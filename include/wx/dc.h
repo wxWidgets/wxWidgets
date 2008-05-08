@@ -469,8 +469,12 @@ public:
 
 
 #if wxUSE_SPLINES
-    virtual void DoDrawSpline(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, wxCoord x3, wxCoord y3);
-    virtual void DoDrawSpline(int n, wxPoint points[]);
+    void DrawSpline(wxCoord x1, wxCoord y1,
+                            wxCoord x2, wxCoord y2,
+                            wxCoord x3, wxCoord y3);
+    void DrawSpline(int n, wxPoint points[]);
+    void DrawSpline(const wxPointList *points) { DoDrawSpline(points); }
+
     virtual void DoDrawSpline(const wxPointList *points);
 #endif
 
@@ -1077,11 +1081,11 @@ public:
     void DrawSpline(wxCoord x1, wxCoord y1,
                     wxCoord x2, wxCoord y2,
                     wxCoord x3, wxCoord y3)
-        { m_pimpl->DoDrawSpline(x1,y1,x2,y2,x3,y3); }
+        { m_pimpl->DrawSpline(x1,y1,x2,y2,x3,y3); }
     void DrawSpline(int n, wxPoint points[])
-        { m_pimpl->DoDrawSpline(n,points); }
+        { m_pimpl->DrawSpline(n,points); }
     void DrawSpline(const wxPointList *points)
-        { m_pimpl->DoDrawSpline(points); }
+        { m_pimpl->DrawSpline(points); }
 #endif // wxUSE_SPLINES
 
 

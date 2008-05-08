@@ -758,38 +758,21 @@ wxDCImpl::DoDrawPolyPolygon(int n,
 
 #if wxUSE_SPLINES
 
-void wxDCImpl::DoDrawSpline(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, wxCoord x3, wxCoord y3)
+void wxDCImpl::DrawSpline(wxCoord x1, wxCoord y1,
+                          wxCoord x2, wxCoord y2,
+                          wxCoord x3, wxCoord y3)
 {
-    wxPointList point_list;
-
-    wxPoint *point1 = new wxPoint;
-    point1->x = x1; point1->y = y1;
-    point_list.Append( point1 );
-
-    wxPoint *point2 = new wxPoint;
-    point2->x = x2; point2->y = y2;
-    point_list.Append( point2 );
-
-    wxPoint *point3 = new wxPoint;
-    point3->x = x3; point3->y = y3;
-    point_list.Append( point3 );
-
-    DoDrawSpline(&point_list);
-
-    for( wxPointList::compatibility_iterator node = point_list.GetFirst(); node; node = node->GetNext() )
-    {
-        wxPoint *p = node->GetData();
-        delete p;
-    }
+    wxPoint points[] = { wxPoint(x1, y1), wxPoint(x2, y2), wxPoint(x3, y3) };
+    DrawSpline(WXSIZEOF(points), points);
 }
 
-void wxDCImpl::DoDrawSpline(int n, wxPoint points[])
+void wxDCImpl::DrawSpline(int n, wxPoint points[])
 {
     wxPointList list;
-    for (int i =0; i < n; i++)
-        list.Append( &points[i] );
+    for ( int i = 0; i < n; i++ )
+        list.Append(&points[i]);
 
-    DoDrawSpline(&list);
+    DrawSpline(&list);
 }
 
 // ----------------------------------- spline code ----------------------------------------
