@@ -31,9 +31,12 @@
 /* printf() family saga */
 
 /*
-   For some systems [v]snprintf()/vsscanf() exists in the system libraries but
-   not in the headers, so we need to declare it ourselves to be able to use it.
+   For many old Unix systems [v]snprintf()/vsscanf() exists in the system
+   libraries but not in the headers, so we need to declare it ourselves to be
+   able to use it.
  */
+#ifdef __UNIX__
+
 #if defined(HAVE_VSNPRINTF) && !defined(HAVE_VSNPRINTF_DECL)
 #ifdef __cplusplus
     extern "C"
@@ -52,9 +55,6 @@
     int snprintf(char *str, size_t size, const char *format, ...);
 #endif /* !HAVE_SNPRINTF_DECL */
 
-#ifdef __WATCOMC__
-    #define HAVE_VSSCANF_DECL
-#endif
 #if defined(HAVE_VSSCANF) && !defined(HAVE_VSSCANF_DECL)
 #ifdef __cplusplus
     extern "C"
@@ -62,7 +62,7 @@
     extern
 #endif
     int vsscanf(const char *str, const char *format, va_list ap);
-#endif /* !HAVE_SNPRINTF_DECL */
+#endif /* !HAVE_VSSCANF_DECL */
 
 /* Wrapper for vsnprintf if it's 3rd parameter is non-const. Note: the
  * same isn't done for snprintf below, the builtin wxSnprintf_ is used
@@ -73,6 +73,8 @@
         return vsnprintf(str, size, (char*)format, ap);
     }
 #endif
+
+#endif /* __UNIX__ */
 
 /*
    mingw32 normally uses MSVCRT which has non-standard vswprintf() and so
