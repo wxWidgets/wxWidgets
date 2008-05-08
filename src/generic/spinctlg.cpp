@@ -306,7 +306,7 @@ bool wxSpinCtrlGenericBase::Show(bool show)
     return true;
 }
 
-bool wxSpinCtrlGenericBase::Reparent(wxWindow *newParent)
+bool wxSpinCtrlGenericBase::Reparent(wxWindowBase *newParent)
 {
     if ( m_spinButton )
     {

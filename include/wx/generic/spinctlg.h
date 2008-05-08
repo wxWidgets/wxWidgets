@@ -80,7 +80,7 @@ public:
     // forward these functions to all subcontrols
     virtual bool Enable(bool enable = true);
     virtual bool Show(bool show = true);
-    virtual bool Reparent(wxWindow *newParent);
+    virtual bool Reparent(wxWindowBase *newParent);
 
     // get the subcontrols
     wxTextCtrl   *GetText() const       { return m_textCtrl; }
