@@ -1642,6 +1642,10 @@ void wxToolBar::OnEraseBackground(wxEraseEvent& event)
 
 bool wxToolBar::HandleSize(WXWPARAM WXUNUSED(wParam), WXLPARAM lParam)
 {
+    // wait until we have some tools
+    if ( !GetToolsCount() )
+        return false;
+
     // calculate our minor dimension ourselves - we're confusing the standard
     // logic (TB_AUTOSIZE) with our horizontal toolbars and other hacks
     const RECT r = wxGetTBItemRect(GetHwnd(), 0);
