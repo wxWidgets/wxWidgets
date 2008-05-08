@@ -29,10 +29,15 @@ public:
     /**
         Constructor for a wxWrapSizer. @a orient determines the primary direction of
         the sizer (the most common case being @c wxHORIZONTAL). The flags
-        parameter may have the value @c wxEXTEND_LAST_ON_EACH_LINE which will
-        cause the last item on each line to use any remaining space on that line.
+        parameter can be a combination of the values @c
+        wxEXTEND_LAST_ON_EACH_LINE which will cause the last item on each line
+        to use any remaining space on that line and @c wxREMOVE_LEADING_SPACES
+        which removes any spacer elements from the beginning of a row. Both of
+        these flags are on by default.
     */
-    wxWrapSizer(int orient, int flags);
+    wxWrapSizer(int orient = wxHORIZONTAL,
+                int flags = wxEXTEND_LAST_ON_EACH_LINE |
+                            wxREMOVE_LEADING_SPACES);
 
     /**
         Not used by an application. This is the mechanism by which sizers can inform
@@ -43,5 +48,16 @@ public:
     */
     bool InformFirstDirection(int direction, int size,
                               int availableOtherDir);
+
+protected:
+    /**
+        Can be overridden in the derived classes to treat some normal items as
+        spacers.
+
+        This method is used to determine whether the given @a item should be
+        considered to be a spacer for the purposes of @c wxREMOVE_LEADING_SPACES
+        implementation. By default only returns @true for the real spacers.
+     */
+    virtual bool IsSpaceItem(wxSizerItem *item) const;
 };
 
