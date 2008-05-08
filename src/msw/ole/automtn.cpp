@@ -674,6 +674,7 @@ WXDLLEXPORT bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& ole
 WXDLLEXPORT bool
 wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant)
 {
+    bool ok = true;
     if ( oleVariant.vt & VT_ARRAY )
     {
         variant.ClearList();
@@ -689,7 +690,6 @@ wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant)
         if ( FAILED(hr) )
             return false;
 
-        bool ok = true;
         for ( int i = 0; i < cElements; i++ )
         {
             VARIANTARG& oleElement = pvdata[i];
@@ -802,7 +802,7 @@ wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant)
         }
     }
 
-    return true;
+    return ok;
 }
 
 /*

@@ -118,7 +118,7 @@ void DecIdRefCount(wxWindowID id)
     // so it should never be reserved, but test anyway
     if(gs_autoIdsRefCount[id] == ID_RESERVED)
     {
-        wxASSERT_MSG(false, wxT("reserve id being decreased"));
+        wxFAIL_MSG(wxT("reserve id being decreased"));
         gs_autoIdsRefCount[id] = ID_FREE;
     }
     else

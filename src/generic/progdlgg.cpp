@@ -182,9 +182,6 @@ wxProgressDialog::wxProgressDialog(const wxString& title,
     m_break = 0;
     m_ctdelay = 0;
 
-    // if we are going to have at least one label, remember it in this var
-    wxStaticText *label = NULL;
-
     // also count how many labels we really have
     size_t nTimeLabels = 0;
 
@@ -194,7 +191,6 @@ wxProgressDialog::wxProgressDialog(const wxString& title,
     {
         nTimeLabels++;
 
-        label =
         m_elapsed = CreateLabel(_("Elapsed time:"), sizerLabels);
     }
 
@@ -202,7 +198,6 @@ wxProgressDialog::wxProgressDialog(const wxString& title,
     {
         nTimeLabels++;
 
-        label =
         m_estimated = CreateLabel(_("Estimated time:"), sizerLabels);
     }
 
@@ -210,7 +205,6 @@ wxProgressDialog::wxProgressDialog(const wxString& title,
     {
         nTimeLabels++;
 
-        label =
         m_remaining = CreateLabel(_("Remaining time:"), sizerLabels);
     }
     sizerTop->Add(sizerLabels, 0, wxALIGN_CENTER_HORIZONTAL | wxTOP, LAYOUT_MARGIN);
