@@ -171,6 +171,8 @@ wxMSW:
   spin button's client size.
 - Fixed IMPLEMENT_APP() to be compatible with the -WU flag of Borland C++
   compiler (Matthias Bohm).
+- Correct size calculation for toolbars containing controls under pre-XP
+  systems (Gerald Giese)
 
 wxGTK:
 
