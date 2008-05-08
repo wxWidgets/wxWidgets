@@ -118,8 +118,14 @@ enum wxWindowVariant
 // valid values for Show/HideWithEffect()
 enum wxShowEffect
 {
-    wxSHOW_EFFECT_ROLL,
-    wxSHOW_EFFECT_SLIDE,
+    wxSHOW_EFFECT_ROLL_TO_LEFT,
+    wxSHOW_EFFECT_ROLL_TO_RIGHT,
+    wxSHOW_EFFECT_ROLL_TO_TOP,
+    wxSHOW_EFFECT_ROLL_TO_BOTTOM,
+    wxSHOW_EFFECT_SLIDE_TO_LEFT,
+    wxSHOW_EFFECT_SLIDE_TO_RIGHT,
+    wxSHOW_EFFECT_SLIDE_TO_TOP,
+    wxSHOW_EFFECT_SLIDE_TO_BOTTOM,
     wxSHOW_EFFECT_BLEND,
     wxSHOW_EFFECT_EXPAND,
     wxSHOW_EFFECT_MAX
@@ -538,27 +544,15 @@ public:
         //
         // timeout specifies how long the animation should take, in ms, the
         // default value of 0 means to use the default (system-dependent) value
-        //
-        // direction is only used with wxSHOW_EFFECT_ROLL and SLIDE values
-    virtual bool ShowWithEffect(wxShowEffect effect,
-                                unsigned timeout = 0,
-                                wxDirection dir = wxBOTTOM)
+    virtual bool ShowWithEffect(wxShowEffect WXUNUSED(effect),
+                                unsigned WXUNUSED(timeout) = 0)
     {
-        wxUnusedVar(effect);
-        wxUnusedVar(timeout);
-        wxUnusedVar(dir);
-
         return Show();
     }
 
-    virtual bool HideWithEffect(wxShowEffect effect,
-                                unsigned timeout = 0,
-                                wxDirection dir = wxBOTTOM)
+    virtual bool HideWithEffect(wxShowEffect WXUNUSED(effect),
+                                unsigned WXUNUSED(timeout) = 0)
     {
-        wxUnusedVar(effect);
-        wxUnusedVar(timeout);
-        wxUnusedVar(dir);
-
         return Hide();
     }
 

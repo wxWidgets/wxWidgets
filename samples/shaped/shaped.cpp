@@ -40,6 +40,7 @@
 #include "wx/dcclient.h"
 #include "wx/image.h"
 
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -152,15 +153,13 @@ public:
                 wxShowEffect effect,
                 // TODO: add menu command to the main frame to allow changing
                 //       these parameters
-                unsigned timeout = 1000,
-                wxDirection dir = wxBOTTOM)
+                unsigned timeout = 1000)
         : wxFrame(parent, wxID_ANY,
                   wxString::Format("Frame shown with %s effect",
                                    GetEffectName(effect)),
                   wxDefaultPosition, wxSize(450, 300)),
           m_effect(effect),
-          m_timeout(timeout),
-          m_dir(dir)
+          m_timeout(timeout)
     {
         new wxStaticText(this, wxID_ANY,
                          wxString::Format("Effect: %s", GetEffectName(effect)),
@@ -169,7 +168,7 @@ public:
                          wxString::Format("Timeout: %ums", m_timeout),
                          wxPoint(20, 60));
 
-        ShowWithEffect(m_effect, m_timeout, m_dir);
+        ShowWithEffect(m_effect, m_timeout);
 
         Connect(wxEVT_CLOSE_WINDOW, wxCloseEventHandler(EffectFrame::OnClose));
     }
@@ -179,7 +178,16 @@ private:
     {
         static const char *names[] =
         {
-            "roll", "slide", "fade", "expand",
+            "roll to left",
+            "roll to right",
+            "roll to top",
+            "roll to bottom",
+            "slide to left",
+            "slide to right",
+            "slide to top",
+            "slide to bottom",
+            "fade",
+            "expand",
         };
         wxCOMPILE_TIME_ASSERT( WXSIZEOF(names) == wxSHOW_EFFECT_MAX,
                                 EffectNamesMismatch );
@@ -189,14 +197,13 @@ private:
 
     void OnClose(wxCloseEvent& event)
     {
-        HideWithEffect(m_effect, m_timeout, m_dir);
+        HideWithEffect(m_effect, m_timeout);
 
         event.Skip();
     }
 
     wxShowEffect m_effect;
     unsigned m_timeout;
-    wxDirection m_dir;
 };
 
 // ============================================================================
@@ -271,12 +278,70 @@ void MainFrame::OnShowTransparent(wxCommandEvent& WXUNUSED(event))
 
 void MainFrame::OnShowEffect(wxCommandEvent& event)
 {
-    int effect = wxSHOW_EFFECT_ROLL + event.GetId() - Show_Effect_Roll;
+    int effect = event.GetId();
     static wxDirection direction = wxLEFT;
     direction = (wxDirection)(((int)direction)<< 1);
     if ( direction > wxDOWN )
         direction = wxLEFT ;
-    new EffectFrame(this, wx_static_cast(wxShowEffect, effect),1000,direction);
+
+    wxShowEffect eff;
+    switch ( effect )
+    {
+        case Show_Effect_Roll:
+            switch ( direction )
+            {
+                case wxLEFT:
+                    eff = wxSHOW_EFFECT_ROLL_TO_LEFT;
+                    break;
+                case wxRIGHT:
+                    eff = wxSHOW_EFFECT_ROLL_TO_RIGHT;
+                    break;
+                case wxTOP:
+                    eff = wxSHOW_EFFECT_ROLL_TO_TOP;
+                    break;
+                case wxBOTTOM:
+                    eff = wxSHOW_EFFECT_ROLL_TO_BOTTOM;
+                    break;
+                default:
+                    wxFAIL_MSG( "invalid direction" );
+                    return;
+            }
+            break;
+        case Show_Effect_Slide:
+            switch ( direction )
+            {
+                case wxLEFT:
+                    eff = wxSHOW_EFFECT_SLIDE_TO_LEFT;
+                    break;
+                case wxRIGHT:
+                    eff = wxSHOW_EFFECT_SLIDE_TO_RIGHT;
+                    break;
+                case wxTOP:
+                    eff = wxSHOW_EFFECT_SLIDE_TO_TOP;
+                    break;
+                case wxBOTTOM:
+                    eff = wxSHOW_EFFECT_SLIDE_TO_BOTTOM;
+                    break;
+                default:
+                    wxFAIL_MSG( "invalid direction" );
+                    return;
+            }
+            break;
+
+        case Show_Effect_Blend:
+            eff = wxSHOW_EFFECT_BLEND;
+            break;
+
+        case Show_Effect_Expand:
+            eff = wxSHOW_EFFECT_EXPAND;
+            break;
+
+        default:
+            wxFAIL_MSG( "invalid effect" );
+            return;
+    }
+
+    new EffectFrame(this, eff,1000);
 }
 
 // ----------------------------------------------------------------------------

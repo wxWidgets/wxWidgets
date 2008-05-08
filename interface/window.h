@@ -1255,17 +1255,16 @@ public:
     bool Hide();
 
     /**
-        This function hides a window, like Hide(), but using a
-        special visual effect if possible.
-        The parameters of this function are the same as for
-        ShowWithEffect(), please see their
-        description there.
+        This function hides a window, like Hide(), but using a special visual
+        effect if possible.
+
+        The parameters of this function are the same as for ShowWithEffect(),
+        please see their description there.
 
         @since 2.9.0
     */
     virtual bool HideWithEffect(wxShowEffect effect,
-                                unsigned timeout = 0,
-                                wxDirection dir = wxBOTTOM);
+                                unsigned timeout = 0);
 
     /**
         This function is (or should be, in case of custom controls) called during
@@ -2455,42 +2454,26 @@ public:
     virtual bool Show(bool show = true);
 
     /**
-        This function shows a window, like Show(), but using a
-        special visual effect if possible.
-        Possible values for @a effect are:
+        This function shows a window, like Show(), but using a special visual
+        effect if possible.
 
-        wxSHOW_EFFECT_ROLL
+        @param effect
+            The effect to use.
 
-        Roll window effect
+        @param timeout
+            The @a timeout parameter specifies the time of the animation, in
+            milliseconds. If the default value of 0 is used, the default
+            animation time for the current platform is used.
 
-        wxSHOW_EFFECT_SLIDE
-
-        Sliding window effect
-
-        wxSHOW_EFFECT_BLEND
-
-        Fade in or out effect
-
-        wxSHOW_EFFECT_EXPAND
-
-        Expanding or collapsing effect
-
-        For the roll and slide effects the @a dir parameter specifies the animation
-        direction: it can be one of @c wxTOP, @c wxBOTTOM, @c wxLEFT
-        or @c wxRIGHT. For the other effects, this parameter is unused.
-        The @a timeout parameter specifies the time of the animation, in
-        milliseconds. If the default value of 0 is used, the default animation time
-        for the current platform is used.
-        Currently this function is only implemented in wxMSW and does the same thing as
-        Show() in the other ports.
+        @note Currently this function is only implemented in wxMSW and does the
+              same thing as Show() in the other ports.
 
         @since 2.9.0
 
         @see HideWithEffect()
     */
     virtual bool ShowWithEffect(wxShowEffect effect,
-                                unsigned timeout = 0,
-                                wxDirection dir = wxBOTTOM);
+                                unsigned timeout = 0);
 
     /**
         Reenables window updating after a previous call to Freeze().
@@ -2631,6 +2614,32 @@ public:
             The new y position for the cursor.
     */
     void WarpPointer(int x, int y);
+};
+
+
+/// Valid values for wxWindow::ShowWithEffect() and wxWindow::HideWithEffect().
+enum wxShowEffect
+{
+    /// Roll window to the left
+    wxSHOW_EFFECT_ROLL_TO_LEFT,
+    /// Roll window to the right
+    wxSHOW_EFFECT_ROLL_TO_RIGHT,
+    /// Roll window to the top
+    wxSHOW_EFFECT_ROLL_TO_TOP,
+    /// Roll window to the bottom
+    wxSHOW_EFFECT_ROLL_TO_BOTTOM,
+    /// Slide window to the left
+    wxSHOW_EFFECT_SLIDE_TO_LEFT,
+    /// Slide window to the right
+    wxSHOW_EFFECT_SLIDE_TO_RIGHT,
+    /// Slide window to the top
+    wxSHOW_EFFECT_SLIDE_TO_TOP,
+    /// Slide window to the bottom
+    wxSHOW_EFFECT_SLIDE_TO_BOTTOM,
+    /// Fade in or out effect
+    wxSHOW_EFFECT_BLEND,
+    /// Expanding or collapsing effect
+    wxSHOW_EFFECT_EXPAND
 };
 
 

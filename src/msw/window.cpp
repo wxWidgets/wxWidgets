@@ -732,8 +732,7 @@ bool wxWindowMSW::Show(bool show)
 bool
 wxWindowMSW::MSWShowWithEffect(bool show,
                                wxShowEffect effect,
-                               unsigned timeout,
-                               wxDirection dir)
+                               unsigned timeout)
 {
     if ( !wxWindowBase::Show(show) )
         return false;
@@ -762,16 +761,39 @@ wxWindowMSW::MSWShowWithEffect(bool show,
         timeout = 200; // this is the default animation timeout, per MSDN
 
     DWORD dwFlags = show ? 0 : AW_HIDE;
-    bool needsDir = false;
+
     switch ( effect )
     {
-        case wxSHOW_EFFECT_ROLL:
-            needsDir = true;
+        case wxSHOW_EFFECT_ROLL_TO_LEFT:
+            dwFlags |= AW_HOR_NEGATIVE;
             break;
 
-        case wxSHOW_EFFECT_SLIDE:
-            needsDir = true;
-            dwFlags |= AW_SLIDE;
+        case wxSHOW_EFFECT_ROLL_TO_RIGHT:
+            dwFlags |= AW_HOR_POSITIVE;
+            break;
+
+        case wxSHOW_EFFECT_ROLL_TO_TOP:
+            dwFlags |= AW_VER_NEGATIVE;
+            break;
+
+        case wxSHOW_EFFECT_ROLL_TO_BOTTOM:
+            dwFlags |= AW_VER_POSITIVE;
+            break;
+
+        case wxSHOW_EFFECT_SLIDE_TO_LEFT:
+            dwFlags |= AW_SLIDE | AW_HOR_NEGATIVE;
+            break;
+
+        case wxSHOW_EFFECT_SLIDE_TO_RIGHT:
+            dwFlags |= AW_SLIDE | AW_HOR_POSITIVE;
+            break;
+
+        case wxSHOW_EFFECT_SLIDE_TO_TOP:
+            dwFlags |= AW_SLIDE | AW_VER_NEGATIVE;
+            break;
+
+        case wxSHOW_EFFECT_SLIDE_TO_BOTTOM:
+            dwFlags |= AW_SLIDE | AW_VER_POSITIVE;
             break;
 
         case wxSHOW_EFFECT_BLEND:
@@ -791,38 +813,6 @@ wxWindowMSW::MSWShowWithEffect(bool show,
             wxFAIL_MSG( _T("unknown window show effect") );
             return false;
     }
-
-    if ( needsDir )
-    {
-        switch ( dir )
-        {
-            case wxTOP:
-                dwFlags |= AW_VER_NEGATIVE;
-                break;
-
-            case wxBOTTOM:
-                dwFlags |= AW_VER_POSITIVE;
-                break;
-
-            case wxLEFT:
-                dwFlags |= AW_HOR_NEGATIVE;
-                break;
-
-            case wxRIGHT:
-                dwFlags |= AW_HOR_POSITIVE;
-                break;
-
-            default:
-                wxFAIL_MSG( _T("unknown window effect direction") );
-                return false;
-        }
-    }
-    else // animation effect which doesn't need the direction
-    {
-        wxASSERT_MSG( dir == wxBOTTOM,
-                        _T("non-default direction used unnecessarily") );
-    }
-
 
     if ( !(*s_pfnAnimateWindow)(GetHwnd(), timeout, dwFlags) )
     {

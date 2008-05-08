@@ -61,16 +61,14 @@ public:
 
     virtual bool Show(bool show = true);
     virtual bool ShowWithEffect(wxShowEffect effect,
-                                unsigned timeout = 0,
-                                wxDirection dir = wxBOTTOM)
+                                unsigned timeout = 0)
     {
-        return MSWShowWithEffect(true, effect, timeout, dir);
+        return MSWShowWithEffect(true, effect, timeout);
     }
     virtual bool HideWithEffect(wxShowEffect effect,
-                                unsigned timeout = 0,
-                                wxDirection dir = wxBOTTOM)
+                                unsigned timeout = 0)
     {
-        return MSWShowWithEffect(false, effect, timeout, dir);
+        return MSWShowWithEffect(false, effect, timeout);
     }
 
     virtual void SetFocus();
@@ -431,8 +429,7 @@ public:
     // common part of Show/HideWithEffect()
     bool MSWShowWithEffect(bool show,
                            wxShowEffect effect,
-                           unsigned timeout,
-                           wxDirection dir);
+                           unsigned timeout);
 
     // Responds to colour changes: passes event on to children.
     void OnSysColourChanged(wxSysColourChangedEvent& event);
