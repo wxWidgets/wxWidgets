@@ -10,13 +10,11 @@
     @class wxToolTip
     @wxheader{tooltip.h}
 
-    This class holds information about a tooltip associated with a window
-    (see wxWindow::SetToolTip).
+    This class holds information about a tooltip associated with a window (see
+    wxWindow::SetToolTip()).
 
-    The four static methods, wxToolTip::Enable,
-    wxToolTip::SetDelay
-    wxToolTip::SetAutoPop and
-    wxToolTip::SetReshow can be used to globally
+    The four static methods, wxToolTip::Enable(), wxToolTip::SetDelay()
+    wxToolTip::SetAutoPop() and wxToolTip::SetReshow() can be used to globally
     alter tooltips behaviour.
 
     @library{wxcore}
@@ -32,7 +30,8 @@ public:
 
     /**
         Enable or disable tooltips globally.
-        May not be supported on all platforms (eg. wxCocoa).
+
+        @note May not be supported on all platforms (eg. wxCocoa).
     */
     static void Enable(bool flag);
 
@@ -47,21 +46,24 @@ public:
     wxWindow* GetWindow() const;
 
     /**
-        Set the delay after which the tooltip disappears or how long a
-        tooltip remains visible.
-        May not be supported on all platforms (eg. wxCocoa, GTK, Palmos).
+        Set the delay after which the tooltip disappears or how long a tooltip
+        remains visible.
+
+        @note May not be supported on all platforms (eg. wxCocoa, GTK, Palmos).
     */
     static void SetAutoPop(long msecs);
 
     /**
         Set the delay after which the tooltip appears.
-        May not be supported on all platforms (eg. wxCocoa).
+
+        @note May not be supported on all platforms (eg. wxCocoa).
     */
     static void SetDelay(long msecs);
 
     /**
         Set the delay between subsequent tooltips to appear.
-        May not be supported on all platforms (eg. wxCocoa, GTK, Palmos).
+
+        @note May not be supported on all platforms (eg. wxCocoa, GTK, Palmos).
     */
     static void SetReshow(long msecs);
 

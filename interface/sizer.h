@@ -767,6 +767,9 @@ public:
     */
     ~wxSizer();
 
+    /** @name Item Management */
+    //@{
+
     /**
         Appends a child to the sizer.
 
@@ -939,6 +942,8 @@ public:
         wxSizer::Add(0, 0, prop).
     */
     wxSizerItem* AddStretchSpacer(int prop = 1);
+
+    //@}
 
     /**
         This method is abstract and has to be overwritten by any derived class.

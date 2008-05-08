@@ -7,6 +7,49 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    Item kinds for use with wxMenu, wxMenuItem, and wxToolBar.
+    
+    @see wxMenu::Append(), wxMenuItem::wxMenuItem(), wxToolBar::AddTool()
+*/
+enum wxItemKind
+{
+    wxITEM_SEPARATOR = -1,
+
+    /**
+        Normal tool button / menu item.
+
+        @see wxToolBar::AddTool(), wxMenu::AppendItem().
+    */
+    wxITEM_NORMAL,
+
+    /**
+        Check (or toggle) tool button / menu item.
+
+        @see wxToolBar::AddCheckTool(), wxMenu::AppendCheckItem().
+    */
+    wxITEM_CHECK,
+
+    /**
+        Radio tool button / menu item.
+
+        @see wxToolBar::AddRadioTool(), wxMenu::AppendRadioItem().
+    */
+    wxITEM_RADIO,
+
+    /**
+        Normal tool button with a dropdown arrow next to it. Clicking the
+        dropdown arrow sends a @c wxEVT_COMMAND_TOOL_DROPDOWN_CLICKED event and may
+        also display the menu previously associated with the item with
+        wxToolBar::SetDropdownMenu(). Currently this type of tools is supported
+        under MSW and GTK.
+    */
+    wxITEM_DROPDOWN,
+
+    wxITEM_MAX
+};
+
+
+/**
     Paper size types for use with the printing framework.
 
     @see overview_printing, wxPrintData::SetPaperId()
@@ -315,4 +358,5 @@ enum wxPaperSize
 void wxVaCopy(va_list argptrDst, va_list argptrSrc);
 
 //@}
+
 
