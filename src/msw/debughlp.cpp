@@ -391,7 +391,7 @@ wxDbgHelpDLL::DumpUDT(PSYMBOL_INFO pSym, void *pVariable, unsigned level)
     s.reserve(512);
     s = GetSymbolName(pSym);
 
-#if !wxUSE_STL
+#if !wxUSE_STD_STRING
     // special handling for ubiquitous wxString: although the code below works
     // for it as well, it shows the wxStringBase class and takes 4 lines
     // instead of only one as this branch
@@ -419,7 +419,7 @@ wxDbgHelpDLL::DumpUDT(PSYMBOL_INFO pSym, void *pVariable, unsigned level)
         s << _T("(\"") << (p ? p : _T("???")) << _T(")\"");
     }
     else // any other UDT
-#endif // !wxUSE_STL
+#endif // !wxUSE_STD_STRING
     {
         // Determine how many children this type has.
         DWORD dwChildrenCount = 0;
