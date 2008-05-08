@@ -796,6 +796,7 @@ MyFrame::MyFrame(wxWindow* parent,
     tb4->AddTool(101, wxT("Item 6"), tb4_bmp1);
     tb4->AddTool(101, wxT("Item 7"), tb4_bmp1);
     tb4->AddTool(101, wxT("Item 8"), tb4_bmp1);
+    tb4->AddControl(new wxComboBox(tb4, -1));
     tb4->Realize();
 
     // create some toolbars
