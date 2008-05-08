@@ -632,7 +632,14 @@ public:
     const wxSizerItemList& GetChildren() const
         { return m_children; }
 
-    void SetDimension( int x, int y, int width, int height );
+    void SetDimension(const wxPoint& pos, const wxSize& size)
+    {
+        m_position = pos;
+        m_size = size;
+        Layout();
+    }
+    void SetDimension(int x, int y, int width, int height)
+        { SetDimension(wxPoint(x, y), wxSize(width, height)); }
 
     wxSizerItem* GetItem( wxWindow *window, bool recursive = false );
     wxSizerItem* GetItem( wxSizer *sizer, bool recursive = false );
@@ -890,36 +897,6 @@ protected:
 
 private:
     DECLARE_CLASS(wxBoxSizer)
-};
-
-//---------------------------------------------------------------------------
-// wxWrapSizer - A box sizer that can wrap items on several lines when 
-// widths exceed available width.
-//---------------------------------------------------------------------------
-
-// Borrow unused flag value
-#define wxEXTEND_LAST_ON_EACH_LINE	wxFULL_REPAINT_ON_RESIZE
-
-class WXDLLIMPEXP_CORE wxWrapSizer: public wxBoxSizer
-{
-public:
-    wxWrapSizer( int orient=wxHORIZONTAL, int flags=wxEXTEND_LAST_ON_EACH_LINE );
-    virtual ~wxWrapSizer();
-
-    virtual void RecalcSizes();
-    virtual wxSize CalcMin();
-    
-    virtual bool InformFirstDirection( int direction, int size, int availableOtherDir );
-    
-protected:
-    int m_prim_size_last;    // Size in primary direction last time
-    int m_n_line;            // Number of lines
-    wxBoxSizer m_rows;       // Rows of items
-    int m_flags;
-
-    void AdjustPropLastItem(wxSizer *psz, wxSizerItem *itemLast);    
-    
-    DECLARE_DYNAMIC_CLASS(wxWrapSizer)
 };
 
 //---------------------------------------------------------------------------

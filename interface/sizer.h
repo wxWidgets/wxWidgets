@@ -1297,6 +1297,7 @@ public:
         rules defined by the parameter in the Add() and Prepend() methods.
     */
     void SetDimension(int x, int y, int width, int height);
+    void SetDimension(const wxPoint& pos, const wxSize& size);
 
     //@{
     /**
