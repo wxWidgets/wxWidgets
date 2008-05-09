@@ -84,13 +84,13 @@ public:
     virtual bool Show( bool show = true );
 
     virtual bool ShowWithEffect(wxShowEffect effect,
-                                unsigned timeout = 0,
-                                wxDirection dir = wxBOTTOM);
-   
+                                unsigned timeout = 0)
+        { return MacShowWithEffect(true, effect, timeout); }
+
     virtual bool HideWithEffect(wxShowEffect effect,
-                                unsigned timeout = 0,
-                                wxDirection dir = wxBOTTOM);
-     
+                                unsigned timeout = 0)
+        { return MacShowWithEffect(false, effect, timeout); }
+
     virtual void SetExtraStyle(long exStyle) ;
 
     virtual bool SetBackgroundColour( const wxColour &colour );
@@ -110,6 +110,8 @@ public:
 protected:
     // common part of all ctors
     void Init();
+
+    bool MacShowWithEffect(bool show, wxShowEffect effect, unsigned timeout);
 
     virtual void DoGetPosition( int *x, int *y ) const;
     virtual void DoGetSize( int *width, int *height ) const;
