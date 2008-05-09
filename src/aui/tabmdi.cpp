@@ -417,10 +417,20 @@ wxAuiMDIChildFrame::wxAuiMDIChildFrame(wxAuiMDIParentFrame *parent,
 wxAuiMDIChildFrame::~wxAuiMDIChildFrame()
 {
     wxAuiMDIParentFrame* pParentFrame = GetMDIParentFrame();
-    if (pParentFrame && pParentFrame->GetActiveChild() == this)
+    if (pParentFrame)
     {
-        pParentFrame->SetActiveChild(NULL);
-        pParentFrame->SetChildMenuBar(NULL);
+        if (pParentFrame->GetActiveChild() == this)
+        {
+            pParentFrame->SetActiveChild(NULL);
+            pParentFrame->SetChildMenuBar(NULL);
+        }
+        wxAuiMDIClientWindow* pClientWindow = pParentFrame->GetClientWindow();
+        wxASSERT(pClientWindow);
+        int idx = pClientWindow->GetPageIndex(this);
+        if (idx != wxNOT_FOUND)
+        {
+            pClientWindow->RemovePage(idx);
+        }
     }
 
 #if wxUSE_MENUS
@@ -768,7 +778,7 @@ void wxAuiMDIClientWindow::PageChanged(int old_selection, int new_selection)
 
 
     // notify old active child that it has been deactivated
-    if (old_selection != -1)
+    if ((old_selection != -1) && (old_selection < (int)GetPageCount()))
     {
         wxAuiMDIChildFrame* old_child = (wxAuiMDIChildFrame*)GetPage(old_selection);
         wxASSERT_MSG(old_child, wxT("wxAuiMDIClientWindow::PageChanged - null page pointer"));
