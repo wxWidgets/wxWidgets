@@ -2332,14 +2332,16 @@ void wxLocale::AddCatalogLookupPathPrefix(const wxString& prefix)
         break ;
       default :
         break ;
-   }
-  for ( i = 0; i < count; i++ )
-  {
-      if ( ms_languagesDB->Item(i).CanonicalName == lc )
-      {
-          break;
-      }
-  }
+    }
+    if ( !lc )
+        return wxLANGUAGE_UNKNOWN;
+    for ( i = 0; i < count; i++ )
+    {
+        if ( ms_languagesDB->Item(i).CanonicalName == lc )
+        {
+            break;
+        }
+    }
 
 #elif defined(__WIN32__)
     LCID lcid = GetUserDefaultLCID();
