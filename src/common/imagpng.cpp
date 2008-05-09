@@ -33,7 +33,7 @@
     #include "wx/stream.h"
 #endif
 
-#include <png.h>
+#include "png.h"
 
 // For memcpy
 #include <string.h>
