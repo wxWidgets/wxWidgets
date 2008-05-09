@@ -5351,6 +5351,15 @@ bool wxRichTextBuffer::InsertParagraphsWithUndo(long pos, const wxRichTextParagr
 
     action->GetNewParagraphs() = paragraphs;
 
+    if (p && !p->IsDefault())
+    {
+        for (wxRichTextObjectList::compatibility_iterator node = action->GetNewParagraphs().GetChildren().GetFirst(); node; node = node->GetNext())
+        {
+            wxRichTextObject* child = node->GetData();
+            child->SetAttributes(*p);
+        }
+    }
+
     action->SetPosition(pos);
 
     wxRichTextRange range = wxRichTextRange(pos, pos + paragraphs.GetRange().GetEnd() - 1);
@@ -6225,7 +6234,7 @@ bool wxRichTextBuffer::PasteFromClipboard(long position)
                 wxRichTextBuffer* richTextBuffer = data.GetRichTextBuffer();
                 if (richTextBuffer)
                 {
-                    InsertParagraphsWithUndo(position+1, *richTextBuffer, GetRichTextCtrl(), wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
+                    InsertParagraphsWithUndo(position+1, *richTextBuffer, GetRichTextCtrl(), 0);
                     if (GetRichTextCtrl())
                         GetRichTextCtrl()->ShowPosition(position + richTextBuffer->GetRange().GetEnd());
                     delete richTextBuffer;
@@ -6249,7 +6258,7 @@ bool wxRichTextBuffer::PasteFromClipboard(long position)
 #else
                 wxString text2 = text;
 #endif
-                InsertTextWithUndo(position+1, text2, GetRichTextCtrl());
+                InsertTextWithUndo(position+1, text2, GetRichTextCtrl(), wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
 
                 if (GetRichTextCtrl())
                     GetRichTextCtrl()->ShowPosition(position + text2.Length());
