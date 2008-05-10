@@ -728,7 +728,8 @@ WXDLLEXPORT bool wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& 
             variant = oleVariant.dblVal;
             break;
         }
-    case VT_ARRAY:
+    case VT_VARIANT:
+    // case VT_ARRAY: // This is masked out by VT_TYPEMASK
         {
             variant.ClearList();
 
