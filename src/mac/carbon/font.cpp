@@ -23,6 +23,7 @@
 #include "wx/fontutil.h"
 #include "wx/graphics.h"
 #include "wx/log.h"
+#include "wx/settings.h"
 
 #include "wx/mac/private.h"
 
@@ -188,7 +189,7 @@ void wxFontRefData::Init(int pointSize,
     wxFontEncoding encoding)
 {
     m_style = style;
-    m_pointSize = pointSize;
+    m_pointSize = (pointSize == -1) ? wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize() : pointSize;
     m_family = family;
     m_style = style;
     m_weight = weight;

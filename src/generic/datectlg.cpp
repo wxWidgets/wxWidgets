@@ -158,6 +158,7 @@ public:
         if ( date.IsValid() )
         {
             m_combo->SetText(date.Format(m_format));
+            SetDate(date);
         }
         else // invalid date
         {
@@ -166,8 +167,6 @@ public:
 
             m_combo->SetText(wxEmptyString);
         }
-
-        SetDate(date);
     }
 
     bool ParseDateTime(const wxString& s, wxDateTime* pDt)
@@ -238,6 +237,9 @@ private:
 
         m_combo->SetText(GetStringValueFor(dt));
 
+        if ( !dt.IsValid() && HasDPFlag(wxDP_ALLOWNONE) )
+            return;
+        
         // notify that we had to change the date after validation
         if ( (dt.IsValid() && (!dtOld.IsValid() || dt != dtOld)) ||
                 (!dt.IsValid() && dtOld.IsValid()) )
@@ -322,11 +324,9 @@ private:
     virtual void SetStringValue(const wxString& s)
     {
         wxDateTime dt;
-        if ( ParseDateTime(s, &dt) )
+        if ( !s.empty() && ParseDateTime(s, &dt) )
             SetDate(dt);
-        else if ( HasDPFlag(wxDP_ALLOWNONE) )
-            SetDate(wxInvalidDateTime);
-        //else: !wxDP_ALLOWNONE, keep the old value
+        //else: keep the old value
     }
 
     virtual wxString GetStringValue() const

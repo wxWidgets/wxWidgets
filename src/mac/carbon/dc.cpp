@@ -1718,24 +1718,33 @@ bool wxDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) con
     status = ::ATSUSetLayoutControls(atsuLayout , sizeof(atsuTags)/sizeof(ATSUAttributeTag) ,
             atsuTags, atsuSizes, atsuValues ) ;
 
-    for ( int pos = 0; pos < (int)chars ; pos ++ )
+    ATSLayoutRecord *layoutRecords;
+    ItemCount glyphCount = 0;
+
+    // Get the glyph extents
+    OSStatus err = ::ATSUDirectGetLayoutDataArrayPtrFromTextLayout(atsuLayout,
+                                                        0,
+                                                        kATSUDirectDataLayoutRecordATSLayoutRecordCurrent,
+                                                        (void **)
+                                                        &layoutRecords,
+                                                        &glyphCount);
+    wxASSERT(glyphCount == (text.length()+1));
+
+    if (glyphCount == (text.length()+1))
     {
-        unsigned long actualNumberOfBounds = 0;
-        ATSTrapezoid glyphBounds;
-
-        // We get a single bound, since the text should only require one. If it requires more, there is an issue
-        OSStatus result;
-        result = ATSUGetGlyphBounds( atsuLayout, 0, 0, kATSUFromTextBeginning, pos + 1,
-            kATSUseDeviceOrigins, 1, &glyphBounds, &actualNumberOfBounds );
-        if (result != noErr || actualNumberOfBounds != 1 )
-            return false;
-
-        widths[pos] = XDEV2LOGREL(FixedToInt( glyphBounds.upperRight.x - glyphBounds.upperLeft.x ));
+        for ( int pos = 1; pos < (int)glyphCount ; pos ++ )
+        {
+            widths[pos-1] = XDEV2LOGREL(FixedToInt( layoutRecords[pos].realPos ));
+        }
     }
+
+    ::ATSUDirectReleaseLayoutDataArrayPtr(NULL,
+                                        kATSUDirectDataLayoutRecordATSLayoutRecordCurrent,
+                                        (void **) &layoutRecords);
 
     ::ATSUDisposeTextLayout(atsuLayout);
 
-    return true;
+    return err != noErr;
 }
 
 wxCoord wxDC::GetCharWidth(void) const

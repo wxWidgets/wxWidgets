@@ -166,10 +166,13 @@ wxMSW:
 - Fixed rendering of borders for wxTextCtrl with wxTE_RICH(2) style when
   using Windows XP's Classic UI theme.
 - Text controls with wxTE_RICH style now also generate wxClipboardTextEvents.
+- Fixed wxEVT_COMMAND_TEXT_ENTER generation in wxSpinCtrl.
 - Fixed wxSpinCtrl::GetClientSize() to return sensible value and not just
   spin button's client size.
 - Fixed IMPLEMENT_APP() to be compatible with the -WU flag of Borland C++
   compiler (Matthias Bohm).
+- Correct size calculation for toolbars containing controls under pre-XP
+  systems (Gerald Giese)
 
 wxGTK:
 

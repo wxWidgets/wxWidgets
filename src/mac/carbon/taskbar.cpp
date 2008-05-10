@@ -53,11 +53,11 @@ public:
 //  a top level window...
 //-----------------------------------------------------------------------------
 
-class wxTaskBarIconWindow : public wxTopLevelWindow
+class wxTaskBarIconWindow : public wxEvtHandler
 {
 public:
     wxTaskBarIconWindow(wxTaskBarIconImpl *impl)
-        : wxTopLevelWindow(NULL, wxID_ANY, wxEmptyString), m_impl(impl)
+        : wxEvtHandler(), m_impl(impl)
     {
         Connect(
             -1, wxEVT_COMMAND_MENU_SELECTED,

@@ -94,8 +94,6 @@ public:
     wxGraphicsContext* GetGraphicsContext() { return m_graphicContext; }
     virtual void SetGraphicsContext( wxGraphicsContext* ctx );
     
-    wxDC* GetBaseDC() { return m_baseDC; }
-    
 protected:
     // the true implementations
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
@@ -185,7 +183,6 @@ protected:
     double m_formerScaleX, m_formerScaleY;
 
     wxGraphicsContext* m_graphicContext;
-    wxDC* m_baseDC;
 };
 
 #endif

@@ -759,7 +759,10 @@ Converts given buffer of binary data from 8-bit string to wxString. In Unicode
 build, the string is interpreted as being in ISO-8859-1 encoding. The version
 without \arg{len} parameter takes NUL-terminated data.
 
-This is a convenience method useful when storing binary data in wxString.
+This is a convenience method useful when storing binary data in
+wxString. It should be used {\it only} for that purpose and only in
+conjunction with \helpref{To8BitData}{wxstringto8bitdata}.
+Use mb\_str() for conversion of character data to known encoding.
 
 \newsince{2.8.4}
 
@@ -1164,7 +1167,9 @@ Converts the string to an 8-bit string (ANSI builds only).
 Converts the string to an 8-bit string in ISO-8859-1 encoding in the form of
 a wxCharBuffer (Unicode builds only).
 
-This is a convenience method useful when storing binary data in wxString.
+This is a convenience method useful when storing binary data in
+wxString. It should be used {\it only} for this purpose. It is only valid
+to call this method on strings created using \helpref{From8BitData}{wxstringfrom8bitdata}.
 
 \newsince{2.8.4}
 

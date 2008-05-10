@@ -363,8 +363,25 @@ wxSize wxToolBar::DoGetBestSize() const
             sizeBest.y = t;
         }
     }
-    else
+    else // TB_GETMAXSIZE succeeded
     {
+        // but it could still return an incorrect result due to what appears to
+        // be a bug in old comctl32.dll versions which don't handle controls in
+        // the toolbar correctly, so work around it (see SF patch 1902358)
+        if ( !IsVertical() && wxApp::GetComCtl32Version() < 600 )
+        {
+            // calculate the toolbar width in alternative way
+            RECT rcFirst, rcLast;
+            if ( ::SendMessage(GetHwnd(), TB_GETITEMRECT, 0, (LPARAM)&rcFirst)
+                    && ::SendMessage(GetHwnd(), TB_GETITEMRECT,
+                                     GetToolsCount() - 1, (LPARAM)&rcLast) )
+            {
+                const int widthAlt = rcLast.right - rcFirst.left;
+                if ( widthAlt > size.cx )
+                    size.cx = widthAlt;
+            }
+        }
+
         sizeBest.x = size.cx;
         sizeBest.y = size.cy;
     }

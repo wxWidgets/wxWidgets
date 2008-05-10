@@ -129,9 +129,9 @@ bool wxXPMHandler::SaveFile(wxImage * image,
     }
 
     if ( !sName.empty() )
-        sName = wxString(wxT("/* XPM */\nstatic char *")) + sName;
+        sName = wxString(wxT("/* XPM */\nstatic const char *")) + sName;
     else
-        sName = wxT("/* XPM */\nstatic char *xpm_data");
+        sName = wxT("/* XPM */\nstatic const char *xpm_data");
     stream.Write( (const char*) sName.ToAscii(), sName.Len() );
 
     char tmpbuf[200];
