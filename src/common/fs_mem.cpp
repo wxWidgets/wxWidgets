@@ -23,7 +23,6 @@
     #include "wx/hash.h"
     #include "wx/wxcrtvararg.h"
     #if wxUSE_GUI
-        #include "wx/bitmap.h"
         #include "wx/image.h"
     #endif // wxUSE_GUI
 #endif

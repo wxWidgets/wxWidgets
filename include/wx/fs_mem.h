@@ -16,8 +16,7 @@
 #include "wx/filesys.h"
 
 #if wxUSE_GUI
-    class WXDLLIMPEXP_FWD_CORE wxBitmap;
-    class WXDLLIMPEXP_FWD_CORE wxImage;
+    #include "wx/bitmap.h"
 #endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
