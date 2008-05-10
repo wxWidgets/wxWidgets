@@ -10,15 +10,32 @@
     @class wxFrame
     @wxheader{frame.h}
 
-    A frame is a window whose size and position can (usually) be changed by the
-    user. It usually has thick borders and a title bar, and can optionally contain
-    a menu bar, toolbar and status bar. A frame can contain any window that is not
+    A frame is a window whose size and position can (usually) be changed by the user.
+
+    It usually has thick borders and a title bar, and can optionally contain a
+    menu bar, toolbar and status bar. A frame can contain any window that is not
     a frame or dialog.
 
-    A frame that has a status bar and toolbar created via the
-    CreateStatusBar/CreateToolBar functions manages these windows, and adjusts the
-    value returned by GetClientSize to reflect the remaining size available to
-    application windows.
+    A frame that has a status bar and toolbar, created via the CreateStatusBar() and
+    CreateToolBar() functions, manages these windows and adjusts the value returned
+    by GetClientSize() to reflect the remaining size available to application windows.
+
+    @remarks An application should normally define an wxCloseEvent handler for the
+             frame to respond to system close events, for example so that related
+             data and subwindows can be cleaned up.
+
+
+    @section wxframe_defaultevent Default event processing
+
+    wxFrame processes the following events:
+
+    @li @c wxEVT_SIZE: if the frame has exactly one child window, not counting the
+        status and toolbar, this child is resized to take the entire frame client area.
+        If two or more windows are present, they should be laid out explicitly either
+        by manually handling wxEVT_SIZE or using sizers;
+    @li @c wxEVT_MENU_HIGHLIGHT: the default implementation displays the help string
+        associated with the selected item in the first pane of the status bar, if there is one.
+
 
     @beginStyleTable
     @style{wxDEFAULT_FRAME_STYLE}
@@ -54,12 +71,26 @@
            and thus it might be better to use this style only without
            wxMINIMIZE_BOX style). In wxGTK, the flag is respected only if GTK+
            is at least version 2.2 and the window manager supports
-           _NET_WM_STATE_SKIP_TASKBAR hint. Has no effect under other
-           platforms.
+           _NET_WM_STATE_SKIP_TASKBAR hint. Has no effect under other platforms.
     @style{wxFRAME_FLOAT_ON_PARENT}
-           The frame will always be on top of its parent (unlike
-           wxSTAY_ON_TOP). A frame created with this style must have a
-           non-@NULL parent.
+           The frame will always be on top of its parent (unlike wxSTAY_ON_TOP).
+           A frame created with this style must have a non-@NULL parent.
+    @style{wxFRAME_SHAPED}
+           Windows with this style are   allowed to have their shape changed
+           with the SetShape() method.
+    @endStyleTable
+
+    The default frame style is for normal, resizeable frames.
+    To create a frame which can not be resized by user, you may use the following
+    combination of styles:
+
+    @code
+        wxDEFAULT_FRAME_STYLE & ~(wxRESIZE_BORDER | wxRESIZE_BOX | wxMAXIMIZE_BOX)
+    @endcode
+
+    See also the @ref overview_windowstyles.
+
+    @beginExtraStyleTable
     @style{wxFRAME_EX_CONTEXTHELP}
            Under Windows, puts a query button on the caption. When pressed,
            Windows will go into a context-sensitive help mode and wxWidgets
@@ -71,13 +102,10 @@
            wxDEFAULT_FRAME_STYLE  ~ (wxMINIMIZE_BOX | wxMAXIMIZE_BOX) for the
            frames having this style (the dialogs don't have a minimize or a
            maximize box by default)
-    @style{wxFRAME_SHAPED}
-           Windows with this style are   allowed to have their shape changed
-           with the SetShape method.
     @style{wxFRAME_EX_METAL}
            On Mac OS X, frames with this style will be shown with a metallic
            look. This is an extra style.
-    @endStyleTable
+    @endExtraStyleTable
 
     @library{wxcore}
     @category{managedwnd}
