@@ -406,4 +406,31 @@ wxRendererNative& wxRendererNative::GetDefault()
 
 #endif // !wxHAS_NATIVE_RENDERER
 
+
+// ----------------------------------------------------------------------------
+// Other renderer functions to be merged in to wxRenderer class in 2.9, but
+// they are standalone functions here to protect the ABI.
+// ----------------------------------------------------------------------------
+
+#if defined(__WXMSW__) || defined(__WXMAC__)
+#if wxABI_VERSION >= 20804
+
+// Draw a native wxChoice
+void WXDLLEXPORT wxRenderer_DrawChoice(wxWindow* win, wxDC& dc,
+                                       const wxRect& rect, int flags=0);
+
+// Draw a native wxComboBox
+void WXDLLEXPORT wxRenderer_DrawComboBox(wxWindow* win, wxDC& dc,
+                                         const wxRect& rect, int flags=0);
+
+// Draw a native wxTextCtrl frame
+void WXDLLEXPORT wxRenderer_DrawTextCtrl(wxWindow* win, wxDC& dc,
+                                         const wxRect& rect, int flags=0);
+
+// Draw a native wxRadioButton (just the graphical portion)
+void WXDLLEXPORT wxRenderer_DrawRadioButton(wxWindow* win, wxDC& dc,
+                                            const wxRect& rect, int flags=0);
+#endif // wxABI_VERSION
+#endif // (platforms)
+
 #endif // _WX_RENDERER_H_

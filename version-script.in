@@ -33,6 +33,7 @@
 	*wxGridBagSizer*AdjustForOverflow*;
         *wxRemotelyScrolledTreeCtrl*DoCalcScrolledPosition*;
         *wxRemotelyScrolledTreeCtrl*SetScrollbar*;
+	*wxRenderer_Draw*;
         *wxRichTextAction*CalculateRefreshOptimizations*;
         *wxRichTextCtrl*GetTextCursor*;
         *wxRichTextCtrl*GetURLCursor*;
