@@ -168,7 +168,8 @@ protected:
 //--------------------------------------------------------------------------------
 
 // Open Bit Flags
-enum {
+enum wxFileSystemOpenFlags
+{
     wxFS_READ = 1,      // Open for reading
     wxFS_SEEKABLE = 4   // Returned stream will be seekable
 };
