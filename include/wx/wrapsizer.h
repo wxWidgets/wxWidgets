@@ -39,6 +39,10 @@ public:
     virtual wxSize CalcMin();
     virtual void RecalcSizes();
 
+    virtual bool InformFirstDirection(int direction,
+                                      int size,
+                                      int availableOtherDir);
+
 protected:
     // This method is called to decide if an item represents empty space or
     // not. We do this to avoid having space-only items first or last on a
@@ -51,10 +55,6 @@ protected:
     {
         return item->IsSpacer();
     }
-
-    virtual bool InformFirstDirection(int direction,
-                                      int size,
-                                      int availableOtherDir );
 
     // helpers of CalcMin()
     void CalcMinFromMinor(int totMinor);
@@ -94,8 +94,7 @@ protected:
 
     wxBoxSizer m_rows;       // Sizer containing multiple rows of our items
 
-private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxWrapSizer);
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxWrapSizer)
 };
 
 #endif // _WX_WRAPSIZER_H_
