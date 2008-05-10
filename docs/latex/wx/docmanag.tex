@@ -324,12 +324,29 @@ construct wxDocManager with no arguments.
 
 \func{bool}{MakeDefaultName}{\param{const wxString\& }{buf}}
 
-Copies a suitable default name into {\it buf}. This is implemented by
-appending an integer counter to the string {\bf unnamed} and incrementing
-the counter.
+This method is preserved for backwards compatibility in wxWidgets 2.8 but is
+renamed to \helpref{MakeNewDocumentName}{wxdocmanagermakenewdocumentname} in
+wxWidgets 3.0, please see its description for the details.
+
+This function simply copies the value returned by MakeNewDocumentName() into
+the provided \arg{buf} and returns \true.
 
 \perlnote{In wxPerl this function must return the modified name rather
 than just modifying the argument.}
+
+
+\membersection{wxDocManager::MakeNewDocumentName}\label{wxdocmanagermakenewdocumentname}
+
+\func{wxString}{MakeNewDocumentName}{\void}
+
+Returns the name to be used for a new document. The default implementation
+appends an integer counter to the string {\bf unnamed} and increments the
+counter. To customize this behaviour, you need to override the virtual 
+\helpref{MakeNewDocumentName}{wxdocmanagermakedefaultname} method but if you
+only need to call this method, an not to override it, please use this method
+which is forward-compatible with wxWidgets 3.0.
+
+\wxsince{2.8.8}
 
 
 \membersection{wxDocManager::OnCreateFileHistory}\label{wxdocmanageroncreatefilehistory}
