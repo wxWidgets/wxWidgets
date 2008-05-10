@@ -258,39 +258,15 @@ void wxgtk_window_size_request_callback(GtkWidget * WXUNUSED(widget),
 
 extern "C" {
 static gboolean
-gtk_window_expose_callback( GtkWidget*,
+gtk_window_expose_callback( GtkWidget* widget,
                             GdkEventExpose *gdk_event,
                             wxWindow *win )
 {
-#if 0
-    if (win->GetName())
+    if (gdk_event->window == widget->window)
     {
-        wxPrintf( wxT("OnExpose from ") );
-        if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
-            wxPrintf( win->GetClassInfo()->GetClassName() );
-        wxPrintf( wxT(" %d %d %d %d\n"), (int)gdk_event->area.x,
-                                         (int)gdk_event->area.y,
-                                         (int)gdk_event->area.width,
-                                         (int)gdk_event->area.height );
+        win->GetUpdateRegion() = wxRegion( gdk_event->region );
+        win->GtkSendPaintEvents();
     }
-
-    gtk_paint_box
-    (
-        win->m_wxwindow->style,
-        pizza->bin_window,
-        GTK_STATE_NORMAL,
-        GTK_SHADOW_OUT,
-        (GdkRectangle*) NULL,
-        win->m_wxwindow,
-        (char *)"button", // const_cast
-        20,20,24,24
-    );
-#endif
-
-    win->GetUpdateRegion() = wxRegion( gdk_event->region );
-
-    win->GtkSendPaintEvents();
-
     // Let parent window draw window-less widgets
     return FALSE;
 }
