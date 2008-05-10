@@ -99,11 +99,11 @@ public:
 #if wxUSE_IMAGE
     static void AddFile(const wxString& filename,
                         const wxImage& image,
-                        long type);
+                        wxBitmapType type);
 
     static void AddFile(const wxString& filename,
                         const wxBitmap& bitmap,
-                        long type);
+                        wxBitmapType type);
 #endif // wxUSE_IMAGE
 
 };

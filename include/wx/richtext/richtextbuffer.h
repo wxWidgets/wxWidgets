@@ -91,13 +91,15 @@ extern WXDLLIMPEXP_RICHTEXT const wxChar wxRichTextLineBreakChar;
 /*!
  * File types
  */
-
-#define wxRICHTEXT_TYPE_ANY             0
-#define wxRICHTEXT_TYPE_TEXT            1
-#define wxRICHTEXT_TYPE_XML             2
-#define wxRICHTEXT_TYPE_HTML            3
-#define wxRICHTEXT_TYPE_RTF             4
-#define wxRICHTEXT_TYPE_PDF             5
+enum wxRichTextFileType
+{
+    wxRICHTEXT_TYPE_ANY = 0,
+    wxRICHTEXT_TYPE_TEXT,
+    wxRICHTEXT_TYPE_XML,
+    wxRICHTEXT_TYPE_HTML,
+    wxRICHTEXT_TYPE_RTF,
+    wxRICHTEXT_TYPE_PDF
+};
 
 /*!
  * Forward declarations
@@ -1131,11 +1133,12 @@ public:
     // to conserve space.
     // If it's not a JPEG we can make use of 'image', already scaled, so we don't have to
     // load the image a 2nd time.
-    virtual bool MakeImageBlock(const wxString& filename, int imageType, wxImage& image, bool convertToJPEG = true);
+    virtual bool MakeImageBlock(const wxString& filename, wxBitmapType imageType,
+                                wxImage& image, bool convertToJPEG = true);
 
     // Make an image block from the wxImage in the given
     // format.
-    virtual bool MakeImageBlock(wxImage& image, int imageType, int quality = 80);
+    virtual bool MakeImageBlock(wxImage& image, wxBitmapType imageType, int quality = 80);
 
     // Write to a file
     bool Write(const wxString& filename);
@@ -1144,7 +1147,7 @@ public:
     bool WriteHex(wxOutputStream& stream);
 
     // Read data in hex from a stream
-    bool ReadHex(wxInputStream& stream, int length, int imageType);
+    bool ReadHex(wxInputStream& stream, int length, wxBitmapType imageType);
 
     // Copy from 'block'
     void Copy(const wxRichTextImageBlock& block);
@@ -1159,11 +1162,11 @@ public:
 
     unsigned char* GetData() const { return m_data; }
     size_t GetDataSize() const { return m_dataSize; }
-    int GetImageType() const { return m_imageType; }
+    wxBitmapType GetImageType() const { return m_imageType; }
 
     void SetData(unsigned char* image) { m_data = image; }
     void SetDataSize(size_t size) { m_dataSize = size; }
-    void SetImageType(int imageType) { m_imageType = imageType; }
+    void SetImageType(wxBitmapType imageType) { m_imageType = imageType; }
 
     bool Ok() const { return IsOk(); }
     bool IsOk() const { return GetData() != NULL; }
@@ -1188,7 +1191,7 @@ protected:
     // This is in the raw, original form such as a JPEG file.
     unsigned char*      m_data;
     size_t              m_dataSize;
-    int                 m_imageType; // wxWin type id
+    wxBitmapType        m_imageType;
 };
 
 
@@ -1306,16 +1309,16 @@ public:
     virtual void ResetAndClearCommands();
 
     /// Load a file
-    virtual bool LoadFile(const wxString& filename, int type = wxRICHTEXT_TYPE_ANY);
+    virtual bool LoadFile(const wxString& filename, wxRichTextFileType type = wxRICHTEXT_TYPE_ANY);
 
     /// Save a file
-    virtual bool SaveFile(const wxString& filename, int type = wxRICHTEXT_TYPE_ANY);
+    virtual bool SaveFile(const wxString& filename, wxRichTextFileType type = wxRICHTEXT_TYPE_ANY);
 
     /// Load from a stream
-    virtual bool LoadFile(wxInputStream& stream, int type = wxRICHTEXT_TYPE_ANY);
+    virtual bool LoadFile(wxInputStream& stream, wxRichTextFileType type = wxRICHTEXT_TYPE_ANY);
 
     /// Save to a stream
-    virtual bool SaveFile(wxOutputStream& stream, int type = wxRICHTEXT_TYPE_ANY);
+    virtual bool SaveFile(wxOutputStream& stream, wxRichTextFileType type = wxRICHTEXT_TYPE_ANY);
 
     /// Set the handler flags, controlling loading and saving
     void SetHandlerFlags(int flags) { m_handlerFlags = flags; }
@@ -1554,13 +1557,14 @@ public:
     static wxRichTextFileHandler *FindHandler(const wxString& name);
 
     /// Finds a handler by extension and type
-    static wxRichTextFileHandler *FindHandler(const wxString& extension, int imageType);
+    static wxRichTextFileHandler *FindHandler(const wxString& extension, wxRichTextFileType imageType);
 
     /// Finds a handler by filename or, if supplied, type
-    static wxRichTextFileHandler *FindHandlerFilenameOrType(const wxString& filename, int imageType);
+    static wxRichTextFileHandler *FindHandlerFilenameOrType(const wxString& filename,
+                                                            wxRichTextFileType imageType);
 
     /// Finds a handler by type
-    static wxRichTextFileHandler *FindHandler(int imageType);
+    static wxRichTextFileHandler *FindHandler(wxRichTextFileType imageType);
 
     /// Gets a wildcard incorporating all visible handlers. If 'types' is present,
     /// will be filled with the file type corresponding to each filter. This can be
@@ -1857,7 +1861,9 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextPlainTextHandler: public wxRichTextFileHand
 {
     DECLARE_CLASS(wxRichTextPlainTextHandler)
 public:
-    wxRichTextPlainTextHandler(const wxString& name = wxT("Text"), const wxString& ext = wxT("txt"), int type = wxRICHTEXT_TYPE_TEXT)
+    wxRichTextPlainTextHandler(const wxString& name = wxT("Text"),
+                               const wxString& ext = wxT("txt"),
+                               wxRichTextFileType type = wxRICHTEXT_TYPE_TEXT)
         : wxRichTextFileHandler(name, ext, type)
         { }
 

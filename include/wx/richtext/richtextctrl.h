@@ -166,7 +166,8 @@ public:
 
     // load/save the controls contents from/to the file
     virtual bool DoLoadFile(const wxString& file, int fileType);
-    virtual bool DoSaveFile(const wxString& file = wxEmptyString, int fileType = wxRICHTEXT_TYPE_ANY);
+    virtual bool DoSaveFile(const wxString& file = wxEmptyString,
+                            int fileType = wxRICHTEXT_TYPE_ANY);
 
     /// Set the handler flags, controlling loading and saving
     void SetHandlerFlags(int flags) { GetBuffer().SetHandlerFlags(flags); }
@@ -281,14 +282,14 @@ public:
 
     /// Write an image at the current insertion point. Supply optional type to use
     /// for internal and file storage of the raw data.
-    virtual bool WriteImage(const wxImage& image, int bitmapType = wxBITMAP_TYPE_PNG);
+    virtual bool WriteImage(const wxImage& image, wxBitmapType bitmapType = wxBITMAP_TYPE_PNG);
 
     /// Write a bitmap at the current insertion point. Supply optional type to use
     /// for internal and file storage of the raw data.
-    virtual bool WriteImage(const wxBitmap& bitmap, int bitmapType = wxBITMAP_TYPE_PNG);
+    virtual bool WriteImage(const wxBitmap& bitmap, wxBitmapType bitmapType = wxBITMAP_TYPE_PNG);
 
     /// Load an image from file and write at the current insertion point.
-    virtual bool WriteImage(const wxString& filename, int bitmapType);
+    virtual bool WriteImage(const wxString& filename, wxBitmapType bitmapType);
 
     /// Write an image block at the current insertion point.
     virtual bool WriteImage(const wxRichTextImageBlock& imageBlock);

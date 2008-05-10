@@ -233,12 +233,12 @@ void wxMemoryFSHandlerBase::AddFile(const wxString& filename,
 /*static*/ void
 wxMemoryFSHandler::AddFile(const wxString& filename,
                            const wxImage& image,
-                           long type)
+                           wxBitmapType type)
 {
     if (!CheckHash(filename)) return;
 
     wxMemoryOutputStream mems;
-    if (image.Ok() && image.SaveFile(mems, (int)type))
+    if (image.Ok() && image.SaveFile(mems, type))
     {
         m_Hash->Put
                 (
@@ -262,7 +262,7 @@ wxMemoryFSHandler::AddFile(const wxString& filename,
 /*static*/ void
 wxMemoryFSHandler::AddFile(const wxString& filename,
                            const wxBitmap& bitmap,
-                           long type)
+                           wxBitmapType type)
 {
 #if !defined(__WXMSW__) || wxUSE_WXDIB
     wxImage img = bitmap.ConvertToImage();

@@ -1990,7 +1990,7 @@ bool wxRichTextCtrl::RecreateBuffer(const wxSize& size)
 
 bool wxRichTextCtrl::DoLoadFile(const wxString& filename, int fileType)
 {
-    bool success = GetBuffer().LoadFile(filename, fileType);
+    bool success = GetBuffer().LoadFile(filename, (wxRichTextFileType)fileType);
     if (success)
         m_filename = filename;
 
@@ -2014,7 +2014,7 @@ bool wxRichTextCtrl::DoLoadFile(const wxString& filename, int fileType)
 
 bool wxRichTextCtrl::DoSaveFile(const wxString& filename, int fileType)
 {
-    if (GetBuffer().SaveFile(filename, fileType))
+    if (GetBuffer().SaveFile(filename, (wxRichTextFileType)fileType))
     {
         m_filename = filename;
 
@@ -2257,7 +2257,7 @@ void wxRichTextCtrl::AppendText(const wxString& text)
 }
 
 /// Write an image at the current insertion point
-bool wxRichTextCtrl::WriteImage(const wxImage& image, int bitmapType)
+bool wxRichTextCtrl::WriteImage(const wxImage& image, wxBitmapType bitmapType)
 {
     wxRichTextImageBlock imageBlock;
 
@@ -2268,7 +2268,7 @@ bool wxRichTextCtrl::WriteImage(const wxImage& image, int bitmapType)
     return false;
 }
 
-bool wxRichTextCtrl::WriteImage(const wxString& filename, int bitmapType)
+bool wxRichTextCtrl::WriteImage(const wxString& filename, wxBitmapType bitmapType)
 {
     wxRichTextImageBlock imageBlock;
 
@@ -2284,7 +2284,7 @@ bool wxRichTextCtrl::WriteImage(const wxRichTextImageBlock& imageBlock)
     return GetBuffer().InsertImageWithUndo(m_caretPosition+1, imageBlock, this);
 }
 
-bool wxRichTextCtrl::WriteImage(const wxBitmap& bitmap, int bitmapType)
+bool wxRichTextCtrl::WriteImage(const wxBitmap& bitmap, wxBitmapType bitmapType)
 {
     if (bitmap.Ok())
     {

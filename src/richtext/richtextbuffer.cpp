@@ -5853,7 +5853,8 @@ bool wxRichTextBuffer::RemoveHandler(const wxString& name)
 }
 
 /// Finds a handler by filename or, if supplied, type
-wxRichTextFileHandler *wxRichTextBuffer::FindHandlerFilenameOrType(const wxString& filename, int imageType)
+wxRichTextFileHandler *wxRichTextBuffer::FindHandlerFilenameOrType(const wxString& filename,
+                                                                   wxRichTextFileType imageType)
 {
     if (imageType != wxRICHTEXT_TYPE_ANY)
         return FindHandler(imageType);
@@ -5883,7 +5884,7 @@ wxRichTextFileHandler* wxRichTextBuffer::FindHandler(const wxString& name)
 }
 
 /// Finds a handler by extension and type
-wxRichTextFileHandler* wxRichTextBuffer::FindHandler(const wxString& extension, int type)
+wxRichTextFileHandler* wxRichTextBuffer::FindHandler(const wxString& extension, wxRichTextFileType type)
 {
     wxList::compatibility_iterator node = sm_handlers.GetFirst();
     while (node)
@@ -5898,7 +5899,7 @@ wxRichTextFileHandler* wxRichTextBuffer::FindHandler(const wxString& extension, 
 }
 
 /// Finds a handler by type
-wxRichTextFileHandler* wxRichTextBuffer::FindHandler(int type)
+wxRichTextFileHandler* wxRichTextBuffer::FindHandler(wxRichTextFileType type)
 {
     wxList::compatibility_iterator node = sm_handlers.GetFirst();
     while (node)
@@ -5976,7 +5977,7 @@ wxString wxRichTextBuffer::GetExtWildcard(bool combine, bool save, wxArrayInt* t
 }
 
 /// Load a file
-bool wxRichTextBuffer::LoadFile(const wxString& filename, int type)
+bool wxRichTextBuffer::LoadFile(const wxString& filename, wxRichTextFileType type)
 {
     wxRichTextFileHandler* handler = FindHandlerFilenameOrType(filename, type);
     if (handler)
@@ -5992,7 +5993,7 @@ bool wxRichTextBuffer::LoadFile(const wxString& filename, int type)
 }
 
 /// Save a file
-bool wxRichTextBuffer::SaveFile(const wxString& filename, int type)
+bool wxRichTextBuffer::SaveFile(const wxString& filename, wxRichTextFileType type)
 {
     wxRichTextFileHandler* handler = FindHandlerFilenameOrType(filename, type);
     if (handler)
@@ -6005,7 +6006,7 @@ bool wxRichTextBuffer::SaveFile(const wxString& filename, int type)
 }
 
 /// Load from a stream
-bool wxRichTextBuffer::LoadFile(wxInputStream& stream, int type)
+bool wxRichTextBuffer::LoadFile(wxInputStream& stream, wxRichTextFileType type)
 {
     wxRichTextFileHandler* handler = FindHandler(type);
     if (handler)
@@ -6021,7 +6022,7 @@ bool wxRichTextBuffer::LoadFile(wxInputStream& stream, int type)
 }
 
 /// Save to a stream
-bool wxRichTextBuffer::SaveFile(wxOutputStream& stream, int type)
+bool wxRichTextBuffer::SaveFile(wxOutputStream& stream, wxRichTextFileType type)
 {
     wxRichTextFileHandler* handler = FindHandler(type);
     if (handler)
@@ -7347,7 +7348,7 @@ void wxRichTextImageBlock::Init()
 {
     m_data = NULL;
     m_dataSize = 0;
-    m_imageType = -1;
+    m_imageType = wxBITMAP_TYPE_INVALID;
 }
 
 void wxRichTextImageBlock::Clear()
@@ -7355,7 +7356,7 @@ void wxRichTextImageBlock::Clear()
     delete[] m_data;
     m_data = NULL;
     m_dataSize = 0;
-    m_imageType = -1;
+    m_imageType = wxBITMAP_TYPE_INVALID;
 }
 
 
@@ -7365,7 +7366,8 @@ void wxRichTextImageBlock::Clear()
 // If it's not a JPEG we can make use of 'image', already scaled, so we don't have to
 // load the image a 2nd time.
 
-bool wxRichTextImageBlock::MakeImageBlock(const wxString& filename, int imageType, wxImage& image, bool convertToJPEG)
+bool wxRichTextImageBlock::MakeImageBlock(const wxString& filename, wxBitmapType imageType,
+                                          wxImage& image, bool convertToJPEG)
 {
     m_imageType = imageType;
 
@@ -7409,7 +7411,7 @@ bool wxRichTextImageBlock::MakeImageBlock(const wxString& filename, int imageTyp
 
 // Make an image block from the wxImage in the given
 // format.
-bool wxRichTextImageBlock::MakeImageBlock(wxImage& image, int imageType, int quality)
+bool wxRichTextImageBlock::MakeImageBlock(wxImage& image, wxBitmapType imageType, int quality)
 {
     m_imageType = imageType;
     image.SetOption(wxT("quality"), quality);
@@ -7537,7 +7539,7 @@ bool wxRichTextImageBlock::WriteHex(wxOutputStream& stream)
 }
 
 // Read data in hex from a stream
-bool wxRichTextImageBlock::ReadHex(wxInputStream& stream, int length, int imageType)
+bool wxRichTextImageBlock::ReadHex(wxInputStream& stream, int length, wxBitmapType imageType)
 {
     int dataSize = length/2;
 

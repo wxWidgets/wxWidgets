@@ -172,10 +172,18 @@ bool wxRichTextXMLHandler::ImportXML(wxRichTextBuffer* buffer, wxXmlNode* node)
             }
             else if (childName == wxT("image"))
             {
-                int imageType = wxBITMAP_TYPE_PNG;
+                wxBitmapType imageType = wxBITMAP_TYPE_PNG;
                 wxString value = node->GetAttribute(wxT("imagetype"), wxEmptyString);
                 if (!value.empty())
-                    imageType = wxAtoi(value);
+                {
+                    int type = wxAtoi(value);
+
+                    // note: 0 == wxBITMAP_TYPE_INVALID
+                    if (type <= 0 || type >= wxBITMAP_TYPE_MAX)
+                        wxLogWarning("Invalid bitmap type specified for <image> tag: %d", type);
+                    else
+                        imageType = (wxBitmapType)type;
+                }
 
                 wxString data;
 
