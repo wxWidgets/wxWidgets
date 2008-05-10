@@ -419,7 +419,7 @@ public:
     wxString MakeNewDocumentName() const
     {
         wxString s;
-        MakeDefaultName(s);
+        wx_const_cast(wxDocManager *, this)->MakeDefaultName(s);
         return s;
     }
 #endif // wx ABI >= 2.8.8
