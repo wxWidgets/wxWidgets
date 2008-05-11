@@ -484,8 +484,18 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
         valueWin = value;
     }
 
+    // suppress events sent during control creation: we're called either from
+    // the ctor and then we shouldn't generate any events for compatibility
+    // with the other ports, or from SetWindowStyleFlag() and then we shouldn't
+    // generate the events because our text doesn't really change, the fact
+    // that we (sometimes) need to recreate the control is just an
+    // implementation detail
+    m_updatesCount = -2;
+
     if ( !MSWCreateControl(windowClass.wx_str(), msStyle, pos, size, valueWin) )
         return false;
+
+    m_updatesCount = -1;
 
 #if wxUSE_RICHEDIT
     if (IsRich())
