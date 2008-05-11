@@ -1509,7 +1509,7 @@ void wxDocManager::FileHistoryRemoveMenu(wxMenu *menu)
 }
 
 #if wxUSE_CONFIG
-void wxDocManager::FileHistoryLoad(wxConfigBase& config)
+void wxDocManager::FileHistoryLoad(const wxConfigBase& config)
 {
     if (m_fileHistory)
         m_fileHistory->Load(config);
@@ -2275,7 +2275,7 @@ void wxFileHistory::RemoveMenu(wxMenu *menu)
 }
 
 #if wxUSE_CONFIG
-void wxFileHistory::Load(wxConfigBase& config)
+void wxFileHistory::Load(const wxConfigBase& config)
 {
     m_fileHistory.Clear();
 

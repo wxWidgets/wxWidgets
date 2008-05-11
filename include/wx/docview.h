@@ -423,7 +423,7 @@ public:
     virtual void FileHistoryUseMenu(wxMenu *menu);
     virtual void FileHistoryRemoveMenu(wxMenu *menu);
 #if wxUSE_CONFIG
-    virtual void FileHistoryLoad(wxConfigBase& config);
+    virtual void FileHistoryLoad(const wxConfigBase& config);
     virtual void FileHistorySave(wxConfigBase& config);
 #endif // wxUSE_CONFIG
 
@@ -601,7 +601,7 @@ public:
     virtual void RemoveMenu(wxMenu *menu);
 
 #if wxUSE_CONFIG
-    virtual void Load(wxConfigBase& config);
+    virtual void Load(const wxConfigBase& config);
     virtual void Save(wxConfigBase& config);
 #endif // wxUSE_CONFIG
 

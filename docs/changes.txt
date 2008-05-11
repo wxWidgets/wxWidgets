@@ -87,6 +87,11 @@ Changes in behaviour not resulting in compilation errors, please read this!
   can still use wxGenericCalendarCtrl instead of wxCalendarCtrl in your code if
   you need the extra features.
 
+- wxDocument::FileHistoryLoad() and wxFileHistory::Load() now take const
+  reference to wxConfigBase argument and not just a reference, please update
+  your code if you overrode these functions and change the functions in the
+  derived classes to use const reference as well.
+
 
 Changes in behaviour which may result in compilation errors
 -----------------------------------------------------------

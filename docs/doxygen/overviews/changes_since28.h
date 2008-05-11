@@ -62,8 +62,36 @@ Finally, a few structure fields, notable @c wxCmdLineEntryDesc::shortName,
 
 @section overview_changes_other Miscellaneous Other Changes
 
-Please see @c docs/changes.txt for details of the other changes until they are
-described in more details here.
+- Default location of wxFileConfig files has changed under Windows, you will
+  need to update your code if you access these files directly.
+
+- wxWindow::IsEnabled() now returns false if a window parent (and not
+  necessarily the window itself) is disabled, new function IsThisEnabled()
+  with the same behaviour as old IsEnabled() was added.
+
+- Generating wxNavigationKeyEvent events doesn't work any more under wxGTK (and
+  other platforms in the future), use wxWindow::Navigate() or NavigateIn()
+  instead.
+
+- Sizers distribute only the extra space between the stretchable items
+  according to their proportions and not all available space. We believe the
+  new behaviour corresponds better to user expectations but if you did rely
+  on the old behaviour you will have to update your code to set the minimal
+  sizes of the sizer items to be in the same proportion as the items
+  proportions to return to the old behaviour.
+
+- wxWindow::Freeze/Thaw() are not virtual any more, if you overrode them in
+  your code you need to override DoFreeze/Thaw() instead now.
+
+- wxCalendarCtrl has native implementation in wxGTK, but it has less features
+  than the generic one. The native implementation is used by default, but you
+  can still use wxGenericCalendarCtrl instead of wxCalendarCtrl in your code if
+  you need the extra features.
+
+- wxDocument::FileHistoryLoad() and wxFileHistory::Load() now take const
+  reference to wxConfigBase argument and not just a reference, please update
+  your code if you overrode these functions and change the functions in the
+  derived classes to use const reference as well.
 
 */
 
