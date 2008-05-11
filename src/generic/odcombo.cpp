@@ -1027,13 +1027,29 @@ int wxOwnerDrawnComboBox::DoInsertItems(const wxArrayStringsAdapter& items,
     EnsurePopupControl();
 
     const unsigned int count = items.GetCount();
-    for( unsigned int i = 0; i < count; ++i, ++pos )
-    {
-        GetVListBoxComboPopup()->Insert(items[i], pos);
-        AssignNewItemClientData(pos, clientData, i, type);
-    }
 
-    return pos - 1;
+    if ( HasFlag(wxCB_SORT) )
+    {
+        int n = pos;
+
+        for ( unsigned int i = 0; i < count; ++i )
+        {
+            int n = GetVListBoxComboPopup()->Append(items[i]);
+            AssignNewItemClientData(n, clientData, i, type);
+        }
+
+        return n;
+    }
+    else
+    {
+        for ( unsigned int i = 0; i < count; ++i, ++pos )
+        {
+            GetVListBoxComboPopup()->Insert(items[i], pos);
+            AssignNewItemClientData(pos, clientData, i, type);
+        }
+
+        return pos - 1;
+    }
 }
 
 void wxOwnerDrawnComboBox::DoSetItemClientData(unsigned int n, void* clientData)
