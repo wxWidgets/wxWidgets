@@ -36,6 +36,9 @@ public:
 protected:
     wxTaskBarIconArea *m_iconWnd;
 
+private:
+    void OnDestroy(wxWindowDestroyEvent&);
+
     DECLARE_DYNAMIC_CLASS(wxTaskBarIcon)
 };
 
