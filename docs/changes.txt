@@ -324,6 +324,7 @@ All (GUI):
   from any window class, not just wxPanel.
 - Allow having menu separators with ids != wxID_SEPARATOR (Jeff Tupper)
 - Fix appending items to sorted wxComboCtrl after creation (Jaakko Salli)
+- Don't blit area larger than necessary in wxBufferedDC::UnMask (Liang Jian)
 
 wxGTK:
 
