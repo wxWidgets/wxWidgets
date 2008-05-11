@@ -114,8 +114,8 @@ struct wxCmdLineEntryDesc
                  described below. For example, @c "-v" might be a switch
                  meaning "enable verbose mode".
     - @b option: Option for us here is something which comes with a value 0
-                 unlike a switch. For example, @c -o:filename might be an
-                 option for specifing the name of the output file.
+                 unlike a switch. For example, @c -o: @c filename might be an
+                 option for specifying the name of the output file.
     - @b parameter: This is a required program argument.
 
 
@@ -161,8 +161,8 @@ struct wxCmdLineEntryDesc
 
     Another global option is the set of characters which may be used to start
     an option (otherwise, the word on the command line is assumed to be a
-    parameter). Under Unix, "-" is always used, but Windows has at least two
-    common choices for this: "-" and "/". Some programs also use "+". The
+    parameter). Under Unix, @c "-" is always used, but Windows has at least two
+    common choices for this: @c "-" and @c "/". Some programs also use "+". The
     default is to use what suits most the current platform, but may be changed
     with SetSwitchChars() method.
 
@@ -240,8 +240,7 @@ public:
         Specifies both the command line (in Unix format) and the
         @ref SetDesc() "command line description".
     */
-    wxCmdLineParser(const wxCmdLineEntryDesc* desc, int argc,
-                    char** argv);
+    wxCmdLineParser(const wxCmdLineEntryDesc* desc, int argc, char** argv);
 
     /**
         Specifies both the command line (in Windows format) and the
