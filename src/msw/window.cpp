@@ -3669,6 +3669,12 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
                             WXDWORD style,
                             WXDWORD extendedStyle)
 {
+    // check a common bug in the user code: if the window is created with a
+    // non-default ctor and Create() is called too, we'd create 2 HWND for a
+    // single wxWindow object and this results in all sorts of trouble,
+    // especially for wxTLWs
+    wxCHECK_MSG( !m_hWnd, true, "window can't be recreated" );
+
     // choose the position/size for the new window
     int x, y, w, h;
     (void)MSWGetCreateWindowCoords(pos, size, x, y, w, h);
