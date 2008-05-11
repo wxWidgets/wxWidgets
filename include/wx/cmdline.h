@@ -192,6 +192,9 @@ public:
     // give the usage message describing all program options
     void Usage() const;
 
+    // return the usage string, call Usage() to directly show it to the user
+    wxString GetUsageString() const;
+
     // get the command line arguments
     // ------------------------------
 
@@ -229,9 +232,6 @@ public:
     static wxArrayString ConvertStringToArgs(const wxString& cmdline);
 
 private:
-    // get usage string
-    wxString GetUsageString() const;
-
     // common part of all ctors
     void Init();
 

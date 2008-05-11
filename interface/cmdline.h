@@ -430,5 +430,12 @@ public:
         @see SetLogo()
     */
     void Usage() const;
+
+    /**
+        Return the string containing the program usage description.
+
+        Call Usage() to directly show this string to the user.
+     */
+    wxString GetUsageString() const;
 };
 
