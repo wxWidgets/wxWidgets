@@ -263,7 +263,10 @@ wxTaskBarIcon::wxTaskBarIcon() : m_iconWnd(NULL)
 wxTaskBarIcon::~wxTaskBarIcon()
 {
     if (m_iconWnd)
+    {
+        m_iconWnd->Disconnect(wxEVT_DESTROY, NULL, NULL, this);
         RemoveIcon();
+    }
 }
 
 bool wxTaskBarIcon::IsOk() const
