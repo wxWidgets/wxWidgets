@@ -243,6 +243,7 @@ All:
   wxQueueEvent() replacing wxPostEvent().
 - wxString now uses std::[w]string internally by default, meaning that it is
   now thread-safe if the standard library provided with your compiler is.
+- Use different Win32 class names in different wx instances (Thomas Hauk)
 
 All (Unix):
 
