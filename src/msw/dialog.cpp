@@ -152,6 +152,7 @@ void wxDialog::Init()
 #if wxUSE_TOOLBAR && defined(__POCKETPC__)
     m_dialogToolBar = NULL;
 #endif
+    m_hGripper = 0;
 }
 
 bool wxDialog::Create(wxWindow *parent,
@@ -183,6 +184,9 @@ bool wxDialog::Create(wxWindow *parent,
     CreateToolBar();
 #endif
 
+    if( HasFlag(wxRESIZE_BORDER) )
+        CreateGripper();
+
     return true;
 }
 
@@ -192,6 +196,8 @@ wxDialog::~wxDialog()
 
     // this will also reenable all the other windows for a modal dialog
     Show(false);
+
+    DestroyGripper();
 }
 
 // ----------------------------------------------------------------------------
@@ -336,6 +342,75 @@ void wxDialog::EndModal(int retCode)
 }
 
 // ----------------------------------------------------------------------------
+// wxDialog gripper handling
+// ----------------------------------------------------------------------------
+
+void wxDialog::SetWindowStyleFlag(long style)
+{
+    wxDialogBase::SetWindowStyleFlag(style);
+
+    if( HasFlag(wxRESIZE_BORDER) )
+        CreateGripper();
+    else
+        DestroyGripper();
+}
+
+void wxDialog::CreateGripper()
+{
+    if( !m_hGripper )
+    {
+        m_hGripper = (WXHWND)::CreateWindow
+                               (
+                                    wxT("SCROLLBAR"),
+                                    wxT(""),
+                                    WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS |
+                                    SBS_SIZEGRIP |
+                                    SBS_SIZEBOX |
+                                    SBS_SIZEBOXBOTTOMRIGHTALIGN,
+                                    0, 0, 0, 0,
+                                    GetHwnd(),
+                                    0,
+                                    wxGetInstance(),
+                                    NULL
+                               );
+
+        // position the gripper correctly after creation
+        ResizeGripper();
+    }
+}
+
+void wxDialog::DestroyGripper()
+{
+    if ( m_hGripper )
+    {
+        ::DestroyWindow((HWND) m_hGripper);
+        m_hGripper = 0;
+    }
+}
+
+void wxDialog::ShowGripper(bool show)
+{
+    wxASSERT_MSG( m_hGripper, _T("shouldn't be called if we have no gripper") );
+
+    ::ShowWindow((HWND)m_hGripper, show ? SW_SHOW : SW_HIDE);
+}
+
+void wxDialog::ResizeGripper()
+{
+    wxASSERT_MSG( m_hGripper, _T("shouldn't be called if we have no gripper") );
+
+    HWND hwndGripper = (HWND)m_hGripper;
+
+    const wxRect rectGripper = wxRectFromRECT(wxGetWindowRect(hwndGripper));
+    const wxSize size = GetClientSize() - rectGripper.GetSize();
+
+    ::SetWindowPos(hwndGripper, HWND_BOTTOM,
+                   size.x, size.y,
+                   rectGripper.width, rectGripper.height,
+                   SWP_NOACTIVATE);
+}
+
+// ----------------------------------------------------------------------------
 // wxWin event handlers
 // ----------------------------------------------------------------------------
 
@@ -416,6 +491,23 @@ WXLRESULT wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPar
             break;
 
         case WM_SIZE:
+            if ( m_hGripper )
+            {
+                switch ( wParam )
+                {
+                    case SIZE_MAXIMIZED:
+                        ShowGripper(false);
+                        break;
+
+                    case SIZE_RESTORED:
+                        ShowGripper(true);
+                        // fall through
+
+                    default:
+                        ResizeGripper();
+                }
+            }
+
             // the Windows dialogs unfortunately are not meant to be resizeable
             // at all and their standard class doesn't include CS_[VH]REDRAW
             // styles which means that the window is not refreshed properly

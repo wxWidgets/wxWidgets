@@ -85,6 +85,8 @@ public:
 
     virtual void Raise();
 
+    virtual void SetWindowStyleFlag(long style);
+
 #ifdef __POCKETPC__
     // Responds to the OK button in a PocketPC titlebar. This
     // can be overridden, or you can change the id used for
@@ -106,6 +108,13 @@ protected:
     // common part of all ctors
     void Init();
 
+    // these functions deal with the gripper window shown in the corner of
+    // resizeable dialogs
+    void CreateGripper();
+    void DestroyGripper();
+    void ShowGripper(bool show);
+    void ResizeGripper();
+
 private:
     wxWindow*   m_oldFocus;
     bool        m_endModalCalled; // allow for closing within InitDialog
@@ -116,6 +125,9 @@ private:
 
     // this pointer is non-NULL only while the modal event loop is running
     wxDialogModalData *m_modalData;
+
+    // gripper window for a resizable dialog, NULL if we're not resizable
+    WXHWND m_hGripper;
 
     DECLARE_DYNAMIC_CLASS(wxDialog)
     DECLARE_NO_COPY_CLASS(wxDialog)

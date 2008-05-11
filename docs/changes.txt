@@ -353,6 +353,7 @@ wxMSW:
 - Allow tooltips longer than 64 (up to 128) characters in wxTaskBarIcon
 - Fix centering wxFileDialog and allow positioning it
 - Allow centering wxMessageDialog on its parent window (troelsk)
+- Show resize gripper on resizeable dialogs (Kolya Kosenko)
 - Implement support for display enumeration under WinCE (Vince Harron)
 - Use different Win32 class names in different wx instances (Thomas Hauk)
 
