@@ -50,7 +50,7 @@ public:
     /* Update the status bar to the new value.
        @param value new value
        @param newmsg if used, new message to display
-       @returns true if ABORT button has not been pressed
+       @return true if ABORT button has not been pressed
     */
     virtual bool Update(int value, const wxString& newmsg = wxEmptyString, bool *skip = NULL);
 

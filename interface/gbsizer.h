@@ -86,7 +86,7 @@ public:
     /**
         Adds the given item to the given position.
         
-        @returns A valid pointer if the item was successfully placed at the
+        @return A valid pointer if the item was successfully placed at the
                  given position, or @NULL if something was already there.
     */
     wxSizerItem* Add(wxWindow* window, const wxGBPosition& pos,

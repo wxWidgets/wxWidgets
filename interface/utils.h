@@ -515,7 +515,7 @@ wxString wxStripMenuCodes(const wxString& str, int flags = wxStrip_All);
     Copies the user's email address into the supplied buffer, by concatenating
     the values returned by wxGetFullHostName() and wxGetUserId().
 
-    @returns @true if successful, @false otherwise.
+    @return @true if successful, @false otherwise.
 
     @header{wx/utils.h}
 */
@@ -527,7 +527,7 @@ wxString wxGetEmailAddress();
     @param buf Buffer to store the email address in.
     @param sz  Size of the buffer.
 
-    @returns @true if successful, @false otherwise.
+    @return @true if successful, @false otherwise.
 
     @header{wx/utils.h}
 */
@@ -559,7 +559,7 @@ wxString wxGetHomeDir();
     SYSTEM_NAME; if this is not found, the entry @b HostName in the wxWidgets
     section of the WIN.INI file is tried.
 
-    @returns The hostname if successful or an empty string otherwise.
+    @return The hostname if successful or an empty string otherwise.
 
     @see wxGetFullHostName()
 
@@ -573,7 +573,7 @@ wxString wxGetHostName();
     @param buf Buffer to store the host name in.
     @param sz  Size of the buffer.
 
-    @returns @true if successful, @false otherwise.
+    @return @true if successful, @false otherwise.
 
     @header{wx/utils.h}
 */
@@ -607,7 +607,7 @@ wxString wxGetUserHome(const wxString& user = "");
     environment variables USER and LOGNAME; if neither of these is found, the
     entry @b UserId in the @b wxWidgets section of the WIN.INI file is tried.
 
-    @returns The login name if successful or an empty string otherwise.
+    @return The login name if successful or an empty string otherwise.
 
     @see wxGetUserName()
 
@@ -621,7 +621,7 @@ wxString wxGetUserId();
     @param buf Buffer to store the login name in.
     @param sz  Size of the buffer.
 
-    @returns @true if successful, @false otherwise.
+    @return @true if successful, @false otherwise.
 
     @header{wx/utils.h}
 */
@@ -634,7 +634,7 @@ bool wxGetUserId(char* buf, int sz);
     wxWidgets section of the WIN.INI file. If PenWindows is running, the entry
     Current in the section User of the PENWIN.INI file is used.
 
-    @returns The full user name if successful or an empty string otherwise.
+    @return The full user name if successful or an empty string otherwise.
 
     @see wxGetUserId()
 
@@ -648,7 +648,7 @@ wxString wxGetUserName();
     @param buf Buffer to store the full user name in.
     @param sz  Size of the buffer.
 
-    @returns @true if successful, @false otherwise.
+    @return @true if successful, @false otherwise.
 
     @header{wx/utils.h}
 */
@@ -950,7 +950,7 @@ bool wxShell(const wxString& command = NULL);
     @param flags
         Either wxSHUTDOWN_POWEROFF or wxSHUTDOWN_REBOOT
 
-    @returns @true on success, @false if an error occurred.
+    @return @true on success, @false if an error occurred.
 
     @header{wx/utils.h}
 */

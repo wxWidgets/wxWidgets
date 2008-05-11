@@ -33,7 +33,7 @@ public:
     /**
         The derived class must implement this to create the popup control.
 
-        @returns @true if the call succeeded, @false otherwise.
+        @return @true if the call succeeded, @false otherwise.
     */
     virtual bool Create(wxWindow* parent);
 
@@ -359,9 +359,9 @@ public:
 
         The parameters are the same as those for DoShowPopup().
 
-        @returns @true if animation finishes before the function returns,
-                 @false otherwise. In the latter case you need to manually call
-                 DoShowPopup() after the animation ends.
+        @return @true if animation finishes before the function returns,
+                @false otherwise. In the latter case you need to manually call
+                DoShowPopup() after the animation ends.
     */
     virtual bool AnimateShow(const wxRect& rect, int flags);
 
@@ -430,7 +430,7 @@ public:
         Returns disabled button bitmap that has been set with
         SetButtonBitmaps().
 
-        @returns A reference to the disabled state bitmap.
+        @return A reference to the disabled state bitmap.
     */
     const wxBitmap GetBitmapDisabled() const;
 
@@ -438,7 +438,7 @@ public:
         Returns button mouse hover bitmap that has been set with
         SetButtonBitmaps().
 
-        @returns A reference to the mouse hover state bitmap.
+        @return A reference to the mouse hover state bitmap.
     */
     const wxBitmap GetBitmapHover() const;
 
@@ -446,7 +446,7 @@ public:
         Returns default button bitmap that has been set with
         SetButtonBitmaps().
 
-        @returns A reference to the normal state bitmap.
+        @return A reference to the normal state bitmap.
     */
     const wxBitmap GetBitmapNormal() const;
 
@@ -454,7 +454,7 @@ public:
         Returns depressed button bitmap that has been set with
         SetButtonBitmaps().
 
-        @returns A reference to the depressed state bitmap.
+        @return A reference to the depressed state bitmap.
     */
     const wxBitmap GetBitmapPressed() const;
 
@@ -475,8 +475,8 @@ public:
         missing, you need to instead use wxGenericComboCtrl, which however may
         lack a native look and feel (but otherwise sports identical API).
 
-        @returns Value returned is a combination of the flags defined in
-                 wxComboCtrlFeatures.
+        @return Value returned is a combination of the flags defined in
+                wxComboCtrlFeatures.
     */
     static int GetFeatures();
 

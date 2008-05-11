@@ -43,7 +43,7 @@ public:
         In such case, you may want to use wxInputStream::LastRead() method in a loop
         to get the total size.
 
-        @returns Returns the initialized stream. You must delete it yourself
+        @return Returns the initialized stream. You must delete it yourself
                  once you don't use it anymore and this must be done before
                  the wxHTTP object itself is destroyed. The destructor
                  closes the network connection. The next time you will

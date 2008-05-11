@@ -274,7 +274,7 @@ public:
             The validity of these flags depends on the platform and wxWidgets
         configuration.
 
-        @returns @true if the operation succeeded, @false otherwise.
+        @return @true if the operation succeeded, @false otherwise.
 
         @see wxIcon()
     */

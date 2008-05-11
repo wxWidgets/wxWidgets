@@ -91,7 +91,7 @@ public:
         and so it is important to ensure that the condition will be signalled after
         Wait or the thread may sleep forever.
 
-        @returns Returns wxCOND_NO_ERROR on success, another value if an error
+        @return Returns wxCOND_NO_ERROR on success, another value if an error
                  occurred.
 
         @see WaitTimeout()
@@ -226,7 +226,7 @@ public:
         it.  You may optionally specify the stack size to be allocated to it (Ignored on
         platforms that don't support setting it explicitly, eg. Unix).
 
-        @returns One of:
+        @return One of:
     */
     wxThreadError Create(unsigned int stackSize = 0);
 
@@ -382,7 +382,7 @@ public:
         unless you explicitly specify a smaller amount of thread stack space for each
         thread.
 
-        @returns One of:
+        @return One of:
     */
     wxThreadError Create(unsigned int stackSize = 0);
 
@@ -788,14 +788,14 @@ public:
         threads in an atomic way. Returns wxSEMA_OVERFLOW if the count
         would increase the counter past the maximum.
 
-        @returns One of:
+        @return One of:
     */
     wxSemaError Post();
 
     /**
         Same as Wait(), but returns immediately.
 
-        @returns One of:
+        @return One of:
     */
     wxSemaError TryWait();
 
@@ -803,7 +803,7 @@ public:
         Wait indefinitely until the semaphore count becomes strictly positive
         and then decrement it and return.
 
-        @returns One of:
+        @return One of:
     */
     wxSemaError Wait();
 };
@@ -894,28 +894,28 @@ public:
         Locks the mutex object. This is equivalent to
         LockTimeout() with infinite timeout.
 
-        @returns One of:
+        @return One of:
     */
     wxMutexError Lock();
 
     /**
         Try to lock the mutex object during the specified time interval.
 
-        @returns One of:
+        @return One of:
     */
     wxMutexError LockTimeout(unsigned long msec);
 
     /**
         Tries to lock the mutex object. If it can't, returns immediately with an error.
 
-        @returns One of:
+        @return One of:
     */
     wxMutexError TryLock();
 
     /**
         Unlocks the mutex object.
 
-        @returns One of:
+        @return One of:
     */
     wxMutexError Unlock();
 };

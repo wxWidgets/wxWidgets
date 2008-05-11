@@ -217,7 +217,7 @@ public:
 
         The position is counted from the end of the stream.
 
-        @returns Upon successful completion, it returns the new offset as
+        @return Upon successful completion, it returns the new offset as
                  measured in bytes from the beginning of the stream.
                  Otherwise, it returns wxInvalidOffset.
     */
@@ -256,7 +256,7 @@ public:
         it gives you the position in the @e real stream counted from the start of
         the stream.
 
-        @returns Returns the current position in the stream if possible,
+        @return Returns the current position in the stream if possible,
                  wxInvalidOffset in the other case.
     */
     off_t Tell() const;
@@ -332,7 +332,7 @@ public:
         @param mode
             One of wxFromStart, wxFromEnd, wxFromCurrent.
 
-        @returns The new stream position or wxInvalidOffset on error.
+        @return The new stream position or wxInvalidOffset on error.
     */
     off_t SeekO(off_t pos, wxSeekMode mode = wxFromStart);
 
@@ -634,7 +634,7 @@ public:
         Reads data from the input queue and stores it in the specified output stream.
         The data is read until an error is raised by one of the two streams.
 
-        @returns This function returns a reference on the current object, so the
+        @return This function returns a reference on the current object, so the
                  user can test any states of the stream right away.
     */
     wxInputStream Read(void* buffer, size_t size);
@@ -652,7 +652,7 @@ public:
         @param mode
             One of wxFromStart, wxFromEnd, wxFromCurrent.
 
-        @returns The new stream position or wxInvalidOffset on error.
+        @return The new stream position or wxInvalidOffset on error.
     */
     off_t SeekI(off_t pos, wxSeekMode mode = wxFromStart);
 

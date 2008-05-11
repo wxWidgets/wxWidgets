@@ -162,7 +162,7 @@ public:
         @param imageId
             Specifies the optional image index for the new page.
 
-        @returns @true if successful, @false otherwise.
+        @return @true if successful, @false otherwise.
 
         @remarks Do not delete the page, it will be deleted by the notebook.
 
@@ -339,7 +339,7 @@ public:
             The point was over a currently selected page, not over any tab. Note that
         this flag is present only if wxNOT_FOUND is returned.
 
-        @returns Returns the zero-based tab index or wxNOT_FOUND if there is no
+        @return Returns the zero-based tab index or wxNOT_FOUND if there is no
                  tab is at the specified position.
     */
     virtual int HitTest(const wxPoint& pt, long* = NULL) const;
@@ -358,7 +358,7 @@ public:
         @param imageId
             Specifies the optional image index for the new page.
 
-        @returns @true if successful, @false otherwise.
+        @return @true if successful, @false otherwise.
 
         @remarks Do not delete the page, it will be deleted by the notebook.
 

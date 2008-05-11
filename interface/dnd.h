@@ -121,7 +121,7 @@ public:
             Suggested value for return value. Determined by SHIFT or CONTROL
             key states.
 
-        @returns The desired operation or wxDragNone. This is used for optical
+        @return The desired operation or wxDragNone. This is used for optical
                  feedback from the side of the drop source, typically in form
                  of changing the icon.
     */
@@ -136,7 +136,7 @@ public:
         @param y
             The y coordinate of the mouse.
 
-        @returns @true to accept the data, or @false to veto the operation.
+        @return @true to accept the data, or @false to veto the operation.
     */
     virtual bool OnDrop(wxCoord x, wxCoord y);
 
@@ -152,7 +152,7 @@ public:
             Suggested default for return value. Determined by SHIFT or CONTROL
             key states.
 
-        @returns The desired operation or wxDragNone. This is used for optical
+        @return The desired operation or wxDragNone. This is used for optical
                  feedback from the side of the drop source, typically in form
                  of changing the icon.
     */
@@ -244,7 +244,7 @@ public:
             (which includes the previous flag), this is even the default
             operation.
 
-        @returns The operation requested by the user, may be ::wxDragCopy,
+        @return The operation requested by the user, may be ::wxDragCopy,
                  ::wxDragMove, ::wxDragLink, ::wxDragCancel or ::wxDragNone if
                  an error occurred.
     */
@@ -266,7 +266,7 @@ public:
         @param scrolling
             @true if the window is scrolling. MSW only.
 
-        @returns @false if you want default feedback, or @true if you implement
+        @return @false if you want default feedback, or @true if you implement
                  your own feedback. The return values is ignored under GTK.
     */
     virtual bool GiveFeedback(wxDragResult effect);
@@ -349,7 +349,7 @@ public:
 
     This macro should be used with wxDropSource::wxDropSource().
 
-    @returns wxCursor on MSW, otherwise returns a wxIcon
+    @return wxCursor on MSW, otherwise returns a wxIcon
 
     @header{wx/dnd.h}
 */

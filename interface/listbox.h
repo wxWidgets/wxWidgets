@@ -150,7 +150,7 @@ public:
             A reference to an wxArrayInt instance that is used to store the result of
         the query.
 
-        @returns The number of selections.
+        @return The number of selections.
 
         @remarks Use this with a multiple selection listbox.
 
@@ -168,7 +168,7 @@ public:
         @param point
             Point of item (in client coordinates) to obtain
 
-        @returns Item located at point, or wxNOT_FOUND if unimplemented or the
+        @return Item located at point, or wxNOT_FOUND if unimplemented or the
                  item does not exist.
 
         @since 2.7.0
@@ -200,7 +200,7 @@ public:
         @param n
             The zero-based item index.
 
-        @returns @true if the given item is selected, @false otherwise.
+        @return @true if the given item is selected, @false otherwise.
     */
     bool IsSelected(int n) const;
 

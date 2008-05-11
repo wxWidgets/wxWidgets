@@ -86,7 +86,7 @@ public:
         @param blue
             An array of blue values.
 
-        @returns @true if the creation was successful, @false otherwise.
+        @return @true if the creation was successful, @false otherwise.
 
         @see wxPalette()
     */
@@ -109,7 +109,7 @@ public:
         @param blue
             Blue value.
 
-        @returns The nearest palette index or @c wxNOT_FOUND for unexpected errors.
+        @return The nearest palette index or @c wxNOT_FOUND for unexpected errors.
 
         @see GetRGB()
     */
@@ -128,7 +128,7 @@ public:
         @param blue
             Receives the blue value.
 
-        @returns @true if the operation was successful.
+        @return @true if the operation was successful.
 
         @see GetPixel()
     */

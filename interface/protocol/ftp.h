@@ -116,7 +116,7 @@ public:
         Send the specified @a command to the FTP server. @a ret specifies
         the expected result.
 
-        @returns @true if the command has been sent successfully, else @false.
+        @return @true if the command has been sent successfully, else @false.
     */
     bool CheckCommand(const wxString& command, char ret);
 
@@ -173,7 +173,7 @@ public:
         This list always has the same format and contains one full (including the
         directory path) file name per line.
 
-        @returns @true if the file list was successfully retrieved, @false otherwise.
+        @return @true if the file list was successfully retrieved, @false otherwise.
 
         @see GetDirList()
     */
@@ -190,7 +190,7 @@ public:
 
         You will be notified when the EOF is reached by an error.
 
-        @returns Returns @NULL if an error occurred (it could be a network failure
+        @return Returns @NULL if an error occurred (it could be a network failure
                  or the fact that the file doesn't exist).
     */
     wxInputStream* GetInputStream(const wxString& path);
@@ -206,7 +206,7 @@ public:
         The returned stream has all but the seek functionality of wxStreams.
         When the user finishes writing data, he has to delete the stream to close it.
 
-        @returns An initialized write-only stream.
+        @return An initialized write-only stream.
 
         @see wxOutputStream
     */

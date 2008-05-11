@@ -723,7 +723,7 @@ public:
         to scale both dimensions by the same factor you can also use
         operator*=().
 
-        @returns A reference to this object (so that you can concatenate other
+        @return A reference to this object (so that you can concatenate other
                  operations in the same line).
     */
     wxSize& Scale(float xscale, float yscale);

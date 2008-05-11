@@ -437,7 +437,7 @@ public:
     //@{
 
     /**
-        @returns @true if either a group or an entry with a given name exists.
+        @return @true if either a group or an entry with a given name exists.
     */
     bool Exists(wxString& strName) const;
 
@@ -451,12 +451,12 @@ public:
     wxConfigBase::EntryType GetEntryType(const wxString& name) const;
 
     /**
-        @returns @true if the entry by this name exists.
+        @return @true if the entry by this name exists.
     */
     bool HasEntry(wxString& strName) const;
 
     /**
-        @returns @true if the group by this name exists.
+        @return @true if the group by this name exists.
     */
     bool HasGroup(const wxString& strName) const;
 
@@ -503,7 +503,7 @@ public:
         Read a string from the key. The default value is returned if the key
         was not found.
 
-        @returns @true if value was really read, @false if the default was used.
+        @return @true if value was really read, @false if the default was used.
     */
     const bool Read(const wxString& key, wxString* str,
                       const wxString& defaultVal) const;
@@ -637,8 +637,8 @@ public:
         and the new one) shouldn't contain backslashes, i.e. only simple names
         and not arbitrary paths are accepted by this function.
 
-        @returns @false if @a oldName doesn't exist or if @a newName already
-                 exists.
+        @return @false if @a oldName doesn't exist or if @a newName already
+                exists.
     */
     bool RenameEntry(const wxString& oldName, const wxString& newName);
 
@@ -647,8 +647,8 @@ public:
         old and the new one) shouldn't contain backslashes, i.e. only simple
         names and not arbitrary paths are accepted by this function.
 
-        @returns @false if @a oldName doesn't exist or if @a newName already
-                 exists.
+        @return @false if @a oldName doesn't exist or if @a newName already
+                exists.
     */
     bool RenameGroup(const wxString& oldName, const wxString& newName);
 

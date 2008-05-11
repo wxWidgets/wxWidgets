@@ -131,7 +131,7 @@ public:
     /**
         Returns the bitmap for the disabled state, which may be invalid.
 
-        @returns A reference to the disabled state bitmap.
+        @return A reference to the disabled state bitmap.
 
         @see SetBitmapDisabled()
     */
@@ -143,7 +143,7 @@ public:
     /**
         Returns the bitmap for the focused state, which may be invalid.
 
-        @returns A reference to the focused state bitmap.
+        @return A reference to the focused state bitmap.
 
         @see SetBitmapFocus()
     */
@@ -165,7 +165,7 @@ public:
     /**
         Returns the label bitmap (the one passed to the constructor), always valid.
 
-        @returns A reference to the button's label bitmap.
+        @return A reference to the button's label bitmap.
 
         @see SetBitmapLabel()
     */
@@ -176,7 +176,7 @@ public:
     /**
         Returns the bitmap for the selected state.
 
-        @returns A reference to the selected state bitmap.
+        @return A reference to the selected state bitmap.
 
         @see SetBitmapSelected()
     */

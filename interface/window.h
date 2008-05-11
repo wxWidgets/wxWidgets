@@ -422,7 +422,7 @@ public:
         non-existent
         windows.
 
-        @returns @true if the window has either been successfully deleted, or it
+        @return @true if the window has either been successfully deleted, or it
                  has been added to the list of windows pending real
                  deletion.
     */
@@ -436,7 +436,7 @@ public:
     /**
         Disables the window, same as @ref enable() Enable(@false).
 
-        @returns Returns @true if the window has been disabled, @false if it had
+        @return Returns @true if the window has been disabled, @false if it had
                  been already disabled before the call to this function.
     */
     bool Disable();
@@ -491,7 +491,7 @@ public:
         @param enable
             If @true, enables the window for input. If @false, disables the window.
 
-        @returns Returns @true if the window has been enabled or disabled, @false
+        @return Returns @true if the window has been enabled or disabled, @false
                  if nothing was done, i.e. if the window had already
                  been in the specified state.
 
@@ -978,7 +978,7 @@ public:
         @param y
             The vertical position of the menu
 
-        @returns The selected menu item id or wxID_NONE if none selected or an
+        @return The selected menu item id or wxID_NONE if none selected or an
                  error occurred.
     */
     int GetPopupMenuSelectionFromUser(wxMenu& menu,
@@ -1180,7 +1180,7 @@ public:
         Navigate() if the key event is one normally used for
         keyboard navigation and return @true in this case.
 
-        @returns Returns @true if the key pressed was for navigation and was
+        @return Returns @true if the key pressed was for navigation and was
                  handled, @false otherwise.
 
         @see Navigate()
@@ -1473,7 +1473,7 @@ public:
             A combination of wxNavigationKeyEvent::IsForward and
         wxNavigationKeyEvent::WinChange.
 
-        @returns Returns @true if the focus was moved to another window or @false
+        @return Returns @true if the focus was moved to another window or @false
                  if nothing changed.
 
         @remarks You may wish to call this from a text control custom keypress
@@ -1501,7 +1501,7 @@ public:
         @param count
             The number of sequential IDs to reserve.
 
-        @returns Returns the ID or the first ID of the range, or wxID_NONE if the
+        @return Returns the ID or the first ID of the range, or wxID_NONE if the
                  specified number of identifiers couldn't be allocated.
 
         @see UnreserveControlId(), wxIdManager, @ref overview_windowidsoverview
@@ -1656,7 +1656,7 @@ public:
         @param virtualKeyCode
             The virtual key code of the hotkey.
 
-        @returns @true if the hotkey was registered successfully. @false if some
+        @return @true if the hotkey was registered successfully. @false if some
                  other application already registered a hotkey with this
                  modifier/virtualKeyCode combination.
 
@@ -1697,7 +1697,7 @@ public:
             The event handler to remove, must be non-@NULL and
             must be present in this windows event handlers chain
 
-        @returns Returns @true if it was found and @false otherwise (this also
+        @return Returns @true if it was found and @false otherwise (this also
                  results in an assert failure so this function should
                  only be called when the handler is supposed to be
                  there).
@@ -1735,7 +1735,7 @@ public:
         Scrolls the window by the given number of lines down (if @a lines is
         positive) or up.
 
-        @returns Returns @true if the window was scrolled, @false if it was already
+        @return Returns @true if the window was scrolled, @false if it was already
                  on top/bottom and nothing was done.
 
         @remarks This function is currently only implemented under MSW and
@@ -1750,7 +1750,7 @@ public:
         Scrolls the window by the given number of pages down (if @a pages is
         positive) or up.
 
-        @returns Returns @true if the window was scrolled, @false if it was already
+        @return Returns @true if the window was scrolled, @false if it was already
                  on top/bottom and nothing was done.
 
         @remarks This function is currently only implemented under MSW and wxGTK.
@@ -2021,7 +2021,7 @@ public:
             Font to associate with this window, pass
             wxNullFont to reset to the default font.
 
-        @returns @true if the want was really changed, @false if it was already set
+        @return @true if the want was really changed, @false if it was already set
                  to this  font and so nothing was done.
 
         @see GetFont(), InheritAttributes()
@@ -2446,7 +2446,7 @@ public:
         @param show
             If @true displays the window. Otherwise, hides it.
 
-        @returns @true if the window has been shown or hidden or @false if nothing
+        @return @true if the window has been shown or hidden or @false if nothing
                  was done because it already was in the requested state.
 
         @see IsShown(), Hide(), wxRadioBox::Show
@@ -2494,7 +2494,7 @@ public:
         Also, please notice that not all styles can be changed after the control
         creation.
 
-        @returns Returns @true if the style was turned on by this function, @false
+        @return Returns @true if the style was turned on by this function, @false
                  if it was switched off.
 
         @see SetWindowStyleFlag(), HasFlag()
@@ -2518,7 +2518,7 @@ public:
         If the window has @c wxWS_EX_VALIDATE_RECURSIVELY extra style flag set,
         the method will also call TransferDataToWindow() of all child windows.
 
-        @returns Returns @false if a transfer failed.
+        @return Returns @false if a transfer failed.
 
         @see TransferDataFromWindow(), wxValidator, Validate()
     */
@@ -2531,7 +2531,7 @@ public:
             Numeric identifier of the hotkey. Must be the same id that was passed to
         RegisterHotKey.
 
-        @returns @true if the hotkey was unregistered successfully, @false if the
+        @return @true if the hotkey was unregistered successfully, @false if the
                  id was invalid.
 
         @remarks This function is currently only implemented under MSW.
@@ -2596,7 +2596,7 @@ public:
         If the window has @c wxWS_EX_VALIDATE_RECURSIVELY extra style flag set,
         the method will also call Validate() of all child windows.
 
-        @returns Returns @false if any of the validations failed.
+        @return Returns @false if any of the validations failed.
 
         @see TransferDataFromWindow(), TransferDataToWindow(),
              wxValidator

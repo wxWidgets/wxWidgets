@@ -90,8 +90,8 @@ public:
         @param name
             Control name.
 
-        @returns @true if the control was successfully created or @false if
-                 creation failed.
+        @return @true if the control was successfully created or @false if
+                creation failed.
     */
     bool Create(wxWindow* parent, wxWindowID id,
                 const wxAnimation& anim = wxNullAnimation,
@@ -246,7 +246,7 @@ public:
              @li wxANIMATION_TYPE_ANI: load an ANI file;
              @li wxANIMATION_TYPE_ANY: tries to autodetect the filetype.
 
-        @returns @true if the operation succeeded, @false otherwise.
+        @return @true if the operation succeeded, @false otherwise.
     */
     virtual bool Load(wxInputStream& stream,
                       wxAnimationType type = wxANIMATION_TYPE_ANY);
@@ -260,7 +260,7 @@ public:
             One of the wxAnimationType values; wxANIMATION_TYPE_ANY
             means that the function should try to autodetect the filetype.
 
-        @returns @true if the operation succeeded, @false otherwise.
+        @return @true if the operation succeeded, @false otherwise.
     */
     virtual bool LoadFile(const wxString& name,
                           wxAnimationType type = wxANIMATION_TYPE_ANY);

@@ -68,7 +68,7 @@ public:
         @c wxLB_MULTIPLE which indicates that the listbox should support
         multiple selection.
 
-        @returns @true on success or @false if the control couldn't be created.
+        @return @true on success or @false if the control couldn't be created.
     */
     bool Create(wxWindow* parent, wxWindowID id = wxID_ANY,
                 const wxPoint& pos = wxDefaultPosition,
@@ -79,7 +79,7 @@ public:
         Deselects all the items in the listbox. This method is only valid for
         multi selection listboxes.
 
-        @returns @true if any items were changed, i.e. if there had been any
+        @return @true if any items were changed, i.e. if there had been any
                  selected items before, or @false if all the items were already
                  deselected.
 
@@ -239,7 +239,7 @@ public:
         Selects or deselects the specified item which must be valid (i.e. not
         equal to @c wxNOT_FOUND).
 
-        @returns @true if the items selection status has changed or @false
+        @return @true if the items selection status has changed or @false
                  otherwise.
 
         This function is only valid for the multiple selection listboxes, use
@@ -250,7 +250,7 @@ public:
     /**
         Selects all the items in the listbox.
 
-        @returns @true if any items were changed, i.e. if there had been any
+        @return @true if any items were changed, i.e. if there had been any
                  unselected items before, or @false if all the items were
                  already selected.
 
@@ -264,7 +264,7 @@ public:
         Selects all items in the specified range which may be given in any
         order.
 
-        @returns @true if the items selection status has changed or @false
+        @return @true if the items selection status has changed or @false
                  otherwise.
 
         This method is only valid for multi selection listboxes.

@@ -82,7 +82,7 @@ public:
         @param rect
             The rectangle values are placed in this variable.
 
-        @returns @true if the field index is valid, @false otherwise.
+        @return @true if the field index is valid, @false otherwise.
 
         @see wxRect
     */
@@ -99,7 +99,7 @@ public:
         @param i
             The number of the status field to retrieve, starting from zero.
 
-        @returns The status field string if the field is valid, otherwise the
+        @return The status field string if the field is valid, otherwise the
                  empty string.
 
         @see SetStatusText()

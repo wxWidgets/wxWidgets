@@ -60,7 +60,7 @@ public:
         @param icon
             Icon to use as the image.
 
-        @returns The new zero-based image index.
+        @return The new zero-based image index.
 
         @remarks The original bitmap or icon is not affected by the Add
                  operation, and can be deleted afterwards.
@@ -169,7 +169,7 @@ public:
         @param height
             receives the height of the images in the list
 
-        @returns @true if the function succeeded, @false if it failed (for example,
+        @return @true if the function succeeded, @false if it failed (for example,
                  if the image list was not yet initialized).
     */
     bool GetSize(int index, int& width, int& height) const;
@@ -195,7 +195,7 @@ public:
         @param icon
             Icon to use as the image.
 
-        @returns @true if the replacement was successful, @false otherwise.
+        @return @true if the replacement was successful, @false otherwise.
 
         @remarks The original bitmap or icon is not affected by the Replace
                  operation, and can be deleted afterwards.

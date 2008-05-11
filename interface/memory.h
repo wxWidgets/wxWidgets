@@ -54,7 +54,7 @@ public:
         Checks the memory blocks for errors, starting from the currently set
         checkpoint.
 
-        @returns Returns the number of errors, so a value of zero represents
+        @return Returns the number of errors, so a value of zero represents
                  success. Returns -1 if an error was detected that
                  prevents further checking.
     */
@@ -65,7 +65,7 @@ public:
         current debug stream. Calls the @b Dump member function for each wxObject
         derived instance.
 
-        @returns @true if the function succeeded, @false otherwise.
+        @return @true if the function succeeded, @false otherwise.
     */
     bool Dump();
 

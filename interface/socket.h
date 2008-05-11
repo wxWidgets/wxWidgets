@@ -24,7 +24,7 @@ public:
         problems. Internally, this is the same as setting the IP address
         to @b INADDR_ANY.
 
-        @returns Returns @true on success, @false if something went wrong.
+        @return Returns @true on success, @false if something went wrong.
     */
     bool AnyAddress();
 
@@ -107,7 +107,7 @@ public:
         or catch @b wxSOCKET_CONNECTION events, then call Accept once you know
         that there is an incoming connection waiting to be accepted.
 
-        @returns Returns an opened socket connection, or @NULL if an error
+        @return Returns an opened socket connection, or @NULL if an error
                  occurred or if the wait parameter was @false and there
                  were no pending connections.
 
@@ -122,7 +122,7 @@ public:
         @param socket
             Socket to be initialized
 
-        @returns Returns @true on success, or @false if an error occurred or if the
+        @return Returns @true on success, or @false if an error occurred or if the
                  wait parameter was @false and there were no pending
                  connections.
     */
@@ -141,7 +141,7 @@ public:
         @param millisecond
             Number of milliseconds to wait.
 
-        @returns Returns @true if an incoming connection arrived, @false if the
+        @return Returns @true if an incoming connection arrived, @false if the
                  timeout elapsed.
     */
     bool WaitForAccept(long seconds = -1, long millisecond = 0);
@@ -170,7 +170,7 @@ public:
         On IPV4 implementations, 0.0.0.0
         On IPV6 implementations, ::
 
-        @returns Returns @true on success, @false if something went wrong.
+        @return Returns @true on success, @false if something went wrong.
     */
     virtual bool AnyAddress();
 
@@ -179,7 +179,7 @@ public:
         to @b INADDR_BROADCAST.
         On IPV4 implementations, 255.255.255.255
 
-        @returns Returns @true on success, @false if something went wrong.
+        @return Returns @true on success, @false if something went wrong.
     */
     virtual bool BroadcastAddress();
 
@@ -206,7 +206,7 @@ public:
         On IPV4 implementations, 127.0.0.1
         On IPV6 implementations, ::1
 
-        @returns Returns @true on success, @false if something went wrong.
+        @return Returns @true on success, @false if something went wrong.
     */
     virtual bool LocalHost();
 
@@ -270,7 +270,7 @@ public:
         @param wait
             If @true, waits for the connection to complete.
 
-        @returns Returns @true if the connection is established and no error
+        @return Returns @true if the connection is established and no error
                  occurs.
 
         @see WaitOnConnect(), wxSocketBase::SetNotify,
@@ -293,7 +293,7 @@ public:
         @param millisecond
             Number of milliseconds to wait.
 
-        @returns WaitOnConnect returns @true if the connection request completes.
+        @return WaitOnConnect returns @true if the connection request completes.
                  This does not necessarily mean that the connection was
                  successfully established; it might also happen that the
                  connection was refused by the peer. Use  IsConnected to
@@ -490,7 +490,7 @@ public:
         socket objects in the stack.
         Destroy calls Close() automatically.
 
-        @returns Always @true.
+        @return Always @true.
     */
     bool Destroy();
 
@@ -525,7 +525,7 @@ public:
         address field contains the complete local address of the socket (local
         address, local port, ...).
 
-        @returns @true if no error happened, @false otherwise.
+        @return @true if no error happened, @false otherwise.
     */
     bool GetLocal(wxSockAddress& addr) const;
 
@@ -534,7 +534,7 @@ public:
         address field contains the complete peer host address of the socket
         (address, port, ...).
 
-        @returns @true if no error happened, @false otherwise.
+        @return @true if no error happened, @false otherwise.
     */
     bool GetPeer(wxSockAddress& addr) const;
 
@@ -634,7 +634,7 @@ public:
         @param nbytes
             Number of bytes.
 
-        @returns Returns a reference to the current object.
+        @return Returns a reference to the current object.
 
         @see Error(), LastError(), LastCount(),
              SetFlags()
@@ -651,7 +651,7 @@ public:
         @param nbytes
             Number of bytes.
 
-        @returns Returns a reference to the current object.
+        @return Returns a reference to the current object.
 
         @see Error(), LastError(), LastCount(),
              SetFlags()
@@ -671,7 +671,7 @@ public:
         @param nbytes
             Size of the buffer.
 
-        @returns Returns a reference to the current object.
+        @return Returns a reference to the current object.
 
         @see Error(), LastError(), LastCount(),
              SetFlags(), WriteMsg()
@@ -896,7 +896,7 @@ public:
         @param nbytes
             Number of bytes.
 
-        @returns Returns a reference to the current object.
+        @return Returns a reference to the current object.
 
         @see Error(), LastCount(), LastError()
     */
@@ -920,7 +920,7 @@ public:
         @param millisecond
             Number of milliseconds to wait.
 
-        @returns Returns @true when any of the above conditions is satisfied,
+        @return Returns @true when any of the above conditions is satisfied,
                  @false if the timeout was reached.
 
         @see InterruptWait(), wxSocketServer::WaitForAccept,
@@ -940,7 +940,7 @@ public:
         @param millisecond
             Number of milliseconds to wait.
 
-        @returns Returns @true if the connection was lost, @false if the timeout
+        @return Returns @true if the connection was lost, @false if the timeout
                  was reached.
 
         @see InterruptWait(), Wait()
@@ -961,7 +961,7 @@ public:
         @param millisecond
             Number of milliseconds to wait.
 
-        @returns Returns @true if the socket becomes readable, @false on timeout.
+        @return Returns @true if the socket becomes readable, @false on timeout.
 
         @see InterruptWait(), Wait()
     */
@@ -981,7 +981,7 @@ public:
         @param millisecond
             Number of milliseconds to wait.
 
-        @returns Returns @true if the socket becomes writable, @false on timeout.
+        @return Returns @true if the socket becomes writable, @false on timeout.
 
         @see InterruptWait(), Wait()
     */
@@ -997,7 +997,7 @@ public:
         @param nbytes
             Number of bytes.
 
-        @returns Returns a reference to the current object.
+        @return Returns a reference to the current object.
 
         @see Error(), LastError(), LastCount(),
              SetFlags()
@@ -1018,7 +1018,7 @@ public:
         @param nbytes
             Number of bytes to send.
 
-        @returns Returns a reference to the current object.
+        @return Returns a reference to the current object.
     */
     wxSocketBase WriteMsg(const void* buffer, wxUint32 nbytes);
 };
@@ -1065,7 +1065,7 @@ public:
         @param nbytes
             Number of bytes.
 
-        @returns Returns a reference to the current object, and the address of
+        @return Returns a reference to the current object, and the address of
                  the peer that sent the data on address param.
 
         @see wxSocketBase::Error, wxSocketBase::LastError, wxSocketBase::LastCount,
@@ -1087,7 +1087,7 @@ public:
         @param nbytes
             Number of bytes.
 
-        @returns Returns a reference to the current object.
+        @return Returns a reference to the current object.
     */
     wxDatagramSocket SendTo(const wxSockAddress& address,
                             const void* buffer,

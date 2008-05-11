@@ -1149,7 +1149,7 @@ public:
         Together with GetNextSelected() it can be
         used to iterate over all selected items in the control.
 
-        @returns The first selected item, if any, -1 otherwise.
+        @return The first selected item, if any, -1 otherwise.
     */
     long GetFirstSelected() const;
 
@@ -1164,7 +1164,7 @@ public:
         Used together with GetFirstSelected() to
         iterate over all selected items in the control.
 
-        @returns Returns the next selected item or -1 if there are no more of
+        @return Returns the next selected item or -1 if there are no more of
                  them.
     */
     long GetNextSelected(long item) const;

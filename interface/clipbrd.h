@@ -103,7 +103,7 @@ public:
         (possibly eating memory), otherwise the clipboard will be emptied on
         exit.
 
-        @returns @false if the operation is unsuccessful for any reason.
+        @return @false if the operation is unsuccessful for any reason.
     */
     bool Flush();
 
@@ -142,8 +142,8 @@ public:
         Call Close() when you have finished with the clipboard. You should keep
         the clipboard open for only a very short time.
 
-        @returns @true on success. This should be tested (as in the sample
-                 shown above).
+        @return @true on success. This should be tested (as in the sample
+                shown above).
     */
     bool Open();
 

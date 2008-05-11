@@ -35,7 +35,7 @@ public:
         one of supported tags is detected. @a tag contains all necessary
         info (see wxHtmlTag for details).
         
-        @returns @true if ParseInner was called, @false otherwise.
+        @return @true if ParseInner was called, @false otherwise.
     */
     virtual bool HandleTag(const wxHtmlTag& tag);
 

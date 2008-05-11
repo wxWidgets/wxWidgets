@@ -274,9 +274,8 @@ public:
         @a childId is 0 (the action for this object) or greater than 0 (the action
         for a child).
 
-        @returns
-        wxACC_NOT_SUPPORTED if there is no default action for this window
-        (e.g. an edit control).
+        @return wxACC_NOT_SUPPORTED if there is no default action for this
+                window (e.g. an edit control).
     */
     virtual wxAccStatus DoDefaultAction(int childId);
 

@@ -72,7 +72,7 @@ public:
         @param source
             HTML code fragment
         
-        @returns @false if an error occurred, @true otherwise.
+        @return @false if an error occurred, @true otherwise.
     */
     bool AppendToPage(const wxString& source);
 
@@ -140,7 +140,7 @@ public:
     /**
         Loads HTML page from file and displays it.
         
-        @returns @false if an error occurred, @true otherwise
+        @return @false if an error occurred, @true otherwise
         
         @see LoadPage()
     */
@@ -154,7 +154,7 @@ public:
             The address of document. See wxFileSystem for details on address format and
         behaviour of "opener".
         
-        @returns @false if an error occurred, @true otherwise
+        @return @false if an error occurred, @true otherwise
         
         @see LoadFile()
     */
@@ -176,7 +176,7 @@ public:
         @param event
             The mouse event containing other information about the click
         
-        @returns @true if a link was clicked, @false otherwise.
+        @return @true if a link was clicked, @false otherwise.
     */
     virtual bool OnCellClicked(wxHtmlCell cell, wxCoord x, wxCoord y,
                                const wxMouseEvent& event);
@@ -351,7 +351,7 @@ public:
         @param source
             The HTML document source to be displayed.
         
-        @returns @false if an error occurred, @true otherwise.
+        @return @false if an error occurred, @true otherwise.
     */
     bool SetPage(const wxString& source);
 

@@ -68,7 +68,7 @@ public:
         the data associated with the given item. Causes the client connection's
         OnAdvise() member to be called.
 
-        @returns @true if successful.
+        @return @true if successful.
     */
     bool Advise(const wxString& item, const void* data, size_t size,
                 wxIPCFormat format = wxIPC_PRIVATE);
@@ -85,7 +85,7 @@ public:
         calling application must explicitly delete its side of the connection
         having called Disconnect().
 
-        @returns @true if successful.
+        @return @true if successful.
     */
     bool Disconnect();
 
@@ -96,7 +96,7 @@ public:
         Poke() in that respect). Causes the server connection's OnExecute()
         member to be called.
 
-        @returns @true if successful.
+        @return @true if successful.
     */
     bool Execute(const void* data, size_t size,
                  wxIPCFormat format = wxIPC_PRIVATE);
@@ -164,7 +164,7 @@ public:
         used to transfer arbitrary data to the server. Causes the server
         connection's OnPoke() member to be called.
 
-        @returns @true if successful.
+        @return @true if successful.
     */
     bool Poke(const wxString& item, const void* data, size_t size,
               wxIPCFormat format = wxIPC_PRIVATE);
@@ -177,7 +177,7 @@ public:
         Called by the client application to request data from the server.
         Causes the server connection's OnRequest() member to be called.
 
-        @returns A character string (actually a pointer to the connection's
+        @return A character string (actually a pointer to the connection's
                  buffer) if successful, @NULL otherwise.
     */
     const void* Request(const wxString& item, size_t* size,
@@ -188,7 +188,7 @@ public:
         started with the server. Causes the server connection's OnStartAdvise()
         member to be called.
 
-        @returns @true if the server okays it, @false otherwise.
+        @return @true if the server okays it, @false otherwise.
     */
     bool StartAdvise(const wxString& item);
 
@@ -197,7 +197,7 @@ public:
         stopped. Causes the server connection's OnStopAdvise() member to be
         called.
 
-        @returns @true if the server okays it, @false otherwise.
+        @return @true if the server okays it, @false otherwise.
     */
     bool StopAdvise(const wxString& item);
 };

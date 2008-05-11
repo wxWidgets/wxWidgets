@@ -196,7 +196,7 @@ public:
         @param name
             The status bar window name.
 
-        @returns A pointer to the status bar if it was created successfully, @NULL
+        @return A pointer to the status bar if it was created successfully, @NULL
                  otherwise.
 
         @remarks The width of the status bar is the whole width of the frame
@@ -222,7 +222,7 @@ public:
         @param name
             The toolbar window name.
 
-        @returns A pointer to the toolbar if it was created successfully, @NULL
+        @return A pointer to the toolbar if it was created successfully, @NULL
                  otherwise.
 
         @remarks By default, the toolbar is an instance of wxToolBar (which is
@@ -286,7 +286,7 @@ public:
         @param name
             The window name.
 
-        @returns A status bar object.
+        @return A status bar object.
 
         @remarks An application can override this function to return a different
                  kind of status bar. The default implementation returns
@@ -310,7 +310,7 @@ public:
         @param name
             The toolbar window name.
 
-        @returns A toolbar object.
+        @return A toolbar object.
 
         @remarks An application can override this function to return a different
                  kind of toolbar. The default implementation returns an

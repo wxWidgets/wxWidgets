@@ -528,7 +528,7 @@ public:
         @param event
             Event to process.
 
-        @returns @true if a suitable event handler function was found and
+        @return @true if a suitable event handler function was found and
                  executed, and the function did not call wxEvent::Skip.
 
         @see SearchEventTable()
@@ -543,7 +543,7 @@ public:
         @param event
             Event to process.
 
-        @returns @true if the event was processed, @false if no handler was found
+        @return @true if the event was processed, @false if no handler was found
                  or an exception was thrown.
 
         @see wxWindow::HandleWindowEvent
@@ -559,7 +559,7 @@ public:
         @param event
             Event to be matched against an event table entry.
 
-        @returns @true if a suitable event handler function was found and
+        @return @true if a suitable event handler function was found and
                  executed, and the function did not call wxEvent::Skip.
 
         @remarks This function looks through the object's event table and tries

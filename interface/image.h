@@ -25,6 +25,8 @@
     @category{FIXME}
 
     @see wxImage, wxInitAllImageHandlers()
+
+    @todo Document all image handler types, indicating their library.
 */
 class wxImageHandler : public wxObject
 {
@@ -54,7 +56,7 @@ public:
             Opened input stream for reading image data. Currently, the stream must
         support seeking.
 
-        @returns Number of available images. For most image handlers, this is 1
+        @return Number of available images. For most image handlers, this is 1
                  (exceptions are TIFF and ICO formats).
     */
     int GetImageCount(wxInputStream& stream);
@@ -91,7 +93,7 @@ public:
         @param index
             The index of the image in the file (starting from zero).
 
-        @returns @true if the operation succeeded, @false otherwise.
+        @return @true if the operation succeeded, @false otherwise.
 
         @see wxImage::LoadFile, wxImage::SaveFile, SaveFile()
     */
@@ -106,7 +108,7 @@ public:
         @param stream
             Opened output stream for writing the data.
 
-        @returns @true if the operation succeeded, @false otherwise.
+        @return @true if the operation succeeded, @false otherwise.
 
         @see wxImage::LoadFile, wxImage::SaveFile, LoadFile()
     */
@@ -359,7 +361,7 @@ public:
         wxImageHistogram object. wxImageHistogram is a specialization of
         wxHashMap "template" and is defined as follows:
 
-        @returns Returns number of colours in the histogram.
+        @return Returns number of colours in the histogram.
     */
     unsigned long ComputeHistogram(wxImageHistogram& histogram) const;
 
@@ -371,7 +373,7 @@ public:
         If the image image doesn't have alpha channel,
         ConvertAlphaToMask does nothing.
 
-        @returns @false if FindFirstUnusedColour returns @false, @true otherwise.
+        @return @false if FindFirstUnusedColour returns @false, @true otherwise.
     */
     bool ConvertAlphaToMask(unsigned char threshold = 128);
 
@@ -413,7 +415,7 @@ public:
         @param height
             The height of the image in pixels.
 
-        @returns @true if the call succeeded, @false otherwise.
+        @return @true if the call succeeded, @false otherwise.
     */
     bool Create(int width, int height, bool clear = true);
 
@@ -429,7 +431,7 @@ public:
             Initial values of the colour. Returned colour
             will have RGB values equal to or greater than these.
 
-        @returns Returns @false if there is no unused colour left, @true on success.
+        @return Returns @false if there is no unused colour left, @true on success.
     */
     bool FindFirstUnusedColour(unsigned char* r, unsigned char* g,
                                unsigned char* b,
@@ -450,7 +452,7 @@ public:
         @param mimetype
             MIME type.
 
-        @returns A pointer to the handler if found, @NULL otherwise.
+        @return A pointer to the handler if found, @NULL otherwise.
 
         @see wxImageHandler
     */
@@ -536,7 +538,7 @@ public:
             @li wxBITMAP_TYPE_ANI: Load a Windows animated cursor file (ANI).
             @li wxBITMAP_TYPE_ANY: Will try to autodetect the format.
 
-        @returns Number of available images. For most image handlers, this is 1
+        @return Number of available images. For most image handlers, this is 1
                  (exceptions are TIFF and ICO formats).
     */
     static int GetImageCount(const wxString& filename,
@@ -550,7 +552,7 @@ public:
         file extension masks
         suitable for passing to file open/save dialog boxes.
 
-        @returns The format of the returned string is
+        @return The format of the returned string is
                  "(*.ext1;*.ext2)|*.ext1;*.ext2".
 
         @see wxImageHandler
@@ -739,7 +741,7 @@ public:
             interpreted as the first image (index=0) by the GIF and TIFF handler
             and as the largest and most colourful one by the ICO handler.
 
-        @returns @true if the operation succeeded, @false otherwise. If the
+        @return @true if the operation succeeded, @false otherwise. If the
                  optional index parameter is out of range, @false is
                  returned and a call to wxLogError() takes place.
 
@@ -793,7 +795,7 @@ public:
         @param name
             The handler name.
 
-        @returns @true if the handler was found and removed, @false otherwise.
+        @return @true if the handler was found and removed, @false otherwise.
 
         @see wxImageHandler
     */
@@ -884,7 +886,7 @@ public:
         @param mimetype
             MIME type.
 
-        @returns @true if the operation succeeded, @false otherwise.
+        @return @true if the operation succeeded, @false otherwise.
 
         @remarks Depending on how wxWidgets has been configured, not all formats
                  may be available.
@@ -980,7 +982,7 @@ public:
         @param mr,mg,mb
             RGB value of pixels in mask that will be used to create the mask.
 
-        @returns Returns @false if mask does not have same dimensions as the image
+        @return Returns @false if mask does not have same dimensions as the image
                  or if there is no unused colour left. Returns @true if
                  the mask was successfully applied.
     */
@@ -1039,7 +1041,7 @@ public:
         @param image
             Image to assign.
 
-        @returns Returns 'this' object.
+        @return Returns 'this' object.
     */
     wxImage operator =(const wxImage& image);
 };

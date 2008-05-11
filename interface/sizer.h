@@ -585,7 +585,7 @@ public:
         Returns a wxOrientation value that specifies whether the sizer flexibly
         resizes its columns, rows, or both (default).
 
-        @returns One of the following values:
+        @return One of the following values:
 
         @see SetFlexibleDirection()
     */
@@ -595,7 +595,7 @@ public:
         Returns the value that specifies how the sizer grows in the "non-flexible"
         direction if there is one.
 
-        @returns One of the following values:
+        @return One of the following values:
 
         @see SetFlexibleDirection(),
              SetNonFlexibleGrowMode()

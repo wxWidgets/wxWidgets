@@ -32,7 +32,7 @@ public:
             Pointer to the location to return the size of this module in
             memory in, may be @NULL.
 
-        @returns @true if the load address and module size were retrieved,
+        @return @true if the load address and module size were retrieved,
                  @false if this information is not available.
     */
     bool GetAddress(void** addr, size_t len) const;

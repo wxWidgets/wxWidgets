@@ -131,7 +131,7 @@ public:
 
         @remarks Under Windows, only dialog box buttons respond to this function.
 
-        @returns the old default item (possibly NULL)
+        @return the old default item (possibly NULL)
     */
     virtual wxWindow* SetDefault();
 

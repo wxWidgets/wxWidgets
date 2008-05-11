@@ -114,7 +114,7 @@ public:
     /**
         Gets the state of a 2-state checkbox.
 
-        @returns Returns @true if it is checked, @false otherwise.
+        @return Returns @true if it is checked, @false otherwise.
     */
     bool GetValue() const;
 
@@ -127,8 +127,8 @@ public:
     /**
         Returns whether or not the checkbox is a 3-state checkbox.
 
-        @returns Returns @true if this checkbox is a 3-state checkbox, @false
-                 if it's a 2-state checkbox.
+        @return @true if this checkbox is a 3-state checkbox, @false if it's
+                a 2-state checkbox.
     */
     bool Is3State() const;
 
@@ -136,9 +136,9 @@ public:
         Returns whether or not the user can set the checkbox to the third
         state.
 
-        @returns Returns @true if the user can set the third state of this
-                 checkbox, @false if it can only be set programmatically or if
-                 it's a 2-state checkbox.
+        @return @true if the user can set the third state of this checkbox,
+                @false if it can only be set programmatically or if it's a
+                2-state checkbox.
     */
     bool Is3rdStateAllowedForUser() const;
 

@@ -468,7 +468,7 @@ public:
         - wxFLOOD_BORDER: The area to be flooded is bounded by the given
           colour.
 
-        @returns @false if the operation failed.
+        @return @false if the operation failed.
 
         @note The present implementation for non-Windows platforms may fail to
               find colour borders if the pixels do not match the colour
@@ -581,7 +581,7 @@ public:
         @a string is the text string to measure, @e heightLine, if non @NULL,
         is where to store the height of a single line.
 
-        @returns The text extent as a wxSize object.
+        @return The text extent as a wxSize object.
 
         @note This function works with both single-line and multi-line strings.
 

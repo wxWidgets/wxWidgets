@@ -10,7 +10,7 @@
 //@{
 
 /**
-    @returns @true if the pointer is either @NULL or points to an empty string,
+    @return @true if the pointer is either @NULL or points to an empty string,
              @false otherwise.
 
     @header{wx/wxcrt.h}
@@ -30,7 +30,7 @@ size_t wxStrlen(const char* p);
     This function complements the standard C function @e stricmp() which
     performs case-insensitive comparison.
 
-    @returns A negative value, 0, or positive value if @a p1 is less than,
+    @return A negative value, 0, or positive value if @a p1 is less than,
              equal to or greater than @a p2. The comparison is case-sensitive.
 
     @header{wx/wxcrt.h}
@@ -41,7 +41,7 @@ int wxStrcmp(const char* p1, const char* p2);
     This function complements the standard C function @e strcmp() which performs
     case-sensitive comparison.
 
-    @returns A negative value, 0, or positive value if @a p1 is less than,
+    @return A negative value, 0, or positive value if @a p1 is less than,
              equal to or greater than @e p2. The comparison is case-insensitive.
 
     @header{wx/wxcrt.h}

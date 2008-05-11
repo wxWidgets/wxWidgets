@@ -107,8 +107,8 @@ public:
         @param origin
             Help event origin, see wxHelpEvent::GetOrigin.
 
-        @returns @true if help was shown, or @false if no help was available
-                 for this window.
+        @return @true if help was shown, or @false if no help was available
+                for this window.
 
         @since 2.7.0
     */

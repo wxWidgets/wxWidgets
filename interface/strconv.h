@@ -330,7 +330,7 @@ public:
             The length of the output buffer but including
             NUL, ignored if out is @NULL
 
-        @returns The length of the converted string excluding the trailing NUL.
+        @return The length of the converted string excluding the trailing NUL.
     */
     virtual size_t MB2WC(wchar_t* out, const char* in,
                          size_t outLen) const;

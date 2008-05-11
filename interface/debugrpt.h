@@ -41,7 +41,7 @@ public:
         Present the report to the user and allow him to modify it by removing
         some or all of the files and, potentially, adding some notes.
 
-        @returns @true if the report should be processed or @false if the user
+        @return @true if the report should be processed or @false if the user
                  chose to cancel report generation or removed all files from
                  it.
     */
@@ -198,7 +198,7 @@ public:
         the given @a name and writes @a text to it, then adds the file to the
         report. The @a filename shouldn't contain the path.
 
-        @returns @true if file could be added successfully, @false if an IO
+        @return @true if file could be added successfully, @false if an IO
                  error occurred.
     */
     bool AddText(const wxString& filename, const wxString& text,
@@ -232,7 +232,7 @@ public:
         This method should be used to construct the full name of the files
         which you wish to add to the report using AddFile().
 
-        @returns The name of the temporary directory used for the files in this
+        @return The name of the temporary directory used for the files in this
                  report.
     */
     const wxString GetDirectory() const;

@@ -33,7 +33,7 @@
     @param srcLen
         The length of the input data.
 
-    @returns @c wxCONV_FAILED if the output buffer is too small.
+    @return @c wxCONV_FAILED if the output buffer is too small.
 
     @header{wx/base64.h}
 */

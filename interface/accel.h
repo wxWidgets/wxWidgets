@@ -116,8 +116,8 @@ public:
         @param str
             Should be a string in the form "flags-keycode"
 
-        @returns @true if the given string correctly initialized this object
-                 (i.e. if IsOk() returns true after this call)
+        @return @true if the given string correctly initialized this object
+                (i.e. if IsOk() returns true after this call)
     */
     bool FromString(const wxString& str);
 

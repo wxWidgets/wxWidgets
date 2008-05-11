@@ -101,7 +101,7 @@ public:
         by the system and so we don't do any polling and this parameter is
         ignored.
 
-        @returns @false if couldn't set up automatic check for online status.
+        @return @false if couldn't set up automatic check for online status.
     */
     bool EnableAutoCheckOnlineStatus(size_t nSeconds = 60);
 

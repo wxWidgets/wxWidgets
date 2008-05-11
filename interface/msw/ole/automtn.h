@@ -156,7 +156,7 @@ public:
         @param ptrArgs
             If non-null, contains an array of constant pointers to variants.
 
-        @returns @true if the operation was successful, @false otherwise.
+        @return @true if the operation was successful, @false otherwise.
 
         @remarks Two types of argument array are provided, so that when possible
                  pointers are used for efficiency.

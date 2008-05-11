@@ -177,7 +177,7 @@ public:
         @param count
             The number of bytes to read.
 
-        @returns The number of bytes read.
+        @return The number of bytes read.
     */
     size_t Read(void* buffer, size_t count);
 
@@ -190,7 +190,7 @@ public:
             Conversion object to use in Unicode build; by default supposes
             that file contents is encoded in UTF-8.
 
-        @returns @true if file was read successfully, @false otherwise.
+        @return @true if file was read successfully, @false otherwise.
     */
     bool ReadAll(wxString* str, const wxMBConv& conv = wxConvAuto());
 
@@ -234,7 +234,7 @@ public:
         @param count
             The number of bytes to write.
 
-        @returns The number of bytes written.
+        @return The number of bytes written.
     */
     size_t Write(const void* buffer, size_t count);
 

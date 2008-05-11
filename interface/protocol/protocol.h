@@ -44,7 +44,7 @@ public:
         It is advised to destroy the input stream instead of aborting the stream
         this way.
 
-        @returns Returns @true, if successful, else @false.
+        @return Returns @true, if successful, else @false.
     */
     bool Abort();
 
@@ -69,7 +69,7 @@ public:
         available for the moment for this sort of stream.
         You will be notified when the EOF is reached by an error.
 
-        @returns Returns the initialized stream. You will have to delete it
+        @return Returns the initialized stream. You will have to delete it
                  yourself once you don't use it anymore. The destructor
                  closes the network connection.
 
@@ -81,7 +81,7 @@ public:
         Tries to reestablish a previous opened connection (close and renegotiate
         connection).
 
-        @returns @true, if the connection is established, else @false.
+        @return @true, if the connection is established, else @false.
     */
     bool Reconnect();
 

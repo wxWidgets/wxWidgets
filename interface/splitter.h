@@ -290,7 +290,7 @@ public:
         (default)
             to choose the default position (half of the total window height).
 
-        @returns @true if successful, @false otherwise (the window was already
+        @return @true if successful, @false otherwise (the window was already
                  split).
 
         @remarks This should be called if you wish to initially view two panes.
@@ -319,7 +319,7 @@ public:
         (default)
             to choose the default position (half of the total window width).
 
-        @returns @true if successful, @false otherwise (the window was already
+        @return @true if successful, @false otherwise (the window was already
                  split).
 
         @remarks This should be called if you wish to initially view two panes.
@@ -339,7 +339,7 @@ public:
         @param toRemove
             The pane to remove, or @NULL to remove the right or bottom pane.
 
-        @returns @true if successful, @false otherwise (the window was not split).
+        @return @true if successful, @false otherwise (the window was not split).
 
         @remarks This call will not actually delete the pane being removed; it
                  calls OnUnsplit which can be overridden for the desired

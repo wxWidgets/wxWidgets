@@ -63,7 +63,7 @@ public:
         brushes, it does not make sense to have a reference counting scheme to
         do this cloning because all validators should have separate data.
 
-        @returns This base function returns @NULL.
+        @return This base function returns @NULL.
     */
     virtual wxObject* Clone() const;
 

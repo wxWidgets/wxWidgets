@@ -136,8 +136,8 @@ public:
         @param name
             Control name.
 
-        @returns @true if the control was successfully created or @false if
-                 creation failed.
+        @return @true if the control was successfully created or @false if
+                creation failed.
     */
     bool Create(wxWindow* parent, wxWindowID id,
                 const wxString& label,

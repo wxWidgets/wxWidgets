@@ -240,7 +240,7 @@ public:
     /**
         Releases the capture set by @b SetCapture.
 
-        @returns @true if the capture release succeeded.
+        @return @true if the capture release succeeded.
 
         @see SetCapture(), wxJoystickEvent
     */
@@ -256,7 +256,7 @@ public:
             threshold. If greater than zero, events are received every pollingFreq
         milliseconds.
 
-        @returns @true if the capture succeeded.
+        @return @true if the capture succeeded.
 
         @see ReleaseCapture(), wxJoystickEvent
     */

@@ -89,7 +89,7 @@ public:
     /**
         Gets the state of the toggle button.
 
-        @returns Returns @true if it is pressed, @false otherwise.
+        @return Returns @true if it is pressed, @false otherwise.
     */
     bool GetValue() const;
 
@@ -154,7 +154,7 @@ public:
     /**
         Gets the state of the toggle button.
 
-        @returns Returns @true if it is pressed, @false otherwise.
+        @return Returns @true if it is pressed, @false otherwise.
     */
     virtual bool GetValue() const;
 

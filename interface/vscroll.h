@@ -304,9 +304,9 @@ public:
         Scroll by the specified number of rows which may be positive (to scroll
         down) or negative (to scroll up).
 
-        @returns @true if the window was scrolled, @false otherwise (for
-                 example, if we're trying to scroll down but we are already
-                 showing the last row).
+        @return @true if the window was scrolled, @false otherwise (for
+                example, if we're trying to scroll down but we are already
+                showing the last row).
     */
     virtual bool ScrollRows(int rows);
 
@@ -314,7 +314,7 @@ public:
         Scroll to the specified row. It will become the first visible row in
         the window.
 
-        @returns @true if we scrolled the window, @false if nothing was done.
+        @return @true if we scrolled the window, @false if nothing was done.
     */
     bool ScrollToRow(size_t row);
 
@@ -441,9 +441,9 @@ public:
         Scroll by the specified number of columns which may be positive (to
         scroll right) or negative (to scroll left).
 
-        @returns @true if the window was scrolled, @false otherwise (for
-                 example, if we're trying to scroll right but we are already
-                 showing the last column).
+        @return @true if the window was scrolled, @false otherwise (for
+                example, if we're trying to scroll right but we are already
+                showing the last column).
     */
     virtual bool ScrollColumns(int columns);
 
@@ -451,7 +451,7 @@ public:
         Scroll to the specified column. It will become the first visible column
         in the window.
 
-        @returns @true if we scrolled the window, @false if nothing was done.
+        @return @true if we scrolled the window, @false if nothing was done.
     */
     bool ScrollToColumn(size_t column);
 

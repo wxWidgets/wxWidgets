@@ -56,8 +56,8 @@ public:
         @param n
             The zero-based index.
 
-        @returns The label of the item or an empty string if the position was
-                 invalid.
+        @return The label of the item or an empty string if the position was
+                invalid.
     */
     virtual wxString GetString(unsigned int n) const;
 
@@ -84,8 +84,8 @@ public:
         @param caseSensitive
             Whether search is case sensitive (default is not).
 
-        @returns The zero-based position of the item, or wxNOT_FOUND if the
-                 string was not found.
+        @return The zero-based position of the item, or wxNOT_FOUND if the
+                string was not found.
     */
     virtual int FindString(const wxString& s, bool bCase = false) const;
 
@@ -113,7 +113,7 @@ public:
         Returns the index of the selected item or @c wxNOT_FOUND if no item is
         selected.
 
-        @returns The position of the current selection.
+        @return The position of the current selection.
 
         @remarks This method can be used with single selection list boxes only,
                  you should use wxListBox::GetSelections() for the list
@@ -130,8 +130,8 @@ public:
         @param string
             The string to select.
 
-        @returns @true if the specified string has been selected, @false if it
-                 wasn't found in the control.
+        @return @true if the specified string has been selected, @false if it
+                wasn't found in the control.
     */
     bool SetStringSelection(const wxString& string);
 
@@ -203,10 +203,10 @@ public:
         @param item
             String to add.
 
-        @returns The return value is the index of the newly inserted item.
-                 Note that this may be different from the last one if the
-                 control is sorted (e.g. has @c wxLB_SORT or @c wxCB_SORT
-                 style).
+        @return The return value is the index of the newly inserted item.
+                Note that this may be different from the last one if the
+                control is sorted (e.g. has @c wxLB_SORT or @c wxCB_SORT
+                style).
     */
     int Append(const wxString& item);
 
@@ -218,10 +218,10 @@ public:
         @param clientData
             Pointer to client data to associate with the new item.
 
-        @returns The return value is the index of the newly inserted item.
-                 Note that this may be different from the last one if the
-                 control is sorted (e.g. has @c wxLB_SORT or @c wxCB_SORT
-                 style).
+        @return The return value is the index of the newly inserted item.
+                Note that this may be different from the last one if the
+                control is sorted (e.g. has @c wxLB_SORT or @c wxCB_SORT
+                style).
     */
     int Append(const wxString& item, void* clientData);
 
@@ -233,10 +233,10 @@ public:
         @param clientData
             Pointer to client data to associate with the new item.
 
-        @returns The return value is the index of the newly inserted item.
-                 Note that this may be different from the last one if the
-                 control is sorted (e.g. has @c wxLB_SORT or @c wxCB_SORT
-                 style).
+        @return The return value is the index of the newly inserted item.
+                Note that this may be different from the last one if the
+                control is sorted (e.g. has @c wxLB_SORT or @c wxCB_SORT
+                style).
     */
     int Append(const wxString& item, wxClientData* clientData);
 
@@ -361,7 +361,7 @@ public:
         @param n
             The zero-based position of the item.
 
-        @returns A pointer to the client data, or @NULL if not present.
+        @return A pointer to the client data, or @NULL if not present.
     */
     void* GetClientData(unsigned int n) const;
 
@@ -375,7 +375,7 @@ public:
         @param n
             The zero-based position of the item.
 
-        @returns A pointer to the client data, or @NULL if not present.
+        @return A pointer to the client data, or @NULL if not present.
     */
     wxClientData* GetClientObject(unsigned int n) const;
 
@@ -418,8 +418,8 @@ public:
         @param pos
             Position to insert item before, zero based.
 
-        @returns The return value is the index of the newly inserted item.
-                 If the insertion failed for some reason, -1 is returned.
+        @return The return value is the index of the newly inserted item.
+                If the insertion failed for some reason, -1 is returned.
     */
     int Insert(const wxString& item, unsigned int pos);
 
@@ -433,8 +433,8 @@ public:
         @param clientData
             Pointer to client data to associate with the new item.
 
-        @returns The return value is the index of the newly inserted item.
-                 If the insertion failed for some reason, -1 is returned.
+        @return The return value is the index of the newly inserted item.
+                If the insertion failed for some reason, -1 is returned.
     */
     int Insert(const wxString& item, unsigned int pos, void* clientData);
 
@@ -448,8 +448,8 @@ public:
         @param clientData
             Pointer to client data to associate with the new item.
 
-        @returns The return value is the index of the newly inserted item.
-                 If the insertion failed for some reason, -1 is returned.
+        @return The return value is the index of the newly inserted item.
+                If the insertion failed for some reason, -1 is returned.
     */
     int Insert(const wxString& item, unsigned int pos,
                wxClientData* clientData);

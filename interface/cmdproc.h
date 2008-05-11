@@ -52,10 +52,10 @@ public:
         Override this member function to execute the appropriate action when
         called.
 
-        @returns @true to indicate that the action has taken place, @false
-                 otherwise. Returning @false will indicate to the command
-                 processor that the action is not undoable and should not be
-                 added to the command history.
+        @return @true to indicate that the action has taken place, @false
+                otherwise. Returning @false will indicate to the command
+                processor that the action is not undoable and should not be
+                added to the command history.
     */
     bool Do();
 
@@ -81,10 +81,10 @@ public:
           execute" operation is hard to write. The docview sample uses the
           first method, to remove or restore segments in the drawing.
 
-        @returns @true to indicate that the action has taken place, @false
-                 otherwise. Returning @false will indicate to the command
-                 processor that the action is not redoable and no change should
-                 be made to the command history.
+        @return @true to indicate that the action has taken place, @false
+                otherwise. Returning @false will indicate to the command
+                processor that the action is not redoable and no change should
+                be made to the command history.
     */
     bool Undo();
 };

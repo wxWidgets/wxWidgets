@@ -281,7 +281,7 @@ public:
         @param mode
             One of wxFromStart, wxFromEnd, wxFromCurrent.
 
-        @returns The actual offset position achieved, or wxInvalidOffset on
+        @return The actual offset position achieved, or wxInvalidOffset on
                  failure.
     */
     wxFileOffset Seek(wxFileOffset ofs,
@@ -295,7 +295,7 @@ public:
         @param ofs
             Number of bytes before the end of the file.
 
-        @returns The actual offset position achieved, or wxInvalidOffset on
+        @return The actual offset position achieved, or wxInvalidOffset on
                  failure.
     */
     wxFileOffset SeekEnd(wxFileOffset ofs = 0);

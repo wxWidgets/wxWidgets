@@ -50,7 +50,7 @@ public:
         @param isResource
             @true if fileName is a resource, @false if it is a filename.
 
-        @returns @true if the call was successful, @false otherwise.
+        @return @true if the call was successful, @false otherwise.
     */
     bool Create(const wxString& fileName, bool isResource = false);
 

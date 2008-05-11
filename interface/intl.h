@@ -544,7 +544,7 @@ public:
     This macro is identical to _() but for the plural variant of
     wxGetTranslation().
 
-    @returns A const wxString.
+    @return A const wxString.
 
     @header{wx/intl.h}
 */
@@ -587,7 +587,7 @@ public:
     would be no translations for the weekday names in the program message
     catalog and wxGetTranslation() wouldn't find them.
 
-    @returns A const wxChar*.
+    @return A const wxChar*.
 
     @header{wx/intl.h}
 */

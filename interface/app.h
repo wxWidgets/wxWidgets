@@ -203,8 +203,7 @@ public:
         Called by wxWidgets on creation of the application. Override this if you wish
         to provide your own (environment-dependent) main loop.
 
-        @returns Returns 0 under X, and the wParam of the WM_QUIT message under
-                 Windows.
+        @return 0 under X, and the wParam of the WM_QUIT message under Windows.
     */
     virtual int MainLoop();
 

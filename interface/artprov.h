@@ -178,8 +178,8 @@ public:
         @param size
             Size of the returned bitmap or wxDefaultSize if size doesn't matter.
 
-        @returns The bitmap if one of registered providers recognizes the ID or
-                 wxNullBitmap otherwise.
+        @return The bitmap if one of registered providers recognizes the ID or
+                wxNullBitmap otherwise.
     */
     static wxBitmap GetBitmap(const wxArtID& id,
                               const wxArtClient& client = wxART_OTHER,
@@ -212,8 +212,8 @@ public:
             wxArtClient identifier of the client (i.e. who is asking for the icon
             bundle).
 
-        @returns The icon bundle if one of registered providers recognizes the ID
-                 or wxNullIconBundle otherwise.
+        @return The icon bundle if one of registered providers recognizes the ID
+                or wxNullIconBundle otherwise.
     */
     static wxIconBundle GetIconBundle(const wxArtID& id,
                                       const wxArtClient& client = wxART_OTHER);

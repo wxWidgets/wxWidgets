@@ -78,7 +78,7 @@ public:
         @param name
             Control name.
 
-        @returns @true if the control was successfully created or @false if
+        @return @true if the control was successfully created or @false if
                  creation failed.
     */
 
@@ -154,14 +154,14 @@ public:
     /**
         Sets(changes) the current directory displayed in the control.
 
-        @returns Returns @true on success, @false otherwise.
+        @return Returns @true on success, @false otherwise.
     */
     bool SetDirectory(const wxString& directory);
 
     /**
         Selects a certain file.
 
-        @returns Returns @true on success, @false otherwise
+        @return Returns @true on success, @false otherwise
     */
     bool SetFilename(const wxString& filename);
 

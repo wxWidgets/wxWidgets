@@ -761,7 +761,7 @@ public:
         be specified. It is thus less flexible then ParseDateTime(), but also
         has less chances to misinterpret the user input.
 
-        @returns @NULL if the conversion failed, otherwise return the pointer
+        @return @NULL if the conversion failed, otherwise return the pointer
                  to the character which stopped the scan.
     */
     const char* ParseDate(const wxString& date,
@@ -771,7 +771,7 @@ public:
         be specified. It is thus less flexible then ParseDateTime(), but also
         has less chances to misinterpret the user input.
 
-        @returns @NULL if the conversion failed, otherwise return the pointer
+        @return @NULL if the conversion failed, otherwise return the pointer
                  to the character which stopped the scan.
     */
     const char* ParseDate(const char* date);
@@ -780,7 +780,7 @@ public:
         be specified. It is thus less flexible then ParseDateTime(), but also
         has less chances to misinterpret the user input.
 
-        @returns @NULL if the conversion failed, otherwise return the pointer
+        @return @NULL if the conversion failed, otherwise return the pointer
                  to the character which stopped the scan.
     */
     const wchar_t* ParseDate(const wchar_t* date);
@@ -792,7 +792,7 @@ public:
         anything that may be accepted and will only reject strings which can
         not be parsed in any way at all.
 
-        @returns @NULL if the conversion failed, otherwise return the pointer
+        @return @NULL if the conversion failed, otherwise return the pointer
                  to the character which stopped the scan.
     */
     const char* ParseDateTime(const wxString& datetime,
@@ -804,7 +804,7 @@ public:
         anything that may be accepted and will only reject strings which can
         not be parsed in any way at all.
 
-        @returns @NULL if the conversion failed, otherwise return the pointer
+        @return @NULL if the conversion failed, otherwise return the pointer
                  to the character which stopped the scan.
     */
     const char* ParseDateTime(const char* datetime);
@@ -815,7 +815,7 @@ public:
         anything that may be accepted and will only reject strings which can
         not be parsed in any way at all.
 
-        @returns @NULL if the conversion failed, otherwise return the pointer
+        @return @NULL if the conversion failed, otherwise return the pointer
                  to the character which stopped the scan.
     */
     const wchar_t* ParseDateTime(const wchar_t* datetime);
@@ -839,7 +839,7 @@ public:
         @a dateDef. If it is not specified, Today() is used as the default
         date.
 
-        @returns @NULL if the conversion failed, otherwise return the pointer
+        @return @NULL if the conversion failed, otherwise return the pointer
                  to the character which stopped the scan.
     */
     const char* ParseFormat(const wxString& date,
@@ -865,7 +865,7 @@ public:
         @a dateDef. If it is not specified, Today() is used as the default
         date.
 
-        @returns @NULL if the conversion failed, otherwise return the pointer
+        @return @NULL if the conversion failed, otherwise return the pointer
                  to the character which stopped the scan.
     */
     const char* ParseFormat(const char* date,
@@ -890,7 +890,7 @@ public:
         @a dateDef. If it is not specified, Today() is used as the default
         date.
 
-        @returns @NULL if the conversion failed, otherwise return the pointer
+        @return @NULL if the conversion failed, otherwise return the pointer
                  to the character which stopped the scan.
     */
     const wchar_t* ParseFormat(const wchar_t* date,
@@ -903,7 +903,7 @@ public:
         the date and time parts must be equal to @a sep for the function to
         succeed.
 
-        @returns @true if the entire string was parsed successfully, @false
+        @return @true if the entire string was parsed successfully, @false
                  otherwise.
     */
     bool ParseISOCombined(const wxString& date, char sep = 'T');
@@ -911,7 +911,7 @@ public:
     /**
         This function parses the date in ISO 8601 format @c "YYYY-MM-DD".
 
-        @returns @true if the entire string was parsed successfully, @false
+        @return @true if the entire string was parsed successfully, @false
                  otherwise.
     */
     bool ParseISODate(const wxString& date);
@@ -919,7 +919,7 @@ public:
     /**
         This function parses the time in ISO 8601 format @c "HH:MM:SS".
 
-        @returns @true if the entire string was parsed successfully, @false
+        @return @true if the entire string was parsed successfully, @false
                  otherwise.
     */
     bool ParseISOTime(const wxString& date);
@@ -987,7 +987,7 @@ public:
         This functions is like ParseDateTime(), but only allows the time to be
         specified in the input string.
 
-        @returns @NULL if the conversion failed, otherwise return the pointer
+        @return @NULL if the conversion failed, otherwise return the pointer
                  to the character which stopped the scan.
     */
     const char* ParseTime(const wxString& time,
@@ -996,7 +996,7 @@ public:
         This functions is like ParseDateTime(), but only allows the time to be
         specified in the input string.
 
-        @returns @NULL if the conversion failed, otherwise return the pointer
+        @return @NULL if the conversion failed, otherwise return the pointer
                  to the character which stopped the scan.
     */
     const char* ParseTime(const char* time);
@@ -1004,7 +1004,7 @@ public:
         This functions is like ParseDateTime(), but only allows the time to be
         specified in the input string.
 
-        @returns @NULL if the conversion failed, otherwise return the pointer
+        @return @NULL if the conversion failed, otherwise return the pointer
                  to the character which stopped the scan.
     */
     const wchar_t* ParseTime(const wchar_t* time);
@@ -1074,7 +1074,7 @@ public:
         Sets the date to the last day in the specified month (the current one
         by default).
 
-        @returns The reference to the modified object itself.
+        @return The reference to the modified object itself.
     */
     wxDateTime SetToLastMonthDay(Month month = Inv_Month,
                                  int year = Inv_Year);
@@ -1092,7 +1092,7 @@ public:
         Sets the date so that it will be the first @a weekday following the
         current date.
 
-        @returns The reference to the modified object itself.
+        @return The reference to the modified object itself.
     */
     wxDateTime& SetToNextWeekDay(WeekDay weekday);
 
@@ -1100,7 +1100,7 @@ public:
         Sets the date so that it will be the last @a weekday before the current
         date.
 
-        @returns The reference to the modified object itself.
+        @return The reference to the modified object itself.
     */
     wxDateTime& SetToPrevWeekDay(WeekDay weekday);
 
@@ -1115,7 +1115,7 @@ public:
         SetToWeekDay(-1, wxDateTime::Sun) will set the date to the last Sunday
         in the current month.
 
-        @returns @true if the date was modified successfully, @false otherwise
+        @return @true if the date was modified successfully, @false otherwise
                  meaning that the specified date doesn't exist.
     */
     bool SetToWeekDay(WeekDay weekday, int n = 1,
@@ -1125,7 +1125,7 @@ public:
         Adjusts the date so that it will still lie in the same week as before,
         but its week day will be the given one.
 
-        @returns The reference to the modified object itself.
+        @return The reference to the modified object itself.
     */
     wxDateTime SetToWeekDayInSameWeek(WeekDay weekday,
                                       WeekFlags flags = Monday_First);
@@ -1136,7 +1136,7 @@ public:
         number should be in the range 1-366 for the leap years and 1-365 for
         the other ones.
 
-        @returns The reference to the modified object itself.
+        @return The reference to the modified object itself.
     */
     wxDateTime& SetToYearDay(wxDateTime_t yday);
 
@@ -1209,7 +1209,7 @@ public:
         Transform the date from the given time zone to the local one. If
         @a noDST is @true, no DST adjustments will be made.
 
-        @returns The date in the local time zone.
+        @return The date in the local time zone.
     */
     wxDateTime FromTimezone(const TimeZone& tz, bool noDST = false) const;
 
@@ -1240,7 +1240,7 @@ public:
         Transform the date to the given time zone. If @a noDST is @true, no DST
         adjustments will be made.
 
-        @returns The date in the new time zone.
+        @return The date in the new time zone.
     */
     wxDateTime ToTimezone(const TimeZone& tz, bool noDST = false) const;
 
@@ -1542,7 +1542,7 @@ public:
     /**
         Returns the sum of two date spans.
 
-        @returns A new wxDateSpan object with the result.
+        @return A new wxDateSpan object with the result.
     */
     wxDateSpan Add(const wxDateSpan& other) const;
     /**
@@ -1618,14 +1618,14 @@ public:
         product is computed by multiplying each of the components by the
         @a factor.
 
-        @returns A new wxDateSpan object with the result.
+        @return A new wxDateSpan object with the result.
     */
     wxDateSpan Multiply(int factor) const;
     /**
         Multiplies this date span by the specified @a factor. The product is
         computed by multiplying each of the components by the @a factor.
 
-        @returns A reference to this wxDateSpan object modified in place.
+        @return A reference to this wxDateSpan object modified in place.
     */
     wxDateSpan& Multiply(int factor);
 
@@ -1670,7 +1670,7 @@ public:
     /**
         Returns the difference of two date spans.
 
-        @returns A new wxDateSpan object with the result.
+        @return A new wxDateSpan object with the result.
     */
     wxDateSpan Subtract(const wxDateSpan& other) const;
     /**
@@ -1729,7 +1729,7 @@ public:
         Multiplies this date span by the specified @a factor. The product is
         computed by multiplying each of the components by the @a factor.
 
-        @returns A reference to this wxDateSpan object modified in place.
+        @return A reference to this wxDateSpan object modified in place.
     */
     wxDateSpan& operator*=(int factor);
 
@@ -1782,7 +1782,7 @@ public:
     /**
         Returns the sum of two time spans.
 
-        @returns A new wxDateSpan object with the result.
+        @return A new wxDateSpan object with the result.
     */
     wxTimeSpan Add(const wxTimeSpan& diff) const;
     /**
@@ -1931,13 +1931,13 @@ public:
     /**
         Returns the product of this time span by @a n.
 
-        @returns A new wxTimeSpan object with the result.
+        @return A new wxTimeSpan object with the result.
     */
     wxTimeSpan Multiply(int n) const;
     /**
         Multiplies this time span by @a n.
 
-        @returns A reference to this wxTimeSpan object modified in place.
+        @return A reference to this wxTimeSpan object modified in place.
     */
     wxTimeSpan& Multiply(int n);
 
@@ -1968,7 +1968,7 @@ public:
     /**
         Returns the difference of two time spans.
 
-        @returns A new wxDateSpan object with the result.
+        @return A new wxDateSpan object with the result.
     */
     wxTimeSpan Subtract(const wxTimeSpan& diff) const;
     /**
@@ -1995,7 +1995,7 @@ public:
     /**
         Multiplies this time span by @a n.
 
-        @returns A reference to this wxTimeSpan object modified in place.
+        @return A reference to this wxTimeSpan object modified in place.
     */
     wxTimeSpan& operator*=(int n);
 

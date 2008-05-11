@@ -556,7 +556,7 @@ public:
         Shows a modal dialog. Program flow does not return until the dialog has
         been dismissed with EndModal().
 
-        @returns The value set with SetReturnCode().
+        @return The value set with SetReturnCode().
 
         @see EndModal(), GetReturnCode(), SetReturnCode()
     */

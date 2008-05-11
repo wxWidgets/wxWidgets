@@ -59,7 +59,7 @@ public:
         @param title
             The title of the menu.
 
-        @returns @true on success, @false if an error occurred.
+        @return @true on success, @false if an error occurred.
 
         @see Insert()
     */
@@ -111,7 +111,7 @@ public:
         @param menu
             If not @NULL, menu will get set to the associated menu.
 
-        @returns The found menu item object, or @NULL if one was not found.
+        @return The found menu item object, or @NULL if one was not found.
     */
     wxMenuItem* FindItem(int id, wxMenu menu = NULL) const;
 
@@ -131,7 +131,7 @@ public:
         @param itemString
             Item to find.
 
-        @returns The menu item identifier, or wxNOT_FOUND if none was found.
+        @return The menu item identifier, or wxNOT_FOUND if none was found.
 
         @remarks Any special menu codes are stripped out of source and target
                  strings before matching.
@@ -145,8 +145,8 @@ public:
         @param id
             The menu item identifier.
 
-        @returns The help string, or the empty string if there was no help string
-                 or the menu item was not found.
+        @return The help string, or the empty string if there was no help string
+                or the menu item was not found.
 
         @see SetHelpString()
     */
@@ -158,8 +158,8 @@ public:
         @param id
             The menu item identifier.
 
-        @returns The menu item label, or the empty string if the item was not
-                 found.
+        @return The menu item label, or the empty string if the item was not
+                found.
 
         @remarks Use only after the menubar has been associated with a frame.
     */
@@ -173,7 +173,7 @@ public:
         @param pos
             Position of the menu on the menu bar, starting from zero.
 
-        @returns The menu label, or the empty string if the menu was not found.
+        @return The menu label, or the empty string if the menu was not found.
 
         @remarks Use only after the menubar has been associated with a frame.
 
@@ -199,7 +199,7 @@ public:
         @param pos
             Position of the menu on the menu bar, starting from zero.
 
-        @returns The menu label, or the empty string if the menu was not found.
+        @return The menu label, or the empty string if the menu was not found.
 
         @remarks Use only after the menubar has been associated with a frame.
 
@@ -215,7 +215,7 @@ public:
         @param pos
             Position of the menu on the menu bar, starting from zero.
 
-        @returns The menu label, or the empty string if the menu was not found.
+        @return The menu label, or the empty string if the menu was not found.
 
         @remarks Use only after the menubar has been associated with a frame.
 
@@ -236,7 +236,7 @@ public:
         @param title
             The title of the menu.
 
-        @returns @true on success, @false if an error occurred.
+        @return @true on success, @false if an error occurred.
 
         @see Append()
     */
@@ -248,7 +248,7 @@ public:
         @param id
             The menu item identifier.
 
-        @returns @true if the item was found and is checked, @false otherwise.
+        @return @true if the item was found and is checked, @false otherwise.
     */
     bool IsChecked(int id) const;
 
@@ -258,7 +258,7 @@ public:
         @param id
             The menu item identifier.
 
-        @returns @true if the item was found and is enabled, @false otherwise.
+        @return @true if the item was found and is enabled, @false otherwise.
     */
     bool IsEnabled(int id) const;
 
@@ -287,8 +287,8 @@ public:
         @param title
             The title of the menu.
 
-        @returns The menu which was previously at position pos. The caller is
-                 responsible for deleting it.
+        @return The menu which was previously at position pos. The caller is
+                responsible for deleting it.
 
         @see Insert(), Remove()
     */
@@ -601,7 +601,7 @@ public:
         @param itemString
             Menu item string to find.
 
-        @returns Menu item identifier, or wxNOT_FOUND if none is found.
+        @return Menu item identifier, or wxNOT_FOUND if none is found.
 
         @remarks Any special menu codes are stripped out of source and target
                  strings before matching.
@@ -618,7 +618,7 @@ public:
             If the pointer is not @NULL, it will be filled with the item's
             parent menu (if the item was found)
 
-        @returns Menu item object or NULL if none is found.
+        @return Menu item object or NULL if none is found.
     */
     const wxMenuItem *  FindItem(int id, wxMenu** menu = NULL) const;
 
@@ -633,8 +633,8 @@ public:
         @param id
             The menu item identifier.
 
-        @returns The help string, or the empty string if there is no help string
-                 or the item was not found.
+        @return The help string, or the empty string if there is no help string
+                or the item was not found.
 
         @see SetHelpString(), Append()
     */
@@ -646,7 +646,7 @@ public:
         @param id
             The menu item identifier.
 
-        @returns The item label, or the empty string if the item was not found.
+        @return The item label, or the empty string if the item was not found.
 
         @see GetLabelText(), SetLabel()
     */
@@ -659,7 +659,7 @@ public:
         @param id
             The menu item identifier.
 
-        @returns The item label, or the empty string if the item was not found.
+        @return The item label, or the empty string if the item was not found.
 
         @see GetLabel(), SetLabel()
     */
@@ -738,7 +738,7 @@ public:
         @param id
             The menu item identifier.
 
-        @returns @true if the menu item is checked, @false otherwise.
+        @return @true if the menu item is checked, @false otherwise.
 
         @see Check()
     */
@@ -750,7 +750,7 @@ public:
         @param id
             The menu item identifier.
 
-        @returns @true if the menu item is enabled, @false otherwise.
+        @return @true if the menu item is enabled, @false otherwise.
 
         @see Enable()
     */
@@ -805,7 +805,7 @@ public:
         @param id
             The identifier of the menu item to remove.
 
-        @returns The item which was detached from the menu.
+        @return The item which was detached from the menu.
     */
     wxMenuItem* Remove(int id);
     
@@ -817,7 +817,7 @@ public:
         @param item
             The menu item to remove.
 
-        @returns The item which was detached from the menu.
+        @return The item which was detached from the menu.
     */
     wxMenuItem* Remove(wxMenuItem* item);
 

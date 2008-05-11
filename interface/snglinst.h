@@ -91,7 +91,7 @@ public:
             create the lock file in under Unix (default is
             wxGetHomeDir())
 
-        @returns Returns @false if initialization failed, it doesn't mean that
+        @return Returns @false if initialization failed, it doesn't mean that
                  another instance is running - use  IsAnotherRunning()
                  to check for it.
     */

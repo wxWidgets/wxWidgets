@@ -771,7 +771,7 @@ public:
 
         @since 2.9.0
 
-        @returns @true if the auto-completion was enabled or @false if the
+        @return @true if the auto-completion was enabled or @false if the
                  operation failed, typically because auto-completion is
                  not supported by the current platform.
 
@@ -787,7 +787,7 @@ public:
 
         @since 2.9.0
 
-        @returns @true if the auto-completion was enabled or @false if the
+        @return @true if the auto-completion was enabled or @false if the
                  operation failed, typically because auto-completion is
                  not supported by the current platform.
 
@@ -884,7 +884,7 @@ public:
         Please note that this function doesn't currently work correctly for all keys
         under any platform but MSW.
 
-        @returns @true if the event resulted in a change to the control, @false
+        @return @true if the event resulted in a change to the control, @false
                  otherwise.
     */
     bool EmulateKeyPress(const wxKeyEvent& event);
@@ -920,7 +920,7 @@ public:
         @param lineNo
             Line number (starting from zero).
 
-        @returns The length of the line, or -1 if lineNo was invalid.
+        @return The length of the line, or -1 if lineNo was invalid.
     */
     int GetLineLength(long lineNo) const;
 
@@ -931,7 +931,7 @@ public:
         @param lineNo
             The line number, starting from zero.
 
-        @returns The contents of the line.
+        @return The contents of the line.
     */
     wxString GetLineText(long lineNo) const;
 
@@ -984,7 +984,7 @@ public:
         Returns the style at this position in the text control. Not all platforms
         support this function.
 
-        @returns @true on success, @false if an error occurred - it may also mean
+        @return @true on success, @false if an error occurred - it may also mean
                  that the styles are not supported under this platform.
 
         @see SetStyle(), wxTextAttr
@@ -1062,7 +1062,7 @@ public:
         @param fileType
             The type of file to load. This is currently ignored in wxTextCtrl.
 
-        @returns @true if successful, @false otherwise.
+        @return @true if successful, @false otherwise.
     */
     bool LoadFile(const wxString& filename,
                   int fileType = wxTEXT_TYPE_ANY);
@@ -1102,7 +1102,7 @@ public:
         @param y
             Receives zero based line number.
 
-        @returns @true on success, @false on failure (most likely due to a too
+        @return @true on success, @false on failure (most likely due to a too
                  large position parameter).
 
         @see XYToPosition()
@@ -1148,7 +1148,7 @@ public:
         @param fileType
             The type of file to save. This is currently ignored in wxTextCtrl.
 
-        @returns @true if the operation was successful, @false otherwise.
+        @return @true if the operation was successful, @false otherwise.
     */
     bool SaveFile(const wxString& filename,
                   int fileType = wxTEXT_TYPE_ANY);
@@ -1168,7 +1168,7 @@ public:
         @param style
             The style for the new text.
 
-        @returns @true on success, @false if an error occurred - may also mean that
+        @return @true on success, @false if an error occurred - may also mean that
                  the styles are not supported under this platform.
 
         @see GetDefaultStyle()
@@ -1255,7 +1255,7 @@ public:
         @param style
             The new style for the range.
 
-        @returns @true on success, @false if an error occurred - it may also mean
+        @return @true on success, @false if an error occurred - it may also mean
                  that the styles are not supported under this platform.
 
         @see GetStyle(), wxTextAttr
@@ -1313,7 +1313,7 @@ public:
         @param y
             The line number.
 
-        @returns The position value, or -1 if x or y was invalid.
+        @return The position value, or -1 if x or y was invalid.
     */
     long XYToPosition(long x, long y);
 

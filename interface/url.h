@@ -85,7 +85,7 @@ public:
         }
         @endcode
 
-        @returns Returns the initialized stream. You will have to delete it
+        @return Returns the initialized stream. You will have to delete it
                  yourself.
 
         @see wxInputStream

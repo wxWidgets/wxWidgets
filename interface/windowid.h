@@ -35,7 +35,7 @@ public:
         @param count
             The number of sequential IDs to reserve.
 
-        @returns The value of the first ID in the sequence, or wxID_NONE.
+        @return The value of the first ID in the sequence, or wxID_NONE.
     */
     static wxWindowID ReserveControlId(int count = 1);
 };

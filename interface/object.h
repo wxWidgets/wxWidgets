@@ -250,7 +250,7 @@ public:
             A pointer to a class information object, which may be obtained
             by using the ::CLASSINFO macro.
 
-        @returns @true if the class represented by info is the same class as this
+        @return @true if the class represented by info is the same class as this
                  one or is derived from it.
     */
     bool IsKindOf(wxClassInfo* info);
@@ -368,7 +368,7 @@ public:
     /**
         Creates an object of the appropriate kind.
 
-        @returns @NULL if the class has not been declared dynamically creatable
+        @return @NULL if the class has not been declared dynamically creatable
                  (typically, this happens for abstract classes).
     */
     wxObject* CreateObject() const;

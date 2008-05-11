@@ -265,7 +265,7 @@ public:
         @param y
             Y position.
 
-        @returns A pointer to a tool if a tool is found, or @NULL otherwise.
+        @return A pointer to a tool if a tool is found, or @NULL otherwise.
 
         @remarks Currently not implemented in wxGTK (always returns @NULL there).
     */
@@ -297,7 +297,7 @@ public:
         @param toolId
             Id of the tool, as passed to AddTool().
 
-        @returns Client data, or @NULL if there is none.
+        @return Client data, or @NULL if there is none.
     */
     wxObject* GetToolClientData(int toolId) const;
 
@@ -307,7 +307,7 @@ public:
         @param toolId
             Id of the tool in question.
 
-        @returns @true if the tool is enabled, @false otherwise.
+        @return @true if the tool is enabled, @false otherwise.
 
         @see EnableTool()
     */
@@ -368,7 +368,7 @@ public:
         @param toolId
             The tool in question.
 
-        @returns @true if the tool is toggled on, @false otherwise.
+        @return @true if the tool is toggled on, @false otherwise.
 
         @see ToggleTool()
     */
@@ -424,7 +424,7 @@ public:
         @param toggleDown
             @true if the tool is a toggle and the toggle is down, otherwise is @false.
 
-        @returns If the tool is a toggle and this function returns @false, the
+        @return If the tool is a toggle and this function returns @false, the
                  toggle toggle state (internal and visual) will not be
                  changed. This provides a way of specifying that toggle
                  operations are not permitted in some circumstances.

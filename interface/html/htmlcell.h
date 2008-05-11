@@ -277,7 +277,7 @@ public:
         @param event
             mouse event that triggered the call
         
-        @returns @true if a link was clicked, @false otherwise.
+        @return @true if a link was clicked, @false otherwise.
     */
     virtual bool ProcessMouseClick(wxHtmlWindowInterface* window,
                                    const wxPoint& pos,

@@ -64,7 +64,7 @@ public:
             A bitmap type identifier - see ::wxBitmapType for a list
             of possible values.
 
-        @returns @true if the call succeeded, @false otherwise (the default).
+        @return @true if the call succeeded, @false otherwise (the default).
     */
     virtual bool Create(wxBitmap* bitmap, const void* data, wxBitmapType type,
                         int width, int height, int depth = 1);
@@ -100,7 +100,7 @@ public:
         @param desiredHeight
             The desired height for the loaded bitmap.
 
-        @returns @true if the operation succeeded, @false otherwise.
+        @return @true if the operation succeeded, @false otherwise.
 
         @see wxBitmap::LoadFile, wxBitmap::SaveFile, SaveFile()
     */
@@ -119,7 +119,7 @@ public:
         @param palette
             An optional palette used for saving the bitmap.
 
-        @returns @true if the operation succeeded, @false otherwise.
+        @return @true if the operation succeeded, @false otherwise.
 
         @see wxBitmap::LoadFile, wxBitmap::SaveFile, LoadFile()
     */
@@ -376,7 +376,7 @@ public:
         @param depth
             The depth of the bitmap in pixels. If this is -1, the screen depth is used.
 
-        @returns @true if the call succeeded, @false otherwise.
+        @return @true if the call succeeded, @false otherwise.
 
         This overload depends on the @a type of data.
 
@@ -389,7 +389,7 @@ public:
     /**
         Finds the handler with the given @a name.
 
-        @returns A pointer to the handler if found, @NULL otherwise.
+        @return A pointer to the handler if found, @NULL otherwise.
     */
     static wxBitmapHandler* FindHandler(const wxString& name);
 
@@ -401,7 +401,7 @@ public:
         @param bitmapType
             The bitmap type managed by the handler, see ::wxBitmapType.
 
-        @returns A pointer to the handler if found, @NULL otherwise.
+        @return A pointer to the handler if found, @NULL otherwise.
     */
     static wxBitmapHandler* FindHandler(const wxString& extension,
                                         wxBitmapType bitmapType);
@@ -412,7 +412,7 @@ public:
         @param bitmapType
             The bitmap type managed by the handler, see ::wxBitmapType.
 
-        @returns A pointer to the handler if found, @NULL otherwise.
+        @return A pointer to the handler if found, @NULL otherwise.
 
         @see wxBitmapHandler
     */
@@ -503,7 +503,7 @@ public:
             One of the ::wxBitmapType values; see the note in the class
             detailed description.
 
-        @returns @true if the operation succeeded, @false otherwise.
+        @return @true if the operation succeeded, @false otherwise.
 
         @remarks A palette may be associated with the bitmap if one exists
                  (especially for colour Windows bitmaps), and if the
@@ -521,7 +521,7 @@ public:
         @param name
             The handler name.
 
-        @returns @true if the handler was found and removed, @false otherwise.
+        @return @true if the handler was found and removed, @false otherwise.
 
         @see wxBitmapHandler
     */
@@ -538,7 +538,7 @@ public:
         @param palette
             An optional palette used for saving the bitmap.
 
-        @returns @true if the operation succeeded, @false otherwise.
+        @return @true if the operation succeeded, @false otherwise.
 
         @remarks Depending on how wxWidgets has been configured, not all formats
                  may be available.

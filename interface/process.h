@@ -237,7 +237,7 @@ public:
             The flags to pass to ::wxExecute().
             Note: @c wxEXEC_SYNC should not be used.
 
-        @returns A pointer to new wxProcess object or @NULL on error.
+        @return A pointer to new wxProcess object or @NULL on error.
 
         @see ::wxExecute()
     */

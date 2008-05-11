@@ -89,7 +89,7 @@ public:
         @param name
             Control name.
 
-        @returns @true if the control was successfully created or @false if
+        @return @true if the control was successfully created or @false if
                  creation failed.
     */
     bool Create(wxWindow* parent, wxWindowID id,
@@ -113,7 +113,7 @@ public:
         @param dt2
             Same as above but for the upper limit.
 
-        @returns @false if no range limits are currently set, @true if at least
+        @return @false if no range limits are currently set, @true if at least
                  one bound is set.
     */
     bool GetRange(wxDateTime* dt1, wxDateTime dt2) const;

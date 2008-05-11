@@ -178,7 +178,7 @@ public:
         @param fileTemp
             The file to open or @NULL to just get the name
 
-        @returns The full temporary file name or an empty string on error.
+        @return The full temporary file name or an empty string on error.
     */
     static wxString CreateTempFileName(const wxString& prefix,
                                        wxFile* fileTemp = NULL);
@@ -333,7 +333,7 @@ public:
         the volume is empty, the program's current working directory is returned for the
         current volume.
 
-        @returns The string containing the current working directory or an empty
+        @return The string containing the current working directory or an empty
                  string on error.
 
         @see AssignCwd()
@@ -511,7 +511,7 @@ public:
         Any of the pointers may be @NULL if the corresponding time is not
         needed.
 
-        @returns @true on success, @false if we failed to retrieve the times.
+        @return @true on success, @false if we failed to retrieve the times.
     */
     bool GetTimes(wxDateTime* dtAccess, wxDateTime* dtMod,
                   wxDateTime* dtCreate) const;
@@ -681,7 +681,7 @@ public:
         @param format
             the file name format, native by default
 
-        @returns @true if the file name has been changed, @false if we failed to do
+        @return @true if the file name has been changed, @false if we failed to do
                  anything with it (currently this only happens if the
                  file name is on a volume different from the volume
                  specified by pathBase).
@@ -702,7 +702,7 @@ public:
             try to create each directory in the path and also don't return an error
             if the target directory already exists.
 
-        @returns Returns @true if the directory was successfully created, @false
+        @return Returns @true if the directory was successfully created, @false
                  otherwise.
     */
     bool Mkdir(int perm = 0777, int flags = 0);
@@ -814,7 +814,7 @@ public:
         @param format
             The file name format to use when processing the paths, native by default.
 
-        @returns @true if normalization was successfully or @false otherwise.
+        @return @true if normalization was successfully or @false otherwise.
     */
     bool Normalize(int flags = wxPATH_NORM_ALL,
                    const wxString& cwd = wxEmptyString,

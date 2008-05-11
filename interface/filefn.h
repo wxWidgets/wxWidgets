@@ -124,7 +124,7 @@ public:
     @note The generic Unix implementation depends on the system having the
           @c statfs() or @c statvfs() function.
 
-    @returns @true on success, @false if an error occurred (for example, the
+    @return @true on success, @false if an error occurred (for example, the
              directory doesn’t exist).
 
     @header{wx/filefn.h}
