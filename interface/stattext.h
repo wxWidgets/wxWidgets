@@ -201,7 +201,9 @@ public:
         This functions wraps the controls label so that each of its lines becomes at
         most @a width pixels wide if possible (the lines are broken at words
         boundaries so it might not be the case if words are too long). If @e width
-        is negative, no wrapping is done.
+        is negative, no wrapping is done. Note that this width is not
+        necessarily the total width of the control, since a few pixels for the
+        border (depending on the controls border style) may be added.
 
         @since 2.6.2
     */
