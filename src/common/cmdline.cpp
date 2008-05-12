@@ -73,20 +73,29 @@ struct wxCmdLineOption
                     wxCmdLineParamType typ,
                     int fl)
     {
-        wxASSERT_MSG( !shrt.empty() || !lng.empty(),
-                      _T("option should have at least one name") );
+        // wxCMD_LINE_USAGE_TEXT uses only description, shortName and longName is empty
+    #ifdef __WXDEBUG__
+        if ( k != wxCMD_LINE_USAGE_TEXT )
+        {
+            wxASSERT_MSG
+            (
+                !shrt.empty() || !lng.empty(),
+                 wxT("option should have at least one name")
+            );
 
-        wxASSERT_MSG
-        (
-            GetShortOptionName(shrt.begin(), shrt.end()).Len() == shrt.Len(),
-            wxT("Short option contains invalid characters")
-        );
+            wxASSERT_MSG
+            (
+                GetShortOptionName(shrt.begin(), shrt.end()).Len() == shrt.Len(),
+                wxT("Short option contains invalid characters")
+            );
 
-        wxASSERT_MSG
-        (
-            GetLongOptionName(lng.begin(), lng.end()).Len() == lng.Len(),
-            wxT("Long option contains invalid characters")
-        );
+            wxASSERT_MSG
+            (
+                GetLongOptionName(lng.begin(), lng.end()).Len() == lng.Len(),
+                wxT("Long option contains invalid characters")
+            );
+        }
+    #endif // __WXDEBUG__
 
 
         kind = k;
@@ -390,6 +399,10 @@ void wxCmdLineParser::SetDesc(const wxCmdLineEntryDesc *desc)
                          desc->type, desc->flags);
                 break;
 
+            case wxCMD_LINE_USAGE_TEXT:
+                AddUsageText(wxGetTranslation(desc->description));
+                break;
+
             default:
                 wxFAIL_MSG( _T("unknown command line entry type") );
                 // still fall through
@@ -456,6 +469,17 @@ void wxCmdLineParser::AddParam(const wxString& desc,
     wxCmdLineParam *param = new wxCmdLineParam(desc, type, flags);
 
     m_data->m_paramDesc.Add(param);
+}
+
+void wxCmdLineParser::AddUsageText(const wxString& text)
+{
+    wxASSERT_MSG( !text.empty(), wxT("text can't be empty") );
+
+    wxCmdLineOption *option = new wxCmdLineOption(wxCMD_LINE_USAGE_TEXT,
+                                                  wxEmptyString, wxEmptyString,
+                                                  text, wxCMD_LINE_VAL_NONE, 0);
+
+    m_data->m_options.Add(option);
 }
 
 // ----------------------------------------------------------------------------
@@ -1036,58 +1060,60 @@ wxString wxCmdLineParser::GetUsageString() const
     for ( n = 0; n < count; n++ )
     {
         wxCmdLineOption& opt = m_data->m_options[n];
+        wxString option;
 
-        usage << _T(' ');
-        if ( !(opt.flags & wxCMD_LINE_OPTION_MANDATORY) )
+        if ( opt.kind != wxCMD_LINE_USAGE_TEXT )
         {
-            usage << _T('[');
-        }
-
-        if ( !opt.shortName.empty() )
-        {
-            usage << chSwitch << opt.shortName;
-        }
-        else if ( areLongOptionsEnabled && !opt.longName.empty() )
-        {
-            usage << _T("--") << opt.longName;
-        }
-        else
-        {
-            if (!opt.longName.empty())
+            usage << _T(' ');
+            if ( !(opt.flags & wxCMD_LINE_OPTION_MANDATORY) )
             {
-                wxFAIL_MSG( wxT("option with only a long name while long ")
-                            wxT("options are disabled") );
+                usage << _T('[');
+            }
+
+            if ( !opt.shortName.empty() )
+            {
+                usage << chSwitch << opt.shortName;
+            }
+            else if ( areLongOptionsEnabled && !opt.longName.empty() )
+            {
+                usage << _T("--") << opt.longName;
             }
             else
             {
-                wxFAIL_MSG( _T("option without neither short nor long name") );
+                if (!opt.longName.empty())
+                {
+                    wxFAIL_MSG( wxT("option with only a long name while long ")
+                                wxT("options are disabled") );
+                }
+                else
+                {
+                    wxFAIL_MSG( _T("option without neither short nor long name") );
+                }
             }
-        }
 
-        wxString option;
+            if ( !opt.shortName.empty() )
+            {
+                option << _T("  ") << chSwitch << opt.shortName;
+            }
 
-        if ( !opt.shortName.empty() )
-        {
-            option << _T("  ") << chSwitch << opt.shortName;
-        }
+            if ( areLongOptionsEnabled && !opt.longName.empty() )
+            {
+                option << (option.empty() ? _T("  ") : _T(", "))
+                       << _T("--") << opt.longName;
+            }
 
-        if ( areLongOptionsEnabled && !opt.longName.empty() )
-        {
-            option << (option.empty() ? _T("  ") : _T(", "))
-                   << _T("--") << opt.longName;
-        }
+            if ( opt.kind != wxCMD_LINE_SWITCH )
+            {
+                wxString val;
+                val << _T('<') << GetTypeName(opt.type) << _T('>');
+                usage << _T(' ') << val;
+                option << (!opt.longName ? _T(':') : _T('=')) << val;
+            }
 
-        if ( opt.kind != wxCMD_LINE_SWITCH )
-        {
-            wxString val;
-            val << _T('<') << GetTypeName(opt.type) << _T('>');
-            usage << _T(' ') << val;
-            option << (!opt.longName ? _T(':') : _T('=')) << val;
-        }
-
-        if ( !(opt.flags & wxCMD_LINE_OPTION_MANDATORY) )
-        {
-            usage << _T(']');
+            if ( !(opt.flags & wxCMD_LINE_OPTION_MANDATORY) )
+            {
+                usage << _T(']');
+            }
         }
 
         namesOptions.push_back(option);
@@ -1144,10 +1170,18 @@ wxString wxCmdLineParser::GetUsageString() const
             usage << _T('\n') << stdDesc;
 
         len = namesOptions[n].length();
-        usage << namesOptions[n]
-              << wxString(_T(' '), lenMax - len) << _T('\t')
-              << descOptions[n]
-              << _T('\n');
+        // desc contains text if name is empty
+        if (len == 0)
+        {
+            usage << descOptions[n] << _T('\n');
+        }
+        else
+        {
+            usage << namesOptions[n]
+                  << wxString(_T(' '), lenMax - len) << _T('\t')
+                  << descOptions[n]
+                  << _T('\n');
+        }
     }
 
     return usage;

@@ -34,9 +34,11 @@ public:
 private:
     CPPUNIT_TEST_SUITE( CmdLineTestCase );
         CPPUNIT_TEST( ConvertStringTestCase );
+        CPPUNIT_TEST( Usage );
     CPPUNIT_TEST_SUITE_END();
 
     void ConvertStringTestCase();
+    void Usage();
 
     DECLARE_NO_COPY_CLASS(CmdLineTestCase)
 };
@@ -79,4 +81,53 @@ void CmdLineTestCase::ConvertStringTestCase()
     WX_ASSERT_ARGS_EQUAL( "foo|bar\\\"baz", "foo \"bar\\\"baz\"" );
 
     #undef WX_ASSERT_ARGS_EQUAL
+}
+
+void CmdLineTestCase::Usage()
+{
+    // check that Usage() returns roughly what we expect (don't check all the
+    // details, its format can change in the future)
+    static const wxCmdLineEntryDesc desc[] =
+    {
+        { wxCMD_LINE_USAGE_TEXT, NULL, NULL, "Verbosity options" },
+        { wxCMD_LINE_SWITCH, "v", "verbose", "be verbose" },
+        { wxCMD_LINE_SWITCH, "q", "quiet",   "be quiet" },
+
+        { wxCMD_LINE_USAGE_TEXT, NULL, NULL, "Output options" },
+        { wxCMD_LINE_OPTION, "o", "output",  "output file" },
+        { wxCMD_LINE_OPTION, "s", "size",    "output block size", wxCMD_LINE_VAL_NUMBER },
+        { wxCMD_LINE_OPTION, "d", "date",    "output file date", wxCMD_LINE_VAL_DATE },
+        { wxCMD_LINE_OPTION, "f", "double",  "output double", wxCMD_LINE_VAL_DOUBLE },
+
+        { wxCMD_LINE_PARAM,  NULL, NULL, "input file", },
+
+        { wxCMD_LINE_USAGE_TEXT, NULL, NULL, "\nEven more usage text" },
+        { wxCMD_LINE_NONE }
+    };
+
+    wxCmdLineParser p(desc);
+    const wxArrayString usageLines = wxSplit(p.GetUsageString(), '\n');
+
+    enum
+    {
+        Line_Synopsis,
+        Line_Text_Verbosity,
+        Line_Verbose,
+        Line_Quiet,
+        Line_Text_Output,
+        Line_Output_File,
+        Line_Output_Size,
+        Line_Output_Date,
+        Line_Output_Double,
+        Line_Text_Dummy1,
+        Line_Text_Dummy2,
+        Line_Last,
+        Line_Max
+    };
+
+    WX_ASSERT_SIZET_EQUAL( Line_Max, usageLines.size() );
+    WX_ASSERT_STR_EQUAL("Verbosity options", usageLines[Line_Text_Verbosity]);
+    WX_ASSERT_STR_EQUAL("", usageLines[Line_Text_Dummy1]);
+    WX_ASSERT_STR_EQUAL("Even more usage text", usageLines[Line_Text_Dummy2]);
+    WX_ASSERT_STR_EQUAL("", usageLines[Line_Last]);
 }

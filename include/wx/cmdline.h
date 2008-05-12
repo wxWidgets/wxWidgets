@@ -55,6 +55,7 @@ enum wxCmdLineEntryType
     wxCMD_LINE_SWITCH,
     wxCMD_LINE_OPTION,
     wxCMD_LINE_PARAM,
+    wxCMD_LINE_USAGE_TEXT,
     wxCMD_LINE_NONE         // to terminate the list
 };
 
@@ -178,6 +179,9 @@ public:
                   wxCmdLineParamType type = wxCMD_LINE_VAL_STRING,
                   int flags = 0);
 
+    // add an explanatory text to be shown to the user in help
+    void AddUsageText(const wxString& text);
+
     // actions
     // -------
 
@@ -253,4 +257,3 @@ public:
 #endif // wxUSE_CMDLINE_PARSER/!wxUSE_CMDLINE_PARSER
 
 #endif // _WX_CMDLINE_H_
-

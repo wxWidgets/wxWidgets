@@ -55,6 +55,7 @@ enum wxCmdLineEntryType
     wxCMD_LINE_SWITCH,
     wxCMD_LINE_OPTION,
     wxCMD_LINE_PARAM,
+    wxCMD_LINE_USAGE_TEXT,
     wxCMD_LINE_NONE     ///< Use this to terminate the list.
 };
 
@@ -117,6 +118,7 @@ struct wxCmdLineEntryDesc
                  unlike a switch. For example, @c -o: @c filename might be an
                  option for specifying the name of the output file.
     - @b parameter: This is a required program argument.
+    - @b text: This is a text which can be shown in usage information.
 
 
     @section cmdlineparser_construction Construction
@@ -137,8 +139,8 @@ struct wxCmdLineEntryDesc
 
     The same holds for command line description: it can be specified either in
     the constructor (with or without the command line itself) or constructed
-    later using either SetDesc() or combination of AddSwitch(), AddOption() and
-    AddParam() methods.
+    later using either SetDesc() or combination of AddSwitch(), AddOption(),
+    AddParam() and AddUsageText() methods.
 
     Using constructors or SetDesc() uses a (usually const static) table
     containing the command line description. If you want to decide which
@@ -284,6 +286,13 @@ public:
                    const wxString& lng = wxEmptyString,
                    const wxString& desc = wxEmptyString,
                    int flags = 0);
+
+    /**
+        Add a string @a text to the command line description shown by Usage().
+
+        @since 2.9.0
+    */
+    void AddUsageText(const wxString& text);
 
     /**
         Returns @true if long options are enabled, otherwise @false.
