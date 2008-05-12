@@ -109,9 +109,8 @@ WXDWORD wxCalendarCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
 {
     WXDWORD styleMSW = wxCalendarCtrlBase::MSWGetStyle(style, exstyle);
 
-    // right now we don't support any native styles but we should add wx styles
-    // corresponding to MCS_NOTODAY, MCS_NOTODAYCIRCLE and MCS_WEEKNUMBERS
-    // probably (TODO)
+    // right now we don't support all native styles but we should add wx styles
+    // corresponding to MCS_NOTODAY and MCS_NOTODAYCIRCLE probably (TODO)
 
     // for compatibility with the other versions, just turn off today display
     // unconditionally for now
@@ -119,6 +118,9 @@ WXDWORD wxCalendarCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
 
     // we also need this style for Mark() to work
     styleMSW |= MCS_DAYSTATE;
+
+    if ( style & wxCAL_SHOW_WEEK_NUMBERS )
+       styleMSW |= MCS_WEEKNUMBERS;
 
     return styleMSW;
 }
