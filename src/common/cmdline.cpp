@@ -779,15 +779,15 @@ int wxCmdLineParser::Parse(bool showUsage)
             }
             else // it's an option. not a switch
             {
-                switch ( (*p).GetValue() )
+                switch ( p == end ? '\0' : (*p).GetValue() )
                 {
-                    case _T('='):
-                    case _T(':'):
+                    case '=':
+                    case ':':
                         // the value follows
                         ++p;
                         break;
 
-                    case 0:
+                    case '\0':
                         // the value is in the next argument
                         if ( ++n == count )
                         {
