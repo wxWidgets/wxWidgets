@@ -171,8 +171,8 @@ for further details.
 \membersection{wxFrame::CreateStatusBar}\label{wxframecreatestatusbar}
 
 \func{virtual wxStatusBar*}{CreateStatusBar}{\param{int}{ number = 1},
- \param{long}{ style = 0},
- \param{wxWindowID}{ id = -1}, \param{const wxString\&}{ name = "statusBar"}}
+ \param{long}{ style = wxST\_SIZEGRIP | wxFULL\_REPAINT\_ON\_RESIZE},
+ \param{wxWindowID}{ id = 0}, \param{const wxString\&}{ name = "statusBar"}}
 
 Creates a status bar at the bottom of the frame.
 
