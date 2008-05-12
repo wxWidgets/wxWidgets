@@ -38,6 +38,7 @@
     #include "wx/gdicmn.h"
 #endif
 
+#include "wx/tokenzr.h"
 #include "wx/prntbase.h"
 #include "wx/printdlg.h"
 
@@ -135,43 +136,19 @@ wxString wxColourData::ToString() const
 
 bool wxColourData::FromString(const wxString& str)
 {
-    wxString token;
-    int n = -1; // index of the field, -1 corresponds to m_chooseFull
-    for ( wxString::const_iterator i = str.begin(); i != str.end(); ++i )
+    wxStringTokenizer tokenizer(str, wxCOL_DATA_SEP);
+    wxString token = tokenizer.GetNextToken();
+    m_chooseFull = token == '1';
+    bool success = m_chooseFull || token == '0';
+    for (int i = 0; success && i < NUM_CUSTOM; i++)
     {
-        if ( *i == wxCOL_DATA_SEP )
-        {
-            if ( n == -1 )
-            {
-                if ( token == '0' )
-                    m_chooseFull = false;
-                else if ( token == '1' )
-                    m_chooseFull = true;
-                else // only '0' and '1' are used in ToString()
-                    return false;
-            }
-            else // custom colour
-            {
-                if ( n == WXSIZEOF(m_custColours) )
-                    return false;   // too many custom colours
-
-                // empty strings are used by ToString() for colours not used
-                if ( token.empty() )
-                    m_custColours[n] = wxNullColour;
-                else if ( !m_custColours[n].Set(token) )
-                    return false;   // invalid colour string
-            }
-
-            token.clear();
-            n++;
-        }
-        else // continuation of the current field
-        {
-            token += *i;
-        }
+        token = tokenizer.GetNextToken();
+        if (token.empty())
+            m_custColours[i] = wxNullColour;
+        else
+            success = m_custColours[i].Set(token);
     }
-
-    return true;
+    return success;
 }
 
 // ----------------------------------------------------------------------------
