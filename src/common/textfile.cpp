@@ -127,9 +127,16 @@ bool wxTextFile::OnRead(const wxMBConv& conv)
         wxASSERT_MSG( m_file.Tell() == 0, _T("should be at start of file") );
 
         char *dst = buf.data();
-        for ( ;; )
+        for ( size_t nRemaining = bufSize; nRemaining > 0; )
         {
-            ssize_t nRead = m_file.Read(dst, BLOCK_SIZE);
+            size_t nToRead = BLOCK_SIZE;
+
+            // the file size could have changed, avoid overflowing the buffer
+            // even if it did
+            if ( nToRead > nRemaining )
+                nToRead = nRemaining;
+
+            ssize_t nRead = m_file.Read(dst, nToRead);
 
             if ( nRead == wxInvalidOffset )
             {
@@ -140,10 +147,12 @@ bool wxTextFile::OnRead(const wxMBConv& conv)
             if ( nRead == 0 )
             {
                 // this file can't be empty because we checked for this above
+                // so this must be the end of file
                 break;
             }
 
             dst += nRead;
+            nRemaining -= nRead;
         }
 
         wxASSERT_MSG( dst - buf.data() == (wxFileOffset)bufSize,
