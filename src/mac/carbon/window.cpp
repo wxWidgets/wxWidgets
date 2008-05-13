@@ -2060,8 +2060,12 @@ void wxWindowMac::GetTextExtent(const wxString& string, int *x, int *y,
                            int *descent, int *externalLeading, const wxFont *theFont ) const
 {
     const wxFont *fontToUse = theFont;
+    wxFont tempFont;
     if ( !fontToUse )
-        fontToUse = &m_font;
+    {
+        tempFont = GetFont();
+        fontToUse = &tempFont;
+    }
 
     wxClientDC dc( (wxWindowMac*) this ) ;
     wxCoord lx,ly,ld,le ;
