@@ -36,10 +36,9 @@ inline bool wxInPaintEvent(wxWindow* win, wxDC& dc)
     return 
 #if wxMAC_USE_CORE_GRAPHICS
         win->MacGetCGContextRef() != NULL ||
-#else
+#endif
          // wxMemoryDC derives from wxPaintDC so it is okay too.
         dc.IsKindOf( CLASSINFO(wxPaintDC) ); 
-#endif
 }
 
 
