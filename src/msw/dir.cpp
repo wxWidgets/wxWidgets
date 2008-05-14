@@ -303,9 +303,20 @@ wxDir::wxDir(const wxString& dirname)
 bool wxDir::Open(const wxString& dirname)
 {
     delete M_DIR;
-    m_data = new wxDirData(dirname);
+    
+    // The Unix code does a similar test
+    if (wxDirExists(dirname))
+    {
+        m_data = new wxDirData(dirname);
 
-    return true;
+        return true;
+    }
+    else
+    {
+        m_data = NULL;
+    
+        return false;
+    }
 }
 
 bool wxDir::IsOpened() const
