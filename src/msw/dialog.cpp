@@ -256,13 +256,15 @@ bool wxDialog::Show(bool show)
 
     if ( show )
     {
-        // dialogs don't get WM_SIZE message after creation unlike most (all?)
-        // other windows and so could start their life non laid out correctly
-        // if we didn't call Layout() from here
+        // dialogs don't get WM_SIZE message from ::ShowWindow() for some
+        // reason so generate it ourselves for consistency with frames and
+        // dialogs in other ports
         //
         // NB: normally we should call it just the first time but doing it
         //     every time is simpler than keeping a flag
-        Layout();
+        const wxSize size = GetClientSize();
+        ::SendMessage(GetHwnd(), WM_SIZE,
+                      SIZE_RESTORED, MAKELPARAM(size.x, size.y));
     }
 
     return true;
@@ -517,20 +519,6 @@ WXLRESULT wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPar
             if ( HasFlag(wxFULL_REPAINT_ON_RESIZE) )
             {
                 ::InvalidateRect(GetHwnd(), NULL, false /* erase bg */);
-            }
-            break;
-
-        case WM_WINDOWPOSCHANGED:
-            {
-                WINDOWPOS * const wp = wx_reinterpret_cast(WINDOWPOS *, lParam);
-                if ( wp->flags & SWP_SHOWWINDOW )
-                {
-                    // we should only show it now to ensure that it's really
-                    // positioned underneath under all the other controls in
-                    // the dialog, if we showed it before it could overlap them
-                    if ( m_hGripper )
-                        ShowGripper(true);
-                }
             }
             break;
 
