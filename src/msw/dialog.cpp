@@ -184,7 +184,7 @@ bool wxDialog::Create(wxWindow *parent,
     CreateToolBar();
 #endif
 
-    if( HasFlag(wxRESIZE_BORDER) )
+    if ( HasFlag(wxRESIZE_BORDER) )
         CreateGripper();
 
     return true;
@@ -349,7 +349,7 @@ void wxDialog::SetWindowStyleFlag(long style)
 {
     wxDialogBase::SetWindowStyleFlag(style);
 
-    if( HasFlag(wxRESIZE_BORDER) )
+    if ( HasFlag(wxRESIZE_BORDER) )
         CreateGripper();
     else
         DestroyGripper();
@@ -357,13 +357,15 @@ void wxDialog::SetWindowStyleFlag(long style)
 
 void wxDialog::CreateGripper()
 {
-    if( !m_hGripper )
+    if ( !m_hGripper )
     {
+        // just create it here, it will be positioned and shown later
         m_hGripper = (WXHWND)::CreateWindow
                                (
                                     wxT("SCROLLBAR"),
                                     wxT(""),
-                                    WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS |
+                                    WS_CHILD |
+                                    WS_CLIPSIBLINGS |
                                     SBS_SIZEGRIP |
                                     SBS_SIZEBOX |
                                     SBS_SIZEBOXBOTTOMRIGHTALIGN,
@@ -373,9 +375,6 @@ void wxDialog::CreateGripper()
                                     wxGetInstance(),
                                     NULL
                                );
-
-        // position the gripper correctly after creation
-        ResizeGripper();
     }
 }
 
@@ -391,6 +390,9 @@ void wxDialog::DestroyGripper()
 void wxDialog::ShowGripper(bool show)
 {
     wxASSERT_MSG( m_hGripper, _T("shouldn't be called if we have no gripper") );
+
+    if ( show )
+        ResizeGripper();
 
     ::ShowWindow((HWND)m_hGripper, show ? SW_SHOW : SW_HIDE);
 }
@@ -501,10 +503,6 @@ WXLRESULT wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPar
 
                     case SIZE_RESTORED:
                         ShowGripper(true);
-                        // fall through
-
-                    default:
-                        ResizeGripper();
                 }
             }
 
@@ -519,6 +517,20 @@ WXLRESULT wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPar
             if ( HasFlag(wxFULL_REPAINT_ON_RESIZE) )
             {
                 ::InvalidateRect(GetHwnd(), NULL, false /* erase bg */);
+            }
+            break;
+
+        case WM_WINDOWPOSCHANGED:
+            {
+                WINDOWPOS * const wp = wx_reinterpret_cast(WINDOWPOS *, lParam);
+                if ( wp->flags & SWP_SHOWWINDOW )
+                {
+                    // we should only show it now to ensure that it's really
+                    // positioned underneath under all the other controls in
+                    // the dialog, if we showed it before it could overlap them
+                    if ( m_hGripper )
+                        ShowGripper(true);
+                }
             }
             break;
 
