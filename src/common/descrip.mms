@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 16 April 2008                                                        *
+# Date : 13 May 2008                                                         *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -209,7 +209,8 @@ OBJECTS2=tbarbase.obj,srchcmn.obj,\
 		fontpickercmn.obj,\
 		pickerbase.obj,\
 		listctrlcmn.obj,gsocketiohandler.obj,fdiodispatcher.obj,\
-		selectdispatcher.obj,overlaycmn.obj,windowid.obj,sstream.obj
+		selectdispatcher.obj,overlaycmn.obj,windowid.obj,sstream.obj,\
+		wrapsizer.obj
 
 OBJECTS_MOTIF=radiocmn.obj,combocmn.obj
 
@@ -404,7 +405,8 @@ SOURCES = \
 		uri.cpp,\
 		xti.cpp,\
 		xtistrm.cpp,\
-		xtixml.cpp
+		xtixml.cpp,\
+		wrapsizer.cpp
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -635,3 +637,4 @@ overlaycmn.obj : overlaycmn.cpp
 windowid.obj : windowid.cpp
 calctrlcmn.obj : calctrlcmn.cpp
 sstream.obj : sstream.cpp
+wrapsizer.obj : wrapsizer.cpp
