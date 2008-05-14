@@ -205,7 +205,7 @@ protected :
         m_image = image;
         if ( m_image )
         {
-            m_imageBounds = CGRectMake( 0.0, 0.0, (CGFloat)CGImageGetWidth( m_image ), (CGFloat)CGImageGetHeight( m_image ) );
+            m_imageBounds = CGRectMake( (CGFloat) 0.0, (CGFloat) 0.0, (CGFloat)CGImageGetWidth( m_image ), (CGFloat)CGImageGetHeight( m_image ) );
             m_patternRef = CGPatternCreate(
                 this , m_imageBounds, transform ,
                 m_imageBounds.size.width, m_imageBounds.size.height,
@@ -229,7 +229,7 @@ public :
     HatchPattern( int hatchstyle, const CGAffineTransform& transform )
     {
         m_hatch = hatchstyle;
-        m_imageBounds = CGRectMake( 0.0, 0.0, 8.0 , 8.0 );
+        m_imageBounds = CGRectMake( (CGFloat) 0.0, (CGFloat) 0.0, (CGFloat) 8.0 , (CGFloat) 8.0 );
         m_patternRef = CGPatternCreate(
             this , m_imageBounds, transform ,
             m_imageBounds.size.width, m_imageBounds.size.height,
@@ -249,7 +249,7 @@ public :
                 {
                     CGPoint pts[] =
                     {
-                    { 8.0 , 0.0 } , { 0.0 , 8.0 }
+                    { (CGFloat) 8.0 , (CGFloat) 0.0 } , { (CGFloat) 0.0 , (CGFloat) 8.0 }
                     };
                     StrokeLineSegments( ctxRef , pts , 2 );
                 }
@@ -259,8 +259,8 @@ public :
                 {
                     CGPoint pts[] =
                     {
-                        { 0.0 , 0.0 } , { 8.0 , 8.0 } ,
-                        { 8.0 , 0.0 } , { 0.0 , 8.0 }
+                        { (CGFloat) 0.0 , (CGFloat) 0.0 } , { (CGFloat) 8.0 , (CGFloat) 8.0 } ,
+                        { (CGFloat) 8.0 , (CGFloat) 0.0 } , { (CGFloat) 0.0 , (CGFloat) 8.0 }
                     };
                     StrokeLineSegments( ctxRef , pts , 4 );
                 }
@@ -270,7 +270,7 @@ public :
                 {
                     CGPoint pts[] =
                     {
-                    { 0.0 , 0.0 } , { 8.0 , 8.0 }
+                    { (CGFloat) 0.0 , (CGFloat) 0.0 } , { (CGFloat) 8.0 , (CGFloat) 8.0 }
                     };
                     StrokeLineSegments( ctxRef , pts , 2 );
                 }
@@ -280,8 +280,8 @@ public :
                 {
                     CGPoint pts[] =
                     {
-                    { 0.0 , 4.0 } , { 8.0 , 4.0 } ,
-                    { 4.0 , 0.0 } , { 4.0 , 8.0 } ,
+                    { (CGFloat) 0.0 , (CGFloat) 4.0 } , { (CGFloat) 8.0 , (CGFloat) 4.0 } ,
+                    { (CGFloat) 4.0 , (CGFloat) 0.0 } , { (CGFloat) 4.0 , (CGFloat) 8.0 } ,
                     };
                     StrokeLineSegments( ctxRef , pts , 4 );
                 }
@@ -291,7 +291,7 @@ public :
                 {
                     CGPoint pts[] =
                     {
-                    { 0.0 , 4.0 } , { 8.0 , 4.0 } ,
+                    { (CGFloat) 0.0 , (CGFloat) 4.0 } , { (CGFloat) 8.0 , (CGFloat) 4.0 } ,
                     };
                     StrokeLineSegments( ctxRef , pts , 2 );
                 }
@@ -301,7 +301,7 @@ public :
                 {
                     CGPoint pts[] =
                     {
-                    { 4.0 , 0.0 } , { 4.0 , 8.0 } ,
+                    { (CGFloat) 4.0 , (CGFloat) 0.0 } , { (CGFloat) 4.0 , (CGFloat) 8.0 } ,
                     };
                     StrokeLineSegments( ctxRef , pts , 2 );
                 }
@@ -357,7 +357,7 @@ wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer
     // TODO: * m_dc->m_scaleX
     m_width = pen.GetWidth();
     if (m_width <= 0.0)
-        m_width = 0.1;
+        m_width = (CGFloat) 0.1;
 
     switch ( pen.GetCap() )
     {
@@ -397,12 +397,12 @@ wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer
             break;
     }
 
-    const CGFloat dashUnit = m_width < 1.0 ? 1.0 : m_width;
+    const CGFloat dashUnit = m_width < 1.0 ? (CGFloat) 1.0 : m_width;
 
-    const CGFloat dotted[] = { dashUnit , dashUnit + 2.0 };
-    static const CGFloat short_dashed[] = { 9.0 , 6.0 };
-    static const CGFloat dashed[] = { 19.0 , 9.0 };
-    static const CGFloat dotted_dashed[] = { 9.0 , 6.0 , 3.0 , 3.0 };
+    const CGFloat dotted[] = { (CGFloat) dashUnit , (CGFloat) (dashUnit + 2.0) };
+    static const CGFloat short_dashed[] = { (CGFloat) 9.0 , (CGFloat) 6.0 };
+    static const CGFloat dashed[] = { (CGFloat) 19.0 , (CGFloat) 9.0 };
+    static const CGFloat dotted_dashed[] = { (CGFloat) 9.0 , (CGFloat) 6.0 , (CGFloat) 3.0 , (CGFloat) 3.0 };
 
     switch ( pen.GetStyle() )
     {
@@ -442,7 +442,7 @@ wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer
                     m_userLengths[i] = dashes[i] * dashUnit;
 
                     if ( i % 2 == 1 && m_userLengths[i] < dashUnit + 2.0 )
-                        m_userLengths[i] = dashUnit + 2.0;
+                        m_userLengths[i] = (CGFloat) (dashUnit + 2.0);
                     else if ( i % 2 == 0 && m_userLengths[i] < dashUnit )
                         m_userLengths[i] = dashUnit;
                 }
@@ -458,7 +458,7 @@ wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer
                     m_colorSpace.reset( CGColorSpaceCreatePattern( NULL ) );
                     m_pattern.reset( (CGPatternRef) *( new ImagePattern( bmp , CGAffineTransformMakeScale( 1,-1 ) ) ) );
                     m_patternColorComponents = new CGFloat[1] ;
-                    m_patternColorComponents[0] = 1.0;
+                    m_patternColorComponents[0] = (CGFloat) 1.0;
                     m_isPattern = true;
                 }
             }
@@ -470,10 +470,10 @@ wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer
                 m_colorSpace.reset( CGColorSpaceCreatePattern( wxMacGetGenericRGBColorSpace() ) );
                 m_pattern.reset( (CGPatternRef) *( new HatchPattern( pen.GetStyle() , CGAffineTransformMakeScale( 1,-1 ) ) ) );
                 m_patternColorComponents = new CGFloat[4] ;
-                m_patternColorComponents[0] = pen.GetColour().Red() / 255.0;
-                m_patternColorComponents[1] = pen.GetColour().Green() / 255.0;
-                m_patternColorComponents[2] = pen.GetColour().Blue() / 255.0;
-                m_patternColorComponents[3] =  pen.GetColour().Alpha() / 255.0;
+                m_patternColorComponents[0] = (CGFloat) (pen.GetColour().Red() / 255.0);
+                m_patternColorComponents[1] = (CGFloat) (pen.GetColour().Green() / 255.0);
+                m_patternColorComponents[2] = (CGFloat) (pen.GetColour().Blue() / 255.0);
+                m_patternColorComponents[3] =  (CGFloat) (pen.GetColour().Alpha() / 255.0);
             }
             break;
     }
@@ -520,7 +520,7 @@ void wxMacCoreGraphicsPenData::Apply( wxGraphicsContext* context )
     {
         if ( context->GetLogicalFunction() == wxINVERT || context->GetLogicalFunction() == wxXOR )
         {
-            CGContextSetRGBStrokeColor( cg , 1.0, 1.0 , 1.0, 1.0 );
+            CGContextSetRGBStrokeColor( cg , (CGFloat) 1.0,(CGFloat)  1.0 , (CGFloat) 1.0, (CGFloat) 1.0 );
         }
         else
             CGContextSetStrokeColorWithColor( cg , m_color );
@@ -610,10 +610,10 @@ wxMacCoreGraphicsColour::wxMacCoreGraphicsColour( const wxBrush &brush )
         m_pattern.reset( (CGPatternRef) *( new HatchPattern( brush.GetStyle() , CGAffineTransformMakeScale( 1,-1 ) ) ) );
 
         m_patternColorComponents = new CGFloat[4] ;
-        m_patternColorComponents[0] = brush.GetColour().Red() / 255.0;
-        m_patternColorComponents[1] = brush.GetColour().Green() / 255.0;
-        m_patternColorComponents[2] = brush.GetColour().Blue() / 255.0;
-        m_patternColorComponents[3] = brush.GetColour().Alpha() / 255.0;
+        m_patternColorComponents[0] = (CGFloat) (brush.GetColour().Red() / 255.0);
+        m_patternColorComponents[1] = (CGFloat) (brush.GetColour().Green() / 255.0);
+        m_patternColorComponents[2] = (CGFloat) (brush.GetColour().Blue() / 255.0);
+        m_patternColorComponents[3] = (CGFloat) (brush.GetColour().Alpha() / 255.0);
     }
     else
     {
@@ -623,7 +623,7 @@ wxMacCoreGraphicsColour::wxMacCoreGraphicsColour( const wxBrush &brush )
         {
             m_isPattern = true;
             m_patternColorComponents = new CGFloat[1] ;
-            m_patternColorComponents[0] = 1.0;
+            m_patternColorComponents[0] = (CGFloat) 1.0;
             m_colorSpace.reset( CGColorSpaceCreatePattern( NULL ) );
             m_pattern.reset( (CGPatternRef) *( new ImagePattern( bmp , CGAffineTransformMakeScale( 1,-1 ) ) ) );
         }
@@ -667,7 +667,8 @@ void wxMacCoreGraphicsBrushData::CreateLinearGradientBrush( wxDouble x1, wxDoubl
         const wxColour&c1, const wxColour&c2 )
 {
     m_gradientFunction = CreateGradientFunction( c1, c2 );
-    m_shading = CGShadingCreateAxial( wxMacGetGenericRGBColorSpace(), CGPointMake(x1,y1), CGPointMake(x2,y2), m_gradientFunction, true, true ) ;
+    m_shading = CGShadingCreateAxial( wxMacGetGenericRGBColorSpace(), CGPointMake((CGFloat) x1, (CGFloat) y1),
+                                        CGPointMake((CGFloat) x2,(CGFloat) y2), m_gradientFunction, true, true ) ;
     m_isShading = true ;
 }
 
@@ -675,7 +676,8 @@ void wxMacCoreGraphicsBrushData::CreateRadialGradientBrush( wxDouble xo, wxDoubl
     const wxColour &oColor, const wxColour &cColor )
 {
     m_gradientFunction = CreateGradientFunction( oColor, cColor );
-    m_shading = CGShadingCreateRadial( wxMacGetGenericRGBColorSpace(), CGPointMake(xo,yo), 0, CGPointMake(xc,yc), radius, m_gradientFunction, true, true ) ;
+    m_shading = CGShadingCreateRadial( wxMacGetGenericRGBColorSpace(), CGPointMake((CGFloat) xo,(CGFloat) yo), 0, 
+                                        CGPointMake((CGFloat) xc,(CGFloat) yc), (CGFloat) radius, m_gradientFunction, true, true ) ;
     m_isShading = true ;
 }
 
@@ -735,14 +737,14 @@ CGFunctionRef wxMacCoreGraphicsBrushData::CreateGradientFunction( const wxColour
     static const CGFloat input_value_range [2] = { 0, 1 };
     static const CGFloat output_value_ranges [8] = { 0, 1, 0, 1, 0, 1, 0, 1 };
     m_gradientComponents = new CGFloat[8] ;
-    m_gradientComponents[0] = c1.Red() / 255.0;
-    m_gradientComponents[1] = c1.Green() / 255.0;
-    m_gradientComponents[2] = c1.Blue() / 255.0;
-    m_gradientComponents[3] = c1.Alpha() / 255.0;
-    m_gradientComponents[4] = c2.Red() / 255.0;
-    m_gradientComponents[5] = c2.Green() / 255.0;
-    m_gradientComponents[6] = c2.Blue() / 255.0;
-    m_gradientComponents[7] = c2.Alpha() / 255.0;
+    m_gradientComponents[0] = (CGFloat) (c1.Red() / 255.0);
+    m_gradientComponents[1] = (CGFloat) (c1.Green() / 255.0);
+    m_gradientComponents[2] = (CGFloat) (c1.Blue() / 255.0);
+    m_gradientComponents[3] = (CGFloat) (c1.Alpha() / 255.0);
+    m_gradientComponents[4] = (CGFloat) (c2.Red() / 255.0);
+    m_gradientComponents[5] = (CGFloat) (c2.Green() / 255.0);
+    m_gradientComponents[6] = (CGFloat) (c2.Blue() / 255.0);
+    m_gradientComponents[7] = (CGFloat) (c2.Alpha() / 255.0);
 
     return CGFunctionCreate ( m_gradientComponents,  1,
                             input_value_range,
@@ -846,17 +848,19 @@ wxMacCoreGraphicsFontData::~wxMacCoreGraphicsFontData()
 class wxMacCoreGraphicsBitmapData : public wxGraphicsObjectRefData
 {
 public:
-    wxMacCoreGraphicsBitmapData( wxGraphicsRenderer* renderer, CGImageRef bitmap );
+    wxMacCoreGraphicsBitmapData( wxGraphicsRenderer* renderer, CGImageRef bitmap, bool monochrome );
     ~wxMacCoreGraphicsBitmapData();
 
     virtual CGImageRef GetBitmap() { return m_bitmap; }
+    bool IsMonochrome() { return m_monochrome; }
 private :
     CGImageRef m_bitmap;
+    bool m_monochrome;
 };
 
-wxMacCoreGraphicsBitmapData::wxMacCoreGraphicsBitmapData( wxGraphicsRenderer* renderer, CGImageRef bitmap ) : wxGraphicsObjectRefData( renderer )
+wxMacCoreGraphicsBitmapData::wxMacCoreGraphicsBitmapData( wxGraphicsRenderer* renderer, CGImageRef bitmap, bool monochrome ) : wxGraphicsObjectRefData( renderer ),
+    m_bitmap(bitmap), m_monochrome(monochrome)
 {
-    m_bitmap = bitmap;
 }
 
 wxMacCoreGraphicsBitmapData::~wxMacCoreGraphicsBitmapData()
@@ -960,7 +964,7 @@ void wxMacCoreGraphicsMatrixData::Concat( const wxGraphicsMatrixData *t )
 void wxMacCoreGraphicsMatrixData::Set(wxDouble a, wxDouble b, wxDouble c, wxDouble d,
     wxDouble tx, wxDouble ty)
 {
-    m_matrix = CGAffineTransformMake(a,b,c,d,tx,ty);
+    m_matrix = CGAffineTransformMake((CGFloat) a,(CGFloat) b,(CGFloat) c,(CGFloat) d,(CGFloat) tx,(CGFloat) ty);
 }
 
 // gets the component valuess of the matrix
@@ -1001,19 +1005,19 @@ bool wxMacCoreGraphicsMatrixData::IsIdentity() const
 // add the translation to this matrix
 void wxMacCoreGraphicsMatrixData::Translate( wxDouble dx , wxDouble dy )
 {
-    m_matrix = CGAffineTransformTranslate( m_matrix, dx, dy);
+    m_matrix = CGAffineTransformTranslate( m_matrix, (CGFloat) dx, (CGFloat) dy);
 }
 
 // add the scale to this matrix
 void wxMacCoreGraphicsMatrixData::Scale( wxDouble xScale , wxDouble yScale )
 {
-    m_matrix = CGAffineTransformScale( m_matrix, xScale, yScale);
+    m_matrix = CGAffineTransformScale( m_matrix, (CGFloat) xScale, (CGFloat) yScale);
 }
 
 // add the rotation to this matrix (radians)
 void wxMacCoreGraphicsMatrixData::Rotate( wxDouble angle )
 {
-    m_matrix = CGAffineTransformRotate( m_matrix, angle);
+    m_matrix = CGAffineTransformRotate( m_matrix, (CGFloat) angle);
 }
 
 //
@@ -1023,7 +1027,7 @@ void wxMacCoreGraphicsMatrixData::Rotate( wxDouble angle )
 // applies that matrix to the point
 void wxMacCoreGraphicsMatrixData::TransformPoint( wxDouble *x, wxDouble *y ) const
 {
-    CGPoint pt = CGPointApplyAffineTransform( CGPointMake(*x,*y), m_matrix);
+    CGPoint pt = CGPointApplyAffineTransform( CGPointMake((CGFloat) *x,(CGFloat) *y), m_matrix);
 
     *x = pt.x;
     *y = pt.y;
@@ -1032,7 +1036,7 @@ void wxMacCoreGraphicsMatrixData::TransformPoint( wxDouble *x, wxDouble *y ) con
 // applies the matrix except for translations
 void wxMacCoreGraphicsMatrixData::TransformDistance( wxDouble *dx, wxDouble *dy ) const
 {
-    CGSize sz = CGSizeApplyAffineTransform( CGSizeMake(*dx,*dy) , m_matrix );
+    CGSize sz = CGSizeApplyAffineTransform( CGSizeMake((CGFloat) *dx,(CGFloat) *dy) , m_matrix );
     *dx = sz.width;
     *dy = sz.height;
 }
@@ -1142,45 +1146,45 @@ wxGraphicsObjectRefData* wxMacCoreGraphicsPathData::Clone() const
 // opens (starts) a new subpath
 void wxMacCoreGraphicsPathData::MoveToPoint( wxDouble x1 , wxDouble y1 )
 {
-    CGPathMoveToPoint( m_path , NULL , x1 , y1 );
+    CGPathMoveToPoint( m_path , NULL , (CGFloat) x1 , (CGFloat) y1 );
 }
 
 void wxMacCoreGraphicsPathData::AddLineToPoint( wxDouble x1 , wxDouble y1 )
 {
-    CGPathAddLineToPoint( m_path , NULL , x1 , y1 );
+    CGPathAddLineToPoint( m_path , NULL , (CGFloat) x1 , (CGFloat) y1 );
 }
 
 void wxMacCoreGraphicsPathData::AddCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble cx2, wxDouble cy2, wxDouble x, wxDouble y )
 {
-    CGPathAddCurveToPoint( m_path , NULL , cx1 , cy1 , cx2, cy2, x , y );
+    CGPathAddCurveToPoint( m_path , NULL , (CGFloat) cx1 , (CGFloat) cy1 , (CGFloat) cx2, (CGFloat) cy2, (CGFloat) x , (CGFloat) y );
 }
 
 void wxMacCoreGraphicsPathData::AddQuadCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble x, wxDouble y )
 {
-    CGPathAddQuadCurveToPoint( m_path , NULL , cx1 , cy1 , x , y );
+    CGPathAddQuadCurveToPoint( m_path , NULL , (CGFloat) cx1 , (CGFloat) cy1 , (CGFloat) x , (CGFloat) y );
 }
 
 void wxMacCoreGraphicsPathData::AddRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
-    CGRect cgRect = { { x , y } , { w , h } };
+    CGRect cgRect = { { (CGFloat) x , (CGFloat) y } , { (CGFloat) w , (CGFloat) h } };
     CGPathAddRect( m_path , NULL , cgRect );
 }
 
 void wxMacCoreGraphicsPathData::AddCircle( wxDouble x, wxDouble y , wxDouble r )
 {
-    CGPathAddArc( m_path , NULL , x , y , r , 0.0 , 2 * M_PI , true );
+    CGPathAddArc( m_path , NULL , (CGFloat) x , (CGFloat) y , (CGFloat) r , (CGFloat) 0.0 , (CGFloat) (2 * M_PI) , true );
 }
 
 // adds an arc of a circle centering at (x,y) with radius (r) from startAngle to endAngle
 void wxMacCoreGraphicsPathData::AddArc( wxDouble x, wxDouble y, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise )
 {
     // inverse direction as we the 'normal' state is a y axis pointing down, ie mirrored to the standard core graphics setup
-    CGPathAddArc( m_path, NULL , x, y, r, startAngle, endAngle, !clockwise);
+    CGPathAddArc( m_path, NULL , (CGFloat) x, (CGFloat) y, (CGFloat) r, (CGFloat) startAngle, (CGFloat) endAngle, !clockwise);
 }
 
 void wxMacCoreGraphicsPathData::AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, wxDouble y2, wxDouble r )
 {
-    CGPathAddArcToPoint( m_path, NULL , x1, y1, x2, y2, r);
+    CGPathAddArcToPoint( m_path, NULL , (CGFloat) x1, (CGFloat) y1, (CGFloat) x2, (CGFloat) y2, (CGFloat) r);
 }
 
 void wxMacCoreGraphicsPathData::AddPath( const wxGraphicsPathData* path )
@@ -1223,7 +1227,7 @@ void wxMacCoreGraphicsPathData::GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wx
 
 bool wxMacCoreGraphicsPathData::Contains( wxDouble x, wxDouble y, int fillStyle) const
 {
-    return CGPathContainsPoint( m_path, NULL, CGPointMake(x,y), fillStyle == wxODDEVEN_RULE );
+    return CGPathContainsPoint( m_path, NULL, CGPointMake((CGFloat) x,(CGFloat) y), fillStyle == wxODDEVEN_RULE );
 }
 
 //
@@ -1390,12 +1394,12 @@ public :
         m_cg = cg;
         m_offset = offset;
         if ( m_offset )
-            CGContextTranslateCTM( m_cg, 0.5, 0.5 );
+            CGContextTranslateCTM( m_cg, (CGFloat) 0.5, (CGFloat) 0.5 );
     }
     ~wxQuartzOffsetHelper( )
     {
         if ( m_offset )
-            CGContextTranslateCTM( m_cg, -0.5, -0.5 );
+            CGContextTranslateCTM( m_cg, (CGFloat) -0.5, (CGFloat) -0.5 );
     }
 public :
     CGContextRef m_cg;
@@ -1473,9 +1477,9 @@ void wxMacCoreGraphicsContext::StartPage( wxDouble width, wxDouble height )
 {
     CGRect r;
     if ( width != 0 && height != 0)
-        r = CGRectMake( 0 , 0 , width  , height );
+        r = CGRectMake( (CGFloat) 0.0 , (CGFloat) 0.0 , (CGFloat) width  , (CGFloat) height );
     else
-        r = CGRectMake( 0 , 0 , m_width  , m_height );
+        r = CGRectMake( (CGFloat) 0.0 , (CGFloat) 0.0 , (CGFloat) m_width  , (CGFloat) m_height );
 
     CGContextBeginPage(m_cgContext,  &r );
 //    CGContextTranslateCTM( m_cgContext , 0 ,  height == 0 ? m_height : height );
@@ -1607,7 +1611,7 @@ void wxMacCoreGraphicsContext::Clip( const wxRegion &region )
 // clips drawings to the rect
 void wxMacCoreGraphicsContext::Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
-    CGRect r = CGRectMake( x , y , w , h );
+    CGRect r = CGRectMake( (CGFloat) x , (CGFloat) y , (CGFloat) w , (CGFloat) h );
     if ( m_cgContext )
     {
         CGContextClipToRect( m_cgContext, r );
@@ -1775,25 +1779,25 @@ void wxMacCoreGraphicsContext::SetNativeContext( CGContextRef cg )
 void wxMacCoreGraphicsContext::Translate( wxDouble dx , wxDouble dy )
 {
     if ( m_cgContext )
-        CGContextTranslateCTM( m_cgContext, dx, dy );
+        CGContextTranslateCTM( m_cgContext, (CGFloat) dx, (CGFloat) dy );
     else
-        m_windowTransform = CGAffineTransformTranslate(m_windowTransform,dx,dy);
+        m_windowTransform = CGAffineTransformTranslate(m_windowTransform, (CGFloat) dx, (CGFloat) dy);
 }
 
 void wxMacCoreGraphicsContext::Scale( wxDouble xScale , wxDouble yScale )
 {
     if ( m_cgContext )
-        CGContextScaleCTM( m_cgContext , xScale , yScale );
+        CGContextScaleCTM( m_cgContext , (CGFloat) xScale , (CGFloat) yScale );
     else
-        m_windowTransform = CGAffineTransformScale(m_windowTransform,xScale,yScale);
+        m_windowTransform = CGAffineTransformScale(m_windowTransform, (CGFloat) xScale, (CGFloat) yScale);
 }
 
 void wxMacCoreGraphicsContext::Rotate( wxDouble angle )
 {
     if ( m_cgContext )
-        CGContextRotateCTM( m_cgContext , angle );
+        CGContextRotateCTM( m_cgContext , (CGFloat) angle );
     else
-        m_windowTransform = CGAffineTransformRotate(m_windowTransform,angle);
+        m_windowTransform = CGAffineTransformRotate(m_windowTransform, (CGFloat) angle);
 }
 
 void wxMacCoreGraphicsContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
@@ -1806,9 +1810,10 @@ void wxMacCoreGraphicsContext::DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble
 {
     EnsureIsValid();
 #ifdef __WXMAC__
-    CGImageRef image = static_cast<wxMacCoreGraphicsBitmapData*>(bmp.GetRefData())->GetBitmap();
-    CGRect r = CGRectMake( x , y , w , h );
-    // if ( bmp.GetDepth() == 1 )
+    wxMacCoreGraphicsBitmapData* refdata  =static_cast<wxMacCoreGraphicsBitmapData*>(bmp.GetRefData());
+    CGImageRef image = refdata->GetBitmap();
+    CGRect r = CGRectMake( (CGFloat) x , (CGFloat) y , (CGFloat) w , (CGFloat) h );
+    if ( refdata->IsMonochrome() == 1 )
     {
         // is is a mask, the '1' in the mask tell where to draw the current brush
         if (  !m_brush.IsNull() )
@@ -1831,13 +1836,10 @@ void wxMacCoreGraphicsContext::DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble
             }
         }
     }
-    /*
     else
     {
         wxMacDrawCGImage( m_cgContext , &r , image );
     }
-    CGImageRelease( image );
-    */
 #endif
 }
 
@@ -1845,9 +1847,9 @@ void wxMacCoreGraphicsContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDoubl
 {
     EnsureIsValid();
 
-    CGRect r = CGRectMake( 00 , 00 , w , h );
+    CGRect r = CGRectMake( (CGFloat) 0.0 , (CGFloat) 0.0 , (CGFloat) w , (CGFloat) h );
     CGContextSaveGState( m_cgContext );
-    CGContextTranslateCTM( m_cgContext, x , y + h );
+    CGContextTranslateCTM( m_cgContext,(CGFloat) x ,(CGFloat) (y + h) );
     CGContextScaleCTM( m_cgContext, 1, -1 );
 #ifdef __WXMAC__
     PlotIconRefInContext( m_cgContext , &r , kAlignNone , kTransformNone ,
@@ -1999,7 +2001,7 @@ void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDoub
         wxASSERT_MSG( status == noErr , wxT("couldn't measure the rotated text") );
 
         CGContextSaveGState(m_cgContext);
-        CGContextTranslateCTM(m_cgContext, x, y);
+        CGContextTranslateCTM(m_cgContext, (CGFloat) x, (CGFloat) y);
         CGContextScaleCTM(m_cgContext, 1, -1);
         status = ::ATSUDrawText( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
                                 IntToFixed(0) , IntToFixed(0) );
@@ -2447,7 +2449,7 @@ wxGraphicsBitmap wxMacCoreGraphicsRenderer::CreateBitmap( const wxBitmap& bmp )
     {
         wxGraphicsBitmap p;
 #ifdef __WXMAC__
-        p.SetRefData(new wxMacCoreGraphicsBitmapData( this , bmp.CreateCGImage() ) );
+        p.SetRefData(new wxMacCoreGraphicsBitmapData( this , bmp.CreateCGImage(), bmp.GetDepth() == 1 ) );
 #endif
         return p;
     }
@@ -2457,12 +2459,13 @@ wxGraphicsBitmap wxMacCoreGraphicsRenderer::CreateBitmap( const wxBitmap& bmp )
 
 wxGraphicsBitmap wxMacCoreGraphicsRenderer::CreateSubBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h  )
 {
-    CGImageRef img = static_cast<wxMacCoreGraphicsBitmapData*>(bmp.GetRefData())->GetBitmap();
+    wxMacCoreGraphicsBitmapData* refdata  =static_cast<wxMacCoreGraphicsBitmapData*>(bmp.GetRefData());
+    CGImageRef img = refdata->GetBitmap();
     if ( img )
     {
         wxGraphicsBitmap p;
-        CGImageRef subimg = CGImageCreateWithImageInRect(img,CGRectMake( x , y , w , h ));
-        p.SetRefData(new wxMacCoreGraphicsBitmapData( this , subimg ) );
+        CGImageRef subimg = CGImageCreateWithImageInRect(img,CGRectMake( (CGFloat) x , (CGFloat) y , (CGFloat) w , (CGFloat) h ));
+        p.SetRefData(new wxMacCoreGraphicsBitmapData( this , subimg, refdata->IsMonochrome() ) );
         return p;
     }
     else
