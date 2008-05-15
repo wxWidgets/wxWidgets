@@ -536,7 +536,7 @@ public:
         Reset this class to ptr which points to a reference counted object and
         calls T::DecRef() on the previously owned object.
     */
-    void reset(T *ptr)
+    void reset(T *ptr);
 
     /**
         Conversion to a boolean expression (in a variant which is not
