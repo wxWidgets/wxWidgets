@@ -176,7 +176,7 @@ wxIcon wxIconBundle::GetIcon(const wxSize& size) const
 
                 // the best icon is by default (arbitrarily) the first one but
                 // if we find a system-sized icon, take it instead
-                if ( sx == sysX && sy == sysY || !iconBest.IsOk() )
+                if ((sx == sysX && sy == sysY) || !iconBest.IsOk())
                     iconBest = icon;
             }
     }

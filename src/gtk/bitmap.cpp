@@ -902,8 +902,8 @@ void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
     const bool hasAlpha = HasAlpha();
     // allow access if bpp is valid and matches existence of alpha
     if (pixbuf != NULL && (
-        bpp == 24 && !hasAlpha ||
-        bpp == 32 && hasAlpha))
+        (bpp == 24 && !hasAlpha) ||
+        (bpp == 32 && hasAlpha)))
     {
         data.m_height = gdk_pixbuf_get_height( pixbuf );
         data.m_width = gdk_pixbuf_get_width( pixbuf );

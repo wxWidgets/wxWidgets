@@ -114,7 +114,7 @@ private:
 
    virtual void DoDrawArc(wxCoord, wxCoord, wxCoord, wxCoord, wxCoord, wxCoord);
 
-   virtual void DoDrawBitmap(const wxBitmap &, wxCoord, wxCoord, bool = 0);
+   virtual void DoDrawBitmap(const wxBitmap &, wxCoord, wxCoord, bool = false);
 
    virtual void DoDrawCheckMark(wxCoord x, wxCoord y, wxCoord w, wxCoord h);
 

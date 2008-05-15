@@ -500,11 +500,11 @@ static long wxTranslateKeySymToWXKey(KeySym keysym, bool isChar)
         case GDK_KP_7:
         case GDK_KP_8:
         case GDK_KP_9:
-            key_code = (isChar ? '0' : WXK_NUMPAD0) + keysym - GDK_KP_0;
+            key_code = (isChar ? '0' : int(WXK_NUMPAD0)) + keysym - GDK_KP_0;
             break;
 
         case GDK_KP_Space:
-            key_code = isChar ? ' ' : WXK_NUMPAD_SPACE;
+            key_code = isChar ? ' ' : int(WXK_NUMPAD_SPACE);
             break;
 
         case GDK_KP_Tab:
@@ -576,32 +576,32 @@ static long wxTranslateKeySymToWXKey(KeySym keysym, bool isChar)
             break;
 
         case GDK_KP_Equal:
-            key_code = isChar ? '=' : WXK_NUMPAD_EQUAL;
+            key_code = isChar ? '=' : int(WXK_NUMPAD_EQUAL);
             break;
 
         case GDK_KP_Multiply:
-            key_code = isChar ? '*' : WXK_NUMPAD_MULTIPLY;
+            key_code = isChar ? '*' : int(WXK_NUMPAD_MULTIPLY);
             break;
 
         case GDK_KP_Add:
-            key_code = isChar ? '+' : WXK_NUMPAD_ADD;
+            key_code = isChar ? '+' : int(WXK_NUMPAD_ADD);
             break;
 
         case GDK_KP_Separator:
             // FIXME: what is this?
-            key_code = isChar ? '.' : WXK_NUMPAD_SEPARATOR;
+            key_code = isChar ? '.' : int(WXK_NUMPAD_SEPARATOR);
             break;
 
         case GDK_KP_Subtract:
-            key_code = isChar ? '-' : WXK_NUMPAD_SUBTRACT;
+            key_code = isChar ? '-' : int(WXK_NUMPAD_SUBTRACT);
             break;
 
         case GDK_KP_Decimal:
-            key_code = isChar ? '.' : WXK_NUMPAD_DECIMAL;
+            key_code = isChar ? '.' : int(WXK_NUMPAD_DECIMAL);
             break;
 
         case GDK_KP_Divide:
-            key_code = isChar ? '/' : WXK_NUMPAD_DIVIDE;
+            key_code = isChar ? '/' : int(WXK_NUMPAD_DIVIDE);
             break;
 
 

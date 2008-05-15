@@ -875,7 +875,7 @@ wxRichTextLine* wxRichTextParagraphLayoutBox::GetLineAtPosition(long pos, bool c
 
                     // If the position is end-of-paragraph, then return the last line of
                     // of the paragraph.
-                    (range.GetEnd() == child->GetRange().GetEnd()-1) && (pos == child->GetRange().GetEnd()))
+                    ((range.GetEnd() == child->GetRange().GetEnd()-1) && (pos == child->GetRange().GetEnd())))
                     return line;
 
                 node2 = node2->GetNext();
@@ -5943,7 +5943,7 @@ wxString wxRichTextBuffer::GetExtWildcard(bool combine, bool save, wxArrayInt* t
     while (node)
     {
         wxRichTextFileHandler* handler = (wxRichTextFileHandler*) node->GetData();
-        if (handler->IsVisible() && ((save && handler->CanSave()) || !save && handler->CanLoad()))
+        if (handler->IsVisible() && ((save && handler->CanSave()) || (!save && handler->CanLoad())))
         {
             if (combine)
             {
@@ -7774,6 +7774,7 @@ wxRichTextFontTable::wxRichTextFontTable()
 }
 
 wxRichTextFontTable::wxRichTextFontTable(const wxRichTextFontTable& table)
+    : wxObject()
 {
     (*this) = table;
 }
