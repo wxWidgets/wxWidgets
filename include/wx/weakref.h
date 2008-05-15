@@ -13,6 +13,21 @@
 
 #include "wx/tracker.h"
 
+
+// Some compilers (VC6, Borland, otehrs?) have problem with template specialization.
+// However, this is only used for optimization purposes (a smaller wxWeakRef pointer)
+// (and the corner case of wxWeakRef<wxObject>). So for those compilers, we can fall 
+// back to the non-optimal case, where we use a the same type of weak ref (static one) 
+// in all cases. See defs.h for various setting these defines depending on compiler.
+
+#if !defined(HAVE_PARTIAL_SPECIALIZATION) || !defined(HAVE_TEMPLATE_OVERLOAD_RESOLUTION)
+    #define USE_ONLY_STATIC_WEAKREF 
+#endif 
+
+
+#ifndef USE_ONLY_STATIC_WEAKREF
+
+// Avoid including this for simpler compilers
 #include "wx/meta/convertible.h"
 #include "wx/meta/int2type.h"
 
@@ -21,6 +36,9 @@ struct wxIsStaticTrackable
 {
     enum { value = wxConvertibleTo<T, wxTrackable>::value };
 };
+
+#endif // !USE_ONLY_STATIC_WEAKREF
+
 
 // Weak ref implementation when T has wxTrackable as a known base class
 template <class T>
@@ -75,12 +93,9 @@ protected:
 };
 
 
-#if !defined(HAVE_PARTIAL_SPECIALIZATION) || !defined(HAVE_TEMPLATE_OVERLOAD_RESOLUTION)
-    #define USE_STATIC_WEAKREF
-#endif 
 
+#ifndef USE_ONLY_STATIC_WEAKREF
 
-#ifndef USE_STATIC_WEAKREF
 template<class T,bool use_static>
 struct wxWeakRefImpl;
 
@@ -174,15 +189,15 @@ protected:
     wxTrackable *m_ptbase;
 };
 
-#endif // #ifndef USE_STATIC_WEAKREF
+#endif // #ifndef USE_ONLY_STATIC_WEAKREF
 
 
 
-// A weak reference to an object of type T, where T has type wxTrackable
+// A weak reference to an object of type T, where T has base wxTrackable
 // (usually statically but if not dynamic_cast<> is tried).
 template <class T>
 class wxWeakRef : public
-#ifdef USE_STATIC_WEAKREF
+#ifdef USE_ONLY_STATIC_WEAKREF
                   wxWeakRefStatic<T>
 #else
                   wxWeakRefImpl<T, wxIsStaticTrackable<T>::value>
@@ -200,7 +215,8 @@ public:
         Assign(pobj);
     }
 
-    // We need this copy ctor, since otherwise a default compiler (binary) copy happens
+    // We need this copy ctor, since otherwise a default compiler (binary) copy 
+    // happens (if embedded as an object member).
     wxWeakRef(const wxWeakRef<T>& wr)
     {
         Assign(wr.get());
@@ -222,13 +238,15 @@ public:
     virtual ~wxWeakRef() { this->Release(); }
 
     // Smart pointer functions
-    T& operator*() const { return *this->m_pobj; }
-    T* operator->() const { return this->m_pobj; }
+    T& operator*() const    { return *this->m_pobj; }
+    T* operator->() const   { return this->m_pobj; }
 
-    T* get() const { return this->m_pobj; }
-    operator T*() const { return get(); }
+    T* get() const          { return this->m_pobj; }
+    operator T*() const     { return this->m_pobj; }
 };
 
+
+#ifdef HAVE_DYNAMIC_CAST
 
 // Weak ref implementation assign objects are queried for wxTrackable
 // using dynamic_cast<>
@@ -243,27 +261,24 @@ public:
         Assign(pobj);
     }
 
+    wxWeakRefDynamic(const wxWeakRef<T>& wr)
+    {
+        Assign(wr.get());
+    }
+    
     virtual ~wxWeakRefDynamic() { Release(); }
 
     // Smart pointer functions
-    T& operator * (){ wxASSERT(this->m_pobj); return *m_pobj; }
-    T* operator -> (){ wxASSERT(this->m_pobj); return m_pobj; }
+    T& operator*() const    { wxASSERT(m_pobj); return *m_pobj; }
+    T* operator->() const   { wxASSERT(m_pobj); return m_pobj; }
+    
+    T* get() const          { return m_pobj; }
+    operator T* () const    { return m_pobj; }
+
     T* operator = (T* pobj) { Assign(pobj); return m_pobj; }
-
-    T* get(){ return this->m_pobj; }
-
-    // operator T* (){ return this->m_pobj; }
-
-    // test for pointer validity: defining conversion to unspecified_bool_type
-    // and not more obvious bool to avoid implicit conversions to integer types
-    typedef T *(wxWeakRef<T>::*unspecified_bool_type)() const;
-    operator unspecified_bool_type() const
-    {
-        return m_pobj ? &wxWeakRef<T>::get : NULL;
-    }
-
+    
     // Assign from another weak ref, point to same object
-    T* operator = (const wxWeakRef<T> &wr) { Assign( wr.get() ); return this->m_pobj; }
+    T* operator = (const wxWeakRef<T> &wr) { Assign( wr.get() ); return m_pobj; }
 
     void Release()
     {
@@ -315,9 +330,13 @@ protected:
     T *m_pobj;
 };
 
+#endif // #ifdef HAVE_DYNAMIC_CAST
+
+
 // Provide some basic types of weak references
 class WXDLLIMPEXP_FWD_BASE wxEvtHandler;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
+
 
 typedef wxWeakRef<wxEvtHandler>  wxEvtHandlerRef;
 typedef wxWeakRef<wxWindow>      wxWindowRef;
