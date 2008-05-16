@@ -2935,6 +2935,8 @@ wxRect wxDataViewMainWindow::GetLineRect( unsigned int row ) const
 
 int wxDataViewMainWindow::GetLineStart( unsigned int row ) const
 {
+    const wxDataViewModel *model = GetOwner()->GetModel();
+    
     if (GetOwner()->GetWindowStyle() & wxDV_VARIABLE_LINE_HEIGHT)
     {
         // TODO make more efficient
@@ -2947,6 +2949,8 @@ int wxDataViewMainWindow::GetLineStart( unsigned int row ) const
            const wxDataViewTreeNode* node = GetTreeNodeByRow(r);
            if (!node) return start;
            
+           wxDataViewItem item = node->GetItem();
+           
            unsigned int cols = GetOwner()->GetColumnCount();
            unsigned int col;
            int height = 0;
@@ -2956,7 +2960,14 @@ int wxDataViewMainWindow::GetLineStart( unsigned int row ) const
                 if (column->IsHidden())
                     continue;      // skip it!
             
+                if ((col != 0) && model->IsContainer(item) && !model->HasContainerColumns(item))
+                    continue;      // skip it!
+            
                 const wxDataViewRenderer *renderer = column->GetRenderer();
+                wxVariant value;
+                model->GetValue( value, item, column->GetModelColumn() );
+                wxDataViewRenderer *renderer2 = const_cast<wxDataViewRenderer*>(renderer);
+                renderer2->SetValue( value );
                 height = wxMax( height, renderer->GetSize().y );
            }
            
@@ -2973,6 +2984,8 @@ int wxDataViewMainWindow::GetLineStart( unsigned int row ) const
 
 int wxDataViewMainWindow::GetLineAt( unsigned int y ) const
 {
+    const wxDataViewModel *model = GetOwner()->GetModel();
+
     if (GetOwner()->GetWindowStyle() & wxDV_VARIABLE_LINE_HEIGHT)
     {
         // TODO make more efficient
@@ -2988,6 +3001,8 @@ int wxDataViewMainWindow::GetLineAt( unsigned int y ) const
                return row + ((y-yy) / m_lineHeight);
            }
            
+           wxDataViewItem item = node->GetItem();
+           
            unsigned int cols = GetOwner()->GetColumnCount();
            unsigned int col;
            int height = 0;
@@ -2996,8 +3011,15 @@ int wxDataViewMainWindow::GetLineAt( unsigned int y ) const
                 const wxDataViewColumn *column = GetOwner()->GetColumn(col);
                 if (column->IsHidden())
                     continue;      // skip it!
+                
+                if ((col != 0) && model->IsContainer(item) && !model->HasContainerColumns(item))
+                    continue;      // skip it!
             
                 const wxDataViewRenderer *renderer = column->GetRenderer();
+                wxVariant value;
+                model->GetValue( value, item, column->GetModelColumn() );
+                wxDataViewRenderer *renderer2 = const_cast<wxDataViewRenderer*>(renderer);
+                renderer2->SetValue( value );
                 height = wxMax( height, renderer->GetSize().y );
            }
            
@@ -3018,6 +3040,8 @@ int wxDataViewMainWindow::GetLineAt( unsigned int y ) const
 
 int wxDataViewMainWindow::GetLineHeight( unsigned int row ) const
 {
+    const wxDataViewModel *model = GetOwner()->GetModel();
+    
     if (GetOwner()->GetWindowStyle() & wxDV_VARIABLE_LINE_HEIGHT)
     {
         wxASSERT( !IsVirtualList() );
@@ -3026,7 +3050,7 @@ int wxDataViewMainWindow::GetLineHeight( unsigned int row ) const
         // wxASSERT( node );
         if (!node) return m_lineHeight;
 
-        wxDataViewItem item( node->GetItem() );
+        wxDataViewItem item = node->GetItem();
         
         int height = 0;
         
@@ -3037,8 +3061,15 @@ int wxDataViewMainWindow::GetLineHeight( unsigned int row ) const
             const wxDataViewColumn *column = GetOwner()->GetColumn(col);
             if (column->IsHidden())
                 continue;      // skip it!
+
+            if ((col != 0) && model->IsContainer(item) && !model->HasContainerColumns(item))
+                continue;      // skip it!
             
             const wxDataViewRenderer *renderer = column->GetRenderer();
+            wxVariant value;
+            model->GetValue( value, item, column->GetModelColumn() );
+            wxDataViewRenderer *renderer2 = const_cast<wxDataViewRenderer*>(renderer);
+            renderer2->SetValue( value );
             height = wxMax( height, renderer->GetSize().y );
         }
 
