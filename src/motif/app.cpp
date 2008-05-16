@@ -437,6 +437,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
     s_inYield = true;
 
+    wxEventLoopGuarantor dummyLoopIfNeeded;
     while (wxTheApp && wxTheApp->Pending())
         wxTheApp->Dispatch();
 

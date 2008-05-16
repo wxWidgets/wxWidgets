@@ -796,13 +796,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
         // Make sure we have an event loop object,
         // or Pending/Dispatch will fail
-        wxEventLoop* eventLoop = wxEventLoop::GetActive();
-        wxEventLoop* newEventLoop = NULL;
-        if (!eventLoop)
-        {
-            newEventLoop = new wxEventLoop;
-            wxEventLoop::SetActive(newEventLoop);
-        }
+        wxEventLoopGuarantor dummyLoopIfNeeded;
 
         // Call dispatch at least once so that sockets
         // can be tested
@@ -815,12 +809,6 @@ bool wxApp::Yield(bool onlyIfNeeded)
         wxTimer::NotifyTimers();
 #endif
         ProcessIdle();
-
-        if (newEventLoop)
-        {
-            wxEventLoop::SetActive(NULL);
-            delete newEventLoop;
-        }
 
         s_inYield = false;
     }

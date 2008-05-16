@@ -31,6 +31,7 @@
         *TimeZone*Make*;
         *wxBitmapButton*OnFocusChange*;
         *wxDocManager*MakeNewDocumentName*;
+        *wxEventLoopGuarantor*;
         *wxGridBagSizer*AdjustForOverflow*;
         *wxRemotelyScrolledTreeCtrl*DoCalcScrolledPosition*;
         *wxRemotelyScrolledTreeCtrl*SetScrollbar*;
