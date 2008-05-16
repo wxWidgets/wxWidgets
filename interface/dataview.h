@@ -676,7 +676,7 @@ public:
            Display fine rules between row if supported.
     @style{wxDV_VERT_RULES}
            Display fine rules between columns is supported.
-    @style{wxDV_VARIABLE_LINE_HEIGHT)
+    @style{wxDV_VARIABLE_LINE_HEIGHT}
            Allow variable line heights. This can be inefficient when displaying large number of items.
     @endStyleTable
 
