@@ -535,6 +535,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
     // We want to go back to the main message loop
     // if we see a WM_QUIT. (?)
     //
+    wxEventLoopGuarantor dummyLoopIfNeeded;
     while (::WinPeekMsg(vHab, &vMsg, (HWND)NULL, 0, 0, PM_NOREMOVE) && vMsg.msg != WM_QUIT)
     {
 #if wxUSE_THREADS

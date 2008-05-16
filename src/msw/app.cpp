@@ -800,6 +800,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
     // we don't want to process WM_QUIT from here - it should be processed in
     // the main event loop in order to stop it
+    wxEventLoopGuarantor dummyLoopIfNeeded;
     MSG msg;
     while ( PeekMessage(&msg, (HWND)0, 0, 0, PM_NOREMOVE) &&
             msg.message != WM_QUIT )
