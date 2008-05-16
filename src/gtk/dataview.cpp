@@ -3620,7 +3620,10 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
 
 #ifdef __WXGTK26__
     if (!gtk_check_version(2,6,0))
-        gtk_tree_view_set_fixed_height_mode( GTK_TREE_VIEW(m_treeview), TRUE );
+    {
+        bool fixed = (style & wxDV_VARIABLE_LINE_HEIGHT) == 0;
+        gtk_tree_view_set_fixed_height_mode( GTK_TREE_VIEW(m_treeview), fixed );
+    }
 #endif
 
     if (style & wxDV_MULTIPLE)
@@ -3711,6 +3714,14 @@ bool wxDataViewCtrl::AssociateModel( wxDataViewModel *model )
 
     if (!wxDataViewCtrlBase::AssociateModel( model ))
         return false;
+
+#ifdef __WXGTK26__
+    if (!gtk_check_version(2,6,0))
+    {
+        bool fixed = (((GetWindowStyle() & wxDV_VARIABLE_LINE_HEIGHT) == 0) || (model->IsVirtualListModel()));
+        gtk_tree_view_set_fixed_height_mode( GTK_TREE_VIEW(m_treeview), fixed );
+    }
+#endif
 
     GtkWxTreeModel *gtk_model = wxgtk_tree_model_new();
     m_internal = new wxDataViewCtrlInternal( this, model, gtk_model );

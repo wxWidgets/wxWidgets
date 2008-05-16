@@ -478,9 +478,7 @@ public:
         : m_text(text), m_icon(icon)
     { }
     wxDataViewIconText( const wxDataViewIconText &other )
-        : wxObject()
-        , m_text(other.m_text), m_icon(other.m_icon)
-    { }
+    { m_icon = other.m_icon; m_text = other.m_text; }
 
     void SetText( const wxString &text ) { m_text = text; }
     wxString GetText() const             { return m_text; }
@@ -586,6 +584,7 @@ protected:
 #define wxDV_VERT_RULES              0x0008     // light vertical rules between columns
 
 #define wxDV_ROW_LINES               0x0010     // alternating colour in rows
+#define wxDV_VARIABLE_LINE_HEIGHT    0x0020     // variable line height
 
 class WXDLLIMPEXP_ADV wxDataViewCtrlBase: public wxControl
 {
@@ -713,7 +712,7 @@ public:
         { return m_expander_column; }
 
     virtual wxDataViewColumn *GetSortingColumn() const = 0;
-
+    
     void SetIndent( int indent )
         { m_indent = indent ; DoSetIndent(); }
     int GetIndent() const

@@ -595,7 +595,7 @@ public:
     
     virtual wxSize GetSize() const
     { 
-        return wxSize(60,20); 
+        return wxSize(60,40); 
     }
     
     virtual bool SetValue( const wxVariant &WXUNUSED(value) ) { return true; }
@@ -780,7 +780,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     // MyMusic
 
     m_musicCtrl = new wxDataViewCtrl( this, ID_MUSIC_CTRL, wxDefaultPosition,
-                                    wxDefaultSize, wxDV_MULTIPLE );
+                                    wxDefaultSize, wxDV_MULTIPLE|wxDV_VARIABLE_LINE_HEIGHT );
 
     m_music_model = new MyMusicModel;
     m_musicCtrl->AssociateModel( m_music_model.get() );

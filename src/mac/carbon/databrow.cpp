@@ -169,7 +169,7 @@ wxMacDataBrowserTableViewControl::wxMacDataBrowserTableViewControl(wxWindow* pee
   this->SetCustomCallbacks(&customCallbacks);
 
  // style setting:
-  this->EnableCellSizeModification();
+  this->EnableCellSizeModification( ((style & wxDV_VARIABLE_LINE_HEIGHT) != 0), true );
 
   DataBrowserSelectionFlags flags; // variable definition
 
