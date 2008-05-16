@@ -2174,7 +2174,6 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     cell_rect.x = x_start;
     for (unsigned int i = col_start; i < col_last; i++)
     {
-        cell_rect.height = GetLineHeight( i );     // -1 is for the horizontal rules (?)
        
         wxDataViewColumn *col = GetOwner()->GetColumn( i );
         wxDataViewRenderer *cell = col->GetRenderer();
@@ -2218,8 +2217,9 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 cell->SetHasAttr( ret );
             }
 
-            // update the y offset
+            // update cell_rect
             cell_rect.y = GetLineStart( item );
+            cell_rect.height = GetLineHeight( item );     // -1 is for the horizontal rules (?)
 
             //Draw the expander here.
             int indent = 0;
