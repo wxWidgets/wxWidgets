@@ -215,11 +215,41 @@ public:
   virtual bool ItemAdded(const wxDataViewItem &parent, const wxDataViewItem &item)
   {
     DataBrowserItemID itemID(reinterpret_cast<DataBrowserItemID>(item.GetID()));
-
-
+    
     wxCHECK_MSG(item.IsOk(),false,_("Added item is invalid."));
-    return (!(parent.IsOk()) && (this->m_dataViewControlPtr->AddItem(kDataBrowserNoItem,&itemID) == noErr) ||
-            parent.IsOk()  && (this->m_dataViewControlPtr->AddItem(reinterpret_cast<DataBrowserItemID>(parent.GetID()),&itemID) == noErr));
+    bool noFailureFlag = (!(parent.IsOk()) && (this->m_dataViewControlPtr->AddItem(kDataBrowserNoItem,&itemID) == noErr) ||
+                  parent.IsOk()  && (this->m_dataViewControlPtr->AddItem(reinterpret_cast<DataBrowserItemID>(parent.GetID()),&itemID) == noErr));
+    
+    wxDataViewCtrl *dvc = (wxDataViewCtrl*) this->m_dataViewControlPtr->GetPeer();
+    if (dvc->GetWindowStyle() & wxDV_VARIABLE_LINE_HEIGHT)
+    {
+        wxDataViewModel *model = GetOwner();
+    
+        int height = 20; // TODO find out standard height
+        unsigned int num = dvc->GetColumnCount();
+        unsigned int col;
+        for (col = 0; col < num; col++)
+        {
+            wxDataViewColumn *column = dvc->GetColumn( col );
+            if (column->IsHidden())
+                continue;
+                
+            wxDataViewCustomRenderer *renderer = wxDynamicCast( column->GetRenderer(), wxDataViewCustomRenderer );
+            if (renderer)
+            {
+                wxVariant value;
+                model->GetValue( value, item, column->GetModelColumn() );
+                renderer->SetValue( value );
+                height = wxMax( height, renderer->GetSize().y );
+            }
+            
+        }
+        
+        if (height > 20)
+            this->m_dataViewControlPtr->SetRowHeight( itemID, height );
+    }
+            
+    return noFailureFlag;
   } /* ItemAdded(wxDataViewItem const&, wxDataViewItem const&) */
 
   virtual bool ItemsAdded(wxDataViewItem const& parent, wxDataViewItemArray const& items)
@@ -239,6 +269,39 @@ public:
                      parent.IsOk() && (this->m_dataViewControlPtr->AddItems(reinterpret_cast<DataBrowserItemID>(parent.GetID()),noOfEntries,itemIDs,kDataBrowserItemNoProperty) == noErr));
    // give allocated array space free again:
     delete[] itemIDs;
+
+    wxDataViewCtrl *dvc = (wxDataViewCtrl*) this->m_dataViewControlPtr->GetPeer();
+    if (dvc->GetWindowStyle() & wxDV_VARIABLE_LINE_HEIGHT)
+    {
+         wxDataViewItem item = items[0];  // TODO get all items
+         DataBrowserItemID itemID(reinterpret_cast<DataBrowserItemID>(item.GetID()));
+    
+        wxDataViewModel *model = GetOwner();
+    
+        int height = 20; // TODO find out standard height
+        unsigned int num = dvc->GetColumnCount();
+        unsigned int col;
+        for (col = 0; col < num; col++)
+        {
+            wxDataViewColumn *column = dvc->GetColumn( col );
+            if (column->IsHidden())
+                continue;
+                
+            wxDataViewCustomRenderer *renderer = wxDynamicCast( column->GetRenderer(), wxDataViewCustomRenderer );
+            if (renderer)
+            {
+                wxVariant value;
+                model->GetValue( value, item, column->GetModelColumn() );
+                renderer->SetValue( value );
+                height = wxMax( height, renderer->GetSize().y );
+            }
+            
+        }
+        
+        if (height > 20)
+            this->m_dataViewControlPtr->SetRowHeight( itemID, height );
+   }    
+    
    // done:
     return noFailureFlag;
   } /* ItemsAdded(wxDataViewItem const&, wxDataViewItemArray const&) */
