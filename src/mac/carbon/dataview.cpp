@@ -867,8 +867,39 @@ void wxDataViewColumn::SetReorderable(bool reorderable)
   } /* if */
 } /* wxDataViewColumn::SetReorderable(bool) */
 
-void wxDataViewColumn::SetResizeable(bool WXUNUSED(resizeable))
+void wxDataViewColumn::SetResizeable(bool resizeable)
 {
+ // first set the internal flag of the column:
+  if (resizeable)
+    this->m_flags |= wxDATAVIEW_COL_RESIZABLE;
+  else
+    this->m_flags &= ~wxDATAVIEW_COL_RESIZABLE;
+ // if the column is associated with a control change also immediately the flags of the control:
+  wxDataViewCtrl* dataViewCtrlPtr(this->GetOwner()); // variable definition and initialization
+
+  if (dataViewCtrlPtr != NULL)
+  {
+   // variable definition and initialization:
+    wxMacDataViewDataBrowserListViewControlPointer macDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(dataViewCtrlPtr->GetPeer()));
+    
+    if (macDataViewListCtrlPtr != NULL)
+    {
+     // variable definition and initialization:
+      DataBrowserListViewHeaderDesc headerDescription;
+      
+      verify_noerr(macDataViewListCtrlPtr->GetHeaderDesc(this->GetPropertyID(),&headerDescription));
+      if (resizeable) {
+        headerDescription.minimumWidth = 0;
+        headerDescription.maximumWidth = 30000;
+      }
+      else {
+        headerDescription.minimumWidth = this->m_width;
+        headerDescription.maximumWidth = this->m_width;
+      }
+      verify_noerr(macDataViewListCtrlPtr->SetHeaderDesc(this->GetPropertyID(),&headerDescription));
+      macDataViewListCtrlPtr->SetSortProperty(this->GetPropertyID());
+    } /* if */
+  } /* if */
 } /* wxDataViewColumn::SetResizeable(bool) */
 
 void wxDataViewColumn::SetSortable(bool sortable)
