@@ -85,7 +85,7 @@ public:
     virtual void     DoEnable(bool bEnable);
     virtual void     SetFocus(void);
     virtual void     SetFocusFromKbd(void);
-    virtual bool     Reparent(wxWindow* pNewParent);
+    virtual bool     Reparent(wxWindowBase* pNewParent);
     virtual void     WarpPointer( int x
                                  ,int y
                                 );
@@ -536,12 +536,6 @@ private:
     DECLARE_DYNAMIC_CLASS(wxWindowOS2);
     DECLARE_NO_COPY_CLASS(wxWindowOS2)
     DECLARE_EVENT_TABLE()
-
-    //
-    // Virtual function hiding supression
-    //
-    inline virtual bool Reparent(wxWindowBase* pNewParent)
-    { return(wxWindowBase::Reparent(pNewParent));}
 }; // end of wxWindow
 
 class wxWindowCreationHook

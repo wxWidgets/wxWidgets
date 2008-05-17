@@ -1094,7 +1094,7 @@ void wxWindowOS2::OnIdle(
 //
 // Set this window to be the child of 'parent'.
 //
-bool wxWindowOS2::Reparent( wxWindow* pParent)
+bool wxWindowOS2::Reparent( wxWindowBase* pParent)
 {
     if (!wxWindowBase::Reparent(pParent))
         return false;
