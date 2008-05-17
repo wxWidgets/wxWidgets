@@ -101,11 +101,12 @@ in the current locale encoding, so writing
 wxMessageBox("Salut à toi!");
 @endcode
 wouldn't work if the encoding used on the user system is incompatible with
-ISO-8859-1. In particular, the most common encoding used under modern Unix
-systems is UTF-8 and as the string above is not a valid UTF-8 byte sequence,
-nothing would be displayed at all in this case. Thus it is important to never
-use 8 bit characters directly in the program source but use wide strings or,
-alternatively, write
+ISO-8859-1 (or even if the sources were compiled under different locale
+in the case of gcc). In particular, the most common encoding used under
+modern Unix systems is UTF-8 and as the string above is not a valid UTF-8 byte
+sequence, nothing would be displayed at all in this case. Thus it is important
+to never use 8 bit characters directly in the program source but use wide
+strings or, alternatively, write
 @code
 wxMessageBox(wxString::FromUTF8("Salut \xc3\xa0 toi!"));
 @endcode
@@ -170,7 +171,7 @@ problems:
     of @c c_str(), it is not needed at all with wxWidgets functions)
   - Compatible with wxWidgets 2.8: @code wxPrintf("Hello, %s", s.c_str()) @endcode
   - Using an explicit conversion to narrow, multibyte, string:
-    @code printf("Hello, %s", s.mb_str()) @endcode
+    @code printf("Hello, %s", (const char *)s.mb_str()) @endcode
   - Using a cast to force the issue (listed only for completeness):
     @code printf("Hello, %s", (const char *)s.c_str()) @endcode
 
