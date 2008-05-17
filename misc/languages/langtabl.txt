@@ -154,6 +154,7 @@ wxLANGUAGE_RHAETO_ROMANCE              rm     -                -                
 wxLANGUAGE_ROMANIAN                    ro_RO  LANG_ROMANIAN    SUBLANG_DEFAULT                     LTR    "Romanian"
 wxLANGUAGE_RUSSIAN                     ru_RU  LANG_RUSSIAN     SUBLANG_DEFAULT                     LTR    "Russian"
 wxLANGUAGE_RUSSIAN_UKRAINE             ru_UA  -                -                                   LTR    "Russian (Ukraine)"
+wxLANGUAGE_SAMI                        se_NO  LANG_SAMI        SUBLANG_DEFAULT                     LTR    "Northern Sami"
 wxLANGUAGE_SAMOAN                      sm     -                -                                   LTR    "Samoan"
 wxLANGUAGE_SANGHO                      sg     -                -                                   LTR    "Sangho"
 wxLANGUAGE_SANSKRIT                    sa     LANG_SANSKRIT    SUBLANG_DEFAULT                     LTR    "Sanskrit"
