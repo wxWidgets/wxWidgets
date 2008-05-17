@@ -3,7 +3,7 @@
 // Purpose:     wxBitmapComboBox
 // Author:      Jaakko Salli
 // Created:     2008-04-09
-// RCS-ID:      $Id:$
+// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Jaakko Salli
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -28,6 +28,8 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/dc.h"
+    #include "wx/ctrlsub.h"
 #endif
 
 #include "wx/settings.h"

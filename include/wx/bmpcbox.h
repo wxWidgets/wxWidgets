@@ -19,6 +19,8 @@
 
 #include "wx/bitmap.h"
 
+class WXDLLIMPEXP_FWD_CORE wxItemContainer;
+
 // Define wxBITMAPCOMBOBOX_OWNERDRAWN_BASED for platforms which
 // wxBitmapComboBox implementation utilizes ownerdrawn combobox
 // (either native or generic).
