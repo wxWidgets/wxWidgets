@@ -471,7 +471,7 @@ static bool UnregisterAndFreeClassName(const wxChar **ppClassName)
         retval = false;
     }
 
-    delete [] *ppClassName;
+    delete [] (wxChar*) *ppClassName;
     *ppClassName = NULL;
 
     return retval;
