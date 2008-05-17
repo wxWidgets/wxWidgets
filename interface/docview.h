@@ -350,7 +350,7 @@ public:
 
         @see wxConfigBase
     */
-    void FileHistoryLoad(wxConfigBase& config);
+    void FileHistoryLoad(const wxConfigBase& config);
 
     /**
         Removes the given menu from the list of menus managed by the file
@@ -1387,7 +1387,7 @@ public:
 
         @see wxConfigBase
     */
-    void Load(wxConfigBase& config);
+    void Load(const wxConfigBase& config);
 
     /**
         Removes the specified file from the history.
