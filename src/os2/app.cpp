@@ -35,6 +35,7 @@
 
 #include "wx/stdpaths.h"
 #include "wx/filename.h"
+#include "wx/evtloop.h"
 
 #include "wx/os2/private.h"
 
