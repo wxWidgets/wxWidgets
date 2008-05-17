@@ -128,8 +128,21 @@ void wxBufferedDC::UnMask()
     if ( m_style & wxBUFFER_CLIENT_AREA )
         GetDeviceOrigin(&x, &y);
 
-    m_dc->Blit(0, 0, m_buffer->GetWidth(), m_buffer->GetHeight(),
-               this, -x, -y );
+    // avoid blitting too much: if we were created for a bigger bitmap (and
+    // reused for a smaller one later) we should only blit the real bitmap area
+    // and not the full allocated back buffer
+    int widthDC,
+        heightDC;
+
+    m_dc->GetSize(&widthDC, &heightDC);
+
+    int widthBuf = m_buffer->GetWidth(),
+        heightBuf = m_buffer->GetHeight();
+
+    m_dc->Blit(0, 0,
+               wxMin(widthDC, widthBuf), wxMin(heightDC, heightBuf),
+               this,
+               -x, -y);
     m_dc = NULL;
 
     if ( m_style & wxBUFFER_USES_SHARED_BUFFER )
