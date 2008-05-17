@@ -478,6 +478,7 @@ public:
         : m_text(text), m_icon(icon)
     { }
     wxDataViewIconText( const wxDataViewIconText &other )
+        : wxObject()
     { m_icon = other.m_icon; m_text = other.m_text; }
 
     void SetText( const wxString &text ) { m_text = text; }
