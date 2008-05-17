@@ -392,8 +392,9 @@ bool wxRichTextFontPage::TransferDataFromWindow()
     }
     else
     {
-        attr->SetTextEffectFlags(attr->GetTextEffectFlags() | wxTEXT_ATTR_EFFECT_SUBSCRIPT | wxTEXT_ATTR_EFFECT_SUPERSCRIPT );
-        attr->SetTextEffects(attr->GetTextEffects() & ~( wxTEXT_ATTR_EFFECT_SUPERSCRIPT | wxTEXT_ATTR_EFFECT_SUBSCRIPT));
+        // If they are undetermined, we don't want to include these flags in the text effects - the objects
+        // should retain their original style.
+        attr->SetTextEffectFlags(attr->GetTextEffectFlags() & ~(wxTEXT_ATTR_EFFECT_SUBSCRIPT|wxTEXT_ATTR_EFFECT_SUPERSCRIPT) );
     }
 
     return true;
@@ -514,16 +515,16 @@ bool wxRichTextFontPage::TransferDataToWindow()
         }
         else
         {
-            m_superscriptCtrl->Set3StateValue(wxCHK_UNCHECKED);
-            m_subscriptCtrl->Set3StateValue(wxCHK_UNCHECKED);
+            m_superscriptCtrl->Set3StateValue(wxCHK_UNDETERMINED);
+            m_subscriptCtrl->Set3StateValue(wxCHK_UNDETERMINED);
         }
     }
     else
     {
         m_strikethroughCtrl->Set3StateValue(wxCHK_UNDETERMINED);
         m_capitalsCtrl->Set3StateValue(wxCHK_UNDETERMINED);
-        m_superscriptCtrl->Set3StateValue(wxCHK_UNCHECKED);
-        m_subscriptCtrl->Set3StateValue(wxCHK_UNCHECKED);
+        m_superscriptCtrl->Set3StateValue(wxCHK_UNDETERMINED);
+        m_subscriptCtrl->Set3StateValue(wxCHK_UNDETERMINED);
     }
 
     UpdatePreview();
@@ -790,8 +791,11 @@ void wxRichTextFontPage::OnCapsctrlClick( wxCommandEvent& WXUNUSED(event) )
 
 void wxRichTextFontPage::OnRichtextfontpageSuperscriptClick( wxCommandEvent& WXUNUSED(event) )
 {
-    if ( m_superscriptCtrl->Get3StateValue() == wxCHK_CHECKED && m_subscriptCtrl->Get3StateValue() == wxCHK_CHECKED )
+    if ( m_superscriptCtrl->Get3StateValue() == wxCHK_CHECKED)
         m_subscriptCtrl->Set3StateValue( wxCHK_UNCHECKED );
+    else
+        m_subscriptCtrl->Set3StateValue( wxCHK_CHECKED );
+
     UpdatePreview();
 }
 
@@ -801,7 +805,10 @@ void wxRichTextFontPage::OnRichtextfontpageSuperscriptClick( wxCommandEvent& WXU
 
 void wxRichTextFontPage::OnRichtextfontpageSubscriptClick( wxCommandEvent& WXUNUSED(event) )
 {
-    if ( m_superscriptCtrl->Get3StateValue() == wxCHK_CHECKED && m_subscriptCtrl->Get3StateValue() == wxCHK_CHECKED )
+    if ( m_subscriptCtrl->Get3StateValue() == wxCHK_CHECKED)
         m_superscriptCtrl->Set3StateValue( wxCHK_UNCHECKED );
+    else
+        m_superscriptCtrl->Set3StateValue( wxCHK_CHECKED );
+
     UpdatePreview();
 }

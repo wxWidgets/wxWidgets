@@ -362,6 +362,18 @@ bool wxTextAttr::GetFontAttributes(const wxFont& font, int flags)
     return true;
 }
 
+// Resets bits in destination so new attributes aren't merged with mutually exclusive ones
+static bool wxResetIncompatibleBits(const int mask, const int srcFlags, int& destFlags, int& destBits)
+{
+    if ((srcFlags & mask) && (destFlags & mask))
+    {
+        destBits &= ~mask;
+        destFlags &= ~mask;
+    }
+
+    return true;
+}
+
 bool wxTextAttr::Apply(const wxTextAttr& style, const wxTextAttr* compareWith)
 {
     wxTextAttr& destStyle = (*this);
@@ -523,6 +535,11 @@ bool wxTextAttr::Apply(const wxTextAttr& style, const wxTextAttr* compareWith)
 
             int srcBits = style.GetTextEffects();
             int srcFlags = style.GetTextEffectFlags();
+
+            // Reset incompatible bits in the destination
+            wxResetIncompatibleBits((wxTEXT_ATTR_EFFECT_SUPERSCRIPT|wxTEXT_ATTR_EFFECT_SUBSCRIPT), srcFlags, destFlags, destBits);
+            wxResetIncompatibleBits((wxTEXT_ATTR_EFFECT_CAPITALS|wxTEXT_ATTR_EFFECT_SMALL_CAPITALS), srcFlags, destFlags, destBits);
+            wxResetIncompatibleBits((wxTEXT_ATTR_EFFECT_STRIKETHROUGH|wxTEXT_ATTR_EFFECT_DOUBLE_STRIKETHROUGH), srcFlags, destFlags, destBits);
 
             CombineBitlists(destBits, srcBits, destFlags, srcFlags);
 

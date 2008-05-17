@@ -1946,11 +1946,14 @@ static bool wxHasStyle(long flags, long style)
 
 /// Combines 'style' with 'currentStyle' for the purpose of summarising the attributes of a range of
 /// content.
-bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttr& currentStyle, const wxTextAttr& style, long& multipleStyleAttributes, int& multipleTextEffectAttributes)
+bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttr& currentStyle, const wxTextAttr& style, long& multipleStyleAttributes, int& multipleTextEffectAttributes, int& absentStyleAttributes, int& absentTextEffectAttributes)
 {
+    absentStyleAttributes |= (~style.GetFlags() & wxTEXT_ATTR_ALL);
+    absentTextEffectAttributes |= (~style.GetTextEffectFlags() & 0xFFFF);
+
     if (style.HasFont())
     {
-        if (style.HasFontSize() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_FONT_SIZE))
+        if (style.HasFontSize() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_FONT_SIZE))
         {
             if (currentStyle.HasFontSize())
             {
@@ -1967,7 +1970,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttr& currentStyle, const 
             }
         }
 
-        if (style.HasFontItalic() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_FONT_ITALIC))
+        if (style.HasFontItalic() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_FONT_ITALIC))
         {
             if (currentStyle.HasFontItalic())
             {
@@ -1984,7 +1987,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttr& currentStyle, const 
             }
         }
 
-        if (style.HasFontWeight() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_FONT_WEIGHT))
+        if (style.HasFontWeight() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_FONT_WEIGHT))
         {
             if (currentStyle.HasFontWeight())
             {
@@ -2001,7 +2004,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttr& currentStyle, const 
             }
         }
 
-        if (style.HasFontFaceName() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_FONT_FACE))
+        if (style.HasFontFaceName() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_FONT_FACE))
         {
             if (currentStyle.HasFontFaceName())
             {
@@ -2021,7 +2024,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttr& currentStyle, const 
             }
         }
 
-        if (style.HasFontUnderlined() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_FONT_UNDERLINE))
+        if (style.HasFontUnderlined() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_FONT_UNDERLINE))
         {
             if (currentStyle.HasFontUnderlined())
             {
@@ -2039,7 +2042,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttr& currentStyle, const 
         }
     }
 
-    if (style.HasTextColour() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_TEXT_COLOUR))
+    if (style.HasTextColour() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_TEXT_COLOUR))
     {
         if (currentStyle.HasTextColour())
         {
@@ -2054,7 +2057,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttr& currentStyle, const 
             currentStyle.SetTextColour(style.GetTextColour());
     }
 
-    if (style.HasBackgroundColour() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_BACKGROUND_COLOUR))
+    if (style.HasBackgroundColour() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_BACKGROUND_COLOUR))
     {
         if (currentStyle.HasBackgroundColour())
         {
@@ -2069,7 +2072,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttr& currentStyle, const 
             currentStyle.SetBackgroundColour(style.GetBackgroundColour());
     }
 
-    if (style.HasAlignment() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_ALIGNMENT))
+    if (style.HasAlignment() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_ALIGNMENT))
     {
         if (currentStyle.HasAlignment())
         {
@@ -2084,7 +2087,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttr& currentStyle, const 
             currentStyle.SetAlignment(style.GetAlignment());
     }
 
-    if (style.HasTabs() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_TABS))
+    if (style.HasTabs() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_TABS))
     {
         if (currentStyle.HasTabs())
         {
@@ -2099,7 +2102,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttr& currentStyle, const 
             currentStyle.SetTabs(style.GetTabs());
     }
 
-    if (style.HasLeftIndent() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_LEFT_INDENT))
+    if (style.HasLeftIndent() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_LEFT_INDENT))
     {
         if (currentStyle.HasLeftIndent())
         {
@@ -2114,7 +2117,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttr& currentStyle, const 
             currentStyle.SetLeftIndent(style.GetLeftIndent(), style.GetLeftSubIndent());
     }
 
-    if (style.HasRightIndent() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_RIGHT_INDENT))
+    if (style.HasRightIndent() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_RIGHT_INDENT))
     {
         if (currentStyle.HasRightIndent())
         {
@@ -2129,7 +2132,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttr& currentStyle, const 
             currentStyle.SetRightIndent(style.GetRightIndent());
     }
 
-    if (style.HasParagraphSpacingAfter() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_PARA_SPACING_AFTER))
+    if (style.HasParagraphSpacingAfter() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_PARA_SPACING_AFTER))
     {
         if (currentStyle.HasParagraphSpacingAfter())
         {
@@ -2144,7 +2147,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttr& currentStyle, const 
             currentStyle.SetParagraphSpacingAfter(style.GetParagraphSpacingAfter());
     }
 
-    if (style.HasParagraphSpacingBefore() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_PARA_SPACING_BEFORE))
+    if (style.HasParagraphSpacingBefore() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_PARA_SPACING_BEFORE))
     {
         if (currentStyle.HasParagraphSpacingBefore())
         {
@@ -2159,7 +2162,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttr& currentStyle, const 
             currentStyle.SetParagraphSpacingBefore(style.GetParagraphSpacingBefore());
     }
 
-    if (style.HasLineSpacing() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_LINE_SPACING))
+    if (style.HasLineSpacing() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_LINE_SPACING))
     {
         if (currentStyle.HasLineSpacing())
         {
@@ -2174,7 +2177,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttr& currentStyle, const 
             currentStyle.SetLineSpacing(style.GetLineSpacing());
     }
 
-    if (style.HasCharacterStyleName() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_CHARACTER_STYLE_NAME))
+    if (style.HasCharacterStyleName() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_CHARACTER_STYLE_NAME))
     {
         if (currentStyle.HasCharacterStyleName())
         {
@@ -2189,7 +2192,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttr& currentStyle, const 
             currentStyle.SetCharacterStyleName(style.GetCharacterStyleName());
     }
 
-    if (style.HasParagraphStyleName() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_PARAGRAPH_STYLE_NAME))
+    if (style.HasParagraphStyleName() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_PARAGRAPH_STYLE_NAME))
     {
         if (currentStyle.HasParagraphStyleName())
         {
@@ -2204,7 +2207,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttr& currentStyle, const 
             currentStyle.SetParagraphStyleName(style.GetParagraphStyleName());
     }
 
-    if (style.HasListStyleName() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_LIST_STYLE_NAME))
+    if (style.HasListStyleName() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_LIST_STYLE_NAME))
     {
         if (currentStyle.HasListStyleName())
         {
@@ -2219,7 +2222,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttr& currentStyle, const 
             currentStyle.SetListStyleName(style.GetListStyleName());
     }
 
-    if (style.HasBulletStyle() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_BULLET_STYLE))
+    if (style.HasBulletStyle() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_BULLET_STYLE))
     {
         if (currentStyle.HasBulletStyle())
         {
@@ -2234,7 +2237,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttr& currentStyle, const 
             currentStyle.SetBulletStyle(style.GetBulletStyle());
     }
 
-    if (style.HasBulletNumber() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_BULLET_NUMBER))
+    if (style.HasBulletNumber() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_BULLET_NUMBER))
     {
         if (currentStyle.HasBulletNumber())
         {
@@ -2249,7 +2252,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttr& currentStyle, const 
             currentStyle.SetBulletNumber(style.GetBulletNumber());
     }
 
-    if (style.HasBulletText() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_BULLET_TEXT))
+    if (style.HasBulletText() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_BULLET_TEXT))
     {
         if (currentStyle.HasBulletText())
         {
@@ -2267,7 +2270,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttr& currentStyle, const 
         }
     }
 
-    if (style.HasBulletName() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_BULLET_NAME))
+    if (style.HasBulletName() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_BULLET_NAME))
     {
         if (currentStyle.HasBulletName())
         {
@@ -2284,7 +2287,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttr& currentStyle, const 
         }
     }
 
-    if (style.HasURL() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_URL))
+    if (style.HasURL() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_URL))
     {
         if (currentStyle.HasURL())
         {
@@ -2301,12 +2304,16 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttr& currentStyle, const 
         }
     }
 
-    if (style.HasTextEffects() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_EFFECTS))
+    if (style.HasTextEffects() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_EFFECTS))
     {
         if (currentStyle.HasTextEffects())
         {
             // We need to find the bits in the new style that are different:
             // just look at those bits that are specified by the new style.
+
+            // We need to remove the bits and flags that are not common between current style
+            // and new style. In so doing we need to take account of the styles absent from one or more of the
+            // previous styles.
 
             int currentRelevantTextEffects = currentStyle.GetTextEffects() & style.GetTextEffectFlags();
             int newRelevantTextEffects = style.GetTextEffects() & style.GetTextEffectFlags();
@@ -2326,9 +2333,17 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttr& currentStyle, const 
             currentStyle.SetTextEffects(style.GetTextEffects());
             currentStyle.SetTextEffectFlags(style.GetTextEffectFlags());
         }
+
+        // Mask out the flags and values that cannot be common because they were absent in one or more objecrs
+        // that we've looked at so far
+        currentStyle.SetTextEffects(currentStyle.GetTextEffects() & ~absentTextEffectAttributes);
+        currentStyle.SetTextEffectFlags(currentStyle.GetTextEffectFlags() & ~absentTextEffectAttributes);
+
+        if (currentStyle.GetTextEffectFlags() == 0)
+            currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_EFFECTS);
     }
 
-    if (style.HasOutlineLevel() && !wxHasStyle(multipleStyleAttributes, wxTEXT_ATTR_OUTLINE_LEVEL))
+    if (style.HasOutlineLevel() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_OUTLINE_LEVEL))
     {
         if (currentStyle.HasOutlineLevel())
         {
@@ -2358,6 +2373,11 @@ bool wxRichTextParagraphLayoutBox::GetStyleForRange(const wxRichTextRange& range
     long multipleStyleAttributes = 0;
     int multipleTextEffectAttributes = 0;
 
+    int absentStyleAttributesPara = 0;
+    int absentStyleAttributesChar = 0;
+    int absentTextEffectAttributesPara = 0;
+    int absentTextEffectAttributesChar = 0;
+
     wxRichTextObjectList::compatibility_iterator node = GetChildren().GetFirst();
     while (node)
     {
@@ -2368,7 +2388,7 @@ bool wxRichTextParagraphLayoutBox::GetStyleForRange(const wxRichTextRange& range
             {
                 wxTextAttr paraStyle = para->GetCombinedAttributes();
 
-                CollectStyle(style, paraStyle, multipleStyleAttributes, multipleTextEffectAttributes);
+                CollectStyle(style, paraStyle, multipleStyleAttributes, multipleTextEffectAttributes, absentStyleAttributesPara, absentTextEffectAttributesPara);
             }
             else
             {
@@ -2378,7 +2398,7 @@ bool wxRichTextParagraphLayoutBox::GetStyleForRange(const wxRichTextRange& range
                 // First collect paragraph attributes only
                 wxTextAttr paraStyle = para->GetCombinedAttributes();
                 paraStyle.SetFlags(paraStyle.GetFlags() & wxTEXT_ATTR_PARAGRAPH);
-                CollectStyle(style, paraStyle, multipleStyleAttributes, multipleTextEffectAttributes);
+                CollectStyle(style, paraStyle, multipleStyleAttributes, multipleTextEffectAttributes, absentStyleAttributesPara, absentTextEffectAttributesPara);
 
                 wxRichTextObjectList::compatibility_iterator childNode = para->GetChildren().GetFirst();
 
@@ -2392,7 +2412,7 @@ bool wxRichTextParagraphLayoutBox::GetStyleForRange(const wxRichTextRange& range
                         // Now collect character attributes only
                         childStyle.SetFlags(childStyle.GetFlags() & wxTEXT_ATTR_CHARACTER);
 
-                        CollectStyle(style, childStyle, multipleStyleAttributes, multipleTextEffectAttributes);
+                        CollectStyle(style, childStyle, multipleStyleAttributes, multipleTextEffectAttributes, absentStyleAttributesChar, absentTextEffectAttributesChar);
                     }
 
                     childNode = childNode->GetNext();
