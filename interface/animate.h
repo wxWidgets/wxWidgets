@@ -124,6 +124,13 @@ public:
                           wxAnimationType animType = wxANIMATION_TYPE_ANY);
 
     /**
+        Loads the animation from the given stream and calls SetAnimation().
+        See wxAnimation::Load() for more info.
+    */
+    virtual bool Load(wxInputStream& file,
+                      wxAnimationType animType = wxANIMATION_TYPE_ANY);
+
+    /**
         Starts playing the animation.
 
         The animation is always played in loop mode (unless the last frame of the

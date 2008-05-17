@@ -308,9 +308,14 @@ wxAnimationCtrl::~wxAnimationCtrl()
 
 bool wxAnimationCtrl::LoadFile(const wxString& filename, wxAnimationType type)
 {
+    wxFileInputStream fis(filename);
+    return Load(fis, type);
+}
+
+bool wxAnimationCtrl::Load(wxInputStream& stream, wxAnimationType type)
+{
     wxAnimation anim;
-    if (!anim.LoadFile(filename, type) ||
-        !anim.IsOk())
+    if ( !anim.Load(stream, type) || !anim.IsOk() )
         return false;
 
     SetAnimation(anim);

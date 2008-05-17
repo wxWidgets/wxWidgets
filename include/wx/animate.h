@@ -75,6 +75,8 @@ public:
     // public API
     virtual bool LoadFile(const wxString& filename,
                           wxAnimationType type = wxANIMATION_TYPE_ANY) = 0;
+    virtual bool Load(wxInputStream& stream,
+                      wxAnimationType type = wxANIMATION_TYPE_ANY) = 0;
 
     virtual void SetAnimation(const wxAnimation &anim) = 0;
     virtual wxAnimation GetAnimation() const = 0;

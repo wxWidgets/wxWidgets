@@ -113,6 +113,7 @@ public:     // event handler
 public:     // public API
 
     virtual bool LoadFile(const wxString& filename, wxAnimationType type = wxANIMATION_TYPE_ANY);
+    virtual bool Load(wxInputStream& stream, wxAnimationType type = wxANIMATION_TYPE_ANY);
 
     virtual void SetAnimation(const wxAnimation &anim);
     virtual wxAnimation GetAnimation() const
