@@ -240,10 +240,15 @@ BitmapComboBoxWidgetsPage::BitmapComboBoxWidgetsPage(WidgetsBookCtrl *book,
 {
     // init everything
     m_chkSort =
-    m_chkReadonly = (wxCheckBox *)NULL;
+    m_chkReadonly = NULL;
 
-    m_combobox = (wxBitmapComboBox *)NULL;
-    m_sizerCombo = (wxSizer *)NULL;
+    m_combobox = NULL;
+    m_sizerCombo = NULL;
+
+    m_textInsert =
+    m_textChangeHeight =
+    m_textChange =
+    m_textDelete = NULL;
 }
 
 // create a sizer containing a label and a small text ctrl
@@ -273,7 +278,6 @@ void BitmapComboBoxWidgetsPage::CreateContent()
        miscellaneous combobox operations and the pane containing the combobox
        itself to the right
     */
-    //wxTextCtrl *text;
     wxSizer *sizerRow;
 
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
@@ -513,7 +517,8 @@ void BitmapComboBoxWidgetsPage::OnButtonInsert(wxCommandEvent& WXUNUSED(event))
 void BitmapComboBoxWidgetsPage::OnTextChangeHeight(wxCommandEvent& WXUNUSED(event))
 {
     long h = 0;
-    m_textChangeHeight->GetValue().ToLong(&h);
+    if ( m_textChangeHeight )
+        m_textChangeHeight->GetValue().ToLong(&h);
     if ( h < 5 )
         return;
     m_combobox->SetSize(wxDefaultCoord, h);
