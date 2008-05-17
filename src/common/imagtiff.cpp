@@ -32,6 +32,7 @@
     #include "wx/intl.h"
     #include "wx/bitmap.h"
     #include "wx/module.h"
+    #include "wx/wxcrtvararg.h"
 #endif
 
 extern "C"
@@ -61,39 +62,38 @@ extern "C"
 // TIFF library error/warning handlers
 // ----------------------------------------------------------------------------
 
+static wxString
+FormatTiffMessage(const char *module, const char *fmt, va_list ap)
+{
+    char buf[512];
+    if ( wxCRT_VsnprintfA(buf, WXSIZEOF(buf), fmt, ap) <= 0 )
+    {
+        // this isn't supposed to happen, but if it does, it's better
+        // than nothing
+        strcpy(buf, "Incorrectly formatted TIFF message");
+    }
+    buf[WXSIZEOF(buf)-1] = 0; // make sure it is always NULL-terminated
+
+    wxString msg(buf);
+    if ( module )
+        msg += wxString::Format(_(" (in module \"%s\")"), module);
+
+    return msg;
+}
+
 extern "C"
 {
 
 static void
-TIFFwxWarningHandler(const char* module,
-                     const char* WXUNUSED_IN_UNICODE(fmt),
-                     va_list WXUNUSED_IN_UNICODE(ap))
+TIFFwxWarningHandler(const char* module, const char *fmt, va_list ap)
 {
-    if (module != NULL)
-        wxLogWarning(_("tiff module: %s"), wxString::FromAscii(module).c_str());
-
-    // FIXME: this is not terrible informative but better than crashing!
-#if wxUSE_UNICODE
-    wxLogWarning(_("TIFF library warning."));
-#else
-    wxVLogWarning(fmt, ap);
-#endif
+    wxLogWarning("%s", FormatTiffMessage(module, fmt, ap));
 }
 
 static void
-TIFFwxErrorHandler(const char* module,
-                   const char* WXUNUSED_IN_UNICODE(fmt),
-                   va_list WXUNUSED_IN_UNICODE(ap))
+TIFFwxErrorHandler(const char* module, const char *fmt, va_list ap)
 {
-    if (module != NULL)
-        wxLogError(_("tiff module: %s"), wxString::FromAscii(module).c_str());
-
-    // FIXME: as above
-#if wxUSE_UNICODE
-    wxLogError(_("TIFF library error."));
-#else
-    wxVLogError(fmt, ap);
-#endif
+    wxLogError("%s", FormatTiffMessage(module, fmt, ap));
 }
 
 } // extern "C"
