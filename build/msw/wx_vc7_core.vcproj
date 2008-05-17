@@ -2638,6 +2638,8 @@
 			<File
 				RelativePath="..\..\include\wx\msw\bmpbuttn.h"/>
 			<File
+				RelativePath="..\..\include\wx\msw\bmpcbox.h"/>
+			<File
 				RelativePath="..\..\include\wx\msw\brush.h"/>
 			<File
 				RelativePath="..\..\include\wx\msw\button.h"/>

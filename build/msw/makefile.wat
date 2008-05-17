@@ -678,6 +678,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =
 !ifeq WXUNIV 0
 ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_animatecmn.obj &
+	$(OBJS)\monodll_bmpcboxcmn.obj &
 	$(OBJS)\monodll_calctrlcmn.obj &
 	$(OBJS)\monodll_datavcmn.obj &
 	$(OBJS)\monodll_hyperlnkcmn.obj &
@@ -707,6 +708,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_sound.obj &
 	$(OBJS)\monodll_taskbar.obj &
 	$(OBJS)\monodll_joystick.obj &
+	$(OBJS)\monodll_bmpcbox.obj &
 	$(OBJS)\monodll_calctrl.obj &
 	$(OBJS)\monodll_datecontrols.obj &
 	$(OBJS)\monodll_datectrl.obj
@@ -714,6 +716,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
 !ifeq WXUNIV 1
 ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_animatecmn.obj &
+	$(OBJS)\monodll_bmpcboxcmn.obj &
 	$(OBJS)\monodll_calctrlcmn.obj &
 	$(OBJS)\monodll_datavcmn.obj &
 	$(OBJS)\monodll_hyperlnkcmn.obj &
@@ -1339,6 +1342,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =
 !ifeq WXUNIV 0
 ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_animatecmn.obj &
+	$(OBJS)\monolib_bmpcboxcmn.obj &
 	$(OBJS)\monolib_calctrlcmn.obj &
 	$(OBJS)\monolib_datavcmn.obj &
 	$(OBJS)\monolib_hyperlnkcmn.obj &
@@ -1368,6 +1372,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_sound.obj &
 	$(OBJS)\monolib_taskbar.obj &
 	$(OBJS)\monolib_joystick.obj &
+	$(OBJS)\monolib_bmpcbox.obj &
 	$(OBJS)\monolib_calctrl.obj &
 	$(OBJS)\monolib_datecontrols.obj &
 	$(OBJS)\monolib_datectrl.obj
@@ -1375,6 +1380,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
 !ifeq WXUNIV 1
 ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_animatecmn.obj &
+	$(OBJS)\monolib_bmpcboxcmn.obj &
 	$(OBJS)\monolib_calctrlcmn.obj &
 	$(OBJS)\monolib_datavcmn.obj &
 	$(OBJS)\monolib_hyperlnkcmn.obj &
@@ -2425,6 +2431,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =
 !ifeq WXUNIV 0
 ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\advdll_animatecmn.obj &
+	$(OBJS)\advdll_bmpcboxcmn.obj &
 	$(OBJS)\advdll_calctrlcmn.obj &
 	$(OBJS)\advdll_datavcmn.obj &
 	$(OBJS)\advdll_hyperlnkcmn.obj &
@@ -2454,6 +2461,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\advdll_sound.obj &
 	$(OBJS)\advdll_taskbar.obj &
 	$(OBJS)\advdll_joystick.obj &
+	$(OBJS)\advdll_bmpcbox.obj &
 	$(OBJS)\advdll_calctrl.obj &
 	$(OBJS)\advdll_datecontrols.obj &
 	$(OBJS)\advdll_datectrl.obj
@@ -2461,6 +2469,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
 !ifeq WXUNIV 1
 ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\advdll_animatecmn.obj &
+	$(OBJS)\advdll_bmpcboxcmn.obj &
 	$(OBJS)\advdll_calctrlcmn.obj &
 	$(OBJS)\advdll_datavcmn.obj &
 	$(OBJS)\advdll_hyperlnkcmn.obj &
@@ -2505,6 +2514,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =
 !ifeq WXUNIV 0
 ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\advlib_animatecmn.obj &
+	$(OBJS)\advlib_bmpcboxcmn.obj &
 	$(OBJS)\advlib_calctrlcmn.obj &
 	$(OBJS)\advlib_datavcmn.obj &
 	$(OBJS)\advlib_hyperlnkcmn.obj &
@@ -2534,6 +2544,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\advlib_sound.obj &
 	$(OBJS)\advlib_taskbar.obj &
 	$(OBJS)\advlib_joystick.obj &
+	$(OBJS)\advlib_bmpcbox.obj &
 	$(OBJS)\advlib_calctrl.obj &
 	$(OBJS)\advlib_datecontrols.obj &
 	$(OBJS)\advlib_datectrl.obj
@@ -2541,6 +2552,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
 !ifeq WXUNIV 1
 ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\advlib_animatecmn.obj &
+	$(OBJS)\advlib_bmpcboxcmn.obj &
 	$(OBJS)\advlib_calctrlcmn.obj &
 	$(OBJS)\advlib_datavcmn.obj &
 	$(OBJS)\advlib_hyperlnkcmn.obj &
@@ -6051,6 +6063,9 @@ $(OBJS)\monodll_mono.obj :  .AUTODEPEND ..\..\src\univ\themes\mono.cpp
 $(OBJS)\monodll_win32.obj :  .AUTODEPEND ..\..\src\univ\themes\win32.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_bmpcbox.obj :  .AUTODEPEND ..\..\src\msw\bmpcbox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_calctrl.obj :  .AUTODEPEND ..\..\src\msw\calctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -7674,6 +7689,11 @@ $(OBJS)\monodll_animatecmn.obj :  .AUTODEPEND ..\..\src\common\animatecmn.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_bmpcboxcmn.obj :  .AUTODEPEND ..\..\src\common\bmpcboxcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_calctrlcmn.obj :  .AUTODEPEND ..\..\src\common\calctrlcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -8300,6 +8320,9 @@ $(OBJS)\monolib_mono.obj :  .AUTODEPEND ..\..\src\univ\themes\mono.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_win32.obj :  .AUTODEPEND ..\..\src\univ\themes\win32.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_bmpcbox.obj :  .AUTODEPEND ..\..\src\msw\bmpcbox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_calctrl.obj :  .AUTODEPEND ..\..\src\msw\calctrl.cpp
@@ -9921,6 +9944,11 @@ $(OBJS)\monolib_vscroll.obj :  .AUTODEPEND ..\..\src\generic\vscroll.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_animatecmn.obj :  .AUTODEPEND ..\..\src\common\animatecmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_bmpcboxcmn.obj :  .AUTODEPEND ..\..\src\common\bmpcboxcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -13673,6 +13701,9 @@ $(OBJS)\advdll_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 $(OBJS)\advdll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
 	wrc -q -ad -bt=nt -r -fo=$^@    -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  $(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv_wat$(VENDORTAG)  -i=..\..\src\tiff\libtiff -i=..\..\src\jpeg -i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_ADV $<
 
+$(OBJS)\advdll_bmpcbox.obj :  .AUTODEPEND ..\..\src\msw\bmpcbox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+
 $(OBJS)\advdll_calctrl.obj :  .AUTODEPEND ..\..\src\msw\calctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
@@ -13683,6 +13714,9 @@ $(OBJS)\advdll_datectrl.obj :  .AUTODEPEND ..\..\src\msw\datectrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
 $(OBJS)\advdll_animatecmn.obj :  .AUTODEPEND ..\..\src\common\animatecmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+
+$(OBJS)\advdll_bmpcboxcmn.obj :  .AUTODEPEND ..\..\src\common\bmpcboxcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
 $(OBJS)\advdll_calctrlcmn.obj :  .AUTODEPEND ..\..\src\common\calctrlcmn.cpp
@@ -13780,6 +13814,9 @@ $(OBJS)\advdll_joystick.obj :  .AUTODEPEND ..\..\src\msw\joystick.cpp
 $(OBJS)\advlib_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
+$(OBJS)\advlib_bmpcbox.obj :  .AUTODEPEND ..\..\src\msw\bmpcbox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+
 $(OBJS)\advlib_calctrl.obj :  .AUTODEPEND ..\..\src\msw\calctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
@@ -13790,6 +13827,9 @@ $(OBJS)\advlib_datectrl.obj :  .AUTODEPEND ..\..\src\msw\datectrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_animatecmn.obj :  .AUTODEPEND ..\..\src\common\animatecmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+
+$(OBJS)\advlib_bmpcboxcmn.obj :  .AUTODEPEND ..\..\src\common\bmpcboxcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_calctrlcmn.obj :  .AUTODEPEND ..\..\src\common\calctrlcmn.cpp

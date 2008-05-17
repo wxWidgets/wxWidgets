@@ -1,34 +1,31 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/generic/bmpcbox.h
+// Name:        wx/msw/bmpcbox.h
 // Purpose:     wxBitmapComboBox
 // Author:      Jaakko Salli
-// Modified by:
-// Created:     Aug-30-2006
-// RCS-ID:      $Id$
-// Copyright:   (c) Jaakko Salli
+// Created:     2008-04-06
+// RCS-ID:      $Id:$
+// Copyright:   (c) 2008 Jaakko Salli
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GENERIC_BMPCBOX_H_
-#define _WX_GENERIC_BMPCBOX_H_
+#ifndef _WX_MSW_BMPCBOX_H_
+#define _WX_MSW_BMPCBOX_H_
 
 
-#define wxGENERIC_BITMAPCOMBOBOX     1
+#include "wx/combobox.h"
 
-#include "wx/odcombo.h"
 
 // ----------------------------------------------------------------------------
 // wxBitmapComboBox: a wxComboBox that allows images to be shown
 // in front of string items.
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxBitmapComboBox : public wxOwnerDrawnComboBox,
+class WXDLLIMPEXP_ADV wxBitmapComboBox : public wxComboBox,
                                          public wxBitmapComboBoxBase
 {
 public:
-
     // ctors and such
-    wxBitmapComboBox() : wxOwnerDrawnComboBox(), wxBitmapComboBoxBase()
+    wxBitmapComboBox() : wxComboBox(), wxBitmapComboBoxBase()
     {
         Init();
     }
@@ -43,7 +40,7 @@ public:
                      long style = 0,
                      const wxValidator& validator = wxDefaultValidator,
                      const wxString& name = wxBitmapComboBoxNameStr)
-        : wxOwnerDrawnComboBox(),
+        : wxComboBox(),
           wxBitmapComboBoxBase()
     {
         Init();
@@ -85,6 +82,9 @@ public:
 
     virtual ~wxBitmapComboBox();
 
+    // Sets the image for the given item.
+    virtual void SetItemBitmap(unsigned int n, const wxBitmap& bitmap);
+
     // Adds item with image to the end of the combo box.
     int Append(const wxString& item, const wxBitmap& bitmap = wxNullBitmap);
     int Append(const wxString& item, const wxBitmap& bitmap, void *clientData);
@@ -98,20 +98,15 @@ public:
     int Insert(const wxString& item, const wxBitmap& bitmap,
                unsigned int pos, wxClientData *clientData);
 
-    // Sets the image for the given item.
-    virtual void SetItemBitmap(unsigned int n, const wxBitmap& bitmap);
-
 protected:
 
-    virtual void OnDrawBackground(wxDC& dc, const wxRect& rect, int item, int flags) const;
-    virtual void OnDrawItem(wxDC& dc, const wxRect& rect, int item, int flags) const;
-    virtual wxCoord OnMeasureItem(size_t item) const;
-    virtual wxCoord OnMeasureItemWidth(size_t item) const;
+    WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
+    virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *item);
+    virtual bool MSWOnMeasure(WXMEASUREITEMSTRUCT *item);
 
     // Event handlers
     void OnSize(wxSizeEvent& event);
 
-    virtual wxSize DoGetBestSize() const;
     virtual bool SetFont(const wxFont& font);
 
     virtual wxItemContainer* GetItemContainer() { return this; }
@@ -124,14 +119,17 @@ protected:
     virtual void DoClear();
     virtual void DoDeleteOneItem(unsigned int n);
 
-private:
-    bool                m_inResize;
+    virtual bool OnAddBitmap(const wxBitmap& bitmap);
+    void RecreateControl();
 
+private:
     void Init();
+
+    bool m_inResize;
 
     DECLARE_EVENT_TABLE()
 
     DECLARE_DYNAMIC_CLASS(wxBitmapComboBox)
 };
 
-#endif // _WX_GENERIC_BMPCBOX_H_
+#endif // _WX_MSW_BMPCBOX_H_

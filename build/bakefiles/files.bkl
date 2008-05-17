@@ -2817,6 +2817,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="ADVANCED_CMN_SRC" hints="files">
     src/common/animatecmn.cpp
+    src/common/bmpcboxcmn.cpp
     src/common/calctrlcmn.cpp
     src/common/datavcmn.cpp
     src/common/hyperlnkcmn.cpp
@@ -2899,11 +2900,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <!-- not used with wxUniv -->
 <set var="ADVANCED_MSW_NATIVE_SRC" hints="files">
+    src/msw/bmpcbox.cpp
     src/msw/calctrl.cpp
     src/msw/datecontrols.cpp
     src/msw/datectrl.cpp
 </set>
 <set var="ADVANCED_MSW_NATIVE_HDR" hints="files">
+    wx/msw/bmpcbox.h
     wx/msw/calctrl.h
     wx/msw/datecontrols.h
     wx/msw/datectrl.h

@@ -4688,6 +4688,10 @@ SOURCE=..\..\include\wx\msw\bmpbuttn.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\bmpcbox.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\brush.h
 # End Source File
 # Begin Source File

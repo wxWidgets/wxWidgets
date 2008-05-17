@@ -587,6 +587,8 @@
 			<File
 				RelativePath="..\..\src\common\animatecmn.cpp"/>
 			<File
+				RelativePath="..\..\src\common\bmpcboxcmn.cpp"/>
+			<File
 				RelativePath="..\..\src\common\calctrlcmn.cpp"/>
 			<File
 				RelativePath="..\..\src\common\datavcmn.cpp"/>
@@ -651,6 +653,21 @@
 			UniqueIdentifier="{D030D8C2-53EE-5B96-8F89-D78157B06140}">
 			<File
 				RelativePath="..\..\src\msw\aboutdlg.cpp"/>
+			<File
+				RelativePath="..\..\src\msw\bmpcbox.cpp">
+				<FileConfiguration
+					Name="DLL Universal Release|Win32"
+					ExcludedFromBuild="true"/>
+				<FileConfiguration
+					Name="DLL Universal Debug|Win32"
+					ExcludedFromBuild="true"/>
+				<FileConfiguration
+					Name="Universal Release|Win32"
+					ExcludedFromBuild="true"/>
+				<FileConfiguration
+					Name="Universal Debug|Win32"
+					ExcludedFromBuild="true"/>
+			</File>
 			<File
 				RelativePath="..\..\src\msw\calctrl.cpp">
 				<FileConfiguration
@@ -865,6 +882,8 @@
 		<Filter
 			Name="MSW Headers"
 			UniqueIdentifier="{5AFFF20E-29F9-512B-B80A-7DC45976CDAC}">
+			<File
+				RelativePath="..\..\include\wx\msw\bmpcbox.h"/>
 			<File
 				RelativePath="..\..\include\wx\msw\calctrl.h"/>
 			<File

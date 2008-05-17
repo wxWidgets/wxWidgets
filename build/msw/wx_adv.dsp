@@ -248,6 +248,10 @@ SOURCE=..\..\src\common\animatecmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\bmpcboxcmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\calctrlcmn.cpp
 # End Source File
 # Begin Source File
@@ -275,6 +279,41 @@ SOURCE=..\..\src\common\taskbarcmn.cpp
 # Begin Source File
 
 SOURCE=..\..\src\msw\aboutdlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\msw\bmpcbox.cpp
+
+!IF  "$(CFG)" == "adv - Win32 DLL Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "adv - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "adv - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "adv - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "adv - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "adv - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "adv - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "adv - Win32 Debug"
+
+
+!ENDIF
+
 # End Source File
 # Begin Source File
 
@@ -693,6 +732,10 @@ InputPath=..\..\include\wx\univ\setup.h
 # Begin Group "MSW Headers"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\bmpcbox.h
+# End Source File
 # Begin Source File
 
 SOURCE=..\..\include\wx\msw\calctrl.h
