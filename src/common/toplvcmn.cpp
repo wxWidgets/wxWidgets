@@ -273,8 +273,11 @@ void wxTopLevelWindowBase::DoCentre(int dir)
     if((rectParent == rectDisplay) && IsMaximized())
         return;
 
+    if ( !(dir & wxBOTH) )
+        dir |= wxBOTH; // if neither is specified, center in both directions
+
     // the new window rect candidate
-    wxRect rect = GetRect().CentreIn(rectParent, dir);
+    wxRect rect = GetRect().CentreIn(rectParent, dir & ~wxCENTRE_ON_SCREEN);
 
     // we don't want to place the window off screen if Centre() is called as
     // this is (almost?) never wanted and it would be very difficult to prevent
