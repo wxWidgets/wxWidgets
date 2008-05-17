@@ -187,6 +187,10 @@ public:
     // system ones, otherwise wxSystemSettings is just the same as
     // wxSystemSettingsNative
     static wxColour GetColour(wxSystemColour index);
+
+    // some metrics are toolkit-dependent and provided by wxUniv, some are
+    // lowlevel
+    static int GetMetric(wxSystemMetric index, wxWindow *win = NULL);
 #endif // __WXUNIVERSAL__
 
     // Get system screen design (desktop, pda, ..) used for

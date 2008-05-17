@@ -1792,7 +1792,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_checkbox.o \
 	$(OBJS)\monodll_checklst.o \
 	$(OBJS)\monodll_choice.o \
-	$(OBJS)\monodll_colschem.o \
 	$(OBJS)\monodll_combobox.o \
 	$(OBJS)\monodll_control.o \
 	$(OBJS)\monodll_ctrlrend.o \
@@ -1809,6 +1808,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_scrarrow.o \
 	$(OBJS)\monodll_scrolbar.o \
 	$(OBJS)\monodll_scrthumb.o \
+	$(OBJS)\monodll_settingsuniv.o \
 	$(OBJS)\monodll_slider.o \
 	$(OBJS)\monodll_spinbutt.o \
 	$(OBJS)\monodll_statbmp.o \
@@ -2448,7 +2448,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_checkbox.o \
 	$(OBJS)\monolib_checklst.o \
 	$(OBJS)\monolib_choice.o \
-	$(OBJS)\monolib_colschem.o \
 	$(OBJS)\monolib_combobox.o \
 	$(OBJS)\monolib_control.o \
 	$(OBJS)\monolib_ctrlrend.o \
@@ -2465,6 +2464,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_scrarrow.o \
 	$(OBJS)\monolib_scrolbar.o \
 	$(OBJS)\monolib_scrthumb.o \
+	$(OBJS)\monolib_settingsuniv.o \
 	$(OBJS)\monolib_slider.o \
 	$(OBJS)\monolib_spinbutt.o \
 	$(OBJS)\monolib_statbmp.o \
@@ -3029,7 +3029,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_checkbox.o \
 	$(OBJS)\coredll_checklst.o \
 	$(OBJS)\coredll_choice.o \
-	$(OBJS)\coredll_colschem.o \
 	$(OBJS)\coredll_combobox.o \
 	$(OBJS)\coredll_control.o \
 	$(OBJS)\coredll_ctrlrend.o \
@@ -3046,6 +3045,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_scrarrow.o \
 	$(OBJS)\coredll_scrolbar.o \
 	$(OBJS)\coredll_scrthumb.o \
+	$(OBJS)\coredll_settingsuniv.o \
 	$(OBJS)\coredll_slider.o \
 	$(OBJS)\coredll_spinbutt.o \
 	$(OBJS)\coredll_statbmp.o \
@@ -3504,7 +3504,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_checkbox.o \
 	$(OBJS)\corelib_checklst.o \
 	$(OBJS)\corelib_choice.o \
-	$(OBJS)\corelib_colschem.o \
 	$(OBJS)\corelib_combobox.o \
 	$(OBJS)\corelib_control.o \
 	$(OBJS)\corelib_ctrlrend.o \
@@ -3521,6 +3520,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_scrarrow.o \
 	$(OBJS)\corelib_scrolbar.o \
 	$(OBJS)\corelib_scrthumb.o \
+	$(OBJS)\corelib_settingsuniv.o \
 	$(OBJS)\corelib_slider.o \
 	$(OBJS)\corelib_spinbutt.o \
 	$(OBJS)\corelib_statbmp.o \
@@ -5774,9 +5774,6 @@ $(OBJS)\monodll_msgdlgg.o: ../../src/generic/msgdlgg.cpp
 $(OBJS)\monodll_tabg.o: ../../src/generic/tabg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monodll_colschem.o: ../../src/univ/colschem.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\monodll_ctrlrend.o: ../../src/univ/ctrlrend.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -5793,6 +5790,9 @@ $(OBJS)\monodll_scrarrow.o: ../../src/univ/scrarrow.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_scrthumb.o: ../../src/univ/scrthumb.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monodll_settingsuniv.o: ../../src/univ/settingsuniv.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_stdrend.o: ../../src/univ/stdrend.cpp
@@ -8025,9 +8025,6 @@ $(OBJS)\monolib_msgdlgg.o: ../../src/generic/msgdlgg.cpp
 $(OBJS)\monolib_tabg.o: ../../src/generic/tabg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monolib_colschem.o: ../../src/univ/colschem.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\monolib_ctrlrend.o: ../../src/univ/ctrlrend.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -8044,6 +8041,9 @@ $(OBJS)\monolib_scrarrow.o: ../../src/univ/scrarrow.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_scrthumb.o: ../../src/univ/scrthumb.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_settingsuniv.o: ../../src/univ/settingsuniv.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_stdrend.o: ../../src/univ/stdrend.cpp
@@ -10660,9 +10660,6 @@ $(OBJS)\coredll_msgdlgg.o: ../../src/generic/msgdlgg.cpp
 $(OBJS)\coredll_tabg.o: ../../src/generic/tabg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\coredll_colschem.o: ../../src/univ/colschem.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\coredll_ctrlrend.o: ../../src/univ/ctrlrend.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -10679,6 +10676,9 @@ $(OBJS)\coredll_scrarrow.o: ../../src/univ/scrarrow.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\coredll_scrthumb.o: ../../src/univ/scrthumb.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\coredll_settingsuniv.o: ../../src/univ/settingsuniv.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\coredll_stdrend.o: ../../src/univ/stdrend.cpp
@@ -12103,9 +12103,6 @@ $(OBJS)\corelib_msgdlgg.o: ../../src/generic/msgdlgg.cpp
 $(OBJS)\corelib_tabg.o: ../../src/generic/tabg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\corelib_colschem.o: ../../src/univ/colschem.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\corelib_ctrlrend.o: ../../src/univ/ctrlrend.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -12122,6 +12119,9 @@ $(OBJS)\corelib_scrarrow.o: ../../src/univ/scrarrow.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_scrthumb.o: ../../src/univ/scrthumb.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\corelib_settingsuniv.o: ../../src/univ/settingsuniv.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_stdrend.o: ../../src/univ/stdrend.cpp

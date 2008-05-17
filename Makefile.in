@@ -3996,7 +3996,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_checkbox.o \
 	monodll_checklst.o \
 	monodll_choice.o \
-	monodll_colschem.o \
 	monodll_combobox.o \
 	monodll_control.o \
 	monodll_ctrlrend.o \
@@ -4013,6 +4012,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_scrarrow.o \
 	monodll_scrolbar.o \
 	monodll_scrthumb.o \
+	monodll_settingsuniv.o \
 	monodll_slider.o \
 	monodll_spinbutt.o \
 	monodll_statbmp.o \
@@ -5909,7 +5909,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_checkbox.o \
 	monolib_checklst.o \
 	monolib_choice.o \
-	monolib_colschem.o \
 	monolib_combobox.o \
 	monolib_control.o \
 	monolib_ctrlrend.o \
@@ -5926,6 +5925,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_scrarrow.o \
 	monolib_scrolbar.o \
 	monolib_scrthumb.o \
+	monolib_settingsuniv.o \
 	monolib_slider.o \
 	monolib_spinbutt.o \
 	monolib_statbmp.o \
@@ -8108,7 +8108,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_checkbox.o \
 	coredll_checklst.o \
 	coredll_choice.o \
-	coredll_colschem.o \
 	coredll_combobox.o \
 	coredll_control.o \
 	coredll_ctrlrend.o \
@@ -8125,6 +8124,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_scrarrow.o \
 	coredll_scrolbar.o \
 	coredll_scrthumb.o \
+	coredll_settingsuniv.o \
 	coredll_slider.o \
 	coredll_spinbutt.o \
 	coredll_statbmp.o \
@@ -9607,7 +9607,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_checkbox.o \
 	corelib_checklst.o \
 	corelib_choice.o \
-	corelib_colschem.o \
 	corelib_combobox.o \
 	corelib_control.o \
 	corelib_ctrlrend.o \
@@ -9624,6 +9623,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_scrarrow.o \
 	corelib_scrolbar.o \
 	corelib_scrthumb.o \
+	corelib_settingsuniv.o \
 	corelib_slider.o \
 	corelib_spinbutt.o \
 	corelib_statbmp.o \
@@ -14128,9 +14128,6 @@ monodll_regiong.o: $(srcdir)/src/generic/regiong.cpp $(MONODLL_ODEP)
 monodll_gsockpm.o: $(srcdir)/src/os2/gsockpm.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/gsockpm.cpp
 
-monodll_colschem.o: $(srcdir)/src/univ/colschem.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/univ/colschem.cpp
-
 monodll_ctrlrend.o: $(srcdir)/src/univ/ctrlrend.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/univ/ctrlrend.cpp
 
@@ -14148,6 +14145,9 @@ monodll_scrarrow.o: $(srcdir)/src/univ/scrarrow.cpp $(MONODLL_ODEP)
 
 monodll_scrthumb.o: $(srcdir)/src/univ/scrthumb.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/univ/scrthumb.cpp
+
+monodll_settingsuniv.o: $(srcdir)/src/univ/settingsuniv.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/univ/settingsuniv.cpp
 
 monodll_stdrend.o: $(srcdir)/src/univ/stdrend.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/univ/stdrend.cpp
@@ -18670,9 +18670,6 @@ monolib_regiong.o: $(srcdir)/src/generic/regiong.cpp $(MONOLIB_ODEP)
 monolib_gsockpm.o: $(srcdir)/src/os2/gsockpm.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/gsockpm.cpp
 
-monolib_colschem.o: $(srcdir)/src/univ/colschem.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/univ/colschem.cpp
-
 monolib_ctrlrend.o: $(srcdir)/src/univ/ctrlrend.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/univ/ctrlrend.cpp
 
@@ -18690,6 +18687,9 @@ monolib_scrarrow.o: $(srcdir)/src/univ/scrarrow.cpp $(MONOLIB_ODEP)
 
 monolib_scrthumb.o: $(srcdir)/src/univ/scrthumb.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/univ/scrthumb.cpp
+
+monolib_settingsuniv.o: $(srcdir)/src/univ/settingsuniv.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/univ/settingsuniv.cpp
 
 monolib_stdrend.o: $(srcdir)/src/univ/stdrend.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/univ/stdrend.cpp
@@ -24619,9 +24619,6 @@ coredll_regiong.o: $(srcdir)/src/generic/regiong.cpp $(COREDLL_ODEP)
 coredll_gsockpm.o: $(srcdir)/src/os2/gsockpm.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/os2/gsockpm.cpp
 
-coredll_colschem.o: $(srcdir)/src/univ/colschem.cpp $(COREDLL_ODEP)
-	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/univ/colschem.cpp
-
 coredll_ctrlrend.o: $(srcdir)/src/univ/ctrlrend.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/univ/ctrlrend.cpp
 
@@ -24639,6 +24636,9 @@ coredll_scrarrow.o: $(srcdir)/src/univ/scrarrow.cpp $(COREDLL_ODEP)
 
 coredll_scrthumb.o: $(srcdir)/src/univ/scrthumb.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/univ/scrthumb.cpp
+
+coredll_settingsuniv.o: $(srcdir)/src/univ/settingsuniv.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/univ/settingsuniv.cpp
 
 coredll_stdrend.o: $(srcdir)/src/univ/stdrend.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/univ/stdrend.cpp
@@ -27700,9 +27700,6 @@ corelib_regiong.o: $(srcdir)/src/generic/regiong.cpp $(CORELIB_ODEP)
 corelib_gsockpm.o: $(srcdir)/src/os2/gsockpm.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/os2/gsockpm.cpp
 
-corelib_colschem.o: $(srcdir)/src/univ/colschem.cpp $(CORELIB_ODEP)
-	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/univ/colschem.cpp
-
 corelib_ctrlrend.o: $(srcdir)/src/univ/ctrlrend.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/univ/ctrlrend.cpp
 
@@ -27720,6 +27717,9 @@ corelib_scrarrow.o: $(srcdir)/src/univ/scrarrow.cpp $(CORELIB_ODEP)
 
 corelib_scrthumb.o: $(srcdir)/src/univ/scrthumb.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/univ/scrthumb.cpp
+
+corelib_settingsuniv.o: $(srcdir)/src/univ/settingsuniv.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/univ/settingsuniv.cpp
 
 corelib_stdrend.o: $(srcdir)/src/univ/stdrend.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/univ/stdrend.cpp

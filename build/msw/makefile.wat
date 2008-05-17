@@ -511,7 +511,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_checkbox.obj &
 	$(OBJS)\monodll_checklst.obj &
 	$(OBJS)\monodll_choice.obj &
-	$(OBJS)\monodll_colschem.obj &
 	$(OBJS)\monodll_combobox.obj &
 	$(OBJS)\monodll_control.obj &
 	$(OBJS)\monodll_ctrlrend.obj &
@@ -528,6 +527,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_scrarrow.obj &
 	$(OBJS)\monodll_scrolbar.obj &
 	$(OBJS)\monodll_scrthumb.obj &
+	$(OBJS)\monodll_settingsuniv.obj &
 	$(OBJS)\monodll_slider.obj &
 	$(OBJS)\monodll_spinbutt.obj &
 	$(OBJS)\monodll_statbmp.obj &
@@ -1172,7 +1172,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_checkbox.obj &
 	$(OBJS)\monolib_checklst.obj &
 	$(OBJS)\monolib_choice.obj &
-	$(OBJS)\monolib_colschem.obj &
 	$(OBJS)\monolib_combobox.obj &
 	$(OBJS)\monolib_control.obj &
 	$(OBJS)\monolib_ctrlrend.obj &
@@ -1189,6 +1188,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_scrarrow.obj &
 	$(OBJS)\monolib_scrolbar.obj &
 	$(OBJS)\monolib_scrthumb.obj &
+	$(OBJS)\monolib_settingsuniv.obj &
 	$(OBJS)\monolib_slider.obj &
 	$(OBJS)\monolib_spinbutt.obj &
 	$(OBJS)\monolib_statbmp.obj &
@@ -1764,7 +1764,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_checkbox.obj &
 	$(OBJS)\coredll_checklst.obj &
 	$(OBJS)\coredll_choice.obj &
-	$(OBJS)\coredll_colschem.obj &
 	$(OBJS)\coredll_combobox.obj &
 	$(OBJS)\coredll_control.obj &
 	$(OBJS)\coredll_ctrlrend.obj &
@@ -1781,6 +1780,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_scrarrow.obj &
 	$(OBJS)\coredll_scrolbar.obj &
 	$(OBJS)\coredll_scrthumb.obj &
+	$(OBJS)\coredll_settingsuniv.obj &
 	$(OBJS)\coredll_slider.obj &
 	$(OBJS)\coredll_spinbutt.obj &
 	$(OBJS)\coredll_statbmp.obj &
@@ -2241,7 +2241,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_checkbox.obj &
 	$(OBJS)\corelib_checklst.obj &
 	$(OBJS)\corelib_choice.obj &
-	$(OBJS)\corelib_colschem.obj &
 	$(OBJS)\corelib_combobox.obj &
 	$(OBJS)\corelib_control.obj &
 	$(OBJS)\corelib_ctrlrend.obj &
@@ -2258,6 +2257,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_scrarrow.obj &
 	$(OBJS)\corelib_scrolbar.obj &
 	$(OBJS)\corelib_scrthumb.obj &
+	$(OBJS)\corelib_settingsuniv.obj &
 	$(OBJS)\corelib_slider.obj &
 	$(OBJS)\corelib_spinbutt.obj &
 	$(OBJS)\corelib_statbmp.obj &
@@ -6006,9 +6006,6 @@ $(OBJS)\monodll_msgdlgg.obj :  .AUTODEPEND ..\..\src\generic\msgdlgg.cpp
 $(OBJS)\monodll_tabg.obj :  .AUTODEPEND ..\..\src\generic\tabg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
-$(OBJS)\monodll_colschem.obj :  .AUTODEPEND ..\..\src\univ\colschem.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
 $(OBJS)\monodll_ctrlrend.obj :  .AUTODEPEND ..\..\src\univ\ctrlrend.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -6025,6 +6022,9 @@ $(OBJS)\monodll_scrarrow.obj :  .AUTODEPEND ..\..\src\univ\scrarrow.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_scrthumb.obj :  .AUTODEPEND ..\..\src\univ\scrthumb.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_settingsuniv.obj :  .AUTODEPEND ..\..\src\univ\settingsuniv.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_stdrend.obj :  .AUTODEPEND ..\..\src\univ\stdrend.cpp
@@ -8257,9 +8257,6 @@ $(OBJS)\monolib_msgdlgg.obj :  .AUTODEPEND ..\..\src\generic\msgdlgg.cpp
 $(OBJS)\monolib_tabg.obj :  .AUTODEPEND ..\..\src\generic\tabg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
-$(OBJS)\monolib_colschem.obj :  .AUTODEPEND ..\..\src\univ\colschem.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
 $(OBJS)\monolib_ctrlrend.obj :  .AUTODEPEND ..\..\src\univ\ctrlrend.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -8276,6 +8273,9 @@ $(OBJS)\monolib_scrarrow.obj :  .AUTODEPEND ..\..\src\univ\scrarrow.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_scrthumb.obj :  .AUTODEPEND ..\..\src\univ\scrthumb.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_settingsuniv.obj :  .AUTODEPEND ..\..\src\univ\settingsuniv.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_stdrend.obj :  .AUTODEPEND ..\..\src\univ\stdrend.cpp
@@ -10892,9 +10892,6 @@ $(OBJS)\coredll_msgdlgg.obj :  .AUTODEPEND ..\..\src\generic\msgdlgg.cpp
 $(OBJS)\coredll_tabg.obj :  .AUTODEPEND ..\..\src\generic\tabg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
-$(OBJS)\coredll_colschem.obj :  .AUTODEPEND ..\..\src\univ\colschem.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-
 $(OBJS)\coredll_ctrlrend.obj :  .AUTODEPEND ..\..\src\univ\ctrlrend.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
@@ -10911,6 +10908,9 @@ $(OBJS)\coredll_scrarrow.obj :  .AUTODEPEND ..\..\src\univ\scrarrow.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_scrthumb.obj :  .AUTODEPEND ..\..\src\univ\scrthumb.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_settingsuniv.obj :  .AUTODEPEND ..\..\src\univ\settingsuniv.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_stdrend.obj :  .AUTODEPEND ..\..\src\univ\stdrend.cpp
@@ -12335,9 +12335,6 @@ $(OBJS)\corelib_msgdlgg.obj :  .AUTODEPEND ..\..\src\generic\msgdlgg.cpp
 $(OBJS)\corelib_tabg.obj :  .AUTODEPEND ..\..\src\generic\tabg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
-$(OBJS)\corelib_colschem.obj :  .AUTODEPEND ..\..\src\univ\colschem.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-
 $(OBJS)\corelib_ctrlrend.obj :  .AUTODEPEND ..\..\src\univ\ctrlrend.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
@@ -12354,6 +12351,9 @@ $(OBJS)\corelib_scrarrow.obj :  .AUTODEPEND ..\..\src\univ\scrarrow.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_scrthumb.obj :  .AUTODEPEND ..\..\src\univ\scrthumb.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_settingsuniv.obj :  .AUTODEPEND ..\..\src\univ\settingsuniv.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_stdrend.obj :  .AUTODEPEND ..\..\src\univ\stdrend.cpp

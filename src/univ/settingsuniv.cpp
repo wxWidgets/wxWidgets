@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        src/univ/colschem.cpp
-// Purpose:     (trivial) wxColourScheme implementation
+// Name:        src/univ/settingsuniv.cpp
+// Purpose:     wxSystemSettings wxUniv-specific parts
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     20.08.00
@@ -31,18 +31,11 @@
 
 #include "wx/univ/colschem.h"
 #include "wx/univ/theme.h"
+#include "wx/univ/renderer.h"
 
 // ============================================================================
 // implementation
 // ============================================================================
-
-// ----------------------------------------------------------------------------
-// wxColourScheme
-// ----------------------------------------------------------------------------
-
-wxColourScheme::~wxColourScheme()
-{
-}
 
 // ----------------------------------------------------------------------------
 // wxSystemSettings
@@ -92,4 +85,18 @@ wxColour wxSystemSettings::GetColour(wxSystemColour index)
     }
 
     return wxTheme::Get()->GetColourScheme()->Get(col);
+}
+
+int wxSystemSettings::GetMetric(wxSystemMetric index, wxWindow *win)
+{
+    switch ( index )
+    {
+        case wxSYS_VSCROLL_X:
+            return wxTheme::Get()->GetRenderer()->GetScrollbarArrowSize().x;
+        case wxSYS_HSCROLL_Y:
+            return wxTheme::Get()->GetRenderer()->GetScrollbarArrowSize().y;
+
+        default:
+            return wxSystemSettingsNative::GetMetric(index, win);
+    }
 }

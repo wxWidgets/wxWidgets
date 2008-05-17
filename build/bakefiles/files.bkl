@@ -2721,7 +2721,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/univ/checkbox.cpp
     src/univ/checklst.cpp
     src/univ/choice.cpp
-    src/univ/colschem.cpp
     src/univ/combobox.cpp
     src/univ/control.cpp
     src/univ/ctrlrend.cpp
@@ -2738,6 +2737,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/univ/scrarrow.cpp
     src/univ/scrolbar.cpp
     src/univ/scrthumb.cpp
+    src/univ/settingsuniv.cpp
     src/univ/slider.cpp
     src/univ/spinbutt.cpp
     src/univ/statbmp.cpp

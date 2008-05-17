@@ -91,9 +91,6 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow* WXUNUSED(w
         case wxSYS_SCREEN_Y:
             wxDisplaySize(NULL, &val);
             return val;
-        case wxSYS_VSCROLL_X:
-        case wxSYS_HSCROLL_Y:
-            return 15;
         default:
         {
         }

@@ -3285,41 +3285,6 @@ SOURCE=..\..\src\univ\choice.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\univ\colschem.cpp
-
-!IF  "$(CFG)" == "core - Win32 DLL Universal Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ENDIF
-
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\univ\combobox.cpp
 
 !IF  "$(CFG)" == "core - Win32 DLL Universal Release"
@@ -3951,6 +3916,41 @@ SOURCE=..\..\src\univ\scrolbar.cpp
 # Begin Source File
 
 SOURCE=..\..\src\univ\scrthumb.cpp
+
+!IF  "$(CFG)" == "core - Win32 DLL Universal Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\univ\settingsuniv.cpp
 
 !IF  "$(CFG)" == "core - Win32 DLL Universal Release"
 

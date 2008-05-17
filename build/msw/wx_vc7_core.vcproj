@@ -1997,21 +1997,6 @@
 					ExcludedFromBuild="true"/>
 			</File>
 			<File
-				RelativePath="..\..\src\univ\colschem.cpp">
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"/>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"/>
-			</File>
-			<File
 				RelativePath="..\..\src\univ\combobox.cpp">
 				<FileConfiguration
 					Name="DLL Release|Win32"
@@ -2283,6 +2268,21 @@
 			</File>
 			<File
 				RelativePath="..\..\src\univ\scrthumb.cpp">
+				<FileConfiguration
+					Name="DLL Release|Win32"
+					ExcludedFromBuild="true"/>
+				<FileConfiguration
+					Name="DLL Debug|Win32"
+					ExcludedFromBuild="true"/>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"/>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"/>
+			</File>
+			<File
+				RelativePath="..\..\src\univ\settingsuniv.cpp">
 				<FileConfiguration
 					Name="DLL Release|Win32"
 					ExcludedFromBuild="true"/>

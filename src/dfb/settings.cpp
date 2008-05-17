@@ -77,13 +77,6 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index,
             wxDisplaySize(NULL, &val);
             return val;
 
-#warning "FIXME this"
-#if 0
-        case wxSYS_VSCROLL_X:
-        case wxSYS_HSCROLL_Y:
-            return 15;
-#endif
-
         default:
             wxFAIL_MSG( "unsupported metric" );
             return -1;
