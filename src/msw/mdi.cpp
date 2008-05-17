@@ -518,8 +518,11 @@ bool wxMDIParentFrame::HandleActivate(int state, bool minimized, WXHWND activate
     return processed;
 }
 
-bool wxMDIParentFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND hwnd)
+bool wxMDIParentFrame::HandleCommand(WXWORD id_, WXWORD cmd, WXHWND hwnd)
 {
+    // sign extend to int from short before comparing with the other int ids
+    int id = (signed short)id_;
+
     // In case it's e.g. a toolbar.
     if ( hwnd )
     {
@@ -1009,8 +1012,11 @@ WXLRESULT wxMDIChildFrame::MSWWindowProc(WXUINT message,
     return rc;
 }
 
-bool wxMDIChildFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND hwnd)
+bool wxMDIChildFrame::HandleCommand(WXWORD id_, WXWORD cmd, WXHWND hwnd)
 {
+    // sign extend to int from short before comparing with the other int ids
+    int id = (signed short)id_;
+
     // In case it's e.g. a toolbar.
     if ( hwnd )
     {
