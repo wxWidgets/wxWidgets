@@ -61,6 +61,8 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxChoiceNameStr );
 
+    void SendSelectionChangedEvent(wxEventType evt_type);
+
     int GetSelection() const;
     void SetSelection(int n);
 
@@ -69,38 +71,29 @@ public:
     virtual wxString GetString(unsigned int n) const;
     virtual void SetString(unsigned int n, const wxString& string);
 
+    virtual void DisableEvents();
+    virtual void EnableEvents();
+
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
 protected:
-    void DoDeleteOneItem(unsigned int n);
-    void DoClear();
-
-    wxArrayPtrVoid m_clientData; // contains the client data for the items
-
-    virtual wxSize DoGetBestSize() const;
-    virtual void DoApplyWidgetStyle(GtkRcStyle *style);
-    virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
-
-    virtual int DoInsertItems(const wxArrayStringsAdapter& items,
-                              unsigned int pos,
-                              void **clientData, wxClientDataType type);
-
-    virtual void DoSetItemClientData(unsigned int n, void* clientData);
-    virtual void* DoGetItemClientData(unsigned int n) const;
-
-private:
-    // DoInsertItems() helper
-    int GtkAddHelper(GtkWidget *menu, unsigned int pos, const wxString& item);
-
     // this array is only used for controls with wxCB_SORT style, so only
     // allocate it if it's needed (hence using pointer)
     wxSortedArrayString *m_strings;
 
-public:
-    // this circumvents a GTK+ 2.0 bug so that the selection is
-    // invalidated properly
-    int m_selection_hack;
+    // contains the client data for the items
+    wxArrayPtrVoid m_clientData;
+
+    virtual int DoInsertItems(const wxArrayStringsAdapter& items,
+                              unsigned int pos,
+                              void **clientData, wxClientDataType type);
+    virtual void DoSetItemClientData(unsigned int n, void* clientData);
+    virtual void* DoGetItemClientData(unsigned int n) const;
+    virtual void DoClear();
+    virtual void DoDeleteOneItem(unsigned int n);
+
+    virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxChoice)

@@ -272,7 +272,7 @@ void ChoiceWidgetsPage::CreateContent()
     // right pane
     wxSizer *sizerRight = new wxBoxSizer(wxVERTICAL);
     m_choice = new wxChoice(this, ChoicePage_Choice);
-    sizerRight->Add(m_choice, 1, wxGROW | wxALL, 5);
+    sizerRight->Add(m_choice, 0, wxALL | wxGROW, 5);
     sizerRight->SetMinSize(150, 0);
     m_sizerChoice = sizerRight; // save it to modify it later
 
@@ -439,10 +439,7 @@ void ChoiceWidgetsPage::OnChoice(wxCommandEvent& event)
     long sel = event.GetSelection();
     m_textDelete->SetValue(wxString::Format(_T("%ld"), sel));
 
-    if (event.IsSelection())
-        wxLogMessage(_T("Choice item %ld selected"), sel);
-    else
-        wxLogMessage(_T("Choice item %ld deselected"), sel);
+    wxLogMessage(_T("Choice item %ld selected"), sel);
 }
 
 void ChoiceWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))
