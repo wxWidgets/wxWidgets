@@ -286,11 +286,11 @@ void FileNameTestCase::TestNormalize()
     if (cwd.Contains(wxT(':')))
         cwd = cwd.AfterFirst(wxT(':'));
 
-    static struct FileNameTest
+    static const struct FileNameTest
     {
-        const wxString original;
+        wxString original;
         int flags;
-        const wxString expected;
+        wxString expected;
     } tests[] =
     {
         // test wxPATH_NORM_ENV_VARS
