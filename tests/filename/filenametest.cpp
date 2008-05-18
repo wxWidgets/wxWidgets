@@ -72,9 +72,9 @@ static struct FileNameInfo
     { _T("c:\\foo.bar"), _T("c"), _T("\\"), _T("foo"), _T("bar"), true, wxPATH_DOS },
     { _T("c:\\Windows\\command.com"), _T("c"), _T("\\Windows"), _T("command"), _T("com"), true, wxPATH_DOS },
 
-    // NB: when using the wxFileName::GetLongPath() function on these two strings,
-    //     the program will hang various seconds. All those time is taken by the
-    //     call to the win32 API GetLongPathName()...
+    // NB: when using the wxFileName::GetLongPath() function on these two
+    //     strings, the program will hang for several seconds blocking inside
+    //     Win32 GetLongPathName() function
     { _T("\\\\server\\foo.bar"), _T("server"), _T("\\"), _T("foo"), _T("bar"), true, wxPATH_DOS },
     { _T("\\\\server\\dir\\foo.bar"), _T("server"), _T("\\dir"), _T("foo"), _T("bar"), true, wxPATH_DOS },
 
@@ -291,33 +291,42 @@ void FileNameTestCase::TestNormalize()
         wxString original;
         int flags;
         wxString expected;
+        wxPathFormat fmt;
     } tests[] =
     {
         // test wxPATH_NORM_ENV_VARS
 #ifdef __WXMSW__
-        { wxT("%ABCDEF%/g/h/i"), wxPATH_NORM_ENV_VARS, wxT("abcdef/g/h/i") },
+        { "%ABCDEF%/g/h/i", wxPATH_NORM_ENV_VARS, "abcdef/g/h/i", wxPATH_UNIX },
 #else
-        { wxT("$(ABCDEF)/g/h/i"), wxPATH_NORM_ENV_VARS, wxT("abcdef/g/h/i") },
+        { "$(ABCDEF)/g/h/i", wxPATH_NORM_ENV_VARS, "abcdef/g/h/i", wxPATH_UNIX },
 #endif
 
         // test wxPATH_NORM_DOTS
-        { wxT("a/.././b/c/../../"), wxPATH_NORM_DOTS, wxT("") },
+        { "a/.././b/c/../../", wxPATH_NORM_DOTS, "", wxPATH_UNIX },
 
         // test wxPATH_NORM_TILDE
         // NB: do the tilde expansion also under Windows to test if it works there too
-        { wxT("/a/b/~"), wxPATH_NORM_TILDE, wxT("/a/b/~") },
-        { wxT("/~/a/b"), wxPATH_NORM_TILDE, home + wxT("a/b") },
-        { wxT("~/a/b"), wxPATH_NORM_TILDE, home + wxT("a/b") },
+        { "/a/b/~", wxPATH_NORM_TILDE, "/a/b/~", wxPATH_UNIX },
+        { "/~/a/b", wxPATH_NORM_TILDE, home + "a/b", wxPATH_UNIX },
+        { "~/a/b", wxPATH_NORM_TILDE, home + "a/b", wxPATH_UNIX },
+
+        // test wxPATH_NORM_CASE
+        { "Foo", wxPATH_NORM_CASE, "Foo", wxPATH_UNIX },
+        { "Foo", wxPATH_NORM_CASE, "foo", wxPATH_DOS },
+        { "C:\\Program Files\\wx", wxPATH_NORM_CASE,
+          "c:\\program files\\wx", wxPATH_DOS },
+        { "C:/Program Files/wx", wxPATH_NORM_ALL | wxPATH_NORM_CASE,
+          "c:\\program files\\wx", wxPATH_DOS },
 
         // test wxPATH_NORM_ABSOLUTE
-        { wxT("a/b/"), wxPATH_NORM_ABSOLUTE, cwd + wxT("a/b/") },
-        { wxT("a/b/c.ext"), wxPATH_NORM_ABSOLUTE, cwd + wxT("a/b/c.ext") },
-        { wxT("/a"), wxPATH_NORM_ABSOLUTE, wxT("/a") },
+        { "a/b/", wxPATH_NORM_ABSOLUTE, cwd + "a/b/", wxPATH_UNIX },
+        { "a/b/c.ext", wxPATH_NORM_ABSOLUTE, cwd + "a/b/c.ext", wxPATH_UNIX },
+        { "/a", wxPATH_NORM_ABSOLUTE, "/a", wxPATH_UNIX },
 
         // test giving no flags at all to Normalize()
-        { wxT("a/b/"), 0, wxT("a/b/") },
-        { wxT("a/b/c.ext"), 0, wxT("a/b/c.ext") },
-        { wxT("/a"), 0, wxT("/a") }
+        { "a/b/", 0, "a/b/", wxPATH_UNIX },
+        { "a/b/c.ext", 0, "a/b/c.ext", wxPATH_UNIX },
+        { "/a", 0, "/a", wxPATH_UNIX }
     };
 
     // set the env var ABCDEF
@@ -325,17 +334,18 @@ void FileNameTestCase::TestNormalize()
 
     for ( size_t i = 0; i < WXSIZEOF(tests); i++ )
     {
-        wxFileName fn(tests[i].original, wxPATH_UNIX);
+        const FileNameTest& fnt = tests[i];
+        wxFileName fn(fnt.original, fnt.fmt);
 
         // be sure this normalization does not fail
         CPPUNIT_ASSERT_MESSAGE
         (
-            (const char *)wxString::Format(_T("Normalize(%s) failed"), tests[i].original).mb_str(),
-            fn.Normalize(tests[i].flags, cwd, wxPATH_UNIX)
+            (const char *)wxString::Format(_T("Normalize(%s) failed"), fnt.original).mb_str(),
+            fn.Normalize(fnt.flags, cwd, fnt.fmt)
         );
 
         // compare result with expected string
-        WX_ASSERT_STR_EQUAL( tests[i].expected, fn.GetFullPath(wxPATH_UNIX) );
+        WX_ASSERT_STR_EQUAL( fnt.expected, fn.GetFullPath(fnt.fmt) );
     }
 }
 
