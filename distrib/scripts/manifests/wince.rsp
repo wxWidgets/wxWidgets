@@ -328,8 +328,8 @@ utils/tex2rtf/src/tex2rtf.vcw
 utils/hhp2cached/hhp2cached.vcp
 utils/hhp2cached/hhp2cached.vcw
 
-utils/helpgen/src/helpgen.vcp
-utils/helpgen/src/helpgen.vcw
+utils/HelpGen/src/helpgen.vcp
+utils/HelpGen/src/helpgen.vcw
 
 utils/helpview/src/helpview.vcp
 utils/helpview/src/helpview.vcw
