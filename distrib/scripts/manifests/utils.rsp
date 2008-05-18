@@ -1,12 +1,3 @@
-utils/HelpGen/src/*.h
-utils/HelpGen/src/*.cpp
-utils/HelpGen/src/*.rc
-utils/HelpGen/src/makefile*
-utils/HelpGen/src/*.bkl
-utils/HelpGen/src/*.xbm
-utils/HelpGen/src/*.xpm
-utils/HelpGen/src/*.txt
-
 utils/emulator/Makefile.in
 utils/emulator/src/*.cpp
 utils/emulator/src/*.h

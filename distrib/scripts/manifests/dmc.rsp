@@ -220,8 +220,6 @@ tests/makefile.dmc
 tests/makefile.dms
 utils/emulator/src/makefile.dmc
 utils/emulator/src/makefile.dms
-utils/HelpGen/src/makefile.dmc
-utils/HelpGen/src/makefile.dms
 utils/helpview/src/makefile.dmc
 utils/helpview/src/makefile.dms
 utils/hhp2cached/makefile.dmc

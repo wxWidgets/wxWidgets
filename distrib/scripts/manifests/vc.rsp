@@ -234,8 +234,6 @@ tests/test_test.dsp
 tests/test_test_gui.dsp
 utils/emulator/src/emulator.dsp
 utils/emulator/src/emulator.dsw
-utils/HelpGen/src/helpgen.dsp
-utils/HelpGen/src/helpgen.dsw
 utils/helpview/src/helpview.dsp
 utils/helpview/src/helpview.dsw
 utils/hhp2cached/hhp2cached.dsp

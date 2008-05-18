@@ -109,7 +109,6 @@ samples/wizard/Makefile.in
 samples/xrc/Makefile.in
 tests/Makefile.in
 utils/emulator/src/Makefile.in
-utils/HelpGen/src/Makefile.in
 utils/helpview/src/Makefile.in
 utils/hhp2cached/Makefile.in
 utils/Makefile.in
