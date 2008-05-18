@@ -273,33 +273,40 @@ public:
     wxDataViewCtrl *dvc = (wxDataViewCtrl*) this->m_dataViewControlPtr->GetPeer();
     if (dvc->GetWindowStyle() & wxDV_VARIABLE_LINE_HEIGHT)
     {
-         wxDataViewItem item = items[0];  // TODO get all items
-         DataBrowserItemID itemID(reinterpret_cast<DataBrowserItemID>(item.GetID()));
-    
         wxDataViewModel *model = GetOwner();
-    
-        int height = 20; // TODO find out standard height
-        unsigned int num = dvc->GetColumnCount();
-        unsigned int col;
-        for (col = 0; col < num; col++)
-        {
-            wxDataViewColumn *column = dvc->GetColumn( col );
-            if (column->IsHidden())
-                continue;
-                
-            wxDataViewCustomRenderer *renderer = wxDynamicCast( column->GetRenderer(), wxDataViewCustomRenderer );
-            if (renderer)
-            {
-                wxVariant value;
-                model->GetValue( value, item, column->GetModelColumn() );
-                renderer->SetValue( value );
-                height = wxMax( height, renderer->GetSize().y );
-            }
-            
-        }
+        unsigned int colnum = dvc->GetColumnCount();
         
-        if (height > 20)
-            this->m_dataViewControlPtr->SetRowHeight( itemID, height );
+        size_t i;
+        size_t count = items.GetCount();
+        for (i = 0; i < count; i++)
+        { 
+            wxDataViewItem item = items[i];
+            DataBrowserItemID itemID(reinterpret_cast<DataBrowserItemID>(item.GetID()));
+    
+            int height = 20; // TODO find out standard height
+            unsigned int col;
+            for (col = 0; col < colnum; col++)
+            {
+                wxDataViewColumn *column = dvc->GetColumn( col );
+                if (column->IsHidden())
+                    continue;      // skip it!
+                
+                if ((col != 0) && model->IsContainer(item) && !model->HasContainerColumns(item))
+                    continue;      // skip it!
+            
+                wxDataViewCustomRenderer *renderer = wxDynamicCast( column->GetRenderer(), wxDataViewCustomRenderer );
+                if (renderer)
+                {
+                    wxVariant value;
+                    model->GetValue( value, item, column->GetModelColumn() );
+                    renderer->SetValue( value );
+                    height = wxMax( height, renderer->GetSize().y );
+                }
+            }
+        
+            if (height > 20)
+                this->m_dataViewControlPtr->SetRowHeight( itemID, height );
+        }
    }    
     
    // done:
@@ -546,7 +553,8 @@ wxDataViewCustomRenderer::~wxDataViewCustomRenderer(void)
 void wxDataViewCustomRenderer::RenderText( const wxString &text, int xoffset, wxRect cell, wxDC *dc, int state )
 {
     wxDataViewCtrl *view = GetOwner()->GetOwner();
-    wxColour col = (state & wxDATAVIEW_CELL_SELECTED) ? wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT) : view->GetForegroundColour();
+//    wxColour col = (state & wxDATAVIEW_CELL_SELECTED) ? wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT) : view->GetForegroundColour();
+    wxColour col = (state & wxDATAVIEW_CELL_SELECTED) ? *wxWHITE : view->GetForegroundColour();
     dc->SetTextForeground(col);
     dc->DrawText( text, cell.x + xoffset, cell.y + ((cell.height - dc->GetCharHeight()) / 2));
 }
