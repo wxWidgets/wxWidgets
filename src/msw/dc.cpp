@@ -2017,9 +2017,15 @@ void wxMSWDCImpl::SetLogicalOrigin(wxCoord x, wxCoord y)
 
     wxDCImpl::SetLogicalOrigin( x, y );
 
-#ifndef __WXWINCE__
-    ::SetWindowOrgEx(GetHdc(), (int)m_logicalOriginX, (int)m_logicalOriginY, NULL);
-#endif
+    RealizeScaleAndOrigin();
+}
+
+// For use by wxWidgets only, unless custom units are required.
+void wxMSWDCImpl::SetLogicalScale(double x, double y)
+{
+    WXMICROWIN_CHECK_HDC
+
+    wxDCImpl::SetLogicalScale(x,y);
 }
 
 void wxMSWDCImpl::SetDeviceOrigin(wxCoord x, wxCoord y)
@@ -2387,14 +2393,6 @@ wxSize wxMSWDCImpl::GetPPI() const
     int y = ::GetDeviceCaps(GetHdc(), LOGPIXELSY);
 
     return wxSize(x, y);
-}
-
-// For use by wxWidgets only, unless custom units are required.
-void wxMSWDCImpl::SetLogicalScale(double x, double y)
-{
-    WXMICROWIN_CHECK_HDC
-
-    wxDCImpl::SetLogicalScale(x,y);
 }
 
 // ----------------------------------------------------------------------------

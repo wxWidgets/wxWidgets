@@ -502,7 +502,7 @@ bool wxWindowDCImpl::DoGetPixel( wxCoord x1, wxCoord y1, wxColour *col ) const
 void wxWindowDCImpl::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 )
 {
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
-
+    
     if (m_pen.GetStyle() != wxPENSTYLE_TRANSPARENT)
     {
         if (m_gdkwindow)
@@ -2106,11 +2106,7 @@ void wxWindowDCImpl::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, w
 
     wxCoord xx, yy, ww, hh;
     m_currentClippingRegion.GetBox( xx, yy, ww, hh );
-#if wxUSE_NEW_DC
     wxGTKDCImpl::DoSetClippingRegion( xx, yy, ww, hh );
-#else
-    wxDC::DoSetClippingRegion( xx, yy, ww, hh );
-#endif
 
     GdkRegion* gdkRegion = m_currentClippingRegion.GetRegion();
     gdk_gc_set_clip_region(m_penGC,   gdkRegion);
@@ -2143,11 +2139,7 @@ void wxWindowDCImpl::DoSetClippingRegionAsRegion( const wxRegion &region  )
 
     wxCoord xx, yy, ww, hh;
     m_currentClippingRegion.GetBox( xx, yy, ww, hh );
-#if wxUSE_NEW_DC
     wxGTKDCImpl::DoSetClippingRegion( xx, yy, ww, hh );
-#else
-    wxDC::DoSetClippingRegion( xx, yy, ww, hh );
-#endif
 
     GdkRegion* gdkRegion = m_currentClippingRegion.GetRegion();
     gdk_gc_set_clip_region(m_penGC,   gdkRegion);
@@ -2160,11 +2152,7 @@ void wxWindowDCImpl::DestroyClippingRegion()
 {
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
-#if wxUSE_NEW_DC
     wxDCImpl::DestroyClippingRegion();
-#else
-    wxDC::DestroyClippingRegion();
-#endif
 
     m_currentClippingRegion.Clear();
 
@@ -2221,11 +2209,7 @@ void wxWindowDCImpl::ComputeScaleAndOrigin()
 {
     const wxRealPoint origScale(m_scaleX, m_scaleY);
 
-#if wxUSE_NEW_DC
     wxDCImpl::ComputeScaleAndOrigin();
-#else
-    wxDC::ComputeScaleAndOrigin();
-#endif
 
     // if scale has changed call SetPen to recalulate the line width
     if ( wxRealPoint(m_scaleX, m_scaleY) != origScale && m_pen.IsOk() )

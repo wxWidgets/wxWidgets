@@ -363,11 +363,13 @@ void wxGCDCImpl::ComputeScaleAndOrigin()
     if ( m_graphicContext )
     {
         m_matrixCurrent = m_graphicContext->CreateMatrix();
-        m_matrixCurrent.Translate( m_deviceOriginX, m_deviceOriginY );
-        m_matrixCurrent.Scale( m_scaleX, m_scaleY );
+        
         // the logical origin sets the origin to have new coordinates
-        m_matrixCurrent.Translate( -m_logicalOriginX, -m_logicalOriginY );
-
+        m_matrixCurrent.Translate( m_deviceOriginX - m_logicalOriginX * m_signX * m_scaleX, 
+                                   m_deviceOriginY-m_logicalOriginY * m_signY * m_scaleY);
+        
+        m_matrixCurrent.Scale( m_scaleX * m_signX, m_scaleY * m_signY );
+        
         m_graphicContext->SetTransform( m_matrixOriginal );
         m_graphicContext->ConcatTransform( m_matrixCurrent );
     }

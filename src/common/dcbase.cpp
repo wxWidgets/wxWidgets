@@ -368,12 +368,12 @@ wxDCImpl::~wxDCImpl()
 
 wxCoord wxDCImpl::DeviceToLogicalX(wxCoord x) const
 {
-    return wxRound((double)(x - m_deviceOriginX - m_deviceLocalOriginX) / m_scaleX) * m_signX + m_logicalOriginX;
+    return wxRound( (double)((x - m_deviceOriginX - m_deviceLocalOriginX) * m_signX) / m_scaleX ) + m_logicalOriginX ;
 }
 
 wxCoord wxDCImpl::DeviceToLogicalY(wxCoord y) const
 {
-    return wxRound((double)(y - m_deviceOriginY - m_deviceLocalOriginY) / m_scaleY) * m_signY + m_logicalOriginY;
+    return wxRound( (double)((y - m_deviceOriginY - m_deviceLocalOriginY) * m_signY) / m_scaleY ) + m_logicalOriginY ;
 }
 
 wxCoord wxDCImpl::DeviceToLogicalXRel(wxCoord x) const
@@ -388,12 +388,12 @@ wxCoord wxDCImpl::DeviceToLogicalYRel(wxCoord y) const
 
 wxCoord wxDCImpl::LogicalToDeviceX(wxCoord x) const
 {
-    return wxRound((double)(x - m_logicalOriginX) * m_scaleX) * m_signX + m_deviceOriginX * m_signY + m_deviceLocalOriginX;
+    return wxRound( (double)((x - m_logicalOriginX) * m_signX) * m_scaleX) + m_deviceOriginX + m_deviceLocalOriginX;
 }
 
 wxCoord wxDCImpl::LogicalToDeviceY(wxCoord y) const
 {
-    return wxRound((double)(y - m_logicalOriginY) * m_scaleY) * m_signY + m_deviceOriginY * m_signY + m_deviceLocalOriginY;
+    return wxRound( (double)((y - m_logicalOriginY) * m_signY) * m_scaleY) + m_deviceOriginY + m_deviceLocalOriginY;
 }
 
 wxCoord wxDCImpl::LogicalToDeviceXRel(wxCoord x) const
