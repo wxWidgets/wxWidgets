@@ -650,7 +650,8 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserGetContextualMenuProc(M
   *helpItemString = NULL;
  // create information for a context menu event:
   wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU,dataViewCtrlPtr->GetId());
-  
+
+  dataViewEvent.SetEventObject(dataViewCtrlPtr);
   dataViewEvent.SetModel(dataViewCtrlPtr->GetModel());
  // get the item information;
  // theoretically more than one ID can be returned but the event can only handle one item, therefore all item related data is using the data of the first item in the array:
