@@ -8,6 +8,7 @@
    version number all of these files must be edited:
 
        {wx}/configure.in
+       {wx}/configure {and set subrelease to zero in these two files}
        {wx}/*.spec
        {wx}/include/wx/version.h
        {wx}/include/msvc/wx/setup.h  {major release only}
