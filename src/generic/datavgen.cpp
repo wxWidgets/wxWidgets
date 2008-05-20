@@ -2953,7 +2953,7 @@ int wxDataViewMainWindow::GetLineStart( unsigned int row ) const
            
            unsigned int cols = GetOwner()->GetColumnCount();
            unsigned int col;
-           int height = 0;
+           int height = m_lineHeight;
            for (col = 0; col < cols; col++)
            {
                 const wxDataViewColumn *column = GetOwner()->GetColumn(col);
@@ -3005,7 +3005,7 @@ int wxDataViewMainWindow::GetLineAt( unsigned int y ) const
            
            unsigned int cols = GetOwner()->GetColumnCount();
            unsigned int col;
-           int height = 0;
+           int height = m_lineHeight;
            for (col = 0; col < cols; col++)
            {
                 const wxDataViewColumn *column = GetOwner()->GetColumn(col);
@@ -3052,7 +3052,7 @@ int wxDataViewMainWindow::GetLineHeight( unsigned int row ) const
 
         wxDataViewItem item = node->GetItem();
         
-        int height = 0;
+        int height = m_lineHeight;
         
         unsigned int cols = GetOwner()->GetColumnCount();
         unsigned int col;
@@ -3722,7 +3722,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             wxRect rect( xpos + indent + EXPANDER_MARGIN, 
                          GetLineStart( current ) + EXPANDER_MARGIN + (GetLineHeight(current)/2) - (m_lineHeight/2) - EXPANDER_OFFSET,
                          m_lineHeight-2*EXPANDER_MARGIN,
-                         m_lineHeight-2*EXPANDER_MARGIN);
+                         m_lineHeight-2*EXPANDER_MARGIN + EXPANDER_OFFSET);
             if( rect.Contains( x, y) )
             {
                 //So the mouse is over the expander
@@ -3850,7 +3850,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
                 wxRect rect( xpos + indent + EXPANDER_MARGIN, 
                          GetLineStart( current ) + EXPANDER_MARGIN + (GetLineHeight(current)/2) - (m_lineHeight/2) - EXPANDER_OFFSET,
                          m_lineHeight-2*EXPANDER_MARGIN,
-                         m_lineHeight-2*EXPANDER_MARGIN);
+                         m_lineHeight-2*EXPANDER_MARGIN + EXPANDER_OFFSET);
                 
                 if( rect.Contains( x, y) )
                 {
