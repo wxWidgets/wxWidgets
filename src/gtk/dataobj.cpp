@@ -149,12 +149,14 @@ void wxDataFormat::PrepareFormats()
     //     text/uri-list for file dnd because compatibility is not important
     //     here (with whom?)
     if (!g_textAtom)
+    {
 #if wxUSE_UNICODE
         g_textAtom = gdk_atom_intern( "UTF8_STRING", FALSE );
         g_altTextAtom = gdk_atom_intern( "STRING", FALSE );
 #else
         g_textAtom = gdk_atom_intern( "STRING" /* "text/plain" */, FALSE );
 #endif
+    }
     if (!g_pngAtom)
         g_pngAtom = gdk_atom_intern( "image/png", FALSE );
     if (!g_fileAtom)
