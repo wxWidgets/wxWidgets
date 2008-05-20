@@ -2947,16 +2947,23 @@ int wxDataViewMainWindow::GetLineStart( unsigned int row ) const
         unsigned int r;
         for (r = 0; r < row; r++)
         {
-           const wxDataViewTreeNode* node = GetTreeNodeByRow(r);
-           if (!node) return start;
+            const wxDataViewTreeNode* node = GetTreeNodeByRow(r);
+            if (!node) return start;
            
-           wxDataViewItem item = node->GetItem();
+            wxDataViewItem item = node->GetItem();
            
-           unsigned int cols = GetOwner()->GetColumnCount();
-           unsigned int col;
-           int height = m_lineHeight;
-           for (col = 0; col < cols; col++)
-           {
+            if (node && !node->HasChildren())
+            {
+                // Yes, if the node does not have any child, it must be a leaf which
+                // mean that it is a temporarily created by GetTreeNodeByRow
+                wxDELETE(node)
+            }
+            
+            unsigned int cols = GetOwner()->GetColumnCount();
+            unsigned int col;
+            int height = m_lineHeight;
+            for (col = 0; col < cols; col++)
+            {
                 const wxDataViewColumn *column = GetOwner()->GetColumn(col);
                 if (column->IsHidden())
                     continue;      // skip it!
@@ -2970,9 +2977,10 @@ int wxDataViewMainWindow::GetLineStart( unsigned int row ) const
                 wxDataViewRenderer *renderer2 = const_cast<wxDataViewRenderer*>(renderer);
                 renderer2->SetValue( value );
                 height = wxMax( height, renderer->GetSize().y );
-           }
+            }
            
-           start += height;
+           
+            start += height;
         }
         
         return start;
@@ -3004,6 +3012,13 @@ int wxDataViewMainWindow::GetLineAt( unsigned int y ) const
            
            wxDataViewItem item = node->GetItem();
            
+            if (node && !node->HasChildren())
+            {
+                // Yes, if the node does not have any child, it must be a leaf which
+                // mean that it is a temporarily created by GetTreeNodeByRow
+                wxDELETE(node)
+            }
+            
            unsigned int cols = GetOwner()->GetColumnCount();
            unsigned int col;
            int height = m_lineHeight;
@@ -3053,6 +3068,13 @@ int wxDataViewMainWindow::GetLineHeight( unsigned int row ) const
 
         wxDataViewItem item = node->GetItem();
         
+        if (node && !node->HasChildren())
+        {
+                // Yes, if the node does not have any child, it must be a leaf which
+                // mean that it is a temporarily created by GetTreeNodeByRow
+             wxDELETE(node)
+        }
+            
         int height = m_lineHeight;
         
         unsigned int cols = GetOwner()->GetColumnCount();
