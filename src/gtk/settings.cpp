@@ -90,6 +90,7 @@ enum wxGtkColourType
 {
     wxGTK_FG,
     wxGTK_BG,
+    wxGTK_TEXT,
     wxGTK_BASE
 };
 
@@ -148,6 +149,10 @@ static bool GetColourFromGTKWidget(GdkColor& gdkColor,
 
             case wxGTK_BG:
                 gdkColor = def->bg[state];
+                break;
+
+            case wxGTK_TEXT:
+                gdkColor = def->text[state];
                 break;
 
             case wxGTK_BASE:
@@ -317,11 +322,12 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
         case wxSYS_COLOUR_HIGHLIGHTTEXT:
             if (!gs_objects.m_colHighlightText.Ok())
             {
-                wxColour hclr = GetColour(wxSYS_COLOUR_HIGHLIGHT);
-                if (hclr.Red() > 200 && hclr.Green() > 200 && hclr.Blue() > 200)
-                    gs_objects.m_colHighlightText = *wxBLACK;
-                else
-                    gs_objects.m_colHighlightText = *wxWHITE;
+                gdkColor.red =
+                gdkColor.green =
+                gdkColor.blue = 0;
+                GetColourFromGTKWidget(
+                    gdkColor, wxGTK_BUTTON, GTK_STATE_SELECTED, wxGTK_TEXT);
+                gs_objects.m_colHighlightText = wxColour(gdkColor);
             }
             color = gs_objects.m_colHighlightText;
             break;
