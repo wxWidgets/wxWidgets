@@ -1412,6 +1412,7 @@ void wxDataViewHeaderWindowMSW::UpdateDisplay()
         if (col->IsHidden())
             continue;      // don't add it!
 
+        wxString title( col->GetTitle() );
         HDITEM hdi;
         hdi.mask = HDI_TEXT | HDI_FORMAT | HDI_WIDTH;
         if (col->GetBitmap().IsOk())
@@ -1420,7 +1421,7 @@ void wxDataViewHeaderWindowMSW::UpdateDisplay()
            hdi.mask |= HDI_IMAGE;
            hdi.iImage = m_imageList->GetImageCount()-1;
         }
-        hdi.pszText = (wxChar *) col->GetTitle().wx_str();
+        hdi.pszText = (wxChar *) title.wx_str();
         hdi.cxy = col->GetWidth();
         hdi.cchTextMax = sizeof(hdi.pszText)/sizeof(hdi.pszText[0]);
         hdi.fmt = HDF_LEFT | HDF_STRING;
