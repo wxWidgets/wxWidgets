@@ -1254,6 +1254,24 @@ int wxMacTextControl::GetLineLength(long lineNo) const
     return 0 ;
 }
 
+void wxMacTextControl::SetFont( const wxFont & font , const wxColour& foreground , long windowStyle )
+{
+    wxMacControl::SetFont(font, foreground, windowStyle );
+#ifndef __LP64__
+
+    // overrule the barrier in wxMacControl for supporting disabled controls, in order to support
+    // setting the color to eg red and back to black by controllers
+
+    if ( foreground == *wxBLACK )
+    {
+        ControlFontStyleRec fontStyle;
+        fontStyle.foreColor.red = fontStyle.foreColor.green = fontStyle.foreColor.blue = 0;
+        fontStyle.flags = kControlUseForeColorMask;
+        ::SetControlFontStyle( m_controlRef , &fontStyle );
+    }
+#endif
+}
+
 // ----------------------------------------------------------------------------
 // standard unicode control implementation
 // ----------------------------------------------------------------------------
