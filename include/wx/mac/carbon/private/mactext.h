@@ -56,6 +56,7 @@ public :
     virtual int GetLineLength(long lineNo) const ;
     virtual wxString GetLineText(long lineNo) const ;
     virtual void CheckSpelling(bool check) { }
+    virtual void SetFont( const wxFont & font , const wxColour& foreground , long windowStyle );    
 
 #ifndef __WXMAC_OSX__
     virtual void            MacControlUserPaneDrawProc(wxInt16 part) = 0 ;
