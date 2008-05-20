@@ -26,9 +26,8 @@
     #undef GTK_DISABLE_DEPRECATED
 #endif
 #include <gtk/gtk.h>
-#include <gdk/gdkx.h>
 
-#include <X11/Xatom.h>
+bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* bottom);
 
 // ----------------------------------------------------------------------------
 // wxSystemObjects
@@ -415,53 +414,6 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
     return font;
 }
 
-static bool GetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* bottom)
-{
-    bool success = false;
-    Atom property = 0;
-    if (gdk_x11_screen_supports_net_wm_hint(
-            gdk_drawable_get_screen(window),
-            gdk_atom_intern("_NET_FRAME_EXTENTS", false)))
-    {
-        success = true;
-        property = gdk_x11_get_xatom_by_name_for_display(
-            gdk_drawable_get_display(window),
-            "_NET_FRAME_EXTENTS");
-    }
-
-    if (success)
-    {
-        Atom type;
-        int format;
-        gulong nitems, bytes_after;
-        guchar* data;
-        success = XGetWindowProperty(
-            gdk_x11_drawable_get_xdisplay(window),
-            gdk_x11_drawable_get_xid(window),
-            property,
-            0, 4,
-            false,
-            XA_CARDINAL,
-            &type, &format, &nitems, &bytes_after, &data
-            ) == Success;
-        if (success)
-        {
-            success = data && nitems == 4;
-            if (success)
-            {
-                long* p = (long*)data;
-                if (left)   *left   = int(p[0]);
-                if (right)  *right  = int(p[1]);
-                if (top)    *top    = int(p[2]);
-                if (bottom) *bottom = int(p[3]);
-            }
-            if (data)
-                XFree(data);
-        }
-    }
-    return success;
-}
-
 // helper: return the GtkSettings either for the screen the current window is
 // on or for the default screen if window is NULL
 static GtkSettings *GetSettingsForWindowScreen(GdkWindow *window)
@@ -497,7 +449,7 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
                     // In most cases the top extent is the titlebar, so we use the bottom extent
                     // for the heights.
                     int right, bottom;
-                    if (GetFrameExtents(window, NULL, &right, NULL, &bottom))
+                    if (wxGetFrameExtents(window, NULL, &right, NULL, &bottom))
                     {
                         switch (index)
                         {
@@ -583,7 +535,7 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
             // Reconsider when we have a way to report to the user on which side it is.
             {
                 int top;
-                if (GetFrameExtents(window, NULL, NULL, &top, NULL))
+                if (wxGetFrameExtents(window, NULL, NULL, &top, NULL))
                 {
                     return top; // top frame extent
                 }

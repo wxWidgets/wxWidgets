@@ -376,6 +376,37 @@ gtk_frame_unmap_callback( GtkWidget * WXUNUSED(widget),
 }
 
 //-----------------------------------------------------------------------------
+
+bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* bottom)
+{
+    static GdkAtom property = gdk_atom_intern("_NET_FRAME_EXTENTS", false);
+    Atom xproperty = gdk_x11_atom_to_xatom_for_display(
+                        gdk_drawable_get_display(window), property);
+    Atom type;
+    int format;
+    gulong nitems, bytes_after;
+    guchar* data;
+    Status status = XGetWindowProperty(
+        gdk_x11_drawable_get_xdisplay(window),
+        gdk_x11_drawable_get_xid(window),
+        xproperty,
+        0, 4, false, XA_CARDINAL,
+        &type, &format, &nitems, &bytes_after, &data);
+    const bool success = status == Success && data && nitems == 4;
+    if (success)
+    {
+        long* p = (long*)data;
+        if (left)   *left   = int(p[0]);
+        if (right)  *right  = int(p[1]);
+        if (top)    *top    = int(p[2]);
+        if (bottom) *bottom = int(p[3]);
+    }
+    if (data)
+        XFree(data);
+    return success;
+}
+
+//-----------------------------------------------------------------------------
 // "property_notify_event" from m_widget
 //-----------------------------------------------------------------------------
 
@@ -387,27 +418,13 @@ static gboolean property_notify_event(
     static GdkAtom property = gdk_atom_intern("_NET_FRAME_EXTENTS", false);
     if (event->state == GDK_PROPERTY_NEW_VALUE && event->atom == property)
     {
-        Atom xproperty = gdk_x11_atom_to_xatom_for_display(
-                            gdk_drawable_get_display(event->window), property);
-        Atom type;
-        int format;
-        gulong nitems, bytes_after;
-        guchar* data;
-        Status status = XGetWindowProperty(
-            gdk_x11_drawable_get_xdisplay(event->window),
-            gdk_x11_drawable_get_xid(event->window),
-            xproperty,
-            0, 4, false, XA_CARDINAL,
-            &type, &format, &nitems, &bytes_after, &data);
-        if (status == Success && data && nitems == 4)
+        int left, right, top, bottom;
+        if (wxGetFrameExtents(event->window, &left, &right, &top, &bottom))
         {
-            long* p = (long*)data;
             const wxSize decorSize =
-                wxSize(int(p[0] + p[1]), int(p[2] + p[3]));
+                wxSize(left + right, top + bottom);
             win->GTKUpdateDecorSize(decorSize);
         }
-        if (data)
-            XFree(data);
     }
     return false;
 }
