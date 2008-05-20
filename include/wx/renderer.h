@@ -412,7 +412,7 @@ wxRendererNative& wxRendererNative::GetDefault()
 // they are standalone functions here to protect the ABI.
 // ----------------------------------------------------------------------------
 
-#if defined(__WXMSW__) || defined(__WXMAC__)
+#if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXGTK20__)
 #if wxABI_VERSION >= 20804
 
 // Draw a native wxChoice

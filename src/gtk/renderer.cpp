@@ -94,7 +94,7 @@ public:
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 
-private:
+// private:
     // FIXME: shouldn't we destroy these windows somewhere?
 
     // used by DrawPushButton and DrawDropArrow
@@ -106,8 +106,17 @@ private:
     // used by DrawCheckBox()
     static GtkWidget *GetCheckButtonWidget();
 
+    // used by DrawRadioButton()
+    static GtkWidget *GetRadioButtonWidget();
+
     // Used by DrawHeaderButton
     static GtkWidget *GetHeaderButtonWidget();
+    
+    // Used by DrawTextCtrl
+    static GtkWidget *GetTextEntryWidget();
+    
+    // Used by DrawComboBox
+    static GtkWidget *GetComboBoxWidget();
 };
 
 GdkWindow* wxGetGdkWindowForDC(wxWindow* win, wxDC& dc)
@@ -168,6 +177,42 @@ wxRendererGTK::GetButtonWidget()
 }
 
 GtkWidget *
+wxRendererGTK::GetTextEntryWidget()
+{
+    static GtkWidget *s_button = NULL;
+    static GtkWidget *s_window = NULL;
+
+    if ( !s_button )
+    {
+        s_window = gtk_window_new( GTK_WINDOW_POPUP );
+        gtk_widget_realize( s_window );
+        s_button = gtk_entry_new();
+        gtk_container_add( GTK_CONTAINER(s_window), s_button );
+        gtk_widget_realize( s_button );
+    }
+
+    return s_button;
+}
+
+GtkWidget *
+wxRendererGTK::GetComboBoxWidget()
+{
+    static GtkWidget *s_button = NULL;
+    static GtkWidget *s_window = NULL;
+
+    if ( !s_button )
+    {
+        s_window = gtk_window_new( GTK_WINDOW_POPUP );
+        gtk_widget_realize( s_window );
+        s_button = gtk_combo_box_new();
+        gtk_container_add( GTK_CONTAINER(s_window), s_button );
+        gtk_widget_realize( s_button );
+    }
+
+    return s_button;
+}
+
+GtkWidget *
 wxRendererGTK::GetCheckButtonWidget()
 {
     static GtkWidget *s_button = NULL;
@@ -178,6 +223,24 @@ wxRendererGTK::GetCheckButtonWidget()
         s_window = gtk_window_new( GTK_WINDOW_POPUP );
         gtk_widget_realize( s_window );
         s_button = gtk_check_button_new();
+        gtk_container_add( GTK_CONTAINER(s_window), s_button );
+        gtk_widget_realize( s_button );
+    }
+
+    return s_button;
+}
+
+GtkWidget *
+wxRendererGTK::GetRadioButtonWidget()
+{
+    static GtkWidget *s_button = NULL;
+    static GtkWidget *s_window = NULL;
+
+    if ( !s_button )
+    {
+        s_window = gtk_window_new( GTK_WINDOW_POPUP );
+        gtk_widget_realize( s_window );
+        s_button = gtk_radio_button_new(NULL);
         gtk_container_add( GTK_CONTAINER(s_window), s_button );
         gtk_widget_realize( s_button );
     }
@@ -525,7 +588,10 @@ wxRendererGTK::DrawPushButton(wxWindow* win,
         NULL,
         button,
         "button",
-        rect.x, rect.y, rect.width, rect.height
+        dc.LogicalToDeviceX(rect.x), 
+        dc.LogicalToDeviceY(rect.y), 
+        rect.width, 
+        rect.height
     );
 }
 
@@ -574,4 +640,163 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow *win,
                          rect.width,
                          rect.height );
     }
+}
+
+
+// ----------------------------------------------------------------------------
+// Other renderer functions to be merged in to wxRenderer class in 2.9, but
+// they are standalone functions here to protect the ABI.
+// ----------------------------------------------------------------------------
+
+// Uses the theme to draw the border and fill for something like a wxTextCtrl
+void wxRenderer_DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, int flags)
+{
+    GtkWidget *entry = wxRendererGTK::GetTextEntryWidget();
+
+    GdkWindow* gdk_window = wxGetGdkWindowForDC(win, dc);
+
+    GtkStateType state = GTK_STATE_NORMAL;
+    if ( flags & wxCONTROL_DISABLED )
+       state = GTK_STATE_INSENSITIVE;
+       
+   if (flags & wxCONTROL_CURRENT )
+      GTK_WIDGET_SET_FLAGS( entry, GTK_HAS_FOCUS );
+   else
+      GTK_WIDGET_UNSET_FLAGS( entry, GTK_HAS_FOCUS );
+
+    gtk_paint_shadow
+    (
+      entry->style, 
+      gdk_window,
+      state,
+      GTK_SHADOW_OUT,
+      NULL,
+      entry,
+      "entry",
+      dc.LogicalToDeviceX(rect.x),
+      dc.LogicalToDeviceY(rect.y),
+      rect.width,
+      rect.height 
+   );
+}
+
+// Draw the equivallent of a wxComboBox
+void wxRenderer_DrawComboBox(wxWindow* win, wxDC& dc, const wxRect& rect, int flags)
+{
+    GtkWidget *combo = wxRendererGTK::GetComboBoxWidget();
+
+    GdkWindow* gdk_window = wxGetGdkWindowForDC(win, dc);
+
+    GtkStateType state = GTK_STATE_NORMAL;
+    if ( flags & wxCONTROL_DISABLED )
+       state = GTK_STATE_INSENSITIVE;
+       
+   if (flags & wxCONTROL_CURRENT )
+      GTK_WIDGET_SET_FLAGS( combo, GTK_HAS_FOCUS );
+   else
+      GTK_WIDGET_UNSET_FLAGS( combo, GTK_HAS_FOCUS );
+
+   gtk_paint_shadow
+   (
+     combo->style, 
+     gdk_window,
+     state,
+     GTK_SHADOW_OUT,
+     NULL,
+     combo,
+     "combobox",
+      dc.LogicalToDeviceX(rect.x),
+      dc.LogicalToDeviceY(rect.y),
+      rect.width,
+      rect.height 
+   );
+
+   wxRect r = rect;
+   int extent = rect.height / 2;
+   r.x += rect.width - extent - extent/2;
+   r.y += extent/2;
+   r.width = extent;
+   r.height = extent;
+
+   gtk_paint_arrow
+   (
+     combo->style, 
+     gdk_window,
+     state,
+     GTK_SHADOW_OUT,
+     NULL,
+     combo,
+     "arrow",
+     GTK_ARROW_DOWN,
+     TRUE,
+      dc.LogicalToDeviceX(r.x),
+      dc.LogicalToDeviceY(r.y),
+      r.width,
+      r.height
+   );
+
+   r = rect;
+   r.x += rect.width - 2*extent;
+   r.width = 2;
+
+   gtk_paint_box
+   (
+      combo->style, 
+      gdk_window,
+      state,
+      GTK_SHADOW_ETCHED_OUT,
+      NULL,
+      combo,
+      "vseparator",
+      dc.LogicalToDeviceX(r.x),
+      dc.LogicalToDeviceY(r.y+1),
+      r.width,
+      r.height-2
+   );
+}
+
+
+void wxRenderer_DrawChoice(wxWindow* win, wxDC& dc,
+                           const wxRect& rect, int flags)
+{
+   wxRenderer_DrawComboBox( win, dc, rect, flags );
+}
+
+    
+// Draw a themed radio button
+void wxRenderer_DrawRadioButton(wxWindow* win, wxDC& dc, const wxRect& rect, int flags)
+{
+    GtkWidget *button = wxRendererGTK::GetRadioButtonWidget();
+
+    GdkWindow* gdk_window = wxGetGdkWindowForDC(win, dc);
+    
+    GtkShadowType shadow_type = GTK_SHADOW_OUT;
+    if ( flags & wxCONTROL_CHECKED )
+        shadow_type = GTK_SHADOW_IN;
+    else if ( flags & wxCONTROL_UNDETERMINED )
+        shadow_type = GTK_SHADOW_ETCHED_IN;
+        
+    GtkStateType state = GTK_STATE_NORMAL;
+    if ( flags & wxCONTROL_DISABLED )
+       state = GTK_STATE_INSENSITIVE;
+    if ( flags & wxCONTROL_PRESSED )
+    state = GTK_STATE_ACTIVE;
+/*
+    Don't know when to set this
+       state_type = GTK_STATE_PRELIGHT;
+*/
+
+    gtk_paint_option
+    (
+        button->style,
+        gdk_window,
+        state,
+        shadow_type,
+        NULL,
+        button,
+        "radiobutton",
+        dc.LogicalToDeviceX(rect.x), 
+        dc.LogicalToDeviceY(rect.y), 
+        rect.width, rect.height
+    );
 }
