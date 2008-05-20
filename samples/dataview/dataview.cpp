@@ -232,8 +232,8 @@ public:
             if (res) return res;
             
             // items must be different
-            unsigned long litem1 = (unsigned long) item1.GetID();    
-            unsigned long litem2 = (unsigned long) item2.GetID();    
+            wxUIntPtr litem1 = (wxUIntPtr) item1.GetID();    
+            wxUIntPtr litem2 = (wxUIntPtr) item2.GetID();    
 
             return litem1-litem2;
         }
