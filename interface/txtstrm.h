@@ -6,57 +6,56 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+
+
 /**
     @class wxTextInputStream
     @wxheader{txtstrm.h}
 
-    This class provides functions that read text datas using an input stream.
-    So, you can read @e text floats, integers.
+    This class provides functions that reads text data using an input stream,
+    allowing you to read text, floats, and integers.
 
-    The wxTextInputStream correctly reads text files (or streams) in DOS, Macintosh
-    and Unix formats and reports a single newline char as a line ending.
+    The wxTextInputStream correctly reads text files (or streams) in DOS,
+    Macintosh and Unix formats and reports a single newline char as a line
+    ending.
 
-    Operator  is overloaded and you can use this class like a standard C++ iostream.
-    Note, however, that the arguments are the fixed size types wxUint32, wxInt32 etc
-    and on a typical 32-bit computer, none of these match to the "long" type
-    (wxInt32
-    is defined as int on 32-bit architectures) so that you cannot use long. To avoid
-    problems (here and elsewhere), make use of wxInt32, wxUint32 and similar types.
+    wxTextInputStream::operator>>() is overloaded and you can use this class
+    like a standard C++ iostream. Note, however, that the arguments are the
+    fixed size types wxUint32, wxInt32 etc and on a typical 32-bit computer,
+    none of these match to the "long" type (wxInt32 is defined as int on 32-bit
+    architectures) so that you cannot use long. To avoid problems (here and
+    elsewhere), make use of wxInt32, wxUint32 and similar types.
 
-    If you're scanning through a file using wxTextInputStream, you should check for
-    EOF @b before
-    reading the next item (word / number), because otherwise the last item may get
-    lost.
-    You should however be prepared to receive an empty item (empty string / zero
-    number) at the
-    end of file, especially on Windows systems. This is unavoidable because most
-    (but not all) files end
-    with whitespace (i.e. usually a newline).
+    If you're scanning through a file using wxTextInputStream, you should check
+    for @c EOF @b before reading the next item (word / number), because
+    otherwise the last item may get lost. You should however be prepared to
+    receive an empty item (empty string / zero number) at the end of file,
+    especially on Windows systems. This is unavoidable because most (but not
+    all) files end with whitespace (i.e. usually a newline).
 
     For example:
 
     @code
     wxFileInputStream input( "mytext.txt" );
-      wxTextInputStream text( input );
-      wxUint8 i1;
-      float f2;
-      wxString line;
+    wxTextInputStream text( input );
+    wxUint8 i1;
+    float f2;
+    wxString line;
 
-      text  i1;       // read a 8 bit integer.
-      text  i1  f2; // read a 8 bit integer followed by float.
-      text  line;     // read a text line
+    text >> i1;       // read a 8 bit integer.
+    text >> i1 >> f2; // read a 8 bit integer followed by float.
+    text >> line;     // read a text line
     @endcode
 
     @library{wxbase}
     @category{streams}
 
-    @see wxTextInputStream::SetStringSeparators
+    @see wxTextOutputStream
 */
 class wxTextInputStream
 {
 public:
     /**
-        )
         Constructs a text stream associated to the given input stream.
 
         @param stream
@@ -64,67 +63,69 @@ public:
         @param sep
             The initial string separator characters.
         @param conv
-            In Unicode build only: The encoding converter used to convert the bytes in
-        the
-              underlying input stream to characters.
+            <b>In Unicode build only:</b> The encoding converter used to
+            convert the bytes in the underlying input stream to characters.
     */
     wxTextInputStream(wxInputStream& stream,
-                      const wxString& sep = " \t");
+                      const wxString& sep = " \t",
+                      const wxMBConv& conv = wxConvAuto());
 
     /**
-        Destroys the wxTextInputStream object.
+        Destructor.
     */
     ~wxTextInputStream();
 
     /**
-        Reads a character, returns 0 if there are no more characters in the stream.
+        Reads a character, returns 0 if there are no more characters in the
+        stream.
     */
     wxChar GetChar();
 
     /**
         Reads a unsigned 16 bit integer from the stream.
-        See wxTextInputStream::Read8 for the
-        description of the @a base parameter.
+
+        See Read8() for the description of the @a base parameter.
     */
     wxUint16 Read16(int base = 10);
 
     /**
         Reads a signed 16 bit integer from the stream.
-        See wxTextInputStream::Read8 for the
-        description of the @a base parameter.
+
+        See Read8() for the description of the @a base parameter.
     */
     wxInt16 Read16S(int base = 10);
 
     /**
         Reads a 32 bit unsigned integer from the stream.
-        See wxTextInputStream::Read8 for the
-        description of the @a base parameter.
+
+        See Read8() for the description of the @a base parameter.
     */
     wxUint32 Read32(int base = 10);
 
     /**
         Reads a 32 bit signed integer from the stream.
-        See wxTextInputStream::Read8 for the
-        description of the @a base parameter.
+
+        See Read8() for the description of the @a base parameter.
     */
     wxInt32 Read32S(int base = 10);
 
     /**
-        Reads a single unsigned byte from the stream, given in base @e base.
+        Reads a single unsigned byte from the stream, given in base @a base.
+
         The value of @a base must be comprised between 2 and 36, inclusive, or
-        be a special value 0 which means that the usual rules of @c C numbers are
+        be a special value 0 which means that the usual rules of C numbers are
         applied: if the number starts with @c 0x it is considered to be in base
-        16, if it starts with @c 0 - in base 8 and in base 10 otherwise. Note
-        that you may not want to specify the base 0 if you are parsing the numbers
-        which may have leading zeroes as they can yield unexpected (to the user not
-        familiar with C) results.
+        16, if it starts with 0 - in base 8 and in base 10 otherwise. Note that
+        you may not want to specify the base 0 if you are parsing the numbers
+        which may have leading zeroes as they can yield unexpected (to the user
+        not familiar with C) results.
     */
     wxUint8 Read8(int base = 10);
 
     /**
         Reads a single signed byte from the stream.
-        See wxTextInputStream::Read8 for the
-        description of the @a base parameter.
+
+        See Read8() for the description of the @a base parameter.
     */
     wxInt8 Read8S(int base = 10);
 
@@ -134,21 +135,21 @@ public:
     double ReadDouble();
 
     /**
-        Reads a line from the input stream and returns it (without the end of line
-        character).
+        Reads a line from the input stream and returns it (without the end of
+        line character).
     */
     wxString ReadLine();
 
     /**
-        @note This method is deprecated, use ReadLine()
-        or ReadWord() instead.
+        @deprecated Use ReadLine() or ReadWord() instead.
+
         Same as ReadLine().
     */
     wxString ReadString();
 
     /**
-        Reads a word (a sequence of characters until the next separator) from the
-        input stream.
+        Reads a word (a sequence of characters until the next separator) from
+        the input stream.
 
         @see SetStringSeparators()
     */
@@ -157,55 +158,84 @@ public:
     /**
         Sets the characters which are used to define the word boundaries in
         ReadWord().
-        The default separators are the space and @c TAB characters.
+
+        The default separators are the @c space and @c TAB characters.
     */
     void SetStringSeparators(const wxString& sep);
 };
 
+
+/**
+    Specifies the end-of-line characters to use with wxTextOutputStream.
+*/
+typedef enum
+{
+    /**
+        Specifies wxTextOutputStream to use the native end-of-line characters.
+    */
+    wxEOL_NATIVE,
+
+    /**
+        Specifies wxTextOutputStream to use Unix end-of-line characters.
+    */
+    wxEOL_UNIX,
+
+    /**
+        Specifies wxTextOutputStream to use Mac end-of-line characters.
+    */
+    wxEOL_MAC,
+
+    /**
+        Specifies wxTextOutputStream to use DOS end-of-line characters.
+    */
+    wxEOL_DOS
+} wxEOL;
 
 
 /**
     @class wxTextOutputStream
     @wxheader{txtstrm.h}
 
-    This class provides functions that write text datas using an output stream.
-    So, you can write @e text floats, integers.
+    This class provides functions that writes text data using an output stream,
+    allowing you to write text, floats, and integers.
 
     You can also simulate the C++ cout class:
 
     @code
     wxFFileOutputStream output( stderr );
-      wxTextOutputStream cout( output );
+    wxTextOutputStream cout( output );
 
-      cout  "This is a text line"  endl;
-      cout  1234;
-      cout  1.23456;
+    cout << "This is a text line" << endl;
+    cout << 1234;
+    cout << 1.23456;
     @endcode
 
-    The wxTextOutputStream writes text files (or streams) on DOS, Macintosh
-    and Unix in their native formats (concerning the line ending).
+    The wxTextOutputStream writes text files (or streams) on DOS, Macintosh and
+    Unix in their native formats (concerning the line ending).
 
     @library{wxbase}
     @category{streams}
+
+    @see wxTextInputStream
 */
 class wxTextOutputStream
 {
 public:
     /**
-        )
         Constructs a text stream object associated to the given output stream.
 
         @param stream
             The output stream.
         @param mode
-            The end-of-line mode. One of wxEOL_NATIVE, wxEOL_DOS, wxEOL_MAC and
-        wxEOL_UNIX.
+            The end-of-line mode. One of ::wxEOL_NATIVE, ::wxEOL_DOS,
+            ::wxEOL_MAC and ::wxEOL_UNIX.
         @param conv
-            In Unicode build only: The object used to convert
+            <b>In Unicode build only:</b> The object used to convert
             Unicode text into ASCII characters written to the output stream.
     */
     wxTextOutputStream(wxOutputStream& stream,
-                       wxEOL mode = wxEOL_NATIVE);
+                       wxEOL mode = wxEOL_NATIVE,
+                       const wxMBConv& conv = wxConvAuto());
 
     /**
         Destroys the wxTextOutputStream object.
@@ -213,8 +243,8 @@ public:
     ~wxTextOutputStream();
 
     /**
-        Returns the end-of-line mode. One of @b wxEOL_DOS, @b wxEOL_MAC and @b
-        wxEOL_UNIX.
+        Returns the end-of-line mode. One of ::wxEOL_DOS, ::wxEOL_MAC and
+        ::wxEOL_UNIX.
     */
     wxEOL GetMode();
 
@@ -224,8 +254,8 @@ public:
     void PutChar(wxChar c);
 
     /**
-        Set the end-of-line mode. One of @b wxEOL_NATIVE, @b wxEOL_DOS, @b wxEOL_MAC
-        and @b wxEOL_UNIX.
+        Set the end-of-line mode. One of ::wxEOL_NATIVE, ::wxEOL_DOS,
+        ::wxEOL_MAC and ::wxEOL_UNIX.
     */
     void SetMode(wxEOL mode = wxEOL_NATIVE);
 
@@ -251,8 +281,8 @@ public:
 
     /**
         Writes @a string as a line. Depending on the end-of-line mode the end of
-        line ('\n') characters in the string are converted to the correct
-        line ending terminator.
+        line ('\\n') characters in the string are converted to the correct line
+        ending terminator.
     */
     virtual void WriteString(const wxString& string);
 };
