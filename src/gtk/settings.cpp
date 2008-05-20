@@ -122,11 +122,11 @@ static bool GetColourFromGTKWidget(GdkColor& gdkColor,
 
         case wxGTK_MENUITEM:
             widget = gtk_menu_item_new();
-            
+            break;
+
         case wxGTK_MENUBAR:
             widget = gtk_menu_bar_new();
             break;
-            
     }
 
     GtkStyle *def = gtk_rc_get_style( widget );
