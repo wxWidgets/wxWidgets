@@ -1079,6 +1079,53 @@ wxString wxRichTextXMLHandler::CreateStyle(const wxTextAttr& attr, bool isPara)
     return str;
 }
 
+/// Replace face name with current name for platform.
+/// TODO: introduce a virtual function or settable table to
+/// do this comprehensively.
+bool wxRichTextFixFaceName(wxString& facename)
+{
+    if (facename.IsEmpty())
+        return false;
+
+#ifdef __WXMSW__
+    if (facename == wxT("Times"))
+    {
+        facename = wxT("Times New Roman");
+        return true;
+    }
+    else if (facename == wxT("Helvetica"))
+    {
+        facename = wxT("Arial");
+        return true;
+    }
+    else if (facename == wxT("Courier"))
+    {
+        facename = wxT("Courier New");
+        return true;
+    }
+    else
+        return false;
+#else
+    if (facename == wxT("Times New Roman"))
+    {
+        facename = wxT("Times");
+        return true;
+    }
+    else if (facename == wxT("Arial"))
+    {
+        facename = wxT("Helvetica");
+        return true;
+    }
+    else if (facename == wxT("Courier New"))
+    {
+        facename = wxT("Courier");
+        return true;
+    }
+    else
+        return false;
+#endif
+}
+
 /// Get style parameters
 bool wxRichTextXMLHandler::GetStyle(wxTextAttr& attr, wxXmlNode* node, bool isPara)
 {
@@ -1093,7 +1140,12 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttr& attr, wxXmlNode* node, bool isPa
 
     fontFacename = node->GetAttribute(wxT("fontface"), wxEmptyString);
     if (!fontFacename.IsEmpty())
+    {
         attr.SetFontFaceName(fontFacename);
+        if (GetFlags() & wxRICHTEXT_HANDLER_CONVERT_FACENAMES)
+            wxRichTextFixFaceName(fontFacename);
+    }
+
 
     wxString value;
     //value = node->GetAttribute(wxT("fontfamily"), wxEmptyString);

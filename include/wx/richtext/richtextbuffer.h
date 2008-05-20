@@ -1779,6 +1779,10 @@ protected:
 // in a larger document
 #define wxRICHTEXT_HANDLER_NO_HEADER_FOOTER         0x0080
 
+// Convert the more common face names to names that will work on the current platform
+// in a larger document
+#define wxRICHTEXT_HANDLER_CONVERT_FACENAMES        0x0100
+
 /*!
  * wxRichTextFileHandler
  * Base class for file handlers
