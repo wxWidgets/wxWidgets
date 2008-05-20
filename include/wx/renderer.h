@@ -413,7 +413,7 @@ wxRendererNative& wxRendererNative::GetDefault()
 // ----------------------------------------------------------------------------
 
 #if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXGTK20__)
-#if wxABI_VERSION >= 20804
+#if wxABI_VERSION >= 20808
 
 // Draw a native wxChoice
 void WXDLLEXPORT wxRenderer_DrawChoice(wxWindow* win, wxDC& dc,
