@@ -422,15 +422,35 @@ public:
     */
     bool Alloc(size_t nLen);
 
-    //@{
     /**
-       Appends the string or string literal or character.
+       Appends the string literal @e psz.
+    */
+    wxString& Append(const char* psz);
+
+    /**
+       Appends the wide string literal @e pwz.
+    */
+    wxString& Append(const wchar_t* pwz)
+
+    /**
+       Appends the string literal @e psz with max length @e nLen.
     */
     wxString& Append(const char* psz, size_t nLen);
+
+    /**
+       Appends the wide string literal @e psz with max length @e nLen.
+    */
     wxString& Append(const wchar_t* pwz, size_t nLen)
+
+    /**
+       Appends the string @e s.
+    */
     wxString &Append(const wxString &s);
+
+    /**
+       Appends the character @e ch @e count times.
+    */
     wxString &Append(wxUniChar ch, size_t count = 1u);
-    //@}
 
     /**
         Gets all characters before the first occurrence of @e ch.
@@ -469,7 +489,7 @@ public:
         Case-sensitive comparison.
         Returns a positive value if the string is greater than the argument,
         zero if it is equal to it or a negative value if it is less than the
-        argument (same semantics as the standard @e strcmp() function).
+        argument (same semantics as the standard @c strcmp() function).
         
         See also CmpNoCase(), IsSameAs().
     */
@@ -479,7 +499,7 @@ public:
         Case-insensitive comparison.
         Returns a positive value if the string is greater than the argument,
         zero if it is equal to it or a negative value if it is less than the
-        argument (same semantics as the standard @e strcmp() function).
+        argument (same semantics as the standard @c strcmp() function).
         
         See also Cmp(), IsSameAs().
     */
@@ -522,20 +542,23 @@ public:
     /**
         This function can be used to test if the string ends with the specified
         @e suffix. If it does, the function will return @true and put the
-        beginning of the string before the suffix into @a rest string if it is not
+        beginning of the string before the suffix into @e rest string if it is not
         @NULL. Otherwise, the function returns @false and doesn't
         modify the @e rest.
     */
     bool EndsWith(const wxString& suffix, wxString rest = NULL) const;
 
-    //@{
     /**
-        Searches for the given string. Returns the starting index, or
+        Searches for the given character @e ch. Returns the position or
         @c wxNOT_FOUND if not found.
     */
     int Find(wxUniChar ch, bool fromEnd = false) const;
+    
+    /**
+        Searches for the given string @e sub. Returns the starting position or 
+        @c wxNOT_FOUND if not found.
+    */
     int Find(const wxString& sub) const;
-    //@}
 
     //@{
     /**
@@ -564,9 +587,9 @@ public:
     static wxString FormatV(const wxChar format, va_list argptr);
 
     /**
-        Returns the number of occurrences of @a ch in the string.
-        This is a wxWidgets 1.xx compatibility function; you should not use it in new
-        code.
+        Returns the number of occurrences of @e ch in the string.
+        This is a wxWidgets 1.xx compatibility function; you should not
+        use it in new code.
     */
     int Freq(wxUniChar ch) const;
 
@@ -574,7 +597,7 @@ public:
     /**
         Converts given buffer of binary data from 8-bit string to wxString. In
         Unicode build, the string is interpreted as being in ISO-8859-1
-        encoding. The version without @a len parameter takes NUL-terminated
+        encoding. The version without @e len parameter takes NUL-terminated
         data.
 
         This is a convenience method useful when storing binary data in
