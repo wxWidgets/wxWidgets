@@ -249,7 +249,9 @@ public:
             for a checkable tool (such tool stays pressed after it had been
             toggled) or ::wxITEM_RADIO for a checkable tool which makes part of
             a radio group of tools each of which is automatically unchecked 
-            whenever another button in the group is checked.
+            whenever another button in the group is checked. ::wxITEM_DROPDOWN
+            specifies that a drop-down menu button will appear next to the
+            tool button (only GTK+ and MSW). Call SetDropdownMenu() afterwards.
         @param bitmap1
             The primary tool bitmap.
         @param bitmap2
@@ -271,7 +273,7 @@ public:
             Realize() in order to have the tools appear.
 
         @see AddSeparator(), AddCheckTool(), AddRadioTool(),
-             InsertTool(), DeleteTool(), Realize()
+             InsertTool(), DeleteTool(), Realize(), SetDropdownMenu()
     */
     wxToolBarToolBase* AddTool(int toolId, const wxString& label,
                                const wxBitmap& bitmap1,
@@ -581,7 +583,8 @@ public:
 
     /**
         Sets the dropdown menu for the tool given by its @e id. The tool itself
-        will delete the menu when it's no longer needed.
+        will delete the menu when it's no longer needed. Only supported under
+        GTK+ und MSW.
 
         If you define a EVT_TOOL_DROPDOWN() handler in your program, you must
         call wxEvent::Skip() from it or the menu won't be displayed.
