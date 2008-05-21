@@ -16,6 +16,13 @@
 #include "wx/vidmode.h"
 
 #include <directfb.h>
+#include <directfb_version.h>
+
+// DFB < 1.0 didn't have u8 type, only __u8
+#if DIRECTFB_MAJOR_VERSION == 0
+typedef __u8 u8;
+#endif
+
 
 wxDFB_DECLARE_INTERFACE(IDirectFB);
 wxDFB_DECLARE_INTERFACE(IDirectFBDisplayLayer);
