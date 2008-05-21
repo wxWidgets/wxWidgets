@@ -245,7 +245,7 @@ public:
     
     virtual unsigned int GetColumnCount() const
     {
-        return 3;
+        return 4;
     }
 
     virtual wxString GetColumnType( unsigned int col ) const
@@ -265,9 +265,10 @@ public:
             case 0: variant = node->m_title; break;
             case 1: variant = node->m_artist; break;
             case 2: variant = (long) node->m_year; break;
+            case 3: if (IsContainer(item)) variant = (long) 0; else variant = (long) 80; break; // popularity
             default: 
             {
-                wxLogError( wxT("MyMusicModel::GetValue: wrong column" ));
+                wxLogError( wxT("MyMusicModel::GetValue: wrong column %d"), col );
                 
                 // provoke a crash when mouse button down
                 wxMouseState state = wxGetMouseState();
@@ -595,7 +596,7 @@ public:
     
     virtual wxSize GetSize() const
     { 
-        return wxSize(60,40); 
+        return wxSize(60,30); 
     }
     
     virtual bool SetValue( const wxVariant &WXUNUSED(value) ) { return true; }
@@ -804,6 +805,8 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     wxDataViewColumn *column2 = new wxDataViewColumn( wxT("year"), sr, 2, 80, wxALIGN_LEFT, 
         wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE );
     m_musicCtrl->AppendColumn( column2 );
+
+    m_musicCtrl->AppendProgressColumn( wxT("popularity"), 3, wxDATAVIEW_CELL_INERT, 80 );
 
     MyCustomRenderer *cr = new MyCustomRenderer( wxDATAVIEW_CELL_ACTIVATABLE, wxALIGN_RIGHT );
     wxDataViewColumn *column3 = new wxDataViewColumn( wxT("custom"), cr, 2, -1, wxALIGN_LEFT, 
