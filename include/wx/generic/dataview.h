@@ -414,8 +414,10 @@ public:
            const wxValidator& validator = wxDefaultValidator );
 
     virtual bool AssociateModel( wxDataViewModel *model );
+    
     virtual bool AppendColumn( wxDataViewColumn *col );
     virtual bool PrependColumn( wxDataViewColumn *col );
+    virtual bool InsertColumn( unsigned int pos, wxDataViewColumn *col );
 
     virtual void DoSetExpanderColumn();
     virtual void DoSetIndent();

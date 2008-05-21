@@ -698,6 +698,7 @@ public:
 
 
     virtual bool PrependColumn( wxDataViewColumn *col );
+    virtual bool InsertColumn( unsigned int pos, wxDataViewColumn *col );
     virtual bool AppendColumn( wxDataViewColumn *col );
 
     virtual unsigned int GetColumnCount() const = 0;

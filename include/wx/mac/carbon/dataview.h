@@ -33,11 +33,11 @@ public:
 //
 // inherited methods from wxDataViewRendererBase
 //
-  virtual int GetAlignment(void) const
+  virtual int GetAlignment() const
   {
     return this->m_alignment;
   }
-  virtual wxDataViewCellMode GetMode(void) const
+  virtual wxDataViewCellMode GetMode() const
   {
     return this->m_mode;
   }
@@ -60,18 +60,18 @@ public:
 //
 // implementation
 //
-  WXDataBrowserItemDataRef GetDataReference(void) const
+  WXDataBrowserItemDataRef GetDataReference() const
   {
     return this->m_dataReference;
   }
-  wxVariant const& GetValue(void) const
+  wxVariant const& GetValue() const
   {
     return this->m_value;
   }
 
-  virtual WXDataBrowserPropertyType GetPropertyType(void) const = 0;
+  virtual WXDataBrowserPropertyType GetPropertyType() const = 0;
 
-  virtual bool Render(void) = 0; // a call to the appropriate data browser function filling the data reference with the stored datum;
+  virtual bool Render() = 0; // a call to the appropriate data browser function filling the data reference with the stored datum;
                                  // returns 'true' if the data value could be rendered, 'false' otherwise
 
   void SetDataReference(WXDataBrowserItemDataRef const& newDataReference)
@@ -109,7 +109,7 @@ public:
 //
   wxDataViewCustomRenderer(wxString const& varianttype=wxT("string"), wxDataViewCellMode mode=wxDATAVIEW_CELL_INERT, int align=wxDVR_DEFAULT_ALIGNMENT);
   
-  virtual ~wxDataViewCustomRenderer(void);
+  virtual ~wxDataViewCustomRenderer();
 
   void RenderText( const wxString &text, int xoffset, wxRect cell, wxDC *dc, int state );
 
@@ -146,15 +146,15 @@ public:
 //
 // device context handling
 //
-  virtual wxDC* GetDC(void); // creates a device context and keeps it
+  virtual wxDC* GetDC(); // creates a device context and keeps it
 
 //
 // implementation
 //
-  virtual bool Render(void); // declared in wxDataViewRenderer but will not be used here, therefore calling this function will
+  virtual bool Render(); // declared in wxDataViewRenderer but will not be used here, therefore calling this function will
                              // return 'true' without having done anything
 
-  virtual WXDataBrowserPropertyType GetPropertyType(void) const;
+  virtual WXDataBrowserPropertyType GetPropertyType() const;
 
   void SetDC(wxDC* newDCPtr); // this method takes ownership of the pointer
 
@@ -188,12 +188,12 @@ public:
 //
 // inherited functions from wxDataViewRenderer
 //
-  virtual bool Render(void);
+  virtual bool Render();
 
 //
 // implementation
 //
-  virtual WXDataBrowserPropertyType GetPropertyType(void) const;
+  virtual WXDataBrowserPropertyType GetPropertyType() const;
 
 protected:
 private:
@@ -231,12 +231,12 @@ public:
 //
 // inherited functions from wxDataViewRenderer
 //
-  virtual bool Render(void);
+  virtual bool Render();
 
 //
 // implementation
 //
-  virtual WXDataBrowserPropertyType GetPropertyType(void) const;
+  virtual WXDataBrowserPropertyType GetPropertyType() const;
 
 protected:
 private:
@@ -255,12 +255,12 @@ public:
 //
 // inherited functions from wxDataViewRenderer
 //
-  virtual bool Render(void);
+  virtual bool Render();
   
 //
 // implementation
 //
-  virtual WXDataBrowserPropertyType GetPropertyType(void) const;
+  virtual WXDataBrowserPropertyType GetPropertyType() const;
   
 protected:
 private:
@@ -279,12 +279,12 @@ public:
 //
 // inherited functions from wxDataViewRenderer
 //
-  virtual bool Render(void);
+  virtual bool Render();
 
 //
 // implementation
 //
-  virtual WXDataBrowserPropertyType GetPropertyType(void) const;
+  virtual WXDataBrowserPropertyType GetPropertyType() const;
 
 protected:
 private:
@@ -304,12 +304,12 @@ public:
 //
 // inherited functions from wxDataViewRenderer
 //
-  virtual bool Render(void);
+  virtual bool Render();
 
 //
 // implementation
 //
-  virtual WXDataBrowserPropertyType GetPropertyType(void) const;
+  virtual WXDataBrowserPropertyType GetPropertyType() const;
 
 protected:
 private:
@@ -328,12 +328,12 @@ public:
 //
 // inherited functions from wxDataViewRenderer
 //
-  virtual bool Render(void);
+  virtual bool Render();
 
 //
 // implementation
 //
-  virtual WXDataBrowserPropertyType GetPropertyType(void) const;
+  virtual WXDataBrowserPropertyType GetPropertyType() const;
 
 protected:
 private:
@@ -358,48 +358,48 @@ public:
 //
 // inherited methods from wxDataViewColumnBase
 //
-  virtual wxAlignment GetAlignment(void) const
+  virtual wxAlignment GetAlignment() const
   {
     return this->m_alignment;
   }
-  virtual int GetFlags(void) const
+  virtual int GetFlags() const
   {
     return this->m_flags;
   }
-  virtual int GetMaxWidth(void) const
+  virtual int GetMaxWidth() const
   {
     return this->m_maxWidth;
   }
-  virtual int GetMinWidth(void) const
+  virtual int GetMinWidth() const
   {
     return this->m_minWidth;
   }
-  virtual wxString GetTitle(void) const
+  virtual wxString GetTitle() const
   {
     return this->m_title;
   }
-  virtual int GetWidth(void) const
+  virtual int GetWidth() const
   {
     return this->m_width;
   }
 
-  virtual bool IsHidden(void) const
+  virtual bool IsHidden() const
   {
     return false; // not implemented
   }
-  virtual bool IsReorderable(void) const
+  virtual bool IsReorderable() const
   {
     return ((this->m_flags & wxDATAVIEW_COL_REORDERABLE) != 0);
   }
-  virtual bool IsResizeable(void) const
+  virtual bool IsResizeable() const
   {
     return ((this->m_flags & wxDATAVIEW_COL_RESIZABLE) != 0);
   }
-  virtual bool IsSortable(void) const
+  virtual bool IsSortable() const
   {
     return ((this->m_flags & wxDATAVIEW_COL_SORTABLE) != 0);
   }
-  virtual bool IsSortOrderAscending(void) const
+  virtual bool IsSortOrderAscending() const
   {
     return this->m_ascending;
   }
@@ -465,7 +465,7 @@ class WXDLLIMPEXP_ADV wxDataViewCtrl: public wxDataViewCtrlBase
 {
 public:
  // Constructors / destructor:
-  wxDataViewCtrl(void)
+  wxDataViewCtrl()
   {
     this->Init();
   }
@@ -480,7 +480,7 @@ public:
   bool Create(wxWindow *parent, wxWindowID id, wxPoint const& pos=wxDefaultPosition, wxSize const& size=wxDefaultSize, long style=0,
               wxValidator const& validator=wxDefaultValidator);
 
-  virtual wxControl* GetMainWindow(void) // should disappear as it is not of any use for the native implementation
+  virtual wxControl* GetMainWindow() // should disappear as it is not of any use for the native implementation
   {
     return this;
   }
@@ -489,34 +489,36 @@ public:
   virtual bool AssociateModel(wxDataViewModel* model);
 
   virtual bool AppendColumn(wxDataViewColumn* columnPtr);
-  virtual bool ClearColumns(void);
+  virtual bool PrependColumn(wxDataViewColumn* columnPtr);
+  virtual bool InsertColumn( unsigned int pos, wxDataViewColumn *col );
+  
+  virtual bool ClearColumns();
   virtual bool DeleteColumn(wxDataViewColumn* columnPtr);
   virtual wxDataViewColumn* GetColumn(unsigned int pos) const;
-  virtual unsigned int GetColumnCount(void) const;
+  virtual unsigned int GetColumnCount() const;
   virtual int GetColumnPosition(wxDataViewColumn const* columnPtr) const;
-  virtual bool PrependColumn(wxDataViewColumn* columnPtr);
 
   virtual void Collapse(wxDataViewItem const& item);
   virtual void EnsureVisible(wxDataViewItem const& item, wxDataViewColumn const* columnPtr=NULL);
   virtual void Expand(wxDataViewItem const& item);
   
-  virtual wxDataViewColumn* GetSortingColumn(void) const;
+  virtual wxDataViewColumn* GetSortingColumn() const;
 
-  virtual unsigned int GetCount(void) const;
+  virtual unsigned int GetCount() const;
   virtual wxRect GetItemRect(wxDataViewItem const& item, wxDataViewColumn const* columnPtr) const;
-  virtual wxDataViewItem GetSelection(void) const;
+  virtual wxDataViewItem GetSelection() const;
   virtual int GetSelections(wxDataViewItemArray& sel) const;
   
   virtual void HitTest(wxPoint const& point, wxDataViewItem& item, wxDataViewColumn*& columnPtr) const;
 
   virtual bool IsSelected(wxDataViewItem const& item) const;
 
-  virtual void SelectAll(void);
+  virtual void SelectAll();
   virtual void Select(wxDataViewItem const& item);
   virtual void SetSelections(wxDataViewItemArray const& sel);
 
   virtual void Unselect(wxDataViewItem const& item);
-  virtual void UnselectAll(void);
+  virtual void UnselectAll();
 
 //
 // implementation
@@ -526,24 +528,24 @@ public:
   void AddChildrenLevel(wxDataViewItem const& parentItem);
 
  // finishes editing of custom items; if no custom item is currently edited the method does nothing
-  void FinishCustomItemEditing(void);
+  void FinishCustomItemEditing();
 
  // returns a pointer to a column;
  // in case the pointer cannot be found NULL is returned:
   wxDataViewColumn* GetColumnPtr(WXDataBrowserPropertyID propertyID) const;
  // returns the current being rendered item of the customized renderer (this item is only valid during editing)
-  wxDataViewItem const& GetCustomRendererItem(void) const
+  wxDataViewItem const& GetCustomRendererItem() const
   {
     return this->m_CustomRendererItem;
   }
  // returns a pointer to a customized renderer (this pointer is only valid during editing)
-  wxDataViewCustomRenderer* GetCustomRendererPtr(void) const
+  wxDataViewCustomRenderer* GetCustomRendererPtr() const
   {
     return this->m_CustomRendererPtr;
   }
 
  // checks if currently a delete process is running:
-  bool IsDeleting(void) const
+  bool IsDeleting() const
   {
     return this->m_Deleting;
   }
@@ -556,7 +558,7 @@ public:
   {
     this->m_cgContext = context;
   }
-  void* MacGetDrawingContext(void) const
+  void* MacGetDrawingContext() const
   {
     return this->m_cgContext;
   }
@@ -587,8 +589,8 @@ public:
 
 protected:
  // inherited methods from wxDataViewCtrlBase:
-  virtual void DoSetExpanderColumn(void);
-  virtual void DoSetIndent(void);
+  virtual void DoSetExpanderColumn();
+  virtual void DoSetIndent();
 
  // event handling:
   void OnSize(wxSizeEvent &event);
@@ -598,7 +600,7 @@ private:
   WX_DECLARE_HASH_MAP(WXDataBrowserPropertyID,wxDataViewColumn*,wxIntegerHash,wxIntegerEqual,ColumnPointerHashMapType);
 
  // initializing of local variables:
-  void Init(void);
+  void Init();
 
 ///
 // variables

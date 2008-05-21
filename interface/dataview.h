@@ -687,17 +687,19 @@ public:
 class wxDataViewCtrl : public wxControl
 {
 public:
-    //@{
+    /**
+        Default Constructor.
+    */
+    wxDataViewCtrl();
+    
     /**
         Constructor. Calls Create().
     */
-    wxDataViewCtrl();
     wxDataViewCtrl(wxWindow* parent, wxWindowID id,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator);
-    //@}
 
     /**
         Destructor.
@@ -705,13 +707,24 @@ public:
     ~wxDataViewCtrl();
 
     /**
-        Add a wxDataViewColumn to the control. Returns
-        @e @true on success.
+        Appends a wxDataViewColumn to the control. Returns @true on success.
         Note that there is a number of short cut methods which implicitly create
         a wxDataViewColumn and a wxDataViewRenderer for it (see below).
     */
     virtual bool AppendColumn(wxDataViewColumn* col);
 
+    /**
+        Prepends a wxDataViewColumn to the control. Returns @true on success.
+        Note that there is a number of short cut methods which implicitly create
+        a wxDataViewColumn and a wxDataViewRenderer for it.
+    */
+    virtual bool PrependColumn(wxDataViewColumn* col);
+
+    /**
+        Inserts a wxDataViewColumn to the control. Returns @true on success.
+    */
+    virtual bool InsertColumn(unsigned int pos, wxDataViewColumn* col);
+    
     //@{
     /**
         Appends a column for rendering a bitmap. Returns the wxDataViewColumn

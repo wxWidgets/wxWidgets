@@ -1205,6 +1205,13 @@ wxDataViewCtrlBase::PrependColumn( wxDataViewColumn *col )
     return true;
 }
 
+bool 
+wxDataViewCtrlBase::InsertColumn( unsigned int WXUNUSED(pos), wxDataViewColumn *col )
+{
+    col->SetOwner( (wxDataViewCtrl*) this );
+    return true;
+}
+
 // ---------------------------------------------------------
 // wxDataViewEvent
 // ---------------------------------------------------------

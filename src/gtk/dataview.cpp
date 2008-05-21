@@ -3783,6 +3783,28 @@ bool wxDataViewCtrl::PrependColumn( wxDataViewColumn *col )
     return true;
 }
 
+bool wxDataViewCtrl::InsertColumn( unsigned int pos, wxDataViewColumn *col )
+{
+    if (!wxDataViewCtrlBase::InsertColumn(pos,col))
+        return false;
+
+    m_cols.Insert( pos, col );
+
+#ifdef __WXGTK26__
+    if (!gtk_check_version(2,6,0))
+    {
+        if (gtk_tree_view_column_get_sizing( GTK_TREE_VIEW_COLUMN(col->GetGtkHandle()) ) !=
+               GTK_TREE_VIEW_COLUMN_FIXED)
+           gtk_tree_view_set_fixed_height_mode( GTK_TREE_VIEW(m_treeview), FALSE );
+    }
+#endif
+
+    gtk_tree_view_insert_column( GTK_TREE_VIEW(m_treeview),
+                                 GTK_TREE_VIEW_COLUMN(col->GetGtkHandle()), pos );
+
+    return true;
+}
+
 unsigned int wxDataViewCtrl::GetColumnCount() const
 {
     return m_cols.GetCount();
