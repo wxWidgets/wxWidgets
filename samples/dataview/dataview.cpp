@@ -175,13 +175,22 @@ public:
     
     // helper method for wxLog
     
-    wxString GetTitle( const wxDataViewItem &item )
+    wxString GetTitle( const wxDataViewItem &item ) const
     {
         MyMusicModelNode *node = (MyMusicModelNode*) item.GetID();
         if (!node)
             return wxEmptyString;
             
         return node->m_title;
+    }
+    
+    int GetYear( const wxDataViewItem &item ) const
+    {
+        MyMusicModelNode *node = (MyMusicModelNode*) item.GetID();
+        if (!node)
+            return 2000;
+            
+        return node->m_year;
     }
     
     // helper methods to change the model
@@ -245,7 +254,7 @@ public:
     
     virtual unsigned int GetColumnCount() const
     {
-        return 4;
+        return 5;
     }
 
     virtual wxString GetColumnType( unsigned int col ) const
@@ -265,7 +274,20 @@ public:
             case 0: variant = node->m_title; break;
             case 1: variant = node->m_artist; break;
             case 2: variant = (long) node->m_year; break;
-            case 3: if (IsContainer(item)) variant = (long) 0; else variant = (long) 80; break; // popularity
+            case 3: 
+               // wxMac doesn't conceal the popularity progress renderer, return 0 for containers
+               if (IsContainer(item)) 
+                  variant = (long) 0; 
+               else 
+                  variant = (long) 80;  // all music is very 80% popular
+               break;
+            case 4: 
+               // Make size of red square depend on year
+               if (GetYear(item) < 1900) 
+                  variant = (long) 35; 
+               else 
+                  variant = (long) 25; 
+               break; 
             default: 
             {
                 wxLogError( wxT("MyMusicModel::GetValue: wrong column %d"), col );
@@ -569,7 +591,8 @@ class MyCustomRenderer: public wxDataViewCustomRenderer
 {
 public:
     MyCustomRenderer( wxDataViewCellMode mode, int alignment ) :
-       wxDataViewCustomRenderer( wxString("long"), mode, alignment ) { }
+       wxDataViewCustomRenderer( wxString("long"), mode, alignment )
+       { m_height = 25; }
        
     virtual bool Render( wxRect rect, wxDC *dc, int WXUNUSED(state) )
     {
@@ -596,11 +619,19 @@ public:
     
     virtual wxSize GetSize() const
     { 
-        return wxSize(60,30); 
+        return wxSize(60,m_height); 
     }
     
-    virtual bool SetValue( const wxVariant &WXUNUSED(value) ) { return true; }
+    virtual bool SetValue( const wxVariant &value ) 
+    { 
+        m_height = value;
+        return true;
+    }
+    
     virtual bool GetValue( wxVariant &WXUNUSED(value) ) const { return true; }
+    
+private:
+    long m_height;
 };
 
 // -------------------------------------
@@ -809,7 +840,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     m_musicCtrl->AppendProgressColumn( wxT("popularity"), 3, wxDATAVIEW_CELL_INERT, 80 );
 
     MyCustomRenderer *cr = new MyCustomRenderer( wxDATAVIEW_CELL_ACTIVATABLE, wxALIGN_RIGHT );
-    wxDataViewColumn *column3 = new wxDataViewColumn( wxT("custom"), cr, 2, -1, wxALIGN_LEFT, 
+    wxDataViewColumn *column3 = new wxDataViewColumn( wxT("custom"), cr, 4, -1, wxALIGN_LEFT, 
         wxDATAVIEW_COL_RESIZABLE );
     m_musicCtrl->AppendColumn( column3 );
 
