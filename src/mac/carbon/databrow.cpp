@@ -1018,7 +1018,7 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserDrawItemProc(DataBrowse
   dataViewCustomRendererPtr->SetValue(dataToRender);
 
   wxDataViewItem dataitem( reinterpret_cast<void*>(itemID) );
-  dataViewCtrlPtr->GetModel()->GetValue(dataToRender,dataitem,columnIndex);
+  dataViewCtrlPtr->GetModel()->GetValue(dataToRender,dataitem,dataViewColumnPtr->GetModelColumn());
   dataViewCustomRendererPtr->SetValue(dataToRender);
 
  // try to determine the content's size (drawable part):
