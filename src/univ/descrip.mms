@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 4 January 2008                                                      *
+# Date : 21 May 2008                                                         *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -26,7 +26,6 @@ OBJECTS = \
 		checkbox.obj,\
 		checklst.obj,\
 		choice.obj,\
-		colschem.obj,\
 		control.obj,\
 		dialog.obj,\
 		framuniv.obj,\
@@ -40,6 +39,7 @@ OBJECTS = \
 		scrarrow.obj,\
 		scrolbar.obj,\
 		scrthumb.obj,\
+		settingsuniv.obj,\
 		slider.obj,\
 		spinbutt.obj,\
 		statbmp.obj,\
@@ -67,7 +67,6 @@ SOURCES =\
 		checkbox.cpp \
 		checklst.cpp \
 		choice.cpp \
-		colschem.cpp \
 		control.cpp \
 		dialog.cpp \
 		framuniv.cpp \
@@ -81,6 +80,7 @@ SOURCES =\
 		scrarrow.cpp \
 		scrolbar.cpp \
 		scrthumb.cpp \
+		settingsuniv.cpp \
 		slider.cpp \
 		spinbutt.cpp \
 		statbmp.cpp \
@@ -113,7 +113,6 @@ button.obj : button.cpp
 checkbox.obj : checkbox.cpp
 checklst.obj : checklst.cpp
 choice.obj : choice.cpp
-colschem.obj : colschem.cpp
 control.obj : control.cpp
 dialog.obj : dialog.cpp
 framuniv.obj : framuniv.cpp
@@ -127,6 +126,7 @@ radiobut.obj : radiobut.cpp
 scrarrow.obj : scrarrow.cpp
 scrolbar.obj : scrolbar.cpp
 scrthumb.obj : scrthumb.cpp
+settingsuniv.obj : settingsuniv.cpp
 slider.obj : slider.cpp
 spinbutt.obj : spinbutt.cpp
 statbmp.obj : statbmp.cpp

@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 26 November 2007                                                    *
+# Date : 21 May 2008                                                         *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -65,7 +65,6 @@ OBJECTS = \
 	tooltip.obj,\
 	toplevel.obj,\
 	utilsgtk.obj,\
-	utilsres.obj,\
 	window.obj
 
 OBJECTS0= \
@@ -164,7 +163,6 @@ SOURCES =\
 	tooltip.cpp,\
 	toplevel.cpp,\
 	utilsgtk.cpp,\
-	utilsres.cpp,\
 	window.cpp,\
 	treeentry_gtk.c,textentry.cpp,filectrl.cpp,print.cpp,win_gtk.cpp,\
 	mnemonics.cpp
@@ -252,7 +250,6 @@ timer.obj : timer.cpp
 tooltip.obj : tooltip.cpp
 toplevel.obj : toplevel.cpp
 utilsgtk.obj : utilsgtk.cpp
-utilsres.obj : utilsres.cpp
 window.obj : window.cpp
 treeentry_gtk.obj : treeentry_gtk.c
 textentry.obj : textentry.cpp

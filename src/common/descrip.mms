@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 13 May 2008                                                         *
+# Date : 21 May 2008                                                         *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -61,6 +61,7 @@ OBJECTS = \
 		base64.obj,\
 		bmpbase.obj,\
 		btncmn.obj,\
+		bmpcboxcmn.obj,\
 		bookctrl.obj,\
 		calctrlcmn.obj,\
 		choiccmn.obj,\
@@ -235,6 +236,7 @@ SOURCES = \
 		base64.cpp,\
 		bmpbase.cpp,\
 		btncmn.cpp,\
+		bmpcboxcmn.cpp,\
 		bookctrl.cpp,\
 		calctrlcmn.cpp,\
 		cairo.cpp,\
@@ -464,6 +466,7 @@ artstd.obj : artstd.cpp
 base64.obj : base64.cpp
 bmpbase.obj : bmpbase.cpp
 btncmn.obj : btncmn.cpp
+bmpcboxcmn.obj : bmpcboxcmn.cpp
 bookctrl.obj : bookctrl.cpp
 choiccmn.obj : choiccmn.cpp
 clipcmn.obj : clipcmn.cpp
