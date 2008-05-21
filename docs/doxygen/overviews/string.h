@@ -16,7 +16,6 @@ Classes: wxString, wxArrayString, wxStringTokenizer
 @li @ref overview_string_comparison
 @li @ref overview_string_advice
 @li @ref overview_string_related
-@li @ref overview_string_refcount
 @li @ref overview_string_tuning
 
 
@@ -54,13 +53,10 @@ memory for C strings; working with fixed size buffers almost inevitably leads
 to buffer overflows. At last, C++ has a standard string class (std::string). So
 why the need for wxString? There are several advantages:
 
-@li <b>Efficiency:</b> This class was made to be as efficient as possible: both in
-    terms of size (each wxString objects takes exactly the same space as a
-    <tt>char*</tt> pointer, see @ref overview_string_refcount
-    "reference counting") and speed. It also provides performance
-    @ref overview_string_tuning "statistics gathering code" which may be
-    enabled to fine tune the memory allocation strategy for your particular
-    application - and the gain might be quite big.
+@li <b>Efficiency:</b> Since wxWidgets 3.0 wxString uses std::string (UTF8
+    mode under Linux, Unix and OS X) or std::wstring (MSW) internally by
+    default to store its constent. wxString will therefore inherit the
+    performance characteristics from std::string.
 @li <b>Compatibility:</b> This class tries to combine almost full compatibility
     with the old wxWidgets 1.xx wxString class, some reminiscence to MFC
     CString class and 90% of the functionality of std::string class.
@@ -70,9 +66,8 @@ why the need for wxString? There are several advantages:
     wxString::Printf. Of course, all the standard string operations are
     supported as well.
 @li <b>Unicode wxString is Unicode friendly:</b> it allows to easily convert to
-    and from ANSI and Unicode strings in any build mode (see the
-    @ref overview_unicode "unicode overview" for more details) and maps to
-    either @c string or @c wstring transparently depending on the current mode.
+    and from ANSI and Unicode strings (see the @ref overview_unicode "unicode overview"
+    for more details) and maps to @c wstring transparently.
 @li <b>Used by wxWidgets:</b> And, of course, this class is used everywhere
     inside wxWidgets so there is no performance loss which would result from
     conversions of objects of any other string class (including std::string) to
@@ -80,7 +75,7 @@ why the need for wxString? There are several advantages:
 
 However, there are several problems as well. The most important one is probably
 that there are often several functions to do exactly the same thing: for
-example, to get the length of the string either one of @c length(),
+example, to get the length of the string either one of wxString::length(),
 wxString::Len() or wxString::Length() may be used. The first function, as
 almost all the other functions in lowercase, is std::string compatible. The
 second one is the "native" wxString version and the last one is the wxWidgets
@@ -144,9 +139,8 @@ easy, just make the function return wxString instead of a C string.
 
 This leads us to the following general advice: all functions taking string
 arguments should take <tt>const wxString</tt> (this makes assignment to the
-strings inside the function faster because of
-@ref overview_string_refcount "reference counting") and all functions returning
-strings should return wxString - this makes it safe to return local variables.
+strings inside the function faster) and all functions returning strings
+should return wxString - this makes it safe to return local variables.
 
 
 @section overview_string_related String Related Functions and Classes
@@ -182,36 +176,11 @@ is vastly better from a performance point of view than a wxObjectArray of
 wxStrings.
 
 
-@section overview_string_refcount Reference Counting and Why You Shouldn't Care
-
-All considerations for wxObject-derived
-@ref overview_refcount "reference counted" objects are valid also for wxString,
-even if it does not derive from wxObject.
-
-Probably the unique case when you might want to think about reference counting
-is when a string character is taken from a string which is not a constant (or
-a constant reference). In this case, due to C++ rules, the "read-only"
-@c operator[] (which is the same as wxString::GetChar()) cannot be chosen and
-the "read/write" @c operator[] (the same as wxString::GetWritableChar()) is
-used instead. As the call to this operator may modify the string, its data is
-unshared (COW is done) and so if the string was really shared there is some
-performance loss (both in terms of speed and memory consumption). In the rare
-cases when this may be important, you might prefer using wxString::GetChar()
-instead of the array subscript operator for this reasons. Please note that
-wxString::at() method has the same problem as the subscript operator in this
-situation and so using it is not really better. Also note that if all string
-arguments to your functions are passed as <tt>const wxString</tt> (see the
-@ref overview_string_advice section) this situation will almost never arise
-because for constant references the correct operator is called automatically.
-
-
 @section overview_string_tuning Tuning wxString for Your Application
 
 @note This section is strictly about performance issues and is absolutely not
 necessary to read for using wxString class. Please skip it unless you feel
-familiar with profilers and relative tools. If you do read it, please also
-read the preceding section about
-@ref overview_string_refcount "reference counting".
+familiar with profilers and relative tools. 
 
 For the performance reasons wxString doesn't allocate exactly the amount of
 memory needed for each string. Instead, it adds a small amount of space to each
@@ -223,13 +192,13 @@ subsequently adding one character at a time to it, as for example in:
 // delete all vowels from the string
 wxString DeleteAllVowels(const wxString& original)
 {
+    wxString vowels( "aeuioAEIOU" );
     wxString result;
-
-    size_t len = original.length();
-    for ( size_t n = 0; n < len; n++ )
+    wxString::const_iterator i;
+    for ( i = original.begin(); i != original.end(); ++i )
     {
-        if ( strchr("aeuio", tolower(original[n])) == NULL )
-            result += original[n];
+        if (vowels.Find( *i ) == wxNOT_FOUND)
+            result += *i;
     }
 
     return result;
