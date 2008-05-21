@@ -309,58 +309,58 @@ public:
     
 
     /**
-       Constructs a string from the string literal @c psz using
+       Constructs a string from the string literal @e psz using
        the current locale encoding to convert it to Unicode (wxConvLibc).
     */
     wxString(const char *psz);
 
     /**
-       Constructs a string from the string literal @c psz using
-       @c conv to convert it Unicode.
+       Constructs a string from the string literal @e psz using
+       @e conv to convert it Unicode.
     */
     wxString(const char *psz, const wxMBConv& conv);
 
     /**
-       Constructs a string from the first @ nLength character of the string literal @c psz using
+       Constructs a string from the first @e nLength character of the string literal @e psz using
        the current locale encoding to convert it to Unicode (wxConvLibc).
     */
     wxString(const char *psz, size_t nLength);
 
     /**
-       Constructs a string from the first @ nLength character of the string literal @c psz using
-       @c conv to convert it Unicode.
+       Constructs a string from the first @e nLength character of the string literal @e psz using
+       @e conv to convert it Unicode.
     */
     wxString(const char *psz, const wxMBConv& conv, size_t nLength);
 
     /**
-       Constructs a string from the string literal @c pwz.
+       Constructs a string from the string literal @e pwz.
     */
     wxString(const wchar_t *pwz);
 
     /**
-       Constructs a string from the first @ nLength characters of the string literal @c pwz.
+       Constructs a string from the first @e nLength characters of the string literal @e pwz.
     */
     wxString(const wchar_t *pwz, size_t nLength);
 
     /**
-       Constructs a string from @c buf using the using
+       Constructs a string from @e buf using the using
        the current locale encoding to convert it to Unicode.
     */
     wxString(const wxCharBuffer& buf);
     
     /**
-       Constructs a string from @c buf.
+       Constructs a string from @e buf.
     */
     wxString(const wxWCharBuffer& buf);
 
     /**
-       Constructs a string from @str using the using the current locale encoding 
+       Constructs a string from @e str using the using the current locale encoding 
        to convert it to Unicode (wxConvLibc).
     */
     wxString(const std::string& str);
     
     /**
-       Constructs a string from @str.
+       Constructs a string from @e str.
     */
     wxString(const std::wstring& str);
     
@@ -373,13 +373,13 @@ public:
 
     /**
         Gets all the characters after the first occurrence of @e ch.
-        Returns the empty string if @a ch is not found.
+        Returns the empty string if @e ch is not found.
     */
     wxString AfterFirst(wxUniChar ch) const;
 
     /**
         Gets all the characters after the last occurrence of @e ch.
-        Returns the whole string if @a ch is not found.
+        Returns the whole string if @e ch is not found.
     */
     wxString AfterLast(wxUniChar ch) const;
 
