@@ -89,7 +89,6 @@ enum wxGtkColourType
 {
     wxGTK_FG,
     wxGTK_BG,
-    wxGTK_TEXT,
     wxGTK_BASE
 };
 
@@ -148,10 +147,6 @@ static bool GetColourFromGTKWidget(GdkColor& gdkColor,
 
             case wxGTK_BG:
                 gdkColor = def->bg[state];
-                break;
-
-            case wxGTK_TEXT:
-                gdkColor = def->text[state];
                 break;
 
             case wxGTK_BASE:
@@ -325,7 +320,7 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
                 gdkColor.green =
                 gdkColor.blue = 0;
                 GetColourFromGTKWidget(
-                    gdkColor, wxGTK_BUTTON, GTK_STATE_SELECTED, wxGTK_TEXT);
+                    gdkColor, wxGTK_BUTTON, GTK_STATE_SELECTED, wxGTK_FG);
                 gs_objects.m_colHighlightText = wxColour(gdkColor);
             }
             color = gs_objects.m_colHighlightText;
