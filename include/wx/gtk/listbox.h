@@ -93,11 +93,13 @@ public:
     bool       m_hasCheckBoxes;
 #endif // wxUSE_CHECKLISTBOX
 
-    bool       m_blockEvent;
-
     struct _GtkTreeEntry* GtkGetEntry(unsigned pos) const;
-    void GtkDeselectAll();
-    void GtkSetSelection(int n, const bool select, const bool blockEvent);
+
+    void GtkDisableEvents();
+    void GtkEnableEvents();
+    
+    wxArrayInt m_oldSelection;
+    void GtkUpdateOldSelection();
 
 protected:
     virtual void DoClear();

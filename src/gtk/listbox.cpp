@@ -119,8 +119,6 @@ gtk_listitem_changed_callback(GtkTreeSelection * WXUNUSED(selection),
 {
     if (g_blockEventsOnDrag) return;
 
-    if (listbox->m_blockEvent) return;
-
     wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, listbox->GetId() );
     event.SetEventObject( listbox );
 
@@ -367,8 +365,6 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
                         long style, const wxValidator& validator,
                         const wxString &name )
 {
-    m_blockEvent = false;
-
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
@@ -435,12 +431,6 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
     gtk_tree_view_set_enable_search(m_treeview, FALSE);
 
-
-    GtkTreeSelection* selection = gtk_tree_view_get_selection( m_treeview );
-
-    g_signal_connect_after (selection, "changed",
-                            G_CALLBACK (gtk_listitem_changed_callback), this);
-
     GtkSelectionMode mode;
     if (style & wxLB_MULTIPLE)
     {
@@ -457,6 +447,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
         mode = GTK_SELECTION_SINGLE;
     }
 
+    GtkTreeSelection* selection = gtk_tree_view_get_selection( m_treeview );
     gtk_tree_selection_set_mode( selection, mode );
 
     // Handle sortable stuff
@@ -497,6 +488,9 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
     PostCreation(size);
     SetInitialSize(size); // need this too because this is a wxControlWithItems
 
+    g_signal_connect_after (selection, "changed",
+                            G_CALLBACK (gtk_listitem_changed_callback), this);
+ 
     return true;
 }
 
@@ -505,6 +499,24 @@ wxListBox::~wxListBox()
     m_hasVMT = false;
 
     Clear();
+}
+
+void wxListBox::GtkDisableEvents()
+{
+    GtkTreeSelection* selection = gtk_tree_view_get_selection( m_treeview );
+
+    g_signal_handlers_block_by_func(selection,
+                                (gpointer) gtk_listitem_changed_callback, this);
+}
+
+void wxListBox::GtkEnableEvents()
+{
+    GtkTreeSelection* selection = gtk_tree_view_get_selection( m_treeview );
+
+    g_signal_handlers_unblock_by_func(selection,
+                                (gpointer) gtk_listitem_changed_callback, this);
+                                
+    GtkUpdateOldSelection();
 }
 
 // ----------------------------------------------------------------------------
@@ -793,43 +805,25 @@ bool wxListBox::IsSelected( int n ) const
 
 void wxListBox::DoSetSelection( int n, bool select )
 {
+    wxCHECK_RET( m_treeview != NULL, wxT("invalid listbox") );
+
+    GtkDisableEvents();
+    
+    GtkTreeSelection* selection = gtk_tree_view_get_selection(m_treeview);
+
     // passing -1 to SetSelection() is documented to deselect all items
     if ( n == wxNOT_FOUND )
     {
-        // ... and not generate any events in the process
-        GtkDeselectAll();
+        gtk_tree_selection_unselect_all(selection);
+        GtkEnableEvents();
         return;
     }
 
     wxCHECK_RET( IsValid(n), wxT("invalid index in wxListBox::SetSelection") );
 
-    // don't generate the selection event
-    GtkSetSelection(n, select, true);
-}
-
-void wxListBox::GtkDeselectAll()
-{
-    wxCHECK_RET( m_treeview != NULL, wxT("invalid listbox") );
-
-    GtkTreeSelection* selection = gtk_tree_view_get_selection(m_treeview);
-
-    m_blockEvent = true;
-
-    gtk_tree_selection_unselect_all(selection);
-
-    m_blockEvent = false;
-}
-
-void wxListBox::GtkSetSelection(int n, const bool select, const bool blockEvent)
-{
-    wxCHECK_RET( m_treeview != NULL, wxT("invalid listbox") );
-
-    GtkTreeSelection* selection = gtk_tree_view_get_selection(m_treeview);
-
+    
     GtkTreeIter iter;
     wxCHECK_RET( GtkGetIteratorFor(n, &iter), wxT("Invalid index") );
-
-    m_blockEvent = blockEvent;
 
     if (select)
         gtk_tree_selection_select_iter(selection, &iter);
@@ -843,7 +837,13 @@ void wxListBox::GtkSetSelection(int n, const bool select, const bool blockEvent)
 
     gtk_tree_path_free(path);
 
-    m_blockEvent = false;
+    GtkEnableEvents();
+}
+
+void wxListBox::GtkUpdateOldSelection()
+{
+    if (HasFlag(wxLB_MULTIPLE))
+        GetSelections( m_oldSelection );
 }
 
 void wxListBox::DoScrollToCell(int n, float alignY, float alignX)
