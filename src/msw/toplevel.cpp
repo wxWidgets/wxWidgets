@@ -1080,7 +1080,7 @@ void wxTopLevelWindowMSW::RequestUserAttention(int flags)
 #if defined(FLASHW_STOP) && defined(VK_XBUTTON1) && wxUSE_DYNLIB_CLASS
     // available in the headers, check if it is supported by the system
     typedef BOOL (WINAPI *FlashWindowEx_t)(FLASHWINFO *pfwi);
-    FlashWindowEx_t s_pfnFlashWindowEx = NULL;
+    static FlashWindowEx_t s_pfnFlashWindowEx = NULL;
     if ( !s_pfnFlashWindowEx )
     {
         wxDynamicLibrary dllUser32(_T("user32.dll"));
