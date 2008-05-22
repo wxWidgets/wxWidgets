@@ -1918,7 +1918,7 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
             // the user's format string
             return -1;
 #else // assume that system version only returns error if not enough space
-#ifndef __WXWINCE__
+#if !defined(__WXWINCE__) && (!defined(__OS2__) || defined(__INNOTEK_LIBC__))
             if( (errno == EILSEQ) || (errno == EINVAL) )
             // If errno was set to one of the two well-known hard errors
             // then fail immediately to avoid an infinite loop.
