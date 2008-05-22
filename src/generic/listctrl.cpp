@@ -4189,9 +4189,9 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
     const size_t count = GetItemCount();
 
     int iconSpacing;
-    if ( HasFlag(wxLC_ICON) )
+    if ( HasFlag(wxLC_ICON) && m_normal_image_list )
         iconSpacing = m_normal_spacing;
-    else if ( HasFlag(wxLC_SMALL_ICON) )
+    else if ( HasFlag(wxLC_SMALL_ICON) && m_small_image_list )
         iconSpacing = m_small_spacing;
     else
         iconSpacing = 0;
