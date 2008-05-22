@@ -54,6 +54,16 @@ public:
 #endif
 };
 
+#ifndef __WXPM__
+inline void wxGUIAppTraits::InitializeGui(unsigned long &WXUNUSED(ulHab))
+{
+}
+
+inline void wxGUIAppTraits::TerminateGui(unsigned long WXUNUSED(ulHab))
+{
+}
+#endif
+
 #endif // wxUSE_GUI
 
 #endif // _WX_OS2_APPTRAIT_H_
