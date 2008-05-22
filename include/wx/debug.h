@@ -210,7 +210,10 @@
             wxFAIL_COND_MSG(#cond, msg);                                      \
             op;                                                               \
         }                                                                     \
-        struct wxDummyCheckStruct /* just to force a semicolon */
+        typedef int wxDummyCheckInt /* just to force a semicolon */
+        /* NB: old gcc versions (e.g. 2.8) give an internal compiler error */
+        /*     on a simple forward declaration, when used in a template    */
+        /*     function, so rather use a dummy typedef which does work...  */
 #endif
 
 /*  special form of wxCHECK2: as wxCHECK, but for use in void functions */
