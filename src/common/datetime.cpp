@@ -4588,4 +4588,30 @@ WXDLLIMPEXP_BASE void wxPrevWDay(wxDateTime::WeekDay& wd)
                                : (wxDateTime::WeekDay)(wd - 1);
 }
 
+#ifdef __WXMSW__
+
+wxDateTime& wxDateTime::SetFromMSWSysTime(const SYSTEMTIME& st)
+{
+    return Set(st.wDay,
+            wx_static_cast(wxDateTime::Month, wxDateTime::Jan + st.wMonth - 1),
+            st.wYear,
+            0, 0, 0);
+}
+
+void wxDateTime::GetAsMSWSysTime(SYSTEMTIME* st) const
+{
+    const wxDateTime::Tm tm(GetTm());
+
+    st->wYear = (WXWORD)tm.year;
+    st->wMonth = (WXWORD)(tm.mon - wxDateTime::Jan + 1);
+    st->wDay = tm.mday;
+
+    st->wDayOfWeek =
+    st->wHour =
+    st->wMinute =
+    st->wSecond =
+    st->wMilliseconds = 0;
+}
+#endif // __WXMSW__
+
 #endif // wxUSE_DATETIME

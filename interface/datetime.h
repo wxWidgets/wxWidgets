@@ -286,6 +286,17 @@ public:
                wxDateTime_t millisec = 0);
 
     /**
+        Same as SetFromMSWSysTime.
+
+        @param st
+            Input, Windows SYSTEMTIME reference
+        @since 2.9.0
+        @remarks MSW only
+    */
+    wxDateTime(const struct _SYSTEMTIME& st);
+
+
+    /**
         Reset time to midnight (00:00:00) without changing the date.
     */
     wxDateTime& ResetTime();
@@ -409,6 +420,24 @@ public:
         Returns the date and time in DOS format.
     */
     long unsigned int GetAsDOS() const;
+
+    /**
+        Initialize using the Windows SYSTEMTIME structure.
+        @param st
+            Input, Windows SYSTEMTIME reference
+        @since 2.9.0
+        @remarks MSW only
+    */
+    wxDateTime& SetFromMSWSysTime(const struct _SYSTEMTIME& st);
+
+    /**
+        Returns the date and time in the Windows SYSTEMTIME format.
+        @param st
+            Output, pointer to Windows SYSTEMTIME
+        @since 2.9.0
+        @remarks MSW only
+    */
+    void GetAsMSWSysTime(struct _SYSTEMTIME* st) const;
 
     /**
         Returns the century of this date.

@@ -177,7 +177,7 @@ wxCalendarCtrl::HitTest(const wxPoint& pos,
 
         case MCHT_CALENDARDATE:
             if ( date )
-                wxMSWDateControls::FromSystemTime(date, hti.st);
+                date->SetFromMSWSysTime(hti.st);
             return wxCAL_HITTEST_DAY;
 
         case MCHT_CALENDARDAY:
@@ -208,7 +208,7 @@ bool wxCalendarCtrl::SetDate(const wxDateTime& dt)
     wxCHECK_MSG( dt.IsValid(), false, "invalid date" );
 
     SYSTEMTIME st;
-    wxMSWDateControls::ToSystemTime(&st, dt);
+    dt.GetAsMSWSysTime(&st);
     if ( !MonthCal_SetCurSel(GetHwnd(), &st) )
     {
         wxLogDebug(_T("DateTime_SetSystemtime() failed"));
@@ -232,8 +232,7 @@ wxDateTime wxCalendarCtrl::GetDate() const
         return wxDefaultDateTime;
     }
 
-    wxDateTime dt;
-    wxMSWDateControls::FromSystemTime(&dt, st);
+    wxDateTime dt(st);
 
     wxASSERT_MSG( dt == m_date, "mismatch between data and control" );
 #endif // __WXDEBUG__
@@ -248,13 +247,13 @@ bool wxCalendarCtrl::SetDateRange(const wxDateTime& dt1, const wxDateTime& dt2)
     DWORD flags = 0;
     if ( dt1.IsValid() )
     {
-        wxMSWDateControls::ToSystemTime(&st[0], dt1);
+        dt1.GetAsMSWSysTime(st + 0);
         flags |= GDTR_MIN;
     }
 
     if ( dt2.IsValid() )
     {
-        wxMSWDateControls::ToSystemTime(&st[1], dt2);
+        dt2.GetAsMSWSysTime(st + 1);
         flags |= GDTR_MAX;
     }
 
@@ -274,7 +273,7 @@ bool wxCalendarCtrl::GetDateRange(wxDateTime *dt1, wxDateTime *dt2) const
     if ( dt1 )
     {
         if ( flags & GDTR_MIN )
-            wxMSWDateControls::FromSystemTime(dt1, st[0]);
+            dt1->SetFromMSWSysTime(st[0]);
         else
             *dt1 = wxDefaultDateTime;
     }
@@ -282,7 +281,7 @@ bool wxCalendarCtrl::GetDateRange(wxDateTime *dt1, wxDateTime *dt2) const
     if ( dt2 )
     {
         if ( flags & GDTR_MAX )
-            wxMSWDateControls::FromSystemTime(dt2, st[1]);
+            dt2->SetFromMSWSysTime(st[1]);
         else
             *dt2 = wxDefaultDateTime;
     }
@@ -363,7 +362,7 @@ bool wxCalendarCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 // which expects GetDate() to return the new date
                 const wxDateTime dateOld = m_date;
                 const NMSELCHANGE * const sch = (NMSELCHANGE *)lParam;
-                wxMSWDateControls::FromSystemTime(&m_date, sch->stSelStart);
+                m_date.SetFromMSWSysTime(sch->stSelStart);
 
                 // changing the year or the month results in a second dummy
                 // MCN_SELCHANGE event on this system which doesn't really

@@ -30,6 +30,9 @@
 class WXDLLIMPEXP_FWD_BASE wxDateTime;
 class WXDLLIMPEXP_FWD_BASE wxTimeSpan;
 class WXDLLIMPEXP_FWD_BASE wxDateSpan;
+#ifdef __WXMSW__
+struct _SYSTEMTIME;
+#endif
 
 #include "wx/dynarray.h"
 
@@ -598,6 +601,12 @@ public:
                       wxDateTime_t minute = 0,
                       wxDateTime_t second = 0,
                       wxDateTime_t millisec = 0);
+#ifdef __WXMSW__
+    wxDateTime(const struct _SYSTEMTIME& st)
+    {
+        SetFromMSWSysTime(st);
+    }
+#endif
 
         // default copy ctor ok
 
@@ -911,6 +920,17 @@ public:
 
         // pack the date in DOS format
     unsigned long GetAsDOS() const;
+
+    // SYSTEMTIME format
+    // ------------------------------------------------------------------------
+#ifdef __WXMSW__
+
+    // convert SYSTEMTIME to wxDateTime
+    wxDateTime& SetFromMSWSysTime(const struct _SYSTEMTIME&);
+
+    // convert wxDateTime to SYSTEMTIME
+    void GetAsMSWSysTime(struct _SYSTEMTIME*) const;
+#endif // __WXMSW__
 
     // comparison (see also functions below for operator versions)
     // ------------------------------------------------------------------------

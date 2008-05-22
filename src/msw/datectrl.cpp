@@ -178,7 +178,7 @@ void wxDatePickerCtrl::SetValue(const wxDateTime& dt)
 
     SYSTEMTIME st;
     if ( dt.IsValid() )
-        wxMSWDateControls::ToSystemTime(&st, dt);
+        dt.GetAsMSWSysTime(&st);
     if ( !DateTime_SetSystemtime(GetHwnd(),
                                  dt.IsValid() ? GDT_VALID : GDT_NONE,
                                  &st) )
@@ -200,7 +200,7 @@ wxDateTime wxDatePickerCtrl::GetValue() const
     SYSTEMTIME st;
     if ( DateTime_GetSystemtime(GetHwnd(), &st) == GDT_VALID )
     {
-        wxMSWDateControls::FromSystemTime(&dt, st);
+        dt.SetFromMSWSysTime(st);
     }
 
     wxASSERT_MSG( m_date.IsValid() == dt.IsValid() &&
@@ -218,13 +218,13 @@ void wxDatePickerCtrl::SetRange(const wxDateTime& dt1, const wxDateTime& dt2)
     DWORD flags = 0;
     if ( dt1.IsValid() )
     {
-        wxMSWDateControls::ToSystemTime(&st[0], dt1);
+        dt1.GetAsMSWSysTime(st + 0);
         flags |= GDTR_MIN;
     }
 
     if ( dt2.IsValid() )
     {
-        wxMSWDateControls::ToSystemTime(&st[1], dt2);
+        dt2.GetAsMSWSysTime(st + 1);
         flags |= GDTR_MAX;
     }
 
@@ -242,7 +242,7 @@ bool wxDatePickerCtrl::GetRange(wxDateTime *dt1, wxDateTime *dt2) const
     if ( dt1 )
     {
         if ( flags & GDTR_MIN )
-            wxMSWDateControls::FromSystemTime(dt1, st[0]);
+            dt1->SetFromMSWSysTime(st[0]);
         else
             *dt1 = wxDefaultDateTime;
     }
@@ -250,7 +250,7 @@ bool wxDatePickerCtrl::GetRange(wxDateTime *dt1, wxDateTime *dt2) const
     if ( dt2 )
     {
         if ( flags & GDTR_MAX )
-            wxMSWDateControls::FromSystemTime(dt2, st[1]);
+            dt2->SetFromMSWSysTime(st[1]);
         else
             *dt2 = wxDefaultDateTime;
     }
@@ -273,7 +273,7 @@ wxDatePickerCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             NMDATETIMECHANGE *dtch = (NMDATETIMECHANGE *)hdr;
             wxDateTime dt;
             if ( dtch->dwFlags == GDT_VALID )
-                wxMSWDateControls::FromSystemTime(&dt, dtch->st);
+                dt.SetFromMSWSysTime(dtch->st);
 
             // filter out duplicate DTN_DATETIMECHANGE events which the native
             // control sends us when using wxDP_DROPDOWN style
