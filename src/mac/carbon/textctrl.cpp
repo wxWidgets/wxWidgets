@@ -858,7 +858,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
     // allow navigation and deletion
     GetSelection( &from, &to );
     if ( !IsMultiLine() && m_maxLength && GetValue().length() >= m_maxLength &&
-        key != WXK_LEFT && key != WXK_RIGHT && key != WXK_TAB &&
+        key != WXK_LEFT && key != WXK_RIGHT && key != WXK_TAB && key != WXK_UP && key != WXK_DOWN && 
         key != WXK_BACK && key != WXK_DELETE && !( key == WXK_RETURN && (m_windowStyle & wxTE_PROCESS_ENTER) ) &&
         from == to )
     {
