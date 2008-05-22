@@ -349,7 +349,11 @@ void wxMacCarbonPrintData::TransferTo( wxPrintDialogData* data )
 
 void wxMacCarbonPrintData::TransferFrom( wxPrintDialogData* data )
 {
-    PMSetPageRange( m_macPrintSettings , data->GetMinPage() , data->GetMaxPage() ) ;
+    // Respect the value of m_printAllPages
+    if ( data->GetAllPages() )
+        PMSetPageRange( m_macPrintSettings , data->GetMinPage() , (UInt32) kPMPrintAllPages ) ;
+    else
+        PMSetPageRange( m_macPrintSettings , data->GetMinPage() , data->GetMaxPage() ) ;
     PMSetCopies( m_macPrintSettings , data->GetNoCopies() , false ) ;
     PMSetFirstPage( m_macPrintSettings , data->GetFromPage() , false ) ;
 
@@ -457,58 +461,34 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
     m_printDialogData.SetMinPage(minPage);
     m_printDialogData.SetMaxPage(maxPage);
 
-    wxWindow *win = CreateAbortWindow(parent, printout);
-    wxSafeYield(win,true);
-
-    if (!win)
-    {
-        wxEndBusyCursor();
-        wxMessageBox(wxT("Sorry, could not create an abort dialog."), wxT("Print Error"), wxOK, parent);
-        delete dc;
-
-        return false;
-    }
-
-    sm_abortWindow = win;
-    sm_abortWindow->Show(true);
-    wxSafeYield(win,true);
-
     printout->OnBeginPrinting();
 
     bool keepGoing = true;
 
-    int copyCount;
-    for (copyCount = 1; copyCount <= m_printDialogData.GetNoCopies(); copyCount ++)
+    if (!printout->OnBeginDocument(m_printDialogData.GetFromPage(), m_printDialogData.GetToPage()))
     {
-        if (!printout->OnBeginDocument(m_printDialogData.GetFromPage(), m_printDialogData.GetToPage()))
-        {
             wxEndBusyCursor();
             wxMessageBox(wxT("Could not start printing."), wxT("Print Error"), wxOK, parent);
-            break;
-        }
-        if (sm_abortIt)
-            break;
+    }
 
-        int pn;
-        for (pn = m_printDialogData.GetFromPage();
+    int pn;
+    for (pn = m_printDialogData.GetFromPage();
         keepGoing && (pn <= m_printDialogData.GetToPage()) && printout->HasPage(pn);
         pn++)
+    {
+        if (sm_abortIt)
         {
-            if (sm_abortIt)
-            {
                 keepGoing = false;
                 break;
-            }
-            else
-            {
-                wxSafeYield(win,true);
+        }
+        else
+        {
                 dc->StartPage();
                 keepGoing = printout->OnPrintPage(pn);
                 dc->EndPage();
-            }
         }
-        printout->OnEndDocument();
     }
+    printout->OnEndDocument();
 
     printout->OnEndPrinting();
 

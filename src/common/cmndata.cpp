@@ -342,7 +342,12 @@ wxPrintDialogData::wxPrintDialogData(const wxPrintData& printData)
     m_printMinPage = 1;
     m_printMaxPage = 9999;
     m_printNoCopies = 1;
+    // On Mac the Print dialog always defaults to "All Pages"
+#ifdef __WXMAC__
+    m_printAllPages = true;
+#else
     m_printAllPages = false;
+#endif
     m_printCollate = false;
     m_printToFile = false;
     m_printSelection = false;
