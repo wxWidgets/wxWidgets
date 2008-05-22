@@ -20,9 +20,8 @@
     List box elements are numbered from zero. Their number may be limited
     under some platforms.
 
-    A listbox callback gets an event wxEVT_COMMAND_LISTBOX_SELECTED for single
-    clicks, and
-    wxEVT_COMMAND_LISTBOX_DOUBLECLICKED for double clicks.
+    A listbox callback gets an event wxEVT_COMMAND_LISTBOX_SELECTED for
+    single clicks, and wxEVT_COMMAND_LISTBOX_DOUBLECLICKED for double clicks.
 
     @beginStyleTable
     @style{wxLB_SINGLE}
@@ -61,34 +60,20 @@
 class wxListBox : public wxControlWithItems
 {
 public:
-    //@{
     /**
-        Constructor, creating and showing a list box.
-
-        @param parent
-            Parent window. Must not be @NULL.
-        @param id
-            Window identifier. The value wxID_ANY indicates a default value.
-        @param pos
-            Window position.
-        @param size
-            Window size. If wxDefaultSize is specified then the window is
-        sized
-            appropriately.
-        @param n
-            Number of strings with which to initialise the control.
-        @param choices
-            An array of strings with which to initialise the control.
-        @param style
-            Window style. See wxListBox.
-        @param validator
-            Window validator.
-        @param name
-            Window name.
-
-        @see Create(), wxValidator
+        Default constructor.
     */
     wxListBox();
+    
+    /**
+        Constructor 
+
+        @param n
+            Number of strings with which to initialise the control.
+        @param style
+            Window style. See wxListBox.
+    */
+    
     wxListBox(wxWindow* parent, wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
@@ -97,6 +82,16 @@ public:
               long style = 0,
               const wxValidator& validator = wxDefaultValidator,
               const wxString& name = "listBox");
+              
+    /**
+        Constructor 
+
+        @param choices
+            An array of strings with which to initialise the control.
+        @param style
+            Window style. See wxListBox.
+    */
+    
     wxListBox(wxWindow* parent, wxWindowID id,
               const wxPoint& pos,
               const wxSize& size,
@@ -104,7 +99,6 @@ public:
               long style = 0,
               const wxValidator& validator = wxDefaultValidator,
               const wxString& name = "listBox");
-    //@}
 
     /**
         Destructor, destroying the list box.
@@ -175,7 +169,6 @@ public:
     */
     int HitTest(const wxPoint point) const;
 
-    //@{
     /**
         Insert the given number of strings before the specified position.
 
@@ -184,15 +177,23 @@ public:
         @param items
             Labels of items to be inserted
         @param pos
-            Position before which to insert the items: for example, if pos is 0 the
-        items
-            will be inserted in the beginning of the listbox
+            Position before which to insert the items: if pos is 0 the
+            items will be inserted in the beginning of the listbox
     */
-    void InsertItems(int nItems, const wxString items,
+    void InsertItems(int nItems, const wxString *items,
                      unsigned int pos);
-    void InsertItems(const wxArrayString& nItems,
+
+    /**
+        Insert the given number of strings before the specified position.
+
+        @param items
+            Labels of items to be inserted
+        @param pos
+            Position before which to insert the items: if pos is 0 the
+            items will be inserted in the beginning of the listbox
+    */
+    void InsertItems(const wxArrayString& items,
                      unsigned int pos);
-    //@}
 
     /**
         Determines whether an item is selected.
@@ -204,7 +205,6 @@ public:
     */
     bool IsSelected(int n) const;
 
-    //@{
     /**
         Clears the list box and adds the given strings to it.
 
@@ -214,26 +214,36 @@ public:
             An array of strings to set.
         @param clientData
             Options array of client data pointers
-
-        @remarks You may free the array from the calling program after this
-                 function has been called.
     */
-    void Set(int n, const wxString* choices, void clientData = NULL);
-    void Set(const wxArrayString& choices,
-             void clientData = NULL);
-    //@}
+    void Set(int n, const wxString* choices, void **clientData = NULL);
 
-    //@{
+    /**
+        Clears the list box and adds the given strings to it. You may
+        free the array from the calling program after this method
+        has been called.
+
+        @param choices
+            An array of strings to set.
+        @param clientData
+            Options array of client data pointers
+    */
+    void Set(const wxArrayString& choices,
+             void **clientData = NULL);
+
     /**
         Set the specified item to be the first visible item.
 
         @param n
-            The zero-based item index.
+            The zero-based item index that should be visible.
+    */
+    void SetFirstItem(int n);
+
+    /**
+        Set the specified item to be the first visible item.
+
         @param string
             The string that should be visible.
     */
-    void SetFirstItem(int n);
     void SetFirstItem(const wxString& string);
-    //@}
 };
 
