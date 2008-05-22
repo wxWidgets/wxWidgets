@@ -127,24 +127,42 @@ wxGLCanvasX11::ConvertWXAttrsToGL(const int *wxattrs, int *glattrs, size_t n)
 {
     wxCHECK_MSG( n >= 16, false, _T("GL attributes buffer too small") );
 
+    /*
+       Different versions of GLX API use rather different attributes lists, see
+       the following URLs:
+
+        - <= 1.2: http://www.opengl.org/sdk/docs/man/xhtml/glXChooseVisual.xml
+        - >= 1.3: http://www.opengl.org/sdk/docs/man/xhtml/glXChooseFBConfig.xml
+
+       Notice in particular that
+        - GLX_RGBA is boolean attribute in the old version of the API but a
+          value of GLX_RENDER_TYPE in the new one
+        - Boolean attributes such as GLX_DOUBLEBUFFER don't take values in the
+          old version but must be followed by True or False in the new one.
+     */
+
     if ( !wxattrs )
     {
         size_t i = 0;
 
         // use double-buffered true colour by default
-        glattrs[i++] = GLX_RGBA;            glattrs[i++] = True;
-        glattrs[i++] = GLX_DOUBLEBUFFER;    glattrs[i++] = True;
+        glattrs[i++] = GLX_DOUBLEBUFFER;
 
         if ( GetGLXVersion() < 13 )
         {
             // default settings if attriblist = 0
+            glattrs[i++] = GLX_RGBA;
             glattrs[i++] = GLX_DEPTH_SIZE;   glattrs[i++] = 1;
             glattrs[i++] = GLX_RED_SIZE;     glattrs[i++] = 1;
             glattrs[i++] = GLX_GREEN_SIZE;   glattrs[i++] = 1;
             glattrs[i++] = GLX_BLUE_SIZE;    glattrs[i++] = 1;
             glattrs[i++] = GLX_ALPHA_SIZE;   glattrs[i++] = 0;
         }
-        //else: recent GLX can choose the defaults on its own just fine
+        else // recent GLX can choose the defaults on its own just fine
+        {
+            // we just need to have a value after GLX_DOUBLEBUFFER
+            glattrs[i++] = True;
+        }
 
         glattrs[i] = None;
 
@@ -161,6 +179,9 @@ wxGLCanvasX11::ConvertWXAttrsToGL(const int *wxattrs, int *glattrs, size_t n)
             if ( p > n - 3 )
                 return false;
 
+            // indicates whether we have a boolean attribute
+            bool isBoolAttr = false;
+
             switch ( wxattrs[arg++] )
             {
                 case WX_GL_BUFFER_SIZE:
@@ -171,26 +192,26 @@ wxGLCanvasX11::ConvertWXAttrsToGL(const int *wxattrs, int *glattrs, size_t n)
                     glattrs[p++] = GLX_LEVEL;
                     break;
 
-                    // the following boolean attributes don't have values in wx
-                    // API (they're turned on if specified) but do have them in
-                    // OpenGL, so do put them into glattrs and also skip the
-                    // copy of wx value after switch by using "continue"
-                    // instead of "break"
                 case WX_GL_RGBA:
+                    if ( GetGLXVersion() >= 13 )
+                    {
+                        // this is the default GLX_RENDER_TYPE anyhow
+                        continue;
+                    }
+
                     glattrs[p++] = GLX_RGBA;
-                    glattrs[p++] = True;
-                    continue;
+                    isBoolAttr = true;
+                    break;
 
                 case WX_GL_DOUBLEBUFFER:
                     glattrs[p++] = GLX_DOUBLEBUFFER;
-                    glattrs[p++] = True;
-                    continue;
+                    isBoolAttr = true;
+                    break;
 
                 case WX_GL_STEREO:
                     glattrs[p++] = GLX_STEREO;
-                    glattrs[p++] = True;
-                    continue;
-
+                    isBoolAttr = true;
+                    break;
 
                 case WX_GL_AUX_BUFFERS:
                     glattrs[p++] = GLX_AUX_BUFFERS;
@@ -242,8 +263,18 @@ wxGLCanvasX11::ConvertWXAttrsToGL(const int *wxattrs, int *glattrs, size_t n)
                     continue;
             }
 
-            // copy attribute value as is
-            glattrs[p++] = wxattrs[arg++];
+            if ( isBoolAttr )
+            {
+                // as explained above, for pre 1.3 API the attribute just needs
+                // to be present so we only add its value when using the new API
+                if ( GetGLXVersion() >= 13 )
+                    glattrs[p++] = True;
+            }
+            else // attribute with real (non-boolean) value
+            {
+                // copy attribute value as is
+                glattrs[p++] = wxattrs[arg++];
+            }
         }
 
         glattrs[p] = None;
