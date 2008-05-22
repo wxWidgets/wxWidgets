@@ -80,6 +80,10 @@ wxSizerXmlHandler::wxSizerXmlHandler()
 
     XRC_ADD_STYLE(wxFIXED_MINSIZE);
     XRC_ADD_STYLE(wxRESERVE_SPACE_EVEN_IF_HIDDEN);
+
+    // wxWrapSizer-specific flags
+    XRC_ADD_STYLE(wxEXTEND_LAST_ON_EACH_LINE);
+    XRC_ADD_STYLE(wxREMOVE_LEADING_SPACES);
 }
 
 
@@ -209,7 +213,7 @@ wxObject* wxSizerXmlHandler::Handle_sizer()
         sizer = Handle_wxGridBagSizer();
 
     else if (m_class == wxT("wxWrapSizer"))
-        sizer = Handle_wxGridBagSizer();
+        sizer = Handle_wxWrapSizer();
 
     if ( !sizer )
     {
@@ -313,7 +317,7 @@ wxSizer*  wxSizerXmlHandler::Handle_wxGridBagSizer()
 
 wxSizer*  wxSizerXmlHandler::Handle_wxWrapSizer()
 {
-    wxWrapSizer *sizer = new wxWrapSizer(GetStyle("orient"), wxHORIZONTAL);
+    wxWrapSizer *sizer = new wxWrapSizer(GetStyle("orient"), GetStyle("flag"));
     return sizer;
 }
 
