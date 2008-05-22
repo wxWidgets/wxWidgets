@@ -85,6 +85,7 @@ protected:
     // contains the client data for the items
     wxArrayPtrVoid m_clientData;
 
+    virtual wxSize DoGetBestSize() const;
     virtual int DoInsertItems(const wxArrayStringsAdapter& items,
                               unsigned int pos,
                               void **clientData, wxClientDataType type);

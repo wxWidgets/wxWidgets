@@ -314,6 +314,37 @@ GdkWindow *wxChoice::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
     return m_widget->window;
 }
 
+// Notice that this method shouldn't be necessary, because GTK calculates
+// properly size of the combobox but for unknown reasons it doesn't work
+// correctly in wx without this.
+wxSize wxChoice::DoGetBestSize() const
+{
+    // strangely, this returns a width of 188 pixels from GTK+ (?)
+    wxSize ret( wxControl::DoGetBestSize() );
+
+    // we know better our horizontal extent: it depends on the longest string
+    // in the combobox
+    if ( m_widget )
+    {
+        ret.x = 60;  // start with something "sensible"
+        int width;
+        unsigned int count = GetCount();
+        for ( unsigned int n = 0; n < count; n++ )
+        {
+            GetTextExtent(GetString(n), &width, NULL, NULL, NULL );
+            if ( width + 40 > ret.x ) // 40 for drop down arrow and space around text
+                ret.x = width + 40;
+        }
+    }
+
+    // empty combobox should have some reasonable default size too
+    if ((GetCount() == 0) && (ret.x < 80))
+        ret.x = 80;
+
+    CacheBestSize(ret);
+    return ret;
+}
+
 // static
 wxVisualAttributes
 wxChoice::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
