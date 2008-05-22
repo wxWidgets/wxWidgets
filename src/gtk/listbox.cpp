@@ -126,25 +126,97 @@ gtk_listitem_changed_callback(GtkTreeSelection * WXUNUSED(selection),
     {
         wxArrayInt selections;
         listbox->GetSelections( selections );
+        
+        if ((selections.GetCount() == 0) && (listbox->m_oldSelection.GetCount() == 0))
+        {
+            // nothing changed, just leave
+            return;
+        }
+        
+        if (selections.GetCount() == listbox->m_oldSelection.GetCount())
+        {
+            bool changed = false;
+            size_t idx;
+            for (idx = 0; idx < selections.GetCount(); idx++)
+            {
+                if (selections[idx] != listbox->m_oldSelection[idx])
+                {
+                    changed = true;
+                    break;
+                }
+            }
+            
+            // nothing changed, just leave
+            if (!changed)
+               return;
+        }
 
         if (selections.GetCount() == 0)
         {
             // indicate that this is a deselection
             event.SetExtraLong( 0 );
-            event.SetInt( -1 );
+            
+            // take first item in old selection
+            event.SetInt( listbox->m_oldSelection[0] );
+            event.SetString( listbox->GetString( listbox->m_oldSelection[0] ) );
+            
+            listbox->m_oldSelection = selections;
 
             listbox->HandleWindowEvent( event );
 
             return;
         }
-        else
+        
+        // Now test if any new item is selected
+        bool any_new_selected = false;
+        size_t idx;
+        for (idx = 0; idx < selections.GetCount(); idx++)
+        {
+            int item = selections[idx];
+            if (listbox->m_oldSelection.Index(item) == wxNOT_FOUND)
+            {
+                event.SetInt( item );
+                event.SetString( listbox->GetString( item ) );
+                any_new_selected = true;
+                break;
+            }
+        }
+        
+        if (any_new_selected)
         {
             // indicate that this is a selection
             event.SetExtraLong( 1 );
-            event.SetInt( selections[0] );
 
+            listbox->m_oldSelection = selections;
             listbox->HandleWindowEvent( event );
+            return;
         }
+        
+        // Now test if any new item is deselected
+        bool any_new_deselected = false;
+        for (idx = 0; idx < listbox->m_oldSelection.GetCount(); idx++)
+        {
+            int item = listbox->m_oldSelection[idx];
+            if (selections.Index(item) == wxNOT_FOUND)
+            {
+                event.SetInt( item );
+                event.SetString( listbox->GetString( item ) );
+                any_new_deselected = true;
+                break;
+            }
+        }
+        
+        if (any_new_deselected)
+        {
+            // indicate that this is a selection
+            event.SetExtraLong( 0 );
+
+            listbox->m_oldSelection = selections;
+            listbox->HandleWindowEvent( event );
+            return;
+        }
+        
+        wxLogError( wxT("Wrong wxListBox selection") );
     }
     else
     {
@@ -842,7 +914,7 @@ void wxListBox::DoSetSelection( int n, bool select )
 
 void wxListBox::GtkUpdateOldSelection()
 {
-    if (HasFlag(wxLB_MULTIPLE))
+    if (HasFlag(wxLB_MULTIPLE) || HasFlag(wxLB_EXTENDED))
         GetSelections( m_oldSelection );
 }
 
