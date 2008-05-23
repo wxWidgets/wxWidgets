@@ -1007,12 +1007,12 @@ void MyTreeCtrl::GetItemsRecursively(const wxTreeItemId& idParent,
 
 void MyTreeCtrl::DoToggleIcon(const wxTreeItemId& item)
 {
-    int image = (GetItemImage(item) == TreeCtrlIcon_Folder)
+    int image = GetItemImage(item) == TreeCtrlIcon_Folder
                     ? TreeCtrlIcon_File
                     : TreeCtrlIcon_Folder;
     SetItemImage(item, image, wxTreeItemIcon_Normal);
 
-    image = (GetItemImage(item) == TreeCtrlIcon_FolderSelected)
+    image = GetItemImage(item, TreeCtrlIcon_FolderSelected) == TreeCtrlIcon_FolderSelected
                     ? TreeCtrlIcon_FileSelected
                     : TreeCtrlIcon_FolderSelected;
     SetItemImage(item, image, wxTreeItemIcon_Selected);
