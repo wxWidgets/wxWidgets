@@ -645,9 +645,13 @@ void wxListBox::DoClear()
 {
     wxCHECK_RET( m_treeview != NULL, wxT("invalid listbox") );
 
+    GtkDisableEvents(); // just in case
+
     InvalidateBestSize();
 
     gtk_list_store_clear( m_liststore ); /* well, THAT was easy :) */
+                                
+    GtkEnableEvents();
 }
 
 void wxListBox::DoDeleteOneItem(unsigned int n)
@@ -656,12 +660,16 @@ void wxListBox::DoDeleteOneItem(unsigned int n)
 
     InvalidateBestSize();
 
+    GtkDisableEvents(); // just in case
+
     GtkTreeIter iter;
     wxCHECK_RET( GtkGetIteratorFor(n, &iter), wxT("wrong listbox index") );
 
     // this returns false if iter is invalid (e.g. deleting item at end) but
     // since we don't use iter, we ignore the return value
     gtk_list_store_remove(m_liststore, &iter);
+                                
+    GtkEnableEvents();
 }
 
 // ----------------------------------------------------------------------------
