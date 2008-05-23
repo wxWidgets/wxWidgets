@@ -178,10 +178,19 @@ gtk_listbox_key_press_callback( GtkWidget *WXUNUSED(widget),
         (gdk_event->keyval == GDK_ISO_Enter) ||
         (gdk_event->keyval == GDK_KP_Enter))
     {
-        int index = listbox->GetSelection();
+        int index = -1;
+        if (!listbox->HasMultipleSelection())
+            index = listbox->GetSelection();
+        else
+        {
+            wxArrayInt sels;
+            if (listbox->GetSelections( sels ) < 1)
+                return FALSE;
+            index = sels[0];
+        }
+        
         if (index != wxNOT_FOUND)
         {
-        
             wxCommandEvent event(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, listbox->GetId() );
             event.SetEventObject( listbox );
             
