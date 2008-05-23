@@ -432,7 +432,7 @@ public:
                             const wxSize &size = wxDefaultSize,
                             const wxString &name = wxT("wxdataviewctrlmainwindow") );
     virtual ~wxDataViewMainWindow();
-    
+
     bool IsVirtualList() const { return m_root == NULL; }
 
     // notifications from wxDataViewModel
@@ -524,7 +524,7 @@ public:
     }
 
     wxRect GetLineRect( unsigned int row ) const;
-    
+
     int GetLineStart( unsigned int row ) const;  // row * m_lineHeight in fixed mode
     int GetLineHeight( unsigned int row ) const; // m_lineHeight in fixed mode
     int GetLineAt( unsigned int y ) const;       // y / m_lineHeight in fixed mode
@@ -532,7 +532,7 @@ public:
     //Some useful functions for row and item mapping
     wxDataViewItem GetItemByRow( unsigned int row ) const;
     int GetRowByItem( const wxDataViewItem & item ) const;
-    
+
     //Methods for building the mapping tree
     void BuildTree( wxDataViewModel  * model );
     void DestroyTree();
@@ -657,7 +657,7 @@ wxDC *wxDataViewRenderer::GetDC()
 }
 
 void wxDataViewRenderer::SetAlignment( int align )
-{ 
+{
     m_align=align;
 }
 
@@ -667,15 +667,15 @@ int wxDataViewRenderer::GetAlignment() const
 }
 
 int wxDataViewRenderer::CalculateAlignment() const
-{ 
+{
     if (m_align == wxDVR_DEFAULT_ALIGNMENT)
     {
         if (GetOwner() == NULL)
            return wxALIGN_LEFT | wxALIGN_CENTRE_VERTICAL;
-           
+
         return GetOwner()->GetAlignment() | wxALIGN_CENTRE_VERTICAL;
     }
-    
+
     return m_align;
 }
 
@@ -1400,7 +1400,7 @@ void wxDataViewHeaderWindowMSW::UpdateDisplay()
     // remove old columns
     for (int j=0, max=Header_GetItemCount((HWND)m_hWnd); j < max; j++)
         Header_DeleteItem((HWND)m_hWnd, 0);
-        
+
     m_imageList->RemoveAll();
 
     // add the updated array of columns to the header control
@@ -1427,7 +1427,7 @@ void wxDataViewHeaderWindowMSW::UpdateDisplay()
         hdi.fmt = HDF_LEFT | HDF_STRING;
         if (col->GetBitmap().IsOk())
             hdi.fmt |= HDF_IMAGE;
-        
+
         //hdi.fmt &= ~(HDF_SORTDOWN|HDF_SORTUP);
 
         if (col->IsSortable() && GetOwner()->GetSortingColumn() == col)
@@ -2175,7 +2175,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     cell_rect.x = x_start;
     for (unsigned int i = col_start; i < col_last; i++)
     {
-       
+
         wxDataViewColumn *col = GetOwner()->GetColumn( i );
         wxDataViewRenderer *cell = col->GetRenderer();
         cell_rect.width = col->GetWidth();
@@ -2203,7 +2203,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             }
             else
             {
-                dataitem = wxDataViewItem( (void*) item );
+                dataitem = wxDataViewItem( wxUIntToPtr(item) );
             }
 
             model->GetValue( value, dataitem, col->GetModelColumn());
@@ -2334,9 +2334,9 @@ void wxDataViewMainWindow::OnRenameTimer()
             break;
         xpos += c->GetWidth();
     }
-    wxRect labelRect( xpos, 
+    wxRect labelRect( xpos,
                       GetLineStart( m_currentRow ),
-                      m_currentCol->GetWidth(), 
+                      m_currentCol->GetWidth(),
                       GetLineHeight( m_currentRow ) );
 
     GetOwner()->CalcScrolledPosition( labelRect.x, labelRect.y,
@@ -2867,7 +2867,7 @@ void wxDataViewMainWindow::RefreshRowsAfter( unsigned int firstRow )
     if (start > client_size.y) return;
 
     wxRect rect( 0, start, client_size.x, client_size.y - start );
-    
+
     Refresh( true, &rect );
 }
 
@@ -2937,28 +2937,28 @@ wxRect wxDataViewMainWindow::GetLineRect( unsigned int row ) const
 int wxDataViewMainWindow::GetLineStart( unsigned int row ) const
 {
     const wxDataViewModel *model = GetOwner()->GetModel();
-    
+
     if (GetOwner()->GetWindowStyle() & wxDV_VARIABLE_LINE_HEIGHT)
     {
         // TODO make more efficient
-        
+
         int start = 0;
-        
+
         unsigned int r;
         for (r = 0; r < row; r++)
         {
             const wxDataViewTreeNode* node = GetTreeNodeByRow(r);
             if (!node) return start;
-           
+
             wxDataViewItem item = node->GetItem();
-           
+
             if (node && !node->HasChildren())
             {
                 // Yes, if the node does not have any child, it must be a leaf which
                 // mean that it is a temporarily created by GetTreeNodeByRow
                 wxDELETE(node)
             }
-            
+
             unsigned int cols = GetOwner()->GetColumnCount();
             unsigned int col;
             int height = m_lineHeight;
@@ -2967,10 +2967,10 @@ int wxDataViewMainWindow::GetLineStart( unsigned int row ) const
                 const wxDataViewColumn *column = GetOwner()->GetColumn(col);
                 if (column->IsHidden())
                     continue;      // skip it!
-            
+
                 if ((col != 0) && model->IsContainer(item) && !model->HasContainerColumns(item))
                     continue;      // skip it!
-            
+
                 const wxDataViewRenderer *renderer = column->GetRenderer();
                 wxVariant value;
                 model->GetValue( value, item, column->GetModelColumn() );
@@ -2978,11 +2978,11 @@ int wxDataViewMainWindow::GetLineStart( unsigned int row ) const
                 renderer2->SetValue( value );
                 height = wxMax( height, renderer->GetSize().y );
             }
-           
-           
+
+
             start += height;
         }
-        
+
         return start;
     }
     else
@@ -2995,88 +2995,82 @@ int wxDataViewMainWindow::GetLineAt( unsigned int y ) const
 {
     const wxDataViewModel *model = GetOwner()->GetModel();
 
-    if (GetOwner()->GetWindowStyle() & wxDV_VARIABLE_LINE_HEIGHT)
-    {
-        // TODO make more efficient
-        
-        unsigned int row = 0;
-        unsigned int yy = 0;
-        for (;;)
-        {
-           const wxDataViewTreeNode* node = GetTreeNodeByRow(row);
-           if (!node)
-           {
-               // not really correct...
-               return row + ((y-yy) / m_lineHeight);
-           }
-           
-           wxDataViewItem item = node->GetItem();
-           
-            if (node && !node->HasChildren())
-            {
-                // Yes, if the node does not have any child, it must be a leaf which
-                // mean that it is a temporarily created by GetTreeNodeByRow
-                wxDELETE(node)
-            }
-            
-           unsigned int cols = GetOwner()->GetColumnCount();
-           unsigned int col;
-           int height = m_lineHeight;
-           for (col = 0; col < cols; col++)
-           {
-                const wxDataViewColumn *column = GetOwner()->GetColumn(col);
-                if (column->IsHidden())
-                    continue;      // skip it!
-                
-                if ((col != 0) && model->IsContainer(item) && !model->HasContainerColumns(item))
-                    continue;      // skip it!
-            
-                const wxDataViewRenderer *renderer = column->GetRenderer();
-                wxVariant value;
-                model->GetValue( value, item, column->GetModelColumn() );
-                wxDataViewRenderer *renderer2 = const_cast<wxDataViewRenderer*>(renderer);
-                renderer2->SetValue( value );
-                height = wxMax( height, renderer->GetSize().y );
-           }
-           
-           yy += height;
-           if (y < yy)
-               return row;
-               
-           row++;
-        }
-        
-        return -1;
-    }
-    else
-    {
+    // check for the easy case first
+    if ( !GetOwner()->HasFlag(wxDV_VARIABLE_LINE_HEIGHT) )
         return y / m_lineHeight;
+
+    // TODO make more efficient
+    unsigned int row = 0;
+    unsigned int yy = 0;
+    for (;;)
+    {
+       const wxDataViewTreeNode* node = GetTreeNodeByRow(row);
+       if (!node)
+       {
+           // not really correct...
+           return row + ((y-yy) / m_lineHeight);
+       }
+
+       wxDataViewItem item = node->GetItem();
+
+        if (node && !node->HasChildren())
+        {
+            // Yes, if the node does not have any child, it must be a leaf which
+            // mean that it is a temporarily created by GetTreeNodeByRow
+            wxDELETE(node)
+        }
+
+       unsigned int cols = GetOwner()->GetColumnCount();
+       unsigned int col;
+       int height = m_lineHeight;
+       for (col = 0; col < cols; col++)
+       {
+            const wxDataViewColumn *column = GetOwner()->GetColumn(col);
+            if (column->IsHidden())
+                continue;      // skip it!
+
+            if ((col != 0) && model->IsContainer(item) && !model->HasContainerColumns(item))
+                continue;      // skip it!
+
+            const wxDataViewRenderer *renderer = column->GetRenderer();
+            wxVariant value;
+            model->GetValue( value, item, column->GetModelColumn() );
+            wxDataViewRenderer *renderer2 = const_cast<wxDataViewRenderer*>(renderer);
+            renderer2->SetValue( value );
+            height = wxMax( height, renderer->GetSize().y );
+       }
+
+       yy += height;
+       if (y < yy)
+           return row;
+
+       row++;
     }
 }
 
 int wxDataViewMainWindow::GetLineHeight( unsigned int row ) const
 {
     const wxDataViewModel *model = GetOwner()->GetModel();
-    
+
     if (GetOwner()->GetWindowStyle() & wxDV_VARIABLE_LINE_HEIGHT)
     {
         wxASSERT( !IsVirtualList() );
-        
+
         const wxDataViewTreeNode* node = GetTreeNodeByRow(row);
         // wxASSERT( node );
         if (!node) return m_lineHeight;
 
         wxDataViewItem item = node->GetItem();
-        
+
         if (node && !node->HasChildren())
         {
                 // Yes, if the node does not have any child, it must be a leaf which
                 // mean that it is a temporarily created by GetTreeNodeByRow
              wxDELETE(node)
         }
-            
+
         int height = m_lineHeight;
-        
+
         unsigned int cols = GetOwner()->GetColumnCount();
         unsigned int col;
         for (col = 0; col < cols; col++)
@@ -3087,7 +3081,7 @@ int wxDataViewMainWindow::GetLineHeight( unsigned int row ) const
 
             if ((col != 0) && model->IsContainer(item) && !model->HasContainerColumns(item))
                 continue;      // skip it!
-            
+
             const wxDataViewRenderer *renderer = column->GetRenderer();
             wxVariant value;
             model->GetValue( value, item, column->GetModelColumn() );
@@ -3159,7 +3153,7 @@ wxDataViewItem wxDataViewMainWindow::GetItemByRow(unsigned int row) const
 {
     if (!m_root)
     {
-        return wxDataViewItem( (void*) row );
+        return wxDataViewItem( wxUIntToPtr(row) );
     }
     else
     {
@@ -3240,7 +3234,7 @@ private:
 wxDataViewTreeNode * wxDataViewMainWindow::GetTreeNodeByRow(unsigned int row) const
 {
     wxASSERT( !IsVirtualList() );
-    
+
     RowToTreeNodeJob job( row , -2, m_root );
     Walker( m_root , job );
     return job.GetResult();
@@ -3368,14 +3362,14 @@ wxDataViewTreeNode * wxDataViewMainWindow::FindNode( const wxDataViewItem & item
             wxDataViewTreeNodes nodes = node->GetNodes();
             unsigned int i;
             bool found = false;
-            
+
             for (i = 0; i < nodes.GetCount(); i ++)
             {
                 if (nodes[i]->GetItem() == (**iter))
                 {
                     if (nodes[i]->GetItem() == item)
                        return nodes[i];
-                       
+
                     node = nodes[i];
                     found = true;
                     break;
@@ -3742,7 +3736,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         {
             int indent = node->GetIndentLevel();
             indent = GetOwner()->GetIndent()*indent;
-            wxRect rect( xpos + indent + EXPANDER_MARGIN, 
+            wxRect rect( xpos + indent + EXPANDER_MARGIN,
                          GetLineStart( current ) + EXPANDER_MARGIN + (GetLineHeight(current)/2) - (m_lineHeight/2) - EXPANDER_OFFSET,
                          m_lineHeight-2*EXPANDER_MARGIN,
                          m_lineHeight-2*EXPANDER_MARGIN + EXPANDER_OFFSET);
@@ -3870,11 +3864,11 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             {
                 int indent = node->GetIndentLevel();
                 indent = GetOwner()->GetIndent()*indent;
-                wxRect rect( xpos + indent + EXPANDER_MARGIN, 
+                wxRect rect( xpos + indent + EXPANDER_MARGIN,
                          GetLineStart( current ) + EXPANDER_MARGIN + (GetLineHeight(current)/2) - (m_lineHeight/2) - EXPANDER_OFFSET,
                          m_lineHeight-2*EXPANDER_MARGIN,
                          m_lineHeight-2*EXPANDER_MARGIN + EXPANDER_OFFSET);
-                
+
                 if( rect.Contains( x, y) )
                 {
                     expander = true;
@@ -3993,7 +3987,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
                 wxFAIL_MSG( _T("how did we get here?") );
             }
         }
-        
+
         if (m_currentRow != oldCurrentRow)
             RefreshRow( oldCurrentRow );
 
@@ -4081,7 +4075,7 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
 {
     if ( (style & wxBORDER_MASK) == 0)
         style |= wxBORDER_SUNKEN;
-    
+
     if (!wxControl::Create( parent, id, pos, size,
                             style | wxScrolledWindowStyle, validator))
         return false;

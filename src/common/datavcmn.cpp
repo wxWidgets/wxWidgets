@@ -260,38 +260,41 @@ int wxDataViewModel::Compare( const wxDataViewItem &item1, const wxDataViewItem 
         wxString str1 = value1.GetString();
         wxString str2 = value2.GetString();
         int res = str1.Cmp( str2 );
-        if (res) return res;
-    } else
-    if (value1.GetType() == wxT("long"))
+        if (res)
+            return res;
+    }
+    else if (value1.GetType() == wxT("long"))
     {
         long l1 = value1.GetLong();
         long l2 = value2.GetLong();
         long res = l1-l2;
-        if (res) return res;
-    } else
-    if (value1.GetType() == wxT("double"))
+        if (res)
+            return res;
+    }
+    else if (value1.GetType() == wxT("double"))
     {
         double d1 = value1.GetDouble();
         double d2 = value2.GetDouble();
-        if (d1 < d2) return 1;
-        if (d1 > d2) return -1;
-    } else
-    if (value1.GetType() == wxT("datetime"))
+        if (d1 < d2)
+            return 1;
+        if (d1 > d2)
+            return -1;
+    }
+    else if (value1.GetType() == wxT("datetime"))
     {
         wxDateTime dt1 = value1.GetDateTime();
         wxDateTime dt2 = value2.GetDateTime();
-        if (dt1.IsEarlierThan(dt2)) return 1;
-        if (dt2.IsEarlierThan(dt1)) return -11;
+        if (dt1.IsEarlierThan(dt2))
+            return 1;
+        if (dt2.IsEarlierThan(dt1))
+            return -11;
     }
 
     // items must be different
-    unsigned long litem1 = (unsigned long) item1.GetID();
-    unsigned long litem2 = (unsigned long) item2.GetID();
+    wxUIntPtr id1 = wxPtrToUInt(item1.GetID()),
+              id2 = wxPtrToUInt(item2.GetID());
 
-    if (!ascending)
-        return litem2-litem2;
-
-    return litem1-litem2;
+    return ascending ? id1 - id2 : id2 - id1;
 }
 
 // ---------------------------------------------------------
@@ -308,11 +311,11 @@ wxDataViewIndexListModel::wxDataViewIndexListModel( unsigned int initial_size )
 {
     // IDs are ordered until an item gets deleted or inserted
     m_ordered = true;
-    
+
     // build initial index
     unsigned int i;
     for (i = 1; i < initial_size+1; i++)
-            m_hash.Add( (void*) i );
+            m_hash.Add( wxUIntToPtr(i) );
     m_lastIndex = initial_size + 1;
 }
 
@@ -323,51 +326,51 @@ wxDataViewIndexListModel::~wxDataViewIndexListModel()
 void wxDataViewIndexListModel::Reset( unsigned int new_size )
 {
     m_hash.Clear();
-    
+
     // IDs are ordered until an item gets deleted or inserted
     m_ordered = true;
-        
+
     // build initial index
     unsigned int i;
     for (i = 1; i < new_size+1; i++)
-            m_hash.Add( (void*) i );
+            m_hash.Add( wxUIntToPtr(i) );
     m_lastIndex = new_size + 1;
-    
+
     wxDataViewModel::Cleared();
 }
 
 void wxDataViewIndexListModel::RowPrepended()
 {
     m_ordered = false;
-    
+
     unsigned int id = m_lastIndex++;
-    m_hash.Insert( (void*) id, 0 );
-    wxDataViewItem item( (void*) id );
+    m_hash.Insert( wxUIntToPtr(id), 0 );
+    wxDataViewItem item( wxUIntToPtr(id) );
     ItemAdded( wxDataViewItem(0), item );
 }
 
 void wxDataViewIndexListModel::RowInserted( unsigned int before )
 {
     m_ordered = false;
-    
+
     unsigned int id = m_lastIndex++;
-    m_hash.Insert( (void*) id, before );
-    wxDataViewItem item( (void*) id );
+    m_hash.Insert( wxUIntToPtr(id), before );
+    wxDataViewItem item( wxUIntToPtr(id) );
     ItemAdded( wxDataViewItem(0), item );
 }
 
 void wxDataViewIndexListModel::RowAppended()
 {
     unsigned int id = m_lastIndex++;
-    m_hash.Add( (void*) id );
-    wxDataViewItem item( (void*) id );
+    m_hash.Add( wxUIntToPtr(id) );
+    wxDataViewItem item( wxUIntToPtr(id) );
     ItemAdded( wxDataViewItem(0), item );
 }
 
 void wxDataViewIndexListModel::RowDeleted( unsigned int row )
 {
     m_ordered = false;
-        
+
     wxDataViewItem item( m_hash[row] );
     wxDataViewModel::ItemDeleted( wxDataViewItem(0), item );
     m_hash.RemoveAt( row );
@@ -377,9 +380,9 @@ void wxDataViewIndexListModel::RowsDeleted( const wxArrayInt &rows )
 {
     wxArrayInt sorted = rows;
     sorted.Sort( my_sort );
-    
+
     m_ordered = false;
-        
+
     wxDataViewItemArray array;
     unsigned int i;
     for (i = 0; i < rows.GetCount(); i++)
@@ -388,7 +391,7 @@ void wxDataViewIndexListModel::RowsDeleted( const wxArrayInt &rows )
             array.Add( item );
     }
     wxDataViewModel::ItemsDeleted( wxDataViewItem(0), array );
-        
+
     for (i = 0; i < sorted.GetCount(); i++)
            m_hash.RemoveAt( sorted[i] );
 }
@@ -410,7 +413,7 @@ unsigned int wxDataViewIndexListModel::GetRow( const wxDataViewItem &item ) cons
             unsigned int pos = wxPtrToUInt( item.GetID() );
             return pos-1;
     }
-    
+
     // assert for not found
     return (unsigned int) m_hash.Index( item.GetID() );
 }
@@ -422,7 +425,7 @@ wxDataViewItem wxDataViewIndexListModel::GetItem( unsigned int row ) const
 }
 
 bool wxDataViewIndexListModel::HasDefaultCompare() const
-{ 
+{
     return !m_ordered;
 }
 
@@ -435,13 +438,13 @@ int wxDataViewIndexListModel::Compare(const wxDataViewItem& item1,
     {
         unsigned int pos1 = wxPtrToUInt(item1.GetID());
         unsigned int pos2 = wxPtrToUInt(item2.GetID());
-        
+
         if (ascending)
             return pos1 - pos2;
-        else 
+        else
             return pos2 - pos1;
     }
-    
+
     if (ascending)
         return GetRow(item1) - GetRow(item2);
 
@@ -485,7 +488,7 @@ unsigned int wxDataViewIndexListModel::GetChildren( const wxDataViewItem &item, 
         return 0;
 
     children = m_hash;
-    
+
     return m_hash.GetCount();
 }
 
@@ -507,34 +510,34 @@ wxDataViewVirtualListModel::~wxDataViewVirtualListModel()
 void wxDataViewVirtualListModel::Reset( unsigned int new_size )
 {
     m_lastIndex = new_size-1;
-    
+
     wxDataViewModel::Cleared();
 }
 
 void wxDataViewVirtualListModel::RowPrepended()
 {
     m_lastIndex++;
-    wxDataViewItem item( (void*) 0 );
+    wxDataViewItem item( NULL );
     ItemAdded( wxDataViewItem(0), item );
 }
 
 void wxDataViewVirtualListModel::RowInserted( unsigned int before )
 {
     m_lastIndex++;
-    wxDataViewItem item( (void*) before );
+    wxDataViewItem item( wxUIntToPtr(before) );
     ItemAdded( wxDataViewItem(0), item );
 }
 
 void wxDataViewVirtualListModel::RowAppended()
 {
     m_lastIndex++;
-    wxDataViewItem item( (void*) m_lastIndex );
+    wxDataViewItem item( wxUIntToPtr(m_lastIndex) );
     ItemAdded( wxDataViewItem(0), item );
 }
 
 void wxDataViewVirtualListModel::RowDeleted( unsigned int row )
 {
-    wxDataViewItem item( (void*) row );
+    wxDataViewItem item( wxUIntToPtr(row) );
     wxDataViewModel::ItemDeleted( wxDataViewItem(0), item );
     m_lastIndex++;
 }
@@ -543,16 +546,16 @@ void wxDataViewVirtualListModel::RowsDeleted( const wxArrayInt &rows )
 {
     wxArrayInt sorted = rows;
     sorted.Sort( my_sort );
-    
+
     wxDataViewItemArray array;
     unsigned int i;
     for (i = 0; i < sorted.GetCount(); i++)
     {
-            wxDataViewItem item( (void*) sorted[i] );
+            wxDataViewItem item( wxUIntToPtr(sorted[i]) );
             array.Add( item );
     }
     wxDataViewModel::ItemsDeleted( wxDataViewItem(0), array );
-    
+
     m_lastIndex -= rows.GetCount();
 }
 
@@ -573,11 +576,11 @@ unsigned int wxDataViewVirtualListModel::GetRow( const wxDataViewItem &item ) co
 
 wxDataViewItem wxDataViewVirtualListModel::GetItem( unsigned int row ) const
 {
-    return wxDataViewItem( (void*) row  );
+    return wxDataViewItem( wxUIntToPtr(row)  );
 }
 
 bool wxDataViewVirtualListModel::HasDefaultCompare() const
-{ 
+{
     return true;
 }
 
@@ -588,10 +591,10 @@ int wxDataViewVirtualListModel::Compare(const wxDataViewItem& item1,
 {
     unsigned int pos1 = wxPtrToUInt(item1.GetID());
     unsigned int pos2 = wxPtrToUInt(item2.GetID());
-        
+
     if (ascending)
        return pos1 - pos2;
-    else 
+    else
        return pos2 - pos1;
 }
 
@@ -672,8 +675,8 @@ const wxDataViewCtrl* wxDataViewRendererBase::GetView() const
 }
 
 class wxKillRef: public wxWindowRef
-{       
-public: 
+{
+public:
    wxKillRef( wxWindow *win ) : wxWindowRef( win ) { }
    virtual void OnObjectDestroy()
    {
@@ -718,7 +721,7 @@ bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect la
 void wxDataViewRendererBase::CancelEditing()
 {
     GetOwner()->GetOwner()->GetMainWindow()->SetFocus();
-    
+
     m_editorCtrl->Hide();
     wxPendingDelete.Append( m_editorCtrl );
 }
@@ -732,7 +735,7 @@ bool wxDataViewRendererBase::FinishEditing()
 
     m_editorCtrl->Hide();
     wxPendingDelete.Append( m_editorCtrl );
-    
+
     if (!Validate(value))
         return false;
 
@@ -1264,7 +1267,7 @@ wxControl* wxDataViewSpinRenderer::CreateEditorCtrl( wxWindow *parent, wxRect la
     wxPoint pt = sc->GetPosition();
     sc->SetSize( pt.x - 4, pt.y - 4, size.x, size.y );
 #endif
-    
+
     return sc;
 }
 
@@ -1599,7 +1602,7 @@ wxDataViewTreeStore::GetValue(wxVariant &variant,
         if (container->IsExpanded() && container->GetExpandedIcon().IsOk())
            icon = container->GetExpandedIcon();
     }
-    
+
     wxDataViewIconText data( node->GetText(), icon );
 
     variant << data;
@@ -1730,15 +1733,15 @@ wxDataViewTreeCtrl::wxDataViewTreeCtrl()
 }
 
 wxDataViewTreeCtrl::wxDataViewTreeCtrl( wxWindow *parent, wxWindowID id,
-           const wxPoint& pos, const wxSize& size, long style, const wxValidator& validator ) 
+           const wxPoint& pos, const wxSize& size, long style, const wxValidator& validator )
 {
     m_imageList = NULL;
     Create( parent, id, pos, size, style, validator );
-    
+
     wxDataViewTreeStore *store = new wxDataViewTreeStore;
     AssociateModel( store );
     store->DecRef();
-    
+
     AppendIconTextColumn(wxString(),0,wxDATAVIEW_CELL_INERT,-1);
 }
 
@@ -1759,16 +1762,16 @@ void wxDataViewTreeCtrl::SetImageList( wxImageList *imagelist )
     if (m_imageList)
         delete m_imageList;
 
-    m_imageList = imagelist;   
+    m_imageList = imagelist;
 }
-    
+
 wxDataViewItem wxDataViewTreeCtrl::AppendItem( const wxDataViewItem& parent,
         const wxString &text, int iconIndex, wxClientData *data )
 {
     wxIcon icon = wxNullIcon;
     if (m_imageList && (iconIndex != -1))
         icon = m_imageList->GetIcon( iconIndex );
-        
+
     return GetStore()->AppendItem( parent, text, icon, data );
 }
 
@@ -1778,7 +1781,7 @@ wxDataViewItem wxDataViewTreeCtrl::PrependItem( const wxDataViewItem& parent,
     wxIcon icon = wxNullIcon;
     if (m_imageList && (iconIndex != -1))
         icon = m_imageList->GetIcon( iconIndex );
-        
+
     return GetStore()->PrependItem( parent, text, icon, data );
 }
 
@@ -1788,7 +1791,7 @@ wxDataViewItem wxDataViewTreeCtrl::InsertItem( const wxDataViewItem& parent, con
     wxIcon icon = wxNullIcon;
     if (m_imageList && (iconIndex != -1))
         icon = m_imageList->GetIcon( iconIndex );
-        
+
     return GetStore()->InsertItem( parent, previous, text, icon, data );
 }
 
@@ -1798,11 +1801,11 @@ wxDataViewItem wxDataViewTreeCtrl::PrependContainer( const wxDataViewItem& paren
     wxIcon icon = wxNullIcon;
     if (m_imageList && (iconIndex != -1))
         icon = m_imageList->GetIcon( iconIndex );
-        
+
     wxIcon expanded = wxNullIcon;
     if (m_imageList && (expandedIndex != -1))
         expanded = m_imageList->GetIcon( expandedIndex );
-        
+
     return GetStore()->PrependContainer( parent, text, icon, expanded, data );
 }
 
@@ -1812,11 +1815,11 @@ wxDataViewItem wxDataViewTreeCtrl::AppendContainer( const wxDataViewItem& parent
     wxIcon icon = wxNullIcon;
     if (m_imageList && (iconIndex != -1))
         icon = m_imageList->GetIcon( iconIndex );
-        
+
     wxIcon expanded = wxNullIcon;
     if (m_imageList && (expandedIndex != -1))
         expanded = m_imageList->GetIcon( expandedIndex );
-        
+
     return GetStore()->AppendContainer( parent, text, icon, expanded, data );
 }
 
@@ -1826,21 +1829,21 @@ wxDataViewItem wxDataViewTreeCtrl::InsertContainer( const wxDataViewItem& parent
     wxIcon icon = wxNullIcon;
     if (m_imageList && (iconIndex != -1))
         icon = m_imageList->GetIcon( iconIndex );
-        
+
     wxIcon expanded = wxNullIcon;
     if (m_imageList && (expandedIndex != -1))
         expanded = m_imageList->GetIcon( expandedIndex );
-        
+
     return GetStore()->InsertContainer( parent, previous, text, icon, expanded, data );
 }
 
 void wxDataViewTreeCtrl::OnExpanded( wxDataViewEvent &event )
 {
     if (m_imageList) return;
-    
+
     wxDataViewTreeStoreContainerNode* container = GetStore()->FindContainerNode( event.GetItem() );
     if (!container) return;
-    
+
     container->SetExpanded( true );
     GetStore()->ItemChanged( event.GetItem() );
 }
@@ -1848,10 +1851,10 @@ void wxDataViewTreeCtrl::OnExpanded( wxDataViewEvent &event )
 void wxDataViewTreeCtrl::OnCollapsed( wxDataViewEvent &event )
 {
     if (m_imageList) return;
-    
+
     wxDataViewTreeStoreContainerNode* container = GetStore()->FindContainerNode( event.GetItem() );
     if (!container) return;
-    
+
     container->SetExpanded( false );
     GetStore()->ItemChanged( event.GetItem() );
 }
@@ -1861,7 +1864,7 @@ void wxDataViewTreeCtrl::OnSize( wxSizeEvent &event )
 #if defined(wxUSE_GENERICDATAVIEWCTRL)
     wxSize size = GetClientSize();
     wxDataViewColumn *col = GetColumn( 0 );
-    if (col) 
+    if (col)
        col->SetWidth( size.x );
 #endif
     event.Skip( true );
