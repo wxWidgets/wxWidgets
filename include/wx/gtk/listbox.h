@@ -97,9 +97,6 @@ public:
 
     void GtkDisableEvents();
     void GtkEnableEvents();
-    
-    wxArrayInt m_oldSelection;
-    void GtkUpdateOldSelection();
 
 protected:
     virtual void DoClear();

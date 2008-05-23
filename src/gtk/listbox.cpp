@@ -112,17 +112,6 @@ gtk_listbox_row_activated_callback(GtkTreeView        * WXUNUSED(treeview),
 // "changed"
 //-----------------------------------------------------------------------------
 
-static void SendEvent( wxCommandEvent &event, wxListBox *listbox, int item )
-{
-    event.SetInt( item );
-    event.SetString( listbox->GetString( item ) );
-    if ( listbox->HasClientObjectData() )
-        event.SetClientObject( listbox->GetClientObject(item) );
-    else if ( listbox->HasClientUntypedData() )
-        event.SetClientData( listbox->GetClientData(item) );
-    listbox->HandleWindowEvent( event );
-}
-
 extern "C" {
 static void
 gtk_listitem_changed_callback(GtkTreeSelection * WXUNUSED(selection),
@@ -130,96 +119,15 @@ gtk_listitem_changed_callback(GtkTreeSelection * WXUNUSED(selection),
 {
     if (g_blockEventsOnDrag) return;
 
-    wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, listbox->GetId() );
-    event.SetEventObject( listbox );
-
     if (listbox->HasFlag(wxLB_MULTIPLE) || listbox->HasFlag(wxLB_EXTENDED))
     {
-        wxArrayInt selections;
-        listbox->GetSelections( selections );
-        
-        if ((selections.GetCount() == 0) && (listbox->m_oldSelection.GetCount() == 0))
-        {
-            // nothing changed, just leave
-            return;
-        }
-        
-        if (selections.GetCount() == listbox->m_oldSelection.GetCount())
-        {
-            bool changed = false;
-            size_t idx;
-            for (idx = 0; idx < selections.GetCount(); idx++)
-            {
-                if (selections[idx] != listbox->m_oldSelection[idx])
-                {
-                    changed = true;
-                    break;
-                }
-            }
-            
-            // nothing changed, just leave
-            if (!changed)
-               return;
-        }
-
-        if (selections.GetCount() == 0)
-        {
-            // indicate that this is a deselection
-            event.SetExtraLong( 0 );
-            int item = listbox->m_oldSelection[0];
-            listbox->m_oldSelection = selections;
-            SendEvent( event, listbox, item );
-            return;
-        }
-        
-        int item;
-        // Now test if any new item is selected
-        bool any_new_selected = false;
-        size_t idx;
-        for (idx = 0; idx < selections.GetCount(); idx++)
-        {
-            item = selections[idx];
-            if (listbox->m_oldSelection.Index(item) == wxNOT_FOUND)
-            {
-                any_new_selected = true;
-                break;
-            }
-        }
-        
-        if (any_new_selected)
-        {
-            // indicate that this is a selection
-            event.SetExtraLong( 1 );
-            listbox->m_oldSelection = selections;
-            SendEvent( event, listbox, item );
-            return;
-        }
-        
-        // Now test if any new item is deselected
-        bool any_new_deselected = false;
-        for (idx = 0; idx < listbox->m_oldSelection.GetCount(); idx++)
-        {
-            item = listbox->m_oldSelection[idx];
-            if (selections.Index(item) == wxNOT_FOUND)
-            {
-                any_new_deselected = true;
-                break;
-            }
-        }
-        
-        if (any_new_deselected)
-        {
-            // indicate that this is a selection
-            event.SetExtraLong( 0 );
-            listbox->m_oldSelection = selections;
-            SendEvent( event, listbox, item );
-            return;
-        }
-        
-        wxLogError( wxT("Wrong wxListBox selection") );
+        listbox->CalcAndSendEvent();
     }
     else
     {
+        wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, listbox->GetId() );
+        event.SetEventObject( listbox );
+
         int index = listbox->GetSelection();
         if (index == wxNOT_FOUND)
         {
@@ -588,7 +496,7 @@ void wxListBox::GtkEnableEvents()
     g_signal_handlers_unblock_by_func(selection,
                                 (gpointer) gtk_listitem_changed_callback, this);
                                 
-    GtkUpdateOldSelection();
+    UpdateOldSelections();
 }
 
 // ----------------------------------------------------------------------------
@@ -853,7 +761,7 @@ int wxListBox::GetSelections( wxArrayInt& aSelections ) const
 
     aSelections.Empty();
 
-        int i = 0;
+    int i = 0;
     GtkTreeIter iter;
     GtkTreeSelection* selection = gtk_tree_view_get_selection(m_treeview);
 
@@ -918,12 +826,6 @@ void wxListBox::DoSetSelection( int n, bool select )
     gtk_tree_path_free(path);
 
     GtkEnableEvents();
-}
-
-void wxListBox::GtkUpdateOldSelection()
-{
-    if (HasFlag(wxLB_MULTIPLE) || HasFlag(wxLB_EXTENDED))
-        GetSelections( m_oldSelection );
 }
 
 void wxListBox::DoScrollToCell(int n, float alignY, float alignX)

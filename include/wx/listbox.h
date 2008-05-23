@@ -94,6 +94,11 @@ public:
     // returns the item number at a point or wxNOT_FOUND
     int HitTest(const wxPoint& point) const { return DoListHitTest(point); }
 
+    // For generating events in multiple and extended mode
+    wxArrayInt m_oldSelections;
+    void UpdateOldSelections();
+    void CalcAndSendEvent();
+
 protected:
     virtual void DoSetFirstItem(int n) = 0;
 
