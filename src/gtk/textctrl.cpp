@@ -955,6 +955,19 @@ void wxTextCtrl::DoSetValue( const wxString &value, int flags )
         return;
     }
 
+    if (value.IsEmpty())
+    {
+        if ( !(flags & SetValue_SendEvent) )
+            EnableTextChangedEvents(false);
+        
+        gtk_text_buffer_set_text( m_buffer, "", 0 );
+            
+        if ( !(flags & SetValue_SendEvent) )
+            EnableTextChangedEvents(true);
+            
+        return;
+    }
+
     wxFontEncoding enc = m_defaultStyle.HasFont()
                             ? m_defaultStyle.GetFont().GetEncoding()
                             : wxFONTENCODING_SYSTEM;
