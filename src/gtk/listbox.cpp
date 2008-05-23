@@ -542,6 +542,8 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
             AssignNewItemClientData(GtkGetIndexFor(itercur), clientData, i, type);
     }
 
+    UpdateOldSelections();
+
     return pos + numItems - 1;
 }
 
