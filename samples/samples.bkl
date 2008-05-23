@@ -82,6 +82,7 @@
     <subproject id="vscroll" template="sub"/>
     <subproject id="widgets" template="sub"/>
     <subproject id="wizard" template="sub"/>
+    <subproject id="wrapsizer" template="sub"/>
     <!-- Put samples most likely to fail at the end -->
     <subproject id="mfc" template="sub"/>
 
