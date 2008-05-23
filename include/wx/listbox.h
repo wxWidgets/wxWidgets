@@ -94,12 +94,6 @@ public:
     // returns the item number at a point or wxNOT_FOUND
     int HitTest(const wxPoint& point) const { return DoListHitTest(point); }
 
-#if WXWIN_COMPATIBILITY_2_6
-    // compatibility - these functions are deprecated, use the new ones
-    // instead
-    wxDEPRECATED( bool Selected(int n) const );
-#endif // WXWIN_COMPATIBILITY_2_6
-
 protected:
     virtual void DoSetFirstItem(int n) = 0;
 
@@ -112,10 +106,6 @@ protected:
 private:
     DECLARE_NO_COPY_CLASS(wxListBoxBase)
 };
-
-#if WXWIN_COMPATIBILITY_2_6
-    inline bool wxListBoxBase::Selected(int n) const { return IsSelected(n); }
-#endif // WXWIN_COMPATIBILITY_2_6
 
 // ----------------------------------------------------------------------------
 // include the platform-specific class declaration
