@@ -28,6 +28,10 @@ public:
 #endif
     virtual bool DoMessageFromThreadWait();
     virtual WXDWORD WaitForThread(WXHANDLE hThread);
+#ifndef __WXWINCE__
+    virtual bool CanUseStderr() { return true; }
+    virtual bool WriteToStderr(const wxString& text);
+#endif // !__WXWINCE__
 };
 
 #if wxUSE_GUI
@@ -45,9 +49,13 @@ public:
     virtual bool DoMessageFromThreadWait();
     virtual wxPortId GetToolkitVersion(int *majVer = NULL, int *minVer = NULL) const;
     virtual WXDWORD WaitForThread(WXHANDLE hThread);
+
+#ifndef __WXWINCE__
+    virtual bool CanUseStderr();
+    virtual bool WriteToStderr(const wxString& text);
+#endif // !__WXWINCE__
 };
 
 #endif // wxUSE_GUI
 
 #endif // _WX_MSW_APPTRAIT_H_
-

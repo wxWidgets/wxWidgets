@@ -105,48 +105,42 @@ void wxMessageOutput::DoPrintfUtf8(const char *format, ...)
 // wxMessageOutputBest
 // ----------------------------------------------------------------------------
 
-#ifdef __WINDOWS__
-
-// check if we're running in a console under Windows
-static inline bool IsInConsole()
-{
-#ifdef __WXWINCE__
-    return false;
-#else // !__WXWINCE__
-    HANDLE hStdErr = ::GetStdHandle(STD_ERROR_HANDLE);
-    return hStdErr && hStdErr != INVALID_HANDLE_VALUE;
-#endif // __WXWINCE__/!__WXWINCE__
-}
-
-#endif // __WINDOWS__
-
 void wxMessageOutputBest::Output(const wxString& str)
 {
 #ifdef __WINDOWS__
-    if ( !IsInConsole() )
-    {
-        ::MessageBox(NULL, str.wx_str(), _T("wxWidgets"),
-                     MB_ICONINFORMATION | MB_OK);
-    }
-    else
-#endif // __WINDOWS__/!__WINDOWS__
-    {
-        const wxWX2MBbuf buf = str.mb_str();
+    // decide whether to use console output or not
+    wxAppTraits * const traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
+    const bool hasStderr = traits ? traits->CanUseStderr() : false;
 
-        if ( buf )
-            fprintf(stderr, "%s", (const char*) buf);
-        else // print at least something
-            fprintf(stderr, "%s", (const char*) str.ToAscii());
+    if ( !(m_flags & wxMSGOUT_PREFER_MSGBOX) )
+    {
+        if ( hasStderr && traits->WriteToStderr(AppendLineFeedIfNeeded(str)) )
+            return;
     }
+
+    ::MessageBox(NULL, str.wx_str(), NULL, MB_ICONINFORMATION | MB_OK);
+#else // !__WINDOWS__
+    // TODO: use the native message box for the other ports too
+    wxMessageOutputStderr::Output(str);
+#endif // __WINDOWS__/!__WINDOWS__
 }
 
 // ----------------------------------------------------------------------------
 // wxMessageOutputStderr
 // ----------------------------------------------------------------------------
 
+wxString wxMessageOutputStderr::AppendLineFeedIfNeeded(const wxString& str)
+{
+    wxString strLF(str);
+    if ( strLF.empty() || *strLF.rbegin() != '\n' )
+        strLF += '\n';
+
+    return strLF;
+}
+
 void wxMessageOutputStderr::Output(const wxString& str)
 {
-    const wxWX2MBbuf buf = str.mb_str();
+    const wxWX2MBbuf buf = AppendLineFeedIfNeeded(str).mb_str();
 
     if ( buf )
         fprintf(stderr, "%s", (const char*) buf);
@@ -160,17 +154,14 @@ void wxMessageOutputStderr::Output(const wxString& str)
 
 void wxMessageOutputDebug::Output(const wxString& str)
 {
-    wxString out(str);
-
 #if defined(__WXMSW__) && !defined(__WXMICROWIN__)
+    wxString out(AppendLineFeedIfNeeded(str));
     out.Replace(wxT("\t"), wxT("        "));
     out.Replace(wxT("\n"), wxT("\r\n"));
     ::OutputDebugString(out.wx_str());
 #else
-    wxFputs( out , stderr ) ;
-    if ( out.Right(1) != wxT("\n") )
-        wxFputs( wxT("\n") , stderr ) ;
-    fflush( stderr ) ;
+    // TODO: use native debug output function for the other ports too
+    wxMessageOutputStderr::Output(str);
 #endif // platform
 }
 
@@ -204,9 +195,7 @@ void wxMessageOutputMessageBox::Output(const wxString& str)
     out.Replace(wxT("\t"), wxT("        "));
 #endif
 
-    wxString title;
-    if ( wxTheApp )
-        title.Printf(_("%s message"), wxTheApp->GetAppDisplayName().c_str());
+    wxString title = wxTheApp ? wxTheApp->GetAppDisplayName() : wxT("wxWidgets");
 
     ::wxMessageBox(out, title);
 }

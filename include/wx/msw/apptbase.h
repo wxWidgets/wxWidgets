@@ -65,6 +65,23 @@ public:
     virtual GSocketManager *GetSocketManager() { return ms_manager; }
 #endif // wxUSE_SOCKETS
 
+
+#ifndef __WXWINCE__
+    // console helpers
+    // ---------------
+
+    // this method can be overridden by a derived class to always return true
+    // or false to force [not] using the console for output to stderr
+    //
+    // by default console applications always return true from here while the
+    // GUI ones only return true if they're being run from console and there is
+    // no other activity happening in this console
+    virtual bool CanUseStderr() = 0;
+
+    // write text to the console, return true if ok or false on error
+    virtual bool WriteToStderr(const wxString& text) = 0;
+#endif // !__WXWINCE__
+
 protected:
     // implementation of WaitForThread() for the console applications which is
     // also used by the GUI code if it doesn't [yet|already} dispatch events

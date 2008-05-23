@@ -282,6 +282,279 @@ wxEventLoopBase* wxGUIAppTraits::CreateEventLoop()
     return new wxEventLoop;
 }
 
+// ---------------------------------------------------------------------------
+// Stuff for using console from the GUI applications
+// ---------------------------------------------------------------------------
+
+#ifndef __WXWINCE__
+
+#include <wx/dynlib.h>
+
+namespace
+{
+
+/*
+    Helper class to manipulate console from a GUI app.
+
+    Notice that console output is available in the GUI app only if:
+    - AttachConsole() returns TRUE (which means it never works under pre-XP)
+    - we have a valid STD_ERROR_HANDLE
+    - command history hasn't been changed since our startup
+
+    To check if all these conditions are verified, you need to simple call
+    IsOkToUse(). It will check the first two conditions above the first time it
+    is called (and if this fails, the subsequent calls will return immediately)
+    and also recheck the last one every time it is called.
+ */
+class wxConsoleStderr
+{
+public:
+    // default ctor does nothing, call Init() before using this class
+    wxConsoleStderr()
+    {
+        m_hStderr = INVALID_HANDLE_VALUE;
+        m_historyLen =
+        m_dataLen =
+        m_dataLine = 0;
+
+        m_ok = -1;
+    }
+
+    ~wxConsoleStderr()
+    {
+        if ( m_hStderr != INVALID_HANDLE_VALUE )
+        {
+            if ( !::FreeConsole() )
+            {
+                wxLogLastError(_T("FreeConsole"));
+            }
+        }
+    }
+
+    // return true if we were successfully initialized and there had been no
+    // console activity which would interfere with our output since then
+    bool IsOkToUse() const
+    {
+        if ( m_ok == -1 )
+        {
+            wxConsoleStderr * const self = wx_const_cast(wxConsoleStderr *, this);
+            self->m_ok = self->DoInit();
+
+            // no need to call IsHistoryUnchanged() as we just initialized
+            // m_history anyhow
+            return m_ok == 1;
+        }
+
+        return m_ok && IsHistoryUnchanged();
+    }
+
+
+    // output the provided text on the console, return true if ok
+    bool Write(const wxString& text);
+
+private:
+    // called by Init() once only to do the real initialization
+    bool DoInit();
+
+    // retrieve the command line history into the provided buffer and return
+    // its length
+    int GetCommandHistory(wxWxCharBuffer& buf) const;
+
+    // check if the console history has changed
+    bool IsHistoryUnchanged() const;
+
+    int m_ok;                   // initially -1, set to true or false by Init()
+
+    wxDynamicLibrary m_dllKernel32;
+
+    HANDLE m_hStderr;           // console handle, if it's valid we must call
+                                // FreeConsole() (even if m_ok != 1)
+
+    wxWxCharBuffer m_history;   // command history on startup
+    int m_historyLen;           // length command history buffer
+
+    wxCharBuffer m_data;        // data between empty line and cursor position
+    int m_dataLen;              // length data buffer
+    int m_dataLine;             // line offset
+
+    typedef DWORD (WINAPI *GetConsoleCommandHistory_t)(LPTSTR sCommands,
+                                                       DWORD nBufferLength,
+                                                       LPCTSTR sExeName);
+    typedef DWORD (WINAPI *GetConsoleCommandHistoryLength_t)(LPCTSTR sExeName);
+
+    GetConsoleCommandHistory_t m_pfnGetConsoleCommandHistory;
+    GetConsoleCommandHistoryLength_t m_pfnGetConsoleCommandHistoryLength;
+
+    DECLARE_NO_COPY_CLASS(wxConsoleStderr)
+};
+
+bool wxConsoleStderr::DoInit()
+{
+    HANDLE hStderr = ::GetStdHandle(STD_ERROR_HANDLE);
+
+    if ( hStderr == INVALID_HANDLE_VALUE || !hStderr )
+        return false;
+
+    if ( !m_dllKernel32.Load(_T("kernel32.dll")) )
+        return false;
+
+    typedef BOOL (WINAPI *AttachConsole_t)(DWORD dwProcessId);
+    AttachConsole_t wxDL_INIT_FUNC(pfn, AttachConsole, m_dllKernel32);
+
+    if ( !pfnAttachConsole || !pfnAttachConsole(ATTACH_PARENT_PROCESS) )
+        return false;
+
+    // console attached, set m_hStderr now to ensure that we free it in the
+    // dtor
+    m_hStderr = hStderr;
+
+    wxDL_INIT_FUNC_AW(m_pfn, GetConsoleCommandHistory, m_dllKernel32);
+    if ( !m_pfnGetConsoleCommandHistory )
+        return false;
+
+    wxDL_INIT_FUNC_AW(m_pfn, GetConsoleCommandHistoryLength, m_dllKernel32);
+    if ( !m_pfnGetConsoleCommandHistoryLength )
+        return false;
+
+    // remember the current command history to be able to compare with it later
+    // in IsHistoryUnchanged()
+    m_historyLen = GetCommandHistory(m_history);
+    if ( !m_history )
+        return false;
+
+
+    // now find the first blank line above the current position
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+
+    if ( !::GetConsoleScreenBufferInfo(m_hStderr, &csbi) )
+    {
+        wxLogLastError(_T("GetConsoleScreenBufferInfo"));
+        return false;
+    }
+
+    COORD pos;
+    pos.X = 0;
+    pos.Y = csbi.dwCursorPosition.Y + 1;
+
+    // we decide that a line is empty if first 4 characters are spaces
+    DWORD ret;
+    char buf[4];
+    do
+    {
+        pos.Y--;
+        if ( !::ReadConsoleOutputCharacterA(m_hStderr, buf, WXSIZEOF(buf),
+                                            pos, &ret) )
+        {
+            wxLogLastError(_T("ReadConsoleOutputCharacterA"));
+            return false;
+        }
+    } while ( wxStrncmp("    ", buf, WXSIZEOF(buf)) != 0 );
+
+    // calculate line offset and length of data
+    m_dataLine = csbi.dwCursorPosition.Y - pos.Y;
+    m_dataLen = m_dataLine*csbi.dwMaximumWindowSize.X + csbi.dwCursorPosition.X;
+
+    if ( m_dataLen > 0 )
+    {
+        m_data.extend(m_dataLen);
+        if ( !::ReadConsoleOutputCharacterA(m_hStderr, m_data.data(), m_dataLen,
+                                            pos, &ret) )
+        {
+            wxLogLastError(_T("ReadConsoleOutputCharacterA"));
+            return false;
+        }
+    }
+
+    return true;
+}
+
+int wxConsoleStderr::GetCommandHistory(wxWxCharBuffer& buf) const
+{
+    // these functions are internal and may only be called by cmd.exe
+    static const wxChar *CMD_EXE = _T("cmd.exe");
+
+    const int len = m_pfnGetConsoleCommandHistoryLength(CMD_EXE);
+    if ( len )
+    {
+        buf.extend(len);
+        const int len2 = m_pfnGetConsoleCommandHistory(buf.data(), len, CMD_EXE);
+        wxASSERT_MSG( len2 == len, _T("failed getting history?") );
+    }
+
+    return len;
+}
+
+bool wxConsoleStderr::IsHistoryUnchanged() const
+{
+    wxASSERT_MSG( m_ok == 1, _T("shouldn't be called if not initialized") );
+
+    // get (possibly changed) command history
+    wxWxCharBuffer history;
+    const int historyLen = GetCommandHistory(history);
+
+    // and compare it with the original one
+    return historyLen == m_historyLen && history &&
+                memcmp(m_history, history, historyLen) == 0;
+}
+
+bool wxConsoleStderr::Write(const wxString& text)
+{
+    wxASSERT_MSG( m_hStderr != INVALID_HANDLE_VALUE,
+                    _T("should only be called if Init() returned true") );
+
+    // get current position
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    if ( !::GetConsoleScreenBufferInfo(m_hStderr, &csbi) )
+    {
+        wxLogLastError(_T("GetConsoleScreenBufferInfo"));
+        return false;
+    }
+
+    // and calculate new position (where is empty line)
+    csbi.dwCursorPosition.X = 0;
+    csbi.dwCursorPosition.Y -= m_dataLine;
+
+    if ( !::SetConsoleCursorPosition(m_hStderr, csbi.dwCursorPosition) )
+    {
+        wxLogLastError(_T("SetConsoleCursorPosition"));
+        return false;
+    }
+
+    DWORD ret;
+    if ( !::FillConsoleOutputCharacter(m_hStderr, _T(' '), m_dataLen,
+                                       csbi.dwCursorPosition, &ret) )
+    {
+        wxLogLastError(_T("FillConsoleOutputCharacter"));
+        return false;
+    }
+
+    if ( !::WriteConsole(m_hStderr, text.wx_str(), text.length(), &ret, NULL) )
+    {
+        wxLogLastError(_T("WriteConsole"));
+        return false;
+    }
+
+    WriteConsoleA(m_hStderr, m_data, m_dataLen, &ret, 0);
+
+    return true;
+}
+
+wxConsoleStderr s_consoleStderr;
+
+} // anonymous namespace
+
+bool wxGUIAppTraits::CanUseStderr()
+{
+    return s_consoleStderr.IsOkToUse();
+}
+
+bool wxGUIAppTraits::WriteToStderr(const wxString& text)
+{
+    return s_consoleStderr.IsOkToUse() && s_consoleStderr.Write(text);
+}
+
+#endif // !__WXWINCE__
+
 // ===========================================================================
 // wxApp implementation
 // ===========================================================================

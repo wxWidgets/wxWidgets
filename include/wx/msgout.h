@@ -101,21 +101,6 @@ private:
 #endif
 
 // ----------------------------------------------------------------------------
-// implementation showing the message to the user in "best" possible way: uses
-// native message box if available (currently only under Windows) and stderr
-// otherwise; unlike wxMessageOutputMessageBox this class is always safe to use
-// ----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_BASE wxMessageOutputBest : public wxMessageOutput
-{
-public:
-    wxMessageOutputBest() { }
-
-protected:
-    virtual void Output(const wxString& str);
-};
-
-// ----------------------------------------------------------------------------
 // implementation which sends output to stderr
 // ----------------------------------------------------------------------------
 
@@ -126,6 +111,34 @@ public:
 
 protected:
     virtual void Output(const wxString& str);
+
+    // return the string with "\n" appended if it doesn't already terminate
+    // with it (in which case it's returned unchanged)
+    wxString AppendLineFeedIfNeeded(const wxString& str);
+};
+
+// ----------------------------------------------------------------------------
+// implementation showing the message to the user in "best" possible way:
+// uses stderr or message box if available according to the flag given to ctor.
+// ----------------------------------------------------------------------------
+
+enum wxMessageOutputFlags
+{
+    wxMSGOUT_PREFER_STDERR = 0, // use stderr if available (this is the default)
+    wxMSGOUT_PREFER_MSGBOX = 1  // always use message box if available
+};
+
+class WXDLLIMPEXP_BASE wxMessageOutputBest : public wxMessageOutputStderr
+{
+public:
+    wxMessageOutputBest(wxMessageOutputFlags flags = wxMSGOUT_PREFER_STDERR)
+        : m_flags(flags) { }
+
+protected:
+    virtual void Output(const wxString& str);
+
+private:
+    wxMessageOutputFlags m_flags;
 };
 
 // ----------------------------------------------------------------------------
@@ -149,7 +162,7 @@ protected:
 // implementation using the native way of outputting debug messages
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_BASE wxMessageOutputDebug : public wxMessageOutput
+class WXDLLIMPEXP_BASE wxMessageOutputDebug : public wxMessageOutputStderr
 {
 public:
     wxMessageOutputDebug() { }
@@ -171,5 +184,4 @@ protected:
     virtual void Output(const wxString& str);
 };
 
-#endif
-    // _WX_MSGOUT_H_
+#endif // _WX_MSGOUT_H_

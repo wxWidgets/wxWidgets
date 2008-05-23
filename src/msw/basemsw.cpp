@@ -108,3 +108,7 @@ WXDWORD wxConsoleAppTraits::WaitForThread(WXHANDLE hThread)
     return DoSimpleWaitForThread(hThread);
 }
 
+bool wxConsoleAppTraits::WriteToStderr(const wxString& text)
+{
+    return wxFprintf(stderr, "%s", text) != -1;
+}

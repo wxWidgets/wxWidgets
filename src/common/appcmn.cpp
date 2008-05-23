@@ -437,7 +437,8 @@ wxMessageOutput *wxGUIAppTraitsBase::CreateMessageOutput()
     // is (according to common practice):
     //     - console apps: to stderr (on any platform)
     //     - GUI apps: stderr on Unix platforms (!)
-    //                 message box under Windows and others
+    //                 stderr if available and message box otherwise on others
+    //                 (currently stderr only Windows if app running from console)
 #ifdef __UNIX__
     return new wxMessageOutputStderr;
 #else // !__UNIX__
@@ -445,7 +446,7 @@ wxMessageOutput *wxGUIAppTraitsBase::CreateMessageOutput()
     #ifdef __WXMOTIF__
         return new wxMessageOutputLog;
     #elif wxUSE_MSGDLG
-        return new wxMessageOutputMessageBox;
+        return new wxMessageOutputBest(wxMSGOUT_PREFER_STDERR);
     #else
         return new wxMessageOutputStderr;
     #endif
