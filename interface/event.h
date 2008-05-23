@@ -2073,8 +2073,10 @@ public:
     int GetSelection() const;
 
     /**
-        Returns item string for a listbox or choice selection event (not valid for
-        a deselection).
+        Returns item string for a listbox or choice selection event. If one
+        or several items have been deselected, returns the index of the first
+        deselected item. If some items have been selected and others deselected
+        at the same time, it will return the index of the first selected item.
     */
     wxString GetString() const;
 
@@ -2089,8 +2091,9 @@ public:
     bool IsChecked() const;
 
     /**
-        For a listbox or similar event, returns @true if it is a selection, @false if it
-        is a deselection.
+        For a listbox or similar event, returns @true if it is a selection, @false
+        if it is a deselection. If some items have been selected and others deselected
+        at the same time, it will return @true.
     */
     bool IsSelection() const;
 
