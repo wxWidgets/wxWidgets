@@ -266,6 +266,8 @@ void wxListBox::DoDeleteOneItem(unsigned int n)
     m_noItems--;
 
     SetHorizontalExtent(wxEmptyString);
+
+    UpdateOldSelections();
 }
 
 int wxListBox::FindString(const wxString& s, bool bCase) const
@@ -289,6 +291,8 @@ void wxListBox::DoClear()
 
     m_noItems = 0;
     SetHorizontalExtent();
+
+    UpdateOldSelections();
 }
 
 void wxListBox::Free()
@@ -314,6 +318,8 @@ void wxListBox::DoSetSelection(int N, bool select)
     {
         SendMessage(GetHwnd(), LB_SETCURSEL, select ? N : -1, 0);
     }
+
+    UpdateOldSelections();
 }
 
 bool wxListBox::IsSelected(int N) const
@@ -463,6 +469,8 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter & items,
     }
 
     SetHorizontalExtent();
+
+    UpdateOldSelections();
 
     return n;
 }
@@ -626,6 +634,12 @@ wxSize wxListBox::DoGetBestSize() const
 
 bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 {
+    if ((param == LBN_SELCHANGE) && HasMultipleSelection())
+    {
+        CalcAndSendEvent();
+        return true;
+    }
+
     wxEventType evtType;
     if ( param == LBN_SELCHANGE )
     {
@@ -654,7 +668,10 @@ bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
             event.SetClientData( GetClientData(n) );
 
         event.SetString(GetString(n));
-        event.SetExtraLong( HasMultipleSelection() ? IsSelected(n) : true );
+    }
+    else
+    {
+        return false;
     }
 
     event.SetInt(n);
