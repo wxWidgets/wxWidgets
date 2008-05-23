@@ -1191,14 +1191,16 @@ void MyPanel::OnChangeColour(wxCommandEvent& WXUNUSED(event))
 
 void MyPanel::OnListBox( wxCommandEvent &event )
 {
-    if (event.GetInt() == -1)
-    {
-        m_text->AppendText( _T("ListBox has no selections anymore\n") );
-        return;
-    }
-
     wxListBox *listbox = event.GetId() == ID_LISTBOX ? m_listbox
                                                      : m_listboxSorted;
+
+    bool deselect = false;
+    if (listbox->HasFlag(wxLB_MULTIPLE) || listbox->HasFlag(wxLB_EXTENDED))
+    {
+        deselect = !event.IsSelection();
+        if (deselect)
+            m_text->AppendText( _T("ListBox deselection event\n") );
+    }
 
     m_text->AppendText( _T("ListBox event selection string is: '") );
     m_text->AppendText( event.GetString() );
@@ -1206,7 +1208,7 @@ void MyPanel::OnListBox( wxCommandEvent &event )
 
     // can't use GetStringSelection() with multiple selections, there could be
     // more than one of them
-    if ( !listbox->HasFlag(wxLB_MULTIPLE) )
+    if ( !listbox->HasFlag(wxLB_MULTIPLE) && !listbox->HasFlag(wxLB_EXTENDED) )
     {
         m_text->AppendText( _T("ListBox control selection string is: '") );
         m_text->AppendText( listbox->GetStringSelection() );
