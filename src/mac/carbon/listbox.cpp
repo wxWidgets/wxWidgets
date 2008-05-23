@@ -121,6 +121,8 @@ void wxListBox::DoDeleteOneItem(unsigned int n)
     wxCHECK_RET( IsValid(n), wxT("invalid index in wxListBox::Delete") );
 
     GetPeer()->MacDelete( n );
+    
+    UpdateOldSelections();
 }
 
 int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
@@ -139,6 +141,8 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
     }
 
     return pos + count - 1;
+    
+    UpdateOldSelections();
 }
 
 int wxListBox::FindString(const wxString& s, bool bCase) const
@@ -155,6 +159,8 @@ int wxListBox::FindString(const wxString& s, bool bCase) const
 void wxListBox::DoClear()
 {
     FreeData();
+    
+    UpdateOldSelections();
 }
 
 void wxListBox::DoSetSelection(int n, bool select)
@@ -166,6 +172,8 @@ void wxListBox::DoSetSelection(int n, bool select)
         GetPeer()->MacDeselectAll();
     else
         GetPeer()->MacSetSelection( n, select, HasMultipleSelection() );
+    
+    UpdateOldSelections();
 }
 
 bool wxListBox::IsSelected(int n) const
@@ -411,16 +419,26 @@ void wxMacListBoxItem::Notification(wxMacDataItemBrowserControl *owner ,
 
     wxListBox *list = wxDynamicCast( owner->GetPeer() , wxListBox );
     wxCHECK_RET( list != NULL , wxT("Listbox expected"));
+    
+#if 0
+    // Doesn't work
+    if (list->HasMultipleSelection() && (message == kDataBrowserSelectionSetChanged))
+    {
+        list->CalcAndSendEvent();
+        return;
+    }
+#else
+    if (list->HasMultipleSelection() && ((message == kDataBrowserItemSelected) || (message == kDataBrowserItemDeselected)))
+    {
+        list->CalcAndSendEvent();
+        return;
+    }
+#endif
 
     bool trigger = false;
     wxCommandEvent event( wxEVT_COMMAND_LISTBOX_SELECTED, list->GetId() );
     switch (message)
     {
-        case kDataBrowserItemDeselected:
-            if ( list->HasMultipleSelection() )
-                trigger = !lb->IsSelectionSuppressed();
-            break;
-
         case kDataBrowserItemSelected:
             trigger = !lb->IsSelectionSuppressed();
             break;
