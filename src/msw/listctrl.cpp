@@ -528,7 +528,7 @@ void wxListCtrl::SetWindowStyleFlag(long flag)
 {
     if ( flag != m_windowStyle )
     {
-        m_windowStyle = flag;
+        wxControl::SetWindowStyleFlag(flag);
 
         UpdateStyle();
 
