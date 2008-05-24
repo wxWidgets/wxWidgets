@@ -195,7 +195,8 @@ void wxMessageOutputMessageBox::Output(const wxString& str)
     out.Replace(wxT("\t"), wxT("        "));
 #endif
 
-    wxString title = wxTheApp ? wxTheApp->GetAppDisplayName() : wxT("wxWidgets");
+    wxString title = wxT("wxWidgets") ;
+    if (wxTheApp) title = wxTheApp->GetAppDisplayName();
 
     ::wxMessageBox(out, title);
 }
