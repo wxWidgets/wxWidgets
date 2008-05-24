@@ -1012,7 +1012,7 @@ void MyTreeCtrl::DoToggleIcon(const wxTreeItemId& item)
                     : TreeCtrlIcon_Folder;
     SetItemImage(item, image, wxTreeItemIcon_Normal);
 
-    image = GetItemImage(item, TreeCtrlIcon_FolderSelected) == TreeCtrlIcon_FolderSelected
+    image = GetItemImage(item, wxTreeItemIcon_Selected) == TreeCtrlIcon_FolderSelected
                     ? TreeCtrlIcon_FileSelected
                     : TreeCtrlIcon_FolderSelected;
     SetItemImage(item, image, wxTreeItemIcon_Selected);
