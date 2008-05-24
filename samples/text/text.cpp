@@ -194,6 +194,12 @@ public:
     }
 #endif // wxUSE_CLIPBOARD
 
+    void OnAddTextLine(wxCommandEvent& WXUNUSED(event))
+    {
+        static int s_n = 0;
+        m_panel->m_textrich->AppendText(wxString::Format("Line %d\n", ++s_n));
+    }
+
     void OnAddTextFreeze( wxCommandEvent& WXUNUSED(event) )
         { DoAddText(true); }
     void OnAddText( wxCommandEvent& WXUNUSED(event) )
@@ -395,6 +401,7 @@ enum
     // text menu
     TEXT_ADD_SOME = 400,
     TEXT_ADD_FREEZE,
+    TEXT_ADD_LINE,
     TEXT_MOVE_ENDTEXT,
     TEXT_MOVE_ENDENTRY,
     TEXT_SET_EDITABLE,
@@ -476,6 +483,7 @@ bool MyApp::OnInit()
     wxMenu *menuText = new wxMenu;
     menuText->Append(TEXT_ADD_SOME, _T("&Append some text\tCtrl-A"));
     menuText->Append(TEXT_ADD_FREEZE, _T("&Append text with freeze/thaw\tShift-Ctrl-A"));
+    menuText->Append(TEXT_ADD_LINE, _T("Append a new &line\tAlt-Shift-A"));
     menuText->Append(TEXT_REMOVE, _T("&Remove first 10 characters\tCtrl-Y"));
     menuText->Append(TEXT_REPLACE, _T("&Replace characters 4 to 8 with ABC\tCtrl-R"));
     menuText->Append(TEXT_SELECT, _T("&Select characters 4 to 8\tCtrl-I"));
@@ -1337,6 +1345,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TEXT_SELECT,             MyFrame::OnSelectText)
     EVT_MENU(TEXT_ADD_SOME,           MyFrame::OnAddText)
     EVT_MENU(TEXT_ADD_FREEZE,         MyFrame::OnAddTextFreeze)
+    EVT_MENU(TEXT_ADD_LINE,           MyFrame::OnAddTextLine)
     EVT_MENU(TEXT_MOVE_ENDTEXT,       MyFrame::OnMoveToEndOfText)
     EVT_MENU(TEXT_MOVE_ENDENTRY,      MyFrame::OnMoveToEndOfEntry)
 
