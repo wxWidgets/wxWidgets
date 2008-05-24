@@ -15,6 +15,9 @@
     expanded to show further items. Items in a tree control are referenced by
     wxTreeItemId handles, which may be tested for validity by calling
     wxTreeItemId::IsOk().
+    
+    A similar control with a fully native implemtation for GTK+ and OS X
+    as well is wxDataViewTreeCtrl.
 
     To intercept events from a tree control, use the event table macros
     described in wxTreeEvent.
@@ -75,7 +78,7 @@
     @category{ctrl}
     <!-- @appearance{treectrl.png} -->
 
-    @see wxTreeEvent, wxTreeItemData, @ref overview_treectrl, wxListBox,
+    @see wxDataViewTreeCtrl, wxTreeEvent, wxTreeItemData, @ref overview_treectrl, wxListBox,
          wxListCtrl, wxImageList
 */
 class wxTreeCtrl : public wxControl
