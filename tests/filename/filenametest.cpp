@@ -317,6 +317,8 @@ void FileNameTestCase::TestNormalize()
           "c:\\program files\\wx", wxPATH_DOS },
         { "C:/Program Files/wx", wxPATH_NORM_ALL | wxPATH_NORM_CASE,
           "c:\\program files\\wx", wxPATH_DOS },
+        { "C:\\Users\\zeitlin", wxPATH_NORM_ALL | wxPATH_NORM_CASE,
+          "c:\\users\\zeitlin", wxPATH_DOS },
 
         // test wxPATH_NORM_ABSOLUTE
         { "a/b/", wxPATH_NORM_ABSOLUTE, cwd + "a/b/", wxPATH_UNIX },
