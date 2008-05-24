@@ -75,7 +75,11 @@ public:
 class wxSpinButton : public wxControl
 {
 public:
-    //@{
+    /**
+        Default constructor.
+    */
+    wxSpinButton();
+    
     /**
         Constructor, creating and showing a spin button.
 
@@ -96,13 +100,11 @@ public:
 
         @see Create()
     */
-    wxSpinButton();
     wxSpinButton(wxWindow* parent, wxWindowID id,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxSP_HORIZONTAL,
                  const wxString& name = "spinButton");
-    //@}
 
     /**
         Destructor, destroys the spin button control.

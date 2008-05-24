@@ -24,20 +24,23 @@
     @category{ctrl}
     <!-- @appearance{spinctrl.png} -->
 
-    @see @ref overview_eventhandlingoverview, wxSpinButton, wxControl
+    @see wxSpinButton, wxControl
 */
 class wxSpinCtrl : public wxControl
 {
 public:
-    //@{
     /**
-        )
+       Default constructor.
+    */
+    wxSpinCtrl();
+    
+    /**
         Constructor, creating and showing a spin control.
 
         @param parent
             Parent window. Must not be @NULL.
         @param value
-            Default value.
+            Default value (as text).
         @param id
             Window identifier. The value wxID_ANY indicates a default value.
         @param pos
@@ -59,7 +62,6 @@ public:
 
         @see Create()
     */
-    wxSpinCtrl();
     wxSpinCtrl(wxWindow* parent, wxWindowID id = -1,
                const wxString& value = wxEmptyString,
                const wxPoint& pos = wxDefaultPosition,
@@ -67,10 +69,8 @@ public:
                long style = wxSP_ARROW_KEYS,
                int min = 0, int max = 100,
                int initial = 0);
-    //@}
 
     /**
-        )
         Creation function called by the spin control constructor.
         See wxSpinCtrl() for details.
     */
@@ -111,12 +111,14 @@ public:
     */
     void SetSelection(long from, long to);
 
-    //@{
+    /**
+        Sets the value of the spin control. Use the variant using int instead.
+    */
+    void SetValue(const wxString& text);
+
     /**
         Sets the value of the spin control.
     */
-    void SetValue(const wxString& text);
     void SetValue(int value);
-    //@}
 };
 
