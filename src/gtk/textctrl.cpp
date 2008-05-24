@@ -968,6 +968,9 @@ void wxTextCtrl::DoSetValue( const wxString &value, int flags )
         return;
     }
 
+#ifdef wxUSE_UNICODE
+    const wxCharBuffer buffer(value.utf8_str());
+#else
     wxFontEncoding enc = m_defaultStyle.HasFont()
                             ? m_defaultStyle.GetFont().GetEncoding()
                             : wxFONTENCODING_SYSTEM;
@@ -982,6 +985,7 @@ void wxTextCtrl::DoSetValue( const wxString &value, int flags )
         wxLogWarning(_("Failed to set text in the text control."));
         return;
     }
+#endif
 
     if ( !(flags & SetValue_SendEvent) )
     {
@@ -1020,6 +1024,9 @@ void wxTextCtrl::WriteText( const wxString &text )
         return;
     }
 
+#ifdef wxUSE_UNICODE
+    const wxCharBuffer buffer(text.utf8_str());
+#else
     // check if we have a specific style for the current position
     wxFontEncoding enc = wxFONTENCODING_SYSTEM;
     wxTextAttr style;
@@ -1040,6 +1047,7 @@ void wxTextCtrl::WriteText( const wxString &text )
         wxLogWarning(_("Failed to insert text in the control."));
         return;
     }
+#endif
 
     // First remove the selection if there is one
     // TODO:  Is there an easier GTK specific way to do this?
