@@ -135,7 +135,11 @@
 class wxWindow : public wxEvtHandler
 {
 public:
-    //@{
+    /**
+       Default constructor
+    */
+    wxWindow();
+    
     /**
         Constructs a window, which can be a child of a frame, dialog or any other
         non-control window.
@@ -161,13 +165,11 @@ public:
         @param name
             Window name.
     */
-    wxWindow();
     wxWindow(wxWindow* parent, wxWindowID id,
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
              long style = 0,
              const wxString& name = wxPanelNameStr);
-    //@}
 
     /**
         Destructor. Deletes all sub-windows, then deletes itself. Instead of using
@@ -320,7 +322,7 @@ public:
             The client position for the second form of the function.
     */
     virtual void ClientToScreen(int* x, int* y) const;
-    const virtual wxPoint  ClientToScreen(const wxPoint& pt) const;
+    virtual wxPoint ClientToScreen(const wxPoint& pt) const;
     //@}
 
     /**
@@ -509,13 +511,18 @@ public:
     */
     static wxWindow* FindFocus();
 
-    //@{
     /**
-        Find a child of this window, by name.
+        Find a child of this window, by @a id. May return @a this if
+        it matches itself.
     */
     wxWindow* FindWindow(long id) const;
-    const wxWindow*  FindWindow(const wxString& name) const;
-    //@}
+    
+
+    /**
+        Find a child of this window, by name. May return @a this if
+        it matches itself.
+    */
+    wxWindow* FindWindow(const wxString& name) const;
 
     /**
         Find the first window with the given @e id.
@@ -702,11 +709,10 @@ public:
     //@{
     /**
         Returns a reference to the list of the window's children. @c wxWindowList
-        is a type-safe wxList-like class whose elements are of type
-        @c wxWindow *.
+        is a type-safe wxList-like class whose elements are of type @c wxWindow*.
     */
-    wxWindowList GetChildren() const;
-    const wxWindowList GetChildren() const;
+    wxWindowList& GetChildren();
+    const wxWindowList& GetChildren() const;
     //@}
 
     /**
@@ -749,7 +755,7 @@ public:
         @see GetSize(), GetVirtualSize()
     */
     void GetClientSize(int* width, int* height) const;
-    const wxSize  GetClientSize() const;
+    wxSize GetClientSize() const;
     //@}
 
     /**
@@ -768,7 +774,7 @@ public:
 
         @see SetCursor()
     */
-    const wxCursor GetCursor() const;
+    const wxCursor& GetCursor() const;
 
     /**
         Currently this is the same as calling
@@ -1000,7 +1006,7 @@ public:
         @see GetScreenPosition()
     */
     virtual void GetPosition(int* x, int* y) const;
-    const wxPoint  GetPosition() const;
+    wxPoint GetPosition() const;
     //@}
 
     /**
