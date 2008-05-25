@@ -145,7 +145,7 @@ wxOwnerDrawn *wxListBox::CreateLboxItem(size_t WXUNUSED(n))
 wxListBox::wxListBox()
 {
     m_noItems = 0;
-    m_selected = 0;
+    m_updateHorizontalExtent = false;
 }
 
 bool wxListBox::Create(wxWindow *parent,
@@ -158,7 +158,7 @@ bool wxListBox::Create(wxWindow *parent,
                        const wxString& name)
 {
     m_noItems = 0;
-    m_selected = 0;
+    m_updateHorizontalExtent = false;
 
     // initialize base class fields
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
@@ -245,6 +245,17 @@ WXDWORD wxListBox::MSWGetStyle(long style, WXDWORD *exstyle) const
     return msStyle;
 }
 
+void wxListBox::OnInternalIdle()
+{
+    wxWindow::OnInternalIdle();
+    
+    if (m_updateHorizontalExtent)
+    {
+        SetHorizontalExtent(wxEmptyString);
+        m_updateHorizontalExtent = false;
+    }
+}
+
 // ----------------------------------------------------------------------------
 // implementation of wxListBoxBase methods
 // ----------------------------------------------------------------------------
@@ -265,7 +276,8 @@ void wxListBox::DoDeleteOneItem(unsigned int n)
     SendMessage(GetHwnd(), LB_DELETESTRING, n, 0);
     m_noItems--;
 
-    SetHorizontalExtent(wxEmptyString);
+    // SetHorizontalExtent(wxEmptyString); can be slow
+    m_updateHorizontalExtent = true;
 
     UpdateOldSelections();
 }
@@ -290,7 +302,7 @@ void wxListBox::DoClear()
     ListBox_ResetContent(GetHwnd());
 
     m_noItems = 0;
-    SetHorizontalExtent();
+    m_updateHorizontalExtent = true;
 
     UpdateOldSelections();
 }
@@ -468,7 +480,7 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter & items,
         AssignNewItemClientData(n, clientData, i, type);
     }
 
-    SetHorizontalExtent();
+    m_updateHorizontalExtent = true;
 
     UpdateOldSelections();
 
@@ -530,7 +542,7 @@ void wxListBox::SetString(unsigned int n, const wxString& s)
     if ( wasSelected )
         Select(n);
 
-    SetHorizontalExtent();
+    m_updateHorizontalExtent = true;
 }
 
 unsigned int wxListBox::GetCount() const

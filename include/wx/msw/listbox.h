@@ -147,11 +147,13 @@ protected:
     virtual void* DoGetItemClientData(unsigned int n) const;
     virtual int DoListHitTest(const wxPoint& point) const;
 
+    bool m_updateHorizontalExtent;
+    virtual void OnInternalIdle();
+
     // free memory (common part of Clear() and dtor)
     void Free();
 
     unsigned int m_noItems;
-    int m_selected;
 
     virtual wxSize DoGetBestSize() const;
 
