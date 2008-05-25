@@ -767,9 +767,6 @@ public:
     */
     ~wxSizer();
 
-    /** @name Item Management */
-    //@{
-
     /**
         Appends a child to the sizer.
 
@@ -943,8 +940,6 @@ public:
     */
     wxSizerItem* AddStretchSpacer(int prop = 1);
 
-    //@}
-
     /**
         This method is abstract and has to be overwritten by any derived class.
         Here, the sizer will do the actual calculation of its children's minimal sizes.
@@ -1016,10 +1011,8 @@ public:
     /**
         Tell the sizer to resize the virtual size of the @a window to match the sizer's
         minimal size.  This will not alter the on screen size of the window, but may
-        cause
-        the addition/removal/alteration of scrollbars required to view the virtual area
-        in
-        windows which manage it.
+        cause the addition/removal/alteration of scrollbars required to view the virtual
+        area in windows which manage it.
 
         @see wxScrolled::SetScrollbars(), SetVirtualSizeHints()
     */
@@ -1028,11 +1021,11 @@ public:
     //@{
     /**
         Returns the list of the items in this sizer. The elements of type-safe
-        wxList @c wxSizerItemList are objects of type
+        wxList @a wxSizerItemList are objects of type
         @ref overview_wxsizeritem "wxSizerItem *".
     */
-    const wxSizerItemList GetChildren();
-    const wxSizerItemList GetChildren();
+    wxSizerItemList& GetChildren();
+    const wxSizerItemList& GetChildren() const;
     //@}
 
     /**
@@ -1040,17 +1033,27 @@ public:
     */
     wxWindow* GetContainingWindow() const;
 
-    //@{
     /**
-        Finds item of the sizer which holds given @e window, @a sizer or is located
-        in sizer at position @e index.
+        Finds wxSizerItem which holds the given @a window
         Use parameter @a recursive to search in subsizers too.
         Returns pointer to item or @NULL.
     */
     wxSizerItem* GetItem(wxWindow* window, bool recursive = false);
+    
+    /**
+        Finds wxSizerItem which holds the given @a sizer
+        Use parameter @a recursive to search in subsizers too.
+        Returns pointer to item or @NULL.
+    */
+    
     wxSizerItem* GetItem(wxSizer* sizer, bool recursive = false);
+    /**
+        Finds wxSizerItem which is located in the sizer at position
+        @a index.
+        Use parameter @a recursive to search in subsizers too.
+        Returns pointer to item or @NULL.
+    */
     wxSizerItem* GetItem(size_t index);
-    //@}
 
     /**
         Finds item of the sizer which has the given @e id.  This @a id is not the
