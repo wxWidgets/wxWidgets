@@ -927,10 +927,10 @@ public:
 
     /**
         Returns the minimum size of the window, an indication to the sizer layout
-        mechanism
-        that this is the minimum required size. It normally just returns the value set
-        by SetMinSize(), but it can be overridden to do the
-        calculation on demand.
+        mechanism that this is the minimum required size.
+
+        This method normally just returns the value set by SetMinSize(), but it
+        can be overridden to do the calculation on demand.
 
         @see GetMinClientSize()
     */
@@ -2122,18 +2122,30 @@ public:
     /**
         Sets the minimum client size of the window, to indicate to the sizer
         layout mechanism that this is the minimum required size of window's client
-        area. You may need to call this if you change the window size after
+        area.
+
+        You may need to call this if you change the window size after
         construction and before adding to its parent sizer.
+
+        Note, that just as with SetMinSize(), calling this method doesn't
+        prevent the program from explicitly making the window smaller than the
+        specified size.
 
         @see SetMinSize()
     */
     void SetMinClientSize(const wxSize& size);
 
     /**
-        Sets the minimum size of the window, to indicate to the sizer layout mechanism
-        that this is the minimum required size. You may need to call this
-        if you change the window size after construction and before adding
-        to its parent sizer.
+        Sets the minimum size of the window, to indicate to the sizer layout
+        mechanism that this is the minimum required size.
+
+        You may need to call this if you change the window size after
+        construction and before adding to its parent sizer.
+
+        Notice that calling this method doesn't prevent the program from making
+        the window explicitly smaller than the specified size by calling
+        SetSize(), it just ensures that it won't become smaller than this size
+        during the automatic layout.
 
         @see SetMinClientSize()
     */

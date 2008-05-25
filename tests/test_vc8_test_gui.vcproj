@@ -891,6 +891,9 @@
 				RelativePath=".\misc\selstoretest.cpp"
 			/>
 			<File
+				RelativePath=".\window\setsize.cpp"
+			/>
+			<File
 				RelativePath=".\geometry\size.cpp"
 			/>
 			<File

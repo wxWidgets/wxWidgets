@@ -98,6 +98,7 @@
             controls/textctrltest.cpp
             misc/selstoretest.cpp
             window/clientsize.cpp
+            window/setsize.cpp
         </sources>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>

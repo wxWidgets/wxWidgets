@@ -265,6 +265,10 @@ SOURCE=.\misc\selstoretest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\window\setsize.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\geometry\size.cpp
 # End Source File
 # Begin Source File

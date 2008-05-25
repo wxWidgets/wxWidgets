@@ -2419,8 +2419,6 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
     if (height != -1)
         m_height = height;
 
-    ConstrainSize();
-
     if (m_parent->m_wxwindow)
     {
         wxPizza* pizza = WX_PIZZA(m_parent->m_wxwindow);

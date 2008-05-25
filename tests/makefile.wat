@@ -310,7 +310,8 @@ TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_config.obj &
 	$(OBJS)\test_gui_textctrltest.obj &
 	$(OBJS)\test_gui_selstoretest.obj &
-	$(OBJS)\test_gui_clientsize.obj
+	$(OBJS)\test_gui_clientsize.obj &
+	$(OBJS)\test_gui_setsize.obj
 PRINTFBENCH_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
@@ -574,6 +575,9 @@ $(OBJS)\test_gui_selstoretest.obj :  .AUTODEPEND .\misc\selstoretest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_clientsize.obj :  .AUTODEPEND .\window\clientsize.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_setsize.obj :  .AUTODEPEND .\window\setsize.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\printfbench_dummy.obj :  .AUTODEPEND .\dummy.cpp

@@ -105,7 +105,8 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_config.obj \
 	$(OBJS)\test_gui_textctrltest.obj \
 	$(OBJS)\test_gui_selstoretest.obj \
-	$(OBJS)\test_gui_clientsize.obj
+	$(OBJS)\test_gui_clientsize.obj \
+	$(OBJS)\test_gui_setsize.obj
 PRINTFBENCH_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG_1) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -544,6 +545,9 @@ $(OBJS)\test_gui_selstoretest.obj: .\misc\selstoretest.cpp
 
 $(OBJS)\test_gui_clientsize.obj: .\window\clientsize.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\window\clientsize.cpp
+
+$(OBJS)\test_gui_setsize.obj: .\window\setsize.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\window\setsize.cpp
 
 $(OBJS)\printfbench_dummy.obj: .\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(PRINTFBENCH_CXXFLAGS) -H .\dummy.cpp

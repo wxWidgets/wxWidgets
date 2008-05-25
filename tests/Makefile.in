@@ -118,7 +118,8 @@ TEST_GUI_OBJECTS =  \
 	test_gui_config.o \
 	test_gui_textctrltest.o \
 	test_gui_selstoretest.o \
-	test_gui_clientsize.o
+	test_gui_clientsize.o \
+	test_gui_setsize.o
 TEST_GUI_ODEP =  $(___pch_testprec_test_gui_testprec_h_gch___depname)
 PRINTFBENCH_CXXFLAGS = $(__printfbench_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -509,6 +510,9 @@ test_gui_selstoretest.o: $(srcdir)/misc/selstoretest.cpp $(TEST_GUI_ODEP)
 
 test_gui_clientsize.o: $(srcdir)/window/clientsize.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/window/clientsize.cpp
+
+test_gui_setsize.o: $(srcdir)/window/setsize.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/window/setsize.cpp
 
 printfbench_printfbench.o: $(srcdir)/benchmarks/printfbench.cpp $(PRINTFBENCH_ODEP)
 	$(CXXC) -c -o $@ $(PRINTFBENCH_CXXFLAGS) $(srcdir)/benchmarks/printfbench.cpp
