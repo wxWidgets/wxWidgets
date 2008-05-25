@@ -17,6 +17,7 @@
 #ifndef WX_PRECOMP
     #include "wx/dcclient.h"
     #include "wx/dcmemory.h"
+    #include "wx/dcprint.h"
     #include "wx/log.h"
     #include "wx/region.h"
     #include "wx/image.h"
