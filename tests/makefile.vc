@@ -99,9 +99,9 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_size.obj \
 	$(OBJS)\test_gui_point.obj \
 	$(OBJS)\test_gui_config.obj \
-	$(OBJS)\test_gui_clientsize.obj \
 	$(OBJS)\test_gui_textctrltest.obj \
-	$(OBJS)\test_gui_selstoretest.obj
+	$(OBJS)\test_gui_selstoretest.obj \
+	$(OBJS)\test_gui_clientsize.obj
 PRINTFBENCH_CXXFLAGS = /M$(__RUNTIME_LIBS_38)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) /Fd$(OBJS)\printfbench.pdb $(____DEBUGRUNTIME) \
 	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
@@ -621,14 +621,14 @@ $(OBJS)\test_gui_point.obj: .\geometry\point.cpp
 $(OBJS)\test_gui_config.obj: .\config\config.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\config\config.cpp
 
-$(OBJS)\test_gui_clientsize.obj: .\controls\clientsize.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\controls\clientsize.cpp
-
 $(OBJS)\test_gui_textctrltest.obj: .\controls\textctrltest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\controls\textctrltest.cpp
 
 $(OBJS)\test_gui_selstoretest.obj: .\misc\selstoretest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\misc\selstoretest.cpp
+
+$(OBJS)\test_gui_clientsize.obj: .\window\clientsize.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\window\clientsize.cpp
 
 $(OBJS)\printfbench_dummy.obj: .\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(PRINTFBENCH_CXXFLAGS) /Yctestprec.h .\dummy.cpp

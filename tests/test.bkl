@@ -95,9 +95,9 @@
             geometry/size.cpp
             geometry/point.cpp
             config/config.cpp
-            controls/clientsize.cpp
             controls/textctrltest.cpp
             misc/selstoretest.cpp
+            window/clientsize.cpp
         </sources>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>

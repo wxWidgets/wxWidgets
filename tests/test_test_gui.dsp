@@ -235,7 +235,7 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\controls\clientsize.cpp
+SOURCE=.\window\clientsize.cpp
 # End Source File
 # Begin Source File
 
