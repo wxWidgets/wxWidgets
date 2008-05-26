@@ -17,13 +17,11 @@
     Please note that all children of the window will be deleted automatically by
     the destructor before the window itself is deleted which means that you don't
     have to worry about deleting them manually. Please see the @ref
-    overview_windowdeletionoverview "window
-    deletion overview" for more information.
+    overview_windowdeletion "window deletion overview" for more information.
 
     Also note that in this, and many others, wxWidgets classes some
     @c GetXXX() methods may be overloaded (as, for example,
-    wxWindow::GetSize or
-    wxWindow::GetClientSize). In this case, the overloads
+    wxWindow::GetSize or wxWindow::GetClientSize). In this case, the overloads
     are non-virtual because having multiple virtual functions with the same name
     results in a virtual function name hiding at the derived class level (in
     English, this means that the derived class has to override all overloaded
@@ -129,8 +127,8 @@
     @library{wxcore}
     @category{FIXME}
 
-    @see @ref overview_eventhandlingoverview, @ref overview_windowsizingoverview
-    "Window sizing overview"
+    @see @ref overview_eventhandling "Event handling overview", 
+         @ref overview_windowsizing "Window sizing overview"
 */
 class wxWindow : public wxEvtHandler
 {
@@ -189,7 +187,7 @@ public:
 
         @see AcceptsFocusFromKeyboard()
     */
-    bool AcceptsFocus() const;
+    virtual bool AcceptsFocus() const;
 
     /**
         This method may be overridden in the derived classes to return @false to
@@ -197,8 +195,15 @@ public:
         clicks it with the mouse, it shouldn't be included in the TAB traversal chain
         when using the keyboard.
     */
-    bool AcceptsFocusFromKeyboard() const;
+    virtual bool AcceptsFocusFromKeyboard() const;
 
+     /**
+        Overridden to indicate wehter this window or one of its children accepts
+        focus. Usually it's the same as AcceptsFocus() but is overridden for
+        container windows
+     */
+    virtual bool AcceptsFocusRecursively() const;
+    
     /**
         Adds a child window.  This is called automatically by window creation
         functions so should not be required by the application programmer.
@@ -321,8 +326,8 @@ public:
         @param pt
             The client position for the second form of the function.
     */
-    virtual void ClientToScreen(int* x, int* y) const;
-    virtual wxPoint ClientToScreen(const wxPoint& pt) const;
+    void ClientToScreen(int* x, int* y) const;
+    wxPoint ClientToScreen(const wxPoint& pt) const;
     //@}
 
     /**
@@ -636,7 +641,7 @@ public:
         @see SetBackgroundColour(), SetForegroundColour(),
              GetForegroundColour()
     */
-    virtual wxColour GetBackgroundColour() const;
+    wxColour GetBackgroundColour() const;
 
     /**
         Returns the background style of the window. The background style can be one of:
@@ -767,7 +772,7 @@ public:
         Return the sizer that this window is a member of, if any, otherwise
         @NULL.
     */
-    const wxSizer* GetContainingSizer() const;
+    wxSizer* GetContainingSizer() const;
 
     /**
         Return the cursor associated with this window.
@@ -839,7 +844,7 @@ public:
         @see SetForegroundColour(), SetBackgroundColour(),
              GetBackgroundColour()
     */
-    virtual wxColour GetForegroundColour();
+    wxColour GetForegroundColour();
 
     /**
         Returns the grandparent of a window, or @NULL if there isn't one.
@@ -1005,7 +1010,7 @@ public:
 
         @see GetScreenPosition()
     */
-    virtual void GetPosition(int* x, int* y) const;
+    void GetPosition(int* x, int* y) const;
     wxPoint GetPosition() const;
     //@}
 
@@ -1025,7 +1030,7 @@ public:
 
         @see GetScreenRect()
     */
-    virtual wxRect GetRect() const;
+    wxRect GetRect() const;
 
     //@{
     /**
@@ -1039,8 +1044,8 @@ public:
 
         @see GetPosition()
     */
-    virtual void GetScreenPosition(int* x, int* y) const;
-    const wxPoint  GetScreenPosition() const;
+    void GetScreenPosition(int* x, int* y) const;
+    wxPoint GetScreenPosition() const;
     //@}
 
     /**
@@ -1049,7 +1054,7 @@ public:
 
         @see GetRect()
     */
-    virtual wxRect GetScreenRect() const;
+    wxRect GetScreenRect() const;
 
     /**
         Returns the built-in scrollbar position.
@@ -2305,16 +2310,6 @@ public:
     //@}
 
     /**
-        Use of this function for windows which are not toplevel windows
-        (such as wxDialog or wxFrame) is discouraged. Please use
-        SetMinSize() and SetMaxSize()
-        instead.
-
-        @see wxTopLevelWindow::SetSizeHints.
-    */
-
-
-    /**
         Sets the window to have the given layout sizer. The window
         will then own the object, and will take care of its deletion.
         If an existing layout constraints object is already owned by the
@@ -2390,34 +2385,6 @@ public:
     */
     void SetVirtualSize(int width, int height);
     void SetVirtualSize(const wxSize& size);
-    //@}
-
-    //@{
-    /**
-        Allows specification of minimum and maximum virtual window sizes.
-        If a pair of values is not set (or set to -1), the default values
-        will be used.
-
-        @param minW
-            Specifies the minimum width allowable.
-        @param minH
-            Specifies the minimum height allowable.
-        @param maxW
-            Specifies the maximum width allowable.
-        @param maxH
-            Specifies the maximum height allowable.
-        @param minSize
-            Minimum size.
-        @param maxSize
-            Maximum size.
-
-        @remarks If this function is called, the user will not be able to size
-                 the virtual area of the window outside the given bounds.
-    */
-    virtual void SetVirtualSizeHints(int minW, int minH, int maxW = -1,
-                                     int maxH = -1);
-    void SetVirtualSizeHints(const wxSize& minSize = wxDefaultSize,
-                             const wxSize& maxSize = wxDefaultSize);
     //@}
 
     /**
