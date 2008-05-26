@@ -50,7 +50,11 @@
 class wxSlider : public wxControl
 {
 public:
-    //@{
+    /**
+       Default constructor
+    */
+    wxSlider();
+    
     /**
         Constructor, creating and showing a slider.
 
@@ -76,7 +80,6 @@ public:
 
         @see Create(), wxValidator
     */
-    wxSlider();
     wxSlider(wxWindow* parent, wxWindowID id, int value,
              int minValue, int maxValue,
              const wxPoint& point = wxDefaultPosition,
@@ -84,7 +87,6 @@ public:
              long style = wxSL_HORIZONTAL,
              const wxValidator& validator = wxDefaultValidator,
              const wxString& name = "slider");
-    //@}
 
     /**
         Destructor, destroying the slider.
