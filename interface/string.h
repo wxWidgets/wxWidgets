@@ -546,7 +546,7 @@ public:
         @NULL. Otherwise, the function returns @false and doesn't
         modify the @e rest.
     */
-    bool EndsWith(const wxString& suffix, wxString rest = NULL) const;
+    bool EndsWith(const wxString& suffix, wxString *rest = NULL) const;
 
     /**
         Searches for the given character @e ch. Returns the position or
@@ -846,7 +846,7 @@ public:
         @NULL. Otherwise, the function returns @false and doesn't modify the
         @e rest.
     */
-    bool StartsWith(const wxString& prefix, wxString rest = NULL) const;
+    bool StartsWith(const wxString& prefix, wxString *rest = NULL) const;
 
     /**
         Strip characters at the front and/or end. The same as Trim except that it
