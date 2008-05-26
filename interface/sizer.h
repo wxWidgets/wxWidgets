@@ -978,22 +978,40 @@ public:
     */
     wxSize ComputeFittingWindowSize(wxWindow* window);
 
-    //@{
     /**
-        Detach a child from the sizer without destroying it. @a window is the window to
-        be
-        detached, @a sizer is the equivalent sizer and @a index is the position of
-        the child in the sizer, typically 0 for the first item. This method does not
-        cause any layout or resizing to take place, call Layout()
+        Detach the child @a window from the sizer without destroying it.
+        
+        This method does not cause any layout or resizing to take place, call Layout()
         to update the layout "on screen" after detaching a child from the sizer.
+        
         Returns @true if the child item was found and detached, @false otherwise.
 
         @see Remove()
     */
     bool Detach(wxWindow* window);
+
+    /**
+        Detach the child @a sizer from the sizer without destroying it.
+        
+        This method does not cause any layout or resizing to take place, call Layout()
+        to update the layout "on screen" after detaching a child from the sizer.
+        
+        Returns @true if the child item was found and detached, @false otherwise.
+        
+        @see Remove()
+    */
     bool Detach(wxSizer* sizer);
+
+    /**
+        Detach a item at position @a index from the sizer without destroying it.
+        
+        This method does not cause any layout or resizing to take place, call Layout()
+        to update the layout "on screen" after detaching a child from the sizer.
+        Returns @true if the child item was found and detached, @false otherwise.
+
+        @see Remove()
+    */
     bool Detach(size_t index);
-    //@}
 
     /**
         Tell the sizer to resize the @a window so that its client area matches the
@@ -1018,15 +1036,19 @@ public:
     */
     void FitInside(wxWindow* window);
 
-    //@{
     /**
         Returns the list of the items in this sizer. The elements of type-safe
         wxList @a wxSizerItemList are objects of type
         @ref overview_wxsizeritem "wxSizerItem *".
     */
     wxSizerItemList& GetChildren();
+    
+    /**
+        Returns the list of the items in this sizer. The elements of type-safe
+        wxList @a wxSizerItemList are objects of type
+        @ref overview_wxsizeritem "wxSizerItem *".
+    */
     const wxSizerItemList& GetChildren() const;
-    //@}
 
     /**
         Returns the window this sizer is used in or @NULL if none.
@@ -1087,48 +1109,90 @@ public:
     */
     wxSize GetSize();
 
-    //@{
     /**
-        Hides the @e window, @e sizer, or item at @e index.
+        Hides the child @a window.
+        
         To make a sizer item disappear, use Hide() followed by Layout().
+        
         Use parameter @a recursive to hide elements found in subsizers.
         Returns @true if the child item was found, @false otherwise.
 
         @see IsShown(), Show()
     */
     bool Hide(wxWindow* window, bool recursive = false);
-    bool Hide(wxSizer* sizer, bool recursive = false);
-    bool Hide(size_t index);
-    //@}
 
-    //@{
+    /**
+        Hides the child @a sizer.
+        
+        To make a sizer item disappear, use Hide() followed by Layout().
+        
+        Use parameter @a recursive to hide elements found in subsizers.
+        Returns @true if the child item was found, @false otherwise.
+
+        @see IsShown(), Show()
+    */
+    bool Hide(wxSizer* sizer, bool recursive = false);
+
+    /**
+        Hides the item at position @a index.
+        
+        To make a sizer item disappear, use Hide() followed by Layout().
+        
+        Use parameter @a recursive to hide elements found in subsizers.
+        Returns @true if the child item was found, @false otherwise.
+
+        @see IsShown(), Show()
+    */
+    bool Hide(size_t index);
+
     /**
         Insert a child into the sizer before any existing item at
 
         See Add() for the meaning of the other parameters.
-
-        @param index The position this child should assume in the sizer.
     */
     wxSizerItem* Insert(size_t index, wxWindow* window,
                         const wxSizerFlags& flags);
+
+    /**
+        Insert a child into the sizer before any existing item at
+
+        See Add() for the meaning of the other parameters.
+    */
     wxSizerItem* Insert(size_t index, wxWindow* window,
                         int proportion = 0,
                         int flag = 0,
                         int border = 0,
                         wxObject* userData = NULL);
+
+    /**
+        Insert a child into the sizer before any existing item at
+
+        See Add() for the meaning of the other parameters.
+    */
     wxSizerItem* Insert(size_t index, wxSizer* sizer,
                         const wxSizerFlags& flags);
+
+    /**
+        Insert a child into the sizer before any existing item at
+
+        See Add() for the meaning of the other parameters.
+    */
     wxSizerItem* Insert(size_t index, wxSizer* sizer,
                         int proportion = 0,
                         int flag = 0,
                         int border = 0,
                         wxObject* userData = NULL);
+
+    /**
+        Insert a child into the sizer before any existing item at
+
+        See Add() for the meaning of the other parameters.
+    */
     wxSizerItem* Insert(size_t index, int width, int height,
                         int proportion = 0,
                         int flag = 0,
                         int border = 0,
                         wxObject* userData = NULL);
-    //@}
 
     /**
         Inserts non-stretchable space to the sizer. More readable way of calling
@@ -1279,25 +1343,54 @@ public:
     */
     bool Remove(size_t index);
 
-    //@{
     /**
-        Detaches the given @e oldwin, @a oldsz child from the sizer and
-        replaces it with the given window, sizer, or wxSizerItem.
-        The detached child is removed @b only if it is a sizer or a spacer
-        (because windows are owned by their parent window, not the sizer).
+        Detaches the given @a oldwin from the sizer and
+        replaces it with the given @newwin. The detached
+        child window is @b not deleted (because windows are
+        owned by their parent window, not the sizer).
+        
         Use parameter @a recursive to search the given element recursively in subsizers.
 
-        This method does not cause any layout or resizing to take place, call
-        Layout() to update the layout "on screen" after replacing a
+        This method does not cause any layout or resizing to take place,
+        call Layout() to update the layout "on screen" after replacing a
         child from the sizer.
+        
         Returns @true if the child item was found and removed, @false otherwise.
     */
     bool Replace(wxWindow* oldwin, wxWindow* newwin,
                  bool recursive = false);
+                 
+    /**
+        Detaches the given @a oldsz from the sizer and
+        replaces it with the given @newwin. The detached
+        child sizer is deleted. 
+        
+        Use parameter @a recursive to search the given element recursively in subsizers.
+
+        This method does not cause any layout or resizing to take place,
+        call Layout() to update the layout "on screen" after replacing a
+        child from the sizer.
+        
+        Returns @true if the child item was found and removed, @false otherwise.
+    */
     bool Replace(wxSizer* oldsz, wxSizer* newsz,
                  bool recursive = false);
-    bool Remove(size_t oldindex, wxSizerItem* newitem);
-    //@}
+                 
+    /**
+        Detaches the given item at position @a index from the sizer and
+        replaces it with the given wxSizerItem @ newitem.
+        
+        The detached child is deleted @b only if it is a sizer or a spacer
+        (but not if it is a wxWindow because windows are owned by their
+        parent window, not the sizer).
+        
+        This method does not cause any layout or resizing to take place,
+        call Layout() to update the layout "on screen" after replacing a
+        child from the sizer.
+        
+        Returns @true if the child item was found and removed, @false otherwise.
+    */
+    bool Replace(size_t index, wxSizerItem* newitem);
 
     /**
         Call this to force the sizer to take the given dimension and thus force
@@ -1305,9 +1398,12 @@ public:
         rules defined by the parameter in the Add() and Prepend() methods.
     */
     void SetDimension(int x, int y, int width, int height);
+    
+    /**
+        @overload
+     */
     void SetDimension(const wxPoint& pos, const wxSize& size);
 
-    //@{
     /**
         Set an item's minimum size by window, sizer, or position.
 
@@ -1318,9 +1414,28 @@ public:
         @see wxSizerItem::SetMinSize()
     */
     void SetItemMinSize(wxWindow* window, int width, int height);
+
+    /**
+        Set an item's minimum size by window, sizer, or position.
+
+        The item will be found recursively in the sizer's descendants. This
+        function enables an application to set the size of an item after
+        initial creation.
+
+        @see wxSizerItem::SetMinSize()
+    */
     void SetItemMinSize(wxSizer* sizer, int width, int height);
+
+    /**
+        Set an item's minimum size by window, sizer, or position.
+
+        The item will be found recursively in the sizer's descendants. This
+        function enables an application to set the size of an item after
+        initial creation.
+
+        @see wxSizerItem::SetMinSize()
+    */
     void SetItemMinSize(size_t index, int width, int height);
-    //@}
 
     /**
         Call this to give the sizer a minimal size. Normally, the sizer will
@@ -1360,21 +1475,41 @@ public:
     */
     void SetVirtualSizeHints(wxWindow* window);
 
-    //@{
     /**
-        Shows or hides the @e window, @e sizer, or item at @e index.
+        Shows or hides the @a window.
         To make a sizer item disappear or reappear, use Show() followed by Layout().
+        
         Use parameter @a recursive to show or hide elements found in subsizers.
+        
         Returns @true if the child item was found, @false otherwise.
 
         @see Hide(), IsShown()
     */
     bool Show(wxWindow* window, bool show = true,
               bool recursive = false);
+
+    /**
+        Shows or hides @a sizer.
+        To make a sizer item disappear or reappear, use Show() followed by Layout().
+        
+        Use parameter @a recursive to show or hide elements found in subsizers.
+        
+        Returns @true if the child item was found, @false otherwise.
+
+        @see Hide(), IsShown()
+    */
     bool Show(wxSizer* sizer, bool show = true,
               bool recursive = false);
+
+    /**
+        Shows the item at @a index.
+        To make a sizer item disappear or reappear, use Show() followed by Layout().
+        
+        Returns @true if the child item was found, @false otherwise.
+
+        @see Hide(), IsShown()
+    */
     bool Show(size_t index, bool show = true);
-    //@}
 };
 
 
