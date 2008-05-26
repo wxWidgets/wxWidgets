@@ -236,7 +236,6 @@ enum wxLanguage
     wxLANGUAGE_ROMANIAN,
     wxLANGUAGE_RUSSIAN,
     wxLANGUAGE_RUSSIAN_UKRAINE,
-    wxLANGUAGE_SAMI,
     wxLANGUAGE_SAMOAN,
     wxLANGUAGE_SANGHO,
     wxLANGUAGE_SANSKRIT,
@@ -315,11 +314,12 @@ enum wxLanguage
 
 
 #if wxABI_VERSION >= 20808
-    // for binary compatibility, we can't put wxLANGUAGE_VALENCIAN in its
-    // normal position in the enum, because it would change other values.
-    // We have to put it somewhere well outside normal range -- the particular
-    // value used is arbitrary:
-    , wxLANGUAGE_VALENCIAN = 0x1fffffff
+    // For binary compatibility, we can't put new items in their normal
+    // position in the enum, because it would change other values.  We have to
+    // put it somewhere well outside normal range -- the particular value used
+    // is arbitrary:
+    , wxLANGUAGE_VALENCIAN = 0x1fffffff,
+    wxLANGUAGE_SAMI
 #endif
 };
 
