@@ -829,7 +829,7 @@ wxString wxMenuItem::GTKProcessMenuItemLabel(const wxString& str, wxString *hotK
         hotKey->Empty();
         if(*pc == wxT('\t'))
         {
-            pc++;
+            ++pc;
             hotKey->assign(pc, str.end());
         }
     }
@@ -1215,9 +1215,8 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
         m_prevRadio = NULL;
     }
 
-    // TODO: this code doesn't delete the item factory item and this seems
-    //       impossible as of GTK 1.2.6.
-    gtk_widget_destroy( mitem );
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(mitem), NULL);
+    gtk_container_remove(GTK_CONTAINER(m_menu), mitem);
 
     return item;
 }
