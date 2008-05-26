@@ -1311,9 +1311,9 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
     if ( !wxMenuBase::DoRemove(item) )
         return (wxMenuItem *)NULL;
 
-    // TODO: this code doesn't delete the item factory item and this seems
-    //       impossible as of GTK 1.2.6.
-    gtk_widget_destroy( item->GetMenuItem() );
+    GtkWidget* mitem = item->GetMenuItem();
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(mitem), NULL);
+    gtk_container_remove(GTK_CONTAINER(m_menu), mitem);
 
     return item;
 }
