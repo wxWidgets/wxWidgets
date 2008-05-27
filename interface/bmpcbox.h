@@ -19,7 +19,8 @@
     be derived from that class. In fact, if the platform does not have a native
     implementation, wxBitmapComboBox will inherit from wxOwnerDrawnComboBox.
     You can determine if the implementation is generic by checking whether
-    @c wxGENERIC_BITMAPCOMBOBOX is defined.
+    @c wxGENERIC_BITMAPCOMBOBOX is defined. Currently wxBitmapComboBox is
+    implemented natively for MSW and GTK+.
 
     @beginStyleTable
     @style{wxCB_READONLY}
@@ -61,7 +62,6 @@ public:
     */
     wxBitmapComboBox();
 
-    //@{
     /**
         Constructor, creating and showing a combobox.
 
@@ -71,21 +71,10 @@ public:
             Window identifier. The value wxID_ANY indicates a default value.
         @param value
             Initial selection string. An empty string indicates no selection.
-        @param pos
-            Window position.
-        @param size
-            Window size. If wxDefaultSize is specified then the window is sized
-            appropriately.
         @param n
             Number of strings with which to initialise the control.
         @param choices
             An array of strings with which to initialise the control.
-        @param style
-            Window style. See wxBitmapComboBox.
-        @param validator
-            Window validator.
-        @param name
-            Window name.
 
         @see Create(), wxValidator
     */
@@ -98,6 +87,21 @@ public:
                      long style = 0,
                      const wxValidator& validator = wxDefaultValidator,
                      const wxString& name = "comboBox");
+
+    /**
+        Constructor, creating and showing a combobox.
+
+        @param parent
+            Parent window. Must not be @NULL.
+        @param id
+            Window identifier. The value wxID_ANY indicates a default value.
+        @param value
+            Initial selection string. An empty string indicates no selection.
+        @param choices
+            An wxArrayString with which to initialise the control.
+
+        @see Create(), wxValidator
+    */
     wxBitmapComboBox(wxWindow* parent, wxWindowID id,
                      const wxString& value,
                      const wxPoint& pos,
@@ -106,7 +110,6 @@ public:
                      long style = 0,
                      const wxValidator& validator = wxDefaultValidator,
                      const wxString& name = "comboBox");
-    //@}
 
     /**
         Destructor, destroying the combobox.
@@ -119,22 +122,22 @@ public:
     int Append(const wxString& item,
                const wxBitmap& bitmap = wxNullBitmap);
 
-    //@{
     /**
-        Adds the item to the end of the combo box, associating the given, typed or
+        Adds the item to the end of the combo box, associating the given
         untyped, client data pointer @a clientData with the item.
     */
     int Append(const wxString& item, const wxBitmap& bitmap,
                void* clientData);
+
+    /**
+        Adds the item to the end of the combo box, associating the given typed
+        client data pointer @a clientData with the item.
+    */
     int Append(const wxString& item, const wxBitmap& bitmap,
                wxClientData* clientData);
-    //@}
 
-    //@{
     /**
-        Creates the combobox for two-step construction. Derived classes
-        should call or replace this function. See wxBitmapComboBox()
-        for further details.
+        Creates the combobox for two-step construction.
     */
     bool Create(wxWindow* parent, wxWindowID id,
                 const wxString& value = "",
@@ -144,6 +147,10 @@ public:
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = "comboBox");
+
+    /**
+        Creates the combobox for two-step construction.
+    */
     bool Create(wxWindow* parent, wxWindowID id,
                 const wxString& value,
                 const wxPoint& pos,
@@ -152,7 +159,6 @@ public:
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = "comboBox");
-    //@}
 
     /**
         Returns size of bitmaps used in the list.
@@ -171,20 +177,23 @@ public:
     int Insert(const wxString& item, const wxBitmap& bitmap,
                unsigned int pos);
 
-    //@{
     /**
-        Inserts the item into the list before pos, associating the given, typed or
+        Inserts the item into the list before pos, associating the given
         untyped, client data pointer with the item.
         Not valid for @c wxCB_SORT style, use Append() instead.
     */
-
     int Insert(const wxString& item, const wxBitmap& bitmap,
                unsigned int pos,
                void* clientData);
+
+    /**
+        Inserts the item into the list before pos, associating the given typed
+        client data pointer with the item.
+        Not valid for @c wxCB_SORT style, use Append() instead.
+    */
     int Insert(const wxString& item, const wxBitmap& bitmap,
                unsigned int pos,
                wxClientData* clientData);
-    //@}
 
     /**
         Sets the bitmap for the given item.
