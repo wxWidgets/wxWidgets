@@ -73,11 +73,9 @@ wxAuiFloatingFrame::wxAuiFloatingFrame(wxWindow* parent,
 wxAuiFloatingFrame::~wxAuiFloatingFrame()
 {
     // if we do not do this, then we can crash...
-    if(m_owner_mgr)
+    if (m_owner_mgr && m_owner_mgr->m_action_window == this)
     {
-        if(m_owner_mgr->m_action_window == this)
-            m_owner_mgr->m_action_window = NULL;
-        m_owner_mgr->UnregisterFloatingFrame(this);
+        m_owner_mgr->m_action_window = NULL;
     }
 
     m_mgr.UnInit();
@@ -153,11 +151,6 @@ wxAuiManager* wxAuiFloatingFrame::GetOwnerManager() const
     return m_owner_mgr;
 }
 
-void wxAuiFloatingFrame::SetOwnerManager(wxAuiManager* owner_mgr)
-{
-    // we want to allow for NULL here to avoid crashing in dtor
-    m_owner_mgr = owner_mgr;
-}
 
 void wxAuiFloatingFrame::OnSize(wxSizeEvent& event)
 {

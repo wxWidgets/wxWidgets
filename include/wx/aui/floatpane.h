@@ -17,6 +17,7 @@
 // ----------------------------------------------------------------------------
 
 #include "wx/defs.h"
+#include "wx/weakref.h"
 
 #if wxUSE_AUI
 
@@ -30,8 +31,6 @@
 
 class WXDLLIMPEXP_AUI wxAuiFloatingFrame : public wxAuiFloatingFrameBaseClass
 {
-    friend class wxAuiManager;
-
 public:
     wxAuiFloatingFrame(wxWindow* parent,
                    wxAuiManager* owner_mgr,
@@ -46,7 +45,6 @@ public:
     wxAuiManager* GetOwnerManager() const;
     
 protected:
-    void SetOwnerManager(wxAuiManager* owner_mgr);
     virtual void OnMoveStart();
     virtual void OnMoving(const wxRect& window_rect, wxDirection dir);
     virtual void OnMoveFinished();
@@ -69,7 +67,7 @@ private:
     wxSize m_last_size;
     wxDirection m_lastDirection;
 
-    wxAuiManager* m_owner_mgr;
+    wxWeakRef<wxAuiManager> m_owner_mgr;
     wxAuiManager m_mgr;
 
 #ifndef SWIG
