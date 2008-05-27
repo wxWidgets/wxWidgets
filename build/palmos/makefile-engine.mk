@@ -173,6 +173,7 @@ endif
 UNAME :=$(shell uname)
 ifeq ($(UNAME),Linux)
 # Linux Settings
+PELF2BIN:=wine "$(TOOLS_DIR)/pelf2bin.exe"
 PSLIB:=wine "$(TOOLS_DIR)/pslib.exe"
 PRCMERGE :=wine "$(TOOLS_DIR)/PRCMerge.exe"
 PALMRC :=wine "$(TOOLS_DIR)/PalmRc.exe"
@@ -617,9 +618,9 @@ $(SIM_OBJ_DIR)/%.o : %.CPP #makefile
 
 # XRD source processing
 $(RSC_OBJ_DIR)/%.trc : %.xrd makefile
-	$(PALMRC) -p $(TARGET_FORMAT) -makeDeps $(@D)/$(*F).deps $(RFLAGS) -locale $(LOCALE) "`cygpath -w -a ./$<`" -o $@
+	$(PALMRC) -p $(TARGET_FORMAT) -makeDeps $(@D)/$(*F).deps $(RFLAGS) -locale $(LOCALE) "`$(CYGPATH_WA) ./$<`" -o $@
 $(RSC_OBJ_DIR)/%.trc : %.XRD makefile
-	$(PALMRC) -p $(TARGET_FORMAT) -makeDeps $(@D)/$(*F).deps $(RFLAGS) -locale $(LOCALE) "`cygpath -w -a ./$<`" -o $@
+	$(PALMRC) -p $(TARGET_FORMAT) -makeDeps $(@D)/$(*F).deps $(RFLAGS) -locale $(LOCALE) "`$(CYGPATH_WA) ./$<`" -o $@
 
 
 # Definition file source processing
