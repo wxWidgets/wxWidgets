@@ -105,7 +105,13 @@ wxIDirectFBSurfacePtr wxIDirectFB::GetPrimarySurface()
 {
     DFBSurfaceDescription desc;
     desc.flags = DSDESC_CAPS;
-    desc.caps = DSCAPS_PRIMARY;
+    // NB: see dcscreen.cpp for why we request double-buffered surface
+    //
+    //     This assumes the cooperative level is DFSCL_NORMAL (that's the
+    //     default and wx doesn't modify it anywhere); if we ever support
+    //     other cooperative levels, DSCAPS_DOUBLE should *not* be used with
+    //     them.
+    desc.caps = DFBSurfaceCapabilities(DSCAPS_PRIMARY | DSCAPS_DOUBLE);
     return CreateSurface(&desc);
 }
 
