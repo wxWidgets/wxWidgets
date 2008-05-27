@@ -3572,6 +3572,8 @@ wxDataViewCtrl::~wxDataViewCtrl()
     if (m_notifier)
         GetModel()->RemoveNotifier( m_notifier );
 
+    m_cols.Clear();
+
     // remove the model from the GtkTreeView before it gets destroyed by the
     // wxDataViewCtrlBase's dtor
     gtk_tree_view_set_model( GTK_TREE_VIEW(m_treeview), NULL );
@@ -3583,6 +3585,8 @@ void wxDataViewCtrl::Init()
 {
     m_notifier = NULL;
     m_internal = NULL;
+    
+    m_cols.DeleteContents( true );
 }
 
 static GtkTargetEntry gs_target;
@@ -3817,7 +3821,7 @@ wxDataViewColumn* wxDataViewCtrl::GetColumn( unsigned int pos ) const
         return NULL;
 
     wxDataViewColumnList::const_iterator iter;
-    for (iter = m_cols.begin(); iter != m_cols.end(); iter++)
+    for (iter = m_cols.begin(); iter != m_cols.end(); ++iter)
     {
         wxDataViewColumn *col = *iter;
         if (GTK_TREE_VIEW_COLUMN(col->GetGtkHandle()) == gtk_col)
@@ -3834,9 +3838,7 @@ bool wxDataViewCtrl::DeleteColumn( wxDataViewColumn *column )
     gtk_tree_view_remove_column( GTK_TREE_VIEW(m_treeview),
                                  GTK_TREE_VIEW_COLUMN(column->GetGtkHandle()) );
 
-    m_cols.remove( column );
-
-    delete column;
+    m_cols.DeleteObject( column );
 
     return true;
 }
@@ -3844,14 +3846,14 @@ bool wxDataViewCtrl::DeleteColumn( wxDataViewColumn *column )
 bool wxDataViewCtrl::ClearColumns()
 {
     wxDataViewColumnList::iterator iter;
-    for (iter = m_cols.begin(); iter != m_cols.end(); iter++)
+    for (iter = m_cols.begin(); iter != m_cols.end(); ++iter)
     {
         wxDataViewColumn *col = *iter;
         gtk_tree_view_remove_column( GTK_TREE_VIEW(m_treeview),
                                      GTK_TREE_VIEW_COLUMN(col->GetGtkHandle()) );
     }
 
-    m_cols.clear();
+    m_cols.Clear();
 
     return true;
 }
