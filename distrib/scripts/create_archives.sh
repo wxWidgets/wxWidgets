@@ -31,7 +31,7 @@ fi
 
 # Set this to the required version
 if [ "$VERSION" = "" ]; then
-  VERSION=2.7.0
+  VERSION=2.9.0
 fi
 
 getfilelist(){
@@ -212,7 +212,6 @@ prepareforrelease()
     rm -f setup.h_vms
     rm -f docs/html/wxbook.htm docs/html/roadmap.htm
     rm -f src/mingegcs.bat
-#    rm -f *.spec
     rm -f src/gtk/descrip.mms src/motif/descrip.mms
 
     # Copy setup0.h files to setup.h
@@ -247,19 +246,19 @@ usage()
 for i in "$@"; do
 
     case "$i" in
-	--wxmac) SPINMAC=1; SPINALL=0 ;;
-	--wxmsw) SPINMSW=1; SPINALL=0 ;;
-	--wxos2) SPINOS2=1; SPINALL=0 ;;
-	--wxall) SPINWXALL=1; SPINALL=0 ;;
-	--wxbase) SPINBASE=1; SPINALL=0 ;;
-	--getmakefiles) GETMAKEFILES=1; SPINALL=0 ;;
-	--docs) SPINDOCS=1; SPINALL=0 ;;
-	--all) SPINALL=1 ;;
-	--verbose) VERBOSE=1 ;;
-	*)
-	    usage
-	    exit
-	    ;;
+        --wxmac) SPINMAC=1; SPINALL=0 ;;
+        --wxmsw) SPINMSW=1; SPINALL=0 ;;
+        --wxos2) SPINOS2=1; SPINALL=0 ;;
+        --wxall) SPINWXALL=1; SPINALL=0 ;;
+        --wxbase) SPINBASE=1; SPINALL=0 ;;
+        --getmakefiles) GETMAKEFILES=1; SPINALL=0 ;;
+        --docs) SPINDOCS=1; SPINALL=0 ;;
+        --all) SPINALL=1 ;;
+        --verbose) VERBOSE=1 ;;
+        *)
+            usage
+            exit
+            ;;
     esac
 done
 
