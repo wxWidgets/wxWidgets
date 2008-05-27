@@ -44,7 +44,7 @@
 #include <SystemMgr.h> // SysDoze()...
 #include <SysUtils.h>
 
-#ifdef defined (__WXPALMOS6__)
+#ifdef __WXPALMOS6__
 extern void SysReset (void);
 extern UInt32 SysTaskID (void);
 #endif
@@ -165,7 +165,7 @@ bool wxShutdown(wxShutdownFlags wFlags)
     switch (wFlags) {
     case wxSHUTDOWN_POWEROFF:
         // TODO: turn off lamps
-#ifdef defined (__WXPALMOS6__)
+#ifdef __WXPALMOS6__
         //extern void SysReset (void);
         //extern UInt32 SysTaskID (void);
         #define SysReset()
