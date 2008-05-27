@@ -551,21 +551,19 @@ void wxGCDCImpl::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord w, wxCoord h,
     {
         wxGraphicsPath path = m_graphicContext->CreatePath();
         path.MoveToPoint( 0, 0 );
-        path.AddLineToPoint( h / 2.0 * cos(DegToRad(sa)) , h / 2.0 * sin(DegToRad(-sa)) );
-        path.AddLineToPoint( h / 2.0 * cos(DegToRad(ea)) , h / 2.0 * sin(DegToRad(-ea)) );
+        path.AddArc( 0, 0, h/2.0 , DegToRad(-sa) , DegToRad(-ea), sa > ea );
         path.AddLineToPoint( 0, 0 );
         m_graphicContext->FillPath( path );
 
         path = m_graphicContext->CreatePath();
         path.AddArc( 0, 0, h/2.0 , DegToRad(-sa) , DegToRad(-ea), sa > ea );
-        m_graphicContext->FillPath( path );
         m_graphicContext->StrokePath( path );
     }
     else
     {
         wxGraphicsPath path = m_graphicContext->CreatePath();
-    path.AddArc( 0, 0, h/2.0 , DegToRad(-sa) , DegToRad(-ea), sa > ea );
-    m_graphicContext->DrawPath( path );
+        path.AddArc( 0, 0, h/2.0 , DegToRad(-sa) , DegToRad(-ea), sa > ea );
+        m_graphicContext->DrawPath( path );
     }
 
     m_graphicContext->PopState();
