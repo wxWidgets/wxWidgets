@@ -20,7 +20,10 @@ class WXDLLIMPEXP_FWD_BASE wxArrayString;
 class WXDLLIMPEXP_CORE wxChoice : public wxChoiceBase
 {
 public:
-    wxChoice();
+    wxChoice()
+    {
+        Init();
+    }
     wxChoice( wxWindow *parent, wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
@@ -29,8 +32,7 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxChoiceNameStr )
     {
-        m_strings = (wxSortedArrayString *)NULL;
-
+        Init();
         Create(parent, id, pos, size, n, choices, style, validator, name);
     }
     wxChoice( wxWindow *parent, wxWindowID id,
@@ -41,8 +43,7 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxChoiceNameStr )
     {
-        m_strings = (wxSortedArrayString *)NULL;
-
+        Init();
         Create(parent, id, pos, size, choices, style, validator, name);
     }
     virtual ~wxChoice();
@@ -85,6 +86,9 @@ protected:
     // contains the client data for the items
     wxArrayPtrVoid m_clientData;
 
+    // index to GtkListStore cell which displays the item text
+    int m_stringCellIndex;
+
     virtual wxSize DoGetBestSize() const;
     virtual int DoInsertItems(const wxArrayStringsAdapter& items,
                               unsigned int pos,
@@ -96,7 +100,13 @@ protected:
 
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
 
+    // in derived classes, implement this to insert list store entry
+    // with all items default except text
+    virtual void GTKInsertComboBoxTextItem( unsigned int n, const wxString& text );
+
 private:
+    void Init();
+
     DECLARE_DYNAMIC_CLASS(wxChoice)
 };
 

@@ -2999,12 +2999,14 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="ADVANCED_GTK_NATIVE_SRC" hints="files">
     src/gtk/aboutdlg.cpp
     src/gtk/animate.cpp
+    src/gtk/bmpcbox.cpp
     src/gtk/calctrl.cpp
     src/gtk/dataview.cpp
     src/gtk/hyperlink.cpp
 </set>
 <set var="ADVANCED_GTK_NATIVE_HDR" hints="files">
     wx/gtk/animate.h
+    wx/gtk/bmpcbox.h
     wx/gtk/calctrl.h
     wx/gtk/dataview.h
     wx/gtk/hyperlink.h

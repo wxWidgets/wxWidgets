@@ -40,9 +40,10 @@ gtk_choice_changed_callback( GtkWidget *WXUNUSED(widget), wxChoice *choice )
 
 IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControlWithItems)
 
-wxChoice::wxChoice()
-    : m_strings(NULL)
+void wxChoice::Init()
 {
+    m_strings = (wxSortedArrayString *)NULL;
+    m_stringCellIndex = 0;
 }
 
 bool wxChoice::Create( wxWindow *parent, wxWindowID id,
@@ -63,8 +64,6 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
                        long style, const wxValidator& validator,
                        const wxString &name )
 {
-    m_strings = NULL;
-
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
@@ -117,6 +116,11 @@ void wxChoice::SendSelectionChangedEvent(wxEventType evt_type)
     HandleWindowEvent( event );
 }
 
+void wxChoice::GTKInsertComboBoxTextItem( unsigned int n, const wxString& text )
+{
+    gtk_combo_box_insert_text( GTK_COMBO_BOX( m_widget ), n, wxGTK_CONV( text ) );
+}
+
 int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
                             unsigned int pos,
                             void **clientData, wxClientDataType type)
@@ -130,7 +134,6 @@ int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
 
     int n = wxNOT_FOUND;
 
-    GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );
     for ( int i = 0; i < count; ++i )
     {
         n = pos + i;
@@ -139,7 +142,7 @@ int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
         if(m_strings)
             n = m_strings->Add(items[i]);
 
-        gtk_combo_box_insert_text( combobox, n, wxGTK_CONV( items[i] ) );
+        GTKInsertComboBoxTextItem( n, items[i] );
 
         m_clientData.Insert( NULL, n );
         AssignNewItemClientData(n, clientData, i, type);
@@ -166,9 +169,9 @@ void wxChoice::DoClear()
 
     DisableEvents();
 
-    const unsigned int count = GetCount();
-    for (unsigned int i = 0; i < count; i++)
-        gtk_combo_box_remove_text( GTK_COMBO_BOX(m_widget), 0 );
+    GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );
+    GtkTreeModel* model = gtk_combo_box_get_model( combobox );
+    gtk_list_store_clear(GTK_LIST_STORE(model));
 
     m_clientData.Clear();
 
@@ -185,7 +188,14 @@ void wxChoice::DoDeleteOneItem(unsigned int n)
     wxCHECK_RET( m_widget != NULL, wxT("invalid control") );
     wxCHECK_RET( IsValid(n), _T("invalid index in wxChoice::Delete") );
 
-    gtk_combo_box_remove_text( GTK_COMBO_BOX( m_widget ), n );
+    GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );
+    GtkTreeModel* model = gtk_combo_box_get_model( combobox );
+    GtkListStore* store = GTK_LIST_STORE(model);
+    GtkTreeIter iter;
+    gtk_tree_model_iter_nth_child( model, &iter,
+                                   NULL, (gint) n );
+    gtk_list_store_remove( store, &iter );
+
     m_clientData.RemoveAt( n );
     if ( m_strings )
         m_strings->RemoveAt( n );
@@ -207,7 +217,7 @@ int wxChoice::FindString( const wxString &item, bool bCase ) const
     do
     {
         GValue value = { 0, };
-        gtk_tree_model_get_value( model, &iter, 0, &value );
+        gtk_tree_model_get_value( model, &iter, m_stringCellIndex, &value );
         wxString str = wxGTK_CONV_BACK( g_value_get_string( &value ) );
         g_value_unset( &value );
 
@@ -240,7 +250,7 @@ void wxChoice::SetString(unsigned int n, const wxString &text)
         GValue value = { 0, };
         g_value_init( &value, G_TYPE_STRING );
         g_value_set_string( &value, wxGTK_CONV( text ) );
-        gtk_list_store_set_value( GTK_LIST_STORE(model), &iter, 0, &value );
+        gtk_list_store_set_value( GTK_LIST_STORE(model), &iter, m_stringCellIndex, &value );
         g_value_unset( &value );
     }
 
@@ -259,7 +269,7 @@ wxString wxChoice::GetString(unsigned int n) const
     if (gtk_tree_model_iter_nth_child (model, &iter, NULL, n))
     {
         GValue value = { 0, };
-        gtk_tree_model_get_value( model, &iter, 0, &value );
+        gtk_tree_model_get_value( model, &iter, m_stringCellIndex, &value );
         wxString tmp = wxGTK_CONV_BACK( g_value_get_string( &value ) );
         g_value_unset( &value );
         return tmp;

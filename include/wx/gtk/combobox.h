@@ -23,7 +23,11 @@ class WXDLLIMPEXP_CORE wxComboBox : public wxChoice,
                                     public wxTextEntry
 {
 public:
-    wxComboBox() { m_strings = NULL; }
+    wxComboBox()
+        : wxChoice(), wxTextEntry()
+    {
+        Init();
+    }
     wxComboBox(wxWindow *parent,
                wxWindowID id,
                const wxString& value = wxEmptyString,
@@ -33,7 +37,9 @@ public:
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
                const wxString& name = wxComboBoxNameStr)
+        : wxChoice(), wxTextEntry()
     {
+        Init();
         Create(parent, id, value, pos, size, n, choices, style, validator, name);
     }
 
@@ -45,7 +51,9 @@ public:
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
                const wxString& name = wxComboBoxNameStr)
+        : wxChoice(), wxTextEntry()
     {
+        Init();
         Create(parent, id, value, pos, size, choices, style, validator, name);
     }
 
@@ -123,8 +131,14 @@ protected:
     // override this and return true.
     virtual bool UseGTKStyleBase() const { return true; }
 
+    // Override in derived classes to create combo box widgets with
+    // custom list stores.
+    virtual void GTKCreateComboBoxWidget();
+
     // return the GtkEntry part of the combobox
-    GtkEntry *GetEntry() const;
+    GtkEntry *GetEntry() const { return m_entry; }
+
+    GtkEntry*   m_entry;
 
 private:
     // From wxTextEntry:
@@ -137,6 +151,8 @@ private:
         else
             DisableEvents();
     }
+
+    void Init();
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxComboBox)
     DECLARE_EVENT_TABLE()

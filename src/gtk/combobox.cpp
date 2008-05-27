@@ -72,6 +72,11 @@ BEGIN_EVENT_TABLE(wxComboBox, wxChoice)
     EVT_UPDATE_UI(wxID_SELECTALL, wxComboBox::OnUpdateSelectAll)
 END_EVENT_TABLE()
 
+void wxComboBox::Init()
+{
+    m_entry = NULL;
+}
+
 bool wxComboBox::Create( wxWindow *parent, wxWindowID id,
                          const wxString& value,
                          const wxPoint& pos, const wxSize& size,
@@ -91,8 +96,6 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
                          long style, const wxValidator& validator,
                          const wxString& name )
 {
-    m_strings = NULL;
-
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
@@ -103,12 +106,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     if (HasFlag(wxCB_SORT))
         m_strings = new wxSortedArrayString();
 
-    m_widget = gtk_combo_box_entry_new_text();
-
-    // Set it up to trigger default item on enter key press
-    GtkWidget *widget = gtk_bin_get_child(GTK_BIN(m_widget));
-    gtk_entry_set_activates_default(GTK_ENTRY(widget),
-                                    !HasFlag(wxTE_PROCESS_ENTER));
+    GTKCreateComboBoxWidget();
 
     if (HasFlag(wxBORDER_NONE))
     {
@@ -118,23 +116,34 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
 
     GtkEntry * const entry = GetEntry();
 
-    gtk_entry_set_editable( entry, TRUE );
+    if ( entry )
+    {
+        // Set it up to trigger default item on enter key press
+        gtk_entry_set_activates_default( entry,
+                                         !HasFlag(wxTE_PROCESS_ENTER) );
+
+        gtk_entry_set_editable( entry, TRUE );
+    }
 
     Append(n, choices);
 
     m_parent->DoAddChild( this );
 
-    m_focusWidget = GTK_WIDGET( entry );
+    if ( entry )
+        m_focusWidget = GTK_WIDGET( entry );
 
     PostCreation(size);
 
-    gtk_entry_set_text( entry, wxGTK_CONV(value) );
+    if ( entry )
+    {
+        gtk_entry_set_text( entry, wxGTK_CONV(value) );
 
-    if (style & wxCB_READONLY)
-        gtk_entry_set_editable( entry, FALSE );
+        if (style & wxCB_READONLY)
+            gtk_entry_set_editable( entry, FALSE );
 
-    g_signal_connect_after (entry, "changed",
-                        G_CALLBACK (gtkcombobox_text_changed_callback), this);
+        g_signal_connect_after (entry, "changed",
+                                G_CALLBACK (gtkcombobox_text_changed_callback), this);
+    }
 
     g_signal_connect_after (m_widget, "changed",
                         G_CALLBACK (gtkcombobox_changed_callback), this);
@@ -144,9 +153,11 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     return true;
 }
 
-GtkEntry *wxComboBox::GetEntry() const
+void wxComboBox::GTKCreateComboBoxWidget()
 {
-    return GTK_ENTRY(GTK_BIN(m_widget)->child);
+    m_widget = gtk_combo_box_entry_new_text();
+
+    m_entry = GTK_ENTRY(GTK_BIN(m_widget)->child);
 }
 
 GtkEditable *wxComboBox::GetEditable() const
@@ -159,7 +170,7 @@ void wxComboBox::OnChar( wxKeyEvent &event )
     switch ( event.GetKeyCode() )
     {
         case WXK_RETURN:
-            if ( HasFlag(wxTE_PROCESS_ENTER) )
+            if ( HasFlag(wxTE_PROCESS_ENTER) && GetEntry() )
             {
                 // GTK automatically selects an item if its in the list
                 wxCommandEvent eventEnter(wxEVT_COMMAND_TEXT_ENTER, GetId());
@@ -182,8 +193,9 @@ void wxComboBox::OnChar( wxKeyEvent &event )
 
 void wxComboBox::DisableEvents()
 {
-    g_signal_handlers_block_by_func(GTK_BIN(m_widget)->child,
-        (gpointer)gtkcombobox_text_changed_callback, this);
+    if ( GetEntry() )
+        g_signal_handlers_block_by_func(GTK_BIN(m_widget)->child,
+            (gpointer)gtkcombobox_text_changed_callback, this);
 
     g_signal_handlers_block_by_func(m_widget,
         (gpointer)gtkcombobox_changed_callback, this);
@@ -191,8 +203,9 @@ void wxComboBox::DisableEvents()
 
 void wxComboBox::EnableEvents()
 {
-    g_signal_handlers_unblock_by_func(GTK_BIN(m_widget)->child,
-        (gpointer)gtkcombobox_text_changed_callback, this);
+    if ( GetEntry() )
+        g_signal_handlers_unblock_by_func(GTK_BIN(m_widget)->child,
+            (gpointer)gtkcombobox_text_changed_callback, this);
 
     g_signal_handlers_unblock_by_func(m_widget,
         (gpointer)gtkcombobox_changed_callback, this);
