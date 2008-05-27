@@ -1175,6 +1175,9 @@ wxString wxGetOsDescription()
                     str << _T(", ") << info.szCSDVersion;
                 }
                 str << _T(')');
+
+                if ( wxIsPlatform64Bit() )
+                    str << _(", 64-bit edition");
                 break;
         }
     }
