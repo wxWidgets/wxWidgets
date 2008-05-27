@@ -502,9 +502,10 @@ wcschr (const wchar_t * str, const wchar_t chr)
 
 int wcscoll (const wchar_t *str1, const wchar_t * str2) {return wcscmp(str1, str2);}
 
-//wcsxfrm: ¸ù¾Ýָ֨µĵØÓòÉèÖã̰Ñ×ַûԮstrSourceÖÐָ֨ÊýÁߵĿí×ַûתۻΪ
-// ×ַûԮstrDest ,Èô³ɹ¦Ô򷵻ر»תۻ×ַûµĳĶȣ̷ñÔ򷵻Ø-1
-// ºÍstrxfrmگÊýÀàËÆ
+/*
+ * wcsxfrm: Transfom the wide-char str2 and place the result into the str1,
+ * return the length of the wide-char, return -1 on error.
+ */
 size_t
 wcsxfrm (wchar_t * str1, const wchar_t * str2, size_t n)
 {
@@ -548,9 +549,13 @@ wcspbrk (const wchar_t * str, const wchar_t * set)
     return NULL;
 }
 
-// ²éÕÒÔڼϺÏsetËùָ֨µÄÄÇЩ×ַûÔÚstrµĿªʼԦ³öÏֵÄ×î´ó¸öÊý
-// Èçstr="13134abcde", set="1234567890", wcsspn(str,set)==5
-// Èçstr="abcde", set="1234567890", wcsspn(str,set)==0
+/*
+ * wcsspn: compute the maxinum initial segment of the wide-char str which consists entirely of wide-char codes from the set.
+ * returnt he length of the initial substring of str
+ * examples:
+ * str="13134abcde", set="1234567890", wcsspn(str,set)==5
+ * str="abcde", set="1234567890", wcsspn(str,set)==0
+ */
 size_t
 wcsspn (const wchar_t * str, const wchar_t * set)
 {
@@ -573,9 +578,12 @@ wcsspn (const wchar_t * str, const wchar_t * set)
     return i;
 }
 
-// ²éÕÒÔڼϺÏsetËùָ֨µÄÄÇЩ×ַûÔÚstrµĿªʼԦһ³öÏֵÄ×î´ó¸öÊý
-// Èçstr="13134abcde", set="1234567890", wcsspn(str,set)==0
-// Èçstr="abcde123", set="1234567890", wcsspn(str,set)==5
+/*
+ * wcscspn: determines the length of the initial segment of str which consists entirely of characters not found in set.
+ * examples:
+ * str="13134abcde", set="1234567890", wcsspn(str,set)==0
+ * str="abcde123", set="1234567890", wcsspn(str,set)==5
+*/
 size_t
 wcscspn (const wchar_t * str, const wchar_t * set)
 {
