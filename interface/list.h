@@ -88,13 +88,15 @@
 class wxList<T>
 {
 public:
-    //@{
     /**
-        Constructors.
+        Default constructor.
     */
     wxList<T>();
+    
+    /**
+        Constructor which initialized the list with an array of @count elements.
+    */
     wxList<T>(size_t count, T* elements[]);
-    //@}
 
     /**
         Destroys the list, but does not delete the objects stored in the list
@@ -108,8 +110,8 @@ public:
     wxList<T>::compatibility_iterator Append(T* object);
 
     /**
-        Clears the list, but does not delete the objects stored in the list
-        unless you called DeleteContents(@true ).
+        Clears the list. 
+        Deletes the actual objects if DeleteContents( @true ) was called previously.
     */
     void Clear();
 
@@ -121,20 +123,25 @@ public:
     void DeleteContents(bool destroy);
 
     /**
-        Deletes the given element refered to by @c iter from the list,
-        returning @true if successful.
+        Deletes the given element refered to by @a iter from the list
+        if @a iter is a valid iterator. Returns @true if successful.
+        
+        Deletes the actual object if DeleteContents( @true ) was called previously.
     */
     bool DeleteNode(const compatibility_iterator& iter);
 
     /**
         Finds the given @a object and removes it from the list, returning
-        @true if successful. The application must delete the actual object
-        separately.
+        @true if successful. 
+        
+        Deletes @a object if DeleteContents( @true ) was called previously.
     */
     bool DeleteObject(T* object);
 
     /**
-        Removes element refered to be @c iter.
+        Removes element refered to be @a iter.
+        
+        Deletes the actualy object if DeleteContents( @true ) was called previously.
     */
     void Erase(const compatibility_iterator& iter);
 
@@ -164,16 +171,22 @@ public:
     */
     int IndexOf(T* obj) const;
 
-    //@{
     /**
-        Inserts the object before the object refered to be @e iter.
+        Inserts @a object at the beginning of the list.
     */
     wxList<T>::compatibility_iterator Insert(T* object);
+
+    /**
+        Inserts @a object at @a position.
+    */
     wxList<T>::compatibility_iterator Insert(size_t position,
                                            T* object);
+
+    /**
+        Inserts @a object before the object refered to be @a iter.
+    */
     wxList<T>::compatibility_iterator Insert(compatibility_iterator iter,
                                            T* object);
-    //@}
 
     /**
         Returns @true if the list is empty, @false otherwise.
@@ -182,7 +195,7 @@ public:
 
     /**
         Returns the iterator refering to the object at the given
-        @c index in the list.
+        @a index in the list.
     */
     wxList<T>::compatibility_iterator Item(size_t index) const;
 
@@ -193,9 +206,8 @@ public:
 
     /**
         @note This function is deprecated, use @ref wxList::itemfunc Item instead.
-        Returns the @e nth node in the list, indexing from zero (@NULL if the list is
-        empty
-        or the nth node could not be found).
+        Returns the @a nth node in the list, indexing from zero (@NULL if the list is
+        empty or the nth node could not be found).
     */
     wxList<T>::compatibility_iterator Nth(int n) const;
 
@@ -212,13 +224,15 @@ public:
     */
     void Sort(wxSortCompareFunction compfunc);
 
-    //@{
     /**
-        )
+       Clears the list and item from @a first to @a last from another list to it.
     */
     void assign(const_iterator first, const const_iterator& last);
-    void assign(size_type n);
-    //@}
+
+    /**
+       Clears the list and adds @a n items with value @a v to it.
+    */
+    void assign(size_type n, const_reference v = value_type())          \
 
     /**
         Returns the last item of the list.
