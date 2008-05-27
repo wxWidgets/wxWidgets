@@ -1067,6 +1067,41 @@ bool wxIsDebuggerRunning()
 // OS version
 // ----------------------------------------------------------------------------
 
+// check if we're running under a server or workstation Windows system: it
+// returns true or false with obvious meaning as well as -1 if the system type
+// couldn't be determined
+//
+// this function is currently private but we may want to expose it later if
+// it's really useful
+namespace
+{
+
+int wxIsWindowsServer()
+{
+#ifdef VER_NT_WORKSTATION
+    OSVERSIONINFOEX info;
+    wxZeroMemory(info);
+
+    info.dwOSVersionInfoSize = sizeof(info);
+    if ( ::GetVersionEx(wx_reinterpret_cast(OSVERSIONINFO *, &info)) )
+    {
+        switch ( info.wProductType )
+        {
+            case VER_NT_WORKSTATION:
+                return false;
+
+            case VER_NT_SERVER:
+            case VER_NT_DOMAIN_CONTROLLER:
+                return true;
+        }
+    }
+#endif // VER_NT_WORKSTATION
+
+    return -1;
+}
+
+} // anonymous namespace
+
 wxString wxGetOsDescription()
 {
     wxString str;
@@ -1141,13 +1176,20 @@ wxString wxGetOsDescription()
                                            info.dwBuildNumber);
                                 break;
 
+                            case 2:
+                                // we can't distinguish between XP 64 and 2003
+                                // as they both are 5.2, so examine the product
+                                // type to resolve this ambiguity
+                                if ( wxIsWindowsServer() == true )
+                                {
+                                    str.Printf(_("Windows Server 2003 (build %lu"),
+                                               info.dwBuildNumber);
+                                    break;
+                                }
+                                //else: must be XP, fall through
+
                             case 1:
                                 str.Printf(_("Windows XP (build %lu"),
-                                           info.dwBuildNumber);
-                                break;
-
-                            case 2:
-                                str.Printf(_("Windows Server 2003 (build %lu"),
                                            info.dwBuildNumber);
                                 break;
                         }
