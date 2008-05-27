@@ -456,8 +456,10 @@ typedef short int WXTYPE;
 
 
 #ifndef HAVE_WOSTREAM
-    // Mingw <=3.4 doesn't have std::wostream
-    #if defined(__MINGW32__) && !wxCHECK_GCC_VERSION(4,0)
+    // Mingw <= 3.4 and any version (so far) when targetting PalmOS don't have
+    // std::wostream
+    #if defined(__PALMOS__) || \
+        (defined(__MINGW32__) && !wxCHECK_GCC_VERSION(4, 0))
         #define wxNO_WOSTREAM
     #endif
 
