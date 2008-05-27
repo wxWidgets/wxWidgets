@@ -4057,15 +4057,12 @@ wxDataViewCtrl::~wxDataViewCtrl()
     if (m_notifier)
         GetModel()->RemoveNotifier( m_notifier );
 
-    wxDataViewColumnList::const_iterator iter;
-    for (iter = m_cols.begin(); iter!=m_cols.end(); iter++)
-    {
-        delete *iter;
-    }
+    m_cols.Clear();
 }
 
 void wxDataViewCtrl::Init()
 {
+    m_cols.DeleteContents(true);
     m_notifier = NULL;
 }
 
@@ -4237,12 +4234,11 @@ void wxDataViewCtrl::ColumnMoved( wxDataViewColumn* col, unsigned int new_pos )
 
 bool wxDataViewCtrl::DeleteColumn( wxDataViewColumn *column )
 {
-    wxDataViewColumnList::compatibility_iterator  ret = m_cols.Find( column );
+    wxDataViewColumnList::compatibility_iterator ret = m_cols.Find( column );
     if (!ret)
         return false;
 
     m_cols.Erase(ret);
-    delete column;
     OnColumnChange();
 
     return true;
@@ -4250,7 +4246,7 @@ bool wxDataViewCtrl::DeleteColumn( wxDataViewColumn *column )
 
 bool wxDataViewCtrl::ClearColumns()
 {
-    m_cols.clear();
+    m_cols.Clear();
     OnColumnChange();
     return true;
 }
