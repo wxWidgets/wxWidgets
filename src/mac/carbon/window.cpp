@@ -2055,41 +2055,46 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
 wxSize wxWindowMac::DoGetBestSize() const
 {
     if ( m_peer == NULL || m_macIsUserPane || IsTopLevel() )
-        return wxWindowBase::DoGetBestSize() ;
-
-    Rect    bestsize = { 0 , 0 , 0 , 0 } ;
-    int bestWidth, bestHeight ;
-
-    m_peer->GetBestRect( &bestsize ) ;
-    if ( EmptyRect( &bestsize ) )
     {
-        bestsize.left =
-        bestsize.top = 0 ;
-        bestsize.right =
-        bestsize.bottom = 16 ;
-
-        if ( IsKindOf( CLASSINFO( wxScrollBar ) ) )
-        {
-            bestsize.bottom = 16 ;
-        }
-#if wxUSE_SPINBTN
-        else if ( IsKindOf( CLASSINFO( wxSpinButton ) ) )
-        {
-            bestsize.bottom = 24 ;
-        }
-#endif
-        else
-        {
-            // return wxWindowBase::DoGetBestSize() ;
-        }
+        return wxWindowBase::DoGetBestSize() ;
     }
+    else
+    {
+        Rect    bestsize = { 0 , 0 , 0 , 0 } ;
+        int bestWidth, bestHeight ;
 
-    bestWidth = bestsize.right - bestsize.left ;
-    bestHeight = bestsize.bottom - bestsize.top ;
-    if ( bestHeight < 10 )
-        bestHeight = 13 ;
+        m_peer->GetBestRect( &bestsize ) ;
+        if ( EmptyRect( &bestsize ) )
+        {
+            bestsize.left =
+            bestsize.top = 0 ;
+            bestsize.right =
+            bestsize.bottom = 16 ;
 
-    return wxSize(bestWidth, bestHeight);
+            if ( IsKindOf( CLASSINFO( wxScrollBar ) ) )
+            {
+                bestsize.bottom = 16 ;
+            }
+    #if wxUSE_SPINBTN
+            else if ( IsKindOf( CLASSINFO( wxSpinButton ) ) )
+            {
+                bestsize.bottom = 24 ;
+            }
+    #endif
+            else
+            {
+                // return wxWindowBase::DoGetBestSize() ;
+            }
+        }
+        // wx-borders are being drawn outside the native control
+        bestWidth = bestsize.right - bestsize.left + MacGetLeftBorderSize() + 
+                    MacGetRightBorderSize();
+        bestHeight = bestsize.bottom - bestsize.top + MacGetTopBorderSize() + 
+                     MacGetBottomBorderSize();
+        if ( bestHeight < 10 )
+            bestHeight = 13 ;
+        return wxSize(bestWidth, bestHeight);
+    }
 }
 
 // set the size of the window: if the dimensions are positive, just use them,
