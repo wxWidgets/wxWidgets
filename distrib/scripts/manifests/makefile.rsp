@@ -1,6 +1,5 @@
 autoconf_inc.m4
 demos/bombs/Makefile.in
-demos/dbbrowse/Makefile.in
 demos/forty/Makefile.in
 demos/fractal/Makefile.in
 demos/life/Makefile.in

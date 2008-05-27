@@ -24,8 +24,6 @@ build/msw/wx.dsw
 build/msw/wx_dll.dsw
 demos/bombs/bombs.dsp
 demos/bombs/bombs.dsw
-demos/dbbrowse/dbbrowse.dsp
-demos/dbbrowse/dbbrowse.dsw
 demos/forty/forty.dsp
 demos/forty/forty.dsw
 demos/fractal/fractal.dsp

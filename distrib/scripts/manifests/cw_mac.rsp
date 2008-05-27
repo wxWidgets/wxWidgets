@@ -181,9 +181,6 @@ utils/hhp2cached/*.mcp
 demos/bombs/*M?.xml
 demos/bombs/*.mcp
 
-demos/dbbrowse/*M?.xml
-demos/dbbrowse/*.mcp
-
 demos/forty/*M?.xml
 demos/forty/*.mcp
 

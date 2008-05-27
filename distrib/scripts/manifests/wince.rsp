@@ -7,8 +7,6 @@ build/wince/wx_wxpng.vcp
 build/wince/wx_wxzlib.vcp
 demos/bombs/bombs.vcp
 demos/bombs/bombs.vcw
-demos/dbbrowse/dbbrowse.vcp
-demos/dbbrowse/dbbrowse.vcw
 demos/forty/forty.vcp
 demos/forty/forty.vcw
 demos/fractal/fractal.vcp

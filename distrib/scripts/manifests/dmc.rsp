@@ -4,8 +4,6 @@ build/msw/makefile.dmc
 build/msw/makefile.dms
 demos/bombs/makefile.dmc
 demos/bombs/makefile.dms
-demos/dbbrowse/makefile.dmc
-demos/dbbrowse/makefile.dms
 demos/forty/makefile.dmc
 demos/forty/makefile.dms
 demos/fractal/makefile.dmc
