@@ -21,6 +21,7 @@
 #include "wx/nonownedwnd.h"
 #include "wx/iconbndl.h"
 #include "wx/containr.h"
+#include "wx/weakref.h"
 
 // the default names for various classes
 extern WXDLLIMPEXP_DATA_CORE(const char) wxFrameNameStr[];
@@ -288,19 +289,15 @@ protected:
     static int WidthDefault(int w) { return w == wxDefaultCoord ? GetDefaultSize().x : w; }
     static int HeightDefault(int h) { return h == wxDefaultCoord ? GetDefaultSize().y : h; }
 
-    // reset m_winDefault and m_winTmpDefault if they point to the window being
-    // destroyed
-    void OnChildDestroy(wxWindowDestroyEvent& event);
-
 
     // the frame icon
     wxIconBundle m_icons;
 
     // a default window (usually a button) or NULL
-    wxWindow *m_winDefault;
+    wxWindowRef m_winDefault;
 
     // a temporary override of m_winDefault, use the latter if NULL
-    wxWindow *m_winTmpDefault;
+    wxWindowRef m_winTmpDefault;
 
     DECLARE_NO_COPY_CLASS(wxTopLevelWindowBase)
     DECLARE_EVENT_TABLE()

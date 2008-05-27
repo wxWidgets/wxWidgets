@@ -39,7 +39,6 @@
 BEGIN_EVENT_TABLE(wxTopLevelWindowBase, wxWindow)
     EVT_CLOSE(wxTopLevelWindowBase::OnCloseWindow)
     EVT_SIZE(wxTopLevelWindowBase::OnSize)
-    EVT_WINDOW_DESTROY(wxTopLevelWindowBase::OnChildDestroy)
     WX_EVENT_TABLE_CONTROL_CONTAINER(wxTopLevelWindowBase)
 END_EVENT_TABLE()
 
@@ -59,17 +58,12 @@ wxTopLevelWindowBase::wxTopLevelWindowBase()
 {
     // Unlike windows, top level windows are created hidden by default.
     m_isShown = false;
-    m_winDefault =
-    m_winTmpDefault = NULL;
 
     WX_INIT_CONTROL_CONTAINER();
 }
 
 wxTopLevelWindowBase::~wxTopLevelWindowBase()
 {
-    m_winDefault =
-    m_winTmpDefault = NULL;
-
     // don't let wxTheApp keep any stale pointers to us
     if ( wxTheApp && wxTheApp->GetTopWindow() == this )
         wxTheApp->SetTopWindow(NULL);
@@ -420,17 +414,6 @@ void wxTopLevelWindowBase::DoLayout()
 void wxTopLevelWindowBase::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
     Destroy();
-}
-
-void wxTopLevelWindowBase::OnChildDestroy(wxWindowDestroyEvent& event)
-{
-    event.Skip();
-
-    wxWindow * const win = event.GetWindow();
-    if ( win == m_winDefault )
-        m_winDefault = NULL;
-    if ( win == m_winTmpDefault )
-        m_winTmpDefault = NULL;
 }
 
 bool wxTopLevelWindowBase::SendIconizeEvent(bool iconized)
