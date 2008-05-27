@@ -1180,7 +1180,7 @@ wxString wxGetOsDescription()
                                 // we can't distinguish between XP 64 and 2003
                                 // as they both are 5.2, so examine the product
                                 // type to resolve this ambiguity
-                                if ( wxIsWindowsServer() == true )
+                                if ( wxIsWindowsServer() == 1 )
                                 {
                                     str.Printf(_("Windows Server 2003 (build %lu"),
                                                info.dwBuildNumber);

@@ -478,7 +478,10 @@ int wxConsoleStderr::GetCommandHistory(wxWxCharBuffer& buf) const
     {
         buf.extend(len);
         const int len2 = m_pfnGetConsoleCommandHistory(buf.data(), len, CMD_EXE);
-        wxASSERT_MSG( len2 == len, _T("failed getting history?") );
+        if ( len2 != len )
+        {
+            wxFAIL_MSG( _T("failed getting history?") );
+        }
     }
 
     return len;
