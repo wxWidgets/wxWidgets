@@ -476,6 +476,8 @@ public:
     this->Create(parent, id, pos, size, style, validator );
   }
 
+  ~wxDataViewCtrl();
+
  // explicit control creation
   bool Create(wxWindow *parent, wxWindowID id, wxPoint const& pos=wxDefaultPosition, wxSize const& size=wxDefaultSize, long style=0,
               wxValidator const& validator=wxDefaultValidator);

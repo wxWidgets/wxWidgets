@@ -1078,6 +1078,13 @@ IMPLEMENT_ABSTRACT_CLASS(wxDataViewColumn,wxDataViewColumnBase)
 //-----------------------------------------------------------------------------
 // wxDataViewCtrl
 //-----------------------------------------------------------------------------
+
+
+wxDataViewCtrl::~wxDataViewCtrl()
+{
+   ClearColumns();
+}
+
 #pragma mark -
 void wxDataViewCtrl::Init()
 {
