@@ -321,7 +321,7 @@ public:
 
     virtual ExitCode Entry()
     {
-        return (ExitCode)EXEC(m_command);
+        return wxUIntToPtr(EXEC(m_command));
     }
 
 private:
@@ -674,7 +674,7 @@ void MyFrame::OnExecThread(wxCommandEvent& WXUNUSED(event))
     thread.Run();
 
     wxLogMessage(wxT("The exit code from a child thread is %ld"),
-                 (long)thread.Wait());
+                 (long)wxPtrToUInt(thread.Wait()));
 }
 
 void MyFrame::OnShowCPUs(wxCommandEvent& WXUNUSED(event))
