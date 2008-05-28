@@ -477,7 +477,15 @@ int wxConsoleStderr::GetCommandHistory(wxWxCharBuffer& buf) const
     if ( len )
     {
         buf.extend(len);
-        const int len2 = m_pfnGetConsoleCommandHistory(buf.data(), len, CMD_EXE);
+
+        int len2 = m_pfnGetConsoleCommandHistory(buf.data(), len, CMD_EXE);
+
+#if !wxUSE_UNICODE
+        // there seems to be a bug in the GetConsoleCommandHistoryA(), it
+        // returns the length of Unicode string and not ANSI one
+        len2 /= 2;
+#endif // !wxUSE_UNICODE
+
         if ( len2 != len )
         {
             wxFAIL_MSG( _T("failed getting history?") );
