@@ -172,11 +172,31 @@ protected:
     wxString m_url;
 };
 
+
+class wxWebKitNewWindowEvent : public wxCommandEvent
+{
+    DECLARE_DYNAMIC_CLASS( wxWebViewNewWindowEvent )
+public:
+    wxString GetURL() const { return m_url; }
+    void SetURL(const wxString& url) { m_url = url; }
+    wxString GetTargetName() const { return m_targetName; }
+    void SetTargetName(const wxString& name) { m_targetName = name; }
+
+    wxWebKitNewWindowEvent( wxWindow* win = (wxWindow*)(NULL));
+    wxEvent *Clone(void) const { return new wxWebKitNewWindowEvent(*this); }
+
+private:
+    wxString m_url;
+    wxString m_targetName;
+};
+
 typedef void (wxEvtHandler::*wxWebKitStateChangedEventFunction)(wxWebKitStateChangedEvent&);
 typedef void (wxEvtHandler::*wxWebKitBeforeLoadEventFunction)(wxWebKitBeforeLoadEvent&);
+typedef void (wxEvtHandler::*wxWebKitNewWindowEventFunction)(wxWebKitNewWindowEvent&);
 
 extern const wxEventType wxEVT_WEBKIT_BEFORE_LOAD;
 extern const wxEventType wxEVT_WEBKIT_STATE_CHANGED;
+extern const wxEventType wxEVT_WEBKIT_NEW_WINDOW;
 
 #define EVT_WEBKIT_STATE_CHANGED(func) \
             DECLARE_EVENT_TABLE_ENTRY( wxEVT_WEBKIT_STATE_CHANGED, \
@@ -194,6 +214,13 @@ extern const wxEventType wxEVT_WEBKIT_STATE_CHANGED;
                             (wxWebKitBeforeLoadEventFunction) & func, \
                             (wxObject *) NULL ),
 
+#define EVT_WEBKIT_NEW_WINDOW(func)                              \
+            DECLARE_EVENT_TABLE_ENTRY( wxEVT_WEBKIT_NEW_WINDOW, \
+                            wxID_ANY, \
+                            wxID_ANY, \
+                            (wxObjectEventFunction)   \
+                            (wxWebKitNewWindowEventFunction) & func, \
+                            (wxObject *) NULL ),
 #endif // wxUSE_WEBKIT
 
 #endif

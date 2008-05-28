@@ -309,6 +309,20 @@ wxWebKitBeforeLoadEvent::wxWebKitBeforeLoadEvent( wxWindow* win )
     SetId(win->GetId());
 }
 
+
+IMPLEMENT_DYNAMIC_CLASS( wxWebKitNewWindowEvent, wxCommandEvent )
+
+DEFINE_EVENT_TYPE( wxEVT_WEBKIT_NEW_WINDOW )
+
+wxWebKitNewWindowEvent::wxWebKitNewWindowEvent( wxWindow* win )
+{
+    SetEventType( wxEVT_WEBKIT_NEW_WINDOW);
+    SetEventObject( win );
+    SetId(win->GetId());
+}
+
+
+
 //---------------------------------------------------------
 // helper functions for NSString<->wxString conversion
 //---------------------------------------------------------
@@ -858,6 +872,19 @@ void wxWebKitCtrl::MacVisibilityChanged(){
         [listener use];
 }
 
+- (void)webView:(WebView *)sender decidePolicyForNewWindowAction:(NSDictionary *)actionInformation request:(NSURLRequest *)request newFrameName:(NSString *)frameName decisionListener:(id < WebPolicyDecisionListener >)listener
+{
+    wxWebKitNewWindowEvent thisEvent(webKitWindow);
+
+    NSString *url = [[request URL] absoluteString];
+    thisEvent.SetURL( wxStringWithNSString( url ) );
+    thisEvent.SetTargetName( wxStringWithNSString( frameName ) );
+    
+    if (webKitWindow && webKitWindow->GetEventHandler())
+        webKitWindow->GetEventHandler()->ProcessEvent(thisEvent);
+
+    [listener use];
+}
 @end
 
 #endif //wxUSE_WEBKIT
