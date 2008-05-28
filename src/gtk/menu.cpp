@@ -1313,7 +1313,8 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
 
     GtkWidget* mitem = item->GetMenuItem();
     gtk_menu_item_set_submenu(GTK_MENU_ITEM(mitem), NULL);
-    gtk_container_remove(GTK_CONTAINER(m_menu), mitem);
+    gtk_widget_destroy(mitem);
+    item->SetMenuItem(NULL);
 
     return item;
 }
