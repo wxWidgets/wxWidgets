@@ -46,6 +46,7 @@
         *wxSizer*ComputeFittingWindowSize*;
         *wxSizerFlags*ReserveSpaceEvenIfHidden*;
         *wxSizerItem*ShouldAccountFor*;
+	*wxWebKitNewWindowEvent*;
         *wxWindowBase*ClientToWindowSize*;
         *wxWindowBase*Get*Sibling*;
         *wxWindowBase*WindowToClientSize*;
