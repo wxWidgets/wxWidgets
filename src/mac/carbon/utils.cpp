@@ -1909,9 +1909,20 @@ unsigned int wxMacDataItemBrowserControl::GetLineFromItem(const wxMacDataItem* i
 
 wxMacDataItem*  wxMacDataItemBrowserControl::GetItemFromLine(unsigned int n) const
 {
-    DataBrowserItemID id;
+    DataBrowserItemID id = 0;
     OSStatus err =  GetItemID( (DataBrowserTableViewRowIndex) n , &id);
-    wxASSERT( err == noErr);
+    if ( err )
+    {
+        unsigned int count = MacGetCount();
+        if ( n >= count )
+        {
+            wxASSERT_MSG( n < count, wxString::Format(wxT("wxMacDataItemBrowserControl::GetItemFromLine: line index %d (zero based) out of bounds [0,%d]"), n, count-1 ) );
+        }
+        else
+        {
+            wxASSERT_MSG( err == noErr, wxString::Format(wxT("wxMacDataItemBrowserControl::GetItemFromLine GetItemId returned %d"), err ));
+        }
+    }
     return (wxMacDataItem*) id;
 }
 
