@@ -111,6 +111,8 @@ public:
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
     wxMacListControl* GetPeer() const;
+    
+    bool MacGetBlockEvents() const { return m_blockEvents; }
 
 protected:
     virtual void DoClear();
@@ -135,6 +137,8 @@ protected:
 
     virtual wxSize DoGetBestSize() const;
 
+    bool m_blockEvents;
+    
 private:
     DECLARE_DYNAMIC_CLASS(wxListBox)
     DECLARE_EVENT_TABLE()
