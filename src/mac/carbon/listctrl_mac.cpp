@@ -3177,7 +3177,7 @@ void wxMacDataBrowserListCtrlControl::MacSetColumnInfo( unsigned int row, unsign
 {
     wxMacDataItem* dataItem = GetItemFromLine(row);
     wxASSERT_MSG( dataItem, _T("could not obtain wxMacDataItem for row in MacSetColumnInfo. Is row a valid wxListCtrl row?") );
-    if (item)
+    if (dataItem && item)
     {
         wxMacListCtrlItem* listItem = wx_static_cast(wxMacListCtrlItem*,dataItem);
         bool hasInfo = listItem->HasColumnInfo( column );
@@ -3220,7 +3220,7 @@ void wxMacDataBrowserListCtrlControl::MacGetColumnInfo( unsigned int row, unsign
     wxMacDataItem* dataItem = GetItemFromLine(row);
     wxASSERT_MSG( dataItem, _T("could not obtain wxMacDataItem in MacGetColumnInfo. Is row a valid wxListCtrl row?") );
     // CS should this guard against dataItem = 0 ? , as item is not a pointer if (item) is not appropriate
-    //if (item)
+    if (dataItem)
     {
         wxMacListCtrlItem* listItem =wx_static_cast(wxMacListCtrlItem*,dataItem);
 
