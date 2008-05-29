@@ -38,6 +38,7 @@
 #define wxTYPE_SA_HANDLER int
 #define WX_GMTOFF_IN_TM 1
 #define HAVE_PW_GECOS 1
+#define HAVE_DLOPEN 1
 #define HAVE_GETTIMEOFDAY 1
 #define HAVE_FSYNC 1
 #define HAVE_LARGEFILE_SUPPORT 1
@@ -113,12 +114,12 @@
 #define HAVE_FSEEKO 1
 #define HAVE_SYS_SELECT_H 1
 
-#define WXWIN_OS_DESCRIPTION "Darwin 7.9.0 Power Macintosh"
-#define PACKAGE_BUGREPORT "wx-dev@lists.wxwidgets.org"
-#define PACKAGE_NAME "wxWidgets"
-#define PACKAGE_STRING "wxWidgets 2.8.8"
-#define PACKAGE_TARNAME "wxwidgets"
-#define PACKAGE_VERSION "2.8.8"
+// #define WXWIN_OS_DESCRIPTION "Darwin 7.9.0 Power Macintosh"
+// #define PACKAGE_BUGREPORT "wx-dev@lists.wxwidgets.org"
+// #define PACKAGE_NAME "wxWidgets"
+// #define PACKAGE_STRING "wxWidgets 2.8.8"
+// #define PACKAGE_TARNAME "wxwidgets"
+// #define PACKAGE_VERSION "2.8.8"
 
 // for regex
 #define WX_NO_REGEX_ADVANCED 1
