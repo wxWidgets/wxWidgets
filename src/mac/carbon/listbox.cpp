@@ -556,6 +556,17 @@ wxMacDataBrowserListControl::~wxMacDataBrowserListControl()
 {
 }
 
+void wxMacDataBrowserListControl::ItemNotification(
+                        const wxMacDataItem* itemID,
+                        DataBrowserItemNotification message,
+                        DataBrowserItemDataRef itemData)
+{
+    // hook specific browser-level (not item-level) processing here
+    
+    // call super for item level(wxMacDataItem->Notification) callback processing
+    wxMacDataItemBrowserControl::ItemNotification( itemID, message, itemData);
+}
+
 wxWindow * wxMacDataBrowserListControl::GetPeer() const
 {
     return wxDynamicCast( wxMacControl::GetPeer() , wxWindow );
