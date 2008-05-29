@@ -65,8 +65,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv28u_core.lib wxbase28u.lib /nologo /dll /machine:i386 /out:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28u_plot_vc_custom.dll" /libpath:"..\..\src\plot\..\..\..\lib\vc_dll" /implib:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28u_plot.lib"
-# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv28u_core.lib wxbase28u.lib /nologo /dll /machine:i386 /out:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28u_plot_vc_custom.dll" /libpath:"..\..\src\plot\..\..\..\lib\vc_dll" /implib:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28u_plot.lib"
+# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv28u_core.lib wxbase28u.lib /nologo /dll /machine:i386 /out:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28u_plot_vc_custom.dll" /libpath:"..\..\src\plot\..\..\..\lib\vc_dll" /implib:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28u_plot.lib" /pdb:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28u_plot_vc_custom.pdb"
+# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv28u_core.lib wxbase28u.lib /nologo /dll /machine:i386 /out:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28u_plot_vc_custom.dll" /libpath:"..\..\src\plot\..\..\..\lib\vc_dll" /implib:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28u_plot.lib" /pdb:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28u_plot_vc_custom.pdb"
 
 !ELSEIF  "$(CFG)" == "plot - Win32 DLL Universal Unicode Debug"
 
@@ -80,8 +80,8 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\plot\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivuddll\plot"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\plot\..\..\..\lib\vc_dll\mswunivud" /I "..\..\src\plot\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_plotdll.pch" /Zi /Gm /GZ /Fd..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28ud_plot_vc_custom.pdb /I "..\..\src\plot\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_PLOT" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\plot\..\..\..\lib\vc_dll\mswunivud" /I "..\..\src\plot\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_plotdll.pch" /Zi /Gm /GZ /Fd..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28ud_plot_vc_custom.pdb /I "..\..\src\plot\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_PLOT" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\plot\..\..\..\lib\vc_dll\mswunivud" /I "..\..\src\plot\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_plotdll.pch" /Zi /Fd..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28ud_plot_vc_custom.pdb /I "..\..\src\plot\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_PLOT" /c
+# ADD CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\plot\..\..\..\lib\vc_dll\mswunivud" /I "..\..\src\plot\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_plotdll.pch" /Zi /Fd..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28ud_plot_vc_custom.pdb /I "..\..\src\plot\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_PLOT" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_PLOT" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_PLOT" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\plot\..\..\..\lib\vc_dll\mswunivud" /i "..\..\src\plot\..\..\..\include" /d WXDLLNAME=wxmswuniv28ud_plot_vc_custom /i "..\..\src\plot\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_PLOT
@@ -90,8 +90,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv28ud_core.lib wxbase28ud.lib /nologo /dll /machine:i386 /out:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28ud_plot_vc_custom.dll" /libpath:"..\..\src\plot\..\..\..\lib\vc_dll" /implib:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28ud_plot.lib" /debug
-# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv28ud_core.lib wxbase28ud.lib /nologo /dll /machine:i386 /out:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28ud_plot_vc_custom.dll" /libpath:"..\..\src\plot\..\..\..\lib\vc_dll" /implib:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28ud_plot.lib" /debug
+# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv28ud_core.lib wxbase28ud.lib /nologo /dll /machine:i386 /out:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28ud_plot_vc_custom.dll" /libpath:"..\..\src\plot\..\..\..\lib\vc_dll" /implib:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28ud_plot.lib" /debug /pdb:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28ud_plot_vc_custom.pdb"
+# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv28ud_core.lib wxbase28ud.lib /nologo /dll /machine:i386 /out:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28ud_plot_vc_custom.dll" /libpath:"..\..\src\plot\..\..\..\lib\vc_dll" /implib:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28ud_plot.lib" /debug /pdb:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28ud_plot_vc_custom.pdb"
 
 !ELSEIF  "$(CFG)" == "plot - Win32 DLL Universal Release"
 
@@ -115,8 +115,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv28_core.lib wxbase28.lib /nologo /dll /machine:i386 /out:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28_plot_vc_custom.dll" /libpath:"..\..\src\plot\..\..\..\lib\vc_dll" /implib:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28_plot.lib"
-# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv28_core.lib wxbase28.lib /nologo /dll /machine:i386 /out:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28_plot_vc_custom.dll" /libpath:"..\..\src\plot\..\..\..\lib\vc_dll" /implib:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28_plot.lib"
+# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv28_core.lib wxbase28.lib /nologo /dll /machine:i386 /out:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28_plot_vc_custom.dll" /libpath:"..\..\src\plot\..\..\..\lib\vc_dll" /implib:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28_plot.lib" /pdb:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28_plot_vc_custom.pdb"
+# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv28_core.lib wxbase28.lib /nologo /dll /machine:i386 /out:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28_plot_vc_custom.dll" /libpath:"..\..\src\plot\..\..\..\lib\vc_dll" /implib:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28_plot.lib" /pdb:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28_plot_vc_custom.pdb"
 
 !ELSEIF  "$(CFG)" == "plot - Win32 DLL Universal Debug"
 
@@ -130,8 +130,8 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\plot\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivddll\plot"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\plot\..\..\..\lib\vc_dll\mswunivd" /I "..\..\src\plot\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_plotdll.pch" /Zi /Gm /GZ /Fd..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28d_plot_vc_custom.pdb /I "..\..\src\plot\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_PLOT" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\plot\..\..\..\lib\vc_dll\mswunivd" /I "..\..\src\plot\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_plotdll.pch" /Zi /Gm /GZ /Fd..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28d_plot_vc_custom.pdb /I "..\..\src\plot\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_PLOT" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\plot\..\..\..\lib\vc_dll\mswunivd" /I "..\..\src\plot\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_plotdll.pch" /Zi /Fd..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28d_plot_vc_custom.pdb /I "..\..\src\plot\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_PLOT" /c
+# ADD CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\plot\..\..\..\lib\vc_dll\mswunivd" /I "..\..\src\plot\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_plotdll.pch" /Zi /Fd..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28d_plot_vc_custom.pdb /I "..\..\src\plot\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_PLOT" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_PLOT" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_PLOT" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\src\plot\..\..\..\lib\vc_dll\mswunivd" /i "..\..\src\plot\..\..\..\include" /d WXDLLNAME=wxmswuniv28d_plot_vc_custom /i "..\..\src\plot\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_PLOT
@@ -140,8 +140,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv28d_core.lib wxbase28d.lib /nologo /dll /machine:i386 /out:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28d_plot_vc_custom.dll" /libpath:"..\..\src\plot\..\..\..\lib\vc_dll" /implib:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28d_plot.lib" /debug
-# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv28d_core.lib wxbase28d.lib /nologo /dll /machine:i386 /out:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28d_plot_vc_custom.dll" /libpath:"..\..\src\plot\..\..\..\lib\vc_dll" /implib:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28d_plot.lib" /debug
+# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv28d_core.lib wxbase28d.lib /nologo /dll /machine:i386 /out:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28d_plot_vc_custom.dll" /libpath:"..\..\src\plot\..\..\..\lib\vc_dll" /implib:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28d_plot.lib" /debug /pdb:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28d_plot_vc_custom.pdb"
+# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv28d_core.lib wxbase28d.lib /nologo /dll /machine:i386 /out:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28d_plot_vc_custom.dll" /libpath:"..\..\src\plot\..\..\..\lib\vc_dll" /implib:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28d_plot.lib" /debug /pdb:"..\..\src\plot\..\..\..\lib\vc_dll\wxmswuniv28d_plot_vc_custom.pdb"
 
 !ELSEIF  "$(CFG)" == "plot - Win32 DLL Unicode Release"
 
@@ -165,8 +165,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw28u_core.lib wxbase28u.lib /nologo /dll /machine:i386 /out:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28u_plot_vc_custom.dll" /libpath:"..\..\src\plot\..\..\..\lib\vc_dll" /implib:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28u_plot.lib"
-# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw28u_core.lib wxbase28u.lib /nologo /dll /machine:i386 /out:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28u_plot_vc_custom.dll" /libpath:"..\..\src\plot\..\..\..\lib\vc_dll" /implib:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28u_plot.lib"
+# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw28u_core.lib wxbase28u.lib /nologo /dll /machine:i386 /out:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28u_plot_vc_custom.dll" /libpath:"..\..\src\plot\..\..\..\lib\vc_dll" /implib:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28u_plot.lib" /pdb:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28u_plot_vc_custom.pdb"
+# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw28u_core.lib wxbase28u.lib /nologo /dll /machine:i386 /out:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28u_plot_vc_custom.dll" /libpath:"..\..\src\plot\..\..\..\lib\vc_dll" /implib:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28u_plot.lib" /pdb:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28u_plot_vc_custom.pdb"
 
 !ELSEIF  "$(CFG)" == "plot - Win32 DLL Unicode Debug"
 
@@ -180,8 +180,8 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\plot\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswuddll\plot"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\plot\..\..\..\lib\vc_dll\mswud" /I "..\..\src\plot\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_plotdll.pch" /Zi /Gm /GZ /Fd..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28ud_plot_vc_custom.pdb /I "..\..\src\plot\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_PLOT" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\plot\..\..\..\lib\vc_dll\mswud" /I "..\..\src\plot\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_plotdll.pch" /Zi /Gm /GZ /Fd..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28ud_plot_vc_custom.pdb /I "..\..\src\plot\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_PLOT" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\plot\..\..\..\lib\vc_dll\mswud" /I "..\..\src\plot\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_plotdll.pch" /Zi /Fd..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28ud_plot_vc_custom.pdb /I "..\..\src\plot\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_PLOT" /c
+# ADD CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\plot\..\..\..\lib\vc_dll\mswud" /I "..\..\src\plot\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_plotdll.pch" /Zi /Fd..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28ud_plot_vc_custom.pdb /I "..\..\src\plot\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_PLOT" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_PLOT" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_PLOT" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\plot\..\..\..\lib\vc_dll\mswud" /i "..\..\src\plot\..\..\..\include" /d WXDLLNAME=wxmsw28ud_plot_vc_custom /i "..\..\src\plot\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_PLOT
@@ -190,8 +190,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw28ud_core.lib wxbase28ud.lib /nologo /dll /machine:i386 /out:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28ud_plot_vc_custom.dll" /libpath:"..\..\src\plot\..\..\..\lib\vc_dll" /implib:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28ud_plot.lib" /debug
-# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw28ud_core.lib wxbase28ud.lib /nologo /dll /machine:i386 /out:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28ud_plot_vc_custom.dll" /libpath:"..\..\src\plot\..\..\..\lib\vc_dll" /implib:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28ud_plot.lib" /debug
+# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw28ud_core.lib wxbase28ud.lib /nologo /dll /machine:i386 /out:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28ud_plot_vc_custom.dll" /libpath:"..\..\src\plot\..\..\..\lib\vc_dll" /implib:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28ud_plot.lib" /debug /pdb:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28ud_plot_vc_custom.pdb"
+# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw28ud_core.lib wxbase28ud.lib /nologo /dll /machine:i386 /out:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28ud_plot_vc_custom.dll" /libpath:"..\..\src\plot\..\..\..\lib\vc_dll" /implib:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28ud_plot.lib" /debug /pdb:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28ud_plot_vc_custom.pdb"
 
 !ELSEIF  "$(CFG)" == "plot - Win32 DLL Release"
 
@@ -215,8 +215,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw28_core.lib wxbase28.lib /nologo /dll /machine:i386 /out:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28_plot_vc_custom.dll" /libpath:"..\..\src\plot\..\..\..\lib\vc_dll" /implib:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28_plot.lib"
-# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw28_core.lib wxbase28.lib /nologo /dll /machine:i386 /out:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28_plot_vc_custom.dll" /libpath:"..\..\src\plot\..\..\..\lib\vc_dll" /implib:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28_plot.lib"
+# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw28_core.lib wxbase28.lib /nologo /dll /machine:i386 /out:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28_plot_vc_custom.dll" /libpath:"..\..\src\plot\..\..\..\lib\vc_dll" /implib:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28_plot.lib" /pdb:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28_plot_vc_custom.pdb"
+# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw28_core.lib wxbase28.lib /nologo /dll /machine:i386 /out:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28_plot_vc_custom.dll" /libpath:"..\..\src\plot\..\..\..\lib\vc_dll" /implib:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28_plot.lib" /pdb:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28_plot_vc_custom.pdb"
 
 !ELSEIF  "$(CFG)" == "plot - Win32 DLL Debug"
 
@@ -230,8 +230,8 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\plot\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswddll\plot"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\plot\..\..\..\lib\vc_dll\mswd" /I "..\..\src\plot\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_plotdll.pch" /Zi /Gm /GZ /Fd..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28d_plot_vc_custom.pdb /I "..\..\src\plot\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_PLOT" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\plot\..\..\..\lib\vc_dll\mswd" /I "..\..\src\plot\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_plotdll.pch" /Zi /Gm /GZ /Fd..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28d_plot_vc_custom.pdb /I "..\..\src\plot\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_PLOT" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\plot\..\..\..\lib\vc_dll\mswd" /I "..\..\src\plot\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_plotdll.pch" /Zi /Fd..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28d_plot_vc_custom.pdb /I "..\..\src\plot\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_PLOT" /c
+# ADD CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\plot\..\..\..\lib\vc_dll\mswd" /I "..\..\src\plot\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_plotdll.pch" /Zi /Fd..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28d_plot_vc_custom.pdb /I "..\..\src\plot\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_PLOT" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_PLOT" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_PLOT" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\src\plot\..\..\..\lib\vc_dll\mswd" /i "..\..\src\plot\..\..\..\include" /d WXDLLNAME=wxmsw28d_plot_vc_custom /i "..\..\src\plot\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_PLOT
@@ -240,8 +240,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw28d_core.lib wxbase28d.lib /nologo /dll /machine:i386 /out:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28d_plot_vc_custom.dll" /libpath:"..\..\src\plot\..\..\..\lib\vc_dll" /implib:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28d_plot.lib" /debug
-# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw28d_core.lib wxbase28d.lib /nologo /dll /machine:i386 /out:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28d_plot_vc_custom.dll" /libpath:"..\..\src\plot\..\..\..\lib\vc_dll" /implib:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28d_plot.lib" /debug
+# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw28d_core.lib wxbase28d.lib /nologo /dll /machine:i386 /out:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28d_plot_vc_custom.dll" /libpath:"..\..\src\plot\..\..\..\lib\vc_dll" /implib:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28d_plot.lib" /debug /pdb:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28d_plot_vc_custom.pdb"
+# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw28d_core.lib wxbase28d.lib /nologo /dll /machine:i386 /out:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28d_plot_vc_custom.dll" /libpath:"..\..\src\plot\..\..\..\lib\vc_dll" /implib:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28d_plot.lib" /debug /pdb:"..\..\src\plot\..\..\..\lib\vc_dll\wxmsw28d_plot_vc_custom.pdb"
 
 !ELSEIF  "$(CFG)" == "plot - Win32 Universal Unicode Release"
 
@@ -278,8 +278,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\plot\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivud\plot"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\plot\..\..\..\lib\vc_lib\mswunivud" /I "..\..\src\plot\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\plot\..\..\..\lib\vc_lib\wxmswuniv28ud_plot.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_plotlib.pch" /I "..\..\src\plot\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\plot\..\..\..\lib\vc_lib\mswunivud" /I "..\..\src\plot\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\plot\..\..\..\lib\vc_lib\wxmswuniv28ud_plot.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_plotlib.pch" /I "..\..\src\plot\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\plot\..\..\..\lib\vc_lib\mswunivud" /I "..\..\src\plot\..\..\..\include" /W4 /Zi /Fd..\..\src\plot\..\..\..\lib\vc_lib\wxmswuniv28ud_plot.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_plotlib.pch" /I "..\..\src\plot\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /c
+# ADD CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\plot\..\..\..\lib\vc_lib\mswunivud" /I "..\..\src\plot\..\..\..\include" /W4 /Zi /Fd..\..\src\plot\..\..\..\lib\vc_lib\wxmswuniv28ud_plot.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_plotlib.pch" /I "..\..\src\plot\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -324,8 +324,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\plot\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivd\plot"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\plot\..\..\..\lib\vc_lib\mswunivd" /I "..\..\src\plot\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\plot\..\..\..\lib\vc_lib\wxmswuniv28d_plot.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_plotlib.pch" /I "..\..\src\plot\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\plot\..\..\..\lib\vc_lib\mswunivd" /I "..\..\src\plot\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\plot\..\..\..\lib\vc_lib\wxmswuniv28d_plot.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_plotlib.pch" /I "..\..\src\plot\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\plot\..\..\..\lib\vc_lib\mswunivd" /I "..\..\src\plot\..\..\..\include" /W4 /Zi /Fd..\..\src\plot\..\..\..\lib\vc_lib\wxmswuniv28d_plot.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_plotlib.pch" /I "..\..\src\plot\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /c
+# ADD CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\plot\..\..\..\lib\vc_lib\mswunivd" /I "..\..\src\plot\..\..\..\include" /W4 /Zi /Fd..\..\src\plot\..\..\..\lib\vc_lib\wxmswuniv28d_plot.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_plotlib.pch" /I "..\..\src\plot\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -370,8 +370,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\plot\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswud\plot"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\plot\..\..\..\lib\vc_lib\mswud" /I "..\..\src\plot\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\plot\..\..\..\lib\vc_lib\wxmsw28ud_plot.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_plotlib.pch" /I "..\..\src\plot\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\plot\..\..\..\lib\vc_lib\mswud" /I "..\..\src\plot\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\plot\..\..\..\lib\vc_lib\wxmsw28ud_plot.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_plotlib.pch" /I "..\..\src\plot\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\plot\..\..\..\lib\vc_lib\mswud" /I "..\..\src\plot\..\..\..\include" /W4 /Zi /Fd..\..\src\plot\..\..\..\lib\vc_lib\wxmsw28ud_plot.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_plotlib.pch" /I "..\..\src\plot\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /c
+# ADD CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\plot\..\..\..\lib\vc_lib\mswud" /I "..\..\src\plot\..\..\..\include" /W4 /Zi /Fd..\..\src\plot\..\..\..\lib\vc_lib\wxmsw28ud_plot.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_plotlib.pch" /I "..\..\src\plot\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -416,8 +416,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\plot\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswd\plot"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\plot\..\..\..\lib\vc_lib\mswd" /I "..\..\src\plot\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\plot\..\..\..\lib\vc_lib\wxmsw28d_plot.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_plotlib.pch" /I "..\..\src\plot\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\plot\..\..\..\lib\vc_lib\mswd" /I "..\..\src\plot\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\plot\..\..\..\lib\vc_lib\wxmsw28d_plot.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_plotlib.pch" /I "..\..\src\plot\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\plot\..\..\..\lib\vc_lib\mswd" /I "..\..\src\plot\..\..\..\include" /W4 /Zi /Fd..\..\src\plot\..\..\..\lib\vc_lib\wxmsw28d_plot.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_plotlib.pch" /I "..\..\src\plot\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /c
+# ADD CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\plot\..\..\..\lib\vc_lib\mswd" /I "..\..\src\plot\..\..\..\include" /W4 /Zi /Fd..\..\src\plot\..\..\..\lib\vc_lib\wxmsw28d_plot.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_plotlib.pch" /I "..\..\src\plot\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -452,17 +452,17 @@ LIB32=link.exe -lib
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=../../src/plot\..\..\..\src\common\dummy.cpp
+SOURCE=..\..\src\plot\..\..\..\src\common\dummy.cpp
 # ADD BASE CPP /Yc"wx/wxprec.h"
 # ADD CPP /Yc"wx/wxprec.h"
 # End Source File
 # Begin Source File
 
-SOURCE=../../src/plot\plot.cpp
+SOURCE=..\..\src\plot\plot.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=../../src/plot\..\..\..\src\msw\version.rc
+SOURCE=..\..\src\plot\..\..\..\src\msw\version.rc
 
 !IF  "$(CFG)" == "plot - Win32 DLL Universal Unicode Release"
 
