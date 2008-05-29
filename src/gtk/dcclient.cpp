@@ -2239,17 +2239,6 @@ void wxWindowDC::SetBackgroundMode( int mode )
     wxCHECK_RET( Ok(), wxT("invalid window dc") );
 
     m_backgroundMode = mode;
-
-    if (!m_window) return;
-
-    // CMB 21/7/98: fill style of cross-hatch brushes is affected by
-    // transparent/solid background mode
-
-    if (m_brush.GetStyle() != wxSOLID && m_brush.GetStyle() != wxTRANSPARENT)
-    {
-        gdk_gc_set_fill( m_brushGC,
-          (m_backgroundMode == wxTRANSPARENT) ? GDK_STIPPLED : GDK_OPAQUE_STIPPLED);
-    }
 }
 
 void wxWindowDC::SetPalette( const wxPalette& WXUNUSED(palette) )

@@ -229,6 +229,13 @@ void wxBookCtrlBase::DoSize()
                     sizeCtrl( GetControllerSize() );
 
         m_bookctrl->SetClientSize( sizeCtrl.x - sizeBorder.x, sizeCtrl.y - sizeBorder.y );
+        // if this changes the visibility of the scrollbars the best size changes, relayout in this case
+        wxSize sizeCtrl2 = GetControllerSize();
+        if ( sizeCtrl != sizeCtrl2 )
+        {
+            wxSize sizeBorder2 = m_bookctrl->GetSize() - m_bookctrl->GetClientSize();
+            m_bookctrl->SetClientSize( sizeCtrl2.x - sizeBorder2.x, sizeCtrl2.y - sizeBorder2.y );
+        }
 
         const wxSize sizeNew = m_bookctrl->GetSize();
         wxPoint posCtrl;

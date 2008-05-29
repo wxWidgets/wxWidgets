@@ -14,13 +14,10 @@
 #include "wx/dcscreen.h"
 
 #include "wx/mac/uma.h"
+#include "wx/mac/common/glgrab.h"
 #include "wx/graphics.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxScreenDC, wxWindowDC)
-
-// TODO : for the Screenshot use case, which doesn't work in Quartz
-// we should do a GetAsBitmap using something like
-// http://www.cocoabuilder.com/archive/message/cocoa/2005/8/13/144256
 
 // Create a DC representing the whole screen
 wxScreenDC::wxScreenDC()
@@ -78,4 +75,38 @@ wxScreenDC::~wxScreenDC()
     if ( m_macPort )
         DisposePort( (CGrafPtr) m_macPort ) ;
 #endif
+}
+
+wxBitmap wxScreenDC::DoGetAsBitmap(const wxRect *subrect) const
+{
+    CGRect srcRect = CGRectMake(0, 0, m_width, m_height);
+    if (subrect)
+    {
+        srcRect.origin.x = subrect->GetX();
+        srcRect.origin.y = subrect->GetY();
+        srcRect.size.width = subrect->GetWidth();
+        srcRect.size.height = subrect->GetHeight();
+    }
+    
+    wxBitmap bmp = wxBitmap(srcRect.size.width, srcRect.size.height, 32);
+    
+    CGContextRef context = (CGContextRef)bmp.GetHBITMAP();
+    
+    CGContextSaveGState(context);
+    
+    CGContextTranslateCTM( context, 0,  m_height );
+    CGContextScaleCTM( context, 1, -1 );
+    
+    if ( subrect )
+        srcRect = CGRectOffset( srcRect, -subrect->x, -subrect->y ) ;
+    
+    CGImageRef image = grabViaOpenGL(kCGNullDirectDisplay, srcRect);
+    
+    wxASSERT_MSG(image, wxT("wxScreenDC::GetAsBitmap - unable to get screenshot."));
+    
+    CGContextDrawImage(context, srcRect, image);
+    
+    CGContextRestoreGState(context);
+    
+    return bmp;
 }

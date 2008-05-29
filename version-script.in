@@ -30,7 +30,9 @@
         *wxApp*MacHideApp*;
         *TimeZone*Make*;
         *wxBitmapButton*OnFocusChange*;
-	*wxGridBagSizer*AdjustForOverflow*;
+        *wxDocManager*MakeNewDocumentName*;
+        *wxEventLoopGuarantor*;
+        *wxGridBagSizer*AdjustForOverflow*;
         *wxRemotelyScrolledTreeCtrl*DoCalcScrolledPosition*;
         *wxRemotelyScrolledTreeCtrl*SetScrollbar*;
 	*wxRenderer_Draw*;
@@ -44,6 +46,7 @@
         *wxSizer*ComputeFittingWindowSize*;
         *wxSizerFlags*ReserveSpaceEvenIfHidden*;
         *wxSizerItem*ShouldAccountFor*;
+	*wxWebKitNewWindowEvent*;
         *wxWindowBase*ClientToWindowSize*;
         *wxWindowBase*Get*Sibling*;
         *wxWindowBase*WindowToClientSize*;

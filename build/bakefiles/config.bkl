@@ -404,10 +404,9 @@ it if SHARED=1 unless you know what you are doing.
 
         <set var="WITH_PLUGIN_SDL">0</set>
 
-        <set var="SRCDIR">
-            <if cond="BUILDING_LIB=='1'">..$(DIRSEP)..</if>
-            <if cond="BUILDING_LIB=='0'">.</if>
-        </set>
+        <if cond="BUILDING_LIB=='1'">
+            <set-srcdir>../..</set-srcdir>
+        </if>
         <set var="TOP_SRCDIR">$(SRCDIR)/$(WXTOPDIR)</set>
     </if>
 

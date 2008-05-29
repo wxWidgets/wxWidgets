@@ -408,7 +408,21 @@ public:
     wxList& GetTemplates() { return m_templates; }
 
     // Make a default document name
+    //
+    // NB: this method is renamed to MakeNewDocumentName() in wx 3.0, you still
+    //     need to override it if your code needs to customize the default name
+    //     generation but if you just use it from your code, prefer the version
+    //     below which is forward-compatible with wx 3.0
     virtual bool MakeDefaultName(wxString& buf);
+
+#if wxABI_VERSION >= 20808
+    wxString MakeNewDocumentName() const
+    {
+        wxString s;
+        wx_const_cast(wxDocManager *, this)->MakeDefaultName(s);
+        return s;
+    }
+#endif // wx ABI >= 2.8.8
 
     // Make a frame title (override this to do something different)
     virtual wxString MakeFrameTitle(wxDocument* doc);

@@ -134,7 +134,7 @@ public:
         dc.DrawText(_T("using the current renderer:"), 10, 40);
 
         wxRendererNative::Get().DrawHeaderButton(this, dc,
-                                                 wxRect(20, 70, 100, 60));
+                                                 wxRect(20, 70, 100, 25));
 
         // Draw some check boxes in various states
         dc.SetBrush(*wxBLACK_BRUSH);
@@ -148,6 +148,22 @@ public:
         wxRendererNative::Get().DrawCheckBox(this, dc, wxRect(60, 170, 16, 16), 0);
         // Checked and Disabled
         wxRendererNative::Get().DrawCheckBox(this, dc, wxRect(80, 170, 16, 16), wxCONTROL_CHECKED | wxCONTROL_DISABLED);
+        
+        
+        dc.DrawText(_T("Draw wxTextCtrl (without text)"), 10, 200);
+        wxRenderer_DrawTextCtrl( this, dc, wxRect(20,220,60,24), 0);
+        wxRenderer_DrawTextCtrl( this, dc, wxRect(120,220,60,24), wxCONTROL_CURRENT );
+        
+        dc.DrawText(_T("Draw wxComboBox (without text)"), 10, 250);
+        wxRenderer_DrawComboBox( this, dc, wxRect(20,270,80,24), 0);
+        
+        dc.DrawText(_T("Draw wxChoice (without text)"), 10, 300);
+        wxRenderer_DrawChoice( this, dc, wxRect(20,320,80,24), 0);
+        
+        dc.DrawText(_T("Draw wxRadioButton (without text)"), 10, 350);
+        wxRenderer_DrawRadioButton( this, dc, wxRect(20,370,24,24), 0);
+        wxRenderer_DrawRadioButton( this, dc, wxRect(40,370,24,24), wxCONTROL_CHECKED );
+  
 
     }
 

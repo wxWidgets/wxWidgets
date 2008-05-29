@@ -1845,8 +1845,7 @@ bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const 
                 // we only want the paragraphs to hold this character style, then we _don't_ want to
                 // apply the character style. So we need to be able to choose.
 
-                // if (!paragraphStyle && characterStyle && range.GetStart() != newPara->GetRange().GetEnd())
-                if (!parasOnly && characterStyle && range.GetStart() != newPara->GetRange().GetEnd())
+                if (!parasOnly && (characterStyle|charactersOnly) && range.GetStart() != newPara->GetRange().GetEnd())
                 {
                     wxRichTextRange childRange(range);
                     childRange.LimitTo(newPara->GetRange());
@@ -2454,6 +2453,450 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttrEx& currentStyle, cons
     return true;
 }
 
+/// Combines 'style' with 'currentStyle' for the purpose of summarising the attributes of a range of
+/// content. This version also takes account of attributes *not* being specified, which is just as important
+/// as collecting attributes which are both present and common to all examined objects.
+bool wxCollectStyle2(wxTextAttrEx& currentStyle, const wxTextAttrEx& style, long& multipleStyleAttributes, int& multipleTextEffectAttributes, long& absentStyleAttributes, int& absentTextEffectAttributes)
+{
+    absentStyleAttributes |= (~style.GetFlags() & wxTEXT_ATTR_ALL);
+    absentTextEffectAttributes |= (~style.GetTextEffectFlags() & 0xFFFF);
+
+    if (style.HasFont())
+    {
+        if (style.HasFontSize() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_FONT_SIZE))
+        {
+            if (currentStyle.GetFont().Ok() && currentStyle.HasFontSize())
+            {
+                if (currentStyle.GetFont().GetPointSize() != style.GetFont().GetPointSize())
+                {
+                    // Clash of style - mark as such
+                    multipleStyleAttributes |= wxTEXT_ATTR_FONT_SIZE;
+                    currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_FONT_SIZE);
+                }
+            }
+            else
+            {
+                if (!currentStyle.GetFont().Ok())
+                    wxSetFontPreservingStyles(currentStyle, *wxNORMAL_FONT);
+                wxFont font(currentStyle.GetFont());
+                wxFontSetPointSize(font, style.GetFont().GetPointSize());
+
+                wxSetFontPreservingStyles(currentStyle, font);
+                currentStyle.SetFlags(currentStyle.GetFlags() | wxTEXT_ATTR_FONT_SIZE);
+            }
+        }
+
+        if (style.HasFontItalic() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_FONT_ITALIC))
+        {
+            if (currentStyle.GetFont().Ok() && currentStyle.HasFontItalic())
+            {
+                if (currentStyle.GetFont().GetStyle() != style.GetFont().GetStyle())
+                {
+                    // Clash of style - mark as such
+                    multipleStyleAttributes |= wxTEXT_ATTR_FONT_ITALIC;
+                    currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_FONT_ITALIC);
+                }
+            }
+            else
+            {
+                if (!currentStyle.GetFont().Ok())
+                    wxSetFontPreservingStyles(currentStyle, *wxNORMAL_FONT);
+                wxFont font(currentStyle.GetFont());
+                wxFontSetStyle(font, style.GetFont().GetStyle());
+                wxSetFontPreservingStyles(currentStyle, font);
+                currentStyle.SetFlags(currentStyle.GetFlags() | wxTEXT_ATTR_FONT_ITALIC);
+            }
+        }
+
+        if (style.HasFontWeight() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_FONT_WEIGHT))
+        {
+            if (currentStyle.GetFont().Ok() && currentStyle.HasFontWeight())
+            {
+                if (currentStyle.GetFont().GetWeight() != style.GetFont().GetWeight())
+                {
+                    // Clash of style - mark as such
+                    multipleStyleAttributes |= wxTEXT_ATTR_FONT_WEIGHT;
+                    currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_FONT_WEIGHT);
+                }
+            }
+            else
+            {
+                if (!currentStyle.GetFont().Ok())
+                    wxSetFontPreservingStyles(currentStyle, *wxNORMAL_FONT);
+                wxFont font(currentStyle.GetFont());
+                wxFontSetWeight(font, style.GetFont().GetWeight());
+                wxSetFontPreservingStyles(currentStyle, font);
+                currentStyle.SetFlags(currentStyle.GetFlags() | wxTEXT_ATTR_FONT_WEIGHT);
+            }
+        }
+
+        if (style.HasFontFaceName() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_FONT_FACE))
+        {
+            if (currentStyle.GetFont().Ok() && currentStyle.HasFontFaceName())
+            {
+                wxString faceName1(currentStyle.GetFont().GetFaceName());
+                wxString faceName2(style.GetFont().GetFaceName());
+
+                if (faceName1 != faceName2)
+                {
+                    // Clash of style - mark as such
+                    multipleStyleAttributes |= wxTEXT_ATTR_FONT_FACE;
+                    currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_FONT_FACE);
+                }
+            }
+            else
+            {
+                if (!currentStyle.GetFont().Ok())
+                    wxSetFontPreservingStyles(currentStyle, *wxNORMAL_FONT);
+                wxFont font(currentStyle.GetFont());
+                wxFontSetFaceName(font, style.GetFont().GetFaceName());
+                wxSetFontPreservingStyles(currentStyle, font);
+                currentStyle.SetFlags(currentStyle.GetFlags() | wxTEXT_ATTR_FONT_FACE);
+            }
+        }
+
+        if (style.HasFontUnderlined() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_FONT_UNDERLINE))
+        {
+            if (currentStyle.GetFont().Ok() && currentStyle.HasFontUnderlined())
+            {
+                if (currentStyle.GetFont().GetUnderlined() != style.GetFont().GetUnderlined())
+                {
+                    // Clash of style - mark as such
+                    multipleStyleAttributes |= wxTEXT_ATTR_FONT_UNDERLINE;
+                    currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_FONT_UNDERLINE);
+                }
+            }
+            else
+            {
+                if (!currentStyle.GetFont().Ok())
+                    wxSetFontPreservingStyles(currentStyle, *wxNORMAL_FONT);
+                wxFont font(currentStyle.GetFont());
+                wxFontSetUnderlined(font, style.GetFont().GetUnderlined());
+                wxSetFontPreservingStyles(currentStyle, font);
+                currentStyle.SetFlags(currentStyle.GetFlags() | wxTEXT_ATTR_FONT_UNDERLINE);
+            }
+        }
+    }
+
+    if (style.HasTextColour() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_TEXT_COLOUR))
+    {
+        if (currentStyle.HasTextColour())
+        {
+            if (currentStyle.GetTextColour() != style.GetTextColour())
+            {
+                // Clash of style - mark as such
+                multipleStyleAttributes |= wxTEXT_ATTR_TEXT_COLOUR;
+                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_TEXT_COLOUR);
+            }
+        }
+        else
+            currentStyle.SetTextColour(style.GetTextColour());
+    }
+
+    if (style.HasBackgroundColour() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_BACKGROUND_COLOUR))
+    {
+        if (currentStyle.HasBackgroundColour())
+        {
+            if (currentStyle.GetBackgroundColour() != style.GetBackgroundColour())
+            {
+                // Clash of style - mark as such
+                multipleStyleAttributes |= wxTEXT_ATTR_BACKGROUND_COLOUR;
+                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_BACKGROUND_COLOUR);
+            }
+        }
+        else
+            currentStyle.SetBackgroundColour(style.GetBackgroundColour());
+    }
+
+    if (style.HasAlignment() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_ALIGNMENT))
+    {
+        if (currentStyle.HasAlignment())
+        {
+            if (currentStyle.GetAlignment() != style.GetAlignment())
+            {
+                // Clash of style - mark as such
+                multipleStyleAttributes |= wxTEXT_ATTR_ALIGNMENT;
+                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_ALIGNMENT);
+            }
+        }
+        else
+            currentStyle.SetAlignment(style.GetAlignment());
+    }
+
+    if (style.HasTabs() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_TABS))
+    {
+        if (currentStyle.HasTabs())
+        {
+            if (!wxRichTextTabsEq(currentStyle.GetTabs(), style.GetTabs()))
+            {
+                // Clash of style - mark as such
+                multipleStyleAttributes |= wxTEXT_ATTR_TABS;
+                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_TABS);
+            }
+        }
+        else
+            currentStyle.SetTabs(style.GetTabs());
+    }
+
+    if (style.HasLeftIndent() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_LEFT_INDENT))
+    {
+        if (currentStyle.HasLeftIndent())
+        {
+            if (currentStyle.GetLeftIndent() != style.GetLeftIndent() || currentStyle.GetLeftSubIndent() != style.GetLeftSubIndent())
+            {
+                // Clash of style - mark as such
+                multipleStyleAttributes |= wxTEXT_ATTR_LEFT_INDENT;
+                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_LEFT_INDENT);
+            }
+        }
+        else
+            currentStyle.SetLeftIndent(style.GetLeftIndent(), style.GetLeftSubIndent());
+    }
+
+    if (style.HasRightIndent() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_RIGHT_INDENT))
+    {
+        if (currentStyle.HasRightIndent())
+        {
+            if (currentStyle.GetRightIndent() != style.GetRightIndent())
+            {
+                // Clash of style - mark as such
+                multipleStyleAttributes |= wxTEXT_ATTR_RIGHT_INDENT;
+                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_RIGHT_INDENT);
+            }
+        }
+        else
+            currentStyle.SetRightIndent(style.GetRightIndent());
+    }
+
+    if (style.HasParagraphSpacingAfter() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_PARA_SPACING_AFTER))
+    {
+        if (currentStyle.HasParagraphSpacingAfter())
+        {
+            if (currentStyle.GetParagraphSpacingAfter() != style.GetParagraphSpacingAfter())
+            {
+                // Clash of style - mark as such
+                multipleStyleAttributes |= wxTEXT_ATTR_PARA_SPACING_AFTER;
+                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_PARA_SPACING_AFTER);
+            }
+        }
+        else
+            currentStyle.SetParagraphSpacingAfter(style.GetParagraphSpacingAfter());
+    }
+
+    if (style.HasParagraphSpacingBefore() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_PARA_SPACING_BEFORE))
+    {
+        if (currentStyle.HasParagraphSpacingBefore())
+        {
+            if (currentStyle.GetParagraphSpacingBefore() != style.GetParagraphSpacingBefore())
+            {
+                // Clash of style - mark as such
+                multipleStyleAttributes |= wxTEXT_ATTR_PARA_SPACING_BEFORE;
+                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_PARA_SPACING_BEFORE);
+            }
+        }
+        else
+            currentStyle.SetParagraphSpacingBefore(style.GetParagraphSpacingBefore());
+    }
+
+    if (style.HasLineSpacing() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_LINE_SPACING))
+    {
+        if (currentStyle.HasLineSpacing())
+        {
+            if (currentStyle.GetLineSpacing() != style.GetLineSpacing())
+            {
+                // Clash of style - mark as such
+                multipleStyleAttributes |= wxTEXT_ATTR_LINE_SPACING;
+                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_LINE_SPACING);
+            }
+        }
+        else
+            currentStyle.SetLineSpacing(style.GetLineSpacing());
+    }
+
+    if (style.HasCharacterStyleName() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_CHARACTER_STYLE_NAME))
+    {
+        if (currentStyle.HasCharacterStyleName())
+        {
+            if (currentStyle.GetCharacterStyleName() != style.GetCharacterStyleName())
+            {
+                // Clash of style - mark as such
+                multipleStyleAttributes |= wxTEXT_ATTR_CHARACTER_STYLE_NAME;
+                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_CHARACTER_STYLE_NAME);
+            }
+        }
+        else
+            currentStyle.SetCharacterStyleName(style.GetCharacterStyleName());
+    }
+
+    if (style.HasParagraphStyleName() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_PARAGRAPH_STYLE_NAME))
+    {
+        if (currentStyle.HasParagraphStyleName())
+        {
+            if (currentStyle.GetParagraphStyleName() != style.GetParagraphStyleName())
+            {
+                // Clash of style - mark as such
+                multipleStyleAttributes |= wxTEXT_ATTR_PARAGRAPH_STYLE_NAME;
+                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_PARAGRAPH_STYLE_NAME);
+            }
+        }
+        else
+            currentStyle.SetParagraphStyleName(style.GetParagraphStyleName());
+    }
+
+    if (style.HasListStyleName() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_LIST_STYLE_NAME))
+    {
+        if (currentStyle.HasListStyleName())
+        {
+            if (currentStyle.GetListStyleName() != style.GetListStyleName())
+            {
+                // Clash of style - mark as such
+                multipleStyleAttributes |= wxTEXT_ATTR_LIST_STYLE_NAME;
+                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_LIST_STYLE_NAME);
+            }
+        }
+        else
+            currentStyle.SetListStyleName(style.GetListStyleName());
+    }
+
+    if (style.HasBulletStyle() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_BULLET_STYLE))
+    {
+        if (currentStyle.HasBulletStyle())
+        {
+            if (currentStyle.GetBulletStyle() != style.GetBulletStyle())
+            {
+                // Clash of style - mark as such
+                multipleStyleAttributes |= wxTEXT_ATTR_BULLET_STYLE;
+                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_BULLET_STYLE);
+            }
+        }
+        else
+            currentStyle.SetBulletStyle(style.GetBulletStyle());
+    }
+
+    if (style.HasBulletNumber() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_BULLET_NUMBER))
+    {
+        if (currentStyle.HasBulletNumber())
+        {
+            if (currentStyle.GetBulletNumber() != style.GetBulletNumber())
+            {
+                // Clash of style - mark as such
+                multipleStyleAttributes |= wxTEXT_ATTR_BULLET_NUMBER;
+                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_BULLET_NUMBER);
+            }
+        }
+        else
+            currentStyle.SetBulletNumber(style.GetBulletNumber());
+    }
+
+    if (style.HasBulletText() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_BULLET_TEXT))
+    {
+        if (currentStyle.HasBulletText())
+        {
+            if (currentStyle.GetBulletText() != style.GetBulletText())
+            {
+                // Clash of style - mark as such
+                multipleStyleAttributes |= wxTEXT_ATTR_BULLET_TEXT;
+                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_BULLET_TEXT);
+            }
+        }
+        else
+        {
+            currentStyle.SetBulletText(style.GetBulletText());
+            currentStyle.SetBulletFont(style.GetBulletFont());
+        }
+    }
+
+    if (style.HasBulletName() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_BULLET_NAME))
+    {
+        if (currentStyle.HasBulletName())
+        {
+            if (currentStyle.GetBulletName() != style.GetBulletName())
+            {
+                // Clash of style - mark as such
+                multipleStyleAttributes |= wxTEXT_ATTR_BULLET_NAME;
+                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_BULLET_NAME);
+            }
+        }
+        else
+        {
+            currentStyle.SetBulletName(style.GetBulletName());
+        }
+    }
+
+    if (style.HasURL() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_URL))
+    {
+        if (currentStyle.HasURL())
+        {
+            if (currentStyle.GetURL() != style.GetURL())
+            {
+                // Clash of style - mark as such
+                multipleStyleAttributes |= wxTEXT_ATTR_URL;
+                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_URL);
+            }
+        }
+        else
+        {
+            currentStyle.SetURL(style.GetURL());
+        }
+    }
+
+    if (style.HasTextEffects() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_EFFECTS))
+    {
+        if (currentStyle.HasTextEffects())
+        {
+            // We need to find the bits in the new style that are different:
+            // just look at those bits that are specified by the new style.
+
+            // We need to remove the bits and flags that are not common between current style
+            // and new style. In so doing we need to take account of the styles absent from one or more of the
+            // previous styles.
+
+            int currentRelevantTextEffects = currentStyle.GetTextEffects() & style.GetTextEffectFlags();
+            int newRelevantTextEffects = style.GetTextEffects() & style.GetTextEffectFlags();
+
+            if (currentRelevantTextEffects != newRelevantTextEffects)
+            {
+                // Find the text effects that were different, using XOR
+                int differentEffects = currentRelevantTextEffects ^ newRelevantTextEffects;
+
+                // Clash of style - mark as such
+                multipleTextEffectAttributes |= differentEffects;
+                currentStyle.SetTextEffectFlags(currentStyle.GetTextEffectFlags() & ~differentEffects);
+            }
+        }
+        else
+        {
+            currentStyle.SetTextEffects(style.GetTextEffects());
+            currentStyle.SetTextEffectFlags(style.GetTextEffectFlags());
+        }
+
+        // Mask out the flags and values that cannot be common because they were absent in one or more objecrs
+        // that we've looked at so far
+        currentStyle.SetTextEffects(currentStyle.GetTextEffects() & ~absentTextEffectAttributes);
+        currentStyle.SetTextEffectFlags(currentStyle.GetTextEffectFlags() & ~absentTextEffectAttributes);
+
+        if (currentStyle.GetTextEffectFlags() == 0)
+            currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_EFFECTS);
+    }
+
+    if (style.HasOutlineLevel() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_OUTLINE_LEVEL))
+    {
+        if (currentStyle.HasOutlineLevel())
+        {
+            if (currentStyle.GetOutlineLevel() != style.GetOutlineLevel())
+            {
+                // Clash of style - mark as such
+                multipleStyleAttributes |= wxTEXT_ATTR_OUTLINE_LEVEL;
+                currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_OUTLINE_LEVEL);
+            }
+        }
+        else
+            currentStyle.SetOutlineLevel(style.GetOutlineLevel());
+    }
+
+    return true;
+}
+
 /// Get the combined style for a range - if any attribute is different within the range,
 /// that attribute is not present within the flags.
 /// *** Note that this is not recursive, and so assumes that content inside a paragraph is not itself
@@ -2465,6 +2908,10 @@ bool wxRichTextParagraphLayoutBox::GetStyleForRange(const wxRichTextRange& range
     // The attributes that aren't valid because of multiple styles within the range
     long multipleStyleAttributes = 0;
     int multipleTextEffectAttributes = 0;
+    long absentStyleAttributesPara = 0;
+    long absentStyleAttributesChar = 0;
+    int absentTextEffectAttributesPara = 0;
+    int absentTextEffectAttributesChar = 0;
 
     wxRichTextObjectList::compatibility_iterator node = GetChildren().GetFirst();
     while (node)
@@ -2476,7 +2923,7 @@ bool wxRichTextParagraphLayoutBox::GetStyleForRange(const wxRichTextRange& range
             {
                 wxTextAttrEx paraStyle = para->GetCombinedAttributes();
 
-                CollectStyle(style, paraStyle, multipleStyleAttributes, multipleTextEffectAttributes);
+                wxCollectStyle2(style, paraStyle, multipleStyleAttributes, multipleTextEffectAttributes, absentStyleAttributesPara, absentTextEffectAttributesPara);
             }
             else
             {
@@ -2486,7 +2933,8 @@ bool wxRichTextParagraphLayoutBox::GetStyleForRange(const wxRichTextRange& range
                 // First collect paragraph attributes only
                 wxTextAttrEx paraStyle = para->GetCombinedAttributes();
                 paraStyle.SetFlags(paraStyle.GetFlags() & wxTEXT_ATTR_PARAGRAPH);
-                CollectStyle(style, paraStyle, multipleStyleAttributes, multipleTextEffectAttributes);
+
+                wxCollectStyle2(style, paraStyle, multipleStyleAttributes, multipleTextEffectAttributes, absentStyleAttributesPara, absentTextEffectAttributesPara);
 
                 wxRichTextObjectList::compatibility_iterator childNode = para->GetChildren().GetFirst();
 
@@ -2500,7 +2948,7 @@ bool wxRichTextParagraphLayoutBox::GetStyleForRange(const wxRichTextRange& range
                         // Now collect character attributes only
                         childStyle.SetFlags(childStyle.GetFlags() & wxTEXT_ATTR_CHARACTER);
 
-                        CollectStyle(style, childStyle, multipleStyleAttributes, multipleTextEffectAttributes);
+                        wxCollectStyle2(style, childStyle, multipleStyleAttributes, multipleTextEffectAttributes, absentStyleAttributesChar, absentTextEffectAttributesChar);
                     }
 
                     childNode = childNode->GetNext();
@@ -7549,6 +7997,17 @@ bool wxRichTextTabsEq(const wxArrayInt& tabs1, const wxArrayInt& tabs2)
     return true;
 }
 
+bool wxResetIncompatibleBits(int mask, const int srcFlags, int& destFlags, int& destBits)
+{
+    if ((srcFlags & mask) && (destFlags & mask))
+    {
+        destBits &= ~mask;
+        destFlags &= ~mask;
+    }
+
+    return true;
+}
+
 /// Apply one style to another
 bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxTextAttrEx& style)
 {
@@ -7670,6 +8129,11 @@ bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxTextAttrEx& style)
 
         int srcBits = style.GetTextEffects();
         int srcFlags = style.GetTextEffectFlags();
+
+        // Reset incompatible bits in the destination
+        wxResetIncompatibleBits((wxTEXT_ATTR_EFFECT_SUPERSCRIPT|wxTEXT_ATTR_EFFECT_SUBSCRIPT), srcFlags, destFlags, destBits);
+        wxResetIncompatibleBits((wxTEXT_ATTR_EFFECT_CAPITALS|wxTEXT_ATTR_EFFECT_SMALL_CAPITALS), srcFlags, destFlags, destBits);
+        wxResetIncompatibleBits((wxTEXT_ATTR_EFFECT_STRIKETHROUGH|wxTEXT_ATTR_EFFECT_DOUBLE_STRIKETHROUGH), srcFlags, destFlags, destBits);
 
         wxRichTextCombineBitlists(destBits, srcBits, destFlags, srcFlags);
 
@@ -7920,6 +8384,11 @@ bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxRichTextAttr& style, 
 
             int srcBits = style.GetTextEffects();
             int srcFlags = style.GetTextEffectFlags();
+
+            // Reset incompatible bits in the destination
+            wxResetIncompatibleBits((wxTEXT_ATTR_EFFECT_SUPERSCRIPT|wxTEXT_ATTR_EFFECT_SUBSCRIPT), srcFlags, destFlags, destBits);
+            wxResetIncompatibleBits((wxTEXT_ATTR_EFFECT_CAPITALS|wxTEXT_ATTR_EFFECT_SMALL_CAPITALS), srcFlags, destFlags, destBits);
+            wxResetIncompatibleBits((wxTEXT_ATTR_EFFECT_STRIKETHROUGH|wxTEXT_ATTR_EFFECT_DOUBLE_STRIKETHROUGH), srcFlags, destFlags, destBits);
 
             wxRichTextCombineBitlists(destBits, srcBits, destFlags, srcFlags);
 

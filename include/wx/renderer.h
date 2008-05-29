@@ -412,8 +412,8 @@ wxRendererNative& wxRendererNative::GetDefault()
 // they are standalone functions here to protect the ABI.
 // ----------------------------------------------------------------------------
 
-#if defined(__WXMSW__) || defined(__WXMAC__)
-#if wxABI_VERSION >= 20804
+#if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXGTK20__)
+#if wxABI_VERSION >= 20808
 
 // Draw a native wxChoice
 void WXDLLEXPORT wxRenderer_DrawChoice(wxWindow* win, wxDC& dc,

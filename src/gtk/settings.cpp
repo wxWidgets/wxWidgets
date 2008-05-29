@@ -121,11 +121,11 @@ static bool GetColourFromGTKWidget(GdkColor& gdkColor,
 
         case wxGTK_MENUITEM:
             widget = gtk_menu_item_new();
-            
+            break;
+
         case wxGTK_MENUBAR:
             widget = gtk_menu_bar_new();
             break;
-            
     }
 
     GtkStyle *def = gtk_rc_get_style( widget );
@@ -316,11 +316,12 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
         case wxSYS_COLOUR_HIGHLIGHTTEXT:
             if (!gs_objects.m_colHighlightText.Ok())
             {
-                wxColour hclr = GetColour(wxSYS_COLOUR_HIGHLIGHT);
-                if (hclr.Red() > 200 && hclr.Green() > 200 && hclr.Blue() > 200)
-                    gs_objects.m_colHighlightText = *wxBLACK;
-                else
-                    gs_objects.m_colHighlightText = *wxWHITE;
+                gdkColor.red =
+                gdkColor.green =
+                gdkColor.blue = 0;
+                GetColourFromGTKWidget(
+                    gdkColor, wxGTK_BUTTON, GTK_STATE_SELECTED, wxGTK_FG);
+                gs_objects.m_colHighlightText = wxColour(gdkColor);
             }
             color = gs_objects.m_colHighlightText;
             break;

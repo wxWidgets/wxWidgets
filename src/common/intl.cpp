@@ -2181,7 +2181,7 @@ void wxLocale::AddCatalogLookupPathPrefix(const wxString& prefix)
         lc = wxT("lv_LV") ;
         break ;
       case verSami:
-        // not known
+        lc = wxT("se_NO") ;
         break ;
       case verFaroeIsl:
         lc = wxT("fo_FO") ;
@@ -3197,6 +3197,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxLocaleModule, wxModule)
 #ifndef LANG_RUSSIAN
 #define LANG_RUSSIAN (0)
 #endif
+#ifndef LANG_SAMI
+#define LANG_SAMI (0)
+#endif
 #ifndef LANG_SANSKRIT
 #define LANG_SANSKRIT (0)
 #endif
@@ -3695,6 +3698,7 @@ void wxLocale::InitLanguagesDB()
    LNG(wxLANGUAGE_SANGHO,                     "sg"   , 0              , 0                                 , wxLayout_LeftToRight, "Sangho")
    LNG(wxLANGUAGE_SANSKRIT,                   "sa"   , LANG_SANSKRIT  , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Sanskrit")
    LNG(wxLANGUAGE_SCOTS_GAELIC,               "gd"   , 0              , 0                                 , wxLayout_LeftToRight, "Scots Gaelic")
+   LNG(wxLANGUAGE_SAMI,                       "se_NO", LANG_SAMI      , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Northern Sami")
    LNG(wxLANGUAGE_SERBIAN,                    "sr_SR", LANG_SERBIAN   , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Serbian")
    LNG(wxLANGUAGE_SERBIAN_CYRILLIC,           "sr_SR", LANG_SERBIAN   , SUBLANG_SERBIAN_CYRILLIC          , wxLayout_LeftToRight, "Serbian (Cyrillic)")
    LNG(wxLANGUAGE_SERBIAN_LATIN,              "sr_SR@latin", LANG_SERBIAN   , SUBLANG_SERBIAN_LATIN             , wxLayout_LeftToRight, "Serbian (Latin)")

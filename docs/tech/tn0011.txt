@@ -8,6 +8,7 @@
    version number all of these files must be edited:
 
        {wx}/configure.in
+       {wx}/configure {and set subrelease to zero in these two files}
        {wx}/*.spec
        {wx}/include/wx/version.h
        {wx}/include/msvc/wx/setup.h  {major release only}
@@ -19,7 +20,7 @@
        {wx}/build/bakefiles/version.bkl {C:R:A}
        {wx}/build/script/win_docs.bat {windows doc and setup file}
        {wx}/distrib/scripts/build-environ.cfg {cvs tar and zip files}
-       {wx}/mac/carbon/config_xcode.h
+       {wx}/include/wx/mac/carbon/config_xcode.h
 
    The script misc/scripts/inc_release can be used for incrementing
    the release field of the version, i.e. changing 2.8.x to 2.8.x+1.
