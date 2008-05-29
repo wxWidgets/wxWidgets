@@ -920,6 +920,11 @@ public:
 
     virtual wxMacDataItem* CreateItem();
 
+    virtual void    ItemNotification(
+                        const wxMacDataItem* itemID,
+                        DataBrowserItemNotification message,
+                        DataBrowserItemDataRef itemData);
+
     // pointing back
 
     wxWindow * GetPeer() const;
