@@ -53,13 +53,17 @@ public:
     // and in the hotkey which is used to set given pointer
     static wxString GTKProcessMenuItemLabel(const wxString& str, wxString *hotKey);
 
+#if WXWIN_COMPATIBILITY_2_8
     // compatibility only, don't use in new code
+    wxDEPRECATED(
     wxMenuItem(wxMenu *parentMenu,
                int id,
                const wxString& text,
                const wxString& help,
                bool isCheckable,
-               wxMenu *subMenu = (wxMenu *)NULL);
+               wxMenu *subMenu = NULL)
+    );
+#endif
 
 private:
     // common part of all ctors

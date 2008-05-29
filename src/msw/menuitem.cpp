@@ -137,6 +137,7 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu,
     Init();
 }
 
+#if WXWIN_COMPATIBILITY_2_8
 wxMenuItem::wxMenuItem(wxMenu *parentMenu,
                        int id,
                        const wxString& text,
@@ -151,6 +152,7 @@ wxMenuItem::wxMenuItem(wxMenu *parentMenu,
 {
     Init();
 }
+#endif
 
 void wxMenuItem::Init()
 {

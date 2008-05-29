@@ -64,13 +64,17 @@ public:
     void SetRadioGroupStart(int start);
     void SetRadioGroupEnd(int end);
 
+#if WXWIN_COMPATIBILITY_2_8
     // compatibility only, don't use in new code
+    wxDEPRECATED(
     wxMenuItem(wxMenu *parentMenu,
                int id,
                const wxString& text,
                const wxString& help,
                bool isCheckable,
-               wxMenu *subMenu = (wxMenu *)NULL);
+               wxMenu *subMenu = NULL)
+    );
+#endif
 
 private:
     // common part of all ctors
