@@ -886,6 +886,7 @@ static void ReleaseVariant(VARIANTARG *pvarg)
             case VT_R8:
             case VT_ERROR:        // to avoid erroring on an error return from Excel
             case VT_EMPTY:
+            case VT_DATE:
                 // no work for these types
                 break;
 
