@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKMENUITEMH__
-#define __GTKMENUITEMH__
+#ifndef _WX_GTKMENUITEM_H_
+#define _WX_GTKMENUITEM_H_
 
 #include "wx/bitmap.h"
 
@@ -30,8 +30,8 @@ public:
     // implement base class virtuals
     virtual void SetItemLabel( const wxString& str );
     virtual wxString GetItemLabel() const;
-    virtual void Enable( bool enable = TRUE );
-    virtual void Check( bool check = TRUE );
+    virtual void Enable( bool enable = true );
+    virtual void Check( bool check = true );
     virtual bool IsChecked() const;
     virtual void SetBitmap(const wxBitmap& bitmap) { m_bitmap = bitmap; }
     virtual const wxBitmap& GetBitmap() const { return m_bitmap; }
@@ -43,11 +43,6 @@ public:
     // implementation
     void SetMenuItem(GtkWidget *menuItem) { m_menuItem = menuItem; }
     GtkWidget *GetMenuItem() const { return m_menuItem; }
-    GtkWidget *GetLabelWidget() const { return m_labelWidget; }
-    void SetLabelWidget(GtkWidget *labelWidget) { m_labelWidget = labelWidget; }
-    wxString GetFactoryPath() const;
-
-    wxString GetHotKey() const { return m_hotKey; }
 
     // splits given string in the label, doing & => _ translation, which is returned,
     // and in the hotkey which is used to set given pointer
@@ -77,10 +72,8 @@ private:
     wxBitmap  m_bitmap; // Bitmap for menuitem, if any
 
     GtkWidget *m_menuItem;  // GtkMenuItem
-    GtkWidget* m_labelWidget; // Label widget
 
     DECLARE_DYNAMIC_CLASS(wxMenuItem)
 };
 
-#endif
-        //__GTKMENUITEMH__
+#endif // _WX_GTKMENUITEM_H_

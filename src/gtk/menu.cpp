@@ -623,7 +623,6 @@ wxMenuItem::wxMenuItem(wxMenu *parentMenu,
 
 void wxMenuItem::Init(const wxString& text)
 {
-    m_labelWidget = (GtkWidget *) NULL;
     m_menuItem = (GtkWidget *) NULL;
 
     DoSetText(text);
@@ -706,7 +705,7 @@ void wxMenuItem::SetItemLabel( const wxString& str )
     oldLabel.Replace(wxT("_"), wxT(""));
     wxString label1 = wxStripMenuCodes(str);
 #if wxUSE_ACCEL
-    wxString oldhotkey = GetHotKey();    // Store the old hotkey in Ctrl-foo format
+    wxString oldhotkey = m_hotKey;    // Store the old hotkey in Ctrl-foo format
     wxCharBuffer oldbuf = wxGTK_CONV_SYS( GetGtkHotKey(*this) );  // and as <control>foo
 #endif // wxUSE_ACCEL
 
@@ -714,17 +713,11 @@ void wxMenuItem::SetItemLabel( const wxString& str )
 
 #if wxUSE_ACCEL
     if (oldLabel == label1 &&
-        oldhotkey == GetHotKey())    // Make sure we can change a hotkey even if the label is unaltered
+        oldhotkey == m_hotKey)    // Make sure we can change a hotkey even if the label is unaltered
         return;
 
     if (m_menuItem)
     {
-        GtkLabel *label;
-        if (m_labelWidget)
-            label = (GtkLabel*) m_labelWidget;
-        else
-            label = GTK_LABEL( GTK_BIN(m_menuItem)->child );
-
         // stock menu items can have empty labels:
         wxString text = m_text;
         if (text.IsEmpty() && !IsSeparator())
@@ -736,7 +729,8 @@ void wxMenuItem::SetItemLabel( const wxString& str )
             text = GTKProcessMenuItemLabel(text, NULL);
         }
 
-        gtk_label_set_text_with_mnemonic( GTK_LABEL(label), wxGTK_CONV_SYS(text) );
+        GtkLabel* label = GTK_LABEL(GTK_BIN(m_menuItem)->child);
+        gtk_label_set_text_with_mnemonic(label, wxGTK_CONV_SYS(text));
     }
 
     // remove old accelerator from our parent's accelerator group, if present
@@ -850,7 +844,7 @@ void wxMenuItem::DoSetText( const wxString& str )
 
 wxAcceleratorEntry *wxMenuItem::GetAccel() const
 {
-    if ( !GetHotKey() )
+    if (m_hotKey.empty())
     {
         // nothing
         return NULL;
@@ -859,7 +853,7 @@ wxAcceleratorEntry *wxMenuItem::GetAccel() const
     // accelerator parsing code looks for them after a TAB, so insert a dummy
     // one here
     wxString label;
-    label << wxT('\t') << GetHotKey();
+    label << wxT('\t') << m_hotKey;
 
     return wxAcceleratorEntry::Create(label);
 }
