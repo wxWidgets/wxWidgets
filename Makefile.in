@@ -1657,6 +1657,7 @@ COND_WXUSE_EXPAT_BUILTIN___wxexpat___depname = \
 @COND_TOOLKIT_WINCE@	wx/msw/wince/chkconf.h
 @COND_TOOLKIT_WINCE@NET_WINCE_SRC = src/msw/wince/net.cpp
 @COND_TOOLKIT_WINCE@NET_WINCE_HDR = wx/msw/wince/net.h
+@COND_PLATFORM_MACOSX_1@MAC_LOWLEVEL_HDR = wx/mac/common/glgrab.h
 @COND_TOOLKIT_MSW@MSW_HTML_HDR = wx/msw/helpbest.h
 @COND_TOOLKIT_COCOA@OPENGL_HDR = wx/cocoa/glcanvas.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@OPENGL_HDR = wx/gtk1/glcanvas.h
@@ -1894,7 +1895,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_LOWLEVEL_HDR =  \
 	wx/gtk/win_gtk.h \
 	wx/gtk/window.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@LOWLEVEL_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_LOWLEVEL_HDR)
-@COND_TOOLKIT_MAC@LOWLEVEL_HDR = 
+@COND_TOOLKIT_MAC@LOWLEVEL_HDR = $(MAC_LOWLEVEL_HDR)
 COND_TOOLKIT_MGL_LOWLEVEL_HDR =  \
 	wx/generic/caret.h \
 	wx/generic/colour.h \
@@ -11089,7 +11090,7 @@ COND_WITH_PLUGIN_SDL_1___sound_sdl___depname = \
 @COND_SHARED_0@____SHARED = 
 @COND_SHARED_1@____SHARED = $(PIC_FLAG)
 @COND_PLATFORM_MACOSX_1@__MAC_LOWLEVEL_SRC_OBJECTS \
-@COND_PLATFORM_MACOSX_1@	= monodll_gsockosx.o monodll_hid.o \
+@COND_PLATFORM_MACOSX_1@	= monodll_glgrab.o monodll_gsockosx.o monodll_hid.o \
 @COND_PLATFORM_MACOSX_1@	monodll_utilsexc_cf.o
 COND_PLATFORM_UNIX_1_TOOLKIT_MGL___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_taskbarcmn.o \
@@ -11152,7 +11153,7 @@ COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_taskbarx11.o
 @COND_TOOLKIT_X11@__ADVANCED_PLATFORM_SRC_OBJECTS = $(COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS)
 @COND_PLATFORM_MACOSX_1@__MAC_LOWLEVEL_SRC_OBJECTS_0 \
-@COND_PLATFORM_MACOSX_1@	= monolib_gsockosx.o monolib_hid.o \
+@COND_PLATFORM_MACOSX_1@	= monolib_glgrab.o monolib_gsockosx.o monolib_hid.o \
 @COND_PLATFORM_MACOSX_1@	monolib_utilsexc_cf.o
 COND_PLATFORM_UNIX_1_TOOLKIT_MGL___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 	monolib_taskbarcmn.o \
@@ -11215,10 +11216,10 @@ COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 	monolib_taskbarx11.o
 @COND_TOOLKIT_X11@__ADVANCED_PLATFORM_SRC_OBJECTS_0 = $(COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_0)
 @COND_PLATFORM_MACOSX_1@__MAC_LOWLEVEL_SRC_OBJECTS_8 \
-@COND_PLATFORM_MACOSX_1@	= coredll_gsockosx.o coredll_hid.o \
+@COND_PLATFORM_MACOSX_1@	= coredll_glgrab.o coredll_gsockosx.o coredll_hid.o \
 @COND_PLATFORM_MACOSX_1@	coredll_utilsexc_cf.o
 @COND_PLATFORM_MACOSX_1@__MAC_LOWLEVEL_SRC_OBJECTS_9 \
-@COND_PLATFORM_MACOSX_1@	= corelib_gsockosx.o corelib_hid.o \
+@COND_PLATFORM_MACOSX_1@	= corelib_glgrab.o corelib_gsockosx.o corelib_hid.o \
 @COND_PLATFORM_MACOSX_1@	corelib_utilsexc_cf.o
 @COND_PLATFORM_UNIX_1_TOOLKIT_MGL@__ADVANCED_PLATFORM_SRC_OBJECTS_8 \
 @COND_PLATFORM_UNIX_1_TOOLKIT_MGL@	= advdll_taskbarcmn.o advdll_joystick.o \
@@ -14914,6 +14915,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_uuid.o: $(srcdir)/src/msw/ole/uuid.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/uuid.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC_USE_GUI_1@monodll_glgrab.o: $(srcdir)/src/mac/common/glgrab.c $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC_USE_GUI_1@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $(srcdir)/src/mac/common/glgrab.c
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_MAC_USE_GUI_1@monodll_gsockosx.o: $(srcdir)/src/mac/corefoundation/gsockosx.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_MAC_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/corefoundation/gsockosx.cpp
@@ -19042,6 +19046,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_uuid.o: $(srcdir)/src/msw/ole/uuid.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/uuid.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC_USE_GUI_1@monolib_glgrab.o: $(srcdir)/src/mac/common/glgrab.c $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC_USE_GUI_1@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $(srcdir)/src/mac/common/glgrab.c
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_MAC_USE_GUI_1@monolib_gsockosx.o: $(srcdir)/src/mac/corefoundation/gsockosx.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_MAC_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/corefoundation/gsockosx.cpp
@@ -23549,6 +23556,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_uuid.o: $(srcdir)/src/msw/ole/uuid.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/uuid.cpp
 
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC_USE_GUI_1@coredll_glgrab.o: $(srcdir)/src/mac/common/glgrab.c $(COREDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC_USE_GUI_1@	$(CCC) -c -o $@ $(COREDLL_CFLAGS) $(srcdir)/src/mac/common/glgrab.c
+
 @COND_PLATFORM_MACOSX_1_TOOLKIT_MAC_USE_GUI_1@coredll_gsockosx.o: $(srcdir)/src/mac/corefoundation/gsockosx.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_MAC_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/corefoundation/gsockosx.cpp
 
@@ -26509,6 +26519,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_uuid.o: $(srcdir)/src/msw/ole/uuid.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/uuid.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC_USE_GUI_1@corelib_glgrab.o: $(srcdir)/src/mac/common/glgrab.c $(CORELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC_USE_GUI_1@	$(CCC) -c -o $@ $(CORELIB_CFLAGS) $(srcdir)/src/mac/common/glgrab.c
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_MAC_USE_GUI_1@corelib_gsockosx.o: $(srcdir)/src/mac/corefoundation/gsockosx.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_MAC_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/corefoundation/gsockosx.cpp
