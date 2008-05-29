@@ -245,14 +245,14 @@ bool wxCrashReportImpl::Generate(int flags, EXCEPTION_POINTERS *ep)
 // ----------------------------------------------------------------------------
 
 /* static */
-void wxCrashReport::SetFileName(const wxChar *filename)
+void wxCrashReport::SetFileName(const wxString& filename)
 {
-    wxStrncpy(gs_reportFilename, filename, WXSIZEOF(gs_reportFilename) - 1);
+    wxStrncpy(gs_reportFilename, filename.c_str(), WXSIZEOF(gs_reportFilename) - 1);
     gs_reportFilename[WXSIZEOF(gs_reportFilename) - 1] = _T('\0');
 }
 
 /* static */
-const wxChar *wxCrashReport::GetFileName()
+wxString wxCrashReport::GetFileName()
 {
     return gs_reportFilename;
 }
