@@ -32,7 +32,11 @@
 class wxStaticBox : public wxControl
 {
 public:
-    //@{
+    /**
+      Default constructor
+    */
+    wxStaticBox();
+    
     /**
         Constructor, creating and showing a static box.
 
@@ -55,14 +59,12 @@ public:
 
         @see Create()
     */
-    wxStaticBox();
     wxStaticBox(wxWindow* parent, wxWindowID id,
                 const wxString& label,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxString& name = "staticBox");
-    //@}
 
     /**
         Destructor, destroying the group box.

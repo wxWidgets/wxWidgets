@@ -31,7 +31,11 @@
 class wxScrollBar : public wxControl
 {
 public:
-    //@{
+    /**
+      Default constructor
+    */
+    wxScrollBar();
+    
     /**
         Constructor, creating and showing a scrollbar.
 
@@ -54,14 +58,12 @@ public:
 
         @see Create(), wxValidator
     */
-    wxScrollBar();
     wxScrollBar(wxWindow* parent, wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxSB_HORIZONTAL,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = "scrollBar");
-    //@}
 
     /**
         Destructor, destroying the scrollbar.

@@ -25,7 +25,11 @@
 class wxStaticBitmap : public wxControl
 {
 public:
-    //@{
+    /**
+      Default constructor
+    */
+    wxStaticBitmap();
+    
     /**
         Constructor, creating and showing a static bitmap control.
 
@@ -46,14 +50,12 @@ public:
 
         @see Create()
     */
-    wxStaticBitmap();
     wxStaticBitmap(wxWindow* parent, wxWindowID id,
                    const wxBitmap& label,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
                    const wxString& name = "staticBitmap");
-    //@}
 
     /**
         Creation function, for two-step construction. For details see wxStaticBitmap().

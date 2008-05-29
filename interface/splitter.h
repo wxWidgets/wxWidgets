@@ -46,7 +46,11 @@
 class wxSplitterWindow : public wxWindow
 {
 public:
-    //@{
+    /**
+      Default constructor
+    */
+    wxSplitterWindow();
+    
     /**
         Constructor for creating the window.
 
@@ -73,13 +77,11 @@ public:
         @see Initialize(), SplitVertically(),
              SplitHorizontally(), Create()
     */
-    wxSplitterWindow();
     wxSplitterWindow(wxWindow* parent, wxWindowID id,
                      const wxPoint& point = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxSP_3D,
                      const wxString& name = "splitterWindow");
-    //@}
 
     /**
         Destroys the wxSplitterWindow and its children.

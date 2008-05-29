@@ -47,7 +47,11 @@
 class wxStaticText : public wxControl
 {
 public:
-    //@{
+    /**
+        Default constructor.
+    */
+    wxStaticText();
+    
     /**
         Constructor, creating and showing a text control.
 
@@ -68,14 +72,12 @@ public:
 
         @see Create()
     */
-    wxStaticText();
     wxStaticText(wxWindow* parent, wxWindowID id,
                  const wxString& label,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = 0,
                  const wxString& name = "staticText");
-    //@}
 
     /**
         Creation function, for two-step construction. For details see wxStaticText().

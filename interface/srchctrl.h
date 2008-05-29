@@ -48,7 +48,11 @@
 class wxSearchCtrl : public wxTextCtrl
 {
 public:
-    //@{
+    /**
+      Default constructor
+    */
+    wxSearchCtrl();
+    
     /**
         Constructor, creating and showing a text control.
 
@@ -71,7 +75,6 @@ public:
 
         @see wxTextCtrl::Create, wxValidator
     */
-    wxSearchCtrl();
     wxSearchCtrl(wxWindow* parent, wxWindowID id,
                  const wxString& value = "",
                  const wxPoint& pos = wxDefaultPosition,
@@ -79,7 +82,6 @@ public:
                  long style = 0,
                  const wxValidator& validator = wxDefaultValidator,
                  const wxString& name = wxSearchCtrlNameStr);
-    //@}
 
     /**
         Destructor, destroying the search control.

@@ -28,7 +28,11 @@
 class wxStaticLine : public wxControl
 {
 public:
-    //@{
+    /**
+      Default constructor
+    */
+    wxStaticLine();
+    
     /**
         Constructor, creating and showing a static line.
 
@@ -49,13 +53,11 @@ public:
 
         @see Create()
     */
-    wxStaticLine();
     wxStaticLine(wxWindow* parent, wxWindowID id = wxID_ANY,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxLI_HORIZONTAL,
                  const wxString& name = "staticLine");
-    //@}
 
     /**
         Creates the static line for two-step construction. See wxStaticLine()
