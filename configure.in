@@ -8041,6 +8041,11 @@ AC_SUBST(HOST_SUFFIX)
 AC_SUBST(CPPUNIT_CFLAGS)
 AC_SUBST(CPPUNIT_LIBS)
 
+dnl Cocoa sets this, but no other port does. As a result, we run into problems when compiling
+dnl webkit.mm, or other Objective-C sources. This line can be removed when we move to Bakefile 0.2.4
+dnl which adds this call to bakefile.m4.
+AC_SUBST(OBJCXXFLAGS)
+
 case "$TOOLKIT" in
     GTK)
         TOOLKIT_DESC="GTK+"
