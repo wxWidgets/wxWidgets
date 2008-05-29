@@ -35,6 +35,7 @@
 // wxBase.dll, and MSVC 5 will give linker errors
 #include "wx/recguard.h"
 
+#include "wx/crt.h"
 #include "wx/msw/private.h"
 
 // ============================================================================
