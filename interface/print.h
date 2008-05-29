@@ -609,8 +609,8 @@ public:
         By default this returns (1, 32000) for the page minimum and maximum values, and
         (1, 1) for the required page range.
 
-        If @a minPage is zero, the page number controls in the print dialog will be
-        disabled.
+        @a minPage must be greater than zero and @a maxPage must be greater
+        than @a minPage.
 
         @beginWxPythonOnly
         When this method is implemented in a derived Python class, it should be designed
