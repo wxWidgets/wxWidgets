@@ -14,9 +14,10 @@ in the manual for more details but here are the most important incompatible
 changes:
 
 - Many wxWidgets functions taking "const wxChar *" have been changed to take
-  either "const wxString&" so that they accept both Unicode and ANSI strings.
-  and the argument can't be NULL or "const char *" if the strings are always
-  ANSI but may be NULL. This change is normally backwards compatible except:
+  either "const wxString&" (so that they accept both Unicode and ANSI strings;
+  the argument can't be NULL anymore in this case) or "const char *" (if the
+  strings are always; may still be NULL). This change is normally backwards
+  compatible except:
 
   a) Virtual functions: derived classes versions must be modified to take
      "const wxString&" as well to make sure that they continue to override the
