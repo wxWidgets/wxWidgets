@@ -341,20 +341,31 @@ enum wxFileKind
 
     // Types: Notice that Watcom is the only compiler to have a wide char
     // version of struct stat as well as a wide char stat function variant.
-    // This was droped since OW 1.4 "for consistency across platforms".
-    #ifdef wxHAS_HUGE_FILES
-        #if wxUSE_UNICODE && wxONLY_WATCOM_EARLIER_THAN(1,4)
-            #define   wxStructStat struct _wstati64
+    // This was dropped since OW 1.4 "for consistency across platforms".
+    //
+    // Borland is also special in that it uses _stat with Unicode functions
+    // (for MSVC compatibility?) but stat with ANSI ones
+    #ifdef __BORLANDC__
+        #if wxUSE_UNICODE
+            #define wxStructStat struct _stat
         #else
-            #define   wxStructStat struct _stati64
+            #define wxStructStat struct stat
         #endif
-    #else
-        #if wxUSE_UNICODE && wxONLY_WATCOM_EARLIER_THAN(1,4)
-            #define   wxStructStat struct _wstat
+    #else // !__BORLANDC__
+        #ifdef wxHAS_HUGE_FILES
+            #if wxUSE_UNICODE && wxONLY_WATCOM_EARLIER_THAN(1,4)
+                #define wxStructStat struct _wstati64
+            #else
+                #define wxStructStat struct _stati64
+            #endif
         #else
-            #define   wxStructStat struct _stat
+            #if wxUSE_UNICODE && wxONLY_WATCOM_EARLIER_THAN(1,4)
+                #define wxStructStat struct _wstat
+            #else
+                #define wxStructStat struct _stat
+            #endif
         #endif
-    #endif
+    #endif // __BORLANDC__/!__BORLANDC__
 
     // constants (unless already defined by the user code)
     #ifdef wxHAS_UNDERSCORES_IN_POSIX_IDENTS
