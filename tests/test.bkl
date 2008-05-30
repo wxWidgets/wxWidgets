@@ -96,6 +96,7 @@
             geometry/point.cpp
             config/config.cpp
             controls/textctrltest.cpp
+            image/rawbmp.cpp
             misc/selstoretest.cpp
             window/clientsize.cpp
             window/setsize.cpp

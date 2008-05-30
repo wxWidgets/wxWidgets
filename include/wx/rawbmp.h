@@ -309,7 +309,7 @@ struct wxPixelDataOut<wxImage>
             typedef wxImagePixelFormat PixelFormat;
 
             // the type of the pixel components
-            typedef typename dummyPixelFormat::ChannelType ChannelType;
+            typedef typename PixelFormat::ChannelType ChannelType;
 
             // the pixel data we're working with
             typedef
@@ -405,11 +405,15 @@ struct wxPixelDataOut<wxImage>
             // data access
             // -----------
 
-            // access to invidividual colour components
+            // access to individual colour components
             ChannelType& Red() { return m_pRGB[PixelFormat::RED]; }
             ChannelType& Green() { return m_pRGB[PixelFormat::GREEN]; }
             ChannelType& Blue() { return m_pRGB[PixelFormat::BLUE]; }
             ChannelType& Alpha() { return *m_pAlpha; }
+
+            // address the pixel contents directly (always RGB, without alpha)
+            typename PixelFormat::PixelType& Data()
+                { return *(typename PixelFormat::PixelType *)m_pRGB; }
 
         // private: -- see comment in the beginning of the file
 
@@ -425,7 +429,7 @@ struct wxPixelDataOut<wxImage>
         {
             m_width = image.GetWidth();
             m_height = image.GetHeight();
-            m_stride = Iterator::SizePixel * m_width;
+            m_stride = Iterator::PixelFormat::SizePixel * m_width;
         }
 
         // initializes us with the given region of the specified image
@@ -433,7 +437,7 @@ struct wxPixelDataOut<wxImage>
                       const wxPoint& pt,
                       const wxSize& sz) : m_image(image), m_pixels(image)
         {
-            m_stride = Iterator::SizePixel * m_width;
+            m_stride = Iterator::PixelFormat::SizePixel * m_width;
 
             InitRect(pt, sz);
         }
@@ -442,7 +446,7 @@ struct wxPixelDataOut<wxImage>
         wxPixelDataIn(ImageType& image,
                       const wxRect& rect) : m_image(image), m_pixels(image)
         {
-            m_stride = Iterator::SizePixel * m_width;
+            m_stride = Iterator::PixelFormat::SizePixel * m_width;
 
             InitRect(rect.GetPosition(), rect.GetSize());
         }
@@ -675,7 +679,7 @@ struct wxPixelDataOut<wxBitmap>
 
 #endif //wxUSE_GUI
 
-template <class Image, class PixelFormat = wxPixelFormatFor<Image> >
+template <class Image, class PixelFormat = typename wxPixelFormatFor<Image>::Format >
 class wxPixelData :
     public wxPixelDataOut<Image>::template wxPixelDataIn<PixelFormat>
 {

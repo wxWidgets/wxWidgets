@@ -104,6 +104,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_point.obj \
 	$(OBJS)\test_gui_config.obj \
 	$(OBJS)\test_gui_textctrltest.obj \
+	$(OBJS)\test_gui_rawbmp.obj \
 	$(OBJS)\test_gui_selstoretest.obj \
 	$(OBJS)\test_gui_clientsize.obj \
 	$(OBJS)\test_gui_setsize.obj
@@ -539,6 +540,9 @@ $(OBJS)\test_gui_config.obj: .\config\config.cpp
 
 $(OBJS)\test_gui_textctrltest.obj: .\controls\textctrltest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\controls\textctrltest.cpp
+
+$(OBJS)\test_gui_rawbmp.obj: .\image\rawbmp.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\image\rawbmp.cpp
 
 $(OBJS)\test_gui_selstoretest.obj: .\misc\selstoretest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\misc\selstoretest.cpp

@@ -707,6 +707,8 @@
 			<File
 				RelativePath=".\geometry\point.cpp"/>
 			<File
+				RelativePath=".\image\rawbmp.cpp"/>
+			<File
 				RelativePath=".\geometry\rect.cpp"/>
 			<File
 				RelativePath=".\misc\selstoretest.cpp"/>

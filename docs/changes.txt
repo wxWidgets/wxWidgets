@@ -270,7 +270,7 @@ All:
   wxQueueEvent() replacing wxPostEvent().
 - wxString now uses std::[w]string internally by default, meaning that it is
   now thread-safe if the standard library provided with your compiler is.
-- Added wxCmdLineParser::AddUsageText() (Marcin 'Malcom' Malich)
+- Added wxCmdLineParser::AddUsageText() (Marcin 'Malcom' Malich).
 
 All (Unix):
 
@@ -348,6 +348,7 @@ All (GUI):
 - Allow having menu separators with ids != wxID_SEPARATOR (Jeff Tupper)
 - Fix appending items to sorted wxComboCtrl after creation (Jaakko Salli)
 - Don't blit area larger than necessary in wxBufferedDC::UnMask (Liang Jian)
+- Fixed wxPixelData<wxImage> compilation (Leonardo Fernandes).
 
 wxGTK:
 

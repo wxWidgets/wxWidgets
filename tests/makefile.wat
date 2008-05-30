@@ -309,6 +309,7 @@ TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_point.obj &
 	$(OBJS)\test_gui_config.obj &
 	$(OBJS)\test_gui_textctrltest.obj &
+	$(OBJS)\test_gui_rawbmp.obj &
 	$(OBJS)\test_gui_selstoretest.obj &
 	$(OBJS)\test_gui_clientsize.obj &
 	$(OBJS)\test_gui_setsize.obj
@@ -569,6 +570,9 @@ $(OBJS)\test_gui_config.obj :  .AUTODEPEND .\config\config.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_textctrltest.obj :  .AUTODEPEND .\controls\textctrltest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_rawbmp.obj :  .AUTODEPEND .\image\rawbmp.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_selstoretest.obj :  .AUTODEPEND .\misc\selstoretest.cpp

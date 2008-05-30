@@ -253,6 +253,10 @@ SOURCE=.\geometry\point.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\image\rawbmp.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\geometry\rect.cpp
 # End Source File
 # Begin Source File
