@@ -13,6 +13,7 @@
 #define _WX_RAWBMP_H_
 
 #include "wx/image.h"
+#include "wx/bitmap.h"
 
 // ----------------------------------------------------------------------------
 // Abstract Pixel API
