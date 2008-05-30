@@ -19,6 +19,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_WXVSNPRINTF
+
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
     #include "wx/wxchar.h"
@@ -549,3 +551,5 @@ void VsnprintfTestCase::Miscellaneous()
     DoMisc(5, wxT("%%%%%"), 6,  wxT("%%%%%%%%%%"));
     DoMisc(6, wxT("%%%%12"), 7,  wxT("%%%%%%%%%d"), 12);
 }
+
+#endif // wxUSE_WXVSNPRINTF

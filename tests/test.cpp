@@ -78,13 +78,6 @@ bool TestApp::OnInit()
     cout << "Test program for wxWidgets\n"
          << "build: " << WX_BUILD_OPTIONS_SIGNATURE << std::endl;
 
-#if !wxUSE_WXVSNPRINTF
-    cout << "\n";
-    cout << "WARNING: VsnprintfTestCase will test the system vsnprintf() function\n";
-    cout << "         instead of the wxWidgets wxVsnprintf_ implementation!" << std::endl;
-    cout << "\n";
-#endif
-
 #if wxUSE_GUI
     // create a hidden parent window to be used as parent for the GUI controls
     new wxFrame(NULL, wxID_ANY, "Hidden wx test frame");
