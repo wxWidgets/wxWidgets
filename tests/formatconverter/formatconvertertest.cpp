@@ -165,7 +165,7 @@ void FormatConverterTestCase::format_ls()
 
 void FormatConverterTestCase::format_c()
 {
-    doTest("c", "lc", "s", "lc", "c");
+    doTest("c", "lc", "lc", "lc", "c");
     CPPUNIT_ASSERT(wxString::Format(_T("%c"), _T('x')) == _T("x"));
     CPPUNIT_ASSERT(wxString::Format(_T("%2c"), _T('x')) == _T(" x"));
     CPPUNIT_ASSERT(wxString::Format(_T("%-2c"), _T('x')) == _T("x "));
@@ -173,7 +173,7 @@ void FormatConverterTestCase::format_c()
 
 void FormatConverterTestCase::format_hc()
 {
-    doTest("hc", "hc", "s", "lc", "c");
+    doTest("hc", "hc", "lc", "lc", "c");
     CPPUNIT_ASSERT(wxString::Format(wxString(_T("%hc")), 'x') == _T("x"));
     CPPUNIT_ASSERT(wxString::Format(wxString(_T("%2hc")), 'x') == _T(" x"));
     CPPUNIT_ASSERT(wxString::Format(wxString(_T("%-2hc")), 'x') == _T("x "));
@@ -181,7 +181,7 @@ void FormatConverterTestCase::format_hc()
 
 void FormatConverterTestCase::format_lc()
 {
-    doTest("lc", "lc", "s", "lc", "c");
+    doTest("lc", "lc", "lc", "lc", "c");
     CPPUNIT_ASSERT(wxString::Format(_T("%lc"), L'x') == _T("x"));
     CPPUNIT_ASSERT(wxString::Format(_T("%2lc"), L'x') == _T(" x"));
     CPPUNIT_ASSERT(wxString::Format(_T("%-2lc"), L'x') == _T("x "));
@@ -196,11 +196,11 @@ void FormatConverterTestCase::format_lS()
     { doTest("lS", "ls", "s", "ls", "s"); }
 
 void FormatConverterTestCase::format_C()
-    { doTest("C",  "c", "s", "lc", "c");  }
+    { doTest("C",  "c", "lc", "lc", "c");  }
 void FormatConverterTestCase::format_hC()
-    { doTest("hC", "c", "s", "lc", "c");  }
+    { doTest("hC", "c", "lc", "lc", "c");  }
 void FormatConverterTestCase::format_lC()
-    { doTest("lC", "lc", "s", "lc", "c"); }
+    { doTest("lC", "lc", "lc", "lc", "c"); }
 
 // It's possible that although a format converts correctly alone, it leaves
 // the converter in a bad state that will affect subsequent formats, so
@@ -221,9 +221,9 @@ void FormatConverterTestCase::testLonger()
         { "%-.*s",  "%-.*ls", "%-.*ls", "%-.*s", "%-.*s" },
         { "%.*hs",  "%.*hs",  "%.*ls",  "%.*s",  "%.*s"  },
         { "%-.9ls", "%-.9ls", "%-.9ls", "%-.9s", "%-.9s" },
-        { "%-*c",   "%-*lc",  "%-*lc",  "%-*c",  "%-*s"  },
-        { "%3hc",   "%3hc",   "%3lc",   "%3c",   "%3s"   },
-        { "%-5lc",  "%-5lc",  "%-5lc",  "%-5c",  "%-5s"  }
+        { "%-*c",   "%-*lc",  "%-*lc",  "%-*c",  "%-*lc" },
+        { "%3hc",   "%3hc",   "%3lc",   "%3c",   "%3lc"  },
+        { "%-5lc",  "%-5lc",  "%-5lc",  "%-5c",  "%-5lc" }
     };
     size_t i, j;
 
