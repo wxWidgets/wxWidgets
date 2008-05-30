@@ -832,11 +832,17 @@ The m_stateMask and m_state members take flags from the following:
     bool SetItemColumnImage(long item, long column, int image);
 
     /**
-    This method can only be used with virtual list controls. It is used to indicate
-    to the control the number of items it contains. After calling it, the main
-    program should be ready to handle calls to various item callbacks (such as
-    wxListCtrl::OnGetItemText) for all items in the range
-    from 0 to @e count.
+        This method can only be used with virtual list controls.
+
+        It is used to indicate to the control the number of items it contains.
+        After calling it, the main program should be ready to handle calls to
+        various item callbacks (such as wxListCtrl::OnGetItemText) for all
+        items in the range from 0 to @a count.
+
+        Notice that the control is not necessarily redrawn after this call as
+        it may be undesirable if an item which is not visible on the screen
+        anyhow was added to or removed from a control displaying many items, if
+        you do need to refresh the display you can just call Refresh() manually.
     */
     void SetItemCount(long count);
 
