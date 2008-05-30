@@ -1863,10 +1863,11 @@ public:
     wxMBConv_iconv(const char *name);
     virtual ~wxMBConv_iconv();
 
-    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
-    virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
-
-    // classify this encoding as explained in wxMBConv::GetMBNulLen() comment
+    // implement base class virtual methods
+    virtual size_t ToWChar(wchar_t *dst, size_t dstLen,
+                           const char *src, size_t srcLen = wxNO_LEN) const;
+    virtual size_t FromWChar(char *dst, size_t dstLen,
+                             const wchar_t *src, size_t srcLen = wxNO_LEN) const;
     virtual size_t GetMBNulLen() const;
 
 #if wxUSE_UNICODE_UTF8
@@ -2052,32 +2053,41 @@ wxMBConv_iconv::~wxMBConv_iconv()
         iconv_close(w2m);
 }
 
-size_t wxMBConv_iconv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
+size_t
+wxMBConv_iconv::ToWChar(wchar_t *dst, size_t dstLen,
+                        const char *src, size_t srcLen) const
 {
-    // find the string length: notice that must be done differently for
-    // NUL-terminated strings and UTF-16/32 which are terminated with 2/4 NULs
-    size_t inbuf;
-    const size_t nulLen = GetMBNulLen();
-    switch ( nulLen )
+    if ( srcLen == wxNO_LEN )
     {
-        default:
-            return wxCONV_FAILED;
+        // find the string length: notice that must be done differently for
+        // NUL-terminated strings and UTF-16/32 which are terminated with 2/4
+        // consecutive NULs
+        const size_t nulLen = GetMBNulLen();
+        switch ( nulLen )
+        {
+            default:
+                return wxCONV_FAILED;
 
-        case 1:
-            inbuf = strlen(psz); // arguably more optimized than our version
-            break;
+            case 1:
+                srcLen = strlen(src); // arguably more optimized than our version
+                break;
 
-        case 2:
-        case 4:
-            // for UTF-16/32 not only we need to have 2/4 consecutive NULs but
-            // they also have to start at character boundary and not span two
-            // adjacent characters
-            const char *p;
-            for ( p = psz; NotAllNULs(p, nulLen); p += nulLen )
-                ;
-            inbuf = p - psz;
-            break;
+            case 2:
+            case 4:
+                // for UTF-16/32 not only we need to have 2/4 consecutive NULs
+                // but they also have to start at character boundary and not
+                // span two adjacent characters
+                const char *p;
+                for ( p = src; NotAllNULs(p, nulLen); p += nulLen )
+                    ;
+                srcLen = p - src;
+                break;
+        }
     }
+
+    // we express length in the number of (wide) characters but iconv always
+    // counts buffer sizes it in bytes
+    dstLen *= SIZEOF_WCHAR_T;
 
 #if wxUSE_THREADS
     // NB: iconv() is MT-safe, but each thread must use its own iconv_t handle.
@@ -2089,53 +2099,51 @@ size_t wxMBConv_iconv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
     wxMutexLocker lock(wxConstCast(this, wxMBConv_iconv)->m_iconvMutex);
 #endif // wxUSE_THREADS
 
-    size_t outbuf = n * SIZEOF_WCHAR_T;
     size_t res, cres;
-    const char *pszPtr = psz;
+    const char *pszPtr = src;
 
-    if (buf)
+    if ( dst )
     {
-        char* bufPtr = (char*)buf;
+        char* bufPtr = (char*)dst;
 
         // have destination buffer, convert there
         cres = iconv(m2w,
-                     ICONV_CHAR_CAST(&pszPtr), &inbuf,
-                     &bufPtr, &outbuf);
-        res = n - (outbuf / SIZEOF_WCHAR_T);
+                     ICONV_CHAR_CAST(&pszPtr), &srcLen,
+                     &bufPtr, &dstLen);
+        res = dstLen - (dstLen / SIZEOF_WCHAR_T);
 
         if (ms_wcNeedsSwap)
         {
             // convert to native endianness
             for ( unsigned i = 0; i < res; i++ )
-                buf[n] = WC_BSWAP(buf[i]);
+                dst[dstLen] = WC_BSWAP(dst[i]);
         }
 
         // NUL-terminate the string if there is any space left
-        if (res < n)
-            buf[res] = 0;
+        if (res < dstLen)
+            dst[res] = 0;
     }
-    else
+    else // no destination buffer
     {
-        // no destination buffer... convert using temp buffer
-        // to calculate destination buffer requirement
+        // convert using temp buffer to calculate the size of the buffer needed
         wchar_t tbuf[8];
         res = 0;
 
         do
         {
             char* bufPtr = (char*)tbuf;
-            outbuf = 8 * SIZEOF_WCHAR_T;
+            dstLen = 8 * SIZEOF_WCHAR_T;
 
             cres = iconv(m2w,
-                         ICONV_CHAR_CAST(&pszPtr), &inbuf,
-                         &bufPtr, &outbuf );
+                         ICONV_CHAR_CAST(&pszPtr), &srcLen,
+                         &bufPtr, &dstLen );
 
-            res += 8 - (outbuf / SIZEOF_WCHAR_T);
+            res += 8 - (dstLen / SIZEOF_WCHAR_T);
         }
         while ((cres == (size_t)-1) && (errno == E2BIG));
     }
 
-    if (ICONV_FAILED(cres, inbuf))
+    if (ICONV_FAILED(cres, srcLen))
     {
         //VS: it is ok if iconv fails, hence trace only
         wxLogTrace(TRACE_STRCONV, wxT("iconv failed: %s"), wxSysErrorMsg(wxSysErrorCode()));
@@ -2145,16 +2153,19 @@ size_t wxMBConv_iconv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
     return res;
 }
 
-size_t wxMBConv_iconv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
+size_t wxMBConv_iconv::FromWChar(char *dst, size_t dstLen,
+                                 const wchar_t *src, size_t srcLen) const
 {
 #if wxUSE_THREADS
     // NB: explained in MB2WC
     wxMutexLocker lock(wxConstCast(this, wxMBConv_iconv)->m_iconvMutex);
 #endif
 
-    size_t inlen = wxWcslen(psz);
-    size_t inbuflen = inlen * SIZEOF_WCHAR_T;
-    size_t outbuflen = n;
+    if ( srcLen == wxNO_LEN )
+        srcLen = wxWcslen(src);
+
+    size_t inbuflen = srcLen * SIZEOF_WCHAR_T;
+    size_t outbuflen = dstLen;
     size_t res, cres;
 
     wchar_t *tmpbuf = 0;
@@ -2165,39 +2176,38 @@ size_t wxMBConv_iconv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
         // (doing WC_BSWAP twice on the original buffer won't help, as it
         //  could be in read-only memory, or be accessed in some other thread)
         tmpbuf = (wchar_t *)malloc(inbuflen + SIZEOF_WCHAR_T);
-        for ( size_t i = 0; i < inlen; i++ )
-            tmpbuf[n] = WC_BSWAP(psz[i]);
+        for ( size_t i = 0; i < srcLen; i++ )
+            tmpbuf[i] = WC_BSWAP(src[i]);
 
-        tmpbuf[inlen] = L'\0';
-        psz = tmpbuf;
+        tmpbuf[srcLen] = L'\0';
+        src = tmpbuf;
     }
 
-    char* inbuf = (char*)psz;
-    if (buf)
+    char* inbuf = (char*)src;
+    if ( dst )
     {
         // have destination buffer, convert there
-        cres = iconv(w2m, ICONV_CHAR_CAST(&inbuf), &inbuflen, &buf, &outbuflen);
+        cres = iconv(w2m, ICONV_CHAR_CAST(&inbuf), &inbuflen, &dst, &outbuflen);
 
-        res = n - outbuflen;
+        res = dstLen - outbuflen;
 
-        // NB: iconv was given only wcslen(psz) characters on input, and so
+        // NB: iconv was given only wcslen(src) characters on input, and so
         //     it couldn't convert the trailing zero. Let's do it ourselves
         //     if there's some room left for it in the output buffer.
-        if (res < n)
-            buf[0] = 0;
+        if (res < dstLen)
+            dst[0] = 0;
     }
-    else
+    else // no destination buffer
     {
-        // no destination buffer: convert using temp buffer
-        // to calculate destination buffer requirement
+        // convert using temp buffer to calculate the size of the buffer needed
         char tbuf[16];
         res = 0;
         do
         {
-            buf = tbuf;
+            dst = tbuf;
             outbuflen = 16;
 
-            cres = iconv(w2m, ICONV_CHAR_CAST(&inbuf), &inbuflen, &buf, &outbuflen);
+            cres = iconv(w2m, ICONV_CHAR_CAST(&inbuf), &inbuflen, &dst, &outbuflen);
 
             res += 16 - outbuflen;
         }
