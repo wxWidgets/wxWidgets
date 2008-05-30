@@ -6669,6 +6669,11 @@ if test "$wxUSE_TEXTCTRL" = "yes"; then
     AC_DEFINE(wxUSE_TEXTCTRL)
     USES_CONTROLS=1
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS text"
+
+    dnl we don't have special switches to disable wxUSE_RICHEDIT[2], it doesn't
+    dnl seem useful to allow disabling them
+    AC_DEFINE(wxUSE_RICHEDIT)
+    AC_DEFINE(wxUSE_RICHEDIT2)
 fi
 
 if test "$wxUSE_TOGGLEBTN" = "yes"; then
