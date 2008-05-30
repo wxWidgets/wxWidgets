@@ -1412,7 +1412,6 @@ void wxMacCoreGraphicsContext::EnsureIsValid()
             hishape.Set( HIShapeCreateMutableCopy( m_clipRgn ) );
             CGPoint transformedOrigin = CGPointApplyAffineTransform( CGPointZero,m_windowTransform);
             HIShapeOffset( hishape, -transformedOrigin.x, -transformedOrigin.y );
-			HIShapeReplacePathInCGContext( hishape, m_cgContext );
             // if the shape is empty, HIShapeReplacePathInCGContext doesn't work
             if ( HIShapeIsEmpty(hishape))
             {
