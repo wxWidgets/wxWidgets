@@ -122,14 +122,26 @@ Changes in behaviour which may result in compilation errors
   and has to be replaced with this:
      switch (str[i].GetValue()) { ... }
 
-- Return type of wxString::c_str() is now wxCStrData struct and not
-  const wxChar*. wxCStrData is implicitly convertible to const char* and
-  const wchar_t*, so this only presents a problem if the compiler cannot
-  convert the type. In particular, Borland C++ and DigitalMars compilers
-  don't correctly convert operator?: operands to the same type and fail with
-  compilation error instead. This can be worked around by explicitly casting
-  to const wxChar*:
-     wxLogError(_("error: %s"), !err.empty() ? (const wxChar*)err.c_str() : "")
+- Return type of wxString::c_str() is now a helper wxCStrData struct and not
+  const wxChar*. wxCStrData is implicitly convertible to both "const char *"
+  and "const wchar_t *", so this only presents a problem if the compiler cannot
+  apply the conversion. This can happen in 2 cases:
+  
+  + There is an ambiguity because the function being called is overloaded to
+    take both "const char *" and "const wchar_t *" as the compiler can't choose
+    between them. In this case you may use s.wx_str() to call the function
+    matching the current build (Unicode or not) or s.mb_str() or s.wc_str() to
+    explicitly select narrow or wide version of it.
+
+    Notice that such functions are normally not very common but unfortunately
+    Microsoft decided to extend their STL with standard-incompatible overloads
+    of some functions accepting "const wchar_t *" so you may need to replace
+    some occurrences of c_str() with wx_str() when using MSVC 8 or later.
+
+  + Some compilers, notably Borland C++ and DigitalMars, don't correctly
+    convert operator?: operands to the same type and fail with compilation
+    error instead. This can be worked around by explicitly casting to const
+    wxChar*: wxLogError(_("error: %s"), !err.empty() ? (const wxChar*)err.c_str() : "")
 
 - wxCtime() and wxAsctime() return char*; this is incompatible with Unicode
   build in wxWidgets 2.8 that returned wchar_t*.
@@ -143,7 +155,7 @@ Changes in behaviour which may result in compilation errors
 
 - Virtual wxHtmlParser::AddText() takes wxString, not wxChar*, argument now.
 
-- Functions that took wxChar* arguments that could by NULL in wxWidgets 2.8.
+- Functions that took wxChar* arguments that could by NULL in wxWidgets 2.8
   are deprecated and passing NULL to them won't compile anymore, wxEmptyString
   must be used instead.
 

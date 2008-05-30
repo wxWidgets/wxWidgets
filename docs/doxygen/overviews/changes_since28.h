@@ -46,6 +46,22 @@ passing it to @c printf() will now result in a crash. It is strongly advised to
 recompile your code with a compiler warning about passing non-POD objects to
 vararg functions, such as g++.
 
+The change of the type of wxString::c_str() can also result in compilation
+errors when passing its result to a function overloaded to take both narrow and
+wide strings and in this case you must select the version which you really want
+to use, e.g.:
+@code
+    void OpenLogFile(const char *filename);
+    void OpenLogFile(const wchar_t *filename);
+
+    wxString s;
+    OpenLogFile(s);             // ERROR: ambiguity
+    OpenLogFile(s.c_str());     // ERROR: ambiguity
+    OpenLogFile(s.wx_str());    // OK: function called depends on the build
+    OpenLogFile(s.mb_str());    // OK: always calls narrow string overload
+    OpenLogFile(s.wc_str());    // OK: always calls wide string overload
+@endcode
+
 The other class of incompatible changes is due to modifying some virtual
 methods to use @c wxString parameters instead of @c const @c wxChar* ones to
 make them accept both narrow and wide strings. This is not a problem if you
