@@ -830,6 +830,16 @@ void MyListCtrl::OnBeginRDrag(wxListEvent& event)
 void MyListCtrl::OnBeginLabelEdit(wxListEvent& event)
 {
     wxLogMessage( wxT("OnBeginLabelEdit: %s"), event.m_item.m_text.c_str());
+
+    wxTextCtrl * const text = GetEditControl();
+    if ( !text )
+    {
+        wxLogMessage("BUG: started to edit but no edit control");
+    }
+    else
+    {
+        wxLogMessage("Edit control value: \"%s\"", text->GetValue());
+    }
 }
 
 void MyListCtrl::OnEndLabelEdit(wxListEvent& event)

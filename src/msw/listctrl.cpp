@@ -766,6 +766,25 @@ int wxListCtrl::GetCountPerPage() const
 // Gets the edit control for editing labels.
 wxTextCtrl* wxListCtrl::GetEditControl() const
 {
+    // first check corresponds to the case when the label editing was started
+    // by user and hence m_textCtrl wasn't created by EditLabel() at all, while
+    // the second case corresponds to us being called from inside EditLabel()
+    // (e.g. from a user wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT handler): in this
+    // case EditLabel() did create the control but it didn't have an HWND to
+    // initialize it with yet
+    if ( !m_textCtrl || !m_textCtrl->GetHWND() )
+    {
+        HWND hwndEdit = ListView_GetEditControl(GetHwnd());
+        if ( hwndEdit )
+        {
+            wxListCtrl * const self = wx_const_cast(wxListCtrl *, this);
+
+            if ( !m_textCtrl )
+                self->m_textCtrl = new wxTextCtrl;
+            self->InitEditControl((WXHWND)hwndEdit);
+        }
+    }
+
     return m_textCtrl;
 }
 
@@ -1455,24 +1474,8 @@ void wxListCtrl::ClearAll()
         DeleteAllColumns();
 }
 
-wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
+void wxListCtrl::InitEditControl(WXHWND hWnd)
 {
-    wxASSERT( (textControlClass->IsKindOf(CLASSINFO(wxTextCtrl))) );
-
-    // ListView_EditLabel requires that the list has focus.
-    SetFocus();
-
-    WXHWND hWnd = (WXHWND) ListView_EditLabel(GetHwnd(), item);
-    if ( !hWnd )
-    {
-        // failed to start editing
-        return NULL;
-    }
-
-    // [re]create the text control wrapping the HWND we got
-    DeleteEditControl();
-
-    m_textCtrl = (wxTextCtrl *)textControlClass->CreateObject();
     m_textCtrl->SetHWND(hWnd);
     m_textCtrl->SubclassWin(hWnd);
     m_textCtrl->SetParent(this);
@@ -1482,6 +1485,38 @@ wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
     // this line and then pressing TAB while editing an item in  listctrl
     // inside a panel)
     m_textCtrl->SetWindowStyle(m_textCtrl->GetWindowStyle() | wxTE_PROCESS_TAB);
+}
+
+wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
+{
+    wxCHECK_MSG( textControlClass->IsKindOf(CLASSINFO(wxTextCtrl)), NULL,
+                  "control used for label editing must be a wxTextCtrl" );
+
+    // ListView_EditLabel requires that the list has focus.
+    SetFocus();
+
+    // create m_textCtrl here before calling ListView_EditLabel() because it
+    // generates wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT event from inside it and
+    // the user handler for it can call GetEditControl() resulting in an on
+    // demand creation of a stock wxTextCtrl instead of the control of a
+    // (possibly) custom wxClassInfo
+    DeleteEditControl();
+    m_textCtrl = (wxTextCtrl *)textControlClass->CreateObject();
+
+    WXHWND hWnd = (WXHWND) ListView_EditLabel(GetHwnd(), item);
+    if ( !hWnd )
+    {
+        // failed to start editing
+        delete m_textCtrl;
+        m_textCtrl = NULL;
+
+        return NULL;
+    }
+
+    // if GetEditControl() hasn't been called, we need to initialize the edit
+    // control ourselves
+    if ( !m_textCtrl->GetHWND() )
+        InitEditControl(hWnd);
 
     return m_textCtrl;
 }
