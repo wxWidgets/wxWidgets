@@ -5,6 +5,12 @@
 INCOMPATIBLE CHANGES SINCE 2.8.x
 ================================
 
+
+        Notice that these changes are described in more details in
+        the "Changes Since wxWidgets 2.8" section of the manual,
+        please read it if the explanation here is too cryptic.
+
+
 Unicode-related changes
 -----------------------
 
@@ -176,6 +182,9 @@ Changes in behaviour which may result in compilation errors
   necessarily allocated consecutively any more. Use GetChildren() to find the
   next/previous control sibling instead.
 
+- Calling wxConfig::Write() with an enum value will fail to compile because
+  wxConfig now tries to convert all unknown types to wxString automatically.
+  The simplest solution is to cast the enum value to int.
 
 Deprecated methods and their replacements
 -----------------------------------------

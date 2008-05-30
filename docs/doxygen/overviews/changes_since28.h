@@ -109,5 +109,45 @@ Finally, a few structure fields, notable @c wxCmdLineEntryDesc::shortName,
   your code if you overrode these functions and change the functions in the
   derived classes to use const reference as well.
 
+- Calling wxConfig::Write() with an enum value will fail to compile because
+  wxConfig now tries to convert all unknown types to wxString automatically
+  using wxToString() function.
+
+  The simplest solution is to cast the enum value to int, e.g.
+  @code
+    enum Colour { Red, Green, Blue };
+
+    wxConfig conf;
+    conf.Write("MyFavouriteColour", Red);       // ERROR: no match
+    conf.Write("MyFavouriteColour", int(Red));  // OK
+  @endcode
+
+  Another possibility which exists now is to provide an overload of
+  wxToString() (and wxFromString()) for your own type, e.g.
+
+  @code
+    wxString wxToString(Colour col)
+    {
+        return col == Red ? "R" : col == Green ? "G" : "B";
+    }
+
+    bool wxFromString(const wxString& s, Colour* col)
+    {
+        if ( s.length() != 1 )
+            return false;
+
+        switch ( s[0].GetValue() )
+        {
+            case 'R': *col = Red; return true;
+            case 'G': *col = Green; return true;
+            case 'B': *col = Blue; return true;
+        }
+
+        return false;
+    }
+  @endcode
+
+  Of course, this will change the format of the wxConfig output which may be
+  undesirable.
 */
 
