@@ -297,7 +297,7 @@ void wxControl::OnInternalIdle()
         GTKUpdateCursor();
     }
 
-    if ( wxUpdateUIEvent::CanUpdate(this) )
+    if ( wxUpdateUIEvent::CanUpdate(this) && IsVisibleOnScreen() )
         UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 }
 
