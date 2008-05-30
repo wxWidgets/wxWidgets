@@ -128,6 +128,9 @@ wxWindowDC::wxWindowDC(wxWindow *window)
 
 #if wxMAC_USE_CORE_GRAPHICS
     m_window->GetSize( &m_width , &m_height);
+    if ( !m_window->IsShownOnScreen() )
+        m_width = m_height = 0;
+        
     CGContextRef cg = (CGContextRef) window->MacGetCGContextRef();
     m_release = false;
     if ( cg == NULL )
@@ -246,6 +249,8 @@ wxClientDC::wxClientDC(wxWindow *window) :
     wxCHECK_RET( window, _T("invalid window in wxClientDC") );
     wxPoint origin = window->GetClientAreaOrigin() ;
     m_window->GetClientSize( &m_width , &m_height);
+    if ( !m_window->IsShownOnScreen() )
+        m_width = m_height = 0;
     SetDeviceOrigin( origin.x, origin.y );
     SetClippingRegion( 0 , 0 , m_width , m_height ) ;
 }
