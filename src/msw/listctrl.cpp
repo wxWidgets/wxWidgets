@@ -488,10 +488,8 @@ void wxListCtrl::FreeAllInternalData()
     }
 }
 
-wxListCtrl::~wxListCtrl()
+void wxListCtrl::DeleteEditControl()
 {
-    FreeAllInternalData();
-
     if ( m_textCtrl )
     {
         m_textCtrl->UnsubclassWin();
@@ -499,6 +497,13 @@ wxListCtrl::~wxListCtrl()
         delete m_textCtrl;
         m_textCtrl = NULL;
     }
+}
+
+wxListCtrl::~wxListCtrl()
+{
+    FreeAllInternalData();
+
+    DeleteEditControl();
 
     if (m_ownsImageListNormal)
         delete m_imageListNormal;
@@ -1465,12 +1470,7 @@ wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
     }
 
     // [re]create the text control wrapping the HWND we got
-    if ( m_textCtrl )
-    {
-        m_textCtrl->UnsubclassWin();
-        m_textCtrl->SetHWND(0);
-        delete m_textCtrl;
-    }
+    DeleteEditControl();
 
     m_textCtrl = (wxTextCtrl *)textControlClass->CreateObject();
     m_textCtrl->SetHWND(hWnd);
@@ -2093,16 +2093,9 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     const LV_ITEM& lvi = (LV_ITEM)item;
                     if ( !lvi.pszText || lvi.iItem == -1 )
                     {
-                        // don't keep a stale wxTextCtrl around
-                        if ( m_textCtrl )
-                        {
-                            // EDIT control will be deleted by the list control itself so
-                            // prevent us from deleting it as well
-                            m_textCtrl->UnsubclassWin();
-                            m_textCtrl->SetHWND(0);
-                            delete m_textCtrl;
-                            m_textCtrl = NULL;
-                        }
+                        // EDIT control will be deleted by the list control
+                        // itself so prevent us from deleting it as well
+                        DeleteEditControl();
 
                         event.SetEditCanceled(true);
                     }
@@ -2475,16 +2468,9 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             // logic here is inverted compared to all the other messages
             *result = event.IsAllowed();
 
-            // don't keep a stale wxTextCtrl around
-            if ( m_textCtrl )
-            {
-                // EDIT control will be deleted by the list control itself so
-                // prevent us from deleting it as well
-                m_textCtrl->UnsubclassWin();
-                m_textCtrl->SetHWND(0);
-                delete m_textCtrl;
-                m_textCtrl = NULL;
-            }
+            // EDIT control will be deleted by the list control itself so
+            // prevent us from deleting it as well
+            DeleteEditControl();
 
             return true;
     }
