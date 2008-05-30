@@ -981,7 +981,7 @@ void MyListCtrl::OnListKeyDown(wxListEvent& event)
             }
             break;
 
-        case WXK_DELETE:
+        case 'D': // delete
             item = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
             while ( item != -1 )
             {
@@ -995,7 +995,7 @@ void MyListCtrl::OnListKeyDown(wxListEvent& event)
             }
             break;
 
-        case WXK_INSERT:
+        case 'I': // insert
             if ( GetWindowStyle() & wxLC_REPORT )
             {
                 if ( GetWindowStyle() & wxLC_VIRTUAL )
@@ -1030,8 +1030,10 @@ void MyListCtrl::OnChar(wxKeyEvent& event)
         case 'R':
         case 'u':
         case 'U':
-        case WXK_DELETE:
-        case WXK_INSERT:
+        case 'd':
+        case 'D':
+        case 'i':
+        case 'I':
             // these are the keys we process ourselves
             break;
 
