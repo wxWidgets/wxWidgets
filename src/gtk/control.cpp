@@ -373,7 +373,7 @@ void wxControl::OnInternalIdle()
         GTKSetDelayedFocusIfNeeded();
     }
 
-    if ( wxUpdateUIEvent::CanUpdate(this) && IsVisibleOnScreen() )
+    if ( wxUpdateUIEvent::CanUpdate(this) && IsShownOnScreen() )
         UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 }
 
