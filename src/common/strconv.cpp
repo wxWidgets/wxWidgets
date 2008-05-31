@@ -2111,10 +2111,14 @@ wxMBConv_iconv::ToWChar(wchar_t *dst, size_t dstLen,
         char* bufPtr = (char*)dst;
 
         // have destination buffer, convert there
+        size_t dstLenOrig = dstLen;
         cres = iconv(m2w,
                      ICONV_CHAR_CAST(&pszPtr), &srcLen,
                      &bufPtr, &dstLen);
-        res = dstLen - (dstLen / SIZEOF_WCHAR_T);
+
+        // convert the number of bytes converted as returned by iconv to the
+        // number of (wide) characters converted that we need
+        res = (dstLenOrig - dstLen) / SIZEOF_WCHAR_T;
 
         if (ms_wcNeedsSwap)
         {
@@ -2122,10 +2126,6 @@ wxMBConv_iconv::ToWChar(wchar_t *dst, size_t dstLen,
             for ( unsigned i = 0; i < res; i++ )
                 dst[i] = WC_BSWAP(dst[i]);
         }
-
-        // NUL-terminate the string if there is any space left
-        if (res < dstLen)
-            dst[res] = 0;
     }
     else // no destination buffer
     {
