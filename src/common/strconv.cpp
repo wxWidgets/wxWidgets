@@ -2194,12 +2194,6 @@ size_t wxMBConv_iconv::FromWChar(char *dst, size_t dstLen,
         cres = iconv(w2m, ICONV_CHAR_CAST(&inbuf), &inbuflen, &dst, &outbuflen);
 
         res = dstLen - outbuflen;
-
-        // NB: iconv was given only wcslen(src) characters on input, and so
-        //     it couldn't convert the trailing zero. Let's do it ourselves
-        //     if there's some room left for it in the output buffer.
-        if (res < dstLen)
-            dst[0] = 0;
     }
     else // no destination buffer
     {
