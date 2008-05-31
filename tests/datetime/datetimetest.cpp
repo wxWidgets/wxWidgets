@@ -731,11 +731,11 @@ void DateTimeTestCase::TestTimeTicks()
         //into Vadim's tests
         dt.MakeTimezone(wxDateTime::WEST, true);
         long ticks = (dt.GetValue() / 1000).ToLong();
-        CPPUNIT_ASSERT( ticks == d.ticks );
+        CPPUNIT_ASSERT_EQUAL( d.ticks, ticks );
 
         dt = d.DT().FromTimezone(wxDateTime::GMT0);
         ticks = (dt.GetValue() / 1000).ToLong();
-        CPPUNIT_ASSERT( ticks == d.gmticks );
+        CPPUNIT_ASSERT_EQUAL( d.gmticks, ticks );
     }
 }
 
