@@ -4189,6 +4189,8 @@ if test "$wxUSE_OPENGL" = "yes"; then
         OPENGL_LIBS="-framework OpenGL -framework AGL"
     elif test "$wxUSE_MSW" = 1; then
         OPENGL_LIBS="-lopengl32 -lglu32"
+    elif test "$USE_DARWIN" = 1; then
+        OPENGL_LIBS=""
     else
         dnl adjust CPPFLAGS to include GL/gl.h location if necessary
         dnl (/opt/graphics/OpenGL is for HP-UX systems, bug 925307)
