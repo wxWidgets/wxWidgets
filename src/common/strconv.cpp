@@ -2166,7 +2166,7 @@ size_t wxMBConv_iconv::FromWChar(char *dst, size_t dstLen,
 #endif
 
     if ( srcLen == wxNO_LEN )
-        srcLen = wxWcslen(src);
+        srcLen = wxWcslen(src) + 1;
 
     size_t inbuflen = srcLen * SIZEOF_WCHAR_T;
     size_t outbuflen = dstLen;
