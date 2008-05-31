@@ -472,7 +472,6 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
 
     wxBusyCursor busyCursor;
 
-    wxFSFile *f;
     bool rt_val;
     bool needs_refresh = false;
 
@@ -485,31 +484,28 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
         (*m_History)[m_HistoryPos].SetPos(y);
     }
 
-    if (location[0] == wxT('#'))
+    // first check if we're moving to an anchor in the same page
+    size_t posLocalAnchor = location.Find('#');
+    if ( posLocalAnchor != wxString::npos && posLocalAnchor != 0 )
     {
-        // local anchor:
-        wxString anch = location.Mid(1) /*1 to end*/;
-        m_tmpCanDrawLocks--;
-        rt_val = ScrollToAnchor(anch);
-        m_tmpCanDrawLocks++;
-    }
-    else if (location.Find(wxT('#')) != wxNOT_FOUND && location.BeforeFirst(wxT('#')) == m_OpenedPage)
-    {
-        wxString anch = location.AfterFirst(wxT('#'));
-        m_tmpCanDrawLocks--;
-        rt_val = ScrollToAnchor(anch);
-        m_tmpCanDrawLocks++;
-    }
-    else if (location.Find(wxT('#')) != wxNOT_FOUND &&
-             (m_FS->GetPath() + location.BeforeFirst(wxT('#'))) == m_OpenedPage)
-    {
-        wxString anch = location.AfterFirst(wxT('#'));
-        m_tmpCanDrawLocks--;
-        rt_val = ScrollToAnchor(anch);
-        m_tmpCanDrawLocks++;
+        // check if the part before the anchor is the same as the (either
+        // relative or absolute) URI of the current page
+        const wxString beforeAnchor = location.substr(0, posLocalAnchor);
+        if ( beforeAnchor != m_OpenedPage &&
+                m_FS->GetPath() + beforeAnchor != m_OpenedPage )
+        {
+            // indicate that we're not moving to a local anchor
+            posLocalAnchor = wxString::npos;
+        }
     }
 
-    else
+    if ( posLocalAnchor != wxString::npos )
+    {
+        m_tmpCanDrawLocks--;
+        rt_val = ScrollToAnchor(location.substr(posLocalAnchor + 1));
+        m_tmpCanDrawLocks++;
+    }
+    else // moving to another page
     {
         needs_refresh = true;
 #if wxUSE_STATUSBAR
@@ -521,7 +517,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
         }
 #endif // wxUSE_STATUSBAR
 
-        f = m_Parser->OpenURL(wxHTML_URL_PAGE, location);
+        wxFSFile *f = m_Parser->OpenURL(wxHTML_URL_PAGE, location);
 
         // try to interpret 'location' as filename instead of URL:
         if (f == NULL)
