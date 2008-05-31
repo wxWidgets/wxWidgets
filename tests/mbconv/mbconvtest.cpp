@@ -269,11 +269,11 @@ wxString CByteArrayFormat( const void* data, size_t len, const wxChar* name )
     return result;
 }
 
-// The following bytes represent the same string, containing Japanese and English 
+// The following bytes represent the same string, containing Japanese and English
 // characters, encoded in several different formats.
 
 // encoded by iconv
-const static unsigned char welcome_utf7_iconv[84] = 
+const static unsigned char welcome_utf7_iconv[84] =
 {
     0x57,0x65,0x6c,0x63,0x6f,0x6d,0x65,0x20,0x74,0x6f,0x20,0x6f,0x75,0x72,0x20,0x63,
     0x79,0x62,0x65,0x72,0x20,0x73,0x70,0x61,0x63,0x65,0x20,0x66,0x6f,0x72,0x63,0x65,
@@ -283,7 +283,7 @@ const static unsigned char welcome_utf7_iconv[84] =
     0x57,0x54,0x41,0x43
 };
 // encoded by wxWindows (iconv can decode this successfully)
-const static unsigned char welcome_utf7_wx[109] = 
+const static unsigned char welcome_utf7_wx[109] =
 {
     0x57,0x65,0x6c,0x63,0x6f,0x6d,0x65,0x2b,0x41,0x43,0x41,0x2d,0x74,0x6f,0x2b,0x41,
     0x43,0x41,0x2d,0x6f,0x75,0x72,0x2b,0x41,0x43,0x41,0x2d,0x63,0x79,0x62,0x65,0x72,
@@ -294,7 +294,7 @@ const static unsigned char welcome_utf7_wx[109] =
     0x51,0x77,0x52,0x44,0x42,0x6e,0x4d,0x46,0x6b,0x77,0x41,0x67,0x2d
 };
 // encoded by iconv
-const static unsigned char welcome_utf8[89] = 
+const static unsigned char welcome_utf8[89] =
 {
     0x57,0x65,0x6c,0x63,0x6f,0x6d,0x65,0x20,0x74,0x6f,0x20,0x6f,0x75,0x72,0x20,0x63,
     0x79,0x62,0x65,0x72,0x20,0x73,0x70,0x61,0x63,0x65,0x20,0x66,0x6f,0x72,0x63,0x65,
@@ -304,7 +304,7 @@ const static unsigned char welcome_utf8[89] =
     0xe3,0x81,0xa7,0xe3,0x81,0x99,0xe3,0x80,0x82
 };
 // encoded by iconv
-const static unsigned char welcome_utf16le[106] = 
+const static unsigned char welcome_utf16le[106] =
 {
     0x57,0x00,0x65,0x00,0x6c,0x00,0x63,0x00,0x6f,0x00,0x6d,0x00,0x65,0x00,0x20,0x00,
     0x74,0x00,0x6f,0x00,0x20,0x00,0x6f,0x00,0x75,0x00,0x72,0x00,0x20,0x00,0x63,0x00,
@@ -315,7 +315,7 @@ const static unsigned char welcome_utf16le[106] =
     0x44,0x30,0x44,0x30,0x67,0x30,0x59,0x30,0x02,0x30
 };
 // encoded by iconv
-const static unsigned char welcome_utf16be[106] = 
+const static unsigned char welcome_utf16be[106] =
 {
     0x00,0x57,0x00,0x65,0x00,0x6c,0x00,0x63,0x00,0x6f,0x00,0x6d,0x00,0x65,0x00,0x20,
     0x00,0x74,0x00,0x6f,0x00,0x20,0x00,0x6f,0x00,0x75,0x00,0x72,0x00,0x20,0x00,0x63,
@@ -326,7 +326,7 @@ const static unsigned char welcome_utf16be[106] =
     0x30,0x44,0x30,0x44,0x30,0x67,0x30,0x59,0x30,0x02
 };
 // encoded by iconv
-const static unsigned char welcome_utf32le[212] = 
+const static unsigned char welcome_utf32le[212] =
 {
     0x57,0x00,0x00,0x00,0x65,0x00,0x00,0x00,0x6c,0x00,0x00,0x00,0x63,0x00,0x00,0x00,
     0x6f,0x00,0x00,0x00,0x6d,0x00,0x00,0x00,0x65,0x00,0x00,0x00,0x20,0x00,0x00,0x00,
@@ -344,7 +344,7 @@ const static unsigned char welcome_utf32le[212] =
     0x02,0x30,0x00,0x00
 };
 // encoded by iconv
-const static unsigned char welcome_utf32be[212] = 
+const static unsigned char welcome_utf32be[212] =
 {
     0x00,0x00,0x00,0x57,0x00,0x00,0x00,0x65,0x00,0x00,0x00,0x6c,0x00,0x00,0x00,0x63,
     0x00,0x00,0x00,0x6f,0x00,0x00,0x00,0x6d,0x00,0x00,0x00,0x65,0x00,0x00,0x00,0x20,
@@ -362,7 +362,7 @@ const static unsigned char welcome_utf32be[212] =
     0x00,0x00,0x30,0x02
 };
 // encoded by iconv
-const static unsigned char welcome_cp932[71] = 
+const static unsigned char welcome_cp932[71] =
 {
     0x57,0x65,0x6c,0x63,0x6f,0x6d,0x65,0x20,0x74,0x6f,0x20,0x6f,0x75,0x72,0x20,0x63,
     0x79,0x62,0x65,0x72,0x20,0x73,0x70,0x61,0x63,0x65,0x20,0x66,0x6f,0x72,0x63,0x65,
@@ -387,45 +387,51 @@ const static unsigned char welcome_cp932[71] =
 
 void MBConvTestCase::UTF7Tests()
 {
+#if 0
+    wxCSConv convUTF7(wxFONTENCODING_UTF7);
+#else
+    wxMBConvUTF7 convUTF7;
+#endif
+
     TestDecoder
-        ( 
-        (const wchar_t*)welcome_wchar_t, 
+        (
+        (const wchar_t*)welcome_wchar_t,
         sizeof(welcome_wchar_t)/sizeof(wchar_t),
-        (const char*)welcome_utf7_iconv, 
-        sizeof(welcome_utf7_iconv), 
-        wxConvUTF7,
+        (const char*)welcome_utf7_iconv,
+        sizeof(welcome_utf7_iconv),
+        convUTF7,
         1
         );
     TestDecoder
-        ( 
-        (const wchar_t*)welcome_wchar_t, 
+        (
+        (const wchar_t*)welcome_wchar_t,
         sizeof(welcome_wchar_t)/sizeof(wchar_t),
-        (const char*)welcome_utf7_wx, 
-        sizeof(welcome_utf7_wx), 
-        wxConvUTF7,
+        (const char*)welcome_utf7_wx,
+        sizeof(welcome_utf7_wx),
+        convUTF7,
         1
         );
-#if 0 
-    // wxWidget's UTF-7 encoder generates different byte sequences than iconv's.  
+#if 0
+    // wxWidget's UTF-7 encoder generates different byte sequences than iconv's.
     // but both seem to be equally legal.
     // This test won't work and that's okay.
     TestEncoder
-        ( 
-        (const wchar_t*)welcome_wchar_t, 
+        (
+        (const wchar_t*)welcome_wchar_t,
         sizeof(welcome_wchar_t)/sizeof(wchar_t),
-        (const char*)welcome_utf7_iconv, 
-        sizeof(welcome_utf7_iconv), 
-        wxConvUTF7,
+        (const char*)welcome_utf7_iconv,
+        sizeof(welcome_utf7_iconv),
+        convUTF7,
         1
         );
 #endif
     TestEncoder
-        ( 
-        (const wchar_t*)welcome_wchar_t, 
+        (
+        (const wchar_t*)welcome_wchar_t,
         sizeof(welcome_wchar_t)/sizeof(wchar_t),
-        (const char*)welcome_utf7_wx, 
-        sizeof(welcome_utf7_wx), 
-        wxConvUTF7,
+        (const char*)welcome_utf7_wx,
+        sizeof(welcome_utf7_wx),
+        convUTF7,
         1
         );
 }
@@ -433,20 +439,20 @@ void MBConvTestCase::UTF7Tests()
 void MBConvTestCase::UTF8Tests()
 {
     TestDecoder
-        ( 
-        (const wchar_t*)welcome_wchar_t, 
+        (
+        (const wchar_t*)welcome_wchar_t,
         sizeof(welcome_wchar_t)/sizeof(wchar_t),
-        (const char*)welcome_utf8, 
-        sizeof(welcome_utf8), 
+        (const char*)welcome_utf8,
+        sizeof(welcome_utf8),
         wxConvUTF8,
         1
         );
     TestEncoder
-        ( 
-        (const wchar_t*)welcome_wchar_t, 
+        (
+        (const wchar_t*)welcome_wchar_t,
         sizeof(welcome_wchar_t)/sizeof(wchar_t),
-        (const char*)welcome_utf8, 
-        sizeof(welcome_utf8), 
+        (const char*)welcome_utf8,
+        sizeof(welcome_utf8),
         wxConvUTF8,
         1
         );
@@ -456,20 +462,20 @@ void MBConvTestCase::UTF16LETests()
 {
     wxMBConvUTF16LE convUTF16LE;
     TestDecoder
-        ( 
-        (const wchar_t*)welcome_wchar_t, 
+        (
+        (const wchar_t*)welcome_wchar_t,
         sizeof(welcome_wchar_t)/sizeof(wchar_t),
-        (const char*)welcome_utf16le, 
-        sizeof(welcome_utf16le), 
+        (const char*)welcome_utf16le,
+        sizeof(welcome_utf16le),
         convUTF16LE,
         2
         );
     TestEncoder
-        ( 
-        (const wchar_t*)welcome_wchar_t, 
+        (
+        (const wchar_t*)welcome_wchar_t,
         sizeof(welcome_wchar_t)/sizeof(wchar_t),
-        (const char*)welcome_utf16le, 
-        sizeof(welcome_utf16le), 
+        (const char*)welcome_utf16le,
+        sizeof(welcome_utf16le),
         convUTF16LE,
         2
         );
@@ -479,20 +485,20 @@ void MBConvTestCase::UTF16BETests()
 {
     wxMBConvUTF16BE convUTF16BE;
     TestDecoder
-        ( 
-        (const wchar_t*)welcome_wchar_t, 
+        (
+        (const wchar_t*)welcome_wchar_t,
         sizeof(welcome_wchar_t)/sizeof(wchar_t),
-        (const char*)welcome_utf16be, 
-        sizeof(welcome_utf16be), 
+        (const char*)welcome_utf16be,
+        sizeof(welcome_utf16be),
         convUTF16BE,
         2
         );
     TestEncoder
-        ( 
-        (const wchar_t*)welcome_wchar_t, 
+        (
+        (const wchar_t*)welcome_wchar_t,
         sizeof(welcome_wchar_t)/sizeof(wchar_t),
-        (const char*)welcome_utf16be, 
-        sizeof(welcome_utf16be), 
+        (const char*)welcome_utf16be,
+        sizeof(welcome_utf16be),
         convUTF16BE,
         2
         );
@@ -502,20 +508,20 @@ void MBConvTestCase::UTF32LETests()
 {
     wxMBConvUTF32LE convUTF32LE;
     TestDecoder
-        ( 
-        (const wchar_t*)welcome_wchar_t, 
+        (
+        (const wchar_t*)welcome_wchar_t,
         sizeof(welcome_wchar_t)/sizeof(wchar_t),
-        (const char*)welcome_utf32le, 
-        sizeof(welcome_utf32le), 
+        (const char*)welcome_utf32le,
+        sizeof(welcome_utf32le),
         convUTF32LE,
         4
         );
     TestEncoder
-        ( 
-        (const wchar_t*)welcome_wchar_t, 
+        (
+        (const wchar_t*)welcome_wchar_t,
         sizeof(welcome_wchar_t)/sizeof(wchar_t),
-        (const char*)welcome_utf32le, 
-        sizeof(welcome_utf32le), 
+        (const char*)welcome_utf32le,
+        sizeof(welcome_utf32le),
         convUTF32LE,
         4
         );
@@ -525,20 +531,20 @@ void MBConvTestCase::UTF32BETests()
 {
     wxMBConvUTF32BE convUTF32BE;
     TestDecoder
-        ( 
-        (const wchar_t*)welcome_wchar_t, 
+        (
+        (const wchar_t*)welcome_wchar_t,
         sizeof(welcome_wchar_t)/sizeof(wchar_t),
-        (const char*)welcome_utf32be, 
-        sizeof(welcome_utf32be), 
+        (const char*)welcome_utf32be,
+        sizeof(welcome_utf32be),
         convUTF32BE,
         4
         );
     TestEncoder
-        ( 
-        (const wchar_t*)welcome_wchar_t, 
+        (
+        (const wchar_t*)welcome_wchar_t,
         sizeof(welcome_wchar_t)/sizeof(wchar_t),
-        (const char*)welcome_utf32be, 
-        sizeof(welcome_utf32be), 
+        (const char*)welcome_utf32be,
+        sizeof(welcome_utf32be),
         convUTF32BE,
         4
         );
@@ -548,27 +554,27 @@ void MBConvTestCase::CP932Tests()
 {
     wxCSConv convCP932( wxFONTENCODING_CP932 );
     TestDecoder
-        ( 
-        (const wchar_t*)welcome_wchar_t, 
+        (
+        (const wchar_t*)welcome_wchar_t,
         sizeof(welcome_wchar_t)/sizeof(wchar_t),
-        (const char*)welcome_cp932, 
-        sizeof(welcome_cp932), 
+        (const char*)welcome_cp932,
+        sizeof(welcome_cp932),
         convCP932,
         1
         );
     TestEncoder
-        ( 
-        (const wchar_t*)welcome_wchar_t, 
+        (
+        (const wchar_t*)welcome_wchar_t,
         sizeof(welcome_wchar_t)/sizeof(wchar_t),
-        (const char*)welcome_cp932, 
-        sizeof(welcome_cp932), 
+        (const char*)welcome_cp932,
+        sizeof(welcome_cp932),
         convCP932,
         1
         );
 }
 
 // a character sequence encoded as iso8859-1 (iconv)
-static const unsigned char iso8859_1[251] = 
+static const unsigned char iso8859_1[251] =
 {
     0x05,0x06,0x07,0x08,0x09,0x0a,0x0b,0x0c,0x0d,0x0e,0x0f,0x10,0x11,0x12,0x13,0x14,
     0x15,0x16,0x17,0x18,0x19,0x1a,0x1b,0x1c,0x1d,0x1e,0x1f,0x20,0x21,0x22,0x23,0x24,
@@ -588,7 +594,7 @@ static const unsigned char iso8859_1[251] =
     0xf5,0xf6,0xf7,0xf8,0xf9,0xfa,0xfb,0xfc,0xfd,0xfe,0xff
 };
 // the above character sequence encoded as UTF-8 (iconv)
-static const unsigned char iso8859_1_utf8[379] = 
+static const unsigned char iso8859_1_utf8[379] =
 {
     0x05,0x06,0x07,0x08,0x09,0x0a,0x0b,0x0c,0x0d,0x0e,0x0f,0x10,0x11,0x12,0x13,0x14,
     0x15,0x16,0x17,0x18,0x19,0x1a,0x1b,0x1c,0x1d,0x1e,0x1f,0x20,0x21,0x22,0x23,0x24,
@@ -617,7 +623,7 @@ static const unsigned char iso8859_1_utf8[379] =
 };
 
 // a character sequence encoded as CP1252 (iconv)
-static const unsigned char CP1252[246] = 
+static const unsigned char CP1252[246] =
 {
     0x05,0x06,0x07,0x08,0x09,0x0a,0x0b,0x0c,0x0d,0x0e,0x0f,0x10,0x11,0x12,0x13,0x14,
     0x15,0x16,0x17,0x18,0x19,0x1a,0x1b,0x1c,0x1d,0x1e,0x1f,0x20,0x21,0x22,0x23,0x24,
@@ -637,7 +643,7 @@ static const unsigned char CP1252[246] =
     0x85,0x89,0x8b,0x9b,0x80,0x99
 };
 // the above character sequence encoded as UTF-8 (iconv)
-static const unsigned char CP1252_utf8[386] = 
+static const unsigned char CP1252_utf8[386] =
 {
     0x05,0x06,0x07,0x08,0x09,0x0a,0x0b,0x0c,0x0d,0x0e,0x0f,0x10,0x11,0x12,0x13,0x14,
     0x15,0x16,0x17,0x18,0x19,0x1a,0x1b,0x1c,0x1d,0x1e,0x1f,0x20,0x21,0x22,0x23,0x24,
@@ -667,7 +673,7 @@ static const unsigned char CP1252_utf8[386] =
 };
 
 // a character sequence encoded as iso8859-5 (iconv)
-static const unsigned char iso8859_5[251] = 
+static const unsigned char iso8859_5[251] =
 {
     0x05,0x06,0x07,0x08,0x09,0x0a,0x0b,0x0c,0x0d,0x0e,0x0f,0x10,0x11,0x12,0x13,0x14,
     0x15,0x16,0x17,0x18,0x19,0x1a,0x1b,0x1c,0x1d,0x1e,0x1f,0x20,0x21,0x22,0x23,0x24,
@@ -687,7 +693,7 @@ static const unsigned char iso8859_5[251] =
     0xf5,0xf6,0xf7,0xf8,0xf9,0xfa,0xfb,0xfc,0xfe,0xff,0xf0
 };
 // the above character sequence encoded as UTF-8 (iconv)
-static const unsigned char iso8859_5_utf8[380] = 
+static const unsigned char iso8859_5_utf8[380] =
 {
     0x05,0x06,0x07,0x08,0x09,0x0a,0x0b,0x0c,0x0d,0x0e,0x0f,0x10,0x11,0x12,0x13,0x14,
     0x15,0x16,0x17,0x18,0x19,0x1a,0x1b,0x1c,0x1d,0x1e,0x1f,0x20,0x21,0x22,0x23,0x24,
@@ -757,19 +763,19 @@ void MBConvTestCase::TestCoder(
     size_t wideChars = wxWcslen( wideBuffer.data() );
 
     TestDecoder
-        ( 
-        wideBuffer.data(), 
+        (
+        wideBuffer.data(),
         wideChars,
-        (const char*)multiBuffer, 
+        (const char*)multiBuffer,
         multiBytes,
         converter,
         sizeofNull
         );
     TestEncoder
-        ( 
-        wideBuffer.data(), 
+        (
+        wideBuffer.data(),
         wideChars,
-        (const char*)multiBuffer, 
+        (const char*)multiBuffer,
         multiBytes,
         converter,
         sizeofNull
@@ -857,9 +863,9 @@ void MBConvTestCase::LibcTests()
 #endif
     wxMBConvLibc convLibc;
     TestCoder(
-        (const char*)systemMB, 
+        (const char*)systemMB,
         systemMB_size,
-        (const char*)systemMB_utf8, 
+        (const char*)systemMB_utf8,
         systemMB_utf8_size,
         convLibc,
         1
@@ -887,13 +893,13 @@ void MBConvTestCase::TestDecoder(
 
     // calculate the output size
     size_t outputWritten = converter.MB2WC
-        ( 
-        0, 
-        (const char*)inputCopy.data(), 
+        (
+        0,
+        (const char*)inputCopy.data(),
         0
         );
     // make sure the correct output length was calculated
-    CPPUNIT_ASSERT( outputWritten == wideChars );
+    CPPUNIT_ASSERT_EQUAL( wideChars, outputWritten );
 
     // convert the string
     size_t guardChars = 8; // to make sure we're not overrunning the output buffer
@@ -903,13 +909,13 @@ void MBConvTestCase::TestDecoder(
     memset( outputBuffer.data(), UNINITIALIZED, outputBufferChars*sizeof(wchar_t) );
 
     outputWritten = converter.MB2WC
-        ( 
-        outputBuffer.data(), 
-        (const char*)inputCopy.data(), 
+        (
+        outputBuffer.data(),
+        (const char*)inputCopy.data(),
         outputBufferChars
         );
     // make sure the correct number of characters were outputs
-    CPPUNIT_ASSERT( outputWritten == wideChars );
+    CPPUNIT_ASSERT_EQUAL( wideChars, outputWritten );
 
     // make sure the characters generated are correct
     CPPUNIT_ASSERT( 0 == memcmp( outputBuffer, wideBuffer, wideChars*sizeof(wchar_t) ) );
@@ -947,13 +953,13 @@ void MBConvTestCase::TestEncoder(
 
     // calculate the output size
     size_t outputWritten = converter.WC2MB
-        ( 
-        0, 
-        (const wchar_t*)inputCopy.data(), 
+        (
+        0,
+        (const wchar_t*)inputCopy.data(),
         0
         );
     // make sure the correct output length was calculated
-    CPPUNIT_ASSERT( outputWritten == multiBytes );
+    CPPUNIT_ASSERT_EQUAL( multiBytes, outputWritten );
 
     // convert the string
     size_t guardBytes = 8; // to make sure we're not overrunning the output buffer
@@ -962,14 +968,14 @@ void MBConvTestCase::TestEncoder(
     memset( outputBuffer.data(), UNINITIALIZED, outputBufferSize );
 
     outputWritten = converter.WC2MB
-        ( 
-        outputBuffer.data(), 
-        (const wchar_t*)inputCopy.data(), 
-        outputBufferSize 
+        (
+        outputBuffer.data(),
+        (const wchar_t*)inputCopy.data(),
+        outputBufferSize
         );
 
     // make sure the correct number of characters were output
-    CPPUNIT_ASSERT( outputWritten == multiBytes );
+    CPPUNIT_ASSERT_EQUAL( multiBytes, outputWritten );
 
     // make sure the characters generated are correct
     CPPUNIT_ASSERT( 0 == memcmp( outputBuffer, multiBuffer, multiBytes ) );
@@ -1093,7 +1099,7 @@ void MBConvTestCase::UTF8Octal(const char *charSequence,
 //
 static wchar_t *wx_wcscpy(wchar_t *dest, const wchar_t *src)
 {
-    wchar_t *d = dest; 
+    wchar_t *d = dest;
     while ((*d++ = *src++) != 0)
         ;
     return dest;
@@ -1103,7 +1109,7 @@ static wchar_t *wx_wcscpy(wchar_t *dest, const wchar_t *src)
 //
 static wchar_t *wx_wcscat(wchar_t *dest, const wchar_t *src)
 {
-    wchar_t *d = dest; 
+    wchar_t *d = dest;
     while (*d)
         d++;
     while ((*d++ = *src++) != 0)
@@ -1146,12 +1152,12 @@ void MBConvTestCase::UTF8(const char *charSequence,
     const size_t BUFSIZE = 128;
     wxASSERT(strlen(charSequence) * 3 + 10 < BUFSIZE);
     char bytes[BUFSIZE];
-    
+
     // include the option in the error messages so it's possible to see
     // which test failed
     sprintf(bytes, " (with option == %d)", option);
     std::string errmsg(bytes);
-    
+
     // put the charSequence at the start, middle and end of a string
     strcpy(bytes, charSequence);
     strcat(bytes, "ABC");
