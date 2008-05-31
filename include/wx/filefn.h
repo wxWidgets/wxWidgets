@@ -202,7 +202,7 @@ enum wxFileKind
     // to avoid using them as they're not present in earlier versions and
     // always using the native functions spelling is easier than testing for
     // the versions
-    #if defined(__BORLANDC__) || defined(__DMC__) || defined(__WATCOMC__)
+    #if defined(__BORLANDC__) || defined(__DMC__) || defined(__WATCOMC__) || defined(__MINGW64__)
         #define wxPOSIX_IDENT(func)    ::func
     #else // by default assume MSVC-compatible names
         #define wxPOSIX_IDENT(func)    _ ## func
@@ -237,9 +237,16 @@ enum wxFileKind
     #endif
 
     #ifdef wxHAS_HUGE_FILES
-        #define   wxSeek       wxPOSIX_IDENT(lseeki64)
-        #define   wxLseek      wxPOSIX_IDENT(lseeki64)
-        #define   wxTell       wxPOSIX_IDENT(telli64)
+        #ifndef __MINGW64__
+            #define   wxSeek       wxPOSIX_IDENT(lseeki64)
+            #define   wxLseek      wxPOSIX_IDENT(lseeki64)
+            #define   wxTell       wxPOSIX_IDENT(telli64)
+        #else
+            // unfortunately, mingw-W64 is somewhat inconsistent...
+            #define   wxSeek       _lseeki64
+            #define   wxLseek      _lseeki64
+            #define   wxTell       _telli64
+        #endif
     #else // !wxHAS_HUGE_FILES
         #define   wxSeek       wxPOSIX_IDENT(lseek)
         #define   wxLseek      wxPOSIX_IDENT(lseek)

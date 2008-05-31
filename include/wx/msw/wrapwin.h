@@ -77,7 +77,7 @@
 // pointer) on MSVC 7 and later. However, they are not available in older 
 // Platform SDKs, and since they are typedefs and not #defines we simply 
 // overwrite them if there is a chance that they're not defined
-#if !defined(_MSC_VER) || (_MSC_VER < 1300)
+#if (!defined(_MSC_VER) || (_MSC_VER < 1300)) && !defined(__WIN64__)
     #define UINT_PTR unsigned int
     #define INT_PTR int
     #define LONG_PTR long
