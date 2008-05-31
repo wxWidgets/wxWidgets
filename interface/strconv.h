@@ -13,10 +13,8 @@
     This class converts between the UTF-7 encoding and Unicode.
     It has one predefined instance, @b wxConvUTF7.
 
-    @b WARNING: this class is not implemented yet.
-
     @library{wxbase}
-    @category{FIXME}
+    @category{conv}
 
     @see wxMBConvUTF8, @ref overview_mbconv "wxMBConv classes overview"
 */
@@ -46,7 +44,7 @@ public:
     It has one predefined instance, @b wxConvUTF8.
 
     @library{wxbase}
-    @category{FIXME}
+    @category{conv}
 
     @see wxMBConvUTF7, @ref overview_mbconv "wxMBConv classes overview"
 */
@@ -81,7 +79,7 @@ public:
     under Mac).
 
     @library{wxbase}
-    @category{FIXME}
+    @category{conv}
 
     @see wxMBConvUTF8, wxMBConvUTF32, @ref overview_mbconv "wxMBConv classes overview"
 */
@@ -112,7 +110,7 @@ public:
     default user character set.
 
     @library{wxbase}
-    @category{FIXME}
+    @category{conv}
 
     @see wxMBConv, wxEncodingConverter, @ref overview_mbconv "wxMBConv classes overview"
 */
@@ -125,9 +123,9 @@ public:
         is used as fall back.
     */
     wxCSConv(const wxChar* charset);
-    
+
     /**
-        Constructor. You can specify an encoding constant for the 
+        Constructor. You can specify an encoding constant for the
         character set you want to convert from/to or. If the encoding
         is not recognized, ISO 8859-1 is used as fall back.
     */
@@ -193,7 +191,7 @@ public:
     (although it would be better to use wxFopen(name, wxT("r")) in this case.)
 
     @library{wxbase}
-    @category{FIXME}
+    @category{conv}
 
     @see @ref overview_mbconv "wxMBConv classes overview"
 */
@@ -228,7 +226,7 @@ public:
     under Mac).
 
     @library{wxbase}
-    @category{FIXME}
+    @category{conv}
 
     @see wxMBConvUTF8, wxMBConvUTF16, @ref overview_mbconv "wxMBConv classes overview"
 */
@@ -266,7 +264,7 @@ public:
     under Windows) or 4 (Unix).
 
     @library{wxbase}
-    @category{FIXME}
+    @category{conv}
 
     @see wxCSConv, wxEncodingConverter, @ref overview_mbconv "wxMBConv classes overview"
 */

@@ -44,6 +44,7 @@ This page contains a summarized listing of classes, please see the
 @li @ref page_class_cat_logging
 @li @ref page_class_cat_threading
 @li @ref page_class_cat_data
+@li @ref page_class_cat_conv
 @li @ref page_class_cat_containers
 @li @ref page_class_cat_smartpointers
 @li @ref page_class_cat_file
@@ -655,6 +656,23 @@ These are the data structure classes supported by wxWidgets.
 @li wxURI: Represents a Uniform Resource Identifier
 @li wxVariant: A class for storing arbitrary types that may change at run-time
 
+
+
+@section page_class_cat_conv Text Conversion
+
+These classes define objects for performing conversions between different
+multibyte and Unicode encodings and wide character strings.
+
+@li wxMBConv: Base class for all convertors, defines the API implemented by all
+    the other convertor classes.
+@li wxMBConvUTF7: Convertor for UTF-7
+@li wxMBConvUTF8: Convertor for UTF-8
+@li wxMBConvUTF16: Convertor for UTF-16
+@li wxMBConvUTF32: Convertor for UTF-32
+@li wxCSConv: Convertor for any system-supported encoding which can be
+    specified by name.
+
+Related Overviews: @ref overview_mbconv
 
 
 @section page_class_cat_containers Containers
