@@ -2115,7 +2115,7 @@ wxMBConv_iconv::ToWChar(wchar_t *dst, size_t dstLen,
         {
             // convert to native endianness
             for ( unsigned i = 0; i < res; i++ )
-                dst[dstLen] = WC_BSWAP(dst[i]);
+                dst[i] = WC_BSWAP(dst[i]);
         }
 
         // NUL-terminate the string if there is any space left
