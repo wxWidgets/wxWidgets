@@ -564,14 +564,13 @@ size_t wxMBConvUTF7::MB2WC(wchar_t *buf, const char *psz, size_t n) const
                         if (buf)
                             *buf++ |= c;
                         len ++;
+                        ok = true;
                     }
                     else
                     {
                         if (buf)
                             *buf = (wchar_t)(c << 8);
                     }
-
-                    ok = true;
                 }
             }
 
