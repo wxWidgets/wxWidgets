@@ -2082,6 +2082,11 @@ wxMBConv_iconv::ToWChar(wchar_t *dst, size_t dstLen,
                 srcLen = p - src;
                 break;
         }
+
+        // when we're determining the length of the string ourselves we count
+        // the terminating NUL(s) as part of it and always NUL-terminate the
+        // output
+        srcLen += nulLen;
     }
 
     // we express length in the number of (wide) characters but iconv always
