@@ -89,7 +89,12 @@
     <steps>
         <checkout/>
         <setup cppunit-options="--host=powerpc-apple-darwin8"/>
-        <configure options="--host=powerpc-apple-darwin8"/>
+        <!--
+            The compiler used suffers from a bug in its visibility support
+            and doesn't find some virtual inline functions during linking if it
+            is used, so disable it.
+         -->
+        <configure options="--host=powerpc-apple-darwin8 --disable-visibility"/>
         <compile-all/>
     </steps>
 </build>
