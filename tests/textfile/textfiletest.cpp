@@ -202,6 +202,8 @@ void TextFileTestCase::ReadUTF16()
 #endif // wxHAVE_U_ESCAPE
 }
 
+#endif // wxUSE_UNICODE
+
 void TextFileTestCase::ReadBig()
 {
     static const size_t NUM_LINES = 10000;
@@ -224,8 +226,6 @@ void TextFileTestCase::ReadBig()
     CPPUNIT_ASSERT_EQUAL( wxString::Format("Line %lu", (unsigned long)NUM_LINES),
                           f[NUM_LINES - 1] );
 }
-
-#endif // wxUSE_UNICODE
 
 #endif // wxUSE_TEXTFILE
 
