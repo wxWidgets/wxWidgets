@@ -2847,8 +2847,9 @@ wxDateTime::ParseRfc822Date(const wxString& date, wxString::const_iterator *end)
     min = (wxDateTime_t)(min + *p++ - _T('0'));
 
     wxDateTime_t sec = 0;
-    if ( *p++ == _T(':') )
+    if ( *p == _T(':') )
     {
+        p++;
         if ( !wxIsdigit(*p) )
         {
             return NULL;

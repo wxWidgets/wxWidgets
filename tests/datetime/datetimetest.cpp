@@ -767,14 +767,28 @@ void DateTimeTestCase::TestParceRFC822()
         },
         {
             "Sun, 28 Aug 2005 03:31:30 +0200",
-            {  28, wxDateTime::Aug, 2005, 1, 31, 30 },
+            { 28, wxDateTime::Aug, 2005, 1, 31, 30 },
             true
         },
 
         {
             "Sat, 18 Dec 1999 10:48:30 -0500",
-            {  18, wxDateTime::Dec, 1999, 15, 48, 30 },
+            { 18, wxDateTime::Dec, 1999, 15, 48, 30 },
             true
+        },
+
+        // seconds are optional according to the RFC
+        {
+            "Sun, 01 Jun 2008 16:30 +0200",
+            {  1, wxDateTime::Jun, 2008, 14, 30, 00 },
+            true
+        },
+
+        // try some bogus ones too
+        {
+            "Sun, 01 Jun 2008 16:30: +0200",
+            { 0 },
+            false
         },
     };
 
