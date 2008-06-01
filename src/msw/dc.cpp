@@ -43,7 +43,7 @@
 #include "wx/sysopt.h"
 #include "wx/dynlib.h"
 
-#ifdef wxHAVE_RAW_BITMAP
+#ifdef wxHAS_RAW_BITMAP
 #include "wx/rawbmp.h"
 #endif
 
@@ -133,7 +133,7 @@ static bool AlphaBlt(HDC hdcDst,
                      HDC hdcSrc,
                      const wxBitmap& bmp);
 
-#ifdef wxHAVE_RAW_BITMAP
+#ifdef wxHAS_RAW_BITMAP
 
 // our (limited) AlphaBlend() replacement for Windows versions not providing it
 static void
@@ -143,7 +143,7 @@ wxAlphaBlend(HDC hdcDst, int xDst, int yDst,
              int srcWidth, int srcHeight,
              const wxBitmap& bmpSrc);
 
-#endif // wxHAVE_RAW_BITMAP
+#endif // wxHAS_RAW_BITMAP
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -2579,21 +2579,21 @@ static bool AlphaBlt(HDC hdcDst,
 
     // AlphaBlend() unavailable of failed: use our own (probably much slower)
     // implementation
-#ifdef wxHAVE_RAW_BITMAP
+#ifdef wxHAS_RAW_BITMAP
     wxAlphaBlend(hdcDst, x, y, dstWidth, dstHeight, srcX, srcY, srcWidth, srcHeight, bmp);
 
     return true;
-#else // !wxHAVE_RAW_BITMAP
+#else // !wxHAS_RAW_BITMAP
     // no wxAlphaBlend() neither, fall back to using simple BitBlt() (we lose
     // alpha but at least something will be shown like this)
     wxUnusedVar(bmp);
     return false;
-#endif // wxHAVE_RAW_BITMAP
+#endif // wxHAS_RAW_BITMAP/!wxHAS_RAW_BITMAP
 }
 
 
 // wxAlphaBlend: our fallback if ::AlphaBlend() is unavailable
-#ifdef wxHAVE_RAW_BITMAP
+#ifdef wxHAS_RAW_BITMAP
 
 static void
 wxAlphaBlend(HDC hdcDst, int xDst, int yDst,
@@ -2655,7 +2655,7 @@ wxAlphaBlend(HDC hdcDst, int xDst, int yDst,
     }
 }
 
-#endif // #ifdef wxHAVE_RAW_BITMAP
+#endif // wxHAS_RAW_BITMAP
 
 void wxMSWDCImpl::DoGradientFillLinear (const wxRect& rect,
                                  const wxColour& initialColour,

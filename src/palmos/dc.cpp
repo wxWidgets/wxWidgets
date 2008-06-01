@@ -44,10 +44,6 @@
 #include "wx/sysopt.h"
 #include "wx/dynlib.h"
 
-#ifdef wxHAVE_RAW_BITMAP
-#include "wx/rawbmp.h"
-#endif
-
 #include "wx/palmos/dc.h"
 
 #ifndef AC_SRC_ALPHA

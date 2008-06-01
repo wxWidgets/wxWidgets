@@ -45,10 +45,6 @@
 
 #include "wx/xpmdecod.h"
 
-#ifdef wxHAVE_RAW_BITMAP
-#include "wx/rawbmp.h"
-#endif
-
 // missing from mingw32 header
 #ifndef CLR_INVALID
     #define CLR_INVALID ((COLORREF)-1)
@@ -363,18 +359,6 @@ void wxBitmap::SetMask(wxMask *mask)
 // ----------------------------------------------------------------------------
 // raw bitmap access support
 // ----------------------------------------------------------------------------
-
-#ifdef wxHAVE_RAW_BITMAP
-void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
-{
-    return NULL;
-}
-
-void wxBitmap::UngetRawData(wxPixelDataBase& dataBase)
-{
-    return;
-}
-#endif // #ifdef wxHAVE_RAW_BITMAP
 
 // ----------------------------------------------------------------------------
 // wxMask

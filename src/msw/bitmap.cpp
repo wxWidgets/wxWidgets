@@ -46,7 +46,7 @@
     #include "wx/msw/dib.h"
 #endif
 
-#ifdef wxHAVE_RAW_BITMAP
+#ifdef wxHAS_RAW_BITMAP
     #include "wx/rawbmp.h"
 #endif
 
@@ -1247,7 +1247,8 @@ void wxBitmap::SetMask(wxMask *mask)
 // raw bitmap access support
 // ----------------------------------------------------------------------------
 
-#ifdef wxHAVE_RAW_BITMAP
+#ifdef wxHAS_RAW_BITMAP
+
 void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
 {
 #if wxUSE_WXDIB
@@ -1353,7 +1354,7 @@ void wxBitmap::UngetRawData(wxPixelDataBase& dataBase)
     }
 #endif // wxUSE_WXDIB
 }
-#endif // #ifdef wxHAVE_RAW_BITMAP
+#endif // wxHAS_RAW_BITMAP
 
 // ----------------------------------------------------------------------------
 // wxMask
