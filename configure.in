@@ -6615,6 +6615,7 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
         AC_CACHE_CHECK([what is the type of the fifth argument of getsockopt],
                        wx_cv_type_getsockopt5,
             [
+                AC_LANG_PUSH(C++)
                 AC_TRY_COMPILE(
                     [
                         #include <sys/types.h>
@@ -6658,6 +6659,7 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
                         AC_LANG_POP()
                     ]
                 )
+                AC_LANG_POP()
             ])
 
         if test "$wx_cv_type_getsockopt5" = "unknown"; then
