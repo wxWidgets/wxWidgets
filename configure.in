@@ -4182,8 +4182,9 @@ if test "$ac_cv_func_vsscanf" = "yes"; then
                     #endif
                 ],
                 [
-                    char *buf, *parse;
-                    vsscanf(buf, "%s", parse);
+                    char *buf;
+                    va_list args;
+                    vsscanf(buf, "%s", args);
                 ],
                 wx_cv_func_vsscanf_decl=yes,
                 wx_cv_func_vsscanf_decl=no
