@@ -25,7 +25,10 @@
 #include "wx/url.h"
 
 // Test wxURL & wxURI compat?
-#define TEST_URL ( 1 && wxUSE_URL )
+#define TEST_URL wxUSE_URL
+
+// Uncomment this to test stuff requiring real network access
+#define TEST_NET
 
 // ----------------------------------------------------------------------------
 // test class
@@ -338,9 +341,11 @@ void URITestCase::URLCompat()
 
     CPPUNIT_ASSERT(url.GetError() == wxURL_NOERR);
 
+#if TEST_NET
     wxInputStream* pInput = url.GetInputStream();
 
     CPPUNIT_ASSERT( pInput != NULL );
+#endif // TEST_NET
 
     CPPUNIT_ASSERT( url == wxURL(wxT("http://user:password@wxwidgets.org")) );
 
