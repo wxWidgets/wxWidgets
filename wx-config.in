@@ -1194,7 +1194,7 @@ fi
 if is_installed; then
     _include_cppflags="-I${includedir}/wx-@WX_RELEASE@@WX_FLAVOUR@"
 else
-    _include_cppflags="-I${includedir} -I${prefix}/contrib/include"
+    _include_cppflags="-I${includedir}"
 fi
 
 _cppflags=`echo "-I${libdir}/wx/include/@TOOLCHAIN_FULLNAME@" $_include_cppflags "@WXCONFIG_CPPFLAGS@" $_gui_cppflags`
@@ -1271,7 +1271,6 @@ if [ -n "$output_option_rescomp" ]; then
                            "@WXCONFIG_RESFLAGS@"
         else
             echo "@RESCOMP@ --include-dir ${includedir}" \
-                           "--include-dir ${prefix}/contrib/include" \
                            "@WXCONFIG_RESFLAGS@"
         fi
         ;;

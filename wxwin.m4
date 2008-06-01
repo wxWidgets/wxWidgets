@@ -152,9 +152,9 @@ dnl to use. Set WX_CONFIG_PATH to specify the full path to wx-config - in this
 dnl case the macro won't even waste time on tests for its existence.
 dnl
 dnl Optional WX-LIBS argument contains comma- or space-separated list of
-dnl wxWidgets libraries to link against (it may include contrib libraries). If
-dnl it is not specified then WX_LIBS and WX_LIBS_STATIC will contain flags to
-dnl link with all of the core wxWidgets libraries.
+dnl wxWidgets libraries to link against. If it is not specified then WX_LIBS
+dnl and WX_LIBS_STATIC will contain flags to link with all of the core
+dnl wxWidgets libraries.
 dnl
 dnl Optional ADDITIONAL-WX-CONFIG-FLAGS argument is appended to wx-config
 dnl invocation command in present. It can be used to fine-tune lookup of
