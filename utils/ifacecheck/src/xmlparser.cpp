@@ -520,7 +520,7 @@ bool getMemberIDs(wxClassMemberIdHashMap* map, wxClass* p, const wxStringCharTyp
     while (curpos < end)
     {
         // curpos always points to the underscore of the next token to parse:
-#if wxUSE_UNICODE_UTF8
+#if wxUSE_UNICODE_WCHAR
         unsigned long id = wcstoul(curpos+1, &nexttoken, GCCXML_BASE);
 #else
         unsigned long id = strtoul(curpos+1, &nexttoken, GCCXML_BASE);
