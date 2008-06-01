@@ -121,4 +121,26 @@
         <show log="compile"/>
     </steps>
 </build>
+
+<build>
+    <name>MingW-W64 cross_wxMSW Trunk</name>
+    <builddir>psh_mingw64_trunk</builddir>
+
+    <steps>
+        <extractlogs/>
+        <show log="configure"/>
+        <show log="compile"/>
+    </steps>
+</build>
+
+<build>
+    <name>MingW-W64 cross_wxMSW Stable</name>
+    <builddir>psh_mingw64_stable</builddir>
+
+    <steps>
+        <extractlogs/>
+        <show log="configure"/>
+        <show log="compile"/>
+    </steps>
+</build>
 </bot>
