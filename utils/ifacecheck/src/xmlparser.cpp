@@ -484,10 +484,10 @@ typedef std::map<unsigned long, toResolveTypeItem> wxToResolveTypeHashMap;
 bool getID(unsigned long *id, const wxStringCharType* str)
 {
     wxStringCharType *end;
-#if wxUSE_UNICODE_UTF8
-    unsigned long val = strtoul(str+1, &end, GCCXML_BASE);
-#else
+#if wxUSE_UNICODE_WCHAR
     unsigned long val = wcstoul(str+1, &end, GCCXML_BASE);
+#else
+    unsigned long val = strtoul(str+1, &end, GCCXML_BASE);
 #endif
 
     // return true only if scan was stopped by the terminating NUL and
@@ -504,10 +504,10 @@ bool getID(unsigned long *id, const wxStringCharType* str)
 // in nodes like <Class> ones... i.e. numeric values separed by " _" token
 bool getMemberIDs(wxClassMemberIdHashMap* map, wxClass* p, const wxStringCharType* str)
 {
-#if wxUSE_UNICODE_UTF8
-    size_t len = strlen(str);
-#else
+#if wxUSE_UNICODE_WCHAR
     size_t len = wcslen(str);
+#else
+    size_t len = strlen(str);
 #endif
 
     if (len == 0 || str[0] != '_')
@@ -521,9 +521,9 @@ bool getMemberIDs(wxClassMemberIdHashMap* map, wxClass* p, const wxStringCharTyp
     {
         // curpos always points to the underscore of the next token to parse:
 #if wxUSE_UNICODE_UTF8
-        unsigned long id = strtoul(curpos+1, &nexttoken, GCCXML_BASE);
-#else
         unsigned long id = wcstoul(curpos+1, &nexttoken, GCCXML_BASE);
+#else
+        unsigned long id = strtoul(curpos+1, &nexttoken, GCCXML_BASE);
 #endif
         if ( *nexttoken != ' ' || errno == ERANGE || errno == EINVAL )
             return false;
