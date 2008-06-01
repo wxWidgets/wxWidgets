@@ -719,6 +719,13 @@ void DateTimeTestCase::TestTimeSpanFormat()
 
 void DateTimeTestCase::TestTimeTicks()
 {
+    static const wxDateTime::TZ TZ_TEST = wxDateTime::NZST;
+
+    // this test depends on the local time zone so to make it work everywhere
+    // we need to adjust the expected results
+    const long tzOffset = wxDateTime::TimeZone(wxDateTime::Local).GetOffset() -
+                          wxDateTime::TimeZone(TZ_TEST).GetOffset();
+
     for ( size_t n = 0; n < WXSIZEOF(testDates); n++ )
     {
         const Date& d = testDates[n];
@@ -726,14 +733,13 @@ void DateTimeTestCase::TestTimeTicks()
             continue;
 
         wxDateTime dt = d.DT();
-        //RN:  Translate according to test's time zone
-        //2nd param is to ignore DST - it's already factored
-        //into Vadim's tests
-        dt.MakeTimezone(wxDateTime::WEST, true);
-        long ticks = (dt.GetValue() / 1000).ToLong();
-        CPPUNIT_ASSERT_EQUAL( d.ticks, ticks );
 
-        dt = d.DT().FromTimezone(wxDateTime::GMT0);
+        // ignore DST, the test data already takes it into account
+        dt.MakeTimezone(TZ_TEST, true);
+        long ticks = (dt.GetValue() / 1000).ToLong();
+        CPPUNIT_ASSERT_EQUAL( d.ticks, ticks + tzOffset );
+
+        dt = d.DT().FromTimezone(wxDateTime::UTC);
         ticks = (dt.GetValue() / 1000).ToLong();
         CPPUNIT_ASSERT_EQUAL( d.gmticks, ticks );
     }
