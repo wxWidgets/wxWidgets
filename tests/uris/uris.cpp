@@ -27,8 +27,8 @@
 // Test wxURL & wxURI compat?
 #define TEST_URL wxUSE_URL
 
-// Uncomment this to test stuff requiring real network access
-#define TEST_NET
+// Set this to 1 to test stuff requiring real network access
+#define TEST_NET 0
 
 // ----------------------------------------------------------------------------
 // test class
