@@ -127,6 +127,8 @@ public:
 
     wxTextOutputStream& PutChar(wxChar c);
 
+    void Flush();
+
     wxTextOutputStream& operator<<(const wxString& string);
     wxTextOutputStream& operator<<(char c);
 #if wxUSE_UNICODE && wxWCHAR_T_IS_REAL_TYPE

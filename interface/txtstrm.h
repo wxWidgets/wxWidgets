@@ -196,10 +196,10 @@ typedef enum
     @class wxTextOutputStream
     @wxheader{txtstrm.h}
 
-    This class provides functions that writes text data using an output stream,
+    This class provides functions that write text data using an output stream,
     allowing you to write text, floats, and integers.
 
-    You can also simulate the C++ cout class:
+    You can also simulate the C++ @c std::cout class:
 
     @code
     wxFFileOutputStream output( stderr );
@@ -239,8 +239,21 @@ public:
 
     /**
         Destroys the wxTextOutputStream object.
+
+        Also calls Flush().
     */
     ~wxTextOutputStream();
+
+    /**
+        Flushes the stream.
+
+        This method should be called when using stateful encodings (currently
+        the only example of such encoding in wxWidgets is wxMBConvUTF7) to
+        write the end of the encoded data to the stream.
+
+        @since 2.9.0
+     */
+    void Flush();
 
     /**
         Returns the end-of-line mode. One of ::wxEOL_DOS, ::wxEOL_MAC and

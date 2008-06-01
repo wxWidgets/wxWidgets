@@ -1050,6 +1050,9 @@ void MBConvTestCase::TestStreamEncoder(
     {
         textOutputStream.PutChar( wideBuffer[i] );
     }
+
+    textOutputStream.Flush();
+
     CPPUNIT_ASSERT_EQUAL( (wxFileOffset)multiBytes, memoryOutputStream.TellO() );
     wxCharBuffer copy( memoryOutputStream.TellO() );
     memoryOutputStream.CopyTo( copy.data(), memoryOutputStream.TellO());

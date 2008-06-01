@@ -426,6 +426,19 @@ wxTextOutputStream& wxTextOutputStream::PutChar(wxChar c)
     return *this;
 }
 
+void wxTextOutputStream::Flush()
+{
+#if wxUSE_UNICODE
+    const size_t len = m_conv->FromWChar(NULL, 0, L"", 1);
+    if ( len > m_conv->GetMBNulLen() )
+    {
+        wxCharBuffer buf(len);
+        m_conv->FromWChar(buf.data(), len, L"", 1);
+        m_output.Write(buf, len - m_conv->GetMBNulLen());
+    }
+#endif // wxUSE_UNICODE
+}
+
 wxTextOutputStream& wxTextOutputStream::operator<<(const wxString& string)
 {
     WriteString( string );
