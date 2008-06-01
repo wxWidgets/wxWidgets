@@ -97,6 +97,7 @@ All:
 - Fixed bug with parsing negative time zones in wxDateTime::ParseRfc822Date().
 - Initialize current line in wxTextBuffer ctor (Suzuki Masahiro).
 - Improved performance of XML parsing (Francesco Montorsi).
+- Fix wxDateTime::ParseRfc822Date() to handle missing seconds (Joe Nader).
 
 All (GUI):
 
