@@ -173,8 +173,8 @@ bool TextEditView::OnCreate(wxDocument *doc, long WXUNUSED(flags) )
 #ifdef __X__
     // X seems to require a forced resize
     int x, y;
-    frame->GetSize(&x, &y);
-    frame->SetSize(wxDefaultCoord, wxDefaultCoord, x, y);
+    m_frame->GetSize(&x, &y);
+    m_frame->SetSize(wxDefaultCoord, wxDefaultCoord, x, y);
 #endif
 
     m_frame->Show(true);
