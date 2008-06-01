@@ -291,6 +291,17 @@ public:
     This class converts between the UTF-7 encoding and Unicode.
     It has one predefined instance, @b wxConvUTF7.
 
+    Notice that, unlike all the other conversion objects, this converter is
+    stateful, i.e. it remembers its state from the last call to its ToWChar()
+    or FromWChar() and assumes it is called on the continuation of the same
+    string when the same method is called again. This assumption is only made
+    if an explicit length is specified as parameter to these functions as if an
+    entire @c NUL terminated string is processed the state doesn't need to be
+    remembered.
+
+    This also means that, unlike the other predefined conversion objects,
+    @b wxConvUTF7 is @em not thread-safe.
+
     @library{wxbase}
     @category{conv}
 

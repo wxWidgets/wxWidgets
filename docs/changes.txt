@@ -271,6 +271,7 @@ All:
 - wxString now uses std::[w]string internally by default, meaning that it is
   now thread-safe if the standard library provided with your compiler is.
 - Added wxCmdLineParser::AddUsageText() (Marcin 'Malcom' Malich).
+- Fix reading/writing UTF-7-encoded text streams.
 
 All (Unix):
 

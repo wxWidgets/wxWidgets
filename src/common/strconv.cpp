@@ -484,6 +484,8 @@ wxConvBrokenFileNames::wxConvBrokenFileNames(const wxString& charset)
 // ----------------------------------------------------------------------------
 
 // Implementation (C) 2004 Fredrik Roubert
+//
+// Changes to work in streaming mode (C) 2008 Vadim Zeitlin
 
 //
 // BASE64 decoding table
@@ -521,72 +523,134 @@ static const unsigned char utf7unb64[] =
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff 
 };
 
-size_t wxMBConvUTF7::MB2WC(wchar_t *buf, const char *psz, size_t n) const
+size_t wxMBConvUTF7::ToWChar(wchar_t *dst, size_t dstLen,
+                             const char *src, size_t srcLen) const
 {
+    DecoderState stateOrig,
+         *statePtr;
+    if ( srcLen == wxNO_LEN )
+    {
+        // convert the entire string, up to and including the trailing NUL
+        srcLen = strlen(src) + 1;
+
+        // when working on the entire strings we don't update nor use the shift
+        // state from the previous call
+        statePtr = &stateOrig;
+    }
+    else // when working with partial strings we do use the shift state
+    {
+        statePtr = wx_const_cast(DecoderState *, &m_stateDecoder);
+
+        // also save the old state to be able to rollback to it on error
+        stateOrig = m_stateDecoder;
+    }
+
+    // but to simplify the code below we use this variable in both cases
+    DecoderState& state = *statePtr;
+
+
+    // number of characters [which would have been] written to dst [if it were
+    // not NULL]
     size_t len = 0;
 
-    while ( *psz && (!buf || (len < n)) )
+    const char * const srcEnd = src + srcLen;
+
+    while ( (src < srcEnd) && (!dst || (len < dstLen)) )
     {
-        unsigned char cc = *psz++;
-        if (cc != '+')
+        const unsigned char cc = *src++;
+
+        if ( state.IsShifted() )
         {
-            // plain ASCII char
-            if (buf)
-                *buf++ = cc;
-            len++;
-        }
-        else if (*psz == '-')
-        {
-            // encoded plus sign
-            if (buf)
-                *buf++ = cc;
-            len++;
-            psz++;
-        }
-        else // start of BASE64 encoded string
-        {
-            bool lsb, ok;
-            unsigned int d, l;
-            for ( ok = lsb = false, d = 0, l = 0;
-                  (cc = utf7unb64[(unsigned char)*psz]) != 0xff;
-                  psz++ )
+            const unsigned char dc = utf7unb64[cc];
+            if ( dc == 0xff )
             {
-                d <<= 6;
-                d += cc;
-                for (l += 6; l >= 8; lsb = !lsb)
+                // end of encoded part
+                state.ToDirect();
+
+                // re-parse this character normally below unless it's '-' which
+                // is consumed by the decoder
+                if ( cc == '-' )
+                    continue;
+            }
+            else // valid encoded character
+            {
+                // mini base64 decoder: each character is 6 bits
+                state.bit += 6;
+                state.accum <<= 6;
+                state.accum += dc;
+
+                if ( state.bit >= 8 )
                 {
-                    unsigned char c = (unsigned char)((d >> (l -= 8)) % 256);
-                    if (lsb)
+                    // got the full byte, consume it
+                    state.bit -= 8;
+                    unsigned char b = (state.accum >> state.bit) & 0x00ff;
+
+                    if ( state.isLSB )
                     {
-                        if (buf)
-                            *buf++ |= c;
-                        len ++;
-                        ok = true;
+                        // we've got the full word, output it
+                        if ( dst )
+                            *dst++ = (state.msb << 8) | b;
+                        len++;
+                        state.isLSB = false;
                     }
-                    else
+                    else // MSB
                     {
-                        if (buf)
-                            *buf = (wchar_t)(c << 8);
+                        // just store it while we wait for LSB
+                        state.msb = b;
+                        state.isLSB = true;
                     }
                 }
             }
+        }
 
-            if ( !ok )
+        if ( state.IsDirect() )
+        {
+            // start of an encoded segment?
+            if ( cc == '+' )
             {
-                // in valid UTF7 we should have valid characters after '+'
-                return wxCONV_FAILED;
-            }
+                if ( src == srcEnd )
+                    return wxCONV_FAILED; // can't have '+' at the end
 
-            if (*psz == '-')
-                psz++;
+                if ( *src == '-' )
+                {
+                    // just the encoded plus sign, don't switch to shifted mode
+                    if ( dst )
+                        *dst++ = '+';
+                    len++;
+                    src++;
+                }
+                else
+                {
+                    state.ToShifted();
+                }
+            }
+            else // not '+'
+            {
+                // only printable 7 bit ASCII characters (with the exception of
+                // NUL, TAB, CR and LF) can be used directly
+                if ( cc >= 0x7f || (cc < ' ' &&
+                      !(cc == '\0' || cc == '\t' || cc == '\r' || cc == '\n')) )
+                    return wxCONV_FAILED;
+
+                if ( dst )
+                    *dst++ = cc;
+                len++;
+            }
         }
     }
 
-    if ( buf && (len < n) )
-        *buf = '\0';
+    if ( !len )
+    {
+        // as we didn't read any characters we should be called with the same
+        // data (followed by some more new data) again later so don't save our
+        // state
+        state = stateOrig;
+
+        return wxCONV_FAILED;
+    }
 
     return len;
 }
@@ -616,7 +680,7 @@ static const unsigned char utf7enb64[] =
 //
 static const unsigned char utf7encode[128] =
 {
-    3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 3, 3, 2, 3, 3,
+    0, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 3, 3, 2, 3, 3,
     3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
     2, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 3, 0, 0, 0, 3,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0,
@@ -626,20 +690,71 @@ static const unsigned char utf7encode[128] =
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 3, 3
 };
 
-size_t wxMBConvUTF7::WC2MB(char *buf, const wchar_t *psz, size_t n) const
+static inline bool wxIsUTF7Direct(wchar_t wc)
 {
+    return wc < 0x80 && utf7encode[wc] < 1;
+}
+
+size_t wxMBConvUTF7::FromWChar(char *dst, size_t dstLen,
+                               const wchar_t *src, size_t srcLen) const
+{
+    EncoderState stateOrig,
+                *statePtr;
+    if ( srcLen == wxNO_LEN )
+    {
+        // we don't apply the stored state when operating on entire strings at
+        // once
+        statePtr = &stateOrig;
+
+        srcLen = wxWcslen(src) + 1;
+    }
+    else // do use the mode we left the output in previously
+    {
+        stateOrig = m_stateEncoder;
+        statePtr = wx_const_cast(EncoderState *, &m_stateEncoder);
+    }
+
+    EncoderState& state = *statePtr;
+
+
     size_t len = 0;
 
-    while (*psz && ((!buf) || (len < n)))
+    const wchar_t * const srcEnd = src + srcLen;
+    while ( src < srcEnd && (!dst || len < dstLen) )
     {
-        wchar_t cc = *psz++;
-        if (cc < 0x80 && utf7encode[cc] < 1)
+        wchar_t cc = *src++;
+        if ( wxIsUTF7Direct(cc) )
         {
-            // plain ASCII char
-            if (buf)
-                *buf++ = (char)cc;
+            if ( state.IsShifted() )
+            {
+                // pad with zeros the last encoded block if necessary
+                if ( state.bit )
+                {
+                    if ( dst )
+                        *dst++ = utf7enb64[((state.accum % 16) << (6 - state.bit)) % 64];
+                    len++;
+                }
 
+                state.ToDirect();
+
+                if ( dst )
+                    *dst++ = '-';
+                len++;
+            }
+
+            if ( dst )
+                *dst++ = (char)cc;
             len++;
+        }
+        else if ( cc == '+' && state.IsDirect() )
+        {
+            if ( dst )
+            {
+                *dst++ = '+';
+                *dst++ = '-';
+            }
+
+            len += 2;
         }
 #ifndef WC_UTF16
         else if (((wxUint32)cc) > 0xffff)
@@ -650,52 +765,45 @@ size_t wxMBConvUTF7::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 #endif
         else
         {
-            if (buf)
-                *buf++ = '+';
-
-            len++;
-            if (cc != '+')
+            if ( state.IsDirect() )
             {
-                // BASE64 encode string
-                unsigned int lsb, d, l;
-                for (d = 0, l = 0; /*nothing*/; psz++)
-                {
-                    for (lsb = 0; lsb < 2; lsb ++)
-                    {
-                        d <<= 8;
-                        d += lsb ? cc & 0xff : (cc & 0xff00) >> 8;
+                state.ToShifted();
 
-                        for (l += 8; l >= 6; )
-                        {
-                            l -= 6;
-                            if (buf)
-                                *buf++ = utf7enb64[(d >> l) % 64];
-                            len++;
-                        }
-                    }
-
-                    cc = *psz;
-                    if (!(cc) || (cc < 0x80 && utf7encode[cc] < 1))
-                        break;
-                }
-
-                if (l != 0)
-                {
-                    if (buf)
-                        *buf++ = utf7enb64[((d % 16) << (6 - l)) % 64];
-
-                    len++;
-                }
+                if ( dst )
+                    *dst++ = '+';
+                len++;
             }
 
-            if (buf)
-                *buf++ = '-';
-            len++;
+            // BASE64 encode string
+            for ( ;; )
+            {
+                for ( unsigned lsb = 0; lsb < 2; lsb++ )
+                {
+                    state.accum <<= 8;
+                    state.accum += lsb ? cc & 0xff : (cc & 0xff00) >> 8;
+
+                    for (state.bit += 8; state.bit >= 6; )
+                    {
+                        state.bit -= 6;
+                        if ( dst )
+                            *dst++ = utf7enb64[(state.accum >> state.bit) % 64];
+                        len++;
+                    }
+                }
+
+                if ( src == srcEnd || wxIsUTF7Direct(cc = *src) )
+                    break;
+
+                src++;
+            }
         }
     }
 
-    if (buf && (len < n))
-        *buf = 0;
+    // we need to restore the original encoder state if we were called just to
+    // calculate the amount of space needed as we will presumably be called
+    // again to really convert the data now
+    if ( !dst )
+        state = stateOrig;
 
     return len;
 }

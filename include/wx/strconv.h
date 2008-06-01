@@ -249,10 +249,81 @@ private:
 class WXDLLIMPEXP_BASE wxMBConvUTF7 : public wxMBConv
 {
 public:
-    virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const;
-    virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
+    wxMBConvUTF7() { }
+
+    // compiler-generated copy ctor, assignment operator and dtor are ok
+    // (assuming it's ok to copy the shift state -- not really sure about it)
+
+    virtual size_t ToWChar(wchar_t *dst, size_t dstLen,
+                           const char *src, size_t srcLen = wxNO_LEN) const;
+    virtual size_t FromWChar(char *dst, size_t dstLen,
+                             const wchar_t *src, size_t srcLen = wxNO_LEN) const;
 
     virtual wxMBConv *Clone() const { return new wxMBConvUTF7; }
+
+private:
+    // UTF-7 decoder/encoder may be in direct mode or in shifted mode after a
+    // '+' (and until the '-' or any other non-base64 character)
+    enum Mode
+    {
+        Direct,     // pass through state
+        Shifted     // after a '+' (and before '-')
+    };
+
+    // the current decoder state: this is only used by ToWChar() if srcLen
+    // parameter is not wxNO_LEN, when working on the entire NUL-terminated
+    // strings we neither update nor use the state
+    class DecoderState
+    {
+    private:
+        // current state: this one is private as we want to enforce the use of
+        // ToDirect/ToShifted() methods below
+        Mode mode;
+
+    public:
+        // the initial state is direct
+        DecoderState() { mode = Direct; }
+
+        // switch to/from shifted mode
+        void ToDirect() { mode = Direct; }
+        void ToShifted() { mode = Shifted; accum = bit = 0; isLSB = false; }
+
+        bool IsDirect() const { return mode == Direct; }
+        bool IsShifted() const { return mode == Shifted; }
+
+
+        // these variables are only used in shifted mode
+
+        unsigned int accum; // accumulator of the bit we've already got
+        unsigned int bit;   // the number of bits consumed mod 8
+        unsigned char msb;  // the high byte of UTF-16 word
+        bool isLSB;         // whether we're decoding LSB or MSB of UTF-16 word
+    };
+
+    DecoderState m_stateDecoder;
+
+
+    // encoder state is simpler as we always receive entire Unicode characters
+    // on input
+    class EncoderState
+    {
+    private:
+        Mode mode;
+
+    public:
+        EncoderState() { mode = Direct; }
+
+        void ToDirect() { mode = Direct; }
+        void ToShifted() { mode = Shifted; accum = bit = 0; }
+
+        bool IsDirect() const { return mode == Direct; }
+        bool IsShifted() const { return mode == Shifted; }
+
+        unsigned int accum;
+        unsigned int bit;
+    };
+
+    EncoderState m_stateEncoder;
 };
 
 // ----------------------------------------------------------------------------
