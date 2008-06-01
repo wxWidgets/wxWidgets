@@ -90,8 +90,10 @@
     #define wxHAS_RAW_BITMAP
 #endif
 
-/* deprecated synonym which exists for compatibility only */
-#define wxHAVE_RAW_BITMAP wxHAS_RAW_BITMAP
+/* also define deprecated synonym which exists for compatibility only */
+#ifdef wxHAS_RAW_BITMAP
+    #define wxHAVE_RAW_BITMAP
+#endif
 
 #endif /*  _WX_FEATURES_H_ */
 
