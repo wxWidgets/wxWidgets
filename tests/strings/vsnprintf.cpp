@@ -19,6 +19,8 @@
     #pragma hdrstop
 #endif
 
+#include "wx/crt.h"
+
 #if wxUSE_WXVSNPRINTF
 
 #ifndef WX_PRECOMP
