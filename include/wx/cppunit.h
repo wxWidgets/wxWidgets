@@ -104,6 +104,10 @@
         }                                                                     \
     }
 
+// Use this macro to compare the expected time_t value with the result of not
+// necessarily time_t type
+#define WX_ASSERT_TIME_T_EQUAL(t, n) CPPUNIT_ASSERT_EQUAL((t), (time_t)(n))
+
 // Use this macro to assert with the given formatted message (it should contain
 // the format string and arguments in a separate pair of parentheses)
 #define WX_ASSERT_MESSAGE(msg, cond) \

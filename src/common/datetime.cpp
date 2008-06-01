@@ -376,11 +376,13 @@ wxDateTime::Country wxDateTime::ms_country = wxDateTime::Country_Unknown;
 
 // debugger helper: shows what the date really is
 #ifdef __WXDEBUG__
-extern const wxChar *wxDumpDate(const wxDateTime* dt)
+extern const char *wxDumpDate(const wxDateTime* dt)
 {
-    static wxChar buf[128];
+    static char buf[128];
 
-    wxStrcpy(buf, dt->Format(_T("%Y-%m-%d (%a) %H:%M:%S")));
+    wxString fmt(dt->Format("%Y-%m-%d (%a) %H:%M:%S"));
+    wxStrncpy(buf, fmt + " (" + dt->GetValue().ToString() + " ticks)",
+              WXSIZEOF(buf));
 
     return buf;
 }

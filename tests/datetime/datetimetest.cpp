@@ -737,11 +737,11 @@ void DateTimeTestCase::TestTimeTicks()
         // ignore DST, the test data already takes it into account
         dt.MakeTimezone(TZ_TEST, true);
         long ticks = (dt.GetValue() / 1000).ToLong();
-        CPPUNIT_ASSERT_EQUAL( d.ticks, ticks + tzOffset );
+        WX_ASSERT_TIME_T_EQUAL( d.ticks, ticks + tzOffset );
 
         dt = d.DT().FromTimezone(wxDateTime::UTC);
         ticks = (dt.GetValue() / 1000).ToLong();
-        CPPUNIT_ASSERT_EQUAL( d.gmticks, ticks );
+        WX_ASSERT_TIME_T_EQUAL( d.gmticks, ticks );
     }
 }
 
