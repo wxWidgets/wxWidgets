@@ -987,7 +987,7 @@ wxMBConvStrictUTF8::FromWChar(char *dst, size_t dstLen,
 
     for ( const wchar_t *wp = src; ; wp++ )
     {
-        if ( !(srcLen == wxNO_LEN ? *wp : srcLen--) )
+        if ( !(srcLen == wxNO_LEN ? *wp : srcLen) )
         {
             // all done successfully, just add the trailing NULL if we are not
             // using explicit length
@@ -1007,6 +1007,8 @@ wxMBConvStrictUTF8::FromWChar(char *dst, size_t dstLen,
             return written;
         }
 
+        if ( srcLen != wxNO_LEN )
+            srcLen--;
 
         wxUint32 code;
 #ifdef WC_UTF16
