@@ -233,7 +233,9 @@ public:
     void OnLeftDown(wxMouseEvent& event);
     void OnRightDown(wxMouseEvent& event);
 
+#if wxUSE_DRAG_AND_DROP
     void OnBeginDrag(wxTreeEvent& event);
+#endif // wxUSE_DRAG_AND_DROP
 
     void OnUpdateUIMoveByDefault(wxUpdateUIEvent& event);
 
@@ -241,8 +243,10 @@ public:
     void OnUpdateUIPasteBitmap(wxUpdateUIEvent& event);
 
 private:
+#if wxUSE_DRAG_AND_DROP
     // show the result of a dnd operation in the status bar
     void LogDragResult(wxDragResult result);
+#endif // wxUSE_DRAG_AND_DROP
 
 
     // GUI controls
@@ -1010,6 +1014,7 @@ DnDFrame::DnDFrame()
     m_ctrlFile->SetDropTarget(new DnDFile(m_ctrlFile));
     m_ctrlText->SetDropTarget(new DnDText(m_ctrlText));
 
+#if wxUSE_DRAG_AND_DROP
     m_ctrlDir->Connect
     (
         wxID_ANY,
@@ -1018,6 +1023,7 @@ DnDFrame::DnDFrame()
         NULL,
         this
     );
+#endif // wxUSE_DRAG_AND_DROP
 
 #if wxUSE_LOG
     m_ctrlLog->SetDropTarget(new URLDropTarget);
@@ -1190,6 +1196,8 @@ void DnDFrame::OnLogClear(wxCommandEvent& /* event */ )
 }
 #endif // wxUSE_LOG
 
+#if wxUSE_DRAG_AND_DROP
+
 void DnDFrame::LogDragResult(wxDragResult result)
 {
 #if wxUSE_STATUSBAR
@@ -1209,6 +1217,8 @@ void DnDFrame::LogDragResult(wxDragResult result)
     wxUnusedVar(result);
 #endif // wxUSE_STATUSBAR
 }
+
+#endif // wxUSE_DRAG_AND_DROP
 
 void DnDFrame::OnLeftDown(wxMouseEvent &WXUNUSED(event) )
 {
@@ -1263,6 +1273,8 @@ void DnDFrame::OnUsePrimary(wxCommandEvent& event)
                                                          : _T("clipboard"));
 }
 
+#if wxUSE_DRAG_AND_DROP
+
 void DnDFrame::OnBeginDrag(wxTreeEvent& WXUNUSED(event))
 {
     wxFileDataObject data;
@@ -1273,6 +1285,8 @@ void DnDFrame::OnBeginDrag(wxTreeEvent& WXUNUSED(event))
 
     LogDragResult(dragSource.DoDragDrop());
 }
+
+#endif // wxUSE_DRAG_AND_DROP
 
 // ---------------------------------------------------------------------------
 // bitmap clipboard
