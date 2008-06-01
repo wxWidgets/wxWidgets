@@ -101,17 +101,12 @@ public:
         : wxToolBarToolBase(tbar, control, label)
     {
         Init();
-    }
-
-    virtual ~wxToolBarTool()
-    {
-        if ( IsControl() && !m_item )
-        {
-            // if we're a control which is not currently attached to the
-            // toolbar (as indicated by NULL m_item), we must undo the extra
-            // reference we added in DoDeleteTool()
-            g_object_unref(GetControl()->m_widget);
-        }
+        // Hold a reference to keep control alive until DoInsertTool() is
+        // called, or if RemoveTool() is called (see DoDeleteTool)
+        g_object_ref(control->m_widget);
+        // release reference when gtk_widget_destroy() is called on control
+        g_signal_connect(
+            control->m_widget, "destroy", G_CALLBACK(g_object_unref), NULL);
     }
 
     // is this a radio button?
@@ -153,6 +148,8 @@ public:
     // the toolbar element for button tools or a GtkAlignment containing the
     // control for control tools
     GtkWidget *m_item;
+    // dropdown element for button tools
+    GtkWidget *m_itemDropdown;
 
     // a GtkImage containing the image for a button-type tool, may be NULL
     GtkWidget *m_image;
@@ -359,11 +356,9 @@ size_request(GtkWidget*, GtkRequisition* req, wxToolBar* win)
 //-----------------------------------------------------------------------------
 
 static void wxInsertChildInToolBar( wxWindow* WXUNUSED(parent),
-                                    wxWindow* child)
+                                    wxWindow* /* child */)
 {
-    // Child widget will be inserted into GtkToolbar by DoInsertTool. Ref it
-    // here so reparenting into wxToolBar doesn't delete it.
-    g_object_ref(child->m_widget);
+    // Child widget will be inserted into GtkToolbar by DoInsertTool()
 }
 
 // ----------------------------------------------------------------------------
@@ -373,6 +368,7 @@ static void wxInsertChildInToolBar( wxWindow* WXUNUSED(parent),
 void wxToolBarTool::Init()
 {
     m_item =
+    m_itemDropdown =
     m_image = NULL;
 }
 
@@ -605,6 +601,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
                     GtkWidget *image = gtk_image_new_from_pixbuf( pixbuf );
                     gtk_widget_show( image );
                     gtk_container_add( GTK_CONTAINER(dropdown), image );
+                    g_object_unref(pixbuf);
 
                     if (GetWindowStyle() & wxTB_FLAT)
                         gtk_button_set_relief( GTK_BUTTON(dropdown), GTK_RELIEF_NONE );
@@ -628,6 +625,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 
                     gtk_toolbar_insert_widget(m_toolbar, dropdown, NULL, NULL,
                                               posGtk + 1);
+                    tool->m_itemDropdown = dropdown;
                 }
             }
             break;
@@ -642,9 +640,6 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
             gtk_container_add(GTK_CONTAINER(align),
                               tool->GetControl()->m_widget);
             gtk_toolbar_insert_widget(m_toolbar, align, NULL, NULL, posGtk);
-
-            // release reference obtained by wxInsertChildInToolBar
-            g_object_unref(tool->GetControl()->m_widget);
 
             // remember the container we're in so that we could remove
             // ourselves from it when we're detached from the toolbar
@@ -668,16 +663,18 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *toolBase)
             // RemoveTool() and then we need to keep the control alive;
             // while if we're called from DeleteTool() the control will
             // be destroyed when wxToolBarToolBase itself is deleted
-            {
-                GtkWidget * const w = tool->GetControl()->m_widget;
-                g_object_ref(w);
-                gtk_container_remove(GTK_CONTAINER(tool->m_item), w);
-            }
+            gtk_container_remove(
+                GTK_CONTAINER(tool->m_item), tool->GetControl()->m_widget);
             // fall through
 
         case wxTOOL_STYLE_BUTTON:
             gtk_widget_destroy( tool->m_item );
             tool->m_item = NULL;
+            if (tool->m_itemDropdown)
+            {
+                gtk_widget_destroy(tool->m_itemDropdown);
+                tool->m_itemDropdown = NULL;
+            }
             break;
 
         case wxTOOL_STYLE_SEPARATOR:
