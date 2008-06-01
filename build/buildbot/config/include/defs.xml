@@ -372,7 +372,7 @@ cd tests &amp;&amp;
 <normalize-space>
 cd tests &amp;&amp;
 ./test &amp;&amp;
-if [ -x test_gui ]; then ./test_gui; fi
+if [ -n "$DISPLAY" -a -x test_gui ]; then ./test_gui; fi
 </normalize-space>
 </xsl:template>
 
