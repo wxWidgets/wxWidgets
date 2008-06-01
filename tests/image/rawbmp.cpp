@@ -18,6 +18,8 @@
     #pragma hdrstop
 #endif
 
+#ifdef wxHAS_RAW_BITMAP
+
 #ifndef WX_PRECOMP
 #endif // WX_PRECOMP
 
@@ -82,3 +84,5 @@ void ImageRawTestCase::RGBImage()
     ASSERT_COL_EQUAL( 0, image.GetGreen(0, 1) );
     ASSERT_COL_EQUAL( 0, image.GetGreen(1, 0) );
 }
+
+#endif // wxHAS_RAW_BITMAP

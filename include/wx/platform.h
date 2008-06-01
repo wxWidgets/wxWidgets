@@ -612,15 +612,6 @@
     #define wxCHECK_SUNCC_VERSION(maj, min) (0)
 #endif
 
-#if defined (__WXMSW__)
-#    if !defined(__WATCOMC__)
-#        define wxHAVE_RAW_BITMAP
-#    endif
-#endif
-#if defined(__WXGTK20__) || defined(__WXMAC__)
-#    define wxHAVE_RAW_BITMAP
-#endif
-
 /*
     Handle Darwin gcc universal compilation.  Don't do this in an Apple-
     specific case since no sane compiler should be defining either
