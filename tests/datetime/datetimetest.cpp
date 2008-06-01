@@ -718,23 +718,31 @@ void DateTimeTestCase::TestTimeSpanFormat()
 
 void DateTimeTestCase::TestTimeTicks()
 {
+    static const wxDateTime::TimeZone TZ_LOCAL(wxDateTime::Local);
+    static const wxDateTime::TimeZone TZ_TEST(wxDateTime::NZST);
+
+    // this offset is needed to make the test work in any time zone when we
+    // only have expected test results in UTC in testDates
+    static const long tzOffset = TZ_LOCAL.GetOffset() - TZ_TEST.GetOffset();
+
     for ( size_t n = 0; n < WXSIZEOF(testDates); n++ )
     {
         const Date& d = testDates[n];
-        if ( d.ticks == -1 )
+        if ( d.gmticks == -1 )
             continue;
 
-        wxDateTime dt = d.DT();
-        //RN:  Translate according to test's time zone
-        //2nd param is to ignore DST - it's already factored
-        //into Vadim's tests
-        dt.MakeTimezone(wxDateTime::WEST, true);
-        long ticks = (dt.GetValue() / 1000).ToLong();
-        CPPUNIT_ASSERT( ticks == d.ticks );
+        wxDateTime dt = d.DT().MakeTimezone(TZ_TEST, true /* no DST */);
 
-        dt = d.DT().FromTimezone(wxDateTime::GMT0);
+        // GetValue() returns internal UTC-based representation, we need to
+        // convert it to local TZ before comparing
+        long ticks = (dt.GetValue() / 1000).ToLong() + TZ_LOCAL.GetOffset();
+        if ( dt.IsDST() )
+            ticks += 3600;
+        WX_ASSERT_TIME_T_EQUAL( d.gmticks, ticks + tzOffset );
+
+        dt = d.DT().FromTimezone(wxDateTime::UTC);
         ticks = (dt.GetValue() / 1000).ToLong();
-        CPPUNIT_ASSERT( ticks == d.gmticks );
+        WX_ASSERT_TIME_T_EQUAL( d.gmticks, ticks );
     }
 }
 
