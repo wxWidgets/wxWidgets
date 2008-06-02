@@ -642,53 +642,6 @@ wxString wxMenuItemBase::GetLabelText(const wxString& text)
     // format, not GTK+ format, so we do what the other ports do.
 
     return wxStripMenuCodes(text);
-
-#if 0
-    wxString label;
-
-    for ( const wxChar *pc = text.c_str(); *pc; pc++ )
-    {
-        if ( *pc == wxT('\t'))
-            break;
-
-        if ( *pc == wxT('_') )
-        {
-            // GTK 1.2 escapes "xxx_xxx" to "xxx__xxx"
-            pc++;
-            label += *pc;
-            continue;
-        }
-
-        if ( *pc == wxT('\\')  )
-        {
-            // GTK 2.0 escapes "xxx/xxx" to "xxx\/xxx"
-            pc++;
-            label += *pc;
-            continue;
-        }
-
-        if ( (*pc == wxT('&')) && (*(pc+1) != wxT('&')) )
-        {
-            // wxMSW escapes "&"
-            // "&" is doubled to indicate "&" instead of accelerator
-            continue;
-        }
-
-        label += *pc;
-    }
-
-    // wxPrintf( wxT("GetLabelText(): text %s label %s\n"), text.c_str(), label.c_str() );
-
-    return label;
-#endif
-}
-
-wxString wxMenuItem::GetItemLabel() const
-{
-    wxString label = wxConvertMnemonicsFromGTK(m_text);
-    if (!m_hotKey.IsEmpty())
-        label << "\t" << m_hotKey;
-    return label;
 }
 
 void wxMenuItem::SetItemLabel( const wxString& str )
@@ -702,7 +655,6 @@ void wxMenuItem::SetItemLabel( const wxString& str )
     // Some optimization to avoid flicker
     wxString oldLabel = m_text;
     oldLabel = wxStripMenuCodes(oldLabel);
-    oldLabel.Replace(wxT("_"), wxT(""));
     wxString label1 = wxStripMenuCodes(str);
 #if wxUSE_ACCEL
     wxString oldhotkey = m_hotKey;    // Store the old hotkey in Ctrl-foo format
@@ -719,7 +671,7 @@ void wxMenuItem::SetItemLabel( const wxString& str )
     if (m_menuItem)
     {
         // stock menu items can have empty labels:
-        wxString text = m_text;
+        wxString text = m_gtkText;
         if (text.IsEmpty() && !IsSeparator())
         {
             wxASSERT_MSG(isstock, wxT("A non-stock menu item with an empty label?"));
@@ -836,8 +788,8 @@ wxString wxMenuItem::GTKProcessMenuItemLabel(const wxString& str, wxString *hotK
 // it's valid for this function to be called even if m_menuItem == NULL
 void wxMenuItem::DoSetText( const wxString& str )
 {
-    m_text.Empty();
-    m_text = GTKProcessMenuItemLabel(str, &m_hotKey);
+    m_text = str;
+    m_gtkText = GTKProcessMenuItemLabel(str, &m_hotKey);
 }
 
 #if wxUSE_ACCEL
@@ -989,7 +941,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
     GtkWidget *menuItem;
 
     // cache some data used later
-    wxString text = mitem->wxMenuItemBase::GetItemLabel();
+    wxString text = mitem->GetGtkItemLabel();
     int id = mitem->GetId();
     bool isstock = wxIsStockID(id);
     const char *stockid = NULL;
@@ -1011,7 +963,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
         menuItem = gtk_separator_menu_item_new();
         m_prevRadio = NULL;
     }
-    else if ( mitem->GetBitmap().Ok() ||
+    else if ( mitem->GetBitmap().IsOk() ||
                 (mitem->GetKind() == wxITEM_NORMAL && isstock) )
     {
         wxBitmap bitmap(mitem->GetBitmap());

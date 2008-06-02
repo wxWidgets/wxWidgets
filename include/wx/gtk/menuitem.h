@@ -29,7 +29,6 @@ public:
 
     // implement base class virtuals
     virtual void SetItemLabel( const wxString& str );
-    virtual wxString GetItemLabel() const;
     virtual void Enable( bool enable = true );
     virtual void Check( bool check = true );
     virtual bool IsChecked() const;
@@ -47,6 +46,8 @@ public:
     // splits given string in the label, doing & => _ translation, which is returned,
     // and in the hotkey which is used to set given pointer
     static wxString GTKProcessMenuItemLabel(const wxString& str, wxString *hotKey);
+
+    wxString GetGtkItemLabel() { return m_gtkText; }
 
 #if WXWIN_COMPATIBILITY_2_8
     // compatibility only, don't use in new code
@@ -68,6 +69,7 @@ private:
     // style to GTK+ and is called from ctor and SetText()
     void DoSetText(const wxString& text);
 
+    wxString  m_gtkText; // m_text after conversion to GTK mnemonics
     wxString  m_hotKey;
     wxBitmap  m_bitmap; // Bitmap for menuitem, if any
 
