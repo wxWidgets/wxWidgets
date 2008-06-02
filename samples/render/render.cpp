@@ -150,6 +150,7 @@ public:
         wxRendererNative::Get().DrawCheckBox(this, dc, wxRect(80, 170, 16, 16), wxCONTROL_CHECKED | wxCONTROL_DISABLED);
         
         
+#if defined(__WXGTK20__) || defined(__WXMSW__) || defined(__WXMAC__)
         dc.DrawText(_T("Draw wxTextCtrl (without text)"), 10, 200);
         wxRenderer_DrawTextCtrl( this, dc, wxRect(20,220,60,24), 0);
         wxRenderer_DrawTextCtrl( this, dc, wxRect(120,220,60,24), wxCONTROL_CURRENT );
@@ -163,7 +164,7 @@ public:
         dc.DrawText(_T("Draw wxRadioButton (without text)"), 10, 350);
         wxRenderer_DrawRadioButton( this, dc, wxRect(20,370,24,24), 0);
         wxRenderer_DrawRadioButton( this, dc, wxRect(40,370,24,24), wxCONTROL_CHECKED );
-  
+#endif
 
     }
 
