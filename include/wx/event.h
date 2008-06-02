@@ -2260,9 +2260,7 @@ protected:
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_BASE wxEvtHandler : public wxObject
-#if wxUSE_WEAKREF
                                     , public wxTrackable
-#endif
 {
 public:
     wxEvtHandler();
@@ -2381,9 +2379,7 @@ public:
 
     // Avoid problems at exit by cleaning up static hash table gracefully
     void ClearEventHashTable() { GetEventHashTable().Clear(); }
-#if wxUSE_WEAKREF
     void OnSinkDestroyed( wxEvtHandler *sink );
-#endif
 
 private:
     static const wxEventTableEntry sm_eventTableEntries[];
@@ -2450,16 +2446,13 @@ protected:
     virtual void DoSetClientData( void *data );
     virtual void *DoGetClientData() const;
 
-#if wxUSE_WEAKREF
     // Search tracker objects for event connection with this sink
     wxEventConnectionRef *FindRefInTrackerList(wxEvtHandler *eventSink);
-#endif
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxEvtHandler)
 };
 
-#if wxUSE_WEAKREF
 // ----------------------------------------------------------------------------
 // wxEventConnectionRef represents all connections between two event handlers
 // and enables automatic disconnect when an event handler sink goes out of
@@ -2508,7 +2501,6 @@ private:
 
     DECLARE_NO_ASSIGN_CLASS(wxEventConnectionRef)
 };
-#endif // wxUSE_WEAKREF
 
 // Post a message to the given event handler which will be processed during the
 // next event loop iteration.

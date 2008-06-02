@@ -196,8 +196,6 @@
 
 #define wxUSE_THREADS 1
 
-#define wxUSE_WEAKREF 1
-
 #define wxUSE_STREAMS 1
 
 #if defined(__DMC__) || defined(__WATCOMC__) \

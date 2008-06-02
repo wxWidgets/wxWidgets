@@ -1061,7 +1061,6 @@ wxEvtHandler::~wxEvtHandler()
         {
             wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)*it;
 
-#if wxUSE_WEAKREF
             // Remove ourselves from sink destructor notifications
             // (this has usually been been done, in wxTrackable destructor)
             wxEvtHandler *eventSink = entry->m_eventSink;
@@ -1075,7 +1074,6 @@ wxEvtHandler::~wxEvtHandler()
                     delete evtConnRef;
                 }
             }
-#endif // wxUSE_WEAKREF
 
             if (entry->m_callbackUserData)
                 delete entry->m_callbackUserData;
@@ -1379,7 +1377,6 @@ void wxEvtHandler::Connect( int id, int lastId,
     // Insert at the front of the list so most recent additions are found first
     m_dynamicEvents->Insert( (wxObject*) entry );
 
-#if wxUSE_WEAKREF
     // Make sure we get to know when a sink is destroyed
     if ( eventSink && eventSink != this )
     {
@@ -1389,7 +1386,6 @@ void wxEvtHandler::Connect( int id, int lastId,
         else
             evtConnRef = new wxEventConnectionRef(this, eventSink);
     }
-#endif // wxUSE_WEAKREF
 }
 
 bool wxEvtHandler::Disconnect( int id, int lastId, wxEventType eventType,
@@ -1400,7 +1396,6 @@ bool wxEvtHandler::Disconnect( int id, int lastId, wxEventType eventType,
     if (!m_dynamicEvents)
         return false;
 
-#if wxUSE_WEAKREF
     // Remove connection from tracker node (wxEventConnectionRef)
     if ( eventSink && eventSink != this )
     {
@@ -1408,7 +1403,6 @@ bool wxEvtHandler::Disconnect( int id, int lastId, wxEventType eventType,
         if ( evtConnRef )
             evtConnRef->DecRef();
     }
-#endif // wxUSE_WEAKREF
 
     wxList::compatibility_iterator node = m_dynamicEvents->GetFirst();
     while (node)
@@ -1500,7 +1494,6 @@ void *wxEvtHandler::DoGetClientData() const
     return m_clientData;
 }
 
-#if wxUSE_WEAKREF
 // A helper to find an wxEventConnectionRef object
 wxEventConnectionRef *
 wxEvtHandler::FindRefInTrackerList(wxEvtHandler *eventSink)
@@ -1540,7 +1533,6 @@ void wxEvtHandler::OnSinkDestroyed( wxEvtHandler *sink )
         node = node_nxt;
     }
 }
-#endif // wxUSE_WEAKREF
 
 #endif // wxUSE_BASE
 

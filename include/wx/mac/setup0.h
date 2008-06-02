@@ -235,16 +235,6 @@
 // Recommended setting: 0 unless you do plan to develop MT applications
 #define wxUSE_THREADS 1
 
-// Set wxUSE_WEAKREF to 1 t support use of weak references to common classes
-// in wxWidgets (wxWeakRef<T>). Set to 0 if your compiler has problems with
-// the template-based implementation (Embedded Visual C++ 4 for ARM has a bug
-// in this area, Visual C compiler options "/vmm /vmg" may help then).
-//
-// Default is 1
-//
-// Recommended setting: 1
-#define wxUSE_WEAKREF 1
-
 // If enabled, compiles wxWidgets streams classes
 //
 // wx stream classes are used for image IO, process IO redirection, network

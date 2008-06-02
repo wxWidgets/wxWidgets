@@ -719,7 +719,6 @@ WX_ARG_FEATURE(textbuf,       [  --enable-textbuf        use wxTextBuffer class]
 WX_ARG_FEATURE(textfile,      [  --enable-textfile       use wxTextFile class], wxUSE_TEXTFILE)
 WX_ARG_FEATURE(timer,         [  --enable-timer          use wxTimer class], wxUSE_TIMER)
 WX_ARG_FEATURE(variant,       [  --enable-variant        use wxVariant class], wxUSE_VARIANT)
-WX_ARG_FEATURE(weakref,       [  --enable-weakref        make wxEvtHandler trackable with wxWeakRef<>], wxUSE_WEAKREF)
 WX_ARG_FEATURE(zipstream,     [  --enable-zipstream      use wxZip streams], wxUSE_ZIPSTREAM)
 
 dnl URL-related classes
@@ -6097,10 +6096,6 @@ fi
 
 if test "$wxUSE_VARIANT" = "yes"; then
     AC_DEFINE(wxUSE_VARIANT)
-fi
-
-if test "$wxUSE_WEAKREF" = "yes"; then
-    AC_DEFINE(wxUSE_WEAKREF)
 fi
 
 if test "$wxUSE_FS_INET" = "yes"; then
