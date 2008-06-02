@@ -195,5 +195,5 @@ void *AtomicTestCase::MyThread::Entry()
         }
     }
 
-    return (wxThread::ExitCode)negativeValuesSeen;
+    return wxUIntToPtr(negativeValuesSeen);
 }
