@@ -97,11 +97,13 @@ COND_PLATFORM_OS2_1___notebook___os2_emxbindcmd = $(NM) notebook$(EXEEXT) | if \
 @COND_PLATFORM_WIN32_1@__notebook___win32rc = notebook_sample_rc.o
 @COND_PLATFORM_OS2_1@__notebook_os2_lib_res = \
 @COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
+@COND_PLATFORM_MACOSX_1@__notebook_app_Contents_PkgInfo___depname \
+@COND_PLATFORM_MACOSX_1@	= notebook.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__notebook_bundle___depname = notebook_bundle
 @COND_TOOLKIT_COCOA@____notebook_BUNDLE_TGT_REF_DEP = \
-@COND_TOOLKIT_COCOA@	notebook.app/Contents/PkgInfo
+@COND_TOOLKIT_COCOA@	$(__notebook_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_MAC@____notebook_BUNDLE_TGT_REF_DEP = \
-@COND_TOOLKIT_MAC@	notebook.app/Contents/PkgInfo
+@COND_TOOLKIT_MAC@	$(__notebook_app_Contents_PkgInfo___depname)
 COND_MONOLITHIC_0___WXLIB_CORE_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_CORE_p = $(COND_MONOLITHIC_0___WXLIB_CORE_p)
@@ -160,25 +162,25 @@ notebook$(EXEEXT): $(NOTEBOOK_OBJECTS) $(__notebook___win32rc)
 	$(__notebook___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-notebook.app/Contents/PkgInfo: notebook$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(top_srcdir)/src/mac/carbon/wxmac.icns
-	mkdir -p notebook.app/Contents
-	mkdir -p notebook.app/Contents/MacOS
-	mkdir -p notebook.app/Contents/Resources
-	
-	
-	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
-	-e "s/EXECUTABLE/notebook/" \
-	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/carbon/Info.plist.in >notebook.app/Contents/Info.plist
-	
-	
-	echo -n "APPL????" >notebook.app/Contents/PkgInfo
-	
-	
-	ln -f notebook$(EXEEXT) notebook.app/Contents/MacOS/notebook
-	
-	
-	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns notebook.app/Contents/Resources/wxmac.icns
+@COND_PLATFORM_MACOSX_1@notebook.app/Contents/PkgInfo: notebook$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(top_srcdir)/src/mac/carbon/wxmac.icns
+@COND_PLATFORM_MACOSX_1@	mkdir -p notebook.app/Contents
+@COND_PLATFORM_MACOSX_1@	mkdir -p notebook.app/Contents/MacOS
+@COND_PLATFORM_MACOSX_1@	mkdir -p notebook.app/Contents/Resources
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/EXECUTABLE/notebook/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/VERSION/$(WX_VERSION)/" \
+@COND_PLATFORM_MACOSX_1@	$(top_srcdir)/src/mac/carbon/Info.plist.in >notebook.app/Contents/Info.plist
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >notebook.app/Contents/PkgInfo
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	ln -f notebook$(EXEEXT) notebook.app/Contents/MacOS/notebook
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns notebook.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@notebook_bundle: $(____notebook_BUNDLE_TGT_REF_DEP)
 

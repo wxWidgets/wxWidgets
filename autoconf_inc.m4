@@ -320,6 +320,12 @@ dnl ### begin block 20_COND_PLATFORM_MACOSX_1[../../demos/bombs/bombs.bkl,../../
         COND_PLATFORM_MACOSX_1=""
     fi
     AC_SUBST(COND_PLATFORM_MACOSX_1)
+dnl ### begin block 20_COND_PLATFORM_MACOSX_1_PLATFORM_MSDOS_0[../../samples/dialup/dialup.bkl] ###
+    COND_PLATFORM_MACOSX_1_PLATFORM_MSDOS_0="#"
+    if test "x$PLATFORM_MACOSX" = "x1" -a "x$PLATFORM_MSDOS" = "x0" ; then
+        COND_PLATFORM_MACOSX_1_PLATFORM_MSDOS_0=""
+    fi
+    AC_SUBST(COND_PLATFORM_MACOSX_1_PLATFORM_MSDOS_0)
 dnl ### begin block 20_COND_PLATFORM_MACOSX_1_TOOLKIT_[wx.bkl] ###
     COND_PLATFORM_MACOSX_1_TOOLKIT_="#"
     if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "x" ; then
@@ -362,12 +368,18 @@ dnl ### begin block 20_COND_PLATFORM_MACOSX_1_TOOLKIT_X11[wx.bkl] ###
         COND_PLATFORM_MACOSX_1_TOOLKIT_X11=""
     fi
     AC_SUBST(COND_PLATFORM_MACOSX_1_TOOLKIT_X11)
-dnl ### begin block 20_COND_PLATFORM_MACOSX_1_USE_GUI_1[wx.bkl] ###
+dnl ### begin block 20_COND_PLATFORM_MACOSX_1_USE_GUI_1[../../samples/ipc/ipc.bkl,../../samples/sockets/sockets.bkl,../../tests/test.bkl,wx.bkl] ###
     COND_PLATFORM_MACOSX_1_USE_GUI_1="#"
     if test "x$PLATFORM_MACOSX" = "x1" -a "x$USE_GUI" = "x1" ; then
         COND_PLATFORM_MACOSX_1_USE_GUI_1=""
     fi
     AC_SUBST(COND_PLATFORM_MACOSX_1_USE_GUI_1)
+dnl ### begin block 20_COND_PLATFORM_MACOSX_1_USE_OPENGL_1[../../samples/opengl/cube/cube.bkl,../../samples/opengl/isosurf/isosurf.bkl,../../samples/opengl/penguin/penguin.bkl] ###
+    COND_PLATFORM_MACOSX_1_USE_OPENGL_1="#"
+    if test "x$PLATFORM_MACOSX" = "x1" -a "x$USE_OPENGL" = "x1" ; then
+        COND_PLATFORM_MACOSX_1_USE_OPENGL_1=""
+    fi
+    AC_SUBST(COND_PLATFORM_MACOSX_1_USE_OPENGL_1)
 dnl ### begin block 20_COND_PLATFORM_MACOSX_1_USE_SOVERSION_1[wx.bkl] ###
     COND_PLATFORM_MACOSX_1_USE_SOVERSION_1="#"
     if test "x$PLATFORM_MACOSX" = "x1" -a "x$USE_SOVERSION" = "x1" ; then

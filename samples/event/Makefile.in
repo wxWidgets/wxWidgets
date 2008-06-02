@@ -96,10 +96,13 @@ COND_PLATFORM_OS2_1___event___os2_emxbindcmd = $(NM) event$(EXEEXT) | if grep -q
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_OS2_1@__event_os2_lib_res = \
 @COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
+@COND_PLATFORM_MACOSX_1@__event_app_Contents_PkgInfo___depname \
+@COND_PLATFORM_MACOSX_1@	= event.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__event_bundle___depname = event_bundle
 @COND_TOOLKIT_COCOA@____event_BUNDLE_TGT_REF_DEP = \
-@COND_TOOLKIT_COCOA@	event.app/Contents/PkgInfo
-@COND_TOOLKIT_MAC@____event_BUNDLE_TGT_REF_DEP = event.app/Contents/PkgInfo
+@COND_TOOLKIT_COCOA@	$(__event_app_Contents_PkgInfo___depname)
+@COND_TOOLKIT_MAC@____event_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_MAC@	$(__event_app_Contents_PkgInfo___depname)
 COND_MONOLITHIC_0___WXLIB_CORE_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_CORE_p = $(COND_MONOLITHIC_0___WXLIB_CORE_p)
@@ -159,25 +162,25 @@ event$(EXEEXT): $(EVENT_OBJECTS) $(__event___win32rc)
 	$(__event___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-event.app/Contents/PkgInfo: event$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(top_srcdir)/src/mac/carbon/wxmac.icns
-	mkdir -p event.app/Contents
-	mkdir -p event.app/Contents/MacOS
-	mkdir -p event.app/Contents/Resources
-	
-	
-	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
-	-e "s/EXECUTABLE/event/" \
-	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/carbon/Info.plist.in >event.app/Contents/Info.plist
-	
-	
-	echo -n "APPL????" >event.app/Contents/PkgInfo
-	
-	
-	ln -f event$(EXEEXT) event.app/Contents/MacOS/event
-	
-	
-	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns event.app/Contents/Resources/wxmac.icns
+@COND_PLATFORM_MACOSX_1@event.app/Contents/PkgInfo: event$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(top_srcdir)/src/mac/carbon/wxmac.icns
+@COND_PLATFORM_MACOSX_1@	mkdir -p event.app/Contents
+@COND_PLATFORM_MACOSX_1@	mkdir -p event.app/Contents/MacOS
+@COND_PLATFORM_MACOSX_1@	mkdir -p event.app/Contents/Resources
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/EXECUTABLE/event/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/VERSION/$(WX_VERSION)/" \
+@COND_PLATFORM_MACOSX_1@	$(top_srcdir)/src/mac/carbon/Info.plist.in >event.app/Contents/Info.plist
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >event.app/Contents/PkgInfo
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	ln -f event$(EXEEXT) event.app/Contents/MacOS/event
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns event.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@event_bundle: $(____event_BUNDLE_TGT_REF_DEP)
 

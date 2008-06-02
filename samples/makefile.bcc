@@ -43,7 +43,7 @@ MAKEARGS = -DCC="$(CC)" -DCXX="$(CXX)" -DCFLAGS="$(CFLAGS)" \
 
 ### Targets: ###
 
-all: access animate artprov aui calendar caret collpane config combo console controls dataview dialogs dialup display dnd docview docvwmdi dragimag drawing erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer memcheck menu minimal mobile nativdlg notebook oleauto opengl ownerdrw popup printing regtest render richtext sashtest scroll scrollsub shaped sockets sound splash splitter statbar stc taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard mfc
+all: access animate artprov aui calendar caret collpane config combo console controls dataview dialogs dialup display dnd docview docvwmdi dragimag drawing erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer memcheck menu minimal mobile nativdlg notebook oleauto opengl ownerdrw popup printing regtest render richtext sashtest scroll scrollsub shaped sockets sound splash splitter statbar stc taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wrapsizer mfc
 
 clean: 
 	-if exist .\*.obj del .\*.obj
@@ -337,6 +337,10 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>wizard.bat
 	call wizard.bat
 	@del wizard.bat
+	@echo cd wrapsizer >wrapsizer.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>wrapsizer.bat
+	call wrapsizer.bat
+	@del wrapsizer.bat
 	@echo cd mfc >mfc.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>mfc.bat
 	call mfc.bat
@@ -773,6 +777,12 @@ wizard:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>wizard.bat
 	call wizard.bat
 	@del wizard.bat
+
+wrapsizer: 
+	@echo cd wrapsizer >wrapsizer.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>wrapsizer.bat
+	call wrapsizer.bat
+	@del wrapsizer.bat
 
 mfc: 
 	@echo cd mfc >mfc.bat

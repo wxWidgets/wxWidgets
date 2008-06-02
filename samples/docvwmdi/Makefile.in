@@ -98,11 +98,13 @@ COND_PLATFORM_OS2_1___docvwmdi___os2_emxbindcmd = $(NM) docvwmdi$(EXEEXT) | if \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_OS2_1@__docvwmdi_os2_lib_res = \
 @COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
+@COND_PLATFORM_MACOSX_1@__docvwmdi_app_Contents_PkgInfo___depname \
+@COND_PLATFORM_MACOSX_1@	= docvwmdi.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__docvwmdi_bundle___depname = docvwmdi_bundle
 @COND_TOOLKIT_COCOA@____docvwmdi_BUNDLE_TGT_REF_DEP = \
-@COND_TOOLKIT_COCOA@	docvwmdi.app/Contents/PkgInfo
+@COND_TOOLKIT_COCOA@	$(__docvwmdi_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_MAC@____docvwmdi_BUNDLE_TGT_REF_DEP = \
-@COND_TOOLKIT_MAC@	docvwmdi.app/Contents/PkgInfo
+@COND_TOOLKIT_MAC@	$(__docvwmdi_app_Contents_PkgInfo___depname)
 COND_MONOLITHIC_0___WXLIB_CORE_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_CORE_p = $(COND_MONOLITHIC_0___WXLIB_CORE_p)
@@ -162,25 +164,25 @@ docvwmdi$(EXEEXT): $(DOCVWMDI_OBJECTS) $(__docvwmdi___win32rc)
 	$(__docvwmdi___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-docvwmdi.app/Contents/PkgInfo: docvwmdi$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(top_srcdir)/src/mac/carbon/wxmac.icns
-	mkdir -p docvwmdi.app/Contents
-	mkdir -p docvwmdi.app/Contents/MacOS
-	mkdir -p docvwmdi.app/Contents/Resources
-	
-	
-	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
-	-e "s/EXECUTABLE/docvwmdi/" \
-	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/carbon/Info.plist.in >docvwmdi.app/Contents/Info.plist
-	
-	
-	echo -n "APPL????" >docvwmdi.app/Contents/PkgInfo
-	
-	
-	ln -f docvwmdi$(EXEEXT) docvwmdi.app/Contents/MacOS/docvwmdi
-	
-	
-	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns docvwmdi.app/Contents/Resources/wxmac.icns
+@COND_PLATFORM_MACOSX_1@docvwmdi.app/Contents/PkgInfo: docvwmdi$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(top_srcdir)/src/mac/carbon/wxmac.icns
+@COND_PLATFORM_MACOSX_1@	mkdir -p docvwmdi.app/Contents
+@COND_PLATFORM_MACOSX_1@	mkdir -p docvwmdi.app/Contents/MacOS
+@COND_PLATFORM_MACOSX_1@	mkdir -p docvwmdi.app/Contents/Resources
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/EXECUTABLE/docvwmdi/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/VERSION/$(WX_VERSION)/" \
+@COND_PLATFORM_MACOSX_1@	$(top_srcdir)/src/mac/carbon/Info.plist.in >docvwmdi.app/Contents/Info.plist
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >docvwmdi.app/Contents/PkgInfo
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	ln -f docvwmdi$(EXEEXT) docvwmdi.app/Contents/MacOS/docvwmdi
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns docvwmdi.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@docvwmdi_bundle: $(____docvwmdi_BUNDLE_TGT_REF_DEP)
 

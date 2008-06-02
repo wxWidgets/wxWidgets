@@ -108,11 +108,14 @@ COND_PLATFORM_OS2_1___penguin___os2_emxbindcmd = $(NM) penguin$(EXEEXT) | if \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_OS2_1@__penguin_os2_lib_res = \
 @COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
-@COND_PLATFORM_MACOSX_1@__penguin_bundle___depname = penguin_bundle
+@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@__penguin_app_Contents_PkgInfo___depname \
+@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	= penguin.app/Contents/PkgInfo
+@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@__penguin_bundle___depname \
+@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	= penguin_bundle
 @COND_TOOLKIT_COCOA@____penguin_BUNDLE_TGT_REF_DEP = \
-@COND_TOOLKIT_COCOA@	penguin.app/Contents/PkgInfo
+@COND_TOOLKIT_COCOA@	$(__penguin_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_MAC@____penguin_BUNDLE_TGT_REF_DEP = \
-@COND_TOOLKIT_MAC@	penguin.app/Contents/PkgInfo
+@COND_TOOLKIT_MAC@	$(__penguin_app_Contents_PkgInfo___depname)
 COND_MONOLITHIC_0___WXLIB_CORE_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_CORE_p = $(COND_MONOLITHIC_0___WXLIB_CORE_p)
@@ -172,27 +175,27 @@ distclean: clean
 @COND_USE_OPENGL_1@	$(__penguin___os2_emxbindcmd)
 @COND_USE_OPENGL_1@	$(SAMPLES_RPATH_POSTLINK)
 
-penguin.app/Contents/PkgInfo: $(__penguin___depname) $(top_srcdir)/src/mac/carbon/Info.plist.in $(top_srcdir)/src/mac/carbon/wxmac.icns
-	mkdir -p penguin.app/Contents
-	mkdir -p penguin.app/Contents/MacOS
-	mkdir -p penguin.app/Contents/Resources
-	
-	
-	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
-	-e "s/EXECUTABLE/penguin/" \
-	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/carbon/Info.plist.in >penguin.app/Contents/Info.plist
-	
-	
-	echo -n "APPL????" >penguin.app/Contents/PkgInfo
-	
-	
-	ln -f penguin$(EXEEXT) penguin.app/Contents/MacOS/penguin
-	
-	
-	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns penguin.app/Contents/Resources/wxmac.icns
+@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@penguin.app/Contents/PkgInfo: $(__penguin___depname) $(top_srcdir)/src/mac/carbon/Info.plist.in $(top_srcdir)/src/mac/carbon/wxmac.icns
+@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	mkdir -p penguin.app/Contents
+@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	mkdir -p penguin.app/Contents/MacOS
+@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	mkdir -p penguin.app/Contents/Resources
+@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	
+@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	
+@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
+@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	-e "s/EXECUTABLE/penguin/" \
+@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	-e "s/VERSION/$(WX_VERSION)/" \
+@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	$(top_srcdir)/src/mac/carbon/Info.plist.in >penguin.app/Contents/Info.plist
+@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	
+@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	
+@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	echo -n "APPL????" >penguin.app/Contents/PkgInfo
+@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	
+@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	
+@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	ln -f penguin$(EXEEXT) penguin.app/Contents/MacOS/penguin
+@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	
+@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	
+@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns penguin.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@penguin_bundle: $(____penguin_BUNDLE_TGT_REF_DEP)
+@COND_PLATFORM_MACOSX_1_USE_OPENGL_1@penguin_bundle: $(____penguin_BUNDLE_TGT_REF_DEP)
 
 data: 
 	@mkdir -p .

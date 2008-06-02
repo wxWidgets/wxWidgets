@@ -96,10 +96,13 @@ COND_PLATFORM_OS2_1___popup___os2_emxbindcmd = $(NM) popup$(EXEEXT) | if grep -q
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_OS2_1@__popup_os2_lib_res = \
 @COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
+@COND_PLATFORM_MACOSX_1@__popup_app_Contents_PkgInfo___depname \
+@COND_PLATFORM_MACOSX_1@	= popup.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__popup_bundle___depname = popup_bundle
 @COND_TOOLKIT_COCOA@____popup_BUNDLE_TGT_REF_DEP = \
-@COND_TOOLKIT_COCOA@	popup.app/Contents/PkgInfo
-@COND_TOOLKIT_MAC@____popup_BUNDLE_TGT_REF_DEP = popup.app/Contents/PkgInfo
+@COND_TOOLKIT_COCOA@	$(__popup_app_Contents_PkgInfo___depname)
+@COND_TOOLKIT_MAC@____popup_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_MAC@	$(__popup_app_Contents_PkgInfo___depname)
 COND_MONOLITHIC_0___WXLIB_CORE_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_CORE_p = $(COND_MONOLITHIC_0___WXLIB_CORE_p)
@@ -159,25 +162,25 @@ popup$(EXEEXT): $(POPUP_OBJECTS) $(__popup___win32rc)
 	$(__popup___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-popup.app/Contents/PkgInfo: popup$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(top_srcdir)/src/mac/carbon/wxmac.icns
-	mkdir -p popup.app/Contents
-	mkdir -p popup.app/Contents/MacOS
-	mkdir -p popup.app/Contents/Resources
-	
-	
-	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
-	-e "s/EXECUTABLE/popup/" \
-	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/carbon/Info.plist.in >popup.app/Contents/Info.plist
-	
-	
-	echo -n "APPL????" >popup.app/Contents/PkgInfo
-	
-	
-	ln -f popup$(EXEEXT) popup.app/Contents/MacOS/popup
-	
-	
-	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns popup.app/Contents/Resources/wxmac.icns
+@COND_PLATFORM_MACOSX_1@popup.app/Contents/PkgInfo: popup$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(top_srcdir)/src/mac/carbon/wxmac.icns
+@COND_PLATFORM_MACOSX_1@	mkdir -p popup.app/Contents
+@COND_PLATFORM_MACOSX_1@	mkdir -p popup.app/Contents/MacOS
+@COND_PLATFORM_MACOSX_1@	mkdir -p popup.app/Contents/Resources
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/EXECUTABLE/popup/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/VERSION/$(WX_VERSION)/" \
+@COND_PLATFORM_MACOSX_1@	$(top_srcdir)/src/mac/carbon/Info.plist.in >popup.app/Contents/Info.plist
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >popup.app/Contents/PkgInfo
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	ln -f popup$(EXEEXT) popup.app/Contents/MacOS/popup
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns popup.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@popup_bundle: $(____popup_BUNDLE_TGT_REF_DEP)
 

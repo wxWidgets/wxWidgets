@@ -96,11 +96,13 @@ COND_PLATFORM_OS2_1___oleauto___os2_emxbindcmd = $(NM) oleauto$(EXEEXT) | if \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_OS2_1@__oleauto_os2_lib_res = \
 @COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
+@COND_PLATFORM_MACOSX_1@__oleauto_app_Contents_PkgInfo___depname \
+@COND_PLATFORM_MACOSX_1@	= oleauto.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__oleauto_bundle___depname = oleauto_bundle
 @COND_TOOLKIT_COCOA@____oleauto_BUNDLE_TGT_REF_DEP = \
-@COND_TOOLKIT_COCOA@	oleauto.app/Contents/PkgInfo
+@COND_TOOLKIT_COCOA@	$(__oleauto_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_MAC@____oleauto_BUNDLE_TGT_REF_DEP = \
-@COND_TOOLKIT_MAC@	oleauto.app/Contents/PkgInfo
+@COND_TOOLKIT_MAC@	$(__oleauto_app_Contents_PkgInfo___depname)
 COND_MONOLITHIC_0___WXLIB_CORE_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_CORE_p = $(COND_MONOLITHIC_0___WXLIB_CORE_p)
@@ -160,25 +162,25 @@ oleauto$(EXEEXT): $(OLEAUTO_OBJECTS) $(__oleauto___win32rc)
 	$(__oleauto___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-oleauto.app/Contents/PkgInfo: oleauto$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(top_srcdir)/src/mac/carbon/wxmac.icns
-	mkdir -p oleauto.app/Contents
-	mkdir -p oleauto.app/Contents/MacOS
-	mkdir -p oleauto.app/Contents/Resources
-	
-	
-	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
-	-e "s/EXECUTABLE/oleauto/" \
-	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/carbon/Info.plist.in >oleauto.app/Contents/Info.plist
-	
-	
-	echo -n "APPL????" >oleauto.app/Contents/PkgInfo
-	
-	
-	ln -f oleauto$(EXEEXT) oleauto.app/Contents/MacOS/oleauto
-	
-	
-	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns oleauto.app/Contents/Resources/wxmac.icns
+@COND_PLATFORM_MACOSX_1@oleauto.app/Contents/PkgInfo: oleauto$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(top_srcdir)/src/mac/carbon/wxmac.icns
+@COND_PLATFORM_MACOSX_1@	mkdir -p oleauto.app/Contents
+@COND_PLATFORM_MACOSX_1@	mkdir -p oleauto.app/Contents/MacOS
+@COND_PLATFORM_MACOSX_1@	mkdir -p oleauto.app/Contents/Resources
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/EXECUTABLE/oleauto/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/VERSION/$(WX_VERSION)/" \
+@COND_PLATFORM_MACOSX_1@	$(top_srcdir)/src/mac/carbon/Info.plist.in >oleauto.app/Contents/Info.plist
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >oleauto.app/Contents/PkgInfo
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	ln -f oleauto$(EXEEXT) oleauto.app/Contents/MacOS/oleauto
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns oleauto.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@oleauto_bundle: $(____oleauto_BUNDLE_TGT_REF_DEP)
 

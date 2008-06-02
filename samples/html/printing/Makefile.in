@@ -99,12 +99,14 @@ COND_PLATFORM_OS2_1___htmlprinting___os2_emxbindcmd = $(NM) \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_OS2_1@__htmlprinting_os2_lib_res = \
 @COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
+@COND_PLATFORM_MACOSX_1@__htmlprinting_app_Contents_PkgInfo___depname \
+@COND_PLATFORM_MACOSX_1@	= htmlprinting.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__htmlprinting_bundle___depname \
 @COND_PLATFORM_MACOSX_1@	= htmlprinting_bundle
 @COND_TOOLKIT_COCOA@____htmlprinting_BUNDLE_TGT_REF_DEP \
-@COND_TOOLKIT_COCOA@	= htmlprinting.app/Contents/PkgInfo
+@COND_TOOLKIT_COCOA@	= $(__htmlprinting_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_MAC@____htmlprinting_BUNDLE_TGT_REF_DEP = \
-@COND_TOOLKIT_MAC@	htmlprinting.app/Contents/PkgInfo
+@COND_TOOLKIT_MAC@	$(__htmlprinting_app_Contents_PkgInfo___depname)
 COND_MONOLITHIC_0___WXLIB_HTML_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_HTML_p = $(COND_MONOLITHIC_0___WXLIB_HTML_p)
@@ -168,25 +170,25 @@ htmlprinting$(EXEEXT): $(HTMLPRINTING_OBJECTS) $(__htmlprinting___win32rc)
 	$(__htmlprinting___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-htmlprinting.app/Contents/PkgInfo: htmlprinting$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(top_srcdir)/src/mac/carbon/wxmac.icns
-	mkdir -p htmlprinting.app/Contents
-	mkdir -p htmlprinting.app/Contents/MacOS
-	mkdir -p htmlprinting.app/Contents/Resources
-	
-	
-	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
-	-e "s/EXECUTABLE/htmlprinting/" \
-	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/carbon/Info.plist.in >htmlprinting.app/Contents/Info.plist
-	
-	
-	echo -n "APPL????" >htmlprinting.app/Contents/PkgInfo
-	
-	
-	ln -f htmlprinting$(EXEEXT) htmlprinting.app/Contents/MacOS/htmlprinting
-	
-	
-	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns htmlprinting.app/Contents/Resources/wxmac.icns
+@COND_PLATFORM_MACOSX_1@htmlprinting.app/Contents/PkgInfo: htmlprinting$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(top_srcdir)/src/mac/carbon/wxmac.icns
+@COND_PLATFORM_MACOSX_1@	mkdir -p htmlprinting.app/Contents
+@COND_PLATFORM_MACOSX_1@	mkdir -p htmlprinting.app/Contents/MacOS
+@COND_PLATFORM_MACOSX_1@	mkdir -p htmlprinting.app/Contents/Resources
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/EXECUTABLE/htmlprinting/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/VERSION/$(WX_VERSION)/" \
+@COND_PLATFORM_MACOSX_1@	$(top_srcdir)/src/mac/carbon/Info.plist.in >htmlprinting.app/Contents/Info.plist
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >htmlprinting.app/Contents/PkgInfo
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	ln -f htmlprinting$(EXEEXT) htmlprinting.app/Contents/MacOS/htmlprinting
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns htmlprinting.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@htmlprinting_bundle: $(____htmlprinting_BUNDLE_TGT_REF_DEP)
 

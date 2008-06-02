@@ -96,11 +96,13 @@ COND_PLATFORM_OS2_1___validate___os2_emxbindcmd = $(NM) validate$(EXEEXT) | if \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_OS2_1@__validate_os2_lib_res = \
 @COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
+@COND_PLATFORM_MACOSX_1@__validate_app_Contents_PkgInfo___depname \
+@COND_PLATFORM_MACOSX_1@	= validate.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__validate_bundle___depname = validate_bundle
 @COND_TOOLKIT_COCOA@____validate_BUNDLE_TGT_REF_DEP = \
-@COND_TOOLKIT_COCOA@	validate.app/Contents/PkgInfo
+@COND_TOOLKIT_COCOA@	$(__validate_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_MAC@____validate_BUNDLE_TGT_REF_DEP = \
-@COND_TOOLKIT_MAC@	validate.app/Contents/PkgInfo
+@COND_TOOLKIT_MAC@	$(__validate_app_Contents_PkgInfo___depname)
 COND_MONOLITHIC_0___WXLIB_CORE_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_CORE_p = $(COND_MONOLITHIC_0___WXLIB_CORE_p)
@@ -160,25 +162,25 @@ validate$(EXEEXT): $(VALIDATE_OBJECTS) $(__validate___win32rc)
 	$(__validate___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-validate.app/Contents/PkgInfo: validate$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(top_srcdir)/src/mac/carbon/wxmac.icns
-	mkdir -p validate.app/Contents
-	mkdir -p validate.app/Contents/MacOS
-	mkdir -p validate.app/Contents/Resources
-	
-	
-	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
-	-e "s/EXECUTABLE/validate/" \
-	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/carbon/Info.plist.in >validate.app/Contents/Info.plist
-	
-	
-	echo -n "APPL????" >validate.app/Contents/PkgInfo
-	
-	
-	ln -f validate$(EXEEXT) validate.app/Contents/MacOS/validate
-	
-	
-	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns validate.app/Contents/Resources/wxmac.icns
+@COND_PLATFORM_MACOSX_1@validate.app/Contents/PkgInfo: validate$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(top_srcdir)/src/mac/carbon/wxmac.icns
+@COND_PLATFORM_MACOSX_1@	mkdir -p validate.app/Contents
+@COND_PLATFORM_MACOSX_1@	mkdir -p validate.app/Contents/MacOS
+@COND_PLATFORM_MACOSX_1@	mkdir -p validate.app/Contents/Resources
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/EXECUTABLE/validate/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/VERSION/$(WX_VERSION)/" \
+@COND_PLATFORM_MACOSX_1@	$(top_srcdir)/src/mac/carbon/Info.plist.in >validate.app/Contents/Info.plist
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >validate.app/Contents/PkgInfo
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	ln -f validate$(EXEEXT) validate.app/Contents/MacOS/validate
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns validate.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@validate_bundle: $(____validate_BUNDLE_TGT_REF_DEP)
 

@@ -96,9 +96,13 @@ COND_PLATFORM_OS2_1___font___os2_emxbindcmd = $(NM) font$(EXEEXT) | if grep -q \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_OS2_1@__font_os2_lib_res = \
 @COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
+@COND_PLATFORM_MACOSX_1@__font_app_Contents_PkgInfo___depname \
+@COND_PLATFORM_MACOSX_1@	= font.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__font_bundle___depname = font_bundle
-@COND_TOOLKIT_COCOA@____font_BUNDLE_TGT_REF_DEP = font.app/Contents/PkgInfo
-@COND_TOOLKIT_MAC@____font_BUNDLE_TGT_REF_DEP = font.app/Contents/PkgInfo
+@COND_TOOLKIT_COCOA@____font_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_COCOA@	$(__font_app_Contents_PkgInfo___depname)
+@COND_TOOLKIT_MAC@____font_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_MAC@	$(__font_app_Contents_PkgInfo___depname)
 COND_MONOLITHIC_0___WXLIB_CORE_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_CORE_p = $(COND_MONOLITHIC_0___WXLIB_CORE_p)
@@ -158,25 +162,25 @@ font$(EXEEXT): $(FONT_OBJECTS) $(__font___win32rc)
 	$(__font___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-font.app/Contents/PkgInfo: font$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(top_srcdir)/src/mac/carbon/wxmac.icns
-	mkdir -p font.app/Contents
-	mkdir -p font.app/Contents/MacOS
-	mkdir -p font.app/Contents/Resources
-	
-	
-	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
-	-e "s/EXECUTABLE/font/" \
-	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/carbon/Info.plist.in >font.app/Contents/Info.plist
-	
-	
-	echo -n "APPL????" >font.app/Contents/PkgInfo
-	
-	
-	ln -f font$(EXEEXT) font.app/Contents/MacOS/font
-	
-	
-	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns font.app/Contents/Resources/wxmac.icns
+@COND_PLATFORM_MACOSX_1@font.app/Contents/PkgInfo: font$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(top_srcdir)/src/mac/carbon/wxmac.icns
+@COND_PLATFORM_MACOSX_1@	mkdir -p font.app/Contents
+@COND_PLATFORM_MACOSX_1@	mkdir -p font.app/Contents/MacOS
+@COND_PLATFORM_MACOSX_1@	mkdir -p font.app/Contents/Resources
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/EXECUTABLE/font/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/VERSION/$(WX_VERSION)/" \
+@COND_PLATFORM_MACOSX_1@	$(top_srcdir)/src/mac/carbon/Info.plist.in >font.app/Contents/Info.plist
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >font.app/Contents/PkgInfo
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	ln -f font$(EXEEXT) font.app/Contents/MacOS/font
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns font.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@font_bundle: $(____font_BUNDLE_TGT_REF_DEP)
 

@@ -100,11 +100,13 @@ COND_PLATFORM_OS2_1___wizard___os2_emxbindcmd = $(NM) wizard$(EXEEXT) | if grep 
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_OS2_1@__wizard_os2_lib_res = \
 @COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
+@COND_PLATFORM_MACOSX_1@__wizard_app_Contents_PkgInfo___depname \
+@COND_PLATFORM_MACOSX_1@	= wizard.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__wizard_bundle___depname = wizard_bundle
 @COND_TOOLKIT_COCOA@____wizard_BUNDLE_TGT_REF_DEP = \
-@COND_TOOLKIT_COCOA@	wizard.app/Contents/PkgInfo
+@COND_TOOLKIT_COCOA@	$(__wizard_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_MAC@____wizard_BUNDLE_TGT_REF_DEP = \
-@COND_TOOLKIT_MAC@	wizard.app/Contents/PkgInfo
+@COND_TOOLKIT_MAC@	$(__wizard_app_Contents_PkgInfo___depname)
 COND_MONOLITHIC_0___WXLIB_ADV_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_ADV_p = $(COND_MONOLITHIC_0___WXLIB_ADV_p)
@@ -173,25 +175,25 @@ wizard$(EXEEXT): $(WIZARD_OBJECTS) $(__wizard___win32rc)
 	$(__wizard___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-wizard.app/Contents/PkgInfo: wizard$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(top_srcdir)/src/mac/carbon/wxmac.icns
-	mkdir -p wizard.app/Contents
-	mkdir -p wizard.app/Contents/MacOS
-	mkdir -p wizard.app/Contents/Resources
-	
-	
-	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
-	-e "s/EXECUTABLE/wizard/" \
-	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/carbon/Info.plist.in >wizard.app/Contents/Info.plist
-	
-	
-	echo -n "APPL????" >wizard.app/Contents/PkgInfo
-	
-	
-	ln -f wizard$(EXEEXT) wizard.app/Contents/MacOS/wizard
-	
-	
-	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns wizard.app/Contents/Resources/wxmac.icns
+@COND_PLATFORM_MACOSX_1@wizard.app/Contents/PkgInfo: wizard$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(top_srcdir)/src/mac/carbon/wxmac.icns
+@COND_PLATFORM_MACOSX_1@	mkdir -p wizard.app/Contents
+@COND_PLATFORM_MACOSX_1@	mkdir -p wizard.app/Contents/MacOS
+@COND_PLATFORM_MACOSX_1@	mkdir -p wizard.app/Contents/Resources
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/EXECUTABLE/wizard/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/VERSION/$(WX_VERSION)/" \
+@COND_PLATFORM_MACOSX_1@	$(top_srcdir)/src/mac/carbon/Info.plist.in >wizard.app/Contents/Info.plist
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >wizard.app/Contents/PkgInfo
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	ln -f wizard$(EXEEXT) wizard.app/Contents/MacOS/wizard
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns wizard.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@wizard_bundle: $(____wizard_BUNDLE_TGT_REF_DEP)
 

@@ -97,11 +97,13 @@ COND_PLATFORM_OS2_1___widget___os2_emxbindcmd = $(NM) widget$(EXEEXT) | if grep 
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_OS2_1@__widget_os2_lib_res = \
 @COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
+@COND_PLATFORM_MACOSX_1@__widget_app_Contents_PkgInfo___depname \
+@COND_PLATFORM_MACOSX_1@	= widget.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__widget_bundle___depname = widget_bundle
 @COND_TOOLKIT_COCOA@____widget_BUNDLE_TGT_REF_DEP = \
-@COND_TOOLKIT_COCOA@	widget.app/Contents/PkgInfo
+@COND_TOOLKIT_COCOA@	$(__widget_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_MAC@____widget_BUNDLE_TGT_REF_DEP = \
-@COND_TOOLKIT_MAC@	widget.app/Contents/PkgInfo
+@COND_TOOLKIT_MAC@	$(__widget_app_Contents_PkgInfo___depname)
 COND_MONOLITHIC_0___WXLIB_HTML_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_HTML_p = $(COND_MONOLITHIC_0___WXLIB_HTML_p)
@@ -164,25 +166,25 @@ widget$(EXEEXT): $(WIDGET_OBJECTS) $(__widget___win32rc)
 	$(__widget___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-widget.app/Contents/PkgInfo: widget$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(top_srcdir)/src/mac/carbon/wxmac.icns
-	mkdir -p widget.app/Contents
-	mkdir -p widget.app/Contents/MacOS
-	mkdir -p widget.app/Contents/Resources
-	
-	
-	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
-	-e "s/EXECUTABLE/widget/" \
-	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/carbon/Info.plist.in >widget.app/Contents/Info.plist
-	
-	
-	echo -n "APPL????" >widget.app/Contents/PkgInfo
-	
-	
-	ln -f widget$(EXEEXT) widget.app/Contents/MacOS/widget
-	
-	
-	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns widget.app/Contents/Resources/wxmac.icns
+@COND_PLATFORM_MACOSX_1@widget.app/Contents/PkgInfo: widget$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(top_srcdir)/src/mac/carbon/wxmac.icns
+@COND_PLATFORM_MACOSX_1@	mkdir -p widget.app/Contents
+@COND_PLATFORM_MACOSX_1@	mkdir -p widget.app/Contents/MacOS
+@COND_PLATFORM_MACOSX_1@	mkdir -p widget.app/Contents/Resources
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/EXECUTABLE/widget/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/VERSION/$(WX_VERSION)/" \
+@COND_PLATFORM_MACOSX_1@	$(top_srcdir)/src/mac/carbon/Info.plist.in >widget.app/Contents/Info.plist
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >widget.app/Contents/PkgInfo
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	ln -f widget$(EXEEXT) widget.app/Contents/MacOS/widget
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns widget.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@widget_bundle: $(____widget_BUNDLE_TGT_REF_DEP)
 
