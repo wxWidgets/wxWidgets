@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 EVENT_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 EVENT_OBJECTS =  \
 	event_event.o
@@ -59,7 +59,7 @@ clean:
 	rm -f event
 
 event: $(EVENT_OBJECTS)
-	$(CXX) -o $@ $(EVENT_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(EVENT_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 event_event.o: ./event.cpp
 	$(CXX) -c -o $@ $(EVENT_CXXFLAGS) $(CPPDEPS) $<

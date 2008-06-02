@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 DOCVIEW_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 DOCVIEW_OBJECTS =  \
 	docview_docview.o \
@@ -61,7 +61,7 @@ clean:
 	rm -f docview
 
 docview: $(DOCVIEW_OBJECTS)
-	$(CXX) -o $@ $(DOCVIEW_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(DOCVIEW_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 docview_docview.o: ./docview.cpp
 	$(CXX) -c -o $@ $(DOCVIEW_CXXFLAGS) $(CPPDEPS) $<

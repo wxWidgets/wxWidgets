@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 GRID_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 GRID_OBJECTS =  \
 	grid_griddemo.o
@@ -59,7 +59,7 @@ clean:
 	rm -f grid
 
 grid: $(GRID_OBJECTS)
-	$(CXX) -o $@ $(GRID_OBJECTS)   `$(WX_CONFIG) --libs adv,html,xml,core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(GRID_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs adv,html,xml,core,base`
 
 grid_griddemo.o: ./griddemo.cpp
 	$(CXX) -c -o $@ $(GRID_CXXFLAGS) $(CPPDEPS) $<

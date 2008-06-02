@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 TEST_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 TEST_OBJECTS =  \
 	test_test.o
@@ -59,7 +59,7 @@ clean:
 	rm -f test
 
 test: $(TEST_OBJECTS)
-	$(CXX) -o $@ $(TEST_OBJECTS)   `$(WX_CONFIG) --libs html,core,net,base` $(LDFLAGS)
+	$(CXX) -o $@ $(TEST_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs html,core,net,base`
 
 test_test.o: ./test.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<

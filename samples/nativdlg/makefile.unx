@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 NATIVDLG_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 NATIVDLG_OBJECTS =  \
 	nativdlg_nativdlg.o
@@ -59,7 +59,7 @@ clean:
 	rm -f nativdlg
 
 nativdlg: $(NATIVDLG_OBJECTS)
-	$(CXX) -o $@ $(NATIVDLG_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(NATIVDLG_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 nativdlg_nativdlg.o: ./nativdlg.cpp
 	$(CXX) -c -o $@ $(NATIVDLG_CXXFLAGS) $(CPPDEPS) $<

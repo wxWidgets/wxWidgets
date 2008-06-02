@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 SOUND_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 SOUND_OBJECTS =  \
 	sound_sound.o
@@ -59,7 +59,7 @@ clean:
 	rm -f sound
 
 sound: $(SOUND_OBJECTS)
-	$(CXX) -o $@ $(SOUND_OBJECTS)   `$(WX_CONFIG) --libs adv,html,xml,core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(SOUND_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs adv,html,xml,core,base`
 
 sound_sound.o: ./sound.cpp
 	$(CXX) -c -o $@ $(SOUND_CXXFLAGS) $(CPPDEPS) $<

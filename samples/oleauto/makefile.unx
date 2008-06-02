@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 OLEAUTO_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 OLEAUTO_OBJECTS =  \
 	oleauto_oleauto.o
@@ -59,7 +59,7 @@ clean:
 	rm -f oleauto
 
 oleauto: $(OLEAUTO_OBJECTS)
-	$(CXX) -o $@ $(OLEAUTO_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(OLEAUTO_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 oleauto_oleauto.o: ./oleauto.cpp
 	$(CXX) -c -o $@ $(OLEAUTO_CXXFLAGS) $(CPPDEPS) $<

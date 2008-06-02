@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 LISTBOX_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 LISTBOX_OBJECTS =  \
 	listbox_lboxtest.o
@@ -59,7 +59,7 @@ clean:
 	rm -f listbox
 
 listbox: $(LISTBOX_OBJECTS)
-	$(CXX) -o $@ $(LISTBOX_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(LISTBOX_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 listbox_lboxtest.o: ./lboxtest.cpp
 	$(CXX) -c -o $@ $(LISTBOX_CXXFLAGS) $(CPPDEPS) $<

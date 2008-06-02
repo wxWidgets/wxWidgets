@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 MINIFRAM_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 MINIFRAM_OBJECTS =  \
 	minifram_minifram.o
@@ -59,7 +59,7 @@ clean:
 	rm -f minifram
 
 minifram: $(MINIFRAM_OBJECTS)
-	$(CXX) -o $@ $(MINIFRAM_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(MINIFRAM_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 minifram_minifram.o: ./minifram.cpp
 	$(CXX) -c -o $@ $(MINIFRAM_CXXFLAGS) $(CPPDEPS) $<

@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 ARTTEST_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 ARTTEST_OBJECTS =  \
 	arttest_arttest.o \
@@ -60,7 +60,7 @@ clean:
 	rm -f arttest
 
 arttest: $(ARTTEST_OBJECTS)
-	$(CXX) -o $@ $(ARTTEST_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(ARTTEST_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 arttest_arttest.o: ./arttest.cpp
 	$(CXX) -c -o $@ $(ARTTEST_CXXFLAGS) $(CPPDEPS) $<

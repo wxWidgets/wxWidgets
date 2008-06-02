@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 SASHTEST_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 SASHTEST_OBJECTS =  \
 	sashtest_sashtest.o
@@ -59,7 +59,7 @@ clean:
 	rm -f sashtest
 
 sashtest: $(SASHTEST_OBJECTS)
-	$(CXX) -o $@ $(SASHTEST_OBJECTS)   `$(WX_CONFIG) --libs adv,html,xml,core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(SASHTEST_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs adv,html,xml,core,base`
 
 sashtest_sashtest.o: ./sashtest.cpp
 	$(CXX) -c -o $@ $(SASHTEST_CXXFLAGS) $(CPPDEPS) $<

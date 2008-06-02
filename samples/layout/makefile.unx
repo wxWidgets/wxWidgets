@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 LAYOUT_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 LAYOUT_OBJECTS =  \
 	layout_layout.o
@@ -59,7 +59,7 @@ clean:
 	rm -f layout
 
 layout: $(LAYOUT_OBJECTS)
-	$(CXX) -o $@ $(LAYOUT_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(LAYOUT_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 layout_layout.o: ./layout.cpp
 	$(CXX) -c -o $@ $(LAYOUT_CXXFLAGS) $(CPPDEPS) $<

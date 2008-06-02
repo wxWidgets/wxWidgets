@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 SPLITTER_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 SPLITTER_OBJECTS =  \
 	splitter_splitter.o
@@ -59,7 +59,7 @@ clean:
 	rm -f splitter
 
 splitter: $(SPLITTER_OBJECTS)
-	$(CXX) -o $@ $(SPLITTER_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(SPLITTER_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 splitter_splitter.o: ./splitter.cpp
 	$(CXX) -c -o $@ $(SPLITTER_CXXFLAGS) $(CPPDEPS) $<

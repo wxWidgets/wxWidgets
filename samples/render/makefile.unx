@@ -42,7 +42,7 @@ SHARED := 0
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 RENDER_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 RENDER_OBJECTS =  \
 	render_render.o
@@ -72,11 +72,11 @@ clean:
 	rm -f renddll.so
 
 render: $(RENDER_OBJECTS)
-	$(CXX) -o $@ $(RENDER_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(RENDER_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 ifeq ($(SHARED),1)
 renddll.so: $(RENDDLL_OBJECTS)
-	$(CXX) $(LINK_MODULE_FLAGS) -fPIC -o $@ $(RENDDLL_OBJECTS)  `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) $(LINK_MODULE_FLAGS) -fPIC -o $@ $(RENDDLL_OBJECTS) $(LDFLAGS) `$(WX_CONFIG) --libs core,base`
 endif
 
 render_render.o: ./render.cpp

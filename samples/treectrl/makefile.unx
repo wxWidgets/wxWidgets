@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 TREECTRL_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 TREECTRL_OBJECTS =  \
 	treectrl_treetest.o
@@ -59,7 +59,7 @@ clean:
 	rm -f treectrl
 
 treectrl: $(TREECTRL_OBJECTS)
-	$(CXX) -o $@ $(TREECTRL_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(TREECTRL_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 treectrl_treetest.o: ./treetest.cpp
 	$(CXX) -c -o $@ $(TREECTRL_CXXFLAGS) $(CPPDEPS) $<

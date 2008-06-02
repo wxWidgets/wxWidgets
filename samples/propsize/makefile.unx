@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 PROPSIZE_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 PROPSIZE_OBJECTS =  \
 	propsize_propsize.o
@@ -59,7 +59,7 @@ clean:
 	rm -f propsize
 
 propsize: $(PROPSIZE_OBJECTS)
-	$(CXX) -o $@ $(PROPSIZE_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(PROPSIZE_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 propsize_propsize.o: ./propsize.cpp
 	$(CXX) -c -o $@ $(PROPSIZE_CXXFLAGS) $(CPPDEPS) $<

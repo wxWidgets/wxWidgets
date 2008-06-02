@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 REGTEST_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 REGTEST_OBJECTS =  \
 	regtest_regtest.o
@@ -59,7 +59,7 @@ clean:
 	rm -f regtest
 
 regtest: $(REGTEST_OBJECTS)
-	$(CXX) -o $@ $(REGTEST_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(REGTEST_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 regtest_regtest.o: ./regtest.cpp
 	$(CXX) -c -o $@ $(REGTEST_CXXFLAGS) $(CPPDEPS) $<

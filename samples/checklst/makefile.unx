@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 CHECKLST_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 CHECKLST_OBJECTS =  \
 	checklst_checklst.o
@@ -59,7 +59,7 @@ clean:
 	rm -f checklst
 
 checklst: $(CHECKLST_OBJECTS)
-	$(CXX) -o $@ $(CHECKLST_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(CHECKLST_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 checklst_checklst.o: ./checklst.cpp
 	$(CXX) -c -o $@ $(CHECKLST_CXXFLAGS) $(CPPDEPS) $<

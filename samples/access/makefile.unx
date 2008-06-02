@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 ACCESSTEST_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 ACCESSTEST_OBJECTS =  \
 	accesstest_accesstest.o
@@ -59,7 +59,7 @@ clean:
 	rm -f accesstest
 
 accesstest: $(ACCESSTEST_OBJECTS)
-	$(CXX) -o $@ $(ACCESSTEST_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(ACCESSTEST_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 accesstest_accesstest.o: ./accesstest.cpp
 	$(CXX) -c -o $@ $(ACCESSTEST_CXXFLAGS) $(CPPDEPS) $<

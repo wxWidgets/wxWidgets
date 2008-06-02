@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 STATBAR_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 STATBAR_OBJECTS =  \
 	statbar_statbar.o
@@ -59,7 +59,7 @@ clean:
 	rm -f statbar
 
 statbar: $(STATBAR_OBJECTS)
-	$(CXX) -o $@ $(STATBAR_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(STATBAR_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 statbar_statbar.o: ./statbar.cpp
 	$(CXX) -c -o $@ $(STATBAR_CXXFLAGS) $(CPPDEPS) $<

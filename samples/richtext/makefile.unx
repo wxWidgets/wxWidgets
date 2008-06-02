@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 RICHTEXT_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 RICHTEXT_OBJECTS =  \
 	richtext_richtext.o
@@ -59,7 +59,7 @@ clean:
 	rm -f richtext
 
 richtext: $(RICHTEXT_OBJECTS)
-	$(CXX) -o $@ $(RICHTEXT_OBJECTS)   `$(WX_CONFIG) --libs richtext,adv,html,core,xml,base` $(LDFLAGS)
+	$(CXX) -o $@ $(RICHTEXT_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs richtext,adv,html,core,xml,base`
 
 richtext_richtext.o: ./richtext.cpp
 	$(CXX) -c -o $@ $(RICHTEXT_CXXFLAGS) $(CPPDEPS) $<

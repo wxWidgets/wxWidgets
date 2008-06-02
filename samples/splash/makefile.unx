@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 SPLASH_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 SPLASH_OBJECTS =  \
 	splash_splash.o
@@ -59,7 +59,7 @@ clean:
 	rm -f splash
 
 splash: $(SPLASH_OBJECTS)
-	$(CXX) -o $@ $(SPLASH_OBJECTS)   `$(WX_CONFIG) --libs media,adv,html,xml,core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(SPLASH_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs media,adv,html,xml,core,base`
 
 splash_splash.o: ./splash.cpp
 	$(CXX) -c -o $@ $(SPLASH_CXXFLAGS) $(CPPDEPS) $<

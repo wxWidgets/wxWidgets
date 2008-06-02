@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 VIRTUAL_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 VIRTUAL_OBJECTS =  \
 	virtual_virtual.o
@@ -59,7 +59,7 @@ clean:
 	rm -f virtual
 
 virtual: $(VIRTUAL_OBJECTS)
-	$(CXX) -o $@ $(VIRTUAL_OBJECTS)   `$(WX_CONFIG) --libs html,core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(VIRTUAL_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs html,core,base`
 
 virtual_virtual.o: ./virtual.cpp
 	$(CXX) -c -o $@ $(VIRTUAL_CXXFLAGS) $(CPPDEPS) $<

@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 HTMLPRINTING_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 HTMLPRINTING_OBJECTS =  \
 	htmlprinting_printing.o
@@ -59,7 +59,7 @@ clean:
 	rm -f htmlprinting
 
 htmlprinting: $(HTMLPRINTING_OBJECTS)
-	$(CXX) -o $@ $(HTMLPRINTING_OBJECTS)   `$(WX_CONFIG) --libs html,core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(HTMLPRINTING_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs html,core,base`
 
 htmlprinting_printing.o: ./printing.cpp
 	$(CXX) -c -o $@ $(HTMLPRINTING_CXXFLAGS) $(CPPDEPS) $<

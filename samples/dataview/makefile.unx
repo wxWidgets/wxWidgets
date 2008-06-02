@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 DATAVIEW_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 DATAVIEW_OBJECTS =  \
 	dataview_dataview.o
@@ -59,7 +59,7 @@ clean:
 	rm -f dataview
 
 dataview: $(DATAVIEW_OBJECTS)
-	$(CXX) -o $@ $(DATAVIEW_OBJECTS)   `$(WX_CONFIG) --libs adv,core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(DATAVIEW_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs adv,core,base`
 
 dataview_dataview.o: ./dataview.cpp
 	$(CXX) -c -o $@ $(DATAVIEW_CXXFLAGS) $(CPPDEPS) $<

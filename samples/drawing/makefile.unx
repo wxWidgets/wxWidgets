@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 DRAWING_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 DRAWING_OBJECTS =  \
 	drawing_drawing.o
@@ -59,7 +59,7 @@ clean:
 	rm -f drawing
 
 drawing: $(DRAWING_OBJECTS)
-	$(CXX) -o $@ $(DRAWING_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(DRAWING_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 drawing_drawing.o: ./drawing.cpp
 	$(CXX) -c -o $@ $(DRAWING_CXXFLAGS) $(CPPDEPS) $<

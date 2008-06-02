@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 WIDGETS_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 WIDGETS_OBJECTS =  \
 	widgets_bmpcombobox.o \
@@ -81,7 +81,7 @@ clean:
 	rm -f widgets
 
 widgets: $(WIDGETS_OBJECTS)
-	$(CXX) -o $@ $(WIDGETS_OBJECTS)   `$(WX_CONFIG) --libs xml,adv,html,core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(WIDGETS_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs xml,adv,html,core,base`
 
 widgets_bmpcombobox.o: ./bmpcombobox.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<

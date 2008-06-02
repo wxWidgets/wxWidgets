@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 CONFTEST_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 CONFTEST_OBJECTS =  \
 	conftest_conftest.o
@@ -59,7 +59,7 @@ clean:
 	rm -f conftest
 
 conftest: $(CONFTEST_OBJECTS)
-	$(CXX) -o $@ $(CONFTEST_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(CONFTEST_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 conftest_conftest.o: ./conftest.cpp
 	$(CXX) -c -o $@ $(CONFTEST_CXXFLAGS) $(CPPDEPS) $<

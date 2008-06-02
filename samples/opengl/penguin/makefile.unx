@@ -45,7 +45,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 PENGUIN_CFLAGS =  -I.  $(WX_CFLAGS) $(CPPFLAGS) $(CFLAGS)
 PENGUIN_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 PENGUIN_OBJECTS =  \
@@ -71,7 +71,7 @@ clean:
 	rm -f penguin
 
 penguin: $(PENGUIN_OBJECTS)
-	$(CXX) -o $@ $(PENGUIN_OBJECTS)   `$(WX_CONFIG) --libs gl,core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(PENGUIN_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs gl,core,base`
 
 penguin_penguin.o: ./penguin.cpp
 	$(CXX) -c -o $@ $(PENGUIN_CXXFLAGS) $(CPPDEPS) $<

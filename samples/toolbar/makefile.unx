@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 TOOLBAR_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 TOOLBAR_OBJECTS =  \
 	toolbar_toolbar.o
@@ -59,7 +59,7 @@ clean:
 	rm -f toolbar
 
 toolbar: $(TOOLBAR_OBJECTS)
-	$(CXX) -o $@ $(TOOLBAR_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(TOOLBAR_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 toolbar_toolbar.o: ./toolbar.cpp
 	$(CXX) -c -o $@ $(TOOLBAR_CXXFLAGS) $(CPPDEPS) $<

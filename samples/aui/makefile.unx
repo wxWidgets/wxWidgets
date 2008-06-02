@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 AUIDEMO_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 AUIDEMO_OBJECTS =  \
 	auidemo_auidemo.o
@@ -59,7 +59,7 @@ clean:
 	rm -f auidemo
 
 auidemo: $(AUIDEMO_OBJECTS)
-	$(CXX) -o $@ $(AUIDEMO_OBJECTS)   `$(WX_CONFIG) --libs aui,html,adv,core,xml,base` $(LDFLAGS)
+	$(CXX) -o $@ $(AUIDEMO_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs aui,html,adv,core,xml,base`
 
 auidemo_auidemo.o: ./auidemo.cpp
 	$(CXX) -c -o $@ $(AUIDEMO_CXXFLAGS) $(CPPDEPS) $<

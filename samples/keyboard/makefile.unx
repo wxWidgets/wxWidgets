@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 KEYBOARD_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 KEYBOARD_OBJECTS =  \
 	keyboard_keyboard.o
@@ -59,7 +59,7 @@ clean:
 	rm -f keyboard
 
 keyboard: $(KEYBOARD_OBJECTS)
-	$(CXX) -o $@ $(KEYBOARD_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(KEYBOARD_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 keyboard_keyboard.o: ./keyboard.cpp
 	$(CXX) -c -o $@ $(KEYBOARD_CXXFLAGS) $(CPPDEPS) $<
