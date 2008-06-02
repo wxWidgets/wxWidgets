@@ -31,8 +31,9 @@
             <if cond="TOOLKIT=='MAC'">$(BUNDLE)/PkgInfo</if>
             <if cond="TOOLKIT=='COCOA'">$(BUNDLE)/PkgInfo</if>
         </set>
-        
-        <add-target target="$(BUNDLE_TGT)" type="action"/>
+
+        <add-target target="$(BUNDLE_TGT)" type="action"
+                    cond="target and PLATFORM_MACOSX=='1'"/>
         <modify-target target="$(BUNDLE_TGT)">
             <!-- required data: -->
             <depends>$(id)</depends>
@@ -64,7 +65,7 @@
         
         <!-- add pseudo target id_bundle: -->
         <add-target target="$(id)_bundle" type="phony"
-                    cond="PLATFORM_MACOSX=='1'"/>
+                    cond="target and PLATFORM_MACOSX=='1'"/>
         <modify-target target="$(id)_bundle">
             <dependency-of>all</dependency-of>
             <depends>$(BUNDLE_TGT_REF)</depends>
