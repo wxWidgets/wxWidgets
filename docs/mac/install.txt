@@ -57,11 +57,19 @@ By configuring the library with --disable-shared and using the full path
 to wx-config with the --in-place option you can avoid installing the library.
 
 
-Apple Developer Tools: XCode
+Apple Developer Tools: Xcode
 ----------------------------
 
 You can use the project in src/wxWindows.xcodeproj to build wxWidgets,
 and there is a sample project supplied with the minimal sample.
+
+Notice that the command line build above builds not just the library itself but
+also wxrc tool which doesn't have its own Xcode project. If you need this tool,
+the simplest possibility is to build it from the command line after installing
+the libraries using commands like this:
+
+$ cd utils/wxrc
+$ g++ -o wxrc wxrc.cpp `wx-config --cxxflags --libs base,xml`
 
 Creating universal binaries
 ---------------------------
