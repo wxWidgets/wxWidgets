@@ -4257,15 +4257,30 @@ bool wxWindowMSW::HandlePower(WXWPARAM WXUNUSED_IN_WINCE(wParam),
 
 bool wxWindowMSW::IsDoubleBuffered() const
 {
-    for ( const wxWindowMSW *wnd = this;
-          wnd && !wnd->IsTopLevel(); wnd =
-          wnd->GetParent() )
-    {
-        if ( ::GetWindowLong(GetHwndOf(wnd), GWL_EXSTYLE) & WS_EX_COMPOSITED )
+    const wxWindowMSW *wnd = this;
+    do {
+        long style = ::GetWindowLong(GetHwndOf(wnd), GWL_EXSTYLE);
+        if ( (style & WS_EX_COMPOSITED) != 0 )
             return true;
-    }
-
+        wnd = wnd->GetParent();
+    } while ( wnd && !wnd->IsTopLevel() );
+        
     return false;
+}
+
+void wxWindowMSW::SetDoubleBuffered(bool on)
+{
+    // Get the current extended style bits
+    long exstyle = ::GetWindowLong(GetHwnd(), GWL_EXSTYLE);
+
+    // Twiddle the bit as needed
+    if ( on )
+        exstyle |= WS_EX_COMPOSITED;
+    else
+        exstyle &= ~WS_EX_COMPOSITED;
+
+    // put it back
+    ::SetWindowLong(GetHwnd(), GWL_EXSTYLE, exstyle);
 }
 
 // ---------------------------------------------------------------------------
