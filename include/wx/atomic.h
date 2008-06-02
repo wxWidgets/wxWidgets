@@ -88,7 +88,7 @@ inline wxUint32 wxAtomicDec (wxUint32 &value)
 #else // unknown platform
 
 // it will result in inclusion if the generic implementation code a bit later in this page
-#define wxHAS_GENERIC_ATOMIC_OPS 1
+#define wxNEEDS_GENERIC_ATOMIC_OPS
 
 #endif // unknown platform
 
@@ -105,11 +105,8 @@ inline wxUint32 wxAtomicDec (wxUint32 &value) { return --value; }
 //  behaviour
 // ----------------------------------------------------------------------------
 
-#if !defined(wxHAS_GENERIC_ATOMIC_OPS)
-#define wxHAS_GENERIC_ATOMIC_OPS 0
-#endif
+#ifdef wxNEEDS_GENERIC_ATOMIC_OPS
 
-#if wxHAS_GENERIC_ATOMIC_OPS
 #include "wx/thread.h" // for wxCriticalSection
 
 class wxAtomicInt32
@@ -144,14 +141,16 @@ private:
 inline void wxAtomicInc(wxAtomicInt32 &value) { value.Inc(); }
 inline wxInt32 wxAtomicDec(wxAtomicInt32 &value) { return value.Dec(); }
 
-#else // !wxHAS_GENERIC_ATOMIC_OPS
+#else // !wxNEEDS_GENERIC_ATOMIC_OPS
+
+#define wxHAS_ATOMIC_OPS
 
 inline void wxAtomicInc(wxInt32 &value) { wxAtomicInc((wxUint32&)value); }
 inline wxInt32 wxAtomicDec(wxInt32 &value) { return wxAtomicDec((wxUint32&)value); }
 
 typedef wxInt32 wxAtomicInt32;
 
-#endif // wxHAS_GENERIC_ATOMIC_OPS
+#endif // wxNEEDS_GENERIC_ATOMIC_OPS
 
 // all the native implementations use 32 bits currently
 // for a 64 bits implementation we could use (a future) wxAtomicInt64 as

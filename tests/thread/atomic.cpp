@@ -28,6 +28,18 @@
 WX_DEFINE_ARRAY_PTR(wxThread *, wxArrayThread);
 
 // ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+// number of times to run the loops: the code takes too long to run if we use
+// the bigger value with generic atomic operations implementation
+#ifdef wxHAS_ATOMIC_OPS
+    static const wxInt32 ITERATIONS_NUM = 10000000;
+#else
+    static const wxInt32 ITERATIONS_NUM = 1000;
+#endif
+
+// ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
 
@@ -86,16 +98,17 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( AtomicTestCase, "AtomicTestCase" );
 
 void AtomicTestCase::TestNoThread()
 {
-    wxAtomicInt    int1=0, int2=0;
+    wxAtomicInt int1 = 0,
+                int2 = 0;
 
-    for (wxInt32 i=0; i<10000000; ++i)
+    for ( wxInt32 i = 0; i < ITERATIONS_NUM; ++i )
     {
         wxAtomicInc(int1);
         wxAtomicDec(int2);
     }
 
-    CPPUNIT_ASSERT( int1 == 10000000 );
-    CPPUNIT_ASSERT( int2 == -10000000 );
+    CPPUNIT_ASSERT( int1 == ITERATIONS_NUM );
+    CPPUNIT_ASSERT( int2 == -ITERATIONS_NUM );
 }
 
 void AtomicTestCase::TestDecReturn()
@@ -160,25 +173,25 @@ void *AtomicTestCase::MyThread::Entry()
 {
     wxInt32 negativeValuesSeen = 0;
 
-    for (wxInt32 i=0; i<10000000; ++i)
+    for ( wxInt32 i = 0; i < ITERATIONS_NUM; ++i )
     {
-        switch (m_testType)
+        switch ( m_testType )
         {
-        case AtomicTestCase::IncAndDecMixed:
-            wxAtomicInc(m_operateOn);
-            wxAtomicDec(m_operateOn);
+            case AtomicTestCase::IncAndDecMixed:
+                wxAtomicInc(m_operateOn);
+                wxAtomicDec(m_operateOn);
 
-            if (m_operateOn < 0)
-                ++negativeValuesSeen;
-            break;
+                if (m_operateOn < 0)
+                    ++negativeValuesSeen;
+                break;
 
-        case AtomicTestCase::IncOnly:
-            wxAtomicInc(m_operateOn);
-            break;
+            case AtomicTestCase::IncOnly:
+                wxAtomicInc(m_operateOn);
+                break;
 
-        case AtomicTestCase::DecOnly:
-            wxAtomicDec(m_operateOn);
-            break;
+            case AtomicTestCase::DecOnly:
+                wxAtomicDec(m_operateOn);
+                break;
         }
     }
 
