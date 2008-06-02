@@ -140,10 +140,6 @@ public:
     wxString GetLabel() const;
 
     /**
-        Strips all accelerator characters and mnemonics from the given @e text.
-        For example,
-
-        will return just @c "Hello".
         This function is deprecated; please use GetLabelText() instead.
 
         @see GetText(), GetLabel()
@@ -152,7 +148,11 @@ public:
 
     /**
         Strips all accelerator characters and mnemonics from the given @e text.
-        For example,
+        For example:
+
+        @code
+          wxMenuItem::GetLabelfromText( "&Hello\tCtrl-h");
+        @endcode
 
         will return just @c "Hello".
 
