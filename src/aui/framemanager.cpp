@@ -2321,7 +2321,9 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
 
         if (middle->GetChildren().GetCount() > 0)
             cont->Add(middle, 1, wxEXPAND);
-
+             else
+            delete middle;
+            
 
 
         // find any bottom docks in this layer
