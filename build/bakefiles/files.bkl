@@ -1179,7 +1179,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/textctrl.h
     wx/gtk/textentry.h
     wx/gtk/tglbtn.h
-    wx/gtk/treectrl.h
     wx/gtk/treeentry_gtk.h
 </set>
 
