@@ -581,13 +581,15 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
         wxToolBarTool *tool2 = (wxToolBarTool*)node->GetData();
         if ( tool2->IsControl() )
         {
+            wxControl * const control = tool2->GetControl();
+
             int x;
-            wxControl *control = tool2->GetControl();
             control->GetPosition(&x, NULL);
             control->Move(x - width, wxDefaultCoord);
 
-            wxStaticText* staticText = tool2->GetStaticText();
-            staticText->Move(x - width, wxDefaultCoord);
+            wxStaticText * const staticText = tool2->GetStaticText();
+            if ( staticText )
+                staticText->Move(x - width, wxDefaultCoord);
         }
     }
 
