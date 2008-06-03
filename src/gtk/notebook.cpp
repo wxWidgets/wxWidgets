@@ -88,7 +88,7 @@ static void gtk_notebook_page_changing_callback( GtkNotebook *widget,
     if ( !notebook->SendPageChangingEvent(page) )
     {
         // program doesn't allow the page change
-        g_signal_stop_emission_by_name(notebook->m_widget, "switch_page");
+        g_signal_stop_emission_by_name( widget, "switch_page" );
     }
     else
     {
@@ -106,20 +106,6 @@ static void gtk_notebook_page_changed_callback( GtkNotebook * WXUNUSED(widget),
 {
     int old = notebook->m_oldSelection;
     notebook->SendPageChangedEvent( old );
-}
-}
-
-//-----------------------------------------------------------------------------
-// "realize" from m_widget
-//-----------------------------------------------------------------------------
-
-extern "C" {
-static void
-gtk_notebook_realized_callback( GtkWidget * WXUNUSED(widget), wxWindow *win )
-{
-    /* GTK 1.2 up to version 1.2.5 is broken so that we have to call a queue_resize
-       here in order to make repositioning before showing to take effect. */
-    gtk_widget_queue_resize( win->m_widget );
 }
 }
 
@@ -218,9 +204,6 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
         gtk_notebook_set_tab_pos( GTK_NOTEBOOK(m_widget), GTK_POS_BOTTOM );
 
     PostCreation(size);
-
-    g_signal_connect (m_widget, "realize",
-                      G_CALLBACK (gtk_notebook_realized_callback), this);
 
     return true;
 }
