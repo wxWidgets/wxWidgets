@@ -194,8 +194,7 @@ void wxWindowDC::DoGetSize( int* width, int* height ) const
 
 wxBitmap wxWindowDC::DoGetAsBitmap(const wxRect *subrect) const
 {
-    // wxScreenDC is derived from wxWindowDC, so a screen dc will
-    // call this method when a Blit is performed with it as a source.
+#if wxMAC_USE_CORE_GRAPHICS
     if (!m_window)
         return wxNullBitmap;
         
@@ -231,6 +230,9 @@ wxBitmap wxWindowDC::DoGetAsBitmap(const wxRect *subrect) const
     CGContextRestoreGState(context);
 
     return bmp;
+#else
+    return wxNullBitmap;
+#endif
 }
 
 /*
