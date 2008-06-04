@@ -59,6 +59,9 @@ public:
 
     virtual void Update();
 
+    virtual void Raise();
+    virtual void Lower();
+
     // implementation from now on
     // --------------------------
 

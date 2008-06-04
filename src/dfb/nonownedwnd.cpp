@@ -259,6 +259,16 @@ bool wxNonOwnedWindow::Show(bool show)
     return true;
 }
 
+void wxNonOwnedWindow::Raise()
+{
+    m_dfbwin->RaiseToTop();
+}
+
+void wxNonOwnedWindow::Lower()
+{
+    m_dfbwin->LowerToBottom();
+}
+
 // ----------------------------------------------------------------------------
 // surfaces and painting
 // ----------------------------------------------------------------------------

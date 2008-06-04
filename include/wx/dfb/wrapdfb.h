@@ -434,6 +434,12 @@ struct wxIDirectFBWindow : public wxDfbWrapper<IDirectFBWindow>
     bool SetStackingClass(DFBWindowStackingClass klass)
         { return Check(m_ptr->SetStackingClass(m_ptr, klass)); }
 
+    bool RaiseToTop()
+        { return Check(m_ptr->RaiseToTop(m_ptr)); }
+
+    bool LowerToBottom()
+        { return Check(m_ptr->LowerToBottom(m_ptr)); }
+
     wxIDirectFBSurfacePtr GetSurface()
     {
         IDirectFBSurface *s;
