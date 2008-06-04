@@ -35,6 +35,8 @@
 #import <OpenGL/OpenGL.h>
 #import <OpenGL/gl.h>
 
+#if wxMAC_USE_CORE_GRAPHICS
+
 #include "wx/mac/common/glgrab.h"
 
 
@@ -211,3 +213,5 @@ CGImageRef grabViaOpenGL(CGDirectDisplayID display, CGRect srcRect)
     /* Returned image has a reference count of 1 */
     return image;
 }
+
+#endif
