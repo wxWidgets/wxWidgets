@@ -6160,10 +6160,10 @@ bool wxRichTextBuffer::PasteFromClipboard(long position)
                 if (action->GetNewParagraphs().GetChildCount() == 1)
                     action->GetNewParagraphs().SetPartialParagraph(true);
 
-                action->SetPosition(position);
+                action->SetPosition(position+1);
 
                 // Set the range we'll need to delete in Undo
-                action->SetRange(wxRichTextRange(position, position));
+                action->SetRange(wxRichTextRange(position+1, position+1));
 
                 SubmitAction(action);
 
