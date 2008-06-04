@@ -26996,8 +26996,14 @@ fi
 
 
 
+            case "${host}" in
+	x86_64-*-mingw32* )
+                        LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lcomctl32 -lcomdlg32 -lwctl3d32 -ladvapi32 -lwsock32 -lgdi32"
+        ;;
+        * )
             LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lcomctl32 -lcomdlg32 -lctl3d32 -ladvapi32 -lwsock32 -lgdi32"
-
+        ;;
+    esac
     if test "$wxUSE_ACCESSIBILITY" = "yes" ; then
         LIBS="$LIBS -loleacc"
     fi
@@ -40000,6 +40006,8 @@ echo "$as_me: WARNING: wxMutex won't be recursive on this platform" >&2;}
 else
     if test "$wxUSE_THREADS" = "yes" ; then
       case "${host}" in
+	x86_64-*-mingw32* )
+        ;;
         *-*-mingw32* )
                         echo "$as_me:$LINENO: checking if compiler supports -mthreads" >&5
 echo $ECHO_N "checking if compiler supports -mthreads... $ECHO_C" >&6
