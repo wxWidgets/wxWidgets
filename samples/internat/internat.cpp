@@ -414,7 +414,7 @@ void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event))
 {
-    const wxChar* title = _("Testing _() (gettext)");
+    const wxString title = _("Testing _() (gettext)");
     wxTextEntryDialog d(this, _("Please enter text to translate"),
         title, wxTRANSLATE("default value"));
     if (d.ShowModal() == wxID_OK)
@@ -429,7 +429,7 @@ void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnTest2(wxCommandEvent& WXUNUSED(event))
 {
-    const wxChar* title = _("Testing _N() (ngettext)");
+    const wxString title = _("Testing _N() (ngettext)");
     wxTextEntryDialog d(this,
         _("Please enter range for plural forms of \"n files deleted\" phrase"),
         title, _T("0-10"));
