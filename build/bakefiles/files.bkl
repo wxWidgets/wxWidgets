@@ -3300,7 +3300,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- ====================================================================== -->
 
 <set var="OPENGL_SRC_PLATFORM" hints="files">
-    src/common/glcmn.cpp
     <if cond="TOOLKIT=='MAC'">src/mac/carbon/glcanvas.cpp</if>
     <if cond="TOOLKIT=='COCOA'">src/cocoa/glcanvas.mm</if>
     <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">
