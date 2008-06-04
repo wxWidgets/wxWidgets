@@ -34,6 +34,8 @@
 		40011CBD0893D5B400E4DE95 /* utilsexc_base.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40011CBB0893D5B400E4DE95 /* utilsexc_base.cpp */; };
 		40011F3C0897D8DF00E4DE95 /* setup0.h in Headers */ = {isa = PBXBuildFile; fileRef = 40011F3B0897D8DF00E4DE95 /* setup0.h */; };
 		40011F3D0897D8DF00E4DE95 /* setup0.h in Headers */ = {isa = PBXBuildFile; fileRef = 40011F3B0897D8DF00E4DE95 /* setup0.h */; };
+		400AE9BF0DF6656D00D5018A /* glgrab.c in Sources */ = {isa = PBXBuildFile; fileRef = 400AE9BE0DF6656D00D5018A /* glgrab.c */; };
+		400AE9C00DF6656D00D5018A /* glgrab.c in Sources */ = {isa = PBXBuildFile; fileRef = 400AE9BE0DF6656D00D5018A /* glgrab.c */; };
 		400EDEB3089D4FFD00E848D9 /* propdlg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 400EDEB2089D4FFD00E848D9 /* propdlg.cpp */; };
 		400EDEB4089D4FFD00E848D9 /* propdlg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 400EDEB2089D4FFD00E848D9 /* propdlg.cpp */; };
 		401640E607F94B2800A8837A /* imaglist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 401640E507F94B2800A8837A /* imaglist.cpp */; };
@@ -1164,6 +1166,7 @@
 		0A98CD2207172992007B4289 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
 		40011CBB0893D5B400E4DE95 /* utilsexc_base.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = utilsexc_base.cpp; path = mac/corefoundation/utilsexc_base.cpp; sourceTree = SOURCE_ROOT; };
 		40011F3B0897D8DF00E4DE95 /* setup0.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = setup0.h; path = wx/mac/setup0.h; sourceTree = "<group>"; };
+		400AE9BE0DF6656D00D5018A /* glgrab.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = glgrab.c; path = mac/common/glgrab.c; sourceTree = "<group>"; };
 		400EDEB2089D4FFD00E848D9 /* propdlg.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = propdlg.cpp; sourceTree = "<group>"; };
 		401640E507F94B2800A8837A /* imaglist.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = imaglist.cpp; sourceTree = "<group>"; };
 		402AB2540AFF554A00C0D0C9 /* arcall.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = arcall.cpp; sourceTree = "<group>"; };
@@ -2157,7 +2160,15 @@
 			name = "External Frameworks and Libraries";
 			sourceTree = "<group>";
 		};
-		40670A8107377A3600F7C08C /* mac/corefoundation */ = {
+		400AE9BD0DF6652700D5018A /* mac_common */ = {
+			isa = PBXGroup;
+			children = (
+				400AE9BE0DF6656D00D5018A /* glgrab.c */,
+			);
+			name = mac_common;
+			sourceTree = "<group>";
+		};
+		40670A8107377A3600F7C08C /* mac_corefoundation */ = {
 			isa = PBXGroup;
 			children = (
 				40670A8207377A6300F7C08C /* cfstring.cpp */,
@@ -2168,7 +2179,7 @@
 				40011CBB0893D5B400E4DE95 /* utilsexc_base.cpp */,
 				40607C750749432A00DC0420 /* utilsexc_cf.cpp */,
 			);
-			name = mac/corefoundation;
+			name = mac_corefoundation;
 			path = mac/carbon;
 			sourceTree = "<group>";
 		};
@@ -2732,8 +2743,9 @@
 				F5A8606E01FA022C0175ACA7 /* generic */,
 				F5A860F101FA022C0175ACA7 /* html */,
 				F5A8613E01FA022C0175ACA7 /* jpeg */,
-				40670A8107377A3600F7C08C /* mac/corefoundation */,
-				F5A8619901FA022C0175ACA7 /* mac/carbon */,
+				400AE9BD0DF6652700D5018A /* mac_common */,
+				40670A8107377A3600F7C08C /* mac_corefoundation */,
+				F5A8619901FA022C0175ACA7 /* mac_carbon */,
 				F5A863AB01FA022C0175ACA7 /* png */,
 				4086C62E063AAD4A00D4CD53 /* regex */,
 				40F185B80AB722BC00E3BEF9 /* richtext */,
@@ -3082,7 +3094,7 @@
 			path = jpeg;
 			sourceTree = "<group>";
 		};
-		F5A8619901FA022C0175ACA7 /* mac/carbon */ = {
+		F5A8619901FA022C0175ACA7 /* mac_carbon */ = {
 			isa = PBXGroup;
 			children = (
 				40C8AA5F0C538FDD006D5BE9 /* utilscocoa.mm */,
@@ -3180,6 +3192,7 @@
 				F5A8620801FA022C0175ACA7 /* utilsexc.cpp */,
 				F5A8620A01FA022C0175ACA7 /* window.cpp */,
 			);
+			name = mac_carbon;
 			path = mac/carbon;
 			sourceTree = "<group>";
 		};
@@ -3952,6 +3965,7 @@
 				40C8AA600C538FDD006D5BE9 /* utilscocoa.mm in Sources */,
 				40827E120CA0FABD00C14F94 /* xh_richtext.cpp in Sources */,
 				40827E130CA0FABD00C14F94 /* xh_propdlg.cpp in Sources */,
+				400AE9BF0DF6656D00D5018A /* glgrab.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4498,6 +4512,7 @@
 				40C8AA610C538FDD006D5BE9 /* utilscocoa.mm in Sources */,
 				40827E140CA0FABD00C14F94 /* xh_richtext.cpp in Sources */,
 				40827E150CA0FABD00C14F94 /* xh_propdlg.cpp in Sources */,
+				400AE9C00DF6656D00D5018A /* glgrab.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
