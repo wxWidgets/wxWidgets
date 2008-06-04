@@ -266,17 +266,15 @@ void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnPrintSmall(wxCommandEvent& WXUNUSED(event))
 {
-    int fontsizes[] = { 4, 6, 8, 10, 12, 20, 24 }; 
-    m_Prn->SetFonts(wxEmptyString, wxEmptyString, fontsizes);
+    m_Prn->SetStandardFonts(8);
 }
 
 void MyFrame::OnPrintNormal(wxCommandEvent& WXUNUSED(event))
 {
-    m_Prn->SetFonts(wxEmptyString, wxEmptyString, 0);
+    m_Prn->SetStandardFonts(12);
 }
 
 void MyFrame::OnPrintHuge(wxCommandEvent& WXUNUSED(event))
 {
-    int fontsizes[] = { 20, 26, 28, 30, 32, 40, 44 }; 
-    m_Prn->SetFonts(wxEmptyString, wxEmptyString, fontsizes);
+    m_Prn->SetStandardFonts(28);
 }

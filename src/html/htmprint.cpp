@@ -33,6 +33,10 @@
 #include "wx/wfstream.h"
 
 
+// default font size of normal text (HTML font size 0) for printing, in points:
+#define DEFAULT_PRINT_FONT_SIZE   12
+
+
 //--------------------------------------------------------------------------------
 // wxHtmlDCRenderer
 //--------------------------------------------------------------------------------
@@ -46,6 +50,7 @@ wxHtmlDCRenderer::wxHtmlDCRenderer() : wxObject()
     m_Parser = new wxHtmlWinParser();
     m_FS = new wxFileSystem();
     m_Parser->SetFS(m_FS);
+    SetStandardFonts(DEFAULT_PRINT_FONT_SIZE);
 }
 
 
@@ -161,6 +166,7 @@ wxHtmlPrintout::wxHtmlPrintout(const wxString& title) : wxPrintout(title)
     m_Footers[0] = m_Footers[1] = wxEmptyString;
     m_HeaderHeight = m_FooterHeight = 0;
     SetMargins(); // to default values
+    SetStandardFonts(DEFAULT_PRINT_FONT_SIZE);
 }
 
 
@@ -500,7 +506,7 @@ wxHtmlEasyPrinting::wxHtmlEasyPrinting(const wxString& name, wxWindow *parentWin
     m_PageSetupData->SetMarginTopLeft(wxPoint(25, 25));
     m_PageSetupData->SetMarginBottomRight(wxPoint(25, 25));
 
-    SetFonts(wxEmptyString, wxEmptyString, NULL);
+    SetStandardFonts(DEFAULT_PRINT_FONT_SIZE);
 }
 
 
