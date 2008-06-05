@@ -25,6 +25,7 @@
     #include "wx/timer.h"
     #include "wx/settings.h"
     #include "wx/dataobj.h"
+    #include "wx/statusbr.h"
 #endif
 
 #include "wx/html/htmlwin.h"
