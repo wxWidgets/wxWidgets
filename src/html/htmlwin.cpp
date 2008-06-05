@@ -291,7 +291,8 @@ void wxHtmlWindow::Init()
     m_tmpCanDrawLocks = 0;
     m_FS = new wxFileSystem();
 #if wxUSE_STATUSBAR
-    m_RelatedStatusBar = -1;
+    m_RelatedStatusBar = NULL;
+    m_RelatedStatusBarIndex = -1;
 #endif // wxUSE_STATUSBAR
     m_RelatedFrame = NULL;
     m_TitleFormat = wxT("%s");
@@ -363,10 +364,17 @@ void wxHtmlWindow::SetRelatedFrame(wxFrame* frame, const wxString& format)
 
 
 #if wxUSE_STATUSBAR
-void wxHtmlWindow::SetRelatedStatusBar(int bar)
+void wxHtmlWindow::SetRelatedStatusBar(int index)
 {
-    m_RelatedStatusBar = bar;
+    m_RelatedStatusBarIndex = index;
 }
+
+void wxHtmlWindow::SetRelatedStatusBar(wxStatusBar* statusbar, int index)
+{
+    m_RelatedStatusBar =  statusbar;
+    m_RelatedStatusBarIndex = index;
+}
+
 #endif // wxUSE_STATUSBAR
 
 
@@ -510,9 +518,9 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
         needs_refresh = true;
 #if wxUSE_STATUSBAR
         // load&display it:
-        if (m_RelatedStatusBar != -1)
+        if (m_RelatedStatusBarIndex != -1)
         {
-            m_RelatedFrame->SetStatusText(_("Connecting..."), m_RelatedStatusBar);
+            SetHTMLStatusText(_("Connecting..."));
             Refresh(false);
         }
 #endif // wxUSE_STATUSBAR
@@ -541,10 +549,10 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
             wxString src = wxEmptyString;
 
 #if wxUSE_STATUSBAR
-            if (m_RelatedStatusBar != -1)
+            if (m_RelatedStatusBarIndex != -1)
             {
                 wxString msg = _("Loading : ") + location;
-                m_RelatedFrame->SetStatusText(msg, m_RelatedStatusBar);
+                SetHTMLStatusText(msg);
                 Refresh(false);
             }
 #endif // wxUSE_STATUSBAR
@@ -577,8 +585,10 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
             delete f;
 
 #if wxUSE_STATUSBAR
-            if (m_RelatedStatusBar != -1)
-                m_RelatedFrame->SetStatusText(_("Done"), m_RelatedStatusBar);
+            if (m_RelatedStatusBarIndex != -1)
+            {
+                SetHTMLStatusText(_("Done"));
+            }
 #endif // wxUSE_STATUSBAR
         }
     }
@@ -1612,8 +1622,17 @@ void wxHtmlWindow::SetHTMLBackgroundImage(const wxBitmap& bmpBg)
 void wxHtmlWindow::SetHTMLStatusText(const wxString& text)
 {
 #if wxUSE_STATUSBAR
-    if (m_RelatedStatusBar != -1)
-        m_RelatedFrame->SetStatusText(text, m_RelatedStatusBar);
+    if (m_RelatedStatusBarIndex != -1)
+    {
+        if (m_RelatedStatusBar)
+        {
+            m_RelatedStatusBar->SetStatusText(text, m_RelatedStatusBarIndex);
+        }
+        else if (m_RelatedFrame)
+        {
+            m_RelatedFrame->SetStatusText(text, m_RelatedStatusBarIndex);
+        }
+    }
 #else
     wxUnusedVar(text);
 #endif // wxUSE_STATUSBAR

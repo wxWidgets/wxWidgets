@@ -31,7 +31,7 @@ class wxHtmlProcessorList;
 class WXDLLIMPEXP_FWD_HTML wxHtmlWinAutoScrollTimer;
 class WXDLLIMPEXP_FWD_HTML wxHtmlCellEvent;
 class WXDLLIMPEXP_FWD_HTML wxHtmlLinkEvent;
-
+class WXDLLIMPEXP_FWD_CORE wxStatusBar;
 
 // wxHtmlWindow flags:
 #define wxHW_SCROLLBAR_NEVER    0x0002
@@ -297,7 +297,8 @@ public:
 #if wxUSE_STATUSBAR
     // After(!) calling SetRelatedFrame, this sets statusbar slot where messages
     // will be displayed. Default is -1 = no messages.
-    void SetRelatedStatusBar(int bar);
+    void SetRelatedStatusBar(int index);
+    void SetRelatedStatusBar(wxStatusBar*, int index = 0);
 #endif // wxUSE_STATUSBAR
 
     // Sets fonts to be used when displaying HTML page.
@@ -479,13 +480,14 @@ protected:
     // class for opening files (file system)
     wxFileSystem* m_FS;
 
-    wxFrame *m_RelatedFrame;
-    wxString m_TitleFormat;
-#if wxUSE_STATUSBAR
     // frame in which page title should be displayed & number of it's statusbar
     // reserved for usage with this html window
-    int m_RelatedStatusBar;
+    wxFrame *m_RelatedFrame;
+#if wxUSE_STATUSBAR
+    int m_RelatedStatusBarIndex;
+    wxStatusBar* m_RelatedStatusBar;
 #endif // wxUSE_STATUSBAR
+    wxString m_TitleFormat;
 
     // borders (free space between text and window borders)
     // defaults to 10 pixels.

@@ -366,11 +366,25 @@ public:
         @b After calling SetRelatedFrame(),
         this sets statusbar slot where messages will be displayed.
         (Default is -1 = no messages.)
-        
-        @param bar
-            statusbar slot number (0..n)
+
+        @param index
+            Statusbar slot number (0..n)
     */
-    void SetRelatedStatusBar(int bar);
+    void SetRelatedStatusBar(int index);
+
+    /**
+        @b Sets the associated statusbar where messages will be displayed.
+        Call this instead of SetRelatedFrame() if you want statusbar updates only,
+        no changing of the frame title.
+
+        @param statusbar
+            Statusbar pointer
+        @param index
+            Statusbar slot number (0..n)
+
+        @since 2.9.0
+    */
+    void SetRelatedStatusBar(wxStatusBar* statusbar, int index = 0);
 
     /**
         Returns content of currently displayed page as plain text.
