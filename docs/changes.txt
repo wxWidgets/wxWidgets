@@ -134,6 +134,7 @@ All (GUI):
 - Fixed timing of malformed animated GIFs in wxHTML (Gennady Feller).
 - Fixed incorrect layout width caching in wxHTML (Jeff Tupper).
 - wxHTML: preserve TAB characters when copying <pre> content to clipboard.
+- Set focus to wxCalendarCtrl when it is clicked.
 
 All (Unix):
 

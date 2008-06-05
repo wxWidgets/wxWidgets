@@ -1477,6 +1477,10 @@ void wxCalendarCtrl::OnClick(wxMouseEvent& event)
             event.Skip();
             break;
     }
+
+    // as we don't (always) skip the message, we're not going to receive the
+    // focus on click by default if we don't do it ourselves
+    SetFocus();
 }
 
 wxCalendarHitTestResult wxCalendarCtrl::HitTest(const wxPoint& pos,
