@@ -272,6 +272,7 @@ All:
   now thread-safe if the standard library provided with your compiler is.
 - Added wxCmdLineParser::AddUsageText() (Marcin 'Malcom' Malich).
 - Fix reading/writing UTF-7-encoded text streams.
+- Corrected bug in wxTimeSpan::IsShorterThan() for equal time spans.
 
 All (Unix):
 

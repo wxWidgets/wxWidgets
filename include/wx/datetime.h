@@ -1433,7 +1433,7 @@ public:
         // compare two timestamps: works with the absolute values, i.e. 1
         // hour is shorter than -2 hours. Also, it will return false if the
         // timespans are equal in absolute value.
-    bool IsShorterThan(const wxTimeSpan& t) const { return !IsLongerThan(t); }
+    bool IsShorterThan(const wxTimeSpan& t) const;
 
     inline bool operator<(const wxTimeSpan &ts) const
     {
@@ -2201,6 +2201,11 @@ inline bool wxTimeSpan::IsEqualTo(const wxTimeSpan& ts) const
 inline bool wxTimeSpan::IsLongerThan(const wxTimeSpan& ts) const
 {
     return GetValue().Abs() > ts.GetValue().Abs();
+}
+
+inline bool wxTimeSpan::IsShorterThan(const wxTimeSpan& ts) const
+{
+    return GetValue().Abs() < ts.GetValue().Abs();
 }
 
 // ----------------------------------------------------------------------------
