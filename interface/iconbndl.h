@@ -28,7 +28,7 @@ public:
         Copy constructor.
     */
     wxIconBundle();
-    wxIconBundle(const wxString& file, long type);
+    wxIconBundle(const wxString& file, wxBitmapType type);
     wxIconBundle(const wxIcon& icon);
     wxIconBundle(const wxIconBundle& ic);
     //@}
@@ -44,7 +44,7 @@ public:
         contains an icon with the same width and height, it is
         replaced by the new one.
     */
-    void AddIcon(const wxString& file, long type);
+    void AddIcon(const wxString& file, wxBitmapType type);
     void AddIcon(const wxIcon& icon);
     //@}
 

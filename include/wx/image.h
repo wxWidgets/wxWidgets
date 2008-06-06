@@ -90,7 +90,7 @@ class WXDLLIMPEXP_CORE wxImageHandler: public wxObject
 {
 public:
     wxImageHandler()
-        : m_name(wxEmptyString), m_extension(wxEmptyString), m_mime(), m_type(0)
+        : m_name(wxEmptyString), m_extension(wxEmptyString), m_mime(), m_type(wxBITMAP_TYPE_INVALID)
         { }
 
 #if wxUSE_STREAMS
@@ -105,11 +105,11 @@ public:
 
     void SetName(const wxString& name) { m_name = name; }
     void SetExtension(const wxString& ext) { m_extension = ext; }
-    void SetType(long type) { m_type = type; }
+    void SetType(wxBitmapType type) { m_type = type; }
     void SetMimeType(const wxString& type) { m_mime = type; }
     const wxString& GetName() const { return m_name; }
     const wxString& GetExtension() const { return m_extension; }
-    long GetType() const { return m_type; }
+    wxBitmapType GetType() const { return m_type; }
     const wxString& GetMimeType() const { return m_mime; }
 
 protected:
@@ -130,7 +130,7 @@ protected:
     wxString  m_name;
     wxString  m_extension;
     wxString  m_mime;
-    long      m_type;
+    wxBitmapType m_type;
 
 private:
     DECLARE_CLASS(wxImageHandler)
@@ -208,16 +208,16 @@ public:
         double value;
     };
 
-    wxImage(){}
+    wxImage() {}
     wxImage( int width, int height, bool clear = true );
     wxImage( int width, int height, unsigned char* data, bool static_data = false );
     wxImage( int width, int height, unsigned char* data, unsigned char* alpha, bool static_data = false );
-    wxImage( const wxString& name, long type = wxBITMAP_TYPE_ANY, int index = -1 );
+    wxImage( const wxString& name, wxBitmapType type = wxBITMAP_TYPE_ANY, int index = -1 );
     wxImage( const wxString& name, const wxString& mimetype, int index = -1 );
     wxImage( const char* const* xpmData );
 
 #if wxUSE_STREAMS
-    wxImage( wxInputStream& stream, long type = wxBITMAP_TYPE_ANY, int index = -1 );
+    wxImage( wxInputStream& stream, wxBitmapType type = wxBITMAP_TYPE_ANY, int index = -1 );
     wxImage( wxInputStream& stream, const wxString& mimetype, int index = -1 );
 #endif // wxUSE_STREAMS
 
@@ -327,23 +327,23 @@ public:
     bool ConvertColourToAlpha( unsigned char r, unsigned char g, unsigned char b );
 
     static bool CanRead( const wxString& name );
-    static int GetImageCount( const wxString& name, long type = wxBITMAP_TYPE_ANY );
-    virtual bool LoadFile( const wxString& name, long type = wxBITMAP_TYPE_ANY, int index = -1 );
+    static int GetImageCount( const wxString& name, wxBitmapType type = wxBITMAP_TYPE_ANY );
+    virtual bool LoadFile( const wxString& name, wxBitmapType type = wxBITMAP_TYPE_ANY, int index = -1 );
     virtual bool LoadFile( const wxString& name, const wxString& mimetype, int index = -1 );
 
 #if wxUSE_STREAMS
     static bool CanRead( wxInputStream& stream );
-    static int GetImageCount( wxInputStream& stream, long type = wxBITMAP_TYPE_ANY );
-    virtual bool LoadFile( wxInputStream& stream, long type = wxBITMAP_TYPE_ANY, int index = -1 );
+    static int GetImageCount( wxInputStream& stream, wxBitmapType type = wxBITMAP_TYPE_ANY );
+    virtual bool LoadFile( wxInputStream& stream, wxBitmapType type = wxBITMAP_TYPE_ANY, int index = -1 );
     virtual bool LoadFile( wxInputStream& stream, const wxString& mimetype, int index = -1 );
 #endif
 
     virtual bool SaveFile( const wxString& name ) const;
-    virtual bool SaveFile( const wxString& name, int type ) const;
+    virtual bool SaveFile( const wxString& name, wxBitmapType type ) const;
     virtual bool SaveFile( const wxString& name, const wxString& mimetype ) const;
 
 #if wxUSE_STREAMS
-    virtual bool SaveFile( wxOutputStream& stream, int type ) const;
+    virtual bool SaveFile( wxOutputStream& stream, wxBitmapType type ) const;
     virtual bool SaveFile( wxOutputStream& stream, const wxString& mimetype ) const;
 #endif
 
@@ -412,8 +412,8 @@ public:
     static void InsertHandler( wxImageHandler *handler );
     static bool RemoveHandler( const wxString& name );
     static wxImageHandler *FindHandler( const wxString& name );
-    static wxImageHandler *FindHandler( const wxString& extension, long imageType );
-    static wxImageHandler *FindHandler( long imageType );
+    static wxImageHandler *FindHandler( const wxString& extension, wxBitmapType imageType );
+    static wxImageHandler *FindHandler( wxBitmapType imageType );
     static wxImageHandler *FindHandlerMime( const wxString& mimetype );
 
     static wxString GetImageExtWildcard();

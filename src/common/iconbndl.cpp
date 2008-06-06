@@ -68,7 +68,7 @@ wxIconBundle::wxIconBundle()
 {
 }
 
-wxIconBundle::wxIconBundle(const wxString& file, long type)
+wxIconBundle::wxIconBundle(const wxString& file, wxBitmapType type)
             : wxGDIObject()
 {
     AddIcon(file, type);
@@ -101,7 +101,7 @@ void wxIconBundle::DeleteIcons()
     UnRef();
 }
 
-void wxIconBundle::AddIcon(const wxString& file, long type)
+void wxIconBundle::AddIcon(const wxString& file, wxBitmapType type)
 {
 #ifdef __WXMAC__
     // Deal with standard icons
@@ -237,4 +237,5 @@ wxIcon wxIconBundle::GetIconByIndex(size_t n) const
 
     return M_ICONBUNDLEDATA->m_icons[n];
 }
+
 

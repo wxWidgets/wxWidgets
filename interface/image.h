@@ -74,7 +74,7 @@ public:
     /**
         Gets the image type associated with this handler.
     */
-    long GetType() const;
+    wxBitmapType GetType() const;
 
     /**
         Loads a image from a stream, putting the resulting data into @e image. If the
@@ -170,16 +170,16 @@ public:
 class wxImage : public wxObject
 {
 public:
-    
+
     /**
          Creates an empty wxImage object without an alpha channel.
     */
     wxImage();
-    
+
     /**
          Creates an image with the given size and clears it if requested.
          Does not create an alpha channel.
-         
+
         @param width
             Specifies the width of the image.
         @param height
@@ -188,12 +188,12 @@ public:
             Clear the image with zeros.
     */
     wxImage(int width, int height, bool clear = true);
-    
+
     /**
         Creates an image from data in memory. If static_data is false
         then the wxImage will take ownership of the data and free it
         afterwards. For this, it has to be allocated with @e malloc.
-    
+
         @param width
             Specifies the width of the image.
         @param height
@@ -202,15 +202,15 @@ public:
             A pointer to RGB data
         @param static_data
             Indicates if the data should be free'd after use
-        
+
     */
     wxImage(int width, int height, unsigned char* data,  bool static_data = false);
-    
+
     /**
         Creates an image from data in memory. If static_data is false
         then the wxImage will take ownership of the data and free it
         afterwards. For this, it has to be allocated with @e malloc.
-    
+
         @param width
             Specifies the width of the image.
         @param height
@@ -221,21 +221,21 @@ public:
             A pointer to alpha-channel data
         @param static_data
             Indicates if the data should be free'd after use
-        
+
     */
     wxImage(int width, int height, unsigned char* data, unsigned char* alpha, bool static_data = false );
-    
+
     /**
         Creates an image from XPM data.
-        
+
         @param xpmData
             A pointer to XPM image data.
     */
     wxImage(const char* const* xpmData);
-    
+
     /**
         Creates an image from a file.
-    
+
         @param name
             Name of the file from which to load the image.
         @param type
@@ -265,11 +265,11 @@ public:
 
         @see LoadFile()
     */
-    wxImage(const wxString& name, long type = wxBITMAP_TYPE_ANY, int index = -1);
-    
+    wxImage(const wxString& name, wxBitmapType type = wxBITMAP_TYPE_ANY, int index = -1);
+
     /**
         Creates an image from a file using MIME-types to specify the type.
-    
+
         @param name
             Name of the file from which to load the image.
         @param type
@@ -280,10 +280,10 @@ public:
             See above
     */
     wxImage(const wxString& name, const wxString& mimetype, int index = -1);
-    
+
     /**
         Creates an image from a stream.
-    
+
         @param stream
             Opened input stream from which to load the image. Currently,
             the stream must support seeking.
@@ -292,11 +292,11 @@ public:
         @param index
             See above.
     */
-    wxImage(wxInputStream& stream, long type = wxBITMAP_TYPE_ANY, int index = -1);    
-    
+    wxImage(wxInputStream& stream, wxBitmapType type = wxBITMAP_TYPE_ANY, int index = -1);
+
     /**
         Creates an image from a stream using MIME-types to specify the type.
-    
+
         @param stream
             Opened input stream from which to load the image. Currently,
             the stream must support seeking.
@@ -306,7 +306,7 @@ public:
             See above.
     */
     wxImage(wxInputStream& stream, const wxString& mimetype, int index = -1);
-    
+
 
     /**
         Destructor.
@@ -344,7 +344,7 @@ public:
         @see Blur(), BlurHorizontal()
     */
     wxImage BlurVertical(int blurRadius);
-    
+
     /**
         Returns @true if the current image handlers can read this file
     */
@@ -458,8 +458,8 @@ public:
     */
     static wxImageHandler* FindHandler(const wxString& name);
     static wxImageHandler* FindHandler(const wxString& extension,
-                                       long imageType);
-    static wxImageHandler* FindHandler(long imageType);
+                                       wxBitmapType imageType);
+    static wxImageHandler* FindHandler(wxBitmapType imageType);
     static wxImageHandler* FindHandlerMime(const wxString& mimetype);
     //@}
 
@@ -467,7 +467,7 @@ public:
         Return alpha value at given pixel location.
     */
     unsigned char GetAlpha(int x, int y) const;
-    
+
     /**
         Returns pointer to the array storing the alpha values for this image. This
         pointer is @NULL for the images without the alpha channel. If the image
@@ -542,9 +542,9 @@ public:
                  (exceptions are TIFF and ICO formats).
     */
     static int GetImageCount(const wxString& filename,
-                             long type = wxBITMAP_TYPE_ANY);
+                             wxBitmapType type = wxBITMAP_TYPE_ANY);
     static int GetImageCount(wxInputStream& stream,
-                             long type = wxBITMAP_TYPE_ANY);
+                             wxBitmapType type = wxBITMAP_TYPE_ANY);
     //@}
 
     /**
@@ -585,12 +585,12 @@ public:
 
     /**
         Gets a user-defined option as an integer. The function is case-insensitive
-        to @e name. If the given option is not present, the function returns 0. 
+        to @e name. If the given option is not present, the function returns 0.
         Use HasOption() is 0 is a possibly valid value for the option.
         Options for wxPNGHandler
         @li wxIMAGE_OPTION_PNG_FORMAT: Format for saving a PNG file.
         @li wxIMAGE_OPTION_PNG_BITDEPTH: Bit depth for every channel (R/G/B/A).
-        
+
         Supported values for wxIMAGE_OPTION_PNG_FORMAT:
         @li wxPNG_TYPE_COLOUR: Stores RGB image.
         @li wxPNG_TYPE_GREY: Stores grey image, converts from RGB.
@@ -751,11 +751,11 @@ public:
         @see SaveFile()
     */
     bool LoadFile(const wxString& name,
-                  long type = wxBITMAP_TYPE_ANY,
+                  wxBitmapType type = wxBITMAP_TYPE_ANY,
                   int index = -1);
     bool LoadFile(const wxString& name, const wxString& mimetype,
                   int index = -1);
-    bool LoadFile(wxInputStream& stream, long type,
+    bool LoadFile(wxInputStream& stream, wxBitmapType type,
                   int index = -1);
     bool LoadFile(wxInputStream& stream,
                   const wxString& mimetype,
@@ -922,8 +922,8 @@ public:
         Example:
 
         @param quality
-            Determines what method to use for resampling the image. 
-            
+            Determines what method to use for resampling the image.
+
             Can be one of the following:
             @li wxIMAGE_QUALITY_NORMAL: Uses the normal default scaling method of
                 pixel replication
@@ -935,14 +935,14 @@ public:
     wxImage Scale(int width, int height,
                   int quality = wxIMAGE_QUALITY_NORMAL) const;
 
-    /** 
+    /**
        Assigns new data as alpha channel to the image.
        If @e static_data is false the data will be
        free()'d after use.
     */
     void SetAlpha(unsigned char* alpha = NULL,
                   bool static_data = false);
-                  
+
     /**
         Sets the alpha value for the given pixel. This function should only be
         called if the image has alpha channel data, use HasAlpha() to

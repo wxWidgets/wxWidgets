@@ -186,6 +186,10 @@ Changes in behaviour which may result in compilation errors
   wxConfig now tries to convert all unknown types to wxString automatically.
   The simplest solution is to cast the enum value to int.
 
+- Several wxImage methods which previously had "long bitmaptype" parameters
+  have been changed to accept "wxBitmapType bitmaptype", please use enum
+  wxBitmapType in your code.
+
 Deprecated methods and their replacements
 -----------------------------------------
 

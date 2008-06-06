@@ -140,7 +140,7 @@ wxImage::wxImage( int width, int height, unsigned char* data, unsigned char* alp
     Create( width, height, data, alpha, static_data );
 }
 
-wxImage::wxImage( const wxString& name, long type, int index )
+wxImage::wxImage( const wxString& name, wxBitmapType type, int index )
 {
     LoadFile( name, type, index );
 }
@@ -151,7 +151,7 @@ wxImage::wxImage( const wxString& name, const wxString& mimetype, int index )
 }
 
 #if wxUSE_STREAMS
-wxImage::wxImage( wxInputStream& stream, long type, int index )
+wxImage::wxImage( wxInputStream& stream, wxBitmapType type, int index )
 {
     LoadFile( stream, type, index );
 }
@@ -2014,7 +2014,7 @@ bool wxImage::HasOption(const wxString& name) const
 // ----------------------------------------------------------------------------
 
 bool wxImage::LoadFile( const wxString& WXUNUSED_UNLESS_STREAMS(filename),
-                        long WXUNUSED_UNLESS_STREAMS(type),
+                        wxBitmapType WXUNUSED_UNLESS_STREAMS(type),
                         int WXUNUSED_UNLESS_STREAMS(index) )
 {
 #if HAS_FILE_STREAMS
@@ -2058,24 +2058,23 @@ bool wxImage::LoadFile( const wxString& WXUNUSED_UNLESS_STREAMS(filename),
 }
 
 
-
 bool wxImage::SaveFile( const wxString& filename ) const
 {
     wxString ext = filename.AfterLast('.').Lower();
 
-    wxImageHandler * pHandler = FindHandler(ext, -1);
-    if (pHandler)
+    wxImageHandler *handler = FindHandler(ext, wxBITMAP_TYPE_ANY);
+    if ( !handler)
     {
-        return SaveFile(filename, pHandler->GetType());
+       wxLogError(_("Can't save image to file '%s': unknown extension."),
+                  filename);
+       return false;
     }
 
-    wxLogError(_("Can't save image to file '%s': unknown extension."), filename.c_str());
-
-    return false;
+    return SaveFile(filename, handler->GetType());
 }
 
 bool wxImage::SaveFile( const wxString& WXUNUSED_UNLESS_STREAMS(filename),
-                        int WXUNUSED_UNLESS_STREAMS(type) ) const
+                        wxBitmapType WXUNUSED_UNLESS_STREAMS(type) ) const
 {
 #if HAS_FILE_STREAMS
     wxCHECK_MSG( Ok(), false, wxT("invalid image") );
@@ -2125,7 +2124,7 @@ bool wxImage::CanRead( const wxString& WXUNUSED_UNLESS_STREAMS(name) )
 }
 
 int wxImage::GetImageCount( const wxString& WXUNUSED_UNLESS_STREAMS(name),
-                            long WXUNUSED_UNLESS_STREAMS(type) )
+                            wxBitmapType WXUNUSED_UNLESS_STREAMS(type) )
 {
 #if HAS_FILE_STREAMS
     wxImageFileInputStream stream(name);
@@ -2152,7 +2151,7 @@ bool wxImage::CanRead( wxInputStream &stream )
     return false;
 }
 
-int wxImage::GetImageCount( wxInputStream &stream, long type )
+int wxImage::GetImageCount( wxInputStream &stream, wxBitmapType type )
 {
     wxImageHandler *handler;
 
@@ -2197,7 +2196,7 @@ int wxImage::GetImageCount( wxInputStream &stream, long type )
     }
 }
 
-bool wxImage::LoadFile( wxInputStream& stream, long type, int index )
+bool wxImage::LoadFile( wxInputStream& stream, wxBitmapType type, int index )
 {
     UnRef();
 
@@ -2225,23 +2224,22 @@ bool wxImage::LoadFile( wxInputStream& stream, long type, int index )
 
         return false;
     }
+    //else: have specific type
 
     handler = FindHandler(type);
-
-    if (handler == 0)
+    if ( !handler )
     {
         wxLogWarning( _("No image handler for type %ld defined."), type );
-
         return false;
     }
 
-    if (stream.IsSeekable() && !handler->CanRead(stream))
+    if ( stream.IsSeekable() && !handler->CanRead(stream) )
     {
         wxLogError(_("Image file is not of type %ld."), type);
         return false;
     }
-    else
-        return handler->LoadFile(this, stream, true/*verbose*/, index);
+
+    return handler->LoadFile(this, stream, true/*verbose*/, index);
 }
 
 bool wxImage::LoadFile( wxInputStream& stream, const wxString& mimetype, int index )
@@ -2252,23 +2250,22 @@ bool wxImage::LoadFile( wxInputStream& stream, const wxString& mimetype, int ind
 
     wxImageHandler *handler = FindHandlerMime(mimetype);
 
-    if (handler == 0)
+    if ( !handler )
     {
         wxLogWarning( _("No image handler for type %s defined."), mimetype.GetData() );
-
         return false;
     }
 
-    if (stream.IsSeekable() && !handler->CanRead(stream))
+    if ( stream.IsSeekable() && !handler->CanRead(stream) )
     {
         wxLogError(_("Image file is not of type %s."), mimetype);
         return false;
     }
-    else
-        return handler->LoadFile( this, stream, true/*verbose*/, index );
+
+    return handler->LoadFile( this, stream, true/*verbose*/, index );
 }
 
-bool wxImage::SaveFile( wxOutputStream& stream, int type ) const
+bool wxImage::SaveFile( wxOutputStream& stream, wxBitmapType type ) const
 {
     wxCHECK_MSG( Ok(), false, wxT("invalid image") );
 
@@ -2276,7 +2273,6 @@ bool wxImage::SaveFile( wxOutputStream& stream, int type ) const
     if ( !handler )
     {
         wxLogWarning( _("No image handler for type %d defined."), type );
-
         return false;
     }
 
@@ -2291,12 +2287,11 @@ bool wxImage::SaveFile( wxOutputStream& stream, const wxString& mimetype ) const
     if ( !handler )
     {
         wxLogWarning( _("No image handler for type %s defined."), mimetype.GetData() );
-
-        return false;
     }
 
     return handler->SaveFile( (wxImage*)this, stream );
 }
+
 #endif // wxUSE_STREAMS
 
 // ----------------------------------------------------------------------------
@@ -2366,21 +2361,23 @@ wxImageHandler *wxImage::FindHandler( const wxString& name )
     return NULL;
 }
 
-wxImageHandler *wxImage::FindHandler( const wxString& extension, long bitmapType )
+wxImageHandler *wxImage::FindHandler( const wxString& extension, wxBitmapType bitmapType )
 {
     wxList::compatibility_iterator node = sm_handlers.GetFirst();
     while (node)
     {
         wxImageHandler *handler = (wxImageHandler*)node->GetData();
         if ( (handler->GetExtension().Cmp(extension) == 0) &&
-            (bitmapType == -1 || handler->GetType() == bitmapType) )
+             ( (bitmapType == wxBITMAP_TYPE_ANY) || (handler->GetType() == bitmapType)) )
+        {
             return handler;
+        }
         node = node->GetNext();
     }
     return NULL;
 }
 
-wxImageHandler *wxImage::FindHandler( long bitmapType )
+wxImageHandler *wxImage::FindHandler(wxBitmapType bitmapType )
 {
     wxList::compatibility_iterator node = sm_handlers.GetFirst();
     while (node)
