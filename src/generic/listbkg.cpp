@@ -103,9 +103,10 @@ wxListbook::Create(wxWindow *parent,
                     wxID_ANY,
                     wxDefaultPosition,
                     wxDefaultSize,
-                    wxLC_ICON | wxLC_SINGLE_SEL |
-                        (IsVertical() ? wxLC_ALIGN_LEFT : wxLC_ALIGN_TOP)
+                    wxLC_SINGLE_SEL | wxLC_REPORT | wxLC_NO_HEADER
                  );
+
+    GetListView()->InsertColumn(0, wxT("Pages"));
 
 #ifdef __WXMSW__
     // On XP with themes enabled the GetViewRect used in GetControllerSize() to
@@ -232,11 +233,19 @@ wxString wxListbook::GetPageText(size_t n) const
     return GetListView()->GetItemText(n);
 }
 
-int wxListbook::GetPageImage(size_t WXUNUSED(n)) const
+int wxListbook::GetPageImage(size_t n) const
 {
-    wxFAIL_MSG( _T("wxListbook::GetPageImage() not implemented") );
+    wxListItem item;
+    item.SetId(n);
 
-    return wxNOT_FOUND;
+    if (GetListView()->GetItem(item))
+    {
+       return item.GetImage();
+    }
+    else
+    {
+       return wxNOT_FOUND;
+    }
 }
 
 bool wxListbook::SetPageImage(size_t n, int imageId)
@@ -250,7 +259,55 @@ bool wxListbook::SetPageImage(size_t n, int imageId)
 
 void wxListbook::SetImageList(wxImageList *imageList)
 {
-    GetListView()->SetImageList(imageList, wxIMAGE_LIST_NORMAL);
+    wxListView * const list = GetListView();
+
+    // If imageList presence has changed, we update the list control view
+    if ( (imageList != NULL) != (GetImageList() != NULL) )
+    {
+        wxArrayString labels;
+        labels.Alloc(GetPageCount());
+
+        wxArrayInt imageIds;
+        imageIds.Alloc(GetPageCount());
+
+        const int oldSel = GetSelection();
+        size_t i;
+
+        // Grab snapshot of all list control items before changing the window
+        // style (which deletes the items)
+        for ( i = 0; i < GetPageCount(); i++ )
+        {
+           labels.Add(GetPageText(i));
+           imageIds.Add(GetPageImage(i));
+        }
+
+        // Update the style to use icon view for images, report view otherwise
+        long style = wxLC_SINGLE_SEL;
+        if ( imageList )
+        {
+           list->SetWindowStyleFlag(style |
+                                    (IsVertical() ? wxLC_ALIGN_LEFT
+                                                  : wxLC_ALIGN_TOP) |
+                                    wxLC_ICON);
+        }
+        else // no image list
+        {
+           list->SetWindowStyleFlag(style | wxLC_REPORT | wxLC_NO_HEADER);
+           list->InsertColumn(0, wxT("Pages"));
+        }
+
+        // Add back the list control items
+        for ( i = 0; i < GetPageCount(); i++ )
+        {
+           list->InsertItem(i, labels[i], imageIds[i]);
+        }
+
+        // Restore selection
+        if ( oldSel != wxNOT_FOUND )
+           SetSelection(oldSel);
+    }
+
+    list->SetImageList(imageList, wxIMAGE_LIST_NORMAL);
 
     wxBookCtrlBase::SetImageList(imageList);
 }

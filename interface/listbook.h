@@ -14,6 +14,10 @@
     uses a wxListCtrl to show the labels instead of the
     tabs.
 
+    The underlying wxListCtrl displays page labels in a one-column report view
+    by default.  Calling wxListbook::SetImageList will implicitly switch the
+    control to use an icon view.
+
     There is no documentation for this class yet but its usage is
     identical to wxNotebook (except for the features clearly related to tabs
     only), so please refer to that class documentation for now. You can also
