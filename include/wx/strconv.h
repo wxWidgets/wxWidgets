@@ -264,16 +264,19 @@ public:
 private:
     // UTF-7 decoder/encoder may be in direct mode or in shifted mode after a
     // '+' (and until the '-' or any other non-base64 character)
-    enum Mode
+    struct StateMode
     {
-        Direct,     // pass through state
-        Shifted     // after a '+' (and before '-')
+        enum Mode
+        {
+            Direct,     // pass through state
+            Shifted     // after a '+' (and before '-')
+        };
     };
 
     // the current decoder state: this is only used by ToWChar() if srcLen
     // parameter is not wxNO_LEN, when working on the entire NUL-terminated
     // strings we neither update nor use the state
-    class DecoderState
+    class DecoderState : StateMode
     {
     private:
         // current state: this one is private as we want to enforce the use of
@@ -305,7 +308,7 @@ private:
 
     // encoder state is simpler as we always receive entire Unicode characters
     // on input
-    class EncoderState
+    class EncoderState : StateMode
     {
     private:
         Mode mode;
