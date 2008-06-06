@@ -78,8 +78,8 @@ bool wxVListBox::Create(wxWindow *parent,
                         const wxString& name)
 {
 #ifdef __WXMSW__
-	if ((style & wxBORDER_MASK) == wxDEFAULT)
-		style |= wxBORDER_THEME;
+    if ( (style & wxBORDER_MASK) == wxDEFAULT )
+        style |= wxBORDER_THEME;
 #endif
 
     style |= wxWANTS_CHARS | wxFULL_REPAINT_ON_RESIZE;
@@ -110,6 +110,10 @@ wxVListBox::~wxVListBox()
 
 void wxVListBox::SetItemCount(size_t count)
 {
+    // don't leave the current index invalid
+    if ( m_current != wxNOT_FOUND && (size_t)m_current >= count )
+        m_current = count - 1; // also ok when count == 0 as wxNOT_FOUND == -1
+
     if ( m_selStore )
     {
         // tell the selection store that our number of items has changed
