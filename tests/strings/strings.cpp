@@ -374,22 +374,6 @@ void StringTestCase::CaseChanges()
     CPPUNIT_ASSERT( s1l == _T("hello!") );
     CPPUNIT_ASSERT( s2u == wxEmptyString );
     CPPUNIT_ASSERT( s2l == wxEmptyString );
-
-#if !wxUSE_UNICODE
-    wxLocale locRu(wxLANGUAGE_RUSSIAN, 0 /* flags */);
-    if ( locRu.IsOk() )
-    {
-        // try upper casing 8bit strings
-        const wchar_t capital_ya[] = { 0x42f, 0 },
-                      small_ya[]   = { 0x44f, 0 };
-
-        wxString sUpper(wxConvLibc.cWC2MB(capital_ya)),
-                 sLower(wxConvLibc.cWC2MB(small_ya));
-
-        CPPUNIT_ASSERT( sUpper.Lower() == sLower );
-        CPPUNIT_ASSERT( sLower.Upper() == sUpper );
-    }
-#endif // !wxUSE_UNICODE
 }
 
 void StringTestCase::Compare()
