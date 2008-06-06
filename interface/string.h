@@ -72,25 +72,25 @@ public:
     @class wxString
     @wxheader{string.h}
 
-    wxString is a class representing a Unicode character string.  
+    wxString is a class representing a Unicode character string.
     wxString uses @c std::string internally to store its content
     unless this is not supported by the compiler or disabled
-    specifically when building wxWidgets. Therefore wxString 
+    specifically when building wxWidgets. Therefore wxString
     inherits many features from @c std::string's. Most
     implementations of @std::string are thread-safe and don't
     use reference counting. By default, wxString uses @c std::string
     internally even if wxUSE_STL is not defined.
-    
+
     Since wxWidgets 3.0 wxString internally uses UCS-2 (basically 2-byte per
     character wchar_t) under Windows and UTF-8 under Unix, Linux and
     OS X to store its content. Much work has been done to make existing
-    code using ANSI string literals work as before. If you need to have a 
+    code using ANSI string literals work as before. If you need to have a
     wxString that uses wchar_t on Unix and Linux, too, you can specify
     this on the command line with the @c configure @c --disable-utf8 switch.
 
     As a consequence of this change, iterating over a wxString by index
     can become inefficient in UTF8 mode and iterators should be used instead:
-    
+
     @code
     wxString s = "hello";
     wxString::const_iterator i;
@@ -100,9 +100,9 @@ public:
         // do something with it
     }
     @endcode
-    
-    Please see the 
-    @ref overview_string "wxString overview" and the 
+
+    Please see the
+    @ref overview_string "wxString overview" and the
     @ref overview_unicode "Unicode overview" for more information
     about it.
 
@@ -112,7 +112,7 @@ public:
     conversion, the @a wxConvLibc class instance is used. See wxCSConv and wxMBConv.
 
     wxString implements most of the methods of the @c std::string class.
-    These standard functions are only listed here, but they are not 
+    These standard functions are only listed here, but they are not
     fully documented in this manual. Please see the STL documentation.
     The behaviour of all these functions is identical to the behaviour
     described there.
@@ -125,7 +125,7 @@ public:
         Anything may be concatenated (appended to) with a string. However, you can't
         append something to a C string (including literal constants), so to do this it
         should be converted to a wxString first.
-        
+
         @li operator<<()
         @li operator+=()
         @li operator+()
@@ -136,7 +136,7 @@ public:
         a single character or a wide (UNICODE) string. For all constructors (except the
         default which creates an empty string) there is also a corresponding assignment
         operator.
-        
+
         @li wxString()
         @li operator=()
         @li ~wxString()
@@ -144,7 +144,7 @@ public:
         The MakeXXX() variants modify the string in place, while the other functions
         return a new string which contains the original text converted to the upper or
         lower case and leave the original string unchanged.
-        
+
         @li MakeUpper()
         @li Upper()
         @li MakeLower()
@@ -158,8 +158,8 @@ public:
         done in release builds.
         This section also contains both implicit and explicit conversions to C style
         strings. Although implicit conversion is quite convenient, it is advised to use
-        explicit c_str() method for the sake of clarity. 
-        
+        explicit c_str() method for the sake of clarity.
+
         @li GetChar()
         @li GetWritableChar()
         @li SetChar()
@@ -177,12 +177,12 @@ public:
         convenient if only equality of the strings matters because it returns a boolean
         @true value if the strings are the same and not 0 (which is usually @false
         in C)as Cmp() does.
-        Matches() is a poor man's regular expression matcher: it only understands 
+        Matches() is a poor man's regular expression matcher: it only understands
         '*' and '?' metacharacters in the sense of DOS command line interpreter.
         StartsWith() is helpful when parsing a line of text which should start
         with some predefined prefix and is more efficient than doing direct string
         comparison as you would also have to precalculate the length of the prefix then.
-        
+
         @li Cmp()
         @li CmpNoCase()
         @li IsSameAs()
@@ -194,7 +194,7 @@ public:
         floating point numbers. All three functions take a pointer to the variable to
         put the numeric value in and return @true if the @b entire string could be
         converted to a number.
-        
+
         @li ToLong()
         @li ToLongLong()
         @li ToULong()
@@ -206,21 +206,21 @@ public:
         wxStringBuffer and wxStringBufferLength classes may be very useful
         when working with some external API which requires the caller to provide
         a writable buffer.
-        
+
         @li Alloc()
         @li Shrink()
         @li wxStringBuffer
         @li wxStringBufferLength
 
         Misc. other string functions.
-        
+
         @li Trim()
         @li Truncate()
         @li Pad()
 
         These functions return the string length and check whether the string
         is empty or empty it.
-        
+
         @li Len()
         @li IsEmpty()
         @li operator!()
@@ -231,7 +231,7 @@ public:
         These functions allow to extract substring from this string. All of them don't
         modify the original string and return a new string containing the extracted
         substring.
-        
+
         @li Mid()
         @li operator()()
         @li Left()
@@ -245,7 +245,7 @@ public:
 
         These functions replace the standard @e strchr() and @e strstr()
         functions.
-        
+
         @li Find()
         @li Replace()
 
@@ -261,7 +261,7 @@ public:
 
         These functions are deprecated, please consider using new wxWidgets 2.0
         functions instead of them (or, even better, std::string compatible variants).
-        
+
         Contains(), First(), Freq(), IsAscii(), IsNull(),
         IsNumber(), IsWord(), Last(), Length(), LowerCase(), Remove(), Strip(),
         SubString(), UpperCase()
@@ -283,7 +283,7 @@ public:
     */
     static const size_t npos;
 
-    /** 
+    /**
         @name Standard types
     */
     //@{
@@ -300,13 +300,13 @@ public:
        Default constructor
     */
     wxString();
-    
+
     /**
-       Creates a string from another string. Just increases the ref 
+       Creates a string from another string. Just increases the ref
        count by 1.
     */
     wxString(const wxString& stringSrc);
-    
+
 
     /**
        Constructs a string from the string literal @e psz using
@@ -347,23 +347,23 @@ public:
        the current locale encoding to convert it to Unicode.
     */
     wxString(const wxCharBuffer& buf);
-    
+
     /**
        Constructs a string from @e buf.
     */
     wxString(const wxWCharBuffer& buf);
 
     /**
-       Constructs a string from @e str using the using the current locale encoding 
+       Constructs a string from @e str using the using the current locale encoding
        to convert it to Unicode (wxConvLibc).
     */
     wxString(const std::string& str);
-    
+
     /**
        Constructs a string from @e str.
     */
     wxString(const std::wstring& str);
-    
+
 
     /**
         String destructor. Note that this is not virtual, so wxString must not be
@@ -490,7 +490,7 @@ public:
         Returns a positive value if the string is greater than the argument,
         zero if it is equal to it or a negative value if it is less than the
         argument (same semantics as the standard @c strcmp() function).
-        
+
         See also CmpNoCase(), IsSameAs().
     */
     int Cmp(const wxString& s) const;
@@ -500,7 +500,7 @@ public:
         Returns a positive value if the string is greater than the argument,
         zero if it is equal to it or a negative value if it is less than the
         argument (same semantics as the standard @c strcmp() function).
-        
+
         See also Cmp(), IsSameAs().
     */
     int CmpNoCase(const wxString& s) const;
@@ -553,9 +553,9 @@ public:
         @c wxNOT_FOUND if not found.
     */
     int Find(wxUniChar ch, bool fromEnd = false) const;
-    
+
     /**
-        Searches for the given string @e sub. Returns the starting position or 
+        Searches for the given string @e sub. Returns the starting position or
         @c wxNOT_FOUND if not found.
     */
     int Find(const wxString& sub) const;
@@ -563,7 +563,7 @@ public:
     //@{
     /**
         Same as Find().
-        This is a wxWidgets 1.xx compatibility function; 
+        This is a wxWidgets 1.xx compatibility function;
         you should not use it in new code.
     */
     int First(wxUniChar ch) const;
@@ -616,7 +616,7 @@ public:
     //@{
     /**
         Converts the string or character from an ASCII, 7-bit form
-        to the native wxString representation. 
+        to the native wxString representation.
     */
     static wxString FromAscii(const char* s);
     static wxString FromAscii(const unsigned char* s);
@@ -710,7 +710,7 @@ public:
     //@{
     /**
         Returns a reference to the last character (writable).
-        This is a wxWidgets 1.xx compatibility function; 
+        This is a wxWidgets 1.xx compatibility function;
         you should not use it in new code.
     */
     wxUniCharRef Last();
@@ -1008,7 +1008,7 @@ public:
     /**
         Returns a pointer to the string data (@c const char* when using UTF-8
         internally, @c const wchar_t* when using UCS-2 internally).
-        
+
         Note that the returned value is not convertible to @c char* or
         @c wchar_t*, use char_str() or wchar_str() if you need to pass
         string value to a function expecting non-const pointer.
@@ -1026,10 +1026,33 @@ public:
     */
     wxWritableCharBuffer char_str(const wxMBConv& conv = wxConvLibc) const;
 
+    /**
+        Returns buffer of the specified type containing the string data.
+
+        This method is only useful in template code, otherwise you should
+        directly call mb_str() or wc_str() if you need to retrieve a narrow or
+        wide string from this wxString. The template parameter @a t should be
+        either @c char or @c wchar_t.
+
+        Notice that retrieving a char buffer in UTF-8 build will return the
+        internal string representation in UTF-8 while in wchar_t build the char
+        buffer will contain the conversion of the string to the encoding of the
+        current locale (and so can fail).
+
+        @param len If non-@NULL, filled with the length of the returned buffer.
+        @return
+            buffer containing the string contents in the specified type,
+            notice that it may be @NULL if the conversion failed (e.g. Unicode
+            string couldn't be converted to the current encoding when @a T is
+            @c char).
+     */
+    template <typename T>
+    wxCharTypeBuffer<T> tchar_str(size_t *len = NULL) const;
+
     //@{
     /**
         Returns string representation suitable for passing to OS' functions
-        for file handling. 
+        for file handling.
     */
     const wchar_t* fn_str() const;
     const char* fn_str() const;
@@ -1110,7 +1133,7 @@ public:
     /**
         Empty string is @false, so !string will only return @true if the
         string is empty.
-        
+
         See also IsEmpty().
     */
     bool operator!() const;
@@ -1131,7 +1154,7 @@ public:
         Converts the strings contents to the wide character represention
         and returns it as a temporary wxWCharBuffer object or returns a
         pointer to the internal string contents in wide character mode.
-        
+
         The macro wxWX2WCbuf is defined as the correct return
         type (without const).
 
@@ -1154,7 +1177,7 @@ public:
 
     /**
         @name Iterator interface
-        
+
         These methods return iterators to the beginnnig or
         end of the string.
     */
@@ -1172,8 +1195,8 @@ public:
 
     /**
         @name STL interface
-    
-        The supported STL functions are listed here. Please see any 
+
+        The supported STL functions are listed here. Please see any
         STL reference for their documentation.
     */
     //@{
@@ -1200,7 +1223,7 @@ public:
         wxString& assign(const_iterator first, const_iterator last);
 
         void clear();
-        
+
         int compare(const wxString& str) const;
         int compare(size_t nStart, size_t nLen, const wxString& str) const;
         int compare(size_t nStart, size_t nLen,
@@ -1257,9 +1280,9 @@ public:
         size_t rfind(wxUniChar ch, size_t nStart = npos) const;
 
         wxString substr(size_t nStart = 0, size_t nLen = npos) const;
-    
+
         void swap(wxString& str);
-  
+
     //@}
 
 };

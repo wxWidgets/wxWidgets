@@ -65,6 +65,11 @@ class WXDLLIMPEXP_FWD_BASE wxString;
     #define WXWIN_COMPATIBILITY_STRING_PTR_AS_ITER 1
 #endif
 
+namespace wxPrivate
+{
+    template <typename T> struct wxStringAsBufHelper;
+}
+
 // ---------------------------------------------------------------------------
 // macros
 // ---------------------------------------------------------------------------
@@ -1211,6 +1216,30 @@ public:
         { return mb_str(conv); }
     wxWritableWCharBuffer wchar_str() const { return wc_str(); }
 
+    // conversion to the buffer of the given type T (= char or wchar_t) and
+    // also optionally return the buffer length
+    //
+    // this is mostly/only useful for the template functions
+    //
+    // FIXME-VC6: the second argument only exists for VC6 which doesn't support
+    //            explicit template function selection, do not use it unless
+    //            you must support VC6!
+    template <typename T>
+    wxCharTypeBuffer<T> tchar_str(size_t *len = NULL,
+                                  T * WXUNUSED(dummy) = NULL) const
+    {
+#if wxUSE_UNICODE
+        // we need a helper dispatcher depending on type
+        return wxPrivate::wxStringAsBufHelper<T>::Get(*this, len);
+#else // ANSI
+        // T can only be char in ANSI build
+        if ( len )
+            *len = length();
+
+        return wxCharTypeBuffer<T>::CreateNonOwned(wx_str());
+#endif // Unicode build kind
+    }
+
     // conversion to/from plain (i.e. 7 bit) ASCII: this is useful for
     // converting numbers or strings which are certain not to contain special
     // chars (typically system functions, X atoms, environment variables etc.)
@@ -1259,6 +1288,10 @@ public:
     }
     const char* utf8_str() const { return wx_str(); }
     const char* ToUTF8() const { return wx_str(); }
+
+    // this function exists in UTF-8 build only and returns the length of the
+    // internal UTF-8 representation
+    size_t utf8_length() const { return m_impl.length(); }
 #elif wxUSE_UNICODE_WCHAR
     static wxString FromUTF8(const char *utf8)
       { return wxString(utf8, wxMBConvUTF8()); }
@@ -2716,6 +2749,67 @@ inline wxString operator+(wchar_t ch, const wxString& string)
 #define wxGetEmptyString() wxString()
 
 // ----------------------------------------------------------------------------
+// helper functions which couldn't be defined inline
+// ----------------------------------------------------------------------------
+
+namespace wxPrivate
+{
+
+#if wxUSE_UNICODE_WCHAR
+
+template <>
+struct wxStringAsBufHelper<char>
+{
+    static wxCharBuffer Get(const wxString& s, size_t *len)
+    {
+        wxCharBuffer buf(s.mb_str());
+        if ( len )
+            *len = buf ? strlen(buf) : 0;
+        return buf;
+    }
+};
+
+template <>
+struct wxStringAsBufHelper<wchar_t>
+{
+    static wxWCharBuffer Get(const wxString& s, size_t *len)
+    {
+        if ( len )
+            *len = s.length();
+        return wxWCharBuffer::CreateNonOwned(s.wx_str());
+    }
+};
+
+#elif wxUSE_UNICODE_UTF8
+
+template <>
+struct wxStringAsBufHelper<char>
+{
+    static wxCharBuffer Get(const wxString& s, size_t *len)
+    {
+        if ( len )
+            *len = s.utf8_length();
+        return wxCharBuffer::CreateNonOwned(s.wx_str());
+    }
+};
+
+template <>
+struct wxStringAsBufHelper<wchar_t>
+{
+    static wxWCharBuffer Get(const wxString& s, size_t *len)
+    {
+        wxWCharBuffer wbuf(s.wc_str());
+        if ( len )
+            *len = wxWcslen(wbuf);
+        return wbuf;
+    }
+};
+
+#endif // Unicode build kind
+
+} // namespace wxPrivate
+
+// ----------------------------------------------------------------------------
 // wxStringBuffer: a tiny class allowing to get a writable pointer into string
 // ----------------------------------------------------------------------------
 
@@ -2782,8 +2876,30 @@ public:
 
     wxStringTypeBufferBase(wxString& str, size_t lenWanted = 1024)
         : m_str(str), m_buf(lenWanted)
-        { }
+    {
+        // for compatibility with old wxStringBuffer which provided direct
+        // access to wxString internal buffer, initialize ourselves with the
+        // string initial contents
 
+        // FIXME-VC6: remove the ugly (CharType *)NULL and use normal
+        //            tchar_str<CharType>
+        size_t len;
+        const wxCharTypeBuffer<CharType> buf(str.tchar_str(&len, (CharType *)NULL));
+        if ( buf )
+        {
+            if ( len > lenWanted )
+            {
+                // in this case there is not enough space for terminating NUL,
+                // ensure that we still put it there
+                m_buf.data()[lenWanted] = 0;
+                len = lenWanted - 1;
+            }
+
+            wxTmemcpy(m_buf.data(), buf, len + 1);
+        }
+        //else: conversion failed, this can happen when trying to get Unicode
+        //      string contents into a char string
+    }
 
     operator CharType*() { return m_buf.data(); }
 
@@ -2794,22 +2910,25 @@ protected:
 
 template<typename T>
 class WXDLLIMPEXP_BASE wxStringTypeBufferLengthBase
+    : public wxStringTypeBufferBase<T>
 {
 public:
-    typedef T CharType;
-
     wxStringTypeBufferLengthBase(wxString& str, size_t lenWanted = 1024)
-        : m_str(str), m_buf(lenWanted), m_len(0), m_lenSet(false)
+        : wxStringTypeBufferBase<T>(str, lenWanted),
+          m_len(0),
+          m_lenSet(false)
         { }
 
-    operator CharType*() { return m_buf.data(); }
+    ~wxStringTypeBufferLengthBase()
+    {
+        wxASSERT_MSG( this->m_lenSet, "forgot to call SetLength()" );
+    }
+
     void SetLength(size_t length) { m_len = length; m_lenSet = true; }
 
 protected:
-    wxString& m_str;
-    wxCharTypeBuffer<CharType> m_buf;
-    size_t        m_len;
-    bool          m_lenSet;
+    size_t m_len;
+    bool m_lenSet;
 };
 
 template<typename T>
@@ -2817,7 +2936,9 @@ class wxStringTypeBuffer : public wxStringTypeBufferBase<T>
 {
 public:
     wxStringTypeBuffer(wxString& str, size_t lenWanted = 1024)
-        : wxStringTypeBufferBase<T>(str, lenWanted) {}
+        : wxStringTypeBufferBase<T>(str, lenWanted)
+        { }
+
     ~wxStringTypeBuffer()
     {
         this->m_str.assign(this->m_buf.data());
@@ -2831,11 +2952,11 @@ class wxStringTypeBufferLength : public wxStringTypeBufferLengthBase<T>
 {
 public:
     wxStringTypeBufferLength(wxString& str, size_t lenWanted = 1024)
-        : wxStringTypeBufferLengthBase<T>(str, lenWanted) {}
+        : wxStringTypeBufferLengthBase<T>(str, lenWanted)
+        { }
 
     ~wxStringTypeBufferLength()
     {
-        wxASSERT(this->m_lenSet);
         this->m_str.assign(this->m_buf.data(), this->m_len);
     }
 
@@ -2869,12 +2990,12 @@ public:
 
     ~wxStringInternalBufferLength()
     {
-        wxASSERT(m_lenSet);
         m_str.m_impl.assign(m_buf.data(), m_len);
     }
 
     DECLARE_NO_COPY_CLASS(wxStringInternalBufferLength)
 };
+
 #endif // wxUSE_STL_BASED_WXSTRING
 
 

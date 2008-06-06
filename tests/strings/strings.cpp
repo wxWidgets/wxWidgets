@@ -53,7 +53,7 @@ private:
         CPPUNIT_TEST( ToULongLong );
 #endif // wxLongLong_t
         CPPUNIT_TEST( ToDouble );
-        CPPUNIT_TEST( WriteBuf );
+        CPPUNIT_TEST( StringBuf );
         CPPUNIT_TEST( UTF8Buf );
         CPPUNIT_TEST( CStrDataTernaryOperator );
         CPPUNIT_TEST( CStrDataOperators );
@@ -82,7 +82,7 @@ private:
     void ToULongLong();
 #endif // wxLongLong_t
     void ToDouble();
-    void WriteBuf();
+    void StringBuf();
     void UTF8Buf();
     void CStrDataTernaryOperator();
     void DoCStrDataTernaryOperator(bool cond);
@@ -661,31 +661,50 @@ void StringTestCase::ToDouble()
     }
 }
 
-void StringTestCase::WriteBuf()
+void StringTestCase::StringBuf()
 {
+    // check that buffer can be used to write into the string
     wxString s;
     wxStrcpy(wxStringBuffer(s, 10), _T("foo"));
 
-    CPPUNIT_ASSERT(s[0u] == _T('f') );
+    WX_ASSERT_SIZET_EQUAL(3, s.length());
     CPPUNIT_ASSERT(_T('f') == s[0u]);
     CPPUNIT_ASSERT(_T('o') == s[1]);
     CPPUNIT_ASSERT(_T('o') == s[2]);
-    WX_ASSERT_SIZET_EQUAL(3, s.length());
 
+    {
+        // also check that the buffer initially contains the original string
+        // contents
+        wxStringBuffer buf(s, 10);
+        CPPUNIT_ASSERT_EQUAL( _T('f'), buf[0] );
+        CPPUNIT_ASSERT_EQUAL( _T('o'), buf[1] );
+        CPPUNIT_ASSERT_EQUAL( _T('o'), buf[2] );
+        CPPUNIT_ASSERT_EQUAL( _T('\0'), buf[3] );
+    }
 
     {
         wxStringBufferLength buf(s, 10);
+        CPPUNIT_ASSERT_EQUAL( _T('f'), buf[0] );
+        CPPUNIT_ASSERT_EQUAL( _T('o'), buf[1] );
+        CPPUNIT_ASSERT_EQUAL( _T('o'), buf[2] );
+        CPPUNIT_ASSERT_EQUAL( _T('\0'), buf[3] );
+
+        // and check that it can be used to write only the specified number of
+        // characters to the string
         wxStrcpy(buf, _T("barrbaz"));
         buf.SetLength(4);
     }
 
+    WX_ASSERT_SIZET_EQUAL(4, s.length());
     CPPUNIT_ASSERT(_T('b') == s[0u]);
     CPPUNIT_ASSERT(_T('a') == s[1]);
     CPPUNIT_ASSERT(_T('r') == s[2]);
     CPPUNIT_ASSERT(_T('r') == s[3]);
-    WX_ASSERT_SIZET_EQUAL(4, s.length());
 
-    CPPUNIT_ASSERT_EQUAL( 0, wxStrcmp(_T("barr"), s) );
+    // check that creating buffer of length smaller than string works, i.e. at
+    // least doesn't crash (it would if we naively copied the entire original
+    // string contents in the buffer)
+    *wxStringBuffer(s, 1) = '!';
 }
 
 void StringTestCase::UTF8Buf()
