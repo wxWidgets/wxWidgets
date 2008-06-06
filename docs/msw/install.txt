@@ -9,15 +9,20 @@ in your wxWidgets distribution.
 
 IMPORTANT NOTE: If you experience problems installing, please
 re-read this instructions and other related files (changes.txt,
-readme.txt, FAQ) carefully before mailing wx-users. Preferably,
-try to fix the problem first and then upload a patch to
-SourceForge:
+readme.txt, FAQ) carefully before posting to wx-users list.
 
-  http://sourceforge.net/patch/?group_id=9863
+If you are sure that you found a bug, please report it at
+wxWidgets Trac:
 
-Please report bugs using the SourceForge bug tracker:
+  http://trac.wxwidgets.org/newticket
 
-  http://sourceforge.net/bugs/?group_id=9863
+Please notice that often correcting trying to correct the bug
+yourself is the quickest way to fix it. Even if you fail to do
+it, you may discover valuable information allowing us to fix it
+while doing it. We also give much higher priority to bug reports
+with patches fixing the problems so this ensures that your report
+will be addressed sooner.
+
 
 Unarchiving
 ============================================================
