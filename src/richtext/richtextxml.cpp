@@ -174,7 +174,7 @@ bool wxRichTextXMLHandler::ImportXML(wxRichTextBuffer* buffer, wxXmlNode* node)
             else if (childName == wxT("image"))
             {
                 wxBitmapType imageType = wxBITMAP_TYPE_PNG;
-                wxString value = node->GetAttribute(wxT("imagetype"), wxEmptyString);
+                wxString value = child->GetAttribute(wxT("imagetype"), wxEmptyString);
                 if (!value.empty())
                 {
                     int type = wxAtoi(value);
