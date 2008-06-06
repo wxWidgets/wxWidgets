@@ -158,7 +158,7 @@ int wxWcscmp(const wchar_t* s1, const wchar_t* s2)
     if (nLen1 != nLen2)
         return nLen1 - nLen2;
 
-    return wxTmemcmp(s1, s2, nLen1);
+    return memcmp(s1, s2, nLen1*sizeof(wchar_t));
 }
 
 // convert a string from UTF8 to the internal encoding
@@ -324,7 +324,7 @@ wxString RegExTestCase::quote(const wxString& arg)
     wxString str;
 
     for (size_t i = 0; i < arg.length(); i++) {
-        wxUChar ch = (wxChar)arg[i];
+        wxChar ch = (wxChar)arg[i];
         const wxChar *p = wxStrchr(needEscape, ch);
 
         if (p)
