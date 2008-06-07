@@ -680,7 +680,18 @@ struct wxPixelDataOut<wxBitmap>
 
 #endif //wxUSE_GUI
 
-template <class Image, class PixelFormat = typename wxPixelFormatFor<Image>::Format >
+// FIXME-VC6: VC6 doesn't like typename in default template parameters while
+//            it is necessary with standard-conforming compilers, remove this
+//            #define and just use typename when we drop VC6 support
+#if defined(__VISUALC__) && !wxCHECK_VISUALC_VERSION(7)
+    #define wxTYPENAME_IN_TEMPLATE_DEFAULT_PARAM
+#else
+    #define wxTYPENAME_IN_TEMPLATE_DEFAULT_PARAM typename
+#endif
+
+template <class Image,
+          class PixelFormat = wxTYPENAME_IN_TEMPLATE_DEFAULT_PARAM
+                                wxPixelFormatFor<Image>::Format >
 class wxPixelData :
     public wxPixelDataOut<Image>::template wxPixelDataIn<PixelFormat>
 {
