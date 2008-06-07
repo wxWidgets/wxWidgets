@@ -67,7 +67,8 @@ wxObject *wxHyperlinkCtrlXmlHandler::DoCreateResource()
     control->Create(m_parentAsWindow, GetID(),
         GetParamValue(wxT("label")), GetParamValue(wxT("url")),
         GetPosition(), GetSize(),
-        GetStyle(wxT("style"), wxHL_DEFAULT_STYLE));
+        GetStyle(wxT("style"), wxHL_DEFAULT_STYLE),
+        GetName());
 
     SetupWindow(control);
 
