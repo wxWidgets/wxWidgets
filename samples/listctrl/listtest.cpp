@@ -1132,16 +1132,29 @@ void MyListCtrl::InsertItemInReportView(int i)
 #if USE_CONTEXT_MENU
 void MyListCtrl::OnContextMenu(wxContextMenuEvent& event)
 {
-    wxPoint point = event.GetPosition();
-    // If from keyboard
-    if (point.x == -1 && point.y == -1) {
-        wxSize size = GetSize();
-        point.x = size.x / 2;
-        point.y = size.y / 2;
-    } else {
-        point = ScreenToClient(point);
+    if (GetEditControl() == NULL)
+    {
+        wxPoint point = event.GetPosition();
+        // If from keyboard
+        if ( (point.x == -1) && (point.y == -1) )
+        {
+            wxSize size = GetSize();
+            point.x = size.x / 2;
+            point.y = size.y / 2;
+        }
+        else
+        {
+            point = ScreenToClient(point);
+        }
+        ShowContextMenu(point);
     }
-    ShowContextMenu(point);
+    else
+    {
+        // the user is editing:
+        // allow the text control to display its context menu
+        // if it has one (it has on Windows) rather than display our one
+        event.Skip();
+    }
 }
 #endif
 
