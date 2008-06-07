@@ -26,7 +26,8 @@ public:
 
     wxCursor(const wxImage & image) ;
     wxCursor(const char* const* bits);
-    wxCursor(const wxString& name, long flags = wxBITMAP_TYPE_MACCURSOR_RESOURCE,
+    wxCursor(const wxString& name,
+             wxBitmapType flags = wxBITMAP_TYPE_MACCURSOR_RESOURCE,
              int hotSpotX = 0, int hotSpotY = 0);
 
     wxCursor(int cursor_type);

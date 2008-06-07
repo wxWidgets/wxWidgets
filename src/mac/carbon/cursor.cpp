@@ -484,7 +484,7 @@ void wxCursor::CreateFromImage(const wxImage & image)
 
 #endif //wxUSE_IMAGE
 
-wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int hotSpotY)
+wxCursor::wxCursor(const wxString& cursor_file, wxBitmapType flags, int hotSpotX, int hotSpotY)
 {
     m_refData = new wxCursorRefData;
     if ( flags == wxBITMAP_TYPE_MACCURSOR_RESOURCE )
