@@ -80,14 +80,23 @@ public:
     MyFrame(wxFrame *frame, const wxString& title, int x, int y, int w, int h);
     virtual ~MyFrame();
 
-    // operations
-    void WriteText(const wxString& text) { m_txtctrl->WriteText(text); }
+    // this function is MT-safe, i.e. it can be called from worker threads
+    // safely without any additional locking
+    void LogThreadMessage(const wxString& text)
+    {
+        wxCriticalSectionLocker lock(m_csMessages);
+        m_messages.push_back(text);
+
+        // as we effectively log the messages from the idle event handler,
+        // ensure it's going to be called now that we have some messages to log
+        wxWakeUpIdle();
+    }
 
     // accessors for MyWorkerThread (called in its context!)
     bool Cancelled();
 
-protected:
-    // callbacks
+private:
+    // event handlers
     void OnQuit(wxCommandEvent& event);
     void OnClear(wxCommandEvent& event);
 
@@ -109,15 +118,27 @@ protected:
 
     void OnIdle(wxIdleEvent &event);
 
-private:
     // helper function - creates a new thread (but doesn't run it)
     MyThread *CreateThread();
+
+    // update display in our status bar: called during idle handling
+    void UpdateThreadStatus();
+
+    // log the messages queued by LogThreadMessage()
+    void DoLogThreadMessages();
+
 
     // just some place to put our messages in
     wxTextCtrl *m_txtctrl;
 
+    // the array of pending messages to be displayed and the critical section
+    // protecting it
+    wxArrayString m_messages;
+    wxCriticalSection m_csMessages;
+
     // remember the number of running threads and total number of threads
-    size_t m_nRunning, m_nCount;
+    size_t m_nRunning,
+           m_nCount;
 
     // the progress dialog which we show while worker thread is running
     wxProgressDialog *m_dlgProgress;
@@ -186,17 +207,7 @@ MyThread::MyThread(MyFrame *frame)
 
 void MyThread::WriteText(const wxString& text)
 {
-    wxString msg;
-
-    // before doing any GUI calls we must ensure that this thread is the only
-    // one doing it!
-
-    wxMutexGuiEnter();
-
-    msg << text;
-    m_frame->WriteText(msg);
-
-    wxMutexGuiLeave();
+    m_frame->LogThreadMessage(text);
 }
 
 void MyThread::OnExit()
@@ -295,8 +306,7 @@ void *MyWorkerThread::Entry()
         // send in a thread-safe way
         wxPostEvent( m_frame, event );
 
-        // wxSleep() can't be called from non-main thread!
-        wxThread::Sleep(200);
+        wxMilliSleep(200);
     }
 
     wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, WORKER_EVENT );
@@ -631,8 +641,29 @@ void MyFrame::OnPauseThread(wxCommandEvent& WXUNUSED(event) )
     }
 }
 
-// set the frame title indicating the current number of threads
 void MyFrame::OnIdle(wxIdleEvent& event)
+{
+    DoLogThreadMessages();
+
+    UpdateThreadStatus();
+
+    event.Skip();
+}
+
+void MyFrame::DoLogThreadMessages()
+{
+    wxCriticalSectionLocker lock(m_csMessages);
+
+    const size_t count = m_messages.size();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        m_txtctrl->AppendText(m_messages[n]);
+    }
+
+    m_messages.clear();
+}
+
+void MyFrame::UpdateThreadStatus()
 {
     wxCriticalSectionLocker enter(wxGetApp().m_critsect);
 
@@ -653,8 +684,6 @@ void MyFrame::OnIdle(wxIdleEvent& event)
         wxLogStatus(this, wxT("%u threads total, %u running."), unsigned(nCount), unsigned(nRunning));
     }
     //else: avoid flicker - don't print anything
-
-    event.Skip();
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
@@ -757,11 +786,6 @@ void MyFrame::OnStartWorker(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnWorkerEvent(wxCommandEvent& event)
 {
-#if 0
-    WriteText( _T("Got message from worker thread: ") );
-    WriteText( event.GetString() );
-    WriteText( _T("\n") );
-#else
     int n = event.GetInt();
     if ( n == -1 )
     {
@@ -782,7 +806,6 @@ void MyFrame::OnWorkerEvent(wxCommandEvent& event)
             m_cancelled = true;
         }
     }
-#endif
 }
 
 bool MyFrame::Cancelled()
