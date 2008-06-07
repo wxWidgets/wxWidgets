@@ -2895,7 +2895,7 @@ public:
                 len = lenWanted - 1;
             }
 
-            wxTmemcpy(m_buf.data(), buf, len + 1);
+            memcpy(m_buf.data(), buf, (len + 1)*sizeof(CharType));
         }
         //else: conversion failed, this can happen when trying to get Unicode
         //      string contents into a char string
