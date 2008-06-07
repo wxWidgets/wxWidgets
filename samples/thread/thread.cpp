@@ -53,20 +53,18 @@ public:
 
     virtual bool OnInit();
 
-public:
+    // critical section protects access to all of the fields below
+    wxCriticalSection m_critsect;
+
     // all the threads currently alive - as soon as the thread terminates, it's
     // removed from the array
     wxArrayThread m_threads;
 
-    // crit section protects access to all of the arrays below
-    wxCriticalSection m_critsect;
-
     // semaphore used to wait for the threads to exit, see MyFrame::OnQuit()
     wxSemaphore m_semAllDone;
 
-    // the last exiting thread should post to m_semAllDone if this is true
-    // (protected by the same m_critsect)
-    bool m_waitingUntilAllDone;
+    // indicates that we're shutting down and all threads should exit
+    bool m_shuttingDown;
 };
 
 // Create a new application object
@@ -182,16 +180,16 @@ class MyThread : public wxThread
 {
 public:
     MyThread(MyFrame *frame);
+    virtual ~MyThread();
 
     // thread execution starts here
     virtual void *Entry();
 
-    // called when the thread exits - whether it terminates normally or is
-    // stopped with Delete() (but not when it is Kill()ed!)
-    virtual void OnExit();
-
-    // write something to the text control
-    void WriteText(const wxString& text);
+    // write something to the text control in the main frame
+    void WriteText(const wxString& text)
+    {
+        m_frame->LogThreadMessage(text);
+    }
 
 public:
     unsigned m_count;
@@ -205,12 +203,7 @@ MyThread::MyThread(MyFrame *frame)
     m_frame = frame;
 }
 
-void MyThread::WriteText(const wxString& text)
-{
-    m_frame->LogThreadMessage(text);
-}
-
-void MyThread::OnExit()
+MyThread::~MyThread()
 {
     wxCriticalSectionLocker locker(wxGetApp().m_critsect);
 
@@ -221,9 +214,9 @@ void MyThread::OnExit()
     {
         // signal the main thread that there are no more threads left if it is
         // waiting for us
-        if ( wxGetApp().m_waitingUntilAllDone )
+        if ( wxGetApp().m_shuttingDown )
         {
-            wxGetApp().m_waitingUntilAllDone = false;
+            wxGetApp().m_shuttingDown = false;
 
             wxGetApp().m_semAllDone.Post();
         }
@@ -241,7 +234,15 @@ void *MyThread::Entry()
 
     for ( m_count = 0; m_count < 10; m_count++ )
     {
-        // check if we were asked to exit
+        // check if the application is shutting down: in this case all threads
+        // should stop a.s.a.p.
+        {
+            wxCriticalSectionLocker locker(wxGetApp().m_critsect);
+            if ( wxGetApp().m_shuttingDown )
+                return NULL;
+        }
+
+        // check if just this thread was asked to exit
         if ( TestDestroy() )
             break;
 
@@ -365,9 +366,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 END_EVENT_TABLE()
 
 MyApp::MyApp()
-     : m_semAllDone()
 {
-    m_waitingUntilAllDone = false;
+    m_shuttingDown = false;
 }
 
 // `Main program' equivalent, creating windows and returning main app frame
@@ -454,40 +454,23 @@ MyFrame::~MyFrame()
     // tell all the threads to terminate: note that they can't terminate while
     // we're deleting them because they will block in their OnExit() -- this is
     // important as otherwise we might access invalid array elements
-    wxThread *thread;
 
-    wxGetApp().m_critsect.Enter();
-
-    // check if we have any threads running first
-    const wxArrayThread& threads = wxGetApp().m_threads;
-    size_t count = threads.GetCount();
-
-    if ( count )
     {
-        // set the flag for MyThread::OnExit()
-        wxGetApp().m_waitingUntilAllDone = true;
+        wxCriticalSectionLocker locker(wxGetApp().m_critsect);
 
-        // stop all threads
-        while ( ! threads.IsEmpty() )
-        {
-            thread = threads.Last();
+        // check if we have any threads running first
+        const wxArrayThread& threads = wxGetApp().m_threads;
+        size_t count = threads.GetCount();
 
-            wxGetApp().m_critsect.Leave();
+        if ( !count )
+            return;
 
-            thread->Delete();
-
-            wxGetApp().m_critsect.Enter();
-        }
+        // set the flag indicating that all threads should exit
+        wxGetApp().m_shuttingDown = true;
     }
 
-    wxGetApp().m_critsect.Leave();
-
-    if ( count )
-    {
-        // now wait for them to really terminate
-        wxGetApp().m_semAllDone.Wait();
-    }
-    //else: no threads to terminate, no condition to wait for
+    // now wait for them to really terminate
+    wxGetApp().m_semAllDone.Wait();
 }
 
 MyThread *MyFrame::CreateThread()
@@ -569,28 +552,19 @@ void MyFrame::OnStartThread(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnStopThread(wxCommandEvent& WXUNUSED(event) )
 {
-    wxGetApp().m_critsect.Enter();
+    wxCriticalSectionLocker enter(wxGetApp().m_critsect);
 
     // stop the last thread
     if ( wxGetApp().m_threads.IsEmpty() )
     {
         wxLogError(wxT("No thread to stop!"));
-
-        wxGetApp().m_critsect.Leave();
     }
     else
     {
-        wxThread *thread = wxGetApp().m_threads.Last();
-
-        // it's important to leave critical section before calling Delete()
-        // because delete will (implicitly) call OnExit() which also tries
-        // to enter the same crit section - would dead lock.
-        wxGetApp().m_critsect.Leave();
-
-        thread->Delete();
+        wxGetApp().m_threads.Last()->Delete();
 
 #if wxUSE_STATUSBAR
-        SetStatusText(_T("Thread stopped."), 1);
+        SetStatusText(_T("Last thread stopped."), 1);
 #endif // wxUSE_STATUSBAR
     }
 }
