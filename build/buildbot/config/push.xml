@@ -79,7 +79,7 @@
 </build>
 
 <build>
-    <name>Solaris-HEAD-GTK1</name>
+    <name>Solaris HEAD GTK1</name>
     <builddir>psh_solaris_hd_gtk1</builddir>
 
     <steps>
@@ -90,7 +90,7 @@
 </build>
 
 <build>
-    <name>Solaris-HEAD-X11</name>
+    <name>Solaris HEAD X11 with-stl</name>
     <builddir>psh_solaris_hd_x11</builddir>
 
     <steps>
@@ -101,7 +101,7 @@
 </build>
 
 <build>
-    <name>Solaris-Stable-Motif</name>
+    <name>Solaris Stable Motif</name>
     <builddir>psh_solaris_st_motif</builddir>
 
     <steps>
@@ -112,7 +112,7 @@
 </build>
 
 <build>
-    <name>Solaris-Stable-GTK2U</name>
+    <name>Solaris Stable GTK2 Unicode</name>
     <builddir>psh_solaris_st_gtk2u</builddir>
 
     <steps>
