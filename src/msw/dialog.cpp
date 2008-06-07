@@ -185,7 +185,12 @@ bool wxDialog::Create(wxWindow *parent,
 #endif
 
     if ( HasFlag(wxRESIZE_BORDER) )
+    {
         CreateGripper();
+
+        Connect(wxEVT_CREATE,
+                wxWindowCreateEventHandler(wxDialog::OnWindowCreate));
+    }
 
     return true;
 }
@@ -384,6 +389,11 @@ void wxDialog::DestroyGripper()
 {
     if ( m_hGripper )
     {
+        // we used to have trouble with gripper appearing on top (and hence
+        // overdrawing) the other, real, dialog children -- check that this
+        // isn't the case automatically
+        wxASSERT_MSG( ::GetNextWindow((HWND)m_hGripper, GW_HWNDNEXT) == 0,
+            _T("Bug in wxWidgets: gripper should be at the bottom of Z-order") );
         ::DestroyWindow((HWND) m_hGripper);
         m_hGripper = 0;
     }
@@ -412,6 +422,19 @@ void wxDialog::ResizeGripper()
                    size.x, size.y,
                    rectGripper.width, rectGripper.height,
                    SWP_NOACTIVATE);
+}
+
+void wxDialog::OnWindowCreate(wxWindowCreateEvent& event)
+{
+    if ( m_hGripper && IsShown() &&
+            event.GetWindow() && event.GetWindow()->GetParent() == this )
+    {
+        // Put gripper below the newly created child window
+        ::SetWindowPos((HWND)m_hGripper, HWND_BOTTOM, 0, 0, 0, 0,
+                       SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
+    }
+
+    event.Skip();
 }
 
 // ----------------------------------------------------------------------------

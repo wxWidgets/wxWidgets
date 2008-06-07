@@ -116,6 +116,11 @@ protected:
     void ResizeGripper();
 
 private:
+    // this function is used to adjust Z-order of new children relative to the
+    // gripper if we have one
+    void OnWindowCreate(wxWindowCreateEvent& event);
+
+
     wxWindow*   m_oldFocus;
     bool        m_endModalCalled; // allow for closing within InitDialog
 
