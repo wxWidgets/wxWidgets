@@ -58,6 +58,15 @@ public:
         return *this;
     }
 
+    wxSizerFlags& Expand()
+    {
+        m_flags |= wxEXPAND;
+        return *this;
+    }
+
+    // notice that Align() replaces the current alignment flags, use specific
+    // methods below such as Top(), Left() &c if you want to set just the
+    // vertical or horizontal alignment
     wxSizerFlags& Align(int alignment) // combination of wxAlignment values
     {
         m_flags &= ~wxALIGN_MASK;
@@ -66,19 +75,34 @@ public:
         return *this;
     }
 
-    wxSizerFlags& Expand()
-    {
-        m_flags |= wxEXPAND;
-        return *this;
-    }
-
     // some shortcuts for Align()
     wxSizerFlags& Centre() { return Align(wxALIGN_CENTRE); }
     wxSizerFlags& Center() { return Centre(); }
-    wxSizerFlags& Top() { return Align(wxALIGN_TOP); }
-    wxSizerFlags& Left() { return Align(wxALIGN_LEFT); }
-    wxSizerFlags& Right() { return Align(wxALIGN_RIGHT); }
-    wxSizerFlags& Bottom() { return Align(wxALIGN_BOTTOM); }
+
+    wxSizerFlags& Top() 
+    { 
+        m_flags &= ~(wxALIGN_BOTTOM | wxALIGN_CENTRE_VERTICAL); 
+        return *this; 
+    }
+
+    wxSizerFlags& Left() 
+    { 
+        m_flags &= ~(wxALIGN_RIGHT | wxALIGN_CENTRE_HORIZONTAL); 
+        return *this; 
+    }
+
+    wxSizerFlags& Right() 
+    { 
+        m_flags = (m_flags & ~wxALIGN_CENTRE_HORIZONTAL) | wxALIGN_RIGHT; 
+        return *this; 
+    }
+
+    wxSizerFlags& Bottom() 
+    { 
+        m_flags = (m_flags & ~wxALIGN_CENTRE_VERTICAL) | wxALIGN_BOTTOM; 
+        return *this; 
+    }
+
 
     // default border size used by Border() below
     static int GetDefaultBorder()

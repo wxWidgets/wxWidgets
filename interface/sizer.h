@@ -322,11 +322,12 @@ public:
     @class wxSizerFlags
     @wxheader{sizer.h}
 
-    Normally, when you add an item to a sizer via
-    wxSizer::Add, you have to specify a lot of flags and
-    parameters which can be unwieldy. This is where wxSizerFlags comes in: it
-    allows you to specify all parameters using the named methods instead. For
-    example, instead of
+    Container for sizer items flags providing readable names for them.
+
+    Normally, when you add an item to a sizer via wxSizer::Add, you have to
+    specify a lot of flags and parameters which can be unwieldy. This is where
+    wxSizerFlags comes in: it allows you to specify all parameters using the
+    named methods instead. For example, instead of
 
     @code
     sizer->Add(ctrl, 0, wxEXPAND | wxALL, 10);
@@ -367,10 +368,14 @@ public:
     wxSizerFlags(int proportion = 0);
 
     /**
-        Sets the alignment of this wxSizerFlags to @e align.  Note that if this
-        method is not called, the wxSizerFlags has no specified alignment.
+        Sets the alignment of this wxSizerFlags to @e align.
+
+        This method replaces the previously set alignment with the specified
+        one.
 
         @see Top(), Left(), Right(), Bottom(), Centre()
+
+        @param align Combination of @c wxALIGN_XXX bit masks.
     */
     wxSizerFlags& Align(int align = 0);
 
@@ -389,9 +394,10 @@ public:
     wxSizerFlags& Border(int direction = wxALL);
 
     /**
-        Aligns the object to the bottom, shortcut for @c Align(wxALIGN_BOTTOM).
+        Aligns the object to the bottom, similar for @c Align(wxALIGN_BOTTOM).
 
-        @see Align()
+        Unlike Align(), this method doesn't change the horizontal alignment of
+        the item.
     */
     wxSizerFlags& Bottom();
 
@@ -447,9 +453,10 @@ public:
     static int GetDefaultBorder();
 
     /**
-        Aligns the object to the left, shortcut for @c Align(wxALIGN_LEFT)
+        Aligns the object to the left, similar for @c Align(wxALIGN_LEFT).
 
-        @see Align()
+        Unlike Align(), this method doesn't change the vertical alignment of
+        the item.
     */
     wxSizerFlags& Left();
 
@@ -459,9 +466,10 @@ public:
     wxSizerFlags& Proportion(int proportion = 0);
 
     /**
-        Aligns the object to the right, shortcut for @c Align(wxALIGN_RIGHT)
+        Aligns the object to the right, similar for @c Align(wxALIGN_RIGHT).
 
-        @see Align()
+        Unlike Align(), this method doesn't change the vertical alignment of
+        the item.
     */
     wxSizerFlags& Right();
 
@@ -472,9 +480,10 @@ public:
     wxSizerFlags& Shaped();
 
     /**
-        Aligns the object to the top, shortcut for @c Align(wxALIGN_TOP)
+        Aligns the object to the top, similar for @c Align(wxALIGN_TOP).
 
-        @see Align()
+        Unlike Align(), this method doesn't change the horizontal alignment of
+        the item.
     */
     wxSizerFlags& Top();
 
