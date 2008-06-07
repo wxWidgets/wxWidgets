@@ -40,8 +40,8 @@
 #endif
 
 #include "wx/stockitem.h"
-#include "wx/tokenzr.h"
 #include "wx/msw/private.h"
+#include "wx/msw/private/button.h"
 
 #if wxUSE_UXTHEME
     #include "wx/msw/uxtheme.h"
@@ -183,10 +183,7 @@ bool wxButton::Create(wxWindow *parent,
     //
     // NB: we do it here and not in MSWGetStyle() because we need the label
     //     value and the label is not set yet when MSWGetStyle() is called
-    if ( label.find(_T('\n')) != wxString::npos )
-    {
-        msStyle |= BS_MULTILINE;
-    }
+    msStyle |= wxMSWButton::GetMultilineStyle(label);
 
     return MSWCreateControl(_T("BUTTON"), msStyle, pos, size, label, exstyle);
 }
@@ -238,19 +235,7 @@ WXDWORD wxButton::MSWGetStyle(long style, WXDWORD *exstyle) const
 
 void wxButton::SetLabel(const wxString& label)
 {
-    // update BS_MULTILINE style depending on the new label (resetting it
-    // doesn't seem to do anything very useful but it shouldn't hurt and we do
-    // have to set it whenever the label becomes multi line as otherwise it
-    // wouldn't be shown correctly)
-    long styleOld = ::GetWindowLong(GetHwnd(), GWL_STYLE),
-         styleNew;
-    if ( label.find(_T('\n')) != wxString::npos )
-        styleNew = styleOld | BS_MULTILINE;
-    else
-        styleNew = styleOld & ~BS_MULTILINE;
-
-    if ( styleNew != styleOld )
-        ::SetWindowLong(GetHwnd(), GWL_STYLE, styleNew);
+    wxMSWButton::UpdateMultilineStyle(GetHwnd(), label);
 
     wxButtonBase::SetLabel(label);
 }

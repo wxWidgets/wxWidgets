@@ -42,6 +42,8 @@ public:
     virtual bool GetValue() const;
 
     // override some base class virtuals
+    virtual void SetLabel(const wxString& label);
+
     virtual bool MSWCommand(WXUINT param, WXWORD id);
     virtual void Command(wxCommandEvent& event);
     virtual bool SetForegroundColour(const wxColour& colour);

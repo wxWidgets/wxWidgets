@@ -35,8 +35,9 @@
 #endif
 
 #include "wx/msw/dc.h"          // for wxDCTemp
-#include "wx/msw/uxtheme.h"
 #include "wx/renderer.h"
+#include "wx/msw/uxtheme.h"
+#include "wx/msw/private/button.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -188,6 +189,8 @@ bool wxCheckBox::Create(wxWindow *parent,
         msStyle |= BS_LEFTTEXT | BS_RIGHT;
     }
 
+    msStyle |= wxMSWButton::GetMultilineStyle(label);
+
     return MSWCreateControl(wxT("BUTTON"), msStyle, pos, size, label, 0);
 }
 
@@ -212,7 +215,9 @@ wxSize wxCheckBox::DoGetBestSize() const
     int wCheckbox, hCheckbox;
     if ( !str.empty() )
     {
-        GetTextExtent(GetLabelText(str), &wCheckbox, &hCheckbox);
+        wxClientDC dc(wx_const_cast(wxCheckBox *, this));
+        dc.SetFont(GetFont());
+        dc.GetMultiLineTextExtent(GetLabelText(str), &wCheckbox, &hCheckbox);
         wCheckbox += s_checkSize + GetCharWidth();
 
         if ( hCheckbox < s_checkSize )
@@ -235,6 +240,13 @@ wxSize wxCheckBox::DoGetBestSize() const
 // ----------------------------------------------------------------------------
 // wxCheckBox operations
 // ----------------------------------------------------------------------------
+
+void wxCheckBox::SetLabel(const wxString& label)
+{
+    wxMSWButton::UpdateMultilineStyle(GetHwnd(), label);
+
+    wxCheckBoxBase::SetLabel(label);
+}
 
 void wxCheckBox::SetValue(bool val)
 {

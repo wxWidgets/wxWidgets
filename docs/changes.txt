@@ -393,6 +393,7 @@ wxMSW:
 - Show resize gripper on resizeable dialogs (Kolya Kosenko)
 - Implement support for display enumeration under WinCE (Vince Harron)
 - Use different Win32 class names in different wx instances (Thomas Hauk)
+- Support multiline labels for wxCheckBox.
 
 wxX11:
 
