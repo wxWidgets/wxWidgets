@@ -56,7 +56,7 @@ wxHyperlinkCtrlXmlHandler::wxHyperlinkCtrlXmlHandler()
     XRC_ADD_STYLE(wxHL_ALIGN_RIGHT);
     XRC_ADD_STYLE(wxHL_ALIGN_CENTRE);
     XRC_ADD_STYLE(wxHL_DEFAULT_STYLE);
-    
+
     AddWindowStyles();
 }
 
@@ -67,7 +67,8 @@ wxObject *wxHyperlinkCtrlXmlHandler::DoCreateResource()
     control->Create(m_parentAsWindow, GetID(),
         GetParamValue(wxT("label")), GetParamValue(wxT("url")),
         GetPosition(), GetSize(),
-        GetStyle(wxT("style"), wxHL_DEFAULT_STYLE));
+        GetStyle(wxT("style"), wxHL_DEFAULT_STYLE),
+        GetName());
 
     SetupWindow(control);
 
