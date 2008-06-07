@@ -2287,8 +2287,8 @@ void wxGridCellBoolRenderer::Draw(wxGrid& grid,
 
     int flags = 0;
     if (value)
-        flags |= wxCONTROL_CHECKED; 
-        
+        flags |= wxCONTROL_CHECKED;
+
     wxRendererNative::Get().DrawCheckBox( &grid, dc, rectBorder, flags );
 }
 
@@ -7214,7 +7214,7 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
     m_currentCellCoords = coords;
 
     wxGridCellAttr *attr = GetCellAttr( coords );
-#if !defined(__WXMAC__) 
+#if !defined(__WXMAC__)
     DrawCellHighlight( dc, attr );
 #endif
     attr->DecRef();
@@ -7924,7 +7924,7 @@ void wxGrid::SetUseNativeColLabels( bool native )
         int height = wxRendererNative::Get().GetHeaderButtonHeight( this );
         SetColLabelSize( height );
     }
-    
+
     m_colLabelWin->Refresh();
 }
 
@@ -8412,7 +8412,7 @@ void wxGrid::ShowCellEditControl()
                 if (rect.GetRight() > client_right)
                     rect.SetRight( client_right - 1 );
             }
-            
+
             editor->SetCellAttr( attr );
             editor->SetSize( rect );
             if (nXMove != 0)
@@ -9633,7 +9633,8 @@ void wxGrid::SetCellHighlightROPenWidth(int width)
         // make any visible change if the the thickness is getting smaller.
         int row = m_currentCellCoords.GetRow();
         int col = m_currentCellCoords.GetCol();
-        if ( GetColWidth(col) <= 0 || GetRowHeight(row) <= 0 )
+        if ( row == -1 || col == -1 ||
+                GetColWidth(col) <= 0 || GetRowHeight(row) <= 0 )
             return;
 
         wxRect rect = CellToRect(row, col);
