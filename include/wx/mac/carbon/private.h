@@ -1229,7 +1229,7 @@ private:
 
 #ifdef __WXMAC_OSX__
 
-CGColorSpaceRef wxMacGetGenericRGBColorSpace(void);
+extern "C" CGColorSpaceRef wxMacGetGenericRGBColorSpace(void);
 void wxMacMemoryBufferReleaseProc(void *info, const void *data, size_t size);
 
 #endif
