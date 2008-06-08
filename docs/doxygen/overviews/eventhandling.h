@@ -29,7 +29,7 @@ Classes: wxEvtHandler, wxWindow, wxEvent
 @section overview_eventhandling_introduction Introduction
 
 There are two principal ways to handle events in wxWidgets. One of them uses
-<em>event table</em> macros and allows to define the connection between events
+<em>event table</em> macros and allows you to define the connection between events
 and their handlers only statically, i.e. during program compilation. The other
 one uses wxEvtHandler::Connect() call and can be used to connect, and
 disconnect, the handlers dynamically, i.e. during run-time depending on some
@@ -331,21 +331,21 @@ void MyTextCtrl::OnChar(wxKeyEvent& event)
 @endcode
 
 The normal order of event table searching by ProcessEvent is as follows:
-
-@li If the object is disabled (via a call to wxEvtHandler::SetEvtHandlerEnabled)
+<ol>
+<li> If the object is disabled (via a call to wxEvtHandler::SetEvtHandlerEnabled)
     the function skips to step (6).
-@li If the object is a wxWindow, @b ProcessEvent is recursively called on the window's
+<li> If the object is a wxWindow, @b ProcessEvent is recursively called on the window's
     wxValidator. If this returns @true, the function exits.
-@li @b SearchEventTable is called for this event handler. If this fails, the base
+<li> @b SearchEventTable is called for this event handler. If this fails, the base
     class table is tried, and so on until no more tables exist or an appropriate
     function was found, in which case the function exits.
-@li The search is applied down the entire chain of event handlers (usually the chain has
+<li> The search is applied down the entire chain of event handlers (usually the chain has
     a length of one). If this succeeds, the function exits.
-@li If the object is a wxWindow and the event is set to set to propagate (in the library only
+<li> If the object is a wxWindow and the event is set to set to propagate (in the library only
     wxCommandEvent based events are set to propagate), @b ProcessEvent is recursively applied
     to the parent window's event handler. If this returns @true, the function exits.
-@li Finally, @b ProcessEvent is called on the wxApp object.
-
+<li> Finally, @b ProcessEvent is called on the wxApp object.
+</ol>
 <b>Pay close attention to Step 5</b>.  People often overlook or get
 confused by this powerful feature of the wxWidgets event processing
 system.  To put it a different way, events set to propagate
@@ -488,7 +488,7 @@ as well. The automatically generated identifiers are always negative and so
 will never conflict with the user-specified identifiers which must be always
 positive.
 
-See @ref page_stdevtid for the list of standard identifiers availabel.
+See @ref page_stdevtid for the list of standard identifiers available.
 You can use wxID_HIGHEST to determine the number above which it is safe to
 define your own identifiers. Or, you can use identifiers below wxID_LOWEST.
 Finally, you can allocate identifiers dynamically using wxNewId() function to.
