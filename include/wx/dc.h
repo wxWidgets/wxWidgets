@@ -316,7 +316,9 @@ public:
 
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y,
                                      wxCoord width, wxCoord height) = 0;
-    virtual void DoSetClippingRegionAsRegion(const wxRegion& region) = 0;
+
+    // NB: this function works with device coordinates, not the logical ones!
+    virtual void DoSetDeviceClippingRegion(const wxRegion& region) = 0;
 
     virtual void DoGetClippingBox(wxCoord *x, wxCoord *y,
                                   wxCoord *w, wxCoord *h) const
@@ -796,8 +798,21 @@ public:
         { m_pimpl->DoSetClippingRegion(pt.x, pt.y, sz.x, sz.y); }
     void SetClippingRegion(const wxRect& rect)
         { m_pimpl->DoSetClippingRegion(rect.x, rect.y, rect.width, rect.height); }
-    void SetClippingRegion(const wxRegion& region)
-        { m_pimpl->DoSetClippingRegionAsRegion(region); }
+
+    // unlike the functions above, the coordinates of the region used in this
+    // one are in device coordinates, not the logical ones
+    void SetDeviceClippingRegion(const wxRegion& region)
+        { m_pimpl->DoSetDeviceClippingRegion(region); }
+
+    // this function is deprecated because its name is confusing: you may
+    // expect it to work with logical coordinates but, in fact, it does exactly
+    // the same thing as SetDeviceClippingRegion()
+    //
+    // please review the code using it and either replace it with calls to
+    // SetDeviceClippingRegion() or correct it if it was [wrongly] passing
+    // logical coordinates to this function
+    wxDEPRECATED_INLINE(void SetClippingRegion(const wxRegion& region),
+                        SetDeviceClippingRegion(region); )
 
     void DestroyClippingRegion()
         { m_pimpl->DestroyClippingRegion(); }
@@ -1212,7 +1227,7 @@ class WXDLLIMPEXP_CORE wxDCClipper
 {
 public:
     wxDCClipper(wxDC& dc, const wxRegion& r) : m_dc(dc)
-        { dc.SetClippingRegion(r); }
+        { dc.SetClippingRegion(r.GetBox()); }
     wxDCClipper(wxDC& dc, const wxRect& r) : m_dc(dc)
         { dc.SetClippingRegion(r.x, r.y, r.width, r.height); }
     wxDCClipper(wxDC& dc, wxCoord x, wxCoord y, wxCoord w, wxCoord h) : m_dc(dc)

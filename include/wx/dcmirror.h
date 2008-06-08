@@ -246,7 +246,7 @@ protected:
         Mirror(n, points);
     }
 
-    virtual void DoSetClippingRegionAsRegion(const wxRegion& WXUNUSED(region))
+    virtual void DoSetDeviceClippingRegion(const wxRegion& WXUNUSED(region))
     {
         wxFAIL_MSG( _T("not implemented") );
     }

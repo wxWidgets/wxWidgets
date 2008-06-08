@@ -94,7 +94,7 @@ public:
 
     virtual void DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height );
     virtual void DestroyClippingRegion();
-    virtual void DoSetClippingRegionAsRegion( const wxRegion &region  );
+    virtual void DoSetDeviceClippingRegion( const wxRegion &region );
 
     // Resolution in pixels per logical inch
     virtual wxSize GetPPI() const;

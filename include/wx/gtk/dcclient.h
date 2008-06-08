@@ -71,7 +71,7 @@ public:
                                 const wxFont *theFont = (wxFont *) NULL) const;
     virtual bool DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const;
     virtual void DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height );
-    virtual void DoSetClippingRegionAsRegion( const wxRegion &region );
+    virtual void DoSetDeviceClippingRegion( const wxRegion &region );
 
     virtual wxCoord GetCharWidth() const;
     virtual wxCoord GetCharHeight() const;

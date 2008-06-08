@@ -869,8 +869,15 @@ public:
                            wxCoord height);
     void SetClippingRegion(const wxPoint& pt, const wxSize& sz);
     void SetClippingRegion(const wxRect& rect);
-    void SetClippingRegion(const wxRegion& region);
     //@}
+
+    /**
+        Sets the clipping region for this device context.
+
+        Unlike SetClippingRegion(), this function works with physical
+        coordinates and not with the logical ones.
+     */
+    void SetDeviceClippingRegion(const wxRegion& region);
 
     /**
         Sets the device origin (i.e., the origin in pixels after scaling has

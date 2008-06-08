@@ -158,7 +158,7 @@ protected:
 
     // this is gnarly - we can't even call this function DoSetClippingRegion()
     // because of virtual function hiding
-    virtual void DoSetClippingRegionAsRegion(const wxRegion& region);
+    virtual void DoSetDeviceClippingRegion(const wxRegion& region);
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y,
                                      wxCoord width, wxCoord height);
 

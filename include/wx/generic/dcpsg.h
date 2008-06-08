@@ -119,7 +119,10 @@ protected:
     void DoDrawText(const wxString& text, wxCoord x, wxCoord y);
     void DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y, double angle);
     void DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
-    void DoSetClippingRegionAsRegion( const wxRegion &WXUNUSED(clip)) { }
+    void DoSetDeviceClippingRegion( const wxRegion &WXUNUSED(clip))
+    {
+        wxFAIL_MSG( "not implemented" );
+    }
     void DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
                          wxCoord *descent = NULL,
                          wxCoord *externalLeading = NULL,

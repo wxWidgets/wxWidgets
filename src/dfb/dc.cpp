@@ -95,10 +95,19 @@ void wxDFBDCImpl::DoSetClippingRegion(wxCoord cx, wxCoord cy, wxCoord cw, wxCoor
     m_clipping = true;
 }
 
-void wxDFBDCImpl::DoSetClippingRegionAsRegion(const wxRegion& region)
+void wxDFBDCImpl::DoSetDeviceClippingRegion(const wxRegion& region)
 {
     // NB: this can be done because wxDFB only supports rectangular regions
-    GetOwner()->SetClippingRegion(region.AsRect());
+    wxRect rect = region.AsRect();
+
+    // our parameter is in physical coordinates while DoSetClippingRegion()
+    // takes logical ones
+    rect.x = XDEV2LOG(rect.x);
+    rect.y = YDEV2LOG(rect.y);
+    rect.width = XDEV2LOG(rect.width);
+    rect.height = YDEV2LOG(rect.height);
+
+    DoSetClippingRegion(rect);
 }
 
 void wxDFBDCImpl::DestroyClippingRegion()

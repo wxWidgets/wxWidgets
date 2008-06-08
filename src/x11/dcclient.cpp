@@ -2222,7 +2222,7 @@ void wxWindowDCImpl::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, w
     XSetRegion( (Display*) m_display, (GC) m_bgGC, (Region) m_currentClippingRegion.GetX11Region() );
 }
 
-void wxWindowDCImpl::DoSetClippingRegionAsRegion( const wxRegion& region )
+void wxWindowDCImpl::DoSetDeviceClippingRegion( const wxRegion& region )
 {
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 

@@ -166,9 +166,9 @@ private:
                                 wxCoord *externalLeading = NULL,
                                 const wxFont *font = NULL) const;
 
-   virtual void DoSetClippingRegionAsRegion(const wxRegion& WXUNUSED(region))
+   virtual void DoSetDeviceClippingRegion(const wxRegion& WXUNUSED(region))
    {
-       wxFAIL_MSG(wxT("wxSVGFILEDC::DoSetClippingRegionAsRegion not yet implemented"));
+       wxFAIL_MSG(wxT("wxSVGFILEDC::DoSetDeviceClippingRegion not yet implemented"));
    }
 
    virtual void DoSetClippingRegion( int WXUNUSED(x),  int WXUNUSED(y), int WXUNUSED(width), int WXUNUSED(height) )

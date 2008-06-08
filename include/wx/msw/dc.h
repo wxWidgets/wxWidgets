@@ -225,11 +225,9 @@ public:
                                int rop = wxCOPY, bool useMask = false,
                                wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord);
 
-    // this is gnarly - we can't even call this function DoSetClippingRegion()
-    // because of virtual function hiding
-    virtual void DoSetClippingRegionAsRegion(const wxRegion& region);
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y,
                                      wxCoord width, wxCoord height);
+    virtual void DoSetDeviceClippingRegion(const wxRegion& region);
     virtual void DoGetClippingBox(wxCoord *x, wxCoord *y,
                                   wxCoord *w, wxCoord *h) const;
 
@@ -265,7 +263,7 @@ protected:
     // common part of DoDrawText() and DoDrawRotatedText()
     void DrawAnyText(const wxString& text, wxCoord x, wxCoord y);
 
-    // common part of DoSetClippingRegion() and DoSetClippingRegionAsRegion()
+    // common part of DoSetClippingRegion() and DoSetDeviceClippingRegion()
     void SetClippingHrgn(WXHRGN hrgn);
 
     // implementation of DoGetSize() for wxScreen/PrinterDC: this simply

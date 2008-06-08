@@ -220,7 +220,7 @@ void wxDC::DoSetClippingRegion(wxCoord cx, wxCoord cy, wxCoord cw, wxCoord ch)
     DO_SET_CLIPPING_BOX(m_currentClippingRegion)
 }
 
-void wxDC::DoSetClippingRegionAsRegion(const wxRegion& region)
+void wxDC::DoSetDeviceClippingRegion(const wxRegion& region)
 {
     wxCHECK_RET( Ok(), wxT("invalid dc") );
 

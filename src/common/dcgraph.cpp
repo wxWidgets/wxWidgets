@@ -237,10 +237,10 @@ void wxGCDCImpl::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord w, wxCoord h
     }
 }
 
-void wxGCDCImpl::DoSetClippingRegionAsRegion( const wxRegion &region )
+void wxGCDCImpl::DoSetDeviceClippingRegion( const wxRegion &region )
 {
     // region is in device coordinates
-    wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::DoSetClippingRegionAsRegion - invalid DC") );
+    wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::DoSetDeviceClippingRegion - invalid DC") );
 
     if (region.Empty())
     {

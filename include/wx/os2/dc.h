@@ -321,12 +321,12 @@ public:
                         ,wxCoord vYsrcMask = -1
                        );
 
-    virtual void DoSetClippingRegionAsRegion(const wxRegion& rRegion);
     virtual void DoSetClippingRegion( wxCoord vX
                                      ,wxCoord vY
                                      ,wxCoord vWidth
                                      ,wxCoord vHeight
                                     );
+    virtual void DoSetDeviceClippingRegion(const wxRegion& rRegion);
 
     virtual void DoGetSize( int* pWidth
                            ,int* pHeight

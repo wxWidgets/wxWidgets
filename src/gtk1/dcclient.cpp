@@ -2021,7 +2021,7 @@ void wxWindowDCImpl::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, w
     gdk_gc_set_clip_region( m_bgGC, m_currentClippingRegion.GetRegion() );
 }
 
-void wxWindowDCImpl::DoSetClippingRegionAsRegion( const wxRegion &region  )
+void wxWindowDCImpl::DoSetDeviceClippingRegion( const wxRegion &region  )
 {
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 

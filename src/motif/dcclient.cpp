@@ -2099,7 +2099,7 @@ void wxWindowDCImpl::DoSetClippingRegion( wxCoord x, wxCoord y,
     }
 }
 
-void wxWindowDCImpl::DoSetClippingRegionAsRegion( const wxRegion& region )
+void wxWindowDCImpl::DoSetDeviceClippingRegion( const wxRegion& region )
 {
     SetDCClipping(region.GetX11Region());
 
@@ -2110,10 +2110,10 @@ void wxWindowDCImpl::DoSetClippingRegionAsRegion( const wxRegion& region )
         wxRect box = region.GetBox();
 
         XRectangle rects[1];
-        rects[0].x = (short)XLOG2DEV_2(box.x);
-        rects[0].y = (short)YLOG2DEV_2(box.y);
-        rects[0].width = (unsigned short)XLOG2DEVREL(box.width);
-        rects[0].height = (unsigned short)YLOG2DEVREL(box.height);
+        rects[0].x = (short)box.x;
+        rects[0].y = (short)box.y;
+        rects[0].width = (unsigned short)box.width;
+        rects[0].height = (unsigned short)box.height;
         XSetClipRectangles((Display*) m_display, (GC) m_gcBacking,
                            0, 0, rects, 1, Unsorted);
     }

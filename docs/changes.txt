@@ -218,6 +218,13 @@ Deprecated methods and their replacements
 - EVT_CALENDAR_MONTH and EVT_CALENDAR_YEAR events are deprecated,
   use EVT_CALENDAR_PAGE_CHANGED which replaces both of them.
 - wxCalendarCtrl::EnableYearChange() and wxCAL_NO_YEAR_CHANGE are deprecated.
+  There is no replacement for this functionality, it is being dropped as it is
+  not available in native wxCalendarCtrl implementations.
+- wxDC::SetClippingRegion(const wxRegion&) overload is deprecated as it used
+  different convention from the other SetClippingRegion() overloads: wxRegion
+  passed to it was interpreted in physical, not logical, coordinates. Replace
+  it with SetDeviceClippingRegion() if this was the correct thing to do in your
+  code.
 
 
 

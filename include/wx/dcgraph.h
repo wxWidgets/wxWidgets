@@ -168,7 +168,7 @@ public:
         wxCoord xoffset, wxCoord yoffset,
         int fillStyle);
 
-    virtual void DoSetClippingRegionAsRegion(const wxRegion& region);
+    virtual void DoSetDeviceClippingRegion(const wxRegion& region);
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y,
         wxCoord width, wxCoord height);
 

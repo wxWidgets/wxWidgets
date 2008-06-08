@@ -525,7 +525,7 @@ wxMSWDCImpl::DoGetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoord *h) co
     wxDCImpl::DoGetClippingBox(x, y, w, h);
 }
 
-// common part of DoSetClippingRegion() and DoSetClippingRegionAsRegion()
+// common part of DoSetClippingRegion() and DoSetDeviceClippingRegion()
 void wxMSWDCImpl::SetClippingHrgn(WXHRGN hrgn)
 {
     wxCHECK_RET( hrgn, wxT("invalid clipping region") );
@@ -593,7 +593,7 @@ void wxMSWDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h
     }
 }
 
-void wxMSWDCImpl::DoSetClippingRegionAsRegion(const wxRegion& region)
+void wxMSWDCImpl::DoSetDeviceClippingRegion(const wxRegion& region)
 {
     SetClippingHrgn(region.GetHRGN());
 }

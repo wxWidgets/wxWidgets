@@ -444,7 +444,7 @@ void wxPMDCImpl::DoSetClippingRegion(
     DO_SET_CLIPPING_BOX()
 } // end of wxPMDCImpl::DoSetClippingRegion
 
-void wxPMDCImpl::DoSetClippingRegionAsRegion(
+void wxPMDCImpl::DoSetDeviceClippingRegion(
   const wxRegion&                   rRegion
 )
 {
@@ -457,7 +457,7 @@ void wxPMDCImpl::DoSetClippingRegionAsRegion(
                         ,&hRgnOld
                        );
     DO_SET_CLIPPING_BOX()
-} // end of wxPMDCImpl::DoSetClippingRegionAsRegion
+} // end of wxPMDCImpl::DoSetDeviceClippingRegion
 
 void wxPMDCImpl::DestroyClippingRegion(void)
 {

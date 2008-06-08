@@ -71,9 +71,9 @@ protected:
         wxDC *source, wxCoord xsrc, wxCoord ysrc,
         int rop = wxCOPY, bool useMask = false, wxCoord xsrcMask = -1, wxCoord ysrcMask = -1);
 
-    virtual void DoSetClippingRegionAsRegion(const wxRegion& region);
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y,
         wxCoord width, wxCoord height);
+    virtual void DoSetDeviceClippingRegion(const wxRegion& region);
 
     virtual void DoDrawLines(int n, wxPoint points[],
         wxCoord xoffset, wxCoord yoffset);

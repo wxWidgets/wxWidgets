@@ -197,17 +197,11 @@ wxPalmDCImpl::DoGetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoord *h) c
 {
 }
 
-// common part of DoSetClippingRegion() and DoSetClippingRegionAsRegion()
-void wxPalmDCImpl::SetClippingHrgn(WXHRGN hrgn)
-{
-    wxCHECK_RET( hrgn, wxT("invalid clipping region") );
-}
-
 void wxPalmDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
 {
 }
 
-void wxPalmDCImpl::DoSetClippingRegionAsRegion(const wxRegion& region)
+void wxPalmDCImpl::DoSetDeviceClippingRegion(const wxRegion& region)
 {
 }
 
