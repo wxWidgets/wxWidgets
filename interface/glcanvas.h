@@ -126,7 +126,13 @@ enum
     WX_GL_MIN_ACCUM_BLUE,
 
     /// Specifies minimal number of alpha accumulator bits.
-    WX_GL_MIN_ACCUM_ALPHA
+    WX_GL_MIN_ACCUM_ALPHA,
+
+    /// 1 for multisampling support (antialiasing)
+    WX_GL_SAMPLE_BUFFERS,
+
+    /// 4 for 2x2 antialising supersampling on most graphics cards
+    WX_GL_SAMPLES
 
 };
 

@@ -165,6 +165,34 @@ wxGLCanvas::wxGLCanvas(wxWindow *parent,
 
 #endif // WXWIN_COMPATIBILITY_2_8
 
+/* static */
+bool wxGLCanvasBase::IsExtensionSupported(const char *extension)
+{
+    // we need a valid context to query for extensions.
+    const GLint defaultAttribs[] = { AGL_RGBA, AGL_DOUBLEBUFFER, AGL_NONE };
+    AGLPixelFormat fmt = aglChoosePixelFormat(NULL, 0, defaultAttribs);
+    AGLContext ctx = aglCreateContext(fmt, NULL);
+    if ( !ctx )
+        return false;
+
+    wxString extensions = wxString::FromAscii(glGetString(GL_EXTENSIONS));
+
+    aglDestroyPixelFormat(fmt);
+    aglDestroyContext(ctx);
+
+    return IsExtensionInList(extensions, extension);
+}
+
+/* static */
+bool wxGLCanvas::IsAGLMultiSampleAvailable()
+{
+    static int s_isMultiSampleAvailable = -1;
+    if ( s_isMultiSampleAvailable == -1 )
+        s_isMultiSampleAvailable = IsExtensionSupported("GL_ARB_multisample");
+
+    return s_isMultiSampleAvailable != 0;
+}
+
 static AGLPixelFormat ChoosePixelFormat(const int *attribList)
 {
     GLint data[512];
@@ -269,6 +297,36 @@ static AGLPixelFormat ChoosePixelFormat(const int *attribList)
 
                 case WX_GL_MIN_ACCUM_ALPHA:
                     data[p++] = AGL_ACCUM_ALPHA_SIZE;
+                    data[p++] = attribList[arg++];
+                    break;
+
+                case WX_GL_SAMPLE_BUFFERS:
+                    if ( !wxGLCanvas::IsAGLMultiSampleAvailable() )
+                    {
+                        if ( !attribList[arg++] )
+                            break;
+
+                        return false;
+                    }
+
+                    data[p++] = AGL_SAMPLE_BUFFERS_ARB;
+                    if ( (data[p++] = attribList[arg++]) == true )
+                    {
+                        // don't use software fallback
+                        data[p++] = AGL_NO_RECOVERY;
+                    }
+                    break;
+
+                case WX_GL_SAMPLES:
+                    if ( !wxGLCanvas::IsAGLMultiSampleAvailable() )
+                    {
+                        if ( !attribList[arg++] )
+                            break;
+
+                        return false;
+                    }
+
+                    data[p++] = AGL_SAMPLES_ARB;
                     data[p++] = attribList[arg++];
                     break;
             }

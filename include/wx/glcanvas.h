@@ -47,7 +47,9 @@ enum
     WX_GL_MIN_ACCUM_RED,   // use red accum buffer with most bits (> MIN_ACCUM_RED bits)
     WX_GL_MIN_ACCUM_GREEN, // use green buffer with most bits (> MIN_ACCUM_GREEN bits)
     WX_GL_MIN_ACCUM_BLUE,  // use blue buffer with most bits (> MIN_ACCUM_BLUE bits)
-    WX_GL_MIN_ACCUM_ALPHA  // use alpha buffer with most bits (> MIN_ACCUM_ALPHA bits)
+    WX_GL_MIN_ACCUM_ALPHA, // use alpha buffer with most bits (> MIN_ACCUM_ALPHA bits)
+    WX_GL_SAMPLE_BUFFERS,  // 1 for multisampling support (antialiasing)
+    WX_GL_SAMPLES          // 4 for 2x2 antialising supersampling on most graphics cards
 };
 
 #define wxGLCanvasName _T("GLCanvas")
@@ -121,6 +123,13 @@ public:
     bool SetColour(const wxString& colour);
 
 
+    // return true if the extension with given name is supported
+    //
+    // notice that while this function is implemented for all of GLX, WGL and
+    // AGL the extensions names are usually not the same for different
+    // platforms and so the code using it still usually uses conditional
+    // compilation
+    static bool IsExtensionSupported(const char *extension);
 
     // deprecated methods using the implicit wxGLContext
 #if WXWIN_COMPATIBILITY_2_8
@@ -145,6 +154,10 @@ protected:
     // (not supported in most ports)
     virtual wxPalette CreateDefaultPalette() { return wxNullPalette; }
 
+    // check if the given extension name is present in the space-separated list
+    // of extensions supported by the current implementation such as returned
+    // by glXQueryExtensionsString() or glGetString(GL_EXTENSIONS)
+    static bool IsExtensionInList(const char *list, const char *extension);
 
     wxPalette m_palette;
 

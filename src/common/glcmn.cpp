@@ -115,5 +115,29 @@ void wxGLCanvasBase::OnSize(wxSizeEvent& WXUNUSED(event))
 
 #endif // WXWIN_COMPATIBILITY_2_8
 
+/* static */
+bool wxGLCanvasBase::IsExtensionInList(const char *list, const char *extension)
+{
+    for ( const char *p = list; *p; p++ )
+    {
+        // advance up to the next possible match
+        p = wxStrstr(p, extension);
+        if ( !p )
+            break;
+
+        // check that the extension appears at the beginning/ending of the list
+        // or is preceded/followed by a space to avoid mistakenly finding
+        // "glExtension" in a list containing some "glFunkyglExtension"
+        if ( (p == list || p[-1] == ' ') )
+        {
+            char c = p[strlen(extension)];
+            if ( c == '\0' || c == ' ' )
+                return true;
+        }
+    }
+
+    return false;
+}
+
 #endif // wxUSE_GLCANVAS
 

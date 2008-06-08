@@ -122,6 +122,26 @@ wxGLCanvasX11::~wxGLCanvasX11()
 // working with GL attributes
 // ----------------------------------------------------------------------------
 
+/* static */
+bool wxGLCanvasBase::IsExtensionSupported(const char *extension)
+{
+    Display * const dpy = wxGetX11Display();
+
+    return IsExtensionInList(glXQueryExtensionsString(dpy, DefaultScreen(dpy)),
+                             extension);
+}
+
+
+/* static */
+bool wxGLCanvasX11::IsGLXMultiSampleAvailable()
+{
+    static int s_isMultiSampleAvailable = -1;
+    if ( s_isMultiSampleAvailable == -1 )
+        s_isMultiSampleAvailable = IsExtensionSupported("GLX_ARB_multisample");
+
+    return s_isMultiSampleAvailable != 0;
+}
+
 bool
 wxGLCanvasX11::ConvertWXAttrsToGL(const int *wxattrs, int *glattrs, size_t n)
 {
@@ -255,6 +275,32 @@ wxGLCanvasX11::ConvertWXAttrsToGL(const int *wxattrs, int *glattrs, size_t n)
 
                 case WX_GL_MIN_ACCUM_ALPHA:
                     glattrs[p++] = GLX_ACCUM_ALPHA_SIZE;
+                    break;
+
+                case WX_GL_SAMPLE_BUFFERS:
+                    if ( !IsGLXMultiSampleAvailable() )
+                    {
+                        // if it was specified just to disable it, no problem
+                        if ( !wxattrs[arg++] )
+                            continue;
+
+                        // otherwise indicate that it's not supported
+                        return false;
+                    }
+
+                    glattrs[p++] = GLX_SAMPLE_BUFFERS_ARB;
+                    break;
+
+                case WX_GL_SAMPLES:
+                    if ( !IsGLXMultiSampleAvailable() )
+                    {
+                        if ( !wxattrs[arg++] )
+                            continue;
+
+                        return false;
+                    }
+
+                    glattrs[p++] = GLX_SAMPLES_ARB;
                     break;
 
                 default:

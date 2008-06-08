@@ -66,6 +66,9 @@ public:
     // return GLX version: 13 means 1.3 &c
     static int GetGLXVersion();
 
+    // return true if multisample extension is available
+    static bool IsGLXMultiSampleAvailable();
+
     // get the X11 handle of this window
     virtual Window GetXWindow() const = 0;
 

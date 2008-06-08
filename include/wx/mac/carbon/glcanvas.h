@@ -67,6 +67,9 @@ public:
     // Mac-specific functions
     // ----------------------
 
+    // return true if multisample extension is supported
+    static bool IsAGLMultiSampleAvailable();
+
     // return the pixel format used by this window
     AGLPixelFormat GetAGLPixelFormat() const { return m_aglFormat; }
 
