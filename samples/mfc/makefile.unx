@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 MFCTEST_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 MFCTEST_OBJECTS =  \
 	mfctest_mfctest.o
@@ -59,7 +59,7 @@ clean:
 	rm -f mfctest
 
 mfctest: $(MFCTEST_OBJECTS)
-	$(CXX) -o $@ $(MFCTEST_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(MFCTEST_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 mfctest_mfctest.o: ./mfctest.cpp
 	$(CXX) -c -o $@ $(MFCTEST_CXXFLAGS) $(CPPDEPS) $<

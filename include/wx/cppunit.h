@@ -87,6 +87,10 @@
 // Use this macro to compare a size_t with a literal integer
 #define WX_ASSERT_SIZET_EQUAL(n, m) CPPUNIT_ASSERT_EQUAL(((size_t)n), m)
 
+// Use this macro to compare the expected time_t value with the result of not
+// necessarily time_t type
+#define WX_ASSERT_TIME_T_EQUAL(t, n) CPPUNIT_ASSERT_EQUAL((t), (time_t)(n))
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // stream inserter for wxString

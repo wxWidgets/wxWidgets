@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 ERASE_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 ERASE_OBJECTS =  \
 	erase_erase.o
@@ -59,7 +59,7 @@ clean:
 	rm -f erase
 
 erase: $(ERASE_OBJECTS)
-	$(CXX) -o $@ $(ERASE_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(ERASE_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 erase_erase.o: ./erase.cpp
 	$(CXX) -c -o $@ $(ERASE_CXXFLAGS) $(CPPDEPS) $<

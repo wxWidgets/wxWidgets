@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 COMBO_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 COMBO_OBJECTS =  \
 	combo_combo.o
@@ -59,7 +59,7 @@ clean:
 	rm -f combo
 
 combo: $(COMBO_OBJECTS)
-	$(CXX) -o $@ $(COMBO_OBJECTS)   `$(WX_CONFIG) --libs adv,core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(COMBO_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs adv,core,base`
 
 combo_combo.o: ./combo.cpp
 	$(CXX) -c -o $@ $(COMBO_CXXFLAGS) $(CPPDEPS) $<

@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 POWER_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 POWER_OBJECTS =  \
 	power_power.o
@@ -59,7 +59,7 @@ clean:
 	rm -f power
 
 power: $(POWER_OBJECTS)
-	$(CXX) -o $@ $(POWER_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(POWER_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 power_power.o: ./power.cpp
 	$(CXX) -c -o $@ $(POWER_CXXFLAGS) $(CPPDEPS) $<

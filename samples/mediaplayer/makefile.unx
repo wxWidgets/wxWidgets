@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 MEDIAPLAYER_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 MEDIAPLAYER_OBJECTS =  \
 	mediaplayer_mediaplayer.o
@@ -59,7 +59,7 @@ clean:
 	rm -f mediaplayer
 
 mediaplayer: $(MEDIAPLAYER_OBJECTS)
-	$(CXX) -o $@ $(MEDIAPLAYER_OBJECTS)   `$(WX_CONFIG) --libs media,core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(MEDIAPLAYER_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs media,core,base`
 
 mediaplayer_mediaplayer.o: ./mediaplayer.cpp
 	$(CXX) -c -o $@ $(MEDIAPLAYER_CXXFLAGS) $(CPPDEPS) $<

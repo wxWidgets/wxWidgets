@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 ROTATE_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 ROTATE_OBJECTS =  \
 	rotate_rotate.o
@@ -59,7 +59,7 @@ clean:
 	rm -f rotate
 
 rotate: $(ROTATE_OBJECTS)
-	$(CXX) -o $@ $(ROTATE_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(ROTATE_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 rotate_rotate.o: ./rotate.cpp
 	$(CXX) -c -o $@ $(ROTATE_CXXFLAGS) $(CPPDEPS) $<

@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 EXEC_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 EXEC_OBJECTS =  \
 	exec_exec.o
@@ -59,7 +59,7 @@ clean:
 	rm -f exec
 
 exec: $(EXEC_OBJECTS)
-	$(CXX) -o $@ $(EXEC_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(EXEC_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 exec_exec.o: ./exec.cpp
 	$(CXX) -c -o $@ $(EXEC_CXXFLAGS) $(CPPDEPS) $<

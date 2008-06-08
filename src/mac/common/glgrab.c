@@ -101,6 +101,9 @@ static void swizzleBitmap(void * data, int rowBytes, int height)
  * using CFRelease().
  * Returns NULL on an error.
  */
+ 
+extern CGColorSpaceRef wxMacGetGenericRGBColorSpace();
+ 
 CGImageRef grabViaOpenGL(CGDirectDisplayID display, CGRect srcRect)
 {
     CGContextRef bitmap;
@@ -109,7 +112,6 @@ CGImageRef grabViaOpenGL(CGDirectDisplayID display, CGRect srcRect)
     long bytewidth;
     GLint width, height;
     long bytes;
-    CGColorSpaceRef cSpace = CGColorSpaceCreateWithName (kCGColorSpaceGenericRGB);
     
     CGLContextObj    glContextObj;
     CGLPixelFormatObj pixelFormatObj ;
@@ -163,8 +165,7 @@ CGImageRef grabViaOpenGL(CGDirectDisplayID display, CGRect srcRect)
         return NULL;
     }
     bitmap = CGBitmapContextCreate(data, width, height, 8, bytewidth,
-                                   cSpace, kCGImageAlphaNoneSkipFirst /* XRGB */);
-    CFRelease(cSpace);
+                                   wxMacGetGenericRGBColorSpace(), kCGImageAlphaNoneSkipFirst /* XRGB */);
     
     
     /* Read framebuffer into our bitmap */
@@ -211,3 +212,4 @@ CGImageRef grabViaOpenGL(CGDirectDisplayID display, CGRect srcRect)
     /* Returned image has a reference count of 1 */
     return image;
 }
+

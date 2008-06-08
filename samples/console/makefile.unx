@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 CONSOLE_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 CONSOLE_OBJECTS =  \
 	console_console.o
@@ -59,7 +59,7 @@ clean:
 	rm -f console
 
 console: $(CONSOLE_OBJECTS)
-	$(CXX) -o $@ $(CONSOLE_OBJECTS)   `$(WX_CONFIG) --libs net,odbc,base` $(LDFLAGS)
+	$(CXX) -o $@ $(CONSOLE_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs net,odbc,base`
 
 console_console.o: ./console.cpp
 	$(CXX) -c -o $@ $(CONSOLE_CXXFLAGS) $(CPPDEPS) $<

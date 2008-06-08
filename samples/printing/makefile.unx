@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 PRINTING_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 PRINTING_OBJECTS =  \
 	printing_printing.o
@@ -59,7 +59,7 @@ clean:
 	rm -f printing
 
 printing: $(PRINTING_OBJECTS)
-	$(CXX) -o $@ $(PRINTING_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(PRINTING_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 printing_printing.o: ./printing.cpp
 	$(CXX) -c -o $@ $(PRINTING_CXXFLAGS) $(CPPDEPS) $<

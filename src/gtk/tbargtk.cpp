@@ -95,6 +95,12 @@ public:
         : wxToolBarToolBase(tbar, control)
     {
         Init();
+        // Hold a reference to keep control alive until DoInsertTool() is
+        // called, or if RemoveTool() is called (see DoDeleteTool)
+        g_object_ref(control->m_widget);
+        // release reference when gtk_widget_destroy() is called on control
+        g_signal_connect(
+            control->m_widget, "destroy", G_CALLBACK(g_object_unref), NULL);
     }
 
     // is this a radio button?
@@ -252,11 +258,9 @@ static gint gtk_toolbar_tool_callback( GtkWidget *WXUNUSED(widget),
 //-----------------------------------------------------------------------------
 
 static void wxInsertChildInToolBar( wxToolBar* WXUNUSED(parent),
-                                    wxWindow* child)
+                                    wxWindow* /* child */)
 {
-     // Child widget will be inserted into GtkToolbar by DoInsertTool. Ref it
-     // here so reparenting into wxToolBar doesn't delete it.
-     g_object_ref(child->m_widget);
+     // Child widget will be inserted into GtkToolbar by DoInsertTool()
 }
 
 // ----------------------------------------------------------------------------
@@ -493,8 +497,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
                                        (const char *) NULL,
                                        posGtk
                                       );
-            // release reference obtained by wxInsertChildInToolBar
-            g_object_unref(tool->GetControl()->m_widget);
+            tool->m_item = align;
             break;
     }
 
@@ -515,11 +518,17 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *toolBase)
     switch ( tool->GetStyle() )
     {
         case wxTOOL_STYLE_CONTROL:
-            tool->GetControl()->Destroy();
-            break;
+            // don't destroy the control here as we can be called from
+            // RemoveTool() and then we need to keep the control alive;
+            // while if we're called from DeleteTool() the control will
+            // be destroyed when wxToolBarToolBase itself is deleted
+            gtk_container_remove(
+                GTK_CONTAINER(tool->m_item), tool->GetControl()->m_widget);
+            // fall through
 
         case wxTOOL_STYLE_BUTTON:
             gtk_widget_destroy( tool->m_item );
+            tool->m_item = NULL;
             break;
 
         case wxTOOL_STYLE_SEPARATOR:

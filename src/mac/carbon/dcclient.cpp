@@ -128,6 +128,9 @@ wxWindowDC::wxWindowDC(wxWindow *window)
 
 #if wxMAC_USE_CORE_GRAPHICS
     m_window->GetSize( &m_width , &m_height);
+    if ( !m_window->IsShownOnScreen() )
+        m_width = m_height = 0;
+        
     CGContextRef cg = (CGContextRef) window->MacGetCGContextRef();
     m_release = false;
     if ( cg == NULL )
@@ -191,8 +194,7 @@ void wxWindowDC::DoGetSize( int* width, int* height ) const
 
 wxBitmap wxWindowDC::DoGetAsBitmap(const wxRect *subrect) const
 {
-    // wxScreenDC is derived from wxWindowDC, so a screen dc will
-    // call this method when a Blit is performed with it as a source.
+#if wxMAC_USE_CORE_GRAPHICS
     if (!m_window)
         return wxNullBitmap;
         
@@ -228,6 +230,9 @@ wxBitmap wxWindowDC::DoGetAsBitmap(const wxRect *subrect) const
     CGContextRestoreGState(context);
 
     return bmp;
+#else
+    return wxNullBitmap;
+#endif
 }
 
 /*
@@ -246,6 +251,8 @@ wxClientDC::wxClientDC(wxWindow *window) :
     wxCHECK_RET( window, _T("invalid window in wxClientDC") );
     wxPoint origin = window->GetClientAreaOrigin() ;
     m_window->GetClientSize( &m_width , &m_height);
+    if ( !m_window->IsShownOnScreen() )
+        m_width = m_height = 0;
     SetDeviceOrigin( origin.x, origin.y );
     SetClippingRegion( 0 , 0 , m_width , m_height ) ;
 }

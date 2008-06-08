@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 TEXT_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 TEXT_OBJECTS =  \
 	text_text.o
@@ -59,7 +59,7 @@ clean:
 	rm -f text
 
 text: $(TEXT_OBJECTS)
-	$(CXX) -o $@ $(TEXT_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(TEXT_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 text_text.o: ./text.cpp
 	$(CXX) -c -o $@ $(TEXT_CXXFLAGS) $(CPPDEPS) $<

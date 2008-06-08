@@ -200,15 +200,19 @@ wxRendererGTK::GetComboBoxWidget()
     static GtkWidget *s_button = NULL;
     static GtkWidget *s_window = NULL;
 
-    if ( !s_button )
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
     {
-        s_window = gtk_window_new( GTK_WINDOW_POPUP );
-        gtk_widget_realize( s_window );
-        s_button = gtk_combo_box_new();
-        gtk_container_add( GTK_CONTAINER(s_window), s_button );
-        gtk_widget_realize( s_button );
+        if ( !s_button )
+        {
+            s_window = gtk_window_new( GTK_WINDOW_POPUP );
+            gtk_widget_realize( s_window );
+            s_button = gtk_combo_box_new();
+            gtk_container_add( GTK_CONTAINER(s_window), s_button );
+            gtk_widget_realize( s_button );
+        }
     }
-
+#endif
     return s_button;
 }
 
@@ -683,6 +687,9 @@ void wxRenderer_DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, int fl
 // Draw the equivallent of a wxComboBox
 void wxRenderer_DrawComboBox(wxWindow* win, wxDC& dc, const wxRect& rect, int flags)
 {
+    if (gtk_check_version(2,4,0))
+       return;
+
     GtkWidget *combo = wxRendererGTK::GetComboBoxWidget();
 
     GdkWindow* gdk_window = wxGetGdkWindowForDC(win, dc);

@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 ABOUT_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 ABOUT_OBJECTS =  \
 	about_about.o
@@ -59,7 +59,7 @@ clean:
 	rm -f about
 
 about: $(ABOUT_OBJECTS)
-	$(CXX) -o $@ $(ABOUT_OBJECTS)   `$(WX_CONFIG) --libs html,core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(ABOUT_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs html,core,base`
 
 about_about.o: ./about.cpp
 	$(CXX) -c -o $@ $(ABOUT_CXXFLAGS) $(CPPDEPS) $<

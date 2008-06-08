@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 SHAPED_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 SHAPED_OBJECTS =  \
 	shaped_shaped.o
@@ -59,7 +59,7 @@ clean:
 	rm -f shaped
 
 shaped: $(SHAPED_OBJECTS)
-	$(CXX) -o $@ $(SHAPED_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(SHAPED_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 shaped_shaped.o: ./shaped.cpp
 	$(CXX) -c -o $@ $(SHAPED_CXXFLAGS) $(CPPDEPS) $<

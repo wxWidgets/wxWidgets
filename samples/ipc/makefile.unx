@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 IPCCLIENT_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 IPCCLIENT_OBJECTS =  \
 	ipcclient_client.o
@@ -63,10 +63,10 @@ clean:
 	rm -f ipcserver
 
 ipcclient: $(IPCCLIENT_OBJECTS)
-	$(CXX) -o $@ $(IPCCLIENT_OBJECTS)   `$(WX_CONFIG) --libs core,net,base` $(LDFLAGS)
+	$(CXX) -o $@ $(IPCCLIENT_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,net,base`
 
 ipcserver: $(IPCSERVER_OBJECTS)
-	$(CXX) -o $@ $(IPCSERVER_OBJECTS)   `$(WX_CONFIG) --libs core,net,base` $(LDFLAGS)
+	$(CXX) -o $@ $(IPCSERVER_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,net,base`
 
 ipcclient_client.o: ./client.cpp
 	$(CXX) -c -o $@ $(IPCCLIENT_CXXFLAGS) $(CPPDEPS) $<

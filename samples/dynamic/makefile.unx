@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 DYNAMIC_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 DYNAMIC_OBJECTS =  \
 	dynamic_dynamic.o
@@ -59,7 +59,7 @@ clean:
 	rm -f dynamic
 
 dynamic: $(DYNAMIC_OBJECTS)
-	$(CXX) -o $@ $(DYNAMIC_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(DYNAMIC_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 dynamic_dynamic.o: ./dynamic.cpp
 	$(CXX) -c -o $@ $(DYNAMIC_CXXFLAGS) $(CPPDEPS) $<

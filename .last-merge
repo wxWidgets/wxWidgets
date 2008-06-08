@@ -1,1 +1,1 @@
-vn merge -r 53533:53823 http://svn.wxwidgets.org/svn/wx/wxWidgets/branches/WX_2_8_BRANCH
+svn merge -r 53824:54030 http://svn.wxwidgets.org/svn/wx/wxWidgets/branches/WX_2_8_BRANCH

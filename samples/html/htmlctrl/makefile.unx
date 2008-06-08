@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 HTMLCTRL_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 HTMLCTRL_OBJECTS =  \
 	htmlctrl_htmlctrl.o
@@ -59,7 +59,7 @@ clean:
 	rm -f htmlctrl
 
 htmlctrl: $(HTMLCTRL_OBJECTS)
-	$(CXX) -o $@ $(HTMLCTRL_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(HTMLCTRL_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 htmlctrl_htmlctrl.o: ./htmlctrl.cpp
 	$(CXX) -c -o $@ $(HTMLCTRL_CXXFLAGS) $(CPPDEPS) $<

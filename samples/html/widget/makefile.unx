@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 WIDGET_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 WIDGET_OBJECTS =  \
 	widget_widget.o
@@ -59,7 +59,7 @@ clean:
 	rm -f widget
 
 widget: $(WIDGET_OBJECTS)
-	$(CXX) -o $@ $(WIDGET_OBJECTS)   `$(WX_CONFIG) --libs html,core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(WIDGET_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs html,core,base`
 
 widget_widget.o: ./widget.cpp
 	$(CXX) -c -o $@ $(WIDGET_CXXFLAGS) $(CPPDEPS) $<

@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 PNG_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 PNG_OBJECTS =  \
 	png_pngdemo.o
@@ -59,7 +59,7 @@ clean:
 	rm -f png
 
 png: $(PNG_OBJECTS)
-	$(CXX) -o $@ $(PNG_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(PNG_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 png_pngdemo.o: ./pngdemo.cpp
 	$(CXX) -c -o $@ $(PNG_CXXFLAGS) $(CPPDEPS) $<

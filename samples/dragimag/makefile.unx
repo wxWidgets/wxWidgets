@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 DRAGIMAG_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 DRAGIMAG_OBJECTS =  \
 	dragimag_dragimag.o
@@ -59,7 +59,7 @@ clean:
 	rm -f dragimag
 
 dragimag: $(DRAGIMAG_OBJECTS)
-	$(CXX) -o $@ $(DRAGIMAG_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(DRAGIMAG_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 dragimag_dragimag.o: ./dragimag.cpp
 	$(CXX) -c -o $@ $(DRAGIMAG_CXXFLAGS) $(CPPDEPS) $<

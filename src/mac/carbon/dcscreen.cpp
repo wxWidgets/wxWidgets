@@ -79,6 +79,7 @@ wxScreenDC::~wxScreenDC()
 
 wxBitmap wxScreenDC::DoGetAsBitmap(const wxRect *subrect) const
 {
+#if wxMAC_USE_CORE_GRAPHICS
     CGRect srcRect = CGRectMake(0, 0, m_width, m_height);
     if (subrect)
     {
@@ -107,6 +108,9 @@ wxBitmap wxScreenDC::DoGetAsBitmap(const wxRect *subrect) const
     CGContextDrawImage(context, srcRect, image);
     
     CGContextRestoreGState(context);
-    
+
     return bmp;
+#else
+    return wxNullBitmap;
+#endif    
 }

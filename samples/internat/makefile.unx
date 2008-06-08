@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 INTERNAT_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 INTERNAT_OBJECTS =  \
 	internat_internat.o
@@ -59,7 +59,7 @@ clean:
 	rm -f internat
 
 internat: $(INTERNAT_OBJECTS)
-	$(CXX) -o $@ $(INTERNAT_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(INTERNAT_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 internat_internat.o: ./internat.cpp
 	$(CXX) -c -o $@ $(INTERNAT_CXXFLAGS) $(CPPDEPS) $<

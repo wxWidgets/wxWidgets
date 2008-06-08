@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 STYLES_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 STYLES_OBJECTS =  \
 	styles_styles.o
@@ -59,7 +59,7 @@ clean:
 	rm -f styles
 
 styles: $(STYLES_OBJECTS)
-	$(CXX) -o $@ $(STYLES_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(STYLES_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 styles_styles.o: ./styles.cpp
 	$(CXX) -c -o $@ $(STYLES_CXXFLAGS) $(CPPDEPS) $<

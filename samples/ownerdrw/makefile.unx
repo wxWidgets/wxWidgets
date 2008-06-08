@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 OWNERDRW_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 OWNERDRW_OBJECTS =  \
 	ownerdrw_ownerdrw.o
@@ -59,7 +59,7 @@ clean:
 	rm -f ownerdrw
 
 ownerdrw: $(OWNERDRW_OBJECTS)
-	$(CXX) -o $@ $(OWNERDRW_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(OWNERDRW_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 ownerdrw_ownerdrw.o: ./ownerdrw.cpp
 	$(CXX) -c -o $@ $(OWNERDRW_CXXFLAGS) $(CPPDEPS) $<

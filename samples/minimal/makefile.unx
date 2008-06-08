@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 MINIMAL_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 MINIMAL_OBJECTS =  \
 	minimal_minimal.o
@@ -59,7 +59,7 @@ clean:
 	rm -f minimal
 
 minimal: $(MINIMAL_OBJECTS)
-	$(CXX) -o $@ $(MINIMAL_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(MINIMAL_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 minimal_minimal.o: ./minimal.cpp
 	$(CXX) -c -o $@ $(MINIMAL_CXXFLAGS) $(CPPDEPS) $<

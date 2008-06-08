@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 CALENDAR_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 CALENDAR_OBJECTS =  \
 	calendar_calendar.o
@@ -59,7 +59,7 @@ clean:
 	rm -f calendar
 
 calendar: $(CALENDAR_OBJECTS)
-	$(CXX) -o $@ $(CALENDAR_OBJECTS)   `$(WX_CONFIG) --libs adv,html,xml,core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(CALENDAR_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs adv,html,xml,core,base`
 
 calendar_calendar.o: ./calendar.cpp
 	$(CXX) -c -o $@ $(CALENDAR_CXXFLAGS) $(CPPDEPS) $<

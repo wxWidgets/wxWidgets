@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 WXEDIT_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 WXEDIT_OBJECTS =  \
 	wxedit_wxedit.o
@@ -59,7 +59,7 @@ clean:
 	rm -f wxedit
 
 wxedit: $(WXEDIT_OBJECTS)
-	$(CXX) -o $@ $(WXEDIT_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(WXEDIT_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 wxedit_wxedit.o: ./wxedit.cpp
 	$(CXX) -c -o $@ $(WXEDIT_CXXFLAGS) $(CPPDEPS) $<

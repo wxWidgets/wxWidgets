@@ -1367,9 +1367,6 @@ void wxMacCoreGraphicsContext::Init()
     m_cgContext = NULL;
     m_releaseContext = false;
     m_windowRef = NULL;
-
-    HIRect r = CGRectMake(0,0,0,0);
-    m_clipRgn.Set(HIShapeCreateWithRect(&r));
 }
 
 wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, CGContextRef cgcontext ) : wxGraphicsContext(renderer)
@@ -1430,15 +1427,24 @@ void wxMacCoreGraphicsContext::EnsureIsValid()
         CGContextConcatCTM( m_cgContext, m_windowTransform );
 		CGContextSaveGState( m_cgContext );
 		m_releaseContext = true;
-		if ( !HIShapeIsEmpty(m_clipRgn) )
+		if ( (HIShapeRef) m_clipRgn != NULL )
 		{
             // the clip region is in device coordinates, so we convert this again to user coordinates
             wxMacCFRefHolder<HIMutableShapeRef> hishape ;
             hishape.Set( HIShapeCreateMutableCopy( m_clipRgn ) );
             CGPoint transformedOrigin = CGPointApplyAffineTransform( CGPointZero,m_windowTransform);
             HIShapeOffset( hishape, -transformedOrigin.x, -transformedOrigin.y );
-			HIShapeReplacePathInCGContext( hishape, m_cgContext );
-			CGContextClip( m_cgContext );
+            // if the shape is empty, HIShapeReplacePathInCGContext doesn't work
+            if ( HIShapeIsEmpty(hishape))
+            {
+                CGRect empty = CGRectMake( 0,0,0,0 );
+                CGContextClipToRect( m_cgContext, empty );
+            }
+            else
+            {
+                HIShapeReplacePathInCGContext( hishape, m_cgContext );
+                CGContextClip( m_cgContext );
+            }
 		}
 		CGContextSaveGState( m_cgContext );
 	}
@@ -1486,10 +1492,19 @@ void wxMacCoreGraphicsContext::Clip( const wxRegion &region )
 {
     if( m_cgContext )
     {
-        HIShapeRef shape = HIShapeCreateWithQDRgn( (RgnHandle) region.GetWXHRGN() );
-        HIShapeReplacePathInCGContext( shape, m_cgContext );
-        CGContextClip( m_cgContext );
-        CFRelease( shape );
+        wxMacCFRefHolder<HIShapeRef> shape;
+        shape = HIShapeCreateWithQDRgn( (RgnHandle) region.GetWXHRGN() );
+        // if the shape is empty, HIShapeReplacePathInCGContext doesn't work
+        if ( HIShapeIsEmpty(shape))
+        {
+            CGRect empty = CGRectMake( 0,0,0,0 );
+            CGContextClipToRect( m_cgContext, empty );
+        }
+        else
+        {
+            HIShapeReplacePathInCGContext( shape, m_cgContext );
+            CGContextClip( m_cgContext );
+        }
     }
     else
     {
@@ -1539,8 +1554,7 @@ void wxMacCoreGraphicsContext::ResetClip()
     }
     else
     {
-        HIRect r = CGRectMake(0,0,0,0);
-        m_clipRgn.Set(HIShapeCreateWithRect(&r));
+        m_clipRgn.Release();
     }
 }
 

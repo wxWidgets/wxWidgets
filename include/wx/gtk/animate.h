@@ -44,7 +44,7 @@ public:
 
     // we can retrieve the delay for a frame only after building
     // a GdkPixbufAnimationIter...
-    virtual int GetDelay(unsigned int frame) const { return 0; }
+    virtual int GetDelay(unsigned int WXUNUSED(frame)) const { return 0; }
 
     virtual wxSize GetSize() const;
 

@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 HELPVIEW_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 HELPVIEW_OBJECTS =  \
 	helpview_helpview.o
@@ -59,7 +59,7 @@ clean:
 	rm -f helpview
 
 helpview: $(HELPVIEW_OBJECTS)
-	$(CXX) -o $@ $(HELPVIEW_OBJECTS)   `$(WX_CONFIG) --libs html,core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(HELPVIEW_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs html,core,base`
 
 helpview_helpview.o: ./helpview.cpp
 	$(CXX) -c -o $@ $(HELPVIEW_CXXFLAGS) $(CPPDEPS) $<

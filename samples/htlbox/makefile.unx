@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 HTLBOX_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 HTLBOX_OBJECTS =  \
 	htlbox_htlbox.o
@@ -59,7 +59,7 @@ clean:
 	rm -f htlbox
 
 htlbox: $(HTLBOX_OBJECTS)
-	$(CXX) -o $@ $(HTLBOX_OBJECTS)   `$(WX_CONFIG) --libs html,core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(HTLBOX_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs html,core,base`
 
 htlbox_htlbox.o: ./htlbox.cpp
 	$(CXX) -c -o $@ $(HTLBOX_CXXFLAGS) $(CPPDEPS) $<

@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 ISOSURF_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 ISOSURF_OBJECTS =  \
 	isosurf_isosurf.o
@@ -59,7 +59,7 @@ clean:
 	rm -f isosurf
 
 isosurf: $(ISOSURF_OBJECTS)
-	$(CXX) -o $@ $(ISOSURF_OBJECTS)   `$(WX_CONFIG) --libs gl,core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(ISOSURF_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs gl,core,base`
 
 isosurf_isosurf.o: ./isosurf.cpp
 	$(CXX) -c -o $@ $(ISOSURF_CXXFLAGS) $(CPPDEPS) $<

@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 VSTEST_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 VSTEST_OBJECTS =  \
 	vstest_vstest.o
@@ -59,7 +59,7 @@ clean:
 	rm -f vstest
 
 vstest: $(VSTEST_OBJECTS)
-	$(CXX) -o $@ $(VSTEST_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(VSTEST_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 vstest_vstest.o: ./vstest.cpp
 	$(CXX) -c -o $@ $(VSTEST_CXXFLAGS) $(CPPDEPS) $<

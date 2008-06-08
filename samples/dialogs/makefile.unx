@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 DIALOGS_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 DIALOGS_OBJECTS =  \
 	dialogs_dialogs.o
@@ -59,7 +59,7 @@ clean:
 	rm -f dialogs
 
 dialogs: $(DIALOGS_OBJECTS)
-	$(CXX) -o $@ $(DIALOGS_OBJECTS)   `$(WX_CONFIG) --libs adv,html,xml,core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(DIALOGS_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs adv,html,xml,core,base`
 
 dialogs_dialogs.o: ./dialogs.cpp
 	$(CXX) -c -o $@ $(DIALOGS_CXXFLAGS) $(CPPDEPS) $<

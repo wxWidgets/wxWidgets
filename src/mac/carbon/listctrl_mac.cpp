@@ -220,7 +220,10 @@ public:
     virtual void MacSetColumnInfo( unsigned int row, unsigned int column, wxListItem* item );
     virtual void MacGetColumnInfo( unsigned int row, unsigned int column, wxListItem& item );
     virtual void UpdateState(wxMacDataItem* dataItem, wxListItem* item);
+    virtual void SetDrawingEnabled( bool enable );
+
     int GetFlags() { return m_flags; }
+    bool IsDrawingEnabled() { return m_drawingEnabled; }
     
 protected:
     // we need to override to provide specialized handling for virtual wxListCtrls
@@ -277,6 +280,7 @@ protected:
     wxClientDataType m_clientDataItemsType;
     bool m_isVirtual;
     int m_flags;
+    bool m_drawingEnabled;
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxMacDataBrowserListCtrlControl)
 };
 
@@ -2341,7 +2345,8 @@ void wxListCtrl::RefreshItem(long item)
         else
             id = item+1;
 
-        m_dbImpl->wxMacDataBrowserControl::UpdateItems
+        if ( m_dbImpl->IsDrawingEnabled() )
+            m_dbImpl->wxMacDataBrowserControl::UpdateItems
                   (
                     kDataBrowserNoItem,
                     1, &id,
@@ -2359,7 +2364,7 @@ void wxListCtrl::RefreshItems(long itemFrom, long itemTo)
         return;
     }
 
-    if (m_dbImpl)
+    if (m_dbImpl && m_dbImpl->IsDrawingEnabled())
     {
         const long count = itemTo - itemFrom + 1;
         DataBrowserItemID *ids = new DataBrowserItemID[count];
@@ -2523,6 +2528,7 @@ wxMacDataBrowserListCtrlControl::wxMacDataBrowserListCtrlControl( wxWindow *peer
     m_clientDataItemsType = wxClientData_None;
     m_isVirtual = false;
     m_flags = 0;
+    m_drawingEnabled = true;
 
     if ( style & wxLC_VIRTUAL )
         m_isVirtual = true;
@@ -3192,7 +3198,7 @@ void wxMacDataBrowserListCtrlControl::MacSetColumnInfo( unsigned int row, unsign
         // only the sorted column would be refreshed, meaning only first column text labels
         // would be shown. Making sure not to update items until the control is visible
         // seems to fix this issue.
-        if (hasInfo && list->IsShown())
+        if (hasInfo && list->IsShown() && IsDrawingEnabled() )
             UpdateItem( wxMacDataBrowserRootContainer, listItem , kMinColumnId + column );
     }
 }
@@ -3265,6 +3271,20 @@ void wxMacDataBrowserListCtrlControl::MacInsertItem( unsigned int n, wxListItem*
 wxMacDataItem* wxMacDataBrowserListCtrlControl::CreateItem()
 {
     return new wxMacListCtrlItem();
+}
+
+void wxMacDataBrowserListCtrlControl::SetDrawingEnabled( bool enable )
+{
+    if ( m_drawingEnabled != enable )
+    {
+        m_drawingEnabled = enable;
+        if( enable )
+        {
+            verify_noerr( wxMacDataBrowserControl::UpdateItems( kDataBrowserNoItem , 0,
+                NULL, kDataBrowserItemNoProperty /* notSorted */, kDataBrowserNoItem ) );
+        }
+    }
+    wxMacDataItemBrowserControl::SetDrawingEnabled(enable);
 }
 
 wxMacListCtrlItem::wxMacListCtrlItem()

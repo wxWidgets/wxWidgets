@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 EXCEPT_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 EXCEPT_OBJECTS =  \
 	except_except.o
@@ -59,7 +59,7 @@ clean:
 	rm -f except
 
 except: $(EXCEPT_OBJECTS)
-	$(CXX) -o $@ $(EXCEPT_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(EXCEPT_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 except_except.o: ./except.cpp
 	$(CXX) -c -o $@ $(EXCEPT_CXXFLAGS) $(CPPDEPS) $<

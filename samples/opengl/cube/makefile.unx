@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 CUBE_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 CUBE_OBJECTS =  \
 	cube_cube.o
@@ -59,7 +59,7 @@ clean:
 	rm -f cube
 
 cube: $(CUBE_OBJECTS)
-	$(CXX) -o $@ $(CUBE_OBJECTS)   `$(WX_CONFIG) --libs gl,core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(CUBE_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs gl,core,base`
 
 cube_cube.o: ./cube.cpp
 	$(CXX) -c -o $@ $(CUBE_CXXFLAGS) $(CPPDEPS) $<

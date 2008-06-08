@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 CLIENT_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 CLIENT_OBJECTS =  \
 	client_client.o
@@ -63,10 +63,10 @@ clean:
 	rm -f server
 
 client: $(CLIENT_OBJECTS)
-	$(CXX) -o $@ $(CLIENT_OBJECTS)   `$(WX_CONFIG) --libs core,net,base` $(LDFLAGS)
+	$(CXX) -o $@ $(CLIENT_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,net,base`
 
 server: $(SERVER_OBJECTS)
-	$(CXX) -o $@ $(SERVER_OBJECTS)   `$(WX_CONFIG) --libs core,net,base` $(LDFLAGS)
+	$(CXX) -o $@ $(SERVER_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,net,base`
 
 client_client.o: ./client.cpp
 	$(CXX) -c -o $@ $(CLIENT_CXXFLAGS) $(CPPDEPS) $<

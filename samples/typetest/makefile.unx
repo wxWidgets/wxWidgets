@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 TYPETEST_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 TYPETEST_OBJECTS =  \
 	typetest_typetest.o
@@ -59,7 +59,7 @@ clean:
 	rm -f typetest
 
 typetest: $(TYPETEST_OBJECTS)
-	$(CXX) -o $@ $(TYPETEST_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(TYPETEST_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 typetest_typetest.o: ./typetest.cpp
 	$(CXX) -c -o $@ $(TYPETEST_CXXFLAGS) $(CPPDEPS) $<

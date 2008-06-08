@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 FONT_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 FONT_OBJECTS =  \
 	font_font.o
@@ -59,7 +59,7 @@ clean:
 	rm -f font
 
 font: $(FONT_OBJECTS)
-	$(CXX) -o $@ $(FONT_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(FONT_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 font_font.o: ./font.cpp
 	$(CXX) -c -o $@ $(FONT_CXXFLAGS) $(CPPDEPS) $<

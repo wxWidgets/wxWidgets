@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 HELP_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 HELP_OBJECTS =  \
 	help_demo.o
@@ -59,7 +59,7 @@ clean:
 	rm -f help
 
 help: $(HELP_OBJECTS)
-	$(CXX) -o $@ $(HELP_OBJECTS)   `$(WX_CONFIG) --libs html,adv,core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(HELP_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs html,adv,core,base`
 
 help_demo.o: ./demo.cpp
 	$(CXX) -c -o $@ $(HELP_CXXFLAGS) $(CPPDEPS) $<

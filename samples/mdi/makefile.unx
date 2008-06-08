@@ -36,7 +36,7 @@ WX_CXXFLAGS := `$(WX_CONFIG) --cxxflags`
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
 MDI_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 MDI_OBJECTS =  \
 	mdi_mdi.o
@@ -59,7 +59,7 @@ clean:
 	rm -f mdi
 
 mdi: $(MDI_OBJECTS)
-	$(CXX) -o $@ $(MDI_OBJECTS)   `$(WX_CONFIG) --libs core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(MDI_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) --libs core,base`
 
 mdi_mdi.o: ./mdi.cpp
 	$(CXX) -c -o $@ $(MDI_CXXFLAGS) $(CPPDEPS) $<
