@@ -684,6 +684,31 @@ void DateTimeTestCase::TestTimeFormat()
             }
         }
     }
+
+    // test compilation of some calls which should compile (and not result in
+    // ambiguity because of char*<->wxCStrData<->wxString conversions)
+    wxDateTime dt;
+    wxString s("foo");
+    CPPUNIT_ASSERT( !dt.ParseFormat("foo") );
+    CPPUNIT_ASSERT( !dt.ParseFormat(wxT("foo")) );
+    CPPUNIT_ASSERT( !dt.ParseFormat(s) );
+    CPPUNIT_ASSERT( !dt.ParseFormat(s.c_str()) );
+
+    CPPUNIT_ASSERT( !dt.ParseFormat("foo", "%c") );
+    CPPUNIT_ASSERT( !dt.ParseFormat(wxT("foo"), "%c") );
+    CPPUNIT_ASSERT( !dt.ParseFormat(s, "%c") );
+    CPPUNIT_ASSERT( !dt.ParseFormat(s.c_str(), "%c") );
+
+    CPPUNIT_ASSERT( !dt.ParseFormat("foo", wxT("%c")) );
+    CPPUNIT_ASSERT( !dt.ParseFormat(wxT("foo"), wxT("%c")) );
+    CPPUNIT_ASSERT( !dt.ParseFormat(s, "%c") );
+    CPPUNIT_ASSERT( !dt.ParseFormat(s.c_str(), wxT("%c")) );
+
+    wxString spec("%c");
+    CPPUNIT_ASSERT( !dt.ParseFormat("foo", spec) );
+    CPPUNIT_ASSERT( !dt.ParseFormat(wxT("foo"), spec) );
+    CPPUNIT_ASSERT( !dt.ParseFormat(s, spec) );
+    CPPUNIT_ASSERT( !dt.ParseFormat(s.c_str(), spec) );
 }
 
 void DateTimeTestCase::TestTimeSpanFormat()

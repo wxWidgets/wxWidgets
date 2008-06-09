@@ -1088,22 +1088,39 @@ public:
         // the missing (in the string) fields with the values of dateDef (by
         // default, they will not change if they had valid values or will
         // default to Today() otherwise)
+
+        // notice that we unfortunately need all those overloads because we use
+        // the type of the date string to select the return value of the
+        // function: it's wchar_t if a wide string is passed for compatibility
+        // with the code doing "const wxChar *p = dt.ParseFormat(_T("..."))",
+        // but char* in all other cases for compatibility with ANSI build which
+        // allowed code like "const char *p = dt.ParseFormat("...")"
+        //
+        // so we need wchar_t overload and now passing s.c_str() as first
+        // argument is ambiguous because it's convertible to both wxString and
+        // wchar_t* and now it's passing char* which becomes ambiguous as it is
+        // convertible to both wxString and wxCStrData hence we need char*
+        // overload too
+        //
+        // and to make our life more miserable we also pay for having the
+        // optional dateDef parameter: as it's almost never used, we want to
+        // allow people to omit it when specifying the end iterator output
+        // parameter but we still have to allow specifying dateDef too, so we
+        // need another overload for this
+        //
+        // FIXME: all this mess could be avoided by using some class similar to
+        //        wxFormatString, i.e. remembering string [pointer] of any type
+        //        and convertible to either char* or wchar_t* as wxCStrData and
+        //        having only 1 (or 2, because of the last paragraph above)
+        //        overload taking it, see #9560
     const char *ParseFormat(const wxString& date,
                             const wxString& format = wxDefaultDateTimeFormat,
                             const wxDateTime& dateDef = wxDefaultDateTime,
                             wxString::const_iterator *end = NULL);
 
     const char *ParseFormat(const wxString& date,
-                            const char *format = wxDefaultDateTimeFormat,
-                            const wxDateTime& dateDef = wxDefaultDateTime,
-                            wxString::const_iterator *end = NULL)
-    {
-        return ParseFormat(date, wxString(format), dateDef, end);
-    }
-
-    const char *ParseFormat(const wxString& date,
-                            const wxString& format = wxDefaultDateTimeFormat,
-                            wxString::const_iterator *end = NULL)
+                            const wxString& format,
+                            wxString::const_iterator *end)
     {
         return ParseFormat(date, format, wxDefaultDateTime, end);
     }
@@ -1135,12 +1152,6 @@ public:
         return ParseFormat(wxString(date), format, dateDef);
     }
 
-    const char *ParseFormat(const char *date,
-                            const char *format = wxDefaultDateTimeFormat,
-                            const wxDateTime& dateDef = wxDefaultDateTime)
-    {
-        return ParseFormat(wxString(date), wxString(format), dateDef);
-    }
 
         // parse a string containing date, time or both in ISO 8601 format
         //
