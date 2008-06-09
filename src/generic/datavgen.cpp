@@ -4226,8 +4226,12 @@ wxDataViewColumn* wxDataViewCtrl::GetColumn( unsigned int pos ) const
 void wxDataViewCtrl::ColumnMoved( wxDataViewColumn* col, unsigned int new_pos )
 {
     if (new_pos > m_cols.GetCount()) return;
+    
+    // Exchange position
+    m_cols.DeleteContents(false);
     m_cols.DeleteObject( col );
     m_cols.Insert( new_pos, col );
+    m_cols.DeleteContents(true);
 
     m_clientArea->UpdateDisplay();
 }
