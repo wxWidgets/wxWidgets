@@ -40,6 +40,10 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
         return false;
     }
 
+    wxArrayString fontFamilies ;
+
+#if wxMAC_USE_ATSU_TEXT || wxMAC_USE_CORE_TEXT
+
     //
     // From Apple's QA 1471 http://developer.apple.com/qa/qa2006/qa1471.html
     //
@@ -47,8 +51,6 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
     ATSFontFamilyIterator theFontFamilyIterator = NULL;
     ATSFontFamilyRef theATSFontFamilyRef = 0;
     OSStatus status = noErr;
-
-    wxArrayString fontFamilies ;
 
     // Create the iterator
     status = ATSFontFamilyIteratorCreate(kATSFontContextLocal, nil,nil,
@@ -100,6 +102,7 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
         }
     }
     ATSFontFamilyIteratorRelease(&theFontFamilyIterator);
+#endif
 
     for ( size_t i = 0 ; i < fontFamilies.Count() ; ++i )
     {
