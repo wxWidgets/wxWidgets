@@ -94,10 +94,19 @@
 
 #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
 
+#ifdef __WXASPEN__
+#define wxMAC_USE_CG_TEXT 1
+#define wxMAC_USE_CORE_TEXT 0
+#define wxMAC_USE_ATSU_TEXT 0
+#else
 #define wxMAC_USE_CORE_TEXT 1
 #define wxMAC_USE_ATSU_TEXT 0
+#define wxMAC_USE_CG_TEXT 0
+#endif
 
 #else // platform < 10.5
+
+#define wxMAC_USE_CG_TEXT 0
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
 #define wxMAC_USE_CORE_TEXT 1
@@ -107,9 +116,6 @@
 #define wxMAC_USE_ATSU_TEXT 1
 
 #endif
-
-// pure coregraphics text
-#define wxMAC_USE_CG_TEXT 0
 
 /*
  * turning off capabilities that don't work under 64 bit yet
