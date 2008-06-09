@@ -7819,7 +7819,7 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & WXUNUSED(reg) )
         }
     }
 
-    dc.SetClippingRegion( clippedcells );
+    dc.SetDeviceClippingRegion( clippedcells );
 
 
     // horizontal grid lines

@@ -3569,7 +3569,7 @@ void wxWindowGTK::GtkSendPaintEvents()
     else
     {
         wxWindowDC dc( (wxWindow*)this );
-        dc.SetClippingRegion( m_updateRegion );
+        dc.SetDeviceClippingRegion( m_updateRegion );
 
         // Work around gtk-qt <= 0.60 bug whereby the window colour
         // remains grey

@@ -3231,7 +3231,7 @@ void wxAuiManager::ShowHint(const wxRect& rect)
         // nasty redrawn problems.
         clip.Intersect(m_frame->GetRect());
 
-        screendc.SetClippingRegion(clip);
+        screendc.SetDeviceClippingRegion(clip);
 
         wxBitmap stipple = wxPaneCreateStippleBitmap();
         wxBrush brush(stipple);
