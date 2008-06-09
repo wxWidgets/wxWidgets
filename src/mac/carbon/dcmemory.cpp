@@ -13,6 +13,7 @@
 
 #include "wx/dcmemory.h"
 #include "wx/graphics.h"
+#include "wx/mac/dcmemory.h"
 
 #include "wx/mac/private.h"
 
