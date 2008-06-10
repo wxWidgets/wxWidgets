@@ -157,7 +157,8 @@ void wxWallCtrlTest::CreateControls()
 	testBitmap.LoadFile("S:\\Wall3.bmp", wxBITMAP_TYPE_BMP);
 	bitmapSource->AppendBitmap(testBitmap);
 
-	wxWallCtrlSurface * surface = new wxWallCtrlPlaneSurface(bitmapSource);
+	wxWallCtrlPlaneSurface * surface = new wxWallCtrlPlaneSurface(bitmapSource);
+	surface->SetScopeSize(wxSize(1, 2));
 	wxWallCtrl* wallCtrl1 = new wxWallCtrl(this, surface, wxID_ANY,	wxDefaultPosition, wxDefaultSize);
 	itemBoxSizer2->Add(wallCtrl1, 1, wxGROW|wxALL, 5);
 

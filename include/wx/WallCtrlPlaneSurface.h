@@ -14,10 +14,19 @@ public:
 		m_init = false;
 		m_scopeSize.SetHeight(1);
 		m_scopeSize.SetWidth(1);
+
+		UpdateItemSize();
 		m_firstItem = m_dataSource->GetFirstItem();
 	}
 	virtual ~wxWallCtrlPlaneSurface(void);
 
+	// Recalculates the item size from the number of items in the scope
+	void UpdateItemSize()
+	{
+		// TODO: Take border size into consideration
+		m_itemHeight = 1.0/m_scopeSize.GetHeight();
+		m_itemWidth = 1.0/m_scopeSize.GetWidth();
+	}
 
 	void Render()
 	{
@@ -38,7 +47,7 @@ public:
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// This will be replaced soon
-		TempRenderItems();
+		RenderItems();
 
 		glFlush();
 	}
@@ -163,8 +172,8 @@ public:
 
 
 
-	// This is a temp method that should be integrated with the surfaces, it renders all the items in the source
-	void TempRenderItems()
+	// This method renders all the items in the scope
+	void RenderItems()
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glEnable(GL_TEXTURE_2D);
@@ -178,16 +187,40 @@ public:
 				// Get the index of the item at this position
 				int Index = m_firstItem + y * m_scopeSize.GetWidth() + x;
 
+				// Check if we ran out of items
+				if (Index >= m_dataSource->GetCount())
+				{
+					// If so break out
+					y = m_scopeSize.GetHeight();
+					break;
+				}
 
+				// Select the texture of this item
+				glBindTexture(GL_TEXTURE_2D, GetItemTexture(Index));
+
+				float Left = MapX(m_itemWidth * x);
+				float Right = MapX(m_itemWidth * (x + 1));
+				float Top = MapY(m_itemHeight * y);
+				float Bottom = MapY(m_itemWidth * (y + 1));
+
+				// Draw this item on its own quad
+				glBegin(GL_QUADS);					
+					glTexCoord2f(0.0, 0.0);
+					glVertex3f( Right, Top, 0.0f);			// Top Right
+					glTexCoord2f(0.0, 1.0);
+					glVertex3f(Left, Top, 0.0f);			// Top Left
+					glTexCoord2f(1.0, 1.0);
+					glVertex3f(Left, Bottom, 0.0f);			// Bottom Left
+					glTexCoord2f(1.0, 0.0);
+					glVertex3f(Right, Bottom, 0.0f);			// Bottom Right
+				glEnd();
 			}
 		}
-		for (unsigned i=0; i < m_dataSource->GetCount(); ++i)
+/*		for (unsigned i=0; i < m_dataSource->GetCount(); ++i)
 		{
-			//			m_dataSource->RenderItem(i, )
-			//			GLuint texName;
 			glBindTexture(GL_TEXTURE_2D, GetItemTexture(i));
 			glBegin(GL_QUADS);							// Start drawing the face
-			// Face 3
+
 			glTexCoord2f(0.0, 0.0);
 			glVertex3f( 1.0f, 1.0f, 1.0f);			// Top Right
 			glTexCoord2f(0.0, 1.0);
@@ -199,7 +232,7 @@ public:
 			glEnd();
 
 		}
-
+*/
 		glDisable(GL_TEXTURE_2D);
 	}
 
@@ -213,6 +246,18 @@ public:
 			return;
 		}
 		m_scopeSize = size;
+	}
+
+	// Maps an X coordinate to OpenGL space
+	inline float MapX(float x)
+	{
+		return x*2 - 1;
+	}
+
+	// Maps a Y coordinate to OpenGL space
+	inline float MapY(float y)
+	{
+		return y*2 - 1;
 	}
 
 	private:
@@ -230,4 +275,8 @@ public:
 		// A map to hold the texture names for items that were previously cached
 		WX_DECLARE_HASH_MAP(int, int, wxIntegerHash, wxIntegerEqual, Int2IntMap);
 		Int2IntMap texturesCache;
+
+		// The dimensions of each item as fractions of the total size
+		float m_itemWidth;
+		float m_itemHeight;
 };
