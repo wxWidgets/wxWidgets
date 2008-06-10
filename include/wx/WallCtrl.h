@@ -44,40 +44,12 @@ public:
 		m_init=false;
 	}
 
-	// Initialize OpenGL for first use
-
-
-
 	// Render the control (and all its items)
 	void Render()
 	{
 		SetCurrent();
 		m_surface->Render();
 		SwapBuffers();
-/*
-		SetCurrent();
-		// Init OpenGL once, but after SetCurrent
-		if (!m_init)
-		{
-			InitGL();
-			m_init = true;
-		}
-
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glFrustum(-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 5.0f);
-		glMatrixMode(GL_MODELVIEW);
-
-
-		/ * clear color and depth buffers * /
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		// This will be replaced soon
-		TempRenderItems();
-
-		glFlush();
-		SwapBuffers();
-*/
 	}
 
 	void OnEnterWindow( wxMouseEvent& WXUNUSED(event) )

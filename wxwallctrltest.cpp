@@ -121,21 +121,7 @@ void wxWallCtrlTest::CreateControls()
 	wxWallCtrlBitmapSource * bitmapSource = new wxWallCtrlBitmapSource();
 	wxBitmap testBitmap;
 
-	// Just add bitmaps manually
-	testBitmap.LoadFile("S:\\Wall1.bmp", wxBITMAP_TYPE_BMP);
-	bitmapSource->AppendBitmap(testBitmap);
-	testBitmap.LoadFile("S:\\Wall2.bmp", wxBITMAP_TYPE_BMP);
-	bitmapSource->AppendBitmap(testBitmap);
-	testBitmap.LoadFile("S:\\Wall3.bmp", wxBITMAP_TYPE_BMP);
-	bitmapSource->AppendBitmap(testBitmap);
-
-	testBitmap.LoadFile("S:\\Wall1.bmp", wxBITMAP_TYPE_BMP);
-	bitmapSource->AppendBitmap(testBitmap);
-	testBitmap.LoadFile("S:\\Wall2.bmp", wxBITMAP_TYPE_BMP);
-	bitmapSource->AppendBitmap(testBitmap);
-	testBitmap.LoadFile("S:\\Wall3.bmp", wxBITMAP_TYPE_BMP);
-	bitmapSource->AppendBitmap(testBitmap);
-
+	// Just add bitmaps manually.
 	testBitmap.LoadFile("S:\\Wall1.bmp", wxBITMAP_TYPE_BMP);
 	bitmapSource->AppendBitmap(testBitmap);
 	testBitmap.LoadFile("S:\\Wall2.bmp", wxBITMAP_TYPE_BMP);
@@ -158,26 +144,11 @@ void wxWallCtrlTest::CreateControls()
 	bitmapSource->AppendBitmap(testBitmap);
 
 	wxWallCtrlPlaneSurface * surface = new wxWallCtrlPlaneSurface(bitmapSource);
-	surface->SetScopeSize(wxSize(1, 2));
+	surface->SetScopeSize(wxSize(2, 7));
 	wxWallCtrl* wallCtrl1 = new wxWallCtrl(this, surface, wxID_ANY,	wxDefaultPosition, wxDefaultSize);
 	itemBoxSizer2->Add(wallCtrl1, 1, wxGROW|wxALL, 5);
 
- /*   wxButton* itemButton3 = new wxButton( itemDialog1, ID_BUTTON2, _("Button"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer2->Add(itemButton3, 0, wxGROW|wxALL, 5);
-
-    wxBoxSizer* itemBoxSizer4 = new wxBoxSizer(wxHORIZONTAL);
-    itemBoxSizer2->Add(itemBoxSizer4, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
-
-    wxScrolledWindow* itemScrolledWindow5 = new wxScrolledWindow( itemDialog1, ID_SCROLLEDWINDOW1, wxDefaultPosition, wxSize(100, 100), wxSUNKEN_BORDER|wxHSCROLL|wxVSCROLL );
-    itemBoxSizer4->Add(itemScrolledWindow5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
-    itemScrolledWindow5->SetScrollbars(1, 1, 0, 0);
-    wxButton* itemButton6 = new wxButton( itemScrolledWindow5, ID_BUTTON3, _("Button"), wxDefaultPosition, wxSize(40, 40), 0 );
-
-    wxButton* itemButton7 = new wxButton( itemScrolledWindow5, ID_BUTTON1, _("Button"), wxDefaultPosition, wxDefaultSize, 0 );
-
-    wxPanel* itemPanel8 = new wxPanel( itemDialog1, ID_PANEL1, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER|wxTAB_TRAVERSAL );
-*/
-////@end wxWallCtrlTest content construction
+	////@end wxWallCtrlTest content construction
 }
 
 
