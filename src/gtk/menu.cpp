@@ -905,10 +905,12 @@ void wxMenuItem::SetText( const wxString& str )
     {
         // if the accelerator was taken from a stock ID, just get it back from GTK+ stock
         if (wxGetStockGtkAccelerator(stockid, &accel_mods, &accel_key))
-            gtk_widget_remove_accelerator( GTK_WIDGET(m_menuItem),
-                                           m_parentMenu->m_accel,
-                                           accel_key,
-                                           accel_mods );
+            gtk_widget_add_accelerator( GTK_WIDGET(m_menuItem),
+                                        "activate",
+                                        m_parentMenu->m_accel,
+                                        accel_key,
+                                        accel_mods,
+                                        GTK_ACCEL_VISIBLE);
     }
 }
 
