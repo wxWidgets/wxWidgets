@@ -1,4 +1,4 @@
-#include "wx/WallCtrlPlaneSurface.h"
+#include "wx/wallctrl/WallCtrlPlaneSurface.h"
 
 
 wxWallCtrlPlaneSurface::~wxWallCtrlPlaneSurface(void)
