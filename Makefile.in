@@ -645,7 +645,6 @@ ALL_PORTS_BASE_HEADERS =  \
 	$(NET_WINCE_HDR) \
 	wx/unix/gsockunx.h \
 	wx/unix/gsockunx.h \
-	wx/mac/carbon/gsockmac.h \
 	wx/xml/xml.h \
 	wx/xtixml.h
 ALL_BASE_SOURCES =  \
@@ -2007,7 +2006,7 @@ COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR =  \
 	$(BASE_WINCE_HDR)
 @COND_PLATFORM_WIN32_1@BASE_PLATFORM_HDR = $(COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR)
 @COND_PLATFORM_MACOSX_1@NET_PLATFORM_HDR = wx/unix/gsockunx.h
-@COND_PLATFORM_MACOS_1@NET_PLATFORM_HDR = wx/mac/carbon/gsockmac.h
+@COND_PLATFORM_MACOS_1@NET_PLATFORM_HDR = 
 @COND_PLATFORM_OS2_1@NET_PLATFORM_HDR = wx/unix/gsockunx.h
 @COND_PLATFORM_UNIX_1@NET_PLATFORM_HDR = wx/unix/gsockunx.h
 @COND_PLATFORM_WIN32_1@NET_PLATFORM_HDR = \
@@ -2381,7 +2380,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_GUI_HDR =  \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@GUI_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_GUI_HDR)
 COND_TOOLKIT_MAC_GUI_HDR =  \
 	wx/mac/accel.h \
-	wx/mac/aga.h \
 	wx/mac/app.h \
 	wx/mac/bitmap.h \
 	wx/mac/bmpbuttn.h \
@@ -2414,13 +2412,11 @@ COND_TOOLKIT_MAC_GUI_HDR =  \
 	wx/mac/fontdlg.h \
 	wx/mac/frame.h \
 	wx/mac/gauge.h \
-	wx/mac/gsockmac.h \
 	wx/mac/helpxxxx.h \
 	wx/mac/icon.h \
 	wx/mac/imaglist.h \
 	wx/mac/listbox.h \
 	wx/mac/listctrl.h \
-	wx/mac/macsock.h \
 	wx/mac/mdi.h \
 	wx/mac/menu.h \
 	wx/mac/menuitem.h \
@@ -2462,7 +2458,6 @@ COND_TOOLKIT_MAC_GUI_HDR =  \
 	wx/mac/uma.h \
 	wx/mac/window.h \
 	wx/mac/carbon/accel.h \
-	wx/mac/carbon/aga.h \
 	wx/mac/carbon/app.h \
 	wx/mac/carbon/bitmap.h \
 	wx/mac/carbon/bmpbuttn.h \
@@ -2495,13 +2490,11 @@ COND_TOOLKIT_MAC_GUI_HDR =  \
 	wx/mac/carbon/fontdlg.h \
 	wx/mac/carbon/frame.h \
 	wx/mac/carbon/gauge.h \
-	wx/mac/carbon/gsockmac.h \
 	wx/mac/carbon/helpxxxx.h \
 	wx/mac/carbon/icon.h \
 	wx/mac/carbon/imaglist.h \
 	wx/mac/carbon/listbox.h \
 	wx/mac/carbon/listctrl.h \
-	wx/mac/carbon/macsock.h \
 	wx/mac/carbon/mdi.h \
 	wx/mac/carbon/menu.h \
 	wx/mac/carbon/menuitem.h \
@@ -3730,7 +3723,7 @@ COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS =  \
 @COND_TOOLKIT_MAC@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS = \
 @COND_TOOLKIT_MAC@	monodll_utils.o monodll_uma.o
 @COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS = monodll_gsocket.o
-@COND_PLATFORM_MACOS_1@__NET_PLATFORM_SRC_OBJECTS = monodll_gsocket.o
+@COND_PLATFORM_MACOS_1@__NET_PLATFORM_SRC_OBJECTS = 
 @COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS = monodll_gsocket.o
 @COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS = monodll_gsocket.o
 COND_PLATFORM_WIN32_1___NET_PLATFORM_SRC_OBJECTS =  \
@@ -4655,7 +4648,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS =  \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS)
 COND_TOOLKIT_MAC___GUI_SRC_OBJECTS =  \
 	monodll_accel.o \
-	monodll_aga.o \
 	monodll_app.o \
 	monodll_artmac.o \
 	monodll_bitmap.o \
@@ -5648,7 +5640,7 @@ COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_MAC@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_1 = \
 @COND_TOOLKIT_MAC@	monolib_utils.o monolib_uma.o
 @COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS_1 = monolib_gsocket.o
-@COND_PLATFORM_MACOS_1@__NET_PLATFORM_SRC_OBJECTS_1 = monolib_gsocket.o
+@COND_PLATFORM_MACOS_1@__NET_PLATFORM_SRC_OBJECTS_1 = 
 @COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS_1 = monolib_gsocket.o
 @COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_1 = monolib_gsocket.o
 COND_PLATFORM_WIN32_1___NET_PLATFORM_SRC_OBJECTS_1 =  \
@@ -6574,7 +6566,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_1 =  \
 	monolib_accel.o \
-	monolib_aga.o \
 	monolib_app.o \
 	monolib_artmac.o \
 	monolib_bitmap.o \
@@ -7876,7 +7867,7 @@ COND_USE_SOSYMLINKS_1___netdll___so_symlinks_uninst_cmd = rm -f \
 @COND_USE_SOSYMLINKS_1@__netdll___so_symlinks_uninst_cmd = $(COND_USE_SOSYMLINKS_1___netdll___so_symlinks_uninst_cmd)
 @COND_PLATFORM_WIN32_1@__netdll___win32rc = netdll_version_rc.o
 @COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS_2 = netdll_gsocket.o
-@COND_PLATFORM_MACOS_1@__NET_PLATFORM_SRC_OBJECTS_2 = netdll_gsocket.o
+@COND_PLATFORM_MACOS_1@__NET_PLATFORM_SRC_OBJECTS_2 = 
 @COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS_2 = netdll_gsocket.o
 @COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_2 = netdll_gsocket.o
 COND_PLATFORM_WIN32_1___NET_PLATFORM_SRC_OBJECTS_2 =  \
@@ -7897,7 +7888,7 @@ COND_MONOLITHIC_0_SHARED_0___netlib___depname = \
 @COND_USE_PCH_1@___pch_wxprec_netlib_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= .pch/wxprec_netlib/wx/wxprec.h.gch
 @COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS_3 = netlib_gsocket.o
-@COND_PLATFORM_MACOS_1@__NET_PLATFORM_SRC_OBJECTS_3 = netlib_gsocket.o
+@COND_PLATFORM_MACOS_1@__NET_PLATFORM_SRC_OBJECTS_3 = 
 @COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS_3 = netlib_gsocket.o
 @COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_3 = netlib_gsocket.o
 COND_PLATFORM_WIN32_1___NET_PLATFORM_SRC_OBJECTS_3 =  \
@@ -8777,7 +8768,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_2 =  \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_2 =  \
 	coredll_accel.o \
-	coredll_aga.o \
 	coredll_app.o \
 	coredll_artmac.o \
 	coredll_bitmap.o \
@@ -10273,7 +10263,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_3 =  \
 	corelib_accel.o \
-	corelib_aga.o \
 	corelib_app.o \
 	corelib_artmac.o \
 	corelib_bitmap.o \
@@ -14051,9 +14040,6 @@ monodll_tbarwce.o: $(srcdir)/src/msw/wince/tbarwce.cpp $(MONODLL_ODEP)
 monodll_textctrlce.o: $(srcdir)/src/msw/wince/textctrlce.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/wince/textctrlce.cpp
 
-monodll_aga.o: $(srcdir)/src/mac/carbon/aga.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/aga.cpp
-
 monodll_artmac.o: $(srcdir)/src/mac/carbon/artmac.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/artmac.cpp
 
@@ -15091,9 +15077,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_PLATFORM_WIN32_1@monodll_gsocket.o: $(srcdir)/src/msw/gsocket.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/gsocket.cpp
-
-@COND_PLATFORM_MACOS_1@monodll_gsocket.o: $(srcdir)/src/mac/carbon/gsocket.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOS_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/gsocket.cpp
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_caret.o: $(srcdir)/src/generic/caret.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
@@ -18593,9 +18576,6 @@ monolib_tbarwce.o: $(srcdir)/src/msw/wince/tbarwce.cpp $(MONOLIB_ODEP)
 monolib_textctrlce.o: $(srcdir)/src/msw/wince/textctrlce.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/wince/textctrlce.cpp
 
-monolib_aga.o: $(srcdir)/src/mac/carbon/aga.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/aga.cpp
-
 monolib_artmac.o: $(srcdir)/src/mac/carbon/artmac.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/artmac.cpp
 
@@ -19633,9 +19613,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_PLATFORM_WIN32_1@monolib_gsocket.o: $(srcdir)/src/msw/gsocket.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/gsocket.cpp
-
-@COND_PLATFORM_MACOS_1@monolib_gsocket.o: $(srcdir)/src/mac/carbon/gsocket.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOS_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/gsocket.cpp
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_caret.o: $(srcdir)/src/generic/caret.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
@@ -24380,9 +24357,6 @@ netdll_net.o: $(srcdir)/src/msw/wince/net.cpp $(NETDLL_ODEP)
 @COND_PLATFORM_WIN32_1@netdll_gsocket.o: $(srcdir)/src/msw/gsocket.cpp $(NETDLL_ODEP)
 @COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/msw/gsocket.cpp
 
-@COND_PLATFORM_MACOS_1@netdll_gsocket.o: $(srcdir)/src/mac/carbon/gsocket.cpp $(NETDLL_ODEP)
-@COND_PLATFORM_MACOS_1@	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/gsocket.cpp
-
 netlib_fs_inet.o: $(srcdir)/src/common/fs_inet.cpp $(NETLIB_ODEP)
 	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/common/fs_inet.cpp
 
@@ -24433,9 +24407,6 @@ netlib_net.o: $(srcdir)/src/msw/wince/net.cpp $(NETLIB_ODEP)
 
 @COND_PLATFORM_WIN32_1@netlib_gsocket.o: $(srcdir)/src/msw/gsocket.cpp $(NETLIB_ODEP)
 @COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/msw/gsocket.cpp
-
-@COND_PLATFORM_MACOS_1@netlib_gsocket.o: $(srcdir)/src/mac/carbon/gsocket.cpp $(NETLIB_ODEP)
-@COND_PLATFORM_MACOS_1@	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/gsocket.cpp
 
 coredll_version_rc.o: $(srcdir)/src/msw/version.rc $(COREDLL_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_54)  $(__EXCEPTIONS_DEFINE_p_53) $(__RTTI_DEFINE_p_53) $(__THREAD_DEFINE_p_53)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_54) $(__INC_TIFF_p_54) $(__INC_JPEG_p_54) $(__INC_PNG_p_53) $(__INC_ZLIB_p_55) $(__INC_REGEX_p_53) $(__INC_EXPAT_p_53) --define WXUSINGDLL --define WXMAKINGDLL_CORE --define wxUSE_BASE=0
@@ -24526,9 +24497,6 @@ coredll_tbarwce.o: $(srcdir)/src/msw/wince/tbarwce.cpp $(COREDLL_ODEP)
 
 coredll_textctrlce.o: $(srcdir)/src/msw/wince/textctrlce.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/wince/textctrlce.cpp
-
-coredll_aga.o: $(srcdir)/src/mac/carbon/aga.cpp $(COREDLL_ODEP)
-	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/aga.cpp
 
 coredll_artmac.o: $(srcdir)/src/mac/carbon/artmac.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/artmac.cpp
@@ -27598,9 +27566,6 @@ corelib_tbarwce.o: $(srcdir)/src/msw/wince/tbarwce.cpp $(CORELIB_ODEP)
 
 corelib_textctrlce.o: $(srcdir)/src/msw/wince/textctrlce.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/wince/textctrlce.cpp
-
-corelib_aga.o: $(srcdir)/src/mac/carbon/aga.cpp $(CORELIB_ODEP)
-	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/aga.cpp
 
 corelib_artmac.o: $(srcdir)/src/mac/carbon/artmac.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/artmac.cpp
