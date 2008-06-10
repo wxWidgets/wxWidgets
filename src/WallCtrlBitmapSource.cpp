@@ -1,4 +1,4 @@
-#include "wxWallCtrlBitmapSource.h"
+#include "wx/WallCtrlBitmapSource.h"
 
 wxWallCtrlBitmapSource::wxWallCtrlBitmapSource(void)
 {

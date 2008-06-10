@@ -119,15 +119,27 @@
 			Name="Source Files"
 			>
 			<File
+				RelativePath=".\src\Matrix.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\WallCtrl.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\src\wxWallCtrlBitmapSource.cpp"
+				RelativePath=".\src\WallCtrlBitmapSource.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\src\wxWallCtrlDataSource.cpp"
+				RelativePath=".\src\WallCtrlDataSource.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\WallCtrlPlaneSurface.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\WallCtrlSurface.cpp"
 				>
 			</File>
 			<File
@@ -147,15 +159,27 @@
 			Name="Header Files"
 			>
 			<File
+				RelativePath=".\include\wx\Matrix.h"
+				>
+			</File>
+			<File
 				RelativePath=".\include\wx\WallCtrl.h"
 				>
 			</File>
 			<File
-				RelativePath=".\include\wx\wxWallCtrlBitmapSource.h"
+				RelativePath=".\include\wx\WallCtrlBitmapSource.h"
 				>
 			</File>
 			<File
-				RelativePath=".\include\wx\wxWallCtrlDataSource.h"
+				RelativePath=".\include\wx\WallCtrlDataSource.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\wx\WallCtrlPlaneSurface.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\wx\WallCtrlSurface.h"
 				>
 			</File>
 			<File

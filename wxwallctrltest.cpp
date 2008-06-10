@@ -12,6 +12,8 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 #include "wx/WallCtrl.h"
+#include "wx/WallCtrlPlaneSurface.h"
+#include "wx/WallCtrlBitmapSource.h"
 
 #ifdef __BORLANDC__
 #pragma hdrstop
@@ -116,7 +118,47 @@ void wxWallCtrlTest::CreateControls()
     wxBoxSizer* itemBoxSizer2 = new wxBoxSizer(wxVERTICAL);
     itemDialog1->SetSizer(itemBoxSizer2);
 
-	wxWallCtrl* wallCtrl1 = new wxWallCtrl(this, wxID_ANY,	wxDefaultPosition, wxDefaultSize);
+	wxWallCtrlBitmapSource * bitmapSource = new wxWallCtrlBitmapSource();
+	wxBitmap testBitmap;
+
+	// Just add bitmaps manually
+	testBitmap.LoadFile("S:\\Wall1.bmp", wxBITMAP_TYPE_BMP);
+	bitmapSource->AppendBitmap(testBitmap);
+	testBitmap.LoadFile("S:\\Wall2.bmp", wxBITMAP_TYPE_BMP);
+	bitmapSource->AppendBitmap(testBitmap);
+	testBitmap.LoadFile("S:\\Wall3.bmp", wxBITMAP_TYPE_BMP);
+	bitmapSource->AppendBitmap(testBitmap);
+
+	testBitmap.LoadFile("S:\\Wall1.bmp", wxBITMAP_TYPE_BMP);
+	bitmapSource->AppendBitmap(testBitmap);
+	testBitmap.LoadFile("S:\\Wall2.bmp", wxBITMAP_TYPE_BMP);
+	bitmapSource->AppendBitmap(testBitmap);
+	testBitmap.LoadFile("S:\\Wall3.bmp", wxBITMAP_TYPE_BMP);
+	bitmapSource->AppendBitmap(testBitmap);
+
+	testBitmap.LoadFile("S:\\Wall1.bmp", wxBITMAP_TYPE_BMP);
+	bitmapSource->AppendBitmap(testBitmap);
+	testBitmap.LoadFile("S:\\Wall2.bmp", wxBITMAP_TYPE_BMP);
+	bitmapSource->AppendBitmap(testBitmap);
+	testBitmap.LoadFile("S:\\Wall3.bmp", wxBITMAP_TYPE_BMP);
+	bitmapSource->AppendBitmap(testBitmap);
+
+	testBitmap.LoadFile("S:\\Wall1.bmp", wxBITMAP_TYPE_BMP);
+	bitmapSource->AppendBitmap(testBitmap);
+	testBitmap.LoadFile("S:\\Wall2.bmp", wxBITMAP_TYPE_BMP);
+	bitmapSource->AppendBitmap(testBitmap);
+	testBitmap.LoadFile("S:\\Wall3.bmp", wxBITMAP_TYPE_BMP);
+	bitmapSource->AppendBitmap(testBitmap);
+
+	testBitmap.LoadFile("S:\\Wall1.bmp", wxBITMAP_TYPE_BMP);
+	bitmapSource->AppendBitmap(testBitmap);
+	testBitmap.LoadFile("S:\\Wall2.bmp", wxBITMAP_TYPE_BMP);
+	bitmapSource->AppendBitmap(testBitmap);
+	testBitmap.LoadFile("S:\\Wall3.bmp", wxBITMAP_TYPE_BMP);
+	bitmapSource->AppendBitmap(testBitmap);
+
+	wxWallCtrlSurface * surface = new wxWallCtrlPlaneSurface(bitmapSource);
+	wxWallCtrl* wallCtrl1 = new wxWallCtrl(this, surface, wxID_ANY,	wxDefaultPosition, wxDefaultSize);
 	itemBoxSizer2->Add(wallCtrl1, 1, wxGROW|wxALL, 5);
 
  /*   wxButton* itemButton3 = new wxButton( itemDialog1, ID_BUTTON2, _("Button"), wxDefaultPosition, wxDefaultSize, 0 );

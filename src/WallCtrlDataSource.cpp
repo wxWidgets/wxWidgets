@@ -1,4 +1,4 @@
-#include "wxWallCtrlDataSource.h"
+#include "wx/WallCtrlDataSource.h"
 
 wxWallCtrlDataSource::wxWallCtrlDataSource(void)
 {

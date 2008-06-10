@@ -13,9 +13,14 @@ enum wxWallCtrlRenderType
 	wxWallCtrlRenderBitmap
 };
 
-typedef wxBitmap wxWallCtrlItem;
+//typedef wxBitmap wxWallCtrlItem;
+struct wxWallCtrlItem
+{
+	wxSize size;
+};
 
 // This is an abstract class for wxWallCtrl data sources
+// Wall ctrl data items must be supplied in a consecutive sequence of indices
 class wxWallCtrlDataSource
 {
 public:
@@ -30,4 +35,10 @@ public:
 
 	// Returns the number of the items in the source (those that are accessible)
 	virtual unsigned GetCount()=0;
+
+	// Returns the starting index of the sequence
+	virtual unsigned GetFirstItem()
+	{
+		return 0;
+	}
 };
