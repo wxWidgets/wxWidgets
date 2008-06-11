@@ -38,7 +38,24 @@ class WXDLLIMPEXP_FWD_BASE wxList;
     class WXDLLIMPEXP_FWD_CORE wxWindowBase;
 #endif // wxUSE_GUI
 
-class WXDLLIMPEXP_FWD_BASE wxEvtHandler;
+// We operate with pointer to members of wxEvtHandler (such functions are used
+// as event handlers in the event tables or as arguments to Connect()) but by
+// default MSVC uses a restricted (but more efficient) representation of
+// pointers to members which can't deal with multiple base classes. To avoid
+// mysterious (as the compiler is not good enough to detect this and give a
+// sensible error message) errors in the user code as soon as it defines
+// classes inheriting from both wxEvtHandler (possibly indirectly, e.g. via
+// wxWindow) and something else (including our own wxTrackable but not limited
+// to it), we use the special MSVC keyword telling the compiler to use a more
+// general pointer to member representation for the classes inheriting from
+// wxEvtHandler.
+#ifdef __VISUALC__
+    #define wxMSVC_FWD_MULTIPLE_BASES __multiple_inheritance
+#else
+    #define wxMSVC_FWD_MULTIPLE_BASES
+#endif
+
+class WXDLLIMPEXP_FWD_BASE wxMSVC_FWD_MULTIPLE_BASES wxEvtHandler;
 class wxEventConnectionRef;
 
 // ----------------------------------------------------------------------------
@@ -2098,10 +2115,16 @@ private:
 // event handler and related classes
 // ============================================================================
 
-// for backwards compatibility and to prevent eVC 4 for ARM from crashing with
-// internal compiler error when compiling wx, we define wxObjectEventFunction
-// as a wxObject method even though it can only be a wxEvtHandler one
-typedef void (wxObject::*wxObjectEventFunction)(wxEvent&);
+typedef void (wxEvtHandler::*wxEventFunction)(wxEvent&);
+
+// We had some trouble (specifically with eVC for ARM WinCE build) with using
+// wxEventFunction in the past so we had introduced wxObjectEventFunction which
+// used to be a typedef for a member of wxObject and not wxEvtHandler to work
+// around this but as eVC is not really supported any longer we now only keep
+// this for backwards compatibility and, despite its name, this is a typedef
+// for wxEvtHandler member now -- but if we have the same problem with another
+// compiler we can restore its old definition for it.
+typedef wxEventFunction wxObjectEventFunction;
 
 // struct containing the members common to static and dynamic event tables
 // entries
