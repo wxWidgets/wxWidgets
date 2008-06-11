@@ -33,7 +33,9 @@
 
 // Mac Includes
 #include <CoreFoundation/CoreFoundation.h>
+#ifndef __WXOSX_IPHONE__
 #include <ApplicationServices/ApplicationServices.h>
+#endif
 
 // More WX Includes
 #include "wx/filename.h"
