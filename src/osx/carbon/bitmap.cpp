@@ -28,7 +28,7 @@
 IMPLEMENT_DYNAMIC_CLASS(wxBitmap, wxGDIObject)
 IMPLEMENT_DYNAMIC_CLASS(wxMask, wxObject)
 
-#include "wx/osx/private.h"
+#include "wx/osx/uma.h"
 #ifndef __WXOSX_IPHONE__
 #include <QuickTime/QuickTime.h>
 #endif
