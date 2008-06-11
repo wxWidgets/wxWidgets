@@ -234,7 +234,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/carbon/morefile/MoreFiles.c
     src/mac/carbon/morefile/MoreFilesExtras.c
     src/mac/carbon/morefile/Search.c
-    src/mac/carbon/utilsexc.cpp
 </set>
 <!-- set var="BASE_MAC_CARBONLIB_HDR" hints="files">
 </set -->
@@ -595,10 +594,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <!-- Net files used only by CarbonLib (not Classic or OS X) -->
 <set var="NET_MAC_CARBONLIB_SRC" hints="files">
-    src/mac/carbon/gsocket.cpp
 </set>
 <set var="NET_MAC_CARBONLIB_HDR" hints="files">
-    wx/mac/carbon/gsockmac.h
 </set>
 
 <set var="NET_CMN_SRC" hints="files">
@@ -2211,7 +2208,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="MAC_SRC" hints="files">
     src/mac/carbon/accel.cpp
-    src/mac/carbon/aga.cpp
     src/mac/carbon/app.cpp
     src/mac/carbon/artmac.cpp
     src/mac/carbon/bitmap.cpp
@@ -2227,10 +2223,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/carbon/combobox.cpp
     src/mac/carbon/control.cpp
     src/mac/carbon/cursor.cpp
-    src/mac/carbon/data.cpp
     src/mac/carbon/dataobj.cpp
-    src/mac/carbon/dc.cpp
-    src/mac/carbon/dccg.cpp
     src/mac/carbon/dcclient.cpp
     src/mac/carbon/dcmemory.cpp
     src/mac/carbon/dcprint.cpp
@@ -2307,7 +2300,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- Header files like wx/mac/foo.h which include wx/mac/carbon/foo.h -->
 <set var="MAC_CMN_HDR" hints="files">
     wx/mac/accel.h
-    wx/mac/aga.h
     wx/mac/app.h
     wx/mac/bitmap.h
     wx/mac/bmpbuttn.h
@@ -2340,14 +2332,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mac/fontdlg.h
     wx/mac/frame.h
     wx/mac/gauge.h
-    wx/mac/gsockmac.h
     wx/mac/helpxxxx.h
     wx/mac/icon.h
     wx/mac/imaglist.h
     wx/mac/listbox.h
     wx/mac/listctrl.h
-    wx/mac/macnotfy.h
-    wx/mac/macsock.h
     wx/mac/mdi.h
     wx/mac/menu.h
     wx/mac/menuitem.h
@@ -2392,7 +2381,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- wxMac Carbon header files -->
 <set var="MAC_HDR" hints="files">
     wx/mac/carbon/accel.h
-    wx/mac/carbon/aga.h
     wx/mac/carbon/app.h
     wx/mac/carbon/bitmap.h
     wx/mac/carbon/bmpbuttn.h
@@ -2425,14 +2413,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mac/carbon/fontdlg.h
     wx/mac/carbon/frame.h
     wx/mac/carbon/gauge.h
-    wx/mac/carbon/gsockmac.h
     wx/mac/carbon/helpxxxx.h
     wx/mac/carbon/icon.h
     wx/mac/carbon/imaglist.h
     wx/mac/carbon/listbox.h
     wx/mac/carbon/listctrl.h
-    wx/mac/carbon/macnotfy.h
-    wx/mac/carbon/macsock.h
     wx/mac/carbon/mdi.h
     wx/mac/carbon/menu.h
     wx/mac/carbon/menuitem.h
