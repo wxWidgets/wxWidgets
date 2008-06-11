@@ -352,6 +352,9 @@ public:
     int GetWidth() const;
     int GetHeight() const;
 
+    // Gets the type of image found by LoadFile or specified with SaveFile
+    wxBitmapType GetType() const;
+
     // these functions provide fastest access to wxImage data but should be
     // used carefully as no checks are done
     unsigned char *GetData() const;
@@ -439,6 +442,16 @@ protected:
 
 private:
     friend class WXDLLIMPEXP_FWD_CORE wxImageHandler;
+
+#if wxUSE_STREAMS
+    // read the image from the specified stream updating image type if
+    // successful
+    bool DoLoad(wxImageHandler& handler, wxInputStream& stream, int index);
+
+    // write the image to the specified stream and also update the image type
+    // if successful
+    bool DoSave(wxImageHandler& handler, wxOutputStream& stream) const;
+#endif // wxUSE_STREAMS
 
     DECLARE_DYNAMIC_CLASS(wxImage)
 };

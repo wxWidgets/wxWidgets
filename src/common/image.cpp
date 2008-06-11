@@ -64,6 +64,7 @@ public:
 
     int             m_width;
     int             m_height;
+    wxBitmapType    m_type;
     unsigned char  *m_data;
 
     bool            m_hasMask;
@@ -94,6 +95,7 @@ wxImageRefData::wxImageRefData()
 {
     m_width = 0;
     m_height = 0;
+    m_type = wxBITMAP_TYPE_INVALID;
     m_data =
     m_alpha = (unsigned char *) NULL;
 
@@ -1459,6 +1461,13 @@ int wxImage::GetHeight() const
     return M_IMGDATA->m_height;
 }
 
+wxBitmapType wxImage::GetType() const
+{
+    wxCHECK_MSG( IsOk(), wxBITMAP_TYPE_INVALID, wxT("invalid image") );
+
+    return M_IMGDATA->m_type;
+}
+
 long wxImage::XYToIndex(int x, int y) const
 {
     if ( Ok() &&
@@ -2196,6 +2205,15 @@ int wxImage::GetImageCount( wxInputStream &stream, wxBitmapType type )
     }
 }
 
+bool wxImage::DoLoad(wxImageHandler& handler, wxInputStream& stream, int index)
+{
+    if ( !handler.LoadFile(this, stream, true/*verbose*/, index) )
+        return false;
+
+    M_IMGDATA->m_type = handler.GetType();
+    return true;
+}
+
 bool wxImage::LoadFile( wxInputStream& stream, wxBitmapType type, int index )
 {
     UnRef();
@@ -2212,12 +2230,8 @@ bool wxImage::LoadFile( wxInputStream& stream, wxBitmapType type, int index )
               node = node->GetNext() )
         {
              handler = (wxImageHandler*)node->GetData();
-             if ( handler->CanRead(stream) &&
-                    handler->LoadFile(this, stream, true/*verbose*/, index) )
-             {
+             if ( handler->CanRead(stream) && DoLoad(*handler, stream, index) )
                  return true;
-             }
-
         }
 
         wxLogWarning( _("No handler found for image type.") );
@@ -2239,7 +2253,7 @@ bool wxImage::LoadFile( wxInputStream& stream, wxBitmapType type, int index )
         return false;
     }
 
-    return handler->LoadFile(this, stream, true/*verbose*/, index);
+    return DoLoad(*handler, stream, index);
 }
 
 bool wxImage::LoadFile( wxInputStream& stream, const wxString& mimetype, int index )
@@ -2262,7 +2276,17 @@ bool wxImage::LoadFile( wxInputStream& stream, const wxString& mimetype, int ind
         return false;
     }
 
-    return handler->LoadFile( this, stream, true/*verbose*/, index );
+    return DoLoad(*handler, stream, index);
+}
+
+bool wxImage::DoSave(wxImageHandler& handler, wxOutputStream& stream) const
+{
+    wxImage * const self = wx_const_cast(wxImage *, this);
+    if ( !handler.SaveFile(self, stream) )
+        return false;
+
+    M_IMGDATA->m_type = handler.GetType();
+    return true;
 }
 
 bool wxImage::SaveFile( wxOutputStream& stream, wxBitmapType type ) const
@@ -2276,7 +2300,7 @@ bool wxImage::SaveFile( wxOutputStream& stream, wxBitmapType type ) const
         return false;
     }
 
-    return handler->SaveFile( (wxImage*)this, stream );
+    return DoSave(*handler, stream);
 }
 
 bool wxImage::SaveFile( wxOutputStream& stream, const wxString& mimetype ) const
@@ -2289,7 +2313,7 @@ bool wxImage::SaveFile( wxOutputStream& stream, const wxString& mimetype ) const
         wxLogWarning( _("No image handler for type %s defined."), mimetype.GetData() );
     }
 
-    return handler->SaveFile( (wxImage*)this, stream );
+    return DoSave(*handler, stream);
 }
 
 #endif // wxUSE_STREAMS

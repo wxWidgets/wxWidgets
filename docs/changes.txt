@@ -364,6 +364,7 @@ All (GUI):
 - Fix appending items to sorted wxComboCtrl after creation (Jaakko Salli)
 - Don't blit area larger than necessary in wxBufferedDC::UnMask (Liang Jian)
 - Fixed wxPixelData<wxImage> compilation (Leonardo Fernandes).
+- Added wxImage::GetType() (troelsk).
 
 wxGTK:
 

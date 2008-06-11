@@ -627,6 +627,12 @@ public:
     wxImage GetSubImage(const wxRect& rect) const;
 
     /**
+        Gets the type of image found by LoadFile or specified with SaveFile
+        @since 2.9.0
+    */
+    wxBitmapType GetType() const;
+
+    /**
         Gets the width of the image in pixels.
 
         @see GetHeight()
