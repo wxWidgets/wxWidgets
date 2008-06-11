@@ -24,9 +24,9 @@
     #include "wx/stattext.h"
 #endif
 
-#include "wx/mac/printdlg.h"
-#include "wx/mac/private/print.h"
-#include "wx/mac/private.h"
+#include "wx/osx/printdlg.h"
+#include "wx/osx/private/print.h"
+#include "wx/osx/private.h"
 #include "wx/statline.h"
 
 

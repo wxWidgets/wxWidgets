@@ -19,7 +19,7 @@
 #endif
 
 #include "wx/link.h"
-#include "wx/mac/private.h"
+#include "wx/osx/private.h"
 
 // Linker will discard entire object file without this
 wxFORCE_LINK_THIS_MODULE(gdiobj)

@@ -45,7 +45,7 @@
 //
 
 #ifdef __WXMAC__
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 #ifndef __DARWIN__
 #include <Movies.h>
 #include <Gestalt.h>

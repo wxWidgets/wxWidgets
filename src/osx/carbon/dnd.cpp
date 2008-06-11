@@ -21,7 +21,7 @@
     #include "wx/gdicmn.h"
 #endif // WX_PRECOMP
 
-#include "wx/mac/private.h"
+#include "wx/osx/private.h"
 
 // ----------------------------------------------------------------------------
 // globals

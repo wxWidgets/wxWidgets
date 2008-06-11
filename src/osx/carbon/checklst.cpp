@@ -22,7 +22,7 @@
     #include "wx/arrstr.h"
 #endif
 
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxCheckListBox, wxListBox)
 

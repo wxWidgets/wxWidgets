@@ -34,7 +34,7 @@
 #include "wx/apptrait.h"
 
 #include "wx/sckaddr.h"
-#include "wx/mac/carbon/private.h"
+#include "wx/osx/carbon/private.h"
 
 #include <sys/socket.h>
 #include <netinet/in.h>

@@ -20,7 +20,7 @@
 #endif
 
 #include "wx/app.h"
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 #include "wx/geometry.h"
 #include "wx/sysopt.h"
 

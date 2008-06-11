@@ -33,9 +33,9 @@
     #include "wx/settings.h"
 #endif
 
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
-#include "wx/mac/private.h"
+#include "wx/osx/private.h"
 
 // ----------------------------------------------------------------------------
 // helper functions

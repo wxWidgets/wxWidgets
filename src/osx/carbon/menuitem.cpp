@@ -19,7 +19,7 @@
     #include "wx/menu.h"
 #endif // WX_PRECOMP
 
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
 

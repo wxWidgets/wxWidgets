@@ -17,7 +17,7 @@
     #include "wx/gdicmn.h"
 #endif
 
-#include "wx/mac/private.h"
+#include "wx/osx/private.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
 

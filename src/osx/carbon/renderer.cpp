@@ -27,7 +27,7 @@
 
 #include "wx/renderer.h"
 #include "wx/graphics.h"
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
 
 class WXDLLEXPORT wxRendererMac : public wxDelegateRendererNative

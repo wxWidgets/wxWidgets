@@ -16,7 +16,7 @@
     #include "wx/gdicmn.h"
 #endif
 
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxRegion, wxGDIObject)
 IMPLEMENT_DYNAMIC_CLASS(wxRegionIterator, wxObject)

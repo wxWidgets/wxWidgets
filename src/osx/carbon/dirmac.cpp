@@ -33,7 +33,7 @@
 
 #include "wx/filefn.h"          // for wxDirExists()
 #include "wx/filename.h"
-#include "wx/mac/private.h"
+#include "wx/osx/private.h"
 
 // ----------------------------------------------------------------------------
 // private classes

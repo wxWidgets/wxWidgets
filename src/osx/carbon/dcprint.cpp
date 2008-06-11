@@ -25,9 +25,9 @@
     #include "wx/math.h"
 #endif
 
-#include "wx/mac/uma.h"
-#include "wx/mac/private/print.h"
-#include "wx/mac/carbon/dcprint.h"
+#include "wx/osx/uma.h"
+#include "wx/osx/private/print.h"
+#include "wx/osx/carbon/dcprint.h"
 #include "wx/graphics.h"
 
 IMPLEMENT_ABSTRACT_CLASS(wxPrinterDCImpl, wxGCDCImpl)

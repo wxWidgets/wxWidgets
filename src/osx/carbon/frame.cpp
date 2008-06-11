@@ -24,7 +24,7 @@
     #include "wx/menuitem.h"
 #endif // WX_PRECOMP
 
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
 BEGIN_EVENT_TABLE(wxFrame, wxFrameBase)
   EVT_ACTIVATE(wxFrame::OnActivate)

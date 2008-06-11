@@ -14,11 +14,11 @@
 
 #include "wx/wxprec.h"
 
-#include "wx/mac/private.h"
+#include "wx/osx/private.h"
 
 #if defined( __WXMAC__ )
 
-#include "wx/mac/carbon/drawer.h"
+#include "wx/osx/carbon/drawer.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxDrawerWindow, wxWindow)
 

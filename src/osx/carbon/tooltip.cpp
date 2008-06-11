@@ -21,7 +21,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/geometry.h"
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
 //-----------------------------------------------------------------------------
 // global data

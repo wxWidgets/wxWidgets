@@ -61,7 +61,7 @@
 #include "wx/dnd.h"
 #endif
 
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
 #define MAC_SCROLLBAR_SIZE 15
 #define MAC_SMALL_SCROLLBAR_SIZE 11

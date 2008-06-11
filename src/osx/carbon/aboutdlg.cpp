@@ -27,7 +27,7 @@
 #include "wx/aboutdlg.h"
 #include "wx/generic/aboutdlgg.h"
 
-#include "wx/mac/private.h"
+#include "wx/osx/private.h"
 
 // helper class for HIAboutBox options
 class AboutBoxOptions : public wxCFRef<CFMutableDictionaryRef>

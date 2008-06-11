@@ -21,7 +21,7 @@
 
 #include "wx/stockitem.h"
 
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
 

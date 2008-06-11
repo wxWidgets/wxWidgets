@@ -45,7 +45,7 @@
 
 // mac
 
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
 #ifdef __DARWIN__
 #  include <CoreServices/CoreServices.h>

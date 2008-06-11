@@ -27,7 +27,7 @@
 
 #include "wx/metafile.h"
 
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
 #define wxUSE_DATAOBJ 1
 

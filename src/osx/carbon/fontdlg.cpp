@@ -46,7 +46,7 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog)
 
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
 // ---------------------------------------------------------------------------
 // wxFontDialog
@@ -261,7 +261,7 @@ int wxFontDialog::ShowModal()
 
 #undef wxFontDialog
 
-#include "wx/mac/fontdlg.h"
+#include "wx/osx/fontdlg.h"
 
 #include "wx/fontenum.h"
 #include "wx/colordlg.h"

@@ -22,8 +22,8 @@
     #include "wx/statusbr.h"
 #endif
 
-#include "wx/mac/private.h"
-#include "wx/mac/uma.h"
+#include "wx/osx/private.h"
+#include "wx/osx/uma.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxMDIParentFrame, wxFrame)
 IMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame, wxFrame)

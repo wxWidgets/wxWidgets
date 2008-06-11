@@ -14,7 +14,7 @@
 #if wxUSE_SLIDER
 
 #include "wx/slider.h"
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxSlider, wxControl)
 

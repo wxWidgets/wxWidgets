@@ -25,7 +25,7 @@
 #include "wx/graphics.h"
 #include "wx/settings.h"
 
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
 #ifndef __DARWIN__
 #include <ATSUnicode.h>

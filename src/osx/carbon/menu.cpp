@@ -28,7 +28,7 @@
     #include "wx/menuitem.h"
 #endif
 
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
 // other standard headers
 // ----------------------

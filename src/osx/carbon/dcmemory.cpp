@@ -13,9 +13,9 @@
 
 #include "wx/dcmemory.h"
 #include "wx/graphics.h"
-#include "wx/mac/dcmemory.h"
+#include "wx/osx/dcmemory.h"
 
-#include "wx/mac/private.h"
+#include "wx/osx/private.h"
 
 //-----------------------------------------------------------------------------
 // wxMemoryDCImpl

@@ -25,8 +25,8 @@
 
 #if wxUSE_NATIVE_SEARCH_CONTROL
 
-#include "wx/mac/uma.h"
-#include "wx/mac/carbon/private/mactext.h"
+#include "wx/osx/uma.h"
+#include "wx/osx/carbon/private/mactext.h"
 
 BEGIN_EVENT_TABLE(wxSearchCtrl, wxSearchCtrlBase)
 END_EVENT_TABLE()

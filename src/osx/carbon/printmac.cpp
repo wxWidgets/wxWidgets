@@ -27,14 +27,14 @@
     #include "wx/math.h"
 #endif
 
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
-#include "wx/mac/printmac.h"
-#include "wx/mac/private/print.h"
+#include "wx/osx/printmac.h"
+#include "wx/osx/private/print.h"
 
 #include "wx/printdlg.h"
 #include "wx/paper.h"
-#include "wx/mac/printdlg.h"
+#include "wx/osx/printdlg.h"
 
 #include <stdlib.h>
 

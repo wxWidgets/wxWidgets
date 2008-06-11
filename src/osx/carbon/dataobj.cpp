@@ -27,7 +27,7 @@
 #include "wx/metafile.h"
 #include "wx/tokenzr.h"
 
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
 #ifdef __DARWIN__
     #include <QuickTime/QuickTime.h>

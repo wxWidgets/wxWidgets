@@ -32,7 +32,7 @@
 
 #if wxUSE_MIMETYPE
 
-#include "wx/mac/mimetype.h"
+#include "wx/osx/mimetype.h"
 
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
@@ -48,7 +48,7 @@
 #include "wx/file.h"
 #include "wx/confbase.h"
 
-#include "wx/mac/private.h"
+#include "wx/osx/private.h"
 
 // other standard headers
 #include <ctype.h>
@@ -752,7 +752,7 @@ pascal  OSStatus  MoreProcGetProcessTypeSignature(
 //
 //
 
-#include "wx/mac/corefoundation/cfstring.h"
+#include "wx/osx/core/cfstring.h"
 
 #define wxCF_RELEASE true
 #define wxCF_RETAIN  false

@@ -14,7 +14,7 @@
 #if wxUSE_CHECKBOX
 
 #include "wx/checkbox.h"
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
 
 IMPLEMENT_DYNAMIC_CLASS(wxCheckBox, wxControl)

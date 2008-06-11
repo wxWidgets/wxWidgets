@@ -12,9 +12,9 @@
 #include "wx/wxprec.h"
 
 #include "wx/dcscreen.h"
-#include "wx/mac/carbon/dcscreen.h"
+#include "wx/osx/carbon/dcscreen.h"
 
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 #include "wx/graphics.h"
 
 IMPLEMENT_ABSTRACT_CLASS(wxScreenDCImpl, wxWindowDCImpl)

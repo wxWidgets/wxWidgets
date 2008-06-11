@@ -23,9 +23,9 @@
 #endif
 
 #include "wx/dataview.h"
-#include "wx/mac/carbon/databrow.h"
-#include "wx/mac/private.h"
-#include "wx/mac/uma.h"
+#include "wx/osx/carbon/databrow.h"
+#include "wx/osx/private.h"
+#include "wx/osx/uma.h"
 
 #include <limits>
 

@@ -46,8 +46,8 @@
 #include "wx/sysopt.h"
 #include "wx/thread.h"
 
-#include "wx/mac/uma.h"
-#include "wx/mac/carbon/private/mactext.h"
+#include "wx/osx/uma.h"
+#include "wx/osx/carbon/private/mactext.h"
 
 class wxMacFunctor
 {

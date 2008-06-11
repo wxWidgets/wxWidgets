@@ -22,7 +22,7 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton, wxButton)
 
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
 //---------------------------------------------------------------------------
 // Helper functions

@@ -31,8 +31,8 @@
 #include "wx/tabctrl.h"
 #include "wx/spinbutt.h"
 
-#include "wx/mac/uma.h"
-#include "wx/mac/private.h"
+#include "wx/osx/uma.h"
+#include "wx/osx/private.h"
 
 IMPLEMENT_ABSTRACT_CLASS(wxControl, wxWindow)
 

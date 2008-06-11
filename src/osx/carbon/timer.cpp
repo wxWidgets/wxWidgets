@@ -17,10 +17,10 @@
     #include "wx/dynarray.h"
 #endif
 
-#include "wx/mac/private/timer.h"
+#include "wx/osx/private/timer.h"
 
 #ifdef __WXMAC__
-    #include "wx/mac/private.h"
+    #include "wx/osx/private.h"
 #endif
 
 struct MacTimerInfo

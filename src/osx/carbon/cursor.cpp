@@ -21,7 +21,7 @@
 
 #include "wx/xpmdecod.h"
 
-#include "wx/mac/private.h"
+#include "wx/osx/private.h"
 
 
 IMPLEMENT_DYNAMIC_CLASS(wxCursor, wxGDIObject)

@@ -20,7 +20,7 @@
 #include "wx/tooltip.h"
 #include "wx/nonownedwnd.h"
 
-#include "wx/mac/private.h"
+#include "wx/osx/private.h"
 #include "wx/settings.h"
 #include "wx/frame.h"
 

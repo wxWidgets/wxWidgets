@@ -29,7 +29,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControlWithItems)
 BEGIN_EVENT_TABLE(wxListBox, wxControl)
 END_EVENT_TABLE()
 
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
 // ============================================================================
 // list box control implementation

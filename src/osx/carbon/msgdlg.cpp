@@ -19,7 +19,7 @@
 #endif
 
 #include "wx/thread.h"
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
 
 IMPLEMENT_CLASS(wxMessageDialog, wxDialog)

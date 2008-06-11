@@ -14,7 +14,7 @@
 #if wxUSE_RADIOBTN
 
 #include "wx/radiobut.h"
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxRadioButton, wxControl)
 

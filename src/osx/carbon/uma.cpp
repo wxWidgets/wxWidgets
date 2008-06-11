@@ -11,14 +11,14 @@
 
 #include "wx/wxprec.h"
 
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
 #if wxUSE_GUI
 
 #include "wx/toplevel.h"
 #include "wx/dc.h"
 
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
 static SInt32 sUMASystemVersion = 0 ;
 

@@ -23,7 +23,7 @@
 
 #include "wx/filename.h"
 
-#include "wx/mac/private.h"
+#include "wx/osx/private.h"
 
 #ifdef __DARWIN__
     #include <Carbon/Carbon.h>

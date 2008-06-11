@@ -35,12 +35,12 @@
 #endif
 
 #ifdef __WXMAC__
-    #include "wx/mac/uma.h"
-    #include "wx/mac/dcprint.h"
+    #include "wx/osx/uma.h"
+    #include "wx/osx/dcprint.h"
 #else
     #include "CoreServices/CoreServices.h"
     #include "ApplicationServices/ApplicationServices.h"
-    #include "wx/mac/corefoundation/cfstring.h"
+    #include "wx/osx/core/cfstring.h"
     #include "wx/cocoa/dcclient.h"
 #endif
 

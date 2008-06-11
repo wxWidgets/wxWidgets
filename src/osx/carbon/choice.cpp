@@ -20,7 +20,7 @@
     #include "wx/dcclient.h"
 #endif
 
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
 extern MenuHandle NewUniqueMenu() ;
 

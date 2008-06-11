@@ -26,7 +26,7 @@
 #include "wx/thread.h"
 
 #include <CoreServices/CoreServices.h>
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
 // the possible states of the thread:
 // ("=>" shows all possible transitions from this state)

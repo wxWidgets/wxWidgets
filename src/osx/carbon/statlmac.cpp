@@ -31,7 +31,7 @@
     #include "wx/statbox.h"
 #endif
 
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
 // ============================================================================
 // implementation

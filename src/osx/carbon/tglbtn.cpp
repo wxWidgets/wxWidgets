@@ -23,7 +23,7 @@
 #if wxUSE_TOGGLEBTN
 
 #include "wx/tglbtn.h"
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 // Button
 
 // ----------------------------------------------------------------------------

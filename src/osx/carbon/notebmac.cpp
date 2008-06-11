@@ -24,7 +24,7 @@
 
 #include "wx/string.h"
 #include "wx/imaglist.h"
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
 
 // check that the page index is valid

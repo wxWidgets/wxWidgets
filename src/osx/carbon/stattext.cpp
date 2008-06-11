@@ -26,7 +26,7 @@
 #include "wx/notebook.h"
 #include "wx/tabctrl.h"
 
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
 #include <stdio.h>
 

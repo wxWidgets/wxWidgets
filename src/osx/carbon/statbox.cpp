@@ -14,7 +14,7 @@
 #if wxUSE_STATBOX
 
 #include "wx/statbox.h"
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxStaticBox, wxControl)
 

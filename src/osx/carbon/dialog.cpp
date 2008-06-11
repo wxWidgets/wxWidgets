@@ -20,7 +20,7 @@
     #include "wx/settings.h"
 #endif // WX_PRECOMP
 
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
 
 // Lists to keep track of windows, so we can disable/enable them

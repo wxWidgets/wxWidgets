@@ -18,7 +18,7 @@
 
 #include <limits>
 
-#include "wx/mac/carbon/databrow.h"
+#include "wx/osx/carbon/databrow.h"
 
 #ifndef WX_PRECOMP
     #include "wx/timer.h"

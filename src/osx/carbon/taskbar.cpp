@@ -22,7 +22,7 @@
     #include "wx/icon.h"
 #endif
 
-#include "wx/mac/private.h"
+#include "wx/osx/private.h"
 
 class wxTaskBarIconImpl
 {

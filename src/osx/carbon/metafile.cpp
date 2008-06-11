@@ -24,9 +24,9 @@
 
 #include "wx/metafile.h"
 #include "wx/clipbrd.h"
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 #include "wx/graphics.h"
-#include "wx/mac/carbon/metafile.h"
+#include "wx/osx/carbon/metafile.h"
 
 #include <stdio.h>
 #include <string.h>

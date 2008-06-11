@@ -34,7 +34,7 @@
 #include "wx/popupwin.h"
 #include "wx/tooltip.h"
 
-#include "wx/mac/private.h"    
+#include "wx/osx/private.h"    
 
 // ============================================================================
 // implementation

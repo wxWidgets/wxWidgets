@@ -25,7 +25,7 @@
 #include "wx/apptrait.h"
 
 #if wxUSE_GUI
-    #include "wx/mac/uma.h"
+    #include "wx/osx/uma.h"
 #endif
 
 #include <ctype.h>
@@ -44,11 +44,11 @@
 #if wxUSE_GUI
     #include <CoreServices/CoreServices.h>
     #include <Carbon/Carbon.h>
-    #include "wx/mac/private/timer.h"
+    #include "wx/osx/private/timer.h"
 #endif // wxUSE_GUI
 
 #include "wx/evtloop.h"
-#include "wx/mac/private.h"
+#include "wx/osx/private.h"
 
 #if defined(__MWERKS__) && wxUSE_UNICODE
 #if __MWERKS__ < 0x4100

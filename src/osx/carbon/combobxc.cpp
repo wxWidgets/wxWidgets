@@ -18,7 +18,7 @@
     #include "wx/menu.h"
 #endif
 
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 #if TARGET_API_MAC_OSX
 #ifndef __HIVIEW__
     #include <HIToolbox/HIView.h>

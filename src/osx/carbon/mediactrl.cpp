@@ -46,7 +46,7 @@
 #endif
 
 // uma is for wxMacFSSpec
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
 // standard QT stuff
 #ifndef __DARWIN__

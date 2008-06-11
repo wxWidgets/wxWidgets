@@ -21,7 +21,7 @@
     #include "wx/toplevel.h"
 #endif
 
-#include "wx/mac/private.h"
+#include "wx/osx/private.h"
 
 
 BEGIN_EVENT_TABLE(wxStatusBarMac, wxStatusBarGeneric)

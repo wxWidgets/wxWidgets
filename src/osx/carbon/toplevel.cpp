@@ -37,7 +37,7 @@
     #include "wx/control.h"
 #endif //WX_PRECOMP
 
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 #include "wx/tooltip.h"
 #include "wx/dnd.h"
 
@@ -50,7 +50,7 @@
 #endif
 
 // for targeting OSX
-#include "wx/mac/private.h"
+#include "wx/osx/private.h"
 
 // ============================================================================
 // wxTopLevelWindowMac implementation

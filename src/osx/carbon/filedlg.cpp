@@ -25,7 +25,7 @@
 #include "wx/tokenzr.h"
 #include "wx/filename.h"
 
-#include "wx/mac/private.h"
+#include "wx/osx/private.h"
 
 #ifndef __DARWIN__
     #include <Navigation.h>

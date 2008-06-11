@@ -12,7 +12,7 @@
 
 #include "wx/wxprec.h"
 
-#include "wx/mac/colordlg.h"
+#include "wx/osx/colordlg.h"
 #include "wx/fontdlg.h"
 
 
@@ -20,7 +20,7 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxColourDialog, wxDialog)
 
-#include "wx/mac/private.h"
+#include "wx/osx/private.h"
 
 /*
  * wxColourDialog

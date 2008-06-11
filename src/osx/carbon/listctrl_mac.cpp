@@ -33,7 +33,7 @@
     #include "wx/settings.h"
 #endif
 
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
 #include "wx/imaglist.h"
 #include "wx/sysopt.h"

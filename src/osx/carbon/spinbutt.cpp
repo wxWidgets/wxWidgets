@@ -14,7 +14,7 @@
 #if wxUSE_SPINBTN
 
 #include "wx/spinbutt.h"
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
 
 IMPLEMENT_DYNAMIC_CLASS(wxSpinButton, wxControl)

@@ -19,7 +19,7 @@
     #include "wx/control.h"
 #endif
 
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxTabCtrl, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxTabEvent, wxNotifyEvent)

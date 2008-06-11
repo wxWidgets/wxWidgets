@@ -18,7 +18,7 @@
     #include "wx/gdicmn.h"
 #endif
 
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
 // ----------------------------------------------------------------------------
 // wxSystemSettingsNative

@@ -42,7 +42,7 @@
 #import <Foundation/Foundation.h>
 #import <AppKit/AppKit.h>
 
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 
 @interface wxMacFontPanelAccView : NSView
 {
