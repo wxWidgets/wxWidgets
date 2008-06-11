@@ -458,7 +458,7 @@ void wxDatePickerCtrlGeneric::OnText(wxCommandEvent &ev)
     // We'll create an additional event if the date is valid.
     // If the date isn't valid, the user's probably in the middle of typing
     wxDateTime dt;
-    if ( !m_popup->ParseDateTime(m_combo->GetValue(), &dt) )
+    if ( !m_popup || !m_popup->ParseDateTime(m_combo->GetValue(), &dt) )
         return;
 
     m_popup->SendDateEvent(dt);
