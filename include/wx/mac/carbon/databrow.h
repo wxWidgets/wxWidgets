@@ -14,43 +14,6 @@
 
 #include "wx/defs.h"
 
-#ifdef __DARWIN__
-#    include <Carbon/Carbon.h>
-#else
-#    include <Debugging.h>
-#    include <Appearance.h>
-#    include <Controls.h>
-#    include <ControlDefinitions.h>
-#    include <LowMem.h>
-#    include <Gestalt.h>
-#    include <CoreServices.h>
-#endif
-
-#if UNIVERSAL_INTERFACES_VERSION < 0x0342
-    #error "please update to Apple's latest universal headers from http://developer.apple.com/sdk/"
-#endif
-
-#ifndef MAC_OS_X_VERSION_10_3
-    #define MAC_OS_X_VERSION_10_3 1030
-#endif
-
-#ifndef MAC_OS_X_VERSION_10_4
-    #define MAC_OS_X_VERSION_10_4 1040
-#endif
-
-#ifndef MAC_OS_X_VERSION_10_5
-    #define MAC_OS_X_VERSION_10_5 1050
-#endif
-
-#ifdef __WXMAC_CARBON__
-#  include "wx/mac/corefoundation/cfstring.h"
-#endif
-
-#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
-typedef UInt32 URefCon;
-typedef SInt32 SRefCon;
-#endif
-
 #if wxUSE_GUI
 
 #include "wx/mac/private.h"
