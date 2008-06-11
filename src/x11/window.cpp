@@ -1206,7 +1206,7 @@ void wxWindowX11::SendEraseEvents()
     if (m_clearRegion.IsEmpty()) return;
 
     wxClientDC dc( (wxWindow*)this );
-    dc.SetClippingRegion( m_clearRegion );
+    dc.SetDeviceClippingRegion( m_clearRegion );
 
     wxEraseEvent erase_event( GetId(), &dc );
     erase_event.SetEventObject( this );
