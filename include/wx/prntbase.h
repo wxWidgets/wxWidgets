@@ -338,6 +338,8 @@ public:
                     const wxString& name = wxT("canvas"));
     virtual ~wxPreviewCanvas();
 
+    void SetPreview(wxPrintPreviewBase *preview) { m_printPreview = preview; }
+
     void OnPaint(wxPaintEvent& event);
     void OnChar(wxKeyEvent &event);
     // Responds to colour changes
@@ -347,6 +349,7 @@ private:
 #if wxUSE_MOUSEWHEEL
     void OnMouseWheel(wxMouseEvent& event);
 #endif // wxUSE_MOUSEWHEEL
+    void OnIdle(wxIdleEvent& event);
 
     wxPrintPreviewBase* m_printPreview;
 
@@ -519,6 +522,10 @@ public:
     // The preview canvas should call this from OnPaint
     virtual bool PaintPage(wxPreviewCanvas *canvas, wxDC& dc);
 
+    // Updates rendered page by calling RenderPage() if needed, returns true
+    // if there was some change. Preview canvas should call it at idle time
+    virtual bool UpdatePageRendering();
+
     // This draws a blank page onto the preview canvas
     virtual bool DrawBlankPage(wxPreviewCanvas *canvas, wxDC& dc);
 
@@ -608,6 +615,7 @@ public:
     virtual wxFrame *GetFrame() const;
     virtual wxPreviewCanvas *GetCanvas() const;
     virtual bool PaintPage(wxPreviewCanvas *canvas, wxDC& dc);
+    virtual bool UpdatePageRendering();
     virtual bool DrawBlankPage(wxPreviewCanvas *canvas, wxDC& dc);
     virtual void AdjustScrollbars(wxPreviewCanvas *canvas);
     virtual bool RenderPage(int pageNum);

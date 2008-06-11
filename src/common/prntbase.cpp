@@ -808,6 +808,7 @@ IMPLEMENT_CLASS(wxPreviewCanvas, wxWindow)
 BEGIN_EVENT_TABLE(wxPreviewCanvas, wxScrolledWindow)
     EVT_PAINT(wxPreviewCanvas::OnPaint)
     EVT_CHAR(wxPreviewCanvas::OnChar)
+    EVT_IDLE(wxPreviewCanvas::OnIdle)
     EVT_SYS_COLOUR_CHANGED(wxPreviewCanvas::OnSysColourChanged)
 #if wxUSE_MOUSEWHEEL
     EVT_MOUSEWHEEL(wxPreviewCanvas::OnMouseWheel)
@@ -857,6 +858,16 @@ void wxPreviewCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
     {
         m_printPreview->PaintPage(this, dc);
     }
+}
+
+void wxPreviewCanvas::OnIdle(wxIdleEvent& event)
+{
+    if ( m_printPreview )
+    {
+        if ( m_printPreview->UpdatePageRendering() )
+            Refresh();
+    }
+    event.Skip();
 }
 
 // Responds to colour changes, and passes event on to children.
@@ -1272,7 +1283,9 @@ void wxPreviewFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
         m_printPreview->SetCanvas(NULL);
         m_printPreview->SetFrame(NULL);
     }
-    delete m_printPreview;
+
+    m_previewCanvas->SetPreview(NULL);
+    wxDELETE(m_printPreview);
 
     Destroy();
 }
@@ -1396,8 +1409,6 @@ bool wxPrintPreviewBase::SetCurrentPage(int pageNum)
     {
         AdjustScrollbars(m_previewCanvas);
 
-        if (!RenderPage(pageNum))
-            return false;
         m_previewCanvas->Refresh();
         m_previewCanvas->SetFocus();
     }
@@ -1454,13 +1465,21 @@ void wxPrintPreviewBase::CalcRects(wxPreviewCanvas *canvas, wxRect& pageRect, wx
 }
 
 
+bool wxPrintPreviewBase::UpdatePageRendering()
+{
+    if ( m_previewBitmap )
+        return false;
+
+    if ( !RenderPage(m_currentPage) )
+        return false;
+
+    return true;
+}
+
 bool wxPrintPreviewBase::PaintPage(wxPreviewCanvas *canvas, wxDC& dc)
 {
     DrawBlankPage(canvas, dc);
 
-    if (!m_previewBitmap)
-        if (!RenderPage(m_currentPage))
-            return false;
     if (!m_previewBitmap)
         return false;
     if (!canvas)
@@ -1616,7 +1635,6 @@ void wxPrintPreviewBase::SetZoom(int percent)
     if (m_previewCanvas)
     {
         AdjustScrollbars(m_previewCanvas);
-        RenderPage(m_currentPage);
         ((wxScrolledWindow *) m_previewCanvas)->Scroll(0, 0);
         m_previewCanvas->ClearBackground();
         m_previewCanvas->Refresh();
@@ -1722,6 +1740,11 @@ wxPreviewCanvas *wxPrintPreview::GetCanvas() const
 bool wxPrintPreview::PaintPage(wxPreviewCanvas *canvas, wxDC& dc)
 {
     return m_pimpl->PaintPage( canvas, dc );
+}
+
+bool wxPrintPreview::UpdatePageRendering()
+{
+    return m_pimpl->UpdatePageRendering();
 }
 
 bool wxPrintPreview::DrawBlankPage(wxPreviewCanvas *canvas, wxDC& dc)
