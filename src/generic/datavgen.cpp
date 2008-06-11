@@ -168,6 +168,7 @@ protected:
 
     int          m_scrollOffsetX;
     int          m_buttonHeight;
+    bool         m_vetoColumnDrag;
     bool         m_delayedUpdate;
     wxImageList *m_imageList;
 
@@ -1327,6 +1328,7 @@ bool wxDataViewHeaderWindowMSW::Create( wxDataViewCtrl *parent, wxWindowID id,
 
     m_scrollOffsetX = 0;
     m_delayedUpdate = false;
+    m_vetoColumnDrag = false;
     m_buttonHeight = wxRendererNative::Get().GetHeaderButtonHeight( this );
 
     int x = pos.x == wxDefaultCoord ? 0 : pos.x,
@@ -1506,6 +1508,13 @@ bool wxDataViewHeaderWindowMSW::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARA
     NMHEADER *nmHDR = (NMHEADER *)nmhdr;
     switch ( nmhdr->code )
     {
+        case NM_RELEASEDCAPTURE:
+            {
+                // user has released the mouse
+                m_vetoColumnDrag = false;
+            }
+            break;
+
         case HDN_BEGINTRACK:
             // user has started to resize a column:
             // do we need to veto it?
@@ -1517,11 +1526,21 @@ bool wxDataViewHeaderWindowMSW::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARA
             break;
 
         case HDN_BEGINDRAG:
-            // user has started to reorder a column
-            if ((nmHDR->iItem != -1) && (!GetColumn(nmHDR->iItem)->IsReorderable()))
+            // valid column
+            if (nmHDR->iItem != -1)
+            {
+                // user has started to reorder a valid column
+                if ((m_vetoColumnDrag == true) || (!GetColumn(nmHDR->iItem)->IsReorderable()))
+                {
+                    // veto it!
+                    *result = TRUE;
+                    m_vetoColumnDrag = true;				
+                }
+            }
+            else
             {
                 // veto it!
-                *result = TRUE;
+                m_vetoColumnDrag = true;			
             }
             break;
 
