@@ -751,47 +751,6 @@ wxMenuItem::~wxMenuItem()
    // don't delete menu items, the menus take care of that
 }
 
-// return the menu item text without any menu accels
-/* static */
-wxString wxMenuItemBase::GetLabelText(const wxString& text)
-{
-    // The argument to this function will now always be in wxWidgets standard label
-    // format, not GTK+ format, so we do what the other ports do.
-
-    return wxStripMenuCodes(text);
-
-#if 0
-    wxString label;
-
-    for ( const wxChar *pc = text.c_str(); *pc; pc++ )
-    {
-        if ( *pc == wxT('\t'))
-            break;
-
-        if ( *pc == wxT('_') )
-        {
-            // GTK 1.2 escapes "xxx_xxx" to "xxx__xxx"
-            pc++;
-            label += *pc;
-            continue;
-        }
-
-        if ( (*pc == wxT('&')) && (*(pc+1) != wxT('&')) )
-        {
-            // wxMSW escapes "&"
-            // "&" is doubled to indicate "&" instead of accelerator
-            continue;
-        }
-
-        label += *pc;
-    }
-
-    // wxPrintf( wxT("GetLabelText(): text %s label %s\n"), text.c_str(), label.c_str() );
-
-    return label;
-#endif
-}
-
 wxString wxMenuItem::GetItemLabel() const
 {
     wxString label = wxConvertFromGTKToWXLabel(m_text);

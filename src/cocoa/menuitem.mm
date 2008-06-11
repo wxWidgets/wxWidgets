@@ -101,12 +101,6 @@ wxMenuItem *wxMenuItemBase::New(wxMenu *parentMenu,
     return new wxMenuItem(parentMenu, itemid, name, help, kind, subMenu);
 }
 
-/* static */
-wxString wxMenuItemBase::GetLabelText(const wxString& text)
-{
-    return wxStripMenuCodes(text);
-}
-
 void wxMenuItemCocoa::CocoaSetKeyEquivalent()
 {
     wxAcceleratorEntry *accel = GetAccel();

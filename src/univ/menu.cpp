@@ -1519,12 +1519,6 @@ wxMenuItem *wxMenuItemBase::New(wxMenu *parentMenu,
     return new wxMenuItem(parentMenu, id, name, help, kind, subMenu);
 }
 
-/* static */
-wxString wxMenuItemBase::GetLabelText(const wxString& text)
-{
-    return wxStripMenuCodes(text);
-}
-
 // ----------------------------------------------------------------------------
 // wxMenuItem operations
 // ----------------------------------------------------------------------------

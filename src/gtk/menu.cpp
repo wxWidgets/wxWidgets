@@ -625,17 +625,6 @@ wxMenuItem::~wxMenuItem()
    // don't delete menu items, the menus take care of that
 }
 
-// return the menu item text without any menu accels
-/* static */
-
-wxString wxMenuItemBase::GetLabelText(const wxString& text)
-{
-    // The argument to this function will now always be in wxWidgets standard label
-    // format, not GTK+ format, so we do what the other ports do.
-
-    return wxStripMenuCodes(text);
-}
-
 void wxMenuItem::SetItemLabel( const wxString& str )
 {
 #if wxUSE_ACCEL

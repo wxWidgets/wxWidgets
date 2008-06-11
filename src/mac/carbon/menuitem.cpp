@@ -278,12 +278,6 @@ void wxMenuItem::SetRadioGroupEnd(int end)
 // wxMenuItemBase
 // ----------------------------------------------------------------------------
 
-/* static */
-wxString wxMenuItemBase::GetLabelText(const wxString& text)
-{
-    return wxStripMenuCodes(text);
-}
-
 wxMenuItem *wxMenuItemBase::New(wxMenu *parentMenu,
                                 int id,
                                 const wxString& name,

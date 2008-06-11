@@ -213,12 +213,6 @@ bool wxMenuItem::IsChecked() const
     return (flag & MF_CHECKED) != 0;
 }
 
-/* static */
-wxString wxMenuItemBase::GetLabelText(const wxString& text)
-{
-    return wxStripMenuCodes(text);
-}
-
 // radio group stuff
 // -----------------
 
