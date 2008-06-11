@@ -22,7 +22,7 @@
 
 #include "wx/mac/corefoundation/cfstring.h"
 
-#include <CoreServices/CoreServices.h>
+#include <CoreFoundation/CoreFoundation.h>
 
 void wxMacConvertNewlines13To10( char * data )
 {
@@ -59,7 +59,7 @@ void wxMacConvertNewlines10To13( wxString * data )
 
 wxUint32 wxMacGetSystemEncFromFontEnc(wxFontEncoding encoding)
 {
-    TextEncodingBase enc = 0 ;
+    CFStringEncoding enc = 0 ;
     if ( encoding == wxFONTENCODING_DEFAULT )
     {
 #if wxUSE_GUI
@@ -77,50 +77,50 @@ wxUint32 wxMacGetSystemEncFromFontEnc(wxFontEncoding encoding)
     switch( encoding)
     {
     case wxFONTENCODING_ISO8859_1 :
-        enc = kTextEncodingISOLatin1 ;
+        enc = kCFStringEncodingISOLatin1 ;
         break ;
     case wxFONTENCODING_ISO8859_2 :
-        enc = kTextEncodingISOLatin2;
+        enc = kCFStringEncodingISOLatin2;
         break ;
     case wxFONTENCODING_ISO8859_3 :
-        enc = kTextEncodingISOLatin3 ;
+        enc = kCFStringEncodingISOLatin3 ;
         break ;
     case wxFONTENCODING_ISO8859_4 :
-        enc = kTextEncodingISOLatin4;
+        enc = kCFStringEncodingISOLatin4;
         break ;
     case wxFONTENCODING_ISO8859_5 :
-        enc = kTextEncodingISOLatinCyrillic;
+        enc = kCFStringEncodingISOLatinCyrillic;
         break ;
     case wxFONTENCODING_ISO8859_6 :
-        enc = kTextEncodingISOLatinArabic;
+        enc = kCFStringEncodingISOLatinArabic;
         break ;
     case wxFONTENCODING_ISO8859_7 :
-        enc = kTextEncodingISOLatinGreek;
+        enc = kCFStringEncodingISOLatinGreek;
         break ;
     case wxFONTENCODING_ISO8859_8 :
-        enc = kTextEncodingISOLatinHebrew;
+        enc = kCFStringEncodingISOLatinHebrew;
         break ;
     case wxFONTENCODING_ISO8859_9 :
-        enc = kTextEncodingISOLatin5;
+        enc = kCFStringEncodingISOLatin5;
         break ;
     case wxFONTENCODING_ISO8859_10 :
-        enc = kTextEncodingISOLatin6;
+        enc = kCFStringEncodingISOLatin6;
         break ;
     case wxFONTENCODING_ISO8859_13 :
-        enc = kTextEncodingISOLatin7;
+        enc = kCFStringEncodingISOLatin7;
         break ;
     case wxFONTENCODING_ISO8859_14 :
-        enc = kTextEncodingISOLatin8;
+        enc = kCFStringEncodingISOLatin8;
         break ;
     case wxFONTENCODING_ISO8859_15 :
-        enc = kTextEncodingISOLatin9;
+        enc = kCFStringEncodingISOLatin9;
         break ;
 
     case wxFONTENCODING_KOI8 :
-        enc = kTextEncodingKOI8_R;
+        enc = kCFStringEncodingKOI8_R;
         break ;
     case wxFONTENCODING_ALTERNATIVE : // MS-DOS CP866
-        enc = kTextEncodingDOSRussian;
+        enc = kCFStringEncodingDOSRussian;
         break ;
 /*
     case wxFONTENCODING_BULGARIAN :
@@ -128,202 +128,203 @@ wxUint32 wxMacGetSystemEncFromFontEnc(wxFontEncoding encoding)
         break ;
 */
     case wxFONTENCODING_CP437 :
-        enc =kTextEncodingDOSLatinUS ;
+        enc =kCFStringEncodingDOSLatinUS ;
         break ;
     case wxFONTENCODING_CP850 :
-        enc = kTextEncodingDOSLatin1;
+        enc = kCFStringEncodingDOSLatin1;
         break ;
     case wxFONTENCODING_CP852 :
-        enc = kTextEncodingDOSLatin2;
+        enc = kCFStringEncodingDOSLatin2;
         break ;
     case wxFONTENCODING_CP855 :
-        enc = kTextEncodingDOSCyrillic;
+        enc = kCFStringEncodingDOSCyrillic;
         break ;
     case wxFONTENCODING_CP866 :
-        enc =kTextEncodingDOSRussian ;
+        enc =kCFStringEncodingDOSRussian ;
         break ;
     case wxFONTENCODING_CP874 :
-        enc = kTextEncodingDOSThai;
+        enc = kCFStringEncodingDOSThai;
         break ;
     case wxFONTENCODING_CP932 :
-        enc = kTextEncodingDOSJapanese;
+        enc = kCFStringEncodingDOSJapanese;
         break ;
     case wxFONTENCODING_CP936 :
-        enc = kTextEncodingDOSChineseSimplif ;
+        enc = kCFStringEncodingDOSChineseSimplif ;
         break ;
     case wxFONTENCODING_CP949 :
-        enc = kTextEncodingDOSKorean;
+        enc = kCFStringEncodingDOSKorean;
         break ;
     case wxFONTENCODING_CP950 :
-        enc = kTextEncodingDOSChineseTrad;
+        enc = kCFStringEncodingDOSChineseTrad;
         break ;
 
     case wxFONTENCODING_CP1250 :
-        enc = kTextEncodingWindowsLatin2;
+        enc = kCFStringEncodingWindowsLatin2;
         break ;
     case wxFONTENCODING_CP1251 :
-        enc =kTextEncodingWindowsCyrillic ;
+        enc =kCFStringEncodingWindowsCyrillic ;
         break ;
     case wxFONTENCODING_CP1252 :
-        enc =kTextEncodingWindowsLatin1 ;
+        enc =kCFStringEncodingWindowsLatin1 ;
         break ;
     case wxFONTENCODING_CP1253 :
-        enc = kTextEncodingWindowsGreek;
+        enc = kCFStringEncodingWindowsGreek;
         break ;
     case wxFONTENCODING_CP1254 :
-        enc = kTextEncodingWindowsLatin5;
+        enc = kCFStringEncodingWindowsLatin5;
         break ;
     case wxFONTENCODING_CP1255 :
-        enc =kTextEncodingWindowsHebrew ;
+        enc =kCFStringEncodingWindowsHebrew ;
         break ;
     case wxFONTENCODING_CP1256 :
-        enc =kTextEncodingWindowsArabic ;
+        enc =kCFStringEncodingWindowsArabic ;
         break ;
     case wxFONTENCODING_CP1257 :
-        enc = kTextEncodingWindowsBalticRim;
+        enc = kCFStringEncodingWindowsBalticRim;
         break ;
-
+#if 0
     case wxFONTENCODING_UTF7 :
-        enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicodeUTF7Format) ;
+        enc = CreateTextEncoding(kCFStringEncodingUnicodeDefault,0,kUnicodeUTF7Format) ;
+#endif
         break ;
     case wxFONTENCODING_UTF8 :
-        enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicodeUTF8Format) ;
+        enc = kCFStringEncodingUTF8;
         break ;
     case wxFONTENCODING_EUC_JP :
-        enc = kTextEncodingEUC_JP;
+        enc = kCFStringEncodingEUC_JP;
         break ;
     case wxFONTENCODING_UTF16BE :
-        enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode16BitFormat) ;
+        enc = kCFStringEncodingUTF16BE;
         break ;
     case wxFONTENCODING_UTF16LE :
-        enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode16BitFormat) ;
+        enc = kCFStringEncodingUTF16LE;
         break ;
     case wxFONTENCODING_UTF32BE :
-        enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode32BitFormat) ;
+        enc = kCFStringEncodingUTF32BE;
         break ;
     case wxFONTENCODING_UTF32LE :
-        enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode32BitFormat) ;
+        enc = kCFStringEncodingUTF32LE;
         break ;
 
     case wxFONTENCODING_MACROMAN :
-        enc = kTextEncodingMacRoman ;
+        enc = kCFStringEncodingMacRoman ;
         break ;
     case wxFONTENCODING_MACJAPANESE :
-        enc = kTextEncodingMacJapanese ;
+        enc = kCFStringEncodingMacJapanese ;
         break ;
     case wxFONTENCODING_MACCHINESETRAD :
-        enc = kTextEncodingMacChineseTrad ;
+        enc = kCFStringEncodingMacChineseTrad ;
         break ;
     case wxFONTENCODING_MACKOREAN :
-        enc = kTextEncodingMacKorean ;
+        enc = kCFStringEncodingMacKorean ;
         break ;
     case wxFONTENCODING_MACARABIC :
-        enc = kTextEncodingMacArabic ;
+        enc = kCFStringEncodingMacArabic ;
         break ;
     case wxFONTENCODING_MACHEBREW :
-        enc = kTextEncodingMacHebrew ;
+        enc = kCFStringEncodingMacHebrew ;
         break ;
     case wxFONTENCODING_MACGREEK :
-        enc = kTextEncodingMacGreek ;
+        enc = kCFStringEncodingMacGreek ;
         break ;
     case wxFONTENCODING_MACCYRILLIC :
-        enc = kTextEncodingMacCyrillic ;
+        enc = kCFStringEncodingMacCyrillic ;
         break ;
     case wxFONTENCODING_MACDEVANAGARI :
-        enc = kTextEncodingMacDevanagari ;
+        enc = kCFStringEncodingMacDevanagari ;
         break ;
     case wxFONTENCODING_MACGURMUKHI :
-        enc = kTextEncodingMacGurmukhi ;
+        enc = kCFStringEncodingMacGurmukhi ;
         break ;
     case wxFONTENCODING_MACGUJARATI :
-        enc = kTextEncodingMacGujarati ;
+        enc = kCFStringEncodingMacGujarati ;
         break ;
     case wxFONTENCODING_MACORIYA :
-        enc = kTextEncodingMacOriya ;
+        enc = kCFStringEncodingMacOriya ;
         break ;
     case wxFONTENCODING_MACBENGALI :
-        enc = kTextEncodingMacBengali ;
+        enc = kCFStringEncodingMacBengali ;
         break ;
     case wxFONTENCODING_MACTAMIL :
-        enc = kTextEncodingMacTamil ;
+        enc = kCFStringEncodingMacTamil ;
         break ;
     case wxFONTENCODING_MACTELUGU :
-        enc = kTextEncodingMacTelugu ;
+        enc = kCFStringEncodingMacTelugu ;
         break ;
     case wxFONTENCODING_MACKANNADA :
-        enc = kTextEncodingMacKannada ;
+        enc = kCFStringEncodingMacKannada ;
         break ;
     case wxFONTENCODING_MACMALAJALAM :
-        enc = kTextEncodingMacMalayalam ;
+        enc = kCFStringEncodingMacMalayalam ;
         break ;
     case wxFONTENCODING_MACSINHALESE :
-        enc = kTextEncodingMacSinhalese ;
+        enc = kCFStringEncodingMacSinhalese ;
         break ;
     case wxFONTENCODING_MACBURMESE :
-        enc = kTextEncodingMacBurmese ;
+        enc = kCFStringEncodingMacBurmese ;
         break ;
     case wxFONTENCODING_MACKHMER :
-        enc = kTextEncodingMacKhmer ;
+        enc = kCFStringEncodingMacKhmer ;
         break ;
     case wxFONTENCODING_MACTHAI :
-        enc = kTextEncodingMacThai ;
+        enc = kCFStringEncodingMacThai ;
         break ;
     case wxFONTENCODING_MACLAOTIAN :
-        enc = kTextEncodingMacLaotian ;
+        enc = kCFStringEncodingMacLaotian ;
         break ;
     case wxFONTENCODING_MACGEORGIAN :
-        enc = kTextEncodingMacGeorgian ;
+        enc = kCFStringEncodingMacGeorgian ;
         break ;
     case wxFONTENCODING_MACARMENIAN :
-        enc = kTextEncodingMacArmenian ;
+        enc = kCFStringEncodingMacArmenian ;
         break ;
     case wxFONTENCODING_MACCHINESESIMP :
-        enc = kTextEncodingMacChineseSimp ;
+        enc = kCFStringEncodingMacChineseSimp ;
         break ;
     case wxFONTENCODING_MACTIBETAN :
-        enc = kTextEncodingMacTibetan ;
+        enc = kCFStringEncodingMacTibetan ;
         break ;
     case wxFONTENCODING_MACMONGOLIAN :
-        enc = kTextEncodingMacMongolian ;
+        enc = kCFStringEncodingMacMongolian ;
         break ;
     case wxFONTENCODING_MACETHIOPIC :
-        enc = kTextEncodingMacEthiopic ;
+        enc = kCFStringEncodingMacEthiopic ;
         break ;
     case wxFONTENCODING_MACCENTRALEUR :
-        enc = kTextEncodingMacCentralEurRoman ;
+        enc = kCFStringEncodingMacCentralEurRoman ;
         break ;
     case wxFONTENCODING_MACVIATNAMESE :
-        enc = kTextEncodingMacVietnamese ;
+        enc = kCFStringEncodingMacVietnamese ;
         break ;
     case wxFONTENCODING_MACARABICEXT :
-        enc = kTextEncodingMacExtArabic ;
+        enc = kCFStringEncodingMacExtArabic ;
         break ;
     case wxFONTENCODING_MACSYMBOL :
-        enc = kTextEncodingMacSymbol ;
+        enc = kCFStringEncodingMacSymbol ;
         break ;
     case wxFONTENCODING_MACDINGBATS :
-        enc = kTextEncodingMacDingbats ;
+        enc = kCFStringEncodingMacDingbats ;
         break ;
     case wxFONTENCODING_MACTURKISH :
-        enc = kTextEncodingMacTurkish ;
+        enc = kCFStringEncodingMacTurkish ;
         break ;
     case wxFONTENCODING_MACCROATIAN :
-        enc = kTextEncodingMacCroatian ;
+        enc = kCFStringEncodingMacCroatian ;
         break ;
     case wxFONTENCODING_MACICELANDIC :
-        enc = kTextEncodingMacIcelandic ;
+        enc = kCFStringEncodingMacIcelandic ;
         break ;
     case wxFONTENCODING_MACROMANIAN :
-        enc = kTextEncodingMacRomanian ;
+        enc = kCFStringEncodingMacRomanian ;
         break ;
     case wxFONTENCODING_MACCELTIC :
-        enc = kTextEncodingMacCeltic ;
+        enc = kCFStringEncodingMacCeltic ;
         break ;
     case wxFONTENCODING_MACGAELIC :
-        enc = kTextEncodingMacGaelic ;
+        enc = kCFStringEncodingMacGaelic ;
         break ;
     case wxFONTENCODING_MACKEYBOARD :
-        enc = kTextEncodingMacKeyboardGlyphs ;
+        enc = 41; /* kTextEncodingMacKeyboardGlyphs ; */
         break ;
     default : // to make gcc happy
         break ;
@@ -337,47 +338,47 @@ wxFontEncoding wxMacGetFontEncFromSystemEnc(wxUint32 encoding)
 
     switch( encoding)
     {
-    case kTextEncodingISOLatin1  :
+    case kCFStringEncodingISOLatin1  :
         enc = wxFONTENCODING_ISO8859_1 ;
         break ;
-    case kTextEncodingISOLatin2 :
+    case kCFStringEncodingISOLatin2 :
         enc = wxFONTENCODING_ISO8859_2;
         break ;
-    case kTextEncodingISOLatin3 :
+    case kCFStringEncodingISOLatin3 :
         enc = wxFONTENCODING_ISO8859_3 ;
         break ;
-    case kTextEncodingISOLatin4 :
+    case kCFStringEncodingISOLatin4 :
         enc = wxFONTENCODING_ISO8859_4;
         break ;
-    case kTextEncodingISOLatinCyrillic :
+    case kCFStringEncodingISOLatinCyrillic :
         enc = wxFONTENCODING_ISO8859_5;
         break ;
-    case kTextEncodingISOLatinArabic :
+    case kCFStringEncodingISOLatinArabic :
         enc = wxFONTENCODING_ISO8859_6;
         break ;
-    case kTextEncodingISOLatinGreek :
+    case kCFStringEncodingISOLatinGreek :
         enc = wxFONTENCODING_ISO8859_7;
         break ;
-    case kTextEncodingISOLatinHebrew :
+    case kCFStringEncodingISOLatinHebrew :
         enc = wxFONTENCODING_ISO8859_8;
         break ;
-    case kTextEncodingISOLatin5 :
+    case kCFStringEncodingISOLatin5 :
         enc = wxFONTENCODING_ISO8859_9;
         break ;
-    case kTextEncodingISOLatin6 :
+    case kCFStringEncodingISOLatin6 :
         enc = wxFONTENCODING_ISO8859_10;
         break ;
-    case kTextEncodingISOLatin7 :
+    case kCFStringEncodingISOLatin7 :
         enc = wxFONTENCODING_ISO8859_13;
         break ;
-    case kTextEncodingISOLatin8 :
+    case kCFStringEncodingISOLatin8 :
         enc = wxFONTENCODING_ISO8859_14;
         break ;
-    case kTextEncodingISOLatin9 :
+    case kCFStringEncodingISOLatin9 :
         enc =wxFONTENCODING_ISO8859_15 ;
         break ;
 
-    case kTextEncodingKOI8_R :
+    case kCFStringEncodingKOI8_R :
         enc = wxFONTENCODING_KOI8;
         break ;
 /*
@@ -385,202 +386,204 @@ wxFontEncoding wxMacGetFontEncFromSystemEnc(wxUint32 encoding)
         enc = wxFONTENCODING_BULGARIAN;
         break ;
 */
-    case kTextEncodingDOSLatinUS :
+    case kCFStringEncodingDOSLatinUS :
         enc = wxFONTENCODING_CP437;
         break ;
-    case kTextEncodingDOSLatin1 :
+    case kCFStringEncodingDOSLatin1 :
         enc = wxFONTENCODING_CP850;
         break ;
-    case kTextEncodingDOSLatin2 :
+    case kCFStringEncodingDOSLatin2 :
         enc =wxFONTENCODING_CP852 ;
         break ;
-    case kTextEncodingDOSCyrillic :
+    case kCFStringEncodingDOSCyrillic :
         enc = wxFONTENCODING_CP855;
         break ;
-    case kTextEncodingDOSRussian :
+    case kCFStringEncodingDOSRussian :
         enc = wxFONTENCODING_CP866;
         break ;
-    case kTextEncodingDOSThai :
+    case kCFStringEncodingDOSThai :
         enc =wxFONTENCODING_CP874 ;
         break ;
-    case kTextEncodingDOSJapanese :
+    case kCFStringEncodingDOSJapanese :
         enc = wxFONTENCODING_CP932;
         break ;
-    case kTextEncodingDOSChineseSimplif :
+    case kCFStringEncodingDOSChineseSimplif :
         enc = wxFONTENCODING_CP936;
         break ;
-    case kTextEncodingDOSKorean :
+    case kCFStringEncodingDOSKorean :
         enc = wxFONTENCODING_CP949;
         break ;
-    case kTextEncodingDOSChineseTrad :
+    case kCFStringEncodingDOSChineseTrad :
         enc = wxFONTENCODING_CP950;
         break ;
 
-    case kTextEncodingWindowsLatin2 :
+    case kCFStringEncodingWindowsLatin2 :
         enc = wxFONTENCODING_CP1250;
         break ;
-    case kTextEncodingWindowsCyrillic :
+    case kCFStringEncodingWindowsCyrillic :
         enc = wxFONTENCODING_CP1251;
         break ;
-    case kTextEncodingWindowsLatin1 :
+    case kCFStringEncodingWindowsLatin1 :
         enc = wxFONTENCODING_CP1252;
         break ;
-    case kTextEncodingWindowsGreek :
+    case kCFStringEncodingWindowsGreek :
         enc = wxFONTENCODING_CP1253;
         break ;
-    case kTextEncodingWindowsLatin5 :
+    case kCFStringEncodingWindowsLatin5 :
         enc = wxFONTENCODING_CP1254;
         break ;
-    case kTextEncodingWindowsHebrew :
+    case kCFStringEncodingWindowsHebrew :
         enc = wxFONTENCODING_CP1255;
         break ;
-    case kTextEncodingWindowsArabic :
+    case kCFStringEncodingWindowsArabic :
         enc = wxFONTENCODING_CP1256;
         break ;
-    case kTextEncodingWindowsBalticRim :
+    case kCFStringEncodingWindowsBalticRim :
         enc =wxFONTENCODING_CP1257 ;
         break ;
-    case kTextEncodingEUC_JP :
+    case kCFStringEncodingEUC_JP :
         enc = wxFONTENCODING_EUC_JP;
         break ;
+
+    case kCFStringEncodingUTF8 :
+        enc = wxFONTENCODING_UTF8;
+        break ;
+    case kCFStringEncodingUTF16BE :
+        enc = wxFONTENCODING_UTF16BE;
+        break ;
+    case kCFStringEncodingUTF16LE :
+        enc = wxFONTENCODING_UTF16LE;
+        break ;
+    case kCFStringEncodingUTF32BE :
+        enc = wxFONTENCODING_UTF32BE;
+        break ;
+    case kCFStringEncodingUTF32LE :
+        enc = wxFONTENCODING_UTF32LE;
+        break ;
+
 #if 0
     case wxFONTENCODING_UTF7 :
-        enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicodeUTF7Format) ;
-        break ;
-    case wxFONTENCODING_UTF8 :
-        enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicodeUTF8Format) ;
-        break ;
-    case wxFONTENCODING_UTF16BE :
-        enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode16BitFormat) ;
-        break ;
-    case wxFONTENCODING_UTF16LE :
-        enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode16BitFormat) ;
-        break ;
-    case wxFONTENCODING_UTF32BE :
-        enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode32BitFormat) ;
-        break ;
-    case wxFONTENCODING_UTF32LE :
-        enc = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode32BitFormat) ;
+        enc = CreateTextEncoding(kCFStringEncodingUnicodeDefault,0,kUnicodeUTF7Format) ;
         break ;
 #endif
-    case kTextEncodingMacRoman :
+    case kCFStringEncodingMacRoman :
         enc = wxFONTENCODING_MACROMAN ;
         break ;
-    case kTextEncodingMacJapanese :
+    case kCFStringEncodingMacJapanese :
         enc = wxFONTENCODING_MACJAPANESE ;
         break ;
-    case kTextEncodingMacChineseTrad :
+    case kCFStringEncodingMacChineseTrad :
         enc = wxFONTENCODING_MACCHINESETRAD ;
         break ;
-    case kTextEncodingMacKorean :
+    case kCFStringEncodingMacKorean :
         enc = wxFONTENCODING_MACKOREAN ;
         break ;
-    case kTextEncodingMacArabic :
+    case kCFStringEncodingMacArabic :
         enc =wxFONTENCODING_MACARABIC ;
         break ;
-    case kTextEncodingMacHebrew :
+    case kCFStringEncodingMacHebrew :
         enc = wxFONTENCODING_MACHEBREW ;
         break ;
-    case kTextEncodingMacGreek :
+    case kCFStringEncodingMacGreek :
         enc = wxFONTENCODING_MACGREEK ;
         break ;
-    case kTextEncodingMacCyrillic :
+    case kCFStringEncodingMacCyrillic :
         enc = wxFONTENCODING_MACCYRILLIC ;
         break ;
-    case kTextEncodingMacDevanagari :
+    case kCFStringEncodingMacDevanagari :
         enc = wxFONTENCODING_MACDEVANAGARI ;
         break ;
-    case kTextEncodingMacGurmukhi :
+    case kCFStringEncodingMacGurmukhi :
         enc = wxFONTENCODING_MACGURMUKHI ;
         break ;
-    case kTextEncodingMacGujarati :
+    case kCFStringEncodingMacGujarati :
         enc = wxFONTENCODING_MACGUJARATI ;
         break ;
-    case kTextEncodingMacOriya :
+    case kCFStringEncodingMacOriya :
         enc =wxFONTENCODING_MACORIYA ;
         break ;
-    case kTextEncodingMacBengali :
+    case kCFStringEncodingMacBengali :
         enc =wxFONTENCODING_MACBENGALI ;
         break ;
-    case kTextEncodingMacTamil :
+    case kCFStringEncodingMacTamil :
         enc = wxFONTENCODING_MACTAMIL ;
         break ;
-    case kTextEncodingMacTelugu :
+    case kCFStringEncodingMacTelugu :
         enc = wxFONTENCODING_MACTELUGU ;
         break ;
-    case kTextEncodingMacKannada :
+    case kCFStringEncodingMacKannada :
         enc = wxFONTENCODING_MACKANNADA ;
         break ;
-    case kTextEncodingMacMalayalam :
+    case kCFStringEncodingMacMalayalam :
         enc = wxFONTENCODING_MACMALAJALAM ;
         break ;
-    case kTextEncodingMacSinhalese :
+    case kCFStringEncodingMacSinhalese :
         enc = wxFONTENCODING_MACSINHALESE ;
         break ;
-    case kTextEncodingMacBurmese :
+    case kCFStringEncodingMacBurmese :
         enc = wxFONTENCODING_MACBURMESE ;
         break ;
-    case kTextEncodingMacKhmer :
+    case kCFStringEncodingMacKhmer :
         enc = wxFONTENCODING_MACKHMER ;
         break ;
-    case kTextEncodingMacThai :
+    case kCFStringEncodingMacThai :
         enc = wxFONTENCODING_MACTHAI ;
         break ;
-    case kTextEncodingMacLaotian :
+    case kCFStringEncodingMacLaotian :
         enc = wxFONTENCODING_MACLAOTIAN ;
         break ;
-    case kTextEncodingMacGeorgian :
+    case kCFStringEncodingMacGeorgian :
         enc = wxFONTENCODING_MACGEORGIAN ;
         break ;
-    case kTextEncodingMacArmenian :
+    case kCFStringEncodingMacArmenian :
         enc = wxFONTENCODING_MACARMENIAN ;
         break ;
-    case kTextEncodingMacChineseSimp :
+    case kCFStringEncodingMacChineseSimp :
         enc = wxFONTENCODING_MACCHINESESIMP ;
         break ;
-    case kTextEncodingMacTibetan :
+    case kCFStringEncodingMacTibetan :
         enc = wxFONTENCODING_MACTIBETAN ;
         break ;
-    case kTextEncodingMacMongolian :
+    case kCFStringEncodingMacMongolian :
         enc = wxFONTENCODING_MACMONGOLIAN ;
         break ;
-    case kTextEncodingMacEthiopic :
+    case kCFStringEncodingMacEthiopic :
         enc = wxFONTENCODING_MACETHIOPIC ;
         break ;
-    case kTextEncodingMacCentralEurRoman:
+    case kCFStringEncodingMacCentralEurRoman:
         enc = wxFONTENCODING_MACCENTRALEUR  ;
         break ;
-    case kTextEncodingMacVietnamese:
+    case kCFStringEncodingMacVietnamese:
         enc = wxFONTENCODING_MACVIATNAMESE  ;
         break ;
-    case kTextEncodingMacExtArabic :
+    case kCFStringEncodingMacExtArabic :
         enc = wxFONTENCODING_MACARABICEXT ;
         break ;
-    case kTextEncodingMacSymbol :
+    case kCFStringEncodingMacSymbol :
         enc = wxFONTENCODING_MACSYMBOL ;
         break ;
-    case kTextEncodingMacDingbats :
+    case kCFStringEncodingMacDingbats :
         enc = wxFONTENCODING_MACDINGBATS ;
         break ;
-    case kTextEncodingMacTurkish :
+    case kCFStringEncodingMacTurkish :
         enc = wxFONTENCODING_MACTURKISH ;
         break ;
-    case kTextEncodingMacCroatian :
+    case kCFStringEncodingMacCroatian :
         enc = wxFONTENCODING_MACCROATIAN ;
         break ;
-    case kTextEncodingMacIcelandic :
+    case kCFStringEncodingMacIcelandic :
         enc = wxFONTENCODING_MACICELANDIC ;
         break ;
-    case kTextEncodingMacRomanian :
+    case kCFStringEncodingMacRomanian :
         enc = wxFONTENCODING_MACROMANIAN ;
         break ;
-    case kTextEncodingMacCeltic :
+    case kCFStringEncodingMacCeltic :
         enc = wxFONTENCODING_MACCELTIC ;
         break ;
-    case kTextEncodingMacGaelic :
+    case kCFStringEncodingMacGaelic :
         enc = wxFONTENCODING_MACGAELIC ;
         break ;
-    case kTextEncodingMacKeyboardGlyphs :
+    case 41 /* kTextEncodingMacKeyboardGlyphs */ :
         enc = wxFONTENCODING_MACKEYBOARD ;
         break ;
     } ;
@@ -718,7 +721,7 @@ wxMacUniCharBuffer::~wxMacUniCharBuffer()
     free( m_ubuf ) ;
 }
 
-UniCharArrayPtr wxMacUniCharBuffer::GetBuffer() 
+UniCharPtr wxMacUniCharBuffer::GetBuffer() 
 {
     return m_ubuf ;
 }
