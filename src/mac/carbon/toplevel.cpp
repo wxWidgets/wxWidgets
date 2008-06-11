@@ -38,7 +38,6 @@
 #endif //WX_PRECOMP
 
 #include "wx/mac/uma.h"
-#include "wx/mac/aga.h"
 #include "wx/tooltip.h"
 #include "wx/dnd.h"
 
