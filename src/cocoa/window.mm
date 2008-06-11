@@ -26,7 +26,7 @@
 #include "wx/cocoa/string.h"
 #include "wx/cocoa/trackingrectmanager.h"
 #include "wx/cocoa/private/scrollview.h"
-#include "wx/mac/corefoundation/cfref.h"
+#include "wx/osx/core/cfref.h"
 #include "wx/cocoa/ObjcRef.h"
 
 #import <Foundation/NSArray.h>
