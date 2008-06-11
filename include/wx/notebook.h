@@ -167,7 +167,7 @@ typedef void (wxEvtHandler::*wxNotebookEventFunction)(wxNotebookEvent&);
 #elif defined(__WXGTK__)
     #include  "wx/gtk1/notebook.h"
 #elif defined(__WXMAC__)
-    #include  "wx/mac/notebook.h"
+    #include  "wx/osx/notebook.h"
 #elif defined(__WXCOCOA__)
     #include  "wx/cocoa/notebook.h"
 #elif defined(__WXPM__)

@@ -25,9 +25,9 @@
 #elif defined(__WXX11__)
 #include "wx/unix/joystick.h"
 #elif defined(__DARWIN__)
-#include "wx/mac/corefoundation/joystick.h"
+#include "wx/osx/core/joystick.h"
 #elif defined(__WXMAC__)
-#include "wx/mac/joystick.h"
+#include "wx/osx/joystick.h"
 #elif defined(__WXPM__)
 #include "wx/os2/joystick.h"
 #endif

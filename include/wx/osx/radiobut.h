@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/radiobut.h"
+#include "wx/osx/classic/radiobut.h"
 #else
-#include "wx/mac/carbon/radiobut.h"
+#include "wx/osx/carbon/radiobut.h"
 #endif

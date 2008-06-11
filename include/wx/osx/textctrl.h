@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/textctrl.h"
+#include "wx/osx/classic/textctrl.h"
 #else
-#include "wx/mac/carbon/textctrl.h"
+#include "wx/osx/carbon/textctrl.h"
 #endif

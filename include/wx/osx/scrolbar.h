@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/scrolbar.h"
+#include "wx/osx/classic/scrolbar.h"
 #else
-#include "wx/mac/carbon/scrolbar.h"
+#include "wx/osx/carbon/scrolbar.h"
 #endif

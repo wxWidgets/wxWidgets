@@ -18,8 +18,8 @@
 
 #include <CoreFoundation/CoreFoundation.h>
 
-#include "wx/mac/corefoundation/cfstring.h"
-#include "wx/mac/corefoundation/cfdataref.h"
+#include "wx/osx/core/cfstring.h"
+#include "wx/osx/core/cfdataref.h"
 
 #if wxUSE_GUI
 

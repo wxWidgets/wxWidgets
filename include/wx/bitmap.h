@@ -243,7 +243,7 @@ protected:
 #elif defined(__WXDFB__)
     #include "wx/dfb/bitmap.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/bitmap.h"
+    #include "wx/osx/bitmap.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/bitmap.h"
 #elif defined(__WXPM__)

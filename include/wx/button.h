@@ -95,7 +95,7 @@ protected:
 #elif defined(__WXGTK__)
     #include "wx/gtk1/button.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/button.h"
+    #include "wx/osx/button.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/button.h"
 #elif defined(__WXPM__)

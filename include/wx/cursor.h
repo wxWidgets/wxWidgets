@@ -31,7 +31,7 @@
 #elif defined(__WXDFB__)
     #include "wx/dfb/cursor.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/cursor.h"
+    #include "wx/osx/cursor.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/cursor.h"
 #elif defined(__WXPM__)

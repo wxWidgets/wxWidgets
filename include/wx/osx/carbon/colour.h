@@ -15,7 +15,7 @@
 #include "wx/object.h"
 #include "wx/string.h"
 
-#include "wx/mac/corefoundation/cfref.h"
+#include "wx/osx/core/cfref.h"
 
 struct RGBColor;
 

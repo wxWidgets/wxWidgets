@@ -13,6 +13,6 @@
 #ifdef __WXMAC_CLASSIC__
     #error "wxEventLoop is not implemented for Classic build."
 #else
-    #include "wx/mac/carbon/evtloop.h"
+    #include "wx/osx/carbon/evtloop.h"
 #endif
 

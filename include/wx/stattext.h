@@ -111,7 +111,7 @@ private:
 #elif defined(__WXGTK__)
     #include "wx/gtk1/stattext.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/stattext.h"
+    #include "wx/osx/stattext.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/stattext.h"
 #elif defined(__WXPM__)

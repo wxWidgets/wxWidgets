@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/joystick.h"
+#include "wx/osx/classic/joystick.h"
 #else
-#include "wx/mac/carbon/joystick.h"
+#include "wx/osx/carbon/joystick.h"
 #endif

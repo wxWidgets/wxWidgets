@@ -1,6 +1,6 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/colordlg.h"
+#include "wx/osx/classic/colordlg.h"
 #else
-#include "wx/mac/carbon/colordlg.h"
+#include "wx/osx/carbon/colordlg.h"
 #endif
 

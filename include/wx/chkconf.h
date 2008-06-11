@@ -1023,7 +1023,7 @@
 #elif defined(__WXGTK__)
 #  include "wx/gtk/chkconf.h"
 #elif defined(__WXMAC__)
-#  include "wx/mac/chkconf.h"
+#  include "wx/osx/chkconf.h"
 #elif defined(__OS2__)
 #  include "wx/os2/chkconf.h"
 #elif defined(__WXMGL__)

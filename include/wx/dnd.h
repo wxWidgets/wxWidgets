@@ -222,7 +222,7 @@ protected:
 #elif defined(__WXGTK__)
     #include "wx/gtk1/dnd.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/dnd.h"
+    #include "wx/osx/dnd.h"
 #elif defined(__WXPM__)
     #include "wx/os2/dnd.h"
 #endif

@@ -12,7 +12,7 @@
 #ifndef _WX_MAC_PRIVATE_MACTEXT_H_
 #define _WX_MAC_PRIVATE_MACTEXT_H_
 
-#include "wx/mac/private.h"
+#include "wx/osx/private.h"
 
 // common interface for all implementations
 class wxMacTextControl : public wxMacControl

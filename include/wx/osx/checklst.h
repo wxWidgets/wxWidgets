@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/checklst.h"
+#include "wx/osx/classic/checklst.h"
 #else
-#include "wx/mac/carbon/checklst.h"
+#include "wx/osx/carbon/checklst.h"
 #endif

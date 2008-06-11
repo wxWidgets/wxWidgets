@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/pen.h"
+#include "wx/osx/classic/pen.h"
 #else
-#include "wx/mac/carbon/pen.h"
+#include "wx/osx/carbon/pen.h"
 #endif

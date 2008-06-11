@@ -21,7 +21,7 @@
 #include "wx/module.h"
 #include "wx/dataobj.h"     // for wxDataFormat
 
-#include "wx/mac/corefoundation/cfref.h"
+#include "wx/osx/core/cfref.h"
 
 //-----------------------------------------------------------------------------
 // wxClipboard

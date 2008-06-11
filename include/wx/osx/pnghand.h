@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/pnghand.h"
+#include "wx/osx/classic/pnghand.h"
 #else
-#include "wx/mac/carbon/pnghand.h"
+#include "wx/osx/carbon/pnghand.h"
 #endif

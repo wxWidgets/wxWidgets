@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/treectl.h"
+#include "wx/osx/classic/treectl.h"
 #else
-#include "wx/mac/carbon/treectrl.h"
+#include "wx/osx/carbon/treectrl.h"
 #endif

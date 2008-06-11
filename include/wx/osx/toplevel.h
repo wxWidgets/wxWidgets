@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/toplevel.h"
+#include "wx/osx/classic/toplevel.h"
 #else
-#include "wx/mac/carbon/toplevel.h"
+#include "wx/osx/carbon/toplevel.h"
 #endif

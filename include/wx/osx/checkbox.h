@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/checkbox.h"
+#include "wx/osx/classic/checkbox.h"
 #else
-#include "wx/mac/carbon/checkbox.h"
+#include "wx/osx/carbon/checkbox.h"
 #endif

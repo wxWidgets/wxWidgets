@@ -163,7 +163,7 @@ protected:
     #define wxStatusBarMac wxStatusBar
 
     #include "wx/generic/statusbr.h"
-    #include "wx/mac/statusbr.h"
+    #include "wx/osx/statusbr.h"
 #else
     #define wxStatusBarGeneric wxStatusBar
 

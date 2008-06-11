@@ -144,7 +144,7 @@ private:
 #elif defined(__WXGTK__)
     #include "wx/gtk1/checkbox.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/checkbox.h"
+    #include "wx/osx/checkbox.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/checkbox.h"
 #elif defined(__WXPM__)

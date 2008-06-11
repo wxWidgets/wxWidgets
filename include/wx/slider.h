@@ -136,7 +136,7 @@ private:
 #elif defined(__WXGTK__)
     #include "wx/gtk1/slider.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/slider.h"
+    #include "wx/osx/slider.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/slider.h"
 #elif defined(__WXPM__)

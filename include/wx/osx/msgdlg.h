@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/msgdlg.h"
+#include "wx/osx/classic/msgdlg.h"
 #else
-#include "wx/mac/carbon/msgdlg.h"
+#include "wx/osx/carbon/msgdlg.h"
 #endif

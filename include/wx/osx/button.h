@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/button.h"
+#include "wx/osx/classic/button.h"
 #else
-#include "wx/mac/carbon/button.h"
+#include "wx/osx/carbon/button.h"
 #endif

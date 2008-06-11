@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/clipbrd.h"
+#include "wx/osx/classic/clipbrd.h"
 #else
-#include "wx/mac/carbon/clipbrd.h"
+#include "wx/osx/carbon/clipbrd.h"
 #endif

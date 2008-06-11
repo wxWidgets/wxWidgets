@@ -16,7 +16,7 @@
 
 #if wxUSE_GUI
 
-#include "wx/mac/private.h"
+#include "wx/osx/private.h"
 
 WX_DEFINE_ARRAY_SIZE_T(size_t,wxArrayDataBrowserItemID);
 

@@ -54,7 +54,7 @@
 #elif defined(__WXPM__)
     #include "wx/os2/metafile.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/metafile.h"
+    #include "wx/osx/metafile.h"
 #endif
 
 #endif // wxUSE_METAFILE

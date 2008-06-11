@@ -228,7 +228,7 @@ protected:
 #elif defined(__WXDFB__)
     #include "wx/dfb/region.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/region.h"
+    #include "wx/osx/region.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/region.h"
 #elif defined(__WXPM__)

@@ -60,7 +60,7 @@ protected:
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/sound.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/sound.h"
+    #include "wx/osx/sound.h"
 #elif defined(__WXPM__)
     #include "wx/os2/sound.h"
 #elif defined(__UNIX__)

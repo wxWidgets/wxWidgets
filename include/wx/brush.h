@@ -77,7 +77,7 @@ public:
 #elif defined(__WXDFB__)
     #include "wx/dfb/brush.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/brush.h"
+    #include "wx/osx/brush.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/brush.h"
 #elif defined(__WXPM__)

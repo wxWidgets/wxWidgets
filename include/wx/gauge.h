@@ -114,7 +114,7 @@ protected:
 #elif defined(__WXGTK__)
     #include "wx/gtk1/gauge.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/gauge.h"
+    #include "wx/osx/gauge.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/gauge.h"
 #elif defined(__WXPM__)

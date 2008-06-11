@@ -32,7 +32,7 @@
 #elif defined(__WXDFB__)
   #include "wx/generic/icon.h"
 #elif defined(__WXMAC__)
-  #include "wx/mac/icon.h"
+  #include "wx/osx/icon.h"
 #elif defined(__WXCOCOA__)
   #include "wx/cocoa/icon.h"
 #elif defined(__WXPM__)

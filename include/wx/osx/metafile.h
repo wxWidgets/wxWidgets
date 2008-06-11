@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/metafile.h"
+#include "wx/osx/classic/metafile.h"
 #else
-#include "wx/mac/carbon/metafile.h"
+#include "wx/osx/carbon/metafile.h"
 #endif

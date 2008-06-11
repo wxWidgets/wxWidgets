@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/statbmp.h"
+#include "wx/osx/classic/statbmp.h"
 #else
-#include "wx/mac/carbon/statbmp.h"
+#include "wx/osx/carbon/statbmp.h"
 #endif

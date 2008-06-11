@@ -314,7 +314,7 @@ public:
     #elif defined(__WXGTK__)
         #include "wx/gtk1/dialog.h"
     #elif defined(__WXMAC__)
-        #include "wx/mac/dialog.h"
+        #include "wx/osx/dialog.h"
     #elif defined(__WXCOCOA__)
         #include "wx/cocoa/dialog.h"
     #elif defined(__WXPM__)

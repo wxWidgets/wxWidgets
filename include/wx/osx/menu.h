@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/menu.h"
+#include "wx/osx/classic/menu.h"
 #else
-#include "wx/mac/carbon/menu.h"
+#include "wx/osx/carbon/menu.h"
 #endif

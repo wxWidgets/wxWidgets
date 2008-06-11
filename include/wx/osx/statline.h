@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/statline.h"
+#include "wx/osx/classic/statline.h"
 #else
-#include "wx/mac/carbon/statline.h"
+#include "wx/osx/carbon/statline.h"
 #endif

@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/tglbtn.h"
+#include "wx/osx/classic/tglbtn.h"
 #else
-#include "wx/mac/carbon/tglbtn.h"
+#include "wx/osx/carbon/tglbtn.h"
 #endif

@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/dcprint.h"
+#include "wx/osx/classic/dcprint.h"
 #else
-#include "wx/mac/carbon/dcprint.h"
+#include "wx/osx/carbon/dcprint.h"
 #endif

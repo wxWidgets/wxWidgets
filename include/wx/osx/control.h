@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/control.h"
+#include "wx/osx/classic/control.h"
 #else
-#include "wx/mac/carbon/control.h"
+#include "wx/osx/carbon/control.h"
 #endif

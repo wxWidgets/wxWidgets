@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/dcmemory.h"
+#include "wx/osx/classic/dcmemory.h"
 #else
-#include "wx/mac/carbon/dcmemory.h"
+#include "wx/osx/carbon/dcmemory.h"
 #endif

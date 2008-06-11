@@ -16,7 +16,7 @@
 #ifndef _WX_MAC_COREFOUNDATION_CFDATAREF_H__
 #define _WX_MAC_COREFOUNDATION_CFDATAREF_H__
 
-#include "wx/mac/corefoundation/cfref.h"
+#include "wx/osx/core/cfref.h"
 
 #include <CoreFoundation/CFData.h>
 

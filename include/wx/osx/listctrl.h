@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/listctrl.h"
+#include "wx/osx/classic/listctrl.h"
 #else
-#include "wx/mac/carbon/listctrl.h"
+#include "wx/osx/carbon/listctrl.h"
 #endif

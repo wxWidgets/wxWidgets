@@ -22,7 +22,7 @@ extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_TAB_SEL_CHANGING;
 #if defined(__WXMSW__)
     #include "wx/msw/tabctrl.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/tabctrl.h"
+    #include "wx/osx/tabctrl.h"
 #elif defined(__WXPM__)
     #include "wx/os2/tabctrl.h"
 #endif

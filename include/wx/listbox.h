@@ -127,7 +127,7 @@ private:
 #elif defined(__WXGTK__)
   #include "wx/gtk1/listbox.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/listbox.h"
+    #include "wx/osx/listbox.h"
 #elif defined(__WXPM__)
     #include "wx/os2/listbox.h"
 #elif defined(__WXCOCOA__)

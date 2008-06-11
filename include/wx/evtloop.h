@@ -116,7 +116,7 @@ protected:
 #elif defined(__WXMSW__)
     #include "wx/msw/evtloop.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/evtloop.h"
+    #include "wx/osx/evtloop.h"
 #elif defined(__WXDFB__)
     #include "wx/dfb/evtloop.h"
 #else // other platform

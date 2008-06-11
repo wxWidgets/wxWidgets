@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/region.h"
+#include "wx/osx/classic/region.h"
 #else
-#include "wx/mac/carbon/region.h"
+#include "wx/osx/carbon/region.h"
 #endif

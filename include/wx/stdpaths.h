@@ -169,7 +169,7 @@ protected:
         #define wxHAS_NATIVE_STDPATHS
     // We want CoreFoundation paths on both CarbonLib and Darwin (for all ports)
     #elif defined(__WXMAC__) || defined(__DARWIN__)
-        #include "wx/mac/corefoundation/stdpaths.h"
+        #include "wx/osx/core/stdpaths.h"
         #define wxHAS_NATIVE_STDPATHS
     #elif defined(__OS2__)
         #include "wx/os2/stdpaths.h"

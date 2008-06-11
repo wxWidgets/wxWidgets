@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/cursor.h"
+#include "wx/osx/classic/cursor.h"
 #else
-#include "wx/mac/carbon/cursor.h"
+#include "wx/osx/carbon/cursor.h"
 #endif

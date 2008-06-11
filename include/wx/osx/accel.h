@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/accel.h"
+#include "wx/osx/classic/accel.h"
 #else
-#include "wx/mac/carbon/accel.h"
+#include "wx/osx/carbon/accel.h"
 #endif

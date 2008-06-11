@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/minifram.h"
+#include "wx/osx/classic/minifram.h"
 #else
-#include "wx/mac/carbon/minifram.h"
+#include "wx/osx/carbon/minifram.h"
 #endif

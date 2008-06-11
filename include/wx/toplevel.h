@@ -328,7 +328,7 @@ protected:
     #include "wx/dfb/toplevel.h"
     #define wxTopLevelWindowNative wxTopLevelWindowDFB
 #elif defined(__WXMAC__)
-    #include "wx/mac/toplevel.h"
+    #include "wx/osx/toplevel.h"
     #define wxTopLevelWindowNative wxTopLevelWindowMac
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/toplevel.h"

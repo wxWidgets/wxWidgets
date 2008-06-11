@@ -49,7 +49,7 @@ enum
 #elif defined(__WXMSW__)
     #include "wx/msw/imaglist.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/imaglist.h"
+    #include "wx/osx/imaglist.h"
 #elif defined(__WXPALMOS__)
     #include "wx/palmos/imaglist.h"
 #endif

@@ -17,7 +17,7 @@
 
 #include "wx/dlimpexp.h"
 #include "wx/fontenc.h"
-#include "wx/mac/corefoundation/cfref.h"
+#include "wx/osx/core/cfref.h"
 
 class WXDLLIMPEXP_FWD_BASE wxString;
 

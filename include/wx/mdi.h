@@ -27,7 +27,7 @@
 #elif defined(__WXGTK__)
     #include "wx/gtk1/mdi.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/mdi.h"
+    #include "wx/osx/mdi.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/mdi.h"
 #elif defined(__WXPM__)

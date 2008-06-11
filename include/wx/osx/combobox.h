@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/combobox.h"
+#include "wx/osx/classic/combobox.h"
 #else
-#include "wx/mac/carbon/combobox.h"
+#include "wx/osx/carbon/combobox.h"
 #endif

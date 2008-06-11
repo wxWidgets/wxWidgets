@@ -157,7 +157,7 @@ private:
 #elif defined(__WXGTK__)
     #include "wx/gtk1/accel.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/accel.h"
+    #include "wx/osx/accel.h"
 #elif defined(__WXCOCOA__)
     #include "wx/generic/accel.h"
 #elif defined(__WXPM__)

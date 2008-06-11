@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/mdi.h"
+#include "wx/osx/classic/mdi.h"
 #else
-#include "wx/mac/carbon/mdi.h"
+#include "wx/osx/carbon/mdi.h"
 #endif

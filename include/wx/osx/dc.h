@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/dc.h"
+#include "wx/osx/classic/dc.h"
 #else
-#include "wx/mac/carbon/dc.h"
+#include "wx/osx/carbon/dc.h"
 #endif

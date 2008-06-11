@@ -131,7 +131,7 @@ protected:
 #elif defined(__WXGTK__)
     #include "wx/gtk1/control.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/control.h"
+    #include "wx/osx/control.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/control.h"
 #elif defined(__WXPM__)

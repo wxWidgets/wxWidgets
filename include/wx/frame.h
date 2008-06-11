@@ -263,7 +263,7 @@ protected:
     #elif defined(__WXMOTIF__)
         #include "wx/motif/frame.h"
     #elif defined(__WXMAC__)
-        #include "wx/mac/frame.h"
+        #include "wx/osx/frame.h"
     #elif defined(__WXCOCOA__)
         #include "wx/cocoa/frame.h"
     #elif defined(__WXPM__)

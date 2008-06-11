@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/notebook.h"
+#include "wx/osx/classic/notebook.h"
 #else
-#include "wx/mac/carbon/notebook.h"
+#include "wx/osx/carbon/notebook.h"
 #endif

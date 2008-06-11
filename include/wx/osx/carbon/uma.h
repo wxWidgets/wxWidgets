@@ -12,7 +12,7 @@
 #ifndef H_UMA
 #define H_UMA
 
-#include "wx/mac/private.h"
+#include "wx/osx/private.h"
 
 void UMAInitToolbox( UInt16 inMoreMastersCalls, bool isEmbedded) ;
 long UMAGetSystemVersion() ;

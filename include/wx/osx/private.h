@@ -1,7 +1,7 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/private.h"
+#include "wx/osx/classic/private.h"
 #elif defined(__WXOSX_IPHONE__)
-#include "wx/mac/corefoundation/private.h"
+#include "wx/osx/core/private.h"
 #else
-#include "wx/mac/carbon/private.h"
+#include "wx/osx/carbon/private.h"
 #endif

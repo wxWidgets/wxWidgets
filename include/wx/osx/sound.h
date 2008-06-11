@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/sound.h"
+#include "wx/osx/classic/sound.h"
 #else
-#include "wx/mac/carbon/sound.h"
+#include "wx/osx/carbon/sound.h"
 #endif

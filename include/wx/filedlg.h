@@ -218,7 +218,7 @@ wxSaveFileSelector(const wxString& what,
 #elif defined(__WXGTK__)
     #include "wx/gtk1/filedlg.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/filedlg.h"
+    #include "wx/osx/filedlg.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/filedlg.h"
 #elif defined(__WXPM__)

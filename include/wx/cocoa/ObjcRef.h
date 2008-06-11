@@ -13,7 +13,7 @@
 #define _WX_COCOA_OBJCREF_H__
 
 // Reuse wxCFRef-related code (e.g. wxCFRetain/wxCFRelease)
-#include "wx/mac/corefoundation/cfref.h"
+#include "wx/osx/core/cfref.h"
 
 // NOTE WELL: We can only know whether or not GC can be used when compiling Objective-C.
 // Therefore we cannot implement these functions except when compiling Objective-C.

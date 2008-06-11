@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/mimetype.h"
+#include "wx/osx/classic/mimetype.h"
 #else
-#include "wx/mac/carbon/mimetype.h"
+#include "wx/osx/carbon/mimetype.h"
 #endif

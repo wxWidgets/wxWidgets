@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/tabctrl.h"
+#include "wx/osx/classic/tabctrl.h"
 #else
-#include "wx/mac/carbon/tabctrl.h"
+#include "wx/osx/carbon/tabctrl.h"
 #endif

@@ -70,7 +70,7 @@ private:
 #elif defined(__WXGTK__)
     #include "wx/gtk1/scrolbar.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/scrolbar.h"
+    #include "wx/osx/scrolbar.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/scrolbar.h"
 #elif defined(__WXPM__)

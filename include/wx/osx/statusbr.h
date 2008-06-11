@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/statusbr.h"
+#include "wx/osx/classic/statusbr.h"
 #else
-#include "wx/mac/carbon/statusbr.h"
+#include "wx/osx/carbon/statusbr.h"
 #endif

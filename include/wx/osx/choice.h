@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/choice.h"
+#include "wx/osx/classic/choice.h"
 #else
-#include "wx/mac/carbon/choice.h"
+#include "wx/osx/carbon/choice.h"
 #endif

@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/filedlg.h"
+#include "wx/osx/classic/filedlg.h"
 #else
-#include "wx/mac/carbon/filedlg.h"
+#include "wx/osx/carbon/filedlg.h"
 #endif

@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/radiobox.h"
+#include "wx/osx/classic/radiobox.h"
 #else
-#include "wx/mac/carbon/radiobox.h"
+#include "wx/osx/carbon/radiobox.h"
 #endif

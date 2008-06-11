@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/frame.h"
+#include "wx/osx/classic/frame.h"
 #else
-#include "wx/mac/carbon/frame.h"
+#include "wx/osx/carbon/frame.h"
 #endif

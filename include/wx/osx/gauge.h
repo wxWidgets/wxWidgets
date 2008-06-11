@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/gauge.h"
+#include "wx/osx/classic/gauge.h"
 #else
-#include "wx/mac/carbon/gauge.h"
+#include "wx/osx/carbon/gauge.h"
 #endif

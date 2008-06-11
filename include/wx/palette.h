@@ -39,7 +39,7 @@ public:
 #elif defined(__WXMGL__)
     #include "wx/mgl/palette.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/palette.h"
+    #include "wx/osx/palette.h"
 #elif defined(__WXPM__)
     #include "wx/os2/palette.h"
 #endif

@@ -41,7 +41,9 @@
 
 #ifdef __WXOSX__
 /* for backwards compatibility of code (including our own) define __WXMAC__ */
+#ifndef __WXMAC__
 #define __WXMAC__
+#endif
 /* setup precise defines according to sdk used */
 #   include <TargetConditionals.h>
 #   if defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE
@@ -100,7 +102,7 @@
 #        include <unistd.h>
 #        include <TargetConditionals.h>
 #        include <AvailabilityMacros.h>
-#        include "wx/mac/config_xcode.h"
+#        include "wx/osx/config_xcode.h"
 #    endif
 #endif
 /*

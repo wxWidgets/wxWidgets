@@ -22,7 +22,7 @@
 #include "wx/dataobj.h"
 #endif
 
-#include "wx/mac/carbon/dcclient.h"
+#include "wx/osx/carbon/dcclient.h"
 
 /*
  * Metafile and metafile device context classes

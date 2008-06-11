@@ -15,7 +15,7 @@
 typedef struct __CFRunLoopObserver * CFRunLoopObserverRef;
 typedef const struct __CFString * CFStringRef;
 
-#include "wx/mac/corefoundation/cfref.h"
+#include "wx/osx/core/cfref.h"
 
 // ========================================================================
 // wxApp

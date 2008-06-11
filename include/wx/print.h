@@ -22,7 +22,7 @@
 
 #elif defined(__WXMAC__)
 
-#include "wx/mac/printmac.h"
+#include "wx/osx/printmac.h"
 
 #elif defined(__WXPM__)
 

@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/dialog.h"
+#include "wx/osx/classic/dialog.h"
 #else
-#include "wx/mac/carbon/dialog.h"
+#include "wx/osx/carbon/dialog.h"
 #endif

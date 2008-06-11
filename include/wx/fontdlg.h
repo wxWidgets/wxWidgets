@@ -99,7 +99,7 @@ inline bool wxFontDialogBase::Create(wxWindow *parent, const wxFontData *data)
 #elif defined(__WXPM__)
     #include "wx/os2/fontdlg.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/fontdlg.h"
+    #include "wx/osx/fontdlg.h"
 #endif
 
 // ----------------------------------------------------------------------------

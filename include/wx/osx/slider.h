@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/slider.h"
+#include "wx/osx/classic/slider.h"
 #else
-#include "wx/mac/carbon/slider.h"
+#include "wx/osx/carbon/slider.h"
 #endif

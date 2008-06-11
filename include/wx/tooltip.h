@@ -25,7 +25,7 @@
 #elif defined(__WXGTK__)
 #include "wx/gtk1/tooltip.h"
 #elif defined(__WXMAC__)
-#include "wx/mac/tooltip.h"
+#include "wx/osx/tooltip.h"
 #elif defined(__WXCOCOA__)
 #include "wx/cocoa/tooltip.h"
 #elif defined(__WXPM__)

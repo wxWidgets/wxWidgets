@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/dataobj.h"
+#include "wx/osx/classic/dataobj.h"
 #else
-#include "wx/mac/carbon/dataobj.h"
+#include "wx/osx/carbon/dataobj.h"
 #endif

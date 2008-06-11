@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/bmpbuttn.h"
+#include "wx/osx/classic/bmpbuttn.h"
 #else
-#include "wx/mac/carbon/bmpbuttn.h"
+#include "wx/osx/carbon/bmpbuttn.h"
 #endif

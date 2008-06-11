@@ -28,7 +28,7 @@
 #endif /* wxUSE_STACKWALKER */
 
 #ifdef __WXMAC_CLASSIC__
-#   include "wx/mac/classic/chkconf.h"
+#   include "wx/osx/classic/chkconf.h"
 #else
-#   include "wx/mac/carbon/chkconf.h"
+#   include "wx/osx/carbon/chkconf.h"
 #endif

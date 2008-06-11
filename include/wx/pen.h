@@ -106,7 +106,7 @@ public:
 #elif defined(__WXDFB__)
 #include "wx/dfb/pen.h"
 #elif defined(__WXMAC__)
-#include "wx/mac/pen.h"
+#include "wx/osx/pen.h"
 #elif defined(__WXCOCOA__)
 #include "wx/cocoa/pen.h"
 #elif defined(__WXPM__)

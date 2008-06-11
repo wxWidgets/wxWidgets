@@ -38,6 +38,7 @@ public:
     // accessors
     virtual bool IsOk() const { return m_cocoaNSColor; }
     WX_NSColor GetNSColor() { return m_cocoaNSColor; }
+    WX_NSColor GetNSColor() const { return m_cocoaNSColor; }
 
     unsigned char Red() const { return m_red; }
     unsigned char Green() const { return m_green; }

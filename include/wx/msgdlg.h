@@ -126,7 +126,7 @@ protected:
 #elif defined(__WXGTK20__)
     #include "wx/gtk/msgdlg.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/msgdlg.h"
+    #include "wx/osx/msgdlg.h"
 #elif defined(__WXPM__)
     #include "wx/os2/msgdlg.h"
 #endif

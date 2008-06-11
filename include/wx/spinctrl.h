@@ -126,7 +126,7 @@ typedef void (wxEvtHandler::*wxSpinDoubleEventFunction)(wxSpinDoubleEvent&);
     #include "wx/gtk1/spinctrl.h"
 #elif defined(__WXMAC__)
     #define wxHAS_NATIVE_SPINCTRL
-    #include "wx/mac/spinctrl.h"
+    #include "wx/osx/spinctrl.h"
 #endif // platform
 
 #if !defined(wxHAS_NATIVE_SPINCTRL) || !defined(wxHAS_NATIVE_SPINCTRLDOUBLE)

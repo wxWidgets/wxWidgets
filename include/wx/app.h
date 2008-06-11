@@ -596,7 +596,7 @@ protected:
 #elif defined(__WXX11__)
     #include "wx/x11/app.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/app.h"
+    #include "wx/osx/app.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/app.h"
 #elif defined(__WXPM__)

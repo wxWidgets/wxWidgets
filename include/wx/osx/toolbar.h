@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/toolbar.h"
+#include "wx/osx/classic/toolbar.h"
 #else
-#include "wx/mac/carbon/toolbar.h"
+#include "wx/osx/carbon/toolbar.h"
 #endif

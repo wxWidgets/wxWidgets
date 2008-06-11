@@ -191,7 +191,7 @@ public:
 #elif defined(__WXGTK__)
     #include "wx/gtk1/glcanvas.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/glcanvas.h"
+    #include "wx/osx/glcanvas.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/glcanvas.h"
 #else

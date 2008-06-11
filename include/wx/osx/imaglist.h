@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/imaglist.h"
+#include "wx/osx/classic/imaglist.h"
 #else
-#include "wx/mac/carbon/imaglist.h"
+#include "wx/osx/carbon/imaglist.h"
 #endif

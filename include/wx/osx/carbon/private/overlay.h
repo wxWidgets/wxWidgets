@@ -12,7 +12,7 @@
 #ifndef _WX_MAC_CARBON_PRIVATE_OVERLAY_H_
 #define _WX_MAC_CARBON_PRIVATE_OVERLAY_H_
 
-#include "wx/mac/private.h"
+#include "wx/osx/private.h"
 #include "wx/toplevel.h"
 #include "wx/graphics.h"
 

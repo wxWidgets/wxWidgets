@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/spinbutt.h"
+#include "wx/osx/classic/spinbutt.h"
 #else
-#include "wx/mac/carbon/spinbutt.h"
+#include "wx/osx/carbon/spinbutt.h"
 #endif

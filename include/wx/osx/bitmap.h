@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/bitmap.h"
+#include "wx/osx/classic/bitmap.h"
 #else
-#include "wx/mac/carbon/bitmap.h"
+#include "wx/osx/carbon/bitmap.h"
 #endif

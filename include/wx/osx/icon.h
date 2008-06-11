@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/icon.h"
+#include "wx/osx/classic/icon.h"
 #else
-#include "wx/mac/carbon/icon.h"
+#include "wx/osx/carbon/icon.h"
 #endif

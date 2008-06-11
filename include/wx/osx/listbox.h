@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/listbox.h"
+#include "wx/osx/classic/listbox.h"
 #else
-#include "wx/mac/carbon/listbox.h"
+#include "wx/osx/carbon/listbox.h"
 #endif

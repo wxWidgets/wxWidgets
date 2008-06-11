@@ -70,7 +70,7 @@ public:
 // include the platform-dependent class implementation
 #if wxUSE_NATIVE_SEARCH_CONTROL
     #if defined(__WXMAC__)
-        #include "wx/mac/srchctrl.h"
+        #include "wx/osx/srchctrl.h"
     #endif
 #else
     #include "wx/generic/srchctlg.h"

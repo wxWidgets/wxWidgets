@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/pngread.h"
+#include "wx/osx/classic/pngread.h"
 #else
-#include "wx/mac/carbon/pngread.h"
+#include "wx/osx/carbon/pngread.h"
 #endif

@@ -861,7 +861,7 @@ typedef void (wxEvtHandler::*wxDataViewEventFunction)(wxDataViewEvent&);
 #elif defined(__WXGTK20__)
     #include "wx/gtk/dataview.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/dataview.h"
+    #include "wx/osx/dataview.h"
 #else
     #include "wx/generic/dataview.h"
 #endif

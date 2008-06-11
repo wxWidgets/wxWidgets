@@ -18,8 +18,8 @@
 
 #include <Carbon/Carbon.h>
 
-#include "wx/mac/corefoundation/cfstring.h"
-#include "wx/mac/corefoundation/cfdataref.h"
+#include "wx/osx/core/cfstring.h"
+#include "wx/osx/core/cfdataref.h"
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
 typedef UInt32 URefCon;
@@ -29,9 +29,9 @@ typedef SInt32 SRefCon;
 #if wxUSE_GUI
 
 #include "wx/listbox.h"
-#include "wx/mac/carbon/dc.h"
-#include "wx/mac/carbon/dcclient.h"
-#include "wx/mac/carbon/dcmemory.h"
+#include "wx/osx/carbon/dc.h"
+#include "wx/osx/carbon/dcclient.h"
+#include "wx/osx/carbon/dcmemory.h"
 
 class WXDLLIMPEXP_CORE wxMacCGContextStateSaver
 {

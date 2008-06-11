@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/palette.h"
+#include "wx/osx/classic/palette.h"
 #else
-#include "wx/mac/carbon/palette.h"
+#include "wx/osx/carbon/palette.h"
 #endif

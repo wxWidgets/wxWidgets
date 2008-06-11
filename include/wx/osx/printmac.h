@@ -1,5 +1,5 @@
 #ifdef __WXMAC_CLASSIC__
-#include "wx/mac/classic/printmac.h"
+#include "wx/osx/classic/printmac.h"
 #else
-#include "wx/mac/carbon/printmac.h"
+#include "wx/osx/carbon/printmac.h"
 #endif
