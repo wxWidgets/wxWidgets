@@ -84,10 +84,7 @@
 #endif // ! __WXPALMOS5__
 
 #ifdef __WXMAC__
-#include "wx/mac/private.h"
-#ifndef __DARWIN__
-#include "InternetConfig.h"
-#endif
+#include "wx/osx/private.h"
 #endif
 
 #ifndef __WXPALMOS5__
@@ -1054,7 +1051,7 @@ bool wxLaunchDefaultBrowser(const wxString& urlOrig, int flags)
     // NOTE: We need to call the real implementation from src/cocoa/utils.mm
     // because the code must use Objective-C features.
     return wxCocoaLaunchDefaultBrowser(url, flags);
-#elif defined(__WXMAC__)
+#elif defined(__WXMAC__) && !defined(__WXOSX_IPHONE__)
     wxCFRef< CFURLRef > curl( CFURLCreateWithString( kCFAllocatorDefault,
             wxCFStringRef( url ), NULL ) );
     OSStatus err = LSOpenCFURLRef( curl , NULL );

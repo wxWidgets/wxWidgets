@@ -49,7 +49,7 @@
 #if defined(__WXMSW__)
     #include "wx/msw/mimetype.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/mimetype.h"
+    #include "wx/osx/mimetype.h"
 #elif defined(__WXPM__) || defined (__EMX__)
     #include "wx/os2/mimetype.h"
     #undef __UNIX__

@@ -31,7 +31,11 @@
 #include "wx/dcclient.h"
 
 #ifdef __WXOSX__
-    #include "ApplicationServices/ApplicationServices.h"
+#ifdef __WXOSX_IPHONE__
+    #include <CoreGraphics/CoreGraphics.h>
+#else
+    #include <ApplicationServices/ApplicationServices.h>
+#endif
 #endif
 
 //-----------------------------------------------------------------------------

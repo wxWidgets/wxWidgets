@@ -54,9 +54,9 @@
 #include "wx/msw/printdlg.h"
 #include "wx/msw/dcprint.h"
 #elif defined(__WXMAC__)
-#include "wx/mac/printdlg.h"
-#include "wx/mac/private/print.h"
-#include "wx/mac/dcprint.h"
+#include "wx/osx/printdlg.h"
+#include "wx/osx/private/print.h"
+#include "wx/osx/dcprint.h"
 #elif defined(__WXPM__)
 #include "wx/os2/dcprint.h"
 #include "wx/generic/prntdlgg.h"

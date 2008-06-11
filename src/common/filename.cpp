@@ -93,7 +93,7 @@
 #endif
 
 #if defined(__WXMAC__)
-  #include  "wx/mac/private.h"  // includes mac headers
+  #include  "wx/osx/private.h"  // includes mac headers
 #endif
 
 // utime() is POSIX so should normally be available on all Unices
@@ -1068,7 +1068,7 @@ wxString wxFileName::GetTempDir()
         // default
 #if defined(__DOS__) || defined(__OS2__)
         dir = _T(".");
-#elif defined(__WXMAC__)
+#elif defined(__WXMAC__) && !defined(__WXOSX_IPHONE__)
         dir = wxMacFindFolder(short(kOnSystemDisk), kTemporaryFolderType, kCreateFolder);
 #else
         dir = _T("/tmp");
@@ -2383,7 +2383,7 @@ wxString wxFileName::GetHumanReadableSize(const wxString &failmsg, int precision
 // Mac-specific functions
 // ----------------------------------------------------------------------------
 
-#ifdef __WXMAC__
+#if defined( __WXMAC__ ) && !defined( __WXOSX_IPHONE__ )
 
 const short kMacExtensionMaxLength = 16 ;
 class MacDefaultExtensionRecord

@@ -32,7 +32,7 @@
 #endif
 
 #ifdef __WXMAC__
-    #include "wx/mac/corefoundation/cfstring.h"
+    #include "wx/osx/core/cfstring.h"
     #include <CoreFoundation/CFStringEncodingExt.h>
 
     wxUint16 gMacEncodings[wxFONTENCODING_MACMAX-wxFONTENCODING_MACMIN+1][128] ;

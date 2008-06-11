@@ -65,9 +65,9 @@ using namespace std ;
 #endif
 
 #if defined(__DARWIN__)
-	#include "wx/mac/corefoundation/cfref.h"
+	#include "wx/osx/core/cfref.h"
 	#include <CoreFoundation/CFLocale.h>
-	#include "wx/mac/corefoundation/cfstring.h"
+	#include "wx/osx/core/cfstring.h"
     #include <xlocale.h>
 #endif
 

@@ -56,7 +56,7 @@
 #endif
 
 #if defined(__WXMAC__)
-    #include  "wx/mac/private.h"  // includes mac headers
+    #include  "wx/osx/private.h"  // includes mac headers
 #endif
 
 #ifdef __WINDOWS__
@@ -94,10 +94,6 @@
 
 #ifndef _MAXPATHLEN
     #define _MAXPATHLEN 1024
-#endif
-
-#ifdef __WXMAC__
-// #    include "MoreFilesX.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -878,7 +874,7 @@ wxString wxPathOnly (const wxString& path)
 // and back again - or we get nasty problems with delimiters.
 // Also, convert to lower case, since case is significant in UNIX.
 
-#if defined(__WXMAC__)
+#if defined(__WXMAC__) && !defined(__WXOSX_IPHONE__)
 
 #define kDefaultPathStyle kCFURLPOSIXPathStyle
 
@@ -1661,7 +1657,7 @@ wxString wxGetOSDirectory()
     wxChar buf[256];
     GetWindowsDirectory(buf, 256);
     return wxString(buf);
-#elif defined(__WXMAC__)
+#elif defined(__WXMAC__) && !defined(__WXOSX_IPHONE__)
     return wxMacFindFolder(kOnSystemDisk, 'macs', false);
 #else
     return wxEmptyString;

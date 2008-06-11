@@ -53,9 +53,9 @@
 #endif
 
 #ifdef __WXMAC__
-    #include "wx/mac/dcclient.h"
-    #include "wx/mac/dcmemory.h"
-    #include "wx/mac/dcscreen.h"
+    #include "wx/osx/dcclient.h"
+    #include "wx/osx/dcmemory.h"
+    #include "wx/osx/dcscreen.h"
 #endif
 
 #ifdef __WXPM__

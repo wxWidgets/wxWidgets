@@ -53,7 +53,7 @@
 #include "wx/fontmap.h"
 
 #ifdef __DARWIN__
-#include "wx/mac/corefoundation/private/strconv_cf.h"
+#include "wx/osx/core/private/strconv_cf.h"
 #endif //def __DARWIN__
 
 
