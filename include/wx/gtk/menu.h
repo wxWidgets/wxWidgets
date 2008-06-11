@@ -84,9 +84,6 @@ public:
 
     // TODO: virtual void SetTitle(const wxString& title);
 
-    // implementation
-    int FindMenuIdByMenuItem( GtkWidget *menuItem ) const;
-
     // implementation GTK only
     GtkWidget       *m_menu;  // GtkMenu
     GtkWidget       *m_owner;

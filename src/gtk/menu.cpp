@@ -33,7 +33,7 @@ static const int wxGTK_TITLE_ID = -3;
 // forward declare it as it's used by wxMenuBar too when using Hildon
 extern "C"
 {
-    static void gtk_menu_clicked_callback(GtkWidget *widget, wxMenu *menu);
+    static void menuitem_activate(GtkWidget*, wxMenuItem* item);
 }
 
 #if wxUSE_ACCEL
@@ -263,7 +263,7 @@ bool wxMenuBar::GtkAppend(wxMenu *menu, const wxString& title, int pos)
         menu->m_owner = gtk_menu_item_new_with_mnemonic( wxGTK_CONV( str ) );
 
         g_signal_connect(menu->m_owner, "activate",
-                          G_CALLBACK(gtk_menu_clicked_callback), menu);
+                         G_CALLBACK(menuitem_activate), item);
         item->SetMenuItem(menu->m_owner);
     }
     else
@@ -458,21 +458,13 @@ void wxMenuBar::SetMenuLabel( size_t pos, const wxString& label )
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
+static void menuitem_activate(GtkWidget*, wxMenuItem* item)
 {
-    int id = menu->FindMenuIdByMenuItem(widget);
-
-    /* should find it for normal (not popup) menu */
-    wxASSERT_MSG( (id != -1) || (menu->GetInvokingWindow() != NULL),
-                  _T("menu item not found in gtk_menu_clicked_callback") );
-
-    if (!menu->IsEnabled(id))
+    if (!item->IsEnabled())
         return;
 
-    wxMenuItem* item = menu->FindChildItem( id );
-    wxCHECK_RET( item, wxT("error in menu item callback") );
-
-    if ( item->GetId() == wxGTK_TITLE_ID )
+    int id = item->GetId();
+    if (id == wxGTK_TITLE_ID)
     {
         // ignore events from the menu title
         return;
@@ -498,6 +490,7 @@ static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
 
 
     // Is this menu on a menubar?  (possibly nested)
+    wxMenu* menu = item->GetMenu();
     wxFrame* frame = NULL;
     if(menu->IsAttached())
         frame = menu->GetMenuBar()->GetFrame();
@@ -531,16 +524,13 @@ static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static void gtk_menu_hilight_callback( GtkWidget *widget, wxMenu *menu )
+static void menuitem_select(GtkWidget*, wxMenuItem* item)
 {
-    int id = menu->FindMenuIdByMenuItem(widget);
-
-    wxASSERT( id != -1 ); // should find it!
-
-    if (!menu->IsEnabled(id))
+    if (!item->IsEnabled())
         return;
 
-    wxMenuEvent event( wxEVT_MENU_HIGHLIGHT, id );
+    wxMenu* menu = item->GetMenu();
+    wxMenuEvent event(wxEVT_MENU_HIGHLIGHT, item->GetId());
     event.SetEventObject( menu );
 
     wxEvtHandler* handler = menu->GetEventHandler();
@@ -557,15 +547,12 @@ static void gtk_menu_hilight_callback( GtkWidget *widget, wxMenu *menu )
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static void gtk_menu_nolight_callback( GtkWidget *widget, wxMenu *menu )
+static void menuitem_deselect(GtkWidget*, wxMenuItem* item)
 {
-    int id = menu->FindMenuIdByMenuItem(widget);
-
-    wxASSERT( id != -1 ); // should find it!
-
-    if (!menu->IsEnabled(id))
+    if (!item->IsEnabled())
         return;
 
+    wxMenu* menu = item->GetMenu();
     wxMenuEvent event( wxEVT_MENU_HIGHLIGHT, -1 );
     event.SetEventObject( menu );
 
@@ -858,9 +845,9 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
     {
         mitem->SetGtkLabel();
         g_signal_connect (menuItem, "select",
-                          G_CALLBACK (gtk_menu_hilight_callback), this);
+                          G_CALLBACK(menuitem_select), mitem);
         g_signal_connect (menuItem, "deselect",
-                          G_CALLBACK (gtk_menu_nolight_callback), this);
+                          G_CALLBACK(menuitem_deselect), mitem);
 
         if ( mitem->IsSubMenu() && mitem->GetKind() != wxITEM_RADIO && mitem->GetKind() != wxITEM_CHECK )
         {
@@ -877,8 +864,8 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
         else
         {
             g_signal_connect (menuItem, "activate",
-                              G_CALLBACK (gtk_menu_clicked_callback),
-                              this);
+                              G_CALLBACK(menuitem_activate),
+                              mitem);
         }
     }
 
@@ -923,20 +910,6 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
     item->SetMenuItem(NULL);
 
     return item;
-}
-
-int wxMenu::FindMenuIdByMenuItem( GtkWidget *menuItem ) const
-{
-    wxMenuItemList::compatibility_iterator node = m_items.GetFirst();
-    while (node)
-    {
-        wxMenuItem *item = node->GetData();
-        if (item->GetMenuItem() == menuItem)
-            return item->GetId();
-        node = node->GetNext();
-    }
-
-    return wxNOT_FOUND;
 }
 
 void wxMenu::Attach(wxMenuBarBase *menubar)
