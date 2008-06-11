@@ -15,7 +15,7 @@
     @library{wxcore}
     @category{menus}
 
-    @see wxMenu, @ref overview_eventhandlingoverview
+    @see wxMenu, @ref overview_eventhandling "Event Handling Overview"
 */
 class wxMenuBar : public wxWindow
 {
@@ -390,8 +390,9 @@ public:
     @library{wxcore}
     @category{menus}
 
-    @see wxMenuBar, wxWindow::PopupMenu, @ref overview_eventhandlingoverview, @ref
-    overview_wxfilehistory "wxFileHistory (most recently used files menu)"
+    @see wxMenuBar, wxWindow::PopupMenu,
+    @ref overview_eventhandling "Event Handling Overview",
+    @ref wxFileHistory "wxFileHistory (most recently used files menu)"
 */
 class wxMenu : public wxEvtHandler
 {
@@ -432,30 +433,32 @@ public:
             The menu command identifier.
         @param item
             The string to appear on the menu item.
-        @param kind
-            May be wxITEM_SEPARATOR, wxITEM_NORMAL,
-            wxITEM_CHECK or wxITEM_RADIO
         @param helpString
             An optional help string associated with the item.
             By default, the handler for the wxEVT_MENU_HIGHLIGHT event displays
             this string in the status line.
+        @param kind
+            May be wxITEM_SEPARATOR, wxITEM_NORMAL,
+            wxITEM_CHECK or wxITEM_RADIO
 
         @see AppendSeparator(), AppendCheckItem(), AppendRadioItem(),
              AppendSubMenu(), Insert(), SetLabel(),
              GetHelpString(), SetHelpString(), wxMenuItem
     */
-    wxMenuItem* Append(int id, const wxString& item = "",
-                       const wxString& helpString = "",
+    wxMenuItem* Append(int id, const wxString& item = wxEmptyString,
+                       const wxString& helpString = wxEmptyString,
                        wxItemKind kind = wxITEM_NORMAL);
                        
     /**
         Adds a submenu.
 
+        @warning This function is deprecated, use AppendSubMenu() instead.
+
         @param id
             The menu command identifier.
         @param item
             The string to appear on the menu item.
-        @param menu
+        @param subMenu
             Pull-right submenu.
         @param helpString
             An optional help string associated with the item.
@@ -468,7 +471,7 @@ public:
     */
     wxMenuItem* Append(int id, const wxString& item,
                        wxMenu* subMenu,
-                       const wxString& helpString = "");
+                       const wxString& helpString = wxEmptyString);
                        
     /**
         Adds a menu item object. This is the most generic variant of Append() method
