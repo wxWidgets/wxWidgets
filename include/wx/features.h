@@ -35,7 +35,7 @@
 /*  taskbar is implemented in the major ports */
 #if defined(__WXMSW__) || defined(__WXCOCOA__) \
     || defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXX11__) \
-    || defined(__WXMAC_OSX__) || defined(__WXCOCOA__)
+    || defined(__WXOSX_MAC__) || defined(__WXCOCOA__)
     #define wxHAS_TASK_BAR_ICON
 #else
     #undef wxUSE_TASKBARICON

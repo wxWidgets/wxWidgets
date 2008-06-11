@@ -28,21 +28,44 @@
 #endif
 
 /*
-    WXMAC variants
-    __WXMAC_CLASSIC__ means ppc non-carbon builds, __WXMAC_CARBON__ means
-    carbon API available (mach or cfm builds) , __WXMAC_OSX__ means mach-o
-    builds, running under 10.2 + only
+    WXOSX targets
+    __WXOSX_MAC__ means Mac OS X, non embedded
+    __WXOSX_IPHONE__ means OS X iPhone
 */
-#ifdef __WXMAC__
+
+/* supporting the old short name */
+
+#ifdef __WXMAC__ 
+#   define __WXOSX__
+#endif
+
+#ifdef __WXOSX__
+/* for backwards compatibility of code (including our own) define __WXMAC__ */
+#define __WXMAC__
+/* setup precise defines according to sdk used */
+#   include <TargetConditionals.h>
+#   if defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE
+#       define __WXOSX_IPHONE__
+#       undef __WXOSX_MAC__
+#   elif defined(TARGET_OS_MAC) && TARGET_OS_MAC
+#       undef __WXOSX_IPHONE__
+#       define __WXOSX_MAC__
+#	else
+#		error "unknown SDK, neither TARGET_OS_MAC nor TARGET_OS_IPHONE set in <TargetConditionals.h>"
+#   endif
+#endif
+
+#ifdef __WXOSX_MAC__
 #    if defined(__MACH__)
-#        define __WXMAC_OSX__
-#        define __WXMAC_CARBON__ /* for backwards compat in user code still defined */
 #        include <AvailabilityMacros.h>
 #        ifndef MAC_OS_X_VERSION_10_4
 #           define MAC_OS_X_VERSION_10_4 1040
 #        endif
 #        ifndef MAC_OS_X_VERSION_10_5
 #           define MAC_OS_X_VERSION_10_5 1050
+#        endif
+#        ifndef MAC_OS_X_VERSION_10_6
+#           define MAC_OS_X_VERSION_10_6 1060
 #        endif
 #    else
 #        error "only mach-o configurations are supported"
@@ -68,13 +91,15 @@
     using OS X libraries like Carbon or CoreServices.
 
  */
-#if defined(__WXMAC_OSX__) || (defined(__WXCOCOA__) && (!defined(wxUSE_BASE) || !wxUSE_BASE)) || defined(__WXASPEN__)
+#if defined(__WXOSX_MAC__) || (defined(__WXCOCOA__) && (!defined(wxUSE_BASE) || !wxUSE_BASE)) || defined(__WXOSX_IPHONE__)
 #   define __WXOSX__
 #endif
 
 #ifdef __WXOSX__
 #    ifdef __WXMAC_XCODE__
 #        include <unistd.h>
+#        include <TargetConditionals.h>
+#        include <AvailabilityMacros.h>
 #        include "wx/mac/config_xcode.h"
 #    endif
 #endif
