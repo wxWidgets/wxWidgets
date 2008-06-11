@@ -16,10 +16,10 @@
     </set>
     
     <set var="BUNDLE_PLIST">
-        $(TOP_SRCDIR)src/mac/carbon/Info.plist.in
+        $(TOP_SRCDIR)src/osx/carbon/Info.plist.in
     </set>
     <set var="BUNDLE_ICONS">
-        $(TOP_SRCDIR)src/mac/carbon/wxmac.icns
+        $(TOP_SRCDIR)src/osx/carbon/wxmac.icns
     </set>
 
     <define-tag name="wx-mac-app-bundle" rules="exe">
