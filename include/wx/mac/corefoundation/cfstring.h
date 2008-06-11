@@ -69,12 +69,12 @@ public :
 
     ~wxMacUniCharBuffer() ;
 
-    UniChar* GetBuffer() ;
+    UniCharPtr GetBuffer() ;
 
     UniCharCount GetChars() ;
 
 private :
-    UniChar* m_ubuf ;
+    UniCharPtr m_ubuf ;
     UniCharCount m_chars ;
 };
 #endif //__WXCFSTRINGHOLDER_H__
