@@ -6,7 +6,7 @@
 #endif
 
 
-#include "wx/WallCtrl.h"
+#include "wx/Wallctrl/WallCtrl.h"
 
 BEGIN_EVENT_TABLE(wxWallCtrl, wxGLCanvas)
 //	EVT_SIZE(wxWallCtrl::OnSize)

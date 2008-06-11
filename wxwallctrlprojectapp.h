@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wxwallctrlprojectapp.h
-// Purpose:     
+// Purpose:     A test application for wxWallCtrl
 // Author:      Mokhtar M. Khorshid
 // Modified by: 
 // Created:     02/06/2008 00:11:34
 // RCS-ID:      
-// Copyright:   Copyright 2008 by Mokhtar M. Khorshid
+// Copyright:   (c) Mokhtar M. Khorshid
 // Licence:     
 /////////////////////////////////////////////////////////////////////////////
 
@@ -20,7 +20,7 @@
 ////@begin includes
 #include "wx/image.h"
 #include "wxwallctrltest.h"
-#include "wx/WallCtrl.h"
+#include "wx/Wallctrl/WallCtrl.h"
 ////@end includes
 
 /*!

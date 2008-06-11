@@ -6,9 +6,9 @@
 #include "wx/glcanvas.h"
 
 #include "wx/string.h"
-#include "wx/WallCtrlDataSource.h"
+#include "wx/Wallctrl/WallCtrlDataSource.h"
 
-#include "wx/WallCtrlSurface.h"
+#include "wx/Wallctrl/WallCtrlSurface.h"
 
 
 // For some reason wxVector< > does not compile, so for the meanwhile we'll use this vector

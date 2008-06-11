@@ -1,4 +1,4 @@
-#include "wx/WallCtrlSurface.h"
+#include "wx/Wallctrl/WallCtrlSurface.h"
 
 wxWallCtrlSurface::~wxWallCtrlSurface(void)
 {

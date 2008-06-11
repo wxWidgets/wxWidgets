@@ -1,3 +1,14 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        wallctrlplanesurface.h
+// Purpose:     A concrete plane (flat) surface for wxWallCtrl
+// Author:      Mokhtar M. Khorshid
+// Modified by: 
+// Created:     08/06/2008
+// RCS-ID:      
+// Copyright:   (c) Mokhtar M. Khorshid
+// Licence:     
+/////////////////////////////////////////////////////////////////////////////
+
 #pragma once
 #include "wallctrlsurface.h"
 #include "gl/glut.h"
@@ -38,11 +49,16 @@ public:
 	// Sets the number of elements in a single frame (in both directions)
 	void SetScopeSize(wxSize size);
 
+protected:
 	// Maps an X coordinate to OpenGL space
 	float MapX(float x);
 
 	// Maps a Y coordinate to OpenGL space
 	float MapY(float y);
+
+	// Returns the bounds of a rectangle with the correct aspect ratio centered in the original region
+	// Precondition: right >= left and bottom >= top
+	void AdjustCoordinates(float & top, float & bottom, float & left, float & right, const wxSize & itemSize);
 
 private:
 	bool m_initialized;

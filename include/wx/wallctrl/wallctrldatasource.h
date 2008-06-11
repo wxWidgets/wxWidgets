@@ -1,4 +1,13 @@
-// Mokhtar M. Khorshid
+/////////////////////////////////////////////////////////////////////////////
+// Name:        wallctrldatasource.h
+// Purpose:     The base for wxWallCtrl data sources
+// Author:      Mokhtar M. Khorshid
+// Modified by: 
+// Created:     09/06/2008
+// RCS-ID:      
+// Copyright:   (c) Mokhtar M. Khorshid
+// Licence:     
+/////////////////////////////////////////////////////////////////////////////
 
 #pragma once
 
@@ -27,11 +36,11 @@ public:
 	wxWallCtrlDataSource(void);
 	virtual ~wxWallCtrlDataSource(void);
 
-	virtual wxWallCtrlRenderType GetRenderType(wxWallCtrlItemID& itemId, const wxSize& availableResolution, wxSize& desiredResolution)=0;
+	virtual wxWallCtrlRenderType GetRenderType(const wxWallCtrlItemID& itemId, const wxSize& availableResolution, wxSize& desiredResolution)=0;
 
-	virtual bool RenderItem(wxWallCtrlItemID& itemId, wxDC& dc, const wxSize& dcSize)=0;
-	virtual wxBitmap wxWallCtrlDataSource::GetBitmap(wxWallCtrlItemID& itemId)=0;
-	virtual bool GetItemInfo(wxWallCtrlItemID& itemId, wxWallCtrlItem& info)=0;
+	virtual bool RenderItem(const wxWallCtrlItemID& itemId, wxDC& dc, const wxSize& dcSize)=0;
+	virtual wxBitmap wxWallCtrlDataSource::GetBitmap(const wxWallCtrlItemID& itemId)=0;
+	virtual bool GetItemInfo(const wxWallCtrlItemID& itemId, wxWallCtrlItem& info)=0;
 
 	// Returns the number of the items in the source (those that are accessible)
 	virtual unsigned GetCount()=0;

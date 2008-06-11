@@ -11,9 +11,9 @@
 
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
-#include "wx/WallCtrl.h"
-#include "wx/WallCtrlPlaneSurface.h"
-#include "wx/WallCtrlBitmapSource.h"
+#include "wx/Wallctrl/WallCtrl.h"
+#include "wx/Wallctrl/WallCtrlPlaneSurface.h"
+#include "wx/Wallctrl/WallCtrlBitmapSource.h"
 
 #ifdef __BORLANDC__
 #pragma hdrstop
@@ -144,7 +144,7 @@ void wxWallCtrlTest::CreateControls()
 	bitmapSource->AppendBitmap(testBitmap);
 
 	wxWallCtrlPlaneSurface * surface = new wxWallCtrlPlaneSurface(bitmapSource);
-	surface->SetScopeSize(wxSize(2, 7));
+	surface->SetScopeSize(wxSize(2, 2));
 	wxWallCtrl* wallCtrl1 = new wxWallCtrl(this, surface, wxID_ANY,	wxDefaultPosition, wxDefaultSize);
 	itemBoxSizer2->Add(wallCtrl1, 1, wxGROW|wxALL, 5);
 

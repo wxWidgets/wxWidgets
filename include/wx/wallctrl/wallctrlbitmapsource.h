@@ -1,3 +1,14 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        wallctrlbitmapsource.h
+// Purpose:     A concrete bitmap datasource for wxWallCtrl
+// Author:      Mokhtar M. Khorshid
+// Modified by: 
+// Created:     09/06/2008
+// RCS-ID:      
+// Copyright:   (c) Mokhtar M. Khorshid
+// Licence:     
+/////////////////////////////////////////////////////////////////////////////
+
 #pragma once
 #include "wallctrldatasource.h"
 
@@ -9,16 +20,16 @@ public:
 	virtual ~wxWallCtrlBitmapSource(void);
 
 	// Queries the item to get its preferred rendering mode
-	virtual wxWallCtrlRenderType GetRenderType(wxWallCtrlItemID& itemId, const wxSize& availableResolution, wxSize& desiredResolution);
+	virtual wxWallCtrlRenderType GetRenderType(const wxWallCtrlItemID& itemId, const wxSize& availableResolution, wxSize& desiredResolution);
 
 	// Renders the specified item to the DC
-	virtual bool RenderItem(wxWallCtrlItemID& itemID, wxDC& dc, const wxSize& dcSize);
+	virtual bool RenderItem(const wxWallCtrlItemID& itemID, wxDC& dc, const wxSize& dcSize);
 
 	// Retrieves the bitmap of the specified item
-	virtual wxBitmap GetBitmap(wxWallCtrlItemID& itemID);
+	virtual wxBitmap GetBitmap(const wxWallCtrlItemID& itemID);
 
 	// Queries an item to get available information
-	virtual bool GetItemInfo(wxWallCtrlItemID& itemID, wxWallCtrlItem& info);
+	virtual bool GetItemInfo(const wxWallCtrlItemID& itemID, wxWallCtrlItem& info);
 
 	// Returns the number of items available in the source
 	virtual unsigned GetCount();

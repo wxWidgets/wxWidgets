@@ -1,6 +1,6 @@
 // TODO: Eleminate vectors
 
-#include "wx/Matrix.h"
+#include "wx/Wallctrl/Matrix.h"
 #include <cmath>
 
 VectorType MatrixLib::CrossProduct( VectorType V1, VectorType V2 )

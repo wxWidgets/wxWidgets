@@ -1,4 +1,4 @@
-#include "wx/WallCtrlBitmapSource.h"
+#include "wx/wallctrl/WallCtrlBitmapSource.h"
 
 wxWallCtrlBitmapSource::wxWallCtrlBitmapSource(void)
 {
@@ -8,12 +8,12 @@ wxWallCtrlBitmapSource::~wxWallCtrlBitmapSource(void)
 {
 }
 
-wxWallCtrlRenderType wxWallCtrlBitmapSource::GetRenderType( wxWallCtrlItemID& itemId, const wxSize& availableResolution, wxSize& desiredResolution )
+wxWallCtrlRenderType wxWallCtrlBitmapSource::GetRenderType(const wxWallCtrlItemID& itemId, const wxSize& availableResolution, wxSize& desiredResolution )
 {
 	return wxWallCtrlRenderType::wxWallCtrlRenderBitmap;
 }
 
-bool wxWallCtrlBitmapSource::RenderItem( wxWallCtrlItemID& itemID, wxDC& dc, const wxSize& dcSize )
+bool wxWallCtrlBitmapSource::RenderItem(const wxWallCtrlItemID& itemID, wxDC& dc, const wxSize& dcSize )
 {
 	// TODO: Do error checking for itemID existence if needed
 	// Create a temp memory DC to hold the bitmap
@@ -26,13 +26,13 @@ bool wxWallCtrlBitmapSource::RenderItem( wxWallCtrlItemID& itemID, wxDC& dc, con
 	return true;
 }
 
-wxBitmap wxWallCtrlBitmapSource::GetBitmap( wxWallCtrlItemID& itemID )
+wxBitmap wxWallCtrlBitmapSource::GetBitmap(const wxWallCtrlItemID& itemID )
 {
 	// TODO: Validate ItemID
 	return bitmaps[itemID];
 }
 
-bool wxWallCtrlBitmapSource::GetItemInfo( wxWallCtrlItemID& itemID, wxWallCtrlItem& info )
+bool wxWallCtrlBitmapSource::GetItemInfo(const wxWallCtrlItemID& itemID, wxWallCtrlItem& info )
 {
 	// TODO: Validate ItemID
 	info.size.SetHeight(bitmaps[itemID].GetHeight());

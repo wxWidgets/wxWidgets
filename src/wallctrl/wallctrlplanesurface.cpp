@@ -41,7 +41,7 @@ void wxWallCtrlPlaneSurface::Render()
 	
 	// Place camera
 	glLoadIdentity();
-	glTranslatef(0.0f, 0.0f, -2.0f);
+	glTranslatef(0.0f, 0.0f, -1.0f);
 
 	// This will be replaced soon
 	RenderItems();
@@ -51,10 +51,11 @@ void wxWallCtrlPlaneSurface::Render()
 
 void wxWallCtrlPlaneSurface::CreateTextureFromDC( wxMemoryDC &dc, GLubyte * texture, const wxSize& dcSize )
 {
+	// TODO: Consider faster ways to convert the texture. (Check out rawbmp iterators)
 	// Temp color variable
 	wxColor color;
 
-	// Query each pixel
+	// Copy each pixel color to the texture
 	for (int y=0; y < dcSize.GetHeight(); ++y)
 	{
 		for (int x=0; x < dcSize.GetWidth(); ++x)
@@ -143,9 +144,6 @@ void wxWallCtrlPlaneSurface::InitializeGL()
 	glFrustum(-0.5f, 0.5f, -0.5f, 0.5f, 1.0f, 3.0f);
 	//gluPerspective(45.0,(GLfloat)400/(GLfloat)400,0.01f,10000.0f);
 
-
-
-
 	glEnable(GL_DEPTH_TEST);
 	//glEnable(GL_LIGHTING);
 	//glEnable(GL_LIGHT0);
@@ -177,10 +175,16 @@ void wxWallCtrlPlaneSurface::RenderItems()
 			// Select the texture of this item
 			glBindTexture(GL_TEXTURE_2D, GetItemTexture(Index));
 
-			float Left = MapX(m_itemWidth * x);
-			float Right = MapX(m_itemWidth * (x + 1));
+			// Get the bounds of the quad
 			float Top = MapY(m_itemHeight * y);
 			float Bottom = MapY(m_itemHeight * (y + 1));
+			float Left = MapX(m_itemWidth * x);
+			float Right = MapX(m_itemWidth * (x + 1));
+
+			// Adjust the bounds so that it maintains the aspect ratio
+			wxWallCtrlItem info;
+			m_dataSource->GetItemInfo(Index, info);
+			AdjustCoordinates(Top, Bottom, Left, Right, info.size);
 
 			// Draw this item on its own quad
 			glBegin(GL_QUADS);					
@@ -230,4 +234,43 @@ void wxWallCtrlPlaneSurface::CreateTextureFromBitmap( wxBitmap bitmap, GLubyte *
 
 	// Now load from the DC to the array
 	CreateTextureFromDC(tempDC, texture, wxSize(bitmap.GetWidth(), bitmap.GetHeight()));
+}
+
+// Right >= Left && Bottom >= Top
+void wxWallCtrlPlaneSurface::AdjustCoordinates( float & top, float & bottom, float & left, float & right, const wxSize & itemSize)
+{
+	float width = right - left;
+	float height = bottom - top;
+
+	// The new dimensions
+	float newWidth  = 0;
+	float newHeight = 0;
+
+	// The ratios
+	float widthRatio = width/itemSize.GetWidth();
+	float heightRatio = height/itemSize.GetHeight();
+
+	// Check which dimension is the limiting one
+	if (widthRatio < heightRatio)
+	{
+		// The width is the limiting dimension
+		newWidth = itemSize.x * widthRatio;
+		newHeight = itemSize.y * widthRatio;
+	}
+	else
+	{
+		// The height is the limiting dimension
+		newWidth = itemSize.x * heightRatio;
+		newHeight = itemSize.y * heightRatio;
+	}
+	
+	// Use the new dimensions to recalculate the sizes. The new dimensions are less than or equal the supplied ones
+	float hzMargin = (width - newWidth)/2;
+	float vtMargin = (height- newHeight)/2;
+	
+	// Modify the bounds based on the margins
+	top += vtMargin;
+	bottom -= vtMargin;
+	left += hzMargin;
+	right -= hzMargin;
 }
