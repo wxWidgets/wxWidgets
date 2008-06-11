@@ -21,8 +21,8 @@
 
 #ifdef __DARWIN__
 
-#include "wx/mac/corefoundation/private/strconv_cf.h"
-#include "wx/mac/corefoundation/cfref.h"
+#include "wx/osx/core/private/strconv_cf.h"
+#include "wx/osx/core/cfref.h"
 
 
 // ============================================================================

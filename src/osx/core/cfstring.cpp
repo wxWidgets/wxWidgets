@@ -20,7 +20,7 @@
     #endif
 #endif
 
-#include "wx/mac/corefoundation/cfstring.h"
+#include "wx/osx/core/cfstring.h"
 
 #include <CoreFoundation/CoreFoundation.h>
 

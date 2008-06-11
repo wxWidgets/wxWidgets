@@ -27,7 +27,7 @@
 //DARWIN _ONLY_
 #ifdef __DARWIN__
 
-#include "wx/mac/corefoundation/hid.h"
+#include "wx/osx/core/hid.h"
 
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
@@ -37,7 +37,7 @@
     #include "wx/module.h"
 #endif
 
-#include "wx/mac/corefoundation/cfstring.h"
+#include "wx/osx/core/cfstring.h"
 
 // ============================================================================
 // implementation

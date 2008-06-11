@@ -28,9 +28,9 @@
 #include "wx/stdpaths.h"
 #include "wx/filename.h"
 #ifdef __WXMAC__
-#include "wx/mac/private.h"
+#include "wx/osx/private.h"
 #endif
-#include "wx/mac/corefoundation/cfstring.h"
+#include "wx/osx/core/cfstring.h"
 
 #include <CoreFoundation/CFBundle.h>
 #include <CoreFoundation/CFURL.h>

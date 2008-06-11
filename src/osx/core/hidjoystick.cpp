@@ -41,7 +41,7 @@
 #include "wx/thread.h"      //wxThread for polling thread/ wxCriticalSection
 
 //private headers
-#include "wx/mac/corefoundation/hid.h" //private mac hid stuff
+#include "wx/osx/core/hid.h" //private mac hid stuff
 
 //mac headers
 #include <CoreServices/CoreServices.h>

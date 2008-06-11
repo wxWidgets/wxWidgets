@@ -39,7 +39,7 @@
 
 // More WX Includes
 #include "wx/filename.h"
-#include "wx/mac/corefoundation/cfstring.h"
+#include "wx/osx/core/cfstring.h"
 
 // Default path style
 #define kDefaultPathStyle kCFURLPOSIXPathStyle
