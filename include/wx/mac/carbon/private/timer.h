@@ -11,7 +11,6 @@
 #ifndef _WX_MAC_PRIVATE_TIMER_H_
 #define _WX_MAC_PRIVATE_TIMER_H_
 
-#include "wx/mac/macnotfy.h"
 #include "wx/private/timer.h"
 
 struct MacTimerInfo;
