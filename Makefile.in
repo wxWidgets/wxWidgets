@@ -31983,7 +31983,7 @@ MOTIFDIR = $(WXDIR)/src/motif
 MSDOSDIR = $(WXDIR)/src/msdos
 MSWDIR   = $(WXDIR)/src/msw
 PMDIR    = $(WXDIR)/src/os2
-MACDIR   = $(WXDIR)/src/mac
+MACDIR   = $(WXDIR)/src/osx
 COCOADIR = $(WXDIR)/src/cocoa
 FTDIR    = $(WXDIR)/src/freetype
 INCDIR   = $(WXDIR)/include
@@ -32193,16 +32193,16 @@ BASE_DIST: ALL_DIST INTL_DIST
 	mkdir $(DISTDIR)/include/wx/richtext
 	mkdir $(DISTDIR)/include/wx/aui
 	mkdir $(DISTDIR)/include/wx/stc
-	mkdir $(DISTDIR)/include/wx/mac
-	mkdir $(DISTDIR)/include/wx/mac/carbon
-	mkdir $(DISTDIR)/include/wx/mac/corefoundation
+	mkdir $(DISTDIR)/include/wx/osx
+	mkdir $(DISTDIR)/include/wx/osx/carbon
+	mkdir $(DISTDIR)/include/wx/osx/core
 	mkdir $(DISTDIR)/include/wx/os2
 	mkdir $(DISTDIR)/include/wx/palmos
 	mkdir $(DISTDIR)/src/unix
-	mkdir $(DISTDIR)/src/mac
-	mkdir $(DISTDIR)/src/mac/corefoundation
-	mkdir $(DISTDIR)/src/mac/carbon
-	mkdir $(DISTDIR)/src/mac/carbon/morefilex
+	mkdir $(DISTDIR)/src/osx
+	mkdir $(DISTDIR)/src/osx/core
+	mkdir $(DISTDIR)/src/osx/carbon
+	mkdir $(DISTDIR)/src/osx/carbon/morefilex
 	mkdir $(DISTDIR)/src/msdos
 	mkdir $(DISTDIR)/src/msw
 	mkdir $(DISTDIR)/src/os2
@@ -32269,12 +32269,12 @@ GTK_DIST: UNIV_DIST
 	$(CP_P) $(INCDIR)/wx/gtk/gnome/*.h $(DISTDIR)/include/wx/gtk/gnome
 	$(CP_P) $(GTKDIR)/gnome/*.cpp $(DISTDIR)/src/gtk/gnome
 
-	mkdir $(DISTDIR)/src/mac
-	mkdir $(DISTDIR)/src/mac/corefoundation
-	$(CP_P) $(WXDIR)/src/mac/corefoundation/*.cpp $(DISTDIR)/src/mac/corefoundation
-	mkdir $(DISTDIR)/include/wx/mac
-	mkdir $(DISTDIR)/include/wx/mac/corefoundation
-	$(CP_P) $(WXDIR)/include/wx/mac/corefoundation/*.h $(DISTDIR)/include/wx/mac/corefoundation
+	mkdir $(DISTDIR)/src/osx
+	mkdir $(DISTDIR)/src/osx/core
+	$(CP_P) $(WXDIR)/src/osx/core/*.cpp $(DISTDIR)/src/osx/core
+	mkdir $(DISTDIR)/include/wx/osx
+	mkdir $(DISTDIR)/include/wx/osx/core
+	$(CP_P) $(WXDIR)/include/wx/osx/core/*.h $(DISTDIR)/include/wx/osx/core
 
 X11_DIST: UNIV_DIST
 	$(CP_P) $(WXDIR)/wxX11.spec $(DISTDIR)
@@ -32284,12 +32284,12 @@ X11_DIST: UNIV_DIST
 	$(CP_P) $(X11DIR)/*.cpp $(DISTDIR)/src/x11
 	$(CP_P) $(X11DIR)/*.c $(DISTDIR)/src/x11
 	$(CP_P) $(X11DIR)/*.xbm $(DISTDIR)/src/x11
-	mkdir $(DISTDIR)/src/mac
-	mkdir $(DISTDIR)/src/mac/corefoundation
-	$(CP_P) $(WXDIR)/src/mac/corefoundation/*.cpp $(DISTDIR)/src/mac/corefoundation
-	mkdir $(DISTDIR)/include/wx/mac
-	mkdir $(DISTDIR)/include/wx/mac/corefoundation
-	$(CP_P) $(WXDIR)/include/wx/mac/corefoundation/*.h $(DISTDIR)/include/wx/mac/corefoundation
+	mkdir $(DISTDIR)/src/osx
+	mkdir $(DISTDIR)/src/osx/core
+	$(CP_P) $(WXDIR)/src/osx/core/*.cpp $(DISTDIR)/src/osx/core
+	mkdir $(DISTDIR)/include/wx/osx
+	mkdir $(DISTDIR)/include/wx/osx/core
+	$(CP_P) $(WXDIR)/include/wx/osx/core/*.h $(DISTDIR)/include/wx/osx/core
 
 MOTIF_DIST: ALL_GUI_DIST
 	$(CP_P) $(WXDIR)/wxMotif.spec $(DISTDIR)
@@ -32311,47 +32311,47 @@ MOTIF_DIST: ALL_GUI_DIST
 
 MACX_DIST: ALL_GUI_DIST
 	$(CP_P) $(INCDIR)/*.* $(DISTDIR)/include
-	mkdir $(DISTDIR)/include/wx/mac/carbon
-	mkdir $(DISTDIR)/include/wx/mac/private
-	mkdir $(DISTDIR)/include/wx/mac/carbon/private
-	$(CP_P) $(INCDIR)/wx/mac/*.h $(DISTDIR)/include/wx/mac
-	$(CP_P) $(INCDIR)/wx/mac/carbon/*.h $(DISTDIR)/include/wx/mac/carbon
-	$(CP_P) $(INCDIR)/wx/mac/carbon/private/*.h $(DISTDIR)/include/wx/mac/carbon/private
-	$(CP_P) $(INCDIR)/wx/mac/private/*.h $(DISTDIR)/include/wx/mac/private
-	mkdir $(DISTDIR)/include/wx/mac/corefoundation
-	$(CP_P) $(INCDIR)/wx/mac/corefoundation/*.h $(DISTDIR)/include/wx/mac/corefoundation
-	mkdir $(DISTDIR)/src/mac/corefoundation
-	$(CP_P) $(MACDIR)/corefoundation/*.cpp $(DISTDIR)/src/mac/corefoundation
+	mkdir $(DISTDIR)/include/wx/osx/carbon
+	mkdir $(DISTDIR)/include/wx/osx/private
+	mkdir $(DISTDIR)/include/wx/osx/carbon/private
+	$(CP_P) $(INCDIR)/wx/osx/*.h $(DISTDIR)/include/wx/osx
+	$(CP_P) $(INCDIR)/wx/osx/carbon/*.h $(DISTDIR)/include/wx/osx/carbon
+	$(CP_P) $(INCDIR)/wx/osx/carbon/private/*.h $(DISTDIR)/include/wx/osx/carbon/private
+	$(CP_P) $(INCDIR)/wx/osx/private/*.h $(DISTDIR)/include/wx/osx/private
+	mkdir $(DISTDIR)/include/wx/osx/core
+	$(CP_P) $(INCDIR)/wx/osx/core/*.h $(DISTDIR)/include/wx/osx/core
+	mkdir $(DISTDIR)/src/osx/core
+	$(CP_P) $(MACDIR)/core/*.cpp $(DISTDIR)/src/osx/core
 	mkdir $(DISTDIR)/src/html/htmlctrl
 	mkdir $(DISTDIR)/src/html/htmlctrl/webkit
 	$(CP_P) $(WXDIR)/src/html/htmlctrl/webkit/*.mm $(DISTDIR)/src/html/htmlctrl/webkit
-	mkdir $(DISTDIR)/src/mac/carbon
-	$(CP_P) $(MACDIR)/carbon/*.cpp $(DISTDIR)/src/mac/carbon
-	$(CP_P) $(MACDIR)/carbon/*.mm $(DISTDIR)/src/mac/carbon
-	$(CP_P) $(MACDIR)/carbon/*.icns $(DISTDIR)/src/mac/carbon
-	$(CP_P) $(MACDIR)/carbon/Info.plist.in $(DISTDIR)/src/mac/carbon
-	$(CP_P) $(MACDIR)/carbon/*.h $(DISTDIR)/src/mac/carbon
-	$(CP_P) $(MACDIR)/carbon/*.r $(DISTDIR)/src/mac/carbon
-	mkdir $(DISTDIR)/src/mac/carbon/morefile
-	$(CP_P) $(MACDIR)/carbon/morefile/*.h $(DISTDIR)/src/mac/carbon/morefile
-	$(CP_P) $(MACDIR)/carbon/morefile/*.c $(DISTDIR)/src/mac/carbon/morefile
-	mkdir $(DISTDIR)/src/mac/carbon/morefilex
-	$(CP_P) $(MACDIR)/carbon/morefilex/*.h $(DISTDIR)/src/mac/carbon/morefilex
-	$(CP_P) $(MACDIR)/carbon/morefilex/*.c $(DISTDIR)/src/mac/carbon/morefilex
-	$(CP_P) $(MACDIR)/carbon/morefilex/*.cpp $(DISTDIR)/src/mac/carbon/morefilex
+	mkdir $(DISTDIR)/src/osx/carbon
+	$(CP_P) $(MACDIR)/carbon/*.cpp $(DISTDIR)/src/osx/carbon
+	$(CP_P) $(MACDIR)/carbon/*.mm $(DISTDIR)/src/osx/carbon
+	$(CP_P) $(MACDIR)/carbon/*.icns $(DISTDIR)/src/osx/carbon
+	$(CP_P) $(MACDIR)/carbon/Info.plist.in $(DISTDIR)/src/osx/carbon
+	$(CP_P) $(MACDIR)/carbon/*.h $(DISTDIR)/src/osx/carbon
+	$(CP_P) $(MACDIR)/carbon/*.r $(DISTDIR)/src/osx/carbon
+	mkdir $(DISTDIR)/src/osx/carbon/morefile
+	$(CP_P) $(MACDIR)/carbon/morefile/*.h $(DISTDIR)/src/osx/carbon/morefile
+	$(CP_P) $(MACDIR)/carbon/morefile/*.c $(DISTDIR)/src/osx/carbon/morefile
+	mkdir $(DISTDIR)/src/osx/carbon/morefilex
+	$(CP_P) $(MACDIR)/carbon/morefilex/*.h $(DISTDIR)/src/osx/carbon/morefilex
+	$(CP_P) $(MACDIR)/carbon/morefilex/*.c $(DISTDIR)/src/osx/carbon/morefilex
+	$(CP_P) $(MACDIR)/carbon/morefilex/*.cpp $(DISTDIR)/src/osx/carbon/morefilex
 
 COCOA_DIST: ALL_GUI_DIST
 	$(CP_P) $(INCDIR)/wx/cocoa/*.h $(DISTDIR)/include/wx/cocoa
 	$(CP_P) $(COCOADIR)/*.mm $(DISTDIR)/src/cocoa
 	$(CP_P) $(COCOADIR)/*.cpp $(DISTDIR)/src/cocoa
 	$(CP_P) $(COCOADIR)/*.r $(DISTDIR)/src/cocoa
-	mkdir $(DISTDIR)/include/wx/mac/corefoundation
-	$(CP_P) $(INCDIR)/wx/mac/corefoundation/*.h $(DISTDIR)/include/wx/mac/corefoundation
-	mkdir $(DISTDIR)/src/mac/corefoundation
-	$(CP_P) $(MACDIR)/corefoundation/*.cpp $(DISTDIR)/src/mac/corefoundation
-	mkdir $(DISTDIR)/src/mac/carbon
-	$(CP_P) $(MACDIR)/carbon/Info.plist.in $(DISTDIR)/src/mac/carbon
-	$(CP_P) $(MACDIR)/carbon/wxmac.icns $(DISTDIR)/src/mac/carbon
+	mkdir $(DISTDIR)/include/wx/osx/core
+	$(CP_P) $(INCDIR)/wx/osx/core/*.h $(DISTDIR)/include/wx/osx/core
+	mkdir $(DISTDIR)/src/osx/core
+	$(CP_P) $(MACDIR)/core/*.cpp $(DISTDIR)/src/osx/core
+	mkdir $(DISTDIR)/src/osx/carbon
+	$(CP_P) $(MACDIR)/carbon/Info.plist.in $(DISTDIR)/src/osx/carbon
+	$(CP_P) $(MACDIR)/carbon/wxmac.icns $(DISTDIR)/src/osx/carbon
 
 MSW_DIST: UNIV_DIST
 	mkdir $(DISTDIR)/include/wx/msw/ole
