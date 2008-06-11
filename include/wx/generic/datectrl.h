@@ -12,10 +12,9 @@
 #ifndef _WX_GENERIC_DATECTRL_H_
 #define _WX_GENERIC_DATECTRL_H_
 
-class WXDLLIMPEXP_FWD_ADV wxCalendarDateAttr;
-class WXDLLIMPEXP_FWD_ADV wxGenericCalendarCtrl;
-class WXDLLIMPEXP_FWD_ADV wxCalendarEvent;
-class WXDLLIMPEXP_FWD_CORE wxComboCtrl;
+#include "wx/calctrl.h"
+#include "wx/combo.h"
+
 class WXDLLIMPEXP_FWD_ADV wxCalendarComboPopup;
 
 class WXDLLIMPEXP_ADV wxDatePickerCtrlGeneric : public wxDatePickerCtrlBase
@@ -59,7 +58,7 @@ public:
 
     // extra methods available only in this (generic) implementation
     bool SetFormat(const wxString& fmt);
-    wxGenericCalendarCtrl *GetCalendar() const;
+    wxCalendarCtrl *GetCalendar() const;
 
 
     // implementation only from now on
@@ -80,7 +79,6 @@ private:
 
     wxComboCtrl* m_combo;
     wxCalendarComboPopup* m_popup;
-
 
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxDatePickerCtrlGeneric)

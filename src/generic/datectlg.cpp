@@ -25,13 +25,6 @@
 
 #if wxUSE_DATEPICKCTRL
 
-#include "wx/datectrl.h"
-
-// use this version if we're explicitly requested to do it or if it's the only
-// one we have
-#if !defined(wxHAS_NATIVE_DATEPICKCTRL) || \
-        (defined(wxUSE_DATEPICKCTRL_GENERIC) && wxUSE_DATEPICKCTRL_GENERIC)
-
 #ifndef WX_PRECOMP
     #include "wx/dialog.h"
     #include "wx/dcmemory.h"
@@ -40,27 +33,14 @@
     #include "wx/valtext.h"
 #endif
 
-#ifdef wxHAS_NATIVE_DATEPICKCTRL
-    // this header is not included from wx/datectrl.h if we have a native
-    // version, but we do need it here
-    #include "wx/generic/datectrl.h"
-#endif
+#include "wx/datectrl.h"
+#include "wx/generic/datectrl.h"
 
-#include "wx/dateevt.h"
-
-#include "wx/calctrl.h"
-#include "wx/generic/calctrlg.h"
-#include "wx/combo.h"
 
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
 
-#if defined(__WXMSW__)
-    #define CALBORDER         0
-#else
-    #define CALBORDER         4
-#endif
 
 // ----------------------------------------------------------------------------
 // global variables
@@ -71,12 +51,12 @@
 // local classes
 // ----------------------------------------------------------------------------
 
-class wxCalendarComboPopup : public wxGenericCalendarCtrl,
+class wxCalendarComboPopup : public wxCalendarCtrl,
                              public wxComboPopup
 {
 public:
 
-    wxCalendarComboPopup() : wxGenericCalendarCtrl(),
+    wxCalendarComboPopup() : wxCalendarCtrl(),
                              wxComboPopup()
     {
     }
@@ -90,44 +70,15 @@ public:
     //     certainly introduce new bugs.
     virtual bool Create(wxWindow* parent)
     {
-        if ( !wxGenericCalendarCtrl::Create(parent, wxID_ANY, wxDefaultDateTime,
+        if ( !wxCalendarCtrl::Create(parent, wxID_ANY, wxDefaultDateTime,
                               wxPoint(0, 0), wxDefaultSize,
-                              wxCAL_SHOW_HOLIDAYS | wxBORDER_SUNKEN) )
+                              wxCAL_SEQUENTIAL_MONTH_SELECTION 
+                              | wxCAL_SHOW_HOLIDAYS | wxBORDER_SUNKEN) )
             return false;
-
-        wxWindow *yearControl = wxGenericCalendarCtrl::GetYearControl();
-
-        wxClientDC dc(yearControl);
-        dc.SetFont(yearControl->GetFont());
-        wxCoord width, dummy;
-        dc.GetTextExtent(wxT("2000"), &width, &dummy);
-        width += ConvertDialogToPixels(wxSize(20, 0)).x;
-
-        wxSize calSize = wxGenericCalendarCtrl::GetBestSize();
-        wxSize yearSize = yearControl->GetSize();
-        yearSize.x = width;
-
-        wxPoint yearPosition = yearControl->GetPosition();
 
         SetFormat("%x");
 
-        width = yearPosition.x + yearSize.x+2+CALBORDER/2;
-        if (width < calSize.x-4)
-            width = calSize.x-4;
-
-        int calPos = (width-calSize.x)/2;
-        if (calPos == -1)
-        {
-            calPos = 0;
-            width += 2;
-        }
-        wxGenericCalendarCtrl::SetSize(calPos, 0, calSize.x, calSize.y);
-        yearControl->SetSize(width-yearSize.x-CALBORDER/2, yearPosition.y,
-                             yearSize.x, yearSize.y);
-        wxGenericCalendarCtrl::GetMonthControl()->Move(0, 0);
-
-        m_useSize.x = width+CALBORDER/2;
-        m_useSize.y = calSize.y-2+CALBORDER;
+        m_useSize  = wxCalendarCtrl::GetBestSize();
 
         wxWindow* tx = m_combo->GetTextCtrl();
         if ( !tx )
@@ -345,7 +296,7 @@ private:
 };
 
 
-BEGIN_EVENT_TABLE(wxCalendarComboPopup, wxGenericCalendarCtrl)
+BEGIN_EVENT_TABLE(wxCalendarComboPopup, wxCalendarCtrl)
     EVT_KEY_DOWN(wxCalendarComboPopup::OnCalKey)
     EVT_CALENDAR_SEL_CHANGED(wxID_ANY, wxCalendarComboPopup::OnSelChange)
     EVT_CALENDAR_PAGE_CHANGED(wxID_ANY, wxCalendarComboPopup::OnSelChange)
@@ -469,11 +420,7 @@ void wxDatePickerCtrlGeneric::SetValue(const wxDateTime& date)
 
 bool wxDatePickerCtrlGeneric::GetRange(wxDateTime *dt1, wxDateTime *dt2) const
 {
-    if (dt1)
-        *dt1 = m_popup->GetLowerDateLimit();
-    if (dt2)
-        *dt2 = m_popup->GetUpperDateLimit();
-    return true;
+    return m_popup->GetDateRange(dt1, dt2);
 }
 
 
@@ -483,7 +430,7 @@ wxDatePickerCtrlGeneric::SetRange(const wxDateTime &dt1, const wxDateTime &dt2)
     m_popup->SetDateRange(dt1, dt2);
 }
 
-wxGenericCalendarCtrl *wxDatePickerCtrlGeneric::GetCalendar() const
+wxCalendarCtrl *wxDatePickerCtrlGeneric::GetCalendar() const
 {
     return m_popup;
 }
@@ -523,8 +470,6 @@ void wxDatePickerCtrlGeneric::OnFocus(wxFocusEvent& WXUNUSED(event))
     m_combo->SetFocus();
 }
 
-
-#endif // wxUSE_DATEPICKCTRL_GENERIC
 
 #endif // wxUSE_DATEPICKCTRL
 
