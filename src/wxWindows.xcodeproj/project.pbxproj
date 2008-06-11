@@ -1502,8 +1502,8 @@
 		0A98CB6A07146A06007B4289 /* statbar.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = statbar.cpp; sourceTree = "<group>"; };
 		0A98CC470715CFBC007B4289 /* gdiobj.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = gdiobj.cpp; sourceTree = "<group>"; };
 		0A98CD2207172992007B4289 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
-		40011CBB0893D5B400E4DE95 /* utilsexc_base.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = utilsexc_base.cpp; path = mac/corefoundation/utilsexc_base.cpp; sourceTree = SOURCE_ROOT; };
-		40011F3B0897D8DF00E4DE95 /* setup0.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = setup0.h; path = wx/mac/setup0.h; sourceTree = "<group>"; };
+		40011CBB0893D5B400E4DE95 /* utilsexc_base.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = utilsexc_base.cpp; path = osx/core/utilsexc_base.cpp; sourceTree = SOURCE_ROOT; };
+		40011F3B0897D8DF00E4DE95 /* setup0.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = setup0.h; path = wx/osx/setup0.h; sourceTree = "<group>"; };
 		400226610CE644C0007F534D /* utilscocoa.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = utilscocoa.mm; sourceTree = "<group>"; };
 		400EDEB2089D4FFD00E848D9 /* propdlg.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = propdlg.cpp; sourceTree = "<group>"; };
 		401640E507F94B2800A8837A /* imaglist.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = imaglist.cpp; sourceTree = "<group>"; };
@@ -1702,10 +1702,10 @@
 		405415210AB6A0B000450E09 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
 		405DD167063C2BFC00F579EE /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = /usr/lib/libiconv.dylib; sourceTree = "<absolute>"; };
 		40607C1407493C3F00DC0420 /* archive.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = archive.cpp; sourceTree = "<group>"; };
-		40607C740749432A00DC0420 /* gsockosx.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = gsockosx.cpp; path = mac/corefoundation/gsockosx.cpp; sourceTree = SOURCE_ROOT; };
-		40607C750749432A00DC0420 /* utilsexc_cf.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = utilsexc_cf.cpp; path = mac/corefoundation/utilsexc_cf.cpp; sourceTree = SOURCE_ROOT; };
-		40670A8207377A6300F7C08C /* cfstring.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = cfstring.cpp; path = mac/corefoundation/cfstring.cpp; sourceTree = SOURCE_ROOT; };
-		40670A8307377A6300F7C08C /* stdpaths_cf.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = stdpaths_cf.cpp; path = mac/corefoundation/stdpaths_cf.cpp; sourceTree = SOURCE_ROOT; };
+		40607C740749432A00DC0420 /* gsockosx.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = gsockosx.cpp; path = osx/core/gsockosx.cpp; sourceTree = SOURCE_ROOT; };
+		40607C750749432A00DC0420 /* utilsexc_cf.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = utilsexc_cf.cpp; path = osx/core/utilsexc_cf.cpp; sourceTree = SOURCE_ROOT; };
+		40670A8207377A6300F7C08C /* cfstring.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = cfstring.cpp; path = osx/core/cfstring.cpp; sourceTree = SOURCE_ROOT; };
+		40670A8307377A6300F7C08C /* stdpaths_cf.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = stdpaths_cf.cpp; path = osx/core/stdpaths_cf.cpp; sourceTree = SOURCE_ROOT; };
 		40670A9307377B1000F7C08C /* gbsizer.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = gbsizer.cpp; sourceTree = "<group>"; };
 		40670A9407377B1000F7C08C /* sstream.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = sstream.cpp; sourceTree = "<group>"; };
 		40670A9507377B1000F7C08C /* stdpbase.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = stdpbase.cpp; sourceTree = "<group>"; };
@@ -1828,8 +1828,8 @@
 		40AF909707C8A976006A6D3C /* htmllbox.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = htmllbox.cpp; sourceTree = "<group>"; };
 		40AF909907C8A976006A6D3C /* vlbox.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = vlbox.cpp; sourceTree = "<group>"; };
 		40AF909A07C8A976006A6D3C /* vscroll.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = vscroll.cpp; sourceTree = "<group>"; };
-		40AF90B307C8A9CF006A6D3C /* hid.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = hid.cpp; path = mac/corefoundation/hid.cpp; sourceTree = SOURCE_ROOT; };
-		40AF90B407C8A9CF006A6D3C /* hidjoystick.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = hidjoystick.cpp; path = mac/corefoundation/hidjoystick.cpp; sourceTree = SOURCE_ROOT; };
+		40AF90B307C8A9CF006A6D3C /* hid.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = hid.cpp; path = osx/core/hid.cpp; sourceTree = SOURCE_ROOT; };
+		40AF90B407C8A9CF006A6D3C /* hidjoystick.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = hidjoystick.cpp; path = osx/core/hidjoystick.cpp; sourceTree = SOURCE_ROOT; };
 		40AF90BD07C8AA08006A6D3C /* dlunix.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = dlunix.cpp; sourceTree = "<group>"; };
 		40AF90C207C8AA17006A6D3C /* chm.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = chm.cpp; sourceTree = "<group>"; };
 		40AF90E207C8B18C006A6D3C /* colordlgosx.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = colordlgosx.mm; sourceTree = "<group>"; };
@@ -1838,7 +1838,7 @@
 		40AF90E807C8B18C006A6D3C /* mediactrl.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = mediactrl.cpp; sourceTree = "<group>"; };
 		40AF913507C8BD1F006A6D3C /* combobox.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = combobox.cpp; sourceTree = "<group>"; };
 		40C3B3110CCBF0BB00DE0E06 /* timerimpl.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = timerimpl.cpp; sourceTree = "<group>"; };
-		40C3B31F0CCBF20900DE0E06 /* strconv_cf.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = strconv_cf.cpp; path = mac/corefoundation/strconv_cf.cpp; sourceTree = SOURCE_ROOT; };
+		40C3B31F0CCBF20900DE0E06 /* strconv_cf.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = strconv_cf.cpp; path = osx/core/strconv_cf.cpp; sourceTree = SOURCE_ROOT; };
 		40C3B32A0CCBF23800DE0E06 /* accelcmn.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = accelcmn.cpp; sourceTree = "<group>"; };
 		40C3B33F0CCBF3CB00DE0E06 /* timerunx.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = timerunx.cpp; sourceTree = "<group>"; };
 		40C3B3480CCBF43E00DE0E06 /* appunix.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = appunix.cpp; sourceTree = "<group>"; };
@@ -1920,7 +1920,6 @@
 		CA8CC832050EE2BD00000080 /* bookctrl.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = bookctrl.cpp; sourceTree = "<group>"; };
 		CADEF54103C8C0A800000133 /* display.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = display.cpp; sourceTree = "<group>"; };
 		CADEF54303C8C0A800000133 /* MoreFilesX.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = MoreFilesX.c; sourceTree = "<group>"; };
-		CADEF54C03C8C11300000133 /* display.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = display.h; sourceTree = "<group>"; };
 		F55E08F801FDF9CC01000133 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = /usr/lib/libz.dylib; sourceTree = "<absolute>"; };
 		F58E04FD02F11FA701A8020C /* msgout.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = msgout.cpp; sourceTree = "<group>"; };
 		F5A85C1E01FA022A0175ACA7 /* accel.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = accel.h; sourceTree = "<group>"; };
@@ -1957,10 +1956,6 @@
 		F5A85C3D01FA022A0175ACA7 /* dataobj.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = dataobj.h; sourceTree = "<group>"; };
 		F5A85C3F01FA022A0175ACA7 /* datetime.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = datetime.h; sourceTree = "<group>"; };
 		F5A85C4101FA022A0175ACA7 /* datstrm.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = datstrm.h; sourceTree = "<group>"; };
-		F5A85C4201FA022A0175ACA7 /* db.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = db.h; sourceTree = "<group>"; };
-		F5A85C4301FA022A0175ACA7 /* dbgrid.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = dbgrid.h; sourceTree = "<group>"; };
-		F5A85C4401FA022A0175ACA7 /* dbkeyg.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = dbkeyg.h; sourceTree = "<group>"; };
-		F5A85C4501FA022A0175ACA7 /* dbtable.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = dbtable.h; sourceTree = "<group>"; };
 		F5A85C4601FA022A0175ACA7 /* dc.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = dc.h; sourceTree = "<group>"; };
 		F5A85C4701FA022A0175ACA7 /* dcclient.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = dcclient.h; sourceTree = "<group>"; };
 		F5A85C4801FA022A0175ACA7 /* dcmemory.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = dcmemory.h; sourceTree = "<group>"; };
@@ -2008,7 +2003,6 @@
 		F5A85C7301FA022A0175ACA7 /* gdicmn.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = gdicmn.h; sourceTree = "<group>"; };
 		F5A85C7401FA022A0175ACA7 /* gdiobj.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = gdiobj.h; sourceTree = "<group>"; };
 		F5A85C7701FA022A0175ACA7 /* accel.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = accel.h; sourceTree = "<group>"; };
-		F5A85C7801FA022A0175ACA7 /* calctrl.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = calctrl.h; sourceTree = "<group>"; };
 		F5A85C7901FA022A0175ACA7 /* caret.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = caret.h; sourceTree = "<group>"; };
 		F5A85C7A01FA022A0175ACA7 /* choicdgg.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = choicdgg.h; sourceTree = "<group>"; };
 		F5A85C7B01FA022A0175ACA7 /* colrdlgg.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = colrdlgg.h; sourceTree = "<group>"; };
@@ -2083,8 +2077,6 @@
 		F5A85D2D01FA022B0175ACA7 /* intl.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = intl.h; sourceTree = "<group>"; };
 		F5A85D2E01FA022B0175ACA7 /* ioswrap.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ioswrap.h; sourceTree = "<group>"; };
 		F5A85D2F01FA022B0175ACA7 /* ipcbase.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ipcbase.h; sourceTree = "<group>"; };
-		F5A85D3001FA022B0175ACA7 /* isql.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = isql.h; sourceTree = "<group>"; };
-		F5A85D3101FA022B0175ACA7 /* isqlext.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = isqlext.h; sourceTree = "<group>"; };
 		F5A85D3201FA022B0175ACA7 /* joystick.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = joystick.h; sourceTree = "<group>"; };
 		F5A85D3301FA022B0175ACA7 /* layout.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = layout.h; sourceTree = "<group>"; };
 		F5A85D3401FA022B0175ACA7 /* laywin.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = laywin.h; sourceTree = "<group>"; };
@@ -2094,7 +2086,6 @@
 		F5A85D3901FA022B0175ACA7 /* log.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = log.h; sourceTree = "<group>"; };
 		F5A85D3A01FA022B0175ACA7 /* longlong.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = longlong.h; sourceTree = "<group>"; };
 		F5A85D3C01FA022B0175ACA7 /* accel.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = accel.h; sourceTree = "<group>"; };
-		F5A85D3D01FA022B0175ACA7 /* aga.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = aga.h; sourceTree = "<group>"; };
 		F5A85D3E01FA022B0175ACA7 /* app.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = app.h; sourceTree = "<group>"; };
 		F5A85D3F01FA022B0175ACA7 /* bitmap.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = bitmap.h; sourceTree = "<group>"; };
 		F5A85D4001FA022B0175ACA7 /* bmpbuttn.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = bmpbuttn.h; sourceTree = "<group>"; };
@@ -2125,16 +2116,12 @@
 		F5A85D5901FA022B0175ACA7 /* fontdlg.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = fontdlg.h; sourceTree = "<group>"; };
 		F5A85D5A01FA022B0175ACA7 /* frame.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = frame.h; sourceTree = "<group>"; };
 		F5A85D5B01FA022B0175ACA7 /* gauge.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = gauge.h; sourceTree = "<group>"; };
-		F5A85D5C01FA022B0175ACA7 /* gdiobj.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = gdiobj.h; sourceTree = "<group>"; };
 		F5A85D5D01FA022B0175ACA7 /* glcanvas.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = glcanvas.h; sourceTree = "<group>"; };
-		F5A85D5E01FA022B0175ACA7 /* gsockmac.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = gsockmac.h; sourceTree = "<group>"; };
 		F5A85D6001FA022B0175ACA7 /* icon.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = icon.h; sourceTree = "<group>"; };
 		F5A85D6101FA022B0175ACA7 /* imaglist.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = imaglist.h; sourceTree = "<group>"; };
 		F5A85D6201FA022B0175ACA7 /* joystick.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = joystick.h; sourceTree = "<group>"; };
 		F5A85D6301FA022B0175ACA7 /* listbox.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = listbox.h; sourceTree = "<group>"; };
 		F5A85D6401FA022B0175ACA7 /* listctrl.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = listctrl.h; sourceTree = "<group>"; };
-		F5A85D6501FA022B0175ACA7 /* macnotfy.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = macnotfy.h; sourceTree = "<group>"; };
-		F5A85D6601FA022B0175ACA7 /* macsock.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = macsock.h; sourceTree = "<group>"; };
 		F5A85D6701FA022B0175ACA7 /* mdi.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = mdi.h; sourceTree = "<group>"; };
 		F5A85D6801FA022B0175ACA7 /* menu.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = menu.h; sourceTree = "<group>"; };
 		F5A85D6901FA022B0175ACA7 /* menuitem.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = menuitem.h; sourceTree = "<group>"; };
@@ -2163,7 +2150,6 @@
 		F5A85D8201FA022B0175ACA7 /* statusbr.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = statusbr.h; sourceTree = "<group>"; };
 		F5A85D8301FA022B0175ACA7 /* tabctrl.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = tabctrl.h; sourceTree = "<group>"; };
 		F5A85D8501FA022B0175ACA7 /* textctrl.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = textctrl.h; sourceTree = "<group>"; };
-		F5A85D8601FA022B0175ACA7 /* timer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = timer.h; sourceTree = "<group>"; };
 		F5A85D8701FA022B0175ACA7 /* toolbar.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = toolbar.h; sourceTree = "<group>"; };
 		F5A85D8801FA022B0175ACA7 /* tooltip.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = tooltip.h; sourceTree = "<group>"; };
 		F5A85D8901FA022B0175ACA7 /* toplevel.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = toplevel.h; sourceTree = "<group>"; };
@@ -2264,7 +2250,6 @@
 		F5A85F7E01FA022B0175ACA7 /* variant.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = variant.h; sourceTree = "<group>"; };
 		F5A85F7F01FA022B0175ACA7 /* vector.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = vector.h; sourceTree = "<group>"; };
 		F5A85F8001FA022B0175ACA7 /* version.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = version.h; sourceTree = "<group>"; };
-		F5A85F8201FA022B0175ACA7 /* wave.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = wave.h; sourceTree = "<group>"; };
 		F5A85F8301FA022B0175ACA7 /* wfstream.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = wfstream.h; sourceTree = "<group>"; };
 		F5A85F8401FA022B0175ACA7 /* window.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = window.h; sourceTree = "<group>"; };
 		F5A85F8501FA022B0175ACA7 /* wizard.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = wizard.h; sourceTree = "<group>"; };
@@ -2821,7 +2806,7 @@
 			path = src;
 			sourceTree = "<group>";
 		};
-		40670A8107377A3600F7C08C /* mac/corefoundation */ = {
+		40670A8107377A3600F7C08C /* osx/core */ = {
 			isa = PBXGroup;
 			children = (
 				40C3B31F0CCBF20900DE0E06 /* strconv_cf.cpp */,
@@ -2833,8 +2818,8 @@
 				40011CBB0893D5B400E4DE95 /* utilsexc_base.cpp */,
 				40607C750749432A00DC0420 /* utilsexc_cf.cpp */,
 			);
-			name = mac/corefoundation;
-			path = mac/carbon;
+			name = osx/core;
+			path = osx/carbon;
 			sourceTree = "<group>";
 		};
 		407C6AD60A899E260056252A /* aui */ = {
@@ -2968,7 +2953,7 @@
 				CADEF54303C8C0A800000133 /* MoreFilesX.c */,
 			);
 			name = morefilex;
-			path = mac/carbon/morefilex;
+			path = osx/carbon/morefilex;
 			sourceTree = SOURCE_ROOT;
 		};
 		F5A85C1A01FA022A0175ACA7 /* include */ = {
@@ -3021,10 +3006,6 @@
 				F5A85C3D01FA022A0175ACA7 /* dataobj.h */,
 				F5A85C3F01FA022A0175ACA7 /* datetime.h */,
 				F5A85C4101FA022A0175ACA7 /* datstrm.h */,
-				F5A85C4201FA022A0175ACA7 /* db.h */,
-				F5A85C4301FA022A0175ACA7 /* dbgrid.h */,
-				F5A85C4401FA022A0175ACA7 /* dbkeyg.h */,
-				F5A85C4501FA022A0175ACA7 /* dbtable.h */,
 				F5A85C4601FA022A0175ACA7 /* dc.h */,
 				F5A85C4701FA022A0175ACA7 /* dcclient.h */,
 				F5A85C4801FA022A0175ACA7 /* dcmemory.h */,
@@ -3098,8 +3079,6 @@
 				F5A85D2D01FA022B0175ACA7 /* intl.h */,
 				F5A85D2E01FA022B0175ACA7 /* ioswrap.h */,
 				F5A85D2F01FA022B0175ACA7 /* ipcbase.h */,
-				F5A85D3001FA022B0175ACA7 /* isql.h */,
-				F5A85D3101FA022B0175ACA7 /* isqlext.h */,
 				F5A85D3201FA022B0175ACA7 /* joystick.h */,
 				F5A85D3301FA022B0175ACA7 /* layout.h */,
 				F5A85D3401FA022B0175ACA7 /* laywin.h */,
@@ -3109,7 +3088,7 @@
 				F5A8703A01FA0B7F0175ACA7 /* listimpl.cpp */,
 				F5A85D3901FA022B0175ACA7 /* log.h */,
 				F5A85D3A01FA022B0175ACA7 /* longlong.h */,
-				F5A85D3B01FA022B0175ACA7 /* mac/carbon */,
+				F5A85D3B01FA022B0175ACA7 /* osx/carbon */,
 				F5A85D8E01FA022B0175ACA7 /* matrix.h */,
 				F5A85D8F01FA022B0175ACA7 /* mdi.h */,
 				F5A85D9001FA022B0175ACA7 /* memconf.h */,
@@ -3201,7 +3180,6 @@
 				F5A85F7F01FA022B0175ACA7 /* vector.h */,
 				F5A85F8001FA022B0175ACA7 /* version.h */,
 				F5CC83E90379C20901000133 /* volume.h */,
-				F5A85F8201FA022B0175ACA7 /* wave.h */,
 				F5A85F8301FA022B0175ACA7 /* wfstream.h */,
 				F5A85F8401FA022B0175ACA7 /* window.h */,
 				F5A85F8501FA022B0175ACA7 /* wizard.h */,
@@ -3221,7 +3199,6 @@
 			isa = PBXGroup;
 			children = (
 				F5A85C7701FA022A0175ACA7 /* accel.h */,
-				F5A85C7801FA022A0175ACA7 /* calctrl.h */,
 				F5A85C7901FA022A0175ACA7 /* caret.h */,
 				F5A85C7A01FA022A0175ACA7 /* choicdgg.h */,
 				F5A85C7B01FA022A0175ACA7 /* colrdlgg.h */,
@@ -3284,12 +3261,11 @@
 			path = html;
 			sourceTree = "<group>";
 		};
-		F5A85D3B01FA022B0175ACA7 /* mac/carbon */ = {
+		F5A85D3B01FA022B0175ACA7 /* osx/carbon */ = {
 			isa = PBXGroup;
 			children = (
 				61048A6D0B277DC2009C253D /* private */,
 				F5A85D3C01FA022B0175ACA7 /* accel.h */,
-				F5A85D3D01FA022B0175ACA7 /* aga.h */,
 				F5A85D3E01FA022B0175ACA7 /* app.h */,
 				F5A85D3F01FA022B0175ACA7 /* bitmap.h */,
 				F5A85D4001FA022B0175ACA7 /* bmpbuttn.h */,
@@ -3314,23 +3290,18 @@
 				F5A85D5301FA022B0175ACA7 /* dcscreen.h */,
 				F5A85D5401FA022B0175ACA7 /* dialog.h */,
 				F5A85D5501FA022B0175ACA7 /* dirdlg.h */,
-				CADEF54C03C8C11300000133 /* display.h */,
 				F5A85D5601FA022B0175ACA7 /* dnd.h */,
 				F5A85D5701FA022B0175ACA7 /* filedlg.h */,
 				F5A85D5801FA022B0175ACA7 /* font.h */,
 				F5A85D5901FA022B0175ACA7 /* fontdlg.h */,
 				F5A85D5A01FA022B0175ACA7 /* frame.h */,
 				F5A85D5B01FA022B0175ACA7 /* gauge.h */,
-				F5A85D5C01FA022B0175ACA7 /* gdiobj.h */,
 				F5A85D5D01FA022B0175ACA7 /* glcanvas.h */,
-				F5A85D5E01FA022B0175ACA7 /* gsockmac.h */,
 				F5A85D6001FA022B0175ACA7 /* icon.h */,
 				F5A85D6101FA022B0175ACA7 /* imaglist.h */,
 				F5A85D6201FA022B0175ACA7 /* joystick.h */,
 				F5A85D6301FA022B0175ACA7 /* listbox.h */,
 				F5A85D6401FA022B0175ACA7 /* listctrl.h */,
-				F5A85D6501FA022B0175ACA7 /* macnotfy.h */,
-				F5A85D6601FA022B0175ACA7 /* macsock.h */,
 				F5A85D6701FA022B0175ACA7 /* mdi.h */,
 				F5A85D6801FA022B0175ACA7 /* menu.h */,
 				F5A85D6901FA022B0175ACA7 /* menuitem.h */,
@@ -3359,7 +3330,6 @@
 				F5A85D8201FA022B0175ACA7 /* statusbr.h */,
 				F5A85D8301FA022B0175ACA7 /* tabctrl.h */,
 				F5A85D8501FA022B0175ACA7 /* textctrl.h */,
-				F5A85D8601FA022B0175ACA7 /* timer.h */,
 				F5A85D8701FA022B0175ACA7 /* toolbar.h */,
 				F5A85D8801FA022B0175ACA7 /* tooltip.h */,
 				F5A85D8901FA022B0175ACA7 /* toplevel.h */,
@@ -3367,7 +3337,7 @@
 				F5A85D8B01FA022B0175ACA7 /* uma.h */,
 				F5A85D8D01FA022B0175ACA7 /* window.h */,
 			);
-			path = mac/carbon;
+			path = osx/carbon;
 			sourceTree = "<group>";
 		};
 		F5A85F0E01FA022B0175ACA7 /* protocol */ = {
@@ -3400,8 +3370,8 @@
 				F5A8606E01FA022C0175ACA7 /* generic */,
 				F5A860F101FA022C0175ACA7 /* html */,
 				F5A8613E01FA022C0175ACA7 /* jpeg */,
-				40670A8107377A3600F7C08C /* mac/corefoundation */,
-				F5A8619901FA022C0175ACA7 /* mac/carbon */,
+				40670A8107377A3600F7C08C /* osx/core */,
+				F5A8619901FA022C0175ACA7 /* osx/carbon */,
 				F5A863AB01FA022C0175ACA7 /* png */,
 				4086C62E063AAD4A00D4CD53 /* regex */,
 				40F185B80AB722BC00E3BEF9 /* richtext */,
@@ -3770,7 +3740,7 @@
 			path = jpeg;
 			sourceTree = "<group>";
 		};
-		F5A8619901FA022C0175ACA7 /* mac/carbon */ = {
+		F5A8619901FA022C0175ACA7 /* osx/carbon */ = {
 			isa = PBXGroup;
 			children = (
 				40CACE490DFEF94C00B657E4 /* nonownedwnd.cpp */,
@@ -3868,7 +3838,7 @@
 				400226610CE644C0007F534D /* utilscocoa.mm */,
 				F5A8620A01FA022C0175ACA7 /* window.cpp */,
 			);
-			path = mac/carbon;
+			path = osx/carbon;
 			sourceTree = "<group>";
 		};
 		F5A861D201FA022C0175ACA7 /* morefile */ = {
@@ -5594,7 +5564,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = NO;
 				HEADER_SEARCH_PATHS = tiff/libtiff;
 				PRODUCT_NAME = "$(PRODUCT_NAME)_static";
-				USER_HEADER_SEARCH_PATHS = "${SYMROOT}/include ../include mac/carbon/morefilex common jpeg png regex expat/lib tiff/libtiff stc stc/scintilla/include stc/scintilla/src";
+				USER_HEADER_SEARCH_PATHS = "${SYMROOT}/include ../include osx/carbon/morefilex common jpeg png regex expat/lib tiff/libtiff stc stc/scintilla/include stc/scintilla/src";
 				USE_HEADERMAP = NO;
 				USE_SEPARATE_HEADERMAPS = YES;
 				WARNING_CFLAGS = (
@@ -5635,7 +5605,7 @@
 				HEADER_SEARCH_PATHS = tiff/libtiff;
 				PRODUCT_NAME = "$(PRODUCT_NAME)_static";
 				UNSTRIPPED_PRODUCT = NO;
-				USER_HEADER_SEARCH_PATHS = "${SYMROOT}/include ../include mac/carbon/morefilex common jpeg png regex expat/lib tiff/libtiff stc stc/scintilla/include stc/scintilla/src";
+				USER_HEADER_SEARCH_PATHS = "${SYMROOT}/include ../include osx/carbon/morefilex common jpeg png regex expat/lib tiff/libtiff stc stc/scintilla/include stc/scintilla/src";
 				USE_HEADERMAP = NO;
 				USE_SEPARATE_HEADERMAPS = YES;
 				WARNING_CFLAGS = (
@@ -5689,7 +5659,7 @@
 				OTHER_LIBTOOL_FLAGS = "$(value) ";
 				OTHER_REZFLAGS = "-d __UNIX__";
 				REZ_EXECUTABLE = NO;
-				USER_HEADER_SEARCH_PATHS = "${SYMROOT}/include ../include mac/carbon/morefilex common jpeg png regex expat/lib tiff/libtiff stc stc/scintilla/include stc/scintilla/src";
+				USER_HEADER_SEARCH_PATHS = "${SYMROOT}/include ../include osx/carbon/morefilex common jpeg png regex expat/lib tiff/libtiff stc stc/scintilla/include stc/scintilla/src";
 				USE_HEADERMAP = FALSE;
 				USE_SEPARATE_HEADERMAPS = YES;
 				WARNING_CFLAGS = (
@@ -5736,7 +5706,7 @@
 				);
 				OTHER_REZFLAGS = "-d __UNIX__";
 				SKIP_INSTALL = YES;
-				USER_HEADER_SEARCH_PATHS = "${SYMROOT}/include ../include mac/carbon/morefilex common jpeg png regex expat/lib tiff/libtiff stc stc/scintilla/include stc/scintilla/src";
+				USER_HEADER_SEARCH_PATHS = "${SYMROOT}/include ../include osx/carbon/morefilex common jpeg png regex expat/lib tiff/libtiff stc stc/scintilla/include stc/scintilla/src";
 				USE_HEADERMAP = FALSE;
 				WARNING_CFLAGS = (
 					"-Wmost",
