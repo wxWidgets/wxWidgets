@@ -48,10 +48,6 @@
 #include "wx/protocol/protocol.h"
 #include "wx/protocol/ftp.h"
 
-#if defined(__WXMAC__)
-    #include "wx/mac/macsock.h"
-#endif
-
 #ifndef __MWERKS__
     #include <memory.h>
 #endif
