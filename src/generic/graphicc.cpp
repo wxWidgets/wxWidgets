@@ -107,7 +107,7 @@ static inline double RadToDeg(double deg)
 #endif
 
 #ifdef __WXMAC__
-#include "wx/mac/private.h"
+#include "wx/osx/private.h"
 #include <cairo-quartz.h>
 #include <cairo-atsui.h>
 #endif

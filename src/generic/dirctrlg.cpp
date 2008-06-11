@@ -52,7 +52,7 @@
 #endif
 
 #if defined(__WXMAC__)
-    #include  "wx/mac/private.h"  // includes mac headers
+    #include  "wx/osx/private.h"  // includes mac headers
 #endif
 
 #ifdef __WXMSW__
