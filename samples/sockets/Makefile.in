@@ -217,7 +217,7 @@ distclean: clean
 @COND_USE_GUI_1@	$(__client___os2_emxbindcmd)
 @COND_USE_GUI_1@	$(SAMPLES_RPATH_POSTLINK)
 
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@client.app/Contents/PkgInfo: $(__client___depname) $(top_srcdir)/src/mac/carbon/Info.plist.in $(top_srcdir)/src/mac/carbon/wxmac.icns
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@client.app/Contents/PkgInfo: $(__client___depname) $(top_srcdir)/src/osx/carbon/Info.plist.in $(top_srcdir)/src/osx/carbon/wxmac.icns
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	mkdir -p client.app/Contents
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	mkdir -p client.app/Contents/MacOS
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	mkdir -p client.app/Contents/Resources
@@ -226,7 +226,7 @@ distclean: clean
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/EXECUTABLE/client/" \
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/VERSION/$(WX_VERSION)/" \
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@	$(top_srcdir)/src/mac/carbon/Info.plist.in >client.app/Contents/Info.plist
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	$(top_srcdir)/src/osx/carbon/Info.plist.in >client.app/Contents/Info.plist
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	echo -n "APPL????" >client.app/Contents/PkgInfo
@@ -235,7 +235,7 @@ distclean: clean
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	ln -f client$(EXEEXT) client.app/Contents/MacOS/client
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns client.app/Contents/Resources/wxmac.icns
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns client.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@client_bundle: $(____client_BUNDLE_TGT_REF_DEP)
 
@@ -246,7 +246,7 @@ distclean: clean
 @COND_USE_GUI_1@	$(__server___os2_emxbindcmd)
 @COND_USE_GUI_1@	$(SAMPLES_RPATH_POSTLINK)
 
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@server.app/Contents/PkgInfo: $(__server___depname) $(top_srcdir)/src/mac/carbon/Info.plist.in $(top_srcdir)/src/mac/carbon/wxmac.icns
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@server.app/Contents/PkgInfo: $(__server___depname) $(top_srcdir)/src/osx/carbon/Info.plist.in $(top_srcdir)/src/osx/carbon/wxmac.icns
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	mkdir -p server.app/Contents
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	mkdir -p server.app/Contents/MacOS
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	mkdir -p server.app/Contents/Resources
@@ -255,7 +255,7 @@ distclean: clean
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/EXECUTABLE/server/" \
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/VERSION/$(WX_VERSION)/" \
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@	$(top_srcdir)/src/mac/carbon/Info.plist.in >server.app/Contents/Info.plist
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	$(top_srcdir)/src/osx/carbon/Info.plist.in >server.app/Contents/Info.plist
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	echo -n "APPL????" >server.app/Contents/PkgInfo
@@ -264,7 +264,7 @@ distclean: clean
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	ln -f server$(EXEEXT) server.app/Contents/MacOS/server
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns server.app/Contents/Resources/wxmac.icns
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns server.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@server_bundle: $(____server_BUNDLE_TGT_REF_DEP)
 

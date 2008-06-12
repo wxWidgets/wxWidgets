@@ -167,7 +167,7 @@ stctest$(EXEEXT): $(STCTEST_OBJECTS) $(__stctest___win32rc)
 	$(__stctest___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-@COND_PLATFORM_MACOSX_1@stctest.app/Contents/PkgInfo: stctest$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(top_srcdir)/src/mac/carbon/wxmac.icns
+@COND_PLATFORM_MACOSX_1@stctest.app/Contents/PkgInfo: stctest$(EXEEXT) $(top_srcdir)/src/osx/carbon/Info.plist.in $(top_srcdir)/src/osx/carbon/wxmac.icns
 @COND_PLATFORM_MACOSX_1@	mkdir -p stctest.app/Contents
 @COND_PLATFORM_MACOSX_1@	mkdir -p stctest.app/Contents/MacOS
 @COND_PLATFORM_MACOSX_1@	mkdir -p stctest.app/Contents/Resources
@@ -176,7 +176,7 @@ stctest$(EXEEXT): $(STCTEST_OBJECTS) $(__stctest___win32rc)
 @COND_PLATFORM_MACOSX_1@	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 @COND_PLATFORM_MACOSX_1@	-e "s/EXECUTABLE/stctest/" \
 @COND_PLATFORM_MACOSX_1@	-e "s/VERSION/$(WX_VERSION)/" \
-@COND_PLATFORM_MACOSX_1@	$(top_srcdir)/src/mac/carbon/Info.plist.in >stctest.app/Contents/Info.plist
+@COND_PLATFORM_MACOSX_1@	$(top_srcdir)/src/osx/carbon/Info.plist.in >stctest.app/Contents/Info.plist
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >stctest.app/Contents/PkgInfo
@@ -185,7 +185,7 @@ stctest$(EXEEXT): $(STCTEST_OBJECTS) $(__stctest___win32rc)
 @COND_PLATFORM_MACOSX_1@	ln -f stctest$(EXEEXT) stctest.app/Contents/MacOS/stctest
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns stctest.app/Contents/Resources/wxmac.icns
+@COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns stctest.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@stctest_bundle: $(____stctest_BUNDLE_TGT_REF_DEP)
 

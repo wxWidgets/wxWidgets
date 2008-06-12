@@ -175,7 +175,7 @@ joytest$(EXEEXT): $(JOYTEST_OBJECTS) $(__joytest___win32rc)
 	$(__joytest___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-@COND_PLATFORM_MACOSX_1@joytest.app/Contents/PkgInfo: joytest$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(top_srcdir)/src/mac/carbon/wxmac.icns
+@COND_PLATFORM_MACOSX_1@joytest.app/Contents/PkgInfo: joytest$(EXEEXT) $(top_srcdir)/src/osx/carbon/Info.plist.in $(top_srcdir)/src/osx/carbon/wxmac.icns
 @COND_PLATFORM_MACOSX_1@	mkdir -p joytest.app/Contents
 @COND_PLATFORM_MACOSX_1@	mkdir -p joytest.app/Contents/MacOS
 @COND_PLATFORM_MACOSX_1@	mkdir -p joytest.app/Contents/Resources
@@ -184,7 +184,7 @@ joytest$(EXEEXT): $(JOYTEST_OBJECTS) $(__joytest___win32rc)
 @COND_PLATFORM_MACOSX_1@	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 @COND_PLATFORM_MACOSX_1@	-e "s/EXECUTABLE/joytest/" \
 @COND_PLATFORM_MACOSX_1@	-e "s/VERSION/$(WX_VERSION)/" \
-@COND_PLATFORM_MACOSX_1@	$(top_srcdir)/src/mac/carbon/Info.plist.in >joytest.app/Contents/Info.plist
+@COND_PLATFORM_MACOSX_1@	$(top_srcdir)/src/osx/carbon/Info.plist.in >joytest.app/Contents/Info.plist
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >joytest.app/Contents/PkgInfo
@@ -193,7 +193,7 @@ joytest$(EXEEXT): $(JOYTEST_OBJECTS) $(__joytest___win32rc)
 @COND_PLATFORM_MACOSX_1@	ln -f joytest$(EXEEXT) joytest.app/Contents/MacOS/joytest
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns joytest.app/Contents/Resources/wxmac.icns
+@COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns joytest.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@joytest_bundle: $(____joytest_BUNDLE_TGT_REF_DEP)
 
