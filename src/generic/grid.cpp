@@ -11015,37 +11015,36 @@ void wxGrid::ClearSelection()
 // This function returns the rectangle that encloses the given block
 // in device coords clipped to the client size of the grid window.
 //
-wxRect wxGrid::BlockToDeviceRect( const wxGridCellCoords &topLeft,
-                                  const wxGridCellCoords &bottomRight ) const
+wxRect wxGrid::BlockToDeviceRect( const wxGridCellCoords& topLeft,
+                                  const wxGridCellCoords& bottomRight ) const
 {
-    wxRect rect( wxGridNoCellRect );
-    wxRect cellRect;
-
-    cellRect = CellToRect( topLeft );
-    if ( cellRect != wxGridNoCellRect )
+    wxRect resultRect;
+    wxRect tempCellRect = CellToRect(topLeft);
+    if ( tempCellRect != wxGridNoCellRect )
     {
-        rect = cellRect;
+        resultRect = tempCellRect;
     }
     else
     {
-        rect = wxRect(0, 0, 0, 0);
+        resultRect = wxRect(0, 0, 0, 0);
     }
 
-    cellRect = CellToRect( bottomRight );
-    if ( cellRect != wxGridNoCellRect )
+    tempCellRect = CellToRect(bottomRight);
+    if ( tempCellRect != wxGridNoCellRect )
     {
-        rect += cellRect;
+        resultRect += tempCellRect;
     }
     else
     {
+        // If both inputs were "wxGridNoCellRect," then there's nothing to do.
         return wxGridNoCellRect;
     }
 
-    int i, j;
-    int left = rect.GetLeft();
-    int top = rect.GetTop();
-    int right = rect.GetRight();
-    int bottom = rect.GetBottom();
+    // Ensure that left/right and top/bottom pairs are in order.
+    int left = resultRect.GetLeft();
+    int top = resultRect.GetTop();
+    int right = resultRect.GetRight();
+    int bottom = resultRect.GetBottom();
 
     int leftCol = topLeft.GetCol();
     int topRow = topLeft.GetRow();
@@ -11054,65 +11053,89 @@ wxRect wxGrid::BlockToDeviceRect( const wxGridCellCoords &topLeft,
 
     if (left > right)
     {
-        i = left;
+        int tmp = left;
         left = right;
-        right = i;
-        i = leftCol;
+        right = tmp;
+
+        tmp = leftCol;
         leftCol = rightCol;
-        rightCol = i;
+        rightCol = tmp;
     }
 
     if (top > bottom)
     {
-        i = top;
+        int tmp = top;
         top = bottom;
-        bottom = i;
-        i = topRow;
+        bottom = tmp;
+
+        tmp = topRow;
         topRow = bottomRow;
-        bottomRow = i;
+        bottomRow = tmp;
     }
 
-    for ( j = topRow; j <= bottomRow; j++ )
-    {
-        for ( i = leftCol; i <= rightCol; i++ )
-        {
-            if ((j == topRow) || (j == bottomRow) || (i == leftCol) || (i == rightCol))
-            {
-                cellRect = CellToRect( j, i );
+    // The following loop is ONLY necessary to detect and handle merged cells.
+    int cw, ch;
+    m_gridWin->GetClientSize( &cw, &ch );
 
-                if (cellRect.x < left)
-                    left = cellRect.x;
-                if (cellRect.y < top)
-                    top = cellRect.y;
-                if (cellRect.x + cellRect.width > right)
-                    right = cellRect.x + cellRect.width;
-                if (cellRect.y + cellRect.height > bottom)
-                    bottom = cellRect.y + cellRect.height;
+    // Get the origin coordinates: notice that they will be negative if the
+    // grid is scrolled downwards/to the right.
+    int gridOriginX = 0;
+    int gridOriginY = 0;
+    CalcScrolledPosition(gridOriginX, gridOriginY, &gridOriginX, &gridOriginY);
+
+    int onScreenLeftmostCol = internalXToCol(-gridOriginX);
+    int onScreenUppermostRow = internalYToRow(-gridOriginY);
+
+    int onScreenRightmostCol = internalXToCol(-gridOriginX + cw);
+    int onScreenBottommostRow = internalYToRow(-gridOriginY + ch);
+
+    // Bound our loop so that we only examine the portion of the selected block
+    // that is shown on screen. Therefore, we compare the Top-Left block values
+    // to the Top-Left screen values, and the Bottom-Right block values to the
+    // Bottom-Right screen values, choosing appropriately.
+    const int visibleTopRow = wxMax(topRow, onScreenUppermostRow);
+    const int visibleBottomRow = wxMin(bottomRow, onScreenBottommostRow);
+    const int visibleLeftCol = wxMax(leftCol, onScreenLeftmostCol);
+    const int visibleRightCol = wxMin(rightCol, onScreenRightmostCol);
+
+    for ( int j = visibleTopRow; j <= visibleBottomRow; j++ )
+    {
+        for ( int i = visibleLeftCol; i <= visibleRightCol; i++ )
+        {
+            if ( (j == visibleTopRow) || (j == visibleBottomRow) ||
+                    (i == visibleLeftCol) || (i == visibleRightCol) )
+            {
+                tempCellRect = CellToRect( j, i );
+
+                if (tempCellRect.x < left)
+                    left = tempCellRect.x;
+                if (tempCellRect.y < top)
+                    top = tempCellRect.y;
+                if (tempCellRect.x + tempCellRect.width > right)
+                    right = tempCellRect.x + tempCellRect.width;
+                if (tempCellRect.y + tempCellRect.height > bottom)
+                    bottom = tempCellRect.y + tempCellRect.height;
             }
             else
             {
-                i = rightCol; // jump over inner cells.
+                i = visibleRightCol; // jump over inner cells.
             }
         }
     }
 
-    // convert to scrolled coords
-    //
+    // Convert to scrolled coords
     CalcScrolledPosition( left, top, &left, &top );
     CalcScrolledPosition( right, bottom, &right, &bottom );
-
-    int cw, ch;
-    m_gridWin->GetClientSize( &cw, &ch );
 
     if (right < 0 || bottom < 0 || left > cw || top > ch)
         return wxRect(0,0,0,0);
 
-    rect.SetLeft( wxMax(0, left) );
-    rect.SetTop( wxMax(0, top) );
-    rect.SetRight( wxMin(cw, right) );
-    rect.SetBottom( wxMin(ch, bottom) );
+    resultRect.SetLeft( wxMax(0, left) );
+    resultRect.SetTop( wxMax(0, top) );
+    resultRect.SetRight( wxMin(cw, right) );
+    resultRect.SetBottom( wxMin(ch, bottom) );
 
-    return rect;
+    return resultRect;
 }
 
 // ----------------------------------------------------------------------------
