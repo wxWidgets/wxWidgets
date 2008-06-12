@@ -141,8 +141,6 @@ protected:
     // HDC for this window, we keep it all the time
     HDC m_hDC;
 
-    void wxGLCanvas::DestroyWindowPFD(wxWindow *parent);
-
 private:
     DECLARE_EVENT_TABLE()
     DECLARE_CLASS(wxGLCanvas)
