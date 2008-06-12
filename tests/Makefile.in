@@ -274,7 +274,7 @@ test$(EXEEXT): $(TEST_OBJECTS)
 @COND_USE_GUI_1@	$(__test_gui___mac_setfilecmd)
 @COND_USE_GUI_1@	$(SAMPLES_RPATH_POSTLINK)
 
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@test_gui.app/Contents/PkgInfo: $(__test_gui___depname) $(top_srcdir)/src/mac/carbon/Info.plist.in $(top_srcdir)/src/mac/carbon/wxmac.icns
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@test_gui.app/Contents/PkgInfo: $(__test_gui___depname) $(top_srcdir)/src/osx/carbon/Info.plist.in $(top_srcdir)/src/osx/carbon/wxmac.icns
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	mkdir -p test_gui.app/Contents
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	mkdir -p test_gui.app/Contents/MacOS
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	mkdir -p test_gui.app/Contents/Resources
@@ -283,7 +283,7 @@ test$(EXEEXT): $(TEST_OBJECTS)
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/EXECUTABLE/test_gui/" \
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/VERSION/$(WX_VERSION)/" \
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@	$(top_srcdir)/src/mac/carbon/Info.plist.in >test_gui.app/Contents/Info.plist
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	$(top_srcdir)/src/osx/carbon/Info.plist.in >test_gui.app/Contents/Info.plist
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	echo -n "APPL????" >test_gui.app/Contents/PkgInfo
@@ -292,7 +292,7 @@ test$(EXEEXT): $(TEST_OBJECTS)
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	ln -f test_gui$(EXEEXT) test_gui.app/Contents/MacOS/test_gui
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns test_gui.app/Contents/Resources/wxmac.icns
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns test_gui.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@test_gui_bundle: $(____test_gui_BUNDLE_TGT_REF_DEP)
 
