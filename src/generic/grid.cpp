@@ -2590,8 +2590,12 @@ void wxGridCellAttrData::SetAttr(wxGridCellAttr *attr, int row, int col)
     int n = FindIndex(row, col);
     if ( n == wxNOT_FOUND )
     {
-        // add the attribute
-        m_attrs.Add(new wxGridCellWithAttr(row, col, attr));
+        if ( attr )
+        {
+            // add the attribute
+            m_attrs.Add(new wxGridCellWithAttr(row, col, attr));
+        }
+        //else: nothing to do
     }
     else
     {
