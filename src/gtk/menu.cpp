@@ -773,12 +773,15 @@ wxMenuItem::~wxMenuItem()
 /* static */
 wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
 {
+#if 0
     // The argument to this function will now always be in wxWidgets standard label
     // format, not GTK+ format, so we do what the other ports do.
+    // Actually, m_text is in GTK+ format this function is used on it
+    // we need to retain the original code below.
 
     return wxStripMenuCodes(text);
 
-#if 0
+#else
     wxString label;
 
     for ( const wxChar *pc = text.c_str(); *pc; pc++ )
