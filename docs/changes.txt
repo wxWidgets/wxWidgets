@@ -381,6 +381,7 @@ wxGTK:
 - Pass current control text to EVT_TEXT handler for wxSpinCtrl (John Ratliff).
 - Added gtk.tlw.can-set-transparency system option.
 - Added support for GTK+ print backend
+- Fix changing font/colour of label in buttons with images (Marcin Wojdyr).
 
 wxMac:
 
