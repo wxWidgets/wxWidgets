@@ -98,7 +98,7 @@ static bool NsisNextLineHasElse(unsigned int start, unsigned int end, Accessor &
   return false;
 }
 
-static int NsisCmp( char *s1, char *s2, bool bIgnoreCase )
+static int NsisCmp( const char *s1, const char *s2, bool bIgnoreCase )
 {
   if( bIgnoreCase )
      return CompareCaseInsensitive( s1, s2);
