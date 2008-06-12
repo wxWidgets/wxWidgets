@@ -673,6 +673,26 @@
 #undef HAVE_GNU_CXX_HASH_MAP
 
 /*
+ * Define if your compiler has std::unordered_map
+ */
+#undef HAVE_STD_UNORDERED_MAP
+
+/*
+ * Define if your compiler has std::unordered_set
+ */
+#undef HAVE_STD_UNORDERED_SET
+
+/*
+ * Define if your compiler has std::tr1::unordered_map
+ */
+#undef HAVE_TR1_UNORDERED_MAP
+
+/*
+ * Define if your compiler has std::tr1::unordered_set
+ */
+#undef HAVE_TR1_UNORDERED_SET
+
+/*
  * Define if the compiler supports simple visibility declarations.
  */
 #undef HAVE_VISIBILITY

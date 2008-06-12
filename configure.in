@@ -1954,6 +1954,49 @@ if test "$wxUSE_STL" = "yes"; then
          AC_DEFINE(HAVE_EXT_HASH_MAP)
          AC_DEFINE(HAVE_GNU_CXX_HASH_MAP)
     fi
+
+    AC_CHECK_HEADER([unordered_map],
+        [AC_CACHE_CHECK([for unordered_map and unordered_set in std],
+            wx_cv_class_stdunorderedmapset,
+            [AC_TRY_COMPILE([#include <unordered_map>
+                #include <unordered_set>],
+                [std::unordered_map<double*, char*> test1;
+                 std::unordered_set<char*> test2;],
+                wx_cv_class_stdunorderedmapset=yes,
+                wx_cv_class_stdunorderedmapset=no)
+            ]
+        )],
+        [],
+        [ ]
+    )
+
+    if test "$wx_cv_class_stdunorderedmapset" = yes; then
+         AC_DEFINE(HAVE_STD_UNORDERED_MAP)
+         AC_DEFINE(HAVE_STD_UNORDERED_SET)
+    else
+        AC_CHECK_HEADER([tr1/unordered_map],
+            [AC_CACHE_CHECK([for unordered_map and unordered_set in std::tr1],
+                wx_cv_class_tr1unorderedmapset,
+                [AC_TRY_COMPILE([#include <tr1/unordered_map>
+                    #include <tr1/unordered_set>],
+                    [std::tr1::unordered_map<double*, char*> test1;
+                     std::tr1::unordered_set<char*> test2;
+            #if defined(__GNUC__) && (__GNUC__==4) && (__GNUC_MINOR__<2)
+            #error can't use unordered_{map,set} with gcc-4.[01]: http://gcc.gnu.org/PR24389
+            #endif],
+                    wx_cv_class_tr1unorderedmapset=yes,
+                    wx_cv_class_tr1unorderedmapset=no)
+                ]
+            )],
+            [],
+            [ ]
+        )
+
+        if test "$wx_cv_class_tr1unorderedmapset" = yes; then
+             AC_DEFINE(HAVE_TR1_UNORDERED_MAP)
+             AC_DEFINE(HAVE_TR1_UNORDERED_SET)
+        fi
+    fi
 fi
 
 dnl check for atomic operations builtins for wx/atomic.h:

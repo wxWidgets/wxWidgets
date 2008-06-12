@@ -284,6 +284,7 @@ All:
 - Added wxCmdLineParser::AddUsageText() (Marcin 'Malcom' Malich).
 - Fix reading/writing UTF-7-encoded text streams.
 - Corrected bug in wxTimeSpan::IsShorterThan() for equal time spans.
+- Use std::unordered_{map,set} for wxHashMap/Set if available (Jan van Dijk).
 
 All (Unix):
 
