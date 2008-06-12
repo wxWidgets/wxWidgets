@@ -169,7 +169,7 @@ debugrpt$(EXEEXT): $(DEBUGRPT_OBJECTS) $(__debugrpt___win32rc)
 	$(__debugrpt___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-@COND_PLATFORM_MACOSX_1@debugrpt.app/Contents/PkgInfo: debugrpt$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(top_srcdir)/src/mac/carbon/wxmac.icns
+@COND_PLATFORM_MACOSX_1@debugrpt.app/Contents/PkgInfo: debugrpt$(EXEEXT) $(top_srcdir)/src/osx/carbon/Info.plist.in $(top_srcdir)/src/osx/carbon/wxmac.icns
 @COND_PLATFORM_MACOSX_1@	mkdir -p debugrpt.app/Contents
 @COND_PLATFORM_MACOSX_1@	mkdir -p debugrpt.app/Contents/MacOS
 @COND_PLATFORM_MACOSX_1@	mkdir -p debugrpt.app/Contents/Resources
@@ -178,7 +178,7 @@ debugrpt$(EXEEXT): $(DEBUGRPT_OBJECTS) $(__debugrpt___win32rc)
 @COND_PLATFORM_MACOSX_1@	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 @COND_PLATFORM_MACOSX_1@	-e "s/EXECUTABLE/debugrpt/" \
 @COND_PLATFORM_MACOSX_1@	-e "s/VERSION/$(WX_VERSION)/" \
-@COND_PLATFORM_MACOSX_1@	$(top_srcdir)/src/mac/carbon/Info.plist.in >debugrpt.app/Contents/Info.plist
+@COND_PLATFORM_MACOSX_1@	$(top_srcdir)/src/osx/carbon/Info.plist.in >debugrpt.app/Contents/Info.plist
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >debugrpt.app/Contents/PkgInfo
@@ -187,7 +187,7 @@ debugrpt$(EXEEXT): $(DEBUGRPT_OBJECTS) $(__debugrpt___win32rc)
 @COND_PLATFORM_MACOSX_1@	ln -f debugrpt$(EXEEXT) debugrpt.app/Contents/MacOS/debugrpt
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns debugrpt.app/Contents/Resources/wxmac.icns
+@COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns debugrpt.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@debugrpt_bundle: $(____debugrpt_BUNDLE_TGT_REF_DEP)
 
