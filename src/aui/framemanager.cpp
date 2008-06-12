@@ -64,7 +64,7 @@ DEFINE_EVENT_TYPE(wxEVT_AUI_FIND_MANAGER)
     // a few defines to avoid nameclashes
     #define __MAC_OS_X_MEMORY_MANAGER_CLEAN__ 1
     #define __AIFF__
-    #include "wx/mac/private.h"
+    #include "wx/osx/private.h"
 #endif
 
 #ifdef __WXMSW__

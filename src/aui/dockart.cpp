@@ -35,7 +35,7 @@
 #endif
 
 #ifdef __WXMAC__
-#include "wx/mac/private.h"
+#include "wx/osx/private.h"
 #include "wx/graphics.h"
 #endif
 
@@ -198,7 +198,7 @@ wxString wxAuiChopText(wxDC& dc, const wxString& text, int max_size)
 
 wxAuiDefaultDockArt::wxAuiDefaultDockArt()
 {
-#ifdef __WXMAC__
+#if defined( __WXMAC__ ) && !defined(__WXOSX_IPHONE__)
     wxColor base_colour = wxColour( wxMacCreateCGColorFromHITheme(kThemeBrushToolbarBackground));
 #else
     wxColor base_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
