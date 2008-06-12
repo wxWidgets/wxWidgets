@@ -99,6 +99,7 @@ protected:
     virtual void DoDeleteOneItem(unsigned int n);
 
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
+    virtual void DoApplyWidgetStyle(GtkRcStyle *style);
 
     // in derived classes, implement this to insert list store entry
     // with all items default except text

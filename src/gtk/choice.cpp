@@ -355,6 +355,13 @@ wxSize wxChoice::DoGetBestSize() const
     return ret;
 }
 
+void wxChoice::DoApplyWidgetStyle(GtkRcStyle *style)
+{
+    gtk_widget_modify_style(m_widget, style);
+    gtk_widget_modify_style(GTK_BIN(m_widget)->child, style);
+}
+
+
 // static
 wxVisualAttributes
 wxChoice::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
