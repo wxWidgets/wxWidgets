@@ -60,6 +60,9 @@
     typedef WX_HASH_MAP_NAMESPACE::hash_map< KEY_T, VALUE_T, HASH_T, KEY_EQ_T > CLASSNAME
 
 #else // !wxUSE_STL || no std::{hash,unordered}_map class available
+
+#define wxNEEDS_WX_HASH_MAP
+
 #ifdef __WXWINCE__
 typedef int ptrdiff_t;
 #else
@@ -463,7 +466,7 @@ inline bool grow_lf70( size_t buckets, size_t items )
     return float(items)/float(buckets) >= 0.85;
 }
 
-#endif // !wxUSE_STL || !defined(HAVE_STL_HASH_MAP)
+#endif // various hash map implementations
 
 // ----------------------------------------------------------------------------
 // hashing and comparison functors
@@ -473,7 +476,7 @@ inline bool grow_lf70( size_t buckets, size_t items )
 //     operators to suppress warnings about "statement with no effect" from gcc
 //     in the hash table class assignment operator (where they're assigned)
 
-#if wxUSE_STL && defined(HAVE_STL_HASH_MAP)
+#ifndef wxNEEDS_WX_HASH_MAP
 
 // integer types
 class WXDLLIMPEXP_BASE wxIntegerHash
@@ -517,7 +520,7 @@ public:
     wxIntegerHash& operator=(const wxIntegerHash&) { return *this; }
 };
 
-#else // !wxUSE_STL || !defined(HAVE_STL_HASH_MAP)
+#else // wxNEEDS_WX_HASH_MAP
 
 // integer types
 class WXDLLIMPEXP_BASE wxIntegerHash
@@ -538,7 +541,7 @@ public:
     wxIntegerHash& operator=(const wxIntegerHash&) { return *this; }
 };
 
-#endif // !wxUSE_STL || !defined(HAVE_STL_HASH_MAP)
+#endif // !wxNEEDS_WX_HASH_MAP/wxNEEDS_WX_HASH_MAP
 
 class WXDLLIMPEXP_BASE wxIntegerEqual
 {
@@ -564,10 +567,10 @@ class WXDLLIMPEXP_BASE wxPointerHash
 public:
     wxPointerHash() { }
 
-#if wxUSE_STL && defined(HAVE_STL_HASH_MAP)
-    size_t operator()( const void* k ) const { return (size_t)k; }
-#else
+#ifdef wxNEEDS_WX_HASH_MAP
     wxUIntPtr operator()( const void* k ) const { return wxPtrToUInt(k); }
+#else
+    size_t operator()( const void* k ) const { return (size_t)k; }
 #endif
 
     wxPointerHash& operator=(const wxPointerHash&) { return *this; }
@@ -625,7 +628,7 @@ public:
     wxStringEqual& operator=(const wxStringEqual&) { return *this; }
 };
 
-#if !wxUSE_STL || !defined(HAVE_STL_HASH_MAP)
+#ifdef wxNEEDS_WX_HASH_MAP
 
 #define _WX_DECLARE_HASH_MAP( KEY_T, VALUE_T, HASH_T, KEY_EQ_T, CLASSNAME, CLASSEXP ) \
 _WX_DECLARE_PAIR( KEY_T, VALUE_T, CLASSNAME##_wxImplementation_Pair, CLASSEXP ) \
@@ -684,7 +687,7 @@ public: \
     } \
 }
 
-#endif // !wxUSE_STL || !defined(HAVE_STL_HASH_MAP)
+#endif // wxNEEDS_WX_HASH_MAP
 
 // these macros are to be used in the user code
 #define WX_DECLARE_HASH_MAP( KEY_T, VALUE_T, HASH_T, KEY_EQ_T, CLASSNAME) \
