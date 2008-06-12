@@ -26,7 +26,7 @@
 #ifdef __WXCOCOA__
 #include "wx/cocoa/autorelease.h"
 #else
-#include "wx/mac/uma.h"
+#include "wx/osx/uma.h"
 #include <Carbon/Carbon.h>
 #include <WebKit/WebKit.h>
 #include <WebKit/HIWebView.h>
