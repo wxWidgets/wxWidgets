@@ -29,9 +29,8 @@ public:
         Constructs a wxMenuItem object.
         Menu items can be standard, or "stock menu items", or custom. For the
         standard menu items (such as commands to open a file, exit the program and so
-        on, see @ref overview_stockitems "stock items" for the full list) it is enough
-        to
-        specify just the stock ID and leave @a text and @a helpString empty. In
+        on, see @ref page_stockitems "Stock Items" for the full list) it is enough
+        to specify just the stock ID and leave @a text and @a helpString empty. In
         fact, leaving at least @a text empty for the stock menu items is strongly
         recommended as they will have appearance and keyboard interface (including
         standard accelerators) familiar to the user.
@@ -40,9 +39,7 @@ public:
         description (which is automatically shown by the library in the status bar when
         the menu item is selected) in this parameter.
         Finally note that you can e.g. use a stock menu label without using its stock
-        help string:
-
-        that is, stock properties are set independently one from the other.
+        help string; that is, stock properties are set independently one from the other.
 
         @param parentMenu
             Menu that the menu item belongs to.
@@ -133,15 +130,13 @@ public:
     /**
         Returns the text associated with the menu item without any accelerator
         characters it might contain.
-        This function is deprecated in favour of GetItemLabelText().
-
+        @deprecated This function is deprecated in favour of GetItemLabelText().
         @see GetText(), GetLabelFromText()
     */
     wxString GetLabel() const;
 
     /**
-        This function is deprecated; please use GetLabelText() instead.
-
+        @deprecated This function is deprecated; please use GetLabelText() instead.
         @see GetText(), GetLabel()
     */
     static wxString GetLabelFromText(const wxString& text);
@@ -173,9 +168,8 @@ public:
 
     /**
         Returns the text associated with the menu item.
-        @note this function is deprecated, please use
-        GetItemLabel() or GetItemLabelText()
-        instead.
+        @deprecated This function is deprecated. Please use
+        GetItemLabel() or GetItemLabelText() instead.
     */
     wxString GetName() const;
 
@@ -187,8 +181,7 @@ public:
     /**
         Returns the text associated with the menu item, such as it was passed to the
         wxMenuItem constructor, i.e. with any accelerator characters it may contain.
-        This function is deprecated in favour of GetItemLabel().
-
+        @deprecated This function is deprecated in favour of GetItemLabel().
         @see GetLabel(), GetLabelFromText()
     */
     wxString GetText() const;
@@ -274,7 +267,7 @@ public:
 
     /**
         Sets the text associated with the menu item.
-        This function is deprecated in favour of SetItemLabel().
+        @deprecated This function is deprecated in favour of SetItemLabel().
     */
     void SetText(const wxString& text);
 

@@ -452,7 +452,7 @@ public:
     /**
         Adds a submenu.
 
-        @warning This function is deprecated, use AppendSubMenu() instead.
+        @deprecated This function is deprecated, use AppendSubMenu() instead.
 
         @param id
             The menu command identifier.
@@ -802,25 +802,25 @@ public:
 
     /**
         Removes the menu item from the menu but doesn't delete the associated C++
-        object. This allows to reuse the same item later by adding it back to the menu
+        object. This allows you to reuse the same item later by adding it back to the menu
         (especially useful with submenus).
 
         @param id
             The identifier of the menu item to remove.
 
-        @return The item which was detached from the menu.
+        @return A pointer to the item which was detached from the menu.
     */
     wxMenuItem* Remove(int id);
     
     /**
         Removes the menu item from the menu but doesn't delete the associated C++
-        object. This allows to reuse the same item later by adding it back to the menu
+        object. This allows you to reuse the same item later by adding it back to the menu
         (especially useful with submenus).
 
         @param item
             The menu item to remove.
 
-        @return The item which was detached from the menu.
+        @return A pointer to the item which was detached from the menu.
     */
     wxMenuItem* Remove(wxMenuItem* item);
 
