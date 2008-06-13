@@ -2022,6 +2022,10 @@ dnl In the same vein. Motif 2.1 should be tried before Motif 1.2 for the
 dnl systems which have both (AIX 4.x does)
 SEARCH_INCLUDE="\
     /usr/local/include        \
+    /usr/local/X11/include    \
+    /usr/local/include/X11    \
+    /usr/local/X11R6/include  \
+    /usr/local/include/X11R6  \
                               \
     /usr/Motif-2.1/include    \
     /usr/Motif-1.2/include    \
@@ -2034,28 +2038,24 @@ SEARCH_INCLUDE="\
                               \
     /usr/X11R6/include        \
     /usr/X11R6.4/include      \
-    /usr/X11R5/include        \
-    /usr/X11R4/include        \
                               \
     /usr/include/X11R6        \
-    /usr/include/X11R5        \
-    /usr/include/X11R4        \
-                              \
-    /usr/local/X11R6/include  \
-    /usr/local/X11R5/include  \
-    /usr/local/X11R4/include  \
-                              \
-    /usr/local/include/X11R6  \
-    /usr/local/include/X11R5  \
-    /usr/local/include/X11R4  \
                               \
     /usr/X11/include          \
     /usr/include/X11          \
-    /usr/local/X11/include    \
-    /usr/local/include/X11    \
                               \
     /usr/XFree86/include/X11  \
     /usr/pkg/include          \
+                              \
+    /usr/local/X1R5/include  \
+    /usr/local/include/X11R5  \
+    /usr/X11R5/include        \
+    /usr/include/X11R5        \
+                              \
+    /usr/local/X11R4/include  \
+    /usr/local/include/X11R4  \
+    /usr/X11R4/include        \
+    /usr/include/X11R4        \
                               \
     /usr/openwin/share/include"
 
