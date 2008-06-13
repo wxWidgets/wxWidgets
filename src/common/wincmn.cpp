@@ -402,7 +402,7 @@ bool wxWindowBase::Close(bool force)
 
     // return false if window wasn't closed because the application vetoed the
     // close event
-    return GetEventHandler()->ProcessEvent(event) && !event.GetVeto();
+    return HandleWindowEvent(event) && !event.GetVeto();
 }
 
 bool wxWindowBase::DestroyChildren()
