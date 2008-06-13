@@ -11,6 +11,27 @@ wxWallCtrlPlaneSurface::wxWallCtrlPlaneSurface( wxWallCtrlDataSource * dataSourc
 	m_scopeSize.SetHeight(1);
 	m_scopeSize.SetWidth(1);
 
+	// Set the near and far limits
+	// TODO: The far limit should be a function of the max number of visible item
+	m_nearLimit = 0.1;
+	m_farLimit = 10;
+
+	// Initialize camera position
+	m_camera.resize(3,0);
+	m_camera[2] = 2;		// We start the camera at (0,0,2)
+	
+	m_targetCamera = m_camera;	// Both vectors should match initially
+	
+	// Initialize all direction vectors
+	m_look.resize(3,0);		// TODO: We may not need this vector
+	m_targetLook.resize(3,0);		// TODO: We may not need this vector
+	
+	m_right.resize(3,0);
+	m_right[0] = 1;
+	
+	m_up.resize(3,0);
+	m_up[1] = 1;
+
 	UpdateItemSize();
 	m_firstItem = m_dataSource->GetFirstItem();
 }
@@ -22,7 +43,7 @@ void wxWallCtrlPlaneSurface::UpdateItemSize()
 	m_itemWidth = 1.0/m_scopeSize.GetWidth();
 }
 
-void wxWallCtrlPlaneSurface::Render()
+void wxWallCtrlPlaneSurface::Render(const wxSize & windowSize)
 {
 	// Init OpenGL once. SetCurrent() must have been called before reaching this point
 	if (!m_initialized)
@@ -33,15 +54,24 @@ void wxWallCtrlPlaneSurface::Render()
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glFrustum(-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 5.0f);
-	glMatrixMode(GL_MODELVIEW);
-	// clear color and depth buffers
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
+
+	// Calculate The Aspect Ratio Of The Window
+	gluPerspective(45.0,(GLfloat)windowSize.GetWidth()/(GLfloat)windowSize.GetHeight(),0.01f,10000.0f);
+	//glFrustum(-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 5.0f);
+
+	glMatrixMode(GL_MODELVIEW);
+	// Clear color and depth buffers
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	// Place camera
 	glLoadIdentity();
-	glTranslatef(0.0f, 0.0f, -1.0f);
+	//glTranslatef(0.0f, 0.0f, -1.0f);
+	//glTranslatef(m_camera[0], m_camera[1], m_camera[2]);
+	
+	gluLookAt(m_camera[0], m_camera[1], m_camera[2], m_look[0], m_look[1], m_look[2], m_up[0], m_up[1], m_up[2]);
+
+	UpdateVectors();
 
 	// This will be replaced soon
 	RenderItems();

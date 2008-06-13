@@ -7,9 +7,10 @@
 
 #include "wx/string.h"
 #include "wx/Wallctrl/WallCtrlDataSource.h"
-
 #include "wx/Wallctrl/WallCtrlSurface.h"
 
+// TODO: this one is for testing only
+#include "wx/wallctrl/wallctrlplanesurface.h"
 
 // For some reason wxVector< > does not compile, so for the meanwhile we'll use this vector
 template <class T>
@@ -48,7 +49,7 @@ public:
 	void Render()
 	{
 		SetCurrent();
-		m_surface->Render();
+		m_surface->Render(GetSize());
 		SwapBuffers();
 	}
 
@@ -73,11 +74,31 @@ public:
 		// Do nothing, to avoid flashing.
 	}
 
-
+	// TODO: This is only temp for testing
+	void OnKeyDown(wxKeyEvent &event)
+	{
+		// TODO: wxDynamicCast should be used instead here
+		//wxWallCtrlPlaneSurface * temp = wxDynamicCast(m_surface, wxWallCtrlPlaneSurface);
+		wxWallCtrlPlaneSurface * temp = dynamic_cast<wxWallCtrlPlaneSurface *> (m_surface);
+		if (!temp)
+			return;
+		switch (event.GetKeyCode())
+		{
+		case 'A'://WXK_LEFT:
+			temp->MoveLeft(0.1);
+			break;
+		case 'D':
+			temp->MoveRight(0.1);
+			break;
+		case 'W':
+			temp->MoveIn(0.1);
+			break;
+		case 'S':
+			temp->MoveOut(0.1);
+			break;
+		}
 	
-
-
-	DECLARE_EVENT_TABLE()
+	}
 
 	private:
 		bool m_init;
@@ -89,8 +110,10 @@ public:
 		// This is the data source that will supply the bitmaps
 		wxWallCtrlDataSource * m_dataSource;
 
-		// This will point to a single surface that is currently selected
+		// This will point to the single surface that is currently selected
 		wxWallCtrlSurface * m_surface;
 
-//		wxVectorBase <int> m_ImageFilenames;	// TODO: This is only a temp test variable, remove ASAP
+		DECLARE_EVENT_TABLE();
+
 };
+

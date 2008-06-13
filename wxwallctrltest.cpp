@@ -144,7 +144,7 @@ void wxWallCtrlTest::CreateControls()
 	bitmapSource->AppendBitmap(testBitmap);
 
 	wxWallCtrlPlaneSurface * surface = new wxWallCtrlPlaneSurface(bitmapSource);
-	surface->SetScopeSize(wxSize(2, 2));
+	surface->SetScopeSize(wxSize(8, 2));
 	wxWallCtrl* wallCtrl1 = new wxWallCtrl(this, surface, wxID_ANY,	wxDefaultPosition, wxDefaultSize);
 	itemBoxSizer2->Add(wallCtrl1, 1, wxGROW|wxALL, 5);
 

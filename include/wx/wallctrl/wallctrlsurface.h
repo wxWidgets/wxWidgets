@@ -21,7 +21,7 @@ public:
 	}
 	virtual ~wxWallCtrlSurface(void);
 
-	virtual void Render()=0;
+	virtual void Render(const wxSize & windowSize)=0;
 
 
 protected:
