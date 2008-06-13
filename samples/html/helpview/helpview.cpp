@@ -53,9 +53,6 @@ IMPLEMENT_APP(MyApp)
 
 bool MyApp::OnInit()
 {
-    if ( !wxApp::OnInit() )
-        return false;
-
 #ifdef __WXMOTIF__
     delete wxLog::SetActiveTarget(new wxLogStderr); // So dialog boxes aren't used
 #endif
