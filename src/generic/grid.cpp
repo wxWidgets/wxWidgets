@@ -70,6 +70,24 @@ struct wxGridCellWithAttr
     wxGridCellWithAttr(int row, int col, wxGridCellAttr *attr_)
         : coords(row, col), attr(attr_)
     {
+        wxASSERT( attr );
+    }
+
+    wxGridCellWithAttr(const wxGridCellWithAttr& other)
+        : coords(other.coords),
+          attr(other.attr)
+    {
+        attr->IncRef();
+    }
+
+    wxGridCellWithAttr& operator=(const wxGridCellWithAttr& other)
+    {
+        coords = other.coords;
+        attr->DecRef();
+        attr = other.attr;
+        attr->IncRef();
+
+        return *this;
     }
 
     ~wxGridCellWithAttr()
@@ -79,10 +97,6 @@ struct wxGridCellWithAttr
 
     wxGridCellCoords coords;
     wxGridCellAttr  *attr;
-
-// Cannot do this:
-//  DECLARE_NO_COPY_CLASS(wxGridCellWithAttr)
-// without rewriting the macros, which require a public copy constructor.
 };
 
 WX_DECLARE_OBJARRAY_WITH_DECL(wxGridCellWithAttr, wxGridCellWithAttrArray,
@@ -2597,11 +2611,8 @@ void wxGridCellAttrData::SetAttr(wxGridCellAttr *attr, int row, int col)
         }
         //else: nothing to do
     }
-    else
+    else // we already have an attribute for this cell
     {
-        // free the old attribute
-        m_attrs[(size_t)n].attr->DecRef();
-
         if ( attr )
         {
             // change the attribute
@@ -2654,8 +2665,6 @@ void wxGridCellAttrData::UpdateAttrRows( size_t pos, int numRows )
                 else
                 {
                     // ...or remove the attribute
-                    // No need to DecRef the attribute itself since this is
-                    // done be wxGridCellWithAttr's destructor!
                     m_attrs.RemoveAt(n);
                     n--;
                     count--;
@@ -2690,8 +2699,6 @@ void wxGridCellAttrData::UpdateAttrCols( size_t pos, int numCols )
                 else
                 {
                     // ...or remove the attribute
-                    // No need to DecRef the attribute itself since this is
-                    // done be wxGridCellWithAttr's destructor!
                     m_attrs.RemoveAt(n);
                     n--;
                     count--;
@@ -3168,7 +3175,8 @@ void wxGridTableBase::SetAttr(wxGridCellAttr* attr, int row, int col)
 {
     if ( m_attrProvider )
     {
-        attr->SetKind(wxGridCellAttr::Cell);
+        if ( attr )
+            attr->SetKind(wxGridCellAttr::Cell);
         m_attrProvider->SetAttr(attr, row, col);
     }
     else

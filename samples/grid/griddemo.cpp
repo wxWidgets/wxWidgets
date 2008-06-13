@@ -360,6 +360,12 @@ GridFrame::GridFrame()
     grid->SetCellAlignment(7, 1, wxALIGN_CENTRE, wxALIGN_CENTRE);
     grid->SetCellValue(7, 1, _T("Big box!"));
 
+    // this does exactly nothing except testing that SetAttr() handles NULL
+    // attributes and does reference counting correctly
+    grid->SetAttr(11, 11, NULL);
+    grid->SetAttr(11, 11, new wxGridCellAttr);
+    grid->SetAttr(11, 11, NULL);
+
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
     topSizer->Add( grid,
                    1,
