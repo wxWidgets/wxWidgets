@@ -175,7 +175,7 @@ public:
         use Destroy() so that wxWidgets
         can delete a window only when it is safe to do so, in idle time.
 
-        @see @ref overview_windowdeletionoverview "Window deletion overview",
+        @see @ref overview_windowdeletion "Window Deletion Overview",
              Destroy(), wxCloseEvent
     */
     ~wxWindow();
@@ -376,7 +376,7 @@ public:
                  windows (wxFrame and wxDialog classes) as the others
                  are not supposed to have any special OnClose() logic.
 
-        @see @ref overview_windowdeletionoverview "Window deletion overview",
+        @see @ref overview_windowdeletion "Window Deletion Overview",
              Destroy(), wxCloseEvent
     */
     bool Close(bool force = false);
@@ -441,7 +441,7 @@ public:
     virtual void DestroyChildren();
 
     /**
-        Disables the window, same as @ref enable() Enable(@false).
+        Disables the window. Same as @ref Enable() Enable(@false).
 
         @return Returns @true if the window has been disabled, @false if it had
                  been already disabled before the call to this function.
@@ -471,11 +471,8 @@ public:
 
     /**
         Does the window-specific updating after processing the update event.
-        This function is called by UpdateWindowUI()
-        in order to check return values in the wxUpdateUIEvent and
-        act appropriately. For example, to allow frame and dialog title updating,
-        wxWidgets
-        implements this function as follows:
+        This function is called by UpdateWindowUI() in order to check return
+        values in the wxUpdateUIEvent and act appropriately.
     */
     virtual void DoUpdateWindowUI(wxUpdateUIEvent& event);
 
@@ -579,7 +576,7 @@ public:
         is more precise as Fit() adds some margin to account for fuzziness of its calculations)
         to call:
 
-        @begincode
+        @code
             window->SetClientSize(child->GetSize());
         @endcode
 
@@ -799,7 +796,7 @@ public:
     /**
         Returns the associated drop target, which may be @NULL.
 
-        @see SetDropTarget(), @ref overview_wxdndoverview
+        @see SetDropTarget(), @ref overview_dnd
     */
     wxDropTarget* GetDropTarget() const;
 
@@ -1282,7 +1279,7 @@ public:
         window creation to intelligently set up the window visual attributes, that is
         the font and the foreground and background colours.
         By "intelligently" the following is meant: by default, all windows use their
-        own @ref getclassdefaultattributes() default attributes. However
+        own @ref GetClassDefaultAttributes() default attributes. However
         if some of the parents attributes are explicitly (that is, using
         SetFont() and not
         wxWindow::SetOwnFont) changed and if the
@@ -1391,7 +1388,7 @@ public:
     /**
         Returns @true if this window is intrinsically enabled, @false otherwise,
         i.e.
-        if @ref enable() Enable(@false) had been called. This method is
+        if @ref Enable() Enable(@false) had been called. This method is
         mostly used for wxWidgets itself, user code should normally use
         IsEnabled() instead.
     */
@@ -1507,7 +1504,7 @@ public:
         Create a new ID or range of IDs that are not currently in use.  The
         IDs will be reserved until assigned to a wxWindowIDRef()
         or unreserved with UnreserveControlId().
-        See @ref overview_windowidsoverview "Window IDs overview" for more information.
+        See @ref overview_windowids "Window IDs Overview" for more information.
 
         @param count
             The number of sequential IDs to reserve.
@@ -1515,8 +1512,8 @@ public:
         @return Returns the ID or the first ID of the range, or wxID_NONE if the
                  specified number of identifiers couldn't be allocated.
 
-        @see UnreserveControlId(), wxIdManager, @ref overview_windowidsoverview
-             "Window IDs overview"
+        @see UnreserveControlId(), wxIdManager, @ref overview_windowids
+             "Window IDs Overview"
     */
     static wxWindowID NewControlId(int count = 1);
 
@@ -1930,7 +1927,7 @@ public:
         Associates a drop target with this window.
         If the window already has a drop target, it is deleted.
 
-        @see GetDropTarget(), @ref overview_wxdndoverview
+        @see GetDropTarget(), @ref overview_dnd
     */
     void SetDropTarget(wxDropTarget* target);
 
@@ -1969,7 +1966,7 @@ public:
         for them is found. Using this style allows to prevent them from being
         propagated beyond this window. Notice that wxDialog has this style on by
         default for the reasons explained in the
-        @ref overview_eventprocessing "event processing overview".
+        @ref overview_eventhandling "Event Handling Overview".
 
         @b wxWS_EX_TRANSIENT
 
@@ -2320,13 +2317,11 @@ public:
 
         @param sizer
             The sizer to set. Pass @NULL to disassociate and conditionally delete
-            the window's sizer.  See below.
+            the window's sizer. See below.
         @param deleteOld
             If @true (the default), this will delete any pre-existing sizer.
             Pass @false if you wish to handle deleting the old sizer yourself.
-
-        @remarks SetSizer now enables and disables Layout automatically, but
-                 prior to wxWidgets 2.3.3 the following applied:
+        @remarks SetSizer enables and disables Layout automatically.
     */
     void SetSizer(wxSizer* sizer, bool deleteOld = true);
 
@@ -2527,15 +2522,15 @@ public:
 
     /**
         Unreserve an ID or range of IDs that was reserved by NewControlId().
-        See @ref overview_windowidsoverview "Window IDs overview" for more information.
+        See @ref overview_windowids "Window IDs Overview" for more information.
 
         @param id
             The starting ID of the range of IDs to unreserve.
         @param count
             The number of sequential IDs to unreserve.
 
-        @see NewControlId(), wxIdManager, @ref overview_windowidsoverview
-             "Window IDs overview"
+        @see NewControlId(), wxIdManager, @ref overview_windowids
+             "Window IDs Overview"
     */
     static void UnreserveControlId(wxWindowID id, int count = 1);
 
