@@ -122,6 +122,9 @@ bool wxVariant::operator== (const wxVariant& variant) const
     if (IsNull() || variant.IsNull())
         return (IsNull() == variant.IsNull());
 
+    if (GetType() != variant.GetType())
+        return false;
+
     return (GetData()->Eq(* variant.GetData()));
 }
 
