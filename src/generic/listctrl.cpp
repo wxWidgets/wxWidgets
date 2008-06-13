@@ -5088,7 +5088,17 @@ void wxGenericListCtrl::SetSingleStyle( long style, bool add )
     else
         flag &= ~style;
 
-    SetWindowStyleFlag( flag );
+    // some styles can be set without recreating everything (as happens in
+    // SetWindowStyleFlag() which calls wxListMainWindow::DeleteEverything())
+    if ( !(style & ~(wxLC_HRULES | wxLC_VRULES)) )
+    {
+        Refresh();
+        wxWindow::SetWindowStyleFlag(flag);
+    }
+    else
+    {
+        SetWindowStyleFlag( flag );
+    }
 }
 
 void wxGenericListCtrl::SetWindowStyleFlag( long flag )
