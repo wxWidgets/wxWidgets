@@ -64,21 +64,6 @@ private:
 
 
 #if wxUSE_DRAG_AND_DROP
-class wxStartDragTimer : public wxTimer {
-public:
-    wxStartDragTimer(ScintillaWX* swx) {
-        m_swx = swx;
-    }
-
-    void Notify() {
-        m_swx->DoStartDrag();
-    }
-
-private:
-    ScintillaWX* m_swx;
-};
-
-
 bool wxSTCDropTarget::OnDropText(wxCoord x, wxCoord y, const wxString& data) {
     return m_swx->DoDropText(x, y, data);
 }
@@ -260,16 +245,10 @@ ScintillaWX::ScintillaWX(wxStyledTextCtrl* win) {
     sysCaretWidth = 0;
     sysCaretHeight = 0;
 #endif
-#if wxUSE_DRAG_AND_DROP
-    startDragTimer = new wxStartDragTimer(this);
-#endif // wxUSE_DRAG_AND_DROP
 }
 
 
 ScintillaWX::~ScintillaWX() {
-#if wxUSE_DRAG_AND_DROP
-    delete startDragTimer;
-#endif // wxUSE_DRAG_AND_DROP
     Finalise();
 }
 
@@ -302,15 +281,6 @@ void ScintillaWX::Finalise() {
 
 void ScintillaWX::StartDrag() {
 #if wxUSE_DRAG_AND_DROP
-    // We defer the starting of the DnD, otherwise the LeftUp of a normal
-    // click could be lost and the STC will think it is doing a DnD when the
-    // user just wanted a normal click.
-    startDragTimer->Start(200, true);
-#endif // wxUSE_DRAG_AND_DROP
-}
-
-void ScintillaWX::DoStartDrag() {
-#if wxUSE_DRAG_AND_DROP
     wxString dragText = stc2wx(drag.s, drag.len);
 
     // Send an event to allow the drag text to be changed
@@ -330,6 +300,7 @@ void ScintillaWX::DoStartDrag() {
 
         source.SetData(data);
         dropWentOutside = true;
+        inDragDrop = ddDragging;
         result = source.DoDragDrop(evt.GetDragAllowMove());
         if (result == wxDragMove && dropWentOutside)
             ClearSelection();
@@ -878,14 +849,6 @@ void ScintillaWX::DoLeftButtonDown(Point pt, unsigned int curTime, bool shift, b
 
 void ScintillaWX::DoLeftButtonUp(Point pt, unsigned int curTime, bool ctrl) {
     ButtonUp(pt, curTime, ctrl);
-#if wxUSE_DRAG_AND_DROP
-    if (startDragTimer->IsRunning()) {
-        startDragTimer->Stop();
-        SetDragPosition(invalidPosition);
-        SetEmptySelection(PositionFromLocation(pt));
-        ShowCaretAtCurrentPosition();
-    }
-#endif // wxUSE_DRAG_AND_DROP
 }
 
 void ScintillaWX::DoLeftButtonMove(Point pt) {
