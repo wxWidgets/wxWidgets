@@ -46,7 +46,7 @@ unsigned long wxStringHash::stringHash( const wchar_t* k )
   { return DoStringHash(k); }
 
 
-#if !wxUSE_STL || !defined(HAVE_STL_HASH_MAP)
+#ifdef wxNEEDS_WX_HASH_MAP
 
 /* from SGI STL */
 const unsigned long _wxHashTableBase2::ms_primes[prime_count] =
@@ -139,4 +139,4 @@ _wxHashTable_NodeBase* _wxHashTableBase2::DummyProcessNode(_wxHashTable_NodeBase
     return node;
 }
 
-#endif // !wxUSE_STL || !defined(HAVE_STL_HASH_MAP)
+#endif // wxNEEDS_WX_HASH_MAP
