@@ -49,7 +49,7 @@
 
 // what to test (in alphabetic order)? Define TEST_ALL to 0 to do a single
 // test, define it to 1 to do all tests.
-#define TEST_ALL 0
+#define TEST_ALL 1
 
 
 #if TEST_ALL
@@ -468,7 +468,7 @@ static void TestDllListLoaded()
     for ( size_t n = 0; n < count; ++n )
     {
         const wxDynamicLibraryDetails& details = dlls[n];
-        printf("%-45s", details.GetPath().mb_str());
+        printf("%-45s", (const char *)details.GetPath().mb_str());
 
         void *addr;
         size_t len;
@@ -478,7 +478,7 @@ static void TestDllListLoaded()
                    (unsigned long)addr, (unsigned long)((char *)addr + len));
         }
 
-        printf(" %s\n", details.GetVersion().mb_str());
+        printf(" %s\n", (const char *)details.GetVersion().mb_str());
     }
 }
 
@@ -2739,12 +2739,12 @@ public:
 protected:
     virtual void OnStackFrame(const wxStackFrame& frame)
     {
-        printf("[%2d] ", frame.GetLevel());
+        printf("[%2d] ", (int) frame.GetLevel());
 
         wxString name = frame.GetName();
         if ( !name.empty() )
         {
-            printf("%-20.40s", name.mb_str());
+            printf("%-20.40s", (const char*)name.mb_str());
         }
         else
         {
@@ -2754,8 +2754,8 @@ protected:
         if ( frame.HasSourceLocation() )
         {
             printf("\t%s:%d",
-                   frame.GetFileName().mb_str(),
-                   frame.GetLine());
+                   (const char*)frame.GetFileName().mb_str(),
+                   (int)frame.GetLine());
         }
 
         puts("");
@@ -2763,7 +2763,9 @@ protected:
         wxString type, val;
         for ( size_t n = 0; frame.GetParam(n, &type, &name, &val); n++ )
         {
-            printf("\t%s %s = %s\n", type.mb_str(), name.mb_str(), val.mb_str());
+            printf("\t%s %s = %s\n", (const char*)type.mb_str(), 
+                                     (const char*)name.mb_str(), 
+                                     (const char*)val.mb_str());
         }
     }
 };
@@ -3428,7 +3430,11 @@ static void TestZipStreamRead()
     wxPuts(_T("*** Testing ZIP reading ***\n"));
 
     static const wxString filename = _T("foo");
-    wxZipInputStream istr(TESTFILE_ZIP, filename);
+    wxFFileInputStream in(TESTFILE_ZIP);
+    wxZipInputStream istr(in); 
+    wxZipEntry entry(filename);
+    istr.OpenEntry(entry);
+
     wxPrintf(_T("Archive size: %u\n"), istr.GetSize());
 
     wxPrintf(_T("Dumping the file '%s':\n"), filename.c_str());
