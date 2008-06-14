@@ -1,4 +1,4 @@
-#!/bin/env python
+#!/usr/bin/env python
 #----------------------------------------------------------------------------
 # Name:         gen_iface.py
 # Purpose:      Generate stc.h and stc.cpp from the info in Scintilla.iface
