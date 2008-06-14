@@ -2500,7 +2500,10 @@ void wxDataViewColumn::SetTitle( const wxString &title )
 
 wxString wxDataViewColumn::GetTitle() const
 {
-    return wxGTK_CONV_BACK( gtk_label_get_text( GTK_LABEL(m_label) ) );
+    return wxGTK_CONV_BACK_FONT(
+            gtk_label_get_text( GTK_LABEL(m_label) ),
+            GetOwner()->GetFont()
+           );
 }
 
 void wxDataViewColumn::SetBitmap( const wxBitmap &bitmap )
