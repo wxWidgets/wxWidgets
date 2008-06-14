@@ -71,11 +71,11 @@
     @style{wxLC_SINGLE_SEL}
            Single selection (default is multiple).
     @style{wxLC_SORT_ASCENDING}
-           Sort in ascending order (must still supply a comparison callback in
-           SortItems.
+           Sort in ascending order. (You must still supply a comparison callback
+           in wxListCtrl::SortItems.)
     @style{wxLC_SORT_DESCENDING}
-           Sort in descending order (must still supply a comparison callback
-           in SortItems.
+           Sort in descending order. (You must still supply a comparison callback
+           in wxListCtrl::SortItems.)
     @style{wxLC_HRULES}
            Draws light horizontal rules between rows in report mode.
     @style{wxLC_VRULES}
@@ -86,13 +86,18 @@
     @category{ctrl}
     <!-- @appearance{listctrl.png} -->
 
-    @see @ref overview_wxlistctrloverview "wxListCtrl overview", wxListView,
+    @see @ref overview_listctrl "wxListCtrl Overview", wxListView,
     wxListBox, wxTreeCtrl, wxImageList, wxListEvent, wxListItem
 */
 class wxListCtrl : public wxControl
 {
 public:
     //@{
+    /**
+    Constructor, creating and showing a list control.
+    */
+    wxListCtrl();
+
     /**
         Constructor, creating and showing a list control.
 
@@ -104,8 +109,7 @@ public:
             Window position.
         @param size
             Window size. If wxDefaultSize is specified then the window is
-        sized
-            appropriately.
+            sized appropriately.
         @param style
             Window style. See wxListCtrl.
         @param validator
@@ -115,7 +119,6 @@ public:
 
         @see Create(), wxValidator
     */
-    wxListCtrl();
     wxListCtrl(wxWindow* parent, wxWindowID id,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
@@ -537,20 +540,39 @@ public:
 
     //@{
     /**
-        Insert an image/string item.
-
+        Insert a wxListItem.
         @param info
             wxListItem object
+    */
+    long InsertItem(wxListItem& info);
+
+    /**
+        Insert an string item.
+        @param index
+            Index of the new item, supplied by the application
+        @param label
+            String label
+    */
+    long InsertItem(long index, const wxString& label);
+    
+    /**
+        Insert an image item.
+        @param index
+            Index of the new item, supplied by the application
+        @param imageIndex
+            Index into the image list associated with this control and view style
+    */    
+    long InsertItem(long index, int imageIndex);
+    
+    /**
+        Insert an image/string item.
         @param index
             Index of the new item, supplied by the application
         @param label
             String label
         @param imageIndex
-            index into the image list associated with this control and view style
-    */
-    long InsertItem(wxListItem& info);
-    long InsertItem(long index, const wxString& label);
-    long InsertItem(long index, int imageIndex);
+            Index into the image list associated with this control and view style
+    */    
     long InsertItem(long index, const wxString& label,
                     int imageIndex);
     //@}
@@ -583,7 +605,7 @@ public:
 
     /**
         This function must be overloaded in the derived class for a control with
-        @c wxLC_VIRTUAL style having an @ref setimagelist() "image list"
+        @c wxLC_VIRTUAL style having an @ref SetImageList() "image list"
         (if the control doesn't have an image list, it is not necessary to overload
          it). It should return the index of the items image in the controls image list
         or -1 for no image.
@@ -681,7 +703,7 @@ public:
         Sets a string field at a particular column.
     */
     bool SetItem(wxListItem& info);
-    long SetItem(long index, int col, const wxStringamp; label,
+    long SetItem(long index, int col, const wxString& label,
                  int imageId = -1);
     m_mask m_state field is valid.
 
@@ -1047,7 +1069,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @see @ref overview_wxlistctrloverview "wxListCtrl overview", wxListCtrl,
+    @see @ref overview_listctrl "wxListCtrl Overview", wxListCtrl,
     wxListItem
 */
 class wxListItemAttr
