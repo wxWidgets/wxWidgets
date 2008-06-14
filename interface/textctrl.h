@@ -851,19 +851,16 @@ enum wxTextCtrlHitTestResult
         changes. Notice that this event will be sent when the text controls
         contents changes -- whether this is due to user input or comes from the
         program itself (for example, if SetValue() is called); see
-        ChangeValue() for a function which does not send this event.} This
+        ChangeValue() for a function which does not send this event. This
         event is however not sent during the control creation.
-
     @event{EVT_TEXT_ENTER(id, func)}
         Respond to a wxEVT_COMMAND_TEXT_ENTER event, generated when enter is
         pressed in a text control which must have wxTE_PROCESS_ENTER style for
         this event to be generated.
-
-    @event{EVT_TEXT_URL(id, func}}
+    @event{EVT_TEXT_URL(id, func)}
         A mouse event occurred over an URL in the text control (wxMSW and
         wxGTK2 only currently).
-
-    @event{EVT_TEXT_MAXLEN(id, func}}
+    @event{EVT_TEXT_MAXLEN(id, func)}
         This event is generated when the user tries to enter more text into the
         control than the limit set by SetMaxLength(), see its description.
     @endEventTable
@@ -878,6 +875,12 @@ class wxTextCtrl : public wxControl
 {
 public:
     //@{
+    /**
+       Constructor, creating and showing a text control.
+       @see Create()
+    */
+         wxTextCtrl();
+
     /**
         Constructor, creating and showing a text control.
 
@@ -908,7 +911,6 @@ public:
 
         @see Create(), wxValidator
     */
-    wxTextCtrl();
     wxTextCtrl(wxWindow* parent, wxWindowID id,
                const wxString& value = "",
                const wxPoint& pos = wxDefaultPosition,
@@ -1247,7 +1249,7 @@ public:
         Returns @true if this is a single line edit control and @false
         otherwise.
 
-        @see @ref issingleline() IsMultiLine
+        @see @ref IsSingleLine() IsMultiLine
     */
     bool IsSingleLine() const;
 
