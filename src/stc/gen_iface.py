@@ -21,7 +21,7 @@ H_TEMPLATE    = os.path.abspath('./stc.h.in')
 CPP_TEMPLATE  = os.path.abspath('./stc.cpp.in')
 H_DEST        = os.path.abspath('../../include/wx/stc/stc.h')
 CPP_DEST      = os.path.abspath('./stc.cpp')
-DOCSTR_DEST   = '/dev/null' #os.path.abspath('../../../wxPython/contrib/stc/_stc_gendocs.i')
+DOCSTR_DEST   = os.path.abspath('../../../wxPython/contrib/stc/_stc_gendocs.i')
 
 
 # Value prefixes to convert
@@ -234,7 +234,7 @@ methodOverrideMap = {
     'SetSelFore' : ('SetSelForeground', 0, 0, 0),
     'SetSelBack' : ('SetSelBackground', 0, 0, 0),
     'SetCaretFore' : ('SetCaretForeground', 0, 0, 0),
-    'StyleGetFont' : 
+    'StyleGetFont' :
     ('StyleGetFaceName',
      'wxString %s(int style);',
       '''wxString %s(int style) {
@@ -249,7 +249,7 @@ methodOverrideMap = {
          ('Get the font facename of a style',)),
     'StyleSetFont' : ('StyleSetFaceName', 0, 0, 0),
     'StyleSetCharacterSet' : (None, 0, 0, 0),
-    
+
     'AssignCmdKey' :
     ('CmdKeyAssign',
      'void %s(int key, int modifiers, int cmd);',
@@ -285,7 +285,7 @@ methodOverrideMap = {
     'IndicGetFore' : ('IndicatorGetForeground', 0, 0, 0),
     'IndicSetUnder': ('IndicatorSetUnder', 0, 0, 0),
     'IndicGetUnder': ('IndicatorGetUnder', 0, 0, 0),
-    
+
     'SetWhitespaceFore' : ('SetWhitespaceForeground', 0, 0, 0),
     'SetWhitespaceBack' : ('SetWhitespaceBackground', 0, 0, 0),
 
@@ -317,7 +317,7 @@ methodOverrideMap = {
     'AutoCSetMaxHeight'     : ('AutoCompSetMaxHeight', 0, 0, 0),
     'AutoCGetMaxHeight'     : ('AutoCompGetMaxHeight', 0, 0, 0),
     'AutoCGetMaxHeight'     : ('AutoCompGetMaxHeight', 0, 0, 0),
-    
+
     'RegisterImage' :
     (0,
      '''void %s(int type, const wxBitmap& bmp);''',
@@ -374,14 +374,14 @@ methodOverrideMap = {
                int    startPos,
                int    endPos,
                wxDC*  draw,
-               wxDC*  target, 
+               wxDC*  target,
                wxRect renderRect,
                wxRect pageRect);''',
      ''' int %s(bool   doDraw,
                 int    startPos,
                 int    endPos,
                 wxDC*  draw,
-                wxDC*  target, 
+                wxDC*  target,
                 wxRect renderRect,
                 wxRect pageRect) {
              RangeToFormat fr;
@@ -509,7 +509,7 @@ methodOverrideMap = {
     'SetHotspotActiveBack' : ('SetHotspotActiveBackground', 0, 0, 0),
     'GetHotspotActiveFore' : ('GetHotspotActiveForeground', 0, 0, 0),
     'GetHotspotActiveBack' : ('GetHotspotActiveBackground', 0, 0, 0),
-    
+
     'GetCaretLineBack' : ('GetCaretLineBackground', 0, 0, 0),
     'SetCaretLineBack' : ('SetCaretLineBackground', 0, 0, 0),
 
@@ -898,12 +898,12 @@ def parseFun(line, methods, docs, values, is_const):
     for v in cmdValues:
         if (type(v) == type(()) and v[0] <= num <= v[1]) or v == num:
             parseVal('CMD_%s=%s' % (string.upper(name), number), values, docs)
-            
+
             # if we are not also doing a function for CMD values, then
             # just return, otherwise fall through to the append blow.
             if not FUNC_FOR_CMD:
                 return
-                
+
     methods.append( (retType, name, number, param1, param2, tuple(docs), is_const) )
 
 
@@ -912,6 +912,10 @@ def parseFun(line, methods, docs, values, is_const):
 
 def main(args):
     # TODO: parse command line args to replace default input/output files???
+
+    if not os.path.exists(IFACE):
+        print 'Please run this script from src/stc subdirectory.'
+        sys.exit(1)
 
     # Now just do it
     processIface(IFACE, H_TEMPLATE, CPP_TEMPLATE, H_DEST, CPP_DEST, DOCSTR_DEST)
