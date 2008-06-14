@@ -235,7 +235,7 @@ MyFrame::MyFrame(const wxChar *title)
     menuList->Append(LIST_SHOW_COL_INFO, _T("Show &column info\tCtrl-C"));
     menuList->Append(LIST_SHOW_SEL_INFO, _T("Show &selected items\tCtrl-S"));
     menuList->AppendSeparator();
-    menuList->Append(LIST_SORT, _T("&Sort\tCtrl-S"));
+    menuList->Append(LIST_SORT, _T("Sor&t\tCtrl-T"));
     menuList->AppendSeparator();
     menuList->Append(LIST_ADD, _T("&Append an item\tCtrl-P"));
     menuList->Append(LIST_EDIT, _T("&Edit the item\tCtrl-E"));
