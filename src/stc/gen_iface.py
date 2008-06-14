@@ -21,7 +21,7 @@ H_TEMPLATE    = os.path.abspath('./stc.h.in')
 CPP_TEMPLATE  = os.path.abspath('./stc.cpp.in')
 H_DEST        = os.path.abspath('../../include/wx/stc/stc.h')
 CPP_DEST      = os.path.abspath('./stc.cpp')
-DOCSTR_DEST   = os.path.abspath('../../../wxPython/contrib/stc/_stc_gendocs.i')
+DOCSTR_DEST   = '/dev/null' #os.path.abspath('../../../wxPython/contrib/stc/_stc_gendocs.i')
 
 
 # Value prefixes to convert
@@ -108,13 +108,13 @@ methodOverrideMap = {
 
     'GetCharAt' :
     ( 0, 0,
-      '''int %s(int pos) {
+      '''int %s(int pos) const {
          return (unsigned char)SendMsg(%s, pos, 0);''',
       0),
 
     'GetStyleAt' :
     ( 0, 0,
-      '''int %s(int pos) {
+      '''int %s(int pos) const {
          return (unsigned char)SendMsg(%s, pos, 0);''',
       0),
 
@@ -680,7 +680,7 @@ def processIface(iface, h_tmplt, cpp_tmplt, h_dest, cpp_dest, docstr_dest):
             curDocStrings = []
 
         elif op == 'fun ' or op == 'set ' or op == 'get ':
-            parseFun(line[4:], methods, curDocStrings, cmds)
+            parseFun(line[4:], methods, curDocStrings, cmds, op == 'get ')
             curDocStrings = []
 
         elif op == 'cat ':
@@ -742,7 +742,7 @@ def processMethods(methods):
     imps = []
     dstr = []
 
-    for retType, name, number, param1, param2, docs in methods:
+    for retType, name, number, param1, param2, docs, is_const in methods:
         retType = retTypeMap.get(retType, retType)
         params = makeParamString(param1, param2)
 
@@ -755,14 +755,17 @@ def processMethods(methods):
         st = 'DocStr(wxStyledTextCtrl::%s,\n' \
              '"%s", "");\n' % (name, '\n'.join(docs))
         dstr.append(st)
-        
+
         # Build the method definition for the .h file
         if docs:
             defs.append('')
             for x in docs:
                 defs.append('    // ' + x)
         if not theDef:
-            theDef = '    %s %s(%s);' % (retType, name, params)
+            theDef = '    %s %s(%s)' % (retType, name, params)
+            if is_const:
+                theDef = theDef + ' const'
+            theDef = theDef + ';'
         defs.append(theDef)
 
         # Build the method implementation string
@@ -771,8 +774,10 @@ def processMethods(methods):
             for x in docs:
                 imps.append('// ' + x)
         if not theImp:
-            theImp = '%s wxStyledTextCtrl::%s(%s) {\n    ' % (retType, name, params)
-
+            theImp = '%s wxStyledTextCtrl::%s(%s)' % (retType, name, params)
+            if is_const:
+                theImp = theImp + ' const'
+            theImp = theImp + '\n{\n    '
             if retType == 'wxColour':
                 theImp = theImp + 'long c = '
             elif retType != 'void':
@@ -870,7 +875,7 @@ funregex = re.compile(r'\s*([a-zA-Z0-9_]+)'  # <ws>return type
                       '\(([ a-zA-Z0-9_]*),'  # (param,
                       '([ a-zA-Z0-9_]*)\)')  # param)
 
-def parseFun(line, methods, docs, values):
+def parseFun(line, methods, docs, values, is_const):
     def parseParam(param):
         param = string.strip(param)
         if param == '':
@@ -899,7 +904,7 @@ def parseFun(line, methods, docs, values):
             if not FUNC_FOR_CMD:
                 return
                 
-    methods.append( (retType, name, number, param1, param2, tuple(docs)) )
+    methods.append( (retType, name, number, param1, param2, tuple(docs), is_const) )
 
 
 #----------------------------------------------------------------------------

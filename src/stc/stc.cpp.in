@@ -212,8 +212,8 @@ wxStyledTextCtrl::~wxStyledTextCtrl() {
 
 //----------------------------------------------------------------------
 
-long wxStyledTextCtrl::SendMsg(int msg, long wp, long lp) {
-
+long wxStyledTextCtrl::SendMsg(int msg, long wp, long lp) const
+{
     return m_swx->WndProc(msg, wp, lp);
 }
 
