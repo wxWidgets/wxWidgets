@@ -31,7 +31,7 @@
     thread.
 
     @library{wxbase}
-    @category{thread}
+    @category{threading}
 
     @see wxThread, wxMutex
 */
@@ -150,7 +150,7 @@ public:
     the critical section before each @c return.
 
     @library{wxbase}
-    @category{thread}
+    @category{threading}
 
     @see wxCriticalSection, wxMutexLocker
 */
@@ -202,7 +202,7 @@ public:
     associated pointers.
 
     @library{wxbase}
-    @category{thread}
+    @category{threading}
 
     @see wxThread
 */
@@ -222,7 +222,7 @@ public:
     /**
         Creates a new thread. The thread object is created in the suspended state, and
         you
-        should call @ref wxThread::run GetThread()-Run to start running
+        should call @ref wxThread::Run GetThread()-Run to start running
         it.  You may optionally specify the stack size to be allocated to it (Ignored on
         platforms that don't support setting it explicitly, eg. Unix).
 
@@ -235,7 +235,7 @@ public:
         be implemented by any derived class. The thread execution will start here.
         The returned value is the thread exit code which is only useful for
         joinable threads and is the value returned by
-        @ref wxThread::wait GetThread()-Wait.
+        @ref wxThread::Wait GetThread()-Wait.
         This function is called by wxWidgets itself and should never be called
         directly.
     */
@@ -262,7 +262,7 @@ public:
     A critical section object is used for exactly the same purpose as
     mutexes(). The only difference is that under Windows platform
     critical sections are only visible inside one process, while mutexes may be
-    shared between processes, so using critical sections is slightly more
+    shared among processes, so using critical sections is slightly more
     efficient. The terminology is also slightly different: mutex may be locked (or
     acquired) and unlocked (or released) while critical section is entered and left
     by the program.
@@ -274,7 +274,7 @@ public:
     wxMutex - please see wxMutex for an example.
 
     @library{wxbase}
-    @category{thread}
+    @category{threading}
 
     @see wxThread, wxCondition, wxCriticalSectionLocker
 */
@@ -326,7 +326,7 @@ public:
     problems for the memory checking system.
 
     @library{wxbase}
-    @category{thread}
+    @category{threading}
 
     @see wxMutex, wxCondition, wxCriticalSection
 */
@@ -535,7 +535,7 @@ public:
         Called when the thread exits. This function is called in the context of the
         thread associated with the wxThread object, not in the context of the main
         thread. This function will not be called if the thread was
-        @ref kill() killed.
+        @ref Kill() killed.
         This function should never be called directly.
     */
     void OnExit();
@@ -763,7 +763,7 @@ public:
     released by calling wxSemaphore::Post.
 
     @library{wxbase}
-    @category{thread}
+    @category{threading}
 */
 class wxSemaphore
 {
@@ -822,7 +822,7 @@ public:
     usage.
 
     @library{wxbase}
-    @category{thread}
+    @category{threading}
 
     @see wxMutex, wxCriticalSectionLocker
 */
@@ -831,7 +831,7 @@ class wxMutexLocker
 public:
     /**
         Constructs a wxMutexLocker object associated with mutex and locks it.
-        Call @ref isok() IsLocked to check if the mutex was
+        Call @ref IsOk() IsLocked to check if the mutex was
         successfully locked.
     */
     wxMutexLocker(wxMutex& mutex);
@@ -873,7 +873,7 @@ public:
     (this is also called @e program invariant).
 
     @library{wxbase}
-    @category{thread}
+    @category{threading}
 
     @see wxThread, wxCondition, wxMutexLocker, wxCriticalSection
 */
