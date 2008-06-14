@@ -51,40 +51,18 @@ LRESULT WXDLLEXPORT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message,
 // ----------------------------------------------------------------------------
 
 #ifndef WGL_ARB_pixel_format
-#define WGL_NUMBER_PIXEL_FORMATS_ARB      0x2000
 #define WGL_DRAW_TO_WINDOW_ARB            0x2001
-#define WGL_DRAW_TO_BITMAP_ARB            0x2002
 #define WGL_ACCELERATION_ARB              0x2003
-#define WGL_NEED_PALETTE_ARB              0x2004
-#define WGL_NEED_SYSTEM_PALETTE_ARB       0x2005
-#define WGL_SWAP_LAYER_BUFFERS_ARB        0x2006
-#define WGL_SWAP_METHOD_ARB               0x2007
 #define WGL_NUMBER_OVERLAYS_ARB           0x2008
 #define WGL_NUMBER_UNDERLAYS_ARB          0x2009
-#define WGL_TRANSPARENT_ARB               0x200A
-#define WGL_TRANSPARENT_RED_VALUE_ARB     0x2037
-#define WGL_TRANSPARENT_GREEN_VALUE_ARB   0x2038
-#define WGL_TRANSPARENT_BLUE_VALUE_ARB    0x2039
-#define WGL_TRANSPARENT_ALPHA_VALUE_ARB   0x203A
-#define WGL_TRANSPARENT_INDEX_VALUE_ARB   0x203B
-#define WGL_SHARE_DEPTH_ARB               0x200C
-#define WGL_SHARE_STENCIL_ARB             0x200D
-#define WGL_SHARE_ACCUM_ARB               0x200E
-#define WGL_SUPPORT_GDI_ARB               0x200F
 #define WGL_SUPPORT_OPENGL_ARB            0x2010
 #define WGL_DOUBLE_BUFFER_ARB             0x2011
 #define WGL_STEREO_ARB                    0x2012
-#define WGL_PIXEL_TYPE_ARB                0x2013
 #define WGL_COLOR_BITS_ARB                0x2014
 #define WGL_RED_BITS_ARB                  0x2015
-#define WGL_RED_SHIFT_ARB                 0x2016
 #define WGL_GREEN_BITS_ARB                0x2017
-#define WGL_GREEN_SHIFT_ARB               0x2018
 #define WGL_BLUE_BITS_ARB                 0x2019
-#define WGL_BLUE_SHIFT_ARB                0x201A
 #define WGL_ALPHA_BITS_ARB                0x201B
-#define WGL_ALPHA_SHIFT_ARB               0x201C
-#define WGL_ACCUM_BITS_ARB                0x201D
 #define WGL_ACCUM_RED_BITS_ARB            0x201E
 #define WGL_ACCUM_GREEN_BITS_ARB          0x201F
 #define WGL_ACCUM_BLUE_BITS_ARB           0x2020
@@ -92,14 +70,7 @@ LRESULT WXDLLEXPORT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message,
 #define WGL_DEPTH_BITS_ARB                0x2022
 #define WGL_STENCIL_BITS_ARB              0x2023
 #define WGL_AUX_BUFFERS_ARB               0x2024
-#define WGL_NO_ACCELERATION_ARB           0x2025
-#define WGL_GENERIC_ACCELERATION_ARB      0x2026
 #define WGL_FULL_ACCELERATION_ARB         0x2027
-#define WGL_SWAP_EXCHANGE_ARB             0x2028
-#define WGL_SWAP_COPY_ARB                 0x2029
-#define WGL_SWAP_UNDEFINED_ARB            0x202A
-#define WGL_TYPE_RGBA_ARB                 0x202B
-#define WGL_TYPE_COLORINDEX_ARB           0x202C
 #endif
 
 #ifndef WGL_ARB_multisample
@@ -286,6 +257,8 @@ END_EVENT_TABLE()
 // wxGLCanvas construction
 // ----------------------------------------------------------------------------
 
+static int ChoosePixelFormatARB(HDC hdc, const int *attribList);
+
 void wxGLCanvas::Init()
 {
 #if WXWIN_COMPATIBILITY_2_8
@@ -315,14 +288,12 @@ wxGLCanvas::~wxGLCanvas()
 
 // Replaces wxWindow::Create functionality, since we need to use a different
 // window class
-bool wxGLCanvas::Create(wxWindow *parent,
-                        wxWindowID id,
-                        const wxPoint& pos,
-                        const wxSize& size,
-                        long style,
-                        const wxString& name,
-                        const int *attribList,
-                        const wxPalette& palette)
+bool wxGLCanvas::CreateWindow(wxWindow *parent,
+                              wxWindowID id,
+                              const wxPoint& pos,
+                              const wxSize& size,
+                              long style,
+                              const wxString& name)
 {
     wxCHECK_MSG( parent, false, wxT("can't create wxWindow without parent") );
 
@@ -355,8 +326,71 @@ bool wxGLCanvas::Create(wxWindow *parent,
     if ( !m_hDC )
         return false;
 
-    if ( !DoSetup(attribList) )
+    return true;
+}
+
+bool wxGLCanvas::Create(wxWindow *parent,
+                        wxWindowID id,
+                        const wxPoint& pos,
+                        const wxSize& size,
+                        long style,
+                        const wxString& name,
+                        const int *attribList,
+                        const wxPalette& palette)
+{
+    // Create the window first: we will either use it as is or use it to query
+    // for multisampling support and recreate it later with another pixel format
+    if ( !CreateWindow(parent, id, pos, size, style, name) )
         return false;
+
+    PIXELFORMATDESCRIPTOR pfd;
+    const int setupVal = DoSetup(pfd, attribList);
+    if ( setupVal == 0 ) // PixelFormat error
+        return false;
+
+    if ( setupVal == -1 ) // FSAA requested
+    {
+        // now that we have a valid OpenGL window, query it for FSAA support
+        int pixelFormat;
+        {
+            wxGLContext ctx(this);
+            ctx.SetCurrent(*this);
+            pixelFormat = ::ChoosePixelFormatARB(m_hDC, attribList);
+        }
+
+        if ( pixelFormat > 0 )
+        {
+            // from http://msdn.microsoft.com/en-us/library/ms537559(VS.85).aspx:
+            //
+            //      Setting the pixel format of a window more than once can
+            //      lead to significant complications for the Window Manager
+            //      and for multithread applications, so it is not allowed. An
+            //      application can only set the pixel format of a window one
+            //      time. Once a window's pixel format is set, it cannot be
+            //      changed.
+            //
+            // so we need to delete the old window and create the new one
+
+            // destroy Window
+            ::ReleaseDC(GetHwnd(), m_hDC);
+            m_hDC = 0;
+
+            parent->RemoveChild(this);
+            const HWND hwnd = GetHwnd();
+            DissociateHandle(); // will do SetHWND(0);
+            ::DestroyWindow(hwnd);
+
+            // now recreate with FSAA pixelFormat
+            if ( !CreateWindow(parent, id, pos, size, style, name) )
+                return false;
+
+            if ( !::SetPixelFormat(m_hDC, pixelFormat, &pfd) )
+            {
+                wxLogLastError(_T("SetPixelFormat"));
+                return false;
+            }
+        }
+    }
 
 #if wxUSE_PALETTE
     if ( !SetupPalette(palette) )
@@ -595,6 +629,7 @@ AdjustPFDForAttributes(PIXELFORMATDESCRIPTOR& pfd, const int *attribList)
     pfd.dwFlags &= ~PFD_DOUBLEBUFFER;
     pfd.iPixelType = PFD_TYPE_COLORINDEX;
 
+    bool requestFSAA = false;
     for ( int arg = 0; attribList[arg]; )
     {
         switch ( attribList[arg++] )
@@ -673,11 +708,14 @@ AdjustPFDForAttributes(PIXELFORMATDESCRIPTOR& pfd, const int *attribList)
 
             case WX_GL_SAMPLE_BUFFERS:
             case WX_GL_SAMPLES:
-                return -1;
+                // There is no support for multisample when using PIXELFORMATDESCRIPTOR
+                requestFSAA = true; // Remember that multi sample is requested.
+                arg++;              // will call ChoosePixelFormatARB() later
+                break;
         }
     }
 
-    return 1;
+    return requestFSAA ? -1 : 1;
 }
 
 /* static */
@@ -730,7 +768,9 @@ wxGLCanvas::ChooseMatchingPixelFormat(HDC hdc,
             return 0;
 
         case -1:
-            return ::ChoosePixelFormatARB(hdc, attribList);
+            // requestFSAA == true, will continue as normal
+            // in order to query later for a FSAA pixelformat
+            return -1;
     }
 }
 
@@ -742,23 +782,27 @@ bool wxGLCanvasBase::IsDisplaySupported(const int *attribList)
     return wxGLCanvas::ChooseMatchingPixelFormat(ScreenHDC(), attribList) > 0;
 }
 
-bool wxGLCanvas::DoSetup(const int *attribList)
+int wxGLCanvas::DoSetup(PIXELFORMATDESCRIPTOR &pfd, const int *attribList)
 {
-    PIXELFORMATDESCRIPTOR pfd;
-    const int pixelFormat = ChooseMatchingPixelFormat(m_hDC, attribList, &pfd);
+    int pixelFormat = ChooseMatchingPixelFormat(m_hDC, attribList, &pfd);
+
+    const bool requestFSAA = pixelFormat == -1;
+    if ( requestFSAA )
+        pixelFormat = ::ChoosePixelFormat(m_hDC, &pfd);
+
     if ( !pixelFormat )
     {
         wxLogLastError(_T("ChoosePixelFormat"));
-        return false;
+        return 0;
     }
 
     if ( !::SetPixelFormat(m_hDC, pixelFormat, &pfd) )
     {
         wxLogLastError(_T("SetPixelFormat"));
-        return false;
+        return 0;
     }
 
-    return true;
+    return requestFSAA ? -1 : 1;
 }
 
 // ----------------------------------------------------------------------------

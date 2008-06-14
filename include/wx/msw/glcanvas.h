@@ -134,8 +134,18 @@ protected:
     // common part of all ctors
     void Init();
 
+    // the real window creation function, Create() may reuse it twice as we may
+    // need to create an OpenGL window to query the available extensions and
+    // then potentially delete and recreate it with another pixel format
+    bool CreateWindow(wxWindow *parent,
+                      wxWindowID id = wxID_ANY,
+                      const wxPoint& pos = wxDefaultPosition,
+                      const wxSize& size = wxDefaultSize,
+                      long style = 0,
+                      const wxString& name = wxGLCanvasName);
+
     // set up the pixel format using the given attributes and palette
-    bool DoSetup(const int *attribList);
+    int DoSetup(PIXELFORMATDESCRIPTOR &pfd, const int *attribList);
 
 
     // HDC for this window, we keep it all the time
