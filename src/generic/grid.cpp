@@ -11019,9 +11019,13 @@ wxArrayInt wxGrid::GetSelectedCols() const
 
 void wxGrid::ClearSelection()
 {
+    wxRect r1 = BlockToDeviceRect( m_selectingTopLeft, m_selectingBottomRight);
+    wxRect r2 = BlockToDeviceRect( m_currentCellCoords, m_selectingKeyboard );
     m_selectingTopLeft =
     m_selectingBottomRight =
     m_selectingKeyboard = wxGridNoCellCoords;
+    Refresh( false, &r1 );
+    Refresh( false, &r2 );
     if ( m_selection )
         m_selection->ClearSelection();
 }
