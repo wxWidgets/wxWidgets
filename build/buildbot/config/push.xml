@@ -30,6 +30,8 @@
         <show log="compile"/>
         <show log="demos"/>
         <show log="samples"/>
+        <show log="utils"/>
+        <show log="tests"/>
     </steps>
 </build>
 
@@ -60,6 +62,8 @@
         <show log="compile"/>
         <show log="demos"/>
         <show log="samples"/>
+        <show log="utils"/>
+        <show log="tests"/>
     </steps>
 </build>
 
