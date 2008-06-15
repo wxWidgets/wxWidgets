@@ -10018,6 +10018,8 @@ void wxGrid::SetColFormatCustom(int col, const wxString& typeName)
         attr = new wxGridCellAttr;
     wxGridCellRenderer *renderer = GetDefaultRendererForType(typeName);
     attr->SetRenderer(renderer);
+    wxGridCellEditor *editor = GetDefaultEditorForType(typeName); 
+    attr->SetEditor(editor); 
 
     SetColAttr(col, attr);
 
