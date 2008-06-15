@@ -987,84 +987,6 @@ typedef wxUint32 wxDword;
     #define wxINT64_MIN (wxLL(-9223372036854775807)-1)
 #endif
 
-/*
-   Define an integral type big enough to contain all of long, size_t and void *.
- */
-#if SIZEOF_SIZE_T >= SIZEOF_VOID_P
-    /*
-       Win64 case: size_t is the only integral type big enough for "void *".
-
-       Notice that wxUIntPtr should be also defined as size_t when building
-       under Win32 with MSVC with /Wp64 option as otherwise any conversion
-       between ints and pointers results in a warning 4311 or 4312, even if it
-       is safe under Win32. Using size_t (declared with __w64) allows to avoid
-       them.
-     */
-    typedef size_t wxUIntPtr;
-#elif SIZEOF_LONG >= SIZEOF_VOID_P
-    /*
-       Normal case when long is the largest integral type.
-     */
-    typedef unsigned long wxUIntPtr;
-#else
-    /*
-       This should never happen for the current architectures but if you're
-       using one where it does, please contact wx-dev@lists.wxwidgets.org.
-     */
-    #error "Pointers can't be stored inside integer types."
-#endif
-
-#ifdef __cplusplus
-/* And also define a couple of simple functions to cast pointer to/from it. */
-inline wxUIntPtr wxPtrToUInt(const void *p)
-{
-    /*
-       VC++ 7.1 gives warnings about casts such as below even when they're
-       explicit with /Wp64 option, suppress them as we really know what we're
-       doing here. Same thing with icc with -Wall.
-     */
-#ifdef __VISUALC__
-    #if __VISUALC__ >= 1200
-        #pragma warning(push)
-    #endif
-    /* pointer truncation from '' to '' */
-    #pragma warning(disable: 4311)
-#elif defined(__INTELC__)
-    #pragma warning(push)
-    /* conversion from pointer to same-sized integral type */
-    #pragma warning(disable: 1684)
-#endif
-
-    return wx_reinterpret_cast(wxUIntPtr, p);
-
-#if (defined(__VISUALC__) && __VISUALC__ >= 1200) || defined(__INTELC__)
-    #pragma warning(pop)
-#endif
-}
-
-inline void *wxUIntToPtr(wxUIntPtr p)
-{
-#ifdef __VISUALC__
-    #if __VISUALC__ >= 1200
-        #pragma warning(push)
-    #endif
-    /* conversion to type of greater size */
-    #pragma warning(disable: 4312)
-#elif defined(__INTELC__)
-    #pragma warning(push)
-    /* invalid type conversion: "wxUIntPtr={unsigned long}" to "void *" */
-    #pragma warning(disable: 171)
-#endif
-
-    return wx_reinterpret_cast(void *, p);
-
-#if (defined(__VISUALC__) && __VISUALC__ >= 1200) || defined(__INTELC__)
-    #pragma warning(pop)
-#endif
-}
-#endif /*__cplusplus*/
-
-
 /*  64 bit */
 
 /*  NB: we #define and not typedef wxLongLong_t because we use "#ifdef */
@@ -1201,6 +1123,87 @@ inline void *wxUIntToPtr(wxUIntPtr p)
         #error "error defining ssize_t, size_t is not 4 or 8 bytes"
     #endif
 #endif
+
+/*
+   Define signed and unsigned integral types big enough to contain all of long,
+   size_t and void *.
+ */
+#if SIZEOF_SIZE_T >= SIZEOF_VOID_P
+    /*
+       Win64 case: size_t is the only integral type big enough for "void *".
+
+       Notice that wxUIntPtr should be also defined as size_t when building
+       under Win32 with MSVC with /Wp64 option as otherwise any conversion
+       between ints and pointers results in a warning 4311 or 4312, even if it
+       is safe under Win32. Using size_t (declared with __w64) allows to avoid
+       them.
+     */
+    #define wxIntPtr ssize_t
+    typedef size_t wxUIntPtr;
+#elif SIZEOF_LONG >= SIZEOF_VOID_P
+    /*
+       Normal case when long is the largest integral type.
+     */
+    typedef long wxIntPtr;
+    typedef unsigned long wxUIntPtr;
+#else
+    /*
+       This should never happen for the current architectures but if you're
+       using one where it does, please contact wx-dev@lists.wxwidgets.org.
+     */
+    #error "Pointers can't be stored inside integer types."
+#endif
+
+#ifdef __cplusplus
+/* And also define a couple of simple functions to cast pointer to/from it. */
+inline wxUIntPtr wxPtrToUInt(const void *p)
+{
+    /*
+       VC++ 7.1 gives warnings about casts such as below even when they're
+       explicit with /Wp64 option, suppress them as we really know what we're
+       doing here. Same thing with icc with -Wall.
+     */
+#ifdef __VISUALC__
+    #if __VISUALC__ >= 1200
+        #pragma warning(push)
+    #endif
+    /* pointer truncation from '' to '' */
+    #pragma warning(disable: 4311)
+#elif defined(__INTELC__)
+    #pragma warning(push)
+    /* conversion from pointer to same-sized integral type */
+    #pragma warning(disable: 1684)
+#endif
+
+    return wx_reinterpret_cast(wxUIntPtr, p);
+
+#if (defined(__VISUALC__) && __VISUALC__ >= 1200) || defined(__INTELC__)
+    #pragma warning(pop)
+#endif
+}
+
+inline void *wxUIntToPtr(wxUIntPtr p)
+{
+#ifdef __VISUALC__
+    #if __VISUALC__ >= 1200
+        #pragma warning(push)
+    #endif
+    /* conversion to type of greater size */
+    #pragma warning(disable: 4312)
+#elif defined(__INTELC__)
+    #pragma warning(push)
+    /* invalid type conversion: "wxUIntPtr={unsigned long}" to "void *" */
+    #pragma warning(disable: 171)
+#endif
+
+    return wx_reinterpret_cast(void *, p);
+
+#if (defined(__VISUALC__) && __VISUALC__ >= 1200) || defined(__INTELC__)
+    #pragma warning(pop)
+#endif
+}
+#endif /*__cplusplus*/
+
 
 
 /*  base floating point types */

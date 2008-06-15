@@ -224,7 +224,7 @@ wxStyledTextCtrl::~wxStyledTextCtrl() {
 
 //----------------------------------------------------------------------
 
-long wxStyledTextCtrl::SendMsg(int msg, long wp, long lp) const
+long wxStyledTextCtrl::SendMsg(int msg, wxUIntPtr wp, wxIntPtr lp) const
 {
     return m_swx->WndProc(msg, wp, lp);
 }
@@ -612,12 +612,12 @@ bool wxStyledTextCtrl::GetUseAntiAliasing() {
 
 void wxStyledTextCtrl::AddTextRaw(const char* text)
 {
-    SendMsg(SCI_ADDTEXT, strlen(text), (long)text);
+    SendMsg(SCI_ADDTEXT, strlen(text), (sptr_t)text);
 }
 
 void wxStyledTextCtrl::InsertTextRaw(int pos, const char* text)
 {
-    SendMsg(SCI_INSERTTEXT, pos, (long)text);
+    SendMsg(SCI_INSERTTEXT, pos, (sptr_t)text);
 }
 
 wxCharBuffer wxStyledTextCtrl::GetCurLineRaw(int* linePos)
@@ -630,7 +630,7 @@ wxCharBuffer wxStyledTextCtrl::GetCurLineRaw(int* linePos)
     }
 
     wxCharBuffer buf(len);
-    int pos = SendMsg(SCI_GETCURLINE, len, (long)buf.data());
+    int pos = SendMsg(SCI_GETCURLINE, len, (sptr_t)buf.data());
     if (linePos)  *linePos = pos;
     return buf;
 }
@@ -644,7 +644,7 @@ wxCharBuffer wxStyledTextCtrl::GetLineRaw(int line)
     }
 
     wxCharBuffer buf(len);
-    SendMsg(SCI_GETLINE, line, (long)buf.data());
+    SendMsg(SCI_GETLINE, line, (sptr_t)buf.data());
     return buf;
 }
 
@@ -661,7 +661,7 @@ wxCharBuffer wxStyledTextCtrl::GetSelectedTextRaw()
     }
 
     wxCharBuffer buf(len);
-    SendMsg(SCI_GETSELTEXT, 0, (long)buf.data());
+    SendMsg(SCI_GETSELTEXT, 0, (sptr_t)buf.data());
     return buf;
 }
 
@@ -683,26 +683,26 @@ wxCharBuffer wxStyledTextCtrl::GetTextRangeRaw(int startPos, int endPos)
     tr.lpstrText = buf.data();
     tr.chrg.cpMin = startPos;
     tr.chrg.cpMax = endPos;
-    SendMsg(SCI_GETTEXTRANGE, 0, (long)&tr);
+    SendMsg(SCI_GETTEXTRANGE, 0, (sptr_t)&tr);
     return buf;
 }
 
 void wxStyledTextCtrl::SetTextRaw(const char* text)
 {
-    SendMsg(SCI_SETTEXT, 0, (long)text);
+    SendMsg(SCI_SETTEXT, 0, (sptr_t)text);
 }
 
 wxCharBuffer wxStyledTextCtrl::GetTextRaw()
 {
     int len = GetTextLength();
     wxCharBuffer buf(len); // adds 1 for NUL automatically
-    SendMsg(SCI_GETTEXT, len + 1, (long)buf.data());
+    SendMsg(SCI_GETTEXT, len + 1, (sptr_t)buf.data());
     return buf;
 }
 
 void wxStyledTextCtrl::AppendTextRaw(const char* text)
 {
-    SendMsg(SCI_APPENDTEXT, strlen(text), (long)text);
+    SendMsg(SCI_APPENDTEXT, strlen(text), (sptr_t)text);
 }
 
 

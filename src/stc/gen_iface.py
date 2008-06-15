@@ -85,14 +85,14 @@ methodOverrideMap = {
 
                  '''void %s(const wxString& text) {
                     wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
-                    SendMsg(%s, strlen(buf), (long)(const char*)buf);''',
+                    SendMsg(%s, strlen(buf), (sptr_t)(const char*)buf);''',
                  0),
 
     'AddStyledText' : (0,
                        'void %s(const wxMemoryBuffer& data);',
 
                        '''void %s(const wxMemoryBuffer& data) {
-                          SendMsg(%s, data.GetDataLen(), (long)data.GetData());''',
+                          SendMsg(%s, data.GetDataLen(), (sptr_t)data.GetData());''',
                        0),
 
     'AppendText' : (0,
@@ -100,7 +100,7 @@ methodOverrideMap = {
 
                  '''void %s(const wxString& text) {
                     wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
-                    SendMsg(%s, strlen(buf), (long)(const char*)buf);''',
+                    SendMsg(%s, strlen(buf), (sptr_t)(const char*)buf);''',
                  0),
 
     'GetViewWS' : ( 'GetViewWhiteSpace', 0, 0, 0),
@@ -135,7 +135,7 @@ methodOverrideMap = {
         tr.lpstrText = (char*)buf.GetWriteBuf(len*2+1);
         tr.chrg.cpMin = startPos;
         tr.chrg.cpMax = endPos;
-        len = SendMsg(%s, 0, (long)&tr);
+        len = SendMsg(%s, 0, (sptr_t)&tr);
         buf.UngetWriteBuf(len);
         return buf;''',
 
@@ -164,7 +164,7 @@ methodOverrideMap = {
         wxMemoryBuffer mbuf(len+1);
         char* buf = (char*)mbuf.GetWriteBuf(len+1);
 
-        int pos = SendMsg(%s, len+1, (long)buf);
+        int pos = SendMsg(%s, len+1, (sptr_t)buf);
         mbuf.UngetWriteBuf(len);
         mbuf.AppendByte(0);
         if (linePos)  *linePos = pos;
@@ -211,7 +211,7 @@ methodOverrideMap = {
         char* buff = new char[len+1];
         strm.CopyTo(buff, len);
         buff[len] = 0;
-        SendMsg(%s, markerNumber, (long)buff);
+        SendMsg(%s, markerNumber, (sptr_t)buff);
         delete [] buff;
         ''',
      ('Define a marker from a bitmap',)),
@@ -242,7 +242,7 @@ methodOverrideMap = {
          long len = SendMsg(msg, style, 0);
          wxMemoryBuffer mbuf(len+1);
          char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, style, (long)buf);
+         SendMsg(msg, style, (sptr_t)buf);
          mbuf.UngetWriteBuf(len);
          mbuf.AppendByte(0);
          return stc2wx(buf);''',
@@ -275,7 +275,7 @@ methodOverrideMap = {
      'void %s(int length, char* styleBytes);',
 
      '''void %s(int length, char* styleBytes) {
-        SendMsg(%s, length, (long)styleBytes);''',
+        SendMsg(%s, length, (sptr_t)styleBytes);''',
      0),
 
 
@@ -332,7 +332,7 @@ methodOverrideMap = {
         char* buff = new char[len+1];
         strm.CopyTo(buff, len);
         buff[len] = 0;
-        SendMsg(%s, type, (long)buff);
+        SendMsg(%s, type, (sptr_t)buff);
         delete [] buff;
      ''',
      ('Register an image for use in autocompletion lists.',)),
@@ -365,7 +365,7 @@ methodOverrideMap = {
             wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
             ft.lpstrText = (char*)(const char*)buf;
 
-            return SendMsg(%s, flags, (long)&ft);''',
+            return SendMsg(%s, flags, (sptr_t)&ft);''',
      0),
 
     'FormatRange' :
@@ -404,7 +404,7 @@ methodOverrideMap = {
              fr.chrg.cpMin = startPos;
              fr.chrg.cpMax = endPos;
 
-             return SendMsg(%s, doDraw, (long)&fr);''',
+             return SendMsg(%s, doDraw, (sptr_t)&fr);''',
      0),
 
 
@@ -418,7 +418,7 @@ methodOverrideMap = {
 
          wxMemoryBuffer mbuf(len+1);
          char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(%s, line, (long)buf);
+         SendMsg(%s, line, (sptr_t)buf);
          mbuf.UngetWriteBuf(len);
          mbuf.AppendByte(0);
          return stc2wx(buf);''',
@@ -441,7 +441,7 @@ methodOverrideMap = {
 
          wxMemoryBuffer mbuf(len+2);
          char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(%s, 0, (long)buf);
+         SendMsg(%s, 0, (sptr_t)buf);
          mbuf.UngetWriteBuf(len);
          mbuf.AppendByte(0);
          return stc2wx(buf);''',
@@ -467,7 +467,7 @@ methodOverrideMap = {
          tr.lpstrText = buf;
          tr.chrg.cpMin = startPos;
          tr.chrg.cpMax = endPos;
-         SendMsg(%s, 0, (long)&tr);
+         SendMsg(%s, 0, (sptr_t)&tr);
          mbuf.UngetWriteBuf(len);
          mbuf.AppendByte(0);
          return stc2wx(buf);''',
@@ -489,7 +489,7 @@ methodOverrideMap = {
          int len  = GetTextLength();
          wxMemoryBuffer mbuf(len+1);   // leave room for the null...
          char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(%s, len+1, (long)buf);
+         SendMsg(%s, len+1, (sptr_t)buf);
          mbuf.UngetWriteBuf(len);
          mbuf.AppendByte(0);
          return stc2wx(buf);''',
@@ -520,7 +520,7 @@ methodOverrideMap = {
      '''
      int %s(const wxString& text) {
          wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
-         return SendMsg(%s, strlen(buf), (long)(const char*)buf);''',
+         return SendMsg(%s, strlen(buf), (sptr_t)(const char*)buf);''',
      0),
 
     'ReplaceTargetRE' :
@@ -530,7 +530,7 @@ methodOverrideMap = {
      '''
      int %s(const wxString& text) {
          wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
-         return SendMsg(%s, strlen(buf), (long)(const char*)buf);''',
+         return SendMsg(%s, strlen(buf), (sptr_t)(const char*)buf);''',
      0),
 
     'SearchInTarget' :
@@ -540,7 +540,7 @@ methodOverrideMap = {
      '''
      int %s(const wxString& text) {
          wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
-         return SendMsg(%s, strlen(buf), (long)(const char*)buf);''',
+         return SendMsg(%s, strlen(buf), (sptr_t)(const char*)buf);''',
      0),
 
     # not sure what to do about these yet
@@ -554,12 +554,12 @@ methodOverrideMap = {
      'wxString %s(const wxString& key);',
 
      '''wxString %s(const wxString& key) {
-         int len = SendMsg(SCI_GETPROPERTY, (long)(const char*)wx2stc(key), 0);
+         int len = SendMsg(SCI_GETPROPERTY, (sptr_t)(const char*)wx2stc(key), 0);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+1);
          char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(%s, (long)(const char*)wx2stc(key), (long)buf);
+         SendMsg(%s, (uptr_t)(const char*)wx2stc(key), (sptr_t)buf);
          mbuf.UngetWriteBuf(len);
          mbuf.AppendByte(0);
          return stc2wx(buf);''',
@@ -570,12 +570,12 @@ methodOverrideMap = {
      'wxString %s(const wxString& key);',
 
      '''wxString %s(const wxString& key) {
-         int len = SendMsg(SCI_GETPROPERTYEXPANDED, (long)(const char*)wx2stc(key), 0);
+         int len = SendMsg(SCI_GETPROPERTYEXPANDED, (uptr_t)(const char*)wx2stc(key), 0);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+1);
          char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(%s, (long)(const char*)wx2stc(key), (long)buf);
+         SendMsg(%s, (uptr_t)(const char*)wx2stc(key), (sptr_t)buf);
          mbuf.UngetWriteBuf(len);
          mbuf.AppendByte(0);
          return stc2wx(buf);''',
@@ -598,7 +598,7 @@ methodOverrideMap = {
     (0,
      'void %s(void* docPointer);',
      '''void %s(void* docPointer) {
-         SendMsg(%s, 0, (long)docPointer);''',
+         SendMsg(%s, 0, (sptr_t)docPointer);''',
      0),
 
     'CreateDocument' :
@@ -612,14 +612,14 @@ methodOverrideMap = {
     (0,
      'void %s(void* docPointer);',
      '''void %s(void* docPointer) {
-         SendMsg(%s, 0, (long)docPointer);''',
+         SendMsg(%s, 0, (sptr_t)docPointer);''',
      0),
 
     'ReleaseDocument' :
     (0,
      'void %s(void* docPointer);',
      '''void %s(void* docPointer) {
-         SendMsg(%s, 0, (long)docPointer);''',
+         SendMsg(%s, 0, (sptr_t)docPointer);''',
      0),
 
     'SetCodePage' :
@@ -840,7 +840,7 @@ def makeArgString(param):
     typ, name = param
 
     if typ == 'string':
-        return '(long)(const char*)wx2stc(%s)' % name
+        return '(sptr_t)(const char*)wx2stc(%s)' % name
     if typ == 'colour':
         return 'wxColourAsLong(%s)' % name
 

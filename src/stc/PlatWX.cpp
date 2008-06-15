@@ -1430,7 +1430,7 @@ long Platform::SendScintillaPointer(WindowID w,
                                     void *lParam) {
 
     wxStyledTextCtrl* stc = (wxStyledTextCtrl*)w;
-    return stc->SendMsg(msg, wParam, (long)lParam);
+    return stc->SendMsg(msg, wParam, (wxIntPtr)lParam);
 }
 
 
