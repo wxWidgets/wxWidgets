@@ -1182,7 +1182,6 @@ void wxGDIPlusContext::DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDo
         {
             Rect drawRect((REAL) x, (REAL)y, (REAL)w, (REAL)h);
             m_context->SetPixelOffsetMode( PixelOffsetModeNone );
-            m_context->SetInterpolationMode(InterpolationModeHighQualityBicubic);
             m_context->DrawImage(image, drawRect, 0 , 0 , image->GetWidth()-1, image->GetHeight()-1, UnitPixel ) ;
             m_context->SetPixelOffsetMode( PixelOffsetModeHalf );
         }
