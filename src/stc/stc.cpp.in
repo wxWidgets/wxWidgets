@@ -694,9 +694,9 @@ void wxStyledTextCtrl::SetTextRaw(const char* text)
 
 wxCharBuffer wxStyledTextCtrl::GetTextRaw()
 {
-    int len  = GetTextLength();
-    wxCharBuffer buf(len);
-    SendMsg(SCI_GETTEXT, len, (long)buf.data());
+    int len = GetTextLength();
+    wxCharBuffer buf(len); // adds 1 for NUL automatically
+    SendMsg(SCI_GETTEXT, len + 1, (long)buf.data());
     return buf;
 }
 
