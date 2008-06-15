@@ -83,10 +83,12 @@ struct wxGridCellWithAttr
     wxGridCellWithAttr& operator=(const wxGridCellWithAttr& other)
     {
         coords = other.coords;
-        attr->DecRef();
-        attr = other.attr;
-        attr->IncRef();
-
+        if (attr != other.attr)
+        {
+            attr->DecRef();
+            attr = other.attr;
+            attr->IncRef();
+        }
         return *this;
     }
 
@@ -2766,6 +2768,9 @@ void wxGridRowOrColAttrData::SetAttr(wxGridCellAttr *attr, int rowOrCol)
     else
     {
         size_t n = (size_t)i;
+        if ( m_attrs[n] == attr )
+            // nothing to do
+            return; 
         if ( attr )
         {
             // change the attribute
