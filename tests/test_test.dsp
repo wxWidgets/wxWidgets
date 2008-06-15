@@ -333,7 +333,7 @@ SOURCE=.\strings\iostream.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\streams\iostream.cpp
+SOURCE=.\streams\iostreams.cpp
 # End Source File
 # Begin Source File
 

@@ -88,7 +88,7 @@ TEST_OBJECTS =  \
 	test_ffilestream.o \
 	test_fileback.o \
 	test_filestream.o \
-	test_iostream.o \
+	test_iostreams.o \
 	test_largefile.o \
 	test_memstream.o \
 	test_sstream.o \
@@ -402,6 +402,9 @@ test_wxregextest.o: $(srcdir)/regex/wxregextest.cpp $(TEST_ODEP)
 test_scopeguardtest.o: $(srcdir)/scopeguard/scopeguardtest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/scopeguard/scopeguardtest.cpp
 
+test_iostream.o: $(srcdir)/strings/iostream.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/strings/iostream.cpp
+
 test_strings.o: $(srcdir)/strings/strings.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/strings/strings.cpp
 
@@ -440,6 +443,9 @@ test_fileback.o: $(srcdir)/streams/fileback.cpp $(TEST_ODEP)
 
 test_filestream.o: $(srcdir)/streams/filestream.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/streams/filestream.cpp
+
+test_iostreams.o: $(srcdir)/streams/iostreams.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/streams/iostreams.cpp
 
 test_largefile.o: $(srcdir)/streams/largefile.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/streams/largefile.cpp
@@ -485,12 +491,6 @@ test_xlocale.o: $(srcdir)/xlocale/xlocale.cpp $(TEST_ODEP)
 
 test_xmltest.o: $(srcdir)/xml/xmltest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/xml/xmltest.cpp
-
-test_iostream.o: $(srcdir)/strings/iostream.cpp $(TEST_ODEP)
-	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/strings/iostream.cpp
-
-test_iostream.o: $(srcdir)/streams/iostream.cpp $(TEST_ODEP)
-	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/streams/iostream.cpp
 
 test_gui_sample_rc.o: $(srcdir)/../samples/sample.rc $(TEST_GUI_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_5)  $(__EXCEPTIONS_DEFINE_p_5) $(__RTTI_DEFINE_p_5) $(__THREAD_DEFINE_p_5)   --include-dir $(srcdir) $(__DLLFLAG_p_5) --include-dir $(srcdir)/../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include

@@ -945,7 +945,7 @@
 				RelativePath=".\strings\iostream.cpp"
 			/>
 			<File
-				RelativePath=".\streams\iostream.cpp"
+				RelativePath=".\streams\iostreams.cpp"
 			/>
 			<File
 				RelativePath=".\streams\largefile.cpp"
