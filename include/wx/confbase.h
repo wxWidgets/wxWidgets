@@ -276,6 +276,12 @@ public:
   // we also have to provide specializations for other types which we want to
   // handle using the specialized DoWriteXXX() instead of the generic template
   // version below
+  bool Write(const wxString& key, char value)
+    { return DoWriteLong(key, value); }
+
+  bool Write(const wxString& key, unsigned char value)
+    { return DoWriteLong(key, value); }
+
   bool Write(const wxString& key, short value)
     { return DoWriteLong(key, value); }
 
