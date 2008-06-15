@@ -74,6 +74,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_ffilestream.obj \
 	$(OBJS)\test_fileback.obj \
 	$(OBJS)\test_filestream.obj \
+	$(OBJS)\test_iostream.obj \
 	$(OBJS)\test_largefile.obj \
 	$(OBJS)\test_memstream.obj \
 	$(OBJS)\test_sstream.obj \
@@ -430,9 +431,6 @@ $(OBJS)\test_wxregextest.obj: .\regex\wxregextest.cpp
 $(OBJS)\test_scopeguardtest.obj: .\scopeguard\scopeguardtest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\scopeguard\scopeguardtest.cpp
 
-$(OBJS)\test_iostream.obj: .\strings\iostream.cpp
-	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\strings\iostream.cpp
-
 $(OBJS)\test_strings.obj: .\strings\strings.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\strings\strings.cpp
 
@@ -516,6 +514,12 @@ $(OBJS)\test_xlocale.obj: .\xlocale\xlocale.cpp
 
 $(OBJS)\test_xmltest.obj: .\xml\xmltest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\xml\xmltest.cpp
+
+$(OBJS)\test_iostream.obj: .\strings\iostream.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\strings\iostream.cpp
+
+$(OBJS)\test_iostream.obj: .\streams\iostream.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\streams\iostream.cpp
 
 $(OBJS)\test_gui_sample.res: .\..\samples\sample.rc
 	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) $(__MSLU_DEFINE_p_3) $(__GFXCTX_DEFINE_p_3) -i$(SETUPHDIR) -i.\..\include -i. $(__DLLFLAG_p_3) -i.\..\samples -dNOPCH .\..\samples\sample.rc

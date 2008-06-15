@@ -220,9 +220,16 @@ size_t wxTempFileOutputStream::OnSysWrite(const void *buffer, size_t size)
 // ----------------------------------------------------------------------------
 
 wxFileStream::wxFileStream(const wxString& fileName)
-            : wxFileInputStream(fileName)
+            : wxFileInputStream(),
+              wxFileOutputStream()
 {
-    wxFileOutputStream::m_file = wxFileInputStream::m_file;
+    wxFileOutputStream::m_file =
+    wxFileInputStream::m_file = new wxFile(fileName, wxFile::read_write);
+
+    // this is a bit ugly as streams are symmetric but we still have to delete
+    // the file we created above exactly once so we decide to (arbitrarily) do
+    // it in wxFileInputStream
+    wxFileInputStream::m_file_destroy = true;
 }
 
 bool wxFileStream::IsOk() const
@@ -400,10 +407,18 @@ bool wxFFileOutputStream::IsOk() const
 // wxFFileStream
 // ----------------------------------------------------------------------------
 
-wxFFileStream::wxFFileStream(const wxString& fileName)
-             : wxFFileInputStream(fileName)
+wxFFileStream::wxFFileStream(const wxString& fileName, const wxString& mode)
+             : wxFFileInputStream(),
+               wxFFileOutputStream()
 {
-    wxFFileOutputStream::m_file = wxFFileInputStream::m_file;
+    wxASSERT_MSG( mode.find_first_of('+') != wxString::npos,
+                  "must be opened in read-write mode for this class to work" );
+
+    wxFFileOutputStream::m_file =
+    wxFFileInputStream::m_file = new wxFFile(fileName, mode);
+
+    // see comment in wxFileStream ctor
+    wxFFileInputStream::m_file_destroy = true;
 }
 
 bool wxFFileStream::IsOk() const

@@ -279,6 +279,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_ffilestream.obj &
 	$(OBJS)\test_fileback.obj &
 	$(OBJS)\test_filestream.obj &
+	$(OBJS)\test_iostream.obj &
 	$(OBJS)\test_largefile.obj &
 	$(OBJS)\test_memstream.obj &
 	$(OBJS)\test_sstream.obj &
@@ -461,9 +462,6 @@ $(OBJS)\test_wxregextest.obj :  .AUTODEPEND .\regex\wxregextest.cpp
 $(OBJS)\test_scopeguardtest.obj :  .AUTODEPEND .\scopeguard\scopeguardtest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
-$(OBJS)\test_iostream.obj :  .AUTODEPEND .\strings\iostream.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
-
 $(OBJS)\test_strings.obj :  .AUTODEPEND .\strings\strings.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
@@ -546,6 +544,12 @@ $(OBJS)\test_xlocale.obj :  .AUTODEPEND .\xlocale\xlocale.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_xmltest.obj :  .AUTODEPEND .\xml\xmltest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_iostream.obj :  .AUTODEPEND .\strings\iostream.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_iostream.obj :  .AUTODEPEND .\streams\iostream.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_gui_sample.res :  .AUTODEPEND .\..\samples\sample.rc

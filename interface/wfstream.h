@@ -76,7 +76,7 @@ public:
         Initializes a file stream in write-only mode using the file descriptor @e fp.
     */
     wxFFileOutputStream(const wxString& filename,
-                        const wxString& mode = "w+b");
+                        const wxString& mode = "wb");
     wxFFileOutputStream(wxFFile& file);
     wxFFileOutputStream(FILE* fp);
     //@}
@@ -242,7 +242,7 @@ public:
         Initializes a new file stream in read-write mode using the specified
         @e iofilename name.
     */
-    wxFFileStream(const wxString& iofileName);
+    wxFFileStream(const wxString& iofileName, const wxString& mode = "w+b");
 };
 
 

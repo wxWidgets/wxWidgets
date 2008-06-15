@@ -333,6 +333,10 @@ SOURCE=.\strings\iostream.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\streams\iostream.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\streams\largefile.cpp
 # End Source File
 # Begin Source File

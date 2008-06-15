@@ -88,6 +88,7 @@ TEST_OBJECTS =  \
 	test_ffilestream.o \
 	test_fileback.o \
 	test_filestream.o \
+	test_iostream.o \
 	test_largefile.o \
 	test_memstream.o \
 	test_sstream.o \
@@ -401,9 +402,6 @@ test_wxregextest.o: $(srcdir)/regex/wxregextest.cpp $(TEST_ODEP)
 test_scopeguardtest.o: $(srcdir)/scopeguard/scopeguardtest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/scopeguard/scopeguardtest.cpp
 
-test_iostream.o: $(srcdir)/strings/iostream.cpp $(TEST_ODEP)
-	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/strings/iostream.cpp
-
 test_strings.o: $(srcdir)/strings/strings.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/strings/strings.cpp
 
@@ -488,6 +486,12 @@ test_xlocale.o: $(srcdir)/xlocale/xlocale.cpp $(TEST_ODEP)
 test_xmltest.o: $(srcdir)/xml/xmltest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/xml/xmltest.cpp
 
+test_iostream.o: $(srcdir)/strings/iostream.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/strings/iostream.cpp
+
+test_iostream.o: $(srcdir)/streams/iostream.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/streams/iostream.cpp
+
 test_gui_sample_rc.o: $(srcdir)/../samples/sample.rc $(TEST_GUI_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_5)  $(__EXCEPTIONS_DEFINE_p_5) $(__RTTI_DEFINE_p_5) $(__THREAD_DEFINE_p_5)   --include-dir $(srcdir) $(__DLLFLAG_p_5) --include-dir $(srcdir)/../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
 
@@ -524,6 +528,15 @@ test_gui_setsize.o: $(srcdir)/window/setsize.cpp $(TEST_GUI_ODEP)
 printfbench_printfbench.o: $(srcdir)/benchmarks/printfbench.cpp $(PRINTFBENCH_ODEP)
 	$(CXXC) -c -o $@ $(PRINTFBENCH_CXXFLAGS) $(srcdir)/benchmarks/printfbench.cpp
 
+
+$(srcdir)/include/wx/stc/stc.h: \
+$(srcdir)/src/stc/scintilla/include/Scintilla.iface \
+$(srcdir)/src/stc/stc.cpp.in \
+$(srcdir)/src/stc/stc.h.in \
+$(srcdir)/src/stc/gen_iface.py
+	cd $(srcdir)/src/stc && ./gen_iface.py
+monolib_stc.o monodll_stc.o stcdll_stc.o stclib_stc.o: \
+$(srcdir)/include/wx/stc/stc.h
 
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d

@@ -161,7 +161,7 @@ protected:
 class WXDLLIMPEXP_BASE wxFFileOutputStream : public wxOutputStream
 {
 public:
-    wxFFileOutputStream(const wxString& fileName, const wxString& mode = "w+b");
+    wxFFileOutputStream(const wxString& fileName, const wxString& mode = "wb");
     wxFFileOutputStream(wxFFile& file);
     wxFFileOutputStream(FILE *file);
     virtual ~wxFFileOutputStream();
@@ -192,7 +192,7 @@ class WXDLLIMPEXP_BASE wxFFileStream : public wxFFileInputStream,
                                        public wxFFileOutputStream
 {
 public:
-    wxFFileStream(const wxString& fileName);
+    wxFFileStream(const wxString& fileName, const wxString& mode = "w+b");
     virtual bool IsOk() const;
 
 private:

@@ -747,6 +747,8 @@
 			<File
 				RelativePath=".\strings\iostream.cpp"/>
 			<File
+				RelativePath=".\streams\iostream.cpp"/>
+			<File
 				RelativePath=".\streams\largefile.cpp"/>
 			<File
 				RelativePath=".\lists\lists.cpp"/>

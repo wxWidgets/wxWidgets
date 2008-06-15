@@ -60,6 +60,7 @@
             streams/ffilestream.cpp
             streams/fileback.cpp
             streams/filestream.cpp
+            streams/iostreams.cpp
             streams/largefile.cpp
             streams/memstream.cpp
             streams/sstream.cpp

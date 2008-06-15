@@ -66,6 +66,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_ffilestream.o \
 	$(OBJS)\test_fileback.o \
 	$(OBJS)\test_filestream.o \
+	$(OBJS)\test_iostream.o \
 	$(OBJS)\test_largefile.o \
 	$(OBJS)\test_memstream.o \
 	$(OBJS)\test_sstream.o \
@@ -408,9 +409,6 @@ $(OBJS)\test_wxregextest.o: ./regex/wxregextest.cpp
 $(OBJS)\test_scopeguardtest.o: ./scopeguard/scopeguardtest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\test_iostream.o: ./strings/iostream.cpp
-	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\test_strings.o: ./strings/strings.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
@@ -493,6 +491,12 @@ $(OBJS)\test_xlocale.o: ./xlocale/xlocale.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_xmltest.o: ./xml/xmltest.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_iostream.o: ./strings/iostream.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_iostream.o: ./streams/iostream.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_sample_rc.o: ./../samples/sample.rc
