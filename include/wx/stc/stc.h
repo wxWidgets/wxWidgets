@@ -39,6 +39,7 @@
 #include "wx/dnd.h"
 #include "wx/stopwatch.h"
 
+#include "wx/textentry.h"
 #if wxUSE_TEXTCTRL
     #include "wx/textctrl.h"
 #endif // wxUSE_TEXTCTRL
@@ -1985,6 +1986,7 @@ class  WXDLLIMPEXP_FWD_STC wxStyledTextEvent;
 //----------------------------------------------------------------------
 
 class WXDLLIMPEXP_STC wxStyledTextCtrl : public wxControl
+                                       , public wxTextEntryBase
 #if wxUSE_TEXTCTRL
                                        , public wxTextAreaBase
 #endif // wxUSE_TEXTCTRL
@@ -2069,7 +2071,7 @@ public:
     wxMemoryBuffer GetStyledText(int startPos, int endPos);
 
     // Are there any redoable actions in the undo history?
-    bool CanRedo();
+    bool CanRedo() const;
 
     // Retrieve the line number at which a particular marker is located.
     int MarkerLineFromHandle(int handle);
@@ -2647,7 +2649,7 @@ public:
     bool CanPaste();
 
     // Are there any undoable actions in the undo history?
-    bool CanUndo();
+    bool CanUndo() const;
 
     // Delete the undo history.
     void EmptyUndoBuffer();
@@ -2671,7 +2673,7 @@ public:
     void SetText(const wxString& text);
 
     // Retrieve all the text in the document.
-    wxString GetText();
+    wxString GetText() const;
 
     // Retrieve the number of characters in the document.
     int GetTextLength() const;
@@ -3653,6 +3655,65 @@ public:
 #endif
 
 
+    // implement wxTextEntryBase pure virtual methods
+    // ----------------------------------------------
+
+    virtual void WriteText(const wxString& text) { AddText(text); }
+    virtual wxString GetValue() const { return GetText(); }
+    virtual void Remove(long from, long to)
+    {
+        Replace(from, to, "");
+    }
+    virtual void Replace(long from, long to, const wxString& text)
+    {
+        SetTargetStart(from);
+        SetTargetEnd(to);
+        ReplaceTarget(text);
+    }
+
+    /*
+        These functions are already declared in the generated section.
+
+    virtual void Copy();
+    virtual void Cut();
+    virtual void Paste();
+
+    virtual void Undo();
+    virtual void Redo();
+
+    virtual bool CanUndo() const;
+    virtual bool CanRedo() const;
+
+    */
+
+    virtual void SetInsertionPoint(long pos) { SetCurrentPos(pos); }
+    virtual long GetInsertionPoint() const { return GetCurrentPos(); }
+    virtual long GetLastPosition() const { return GetTextLength(); }
+
+    virtual void SetSelection(long from, long to)
+    {
+        if ( from == -1 && to == -1 )
+        {
+            SelectAll();
+        }
+        else
+        {
+            SetSelectionStart(from);
+            SetSelectionEnd(to);
+        }
+    }
+
+    virtual void GetSelection(long *from, long *to) const
+    {
+        if ( from )
+            *from = GetSelectionStart();
+        if ( to )
+            *to = GetSelectionEnd();
+    }
+
+    virtual bool IsEditable() const { return !GetReadOnly(); }
+    virtual void SetEditable(bool editable) { SetReadOnly(!editable); }
+
     // implement wxTextAreaBase pure virtual methods
     // ---------------------------------------------
 
@@ -3709,10 +3770,7 @@ public:
         return true;
     }
 
-    virtual void ShowPosition(long pos)
-    {
-        EnsureVisible(LineFromPosition(pos));
-    }
+    virtual void ShowPosition(long pos) { GotoPos(pos); }
 
     using wxWindow::HitTest;
 

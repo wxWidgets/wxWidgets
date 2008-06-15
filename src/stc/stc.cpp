@@ -356,7 +356,7 @@ wxMemoryBuffer wxStyledTextCtrl::GetStyledText(int startPos, int endPos) {
 }
 
 // Are there any redoable actions in the undo history?
-bool wxStyledTextCtrl::CanRedo()
+bool wxStyledTextCtrl::CanRedo() const
 {
     return SendMsg(2016, 0, 0) != 0;
 }
@@ -1580,7 +1580,7 @@ bool wxStyledTextCtrl::CanPaste()
 }
 
 // Are there any undoable actions in the undo history?
-bool wxStyledTextCtrl::CanUndo()
+bool wxStyledTextCtrl::CanUndo() const
 {
     return SendMsg(2174, 0, 0) != 0;
 }
@@ -1628,7 +1628,7 @@ void wxStyledTextCtrl::SetText(const wxString& text)
 }
 
 // Retrieve all the text in the document.
-wxString wxStyledTextCtrl::GetText() {
+wxString wxStyledTextCtrl::GetText() const {
          int len  = GetTextLength();
          wxMemoryBuffer mbuf(len+1);   // leave room for the null...
          char* buf = (char*)mbuf.GetWriteBuf(len+1);

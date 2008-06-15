@@ -483,9 +483,9 @@ methodOverrideMap = {
 
     'GetText' :
     (0,
-     'wxString %s();',
+     'wxString %s() const;',
 
-     '''wxString %s() {
+     '''wxString %s() const {
          int len  = GetTextLength();
          wxMemoryBuffer mbuf(len+1);   // leave room for the null...
          char* buf = (char*)mbuf.GetWriteBuf(len+1);
@@ -663,6 +663,8 @@ constNonGetterMethods = set((
     'LineFromPosition',
     'PositionFromLine',
     'LineLength',
+    'CanRedo',
+    'CanUndo',
 ))
 
 #----------------------------------------------------------------------------
