@@ -516,7 +516,11 @@ void wxStyledTextCtrl::ScrollToColumn(int column) {
 }
 
 
+#if wxUSE_TEXTCTRL
+bool wxStyledTextCtrl::DoSaveFile(const wxString& filename, int WXUNUSED(fileType))
+#else
 bool wxStyledTextCtrl::SaveFile(const wxString& filename)
+#endif
 {
     wxFile file(filename, wxFile::write);
 
@@ -531,7 +535,11 @@ bool wxStyledTextCtrl::SaveFile(const wxString& filename)
     return success;
 }
 
+#if wxUSE_TEXTCTRL
+bool wxStyledTextCtrl::DoLoadFile(const wxString& filename, int WXUNUSED(fileType))
+#else
 bool wxStyledTextCtrl::LoadFile(const wxString& filename)
+#endif
 {
     bool success = false;
     wxFile file(filename, wxFile::read);

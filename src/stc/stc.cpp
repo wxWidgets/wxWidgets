@@ -393,7 +393,7 @@ void wxStyledTextCtrl::SetViewWhiteSpace(int viewWS)
 }
 
 // Find the position from a point within the window.
-int wxStyledTextCtrl::PositionFromPoint(wxPoint pt) {
+int wxStyledTextCtrl::PositionFromPoint(wxPoint pt) const {
         return SendMsg(2022, pt.x, pt.y);
 }
 
@@ -1439,7 +1439,7 @@ int wxStyledTextCtrl::GetFirstVisibleLine() const
 }
 
 // Retrieve the contents of a line.
-wxString wxStyledTextCtrl::GetLine(int line) {
+wxString wxStyledTextCtrl::GetLine(int line) const {
          int len = LineLength(line);
          if (!len) return wxEmptyString;
 
@@ -1538,13 +1538,13 @@ void wxStyledTextCtrl::HideSelection(bool normal)
 }
 
 // Retrieve the line containing a position.
-int wxStyledTextCtrl::LineFromPosition(int pos)
+int wxStyledTextCtrl::LineFromPosition(int pos) const
 {
     return SendMsg(2166, pos, 0);
 }
 
 // Retrieve the position at the start of a line.
-int wxStyledTextCtrl::PositionFromLine(int line)
+int wxStyledTextCtrl::PositionFromLine(int line) const
 {
     return SendMsg(2167, line, 0);
 }
@@ -2464,7 +2464,7 @@ void wxStyledTextCtrl::MoveCaretInsideView()
 }
 
 // How many characters are on a line, not including end of line characters?
-int wxStyledTextCtrl::LineLength(int line)
+int wxStyledTextCtrl::LineLength(int line) const
 {
     return SendMsg(2350, line, 0);
 }
@@ -3513,7 +3513,11 @@ void wxStyledTextCtrl::ScrollToColumn(int column) {
 }
 
 
+#if wxUSE_TEXTCTRL
+bool wxStyledTextCtrl::DoSaveFile(const wxString& filename, int WXUNUSED(fileType))
+#else
 bool wxStyledTextCtrl::SaveFile(const wxString& filename)
+#endif
 {
     wxFile file(filename, wxFile::write);
 
@@ -3528,7 +3532,11 @@ bool wxStyledTextCtrl::SaveFile(const wxString& filename)
     return success;
 }
 
+#if wxUSE_TEXTCTRL
+bool wxStyledTextCtrl::DoLoadFile(const wxString& filename, int WXUNUSED(fileType))
+#else
 bool wxStyledTextCtrl::LoadFile(const wxString& filename)
+#endif
 {
     bool success = false;
     wxFile file(filename, wxFile::read);

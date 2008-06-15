@@ -39,6 +39,10 @@
 #include "wx/dnd.h"
 #include "wx/stopwatch.h"
 
+#if wxUSE_TEXTCTRL
+    #include "wx/textctrl.h"
+#endif // wxUSE_TEXTCTRL
+
 class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 
 // SWIG can't handle "#if" type of conditionals, only "#ifdef"
@@ -1981,6 +1985,9 @@ class  WXDLLIMPEXP_FWD_STC wxStyledTextEvent;
 //----------------------------------------------------------------------
 
 class WXDLLIMPEXP_STC wxStyledTextCtrl : public wxControl
+#if wxUSE_TEXTCTRL
+                                       , public wxTextAreaBase
+#endif // wxUSE_TEXTCTRL
 {
 public:
 
@@ -2081,7 +2088,7 @@ public:
     void SetViewWhiteSpace(int viewWS);
 
     // Find the position from a point within the window.
-    int PositionFromPoint(wxPoint pt);
+    int PositionFromPoint(wxPoint pt) const;
 
     // Find the position from a point within the window but return
     // INVALID_POSITION if not close to text.
@@ -2586,7 +2593,7 @@ public:
     int GetFirstVisibleLine() const;
 
     // Retrieve the contents of a line.
-    wxString GetLine(int line);
+    wxString GetLine(int line) const;
 
     // Returns the number of lines in the document. There is always at least one.
     int GetLineCount() const;
@@ -2619,10 +2626,10 @@ public:
     void HideSelection(bool normal);
 
     // Retrieve the line containing a position.
-    int LineFromPosition(int pos);
+    int LineFromPosition(int pos) const;
 
     // Retrieve the position at the start of a line.
-    int PositionFromLine(int line);
+    int PositionFromLine(int line) const;
 
     // Scroll horizontally and vertically.
     void LineScroll(int columns, int lines);
@@ -3087,7 +3094,7 @@ public:
     void MoveCaretInsideView();
 
     // How many characters are on a line, not including end of line characters?
-    int LineLength(int line);
+    int LineLength(int line) const;
 
     // Highlight the characters at two positions.
     void BraceHighlight(int pos1, int pos2);
@@ -3576,11 +3583,14 @@ public:
     bool GetLastKeydownProcessed() { return m_lastKeyDownConsumed; }
     void SetLastKeydownProcessed(bool val) { m_lastKeyDownConsumed = val; }
 
+    // if we derive from wxTextAreaBase it already provides these methods
+#if !wxUSE_TEXTCTRL
     // Write the contents of the editor to filename
     bool SaveFile(const wxString& filename);
 
     // Load the contents of filename into the editor
     bool LoadFile(const wxString& filename);
+#endif // !wxUSE_TEXTCTRL
 
 #ifdef STC_USE_DND
     // Allow for simulating a DnD DragOver
@@ -3641,11 +3651,88 @@ public:
 #ifdef SWIG
     %pythoncode "_stc_utf8_methods.py"
 #endif
-//----------------------------------------------------------------------
 
+
+    // implement wxTextAreaBase pure virtual methods
+    // ---------------------------------------------
+
+    virtual int GetLineLength(long n) const { return GetLine(n).length(); }
+    virtual wxString GetLineText(long n) const { return GetLine(n); }
+    virtual int GetNumberOfLines() const { return GetLineCount(); }
+
+    virtual bool IsModified() const { return GetModify(); }
+    virtual void MarkDirty() { wxFAIL_MSG("not implemented"); }
+    virtual void DiscardEdits() { SetSavePoint(); }
+
+    virtual bool SetStyle(long WXUNUSED(start), long WXUNUSED(end),
+                          const wxTextAttr& WXUNUSED(style))
+    {
+        wxFAIL_MSG("not implemented");
+
+        return false;
+    }
+
+    virtual bool GetStyle(long WXUNUSED(position), wxTextAttr& WXUNUSED(style))
+    {
+        wxFAIL_MSG("not implemented");
+
+        return false;
+    }
+
+    virtual bool SetDefaultStyle(const wxTextAttr& WXUNUSED(style))
+    {
+        wxFAIL_MSG("not implemented");
+
+        return false;
+    }
+
+    virtual long XYToPosition(long x, long y) const
+    {
+        long pos = PositionFromLine(y);
+        pos += x;
+        return pos;
+    }
+
+    virtual bool PositionToXY(long pos, long *x, long *y) const
+    {
+        if ( x )
+            *x = -1; // TODO
+
+        if ( y )
+        {
+            long l = LineFromPosition(pos);
+            if ( l == -1 )
+                return false;
+            *y = l;
+        }
+
+        return true;
+    }
+
+    virtual void ShowPosition(long pos)
+    {
+        EnsureVisible(LineFromPosition(pos));
+    }
+
+    using wxWindow::HitTest;
+
+    virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long *pos) const
+    {
+        const long l = PositionFromPoint(pt);
+        if ( l == -1 )
+            return wxTE_HT_BELOW; // we don't really know where it was
+
+        if ( pos )
+            *pos = l;
+
+        return wxTE_HT_ON_TEXT;
+    }
 
 #ifndef SWIG
 protected:
+    virtual bool DoLoadFile(const wxString& file, int fileType);
+    virtual bool DoSaveFile(const wxString& file, int fileType);
+
     // Event handlers
     void OnPaint(wxPaintEvent& evt);
     void OnScrollWin(wxScrollWinEvent& evt);
@@ -3689,7 +3776,7 @@ protected:
 
     friend class ScintillaWX;
     friend class Platform;
-#endif
+#endif // !SWIG
 };
 
 //----------------------------------------------------------------------

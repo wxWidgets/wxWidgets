@@ -21,7 +21,7 @@ H_TEMPLATE    = os.path.abspath('./stc.h.in')
 CPP_TEMPLATE  = os.path.abspath('./stc.cpp.in')
 H_DEST        = os.path.abspath('../../include/wx/stc/stc.h')
 CPP_DEST      = os.path.abspath('./stc.cpp')
-DOCSTR_DEST   = os.path.abspath('../../../wxPython/contrib/stc/_stc_gendocs.i')
+DOCSTR_DEST   = '/dev/null' #os.path.abspath('../../../wxPython/contrib/stc/_stc_gendocs.i')
 
 
 # Value prefixes to convert
@@ -144,9 +144,9 @@ methodOverrideMap = {
 
     'PositionFromPoint' :
     (0,
-     'int %s(wxPoint pt);',
+     'int %s(wxPoint pt) const;',
 
-     '''int %s(wxPoint pt) {
+     '''int %s(wxPoint pt) const {
         return SendMsg(%s, pt.x, pt.y);''',
      0),
 
@@ -410,9 +410,9 @@ methodOverrideMap = {
 
     'GetLine' :
     (0,
-     'wxString %s(int line);',
+     'wxString %s(int line) const;',
 
-     '''wxString %s(int line) {
+     '''wxString %s(int line) const {
          int len = LineLength(line);
          if (!len) return wxEmptyString;
 
@@ -654,6 +654,16 @@ methodOverrideMap = {
     '' : ('', 0, 0, 0),
 
     }
+
+# all Scintilla getters are transformed into const member of wxSTC class but
+# some non-getter methods are also logically const and this set contains their
+# names (notice that it's useless to include here methods manually overridden
+# above)
+constNonGetterMethods = set((
+    'LineFromPosition',
+    'PositionFromLine',
+    'LineLength',
+))
 
 #----------------------------------------------------------------------------
 
@@ -904,7 +914,8 @@ def parseFun(line, methods, docs, values, is_const):
             if not FUNC_FOR_CMD:
                 return
 
-    methods.append( (retType, name, number, param1, param2, tuple(docs), is_const) )
+    methods.append( (retType, name, number, param1, param2, tuple(docs),
+                     is_const or name in constNonGetterMethods) )
 
 
 #----------------------------------------------------------------------------
