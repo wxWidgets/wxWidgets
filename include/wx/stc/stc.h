@@ -3571,7 +3571,7 @@ public:
     // NB: this method is not really const as it can modify the control but it
     //     has to be declared as such as it's called from both const and
     //     non-const methods and we can't distinguish between the two
-    long SendMsg(int msg, wxUIntPtr wp=0, wxIntPtr lp=0) const;
+    wxIntPtr SendMsg(int msg, wxUIntPtr wp=0, wxIntPtr lp=0) const;
 
 
     // Set the vertical scrollbar to use instead of the ont that's built-in.
