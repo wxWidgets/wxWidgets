@@ -3832,6 +3832,10 @@ protected:
 
     bool                m_lastKeyDownConsumed;
 
+    // the timestamp that consists of the last wheel event
+    // added to the time taken to process that event.
+    long m_lastWheelTimestamp;
+
     friend class ScintillaWX;
     friend class Platform;
 #endif // !SWIG
