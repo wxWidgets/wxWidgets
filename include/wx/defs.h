@@ -1114,7 +1114,11 @@ typedef wxUint32 wxDword;
 #if wxCHECK_WATCOM_VERSION(1,4)
     #define HAVE_SSIZE_T
 #endif
-#ifndef HAVE_SSIZE_T
+#ifdef HAVE_SSIZE_T
+    #ifdef __UNIX__
+        #include <sys/types.h>
+    #endif
+#else // !HAVE_SSIZE_T
     #if SIZEOF_SIZE_T == 4
         typedef wxInt32 ssize_t;
     #elif SIZEOF_SIZE_T == 8
@@ -1122,6 +1126,17 @@ typedef wxUint32 wxDword;
     #else
         #error "error defining ssize_t, size_t is not 4 or 8 bytes"
     #endif
+#endif
+
+// we can't rely on Windows _W64 being defined as windows.h may not be included
+// so define our own equivalent: this should be used with types like WXLPARAM
+// or WXWPARAM which are 64 bit under Win64 to avoid warnings each time we cast
+// it to a pointer or a handle (which results in hundreds of warnings as Win32
+// API often passes pointers in them)
+#if wxCHECK_VISUALC_VERSION(7)
+    #define wxW64 __w64
+#else
+    #define wxW64
 #endif
 
 /*
@@ -1132,13 +1147,11 @@ typedef wxUint32 wxDword;
     /*
        Win64 case: size_t is the only integral type big enough for "void *".
 
-       Notice that wxUIntPtr should be also defined as size_t when building
-       under Win32 with MSVC with /Wp64 option as otherwise any conversion
-       between ints and pointers results in a warning 4311 or 4312, even if it
-       is safe under Win32. Using size_t (declared with __w64) allows to avoid
-       them.
+       Notice that we must use __w64 to avoid warnings about casting pointers
+       to wxIntPtr (which we do often as this is what it is defined for) in 32
+       bit build with MSVC.
      */
-    #define wxIntPtr ssize_t
+    typedef wxW64 ssize_t wxIntPtr;
     typedef size_t wxUIntPtr;
 #elif SIZEOF_LONG >= SIZEOF_VOID_P
     /*
@@ -2815,17 +2828,6 @@ typedef void *          WXRECTANGLEPTR;
 /*  the keywords needed for WinMain() declaration */
 #ifndef WXFAR
 #    define WXFAR
-#endif
-
-// we can't rely on Windows _W64 being defined as windows.h may not be included
-// so define our own equivalent: this should be used with types like WXLPARAM
-// or WXWPARAM which are 64 bit under Win64 to avoid warnings each time we cast
-// it to a pointer or a handle (which results in hundreds of warnings as Win32
-// API often passes pointers in them)
-#if wxCHECK_VISUALC_VERSION(7)
-    #define wxW64 __w64
-#else
-    #define wxW64
 #endif
 
 /*  Stand-ins for Windows types to avoid #including all of windows.h */
