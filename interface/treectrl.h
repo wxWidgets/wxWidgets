@@ -15,7 +15,7 @@
     expanded to show further items. Items in a tree control are referenced by
     wxTreeItemId handles, which may be tested for validity by calling
     wxTreeItemId::IsOk().
-    
+
     A similar control with a fully native implemtation for GTK+ and OS X
     as well is wxDataViewTreeCtrl.
 
@@ -62,7 +62,7 @@
     @endStyleTable
 
     See also @ref overview_windowstyles.
-    
+
     @b Win32 @b notes:
 
     wxTreeCtrl class uses the standard common treeview control under Win32
@@ -116,7 +116,7 @@ public:
                long style = wxTR_HAS_BUTTONS,
                const wxValidator& validator = wxDefaultValidator,
                const wxString& name = "treeCtrl");
-    
+
 
     /**
         Destructor, destroying the tree control.
@@ -138,7 +138,7 @@ public:
     /**
         Appends an item to the end of the branch identified by @a parent, return
         a new item id.
-        
+
         The @a image and @a selImage parameters are an index within the normal
         image list specifying the image to use for unselected and selected
         items, respectively. If @a image -1 and @a selImage is -1, the same
@@ -425,6 +425,11 @@ public:
     int GetItemSelectedImage(const wxTreeItemId& item) const;
 
     /**
+        Gets the specified item state.
+    */
+    int GetItemState(const wxTreeItemId& item) const;
+
+    /**
         Returns the item label.
     */
     wxString GetItemText(const wxTreeItemId& item) const;
@@ -524,7 +529,7 @@ public:
         wxTR_MULTIPLE style.
 
         Returns the number of selected items.
-        
+
         @beginWxPythonOnly
         The wxPython version of this method accepts no parameters and returns a
         Python list of @ref wxTreeItemId "wxTreeItemId"s.
@@ -557,7 +562,7 @@ public:
             item that is in a user-defined state.
         - @c wxTREE_HITTEST_TOLEFT: To the right of the client area.
         - @c wxTREE_HITTEST_TORIGHT: To the left of the client area.
-        
+
         @beginWxPythonOnly
         In wxPython both the wxTreeItemId and the flags are returned as a tuple.
         @endWxPythonOnly
@@ -776,6 +781,15 @@ public:
     void SetItemSelectedImage(const wxTreeItemId& item, int selImage);
 
     /**
+        Sets the specified item state. The value of @a state may be:
+        - wxTREE_ITEMSTATE_NONE: to disable the item state (the state image will
+          be not displayed).
+        - wxTREE_ITEMSTATE_NEXT: to set the next item state.
+        - wxTREE_ITEMSTATE_PREV: to set the previous item statem.
+    */
+    void SetItemState(const wxTreeItemId& item, int state);
+
+    /**
         Sets the item label.
     */
     void SetItemText(const wxTreeItemId& item, const wxString& text);
@@ -973,4 +987,3 @@ public:
     */
     void SetToolTip(const wxString& tooltip);
 };
-

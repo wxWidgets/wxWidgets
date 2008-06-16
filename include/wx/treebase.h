@@ -150,6 +150,11 @@ enum wxTreeItemIcon
     wxTreeItemIcon_Max
 };
 
+// special values for the 'state' parameter of wxTreeCtrl::SetItemState()
+static const int wxTREE_ITEMSTATE_NONE  = -1;   // not state (no display state image)
+static const int wxTREE_ITEMSTATE_NEXT  = -2;   // cycle to the next state
+static const int wxTREE_ITEMSTATE_PREV  = -3;   // cycle to the previous state
+
 // ----------------------------------------------------------------------------
 // wxTreeCtrl flags
 // ----------------------------------------------------------------------------

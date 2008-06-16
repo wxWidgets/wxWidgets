@@ -284,6 +284,9 @@ protected:
                       bool unselect_others = true,
                       bool extended_select = false);
 
+    virtual int DoGetItemState(const wxTreeItemId& item) const;
+    virtual void DoSetItemState(const wxTreeItemId& item, int state);
+
     virtual wxTreeItemId DoInsertItem(const wxTreeItemId& parent,
                                       size_t previous,
                                       const wxString& text,

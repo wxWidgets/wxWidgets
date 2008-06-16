@@ -202,14 +202,6 @@ public:
     virtual bool SetBackgroundColour(const wxColour &colour);
     virtual bool SetForegroundColour(const wxColour &colour);
 
-    // get/set the check state for the item (only for wxTR_MULTIPLE)
-    bool IsItemChecked(const wxTreeItemId& item) const;
-    void SetItemCheck(const wxTreeItemId& item, bool check = true);
-
-    // set/get the item state.image (state == -1 means cycle to the next one)
-    void SetState(const wxTreeItemId& node, int state);
-    int GetState(const wxTreeItemId& node);
-
     // returns true if the platform should explicitly apply a theme border
     virtual bool CanApplyThemeBorder() const { return false; }
 
@@ -222,6 +214,9 @@ protected:
 
     // end edit label
     void DoEndEditLabel(bool discardChanges = false);
+
+    virtual int DoGetItemState(const wxTreeItemId& item) const;
+    virtual void DoSetItemState(const wxTreeItemId& item, int state);
 
     virtual wxTreeItemId DoInsertItem(const wxTreeItemId& parent,
                                       size_t pos,

@@ -106,6 +106,25 @@ wxTreeCtrlBase::~wxTreeCtrlBase()
         delete m_imageListState;
 }
 
+void wxTreeCtrlBase::SetItemState(const wxTreeItemId& item, int state)
+{
+    if ( state == wxTREE_ITEMSTATE_NEXT )
+    {
+        state = GetItemState(item) + 1;
+        if ( m_imageListState && state >= m_imageListState->GetImageCount() )
+            state = 0;
+    }
+    else if ( state == wxTREE_ITEMSTATE_PREV )
+    {
+        state = GetItemState(item) - 1;
+        if ( state == -1 )
+            state = m_imageListState ? m_imageListState->GetImageCount() - 1 : 0;
+    }
+    // else: wxTREE_ITEMSTATE_NONE depending on platform
+
+    DoSetItemState(item, state);
+}
+
 static void
 wxGetBestTreeSize(const wxTreeCtrlBase* treeCtrl, wxTreeItemId id, wxSize& size)
 {
@@ -240,4 +259,3 @@ bool wxTreeCtrlBase::IsEmpty() const
 }
 
 #endif // wxUSE_TREECTRL
-

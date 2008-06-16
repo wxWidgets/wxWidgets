@@ -751,58 +751,6 @@ bool wxTreeCtrl::Create(wxWindow *parent,
     SetForegroundColour(wxWindow::GetParent()->GetForegroundColour());
 #endif
 
-
-    // VZ: this is some experimental code which may be used to get the
-    //     TVS_CHECKBOXES style functionality for comctl32.dll < 4.71.
-    //     AFAIK, the standard DLL does about the same thing anyhow.
-#if 0
-    if ( m_windowStyle & wxTR_MULTIPLE )
-    {
-        wxBitmap bmp;
-
-        // create the DC compatible with the current screen
-        HDC hdcMem = CreateCompatibleDC(NULL);
-
-        // create a mono bitmap of the standard size
-        int x = ::GetSystemMetrics(SM_CXMENUCHECK);
-        int y = ::GetSystemMetrics(SM_CYMENUCHECK);
-        wxImageList imagelistCheckboxes(x, y, false, 2);
-        HBITMAP hbmpCheck = CreateBitmap(x, y,   // bitmap size
-                                         1,      // # of color planes
-                                         1,      // # bits needed for one pixel
-                                         0);     // array containing colour data
-        SelectObject(hdcMem, hbmpCheck);
-
-        // then draw a check mark into it
-        RECT rect = { 0, 0, x, y };
-        if ( !::DrawFrameControl(hdcMem, &rect,
-                                 DFC_BUTTON,
-                                 DFCS_BUTTONCHECK | DFCS_CHECKED) )
-        {
-            wxLogLastError(wxT("DrawFrameControl(check)"));
-        }
-
-        bmp.SetHBITMAP((WXHBITMAP)hbmpCheck);
-        imagelistCheckboxes.Add(bmp);
-
-        if ( !::DrawFrameControl(hdcMem, &rect,
-                                 DFC_BUTTON,
-                                 DFCS_BUTTONCHECK) )
-        {
-            wxLogLastError(wxT("DrawFrameControl(uncheck)"));
-        }
-
-        bmp.SetHBITMAP((WXHBITMAP)hbmpCheck);
-        imagelistCheckboxes.Add(bmp);
-
-        // clean up
-        ::DeleteDC(hdcMem);
-
-        // set the imagelist
-        SetStateImageList(&imagelistCheckboxes);
-    }
-#endif // 0
-
     wxSetCCUnicodeFormat(GetHwnd());
 
     return true;
@@ -1443,33 +1391,6 @@ wxTreeItemId wxTreeCtrl::GetPrevVisible(const wxTreeItemId& item) const
 // ----------------------------------------------------------------------------
 // multiple selections emulation
 // ----------------------------------------------------------------------------
-
-bool wxTreeCtrl::IsItemChecked(const wxTreeItemId& item) const
-{
-    wxCHECK_MSG( item.IsOk(), false, wxT("invalid tree item") );
-
-    // receive the desired information.
-    wxTreeViewItem tvItem(item, TVIF_STATE, TVIS_STATEIMAGEMASK);
-    DoGetItem(&tvItem);
-
-    // state image indices are 1 based
-    return ((tvItem.state >> 12) - 1) == 1;
-}
-
-void wxTreeCtrl::SetItemCheck(const wxTreeItemId& item, bool check)
-{
-    wxCHECK_RET( item.IsOk(), wxT("invalid tree item") );
-
-    // receive the desired information.
-    wxTreeViewItem tvItem(item, TVIF_STATE, TVIS_STATEIMAGEMASK);
-
-    DoGetItem(&tvItem);
-
-    // state images are one-based
-    tvItem.state = (check ? 2 : 1) << 12;
-
-    DoSetItem(&tvItem);
-}
 
 size_t wxTreeCtrl::GetSelections(wxArrayTreeItemIds& selections) const
 {
@@ -3105,40 +3026,29 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 // why do they define INDEXTOSTATEIMAGEMASK but not the inverse?
 #define STATEIMAGEMASKTOINDEX(state) (((state) & TVIS_STATEIMAGEMASK) >> 12)
 
-void wxTreeCtrl::SetState(const wxTreeItemId& node, int state)
+int wxTreeCtrl::DoGetItemState(const wxTreeItemId& item) const
 {
-    TV_ITEM tvi;
-    tvi.hItem = (HTREEITEM)node.m_pItem;
-    tvi.mask = TVIF_STATE;
-    tvi.stateMask = TVIS_STATEIMAGEMASK;
+    wxCHECK_MSG( item.IsOk(), wxTREE_ITEMSTATE_NONE, wxT("invalid tree item") );
 
-    // Select the specified state, or -1 == cycle to the next one.
-    if ( state == -1 )
-    {
-        TreeView_GetItem(GetHwnd(), &tvi);
+    // receive the desired information
+    wxTreeViewItem tvItem(item, TVIF_STATE, TVIS_STATEIMAGEMASK);
+    DoGetItem(&tvItem);
 
-        state = STATEIMAGEMASKTOINDEX(tvi.state) + 1;
-        if ( state == m_imageListState->GetImageCount() )
-            state = 1;
-    }
-
-    wxCHECK_RET( state < m_imageListState->GetImageCount(),
-                 _T("wxTreeCtrl::SetState(): item index out of bounds") );
-
-    tvi.state = INDEXTOSTATEIMAGEMASK(state);
-
-    TreeView_SetItem(GetHwnd(), &tvi);
+    // state images are one-based
+    return STATEIMAGEMASKTOINDEX(tvItem.state) - 1;
 }
 
-int wxTreeCtrl::GetState(const wxTreeItemId& node)
+void wxTreeCtrl::DoSetItemState(const wxTreeItemId& item, int state)
 {
-    TV_ITEM tvi;
-    tvi.hItem = (HTREEITEM)node.m_pItem;
-    tvi.mask = TVIF_STATE;
-    tvi.stateMask = TVIS_STATEIMAGEMASK;
-    TreeView_GetItem(GetHwnd(), &tvi);
+    wxCHECK_RET( item.IsOk(), wxT("invalid tree item") );
 
-    return STATEIMAGEMASKTOINDEX(tvi.state);
+    wxTreeViewItem tvItem(item, TVIF_STATE, TVIS_STATEIMAGEMASK);
+
+    // state images are one-based
+    // 0 if no state image display (wxTREE_ITEMSTATE_NONE = -1)
+    tvItem.state = INDEXTOSTATEIMAGEMASK(state + 1);
+
+    DoSetItem(&tvItem);
 }
 
 #endif // wxUSE_TREECTRL

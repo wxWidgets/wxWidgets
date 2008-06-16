@@ -61,6 +61,9 @@ static const int NO_IMAGE = -1;
 
 static const int PIXELS_PER_UNIT = 10;
 
+// the margin between the item state image and the item normal image
+static const int MARGIN_BETWEEN_STATE_AND_IMAGE = 2;
+
 // the margin between the item image and the item text
 static const int MARGIN_BETWEEN_IMAGE_AND_TEXT = 4;
 
@@ -153,14 +156,16 @@ public:
     int GetImage(wxTreeItemIcon which = wxTreeItemIcon_Normal) const
         { return m_images[which]; }
     wxTreeItemData *GetData() const { return m_data; }
+    int GetState() const { return m_state; }
 
     // returns the current image for the item (depending on its
     // selected/expanded/whatever state)
     int GetCurrentImage() const;
 
-    void SetText( const wxString &text );
+    void SetText( const wxString &text ) { m_text = text; }
     void SetImage(int image, wxTreeItemIcon which) { m_images[which] = image; }
     void SetData(wxTreeItemData *data) { m_data = data; }
+    void SetState(int state) { m_state = state; }
 
     void SetHasPlus(bool has = true) { m_hasPlus = has; }
 
@@ -247,6 +252,8 @@ private:
     wxString            m_text;         // label to be rendered for item
 
     wxTreeItemData     *m_data;         // user-provided data
+
+    int                 m_state;        // item state
 
     wxArrayGenericTreeItems m_children; // list of children
     wxGenericTreeItem  *m_parent;       // parent of this item
@@ -509,6 +516,7 @@ wxGenericTreeItem::wxGenericTreeItem(wxGenericTreeItem *parent,
     m_images[wxTreeItemIcon_SelectedExpanded] = NO_IMAGE;
 
     m_data = data;
+    m_state = wxTREE_ITEMSTATE_NONE;
     m_x = m_y = 0;
 
     m_isCollapsed = true;
@@ -551,11 +559,6 @@ void wxGenericTreeItem::DeleteChildren(wxGenericTreeCtrl *tree)
     }
 
     m_children.Empty();
-}
-
-void wxGenericTreeItem::SetText( const wxString &text )
-{
-    m_text = text;
 }
 
 size_t wxGenericTreeItem::GetChildrenCount(bool recursively) const
@@ -634,10 +637,20 @@ wxGenericTreeItem *wxGenericTreeItem::HitTest(const wxPoint& point,
 
                 // assuming every image (normal and selected) has the same size!
                 if ( (GetImage() != NO_IMAGE) && theCtrl->m_imageListNormal )
-                    theCtrl->m_imageListNormal->GetSize(GetImage(),
-                                                        image_w, image_h);
+                    theCtrl->m_imageListNormal->GetSize(GetImage(), image_w, image_h);
 
-                if ((image_w != -1) && (point.x <= m_x + image_w + 1))
+                int state_w = -1;
+                int state_h;
+
+                if ( (GetState() != wxTREE_ITEMSTATE_NONE) && theCtrl->m_imageListState )
+                    theCtrl->m_imageListState->GetSize(GetState(), state_w, state_h);
+
+                if ((state_w != -1) && (point.x <= m_x + state_w + 1))
+                    flags |= wxTREE_HITTEST_ONITEMSTATEICON;
+                else if ((image_w != -1) &&
+                         (point.x <= m_x +
+                            (state_w != -1 ? state_w + MARGIN_BETWEEN_STATE_AND_IMAGE : 0)
+                                            + image_w + 1))
                     flags |= wxTREE_HITTEST_ONITEMICON;
                 else
                     flags |= wxTREE_HITTEST_ONITEMLABEL;
@@ -939,6 +952,14 @@ wxTreeItemData *wxGenericTreeCtrl::GetItemData(const wxTreeItemId& item) const
     return ((wxGenericTreeItem*) item.m_pItem)->GetData();
 }
 
+int wxGenericTreeCtrl::DoGetItemState(const wxTreeItemId& item) const
+{
+    wxCHECK_MSG( item.IsOk(), wxTREE_ITEMSTATE_NONE, wxT("invalid tree item") );
+
+    wxGenericTreeItem *pItem = (wxGenericTreeItem*) item.m_pItem;
+    return pItem->GetState();
+}
+
 wxColour wxGenericTreeCtrl::GetItemTextColour(const wxTreeItemId& item) const
 {
     wxCHECK_MSG( item.IsOk(), wxNullColour, wxT("invalid tree item") );
@@ -996,6 +1017,15 @@ void wxGenericTreeCtrl::SetItemData(const wxTreeItemId& item, wxTreeItemData *da
         data->SetId( item );
 
     ((wxGenericTreeItem*) item.m_pItem)->SetData(data);
+}
+
+void wxGenericTreeCtrl::DoSetItemState(const wxTreeItemId& item, int state)
+{
+    wxCHECK_RET( item.IsOk(), wxT("invalid tree item") );
+
+    wxGenericTreeItem *pItem = (wxGenericTreeItem*) item.m_pItem;
+    pItem->SetState(state);
+    RefreshLine(pItem);
 }
 
 void wxGenericTreeCtrl::SetItemHasChildren(const wxTreeItemId& item, bool has)
@@ -2162,8 +2192,6 @@ int wxGenericTreeCtrl::GetLineHeight(wxGenericTreeItem *item) const
 
 void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
 {
-    // TODO implement "state" icon on items
-
     wxTreeItemAttr *attr = item->GetAttributes();
     if ( attr && attr->HasFont() )
         dc.SetFont(attr->GetFont());
@@ -2185,6 +2213,24 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
         else
         {
             image = NO_IMAGE;
+        }
+    }
+
+    int state_h = 0, state_w = 0;
+    int state = item->GetState();
+    if ( state != wxTREE_ITEMSTATE_NONE )
+    {
+        if ( m_imageListState )
+        {
+            m_imageListState->GetSize( state, state_w, state_h );
+            if ( image != NO_IMAGE )
+                state_w += MARGIN_BETWEEN_STATE_AND_IMAGE;
+            else
+                state_w += MARGIN_BETWEEN_IMAGE_AND_TEXT;
+        }
+        else
+        {
+            state = wxTREE_ITEMSTATE_NONE;
         }
     }
 
@@ -2243,13 +2289,14 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
     }
     else
     {
-        if ( item->IsSelected() && image != NO_IMAGE )
+        if ( item->IsSelected() &&
+                (state != wxTREE_ITEMSTATE_NONE || image != NO_IMAGE) )
         {
-            // If it's selected, and there's an image, then we should
-            // take care to leave the area under the image painted in the
-            // background colour.
-            wxRect rect( item->GetX() + image_w - 2, item->GetY()+offset,
-                         item->GetWidth() - image_w + 2, total_h-offset );
+            // If it's selected, and there's an state image or normal image,
+            // then we should take care to leave the area under the image
+            // painted in the background colour.
+            wxRect rect( item->GetX() + state_w + image_w - 2, item->GetY() + offset,
+                         item->GetWidth() - state_w - image_w + 2, total_h - offset );
 #if !defined(__WXGTK20__) && !defined(__WXMAC__)
             dc.DrawRectangle( rect );
 #else
@@ -2294,12 +2341,22 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
         }
     }
 
+    if ( state != wxTREE_ITEMSTATE_NONE )
+    {
+        dc.SetClippingRegion( item->GetX(), item->GetY(), state_w, total_h );
+        m_imageListState->Draw( state, dc,
+                                item->GetX(),
+                                item->GetY() + ((total_h > state_h)?((total_h-state_h)/2):0),
+                                wxIMAGELIST_DRAW_TRANSPARENT );
+        dc.DestroyClippingRegion();
+    }
+
     if ( image != NO_IMAGE )
     {
-        dc.SetClippingRegion( item->GetX(), item->GetY(), image_w-2, total_h );
+        dc.SetClippingRegion( item->GetX() + state_w, item->GetY(), image_w, total_h );
         m_imageListNormal->Draw( image, dc,
                                  item->GetX(),
-                                 item->GetY() +((total_h > image_h)?((total_h-image_h)/2):0),
+                                 item->GetY() + ((total_h > image_h)?((total_h-image_h)/2):0),
                                  wxIMAGELIST_DRAW_TRANSPARENT );
         dc.DestroyClippingRegion();
     }
@@ -2307,7 +2364,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
     dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
     int extraH = (total_h > text_h) ? (total_h - text_h)/2 : 0;
     dc.DrawText( item->GetText(),
-                 (wxCoord)(image_w + item->GetX()),
+                 (wxCoord)(state_w + image_w + item->GetX()),
                  (wxCoord)(item->GetY() + extraH));
 
     // restore normal font
@@ -3269,6 +3326,12 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
         }
         else if ( event.LeftUp() )
         {
+            if (flags & wxTREE_HITTEST_ONITEMSTATEICON)
+            {
+                wxTreeEvent nevent(wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK, this, item);
+                GetEventHandler()->ProcessEvent(nevent);
+            }
+
             // this facilitates multiple-item drag-and-drop
 
             if ( /* item && */ HasFlag(wxTR_MULTIPLE))
@@ -3426,6 +3489,24 @@ void wxGenericTreeCtrl::CalculateSize( wxGenericTreeItem *item, wxDC &dc )
         }
     }
 
+    int state_h = 0, state_w = 0;
+    int state = item->GetState();
+    if ( state != wxTREE_ITEMSTATE_NONE )
+    {
+        if ( m_imageListState )
+        {
+            m_imageListState->GetSize( state, state_w, state_h );
+            if ( image != NO_IMAGE )
+                state_w += MARGIN_BETWEEN_STATE_AND_IMAGE;
+            else
+                state_w += MARGIN_BETWEEN_IMAGE_AND_TEXT;
+        }
+        else
+        {
+            state = wxTREE_ITEMSTATE_NONE;
+        }
+    }
+
     int total_h = (image_h > text_h) ? image_h : text_h;
 
     if (total_h < 30)
@@ -3437,7 +3518,7 @@ void wxGenericTreeCtrl::CalculateSize( wxGenericTreeItem *item, wxDC &dc )
     if (total_h>m_lineHeight)
         m_lineHeight=total_h;
 
-    item->SetWidth(image_w+text_w+2);
+    item->SetWidth(state_w + image_w + text_w + 2);
 }
 
 // -----------------------------------------------------------------------------

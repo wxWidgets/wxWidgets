@@ -118,6 +118,12 @@ public:
         // get the item's font
     virtual wxFont GetItemFont(const wxTreeItemId& item) const = 0;
 
+        // get the items state
+    int GetItemState(const wxTreeItemId& item) const
+    {
+        return DoGetItemState(item);
+    }
+
     // modifiers
     // ---------
 
@@ -155,6 +161,9 @@ public:
         // set the items font (should be of the same height for all items)
     virtual void SetItemFont(const wxTreeItemId& item,
                              const wxFont& font) = 0;
+
+        // set the items state (special state values: wxTREE_ITEMSTATE_NONE/NEXT/PREV)
+    void SetItemState(const wxTreeItemId& item, int state);
 
     // item status inquiries
     // ---------------------
@@ -386,6 +395,10 @@ public:
 
 protected:
     virtual wxSize DoGetBestSize() const;
+
+    // comon part of Get/SetItemState()
+    virtual int DoGetItemState(const wxTreeItemId& item) const = 0;
+    virtual void DoSetItemState(const wxTreeItemId& item, int state) = 0;
 
     // common part of Append/Prepend/InsertItem()
     //
