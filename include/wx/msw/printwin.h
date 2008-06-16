@@ -44,6 +44,8 @@ private:
 // wxPrintout.
 // ---------------------------------------------------------------------------
 
+#define wxUSE_HIGH_QUALITY_PREVIEW (wxUSE_IMAGE && wxUSE_WXDIB)
+
 class WXDLLIMPEXP_CORE wxWindowsPrintPreview : public wxPrintPreviewBase
 {
 public:
@@ -58,7 +60,22 @@ public:
     virtual bool Print(bool interactive);
     virtual void DetermineScaling();
 
+#if wxUSE_HIGH_QUALITY_PREVIEW
+protected:
+    bool RenderPageIntoBitmapHQ(wxBitmap& bmp, int pageNum);
+    virtual bool RenderPageIntoBitmap(wxBitmap& bmp, int pageNum);
+
 private:
+    bool RenderPageFragment(float scaleX, float scaleY,
+                            int *nextFinalLine,
+                            wxPrinterDC& printer,
+                            wxMemoryDC& finalDC,
+                            const wxRect& rect,
+                            int pageNum);
+
+    bool m_hqPreviewFailed;
+#endif // wxUSE_HIGH_QUALITY_PREVIEW
+
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxWindowsPrintPreview)
 };
 

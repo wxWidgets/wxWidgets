@@ -406,6 +406,10 @@ wxMSW:
 - Implement support for display enumeration under WinCE (Vince Harron)
 - Use different Win32 class names in different wx instances (Thomas Hauk)
 - Support multiline labels for wxCheckBox.
+- Print preview is now rendered in the resolution used by printer and
+  accurately represents what will be printed. This fixes wxHtmlEasyPrinting
+  preview inaccuracies on Windows; on other platforms, native preview
+  should be used.
 
 wxX11:
 

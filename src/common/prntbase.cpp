@@ -1535,6 +1535,47 @@ void wxPrintPreviewBase::AdjustScrollbars(wxPreviewCanvas *canvas)
         canvas->SetScrollbars(10, 10, scrollUnitsX, scrollUnitsY, 0, 0, true);
 }
 
+bool wxPrintPreviewBase::RenderPageIntoDC(wxDC& dc, int pageNum)
+{
+    m_previewPrintout->SetDC(&dc);
+    m_previewPrintout->SetPageSizePixels(m_pageWidth, m_pageHeight);
+
+    // Need to delay OnPreparePrinting() until here, so we have enough
+    // information.
+    if (!m_printingPrepared)
+    {
+        m_previewPrintout->OnPreparePrinting();
+        int selFrom, selTo;
+        m_previewPrintout->GetPageInfo(&m_minPage, &m_maxPage, &selFrom, &selTo);
+        m_printingPrepared = true;
+    }
+
+    m_previewPrintout->OnBeginPrinting();
+
+    if (!m_previewPrintout->OnBeginDocument(m_printDialogData.GetFromPage(), m_printDialogData.GetToPage()))
+    {
+        wxMessageBox(_("Could not start document preview."), _("Print Preview Failure"), wxOK);
+        return false;
+    }
+
+    m_previewPrintout->OnPrintPage(pageNum);
+    m_previewPrintout->OnEndDocument();
+    m_previewPrintout->OnEndPrinting();
+
+    m_previewPrintout->SetDC(NULL);
+
+    return true;
+}
+
+bool wxPrintPreviewBase::RenderPageIntoBitmap(wxBitmap& bmp, int pageNum)
+{
+    wxMemoryDC memoryDC;
+    memoryDC.SelectObject(bmp);
+    memoryDC.Clear();
+
+    return RenderPageIntoDC(memoryDC, pageNum);
+}
+
 bool wxPrintPreviewBase::RenderPage(int pageNum)
 {
     wxBusyCursor busy;
@@ -1560,42 +1601,12 @@ bool wxPrintPreviewBase::RenderPage(int pageNum)
         }
     }
 
-    wxMemoryDC memoryDC;
-    memoryDC.SelectObject(*m_previewBitmap);
-
-    memoryDC.Clear();
-
-    m_previewPrintout->SetDC(&memoryDC);
-    m_previewPrintout->SetPageSizePixels(m_pageWidth, m_pageHeight);
-
-    // Need to delay OnPreparePrinting until here, so we have enough information.
-    if (!m_printingPrepared)
+    if ( !RenderPageIntoBitmap(*m_previewBitmap, pageNum) )
     {
-        m_previewPrintout->OnPreparePrinting();
-        int selFrom, selTo;
-        m_previewPrintout->GetPageInfo(&m_minPage, &m_maxPage, &selFrom, &selTo);
-        m_printingPrepared = true;
-    }
-
-    m_previewPrintout->OnBeginPrinting();
-
-    if (!m_previewPrintout->OnBeginDocument(m_printDialogData.GetFromPage(), m_printDialogData.GetToPage()))
-    {
-        wxMessageBox(_("Could not start document preview."), _("Print Preview Failure"), wxOK);
-
-        memoryDC.SelectObject(wxNullBitmap);
-
         InvalidatePreviewBitmap();
+        wxMessageBox(_("Sorry, not enough memory to create a preview."), _("Print Preview Failure"), wxOK);
         return false;
     }
-
-    m_previewPrintout->OnPrintPage(pageNum);
-    m_previewPrintout->OnEndDocument();
-    m_previewPrintout->OnEndPrinting();
-
-    m_previewPrintout->SetDC(NULL);
-
-    memoryDC.SelectObject(wxNullBitmap);
 
 #if wxUSE_STATUSBAR
     wxString status;

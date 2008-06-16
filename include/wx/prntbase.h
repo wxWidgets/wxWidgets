@@ -562,6 +562,11 @@ public:
     virtual void DetermineScaling() = 0;
 
 protected:
+    // helpers for RenderPage():
+    virtual bool RenderPageIntoDC(wxDC& dc, int pageNum);
+    // renders preview into m_previewBitmap
+    virtual bool RenderPageIntoBitmap(wxBitmap& bmp, int pageNum);
+
     void InvalidatePreviewBitmap();
 
 protected:
