@@ -199,6 +199,15 @@ public:
     the preview frame. Unlike wxPrinter::Print(), flow of control returns to the
     application immediately after the frame is shown.
 
+    @note
+    The preview shown is only exact on Windows. On other platforms, the wxDC
+    used for preview is different from what is used for printing and the
+    results may be significantly different, depending on how is the output
+    created. In particular, printing code relying on wxDC::GetTextExtent()
+    heavily (for example, wxHtmlEasyPrinting and other wxHTML classes do) is
+    affected. It is recommended to use native preview functionality on
+    platforms that offer it (OS X, GTK+).
+
     @library{wxbase}
     @category{printing}
 
