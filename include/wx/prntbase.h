@@ -562,10 +562,14 @@ public:
     virtual void DetermineScaling() = 0;
 
 protected:
+    void InvalidatePreviewBitmap();
+
+protected:
     wxPrintDialogData m_printDialogData;
     wxPreviewCanvas*  m_previewCanvas;
     wxFrame*          m_previewFrame;
     wxBitmap*         m_previewBitmap;
+    bool              m_previewFailed;
     wxPrintout*       m_previewPrintout;
     wxPrintout*       m_printPrintout;
     int               m_currentPage;

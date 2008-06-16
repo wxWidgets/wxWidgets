@@ -862,12 +862,21 @@ void wxPreviewCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 
 void wxPreviewCanvas::OnIdle(wxIdleEvent& event)
 {
+    event.Skip();
+
+    // prevent UpdatePageRendering() from being called recursively:
+    static bool s_inIdle = false;
+    if ( s_inIdle )
+        return;
+    s_inIdle = true;
+
     if ( m_printPreview )
     {
         if ( m_printPreview->UpdatePageRendering() )
             Refresh();
     }
-    event.Skip();
+
+    s_inIdle = false;
 }
 
 // Responds to colour changes, and passes event on to children.
@@ -1372,6 +1381,7 @@ void wxPrintPreviewBase::Init(wxPrintout *printout,
     m_previewCanvas = NULL;
     m_previewFrame = NULL;
     m_previewBitmap = NULL;
+    m_previewFailed = false;
     m_currentPage = 1;
     m_currentZoom = 70;
     m_topMargin = 40;
@@ -1399,11 +1409,8 @@ bool wxPrintPreviewBase::SetCurrentPage(int pageNum)
         return true;
 
     m_currentPage = pageNum;
-    if (m_previewBitmap)
-    {
-        delete m_previewBitmap;
-        m_previewBitmap = NULL;
-    }
+
+    InvalidatePreviewBitmap();
 
     if (m_previewCanvas)
     {
@@ -1465,13 +1472,27 @@ void wxPrintPreviewBase::CalcRects(wxPreviewCanvas *canvas, wxRect& pageRect, wx
 }
 
 
+void wxPrintPreviewBase::InvalidatePreviewBitmap()
+{
+    wxDELETE(m_previewBitmap);
+    // if there was a problem with rendering the preview, try again now
+    // that it changed in some way (less memory may be needed, for example):
+    m_previewFailed = false;
+}
+
 bool wxPrintPreviewBase::UpdatePageRendering()
 {
     if ( m_previewBitmap )
         return false;
 
-    if ( !RenderPage(m_currentPage) )
+    if ( m_previewFailed )
         return false;
+
+    if ( !RenderPage(m_currentPage) )
+    {
+        m_previewFailed = true; // don't waste time failing again
+        return false;
+    }
 
     return true;
 }
@@ -1533,10 +1554,7 @@ bool wxPrintPreviewBase::RenderPage(int pageNum)
 
         if (!m_previewBitmap || !m_previewBitmap->Ok())
         {
-            if (m_previewBitmap) {
-                delete m_previewBitmap;
-                m_previewBitmap = NULL;
-            }
+            InvalidatePreviewBitmap();
             wxMessageBox(_("Sorry, not enough memory to create a preview."), _("Print Preview Failure"), wxOK);
             return false;
         }
@@ -1567,8 +1585,7 @@ bool wxPrintPreviewBase::RenderPage(int pageNum)
 
         memoryDC.SelectObject(wxNullBitmap);
 
-        delete m_previewBitmap;
-        m_previewBitmap = NULL;
+        InvalidatePreviewBitmap();
         return false;
     }
 
@@ -1626,11 +1643,8 @@ void wxPrintPreviewBase::SetZoom(int percent)
         return;
 
     m_currentZoom = percent;
-    if (m_previewBitmap)
-    {
-        delete m_previewBitmap;
-        m_previewBitmap = NULL;
-    }
+
+    InvalidatePreviewBitmap();
 
     if (m_previewCanvas)
     {
