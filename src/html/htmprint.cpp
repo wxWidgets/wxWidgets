@@ -206,7 +206,8 @@ void wxHtmlPrintout::OnPreparePrinting()
     wxDisplaySize(&scr_w, &scr_h);
     GetDC()->GetSize(&dc_w, &dc_h);
 
-    GetDC()->SetUserScale((double)dc_w / (double)pageWidth, (double)dc_w / (double)pageWidth);
+    GetDC()->SetUserScale((double)dc_w / (double)pageWidth,
+                          (double)dc_h / (double)pageHeight);
 
     /* prepare headers/footers renderer: */
 
@@ -412,7 +413,8 @@ void wxHtmlPrintout::RenderPage(wxDC *dc, int page)
     GetPPIScreen(&ppiScreenX, &ppiScreenY);
     wxUnusedVar(ppiScreenX);
 
-    dc->SetUserScale((double)dc_w / (double)pageWidth, (double)dc_w / (double)pageWidth);
+    dc->SetUserScale((double)dc_w / (double)pageWidth,
+                     (double)dc_h / (double)pageHeight);
 
     m_Renderer->SetDC(dc, (double)ppiPrinterY / (double)ppiScreenY);
 
