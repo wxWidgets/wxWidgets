@@ -428,7 +428,7 @@ void ComboboxWidgetsPage::CreateCombo()
         m_combobox->Append(items[n]);
     }
 
-    m_sizerCombo->Add(m_combobox, 1, wxGROW | wxALL, 5);
+    m_sizerCombo->Add(m_combobox, 0, wxGROW | wxALL, 5);
     m_sizerCombo->Layout();
 }
 
