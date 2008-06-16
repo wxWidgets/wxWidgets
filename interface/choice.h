@@ -117,8 +117,8 @@ public:
     /**
         Gets the number of columns in this choice item.
 
-        @remarks This is implemented for Motif only and always returns 1 for
-                 the other platforms.
+        @remarks This is implemented for GTK and Motif only and always 
+                 returns 1 for the other platforms.
     */
     int GetColumns() const;
 
@@ -142,8 +142,8 @@ public:
         @param n
             Number of columns.
 
-        @remarks This is implemented for Motif only and doesn’t do anything
-                 under other platforms.
+        @remarks This is implemented for GTK and Motif only and doesn’t do 
+                 anything under other platforms.
     */
     void SetColumns(int n = 1);
 };

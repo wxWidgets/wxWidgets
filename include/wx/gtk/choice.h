@@ -72,6 +72,9 @@ public:
     virtual wxString GetString(unsigned int n) const;
     virtual void SetString(unsigned int n, const wxString& string);
 
+    virtual void SetColumns(int n=1);
+    virtual int GetColumns() const;
+
     virtual void DisableEvents();
     virtual void EnableEvents();
 
