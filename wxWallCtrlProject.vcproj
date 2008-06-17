@@ -143,7 +143,15 @@
 				>
 			</File>
 			<File
-				RelativePath="wxWallCtrlProject.rc"
+				RelativePath=".\src\wallctrl\wxwallctrldefaultplanenavigation.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\wallctrl\wxwallctrlnavigation.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\wallctrl\wxwallctrlnavigationevent.cpp"
 				>
 			</File>
 			<File
@@ -183,6 +191,18 @@
 				>
 			</File>
 			<File
+				RelativePath=".\include\wx\wallctrl\wxwallctrldefaultplanenavigation.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\wx\wallctrl\wxwallctrlnavigation.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\wx\wallctrl\wxwallctrlnavigationevent.h"
+				>
+			</File>
+			<File
 				RelativePath="wxwallctrlprojectapp.h"
 				>
 			</File>
@@ -191,6 +211,10 @@
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath="wxWallCtrlProject.rc"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

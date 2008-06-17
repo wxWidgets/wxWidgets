@@ -14,6 +14,7 @@
 #include "wx/Wallctrl/WallCtrl.h"
 #include "wx/Wallctrl/WallCtrlPlaneSurface.h"
 #include "wx/Wallctrl/WallCtrlBitmapSource.h"
+#include "wx/wallctrl/wxwallctrldefaultplanenavigation.h"
 
 #ifdef __BORLANDC__
 #pragma hdrstop
@@ -146,6 +147,10 @@ void wxWallCtrlTest::CreateControls()
 	wxWallCtrlPlaneSurface * surface = new wxWallCtrlPlaneSurface(bitmapSource);
 	surface->SetScopeSize(wxSize(8, 2));
 	wxWallCtrl* wallCtrl1 = new wxWallCtrl(this, surface, wxID_ANY,	wxDefaultPosition, wxDefaultSize);
+
+	wxWallCtrlDefaultPlaneNavigation * navigation = new wxWallCtrlDefaultPlaneNavigation(surface);
+	wallCtrl1->SetNavigation(navigation);
+
 	itemBoxSizer2->Add(wallCtrl1, 1, wxGROW|wxALL, 5);
 
 	////@end wxWallCtrlTest content construction

@@ -11,6 +11,7 @@
 
 // TODO: this one is for testing only
 #include "wx/wallctrl/wallctrlplanesurface.h"
+#include "wx/wallctrl/wxWallCtrlNavigation.h"
 
 // For some reason wxVector< > does not compile, so for the meanwhile we'll use this vector
 template <class T>
@@ -53,6 +54,15 @@ public:
 		SwapBuffers();
 	}
 
+	void SetNavigation (wxWallCtrlNavigation * navigation)
+	{
+		// TODO: See if we need to pop the old event handlers. But we should only pop navigation handlers anyway
+	//	PopEventHandler();
+
+		// Push the navigation as the current event handler
+		PushEventHandler(navigation);
+	}
+
 	void OnEnterWindow( wxMouseEvent& WXUNUSED(event) )
 	{
 		SetFocus();
@@ -75,30 +85,7 @@ public:
 	}
 
 	// TODO: This is only temp for testing
-	void OnKeyDown(wxKeyEvent &event)
-	{
-		// TODO: wxDynamicCast should be used instead here
-		//wxWallCtrlPlaneSurface * temp = wxDynamicCast(m_surface, wxWallCtrlPlaneSurface);
-		wxWallCtrlPlaneSurface * temp = dynamic_cast<wxWallCtrlPlaneSurface *> (m_surface);
-		if (!temp)
-			return;
-		switch (event.GetKeyCode())
-		{
-		case 'A'://WXK_LEFT:
-			temp->MoveLeft(0.1);
-			break;
-		case 'D':
-			temp->MoveRight(0.1);
-			break;
-		case 'W':
-			temp->MoveIn(0.1);
-			break;
-		case 'S':
-			temp->MoveOut(0.1);
-			break;
-		}
-	
-	}
+
 
 	private:
 		bool m_init;
