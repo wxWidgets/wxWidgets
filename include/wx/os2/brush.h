@@ -40,6 +40,11 @@ public:
     wxBitmap* GetStipple(void) const;
     int       GetPS(void) const;
 
+#if FUTURE_WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED_FUTURE( void SetStyle(int style) )
+        { SetStyle((wxBrushStyle)style); }
+#endif
+
     //
     // Implementation
     //

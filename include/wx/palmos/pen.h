@@ -125,6 +125,11 @@ public:
     WXHANDLE GetResourceHandle() const;
     bool IsFree() const;
 
+#if FUTURE_WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED_FUTURE( void SetStyle(int style) )
+        { SetStyle((wxPenStyle)style); }
+#endif
+
 protected:
     virtual wxGDIRefData* CreateGDIRefData() const;
     virtual wxGDIRefData* CloneGDIRefData(const wxGDIRefData* data) const;

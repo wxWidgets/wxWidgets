@@ -55,11 +55,6 @@ public:
 
     virtual bool IsHatch() const
         { return (GetStyle()>=wxBRUSHSTYLE_FIRST_HATCH) && (GetStyle()<=wxBRUSHSTYLE_LAST_HATCH); }
-
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
-    wxDEPRECATED_FUTURE( void SetStyle(int style) )
-        { SetStyle((wxBrushStyle)style); }
-#endif
 };
 
 #if defined(__WXPALMOS__)

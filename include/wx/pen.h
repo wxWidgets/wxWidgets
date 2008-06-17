@@ -84,33 +84,28 @@ public:
     virtual wxPenCap GetCap() const = 0;
     virtual int GetWidth() const = 0;
     virtual int GetDashes(wxDash **ptr) const = 0;
-
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
-    wxDEPRECATED_FUTURE( void SetStyle(int style) )
-        { SetStyle((wxPenStyle)style); }
-#endif
 };
 
 #if defined(__WXPALMOS__)
-#include "wx/palmos/pen.h"
+    #include "wx/palmos/pen.h"
 #elif defined(__WXMSW__)
-#include "wx/msw/pen.h"
+    #include "wx/msw/pen.h"
 #elif defined(__WXMOTIF__) || defined(__WXX11__)
-#include "wx/x11/pen.h"
+    #include "wx/x11/pen.h"
 #elif defined(__WXGTK20__)
-#include "wx/gtk/pen.h"
+    #include "wx/gtk/pen.h"
 #elif defined(__WXGTK__)
-#include "wx/gtk1/pen.h"
+    #include "wx/gtk1/pen.h"
 #elif defined(__WXMGL__)
-#include "wx/mgl/pen.h"
+    #include "wx/mgl/pen.h"
 #elif defined(__WXDFB__)
-#include "wx/dfb/pen.h"
+    #include "wx/dfb/pen.h"
 #elif defined(__WXMAC__)
-#include "wx/osx/pen.h"
+    #include "wx/osx/pen.h"
 #elif defined(__WXCOCOA__)
-#include "wx/cocoa/pen.h"
+    #include "wx/cocoa/pen.h"
 #elif defined(__WXPM__)
-#include "wx/os2/pen.h"
+    #include "wx/os2/pen.h"
 #endif
 
 class WXDLLIMPEXP_CORE wxPenList: public wxGDIObjListBase

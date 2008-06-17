@@ -55,6 +55,11 @@ public:
     int GetDashCount() const;
     wxBitmap* GetStipple() const;
 
+#if FUTURE_WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED_FUTURE( void SetStyle(int style) )
+        { SetStyle((wxPenStyle)style); }
+#endif
+
     // internal: wxGDIObject methods
     virtual bool RealizeResource();
     virtual bool FreeResource(bool force = false);
