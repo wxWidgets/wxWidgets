@@ -2083,7 +2083,7 @@ static void TestRegConfWrite()
 
 static void TestRegConfRead()
 {
-    wxConfig *config = new wxConfig(_T("myapp"));
+    wxRegConfig *config = new wxRegConfig(_T("myapp"));
 
     wxString str;
     long dummy;
