@@ -14,7 +14,7 @@
 #include "wx/Wallctrl/WallCtrl.h"
 #include "wx/Wallctrl/WallCtrlPlaneSurface.h"
 #include "wx/Wallctrl/WallCtrlBitmapSource.h"
-#include "wx/wallctrl/wxwallctrldefaultplanenavigation.h"
+#include "wx/wallctrl/wallctrldefaultplanenavigation.h"
 
 #ifdef __BORLANDC__
 #pragma hdrstop
@@ -123,25 +123,25 @@ void wxWallCtrlTest::CreateControls()
 	wxBitmap testBitmap;
 
 	// Just add bitmaps manually.
-	testBitmap.LoadFile("S:\\Wall1.bmp", wxBITMAP_TYPE_BMP);
+	testBitmap.LoadFile("Wall1.bmp", wxBITMAP_TYPE_BMP);
 	bitmapSource->AppendBitmap(testBitmap);
-	testBitmap.LoadFile("S:\\Wall2.bmp", wxBITMAP_TYPE_BMP);
+	testBitmap.LoadFile("Wall2.bmp", wxBITMAP_TYPE_BMP);
 	bitmapSource->AppendBitmap(testBitmap);
-	testBitmap.LoadFile("S:\\Wall3.bmp", wxBITMAP_TYPE_BMP);
-	bitmapSource->AppendBitmap(testBitmap);
-
-	testBitmap.LoadFile("S:\\Wall1.bmp", wxBITMAP_TYPE_BMP);
-	bitmapSource->AppendBitmap(testBitmap);
-	testBitmap.LoadFile("S:\\Wall2.bmp", wxBITMAP_TYPE_BMP);
-	bitmapSource->AppendBitmap(testBitmap);
-	testBitmap.LoadFile("S:\\Wall3.bmp", wxBITMAP_TYPE_BMP);
+	testBitmap.LoadFile("Wall3.bmp", wxBITMAP_TYPE_BMP);
 	bitmapSource->AppendBitmap(testBitmap);
 
-	testBitmap.LoadFile("S:\\Wall1.bmp", wxBITMAP_TYPE_BMP);
+	testBitmap.LoadFile("Wall1.bmp", wxBITMAP_TYPE_BMP);
 	bitmapSource->AppendBitmap(testBitmap);
-	testBitmap.LoadFile("S:\\Wall2.bmp", wxBITMAP_TYPE_BMP);
+	testBitmap.LoadFile("Wall2.bmp", wxBITMAP_TYPE_BMP);
 	bitmapSource->AppendBitmap(testBitmap);
-	testBitmap.LoadFile("S:\\Wall3.bmp", wxBITMAP_TYPE_BMP);
+	testBitmap.LoadFile("Wall3.bmp", wxBITMAP_TYPE_BMP);
+	bitmapSource->AppendBitmap(testBitmap);
+
+	testBitmap.LoadFile("Wall1.bmp", wxBITMAP_TYPE_BMP);
+	bitmapSource->AppendBitmap(testBitmap);
+	testBitmap.LoadFile("Wall2.bmp", wxBITMAP_TYPE_BMP);
+	bitmapSource->AppendBitmap(testBitmap);
+	testBitmap.LoadFile("Wall3.bmp", wxBITMAP_TYPE_BMP);
 	bitmapSource->AppendBitmap(testBitmap);
 
 	wxWallCtrlPlaneSurface * surface = new wxWallCtrlPlaneSurface(bitmapSource);

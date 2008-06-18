@@ -135,23 +135,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\wallctrl\wallctrldefaultplanenavigation.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\wallctrl\wallctrlnavigation.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\wallctrl\wallctrlnavigationevent.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\wallctrl\wallctrlplanesurface.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\src\wallctrl\wallctrlsurface.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\wallctrl\wxwallctrldefaultplanenavigation.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\wallctrl\wxwallctrlnavigation.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\wallctrl\wxwallctrlnavigationevent.cpp"
 				>
 			</File>
 			<File
@@ -183,23 +183,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\include\wx\wallctrl\wallctrldefaultplanenavigation.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\wx\wallctrl\wallctrlnavigation.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\wx\wallctrl\wallctrlnavigationevent.h"
+				>
+			</File>
+			<File
 				RelativePath=".\include\wx\wallctrl\wallctrlplanesurface.h"
 				>
 			</File>
 			<File
 				RelativePath=".\include\wx\wallctrl\wallctrlsurface.h"
-				>
-			</File>
-			<File
-				RelativePath=".\include\wx\wallctrl\wxwallctrldefaultplanenavigation.h"
-				>
-			</File>
-			<File
-				RelativePath=".\include\wx\wallctrl\wxwallctrlnavigation.h"
-				>
-			</File>
-			<File
-				RelativePath=".\include\wx\wallctrl\wxwallctrlnavigationevent.h"
 				>
 			</File>
 			<File

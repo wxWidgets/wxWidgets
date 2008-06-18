@@ -11,7 +11,7 @@
 
 // TODO: this one is for testing only
 #include "wx/wallctrl/wallctrlplanesurface.h"
-#include "wx/wallctrl/wxWallCtrlNavigation.h"
+#include "wx/wallctrl/WallCtrlNavigation.h"
 
 // For some reason wxVector< > does not compile, so for the meanwhile we'll use this vector
 template <class T>
