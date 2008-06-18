@@ -92,6 +92,17 @@ struct wxGridCellWithAttr
         return *this;
     }
 
+    void ChangeAttr(wxGridCellAttr* new_attr)
+    {
+        if (attr != new_attr)
+        {
+	    // "Delete" (i.e. DecRef) the old attribute.
+            attr->DecRef();
+            attr = new_attr;
+            // Take ownership of the new attribute, i.e. no IncRef.
+        }
+    }
+
     ~wxGridCellWithAttr()
     {
         attr->DecRef();
@@ -2603,6 +2614,9 @@ wxGridCellEditor* wxGridCellAttr::GetEditor(const wxGrid* grid, int row, int col
 
 void wxGridCellAttrData::SetAttr(wxGridCellAttr *attr, int row, int col)
 {
+    // Note: contrary to wxGridRowOrColAttrData::SetAttr, we must not
+    //       touch attribute's reference counting explicitly, since this
+    //       is managed by class wxGridCellWithAttr
     int n = FindIndex(row, col);
     if ( n == wxNOT_FOUND )
     {
@@ -2618,7 +2632,7 @@ void wxGridCellAttrData::SetAttr(wxGridCellAttr *attr, int row, int col)
         if ( attr )
         {
             // change the attribute
-            m_attrs[(size_t)n].attr = attr;
+            m_attrs[(size_t)n].ChangeAttr(attr);
         }
         else
         {
@@ -2759,7 +2773,8 @@ void wxGridRowOrColAttrData::SetAttr(wxGridCellAttr *attr, int rowOrCol)
     {
         if ( attr )
         {
-            // add the attribute
+            // add the attribute - no need to do anything to reference count
+            //                     since we take ownership of the attribute.
             m_rowsOrCols.Add(rowOrCol);
             m_attrs.Add(attr);
         }
@@ -2773,13 +2788,14 @@ void wxGridRowOrColAttrData::SetAttr(wxGridCellAttr *attr, int rowOrCol)
             return; 
         if ( attr )
         {
-            // change the attribute
+            // change the attribute, handling reference count manually,
+            //                       taking ownership of the new attribute.
             m_attrs[n]->DecRef();
             m_attrs[n] = attr;
         }
         else
         {
-            // remove this attribute
+            // remove this attribute, handling reference count manually
             m_attrs[n]->DecRef();
             m_rowsOrCols.RemoveAt(n);
             m_attrs.RemoveAt(n);
