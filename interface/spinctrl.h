@@ -94,6 +94,12 @@ public:
 
     /**
         Gets the value of the spin control.
+
+        Notice that if you use this method from a handler processing a change
+        of the control value, it may return the old value, not the new one
+        (because the event handler can veto the change and this prevent the
+        value from changing at all). Use wxSpinEvent::GetValue() to retrieve
+        the new value in this case.
     */
     int GetValue() const;
 
