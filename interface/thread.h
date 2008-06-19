@@ -317,17 +317,98 @@ public:
     separated while all threads share the same address space.
 
     While it makes it much easier to share common data between several threads, it
-    also
-    makes it much easier to shoot oneself in the foot, so careful use of
-    synchronization
-    objects such as mutexes() or @ref overview_wxcriticalsection "critical
-    sections" is recommended. In addition, don't create global thread
+    also makes it much easier to shoot oneself in the foot, so careful use of
+    synchronization objects such as mutexes() or @ref wxCriticalSection
+    "critical sections" is recommended. In addition, don't create global thread
     objects because they allocate memory in their constructor, which will cause
     problems for the memory checking system.
 
+    @section overview_typeswxthread Types of wxThreads
+        There are two types of threads in wxWidgets: @e detached and @e joinable,
+        modeled after the the POSIX thread API. This is different from the Win32 API
+        where all threads are joinable.
+        
+        By default wxThreads in wxWidgets use the detached behavior. Detached threads
+        delete themselves once they have completed, either by themselves when they
+        complete processing or through a call to Delete(), and thus
+        must be created on the heap (through the new operator, for example).
+        Conversely, joinable threads do not delete themselves when they are done 
+        processing and as such are safe to create on the stack. Joinable threads
+        also provide the ability for one to get value it returned from Entry()
+        through Wait().
+        
+        You shouldn't hurry to create all the threads joinable, however, because this
+        has a disadvantage as well: you @b must Wait() for a joinable thread or the
+        system resources used by it will never be freed, and you also must delete the
+        corresponding wxThread object yourself if you did not create it on the stack.
+        In contrast, detached threads are of the "fire-and-forget" kind: you only have to
+        start a detached thread and it will terminate and destroy itself.
+    @section overview_deletionwxthread wxThread Deletion
+        Regardless of whether it has terminated or not, you should call
+        Wait() on a joinable thread to release its memory, as outlined in 
+        @ref overview_typeswxthread "Types of wxThreads". If you created
+        a joinable thread on the heap, remember to delete it manually with the delete
+        operator or similar means as only detached threads handle this type of memory
+        management.
+        
+        Since detached threads delete themselves when they are finished processing,
+        you should take care when calling a routine on one. If you are certain the
+        thread is still running and would like to end it, you may call Delete() 
+        to gracefully end it (which implies that the thread will be deleted after 
+        that call to Delete()). It should be implied that you should never attempt
+        to delete a detached thread with the delete operator or similar means.
+        As mentioned, Wait() or Delete() attempts to gracefully terminate a 
+        joinable and detached thread, respectively. It does this by waiting until
+        the thread in question calls TestDestroy() or ends processing (returns 
+        from wxThread::Entry).
+        
+        Obviously, if the thread does call TestDestroy() and does not end the calling
+        thread will come to halt. This is why it is important to call TestDestroy() in
+        the Entry() routine of your threads as often as possible.
+        As a last resort you can end the thread immediately through Kill(). It is
+        strongly recommended that you do not do this, however, as it does not free
+        the resources associated with the object (although the wxThread object of
+        detached threads will still be deleted) and could leave the C runtime 
+        library in an undefined state.
+    @section overview_secondarythreads wxWidgets Calls in Secondary Threads
+        All threads other than the "main application thread" (the one
+        wxApp::OnInit or your main function runs in, for example) are considered
+        "secondary threads". These include all threads created by Create() or the
+        corresponding constructors.
+        
+        GUI calls, such as those to a wxWindow or wxBitmap are explicitly not safe
+        at all in secondary threads and could end your application prematurely.
+        This is due to several reasons, including the underlying native API and 
+        the fact that wxThread does not run a GUI event loop similar to other APIs
+        as MFC.
+        
+        A workaround for some wxWidgets ports is calling wxMutexGUIEnter()
+        before any GUI calls and then calling wxMutexGUILeave() afterwords. However,
+        the recommended way is to simply process the GUI calls in the main thread
+        through an event that is posted by either wxPostEvent() or
+        wxEvtHandler::AddPendingEvent. This does not imply that calls to these 
+        classes are thread-safe, however, as most wxWidgets classes are not
+        thread-safe, including wxString.
+    @section overview_pollwxThread Don't Poll a wxThread
+        A common problem users experience with wxThread is that in their main thread
+        they will check the thread every now and then to see if it has ended through
+        IsRunning(), only to find that their application has run into problems 
+        because the thread is using the default behavior and has already deleted 
+        itself. Naturally, they instead attempt to use joinable threads in place 
+        of the previous behavior. However, polling a wxThread for when it has ended
+        is in general a bad idea - in fact calling a routine on any running wxThread 
+        should be avoided if possible. Instead, find a way to notify yourself when
+        the thread has ended.
+        
+        Usually you only need to notify the main thread, in which case you can
+        post an event to it via wxPostEvent() or wxEvtHandler::AddPendingEvent.
+        In the case of secondary threads you can call a routine of another class
+        when the thread is about to complete processing and/or set the value of 
+        a variable, possibly using mutexes() and/or other synchronization means
+        if necessary.
+
     @library{wxbase}
     @category{threading}
-
     @see wxMutex, wxCondition, wxCriticalSection
 */
 class wxThread
@@ -397,26 +478,6 @@ public:
         explanation of this routine.
     */
     wxThreadError Delete();
-
-    /**
-        A common problem users experience with wxThread is that in their main thread
-        they will check the thread every now and then to see if it has ended through
-        IsRunning(), only to find that their
-        application has run into problems because the thread is using the default
-        behavior and has already deleted itself. Naturally, they instead attempt to
-        use joinable threads in place of the previous behavior.
-        However, polling a wxThread for when it has ended is in general a bad idea -
-        in fact calling a routine on any running wxThread should be avoided if
-        possible. Instead, find a way to notify yourself when the thread has ended.
-        Usually you only need to notify the main thread, in which case you can post
-        an event to it via wxPostEvent() or
-        wxEvtHandler::AddPendingEvent. In
-        the case of secondary threads you can call a routine of another class
-        when the thread is about to complete processing and/or set the value
-        of a variable, possibly using mutexes() and/or other
-        synchronization means if necessary.
-    */
-
 
     /**
         This is the entry point of the thread. This function is pure virtual and must
@@ -621,32 +682,6 @@ public:
     static wxThread* This();
 
     /**
-        There are two types of threads in wxWidgets: @e detached and @e joinable,
-        modeled after the the POSIX thread API. This is different from the Win32 API
-        where all threads are joinable.
-        By default wxThreads in wxWidgets use the detached behavior. Detached threads
-        delete themselves once they have completed, either by themselves when they
-        complete
-        processing or through a call to Delete(), and thus
-        must be created on the heap (through the new operator, for example).
-        Conversely,
-        joinable threads do not delete themselves when they are done processing and as
-        such
-        are safe to create on the stack. Joinable threads also provide the ability
-        for one to get value it returned from Entry()
-        through Wait().
-        You shouldn't hurry to create all the threads joinable, however, because this
-        has a disadvantage as well: you @b must Wait() for a joinable thread or the
-        system resources used by it will never be freed, and you also must delete the
-        corresponding wxThread object yourself if you did not create it on the stack.
-        In
-        contrast, detached threads are of the "fire-and-forget" kind: you only have to
-        start
-        a detached thread and it will terminate and destroy itself.
-    */
-
-
-    /**
         Waits for a joinable thread to terminate and returns the value the thread
         returned from Entry() or @c (ExitCode)-1 on
         error. Notice that, unlike Delete() doesn't cancel the
@@ -687,59 +722,7 @@ public:
         See also Sleep().
     */
     void Yield();
-
-    /**
-        Regardless of whether it has terminated or not, you should call
-        Wait() on a joinable thread to release its
-        memory, as outlined in @ref overview_typeswxthread "Types of wxThreads". If you
-        created
-        a joinable thread on the heap, remember to delete it manually with the delete
-        operator or similar means as only detached threads handle this type of memory
-        management.
-        Since detached threads delete themselves when they are finished processing,
-        you should take care when calling a routine on one. If you are certain the
-        thread is still running and would like to end it, you may call
-        Delete() to gracefully end it (which implies
-        that the thread will be deleted after that call to Delete()). It should be
-        implied that you should never attempt to delete a detached thread with the
-        delete operator or similar means.
-        As mentioned, Wait() or
-        Delete() attempts to gracefully terminate
-        a joinable and detached thread, respectively. It does this by waiting until
-        the thread in question calls TestDestroy()
-        or ends processing (returns from wxThread::Entry).
-        Obviously, if the thread does call TestDestroy() and does not end the calling
-        thread will come to halt. This is why it is important to call TestDestroy() in
-        the Entry() routine of your threads as often as possible.
-        As a last resort you can end the thread immediately through
-        Kill(). It is strongly recommended that you
-        do not do this, however, as it does not free the resources associated with
-        the object (although the wxThread object of detached threads will still be
-        deleted) and could leave the C runtime library in an undefined state.
-    */
-
-
-    /**
-        All threads other then the "main application thread" (the one
-        wxApp::OnInit or your main function runs in, for
-        example) are considered "secondary threads". These include all threads created
-        by Create() or the corresponding constructors.
-        GUI calls, such as those to a wxWindow or
-        wxBitmap are explicitly not safe at all in secondary threads
-        and could end your application prematurely. This is due to several reasons,
-        including the underlying native API and the fact that wxThread does not run a
-        GUI event loop similar to other APIs as MFC.
-        A workaround that works on some wxWidgets ports is calling wxMutexGUIEnter()
-        before any GUI calls and then calling wxMutexGUILeave() afterwords. However,
-        the recommended way is to simply process the GUI calls in the main thread
-        through an event that is posted by either wxPostEvent() or
-        wxEvtHandler::AddPendingEvent. This does
-        not imply that calls to these classes are thread-safe, however, as most
-        wxWidgets classes are not thread-safe, including wxString.
-    */
 };
-
-
 
 /**
     @class wxSemaphore
