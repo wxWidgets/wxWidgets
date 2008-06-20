@@ -2712,16 +2712,23 @@ public:
 
         for (i = 0; i < page_count; ++i)
         {
+            int height = m_rect.height - m_tab_ctrl_height;
+            if ( height < 0 )
+            {
+                // avoid passing negative height to wxWindow::SetSize(), this
+                // results in assert failures/GTK+ warnings
+                height = 0;
+            }
+
             wxAuiNotebookPage& page = pages.Item(i);
             if (m_tabs->GetFlags() & wxAUI_NB_BOTTOM)
             {
-                page.window->SetSize(m_rect.x, m_rect.y,
-                                     m_rect.width, m_rect.height - m_tab_ctrl_height);
+                page.window->SetSize(m_rect.x, m_rect.y, m_rect.width, height);
             }
             else //TODO: if (GetFlags() & wxAUI_NB_TOP)
             {
                 page.window->SetSize(m_rect.x, m_rect.y + m_tab_ctrl_height,
-                                  m_rect.width, m_rect.height - m_tab_ctrl_height);
+                                     m_rect.width, height);
             }
             // TODO: else if (GetFlags() & wxAUI_NB_LEFT){}
             // TODO: else if (GetFlags() & wxAUI_NB_RIGHT){}
