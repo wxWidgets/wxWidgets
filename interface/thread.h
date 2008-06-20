@@ -343,6 +343,7 @@ public:
         corresponding wxThread object yourself if you did not create it on the stack.
         In contrast, detached threads are of the "fire-and-forget" kind: you only have to
         start a detached thread and it will terminate and destroy itself.
+        
     @section overview_deletionwxthread wxThread Deletion
         Regardless of whether it has terminated or not, you should call
         Wait() on a joinable thread to release its memory, as outlined in 
@@ -370,6 +371,7 @@ public:
         the resources associated with the object (although the wxThread object of
         detached threads will still be deleted) and could leave the C runtime 
         library in an undefined state.
+        
     @section overview_secondarythreads wxWidgets Calls in Secondary Threads
         All threads other than the "main application thread" (the one
         wxApp::OnInit or your main function runs in, for example) are considered
@@ -385,10 +387,10 @@ public:
         A workaround for some wxWidgets ports is calling wxMutexGUIEnter()
         before any GUI calls and then calling wxMutexGUILeave() afterwords. However,
         the recommended way is to simply process the GUI calls in the main thread
-        through an event that is posted by either wxPostEvent() or
-        wxEvtHandler::AddPendingEvent. This does not imply that calls to these 
-        classes are thread-safe, however, as most wxWidgets classes are not
-        thread-safe, including wxString.
+        through an event that is posted by either wxQueueEvent().
+        This does not imply that calls to these classes are thread-safe, however,
+        as most wxWidgets classes are not thread-safe, including wxString.
+        
     @section overview_pollwxThread Don't Poll a wxThread
         A common problem users experience with wxThread is that in their main thread
         they will check the thread every now and then to see if it has ended through
@@ -415,19 +417,13 @@ class wxThread
 {
 public:
     /**
-        This constructor creates a new detached (default) or joinable C++ thread
-        object. It
-        does not create or start execution of the real thread -- for this you should
-        use the Create() and Run() methods.
+        This constructor creates a new detached (default) or joinable C++
+        thread object. It does not create or start execution of the real thread --
+        for this you should use the Create() and Run() methods.
+        
         The possible values for @a kind parameters are:
-
-        @b wxTHREAD_DETACHED
-
-        Creates a detached thread.
-
-        @b wxTHREAD_JOINABLE
-
-        Creates a joinable thread.
+          - @b wxTHREAD_DETACHED - Creates a detached thread.
+          - @b wxTHREAD_JOINABLE - Creates a joinable thread.
     */
     wxThread(wxThreadKind kind = wxTHREAD_DETACHED);
 
@@ -444,9 +440,8 @@ public:
     ~wxThread();
 
     /**
-        Creates a new thread. The thread object is created in the suspended state, and
-        you
-        should call Run() to start running it.  You may optionally
+        Creates a new thread. The thread object is created in the suspended state,
+        and you should call Run() to start running it.  You may optionally
         specify the stack size to be allocated to it (Ignored on platforms that don't
         support setting it explicitly, eg. Unix system without
         @c pthread_attr_setstacksize). If you do not specify the stack size,
@@ -464,6 +459,9 @@ public:
         thread.
 
         @return One of:
+          - @b wxTHREAD_NO_ERROR - No error.
+          - @b wxTHREAD_NO_RESOURCE - There were insufficient resources to create the thread.
+          - @b wxTHREAD_NO_RUNNING - The thread is already running
     */
     wxThreadError Create(unsigned int stackSize = 0);
 
@@ -523,19 +521,11 @@ public:
 
     /**
         Gets the priority of the thread, between zero and 100.
+        
         The following priorities are defined:
-
-        @b WXTHREAD_MIN_PRIORITY
-
-        0
-
-        @b WXTHREAD_DEFAULT_PRIORITY
-
-        50
-
-        @b WXTHREAD_MAX_PRIORITY
-
-        100
+          - @b WXTHREAD_MIN_PRIORITY: 0
+          - @b WXTHREAD_DEFAULT_PRIORITY: 50
+          - @b WXTHREAD_MAX_PRIORITY: 100
     */
     int GetPriority() const;
 
@@ -588,7 +578,7 @@ public:
         cannot kill itself.
         It is also an error to call this function for a thread which is not running or
         paused (in the latter case, the thread will be resumed first) -- if you do it,
-        a @c wxTHREAD_NOT_RUNNING error will be returned.
+        a @b wxTHREAD_NOT_RUNNING error will be returned.
     */
     wxThreadError Kill();
 
@@ -636,19 +626,11 @@ public:
         Sets the priority of the thread, between 0 and 100. It can only be set
         after calling Create() but before calling
         Run().
-        The following priorities are already defined:
 
-        @b WXTHREAD_MIN_PRIORITY
-
-        0
-
-        @b WXTHREAD_DEFAULT_PRIORITY
-
-        50
-
-        @b WXTHREAD_MAX_PRIORITY
-
-        100
+        The following priorities are defined:
+          - @b WXTHREAD_MIN_PRIORITY: 0
+          - @b WXTHREAD_DEFAULT_PRIORITY: 50
+          - @b WXTHREAD_MAX_PRIORITY: 100
     */
     void SetPriority(int priority);
 
@@ -660,33 +642,28 @@ public:
     static void Sleep(unsigned long milliseconds);
 
     /**
-        This function should be called periodically by the thread to ensure that calls
-        to Pause() and Delete() will
-        work. If it returns @true, the thread should exit as soon as possible.
-        Notice that under some platforms (POSIX), implementation of
-        Pause() also relies on this function being called, so
+        This function should be called periodically by the thread to ensure that
+        calls to Pause() and Delete() will work. If it returns @true, the thread
+        should exit as soon as possible. Notice that under some platforms (POSIX),
+        implementation of Pause() also relies on this function being called, so
         not calling it would prevent both stopping and suspending thread from working.
     */
     virtual bool TestDestroy();
 
     /**
-        Return the thread object for the calling thread. @NULL is returned if the
-        calling thread
-        is the main (GUI) thread, but IsMain() should be used to test
-        whether the thread is really the main one because @NULL may also be returned for
-        the thread
-        not created with wxThread class. Generally speaking, the return value for such
-        a thread
-        is undefined.
+        Return the thread object for the calling thread. @NULL is returned if
+        the calling thread is the main (GUI) thread, but IsMain() should be used
+        to test whether the thread is really the main one because @NULL may also
+        be returned for the thread not created with wxThread class. Generally
+        speaking, the return value for such a thread is undefined.
     */
     static wxThread* This();
 
     /**
         Waits for a joinable thread to terminate and returns the value the thread
-        returned from Entry() or @c (ExitCode)-1 on
-        error. Notice that, unlike Delete() doesn't cancel the
-        thread in any way so the caller waits for as long as it takes to the thread to
-        exit.
+        returned from Entry() or @c (ExitCode)-1 on error. Notice that, unlike
+        Delete() doesn't cancel the thread in any way so the caller waits for as
+        long as it takes to the thread to exit.
         You can only Wait() for joinable (not detached) threads.
         This function can only be called from another thread context.
         See @ref overview_deletionwxthread "wxThread deletion" for a broader
@@ -695,8 +672,8 @@ public:
     ExitCode Wait() const;
 
     /**
-        Give the rest of the thread time slice to the system allowing the other threads
-        to run.
+        Give the rest of the thread time slice to the system allowing the other
+        threads to run.
         Note that using this function is @b strongly discouraged, since in
         many cases it indicates a design weakness of your threading model (as
         does using Sleep functions).
