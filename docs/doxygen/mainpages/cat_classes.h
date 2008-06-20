@@ -50,10 +50,10 @@ This page contains a summarized listing of classes, please see the
 @li @ref page_class_cat_file
 @li @ref page_class_cat_streams
 @li @ref page_class_cat_xml
-@li @ref page_class_cat_archive
 </td><td>
 @li @ref page_class_cat_xrc
 @li @ref page_class_cat_net
+@li @ref page_class_cat_archive
 @li @ref page_class_cat_ipc
 @li @ref page_class_cat_help
 @li @ref page_class_cat_media
