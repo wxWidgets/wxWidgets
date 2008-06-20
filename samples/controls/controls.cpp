@@ -34,6 +34,10 @@
     #define USE_XPM
 #endif
 
+#if defined(__WXGTK__)
+    #include "wx/gtk/private.h"
+#endif
+
 #ifdef USE_XPM
     #include "mondrian.xpm"
     #include "icons/choice.xpm"
@@ -644,8 +648,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     wxString choices[] =
     {
         _T("This"),
-        _T("is one of my"),
-        _T("really"),
+        _T("is"),
+        _T("one of my long and"),
         _T("wonderful"),
         _T("examples.")
     };
@@ -736,10 +740,10 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     wxPanel *panel = new wxPanel(m_book);
     m_listbox = new wxListBox( panel, ID_LISTBOX,
                                wxPoint(10,10), wxSize(120,70),
-                               5, choices, wxLB_MULTIPLE |wxLB_ALWAYS_SB );
+                               5, choices, wxLB_MULTIPLE | wxLB_ALWAYS_SB | wxHSCROLL );
     m_listboxSorted = new wxListBox( panel, ID_LISTBOX_SORTED,
                                      wxPoint(10,90), wxSize(120,70),
-                                     5, choices, wxLB_SORT );
+                                     3, choices, wxLB_SORT );
 
     SetListboxClientData(wxT("listbox"), m_listbox);
     SetListboxClientData(wxT("listbox"), m_listboxSorted);
@@ -934,7 +938,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     s << initialSpinValue;
     m_spintext = new wxTextCtrl( panel, wxID_ANY, s, wxPoint(20,160), wxSize(80,wxDefaultCoord) );
 #if wxUSE_SPINBTN
-    m_spinbutton = new wxSpinButton( panel, ID_SPIN, wxPoint(103,160) );
+    m_spinbutton = new wxSpinButton( panel, ID_SPIN, wxPoint(103,160), wxSize(-1, m_spintext->GetSize().y) );
     m_spinbutton->SetRange(-40,30);
     m_spinbutton->SetValue(initialSpinValue);
 
@@ -1286,8 +1290,8 @@ void MyPanel::OnListBoxButtons( wxCommandEvent &event )
             }
         case ID_LISTBOX_APPEND:
             {
-                m_listbox->Append( _T("Hi!") );
-                m_listboxSorted->Append( _T("Hi!") );
+                m_listbox->Append( _T("Hi kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk!") );
+                m_listboxSorted->Append( _T("Hi hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh!") );
                 break;
             }
         case ID_LISTBOX_DELETE:
