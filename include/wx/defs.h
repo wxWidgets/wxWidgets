@@ -1405,6 +1405,8 @@ typedef double wxDouble;
     #if wxHAS_INT64
         #define wxUINT64_SWAP_ON_BE(val)  wxUINT64_SWAP_ALWAYS(val)
         #define wxUINT64_SWAP_ON_LE(val)  (val)
+        #define wxINT64_SWAP_ON_BE(val)  wxINT64_SWAP_ALWAYS(val)
+        #define wxINT64_SWAP_ON_LE(val)  (val)
     #endif
 #else
     #define wxUINT16_SWAP_ON_LE(val)  wxUINT16_SWAP_ALWAYS(val)
@@ -1418,6 +1420,8 @@ typedef double wxDouble;
     #if wxHAS_INT64
         #define wxUINT64_SWAP_ON_LE(val)  wxUINT64_SWAP_ALWAYS(val)
         #define wxUINT64_SWAP_ON_BE(val)  (val)
+        #define wxINT64_SWAP_ON_LE(val)  wxINT64_SWAP_ALWAYS(val)
+        #define wxINT64_SWAP_ON_BE(val)  (val)
     #endif
 #endif
 
