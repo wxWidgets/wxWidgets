@@ -34,10 +34,6 @@
     #define USE_XPM
 #endif
 
-#if defined(__WXGTK__)
-    #include "wx/gtk/private.h"
-#endif
-
 #ifdef USE_XPM
     #include "mondrian.xpm"
     #include "icons/choice.xpm"
