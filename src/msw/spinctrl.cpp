@@ -114,10 +114,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrl, wxControl)
 
 BEGIN_EVENT_TABLE(wxSpinCtrl, wxSpinButton)
     EVT_CHAR(wxSpinCtrl::OnChar)
-
     EVT_SET_FOCUS(wxSpinCtrl::OnSetFocus)
     EVT_KILL_FOCUS(wxSpinCtrl::OnKillFocus)
-    EVT_SPIN(wxID_ANY, wxSpinCtrl::OnSpinChange)
 END_EVENT_TABLE()
 
 #define GetBuddyHwnd()      (HWND)(m_hwndBuddy)
@@ -627,14 +625,36 @@ void wxSpinCtrl::SendSpinUpdate(int value)
     m_oldValue = value;
 }
 
-void wxSpinCtrl::OnSpinChange(wxSpinEvent& eventSpin)
+bool wxSpinCtrl::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
+                               WXWORD pos, WXHWND control)
 {
-    const int value = eventSpin.GetPosition();
-    if ( value != m_oldValue )
+    wxCHECK_MSG( control, false, wxT("scrolling what?") );
+
+    if ( wParam != SB_THUMBPOSITION )
     {
-        SendSpinUpdate(value);
+        // probable SB_ENDSCROLL - we don't react to it
+        return false;
     }
+
+    int new_value = (short) pos;
+    if (m_oldValue != new_value)
+       SendSpinUpdate( new_value );
+
+    return TRUE;
 }
+
+bool wxSpinCtrl::MSWOnNotify(int WXUNUSED(idCtrl), WXLPARAM lParam, WXLPARAM *result)
+{
+    NM_UPDOWN *lpnmud = (NM_UPDOWN *)lParam;
+
+    if (lpnmud->hdr.hwndFrom != GetHwnd()) // make sure it is the right control
+        return false;
+
+    *result = 0;  // never reject UP and DOWN events
+
+    return TRUE;
+}
+
 
 // ----------------------------------------------------------------------------
 // size calculations

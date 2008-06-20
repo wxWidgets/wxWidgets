@@ -99,8 +99,9 @@ protected:
     virtual void DoSetToolTip( wxToolTip *tip );
 #endif // wxUSE_TOOLTIPS
 
-    // the handler for wxSpinButton events
-    void OnSpinChange(wxSpinEvent& event);
+    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
+    virtual bool MSWOnScroll(int orientation, WXWORD wParam,
+                             WXWORD pos, WXHWND control);
 
     // handle processing of special keys
     void OnChar(wxKeyEvent& event);
