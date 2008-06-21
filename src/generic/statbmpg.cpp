@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        src/generic/statbmp.cpp
-// Purpose:     wxGenericStaticBitmap 
+// Purpose:     wxGenericStaticBitmap
 // Author:      Marcin Wojdyr, Stefan Csomor
 // Created:     2008-06-16
 // RCS-ID:      $Id$
@@ -12,17 +12,20 @@
 
 #if wxUSE_STATBMP
 
-#include "wx/generic/statbmpg.h"
+#ifndef WX_PRECOMP
+    #include "wx/dcclient.h"
+#endif
 
+#include "wx/generic/statbmpg.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxGenericStaticBitmap, wxStaticBitmapBase)
 
-bool wxGenericStaticBitmap::Create(wxWindow *parent, wxWindowID id, 
+bool wxGenericStaticBitmap::Create(wxWindow *parent, wxWindowID id,
                                    const wxBitmap& bitmap,
                                    const wxPoint& pos, const wxSize& size,
                                    long style, const wxString& name)
 {
-    if (! wxControl::Create(parent, id, pos, size, style, 
+    if (! wxControl::Create(parent, id, pos, size, style,
                             wxDefaultValidator, name))
         return false;
     SetBitmap(bitmap);
