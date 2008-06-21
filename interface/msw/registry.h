@@ -17,11 +17,11 @@
     The Windows registry is easy to understand. There are five registry keys,
     namely:
 
-    @li HKEY_CLASSES_ROOT (HKCR)
-    @li HKEY_CURRENT_USER (HKCU)
-    @li HKEY_LOCAL_MACHINE (HKLM)
-    @li HKEY_CURRENT_CONFIG (HKCC)
-    @li HKEY_USERS (HKU)
+    @li @c HKEY_CLASSES_ROOT (HKCR)
+    @li @c HKEY_CURRENT_USER (HKCU)
+    @li @c HKEY_LOCAL_MACHINE (HKLM)
+    @li @c HKEY_CURRENT_CONFIG (HKCC)
+    @li @c HKEY_USERS (HKU)
 
     After creating a key, it can hold a value. The values can be:
 
@@ -70,7 +70,7 @@ class wxRegKey
 {
 public:
     /**
-        Default constructor, initializes to HKCR.
+        Default constructor, initializes to @c HKEY_CLASSES_ROOT.
     */
     wxRegKey();
     /**

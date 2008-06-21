@@ -19,7 +19,7 @@
     would never be detected.
 
     @library{wxbase}
-    @category{FIXME}
+    @category{misc}
 */
 class wxRecursionGuardFlag
 {
@@ -65,7 +65,7 @@ public:
     way (for example because an exception has been thrown).
 
     @library{wxbase}
-    @category{FIXME}
+    @category{misc}
 */
 class wxRecursionGuard
 {

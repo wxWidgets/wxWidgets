@@ -9,7 +9,7 @@
 /**
     @anchor wxRE_FLAGS
 
-    Flags for regex compilation to be used with Compile().
+    Flags for regex compilation to be used with wxRegEx::Compile().
 */
 enum
 {
@@ -42,9 +42,9 @@ enum
 /**
     @anchor wxRE_NOT_FLAGS
 
-    Flags for regex matching to be used with Matches().
+    Flags for regex matching to be used with wxRegEx::Matches().
     These flags are mainly useful when doing several matches in a long string
-    to prevent erroneous matches for ¡¯¡¯ and ¡¯$¡¯:
+    to prevent erroneous matches for '^' and '$':
 */
 enum
 {
