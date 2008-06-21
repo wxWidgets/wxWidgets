@@ -25,6 +25,7 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/frame.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/textctrl.h"

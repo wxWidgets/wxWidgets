@@ -167,6 +167,19 @@ ALIASES += endWxPythonOnly="\endif"
 ALIASES += leftCurly="{"
 ALIASES += rightCurly="}"
 
+# For indicating the a directory containing a sample
+ALIASES += sampledir{1}="\verbatim Location: samples/\1\endverbatim"
+# For refering to a sample introduction in a class document or a overview
+# Usually placed in the queue of @see
+ALIASES += sample{1}="\ref page_samples_\1"
+# For generating a general description for a sample by associating it with a class
+# Shall be replaced by manual written description soon
+ALIASES += sampleabout{1}="This sample demonstrates \1."
+# For indicating the necessary condition of a sample or a class
+# \1 is the wxUSE_XXX macro
+ALIASES += buildwith{1}="<b>Build Note:</b> You may need to build the wxWidgets library with <tt>\1</tt> being set to 1 to be able to make it work, please read comments in @c <wx/setup_inc.h> for more info."
+ALIASES += buildwith{2}="<b>Build Note:</b> You may need to build the wxWidgets library with <tt>\1</tt> and <tt>\2</tt> being set to 1 to be able to make it work, please read comments in @c <wx/setup_inc.h> for more info."
+
 
 #---------------------------------------------------------------------------
 # Build related configuration options

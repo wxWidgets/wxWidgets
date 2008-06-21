@@ -52,7 +52,7 @@ enum wxAnimationType
 
     <!-- @appearance{animationctrl.png} -->
 
-    @see wxAnimation
+    @see wxAnimation, @sample{animate}
 */
 class wxAnimationCtrl : public wxControl
 {
@@ -189,7 +189,7 @@ public:
     @stdobjects
     ::wxNullAnimation
 
-    @see wxAnimationCtrl
+    @see wxAnimationCtrl, @sample{animate}
 */
 class wxAnimation : public wxGDIObject
 {

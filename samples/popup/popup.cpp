@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        minimal.cpp
+// Name:        popup.cpp
 // Purpose:     Popup wxWidgets sample
 // Author:      Robert Roebling
 // Modified by:

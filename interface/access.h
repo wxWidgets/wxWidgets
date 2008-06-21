@@ -254,6 +254,8 @@ typedef enum
 
     @library{wxcore}
     @category{misc}
+
+    @see @sample{access}
 */
 class wxAccessible : public wxObject
 {
