@@ -167,12 +167,14 @@ ALIASES += endWxPythonOnly="\endif"
 ALIASES += leftCurly="{"
 ALIASES += rightCurly="}"
 
+# Sample documentation related aliases
 # For indicating the a directory containing a sample
 ALIASES += sampledir{1}="\verbatim Location: samples/\1\endverbatim"
-# For refering to a sample introduction in a class document or a overview
+# For refering to the corresponding sample in a class document or a overview
 # Usually placed in the queue of @see
 ALIASES += sample{1}="\ref page_samples_\1"
-# For generating a general description for a sample by associating it with a class
+# For generating a general description for a sample
+# \1 could be a class or an overview or a descriptive sentence
 # Shall be replaced by manual written description soon
 ALIASES += sampleabout{1}="This sample demonstrates \1."
 # For indicating the necessary condition of a sample or a class

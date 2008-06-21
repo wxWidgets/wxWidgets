@@ -116,7 +116,7 @@ SimpleTransientPopup::SimpleTransientPopup( wxWindow *parent )
     m_panel = new wxScrolledWindow( this, wxID_ANY );
     m_panel->SetBackgroundColour( *wxLIGHT_GREY );
 
-    // Keep this code to verify if mouse events work, they're required if 
+    // Keep this code to verify if mouse events work, they're required if
     // you're making a control like a combobox where the items are highlighted
     // under the cursor, the m_panel is set focus in the Popup() function
     m_panel->Connect(wxEVT_MOTION,
@@ -133,7 +133,7 @@ SimpleTransientPopup::SimpleTransientPopup( wxWindow *parent )
 
     m_button = new wxButton(m_panel, Minimal_PopupButton, wxT("Press Me"));
     m_spinCtrl = new wxSpinCtrl(m_panel, Minimal_PopupSpinctrl, wxT("Hello"));
-    m_mouseText = new wxStaticText(m_panel, wxID_ANY, 
+    m_mouseText = new wxStaticText(m_panel, wxID_ANY,
                                    wxT("<- Test Mouse ->"));
 
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
@@ -200,9 +200,10 @@ void SimpleTransientPopup::OnMouse(wxMouseEvent &event)
     wxColour colour(*wxLIGHT_GREY);
 
     if (rect.Contains(event.GetPosition()))
-    {       
+    {
         colour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
-    wxLogMessage( wxT("0x%lx SimpleTransientPopup::OnMouse pos(%d, %d)"), long(event.GetEventObject()), event.GetX(), event.GetY());
+        wxLogMessage( wxT("0x%lx SimpleTransientPopup::OnMouse pos(%d, %d)"),
+                      long(event.GetEventObject()), event.GetX(), event.GetY());
     }
 
     if (colour != m_mouseText->GetBackgroundColour())
@@ -228,7 +229,8 @@ void SimpleTransientPopup::OnButton(wxCommandEvent& event)
 
 void SimpleTransientPopup::OnSpinCtrl(wxSpinEvent& event)
 {
-    wxLogMessage( wxT("0x%lx SimpleTransientPopup::OnSpinCtrl ID %d Value %d"), long(this), event.GetId(), event.GetInt());
+    wxLogMessage( wxT("0x%lx SimpleTransientPopup::OnSpinCtrl ID %d Value %d"),
+                  long(this), event.GetId(), event.GetInt());
     event.Skip();
 }
 
