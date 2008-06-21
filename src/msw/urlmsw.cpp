@@ -129,6 +129,7 @@ public:
         { return -1; }
     wxFileOffset TellI() const
         { return -1; }
+    size_t GetSize() const;
 
 protected:
     void SetError(wxStreamError err) { m_lasterror=err; }
@@ -137,6 +138,18 @@ protected:
 
     DECLARE_NO_COPY_CLASS(wxWinINetInputStream)
 };
+
+size_t wxWinINetInputStream::GetSize() const
+{
+   DWORD contentLength = 0;
+   DWORD dwSize = sizeof(contentLength);
+   DWORD index = 0;
+
+   if ( HttpQueryInfo( m_hFile, HTTP_QUERY_CONTENT_LENGTH | HTTP_QUERY_FLAG_NUMBER, &contentLength, &dwSize, &index) )
+      return contentLength;
+   else
+      return 0;
+}
 
 size_t wxWinINetInputStream::OnSysRead(void *buffer, size_t bufsize)
 {
