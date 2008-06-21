@@ -488,34 +488,8 @@ static void menuitem_activate(GtkWidget*, wxMenuItem* item)
         }
     }
 
-
-    // Is this menu on a menubar?  (possibly nested)
     wxMenu* menu = item->GetMenu();
-    wxFrame* frame = NULL;
-    if(menu->IsAttached())
-        frame = menu->GetMenuBar()->GetFrame();
-
-    // FIXME: why do we have to call wxFrame::GetEventHandler() directly here?
-    //        normally wxMenu::SendEvent() should be enough, if it doesn't work
-    //        in wxGTK then we have a bug in wxMenu::GetInvokingWindow() which
-    //        should be fixed instead of working around it here...
-    if (frame)
-    {
-        // If it is attached then let the frame send the event.
-        // Don't call frame->ProcessCommand(id) because it toggles
-        // checkable items and we've already done that above.
-        wxCommandEvent commandEvent(wxEVT_COMMAND_MENU_SELECTED, id);
-        commandEvent.SetEventObject(frame);
-        if (item->IsCheckable())
-            commandEvent.SetInt(item->IsChecked());
-
-        frame->HandleWindowEvent(commandEvent);
-    }
-    else
-    {
-        // otherwise let the menu have it
-        menu->SendEvent(id, item->IsCheckable() ? item->IsChecked() : -1);
-    }
+    menu->SendEvent(id, item->IsCheckable() ? item->IsChecked() : -1);
 }
 }
 
