@@ -143,6 +143,8 @@ The listbox contents are sorted in alphabetical order.
     // Add the single column
     NSTableColumn *tableColumn = [[NSTableColumn alloc] initWithIdentifier:nil];
     [GetNSTableView() addTableColumn: tableColumn];
+    // By default, entries should not be editable
+    [tableColumn setEditable:NO];
     [tableColumn release];
 
     [GetNSTableView() sizeToFit];
@@ -154,13 +156,25 @@ The listbox contents are sorted in alphabetical order.
     CocoaCreateNSScrollView();
     SetInitialFrameRect(pos,size);
 
-    [m_wxCocoaScrollView->GetNSScrollView() setHasVerticalScroller:YES];
-    // Pre-10.3: Always show vertical scroller, never show horizontal scroller
-    // Post-10.3: Show scrollers dynamically (turn them both on, set auto-hide)
-    if([m_wxCocoaScrollView->GetNSScrollView() respondsToSelector:@selector(setAutohidesScrollers:)])
+    if ((style & wxLB_NEEDED_SB) || (style & wxLB_ALWAYS_SB))
     {
-        [m_wxCocoaScrollView->GetNSScrollView() setHasHorizontalScroller:YES];
-        [m_wxCocoaScrollView->GetNSScrollView() setAutohidesScrollers:YES];
+        [m_wxCocoaScrollView->GetNSScrollView() setHasVerticalScroller: YES];
+    }
+
+    if (style & wxLB_HSCROLL)
+    {
+        [m_wxCocoaScrollView->GetNSScrollView() setHasHorizontalScroller: YES];
+    }
+
+    // We can't set auto-hiding individually for horizontal/vertical scrollers,
+    // so we have settled on always allowing hiding for both unless the vertical
+    // setting is "always show".
+    if (((style & wxLB_NEEDED_SB) || (style & wxLB_HSCROLL)) && !(style & wxLB_ALWAYS_SB))
+    {
+        if ([m_wxCocoaScrollView->GetNSScrollView() respondsToSelector:@selector(setAutohidesScrollers:)])
+        {
+            [m_wxCocoaScrollView->GetNSScrollView() setAutohidesScrollers: YES];
+        }
     }
 
     // Set up extended/multiple selection flags
