@@ -36,6 +36,12 @@
 #include "wx/statline.h"
 #include "wx/imaglist.h"
 
+// FIXME: native OS X wxListCtrl hangs if this code is used for it so disable
+//        it for now
+#if !defined(__WXMAC__)
+    #define CAN_USE_REPORT_VIEW
+#endif
+
 // ----------------------------------------------------------------------------
 // various wxWidgets macros
 // ----------------------------------------------------------------------------
@@ -103,10 +109,17 @@ wxListbook::Create(wxWindow *parent,
                     wxID_ANY,
                     wxDefaultPosition,
                     wxDefaultSize,
-                    wxLC_SINGLE_SEL | wxLC_REPORT | wxLC_NO_HEADER
+                    wxLC_SINGLE_SEL |
+#ifdef CAN_USE_REPORT_VIEW
+                    GetListCtrlReportViewFlags()
+#else // !CAN_USE_REPORT_VIEW
+                    GetListCtrlIconViewFlags()
+#endif // CAN_USE_REPORT_VIEW/!CAN_USE_REPORT_VIEW
                  );
 
+#ifdef CAN_USE_REPORT_VIEW
     GetListView()->InsertColumn(0, wxT("Pages"));
+#endif // CAN_USE_REPORT_VIEW
 
 #ifdef __WXMSW__
     // On XP with themes enabled the GetViewRect used in GetControllerSize() to
@@ -120,6 +133,24 @@ wxListbook::Create(wxWindow *parent,
 #endif
     return true;
 }
+
+// ----------------------------------------------------------------------------
+// wxListCtrl flags
+// ----------------------------------------------------------------------------
+
+long wxListbook::GetListCtrlIconViewFlags() const
+{
+    return (IsVertical() ? wxLC_ALIGN_LEFT : wxLC_ALIGN_TOP) | wxLC_ICON;
+}
+
+#ifdef CAN_USE_REPORT_VIEW
+
+long wxListbook::GetListCtrlReportViewFlags() const
+{
+    return wxLC_REPORT | wxLC_NO_HEADER;
+}
+
+#endif // CAN_USE_REPORT_VIEW
 
 // ----------------------------------------------------------------------------
 // wxListbook geometry management
@@ -261,6 +292,7 @@ void wxListbook::SetImageList(wxImageList *imageList)
 {
     wxListView * const list = GetListView();
 
+#ifdef CAN_USE_REPORT_VIEW
     // If imageList presence has changed, we update the list control view
     if ( (imageList != NULL) != (GetImageList() != NULL) )
     {
@@ -285,16 +317,16 @@ void wxListbook::SetImageList(wxImageList *imageList)
         long style = wxLC_SINGLE_SEL;
         if ( imageList )
         {
-           list->SetWindowStyleFlag(style |
-                                    (IsVertical() ? wxLC_ALIGN_LEFT
-                                                  : wxLC_ALIGN_TOP) |
-                                    wxLC_ICON);
+            style |= GetListCtrlIconViewFlags();
         }
         else // no image list
         {
-           list->SetWindowStyleFlag(style | wxLC_REPORT | wxLC_NO_HEADER);
-           list->InsertColumn(0, wxT("Pages"));
+            style |= GetListCtrlReportViewFlags();
         }
+
+        list->SetWindowStyleFlag(style);
+        if ( !imageList )
+            list->InsertColumn(0, wxT("Pages"));
 
         // Add back the list control items
         for ( i = 0; i < GetPageCount(); i++ )
@@ -308,6 +340,7 @@ void wxListbook::SetImageList(wxImageList *imageList)
     }
 
     list->SetImageList(imageList, wxIMAGE_LIST_NORMAL);
+#endif // CAN_USE_REPORT_VIEW
 
     wxBookCtrlBase::SetImageList(imageList);
 }
