@@ -4,12 +4,13 @@
 // Author:      Mokhtar M. Khorshid
 // Modified by: 
 // Created:     08/06/2008
-// RCS-ID:      
 // Copyright:   (c) Mokhtar M. Khorshid
 // Licence:     
 /////////////////////////////////////////////////////////////////////////////
 
-#pragma once
+#ifndef WX_WALLCTRLPLANESURFACE_H
+#define WX_WALLCTRLPLANESURFACE_H
+
 #include "wallctrlsurface.h"
 #include "gl/glut.h"
 #include "wx/wallctrl/matrix.h"
@@ -20,9 +21,10 @@
 class wxWallCtrlPlaneSurface :
 	public wxWallCtrlSurface
 {
+	DECLARE_DYNAMIC_CLASS(wxWallCtrlPlaneSurface)
 public:
 	// Precondition: dataSource must be valid
-	wxWallCtrlPlaneSurface(wxWallCtrlDataSource * dataSource);
+	wxWallCtrlPlaneSurface();
 	virtual ~wxWallCtrlPlaneSurface(void);
 
 	// Recalculates the item size from the number of items in the scope
@@ -39,6 +41,7 @@ public:
 	// Precondition: Texture must be at least Width * Height * BYTES_PER_PIXEL
 	void CreateTextureFromBitmap(wxBitmap bitmap, GLubyte * texture);
 
+	// Returns the texture ID for a specific item, and if it does not exist, it gets loaded
 	GLuint GetItemTexture(wxWallCtrlItemID itemID);
 
 	// Initialize OpenGL for first use
@@ -51,33 +54,24 @@ public:
 	void SetScopeSize(wxSize size);
 
 	// Moves to the left with the specified delta factor
-	void MoveLeft(float delta)
-	{
-		m_targetLook[0] -= delta;
-	}
+	void MoveLeft(float delta);
 	// Moves to the right with the specified delta factor
-	void MoveRight(float delta)
-	{
-		m_targetLook[0] += delta;
-	}
+	void MoveRight(float delta);
 
-	// TODO: Check if we need to put a distant limit
-	void MoveIn(float delta)
-	{
-		m_targetCamera[2] -= delta;
-		if (m_targetCamera[2] < m_nearLimit)
-		{
-			m_targetCamera[2] = m_nearLimit;
-		}
-	}
+	// Moves closer to the wall
+	void MoveIn(float delta);
 
-	// TODO: Check if we need to limit this
-	void MoveOut(float delta)
+	// Moves out far from the wall
+	void MoveOut(float delta);
+
+	virtual void SetDataSource(wxWallCtrlDataSource * dataSource)
 	{
-		m_targetCamera[2] += delta;
-		if (m_targetCamera[2] > m_farLimit)
+		wxWallCtrlSurface::SetDataSource(dataSource);
+
+		// If we have a data source, query its first item
+		if (dataSource)
 		{
-			m_targetCamera[2] = m_farLimit;
+			m_firstItem = dataSource->GetFirstItem();
 		}
 	}
 
@@ -94,63 +88,12 @@ protected:
 
 	// Updates the camera each frame
 	// TODO: Consider delta of time passed since last call
-	void UpdateVectors()
-	{
-		// TODO: Move these into constructor
-		m_lookHzDelta = 0.05;
-		m_cameraHzDelta = 0.025;
-		m_LookHzThreshold = m_cameraHzThreshold =0.1;
-		m_cameraPanningDelta = 0.05;
+	void UpdateVectors();
 
-		UpdateLookVector();
-
-		// Update the camera based on the previous camera
-		UpdateCameraVector();
-
-	}
-
-	void UpdateCameraVector()
-	{
-		// Check if we are far enough to require moving the look point. A threshold avoids oscillations
-		if (m_look[0] < m_targetCamera[0] - m_LookHzThreshold)
-		{
-			m_targetCamera[0] -= m_cameraPanningDelta;
-		}
-		else if (m_look[0] > m_camera[0] + m_LookHzThreshold)
-		{
-			m_targetCamera[0] += m_cameraPanningDelta;
-		}
-
-		// Then update the camera vector to match its target
-		// TODO: *Hz* should be replaced by something else
-		for (int i=0; i < 3; ++i)
-		{
-			if (m_camera[i] < m_targetCamera[i] - m_cameraHzThreshold)
-			{
-				m_camera[i] += m_cameraHzDelta;
-			}
-			else if (m_camera[i] > m_targetCamera[i] + m_cameraHzThreshold)
-			{
-				m_camera[i] -= m_cameraHzDelta;
-			}
-		}
-
-	}
+	void UpdateCameraVector();
 
 	// Updates the look vector to match its target (used to make the motion smooth)
-	void UpdateLookVector()
-	{
-		if (m_look[0] < m_targetLook[0] - m_LookHzThreshold)
-		{
-			m_look[0] += m_lookHzDelta;
-		}
-		else if (m_look[0] > m_targetLook[0] + m_LookHzThreshold)
-		{
-			m_look[0] -= m_lookHzDelta;
-		}
-	}
-	
-
+	void UpdateLookVector();
 
 private:
 	bool m_initialized;
@@ -194,3 +137,4 @@ private:
 //	float m_cameraHzDelta;
 
 };
+#endif

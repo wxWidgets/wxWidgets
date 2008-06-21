@@ -4,7 +4,6 @@
 // Author:      Mokhtar M. Khorshid
 // Modified by: 
 // Created:     02/06/2008 00:11:34
-// RCS-ID:      
 // Copyright:   (c) Mokhtar M. Khorshid
 // Licence:     
 /////////////////////////////////////////////////////////////////////////////

@@ -3,8 +3,7 @@
 // Purpose:     
 // Author:      Mokhtar M. Khorshid
 // Modified by: 
-// Created:     02/06/2008 12:13:29
-// RCS-ID:      
+// Created:     02/06/2008 12:13:29  
 // Copyright:   Copyright 2008 by Mokhtar M. Khorshid
 // Licence:     
 /////////////////////////////////////////////////////////////////////////////

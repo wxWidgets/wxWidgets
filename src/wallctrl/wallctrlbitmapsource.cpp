@@ -1,4 +1,17 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        wallctrlbitmapsource.cpp
+// Purpose:     A concrete bitmap datasource for wxWallCtrl
+// Author:      Mokhtar M. Khorshid
+// Modified by: 
+// Created:     09/06/2008
+// Copyright:   (c) Mokhtar M. Khorshid
+// Licence:     
+/////////////////////////////////////////////////////////////////////////////
+
 #include "wx/wallctrl/WallCtrlBitmapSource.h"
+
+// TODO: What's wrong here?
+IMPLEMENT_CLASS(wxWallCtrlBitmapSource, wxWallCtrlDataSource)
 
 wxWallCtrlBitmapSource::wxWallCtrlBitmapSource(void)
 {

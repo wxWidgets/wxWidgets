@@ -1,7 +1,15 @@
-// ----------------------------------------------------------------------------
-// wxWallCtrl: the Wall Control
-// Mokhtar M. Khorshid
-// ----------------------------------------------------------------------------
+/////////////////////////////////////////////////////////////////////////////
+// Name:        wallctrl.h
+// Purpose:     A wall control allows easier 3D navigation of data
+// Author:      Mokhtar M. Khorshid
+// Modified by: 
+// Created:     02/06/2008
+// Copyright:   (c) Mokhtar M. Khorshid
+// Licence:     
+/////////////////////////////////////////////////////////////////////////////
+
+#ifndef WX_WALLCTRL_H
+#define WX_WALLCTRL_H
 
 #include "wx/glcanvas.h"
 
@@ -9,98 +17,80 @@
 #include "wx/Wallctrl/WallCtrlDataSource.h"
 #include "wx/Wallctrl/WallCtrlSurface.h"
 
-// TODO: this one is for testing only
-#include "wx/wallctrl/wallctrlplanesurface.h"
 #include "wx/wallctrl/WallCtrlNavigation.h"
 
-// For some reason wxVector< > does not compile, so for the meanwhile we'll use this vector
-template <class T>
-struct TempVector
-{
-	unsigned size()
-	{
-		return m_size;
-	}
-	int m_size;
-};
+// TODO: Find out what ID should we use? (Maybe auto-numbered?)
+#define TIMER_ID 1
 
+/*
+Usage:
+	Create wxWallCtrl
+	Set a data source for it
+	Set a surface for it (automatically gets the data source)
+	Set a navigator for it (automatically gets the surface)
+*/
 class WXDLLEXPORT wxWallCtrl : public wxGLCanvas
 {
+	DECLARE_DYNAMIC_CLASS(wxWallCtrl)
 public:
 	// Constructors
-	wxWallCtrl(wxWindow *parent, wxWallCtrlSurface *surface,
+	wxWallCtrl(wxWindow *parent,
 		wxWindowID id = wxID_ANY,
 		const wxPoint& pos = wxDefaultPosition,
 		const wxSize& size = wxDefaultSize,
-		long style = 0, const wxString & name = _T("WallCtrl") )
-		:wxGLCanvas(parent, (wxGLCanvas*) NULL, id, pos, size, style|wxFULL_REPAINT_ON_RESIZE , name ), m_surface(surface)
-	{
-		m_init= false;
-	}
+		long style = 0, const wxString & name = _T("WallCtrl") );
 
-	wxWallCtrl(wxWindow *parent, wxWallCtrlSurface *surface, const wxWallCtrl *other,
+	wxWallCtrl(wxWindow *parent, const wxWallCtrl *other,
 		wxWindowID id, const wxPoint& pos, const wxSize& size, long style,
-		const wxString& name )
-		: wxGLCanvas(parent, other->GetContext(), id, pos, size, style|wxFULL_REPAINT_ON_RESIZE , name),m_surface(surface)
-	{
-		m_init=false;
-	}
+		const wxString& name );
+
+	~wxWallCtrl();
 
 	// Render the control (and all its items)
-	void Render()
-	{
-		SetCurrent();
-		m_surface->Render(GetSize());
-		SwapBuffers();
-	}
+	void Render();
 
-	void SetNavigation (wxWallCtrlNavigation * navigation)
-	{
-		// TODO: See if we need to pop the old event handlers. But we should only pop navigation handlers anyway
-	//	PopEventHandler();
+	void SetNavigator (wxWallCtrlNavigation * navigation = NULL);
 
-		// Push the navigation as the current event handler
-		PushEventHandler(navigation);
-	}
+	void OnEnterWindow( wxMouseEvent& WXUNUSED(event) );
 
-	void OnEnterWindow( wxMouseEvent& WXUNUSED(event) )
-	{
-		SetFocus();
-	}
+	void OnPaint( wxPaintEvent& WXUNUSED(event) );
 
-	void OnPaint( wxPaintEvent& WXUNUSED(event) )
-	{
-		Render();
-	}
+	void OnSize(wxSizeEvent& event);
 
-	void OnSize(wxSizeEvent& event)
-	{
-		// this is also necessary to update the context on some platforms
-		wxGLCanvas::OnSize(event);
-	}
+	void OnTimer(wxTimerEvent& event);
 
-	void OnEraseBackground(wxEraseEvent& WXUNUSED(event))
-	{
-		// Do nothing, to avoid flashing.
-	}
+	void OnIdle(wxIdleEvent& event);
 
-	// TODO: This is only temp for testing
+	void SetDataSource(wxWallCtrlDataSource * dataSource);
 
+	void OnEraseBackground(wxEraseEvent& WXUNUSED(event));
+	
+	void SetSurface(wxWallCtrlSurface * surface);
 
-	private:
-		bool m_init;
-		
-		// TODO: Used for testing only
-		wxBitmap tempTexture;
+private:
+	//	bool m_init;
+	
+	// This is the data source that will supply the bitmaps. Mainly used for clean up
+	wxWallCtrlDataSource * m_dataSource;
 
+	// If true, we will delete the data source
+	bool m_ownDataSource;
 
-		// This is the data source that will supply the bitmaps
-		wxWallCtrlDataSource * m_dataSource;
+	// A pointer to our navigator used to update its surface
+	wxWallCtrlNavigation * m_navigator;
 
-		// This will point to the single surface that is currently selected
-		wxWallCtrlSurface * m_surface;
+	// This will point to the single surface that is currently selected.
+	wxWallCtrlSurface * m_surface;
 
-		DECLARE_EVENT_TABLE();
+	// Timer used for rendering
+	wxTimer m_timer;
 
+	// Specifies whether we can render when idle or not
+	bool m_canRender;	
+
+	// True when a navigation has been set
+	bool navigationSet;
+
+	DECLARE_EVENT_TABLE();
 };
-
+#endif

@@ -4,17 +4,20 @@
 // Author:      Mokhtar M. Khorshid
 // Modified by: 
 // Created:     09/06/2008
-// RCS-ID:      
 // Copyright:   (c) Mokhtar M. Khorshid
 // Licence:     
 /////////////////////////////////////////////////////////////////////////////
 
 #pragma once
+#ifndef WX_WALLCTRLBITMAPSOURCE_H
+#define WX_WALLCTRLBITMAPSOURCE_H
+
 #include "wallctrldatasource.h"
 
 class wxWallCtrlBitmapSource :
 	public wxWallCtrlDataSource
 {
+	DECLARE_DYNAMIC_CLASS(wxWallCtrlBitmapSource)
 public:
 	wxWallCtrlBitmapSource(void);
 	virtual ~wxWallCtrlBitmapSource(void);
@@ -37,9 +40,6 @@ public:
 	// Appends a bitmap at the end of the list and give it an ordered id
 	void AppendBitmap(wxBitmap bitmap);
 
-	
-
-
 private:
 	//WX_DEFINE_ARRAY(wxBitmap, ArrayOfBitmaps);
 	WX_DECLARE_HASH_MAP(int, wxBitmap, wxIntegerHash, wxIntegerEqual, BitmapMap);
@@ -47,3 +47,4 @@ private:
 	BitmapMap bitmaps;
 	wxBitmap tempTexture;
 };
+#endif

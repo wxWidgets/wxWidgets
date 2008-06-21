@@ -4,7 +4,6 @@
 // Author:      Mokhtar M. Khorshid
 // Modified by: 
 // Created:     02/06/2008 12:13:29
-// RCS-ID:      
 // Copyright:   Copyright 2008 by Mokhtar M. Khorshid
 // Licence:     
 /////////////////////////////////////////////////////////////////////////////
@@ -144,12 +143,14 @@ void wxWallCtrlTest::CreateControls()
 	testBitmap.LoadFile("Wall3.bmp", wxBITMAP_TYPE_BMP);
 	bitmapSource->AppendBitmap(testBitmap);
 
-	wxWallCtrlPlaneSurface * surface = new wxWallCtrlPlaneSurface(bitmapSource);
+	wxWallCtrlPlaneSurface * surface = new wxWallCtrlPlaneSurface();
 	surface->SetScopeSize(wxSize(8, 2));
-	wxWallCtrl* wallCtrl1 = new wxWallCtrl(this, surface, wxID_ANY,	wxDefaultPosition, wxDefaultSize);
+	wxWallCtrl * wallCtrl1 = new wxWallCtrl(this, wxID_ANY,	wxDefaultPosition, wxDefaultSize);
 
-	wxWallCtrlDefaultPlaneNavigation * navigation = new wxWallCtrlDefaultPlaneNavigation(surface);
-	wallCtrl1->SetNavigation(navigation);
+	wxWallCtrlDefaultPlaneNavigation * navigation = new wxWallCtrlDefaultPlaneNavigation();
+	wallCtrl1->SetDataSource(bitmapSource);
+	wallCtrl1->SetSurface(surface);
+	wallCtrl1->SetNavigator(navigation);
 
 	itemBoxSizer2->Add(wallCtrl1, 1, wxGROW|wxALL, 5);
 

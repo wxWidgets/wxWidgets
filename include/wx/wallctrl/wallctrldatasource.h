@@ -4,12 +4,12 @@
 // Author:      Mokhtar M. Khorshid
 // Modified by: 
 // Created:     09/06/2008
-// RCS-ID:      
 // Copyright:   (c) Mokhtar M. Khorshid
 // Licence:     
 /////////////////////////////////////////////////////////////////////////////
 
-#pragma once
+#ifndef WX_WALLCTRLDATASOURCE_H
+#define WX_WALLCTRLDATASOURCE_H
 
 #include "wx/wx.h"
 
@@ -30,8 +30,10 @@ struct wxWallCtrlItem
 
 // This is an abstract class for wxWallCtrl data sources
 // Wall ctrl data items must be supplied in a consecutive sequence of indices
-class wxWallCtrlDataSource
+class wxWallCtrlDataSource:
+	public wxEvtHandler
 {
+	DECLARE_DYNAMIC_CLASS(wxWallCtrlDataSource)
 public:
 	wxWallCtrlDataSource(void);
 	virtual ~wxWallCtrlDataSource(void);
@@ -46,8 +48,6 @@ public:
 	virtual unsigned GetCount()=0;
 
 	// Returns the starting index of the sequence
-	virtual unsigned GetFirstItem()
-	{
-		return 0;
-	}
+	virtual unsigned GetFirstItem();
 };
+#endif

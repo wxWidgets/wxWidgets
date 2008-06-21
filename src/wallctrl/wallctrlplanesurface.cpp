@@ -1,11 +1,24 @@
-#include "wx/wallctrl/WallCtrlPlaneSurface.h"
+/////////////////////////////////////////////////////////////////////////////
+// Name:        wallctrlplanesurface.cpp
+// Purpose:     A concrete plane (flat) surface for wxWallCtrl
+// Author:      Mokhtar M. Khorshid
+// Modified by: 
+// Created:     08/06/2008
+// Copyright:   (c) Mokhtar M. Khorshid
+// Licence:     
+/////////////////////////////////////////////////////////////////////////////
 
+#include "wx/wallctrl/WallCtrlPlaneSurface.h"
+#include "wx/rawbmp.h"
+
+// TODO: What's wrong here?
+IMPLEMENT_CLASS(wxWallCtrlPlaneSurface, wxWallCtrlSurface)
 
 wxWallCtrlPlaneSurface::~wxWallCtrlPlaneSurface(void)
 {
 }
 
-wxWallCtrlPlaneSurface::wxWallCtrlPlaneSurface( wxWallCtrlDataSource * dataSource ) :wxWallCtrlSurface(dataSource)
+wxWallCtrlPlaneSurface::wxWallCtrlPlaneSurface()
 {
 	m_initialized = false;
 	m_scopeSize.SetHeight(1);
@@ -23,8 +36,8 @@ wxWallCtrlPlaneSurface::wxWallCtrlPlaneSurface( wxWallCtrlDataSource * dataSourc
 	m_targetCamera = m_camera;	// Both vectors should match initially
 	
 	// Initialize all direction vectors
-	m_look.resize(3,0);		// TODO: We may not need this vector
-	m_targetLook.resize(3,0);		// TODO: We may not need this vector
+	m_look.resize(3,0);	
+	m_targetLook.resize(3,0);
 	
 	m_right.resize(3,0);
 	m_right[0] = 1;
@@ -33,7 +46,7 @@ wxWallCtrlPlaneSurface::wxWallCtrlPlaneSurface( wxWallCtrlDataSource * dataSourc
 	m_up[1] = 1;
 
 	UpdateItemSize();
-	m_firstItem = m_dataSource->GetFirstItem();
+	m_firstItem = 0;//m_dataSource->GetFirstItem();
 }
 
 void wxWallCtrlPlaneSurface::UpdateItemSize()
@@ -82,6 +95,8 @@ void wxWallCtrlPlaneSurface::Render(const wxSize & windowSize)
 void wxWallCtrlPlaneSurface::CreateTextureFromDC( wxMemoryDC &dc, GLubyte * texture, const wxSize& dcSize )
 {
 	// TODO: Consider faster ways to convert the texture. (Check out rawbmp iterators)
+
+
 	// Temp color variable
 	wxColor color;
 
@@ -101,6 +116,7 @@ void wxWallCtrlPlaneSurface::CreateTextureFromDC( wxMemoryDC &dc, GLubyte * text
 			*(texture + pixel*BYTES_PER_PIXEL + 3) = 255;
 		}
 	}
+
 }
 
 GLuint wxWallCtrlPlaneSurface::GetItemTexture( wxWallCtrlItemID itemID )
@@ -181,6 +197,11 @@ void wxWallCtrlPlaneSurface::InitializeGL()
 
 void wxWallCtrlPlaneSurface::RenderItems()
 {
+	if (!m_dataSource)
+	{
+		// TODO: Signal an error here
+		return;
+	}
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_TEXTURE_2D);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
@@ -258,12 +279,45 @@ float wxWallCtrlPlaneSurface::MapY( float y )
 
 void wxWallCtrlPlaneSurface::CreateTextureFromBitmap( wxBitmap bitmap, GLubyte * texture )
 {
+/*	This is a slower way and is not needed any more
 	// Create a memory DC to hold the bitmap
 	wxMemoryDC tempDC;
 	tempDC.SelectObject(bitmap);
 
 	// Now load from the DC to the array
 	CreateTextureFromDC(tempDC, texture, wxSize(bitmap.GetWidth(), bitmap.GetHeight()));
+*/
+
+	typedef wxPixelData<wxBitmap, wxNativePixelFormat> PixelData;
+
+	wxBitmap bmp;
+	PixelData data(bmp);
+	if ( !data )
+	{
+		// TODO: signal some error
+		return;
+	}
+
+	PixelData::Iterator p(data);
+
+	// Copy each pixel color to the texture
+	for (int y=0; y < data.GetHeight(); ++y)
+	{
+		for (int x=0; x < data.GetWidth(); ++x)
+		{
+			// Sequential pixel position
+			unsigned pixel = y*data.GetWidth() + x;
+
+			++p;
+
+			//dc.GetPixel(x, y, &color);
+
+			*(texture + pixel*BYTES_PER_PIXEL + 0) = p.Red();
+			*(texture + pixel*BYTES_PER_PIXEL + 1) = p.Green();
+			*(texture + pixel*BYTES_PER_PIXEL + 2) = p.Blue();
+			*(texture + pixel*BYTES_PER_PIXEL + 3) = 255;
+		}
+	}
 }
 
 // Right >= Left && Bottom >= Top
@@ -303,4 +357,85 @@ void wxWallCtrlPlaneSurface::AdjustCoordinates( float & top, float & bottom, flo
 	bottom -= vtMargin;
 	left += hzMargin;
 	right -= hzMargin;
+}
+
+void wxWallCtrlPlaneSurface::MoveRight( float delta )
+{
+	m_targetLook[0] += delta;
+}
+
+void wxWallCtrlPlaneSurface::MoveLeft( float delta )
+{
+	m_targetLook[0] -= delta;
+}
+
+void wxWallCtrlPlaneSurface::MoveIn( float delta )
+{
+	m_targetCamera[2] -= delta;
+	if (m_targetCamera[2] < m_nearLimit)
+	{
+		m_targetCamera[2] = m_nearLimit;
+	}
+}
+
+void wxWallCtrlPlaneSurface::MoveOut( float delta )
+{
+	m_targetCamera[2] += delta;
+	if (m_targetCamera[2] > m_farLimit)
+	{
+		m_targetCamera[2] = m_farLimit;
+	}
+}
+
+void wxWallCtrlPlaneSurface::UpdateVectors()
+{
+	// TODO: Move these into constructor
+	m_lookHzDelta = 0.05;
+	m_cameraHzDelta = 0.025;
+	m_LookHzThreshold = m_cameraHzThreshold =0.1;
+	m_cameraPanningDelta = 0.05;
+
+	UpdateLookVector();
+
+	// Update the camera based on the previous camera
+	UpdateCameraVector();
+}
+
+void wxWallCtrlPlaneSurface::UpdateCameraVector()
+{
+	// Check if we are far enough to require moving the look point. A threshold avoids oscillations
+	if (m_look[0] < m_targetCamera[0] - m_LookHzThreshold)
+	{
+		m_targetCamera[0] -= m_cameraPanningDelta;
+	}
+	else if (m_look[0] > m_camera[0] + m_LookHzThreshold)
+	{
+		m_targetCamera[0] += m_cameraPanningDelta;
+	}
+
+	// Then update the camera vector to match its target
+	// TODO: *Hz* should be replaced by something else
+	for (int i=0; i < 3; ++i)
+	{
+		if (m_camera[i] < m_targetCamera[i] - m_cameraHzThreshold)
+		{
+			m_camera[i] += m_cameraHzDelta;
+		}
+		else if (m_camera[i] > m_targetCamera[i] + m_cameraHzThreshold)
+		{
+			m_camera[i] -= m_cameraHzDelta;
+		}
+	}
+}
+
+void wxWallCtrlPlaneSurface::UpdateLookVector()
+{
+	if (m_look[0] < m_targetLook[0] - m_LookHzThreshold)
+	{
+		m_look[0] += m_lookHzDelta;
+	}
+	else if (m_look[0] > m_targetLook[0] + m_LookHzThreshold)
+	{
+		m_look[0] -= m_lookHzDelta;
+	}
 }
