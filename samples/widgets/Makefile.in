@@ -76,6 +76,7 @@ WIDGETS_OBJECTS =  \
 	widgets_slider.o \
 	widgets_spinbtn.o \
 	widgets_static.o \
+	widgets_statbmp.o \
 	widgets_textctrl.o \
 	widgets_toggle.o \
 	widgets_widgets.o \
@@ -291,6 +292,9 @@ widgets_spinbtn.o: $(srcdir)/spinbtn.cpp
 widgets_static.o: $(srcdir)/static.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/static.cpp
 
+widgets_statbmp.o: $(srcdir)/statbmp.cpp
+	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/statbmp.cpp
+
 widgets_textctrl.o: $(srcdir)/textctrl.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/textctrl.cpp
 
@@ -303,6 +307,15 @@ widgets_widgets.o: $(srcdir)/widgets.cpp
 widgets_sample_rc.o: $(srcdir)/../sample.rc
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
 
+
+$(srcdir)/include/wx/stc/stc.h: \
+$(srcdir)/src/stc/scintilla/include/Scintilla.iface \
+$(srcdir)/src/stc/stc.cpp.in \
+$(srcdir)/src/stc/stc.h.in \
+$(srcdir)/src/stc/gen_iface.py
+	cd $(srcdir)/src/stc && ./gen_iface.py
+monolib_stc.o monodll_stc.o stcdll_stc.o stclib_stc.o: \
+$(srcdir)/include/wx/stc/stc.h
 
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d

@@ -1874,6 +1874,8 @@
 			<File
 				RelativePath="..\..\src\generic\srchctlg.cpp"/>
 			<File
+				RelativePath="..\..\src\generic\statbmpg.cpp"/>
+			<File
 				RelativePath="..\..\src\generic\statusbr.cpp">
 				<FileConfiguration
 					Name="DLL Universal Release|Win32"
@@ -3006,6 +3008,8 @@
 				RelativePath="..\..\include\wx\generic\splitter.h"/>
 			<File
 				RelativePath="..\..\include\wx\generic\srchctlg.h"/>
+			<File
+				RelativePath="..\..\include\wx\generic\statbmpg.h"/>
 			<File
 				RelativePath="..\..\include\wx\generic\statusbr.h"/>
 			<File

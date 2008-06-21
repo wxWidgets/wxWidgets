@@ -1712,6 +1712,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_spinctlg.o \
 	$(OBJS)\monodll_splitter.o \
 	$(OBJS)\monodll_srchctlg.o \
+	$(OBJS)\monodll_statbmpg.o \
 	$(OBJS)\monodll_textdlgg.o \
 	$(OBJS)\monodll_tipwin.o \
 	$(OBJS)\monodll_toolbkg.o \
@@ -1946,6 +1947,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_spinctlg.o \
 	$(OBJS)\monodll_splitter.o \
 	$(OBJS)\monodll_srchctlg.o \
+	$(OBJS)\monodll_statbmpg.o \
 	$(OBJS)\monodll_textdlgg.o \
 	$(OBJS)\monodll_tipwin.o \
 	$(OBJS)\monodll_toolbkg.o \
@@ -2371,6 +2373,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_spinctlg.o \
 	$(OBJS)\monolib_splitter.o \
 	$(OBJS)\monolib_srchctlg.o \
+	$(OBJS)\monolib_statbmpg.o \
 	$(OBJS)\monolib_textdlgg.o \
 	$(OBJS)\monolib_tipwin.o \
 	$(OBJS)\monolib_toolbkg.o \
@@ -2605,6 +2608,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_spinctlg.o \
 	$(OBJS)\monolib_splitter.o \
 	$(OBJS)\monolib_srchctlg.o \
+	$(OBJS)\monolib_statbmpg.o \
 	$(OBJS)\monolib_textdlgg.o \
 	$(OBJS)\monolib_tipwin.o \
 	$(OBJS)\monolib_toolbkg.o \
@@ -2955,6 +2959,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_spinctlg.o \
 	$(OBJS)\coredll_splitter.o \
 	$(OBJS)\coredll_srchctlg.o \
+	$(OBJS)\coredll_statbmpg.o \
 	$(OBJS)\coredll_textdlgg.o \
 	$(OBJS)\coredll_tipwin.o \
 	$(OBJS)\coredll_toolbkg.o \
@@ -3189,6 +3194,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_spinctlg.o \
 	$(OBJS)\coredll_splitter.o \
 	$(OBJS)\coredll_srchctlg.o \
+	$(OBJS)\coredll_statbmpg.o \
 	$(OBJS)\coredll_textdlgg.o \
 	$(OBJS)\coredll_tipwin.o \
 	$(OBJS)\coredll_toolbkg.o \
@@ -3430,6 +3436,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_spinctlg.o \
 	$(OBJS)\corelib_splitter.o \
 	$(OBJS)\corelib_srchctlg.o \
+	$(OBJS)\corelib_statbmpg.o \
 	$(OBJS)\corelib_textdlgg.o \
 	$(OBJS)\corelib_tipwin.o \
 	$(OBJS)\corelib_toolbkg.o \
@@ -3664,6 +3671,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_spinctlg.o \
 	$(OBJS)\corelib_splitter.o \
 	$(OBJS)\corelib_srchctlg.o \
+	$(OBJS)\corelib_statbmpg.o \
 	$(OBJS)\corelib_textdlgg.o \
 	$(OBJS)\corelib_tipwin.o \
 	$(OBJS)\corelib_toolbkg.o \
@@ -7417,6 +7425,11 @@ $(OBJS)\monodll_srchctlg.o: ../../src/generic/srchctlg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_statbmpg.o: ../../src/generic/statbmpg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_textdlgg.o: ../../src/generic/textdlgg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -9672,6 +9685,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_srchctlg.o: ../../src/generic/srchctlg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_statbmpg.o: ../../src/generic/statbmpg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -11986,6 +12004,11 @@ $(OBJS)\coredll_srchctlg.o: ../../src/generic/srchctlg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_statbmpg.o: ../../src/generic/statbmpg.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_textdlgg.o: ../../src/generic/textdlgg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -13425,6 +13448,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_srchctlg.o: ../../src/generic/srchctlg.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_statbmpg.o: ../../src/generic/statbmpg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 

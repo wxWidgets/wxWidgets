@@ -344,6 +344,10 @@ SOURCE=.\spinbtn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\statbmp.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\static.cpp
 # End Source File
 # Begin Source File

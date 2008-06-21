@@ -366,6 +366,7 @@ All (GUI):
 - Don't blit area larger than necessary in wxBufferedDC::UnMask (Liang Jian)
 - Fixed wxPixelData<wxImage> compilation (Leonardo Fernandes).
 - Added wxImage::GetType() (troelsk).
+- Added wxGenericStaticBitmap suitable for display of large bitmaps.
 
 wxGTK:
 

@@ -670,6 +670,8 @@
 			<File
 				RelativePath=".\spinbtn.cpp"/>
 			<File
+				RelativePath=".\statbmp.cpp"/>
+			<File
 				RelativePath=".\static.cpp"/>
 			<File
 				RelativePath=".\textctrl.cpp"/>

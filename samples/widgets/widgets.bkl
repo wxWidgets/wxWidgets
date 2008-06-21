@@ -29,6 +29,7 @@
             slider.cpp
             spinbtn.cpp
             static.cpp
+            statbmp.cpp
             textctrl.cpp
             toggle.cpp
             widgets.cpp

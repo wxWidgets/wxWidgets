@@ -431,6 +431,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_spinctlg.obj &
 	$(OBJS)\monodll_splitter.obj &
 	$(OBJS)\monodll_srchctlg.obj &
+	$(OBJS)\monodll_statbmpg.obj &
 	$(OBJS)\monodll_textdlgg.obj &
 	$(OBJS)\monodll_tipwin.obj &
 	$(OBJS)\monodll_toolbkg.obj &
@@ -665,6 +666,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_spinctlg.obj &
 	$(OBJS)\monodll_splitter.obj &
 	$(OBJS)\monodll_srchctlg.obj &
+	$(OBJS)\monodll_statbmpg.obj &
 	$(OBJS)\monodll_textdlgg.obj &
 	$(OBJS)\monodll_tipwin.obj &
 	$(OBJS)\monodll_toolbkg.obj &
@@ -1095,6 +1097,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_spinctlg.obj &
 	$(OBJS)\monolib_splitter.obj &
 	$(OBJS)\monolib_srchctlg.obj &
+	$(OBJS)\monolib_statbmpg.obj &
 	$(OBJS)\monolib_textdlgg.obj &
 	$(OBJS)\monolib_tipwin.obj &
 	$(OBJS)\monolib_toolbkg.obj &
@@ -1329,6 +1332,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_spinctlg.obj &
 	$(OBJS)\monolib_splitter.obj &
 	$(OBJS)\monolib_srchctlg.obj &
+	$(OBJS)\monolib_statbmpg.obj &
 	$(OBJS)\monolib_textdlgg.obj &
 	$(OBJS)\monolib_tipwin.obj &
 	$(OBJS)\monolib_toolbkg.obj &
@@ -1690,6 +1694,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_spinctlg.obj &
 	$(OBJS)\coredll_splitter.obj &
 	$(OBJS)\coredll_srchctlg.obj &
+	$(OBJS)\coredll_statbmpg.obj &
 	$(OBJS)\coredll_textdlgg.obj &
 	$(OBJS)\coredll_tipwin.obj &
 	$(OBJS)\coredll_toolbkg.obj &
@@ -1924,6 +1929,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_spinctlg.obj &
 	$(OBJS)\coredll_splitter.obj &
 	$(OBJS)\coredll_srchctlg.obj &
+	$(OBJS)\coredll_statbmpg.obj &
 	$(OBJS)\coredll_textdlgg.obj &
 	$(OBJS)\coredll_tipwin.obj &
 	$(OBJS)\coredll_toolbkg.obj &
@@ -2167,6 +2173,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_spinctlg.obj &
 	$(OBJS)\corelib_splitter.obj &
 	$(OBJS)\corelib_srchctlg.obj &
+	$(OBJS)\corelib_statbmpg.obj &
 	$(OBJS)\corelib_textdlgg.obj &
 	$(OBJS)\corelib_tipwin.obj &
 	$(OBJS)\corelib_toolbkg.obj &
@@ -2401,6 +2408,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_spinctlg.obj &
 	$(OBJS)\corelib_splitter.obj &
 	$(OBJS)\corelib_srchctlg.obj &
+	$(OBJS)\corelib_statbmpg.obj &
 	$(OBJS)\corelib_textdlgg.obj &
 	$(OBJS)\corelib_tipwin.obj &
 	$(OBJS)\corelib_toolbkg.obj &
@@ -7649,6 +7657,11 @@ $(OBJS)\monodll_srchctlg.obj :  .AUTODEPEND ..\..\src\generic\srchctlg.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_statbmpg.obj :  .AUTODEPEND ..\..\src\generic\statbmpg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_textdlgg.obj :  .AUTODEPEND ..\..\src\generic\textdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -9904,6 +9917,11 @@ $(OBJS)\monolib_splitter.obj :  .AUTODEPEND ..\..\src\generic\splitter.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_srchctlg.obj :  .AUTODEPEND ..\..\src\generic\srchctlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_statbmpg.obj :  .AUTODEPEND ..\..\src\generic\statbmpg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -12218,6 +12236,11 @@ $(OBJS)\coredll_srchctlg.obj :  .AUTODEPEND ..\..\src\generic\srchctlg.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\coredll_statbmpg.obj :  .AUTODEPEND ..\..\src\generic\statbmpg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\coredll_textdlgg.obj :  .AUTODEPEND ..\..\src\generic\textdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -13657,6 +13680,11 @@ $(OBJS)\corelib_splitter.obj :  .AUTODEPEND ..\..\src\generic\splitter.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_srchctlg.obj :  .AUTODEPEND ..\..\src\generic\srchctlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_statbmpg.obj :  .AUTODEPEND ..\..\src\generic\statbmpg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 

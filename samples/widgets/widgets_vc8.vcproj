@@ -850,6 +850,9 @@
 				RelativePath=".\spinbtn.cpp"
 			/>
 			<File
+				RelativePath=".\statbmp.cpp"
+			/>
+			<File
 				RelativePath=".\static.cpp"
 			/>
 			<File

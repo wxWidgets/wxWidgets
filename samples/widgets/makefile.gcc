@@ -51,6 +51,7 @@ WIDGETS_OBJECTS =  \
 	$(OBJS)\widgets_slider.o \
 	$(OBJS)\widgets_spinbtn.o \
 	$(OBJS)\widgets_static.o \
+	$(OBJS)\widgets_statbmp.o \
 	$(OBJS)\widgets_textctrl.o \
 	$(OBJS)\widgets_toggle.o \
 	$(OBJS)\widgets_widgets.o \
@@ -330,6 +331,9 @@ $(OBJS)\widgets_spinbtn.o: ./spinbtn.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\widgets_static.o: ./static.cpp
+	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\widgets_statbmp.o: ./statbmp.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\widgets_textctrl.o: ./textctrl.cpp

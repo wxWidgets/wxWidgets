@@ -10,11 +10,12 @@
     @class wxStaticBitmap
     @wxheader{statbmp.h}
 
-    A static bitmap control displays a bitmap. It is meant for display of the
-    small icons in the dialog boxes and is not meant to be a general purpose image
-    display control. In particular, under Windows 9x the size of bitmap is limited
-    to 64*64 pixels and thus you should use your own control if you want to
-    display larger images portably.
+    A static bitmap control displays a bitmap. Native implementations on some 
+    platforms are only meant for display of the small icons in the dialog 
+    boxes. In particular, under Windows 9x the size of bitmap is limited
+    to 64*64 pixels.
+    If you want to display larger images portably, you may use generic 
+    implementation wxGenericStaticBitmap declared in <wx/generic/statbmpg.h>.
 
     @library{wxcore}
     @category{ctrl}

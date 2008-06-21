@@ -265,6 +265,7 @@ WIDGETS_OBJECTS =  &
 	$(OBJS)\widgets_slider.obj &
 	$(OBJS)\widgets_spinbtn.obj &
 	$(OBJS)\widgets_static.obj &
+	$(OBJS)\widgets_statbmp.obj &
 	$(OBJS)\widgets_textctrl.obj &
 	$(OBJS)\widgets_toggle.obj &
 	$(OBJS)\widgets_widgets.obj
@@ -365,6 +366,9 @@ $(OBJS)\widgets_spinbtn.obj :  .AUTODEPEND .\spinbtn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_static.obj :  .AUTODEPEND .\static.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+
+$(OBJS)\widgets_statbmp.obj :  .AUTODEPEND .\statbmp.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_textctrl.obj :  .AUTODEPEND .\textctrl.cpp
