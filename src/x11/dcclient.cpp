@@ -23,6 +23,7 @@
 #endif
 
 #include "wx/fontutil.h"
+#include "wx/vector.h"
 
 #include "wx/x11/private.h"
 #include "wx/x11/dcclient.h"
@@ -167,9 +168,9 @@ static void wxFreePoolGC( GC gc )
 
 IMPLEMENT_ABSTRACT_CLASS(wxWindowDCImpl, wxX11DCImpl)
 
-wxWindowDCImpl::wxWindowDCImpl( wxDC *owner ) 
+wxWindowDCImpl::wxWindowDCImpl( wxDC *owner )
   : wxX11DCImpl( owner )
-{ 
+{
     Init();
 }
 
@@ -1219,9 +1220,20 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
                 XSetStipple( xdisplay, gc, (Pixmap) mask);
             }
 
-            wxCoord clip_x, clip_y, clip_w, clip_h;
-            m_currentClippingRegion.GetBox(clip_x, clip_y, clip_w, clip_h);
-            XFillRectangle( xdisplay, new_pixmap, gc, clip_x-xx, clip_y-yy, clip_w, clip_h );
+            wxVector<XRectangle> rects;
+            for ( wxRegionIterator iter(m_currentClippingRegion);
+                  iter;
+                  ++iter )
+            {
+                XRectangle rect;
+                rect.x = iter.GetX() - xx;
+                rect.y = iter.GetY() - yy;
+                rect.width = iter.GetWidth();
+                rect.height = iter.GetHeight();
+                rects.push_back(rect);
+            }
+
+            XFillRectangles(xdisplay, new_pixmap, gc, &rects[0], rects.size());
 
             XFreeGC( xdisplay, gc );
         }
@@ -1255,7 +1267,7 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
     else
         XCopyArea( (Display*) m_display, (Pixmap) use_bitmap.GetPixmap(), (Window) m_x11window,
             (GC) m_penGC, 0, 0, ww, hh, xx, yy );
-            
+
     // remove mask again if any
     if (setClipMask)
     {
@@ -1314,7 +1326,7 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoor
     if (src_impl->m_isMemDC)
     {
         wxBitmap selected = memDC->GetSelectedBitmap();
-        
+
         if (!selected.IsOk()) return false;
 
         /* we use the "XCopyArea" way to copy a memory dc into
@@ -1379,7 +1391,7 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoor
     if (use_bitmap_method)
     {
         wxBitmap selected = memDC->GetSelectedBitmap();
-        
+
         // scale/translate bitmap size
         wxCoord bm_width = selected.GetWidth();
         wxCoord bm_height = selected.GetHeight();
@@ -1493,7 +1505,7 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoor
             SetLogicalFunction( old_logical_func );
             return false;
         }
-        
+
         if ((width != ww) || (height != hh))
         {
             /* Draw source window into a bitmap as we cannot scale
