@@ -301,6 +301,7 @@ All (GUI):
 - Added wxWrapSizer (Arne Steinarson)
 - Added wxSpinCtrlDouble (John Labenski)
 - Added multisample (anti-aliasing) support to wxGLCanvas (Olivier Playez).
+- Initialize wx{Client,Paint,Window}DC with fonts/colours of its window.
 - Added wxNativeContainerWindow to allow embedding wx into native windows
 - Added custom controls support to wxFileDialog (Diaa Sami and Marcin Wojdyr)
 - Added wxDC::StretchBlit() for wxMac and wxMSW (Vince Harron).

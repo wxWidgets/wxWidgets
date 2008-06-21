@@ -133,17 +133,23 @@ IMPLEMENT_DYNAMIC_CLASS(wxDCFactoryCleanupModule, wxModule)
 
 wxDCImpl* wxNativeDCFactory::CreateWindowDC( wxWindowDC *owner, wxWindow *window )
 {
-    return new wxWindowDCImpl( owner, window );
+    wxDCImpl * const impl = new wxWindowDCImpl( owner, window );
+    impl->InheritAttributes(window);
+    return impl;
 }
 
 wxDCImpl* wxNativeDCFactory::CreateClientDC( wxClientDC *owner, wxWindow *window )
 {
-    return new wxClientDCImpl( owner, window );
+    wxDCImpl * const impl = new wxClientDCImpl( owner, window );
+    impl->InheritAttributes(window);
+    return impl;
 }
 
 wxDCImpl* wxNativeDCFactory::CreatePaintDC( wxPaintDC *owner, wxWindow *window )
 {
-    return new wxPaintDCImpl( owner, window );
+    wxDCImpl * const impl = new wxPaintDCImpl( owner, window );
+    impl->InheritAttributes(window);
+    return impl;
 }
 
 wxDCImpl* wxNativeDCFactory::CreateMemoryDC( wxMemoryDC *owner )
@@ -1090,6 +1096,16 @@ void wxDCImpl::DoGradientFillConcentric(const wxRect& rect,
     }
     //return old pen color
     m_pen.SetColour(oldPenColour);
+}
+
+void wxDCImpl::InheritAttributes(wxWindow *win)
+{
+    wxCHECK_RET( win, "window can't be NULL" );
+
+    SetFont(win->GetFont());
+    SetTextForeground(win->GetForegroundColour());
+    SetTextBackground(win->GetBackgroundColour());
+    SetBackground(wxBrush(win->GetBackgroundColour()));
 }
 
 //-----------------------------------------------------------------------------

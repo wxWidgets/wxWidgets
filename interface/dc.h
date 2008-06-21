@@ -13,7 +13,7 @@
     A wxDC is a @e "device context" onto which graphics and text can be drawn.
     It is intended to represent different output devices and offers a common
     abstract API for drawing on any of them.
-    
+
     wxWidgets offers an alternative drawing API based on the modern drawing
     backends GDI+, CoreGraphics and Cairo. See wxGraphicsContext, wxGraphicsRenderer
     and related classes. There is also a wxGCDC linking the APIs by offering
@@ -21,7 +21,11 @@
 
     wxDC is an abstract base class and cannot be created directly.
     Use wxPaintDC, wxClientDC, wxWindowDC, wxScreenDC, wxMemoryDC or
-    wxPrinterDC.
+    wxPrinterDC. Notice that device contexts which are associated with windows
+    (i.e. wxClientDC, wxWindowDC and wxPaintDC) use the window font and colours
+    by default (starting with wxWidgets 2.9.0) but the other device context
+    classes use system-default values so you always must set the appropriate
+    fonts and colours before using them.
 
     In addition to the versions of the methods documented below, there
     are also versions which accept single wxPoint parameter instead

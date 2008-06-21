@@ -163,7 +163,7 @@ class WXDLLIMPEXP_CORE wxDCImpl: public wxObject
 {
 public:
     wxDCImpl( wxDC *owner );
-    ~wxDCImpl();
+    virtual ~wxDCImpl();
 
     wxDC *GetOwner() const { return m_owner; }
 
@@ -255,31 +255,40 @@ public:
     // setters and getters
 
     virtual void SetFont(const wxFont& font) = 0;
-    virtual const wxFont&   GetFont() const { return m_font; }
+    virtual const wxFont& GetFont() const { return m_font; }
 
     virtual void SetPen(const wxPen& pen) = 0;
-    virtual const wxPen&    GetPen() const { return m_pen; }
+    virtual const wxPen& GetPen() const { return m_pen; }
 
     virtual void SetBrush(const wxBrush& brush) = 0;
-    virtual const wxBrush&  GetBrush() const { return m_brush; }
+    virtual const wxBrush& GetBrush() const { return m_brush; }
 
     virtual void SetBackground(const wxBrush& brush) = 0;
-    virtual const wxBrush&  GetBackground() const { return m_backgroundBrush; }
+    virtual const wxBrush& GetBackground() const { return m_backgroundBrush; }
 
     virtual void SetBackgroundMode(int mode) = 0;
     virtual int GetBackgroundMode() const { return m_backgroundMode; }
 
     virtual void SetTextForeground(const wxColour& colour)
         { m_textForegroundColour = colour; }
-    virtual const wxColour& GetTextForeground() const { return m_textForegroundColour; }
+    virtual const wxColour& GetTextForeground() const
+        { return m_textForegroundColour; }
 
     virtual void SetTextBackground(const wxColour& colour)
         { m_textBackgroundColour = colour; }
-    virtual const wxColour& GetTextBackground() const { return m_textBackgroundColour; }
+    virtual const wxColour& GetTextBackground() const
+        { return m_textBackgroundColour; }
 
 #if wxUSE_PALETTE
     virtual void SetPalette(const wxPalette& palette) = 0;
 #endif // wxUSE_PALETTE
+
+    // inherit the DC attributes (font and colours) from the given window
+    //
+    // this is called automatically when a window, client or paint DC is
+    // created
+    virtual void InheritAttributes(wxWindow *win);
+
 
     // logical functions
 

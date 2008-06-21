@@ -109,9 +109,6 @@ void wxWindowDCImpl::InitDC()
     // DrawText() to OPAQUE as required, otherwise always TRANSPARENT,
     ::SetBkMode(GetHdc(), TRANSPARENT);
 
-    // default bg colour is pne of the window
-    SetBackground(wxBrush(m_window->GetBackgroundColour(), wxBRUSHSTYLE_SOLID));
-
     // since we are a window dc we need to grab the palette from the window
 #if wxUSE_PALETTE
     InitializePalette();

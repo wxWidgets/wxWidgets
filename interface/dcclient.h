@@ -26,6 +26,9 @@
     To draw on the whole window including decorations, construct a wxWindowDC
     object (Windows only).
 
+    A wxPaintDC object is initialized to use the same font and colours as the
+    window it is associated with.
+
     @library{wxcore}
     @category{dc}
 
@@ -57,6 +60,9 @@ public:
     To draw on the whole window including decorations, construct a wxWindowDC
     object (Windows only).
 
+    A wxClientDC object is initialized to use the same font and colours as the
+    window it is associated with.
+
     @library{wxcore}
     @category{dc}
 
@@ -86,6 +92,9 @@ public:
 
     To draw on the client area of a window from outside an EVT_PAINT() handler,
     construct a wxClientDC object.
+
+    A wxWindowDC object is initialized to use the same font and colours as the
+    window it is associated with.
 
     @library{wxcore}
     @category{dc}
