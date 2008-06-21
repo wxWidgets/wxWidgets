@@ -131,29 +131,14 @@ IMPLEMENT_DYNAMIC_CLASS(wxDCFactoryCleanupModule, wxModule)
 // wxNativeDCFactory
 //-----------------------------------------------------------------------------
 
-wxDCImpl* wxNativeDCFactory::CreateWindowDC( wxWindowDC *owner )
-{
-    return new wxWindowDCImpl( owner );
-}
-
 wxDCImpl* wxNativeDCFactory::CreateWindowDC( wxWindowDC *owner, wxWindow *window )
 {
     return new wxWindowDCImpl( owner, window );
 }
 
-wxDCImpl* wxNativeDCFactory::CreateClientDC( wxClientDC *owner )
-{
-    return new wxClientDCImpl( owner );
-}
-
 wxDCImpl* wxNativeDCFactory::CreateClientDC( wxClientDC *owner, wxWindow *window )
 {
     return new wxClientDCImpl( owner, window );
-}
-
-wxDCImpl* wxNativeDCFactory::CreatePaintDC( wxPaintDC *owner )
-{
-    return new wxPaintDCImpl( owner );
 }
 
 wxDCImpl* wxNativeDCFactory::CreatePaintDC( wxPaintDC *owner, wxWindow *window )

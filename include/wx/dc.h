@@ -116,11 +116,8 @@ public:
     wxDCFactory() {}
     virtual ~wxDCFactory() {}
 
-    virtual wxDCImpl* CreateWindowDC( wxWindowDC *owner ) = 0;
     virtual wxDCImpl* CreateWindowDC( wxWindowDC *owner, wxWindow *window ) = 0;
-    virtual wxDCImpl* CreateClientDC( wxClientDC *owner ) = 0;
     virtual wxDCImpl* CreateClientDC( wxClientDC *owner, wxWindow *window ) = 0;
-    virtual wxDCImpl* CreatePaintDC( wxPaintDC *owner ) = 0;
     virtual wxDCImpl* CreatePaintDC( wxPaintDC *owner, wxWindow *window ) = 0;
     virtual wxDCImpl* CreateMemoryDC( wxMemoryDC *owner ) = 0;
     virtual wxDCImpl* CreateMemoryDC( wxMemoryDC *owner, wxBitmap &bitmap ) = 0;
@@ -146,11 +143,8 @@ class WXDLLIMPEXP_CORE wxNativeDCFactory: public wxDCFactory
 public:
     wxNativeDCFactory() {}
 
-    virtual wxDCImpl* CreateWindowDC( wxWindowDC *owner );
     virtual wxDCImpl* CreateWindowDC( wxWindowDC *owner, wxWindow *window );
-    virtual wxDCImpl* CreateClientDC( wxClientDC *owner );
     virtual wxDCImpl* CreateClientDC( wxClientDC *owner, wxWindow *window );
-    virtual wxDCImpl* CreatePaintDC( wxPaintDC *owner );
     virtual wxDCImpl* CreatePaintDC( wxPaintDC *owner, wxWindow *window );
     virtual wxDCImpl* CreateMemoryDC( wxMemoryDC *owner );
     virtual wxDCImpl* CreateMemoryDC( wxMemoryDC *owner, wxBitmap &bitmap );
