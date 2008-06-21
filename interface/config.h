@@ -34,7 +34,7 @@
                              platform.
     @li @c <wx/confbase.h> - Base config class.
     @li @c <wx/fileconf.h> - wxFileConfig class.
-    @li @c <wx/msw/regconf.h> - wxRegConfig class.
+    @li @c <wx/msw/regconf.h> - wxRegConfig class, see also wxRegKey.
 
 
     @section configbase_example Example

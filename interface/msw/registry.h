@@ -8,7 +8,7 @@
 
 /**
     @class wxRegKey
-    @headerfile registry.h wx/msw/registry.h
+    @wxheader{msw/registry.h}
 
     wxRegKey is a class representing the Windows registry (it is only available
     under Windows). One can create, query and delete registry keys using this
@@ -17,37 +17,80 @@
     The Windows registry is easy to understand. There are five registry keys,
     namely:
 
-     HKEY_CLASSES_ROOT (HKCR)
-     HKEY_CURRENT_USER (HKCU)
-     HKEY_LOCAL_MACHINE (HKLM)
-     HKEY_CURRENT_CONFIG (HKCC)
-     HKEY_USERS (HKU)
+    @li HKEY_CLASSES_ROOT (HKCR)
+    @li HKEY_CURRENT_USER (HKCU)
+    @li HKEY_LOCAL_MACHINE (HKLM)
+    @li HKEY_CURRENT_CONFIG (HKCC)
+    @li HKEY_USERS (HKU)
 
     After creating a key, it can hold a value. The values can be:
 
-     String Value
-     Binary Value
-     DWORD Value
-     Multi String Value
-     Expandable String Value
+    @li String Value
+    @li Binary Value
+    @li DWORD Value
+    @li Multi String Value
+    @li Expandable String Value
 
     @onlyfor{wxmsw}
 
     @library{wxbase}
-    @category{FIXME}
+    @category{misc}
+
+    @b Example:
+
+    @code
+    wxRegKey *key = new wxRegKey("HKEY_LOCAL_MACHINE\\Software\\MyKey");
+
+    // Create the key if it does not exist.
+    if( !key->Exists() )
+        key->Create();
+
+    // Create a new value "MYVALUE" and set it to 12.
+    key->SetValue("MYVALUE", 12);
+
+    // Read the value back.
+    long value;
+    key->QueryValue("MYVALUE", &value);
+    wxMessageBox(wxString::Format("%d", value), "Registry Value", wxOK);
+
+    // Get the number of subkeys and enumerate them.
+    size_t subkeys;
+    key->GetKeyInfo(&subkeys, NULL, NULL, NULL);
+
+    wxString key_name;
+    key->GetFirstKey(key_name, 1);
+    for(int i = 0; i < subkeys; i++)
+    {
+        wxMessageBox(key_name, "Subkey Name", wxOK);
+        key->GetNextKey(key_name, 1);
+    }
+    @endcode
 */
 class wxRegKey
 {
 public:
-    //@{
+    /**
+        Default constructor, initializes to HKCR.
+    */
+    wxRegKey();
+    /**
+        The constructor to set the full name of the key.
+    */
+    wxRegKey(const wxString& strKey);
     /**
         The constructor to set the full name of the key under a previously created
         parent.
     */
-    wxRegKey();
-    wxRegKey(const wxString& strKey);
     wxRegKey(const wxRegKey& keyParent, const wxString& strKey);
-    //@}
+
+    /**
+        Access modes for wxRegKey.
+    */
+    enum AccessMode
+    {
+        Read,   ///< Read-only
+        Write   ///< Read and Write
+    };
 
     /**
         Closes the key.
@@ -78,7 +121,7 @@ public:
     /**
         Returns @true if the key exists.
     */
-    static bool Exists() const;
+    bool Exists() const;
 
     /**
         Gets the first key.
@@ -102,8 +145,8 @@ public:
         @param pnMaxValueLen
             The maximum length of a value.
     */
-    bool GetKeyInfo(size_t* pnSubKeys, size_t* pnValues,
-                    size_t* pnMaxValueLen) const;
+    bool GetKeyInfo(size_t* pnSubKeys, size_t* pnMaxKeyLen,
+                    size_t* pnValues, size_t* pnMaxValueLen) const;
 
     /**
         Gets the name of the registry key.
@@ -152,18 +195,20 @@ public:
 
     /**
         Explicitly opens the key. This method also allows the key to be opened in
-        read-only mode by passing @c Read() instead of default
-        @c Write() parameter.
+        read-only mode by passing wxRegKey::Read instead of default
+        wxRegKey::Write parameter.
     */
     bool Open(AccessMode mode = Write);
 
-    //@{
+    /**
+        Retrieves the string value.
+    */
+    bool QueryValue(const wxChar* szValue, wxString& strValue) const;
+
     /**
         Retrieves the numeric value.
     */
-    bool QueryValue(const wxChar* szValue, wxString& strValue) const;
     const bool QueryValue(const wxChar* szValue, long* plValue) const;
-    //@}
 
     /**
         Renames the key.
@@ -176,16 +221,19 @@ public:
     bool RenameValue(const wxChar* szValueOld,
                      const wxChar* szValueNew);
 
-    //@{
     /**
-        Sets the given @a szValue which must be numeric, string or binary depending
-        on the overload used. If the value doesn't exist, it is created.
+        Sets the given @a szValue which must be numeric.
+        If the value doesn't exist, it is created.
     */
     bool SetValue(const wxChar* szValue, long lValue);
-    bool SetValue(const wxChar* szValue,
-                  const wxString& strValue);
-    bool SetValue(const wxChar* szValue,
-                  const wxMemoryBuffer& buf);
-    //@}
+    /**
+        Sets the given @a szValue which must be string.
+        If the value doesn't exist, it is created.
+    */
+    bool SetValue(const wxChar* szValue, const wxString& strValue);
+    /**
+        Sets the given @a szValue which must be binary.
+        If the value doesn't exist, it is created.
+    */
+    bool SetValue(const wxChar* szValue, const wxMemoryBuffer& buf);
 };
-

@@ -94,7 +94,7 @@ in the distribution.
 
 
 
-@section page_port_wxmac wxCocoa
+@section page_port_wxcocoa wxCocoa
 
 @htmlonly
 <img src="osxleopard_logo.png" alt="Mac OS X (Leopard) logo"
@@ -153,7 +153,7 @@ as the underlying graphics backend. wxX11 draws its widgets
 using the wxUniversal widget set which is now part of wxWidgets.
 wxX11 is well-suited for a number of special applications such
 as those running on systems with few resources (PDAs) or for
-applications which need to use a special themed look. 
+applications which need to use a special themed look.
 
 In order to configure wxWidgets to compile wxX11 you will
 need to type:

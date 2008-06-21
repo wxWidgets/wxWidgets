@@ -7,6 +7,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    @anchor wxRE_FLAGS
+
     Flags for regex compilation to be used with Compile().
 */
 enum
@@ -38,6 +40,8 @@ enum
 };
 
 /**
+    @anchor wxRE_NOT_FLAGS
+
     Flags for regex matching to be used with Matches().
     These flags are mainly useful when doing several matches in a long string
     to prevent erroneous matches for ¡¯¡¯ and ¡¯$¡¯:
@@ -120,7 +124,7 @@ public:
         Create and compile the regular expression, use
         IsValid() to test for compilation errors.
 
-        @todo Add referece to the flag enum.
+        As for the flags, please see @ref wxRE_FLAGS.
     */
     wxRegEx(const wxString& expr, int flags = wxRE_DEFAULT);
 
@@ -134,7 +138,7 @@ public:
         Compile the string into regular expression, return @true if ok or @false
         if string has a syntax error.
 
-        @todo Add referece to the flag enum.
+        As for the flags, please see @ref wxRE_FLAGS.
     */
     bool Compile(const wxString& pattern, int flags = wxRE_DEFAULT);
 
@@ -179,8 +183,8 @@ public:
         Matches the precompiled regular expression against the string @a text,
         returns @true if matches and @false otherwise.
 
-        @e Flags may be combination of @c wxRE_NOTBOL and @c wxRE_NOTEOL.
-        @todo  Add referece to the flag enum.
+        @e Flags may be combination of @c wxRE_NOTBOL and @c wxRE_NOTEOL, see
+        @ref wxRE_NOT_FLAGS.
 
         Some regex libraries assume that the text given is null terminated, while
         others require the length be given as a separate parameter. Therefore for
@@ -202,8 +206,8 @@ public:
         Matches the precompiled regular expression against the string @a text,
         returns @true if matches and @false otherwise.
 
-        @e Flags may be combination of @c wxRE_NOTBOL and @c wxRE_NOTEOL.
-        @todo  Add referece to the flag enum.
+        @e Flags may be combination of @c wxRE_NOTBOL and @c wxRE_NOTEOL, see
+        @ref wxRE_NOT_FLAGS.
 
         May only be called after successful call to Compile().
     */

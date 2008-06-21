@@ -1,44 +1,131 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        renderer.h
-// Purpose:     interface of wxSplitterRenderParams
+// Purpose:     interface of wxRendererNative
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 /**
-    @class wxSplitterRenderParams
+    @anchor wxCONTROL_FLAGS
+
+    The following rendering flags are defined for wxRendererNative:
+*/
+enum
+{
+    /** Control is disabled. */
+    wxCONTROL_DISABLED   = 0x00000001,
+
+    /** Currently has keyboard focus. */
+    wxCONTROL_FOCUSED    = 0x00000002,
+
+    /** (Button) is pressed. */
+    wxCONTROL_PRESSED    = 0x00000004,
+
+    /** Control-specific bit. */
+    wxCONTROL_SPECIAL    = 0x00000008,
+
+    /** Only for the buttons. */
+    wxCONTROL_ISDEFAULT  = wxCONTROL_SPECIAL,
+
+    /** Only for the menu items. */
+    wxCONTROL_ISSUBMENU  = wxCONTROL_SPECIAL,
+
+    /** Only for the tree items. */
+    wxCONTROL_EXPANDED   = wxCONTROL_SPECIAL,
+
+    /** Only for the status bar panes. */
+    wxCONTROL_SIZEGRIP   = wxCONTROL_SPECIAL,
+
+    /** Checkboxes only: flat border. */
+    wxCONTROL_FLAT       = wxCONTROL_SPECIAL,
+
+    /** Mouse is currently over the control. */
+    wxCONTROL_CURRENT    = 0x00000010,
+
+    /** Selected item in e.g. listbox. */
+    wxCONTROL_SELECTED   = 0x00000020,
+
+    /** (Check/radio button) is checked. */
+    wxCONTROL_CHECKED    = 0x00000040,
+
+    /** (Menu) item can be checked. */
+    wxCONTROL_CHECKABLE  = 0x00000080,
+
+    /** (Check) undetermined state. */
+    wxCONTROL_UNDETERMINED = wxCONTROL_CHECKABLE
+};
+
+/**
+    @struct wxSplitterRenderParams
     @wxheader{renderer.h}
 
     This is just a simple @c struct used as a return value of
-    wxRendererNative::GetSplitterParams.
+    wxRendererNative::GetSplitterParams().
 
-    It doesn't have any methods and all of its fields are constant and so can be
-    only examined but not modified.
+    It doesn't have any methods and all of its fields are constant, so they can
+    only be examined but not modified.
 
     @library{wxbase}
-    @category{FIXME}
+    @category{gdi}
 */
-class wxSplitterRenderParams
+struct wxSplitterRenderParams
 {
-public:
     /**
-        const wxCoord border
+        The only way to initialize this struct is by using this ctor.
+    */
+    wxSplitterRenderParams(wxCoord widthSash_, wxCoord border_, bool isSens_);
+
+    /**
         The width of the border drawn by the splitter inside it, may be 0.
     */
-
+    const wxCoord border;
 
     /**
-        const bool isHotSensitive
         @true if the sash changes appearance when the mouse passes over it, @false
         otherwise.
     */
-
+    const bool isHotSensitive;
 
     /**
-        const wxCoord widthSash
         The width of the splitter sash.
     */
+    const wxCoord widthSash;
+};
+
+/**
+    @struct wxHeaderButtonParams
+    @wxheader{renderer.h}
+
+    This @c struct can optionally be used with
+    wxRendererNative::DrawHeaderButton() to specify custom values used to draw
+    the text or bitmap label.
+
+    @library{wxbase}
+    @category{gdi}
+*/
+struct wxHeaderButtonParams
+{
+    wxHeaderButtonParams();
+
+    wxColour    m_arrowColour;
+    wxColour    m_selectionColour;
+    wxString    m_labelText;
+    wxFont      m_labelFont;
+    wxColour    m_labelColour;
+    wxBitmap    m_labelBitmap;
+    int         m_labelAlignment;
+};
+
+/**
+    Used to specify the type of sort arrow used with
+    wxRendererNative::DrawHeaderButton().
+*/
+enum wxHeaderSortIconType
+{
+    wxHDR_SORT_ICON_NONE,    ///< Don't draw a sort arrow.
+    wxHDR_SORT_ICON_UP,      ///< Draw a sort arrow icon pointing up.
+    wxHDR_SORT_ICON_DOWN     ///< Draw a sort arrow icon pointing down.
 };
 
 
@@ -69,31 +156,76 @@ public:
     be a real renderer which does the drawing.
 
     @library{wxcore}
-    @category{FIXME}
+    @category{gdi}
+
+    @see wxRendererNative
 */
 class wxDelegateRendererNative : public wxRendererNative
 {
 public:
-    //@{
     /**
         The default constructor does the same thing as the other one except that it
-        uses the @ref wxRendererNative::getgeneric "generic renderer" instead of the
-        user-specified @e rendererNative.
+        uses the @ref wxRendererNative::GetGeneric() "generic renderer" instead of the
+        user-specified @a rendererNative.
+
         In any case, this sets up the delegate renderer object to follow all calls to
         the specified real renderer.
-        Note that this object does not take ownership of (i.e. won't delete)
-        @e rendererNative.
     */
     wxDelegateRendererNative();
-    wxDelegateRendererNative(wxRendererNative& rendererNative);
-    //@}
-
     /**
-        This class also provides all the virtual methods of
-        wxRendererNative, please refer to that class
-        documentation for the details.
+        This constructor uses the user-specified @a rendererNative to set up the delegate
+        renderer object to follow all calls to the specified real renderer.
+
+        @note
+        This object does not take ownership of (i.e. won't delete) @a rendererNative.
     */
-    DrawXXX(...);
+    wxDelegateRendererNative(wxRendererNative& rendererNative);
+
+    // The rest of these functions inherit the documentation from wxRendererNative
+
+    virtual int DrawHeaderButton(wxWindow *win, wxDC& dc,
+                                 const wxRect& rect, int flags = 0,
+                                 wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
+                                 wxHeaderButtonParams* params = NULL);
+
+    virtual int DrawHeaderButtonContents(wxWindow *win, wxDC& dc,
+                                         const wxRect& rect, int flags = 0,
+                                         wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
+                                         wxHeaderButtonParams* params = NULL);
+
+    virtual int GetHeaderButtonHeight(wxWindow *win);
+
+    virtual void DrawTreeItemButton(wxWindow *win, wxDC& dc,
+                                    const wxRect& rect, int flags = 0);
+
+    virtual void DrawSplitterBorder(wxWindow *win, wxDC& dc,
+                                    const wxRect& rect, int flags = 0);
+
+    virtual void DrawSplitterSash(wxWindow *win, wxDC& dc,
+                                  const wxSize& size, wxCoord position,
+                                  wxOrientation orient, int flags = 0);
+
+    virtual void DrawComboBoxDropButton(wxWindow *win, wxDC& dc,
+                                        const wxRect& rect, int flags = 0);
+
+    virtual void DrawDropArrow(wxWindow *win, wxDC& dc,
+                               const wxRect& rect, int flags = 0);
+
+    virtual void DrawCheckBox(wxWindow *win, wxDC& dc,
+                              const wxRect& rect, int flags = 0 );
+
+    virtual void DrawPushButton(wxWindow *win, wxDC& dc,
+                                const wxRect& rect, int flags = 0 );
+
+    virtual void DrawItemSelectionRect(wxWindow *win, wxDC& dc,
+                                       const wxRect& rect, int flags = 0 );
+
+    virtual void DrawFocusRect(wxWindow* win, wxDC& dc,
+                               const wxRect& rect, int flags = 0);
+
+    virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
+
+    virtual wxRendererVersion GetVersion() const;
 };
 
 
@@ -102,7 +234,7 @@ public:
     @class wxRendererNative
     @wxheader{renderer.h}
 
-    First, a brief introduction to wxRenderer and why it is needed.
+    First, a brief introduction to wxRendererNative and why it is needed.
 
     Usually wxWidgets uses the underlying low level GUI system to draw all the
     controls - this is what we mean when we say that it is a "native" framework.
@@ -115,7 +247,7 @@ public:
     appearance is different under different platforms while the lines are always
     drawn in the same way.
 
-    This is why we have renderers: wxRenderer is a class which virtualizes the
+    This is why we have renderers: wxRendererNative is a class which virtualizes the
     drawing, i.e. it abstracts the drawing operations and allows you to draw say, a
     button, without caring about exactly how this is done. Of course, as we
     can draw the button differently in different renderers, this also allows us to
@@ -124,23 +256,23 @@ public:
     So the renderers work by exposing a large set of high-level drawing functions
     which are used by the generic controls. There is always a default global
     renderer but it may be changed or extended by the user, see
-    @ref overview_samplerender "Render sample".
+    @ref page_samples_render.
 
     All drawing functions take some standard parameters:
 
-     @e win is the window being drawn. It is normally not used and when
+    @li @a win - The window being drawn. It is normally not used and when
     it is it should only be used as a generic wxWindow
     (in order to get its low level handle, for example), but you should
     not assume that it is of some given type as the same renderer
     function may be reused for drawing different kinds of control.
-     @e dc is the wxDC to draw on. Only this device
+    @li @a dc - The wxDC to draw on. Only this device
     context should be used for drawing. It is not necessary to restore
     pens and brushes for it on function exit but, on the other hand, you
     shouldn't assume that it is in any specific state on function entry:
     the rendering functions should always prepare it.
-     @e rect the bounding rectangle for the element to be drawn.
-     @e flags the optional flags (none by default) which can be a
-    combination of the @c wxCONTROL_XXX constants below.
+    @li @a rect - The bounding rectangle for the element to be drawn.
+    @li @a flags - The optional flags (none by default) which can be a
+    combination of the @ref wxCONTROL_FLAGS.
 
     Note that each drawing function restores the wxDC attributes if
     it changes them, so it is safe to assume that the same pen, brush and colours
@@ -159,110 +291,130 @@ public:
 
     /**
         Draw a check box (used by wxDataViewCtrl).
+
         @a flags may have the @c wxCONTROL_CHECKED, @c wxCONTROL_CURRENT or
-        @c wxCONTROL_UNDETERMINED bit set.
+        @c wxCONTROL_UNDETERMINED bit set, see @ref wxCONTROL_FLAGS.
     */
-    void DrawCheckBox(wxWindow* win, wxDC& dc, const wxRect& rect,
-                      int flags);
+    virtual void DrawCheckBox(wxWindow* win, wxDC& dc,
+                              const wxRect& rect, int flags);
 
     /**
         Draw a button like the one used by wxComboBox to show a
         drop down window. The usual appearance is a downwards pointing arrow.
-        @a flags may have the @c wxCONTROL_PRESSED or @c wxCONTROL_CURRENT bit set.
+
+        @a flags may have the @c wxCONTROL_PRESSED or @c wxCONTROL_CURRENT bit set,
+        see @ref wxCONTROL_FLAGS.
     */
-    void DrawComboBoxDropButton(wxWindow* win, wxDC& dc,
+    virtual void DrawComboBoxDropButton(wxWindow* win, wxDC& dc,
                                 const wxRect& rect,
                                 int flags);
 
     /**
         Draw a drop down arrow that is suitable for use outside a combo box. Arrow will
-        have
-        transparent background.
+        have transparent background.
+
         @a rect is not entirely filled by the arrow. Instead, you should use bounding
         rectangle of a drop down button which arrow matches the size you need.
-        @a flags may have the @c wxCONTROL_PRESSED or @c wxCONTROL_CURRENT bit set.
+
+        @a flags may have the @c wxCONTROL_PRESSED or @c wxCONTROL_CURRENT bit set,
+        see @ref wxCONTROL_FLAGS.
     */
-    void DrawDropArrow(wxWindow* win, wxDC& dc, const wxRect& rect,
+    virtual void DrawDropArrow(wxWindow* win, wxDC& dc, const wxRect& rect,
                        int flags);
 
     /**
         Draw a focus rectangle using the specified rectangle.
-        wxListCtrl. The only supported flags is
-        @c wxCONTROL_SELECTED for items which are selected.
+        wxListCtrl.
+
+        The only supported flags is @c wxCONTROL_SELECTED for items which are selected.
+        see @ref wxCONTROL_FLAGS.
     */
-    void DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect,
+    virtual void DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect,
                        int flags = 0);
 
     /**
-        Draw the header control button (used, for example, by
-        wxListCtrl).  Depending on platforms the
-        @a flags parameter may support the @c wxCONTROL_SELECTED
-        @c wxCONTROL_DISABLED and @c wxCONTROL_CURRENT bits.
-        The @a sortArrow parameter can be one of
-        @c wxHDR_SORT_ICON_NONE, @c wxHDR_SORT_ICON_UP, or
-        @c wxHDR_SORT_ICON_DOWN.  Additional values controlling the
-        drawing of a text or bitmap label can be passed in @e params.  The
-        value returned is the optimal width to contain the the unabreviated
-        label text or bitmap, the sort arrow if present, and internal margins.
+        Draw the header control button (used, for example, by wxListCtrl).
+
+        Depending on platforms the @a flags parameter may support the @c wxCONTROL_SELECTED
+        @c wxCONTROL_DISABLED and @c wxCONTROL_CURRENT bits, see @ref wxCONTROL_FLAGS.
+
+        @return
+        The optimal width to contain the the unabreviated label text or
+        bitmap, the sort arrow if present, and internal margins.
     */
-    int DrawHeaderButton(wxWindow* win, wxDC& dc, const wxRect& rect,
-                         int flags = 0,
-                         wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
-                         wxHeaderButtonParams* params = NULL);
+    virtual int DrawHeaderButton(wxWindow* win, wxDC& dc,
+                                 const wxRect& rect, int flags = 0,
+                                 wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
+                                 wxHeaderButtonParams* params = NULL);
+
+    /**
+        Draw the contents of a header control button (label, sort arrows,
+        etc.). This function is normally only called by DrawHeaderButton().
+
+        Depending on platforms the @a flags parameter may support the @c wxCONTROL_SELECTED
+        @c wxCONTROL_DISABLED and @c wxCONTROL_CURRENT bits, see @ref wxCONTROL_FLAGS.
+
+        @return
+        The optimal width to contain the the unabreviated label text or
+        bitmap, the sort arrow if present, and internal margins.
+    */
+    virtual int DrawHeaderButtonContents(wxWindow *win, wxDC& dc,
+                                         const wxRect& rect, int flags = 0,
+                                         wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
+                                         wxHeaderButtonParams* params = NULL);
 
     /**
         Draw a selection rectangle underneath the text as used e.g. in a
-        wxListCtrl. The supported @a flags are
-        @c wxCONTROL_SELECTED for items which are selected (e.g. often a blue
-        rectangle) and @c wxCONTROL_CURRENT for the item that has the focus
-        (often a dotted line around the item's text). @c wxCONTROL_FOCUSED may
-        be used to indicate if the control has the focus (othewise the the selection
-        rectangle is e.g. often grey and not blue). This may be ignored by the renderer
-        or deduced by the code directly from the @e win.
+        wxListCtrl.
+
+        The supported @a flags are @c wxCONTROL_SELECTED for items
+        which are selected (e.g. often a blue rectangle) and @c wxCONTROL_CURRENT
+        for the item that has the focus (often a dotted line around the item's text).
+        @c wxCONTROL_FOCUSED may be used to indicate if the control has the focus
+        (othewise the the selection rectangle is e.g. often grey and not blue).
+        This may be ignored by the renderer or deduced by the code directly from
+        the @a win.
     */
-    void DrawItemSelectionRect(wxWindow* win, wxDC& dc,
-                               const wxRect& rect,
-                               int flags = 0);
+    virtual void DrawItemSelectionRect(wxWindow* win, wxDC& dc,
+                                       const wxRect& rect, int flags = 0);
 
     /**
         Draw a blank push button that looks very similar to wxButton.
+
         @a flags may have the @c wxCONTROL_PRESSED, @c wxCONTROL_CURRENT or
-        @c wxCONTROL_ISDEFAULT bit set.
+        @c wxCONTROL_ISDEFAULT bit set, see @ref wxCONTROL_FLAGS.
     */
-    void DrawPushButton(wxWindow* win, wxDC& dc, const wxRect& rect,
-                        int flags);
+    virtual void DrawPushButton(wxWindow* win, wxDC& dc,
+                                const wxRect& rect, int flags);
 
     /**
         Draw the border for sash window: this border must be such that the sash
-        drawn by @ref drawsplittersash() DrawSash blends into it
-        well.
+        drawn by DrawSplitterSash() blends into it well.
     */
-    void DrawSplitterBorder(wxWindow* win, wxDC& dc,
-                            const wxRect& rect,
-                            int flags = 0);
+    virtual void DrawSplitterBorder(wxWindow* win, wxDC& dc,
+                                    const wxRect& rect, int flags = 0);
 
     /**
         Draw a sash. The @a orient parameter defines whether the sash should be
         vertical or horizontal and how the @a position should be interpreted.
     */
-    void DrawSplitterSash(wxWindow* win, wxDC& dc,
-                          const wxSize& size,
-                          wxCoord position,
-                          wxOrientation orient,
-                          int flags = 0);
+    virtual void DrawSplitterSash(wxWindow* win, wxDC& dc,
+                                  const wxSize& size, wxCoord position,
+                                  wxOrientation orient, int flags = 0);
 
     /**
-        Draw the expanded/collapsed icon for a tree control item. To draw an expanded
-        button the @a flags parameter must contain @c wxCONTROL_EXPANDED bit.
+        Draw the expanded/collapsed icon for a tree control item.
+
+        To draw an expanded button the @a flags parameter must contain @c wxCONTROL_EXPANDED bit,
+        see @ref wxCONTROL_FLAGS.
     */
-    void DrawTreeItemButton(wxWindow* win, wxDC& dc,
-                            const wxRect& rect,
-                            int flags = 0);
+    virtual void DrawTreeItemButton(wxWindow* win, wxDC& dc,
+                                    const wxRect& rect, int flags = 0);
 
     /**
         Return the currently used renderer.
     */
-    wxRendererNative Get();
+    static wxRendererNative Get();
 
     /**
         Return the default (native) implementation for this platform -- this is also
@@ -270,67 +422,70 @@ public:
         Set() in which case the return value of this
         method may be different from the return value of Get().
     */
-    wxRendererNative GetDefault();
+    static wxRendererNative GetDefault();
 
     /**
         Return the generic implementation of the renderer. Under some platforms, this
         is the default renderer implementation, others have platform-specific default
         renderer which can be retrieved by calling GetDefault().
     */
-    wxRendererNative GetGeneric();
+    static wxRendererNative GetGeneric();
 
     /**
         Returns the height of a header button, either a fixed platform height if
         available, or a
         generic height based on the window's font.
     */
-    int GetHeaderButtonHeight(const wxWindow* win);
+    virtual int GetHeaderButtonHeight(wxWindow* win);
 
     /**
         Get the splitter parameters, see
         wxSplitterRenderParams.
     */
-    wxSplitterRenderParams GetSplitterParams(const wxWindow* win);
+    virtual wxSplitterRenderParams GetSplitterParams(const wxWindow* win);
 
     /**
         This function is used for version checking: Load()
         refuses to load any shared libraries implementing an older or incompatible
         version.
+
+        @remarks
         The implementation of this method is always the same in all renderers (simply
-        construct wxRendererVersion using the
-        @c wxRendererVersion::Current_XXX values), but it has to be in the derived,
-        not base, class, to detect mismatches between the renderers versions and so you
-        have to implement it anew in all renderers.
+        construct wxRendererVersion using the @c wxRendererVersion::Current_XXX values),
+        but it has to be in the derived, not base, class, to detect mismatches between
+        the renderers versions and so you have to implement it anew in all renderers.
     */
-    wxRendererVersion GetVersion() const;
+    virtual wxRendererVersion GetVersion() const;
 
     /**
         Load the renderer from the specified DLL, the returned pointer must be
         deleted by caller if not @NULL when it is not used any more.
+
         The @a name should be just the base name of the renderer and not the full
         name of the DLL file which is constructed differently (using
-        wxDynamicLibrary::CanonicalizePluginName)
+        wxDynamicLibrary::CanonicalizePluginName())
         on different systems.
     */
-    wxRendererNative* Load(const wxString& name);
+    static wxRendererNative* Load(const wxString& name);
 
     /**
         Set the renderer to use, passing @NULL reverts to using the default
         renderer (the global renderer must always exist).
+
         Return the previous renderer used with Set() or @NULL if none.
     */
-    wxRendererNative* Set(wxRendererNative* renderer);
+    static wxRendererNative* Set(wxRendererNative* renderer);
 };
 
 
 
 /**
-    @class wxRendererVersion
+    @struct wxRendererVersion
     @wxheader{renderer.h}
 
     This simple struct represents the wxRendererNative
     interface version and is only used as the return value of
-    wxRendererNative::GetVersion.
+    wxRendererNative::GetVersion().
 
     The version has two components: the version itself and the age. If the main
     program and the renderer have different versions they are never compatible with
@@ -342,29 +497,27 @@ public:
     done by IsCompatible() method.
 
     @library{wxbase}
-    @category{FIXME}
+    @category{gdi}
 */
-class wxRendererVersion
+struct wxRendererVersion
 {
-public:
     /**
         Checks if the main program is compatible with the renderer having the version
         @e ver, returns @true if it is and @false otherwise.
-        This method is used by
-        wxRendererNative::Load to determine whether a
+
+        This method is used by wxRendererNative::Load() to determine whether a
         renderer can be used.
     */
     static bool IsCompatible(const wxRendererVersion& ver);
 
     /**
-        const int age
         The age component.
     */
-
+    const int age;
 
     /**
-        const int version
         The version component.
     */
+    const int version;
 };
 
