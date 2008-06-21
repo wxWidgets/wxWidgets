@@ -2429,7 +2429,7 @@ public:
         @return @true if the window has been shown or hidden or @false if nothing
                  was done because it already was in the requested state.
 
-        @see IsShown(), Hide(), wxRadioBox::Show
+        @see IsShown(), Hide(), wxRadioBox::Show, wxShowEvent.
     */
     virtual bool Show(bool show = true);
 

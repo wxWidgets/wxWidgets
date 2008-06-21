@@ -1366,7 +1366,13 @@ public:
     { m_show = event.m_show; }
 
     void SetShow(bool show) { m_show = show; }
-    bool GetShow() const { return m_show; }
+
+    // return true if the window was shown, false if hidden
+    bool IsShown() const { return m_show; }
+
+#ifdef WXWIN_COMPATIBILITY_2_8
+    wxDEPRECATED( bool GetShow() const { return IsShown(); } )
+#endif
 
     virtual wxEvent *Clone() const { return new wxShowEvent(*this); }
 
@@ -1391,8 +1397,11 @@ public:
         : wxEvent(event)
     { m_iconized = event.m_iconized; }
 
+#ifdef WXWIN_COMPATIBILITY_2_8
+    wxDEPRECATED( bool Iconized() const { return IsIconized(); } )
+#endif
     // return true if the frame was iconized, false if restored
-    bool Iconized() const { return m_iconized; }
+    bool IsIconized() const { return m_iconized; }
 
     virtual wxEvent *Clone() const { return new wxIconizeEvent(*this); }
 

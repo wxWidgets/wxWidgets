@@ -3115,6 +3115,54 @@ public:
     bool IsPopup() const;
 };
 
+/**
+    @class wxShowEvent
+    @wxheader{event.h}
+
+    An event being sent when the window is shown or hidden.
+
+    Currently only wxMSW, wxGTK and wxOS2 generate such events.
+
+    @onlyfor{wxmsw,wxgtk,wxos2}
+
+    @beginEventTable{wxShowEvent}
+    @event{EVT_SHOW(func)}
+        Process a wxEVT_SHOW event.
+    @endEventTable
+
+    @library{wxcore}
+    @category{events}
+
+    @see @ref overview_eventhandling, wxWindow::Show,
+         wxWindow::IsShown
+*/
+
+class wxShowEvent : public wxEvent
+{
+public:
+    /**
+        Constructor.
+    */
+    wxShowEvent(int winid = 0, bool show = false);
+
+    /**
+        Set whether the windows was shown or hidden.
+    */
+    void SetShow(bool show);
+
+    /**
+        Return @true if the window has been shown, @false if it has been
+        hidden.
+    */
+    bool IsShown() const;
+
+    /**
+        @deprecated This function is deprecated in favour of IsShown().
+    */
+    bool GetShow() const;
+};
+
+
 
 /**
     @class wxIconizeEvent
@@ -3148,6 +3196,11 @@ public:
     /**
         Returns @true if the frame has been iconized, @false if it has been
         restored.
+    */
+    bool IsIconized() const;
+
+    /**
+        @deprecated This function is deprecated in favour of IsIconized().
     */
     bool Iconized() const;
 };

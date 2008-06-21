@@ -132,7 +132,7 @@ public:
         @param iconize
             If @true, iconizes the window; if @false, shows and restores it.
 
-        @see IsIconized(), Maximize().
+        @see IsIconized(), Maximize(), wxIconizeEvent.
     */
     void Iconize(bool iconize);
 
