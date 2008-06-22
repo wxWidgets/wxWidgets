@@ -169,7 +169,10 @@ int wxDialog::ShowModal()
     if ( !m_isModalStyle )
         SetModal(true);
 
-    Show(true);
+    if ( IsShown() )
+        DoShowModal();
+    else
+        Show(true);
 
     return GetReturnCode();
 }

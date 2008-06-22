@@ -283,8 +283,7 @@ void wxDialog::Raise()
 // show dialog modally
 int wxDialog::ShowModal()
 {
-    wxASSERT_MSG(!IsShown(),
-                 _T("ShowModal() can't be called for an already shown dialog"));
+    wxASSERT_MSG( !IsModal(), _T("ShowModal() can't be called twice") );
 
     m_endModalCalled = false;
 

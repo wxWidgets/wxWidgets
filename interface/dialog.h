@@ -553,8 +553,15 @@ public:
     bool Show(bool show);
 
     /**
-        Shows a modal dialog. Program flow does not return until the dialog has
-        been dismissed with EndModal().
+        Shows a modal dialog.
+
+        Program flow does not return until the dialog has been dismissed with
+        EndModal().
+
+        Notice that it is possible to call ShowModal() for a dialog which had
+        been previously shown with Show(), this allows to make an existing
+        modeless dialog modal. However ShowModal() can't be called twice
+        without intervening EndModal() calls.
 
         @return The value set with SetReturnCode().
 
