@@ -72,11 +72,11 @@ public:
     {
         if ( !wxCalendarCtrl::Create(parent, wxID_ANY, wxDefaultDateTime,
                               wxPoint(0, 0), wxDefaultSize,
-                              wxCAL_SEQUENTIAL_MONTH_SELECTION 
+                              wxCAL_SEQUENTIAL_MONTH_SELECTION
                               | wxCAL_SHOW_HOLIDAYS | wxBORDER_SUNKEN) )
             return false;
 
-        SetFormat("%x");
+        SetFormat(GetLocaleDateFormat());
 
         m_useSize  = wxCalendarCtrl::GetBestSize();
 
@@ -182,7 +182,7 @@ private:
 
         if ( !dt.IsValid() && HasDPFlag(wxDP_ALLOWNONE) )
             return;
-        
+
         // notify that we had to change the date after validation
         if ( (dt.IsValid() && (!dtOld.IsValid() || dt != dtOld)) ||
                 (!dt.IsValid() && dtOld.IsValid()) )
@@ -192,49 +192,76 @@ private:
         }
     }
 
-    bool HasDPFlag(int flag)
+    bool HasDPFlag(int flag) const
     {
         return m_combo->GetParent()->HasFlag(flag);
     }
 
-    bool SetFormat(const wxString& fmt)
+    // it expands "%x" format and changes %y to %Y if wxDP_SHOWCENTURY flag
+    // is given. If the locale format can't be easily analyzed (e.g. when
+    // the month is given as a name, not number), "%x" is returned
+    wxString GetLocaleDateFormat() const
     {
-        m_format.clear();
+        wxString x_format(wxT("%x"));
+        wxString fmt;
+        int year_cnt = 0, month_cnt = 0, day_cnt = 0;
 
         wxDateTime dt;
-        dt.ParseFormat(wxT("2003-10-13"), wxT("%Y-%m-%d"));
-        wxString str(dt.Format(fmt));
+        dt.ParseFormat(wxT("2003-10-17"), wxT("%Y-%m-%d"));
+        wxString str(dt.Format(x_format));
 
         const wxChar *p = str.c_str();
         while ( *p )
         {
-            int n=wxAtoi(p);
-            if (n == dt.GetDay())
+            if (wxIsdigit(*p))
             {
-                m_format.Append(wxT("%d"));
-                p += 2;
-            }
-            else if (n == (int)dt.GetMonth()+1)
-            {
-                m_format.Append(wxT("%m"));
-                p += 2;
-            }
-            else if (n == dt.GetYear())
-            {
-                m_format.Append(wxT("%Y"));
-                p += 4;
-            }
-            else if (n == (dt.GetYear() % 100))
-            {
-                if ( HasDPFlag(wxDP_SHOWCENTURY) )
-                    m_format.Append(wxT("%Y"));
+                int n=wxAtoi(p);
+                if (n == dt.GetDay())
+                {
+                    fmt.Append(wxT("%d"));
+                    day_cnt++;
+                    p += 2;
+                }
+                else if (n == (int)dt.GetMonth()+1)
+                {
+                    fmt.Append(wxT("%m"));
+                    month_cnt++;
+                    p += 2;
+                }
+                else if (n == dt.GetYear())
+                {
+                    fmt.Append(wxT("%Y"));
+                    year_cnt++;
+                    p += 4;
+                }
+                else if (n == (dt.GetYear() % 100))
+                {
+                    if ( HasDPFlag(wxDP_SHOWCENTURY) )
+                        fmt.Append(wxT("%Y"));
+                    else
+                        fmt.Append(wxT("%y"));
+                    year_cnt++;
+                    p += 2;
+                }
                 else
-                    m_format.Append(wxT("%y"));
-                p += 2;
+                    // this shouldn't happen
+                    return x_format;
             }
-            else
-                m_format.Append(*p++);
+            else {
+                fmt.Append(*p);
+                p++;
+            }
         }
+
+        if (year_cnt == 1 && month_cnt == 1 && day_cnt == 1)
+            return fmt;
+        else
+            return x_format;
+    }
+
+    bool SetFormat(const wxString& fmt)
+    {
+        m_format = fmt;
 
         if ( m_combo )
         {
