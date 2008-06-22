@@ -42,10 +42,12 @@ public:
         help string; that is, stock properties are set independently one from the other.
 
         @param parentMenu
-            Menu that the menu item belongs to.
+            Menu that the menu item belongs to. Can be @NULL if the item is
+            going to be added to the menu later.
         @param id
-            Identifier for this menu item. May be wxID_SEPARATOR, in which case the
-            given kind is ignored and taken to be wxITEM_SEPARATOR instead.
+            Identifier for this menu item. May be @c wxID_SEPARATOR, in which
+            case the given kind is ignored and taken to be @c wxITEM_SEPARATOR
+            instead.
         @param text
             Text for the menu item, as shown on the menu. An accelerator
             key can be specified using the ampersand " character. In order to embed an
@@ -53,8 +55,8 @@ public:
         @param helpString
             Optional help string that will be shown on the status bar.
         @param kind
-            May be wxITEM_SEPARATOR, wxITEM_NORMAL,
-            wxITEM_CHECK or wxITEM_RADIO
+            May be @c wxITEM_SEPARATOR, @c wxITEM_NORMAL, @c wxITEM_CHECK or @c
+            wxITEM_RADIO
         @param subMenu
             If non-@NULL, indicates that the menu item is a submenu.
     */

@@ -58,7 +58,8 @@ wxMenuItemBase::wxMenuItemBase(wxMenu *parentMenu,
                                wxItemKind kind,
                                wxMenu *subMenu)
 {
-    wxASSERT_MSG( parentMenu != NULL, wxT("menuitem should have a menu") );
+    // notice that parentMenu can be NULL: the item can be attached to the menu
+    // later with SetMenu()
 
     m_parentMenu  = parentMenu;
     m_subMenu     = subMenu;
@@ -827,7 +828,7 @@ wxString wxMenuBarBase::GetHelpString(int id) const
     return item->GetHelp();
 }
 
-void wxMenuBarBase::UpdateMenus( void )
+void wxMenuBarBase::UpdateMenus()
 {
     wxEvtHandler* source;
     wxMenu* menu;
