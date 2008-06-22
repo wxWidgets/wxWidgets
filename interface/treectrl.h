@@ -782,10 +782,10 @@ public:
 
     /**
         Sets the specified item state. The value of @a state may be:
-        - wxTREE_ITEMSTATE_NONE: to disable the item state (the state image will
-          be not displayed).
-        - wxTREE_ITEMSTATE_NEXT: to set the next item state.
-        - wxTREE_ITEMSTATE_PREV: to set the previous item statem.
+        - @c wxTREE_ITEMSTATE_NONE: to disable the item state (the state image will
+            be not displayed).
+        - @c wxTREE_ITEMSTATE_NEXT: to set the next item state.
+        - @c wxTREE_ITEMSTATE_PREV: to set the previous item state.
     */
     void SetItemState(const wxTreeItemId& item, int state);
 
@@ -922,7 +922,7 @@ public:
         The context menu for the selected item has been requested, either by a
         right click or by using the menu key.
     @event{EVT_TREE_STATE_IMAGE_CLICK(id, func)}
-        The state image has been clicked. Windows only.
+        The state image has been clicked.
     @endEventTable
 
     @library{wxbase}
