@@ -535,4 +535,7 @@
         </if>
     </define-global-tag>
 
+
+    <include file="wx_xrc.bkl"/>
+
 </makefile>
