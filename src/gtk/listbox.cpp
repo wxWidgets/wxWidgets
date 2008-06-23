@@ -119,11 +119,11 @@ gtk_listitem_changed_callback(GtkTreeSelection * WXUNUSED(selection),
 {
     if (g_blockEventsOnDrag) return;
 
-    if (listbox->HasFlag(wxLB_MULTIPLE) || listbox->HasFlag(wxLB_EXTENDED))
+    if (listbox->HasFlag(wxLB_MULTIPLE | wxLB_EXTENDED))
     {
         listbox->CalcAndSendEvent();
     }
-    else
+    else // single selection
     {
         wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, listbox->GetId() );
         event.SetEventObject( listbox );
@@ -421,17 +421,13 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
     gtk_tree_view_set_enable_search(m_treeview, FALSE);
 
     GtkSelectionMode mode;
-    if (style & wxLB_MULTIPLE)
+    // GTK_SELECTION_EXTENDED is a deprecated synonym for GTK_SELECTION_MULTIPLE
+    if ( style & (wxLB_MULTIPLE | wxLB_EXTENDED) )
     {
         mode = GTK_SELECTION_MULTIPLE;
     }
-    else if (style & wxLB_EXTENDED)
+    else // no multi-selection flags specified
     {
-        mode = GTK_SELECTION_EXTENDED;
-    }
-    else
-    {
-        // if style was 0 set single mode
         m_windowStyle |= wxLB_SINGLE;
         mode = GTK_SELECTION_SINGLE;
     }

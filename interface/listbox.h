@@ -28,10 +28,11 @@
            Single-selection list.
     @style{wxLB_MULTIPLE}
            Multiple-selection list: the user can toggle multiple items on and
-           off.
+           off. This is the same as wxLB_EXTENDED in wxGTK2 port.
     @style{wxLB_EXTENDED}
-           Extended-selection list: the user can select multiple items using
-           the SHIFT key and the mouse or special key combinations.
+           Extended-selection list: the user can extend the selection by using
+           @c SHIFT or @c CTRL keys together with the cursor movement keys or
+           the mouse.
     @style{wxLB_HSCROLL}
            Create horizontal scrollbar if contents are too wide (Windows only).
     @style{wxLB_ALWAYS_SB}
