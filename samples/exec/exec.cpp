@@ -885,7 +885,7 @@ void MyFrame::OnFileExec(wxCommandEvent& WXUNUSED(event))
 
     s_filename = filename;
 
-    wxString ext = filename.AfterFirst(_T('.'));
+    wxString ext = filename.AfterLast(_T('.'));
     wxFileType *ft = wxTheMimeTypesManager->GetFileTypeFromExtension(ext);
     if ( !ft )
     {
