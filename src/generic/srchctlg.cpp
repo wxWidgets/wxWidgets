@@ -532,6 +532,8 @@ void wxSearchCtrl::LayoutControls(int x, int y, int width, int height)
     y += BORDER;
     width -= horizontalBorder*2;
     height -= BORDER*2;
+    if (width < 0) width = 0;
+    if (height < 0) height = 0;
 
     wxSize sizeSearch(0,0);
     wxSize sizeCancel(0,0);
@@ -558,6 +560,7 @@ void wxSearchCtrl::LayoutControls(int x, int y, int width, int height)
         cancelMargin = 0;
     }
     wxCoord textWidth = width - sizeSearch.x - sizeCancel.x - searchMargin - cancelMargin - 1;
+    if (textWidth < 0) textWidth = 0;
 
     // position the subcontrols inside the client area
 
