@@ -122,35 +122,38 @@ void wxWallCtrlTest::CreateControls()
 	wxBitmap testBitmap;
 
 	// Just add bitmaps manually.
-	testBitmap.LoadFile("Wall1.bmp", wxBITMAP_TYPE_BMP);
+	testBitmap.LoadFile(wxT("Wall1.png"), wxBITMAP_TYPE_PNG);
 	bitmapSource->AppendBitmap(testBitmap);
-	testBitmap.LoadFile("Wall2.bmp", wxBITMAP_TYPE_BMP);
+	testBitmap.LoadFile(wxT("Wall2.png"), wxBITMAP_TYPE_PNG);
 	bitmapSource->AppendBitmap(testBitmap);
-	testBitmap.LoadFile("Wall3.bmp", wxBITMAP_TYPE_BMP);
-	bitmapSource->AppendBitmap(testBitmap);
-
-	testBitmap.LoadFile("Wall1.bmp", wxBITMAP_TYPE_BMP);
-	bitmapSource->AppendBitmap(testBitmap);
-	testBitmap.LoadFile("Wall2.bmp", wxBITMAP_TYPE_BMP);
-	bitmapSource->AppendBitmap(testBitmap);
-	testBitmap.LoadFile("Wall3.bmp", wxBITMAP_TYPE_BMP);
+	testBitmap.LoadFile(wxT("Wall3.png"), wxBITMAP_TYPE_PNG);
 	bitmapSource->AppendBitmap(testBitmap);
 
-	testBitmap.LoadFile("Wall1.bmp", wxBITMAP_TYPE_BMP);
+	testBitmap.LoadFile(wxT("Wall1.png"), wxBITMAP_TYPE_PNG);
 	bitmapSource->AppendBitmap(testBitmap);
-	testBitmap.LoadFile("Wall2.bmp", wxBITMAP_TYPE_BMP);
+	testBitmap.LoadFile(wxT("Wall2.png"), wxBITMAP_TYPE_PNG);
 	bitmapSource->AppendBitmap(testBitmap);
-	testBitmap.LoadFile("Wall3.bmp", wxBITMAP_TYPE_BMP);
+	testBitmap.LoadFile(wxT("Wall3.png"), wxBITMAP_TYPE_PNG);
+	bitmapSource->AppendBitmap(testBitmap);
+
+	testBitmap.LoadFile(wxT("Wall1.png"), wxBITMAP_TYPE_PNG);
+	bitmapSource->AppendBitmap(testBitmap);
+	testBitmap.LoadFile(wxT("Wall2.png"), wxBITMAP_TYPE_PNG);
+	bitmapSource->AppendBitmap(testBitmap);
+	testBitmap.LoadFile(wxT("Wall3.png"), wxBITMAP_TYPE_PNG);
 	bitmapSource->AppendBitmap(testBitmap);
 
 	wxWallCtrlPlaneSurface * surface = new wxWallCtrlPlaneSurface();
 	surface->SetScopeSize(wxSize(8, 2));
-	wxWallCtrl * wallCtrl1 = new wxWallCtrl(this, wxID_ANY,	wxDefaultPosition, wxDefaultSize);
+	wxWallCtrl * wallCtrl1 = new wxWallCtrl(this, wxID_ANY,	wxDefaultPosition, wxDefaultSize, wxWANTS_CHARS);
 
 	wxWallCtrlDefaultPlaneNavigation * navigation = new wxWallCtrlDefaultPlaneNavigation();
 	wallCtrl1->SetDataSource(bitmapSource);
 	wallCtrl1->SetSurface(surface);
 	wallCtrl1->SetNavigator(navigation);
+
+	//wallCtrl1->SetFocus();
+	//SetExtraStyle(wxWANTS_CHARS);
 
 	itemBoxSizer2->Add(wallCtrl1, 1, wxGROW|wxALL, 5);
 

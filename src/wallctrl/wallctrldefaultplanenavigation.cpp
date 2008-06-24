@@ -37,23 +37,23 @@ void wxWallCtrlDefaultPlaneNavigation::OnKeyDown( wxKeyEvent &event )
 	}
 	switch (event.GetKeyCode())
 	{
-	case 'A': //WXK_LEFT:
+	case WXK_LEFT:
 		m_surface->MoveLeft(0.1);
 		break;
-	case 'D':
+	case WXK_RIGHT:
 		m_surface->MoveRight(0.1);
 		break;
-	case 'W':
+	case WXK_UP:
 		m_surface->MoveIn(0.1);
 		break;
-	case 'S':
+	case WXK_DOWN:
 		m_surface->MoveOut(0.1);
 		break;
 	}
 }
 wxWallCtrlDefaultPlaneNavigation::wxWallCtrlDefaultPlaneNavigation()// wxWallCtrlPlaneSurface * surface ) :m_surface(surface)
 {
-
+	
 }
 
 wxWallCtrlDefaultPlaneNavigation::~wxWallCtrlDefaultPlaneNavigation(void)

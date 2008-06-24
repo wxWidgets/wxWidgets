@@ -103,6 +103,7 @@ void wxWallCtrl::OnEnterWindow( wxMouseEvent& WXUNUSED(event) )
 void wxWallCtrl::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
 	wxPaintDC dc(this);
+	Render();
 }
 
 void wxWallCtrl::OnSize( wxSizeEvent& event )
@@ -166,7 +167,8 @@ void wxWallCtrl::OnIdle( wxIdleEvent& event )
 {
 	if (m_canRender)
 	{
-		Render();
+		Refresh();
+		//Render();
 	}
 
 	// We only want to render when explicitly asked to
