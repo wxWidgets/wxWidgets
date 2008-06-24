@@ -2691,6 +2691,43 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         // notify us before painting each item
                         *result = m_hasAnyAttr ? CDRF_NOTIFYITEMDRAW
                                                : CDRF_DODEFAULT;
+
+                        // windows in TreeCtrl use one-based index for item state images,
+                        // 0 indexed image is not being used, we're using zero-based index,
+                        // so we have to add temp image (of zero index) to state image list
+                        // before we draw any item, then after items are drawn we have to
+                        // delete it (in POSTPAINT notify)
+                        if (m_imageListState && m_imageListState->GetImageCount() > 0)
+                        {
+                            #define hImageList (HIMAGELIST)m_imageListState->GetHIMAGELIST()
+
+                            // add temporary image
+                            int width, height;
+                            m_imageListState->GetSize(0, width, height);
+
+                            HBITMAP hbmpTemp = ::CreateBitmap(width, height, 1, 1, NULL);
+                            int index = ::ImageList_Add(hImageList, hbmpTemp, hbmpTemp);
+                            ::DeleteObject(hbmpTemp);
+
+                            if ( index != -1 )
+                            {
+                                // move images to right
+                                for ( int i = index; i > 0; i-- )
+                                    ::ImageList_Copy(hImageList, i, hImageList, i-1, 0);
+
+                                // we must remove the image in POSTPAINT notify
+                                *result |= CDRF_NOTIFYPOSTPAINT;
+                            }
+
+                            #undef hImageList
+                        }
+                        break;
+
+                    case CDDS_POSTPAINT:
+                        // we are deleting temp image of 0 index, which was
+                        // added before items were drawn (in PREPAINT notify)
+                        if (m_imageListState && m_imageListState->GetImageCount() > 0)
+                            m_imageListState->Remove(0);
                         break;
 
                     case CDDS_ITEMPREPAINT:

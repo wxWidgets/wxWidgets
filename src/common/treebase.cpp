@@ -110,13 +110,19 @@ void wxTreeCtrlBase::SetItemState(const wxTreeItemId& item, int state)
 {
     if ( state == wxTREE_ITEMSTATE_NEXT )
     {
-        state = GetItemState(item) + 1;
+        int current = GetItemState(item);
+        if ( current == wxTREE_ITEMSTATE_NONE )
+            return;
+        state = current + 1;
         if ( m_imageListState && state >= m_imageListState->GetImageCount() )
             state = 0;
     }
     else if ( state == wxTREE_ITEMSTATE_PREV )
     {
-        state = GetItemState(item) - 1;
+        int current = GetItemState(item);
+        if ( current == wxTREE_ITEMSTATE_NONE )
+            return;
+        state = current - 1;
         if ( state == -1 )
             state = m_imageListState ? m_imageListState->GetImageCount() - 1 : 0;
     }

@@ -23,18 +23,21 @@
 class MyApp : public wxApp
 {
 public:
-    MyApp() { m_showImages = true; m_showButtons = false; }
+    MyApp() { m_showImages = true; m_showStates = true; m_showButtons = false; }
 
     bool OnInit();
 
     void SetShowImages(bool show) { m_showImages = show; }
     bool ShowImages() const { return m_showImages; }
 
+    void SetShowStates(bool show) { m_showStates = show; }
+    bool ShowStates() const { return m_showStates; }
+
     void SetShowButtons(bool show) { m_showButtons = show; }
     bool ShowButtons() const { return m_showButtons; }
 
 private:
-    bool m_showImages, m_showButtons;
+    bool m_showImages, m_showStates, m_showButtons;
 };
 
 class MyTreeItemData : public wxTreeItemData
@@ -61,7 +64,7 @@ public:
         TreeCtrlIcon_FolderOpened
     };
 
-    MyTreeCtrl() { m_alternateImages = false; }
+    MyTreeCtrl() { m_alternateImages = false; m_alternateStates = false; }
     MyTreeCtrl(wxWindow *parent, const wxWindowID id,
                const wxPoint& pos, const wxSize& size,
                long style);
@@ -85,6 +88,7 @@ public:
     void OnSelChanging(wxTreeEvent& event);
     void OnTreeKeyDown(wxTreeEvent& event);
     void OnItemActivated(wxTreeEvent& event);
+    void OnItemStateClick(wxTreeEvent& event);
     void OnItemRClick(wxTreeEvent& event);
 
     void OnRMouseDown(wxMouseEvent& event);
@@ -96,6 +100,7 @@ public:
 
     void CreateImageList(int size = 16);
     void CreateButtonsImageList(int size = 11);
+    void CreateStateImageList(bool del = false);
 
     void AddTestItemsToTree(size_t numChildren, size_t depth);
 
@@ -104,6 +109,7 @@ public:
     void DoEnsureVisible() { if (m_lastItem.IsOk()) EnsureVisible(m_lastItem); }
 
     void DoToggleIcon(const wxTreeItemId& item);
+    void DoToggleState(const wxTreeItemId& item);
 
     void ShowMenu(wxTreeItemId id, const wxPoint& pt);
 
@@ -113,6 +119,9 @@ public:
 
     void SetAlternateImages(bool show) { m_alternateImages = show; }
     bool AlternateImages() const { return m_alternateImages; }
+
+    void SetAlternateStates(bool show) { m_alternateStates = show; }
+    bool AlternateStates() const { return m_alternateStates; }
 
 protected:
     virtual int OnCompareItems(const wxTreeItemId& i1, const wxTreeItemId& i2);
@@ -137,6 +146,7 @@ private:
     wxTreeItemId m_lastItem,                // for OnEnsureVisible()
                  m_draggedItem;             // item being dragged right now
     bool         m_alternateImages;
+    bool         m_alternateStates;
 
     // NB: due to an ugly wxMSW hack you _must_ use DECLARE_DYNAMIC_CLASS()
     //     if you want your overloaded OnCompareItems() to be called.
@@ -198,7 +208,9 @@ public:
     void OnRecreate(wxCommandEvent& event);
     void OnToggleButtons(wxCommandEvent& event);
     void OnToggleImages(wxCommandEvent& event);
+    void OnToggleStates(wxCommandEvent& event);
     void OnToggleAlternateImages(wxCommandEvent& event);
+    void OnToggleAlternateStates(wxCommandEvent& event);
     void OnSetImageSize(wxCommandEvent& event);
     void OnCollapseAndReset(wxCommandEvent& event);
 
@@ -224,6 +236,7 @@ public:
     void OnDecSpacing(wxCommandEvent& event);
 
     void OnToggleIcon(wxCommandEvent& event);
+    void OnToggleState(wxCommandEvent& event);
 
     void OnShowFirstVisible(wxCommandEvent& WXUNUSED(event))
         { DoShowFirstOrLast(&wxTreeCtrl::GetFirstVisibleItem, "first visible"); }
@@ -301,7 +314,9 @@ enum
     TreeTest_DeleteAll,
     TreeTest_Recreate,
     TreeTest_ToggleImages,
+    TreeTest_ToggleStates,
     TreeTest_ToggleAlternateImages,
+    TreeTest_ToggleAlternateStates,
     TreeTest_ToggleButtons,
     TreeTest_SetImageSize,
     TreeTest_ToggleSel,
@@ -314,6 +329,7 @@ enum
     TreeTest_IncSpacing,
     TreeTest_DecSpacing,
     TreeTest_ToggleIcon,
+    TreeTest_ToggleState,
     TreeTest_Select,
     TreeTest_Unselect,
     TreeTest_SelectRoot,

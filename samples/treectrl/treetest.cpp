@@ -29,6 +29,7 @@
 #include "wx/imaglist.h"
 #include "wx/treectrl.h"
 #include "wx/math.h"
+#include "wx/renderer.h"
 
 #ifdef __WIN32__
     // this is not supported by native control
@@ -42,6 +43,12 @@
 #include "icon3.xpm"
 #include "icon4.xpm"
 #include "icon5.xpm"
+
+#include "state1.xpm"
+#include "state2.xpm"
+#include "state3.xpm"
+#include "state4.xpm"
+#include "state5.xpm"
 
 #ifndef __WXMSW__
     #include "../sample.xpm"
@@ -98,7 +105,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     MENU_LINK(DeleteAll)
     MENU_LINK(Recreate)
     MENU_LINK(ToggleImages)
+    MENU_LINK(ToggleStates)
     MENU_LINK(ToggleAlternateImages)
+    MENU_LINK(ToggleAlternateStates)
     MENU_LINK(ToggleButtons)
     MENU_LINK(SetImageSize)
     MENU_LINK(CollapseAndReset)
@@ -110,6 +119,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     MENU_LINK(IncSpacing)
     MENU_LINK(DecSpacing)
     MENU_LINK(ToggleIcon)
+    MENU_LINK(ToggleState)
     MENU_LINK(SelectRoot)
 
     MENU_LINK(ShowFirstVisible)
@@ -146,6 +156,7 @@ BEGIN_EVENT_TABLE(MyTreeCtrl, wxTreeCtrl)
     EVT_TREE_SEL_CHANGING(TreeTest_Ctrl, MyTreeCtrl::OnSelChanging)
     EVT_TREE_KEY_DOWN(TreeTest_Ctrl, MyTreeCtrl::OnTreeKeyDown)
     EVT_TREE_ITEM_ACTIVATED(TreeTest_Ctrl, MyTreeCtrl::OnItemActivated)
+    EVT_TREE_STATE_IMAGE_CLICK(TreeTest_Ctrl, MyTreeCtrl::OnItemStateClick)
 
     // so many different ways to handle right mouse button clicks...
     EVT_CONTEXT_MENU(MyTreeCtrl::OnContextMenu)
@@ -221,7 +232,9 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     style_menu->AppendCheckItem(TreeTest_ToggleSel, wxT("Toggle &selection mode\tCtrl-S"));
 #endif // NO_MULTIPLE_SELECTION
     style_menu->AppendCheckItem(TreeTest_ToggleImages, wxT("Toggle show ima&ges"));
+    style_menu->AppendCheckItem(TreeTest_ToggleStates, wxT("Toggle show st&ates"));
     style_menu->AppendCheckItem(TreeTest_ToggleAlternateImages, wxT("Toggle alternate images"));
+    style_menu->AppendCheckItem(TreeTest_ToggleAlternateStates, wxT("Toggle alternate state images"));
     style_menu->Append(TreeTest_SetImageSize, wxT("Set image si&ze..."));
     style_menu->AppendSeparator();
     style_menu->Append(TreeTest_SetFgColour, wxT("Set &foreground colour..."));
@@ -261,6 +274,7 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     item_menu->Append(TreeTest_ClearBold, wxT("Make item &not bold"));
     item_menu->AppendSeparator();
     item_menu->Append(TreeTest_ToggleIcon, wxT("Toggle the item's &icon"));
+    item_menu->Append(TreeTest_ToggleState, wxT("Toggle the item's &state"));
     item_menu->AppendSeparator();
     item_menu->Append(TreeTest_ShowFirstVisible, wxT("Show &first visible"));
 #ifdef wxHAS_LAST_VISIBLE
@@ -296,7 +310,9 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     CreateTreeWithDefStyle();
 
     menu_bar->Check(TreeTest_ToggleImages, true);
+    menu_bar->Check(TreeTest_ToggleStates, true);
     menu_bar->Check(TreeTest_ToggleAlternateImages, false);
+    menu_bar->Check(TreeTest_ToggleAlternateStates, false);
 
 #if wxUSE_STATUSBAR
     // create a status bar
@@ -626,12 +642,34 @@ void MyFrame::OnToggleImages(wxCommandEvent& WXUNUSED(event))
     }
 }
 
+void MyFrame::OnToggleStates(wxCommandEvent& WXUNUSED(event))
+{
+    if ( wxGetApp().ShowStates() )
+    {
+        m_treeCtrl->CreateStateImageList(true);
+        wxGetApp().SetShowStates(false);
+    }
+    else
+    {
+        m_treeCtrl->CreateStateImageList(false);
+        wxGetApp().SetShowStates(true);
+    }
+}
+
 void MyFrame::OnToggleAlternateImages(wxCommandEvent& WXUNUSED(event))
 {
     bool alternateImages = m_treeCtrl->AlternateImages();
 
     m_treeCtrl->SetAlternateImages(!alternateImages);
     m_treeCtrl->CreateImageList(0);
+}
+
+void MyFrame::OnToggleAlternateStates(wxCommandEvent& WXUNUSED(event))
+{
+    bool alternateStates = m_treeCtrl->AlternateStates();
+
+    m_treeCtrl->SetAlternateStates(!alternateStates);
+    m_treeCtrl->CreateStateImageList();
 }
 
 void MyFrame::OnToggleButtons(wxCommandEvent& WXUNUSED(event))
@@ -715,6 +753,15 @@ void MyFrame::OnToggleIcon(wxCommandEvent& WXUNUSED(event))
     m_treeCtrl->DoToggleIcon(item);
 }
 
+void MyFrame::OnToggleState(wxCommandEvent& WXUNUSED(event))
+{
+    wxTreeItemId item = m_treeCtrl->GetSelection();
+
+    CHECK_ITEM( item );
+
+    m_treeCtrl->DoToggleState(item);
+}
+
 void MyFrame::DoShowFirstOrLast(TreeFunc0_t pfn, const wxString& label)
 {
     const wxTreeItemId item = (m_treeCtrl->*pfn)();
@@ -772,11 +819,13 @@ MyTreeCtrl::MyTreeCtrl(wxWindow *parent, const wxWindowID id,
                        const wxPoint& pos, const wxSize& size,
                        long style)
           : wxTreeCtrl(parent, id, pos, size, style),
-            m_alternateImages(false)
+            m_alternateImages(false),
+            m_alternateStates(false)
 {
     m_reverseSort = false;
 
     CreateImageList();
+    CreateStateImageList();
 
     // Add some items to the tree
     AddTestItemsToTree(5, 2);
@@ -834,6 +883,70 @@ void MyTreeCtrl::CreateImageList(int size)
     }
 
     AssignImageList(images);
+}
+
+void MyTreeCtrl::CreateStateImageList(bool del)
+{
+    if ( del )
+    {
+        SetStateImageList(NULL);
+        return;
+    }
+
+    wxImageList *states;
+    wxBusyCursor wait;
+
+    if (m_alternateStates)
+    {
+        wxIcon icons[5];
+        icons[0] = wxIcon(state1_xpm);  // yellow
+        icons[1] = wxIcon(state2_xpm);  // green
+        icons[2] = wxIcon(state3_xpm);  // red
+        icons[3] = wxIcon(state4_xpm);  // blue
+        icons[4] = wxIcon(state5_xpm);  // black
+
+        int width  = icons[0].GetWidth(),
+            height = icons[0].GetHeight();
+
+        // Make an state image list containing small icons
+        states = new wxImageList(width, height, true);
+
+        for ( size_t i = 0; i < WXSIZEOF(icons); i++ )
+            states->Add(icons[i]);
+    }
+    else
+    {
+        int width  = ::GetSystemMetrics(SM_CXMENUCHECK),
+            height = ::GetSystemMetrics(SM_CYMENUCHECK);
+
+        // make an state checkbox image list
+        states = new wxImageList(width, height, true);
+
+        wxBitmap checkBmp(width, height);
+        wxRect rect (0, 0, width, height);
+
+        wxRendererNative& renderer = wxRendererNative::Get();
+
+        // create no checked image
+        {
+            // first create bitmap in a memory DC
+            wxMemoryDC memDC(checkBmp);
+            // then draw a check mark into it
+            renderer.DrawCheckBox(this, memDC, rect, 0);
+        } // select checkBmp out of memDC
+
+        states->Add(checkBmp);
+
+        // create checked image
+        {
+            wxMemoryDC memDC(checkBmp);
+            renderer.DrawCheckBox(this, memDC, rect, wxCONTROL_CHECKED);
+        }
+
+        states->Add(checkBmp);
+    }
+
+    AssignStateImageList(states);
 }
 
 #if USE_GENERIC_TREECTRL || !defined(__WXMSW__)
@@ -936,6 +1049,9 @@ void MyTreeCtrl::AddItemsRecursively(const wxTreeItemId& idParent,
             wxTreeItemId id = AppendItem(idParent, str, image, imageSel,
                                          new MyTreeItemData(str));
 
+            if ( wxGetApp().ShowStates() )
+                SetItemState(id, 0);
+
             // and now we also set the expanded one (only for the folders)
             if ( hasChildren && wxGetApp().ShowImages() )
             {
@@ -1016,6 +1132,28 @@ void MyTreeCtrl::DoToggleIcon(const wxTreeItemId& item)
                     ? TreeCtrlIcon_FileSelected
                     : TreeCtrlIcon_FolderSelected;
     SetItemImage(item, image, wxTreeItemIcon_Selected);
+}
+
+void MyTreeCtrl::DoToggleState(const wxTreeItemId& item)
+{
+    if ( m_alternateStates )
+    {
+        // sets random state unlike current
+        int state = GetItemState(item);
+        int nState;
+
+        srand (time(NULL));
+        do {
+            nState = rand() % GetStateImageList()->GetImageCount();
+        } while (nState == state);
+
+        SetItemState(item, nState);
+    }
+    else
+    {
+        // we have only 2 checkbox states, so next state will be reversed
+        SetItemState(item, wxTREE_ITEMSTATE_NEXT);
+    }
 }
 
 void MyTreeCtrl::LogEvent(const wxChar *name, const wxTreeEvent& event)
@@ -1238,7 +1376,10 @@ void MyTreeCtrl::OnEndDrag(wxTreeEvent& event)
     // Finally, we only copy one item here but we might copy the entire tree if
     // we were dragging a folder.
     int image = wxGetApp().ShowImages() ? TreeCtrlIcon_File : -1;
-    AppendItem(itemDst, text, image);
+    wxTreeItemId id = AppendItem(itemDst, text, image);
+
+    if ( wxGetApp().ShowStates() )
+        SetItemState(id, GetItemState(itemSrc));
 }
 
 void MyTreeCtrl::OnBeginLabelEdit(wxTreeEvent& event)
@@ -1301,6 +1442,16 @@ void MyTreeCtrl::OnItemActivated(wxTreeEvent& event)
     wxLogMessage(wxT("OnItemActivated"));
 }
 
+void MyTreeCtrl::OnItemStateClick(wxTreeEvent& event)
+{
+    // toggle item state
+    wxTreeItemId itemId = event.GetItem();
+    DoToggleState(itemId);
+
+    wxLogMessage(wxT("Item \"%s\" state changed to %d"),
+                 GetItemText(itemId), GetItemState(itemId));
+}
+
 void MyTreeCtrl::OnItemMenu(wxTreeEvent& event)
 {
     wxTreeItemId itemId = event.GetItem();
@@ -1309,7 +1460,7 @@ void MyTreeCtrl::OnItemMenu(wxTreeEvent& event)
     wxPoint clientpt = event.GetPoint();
     wxPoint screenpt = ClientToScreen(clientpt);
 
-    wxLogMessage(wxT("OnItemMenu for item \"%s\" at screen coords (%i, %i)"), 
+    wxLogMessage(wxT("OnItemMenu for item \"%s\" at screen coords (%i, %i)"),
                  item ? item->GetDesc() : _T(""), screenpt.x, screenpt.y);
 
     ShowMenu(itemId, clientpt);

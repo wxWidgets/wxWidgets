@@ -2106,6 +2106,20 @@ void wxGenericTreeCtrl::CalculateLineHeight()
         }
     }
 
+    if ( m_imageListState )
+    {
+        // Calculate a m_lineHeight value from the state Image sizes.
+        // May be toggle off. Then wxGenericTreeCtrl will spread when
+        // necessary (which might look ugly).
+        int n = m_imageListState->GetImageCount();
+        for (int i = 0; i < n ; i++)
+        {
+            int width = 0, height = 0;
+            m_imageListState->GetSize(i, width, height);
+            if (height > m_lineHeight) m_lineHeight = height;
+        }
+    }
+
     if (m_imageListButtons)
     {
         // Calculate a m_lineHeight value from the Button image sizes.
@@ -2143,6 +2157,11 @@ void wxGenericTreeCtrl::SetStateImageList(wxImageList *imageList)
     if (m_ownsImageListState) delete m_imageListState;
     m_imageListState = imageList;
     m_ownsImageListState = false;
+    m_dirty = true;
+    // Don't do any drawing if we're setting the list to NULL,
+    // since we may be in the process of deleting the tree control.
+    if (imageList)
+        CalculateLineHeight();
 }
 
 void wxGenericTreeCtrl::SetButtonsImageList(wxImageList *imageList)
@@ -2355,7 +2374,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
     {
         dc.SetClippingRegion( item->GetX() + state_w, item->GetY(), image_w, total_h );
         m_imageListNormal->Draw( image, dc,
-                                 item->GetX(),
+                                 item->GetX() + state_w,
                                  item->GetY() + ((total_h > image_h)?((total_h-image_h)/2):0),
                                  wxIMAGELIST_DRAW_TRANSPARENT );
         dc.DestroyClippingRegion();
