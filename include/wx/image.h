@@ -417,6 +417,7 @@ public:
     static wxImageHandler *FindHandler( const wxString& name );
     static wxImageHandler *FindHandler( const wxString& extension, wxBitmapType imageType );
     static wxImageHandler *FindHandler( wxBitmapType imageType );
+
     static wxImageHandler *FindHandlerMime( const wxString& mimetype );
 
     static wxString GetImageExtWildcard();
@@ -427,6 +428,21 @@ public:
     static HSVValue RGBtoHSV(const RGBValue& rgb);
     static RGBValue HSVtoRGB(const HSVValue& hsv);
 
+#ifdef WXWIN_COMPATIBILITY_2_8
+    wxDEPRECATED(
+        bool LoadFile(const wxString& name, long type, int index = -1)
+        {
+            return LoadFile(name, (wxBitmapType)type, index);
+        }
+    )
+
+    wxDEPRECATED(
+        static wxImageHandler *FindHandler(long imageType)
+        {
+            return FindHandler((wxBitmapType)imageType);
+        }
+    )
+#endif // WXWIN_COMPATIBILITY_2_8
 
 protected:
     static wxList   sm_handlers;
