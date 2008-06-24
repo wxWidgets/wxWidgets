@@ -344,10 +344,8 @@ void wxMDIParentFrame::OnIconized(wxIconizeEvent& event)
 {
     event.Skip();
 
-    if ( !event.Iconized() )
-    {
+    if ( !event.IsIconized() )
         UpdateClientSize();
-    }
 }
 
 // Returns the active MDI child window
