@@ -1,5 +1,5 @@
 /* XPM */
-static char *state1_xpm[] = {
+static const char *state1_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "16 16 123 2",
 "8. c #ADAF01",

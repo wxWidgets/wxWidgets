@@ -916,8 +916,13 @@ void MyTreeCtrl::CreateStateImageList(bool del)
     }
     else
     {
+#if 0
         int width  = ::GetSystemMetrics(SM_CXMENUCHECK),
             height = ::GetSystemMetrics(SM_CYMENUCHECK);
+#else
+        int width = 16;
+        int height = 16;
+#endif
 
         // make an state checkbox image list
         states = new wxImageList(width, height, true);
@@ -931,6 +936,7 @@ void MyTreeCtrl::CreateStateImageList(bool del)
         {
             // first create bitmap in a memory DC
             wxMemoryDC memDC(checkBmp);
+            memDC.Clear();
             // then draw a check mark into it
             renderer.DrawCheckBox(this, memDC, rect, 0);
         } // select checkBmp out of memDC
