@@ -332,6 +332,13 @@ void MyFrame::RecreateToolbar()
     wxToolBarBase *toolBar = GetToolBar();
     long style = toolBar ? toolBar->GetWindowStyle() : TOOLBAR_STYLE;
 
+    if (toolBar && m_searchTool && m_searchTool->GetToolBar() == NULL)
+    {
+        // see ~MyFrame()
+        toolBar->AddTool(m_searchTool);
+    }
+    m_searchTool = NULL;
+
     delete toolBar;
 
     SetToolBar(NULL);
