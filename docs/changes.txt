@@ -98,8 +98,13 @@ All (Unix):
 
 - MIME types reading fixed when running under GNOME, reading .desktop
   files and also the default application list.
+- Added filesys.no-mimetypesmanager system option so that applications that
+  must load an XRC file at program startup don't have to incur the
+  mime types manager initialization penalty.
 
 wxMSW:
+
+- Compile fix for WinCE in window.cpp (no VkKeyScan in Windows CE).
 
 wxGTK:
 
