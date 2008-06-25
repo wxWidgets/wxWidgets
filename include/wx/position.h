@@ -13,7 +13,7 @@
 
 #include "wx/gdicmn.h"
 
-class wxPosition
+class WXDLLIMPEXP_CORE wxPosition
 {
 public:
     wxPosition() : m_row(0), m_column(0) {}

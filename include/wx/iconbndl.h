@@ -84,6 +84,20 @@ public:
     // check if we have any icons at all
     bool IsEmpty() const { return GetIconCount() == 0; }
 
+#ifdef WXWIN_COMPATIBILITY_2_8
+    wxDEPRECATED( void AddIcon(const wxString& file, long type)
+        {
+            AddIcon(file, (long)type);
+        }
+    )
+
+    wxDEPRECATED( wxIconBundle(const wxString& file, long type)
+        {
+            AddIcon(file, (wxBitmapType)type);
+        }
+    )
+#endif // WXWIN_COMPATIBILITY_2_8
+
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
