@@ -87,6 +87,23 @@ Major new features in 2.8 release
   wxDirPickerCtrl, wxFilePickerCtrl, wxFontPickerCtrl, wxCollapsiblePane,
   wxSearchCtrl, wxAboutBox, wxTreebook, tar streams.
 
+2.8.9
+-----
+
+All:
+
+All (GUI):
+
+All (Unix):
+
+- MIME types reading fixed when running under GNOME, reading .desktop
+  files and also the default application list.
+
+wxMSW:
+
+wxGTK:
+
+wxMac:
 
 2.8.8
 -----
