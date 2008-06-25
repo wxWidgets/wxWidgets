@@ -4183,7 +4183,7 @@ bool wxWindowMSW::IsDoubleBuffered() const
             return true;
         wnd = wnd->GetParent();
     } while ( wnd && !wnd->IsTopLevel() );
-        
+
     return false;
 }
 
@@ -5961,6 +5961,7 @@ WXWORD wxCharCodeWXToMSW(int wxk, bool *isVirtual)
             break;
 
         default:
+#ifndef __WXWINCE__
             // check to see if its one of the OEM key codes.
             BYTE vks = LOBYTE(VkKeyScan(wxk));
             if ( vks != 0xff )
@@ -5968,6 +5969,7 @@ WXWORD wxCharCodeWXToMSW(int wxk, bool *isVirtual)
                 vk = vks;
             }
             else
+#endif
             {
                 if ( isVirtual )
                     *isVirtual = false;
