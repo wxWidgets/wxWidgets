@@ -29,6 +29,7 @@
     #include "wx/log.h"
 
     #include "wx/button.h"
+    #include "wx/image.h"
     #include "wx/radiobox.h"
     #include "wx/statbmp.h"
     #include "wx/statbox.h"
