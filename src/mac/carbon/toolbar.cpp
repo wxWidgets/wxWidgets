@@ -1147,6 +1147,13 @@ bool wxToolBar::Realize()
 #if wxMAC_USE_NATIVE_TOOLBAR
     CFIndex currentPosition = 0;
     bool insertAll = false;
+    wxFont f;
+    wxFontEncoding enc;
+    f = GetFont();
+    if ( f.IsOk() )
+        enc = f.GetEncoding();
+    else
+        enc = wxFont::GetDefaultEncoding();
 #endif
 
     node = m_tools.GetFirst();
@@ -1191,6 +1198,11 @@ bool wxToolBar::Realize()
             HIToolbarItemRef    hiItemRef = tool->GetToolbarItemRef();
             if ( hiItemRef != NULL )
             {
+                // since setting the help texts is non-virtual we have to update
+                // the strings now
+                HIToolbarItemSetHelpText( hiItemRef,
+                    wxMacCFStringHolder( tool->GetShortHelp(), enc ),
+                    wxMacCFStringHolder( tool->GetLongHelp(), enc ) );
                 if ( insertAll || (tool->GetIndex() != currentPosition) )
                 {
                     OSStatus err = noErr;
