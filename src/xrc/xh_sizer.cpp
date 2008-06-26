@@ -81,6 +81,11 @@ wxSizerXmlHandler::wxSizerXmlHandler()
     XRC_ADD_STYLE(wxFIXED_MINSIZE);
     XRC_ADD_STYLE(wxRESERVE_SPACE_EVEN_IF_HIDDEN);
 
+    // this flag doesn't do anything any more but we can just ignore its
+    // occurrences in the old resource files instead of raising a fuss because
+    // of it
+    AddStyle("wxADJUST_MINSIZE", 0);
+
     // wxWrapSizer-specific flags
     XRC_ADD_STYLE(wxEXTEND_LAST_ON_EACH_LINE);
     XRC_ADD_STYLE(wxREMOVE_LEADING_SPACES);
