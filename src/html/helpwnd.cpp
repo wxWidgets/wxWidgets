@@ -563,9 +563,10 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
     // showtime
     if ( m_NavigPan && m_Splitter )
     {
-        m_Splitter->SetMinimumPaneSize(20);
-        if ( m_Cfg.navig_on )
-            m_Splitter->SplitVertically(m_NavigPan, m_HtmlWin, m_Cfg.sashpos);
+        if (m_NavigPan)
+            m_Splitter->SetMinimumPaneSize(m_NavigPan->GetBestSize().x);
+        else
+            m_Splitter->SetMinimumPaneSize(20);
 
         if ( m_Cfg.navig_on )
         {

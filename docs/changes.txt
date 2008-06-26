@@ -94,6 +94,10 @@ All:
 
 All (GUI):
 
+- Fixed help viewer bug whereby the splitter sash in wxHtmlHelpWindow could
+  go underneath the left-hand pane, permanently, after resizing the
+  help window.
+
 All (Unix):
 
 - MIME types reading fixed when running under GNOME, reading .desktop
