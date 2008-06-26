@@ -403,6 +403,11 @@ bool wxDataObject::GetFromPasteboard( void * pb )
                     flavorType = (CFStringRef)CFArrayGetValueAtIndex( flavorTypeArray,
                                                                          flavorIndex );
 
+                    // avoid utf8 being treated closer to plain-text than unicode by forcing a conversion
+                    if ( UTTypeConformsTo(flavorType, CFSTR("public.utf8-plain-text") ) )
+                    {
+                        flavorType = CFSTR("public.utf16-plain-text");
+                    }
                     wxDataFormat flavorFormat( (wxDataFormat::NativeFormat) flavorType );
  
                     if ( dataFormat == flavorFormat )
