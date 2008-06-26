@@ -17,7 +17,7 @@
 //
 // please use wxRenderer::DrawBorder() instead of DrawSunkenEdge(); there is no
 // replacement for TileBitmap() but it doesn't seem to be very useful anyhow
-#ifdef WXWIN_COMPATIBILITY_2_8
+#if WXWIN_COMPATIBILITY_2_8
 
 /*
  * wxEffects: various 3D effects

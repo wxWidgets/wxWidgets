@@ -112,7 +112,7 @@ public:
     wxBitmapType GetType() const { return m_type; }
     const wxString& GetMimeType() const { return m_mime; }
 
-#ifdef WXWIN_COMPATIBILITY_2_8
+#if WXWIN_COMPATIBILITY_2_8
     wxDEPRECATED(
         void SetType(long type) { SetType((wxBitmapType)type); }
     )
@@ -434,7 +434,7 @@ public:
     static HSVValue RGBtoHSV(const RGBValue& rgb);
     static RGBValue HSVtoRGB(const HSVValue& hsv);
 
-#ifdef WXWIN_COMPATIBILITY_2_8
+#if WXWIN_COMPATIBILITY_2_8
     wxDEPRECATED(
         wxImage(const wxString& name, long type, int index = -1)
         {

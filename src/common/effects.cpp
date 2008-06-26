@@ -25,6 +25,8 @@
     #include "wx/gdicmn.h"
 #endif //WX_PRECOMP
 
+#if WXWIN_COMPATIBILITY_2_8
+
 /*
  * wxEffectsImpl: various 3D effects
  */
@@ -122,3 +124,6 @@ bool wxEffectsImpl::TileBitmap(const wxRect& rect, wxDC& dc, const wxBitmap& bit
 
     return true;
 }
+
+#endif // WXWIN_COMPATIBILITY_2_8
+

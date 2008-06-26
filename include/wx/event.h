@@ -1370,7 +1370,7 @@ public:
     // return true if the window was shown, false if hidden
     bool IsShown() const { return m_show; }
 
-#ifdef WXWIN_COMPATIBILITY_2_8
+#if WXWIN_COMPATIBILITY_2_8
     wxDEPRECATED( bool GetShow() const { return IsShown(); } )
 #endif
 
@@ -1397,7 +1397,7 @@ public:
         : wxEvent(event)
     { m_iconized = event.m_iconized; }
 
-#ifdef WXWIN_COMPATIBILITY_2_8
+#if WXWIN_COMPATIBILITY_2_8
     wxDEPRECATED( bool Iconized() const { return IsIconized(); } )
 #endif
     // return true if the frame was iconized, false if restored
