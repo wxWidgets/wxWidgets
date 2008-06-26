@@ -9,6 +9,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include <wx/apptrait.h>
+/*
 #if wxUSE_STACKWALKER && defined( __WXDEBUG__ ) // silly workaround for the link error with debug configuration:
 // \src\common\appbase.cpp
 wxString wxAppTraitsBase::GetAssertStackTrace()
@@ -16,7 +17,7 @@ wxString wxAppTraitsBase::GetAssertStackTrace()
 	return wxT("");
 }
 #endif
-
+*/
 
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"

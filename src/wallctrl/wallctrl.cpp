@@ -110,6 +110,17 @@ void wxWallCtrl::OnSize( wxSizeEvent& event )
 {
 	// this is also necessary to update the context on some platforms
 	wxGLCanvas::OnSize(event);
+
+	// set GL viewport (not called by wxGLCanvas::OnSize on all platforms...)
+	int w, h;
+	GetClientSize(&w, &h);
+#ifndef __WXMOTIF__
+	if (GetContext())
+#endif
+	{
+		SetCurrent();
+		glViewport(0, 0, (GLint) w, (GLint) h);
+	}
 }
 
 void wxWallCtrl::OnEraseBackground( wxEraseEvent& WXUNUSED(event) )

@@ -122,29 +122,18 @@ void wxWallCtrlTest::CreateControls()
 	wxBitmap testBitmap;
 
 	// Just add bitmaps manually.
-	testBitmap.LoadFile(wxT("Wall1.png"), wxBITMAP_TYPE_PNG);
-	bitmapSource->AppendBitmap(testBitmap);
-	testBitmap.LoadFile(wxT("Wall2.png"), wxBITMAP_TYPE_PNG);
-	bitmapSource->AppendBitmap(testBitmap);
-	testBitmap.LoadFile(wxT("Wall3.png"), wxBITMAP_TYPE_PNG);
-	bitmapSource->AppendBitmap(testBitmap);
-
-	testBitmap.LoadFile(wxT("Wall1.png"), wxBITMAP_TYPE_PNG);
-	bitmapSource->AppendBitmap(testBitmap);
-	testBitmap.LoadFile(wxT("Wall2.png"), wxBITMAP_TYPE_PNG);
-	bitmapSource->AppendBitmap(testBitmap);
-	testBitmap.LoadFile(wxT("Wall3.png"), wxBITMAP_TYPE_PNG);
-	bitmapSource->AppendBitmap(testBitmap);
-
-	testBitmap.LoadFile(wxT("Wall1.png"), wxBITMAP_TYPE_PNG);
-	bitmapSource->AppendBitmap(testBitmap);
-	testBitmap.LoadFile(wxT("Wall2.png"), wxBITMAP_TYPE_PNG);
-	bitmapSource->AppendBitmap(testBitmap);
-	testBitmap.LoadFile(wxT("Wall3.png"), wxBITMAP_TYPE_PNG);
-	bitmapSource->AppendBitmap(testBitmap);
+	for (int i=0; i < 10; ++i)
+	{
+		testBitmap.LoadFile(wxT("Wall1.png"), wxBITMAP_TYPE_PNG);
+		bitmapSource->AppendBitmap(testBitmap);
+		testBitmap.LoadFile(wxT("Wall2.png"), wxBITMAP_TYPE_PNG);
+		bitmapSource->AppendBitmap(testBitmap);
+		testBitmap.LoadFile(wxT("Wall3.png"), wxBITMAP_TYPE_PNG);
+		bitmapSource->AppendBitmap(testBitmap);
+	}
 
 	wxWallCtrlPlaneSurface * surface = new wxWallCtrlPlaneSurface();
-	surface->SetScopeSize(wxSize(8, 2));
+	surface->SetScopeSize(wxSize(16, 2));
 	wxWallCtrl * wallCtrl1 = new wxWallCtrl(this, wxID_ANY,	wxDefaultPosition, wxDefaultSize, wxWANTS_CHARS);
 
 	wxWallCtrlDefaultPlaneNavigation * navigation = new wxWallCtrlDefaultPlaneNavigation();

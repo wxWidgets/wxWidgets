@@ -194,7 +194,7 @@
           <string name="Runtime linking">"Dynamic"</string>
           <string name="Use exceptions">"Yes"</string>
           <string name="Use ODBC">"No"</string>
-          <string name="Use OpenGL">"No"</string>
+          <string name="Use OpenGL">"Yes"</string>
           <string name="Compiler version">"8"</string>
           <string name="wxWidgets version">"%WXVERSION%"</string>
           <string name="Executable name">"%EXECUTABLE%"</string>
@@ -284,7 +284,7 @@
           <string name="proxy-Implementation filename">"wxwallctrlprojectapp.cpp"</string>
           <string name="proxy-Header filename">"wxwallctrlprojectapp.h"</string>
           <string name="proxy-Event sources">""</string>
-          <string name="proxy-Main window">""</string>
+          <string name="proxy-Main window">"ID_WXWALLCTRLTEST"</string>
           <string name="proxy-Help filename">""</string>
         </document>
         <document>
@@ -377,6 +377,14 @@
             <string name="proxy-type">"wbBoxSizerProxy"</string>
             <string name="proxy-Orientation">"Vertical"</string>
             <string name="proxy-Member variable name">""</string>
+            <string name="proxy-AlignH">"Centre"</string>
+            <string name="proxy-AlignV">"Centre"</string>
+            <long name="proxy-Stretch factor">0</long>
+            <long name="proxy-Border">5</long>
+            <bool name="proxy-wxLEFT">1</bool>
+            <bool name="proxy-wxRIGHT">1</bool>
+            <bool name="proxy-wxTOP">1</bool>
+            <bool name="proxy-wxBOTTOM">1</bool>
             <bool name="proxy-wxSHAPED">0</bool>
             <bool name="proxy-wxADJUST_MINSIZE">0</bool>
             <bool name="proxy-wxFIXED_MINSIZE">0</bool>

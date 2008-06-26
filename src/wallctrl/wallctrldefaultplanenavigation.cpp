@@ -37,6 +37,10 @@ void wxWallCtrlDefaultPlaneNavigation::OnKeyDown( wxKeyEvent &event )
 	}
 	switch (event.GetKeyCode())
 	{
+	case WXK_HOME:
+		// TODO: Should go to first element, not necessarily 0
+		m_surface->Seek(0);
+		break;
 	case WXK_LEFT:
 		m_surface->MoveLeft(0.1);
 		break;

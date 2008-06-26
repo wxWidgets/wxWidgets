@@ -17,10 +17,55 @@
 
 #define BYTES_PER_PIXEL 4
 
+
+
 // This is a default surface implementation. This is where all the geometric manipulation and rendering take place
 class wxWallCtrlPlaneSurface :
 	public wxWallCtrlSurface
 {
+	// TODO: See if there is a better place for this struct
+	struct wxRealRect
+	{
+		float GetTop()const
+		{
+			return m_top;
+		}
+		float GetBottom() const
+		{
+			return m_bottom;
+		}
+		float GetRight() const
+		{
+			return m_right;
+		}
+		float GetLeft() const
+		{
+			return m_left;
+		}
+
+		void SetTop(float top)
+		{
+			m_top = top;
+		}
+		void SetBottom(float bottom)
+		{
+			m_bottom = bottom;
+		}
+		void SetRight(float right)
+		{
+			m_right = right;
+		}
+		void SetLeft(float left)
+		{
+			m_left = left;
+		}
+
+		float m_top;
+		float m_bottom;
+		float m_right;
+		float m_left;
+	};
+
 	DECLARE_DYNAMIC_CLASS(wxWallCtrlPlaneSurface)
 public:
 	// Precondition: dataSource must be valid
@@ -55,6 +100,7 @@ public:
 
 	// Moves to the left with the specified delta factor
 	void MoveLeft(float delta);
+
 	// Moves to the right with the specified delta factor
 	void MoveRight(float delta);
 
@@ -75,16 +121,59 @@ public:
 		}
 	}
 
+	// Returns the point at the center of the specified item in OpenGL coordinates
+	VectorType GetItemCenter(wxWallCtrlItemID itemID) const
+	{
+		VectorType pos;
+		pos.resize(3, 0);
+
+		wxPoint point = GetItemPosition(GetItemIndex(itemID));
+
+		// Get the rect of the item
+		wxRealRect rect = GetRawItemRect(point.x, point.y);
+
+		// Query the item for mor information
+		wxWallCtrlItem info;
+		m_dataSource->GetItemInfo(GetItemIndex(itemID), info);
+
+		// Adjust the rect for aspect ratio
+		AdjustCoordinates(rect, info.size);
+
+		// Set the position of the center
+		pos[0] = (rect.GetRight() - rect.GetLeft())/2.0;
+		pos[1] = (rect.GetBottom() - rect.GetTop())/2.0;
+		pos[2] = 0;
+
+		return pos;
+	}
+
+	void Seek(wxWallCtrlItemID itemID)
+	{
+		m_targetLook = GetItemCenter(itemID);
+	}
 protected:
 	// Maps an X coordinate to OpenGL space
-	float MapX(float x);
+	float MapX(float x) const;
 
 	// Maps a Y coordinate to OpenGL space
-	float MapY(float y);
+	float MapY(float y) const;
+
+	// Returns the index of the item at the specified logical position
+	unsigned GetItemIndex(int x, int y) const;
+
+	// Returns the index of the item with the specified ID
+	unsigned GetItemIndex(wxWallCtrlItemID itemID) const
+	{
+		// The ID is the same as the index and this time
+		return itemID;
+	}
+
+	// Returns the logical position of a specific index
+	wxPoint GetItemPosition(unsigned index) const;
 
 	// Returns the bounds of a rectangle with the correct aspect ratio centered in the original region
 	// Precondition: right >= left and bottom >= top
-	void AdjustCoordinates(float & top, float & bottom, float & left, float & right, const wxSize & itemSize);
+	void AdjustCoordinates(wxRealRect &rect, const wxSize &itemSize) const;//(float & top, float & bottom, float & left, float & right, const wxSize & itemSize);
 
 	// Updates the camera each frame
 	// TODO: Consider delta of time passed since last call
@@ -94,6 +183,19 @@ protected:
 
 	// Updates the look vector to match its target (used to make the motion smooth)
 	void UpdateLookVector();
+
+
+
+	wxRealRect GetRawItemRect(int x, int y) const
+	{
+		wxRealRect rect;
+		rect.SetTop(MapY(m_itemHeight * y));
+		rect.SetBottom(MapY(m_itemHeight * (y + 1)));
+		rect.SetLeft(MapX(m_itemWidth * x));
+		rect.SetRight(MapX(m_itemWidth * (x + 1)));
+		
+		return rect;
+	}
 
 private:
 	bool m_initialized;
@@ -137,4 +239,5 @@ private:
 //	float m_cameraHzDelta;
 
 };
+
 #endif

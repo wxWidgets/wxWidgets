@@ -94,8 +94,7 @@ void wxWallCtrlPlaneSurface::Render(const wxSize & windowSize)
 
 void wxWallCtrlPlaneSurface::CreateTextureFromDC( wxMemoryDC &dc, GLubyte * texture, const wxSize& dcSize )
 {
-	// TODO: Consider faster ways to convert the texture. (Check out rawbmp iterators)
-
+	// TODO: This method may not be needed any more
 
 	// Temp color variable
 	wxColor color;
@@ -195,6 +194,12 @@ void wxWallCtrlPlaneSurface::InitializeGL()
 	//glEnable(GL_LIGHT0);
 }
 
+
+unsigned wxWallCtrlPlaneSurface::GetItemIndex(int x, int y) const
+{
+	return m_firstItem + x * m_scopeSize.GetHeight() + y;
+}
+
 void wxWallCtrlPlaneSurface::RenderItems()
 {
 	if (!m_dataSource)
@@ -213,7 +218,7 @@ void wxWallCtrlPlaneSurface::RenderItems()
 		for (int y=0; y < m_scopeSize.GetHeight(); ++y)
 		{
 			// Get the index of the item at this position
-			int Index = m_firstItem + x * m_scopeSize.GetHeight() + y;
+			int Index = GetItemIndex(x, y);//m_firstItem + x * m_scopeSize.GetHeight() + y;
 
 			// Check if we ran out of items
 			if (Index >= m_dataSource->GetCount())
@@ -226,27 +231,26 @@ void wxWallCtrlPlaneSurface::RenderItems()
 			// Select the texture of this item
 			glBindTexture(GL_TEXTURE_2D, GetItemTexture(Index));
 
-			// Get the bounds of the quad
-			float Top = MapY(m_itemHeight * y);
-			float Bottom = MapY(m_itemHeight * (y + 1));
-			float Left = MapX(m_itemWidth * x);
-			float Right = MapX(m_itemWidth * (x + 1));
 
+			// Get the bounds of the quad
+			wxRealRect rect = GetRawItemRect(x, y);
+			
 			// Adjust the bounds so that it maintains the aspect ratio
 			wxWallCtrlItem info;
 			m_dataSource->GetItemInfo(Index, info);
-			AdjustCoordinates(Top, Bottom, Left, Right, info.size);
+			AdjustCoordinates(rect, info.size);
+			//AdjustCoordinates(Top, Bottom, Left, Right, info.size);
 
 			// Draw this item on its own quad
 			glBegin(GL_QUADS);					
 			glTexCoord2f(1.0, 1.0);
-			glVertex3f( Right, Top, 0.0f);			// Top Right
+			glVertex3f( rect.GetRight(), rect.GetTop(), 0.0f);			// Top Right
 			glTexCoord2f(0.0, 1.0);
-			glVertex3f(Left, Top, 0.0f);			// Top Left
+			glVertex3f(rect.GetLeft(), rect.GetTop(), 0.0f);			// Top Left
 			glTexCoord2f(0.0, 0.0);
-			glVertex3f(Left, Bottom, 0.0f);			// Bottom Left
+			glVertex3f(rect.GetLeft(), rect.GetBottom(), 0.0f);			// Bottom Left
 			glTexCoord2f(1.0, 0.0);
-			glVertex3f(Right, Bottom, 0.0f);			// Bottom Right
+			glVertex3f(rect.GetRight(), rect.GetBottom(), 0.0f);			// Bottom Right
 			glEnd();
 
 		}
@@ -267,12 +271,12 @@ void wxWallCtrlPlaneSurface::SetScopeSize( wxSize size )
 	UpdateItemSize();
 }
 
-float wxWallCtrlPlaneSurface::MapX( float x )
+float wxWallCtrlPlaneSurface::MapX( float x ) const
 {
 	return x*2 - 1;
 }
 
-float wxWallCtrlPlaneSurface::MapY( float y )
+float wxWallCtrlPlaneSurface::MapY( float y ) const
 {
 	return y*2 - 1;
 }
@@ -321,10 +325,10 @@ void wxWallCtrlPlaneSurface::CreateTextureFromBitmap( wxBitmap bitmap, GLubyte *
 }
 
 // Right >= Left && Bottom >= Top
-void wxWallCtrlPlaneSurface::AdjustCoordinates( float & top, float & bottom, float & left, float & right, const wxSize & itemSize)
+void wxWallCtrlPlaneSurface::AdjustCoordinates(wxRealRect &rect, const wxSize &itemSize) const//( float & top, float & bottom, float & left, float & right, const wxSize & itemSize)
 {
-	float width = right - left;
-	float height = bottom - top;
+	float width = rect.GetRight() - rect.GetLeft();
+	float height = rect.GetBottom()- rect.GetTop();
 
 	// The new dimensions
 	float newWidth  = 0;
@@ -353,10 +357,10 @@ void wxWallCtrlPlaneSurface::AdjustCoordinates( float & top, float & bottom, flo
 	float vtMargin = (height- newHeight)/2;
 	
 	// Modify the bounds based on the margins
-	top += vtMargin;
-	bottom -= vtMargin;
-	left += hzMargin;
-	right -= hzMargin;
+	rect.SetTop(rect.GetTop() + vtMargin);
+	rect.SetBottom (rect.GetBottom() - vtMargin);
+	rect.SetLeft(rect.GetLeft() + hzMargin);
+	rect.SetRight(rect.GetRight() - hzMargin);
 }
 
 void wxWallCtrlPlaneSurface::MoveRight( float delta )
@@ -438,4 +442,13 @@ void wxWallCtrlPlaneSurface::UpdateLookVector()
 	{
 		m_look[0] -= m_lookHzDelta;
 	}
+}
+
+wxPoint wxWallCtrlPlaneSurface::GetItemPosition( unsigned index ) const
+{
+	wxPoint P;
+	P.x = index / m_scopeSize.GetHeight();
+	P.y = index % m_scopeSize.GetHeight();
+
+	return P;
 }
