@@ -391,12 +391,12 @@ void wxFontRefData::MacFindFont()
                         break ;
 
                     case wxSWISS :
-                        m_faceName =  wxT("Lucida Grande");
+                        m_faceName =  wxT("Helvetica");
                         break ;
 
                     case wxMODERN :
                     case wxTELETYPE:
-                        m_faceName =  wxT("Monaco");
+                        m_faceName =  wxT("Courier");
                         break ;
 
                     default:
@@ -542,12 +542,12 @@ void wxFontRefData::MacFindFont()
                             break ;
 
                         case wxSWISS :
-                            m_faceName =  wxT("Lucida Grande");
+                            m_faceName =  wxT("Helvetica");
                             break ;
 
                         case wxMODERN :
                         case wxTELETYPE:
-                            m_faceName =  wxT("Monaco");
+                            m_faceName =  wxT("Courier");
                             break ;
 
                         default:
