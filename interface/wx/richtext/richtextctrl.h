@@ -17,14 +17,18 @@
 class wxRichTextEvent : public wxNotifyEvent
 {
 public:
-    //@{
     /**
-        Constructors.
+        Copy constructor.
     */
     wxRichTextEvent(const wxRichTextEvent& event);
-    wxRichTextEvent(wxEventType commandType = wxEVT_NULL,
-                    int winid = 0);
-    //@}
+
+    /**
+        Constructor.
+
+        @param id
+            Window identifier. The value @c wxID_ANY indicates a default value.
+    */
+    wxRichTextEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
 
     /**
         Clones the event.
@@ -113,8 +117,7 @@ public:
     wxEVT_COMMAND_TEXT_UPDATED,
     and wxTextUrlEvent when URL content is clicked.
 
-    For more information, see the @ref overview_wxrichtextctrloverview
-    "wxRichTextCtrl overview".
+    For more information, see the @ref overview_richtextctrl.
 
     @library{wxrichtext}
     @category{richtext}
@@ -122,11 +125,33 @@ public:
 class wxRichTextCtrl
 {
 public:
-    //@{
     /**
-        Constructors.
+        Default Constructor.
     */
     wxRichTextCtrl();
+
+    /**
+        Constructor, creating and showing a rich text control.
+
+        @param parent
+            Parent window. Must not be @NULL.
+        @param id
+            Window identifier. The value @c wxID_ANY indicates a default value.
+        @param value
+            Default string.
+        @param pos
+            Window position.
+        @param size
+            Window size.
+        @param style
+            Window style.
+        @param validator
+            Window validator.
+        @param name
+            Window name.
+
+        @see Create(), wxValidator
+    */
     wxRichTextCtrl(wxWindow* parent, wxWindowID id = wxID_ANY,
                    const wxString& value = wxEmptyString,
                    const wxPoint& pos = wxDefaultPosition,
@@ -134,7 +159,6 @@ public:
                    long style = wxRE_MULTILINE,
                    const wxValidator& validator = wxDefaultValidator,
                    const wxString& name = wxTextCtrlNameStr);
-    //@}
 
     /**
         Destructor.
@@ -235,20 +259,21 @@ public:
 
     /**
         Begins applying a left indent and subindent in tenths of a millimetre.
-        The sub-indent is an offset from the left of the paragraph, and is used for all
-        but the
-        first line in a paragraph. A positive value will cause the first line to appear
-        to the left
-        of the subsequent lines, and a negative value will cause the first line to be
-        indented
-        relative to the subsequent lines.
-        wxRichTextBuffer uses indentation to render a bulleted item. The left indent is
-        the distance between
-        the margin and the bullet. The content of the paragraph, including the first
-        line, starts
-        at leftMargin + leftSubIndent. So the distance between the left edge of the
-        bullet and the
-        left of the actual paragraph is leftSubIndent.
+        The subindent is an offset from the left edge of the paragraph, and is 
+        used for all but the first line in a paragraph. A positive value will 
+        cause the first line to appear to the left of the subsequent lines, and
+        a negative value will cause the first line to be indented to the right
+        of the subsequent lines.
+
+        wxRichTextBuffer uses indentation to render a bulleted item. The
+        content of the paragraph, including the first line, starts at the
+        @a leftIndent plus the @a leftSubIndent.
+
+        @param leftIndent
+            The distance between the margin and the bullet.
+        @param leftSubIndent
+             The distance between the left edge of the bullet and the left edge
+             of the actual paragraph.
     */
     bool BeginLeftIndent(int leftIndent, int leftSubIndent = 0);
 
