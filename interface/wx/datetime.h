@@ -8,7 +8,6 @@
 
 /**
     @class wxDateTime
-    @wxheader{datetime.h}
 
     wxDateTime class represents an absolute moment in the time.
 
@@ -1501,7 +1500,6 @@ const wxDateTime wxDefaultDateTime;
 
 /**
     @class wxDateTimeWorkDays
-    @wxheader{datetime.h}
 
     @todo Write wxDateTimeWorkDays documentation.
 
@@ -1518,7 +1516,6 @@ public:
 
 /**
     @class wxDateSpan
-    @wxheader{datetime.h}
 
     This class is a "logical time span" and is useful for implementing program
     logic for such things as "add one month to the date" which, in general,
@@ -1780,7 +1777,6 @@ public:
 
 /**
     @class wxTimeSpan
-    @wxheader{datetime.h}
 
     wxTimeSpan class represents a time interval.
 
@@ -2046,7 +2042,6 @@ public:
 
 /**
     @class wxDateTimeHolidayAuthority
-    @wxheader{datetime.h}
 
     @todo Write wxDateTimeHolidayAuthority documentation.
 

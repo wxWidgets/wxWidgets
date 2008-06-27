@@ -8,7 +8,6 @@
 
 /**
     @class wxTreeItemId
-    @wxheader{treebase.h}
 
     An opaque reference to a tree item.
 
@@ -48,7 +47,6 @@ public:
 
 /**
     @class wxTreeItemData
-    @wxheader{treebase.h}
 
     wxTreeItemData is some (arbitrary) user class associated with some item. The
     main advantage of having this class is that wxTreeItemData objects are

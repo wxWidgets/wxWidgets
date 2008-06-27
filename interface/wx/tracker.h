@@ -8,7 +8,6 @@
 
 /**
     @class wxTrackable
-    @wxheader{tracker.h}
 
     Add-on base class for a trackable object. This class maintains an internal
     linked list of classes of type wxTrackerNode and calls OnObjectDestroy() on

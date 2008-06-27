@@ -21,7 +21,6 @@ typedef enum {
 
 /**
     @class wxURL
-    @wxheader{url.h}
 
     wxURL is a specialization of wxURI for parsing URLs. Please look at wxURI
     documentation for more info about the functions you can use to retrieve the

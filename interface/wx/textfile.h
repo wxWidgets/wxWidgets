@@ -8,7 +8,6 @@
 
 /**
     @class wxTextFile
-    @wxheader{textfile.h}
 
     The wxTextFile is a simple class which allows to work with text files on line by
     line basis. It also understands the differences in line termination characters

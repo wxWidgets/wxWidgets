@@ -8,7 +8,6 @@
 
 /**
     @class wxIconLocation
-    @wxheader{iconloc.h}
 
     wxIconLocation is a tiny class describing the location of an (external, i.e.
     not embedded into the application resources) icon. For most platforms it simply

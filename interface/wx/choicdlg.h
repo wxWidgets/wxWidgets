@@ -8,7 +8,6 @@
 
 /**
     @class wxMultiChoiceDialog
-    @wxheader{choicdlg.h}
 
     This class represents a dialog that shows a list of strings, and allows the
     user to select one or more.
@@ -95,7 +94,6 @@ public:
 
 /**
     @class wxSingleChoiceDialog
-    @wxheader{choicdlg.h}
 
     This class represents a dialog that shows a list of strings, and allows the
     user to select one. Double-clicking on a list item is equivalent to

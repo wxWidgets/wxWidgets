@@ -8,7 +8,6 @@
 
 /**
     @class wxHtmlHelpData
-    @headerfile helpdata.h wx/html/helpdata.h
 
     This class is used by wxHtmlHelpController
     and wxHtmlHelpFrame to access HTML help items.

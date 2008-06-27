@@ -8,7 +8,6 @@
 
 /**
     @class wxHtmlHelpController
-    @headerfile helpctrl.h wx/html/helpctrl.h
 
     This help controller provides an easy way of displaying HTML help in your
     application (see @e test sample). The help system is based on @b books
@@ -161,7 +160,6 @@ public:
 
 /**
     @class wxHtmlModalHelp
-    @headerfile helpctrl.h wx/html/helpctrl.h
 
     This class uses wxHtmlHelpController
     to display help in a modal dialog. This is useful on platforms such as wxMac

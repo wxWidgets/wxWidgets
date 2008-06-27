@@ -8,7 +8,6 @@
 
 /**
     @class wxScreenDC
-    @wxheader{dcscreen.h}
 
     A wxScreenDC can be used to paint on the screen. This should normally be
     constructed as a temporary stack object; don't store a wxScreenDC object.

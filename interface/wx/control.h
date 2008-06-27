@@ -8,7 +8,6 @@
 
 /**
     @class wxControl
-    @wxheader{control.h}
 
     This is the base class for a control or "widget".
 

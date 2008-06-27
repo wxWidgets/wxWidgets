@@ -8,7 +8,6 @@
 
 /**
     @class wxSashWindow
-    @wxheader{sashwin.h}
 
     wxSashWindow allows any of its edges to have a sash which can be dragged
     to resize the window. The actual content window will be created by the
@@ -171,7 +170,6 @@ public:
 
 /**
     @class wxSashEvent
-    @wxheader{sashwin.h}
 
     A sash event is sent when the sash of a wxSashWindow has been
     dragged by the user.

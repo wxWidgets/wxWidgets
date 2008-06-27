@@ -8,7 +8,6 @@
 
 /**
     @class wxProgressDialog
-    @wxheader{progdlg.h}
 
     This class represents a dialog that shows a short message and a
     progress bar. Optionally, it can display ABORT and SKIP buttons,

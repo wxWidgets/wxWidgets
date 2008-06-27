@@ -8,7 +8,6 @@
 
 /**
     @class wxDragImage
-    @wxheader{dragimag.h}
 
     This class is used when you wish to drag an object on the screen, and a
     simple cursor is not enough.

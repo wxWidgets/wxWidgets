@@ -8,7 +8,6 @@
 
 /**
     @class wxLocale
-    @wxheader{intl.h}
 
     wxLocale class encapsulates all language-dependent settings and is a
     generalization of the C locale concept.
@@ -393,7 +392,6 @@ public:
 
 /**
     @class wxXLocale
-    @wxheader{intl.h}
 
 
     wxXLocale::wxXLocale

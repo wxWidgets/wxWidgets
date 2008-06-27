@@ -73,7 +73,6 @@ enum wxAuiButtonId
 
 /**
     @class wxAuiDockArt
-    @headerfile dockart.h wx/aui/dockart.h
 
     wxAuiDockArt is part of the wxAUI class framework.
     See also @ref overview_aui.

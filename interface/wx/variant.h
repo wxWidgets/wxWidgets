@@ -8,7 +8,6 @@
 
 /**
     @class wxVariant
-    @wxheader{variant.h}
 
     The wxVariant class represents a container for any type. A variant's value
     can be changed at run time, possibly to a different type of value.
@@ -468,7 +467,6 @@ public:
 
 /**
     @class wxVariantData
-    @wxheader{variant.h}
 
     The wxVariantData class is used to implement a new type for wxVariant.
     Derive from wxVariantData, and override the pure virtual functions.

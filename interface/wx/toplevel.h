@@ -36,7 +36,6 @@ enum
 
 /**
     @class wxTopLevelWindow
-    @wxheader{toplevel.h}
 
     wxTopLevelWindow is a common base class for wxDialog and wxFrame. It is an
     abstract base class meaning that you never work with objects of this class

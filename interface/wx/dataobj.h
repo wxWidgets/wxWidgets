@@ -8,7 +8,6 @@
 
 /**
     @class wxCustomDataObject
-    @wxheader{dataobj.h}
 
     wxCustomDataObject is a specialization of wxDataObjectSimple for some
     application-specific data in arbitrary (either custom or one of the
@@ -99,7 +98,6 @@ public:
 
 /**
     @class wxDataObjectComposite
-    @wxheader{dataobj.h}
 
     wxDataObjectComposite is the simplest wxDataObject derivation which may be
     used to support multiple formats. It contains several wxDataObjectSimple
@@ -145,7 +143,6 @@ public:
 
 /**
     @class wxDataObjectSimple
-    @wxheader{dataobj.h}
 
     This is the simplest possible implementation of the wxDataObject class. The
     data object of (a class derived from) this class only supports one format,
@@ -229,7 +226,6 @@ public:
 
 /**
     @class wxBitmapDataObject
-    @wxheader{dataobj.h}
 
     wxBitmapDataObject is a specialization of wxDataObject for bitmap data. It
     can be used without change to paste data into the wxClipboard or a
@@ -281,7 +277,6 @@ public:
 
 /**
     @class wxDataFormat
-    @wxheader{dataobj.h}
 
     A wxDataFormat is an encapsulation of a platform-specific format handle
     which is used by the system for the clipboard and drag and drop operations.
@@ -385,7 +380,6 @@ public:
 
 /**
     @class wxURLDataObject
-    @wxheader{dataobj.h}
 
     wxURLDataObject is a wxDataObject containing an URL and can be used e.g.
     when you need to put an URL on or retrieve it from the clipboard:
@@ -426,7 +420,6 @@ public:
 
 /**
     @class wxDataObject
-    @wxheader{dataobj.h}
 
     A wxDataObject represents data that can be copied to or from the clipboard,
     or dragged and dropped. The important thing about wxDataObject is that this
@@ -597,7 +590,6 @@ public:
 
 /**
     @class wxTextDataObject
-    @wxheader{dataobj.h}
 
     wxTextDataObject is a specialization of wxDataObject for text data. It can
     be used without change to paste data into the wxClipboard or a
@@ -663,7 +655,6 @@ public:
 
 /**
     @class wxFileDataObject
-    @wxheader{dataobj.h}
 
     wxFileDataObject is a specialization of wxDataObject for file names. The
     program works with it just as if it were a list of absolute file names, but

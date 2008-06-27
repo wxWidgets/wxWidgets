@@ -8,7 +8,6 @@
 
 /**
     @class wxStaticText
-    @wxheader{stattext.h}
 
     A static text control displays one or more lines of read-only text.
 

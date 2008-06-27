@@ -8,7 +8,6 @@
 
 /**
     @class wxCaret
-    @wxheader{caret.h}
 
     A caret is a blinking cursor showing the position where the typed text will
     appear. Text controls usually have their own caret but wxCaret provides a

@@ -8,7 +8,6 @@
 
 /**
     @class wxBusyInfo
-    @wxheader{busyinfo.h}
 
     This class makes it easy to tell your user that the program is temporarily busy.
     Just create a wxBusyInfo object on the stack, and within the current scope,

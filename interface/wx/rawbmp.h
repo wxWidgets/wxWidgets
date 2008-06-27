@@ -8,7 +8,6 @@
 
 /**
     @class wxPixelData
-    @wxheader{rawbmp.h}
 
     A class template with ready to use implementations for getting
     direct and efficient access to wxBitmap's internal data and

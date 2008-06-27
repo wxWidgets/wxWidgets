@@ -8,7 +8,6 @@
 
 /**
     @class wxHashMap
-    @wxheader{hashmap.h}
 
     This is a simple, type-safe, and reasonably efficient hash map class,
     whose interface is a subset of the interface of STL containers. In

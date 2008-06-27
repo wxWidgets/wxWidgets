@@ -8,7 +8,6 @@
 
 /**
     @class wxStringBuffer
-    @wxheader{string.h}
 
     This tiny class allows to conveniently access the wxString
     internal buffer as a writable pointer without any risk of forgetting to restore
@@ -70,7 +69,6 @@ public:
 
 /**
     @class wxString
-    @wxheader{string.h}
 
     wxString is a class representing a Unicode character string.
     wxString uses @c std::string internally to store its content
@@ -1304,7 +1302,6 @@ wxString wxEmptyString;
 
 /**
     @class wxStringBufferLength
-    @wxheader{string.h}
 
     This tiny class allows to conveniently access the wxString
     internal buffer as a writable pointer without any risk of forgetting to restore

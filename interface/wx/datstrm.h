@@ -8,7 +8,6 @@
 
 /**
     @class wxDataOutputStream
-    @wxheader{datstrm.h}
 
     This class provides functions that write binary data types in a portable
     way. Data can be written in either big-endian or little-endian format,
@@ -135,7 +134,6 @@ public:
 
 /**
     @class wxDataInputStream
-    @wxheader{datstrm.h}
 
     This class provides functions that read binary data types in a portable
     way. Data can be read in either big-endian or little-endian format,

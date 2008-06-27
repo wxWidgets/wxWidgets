@@ -8,7 +8,6 @@
 
 /**
     @class wxStdDialogButtonSizer
-    @wxheader{sizer.h}
 
     This class creates button layouts which conform to the standard button spacing
     and ordering defined by the platform
@@ -91,7 +90,6 @@ public:
 
 /**
     @class wxSizerItem
-    @wxheader{sizer.h}
 
     The wxSizerItem class is used to track the position, size and other
     attributes of each item managed by a wxSizer. It is not usually necessary
@@ -320,7 +318,6 @@ public:
 
 /**
     @class wxSizerFlags
-    @wxheader{sizer.h}
 
     Container for sizer items flags providing readable names for them.
 
@@ -498,7 +495,6 @@ public:
 
 /**
     @class wxNotebookSizer
-    @wxheader{sizer.h}
 
     @deprecated
     This class is deprecated and should not be used in new code! It is no
@@ -536,7 +532,6 @@ public:
 
 /**
     @class wxFlexGridSizer
-    @wxheader{sizer.h}
 
     A flex grid sizer is a sizer which lays out its children in a two-dimensional
     table with all table fields in one row having the same
@@ -647,7 +642,6 @@ public:
 
 /**
     @class wxSizer
-    @wxheader{sizer.h}
 
     wxSizer is the abstract base class used for laying out subwindows in a window.
     You
@@ -1525,7 +1519,6 @@ public:
 
 /**
     @class wxGridSizer
-    @wxheader{sizer.h}
 
     A grid sizer is a sizer which lays out its children in a two-dimensional
     table with all table fields having the same size,
@@ -1597,7 +1590,6 @@ public:
 
 /**
     @class wxStaticBoxSizer
-    @wxheader{sizer.h}
 
     wxStaticBoxSizer is a sizer derived from wxBoxSizer but adds a static
     box around the sizer. This static box may be either created independently or
@@ -1636,7 +1628,6 @@ public:
 
 /**
     @class wxBoxSizer
-    @wxheader{sizer.h}
 
     The basic idea behind a box sizer is that windows will most often be laid out
     in rather

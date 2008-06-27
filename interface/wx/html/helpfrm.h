@@ -8,7 +8,6 @@
 
 /**
     @class wxHtmlHelpFrame
-    @headerfile helpfrm.h wx/html/helpfrm.h
 
     This class is used by wxHtmlHelpController
     to display help.

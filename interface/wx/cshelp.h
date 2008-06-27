@@ -8,7 +8,6 @@
 
 /**
     @class wxHelpProvider
-    @wxheader{cshelp.h}
 
     wxHelpProvider is an abstract class used by a program implementing
     context-sensitive help to show the help text for the given window.
@@ -120,7 +119,6 @@ public:
 
 /**
     @class wxHelpControllerHelpProvider
-    @wxheader{cshelp.h}
 
     wxHelpControllerHelpProvider is an implementation of wxHelpProvider which
     supports both context identifiers and plain text help strings. If the help
@@ -162,7 +160,6 @@ public:
 
 /**
     @class wxContextHelp
-    @wxheader{cshelp.h}
 
     This class changes the cursor to a query and puts the application into a
     'context-sensitive help mode'.  When the user left-clicks on a window
@@ -230,7 +227,6 @@ public:
 
 /**
     @class wxContextHelpButton
-    @wxheader{cshelp.h}
 
     Instances of this class may be used to add a question mark button that when
     pressed, puts the application into context-help mode. It does this by
@@ -281,7 +277,6 @@ public:
 
 /**
     @class wxSimpleHelpProvider
-    @wxheader{cshelp.h}
 
     wxSimpleHelpProvider is an implementation of wxHelpProvider which supports
     only plain text help strings, and shows the string associated with the

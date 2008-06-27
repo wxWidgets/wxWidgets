@@ -8,7 +8,6 @@
 
 /**
     @class wxDocTemplate
-    @wxheader{docview.h}
 
     The wxDocTemplate class is used to model the relationship between a
     document class and a view class.
@@ -241,7 +240,6 @@ public:
 
 /**
     @class wxDocManager
-    @wxheader{docview.h}
 
     The wxDocManager class is part of the document/view framework supported by
     wxWidgets, and cooperates with the wxView, wxDocument and wxDocTemplate
@@ -611,7 +609,6 @@ public:
 
 /**
     @class wxView
-    @wxheader{docview.h}
 
     The view class can be used to model the viewing and editing component of
     an application's file-based data. It is part of the document/view framework
@@ -800,7 +797,6 @@ public:
 
 /**
     @class wxDocChildFrame
-    @wxheader{docview.h}
 
     The wxDocChildFrame class provides a default frame for displaying documents
     on separate windows. This class can only be used for SDI (not MDI) child
@@ -880,7 +876,6 @@ public:
 
 /**
     @class wxDocParentFrame
-    @wxheader{docview.h}
 
     The wxDocParentFrame class provides a default top-level frame for
     applications using the document/view framework. This class can only be used
@@ -956,7 +951,6 @@ public:
 
 /**
     @class wxDocument
-    @wxheader{docview.h}
 
     The document class can be used to model an application's file-based data.
     It is part of the document/view framework supported by wxWidgets, and
@@ -1305,7 +1299,6 @@ protected:
 
 /**
     @class wxFileHistory
-    @wxheader{docview.h}
 
     The wxFileHistory encapsulates a user interface convenience, the list of
     most recently visited files as shown on a menu (usually the File menu).

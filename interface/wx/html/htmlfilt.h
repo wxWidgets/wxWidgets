@@ -8,7 +8,6 @@
 
 /**
     @class wxHtmlFilter
-    @headerfile htmlfilt.h wx/html/htmlfilt.h
 
     This class is the parent class of input filters for wxHtmlWindow.
     It allows you to read and display files of different file formats.

@@ -8,7 +8,6 @@
 
 /**
     @class wxPreviewControlBar
-    @wxheader{print.h}
 
     This is the default implementation of the preview control bar, a panel
     with buttons and a zoom control.
@@ -86,7 +85,6 @@ public:
 
 /**
     @class wxPreviewCanvas
-    @wxheader{print.h}
 
     A preview canvas is the default canvas used by the print preview
     system to display the preview.
@@ -123,7 +121,6 @@ public:
 
 /**
     @class wxPreviewFrame
-    @wxheader{print.h}
 
     This class provides the default method of managing the print preview interface.
     Member functions may be overridden to replace functionality, or the
@@ -191,7 +188,6 @@ public:
 
 /**
     @class wxPrintPreview
-    @wxheader{print.h}
 
     Objects of this class manage the print preview process. The object is passed
     a wxPrintout object, and the wxPrintPreview object itself is passed to
@@ -348,7 +344,6 @@ public:
 
 /**
     @class wxPrinter
-    @wxheader{print.h}
 
     This class represents the Windows or PostScript printer, and is the vehicle
     through which printing may be launched by an application.
@@ -451,7 +446,6 @@ public:
 
 /**
     @class wxPrintout
-    @wxheader{print.h}
 
     This class encapsulates the functionality of printing out an application document.
 

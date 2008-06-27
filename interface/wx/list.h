@@ -7,7 +7,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
-    @wxheader{list.h}
 
     The wxList<T> class provides linked list functionality. It has been rewritten
     to be type safe and to provide the full API of the STL std::list container and
@@ -384,7 +383,6 @@ public:
 
 /**
     @class wxNode
-    @wxheader{list.h}
 
     wxNodeBase is the node structure used in linked lists (see
     wxList) and derived classes. You should never use wxNodeBase

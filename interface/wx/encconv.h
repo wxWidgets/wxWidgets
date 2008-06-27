@@ -8,7 +8,6 @@
 
 /**
     @class wxEncodingConverter
-    @wxheader{encconv.h}
 
     This class is capable of converting strings between two 8-bit encodings/charsets.
     It can also convert from/to Unicode (but only if you compiled wxWidgets

@@ -8,7 +8,6 @@
 
 /**
     @class wxHelpController
-    @wxheader{help.h}
 
     This is a family of classes by which
     applications may invoke a help viewer to provide on-line help.

@@ -8,7 +8,6 @@
 
 /**
     @class wxDebugReportPreview
-    @wxheader{debugrpt.h}
 
     This class presents the debug report to the user and allows him to veto
     report entirely or remove some parts of it. Although not mandatory, using
@@ -52,7 +51,6 @@ public:
 
 /**
     @class wxDebugReportCompress
-    @wxheader{debugrpt.h}
 
     wxDebugReportCompress is a wxDebugReport which compresses all the files in
     this debug report into a single ZIP file in its wxDebugReport::Process()
@@ -80,7 +78,6 @@ public:
 
 /**
     @class wxDebugReport
-    @wxheader{debugrpt.h}
 
     wxDebugReport is used to generate a debug report, containing information
     about the program current state. It is usually used from
@@ -286,7 +283,6 @@ public:
 
 /**
     @class wxDebugReportPreviewStd
-    @wxheader{debugrpt.h}
 
     wxDebugReportPreviewStd is a standard debug report preview window. It
     displays a dialog allowing the user to examine the contents of a debug
@@ -315,7 +311,6 @@ public:
 
 /**
     @class wxDebugReportUpload
-    @wxheader{debugrpt.h}
 
     This class is used to upload a compressed file using HTTP POST request. As
     this class derives from wxDebugReportCompress, before upload the report is

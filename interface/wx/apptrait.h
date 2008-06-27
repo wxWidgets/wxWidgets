@@ -8,7 +8,6 @@
 
 /**
     @class wxAppTraits
-    @wxheader{apptrait.h}
 
     The wxAppTraits class defines various configurable aspects of a wxApp.
     You can access it using wxApp::GetTraits() function and you can create your

@@ -8,7 +8,6 @@
 
 /**
     @class wxDocMDIParentFrame
-    @wxheader{docmdi.h}
 
     The wxDocMDIParentFrame class provides a default top-level frame for
     applications using the document/view framework. This class can only be used
@@ -80,7 +79,6 @@ public:
 
 /**
     @class wxDocMDIChildFrame
-    @wxheader{docmdi.h}
 
     The wxDocMDIChildFrame class provides a default frame for displaying
     documents on separate windows. This class can only be used for MDI child

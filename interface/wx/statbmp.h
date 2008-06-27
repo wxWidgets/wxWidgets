@@ -8,7 +8,6 @@
 
 /**
     @class wxStaticBitmap
-    @wxheader{statbmp.h}
 
     A static bitmap control displays a bitmap. Native implementations on some 
     platforms are only meant for display of the small icons in the dialog 

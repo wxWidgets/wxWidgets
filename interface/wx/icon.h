@@ -8,7 +8,6 @@
 
 /**
     @class wxIcon
-    @wxheader{icon.h}
 
     An icon is a small rectangular bitmap usually used for denoting a
     minimized application. It differs from a wxBitmap in always

@@ -8,7 +8,6 @@
 
 /**
     @class wxGridCellFloatRenderer
-    @wxheader{grid.h}
 
     This class may be used to format floating point data in a cell.
 
@@ -59,7 +58,6 @@ public:
 
 /**
     @class wxGridTableBase
-    @wxheader{grid.h}
 
     Grid table classes.
 
@@ -279,7 +277,6 @@ public:
 
 /**
     @class wxGridCellEditor
-    @wxheader{grid.h}
 
     This class is responsible for providing and manipulating
     the in-place edit controls for the grid.  Instances of wxGridCellEditor
@@ -386,7 +383,6 @@ public:
 
 /**
     @class wxGridCellTextEditor
-    @wxheader{grid.h}
 
     The editor for string/text data.
 
@@ -415,7 +411,6 @@ public:
 
 /**
     @class wxGridCellStringRenderer
-    @wxheader{grid.h}
 
     This class may be used to format string data in a cell; it is the default
     for string cells.
@@ -439,7 +434,6 @@ public:
 
 /**
     @class wxGridCellChoiceEditor
-    @wxheader{grid.h}
 
     The editor for string data allowing to choose from a list of strings.
 
@@ -478,7 +472,6 @@ public:
 
 /**
     @class wxGridEditorCreatedEvent
-    @wxheader{grid.h}
 
 
     @library{wxadv}
@@ -534,7 +527,6 @@ public:
 
 /**
     @class wxGridRangeSelectEvent
-    @wxheader{grid.h}
 
 
     @library{wxadv}
@@ -619,7 +611,6 @@ public:
 
 /**
     @class wxGridCellRenderer
-    @wxheader{grid.h}
 
     This class is responsible for actually drawing the cell
     in the grid. You may pass it to the wxGridCellAttr (below) to change the
@@ -665,7 +656,6 @@ public:
 
 /**
     @class wxGridCellNumberEditor
-    @wxheader{grid.h}
 
     The editor for numeric integer data.
 
@@ -705,7 +695,6 @@ public:
 
 /**
     @class wxGridSizeEvent
-    @wxheader{grid.h}
 
     This event class contains information about a row/column resize event.
 
@@ -765,7 +754,6 @@ public:
 
 /**
     @class wxGridCellNumberRenderer
-    @wxheader{grid.h}
 
     This class may be used to format integer data in a cell.
 
@@ -788,7 +776,6 @@ public:
 
 /**
     @class wxGridCellAttr
-    @wxheader{grid.h}
 
     This class can be used to alter the cells' appearance in
     the grid by changing their colour/font/... from default. An object of this
@@ -940,7 +927,6 @@ public:
 
 /**
     @class wxGridCellBoolRenderer
-    @wxheader{grid.h}
 
     This class may be used to format boolean data in a cell.
     for string cells.
@@ -964,7 +950,6 @@ public:
 
 /**
     @class wxGridEvent
-    @wxheader{grid.h}
 
     This event class contains information about various grid events.
 
@@ -1035,7 +1020,6 @@ public:
 
 /**
     @class wxGridCellFloatEditor
-    @wxheader{grid.h}
 
     The editor for floating point numbers data.
 
@@ -1066,7 +1050,6 @@ public:
 
 /**
     @class wxGrid
-    @wxheader{grid.h}
 
     wxGrid and its related classes are used for displaying and editing tabular
     data. They provide a rich set of features for display, editing, and
@@ -2716,7 +2699,6 @@ public:
 
 /**
     @class wxGridCellBoolEditor
-    @wxheader{grid.h}
 
     The editor for boolean data.
 
@@ -2755,7 +2737,6 @@ public:
 
 /**
     @class wxGridUpdateLocker
-    @wxheader{grid.h}
 
     This small class can be used to prevent wxGrid from redrawing
     during its lifetime by calling wxGrid::BeginBatch

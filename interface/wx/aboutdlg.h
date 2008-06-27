@@ -8,7 +8,6 @@
 
 /**
     @class wxAboutDialogInfo
-    @wxheader{aboutdlg.h}
 
     wxAboutDialogInfo contains information shown in the standard @e About
     dialog displayed by the wxAboutBox() function.

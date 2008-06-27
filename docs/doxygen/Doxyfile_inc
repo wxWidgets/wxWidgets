@@ -93,14 +93,9 @@ ALIASES += onlyfor{4}="<div><span class='avail'>Availability:</span>&nbsp;&nbsp;
 # creates appearance section: this should be used for all main GUI controls
 ALIASES += appearance{1}="\htmlonly <br><div><span class='appearance'>Appearance:</span><br><table class='appearance'><tr><td><img src='wxmsw/\1' alt='wxMSW appearance' class='appearance'></td><td><img src='wxgtk/\1' alt='wxGTK appearance' class='appearance'></td><td><img src='wxmac/\1' alt='wxMac appearance' class='appearance'></td></tr><tr><td>wxMSW appearance</td><td>wxGTK appearance</td><td>wxMac appearance</td></tr></table></div> \endhtmlonly"
 
-# IMPORTANT: the \headerfile command does not work everywhere we'd need it,
-#            e.g. in the constants page we need to specify an header file
-#            even if they're not inside a \class, \function or \struct command:
+# Use this in grouped global functions, and macros since they
+# wouldn't otherwise indicate what header they are defined in.
 ALIASES += header{1}="Include file:\n \verbatim #include <\1> \endverbatim"
-
-# IMPORTANT: inside a \class, we want to specify the header file only once
-#            and not twice as the \headerfile command requires:
-ALIASES += wxheader{1}="\headerfile \1 wx/\1"
 
 # some formatting aliases
 ALIASES += true="<span class='literal'>true</span>"

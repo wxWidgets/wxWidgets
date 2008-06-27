@@ -8,7 +8,6 @@
 
 /**
     @class wxIdManager
-    @wxheader{windowid.h}
 
     wxIdManager is responsible for allocating and releasing window IDs.  It
     is used by wxWindow::NewControlId and

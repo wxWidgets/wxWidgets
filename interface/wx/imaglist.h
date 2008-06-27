@@ -8,7 +8,6 @@
 
 /**
     @class wxImageList
-    @wxheader{imaglist.h}
 
     A wxImageList contains a list of images, which are stored in
     an unspecified form. Images can have masks for transparent

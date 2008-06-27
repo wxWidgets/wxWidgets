@@ -8,7 +8,6 @@
 
 /**
     @class wxVarScrollHelperBase
-    @wxheader{vscroll.h}
 
     This class provides all common base functionality for scroll calculations
     shared among all variable scrolled window implementations as well as
@@ -197,7 +196,6 @@ public:
 
 /**
     @class wxVarVScrollHelper
-    @wxheader{vscroll.h}
 
     This class provides functions wrapping the wxVarScrollHelperBase class,
     targeted for vertical-specific scrolling.
@@ -332,7 +330,6 @@ public:
 
 /**
     @class wxVarHScrollHelper
-    @wxheader{vscroll.h}
 
     This class provides functions wrapping the wxVarScrollHelperBase class,
     targeted for horizontal-specific scrolling.
@@ -469,7 +466,6 @@ public:
 
 /**
     @class wxVarHVScrollHelper
-    @wxheader{vscroll.h}
 
     This class provides functions wrapping the wxVarHScrollHelper and
     wxVarVScrollHelper classes, targeted for scrolling a window in both axis.
@@ -604,7 +600,6 @@ public:
 
 /**
     @class wxVScrolledWindow
-    @wxheader{vscroll.h}
 
     In the name of this class, "V" may stand for "variable" because it can be
     used for scrolling rows of variable heights; "virtual", because it is not
@@ -729,7 +724,6 @@ public:
 
 /**
     @class wxHScrolledWindow
-    @wxheader{vscroll.h}
 
     In the name of this class, "H" stands for "horizontal" because it can be
     used for scrolling columns of variable widths. It is not necessary to know
@@ -806,7 +800,6 @@ public:
 
 /**
     @class wxHVScrolledWindow
-    @wxheader{vscroll.h}
 
     This window inherits all functionality of both vertical and horizontal,
     variable scrolled windows. It automatically handles everything needed to

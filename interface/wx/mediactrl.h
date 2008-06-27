@@ -8,7 +8,6 @@
 
 /**
     @class wxMediaEvent
-    @wxheader{mediactrl.h}
 
     Event wxMediaCtrl uses.
 
@@ -25,7 +24,6 @@ public:
 
 /**
     @class wxMediaCtrl
-    @wxheader{mediactrl.h}
 
     wxMediaCtrl is a class for displaying types of
     media, such as videos, audio files, natively through native codecs.

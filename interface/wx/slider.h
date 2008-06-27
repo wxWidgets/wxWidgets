@@ -8,7 +8,6 @@
 
 /**
     @class wxSlider
-    @wxheader{slider.h}
 
     A slider is a control with a handle which can be pulled
     back and forth to change the value.

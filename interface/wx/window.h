@@ -8,7 +8,6 @@
 
 /**
     @class wxWindow
-    @wxheader{window.h}
 
     wxWindow is the base class for all windows and represents any visible object on
     screen. All controls, top level windows and so on are windows. Sizers and

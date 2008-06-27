@@ -8,7 +8,6 @@
 
 /**
     @class wxHtmlHelpWindow
-    @headerfile helpwnd.h wx/html/helpwnd.h
 
     This class is used by wxHtmlHelpController
     to display help within a frame or dialog, but you can use it yourself to create

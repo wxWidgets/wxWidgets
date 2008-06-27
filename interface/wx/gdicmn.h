@@ -94,7 +94,6 @@ enum wxStockCursor
 
 /**
     @class wxRealPoint
-    @wxheader{gdicmn.h}
 
     A wxRealPoint is a useful data structure for graphics operations.
 
@@ -131,7 +130,6 @@ public:
 
 /**
     @class wxRect
-    @wxheader{gdicmn.h}
 
     A class for manipulating rectangles.
 
@@ -436,7 +434,6 @@ public:
 
 /**
     @class wxPoint
-    @wxheader{gdicmn.h}
 
     A wxPoint is a useful data structure for graphics operations.
 
@@ -503,7 +500,6 @@ wxPoint wxDefaultPosition;
 
 /**
     @class wxColourDatabase
-    @wxheader{gdicmn.h}
 
     wxWidgets maintains a database of standard RGB colours for a predefined
     set of named colours. The application may add to this set if desired by
@@ -628,7 +624,6 @@ public:
 
 /**
     @class wxSize
-    @wxheader{gdicmn.h}
 
     A wxSize is a useful data structure for graphics operations. It simply
     contains integer @e width and @e height members.

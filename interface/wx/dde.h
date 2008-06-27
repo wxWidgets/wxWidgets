@@ -8,7 +8,6 @@
 
 /**
     @class wxDDEConnection
-    @wxheader{dde.h}
 
     A wxDDEConnection object represents the connection between a client and a
     server. It can be created by making a connection using a wxDDEClient
@@ -206,7 +205,6 @@ public:
 
 /**
     @class wxDDEClient
-    @wxheader{dde.h}
 
     A wxDDEClient object represents the client part of a client-server DDE
     (Dynamic Data Exchange) conversation.
@@ -272,7 +270,6 @@ public:
 
 /**
     @class wxDDEServer
-    @wxheader{dde.h}
 
     A wxDDEServer object represents the server part of a client-server DDE
     (Dynamic Data Exchange) conversation.

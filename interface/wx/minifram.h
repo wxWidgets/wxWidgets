@@ -8,7 +8,6 @@
 
 /**
     @class wxMiniFrame
-    @wxheader{minifram.h}
 
     A miniframe is a frame with a small title bar. It is suitable for floating
     toolbars that must not

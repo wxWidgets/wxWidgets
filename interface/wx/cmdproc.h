@@ -8,7 +8,6 @@
 
 /**
     @class wxCommand
-    @wxheader{cmdproc.h}
 
     wxCommand is a base class for modelling an application command, which is an
     action usually performed by selecting a menu item, pressing a toolbar
@@ -93,7 +92,6 @@ public:
 
 /**
     @class wxCommandProcessor
-    @wxheader{cmdproc.h}
 
     wxCommandProcessor is a class that maintains a history of wxCommands, with
     undo/redo functionality built-in. Derive a new class from this if you want

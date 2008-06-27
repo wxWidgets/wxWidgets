@@ -7,7 +7,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
-    @wxheader{vector.h}
 
     wxVector<T> is a template class which implements most of the @c std::vector
     class and can be used like it.

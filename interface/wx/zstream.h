@@ -8,7 +8,6 @@
 
 /**
     @class wxZlibOutputStream
-    @wxheader{zstream.h}
 
     This stream compresses all data written to it. The compressed output can be
     in zlib or gzip format.
@@ -58,7 +57,6 @@ public:
 
 /**
     @class wxZlibInputStream
-    @wxheader{zstream.h}
 
     This filter stream decompresses a stream that is in zlib or gzip format.
     Note that reading the gzip format requires zlib version 1.2.1 or greater,

@@ -8,7 +8,6 @@
 
 /**
     @class wxBufferedDC
-    @wxheader{dcbuffer.h}
 
     This class provides a simple way to avoid flicker: when drawing on it,
     everything is in fact first drawn on an in-memory buffer (a wxBitmap) and
@@ -100,7 +99,6 @@ public:
 
 /**
     @class wxAutoBufferedPaintDC
-    @wxheader{dcbuffer.h}
 
     This wxDC derivative can be used inside of an @c EVT_PAINT() event handler
     to achieve double-buffered drawing. Just use this class instead of
@@ -134,7 +132,6 @@ public:
 
 /**
     @class wxBufferedPaintDC
-    @wxheader{dcbuffer.h}
 
     This is a subclass of wxBufferedDC which can be used inside of an
     @c EVT_PAINT() event handler to achieve double-buffered drawing. Just use

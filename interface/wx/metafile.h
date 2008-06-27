@@ -8,7 +8,6 @@
 
 /**
     @class wxMetafileDC
-    @wxheader{metafile.h}
 
     This is a type of device context that allows a metafile object to be
     created (Windows only), and has most of the characteristics of a normal
@@ -58,7 +57,6 @@ public:
 
 /**
     @class wxMetafile
-    @wxheader{metafile.h}
 
     A @b wxMetafile represents the MS Windows metafile object, so metafile
     operations have no effect in X. In wxWidgets, only sufficient functionality

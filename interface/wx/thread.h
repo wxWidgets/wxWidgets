@@ -8,7 +8,6 @@
 
 /**
     @class wxCondition
-    @wxheader{thread.h}
 
     wxCondition variables correspond to pthread conditions or to Win32 event
     objects. They may be used in a multithreaded application to wait until the
@@ -114,7 +113,6 @@ public:
 
 /**
     @class wxCriticalSectionLocker
-    @wxheader{thread.h}
 
     This is a small helper class to be used with wxCriticalSection
     objects. A wxCriticalSectionLocker enters the critical section in the
@@ -173,7 +171,6 @@ public:
 
 /**
     @class wxThreadHelper
-    @wxheader{thread.h}
 
     The wxThreadHelper class is a mix-in class that manages a single background
     thread.  By deriving from wxThreadHelper, a class can implement the thread
@@ -257,7 +254,6 @@ public:
 
 /**
     @class wxCriticalSection
-    @wxheader{thread.h}
 
     A critical section object is used for exactly the same purpose as
     mutexes(). The only difference is that under Windows platform
@@ -309,7 +305,6 @@ public:
 
 /**
     @class wxThread
-    @wxheader{thread.h}
 
     A thread is basically a path of execution through a program. Threads are
     sometimes called @e light-weight processes, but the fundamental difference
@@ -703,7 +698,6 @@ public:
 
 /**
     @class wxSemaphore
-    @wxheader{thread.h}
 
     wxSemaphore is a counter limiting the number of threads concurrently accessing
     a shared resource. This counter is always between 0 and the maximum value
@@ -772,7 +766,6 @@ public:
 
 /**
     @class wxMutexLocker
-    @wxheader{thread.h}
 
     This is a small helper class to be used with wxMutex
     objects. A wxMutexLocker acquires a mutex lock in the constructor and releases
@@ -811,7 +804,6 @@ public:
 
 /**
     @class wxMutex
-    @wxheader{thread.h}
 
     A mutex object is a synchronization object whose state is set to signaled when
     it is not owned by any thread, and nonsignaled when it is owned. Its name comes

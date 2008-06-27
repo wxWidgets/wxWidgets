@@ -14,7 +14,6 @@
 
 /**
     @class wxBitmapHandler
-    @wxheader{bitmap.h}
 
     This is the base class for implementing bitmap file loading/saving, and
     bitmap creation from data.
@@ -154,7 +153,6 @@ public:
 
 /**
     @class wxBitmap
-    @wxheader{bitmap.h}
 
     This class encapsulates the concept of a platform-dependent bitmap,
     either monochrome or colour or colour with alpha channel support.
@@ -605,7 +603,6 @@ wxBitmap wxNullBitmap;
 
 /**
     @class wxMask
-    @wxheader{bitmap.h}
 
     This class encapsulates a monochrome mask bitmap, where the masked area is
     black and the unmasked area is white.

@@ -8,7 +8,6 @@
 
 /**
     @class wxPaintDC
-    @wxheader{dcclient.h}
 
     A wxPaintDC must be constructed if an application wishes to paint on the
     client area of a window from within an EVT_PAINT() event handler. This
@@ -47,7 +46,6 @@ public:
 
 /**
     @class wxClientDC
-    @wxheader{dcclient.h}
 
     A wxClientDC must be constructed if an application wishes to paint on the
     client area of a window from outside an EVT_PAINT() handler. This should
@@ -81,7 +79,6 @@ public:
 
 /**
     @class wxWindowDC
-    @wxheader{dcclient.h}
 
     A wxWindowDC must be constructed if an application wishes to paint on the
     whole area of a window (client and decorations). This should normally be

@@ -8,7 +8,6 @@
 
 /**
     @class wxMenuBar
-    @wxheader{menu.h}
 
     A menu bar is a series of menus accessible from the top of a frame.
 
@@ -351,7 +350,6 @@ public:
 
 /**
     @class wxMenu
-    @wxheader{menu.h}
 
     A menu is a popup (or pull down) list of items, one of which may be
     selected before the menu goes away (clicking elsewhere dismisses the

@@ -10,7 +10,6 @@
 
 /**
     @class wxTextInputStream
-    @wxheader{txtstrm.h}
 
     This class provides functions that reads text data using an input stream,
     allowing you to read text, floats, and integers.
@@ -194,7 +193,6 @@ typedef enum
 
 /**
     @class wxTextOutputStream
-    @wxheader{txtstrm.h}
 
     This class provides functions that write text data using an output stream,
     allowing you to write text, floats, and integers.

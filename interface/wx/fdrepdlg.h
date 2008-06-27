@@ -44,7 +44,6 @@ enum wxFindReplaceDialogStyles
 
 /**
     @class wxFindDialogEvent
-    @wxheader{fdrepdlg.h}
 
     wxFindReplaceDialog events
 
@@ -100,7 +99,6 @@ public:
 
 /**
     @class wxFindReplaceData
-    @wxheader{fdrepdlg.h}
 
     wxFindReplaceData holds the data for wxFindReplaceDialog.
 
@@ -158,7 +156,6 @@ public:
 
 /**
     @class wxFindReplaceDialog
-    @wxheader{fdrepdlg.h}
 
     wxFindReplaceDialog is a standard modeless dialog which is used to allow the
     user to search for some text (and possibly replace it with something else).

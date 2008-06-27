@@ -8,7 +8,6 @@
 
 /**
     @class wxTextDropTarget
-    @wxheader{dnd.h}
 
     A predefined drop target for dealing with text data.
 
@@ -63,7 +62,6 @@ enum wxDragResult
 
 /**
     @class wxDropTarget
-    @wxheader{dnd.h}
 
     This class represents a target for a drag and drop operation. A
     wxDataObject can be associated with it and by default, this object will be
@@ -174,7 +172,6 @@ public:
 
 /**
     @class wxDropSource
-    @wxheader{dnd.h}
 
     This class represents a source for a drag and drop operation.
 
@@ -292,7 +289,6 @@ public:
 
 /**
     @class wxFileDropTarget
-    @wxheader{dnd.h}
 
     This is a drop target which accepts files (dragged from File Manager or
     Explorer).

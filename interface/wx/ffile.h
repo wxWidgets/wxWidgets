@@ -34,7 +34,6 @@ enum wxFileKind
 
 /**
     @class wxFFile
-    @wxheader{ffile.h}
 
     wxFFile implements buffered file I/O.
 

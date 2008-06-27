@@ -8,7 +8,6 @@
 
 /**
     @class wxListbook
-    @wxheader{listbook.h}
 
     wxListbook is a class similar to wxNotebook but which
     uses a wxListCtrl to show the labels instead of the

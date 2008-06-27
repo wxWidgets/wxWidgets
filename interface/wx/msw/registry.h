@@ -8,7 +8,6 @@
 
 /**
     @class wxRegKey
-    @wxheader{msw/registry.h}
 
     wxRegKey is a class representing the Windows registry (it is only available
     under Windows). One can create, query and delete registry keys using this

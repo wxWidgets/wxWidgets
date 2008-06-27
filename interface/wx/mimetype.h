@@ -8,7 +8,6 @@
 
 /**
     @class wxMimeTypesManager
-    @wxheader{mimetype.h}
 
     This class allows the application to retrieve the information about all known
     MIME types from a system-specific location and the filename extensions to the
@@ -158,7 +157,6 @@ public:
 
 /**
     @class wxFileType
-    @wxheader{mimetype.h}
 
     This class holds information about a given @e file type. File type is the same
     as

@@ -9,7 +9,6 @@
 
 /**
     @class wxItemContainerImmutable
-    @wxheader{ctrlsub.h}
 
     wxItemContainer defines an interface which is implemented by all controls
     which have string subitems each of which may be selected.
@@ -155,7 +154,6 @@ public:
 
 /**
     @class wxItemContainer
-    @wxheader{ctrlsub.h}
 
     This class is an abstract base class for some wxWidgets controls which
     contain several items such as wxListBox, wxCheckListBox, wxComboBox or
@@ -648,7 +646,6 @@ public:
 
 /**
     @class wxControlWithItems
-    @wxheader{ctrlsub.h}
 
     This is convenience class that derives from both wxControl and
     wxItemContainer. It is used as basis for some wxWidgets controls

@@ -8,7 +8,6 @@
 
 /**
     @class wxIPV4address
-    @wxheader{socket.h}
 
 
     @library{wxbase}
@@ -63,7 +62,6 @@ public:
 
 /**
     @class wxSocketServer
-    @wxheader{socket.h}
 
 
     @library{wxnet}
@@ -151,7 +149,6 @@ public:
 
 /**
     @class wxIPaddress
-    @wxheader{socket.h}
 
     wxIPaddress is an abstract base class for all internet protocol address
     objects. Currently, only wxIPV4address
@@ -224,7 +221,6 @@ public:
 
 /**
     @class wxSocketClient
-    @wxheader{socket.h}
 
 
     @library{wxnet}
@@ -306,7 +302,6 @@ public:
 
 /**
     @class wxSockAddress
-    @wxheader{socket.h}
 
     You are unlikely to need to use this class: only wxSocketBase uses it.
 
@@ -343,7 +338,6 @@ public:
 
 /**
     @class wxSocketEvent
-    @wxheader{socket.h}
 
     This event class contains information about socket events.
 
@@ -382,7 +376,6 @@ public:
 
 /**
     @class wxSocketBase
-    @wxheader{socket.h}
 
     wxSocketBase is the base class for all socket-related objects, and it
     defines all basic IO functionality.
@@ -1027,7 +1020,6 @@ public:
 
 /**
     @class wxDatagramSocket
-    @wxheader{socket.h}
 
 
     @library{wxnet}

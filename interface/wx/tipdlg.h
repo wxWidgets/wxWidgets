@@ -8,7 +8,6 @@
 
 /**
     @class wxTipProvider
-    @wxheader{tipdlg.h}
 
     This is the class used together with wxShowTip() function.
     It must implement wxTipProvider::GetTip function and return the

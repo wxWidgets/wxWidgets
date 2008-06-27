@@ -8,7 +8,6 @@
 
 /**
     @class wxCheckListBox
-    @wxheader{checklst.h}
 
     A wxCheckListBox is like a wxListBox, but allows items to be checked or
     unchecked.

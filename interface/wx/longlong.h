@@ -8,7 +8,6 @@
 
 /**
     @class wxLongLong
-    @wxheader{longlong.h}
 
     This class represents a signed 64 bit long number. It is implemented using the
     native 64 bit type where available (machines with 64 bit longs or compilers

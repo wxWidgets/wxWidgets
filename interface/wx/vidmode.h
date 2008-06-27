@@ -8,7 +8,6 @@
 
 /**
     @struct wxVideoMode
-    @wxheader{display.h}
 
     Determines the sizes and locations of displays connected to the system.
 

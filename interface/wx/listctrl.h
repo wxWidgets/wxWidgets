@@ -8,7 +8,6 @@
 
 /**
     @class wxListCtrl
-    @wxheader{listctrl.h}
 
     A list control presents lists in a number of formats: list view, report view,
     icon view and small icon view. In any case, elements are numbered from zero.
@@ -964,7 +963,6 @@ The m_stateMask and m_state members take flags from the following:
 
 /**
     @class wxListEvent
-    @wxheader{listctrl.h}
 
     A list event holds information about events associated with wxListCtrl objects.
 
@@ -1061,7 +1059,6 @@ public:
 
 /**
     @class wxListItemAttr
-    @wxheader{listctrl.h}
 
     Represents the attributes (color, font, ...) of a
     wxListCtrl wxListItem.
@@ -1136,7 +1133,6 @@ public:
 
 /**
     @class wxListView
-    @wxheader{listctrl.h}
 
     This class currently simply presents a simpler to use interface for the
     wxListCtrl -- it can be thought of as a @e faade
@@ -1233,7 +1229,6 @@ public:
 
 /**
     @class wxListItem
-    @wxheader{listctrl.h}
 
     This class stores information about a wxListCtrl item or column.
 

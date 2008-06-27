@@ -8,7 +8,6 @@
 
 /**
     @class wxStatusBar
-    @wxheader{statusbr.h}
 
     A status bar is a narrow window that can be placed along the bottom of a frame
     to give

@@ -8,7 +8,6 @@
 
 /**
     @class wxRichTextStyleListCtrl
-    @headerfile richtextstyles.h wx/richtext/richtextstyles.h
 
     This class incorporates a wxRichTextStyleListBox and
     a choice control that allows the user to select the category of style to view.
@@ -108,7 +107,6 @@ public:
 
 /**
     @class wxRichTextStyleDefinition
-    @headerfile richtextstyles.h wx/richtext/richtextstyles.h
 
     This is a base class for paragraph and character styles.
 
@@ -182,7 +180,6 @@ public:
 
 /**
     @class wxRichTextParagraphStyleDefinition
-    @headerfile richtextstyles.h wx/richtext/richtextstyles.h
 
     This class represents a paragraph style definition, usually added to a
     wxRichTextStyleSheet.
@@ -218,7 +215,6 @@ public:
 
 /**
     @class wxRichTextStyleListBox
-    @headerfile richtextstyles.h wx/richtext/richtextstyles.h
 
     This is a listbox that can display the styles in a wxRichTextStyleSheet,
     and apply the selection to an associated wxRichTextCtrl.
@@ -341,7 +337,6 @@ public:
 
 /**
     @class wxRichTextStyleComboCtrl
-    @headerfile richtextstyles.h wx/richtext/richtextstyles.h
 
     This is a combo control that can display the styles in a wxRichTextStyleSheet,
     and apply the selection to an associated wxRichTextCtrl.
@@ -401,7 +396,6 @@ public:
 
 /**
     @class wxRichTextCharacterStyleDefinition
-    @headerfile richtextstyles.h wx/richtext/richtextstyles.h
 
     This class represents a character style definition, usually added to a
     wxRichTextStyleSheet.
@@ -427,7 +421,6 @@ public:
 
 /**
     @class wxRichTextListStyleDefinition
-    @headerfile richtextstyles.h wx/richtext/richtextstyles.h
 
     This class represents a list style definition, usually added to a
     wxRichTextStyleSheet.
@@ -530,7 +523,6 @@ public:
 
 /**
     @class wxRichTextStyleSheet
-    @headerfile richtextstyles.h wx/richtext/richtextstyles.h
 
     A style sheet contains named paragraph and character styles that make it
     easy for a user to apply combinations of attributes to a wxRichTextCtrl.

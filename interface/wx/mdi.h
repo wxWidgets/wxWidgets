@@ -8,7 +8,6 @@
 
 /**
     @class wxMDIClientWindow
-    @wxheader{mdi.h}
 
     An MDI client window is a child of wxMDIParentFrame, and manages zero or
     more wxMDIChildFrame objects.
@@ -55,7 +54,6 @@ public:
 
 /**
     @class wxMDIParentFrame
-    @wxheader{mdi.h}
 
     An MDI (Multiple Document Interface) parent frame is a window which can contain
     MDI child frames in its own 'desktop'. It is a convenient way to avoid window
@@ -288,7 +286,6 @@ public:
 
 /**
     @class wxMDIChildFrame
-    @wxheader{mdi.h}
 
     An MDI child frame is a frame that can only exist on a wxMDIClientWindow,
     which is itself a child of wxMDIParentFrame.

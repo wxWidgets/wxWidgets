@@ -8,7 +8,6 @@
 
 /**
     @class wxAuiNotebook
-    @headerfile auibook.h wx/aui/auibook.h
 
     wxAuiNotebook is part of the wxAUI class framework.
     See also @ref overview_aui.
@@ -239,7 +238,6 @@ public:
 
 /**
     @class wxAuiTabArt
-    @headerfile auibook.h wx/aui/auibook.h
 
     Tab art class.
 

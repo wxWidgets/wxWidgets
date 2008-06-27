@@ -8,7 +8,6 @@
 
 /**
     @class wxMenuItem
-    @wxheader{menuitem.h}
 
     A menu item represents an item in a menu. Note that you usually don't have to
     deal with it directly as wxMenu methods usually construct an

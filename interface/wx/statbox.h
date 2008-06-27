@@ -8,7 +8,6 @@
 
 /**
     @class wxStaticBox
-    @wxheader{statbox.h}
 
     A static box is a rectangle drawn around other panel items to denote
     a logical grouping of items.

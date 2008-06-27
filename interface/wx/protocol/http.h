@@ -8,7 +8,6 @@
 
 /**
     @class wxHTTP
-    @headerfile http.h wx/protocol/http.h
 
     wxHTTP can be used to establish a connection to an HTTP server.
 

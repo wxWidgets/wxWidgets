@@ -8,7 +8,6 @@
 
 /**
     @class wxActiveXEvent
-    @headerfile ole/activex.h wx/msw/ole/activex.h
 
     An event class for handling activex events passed from wxActiveXContainer.
 
@@ -58,7 +57,6 @@ public:
 
 /**
     @class wxActiveXContainer
-    @headerfile ole/activex.h wx/msw/ole/activex.h
 
     wxActiveXContainer is a host for an activex control on Windows (and
     as such is a platform-specific class). Note that the HWND that the class

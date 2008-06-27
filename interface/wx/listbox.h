@@ -8,7 +8,6 @@
 
 /**
     @class wxListBox
-    @wxheader{listbox.h}
 
     A listbox is used to select one or more of a list of strings. The
     strings are displayed in a scrolling box, with the selected string(s)

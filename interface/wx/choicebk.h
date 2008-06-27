@@ -8,7 +8,6 @@
 
 /**
     @class wxChoicebook
-    @wxheader{choicebk.h}
 
     wxChoicebook is a class similar to wxNotebook, but uses a wxChoice control
     to show the labels instead of the tabs.

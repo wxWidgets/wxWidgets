@@ -8,7 +8,6 @@
 
 /**
     @class wxDataViewIconText
-    @wxheader{dataview.h}
 
     wxDataViewIconText is used by
     wxDataViewIconTextRenderer
@@ -55,7 +54,6 @@ public:
 
 /**
     @class wxDataViewEvent
-    @wxheader{dataview.h}
 
     wxDataViewEvent - the event class for the wxDataViewCtrl notifications
 
@@ -131,7 +129,6 @@ public:
 
 /**
     @class wxDataViewModel
-    @wxheader{dataview.h}
 
     wxDataViewModel is the base class for all data model to be
     displayed by a wxDataViewCtrl.
@@ -397,7 +394,6 @@ public:
 
 /**
     @class wxDataViewIndexListModel
-    @wxheader{dataview.h}
 
     wxDataViewIndexListModel is a specialized data model which lets
     you address an item by its position (row) rather than its
@@ -514,7 +510,6 @@ public:
 
 /**
     @class wxDataViewVirtualListModel
-    @wxheader{dataview.h}
 
     wxDataViewVirtualListModel is a specialized data model which lets
     you address an item by its position (row) rather than its
@@ -543,7 +538,6 @@ public:
 
 /**
     @class wxDataViewItemAttr
-    @wxheader{dataview.h}
 
     This class is used to indicate to a wxDataViewCtrl
     that a certain Item() has extra font attributes
@@ -585,7 +579,6 @@ public:
 
 /**
     @class wxDataViewItem
-    @wxheader{dataview.h}
 
     wxDataViewItem is a small opaque class that represents an
     item in a wxDataViewCtrl in a
@@ -632,7 +625,6 @@ public:
 
 /**
     @class wxDataViewCtrl
-    @wxheader{dataview.h}
 
     wxDataViewCtrl is a control to display data either
     in a tree like fashion or in a tabular form or both.
@@ -1009,7 +1001,6 @@ public:
 
 /**
     @class wxDataViewModelNotifier
-    @wxheader{dataview.h}
 
     A wxDataViewModelNotifier instance is owned by a
     wxDataViewModel
@@ -1097,7 +1088,6 @@ public:
 
 /**
     @class wxDataViewRenderer
-    @wxheader{dataview.h}
 
     This class is used by wxDataViewCtrl to render the individual cells.
     One instance of a renderer class is owned by a wxDataViewColumn. There
@@ -1228,7 +1218,6 @@ public:
 
 /**
     @class wxDataViewTextRenderer
-    @wxheader{dataview.h}
 
     wxDataViewTextRenderer is used for rendering text. It supports
     in-place editing if desired.
@@ -1251,7 +1240,6 @@ public:
 
 /**
     @class wxDataViewIconTextRenderer
-    @wxheader{dataview.h}
 
     The wxDataViewIconTextRenderer class is used to display text with
     a small icon next to it as it is typically done in a file manager.
@@ -1278,7 +1266,6 @@ public:
 
 /**
     @class wxDataViewProgressRenderer
-    @wxheader{dataview.h}
 
     wxDataViewProgressRenderer
 
@@ -1301,7 +1288,6 @@ public:
 
 /**
     @class wxDataViewSpinRenderer
-    @wxheader{dataview.h}
 
     This is a specialized renderer for rendering integer values. It
     supports modifying the values in-place by using a wxSpinCtrl.
@@ -1326,7 +1312,6 @@ public:
 
 /**
     @class wxDataViewToggleRenderer
-    @wxheader{dataview.h}
 
     wxDataViewToggleRenderer
 
@@ -1347,7 +1332,6 @@ public:
 
 /**
     @class wxDataViewDateRenderer
-    @wxheader{dataview.h}
 
     wxDataViewDateRenderer
 
@@ -1368,7 +1352,6 @@ public:
 
 /**
     @class wxDataViewTextRendererAttr
-    @wxheader{dataview.h}
 
     The same as wxDataViewTextRenderer but with
     support for font attributes. Font attributes are currently only supported
@@ -1395,7 +1378,6 @@ public:
 
 /**
     @class wxDataViewCustomRenderer
-    @wxheader{dataview.h}
 
     You need to derive a new class from wxDataViewCustomRenderer in
     order to write a new renderer. You need to override at least
@@ -1513,7 +1495,6 @@ public:
 
 /**
     @class wxDataViewBitmapRenderer
-    @wxheader{dataview.h}
 
     wxDataViewBitmapRenderer
 
@@ -1535,7 +1516,6 @@ public:
 
 /**
     @class wxDataViewColumn
-    @wxheader{dataview.h}
 
     This class represents a column in a wxDataViewCtrl.
     One wxDataViewColumn is bound to one column in the data model,
@@ -1663,7 +1643,6 @@ public:
 
 /**
     @class wxDataViewTreeCtrl
-    @wxheader{dataview.h}
 
     This class is a wxDataViewCtrl which internally
     uses a wxDataViewTreeStore and forwards
@@ -1854,7 +1833,6 @@ public:
 
 /**
     @class wxDataViewTreeStore
-    @wxheader{dataview.h}
 
     wxDataViewTreeStore is a specialised wxDataViewModel
     for displaying simple trees very much like wxTreeCtrl

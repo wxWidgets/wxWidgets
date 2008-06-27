@@ -8,7 +8,6 @@
 
 /**
     @class wxImageHandler
-    @wxheader{image.h}
 
     This is the base class for implementing image file loading/saving, and
     image creation from data.
@@ -143,7 +142,6 @@ public:
 
 /**
     @class wxImage
-    @wxheader{image.h}
 
     This class encapsulates a platform-independent image. An image can be
     created from data, or using wxBitmap::ConvertToImage. An image can be

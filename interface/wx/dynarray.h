@@ -7,7 +7,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
-    @wxheader{dynarray.h}
 
     This section describes the so called @e "dynamic arrays". This is a C
     array-like type safe data structure i.e. the member access time is constant

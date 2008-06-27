@@ -9,7 +9,6 @@
 
 /**
     @class wxTreeCtrl
-    @wxheader{treectrl.h}
 
     A tree control presents information as a hierarchy, with items that may be
     expanded to show further items. Items in a tree control are referenced by
@@ -869,7 +868,6 @@ public:
 
 /**
     @class wxTreeEvent
-    @wxheader{treectrl.h}
 
     A tree event holds information about events associated with wxTreeCtrl
     objects.

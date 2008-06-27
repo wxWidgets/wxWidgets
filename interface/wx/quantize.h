@@ -8,7 +8,6 @@
 
 /**
     @class wxQuantize
-    @wxheader{quantize.h}
 
     Performs quantization, or colour reduction, on a wxImage.
 

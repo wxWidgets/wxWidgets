@@ -8,7 +8,6 @@
 
 /**
     @class wxFontData
-    @wxheader{cmndata.h}
 
     This class holds a variety of information related to font dialogs.
 
@@ -130,7 +129,6 @@ public:
 
 /**
     @class wxPageSetupDialogData
-    @wxheader{cmndata.h}
 
     This class holds a variety of information related to wxPageSetupDialog.
 
@@ -346,7 +344,6 @@ public:
 
 /**
     @class wxColourData
-    @wxheader{cmndata.h}
 
     This class holds a variety of information related to colour dialogs.
 
@@ -459,7 +456,6 @@ enum wxPrintBin
 
 /**
     @class wxPrintData
-    @wxheader{cmndata.h}
 
     This class holds a variety of information related to printers and printer
     device contexts. This class is used to create a wxPrinterDC and a
@@ -664,7 +660,6 @@ public:
 
 /**
     @class wxPrintDialogData
-    @wxheader{cmndata.h}
 
     This class holds information related to the visual characteristics of
     wxPrintDialog. It contains a wxPrintData object with underlying printing

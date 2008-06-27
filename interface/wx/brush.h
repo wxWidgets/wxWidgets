@@ -54,7 +54,6 @@ enum wxBrushStyle
 
 /**
     @class wxBrush
-    @wxheader{brush.h}
 
     A brush is a drawing tool for filling in areas. It is used for painting
     the background of rectangles, ellipses, etc. It has a colour and a style.
@@ -274,7 +273,6 @@ wxBrush* wxRED_BRUSH;
 
 /**
     @class wxBrushList
-    @wxheader{gdicmn.h}
 
     A brush list is a list containing all brushes which have been created.
 

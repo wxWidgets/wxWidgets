@@ -8,7 +8,6 @@
 
 /**
     @class wxModule
-    @wxheader{module.h}
 
     The module system is a very simple mechanism to allow applications (and parts
     of wxWidgets itself) to define initialization and cleanup functions that are

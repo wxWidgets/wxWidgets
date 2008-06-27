@@ -8,7 +8,6 @@
 
 /**
     @class wxRecursionGuardFlag
-    @wxheader{recguard.h}
 
     This is a completely opaque class which exists only to be used with
     wxRecursionGuard, please see the example in that class' documentation.
@@ -31,7 +30,6 @@ public:
 
 /**
     @class wxRecursionGuard
-    @wxheader{recguard.h}
 
     wxRecursionGuard is a very simple class which can be used to prevent reentrancy
     problems in a function. It is not thread-safe and so should be used only in

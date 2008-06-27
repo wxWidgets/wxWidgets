@@ -8,7 +8,6 @@
 
 /**
     @class wxDynamicLibraryDetails
-    @wxheader{dynlib.h}
 
     This class is used for the objects returned by the
     wxDynamicLibrary::ListLoaded() method and contains the information about a
@@ -80,7 +79,6 @@ enum wxPluginCategory
 
 /**
     @class wxDynamicLibrary
-    @wxheader{dynlib.h}
 
     wxDynamicLibrary is a class representing dynamically loadable library
     (Windows DLL, shared library under Unix etc.). Just create an object of

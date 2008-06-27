@@ -87,7 +87,6 @@ struct wxCmdLineEntryDesc
 
 /**
     @class wxCmdLineParser
-    @wxheader{cmdline.h}
 
     wxCmdLineParser is a class for parsing the command line.
 

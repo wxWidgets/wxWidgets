@@ -18,7 +18,6 @@ enum TransferMode
 
 /**
     @class wxFTP
-    @headerfile ftp.h wx/protocol/ftp.h
 
     wxFTP can be used to establish a connection to an FTP server and perform all the
     usual operations. Please consult the RFC 959 for more details about the FTP

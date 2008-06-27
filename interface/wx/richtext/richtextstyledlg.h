@@ -8,7 +8,6 @@
 
 /**
     @class wxRichTextStyleOrganiserDialog
-    @headerfile richtextstyledlg.h wx/richtext/richtextstyledlg.h
 
     This class shows a style sheet and allows the user to edit, add and remove
     styles.

@@ -8,7 +8,6 @@
 
 /**
     @class wxRadioBox
-    @wxheader{radiobox.h}
 
     A radio box item is used to select one of number of mutually exclusive
     choices.  It is displayed as a vertical column or horizontal row of

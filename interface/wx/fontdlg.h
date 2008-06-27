@@ -8,7 +8,6 @@
 
 /**
     @class wxFontDialog
-    @wxheader{fontdlg.h}
 
     This class represents the font chooser dialog.
 

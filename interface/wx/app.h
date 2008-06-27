@@ -9,7 +9,6 @@
 
 /**
     @class wxAppConsole
-    @wxheader{app.h}
 
     This class is essential for writing console-only or hybrid apps without
     having to define wxUSE_GUI=0.
@@ -472,7 +471,6 @@ public:
 
 /**
     @class wxApp
-    @wxheader{app.h}
 
     The wxApp class represents the application itself. It is used to:
 

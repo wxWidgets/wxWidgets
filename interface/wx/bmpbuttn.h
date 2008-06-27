@@ -8,7 +8,6 @@
 
 /**
     @class wxBitmapButton
-    @wxheader{bmpbuttn.h}
 
     A bitmap button is a control that contains a bitmap.
     It may be placed on a wxDialog or a wxPanel, or indeed almost any other window.

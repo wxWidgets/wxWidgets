@@ -7,7 +7,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
-    @wxheader{ptr_shrd.h}
 
     A smart pointer with non-intrusive reference counting. It is modeled after
     @c boost::shared_ptr<> and can be used with STL containers and wxVector<T> -

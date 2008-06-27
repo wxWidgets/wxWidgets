@@ -18,7 +18,6 @@ enum wxDialogLayoutAdaptationMode
 
 /**
     @class wxDialog
-    @wxheader{dialog.h}
 
     A dialog box is a window with a title bar and sometimes a system menu,
     which can be moved around the screen. It can contain controls and other
@@ -574,7 +573,6 @@ public:
 
 /**
     @class wxDialogLayoutAdapter
-    @wxheader{dialog.h}
 
     This abstract class is the base for classes that help wxWidgets peform
     run-time layout adaptation of dialogs. Principally, this is to cater for

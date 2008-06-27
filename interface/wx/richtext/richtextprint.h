@@ -8,7 +8,6 @@
 
 /**
     @class wxRichTextHeaderFooterData
-    @headerfile richtextprint.h wx/richtext/richtextprint.h
 
 
     This class represents header and footer data to be passed to the
@@ -159,7 +158,6 @@ public:
 
 /**
     @class wxRichTextPrintout
-    @headerfile richtextprint.h wx/richtext/richtextprint.h
 
     This class implements print layout for wxRichTextBuffer. Instead of using it
     directly, you
@@ -238,7 +236,6 @@ public:
 
 /**
     @class wxRichTextPrinting
-    @headerfile richtextprint.h wx/richtext/richtextprint.h
 
     This class provides a simple interface for performing wxRichTextBuffer printing
     and previewing. It uses wxRichTextPrintout for layout and rendering.

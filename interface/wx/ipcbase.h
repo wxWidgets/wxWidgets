@@ -33,7 +33,6 @@ enum wxIPCFormat
 
 /**
     @class wxConnectionBase
-    @wxheader{ipcbase.h}
 
     @todo Document this class.
 

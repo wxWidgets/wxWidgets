@@ -18,7 +18,6 @@ enum wxDirTraverseResult
 
 /**
     @class wxDirTraverser
-    @wxheader{dir.h}
 
     wxDirTraverser is an abstract interface which must be implemented by
     objects passed to wxDir::Traverse() function.
@@ -110,7 +109,6 @@ enum
 
 /**
     @class wxDir
-    @wxheader{dir.h}
 
     wxDir is a portable equivalent of Unix open/read/closedir functions which
     allow enumerating of the files in a directory. wxDir allows to enumerate

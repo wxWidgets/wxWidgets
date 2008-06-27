@@ -19,7 +19,6 @@ enum wxCheckBoxState
 
 /**
     @class wxCheckBox
-    @wxheader{checkbox.h}
 
     A checkbox is a labelled box which by default is either on (checkmark is
     visible) or off (no checkmark). Optionally (when the wxCHK_3STATE style

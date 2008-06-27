@@ -8,7 +8,6 @@
 
 /**
     @class wxDialUpManager
-    @wxheader{dialup.h}
 
     This class encapsulates functions dealing with verifying the connection
     status of the workstation (connected to the Internet via a direct
@@ -186,7 +185,6 @@ public:
 
 /**
     @class wxDialUpEvent
-    @wxheader{dialup.h}
 
     This is the event class for the dialup events sent by wxDialUpManager.
 

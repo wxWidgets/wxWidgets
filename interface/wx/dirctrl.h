@@ -8,7 +8,6 @@
 
 /**
     @class wxGenericDirCtrl
-    @wxheader{dirctrl.h}
 
     This control can  be used to place a directory listing (with optional
     files) on an arbitrary window.

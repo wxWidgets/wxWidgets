@@ -8,7 +8,6 @@
 
 /**
     @class wxBookCtrlBase
-    @wxheader{bookctrl.h}
 
     @todo Document this class.
 

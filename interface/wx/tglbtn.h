@@ -9,7 +9,6 @@
 
 /**
     @class wxToggleButton
-    @wxheader{tglbtn.h}
 
     wxToggleButton is a button that stays pressed when clicked by the user. In
     other words, it is similar to wxCheckBox in
@@ -106,7 +105,6 @@ public:
 
 /**
     @class wxBitmapToggleButton
-    @wxheader{tglbtn.h}
 
     wxBitmapToggleButton is a wxToggleButton
     that contains a bitmap instead of text.

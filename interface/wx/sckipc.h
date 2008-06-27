@@ -8,7 +8,6 @@
 
 /**
     @class wxTCPServer
-    @wxheader{sckipc.h}
 
     A wxTCPServer object represents the server part of a client-server conversation.
     It emulates a DDE-style protocol, but uses TCP/IP which is available on most
@@ -53,7 +52,6 @@ public:
 
 /**
     @class wxTCPClient
-    @wxheader{sckipc.h}
 
     A wxTCPClient object represents the client part of a client-server conversation.
     It emulates a DDE-style protocol, but uses TCP/IP which is available on most
@@ -117,7 +115,6 @@ public:
 
 /**
     @class wxTCPConnection
-    @wxheader{sckipc.h}
 
     A wxTCPClient object represents the connection between a client and a server.
     It emulates a DDE-style protocol, but uses TCP/IP which is available on most

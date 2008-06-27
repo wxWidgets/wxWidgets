@@ -8,7 +8,6 @@
 
 /**
     @class wxFont
-    @wxheader{font.h}
 
     A font is an object which determines the appearance of text. Fonts are
     used for drawing text to a device context, and setting the appearance of
@@ -678,7 +677,6 @@ wxFont wxSWISS_FONT;
 
 /**
     @class wxFontList
-    @wxheader{gdicmn.h}
 
     A font list is a list containing all fonts which have been created. There
     is only one instance of this class: @b wxTheFontList.  Use this object to search

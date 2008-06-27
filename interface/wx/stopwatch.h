@@ -8,7 +8,6 @@
 
 /**
     @class wxStopWatch
-    @wxheader{stopwatch.h}
 
     The wxStopWatch class allow you to measure time intervals. For example, you may
     use it to measure the time elapsed by some function:

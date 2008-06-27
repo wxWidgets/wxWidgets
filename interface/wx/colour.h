@@ -8,7 +8,6 @@
 
 /**
     @class wxColour
-    @wxheader{colour.h}
 
     A colour is an object representing a combination of Red, Green, and Blue
     (RGB) intensity values, and is used to determine drawing colours. See the

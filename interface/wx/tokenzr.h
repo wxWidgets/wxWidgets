@@ -61,7 +61,6 @@ enum wxStringTokenizerMode
 
 /**
     @class wxStringTokenizer
-    @wxheader{tokenzr.h}
 
     wxStringTokenizer helps you to break a string up into a number of tokens.
     It replaces the standard C function @c strtok() and also extends it in a

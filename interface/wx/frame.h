@@ -8,7 +8,6 @@
 
 /**
     @class wxFrame
-    @wxheader{frame.h}
 
     A frame is a window whose size and position can (usually) be changed by the user.
 

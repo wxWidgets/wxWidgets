@@ -8,7 +8,6 @@
 
 /**
     @class wxTextAttr
-    @wxheader{textctrl.h}
 
     wxTextAttr represents the character and paragraph attributes, or style,
     for a range of text in a wxTextCtrl or wxRichTextCtrl.
@@ -648,7 +647,6 @@ enum wxTextCtrlHitTestResult
 
 /**
     @class wxTextCtrl
-    @wxheader{textctrl.h}
 
     A text control allows text to be displayed and edited.
 
@@ -1556,7 +1554,6 @@ public:
 
 /**
     @class wxStreamToTextRedirector
-    @wxheader{textctrl.h}
 
     This class can be used to (temporarily) redirect all output sent to a C++
     ostream object to a wxTextCtrl instead.

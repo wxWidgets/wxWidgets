@@ -8,7 +8,6 @@
 
 /**
     @class wxSound
-    @wxheader{sound.h}
 
     This class represents a short sound (loaded from Windows WAV file), that
     can be stored in memory and played. Currently this class is implemented

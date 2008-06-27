@@ -44,7 +44,6 @@ enum wxAuiManagerOption
 
 /**
     @class wxAuiManager
-    @headerfile aui.h wx/aui/aui.h
 
     wxAuiManager is the central class of the wxAUI class framework.
     See also @ref overview_aui.
@@ -336,7 +335,6 @@ protected:
 
 /**
     @class wxAuiPaneInfo
-    @headerfile aui.h wx/aui/aui.h
 
     wxAuiPaneInfo is part of the wxAUI class framework.
     See also @ref overview_aui.

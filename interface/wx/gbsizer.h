@@ -8,7 +8,6 @@
 
 /**
     @class wxGBPosition
-    @wxheader{gbsizer.h}
 
     This class represents the position of an item in a virtual grid of rows and
     columns managed by a wxGridBagSizer.
@@ -63,7 +62,6 @@ public:
 
 /**
     @class wxGridBagSizer
-    @wxheader{gbsizer.h}
 
     A wxSizer that can lay out items in a virtual grid like a wxFlexGridSizer
     but in this case explicit positioning of the items is allowed using
@@ -216,7 +214,6 @@ public:
 
 /**
     @class wxGBSizerItem
-    @wxheader{gbsizer.h}
 
     The wxGBSizerItem class is used by the wxGridBagSizer for tracking the
     items in the sizer. It adds grid position and spanning information to the
@@ -300,7 +297,6 @@ public:
 
 /**
     @class wxGBSpan
-    @wxheader{gbsizer.h}
 
     This class is used to hold the row and column spanning attributes of items
     in a wxGridBagSizer.

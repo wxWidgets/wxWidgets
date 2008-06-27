@@ -8,7 +8,6 @@
 
 /**
     @class wxVListBox
-    @wxheader{vlbox.h}
 
     wxVListBox is a wxListBox-like control with the following two main
     differences from a regular wxListBox: it can have an arbitrarily huge

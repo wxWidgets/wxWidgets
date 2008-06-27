@@ -8,7 +8,6 @@
 
 /**
     @class wxComboBox
-    @wxheader{combobox.h}
 
     A combobox is like a combination of an edit control and a listbox. It can
     be displayed as static list with editable or read-only text field; or a

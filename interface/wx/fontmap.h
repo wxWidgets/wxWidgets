@@ -8,7 +8,6 @@
 
 /**
     @class wxFontMapper
-    @wxheader{fontmap.h}
 
     wxFontMapper manages user-definable correspondence between logical font
     names and the fonts present on the machine.

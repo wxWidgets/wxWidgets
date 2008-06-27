@@ -8,7 +8,6 @@
 
 /**
     @class wxCalendarEvent
-    @wxheader{calctrl.h}
 
     The wxCalendarEvent class is used together with wxCalendarCtrl.
 
@@ -49,7 +48,6 @@ enum wxCalendarDateBorder
 
 /**
     @class wxCalendarDateAttr
-    @wxheader{calctrl.h}
 
     wxCalendarDateAttr is a custom attributes for a calendar date. The objects
     of this class are used with wxCalendarCtrl.
@@ -194,7 +192,6 @@ enum wxCalendarHitTestResult
 
 /**
     @class wxCalendarCtrl
-    @wxheader{calctrl.h}
 
     The calendar control allows the user to pick a date.  The user can move the
     current selection using the keyboard and select the date (generating

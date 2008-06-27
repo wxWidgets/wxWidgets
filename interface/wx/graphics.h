@@ -8,7 +8,6 @@
 
 /**
     @class wxGraphicsPath
-    @wxheader{graphics.h}
 
     A wxGraphicsPath is a native representation of an geometric path. The contents
     are specific an private to the respective renderer. Instances are ref counted and can
@@ -160,7 +159,6 @@ public:
 
 /**
     @class wxGraphicsObject
-    @wxheader{graphics.h}
 
     This class is the superclass of native graphics objects like pens etc. It
     allows reference counting. Not instantiated by user code.
@@ -189,7 +187,6 @@ public:
 
 /**
     @class wxGraphicsContext
-    @wxheader{graphics.h}
 
     A wxGraphicsContext instance is the object that is drawn upon. It is created by
     a renderer using wxGraphicsRenderer::CreateContext(). This can be either directly
@@ -514,7 +511,6 @@ public:
 
 /**
     @class wxGraphicsRenderer
-    @wxheader{graphics.h}
 
     A wxGraphicsRenderer is the instance corresponding to the rendering engine
     used. There may be multiple instances on a system, if there are different
@@ -634,7 +630,6 @@ public:
 
 /**
     @class wxGraphicsBrush
-    @wxheader{graphics.h}
 
 
     @library{wxcore}
@@ -650,7 +645,6 @@ public:
 
 /**
     @class wxGraphicsFont
-    @wxheader{graphics.h}
 
 
     @library{wxcore}
@@ -666,7 +660,6 @@ public:
 
 /**
     @class wxGraphicsPen
-    @wxheader{graphics.h}
 
 
     @library{wxcore}
@@ -682,7 +675,6 @@ public:
 
 /**
     @class wxGraphicsMatrix
-    @wxheader{graphics.h}
 
     A wxGraphicsMatrix is a native representation of an affine matrix. The contents
     are specific and private to the respective renderer. Instances are ref counted and can therefore be assigned as usual. The only way to get a valid instance is via a CreateMatrix call on the graphics context or the renderer instance.

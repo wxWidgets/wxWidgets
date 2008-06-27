@@ -8,7 +8,6 @@
 
 /**
     @class wxConvAuto
-    @wxheader{convauto.h}
 
     This class implements a Unicode to/from multibyte converter capable of
     automatically recognizing the encoding of the multibyte text on input. The

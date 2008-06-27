@@ -8,7 +8,6 @@
 
 /**
     @class wxFileDialog
-    @wxheader{filedlg.h}
 
     This class represents the file chooser dialog.
 

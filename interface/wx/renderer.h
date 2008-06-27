@@ -58,7 +58,6 @@ enum
 
 /**
     @struct wxSplitterRenderParams
-    @wxheader{renderer.h}
 
     This is just a simple @c struct used as a return value of
     wxRendererNative::GetSplitterParams().
@@ -95,7 +94,6 @@ struct wxSplitterRenderParams
 
 /**
     @struct wxHeaderButtonParams
-    @wxheader{renderer.h}
 
     This @c struct can optionally be used with
     wxRendererNative::DrawHeaderButton() to specify custom values used to draw
@@ -132,7 +130,6 @@ enum wxHeaderSortIconType
 
 /**
     @class wxDelegateRendererNative
-    @wxheader{renderer.h}
 
     wxDelegateRendererNative allows reuse of renderers code by forwarding all the
     wxRendererNative methods to the given object and
@@ -232,7 +229,6 @@ public:
 
 /**
     @class wxRendererNative
-    @wxheader{renderer.h}
 
     First, a brief introduction to wxRendererNative and why it is needed.
 
@@ -481,7 +477,6 @@ public:
 
 /**
     @struct wxRendererVersion
-    @wxheader{renderer.h}
 
     This simple struct represents the wxRendererNative
     interface version and is only used as the return value of

@@ -8,7 +8,6 @@
 
 /**
     @class wxPrinterDC
-    @wxheader{dcprint.h}
 
     A printer device context is specific to MSW and Mac, and allows access to
     any printer with a Windows or Macintosh driver. See wxDC for further

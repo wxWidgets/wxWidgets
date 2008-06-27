@@ -8,7 +8,6 @@
 
 /**
     @class wxFontEnumerator
-    @wxheader{fontenum.h}
 
     wxFontEnumerator enumerates either all available fonts on the system or only
     the ones with given attributes - either only fixed-width (suited for use in

@@ -8,7 +8,6 @@
 
 /**
     @class wxIconBundle
-    @wxheader{iconbndl.h}
 
     This class contains multiple copies of an icon in different sizes,
     see also wxDialog::SetIcons and

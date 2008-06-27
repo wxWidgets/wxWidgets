@@ -8,7 +8,6 @@
 
 /**
     @class wxRichTextHTMLHandler
-    @headerfile richtexthtml.h wx/richtext/richtexthtml.h
 
     Handles HTML output (only) for wxRichTextCtrl content.
 

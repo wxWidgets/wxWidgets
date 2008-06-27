@@ -219,7 +219,6 @@ typedef enum
 
 /**
     @class wxAccessible
-    @wxheader{access.h}
 
     The wxAccessible class allows wxWidgets applications, and wxWidgets itself,
     to return extended information about user interface elements to client

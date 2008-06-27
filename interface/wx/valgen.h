@@ -8,7 +8,6 @@
 
 /**
     @class wxGenericValidator
-    @wxheader{valgen.h}
 
     wxGenericValidator performs data transfer (but not validation or filtering)
     for the following basic controls: wxButton, wxCheckBox, wxListBox,

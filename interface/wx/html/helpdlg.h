@@ -8,7 +8,6 @@
 
 /**
     @class wxHtmlHelpDialog
-    @headerfile helpdlg.h wx/html/helpdlg.h
 
     This class is used by wxHtmlHelpController
     to display help.

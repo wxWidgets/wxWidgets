@@ -8,7 +8,6 @@
 
 /**
     @class wxMemoryDC
-    @wxheader{dcmemory.h}
 
     A memory device context provides a means to draw graphics onto a bitmap.
     When drawing in to a mono-bitmap, using @c wxWHITE, @c wxWHITE_PEN and

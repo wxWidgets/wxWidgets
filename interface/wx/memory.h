@@ -8,7 +8,6 @@
 
 /**
     @class wxDebugStreamBuf
-    @wxheader{memory.h}
 
     This class allows you to treat debugging output in a similar
     (stream-based) fashion on different platforms. Under
@@ -33,7 +32,6 @@ public:
 
 /**
     @class wxDebugContext
-    @wxheader{memory.h}
 
     A class for performing various debugging and memory tracing
     operations. Full functionality (such as printing out objects

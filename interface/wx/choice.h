@@ -8,7 +8,6 @@
 
 /**
     @class wxChoice
-    @wxheader{choice.h}
 
     A choice item is used to select one of a list of strings. Unlike a
     wxListBox, only the selection is visible until the user pulls down the

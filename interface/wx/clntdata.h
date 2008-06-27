@@ -8,7 +8,6 @@
 
 /**
     @class wxClientDataContainer
-    @wxheader{clntdata.h}
 
     This class is a mixin that provides storage and management of "client
     data." This data can either be of type void - in which case the data
@@ -63,7 +62,6 @@ public:
 
 /**
     @class wxClientData
-    @wxheader{clntdata.h}
 
     All classes deriving from wxEvtHandler (such as all controls and wxApp) can
     hold arbitrary data which is here referred to as "client data". This is
@@ -108,7 +106,6 @@ public:
 
 /**
     @class wxStringClientData
-    @wxheader{clntdata.h}
 
     Predefined client data class for holding a string.
 

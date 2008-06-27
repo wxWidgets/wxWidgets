@@ -8,7 +8,6 @@
 
 /**
     @class wxCountingOutputStream
-    @wxheader{stream.h}
 
     wxCountingOutputStream is a specialized output stream which does not write any
     data anywhere,
@@ -52,7 +51,6 @@ public:
 
 /**
     @class wxBufferedInputStream
-    @wxheader{stream.h}
 
     This stream acts as a cache. It caches the bytes read from the specified
     input stream (See wxFilterInputStream).
@@ -75,7 +73,6 @@ public:
 
 /**
     @class wxStreamBuffer
-    @wxheader{stream.h}
 
 
     @library{wxbase}
@@ -281,7 +278,6 @@ public:
 
 /**
     @class wxOutputStream
-    @wxheader{stream.h}
 
     wxOutputStream is an abstract base class which may not be used directly.
 
@@ -356,7 +352,6 @@ public:
 
 /**
     @class wxFilterClassFactory
-    @wxheader{stream.h}
 
     Allows the creation of filter streams to handle compression formats such
     as gzip and bzip2.
@@ -475,7 +470,6 @@ public:
 
 /**
     @class wxFilterOutputStream
-    @wxheader{stream.h}
 
     A filter stream has the capability of a normal
     stream but it can be placed on top of another stream. So, for example, it
@@ -505,7 +499,6 @@ public:
 
 /**
     @class wxFilterInputStream
-    @wxheader{stream.h}
 
     A filter stream has the capability of a normal stream but it can be placed on
     top
@@ -536,7 +529,6 @@ public:
 
 /**
     @class wxBufferedOutputStream
-    @wxheader{stream.h}
 
     This stream acts as a cache. It caches the bytes to be written to the specified
     output stream (See wxFilterOutputStream). The
@@ -581,7 +573,6 @@ public:
 
 /**
     @class wxInputStream
-    @wxheader{stream.h}
 
     wxInputStream is an abstract base class which may not be used directly.
 
@@ -675,7 +666,6 @@ public:
 
 /**
     @class wxStreamBase
-    @wxheader{stream.h}
 
     This class is the base class of most stream related classes in wxWidgets. It
     must

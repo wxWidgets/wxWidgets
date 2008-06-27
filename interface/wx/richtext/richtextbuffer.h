@@ -8,7 +8,6 @@
 
 /**
     @class wxRichTextBuffer
-    @headerfile richtextbuffer.h wx/richtext/richtextbuffer.h
 
     This class represents the whole buffer associated with a wxRichTextCtrl.
 
@@ -773,7 +772,6 @@ public:
 
 /**
     @class wxRichTextFileHandler
-    @headerfile richtextbuffer.h wx/richtext/richtextbuffer.h
 
     This is the base class for file handlers, for loading and/or saving content
     associated with a wxRichTextBuffer.
@@ -914,7 +912,6 @@ public:
 
 /**
     @class wxRichTextRange
-    @headerfile richtextbuffer.h wx/richtext/richtextbuffer.h
 
     This class stores beginning and end positions for a range of data.
 

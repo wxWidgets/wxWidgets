@@ -8,7 +8,6 @@
 
 /**
     @class wxWrapSizer
-    @wxheader{wrapsizer.h}
 
     A wrap sizer lays out its items in a single line, like a box sizer -- as long
     as there is space available in that direction. Once all available space in

@@ -19,7 +19,6 @@ enum wxURIHostType
 
 /**
     @class wxURI
-    @wxheader{uri.h}
 
     wxURI is used to extract information from a URI (Uniform Resource
     Identifier).

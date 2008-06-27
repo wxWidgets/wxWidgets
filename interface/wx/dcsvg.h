@@ -8,7 +8,6 @@
 
 /**
     @class wxSVGFileDC
-    @wxheader{dcsvg.h}
 
     A wxSVGFileDC is a device context onto which graphics and text can be
     drawn, and the output produced as a vector file, in SVG format (see the W3C

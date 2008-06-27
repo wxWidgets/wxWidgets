@@ -19,7 +19,6 @@ enum wxFileSystemOpenFlags
 
 /**
     @class wxFileSystem
-    @wxheader{filesys.h}
 
     This class provides an interface for opening files on different file systems.
     It can handle absolute and/or local filenames.
@@ -171,7 +170,6 @@ public:
 
 /**
     @class wxFSFile
-    @wxheader{filesys.h}
 
     This class represents a single file opened by wxFileSystem.
     It provides more information than wxWindow's input stream
@@ -300,7 +298,6 @@ public:
 
 /**
     @class wxFileSystemHandler
-    @wxheader{filesys.h}
 
     Classes derived from wxFileSystemHandler are used to access virtual file systems.
 

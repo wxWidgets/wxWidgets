@@ -8,7 +8,6 @@
 
 /**
     @class wxHtmlDCRenderer
-    @headerfile htmprint.h wx/html/htmprint.h
 
     This class can render HTML document into a specified area of a DC. You can use
     it
@@ -96,7 +95,6 @@ public:
 
 /**
     @class wxHtmlEasyPrinting
-    @headerfile htmprint.h wx/html/htmprint.h
 
     This class provides very simple interface to printing
     architecture. It allows you to print HTML documents using
@@ -236,7 +234,6 @@ public:
 
 /**
     @class wxHtmlPrintout
-    @headerfile htmprint.h wx/html/htmprint.h
 
     This class serves as printout class for HTML documents.
 

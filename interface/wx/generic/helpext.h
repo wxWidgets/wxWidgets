@@ -9,7 +9,6 @@
 
 /**
     @class wxExtHelpController
-    @wxheader{help.h}
 
     This class implements help via an external browser.
     It requires the name of a directory containing the documentation

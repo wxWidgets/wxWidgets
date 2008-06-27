@@ -8,7 +8,6 @@
 
 /**
     @class wxSystemOptions
-    @wxheader{sysopt.h}
 
     wxSystemOptions stores option/value pairs that wxWidgets itself or
     applications can use to alter behaviour at run-time. It can be

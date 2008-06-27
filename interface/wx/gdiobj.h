@@ -8,7 +8,6 @@
 
 /**
     @class wxGDIObject
-    @wxheader{gdiobj.h}
 
     This class allows platforms to implement functionality to optimise GDI objects,
     such

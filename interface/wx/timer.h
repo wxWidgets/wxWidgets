@@ -8,7 +8,6 @@
 
 /**
     @class wxTimer
-    @wxheader{timer.h}
 
     The wxTimer class allows you to execute code at specified intervals. Its
     precision is platform-dependent, but in general will not be better than 1ms nor
@@ -130,7 +129,6 @@ public:
 
 /**
     @class wxTimerEvent
-    @wxheader{timer.h}
 
     wxTimerEvent object is passed to the event handler of timer events.
 

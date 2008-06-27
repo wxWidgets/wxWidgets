@@ -8,7 +8,6 @@
 
 /**
     @class wxPickerBase
-    @wxheader{pickerbase.h}
 
     Base abstract class for all pickers which support an auxiliary text control.
 

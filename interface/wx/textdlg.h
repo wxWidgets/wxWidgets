@@ -8,7 +8,6 @@
 
 /**
     @class wxPasswordEntryDialog
-    @wxheader{textdlg.h}
 
     This class represents a dialog that requests a one-line password string from
     the user.
@@ -30,7 +29,6 @@ public:
 
 /**
     @class wxTextEntryDialog
-    @wxheader{textdlg.h}
 
     This class represents a dialog that requests a one-line text string from the
     user.

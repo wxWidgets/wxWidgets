@@ -8,7 +8,6 @@
 
 /**
     @class wxGLContext
-    @wxheader{glcanvas.h}
 
     An instance of a wxGLContext represents the state of an OpenGL state machine
     and the connection between OpenGL and the system.
@@ -138,7 +137,6 @@ enum
 
 /**
     @class wxGLCanvas
-    @wxheader{glcanvas.h}
 
     wxGLCanvas is a class for displaying OpenGL graphics. It is always used in
     conjunction with wxGLContext as the context can only be

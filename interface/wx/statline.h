@@ -8,7 +8,6 @@
 
 /**
     @class wxStaticLine
-    @wxheader{statline.h}
 
     A static line is just a line which may be used in a dialog to separate the
     groups of controls. The line may be only vertical or horizontal.

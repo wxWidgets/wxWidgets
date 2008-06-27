@@ -8,7 +8,6 @@
 
 /**
     @class wxGCDC
-    @wxheader{dcgraph.h}
 
     wxGCDC is a device context that draws on a wxGraphicsContext.
 

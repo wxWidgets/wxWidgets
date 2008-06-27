@@ -8,7 +8,6 @@
 
 /**
     @class wxLogWindow
-    @wxheader{log.h}
 
     This class represents a background log window: to be precise, it collects all
     log messages in the log frame which it manages but also passes them on to the
@@ -81,7 +80,6 @@ public:
 
 /**
     @class wxLogInterposerTemp
-    @wxheader{log.h}
 
     A special version of wxLogChain which uses itself as the
     new log target. It forwards log messages to the previously installed one in
@@ -109,7 +107,6 @@ public:
 
 /**
     @class wxLogChain
-    @wxheader{log.h}
 
     This simple class allows you to chain log sinks, that is to install a new sink but
     keep passing log messages to the old one instead of replacing it completely as
@@ -190,7 +187,6 @@ public:
 
 /**
     @class wxLogGui
-    @wxheader{log.h}
 
     This is the default log target for the GUI wxWidgets applications. It is passed
     to wxLog::SetActiveTarget at the program
@@ -212,7 +208,6 @@ public:
 
 /**
     @class wxLogStream
-    @wxheader{log.h}
 
     This class can be used to redirect the log messages to a C++ stream.
 
@@ -238,7 +233,6 @@ public:
 
 /**
     @class wxLogStderr
-    @wxheader{log.h}
 
     This class can be used to redirect the log messages to a C file stream (not to
     be confused with C++ streams). It is the default log target for the non-GUI
@@ -263,7 +257,6 @@ public:
 
 /**
     @class wxLogBuffer
-    @wxheader{log.h}
 
     wxLogBuffer is a very simple implementation of log sink which simply collects
     all the logged messages in a string (except the debug messages which are output
@@ -301,7 +294,6 @@ public:
 
 /**
     @class wxLogInterposer
-    @wxheader{log.h}
 
     A special version of wxLogChain which uses itself as the
     new log target. It forwards log messages to the previously installed one in
@@ -330,7 +322,6 @@ public:
 
 /**
     @class wxLogTextCtrl
-    @wxheader{log.h}
 
     Using these target all the log messages can be redirected to a text control.
     The text control must have been created with @c wxTE_MULTILINE style by the
@@ -355,7 +346,6 @@ public:
 
 /**
     @class wxLog
-    @wxheader{log.h}
 
     wxLog class defines the interface for the @e log targets used by wxWidgets
     logging functions as explained in the @ref overview_log.
@@ -705,7 +695,6 @@ public:
 
 /**
     @class wxLogNull
-    @wxheader{log.h}
 
     This class allows you to temporarily suspend logging. All calls to the log
     functions during the life time of an object of this class are just ignored.

@@ -14,7 +14,6 @@
 
 /**
     @class wxClipboard
-    @wxheader{clipbrd.h}
 
     A class for manipulating the clipboard.
 

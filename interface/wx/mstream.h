@@ -8,7 +8,6 @@
 
 /**
     @class wxMemoryOutputStream
-    @wxheader{mstream.h}
 
 
     @library{wxbase}
@@ -48,7 +47,6 @@ public:
 
 /**
     @class wxMemoryInputStream
-    @wxheader{mstream.h}
 
 
     @library{wxbase}

@@ -8,7 +8,6 @@
 
 /**
     @class wxToolBar
-    @wxheader{toolbar.h}
 
     The name wxToolBar is defined to be a synonym for one of the following
     classes:

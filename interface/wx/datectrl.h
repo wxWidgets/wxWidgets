@@ -8,7 +8,6 @@
 
 /**
     @class wxDatePickerCtrl
-    @wxheader{datectrl.h}
 
     This control allows the user to select a date. Unlike wxCalendarCtrl, which
     is a relatively big control, wxDatePickerCtrl is implemented as a small

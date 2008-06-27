@@ -8,7 +8,6 @@
 
 /**
     @class wxZipNotifier
-    @wxheader{zipstrm.h}
 
     If you need to know when a wxZipInputStream
     updates a wxZipEntry,
@@ -42,7 +41,6 @@ public:
 
 /**
     @class wxZipEntry
-    @wxheader{zipstrm.h}
 
     Holds the meta-data for an entry in a zip.
 
@@ -228,7 +226,6 @@ public:
 
 /**
     @class wxZipInputStream
-    @wxheader{zipstrm.h}
 
     Input stream for reading zip files.
 
@@ -308,7 +305,6 @@ public:
 
 /**
     @class wxZipClassFactory
-    @wxheader{zipstrm.h}
 
     Class factory for the zip archive format. See the base class
     for details.
@@ -329,7 +325,6 @@ public:
 
 /**
     @class wxZipOutputStream
-    @wxheader{zipstrm.h}
 
     Output stream for writing zip files.
 

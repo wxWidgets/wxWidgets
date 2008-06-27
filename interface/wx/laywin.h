@@ -8,7 +8,6 @@
 
 /**
     @class wxLayoutAlgorithm
-    @wxheader{laywin.h}
 
     wxLayoutAlgorithm implements layout of subwindows in MDI or SDI frames.
     It sends a wxCalculateLayoutEvent event
@@ -137,7 +136,6 @@ public:
 
 /**
     @class wxSashLayoutWindow
-    @wxheader{laywin.h}
 
     wxSashLayoutWindow responds to OnCalculateLayout events generated
     by wxLayoutAlgorithm. It allows the
@@ -278,7 +276,6 @@ public:
 
 /**
     @class wxQueryLayoutInfoEvent
-    @wxheader{laywin.h}
 
     This event is sent when wxLayoutAlgorithm wishes to get
     the size, orientation and alignment of a window. More precisely, the event is
@@ -368,7 +365,6 @@ public:
 
 /**
     @class wxCalculateLayoutEvent
-    @wxheader{laywin.h}
 
     This event is sent by wxLayoutAlgorithm to
     calculate the amount of the remaining client area that the window should

@@ -8,7 +8,6 @@
 
 /**
     @class wxPosition
-    @wxheader{position.h}
 
     This class represents the position of an item in any kind of grid of rows and
     columns such as wxGridBagSizer, or wxHVScrolledWindow.

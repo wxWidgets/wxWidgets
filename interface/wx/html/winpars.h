@@ -8,7 +8,6 @@
 
 /**
     @class wxHtmlTagsModule
-    @headerfile winpars.h wx/html/winpars.h
 
     This class provides easy way of filling wxHtmlWinParser's table of
     tag handlers. It is used almost exclusively together with the set of
@@ -39,7 +38,6 @@ public:
 
 /**
     @class wxHtmlWinTagHandler
-    @headerfile winpars.h wx/html/winpars.h
 
     This is basically wxHtmlTagHandler except that
     it is extended with protected member m_WParser pointing to
@@ -64,7 +62,6 @@ public:
 
 /**
     @class wxHtmlWinParser
-    @headerfile winpars.h wx/html/winpars.h
 
     This class is derived from wxHtmlParser and
     its main goal is to parse HTML input so that it can be displayed in

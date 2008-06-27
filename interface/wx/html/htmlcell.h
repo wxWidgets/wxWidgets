@@ -8,7 +8,6 @@
 
 /**
     @class wxHtmlColourCell
-    @headerfile htmlcell.h wx/html/htmlcell.h
 
     This cell changes the colour of either the background or the foreground.
 
@@ -56,7 +55,6 @@ public:
 
 /**
     @class wxHtmlWidgetCell
-    @headerfile htmlcell.h wx/html/htmlcell.h
 
     wxHtmlWidgetCell is a class that provides a connection between HTML cells and
     widgets (an object derived
@@ -90,7 +88,6 @@ public:
 
 /**
     @class wxHtmlCell
-    @headerfile htmlcell.h wx/html/htmlcell.h
 
     Internal data structure. It represents fragments of parsed HTML
     page, the so-called @b cell - a word, picture, table, horizontal line and so on.
@@ -316,7 +313,6 @@ public:
 
 /**
     @class wxHtmlContainerCell
-    @headerfile htmlcell.h wx/html/htmlcell.h
 
     The wxHtmlContainerCell class is an implementation of a cell that may
     contain more cells in it. It is heavily used in the wxHTML layout algorithm.
@@ -680,7 +676,6 @@ public:
 
 /**
     @class wxHtmlLinkInfo
-    @headerfile htmlcell.h wx/html/htmlcell.h
 
     This class stores all necessary information about hypertext
     links (as represented by @c A tag in HTML documents). In

@@ -8,7 +8,6 @@
 
 /**
     @class wxFileCtrl
-    @wxheader{filectrl.h}
 
     This control allows the user to select a file.
 
@@ -186,7 +185,6 @@ public:
 
 /**
     @class wxFileCtrlEvent
-    @wxheader{filectrl.h}
 
     A file control event holds information about events associated with
     wxFileCtrl objects.

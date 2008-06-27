@@ -57,7 +57,6 @@ enum
 
 /**
     @class wxRegEx
-    @wxheader{regex.h}
 
     wxRegEx represents a regular expression.  This class provides support
     for regular expressions matching and also replacement.

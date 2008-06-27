@@ -25,7 +25,6 @@ enum wxProtocolError
 
 /**
     @class wxProtocol
-    @headerfile protocol.h wx/protocol/protocol.h
 
     Represents a protocol for use with wxURL.
 

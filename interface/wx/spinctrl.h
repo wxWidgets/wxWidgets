@@ -8,7 +8,6 @@
 
 /**
     @class wxSpinCtrl
-    @wxheader{spinctrl.h}
 
     wxSpinCtrl combines wxTextCtrl and
     wxSpinButton in one control.

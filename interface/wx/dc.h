@@ -8,7 +8,6 @@
 
 /**
     @class wxDC
-    @wxheader{dc.h}
 
     A wxDC is a @e "device context" onto which graphics and text can be drawn.
     It is intended to represent different output devices and offers a common
@@ -1101,7 +1100,6 @@ public:
 
 /**
     @class wxDCClipper
-    @wxheader{dc.h}
 
     wxDCClipper is a small helper class for setting a clipping region on a wxDC
     and unsetting it automatically. An object of wxDCClipper class is typically

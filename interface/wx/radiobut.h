@@ -8,7 +8,6 @@
 
 /**
     @class wxRadioButton
-    @wxheader{radiobut.h}
 
     A radio button item is a button which usually denotes one of several
     mutually exclusive options. It has a text label next to a (usually) round

@@ -8,7 +8,6 @@
 
 /**
     @class wxSearchCtrl
-    @wxheader{srchctrl.h}
 
     A search control is a composite control with a search button, a text
     control, and a cancel button.

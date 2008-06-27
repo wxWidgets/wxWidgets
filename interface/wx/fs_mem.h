@@ -8,7 +8,6 @@
 
 /**
     @class wxMemoryFSHandler
-    @wxheader{fs_mem.h}
 
     This wxFileSystem handler can store arbitrary data in memory stream and make
     them accessible via an URL.

@@ -8,7 +8,6 @@
 
 /**
     @class wxPopupWindow
-    @wxheader{popupwin.h}
 
     A special kind of top level window used for popup menus,
     combobox popups and such.

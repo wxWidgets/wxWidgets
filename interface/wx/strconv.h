@@ -8,7 +8,6 @@
 
 /**
     @class wxMBConv
-    @wxheader{strconv.h}
 
     This class is the base class of a hierarchy of classes capable of
     converting text strings between multibyte (SBCS or DBCS) encodings and
@@ -286,7 +285,6 @@ public:
 
 /**
     @class wxMBConvUTF7
-    @wxheader{strconv.h}
 
     This class converts between the UTF-7 encoding and Unicode.
     It has one predefined instance, @b wxConvUTF7.
@@ -315,7 +313,6 @@ class wxMBConvUTF7 : public wxMBConv
 
 /**
     @class wxMBConvUTF8
-    @wxheader{strconv.h}
 
     This class converts between the UTF-8 encoding and Unicode.
     It has one predefined instance, @b wxConvUTF8.
@@ -333,7 +330,6 @@ class wxMBConvUTF8 : public wxMBConv
 
 /**
     @class wxMBConvUTF16
-    @wxheader{strconv.h}
 
     This class is used to convert between multibyte encodings and UTF-16 Unicode
     encoding (also known as UCS-2).
@@ -356,7 +352,6 @@ class wxMBConvUTF16 : public wxMBConv
 
 /**
     @class wxMBConvUTF32
-    @wxheader{strconv.h}
 
     This class is used to convert between multibyte encodings and UTF-32
     Unicode encoding (also known as UCS-4).
@@ -380,7 +375,6 @@ class wxMBConvUTF32 : public wxMBConv
 
 /**
     @class wxCSConv
-    @wxheader{strconv.h}
 
     This class converts between any character set supported by the system and
     Unicode.
@@ -443,7 +437,6 @@ public:
 
 /**
     @class wxMBConvFile
-    @wxheader{strconv.h}
 
     This class used to define the class instance @b wxConvFileName, but
     nowadays @b wxConvFileName is either of type wxConvLibc (on most platforms)

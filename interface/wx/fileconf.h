@@ -8,7 +8,6 @@
 
 /**
     @class wxFileConfig
-    @wxheader{fileconf.h}
 
     wxFileConfig implements wxConfigBase interface for
     storing and retrieving configuration information using plain text files. The

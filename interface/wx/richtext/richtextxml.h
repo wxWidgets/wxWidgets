@@ -8,7 +8,6 @@
 
 /**
     @class wxRichTextXMLHandler
-    @headerfile richtextxml.h wx/richtext/richtextxml.h
 
     A handler for loading and saving content in an XML format specific
     to wxRichTextBuffer. You can either add the handler to the buffer

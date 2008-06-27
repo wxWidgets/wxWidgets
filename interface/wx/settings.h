@@ -8,7 +8,6 @@
 
 /**
     @class wxSystemSettings
-    @wxheader{settings.h}
 
     wxSystemSettings allows the application to ask for details about
     the system. This can include settings such as standard colours, fonts,

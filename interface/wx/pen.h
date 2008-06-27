@@ -98,7 +98,6 @@ enum wxPenCap
 
 /**
     @class wxPen
-    @wxheader{pen.h}
 
     A pen is a drawing tool for drawing outlines. It is used for drawing
     lines and painting the outline of rectangles, ellipses, etc.
@@ -410,7 +409,6 @@ wxPen* wxLIGHT_GREY_PEN;
 
 /**
     @class wxPenList
-    @wxheader{gdicmn.h}
 
     There is only one instance of this class: ::wxThePenList.
     Use this object to search for a previously created pen of the desired

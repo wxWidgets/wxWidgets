@@ -8,7 +8,6 @@
 
 /**
     @class wxDirDialog
-    @wxheader{dirdlg.h}
 
     This class represents the directory chooser dialog.
 

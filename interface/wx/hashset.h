@@ -8,7 +8,6 @@
 
 /**
     @class wxHashSet
-    @wxheader{hashset.h}
 
     This is a simple, type-safe, and reasonably efficient hash set class,
     whose interface is a subset of the interface of STL containers. In

@@ -8,7 +8,6 @@
 
 /**
     @class wxToolbook
-    @wxheader{toolbook.h}
 
     wxToolbook is a class similar to wxNotebook but which uses a wxToolBar to
     show the labels instead of the tabs.

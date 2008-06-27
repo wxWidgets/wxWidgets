@@ -7,7 +7,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
-    @wxheader{scrolwin.h}
 
     The wxScrolled class manages scrolling for its client area, transforming
     the coordinates according to the scrollbar positions, and setting the

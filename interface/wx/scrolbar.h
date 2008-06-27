@@ -8,7 +8,6 @@
 
 /**
     @class wxScrollBar
-    @wxheader{scrolbar.h}
 
     A wxScrollBar is a control that represents a horizontal or
     vertical scrollbar. It is distinct from the two scrollbars that some windows

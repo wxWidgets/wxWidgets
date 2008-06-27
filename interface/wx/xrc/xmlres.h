@@ -8,7 +8,6 @@
 
 /**
     @class wxXmlResource
-    @headerfile xmlres.h wx/xrc/xmlres.h
 
     This is the main class for interacting with the XML-based resource system.
 
@@ -234,7 +233,6 @@ public:
 
 /**
     @class wxXmlResourceHandler
-    @headerfile xmlres.h wx/xrc/xmlres.h
 
     wxXmlResourceHandler is an abstract base class for resource handlers
     capable of creating a control from an XML node.

@@ -8,7 +8,6 @@
 
 /**
     @class wxJoystick
-    @wxheader{joystick.h}
 
     wxJoystick allows an application to control one or more joysticks.
 

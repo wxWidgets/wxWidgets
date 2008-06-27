@@ -8,7 +8,6 @@
 
 /**
     @class wxRichTextFormattingDialogFactory
-    @headerfile richtextformatdlg.h wx/richtext/richtextformatdlg.h
 
     This class provides pages for wxRichTextFormattingDialog, and allows other
     customization of the dialog.
@@ -84,7 +83,6 @@ public:
 
 /**
     @class wxRichTextFormattingDialog
-    @headerfile richtextformatdlg.h wx/richtext/richtextformatdlg.h
 
     This dialog allows the user to edit a character and/or paragraph style.
 

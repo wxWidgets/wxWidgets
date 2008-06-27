@@ -8,7 +8,6 @@
 
 /**
     @class wxTempFileOutputStream
-    @wxheader{wfstream.h}
 
     wxTempFileOutputStream is an output stream based on wxTempFile. It
     provides a relatively safe way to replace the contents of the
@@ -52,7 +51,6 @@ public:
 
 /**
     @class wxFFileOutputStream
-    @wxheader{wfstream.h}
 
     This class represents data written to a file. There are actually
     two such groups of classes: this one is based on wxFFile
@@ -96,7 +94,6 @@ public:
 
 /**
     @class wxFileOutputStream
-    @wxheader{wfstream.h}
 
     This class represents data written to a file. There are actually
     two such groups of classes: this one is based on wxFile
@@ -139,7 +136,6 @@ public:
 
 /**
     @class wxFileInputStream
-    @wxheader{wfstream.h}
 
     This class represents data read in from a file. There are actually
     two such groups of classes: this one is based on wxFile
@@ -182,7 +178,6 @@ public:
 
 /**
     @class wxFFileInputStream
-    @wxheader{wfstream.h}
 
     This class represents data read in from a file. There are actually
     two such groups of classes: this one is based on wxFFile
@@ -227,7 +222,6 @@ public:
 
 /**
     @class wxFFileStream
-    @wxheader{wfstream.h}
 
 
     @library{wxbase}
@@ -249,7 +243,6 @@ public:
 
 /**
     @class wxFileStream
-    @wxheader{wfstream.h}
 
 
     @library{wxbase}

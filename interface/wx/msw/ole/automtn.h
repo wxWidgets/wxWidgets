@@ -8,7 +8,6 @@
 
 /**
     @class wxAutomationObject
-    @headerfile ole/automtn.h wx/msw/ole/automtn.h
 
     The @b wxAutomationObject class represents an OLE automation object containing
     a single data member,

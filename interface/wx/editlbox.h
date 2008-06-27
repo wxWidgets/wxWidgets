@@ -8,7 +8,6 @@
 
 /**
     @class wxEditableListBox
-    @wxheader{editlbox.h}
 
     An editable listbox is composite control that lets the user easily enter,
     delete and reorder a list of strings.

@@ -8,7 +8,6 @@
 
 /**
     @class wxSymbolPickerDialog
-    @headerfile richtextsymboldlg.h wx/richtext/richtextsymboldlg.h
 
     wxSymbolPickerDialog presents the user with a choice of fonts and a grid
     of available characters. This modal dialog provides the application with

@@ -58,7 +58,6 @@ enum wxPropertySheetDialogFlags
 
 /**
     @class wxPropertySheetDialog
-    @wxheader{propdlg.h}
 
     This class represents a property sheet dialog: a tabbed dialog
     for showing settings. It is optimized to show flat tabs

@@ -8,7 +8,6 @@
 
 /**
     @class wxSplashScreen
-    @wxheader{splash.h}
 
     wxSplashScreen shows a window with a thin border, displaying a bitmap
     describing your

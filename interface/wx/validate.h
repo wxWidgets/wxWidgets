@@ -8,7 +8,6 @@
 
 /**
     @class wxValidator
-    @wxheader{validate.h}
 
     wxValidator is the base class for a family of validator classes that
     mediate between a class of control, and application data.

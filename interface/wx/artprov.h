@@ -8,7 +8,6 @@
 
 /**
     @class wxArtProvider
-    @wxheader{artprov.h}
 
     wxArtProvider class is used to customize the look of wxWidgets application.
 

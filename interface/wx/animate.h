@@ -25,7 +25,6 @@ enum wxAnimationType
 
 /**
     @class wxAnimationCtrl
-    @wxheader{animate.h}
 
     This is a static control which displays an animation.
     wxAnimationCtrl API is as simple as possible and won't give you full control
@@ -177,7 +176,6 @@ public:
 
 /**
     @class wxAnimation
-    @wxheader{animate.h}
 
     This class encapsulates the concept of a platform-dependent animation.
     An animation is a sequence of frames of the same size.

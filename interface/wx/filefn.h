@@ -8,7 +8,6 @@
 
 /**
     @class wxPathList
-    @wxheader{filefn.h}
 
     The path list is a convenient way of storing a number of directories, and
     when presented with a filename without a directory, searching for an

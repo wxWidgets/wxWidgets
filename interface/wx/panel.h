@@ -8,7 +8,6 @@
 
 /**
     @class wxPanel
-    @wxheader{panel.h}
 
     A panel is a window on which controls are placed. It is usually placed within
     a frame. Its main feature over its parent class wxWindow is code for handling

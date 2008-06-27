@@ -8,7 +8,6 @@
 
 /**
     @class wxWindowUpdateLocker
-    @wxheader{wupdlock.h}
 
     This tiny class prevents redrawing of a wxWindow during its
     lifetime by using wxWindow::Freeze and

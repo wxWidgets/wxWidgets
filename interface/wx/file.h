@@ -8,7 +8,6 @@
 
 /**
     @class wxTempFile
-    @wxheader{file.h}
 
     wxTempFile provides a relatively safe way to replace the contents of the
     existing file. The name is explained by the fact that it may be also used as
@@ -122,7 +121,6 @@ public:
 
 /**
     @class wxFile
-    @wxheader{file.h}
 
     A wxFile performs raw file I/O. This is a very small class designed to
     minimize the overhead of using it - in fact, there is hardly any overhead at

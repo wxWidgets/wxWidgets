@@ -8,7 +8,6 @@
 
 /**
     @class wxHtmlTagHandler
-    @headerfile htmlpars.h wx/html/htmlpars.h
 
 
     @library{wxhtml}
@@ -65,7 +64,6 @@ public:
 
 /**
     @class wxHtmlParser
-    @headerfile htmlpars.h wx/html/htmlpars.h
 
     Classes derived from this handle the @b generic parsing of HTML documents: it
     scans

@@ -8,7 +8,6 @@
 
 /**
     @class wxStyledTextEvent
-    @headerfile stc.h wx/stc/stc.h
 
     The type of events sent from wxStyledTextCtrl.
 
@@ -253,7 +252,6 @@ public:
 
 /**
     @class wxStyledTextCtrl
-    @headerfile stc.h wx/stc/stc.h
 
     A wxWidgets implementation of the Scintilla source code editing component.
 

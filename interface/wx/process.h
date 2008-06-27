@@ -44,7 +44,6 @@ enum wxKillError
 
 /**
     @class wxProcess
-    @wxheader{process.h}
 
     The objects of this class are used in conjunction with the ::wxExecute() function.
     When a wxProcess object is passed to ::wxExecute(), its OnTerminate() virtual method
@@ -258,7 +257,6 @@ public:
 
 /**
     @class wxProcessEvent
-    @wxheader{process.h}
 
     A process event is sent when a process is terminated.
 

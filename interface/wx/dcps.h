@@ -8,7 +8,6 @@
 
 /**
     @class wxPostScriptDC
-    @wxheader{dcps.h}
 
     This defines the wxWidgets Encapsulated PostScript device context, which
     can write PostScript files on any platform. See wxDC for descriptions of

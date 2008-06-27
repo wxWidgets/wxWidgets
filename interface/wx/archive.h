@@ -8,7 +8,6 @@
 
 /**
     @class wxArchiveInputStream
-    @wxheader{archive.h}
 
     This is an abstract base class which serves as a common interface to
     archive input streams such as wxZipInputStream.
@@ -57,7 +56,6 @@ public:
 
 /**
     @class wxArchiveOutputStream
-    @wxheader{archive.h}
 
     This is an abstract base class which serves as a common interface to
     archive output streams such as wxZipOutputStream.
@@ -158,7 +156,6 @@ public:
 
 /**
     @class wxArchiveEntry
-    @wxheader{archive.h}
 
     This is an abstract base class which serves as a common interface to
     archive entry classes such as wxZipEntry.
@@ -316,7 +313,6 @@ enum wxStreamProtocolType
 
 /**
     @class wxArchiveClassFactory
-    @wxheader{archive.h}
 
     Allows the creation of streams to handle archive formats such as zip and tar.
 
@@ -476,7 +472,6 @@ public:
 
 /**
     @class wxArchiveNotifier
-    @wxheader{archive.h}
 
     If you need to know when a wxArchiveInputStream updates a wxArchiveEntry
     object, you can create a notifier by deriving from this abstract base class,
@@ -511,7 +506,6 @@ public:
 
 /**
     @class wxArchiveIterator
-    @wxheader{archive.h}
 
     An input iterator template class that can be used to transfer an archive's
     catalogue to a container. It is only available if wxUSE_STL is set to 1

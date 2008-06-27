@@ -8,7 +8,6 @@
 
 /**
     @class wxTipWindow
-    @wxheader{tipwin.h}
 
     Shows simple text in a popup tip window on creation. This is used by
     wxSimpleHelpProvider to show popup help. The

@@ -8,7 +8,6 @@
 
 /**
     @class wxStackWalker
-    @wxheader{stackwalk.h}
 
     wxStackWalker allows an application to enumerate, or walk, the stack frames
     (the function callstack).
@@ -87,7 +86,6 @@ public:
 
 /**
     @class wxStackFrame
-    @wxheader{stackwalk.h}
 
     wxStackFrame represents a single stack frame, or a single function in the call
     stack, and is used exclusively together with

@@ -8,7 +8,6 @@
 
 /**
     @class wxConnection
-    @wxheader{ipc.h}
 
     A wxConnection object represents the connection between a client
     and a server. It is created by making a connection using a
@@ -212,7 +211,6 @@ public:
 
 /**
     @class wxClient
-    @wxheader{ipc.h}
 
     A wxClient object represents the client part of a client-server
     DDE-like (Dynamic Data Exchange) conversation. The actual
@@ -291,7 +289,6 @@ public:
 
 /**
     @class wxServer
-    @wxheader{ipc.h}
 
     A wxServer object represents the server part of a client-server
     DDE-like (Dynamic Data Exchange) conversation. The actual

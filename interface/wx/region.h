@@ -33,7 +33,6 @@ enum wxRegionContain
 
 /**
     @class wxRegionIterator
-    @wxheader{region.h}
 
     This class is used to iterate through the rectangles in a region,
     typically when examining the damaged regions of a window within an OnPaint call.
@@ -135,7 +134,6 @@ public:
 
 /**
     @class wxRegion
-    @wxheader{region.h}
 
     A wxRegion represents a simple or complex region on a device context or window.
 

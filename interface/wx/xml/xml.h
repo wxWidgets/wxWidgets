@@ -8,7 +8,6 @@
 
 /**
     @class wxXmlNode
-    @headerfile xml.h wx/xml/xml.h
 
     Represents a node in an XML document. See wxXmlDocument.
 
@@ -270,7 +269,6 @@ public:
 
 /**
     @class wxXmlAttribute
-    @headerfile xml.h wx/xml/xml.h
 
     Represents a node attribute.
 
@@ -335,7 +333,6 @@ public:
 
 /**
     @class wxXmlDocument
-    @headerfile xml.h wx/xml/xml.h
 
     This class holds XML data/document as parsed by XML parser in the root node.
 

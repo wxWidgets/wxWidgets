@@ -8,7 +8,6 @@
 
 /**
     @class wxColourDialog
-    @wxheader{colordlg.h}
 
     This class represents the colour chooser dialog.
 

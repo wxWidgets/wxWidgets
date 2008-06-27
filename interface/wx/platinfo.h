@@ -110,7 +110,6 @@ enum wxEndianness
 
 /**
     @class wxPlatformInfo
-    @wxheader{platinfo.h}
 
     This class holds informations about the operating system and the toolkit that
     the application is running under and some basic architecture info of the machine

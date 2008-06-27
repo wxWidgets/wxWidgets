@@ -8,7 +8,6 @@
 
 /**
     @class wxObjectRefData
-    @wxheader{object.h}
 
     This class is used to store reference-counted data.
 
@@ -162,7 +161,6 @@ public:
 
 /**
     @class wxObject
-    @wxheader{object.h}
 
     This is the root class of many of the wxWidgets classes.
 
@@ -338,7 +336,6 @@ protected:
 
 /**
     @class wxClassInfo
-    @wxheader{object.h}
 
     This class stores meta-information about classes.
 
@@ -418,7 +415,6 @@ public:
 
 
 /**
-    @wxheader{object.h}
 
     This is helper template class primarily written to avoid memory leaks because of
     missing calls to wxObjectRefData::DecRef().

@@ -8,7 +8,6 @@
 
 /**
     @class wxHtmlTag
-    @headerfile htmltag.h wx/html/htmltag.h
 
     This class represents a single HTML tag.
     It is used by @ref overview_handlers "tag handlers".

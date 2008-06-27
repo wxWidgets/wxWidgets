@@ -8,7 +8,6 @@
 
 /**
     @class wxHtmlListBox
-    @wxheader{htmllbox.h}
 
     wxHtmlListBox is an implementation of wxVListBox which
     shows HTML content in the listbox rows. This is still an abstract base class
@@ -132,7 +131,6 @@ public:
 
 /**
     @class wxSimpleHtmlListBox
-    @wxheader{htmllbox.h}
 
     wxSimpleHtmlListBox is an implementation of wxHtmlListBox which
     shows HTML content in the listbox rows.

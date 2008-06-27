@@ -29,7 +29,6 @@ enum wxAcceleratorEntryFlags
 
 /**
     @class wxAcceleratorEntry
-    @wxheader{accel.h}
 
     An object used by an application wishing to create an accelerator table
     (see wxAcceleratorTable).
@@ -130,7 +129,6 @@ public:
 
 /**
     @class wxAcceleratorTable
-    @wxheader{accel.h}
 
     An accelerator table allows the application to specify a table of keyboard
     shortcuts for menu or button commands.

@@ -8,7 +8,6 @@
 
 /**
     @class wxTarInputStream
-    @wxheader{tarstrm.h}
 
     Input stream for reading tar files.
 
@@ -72,7 +71,6 @@ public:
 
 /**
     @class wxTarClassFactory
-    @wxheader{tarstrm.h}
 
     Class factory for the tar archive format. See the base class
     for details.
@@ -93,7 +91,6 @@ public:
 
 /**
     @class wxTarOutputStream
-    @wxheader{tarstrm.h}
 
     Output stream for writing tar files.
 
@@ -212,7 +209,6 @@ public:
 
 /**
     @class wxTarEntry
-    @wxheader{tarstrm.h}
 
     Holds the meta-data for an entry in a tar.
 

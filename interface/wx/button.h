@@ -8,7 +8,6 @@
 
 /**
     @class wxButton
-    @wxheader{button.h}
 
     A button is a control that contains a text string, and is one of the most
     common elements of a GUI.

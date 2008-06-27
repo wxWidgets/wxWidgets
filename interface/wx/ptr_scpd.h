@@ -8,7 +8,6 @@
 
 /**
     @class wxScopedPtr
-    @wxheader{ptr_scpd.h}
 
     This is a simple scoped smart pointer implementation that is similar to
     the Boost smart pointers (see http://www.boost.org) but rewritten
@@ -157,7 +156,6 @@ public:
 
 /**
     @class wxScopedArray
-    @wxheader{ptr_scpd.h}
 
     This is a simple scoped smart pointer array implementation that is similar to
     the Boost smart pointers (see http://www.boost.org/) but rewritten to
@@ -256,7 +254,6 @@ public:
 
 /**
     @class wxScopedTiedPtr
-    @wxheader{ptr_scpd.h}
 
     This is a variation on the topic of wxScopedPtr. This class is also a smart pointer
     but in addition it "ties" the pointer value to another variable. In other words,
@@ -292,7 +289,6 @@ public:
 
 
 /**
-    @wxheader{ptr_scpd.h}
 
     A scoped pointer template class. It is the template version of
     the old-style @ref classwx_scoped_ptr "scoped pointer macros".

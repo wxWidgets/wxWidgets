@@ -8,7 +8,6 @@
 
 /**
     @class wxToolTip
-    @wxheader{tooltip.h}
 
     This class holds information about a tooltip associated with a window (see
     wxWindow::SetToolTip()).

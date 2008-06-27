@@ -15,7 +15,6 @@
 
 /**
     @class wxArrayString
-    @wxheader{arrstr.h}
 
     wxArrayString is an efficient container for storing wxString objects.
 
@@ -263,7 +262,6 @@ public:
 
 /**
     @class wxSortedArrayString
-    @wxheader{arrstr.h}
 
     wxSortedArrayString is an efficient container for storing wxString objects
     which always keeps the string in alphabetical order.

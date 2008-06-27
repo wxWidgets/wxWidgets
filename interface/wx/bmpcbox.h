@@ -8,7 +8,6 @@
 
 /**
     @class wxBitmapComboBox
-    @wxheader{bmpcbox.h}
 
     A combobox that displays bitmap in front of the list items.
     It currently only allows using bitmaps of one size, and resizes itself

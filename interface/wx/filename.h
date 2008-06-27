@@ -8,7 +8,6 @@
 
 /**
     @class wxFileName
-    @wxheader{filename.h}
 
     wxFileName encapsulates a file name. This class serves two purposes: first, it
     provides the functions to split the file names into components and to recombine

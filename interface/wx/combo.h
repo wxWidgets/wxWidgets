@@ -8,7 +8,6 @@
 
 /**
     @class wxComboPopup
-    @wxheader{combo.h}
 
     In order to use a custom popup with wxComboCtrl, an interface class must be
     derived from wxComboPopup.
@@ -170,7 +169,6 @@ struct wxComboCtrlFeatures
 
 /**
     @class wxComboCtrl
-    @wxheader{combo.h}
 
     A combo control is a generic combobox that allows totally custom popup. In
     addition it has other customization features. For instance, position and

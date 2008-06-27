@@ -8,7 +8,6 @@
 
 /**
     @class wxStringInputStream
-    @wxheader{sstream.h}
 
     This class implements an input stream which reads data from a string. It
     supports seeking.
@@ -31,7 +30,6 @@ public:
 
 /**
     @class wxStringOutputStream
-    @wxheader{sstream.h}
 
     This class implements an output stream which writes data either to a
     user-provided or internally allocated string. Note that currently this stream

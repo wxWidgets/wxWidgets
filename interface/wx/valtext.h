@@ -8,7 +8,6 @@
 
 /**
     @class wxTextValidator
-    @wxheader{valtext.h}
 
     wxTextValidator validates text controls, providing a variety of filtering
     behaviours.

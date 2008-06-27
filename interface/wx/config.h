@@ -8,7 +8,6 @@
 
 /**
     @class wxConfigBase
-    @wxheader{config.h}
 
     wxConfigBase defines the basic interface of all config classes. It can not
     be used by itself (it is an abstract base class) and you will always use

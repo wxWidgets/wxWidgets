@@ -8,7 +8,6 @@
 
 /**
     @class wxGauge
-    @wxheader{gauge.h}
 
     A gauge is a horizontal or vertical bar which shows a quantity (often
     time).

@@ -8,7 +8,6 @@
 
 /**
     @class wxHashTable
-    @wxheader{hash.h}
 
     @b Please note that this class is retained for backward compatibility
     reasons; you should use wxHashMap.

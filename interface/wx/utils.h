@@ -8,7 +8,6 @@
 
 /**
     @class wxWindowDisabler
-    @wxheader{utils.h}
 
     This class disables all windows of the application (may be with the
     exception of one of them) in its constructor and enables them back in its
@@ -51,7 +50,6 @@ public:
 
 /**
     @class wxBusyCursor
-    @wxheader{utils.h}
 
     This class makes it easy to tell your user that the program is temporarily
     busy. Just create a wxBusyCursor object on the stack, and within the
@@ -92,7 +90,6 @@ public:
 
 /**
     @class wxMouseState
-    @wxheader{utils.h}
 
     Represents the mouse state.
 

@@ -8,7 +8,6 @@
 
 /**
     @class wxRichTextEvent
-    @headerfile richtextctrl.h wx/richtext/richtextctrl.h
 
     This is the event class for wxRichTextCtrl notifications.
 
@@ -105,7 +104,6 @@ public:
 
 /**
     @class wxRichTextCtrl
-    @headerfile richtextctrl.h wx/richtext/richtextctrl.h
 
     wxRichTextCtrl provides a generic, ground-up implementation of a text control
     capable of showing multiple styles and images.

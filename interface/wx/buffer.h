@@ -8,7 +8,6 @@
 
 /**
     @class wxMemoryBuffer
-    @wxheader{buffer.h}
 
     A @b wxMemoryBuffer is a useful data structure for storing arbitrary sized
     blocks of memory. wxMemoryBuffer guarantees deletion of the memory block when

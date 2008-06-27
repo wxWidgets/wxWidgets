@@ -8,7 +8,6 @@
 
 /**
     @class wxNotificationMessage
-    @wxheader{notifmsg.h}
 
     This class allows to show the user a message non intrusively. Currently it is
     implemented natively only for the Maemo platform and uses (non-modal) dialogs

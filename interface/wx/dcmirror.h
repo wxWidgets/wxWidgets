@@ -8,7 +8,6 @@
 
 /**
     @class wxMirrorDC
-    @wxheader{dcmirror.h}
 
     wxMirrorDC is a simple wrapper class which is always associated with a real
     wxDC object and either forwards all of its operations to it without changes

@@ -8,7 +8,6 @@
 
 /**
     @class wxPalette
-    @wxheader{palette.h}
 
     A palette is a table that maps pixel values to RGB colours. It allows the
     colours of a low-depth bitmap, for example, to be mapped to the available

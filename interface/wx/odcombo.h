@@ -24,7 +24,6 @@ enum wxOwnerDrawnComboBoxPaintingFlags
 
 /**
     @class wxOwnerDrawnComboBox
-    @wxheader{odcombo.h}
 
     wxOwnerDrawnComboBox is a combobox with owner-drawn list items.
     In essence, it is a wxComboCtrl with wxVListBox popup and wxControlWithItems

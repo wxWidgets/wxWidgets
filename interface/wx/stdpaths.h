@@ -8,7 +8,6 @@
 
 /**
     @class wxStandardPaths
-    @wxheader{stdpaths.h}
 
     wxStandardPaths returns the standard locations in the file system and should be
     used by applications to find their data files in a portable way.

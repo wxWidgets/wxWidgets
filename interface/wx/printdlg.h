@@ -8,7 +8,6 @@
 
 /**
     @class wxPrintDialog
-    @wxheader{printdlg.h}
 
     This class represents the print and print setup common dialogs.
     You may obtain a wxPrinterDC device context from a successfully dismissed
@@ -69,7 +68,6 @@ public:
 
 /**
     @class wxPageSetupDialog
-    @wxheader{printdlg.h}
 
     This class represents the page setup common dialog. In MSW, the page setup
     dialog is standard from Windows 95 on, replacing the print setup dialog (which

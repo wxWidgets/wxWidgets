@@ -8,7 +8,6 @@
 
 /**
     @class wxMessageDialog
-    @wxheader{msgdlg.h}
 
     This class represents a dialog that shows a single or multi-line message,
     with a choice of OK, Yes, No and Cancel buttons.
