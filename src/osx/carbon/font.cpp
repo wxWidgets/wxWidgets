@@ -316,7 +316,7 @@ static CTFontDescriptorRef wxMacCreateCTFontDescriptor(CFStringRef iFamilyName, 
 wxFontRefData::wxFontRefData( wxUint32 coreTextFontType )
 {
     CTFontRef font = CTFontCreateUIFontForLanguage( coreTextFontType, 0.0, NULL ) ;
-    if ( CTFontGetSize(m_ctFont) == 0 )
+    if ( CTFontGetSize(font) == 0 )
     {
         CFRelease(font);
         font = CTFontCreateUIFontForLanguage( coreTextFontType, 12.0, NULL );
@@ -446,7 +446,7 @@ void wxFontRefData::MacFindFont()
             m_ctFont.reset( CTFontCreateWithFontDescriptor( m_ctFontDescriptor, m_pointSize, NULL ) );
 #endif
         }
-#if wxMAC_USE_ATSU_TEXT == 0
+#if wxMAC_USE_ATSU_TEXT
         OSStatus status = noErr;
         CTFontDescriptorRef desc = m_ctFontDescriptor ;
         ATSFontRef atsfont = CTFontGetPlatformFont( m_ctFont, &desc );
