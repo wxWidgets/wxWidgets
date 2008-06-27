@@ -1568,20 +1568,16 @@ public:
 
     @code
     using namespace std;
-
-      wxTextCtrl *text = new wxTextCtrl(...);
-
-      {
+    wxTextCtrl* text = new wxTextCtrl(...);
+    {
         wxStreamToTextRedirector redirect(text);
 
         // this goes to the text control
-        cout  "Hello, text!"  endl;
-      }
-
-      // this goes somewhere else, presumably to stdout
-      cout  "Hello, console!"  endl;
+        cout << "Hello, text!" << endl;
+    }
+    // this goes somewhere else, presumably to stdout
+    cout << "Hello, console!" << endl;
     @endcode
-
 
     @library{wxcore}
     @category{logging}
