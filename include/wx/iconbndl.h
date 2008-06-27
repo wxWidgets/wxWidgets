@@ -87,7 +87,7 @@ public:
 #if WXWIN_COMPATIBILITY_2_8
     wxDEPRECATED( void AddIcon(const wxString& file, long type)
         {
-            AddIcon(file, (long)type);
+            AddIcon(file, (wxBitmapType)type);
         }
     )
 
