@@ -100,6 +100,7 @@ public:
 
     // Sets the image for the given item.
     virtual void SetItemBitmap(unsigned int n, const wxBitmap& bitmap);
+    virtual bool SetFont(const wxFont& font);
 
 protected:
 
@@ -112,7 +113,6 @@ protected:
     void OnSize(wxSizeEvent& event);
 
     virtual wxSize DoGetBestSize() const;
-    virtual bool SetFont(const wxFont& font);
 
     virtual wxItemContainer* GetItemContainer() { return this; }
     virtual wxWindow* GetControl() { return this; }
