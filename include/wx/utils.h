@@ -578,6 +578,9 @@ enum
 // Launch url in the user's default internet browser
 WXDLLIMPEXP_CORE bool wxLaunchDefaultBrowser(const wxString& url, int flags = 0);
 
+// Launch document in the user's default application
+WXDLLIMPEXP_CORE bool wxLaunchDefaultApplication(const wxString& path, int flags = 0);
+
 // ----------------------------------------------------------------------------
 // Menu accelerators related things
 // ----------------------------------------------------------------------------

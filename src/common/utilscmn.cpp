@@ -934,6 +934,32 @@ void wxQsort(void *const pbase, size_t total_elems,
 #if wxUSE_GUI
 
 // ----------------------------------------------------------------------------
+// Launch document with default app
+// ----------------------------------------------------------------------------
+
+bool wxLaunchDefaultApplication(const wxString &document, int flags)
+{
+    wxUnusedVar(flags);
+    
+#ifdef __UNIX__
+    // Our best best is to use xdg-open from freedesktop.org cross-desktop
+    // compatibility suite xdg-utils
+    // (see http://portland.freedesktop.org/wiki/) -- this is installed on
+    // most modern distributions and may be tweaked by them to handle
+    // distribution specifics.
+    wxString path, xdg_open;
+    if ( wxGetEnv("PATH", &path) &&
+         wxFindFileInPath(&xdg_open, path, "xdg-open") )
+    {
+        if ( wxExecute(xdg_open + " " + document) )
+            return true;
+    }
+#endif
+
+   return false;
+}
+
+// ----------------------------------------------------------------------------
 // Launch default browser
 // ----------------------------------------------------------------------------
 
