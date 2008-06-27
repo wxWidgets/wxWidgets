@@ -7,7 +7,7 @@
 #############################################################################
 
 #---------------------------------------------------------------------------
-# Project related configuration options
+# Project Options
 #---------------------------------------------------------------------------
 
 DOXYFILE_ENCODING      = UTF-8
@@ -21,9 +21,10 @@ REPEAT_BRIEF           = NO
 ABBREVIATE_BRIEF       =
 ALWAYS_DETAILED_SEC    = YES
 INLINE_INHERITED_MEMB  = NO
-FULL_PATH_NAMES        = NO
-STRIP_FROM_PATH        =
-STRIP_FROM_INC_PATH    =
+FULL_PATH_NAMES        = YES
+STRIP_FROM_PATH        = "$(WXWIDGETS)/"
+STRIP_FROM_INC_PATH    = "$(WXWIDGETS)/include/" \
+                         "$(WXWIDGETS)/interface/"
 SHORT_NAMES            = NO
 JAVADOC_AUTOBRIEF      = NO
 QT_AUTOBRIEF           = NO
@@ -182,10 +183,10 @@ ALIASES += sampleabout{1}="This sample demonstrates \1."
 ALIASES += buildwith{1}="<b>Build Note:</b> You may need to build the wxWidgets library with <tt>\1</tt> being set to 1 to be able to make it work, please read comments in @c <wx/setup_inc.h> for more info."
 ALIASES += buildwith{2}="<b>Build Note:</b> You may need to build the wxWidgets library with <tt>\1</tt> and <tt>\2</tt> being set to 1 to be able to make it work, please read comments in @c <wx/setup_inc.h> for more info."
 
+#---------------------------------------------------------------------------
+# Build Options
+#---------------------------------------------------------------------------
 
-#---------------------------------------------------------------------------
-# Build related configuration options
-#---------------------------------------------------------------------------
 EXTRACT_ALL            = YES
 EXTRACT_PRIVATE        = NO
 EXTRACT_STATIC         = YES
@@ -213,14 +214,15 @@ GENERATE_DEPRECATEDLIST= YES
 ENABLED_SECTIONS       = WXPERL_MANUAL WXPYTHON_MANUAL
 
 MAX_INITIALIZER_LINES  = 30
-SHOW_USED_FILES        = YES
+SHOW_USED_FILES        = NO
 SHOW_DIRECTORIES       = YES
-#SHOW_FILES             = NO   # Doxygen 1.5.6+
+SHOW_FILES             = YES # Doxygen 1.5.6+
 FILE_VERSION_FILTER    =
 
 #---------------------------------------------------------------------------
-# configuration options related to warning and progress messages
+# Warning and Progress Message Options
 #---------------------------------------------------------------------------
+
 QUIET                  = YES
 WARNINGS               = YES
 WARN_IF_UNDOCUMENTED   = YES
@@ -230,8 +232,9 @@ WARN_FORMAT            = "$file:$line: $text   "
 WARN_LOGFILE           = doxygen.log
 
 #---------------------------------------------------------------------------
-# configuration options related to the input files
+# Input File Options
 #---------------------------------------------------------------------------
+
 INPUT                  = ./mainpages ./groups ./overviews ../../interface
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.h *.txt
@@ -249,8 +252,9 @@ FILTER_PATTERNS        =
 FILTER_SOURCE_FILES    = NO
 
 #---------------------------------------------------------------------------
-# configuration options related to source browsing
+# Source Browsing Options
 #---------------------------------------------------------------------------
+
 SOURCE_BROWSER         = NO
 INLINE_SOURCES         = NO
 STRIP_CODE_COMMENTS    = YES
@@ -261,8 +265,9 @@ USE_HTAGS              = NO
 VERBATIM_HEADERS       = NO
 
 #---------------------------------------------------------------------------
-# configuration options related to the alphabetical class index
+# Alphabetical Class Index Options
 #---------------------------------------------------------------------------
+
 ALPHABETICAL_INDEX     = YES
 COLS_IN_ALPHA_INDEX    = 5
 IGNORE_PREFIX          = wx
@@ -290,8 +295,9 @@ GENERATE_TREEVIEW      = NO
 TREEVIEW_WIDTH         = 250
 
 #---------------------------------------------------------------------------
-# configuration options related to the LaTeX output
+# LaTeX Output Options
 #---------------------------------------------------------------------------
+
 GENERATE_LATEX         = NO # Only change in format output configs
 LATEX_OUTPUT           = latex
 LATEX_CMD_NAME         = latex
@@ -306,8 +312,9 @@ LATEX_BATCHMODE        = YES
 LATEX_HIDE_INDICES     = NO
 
 #---------------------------------------------------------------------------
-# configuration options related to the RTF output
+# RTF Output Options
 #---------------------------------------------------------------------------
+
 GENERATE_RTF           = NO # Only change in format output configs
 RTF_OUTPUT             = rtf
 COMPACT_RTF            = NO
@@ -316,16 +323,18 @@ RTF_STYLESHEET_FILE    =
 RTF_EXTENSIONS_FILE    =
 
 #---------------------------------------------------------------------------
-# configuration options related to the man page output
+# Man Page Output Options
 #---------------------------------------------------------------------------
+
 GENERATE_MAN           = NO # Only change in format output configs
 MAN_OUTPUT             = man
 MAN_EXTENSION          = .3
 MAN_LINKS              = NO
 
 #---------------------------------------------------------------------------
-# configuration options related to the XML output
+# XML Output Options
 #---------------------------------------------------------------------------
+
 GENERATE_XML           = NO # Only change in format output configs
 XML_OUTPUT             = xml
 XML_SCHEMA             =
@@ -333,21 +342,24 @@ XML_DTD                =
 XML_PROGRAMLISTING     = NO
 
 #---------------------------------------------------------------------------
-# configuration options for the AutoGen Definitions output
+# AutoGen Definitions Output Options
 #---------------------------------------------------------------------------
+
 GENERATE_AUTOGEN_DEF   = NO # Only change in format output configs
 
 #---------------------------------------------------------------------------
-# configuration options related to the Perl module output
+# Perl Module Output Options
 #---------------------------------------------------------------------------
+
 GENERATE_PERLMOD       = NO # Only change in format output configs
 PERLMOD_LATEX          = YES
 PERLMOD_PRETTY         = YES
 PERLMOD_MAKEVAR_PREFIX =
 
 #---------------------------------------------------------------------------
-# Configuration options related to the preprocessor
+# Preprocessor Options
 #---------------------------------------------------------------------------
+
 ENABLE_PREPROCESSING   = YES
 MACRO_EXPANSION        = NO
 EXPAND_ONLY_PREDEF     = NO
@@ -359,8 +371,9 @@ EXPAND_AS_DEFINED      =
 SKIP_FUNCTION_MACROS   = YES
 
 #---------------------------------------------------------------------------
-# Configuration::additions related to external references
+# Additions Related to External References
 #---------------------------------------------------------------------------
+
 TAGFILES               =
 GENERATE_TAGFILE       =
 ALLEXTERNALS           = NO
@@ -368,8 +381,9 @@ EXTERNAL_GROUPS        = YES
 PERL_PATH              = /usr/bin/perl
 
 #---------------------------------------------------------------------------
-# Configuration options related to the dot tool
+# dot Tool Options
 #---------------------------------------------------------------------------
+
 CLASS_DIAGRAMS         = YES
 MSCGEN_PATH            =
 HIDE_UNDOC_RELATIONS   = YES
@@ -396,7 +410,8 @@ GENERATE_LEGEND        = YES
 DOT_CLEANUP            = YES
 
 #---------------------------------------------------------------------------
-# Configuration::additions related to the search engine
+# Search Engine Options
 #---------------------------------------------------------------------------
+
 SEARCHENGINE           = NO
 

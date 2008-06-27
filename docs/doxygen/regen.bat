@@ -31,6 +31,10 @@ set arg=%1
 if "%arg%" EQU "" set cfgfile=Doxyfile_all
 if "%arg%" NEQ "" set cfgfile=Doxyfile_%1
 
+pushd ..\..
+set WXWIDGETS=%CD%
+popd
+
 REM
 REM NOW RUN DOXYGEN
 REM

@@ -20,6 +20,7 @@ me=$(basename $0)
 path=${0%%/$me}        # path from which the script has been launched
 current=$(pwd)
 cd $path
+WXWIDGETS=`cd ../.. && pwd`
 
 # prepare folders for the cp commands below
 mkdir -p out/html       # we need to copy files in this folder below
