@@ -1912,8 +1912,8 @@ void MyFrame::OnMove( wxMoveEvent& event )
 
 void MyFrame::OnIconized( wxIconizeEvent& event )
 {
-    wxLogMessage(_T("Frame %s"), event.Iconized() ? _T("iconized")
-                                                  : _T("restored"));
+    wxLogMessage(_T("Frame %s"), event.IsIconized() ? _T("iconized")
+                                                    : _T("restored"));
     event.Skip();
 }
 
