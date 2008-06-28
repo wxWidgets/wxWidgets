@@ -2239,11 +2239,11 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                                              wxLIST_STATE_SELECTED);
 
                     // <Enter> or <Space> activate the selected item if any (but
-                    // not with Shift and/or Ctrl as then they have a predefined
-                    // meaning for the list view)
+                    // not with any modifiers as they have a predefined meaning
+                    // then)
                     if ( lItem != -1 &&
                          (wVKey == VK_RETURN || wVKey == VK_SPACE) &&
-                         !(wxIsShiftDown() || wxIsCtrlDown()) )
+                         !wxIsAnyModifierDown() )
                     {
                         eventType = wxEVT_COMMAND_LIST_ITEM_ACTIVATED;
                     }
