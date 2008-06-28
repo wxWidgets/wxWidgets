@@ -244,15 +244,20 @@ STDMETHODIMP wxIDropTarget::DragOver(DWORD   grfKeyState,
         result = wxDragNone;
     }
 
-    // we need client coordinates to pass to wxWin functions
-    if ( !ScreenToClient(m_hwnd, (POINT *)&pt) )
-    {
-        wxLogLastError(wxT("ScreenToClient"));
-    }
+    if ( result != wxDragNone ) {
+        // we need client coordinates to pass to wxWin functions
+        if ( !ScreenToClient(m_hwnd, (POINT *)&pt) )
+        {
+            wxLogLastError(wxT("ScreenToClient"));
+        }
 
-    *pdwEffect = ConvertDragResultToEffect(
-                    m_pTarget->OnDragOver(pt.x, pt.y, result)
-                 );
+        *pdwEffect = ConvertDragResultToEffect(
+                        m_pTarget->OnDragOver(pt.x, pt.y, result)
+                     );
+    }
+    else {
+        *pdwEffect = DROPEFFECT_NONE;
+    }
 
     return S_OK;
 }
