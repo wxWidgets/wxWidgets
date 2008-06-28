@@ -1642,7 +1642,7 @@ Optional Features:
   --disable-gtk2          use GTK+ 1.2 instead of 2.0
   --enable-gpe            use GNOME PDA Environment features if possible
   --disable-shared        create static library instead of shared
-  --disable-optimise      create optimised code
+  --disable-optimise      compile without optimisations
   --enable-debug          same as debug_flag and debug_info
   --enable-stl            use STL for containers
   --enable-std_iostreams  use standard C++ stream classes
@@ -1650,7 +1650,7 @@ Optional Features:
   --disable-unicode       compile without Unicode support
   --enable-mslu           use MS Layer for Unicode on Windows 9x (Win32 only)
   --enable-utf8           use UTF-8 representation for strings (Unix only)
-  --enable-utf8only      only support UTF-8 locales in UTF-8 build (Unix only)
+  --enable-utf8only       only support UTF-8 locales in UTF-8 build (Unix only)
   --enable-extended_rtti  use extended RTTI (XTI)
   --enable-omf            use OMF object format
   --enable-debug_flag     set __WXDEBUG__ flag (recommended for developers!)
