@@ -1113,7 +1113,7 @@ void wxGridCellFloatEditor::Create(wxWindow* parent,
 void wxGridCellFloatEditor::BeginEdit(int row, int col, wxGrid* grid)
 {
     // first get the value
-    wxGridTableBase *table = grid->GetTable();
+    wxGridTableBase * const table = grid->GetTable();
     if ( table->CanGetValueAs(row, col, wxGRID_VALUE_FLOAT) )
     {
         m_valueOld = table->GetValueAsDouble(row, col);
@@ -1121,35 +1121,53 @@ void wxGridCellFloatEditor::BeginEdit(int row, int col, wxGrid* grid)
     else
     {
         m_valueOld = 0.0;
-        wxString sValue = table->GetValue(row, col);
-        if (! sValue.ToDouble(&m_valueOld) && ! sValue.empty())
+
+        const wxString value = table->GetValue(row, col);
+        if ( !value.empty() )
         {
-            wxFAIL_MSG( _T("this cell doesn't have float value") );
-            return;
+            if ( !value.ToDouble(&m_valueOld) )
+            {
+                wxFAIL_MSG( _T("this cell doesn't have float value") );
+                return;
+            }
         }
     }
 
     DoBeginEdit(GetString());
 }
 
-bool wxGridCellFloatEditor::EndEdit(int row, int col,
-                                     wxGrid* grid)
+bool wxGridCellFloatEditor::EndEdit(int row, int col, wxGrid* grid)
 {
-    double value = 0.0;
-    wxString text(Text()->GetValue());
+    const wxString text(Text()->GetValue()),
+                   textOld(grid->GetCellValue(row, col));
 
-    if ( (text.empty() || text.ToDouble(&value)) &&
-            !wxIsSameDouble(value, m_valueOld) )
+    double value;
+    if ( !text.empty() )
     {
-        if (grid->GetTable()->CanSetValueAs(row, col, wxGRID_VALUE_FLOAT))
-            grid->GetTable()->SetValueAsDouble(row, col, value);
-        else
-            grid->GetTable()->SetValue(row, col, text);
+        if ( !text.ToDouble(&value) )
+            return false;
+    }
+    else // new value is empty string
+    {
+        if ( textOld.empty() )
+            return false;           // nothing changed
 
-        return true;
+        value = 0.;
     }
 
-    return false;
+    // the test for empty strings ensures that we don't skip the value setting
+    // when "" is replaced by "0" or vice versa as "" numeric value is also 0.
+    if ( wxIsSameDouble(value, m_valueOld) && !text.empty() && !textOld.empty() )
+        return false;           // nothing changed
+
+    wxGridTableBase * const table = grid->GetTable();
+
+    if ( table->CanSetValueAs(row, col, wxGRID_VALUE_FLOAT) )
+        table->SetValueAsDouble(row, col, value);
+    else
+        table->SetValue(row, col, text);
+
+    return true;
 }
 
 void wxGridCellFloatEditor::Reset()
