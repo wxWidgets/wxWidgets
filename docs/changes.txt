@@ -87,6 +87,7 @@ Major new features in 2.8 release
   wxDirPickerCtrl, wxFilePickerCtrl, wxFontPickerCtrl, wxCollapsiblePane,
   wxSearchCtrl, wxAboutBox, wxTreebook, tar streams.
 
+
 2.8.9
 -----
 
@@ -97,6 +98,8 @@ All (GUI):
 - Fixed help viewer bug whereby the splitter sash in wxHtmlHelpWindow could
   go underneath the left-hand pane, permanently, after resizing the
   help window.
+- Fixed wxHTML default font size for printing to be 12pt regardless of the
+  platform, instead of depending on GUI toolkit's screen configuration.
 
 All (Unix):
 
@@ -113,6 +116,7 @@ wxMSW:
 wxGTK:
 
 wxMac:
+
 
 2.8.8
 -----
