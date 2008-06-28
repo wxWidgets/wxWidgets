@@ -116,6 +116,11 @@ public:
         }
     }
 
+    bool IsTextEmpty() const
+    {
+        return m_combo->GetTextCtrl()->IsEmpty();
+    }
+
     bool ParseDateTime(const wxString& s, wxDateTime* pDt)
     {
         wxASSERT(pDt);
@@ -435,6 +440,8 @@ wxDatePickerCtrlGeneric::SetDateRange(const wxDateTime& lowerdate,
 
 wxDateTime wxDatePickerCtrlGeneric::GetValue() const
 {
+    if ( HasFlag(wxDP_ALLOWNONE) && m_popup->IsTextEmpty() )
+        return wxInvalidDateTime;
     return m_popup->GetDate();
 }
 
