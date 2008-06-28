@@ -100,6 +100,7 @@ All (GUI):
   help window.
 - Fixed wxHTML default font size for printing to be 12pt regardless of the
   platform, instead of depending on GUI toolkit's screen configuration.
+- Support wxDP_ALLOWNONE style in generic wxDatePickerCtrl version.
 
 All (Unix):
 
