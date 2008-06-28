@@ -65,7 +65,6 @@ const wxTextCoord wxInvalidTextCoord    = -2;
 // ----------------------------------------------------------------------------
 
 #define wxTE_NO_VSCROLL     0x0002
-#define wxTE_AUTO_SCROLL    0x0008
 
 #define wxTE_READONLY       0x0010
 #define wxTE_MULTILINE      0x0020
@@ -107,6 +106,11 @@ const wxTextCoord wxInvalidTextCoord    = -2;
     // obsolete synonym
     #define wxTE_LINEWRAP       wxTE_CHARWRAP
 #endif // WXWIN_COMPATIBILITY_2_6
+
+#if WXWIN_COMPATIBILITY_2_8
+    // this style is (or at least should be) on by default now, don't use it
+    #define wxTE_AUTO_SCROLL    0
+#endif // WXWIN_COMPATIBILITY_2_8
 
 // force using RichEdit version 2.0 or 3.0 instead of 1.0 (default) for
 // wxTE_RICH controls - can be used together with or instead of wxTE_RICH

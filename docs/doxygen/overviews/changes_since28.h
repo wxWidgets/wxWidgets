@@ -149,5 +149,9 @@ Finally, a few structure fields, notable @c wxCmdLineEntryDesc::shortName,
 
   Of course, this will change the format of the wxConfig output which may be
   undesirable.
+
+- wxTE_AUTO_SCROLL style is deprecated as it's always on by default anyhow in
+  the ports which support it so you should simply remove any mentions of it
+  from your code.
 */
 

@@ -672,10 +672,7 @@ void wxGridCellTextEditor::DoCreate(wxWindow* parent,
                                     wxEvtHandler* evtHandler,
                                     long style)
 {
-    style |= wxTE_PROCESS_ENTER |
-             wxTE_PROCESS_TAB |
-             wxTE_AUTO_SCROLL |
-             wxNO_BORDER;
+    style |= wxTE_PROCESS_ENTER | wxTE_PROCESS_TAB | wxNO_BORDER;
 
     m_control = new wxTextCtrl(parent, id, wxEmptyString,
                                wxDefaultPosition, wxDefaultSize,

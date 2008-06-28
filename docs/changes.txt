@@ -225,7 +225,7 @@ Deprecated methods and their replacements
   passed to it was interpreted in physical, not logical, coordinates. Replace
   it with SetDeviceClippingRegion() if this was the correct thing to do in your
   code.
-
+- wxTE_AUTO_SCROLL style is deprecated as it's always on by default anyhow.
 
 
 Major new features in this release
