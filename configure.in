@@ -944,7 +944,7 @@ dnl compile options
 dnl ---------------------------------------------------------------------------
 
 WX_ARG_ENABLE(shared,      [  --enable-shared         create shared library code], wxUSE_SHARED)
-WX_ARG_ENABLE(optimise,    [  --enable-optimise       create optimised code], wxUSE_OPTIMISE)
+WX_ARG_ENABLE(optimise,    [  --enable-optimise       compile without optimisations], wxUSE_OPTIMISE)
 WX_ARG_ENABLE(debug,       [  --enable-debug          same as debug_flag and debug_info], wxUSE_DEBUG)
 WX_ARG_ENABLE(stl,         [  --enable-stl            use STL for containers], wxUSE_STL)
 if test "$USE_OS2" = "1"; then

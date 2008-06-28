@@ -947,7 +947,7 @@ Optional Features:
   --disable-gtk2          use GTK+ 1.2 instead of 2.0
   --enable-gpe            use GNOME PDA Environment features if possible
   --enable-shared         create shared library code
-  --enable-optimise       create optimised code
+  --enable-optimise       compile without optimisations
   --enable-debug          same as debug_flag and debug_info
   --enable-stl            use STL for containers
   --enable-omf            use OMF object format
