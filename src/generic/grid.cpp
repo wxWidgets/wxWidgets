@@ -6075,7 +6075,8 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
 
 
         }
-        else if ( m_cursorMode == WXGRID_CURSOR_RESIZE_ROW )
+        else if ( event.LeftIsDown() &&
+                  m_cursorMode == WXGRID_CURSOR_RESIZE_ROW )
         {
             int cw, ch, left, dummy;
             m_gridWin->GetClientSize( &cw, &ch );
@@ -6093,7 +6094,8 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
             dc.DrawLine( left, y, left+cw, y );
             m_dragLastPos = y;
         }
-        else if ( m_cursorMode == WXGRID_CURSOR_RESIZE_COL )
+        else if ( event.LeftIsDown() &&
+                  m_cursorMode == WXGRID_CURSOR_RESIZE_COL )
         {
             int cw, ch, dummy, top;
             m_gridWin->GetClientSize( &cw, &ch );
