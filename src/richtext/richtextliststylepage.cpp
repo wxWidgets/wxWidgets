@@ -516,20 +516,20 @@ void wxRichTextListStylePage::CreateControls()
 void wxRichTextListStylePage::UpdatePreview()
 {
     static const wxChar* s_para1 = wxT("Lorem ipsum dolor sit amet, consectetuer adipiscing elit. \
-Nullam ante sapien, vestibulum nonummy, pulvinar sed, luctus ut, lacus.");
+Nullam ante sapien, vestibulum nonummy, pulvinar sed, luctus ut, lacus.\n");
 
-    static const wxChar* s_para2 = wxT("Duis pharetra consequat dui. Nullam vitae justo id mauris lobortis interdum.");
+    static const wxChar* s_para2 = wxT("Duis pharetra consequat dui. Nullam vitae justo id mauris lobortis interdum.\n");
 
-    static const wxChar* s_para3 = wxT("\nInteger convallis dolor at augue \
+    static const wxChar* s_para3 = wxT("Integer convallis dolor at augue \
 iaculis malesuada. Donec bibendum ipsum ut ante porta fringilla.\n");
 
     wxRichTextListStyleDefinition* def = wxDynamicCast(wxRichTextFormattingDialog::GetDialogStyleDefinition(this),
         wxRichTextListStyleDefinition);
 
     wxRichTextStyleSheet* styleSheet = wxRichTextFormattingDialog::GetDialog(this)->GetStyleSheet();
-    
+
     wxTextAttr attr((const wxTextAttr &)(styleSheet ? def->GetStyle() : def->GetStyleMergedWithBase(styleSheet)));
-    
+
     attr.SetFlags(attr.GetFlags() &
       (wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_PARA_SPACING_BEFORE|wxTEXT_ATTR_PARA_SPACING_AFTER|
        wxTEXT_ATTR_LINE_SPACING|
@@ -559,7 +559,7 @@ iaculis malesuada. Donec bibendum ipsum ut ante porta fringilla.\n");
         wxTextAttr levelAttr = * def->GetLevelAttributes(i);
         levelAttr.SetBulletNumber(1);
         m_previewCtrl->BeginStyle(levelAttr);
-        m_previewCtrl->WriteText(wxString::Format(wxT("\nList level %d. "), i+1) + s_para2);
+        m_previewCtrl->WriteText(wxString::Format(wxT("List level %d. "), i+1) + s_para2);
         m_previewCtrl->EndStyle();
     }
     m_previewCtrl->EndStyle();

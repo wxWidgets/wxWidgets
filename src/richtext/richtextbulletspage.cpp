@@ -481,12 +481,12 @@ bool wxRichTextBulletsPage::TransferDataToWindow()
 void wxRichTextBulletsPage::UpdatePreview()
 {
     static const wxChar* s_para1 = wxT("Lorem ipsum dolor sit amet, consectetuer adipiscing elit. \
-Nullam ante sapien, vestibulum nonummy, pulvinar sed, luctus ut, lacus.");
+Nullam ante sapien, vestibulum nonummy, pulvinar sed, luctus ut, lacus.\n");
 
-    static const wxChar* s_para2 = wxT("\nDuis pharetra consequat dui. Cum sociis natoque penatibus \
-et magnis dis parturient montes, nascetur ridiculus mus. Nullam vitae justo id mauris lobortis interdum.");
+    static const wxChar* s_para2 = wxT("Duis pharetra consequat dui. Cum sociis natoque penatibus \
+et magnis dis parturient montes, nascetur ridiculus mus. Nullam vitae justo id mauris lobortis interdum.\n");
 
-    static const wxChar* s_para3 = wxT("\nInteger convallis dolor at augue \
+    static const wxChar* s_para3 = wxT("Integer convallis dolor at augue \
 iaculis malesuada. Donec bibendum ipsum ut ante porta fringilla.\n");
 
     TransferDataFromWindow();
