@@ -378,7 +378,10 @@ wxGridCellAutoWrapStringRenderer::GetBestSize(wxGrid& grid,
                                               wxDC& dc,
                                               int row, int col)
 {
-    wxCoord x,y, height , width = grid.GetColSize(col) -10;
+    wxCoord x,y, height , width = grid.GetColSize(col) -20;
+    // for width, subtract 20 because ColSize includes a magin of 10 pixels
+    // that we do not want here and because we always start with an increment
+    // by 10 in the loop below.
     int count = 250; //Limit iterations..
 
     wxRect rect(0,0,width,10);
