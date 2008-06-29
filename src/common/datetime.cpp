@@ -169,37 +169,18 @@ wxCUSTOM_TYPE_INFO(wxDateTime, wxToStringConverter<wxDateTime> , wxFromStringCon
         #define WX_TIMEZONE wxGetTimeZone()
     #elif defined(__DARWIN__)
         #define WX_GMTOFF_IN_TM
-    #elif defined(__WXWINCE__) && defined(__VISUALC8__)
-        // _timezone is not present in dynamic run-time library
-        #if 0
-        // Solution (1): use the function equivalent of _timezone
+    #elif defined(__VISUALC8__)
+        // _timezone is not present in VC8 static run-time library but
+        // _get_timezone() is
         static long wxGetTimeZone()
         {
-            static long s_Timezone = MAXLONG; // invalid timezone
-            if (s_Timezone == MAXLONG)
-            {
-                int t;
-                _get_timezone(& t);
-                s_Timezone = (long) t;
-            }
-            return s_Timezone;
+            static int s_timezone = INT_MAX; // invalid timezone
+            if ( s_timezone == INT_MAX )
+                _get_timezone(&s_timezone);
+
+            return s_timezone;
         }
         #define WX_TIMEZONE wxGetTimeZone()
-        #elif 1
-        // Solution (2): using GetTimeZoneInformation
-        static long wxGetTimeZone()
-        {
-            static long timezone = MAXLONG; // invalid timezone
-            if (timezone == MAXLONG)
-            {
-                TIME_ZONE_INFORMATION tzi;
-                ::GetTimeZoneInformation(&tzi);
-                timezone = tzi.Bias;
-            }
-            return timezone;
-        }
-        #define WX_TIMEZONE wxGetTimeZone()
-        #endif
     #else // unknown platform - try timezone
         #define WX_TIMEZONE timezone
     #endif
