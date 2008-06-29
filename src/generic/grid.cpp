@@ -1598,19 +1598,7 @@ void wxGridCellChoiceEditor::BeginEdit(int row, int col, wxGrid* grid)
 
     m_startValue = grid->GetTable()->GetValue(row, col);
 
-    if (m_allowOthers)
-    {
-        Combo()->SetValue(m_startValue);
-        Combo()->SetInsertionPointEnd();
-    }
-    else // the combobox is read-only
-    {
-        // find the right position, or default to the first if not found
-        int pos = Combo()->FindString(m_startValue);
-        if (pos == wxNOT_FOUND)
-            pos = 0;
-        Combo()->SetSelection(pos);
-    }
+    Reset(); // this updates combo box to correspond to m_startValue
 
     Combo()->SetFocus();
 
@@ -1638,8 +1626,19 @@ bool wxGridCellChoiceEditor::EndEdit(int row, int col,
 
 void wxGridCellChoiceEditor::Reset()
 {
-    Combo()->SetValue(m_startValue);
-    Combo()->SetInsertionPointEnd();
+    if (m_allowOthers)
+    {
+        Combo()->SetValue(m_startValue);
+        Combo()->SetInsertionPointEnd();
+    }
+    else // the combobox is read-only
+    {
+        // find the right position, or default to the first if not found
+        int pos = Combo()->FindString(m_startValue);
+        if (pos == wxNOT_FOUND)
+            pos = 0;
+        Combo()->SetSelection(pos);
+    }
 }
 
 void wxGridCellChoiceEditor::SetParameters(const wxString& params)
