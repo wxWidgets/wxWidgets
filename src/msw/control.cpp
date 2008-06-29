@@ -174,7 +174,7 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
     // Notice that 0xffff is not a valid Unicode character so the problem
     // doesn't arise in Unicode build.
     if ( !label.empty() && label[0] == -1 )
-        ::SetWindowText(GetHwnd(), label);
+        ::SetWindowText(GetHwnd(), label.wx_str());
 #endif // !wxUSE_UNICODE
 
     // saving the label in m_labelOrig to return it verbatim
