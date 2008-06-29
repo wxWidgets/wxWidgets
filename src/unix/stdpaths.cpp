@@ -29,6 +29,7 @@
 #include "wx/stdpaths.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/wxcrt.h"
     #include "wx/utils.h"
 #endif //WX_PRECOMP
 
