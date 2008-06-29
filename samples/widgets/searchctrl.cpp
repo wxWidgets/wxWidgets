@@ -72,6 +72,7 @@ public:
     virtual ~SearchCtrlWidgetsPage(){};
 
     virtual wxControl *GetWidget() const { return m_srchCtrl; }
+    virtual wxTextEntryBase *GetTextEntry() const { return m_srchCtrl; }
     virtual void RecreateWidget() { CreateControl(); }
 
     // lazy creation of the content

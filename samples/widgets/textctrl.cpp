@@ -138,6 +138,7 @@ public:
     virtual ~TextWidgetsPage(){};
 
     virtual wxControl *GetWidget() const { return m_text; }
+    virtual wxTextEntryBase *GetTextEntry() const { return m_text; }
     virtual void RecreateWidget() { CreateText(); }
 
     // lazy creation of the content

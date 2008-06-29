@@ -92,6 +92,8 @@ public:
     ODComboboxWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
 
     virtual wxControl *GetWidget() const { return m_combobox; }
+    virtual wxTextEntryBase *GetTextEntry() const
+        { return m_combobox ? m_combobox->GetTextCtrl() : NULL; }
     virtual wxItemContainer* GetContainer() const { return m_combobox; }
     virtual void RecreateWidget() { CreateCombo(); }
 

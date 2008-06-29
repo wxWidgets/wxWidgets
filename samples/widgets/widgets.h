@@ -97,6 +97,9 @@ public:
     // return the control shown by this page
     virtual wxControl *GetWidget() const = 0;
 
+    // return the control shown by this page, if it supports text entry interface
+    virtual wxTextEntryBase *GetTextEntry() const { return NULL; }
+
     // lazy creation of the content
     virtual void CreateContent() = 0;
 
