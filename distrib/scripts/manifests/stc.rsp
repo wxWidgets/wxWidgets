@@ -10,6 +10,7 @@ src/stc/*.bmp
 src/stc/README.txt
 
 src/stc/scintilla/README.txt
+src/stc/scintilla/include/Scintilla.iface
 src/stc/scintilla/include/*.h
 src/stc/scintilla/src/*.cpp
 src/stc/scintilla/src/*.cxx
