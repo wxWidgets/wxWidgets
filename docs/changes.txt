@@ -112,6 +112,7 @@ All (Unix):
 
 wxMSW:
 
+- Fix keyboard support in wxSpinCtrl broken in 2.8.8.
 - Compile fix for WinCE in window.cpp (no VkKeyScan in Windows CE).
 
 wxGTK:
