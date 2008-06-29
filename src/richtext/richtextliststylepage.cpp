@@ -479,7 +479,7 @@ void wxRichTextListStylePage::CreateControls()
 ////@end wxRichTextListStylePage content construction
 
     m_dontUpdate = true;
-    
+
     m_styleListBox->Append(_("(None)"));
     m_styleListBox->Append(_("Arabic"));
     m_styleListBox->Append(_("Upper case letters"));
@@ -496,7 +496,7 @@ void wxRichTextListStylePage::CreateControls()
     m_symbolCtrl->Append(_(">"));
     m_symbolCtrl->Append(_("+"));
     m_symbolCtrl->Append(_("~"));
-    
+
     wxArrayString standardBulletNames;
     if (wxRichTextBuffer::GetRenderer())
         wxRichTextBuffer::GetRenderer()->EnumerateStandardBulletNames(standardBulletNames);
@@ -516,16 +516,16 @@ void wxRichTextListStylePage::CreateControls()
 void wxRichTextListStylePage::UpdatePreview()
 {
     static const wxChar* s_para1 = wxT("Lorem ipsum dolor sit amet, consectetuer adipiscing elit. \
-Nullam ante sapien, vestibulum nonummy, pulvinar sed, luctus ut, lacus.");
+Nullam ante sapien, vestibulum nonummy, pulvinar sed, luctus ut, lacus.\n");
 
-    static const wxChar* s_para2 = wxT("Duis pharetra consequat dui. Nullam vitae justo id mauris lobortis interdum.");
+    static const wxChar* s_para2 = wxT("Duis pharetra consequat dui. Nullam vitae justo id mauris lobortis interdum.\n");
 
-    static const wxChar* s_para3 = wxT("\nInteger convallis dolor at augue \
+    static const wxChar* s_para3 = wxT("Integer convallis dolor at augue \
 iaculis malesuada. Donec bibendum ipsum ut ante porta fringilla.\n");
 
     wxRichTextListStyleDefinition* def = wxDynamicCast(wxRichTextFormattingDialog::GetDialogStyleDefinition(this),
         wxRichTextListStyleDefinition);
-        
+
     wxRichTextStyleSheet* styleSheet = wxRichTextFormattingDialog::GetDialog(this)->GetStyleSheet();
 
     wxTextAttrEx attr(styleSheet ? def->GetStyle() : def->GetStyleMergedWithBase(styleSheet));
@@ -559,7 +559,7 @@ iaculis malesuada. Donec bibendum ipsum ut ante porta fringilla.\n");
         wxTextAttrEx levelAttr = * def->GetLevelAttributes(i);
         levelAttr.SetBulletNumber(1);
         m_previewCtrl->BeginStyle(levelAttr);
-        m_previewCtrl->WriteText(wxString::Format(wxT("\nList level %d. "), i+1) + s_para2);
+        m_previewCtrl->WriteText(wxString::Format(wxT("List level %d. "), i+1) + s_para2);
         m_previewCtrl->EndStyle();
     }
     m_previewCtrl->EndStyle();
@@ -690,7 +690,7 @@ bool wxRichTextListStylePage::TransferDataFromWindow()
             bulletStyle |= wxTEXT_ATTR_BULLET_STYLE_ALIGN_CENTRE;
         else if (m_bulletAlignmentCtrl->GetSelection() == 2)
             bulletStyle |= wxTEXT_ATTR_BULLET_STYLE_ALIGN_RIGHT;
-        // Left is implied            
+        // Left is implied
 
         attr->SetBulletStyle(bulletStyle);
     }
