@@ -368,6 +368,7 @@ All (GUI):
 - Fixed wxPixelData<wxImage> compilation (Leonardo Fernandes).
 - Added wxImage::GetType() (troelsk).
 - Added wxGenericStaticBitmap suitable for display of large bitmaps.
+- Support wxListCtrl::GetViewRect() in report view too.
 
 wxGTK:
 

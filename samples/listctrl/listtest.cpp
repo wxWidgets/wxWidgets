@@ -90,6 +90,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_TOGGLE_MULTI_SEL, MyFrame::OnToggleMultiSel)
     EVT_MENU(LIST_SHOW_COL_INFO, MyFrame::OnShowColInfo)
     EVT_MENU(LIST_SHOW_SEL_INFO, MyFrame::OnShowSelInfo)
+    EVT_MENU(LIST_SHOW_VIEW_RECT, MyFrame::OnShowViewRect)
     EVT_MENU(LIST_FREEZE, MyFrame::OnFreeze)
     EVT_MENU(LIST_THAW, MyFrame::OnThaw)
     EVT_MENU(LIST_TOGGLE_LINES, MyFrame::OnToggleLines)
@@ -234,6 +235,7 @@ MyFrame::MyFrame(const wxChar *title)
     menuList->AppendSeparator();
     menuList->Append(LIST_SHOW_COL_INFO, _T("Show &column info\tCtrl-C"));
     menuList->Append(LIST_SHOW_SEL_INFO, _T("Show &selected items\tCtrl-S"));
+    menuList->Append(LIST_SHOW_VIEW_RECT, _T("Show &view rect"));
     menuList->AppendSeparator();
     menuList->Append(LIST_SORT, _T("Sor&t\tCtrl-T"));
     menuList->AppendSeparator();
@@ -641,6 +643,13 @@ void MyFrame::OnShowSelInfo(wxCommandEvent& WXUNUSED(event))
         item = m_listCtrl->GetNextItem(item, wxLIST_NEXT_ALL,
                                        wxLIST_STATE_SELECTED);
     }
+}
+
+void MyFrame::OnShowViewRect(wxCommandEvent& WXUNUSED(event))
+{
+    const wxRect r = m_listCtrl->GetViewRect();
+    wxLogMessage("View rect: (%d, %d)-(%d, %d)",
+                 r.GetLeft(), r.GetTop(), r.GetRight(), r.GetBottom());
 }
 
 void MyFrame::OnShowColInfo(wxCommandEvent& WXUNUSED(event))

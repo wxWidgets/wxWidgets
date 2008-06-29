@@ -1082,19 +1082,40 @@ bool wxListCtrl::SetItemPtrData(long item, wxUIntPtr data)
 
 wxRect wxListCtrl::GetViewRect() const
 {
-    wxASSERT_MSG( !HasFlag(wxLC_REPORT | wxLC_LIST),
-                    _T("wxListCtrl::GetViewRect() only works in icon mode") );
-
-    RECT rc;
-    if ( !ListView_GetViewRect(GetHwnd(), &rc) )
-    {
-        wxLogDebug(_T("ListView_GetViewRect() failed."));
-
-        wxZeroMemory(rc);
-    }
-
     wxRect rect;
-    wxCopyRECTToRect(rc, rect);
+
+    // ListView_GetViewRect() can only be used in icon and small icon views
+    // (this is documented in MSDN and, indeed, it returns bogus results in
+    // report view, at least with comctl32.dll v6 under Windows 2003)
+    if ( HasFlag(wxLC_ICON | wxLC_SMALL_ICON) )
+    {
+        RECT rc;
+        if ( !ListView_GetViewRect(GetHwnd(), &rc) )
+        {
+            wxLogDebug(_T("ListView_GetViewRect() failed."));
+
+            wxZeroMemory(rc);
+        }
+
+        wxCopyRECTToRect(rc, rect);
+    }
+    else if ( HasFlag(wxLC_REPORT) )
+    {
+        const long count = GetItemCount();
+        if ( count )
+        {
+            GetItemRect(wxMin(GetTopItem() + GetCountPerPage(), count - 1), rect);
+
+            // extend the rectangle to start at the top (we include the column
+            // headers, if any, for compatibility with the generic version)
+            rect.height += rect.y;
+            rect.y = 0;
+        }
+    }
+    else
+    {
+        wxFAIL_MSG( _T("not implemented in this mode") );
+    }
 
     return rect;
 }

@@ -135,6 +135,7 @@ protected:
     void OnToggleMultiSel(wxCommandEvent& event);
     void OnShowColInfo(wxCommandEvent& event);
     void OnShowSelInfo(wxCommandEvent& event);
+    void OnShowViewRect(wxCommandEvent& event);
     void OnFreeze(wxCommandEvent& event);
     void OnThaw(wxCommandEvent& event);
     void OnToggleLines(wxCommandEvent& event);
@@ -202,6 +203,7 @@ enum
     LIST_TOGGLE_FIRST,
     LIST_SHOW_COL_INFO,
     LIST_SHOW_SEL_INFO,
+    LIST_SHOW_VIEW_RECT,
     LIST_GOTO,
     LIST_FOCUS_LAST,
     LIST_FREEZE,

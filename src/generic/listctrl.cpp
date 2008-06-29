@@ -4110,8 +4110,7 @@ int wxListMainWindow::GetSelectedItemCount() const
 
 wxRect wxListMainWindow::GetViewRect() const
 {
-    wxASSERT_MSG( !HasFlag(wxLC_REPORT | wxLC_LIST),
-                    _T("wxListCtrl::GetViewRect() only works in icon mode") );
+    wxASSERT_MSG( !HasFlag(wxLC_LIST), "not implemented for list view" );
 
     // we need to find the longest/tallest label
     wxCoord xMax = 0, yMax = 0;
