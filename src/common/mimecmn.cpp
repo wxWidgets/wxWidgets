@@ -667,18 +667,6 @@ wxMimeTypesManager::GetFileTypeFromMimeType(const wxString& mimeType)
     return ft;
 }
 
-bool wxMimeTypesManager::ReadMailcap(const wxString& filename, bool fallback)
-{
-    EnsureImpl();
-    return m_impl->ReadMailcap(filename, fallback);
-}
-
-bool wxMimeTypesManager::ReadMimeTypes(const wxString& filename)
-{
-    EnsureImpl();
-    return m_impl->ReadMimeTypes(filename);
-}
-
 void wxMimeTypesManager::AddFallbacks(const wxFileTypeInfo *filetypes)
 {
     EnsureImpl();

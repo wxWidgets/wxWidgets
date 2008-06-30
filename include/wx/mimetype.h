@@ -461,32 +461,13 @@ public:
         // get file type from MIME type (in format <category>/<format>)
     wxFileType *GetFileTypeFromMimeType(const wxString& mimeType);
 
-    // other operations: return true if there were no errors or false if there
-    // were some unrecognized entries (the good entries are always read anyhow)
-    //
-    // FIXME: These ought to be private ??
-
-        // read in additional file (the standard ones are read automatically)
-        // in mailcap format (see mimetype.cpp for description)
-        //
-        // 'fallback' parameter may be set to true to avoid overriding the
-        // settings from other, previously parsed, files by this one: normally,
-        // the files read most recently would override the older files, but with
-        // fallback == true this won't happen
-
-    bool ReadMailcap(const wxString& filename, bool fallback = false);
-        // read in additional file in mime.types format
-    bool ReadMimeTypes(const wxString& filename);
-
     // enumerate all known MIME types
     //
     // returns the number of retrieved file types
     size_t EnumAllFileTypes(wxArrayString& mimetypes);
 
     // these functions can be used to provide default values for some of the
-    // MIME types inside the program itself (you may also use
-    // ReadMailcap(filenameWithDefaultTypes, true /* use as fallback */) to
-    // achieve the same goal, but this requires having this info in a file).
+    // MIME types inside the program itself
     //
     // The filetypes array should be terminated by either NULL entry or an
     // invalid wxFileTypeInfo (i.e. the one created with default ctor)

@@ -41,9 +41,6 @@ public:
 
     size_t EnumAllFileTypes(wxArrayString& mimetypes);
 
-    bool ReadMailcap(const wxString& filename, bool fallback = FALSE);
-    bool ReadMimeTypes(const wxString& filename);
-
     void AddFallback(const wxFileTypeInfo& filetype);
 
     // add information about the given mimetype
@@ -80,57 +77,22 @@ protected:
     // are we initialized?
     bool m_initialized;
 
-    // keep track of the files we had already loaded (this is a bitwise OR of
-    // wxMailcapStyle values)
-    int m_mailcapStylesInited;
-
     wxString GetCommand(const wxString &verb, size_t nIndex) const;
 
-    // read Gnome files
-    void LoadGnomeDataFromKeyFile(const wxString& filename,
-                                  const wxArrayString& dirs);
-    void LoadGnomeMimeTypesFromMimeFile(const wxString& filename);
-    void LoadGnomeMimeFilesFromDir(const wxString& dirbase,
-                                   const wxArrayString& dirs);
-    void GetGnomeMimeInfo(const wxString& sExtraDir);
-
-    // read KDE
-    void LoadKDELinksForMimeSubtype(const wxString& dirbase,
-                                    const wxString& subdir,
-                                    const wxString& filename,
-                                    const wxArrayString& icondirs);
-    void LoadKDELinksForMimeType(const wxString& dirbase,
-                                 const wxString& subdir,
-                                 const wxArrayString& icondirs);
-    void LoadKDELinkFilesFromDir(const wxString& dirbase,
-                                 const wxArrayString& icondirs);
     void LoadKDEApp(const wxString& filename);
     void LoadKDEAppsFilesFromDir(const wxString& dirname);
-    void GetKDEMimeInfo(const wxString& sExtraDir);
 
     // write KDE
     bool WriteKDEMimeFile(int index, bool delete_index);
     bool CheckKDEDirsExist(const wxString & sOK, const wxString& sTest);
 
-    //read write Netscape and MetaMail formats
-    void GetMimeInfo (const wxString& sExtraDir);
-    bool WriteToMailCap (int index, bool delete_index);
-    bool WriteToMimeTypes (int index, bool delete_index);
-    bool WriteToNSMimeTypes (int index, bool delete_index);
-
-    // ReadMailcap() helper
-    bool ProcessOtherMailcapField(struct MailcapLineData& data,
-                                  const wxString& curField);
-
     // functions used to do associations
-
     virtual int AddToMimeData(const wxString& strType,
                       const wxString& strIcon,
                       wxMimeTypeCommands *entry,
                       const wxArrayString& strExtensions,
                       const wxString& strDesc,
                       bool replaceExisting = TRUE);
-
     virtual bool DoAssociation(const wxString& strType,
                        const wxString& strIcon,
                        wxMimeTypeCommands *entry,
