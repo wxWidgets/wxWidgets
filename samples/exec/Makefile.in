@@ -49,9 +49,9 @@ EXEC_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../../samples $(CXXWARNINGS) \
 	$(CPPFLAGS) $(CXXFLAGS)
 EXEC_OBJECTS =  \
+	$(__exec___win32rc) \
 	$(__exec_os2_lib_res) \
-	exec_exec.o \
-	$(__exec___win32rc)
+	exec_exec.o
 
 ### Conditionally set variables: ###
 
@@ -94,6 +94,7 @@ COND_PLATFORM_OS2_1___exec___os2_emxbindcmd = $(NM) exec$(EXEEXT) | if grep -q \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
+@COND_PLATFORM_WIN32_1@__exec___win32rc = exec_sample_rc.o
 @COND_PLATFORM_OS2_1@__exec_os2_lib_res = \
 @COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_MACOSX_1@__exec_app_Contents_PkgInfo___depname \
@@ -109,7 +110,6 @@ COND_MONOLITHIC_0___WXLIB_CORE_p = \
 COND_MONOLITHIC_0___WXLIB_BASE_p = \
 	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = $(COND_MONOLITHIC_0___WXLIB_BASE_p)
-@COND_PLATFORM_WIN32_1@__exec___win32rc = exec_exec_rc.o
 COND_MONOLITHIC_1___WXLIB_MONO_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = $(COND_MONOLITHIC_1___WXLIB_MONO_p)
@@ -184,12 +184,21 @@ exec$(EXEEXT): $(EXEC_OBJECTS) $(__exec___win32rc)
 
 @COND_PLATFORM_MACOSX_1@exec_bundle: $(____exec_BUNDLE_TGT_REF_DEP)
 
+exec_sample_rc.o: $(srcdir)/../../samples/sample.rc
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
+
 exec_exec.o: $(srcdir)/exec.cpp
 	$(CXXC) -c -o $@ $(EXEC_CXXFLAGS) $(srcdir)/exec.cpp
 
-exec_exec_rc.o: $(srcdir)/exec.rc
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
 
+$(srcdir)/include/wx/stc/stc.h: \
+$(srcdir)/src/stc/scintilla/include/Scintilla.iface \
+$(srcdir)/src/stc/stc.cpp.in \
+$(srcdir)/src/stc/stc.h.in \
+$(srcdir)/src/stc/gen_iface.py
+	cd $(srcdir)/src/stc && ./gen_iface.py
+monolib_stc.o monodll_stc.o stcdll_stc.o stclib_stc.o: \
+$(srcdir)/include/wx/stc/stc.h
 
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d

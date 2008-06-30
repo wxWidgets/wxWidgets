@@ -793,7 +793,7 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			>
 			<File
-				RelativePath=".\exec.rc"
+				RelativePath=".\..\..\samples\sample.rc"
 			/>
 		</Filter>
 	</Files>
