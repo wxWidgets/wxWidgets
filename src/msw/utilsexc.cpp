@@ -433,8 +433,19 @@ wxPipeInputStream::~wxPipeInputStream()
 
 bool wxPipeInputStream::CanRead() const
 {
+    // we can read if there's something in the put back buffer
+    // even pipe is closed
+    if ( m_wbacksize > m_wbackcur )
+        return true;
+
+    wxPipeInputStream * const self = wxConstCast(this, wxPipeInputStream);
+
     if ( !IsOpened() )
+    {
+        // set back to mark Eof as it may have been unset by Ungetch()
+        self->m_lasterror = wxSTREAM_EOF;
         return false;
+    }
 
     DWORD nAvailable;
 
@@ -459,8 +470,6 @@ bool wxPipeInputStream::CanRead() const
         // don't try to continue reading from a pipe if an error occurred or if
         // it had been closed
         ::CloseHandle(m_hInput);
-
-        wxPipeInputStream *self = wxConstCast(this, wxPipeInputStream);
 
         self->m_hInput = INVALID_HANDLE_VALUE;
         self->m_lasterror = wxSTREAM_EOF;
