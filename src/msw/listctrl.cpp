@@ -1409,7 +1409,7 @@ void wxListCtrl::InitEditControl(WXHWND hWnd)
 wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
 {
     wxCHECK_MSG( textControlClass->IsKindOf(CLASSINFO(wxTextCtrl)), NULL,
-                  "control used for label editing must be a wxTextCtrl" );
+                  wxT("control used for label editing must be a wxTextCtrl") );
 
     // ListView_EditLabel requires that the list has focus.
     SetFocus();
