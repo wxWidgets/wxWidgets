@@ -171,11 +171,11 @@ wxCUSTOM_TYPE_INFO(wxDateTime, wxToStringConverter<wxDateTime> , wxFromStringCon
         #define WX_GMTOFF_IN_TM
     #elif defined(__VISUALC8__)
         // _timezone is not present in VC8 static run-time library but
-        // _get_timezone() is
+        // _get_timezone() is so just use it for all builds
         static long wxGetTimeZone()
         {
-            static int s_timezone = INT_MAX; // invalid timezone
-            if ( s_timezone == INT_MAX )
+            static long s_timezone = LONG_MAX; // invalid timezone
+            if ( s_timezone == LONG_MAX )
                 _get_timezone(&s_timezone);
 
             return s_timezone;
