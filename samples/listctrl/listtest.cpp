@@ -970,6 +970,27 @@ void MyListCtrl::OnListKeyDown(wxListEvent& event)
             }
             break;
 
+        case '1': // show sub item bounding rectangle
+        case '2':
+        case '3':
+        case '4': // this column is invalid but we want to test it too
+            if ( InReportView() )
+            {
+                int subItem = event.GetKeyCode() - '1';
+                item = event.GetIndex();
+                wxRect r;
+                if ( !GetSubItemRect(item, subItem, r) )
+                {
+                    wxLogError(_T("Failed to retrieve rect of item %ld column %d"), item, subItem + 1);
+                    break;
+                }
+
+                wxLogMessage(_T("Bounding rect of item %ld column %d is (%d, %d)-(%d, %d)"),
+                             item, subItem + 1,
+                             r.x, r.y, r.x + r.width, r.y + r.height);
+            }
+            break;
+
         case 'U': // update
             if ( !IsVirtual() )
                 break;

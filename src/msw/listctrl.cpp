@@ -1141,7 +1141,12 @@ bool wxListCtrl::GetItemRect(long item, wxRect& rect, int code) const
  */
 bool wxListCtrl::GetSubItemRect(long item, long subItem, wxRect& rect, int code) const
 {
-    RECT rectWin;
+    // ListView_GetSubItemRect() doesn't do subItem error checking and returns
+    // true even for the out of range values of it (even if the results are
+    // completely bogus in this case), so we check item validity ourselves
+    wxCHECK_MSG( subItem == wxLIST_GETSUBITEMRECT_WHOLEITEM ||
+                    (subItem >= 0 && subItem < GetColumnCount()),
+                 false, _T("invalid sub item index") );
 
     int codeWin;
     if ( code == wxLIST_RECT_BOUNDS )
@@ -1156,27 +1161,26 @@ bool wxListCtrl::GetSubItemRect(long item, long subItem, wxRect& rect, int code)
         codeWin = LVIR_BOUNDS;
     }
 
-    bool success;
-    if( subItem == wxLIST_GETSUBITEMRECT_WHOLEITEM)
+    RECT rectWin;
+    if ( !ListView_GetSubItemRect
+          (
+            GetHwnd(),
+            item,
+            subItem == wxLIST_GETSUBITEMRECT_WHOLEITEM ? 0 : subItem,
+            codeWin,
+            &rectWin
+          ) )
     {
-      success = ListView_GetItemRect(GetHwnd(), (int) item, &rectWin, codeWin) != 0;
-    }
-    else if( subItem >= 0)
-    {
-      success = ListView_GetSubItemRect( GetHwnd(), (int) item, (int) subItem, codeWin, &rectWin) != 0;
-    }
-    else
-    {
-      wxFAIL_MSG( _T("incorrect subItem number in GetSubItemRect()") );
-      return false;
+        return false;
     }
 
-    rect.x = rectWin.left;
-    rect.y = rectWin.top;
-    rect.width = rectWin.right - rectWin.left;
-    rect.height = rectWin.bottom - rectWin.top;
+    wxCopyRECTToRect(rectWin, rect);
 
-    return success;
+    // for the first sub item, i.e. the main item itself, the returned rect is
+    // the whole line one, we need to truncate it at first column ourselves
+    rect.width = GetColumnWidth(0);
+
+    return true;
 }
 
 

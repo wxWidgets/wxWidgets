@@ -369,6 +369,7 @@ All (GUI):
 - Added wxImage::GetType() (troelsk).
 - Added wxGenericStaticBitmap suitable for display of large bitmaps.
 - Support wxListCtrl::GetViewRect() in report view too.
+- Implement wxListCtrl::GetSubItemRect() in generic version (David Barnard).
 
 wxGTK:
 

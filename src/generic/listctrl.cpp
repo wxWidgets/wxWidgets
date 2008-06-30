@@ -639,7 +639,11 @@ public:
     void SetItemState( long item, long state, long stateMask );
     void SetItemStateAll( long state, long stateMask );
     int GetItemState( long item, long stateMask ) const;
-    void GetItemRect( long index, wxRect &rect ) const;
+    bool GetItemRect( long item, wxRect &rect ) const
+    {
+        return GetSubItemRect(item, wxLIST_GETSUBITEMRECT_WHOLEITEM, rect);
+    }
+    bool GetSubItemRect( long item, long subItem, wxRect& rect ) const;
     wxRect GetViewRect() const;
     bool GetItemPosition( long item, wxPoint& pos ) const;
     int GetSelectedItemCount() const;
@@ -4146,10 +4150,13 @@ wxRect wxListMainWindow::GetViewRect() const
     return wxRect(0, 0, xMax, yMax);
 }
 
-void wxListMainWindow::GetItemRect( long index, wxRect &rect ) const
+bool
+wxListMainWindow::GetSubItemRect(long item, long subItem, wxRect& rect) const
 {
-    wxCHECK_RET( index >= 0 && (size_t)index < GetItemCount(),
-                 _T("invalid index in GetItemRect") );
+    wxCHECK_MSG( InReportView(), false,
+                 _T("GetSubItemRect only meaningful in report view") );
+    wxCHECK_MSG( item >= 0 && (size_t)item < GetItemCount(), false,
+                 _T("invalid item in GetSubItemRect") );
 
     // ensure that we're laid out, otherwise we could return nonsense
     if ( m_dirty )
@@ -4158,9 +4165,24 @@ void wxListMainWindow::GetItemRect( long index, wxRect &rect ) const
             RecalculatePositions(true /* no refresh */);
     }
 
-    rect = GetLineRect((size_t)index);
+    rect = GetLineRect((size_t)item);
+
+    // Adjust rect to specified column
+    if ( subItem != wxLIST_GETSUBITEMRECT_WHOLEITEM )
+    {
+        wxCHECK_MSG( subItem >= 0 && subItem < GetColumnCount(), false,
+                     _T("invalid subItem in GetSubItemRect") );
+
+        for (int i = 0; i < subItem; i++)
+        {
+            rect.x += GetColumnWidth(i);
+        }
+        rect.width = GetColumnWidth(subItem);
+    }
 
     CalcScrolledPosition(rect.x, rect.y, &rect.x, &rect.y);
+
+    return true;
 }
 
 bool wxListMainWindow::GetItemPosition(long item, wxPoint& pos) const
@@ -5261,11 +5283,22 @@ wxRect wxGenericListCtrl::GetViewRect() const
     return m_mainWin->GetViewRect();
 }
 
-bool wxGenericListCtrl::GetItemRect( long item, wxRect &rect, int WXUNUSED(code) ) const
+bool wxGenericListCtrl::GetItemRect(long item, wxRect& rect, int code) const
 {
-    m_mainWin->GetItemRect( item, rect );
+    return GetSubItemRect(item, wxLIST_GETSUBITEMRECT_WHOLEITEM, rect, code);
+}
+
+bool wxGenericListCtrl::GetSubItemRect(long item,
+                                       long subItem,
+                                       wxRect& rect,
+                                       int WXUNUSED(code)) const
+{
+    if ( !m_mainWin->GetSubItemRect( item, subItem, rect ) )
+        return false;
+
     if ( m_mainWin->HasHeader() )
         rect.y += m_headerHeight + 1;
+
     return true;
 }
 
@@ -5277,7 +5310,7 @@ bool wxGenericListCtrl::GetItemPosition( long item, wxPoint& pos ) const
 
 bool wxGenericListCtrl::SetItemPosition( long WXUNUSED(item), const wxPoint& WXUNUSED(pos) )
 {
-    return 0;
+    return false;
 }
 
 int wxGenericListCtrl::GetItemCount() const
