@@ -265,7 +265,7 @@ void wxMimeTypesManagerImpl::LoadXDGGlobs(const wxString& filename)
        wxArrayString exts;
        exts.Add( ext );
        
-       AddToMimeData(mime, wxEmptyString, NULL, exts, wxEmptyString, false );
+       AddToMimeData(mime, wxEmptyString, NULL, exts, wxEmptyString, true );
     }
 }
 
@@ -528,6 +528,7 @@ void wxMimeTypesManagerImpl::Initialize(int mailcapStyles,
 
     // Read MIME type - extension associations
     LoadXDGGlobs( "/usr/share/mime/globs" );
+    LoadXDGGlobs( "/usr/local/share/mime/globs" );
 
     // Load desktop files for XDG, and then override them with the defaults.
     // We will override them one desktop file at a time, rather
