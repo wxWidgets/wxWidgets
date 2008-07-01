@@ -141,25 +141,40 @@ public:
 class wxFile
 {
 public:
-    //@{
     /**
-        Associates the file with the given file descriptor, which has already been
-        opened.
+      Opening mode
+    */
+    enum OpenMode { read, write, read_write, write_append, write_excl };
+    
+    /** 
+       Standard file descriptors
+    */
+    enum { fd_invalid = -1, fd_stdin, fd_stdout, fd_stderr };
+
+    /** 
+       Default constructor.
+    */
+    wxFile();
+    
+    /**
+        Opens a file with a filename.
 
         @param filename
             The filename.
         @param mode
-            The mode in which to open the file. May be one of read(), write() and
-        wxFile::read_write.
-        @param fd
-            An existing file descriptor (see Attach() for the list of predefined
-        descriptors)
+            The mode in which to open the file. May be one of @c wxFile::read, 
+            @c wxFile::write and @c wxFile::read_write.
     */
-    wxFile();
     wxFile(const wxString& filename,
            wxFile::OpenMode mode = wxFile::read);
+    /**
+        Associates the file with the given file descriptor, which has already been
+        opened. See Attach() for the list of predefined descriptors.
+        
+        @param fd
+            An existing file descriptor. 
+    */
     wxFile(int fd);
-    //@}
 
     /**
         Destructor will close the file.
@@ -168,17 +183,17 @@ public:
     ~wxFile();
 
     /**
-        This function verifies if we may access the given file in specified mode. Only
-        values of read() or write() really make sense here.
+        This function verifies if we may access the given file in specified mode.
+        Only values of @c wxFile::read or @c wxFile::write really make sense here.
     */
     static bool Access(const wxString& name, OpenMode mode);
 
     /**
-        Attaches an existing file descriptor to the wxFile object. Example of predefined
-        file descriptors are 0, 1 and 2 which correspond to stdin, stdout and stderr
-        (and
-        have symbolic names of @b wxFile::fd_stdin, @b wxFile::fd_stdout and @b
-        wxFile::fd_stderr).
+        Attaches an existing file descriptor to the wxFile object. Example of
+        predefined file descriptors are 0, 1 and 2 which correspond to stdin,
+        stdout and stderr (and have symbolic names of @c wxFile::fd_stdin, 
+        @c wxFile::fd_stdout and @c wxFile::fd_stderr).
+        
         The descriptor should be already opened and it will be closed by wxFile
         object.
     */
@@ -207,11 +222,11 @@ public:
     /**
         Returns @true if the end of the file has been reached.
         Note that the behaviour of the file pointer based class
-        wxFFile is different as wxFFile::Eof
-        will return @true here only if an attempt has been made to read
-        @e past the last byte of the file, while wxFile::Eof() will return @true
-        even before such attempt is made if the file pointer is at the last position
-        in the file.
+        wxFFile is different as wxFFile::Eof will return @true here only if an
+        attempt has been made to read @b past the last byte of the file, while
+        wxFile::Eof() will return @true even before such attempt is made if the
+        file pointer is at the last position in the file.
+        
         Note also that this function doesn't work on unseekable file descriptors
         (examples include pipes, terminals and sockets under Unix) and an attempt to
         use it will result in an error message in such case. So, to read the entire
@@ -262,14 +277,17 @@ public:
     bool Open(const wxString& filename,
               wxFile::OpenMode mode = wxFile::read);
 
-    //@{
     /**
-        if there was an error.
+        Reads from the file into a memory buffer. 
+        
+        @param buffer
+           Buffer to write in
+        @param count
+           Bytes to read   
+    
+        @return The number of bytes read, or the symbol wxInvalidOffset
     */
     size_t Read(void* buffer, size_t count);
-    Parameters Return value
-    The number of bytes read, or the symbol wxInvalidOffset();
-    //@}
 
     /**
         Seeks to the specified position.
@@ -299,19 +317,30 @@ public:
     wxFileOffset SeekEnd(wxFileOffset ofs = 0);
 
     /**
-        Returns the current position or wxInvalidOffset if file is not opened or if
-        another
-        error occurred.
+        Returns the current position or wxInvalidOffset if file is not opened or
+        if another  error occurred.
     */
     wxFileOffset Tell() const;
 
     /**
+       Write data to the file (descriptor).
+       
+       @buffer
+          Buffer from which to read data
+       @param count
+         Number of bytes to write
+       
+       @return The number of bytes written.
+    */
+    size_t Write(const void *buffer, size_t count);
+
+    /**
         Writes the contents of the string to the file, returns @true on success.
         The second argument is only meaningful in Unicode build of wxWidgets when
-        @a conv is used to convert @a s to multibyte representation.
+        @a conv is used to convert @a s to a multibyte representation.
         Note that this method only works with @c NUL-terminated strings, if you want
         to write data with embedded @c NULs to the file you should use the other
-        @ref write() "Write() overload".
+        Write() overload.
     */
     bool Write(const wxString& s, const wxMBConv& conv = wxConvUTF8);
 
