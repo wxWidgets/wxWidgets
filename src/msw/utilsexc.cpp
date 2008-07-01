@@ -1027,9 +1027,22 @@ long wxExecuteImpl(CharType **argv, int flags, wxProcess *handler)
     wxString command;
     command.reserve(1024);
 
+    wxString arg;
     for ( ;; )
     {
-        command += *argv++;
+        arg = *argv++;
+
+        // escape any quotes present in the string to avoid interfering with
+        // the command line parsing in the child process
+        arg.Replace("\"", "\\\"", true /* replace all */);
+
+        // and quote any arguments containing the spaces to prevent them from
+        // being broken down
+        if ( arg.find_first_of(" \t") == wxString::npos )
+            command += arg;
+        else
+            command += '\"' + arg + '\"';
+
         if ( !*argv )
             break;
 
