@@ -12,27 +12,17 @@
     This class allows the application to retrieve the information about all known
     MIME types from a system-specific location and the filename extensions to the
     MIME types and vice versa. After initialization the functions
-    wxMimeTypesManager::GetFileTypeFromMimeType
-    and wxMimeTypesManager::GetFileTypeFromExtension
+    GetFileTypeFromMimeType() and GetFileTypeFromExtension()
     may be called: they will return a wxFileType object which
     may be further queried for file description, icon and other attributes.
 
-    @b Windows: MIME type information is stored in the registry and no additional
-    initialization is needed.
+    Under Windows, the MIME type information is queried from registry. Under
+    Linux and Unix, it is queried from the XDG data directories.
+    
+    Currently, wxMimeTypesManager is limited to reading MIME type information.
 
-    @b Unix: MIME type information is stored in the files mailcap and mime.types
-    (system-wide) and .mailcap and .mime.types in the current user's home directory:
-    all of these files are searched for and loaded if found by default. However,
-    additional functions
-    wxMimeTypesManager::ReadMailcap and
-    wxMimeTypesManager::ReadMimeTypes are
-    provided to load additional files.
-
-    If GNOME or KDE desktop environment is installed, then wxMimeTypesManager
-    gathers MIME information from respective files (e.g. .kdelnk files under KDE).
-
-    @note Currently, wxMimeTypesManager is limited to reading MIME type information
-    but it will support modifying it as well in future versions.
+    The application should not construct its own manaer: it should use the
+    object pointer ::wxTheMimeTypesManger.
 
     @library{wxbase}
     @category{misc}
@@ -43,9 +33,7 @@ class wxMimeTypesManager
 {
 public:
     /**
-        Constructor puts the object in the "working" state, no additional initialization
-        are needed - but @ref init() ReadXXX may be used to load
-        additional mailcap/mime.types files.
+        Constructor puts the object in the "working" state.
     */
     wxMimeTypesManager();
 
@@ -62,18 +50,9 @@ public:
     void AddFallbacks(const wxFileTypeInfo* fallbacks);
 
     /**
-        @note You won't normally need to use more than one wxMimeTypesManager object in a
-        program.
-        @ref ctor() wxMimeTypesManager
-
-        @ref dtor() ~wxMimeTypesManager
-    */
-
-
-    /**
         Gather information about the files with given extension and return the
-        corresponding wxFileType object or @NULL if the extension
-        is unknown.
+        corresponding wxFileType object or @NULL if the extension is unknown.
+        
         The @a extension parameter may have, or not, the leading dot, if it has it,
         it is stripped automatically. It must not however be empty.
     */
@@ -81,30 +60,9 @@ public:
 
     /**
         Gather information about the files with given MIME type and return the
-        corresponding wxFileType object or @NULL if the MIME type
-        is unknown.
+        corresponding wxFileType object or @NULL if the MIME type is unknown.
     */
     wxFileType* GetFileTypeFromMimeType(const wxString& mimeType);
-
-    /**
-        All of these functions are static (i.e. don't need a wxMimeTypesManager object
-        to call them) and provide some useful operations for string representations of
-        MIME types. Their usage is recommended instead of directly working with MIME
-        types using wxString functions.
-        IsOfType()
-    */
-
-
-    /**
-        @b Unix: These functions may be used to load additional files (except for the
-        default ones which are loaded automatically) containing MIME
-        information in either mailcap(5) or mime.types(5) format.
-        ReadMailcap()
-
-        ReadMimeTypes()
-
-        AddFallbacks()
-    */
 
 
     /**
@@ -115,44 +73,15 @@ public:
         The comparison don by this function is case insensitive so it is not
         necessary to convert the strings to the same case before calling it.
     */
-    bool IsOfType(const wxString& mimeType, const wxString& wildcard);
+    static bool IsOfType(const wxString& mimeType, const wxString& wildcard);
 
-    /**
-        These functions are the heart of this class: they allow to find a @ref
-        overview_wxfiletype "file type" object
-        from either file extension or MIME type.
-        If the function is successful, it returns a pointer to the wxFileType object
-        which @b must be deleted by the caller, otherwise @NULL will be returned.
-        GetFileTypeFromMimeType()
-
-        GetFileTypeFromExtension()
-    */
-
-
-    /**
-        Load additional file containing information about MIME types and associated
-        information in mailcap format. See metamail(1) and mailcap(5) for more
-        information.
-        @a fallback parameter may be used to load additional mailcap files without
-        overriding the settings found in the standard files: normally, entries from
-        files loaded with ReadMailcap will override the entries from files loaded
-        previously (and the standard ones are loaded in the very beginning), but this
-        will not happen if this parameter is set to @true (default is @false).
-        The return value is @true if there were no errors in the file or @false
-        otherwise.
-    */
-    bool ReadMailcap(const wxString& filename, bool fallback = false);
-
-    /**
-        Load additional file containing information about MIME types and associated
-        information in mime.types file format. See metamail(1) and mailcap(5) for more
-        information.
-        The return value is @true if there were no errors in the file or @false
-        otherwise.
-    */
-    bool ReadMimeTypes(const wxString& filename);
 };
 
+
+/**
+    The global wxMimeTypesManager instance.
+*/
+wxMimeTypesManager* wxTheMimeTypesManager;
 
 
 /**
