@@ -79,12 +79,10 @@ protected:
 
     wxString GetCommand(const wxString &verb, size_t nIndex) const;
 
-    void LoadKDEApp(const wxString& filename);
-    void LoadKDEAppsFilesFromDir(const wxString& dirname);
-
-    // write KDE
-    bool WriteKDEMimeFile(int index, bool delete_index);
-    bool CheckKDEDirsExist(const wxString & sOK, const wxString& sTest);
+    // Read XDG *.desktop file 
+    void LoadXDGApp(const wxString& filename);
+    // Scan XDG directory
+    void LoadXDGAppsFilesFromDir(const wxString& dirname);
 
     // functions used to do associations
     virtual int AddToMimeData(const wxString& strType,
@@ -98,8 +96,6 @@ protected:
                        wxMimeTypeCommands *entry,
                        const wxArrayString& strExtensions,
                        const wxString& strDesc);
-
-    virtual bool WriteMimeInfo(int nIndex, bool delete_mime );
 
     // give it access to m_aXXX variables
     friend class WXDLLIMPEXP_FWD_BASE wxFileTypeImpl;

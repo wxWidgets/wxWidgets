@@ -55,17 +55,17 @@ public:
        m_fname = fname;
     }
     
-    void AddLine( const wxString &line ) { }
-    
-    bool Open( const wxString &fname )
+    bool Open()
     {
-       m_fname = fname;
-       wxFFile file( fname );
+       wxFFile file( m_fname );
        if (!file.IsOpened())
           return false;
+          
        size_t size = file.Length();
        wxCharBuffer buffer( size );
        file.Read( (void*) (const char*) buffer, size );
+       
+       // Check for valid UTF-8 here?
        wxString all = wxString::FromUTF8( buffer, size );
        
        wxStringTokenizer tok( all, "\n" );
@@ -78,10 +78,6 @@ public:
        }
        return true;
     }
-    bool Open() { return Open(m_fname); }
-    bool Create( const wxString &fname ) { return false; }
-    bool Write() { return false; }
-    bool Close() { return false; }
     
     unsigned int GetLineCount() const { return m_text.GetCount(); }
     wxString &GetLine( unsigned int line ) { return m_text[line]; }
@@ -102,29 +98,6 @@ public:
             }
         }
         return wxNOT_FOUND;
-    }
-
-    bool CommentLine(int nIndex)
-    {
-        if (nIndex < 0)
-            return false;
-        if (nIndex >= (int)GetLineCount() )
-            return false;
-
-        GetLine(nIndex) = GetLine(nIndex).Prepend(wxT("#"));
-        return true;
-    }
-
-    bool CommentLine(const wxString & sTest)
-    {
-        int nIndex = pIndexOf(sTest);
-        if (nIndex < 0)
-            return false;
-        if (nIndex >= (int)GetLineCount() )
-            return false;
-
-        GetLine(nIndex) = GetLine(nIndex).Prepend(wxT("#"));
-        return true;
     }
 
     wxString GetVerb(size_t i)
@@ -157,168 +130,14 @@ private:
 // MIME code tracing mask
 #define TRACE_MIME wxT("mime")
 
-// give trace messages about the results of mailcap tests
-#define TRACE_MIME_TEST wxT("mimetest")
 
-// ----------------------------------------------------------------------------
-
-// ----------------------------------------------------------------------------
-// KDE
-// ----------------------------------------------------------------------------
-
-
-// KDE stores the icon info in its .kdelnk files. The file for mimetype/subtype
-// may be found in either of the following locations
-//
-//  1. $KDEDIR/share/mimelnk/mimetype/subtype.kdelnk
-//  2. ~/.kde/share/mimelnk/mimetype/subtype.kdelnk
-//
-// The format of a .kdelnk file is almost the same as the one used by
-// wxFileConfig, i.e. there are groups, comments and entries. The icon is the
-// value for the entry "Type"
-
-// kde writing; see http://webcvs.kde.org/cgi-bin/cvsweb.cgi/~checkout~/kdelibs/kio/DESKTOP_ENTRY_STANDARD
-// for now write to .kdelnk but should eventually do .desktop instead (in preference??)
-
-bool wxMimeTypesManagerImpl::CheckKDEDirsExist( const wxString &sOK, const wxString &sTest )
+// Read a XDG *.desktop file of type 'Application'
+void wxMimeTypesManagerImpl::LoadXDGApp(const wxString& filename)
 {
-    if (sTest.empty())
-    {
-        return wxDir::Exists(sOK);
-    }
-    else
-    {
-        wxString sStart = sOK + wxT("/") + sTest.BeforeFirst(wxT('/'));
-        if (!wxDir::Exists(sStart))
-            wxMkdir(sStart);
-        wxString sEnd = sTest.AfterFirst(wxT('/'));
-        return CheckKDEDirsExist(sStart, sEnd);
-    }
-}
+    wxLogTrace(TRACE_MIME, wxT("loading XDG file %s"), filename.c_str());
 
-bool wxMimeTypesManagerImpl::WriteKDEMimeFile(int index, bool delete_index)
-{
-    wxMimeTextFile appoutfile, mimeoutfile;
-    wxString sHome = wxGetHomeDir();
-    wxString sTmp = wxT(".kde/share/mimelnk/");
-    wxString sMime = m_aTypes[index];
-    CheckKDEDirsExist(sHome, sTmp + sMime.BeforeFirst(wxT('/')) );
-    sTmp = sHome + wxT('/') + sTmp + sMime + wxT(".kdelnk");
-
-    bool bTemp;
-    bool bMimeExists = mimeoutfile.Open(sTmp);
-    if (!bMimeExists)
-    {
-        bTemp = mimeoutfile.Create(sTmp);
-        // some unknown error eg out of disk space
-        if (!bTemp)
-            return false;
-    }
-
-    sTmp = wxT(".kde/share/applnk/");
-    CheckKDEDirsExist(sHome, sTmp + sMime.AfterFirst(wxT('/')) );
-    sTmp = sHome + wxT('/') + sTmp + sMime.AfterFirst(wxT('/')) + wxT(".kdelnk");
-
-    bool bAppExists;
-    bAppExists = appoutfile.Open(sTmp);
-    if (!bAppExists)
-    {
-        bTemp = appoutfile.Create(sTmp);
-        // some unknown error eg out of disk space
-        if (!bTemp)
-            return false;
-    }
-
-    // fixed data; write if new file
-    if (!bMimeExists)
-    {
-        mimeoutfile.AddLine(wxT("#KDE Config File"));
-        mimeoutfile.AddLine(wxT("[KDE Desktop Entry]"));
-        mimeoutfile.AddLine(wxT("Version=1.0"));
-        mimeoutfile.AddLine(wxT("Type=MimeType"));
-        mimeoutfile.AddLine(wxT("MimeType=") + sMime);
-    }
-
-    if (!bAppExists)
-    {
-        mimeoutfile.AddLine(wxT("#KDE Config File"));
-        mimeoutfile.AddLine(wxT("[KDE Desktop Entry]"));
-        appoutfile.AddLine(wxT("Version=1.0"));
-        appoutfile.AddLine(wxT("Type=Application"));
-        appoutfile.AddLine(wxT("MimeType=") + sMime + wxT(';'));
-    }
-
-    // variable data
-    // ignore locale
-    mimeoutfile.CommentLine(wxT("Comment="));
-    if (!delete_index)
-        mimeoutfile.AddLine(wxT("Comment=") + m_aDescriptions[index]);
-    appoutfile.CommentLine(wxT("Name="));
-    if (!delete_index)
-        appoutfile.AddLine(wxT("Comment=") + m_aDescriptions[index]);
-
-    sTmp = m_aIcons[index];
-    // we can either give the full path, or the shortfilename if its in
-    // one of the directories we search
-    mimeoutfile.CommentLine(wxT("Icon=") );
-    if (!delete_index)
-        mimeoutfile.AddLine(wxT("Icon=") + sTmp );
-    appoutfile.CommentLine(wxT("Icon=") );
-    if (!delete_index)
-        appoutfile.AddLine(wxT("Icon=") + sTmp );
-
-    sTmp = wxT(" ") + m_aExtensions[index];
-
-    wxStringTokenizer tokenizer(sTmp, wxT(" "));
-    sTmp = wxT("Patterns=");
-    mimeoutfile.CommentLine(sTmp);
-    while ( tokenizer.HasMoreTokens() )
-    {
-        // holds an extension; need to change it to *.ext;
-        wxString e = wxT("*.") + tokenizer.GetNextToken() + wxT(";");
-        sTmp += e;
-    }
-
-    if (!delete_index)
-        mimeoutfile.AddLine(sTmp);
-
-    wxMimeTypeCommands * entries = m_aEntries[index];
-    // if we don't find open just have an empty string ... FIX this
-    sTmp = entries->GetCommandForVerb(wxT("open"));
-    sTmp.Replace( wxT("%s"), wxT("%f") );
-
-    mimeoutfile.CommentLine(wxT("DefaultApp=") );
-    if (!delete_index)
-        mimeoutfile.AddLine(wxT("DefaultApp=") + sTmp);
-
-    sTmp.Replace( wxT("%f"), wxT("") );
-    appoutfile.CommentLine(wxT("Exec="));
-    if (!delete_index)
-        appoutfile.AddLine(wxT("Exec=") + sTmp);
-
-    if (entries->GetCount() > 1)
-    {
-        //other actions as well as open
-    }
-
-    bTemp = false;
-    if (mimeoutfile.Write())
-        bTemp = true;
-    mimeoutfile.Close();
-    if (appoutfile.Write())
-        bTemp = true;
-    appoutfile.Close();
-
-    return bTemp;
-}
-
-// Read a KDE .desktop file of type 'Application'
-void wxMimeTypesManagerImpl::LoadKDEApp(const wxString& filename)
-{
-    wxLogTrace(TRACE_MIME, wxT("loading KDE file %s"), filename.c_str());
-
-    wxMimeTextFile file;
-    if ( !file.Open(filename) )
+    wxMimeTextFile file(filename);
+    if ( !file.Open() )
         return;
  
     // Here, only type 'Application' should be considered.
@@ -391,7 +210,7 @@ void wxMimeTypesManagerImpl::LoadKDEApp(const wxString& filename)
     }
 }
 
-void wxMimeTypesManagerImpl::LoadKDEAppsFilesFromDir(const wxString& dirname)
+void wxMimeTypesManagerImpl::LoadXDGAppsFilesFromDir(const wxString& dirname)
 {
     // Don't complain if we don't have permissions to read - it confuses users
     wxLogNull logNull;
@@ -408,11 +227,13 @@ void wxMimeTypesManagerImpl::LoadKDEAppsFilesFromDir(const wxString& dirname)
     while (cont)
     {
         wxFileName p(dirname, filename);
-        LoadKDEApp( p.GetFullPath() );
+        LoadXDGApp( p.GetFullPath() );
         cont = dir.GetNext(&filename);
     }
-    
-    return;
+
+#if 0 
+    // RR: I'm not sure this makes any sense. On my system we'll just
+    //     scan the YAST2 and other useless directories
     
     // Look recursively into subdirs
     cont = dir.GetFirst(&filename, wxEmptyString, wxDIR_DIRS);
@@ -420,9 +241,10 @@ void wxMimeTypesManagerImpl::LoadKDEAppsFilesFromDir(const wxString& dirname)
     {
         wxFileName p(dirname, wxEmptyString);
         p.AppendDir(filename);
-        LoadKDEAppsFilesFromDir( p.GetPath() );
+        LoadXDGAppsFilesFromDir( p.GetPath() );
         cont = dir.GetNext(&filename);
     }
+#endif
 }
 
 
@@ -686,15 +508,26 @@ void wxMimeTypesManagerImpl::Initialize(int mailcapStyles,
     // than one mime type at a time, but it should be a reasonable
     // heuristic.
     {
-        wxString xdgDataHome = wxGetenv(wxT("XDG_DATA_HOME"));
+        wxString xdgDataHome = wxGetenv("XDG_DATA_HOME");
         if ( xdgDataHome.empty() )
-            xdgDataHome = wxGetHomeDir() + wxT("/.local/share");
-        wxString xdgDataDirs = wxGetenv(wxT("XDG_DATA_DIRS"));
+            xdgDataHome = wxGetHomeDir() + "/.local/share";
+        wxString xdgDataDirs = wxGetenv("XDG_DATA_DIRS");
         if ( xdgDataDirs.empty() )
-            xdgDataDirs = wxT("/usr/local/share:/usr/share:/usr/share/gnome");
+        {
+            xdgDataDirs = "/usr/local/share:/usr/share";
+            if (mailcapStyles & wxMAILCAP_GNOME)
+                xdgDataDirs += ":/usr/share/gnome:/opt/gnome/share";
+            if (mailcapStyles & wxMAILCAP_KDE)
+                xdgDataDirs += ":/usr/share/kde3:/opt/kde3/share";
+        }
+        if ( !sExtraDir.empty() )
+        {
+           xdgDataDirs += ':';
+           xdgDataDirs += sExtraDir;
+        }
+        
         wxArrayString dirs;
-
-        wxStringTokenizer tokenizer(xdgDataDirs, wxT(":"));
+        wxStringTokenizer tokenizer(xdgDataDirs, ":");
         while ( tokenizer.HasMoreTokens() )
         {
             wxString p = tokenizer.GetNextToken();
@@ -723,7 +556,7 @@ void wxMimeTypesManagerImpl::Initialize(int mailcapStyles,
             wxString dirStr = dirs[nDir];
             if (dirStr.Last() != '/') dirStr += '/';
             dirStr += "applications";
-            LoadKDEAppsFilesFromDir(dirStr);
+            LoadXDGAppsFilesFromDir(dirStr);
         }
 
         if (!defaultsList.IsEmpty())
@@ -750,14 +583,12 @@ void wxMimeTypesManagerImpl::Initialize(int mailcapStyles,
                                 for (j = 0; j < dirs.GetCount(); j++)
                                 {
                                     wxString desktopPath = dirs[j];
-                                    if (desktopPath.Last() == '/')
-                                        desktopPath += "applications/";
-                                    else
-                                        desktopPath += "/applications/";
+                                    if (desktopPath.Last() != '/') desktopPath += '/';
+                                    desktopPath += "applications/";
                                     desktopPath += desktopFile;
                                     
                                     if (wxFileExists(desktopPath))
-                                        LoadKDEApp(desktopPath);
+                                        LoadXDGApp(desktopPath);
                                 }
                             }
                         }
@@ -838,24 +669,7 @@ bool wxMimeTypesManagerImpl::DoAssociation(const wxString& strType,
     if ( nIndex == wxNOT_FOUND )
         return false;
 
-    return WriteMimeInfo(nIndex, false);
-}
-
-bool wxMimeTypesManagerImpl::WriteMimeInfo(int nIndex, bool delete_mime )
-{
-    bool ok = true;
-
-    // Don't write GNOME files here as this is not
-    // allowed and simply doesn't work
-
-  //  if (m_mailcapStylesInited & wxMAILCAP_KDE)
-    {
-        // write in KDE format;
-        if (WriteKDEMimeFile(nIndex, delete_mime) )
-            ok = false;
-    }
-
-    return ok;
+    return true;
 }
 
 int wxMimeTypesManagerImpl::AddToMimeData(const wxString& strType,
@@ -1142,7 +956,6 @@ bool wxMimeTypesManagerImpl::Unassociate(wxFileType *ft)
         }
         else
         {
-            WriteMimeInfo(nIndex, true);
             m_aTypes.RemoveAt(nIndex);
             m_aEntries.RemoveAt(nIndex);
             m_aExtensions.RemoveAt(nIndex);
