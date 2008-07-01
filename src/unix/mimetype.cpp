@@ -255,7 +255,18 @@ void wxMimeTypesManagerImpl::LoadXDGGlobs(const wxString& filename)
     if ( !file.Open() )
         return;
 
-    // Parse it here 
+    size_t i;
+    for (i = 0; i < file.GetLineCount(); i++)
+    {
+       wxStringTokenizer tok( file.GetLine(i), ":" );
+       wxString mime = tok.GetNextToken();
+       wxString ext = tok.GetNextToken();
+       ext.Remove( 0, 2 );
+       wxArrayString exts;
+       exts.Add( ext );
+       
+       AddToMimeData(mime, wxEmptyString, NULL, exts, wxEmptyString, false );
+    }
 }
 
 // ----------------------------------------------------------------------------
