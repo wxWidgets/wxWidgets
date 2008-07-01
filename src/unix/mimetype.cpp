@@ -16,7 +16,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_MIMETYPE && wxUSE_FILE && wxUSE_TEXTFILE
+#if wxUSE_MIMETYPE && wxUSE_FILE
 
 #include "wx/unix/mimetype.h"
 
@@ -32,7 +32,6 @@
 #include "wx/confbase.h"
 
 #include "wx/ffile.h"
-#include "wx/textfile.h"
 #include "wx/dir.h"
 #include "wx/tokenzr.h"
 #include "wx/iconloc.h"
@@ -73,7 +72,7 @@ public:
        {
           wxString t = tok.GetNextToken();
           t.MakeLower();
-          if ((!!t) && (t.Find( "comment" ) != 0) && (t.Find( "generic" ) != 0))
+          if ((!!t) && (t.Find( "comment" ) != 0) && (t.Find( "#" ) != 0) && (t.Find( "generic" ) != 0))
              m_text.Add( t );
        }
        return true;
@@ -247,6 +246,17 @@ void wxMimeTypesManagerImpl::LoadXDGAppsFilesFromDir(const wxString& dirname)
 #endif
 }
 
+
+void wxMimeTypesManagerImpl::LoadXDGGlobs(const wxString& filename)
+{
+    wxLogTrace(TRACE_MIME, wxT("loading XDG globs file from %s"), filename.c_str());
+
+    wxMimeTextFile file(filename);
+    if ( !file.Open() )
+        return;
+
+    // Parse it here 
+}
 
 // ----------------------------------------------------------------------------
 // wxFileTypeImpl (Unix)
@@ -494,6 +504,8 @@ void wxMimeTypesManagerImpl::InitIfNeeded()
     }
 }
 
+
+
 // read system and user mailcaps and other files
 void wxMimeTypesManagerImpl::Initialize(int mailcapStyles,
                                         const wxString& sExtraDir)
@@ -503,7 +515,10 @@ void wxMimeTypesManagerImpl::Initialize(int mailcapStyles,
     return;
 #endif
 
-    // Load desktop files for Gnome, and then override them with the Gnome defaults.
+    // Read MIME type - extension associations
+    LoadXDGGlobs( "/usr/share/mime/globs" );
+
+    // Load desktop files for XDG, and then override them with the defaults.
     // We will override them one desktop file at a time, rather
     // than one mime type at a time, but it should be a reasonable
     // heuristic.
@@ -815,6 +830,7 @@ wxFileType * wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mim
 
     // first look for an exact match
     int index = m_aTypes.Index(mimetype);
+    
     if ( index != wxNOT_FOUND )
     {
         fileType = new wxFileType;
@@ -973,4 +989,4 @@ bool wxMimeTypesManagerImpl::Unassociate(wxFileType *ft)
 }
 
 #endif
-  // wxUSE_MIMETYPE && wxUSE_FILE && wxUSE_TEXTFILE
+  // wxUSE_MIMETYPE && wxUSE_FILE

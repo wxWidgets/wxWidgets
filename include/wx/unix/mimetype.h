@@ -84,6 +84,9 @@ protected:
     // Scan XDG directory
     void LoadXDGAppsFilesFromDir(const wxString& dirname);
 
+    // Load XDG globs files
+    void LoadXDGGlobs(const wxString& filename);
+
     // functions used to do associations
     virtual int AddToMimeData(const wxString& strType,
                       const wxString& strIcon,
