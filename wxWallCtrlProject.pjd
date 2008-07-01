@@ -284,11 +284,11 @@
           <string name="proxy-Implementation filename">"wxwallctrlprojectapp.cpp"</string>
           <string name="proxy-Header filename">"wxwallctrlprojectapp.h"</string>
           <string name="proxy-Event sources">""</string>
-          <string name="proxy-Main window">"ID_WXWALLCTRLTEST"</string>
+          <string name="proxy-Main window">"ID_WXWALLCTRLSAMPLE"</string>
           <string name="proxy-Help filename">""</string>
         </document>
         <document>
-          <string name="title">"Test for wxWallCtrl"</string>
+          <string name="title">"wxWallCtrlSample"</string>
           <string name="type">"dialog-document"</string>
           <string name="filename">""</string>
           <string name="icon-name">"dialog"</string>
@@ -296,7 +296,7 @@
           <long name="owns-file">1</long>
           <long name="title-mode">0</long>
           <long name="locked">0</long>
-          <string name="created">"2/6/2008"</string>
+          <string name="created">"30/6/2008"</string>
           <string name="proxy-type">"wbDialogProxy"</string>
           <long name="base-id">10000</long>
           <bool name="use-id-prefix">0</bool>
@@ -305,15 +305,15 @@
           <string name="id-suffix">""</string>
           <long name="use-xrc">0</long>
           <long name="working-mode">0</long>
-          <string name="proxy-Id name">"ID_WXWALLCTRLTEST"</string>
-          <long name="proxy-Id value">10000</long>
-          <string name="proxy-Class">"wxWallCtrlTest"</string>
+          <string name="proxy-Id name">"ID_WXWALLCTRLSAMPLE"</string>
+          <long name="proxy-Id value">10002</long>
+          <string name="proxy-Class">"wxWallCtrlSample"</string>
           <string name="proxy-Base class">"wxDialog"</string>
           <string name="proxy-Window kind">"wxDialog"</string>
-          <string name="proxy-Implementation filename">"wxwallctrltest.cpp"</string>
-          <string name="proxy-Header filename">"wxwallctrltest.h"</string>
+          <string name="proxy-Implementation filename">"wxwallctrlsample.cpp"</string>
+          <string name="proxy-Header filename">"wxwallctrlsample.h"</string>
           <string name="proxy-XRC filename">""</string>
-          <string name="proxy-Title">"Test for wxWallCtrl"</string>
+          <string name="proxy-Title">"wxWallCtrlSample"</string>
           <bool name="proxy-Centre">1</bool>
           <string name="proxy-Icon">""</string>
           <bool name="proxy-Dialog units">0</bool>
@@ -366,7 +366,7 @@
           <bool name="proxy-AUI manager">0</bool>
           <string name="proxy-Event sources">""</string>
           <document>
-            <string name="title">"wxBoxSizer V"</string>
+            <string name="title">"wxBoxSizer H"</string>
             <string name="type">"dialog-control-document"</string>
             <string name="filename">""</string>
             <string name="icon-name">"sizer"</string>
@@ -374,15 +374,16 @@
             <long name="owns-file">1</long>
             <long name="title-mode">0</long>
             <long name="locked">0</long>
+            <string name="created">"2/7/2008"</string>
             <string name="proxy-type">"wbBoxSizerProxy"</string>
-            <string name="proxy-Orientation">"Vertical"</string>
+            <string name="proxy-Orientation">"Horizontal"</string>
             <string name="proxy-Member variable name">""</string>
             <bool name="proxy-wxSHAPED">0</bool>
             <bool name="proxy-wxADJUST_MINSIZE">0</bool>
             <bool name="proxy-wxFIXED_MINSIZE">0</bool>
             <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
             <document>
-              <string name="title">"wxBoxSizer H"</string>
+              <string name="title">"wxBoxSizer V"</string>
               <string name="type">"dialog-control-document"</string>
               <string name="filename">""</string>
               <string name="icon-name">"sizer"</string>
@@ -390,13 +391,13 @@
               <long name="owns-file">1</long>
               <long name="title-mode">0</long>
               <long name="locked">0</long>
-              <string name="created">"2/6/2008"</string>
+              <string name="created">"2/7/2008"</string>
               <string name="proxy-type">"wbBoxSizerProxy"</string>
-              <string name="proxy-Orientation">"Horizontal"</string>
+              <string name="proxy-Orientation">"Vertical"</string>
               <string name="proxy-Member variable name">""</string>
               <string name="proxy-AlignH">"Centre"</string>
-              <string name="proxy-AlignV">"Centre"</string>
-              <long name="proxy-Stretch factor">0</long>
+              <string name="proxy-AlignV">"Expand"</string>
+              <long name="proxy-Stretch factor">1</long>
               <long name="proxy-Border">5</long>
               <bool name="proxy-wxLEFT">1</bool>
               <bool name="proxy-wxRIGHT">1</bool>
@@ -406,6 +407,64 @@
               <bool name="proxy-wxADJUST_MINSIZE">0</bool>
               <bool name="proxy-wxFIXED_MINSIZE">0</bool>
               <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
+              <document>
+                <string name="title">"wxWallCtrl: ID_WALLCTRL"</string>
+                <string name="type">"dialog-control-document"</string>
+                <string name="filename">""</string>
+                <string name="icon-name">"foreign"</string>
+                <long name="is-transient">0</long>
+                <long name="owns-file">1</long>
+                <long name="title-mode">0</long>
+                <long name="locked">0</long>
+                <string name="created">"2/7/2008"</string>
+                <string name="proxy-type">"wbCustomCtrlProxy:wxWallCtrl"</string>
+                <string name="proxy-Id name">"ID_WALLCTRL"</string>
+                <long name="proxy-Id value">10000</long>
+                <string name="proxy-Name">""</string>
+                <string name="proxy-Class">"wxWallCtrl"</string>
+                <string name="proxy-Base class">"wxWallCtrl"</string>
+                <bool name="proxy-External implementation">1</bool>
+                <bool name="proxy-Separate files">0</bool>
+                <string name="proxy-Implementation filename">""</string>
+                <string name="proxy-Header filename">""</string>
+                <string name="proxy-Member variable name">""</string>
+                <string name="proxy-Attributes">""</string>
+                <string name="proxy-Help text">""</string>
+                <string name="proxy-Tooltip text">""</string>
+                <string name="proxy-Background colour">""</string>
+                <string name="proxy-Foreground colour">""</string>
+                <string name="proxy-Font">""</string>
+                <bool name="proxy-Hidden">0</bool>
+                <bool name="proxy-Enabled">1</bool>
+                <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
+                <bool name="proxy-wxNO_BORDER">0</bool>
+                <bool name="proxy-wxSIMPLE_BORDER">0</bool>
+                <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                <bool name="proxy-wxSUNKEN_BORDER">0</bool>
+                <bool name="proxy-wxRAISED_BORDER">0</bool>
+                <bool name="proxy-wxSTATIC_BORDER">0</bool>
+                <bool name="proxy-wxWANTS_CHARS">0</bool>
+                <bool name="proxy-wxCLIP_CHILDREN">0</bool>
+                <string name="proxy-Custom styles">""</string>
+                <long name="proxy-X">-1</long>
+                <long name="proxy-Y">-1</long>
+                <long name="proxy-Width">-1</long>
+                <long name="proxy-Height">-1</long>
+                <string name="proxy-AlignH">"Expand"</string>
+                <string name="proxy-AlignV">"Expand"</string>
+                <long name="proxy-Stretch factor">1</long>
+                <long name="proxy-Border">5</long>
+                <bool name="proxy-wxLEFT">1</bool>
+                <bool name="proxy-wxRIGHT">1</bool>
+                <bool name="proxy-wxTOP">1</bool>
+                <bool name="proxy-wxBOTTOM">1</bool>
+                <bool name="proxy-wxSHAPED">0</bool>
+                <bool name="proxy-wxADJUST_MINSIZE">0</bool>
+                <bool name="proxy-wxFIXED_MINSIZE">0</bool>
+                <string name="proxy-Custom arguments">"%PARENT%, %IDENTIFIER%, %POSITION%, %SIZE%, wxWANTS_CHARS"</string>
+                <string name="proxy-Custom ctor arguments">""</string>
+                <string name="proxy-Event sources">""</string>
+              </document>
             </document>
           </document>
         </document>
@@ -419,6 +478,114 @@
         <long name="owns-file">1</long>
         <long name="title-mode">0</long>
         <long name="locked">1</long>
+        <document>
+          <string name="title">"matrix.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"src/wallctrl/matrix.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"30/6/2008"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"wallctrl.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"src/wallctrl/wallctrl.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"30/6/2008"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"wallctrlbitmapsource.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"src/wallctrl/wallctrlbitmapsource.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"30/6/2008"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"wallctrldatasource.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"src/wallctrl/wallctrldatasource.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"30/6/2008"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"wallctrldefaultplanenavigation.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"src/wallctrl/wallctrldefaultplanenavigation.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"30/6/2008"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"wallctrlnavigation.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"src/wallctrl/wallctrlnavigation.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"30/6/2008"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"wallctrlnavigationevent.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"src/wallctrl/wallctrlnavigationevent.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"30/6/2008"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"wallctrlplanesurface.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"src/wallctrl/wallctrlplanesurface.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"30/6/2008"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"wallctrlsurface.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"src/wallctrl/wallctrlsurface.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"30/6/2008"</string>
+          <string name="language">""</string>
+        </document>
         <document>
           <string name="title">"wxWallCtrlProject.rc"</string>
           <string name="type">"source-editor-document"</string>

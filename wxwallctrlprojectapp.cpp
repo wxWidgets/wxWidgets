@@ -109,7 +109,7 @@ bool WxWallCtrlProjectApp::OnInit()
 #if wxUSE_GIF
 	wxImage::AddHandler(new wxGIFHandler);
 #endif
-	wxWallCtrlTest* mainWindow = new wxWallCtrlTest(NULL);
+	wxWallCtrlSample* mainWindow = new wxWallCtrlSample(NULL);
 	/* int returnValue = */ mainWindow->ShowModal();
 
 	mainWindow->Destroy();

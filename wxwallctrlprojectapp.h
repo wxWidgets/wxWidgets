@@ -18,8 +18,7 @@
 
 ////@begin includes
 #include "wx/image.h"
-#include "wxwallctrltest.h"
-#include "wx/Wallctrl/WallCtrl.h"
+#include "wxwallctrlsample.h"
 ////@end includes
 
 /*!

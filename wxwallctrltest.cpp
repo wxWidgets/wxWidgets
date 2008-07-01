@@ -10,10 +10,10 @@
 
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
-#include "wx/Wallctrl/WallCtrl.h"
-#include "wx/Wallctrl/WallCtrlPlaneSurface.h"
-#include "wx/Wallctrl/WallCtrlBitmapSource.h"
-#include "wx/wallctrl/wallctrldefaultplanenavigation.h"
+//#include "wx/Wallctrl/WallCtrl.h"
+//#include "wx/Wallctrl/WallCtrlPlaneSurface.h"
+//#include "wx/Wallctrl/WallCtrlBitmapSource.h"
+//#include "wx/wallctrl/wallctrldefaultplanenavigation.h"
 
 #ifdef __BORLANDC__
 #pragma hdrstop
@@ -109,7 +109,7 @@ void wxWallCtrlTest::Init()
 /*!
  * Control creation for wxWallCtrlTest
  */
-
+/*
 void wxWallCtrlTest::CreateControls()
 {    
 ////@begin wxWallCtrlTest content construction
@@ -118,7 +118,43 @@ void wxWallCtrlTest::CreateControls()
     wxBoxSizer* itemBoxSizer2 = new wxBoxSizer(wxVERTICAL);
     itemDialog1->SetSizer(itemBoxSizer2);
 
-	wxWallCtrlBitmapSource * bitmapSource = new wxWallCtrlBitmapSource();
+    wxBoxSizer* itemBoxSizer3 = new wxBoxSizer(wxHORIZONTAL);
+    itemBoxSizer2->Add(itemBoxSizer3, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+
+    wxButton* itemButton4 = new wxButton( itemDialog1, ID_BUTTON1, _("Button"), wxDefaultPosition, wxDefaultSize, 0 );
+
+	////@end wxWallCtrlTest content construction
+}
+*/
+
+void wxWallCtrlTest::CreateControls()
+{    
+////@begin wxWallCtrlTest content construction
+
+	fasdfasd;
+		fasdfdsa; 
+		f; 
+////@end wxWallCtrlTest content construction
+
+	/*
+        wxWallCtrlTest* itemDialog1 = this;
+
+    wxBoxSizer* itemBoxSizer2 = new wxBoxSizer(wxVERTICAL);
+    itemDialog1->SetSizer(itemBoxSizer2);
+
+
+	//wxWallCtrl * wallCtrl1 = new wxWallCtrl(this, wxID_ANY,	wxDefaultPosition, wxDefaultSize, wxWANTS_CHARS);
+
+	
+
+	//wallCtrl1->SetFocus();
+	//SetExtraStyle(wxWANTS_CHARS);
+
+	itemBoxSizer2->Add(wallCtrl1, 1, wxGROW|wxALL, 5);
+
+    
+    
+    wxWallCtrlBitmapSource * bitmapSource = new wxWallCtrlBitmapSource();
 	wxBitmap testBitmap;
 
 	// Just add bitmaps manually.
@@ -134,19 +170,11 @@ void wxWallCtrlTest::CreateControls()
 
 	wxWallCtrlPlaneSurface * surface = new wxWallCtrlPlaneSurface();
 	surface->SetScopeSize(wxSize(16, 2));
-	wxWallCtrl * wallCtrl1 = new wxWallCtrl(this, wxID_ANY,	wxDefaultPosition, wxDefaultSize, wxWANTS_CHARS);
 
 	wxWallCtrlDefaultPlaneNavigation * navigation = new wxWallCtrlDefaultPlaneNavigation();
 	wallCtrl1->SetDataSource(bitmapSource);
 	wallCtrl1->SetSurface(surface);
-	wallCtrl1->SetNavigator(navigation);
-
-	//wallCtrl1->SetFocus();
-	//SetExtraStyle(wxWANTS_CHARS);
-
-	itemBoxSizer2->Add(wallCtrl1, 1, wxGROW|wxALL, 5);
-
-	////@end wxWallCtrlTest content construction
+	wallCtrl1->SetNavigator(navigation);*/
 }
 
 
