@@ -75,6 +75,8 @@ public:
 
     virtual void EnsureVisible(int n);
 
+    virtual void Update();
+
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 

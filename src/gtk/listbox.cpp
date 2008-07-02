@@ -504,6 +504,15 @@ void wxListBox::GtkEnableEvents()
     UpdateOldSelections();
 }
 
+
+void wxListBox::Update()
+{
+    wxWindow::Update();
+    
+    if (m_treeview)
+        gdk_window_process_updates(m_wxwindow->window, TRUE);
+}
+
 // ----------------------------------------------------------------------------
 // adding items
 // ----------------------------------------------------------------------------
