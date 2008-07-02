@@ -33,7 +33,7 @@
       {
       public:
           wxDDEModule() { }
-          virtual bool OnInit() { wxDDEInitialize(); return @true; };
+          virtual bool OnInit() { wxDDEInitialize(); return true; };
           virtual void OnExit() { wxDDECleanUp(); };
 
       private:

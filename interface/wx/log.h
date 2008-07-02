@@ -126,7 +126,7 @@ public:
 
     // don't delete logChain directly as this would leave a dangling
     // pointer as active log target, use SetActiveTarget() instead
-    delete wxLog::SetActiveTarget(...something else or @NULL...);
+    delete wxLog::SetActiveTarget(...something else or NULL...);
     @endcode
 
     @library{wxbase}

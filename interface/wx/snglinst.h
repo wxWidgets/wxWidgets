@@ -28,15 +28,15 @@
         {
             wxLogError(_("Another program instance is already running, aborting."));
 
-            delete m_checker; // OnExit() won't be called if we return @false
-            m_checker = @NULL;
+            delete m_checker; // OnExit() won't be called if we return false
+            m_checker = NULL;
 
-            return @false;
+            return false;
         }
 
         ... more initializations ...
 
-        return @true;
+        return true;
     }
 
     int MyApp::OnExit()

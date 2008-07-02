@@ -74,7 +74,7 @@ enum wxPropertySheetDialogFlags
     bool MyPropertySheetDialog::Create(...)
     {
         if (!wxPropertySheetDialog::Create(...))
-            return @false;
+            return false;
 
         CreateButtons(wxOK|wxCANCEL|wxHELP);
 
@@ -83,7 +83,7 @@ enum wxPropertySheetDialogFlags
         GetBookCtrl()->AddPage(panel, wxT("General"));
 
         LayoutDialog();
-        return @true;
+        return true;
     }
     @endcode
 
