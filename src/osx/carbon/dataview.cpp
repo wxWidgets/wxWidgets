@@ -475,6 +475,7 @@ public:
     wxDataViewItemArray array;
     GetOwner()->GetChildren( item, array );
     ItemsAdded( item, array );
+    this->m_dataViewControlPtr->SetScrollPosition(0, 0);
     return noFailureFlag;
   } /* Cleared() */
 
