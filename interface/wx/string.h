@@ -1004,12 +1004,16 @@ public:
     void UpperCase();
 
     /**
-        Returns a pointer to the string data (@c const char* when using UTF-8
-        internally, @c const wchar_t* when using UCS-2 internally).
-
+        Returns a lightweight intermediate class which is in turn implicitly
+        convertible to both @c const @c char* and to @c const @c wchar_t*.
+        
+        Please see the @ref overview_unicode "Unicode overview" for more
+        information about it.
+        
         Note that the returned value is not convertible to @c char* or
         @c wchar_t*, use char_str() or wchar_str() if you need to pass
         string value to a function expecting non-const pointer.
+        
     */
     const wxCStrData c_str() const;
 
