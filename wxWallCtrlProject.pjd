@@ -446,10 +446,10 @@
                 <bool name="proxy-wxWANTS_CHARS">0</bool>
                 <bool name="proxy-wxCLIP_CHILDREN">0</bool>
                 <string name="proxy-Custom styles">""</string>
-                <long name="proxy-X">-1</long>
-                <long name="proxy-Y">-1</long>
-                <long name="proxy-Width">-1</long>
-                <long name="proxy-Height">-1</long>
+                <long name="proxy-X">0</long>
+                <long name="proxy-Y">0</long>
+                <long name="proxy-Width">300</long>
+                <long name="proxy-Height">300</long>
                 <string name="proxy-AlignH">"Expand"</string>
                 <string name="proxy-AlignV">"Expand"</string>
                 <long name="proxy-Stretch factor">1</long>
