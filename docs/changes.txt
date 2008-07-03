@@ -115,6 +115,7 @@ wxMSW:
 - Fix keyboard support in wxSpinCtrl broken in 2.8.8.
 - Compile fix for WinCE in window.cpp (no VkKeyScan in Windows CE).
 - Fix quoting of arguments passed to wxExecute(char **) (Brian Ravnsgaard Riis).
+- Support disabling items before adding them to the menu (Christian Walther).
 
 wxGTK:
 
