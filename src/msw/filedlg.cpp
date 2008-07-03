@@ -250,10 +250,10 @@ void wxFileDialog::MSWOnInitDone(WXHWND hDlg)
     SetHWND(NULL);
 }
 
-// helper used below in ShowModal(): style is used to determine whether to show
-// the "Save file" dialog (if it contains wxFD_SAVE bit) or "Open file" one;
-// returns true on success or false on failure in which case err is filled with
-// the CDERR_XXX constant
+// helper used below in ShowCommFileDialog(): style is used to determine
+// whether to show the "Save file" dialog (if it contains wxFD_SAVE bit) or
+// "Open file" one; returns true on success or false on failure in which case
+// err is filled with the CDERR_XXX constant
 static bool DoShowCommFileDialog(OPENFILENAME *of, long style, DWORD *err)
 {
     if ( style & wxFD_SAVE ? GetSaveFileName(of) : GetOpenFileName(of) )
@@ -307,6 +307,52 @@ static bool DoShowCommFileDialog(OPENFILENAME *of, long style, DWORD *err)
     // always try the new one first
     static DWORD gs_ofStructSize = wxOPENFILENAME_V5_SIZE;
 #endif // __WXWINCE__ || __WIN64__/!...
+
+static bool ShowCommFileDialog(OPENFILENAME *of, long style)
+{
+    DWORD errCode;
+    bool success = DoShowCommFileDialog(of, style, &errCode);
+
+#ifdef wxTRY_SMALLER_OPENFILENAME
+    // the system might be too old to support the new version file dialog
+    // boxes, try with the old size
+    if ( !success && errCode == CDERR_STRUCTSIZE &&
+            of->lStructSize != wxOPENFILENAME_V4_SIZE )
+    {
+        of->lStructSize = wxOPENFILENAME_V4_SIZE;
+
+        success = DoShowCommFileDialog(of, style, &errCode);
+
+        if ( success || !errCode )
+        {
+            // use this struct size for subsequent dialogs
+            gs_ofStructSize = of->lStructSize;
+        }
+    }
+#endif // wxTRY_SMALLER_OPENFILENAME
+
+    if ( !success && errCode == FNERR_INVALIDFILENAME && of->lpstrFile[0] )
+    {
+        // this can happen if the default file name is invalid, try without it
+        // now
+        of->lpstrFile[0] = _T('\0');
+        success = DoShowCommFileDialog(of, style, &errCode);
+    }
+
+    if ( !success )
+    {
+        // common dialog failed - why?
+        if ( errCode != 0 )
+        {
+            wxLogError(_("File dialog failed with error code %0lx."), errCode);
+        }
+        //else: it was just cancelled
+
+        return false;
+    }
+
+    return true;
+}
 
 int wxFileDialog::ShowModal()
 {
@@ -475,120 +521,86 @@ int wxFileDialog::ShowModal()
 
     //== Execute FileDialog >>=================================================
 
-    DWORD errCode;
-    bool success = DoShowCommFileDialog(&of, m_windowStyle, &errCode);
+    if ( !ShowCommFileDialog(&of, m_windowStyle) )
+        return wxID_CANCEL;
 
-#ifdef wxTRY_SMALLER_OPENFILENAME
-    // the system might be too old to support the new version file dialog
-    // boxes, try with the old size
-    if ( !success && errCode == CDERR_STRUCTSIZE &&
-            of.lStructSize != wxOPENFILENAME_V4_SIZE )
+    // GetOpenFileName will always change the current working directory on
+    // (according to MSDN) "Windows NT 4.0/2000/XP" because the flag
+    // OFN_NOCHANGEDIR has no effect.  If the user did not specify
+    // wxFD_CHANGE_DIR let's restore the current working directory to what it
+    // was before the dialog was shown.
+    if ( msw_flags & OFN_NOCHANGEDIR )
     {
-        of.lStructSize = wxOPENFILENAME_V4_SIZE;
-
-        success = DoShowCommFileDialog(&of, m_windowStyle, &errCode);
-
-        if ( success || !errCode )
-        {
-            // use this struct size for subsequent dialogs
-            gs_ofStructSize = of.lStructSize;
-        }
+        wxSetWorkingDirectory(cwdOrig);
     }
-#endif // wxTRY_SMALLER_OPENFILENAME
 
-    if ( success )
-    {
-        // GetOpenFileName will always change the current working directory on
-        // (according to MSDN) "Windows NT 4.0/2000/XP" because the flag
-        // OFN_NOCHANGEDIR has no effect.  If the user did not specify
-        // wxFD_CHANGE_DIR let's restore the current working directory to what it
-        // was before the dialog was shown.
-        if ( msw_flags & OFN_NOCHANGEDIR )
-        {
-            wxSetWorkingDirectory(cwdOrig);
-        }
+    m_fileNames.Empty();
 
-        m_fileNames.Empty();
-
-        if ( ( HasFdFlag(wxFD_MULTIPLE) ) &&
+    if ( ( HasFdFlag(wxFD_MULTIPLE) ) &&
 #if defined(OFN_EXPLORER)
-             ( fileNameBuffer[of.nFileOffset-1] == wxT('\0') )
+         ( fileNameBuffer[of.nFileOffset-1] == wxT('\0') )
 #else
-             ( fileNameBuffer[of.nFileOffset-1] == wxT(' ') )
+         ( fileNameBuffer[of.nFileOffset-1] == wxT(' ') )
 #endif // OFN_EXPLORER
-           )
-        {
+       )
+    {
 #if defined(OFN_EXPLORER)
-            m_dir = fileNameBuffer;
-            i = of.nFileOffset;
-            m_fileName = &fileNameBuffer[i];
-            m_fileNames.Add(m_fileName);
-            i += m_fileName.length() + 1;
+        m_dir = fileNameBuffer;
+        i = of.nFileOffset;
+        m_fileName = &fileNameBuffer[i];
+        m_fileNames.Add(m_fileName);
+        i += m_fileName.length() + 1;
 
-            while (fileNameBuffer[i] != wxT('\0'))
-            {
-                m_fileNames.Add(&fileNameBuffer[i]);
-                i += wxStrlen(&fileNameBuffer[i]) + 1;
-            }
+        while (fileNameBuffer[i] != wxT('\0'))
+        {
+            m_fileNames.Add(&fileNameBuffer[i]);
+            i += wxStrlen(&fileNameBuffer[i]) + 1;
+        }
 #else
-            wxStringTokenizer toke(fileNameBuffer, _T(" \t\r\n"));
-            m_dir = toke.GetNextToken();
-            m_fileName = toke.GetNextToken();
-            m_fileNames.Add(m_fileName);
+        wxStringTokenizer toke(fileNameBuffer, _T(" \t\r\n"));
+        m_dir = toke.GetNextToken();
+        m_fileName = toke.GetNextToken();
+        m_fileNames.Add(m_fileName);
 
-            while (toke.HasMoreTokens())
-                m_fileNames.Add(toke.GetNextToken());
+        while (toke.HasMoreTokens())
+            m_fileNames.Add(toke.GetNextToken());
 #endif // OFN_EXPLORER
 
-            wxString dir(m_dir);
-            if ( m_dir.Last() != _T('\\') )
-                dir += _T('\\');
+        wxString dir(m_dir);
+        if ( m_dir.Last() != _T('\\') )
+            dir += _T('\\');
 
-            m_path = dir + m_fileName;
-            m_filterIndex = (int)of.nFilterIndex - 1;
-        }
-        else
-        {
-            //=== Adding the correct extension >>=================================
-
-            m_filterIndex = (int)of.nFilterIndex - 1;
-
-            if ( !of.nFileExtension ||
-                 (of.nFileExtension && fileNameBuffer[of.nFileExtension] == wxT('\0')) )
-            {
-                // User has typed a filename without an extension:
-                const wxChar* extension = filterBuffer.wx_str();
-                int   maxFilter = (int)(of.nFilterIndex*2L) - 1;
-
-                for( int i = 0; i < maxFilter; i++ )           // get extension
-                    extension = extension + wxStrlen( extension ) + 1;
-
-                m_fileName = AppendExtension(fileNameBuffer, extension);
-                wxStrncpy(fileNameBuffer, m_fileName.c_str(), wxMin(m_fileName.length(), wxMAXPATH-1));
-                fileNameBuffer[wxMin(m_fileName.length(), wxMAXPATH-1)] = wxT('\0');
-            }
-
-            m_path = fileNameBuffer;
-            m_fileName = wxFileNameFromPath(fileNameBuffer);
-            m_fileNames.Add(m_fileName);
-            m_dir = wxPathOnly(fileNameBuffer);
-        }
+        m_path = dir + m_fileName;
+        m_filterIndex = (int)of.nFilterIndex - 1;
     }
-#ifdef __WXDEBUG__
     else
     {
-        // common dialog failed - why?
-        if ( errCode != 0 )
-        {
-            // this msg is only for developers so don't translate it
-            wxLogError(wxT("Common dialog failed with error code %0lx."),
-                       errCode);
-        }
-        //else: it was just cancelled
-    }
-#endif // __WXDEBUG__
+        //=== Adding the correct extension >>=================================
 
-    return success ? wxID_OK : wxID_CANCEL;
+        m_filterIndex = (int)of.nFilterIndex - 1;
+
+        if ( !of.nFileExtension ||
+             (of.nFileExtension && fileNameBuffer[of.nFileExtension] == wxT('\0')) )
+        {
+            // User has typed a filename without an extension:
+            const wxChar* extension = filterBuffer.wx_str();
+            int   maxFilter = (int)(of.nFilterIndex*2L) - 1;
+
+            for( int i = 0; i < maxFilter; i++ )           // get extension
+                extension = extension + wxStrlen( extension ) + 1;
+
+            m_fileName = AppendExtension(fileNameBuffer, extension);
+            wxStrncpy(fileNameBuffer, m_fileName.c_str(), wxMin(m_fileName.length(), wxMAXPATH-1));
+            fileNameBuffer[wxMin(m_fileName.length(), wxMAXPATH-1)] = wxT('\0');
+        }
+
+        m_path = fileNameBuffer;
+        m_fileName = wxFileNameFromPath(fileNameBuffer);
+        m_fileNames.Add(m_fileName);
+        m_dir = wxPathOnly(fileNameBuffer);
+        }
+
+    return wxID_OK;
 
 }
 
