@@ -156,16 +156,18 @@ public:
         done in release builds.
         This section also contains both implicit and explicit conversions to C style
         strings. Although implicit conversion is quite convenient, it is advised to use
-        explicit c_str() method for the sake of clarity.
+        explicit wc_str() method for the sake of clarity.
 
         @li GetChar()
         @li GetWritableChar()
         @li SetChar()
         @li Last()
         @li operator[]()
-        @li c_str()
-        @li mb_str()
         @li wc_str()
+        @li utf8_str()
+        @li c_str()
+        @li wx_str()
+        @li mb_str()
         @li fn_str()
 
         The default comparison function Cmp() is case-sensitive and
@@ -1006,6 +1008,8 @@ public:
     /**
         Returns a lightweight intermediate class which is in turn implicitly
         convertible to both @c const @c char* and to @c const @c wchar_t*.
+        Given this ambiguity it is mostly better to use wc_str(), mb_str() or
+        utf8_str() instead.
         
         Please see the @ref overview_unicode "Unicode overview" for more
         information about it.
@@ -1014,6 +1018,7 @@ public:
         @c wchar_t*, use char_str() or wchar_str() if you need to pass
         string value to a function expecting non-const pointer.
         
+        @see wc_str(), utf8_str(), c_str(), mb_str(), fn_str()
     */
     const wxCStrData c_str() const;
 
@@ -1061,19 +1066,13 @@ public:
     const wxCharBuffer fn_str() const;
     //@}
 
-    //@{
     /**
-        Returns multibyte (C string) representation of the string.
-        In Unicode build, converts using @e conv's wxMBConv::cWC2MB
-        method and returns wxCharBuffer. In ANSI build, this function
-        is same as c_str().
-        The macro wxWX2MBbuf is defined as the correct return type (without const).
-
-        @see wxMBConv, c_str(), wc_str(), fn_str(), char_str()
+        Returns the multibyte (C string) representation of the string
+        using @e conv's wxMBConv::cWC2MB method and returns wxCharBuffer. 
+        
+        @see wc_str(), utf8_str(), c_str(), wxMBConv
     */
-    const char* mb_str(const wxMBConv& conv = wxConvLibc) const;
     const wxCharBuffer mb_str(const wxMBConv& conv = wxConvLibc) const;
-    //@}
 
     /**
         Extraction from a stream.
@@ -1146,6 +1145,8 @@ public:
         Converts the strings contents to UTF-8 and returns it either as a
         temporary wxCharBuffer object or as a pointer to the internal
         string contents in UTF-8 build.
+        
+        @see wc_str(), c_str(), mb_str()
     */
     const char* utf8_str() const;
     const wxCharBuffer utf8_str() const;
@@ -1154,13 +1155,14 @@ public:
     //@{
     /**
         Converts the strings contents to the wide character represention
-        and returns it as a temporary wxWCharBuffer object or returns a
-        pointer to the internal string contents in wide character mode.
+        and returns it as a temporary wxWCharBuffer object (Unix and OS X) 
+        or returns a pointer to the internal string contents in wide character
+        mode (Windows).
 
         The macro wxWX2WCbuf is defined as the correct return
         type (without const).
 
-        @see wxMBConv, c_str(), mb_str(), fn_str(), wchar_str()
+        @see uf8_str(), c_str(), mb_str(), fn_str(), wchar_str()
     */
     const wchar_t* wc_str() const;
     const wxWCharBuffer wc_str() const;
@@ -1176,6 +1178,13 @@ public:
         @see mb_str(), wc_str(), fn_str(), c_str(), char_str()
     */
     wxWritableWCharBuffer wchar_str() const;
+
+    /** 
+       Explicit conversion to C string in the internal representation (either
+       wchar_t* or UTF-8-encoded char*, depending on the build).
+    */
+    const wxStringCharType *wx_str() const;
+
 
     /**
         @name Iterator interface
