@@ -372,7 +372,8 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
     UpdateAccel(pItem);
 #endif // wxUSE_ACCEL
 
-    UINT flags = 0;
+    // we should support disabling the item even prior to adding it to the menu
+    UINT flags = pItem->IsEnabled() ? MF_ENABLED : MF_GRAYED;
 
     // if "Break" has just been called, insert a menu break before this item
     // (and don't forget to reset the flag)
