@@ -1097,7 +1097,7 @@ void wxDataViewCtrl::Init()
 
 bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxValidator& validator )
 {
-  if (!(this->wxControl::Create(parent,id,pos,size,(style | wxSUNKEN_BORDER) & ~(wxHSCROLL | wxVSCROLL),validator)))
+  if (!(this->wxControl::Create(parent,id,pos,size,style & ~(wxHSCROLL | wxVSCROLL),validator)))
     return false;
 
 #ifdef __WXMAC__
@@ -1105,6 +1105,10 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos,
 #endif
 
   this->m_peer = new wxMacDataViewDataBrowserListViewControl(this,pos,size,style);
+  
+  if ( style & wxBORDER_NONE )
+    this->m_peer->SetData( kControlNoPart, kControlDataBrowserIncludesFrameAndFocusTag, (Boolean) false ) ;
+
   this->MacPostControlCreate(pos,size);
   ::SetAutomaticControlDragTrackingEnabledForWindow(::GetControlOwner(this->m_peer->GetControlRef()),true);
 
