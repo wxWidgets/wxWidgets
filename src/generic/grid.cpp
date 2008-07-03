@@ -953,7 +953,6 @@ void wxGridCellNumberEditor::BeginEdit(int row, int col, wxGrid* grid)
 bool wxGridCellNumberEditor::EndEdit(int row, int col,
                                      wxGrid* grid)
 {
-    bool changed;
     long value = 0;
     wxString text;
 
@@ -961,26 +960,40 @@ bool wxGridCellNumberEditor::EndEdit(int row, int col,
     if ( HasRange() )
     {
         value = Spin()->GetValue();
-        changed = value != m_valueOld;
-        if (changed)
-            text = wxString::Format(wxT("%ld"), value);
+        if ( value == m_valueOld )
+            return false;
+
+        text.Printf(wxT("%ld"), value);
     }
-    else
-#endif
+    else // using unconstrained input
+#endif // wxUSE_SPINCTRL
     {
+        const wxString textOld(grid->GetCellValue(row, col));
         text = Text()->GetValue();
-        changed = (text.empty() || text.ToLong(&value)) && (value != m_valueOld);
+        if ( text.empty() )
+        {
+            if ( textOld.empty() )
+                return false;
+        }
+        else // non-empty text now (maybe 0)
+        {
+            if ( !text.ToLong(&value) )
+                return false;
+
+            // if value == m_valueOld == 0 but old text was "" and new one is
+            // "0" something still did change
+            if ( value == m_valueOld && (value || !textOld.empty()) )
+                return false;
+        }
     }
 
-    if ( changed )
-    {
-        if (grid->GetTable()->CanSetValueAs(row, col, wxGRID_VALUE_NUMBER))
-            grid->GetTable()->SetValueAsLong(row, col, value);
-        else
-            grid->GetTable()->SetValue(row, col, text);
-    }
+    wxGridTableBase * const table = grid->GetTable();
+    if ( table->CanSetValueAs(row, col, wxGRID_VALUE_NUMBER) )
+        table->SetValueAsLong(row, col, value);
+    else
+        table->SetValue(row, col, text);
 
-    return changed;
+    return true;
 }
 
 void wxGridCellNumberEditor::Reset()
