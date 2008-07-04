@@ -109,13 +109,18 @@ public:
     @library{wxcore}
     @category{miscwnd}
 
-    @see wxBookCtrl(), wxNotebookEvent, wxImageList, @ref overview_samplenotebook
-    "notebook sample"
+    @see wxBookCtrl(), wxNotebookEvent, wxImageList, 
+    @ref page_samples_notebook "Notebook Sample"
 */
 class wxNotebook : public wxBookCtrl overview
 {
 public:
-    //@{
+
+    /**
+        Constructs a notebook control.
+    */
+    wxNotebook();
+
     /**
         Constructs a notebook control.
         Note that sometimes you can reduce flicker by passing the wxCLIP_CHILDREN
@@ -134,13 +139,11 @@ public:
         @param name
             The name of the control (used only under Motif).
     */
-    wxNotebook();
     wxNotebook(wxWindow* parent, wxWindowID id,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = 0,
                const wxString& name = wxNotebookNameStr);
-    //@}
 
     /**
         Destroys the wxNotebook object.
@@ -187,8 +190,9 @@ public:
     /**
         Changes the selection for the given page, returning the previous selection.
         The call to this function does not generate the page changing events.
-        This is the only difference with SetSelection().
-        See @ref overview_progevent "this topic" for more info.
+        This is the only difference with SetSelection(). See 
+        @ref overview_eventhandling_prog "User Generated Events"
+        for more infomation.
     */
     virtual int ChangeSelection(size_t page);
 
@@ -278,69 +282,22 @@ public:
             Specifies the point for the hit test.
         @param flags
             Return value for detailed information. One of the following values:
-
-
-
-
-
-
-
-            wxBK_HITTEST_NOWHERE
-
-
-
-
-            There was no tab under this point.
-
-
-
-
-
-            wxBK_HITTEST_ONICON
-
-
-
-
-            The point was over an icon (currently wxMSW only).
-
-
-
-
-
-            wxBK_HITTEST_ONLABEL
-
-
-
-
-            The point was over a label (currently wxMSW only).
-
-
-
-
-
-            wxBK_HITTEST_ONITEM
-
-
-
-
-            The point was over an item, but not on the label or icon.
-
-
-
-
-
-            wxBK_HITTEST_ONPAGE
-
-
-
-
-            The point was over a currently selected page, not over any tab. Note that
-        this flag is present only if wxNOT_FOUND is returned.
-
-        @return Returns the zero-based tab index or wxNOT_FOUND if there is no
-                 tab is at the specified position.
+            <TABLE><TR><TD>wxBK_HITTEST_NOWHERE</TD>
+            <TD>There was no tab under this point.</TD></TR>
+            <TR><TD>wxBK_HITTEST_ONICON</TD>
+            <TD>The point was over an icon (currently wxMSW only).</TD></TR>
+            <TR><TD>wxBK_HITTEST_ONLABEL</TD>
+            <TD>The point was over a label (currently wxMSW only).</TD></TR>
+            <TR><TD>wxBK_HITTEST_ONITEM</TD>
+            <TD>The point was over an item, but not on the label or icon.</TD></TR>
+            <TR><TD>wxBK_HITTEST_ONPAGE</TD>
+            <TD>The point was over a currently selected page, not over any tab.
+            Note that this flag is present only if wxNOT_FOUND is returned.</TD></TR>
+            </TABLE>
+@return Returns the zero-based tab index or wxNOT_FOUND if there is no
+                 tab at the specified position.
     */
-    virtual int HitTest(const wxPoint& pt, long* = NULL) const;
+    virtual int HitTest(const wxPoint& pt, long* flags = NULL) const;
 
     /**
         Inserts a new page at the specified position.
