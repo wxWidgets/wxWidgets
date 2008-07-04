@@ -118,7 +118,7 @@ void wxMessageOutputBest::Output(const wxString& str)
             return;
     }
 
-    ::MessageBox(NULL, str.c_str(), NULL, MB_ICONINFORMATION | MB_OK);
+    ::MessageBox(NULL, str.t_str(), NULL, MB_ICONINFORMATION | MB_OK);
 #else // !__WINDOWS__
     // TODO: use the native message box for the other ports too
     wxMessageOutputStderr::Output(str);
@@ -159,7 +159,7 @@ void wxMessageOutputDebug::Output(const wxString& str)
     wxString out(AppendLineFeedIfNeeded(str));
     out.Replace(wxT("\t"), wxT("        "));
     out.Replace(wxT("\n"), wxT("\r\n"));
-    ::OutputDebugString(out.c_str());
+    ::OutputDebugString(out.t_str());
 #else
     // TODO: use native debug output function for the other ports too
     wxMessageOutputStderr::Output(str);

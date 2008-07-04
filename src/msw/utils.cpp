@@ -608,7 +608,7 @@ bool wxGetEnv(const wxString& WXUNUSED_IN_WINCE(var),
     return false;
 #else // Win32
     // first get the size of the buffer
-    DWORD dwRet = ::GetEnvironmentVariable(var.c_str(), NULL, 0);
+    DWORD dwRet = ::GetEnvironmentVariable(var.t_str(), NULL, 0);
     if ( !dwRet )
     {
         // this means that there is no such variable
@@ -617,7 +617,7 @@ bool wxGetEnv(const wxString& WXUNUSED_IN_WINCE(var),
 
     if ( value )
     {
-        (void)::GetEnvironmentVariable(var.c_str(),
+        (void)::GetEnvironmentVariable(var.t_str(),
                                        wxStringBuffer(*value, dwRet),
                                        dwRet);
     }
@@ -635,7 +635,7 @@ bool wxDoSetEnv(const wxString& WXUNUSED_IN_WINCE(var),
     // no environment variables under CE
     return false;
 #else
-    if ( !::SetEnvironmentVariable(var.c_str(), value) )
+    if ( !::SetEnvironmentVariable(var.t_str(), value) )
     {
         wxLogLastError(_T("SetEnvironmentVariable"));
 
@@ -648,7 +648,7 @@ bool wxDoSetEnv(const wxString& WXUNUSED_IN_WINCE(var),
 
 bool wxSetEnv(const wxString& variable, const wxString& value)
 {
-    return wxDoSetEnv(variable, value.c_str());
+    return wxDoSetEnv(variable, value.t_str());
 }
 
 bool wxUnsetEnv(const wxString& variable)

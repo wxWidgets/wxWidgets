@@ -385,7 +385,7 @@ bool wxRegKey::Open(AccessMode mode)
     m_dwLastError = ::RegOpenKeyEx
                     (
                         (HKEY) m_hRootKey,
-                        m_strKey.wc_str(),
+                        m_strKey.t_str(),
                         RESERVED,
                         mode == Read ? KEY_READ : KEY_ALL_ACCESS,
                         &tmpKey
@@ -426,7 +426,7 @@ bool wxRegKey::Create(bool bOkIfExists)
       &tmpKey,
       &disposition);
 #else
-  m_dwLastError = RegCreateKey((HKEY) m_hRootKey, m_strKey.c_str(), &tmpKey);
+  m_dwLastError = RegCreateKey((HKEY) m_hRootKey, m_strKey.t_str(), &tmpKey);
 #endif
   if ( m_dwLastError != ERROR_SUCCESS ) {
     wxLogSysError(m_dwLastError, _("Can't create registry key '%s'"),
@@ -698,7 +698,7 @@ bool wxRegKey::DeleteSelf()
   // now delete this key itself
   Close();
 
-  m_dwLastError = RegDeleteKey((HKEY) m_hRootKey, m_strKey.c_str());
+  m_dwLastError = RegDeleteKey((HKEY) m_hRootKey, m_strKey.t_str());
   // deleting a key which doesn't exist is not considered an error
   if ( m_dwLastError != ERROR_SUCCESS &&
           m_dwLastError != ERROR_FILE_NOT_FOUND ) {
@@ -942,12 +942,12 @@ bool wxRegKey::QueryValue(const wxString& szValue,
 #ifndef __WXWINCE__
                 if ( (dwType == REG_EXPAND_SZ) && !raw )
                 {
-                    DWORD dwExpSize = ::ExpandEnvironmentStrings(strValue.c_str(), NULL, 0);
+                    DWORD dwExpSize = ::ExpandEnvironmentStrings(strValue.t_str(), NULL, 0);
                     bool ok = dwExpSize != 0;
                     if ( ok )
                     {
                         wxString strExpValue;
-                        ok = ::ExpandEnvironmentStrings(strValue.c_str(),
+                        ok = ::ExpandEnvironmentStrings(strValue.t_str(),
                                                         wxStringBuffer(strExpValue, dwExpSize),
                                                         dwExpSize
                                                         ) != 0;
@@ -1408,7 +1408,7 @@ bool KeyExists(WXHKEY hRootKey, const wxString& szKey)
     if ( ::RegOpenKeyEx
          (
             (HKEY)hRootKey,
-            szKey.c_str(),
+            szKey.t_str(),
             RESERVED,
             KEY_READ,        // we might not have enough rights for rw access
             &hkeyDummy
@@ -1444,7 +1444,7 @@ inline void RemoveTrailingSeparator(wxString& str)
 
 inline const wxChar *RegValueStr(const wxString& szValue)
 {
-    return szValue.empty() ? (const wxChar*)NULL : szValue.c_str();
+    return szValue.empty() ? (const wxChar*)NULL : szValue.t_str();
 }
 
 #endif // wxUSE_REGKEY

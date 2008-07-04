@@ -194,7 +194,7 @@ wxString wxVersionDLL::GetFileVersion(const wxString& filename) const
     wxString ver;
     if ( m_dll.IsLoaded() )
     {
-        wxChar *pc = wx_const_cast(wxChar *, (const wxChar*) filename.c_str());
+        wxChar *pc = wx_const_cast(wxChar *, (const wxChar*) filename.t_str());
 
         DWORD dummy;
         DWORD sizeVerInfo = m_pfnGetFileVersionInfoSize(pc, &dummy);
@@ -281,7 +281,7 @@ wxDllType wxDynamicLibrary::GetProgramHandle()
 wxDllType
 wxDynamicLibrary::RawLoad(const wxString& libname, int WXUNUSED(flags))
 {
-    return ::LoadLibrary(libname.c_str());
+    return ::LoadLibrary(libname.t_str());
 }
 
 /* static */
