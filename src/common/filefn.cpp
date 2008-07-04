@@ -1851,7 +1851,7 @@ static bool wxCheckWin32Permission(const wxString& path, DWORD access)
 
     HANDLE h = ::CreateFile
                  (
-                    path.c_str(),
+                    path.t_str(),
                     access,
                     FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
                     NULL,

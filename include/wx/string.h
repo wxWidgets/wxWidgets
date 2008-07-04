@@ -1351,7 +1351,7 @@ public:
     const wxWX2MBbuf mbc_str() const { return mb_str(*wxConvCurrent); }
 
 #if wxUSE_UNICODE_WCHAR
-    const wxChar* wc_str() const { return wx_str(); }
+    const wchar_t* wc_str() const { return wx_str(); }
 #elif wxUSE_UNICODE_UTF8
     const wxWCharBuffer wc_str() const;
 #endif
@@ -1369,7 +1369,7 @@ public:
     const wxChar* mb_str() const { return wx_str(); }
 
     // for compatibility with wxUSE_UNICODE version
-    const wxChar* mb_str(const wxMBConv& WXUNUSED(conv)) const { return wx_str(); }
+    const char* mb_str(const wxMBConv& WXUNUSED(conv)) const { return wx_str(); }
 
     const wxWX2MBbuf mbc_str() const { return mb_str(); }
 
@@ -1378,6 +1378,15 @@ public:
 #endif // wxUSE_WCHAR_T
     const wxCharBuffer fn_str() const { return wxConvFile.cWC2WX( wc_str( wxConvLibc ) ); }
 #endif // Unicode/ANSI
+
+#if wxUSE_UNICODE_UTF8
+    const wxWCharBuffer t_str() const { return wc_str(); }
+#elif wxUSE_UNICODE_WCHAR
+    const wchar_t* t_str() const { return wx_str(); }
+#else
+    const char* t_str() const { return wx_str(); }
+#endif 
+
 
   // overloaded assignment
     // from another wxString
