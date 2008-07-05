@@ -172,21 +172,13 @@
 
   /*  assert with additional message explaining its cause */
 
-  /*  compilers can give a warning (such as "possible unwanted ;") when using */
-  /*  the default definition of wxASSERT_MSG so we provide an alternative */
-  #if defined(__MWERKS__)
-    #define wxASSERT_MSG(cond, msg)                                           \
-      if ( cond )                                                             \
-      {}                                                                      \
-      else                                                                    \
-          wxOnAssert(__FILE__, __LINE__, __WXFUNCTION__, #cond, msg)
-  #else
-    #define wxASSERT_MSG(cond, msg)                                           \
-      if ( cond )                                                             \
-          ;                                                                   \
-      else                                                                    \
-          wxOnAssert(__FILE__, __LINE__, __WXFUNCTION__, #cond, msg)
-  #endif
+  /*  Note: some compilers will give  a warning (such as           */
+  /*  "possible unwanted ;") when using a ";" instead of the "{}". */
+  #define wxASSERT_MSG(cond, msg)                                           \
+    if ( cond )                                                             \
+    {}                                                                      \
+    else                                                                    \
+        wxOnAssert(__FILE__, __LINE__, __WXFUNCTION__, #cond, msg)
 
   /*  special form of assert: always triggers it (in debug mode) */
   #define wxFAIL wxFAIL_MSG((const char*)NULL)
@@ -246,28 +238,15 @@
 
 /*  as wxCHECK2 but with a message explaining why we fail */
 
-/* see comment near the definition of wxASSERT_MSG for the # if/else reason */
-#if defined(__MWERKS__)
-    #define wxCHECK2_MSG(cond, op, msg)                                       \
-        if ( cond )                                                           \
-        {}                                                                    \
-        else                                                                  \
-        {                                                                     \
-            wxFAIL_COND_MSG(#cond, msg);                                      \
-            op;                                                               \
-        }                                                                     \
-        struct wxDummyCheckStruct /* just to force a semicolon */
-#else
-    #define wxCHECK2_MSG(cond, op, msg)                                       \
-        if ( cond )                                                           \
-            ;                                                                 \
-        else                                                                  \
-        {                                                                     \
-            wxFAIL_COND_MSG(#cond, msg);                                      \
-            op;                                                               \
-        }                                                                     \
-        struct wxDummyCheckStruct /* just to force a semicolon */
-#endif
+#define wxCHECK2_MSG(cond, op, msg)                                       \
+    if ( cond )                                                           \
+    {}                                                                    \
+    else                                                                  \
+    {                                                                     \
+        wxFAIL_COND_MSG(#cond, msg);                                      \
+        op;                                                               \
+    }                                                                     \
+    struct wxDummyCheckStruct /* just to force a semicolon */
 
 /*  special form of wxCHECK2: as wxCHECK, but for use in void functions */
 /*  */
