@@ -5093,12 +5093,8 @@ bool wxWindowMSW::HandleCommand(WXWORD id_, WXWORD cmd, WXHWND control)
     // coming from a control to wxEVT_COMMAND_MENU_SELECTED
     if ( !control )
     {
-        // If no child window, it may be an accelerator, e.g. for a popup menu
-        // command
-
-        wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED);
+        wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED, id);
         event.SetEventObject(this);
-        event.SetId(id);
         event.SetInt(id);
 
         return HandleWindowEvent(event);

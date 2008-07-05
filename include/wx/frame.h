@@ -87,10 +87,19 @@ public:
     // and exists mainly in order to be overridden in the MDI parent frame
     // which also looks at its active child menu bar
     virtual const wxMenuItem *FindItemInMenuBar(int menuId) const;
-#endif // wxUSE_MENUS
 
-    // process menu command: returns true if processed
+    // generate menu command corresponding to the given menu item
+    //
+    // returns true if processed
+    bool ProcessCommand(wxMenuItem *item);
+
+    // generate menu command corresponding to the given menu command id
+    //
+    // returns true if processed
     bool ProcessCommand(int winid);
+#else
+    bool ProcessCommand(int WXUNUSED(winid)) { return false; }
+#endif // wxUSE_MENUS
 
     // status bar functions
     // --------------------

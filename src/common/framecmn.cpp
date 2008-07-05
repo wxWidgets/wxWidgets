@@ -183,41 +183,44 @@ void wxFrameBase::SendSizeEvent()
 // misc
 // ----------------------------------------------------------------------------
 
+#if wxUSE_MENUS
+
 bool wxFrameBase::ProcessCommand(int id)
 {
-#if wxUSE_MENUS
     wxMenuBar *bar = GetMenuBar();
     if ( !bar )
         return false;
 
-    wxCommandEvent commandEvent(wxEVT_COMMAND_MENU_SELECTED, id);
+    wxMenuItem *item = bar->FindItem(id);
+    if ( !item )
+        return false;
+
+    return ProcessCommand(item);
+}
+
+bool wxFrameBase::ProcessCommand(wxMenuItem *item)
+{
+    wxCommandEvent commandEvent(wxEVT_COMMAND_MENU_SELECTED, item->GetId());
     commandEvent.SetEventObject(this);
 
-    wxMenuItem *item = bar->FindItem(id);
-    if (item)
+    if (!item->IsEnabled())
+        return true;
+
+    if ((item->GetKind() == wxITEM_RADIO) && item->IsChecked() )
+        return true;
+
+    if (item->IsCheckable())
     {
-        if (!item->IsEnabled())
-            return true;
+        item->Toggle();
 
-        if ((item->GetKind() == wxITEM_RADIO) && item->IsChecked() )
-            return true;
-
-        if (item->IsCheckable())
-        {
-            item->Toggle();
-
-            // use the new value
-            commandEvent.SetInt(item->IsChecked());
-        }
+        // use the new value
+        commandEvent.SetInt(item->IsChecked());
     }
 
     return HandleWindowEvent(commandEvent);
-#else // !wxUSE_MENUS
-    wxUnusedVar(id);
-
-    return false;
-#endif // wxUSE_MENUS/!wxUSE_MENUS
 }
+
+#endif // wxUSE_MENUS
 
 // Do the UI update processing for this window. This is
 // provided for the application to call if it wants to

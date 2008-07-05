@@ -948,45 +948,29 @@ bool wxFrame::HandleSize(int WXUNUSED(x), int WXUNUSED(y), WXUINT id)
 
 bool wxFrame::HandleCommand(WXWORD id_, WXWORD cmd, WXHWND control)
 {
-    // sign extend to int from short before comparing with the other int ids
-    int id = (signed short)id_;
-
-    if ( control )
-    {
-        // In case it's e.g. a toolbar.
-        wxWindow *win = wxFindWinFromHandle(control);
-        if ( win )
-            return win->MSWCommand(cmd, id);
-    }
-
-    // handle here commands from menus and accelerators
-    if ( cmd == 0 || cmd == 1 )
+    // we only need to handle the menu and accelerator commands from the items
+    // of our menu bar, base wxWindow class already handles the rest
+    if ( !control && (cmd == 0 /* menu */ || cmd == 1 /* accel */) )
     {
 #if wxUSE_MENUS_NATIVE
-        if ( wxCurrentPopupMenu )
-        {
-            wxMenu *popupMenu = wxCurrentPopupMenu;
-            wxCurrentPopupMenu = NULL;
-
-            return popupMenu->MSWCommand(cmd, id);
-        }
+        if ( !wxCurrentPopupMenu )
 #endif // wxUSE_MENUS_NATIVE
-
-#if defined(__SMARTPHONE__) && defined(__WXWINCE__)
-        // handle here commands from Smartphone menu bar
-        if ( wxTopLevelWindow::HandleCommand(id, cmd, control ) )
         {
-            return true;
-        }
-#endif // __SMARTPHONE__ && __WXWINCE__
+            wxMenuBar * const mbar = GetMenuBar();
+            if ( mbar )
+            {
+                // sign extend to int from short before comparing with the
+                // other int ids
+                const int id = (signed short)id_;
 
-        if ( ProcessCommand(id) )
-        {
-            return true;
+                wxMenuItem * const mitem = mbar->FindItem(id);
+                if ( mitem )
+                    return ProcessCommand(mitem);
+            }
         }
     }
 
-    return false;
+    return wxFrameBase::HandleCommand(id_, cmd, control);;
 }
 
 #if wxUSE_MENUS
@@ -1084,7 +1068,14 @@ WXLRESULT wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPara
                 UnpackCommand((WXWPARAM)wParam, (WXLPARAM)lParam,
                               &id, &hwnd, &cmd);
 
-                processed = HandleCommand(id, cmd, (WXHWND)hwnd);
+                HandleCommand(id, cmd, (WXHWND)hwnd);
+
+                // don't pass WM_COMMAND to the base class whether we processed
+                // it or not because we did generate an event for it (our
+                // HandleCommand() calls the base class version) and we must
+                // not do it again or the handlers which skip the event would
+                // be called twice
+                processed = true;
             }
             break;
 
