@@ -652,48 +652,28 @@ void wxHtmlHelpWindow::AddToolbarButtons(wxToolBar *toolBar, int style)
                   wxT("One or more HTML help frame toolbar bitmap could not be loaded.")) ;
 
 
-    toolBar->AddTool(wxID_HTML_PANEL, wpanelBitmap, wxNullBitmap,
-                       false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL,
-                       _("Show/hide navigation panel"));
-
+    toolBar->AddTool(wxID_HTML_PANEL, wxEmptyString, wpanelBitmap, _("Show/hide navigation panel"));
     toolBar->AddSeparator();
-    toolBar->AddTool(wxID_HTML_BACK, wbackBitmap, wxNullBitmap,
-                       false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL,
-                       _("Go back"));
-    toolBar->AddTool(wxID_HTML_FORWARD, wforwardBitmap, wxNullBitmap,
-                       false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL,
-                       _("Go forward"));
+    toolBar->AddTool(wxID_HTML_BACK, wxEmptyString, wbackBitmap, _("Go back"));
+    toolBar->AddTool(wxID_HTML_FORWARD, wxEmptyString, wforwardBitmap, _("Go forward"));
     toolBar->AddSeparator();
-
-    toolBar->AddTool(wxID_HTML_UPNODE, wupnodeBitmap, wxNullBitmap,
-                       false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL,
-                       _("Go one level up in document hierarchy"));
-    toolBar->AddTool(wxID_HTML_UP, wupBitmap, wxNullBitmap,
-                       false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL,
-                       _("Previous page"));
-    toolBar->AddTool(wxID_HTML_DOWN, wdownBitmap, wxNullBitmap,
-                       false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL,
-                       _("Next page"));
+    toolBar->AddTool(wxID_HTML_UPNODE, wxEmptyString, wupnodeBitmap, _("Go one level up in document hierarchy"));
+    toolBar->AddTool(wxID_HTML_UP, wxEmptyString, wupBitmap, _("Previous page"));
+    toolBar->AddTool(wxID_HTML_DOWN, wxEmptyString, wdownBitmap, _("Next page"));
 
     if ((style & wxHF_PRINT) || (style & wxHF_OPEN_FILES))
         toolBar->AddSeparator();
 
     if (style & wxHF_OPEN_FILES)
-        toolBar->AddTool(wxID_HTML_OPENFILE, wopenBitmap, wxNullBitmap,
-                           false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL,
-                           _("Open HTML document"));
+        toolBar->AddTool(wxID_HTML_OPENFILE, wxEmptyString, wopenBitmap, _("Open HTML document"));
 
 #if wxUSE_PRINTING_ARCHITECTURE
     if (style & wxHF_PRINT)
-        toolBar->AddTool(wxID_HTML_PRINT, wprintBitmap, wxNullBitmap,
-                           false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL,
-                           _("Print this page"));
+        toolBar->AddTool(wxID_HTML_PRINT, wxEmptyString, wprintBitmap, _("Print this page"));
 #endif
 
     toolBar->AddSeparator();
-    toolBar->AddTool(wxID_HTML_OPTIONS, woptionsBitmap, wxNullBitmap,
-                       false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL,
-                       _("Display options dialog"));
+    toolBar->AddTool(wxID_HTML_OPTIONS, wxEmptyString, woptionsBitmap, _("Display options dialog"));
 
     // Allow application to add custom buttons
     wxHtmlHelpFrame* parentFrame = wxDynamicCast(GetParent(), wxHtmlHelpFrame);

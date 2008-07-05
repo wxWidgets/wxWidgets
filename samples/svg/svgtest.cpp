@@ -312,15 +312,10 @@ void MyFrame::InitToolBar(wxToolBar* toolBar)
     bitmaps[1] = new wxBitmap( save_xpm );
     bitmaps[2] = new wxBitmap( help_xpm );
 
-    int width = 16;
-    int currentX = 5;
-
-    toolBar->AddTool( MDI_NEW_WINDOW, *(bitmaps[0]), wxNullBitmap, false, currentX, wxDefaultCoord, (wxObject *) NULL, wxT("New SVG test window"));
-    currentX += width + 5;
-    toolBar->AddTool( MDI_SAVE, *bitmaps[1], wxNullBitmap, false, currentX, wxDefaultCoord, (wxObject *) NULL, wxT("Save test in SVG format"));
-    currentX += width + 5;
+    toolBar->AddTool(MDI_NEW_WINDOW, wxEmptyString, *(bitmaps[0]), wxS("New SVG test window"));
+    toolBar->AddTool(MDI_SAVE, wxEmptyString, *bitmaps[1], wxS("Save test in SVG format"));
     toolBar->AddSeparator();
-    toolBar->AddTool(MDI_ABOUT, *bitmaps[2], wxNullBitmap, false, currentX, wxDefaultCoord, (wxObject *) NULL, wxT("Help"));
+    toolBar->AddTool(MDI_ABOUT, wxEmptyString, *bitmaps[2], wxS("Help"));
 
     toolBar->Realize();
 
@@ -424,10 +419,10 @@ void MyCanvas::OnDraw(wxDC& dc)
             dc.SetBrush(*wxCYAN_BRUSH);
             dc.SetPen(*wxRED_PEN);
             dc.DrawRectangle(10, 10, 100, 70);
-            wB = wxBrush (_T("DARK ORCHID"), wxTRANSPARENT);
+            wB = wxBrush (_T("DARK ORCHID"), wxBRUSHSTYLE_TRANSPARENT);
             dc.SetBrush (wB);
             dc.DrawRoundedRectangle(50, 50, 100, 70, 20);
-            dc.SetBrush (wxBrush(_T("GOLDENROD"), wxSOLID) );
+            dc.SetBrush (wxBrush(_T("GOLDENROD")) );
             dc.DrawEllipse(100, 100, 100, 50);
 
             points[0].x = 100; points[0].y = 200;
@@ -491,7 +486,7 @@ void MyCanvas::OnDraw(wxDC& dc)
             wP.SetWidth(3);
             dc.SetPen(wP);
                                  //wxTRANSPARENT));
-            dc.SetBrush (wxBrush (_T("SALMON"),wxSOLID)) ;
+            dc.SetBrush (wxBrush (_T("SALMON"))) ;
             dc.DrawEllipticArc(300,  0,200,100, 0.0,145.0) ;
                                  //same end point
             dc.DrawEllipticArc(300, 50,200,100,90.0,145.0) ;
@@ -504,7 +499,7 @@ void MyCanvas::OnDraw(wxDC& dc)
 
         case 4:
             dc.DrawCheckMark ( 30,30,25,25);
-            dc.SetBrush (wxBrush (_T("SALMON"),wxTRANSPARENT));
+            dc.SetBrush (wxBrush (_T("SALMON"),wxBRUSHSTYLE_TRANSPARENT));
             dc.DrawCheckMark ( 80,50,75,75);
             dc.DrawRectangle ( 80,50,75,75);
 #if wxUSE_STATUSBAR

@@ -445,11 +445,11 @@ public:
     // return true if this is a vertical toolbar, otherwise false
     bool IsVertical() const;
 
-
+#if WXWIN_COMPATIBILITY_2_8
     // the old versions of the various methods kept for compatibility
     // don't use in the new code!
     // --------------------------------------------------------------
-
+    wxDEPRECATED_INLINE(
     wxToolBarToolBase *AddTool(int toolid,
                                const wxBitmap& bitmap,
                                const wxBitmap& bmpDisabled,
@@ -457,23 +457,23 @@ public:
                                wxObject *clientData = NULL,
                                const wxString& shortHelpString = wxEmptyString,
                                const wxString& longHelpString = wxEmptyString)
-    {
+    ,
         return AddTool(toolid, wxEmptyString,
                        bitmap, bmpDisabled,
                        toggle ? wxITEM_CHECK : wxITEM_NORMAL,
                        shortHelpString, longHelpString, clientData);
-    }
-
+    )
+    wxDEPRECATED_INLINE(
     wxToolBarToolBase *AddTool(int toolid,
                                const wxBitmap& bitmap,
                                const wxString& shortHelpString = wxEmptyString,
                                const wxString& longHelpString = wxEmptyString)
-    {
+    ,
         return AddTool(toolid, wxEmptyString,
                        bitmap, wxNullBitmap, wxITEM_NORMAL,
                        shortHelpString, longHelpString, NULL);
-    }
-
+    )
+    wxDEPRECATED_INLINE(
     wxToolBarToolBase *AddTool(int toolid,
                                const wxBitmap& bitmap,
                                const wxBitmap& bmpDisabled,
@@ -483,12 +483,12 @@ public:
                                wxObject *clientData = NULL,
                                const wxString& shortHelp = wxEmptyString,
                                const wxString& longHelp = wxEmptyString)
-    {
+    ,
         return DoAddTool(toolid, wxEmptyString, bitmap, bmpDisabled,
                          toggle ? wxITEM_CHECK : wxITEM_NORMAL,
                          shortHelp, longHelp, clientData, xPos, yPos);
-    }
-
+    )
+    wxDEPRECATED_INLINE(
     wxToolBarToolBase *InsertTool(size_t pos,
                                   int toolid,
                                   const wxBitmap& bitmap,
@@ -497,11 +497,12 @@ public:
                                   wxObject *clientData = NULL,
                                   const wxString& shortHelp = wxEmptyString,
                                   const wxString& longHelp = wxEmptyString)
-    {
+    ,
         return InsertTool(pos, toolid, wxEmptyString, bitmap, bmpDisabled,
                           toggle ? wxITEM_CHECK : wxITEM_NORMAL,
                           shortHelp, longHelp, clientData);
-    }
+    )
+#endif // WXWIN_COMPATIBILITY_2_8
 
     // event handlers
     // --------------
