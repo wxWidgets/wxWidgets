@@ -80,7 +80,6 @@ public:
 #endif // wxUSE_MENUS
 
     // event handlers
-    bool HandlePaint();
     bool HandleSize(int x, int y, WXUINT flag);
     bool HandleCommand(WXWORD id, WXWORD cmd, WXHWND control);
     bool HandleMenuSelect(WXWORD nItem, WXWORD nFlags, WXHMENU hMenu);

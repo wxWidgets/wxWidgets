@@ -835,58 +835,6 @@ bool wxFrame::MSWDoTranslateMessage(wxFrame *frame, WXMSG *pMsg)
 // our private (non virtual) message handlers
 // ---------------------------------------------------------------------------
 
-bool wxFrame::HandlePaint()
-{
-    RECT rect;
-    if ( ::GetUpdateRect(GetHwnd(), &rect, FALSE) )
-    {
-#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
-        if ( m_iconized )
-        {
-            const wxIcon& icon = GetIcon();
-            HICON hIcon = icon.Ok() ? GetHiconOf(icon)
-                                    : (HICON)GetDefaultIcon();
-
-            // Hold a pointer to the dc so long as the OnPaint() message
-            // is being processed
-            PAINTSTRUCT ps;
-            HDC hdc = ::BeginPaint(GetHwnd(), &ps);
-
-            // Erase background before painting or we get white background
-            MSWDefWindowProc(WM_ICONERASEBKGND, (WXWPARAM)ps.hdc, 0L);
-
-            if ( hIcon )
-            {
-                RECT rect;
-                ::GetClientRect(GetHwnd(), &rect);
-
-                // FIXME: why hardcoded?
-                static const int icon_width = 32;
-                static const int icon_height = 32;
-
-                int icon_x = (int)((rect.right - icon_width)/2);
-                int icon_y = (int)((rect.bottom - icon_height)/2);
-
-                ::DrawIcon(hdc, icon_x, icon_y, hIcon);
-            }
-
-            ::EndPaint(GetHwnd(), &ps);
-
-            return true;
-        }
-        else
- #endif
-        {
-            return wxWindow::HandlePaint();
-        }
-    }
-    else
-    {
-        // nothing to paint - processed
-        return true;
-    }
-}
-
 bool wxFrame::HandleSize(int WXUNUSED(x), int WXUNUSED(y), WXUINT id)
 {
 #if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
@@ -1077,10 +1025,6 @@ WXLRESULT wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPara
                 // be called twice
                 processed = true;
             }
-            break;
-
-        case WM_PAINT:
-            processed = HandlePaint();
             break;
 
 #if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
