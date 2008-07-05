@@ -190,6 +190,17 @@
 
 /*  as wxCHECK2 but with a message explaining why we fail */
 
+#ifdef __GNUC__
+    #define wxFORCE_SEMICOLON typedef int wxDummyCheckInt
+    /* Note: old gcc versions (e.g. 2.8) give an internal compiler error */
+    /*     on a simple forward declaration, when used in a template    */
+    /*     function, so rather use a dummy typedef which does work...  */
+#else
+    #define wxFORCE_SEMICOLON struct wxDummyCheckStruct
+    /* Note2: however, some other compilers (notably Digital Mars */
+    /*     don't like multiple typedefs (even though the standard */
+    /*     does allow them), so use a forward declaration for non-gcc.  */
+#endif
 /* see comment near the definition of wxASSERT_MSG for the # if/else reason */
 #if defined(__MWERKS__)
     #define wxCHECK2_MSG(cond, op, msg)                                       \
@@ -210,10 +221,7 @@
             wxFAIL_COND_MSG(#cond, msg);                                      \
             op;                                                               \
         }                                                                     \
-        typedef int wxDummyCheckInt /* just to force a semicolon */
-        /* NB: old gcc versions (e.g. 2.8) give an internal compiler error */
-        /*     on a simple forward declaration, when used in a template    */
-        /*     function, so rather use a dummy typedef which does work...  */
+        wxFORCE_SEMICOLON /* just to force a semicolon */
 #endif
 
 /*  special form of wxCHECK2: as wxCHECK, but for use in void functions */
