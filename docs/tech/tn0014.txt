@@ -501,17 +501,9 @@ appear within wxToolBar node. Their attributes are as follows:
     label                  I18nString              ""
     tooltip                I18nString              ""
     longhelp               I18nString              ""
-    pos                    Position                -1,-1
 
     Constraints:
       At most one of "toggle" and "radio" attributes may be 1.
-      Attribute "pos" may not appear if "label" or "radio" attributes
-      are used or if parent wxToolBar's style contains wxTB_TEXT.
-
-    Note:
-      Use of "pos" attribute is strongly discouraged, it is deprecated
-      usage of wxToolBar and it is not supported by MSW and GTK
-      implementations.
 
 Children objects are added to the toolbar using AddTool for "tool" class,
 AddSeparator for "separator" and AddControl for other classes.
