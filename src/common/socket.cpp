@@ -1234,7 +1234,7 @@ bool wxSocketBase::SetOption(int level, int optname, const void *optval,
     return true;
 }
 
-bool wxSocketBase::SetLocal(wxIPV4address& local)
+bool wxSocketBase::SetLocal(const wxIPV4address& local)
 {
   GAddress* la = local.GetAddress();
 
@@ -1272,7 +1272,9 @@ wxSocketClient::~wxSocketClient()
 // Connect
 // --------------------------------------------------------------------------
 
-bool wxSocketClient::DoConnect(wxSockAddress& addr_man, wxSockAddress* local, bool wait)
+bool wxSocketClient::DoConnect(const wxSockAddress& addr_man,
+                               const wxSockAddress* local,
+                               bool wait)
 {
   GSocketError err;
 
@@ -1356,14 +1358,16 @@ bool wxSocketClient::DoConnect(wxSockAddress& addr_man, wxSockAddress* local, bo
   return true;
 }
 
-bool wxSocketClient::Connect(wxSockAddress& addr_man, bool wait)
+bool wxSocketClient::Connect(const wxSockAddress& addr_man, bool wait)
 {
-    return (DoConnect(addr_man, NULL, wait));
+    return DoConnect(addr_man, NULL, wait);
 }
 
-bool wxSocketClient::Connect(wxSockAddress& addr_man, wxSockAddress& local, bool wait)
+bool wxSocketClient::Connect(const wxSockAddress& addr_man,
+                             const wxSockAddress& local,
+                             bool wait)
 {
-    return (DoConnect(addr_man, &local, wait));
+    return DoConnect(addr_man, &local, wait);
 }
 
 bool wxSocketClient::WaitOnConnect(long seconds, long milliseconds)

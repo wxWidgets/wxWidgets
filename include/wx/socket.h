@@ -124,7 +124,7 @@ public:
   // addresses
   virtual bool GetLocal(wxSockAddress& addr_man) const;
   virtual bool GetPeer(wxSockAddress& addr_man) const;
-  virtual bool SetLocal(wxIPV4address& local);
+  virtual bool SetLocal(const wxIPV4address& local);
 
   // base IO
   virtual bool  Close();
@@ -258,8 +258,9 @@ public:
   wxSocketClient(wxSocketFlags flags = wxSOCKET_NONE);
   virtual ~wxSocketClient();
 
-  virtual bool Connect(wxSockAddress& addr, bool wait = true);
-  bool Connect(wxSockAddress& addr, wxSockAddress& local, bool wait = true);
+  virtual bool Connect(const wxSockAddress& addr, bool wait = true);
+  bool Connect(const wxSockAddress& addr, const wxSockAddress& local,
+               bool wait = true);
 
   bool WaitOnConnect(long seconds = -1, long milliseconds = 0);
 
@@ -272,8 +273,9 @@ public:
   }
 
 private:
-  virtual bool
-      DoConnect(wxSockAddress& addr, wxSockAddress* local, bool wait = true);
+  virtual bool DoConnect(const wxSockAddress& addr,
+                         const wxSockAddress* local,
+                         bool wait = true);
 
   // buffer sizes, -1 if unset and defaults should be used
   int m_initialRecvBufferSize;

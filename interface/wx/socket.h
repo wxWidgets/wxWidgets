@@ -272,8 +272,8 @@ public:
         @see WaitOnConnect(), wxSocketBase::SetNotify,
              wxSocketBase::Notify
     */
-    bool Connect(wxSockAddress& address, bool wait = true);
-    bool Connect(wxSockAddress& address, wxSockAddress& local,
+    bool Connect(const wxSockAddress& address, bool wait = true);
+    bool Connect(const wxSockAddress& address, const wxSockAddress& local,
                  bool wait = true);
     //@}
 
@@ -813,7 +813,7 @@ public:
         a local port is set for a wxSocketClient,
         @b bind will be called before @b connect.
     */
-    bool SetLocal(wxIPV4address& local);
+    bool SetLocal(const wxIPV4address& local);
 
     /**
         SetNotify specifies which socket events are to be sent to the event handler.
