@@ -10352,6 +10352,19 @@ void wxGrid::SetRowSize( int row, int height )
 {
     wxCHECK_RET( row >= 0 && row < m_numRows, _T("invalid row index") );
 
+    // if < 0 then calculate new height from label
+    if ( height < 0 )
+    {
+        long w, h;
+        wxArrayString lines;
+        wxClientDC dc(m_rowLabelWin);
+        dc.SetFont(GetLabelFont());
+        StringToLines(GetRowLabelValue( row ), lines);
+	GetTextBoxSize( dc, lines, &w, &h );
+	//check that it is not less than the minimal height
+	height = wxMax(h, GetRowMinimalAcceptableHeight());
+    }
+
     // See comment in SetColSize
     if ( height < GetRowMinimalAcceptableHeight())
         return;
@@ -10397,6 +10410,23 @@ void wxGrid::SetColSize( int col, int width )
 {
     wxCHECK_RET( col >= 0 && col < m_numCols, _T("invalid column index") );
 
+    // if < 0 then calculate new width from label
+    if ( width < 0 )
+    {
+        long w, h;
+        wxArrayString lines;
+        wxClientDC dc(m_colLabelWin);
+        dc.SetFont(GetLabelFont());
+        StringToLines(GetColLabelValue(col), lines);
+        if ( GetColLabelTextOrientation() == wxHORIZONTAL )
+            GetTextBoxSize( dc, lines, &w, &h );
+        else
+            GetTextBoxSize( dc, lines, &h, &w );
+        width = w + 6;
+	//check that it is not less than the minimal width
+	width = wxMax(width, GetColMinimalAcceptableWidth()); 
+    }
+
     // should we check that it's bigger than GetColMinimalWidth(col) here?
     //                                                                 (VZ)
     // No, because it is reasonable to assume the library user know's
@@ -10412,18 +10442,6 @@ void wxGrid::SetColSize( int col, int width )
     {
         // need to really create the array
         InitColWidths();
-    }
-
-    // if < 0 then calculate new width from label
-    if ( width < 0 )
-    {
-        long w, h;
-        wxArrayString lines;
-        wxClientDC dc(m_colLabelWin);
-        dc.SetFont(GetLabelFont());
-        StringToLines(GetColLabelValue(col), lines);
-        GetTextBoxSize(dc, lines, &w, &h);
-        width = w + 6;
     }
 
     int w = wxMax( 0, width );
@@ -10793,9 +10811,6 @@ void wxGrid::AutoSize()
 
 void wxGrid::AutoSizeRowLabelSize( int row )
 {
-    wxArrayString lines;
-    long w, h;
-
     // Hide the edit control, so it
     // won't interfere with drag-shrinking.
     if ( IsCellEditControlShown() )
@@ -10805,20 +10820,12 @@ void wxGrid::AutoSizeRowLabelSize( int row )
     }
 
     // autosize row height depending on label text
-    StringToLines( GetRowLabelValue( row ), lines );
-    wxClientDC dc( m_rowLabelWin );
-    GetTextBoxSize( dc, lines, &w, &h );
-    if ( h < m_defaultRowHeight )
-        h = m_defaultRowHeight;
-    SetRowSize(row, h);
+    SetRowSize(row, -1);
     ForceRefresh();
 }
 
 void wxGrid::AutoSizeColLabelSize( int col )
 {
-    wxArrayString lines;
-    long w, h;
-
     // Hide the edit control, so it
     // won't interfere with drag-shrinking.
     if ( IsCellEditControlShown() )
@@ -10828,15 +10835,7 @@ void wxGrid::AutoSizeColLabelSize( int col )
     }
 
     // autosize column width depending on label text
-    StringToLines( GetColLabelValue( col ), lines );
-    wxClientDC dc( m_colLabelWin );
-    if ( GetColLabelTextOrientation() == wxHORIZONTAL )
-        GetTextBoxSize( dc, lines, &w, &h );
-    else
-        GetTextBoxSize( dc, lines, &h, &w );
-    if ( w < m_defaultColWidth )
-        w = m_defaultColWidth;
-    SetColSize(col, w);
+    SetColSize(col, -1);
     ForceRefresh();
 }
 
