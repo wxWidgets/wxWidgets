@@ -55,40 +55,26 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
     {
         wxCHECK_MSG(m_toolbar, NULL, wxT("Incorrect syntax of XRC resource: tool not within a toolbar!"));
 
-        if (GetPosition() != wxDefaultPosition)
+        wxItemKind kind = wxITEM_NORMAL;
+        if (GetBool(wxT("radio")))
+            kind = wxITEM_RADIO;
+        if (GetBool(wxT("toggle")))
         {
-            m_toolbar->AddTool(GetID(),
-                               GetBitmap(wxT("bitmap"), wxART_TOOLBAR),
-                               GetBitmap(wxT("bitmap2"), wxART_TOOLBAR),
-                               GetBool(wxT("toggle")),
-                               GetPosition().x,
-                               GetPosition().y,
-                               NULL,
-                               GetText(wxT("tooltip")),
-                               GetText(wxT("longhelp")));
+            wxASSERT_MSG( kind == wxITEM_NORMAL,
+                          _T("can't have both toggle and radio button at once") );
+            kind = wxITEM_CHECK;
         }
-        else
-        {
-            wxItemKind kind = wxITEM_NORMAL;
-            if (GetBool(wxT("radio")))
-                kind = wxITEM_RADIO;
-            if (GetBool(wxT("toggle")))
-            {
-                wxASSERT_MSG( kind == wxITEM_NORMAL,
-                              _T("can't have both toggle and radio button at once") );
-                kind = wxITEM_CHECK;
-            }
-            m_toolbar->AddTool(GetID(),
-                               GetText(wxT("label")),
-                               GetBitmap(wxT("bitmap"), wxART_TOOLBAR),
-                               GetBitmap(wxT("bitmap2"), wxART_TOOLBAR),
-                               kind,
-                               GetText(wxT("tooltip")),
-                               GetText(wxT("longhelp")));
+        m_toolbar->AddTool(GetID(),
+                           GetText(wxT("label")),
+                           GetBitmap(wxT("bitmap"), wxART_TOOLBAR),
+                           GetBitmap(wxT("bitmap2"), wxART_TOOLBAR),
+                           kind,
+                           GetText(wxT("tooltip")),
+                           GetText(wxT("longhelp")));
 
-            if ( GetBool(wxT("disabled")) )
-                m_toolbar->EnableTool(GetID(), false);
-        }
+        if ( GetBool(wxT("disabled")) )
+            m_toolbar->EnableTool(GetID(), false);
+
         return m_toolbar; // must return non-NULL
     }
 
