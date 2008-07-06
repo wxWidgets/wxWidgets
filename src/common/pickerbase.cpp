@@ -144,9 +144,9 @@ void wxPickerBase::DoSetToolTip(wxToolTip *tip)
 // wxPickerBase - event handlers
 // ----------------------------------------------------------------------------
 
-void wxPickerBase::OnTextCtrlKillFocus(wxFocusEvent &)
+void wxPickerBase::OnTextCtrlKillFocus(wxFocusEvent& event)
 {
-    wxASSERT(m_text);
+    event.Skip();
 
     // don't leave the textctrl empty
     if (m_text->GetValue().empty())
