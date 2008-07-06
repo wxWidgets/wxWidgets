@@ -345,6 +345,11 @@ GridFrame::GridFrame()
     grid->SetCellValue(1, 7, _T("1415"));
     grid->SetCellValue(2, 7, _T("12345.67890"));
 
+    grid->SetColFormatNumber(8);
+    grid->SetCellValue(0, 8, "17");
+    grid->SetCellValue(1, 8, "0");
+    grid->SetCellValue(2, 8, "-666");
+
     const wxString choices[] =
     {
         _T("Please select a choice"),
