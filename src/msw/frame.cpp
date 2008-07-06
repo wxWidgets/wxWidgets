@@ -1053,7 +1053,12 @@ WXLRESULT wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPara
                 UnpackCommand((WXWPARAM)wParam, (WXLPARAM)lParam,
                               &id, &hwnd, &cmd);
 
-                processed = HandleCommand(id, cmd, (WXHWND)hwnd);
+                HandleCommand(id, cmd, (WXHWND)hwnd);
+
+                // don't pass WM_COMMAND to the base class as it would generate
+                // another wxCommandEvent which would result in its handler
+                // being called twice if it uses event.Skip()
+                processed = true;
             }
             break;
 
