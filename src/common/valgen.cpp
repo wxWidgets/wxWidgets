@@ -146,7 +146,7 @@ bool wxGenericValidator::TransferToWindow(void)
             return true;
         }
     } else
-#if defined(__WXMAC__) || defined(__WXGTK20__)
+#if (defined(__WXMAC__) || defined(__WXGTK20__)) && !defined(__WXUNIVERSAL__)
     if (m_validatorWindow->IsKindOf(CLASSINFO(wxBitmapToggleButton)) )
     {
         wxBitmapToggleButton * pControl = (wxBitmapToggleButton *) m_validatorWindow;

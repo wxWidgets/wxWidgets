@@ -2912,7 +2912,7 @@ bool wxWindowGTK::GTKHandleFocusIn()
 
     // Notify the parent keeping track of focus for the kbd navigation
     // purposes that we got it.
-    wxChildFocusEvent eventChildFocus(this);
+    wxChildFocusEvent eventChildFocus(static_cast<wxWindow*>(this));
     GTKProcessEvent(eventChildFocus);
 
     wxFocusEvent eventFocus(wxEVT_SET_FOCUS, GetId());
