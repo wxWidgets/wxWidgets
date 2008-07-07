@@ -311,7 +311,7 @@ wxFileName wxFileConfig::GetLocalFile(const wxString& szFile, int style)
 {
     wxFileName fn(GetLocalDir(style), szFile);
 
-#ifdef __UNIX__
+#if defined( __UNIX__ ) && !defined( __WXMAC__ )
     if ( !(style & wxCONFIG_USE_SUBDIR) )
     {
         // dot-files under Unix start with, well, a dot (but OTOH they usually
