@@ -74,14 +74,16 @@ public:
     use reference counting. By default, wxString uses @c std::string
     internally even if wxUSE_STL is not defined.
 
-    wxWidgets 3.0 wxString internally uses UCS-2 (basically 2-byte per
-    character wchar_t) under Windows and UTF-8 under Unix, Linux and
-    OS X to store its content. Much work has been done to make existing
-    code using ANSI string literals work as before. If you need to have a
-    wxString that uses wchar_t on Unix and Linux, too, you can specify
-    this on the command line with the @c configure @c --disable-utf8 switch.
-    As a consequence of this change, iterating over a wxString by index
-    can become inefficient in UTF8 mode and iterators should be used instead:
+    Since wxWidgets 3.0 wxString internally uses UCS-2 (basically 2-byte per
+    character wchar_t and nearly the same as UTF-16) under Windows and 
+    UTF-8 under Unix, Linux and OS X to store its content. 
+    Much work has been done to make existing code using ANSI string literals
+    work as before. If you need to have a wxString that uses wchar_t on Unix
+    and Linux, too, you can specify this on the command line with the
+    @c configure @c --disable-utf8 switch.
+    
+    Since iterating over a wxString by index can become inefficient in UTF-8
+    mode and iterators should be used instead of index based access:
 
     @code
     wxString s = "hello";
@@ -150,7 +152,7 @@ public:
         done in release builds.
         This section also contains both implicit and explicit conversions to C style
         strings. Although implicit conversion is quite convenient, you are advised 
-        to use explicit wc_str() method for the sake of clarity.
+        to use wc_str() for the sake of clarity.
 
         @li GetChar()
         @li GetWritableChar()
@@ -953,7 +955,7 @@ public:
         Same as utf8_str().
     */
     const char* ToUTF8() const;
-    const wxCharBuffer ToUF8() const;
+    const wxCharBuffer ToUTF8() const;
     //@}
 
     /**
@@ -1167,7 +1169,7 @@ public:
         The macro wxWX2WCbuf is defined as the correct return
         type (without const).
 
-        @see uf8_str(), c_str(), mb_str(), fn_str(), wchar_str()
+        @see utf8_str(), c_str(), mb_str(), fn_str(), wchar_str()
     */
     const wchar_t* wc_str() const;
     const wxWCharBuffer wc_str() const;
