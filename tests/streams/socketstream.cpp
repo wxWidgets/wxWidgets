@@ -20,6 +20,7 @@
     #include "wx/log.h"
 #endif
 
+#include "wx/gsocket.h"
 #include "wx/socket.h"
 #include "wx/sckstrm.h"
 #include "wx/thread.h"
