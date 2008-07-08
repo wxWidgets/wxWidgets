@@ -91,6 +91,7 @@ TEST_OBJECTS =  \
 	test_iostreams.o \
 	test_largefile.o \
 	test_memstream.o \
+	test_socketstream.o \
 	test_sstream.o \
 	test_tempfile.o \
 	test_textstreamtest.o \
@@ -452,6 +453,9 @@ test_largefile.o: $(srcdir)/streams/largefile.cpp $(TEST_ODEP)
 
 test_memstream.o: $(srcdir)/streams/memstream.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/streams/memstream.cpp
+
+test_socketstream.o: $(srcdir)/streams/socketstream.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/streams/socketstream.cpp
 
 test_sstream.o: $(srcdir)/streams/sstream.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/streams/sstream.cpp

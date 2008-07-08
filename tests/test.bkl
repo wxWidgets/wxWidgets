@@ -63,6 +63,7 @@
             streams/iostreams.cpp
             streams/largefile.cpp
             streams/memstream.cpp
+            streams/socketstream.cpp
             streams/sstream.cpp
             streams/tempfile.cpp
             streams/textstreamtest.cpp

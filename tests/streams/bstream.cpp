@@ -46,6 +46,7 @@ Test *StreamCase::suite()
      * Register all sub stream test suites.
      */
 
+#if 0
     STREAM_REGISTER_SUB_SUITE(memStream);
     STREAM_REGISTER_SUB_SUITE(strStream);
     STREAM_REGISTER_SUB_SUITE(fileStream);
@@ -58,6 +59,9 @@ Test *StreamCase::suite()
     Test *lfs = GetlargeFileSuite();
     if (lfs)
         suite->addTest(lfs);
+#endif
+
+    STREAM_REGISTER_SUB_SUITE(socketStream);
 
     /*
     ** Add more stream subtests here

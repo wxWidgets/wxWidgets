@@ -765,6 +765,8 @@
 			<File
 				RelativePath=".\scopeguard\scopeguardtest.cpp"/>
 			<File
+				RelativePath=".\streams\socketstream.cpp"/>
+			<File
 				RelativePath=".\streams\sstream.cpp"/>
 			<File
 				RelativePath=".\strings\stdstrings.cpp"/>
