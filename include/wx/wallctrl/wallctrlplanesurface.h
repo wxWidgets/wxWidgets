@@ -140,17 +140,14 @@ public:
 		AdjustCoordinates(rect, info.size);
 
 		// Set the position of the center
-		pos[0] = (rect.GetRight() - rect.GetLeft())/2.0;
-		pos[1] = (rect.GetBottom() - rect.GetTop())/2.0;
+		pos[0] = (rect.GetRight() + rect.GetLeft())/2.0;
+		pos[1] = (rect.GetBottom() + rect.GetTop())/2.0;
 		pos[2] = 0;
 
 		return pos;
 	}
 
-	void Seek(wxWallCtrlItemID itemID)
-	{
-		m_targetLook = GetItemCenter(itemID);
-	}
+	void Seek(wxWallCtrlItemID itemID);
 protected:
 	// Maps an X coordinate to OpenGL space
 	float MapX(float x) const;
@@ -162,11 +159,7 @@ protected:
 	unsigned GetItemIndex(int x, int y) const;
 
 	// Returns the index of the item with the specified ID
-	unsigned GetItemIndex(wxWallCtrlItemID itemID) const
-	{
-		// The ID is the same as the index and this time
-		return itemID;
-	}
+	unsigned GetItemIndex(wxWallCtrlItemID itemID) const;
 
 	// Returns the logical position of a specific index
 	wxPoint GetItemPosition(unsigned index) const;
@@ -186,16 +179,7 @@ protected:
 
 
 
-	wxRealRect GetRawItemRect(int x, int y) const
-	{
-		wxRealRect rect;
-		rect.SetTop(MapY(m_itemHeight * y));
-		rect.SetBottom(MapY(m_itemHeight * (y + 1)));
-		rect.SetLeft(MapX(m_itemWidth * x));
-		rect.SetRight(MapX(m_itemWidth * (x + 1)));
-		
-		return rect;
-	}
+	wxRealRect GetRawItemRect(int x, int y) const;
 
 private:
 	bool m_initialized;
@@ -229,14 +213,16 @@ private:
 	VectorType m_right;			// A vector looking to the right of the camera
 
 	// Camera motion variables
-	float m_lookHzDelta;
-	float m_LookHzThreshold;
+	float m_lookDelta;
+	float m_LookThreshold;
 
-	float m_cameraHzDelta;
-	float m_cameraHzThreshold;
+	float m_cameraDelta;
+	float m_cameraThreshold;
 	float m_cameraPanningDelta;
 
 //	float m_cameraHzDelta;
+
+	float m_defaultDistance;	// The default distance between camera and wallf
 
 };
 

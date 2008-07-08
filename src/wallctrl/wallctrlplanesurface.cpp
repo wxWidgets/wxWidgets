@@ -21,6 +21,7 @@ wxWallCtrlPlaneSurface::~wxWallCtrlPlaneSurface(void)
 wxWallCtrlPlaneSurface::wxWallCtrlPlaneSurface()
 {
 	m_initialized = false;
+	m_defaultDistance = 2;
 	m_scopeSize.SetHeight(1);
 	m_scopeSize.SetWidth(1);
 
@@ -31,7 +32,7 @@ wxWallCtrlPlaneSurface::wxWallCtrlPlaneSurface()
 
 	// Initialize camera position
 	m_camera.resize(3,0);
-	m_camera[2] = 2;		// We start the camera at (0,0,2)
+	m_camera[2] = m_defaultDistance;		// We start the camera at (0,0,2)
 	
 	m_targetCamera = m_camera;	// Both vectors should match initially
 	
@@ -200,6 +201,11 @@ unsigned wxWallCtrlPlaneSurface::GetItemIndex(int x, int y) const
 	return m_firstItem + x * m_scopeSize.GetHeight() + y;
 }
 
+unsigned wxWallCtrlPlaneSurface::GetItemIndex( wxWallCtrlItemID itemID ) const
+{
+	// The ID is the same as the index and this time
+	return itemID;
+}
 void wxWallCtrlPlaneSurface::RenderItems()
 {
 	if (!m_dataSource)
@@ -394,9 +400,9 @@ void wxWallCtrlPlaneSurface::MoveOut( float delta )
 void wxWallCtrlPlaneSurface::UpdateVectors()
 {
 	// TODO: Move these into constructor
-	m_lookHzDelta = 0.05;
-	m_cameraHzDelta = 0.025;
-	m_LookHzThreshold = m_cameraHzThreshold =0.1;
+	m_lookDelta = 0.05;
+	m_cameraDelta = 0.025;
+	m_LookThreshold = m_cameraThreshold =0.1;
 	m_cameraPanningDelta = 0.05;
 
 	UpdateLookVector();
@@ -408,11 +414,11 @@ void wxWallCtrlPlaneSurface::UpdateVectors()
 void wxWallCtrlPlaneSurface::UpdateCameraVector()
 {
 	// Check if we are far enough to require moving the look point. A threshold avoids oscillations
-	if (m_look[0] < m_targetCamera[0] - m_LookHzThreshold)
+	if (m_look[0] < m_targetCamera[0] - m_LookThreshold)
 	{
 		m_targetCamera[0] -= m_cameraPanningDelta;
 	}
-	else if (m_look[0] > m_camera[0] + m_LookHzThreshold)
+	else if (m_look[0] > m_camera[0] + m_LookThreshold)
 	{
 		m_targetCamera[0] += m_cameraPanningDelta;
 	}
@@ -421,26 +427,29 @@ void wxWallCtrlPlaneSurface::UpdateCameraVector()
 	// TODO: *Hz* should be replaced by something else
 	for (int i=0; i < 3; ++i)
 	{
-		if (m_camera[i] < m_targetCamera[i] - m_cameraHzThreshold)
+		if (m_camera[i] < m_targetCamera[i] - m_cameraThreshold)
 		{
-			m_camera[i] += m_cameraHzDelta;
+			m_camera[i] += m_cameraDelta;
 		}
-		else if (m_camera[i] > m_targetCamera[i] + m_cameraHzThreshold)
+		else if (m_camera[i] > m_targetCamera[i] + m_cameraThreshold)
 		{
-			m_camera[i] -= m_cameraHzDelta;
+			m_camera[i] -= m_cameraDelta;
 		}
 	}
 }
 
 void wxWallCtrlPlaneSurface::UpdateLookVector()
 {
-	if (m_look[0] < m_targetLook[0] - m_LookHzThreshold)
+	for (int i=0; i < 3; ++i)
 	{
-		m_look[0] += m_lookHzDelta;
-	}
-	else if (m_look[0] > m_targetLook[0] + m_LookHzThreshold)
-	{
-		m_look[0] -= m_lookHzDelta;
+		if (m_look[i] < m_targetLook[i] - m_LookThreshold)
+		{
+			m_look[i] += m_lookDelta;
+		}
+		else if (m_look[i] > m_targetLook[i] + m_LookThreshold)
+		{
+			m_look[i] -= m_lookDelta;
+		}
 	}
 }
 
@@ -451,4 +460,23 @@ wxPoint wxWallCtrlPlaneSurface::GetItemPosition( unsigned index ) const
 	P.y = index % m_scopeSize.GetHeight();
 
 	return P;
+}
+
+wxWallCtrlPlaneSurface::wxRealRect wxWallCtrlPlaneSurface::GetRawItemRect( int x, int y ) const
+{
+	wxRealRect rect;
+	rect.SetTop(MapY(m_itemHeight * y));
+	rect.SetBottom(MapY(m_itemHeight * (y + 1)));
+	rect.SetLeft(MapX(m_itemWidth * x));
+	rect.SetRight(MapX(m_itemWidth * (x + 1)));
+
+	return rect;
+}
+
+void wxWallCtrlPlaneSurface::Seek( wxWallCtrlItemID itemID )
+{
+	m_targetLook = GetItemCenter(itemID);
+	m_targetCamera[0] = m_targetLook[0];
+	m_targetCamera[1] = m_targetLook[1];
+	m_targetCamera[2] = m_defaultDistance;
 }
