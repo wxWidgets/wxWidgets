@@ -5631,18 +5631,19 @@ int wxWindowMSW::HandleMenuChar(int WXUNUSED_IN_WINCE(chAccel),
     return wxNOT_FOUND;
 }
 
-bool wxWindowMSW::HandleClipboardEvent( WXUINT nMsg )
+#endif // wxUSE_MENUS
+
+bool wxWindowMSW::HandleClipboardEvent(WXUINT nMsg)
 {
-    const wxEventType type = ( nMsg == WM_CUT ) ? wxEVT_COMMAND_TEXT_CUT :
-                             ( nMsg == WM_COPY ) ? wxEVT_COMMAND_TEXT_COPY :
-                           /*( nMsg == WM_PASTE ) ? */ wxEVT_COMMAND_TEXT_PASTE;
+    const wxEventType type = nMsg == WM_CUT       ? wxEVT_COMMAND_TEXT_CUT
+                           : nMsg == WM_COPY      ? wxEVT_COMMAND_TEXT_COPY
+                           : /* nMsg == WM_PASTE */ wxEVT_COMMAND_TEXT_PASTE;
     wxClipboardTextEvent evt(type, GetId());
 
     evt.SetEventObject(this);
 
     return HandleWindowEvent(evt);
 }
-#endif // wxUSE_MENUS
 
 // ---------------------------------------------------------------------------
 // joystick
