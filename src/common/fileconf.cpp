@@ -319,7 +319,7 @@ wxFileName wxFileConfig::GetLocalFile(const wxString& szFile, int style)
         fn.SetName(wxT('.') + fn.GetName());
     }
     else // we do append ".conf" extension to config files in subdirectories
-#endif // __UNIX__
+#endif // defined( __UNIX__ ) && !defined( __WXMAC__ )
     {
         AddConfFileExtIfNeeded(fn);
     }
