@@ -20,7 +20,6 @@
     #include "wx/log.h"
 #endif
 
-#include "wx/gsocket.h"
 #include "wx/socket.h"
 #include "wx/sckstrm.h"
 #include "wx/thread.h"
@@ -158,12 +157,12 @@ socketStream::socketStream()
     m_writeThread =
     m_readThread = NULL;
 
-    GSocket_Init();
+    wxSocketBase::Initialize();
 }
 
 socketStream::~socketStream()
 {
-    GSocket_Cleanup();
+    wxSocketBase::Shutdown();
 }
 
 void socketStream::setUp()
