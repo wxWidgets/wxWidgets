@@ -9944,9 +9944,14 @@ void wxGrid::ClearAttrCache()
 {
     if ( m_attrCache.row != -1 )
     {
-        wxSafeDecRef(m_attrCache.attr);
+        wxGridCellAttr *oldAttr = m_attrCache.attr; 
         m_attrCache.attr = NULL;
         m_attrCache.row = -1;
+        // wxSafeDecRec(...) might cause event processing that accesses
+        // the cached attribute, if one exists (e.g. by deleting the
+        // editor stored within the attribute). Therefore it is important
+	// to invalidate the cache  before calling wxSafeDecRef!
+        wxSafeDecRef(oldAttr);
     }
 }
 
