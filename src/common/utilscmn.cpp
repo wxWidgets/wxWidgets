@@ -940,7 +940,7 @@ void wxQsort(void *const pbase, size_t total_elems,
 bool wxLaunchDefaultApplication(const wxString &document, int flags)
 {
     wxUnusedVar(flags);
-    
+
 #ifdef __UNIX__
     // Our best best is to use xdg-open from freedesktop.org cross-desktop
     // compatibility suite xdg-utils
@@ -968,7 +968,7 @@ bool wxLaunchDefaultApplication(const wxString &document, int flags)
 bool wxCocoaLaunchDefaultBrowser(const wxString& url, int flags);
 #endif
 
-bool wxLaunchDefaultBrowser(const wxString& urlOrig, int flags)
+static bool DoLaunchDefaultBrowser(const wxString& urlOrig, int flags)
 {
     wxUnusedVar(flags);
 
@@ -1174,6 +1174,15 @@ bool wxLaunchDefaultBrowser(const wxString& urlOrig, int flags)
                   url.c_str());
 
     return false;
+}
+
+bool wxLaunchDefaultBrowser(const wxString& url, int flags)
+{
+    if ( flags & wxBROWSER_NOBUSYCURSOR )
+        return DoLaunchDefaultBrowser(url, flags);
+
+    wxBusyCursor bc;
+    return DoLaunchDefaultBrowser(url, flags);
 }
 
 // ----------------------------------------------------------------------------
@@ -1492,8 +1501,8 @@ wxString wxGetPasswordFromUser(const wxString& message,
 
 #if wxUSE_COLOURDLG
 
-wxColour wxGetColourFromUser(wxWindow *parent, 
-                             const wxColour& colInit, 
+wxColour wxGetColourFromUser(wxWindow *parent,
+                             const wxColour& colInit,
                              const wxString& caption,
                              wxColourData *ptrData)
 {

@@ -422,12 +422,19 @@ long wxNewId();
 void wxRegisterId(long id);
 
 /**
-    Opens the @a url in user's default browser. If the @a flags parameter
-    contains @c wxBROWSER_NEW_WINDOW flag, a new window is opened for the URL
-    (currently this is only supported under Windows). The @a url may also be a
-    local file path (with or without the "file://" prefix), if it doesn't
-    correspond to an existing file and the URL has no scheme "http://" is
-    prepended to it by default.
+    Opens the @a url in user's default browser.
+
+    If the @a flags parameter contains @c wxBROWSER_NEW_WINDOW flag, a new
+    window is opened for the URL (currently this is only supported under
+    Windows).
+
+    And unless the @a flags parameter contains @c wxBROWSER_NOBUSYCURSOR flag,
+    a busy cursor is shown while the browser is being launched (using
+    wxBusyCursor).
+
+    The @a url may also be a local file path (with or without the "file://"
+    prefix), if it doesn't correspond to an existing file and the URL has no
+    scheme "http://" is prepended to it by default.
 
     Returns @true if the application was successfully launched.
 

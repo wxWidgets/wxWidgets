@@ -572,7 +572,8 @@ WXDLLIMPEXP_BASE void wxQsort(void *const pbase, size_t total_elems,
 // flags for wxLaunchDefaultBrowser
 enum
 {
-    wxBROWSER_NEW_WINDOW = 1
+    wxBROWSER_NEW_WINDOW   = 0x01,
+    wxBROWSER_NOBUSYCURSOR = 0x02
 };
 
 // Launch url in the user's default internet browser
