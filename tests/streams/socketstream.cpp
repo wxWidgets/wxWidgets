@@ -118,11 +118,11 @@ public:
         CPPUNIT_TEST(Input_CanRead);
         CPPUNIT_TEST(Input_Peek);
         CPPUNIT_TEST(Input_Ungetch);
+#endif
 
         CPPUNIT_TEST(Output_PutC);
         CPPUNIT_TEST(Output_Write);
         CPPUNIT_TEST(Output_LastWrite);
-#endif
     CPPUNIT_TEST_SUITE_END();
 
 private:
