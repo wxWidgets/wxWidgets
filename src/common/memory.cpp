@@ -370,7 +370,7 @@ void wxMemStruct::Dump ()
     msg2.Printf(wxT(" at 0x%lX, size %d"), (long)GetActualData(), (int)RequestSize());
     msg += msg2;
 
-    wxDebugContext::OutputDumpLine(msg);
+    wxDebugContext::OutputDumpLine(msg.c_str());
   }
   else
   {
@@ -381,7 +381,7 @@ void wxMemStruct::Dump ()
     wxString msg2;
     msg2.Printf(wxT("non-object data at 0x%lX, size %d"), (long)GetActualData(), (int)RequestSize() );
     msg += msg2;
-    wxDebugContext::OutputDumpLine(msg);
+    wxDebugContext::OutputDumpLine(msg.c_str());
   }
 }
 
@@ -588,13 +588,13 @@ bool wxDebugContext::Dump(void)
 {
 #ifdef __WXDEBUG__
   {
-    wxChar* appName = (wxChar*) wxT("application");
+    const wxChar* appName = wxT("application");
     wxString appNameStr;
     if (wxTheApp)
     {
         appNameStr = wxTheApp->GetAppName();
-        appName = WXSTRINGCAST appNameStr;
-        OutputDumpLine(wxT("----- Memory dump of %s at %s -----"), appName, WXSTRINGCAST wxNow() );
+        appName = appNameStr;
+        OutputDumpLine(wxT("----- Memory dump of %s at %s -----"), appName, (const wxChar *)wxNow() );
     }
     else
     {
@@ -644,13 +644,13 @@ bool wxDebugContext::PrintStatistics(bool detailed)
 {
 #ifdef __WXDEBUG__
   {
-    wxChar* appName = (wxChar*) wxT("application");
+    const wxChar* appName = wxT("application");
     wxString appNameStr;
     if (wxTheApp)
     {
         appNameStr = wxTheApp->GetAppName();
-        appName = WXSTRINGCAST appNameStr;
-        OutputDumpLine(wxT("----- Memory statistics of %s at %s -----"), appName, WXSTRINGCAST wxNow() );
+        appName = appNameStr;
+        OutputDumpLine(wxT("----- Memory statistics of %s at %s -----"), appName, (const wxChar *) wxNow() );
     }
     else
     {
@@ -738,12 +738,12 @@ bool wxDebugContext::PrintStatistics(bool detailed)
 bool wxDebugContext::PrintClasses(void)
 {
   {
-    wxChar* appName = (wxChar*) wxT("application");
+    const wxChar* appName = wxT("application");
     wxString appNameStr;
     if (wxTheApp)
     {
         appNameStr = wxTheApp->GetAppName();
-        appName = WXSTRINGCAST appNameStr;
+        appName = appNameStr;
         wxLogMessage(wxT("----- Classes in %s -----"), appName);
     }
   }
