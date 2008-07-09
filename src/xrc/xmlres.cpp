@@ -899,22 +899,21 @@ wxString wxXmlResourceHandler::GetText(const wxString& param, bool translate)
     wxXmlNode *parNode = GetParamNode(param);
     wxString str1(GetNodeContent(parNode));
     wxString str2;
-    const wxChar *dt;
-    wxChar amp_char;
+
+    // "\\" wasn't translated to "\" prior to 2.5.3.0:
+    const bool escapeBackslash = (m_resource->CompareVersion(2,5,3,0) >= 0);
 
     // VS: First version of XRC resources used $ instead of & (which is
     //     illegal in XML), but later I realized that '_' fits this purpose
     //     much better (because &File means "File with F underlined").
-    if (m_resource->CompareVersion(2,3,0,1) < 0)
-        amp_char = wxT('$');
-    else
-        amp_char = wxT('_');
+    const wxChar amp_char = (m_resource->CompareVersion(2,3,0,1) < 0)
+                            ? '$' : '_';
 
-    for (dt = str1.c_str(); *dt; dt++)
+    for ( wxString::const_iterator dt = str1.begin(); dt != str1.end(); ++dt )
     {
         // Remap amp_char to &, map double amp_char to amp_char (for things
         // like "&File..." -- this is illegal in XML, so we use "_File..."):
-        if (*dt == amp_char)
+        if ( *dt == amp_char )
         {
             if ( *(++dt) == amp_char )
                 str2 << amp_char;
@@ -922,8 +921,9 @@ wxString wxXmlResourceHandler::GetText(const wxString& param, bool translate)
                 str2 << wxT('&') << *dt;
         }
         // Remap \n to CR, \r to LF, \t to TAB, \\ to \:
-        else if (*dt == wxT('\\'))
-            switch (*(++dt))
+        else if ( *dt == wxT('\\') )
+        {
+            switch ( (*(++dt)).GetValue() )
             {
                 case wxT('n'):
                     str2 << wxT('\n');
@@ -939,7 +939,7 @@ wxString wxXmlResourceHandler::GetText(const wxString& param, bool translate)
 
                 case wxT('\\') :
                     // "\\" wasn't translated to "\" prior to 2.5.3.0:
-                    if (m_resource->CompareVersion(2,5,3,0) >= 0)
+                    if ( escapeBackslash )
                     {
                         str2 << wxT('\\');
                         break;
@@ -950,7 +950,11 @@ wxString wxXmlResourceHandler::GetText(const wxString& param, bool translate)
                     str2 << wxT('\\') << *dt;
                     break;
             }
-        else str2 << *dt;
+        }
+        else
+        {
+            str2 << *dt;
+        }
     }
 
     if (m_resource->GetFlags() & wxXRC_USE_LOCALE)
