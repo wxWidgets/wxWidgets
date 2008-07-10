@@ -580,7 +580,7 @@ void wxGridBagSizer::AdjustForOverflow()
         {
             wxGBPosition pos(row,col);
             wxGBSizerItem* item = FindItemAtPosition(pos);
-            if ( !item || !item->ShouldAccountFor() )
+            if ( !item || !item->IsShown() )
                 continue;
 
             int endrow, endcol;
@@ -623,7 +623,7 @@ void wxGridBagSizer::AdjustForOverflow()
         {
             wxGBPosition pos(row,col);
             wxGBSizerItem* item = FindItemAtPosition(pos);
-            if ( !item || !item->ShouldAccountFor() )
+            if ( !item || !item->IsShown() )
                 continue;
 
             int endrow, endcol;
