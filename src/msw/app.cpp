@@ -50,6 +50,7 @@
 #include "wx/dynlib.h"
 #include "wx/evtloop.h"
 #include "wx/thread.h"
+#include "wx/scopeguard.h"
 
 #include "wx/msw/private.h"
 #include "wx/msw/dc.h"
@@ -1067,12 +1068,6 @@ bool wxApp::Yield(bool onlyIfNeeded)
     // MT-FIXME
     static bool s_inYield = false;
 
-#if wxUSE_LOG
-    // disable log flushing from here because a call to wxYield() shouldn't
-    // normally result in message boxes popping up &c
-    wxLog::Suspend();
-#endif // wxUSE_LOG
-
     if ( s_inYield )
     {
         if ( !onlyIfNeeded )
@@ -1083,7 +1078,20 @@ bool wxApp::Yield(bool onlyIfNeeded)
         return false;
     }
 
+    // set the flag and don't forget to reset it before returning
     s_inYield = true;
+    wxON_BLOCK_EXIT_SET(s_inYield, false);
+
+
+#if wxUSE_LOG
+    // disable log flushing from here because a call to wxYield() shouldn't
+    // normally result in message boxes popping up &c
+    wxLog::Suspend();
+
+    // ensure the logs will be flashed again when we exit
+    wxON_BLOCK_EXIT0(wxLog::Resume);
+#endif // wxUSE_LOG
+
 
     // we don't want to process WM_QUIT from here - it should be processed in
     // the main event loop in order to stop it
@@ -1102,13 +1110,6 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
     // if there are pending events, we must process them.
     ProcessPendingEvents();
-
-#if wxUSE_LOG
-    // let the logs be flashed again
-    wxLog::Resume();
-#endif // wxUSE_LOG
-
-    s_inYield = false;
 
     return true;
 }
