@@ -81,7 +81,10 @@ protected:
 
         wxSocketBase *socket = srv.Accept();
         if ( socket )
+        {
             (*m_accept)(*socket);
+            delete socket;
+        }
 
         return NULL;
     }
@@ -106,19 +109,12 @@ public:
     CPPUNIT_TEST_SUITE(socketStream);
         // Base class stream tests the socketStream supports.
         CPPUNIT_TEST(Input_GetC);
-
-        // This one fails because wxSocketInputStream::Eof() is not implemented
-        // correctly
-        //CPPUNIT_TEST(Input_Read);
-
-        // The other ones untested yet
-#if 0
         CPPUNIT_TEST(Input_Eof);
+        CPPUNIT_TEST(Input_Read);
         CPPUNIT_TEST(Input_LastRead);
         CPPUNIT_TEST(Input_CanRead);
         CPPUNIT_TEST(Input_Peek);
         CPPUNIT_TEST(Input_Ungetch);
-#endif
 
         CPPUNIT_TEST(Output_PutC);
         CPPUNIT_TEST(Output_Write);
