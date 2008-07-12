@@ -135,6 +135,9 @@ protected:
         // Travel to the end of the stream.
         while(!stream_in.Eof())
         {
+            CPPUNIT_ASSERT_MESSAGE( "unexpected non-EOF stream error",
+                                    stream_in.IsOk() );
+
             // Read, we move one byte along.
             (void)stream_in.GetC();
 #if 0
