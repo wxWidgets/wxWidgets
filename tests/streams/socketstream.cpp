@@ -106,19 +106,29 @@ public:
     virtual void setUp();
     virtual void tearDown();
 
-    CPPUNIT_TEST_SUITE(socketStream);
-        // Base class stream tests the socketStream supports.
-        CPPUNIT_TEST(Input_GetC);
-        CPPUNIT_TEST(Input_Eof);
-        CPPUNIT_TEST(Input_Read);
-        CPPUNIT_TEST(Input_LastRead);
-        CPPUNIT_TEST(Input_CanRead);
-        CPPUNIT_TEST(Input_Peek);
-        CPPUNIT_TEST(Input_Ungetch);
+    // repeat all socket tests several times with different socket flags, so we
+    // define this macro which is used several times in the test suite
+    //
+    // there must be some more elegant way to do this but I didn't find it...
+#define ALL_SOCKET_TESTS()                                                    \
+        CPPUNIT_TEST(Input_GetC);                                             \
+        CPPUNIT_TEST(Input_Eof);                                              \
+        CPPUNIT_TEST(Input_Read);                                             \
+        CPPUNIT_TEST(Input_LastRead);                                         \
+        CPPUNIT_TEST(Input_CanRead);                                          \
+        CPPUNIT_TEST(Input_Peek);                                             \
+        CPPUNIT_TEST(Input_Ungetch);                                          \
+                                                                              \
+        CPPUNIT_TEST(Output_PutC);                                            \
+        CPPUNIT_TEST(Output_Write);                                           \
+        CPPUNIT_TEST(Output_LastWrite)
 
-        CPPUNIT_TEST(Output_PutC);
-        CPPUNIT_TEST(Output_Write);
-        CPPUNIT_TEST(Output_LastWrite);
+    CPPUNIT_TEST_SUITE(socketStream);
+        ALL_SOCKET_TESTS();
+        CPPUNIT_TEST( PseudoTest_SetNoWait );
+        ALL_SOCKET_TESTS();
+        CPPUNIT_TEST( PseudoTest_SetWaitAll );
+        ALL_SOCKET_TESTS();
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -139,10 +149,15 @@ private:
             ;
     }
 
+    void PseudoTest_SetNoWait() { m_flags = wxSOCKET_NOWAIT; }
+    void PseudoTest_SetWaitAll() { m_flags = wxSOCKET_WAITALL; }
+
     wxSocketClient *m_readSocket,
                    *m_writeSocket;
     wxThread *m_writeThread,
              *m_readThread;
+
+    wxSocketFlags m_flags;
 };
 
 socketStream::socketStream()
@@ -152,6 +167,8 @@ socketStream::socketStream()
 
     m_writeThread =
     m_readThread = NULL;
+
+    m_flags = wxSOCKET_NONE;
 
     wxSocketBase::Initialize();
 }
@@ -177,12 +194,10 @@ void socketStream::setUp()
         CPPUNIT_ASSERT_EQUAL( wxCOND_NO_ERROR, gs_cond.Wait() );
     }
 
-    m_readSocket = new wxSocketClient;
-    m_readSocket->SetTimeout(3);
+    m_readSocket = new wxSocketClient(m_flags);
     CPPUNIT_ASSERT( m_readSocket->Connect(LocalAddress(TEST_PORT_READ)) );
 
-    m_writeSocket = new wxSocketClient;
-    m_writeSocket->SetTimeout(3);
+    m_writeSocket = new wxSocketClient(m_flags);
     CPPUNIT_ASSERT( m_writeSocket->Connect(LocalAddress(TEST_PORT_WRITE)) );
 }
 
