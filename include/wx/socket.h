@@ -199,7 +199,6 @@ private:
   bool          m_reading;          // busy reading?
   bool          m_writing;          // busy writing?
   bool          m_error;            // did last IO call fail?
-  wxSocketError m_lasterror;        // last error (not cleared on success)
   wxUint32      m_lcount;           // last IO transaction size
   unsigned long m_timeout;          // IO timeout value
   wxList        m_states;           // stack of states
