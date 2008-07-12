@@ -499,6 +499,10 @@ public:
         Returns @true if an error occurred in the last IO operation.
         Use this function to check for an error condition after one of the
         following calls: Discard, Peek, Read, ReadMsg, Unread, Write, WriteMsg.
+
+        Notice that this function will return @true even if the other end of a
+        (connected, i.e. TCP) socket was orderly closed by the peer. Use
+        IsClosed() to check for this.
     */
     bool Error() const;
 
@@ -566,6 +570,13 @@ public:
         Returns @true if the socket is connected.
     */
     bool IsConnected() const;
+
+    /**
+        Return @true if the other end of the socket was closed by the peer.
+
+        Notice that Error() will return @true as well when this happens.
+     */
+    bool IsClosed() const;
 
     /**
         This function waits until the socket is readable. This might mean that

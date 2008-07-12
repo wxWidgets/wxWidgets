@@ -113,6 +113,7 @@ public:
   bool Ok() const { return IsOk(); }
   bool IsOk() const { return (m_socket != NULL); }
   bool Error() const { return m_error; }
+  bool IsClosed() const { return m_closed; }
   bool IsConnected() const { return m_connected; }
   bool IsData() { return WaitForRead(0, 0); }
   bool IsDisconnected() const { return !IsConnected(); }
@@ -199,6 +200,8 @@ private:
   bool          m_reading;          // busy reading?
   bool          m_writing;          // busy writing?
   bool          m_error;            // did last IO call fail?
+  bool          m_closed;           // was the other end closed?
+                                    // (notice that m_error is also set then)
   wxUint32      m_lcount;           // last IO transaction size
   unsigned long m_timeout;          // IO timeout value
   wxList        m_states;           // stack of states

@@ -203,7 +203,8 @@ void wxSocketBase::Init()
   m_establishing =
   m_reading      =
   m_writing      =
-  m_error        = false;
+  m_error        =
+  m_closed       = false;
   m_lcount       = 0;
   m_timeout      = 600;
   m_beingDeleted = false;
@@ -339,8 +340,10 @@ wxSocketBase& wxSocketBase::Read(void* buffer, wxUint32 nbytes)
   return *this;
 }
 
-wxUint32 wxSocketBase::_Read(void* buffer, wxUint32 nbytes)
+wxUint32 wxSocketBase::_Read(void* buffer_, wxUint32 nbytes)
 {
+  char *buffer = (char *)buffer_;
+
   int total;
 
   // Try the pushback buffer first
@@ -365,35 +368,53 @@ wxUint32 wxSocketBase::_Read(void* buffer, wxUint32 nbytes)
   if (m_flags & wxSOCKET_NOWAIT)
   {
     m_socket->SetNonBlocking(1);
-    ret = m_socket->Read((char *)buffer, nbytes);
+    ret = m_socket->Read(buffer, nbytes);
     m_socket->SetNonBlocking(0);
 
-    if (ret > 0)
-      total += ret;
-  }
-  else
-  {
-    bool more = true;
+    if ( ret < 0 )
+        return 0;
 
-    while (more)
+    total += ret;
+  }
+  else // blocking socket
+  {
+    for ( ;; )
     {
+      // dispatch events unless disabled
       if ( !(m_flags & wxSOCKET_BLOCK) && !WaitForRead() )
         break;
 
-      ret = m_socket->Read((char *)buffer, nbytes);
-
-      if (ret > 0)
+      ret = m_socket->Read(buffer, nbytes);
+      if ( ret == 0 )
       {
-        total  += ret;
-        nbytes -= ret;
-        buffer  = (char *)buffer + ret;
+          // for connection-oriented (e.g. TCP) sockets we can only read 0
+          // bytes if the other end has been closed, and for connectionless
+          // ones (UDP) this flag doesn't make sense anyhow so we can set it to
+          // true too without doing any harm
+          m_closed = true;
+          break;
       }
 
-      // If we got here and wxSOCKET_WAITALL is not set, we can leave
-      // now. Otherwise, wait until we recv all the data or until there
-      // is an error.
-      //
-      more = (ret > 0 && nbytes > 0 && (m_flags & wxSOCKET_WAITALL));
+      if ( ret < 0 )
+      {
+          // this will be always interpreted as error by Read()
+          return 0;
+      }
+
+      total += ret;
+
+      // if wxSOCKET_WAITALL is not set, we can leave now as we did read
+      // something
+      if ( !(m_flags & wxSOCKET_WAITALL) )
+          break;
+
+      // otherwise check if read the maximal requested amount of data
+      nbytes -= ret;
+      if ( !nbytes )
+          break;
+
+      // we didn't, so continue reading
+      buffer  = (char *)buffer + ret;
     }
   }
 
@@ -538,8 +559,10 @@ wxSocketBase& wxSocketBase::Write(const void *buffer, wxUint32 nbytes)
   return *this;
 }
 
-wxUint32 wxSocketBase::_Write(const void *buffer, wxUint32 nbytes)
+wxUint32 wxSocketBase::_Write(const void *buffer_, wxUint32 nbytes)
 {
+  const char *buffer = (const char *)buffer_;
+
   wxUint32 total = 0;
 
   // If the socket is invalid or parameters are ill, return immediately
@@ -556,35 +579,42 @@ wxUint32 wxSocketBase::_Write(const void *buffer, wxUint32 nbytes)
   if (m_flags & wxSOCKET_NOWAIT)
   {
     m_socket->SetNonBlocking(1);
-    ret = m_socket->Write((const char *)buffer, nbytes);
+    ret = m_socket->Write(buffer, nbytes);
     m_socket->SetNonBlocking(0);
 
     if (ret > 0)
       total = ret;
   }
-  else
+  else // blocking socket
   {
-    bool more = true;
-
-    while (more)
+    for ( ;; )
     {
       if ( !(m_flags & wxSOCKET_BLOCK) && !WaitForWrite() )
         break;
 
-      ret = m_socket->Write((const char *)buffer, nbytes);
+      ret = m_socket->Write(buffer, nbytes);
 
-      if (ret > 0)
+      // see comments for similar logic for ret handling in _Read()
+      if ( ret == 0 )
       {
-        total  += ret;
-        nbytes -= ret;
-        buffer  = (const char *)buffer + ret;
+          m_closed = true;
+          break;
       }
 
-      // If we got here and wxSOCKET_WAITALL is not set, we can leave
-      // now. Otherwise, wait until we send all the data or until there
-      // is an error.
-      //
-      more = (ret > 0 && nbytes > 0 && (m_flags & wxSOCKET_WAITALL));
+      if ( ret < 0 )
+      {
+          return 0;
+      }
+
+      total += ret;
+      if ( !(m_flags & wxSOCKET_WAITALL) )
+          break;
+
+      nbytes -= ret;
+      if ( !nbytes )
+          break;
+
+      buffer = (const char *)buffer + ret;
     }
   }
 
