@@ -110,14 +110,14 @@ public:
   bool Destroy();
 
   // state
-  inline bool Ok() const { return IsOk(); }
-  inline bool IsOk() const { return (m_socket != NULL); }
-  inline bool Error() const { return m_error; }
-  inline bool IsConnected() const { return m_connected; }
-  inline bool IsData() { return WaitForRead(0, 0); }
-  inline bool IsDisconnected() const { return !IsConnected(); }
-  inline wxUint32 LastCount() const { return m_lcount; }
-  inline wxSocketError LastError() const { return (wxSocketError)m_socket->GetError(); }
+  bool Ok() const { return IsOk(); }
+  bool IsOk() const { return (m_socket != NULL); }
+  bool Error() const { return m_error; }
+  bool IsConnected() const { return m_connected; }
+  bool IsData() { return WaitForRead(0, 0); }
+  bool IsDisconnected() const { return !IsConnected(); }
+  wxUint32 LastCount() const { return m_lcount; }
+  wxSocketError LastError() const { return (wxSocketError)m_socket->GetError(); }
   void SaveState();
   void RestoreState();
 
@@ -142,13 +142,13 @@ public:
   bool WaitForWrite(long seconds = -1, long milliseconds = 0);
   bool WaitForLost(long seconds = -1, long milliseconds = 0);
 
-  inline wxSocketFlags GetFlags() const { return m_flags; }
+  wxSocketFlags GetFlags() const { return m_flags; }
   void SetFlags(wxSocketFlags flags);
   void SetTimeout(long seconds);
 
   bool GetOption(int level, int optname, void *optval, int *optlen);
   bool SetOption(int level, int optname, const void *optval, int optlen);
-  inline wxUint32 GetLastIOSize() const { return m_lcount; }
+  wxUint32 GetLastIOSize() const { return m_lcount; }
 
   // event handling
   void *GetClientData() const { return m_clientData; }
@@ -170,8 +170,8 @@ public:
   void OnRequest(wxSocketNotify notify);
 
   // do not use, not documented nor supported
-  inline bool IsNoWait() const { return ((m_flags & wxSOCKET_NOWAIT) != 0); }
-  inline wxSocketType GetType() const { return m_type; }
+  bool IsNoWait() const { return ((m_flags & wxSOCKET_NOWAIT) != 0); }
+  wxSocketType GetType() const { return m_type; }
 
 private:
   friend class wxSocketClient;
