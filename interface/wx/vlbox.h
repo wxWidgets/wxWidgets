@@ -129,6 +129,8 @@ public:
         Returns the rectangle occupied by this item in physical coordinates.
 
         If the item is not currently visible, returns an empty rectangle.
+
+        @since 2.9.0
      */
     wxRect GetItemRect(size_t item) const;
 
