@@ -4153,7 +4153,8 @@ wxRect wxListMainWindow::GetViewRect() const
 bool
 wxListMainWindow::GetSubItemRect(long item, long subItem, wxRect& rect) const
 {
-    wxCHECK_MSG( InReportView(), false,
+    wxCHECK_MSG( subItem == wxLIST_GETSUBITEMRECT_WHOLEITEM || InReportView(),
+                 false,
                  _T("GetSubItemRect only meaningful in report view") );
     wxCHECK_MSG( item >= 0 && (size_t)item < GetItemCount(), false,
                  _T("invalid item in GetSubItemRect") );
