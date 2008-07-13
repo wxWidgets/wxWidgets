@@ -4704,7 +4704,9 @@ bool wxRichTextParagraph::GetContiguousPlainText(wxString& text, const wxRichTex
                     text += textObj->GetTextForRange(range);
                 }
                 else
-                    return true;
+                {
+                    text += wxT(" ");
+                }
             }
 
             node = node->GetNext();
@@ -4724,7 +4726,9 @@ bool wxRichTextParagraph::GetContiguousPlainText(wxString& text, const wxRichTex
                     text = textObj->GetTextForRange(range) + text;
                 }
                 else
-                    return true;
+                {
+                    text = wxT(" ") + text;
+                }
             }
 
             node = node->GetPrevious();
