@@ -185,9 +185,11 @@ void wxListbook::OnSize(wxSizeEvent& event)
     // under MSW, we'd finish with an ugly looking list control with both
     // vertical and horizontal scrollbar (with one of them being added because
     // the other one is not accounted for in client size computations)
-    wxListView *list = GetListView();
-    if (list) list->Arrange();
-    wxBookCtrlBase::OnSize(event);
+    wxListView * const list = GetListView();
+    if ( list )
+        list->Arrange();
+
+    event.Skip();
 }
 
 int wxListbook::HitTest(const wxPoint& pt, long *flags) const
@@ -247,6 +249,13 @@ wxSize wxListbook::CalcSizeFromPage(const wxSize& sizePage) const
     return size;
 }
 
+void wxListbook::UpdateSize()
+{
+    // we should find a more elegant way to force a layout than generating this
+    // dummy event
+    wxSizeEvent sz(GetSize(), GetId());
+    GetEventHandler()->ProcessEvent(sz);
+}
 
 // ----------------------------------------------------------------------------
 // accessing the pages
@@ -412,9 +421,8 @@ wxListbook::InsertPage(size_t n,
     if ( selNew != -1 )
         SetSelection(selNew);
 
-    wxSizeEvent sz(GetSize(), GetId());
-    GetEventHandler()->ProcessEvent(sz);
-    
+    UpdateSize();
+
     return true;
 }
 
@@ -444,11 +452,7 @@ wxWindow *wxListbook::DoRemovePage(size_t page)
         }
 
         GetListView()->Arrange();
-        if (GetPageCount() == 0)
-        {
-            wxSizeEvent sz(GetSize(), GetId());
-            GetEventHandler()->ProcessEvent(sz);
-        }
+        UpdateSize();
     }
 
     return win;
@@ -463,8 +467,7 @@ bool wxListbook::DeleteAllPages()
 
     m_selection = -1;
 
-    wxSizeEvent sz(GetSize(), GetId());
-    GetEventHandler()->ProcessEvent(sz);
+    UpdateSize();
 
     return true;
 }
