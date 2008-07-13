@@ -336,14 +336,14 @@ GridFrame::GridFrame()
     grid->SetCellValue(5, 5, _T("Bg from row attr Text col from col attr and this text is so long that it covers over many many empty cells but is broken by one that isn't"));
 
     grid->SetColFormatFloat(6);
-    grid->SetCellValue(0, 6, _T("3.1415"));
-    grid->SetCellValue(1, 6, _T("1415"));
-    grid->SetCellValue(2, 6, _T("12345.67890"));
+    grid->SetCellValue(0, 6, wxString::Format(wxT("%g"), 3.1415));
+    grid->SetCellValue(1, 6, wxString::Format(wxT("%g"), 1415.0));
+    grid->SetCellValue(2, 6, wxString::Format(wxT("%g"), 12345.67890));
 
     grid->SetColFormatFloat(7, 6, 2);
-    grid->SetCellValue(0, 7, _T("3.1415"));
-    grid->SetCellValue(1, 7, _T("1415"));
-    grid->SetCellValue(2, 7, _T("12345.67890"));
+    grid->SetCellValue(0, 7, wxString::Format(wxT("%g"), 3.1415));
+    grid->SetCellValue(1, 7, wxString::Format(wxT("%g"), 1415.0));
+    grid->SetCellValue(2, 7, wxString::Format(wxT("%g"), 12345.67890));
 
     grid->SetColFormatNumber(8);
     grid->SetCellValue(0, 8, "17");
