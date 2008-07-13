@@ -333,7 +333,7 @@ public:
     you can now write
 
     @code
-    sizer->Add(ctrl, wxSizerFlags().Expand().Border(10));
+    sizer->Add(ctrl, wxSizerFlags().Expand().Border(wxALL, 10));
     @endcode
 
     This is more readable and also allows you to create wxSizerFlags objects which
@@ -341,7 +341,7 @@ public:
 
     @code
     wxSizerFlags flagsExpand(1);
-        flagsExpand.Expand().Border(10);
+        flagsExpand.Expand().Border(wxALL, 10);
 
         sizer->Add(ctrl1, flagsExpand);
         sizer->Add(ctrl2, flagsExpand);
