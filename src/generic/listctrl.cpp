@@ -3415,16 +3415,9 @@ void wxListMainWindow::OnKeyDown( wxKeyEvent &event )
     wxWindow *parent = GetParent();
 
     // propagate the key event upwards
-    wxKeyEvent ke( wxEVT_KEY_DOWN );
-    ke.m_shiftDown = event.m_shiftDown;
-    ke.m_controlDown = event.m_controlDown;
-    ke.m_altDown = event.m_altDown;
-    ke.m_metaDown = event.m_metaDown;
-    ke.m_keyCode = event.m_keyCode;
-    ke.m_x = event.m_x;
-    ke.m_y = event.m_y;
-    ke.SetEventObject( parent );
-    if (parent->GetEventHandler()->ProcessEvent( ke )) return;
+    wxKeyEvent ke(event);
+    if (parent->GetEventHandler()->ProcessEvent( ke ))
+        return;
 
     event.Skip();
 }
@@ -3434,16 +3427,10 @@ void wxListMainWindow::OnKeyUp( wxKeyEvent &event )
     wxWindow *parent = GetParent();
 
     // propagate the key event upwards
-    wxKeyEvent ke( wxEVT_KEY_UP );
-    ke.m_shiftDown = event.m_shiftDown;
-    ke.m_controlDown = event.m_controlDown;
-    ke.m_altDown = event.m_altDown;
-    ke.m_metaDown = event.m_metaDown;
-    ke.m_keyCode = event.m_keyCode;
-    ke.m_x = event.m_x;
-    ke.m_y = event.m_y;
+    wxKeyEvent ke(event);
     ke.SetEventObject( parent );
-    if (parent->GetEventHandler()->ProcessEvent( ke )) return;
+    if (parent->GetEventHandler()->ProcessEvent( ke ))
+        return;
 
     event.Skip();
 }
@@ -3464,16 +3451,9 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
     }
 
     // propagate the char event upwards
-    wxKeyEvent ke( wxEVT_CHAR );
-    ke.m_shiftDown = event.m_shiftDown;
-    ke.m_controlDown = event.m_controlDown;
-    ke.m_altDown = event.m_altDown;
-    ke.m_metaDown = event.m_metaDown;
-    ke.m_keyCode = event.m_keyCode;
-    ke.m_x = event.m_x;
-    ke.m_y = event.m_y;
-    ke.SetEventObject( parent );
-    if (parent->GetEventHandler()->ProcessEvent( ke )) return;
+    wxKeyEvent ke(event);
+    if (parent->GetEventHandler()->ProcessEvent( ke ))
+        return;
 
     if (event.GetKeyCode() == WXK_TAB)
     {
