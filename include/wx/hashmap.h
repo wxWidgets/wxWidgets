@@ -425,6 +425,8 @@ protected: \
 CLASSEXP CLASSNAME \
 { \
 public: \
+    typedef KEY_T first_type; \
+    typedef VALUE_T second_type; \
     typedef KEY_T t1; \
     typedef VALUE_T t2; \
     typedef const KEY_T const_t1; \

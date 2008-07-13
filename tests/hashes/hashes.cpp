@@ -356,7 +356,7 @@ IntT MakeKey(size_t i, size_t count)
     IntT max = 1;
     max <<= sizeof(KeyT) * 8 - 2;
     max -= count / 4 + 1;
-     
+
     return max / count * 4 * i + i / 3;
 }
 
@@ -380,11 +380,7 @@ void MakeKeyValuePair(size_t i, size_t count, T*& key, ValueT& value)
 template <class HashMapT>
 void HashMapTest()
 {
-#if wxUSE_STL && defined HAVE_STL_HASH_MAP
     typedef typename HashMapT::value_type::second_type value_type;
-#else
-    typedef typename HashMapT::value_type::t2 value_type;
-#endif
     typedef typename HashMapT::key_type key_type;
     typedef typename HashMapT::iterator Itor;
 
