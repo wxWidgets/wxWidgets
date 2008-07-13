@@ -571,17 +571,24 @@ public:
     /**
         Specifies that column @a idx (starting from zero) should be grown if
         there is extra space available to the sizer.
-        The @a proportion parameter has the same meaning as the stretch factor for
-        the sizers() except that if all proportions are 0,
-        then all columns are resized equally (instead of not being resized at all).
+
+        The @a proportion parameter has the same meaning as the stretch factor
+        for the sizers() except that if all proportions are 0, then all columns
+        are resized equally (instead of not being resized at all).
+
+        Notice that the row must not be already growable, if you need to change
+        the proportion you must call RemoveGrowableCol() first and then make it
+        growable (with a different proportion) again. You can use IsColGrowable()
+        to check whether a column is already growable.
     */
     void AddGrowableCol(size_t idx, int proportion = 0);
 
     /**
         Specifies that row idx (starting from zero) should be grown if there
         is extra space available to the sizer.
-        See AddGrowableCol() for the description
-        of @a proportion parameter.
+
+        This is identical to AddGrowableCol() except that it works with rows
+        and not columns.
     */
     void AddGrowableRow(size_t idx, int proportion = 0);
 
@@ -605,6 +612,20 @@ public:
              SetNonFlexibleGrowMode()
     */
     int GetNonFlexibleGrowMode() const;
+
+    /**
+        Returns @true if column @a idx is growable.
+
+        @since 2.9.0
+    */
+    bool IsColGrowable(size_t idx);
+
+    /**
+        Returns @true if row @a idx is growable.
+
+        @since 2.9.0
+    */
+    bool IsRowGrowable(size_t idx);
 
     /**
         Specifies that column idx is no longer growable.

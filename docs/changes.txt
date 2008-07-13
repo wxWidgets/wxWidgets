@@ -372,6 +372,7 @@ All (GUI):
 - Implement wxListCtrl::GetSubItemRect() in generic version (David Barnard).
 - Added wxVListBox::GetItemRect() (Javier Urien).
 - Show busy cursor in wxLaunchDefaultBrowser and add wxBROWSER_NOBUSYCURSOR.
+- Added wxFlexGridSizer::Is{Row,Col}Growable() (Marcin Wojdyr).
 
 wxGTK:
 

@@ -1820,15 +1820,28 @@ void wxFlexGridSizer::AdjustForGrowables(const wxSize& sz)
     }
 }
 
+bool wxFlexGridSizer::IsRowGrowable( size_t idx )
+{
+    return m_growableRows.Index( idx ) != wxNOT_FOUND;
+}
+
+bool wxFlexGridSizer::IsColGrowable( size_t idx )
+{
+    return m_growableCols.Index( idx ) != wxNOT_FOUND;
+}
 
 void wxFlexGridSizer::AddGrowableRow( size_t idx, int proportion )
 {
+    wxASSERT_MSG( !IsRowGrowable( idx ), 
+                  "AddGrowableRow() called for growable row" );
     m_growableRows.Add( idx );
     m_growableRowsProportions.Add( proportion );
 }
 
 void wxFlexGridSizer::AddGrowableCol( size_t idx, int proportion )
 {
+    wxASSERT_MSG( !IsColGrowable( idx ), 
+                  "AddGrowableCol() called for growable column" );
     m_growableCols.Add( idx );
     m_growableColsProportions.Add( proportion );
 }

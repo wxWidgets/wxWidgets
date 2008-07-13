@@ -785,6 +785,8 @@ public:
     void AddGrowableCol( size_t idx, int proportion = 0 );
     void RemoveGrowableCol( size_t idx );
 
+    bool IsRowGrowable( size_t idx );
+    bool IsColGrowable( size_t idx );
 
     // the sizer cells may grow in both directions, not grow at all or only
     // grow in one direction but not the other
