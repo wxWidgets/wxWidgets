@@ -593,8 +593,8 @@ bool wxDebugContext::Dump(void)
     if (wxTheApp)
     {
         appNameStr = wxTheApp->GetAppName();
-        appName = appNameStr;
-        OutputDumpLine(wxT("----- Memory dump of %s at %s -----"), appName, (const wxChar *)wxNow() );
+        appName = appNameStr.c_str();
+        OutputDumpLine(wxT("----- Memory dump of %s at %s -----"), appName, wx_static_cast(const wxChar *, wxNow().c_str()));
     }
     else
     {
@@ -649,8 +649,8 @@ bool wxDebugContext::PrintStatistics(bool detailed)
     if (wxTheApp)
     {
         appNameStr = wxTheApp->GetAppName();
-        appName = appNameStr;
-        OutputDumpLine(wxT("----- Memory statistics of %s at %s -----"), appName, (const wxChar *) wxNow() );
+        appName = appNameStr.c_str();
+        OutputDumpLine(wxT("----- Memory statistics of %s at %s -----"), appName, wx_static_cast(const wxChar *, wxNow().c_str()));
     }
     else
     {
@@ -743,7 +743,7 @@ bool wxDebugContext::PrintClasses(void)
     if (wxTheApp)
     {
         appNameStr = wxTheApp->GetAppName();
-        appName = appNameStr;
+        appName = appNameStr.c_str();
         wxLogMessage(wxT("----- Classes in %s -----"), appName);
     }
   }
