@@ -325,6 +325,31 @@ void wxVListBox::RefreshSelected()
     }
 }
 
+wxRect wxVListBox::GetItemRect(size_t n) const
+{
+    wxRect itemrect;
+
+    // check that this item is visible
+    const size_t lineMax = GetVisibleEnd();
+    if ( n >= lineMax )
+        return itemrect;
+    size_t line = GetVisibleBegin();
+    if ( n < line )
+        return itemrect;
+
+    while ( line <= n )
+    {
+        itemrect.y += itemrect.height;
+        itemrect.height = OnGetRowHeight(line);
+
+        line++;
+    }
+
+    itemrect.width = GetClientSize().x;
+
+    return itemrect;
+}
+
 // ----------------------------------------------------------------------------
 // wxVListBox appearance parameters
 // ----------------------------------------------------------------------------

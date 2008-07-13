@@ -127,6 +127,8 @@ public:
     // get the background colour of selected cells
     const wxColour& GetSelectionBackground() const { return m_colBgSel; }
 
+    // get the item rect, returns empty rect if the item is not visible
+    wxRect GetItemRect(size_t n) const;
 
     // operations
     // ----------

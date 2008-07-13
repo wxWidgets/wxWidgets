@@ -126,6 +126,13 @@ public:
     wxPoint GetMargins() const;
 
     /**
+        Returns the rectangle occupied by this item in physical coordinates.
+
+        If the item is not currently visible, returns an empty rectangle.
+     */
+    wxRect GetItemRect(size_t item) const;
+
+    /**
         Returns the index of the next selected item or @c wxNOT_FOUND if there
         are no more.
 

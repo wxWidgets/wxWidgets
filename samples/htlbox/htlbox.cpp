@@ -116,6 +116,7 @@ public:
     void OnToggleMulti(wxCommandEvent& event);
     void OnSelectAll(wxCommandEvent& event);
     void OnUpdateItem(wxCommandEvent& event);
+    void OnGetItemRect(wxCommandEvent& event);
 
     void OnSetBgCol(wxCommandEvent& event);
     void OnSetSelBgCol(wxCommandEvent& event);
@@ -172,6 +173,7 @@ enum
     HtmlLbox_ToggleMulti,
     HtmlLbox_SelectAll,
     HtmlLbox_UpdateItem,
+    HtmlLbox_GetItemRect,
 
     HtmlLbox_SetBgCol,
     HtmlLbox_SetSelBgCol,
@@ -199,6 +201,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(HtmlLbox_ToggleMulti, MyFrame::OnToggleMulti)
     EVT_MENU(HtmlLbox_SelectAll, MyFrame::OnSelectAll)
     EVT_MENU(HtmlLbox_UpdateItem, MyFrame::OnUpdateItem)
+    EVT_MENU(HtmlLbox_GetItemRect, MyFrame::OnGetItemRect)
 
     EVT_MENU(HtmlLbox_About, MyFrame::OnAbout)
 
@@ -265,6 +268,7 @@ MyFrame::MyFrame()
     menuHLbox->AppendSeparator();
     menuHLbox->Append(HtmlLbox_SelectAll, _T("Select &all items\tCtrl-A"));
     menuHLbox->Append(HtmlLbox_UpdateItem, _T("Update &first item\tCtrl-U"));
+    menuHLbox->Append(HtmlLbox_GetItemRect, _T("Show &rectangle of item #10\tCtrl-R"));
     menuHLbox->AppendSeparator();
     menuHLbox->Append(HtmlLbox_SetBgCol, _T("Set &background...\tCtrl-B"));
     menuHLbox->Append(HtmlLbox_SetSelBgCol,
@@ -432,6 +436,14 @@ void MyFrame::OnUpdateItem(wxCommandEvent& WXUNUSED(event))
 {
     if (GetMyBox())
         GetMyBox()->UpdateFirstItem();
+}
+
+void MyFrame::OnGetItemRect(wxCommandEvent& WXUNUSED(event))
+{
+    static const int ITEM = 10;
+    const wxRect r = m_hlbox->GetItemRect(ITEM);
+    wxLogMessage("Rect of item %d: (%d, %d)-(%d, %d)",
+                 ITEM, r.x, r.y, r.x + r.width, r.y + r.height);
 }
 
 void MyFrame::OnSetBgCol(wxCommandEvent& WXUNUSED(event))
