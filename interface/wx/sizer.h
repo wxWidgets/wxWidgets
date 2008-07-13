@@ -1149,7 +1149,7 @@ public:
     bool Hide(size_t index);
 
     /**
-        Insert a child into the sizer before any existing item at
+        Insert a child into the sizer before any existing item at @a index.
 
         See Add() for the meaning of the other parameters.
     */
@@ -1157,7 +1157,7 @@ public:
                         const wxSizerFlags& flags);
 
     /**
-        Insert a child into the sizer before any existing item at
+        Insert a child into the sizer before any existing item at @a index.
 
         See Add() for the meaning of the other parameters.
     */
@@ -1168,7 +1168,7 @@ public:
                         wxObject* userData = NULL);
 
     /**
-        Insert a child into the sizer before any existing item at
+        Insert a child into the sizer before any existing item at @a index.
 
         See Add() for the meaning of the other parameters.
     */
@@ -1176,7 +1176,7 @@ public:
                         const wxSizerFlags& flags);
 
     /**
-        Insert a child into the sizer before any existing item at
+        Insert a child into the sizer before any existing item at @a index.
 
         See Add() for the meaning of the other parameters.
     */
@@ -1187,7 +1187,7 @@ public:
                         wxObject* userData = NULL);
 
     /**
-        Insert a child into the sizer before any existing item at
+        Insert a child into the sizer before any existing item at @a index.
 
         See Add() for the meaning of the other parameters.
     */
