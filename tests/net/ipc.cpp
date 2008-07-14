@@ -26,6 +26,8 @@
 #include "wx/ipc.h"
 #include "wx/thread.h"
 
+#define wxUSE_SOCKETS_FOR_IPC (!wxUSE_DDE_FOR_IPC)
+
 namespace
 {
 
@@ -91,8 +93,10 @@ public:
     {
         m_conn = NULL;
 
+#if wxUSE_SOCKETS_FOR_IPC
         // we must call this from the main thread
         wxSocketBase::Initialize();
+#endif // wxUSE_SOCKETS_FOR_IPC
 
         // we need event dispatching to work for IPC server to work
         m_thread = new EventThread;
@@ -109,7 +113,9 @@ public:
 
         delete m_conn;
 
+#if wxUSE_SOCKETS_FOR_IPC
         wxSocketBase::Shutdown();
+#endif // wxUSE_SOCKETS_FOR_IPC
     }
 
     virtual wxConnectionBase *OnAcceptConnection(const wxString& topic)
@@ -202,8 +208,7 @@ private:
     DECLARE_NO_COPY_CLASS(IPCTestCase)
 };
 
-// this test is not enabled by default because it requires an IPC server to run
-//CPPUNIT_TEST_SUITE_REGISTRATION( IPCTestCase );
+CPPUNIT_TEST_SUITE_REGISTRATION( IPCTestCase );
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( IPCTestCase, "IPCTestCase" );
 
 void IPCTestCase::Connect()
