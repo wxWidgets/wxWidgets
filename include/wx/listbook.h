@@ -112,6 +112,10 @@ private:
     // common part of all constructors
     void Init();
 
+    // this should be called when we need to be relaid out
+    void UpdateSize();
+
+
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxListbook)
 };
