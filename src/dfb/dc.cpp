@@ -107,7 +107,7 @@ void wxDFBDCImpl::DoSetDeviceClippingRegion(const wxRegion& region)
     rect.width = XDEV2LOG(rect.width);
     rect.height = YDEV2LOG(rect.height);
 
-    DoSetClippingRegion(rect);
+    DoSetClippingRegion(rect.x, rect.y, rect.width, rect.height);
 }
 
 void wxDFBDCImpl::DestroyClippingRegion()
