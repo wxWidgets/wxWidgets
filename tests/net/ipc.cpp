@@ -15,12 +15,13 @@
     #pragma hdrstop
 #endif
 
-// for all others, include the necessary headers
-#ifndef WX_PRECOMP
-#endif
-
 // this test needs threads as it runs the test server in a secondary thread
 #if wxUSE_THREADS
+
+// for all others, include the necessary headers
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif
 
 #include "wx/ipc.h"
 #include "wx/thread.h"
@@ -105,7 +106,8 @@ public:
 
         m_thread->Wait();
         delete m_thread;
-        m_thread = NULL;
+
+        delete m_conn;
 
         wxSocketBase::Shutdown();
     }
