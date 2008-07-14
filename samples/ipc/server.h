@@ -11,11 +11,13 @@
 
 #include "connection.h"
 
-#define ID_START         10000
-#define ID_DISCONNECT    10001
-#define ID_ADVISE         10002
-#define ID_LOG          10003
-#define ID_SERVERNAME    10004
+enum
+{
+    ID_START = 10000,
+    ID_DISCONNECT,
+    ID_ADVISE,
+    ID_SERVERNAME,
+};
 
 // Define a new application
 class MyServer;
@@ -25,11 +27,10 @@ class MyApp : public wxApp
 {
 public:
     virtual bool OnInit();
-    virtual int OnExit();
-    MyFrame *GetFrame() { return m_frame; };
+    MyFrame *GetFrame() { return m_frame; }
 
 protected:
-    MyFrame        *m_frame;
+    MyFrame *m_frame;
 };
 
 DECLARE_APP(MyApp)
@@ -40,10 +41,9 @@ class MyFrame : public wxFrame
 public:
     MyFrame(wxFrame *frame, const wxString& title);
 
-    void OnExit(wxCommandEvent& event);
     void OnClose(wxCloseEvent& event);
 
-    void Enable();
+    void UpdateUI();
     void Disconnect();
 
 protected:
@@ -51,10 +51,9 @@ protected:
     wxChoice* GetServername()  { return (wxChoice*) FindWindow( ID_SERVERNAME ); }
     wxButton* GetDisconnect()  { return (wxButton*) FindWindow( ID_DISCONNECT ); }
     wxButton* GetAdvise()  { return (wxButton*) FindWindow( ID_ADVISE ); }
-    wxTextCtrl* GetLog()  { return (wxTextCtrl*) FindWindow( ID_LOG ); }
 
 
-    MyServer         *m_server;
+    MyServer *m_server;
 
     void OnStart( wxCommandEvent &event );
     void OnServerName( wxCommandEvent &event );
@@ -75,26 +74,31 @@ public:
     virtual bool DoAdvise(const wxString& item, const void *data, size_t size, wxIPCFormat format);
     virtual bool OnDisconnect();
 
-    wxString        m_sAdvise;
+    // topic for which we advise the client or empty if none
+    wxString m_advise;
 
 protected:
-    wxString        m_sRequestDate;
-    char            m_achRequestBytes[3];
+    // the data returned by last OnRequest(): we keep it in this wxString to
+    // ensure that the pointer we return from OnRequest() stays valid
+    wxString m_requestData;
 };
 
-class MyServer: public wxServer
+class MyServer : public wxServer
 {
 public:
     MyServer();
-    ~MyServer();
+    virtual ~MyServer();
+
     void Disconnect();
-    bool IsConnected() { return m_connection != NULL; };
-    MyConnection *GetConnection() { return m_connection; };
+    bool IsConnected() { return m_connection != NULL; }
+    MyConnection *GetConnection() { return m_connection; }
+
     void Advise();
-    bool CanAdvise() { return m_connection != NULL && !m_connection->m_sAdvise.IsEmpty(); };
-    wxConnectionBase *OnAcceptConnection(const wxString& topic);
+    bool CanAdvise() { return m_connection && !m_connection->m_advise.empty(); }
+
+    virtual wxConnectionBase *OnAcceptConnection(const wxString& topic);
 
 protected:
-    MyConnection     *m_connection;
+    MyConnection *m_connection;
 };
 
