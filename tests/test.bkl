@@ -43,6 +43,7 @@
             longlong/longlongtest.cpp
             mbconv/convautotest.cpp
             mbconv/mbconvtest.cpp
+            net/ipc.cpp
             regex/regextest.cpp
             regex/wxregextest.cpp
             scopeguard/scopeguardtest.cpp

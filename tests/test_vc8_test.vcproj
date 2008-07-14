@@ -948,6 +948,9 @@
 				RelativePath=".\streams\iostreams.cpp"
 			/>
 			<File
+				RelativePath=".\net\ipc.cpp"
+			/>
+			<File
 				RelativePath=".\streams\largefile.cpp"
 			/>
 			<File

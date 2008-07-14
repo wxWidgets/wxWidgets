@@ -49,6 +49,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_longlongtest.o \
 	$(OBJS)\test_convautotest.o \
 	$(OBJS)\test_mbconvtest.o \
+	$(OBJS)\test_ipc.o \
 	$(OBJS)\test_regextest.o \
 	$(OBJS)\test_wxregextest.o \
 	$(OBJS)\test_scopeguardtest.o \
@@ -399,6 +400,9 @@ $(OBJS)\test_convautotest.o: ./mbconv/convautotest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_mbconvtest.o: ./mbconv/mbconvtest.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_ipc.o: ./net/ipc.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_regextest.o: ./regex/regextest.cpp

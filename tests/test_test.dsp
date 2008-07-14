@@ -337,6 +337,10 @@ SOURCE=.\streams\iostreams.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\net\ipc.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\streams\largefile.cpp
 # End Source File
 # Begin Source File

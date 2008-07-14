@@ -262,6 +262,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_longlongtest.obj &
 	$(OBJS)\test_convautotest.obj &
 	$(OBJS)\test_mbconvtest.obj &
+	$(OBJS)\test_ipc.obj &
 	$(OBJS)\test_regextest.obj &
 	$(OBJS)\test_wxregextest.obj &
 	$(OBJS)\test_scopeguardtest.obj &
@@ -452,6 +453,9 @@ $(OBJS)\test_convautotest.obj :  .AUTODEPEND .\mbconv\convautotest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_mbconvtest.obj :  .AUTODEPEND .\mbconv\mbconvtest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_ipc.obj :  .AUTODEPEND .\net\ipc.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_regextest.obj :  .AUTODEPEND .\regex\regextest.cpp
