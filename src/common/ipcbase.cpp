@@ -62,7 +62,7 @@ wxConnectionBase::wxConnectionBase(const wxConnectionBase& copy)
 wxConnectionBase::~wxConnectionBase()
 {
   if ( m_deletebufferwhendone )
-    delete m_buffer;
+    delete [] m_buffer;
 }
 
 /* static */
@@ -120,8 +120,7 @@ void *wxConnectionBase::GetBufferAtLeast( size_t bytes )
   {  // need to resize buffer
     if ( m_deletebufferwhendone )
     { // we're in charge of buffer, increase it
-      if ( m_buffer )
-        delete m_buffer;
+      delete [] m_buffer;
       m_buffer = new char[bytes];
       m_buffersize = bytes;
       return m_buffer;
