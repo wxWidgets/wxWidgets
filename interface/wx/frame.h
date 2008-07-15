@@ -84,7 +84,7 @@
     combination of styles:
 
     @code
-        wxDEFAULT_FRAME_STYLE & ~(wxRESIZE_BORDER | wxRESIZE_BOX | wxMAXIMIZE_BOX)
+        wxDEFAULT_FRAME_STYLE & ~(wxRESIZE_BORDER | wxMAXIMIZE_BOX)
     @endcode
 
     See also the @ref overview_windowstyles.
