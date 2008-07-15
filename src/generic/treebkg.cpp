@@ -102,9 +102,7 @@ wxTreebook::Create(wxWindow *parent,
                     wxID_ANY,
                     wxDefaultPosition,
                     wxDefaultSize,
-#ifndef __WXMSW__
-                    wxBORDER_SIMPLE | // On wxMSW this produces a black border which is wrong
-#endif
+                    wxBORDER_THEME |
                     wxTR_DEFAULT_STYLE |
                     wxTR_HIDE_ROOT |
                     wxTR_SINGLE
