@@ -130,35 +130,36 @@ void UnicodeTestCase::ConstructorsWithConversion()
     wxString s2(wchar, wxConvUTF8);
 
 #if wxUSE_UNICODE
-    CPPUNIT_ASSERT( s1 == wchar );
-    CPPUNIT_ASSERT( s2 == wchar );
+    WX_ASSERT_STR_EQUAL( wchar, s1 );
+    WX_ASSERT_STR_EQUAL( wchar, s2 );
 #else
-    CPPUNIT_ASSERT( s1 == utf8 );
-    CPPUNIT_ASSERT( s2 == utf8 );
+    WX_ASSERT_STR_EQUAL( utf8, s1 );
+    WX_ASSERT_STR_EQUAL( utf8, s2 );
 #endif
 
     wxString sub(utf8sub, wxConvUTF8); // "Dej" substring
     wxString s3(utf8, wxConvUTF8, 4);
     wxString s4(wchar, wxConvUTF8, 3);
 
-    CPPUNIT_ASSERT( s3 == sub );
-    CPPUNIT_ASSERT( s4 == sub );
+    CPPUNIT_ASSERT_EQUAL( sub, s3 );
+    CPPUNIT_ASSERT_EQUAL( sub, s4 );
 
 #if wxUSE_UNICODE
-    CPPUNIT_ASSERT ( wxString("\t[pl]open.format.Sformatuj dyskietkê=gfloppy %f", 
-                               wxConvUTF8) == wxT("") ); //should stop at pos 35 
+    // conversion should stop with failure at pos 35
+    wxString s("\t[pl]open.format.Sformatuj dyskietkê=gfloppy %f", wxConvUTF8);
+    CPPUNIT_ASSERT( s.empty() );
 #endif
 
 
     // test using Unicode strings together with char* strings (this must work
     // in ANSI mode as well, of course):
     wxString s5("ascii");
-    CPPUNIT_ASSERT( s5 == "ascii" );
+    WX_ASSERT_STR_EQUAL( "ascii", s5 );
 
     s5 += " value";
 
     CPPUNIT_ASSERT( strcmp(s5.mb_str(), "ascii value") == 0 );
-    CPPUNIT_ASSERT( s5 == "ascii value" );
+    WX_ASSERT_STR_EQUAL( "ascii value", s5 );
     CPPUNIT_ASSERT( s5 != "SomethingElse" );
 }
 
