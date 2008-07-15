@@ -10194,7 +10194,7 @@ void wxGrid::SetCellSize( int row, int col, int num_rows, int num_cols )
                       wxT("wxGrid::SetCellSize setting cell size to < 1"));
 
         // if this was already a multicell then "turn off" the other cells first
-        if ((cell_rows > 1) || (cell_rows > 1))
+        if ((cell_rows > 1) || (cell_cols > 1))
         {
             int i, j;
             for (j=row; j < row + cell_rows; j++)
