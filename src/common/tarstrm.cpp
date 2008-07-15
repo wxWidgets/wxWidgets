@@ -945,7 +945,7 @@ bool wxTarInputStream::ReadExtendedHeader(wxTarHeaderRecords*& recs)
     size_t recPos, recSize;
     bool ok = true;
 
-    for (recPos = 0; recPos < len; recPos += recSize) {
+    for (recPos = 0; recPos < len && ok; recPos += recSize) {
         char *pRec = buf.data() + recPos;
         char *p = pRec;
 
