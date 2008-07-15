@@ -95,13 +95,13 @@ void StdStringTestCase::StdConstructors()
              s7(s3.begin(), s3.begin() + 8);
     wxString s8(s1, 4, 8);
 
-    CPPUNIT_ASSERT( s1 == _T("abcdefgh") );
-    CPPUNIT_ASSERT( s2 == s1 );
-    CPPUNIT_ASSERT( s4 == _T("aaaaaaaa") );
-    CPPUNIT_ASSERT( s5 == _T("abcdefgh") );
-    CPPUNIT_ASSERT( s6 == s1 );
-    CPPUNIT_ASSERT( s7 == s1 );
-    CPPUNIT_ASSERT( s8 == _T("efgh") );
+    WX_ASSERT_STR_EQUAL( _T("abcdefgh"), s1 );
+    CPPUNIT_ASSERT_EQUAL( s1, s2 );
+    WX_ASSERT_STR_EQUAL( _T("aaaaaaaa"), s4 );
+    WX_ASSERT_STR_EQUAL( _T("abcdefgh"), s5 );
+    CPPUNIT_ASSERT_EQUAL( s1, s6 );
+    CPPUNIT_ASSERT_EQUAL( s1, s7 );
+    WX_ASSERT_STR_EQUAL( _T("efgh"), s8 );
 
     const char *pc = s1.c_str();
     WX_ASSERT_STR_EQUAL( "bcd", wxString(pc + 1, pc + 4) );
@@ -133,12 +133,12 @@ void StdStringTestCase::StdAppend()
     s5.append(1, (unsigned char)'y');
     s6.append(s1.begin() + 3, s1.end());
 
-    CPPUNIT_ASSERT( s1 == _T("abcdef") );
-    CPPUNIT_ASSERT( s2 == _T("abcdef") );
-    CPPUNIT_ASSERT( s3 == _T("abcdef") );
-    CPPUNIT_ASSERT( s4 == _T("abcabcdef") );
-    CPPUNIT_ASSERT( s5 == _T("abcaaaxxy") );
-    CPPUNIT_ASSERT( s6 == _T("abcdef") );
+    WX_ASSERT_STR_EQUAL( _T("abcdef"), s1 );
+    WX_ASSERT_STR_EQUAL( _T("abcdef"), s2 );
+    WX_ASSERT_STR_EQUAL( _T("abcdef"), s3 );
+    WX_ASSERT_STR_EQUAL( _T("abcabcdef"), s4 );
+    WX_ASSERT_STR_EQUAL( _T("abcaaaxxy"), s5 );
+    WX_ASSERT_STR_EQUAL( _T("abcdef"), s6 );
 
     const char *pc = s1.c_str() + 2;
     s7.append(pc, pc + 4);
@@ -153,8 +153,8 @@ void StdStringTestCase::StdAppend()
     s7.append(_T("def"));
     s8.append(_T("defgh"), 3);
 
-    CPPUNIT_ASSERT( s7 == wxString(_T("null\0timedef"), 12) );
-    CPPUNIT_ASSERT( s8 == wxString(_T("null\0timedef"), 12) );
+    CPPUNIT_ASSERT_EQUAL( wxString(_T("null\0timedef"), 12), s7 );
+    CPPUNIT_ASSERT_EQUAL( wxString(_T("null\0timedef"), 12), s8 );
 }
 
 void StdStringTestCase::StdAssign()
@@ -169,12 +169,12 @@ void StdStringTestCase::StdAssign()
     s5.assign(3, _T('a'));
     s6.assign(s1.begin() + 1, s1.end());
 
-    CPPUNIT_ASSERT( s1 == _T("def") );
-    CPPUNIT_ASSERT( s2 == _T("def") );
-    CPPUNIT_ASSERT( s3 == _T("def") );
-    CPPUNIT_ASSERT( s4 == _T("def") );
-    CPPUNIT_ASSERT( s5 == _T("aaa") );
-    CPPUNIT_ASSERT( s6 == _T("ef") );
+    WX_ASSERT_STR_EQUAL( _T("def"), s1 );
+    WX_ASSERT_STR_EQUAL( _T("def"), s2 );
+    WX_ASSERT_STR_EQUAL( _T("def"), s3 );
+    WX_ASSERT_STR_EQUAL( _T("def"), s4 );
+    WX_ASSERT_STR_EQUAL( _T("aaa"), s5 );
+    WX_ASSERT_STR_EQUAL( _T("ef"),  s6 );
 
     const char *pc = s1.c_str();
     s7.assign(pc, pc + 2);
@@ -228,11 +228,11 @@ void StdStringTestCase::StdErase()
     wxString::iterator it2 = s4.erase(s4.begin() + 4, s4.begin() + 6);
     wxString::iterator it3 = s7.erase(s7.begin() + 4, s7.begin() + 8);
 
-    CPPUNIT_ASSERT( s1 == _T("acdefgh") );
-    CPPUNIT_ASSERT( s2 == _T("abcd") );
-    CPPUNIT_ASSERT( s3 == _T("ac") );
-    CPPUNIT_ASSERT( s4 == _T("abcdghi") );
-    CPPUNIT_ASSERT( s7 == _T("zabc") );
+    WX_ASSERT_STR_EQUAL( _T("acdefgh"), s1 );
+    WX_ASSERT_STR_EQUAL( _T("abcd"), s2 );
+    WX_ASSERT_STR_EQUAL( _T("ac"), s3 );
+    WX_ASSERT_STR_EQUAL( _T("abcdghi"), s4 );
+    WX_ASSERT_STR_EQUAL( _T("zabc"), s7 );
     CPPUNIT_ASSERT( *it == _T('c') );
     CPPUNIT_ASSERT( *it2 == _T('g') );
     CPPUNIT_ASSERT( it3 == s7.end() );
@@ -383,21 +383,21 @@ void StdStringTestCase::StdInsert()
     s7.insert(s7.begin(), s9.begin(), s9.end() - 1);
     s8.insert(s8.begin(), 2, _T('c'));
 
-    CPPUNIT_ASSERT( s1 == _T("accaaa") );
-    CPPUNIT_ASSERT( s2 == _T("aacdeaa") );
-    CPPUNIT_ASSERT( s3 == _T("aacdefgaa") );
-    CPPUNIT_ASSERT( s4 == _T("aafgaa") );
-    CPPUNIT_ASSERT( s5 == _T("accaaa") );
-    CPPUNIT_ASSERT( s6 == _T("aaaXa") );
-    CPPUNIT_ASSERT( s7 == _T("cdefaaaa") );
-    CPPUNIT_ASSERT( s8 == _T("ccaaaa") );
+    WX_ASSERT_STR_EQUAL( _T("accaaa")   , s1 );
+    WX_ASSERT_STR_EQUAL( _T("aacdeaa")  , s2 );
+    WX_ASSERT_STR_EQUAL( _T("aacdefgaa"), s3 );
+    WX_ASSERT_STR_EQUAL( _T("aafgaa")   , s4 );
+    WX_ASSERT_STR_EQUAL( _T("accaaa")   , s5 );
+    WX_ASSERT_STR_EQUAL( _T("aaaXa")    , s6 );
+    WX_ASSERT_STR_EQUAL( _T("cdefaaaa") , s7 );
+    WX_ASSERT_STR_EQUAL( _T("ccaaaa")   , s8 );
 
     s1 = s2 = s3 = _T("aaaa");
     s1.insert(0, _T("ccc"), 2);
     s2.insert(4, _T("ccc"), 2);
 
-    CPPUNIT_ASSERT( s1 == _T("ccaaaa") );
-    CPPUNIT_ASSERT( s2 == _T("aaaacc") );
+    WX_ASSERT_STR_EQUAL( _T("ccaaaa"), s1 );
+    WX_ASSERT_STR_EQUAL( _T("aaaacc"), s2 );
 }
 
 void StdStringTestCase::StdReplace()
@@ -416,13 +416,13 @@ void StdStringTestCase::StdReplace()
     s6.replace(0, 123, s9, 0, 123);
     s7.replace(2, 7, s9);
 
-    CPPUNIT_ASSERT( s1 == _T("QWErtyuIopopop") );
-    CPPUNIT_ASSERT( s2 == _T("QWERTYUIOPWWWW") );
-    CPPUNIT_ASSERT( s3 == _T("QwertyUIOP") );
-    CPPUNIT_ASSERT( s4 == _T("QwertYUIOP") );
-    CPPUNIT_ASSERT( s5 == _T("QertyRTYUIOP") );
-    CPPUNIT_ASSERT( s6 == s9);
-    CPPUNIT_ASSERT( s7 == _T("QWwertyP") );
+    WX_ASSERT_STR_EQUAL( _T("QWErtyuIopopop"), s1 );
+    WX_ASSERT_STR_EQUAL( _T("QWERTYUIOPWWWW"), s2 );
+    WX_ASSERT_STR_EQUAL( _T("QwertyUIOP")    , s3 );
+    WX_ASSERT_STR_EQUAL( _T("QwertYUIOP")    , s4 );
+    WX_ASSERT_STR_EQUAL( _T("QertyRTYUIOP")  , s5 );
+    CPPUNIT_ASSERT_EQUAL( s9, s6 );
+    WX_ASSERT_STR_EQUAL( _T("QWwertyP"), s7 );
 }
 
 void StdStringTestCase::StdRFind()
@@ -484,10 +484,10 @@ void StdStringTestCase::StdResize()
     s3.resize( 14, _T(' ') );
     s4.resize( 14, _T('W') );
 
-    CPPUNIT_ASSERT( s1 == _T("abcABCdefDEF") );
-    CPPUNIT_ASSERT( s2 == _T("abcABCdefD") );
-    CPPUNIT_ASSERT( s3 == _T("abcABCdefDEF  ") );
-    CPPUNIT_ASSERT( s4 == _T("abcABCdefDEFWW") );
+    WX_ASSERT_STR_EQUAL( _T("abcABCdefDEF"), s1 );
+    WX_ASSERT_STR_EQUAL( _T("abcABCdefD"), s2 );
+    WX_ASSERT_STR_EQUAL( _T("abcABCdefDEF  "), s3 );
+    WX_ASSERT_STR_EQUAL( _T("abcABCdefDEFWW"), s4 );
 
     wxString s =
         wxString::FromUTF8("\xd0\x9f\xd1\x80\xd0\xb8\xd0\xb2\xd0\xb5\xd1\x82");
@@ -546,16 +546,16 @@ void StdStringTestCase::StdConversion()
     wxStdWideString strStdWide(L"std::wstring value");
 
     wxString s1(strStd);
-    CPPUNIT_ASSERT( s1 == "std::string value" );
+    WX_ASSERT_STR_EQUAL( "std::string value", s1 );
 
     wxString s2(strStdWide);
-    CPPUNIT_ASSERT( s2 == "std::wstring value" );
+    WX_ASSERT_STR_EQUAL( "std::wstring value", s2 );
 
     wxString s3;
     s3 = strStd;
-    CPPUNIT_ASSERT( s3 == "std::string value" );
+    WX_ASSERT_STR_EQUAL( "std::string value", s3 );
     s3 = strStdWide;
-    CPPUNIT_ASSERT( s3 == "std::wstring value" );
+    WX_ASSERT_STR_EQUAL( "std::wstring value", s3 );
 
     wxString s4("hello");
 
@@ -563,10 +563,10 @@ void StdStringTestCase::StdConversion()
     // because it conflicts with conversion to const char*/wchar_t*:
 #if wxUSE_STL
     std::string s5 = s4;
-    CPPUNIT_ASSERT( s5 == "hello" );
+    WX_ASSERT_STR_EQUAL( "hello", s5 );
 
     wxStdWideString s6 = s4;
-    CPPUNIT_ASSERT( s6 == "hello" );
+    WX_ASSERT_STR_EQUAL( "hello", s6 );
 #endif
 
     std::string s7(s4);
