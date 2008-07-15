@@ -545,7 +545,13 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
 
         // reuse the code in MSWGetStyle() but correct the results slightly for
         // the dialog
-        dlgTemplate->style = MSWGetStyle(style, &dlgTemplate->dwExtendedStyle);
+        //
+        // NB: we need a temporary variable as we can't pass pointer to
+        //     dwExtendedStyle directly, it's not aligned correctly for 64 bit
+        //     architectures
+        WXDWORD dwExtendedStyle;
+        dlgTemplate->style = MSWGetStyle(style, &dwExtendedStyle);
+        dlgTemplate->dwExtendedStyle = dwExtendedStyle;
 
         // all dialogs are popups
         dlgTemplate->style |= WS_POPUP;
