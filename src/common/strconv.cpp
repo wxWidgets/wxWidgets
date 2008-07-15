@@ -212,11 +212,11 @@ wxMBConv::ToWChar(wchar_t *dst, size_t dstLen,
         if ( lenChunk == wxCONV_FAILED )
             return wxCONV_FAILED;
 
-        lenChunk++; // for the L'\0' at the end of this chunk
-
         dstWritten += lenChunk;
+        if ( !srcEnd )
+            dstWritten++;
 
-        if ( lenChunk == 1 )
+        if ( !lenChunk )
         {
             // nothing left in the input string, conversion succeeded
             break;
@@ -227,10 +227,13 @@ wxMBConv::ToWChar(wchar_t *dst, size_t dstLen,
             if ( dstWritten > dstLen )
                 return wxCONV_FAILED;
 
-            if ( MB2WC(dst, src, lenChunk) == wxCONV_FAILED )
+            // +1 is for trailing NUL
+            if ( MB2WC(dst, src, lenChunk + 1) == wxCONV_FAILED )
                 return wxCONV_FAILED;
 
             dst += lenChunk;
+            if ( !srcEnd )
+                dst++;
         }
 
         if ( !srcEnd )
@@ -269,13 +272,15 @@ wxMBConv::FromWChar(char *dst, size_t dstLen,
     // the number of chars [which would be] written to dst [if it were not NULL]
     size_t dstWritten = 0;
 
+    // if we don't know its length we have no choice but to assume that it is
+    // NUL-terminated (notice that it can still be NUL-terminated even if
+    // explicit length is given but it doesn't change our return value)
+    const bool isNulTerminated = srcLen == wxNO_LEN;
+
     // make a copy of the input string unless it is already properly
     // NUL-terminated
-    //
-    // if we don't know its length we have no choice but to assume that it is,
-    // indeed, properly terminated
     wxWCharBuffer bufTmp;
-    if ( srcLen == wxNO_LEN )
+    if ( isNulTerminated )
     {
         srcLen = wxWcslen(src) + 1;
     }
@@ -298,18 +303,21 @@ wxMBConv::FromWChar(char *dst, size_t dstLen,
         if ( lenChunk == wxCONV_FAILED )
             return wxCONV_FAILED;
 
-        lenChunk += lenNul;
         dstWritten += lenChunk;
+        if ( isNulTerminated )
+            dstWritten += lenNul;
 
         if ( dst )
         {
             if ( dstWritten > dstLen )
                 return wxCONV_FAILED;
 
-            if ( WC2MB(dst, src, lenChunk) == wxCONV_FAILED )
+            if ( WC2MB(dst, src, lenChunk + lenNul) == wxCONV_FAILED )
                 return wxCONV_FAILED;
 
             dst += lenChunk;
+            if ( isNulTerminated )
+                dst += lenNul;
         }
     }
 
@@ -391,13 +399,19 @@ wxMBConv::cMB2WC(const char *inBuff, size_t inLen, size_t *outLen) const
         // because we want the buffer to always be NUL-terminated, even if the
         // input isn't (as otherwise the caller has no way to know its length)
         wxWCharBuffer wbuf(dstLen);
-        wbuf.data()[dstLen - 1] = L'\0';
+        wbuf.data()[dstLen] = L'\0';
         if ( ToWChar(wbuf.data(), dstLen, inBuff, inLen) != wxCONV_FAILED )
         {
             if ( outLen )
             {
                 *outLen = dstLen;
-                if ( wbuf[dstLen - 1] == L'\0' )
+
+                // we also need to handle NUL-terminated input strings
+                // specially: for them the output is the length of the string
+                // excluding the trailing NUL, however if we're asked to
+                // convert a specific number of characters we return the length
+                // of the resulting output even if it's NUL-terminated
+                if ( inLen == wxNO_LEN )
                     (*outLen)--;
             }
 
@@ -429,11 +443,10 @@ wxMBConv::cWC2MB(const wchar_t *inBuff, size_t inLen, size_t *outLen) const
             {
                 *outLen = dstLen;
 
-                if ( dstLen >= nulLen &&
-                        !NotAllNULs(buf.data() + dstLen - nulLen, nulLen) )
+                if ( inLen == wxNO_LEN )
                 {
-                    // in this case the output is NUL-terminated and we're not
-                    // supposed to count NUL
+                    // in this case both input and output are NUL-terminated
+                    // and we're not supposed to count NUL
                     *outLen -= nulLen;
                 }
             }

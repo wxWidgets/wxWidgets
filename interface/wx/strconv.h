@@ -155,26 +155,27 @@ public:
                              const wchar_t* src,
                              size_t srcLen = wxNO_LEN) const;
 
-    //@{
     /**
-        Converts from multibyte encoding to Unicode by calling MB2WC() and
+        Converts from multibyte encoding to Unicode by calling ToWChar() and
         allocating a temporary wxWCharBuffer to hold the result.
 
-        The first overload takes a @c NUL-terminated input string. The second
-        one takes a string of exactly the specified length and the string may
-        include or not the trailing @c NUL character(s). If the string is not
-        @c NUL-terminated, a temporary @c NUL-terminated copy of it suitable
-        for passing to wxMBConv::MB2WC is made, so it is more efficient to
-        ensure that the string is does have the appropriate number of @c NUL
-        bytes (which is usually 1 but may be 2 or 4 for UTF-16 or UTF-32, see
-        wxMBConv::GetMBNulLen), especially for long strings.
+        This function is a convenient wrapper around ToWChar() as it takes care
+        of allocating the buffer of the necessary size itself. Its parameters
+        have the same meaning as for ToWChar(), in particular @a inLen can be
+        specified explicitly in which case exactly that many characters are
+        converted and @a outLen receives (if non-@NULL) exactly the
+        corresponding number of wide characters, whether the last one of them
+        is @c NUL or not. However if @c inLen is @c wxNO_LEN, then @c outLen
+        doesn't count the trailing @c NUL even if it is always present in this
+        case.
 
-        If @a outLen is not-@NULL, it receives the length of the converted
-        string.
+        Finally notice that if the conversion fails, the returned buffer is
+        invalid and @a outLen is set to 0 (and not @c wxCONV_FAILED for
+        compatibility concerns).
     */
-    const wxWCharBuffer cMB2WC(const char* in) const;
-    const wxWCharBuffer cMB2WC(const char* in, size_t inLen, size_t *outLen) const;
-    //@}
+    const wxWCharBuffer cMB2WC(const char* in,
+                               size_t inLen = wxNO_LEN,
+                               size_t *outLen = NULL) const;
 
     //@{
     /**
@@ -189,22 +190,19 @@ public:
     const wxWCharBuffer cMB2WX(const char* psz) const;
     //@}
 
-    //@{
     /**
-        Converts from Unicode to multibyte encoding by calling WC2MB and
+        Converts from Unicode to multibyte encoding by calling FromWChar() and
         allocating a temporary wxCharBuffer to hold the result.
 
-        The second overload of this function allows to convert a string of the
-        given length @e inLen, whether it is @c NUL-terminated or not (for wide
-        character strings, unlike for the multibyte ones, a single @c NUL is
-        always enough). But notice that just as with @ref wxMBConv::mb2wc
-        cMB2WC, it is more efficient to pass an already terminated string to
-        this function as otherwise a copy is made internally. If @a outLen is
-        not-@NULL, it receives the length of the converted string.
+        This function is a convenient wrapper around FromWChar() as it takes
+        care of allocating the buffer of necessary size itself.
+
+        Its parameters have the same meaning as the corresponding parameters of
+        FromWChar(), please see the description of cMB2WC() for more details.
     */
-    const wxCharBuffer cWC2MB(const wchar_t* in) const;
-    const wxCharBuffer cWC2MB(const wchar_t* in, size_t inLen, size_t *outLen) const;
-    //@}
+    const wxCharBuffer cWC2MB(const wchar_t* in,
+                              size_t inLen = wxNO_LEN,
+                              size_t *outLen = NULL) const;
 
     //@{
     /**

@@ -95,15 +95,18 @@ public:
     // Convenience functions for converting strings which may contain embedded
     // NULs and don't have to be NUL-terminated.
     //
-    // inLen is the length of the buffer including trailing NUL if any: if the
-    // last 4 bytes of the buffer are all NULs, these functions are more
-    // efficient as they avoid copying the string, but otherwise a copy is made
-    // internally which could be quite bad for (very) long strings.
+    // inLen is the length of the buffer including trailing NUL if any or
+    // wxNO_LEN if the input is NUL-terminated.
     //
     // outLen receives, if not NULL, the length of the converted string or 0 if
     // the conversion failed (returning 0 and not -1 in this case makes it
     // difficult to distinguish between failed conversion and empty input but
-    // this is done for backwards compatibility)
+    // this is done for backwards compatibility). Notice that the rules for
+    // whether outLen accounts or not for the last NUL are the same as for
+    // To/FromWChar() above: if inLen is specified, outLen is exactly the
+    // number of characters converted, whether the last one of them was NUL or
+    // not. But if inLen == wxNO_LEN then outLen doesn't account for the last
+    // NUL even though it is present.
     const wxWCharBuffer
         cMB2WC(const char *in, size_t inLen, size_t *outLen) const;
     const wxCharBuffer
