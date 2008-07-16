@@ -39,6 +39,8 @@
 #include "wx/process.h"
 #include "wx/thread.h"
 
+#include "wx/cmdline.h"
+
 #include "wx/wfstream.h"
 
 #include "wx/private/selectdispatcher.h"
@@ -436,60 +438,9 @@ bool wxMacLaunch(char **argv);
 
 long wxExecute(const wxString& command, int flags, wxProcess *process)
 {
-    wxArrayString args;
+    ArgsArray argv(wxCmdLineParser::ConvertStringToArgs(command,
+                                                        wxCMD_LINE_SPLIT_UNIX));
 
-    const char *cptr = command.c_str();
-
-    // split the command line in arguments
-    //
-    // TODO: combine this with wxCmdLineParser::ConvertStringToArgs(), it
-    //       doesn't do exactly the same thing right now but it's pretty close
-    //       and we shouldn't maintain 2 copies of this code
-    do
-    {
-        wxString argument;
-        char quotechar = '\0'; // is arg quoted?
-        bool escaped = false;
-
-        // eat leading whitespace:
-        while ( wxIsspace(*cptr) )
-            cptr++;
-
-        if ( *cptr == '\'' || *cptr == '"' )
-            quotechar = *cptr++;
-
-        do
-        {
-            if ( *cptr == '\\' && !escaped )
-            {
-                escaped = true;
-                cptr++;
-                continue;
-            }
-
-            // all other characters:
-            argument += *cptr++;
-            escaped = false;
-
-            // have we reached the end of the argument?
-            if ( (*cptr == quotechar && !escaped)
-                 || (quotechar == '\0' && wxIsspace(*cptr))
-                 || *cptr == '\0' )
-            {
-                args.push_back(argument);
-
-                // if not at end of buffer, swallow last character:
-                if ( *cptr )
-                    cptr++;
-
-                break; // done with this one, start over
-            }
-        } while ( *cptr );
-    } while ( *cptr );
-
-    ArgsArray argv(args);
-
-    // do execute the command
     return wxExecute(argv, flags, process);
 }
 
