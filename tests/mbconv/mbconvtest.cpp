@@ -78,6 +78,7 @@ private:
         CPPUNIT_TEST( CP1252Tests ); // depends on UTF8 Decoder functioning correctly
         CPPUNIT_TEST( LibcTests );
         CPPUNIT_TEST( IconvTests );
+        CPPUNIT_TEST( Latin1Tests );
         CPPUNIT_TEST( FontmapTests );
 #ifdef HAVE_WCHAR_H
         CPPUNIT_TEST( UTF8_41 );
@@ -113,6 +114,7 @@ private:
     void LibcTests();
     void FontmapTests();
     void IconvTests();
+    void Latin1Tests();
 
     // verifies that the specified multibyte sequence decodes to the specified wchar_t sequence
     void TestDecoder(
@@ -826,6 +828,24 @@ void MBConvTestCase::IconvTests()
         );
     delete converter;
 #endif
+}
+
+void MBConvTestCase::Latin1Tests()
+{
+    TestCoder(
+        (const char*)iso8859_1,
+        sizeof(iso8859_1),
+        (const char*)iso8859_1_utf8,
+        sizeof(iso8859_1_utf8),
+        wxConvISO8859_1,
+        1
+        );
+
+    static const char nulstr[] = "foo\0bar\0";
+    static const size_t mbLen = WXSIZEOF(nulstr) - 1;
+    size_t wcLen;
+    wxWCharBuffer wbuf(wxConvISO8859_1.cMB2WC(nulstr, mbLen, &wcLen));
+    CPPUNIT_ASSERT_EQUAL( mbLen, wcLen );
 }
 
 void MBConvTestCase::CP1252Tests()
