@@ -124,70 +124,41 @@ bitmap "focus" ,
 bitmap "disabled" ,
 */
 
-bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id,
-    const wxBitmap& bitmap,
-    const wxPoint& pos,
-    const wxSize& size, long style,
-    const wxValidator& wxVALIDATOR_PARAM(validator),
-    const wxString& name)
+bool wxBitmapButton::Create(wxWindow *parent,
+                            wxWindowID id,
+                            const wxBitmap& bitmap,
+                            const wxPoint& pos,
+                            const wxSize& size, long style,
+                            const wxValidator& wxVALIDATOR_PARAM(validator),
+                            const wxString& name)
 {
+    if ( !CreateControl(parent, id, pos, size, style, validator, name) )
+        return false;
+
     SetBitmapLabel(bitmap);
-    SetName(name);
-
-#if wxUSE_VALIDATORS
-    SetValidator(validator);
-#endif // wxUSE_VALIDATORS
-
-    parent->AddChild(this);
-
-    m_windowStyle = style;
 
     if ( style & wxBU_AUTODRAW )
-    {
-        m_marginX =
-        m_marginY = 4;
-    }
+        SetMargins(4, 4);
 
-    if (id == wxID_ANY)
-        m_windowId = NewControlId();
-    else
-        m_windowId = id;
+    return MSWCreateControl(_T("BUTTON"), wxEmptyString, pos, size);
+}
 
-    long msStyle = WS_VISIBLE | WS_TABSTOP | WS_CHILD | BS_OWNERDRAW ;
+WXDWORD wxBitmapButton::MSWGetStyle(long style, WXDWORD *exstyle) const
+{
+    WXDWORD msStyle = wxButton::MSWGetStyle(style, exstyle);
 
-    if ( m_windowStyle & wxCLIP_SIBLINGS )
-        msStyle |= WS_CLIPSIBLINGS;
+    msStyle |= BS_OWNERDRAW;
 
-#ifdef __WIN32__
-    if(m_windowStyle & wxBU_LEFT)
+    if ( style & wxBU_LEFT )
         msStyle |= BS_LEFT;
-    if(m_windowStyle & wxBU_RIGHT)
+    if ( style & wxBU_RIGHT )
         msStyle |= BS_RIGHT;
-    if(m_windowStyle & wxBU_TOP)
+    if ( style & wxBU_TOP )
         msStyle |= BS_TOP;
-    if(m_windowStyle & wxBU_BOTTOM)
+    if ( style & wxBU_BOTTOM )
         msStyle |= BS_BOTTOM;
-#endif
 
-    m_hWnd = (WXHWND) CreateWindowEx(
-                    0,
-                    wxT("BUTTON"),
-                    wxEmptyString,
-                    msStyle,
-                    0, 0, 0, 0,
-                    GetWinHwnd(parent),
-                    (HMENU)wxUIntToPtr(m_windowId.GetValue()),
-                    wxGetInstance(),
-                    NULL
-                   );
-
-    // Subclass again for purposes of dialog editing mode
-    SubclassWin(m_hWnd);
-
-    SetPosition(pos);
-    SetInitialSize(size);
-
-    return true;
+    return msStyle;
 }
 
 bool wxBitmapButton::SetBackgroundColour(const wxColour& colour)

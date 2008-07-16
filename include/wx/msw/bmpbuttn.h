@@ -68,6 +68,8 @@ protected:
 
     // reimplement some base class virtuals
     virtual wxSize DoGetBestSize() const;
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
+
 
     // invalidate m_brushDisabled when system colours change
     void OnSysColourChanged(wxSysColourChangedEvent& event);
