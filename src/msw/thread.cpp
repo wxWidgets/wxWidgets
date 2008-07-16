@@ -75,8 +75,9 @@
     // this is where _beginthreadex() is declared
     #include <process.h>
 
-    // the return type of the thread function entry point
-    typedef wxUIntPtr THREAD_RETVAL;
+    // the return type of the thread function entry point: notice that this
+    // type can't hold a pointer under Win64
+    typedef unsigned THREAD_RETVAL;
 
     // the calling convention of the thread function entry point
     #define THREAD_CALLCONV __stdcall
@@ -528,7 +529,7 @@ THREAD_RETVAL wxThreadInternal::DoThreadStart(wxThread *thread)
             return THREAD_ERROR_EXIT;
         }
 
-        rc = (THREAD_RETVAL)thread->Entry();
+        rc = wxPtrToUInt(thread->Entry());
     }
     wxCATCH_ALL( wxTheApp->OnUnhandledException(); )
 
@@ -1092,7 +1093,7 @@ wxThreadError wxThread::Resume()
 
 wxThread::ExitCode wxThread::Wait()
 {
-    ExitCode rc = (ExitCode)THREAD_ERROR_EXIT;
+    ExitCode rc = wxUIntToPtr(THREAD_ERROR_EXIT);
 
     // although under Windows we can wait for any thread, it's an error to
     // wait for a detached one in wxWin API
