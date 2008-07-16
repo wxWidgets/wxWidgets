@@ -47,10 +47,10 @@ private:
         CPPUNIT_TEST( Contains );
         CPPUNIT_TEST( ToLong );
         CPPUNIT_TEST( ToULong );
-#ifdef wxLongLong_t
+#ifdef wxHAS_STRTOLL
         CPPUNIT_TEST( ToLongLong );
         CPPUNIT_TEST( ToULongLong );
-#endif // wxLongLong_t
+#endif // wxHAS_STRTOLL
         CPPUNIT_TEST( ToDouble );
         CPPUNIT_TEST( WriteBuf );
         CPPUNIT_TEST( CharStr );
@@ -71,10 +71,10 @@ private:
     void Contains();
     void ToLong();
     void ToULong();
-#ifdef wxLongLong_t
+#ifdef wxHAS_STRTOLL
     void ToLongLong();
     void ToULongLong();
-#endif // wxLongLong_t
+#endif // wxHAS_STRTOLL
     void ToDouble();
     void WriteBuf();
     void CharStr();
