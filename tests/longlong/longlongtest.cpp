@@ -68,6 +68,7 @@ private:
         CPPUNIT_TEST( Division );
         CPPUNIT_TEST( BitOperations );
         CPPUNIT_TEST( ToString );
+        CPPUNIT_TEST( LoHi );
     CPPUNIT_TEST_SUITE_END();
 
     void Conversion();
@@ -77,6 +78,7 @@ private:
     void Division();
     void BitOperations();
     void ToString();
+    void LoHi();
 
     DECLARE_NO_COPY_CLASS(LongLongTestCase)
 };
@@ -322,6 +324,17 @@ void LongLongTestCase::ToString()
     CPPUNIT_ASSERT( a2.ToString() == _T("1311768467139281697") );
 #endif
 
+}
+
+void LongLongTestCase::LoHi()
+{
+    wxLongLong ll(123, 456);
+    CPPUNIT_ASSERT_EQUAL( 456u, ll.GetLo() );
+    CPPUNIT_ASSERT_EQUAL( 123, ll.GetHi() );
+
+    wxULongLong ull(987, 654);
+    CPPUNIT_ASSERT_EQUAL( 654u, ull.GetLo() );
+    CPPUNIT_ASSERT_EQUAL( 987u, ull.GetHi() );
 }
 
 #endif // wxUSE_LONGLONG
