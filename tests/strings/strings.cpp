@@ -519,7 +519,7 @@ void StringTestCase::ToULong()
     }
 }
 
-#ifdef wxLongLong_t
+#ifdef wxHAS_STRTOLL
 
 void StringTestCase::ToLongLong()
 {
@@ -531,9 +531,31 @@ void StringTestCase::ToLongLong()
         if ( ld.flags & (Number_Long | Number_Unsigned) )
             continue;
 
-        CPPUNIT_ASSERT_EQUAL( ld.IsOk(), wxString(ld.str).ToLongLong(&l) );
         if ( ld.IsOk() )
+        {
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                std::string(wxString::Format
+                (
+                    _T("Conversion of \"%s\" to long long failed"),
+                    ld.str
+                ).mb_str()),
+                wxString(ld.str).ToLongLong(&l)
+            );
             CPPUNIT_ASSERT_EQUAL( ld.LLValue(), l );
+        }
+        else
+        {
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                std::string(wxString::Format
+                (
+                    _T("Conversion of \"%s\" to long long succeeded"),
+                    ld.str
+                ).mb_str()),
+                !wxString(ld.str).ToLongLong(&l)
+            );
+        }
     }
 }
 
@@ -547,13 +569,35 @@ void StringTestCase::ToULongLong()
         if ( ld.flags & (Number_Long | Number_Signed) )
             continue;
 
-        CPPUNIT_ASSERT_EQUAL( ld.IsOk(), wxString(ld.str).ToULongLong(&ul) );
         if ( ld.IsOk() )
+        {
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                std::string(wxString::Format
+                (
+                    _T("Conversion of \"%s\" to unsigned long long failed"),
+                    ld.str
+                ).mb_str()),
+                wxString(ld.str).ToULongLong(&ul)
+            );
             CPPUNIT_ASSERT_EQUAL( ld.ULLValue(), ul );
+        }
+        else
+        {
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                std::string(wxString::Format
+                (
+                    _T("Conversion of \"%s\" to unsigned long long succeeded"),
+                    ld.str
+                ).mb_str()),
+                !wxString(ld.str).ToULongLong(&ul)
+            );
+        }
     }
 }
 
-#endif // wxLongLong_t
+#endif // wxHAS_STRTOLL
 
 void StringTestCase::ToDouble()
 {
