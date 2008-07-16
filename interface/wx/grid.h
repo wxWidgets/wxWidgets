@@ -1851,11 +1851,24 @@ public:
 
     /**
         Returns an array of selected cols.
+
+        Please notice that this method alone is not sufficient to find all the
+        selected columns, see the explanation in GetSelectedRows()
+        documentation for more details.
     */
     wxArrayInt GetSelectedCols() const;
 
     /**
         Returns an array of selected rows.
+
+        Note that this array contains only the rows which were individually
+        selected (using the mouse with the row header or combinations involving
+        @c Ctrl key for selecting individual rows). In particular if the user
+        selects many rows at once (e.g. by pressing @c Shift key) this array is
+        @b not updated because this could mean storing a very large number of
+        elements in it. So in general to find the current selection you need to
+        use both this method and GetSelectionBlockTopLeft() and
+        GetSelectionBlockBottomRight() ones.
     */
     wxArrayInt GetSelectedRows() const;
 
