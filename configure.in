@@ -2786,8 +2786,8 @@ dnl
 dnl at least under SGI these functions are only available in C99 code and not
 dnl in C++ so do these tests using C++ compiler
 AC_LANG_PUSH(C++)
-if test "wxUSE_UNICODE" = "yes"; then
-    WX_CHECK_FUNCS(wcstoull)
+if test "$wxUSE_UNICODE" = "yes"; then
+    WX_CHECK_FUNCS(wcstoull,,,[#include <wchar.h>])
 else
     WX_CHECK_FUNCS(strtoull)
 fi
