@@ -58,6 +58,12 @@ void CrtTestCase::SetGetEnv()
     wxSetEnv(_T("TESTVAR"), _T("something else"));
     CPPUNIT_ASSERT( wxGetEnv(_T("TESTVAR"), &val) );
     CPPUNIT_ASSERT( val == _T("something else") );
+
+    // this test doesn't work under Unix systems without setenv(): putenv() can
+    // only be used to add or modify environment variables but not to unset
+    // them
+#if !defined(__UNIX__) || defined(HAVE_SETENV)
     CPPUNIT_ASSERT( wxUnsetEnv(_T("TESTVAR")) );
     CPPUNIT_ASSERT( wxGetEnv(_T("TESTVAR"), NULL) == false );
+#endif
 }
