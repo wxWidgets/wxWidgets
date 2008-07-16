@@ -23,16 +23,18 @@
     #include "wx/msw/wrapcdlg.h"
     #include "wx/image.h"
     #include "wx/window.h"
-    #include "wx/dc.h"
     #include "wx/utils.h"
     #include "wx/dialog.h"
     #include "wx/app.h"
     #include "wx/bitmap.h"
-    #include "wx/dcmemory.h"
     #include "wx/log.h"
     #include "wx/icon.h"
-    #include "wx/dcprint.h"
     #include "wx/module.h"
+    // include all dc types that are used as a param
+    #include "wx/dc.h"
+    #include "wx/dcclient.h"
+    #include "wx/dcmemory.h"
+    #include "wx/dcprint.h"
 #endif
 
 #include "wx/private/graphics.h"
