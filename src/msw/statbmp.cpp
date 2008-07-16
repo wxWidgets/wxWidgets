@@ -29,6 +29,7 @@
 #include "wx/statbmp.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
     #include "wx/window.h"
     #include "wx/icon.h"
     #include "wx/dcclient.h"
@@ -169,10 +170,12 @@ bool wxStaticBitmap::Create(wxWindow *parent,
     // GetBestSize will work properly now, so set the best size if needed
     SetInitialSize(size);
 
-    // Win9x and 2000 don't draw correctly the images with alpha channel so we
-    // need to draw them ourselves and it's easier to just always do it rather
-    // than check if we have an image with alpha or not
-    if ( wxGetWinVersion() <= wxWinVersion_2000 )
+    // Windows versions before XP (and even XP if the application has no
+    // manifest and so the old comctl32.dll is used) don't draw correctly the
+    // images with alpha channel so we need to draw them ourselves and it's
+    // easier to just always do it rather than check if we have an image with
+    // alpha or not
+    if ( wxTheApp->GetComCtl32Version() < 600 )
     {
         Connect(wxEVT_PAINT, wxPaintEventHandler(wxStaticBitmap::DoPaintManually));
     }
