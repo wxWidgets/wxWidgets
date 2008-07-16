@@ -60,6 +60,15 @@ enum wxCmdLineEntryType
 };
 
 /**
+    Flags determining ConvertStringToArgs() behaviour.
+ */
+enum wxCmdLineSplitType
+{
+    wxCMD_LINE_SPLIT_DOS,
+    wxCMD_LINE_SPLIT_UNIX
+};
+
+/**
     The structure wxCmdLineEntryDesc is used to describe the one command line
     switch, option or parameter. An array of such structures should be passed
     to wxCmdLineParser::SetDesc(). Also, the meanings of parameters of the
@@ -301,12 +310,20 @@ public:
     bool AreLongOptionsEnabled() const;
 
     /**
-        Breaks down the string containing the full command line in words. The
-        words are separated by whitespace. The quotes can be used in the input
-        string to quote the white space and the back slashes can be used to
-        quote the quotes.
+        Breaks down the string containing the full command line in words.
+
+        Words are separated by whitespace and double quotes can be used to
+        preserve the spaces inside the words.
+
+        By default, this function uses Windows-like word splitting algorithm,
+        i.e. single quotes have no special meaning and backslash can't be used
+        to escape spaces neither. With @c wxCMD_LINE_SPLIT_UNIX flag Unix
+        semantics is used, i.e. both single and double quotes can be used and
+        backslash can be used to escape all the other special characters.
     */
-    static wxArrayString ConvertStringToArgs(const wxChar cmdline);
+    static wxArrayString
+    ConvertStringToArgs(const wxChar cmdline,
+                        wxCmdLineSplitType flags = wxCMD_LINE_SPLIT_DOS);
 
     /**
         Identical to EnableLongOptions(@false).

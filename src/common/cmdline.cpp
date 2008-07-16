@@ -1280,14 +1280,14 @@ static wxString GetLongOptionName(wxString::const_iterator p,
  */
 
 /* static */
-wxArrayString wxCmdLineParser::ConvertStringToArgs(const wxString& cmdline)
+wxArrayString
+wxCmdLineParser::ConvertStringToArgs(const wxString& cmdline,
+                                     wxCmdLineSplitType type)
 {
     wxArrayString args;
 
     wxString arg;
     arg.reserve(1024);
-
-    bool isInsideQuotes = false;
 
     const wxString::const_iterator end = cmdline.end();
     wxString::const_iterator p = cmdline.begin();
@@ -1303,31 +1303,76 @@ wxArrayString wxCmdLineParser::ConvertStringToArgs(const wxString& cmdline)
             break;
 
         // parse this parameter
-        bool lastBS = false;
+        bool lastBS = false,
+             isInsideQuotes = false;
+        wxChar chDelim = '\0';
         for ( arg.clear(); p != end; ++p )
         {
             const wxChar ch = *p;
-            if ( ch == '"' )
+
+            if ( type == wxCMD_LINE_SPLIT_DOS )
+            {
+                if ( ch == '"' )
+                {
+                    if ( !lastBS )
+                    {
+                        isInsideQuotes = !isInsideQuotes;
+
+                        // don't put quote in arg
+                        continue;
+                    }
+                    //else: quote has no special meaning but the backslash
+                    //      still remains -- makes no sense but this is what
+                    //      Windows does
+                }
+                // note that backslash does *not* quote the space, only quotes do
+                else if ( !isInsideQuotes && (ch == ' ' || ch == '\t') )
+                {
+                    ++p;    // skip this space anyhow
+                    break;
+                }
+
+                lastBS = ch == '\\';
+            }
+            else // type == wxCMD_LINE_SPLIT_UNIX
             {
                 if ( !lastBS )
                 {
-                    isInsideQuotes = !isInsideQuotes;
+                    if ( isInsideQuotes )
+                    {
+                        if ( ch == chDelim )
+                        {
+                            isInsideQuotes = false;
 
-                    // don't put quote in arg
-                    continue;
+                            continue;   // don't use the quote itself
+                        }
+                    }
+                    else // not in quotes and not escaped
+                    {
+                        if ( ch == '\'' || ch == '"' )
+                        {
+                            isInsideQuotes = true;
+                            chDelim = ch;
+
+                            continue;   // don't use the quote itself
+                        }
+
+                        if ( ch == ' ' || ch == '\t' )
+                        {
+                            ++p;    // skip this space anyhow
+                            break;
+                        }
+                    }
+
+                    lastBS = ch == '\\';
+                    if ( lastBS )
+                        continue;
                 }
-                //else: quote has no special meaning but the backslash
-                //      still remains -- makes no sense but this is what
-                //      Windows does
+                else // escaped by backslash, just use as is
+                {
+                    lastBS = false;
+                }
             }
-            // note that backslash does *not* quote the space, only quotes do
-            else if ( !isInsideQuotes && (ch == ' ' || ch == '\t') )
-            {
-                ++p;    // skip this space anyhow
-                break;
-            }
-
-            lastBS = ch == '\\';
 
             arg += ch;
         }

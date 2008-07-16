@@ -19,6 +19,13 @@
 #include "wx/arrstr.h"
 #include "wx/cmdargs.h"
 
+// determines ConvertStringToArgs() behaviour
+enum wxCmdLineSplitType
+{
+    wxCMD_LINE_SPLIT_DOS,
+    wxCMD_LINE_SPLIT_UNIX
+};
+
 #if wxUSE_CMDLINE_PARSER
 
 class WXDLLIMPEXP_FWD_BASE wxDateTime;
@@ -233,7 +240,9 @@ public:
     void Reset();
 
     // break down the command line in arguments
-    static wxArrayString ConvertStringToArgs(const wxString& cmdline);
+    static wxArrayString
+    ConvertStringToArgs(const wxString& cmdline,
+                        wxCmdLineSplitType type = wxCMD_LINE_SPLIT_DOS);
 
 private:
     // common part of all ctors
@@ -251,7 +260,9 @@ private:
 class WXDLLIMPEXP_BASE wxCmdLineParser
 {
 public:
-    static wxArrayString ConvertStringToArgs(const wxString& cmdline);
+    static wxArrayString
+    ConvertStringToArgs(const wxString& cmdline,
+                        wxCmdLineSplitType type = wxCMD_LINE_SPLIT_DOS);
 };
 
 #endif // wxUSE_CMDLINE_PARSER/!wxUSE_CMDLINE_PARSER

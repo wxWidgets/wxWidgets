@@ -55,11 +55,25 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( CmdLineTestCase, "CmdLineTestCase" );
 
 void CmdLineTestCase::ConvertStringTestCase()
 {
-    #define WX_ASSERT_ARGS_EQUAL(s, args)                                     \
+    #define WX_ASSERT_DOS_ARGS_EQUAL(s, args)                                 \
         {                                                                     \
-            const wxArrayString a(wxCmdLineParser::ConvertStringToArgs(args));\
-            WX_ASSERT_STRARRAY_EQUAL(s, a);                                   \
+            const wxArrayString                                               \
+                argsDOS(wxCmdLineParser::ConvertStringToArgs(args,            \
+                                            wxCMD_LINE_SPLIT_DOS));           \
+            WX_ASSERT_STRARRAY_EQUAL(s, argsDOS);                             \
         }
+
+    #define WX_ASSERT_UNIX_ARGS_EQUAL(s, args)                                \
+        {                                                                     \
+            const wxArrayString                                               \
+                argsUnix(wxCmdLineParser::ConvertStringToArgs(args,           \
+                                            wxCMD_LINE_SPLIT_UNIX));          \
+            WX_ASSERT_STRARRAY_EQUAL(s, argsUnix);                            \
+        }
+
+    #define WX_ASSERT_ARGS_EQUAL(s, args)                                     \
+        WX_ASSERT_DOS_ARGS_EQUAL(s, args)                                     \
+        WX_ASSERT_UNIX_ARGS_EQUAL(s, args)
 
     // normal cases
     WX_ASSERT_ARGS_EQUAL( "foo", "foo" )
@@ -74,12 +88,31 @@ void CmdLineTestCase::ConvertStringTestCase()
     WX_ASSERT_ARGS_EQUAL( "foo", "foo \t   " )
     WX_ASSERT_ARGS_EQUAL( "foo|bar", "foo bar " )
     WX_ASSERT_ARGS_EQUAL( "foo|bar|", "foo bar \"" )
-    WX_ASSERT_ARGS_EQUAL( "foo|bar|\\", "foo bar \\" )
+    WX_ASSERT_DOS_ARGS_EQUAL( "foo|bar|\\", "foo bar \\" )
+    WX_ASSERT_UNIX_ARGS_EQUAL( "foo|bar|", "foo bar \\" )
+
+    WX_ASSERT_ARGS_EQUAL( "12 34", "1\"2 3\"4" );
+    WX_ASSERT_ARGS_EQUAL( "1|2 34", "1 \"2 3\"4" );
+    WX_ASSERT_ARGS_EQUAL( "1|2 3|4", "1 \"2 3\" 4" );
 
     // check for (broken) Windows semantics: backslash doesn't escape spaces
-    WX_ASSERT_ARGS_EQUAL( "foo|bar\\|baz", "foo bar\\ baz" );
-    WX_ASSERT_ARGS_EQUAL( "foo|bar\\\"baz", "foo \"bar\\\"baz\"" );
+    WX_ASSERT_DOS_ARGS_EQUAL( "foo|bar\\|baz", "foo bar\\ baz" );
+    WX_ASSERT_DOS_ARGS_EQUAL( "foo|bar\\\"baz", "foo \"bar\\\"baz\"" );
 
+    // check for more sane Unix semantics: backslash does escape spaces and
+    // quotes
+    WX_ASSERT_UNIX_ARGS_EQUAL( "foo|bar baz", "foo bar\\ baz" );
+    WX_ASSERT_UNIX_ARGS_EQUAL( "foo|bar\"baz", "foo \"bar\\\"baz\"" );
+
+    // check that single quotes work too with Unix semantics
+    WX_ASSERT_UNIX_ARGS_EQUAL( "foo bar", "'foo bar'" )
+    WX_ASSERT_UNIX_ARGS_EQUAL( "foo|bar baz", "foo 'bar baz'" )
+    WX_ASSERT_UNIX_ARGS_EQUAL( "foo|bar baz", "foo 'bar baz'" )
+    WX_ASSERT_UNIX_ARGS_EQUAL( "O'Henry", "\"O'Henry\"" )
+    WX_ASSERT_UNIX_ARGS_EQUAL( "O'Henry", "O\\'Henry" )
+
+    #undef WX_ASSERT_DOS_ARGS_EQUAL
+    #undef WX_ASSERT_UNIX_ARGS_EQUAL
     #undef WX_ASSERT_ARGS_EQUAL
 }
 
