@@ -256,8 +256,11 @@ void wxStaticBitmap::DoPaintManually(wxPaintEvent& WXUNUSED(event))
     const wxSize size(GetSize());
     const wxBitmap bmp(GetBitmap());
 
-    // Clear the background
-    dc.SetBrush(GetBackgroundColour());
+    // Clear the background: notice that we're supposed to be transparent, so
+    // use the parent background colour if we don't have our own instead of
+    // falling back to the default
+    const wxWindow *win = UseBgCol() ? this : GetParent();
+    dc.SetBrush(win->GetBackgroundColour());
     dc.SetPen(*wxTRANSPARENT_PEN);
     dc.DrawRectangle(0, 0, size.GetWidth(), size.GetHeight());
 
