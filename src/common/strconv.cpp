@@ -160,11 +160,15 @@ wxMBConv::ToWChar(wchar_t *dst, size_t dstLen,
                   const char *src, size_t srcLen) const
 {
     // although new conversion classes are supposed to implement this function
-    // directly, the existins ones only implement the old MB2WC() and so, to
+    // directly, the existing ones only implement the old MB2WC() and so, to
     // avoid to have to rewrite all conversion classes at once, we provide a
     // default (but not efficient) implementation of this one in terms of the
     // old function by copying the input to ensure that it's NUL-terminated and
     // then using MB2WC() to convert it
+    //
+    // moreover, some conversion classes simply can't implement ToWChar()
+    // directly, the primary example is wxConvLibc: mbstowcs() only handles
+    // NUL-terminated strings
 
     // the number of chars [which would be] written to dst [if it were not NULL]
     size_t dstWritten = 0;
@@ -205,6 +209,21 @@ wxMBConv::ToWChar(wchar_t *dst, size_t dstLen,
         srcEnd = NULL;
     }
 
+    // the idea of this code is straightforward: it converts a NUL-terminated
+    // chunk of the string during each iteration and updates the output buffer
+    // with the result
+    //
+    // all the complication come from the fact that this function, for
+    // historical reasons, must behave in 2 subtly different ways when it's
+    // called with a fixed number of characters and when it's called for the
+    // entire NUL-terminated string: in the former case (srcEnd == NULL) we
+    // must count all characters we convert, NUL or not; but in the latter we
+    // do not count the trailing NUL -- but still count all the NULs inside the
+    // string
+    //
+    // so for the (simple) former case we just always count the trailing NUL,
+    // but for the latter we need to wait until we see if there is going to be
+    // another loop iteration and only count it then
     for ( ;; )
     {
         // try to convert the current chunk
@@ -257,9 +276,19 @@ wxMBConv::ToWChar(wchar_t *dst, size_t dstLen,
 
         // note that ">=" (and not just "==") is needed here as the terminator
         // we skipped just above could be inside or just after the buffer
-        // delimited by inEnd
+        // delimited by srcEnd
         if ( src >= srcEnd )
             break;
+
+        // if we got here then this wasn't the last chunk in this string and
+        // hence we must count an extra char for L'\0' even when converting a
+        // fixed number of characters
+        if ( srcEnd )
+        {
+            dstWritten++;
+            if ( dst )
+                dst++;
+        }
     }
 
     return dstWritten;
