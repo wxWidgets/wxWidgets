@@ -3540,7 +3540,19 @@ size_t wxCSConv::ToWChar(wchar_t *dst, size_t dstLen,
         return m_convReal->ToWChar(dst, dstLen, src, srcLen);
 
     // latin-1 (direct)
-    return wxMBConv::ToWChar(dst, dstLen, src, srcLen);
+    if ( srcLen == wxNO_LEN )
+        srcLen = strlen(src) + 1; // take trailing NUL too
+
+    if ( dst )
+    {
+        if ( dstLen < srcLen )
+            return wxCONV_FAILED;
+
+        for ( size_t n = 0; n < srcLen; n++ )
+            dst[n] = (unsigned char)(src[n]);
+    }
+
+    return srcLen;
 }
 
 size_t wxCSConv::FromWChar(char *dst, size_t dstLen,
@@ -3552,57 +3564,45 @@ size_t wxCSConv::FromWChar(char *dst, size_t dstLen,
         return m_convReal->FromWChar(dst, dstLen, src, srcLen);
 
     // latin-1 (direct)
-    return wxMBConv::FromWChar(dst, dstLen, src, srcLen);
+    if ( srcLen == wxNO_LEN )
+        srcLen = wxWcslen(src) + 1;
+
+    if ( dst )
+    {
+        if ( dstLen < srcLen )
+            return wxCONV_FAILED;
+
+        for ( size_t n = 0; n < srcLen; n++ )
+        {
+            if ( src[n] > 0xFF )
+                return wxCONV_FAILED;
+
+            dst[n] = (char)src[n];
+        }
+
+    }
+    else // still need to check the input validity
+    {
+        for ( size_t n = 0; n < srcLen; n++ )
+        {
+            if ( src[n] > 0xFF )
+                return wxCONV_FAILED;
+        }
+    }
+
+    return srcLen;
 }
 
 size_t wxCSConv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 {
-    CreateConvIfNeeded();
-
-    if (m_convReal)
-        return m_convReal->MB2WC(buf, psz, n);
-
-    // latin-1 (direct)
-    size_t len = strlen(psz);
-
-    if (buf)
-    {
-        for (size_t c = 0; c <= len; c++)
-            buf[c] = (unsigned char)(psz[c]);
-    }
-
-    return len;
+    // this function exists only for ABI-compatibility in 2.8 branch
+    return wxMBConv::MB2WC(buf, psz, n);
 }
 
 size_t wxCSConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 {
-    CreateConvIfNeeded();
-
-    if (m_convReal)
-        return m_convReal->WC2MB(buf, psz, n);
-
-    // latin-1 (direct)
-    const size_t len = wxWcslen(psz);
-    if (buf)
-    {
-        for (size_t c = 0; c <= len; c++)
-        {
-            if (psz[c] > 0xFF)
-                return wxCONV_FAILED;
-
-            buf[c] = (char)psz[c];
-        }
-    }
-    else
-    {
-        for (size_t c = 0; c <= len; c++)
-        {
-            if (psz[c] > 0xFF)
-                return wxCONV_FAILED;
-        }
-    }
-
-    return len;
+    // this function exists only for ABI-compatibility in 2.8 branch
+    return wxMBConv::WC2MB(buf, psz, n);
 }
 
 size_t wxCSConv::GetMBNulLen() const
