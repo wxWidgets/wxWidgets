@@ -22,25 +22,6 @@
 #endif // WX_PRECOMP
 
 // ----------------------------------------------------------------------------
-// local functions
-// ----------------------------------------------------------------------------
-
-#if wxUSE_WCHAR_T && !wxUSE_UNICODE
-
-// in case wcscmp is missing
-static int wx_wcscmp(const wchar_t *s1, const wchar_t *s2)
-{
-    while (*s1 == *s2 && *s1 != 0)
-    {
-        s1++;
-        s2++;
-    }
-    return *s1 - *s2;
-}
-
-#endif // wxUSE_WCHAR_T && !wxUSE_UNICODE
-
-// ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
 
@@ -52,7 +33,6 @@ public:
 private:
     CPPUNIT_TEST_SUITE( UnicodeTestCase );
         CPPUNIT_TEST( ToFromAscii );
-#if wxUSE_WCHAR_T
         CPPUNIT_TEST( ConstructorsWithConversion );
         CPPUNIT_TEST( ConversionEmpty );
         CPPUNIT_TEST( ConversionWithNULs );
@@ -61,14 +41,12 @@ private:
         CPPUNIT_TEST( ConversionUTF16 );
         CPPUNIT_TEST( ConversionUTF32 );
         CPPUNIT_TEST( IsConvOk );
-#endif // wxUSE_WCHAR_T
 #if wxUSE_UNICODE
         CPPUNIT_TEST( Iteration );
 #endif
     CPPUNIT_TEST_SUITE_END();
 
     void ToFromAscii();
-#if wxUSE_WCHAR_T
     void ConstructorsWithConversion();
     void ConversionEmpty();
     void ConversionWithNULs();
@@ -86,7 +64,6 @@ private:
     // if either of the first 2 arguments is NULL, the conversion is supposed
     // to fail
     void DoTestConversion(const char *s, const wchar_t *w, wxMBConv& conv);
-#endif // wxUSE_WCHAR_T
 
 
     DECLARE_NO_COPY_CLASS(UnicodeTestCase)
@@ -116,39 +93,39 @@ void UnicodeTestCase::ToFromAscii()
     TEST_TO_FROM_ASCII( "additional \" special \t test \\ component \n :-)" );
 }
 
-#if wxUSE_WCHAR_T
 void UnicodeTestCase::ConstructorsWithConversion()
 {
     // the string "Déjà" in UTF-8 and wchar_t:
     const unsigned char utf8Buf[] = {0x44,0xC3,0xA9,0x6A,0xC3,0xA0,0};
-    const wchar_t wchar[] = {0x44,0xE9,0x6A,0xE0,0};
     const unsigned char utf8subBuf[] = {0x44,0xC3,0xA9,0x6A,0}; // just "Déj"
     const char *utf8 = (char *)utf8Buf;
     const char *utf8sub = (char *)utf8subBuf;
 
     wxString s1(utf8, wxConvUTF8);
-    wxString s2(wchar, wxConvUTF8);
 
 #if wxUSE_UNICODE
+    const wchar_t wchar[] = {0x44,0xE9,0x6A,0xE0,0};
     WX_ASSERT_STR_EQUAL( wchar, s1 );
+
+    wxString s2(wchar);
     WX_ASSERT_STR_EQUAL( wchar, s2 );
+    WX_ASSERT_STR_EQUAL( utf8, s2 );
 #else
     WX_ASSERT_STR_EQUAL( utf8, s1 );
-    WX_ASSERT_STR_EQUAL( utf8, s2 );
 #endif
 
     wxString sub(utf8sub, wxConvUTF8); // "Dej" substring
     wxString s3(utf8, wxConvUTF8, 4);
-    wxString s4(wchar, wxConvUTF8, 3);
-
     CPPUNIT_ASSERT_EQUAL( sub, s3 );
-    CPPUNIT_ASSERT_EQUAL( sub, s4 );
 
 #if wxUSE_UNICODE
+    wxString s4(wchar, wxConvUTF8, 3);
+    CPPUNIT_ASSERT_EQUAL( sub, s4 );
+
     // conversion should stop with failure at pos 35
     wxString s("\t[pl]open.format.Sformatuj dyskietkê=gfloppy %f", wxConvUTF8);
     CPPUNIT_ASSERT( s.empty() );
-#endif
+#endif // wxUSE_UNICODE
 
 
     // test using Unicode strings together with char* strings (this must work
@@ -192,13 +169,13 @@ void UnicodeTestCase::ConversionWithNULs()
     CPPUNIT_ASSERT( wxTmemcmp(szTheString2.c_str(), L"The\0String",
                     lenNulString + 1) == 0 );
 #else // !wxUSE_UNICODE
-    wxString szTheString(wxT("TheString"));
+    wxString szTheString("TheString");
     szTheString.insert(3, 1, '\0');
     wxWCharBuffer theBuffer = szTheString.wc_str(wxConvLibc);
 
     CPPUNIT_ASSERT( memcmp(theBuffer.data(), L"The\0String", 11 * sizeof(wchar_t)) == 0 );
 
-    wxString szLocalTheString(wxT("TheString"));
+    wxString szLocalTheString("TheString");
     szLocalTheString.insert(3, 1, '\0');
     wxWCharBuffer theLocalBuffer = szLocalTheString.wc_str(wxConvLocal);
 
@@ -211,14 +188,13 @@ UnicodeTestCase::DoTestConversion(const char *s,
                                   const wchar_t *ws,
                                   wxMBConv& conv)
 {
-#if wxUSE_UNICODE
     if ( ws )
     {
         wxCharBuffer buf = conv.cWC2MB(ws, (size_t)-1, NULL);
 
         CPPUNIT_ASSERT( strcmp(buf, s) == 0 );
     }
-#else // wxUSE_UNICODE
+
     if ( s )
     {
         wxWCharBuffer wbuf = conv.cMB2WC(s, (size_t)-1, NULL);
@@ -226,14 +202,13 @@ UnicodeTestCase::DoTestConversion(const char *s,
         if ( ws )
         {
             CPPUNIT_ASSERT( wbuf.data() );
-            CPPUNIT_ASSERT( wx_wcscmp(wbuf, ws) == 0 );
+            CPPUNIT_ASSERT( wxStrcmp(wbuf, ws) == 0 );
         }
         else // conversion is supposed to fail
         {
             CPPUNIT_ASSERT_EQUAL( (wchar_t *)NULL, wbuf.data() );
         }
     }
-#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 }
 
 struct StringConversionData
@@ -246,20 +221,21 @@ void UnicodeTestCase::ConversionUTF7()
 {
     static const StringConversionData utf7data[] =
     {
+        // normal fragments
+        { "+AKM-", L"\xa3" },
+        { "+AOk-t+AOk-", L"\xe9t\xe9" },
+
+        // some special cases
         { "+-", L"+" },
         { "+--", L"+-" },
 
-#ifdef wxHAVE_U_ESCAPE
-        { "+AKM-", L"\u00a3" },
-#endif // wxHAVE_U_ESCAPE
-
         // the following are invalid UTF-7 sequences
+        { "\xa3", NULL },
         { "+", NULL },
         { "+~", NULL },
         { "a+", NULL },
     };
 
-    wxCSConv conv(_T("utf-7"));
     for ( size_t n = 0; n < WXSIZEOF(utf7data); n++ )
     {
         const StringConversionData& d = utf7data[n];
@@ -273,7 +249,7 @@ void UnicodeTestCase::ConversionUTF7()
         //
         // I have no idea how to fix this so just disable the test for now
 #if 0
-        DoTestConversion(d.str, d.wcs, conv);
+        DoTestConversion(d.str, d.wcs, wxCSConv("utf-7"));
 #endif
         DoTestConversion(d.str, d.wcs, wxConvUTF7);
     }
@@ -360,8 +336,6 @@ void UnicodeTestCase::IsConvOk()
     CPPUNIT_ASSERT( wxCSConv(_T("WINDOWS-437")).IsOk() );
 #endif
 }
-
-#endif // wxUSE_WCHAR_T
 
 #if wxUSE_UNICODE
 void UnicodeTestCase::Iteration()
