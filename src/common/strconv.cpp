@@ -543,7 +543,7 @@ size_t wxMBConvUTF7::ToWChar(wchar_t *dst, size_t dstLen,
                              const char *src, size_t srcLen) const
 {
     DecoderState stateOrig,
-         *statePtr;
+                *statePtr;
     if ( srcLen == wxNO_LEN )
     {
         // convert the entire string, up to and including the trailing NUL
@@ -580,7 +580,12 @@ size_t wxMBConvUTF7::ToWChar(wchar_t *dst, size_t dstLen,
             const unsigned char dc = utf7unb64[cc];
             if ( dc == 0xff )
             {
-                // end of encoded part
+                // end of encoded part, check that nothing was left: the bit
+                // field cycles through 0,6,4,2 sequence so check that we're at
+                // the end of it
+                if ( state.bit != 2 )
+                    return wxCONV_FAILED;
+
                 state.ToDirect();
 
                 // re-parse this character normally below unless it's '-' which
@@ -624,9 +629,6 @@ size_t wxMBConvUTF7::ToWChar(wchar_t *dst, size_t dstLen,
             // start of an encoded segment?
             if ( cc == '+' )
             {
-                if ( src == srcEnd )
-                    return wxCONV_FAILED; // can't have '+' at the end
-
                 if ( *src == '-' )
                 {
                     // just the encoded plus sign, don't switch to shifted mode
