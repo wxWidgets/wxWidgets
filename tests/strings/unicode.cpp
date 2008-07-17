@@ -21,6 +21,106 @@
     #include "wx/wx.h"
 #endif // WX_PRECOMP
 
+// helper class holding the matching MB and WC strings
+//
+// either str or wcs (but not both) may be NULL, this means that the conversion
+// to it should fail
+struct StringConversionData
+{
+    const char *str;
+    const wchar_t *wcs;
+
+    enum
+    {
+        TEST_BOTH  = 0, // test both str -> wcs and wcs -> str
+        ONLY_MB2WC = 1  // only test str -> wcs conversion
+    };
+
+    int flags;
+
+    // test that the conversion between str and wcs (subject to flags) succeeds
+    //
+    // the first argument is the index in the test array and is used solely for
+    // diagnostics
+    void Test(size_t n, wxMBConv& conv) const
+    {
+        if ( str )
+        {
+            wxWCharBuffer wbuf = conv.cMB2WC(str);
+
+            if ( wcs )
+            {
+                CPPUNIT_ASSERT_MESSAGE
+                (
+                    Message(n, "MB2WC failed"),
+                    wbuf.data()
+                );
+
+                CPPUNIT_ASSERT_MESSAGE
+                (
+                    Message(n, "MB2WC", wbuf, wcs),
+                    wxStrcmp(wbuf, wcs) == 0
+                );
+            }
+            else // conversion is supposed to fail
+            {
+                CPPUNIT_ASSERT_MESSAGE
+                (
+                    Message(n, "MB2WC succeeded"),
+                    !wbuf.data()
+                );
+            }
+        }
+
+        if ( wcs && !(flags & ONLY_MB2WC) )
+        {
+            wxCharBuffer buf = conv.cWC2MB(wcs);
+
+            if ( str )
+            {
+                CPPUNIT_ASSERT_MESSAGE
+                (
+                    Message(n, "WC2MB failed"),
+                    buf.data()
+                );
+
+                CPPUNIT_ASSERT_MESSAGE
+                (
+                    Message(n, "WC2MB", buf, str),
+                    strcmp(buf, str) == 0
+                );
+            }
+            else
+            {
+                CPPUNIT_ASSERT_MESSAGE
+                (
+                    Message(n, "WC2MB succeeded"),
+                    !buf.data()
+                );
+            }
+        }
+    }
+
+private:
+    static std::string
+    Message(size_t n, const wxString& msg)
+    {
+        return std::string(wxString::Format("#%lu: %s", (unsigned long)n, msg));
+    }
+
+    template <typename T>
+    static std::string
+    Message(size_t n,
+            const char *func,
+            const wxCharTypeBuffer<T>& actual,
+            const T *expected)
+    {
+        return Message(n,
+                       wxString::Format("%s returned \"%s\", expected \"%s\"",
+                                        func, actual.data(), expected));
+    }
+};
+
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
@@ -58,13 +158,6 @@ private:
 #if wxUSE_UNICODE
     void Iteration();
 #endif
-
-    // test if converting s using the given encoding gives ws and vice versa
-    //
-    // if either of the first 2 arguments is NULL, the conversion is supposed
-    // to fail
-    void DoTestConversion(const char *s, const wchar_t *w, wxMBConv& conv);
-
 
     DECLARE_NO_COPY_CLASS(UnicodeTestCase)
 };
@@ -183,40 +276,6 @@ void UnicodeTestCase::ConversionWithNULs()
 #endif // wxUSE_UNICODE/!wxUSE_UNICODE
 }
 
-void
-UnicodeTestCase::DoTestConversion(const char *s,
-                                  const wchar_t *ws,
-                                  wxMBConv& conv)
-{
-    if ( ws )
-    {
-        wxCharBuffer buf = conv.cWC2MB(ws, (size_t)-1, NULL);
-
-        CPPUNIT_ASSERT( strcmp(buf, s) == 0 );
-    }
-
-    if ( s )
-    {
-        wxWCharBuffer wbuf = conv.cMB2WC(s, (size_t)-1, NULL);
-
-        if ( ws )
-        {
-            CPPUNIT_ASSERT( wbuf.data() );
-            CPPUNIT_ASSERT( wxStrcmp(wbuf, ws) == 0 );
-        }
-        else // conversion is supposed to fail
-        {
-            CPPUNIT_ASSERT_EQUAL( (wchar_t *)NULL, wbuf.data() );
-        }
-    }
-}
-
-struct StringConversionData
-{
-    const char *str;
-    const wchar_t *wcs;
-};
-
 void UnicodeTestCase::ConversionUTF7()
 {
     static const StringConversionData utf7data[] =
@@ -224,6 +283,9 @@ void UnicodeTestCase::ConversionUTF7()
         // normal fragments
         { "+AKM-", L"\xa3" },
         { "+AOk-t+AOk-", L"\xe9t\xe9" },
+
+        // this one is an alternative valid encoding of the same string
+        { "+AOk-t+AOk", L"\xe9t\xe9", StringConversionData::ONLY_MB2WC },
 
         // some special cases
         { "+-", L"+" },
@@ -249,9 +311,9 @@ void UnicodeTestCase::ConversionUTF7()
         //
         // I have no idea how to fix this so just disable the test for now
 #if 0
-        DoTestConversion(d.str, d.wcs, wxCSConv("utf-7"));
+        d.Test(n, wxCSConv("utf-7"));
 #endif
-        DoTestConversion(d.str, d.wcs, wxConvUTF7);
+        d.Test(n, wxConvUTF7);
     }
 }
 
@@ -269,8 +331,8 @@ void UnicodeTestCase::ConversionUTF8()
     for ( size_t n = 0; n < WXSIZEOF(utf8data); n++ )
     {
         const StringConversionData& d = utf8data[n];
-        DoTestConversion(d.str, d.wcs, conv);
-        DoTestConversion(d.str, d.wcs, wxConvUTF8);
+        d.Test(n, conv);
+        d.Test(n, wxConvUTF8);
     }
 }
 
@@ -290,7 +352,7 @@ void UnicodeTestCase::ConversionUTF16()
     for ( size_t n = 0; n < WXSIZEOF(utf16data); n++ )
     {
         const StringConversionData& d = utf16data[n];
-        DoTestConversion(d.str, d.wcs, conv);
+        d.Test(n, conv);
     }
 
     // special case: this string has consecutive NULs inside it which don't
@@ -317,7 +379,7 @@ void UnicodeTestCase::ConversionUTF32()
     for ( size_t n = 0; n < WXSIZEOF(utf32data); n++ )
     {
         const StringConversionData& d = utf32data[n];
-        DoTestConversion(d.str, d.wcs, conv);
+        d.Test(n, conv);
     }
 
     size_t len;
