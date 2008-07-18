@@ -565,7 +565,7 @@ static const unsigned char utf7unb64[] =
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff 
+    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 };
 
 size_t wxMBConvUTF7::ToWChar(wchar_t *dst, size_t dstLen,
@@ -609,11 +609,19 @@ size_t wxMBConvUTF7::ToWChar(wchar_t *dst, size_t dstLen,
             const unsigned char dc = utf7unb64[cc];
             if ( dc == 0xff )
             {
-                // end of encoded part, check that nothing was left: the bit
-                // field cycles through 0,6,4,2 sequence so check that we're at
-                // the end of it
-                if ( state.bit != 2 )
+                // end of encoded part, check that nothing was left: there can
+                // be up to 4 bits of 0 padding but nothing else (we also need
+                // to check isLSB as we count bits modulo 8 while a valid UTF-7
+                // encoded sequence must contain an integral number of UTF-16
+                // characters)
+                if ( state.isLSB || state.bit > 4 ||
+                        (state.accum & ((1 << state.bit) - 1)) )
+                {
+                    if ( !len )
+                        state = stateOrig;
+
                     return wxCONV_FAILED;
+                }
 
                 state.ToDirect();
 
@@ -666,7 +674,15 @@ size_t wxMBConvUTF7::ToWChar(wchar_t *dst, size_t dstLen,
                     len++;
                     src++;
                 }
-                else
+                else if ( utf7unb64[(unsigned)*src] == 0xff )
+                {
+                    // empty encoded chunks are not allowed
+                    if ( !len )
+                        state = stateOrig;
+
+                    return wxCONV_FAILED;
+                }
+                else // base-64 encoded chunk follows
                 {
                     state.ToShifted();
                 }
