@@ -99,6 +99,8 @@ Changes in behaviour not resulting in compilation errors, please read this!
   your code if you overrode these functions and change the functions in the
   derived classes to use const reference as well.
 
+- Under MSW wxExecute() arguments are now always properly quoted, as under
+  Unix, and so shouldn't contain quotes unless they are part of the argument.
 
 Changes in behaviour which may result in compilation errors
 -----------------------------------------------------------
@@ -132,7 +134,7 @@ Changes in behaviour which may result in compilation errors
   const wxChar*. wxCStrData is implicitly convertible to both "const char *"
   and "const wchar_t *", so this only presents a problem if the compiler cannot
   apply the conversion. This can happen in 2 cases:
-  
+
   + There is an ambiguity because the function being called is overloaded to
     take both "const char *" and "const wchar_t *" as the compiler can't choose
     between them. In this case you may use s.wx_str() to call the function
@@ -208,7 +210,7 @@ Deprecated methods and their replacements
   use simpler OnExec() version which is called with wxString argument
 - wxMenuItem::GetLabel has been deprecated in favour of wxMenuItem::GetItemLabelText
 - wxMenuItem::GetText has been deprecated in favour of wxMenuItem::GetItemLabel
-- wxMenuItem::GetLabelFromText has been deprecated in favour of wxMenuItem::GetLabelText 
+- wxMenuItem::GetLabelFromText has been deprecated in favour of wxMenuItem::GetLabelText
 - wxMenuItem::SetText has been deprecated in favour of wxMenuItem::SetItemLabel
 - wxBrush's, wxPen's SetStyle() and GetStyle() as well as the wxBrush/wxPen ctor now take
   respectively a wxBrushStyle and a wxPenStyle value instead of a plain "int style";
