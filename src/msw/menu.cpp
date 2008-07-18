@@ -29,7 +29,6 @@
 #include "wx/menu.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
     #include "wx/frame.h"
     #include "wx/utils.h"
     #include "wx/intl.h"
@@ -41,6 +40,7 @@
 #endif
 
 #include "wx/msw/private.h"
+#include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
 
 #ifdef __WXWINCE__
 #include <windows.h>
