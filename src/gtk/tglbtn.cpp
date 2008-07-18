@@ -126,15 +126,13 @@ void wxBitmapToggleButton::OnSetBitmap()
     GtkWidget* image = ((GtkBin*)m_widget)->child;
     if (image == NULL)
     {
-        // initial bitmap
-        image = gtk_image_new_from_pixbuf(m_bitmap.GetPixbuf());
+        image = gtk_image_new();
         gtk_widget_show(image);
         gtk_container_add((GtkContainer*)m_widget, image);
     }
-    else
-    {   // subsequent bitmaps
-        gtk_image_set_from_pixbuf((GtkImage*)image, m_bitmap.GetPixbuf());
-    }
+    // always use pixbuf, because pixmap mask does not
+    // work with disabled images in some themes
+    gtk_image_set_from_pixbuf((GtkImage*)image, m_bitmap.GetPixbuf());
 }
 
 bool wxBitmapToggleButton::Enable(bool enable /*=true*/)

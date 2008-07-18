@@ -204,21 +204,16 @@ void wxBitmapButton::OnSetBitmap()
     if (!the_one.Ok())
         return;
 
-    GtkWidget *child = GTK_BIN(m_widget)->child;
-    if (child == NULL)
+    GtkWidget* image = GTK_BIN(m_widget)->child;
+    if (image == NULL)
     {
-        // initial bitmap
-        GtkWidget *pixmap =
-            gtk_image_new_from_pixbuf(the_one.GetPixbuf());
-
-        gtk_widget_show(pixmap);
-        gtk_container_add(GTK_CONTAINER(m_widget), pixmap);
+        image = gtk_image_new();
+        gtk_widget_show(image);
+        gtk_container_add(GTK_CONTAINER(m_widget), image);
     }
-    else
-    {   // subsequent bitmaps
-        GtkImage *pixmap = GTK_IMAGE(child);
-        gtk_image_set_from_pixbuf(pixmap, the_one.GetPixbuf());
-    }
+    // always use pixbuf, because pixmap mask does not
+    // work with disabled images in some themes
+    gtk_image_set_from_pixbuf(GTK_IMAGE(image), the_one.GetPixbuf());
 }
 
 wxSize wxBitmapButton::DoGetBestSize() const

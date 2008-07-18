@@ -787,16 +787,9 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
             const char* stockid;
             if (bitmap.IsOk())
             {
-                GtkWidget* image;
-                if (bitmap.HasPixbuf())
-                    image = gtk_image_new_from_pixbuf(bitmap.GetPixbuf());
-                else
-                {
-                    GdkPixmap* mask = NULL;
-                    if (bitmap.GetMask())
-                        mask = bitmap.GetMask()->GetBitmap();
-                    image = gtk_image_new_from_pixmap(bitmap.GetPixmap(), mask);
-                }
+                // always use pixbuf, because pixmap mask does not
+                // work with disabled images in some themes
+                GtkWidget* image = gtk_image_new_from_pixbuf(bitmap.GetPixbuf());
                 menuItem = gtk_image_menu_item_new_with_label("");
                 gtk_widget_show(image);
                 gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuItem), image);
