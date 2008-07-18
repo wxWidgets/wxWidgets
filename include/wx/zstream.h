@@ -125,11 +125,11 @@ public:
     wxFilterInputStream *NewStream(wxInputStream& stream) const
         { return new wxZlibInputStream(stream); }
     wxFilterOutputStream *NewStream(wxOutputStream& stream) const
-        { return new wxZlibOutputStream(stream, -1); }
+        { return new wxZlibOutputStream(stream, -1, wxZLIB_GZIP); }
     wxFilterInputStream *NewStream(wxInputStream *stream) const
         { return new wxZlibInputStream(stream); }
     wxFilterOutputStream *NewStream(wxOutputStream *stream) const
-        { return new wxZlibOutputStream(stream, -1); }
+        { return new wxZlibOutputStream(stream, -1, wxZLIB_GZIP); }
 
     const wxChar * const *GetProtocols(wxStreamProtocolType type
                                        = wxSTREAM_PROTOCOL) const;
