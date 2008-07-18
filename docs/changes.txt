@@ -117,6 +117,12 @@ All (Unix):
 
 wxMSW:
 
++ Potentially incompatible change: wxExecute() arguments are now quoted if they
+  contain spaces and existing quotes are escaped with a backslash. However, to
+  preserve compatibility, the argument is unchanged if it is already quoted.
+  Notice that this behaviour will change in wxWidgets 3.0 where all arguments
+  will be quoted, please update your code now if you are affected and use only
+  wxWidgets 2.8.9 or later.
 - Fix keyboard support in wxSpinCtrl broken in 2.8.8.
 - Compile fix for WinCE in window.cpp (no VkKeyScan in Windows CE).
 - Fix quoting of arguments passed to wxExecute(char **) (Brian Ravnsgaard Riis).

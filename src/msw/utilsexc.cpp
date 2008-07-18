@@ -957,16 +957,41 @@ long wxExecute(wxChar **argv, int flags, wxProcess *handler)
     {
         arg = *argv++;
 
-        // escape any quotes present in the string to avoid interfering with
-        // the command line parsing in the child process
-        arg.Replace(_T("\""), _T("\\\""), true /* replace all */);
+        // we didn't quote the arguments properly in the previous wx versions
+        // and while this is the right thing to do, there is a good chance that
+        // people worked around our bug in their code by quoting the arguments
+        // manually before, so, for compatibility sake, keep the argument
+        // unchanged if it's already quoted
 
-        // and quote any arguments containing the spaces to prevent them from
-        // being broken down
-        if ( arg.find_first_of(_T(" \t")) == wxString::npos )
-            command += arg;
-        else
+        bool quote;
+        if ( arg.empty() )
+        {
+            // we need to quote empty arguments, otherwise they'd just
+            // disappear
+            quote = true;
+        }
+        else // non-empty
+        {
+            if ( *arg.begin() != _T('"') || *arg.rbegin() != _T('"') )
+            {
+                // escape any quotes present in the string to avoid interfering
+                // with the command line parsing in the child process
+                arg.Replace(_T("\""), _T("\\\""), true /* replace all */);
+
+                // and quote any arguments containing the spaces to prevent
+                // them from being broken down
+                quote = arg.find_first_of(_T(" \t")) != wxString::npos;
+            }
+            else // already quoted
+            {
+                quote = false;
+            }
+        }
+
+        if ( quote )
             command += _T('\"') + arg + _T('\"');
+        else
+            command += arg;
 
         if ( !*argv )
             break;
