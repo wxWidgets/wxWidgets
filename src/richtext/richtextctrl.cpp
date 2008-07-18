@@ -697,7 +697,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
             wxString text;
             text = wxRichTextLineBreakChar;
             GetBuffer().InsertTextWithUndo(newPos+1, text, this);
-			m_caretAtLineStart = true;
+            m_caretAtLineStart = true;
             PositionCaret();
         }
         else
