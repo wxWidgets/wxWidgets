@@ -78,30 +78,30 @@ void IntlTestCase::tearDown()
 void IntlTestCase::Domain()
 {
     // _() searches all domains by default:
-    WX_ASSERT_STR_EQUAL( "&Ouvrir un fichier", _("&Open bogus file") );
+    CPPUNIT_ASSERT_EQUAL( "&Ouvrir un fichier", _("&Open bogus file") );
 
     // search in our domain only:
-    WX_ASSERT_STR_EQUAL( "&Ouvrir un fichier", wxGetTranslation("&Open bogus file", "internat") );
+    CPPUNIT_ASSERT_EQUAL( "&Ouvrir un fichier", wxGetTranslation("&Open bogus file", "internat") );
 
     // search in a domain that doesn't have this string:
-    WX_ASSERT_STR_EQUAL( "&Open bogus file", wxGetTranslation("&Open bogus file", "BogusDomain") );
+    CPPUNIT_ASSERT_EQUAL( "&Open bogus file", wxGetTranslation("&Open bogus file", "BogusDomain") );
 }
 
 void IntlTestCase::Headers()
 {
-    WX_ASSERT_STR_EQUAL( "wxWindows 2.0 i18n sample", m_locale->GetHeaderValue("Project-Id-Version") );
-    WX_ASSERT_STR_EQUAL( "1999-01-13 18:19+0100", m_locale->GetHeaderValue("POT-Creation-Date") );
-    WX_ASSERT_STR_EQUAL( "YEAR-MO-DA HO:MI+ZONE", m_locale->GetHeaderValue("PO-Revision-Date") );
-    WX_ASSERT_STR_EQUAL( "Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>", m_locale->GetHeaderValue("Last-Translator") );
-    WX_ASSERT_STR_EQUAL( "1.0", m_locale->GetHeaderValue("MIME-Version") );
-    WX_ASSERT_STR_EQUAL( "text/plain; charset=iso-8859-1", m_locale->GetHeaderValue("Content-Type") );
-    WX_ASSERT_STR_EQUAL( "8bit", m_locale->GetHeaderValue("Content-Transfer-Encoding") );
+    CPPUNIT_ASSERT_EQUAL( "wxWindows 2.0 i18n sample", m_locale->GetHeaderValue("Project-Id-Version") );
+    CPPUNIT_ASSERT_EQUAL( "1999-01-13 18:19+0100", m_locale->GetHeaderValue("POT-Creation-Date") );
+    CPPUNIT_ASSERT_EQUAL( "YEAR-MO-DA HO:MI+ZONE", m_locale->GetHeaderValue("PO-Revision-Date") );
+    CPPUNIT_ASSERT_EQUAL( "Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>", m_locale->GetHeaderValue("Last-Translator") );
+    CPPUNIT_ASSERT_EQUAL( "1.0", m_locale->GetHeaderValue("MIME-Version") );
+    CPPUNIT_ASSERT_EQUAL( "text/plain; charset=iso-8859-1", m_locale->GetHeaderValue("Content-Type") );
+    CPPUNIT_ASSERT_EQUAL( "8bit", m_locale->GetHeaderValue("Content-Transfer-Encoding") );
 
     // check that it fails with a bogus domain:
-    WX_ASSERT_STR_EQUAL( "", m_locale->GetHeaderValue("POT-Creation-Date", "Bogus") );
+    CPPUNIT_ASSERT_EQUAL( "", m_locale->GetHeaderValue("POT-Creation-Date", "Bogus") );
 
     // and that it fails for nonexisting header:
-    WX_ASSERT_STR_EQUAL( "", m_locale->GetHeaderValue("X-Not-Here") );
+    CPPUNIT_ASSERT_EQUAL( "", m_locale->GetHeaderValue("X-Not-Here") );
 }
 
 #endif // wxUSE_INTL

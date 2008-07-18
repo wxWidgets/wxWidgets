@@ -79,16 +79,16 @@ void TextCtrlTestCase::SetValue()
     CPPUNIT_ASSERT( m_text->IsEmpty() );
 
     m_text->SetValue("foo");
-    WX_ASSERT_STR_EQUAL( "foo", m_text->GetValue() );
+    CPPUNIT_ASSERT_EQUAL( "foo", m_text->GetValue() );
 
     m_text->SetValue("");
     CPPUNIT_ASSERT( m_text->IsEmpty() );
 
     m_text->SetValue("hi");
-    WX_ASSERT_STR_EQUAL( "hi", m_text->GetValue() );
+    CPPUNIT_ASSERT_EQUAL( "hi", m_text->GetValue() );
 
     m_text->SetValue("bye");
-    WX_ASSERT_STR_EQUAL( "bye", m_text->GetValue() );
+    CPPUNIT_ASSERT_EQUAL( "bye", m_text->GetValue() );
 }
 
 void TextCtrlTestCase::TextChangeEvents()

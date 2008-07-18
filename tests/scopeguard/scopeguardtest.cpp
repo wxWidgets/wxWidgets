@@ -233,9 +233,9 @@ void ScopeGuardTestCase::BlockExitSetVar()
     {
         wxON_BLOCK_EXIT_SET(s, "bye");
 
-        WX_ASSERT_STR_EQUAL( "hi", s );
+        CPPUNIT_ASSERT_EQUAL( "hi", s );
     }
-    WX_ASSERT_STR_EQUAL( "bye", s );
+    CPPUNIT_ASSERT_EQUAL( "bye", s );
 
     ScopeGuardTestCase *p = this;
     {

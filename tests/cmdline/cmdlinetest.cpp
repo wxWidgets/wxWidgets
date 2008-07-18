@@ -158,9 +158,9 @@ void CmdLineTestCase::Usage()
         Line_Max
     };
 
-    WX_ASSERT_SIZET_EQUAL( Line_Max, usageLines.size() );
-    WX_ASSERT_STR_EQUAL("Verbosity options", usageLines[Line_Text_Verbosity]);
-    WX_ASSERT_STR_EQUAL("", usageLines[Line_Text_Dummy1]);
-    WX_ASSERT_STR_EQUAL("Even more usage text", usageLines[Line_Text_Dummy2]);
-    WX_ASSERT_STR_EQUAL("", usageLines[Line_Last]);
+    CPPUNIT_ASSERT_EQUAL(Line_Max, usageLines.size());
+    CPPUNIT_ASSERT_EQUAL("Verbosity options", usageLines[Line_Text_Verbosity]);
+    CPPUNIT_ASSERT_EQUAL("", usageLines[Line_Text_Dummy1]);
+    CPPUNIT_ASSERT_EQUAL("Even more usage text", usageLines[Line_Text_Dummy2]);
+    CPPUNIT_ASSERT_EQUAL("", usageLines[Line_Last]);
 }

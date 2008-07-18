@@ -764,11 +764,11 @@ void DateTimeTestCase::TestTimeTicks()
         long ticks = (dt.GetValue() / 1000).ToLong() + TZ_LOCAL.GetOffset();
         if ( dt.IsDST() )
             ticks += 3600;
-        WX_ASSERT_TIME_T_EQUAL( d.gmticks, ticks + tzOffset );
+        CPPUNIT_ASSERT_EQUAL( d.gmticks, ticks + tzOffset );
 
         dt = d.DT().FromTimezone(wxDateTime::UTC);
         ticks = (dt.GetValue() / 1000).ToLong();
-        WX_ASSERT_TIME_T_EQUAL( d.gmticks, ticks );
+        CPPUNIT_ASSERT_EQUAL( d.gmticks, ticks );
     }
 }
 

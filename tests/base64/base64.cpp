@@ -131,7 +131,7 @@ void Base64TestCase::EncodeDecodeEmpty()
     CPPUNIT_ASSERT(resultEmpty.empty());
 
     bufmt = wxBase64Decode(resultEmpty);
-    WX_ASSERT_SIZET_EQUAL(0, bufmt.GetDataLen());
+    CPPUNIT_ASSERT_EQUAL(0, bufmt.GetDataLen());
 }
 
 void Base64TestCase::EncodeDecodeA()
@@ -140,7 +140,7 @@ void Base64TestCase::EncodeDecodeA()
     CPPUNIT_ASSERT_EQUAL(wxString("QQ=="), str);
 
     wxMemoryBuffer buf = wxBase64Decode(str);
-    WX_ASSERT_SIZET_EQUAL(1, buf.GetDataLen());
+    CPPUNIT_ASSERT_EQUAL(1, buf.GetDataLen());
     CPPUNIT_ASSERT_EQUAL('A', *(char *)buf.GetData());
 }
 
@@ -150,7 +150,7 @@ void Base64TestCase::EncodeDecodeAB()
     CPPUNIT_ASSERT_EQUAL(wxString("QUI="), str);
 
     wxMemoryBuffer buf = wxBase64Decode(str);
-    WX_ASSERT_SIZET_EQUAL(2, buf.GetDataLen());
+    CPPUNIT_ASSERT_EQUAL(2, buf.GetDataLen());
     CPPUNIT_ASSERT_EQUAL('A', buf[0]);
     CPPUNIT_ASSERT_EQUAL('B', buf[1]);
 }
@@ -161,7 +161,7 @@ void Base64TestCase::EncodeDecodeABC()
     CPPUNIT_ASSERT_EQUAL(wxString("QUJD"), str);
 
     wxMemoryBuffer buf = wxBase64Decode(str);
-    WX_ASSERT_SIZET_EQUAL(3, buf.GetDataLen());
+    CPPUNIT_ASSERT_EQUAL(3, buf.GetDataLen());
     CPPUNIT_ASSERT_EQUAL('A', buf[0]);
     CPPUNIT_ASSERT_EQUAL('B', buf[1]);
     CPPUNIT_ASSERT_EQUAL('C', buf[2]);
@@ -173,7 +173,7 @@ void Base64TestCase::EncodeDecodeABCD()
     CPPUNIT_ASSERT_EQUAL(wxString("QUJDRA=="), str);
 
     wxMemoryBuffer buf = wxBase64Decode(str);
-    WX_ASSERT_SIZET_EQUAL(4, buf.GetDataLen());
+    CPPUNIT_ASSERT_EQUAL(4, buf.GetDataLen());
     CPPUNIT_ASSERT_EQUAL('A', buf[0]);
     CPPUNIT_ASSERT_EQUAL('B', buf[1]);
     CPPUNIT_ASSERT_EQUAL('C', buf[2]);
@@ -241,28 +241,28 @@ void Base64TestCase::DecodeInvalid()
     rc = wxBase64Decode(NULL, 0, "one two!", wxNO_LEN,
                         wxBase64DecodeMode_Strict, &posErr);
     CPPUNIT_ASSERT_EQUAL( wxCONV_FAILED, rc);
-    WX_ASSERT_SIZET_EQUAL( 3, posErr );
+    CPPUNIT_ASSERT_EQUAL( 3, posErr );
 
     rc = wxBase64Decode(NULL, 0, "one two!", wxNO_LEN,
                         wxBase64DecodeMode_SkipWS, &posErr);
     CPPUNIT_ASSERT_EQUAL( wxCONV_FAILED, rc);
-    WX_ASSERT_SIZET_EQUAL( 7, posErr );
+    CPPUNIT_ASSERT_EQUAL( 7, posErr );
 
     rc = wxBase64Decode(NULL, 0, "? QQ==", wxNO_LEN,
                         wxBase64DecodeMode_SkipWS, &posErr);
     CPPUNIT_ASSERT_EQUAL( wxCONV_FAILED, rc);
-    WX_ASSERT_SIZET_EQUAL( 0, posErr );
+    CPPUNIT_ASSERT_EQUAL( 0, posErr );
 
     posErr = (size_t)-1;
     rc = wxBase64Decode(NULL, 0, " QQ==", wxNO_LEN,
                         wxBase64DecodeMode_SkipWS, &posErr);
-    WX_ASSERT_SIZET_EQUAL( 1, rc );
-    WX_ASSERT_SIZET_EQUAL( -1, posErr );
+    CPPUNIT_ASSERT_EQUAL( 1, rc );
+    CPPUNIT_ASSERT_EQUAL( -1, posErr );
 
     rc = wxBase64Decode(NULL, 0, "? QQ==", wxNO_LEN,
                         wxBase64DecodeMode_Relaxed, &posErr);
-    WX_ASSERT_SIZET_EQUAL( 1, rc );
-    WX_ASSERT_SIZET_EQUAL( -1, posErr );
+    CPPUNIT_ASSERT_EQUAL( 1, rc );
+    CPPUNIT_ASSERT_EQUAL( -1, posErr );
 
     CPPUNIT_ASSERT( !wxBase64Decode("wxGetApp()").GetDataLen() );
 }

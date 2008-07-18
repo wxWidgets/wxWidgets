@@ -81,11 +81,51 @@
 #define WXTEST_FAIL_WITH_CONDITION(suiteName, Condition, testMethod) \
     WXTEST_ANY_WITH_CONDITION(suiteName, Condition, testMethod, CPPUNIT_TEST_FAIL(testMethod))
 
-// Use this macro to compare a wxString with a literal string.
-#define WX_ASSERT_STR_EQUAL(p, s) CPPUNIT_ASSERT_EQUAL(wxString(p), s)
+CPPUNIT_NS_BEGIN
 
-// Use this macro to compare a size_t with a literal integer
-#define WX_ASSERT_SIZET_EQUAL(n, m) CPPUNIT_ASSERT_EQUAL(((size_t)n), m)
+// provide an overload of cppunit assertEquals(T, T) which can be used to
+// compare wxStrings directly with C strings
+inline void
+assertEquals(const char *expected,
+             const wxString& actual,
+             CppUnit::SourceLine sourceLine,
+             const std::string& message)
+{
+    assertEquals(wxString(expected), actual, sourceLine, message);
+}
+
+inline void
+assertEquals(const wchar_t *expected,
+             const wxString& actual,
+             CppUnit::SourceLine sourceLine,
+             const std::string& message)
+{
+    assertEquals(wxString(expected), actual, sourceLine, message);
+}
+
+// and another to be able to specify (usually literal) ints as expected values
+// for functions returning size_t
+inline void
+assertEquals(int expected,
+             size_t actual,
+             CppUnit::SourceLine sourceLine,
+             const std::string& message)
+{
+    assertEquals(size_t(expected), actual, sourceLine, message);
+}
+
+// and another, slightly different, for checking that result of potentially
+// different time_t type is the same as given time_t value
+inline void
+assertEquals(time_t expected,
+             long actual,
+             CppUnit::SourceLine sourceLine,
+             const std::string& message)
+{
+    assertEquals(expected, time_t(actual), sourceLine, message);
+}
+
+CPPUNIT_NS_END
 
 // Use this macro to compare a wxArrayString with the pipe-separated elements
 // of the given string
@@ -103,10 +143,6 @@
             CPPUNIT_ASSERT_EQUAL( expected[n], a[n] );                        \
         }                                                                     \
     }
-
-// Use this macro to compare the expected time_t value with the result of not
-// necessarily time_t type
-#define WX_ASSERT_TIME_T_EQUAL(t, n) CPPUNIT_ASSERT_EQUAL((t), (time_t)(n))
 
 // Use this macro to assert with the given formatted message (it should contain
 // the format string and arguments in a separate pair of parentheses)

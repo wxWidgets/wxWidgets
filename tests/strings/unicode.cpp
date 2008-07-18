@@ -198,13 +198,13 @@ void UnicodeTestCase::ConstructorsWithConversion()
 
 #if wxUSE_UNICODE
     const wchar_t wchar[] = {0x44,0xE9,0x6A,0xE0,0};
-    WX_ASSERT_STR_EQUAL( wchar, s1 );
+    CPPUNIT_ASSERT_EQUAL( wchar, s1 );
 
     wxString s2(wchar);
-    WX_ASSERT_STR_EQUAL( wchar, s2 );
-    WX_ASSERT_STR_EQUAL( utf8, s2 );
+    CPPUNIT_ASSERT_EQUAL( wchar, s2 );
+    CPPUNIT_ASSERT_EQUAL( utf8, s2 );
 #else
-    WX_ASSERT_STR_EQUAL( utf8, s1 );
+    CPPUNIT_ASSERT_EQUAL( utf8, s1 );
 #endif
 
     wxString sub(utf8sub, wxConvUTF8); // "Dej" substring
@@ -224,12 +224,12 @@ void UnicodeTestCase::ConstructorsWithConversion()
     // test using Unicode strings together with char* strings (this must work
     // in ANSI mode as well, of course):
     wxString s5("ascii");
-    WX_ASSERT_STR_EQUAL( "ascii", s5 );
+    CPPUNIT_ASSERT_EQUAL( "ascii", s5 );
 
     s5 += " value";
 
     CPPUNIT_ASSERT( strcmp(s5.mb_str(), "ascii value") == 0 );
-    WX_ASSERT_STR_EQUAL( "ascii value", s5 );
+    CPPUNIT_ASSERT_EQUAL( "ascii value", s5 );
     CPPUNIT_ASSERT( s5 != "SomethingElse" );
 }
 

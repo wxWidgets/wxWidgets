@@ -347,7 +347,7 @@ void FileNameTestCase::TestNormalize()
         );
 
         // compare result with expected string
-        WX_ASSERT_STR_EQUAL( fnt.expected, fn.GetFullPath(fnt.fmt) );
+        CPPUNIT_ASSERT_EQUAL( fnt.expected, fn.GetFullPath(fnt.fmt) );
     }
 }
 

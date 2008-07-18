@@ -46,7 +46,7 @@ void CheckXml(wxXmlNode *n, ...)
             break;
 
         CPPUNIT_ASSERT( child );
-        WX_ASSERT_STR_EQUAL( childName, child->GetName() );
+        CPPUNIT_ASSERT_EQUAL( childName, child->GetName() );
         CPPUNIT_ASSERT( child->GetChildren() == NULL );
         CPPUNIT_ASSERT( child->GetParent() == n );
 

@@ -161,48 +161,48 @@ void StringTestCase::Format()
 
 void StringTestCase::Constructors()
 {
-    WX_ASSERT_STR_EQUAL( "", wxString('Z', 0) );
-    WX_ASSERT_STR_EQUAL( "Z", wxString('Z') );
-    WX_ASSERT_STR_EQUAL( "ZZZZ", wxString('Z', 4) );
-    WX_ASSERT_STR_EQUAL( "Hell", wxString("Hello", 4) );
-    WX_ASSERT_STR_EQUAL( "Hello", wxString("Hello", 5) );
+    CPPUNIT_ASSERT_EQUAL( "", wxString('Z', 0) );
+    CPPUNIT_ASSERT_EQUAL( "Z", wxString('Z') );
+    CPPUNIT_ASSERT_EQUAL( "ZZZZ", wxString('Z', 4) );
+    CPPUNIT_ASSERT_EQUAL( "Hell", wxString("Hello", 4) );
+    CPPUNIT_ASSERT_EQUAL( "Hello", wxString("Hello", 5) );
 
 #if wxUSE_UNICODE
-    WX_ASSERT_STR_EQUAL( L"", wxString(L'Z', 0) );
-    WX_ASSERT_STR_EQUAL( L"Z", wxString(L'Z') );
-    WX_ASSERT_STR_EQUAL( L"ZZZZ", wxString(L'Z', 4) );
-    WX_ASSERT_STR_EQUAL( L"Hell", wxString(L"Hello", 4) );
-    WX_ASSERT_STR_EQUAL( L"Hello", wxString(L"Hello", 5) );
+    CPPUNIT_ASSERT_EQUAL( L"", wxString(L'Z', 0) );
+    CPPUNIT_ASSERT_EQUAL( L"Z", wxString(L'Z') );
+    CPPUNIT_ASSERT_EQUAL( L"ZZZZ", wxString(L'Z', 4) );
+    CPPUNIT_ASSERT_EQUAL( L"Hell", wxString(L"Hello", 4) );
+    CPPUNIT_ASSERT_EQUAL( L"Hello", wxString(L"Hello", 5) );
 #endif // wxUSE_UNICODE
 
     static const char *s = "?really!";
     const char *start = wxStrchr(s, 'r');
     const char *end = wxStrchr(s, '!');
-    WX_ASSERT_STR_EQUAL( "really", wxString(start, end) );
+    CPPUNIT_ASSERT_EQUAL( "really", wxString(start, end) );
 
     // test if creating string from NULL C pointer works:
-    WX_ASSERT_STR_EQUAL( "", wxString((const char *)NULL) );
+    CPPUNIT_ASSERT_EQUAL( "", wxString((const char *)NULL) );
 }
 
 void StringTestCase::StaticConstructors()
 {
-    WX_ASSERT_STR_EQUAL( "", wxString::FromAscii("") );
-    WX_ASSERT_STR_EQUAL( "", wxString::FromAscii("Hello", 0) );
-    WX_ASSERT_STR_EQUAL( "Hell", wxString::FromAscii("Hello", 4) );
-    WX_ASSERT_STR_EQUAL( "Hello", wxString::FromAscii("Hello", 5) );
-    WX_ASSERT_STR_EQUAL( "Hello", wxString::FromAscii("Hello") );
+    CPPUNIT_ASSERT_EQUAL( "", wxString::FromAscii("") );
+    CPPUNIT_ASSERT_EQUAL( "", wxString::FromAscii("Hello", 0) );
+    CPPUNIT_ASSERT_EQUAL( "Hell", wxString::FromAscii("Hello", 4) );
+    CPPUNIT_ASSERT_EQUAL( "Hello", wxString::FromAscii("Hello", 5) );
+    CPPUNIT_ASSERT_EQUAL( "Hello", wxString::FromAscii("Hello") );
 
     // FIXME: this doesn't work currently but should!
-    //WX_ASSERT_SIZET_EQUAL( 1, wxString::FromAscii("", 1).length() );
+    //CPPUNIT_ASSERT_EQUAL( 1, wxString::FromAscii("", 1).length() );
 
 
-    WX_ASSERT_STR_EQUAL( "", wxString::FromUTF8("") );
-    WX_ASSERT_STR_EQUAL( "", wxString::FromUTF8("Hello", 0) );
-    WX_ASSERT_STR_EQUAL( "Hell", wxString::FromUTF8("Hello", 4) );
-    WX_ASSERT_STR_EQUAL( "Hello", wxString::FromUTF8("Hello", 5) );
-    WX_ASSERT_STR_EQUAL( "Hello", wxString::FromUTF8("Hello") );
+    CPPUNIT_ASSERT_EQUAL( "", wxString::FromUTF8("") );
+    CPPUNIT_ASSERT_EQUAL( "", wxString::FromUTF8("Hello", 0) );
+    CPPUNIT_ASSERT_EQUAL( "Hell", wxString::FromUTF8("Hello", 4) );
+    CPPUNIT_ASSERT_EQUAL( "Hello", wxString::FromUTF8("Hello", 5) );
+    CPPUNIT_ASSERT_EQUAL( "Hello", wxString::FromUTF8("Hello") );
 
-    //WX_ASSERT_SIZET_EQUAL( 1, wxString::FromUTF8("", 1).length() );
+    //CPPUNIT_ASSERT_EQUAL( 1, wxString::FromUTF8("", 1).length() );
 }
 
 void StringTestCase::Extraction()
@@ -230,7 +230,7 @@ void StringTestCase::Extraction()
     #define TEST_STARTS_WITH(prefix, correct_rest, result)                    \
         CPPUNIT_ASSERT_EQUAL(result, s.StartsWith(prefix, &rest));            \
         if ( result )                                                         \
-            WX_ASSERT_STR_EQUAL(correct_rest, rest)
+            CPPUNIT_ASSERT_EQUAL(correct_rest, rest)
 
     TEST_STARTS_WITH( _T("Hello"),           _T(", world!"),      true  );
     TEST_STARTS_WITH( _T("Hello, "),         _T("world!"),        true  );
@@ -244,12 +244,12 @@ void StringTestCase::Extraction()
 
     rest = "Hello world";
     CPPUNIT_ASSERT( rest.StartsWith("Hello ", &rest) );
-    WX_ASSERT_STR_EQUAL("world", rest);
+    CPPUNIT_ASSERT_EQUAL("world", rest);
 
     #define TEST_ENDS_WITH(suffix, correct_rest, result)                      \
         CPPUNIT_ASSERT_EQUAL(result, s.EndsWith(suffix, &rest));              \
         if ( result )                                                         \
-            WX_ASSERT_STR_EQUAL(correct_rest, rest)
+            CPPUNIT_ASSERT_EQUAL(correct_rest, rest)
 
     TEST_ENDS_WITH( _T(""),                 _T("Hello, world!"), true  );
     TEST_ENDS_WITH( _T("!"),                _T("Hello, world"),  true  );
@@ -300,7 +300,7 @@ void StringTestCase::Replace()
         { \
             wxString s = original; \
             s.replace( pos , len , replacement ); \
-            WX_ASSERT_STR_EQUAL( result, s ); \
+            CPPUNIT_ASSERT_EQUAL( result, s ); \
         }
 
     TEST_REPLACE( _T("012-AWORD-XYZ"), 4, 5, _T("BWORD"),  _T("012-BWORD-XYZ") );
@@ -309,16 +309,16 @@ void StringTestCase::Replace()
     TEST_REPLACE( _T("foobar"),        3, 0, _T("-"),      _T("foo-bar")       );
     TEST_REPLACE( _T("barfoo"),        0, 6, _T("foobar"), _T("foobar")        );
 
-    
+
     #define TEST_NULLCHARREPLACE( o , olen, pos , len , replacement , r, rlen ) \
         { \
             wxString s(o,olen); \
             s.replace( pos , len , replacement ); \
             CPPUNIT_ASSERT( s == wxString(r,rlen) ); \
         }
-    
-    TEST_NULLCHARREPLACE( _T("null\0char"), 9, 5, 1, _T("d"), 
-                          _T("null\0dhar"), 9 );   
+
+    TEST_NULLCHARREPLACE( _T("null\0char"), 9, 5, 1, _T("d"),
+                          _T("null\0dhar"), 9 );
 
     #define TEST_WXREPLACE( o , olen, olds, news, all, r, rlen ) \
         { \
@@ -326,12 +326,12 @@ void StringTestCase::Replace()
             s.Replace( olds, news, all ); \
             CPPUNIT_ASSERT( s == wxString(r,rlen) ); \
         }
-    
+
     TEST_WXREPLACE( _T("null\0char"), 9, _T("c"), _T("de"), true,
-                          _T("null\0dehar"), 10 );   
+                          _T("null\0dehar"), 10 );
 
     TEST_WXREPLACE( _T("null\0dehar"), 10, _T("de"), _T("c"), true,
-                          _T("null\0char"), 9 );   
+                          _T("null\0char"), 9 );
 
     #undef TEST_WXREPLACE
     #undef TEST_NULLCHARREPLACE
@@ -667,7 +667,7 @@ void StringTestCase::StringBuf()
     wxString s;
     wxStrcpy(wxStringBuffer(s, 10), _T("foo"));
 
-    WX_ASSERT_SIZET_EQUAL(3, s.length());
+    CPPUNIT_ASSERT_EQUAL(3, s.length());
     CPPUNIT_ASSERT(_T('f') == s[0u]);
     CPPUNIT_ASSERT(_T('o') == s[1]);
     CPPUNIT_ASSERT(_T('o') == s[2]);
@@ -695,7 +695,7 @@ void StringTestCase::StringBuf()
         buf.SetLength(4);
     }
 
-    WX_ASSERT_SIZET_EQUAL(4, s.length());
+    CPPUNIT_ASSERT_EQUAL(4, s.length());
     CPPUNIT_ASSERT(_T('b') == s[0u]);
     CPPUNIT_ASSERT(_T('a') == s[1]);
     CPPUNIT_ASSERT(_T('r') == s[2]);

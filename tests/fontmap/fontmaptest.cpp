@@ -112,8 +112,8 @@ void FontMapperTestCase::NamesAndDesc()
     for ( size_t n = 0; n < WXSIZEOF(charsets); n++ )
     {
         wxFontEncoding enc = fmap.CharsetToEncoding(charsets[n]);
-        WX_ASSERT_STR_EQUAL( names[n], fmap.GetEncodingName(enc).Lower() );
-        WX_ASSERT_STR_EQUAL( descriptions[n], fmap.GetEncodingDescription(enc) );
+        CPPUNIT_ASSERT_EQUAL( names[n], fmap.GetEncodingName(enc).Lower() );
+        CPPUNIT_ASSERT_EQUAL( descriptions[n], fmap.GetEncodingDescription(enc) );
     }
 }
 

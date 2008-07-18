@@ -58,7 +58,7 @@ private:
     void DoTest(Stream& s)
     {
         s.PutC('x');
-        WX_ASSERT_SIZET_EQUAL( 1, s.LastWrite() );
+        CPPUNIT_ASSERT_EQUAL( 1, s.LastWrite() );
 
         s.SeekI(0);
         CPPUNIT_ASSERT_EQUAL( int('x'), s.GetC() );

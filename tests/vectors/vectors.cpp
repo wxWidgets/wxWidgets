@@ -206,7 +206,7 @@ void VectorsTestCase::Objects()
     v.push_back(CountedObject(3));
 
     v.erase(v.begin());
-    WX_ASSERT_SIZET_EQUAL( 2, v.size() );
+    CPPUNIT_ASSERT_EQUAL( 2, v.size() );
     CPPUNIT_ASSERT_EQUAL( 2, CountedObject::GetCount() );
 
     v.clear();

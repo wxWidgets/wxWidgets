@@ -102,16 +102,16 @@ void VarArgTestCase::CharPrintf()
 
     // test using wchar_t:
     s.Printf("char=%c", L'c');
-    WX_ASSERT_STR_EQUAL( "char=c", s );
+    CPPUNIT_ASSERT_EQUAL( "char=c", s );
 
     // test wxUniCharRef:
     s.Printf("string[1] is %c", foo[1]);
-    WX_ASSERT_STR_EQUAL( "string[1] is o", s );
+    CPPUNIT_ASSERT_EQUAL( "string[1] is o", s );
 
     // test char
     char c = 'z';
     s.Printf("%c to %c", 'a', c);
-    WX_ASSERT_STR_EQUAL( "a to z", s );
+    CPPUNIT_ASSERT_EQUAL( "a to z", s );
 
     // test char used as integer:
     #ifdef _MSC_VER
@@ -124,11 +124,11 @@ void VarArgTestCase::CharPrintf()
         #pragma warning(default:4309)
     #endif
     s.Printf("value is %i (int)", c);
-    WX_ASSERT_STR_EQUAL( wxString("value is -16 (int)"), s );
+    CPPUNIT_ASSERT_EQUAL( wxString("value is -16 (int)"), s );
 
     unsigned char u = 240;
     s.Printf("value is %i (int)", u);
-    WX_ASSERT_STR_EQUAL( wxString("value is 240 (int)"), s );
+    CPPUNIT_ASSERT_EQUAL( "value is 240 (int)", s );
 }
 
 #if wxUSE_STD_STRING
@@ -141,10 +141,10 @@ void VarArgTestCase::StdString()
     std::string wc("widechar");
 
     s.Printf("string %s(%i).", mb, 1);
-    CPPUNIT_ASSERT( s == "string multi-byte(1)." );
+    CPPUNIT_ASSERT_EQUAL( "string multi-byte(1).", s );
 
     s.Printf("string %s(%i).", wc, 2);
-    CPPUNIT_ASSERT( s == "string widechar(2)." );
+    CPPUNIT_ASSERT_EQUAL( "string widechar(2).", s );
 }
 #endif // wxUSE_STD_STRING
 
