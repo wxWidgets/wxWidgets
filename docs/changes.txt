@@ -125,6 +125,8 @@ wxMSW:
 
 wxGTK:
 
+- Fix masking of disabled bitmaps in wxMenuItem and wxStaticBitmap.
+
 wxMac:
 
 

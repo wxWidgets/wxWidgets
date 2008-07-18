@@ -1145,18 +1145,9 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
             wxASSERT_MSG( mitem->GetKind() == wxITEM_NORMAL,
                             _T("only normal menu items can have bitmaps") );
 
-            if ( bitmap.HasPixbuf() )
-            {
-                image = gtk_image_new_from_pixbuf(bitmap.GetPixbuf());
-            }
-            else
-            {
-                GdkPixmap *gdk_pixmap = bitmap.GetPixmap();
-                GdkBitmap *gdk_bitmap = bitmap.GetMask() ?
-                                            bitmap.GetMask()->GetBitmap() :
-                                            (GdkBitmap*) NULL;
-                image = gtk_image_new_from_pixmap( gdk_pixmap, gdk_bitmap );
-            }
+            // always use pixbuf, because pixmap mask does not
+            // work with disabled images in some themes
+            image = gtk_image_new_from_pixbuf(bitmap.GetPixbuf());
         }
 
         if ( image )
