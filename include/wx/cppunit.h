@@ -55,6 +55,8 @@
 #include <cppunit/CompilerOutputter.h>
 #include "wx/afterstd.h"
 
+#include "wx/string.h"
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // Set of helpful test macros.
