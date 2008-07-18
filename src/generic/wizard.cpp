@@ -945,6 +945,9 @@ bool wxWizard::DoLayoutAdaptation()
 
     wxStandardDialogLayoutAdapter::DoFitWithScrolling(this, windows);
 
+    // Size event doesn't get sent soon enough on wxGTK
+    DoLayout();
+    
     SetLayoutAdaptationDone(true);
 
     return true;
