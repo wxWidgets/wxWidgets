@@ -513,7 +513,7 @@ public:
 
     void Clear();
 
-    // return true if the conversion could be initilized successfully
+    // return true if the conversion could be initialized successfully
     bool IsOk() const;
 
 private:
@@ -527,13 +527,19 @@ private:
     wxMBConv *DoCreate() const;
 
     // set the name (may be only called when m_name == NULL), makes copy of
-    // charset string
+    // the charset string
     void SetName(const char *charset);
 
 
+    // m_name may be NULL in which case m_encoding should be used
+    //
     // note that we can't use wxString here because of compilation
     // dependencies: we're included from wx/string.h
     char *m_name;
+
+    // may be wxFONTENCODING_SYSTEM in which case m_name is used
+    //
+    // if m_name is NULL, then we should use the default system encoding
     wxFontEncoding m_encoding;
 
     // use CreateConvIfNeeded() before accessing m_convReal!
