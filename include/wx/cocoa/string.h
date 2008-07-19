@@ -44,7 +44,7 @@ inline NSString* wxInitNSStringWithWxString(NSString *nsstring, const wxString &
 inline wxString wxStringWithNSString(NSString *nsstring)
 {
 #if wxUSE_UNICODE
-    return wxString::FromUTF8([nsstring UTF8String]);
+    return wxString::FromUTF8Unchecked([nsstring UTF8String]);
 #else
     return wxString([nsstring lossyCString]);
 #endif // wxUSE_UNICODE

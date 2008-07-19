@@ -1268,7 +1268,7 @@ public:
 
     // conversion to/from UTF-8:
 #if wxUSE_UNICODE_UTF8
-    static wxString FromUTF8(const char *utf8)
+    static wxString FromUTF8Unchecked(const char *utf8)
     {
       if ( !utf8 )
           return wxEmptyString;
@@ -1276,16 +1276,35 @@ public:
       wxASSERT( wxStringOperations::IsValidUtf8String(utf8) );
       return FromImpl(wxStringImpl(utf8));
     }
-    static wxString FromUTF8(const char *utf8, size_t len)
+    static wxString FromUTF8Unchecked(const char *utf8, size_t len)
     {
       if ( !utf8 )
           return wxEmptyString;
       if ( len == npos )
-          return FromUTF8(utf8);
+          return FromUTF8Unchecked(utf8);
 
       wxASSERT( wxStringOperations::IsValidUtf8String(utf8, len) );
       return FromImpl(wxStringImpl(utf8, len));
     }
+
+    static wxString FromUTF8(const char *utf8)
+    {
+        if ( !utf8 || !wxStringOperations::IsValidUtf8String(utf8) )
+            return "";
+
+        return FromImpl(wxStringImpl(utf8));
+    }
+    static wxString FromUTF8(const char *utf8, size_t len)
+    {
+        if ( len == npos )
+            return FromUTF8(utf8);
+
+        if ( !utf8 || !wxStringOperations::IsValidUtf8String(utf8, len) )
+            return "";
+
+        return FromImpl(wxStringImpl(utf8, len));
+    }
+
     const char* utf8_str() const { return wx_str(); }
     const char* ToUTF8() const { return wx_str(); }
 
@@ -1293,10 +1312,15 @@ public:
     // internal UTF-8 representation
     size_t utf8_length() const { return m_impl.length(); }
 #elif wxUSE_UNICODE_WCHAR
-    static wxString FromUTF8(const char *utf8)
-      { return wxString(utf8, wxMBConvUTF8()); }
-    static wxString FromUTF8(const char *utf8, size_t len)
+    static wxString FromUTF8(const char *utf8, size_t len = npos)
       { return wxString(utf8, wxMBConvUTF8(), len); }
+    static wxString FromUTF8Unchecked(const char *utf8, size_t len = npos)
+    {
+        const wxString s(utf8, wxMBConvUTF8(), len);
+        wxASSERT_MSG( !utf8 || !*utf8 || !s.empty(),
+                      "string must be valid UTF-8" );
+        return s;
+    }
     const wxCharBuffer utf8_str() const { return mb_str(wxMBConvUTF8()); }
     const wxCharBuffer ToUTF8() const { return utf8_str(); }
 #else // ANSI

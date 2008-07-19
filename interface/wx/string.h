@@ -623,12 +623,37 @@ public:
     //@{
     /**
         Converts C string encoded in UTF-8 to wxString.
-        Note that this method assumes that @a s is a valid UTF-8 sequence and
-        doesn't do any validation in release builds, it's validity is only checked in
-        debug builds.
+
+        If @a s is not a valid UTF-8 string, an empty string is returned.
+
+        Notice that when using UTF-8 wxWidgets build there is a more efficient
+        alternative to this function called FromUTF8Unchecked() which, unlike
+        this one, doesn't check that the input string is valid.
+
+        @since 2.8.4
     */
     static wxString FromUTF8(const char* s);
     static wxString FromUTF8(const char* s, size_t len);
+    //@}
+
+    //@{
+    /**
+        Converts C string encoded in UTF-8 to wxString without checking its
+        validity.
+
+        This method assumes that @a s is a valid UTF-8 sequence and doesn't do
+        any validation (although an assert failure is triggered in debug builds
+        if the string is invalid). Only use it if you are absolutely sure that
+        @a s is a correct UTF-8 string (e.g. because it comes from another
+        library using UTF-8) and if the performance matters, otherwise use
+        slower (in UTF-8 build) but safer FromUTF8(). Passing a bad UTF-8
+        string to this function will result in creating a corrupted wxString
+        and all the subsequent operations on it will be undefined.
+
+        @since 2.8.9
+    */
+    static wxString FromUTF8Unchecked(const char* s);
+    static wxString FromUTF8Unchecked(const char* s, size_t len);
     //@}
 
     /**

@@ -485,7 +485,7 @@ static wxString CharToString(wxMBConv *conv,
 #endif // !wxUSE_UNICODE
 
     wxUnusedVar(conv);
-    return wxString::FromUTF8(s, len);
+    return wxString::FromUTF8Unchecked(s, len);
 }
 
 // returns true if the given string contains only whitespaces
