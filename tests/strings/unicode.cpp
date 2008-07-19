@@ -391,11 +391,12 @@ void UnicodeTestCase::ConversionUTF32()
 void UnicodeTestCase::IsConvOk()
 {
     CPPUNIT_ASSERT( wxCSConv(wxFONTENCODING_SYSTEM).IsOk() );
-    CPPUNIT_ASSERT( wxCSConv(_T("UTF-8")).IsOk() );
-    CPPUNIT_ASSERT( !wxCSConv(_T("NoSuchConversion")).IsOk() );
+    CPPUNIT_ASSERT( wxCSConv("US-ASCII").IsOk() );
+    CPPUNIT_ASSERT( wxCSConv("UTF-8").IsOk() );
+    CPPUNIT_ASSERT( !wxCSConv("NoSuchConversion").IsOk() );
 
 #ifdef __WINDOWS__
-    CPPUNIT_ASSERT( wxCSConv(_T("WINDOWS-437")).IsOk() );
+    CPPUNIT_ASSERT( wxCSConv("WINDOWS-437").IsOk() );
 #endif
 }
 

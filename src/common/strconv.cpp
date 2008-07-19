@@ -2890,6 +2890,16 @@ wxCSConv::wxCSConv(const wxString& charset)
 
 #if wxUSE_FONTMAP
     m_encoding = wxFontMapperBase::GetEncodingFromName(charset);
+    if ( m_encoding == wxFONTENCODING_MAX )
+    {
+        // set to unknown/invalid value
+        m_encoding = wxFONTENCODING_SYSTEM;
+    }
+    else if ( m_encoding == wxFONTENCODING_DEFAULT )
+    {
+        // wxFONTENCODING_DEFAULT is same as US-ASCII in this context
+        m_encoding = wxFONTENCODING_ISO8859_1;
+    }
 #else
     m_encoding = wxFONTENCODING_SYSTEM;
 #endif
