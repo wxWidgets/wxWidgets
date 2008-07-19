@@ -1332,7 +1332,7 @@ wxCmdLineParser::ConvertStringToArgs(const wxString& cmdline,
                     break;
                 }
 
-                lastBS = ch == '\\';
+                lastBS = !lastBS && ch == '\\';
             }
             else // type == wxCMD_LINE_SPLIT_UNIX
             {

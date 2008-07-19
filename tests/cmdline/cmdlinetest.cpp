@@ -96,6 +96,7 @@ void CmdLineTestCase::ConvertStringTestCase()
     WX_ASSERT_ARGS_EQUAL( "1|2 3|4", "1 \"2 3\" 4" );
 
     // check for (broken) Windows semantics: backslash doesn't escape spaces
+    WX_ASSERT_DOS_ARGS_EQUAL( "\\\\foo\\\\|/bar", "\"\\\\foo\\\\\" /bar" );
     WX_ASSERT_DOS_ARGS_EQUAL( "foo|bar\\|baz", "foo bar\\ baz" );
     WX_ASSERT_DOS_ARGS_EQUAL( "foo|bar\\\"baz", "foo \"bar\\\"baz\"" );
 
