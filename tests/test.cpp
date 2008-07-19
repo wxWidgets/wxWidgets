@@ -84,7 +84,7 @@ bool TestApp::OnInit()
 #endif // wxUSE_GUI
 
     return true;
-};
+}
 
 // The table of command line options
 //
