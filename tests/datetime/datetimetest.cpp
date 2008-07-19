@@ -761,7 +761,7 @@ void DateTimeTestCase::TestTimeTicks()
 
         // GetValue() returns internal UTC-based representation, we need to
         // convert it to local TZ before comparing
-        long ticks = (dt.GetValue() / 1000).ToLong() + TZ_LOCAL.GetOffset();
+        time_t ticks = (dt.GetValue() / 1000).ToLong() + TZ_LOCAL.GetOffset();
         if ( dt.IsDST() )
             ticks += 3600;
         CPPUNIT_ASSERT_EQUAL( d.gmticks, ticks + tzOffset );

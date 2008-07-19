@@ -116,17 +116,6 @@ assertEquals(int expected,
     assertEquals(size_t(expected), actual, sourceLine, message);
 }
 
-// and another, slightly different, for checking that result of potentially
-// different time_t type is the same as given time_t value
-inline void
-assertEquals(time_t expected,
-             long actual,
-             CppUnit::SourceLine sourceLine,
-             const std::string& message)
-{
-    assertEquals(expected, time_t(actual), sourceLine, message);
-}
-
 CPPUNIT_NS_END
 
 // Use this macro to compare a wxArrayString with the pipe-separated elements
