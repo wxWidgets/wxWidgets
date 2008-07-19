@@ -130,6 +130,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\wallctrl\wallctrlcommandevent.cpp"
+				>
+			</File>
+			<File
 				RelativePath="src\wallctrl\wallctrldatasource.cpp"
 				>
 			</File>
@@ -179,6 +183,10 @@
 			</File>
 			<File
 				RelativePath=".\include\wx\wallctrl\wallctrlbitmapsource.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\wx\wallctrl\wallctrlcommandevent.h"
 				>
 			</File>
 			<File

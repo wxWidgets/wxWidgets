@@ -22,6 +22,7 @@
 #include "wx/wallctrl/wallctrlbitmapsource.h"
 
 ////@begin includes
+#include "wx/filepicker.h"
 ////@end includes
 
 /*!
@@ -38,6 +39,7 @@
 ////@begin control identifiers
 #define ID_WXWALLCTRLSAMPLE 10002
 #define ID_WALLCTRL 10000
+#define ID_DIRPICKERCTRL1 10001
 #define SYMBOL_WXWALLCTRLSAMPLE_STYLE wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX|wxTAB_TRAVERSAL
 #define SYMBOL_WXWALLCTRLSAMPLE_TITLE _("wxWallCtrlSample")
 #define SYMBOL_WXWALLCTRLSAMPLE_IDNAME ID_WXWALLCTRLSAMPLE
@@ -74,9 +76,11 @@ public:
     void CreateControls();
 
 ////@begin wxWallCtrlSample event handler declarations
+
 ////@end wxWallCtrlSample event handler declarations
 
 ////@begin wxWallCtrlSample member function declarations
+
     /// Retrieves bitmap resources
     wxBitmap GetBitmapResource( const wxString& name );
 

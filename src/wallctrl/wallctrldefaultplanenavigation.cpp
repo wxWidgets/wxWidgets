@@ -63,3 +63,13 @@ wxWallCtrlDefaultPlaneNavigation::wxWallCtrlDefaultPlaneNavigation()// wxWallCtr
 wxWallCtrlDefaultPlaneNavigation::~wxWallCtrlDefaultPlaneNavigation(void)
 {
 }
+
+void wxWallCtrlDefaultPlaneNavigation::ChangeSelection()
+{
+	//wxWallCtrlNavigationEvent event( wxEVT_WALLCTRL_SELECTION_CHANGED, GetId() );
+	wxWallCtrlNavigationEvent event( wxEVT_WALLCTRL_SELECTION_CHANGED, 0 );
+	event.SetEventObject( this );
+	// Set event details here
+	ProcessEvent( event );
+	
+}
