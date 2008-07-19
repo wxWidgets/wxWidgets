@@ -351,14 +351,14 @@ void MyFrame::LogEvent(const wxString& name, wxKeyEvent& event)
                event.ControlDown() ? 'C' : '-',
                event.AltDown()     ? 'A' : '-',
                event.ShiftDown()   ? 'S' : '-',
-               event.MetaDown()    ? 'M' : '-',
+               event.MetaDown()    ? 'M' : '-'
 #if wxUSE_UNICODE
-               event.GetUnicodeKey(),
-               event.GetUnicodeKey(),
+               , event.GetUnicodeKey()
+               , event.GetUnicodeKey()
 #endif
 #ifdef wxHAS_RAW_KEY_CODES
-               (unsigned long) event.GetRawKeyCode(),
-               (unsigned long) event.GetRawKeyFlags()
+               , (unsigned long) event.GetRawKeyCode()
+               , (unsigned long) event.GetRawKeyFlags()
 #endif
                );
 
