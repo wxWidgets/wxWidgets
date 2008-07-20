@@ -257,8 +257,14 @@ wxDirButton::~wxDirButton()
         m_dialog->m_widget = NULL;
 }
 
-void wxDirButton::SetPath(const wxString &str)
+void wxDirButton::SetPath(const wxString& str)
 {
+    if ( m_path == str )
+    {
+        // don't do anything and especially don't set m_bIgnoreNextChange
+        return;
+    }
+
     m_path = str;
 
     // wxDirButton uses the "current-folder-changed" signal which is triggered also
