@@ -27,7 +27,6 @@
 
 #ifndef WX_PRECOMP
     #include "wx/crt.h"
-    #include "wx/arrstr.h"
 #endif
 
 #include "wx/uri.h"
