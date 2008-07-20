@@ -263,14 +263,14 @@ void ItemContainerWidgetsPage::OnButtonTestItemContainer(wxCommandEvent&)
     StartTest(_T("Append some items with data"));
     void **data = new void *[m_items.GetCount()];
     for ( i = 0; i < m_items.GetCount(); ++i )
-        data[i] = (void*)i;
+        data[i] = wxUIntToPtr(i);
     m_container->Append(m_items, data);
     EndTest(expected_result);
     delete[] data;
 
     StartTest(_T("Append some items with data, one by one"));
     for ( i = 0; i < m_items.GetCount(); ++i )
-        m_container->Append(m_items[i], (void*)i);
+        m_container->Append(m_items[i], wxUIntToPtr(i));
     EndTest(expected_result);
 
     StartTest(_T("Append some items with data objects, one by one"));
@@ -282,7 +282,7 @@ void ItemContainerWidgetsPage::OnButtonTestItemContainer(wxCommandEvent&)
     {
         StartTest(_T("Insert in reverse order with data, one by one"));
         for ( unsigned i = m_items.GetCount(); i; --i )
-            m_container->Insert(m_items[i - 1], 0, (void*)(i - 1));
+            m_container->Insert(m_items[i - 1], 0, wxUIntToPtr(i - 1));
         EndTest(expected_result);
     }
 }
