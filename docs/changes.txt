@@ -132,6 +132,7 @@ wxMSW:
 wxGTK:
 
 - Fix masking of disabled bitmaps in wxMenuItem and wxStaticBitmap.
+- Fix generation of events for an initially empty wxDirPickerCtrl.
 
 wxMac:
 
@@ -426,7 +427,7 @@ All:
   overlaps UTF-8 characters boundary.
 - Account for lines without newline at the end in wxExecute().
 - Added wxString::char_str(), wchar_str(), From8BitData(), To8BitData(),
-  FromUTF8(), ToUTF8() and utf8_str() methods for forward compatiblity
+  FromUTF8(), ToUTF8() and utf8_str() methods for forward compatibility
   with wxWidgets 3.
 
 All (Unix):
