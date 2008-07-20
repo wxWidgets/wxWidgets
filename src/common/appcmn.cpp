@@ -393,7 +393,7 @@ bool wxAppBase::SendIdleEvents(wxWindow* win, wxIdleEvent& event)
             win->HasExtraStyle(wxWS_EX_PROCESS_IDLE) )
     {
         event.SetEventObject(win);
-        win->GetEventHandler()->ProcessEvent(event);
+        win->HandleWindowEvent(event);
 
         if (event.MoreRequested())
             needMore = true;
