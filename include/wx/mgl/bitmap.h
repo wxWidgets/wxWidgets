@@ -69,6 +69,9 @@ public:
     bitmap_t *GetMGLbitmap_t() const;
 
 protected:
+    virtual wxGDIRefData *CreateGDIRefData() const;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+
     // creates temporary DC for access to bitmap's data:
     MGLDevCtx *CreateTmpDC() const;
     // sets fg & bg colours for 1bit bitmaps:

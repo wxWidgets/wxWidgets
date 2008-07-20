@@ -31,6 +31,13 @@
 
 #include <mgraph.hpp>
 
+static bitmap_t *MyMGL_createBitmap(int width, int height,
+                                    int bpp, pixel_format_t *pf)
+{
+    MGLMemoryDC mdc(width, height, bpp, pf);
+    return MGL_getBitmapFromDC(mdc.getDC(), 0, 0, width, height, TRUE);
+}
+
 //-----------------------------------------------------------------------------
 // MGL pixel formats:
 //-----------------------------------------------------------------------------
@@ -54,10 +61,11 @@ static pixel_format_t gs_pixel_format_wxImage =
 // wxBitmap
 //-----------------------------------------------------------------------------
 
-class wxBitmapRefData: public wxObjectRefData
+class wxBitmapRefData: public wxGDIRefData
 {
 public:
-    wxBitmapRefData();
+    wxBitmapRefData(int width, int height, int bpp);
+    wxBitmapRefData(const wxBitmapRefData& data);
     virtual ~wxBitmapRefData();
 
     virtual bool IsOk() const { return m_bitmap != NULL; }
@@ -68,16 +76,74 @@ public:
     wxPalette      *m_palette;
     wxMask         *m_mask;
     bitmap_t       *m_bitmap;
+
+private:
+    void DoCreateBitmap();
 };
 
-wxBitmapRefData::wxBitmapRefData()
+void wxBitmapRefData::DoCreateBitmap()
 {
-    m_mask = NULL;
-    m_width = 0;
-    m_height = 0;
-    m_bpp = 0;
+    pixel_format_t pf_dummy;
+    pixel_format_t *pf;
+    int mglDepth = depth;
+
+    switch ( depth )
+    {
+        case -1:
+            wxASSERT_MSG( g_displayDC, wxT("MGL display DC not created yet.") );
+
+            g_displayDC->getPixelFormat(pf_dummy);
+            mglDepth = g_displayDC->getBitsPerPixel();
+            pf = &pf_dummy;
+            break;
+        case 1:
+        case 8:
+            pf = NULL;
+            mglDepth = 8; // we emulate monochrome bitmaps using 8 bit ones
+            break;
+        case 15:
+            pf = &gs_pixel_format_15;
+            break;
+        case 16:
+            pf = &gs_pixel_format_16;
+            break;
+        case 24:
+            pf = &gs_pixel_format_24;
+            break;
+        case 32:
+            pf = &gs_pixel_format_32;
+            break;
+        default:
+            wxFAIL_MSG(wxT("invalid bitmap depth"));
+            m_bitmap = NULL;
+            return;
+    }
+
+    m_bitmap = MyMGL_createBitmap(width, height, mglDepth, pf);
+}
+
+wxBitmapRefData::wxBitmapRefData(int width, int height, int bpp)
+{
+    m_width = width;
+    m_height = height;
+    m_bpp = bpp;
+
     m_palette = NULL;
-    m_bitmap = NULL;
+    m_mask = NULL;
+
+    DoCreateBitmap();
+}
+
+wxBitmapRefData::wxBitmapRefData(const wxBitmapRefData& data)
+{
+    m_width = data.m_width;
+    m_height = data.m_height;
+    m_bpp = data.m_bpp;
+
+    m_palette = NULL; // FIXME: should copy
+    m_mask = NULL; // FIXME: should copy
+
+    DoCreateBitmap();
 }
 
 wxBitmapRefData::~wxBitmapRefData()
@@ -100,11 +166,14 @@ wxBitmap::wxBitmap(int width, int height, int depth)
 }
 
 
-static bitmap_t *MyMGL_createBitmap(int width, int height,
-                                    int bpp, pixel_format_t *pf)
+wxGDIRefData *wxBitmap::CreateGDIRefData() const
 {
-    MGLMemoryDC mdc(width, height, bpp, pf);
-    return MGL_getBitmapFromDC(mdc.getDC(), 0, 0, width, height, TRUE);
+    return new wxBitmapRefData;
+}
+
+wxGDIRefData *wxBitmap::CloneGDIRefData(const wxGDIRefData *data) const
+{
+    return new wxBitmapRefData(*wx_static_cast(const wxBitmapRefData *, data));
 }
 
 bool wxBitmap::Create(int width, int height, int depth)
@@ -113,58 +182,13 @@ bool wxBitmap::Create(int width, int height, int depth)
 
     wxCHECK_MSG( (width > 0) && (height > 0), false, wxT("invalid bitmap size") );
 
-    pixel_format_t pf_dummy;
-    pixel_format_t *pf;
-    int mglDepth = depth;
+    m_refData = new wxBitmapRefData(width, height, depth);
 
-    switch ( depth )
-    {
-        case -1:
-            wxASSERT_MSG( g_displayDC, wxT("MGL display DC not created yet.") );
-
-            g_displayDC->getPixelFormat(pf_dummy);
-            mglDepth = g_displayDC->getBitsPerPixel();
-            pf = &pf_dummy;
-            break;
-        case 1:
-        case 8:
-            pf = NULL;
-            break;
-        case 15:
-            pf = &gs_pixel_format_15;
-            break;
-        case 16:
-            pf = &gs_pixel_format_16;
-            break;
-        case 24:
-            pf = &gs_pixel_format_24;
-            break;
-        case 32:
-            pf = &gs_pixel_format_32;
-            break;
-        default:
-            wxFAIL_MSG(wxT("invalid bitmap depth"));
-            return false;
-    }
-
-    m_refData = new wxBitmapRefData();
-    M_BMPDATA->m_mask = (wxMask *) NULL;
-    M_BMPDATA->m_palette = (wxPalette *) NULL;
-    M_BMPDATA->m_width = width;
-    M_BMPDATA->m_height = height;
-    M_BMPDATA->m_bpp = mglDepth;
-
-    if ( mglDepth != 1 )
-    {
-        M_BMPDATA->m_bitmap = MyMGL_createBitmap(width, height, mglDepth, pf);
-    }
-    else
+    if ( depth == 1 )
     {
         // MGL does not support mono DCs, so we have to emulate them with
         // 8bpp ones. We do that by using a special palette with color 0
         // set to black and all other colors set to white.
-
-        M_BMPDATA->m_bitmap = MyMGL_createBitmap(width, height, 8, pf);
         SetMonoPalette(wxColour(255, 255, 255), wxColour(0, 0, 0));
     }
 
@@ -398,7 +422,7 @@ MGLDevCtx *wxBitmap::CreateTmpDC() const
 
 bool wxBitmap::LoadFile(const wxString &name, wxBitmapType type)
 {
-    UnRef();
+    AllocExclusive();
 
     if ( type == wxBITMAP_TYPE_BMP || type == wxBITMAP_TYPE_PNG ||
          type == wxBITMAP_TYPE_PCX || type == wxBITMAP_TYPE_JPEG )
@@ -427,8 +451,6 @@ bool wxBitmap::LoadFile(const wxString &name, wxBitmapType type)
             return true;
         }
     }
-
-    m_refData = new wxBitmapRefData();
 
     return handler->LoadFile(this, name, type, -1, -1);
 }
