@@ -81,10 +81,13 @@ void wxDataFormat::SetType( wxDataFormatId type )
         m_format = g_textAtom;
     else if (m_type == wxDF_TEXT)
         m_format = g_altTextAtom;
-#else
-    if (m_type == wxDF_TEXT || m_type == wxDF_UNICODETEXT)
+#else // !wxUSE_UNICODE
+    // notice that we don't map wxDF_UNICODETEXT to g_textAtom here, this
+    // would lead the code elsewhere to treat data objects with this format as
+    // containing UTF-8 data which is not true
+    if (m_type == wxDF_TEXT)
         m_format = g_textAtom;
-#endif
+#endif // wxUSE_UNICODE/!wxUSE_UNICODE
     else
     if (m_type == wxDF_BITMAP)
         m_format = g_pngAtom;
