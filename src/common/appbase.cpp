@@ -290,6 +290,13 @@ wxAppTraits *wxAppConsoleBase::GetTraits()
     return m_traits;
 }
 
+/* static */
+wxAppTraits *wxAppConsoleBase::GetTraitsIfExists()
+{
+    wxAppConsole * const app = GetInstance();
+    return app ? app->GetTraits() : NULL;
+}
+
 // ----------------------------------------------------------------------------
 // event processing
 // ----------------------------------------------------------------------------
@@ -673,12 +680,16 @@ void wxAppTraitsBase::MutexGuiLeave()
 
 void WXDLLIMPEXP_BASE wxMutexGuiEnter()
 {
-    wxAppConsoleBase::GetInstance()->GetTraits()->MutexGuiEnter();
+    wxAppTraits * const traits = wxAppConsoleBase::GetTraitsIfExists();
+    if ( traits )
+        traits->MutexGuiEnter();
 }
 
 void WXDLLIMPEXP_BASE wxMutexGuiLeave()
 {
-    wxAppConsoleBase::GetInstance()->GetTraits()->MutexGuiLeave();
+    wxAppTraits * const traits = wxAppConsoleBase::GetTraitsIfExists();
+    if ( traits )
+        traits->MutexGuiLeave();
 }
 #endif // wxUSE_THREADS
 

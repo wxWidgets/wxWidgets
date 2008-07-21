@@ -198,6 +198,13 @@ public:
     // allows us to abstract the differences behind the common facade
     wxAppTraits *GetTraits();
 
+    // this function provides safer access to traits object than
+    // wxTheApp->GetTraits() during startup or termination when the global
+    // application object itself may be unavailable
+    //
+    // of course, it still returns NULL in this case and the caller must check
+    // for it
+    static wxAppTraits *GetTraitsIfExists();
 
     // event processing functions
     // --------------------------
