@@ -65,17 +65,14 @@ wxFontInstance *wxFontFaceBase::GetFontInstance(float ptSize, bool aa)
 {
     wxASSERT_MSG( m_refCnt > 0, _T("font library not loaded!") );
 
-    wxFontInstance *i;
-    wxFontInstanceList::Node *node;
-
-    for ( node = m_instances->GetFirst(); node; node = node->GetNext() )
+    for ( wxFontInstanceList::const_iterator i = m_instances->begin();
+          i != m_instances->end(); ++i )
     {
-        i = node->GetData();
-        if ( i->GetPointSize() == ptSize && i->IsAntiAliased() == aa )
-            return i;
+        if ( (*i)->GetPointSize() == ptSize && (*i)->IsAntiAliased() == aa )
+            return *i;
     }
 
-    i = CreateFontInstance(ptSize, aa);
+    wxFontInstance *i = CreateFontInstance(ptSize, aa);
     m_instances->Append(i);
     return i;
 }
