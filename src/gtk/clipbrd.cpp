@@ -299,29 +299,29 @@ selection_handler( GtkWidget *WXUNUSED(widget),
 
     if (size == 0) return;
 
-    void *d = malloc(size);
-    wxON_BLOCK_EXIT1(free, d);
+    wxCharBuffer buf(size);
 
-    // Text data will be in UTF8 in Unicode mode.
-    data->GetDataHere( selection_data->target, d );
+    // text data must be returned in UTF8 if format is wxDF_UNICODETEXT
+    data->GetDataHere( format, buf.data() );
 
-    // NB: GTK+ requires special treatment of UTF8_STRING data, the text
-    //     would show as UTF-8 data interpreted as latin1 (?) in other
-    //     GTK+ apps if we used gtk_selection_data_set()
+    // use UTF8_STRING format if requested in Unicode build but just plain
+    // STRING one in ANSI or if explicitly asked in Unicode
+#if wxUSE_UNICODE
     if (format == wxDataFormat(wxDF_UNICODETEXT))
     {
         gtk_selection_data_set_text(
             selection_data,
-            (const gchar*)d,
+            (const gchar*)buf.data(),
             size );
     }
     else
+#endif
     {
         gtk_selection_data_set(
             selection_data,
             GDK_SELECTION_TYPE_STRING,
             8*sizeof(gchar),
-            (unsigned char*) d,
+            (const guchar*)buf.data(),
             size );
     }
 }
