@@ -117,7 +117,7 @@ All (Unix):
 
 wxMSW:
 
-+ Potentially incompatible change: wxExecute() arguments are now quoted if they
+- Potentially incompatible change: wxExecute() arguments are now quoted if they
   contain spaces and existing quotes are escaped with a backslash. However, to
   preserve compatibility, the argument is unchanged if it is already quoted.
   Notice that this behaviour will change in wxWidgets 3.0 where all arguments
@@ -131,8 +131,10 @@ wxMSW:
 
 wxGTK:
 
-- Fix masking of disabled bitmaps in wxMenuItem and wxStaticBitmap.
-- Fix generation of events for an initially empty wxDirPickerCtrl.
+- Fixed masking of disabled bitmaps in wxMenuItem and wxStaticBitmap.
+- Fixed generation of events for an initially empty wxDirPickerCtrl.
+- Fixed detection of Meta key state so that NumLock isn't misdetected
+  as Meta (requires GTK+ 2.10).
 
 wxMac:
 
