@@ -1328,9 +1328,20 @@ public:
       { return wxString(wxMBConvUTF8().cMB2WC(utf8)); }
     static wxString FromUTF8(const char *utf8, size_t len)
     {
-      size_t wlen;
-      wxWCharBuffer buf(wxMBConvUTF8().cMB2WC(utf8, len == npos ? wxNO_LEN : len, &wlen));
-      return wxString(buf.data(), wlen);
+        size_t wlen;
+        wxWCharBuffer buf(wxMBConvUTF8().cMB2WC(utf8, len == npos ? wxNO_LEN : len, &wlen));
+        return wxString(buf.data(), wlen);
+    }
+    static wxString FromUTF8Unchecked(const char *utf8, size_t len = npos)
+    {
+        size_t wlen;
+        wxWCharBuffer buf(wxMBConvUTF8().cMB2WC(utf8,
+                                                len == npos ? wxNO_LEN : len,
+                                                &wlen));
+        wxASSERT_MSG( !utf8 || !*utf8 || wlen,
+                      "string must be valid UTF-8" );
+
+        return wxString(buf.data(), wlen);
     }
     const wxCharBuffer utf8_str() const
       { return wxMBConvUTF8().cWC2MB(wc_str()); }
