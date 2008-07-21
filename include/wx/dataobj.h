@@ -324,6 +324,14 @@ private:
 // wxTextDataObject contains text data
 // ----------------------------------------------------------------------------
 
+#if wxUSE_UNICODE
+    #if defined(__WXGTK20__)
+        #define wxNEEDS_UTF8_FOR_TEXT_DATAOBJ
+    #elif defined(__WXMAC__)
+        #define wxNEEDS_UTF16_FOR_TEXT_DATAOBJ
+    #endif
+#endif // wxUSE_UNICODE
+
 class WXDLLIMPEXP_CORE wxTextDataObject : public wxDataObjectSimple
 {
 public:
@@ -351,7 +359,7 @@ public:
     // ----------------------------------
 
     // some platforms have 2 and not 1 format for text data
-#if wxUSE_UNICODE && (defined(__WXGTK20__) || defined(__WXMAC__))
+#if defined(wxNEEDS_UTF8_FOR_TEXT_DATAOBJ) || defined(wxNEEDS_UTF16_FOR_TEXT_DATAOBJ)
     virtual size_t GetFormatCount(Direction WXUNUSED(dir) = Get) const { return 2; }
     virtual void GetAllFormats(wxDataFormat *formats,
                                wxDataObjectBase::Direction WXUNUSED(dir) = Get) const;
@@ -363,7 +371,7 @@ public:
     size_t GetDataSize(const wxDataFormat& format) const;
     bool GetDataHere(const wxDataFormat& format, void *pBuf) const;
     bool SetData(const wxDataFormat& format, size_t nLen, const void* pBuf);
-#else
+#else // !wxNEEDS_UTF{8,16}_FOR_TEXT_DATAOBJ
     virtual size_t GetDataSize() const;
     virtual bool GetDataHere(void *buf) const;
     virtual bool SetData(size_t len, const void *buf);
@@ -380,7 +388,7 @@ public:
     {
         return SetData(len, buf);
     }
-#endif
+#endif // different wxTextDataObject implementations
 
 private:
     wxString m_text;

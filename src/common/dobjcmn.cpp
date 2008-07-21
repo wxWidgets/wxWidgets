@@ -232,7 +232,13 @@ bool wxDataObjectComposite::SetData(const wxDataFormat& format,
 // wxTextDataObject
 // ----------------------------------------------------------------------------
 
-#if defined(__WXGTK20__) && wxUSE_UNICODE
+#ifdef wxNEEDS_UTF8_FOR_TEXT_DATAOBJ
+
+// FIXME-UTF8: we should be able to merge wchar_t and UTF-8 versions once we
+//             have a way to get UTF-8 string (and its length) in both builds
+//             without loss of efficiency (i.e. extra buffer copy/strlen call)
+
+#if wxUSE_UNICODE_WCHAR
 
 static inline wxMBConv& GetConv(const wxDataFormat& format)
 {
@@ -275,7 +281,70 @@ bool wxTextDataObject::SetData(const wxDataFormat& format,
     return true;
 }
 
-#elif wxUSE_UNICODE && defined(__WXMAC__)
+#else // wxUSE_UNICODE_UTF8
+
+size_t wxTextDataObject::GetDataSize(const wxDataFormat& format) const
+{
+    if ( format == wxDF_UNICODETEXT || wxLocaleIsUtf8 )
+    {
+        return m_text.utf8_length();
+    }
+    else // wxDF_TEXT
+    {
+        const wxCharBuffer buf(wxConvLocal.cWC2MB(m_text.wc_str()));
+        return buf ? strlen(buf) : 0;
+    }
+}
+
+bool wxTextDataObject::GetDataHere(const wxDataFormat& format, void *buf) const
+{
+    if ( !buf )
+        return false;
+
+    if ( format == wxDF_UNICODETEXT || wxLocaleIsUtf8 )
+    {
+        memcpy(buf, m_text.utf8_str(), m_text.utf8_length());
+    }
+    else // wxDF_TEXT
+    {
+        const wxCharBuffer bufLocal(wxConvLocal.cWC2MB(m_text.wc_str()));
+        if ( !bufLocal )
+            return false;
+
+        memcpy(buf, bufLocal, strlen(bufLocal));
+    }
+
+    return true;
+}
+
+bool wxTextDataObject::SetData(const wxDataFormat& format,
+                               size_t len, const void *buf_)
+{
+    const char * const buf = wx_static_cast(const char *, buf_);
+
+    if ( buf == NULL )
+        return false;
+
+    if ( format == wxDF_UNICODETEXT || wxLocaleIsUtf8 )
+    {
+        // normally the data is in UTF-8 so we could use FromUTF8Unchecked()
+        // but it's not absolutely clear what GTK+ does if the clipboard data
+        // is not in UTF-8 so do an extra check for tranquility, it shouldn't
+        // matter much if we lose a bit of performance when pasting from
+        // clipboard
+        m_text = wxString::FromUTF8(buf, len);
+    }
+    else // wxDF_TEXT, convert from current (non-UTF8) locale
+    {
+        m_text = wxConvLocal.cMB2WC(buf, len, NULL);
+    }
+
+    return true;
+}
+
+#endif // wxUSE_UNICODE_WCHAR/wxUSE_UNICODE_UTF8
+
+#elif defined(wxNEEDS_UTF16_FOR_TEXT_DATAOBJ)
 
 static wxMBConvUTF16 sUTF16Converter;
 
@@ -324,7 +393,7 @@ bool wxTextDataObject::SetData(const wxDataFormat& format,
     return true;
 }
 
-#else
+#else // !wxNEEDS_UTF{8,16}_FOR_TEXT_DATAOBJ
 
 size_t wxTextDataObject::GetDataSize() const
 {
@@ -345,54 +414,7 @@ bool wxTextDataObject::SetData(size_t WXUNUSED(len), const void *buf)
     return true;
 }
 
-#endif
-
-// ----------------------------------------------------------------------------
-// wxFileDataObjectBase
-// ----------------------------------------------------------------------------
-
-// VZ: I don't need this in MSW finally, so if it is needed in wxGTK, it should
-//     be moved to gtk/dataobj.cpp
-#if 0
-
-wxString wxFileDataObjectBase::GetFilenames() const
-{
-    wxString str;
-    size_t count = m_filenames.GetCount();
-    for ( size_t n = 0; n < count; n++ )
-    {
-        str << m_filenames[n] << wxT('\0');
-    }
-
-    return str;
-}
-
-void wxFileDataObjectBase::SetFilenames(const wxChar* filenames)
-{
-    m_filenames.Empty();
-
-    wxString current;
-    for ( const wxChar *pc = filenames; ; pc++ )
-    {
-        if ( *pc )
-        {
-            current += *pc;
-        }
-        else
-        {
-            if ( !current )
-            {
-                // 2 consecutive NULs - this is the end of the string
-                break;
-            }
-
-            m_filenames.Add(current);
-            current.Empty();
-        }
-    }
-}
-
-#endif
+#endif // different wxTextDataObject implementations
 
 // ----------------------------------------------------------------------------
 // wxCustomDataObject
