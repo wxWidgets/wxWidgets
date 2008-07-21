@@ -66,6 +66,8 @@
 
 // includes Mac headers
 #include "wx/mac/private.h"
+#include "wx/thread.h"
+
 #endif
 
 
@@ -2800,10 +2802,12 @@ public:
 #else
         ubuf = (UniChar*) (buf ? buf : tbuf) ;
 #endif
-
-        status = TECConvertText(
+        {
+            wxMutexLocker lock( m_MB2WC_guard );
+            status = TECConvertText(
             m_MB2WC_converter, (ConstTextPtr) psz, byteInLen, &byteInLen,
             (TextPtr) ubuf, byteBufferLen, &byteOutLen);
+        }
 
 #if SIZEOF_WCHAR_T == 4
         // we have to terminate here, because n might be larger for the trailing zero, and if UniChar
@@ -2854,10 +2858,13 @@ public:
         ubuf = (UniChar*) psz ;
 #endif
 
-        status = TECConvertText(
+        {
+            wxMutexLocker lock( m_WC2MB_guard );
+            status = TECConvertText(
             m_WC2MB_converter, (ConstTextPtr) ubuf, byteInLen, &byteInLen,
             (TextPtr) (buf ? buf : tbuf), byteBufferLen, &byteOutLen);
-
+        }
+        
 #if SIZEOF_WCHAR_T == 4
         free( ubuf ) ;
 #endif
@@ -2898,6 +2905,9 @@ public:
 protected :
     mutable TECObjectRef m_MB2WC_converter;
     mutable TECObjectRef m_WC2MB_converter;
+    
+    mutable wxMutex m_MB2WC_guard;
+    mutable wxMutex m_WC2MB_guard;
 
     TextEncodingBase m_char_encoding;
     TextEncodingBase m_unicode_encoding;
@@ -2958,15 +2968,18 @@ public :
         ByteCount dcubufread , dcubufwritten ;
         UniChar *dcubuf = (UniChar*) malloc( dcubuflen ) ;
 
-        ConvertFromUnicodeToText( m_uni , byteInLen , ubuf ,
-            kUnicodeDefaultDirectionMask, 0, NULL, NULL, NULL, dcubuflen  , &dcubufread , &dcubufwritten , dcubuf ) ;
+        {
+            wxMutexLocker lock( m_WC2MB_guard );
+            ConvertFromUnicodeToText( m_uni , byteInLen , ubuf ,
+                kUnicodeDefaultDirectionMask, 0, NULL, NULL, NULL, dcubuflen  , &dcubufread , &dcubufwritten , dcubuf ) ;
 
-        // we now convert that decomposed buffer into UTF8
+            // we now convert that decomposed buffer into UTF8
 
-        status = TECConvertText(
+            status = TECConvertText(
             m_WC2MB_converter, (ConstTextPtr) dcubuf, dcubufwritten, &dcubufread,
             (TextPtr) (buf ? buf : tbuf), byteBufferLen, &byteOutLen);
-
+        }
+        
         free( dcubuf );
 
 #if SIZEOF_WCHAR_T == 4
@@ -3015,16 +3028,19 @@ public :
         ByteCount dcubufread , dcubufwritten ;
         UniChar *dcubuf = (UniChar*) malloc( dcubuflen ) ;
 
-        status = TECConvertText(
+        {
+            wxMutexLocker lock( m_MB2WC_guard );
+            status = TECConvertText(
                                 m_MB2WC_converter, (ConstTextPtr) psz, byteInLen, &byteInLen,
                                 (TextPtr) dcubuf, dcubuflen, &byteOutLen);
-        // we have to terminate here, because n might be larger for the trailing zero, and if UniChar
-        // is not properly terminated we get random characters at the end
-        dcubuf[byteOutLen / sizeof( UniChar ) ] = 0 ;
+            // we have to terminate here, because n might be larger for the trailing zero, and if UniChar
+            // is not properly terminated we get random characters at the end
+            dcubuf[byteOutLen / sizeof( UniChar ) ] = 0 ;
 
-        // now from the decomposed UniChar to properly composed uniChar
-        ConvertFromUnicodeToText( m_uniBack , byteOutLen , dcubuf ,
+            // now from the decomposed UniChar to properly composed uniChar
+            ConvertFromUnicodeToText( m_uniBack , byteOutLen , dcubuf ,
                                   kUnicodeDefaultDirectionMask, 0, NULL, NULL, NULL, dcubuflen  , &dcubufread , &dcubufwritten , ubuf ) ;
+        }
 
         free( dcubuf );
         byteOutLen = dcubufwritten ;
