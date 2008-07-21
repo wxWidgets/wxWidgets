@@ -3583,15 +3583,11 @@ void wxWindowGTK::GtkSendPaintEvents()
             }
         }
     }
-    else
-
-    // if (!m_clearRegion.IsEmpty())   // Always send an erase event under GTK 1.2
+    else // Always send an erase event under GTK 1.2
     {
         wxWindowDC dc( (wxWindow*)this );
-        if (m_clearRegion.IsEmpty())
-            dc.SetClippingRegion( m_updateRegion );
-        else
-            dc.SetClippingRegion( m_clearRegion );
+        dc.SetDeviceClippingRegion( m_clearRegion.IsEmpty() ? m_updateRegion
+                                                            : m_clearRegion );
 
         wxEraseEvent erase_event( GetId(), &dc );
         erase_event.SetEventObject( this );
