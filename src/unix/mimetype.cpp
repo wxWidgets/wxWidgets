@@ -45,28 +45,28 @@
 class wxMimeTextFile
 {
 public:
-    wxMimeTextFile() 
+    wxMimeTextFile()
     {
     }
-    
+
     wxMimeTextFile(const wxString& fname)
     {
        m_fname = fname;
     }
-    
+
     bool Open()
     {
        wxFFile file( m_fname );
        if (!file.IsOpened())
           return false;
-          
+
        size_t size = file.Length();
        wxCharBuffer buffer( size );
        file.Read( (void*) (const char*) buffer, size );
-       
+
        // Check for valid UTF-8 here?
        wxString all = wxString::FromUTF8( buffer, size );
-       
+
        wxStringTokenizer tok( all, "\n" );
        while (tok.HasMoreTokens())
        {
@@ -77,7 +77,7 @@ public:
        }
        return true;
     }
-    
+
     unsigned int GetLineCount() const { return m_text.GetCount(); }
     wxString &GetLine( unsigned int line ) { return m_text[line]; }
 
@@ -116,7 +116,7 @@ public:
         wxString sTmp = GetLine(i).AfterFirst(wxT('='));
         return sTmp;
     }
-    
+
 private:
     wxArrayString m_text;
     wxString m_fname;
@@ -138,7 +138,7 @@ void wxMimeTypesManagerImpl::LoadXDGApp(const wxString& filename)
     wxMimeTextFile file(filename);
     if ( !file.Open() )
         return;
- 
+
     // Here, only type 'Application' should be considered.
     int nIndex = file.pIndexOf( "Type=" );
     if (nIndex != wxNOT_FOUND && file.GetCmd(nIndex) != "application")
@@ -230,10 +230,10 @@ void wxMimeTypesManagerImpl::LoadXDGAppsFilesFromDir(const wxString& dirname)
         cont = dir.GetNext(&filename);
     }
 
-#if 0 
+#if 0
     // RR: I'm not sure this makes any sense. On my system we'll just
     //     scan the YAST2 and other useless directories
-    
+
     // Look recursively into subdirs
     cont = dir.GetFirst(&filename, wxEmptyString, wxDIR_DIRS);
     while (cont)
@@ -249,6 +249,9 @@ void wxMimeTypesManagerImpl::LoadXDGAppsFilesFromDir(const wxString& dirname)
 
 void wxMimeTypesManagerImpl::LoadXDGGlobs(const wxString& filename)
 {
+    if ( !wxFileName::FileExists(filename) )
+        return;
+
     wxLogTrace(TRACE_MIME, wxT("loading XDG globs file from %s"), filename.c_str());
 
     wxMimeTextFile file(filename);
@@ -264,7 +267,7 @@ void wxMimeTypesManagerImpl::LoadXDGGlobs(const wxString& filename)
        ext.Remove( 0, 2 );
        wxArrayString exts;
        exts.Add( ext );
-       
+
        AddToMimeData(mime, wxEmptyString, NULL, exts, wxEmptyString, true );
     }
 }
@@ -503,9 +506,9 @@ void wxMimeTypesManagerImpl::InitIfNeeded()
     {
         // set the flag first to prevent recursion
         m_initialized = true;
-        
+
         wxString wm = wxTheApp->GetTraits()->GetDesktopEnvironment();
-        
+
         if (wm == wxT("KDE"))
             Initialize( wxMAILCAP_KDE  );
         else if (wm == wxT("GNOME"))
@@ -552,7 +555,7 @@ void wxMimeTypesManagerImpl::Initialize(int mailcapStyles,
            xdgDataDirs += ':';
            xdgDataDirs += sExtraDir;
         }
-        
+
         wxArrayString dirs;
         wxStringTokenizer tokenizer(xdgDataDirs, ":");
         while ( tokenizer.HasMoreTokens() )
@@ -602,7 +605,7 @@ void wxMimeTypesManagerImpl::Initialize(int mailcapStyles,
                         {
                             wxString mimeType = textfile.GetVerb(i);
                             wxString desktopFile = textfile.GetCmd(i);
-                            
+
                             if (deskTopFilesSeen.Index(desktopFile) == wxNOT_FOUND)
                             {
                                 deskTopFilesSeen.Add(desktopFile);
@@ -613,7 +616,7 @@ void wxMimeTypesManagerImpl::Initialize(int mailcapStyles,
                                     if (desktopPath.Last() != '/') desktopPath += '/';
                                     desktopPath += "applications/";
                                     desktopPath += desktopFile;
-                                    
+
                                     if (wxFileExists(desktopPath))
                                         LoadXDGApp(desktopPath);
                                 }
@@ -842,7 +845,7 @@ wxFileType * wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mim
 
     // first look for an exact match
     int index = m_aTypes.Index(mimetype);
-    
+
     if ( index != wxNOT_FOUND )
     {
         fileType = new wxFileType;
