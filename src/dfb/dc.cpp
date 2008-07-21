@@ -25,6 +25,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
+    #include "wx/dcmemory.h"
     #include "wx/log.h"
 #endif
 

@@ -11,6 +11,7 @@
 #ifndef _WX_DFB_PRIVATE_OVERLAY_H_
 #define _WX_DFB_PRIVATE_OVERLAY_H_
 
+#include "wx/gdicmn.h"
 #include "wx/dfb/dfbptr.h"
 
 wxDFB_DECLARE_INTERFACE(IDirectFBSurface);

@@ -26,6 +26,7 @@
 #include "wx/dcclient.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/toplevel.h"
     #include "wx/window.h"
 #endif
 
