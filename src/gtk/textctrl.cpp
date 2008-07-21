@@ -685,7 +685,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
 
         if (style & wxNO_BORDER)
             g_object_set (m_text, "has-frame", FALSE, NULL);
-            
+
     }
 
     m_parent->DoAddChild( this );
@@ -959,16 +959,16 @@ void wxTextCtrl::DoSetValue( const wxString &value, int flags )
     {
         if ( !(flags & SetValue_SendEvent) )
             EnableTextChangedEvents(false);
-        
+
         gtk_text_buffer_set_text( m_buffer, "", 0 );
-            
+
         if ( !(flags & SetValue_SendEvent) )
             EnableTextChangedEvents(true);
-            
+
         return;
     }
 
-#ifdef wxUSE_UNICODE
+#if wxUSE_UNICODE
     const wxCharBuffer buffer(value.utf8_str());
 #else
     wxFontEncoding enc = m_defaultStyle.HasFont()
@@ -1024,7 +1024,7 @@ void wxTextCtrl::WriteText( const wxString &text )
         return;
     }
 
-#ifdef wxUSE_UNICODE
+#if wxUSE_UNICODE
     const wxCharBuffer buffer(text.utf8_str());
 #else
     // check if we have a specific style for the current position
