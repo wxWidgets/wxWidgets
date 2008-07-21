@@ -290,7 +290,7 @@ static wxString GetSM()
 
     if ( !smc_conn )
     {
-        wxLogWarning(_("Failed to connect to session manager: %s"), smerr);
+        wxLogDebug("Failed to connect to session manager: %s", smerr);
         return wxEmptyString;
     }
 
