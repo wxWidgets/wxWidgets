@@ -425,7 +425,7 @@ void wxTextCtrl::CreatePeer(
 
     if ( UMAGetSystemVersion() >= 0x1030 && !forceMLTE )
     {
-        if ( m_windowStyle & wxTE_MULTILINE )
+        if ( (m_windowStyle & wxTE_MULTILINE) || ( UMAGetSystemVersion() >= 0x1050 ) )
             m_peer = new wxMacMLTEHIViewControl( this , str , pos , size , style ) ;
     }
 
