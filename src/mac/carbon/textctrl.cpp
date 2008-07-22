@@ -1707,6 +1707,7 @@ TXNFrameOptions wxMacMLTEControl::FrameOptionsFromWXStyle( long wxStyle )
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
     frameOptions |= kTXNDoFontSubstitutionMask;
+    frameOptions |= kTXNDisableDragAndDropMask;
 #endif
 
     if ( ! (wxStyle & wxTE_NOHIDESEL) )
