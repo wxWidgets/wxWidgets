@@ -139,6 +139,15 @@ WX_DEFINE_SORTED_ARRAY_CMP_SHORT(ushort, UShortCompareValues, wxSortedArrayUShor
 
 WX_DEFINE_SORTED_ARRAY_CMP_INT(int, IntCompareValues, wxSortedArrayInt);
 
+struct Item
+{
+    Item(int n_ = 0) : n(n_) { }
+
+    int n;
+};
+
+WX_DEFINE_ARRAY_PTR(Item *, ItemPtrArray);
+
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
@@ -594,4 +603,10 @@ void ArraysTestCase::TestSTL()
     {
         CPPUNIT_ASSERT( *it == i );
     }
+
+
+    ItemPtrArray items;
+    items.push_back(new Item(17));
+    CPPUNIT_ASSERT_EQUAL( 17, (*(items.rbegin()))->n );
+    CPPUNIT_ASSERT_EQUAL( 17, (**items.begin()).n );
 }

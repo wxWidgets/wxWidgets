@@ -28,6 +28,8 @@
 #include <stdlib.h>
 #include <string.h> // for memmove
 
+#if !wxUSE_STL
+
 // we cast the value to long from which we cast it to void * in IndexForInsert:
 // this can't work if the pointers are not big enough
 wxCOMPILE_TIME_ASSERT( sizeof(wxUIntPtr) <= sizeof(void *),
@@ -48,7 +50,7 @@ wxCOMPILE_TIME_ASSERT( sizeof(wxUIntPtr) <= sizeof(void *),
 // wxBaseArray - dynamic array of 'T's
 // ----------------------------------------------------------------------------
 
-#define _WX_DEFINE_BASEARRAY_COMMON(T, name)                                \
+#define _WX_DEFINE_BASEARRAY(T, name)                                       \
 /* searches the array for an item (forward or backwards) */                 \
 int name::Index(T lItem, bool bFromEnd) const                               \
 {                                                                           \
@@ -78,35 +80,8 @@ size_t name::Add(T lItem, CMPFUNC fnCompare)                                \
   size_t idx = IndexForInsert(lItem, fnCompare);                            \
   Insert(lItem, idx);                                                       \
   return idx;                                                               \
-}
-
-#if wxUSE_STL
-
-#define _WX_DEFINE_BASEARRAY_NOCOMMON(T, name)                              \
-size_t name::IndexForInsert(T lItem, CMPFUNC fnCompare) const               \
-{                                                                           \
-    Predicate p((SCMPFUNC)fnCompare);                                       \
-    const_iterator it = std::lower_bound(begin(), end(), lItem, p);         \
-    return it - begin();                                                    \
 }                                                                           \
                                                                             \
-int name::Index(T lItem, CMPFUNC fnCompare) const                           \
-{                                                                           \
-    Predicate p((SCMPFUNC)fnCompare);                                       \
-    const_iterator it = std::lower_bound(begin(), end(), lItem, p);         \
-    return (it != end() && !p(lItem, *it)) ?                                \
-                             (int)(it - begin()) : wxNOT_FOUND;             \
-}                                                                           \
-                                                                            \
-void name::Shrink()                                                         \
-{                                                                           \
-    name tmp(*this);                                                        \
-    swap(tmp);                                                              \
-}
-
-#else // if !wxUSE_STL
-
-#define _WX_DEFINE_BASEARRAY_NOCOMMON(T, name)                              \
 /* ctor */                                                                  \
 name::name()                                                                \
 {                                                                           \
@@ -390,12 +365,6 @@ void name::insert(iterator it, const_iterator first, const_iterator last)   \
   m_nCount += nInsert;                                                      \
 }
 
-#endif
-
-#define _WX_DEFINE_BASEARRAY(T, name)                                       \
-        _WX_DEFINE_BASEARRAY_COMMON(T, name)                                \
-        _WX_DEFINE_BASEARRAY_NOCOMMON(T, name)
-
 #ifdef __INTELC__
     #pragma warning(push)
     #pragma warning(disable: 1684)
@@ -414,14 +383,13 @@ _WX_DEFINE_BASEARRAY(double,       wxBaseArrayDouble)
     #pragma warning(pop)
 #endif
 
-#if wxUSE_STL
+#else // wxUSE_STL
+
 #include "wx/arrstr.h"
 
 #include "wx/beforestd.h"
 #include <functional>
 #include "wx/afterstd.h"
-
-_WX_DEFINE_BASEARRAY(wxString, wxBaseArrayStringBase)
 
 // some compilers (Sun CC being the only known example) distinguish between
 // extern "C" functions and the functions with C++ linkage and ptr_fun and
@@ -535,4 +503,4 @@ int wxSortedArrayString::Index(const wxString& str, bool bCase, bool WXUNUSED(bF
     return it - begin();
 }
 
-#endif // wxUSE_STL
+#endif // !wxUSE_STL/wxUSE_STL

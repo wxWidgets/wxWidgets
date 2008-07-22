@@ -54,6 +54,8 @@
 */
 #define WX_ARRAY_DEFAULT_INITIAL_SIZE    (16)
 
+#define _WX_ERROR_REMOVE "removing inexistent element in wxArray::Remove"
+
 // ----------------------------------------------------------------------------
 // types
 // ----------------------------------------------------------------------------
@@ -119,7 +121,10 @@ classexp name : public std::vector<T>                               \
   typedef predicate::CMPFUNC SCMPFUNC;                              \
 public:                                                             \
   typedef wxArray_SortFunction<T>::CMPFUNC CMPFUNC;                 \
+                                                                    \
 public:                                                             \
+  typedef T base_type;                                              \
+                                                                    \
   name() : std::vector<T>() { }                                     \
   name(size_type n) : std::vector<T>(n) { }                         \
   name(size_type n, const_reference v) : std::vector<T>(n, v) { }   \
@@ -127,28 +132,67 @@ public:                                                             \
   void Empty() { clear(); }                                         \
   void Clear() { clear(); }                                         \
   void Alloc(size_t uiSize) { reserve(uiSize); }                    \
-  void Shrink();                                                    \
+  void Shrink() { name tmp(*this); swap(tmp); }                     \
                                                                     \
   size_t GetCount() const { return size(); }                        \
   void SetCount(size_t n, T v = T()) { resize(n, v); }              \
   bool IsEmpty() const { return empty(); }                          \
   size_t Count() const { return size(); }                           \
                                                                     \
-  typedef T base_type;                                              \
-                                                                    \
-protected:                                                          \
   T& Item(size_t uiIndex) const                                     \
     { wxASSERT( uiIndex < size() ); return (T&)operator[](uiIndex); }   \
+  T& Last() const { return Item(size() - 1); }                      \
                                                                     \
-  int Index(T e, bool bFromEnd = false) const;                      \
-  int Index(T lItem, CMPFUNC fnCompare) const;                      \
-  size_t IndexForInsert(T lItem, CMPFUNC fnCompare) const;          \
+  int Index(T item, bool bFromEnd = false) const                    \
+  {                                                                 \
+      if ( bFromEnd )                                               \
+      {                                                             \
+          const const_reverse_iterator b = rbegin(),                \
+                                       e = rend();                  \
+          for ( const_reverse_iterator i = b; i != e; ++i )         \
+              if ( *i == item )                                     \
+                  return (int)(i - b);                              \
+      }                                                             \
+      else                                                          \
+      {                                                             \
+          const const_iterator b = begin(),                         \
+                               e = end();                           \
+          for ( const_iterator i = b; i != e; ++i )                 \
+              if ( *i == item )                                     \
+                  return (int)(i - b);                              \
+      }                                                             \
+                                                                    \
+      return wxNOT_FOUND;                                           \
+  }                                                                 \
+  int Index(T lItem, CMPFUNC fnCompare) const                       \
+  {                                                                 \
+      Predicate p((SCMPFUNC)fnCompare);                             \
+      const_iterator i = std::lower_bound(begin(), end(), lItem, p);\
+      return i != end() && !p(lItem, *i) ? (int)(i - begin())       \
+                                         : wxNOT_FOUND;             \
+  }                                                                 \
+  size_t IndexForInsert(T lItem, CMPFUNC fnCompare) const           \
+  {                                                                 \
+      Predicate p((SCMPFUNC)fnCompare);                             \
+      const_iterator i = std::lower_bound(begin(), end(), lItem, p);\
+      return i - begin();                                           \
+  }                                                                 \
   void Add(T lItem, size_t nInsert = 1)                             \
     { insert(end(), nInsert, lItem); }                              \
-  size_t Add(T lItem, CMPFUNC fnCompare);                           \
+  size_t Add(T lItem, CMPFUNC fnCompare)                            \
+  {                                                                 \
+      size_t n = IndexForInsert(lItem, fnCompare);                  \
+      Insert(lItem, n);                                             \
+      return n;                                                     \
+  }                                                                 \
   void Insert(T lItem, size_t uiIndex, size_t nInsert = 1)          \
     { insert(begin() + uiIndex, nInsert, lItem); }                  \
-  void Remove(T lItem);                                             \
+  void Remove(T lItem)                                              \
+  {                                                                 \
+    int n = Index(lItem);                                           \
+    wxCHECK_RET( n != wxNOT_FOUND, _WX_ERROR_REMOVE );              \
+    RemoveAt((size_t)n);                                            \
+  }                                                                 \
   void RemoveAt(size_t uiIndex, size_t nRemove = 1)                 \
     { erase(begin() + uiIndex, begin() + uiIndex + nRemove); }      \
                                                                     \
@@ -269,11 +313,6 @@ private:                                                            \
 //       so using a temporary variable instead.
 //
 // The classes need a (even trivial) ~name() to link under Mac X
-//
-// _WX_ERROR_REMOVE is needed to resolve the name conflict between the wxT()
-// macro and T typedef: we can't use wxT() inside WX_DEFINE_ARRAY!
-
-#define _WX_ERROR_REMOVE wxT("removing inexisting element in wxArray::Remove")
 
 // ----------------------------------------------------------------------------
 // _WX_DEFINE_TYPEARRAY: array for simple types
@@ -281,40 +320,10 @@ private:                                                            \
 
 #if wxUSE_STL
 
+// in STL case we don't need the entire base arrays hack as standard container
+// don't suffer from alignment/storage problems as our home-grown do
 #define  _WX_DEFINE_TYPEARRAY(T, name, base, classexp)                \
-typedef int (CMPFUNC_CONV *CMPFUNC##T)(T *pItem1, T *pItem2);         \
-classexp name : public base                                           \
-{                                                                     \
-public:                                                               \
-  name() : base() { }                                                 \
-  name(size_type n) : base(n) { }                                     \
-  name(size_type n, const_reference v) : base(n, v) { }               \
-                                                                      \
-  T& operator[](size_t uiIndex) const                                 \
-    { return (T&)(base::operator[](uiIndex)); }                       \
-  T& Item(size_t uiIndex) const                                       \
-    { return (T&)/*const cast*/base::operator[](uiIndex); }           \
-  T& Last() const                                                     \
-    { return Item(GetCount() - 1); }                                  \
-                                                                      \
-  int Index(T e, bool bFromEnd = false) const                         \
-    { return base::Index(e, bFromEnd); }                              \
-                                                                      \
-  void Add(T lItem, size_t nInsert = 1)                               \
-    { insert(end(), nInsert, lItem); }                                \
-  void Insert(T lItem, size_t uiIndex, size_t nInsert = 1)            \
-    { insert(begin() + uiIndex, nInsert, lItem); }                    \
-                                                                      \
-  void RemoveAt(size_t uiIndex, size_t nRemove = 1)                   \
-    { base::RemoveAt(uiIndex, nRemove); }                             \
-  void Remove(T lItem)                                                \
-    { int iIndex = Index(lItem);                                      \
-      wxCHECK2_MSG( iIndex != wxNOT_FOUND, return,                    \
-         _WX_ERROR_REMOVE);                                           \
-      RemoveAt((size_t)iIndex); }                                     \
-                                                                      \
-  void Sort(CMPFUNC##T fCmp) { base::Sort((CMPFUNC)fCmp); }           \
-}
+    _WX_DECLARE_BASEARRAY(T, name, classexp)
 
 #define  _WX_DEFINE_TYPEARRAY_PTR(T, name, base, classexp)         \
          _WX_DEFINE_TYPEARRAY(T, name, base, classexp)
@@ -353,8 +362,7 @@ public:                                                               \
     { base::RemoveAt(uiIndex, nRemove); }                             \
   void Remove(T lItem)                                                \
     { int iIndex = Index(lItem);                                      \
-      wxCHECK2_MSG( iIndex != wxNOT_FOUND, return,                    \
-         _WX_ERROR_REMOVE);                                           \
+      wxCHECK_RET( iIndex != wxNOT_FOUND, _WX_ERROR_REMOVE);          \
       base::RemoveAt((size_t)iIndex); }                               \
                                                                       \
   void Sort(CMPFUNC##T fCmp) { base::Sort((CMPFUNC)fCmp); }           \
@@ -535,8 +543,7 @@ public:                                                               \
     { base::erase(begin() + uiIndex, begin() + uiIndex + nRemove); }  \
   void Remove(T lItem)                                                \
     { int iIndex = Index(lItem);                                      \
-      wxCHECK2_MSG( iIndex != wxNOT_FOUND, return,                    \
-        _WX_ERROR_REMOVE );                                           \
+      wxCHECK_RET( iIndex != wxNOT_FOUND, _WX_ERROR_REMOVE );         \
       base::erase(begin() + iIndex); }                                \
                                                                       \
 private:                                                              \
