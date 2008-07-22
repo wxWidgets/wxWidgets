@@ -64,6 +64,7 @@ static pixel_format_t gs_pixel_format_wxImage =
 class wxBitmapRefData: public wxGDIRefData
 {
 public:
+    wxBitmapRefData();
     wxBitmapRefData(int width, int height, int bpp);
     wxBitmapRefData(const wxBitmapRefData& data);
     virtual ~wxBitmapRefData();
@@ -78,11 +79,15 @@ public:
     bitmap_t       *m_bitmap;
 
 private:
-    void DoCreateBitmap();
+    void DoCreateBitmap(int width, int height, int depth);
 };
 
-void wxBitmapRefData::DoCreateBitmap()
+void wxBitmapRefData::DoCreateBitmap(int width, int height, int depth)
 {
+    m_width = width;
+    m_height = height;
+    m_bpp = depth;
+
     pixel_format_t pf_dummy;
     pixel_format_t *pf;
     int mglDepth = depth;
@@ -122,28 +127,32 @@ void wxBitmapRefData::DoCreateBitmap()
     m_bitmap = MyMGL_createBitmap(width, height, mglDepth, pf);
 }
 
-wxBitmapRefData::wxBitmapRefData(int width, int height, int bpp)
+wxBitmapRefData::wxBitmapRefData()
 {
-    m_width = width;
-    m_height = height;
-    m_bpp = bpp;
+    m_width =
+    m_height =
+    m_bpp = 0;
 
     m_palette = NULL;
     m_mask = NULL;
 
-    DoCreateBitmap();
+    m_bitmap = NULL;
+}
+
+wxBitmapRefData::wxBitmapRefData(int width, int height, int bpp)
+{
+    DoCreateBitmap(width, height, bpp);
+
+    m_palette = NULL;
+    m_mask = NULL;
 }
 
 wxBitmapRefData::wxBitmapRefData(const wxBitmapRefData& data)
 {
-    m_width = data.m_width;
-    m_height = data.m_height;
-    m_bpp = data.m_bpp;
+    DoCreateBitmap(data.m_width, data.m_height, data.m_bpp);
 
     m_palette = NULL; // FIXME: should copy
     m_mask = NULL; // FIXME: should copy
-
-    DoCreateBitmap();
 }
 
 wxBitmapRefData::~wxBitmapRefData()
