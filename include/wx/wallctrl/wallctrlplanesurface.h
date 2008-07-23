@@ -111,44 +111,18 @@ public:
 	// Moves out far from the wall
 	void MoveOut(float delta);
 
-	virtual void SetDataSource(wxWallCtrlDataSource * dataSource)
-	{
-		wxWallCtrlSurface::SetDataSource(dataSource);
-
-		// If we have a data source, query its first item
-		if (dataSource)
-		{
-			m_firstItem = dataSource->GetFirstItem();
-		}
-	}
+	virtual void SetDataSource(wxWallCtrlDataSource * dataSource);
 
 	// Returns the point at the center of the specified item in OpenGL coordinates
-	VectorType GetItemCenter(wxWallCtrlItemID itemID) const
-	{
-		VectorType pos;
-		pos.resize(3, 0);
-
-		wxPoint point = GetItemPosition(GetItemIndex(itemID));
-
-		// Get the rect of the item
-		wxRealRect rect = GetRawItemRect(point.x, point.y);
-
-		// Query the item for mor information
-		wxWallCtrlItem info;
-		m_dataSource->GetItemInfo(GetItemIndex(itemID), info);
-
-		// Adjust the rect for aspect ratio
-		AdjustCoordinates(rect, info.size);
-
-		// Set the position of the center
-		pos[0] = (rect.GetRight() + rect.GetLeft())/2.0;
-		pos[1] = (rect.GetBottom() + rect.GetTop())/2.0;
-		pos[2] = 0;
-
-		return pos;
-	}
+	VectorType GetItemCenter(wxWallCtrlItemID itemID) const;
 
 	void Seek(wxWallCtrlItemID itemID);
+	
+	void SeekLeft();
+	void SeekRight();
+	void SeekUp();
+	void SeekDown();
+
 protected:
 	// Maps an X coordinate to OpenGL space
 	float MapX(float x) const;
@@ -158,9 +132,12 @@ protected:
 
 	// Returns the index of the item at the specified logical position
 	unsigned GetItemIndex(int x, int y) const;
+	unsigned GetItemIndex(wxPoint position) const;
+
 
 	// Returns the index of the item with the specified ID
 	unsigned GetItemIndex(wxWallCtrlItemID itemID) const;
+
 
 	// Returns the logical position of a specific index
 	wxPoint GetItemPosition(unsigned index) const;
@@ -222,6 +199,11 @@ private:
 //	float m_cameraHzDelta;
 
 	float m_defaultDistance;	// The default distance between camera and wallf
+
+	// Selection
+	int m_selectedIndex;
+	float m_selectionMargin;
+	float m_selectionDepth;
 
 };
 

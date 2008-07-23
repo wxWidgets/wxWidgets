@@ -71,8 +71,9 @@ void wxWallCtrl::SetNavigator( wxWallCtrlNavigation * navigator /*= NULL*/)
 {
 	if (navigationSet)
 	{
-		// TODO: Check if this frees the memory
+		// TODO: Check if this frees the memory. It seems like it does
 		PopEventHandler(true);
+
 		m_navigator = NULL;
 	}
 
@@ -165,8 +166,8 @@ wxWallCtrl::~wxWallCtrl()
 	if (m_navigator)
 	{
 //		delete m_navigator;
-		navigationSet = false;
 		SetNavigator(NULL);
+		navigationSet = false;
 	}
 }
 

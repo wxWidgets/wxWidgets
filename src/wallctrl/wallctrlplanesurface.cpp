@@ -25,8 +25,13 @@ wxWallCtrlPlaneSurface::wxWallCtrlPlaneSurface()
 	m_scopeSize.SetHeight(1);
 	m_scopeSize.SetWidth(1);
 
+	// Selection
+	m_selectedIndex = 0;
+	m_selectionMargin = 0.05;
+	m_selectionDepth = 0.05;
+
 	// Set the near and far limits
-	// TODO: The far limit should be a function of the max number of visible item
+	// TODO: The far limit may be a function of the max number of visible item
 	m_nearLimit = 0.1;
 	m_farLimit = 10;
 
@@ -206,6 +211,12 @@ unsigned wxWallCtrlPlaneSurface::GetItemIndex( wxWallCtrlItemID itemID ) const
 	// The ID is the same as the index and this time
 	return itemID;
 }
+
+unsigned wxWallCtrlPlaneSurface::GetItemIndex( wxPoint position ) const
+{
+	return GetItemIndex(position.x, position.y);
+}
+
 void wxWallCtrlPlaneSurface::RenderItems()
 {
 	if (!m_dataSource)
@@ -247,17 +258,41 @@ void wxWallCtrlPlaneSurface::RenderItems()
 			AdjustCoordinates(rect, info.size);
 			//AdjustCoordinates(Top, Bottom, Left, Right, info.size);
 
-			// Draw this item on its own quad
-			glBegin(GL_QUADS);					
-			glTexCoord2f(1.0, 1.0);
-			glVertex3f( rect.GetRight(), rect.GetTop(), 0.0f);			// Top Right
-			glTexCoord2f(0.0, 1.0);
-			glVertex3f(rect.GetLeft(), rect.GetTop(), 0.0f);			// Top Left
-			glTexCoord2f(0.0, 0.0);
-			glVertex3f(rect.GetLeft(), rect.GetBottom(), 0.0f);			// Bottom Left
-			glTexCoord2f(1.0, 0.0);
-			glVertex3f(rect.GetRight(), rect.GetBottom(), 0.0f);			// Bottom Right
-			glEnd();
+			if (Index == m_selectedIndex)
+			{
+				glPushMatrix();
+				glTranslatef(0, 0, m_selectionDepth);
+
+				// Draw this item on its own quad
+				glBegin(GL_QUADS);					
+				glTexCoord2f(1.0, 1.0);
+				glVertex3f( rect.GetRight()+m_selectionMargin, rect.GetTop()-m_selectionMargin, 0.0f);			// Top Right
+				glTexCoord2f(0.0, 1.0);
+				glVertex3f(rect.GetLeft()-m_selectionMargin, rect.GetTop()-m_selectionMargin, 0.0f);			// Top Left
+				glTexCoord2f(0.0, 0.0);
+				glVertex3f(rect.GetLeft()-m_selectionMargin, rect.GetBottom()+m_selectionMargin, 0.0f);			// Bottom Left
+				glTexCoord2f(1.0, 0.0);
+				glVertex3f(rect.GetRight()+m_selectionMargin, rect.GetBottom()+m_selectionMargin, 0.0f);			// Bottom Right
+				glEnd();
+
+				glPopMatrix();
+				
+			}
+			else
+			{
+				// Draw this item on its own quad
+				glBegin(GL_QUADS);					
+				glTexCoord2f(1.0, 1.0);
+				glVertex3f( rect.GetRight(), rect.GetTop(), 0.0f);			// Top Right
+				glTexCoord2f(0.0, 1.0);
+				glVertex3f(rect.GetLeft(), rect.GetTop(), 0.0f);			// Top Left
+				glTexCoord2f(0.0, 0.0);
+				glVertex3f(rect.GetLeft(), rect.GetBottom(), 0.0f);			// Bottom Left
+				glTexCoord2f(1.0, 0.0);
+				glVertex3f(rect.GetRight(), rect.GetBottom(), 0.0f);			// Bottom Right
+				glEnd();
+			}
+
 
 		}
 	}
@@ -473,10 +508,100 @@ wxWallCtrlPlaneSurface::wxRealRect wxWallCtrlPlaneSurface::GetRawItemRect( int x
 	return rect;
 }
 
+
+
+VectorType wxWallCtrlPlaneSurface::GetItemCenter( wxWallCtrlItemID itemID ) const
+{
+	VectorType pos;
+	pos.resize(3, 0);
+
+	wxPoint point = GetItemPosition(GetItemIndex(itemID));
+
+	// Get the rect of the item
+	wxRealRect rect = GetRawItemRect(point.x, point.y);
+
+	// Query the item for mor information
+	wxWallCtrlItem info;
+	m_dataSource->GetItemInfo(GetItemIndex(itemID), info);
+
+	// Adjust the rect for aspect ratio
+	AdjustCoordinates(rect, info.size);
+
+	// Set the position of the center
+	pos[0] = (rect.GetRight() + rect.GetLeft())/2.0;
+	pos[1] = (rect.GetBottom() + rect.GetTop())/2.0;
+	pos[2] = 0;
+
+	return pos;
+}
+
+void wxWallCtrlPlaneSurface::SetDataSource( wxWallCtrlDataSource * dataSource )
+{
+	wxWallCtrlSurface::SetDataSource(dataSource);
+
+	// If we have a data source, query its first item
+	if (dataSource)
+	{
+		m_firstItem = dataSource->GetFirstItem();
+	}
+}
+
 void wxWallCtrlPlaneSurface::Seek( wxWallCtrlItemID itemID )
 {
+	// Update the motion varaibles
 	m_targetLook = GetItemCenter(itemID);
 	m_targetCamera[0] = m_targetLook[0];
 	m_targetCamera[1] = m_targetLook[1];
 	m_targetCamera[2] = m_defaultDistance;
+
+	// Update the logical selection
+	m_selectedIndex = itemID;
+}
+
+// TODO: Using the scope alone for limit checking is not enough
+void wxWallCtrlPlaneSurface::SeekLeft()
+{
+	wxPoint Pos = GetItemPosition(m_selectedIndex);
+	Pos.x--;
+	if (Pos.x < 0)
+	{
+		Pos.x = 0;
+	}
+	Seek(GetItemIndex(Pos));
+}
+
+void wxWallCtrlPlaneSurface::SeekRight()
+{
+	wxPoint Pos = GetItemPosition(m_selectedIndex);
+	Pos.x++;
+	if (Pos.x >= m_scopeSize.GetX())
+	{
+		Pos.x = m_scopeSize.GetX()-1;
+	}
+
+	Seek(GetItemIndex(Pos));
+}
+
+void wxWallCtrlPlaneSurface::SeekUp()
+{
+	wxPoint Pos = GetItemPosition(m_selectedIndex);
+	Pos.y++;
+	if (Pos.y >= m_scopeSize.GetY())
+	{
+		Pos.y = m_scopeSize.GetY()-1;
+	}
+	Seek(GetItemIndex(Pos));
+}
+
+void wxWallCtrlPlaneSurface::SeekDown()
+{
+	wxPoint Pos = GetItemPosition(m_selectedIndex);
+	Pos.y--;
+	if (Pos.y < 0)
+	{
+		Pos.y = 0;
+	}
+	Seek(GetItemIndex(Pos));
+
+
 }

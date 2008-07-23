@@ -26,6 +26,8 @@
 #include "include/wx/wallctrl/wallctrlbitmapsource.h"
 #include "include/wx/wallctrl/wallctrldefaultplanenavigation.h"
 
+#include "wx/dir.h"
+
 ////@begin includes
 ////@end includes
 
@@ -33,6 +35,7 @@
 
 ////@begin XPM images
 ////@end XPM images
+
 
 
 /*!
@@ -49,6 +52,8 @@ IMPLEMENT_DYNAMIC_CLASS( wxWallCtrlSample, wxDialog )
 BEGIN_EVENT_TABLE( wxWallCtrlSample, wxDialog )
 
 ////@begin wxWallCtrlSample event table entries
+    EVT_DIRPICKER_CHANGED( ID_DIRPICKERCTRL1, wxWallCtrlSample::OnDirpickerctrlDirPickerChanged )
+
 ////@end wxWallCtrlSample event table entries
 
 END_EVENT_TABLE()
@@ -142,8 +147,9 @@ void wxWallCtrlSample::CreateControls()
 
 	//wxWallCtrlBitmapSource * source = new wxWallCtrlBitmapSource();
 	bitmapSource = new wxWallCtrlBitmapSource();
-	wxBitmap testBitmap;
 
+
+/*	wxBitmap testBitmap;
 	// Just add bitmaps manually.
 	for (int i=0; i < 10; ++i)
 	{
@@ -154,16 +160,15 @@ void wxWallCtrlSample::CreateControls()
 		testBitmap.LoadFile(wxT("Wall3.png"), wxBITMAP_TYPE_PNG);
 		bitmapSource->AppendBitmap(testBitmap);
 	}
-
+*/
 	wxWallCtrlPlaneSurface * surface = new wxWallCtrlPlaneSurface();
-	surface->SetScopeSize(wxSize(2, 2));
+	surface->SetScopeSize(wxSize(10, 2));
 
 	wxWallCtrlDefaultPlaneNavigation * navigation = new wxWallCtrlDefaultPlaneNavigation();
 	wall->SetSurface(surface);
 	wall->SetDataSource(bitmapSource);
 	//delete (bitmapSource);
 	wall->SetNavigator(navigation);
-
 }
 
 
@@ -201,3 +206,37 @@ wxIcon wxWallCtrlSample::GetIconResource( const wxString& name )
     return wxNullIcon;
 ////@end wxWallCtrlSample icon retrieval
 }
+
+
+/*!
+ * wxEVT_DIRPICKER_CHANGED event handler for ID_DIRPICKERCTRL1
+ */
+
+void wxWallCtrlSample::OnDirpickerctrlDirPickerChanged( wxFileDirPickerEvent& event )
+{	
+    wxBitmap testBitmap;
+	// Just add bitmaps manually.
+
+	wxDir dir(event.GetPath());
+
+    if ( !dir.IsOpened() )
+    {
+		// TODO: We failed to open the folder, see if we should flag an error
+        return;
+    }
+
+
+    wxString filename;
+
+    bool cont = dir.GetFirst(&filename, wxT("*.png"), wxDIR_FILES);
+    while ( cont )
+    {
+		// We need to load the images from the selected folder
+		wxString fullPath = event.GetPath() +wxT("/") +filename;
+		testBitmap.LoadFile(fullPath, wxBITMAP_TYPE_PNG);
+		bitmapSource->AppendBitmap(testBitmap);
+
+        cont = dir.GetNext(&filename);
+    }
+}
+

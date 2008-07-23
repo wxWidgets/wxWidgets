@@ -42,16 +42,20 @@ void wxWallCtrlDefaultPlaneNavigation::OnKeyDown( wxKeyEvent &event )
 		m_surface->Seek(0);
 		break;
 	case WXK_LEFT:
-		m_surface->MoveLeft(0.1);
+		m_surface->SeekLeft();
+		//m_surface->MoveLeft(0.1);
 		break;
 	case WXK_RIGHT:
-		m_surface->MoveRight(0.1);
+		m_surface->SeekRight();
+		//m_surface->MoveRight(0.1);
 		break;
 	case WXK_UP:
-		m_surface->MoveIn(0.1);
+		m_surface->SeekUp();
+		//m_surface->MoveIn(0.1);
 		break;
 	case WXK_DOWN:
-		m_surface->MoveOut(0.1);
+		m_surface->SeekDown();
+		//m_surface->MoveOut(0.1);
 		break;
 	}
 }
