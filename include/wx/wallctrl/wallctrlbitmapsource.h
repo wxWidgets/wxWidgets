@@ -14,6 +14,8 @@
 
 #include "wallctrldatasource.h"
 
+WX_DECLARE_HASH_MAP(int, wxBitmap, wxIntegerHash, wxIntegerEqual, BitmapMap);
+
 class wxWallCtrlBitmapSource :
 	public wxWallCtrlDataSource
 {
@@ -42,7 +44,6 @@ public:
 
 private:
 	//WX_DEFINE_ARRAY(wxBitmap, ArrayOfBitmaps);
-	WX_DECLARE_HASH_MAP(int, wxBitmap, wxIntegerHash, wxIntegerEqual, BitmapMap);
 
 	BitmapMap bitmaps;
 	wxBitmap tempTexture;

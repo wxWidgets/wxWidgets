@@ -20,8 +20,9 @@
     <string name="resource_prefix">""</string>
     <bool name="use_two_step_construction">0</bool>
     <bool name="use_enums">0</bool>
+    <bool name="generate_for_xrced">0</bool>
     <string name="current_platform">"&lt;All platforms&gt;"</string>
-    <string name="target_wx_version">"2.8.7"</string>
+    <string name="target_wx_version">"2.8.8"</string>
     <string name="cpp_header_comment">"/////////////////////////////////////////////////////////////////////////////
 // Name:        %HEADER-FILENAME%
 // Purpose:     
@@ -106,6 +107,7 @@
     <bool name="archive_all_image_files">0</bool>
     <bool name="xrc_retain_relative_paths">1</bool>
     <bool name="xrc_generate_id_tags">0</bool>
+    <bool name="xrc_use_name_property">0</bool>
   </header>
   <data>
     <document>
@@ -149,6 +151,7 @@
         <string name="Compiler location">"%AUTO%"</string>
         <string name="wxWidgets location">"%AUTO%"</string>
         <string name="C++ command">"%AUTO%"</string>
+        <string name="C command">"%AUTO%"</string>
         <string name="Resource compiler">"%AUTO%"</string>
         <string name="Make command">"%AUTO%"</string>
         <string name="Project makefile">"%AUTO%"</string>
@@ -182,7 +185,7 @@
           <long name="title-mode">0</long>
           <long name="locked">0</long>
           <string name="template-name">"VC++ Project"</string>
-          <bool name="dirty">0</bool>
+          <bool name="dirty">1</bool>
           <long name="makefile-last-written">-8519680</long>
           <string name="Compiler name">"VC++ Project"</string>
           <string name="Build mode">"Debug"</string>
@@ -205,6 +208,7 @@
           <string name="Compiler location">"%AUTO%"</string>
           <string name="wxWidgets location">"%AUTO%"</string>
           <string name="C++ command">"%AUTO%"</string>
+          <string name="C command">"%AUTO%"</string>
           <string name="Resource compiler">"%AUTO%"</string>
           <string name="Make command">"%AUTO%"</string>
           <string name="Project makefile">"%AUTO%"</string>
@@ -219,7 +223,7 @@
           <string name="Libraries">"%AUTO%"</string>
           <string name="Library path">"%AUTO%"</string>
           <string name="Linker flags">"%AUTO%"</string>
-          <string name="Include path">"%AUTO%"</string>
+          <string name="Include path">"%AUTO%;./include"</string>
           <string name="Resource flags">"%AUTO%"</string>
           <string name="Resource path">"%AUTO%"</string>
           <string name="wxWidgets build path">"%AUTO%"</string>
@@ -236,6 +240,7 @@
           <string name="Pre-build command">"%AUTO%"</string>
           <string name="Post-build command">"%AUTO%"</string>
           <string name="Pre-link command">"%AUTO%"</string>
+          <string name="Ignore libraries">"%AUTO%"</string>
           <string name="CFG">""</string>
         </document>
       </document>
@@ -560,6 +565,18 @@
         <long name="title-mode">0</long>
         <long name="locked">1</long>
         <document>
+          <string name="title">"WallCtrlCommandEvent.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/wx/wallctrl/WallCtrlCommandEvent.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"23/7/2008"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
           <string name="title">"matrix.cpp"</string>
           <string name="type">"source-editor-document"</string>
           <string name="filename">"src/wallctrl/matrix.cpp"</string>
@@ -569,6 +586,18 @@
           <long name="title-mode">1</long>
           <long name="locked">0</long>
           <string name="created">"30/6/2008"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"matrix.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/wx/wallctrl/matrix.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"23/7/2008"</string>
           <string name="language">""</string>
         </document>
         <document>
@@ -584,6 +613,18 @@
           <string name="language">""</string>
         </document>
         <document>
+          <string name="title">"wallctrl.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/wx/wallctrl/wallctrl.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"23/7/2008"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
           <string name="title">"wallctrlbitmapsource.cpp"</string>
           <string name="type">"source-editor-document"</string>
           <string name="filename">"src/wallctrl/wallctrlbitmapsource.cpp"</string>
@@ -593,6 +634,18 @@
           <long name="title-mode">1</long>
           <long name="locked">0</long>
           <string name="created">"30/6/2008"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"wallctrlbitmapsource.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/wx/wallctrl/wallctrlbitmapsource.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"23/7/2008"</string>
           <string name="language">""</string>
         </document>
         <document>
@@ -608,6 +661,18 @@
           <string name="language">""</string>
         </document>
         <document>
+          <string name="title">"wallctrldatasource.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/wx/wallctrl/wallctrldatasource.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"23/7/2008"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
           <string name="title">"wallctrldefaultplanenavigation.cpp"</string>
           <string name="type">"source-editor-document"</string>
           <string name="filename">"src/wallctrl/wallctrldefaultplanenavigation.cpp"</string>
@@ -617,6 +682,18 @@
           <long name="title-mode">1</long>
           <long name="locked">0</long>
           <string name="created">"30/6/2008"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"wallctrldefaultplanenavigation.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/wx/wallctrl/wallctrldefaultplanenavigation.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"23/7/2008"</string>
           <string name="language">""</string>
         </document>
         <document>
@@ -632,6 +709,18 @@
           <string name="language">""</string>
         </document>
         <document>
+          <string name="title">"wallctrlnavigation.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/wx/wallctrl/wallctrlnavigation.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"23/7/2008"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
           <string name="title">"wallctrlnavigationevent.cpp"</string>
           <string name="type">"source-editor-document"</string>
           <string name="filename">"src/wallctrl/wallctrlnavigationevent.cpp"</string>
@@ -641,6 +730,18 @@
           <long name="title-mode">1</long>
           <long name="locked">0</long>
           <string name="created">"30/6/2008"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"wallctrlnavigationevent.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/wx/wallctrl/wallctrlnavigationevent.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"23/7/2008"</string>
           <string name="language">""</string>
         </document>
         <document>
@@ -656,6 +757,18 @@
           <string name="language">""</string>
         </document>
         <document>
+          <string name="title">"wallctrlplanesurface.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/wx/wallctrl/wallctrlplanesurface.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"23/7/2008"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
           <string name="title">"wallctrlsurface.cpp"</string>
           <string name="type">"source-editor-document"</string>
           <string name="filename">"src/wallctrl/wallctrlsurface.cpp"</string>
@@ -665,6 +778,30 @@
           <long name="title-mode">1</long>
           <long name="locked">0</long>
           <string name="created">"30/6/2008"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"wallctrlsurface.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/wx/wallctrl/wallctrlsurface.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"23/7/2008"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"wxWallCtrlProject.dsp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"wxWallCtrlProject.dsp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"23/7/2008"</string>
           <string name="language">""</string>
         </document>
         <document>

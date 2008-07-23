@@ -17,7 +17,8 @@
 
 #define BYTES_PER_PIXEL 4
 
-
+// A map to hold the texture names for items that were previously cached
+WX_DECLARE_HASH_MAP(int, int, wxIntegerHash, wxIntegerEqual, Int2IntMap);
 
 // This is a default surface implementation. This is where all the geometric manipulation and rendering take place
 class wxWallCtrlPlaneSurface :
@@ -193,8 +194,6 @@ private:
 	// This is the 2D window in number of items in each dimension
 	wxSize m_scopeSize;
 
-	// A map to hold the texture names for items that were previously cached
-	WX_DECLARE_HASH_MAP(int, int, wxIntegerHash, wxIntegerEqual, Int2IntMap);
 	Int2IntMap texturesCache;
 
 	// The dimensions of each item as fractions of the unit size

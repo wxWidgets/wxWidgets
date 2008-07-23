@@ -23,7 +23,7 @@ wxWallCtrlBitmapSource::~wxWallCtrlBitmapSource(void)
 
 wxWallCtrlRenderType wxWallCtrlBitmapSource::GetRenderType(const wxWallCtrlItemID& itemId, const wxSize& availableResolution, wxSize& desiredResolution )
 {
-	return wxWallCtrlRenderType::wxWallCtrlRenderBitmap;
+	return wxWallCtrlRenderBitmap;
 }
 
 bool wxWallCtrlBitmapSource::RenderItem(const wxWallCtrlItemID& itemID, wxDC& dc, const wxSize& dcSize )
