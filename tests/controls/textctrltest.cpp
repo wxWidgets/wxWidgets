@@ -38,10 +38,16 @@ private:
     CPPUNIT_TEST_SUITE( TextCtrlTestCase );
         CPPUNIT_TEST( SetValue );
         CPPUNIT_TEST( TextChangeEvents );
+        CPPUNIT_TEST( Selection );
     CPPUNIT_TEST_SUITE_END();
 
     void SetValue();
     void TextChangeEvents();
+    void Selection();
+
+    // Selection() test helper: verify that selection is as described by the
+    // function parameters
+    void AssertSelection(int from, int to, const char *sel);
 
     wxTextCtrl *m_text;
     wxFrame *m_frame;
@@ -146,3 +152,33 @@ void TextCtrlTestCase::TextChangeEvents()
     CPPUNIT_ASSERT_EQUAL( 1, handler.GetEvents() );
 }
 
+void TextCtrlTestCase::AssertSelection(int from, int to, const char *sel)
+{
+    CPPUNIT_ASSERT( m_text->HasSelection() );
+
+    long fromReal,
+         toReal;
+    m_text->GetSelection(&fromReal, &toReal);
+    CPPUNIT_ASSERT_EQUAL( from, fromReal );
+    CPPUNIT_ASSERT_EQUAL( to, toReal );
+    CPPUNIT_ASSERT_EQUAL( sel, m_text->GetStringSelection() );
+
+    CPPUNIT_ASSERT_EQUAL( from, m_text->GetInsertionPoint() );
+}
+
+void TextCtrlTestCase::Selection()
+{
+    m_text->SetValue("0123456789");
+
+    m_text->SetSelection(2, 4);
+    AssertSelection(2, 4, "23"); // not "234"!
+
+    m_text->SetSelection(3, -1);
+    AssertSelection(3, 10, "3456789");
+
+    m_text->SelectAll();
+    AssertSelection(0, 10, "0123456789");
+
+    m_text->SetSelection(0, 0);
+    CPPUNIT_ASSERT( !m_text->HasSelection() );
+}
