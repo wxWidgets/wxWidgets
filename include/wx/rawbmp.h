@@ -413,7 +413,11 @@ struct wxPixelDataOut<wxImage>
             ChannelType& Alpha() { return *m_pAlpha; }
 
             // address the pixel contents directly (always RGB, without alpha)
-            typename PixelFormat::PixelType& Data()
+            //
+            // this can't be used to modify the image as assigning a 32bpp
+            // value to 24bpp pixel would overwrite an extra byte in the next
+            // pixel or beyond the end of image
+            const typename PixelFormat::PixelType& Data()
                 { return *(typename PixelFormat::PixelType *)m_pRGB; }
 
         // private: -- see comment in the beginning of the file
@@ -600,6 +604,10 @@ struct wxPixelDataOut<wxBitmap>
             // address the pixel contents directly
             //
             // warning: the format is platform dependent
+            //
+            // warning 2: assigning to Data() only works correctly for 16bpp or
+            //            32bpp formats but using it for 24bpp ones overwrites
+            //            one extra byte and so can't be done
             typename PixelFormat::PixelType& Data()
                 { return *(typename PixelFormat::PixelType *)m_ptr; }
 
