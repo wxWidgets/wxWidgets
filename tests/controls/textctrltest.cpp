@@ -39,11 +39,13 @@ private:
         CPPUNIT_TEST( SetValue );
         CPPUNIT_TEST( TextChangeEvents );
         CPPUNIT_TEST( Selection );
+        CPPUNIT_TEST( InsertionPoint );
     CPPUNIT_TEST_SUITE_END();
 
     void SetValue();
     void TextChangeEvents();
     void Selection();
+    void InsertionPoint();
 
     // Selection() test helper: verify that selection is as described by the
     // function parameters
@@ -182,3 +184,30 @@ void TextCtrlTestCase::Selection()
     m_text->SetSelection(0, 0);
     CPPUNIT_ASSERT( !m_text->HasSelection() );
 }
+
+void TextCtrlTestCase::InsertionPoint()
+{
+    CPPUNIT_ASSERT_EQUAL( 0, m_text->GetLastPosition() );
+    CPPUNIT_ASSERT_EQUAL( 0, m_text->GetInsertionPoint() );
+
+    m_text->SetValue("0"); // should put the insertion point in front
+    CPPUNIT_ASSERT_EQUAL( 1, m_text->GetLastPosition() );
+    CPPUNIT_ASSERT_EQUAL( 0, m_text->GetInsertionPoint() );
+
+    m_text->AppendText("12"); // should update the insertion point position
+    CPPUNIT_ASSERT_EQUAL( 3, m_text->GetLastPosition() );
+    CPPUNIT_ASSERT_EQUAL( 3, m_text->GetInsertionPoint() );
+
+    m_text->SetInsertionPoint(1);
+    CPPUNIT_ASSERT_EQUAL( 3, m_text->GetLastPosition() );
+    CPPUNIT_ASSERT_EQUAL( 1, m_text->GetInsertionPoint() );
+
+    m_text->SetInsertionPointEnd();
+    CPPUNIT_ASSERT_EQUAL( 3, m_text->GetInsertionPoint() );
+
+    m_text->SetInsertionPoint(0);
+    m_text->WriteText("-"); // should move it after the written text
+    CPPUNIT_ASSERT_EQUAL( 4, m_text->GetLastPosition() );
+    CPPUNIT_ASSERT_EQUAL( 1, m_text->GetInsertionPoint() );
+}
+
