@@ -70,7 +70,9 @@ void ImageRawTestCase::RGBImage()
 
         for ( int x = 0; x < WIDTH; x++ )
         {
-            p.Data() = (x + y) % 2 ? 0 : -1;
+            p.Red() =
+            p.Green() =
+            p.Blue() = (x + y) % 2 ? 0 : -1;
             ++p;
         }
 
