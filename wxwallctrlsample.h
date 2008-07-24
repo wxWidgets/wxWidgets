@@ -78,7 +78,7 @@ public:
 ////@begin wxWallCtrlSample event handler declarations
 
     /// wxEVT_DIRPICKER_CHANGED event handler for ID_DIRPICKERCTRL1
-    void OnDirpickerctrlDirPickerChanged( wxFileDirPickerEvent& event );
+    void OnDirpickerctrl1DirPickerChanged( wxFileDirPickerEvent& event );
 
 ////@end wxWallCtrlSample event handler declarations
 

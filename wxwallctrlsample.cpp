@@ -52,7 +52,7 @@ IMPLEMENT_DYNAMIC_CLASS( wxWallCtrlSample, wxDialog )
 BEGIN_EVENT_TABLE( wxWallCtrlSample, wxDialog )
 
 ////@begin wxWallCtrlSample event table entries
-    EVT_DIRPICKER_CHANGED( ID_DIRPICKERCTRL1, wxWallCtrlSample::OnDirpickerctrlDirPickerChanged )
+    EVT_DIRPICKER_CHANGED( ID_DIRPICKERCTRL1, wxWallCtrlSample::OnDirpickerctrl1DirPickerChanged )
 
 ////@end wxWallCtrlSample event table entries
 
@@ -212,7 +212,7 @@ wxIcon wxWallCtrlSample::GetIconResource( const wxString& name )
  * wxEVT_DIRPICKER_CHANGED event handler for ID_DIRPICKERCTRL1
  */
 
-void wxWallCtrlSample::OnDirpickerctrlDirPickerChanged( wxFileDirPickerEvent& event )
+void wxWallCtrlSample::OnDirpickerctrl1DirPickerChanged( wxFileDirPickerEvent& event )
 {	
     wxBitmap testBitmap;
 	// Just add bitmaps manually.
@@ -228,15 +228,20 @@ void wxWallCtrlSample::OnDirpickerctrlDirPickerChanged( wxFileDirPickerEvent& ev
 
     wxString filename;
 
-    bool cont = dir.GetFirst(&filename, wxT("*.png"), wxDIR_FILES);
+    bool cont = dir.GetFirst(&filename, wxT("*.*"), wxDIR_FILES);
     while ( cont )
     {
-		// We need to load the images from the selected folder
-		wxString fullPath = event.GetPath() +wxT("/") +filename;
-		testBitmap.LoadFile(fullPath, wxBITMAP_TYPE_PNG);
-		bitmapSource->AppendBitmap(testBitmap);
+        wxString f,p,ext;
+        wxSplitPath(filename, & p, & f, & ext);
+        ext.MakeLower();
+        if (ext == wxT("png") || ext == wxT("jpg") || ext == wxT("jpeg"))
+        {
+            // We need to load the images from the selected folder
+            wxString fullPath = event.GetPath() +wxT("/") +filename;
+            testBitmap.LoadFile(fullPath, wxBITMAP_TYPE_ANY);
+            bitmapSource->AppendBitmap(testBitmap);
+        }
 
         cont = dir.GetNext(&filename);
     }
 }
-
