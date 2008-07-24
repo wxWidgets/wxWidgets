@@ -84,8 +84,8 @@
     #undef wxHAS_XLOCALE_SUPPORT
 #endif
 
-/* Direct access to bitmap data is only implemented for MSW/Mac/GTK2 */
-#if defined(__WXGTK20__) || defined(__WXMAC__) || \
+/* Direct access to bitmap data is not implemented in all ports yet */
+#if defined(__WXGTK20__) || defined(__WXMAC__) || defined(__WXDFB__) \
         (defined(__WXMSW__) && !defined(__WATCOMC__))
     #define wxHAS_RAW_BITMAP
 #endif
