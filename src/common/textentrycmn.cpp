@@ -41,10 +41,10 @@ wxString wxTextEntryBase::GetRange(long from, long to) const
 {
     wxString sel;
     wxString value = GetValue();
-    
-    if ((from < to) && ((long)value.length() >= to + from))
+
+    if ( from < to && (long)value.length() >= to )
     {
-        sel = GetValue().substr(from, to - from);
+        sel = value.substr(from, to - from);
     }
 
     return sel;
