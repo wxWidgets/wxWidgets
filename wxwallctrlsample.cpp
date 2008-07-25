@@ -162,7 +162,7 @@ void wxWallCtrlSample::CreateControls()
 	}
 */
 	wxWallCtrlPlaneSurface * surface = new wxWallCtrlPlaneSurface();
-	surface->SetScopeSize(wxSize(10, 2));
+	surface->SetScopeSize(wxSize(10, 10));
 
 	wxWallCtrlDefaultPlaneNavigation * navigation = new wxWallCtrlDefaultPlaneNavigation();
 	wall->SetSurface(surface);

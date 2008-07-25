@@ -23,6 +23,7 @@ wxWallCtrlBitmapSource::~wxWallCtrlBitmapSource(void)
 
 wxWallCtrlRenderType wxWallCtrlBitmapSource::GetRenderType(const wxWallCtrlItemID& itemId, const wxSize& availableResolution, wxSize& desiredResolution )
 {
+	// Both DC & Bitmap rendering types would work, but Bitmaps are faster
 	return wxWallCtrlRenderBitmap;
 }
 

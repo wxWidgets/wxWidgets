@@ -19,7 +19,8 @@ typedef unsigned wxWallCtrlItemID;
 
 enum wxWallCtrlRenderType
 {
-	wxWallCtrlRenderBitmap
+	wxWallCtrlRenderBitmap,
+	wxWallCtrlRenderDC
 };
 
 //typedef wxBitmap wxWallCtrlItem;

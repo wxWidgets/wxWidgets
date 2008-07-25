@@ -140,12 +140,37 @@ GLuint wxWallCtrlPlaneSurface::GetItemTexture( wxWallCtrlItemID itemID )
 	wxWallCtrlItem info;
 	m_dataSource->GetItemInfo(itemID, info);
 
-	// We must let the source render the texture for us, so we prepare a correctly sized DC for it
-	wxMemoryDC tempDC;
-	tempDC.SelectObject(wxBitmap (info.size.GetWidth(), info.size.GetHeight()));
+	// Allocate enough space for the texture
+	GLubyte * tex = new GLubyte[info.size.GetWidth()*info.size.GetHeight()*BYTES_PER_PIXEL];
 
-	// Let the source draw the item
-	m_dataSource->RenderItem(itemID, tempDC, info.size);
+	switch (m_dataSource->GetRenderType(itemID, wxSize(info.size.GetWidth(), info.size.GetHeight()), wxSize(info.size.GetWidth(), info.size.GetHeight())))
+	{
+	case wxWallCtrlRenderBitmap:
+		CreateTextureFromBitmap(m_dataSource->GetBitmap(itemID), tex);
+		break;
+
+	case wxWallCtrlRenderDC:
+		{
+			// We must let the source render the texture for us, so we prepare a correctly sized DC for it
+			wxMemoryDC tempDC;
+			tempDC.SelectObject(wxBitmap (info.size.GetWidth(), info.size.GetHeight()));
+
+			// Let the source draw the item
+			m_dataSource->RenderItem(itemID, tempDC, info.size);
+			CreateTextureFromDC(tempDC, tex, info.size);	// Why should this be used ?
+		}
+
+		break;
+	default:
+		// TODO: This is an error, we do not know the render type. See if we need to signal it
+		// Delete the texture and return
+		delete [] tex;
+		return wxWallCtrlPlaneSurfaceInvalidTexture;
+	}
+
+
+
+
 
 	// Start creating the texture
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -160,11 +185,6 @@ GLuint wxWallCtrlPlaneSurface::GetItemTexture( wxWallCtrlItemID itemID )
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-	// Allocate enough space for the texture
-	GLubyte * tex = new GLubyte[info.size.GetWidth()*info.size.GetHeight()*BYTES_PER_PIXEL];
-
-	//CreateTextureFromBitmap(m_dataSource->GetBitmap(itemID), tex);
-	CreateTextureFromDC(tempDC, tex, info.size);	// This should be used instead
 
 
 	bool useMipmaps = true;
@@ -246,7 +266,12 @@ void wxWallCtrlPlaneSurface::RenderItems()
 			}
 
 			// Select the texture of this item
-			glBindTexture(GL_TEXTURE_2D, GetItemTexture(Index));
+			GLuint itemTexture = GetItemTexture(Index);
+			if (itemTexture == wxWallCtrlPlaneSurfaceInvalidTexture)
+			{
+				continue;
+			}
+			glBindTexture(GL_TEXTURE_2D, itemTexture);
 
 
 			// Get the bounds of the quad
@@ -335,8 +360,7 @@ void wxWallCtrlPlaneSurface::CreateTextureFromBitmap( wxBitmap bitmap, GLubyte *
 
 	typedef wxPixelData<wxBitmap, wxNativePixelFormat> PixelData;
 
-	wxBitmap bmp;
-	PixelData data(bmp);
+	PixelData data(bitmap);
 	if ( !data )
 	{
 		// TODO: signal some error
@@ -348,20 +372,25 @@ void wxWallCtrlPlaneSurface::CreateTextureFromBitmap( wxBitmap bitmap, GLubyte *
 	// Copy each pixel color to the texture
 	for (int y=0; y < data.GetHeight(); ++y)
 	{
+		PixelData::Iterator rowStart = p;
+
 		for (int x=0; x < data.GetWidth(); ++x)
 		{
 			// Sequential pixel position
 			unsigned pixel = y*data.GetWidth() + x;
-
-			++p;
-
-			//dc.GetPixel(x, y, &color);
-
+		
+			// Set the texel
 			*(texture + pixel*BYTES_PER_PIXEL + 0) = p.Red();
 			*(texture + pixel*BYTES_PER_PIXEL + 1) = p.Green();
 			*(texture + pixel*BYTES_PER_PIXEL + 2) = p.Blue();
 			*(texture + pixel*BYTES_PER_PIXEL + 3) = 255;
+
+			// Move to the next pixel
+			++p;
 		}
+		// Go to the start of the next line
+		p = rowStart;
+		p.OffsetY(data, 1);
 	}
 }
 

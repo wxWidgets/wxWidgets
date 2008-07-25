@@ -20,6 +20,8 @@
 // A map to hold the texture names for items that were previously cached
 WX_DECLARE_HASH_MAP(int, int, wxIntegerHash, wxIntegerEqual, Int2IntMap);
 
+const int wxWallCtrlPlaneSurfaceInvalidTexture = -10;
+
 // This is a default surface implementation. This is where all the geometric manipulation and rendering take place
 class wxWallCtrlPlaneSurface :
 	public wxWallCtrlSurface
