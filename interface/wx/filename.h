@@ -58,6 +58,94 @@
         fname.Assign( user_input );
     @endcode
 
+        These functions allow to examine and modify the individual directories
+        of the path:
+        
+        @li AppendDir()
+        @li InsertDir()
+        @li GetDirCount()
+        @li PrependDir()
+        @li RemoveDir()
+        @li RemoveLastDir()
+        
+        To change the components of the file name individually you can use the
+        following functions:
+        
+        @li GetExt()
+        @li GetName()
+        @li GetVolume()
+        @li HasExt()
+        @li HasName()
+        @li HasVolume()
+        @li SetExt()
+        @li ClearExt()
+        @li SetEmptyExt()
+        @li SetName()
+        @li SetVolume()
+        
+        You can initialize a wxFileName instance using one of the following functions:
+        
+        @li wxFilename()
+        @li Assign()
+        @li AssignCwd()
+        @li AssignDir()
+        @li AssignHomeDir()
+        @li DirName()
+        @li FileName()
+        
+        wxFileName currently supports the file names in the Unix, DOS/Windows, Mac OS
+        and VMS formats (Mac OS no longer being maintained as OS X uses the Unix notation).
+        Although these formats are quite different, wxFileName tries to treat them all
+        in the same generic way. It supposes that all file names consist of the following
+        parts: the volume (also known as drive under Windows or device under VMS), the
+        path which is a sequence of directory names separated by the 
+        @ref getpathseparators() "path separators" 
+        and the full filename itself which, in turn, is composed from the base file name
+        and the extension. All of the individual components of the file name may be empty
+        and, for example, the volume name is always empty under Unix, but if they are all
+        empty simultaneously, the filename object is considered to be in an invalid
+        state and IsOk() returns @false for it.
+        File names can be case-sensitive or not, the function IsCaseSensitive() allows to
+        determine this. The rules for determining whether the file name is absolute or
+        relative also depend on the file name format and the only portable way to answer
+        this question is to use IsAbsolute() or IsRelative() method. Note that on Windows, 
+        "X:" refers to the current working directory on drive X. Therefore, a wxFileName
+        instance constructed from for example "X:dir/file.ext" treats the portion beyond
+        drive separator as being relative to that directory. To ensure that the filename
+        is absolute, you may use MakeAbsolute(). There is also an inverse function
+        MakeRelativeTo() which undoes what Normalize(wxPATH_NORM_DOTS) does.
+        Other functions returning information about the file format provided by this
+        class are GetVolumeSeparator(), IsPathSeparator().
+
+        Before doing other tests, you should use IsOk() to verify that the filename
+        is well defined. If it is, FileExists() can be used to test whether a file
+        with such name exists and DirExists() can be used to test for directory existence.
+        File names should be compared using the SameAs() method or operator=(). For testing
+        basic access modes, you can use:
+        
+        @li IsDirWritable()
+        @li IsDirReadable()
+        @li IsFileWritable()
+        @li IsFileReadable()
+        @li IsFileExecutable()
+
+        These methods allow to work with the file creation, access and modification
+        times. Note that not all filesystems under all platforms implement these times
+        in the same way. For example, the access time under Windows has a resolution of
+        one day (so it is really the access date and not time). The access time may be
+        updated when the file is executed or not depending on the platform.
+        
+        @li GetModificationTime()
+        @li GetTimes()
+        @li SetTimes()
+        @li Touch()
+        
+        Other file system operations functions are:
+        
+        @li Mkdir()
+        @li Rmdir()
+
+
     @library{wxbase}
     @category{file}
 
@@ -66,24 +154,37 @@
 class wxFileName
 {
 public:
-    //@{
     /**
-        Constructor from a volume name, a directory name, base file name and extension.
+        Default constructor.
     */
     wxFileName();
+    /**
+        Copy constructor.
+    */
     wxFileName(const wxFileName& filename);
+    /**
+        Constructor from a full file name including the path.
+    */
     wxFileName(const wxString& fullpath,
                wxPathFormat format = wxPATH_NATIVE);
+    /**
+        Constructor a directory name and file name.
+    */
     wxFileName(const wxString& path, const wxString& name,
                wxPathFormat format = wxPATH_NATIVE);
+    /**
+        Constructor from a directory name, base file name and extension.
+    */
     wxFileName(const wxString& path, const wxString& name,
                const wxString& ext,
                wxPathFormat format = wxPATH_NATIVE);
+    /**
+        Constructor from a volume name, a directory name, base file name and extension.
+    */
     wxFileName(const wxString& volume, const wxString& path,
                const wxString& name,
                const wxString& ext,
                wxPathFormat format = wxPATH_NATIVE);
-    //@}
 
     /**
         Appends a directory component to the path. This component should contain a
@@ -93,28 +194,41 @@ public:
     */
     void AppendDir(const wxString& dir);
 
-    //@{
     /**
-        Creates the file name from various combinations of data.
+        Creates the file name from another filename object.
     */
     void Assign(const wxFileName& filepath);
+    /**
+        Creates the file name from a full file name with a path.
+    */
     void Assign(const wxString& fullpath,
                 wxPathFormat format = wxPATH_NATIVE);
+    /**
+        Creates the file name from volumne, path, name and extension.
+    */
     void Assign(const wxString& volume, const wxString& path,
                 const wxString& name,
                 const wxString& ext,
                 bool hasExt,
                 wxPathFormat format = wxPATH_NATIVE);
+    /**
+        Creates the file name from volumne, path, name and extension.
+    */
     void Assign(const wxString& volume, const wxString& path,
                 const wxString& name,
                 const wxString& ext,
                 wxPathFormat format = wxPATH_NATIVE);
+    /**
+        Creates the file name from file path and file name.
+    */
     void Assign(const wxString& path, const wxString& name,
                 wxPathFormat format = wxPATH_NATIVE);
+    /**
+        Creates the file name from path, name and extension.
+    */
     void Assign(const wxString& path, const wxString& name,
                 const wxString& ext,
                 wxPathFormat format = wxPATH_NATIVE);
-    //@}
 
     /**
         Makes this object refer to the current working directory on the specified
@@ -182,13 +296,15 @@ public:
     static wxString CreateTempFileName(const wxString& prefix,
                                        wxFile* fileTemp = NULL);
 
-    //@{
     /**
         Returns @true if the directory with this name exists.
     */
     bool DirExists();
+    
+    /**
+        Returns @true if the directory with this name exists.
+    */
     const static bool DirExists(const wxString& dir);
-    //@}
 
     /**
         Returns the object corresponding to the directory with the given name.
@@ -198,127 +314,18 @@ public:
                               wxPathFormat format = wxPATH_NATIVE);
 
     /**
-        These functions allow to examine and modify the individual directories of the
-        path:
-        AppendDir()
-
-        InsertDir()
-
-        GetDirCount()
-        PrependDir()
-
-        RemoveDir()
-
-        RemoveLastDir()
-        To change the components of the file name individually you can use the
-        following functions:
-        GetExt()
-
-        GetName()
-
-        GetVolume()
-
-        HasExt()
-
-        HasName()
-
-        HasVolume()
-
-        SetExt()
-
-        ClearExt()
-
-        SetEmptyExt()
-
-        SetName()
-
-        SetVolume()
-    */
-
-
-    /**
-        You can initialize a wxFileName instance using one of the following functions:
-        @ref wxfilename() "wxFileName constructors"
-
-        Assign()
-
-        AssignCwd()
-
-        AssignDir()
-
-        AssignHomeDir()
-
-        @ref assigntempfilename() AssignHomeTempFileName
-
-        DirName()
-
-        FileName()
-
-        @ref operatorassign() "operator ="
-    */
-
-
-    /**
-        wxFileName currently supports the file names in the Unix, DOS/Windows, Mac OS
-        and VMS formats. Although these formats are quite different, wxFileName tries
-        to treat them all in the same generic way. It supposes that all file names
-        consist of the following parts: the volume (also known as drive under Windows
-        or device under VMS), the path which is a sequence of directory names separated
-        by the @ref getpathseparators() "path separators" and the full
-        filename itself which, in turn, is composed from the base file name and the
-        extension. All of the individual components of the file name may be empty and,
-        for example, the volume name is always empty under Unix, but if they are all
-        empty simultaneously, the filename object is considered to be in an invalid
-        state and IsOk() returns @false for it.
-        File names can be case-sensitive or not, the function
-        IsCaseSensitive() allows to determine this.
-        The rules for determining whether the file name is absolute or relative also
-        depend on the file name format and the only portable way to answer this
-        question is to use IsAbsolute() or
-        IsRelative() method. Note that on Windows, "X:"
-        refers to the current working directory on drive X. Therefore, a wxFileName
-        instance constructed from for example "X:dir/file.ext" treats the portion
-        beyond drive separator as being relative to that directory.
-        To ensure that the filename is absolute, you may use
-        MakeAbsolute(). There is also an inverse
-        function MakeRelativeTo() which undoes
-        what @ref normalize() Normalize(wxPATH_NORM_DOTS) does.
-        Other functions returning information about the file format provided by this
-        class are GetVolumeSeparator(),
-        IsPathSeparator().
-    */
-
-
-    /**
-        Before doing other tests, you should use IsOk() to
-        verify that the filename is well defined. If it is,
-        FileExists() can be used to test whether a file
-        with such name exists and DirExists() can be used
-        to test for directory existence.
-        File names should be compared using SameAs() method
-        or @ref operatorequal() "operator ==".
-        For testing basic access modes, you can use:
-        IsDirWritable()
-
-        IsDirReadable()
-
-        IsFileWritable()
-
-        IsFileReadable()
-
-        IsFileExecutable()
-    */
-
-
-    //@{
-    /**
         Returns @true if the file with this name exists.
 
         @see DirExists()
     */
     bool FileExists();
+    
+    /**
+        Returns @true if the file with this name exists.
+
+        @see DirExists()
+    */
     const static bool FileExists(const wxString& file);
-    //@}
 
     /**
         Returns the file name object corresponding to the given @e file. This
@@ -424,15 +431,13 @@ public:
 
         @b wxPATH_GET_VOLUME
 
-        Return the path with the volume (does
-        nothing for the filename formats without volumes), otherwise the path without
-        volume part is returned.
+        Return the path with the volume (does nothing for the filename formats without
+        volumes), otherwise the path without volume part is returned.
 
         @b wxPATH_GET_SEPARATOR
 
-        Return the path with the trailing
-        separator, if this flag is not given there will be no separator at the end of
-        the path.
+        Return the path with the trailing separator, if this flag is not given there
+        will be no separator at the end of the path.
     */
     wxString GetPath(int flags = wxPATH_GET_VOLUME,
                      wxPathFormat format = wxPATH_NATIVE) const;
@@ -477,17 +482,18 @@ public:
     */
     wxString GetShortPath() const;
 
-    //@{
     /**
-        Returns the size of this file (first form) or the size of the given file
-        (second form).
-        If the file does not exist or its size could not be read (because e.g. the file
-        is locked
-        by another process) the returned value is @c wxInvalidSize.
+        Returns the size of the file If the file does not exist or its size could
+        not be read (because e.g. the file is locked by another process) the returned
+        value is @c wxInvalidSize.
     */
     wxULongLong GetSize();
+    /**
+        Returns the size of the file If the file does not exist or its size could
+        not be read (because e.g. the file is locked by another process) the returned
+        value is @c wxInvalidSize.
+    */
     const static wxULongLong GetSize(const wxString& filename);
-    //@}
 
     /**
         Returns the directory used for temporary files.
@@ -690,8 +696,23 @@ public:
     bool MakeRelativeTo(const wxString& pathBase = wxEmptyString,
                         wxPathFormat format = wxPATH_NATIVE);
 
-    //@{
     /**
+        Creates a directory.
+    
+        @param parm
+            the permissions for the newly created directory
+        @param flags
+            if the flags contain wxPATH_MKDIR_FULL flag,
+            try to create each directory in the path and also don't return an error
+            if the target directory already exists.
+
+        @return Returns @true if the directory was successfully created, @false
+                 otherwise.
+    */
+    bool Mkdir(int perm = 0777, int flags = 0);
+    /**
+        Creates a directory.
+        
         @param dir
             the directory to create
         @param parm
@@ -704,10 +725,8 @@ public:
         @return Returns @true if the directory was successfully created, @false
                  otherwise.
     */
-    bool Mkdir(int perm = 0777, int flags = 0);
     static bool Mkdir(const wxString& dir, int perm = 0777,
                       int flags = 0);
-    //@}
 
     /**
         Normalize the path. With the default flags value, the path will be
@@ -717,96 +736,19 @@ public:
         @param flags
             The kind of normalization to do with the file name. It can be
             any or-combination of the following constants:
-
-
-
-
-
-
-            wxPATH_NORM_ENV_VARS
-
-
-
-
-            replace env vars with their values
-
-
-
-
-
-            wxPATH_NORM_DOTS
-
-
-
-
-            squeeze all .. and . when possible; if there are too many .. and thus they
-        cannot be all removed, @false will be returned
-
-
-
-
-
-            wxPATH_NORM_CASE
-
-
-
-
-            if filesystem is case insensitive, transform to lower case
-
-
-
-
-
-            wxPATH_NORM_ABSOLUTE
-
-
-
-
-            make the path absolute prepending cwd
-
-
-
-
-
-            wxPATH_NORM_LONG
-
-
-
-
-            make the path the long form
-
-
-
-
-
-            wxPATH_NORM_SHORTCUT
-
-
-
-
-            resolve if it is a shortcut (Windows only)
-
-
-
-
-
-            wxPATH_NORM_TILDE
-
-
-
-
-            replace ~ and ~user (Unix only)
-
-
-
-
-
-            wxPATH_NORM_ALL
-
-
-
-
-            all of previous flags except wxPATH_NORM_CASE
+            
+            - wxPATH_NORM_ENV_VARS:  replace env vars with their values
+            - wxPATH_NORM_DOTS:  squeeze all .. and . when possible; if
+               there are too many .. and thus they cannot be all removed, 
+               @false will be returned
+            - wxPATH_NORM_CASE: if filesystem is case insensitive, transform
+               to lower case
+            - wxPATH_NORM_ABSOLUTE: make the path absolute prepending cwd
+            - wxPATH_NORM_LONG: make the path the long form
+            - wxPATH_NORM_SHORTCUT: resolve if it is a shortcut (Windows only)
+            - wxPATH_NORM_TILDE: replace ~ and ~user (Unix only)
+            - wxPATH_NORM_ALL: all of previous flags except wxPATH_NORM_CASE
+            
         @param cwd
             If not empty, this directory will be used instead of current
             working directory in normalization (see wxPATH_NORM_ABSOLUTE).
@@ -818,25 +760,6 @@ public:
     bool Normalize(int flags = wxPATH_NORM_ALL,
                    const wxString& cwd = wxEmptyString,
                    wxPathFormat format = wxPATH_NATIVE);
-
-    /**
-        These methods allow to work with the file creation, access and modification
-        times. Note that not all filesystems under all platforms implement these times
-        in the same way. For example, the access time under Windows has a resolution of
-        one day (so it is really the access date and not time). The access time may be
-        updated when the file is executed or not depending on the platform.
-        GetModificationTime()
-
-        GetTimes()
-
-        SetTimes()
-
-        Touch()
-        Other file system operations functions are:
-        Mkdir()
-
-        Rmdir()
-    */
 
 
     /**
