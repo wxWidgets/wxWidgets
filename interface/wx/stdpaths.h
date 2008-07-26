@@ -37,6 +37,10 @@
     This class is MT-safe: its methods may be called concurrently from different
     threads without additional locking.
 
+    Note that you don't allocate an instance of class wxStandardPaths, but retrieve the 
+    global standard paths object using @c wxStandardPaths::Get on which you call the 
+    desired methods.
+
     @library{wxbase}
     @category{file}
 
