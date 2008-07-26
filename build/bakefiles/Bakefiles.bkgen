@@ -35,6 +35,7 @@
         ../../utils/*/*.bkl
         ../../utils/*/*/*.bkl
         ../../tests/*.bkl
+        ../../tests/benchmarks/bench.bkl
     </input>
 
     <!-- List of output formats to generate: -->
