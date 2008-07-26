@@ -472,10 +472,15 @@ wxRendererNative *wxGUIAppTraitsBase::CreateRenderer()
 
 bool wxGUIAppTraitsBase::ShowAssertDialog(const wxString& msg)
 {
-#if defined(__WXMSW__) || !wxUSE_MSGDLG
     // under MSW we prefer to use the base class version using ::MessageBox()
     // even if wxMessageBox() is available because it has less chances to
     // double fault our app than our wxMessageBox()
+    //
+    // under DFB the message dialog is not always functional right now
+    //
+    // and finally we can't use wxMessageBox() if it wasn't compiled in, of
+    // course
+#if defined(__WXMSW__) || defined(__WXDFB__) || !wxUSE_MSGDLG
     return wxAppTraitsBase::ShowAssertDialog(msg);
 #else // wxUSE_MSGDLG
     wxString msgDlg = msg;
