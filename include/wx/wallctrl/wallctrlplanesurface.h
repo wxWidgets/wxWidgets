@@ -14,7 +14,9 @@
 #include "wallctrlsurface.h"
 #include "gl/glut.h"
 #include "wx/wallctrl/matrix.h"
-
+#include <iostream>
+#include <sstream>
+#include <string>
 #define BYTES_PER_PIXEL 4
 
 // A map to hold the texture names for items that were previously cached
@@ -82,16 +84,7 @@ public:
 	// Render the surface with all its items
 	void Render(const wxSize & windowSize);
 
-	// Loads a texture from the DC into the supplied array
-	// Precondition: Texture must be at least Width * Height * BYTES_PER_PIXEL
-	void CreateTextureFromDC(wxMemoryDC &dc, GLubyte * texture, const wxSize& dcSize);
 
-	// Loads a bitmap into a texture array
-	// Precondition: Texture must be at least Width * Height * BYTES_PER_PIXEL
-	void CreateTextureFromBitmap(wxBitmap bitmap, GLubyte * texture);
-
-	// Returns the texture ID for a specific item, and if it does not exist, it gets loaded
-	GLuint GetItemTexture(wxWallCtrlItemID itemID);
 
 	// Initialize OpenGL for first use
 	void InitializeGL();
@@ -126,7 +119,167 @@ public:
 	void SeekUp();
 	void SeekDown();
 
+	// TODO: Width & Height are redundant since the layer is squared
+
+	// Spiral square layers are layers surrounding an item.
+	// Returns the number of columns in the specified layer
+	int GetLayerWidth(int layer) const
+	{
+		// We want the layers around a specific item
+		return 2*layer + 1;//m_scopeSize.GetWidth();
+	}
+	// Returns the number of columns in the specified layer
+	int GetLayerHeight(int layer) const
+	{
+		// We want the layers around a specific item
+		return 2*layer + 1;//m_scopeSize.GetHeight();
+	}
+
+	// Returns the total number of elements in the specified layer, some of which may be invalid
+	int GetLayerItemsCount(int layer) const
+	{
+		if (layer == 0)
+			return 1;
+		return 2*(GetLayerWidth(layer) + GetLayerHeight(layer))-4;
+	}
+
+	wxRect GetLayerRect(int layer) const
+	{
+		/*return wxRect (m_scopeOffsetX - 1,
+			m_scopeOffsetY - 1,
+			GetLayerWidth(layer),
+			GetLayerHeight(layer));*/
+		wxPoint pos = GetItemPosition(m_selectedIndex);
+		return wxRect (pos.x-layer,
+			pos.y-layer,
+			GetLayerWidth(layer),
+			GetLayerHeight(layer));
+	}
+
+	void LoadNextLayerItemTexture()
+	{
+		// TODO: We need to auto flag the m_loadingNeeded when no element is valid in the current layer
+
+		// If we do not need to load, then stop
+		if (!m_loadingNeeded)
+		{
+			return;
+		}
+		
+		// If we finished this layer, move to the next one
+		if (m_nextLayerItem >= GetLayerItemsCount(m_currentLayer))
+		{
+			m_currentLayer++;
+			m_nextLayerItem = 0;
+			m_currentLayerRect = GetLayerRect(m_currentLayer);
+			m_nextLayerItemPos.x = m_currentLayerRect.GetLeft();
+			m_nextLayerItemPos.y = m_currentLayerRect.GetTop();
+		}
+
+		// How many invalid positions will we tolerate
+		int threshold = GetLayerItemsCount(m_currentLayer) - m_nextLayerItem-1;
+
+		wxWallCtrlItemID index = m_nextLayerItem;
+		// Get the next item position
+		do 
+		{
+			m_nextLayerItemPos = GetLayerItemPosition(m_nextLayerItem);
+			if (IsValidPosition(m_nextLayerItemPos))
+			{
+				wxWallCtrlItemID index = GetItemIndex(m_nextLayerItemPos);
+				if (!IsItemTextureLoaded(index))
+				{
+					// Load it, move to the next one, and return
+					GetItemTexture(index);
+
+					m_nextLayerItem++;
+					return;
+				}
+			}
+			else
+			{
+				threshold--;		
+				if (threshold < 0)
+				{
+					// Do not proceed in this case, but increment the layer for next time
+					m_currentLayer++;
+					m_nextLayerItem = 0;
+					m_currentLayerRect = GetLayerRect(m_currentLayer);
+					m_nextLayerItemPos.x = m_currentLayerRect.GetLeft();
+					m_nextLayerItemPos.y = m_currentLayerRect.GetRight();
+					return;
+				}
+			}
+			// Move to the next one
+			m_nextLayerItem++;
+		} while(!IsValidPosition(m_nextLayerItemPos) || IsItemTextureLoaded(index));
+		
+		
+	}
+
 protected:
+	// Loads a texture from the DC into the supplied array
+	// Precondition: Texture must be at least Width * Height * BYTES_PER_PIXEL
+	void CreateTextureFromDC(wxMemoryDC &dc, GLubyte * texture, const wxSize& dcSize);
+
+	// Loads a bitmap into a texture array
+	// Precondition: Texture must be at least Width * Height * BYTES_PER_PIXEL
+	void CreateTextureFromBitmap(wxBitmap bitmap, GLubyte * texture);
+
+	// Returns the texture ID for a specific item, and if it does not exist it loads it
+	GLuint GetItemTexture(wxWallCtrlItemID itemID);
+
+	// Returns true if the specified item has a loaded & cached texture
+	bool IsItemTextureLoaded(wxWallCtrlItemID itemID)
+	{
+		return (texturesCache.find( itemID ) != texturesCache.end());
+	}
+
+	// Returns true if the specified coordinates make sense
+	bool IsValidPosition(wxPoint pos)
+	{
+		return ((pos.x >= 0 && pos.x < m_colsCount) && (pos.y >= 0 && pos.y < m_rowsCount));
+	}
+
+	// Returns the logical position of a specific index in the current layer
+	wxPoint GetLayerItemPosition(unsigned index) const
+	{
+		// TODO: This method is bugged
+		wxPoint point;
+		if (index <= m_currentLayerRect.GetWidth() + m_currentLayerRect.GetHeight()-2)
+		{
+			if (index < GetLayerWidth(m_currentLayer))
+			{
+				// Top row
+				point.x = m_currentLayerRect.GetLeft() + index;
+				point.y = m_currentLayerRect.GetTop();
+			}
+			else
+			{
+				// Right column
+				point.x = m_currentLayerRect.GetRight();
+				point.y = m_currentLayerRect.GetTop() + (index - m_currentLayerRect.GetWidth()) + 1;
+			}
+		}
+		else
+		{
+			if (index < GetLayerItemsCount(m_currentLayer) + 1 - m_currentLayerRect.GetHeight() )
+			{
+				// Bottom row
+				point.x = m_currentLayerRect.GetRight() - (index - (m_currentLayerRect.GetHeight() + m_currentLayerRect.GetWidth()-2));
+				point.y = m_currentLayerRect.GetBottom();
+			}
+			else
+			{
+				// Left column
+				point.x = m_currentLayerRect.GetLeft();
+				point.y = m_currentLayerRect.GetTop() + GetLayerItemsCount(m_currentLayer) - index;
+
+			}
+		}
+		return point;
+	}
+
 	// Maps an X coordinate to OpenGL space
 	float MapX(float x) const;
 
@@ -192,6 +345,14 @@ private:
 	unsigned m_scopeOffsetX;
 	unsigned m_scopeOffsetY;
 
+	// Layer variables used for partial loading and caching
+	unsigned m_currentLayer;		// The current (square) layer that needs to be loaded
+	unsigned m_nextLayerItem;		// The index of the next item to be loaded from the current layer
+	wxRect m_currentLayerRect;		// The bounding rectangle of the current layer, the layer is at its perimeter
+	wxPoint m_nextLayerItemPos;		// The position of the next item to be loaded.
+	bool m_loadingNeeded;			// True when we need to load more items and cache them
+	int m_renderCount;				// Used to load textures
+	int m_rendersBeforeTextureLoad;	// The value after which an attempt to load a new texture will be made
 
 	Int2IntMap texturesCache;
 

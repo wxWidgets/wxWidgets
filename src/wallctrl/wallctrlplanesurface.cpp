@@ -33,6 +33,15 @@ wxWallCtrlPlaneSurface::wxWallCtrlPlaneSurface()
 	m_selectionMargin = 0.05;
 	m_selectionDepth = 0.05;
 
+	// Caching
+	m_currentLayer = 0;
+	m_nextLayerItem = 0;
+	m_nextLayerItemPos.x = 0;
+	m_nextLayerItemPos.y = 0;
+	m_loadingNeeded = true;
+	m_rendersBeforeTextureLoad = 25;
+	m_renderCount = m_rendersBeforeTextureLoad;
+
 	// Set the near and far limits
 	// TODO: The far limit may be a function of the max number of visible item
 	m_nearLimit = 0.1;
@@ -227,6 +236,13 @@ void wxWallCtrlPlaneSurface::RenderItems()
 		return;
 	}
 
+	m_renderCount--;
+	if (m_renderCount <= 0)
+	{
+		m_rowsCount = m_rendersBeforeTextureLoad;
+		LoadNextLayerItemTexture();
+	}
+
 	// Deduce the columns count. We need this each render loop since the bitmaps can change
 	m_colsCount = m_dataSource->GetCount()/m_rowsCount + (m_dataSource->GetCount()%m_rowsCount == 0?0:1);
 
@@ -241,22 +257,32 @@ void wxWallCtrlPlaneSurface::RenderItems()
 		for (int y=m_scopeOffsetY; y < wxMin(m_rowsCount, m_scopeOffsetY + m_scopeSize.GetHeight()); ++y)
 		{
 			// Get the index of the item at this position
-			int Index = GetItemIndex(x, y);//m_firstItem + x * m_scopeSize.GetHeight() + y;
+			int index = GetItemIndex(x, y);//m_firstItem + x * m_scopeSize.GetHeight() + y;
 
 			// Check if we ran out of items
-			if (Index >= m_dataSource->GetCount())
+			if (index >= m_dataSource->GetCount())
 			{
 				// If so break out
 				y = m_scopeSize.GetHeight();
 				break;
 			}
 
-			// Select the texture of this item
-			GLuint itemTexture = GetItemTexture(Index);
-			if (itemTexture == wxWallCtrlPlaneSurfaceInvalidTexture)
+			
+			// This will be used when the texture is not loaded
+			// TODO: Replace this with a predefined texture
+			GLuint itemTexture = -1;
+
+			// See if the item we need is loaded
+			if (IsItemTextureLoaded(index))
 			{
-				continue;
+				// Select the texture of this item
+				itemTexture = GetItemTexture(index);
+				if (itemTexture == wxWallCtrlPlaneSurfaceInvalidTexture)
+				{
+					continue;
+				}
 			}
+
 			glBindTexture(GL_TEXTURE_2D, itemTexture);
 
 
@@ -265,11 +291,11 @@ void wxWallCtrlPlaneSurface::RenderItems()
 			
 			// Adjust the bounds so that it maintains the aspect ratio
 			wxWallCtrlItem info;
-			m_dataSource->GetItemInfo(Index, info);
+			m_dataSource->GetItemInfo(index, info);
 			AdjustCoordinates(rect, info.size);
 			//AdjustCoordinates(Top, Bottom, Left, Right, info.size);
 
-			if (Index == m_selectedIndex)
+			if (index == m_selectedIndex)
 			{
 				glPushMatrix();
 				glTranslatef(0, 0, m_selectionDepth);
@@ -560,7 +586,7 @@ VectorType wxWallCtrlPlaneSurface::GetItemCenter( wxWallCtrlItemID itemID ) cons
 	// Get the rect of the item
 	wxRealRect rect = GetRawItemRect(point.x, point.y);
 
-	// Query the item for mor information
+	// Query the item for more information
 	wxWallCtrlItem info;
 	m_dataSource->GetItemInfo(GetItemIndex(itemID), info);
 
@@ -599,9 +625,17 @@ void wxWallCtrlPlaneSurface::Seek( wxWallCtrlItemID itemID )
 
 	// Update the scope
 	AdjustScope();
+
+	// Reset the layers to start at this specific item
+	m_currentLayer = 0;
+	m_currentLayerRect = GetLayerRect(m_currentLayer);
+	m_nextLayerItem = 0;
+	m_nextLayerItemPos = GetItemPosition(itemID);
+
+	//LoadNextLayerItemTexture();
+	
 }
 
-// TODO: Using the scope alone for limit checking is not enough
 void wxWallCtrlPlaneSurface::SeekLeft()
 {
 	wxPoint Pos = GetItemPosition(m_selectedIndex);

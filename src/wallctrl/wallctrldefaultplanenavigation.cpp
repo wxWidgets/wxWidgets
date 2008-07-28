@@ -57,6 +57,9 @@ void wxWallCtrlDefaultPlaneNavigation::OnKeyDown( wxKeyEvent &event )
 		m_surface->SeekDown();
 		//m_surface->MoveOut(0.1);
 		break;
+	case WXK_END:
+		m_surface->LoadNextLayerItemTexture();
+		break;
 	}
 }
 wxWallCtrlDefaultPlaneNavigation::wxWallCtrlDefaultPlaneNavigation()// wxWallCtrlPlaneSurface * surface ) :m_surface(surface)
