@@ -11,7 +11,6 @@
 #include "wx/wallctrl/WallCtrlPlaneSurface.h"
 #include "wx/rawbmp.h"
 
-// TODO: What's wrong here?
 IMPLEMENT_CLASS(wxWallCtrlPlaneSurface, wxWallCtrlSurface)
 
 wxWallCtrlPlaneSurface::~wxWallCtrlPlaneSurface(void)
@@ -22,8 +21,12 @@ wxWallCtrlPlaneSurface::wxWallCtrlPlaneSurface()
 {
 	m_initialized = false;
 	m_defaultDistance = 2;
+
+	// Scope
 	m_scopeSize.SetHeight(1);
 	m_scopeSize.SetWidth(1);
+	m_scopeOffsetX = 0;
+	m_scopeOffsetY = 0;
 
 	// Selection
 	m_selectedIndex = 0;
@@ -52,7 +55,10 @@ wxWallCtrlPlaneSurface::wxWallCtrlPlaneSurface()
 	m_up[1] = 1;
 
 	UpdateItemSize();
-	m_firstItem = 0;//m_dataSource->GetFirstItem();
+
+	// Actual initialization of the first item is done when a data source is selected
+	m_firstItem = 0;
+	m_rowsCount = 4;
 }
 
 void wxWallCtrlPlaneSurface::UpdateItemSize()
@@ -98,31 +104,7 @@ void wxWallCtrlPlaneSurface::Render(const wxSize & windowSize)
 	glFlush();
 }
 
-void wxWallCtrlPlaneSurface::CreateTextureFromDC( wxMemoryDC &dc, GLubyte * texture, const wxSize& dcSize )
-{
-	// TODO: This method may not be needed any more
 
-	// Temp color variable
-	wxColor color;
-
-	// Copy each pixel color to the texture
-	for (int y=0; y < dcSize.GetHeight(); ++y)
-	{
-		for (int x=0; x < dcSize.GetWidth(); ++x)
-		{
-			// Sequential pixel position
-			unsigned pixel = y*dcSize.GetWidth() + x;
-
-			dc.GetPixel(x, y, &color);
-
-			*(texture + pixel*BYTES_PER_PIXEL + 0) = color.Red();
-			*(texture + pixel*BYTES_PER_PIXEL + 1) = color.Green();
-			*(texture + pixel*BYTES_PER_PIXEL + 2) = color.Blue();
-			*(texture + pixel*BYTES_PER_PIXEL + 3) = 255;
-		}
-	}
-
-}
 
 GLuint wxWallCtrlPlaneSurface::GetItemTexture( wxWallCtrlItemID itemID )
 {
@@ -223,7 +205,7 @@ void wxWallCtrlPlaneSurface::InitializeGL()
 
 unsigned wxWallCtrlPlaneSurface::GetItemIndex(int x, int y) const
 {
-	return m_firstItem + x * m_scopeSize.GetHeight() + y;
+	return m_firstItem + x * m_rowsCount + y;
 }
 
 unsigned wxWallCtrlPlaneSurface::GetItemIndex( wxWallCtrlItemID itemID ) const
@@ -244,15 +226,19 @@ void wxWallCtrlPlaneSurface::RenderItems()
 		// TODO: Signal an error here
 		return;
 	}
+
+	// Deduce the columns count. We need this each render loop since the bitmaps can change
+	m_colsCount = m_dataSource->GetCount()/m_rowsCount + (m_dataSource->GetCount()%m_rowsCount == 0?0:1);
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_TEXTURE_2D);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
 
 	glPushMatrix();
 	// Loop over the grid-like scope window
-	for (int x=0; x < m_scopeSize.GetWidth(); ++x)
+	for (int x=m_scopeOffsetX; x < wxMin(m_colsCount, m_scopeOffsetX + m_scopeSize.GetWidth()); ++x)
 	{
-		for (int y=0; y < m_scopeSize.GetHeight(); ++y)
+		for (int y=m_scopeOffsetY; y < wxMin(m_rowsCount, m_scopeOffsetY + m_scopeSize.GetHeight()); ++y)
 		{
 			// Get the index of the item at this position
 			int Index = GetItemIndex(x, y);//m_firstItem + x * m_scopeSize.GetHeight() + y;
@@ -327,7 +313,7 @@ void wxWallCtrlPlaneSurface::RenderItems()
 
 void wxWallCtrlPlaneSurface::SetScopeSize( wxSize size )
 {
-	if ((size.GetHeight() < 1) || (size.GetWidth() < 1))
+	if ((size.GetHeight() < 1) || (size.GetWidth() < 1) || (size.GetHeight() > m_rowsCount))
 	{
 		// TODO: This is a serious issue, can't proceed. Check how to signal errors
 		assert(false);
@@ -345,6 +331,31 @@ float wxWallCtrlPlaneSurface::MapX( float x ) const
 float wxWallCtrlPlaneSurface::MapY( float y ) const
 {
 	return y*2 - 1;
+}
+
+void wxWallCtrlPlaneSurface::CreateTextureFromDC( wxMemoryDC &dc, GLubyte * texture, const wxSize& dcSize )
+{
+	// TODO: This method may not be needed any more
+
+	// Temp color variable
+	wxColor color;
+
+	// Copy each pixel color to the texture
+	for (int y=0; y < dcSize.GetHeight(); ++y)
+	{
+		for (int x=0; x < dcSize.GetWidth(); ++x)
+		{
+			// Sequential pixel position
+			unsigned pixel = y*dcSize.GetWidth() + x;
+
+			dc.GetPixel(x, y, &color);
+
+			*(texture + pixel*BYTES_PER_PIXEL + 0) = color.Red();
+			*(texture + pixel*BYTES_PER_PIXEL + 1) = color.Green();
+			*(texture + pixel*BYTES_PER_PIXEL + 2) = color.Blue();
+			*(texture + pixel*BYTES_PER_PIXEL + 3) = 255;
+		}
+	}
 }
 
 void wxWallCtrlPlaneSurface::CreateTextureFromBitmap( wxBitmap bitmap, GLubyte * texture )
@@ -520,8 +531,8 @@ void wxWallCtrlPlaneSurface::UpdateLookVector()
 wxPoint wxWallCtrlPlaneSurface::GetItemPosition( unsigned index ) const
 {
 	wxPoint P;
-	P.x = index / m_scopeSize.GetHeight();
-	P.y = index % m_scopeSize.GetHeight();
+	P.x = index / m_rowsCount;
+	P.y = index % m_rowsCount;
 
 	return P;
 }
@@ -585,6 +596,9 @@ void wxWallCtrlPlaneSurface::Seek( wxWallCtrlItemID itemID )
 
 	// Update the logical selection
 	m_selectedIndex = itemID;
+
+	// Update the scope
+	AdjustScope();
 }
 
 // TODO: Using the scope alone for limit checking is not enough
@@ -603,9 +617,9 @@ void wxWallCtrlPlaneSurface::SeekRight()
 {
 	wxPoint Pos = GetItemPosition(m_selectedIndex);
 	Pos.x++;
-	if (Pos.x >= m_scopeSize.GetX())
+	if (Pos.x >= m_colsCount)
 	{
-		Pos.x = m_scopeSize.GetX()-1;
+		Pos.x = m_colsCount-1;
 	}
 
 	Seek(GetItemIndex(Pos));
@@ -615,9 +629,9 @@ void wxWallCtrlPlaneSurface::SeekUp()
 {
 	wxPoint Pos = GetItemPosition(m_selectedIndex);
 	Pos.y++;
-	if (Pos.y >= m_scopeSize.GetY())
+	if (Pos.y >= m_rowsCount)
 	{
-		Pos.y = m_scopeSize.GetY()-1;
+		Pos.y = m_rowsCount-1;
 	}
 	Seek(GetItemIndex(Pos));
 }

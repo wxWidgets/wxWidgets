@@ -20,6 +20,7 @@
 // A map to hold the texture names for items that were previously cached
 WX_DECLARE_HASH_MAP(int, int, wxIntegerHash, wxIntegerEqual, Int2IntMap);
 
+
 const int wxWallCtrlPlaneSurfaceInvalidTexture = -10;
 
 // This is a default surface implementation. This is where all the geometric manipulation and rendering take place
@@ -148,6 +149,17 @@ protected:
 	// Precondition: right >= left and bottom >= top
 	void AdjustCoordinates(wxRealRect &rect, const wxSize &itemSize) const;//(float & top, float & bottom, float & left, float & right, const wxSize & itemSize);
 
+	// Attempts to move the scope so that the selected index is in its middle
+	void AdjustScope()
+	{
+		// Find the position of the selected index
+		wxPoint position = GetItemPosition(m_selectedIndex);
+
+		// Try to center it in the scope. Note that we need only clip from the lower bounds.
+		m_scopeOffsetX = wxMax(position.x - m_scopeSize.GetWidth()/2, 0);
+		m_scopeOffsetY = wxMax(position.y - m_scopeSize.GetHeight()/2,0);
+	}
+
 	// Updates the camera each frame
 	// TODO: Consider delta of time passed since last call
 	void UpdateVectors();
@@ -167,11 +179,19 @@ private:
 	// The number of rows the surface will put the items in
 	unsigned m_rowsCount;
 
+	// The number of columns, this is deduced from m_rowsCount and the number of elements
+	unsigned m_colsCount;
+
 	// The index of the first item of the current scope. NOTE: Items are not sequential inside the scope
 	unsigned m_firstItem;
 
 	// This is the 2D window in number of items in each dimension
 	wxSize m_scopeSize;
+
+	// The coordinates of the scope's start
+	unsigned m_scopeOffsetX;
+	unsigned m_scopeOffsetY;
+
 
 	Int2IntMap texturesCache;
 
@@ -179,6 +199,7 @@ private:
 	float m_itemWidth;
 	float m_itemHeight;
 
+	// Camera limits
 	float m_nearLimit;
 	float m_farLimit;
 
@@ -200,7 +221,7 @@ private:
 
 //	float m_cameraHzDelta;
 
-	float m_defaultDistance;	// The default distance between camera and wallf
+	float m_defaultDistance;	// The default distance between camera and wall
 
 	// Selection
 	int m_selectedIndex;
