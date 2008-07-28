@@ -2803,7 +2803,9 @@ public:
         ubuf = (UniChar*) (buf ? buf : tbuf) ;
 #endif
         {
+#if wxUSE_THREADS
             wxMutexLocker lock( m_MB2WC_guard );
+#endif
             status = TECConvertText(
             m_MB2WC_converter, (ConstTextPtr) psz, byteInLen, &byteInLen,
             (TextPtr) ubuf, byteBufferLen, &byteOutLen);
@@ -2859,7 +2861,9 @@ public:
 #endif
 
         {
+#if wxUSE_THREADS
             wxMutexLocker lock( m_WC2MB_guard );
+#endif
             status = TECConvertText(
             m_WC2MB_converter, (ConstTextPtr) ubuf, byteInLen, &byteInLen,
             (TextPtr) (buf ? buf : tbuf), byteBufferLen, &byteOutLen);
@@ -2905,9 +2909,10 @@ public:
 protected :
     mutable TECObjectRef m_MB2WC_converter;
     mutable TECObjectRef m_WC2MB_converter;
-    
+#if wxUSE_THREADS
     mutable wxMutex m_MB2WC_guard;
     mutable wxMutex m_WC2MB_guard;
+#endif
 
     TextEncodingBase m_char_encoding;
     TextEncodingBase m_unicode_encoding;
@@ -2969,7 +2974,9 @@ public :
         UniChar *dcubuf = (UniChar*) malloc( dcubuflen ) ;
 
         {
+#if wxUSE_THREADS
             wxMutexLocker lock( m_WC2MB_guard );
+#endif
             ConvertFromUnicodeToText( m_uni , byteInLen , ubuf ,
                 kUnicodeDefaultDirectionMask, 0, NULL, NULL, NULL, dcubuflen  , &dcubufread , &dcubufwritten , dcubuf ) ;
 
@@ -3029,7 +3036,9 @@ public :
         UniChar *dcubuf = (UniChar*) malloc( dcubuflen ) ;
 
         {
+#if wxUSE_THREADS
             wxMutexLocker lock( m_MB2WC_guard );
+#endif
             status = TECConvertText(
                                 m_MB2WC_converter, (ConstTextPtr) psz, byteInLen, &byteInLen,
                                 (TextPtr) dcubuf, dcubuflen, &byteOutLen);
