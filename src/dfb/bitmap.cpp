@@ -28,8 +28,11 @@
 #include "wx/dfb/private.h"
 
 //-----------------------------------------------------------------------------
-// helpers
+// helpers for translating between wx and DFB pixel formats
 //-----------------------------------------------------------------------------
+
+namespace
+{
 
 // NB: Most of this conversion code is needed because of differences between
 //     wxImage and wxDFB's wxBitmap representations:
@@ -40,11 +43,11 @@
 // pitch = stride = # of bytes between the start of N-th line and (N+1)-th line
 // {Src,Dst}PixSize = # of bytes used to represent one pixel
 template<int SrcPixSize, int DstPixSize>
-static void CopyPixelsAndSwapRGB(unsigned w, unsigned h,
-                                 const unsigned char *src,
-                                 unsigned src_pitch,
-                                 unsigned char *dst,
-                                 unsigned dst_pitch)
+void CopyPixelsAndSwapRGB(unsigned w, unsigned h,
+                          const unsigned char *src,
+                          unsigned src_pitch,
+                          unsigned char *dst,
+                          unsigned dst_pitch)
 {
     unsigned src_advance = src_pitch - SrcPixSize * w;
     unsigned dst_advance = dst_pitch - DstPixSize * w;
@@ -60,8 +63,7 @@ static void CopyPixelsAndSwapRGB(unsigned w, unsigned h,
     }
 }
 
-static void CopySurfaceToImage(const wxIDirectFBSurfacePtr& surface,
-                               wxImage& image)
+void CopySurfaceToImage(const wxIDirectFBSurfacePtr& surface, wxImage& image)
 {
     wxIDirectFBSurface::Locked locked(surface, DSLF_READ);
     wxCHECK_RET( locked.ptr, "failed to lock surface" );
@@ -115,8 +117,8 @@ static void CopySurfaceToImage(const wxIDirectFBSurfacePtr& surface,
     }
 }
 
-static void CopyImageToSurface(const wxImage& image,
-                               const wxIDirectFBSurfacePtr& surface)
+void CopyImageToSurface(const wxImage& image,
+                        const wxIDirectFBSurfacePtr& surface)
 {
     wxIDirectFBSurface::Locked locked(surface, DSLF_WRITE);
     wxCHECK_RET( locked.ptr, "failed to lock surface" );
@@ -168,7 +170,7 @@ static void CopyImageToSurface(const wxImage& image,
     }
 }
 
-static wxIDirectFBSurfacePtr
+wxIDirectFBSurfacePtr
 CreateSurfaceWithFormat(int w, int h, DFBSurfacePixelFormat format)
 {
     DFBSurfaceDescription desc;
@@ -189,7 +191,7 @@ CreateSurfaceWithFormat(int w, int h, DFBSurfacePixelFormat format)
 }
 
 // Creates a surface that will use wxImage's pixel data (RGB only)
-static wxIDirectFBSurfacePtr CreateSurfaceForImage(const wxImage& image)
+wxIDirectFBSurfacePtr CreateSurfaceForImage(const wxImage& image)
 {
     wxCHECK_MSG( image.Ok(), NULL, "invalid image" );
     // FIXME_DFB: implement alpha handling by merging alpha buffer with RGB
@@ -203,8 +205,8 @@ static wxIDirectFBSurfacePtr CreateSurfaceForImage(const wxImage& image)
                                    DSPF_RGB24);
 }
 
-static bool ConvertSurfaceToFormat(wxIDirectFBSurfacePtr& surface,
-                                   DFBSurfacePixelFormat format)
+bool ConvertSurfaceToFormat(wxIDirectFBSurfacePtr& surface,
+                            DFBSurfacePixelFormat format)
 {
     if ( surface->GetPixelFormat() == format )
         return true;
@@ -224,7 +226,7 @@ static bool ConvertSurfaceToFormat(wxIDirectFBSurfacePtr& surface,
     return true;
 }
 
-static DFBSurfacePixelFormat DepthToFormat(int depth)
+DFBSurfacePixelFormat DepthToFormat(int depth)
 {
     switch ( depth )
     {
@@ -241,6 +243,106 @@ static DFBSurfacePixelFormat DepthToFormat(int depth)
             return DSPF_UNKNOWN;
     }
 }
+
+// ----------------------------------------------------------------------------
+// monochrome bitmap functions
+// ----------------------------------------------------------------------------
+
+// this function works with destination buffer of type T and not char (where T
+// is typically wxUint32 for RGB32, wxUint16 for RGB16 &c) as we don't need
+// access to the individual pixel components -- and so it's not suitable for
+// the pixel formats with pixel size not equal to 8, 16 or 32
+template <typename T, int White, int Black>
+void
+CopyBits(int width,
+         int height,
+         const unsigned char *src,
+         const wxIDirectFBSurface::Locked locked)
+{
+    static const int BITS_PER_BYTE = 8;
+
+    // extra padding to add to dst at the end of each row: this works on the
+    // assumption that all rows are aligned at multiples of T (and usually 4
+    // bytes) boundary so check for it (and change the code if this assert is
+    // ever triggered)
+    wxASSERT_MSG( !(locked.pitch % sizeof(T)), "image rows not aligned?" );
+    const int padDst = (locked.pitch - width*sizeof(T))/sizeof(T);
+
+    int x = 0; // position in the current bitmap row
+
+    // a single char in src corresponds to 8 destination pixels and the last
+    // char in the row contains padding if necessary, i.e. there is always an
+    // integer number of chars per row
+    const unsigned char * const
+        srcEnd = src + ((width + BITS_PER_BYTE - 1)/BITS_PER_BYTE)*height;
+
+    // we operate with sizeof(T), not 1, bytes at once
+    T *dst = static_cast<T *>(locked.ptr);
+    while ( src < srcEnd )
+    {
+        unsigned char val = *src++;
+
+        for ( int bit = 0; bit < BITS_PER_BYTE; bit++ )
+        {
+            *dst++ = val & 1 ? White : Black;
+            val >>= 1;
+            if ( ++x == width )
+            {
+                dst += padDst;
+                x = 0;
+                break;
+            }
+        }
+    }
+}
+
+bool
+CopyBitsToSurface(const unsigned char *bits,
+                  int width,
+                  int height,
+                  wxIDirectFBSurfacePtr& surface)
+{
+    wxIDirectFBSurface::Locked locked(surface, DSLF_WRITE);
+    wxCHECK_MSG( locked.ptr, false, "failed to lock surface" );
+
+    const DFBSurfacePixelFormat format = surface->GetPixelFormat();
+
+    switch ( format )
+    {
+        case DSPF_LUT8:
+            // we suppose that these indices correspond to the palette entries
+            // for white and black, respectively, but a better idea would be to
+            // use IDirectFBPalette::FindBestMatch() to determine them
+            CopyBits<wxUint8, 0xff, 0>(width, height, bits, locked);
+            break;
+
+        case DSPF_RGB16:
+            CopyBits<wxUint16, 0xffff, 0>(width, height, bits, locked);
+            break;
+
+        case DSPF_RGB32:
+            CopyBits<wxUint32, 0xffffffff, 0>(width, height, bits, locked);
+            break;
+
+        default:
+            // we don't really have time to implement efficient support for all
+            // the other formats so simply (and awfully slowly, of course...)
+            // convert everything else from RGB32
+            surface = CreateSurfaceWithFormat(width, height, DSPF_RGB32);
+            if ( !surface )
+                return false;
+
+            if ( !CopyBitsToSurface(bits, width, height, surface) )
+                return false;
+
+            if ( !ConvertSurfaceToFormat(surface, format) )
+                return false;
+    }
+
+    return true;
+}
+
+} // anonymous namespace
 
 //-----------------------------------------------------------------------------
 // wxBitmapRefData
@@ -460,7 +562,13 @@ wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
 {
     wxCHECK_RET( depth == 1, wxT("can only create mono bitmap from XBM data") );
 
-    wxFAIL_MSG( "not implemented" );
+    // create bitmap in the device-dependent format
+    if ( !CreateWithFormat(width, height, DSPF_UNKNOWN) )
+        return;
+
+    if ( !CopyBitsToSurface((const unsigned char *)bits,
+                            width, height, M_BITMAP->m_surface) )
+        UnRef();
 }
 
 int wxBitmap::GetHeight() const
