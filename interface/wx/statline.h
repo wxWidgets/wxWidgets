@@ -10,7 +10,12 @@
     @class wxStaticLine
 
     A static line is just a line which may be used in a dialog to separate the
-    groups of controls. The line may be only vertical or horizontal.
+    groups of controls.
+
+    The line may be only vertical or horizontal. Moreover, not all ports
+    (notably not wxGTK) support specifying the transversal direction of the
+    line (e.g. height for a horizontal line) so for maximial portability you
+    should specify it as wxDefaultCoord.
 
     @beginStyleTable
     @style{wxLI_HORIZONTAL}
