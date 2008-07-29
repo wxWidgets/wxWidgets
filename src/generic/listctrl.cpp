@@ -25,7 +25,7 @@
 
 #include "wx/listctrl.h"
 
-#if (!defined(__WXMSW__) || defined(__WXUNIVERSAL__)) && !defined(__WXMAC__)
+#if ((!defined(__WXMSW__) && !defined(__WXMAC__)) || defined(__WXUNIVERSAL__))
     // if we have a native version, its implementation file does all this
     IMPLEMENT_DYNAMIC_CLASS(wxListItem, wxObject)
     IMPLEMENT_DYNAMIC_CLASS(wxListView, wxListCtrl)
@@ -4964,7 +4964,7 @@ void wxGenericListCtrl::CalculateAndSetHeaderHeight()
 {
     if ( m_headerWin )
     {
-#ifdef __WXMAC__
+#if defined( __WXMAC__ ) && wxOSX_USE_COCOA_OR_CARBON
         SInt32 h;
         GetThemeMetric( kThemeMetricListHeaderHeight, &h );
 #else
@@ -5035,7 +5035,7 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
 
     m_mainWin = new wxListMainWindow( this, wxID_ANY, wxPoint(0, 0), size, style );
 
-#ifdef __WXMAC__
+#if defined( __WXMAC__ ) && wxOSX_USE_COCOA_OR_CARBON
     // Human Interface Guidelines ask us for a special font in this case
     if ( GetWindowVariant() == wxWINDOW_VARIANT_NORMAL )
     {
@@ -5049,7 +5049,7 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
     {
         CreateHeaderWindow();
 
-#ifdef __WXMAC__
+#if defined( __WXMAC__ ) && wxOSX_USE_COCOA_OR_CARBON
         if (m_headerWin)
         {
             wxFont font;

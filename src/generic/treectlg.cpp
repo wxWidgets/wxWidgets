@@ -792,7 +792,7 @@ void wxGenericTreeCtrl::Init()
 
     m_lastOnSame = false;
 
-#ifdef __WXMAC__
+#if defined( __WXMAC__ ) && wxOSX_USE_COCOA_OR_CARBON
     m_normalFont.MacCreateFromThemeFont( kThemeViewsFont ) ;
 #else
     m_normalFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );

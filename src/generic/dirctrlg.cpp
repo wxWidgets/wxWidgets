@@ -219,7 +219,7 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
     }
 #endif // __WIN32__/!__WIN32__
 
-#elif defined(__WXMAC__)
+#elif defined(__WXMAC__) && wxOSX_USE_COCOA_OR_CARBON
 
     ItemCount volumeIndex = 1;
     OSErr err = noErr ;

@@ -82,7 +82,7 @@ bool wxGenericCollapsiblePane::Create(wxWindow *parent,
 
     m_strLabel = label;
 
-#ifdef __WXMAC__
+#if defined( __WXMAC__ ) && !defined(__WXUNIVERSAL__)
     // on Mac we use the disclosure triangle
     // we need a light gray line above and below, lets approximate with the frame
     m_pStaticLine = NULL;
@@ -197,7 +197,7 @@ void wxGenericCollapsiblePane::Collapse(bool collapse)
     m_pPane->Show(!collapse);
 
     // update button label
-#ifdef __WXMAC__
+#if defined( __WXMAC__ ) && !defined(__WXUNIVERSAL__)
     m_pButton->SetOpen( !collapse );
 #else
     // NB: this must be done after updating our "state"
