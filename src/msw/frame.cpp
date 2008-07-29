@@ -310,15 +310,24 @@ void wxFrame::Raise()
 }
 
 // generate an artificial resize event
-void wxFrame::SendSizeEvent()
+void wxFrame::SendSizeEvent(int flags)
 {
     if ( !m_iconized )
     {
         RECT r = wxGetWindowRect(GetHwnd());
 
-        (void)::SendMessage(GetHwnd(), WM_SIZE,
-                            IsMaximized() ? SIZE_MAXIMIZED : SIZE_RESTORED,
-                            MAKELPARAM(r.right - r.left, r.bottom - r.top));
+        if ( flags & wxSEND_EVENT_POST )
+        {
+            ::PostMessage(GetHwnd(), WM_SIZE,
+                          IsMaximized() ? SIZE_MAXIMIZED : SIZE_RESTORED,
+                          MAKELPARAM(r.right - r.left, r.bottom - r.top));
+        }
+        else // send it
+        {
+            ::SendMessage(GetHwnd(), WM_SIZE,
+                          IsMaximized() ? SIZE_MAXIMIZED : SIZE_RESTORED,
+                          MAKELPARAM(r.right - r.left, r.bottom - r.top));
+        }
     }
 }
 

@@ -872,17 +872,28 @@ void wxTopLevelWindowOS2::Restore()
 } // end of wxTopLevelWindowOS2::Restore
 
 // generate an artificial resize event
-void wxTopLevelWindowOS2::SendSizeEvent()
+void wxTopLevelWindowOS2::SendSizeEvent(int flags)
 {
     if (!m_bIconized)
     {
         RECTL                       vRect = wxGetWindowRect(GetHwnd());
 
-        (void)::WinPostMsg( m_hFrame
-                           ,WM_SIZE
-                           ,MPFROM2SHORT(vRect.xRight - vRect.xLeft, vRect.yTop - vRect.yBottom)
-                           ,MPFROM2SHORT(vRect.xRight - vRect.xLeft, vRect.yTop - vRect.yBottom)
-                          );
+        if ( flags & wxSEND_EVENT_POST )
+        {
+            (void)::WinPostMsg( m_hFrame
+                               ,WM_SIZE
+                               ,MPFROM2SHORT(vRect.xRight - vRect.xLeft, vRect.yTop - vRect.yBottom)
+                               ,MPFROM2SHORT(vRect.xRight - vRect.xLeft, vRect.yTop - vRect.yBottom)
+                              );
+        }
+        else // send it
+        {
+            (void)::WinSendMsg( m_hFrame
+                               ,WM_SIZE
+                               ,MPFROM2SHORT(vRect.xRight - vRect.xLeft, vRect.yTop - vRect.yBottom)
+                               ,MPFROM2SHORT(vRect.xRight - vRect.xLeft, vRect.yTop - vRect.yBottom)
+                              );
+        }
     }
 } // end of wxTopLevelWindowOS2::SendSizeEvent
 

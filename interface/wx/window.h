@@ -1589,6 +1589,21 @@ public:
     //@}
 
     /**
+        Posts a size event to the window.
+
+        This is the same as SendSizeEvent() with @c wxSEND_EVENT_POST argument.
+     */
+    void PostSizeEvent();
+
+    /**
+        Posts a size event to the parent of this window.
+
+        This is the same as SendSizeEventToParent() with @c wxSEND_EVENT_POST
+        argument.
+     */
+    void PostSizeEventToParent();
+
+    /**
         Pushes this event handler onto the event stack for the window.
 
         @param handler
@@ -1793,8 +1808,16 @@ public:
         if the frame is using either sizers or constraints for the children
         layout, it is enough to call wxWindow::Layout() directly and this
         function should not be used in this case.
+
+        If @a flags includes @c wxSEND_EVENT_POST value, this function posts
+        the event, i.e. schedules it for later processing, instead of
+        dispatching it directly. You can also use PostSizeEvent() as a more
+        readable equivalent of calling this function with this flag.
+
+        @param flags
+            May include @c wxSEND_EVENT_POST. Default value is 0.
     */
-    void SendSizeEvent();
+    void SendSizeEvent(int flags = 0);
 
     /**
         Safe wrapper for GetParent()->SendSizeEvent().
@@ -1804,8 +1827,13 @@ public:
         used internally by windows such as toolbars changes to whose state
         should result in parent re-layout (e.g. when a toolbar is added to the
         top of the window, all the other windows must be shifted down).
+
+        @see PostSizeEventToParent()
+
+        @param flags
+            See description of this parameter in SendSizeEvent() documentation.
      */
-    void SendSizeEventToParent();
+    void SendSizeEventToParent(int flags = 0);
 
     /**
         Sets the accelerator table for this window. See wxAcceleratorTable.

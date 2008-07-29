@@ -131,6 +131,12 @@ enum wxShowEffect
     wxSHOW_EFFECT_MAX
 };
 
+// flags for SendSizeEvent()
+enum
+{
+    wxSEND_EVENT_POST = 1
+};
+
 // ----------------------------------------------------------------------------
 // (pseudo)template list classes
 // ----------------------------------------------------------------------------
@@ -538,14 +544,24 @@ public:
 
     // sends a size event to the window using its current size -- this has an
     // effect of refreshing the window layout
-    virtual void SendSizeEvent();
+    //
+    // by default the event is sent, i.e. processed immediately, but if flags
+    // value includes wxSEND_EVENT_POST then it's posted, i.e. only schedule
+    // for later processing
+    virtual void SendSizeEvent(int flags = 0);
 
     // this is a safe wrapper for GetParent()->SendSizeEvent(): it checks that
     // we have a parent window and it's not in process of being deleted
     //
     // this is used by controls such as tool/status bars changes to which must
     // also result in parent re-layout
-    void SendSizeEventToParent();
+    void SendSizeEventToParent(int flags = 0);
+
+    // this is a more readable synonym for SendSizeEvent(wxSEND_EVENT_POST)
+    void PostSizeEvent() { SendSizeEvent(wxSEND_EVENT_POST); }
+
+    // this is the same as SendSizeEventToParent() but using PostSizeEvent()
+    void PostSizeEventToParent() { SendSizeEventToParent(wxSEND_EVENT_POST); }
 
 
     // window state

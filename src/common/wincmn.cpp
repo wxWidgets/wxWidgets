@@ -841,18 +841,21 @@ void wxWindowBase::DoGetScreenPosition(int *x, int *y) const
     ClientToScreen(x, y);
 }
 
-void wxWindowBase::SendSizeEvent()
+void wxWindowBase::SendSizeEvent(int flags)
 {
     wxSizeEvent event(GetSize(), GetId());
     event.SetEventObject(this);
-    HandleWindowEvent(event);
+    if ( flags & wxSEND_EVENT_POST )
+        wxPostEvent(this, event);
+    else
+        HandleWindowEvent(event);
 }
 
-void wxWindowBase::SendSizeEventToParent()
+void wxWindowBase::SendSizeEventToParent(int flags)
 {
     wxWindow * const parent = GetParent();
     if ( parent && !parent->IsBeingDeleted() )
-        parent->SendSizeEvent();
+        parent->SendSizeEvent(flags);
 }
 
 // ----------------------------------------------------------------------------
