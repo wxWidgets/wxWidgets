@@ -477,7 +477,7 @@ long wxExecute(char **argv, int flags, wxProcess *process)
                     _T("wxExecute() can be called only from the main thread") );
 #endif // wxUSE_THREADS
 
-#if defined(__DARWIN__)
+#if defined(__WXCOCOA__) || ( defined(__WXOSX_MAC__) && wxOSX_USE_COCOA_OR_CARBON )
     // wxMacLaunch() only executes app bundles and only does it asynchronously.
     // It returns false if the target is not an app bundle, thus falling
     // through to the regular code for non app bundles.
