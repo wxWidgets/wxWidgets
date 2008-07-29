@@ -2662,8 +2662,10 @@ typedef unsigned long   WXDWORD;
 typedef unsigned short  WXWORD;
 
 typedef WX_OPAQUE_TYPE(PicHandle ) * WXHMETAFILE ;
+#if wxOSX_USE_CARBON
 typedef WX_OPAQUE_TYPE(ControlRef ) * WXWidget ;
 typedef WX_OPAQUE_TYPE(WindowRef) * WXWindow ;
+#endif
 
 typedef void*       WXDisplay;
 
@@ -2800,14 +2802,32 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSTextStorage);
 DECLARE_WXCOCOA_OBJC_CLASS(NSThread);
 DECLARE_WXCOCOA_OBJC_CLASS(NSWindow);
 DECLARE_WXCOCOA_OBJC_CLASS(NSView);
-#ifdef __WXMAC__
-// things added for __WXMAC__
-DECLARE_WXCOCOA_OBJC_CLASS(NSString);
-#else
-// things only for __WXCOCOA__
+#ifndef __WXMAC__
 typedef WX_NSView WXWidget; /*  wxWidgets BASE definition */
 #endif
 #endif /*  __WXCOCOA__  || ( __WXMAC__ &__DARWIN__)*/
+
+#ifdef __WXMAC__
+
+DECLARE_WXCOCOA_OBJC_CLASS(NSString);
+
+#if wxOSX_USE_COCOA
+
+typedef WX_NSWindow WXWindow;
+typedef WX_NSView WXWidget;
+
+#elif wxOSX_USE_IPHONE
+
+DECLARE_WXCOCOA_OBJC_CLASS(UIWindow);
+DECLARE_WXCOCOA_OBJC_CLASS(UIView);
+DECLARE_WXCOCOA_OBJC_CLASS(UIFont);
+
+typedef WX_UIWindow WXWindow;
+typedef WX_UIView WXWidget;
+
+#endif
+
+#endif // __WXMAC__
 
 #if defined(__WXPALMOS__)
 

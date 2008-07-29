@@ -35,7 +35,7 @@ class WXDLLIMPEXP_FWD_CORE wxWindow;
 #include "wx/string.h"
 
 // some platforms have their own renderers, others use the generic one
-#if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXGTK__)
+#if defined(__WXMSW__) || ( defined(__WXMAC__) && wxOSX_USE_COCOA_OR_CARBON ) || defined(__WXGTK__)
     #define wxHAS_NATIVE_RENDERER
 #else
     #undef wxHAS_NATIVE_RENDERER

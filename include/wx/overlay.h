@@ -14,7 +14,7 @@
 
 #include "wx/defs.h"
 
-#if defined(wxMAC_USE_CORE_GRAPHICS) && wxMAC_USE_CORE_GRAPHICS && wxMAC_USE_QUICKDRAW
+#if defined(wxOSX_USE_CORE_GRAPHICS) && wxOSX_USE_CORE_GRAPHICS && wxOSX_USE_QUICKDRAW
     #define wxHAS_NATIVE_OVERLAY 1
 #elif defined(__WXDFB__)
     #define wxHAS_NATIVE_OVERLAY 1

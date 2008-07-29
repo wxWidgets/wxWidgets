@@ -183,7 +183,7 @@ protected:
 // ports with Combine() in this class
 #if defined(__WXPALMOS__) || \
     defined(__WXMSW__) || \
-    defined(__WXMAC__) || \
+    ( defined(__WXMAC__) && wxOSX_USE_CARBON ) || \
     defined(__WXPM__)
 
 #define wxHAS_REGION_COMBINE

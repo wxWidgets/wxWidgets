@@ -248,7 +248,7 @@ public:
     }
 #endif // wxUSE_DATETIME
 
-#ifdef __WXMAC__
+#if defined( __WXOSX_MAC__ ) && wxOSX_USE_CARBON
     bool MacSetTypeAndCreator( wxUint32 type , wxUint32 creator ) ;
     bool MacGetTypeAndCreator( wxUint32 *type , wxUint32 *creator ) ;
     // gets the 'common' type and creator for a certain extension

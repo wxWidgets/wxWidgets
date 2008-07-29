@@ -204,7 +204,7 @@ private:
 
 // in order to avoid any overhead under platforms where critical sections are
 // just mutexes make all wxCriticalSection class functions inline
-#if !defined(__WXMSW__) && !defined(__WXMAC__)
+#if !defined(__WXMSW__) && ( !defined(__WXMAC__) || wxOSX_USE_COCOA_OR_IPHONE )
     #define wxCRITSECT_IS_MUTEX 1
 
     #define wxCRITSECT_INLINE inline
