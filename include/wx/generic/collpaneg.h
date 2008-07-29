@@ -15,7 +15,7 @@
 // forward declared
 class WXDLLIMPEXP_FWD_CORE wxButton;
 class WXDLLIMPEXP_FWD_CORE wxStaticLine;
-#ifdef __WXMAC__
+#if defined( __WXMAC__ ) && !defined(__WXUNIVERSAL__)
 class WXDLLIMPEXP_FWD_CORE wxDisclosureTriangle;
 #endif
 
@@ -79,7 +79,7 @@ protected:
     int GetBorder() const;
 
     // child controls
-#ifdef __WXMAC__
+#if defined( __WXMAC__ ) && !defined(__WXUNIVERSAL__)
     wxDisclosureTriangle *m_pButton;
 #else
     wxButton *m_pButton;
