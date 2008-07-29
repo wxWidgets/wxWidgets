@@ -1273,6 +1273,24 @@ typedef double wxDouble;
  */
 #define wxNullPtr ((void *)NULL)
 
+
+/* Define wxChar16 and wxChar32                                              */
+
+#if wxUSE_WCHAR_T && (!defined(SIZEOF_WCHAR_T) || (SIZEOF_WCHAR_T == 2))
+    #define wxWCHAR_T_IS_WXCHAR16
+    typedef wchar_t wxChar16; 
+#else
+    typedef wxUint16 wxChar16;
+#endif
+
+#if wxUSE_WCHAR_T && defined(SIZEOF_WCHAR_T) && (SIZEOF_WCHAR_T == 4)
+    #define wxWCHAR_T_IS_WXCHAR32
+    typedef wchar_t wxChar32;
+#else
+    typedef wxUint32 wxChar32;
+#endif
+
+
 /*  ---------------------------------------------------------------------------- */
 /*  byte ordering related definition and macros */
 /*  ---------------------------------------------------------------------------- */

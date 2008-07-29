@@ -145,7 +145,7 @@
     typedef char wxChar;
     typedef signed char wxSChar;
     typedef unsigned char wxUChar;
-#else /* Unicode */
+#else
     /* VZ: note that VC++ defines _T[SU]CHAR simply as wchar_t and not as    */
     /*     signed/unsigned version of it which (a) makes sense to me (unlike */
     /*     char wchar_t is always unsigned) and (b) was how the previous     */

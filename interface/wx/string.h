@@ -82,6 +82,9 @@ public:
     and Linux, too, you can specify this on the command line with the
     @c configure @c --disable-utf8 switch.
     
+    If you need a Unicode string class with O(1) access on all platforms
+    you should consider using wxUString.
+    
     Since iterating over a wxString by index can become inefficient in UTF-8
     mode and iterators should be used instead of index based access:
 
@@ -268,7 +271,7 @@ public:
     ::Objects, ::wxEmptyString,
 
     @see @ref overview_string "wxString overview", @ref overview_unicode
-    "Unicode overview"
+    "Unicode overview", wxUString
 */
 class wxString
 {

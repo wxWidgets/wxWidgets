@@ -796,6 +796,42 @@ WXDLLIMPEXP_BASE wchar_t * wxCRT_StrdupW(const wchar_t *pwz)
 }
 #endif // wxCRT_StrdupW
 
+#ifndef wxWCHAR_T_IS_WXCHAR16
+WXDLLIMPEXP_BASE size_t wxStrlen(const wxChar16 *s ) 
+{ 
+    if (!s) return 0; 
+    size_t i=0; 
+    while (*s!=0) { ++i; ++s; }; 
+    return i;
+}
+
+WXDLLIMPEXP_BASE wxChar16* wxStrdup(const wxChar16* s)
+{ 
+  size_t size = (wxStrlen(s) + 1) * sizeof(wxChar16); 
+  wxChar16 *ret = (wxChar16*) malloc(size);
+  memcpy(ret, s, size);
+  return ret;
+}
+#endif
+
+#ifndef wxWCHAR_T_IS_WXCHAR32
+WXDLLIMPEXP_BASE size_t wxStrlen(const wxChar32 *s ) 
+{ 
+    if (!s) return 0; 
+    size_t i=0; 
+    while (*s!=0) { ++i; ++s; }; 
+    return i;
+}
+
+WXDLLIMPEXP_BASE wxChar32* wxStrdup(const wxChar32* s)
+{ 
+  size_t size = (wxStrlen(s) + 1) * sizeof(wxChar32); 
+  wxChar32 *ret = (wxChar32*) malloc(size);
+  memcpy(ret, s, size);
+  return ret;
+}
+#endif
+
 #ifndef wxCRT_StricmpA
 WXDLLIMPEXP_BASE int wxCRT_StricmpA(const char *psz1, const char *psz2)
 {
