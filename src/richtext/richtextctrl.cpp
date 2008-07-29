@@ -2290,7 +2290,7 @@ bool wxRichTextCtrl::WriteImage(const wxBitmap& bitmap, int bitmapType)
 /// Insert a newline (actually paragraph) at the current insertion point.
 bool wxRichTextCtrl::Newline()
 {
-    return GetBuffer().InsertNewlineWithUndo(m_caretPosition+1, this);
+    return GetBuffer().InsertNewlineWithUndo(m_caretPosition+1, this, wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
 }
 
 /// Insert a line break at the current insertion point.
