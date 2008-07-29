@@ -101,7 +101,7 @@ wxString wxStandardPathsCF::GetFromFunc(wxCFURLRef (*func)(wxCFBundleRef)) const
 
 wxString wxStandardPathsCF::GetDocumentsDir() const
 {
-#if defined( __WXMAC__ ) && !defined(__WXOSX_IPHONE__)
+#if defined( __WXMAC__ ) && wxOSX_USE_CARBON
     return wxMacFindFolderNoSeparator
         (
         kUserDomain,
@@ -119,7 +119,7 @@ wxString wxStandardPathsCF::GetDocumentsDir() const
 
 wxString wxStandardPathsCF::GetConfigDir() const
 {
-#if defined( __WXMAC__ ) && !defined(__WXOSX_IPHONE__)
+#if defined( __WXMAC__ ) && wxOSX_USE_CARBON
     return wxMacFindFolder((short)kLocalDomain, kPreferencesFolderType, kCreateFolder);
 #else
     return wxT("/Library/Preferences");
@@ -128,7 +128,7 @@ wxString wxStandardPathsCF::GetConfigDir() const
 
 wxString wxStandardPathsCF::GetUserConfigDir() const
 {
-#if defined( __WXMAC__ ) && !defined(__WXOSX_IPHONE__)
+#if defined( __WXMAC__ ) && wxOSX_USE_CARBON
     return wxMacFindFolder((short)kUserDomain, kPreferencesFolderType, kCreateFolder);
 #else
     return wxFileName::GetHomeDir() + wxT("/Library/Preferences");
@@ -180,7 +180,7 @@ wxString wxStandardPathsCF::GetExecutablePath() const
 
 wxString wxStandardPathsCF::GetLocalDataDir() const
 {
-#if defined( __WXMAC__ ) && !defined(__WXOSX_IPHONE__)
+#if defined( __WXMAC__ ) && wxOSX_USE_CARBON
     return AppendAppInfo(wxMacFindFolder((short)kLocalDomain, kApplicationSupportFolderType, kCreateFolder));
 #else
     return AppendAppInfo(wxT("/Library/Application Support"));
@@ -189,7 +189,7 @@ wxString wxStandardPathsCF::GetLocalDataDir() const
 
 wxString wxStandardPathsCF::GetUserDataDir() const
 {
-#if defined( __WXMAC__ ) && !defined(__WXOSX_IPHONE__)
+#if defined( __WXMAC__ ) && wxOSX_USE_CARBON
     return AppendAppInfo(wxMacFindFolder((short)kUserDomain, kApplicationSupportFolderType, kCreateFolder));
 #else
     return AppendAppInfo(wxFileName::GetHomeDir() + _T("/Library/Application Support"));
