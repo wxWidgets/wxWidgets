@@ -97,28 +97,28 @@ wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
                     wxEmptyString,
                     _T("JPEG image (from fallback)"),
                     _T("jpg"), _T("jpeg"), _T("JPG"), _T("JPEG"), wxNullPtr),
-                    wxFileTypeInfo(_T("image/gif"),
+                wxFileTypeInfo(_T("image/gif"),
                     wxEmptyString,
                     wxEmptyString,
                     _T("GIF image (from fallback)"),
                     _T("gif"), _T("GIF"), wxNullPtr),
-                    wxFileTypeInfo(_T("image/png"),
+                wxFileTypeInfo(_T("image/png"),
                     wxEmptyString,
                     wxEmptyString,
                     _T("PNG image (from fallback)"),
                     _T("png"), _T("PNG"), wxNullPtr),
-                    wxFileTypeInfo(_T("image/bmp"),
+                wxFileTypeInfo(_T("image/bmp"),
                     wxEmptyString,
                     wxEmptyString,
                     _T("windows bitmap image (from fallback)"),
                     _T("bmp"), _T("BMP"), wxNullPtr),
-                    wxFileTypeInfo(_T("text/html"),
+                wxFileTypeInfo(_T("text/html"),
                     wxEmptyString,
                     wxEmptyString,
                     _T("HTML document (from fallback)"),
                     _T("htm"), _T("html"), _T("HTM"), _T("HTML"), wxNullPtr),
-                    // must terminate the table with this!
-                    wxFileTypeInfo()
+                // must terminate the table with this!
+                wxFileTypeInfo()
             };
             wxTheMimeTypesManager->AddFallbacks(fallbacks);
             s_MinimalMimeEnsured = true;
