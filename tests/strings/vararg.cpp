@@ -41,6 +41,7 @@ private:
         CPPUNIT_TEST( StdString );
 #endif
         CPPUNIT_TEST( Sscanf );
+        CPPUNIT_TEST( RepeatedPrintf );
     CPPUNIT_TEST_SUITE_END();
 
     void StringPrintf();
@@ -49,6 +50,7 @@ private:
     void StdString();
 #endif
     void Sscanf();
+    void RepeatedPrintf();
 
     DECLARE_NO_COPY_CLASS(VarArgTestCase)
 };
@@ -164,4 +166,20 @@ void VarArgTestCase::Sscanf()
     wxSscanf(input, L"%d %s", &i, &wstr);
     CPPUNIT_ASSERT( i == 42 );
     CPPUNIT_ASSERT( wxStrcmp(wstr, "test") == 0 );
+}
+
+void VarArgTestCase::RepeatedPrintf()
+{
+    wxCharBuffer buffer(2);
+    char *p = buffer.data();
+    *p = 'h';
+    p++;
+    *p = 'i';
+
+    wxString s;
+    s = wxString::Format("buffer %s, len %d", buffer, wxStrlen(buffer));
+    CPPUNIT_ASSERT_EQUAL("buffer hi, len 2", s);
+
+    s = wxString::Format("buffer %s, len %d", buffer, wxStrlen(buffer));
+    CPPUNIT_ASSERT_EQUAL("buffer hi, len 2", s);
 }
