@@ -316,7 +316,7 @@ void wxFrame::SendSizeEvent()
     {
         RECT r = wxGetWindowRect(GetHwnd());
 
-        (void)::PostMessage(GetHwnd(), WM_SIZE,
+        (void)::SendMessage(GetHwnd(), WM_SIZE,
                             IsMaximized() ? SIZE_MAXIMIZED : SIZE_RESTORED,
                             MAKELPARAM(r.right - r.left, r.bottom - r.top));
     }
