@@ -528,8 +528,25 @@ public:
     // stretch over several lines). Parameter availableOtherDir
     // tells the item how much more space there is available in the opposite
     // direction (-1 if unknown).
-    virtual bool InformFirstDirection( int WXUNUSED(direction), int WXUNUSED(size), int WXUNUSED(availableOtherDir) )
-    { return false; }
+    virtual bool
+    InformFirstDirection(int WXUNUSED(direction),
+                         int WXUNUSED(size),
+                         int WXUNUSED(availableOtherDir))
+    {
+        return false;
+    }
+
+    // sends a size event to the window using its current size -- this has an
+    // effect of refreshing the window layout
+    virtual void SendSizeEvent();
+
+    // this is a safe wrapper for GetParent()->SendSizeEvent(): it checks that
+    // we have a parent window and it's not in process of being deleted
+    //
+    // this is used by controls such as tool/status bars changes to which must
+    // also result in parent re-layout
+    void SendSizeEventToParent();
+
 
     // window state
     // ------------

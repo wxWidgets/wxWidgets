@@ -329,17 +329,6 @@ public:
     void ProcessCommand(int id);
 
     /**
-        This function sends a dummy @ref overview_wxsizeevent "size event" to the frame
-        forcing it to reevaluate its children positions. It is sometimes useful to call
-        this function after adding or deleting a children after the frame creation or
-        if a child size changes.
-        Note that if the frame is using either sizers or constraints for the children
-        layout, it is enough to call wxWindow::Layout directly and
-        this function should not be used in this case.
-    */
-    void SendSizeEvent();
-
-    /**
         Tells the frame to show the given menu bar.
 
         @param menuBar

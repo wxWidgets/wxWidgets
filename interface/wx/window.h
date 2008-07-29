@@ -1785,6 +1785,29 @@ public:
                               const wxRect* rect = NULL);
 
     /**
+        This function sends a dummy @ref overview_wxsizeevent "size event" to
+        the window allowing it to re-layout its children positions.
+
+        It is sometimes useful to call this function after adding or deleting a
+        children after the frame creation or if a child size changes. Note that
+        if the frame is using either sizers or constraints for the children
+        layout, it is enough to call wxWindow::Layout() directly and this
+        function should not be used in this case.
+    */
+    void SendSizeEvent();
+
+    /**
+        Safe wrapper for GetParent()->SendSizeEvent().
+
+        This function simply checks that the window has a valid parent which is
+        not in process of being deleted and calls SendSizeEvent() on it. It is
+        used internally by windows such as toolbars changes to whose state
+        should result in parent re-layout (e.g. when a toolbar is added to the
+        top of the window, all the other windows must be shifted down).
+     */
+    void SendSizeEventToParent();
+
+    /**
         Sets the accelerator table for this window. See wxAcceleratorTable.
     */
     virtual void SetAcceleratorTable(const wxAcceleratorTable& accel);

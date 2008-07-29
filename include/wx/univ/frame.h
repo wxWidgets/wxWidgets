@@ -58,9 +58,6 @@ public:
 
     virtual wxSize GetMinSize() const;
 
-    // sends wxSizeEvent to itself (used after attaching xxxBar)
-    virtual void SendSizeEvent();
-
 protected:
     void OnSize(wxSizeEvent& event);
     void OnSysColourChanged(wxSysColourChangedEvent& event);

@@ -87,10 +87,9 @@ public:
 
     bool PreResize();
 
-    void SendSizeEvent();
-
     // for generic/mdig.h
     virtual void DoGetClientSize(int *width, int *height) const;
+
 private:
     // common part of all ctors
     void Init();

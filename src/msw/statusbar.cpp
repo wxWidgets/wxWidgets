@@ -125,11 +125,7 @@ bool wxStatusBar::Create(wxWindow *parent,
 
     // we must refresh the frame size when the statusbar is created, because
     // its client area might change
-    wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
-    if ( frame )
-    {
-        frame->SendSizeEvent();
-    }
+    SendSizeEventToParent();
 
     return true;
 }
@@ -139,11 +135,7 @@ wxStatusBar::~wxStatusBar()
     // we must refresh the frame size when the statusbar is deleted but the
     // frame is not - otherwise statusbar leaves a hole in the place it used to
     // occupy
-    wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
-    if ( frame && !frame->IsBeingDeleted() )
-    {
-        frame->SendSizeEvent();
-    }
+    SendSizeEventToParent();
 }
 
 void wxStatusBar::SetFieldsCount(int nFields, const int *widths)

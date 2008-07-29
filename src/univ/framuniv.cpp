@@ -92,13 +92,6 @@ void wxFrame::OnSize(wxSizeEvent& event)
     event.Skip();
 }
 
-void wxFrame::SendSizeEvent()
-{
-    wxSizeEvent event(GetSize(), GetId());
-    event.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(event);
-}
-
 #if wxUSE_MENUS
 
 void wxFrame::PositionMenuBar()

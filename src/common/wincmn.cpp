@@ -841,6 +841,20 @@ void wxWindowBase::DoGetScreenPosition(int *x, int *y) const
     ClientToScreen(x, y);
 }
 
+void wxWindowBase::SendSizeEvent()
+{
+    wxSizeEvent event(GetSize(), GetId());
+    event.SetEventObject(this);
+    HandleWindowEvent(event);
+}
+
+void wxWindowBase::SendSizeEventToParent()
+{
+    wxWindow * const parent = GetParent();
+    if ( parent && !parent->IsBeingDeleted() )
+        parent->SendSizeEvent();
+}
+
 // ----------------------------------------------------------------------------
 // show/hide/enable/disable the window
 // ----------------------------------------------------------------------------

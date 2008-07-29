@@ -587,13 +587,7 @@ void wxToolBar::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     // otherwise the toolbar can be shown incorrectly
     if ( old_width != width || old_height != height )
     {
-        // But before we send the size event check it
-        // we have a frame that is not being deleted.
-        wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
-        if ( frame && !frame->IsBeingDeleted() )
-        {
-            frame->SendSizeEvent();
-        }
+        SendSizeEventToParent();
     }
 }
 

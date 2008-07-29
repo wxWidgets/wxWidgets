@@ -397,9 +397,7 @@ wxToolBar::~wxToolBar()
 {
     // we must refresh the frame size when the toolbar is deleted but the frame
     // is not - otherwise toolbar leaves a hole in the place it used to occupy
-    wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
-    if ( frame && !frame->IsBeingDeleted() )
-        frame->SendSizeEvent();
+    SendSizeEventToParent();
 
     if ( m_hBitmap )
         ::DeleteObject((HBITMAP) m_hBitmap);
@@ -1422,11 +1420,7 @@ void wxToolBar::UpdateSize()
     // toolbar to full width again, but only if the parent is a frame and the
     // toolbar is managed by the frame.  Otherwise assume that some other
     // layout mechanism is controlling the toolbar size and leave it alone.
-    wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
-    if ( frame && frame->GetToolBar() == this )
-    {
-        frame->SendSizeEvent();
-    }
+    SendSizeEventToParent();
 }
 
 // ----------------------------------------------------------------------------

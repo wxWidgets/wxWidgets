@@ -72,9 +72,6 @@ public:
     // if the frame has a toolbar) in client coordinates
     virtual wxPoint GetClientAreaOrigin() const;
 
-    // sends a size event to the window using its current size -- this has an
-    // effect of refreshing the window layout
-    virtual void SendSizeEvent();
 
     // menu bar functions
     // ------------------

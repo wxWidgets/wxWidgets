@@ -91,8 +91,7 @@ public:
     void SetToolTipCtrl(WXHWND hwndTT) { m_hwndToolTip = hwndTT; }
 #endif // tooltips
 
-    // a MSW only function which sends a size event to the window using its
-    // current size - this has an effect of refreshing the window layout
+    // override the base class function to handle iconized/maximized frames
     virtual void SendSizeEvent();
 
     virtual wxPoint GetClientAreaOrigin() const;
