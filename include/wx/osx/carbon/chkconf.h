@@ -77,12 +77,14 @@
     #endif
     #define wxOSX_USE_QUICKDRAW 0
     #define wxOSX_USE_CARBON 0
+    #define wxOSX_USE_IPHONE 0
 #else
     #ifdef __WXOSX_IPHONE__
         #define wxOSX_USE_QUICKDRAW 0
         #define wxOSX_USE_CARBON 0
         #define wxOSX_USE_IPHONE 1
     #else
+        #define wxOSX_USE_IPHONE 0
         #if wxOSX_USE_COCOA
             #define wxOSX_USE_QUICKDRAW 0
             #define wxOSX_USE_CARBON 0
