@@ -63,19 +63,6 @@
     #include "wx/fontmap.h"
 #endif // wxUSE_FONTMAP
 
-#if defined(__DARWIN__) && defined(_MSL_USING_MW_C_HEADERS) && _MSL_USING_MW_C_HEADERS
-    // For MacTypes.h for Debugger function
-    #include <CoreFoundation/CFBase.h>
-#endif
-
-#if defined(__WXMAC__)
-    #ifdef __DARWIN__
-        #include  <CoreServices/CoreServices.h>
-    #else
-        #include  "wx/mac/private.h"  // includes mac headers
-    #endif
-#endif // __WXMAC__
-
 #ifdef __WXDEBUG__
     #if wxUSE_STACKWALKER
         #include "wx/stackwalk.h"

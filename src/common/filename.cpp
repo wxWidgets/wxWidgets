@@ -1068,7 +1068,7 @@ wxString wxFileName::GetTempDir()
         // default
 #if defined(__DOS__) || defined(__OS2__)
         dir = _T(".");
-#elif defined(__WXMAC__) && !defined(__WXOSX_IPHONE__)
+#elif defined(__WXMAC__) && wxOSX_USE_CARBON
         dir = wxMacFindFolder(short(kOnSystemDisk), kTemporaryFolderType, kCreateFolder);
 #else
         dir = _T("/tmp");
@@ -2383,7 +2383,7 @@ wxString wxFileName::GetHumanReadableSize(const wxString &failmsg, int precision
 // Mac-specific functions
 // ----------------------------------------------------------------------------
 
-#if defined( __WXMAC__ ) && !defined( __WXOSX_IPHONE__ )
+#if defined( __WXOSX_MAC__ ) && wxOSX_USE_CARBON
 
 const short kMacExtensionMaxLength = 16 ;
 class MacDefaultExtensionRecord

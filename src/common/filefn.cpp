@@ -1657,7 +1657,7 @@ wxString wxGetOSDirectory()
     wxChar buf[256];
     GetWindowsDirectory(buf, 256);
     return wxString(buf);
-#elif defined(__WXMAC__) && !defined(__WXOSX_IPHONE__)
+#elif defined(__WXMAC__) && wxOSX_USE_CARBON
     return wxMacFindFolder(kOnSystemDisk, 'macs', false);
 #else
     return wxEmptyString;

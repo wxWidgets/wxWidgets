@@ -181,7 +181,7 @@ wxIcon wxIconBundle::GetIcon(const wxSize& size) const
             }
     }
 
-#ifdef __WXMAC__
+#if defined( __WXMAC__ ) && wxOSX_USE_CARRBON
     return wxIcon(iconBest.GetHICON(), size);
 #else
     return iconBest;
