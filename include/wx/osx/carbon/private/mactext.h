@@ -21,6 +21,8 @@ public :
     wxMacTextControl( wxTextCtrl *peer ) ;
     virtual ~wxMacTextControl() ;
 
+    virtual bool CanFocus() const { return true; }
+
     virtual wxString GetStringValue() const = 0 ;
     virtual void SetStringValue( const wxString &val ) = 0 ;
     virtual void SetSelection( long from, long to ) = 0 ;
