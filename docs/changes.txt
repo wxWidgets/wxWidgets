@@ -93,6 +93,8 @@ Major new features in 2.8 release
 
 All:
 
+- Updated Hindi translation (Priyank Bolia).
+
 All (GUI):
 
 - Fixed help viewer bug whereby the splitter sash in wxHtmlHelpWindow could
