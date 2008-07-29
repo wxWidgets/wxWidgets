@@ -755,6 +755,11 @@ wxWindowMSW::MSWShowWithEffect(bool show,
     if ( !s_pfnAnimateWindow )
         return Show(show);
 
+    // Show() has a side effect of sending a WM_SIZE to the window, which helps
+    // ensuring that it's laid out correctly, but AnimateWindow() doesn't do
+    // this so send the event ourselves
+    SendSizeEvent();
+
     // prepare to use AnimateWindow()
 
     if ( !timeout )
