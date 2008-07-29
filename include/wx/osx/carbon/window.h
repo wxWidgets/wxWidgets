@@ -20,6 +20,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 class WXDLLIMPEXP_FWD_CORE wxNonOwnedWindow;
 
 class WXDLLIMPEXP_FWD_CORE wxMacControl ;
+class WXDLLIMPEXP_FWD_CORE wxWidgetImpl ;
 
 class WXDLLIMPEXP_CORE wxWindowMac: public wxWindowBase
 {
@@ -117,13 +118,10 @@ public:
     // --------------------------
 
     void MacClientToRootWindow( int *x , int *y ) const;
-    void MacRootWindowToClient( int *x , int *y ) const;
 
     void MacWindowToRootWindow( int *x , int *y ) const;
-    void MacWindowToRootWindow( short *x , short *y ) const;
 
     void MacRootWindowToWindow( int *x , int *y ) const;
-    void MacRootWindowToWindow( short *x , short *y ) const;
 
     virtual wxString MacGetToolTipString( wxPoint &where );
 
@@ -164,7 +162,6 @@ public:
 
     virtual void        MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown ) ;
     virtual bool        MacDoRedraw( void* updatergn , long time ) ;
-    virtual bool        MacCanFocus() const ;
 
     // this should not be overriden in classes above wxWindowMac
     // because it is called from its destructor via DeleteChildren
@@ -228,10 +225,8 @@ public:
                wxWindowBase::IsClientAreaChild(child);
     }
 
-    virtual void        MacInstallEventHandler(WXWidget native) ;
     void                MacPostControlCreate(const wxPoint& pos, const wxSize& size) ;
     wxList&             GetSubcontrols() { return m_subControls; }
-    WXEVENTHANDLERREF   MacGetControlEventHandler() { return m_macControlEventHandler ; }
 
     // translate wxWidgets coords into ones suitable
     // to be passed to CreateControl calls
@@ -242,20 +237,13 @@ public:
                                            int& x, int& y,
                                            int& w, int& h , bool adjustForOrigin ) const ;
 
-    // calculates the real window position and size from the native control
-    void                MacGetPositionAndSizeFromControl(int& x, int& y,
-                                           int& w, int& h) const ;
-
-    // gets the inset from every part
-    virtual void        MacGetContentAreaInset( int &left , int &top , int &right , int &bottom ) ;
-
-    // visibly flash the current invalid area:
-    // useful for debugging in OSX composited (double-buffered) situation
-    void                MacFlashInvalidAreas() ;
-
     // the 'true' OS level control for this wxWindow
+#if wxOSX_USE_CARBON
     wxMacControl*       GetPeer() const { return m_peer ; }
-
+#else
+    wxWidgetImpl*       GetPeer() const { return m_peer ; }
+#endif
+ 
     void *              MacGetCGContextRef() { return m_cgContextRef ; }
     void                MacSetCGContextRef(void * cg) { m_cgContextRef = cg ; }
 
@@ -263,9 +251,12 @@ protected:
     // For controls like radio buttons which are genuinely composite
     wxList              m_subControls;
 
+#if wxOSX_USE_CARBON
     // the peer object, allowing for cleaner API support
     wxMacControl *       m_peer ;
-
+#else
+    wxWidgetImpl *       m_peer ;
+#endif
     void *              m_cgContextRef ;
 
     // cache the clipped rectangles within the window hierarchy
@@ -340,8 +331,6 @@ private:
     // AlwaysShowScrollbars()
     void DoUpdateScrollbarVisibility();
 
-
-    WXEVENTHANDLERREF    m_macControlEventHandler ;
 
     DECLARE_NO_COPY_CLASS(wxWindowMac)
     DECLARE_EVENT_TABLE()

@@ -47,14 +47,14 @@ public:
     CGColorRef GetCGColor() const { return m_cgColour; };
     CGColorRef CreateCGColor() const { return wxCFRetain( (CGColorRef)m_cgColour ); };
 
-#if wxMAC_USE_QUICKDRAW
+#if wxOSX_USE_QUICKDRAW
     void GetRGBColor( RGBColor *col ) const;
 #endif
 
     // Mac-specific ctor and assignment operator from the native colour
     // assumes ownership of CGColorRef
     wxColour( CGColorRef col );
-#if wxMAC_USE_QUICKDRAW
+#if wxOSX_USE_QUICKDRAW
     wxColour(const RGBColor& col);
     wxColour& operator=(const RGBColor& col);
 #endif
@@ -64,7 +64,7 @@ public:
 protected :
     virtual void
     InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a);
-#if wxMAC_USE_QUICKDRAW
+#if wxOSX_USE_QUICKDRAW
     void InitRGBColor( const RGBColor& col );
 #endif
     void InitCGColorRef( CGColorRef col );

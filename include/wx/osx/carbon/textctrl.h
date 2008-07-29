@@ -164,9 +164,6 @@ public:
 
     void OnContextMenu(wxContextMenuEvent& event);
 
-    virtual bool MacCanFocus() const
-    { return true; }
-
     virtual bool MacSetupCursor( const wxPoint& pt );
 
     virtual void MacVisibilityChanged();

@@ -14,7 +14,6 @@
 
 #include "wx/osx/private.h"
 
-void UMAInitToolbox( UInt16 inMoreMastersCalls, bool isEmbedded) ;
 long UMAGetSystemVersion() ;
 
 #if wxUSE_GUI

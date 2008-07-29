@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/carbon/private.h
+// Name:        wx/osx/carbon/private.h
 // Purpose:     Private declarations: as this header is only included by
 //              wxWidgets itself, it may contain identifiers which don't start
 //              with "wx".
@@ -14,12 +14,9 @@
 #ifndef _WX_PRIVATE_H_
 #define _WX_PRIVATE_H_
 
-#include "wx/defs.h"
+#include "wx/osx/core/private.h"
 
 #include <Carbon/Carbon.h>
-
-#include "wx/osx/core/cfstring.h"
-#include "wx/osx/core/cfdataref.h"
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
 typedef UInt32 URefCon;
@@ -33,29 +30,14 @@ typedef SInt32 SRefCon;
 #include "wx/osx/carbon/dcclient.h"
 #include "wx/osx/carbon/dcmemory.h"
 
-class WXDLLIMPEXP_CORE wxMacCGContextStateSaver
-{
-    DECLARE_NO_COPY_CLASS(wxMacCGContextStateSaver)
-
-public:
-    wxMacCGContextStateSaver( CGContextRef cg )
-    {
-        m_cg = cg;
-        CGContextSaveGState( cg );
-    }
-    ~wxMacCGContextStateSaver()
-    {
-        CGContextRestoreGState( m_cg );
-    }
-private:
-    CGContextRef m_cg;
-};
-
 // app.h
 
 #if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
 bool wxMacConvertEventToRecord( EventRef event , EventRecord *rec);
 #endif
+
+WXDLLIMPEXP_CORE wxWindowMac * wxFindWindowFromWXWidget(WXWidget inControl );
+// TODO REMOVE WXDLLIMPEXP_CORE wxNonOwnedWindow* wxFindWindowFromWXWindow( WXWindow inWindow );
 
 #endif // wxUSE_GUI
 
@@ -217,30 +199,6 @@ protected :
     bool     m_release;
 };
 
-//
-// helper class for allocating and deallocating Universal Proc Ptrs
-//
-
-template <typename procType, typename uppType , uppType (*newUPP)(procType) , void (*disposeUPP)(uppType) > class wxMacUPP
-{
-public :
-    wxMacUPP( procType WXUNUSED(proc) )
-    {
-        m_upp = NULL;
-        m_upp = (*newUPP)( NULL );
-    }
-    ~wxMacUPP()
-    {
-        if ( m_upp )
-            disposeUPP( m_upp );
-    }
-    operator uppType() { return m_upp; }
-private :
-    uppType m_upp;
-};
-
-typedef wxMacUPP<NMProcPtr,NMUPP,NewNMUPP,DisposeNMUPP> wxMacNMUPP;
-
 #if wxUSE_GUI
 
 class WXDLLIMPEXP_FWD_CORE wxMacToolTipTimer ;
@@ -279,12 +237,6 @@ private :
 
 WXDLLIMPEXP_CORE void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bitmap , int forceType = 0 );
 WXDLLIMPEXP_CORE void wxMacReleaseBitmapButton( ControlButtonContentInfo*info );
-WXDLLIMPEXP_CORE CGImageRef wxMacCreateCGImageFromBitmap( const wxBitmap& bitmap );
-
-WXDLLIMPEXP_CORE CGDataProviderRef wxMacCGDataProviderCreateWithCFData( CFDataRef data );
-WXDLLIMPEXP_CORE CGDataConsumerRef wxMacCGDataConsumerCreateWithCFData( CFMutableDataRef data );
-WXDLLIMPEXP_CORE CGDataProviderRef wxMacCGDataProviderCreateWithMemoryBuffer( const wxMemoryBuffer& buf );
-
 
 #define MAC_WXHBITMAP(a) (GWorldPtr(a))
 #define MAC_WXHMETAFILE(a) (PicHandle(a))
@@ -309,17 +261,14 @@ WXDLLIMPEXP_CORE void wxMacNativeToRect( const Rect *n , wxRect* wx );
 WXDLLIMPEXP_CORE void wxMacPointToNative( const wxPoint* wx , Point *n );
 WXDLLIMPEXP_CORE void wxMacNativeToPoint( const Point *n , wxPoint* wx );
 
-WXDLLIMPEXP_CORE wxWindow * wxFindControlFromMacControl(ControlRef inControl );
-WXDLLIMPEXP_CORE wxNonOwnedWindow* wxFindWinFromMacWindow( WindowRef inWindow );
 WXDLLIMPEXP_CORE wxMenu* wxFindMenuFromMacMenu(MenuRef inMenuRef);
 
 WXDLLIMPEXP_CORE int wxMacCommandToId( UInt32 macCommandId );
 WXDLLIMPEXP_CORE UInt32 wxIdToMacCommand( int wxId );
 WXDLLIMPEXP_CORE wxMenu* wxFindMenuFromMacCommand( const HICommand &macCommandId , wxMenuItem* &item );
 
-extern wxWindow* g_MacLastWindow;
 WXDLLIMPEXP_CORE pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , EventRef event , void *data );
-WXDLLIMPEXP_CORE Rect wxMacGetBoundsForControl( wxWindow* window , const wxPoint& pos , const wxSize &size , bool adjustForOrigin = true );
+WXDLLIMPEXP_CORE Rect wxMacGetBoundsForControl( wxWindowMac* window , const wxPoint& pos , const wxSize &size , bool adjustForOrigin = true );
 
 ControlActionUPP GetwxMacLiveScrollbarActionProc();
 
@@ -331,21 +280,16 @@ enum {
 };
 #endif
 
-class WXDLLIMPEXP_CORE wxMacControl : public wxObject
+class WXDLLIMPEXP_CORE wxMacControl : public wxWidgetImpl
 {
 public :
-    wxMacControl( wxWindow* peer , bool isRootControl = false );
-    wxMacControl( wxWindow* peer , ControlRef control );
-    wxMacControl( wxWindow* peer , WXWidget control );
+    wxMacControl( wxWindowMac* peer , bool isRootControl = false );
     wxMacControl() ;
     virtual ~wxMacControl();
 
     void Init();
 
-    virtual void Dispose();
-
-    bool Ok() const { return IsOk(); }
-    bool IsOk() const { return GetControlRef() != NULL; }
+    virtual void Destroy();
 
     void SetReferenceInNativeControl();
     static wxMacControl* GetReferenceFromNativeControl(ControlRef control);
@@ -353,7 +297,34 @@ public :
     virtual ControlRef * GetControlRefAddr() { return &m_controlRef; }
     virtual ControlRef GetControlRef() const { return m_controlRef; }
 
+    virtual WXWidget GetWXWidget() const { return (WXWidget) m_controlRef; }
+
     virtual void SetReference( URefCon data );
+    
+    virtual bool        IsVisible() const;
+
+    virtual void        Raise();
+    
+    virtual void        Lower();
+
+    virtual void        ScrollRect( const wxRect *rect, int dx, int dy );
+
+    virtual void        GetContentArea( int &left , int &top , int &width , int &height ) const;    
+    virtual void        Move(int x, int y, int width, int height);
+    virtual void        GetPosition( int &x, int &y ) const;
+    virtual void        GetSize( int &width, int &height ) const;
+
+    // where is in native window relative coordinates
+    virtual void        SetNeedsDisplay( const wxRect* where = NULL );
+    virtual bool        GetNeedsDisplay() const;
+ 
+    virtual bool        CanFocus() const;
+    // return true if successful
+    virtual bool        SetFocus();
+    virtual bool        HasFocus() const;
+
+    void                RemoveFromParent();
+    void                Embed( wxWidgetImpl *parent );
     /*
     void operator= (ControlRef c) { m_controlRef = c; }
     operator ControlRef () { return m_controlRef; }
@@ -379,11 +350,6 @@ public :
 
     virtual void SetValueAndRange( SInt32 value , SInt32 minimum , SInt32 maximum );
     virtual void SetRange( SInt32 minimum , SInt32 maximum );
-
-    virtual OSStatus SetFocus( ControlFocusPart focusPart );
-    virtual bool HasFocus() const;
-    virtual bool NeedsFocusRect() const;
-    virtual void SetNeedsFocusRect( bool needs );
 
     // templated helpers
 
@@ -451,8 +417,7 @@ public :
     void SetViewSize( SInt32 viewSize );
     SInt32 GetViewSize() const;
 
-    virtual bool IsVisible() const;
-    virtual void SetVisibility( bool visible , bool redraw );
+    virtual void SetVisibility( bool visible );
     virtual bool IsEnabled() const;
     virtual bool IsActive() const;
     virtual void Enable( bool enable );
@@ -460,49 +425,32 @@ public :
     // invalidates this control and all children
     virtual void InvalidateWithChildren();
     virtual void SetDrawingEnabled( bool enable );
-    virtual bool GetNeedsDisplay() const;
-
-    // where is in native window relative coordinates
-    virtual void SetNeedsDisplay( RgnHandle where );
-    // where is in native window relative coordinates
-    virtual void SetNeedsDisplay( Rect* where = NULL );
-
-    // if rect = NULL, entire view
-    virtual void ScrollRect( wxRect *rect , int dx , int dy );
 
     // in native parent window relative coordinates
-    virtual void GetRect( Rect *r );
-
-    // in native parent window relative coordinates
-    virtual void SetRect( Rect *r );
 
     virtual void GetRectInWindowCoords( Rect *r );
     virtual void GetBestRect( Rect *r );
+
     virtual void SetLabel( const wxString &title );
-    // converts from Toplevel-Content relative to local
-    static void Convert( wxPoint *pt , wxMacControl *convert , wxMacControl *to );
 
     virtual void GetFeatures( UInt32 *features );
     virtual OSStatus GetRegion( ControlPartCode partCode , RgnHandle region );
-    virtual OSStatus SetZOrder( bool above , wxMacControl* other );
-
-    bool    IsRootControl() { return m_isRootControl; }
-
-    wxWindow* GetPeer() const
-    {
-         return m_peer;
-    }
-
-     // to be moved into a tab control class
+    
+    // to be moved into a tab control class
 
     virtual OSStatus SetTabEnabled( SInt16 tabNo , bool enable );
+
+    void InstallEventHandler() 
+    {
+        MacInstallEventHandler( m_controlRef, m_wxPeer );
+    }
+    
+    static void MacInstallEventHandler( ControlRef control, wxWindowMac* wxPeer );
 protected :
+    WXEVENTHANDLERREF    m_macControlEventHandler ;
     ControlRef  m_controlRef;
     wxFont      m_font;
     long        m_windowStyle;
-    wxWindow*   m_peer;
-    bool        m_needsFocusRect;
-    bool        m_isRootControl;
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxMacControl)
 };
 
@@ -927,7 +875,7 @@ public:
 
     // pointing back
 
-    wxWindow * GetPeer() const;
+    // wxWindow * GetPeer() const;
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxMacDataBrowserListControl)
 };
@@ -944,20 +892,6 @@ OSStatus WXDLLIMPEXP_CORE wxMacDrawCGImage(
                                CGImageRef      inImage) ;
 
 CGColorRef WXDLLIMPEXP_CORE wxMacCreateCGColorFromHITheme( ThemeBrush brush ) ;
-
-CGColorSpaceRef WXDLLIMPEXP_CORE wxMacGetGenericRGBColorSpace(void);
-
-// toplevel.cpp
-
-class WXDLLIMPEXP_CORE wxMacDeferredWindowDeleter : public wxObject
-{
-public :
-    wxMacDeferredWindowDeleter( WindowRef windowRef );
-    virtual ~wxMacDeferredWindowDeleter();
-
-protected :
-    WindowRef m_macWindow ;
-} ;
 
 #endif // wxUSE_GUI
 
@@ -986,60 +920,13 @@ WXDLLIMPEXP_BASE wxString wxMacFSRefToPath( const FSRef *fsRef , CFStringRef add
 WXDLLIMPEXP_BASE OSStatus wxMacPathToFSRef( const wxString&path , FSRef *fsRef );
 WXDLLIMPEXP_BASE wxString wxMacHFSUniStrToString( ConstHFSUniStr255Param uniname );
 
-#if wxUSE_GUI
-
-// deprecating QD
-
-void wxMacLocalToGlobal( WindowRef window , Point*pt );
-void wxMacGlobalToLocal( WindowRef window , Point*pt );
-
-#endif
-
 //---------------------------------------------------------------------------
 // cocoa bridging utilities
 //---------------------------------------------------------------------------
 
 bool wxMacInitCocoa();
 
-class WXDLLIMPEXP_CORE wxMacAutoreleasePool
-{
-public :
-    wxMacAutoreleasePool();
-    ~wxMacAutoreleasePool();
-private :
-    void* m_pool;
-};
-
-// NSObject
-
-void wxMacCocoaRelease( void* obj );
-void wxMacCocoaAutorelease( void* obj );
-void wxMacCocoaRetain( void* obj );
-
-#if wxMAC_USE_COCOA
-
-// NSCursor
-
-WX_NSCursor wxMacCocoaCreateStockCursor( int cursor_type );
-WX_NSCursor  wxMacCocoaCreateCursorFromCGImage( CGImageRef cgImageRef, float hotSpotX, float hotSpotY );
-void  wxMacCocoaSetCursor( WX_NSCursor cursor );
-void  wxMacCocoaHideCursor();
-void  wxMacCocoaShowCursor();
-
-typedef struct tagClassicCursor
-{
-    wxUint16 bits[16];
-    wxUint16 mask[16];
-    wxInt16 hotspot[2];
-}ClassicCursor;
-
-#else // !wxMAC_USE_COCOA
-
-// non Darwin
-
 typedef Cursor ClassicCursor;
-
-#endif // wxMAC_USE_COCOA
 
 // -------------
 // Common to all
@@ -1067,6 +954,85 @@ const short kwxCursorLast = kwxCursorRoller;
 // exposing our fallback cursor map
 
 extern ClassicCursor gMacCursors[];
+
+//
+//
+//
+
+#if wxUSE_GUI
+
+class wxNonOwnedWindowCarbonImpl : public wxNonOwnedWindowImpl
+{
+public :
+    wxNonOwnedWindowCarbonImpl( wxNonOwnedWindow* nonownedwnd) ;
+    wxNonOwnedWindowCarbonImpl();
+    virtual ~wxNonOwnedWindowCarbonImpl();
+    
+    virtual void Destroy() ;
+    void Create( wxWindow* parent, const wxPoint& pos, const wxSize& size,
+    long style, long extraStyle, const wxString& name ) ;
+    
+    WXWindow GetWXWindow() const;
+    void Raise();    
+    void Lower();
+    bool Show(bool show);    
+    bool ShowWithEffect(bool show, wxShowEffect effect, unsigned timeout);
+        
+
+    void Update();
+    bool SetTransparent(wxByte alpha);
+    bool SetBackgroundColour(const wxColour& col );
+    void SetExtraStyle( long exStyle );    
+    bool SetBackgroundStyle(wxBackgroundStyle style);    
+    bool CanSetTransparent();
+    void MoveWindow(int x, int y, int width, int height);
+    void GetPosition( int &x, int &y ) const;
+    void GetSize( int &width, int &height ) const;
+    void GetContentArea( int &left , int &top , int &width , int &height ) const;    
+
+    bool SetShape(const wxRegion& region);
+
+    virtual void SetTitle( const wxString& title, wxFontEncoding encoding ) ;
+    
+    virtual bool IsMaximized() const;
+    
+    virtual bool IsIconized() const;
+    
+    virtual void Iconize( bool iconize );
+    
+    virtual void Maximize(bool maximize);
+    
+    virtual bool IsFullScreen() const;
+    
+    virtual bool ShowFullScreen(bool show, long style);
+
+    virtual void RequestUserAttention(int flags);
+    
+    virtual void ScreenToWindow( int *x, int *y );
+    
+    virtual void WindowToScreen( int *x, int *y );
+    
+
+    bool MacGetUnifiedAppearance() const ;
+    void MacChangeWindowAttributes( wxUint32 attributesToSet , wxUint32 attributesToClear ) ;
+    wxUint32 MacGetWindowAttributes() const ;
+    void MacSetMetalAppearance( bool set ) ;
+    bool MacGetMetalAppearance() const ;
+    void MacSetUnifiedAppearance( bool set );
+    
+    WXEVENTHANDLERREF    MacGetEventHandler() { return m_macEventHandler ; }
+
+    wxNonOwnedWindow*   GetWXPeer() { return m_wxPeer; }
+protected :
+    void                MacInstallTopLevelWindowEventHandler();
+    
+    WXEVENTHANDLERREF   m_macEventHandler ;
+    WindowRef           m_macWindow;
+    void *              m_macFullScreenData ;
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxNonOwnedWindowCarbonImpl)    
+};    
+
+#endif // wxUSE_GUI
 
 #endif
     // _WX_PRIVATE_H_

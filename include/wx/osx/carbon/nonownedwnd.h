@@ -28,6 +28,8 @@
 // location is independent of it.  This class is for internal use only, it's
 // the base class for wxTopLevelWindow and wxPopupWindow.
 
+class wxNonOwnedWindowImpl;
+
 class WXDLLIMPEXP_CORE wxNonOwnedWindow : public wxWindow
 {
 public:
@@ -65,79 +67,52 @@ public:
     virtual bool CanSetTransparent();
 
     virtual bool SetBackgroundStyle(wxBackgroundStyle style);
+    
+    virtual void Update();
+
+    WXWindow GetWXWindow() const ;
+    static wxNonOwnedWindow* GetFromWXWindow( WXWindow win );
 
     // implementation from now on
     // --------------------------
 
+    // activation hooks only necessary for MDI Implementation
     static void MacDelayedDeactivation(long timestamp);
-    virtual void MacCreateRealWindow( const wxPoint& pos,
-                                      const wxSize& size,
-                                      long style,
-                                      const wxString& name ) ;
- 
-    WXWindow MacGetWindowRef() { return m_macWindow ; }
     virtual void MacActivate( long timestamp , bool inIsActivating ) ;
-    virtual void MacPerformUpdates() ;
+
 
     virtual void Raise();
     virtual void Lower();
     virtual bool Show( bool show = true );
 
     virtual bool ShowWithEffect(wxShowEffect effect,
-                                unsigned timeout = 0)
-        { return MacShowWithEffect(true, effect, timeout); }
+                                unsigned timeout = 0) ;
 
     virtual bool HideWithEffect(wxShowEffect effect,
-                                unsigned timeout = 0)
-        { return MacShowWithEffect(false, effect, timeout); }
+                                unsigned timeout = 0) ;
 
     virtual void SetExtraStyle(long exStyle) ;
 
     virtual bool SetBackgroundColour( const wxColour &colour );
     
-    virtual void MacInstallTopLevelWindowEventHandler() ;
-
-    bool MacGetMetalAppearance() const ;
-    bool MacGetUnifiedAppearance() const ;
-
-    void MacChangeWindowAttributes( wxUint32 attributesToSet , wxUint32 attributesToClear ) ;
-    wxUint32 MacGetWindowAttributes() const ;
-
-    WXEVENTHANDLERREF    MacGetEventHandler() { return m_macEventHandler ; }
-
-    virtual void        MacGetContentAreaInset( int &left , int &top , int &right , int &bottom ) ;
-
+    wxNonOwnedWindowImpl* GetNonOwnedPeer() const { return m_nowpeer; }
+    
+    
 protected:
     // common part of all ctors
     void Init();
-
-    bool MacShowWithEffect(bool show, wxShowEffect effect, unsigned timeout);
 
     virtual void DoGetPosition( int *x, int *y ) const;
     virtual void DoGetSize( int *width, int *height ) const;
     virtual void DoMoveWindow(int x, int y, int width, int height);
     virtual void DoGetClientSize(int *width, int *height) const;
 
-    WXWindow m_macWindow ;
+    wxNonOwnedWindowImpl* m_nowpeer ;
 
-    wxWindowMac* m_macFocus ;
+//    wxWindowMac* m_macFocus ;
 
     static wxNonOwnedWindow *s_macDeactivateWindow;
 private :
-    // KH: We cannot let this be called directly since the metal appearance is now managed by an
-    // extra style. Calling this function directly can result in blank white window backgrounds.
-    // This is because the ExtraStyle flags get out of sync with the metal appearance and the metal
-    // logic & checks cease to work as expected. To set the metal appearance, use SetExtraStyle.
-    void MacSetMetalAppearance( bool on ) ;
-    void MacSetUnifiedAppearance( bool on ) ;
-    // binary compatible workaround TODO REPLACE
-    void DoMacCreateRealWindow( wxWindow *parent,
-                                      const wxPoint& pos,
-                                      const wxSize& size,
-                                      long style,
-                                      const wxString& name );
-
-    WXEVENTHANDLERREF    m_macEventHandler ;
 };
 
 // list of all frames and modeless dialogs

@@ -48,6 +48,10 @@ class WXDLLIMPEXP_CORE wxApp: public wxAppBase
     // setting up all MacOS Specific Event-Handlers etc
     virtual bool OnInitGui();
 #endif // wxUSE_GUI
+#if wxOSX_USE_IPHONE
+    virtual bool CallOnInit();
+    virtual int OnRun();
+#endif
     // implementation only
     void OnIdle(wxIdleEvent& event);
     void OnEndSession(wxCloseEvent& event);
@@ -106,13 +110,15 @@ public:
     bool    MacSendKeyUpEvent( wxWindow* focus , long keyval , long modifiers , long when , short wherex , short wherey , wxChar uniChar ) ;
     bool    MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey , wxChar uniChar ) ;
     void    MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey , wxChar uniChar ) ;
+#if wxOSX_USE_COCOA_OR_CARBON
+    // we only have applescript on these
     virtual short         MacHandleAEODoc(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
     virtual short         MacHandleAEGURL(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
     virtual short         MacHandleAEPDoc(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
     virtual short         MacHandleAEOApp(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
     virtual short         MacHandleAEQuit(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
     virtual short         MacHandleAERApp(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
-
+#endif
     // in response of an open-document apple event
     virtual void         MacOpenFile(const wxString &fileName) ;
     // in response of a get-url apple event
