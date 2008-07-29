@@ -121,18 +121,14 @@ bool wxRadioButton::Create(wxWindow *parent,
     if ( HasFlag(wxRB_GROUP) )
         msStyle |= WS_GROUP;
 
-    /*
-       wxRB_SINGLE is a temporary workaround for the following problem: if you
-       have 2 radiobuttons in the same group but which are not consecutive in
-       the dialog, Windows can enter an infinite loop! The simplest way to
-       reproduce it is to create radio button, then a panel and then another
-       radio button: then checking the last button hangs the app.
-
-       Ideally, we'd detect (and avoid) such situation automatically but for
-       now, as I don't know how to do it, just allow the user to create
-       BS_RADIOBUTTON buttons for such situations.
-     */
-    msStyle |= HasFlag(wxRB_SINGLE) ? BS_RADIOBUTTON : BS_AUTORADIOBUTTON;
+    // we use BS_RADIOBUTTON and not BS_AUTORADIOBUTTON because the use of the
+    // latter can easily result in the application entering an infinite loop
+    // inside IsDialogMessage()
+    //
+    // we used to use BS_RADIOBUTTON only for wxRB_SINGLE buttons but there
+    // doesn't seem to be any harm to always use it and it prevents some hangs,
+    // see #9786
+    msStyle |= BS_RADIOBUTTON;
 
     if ( HasFlag(wxCLIP_SIBLINGS) )
         msStyle |= WS_CLIPSIBLINGS;
@@ -144,7 +140,7 @@ bool wxRadioButton::Create(wxWindow *parent,
 
     // for compatibility with wxGTK, the first radio button in a group is
     // always checked (this makes sense anyhow as you need to ensure that at
-    // least one button in the group is checked and this is the simlpest way to
+    // least one button in the group is checked and this is the simplest way to
     // do it)
     if ( HasFlag(wxRB_GROUP) )
         SetValue(true);
@@ -170,7 +166,7 @@ void wxRadioButton::SetValue(bool value)
     // buttons in the same group: Windows doesn't do it automatically
     //
     // moreover, if another radiobutton in the group currently has the focus,
-    // we have to set it to this radiobutton, else the old readiobutton will be
+    // we have to set it to this radiobutton, else the old radiobutton will be
     // reselected automatically, if a parent window loses the focus and regains
     // it.
     wxWindow * const focus = FindFocus();
@@ -288,9 +284,8 @@ bool wxRadioButton::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 
     if ( !m_isChecked )
     {
-        // we have to do this for BS_RADIOBUTTON anyhow and, strangely enough,
-        // sometimes this is needed even for BS_AUTORADIOBUTTON (when we
-        // receive focus the button gets BN_CLICKED but stays unchecked!)
+        // we need to manually update the button state as we use BS_RADIOBUTTON
+        // and not BS_AUTORADIOBUTTON
         SetValue(true);
 
         wxCommandEvent event(wxEVT_COMMAND_RADIOBUTTON_SELECTED, GetId());
