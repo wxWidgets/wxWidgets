@@ -365,7 +365,7 @@
  */
 
 #if defined(PNG_FLOATING_POINT_SUPPORTED)
-#  if defined(MACOS)
+#  if defined(MACOS) && !wxOSX_USE_IPHONE
      /* We need to check that <math.h> hasn't already been included earlier
       * as it seems it doesn't agree with <fp.h>, yet we should really use
       * <fp.h> if possible.
