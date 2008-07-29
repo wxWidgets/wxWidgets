@@ -41,6 +41,9 @@
 
 wxWindow* g_MacLastWindow = NULL ;
 
+// unified title and toolbar constant - not in Tiger headers, so we duplicate it here
+#define kWindowUnifiedTitleAndToolbarAttribute (1 << 7)
+
 // ---------------------------------------------------------------------------
 // wxWindowMac utility functions
 // ---------------------------------------------------------------------------
