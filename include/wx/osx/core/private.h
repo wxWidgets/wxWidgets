@@ -26,7 +26,7 @@
 #if wxOSX_USE_IPHONE
 #include <CoreGraphics/CoreGraphics.h>
 #else
-#include <QuartzCore/QuartzCore.h>
+#include <ApplicationServices/ApplicationServices.h>
 #endif
 
 #include "wx/bitmap.h"
