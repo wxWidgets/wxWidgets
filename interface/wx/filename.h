@@ -85,7 +85,7 @@
         
         You can initialize a wxFileName instance using one of the following functions:
         
-        @li wxFilename()
+        @li wxFileName()
         @li Assign()
         @li AssignCwd()
         @li AssignDir()
@@ -270,7 +270,7 @@ public:
 
         @see SetExt(), SetEmptyExt()
     */
-    void SetClearExt();
+    void ClearExt();
 
     /**
         Returns a temporary file name starting with the given @e prefix. If
@@ -387,26 +387,27 @@ public:
     */
     static wxString GetHomeDir();
 
-    //@{
     /**
-        Returns the size of this file (first form) or the given number of bytes (second
-        form)
-        in a human-readable form.
-        If the size could not be retrieved the @c failmsg string is returned (first
-        form).
-        If @c bytes is @c wxInvalidSize or zero, then @c nullsize is returned (second
-        form).
-        In case of success, the returned string is a floating-point number with @c
-        precision decimal digits
-        followed by the size unit (B, kB, MB, GB, TB: respectively bytes, kilobytes,
-        megabytes, gigabytes, terabytes).
+        Returns the size of the file in a human-readable form.
+        If the size could not be retrieved the @c failmsg string
+        is returned. In case of success, the returned string is
+        a floating-point number with @c precision decimal digits
+        followed by the size unit (B, kB, MB, GB, TB: respectively
+        bytes, kilobytes, megabytes, gigabytes, terabytes).
     */
     wxString GetHumanReadableSize(const wxString& failmsg = "Not available",
                                   int precision = 1);
+                                  
+    /**
+        Returns the size of the given number of bytes in a human-readable form.
+        If @c bytes is @c wxInvalidSize or zero, then @c nullsize is returned.
+        In case of success, the returned string is a floating-point number with @c
+        precision decimal digits followed by the size unit (B, kB, MB, GB,
+        TB: respectively bytes, kilobytes, megabytes, gigabytes, terabytes).
+    */
     const static wxString  GetHumanReadableSize(const wxULongLong& bytes,
             const wxString& nullsize = "Not available",
             int precision = 1);
-    //@}
 
     /**
         Return the long form of the path (returns identity on non-Windows platforms)
@@ -557,7 +558,7 @@ public:
     /**
         Returns @true if this filename is absolute.
     */
-    bool IsAbsolute(wxPathFormat format = wxPATH_NATIVE);
+    bool IsAbsolute(wxPathFormat format = wxPATH_NATIVE) const;
 
     /**
         Returns @true if the file names of this type are case-sensitive.
@@ -573,55 +574,71 @@ public:
     */
     bool IsDir() const;
 
-    //@{
     /**
-        Returns @true if the directory component of this instance (or given @e dir)
-        is an existing directory and this process has read permissions on it.
-        Read permissions on a directory mean that you can list the directory contents
-        but it
+        Returns @true if the directory component of this instance is an existing
+        directory and this process has read permissions on it. Read permissions
+        on a directory mean that you can list the directory contents but it
         doesn't imply that you have read permissions on the files contained.
     */
-    bool IsDirReadable();
-    const static bool IsDirReadable(const wxString& dir);
-    //@}
-
-    //@{
+    bool IsDirReadable() const;
+    
     /**
-        Returns @true if the directory component of this instance (or given @e dir)
+        Returns @true if the given @e dir is an existing directory and this process
+        has read permissions on it. Read permissions on a directory mean that you
+        can list the directory contents but it doesn't imply that you have read
+        permissions on the files contained.
+    */
+    static bool IsDirReadable(const wxString& dir);
+
+    /**
+        Returns @true if the directory component of this instance
         is an existing directory and this process has write permissions on it.
         Write permissions on a directory mean that you can create new files in the
         directory.
     */
-    bool IsDirWritable();
-    const static bool IsDirWritable(const wxString& dir);
-    //@}
+    bool IsDirWritable() const;
+    /**
+        Returns @true if the  given @e dir
+        is an existing directory and this process has write permissions on it.
+        Write permissions on a directory mean that you can create new files in the
+        directory.
+    */
+    static bool IsDirWritable(const wxString& dir);
 
-    //@{
     /**
         Returns @true if a file with this name exists and if this process has execute
         permissions on it.
     */
-    bool IsFileExecutable();
-    const static bool IsFileExecutable(const wxString& file);
-    //@}
+    bool IsFileExecutable() const;
+    
+    /**
+        Returns @true if a file with this name exists and if this process has execute
+        permissions on it.
+    */
+    static bool IsFileExecutable(const wxString& file);
 
-    //@{
     /**
         Returns @true if a file with this name exists and if this process has read
         permissions on it.
     */
-    bool IsFileReadable();
-    const static bool IsFileReadable(const wxString& file);
-    //@}
+    bool IsFileReadable() const;
+    
+    /**
+        Returns @true if a file with this name exists and if this process has read
+        permissions on it.
+    */
+    static bool IsFileReadable(const wxString& file);
 
-    //@{
     /**
         Returns @true if a file with this name exists and if this process has write
         permissions on it.
     */
-    bool IsFileWritable();
-    const static bool IsFileWritable(const wxString& file);
-    //@}
+    bool IsFileWritable() const;
+    /**
+        Returns @true if a file with this name exists and if this process has write
+        permissions on it.
+    */
+    static bool IsFileWritable(const wxString& file);
 
     /**
         Returns @true if the filename is valid, @false if it is not
@@ -640,7 +657,7 @@ public:
     /**
         Returns @true if this filename is not absolute.
     */
-    bool IsRelative(wxPathFormat format = wxPATH_NATIVE);
+    bool IsRelative(wxPathFormat format = wxPATH_NATIVE) const;
 
     /**
         On Mac OS, gets the common type and creator for the given extension.
@@ -780,13 +797,14 @@ public:
     */
     void RemoveLastDir();
 
-    //@{
     /**
         Deletes the specified directory from the file system.
     */
     bool Rmdir();
+    /**
+        Deletes the specified directory from the file system.
+    */
     static bool Rmdir(const wxString& dir);
-    //@}
 
     /**
         Compares the filename using the rules of this platform.
@@ -794,13 +812,14 @@ public:
     bool SameAs(const wxFileName& filepath,
                 wxPathFormat format = wxPATH_NATIVE) const;
 
-    //@{
     /**
         Changes the current working directory.
     */
     bool SetCwd();
+    /**
+        Changes the current working directory.
+    */
     static bool SetCwd(const wxString& cwd);
-    //@}
 
     /**
         Sets the extension of the file name to be an empty extension.
@@ -897,30 +916,35 @@ public:
     */
     bool Touch();
 
-    //@{
     /**
         Returns @true if the filenames are different. The string @e filenames
         is interpreted as a path in the native filename format.
     */
     bool operator operator!=(const wxFileName& filename) const;
-    const bool operator operator!=(const wxString& filename) const;
-    //@}
+    /**
+        Returns @true if the filenames are different. The string @e filenames
+        is interpreted as a path in the native filename format.
+    */
+    bool operator operator!=(const wxString& filename) const;
 
-    //@{
     /**
         Assigns the new value to this filename object.
     */
     wxFileName& operator operator=(const wxFileName& filename);
+    /**
+        Assigns the new value to this filename object.
+    */
     wxFileName& operator operator=(const wxString& filename);
-    //@}
 
-    //@{
     /**
         Returns @true if the filenames are equal. The string @e filenames is
         interpreted as a path in the native filename format.
     */
     bool operator operator==(const wxFileName& filename) const;
-    const bool operator operator==(const wxString& filename) const;
-    //@}
+    /**
+        Returns @true if the filenames are equal. The string @e filenames is
+        interpreted as a path in the native filename format.
+    */
+    bool operator operator==(const wxString& filename) const;
 };
 
