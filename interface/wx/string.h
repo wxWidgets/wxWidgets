@@ -86,7 +86,7 @@ public:
     you should consider using wxUString.
     
     Since iterating over a wxString by index can become inefficient in UTF-8
-    mode and iterators should be used instead of index based access:
+    mode iterators should be used instead of index based access:
 
     @code
     wxString s = "hello";

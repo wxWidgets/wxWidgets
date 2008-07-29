@@ -46,83 +46,83 @@ public:
     /**
         Copy constructor.
     */
-    wxUString( const wxUString &str )                         
+    wxUString( const wxUString &str );
     /**
         Constructs a string from a 32-bit string literal.
     */
-    wxUString( const wxChar32 *str )                            
+    wxUString( const wxChar32 *str );                            
     /**
         Constructs a string from 32-bit string buffer.
     */
-    wxUString( const wxU32CharBuffer &buf )                   
+    wxUString( const wxU32CharBuffer &buf );                   
     /**
         Constructs a string from C string literal using wxConvLibc to convert it to Unicode.
     */
-    wxUString( const char *str )                              
+    wxUString( const char *str );
     /**
         Constructs a string from C string buffer using wxConvLibc to convert it to Unicode.
     */
-    wxUString( const wxCharBuffer &buf )        
+    wxUString( const wxCharBuffer &buf );
     /**
         Constructs a string from C string literal using @a conv to convert it to Unicode.
     */
-    wxUString( const char *str, const wxMBConv &conv )          
+    wxUString( const char *str, const wxMBConv &conv );
     /**
         Constructs a string from C string literal using @a conv to convert it to Unicode.
     */
-    wxUString( const wxCharBuffer &buf, const wxMBConv &conv )  
+    wxUString( const wxCharBuffer &buf, const wxMBConv &conv );
     /**
         Constructs a string from UTF-16 string literal
     */
-    wxUString( const wxChar16 *str )                          
+    wxUString( const wxChar16 *str );
     /**
         Constructs a string from UTF-16 string buffer
     */
-    wxUString( const wxU16CharBuffer &buf )                  
+    wxUString( const wxU16CharBuffer &buf );
     /**
         Constructs a string from wxString.
     */
-    wxUString( const wxString &str )                          
+    wxUString( const wxString &str );
     /**
         Constructs a string from using wxConvLibc to convert it to Unicode.
     */
-    wxUString( char ch )                                       
+    wxUString( char ch );
     /**
         Constructs a string from a UTF-16 character.
     */
-    wxUString( wxChar16 ch )                                    
+    wxUString( wxChar16 ch );
     /**
         Constructs a string from 32-bit Unicode character.
     */
-    wxUString( wxChar32 ch )                                    
+    wxUString( wxChar32 ch );
     /**
         Constructs a string from wxUniChar (returned by wxString's access operator)
     */
-    wxUString( wxUniChar ch )                                 
+    wxUString( wxUniChar ch );
     /**
         Constructs a string from wxUniCharRef (returned by wxString's access operator)
     */
-    wxUString( wxUniCharRef ch )                              
+    wxUString( wxUniCharRef ch );
     /**
         Constructs a string from @a n characters @a ch.
     */
-    wxUString( size_type n, char ch )                          
+    wxUString( size_type n, char ch );
     /**
         Constructs a string from @a n characters @a ch.
     */
-    wxUString( size_type n, wxChar16 ch )                     
+    wxUString( size_type n, wxChar16 ch );
     /**
         Constructs a string from @a n characters @a ch.
     */
-    wxUString( size_type n, wxChar32 ch )                      
+    wxUString( size_type n, wxChar32 ch );
     /**
         Constructs a string from @a n characters @a ch.
     */
-    wxUString( size_type n, wxUniChar ch )                     
+    wxUString( size_type n, wxUniChar ch );
     /**
         Constructs a string from @a n characters @a ch.
     */
-    wxUString( size_type n, wxUniCharRef ch )                 
+    wxUString( size_type n, wxUniCharRef ch );
     
     /**
         Static construction of a wxUString from a 7-bit ASCII string
