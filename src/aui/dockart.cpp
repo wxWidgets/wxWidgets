@@ -198,7 +198,7 @@ wxString wxAuiChopText(wxDC& dc, const wxString& text, int max_size)
 
 wxAuiDefaultDockArt::wxAuiDefaultDockArt()
 {
-#if defined( __WXMAC__ ) && !defined(__WXOSX_IPHONE__)
+#if defined( __WXMAC__ ) && wxOSX_USE_COCOA_OR_CARBON
     wxColor base_colour = wxColour( wxMacCreateCGColorFromHITheme(kThemeBrushToolbarBackground));
 #else
     wxColor base_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
@@ -310,7 +310,7 @@ wxAuiDefaultDockArt::wxAuiDefaultDockArt()
     m_active_pin_bitmap = wxAuiBitmapFromBits(pin_bits, 16, 16, m_active_caption_text_colour);
 
     // default metric values
-#if defined(__WXMAC__)
+#if defined( __WXMAC__ ) && wxOSX_USE_COCOA_OR_CARBON
     SInt32 height;
     GetThemeMetric( kThemeMetricSmallPaneSplitterHeight , &height );
     m_sash_size = height;
@@ -413,7 +413,7 @@ wxFont wxAuiDefaultDockArt::GetFont(int id)
 
 void wxAuiDefaultDockArt::DrawSash(wxDC& dc, wxWindow *window, int orientation, const wxRect& rect)
 {
-#if defined(__WXMAC__)
+#if defined( __WXMAC__ ) && wxOSX_USE_COCOA_OR_CARBON
     wxUnusedVar(window);
     wxUnusedVar(orientation);
 

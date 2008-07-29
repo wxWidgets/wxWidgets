@@ -34,7 +34,7 @@
 #include "wx/renderer.h"
 
 #ifdef __WXMAC__
-#include "wx/osx/carbon/private.h"
+#include "wx/osx/private.h"
 #endif
 
 #include "wx/arrimpl.cpp"
@@ -193,7 +193,7 @@ wxAuiDefaultTabArt::wxAuiDefaultTabArt()
     m_fixed_tab_width = 100;
     m_tab_ctrl_height = 0;
 
-#ifdef __WXMAC__
+#if defined( __WXMAC__ ) && wxOSX_USE_COCOA_OR_CARBON
     wxColor base_colour = wxColour( wxMacCreateCGColorFromHITheme(kThemeBrushToolbarBackground));
 #else
     wxColor base_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
