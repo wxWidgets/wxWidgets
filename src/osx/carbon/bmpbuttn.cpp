@@ -137,7 +137,7 @@ bool wxBitmapButton::Create( wxWindow *parent,
     verify_noerr( err );
 
     wxMacReleaseBitmapButton( &info );
-    wxASSERT_MSG( m_peer != NULL && m_peer->Ok(), wxT("No valid native Mac control") );
+    wxASSERT_MSG( m_peer != NULL && m_peer->IsOk(), wxT("No valid native Mac control") );
 
     MacPostControlCreate( pos, size );
 

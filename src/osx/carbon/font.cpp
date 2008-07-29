@@ -25,7 +25,11 @@
 #include "wx/graphics.h"
 #include "wx/settings.h"
 
+#if wxOSX_USE_CARBON
 #include "wx/osx/uma.h"
+#else
+#include "wx/osx/private.h"
+#endif
 
 #ifndef __DARWIN__
 #include <ATSUnicode.h>
@@ -414,7 +418,7 @@ void wxFontRefData::MacFindFont()
                 traits |= kCTFontItalicTrait;
      
 // use font descriptor caching
-#if 1
+#if 0
             wxString lookupname = wxString::Format( "%s_%ld", m_faceName.c_str(), traits );
             
             static std::map< std::wstring , wxCFRef< CTFontDescriptorRef > > fontdescriptorcache ;
@@ -432,7 +436,7 @@ void wxFontRefData::MacFindFont()
 #endif
             
 // use font caching
-#if 1
+#if 0
             wxString lookupnameWithSize = wxString::Format( "%s_%ld_%ld", m_faceName.c_str(), traits, m_pointSize );
             
             static std::map< std::wstring , wxCFRef< CTFontRef > > fontcache ;
@@ -445,6 +449,17 @@ void wxFontRefData::MacFindFont()
 #else
             m_ctFont.reset( CTFontCreateWithFontDescriptor( m_ctFontDescriptor, m_pointSize, NULL ) );
 #endif
+            if ( /* (CTFontGetSymbolicTraits( m_ctFont ) & 0x03) !=*/ traits )
+            {
+                CTFontRef font = CTFontCreateWithName( cf, m_pointSize,  NULL );
+                CTFontRef font2 = CTFontCreateCopyWithSymbolicTraits( font, m_pointSize, NULL, traits, 0x03 );
+                CFRelease(font);
+                m_ctFont.reset( font2 );
+                if ( (CTFontGetSymbolicTraits( m_ctFont ) & 0x03) != traits )
+                {
+                    wxMessageBox( wxString::Format( "expected %d but got %d traits" , traits, (CTFontGetSymbolicTraits( m_ctFont ) & 0x03) ) );
+                }
+            }
         }
 #if wxMAC_USE_ATSU_TEXT
         OSStatus status = noErr;

@@ -69,30 +69,30 @@ bool wxDrawerWindow::Create(wxWindow *parent,
     const wxSize dummySize(0,0);
     const long style = wxFRAME_DRAWER;
     
-    bool success  = wxWindow::Create(parent, id, pos, dummySize, style, name);
+    bool success  = wxNonOwnedWindow::Create(parent, id, pos, size, style, name);
     if (success)
     {
-        this->MacCreateRealWindow(pos, size, style, name);
-        success = (m_macWindow != NULL);
+        // this->MacCreateRealWindow(pos, size, style, name);
+        success = (GetWXWindow() != NULL);
     }
     
     if (success)
     {
         // Use drawer brush.
         SetBackgroundColour( wxColour( wxMacCreateCGColorFromHITheme( kThemeBrushDrawerBackground ) ) );
-        ::SetThemeWindowBackground((WindowRef)m_macWindow, kThemeBrushDrawerBackground, false);
+        ::SetThemeWindowBackground((WindowRef)GetWXWindow(), kThemeBrushDrawerBackground, false);
          
         // Leading and trailing offset are gaps from parent window edges
         // to where the drawer starts.
-        ::SetDrawerOffsets((WindowRef)m_macWindow, kLeadingOffset, kTrailingOffset);
+        ::SetDrawerOffsets((WindowRef)GetWXWindow() , kLeadingOffset, kTrailingOffset);
 
         // Set the drawers parent.
         // Is there a better way to get the parent's WindowRef?
         wxTopLevelWindow* tlwParent = wxDynamicCast(parent, wxTopLevelWindow);
         if (NULL != tlwParent)
         { 
-            OSStatus status = ::SetDrawerParent((WindowRef)m_macWindow,
-            (WindowRef)tlwParent->MacGetWindowRef());
+            OSStatus status = ::SetDrawerParent((WindowRef) GetWXWindow(),
+            (WindowRef)tlwParent->GetWXWindow());
             success = (noErr == status);
         }
         else
@@ -104,19 +104,19 @@ bool wxDrawerWindow::Create(wxWindow *parent,
 
 wxDirection wxDrawerWindow::GetCurrentEdge() const
 {
-    const OptionBits edge = ::GetDrawerCurrentEdge((WindowRef)m_macWindow);
+    const OptionBits edge = ::GetDrawerCurrentEdge((WindowRef)GetWXWindow());
     return WindowEdgeToDirection(edge);
 }
 
 wxDirection wxDrawerWindow::GetPreferredEdge() const
 {
-    const OptionBits edge = ::GetDrawerPreferredEdge((WindowRef)m_macWindow);
+    const OptionBits edge = ::GetDrawerPreferredEdge((WindowRef)GetWXWindow());
     return WindowEdgeToDirection(edge);
 }
 
 bool wxDrawerWindow::IsOpen() const
 {
-    WindowDrawerState state = ::GetDrawerState((WindowRef)m_macWindow);
+    WindowDrawerState state = ::GetDrawerState((WindowRef)GetWXWindow());
     return (state == kWindowDrawerOpen || state == kWindowDrawerOpening);
 }
 
@@ -127,18 +127,18 @@ bool wxDrawerWindow::Open(bool show)
 
     if (show)
     {
-        const OptionBits preferredEdge = ::GetDrawerPreferredEdge((WindowRef)m_macWindow);
-        status = ::OpenDrawer((WindowRef)m_macWindow, preferredEdge, kAsynchronous);
+        const OptionBits preferredEdge = ::GetDrawerPreferredEdge((WindowRef)GetWXWindow());
+        status = ::OpenDrawer((WindowRef)GetWXWindow(), preferredEdge, kAsynchronous);
     }
     else
-        status = ::CloseDrawer((WindowRef)m_macWindow, kAsynchronous);
+        status = ::CloseDrawer((WindowRef)GetWXWindow(), kAsynchronous);
 
     return (noErr == status);
 }
 
 bool wxDrawerWindow::SetPreferredEdge(wxDirection edge)
 {
-    const OSStatus status = ::SetDrawerPreferredEdge((WindowRef)m_macWindow,
+    const OSStatus status = ::SetDrawerPreferredEdge((WindowRef)GetWXWindow(),
      DirectionToWindowEdge(edge));
 	return (noErr == status);
 }

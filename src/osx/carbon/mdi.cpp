@@ -218,7 +218,7 @@ void wxMDIParentFrame::MacActivate(long timestamp, bool activating)
         {
             wxLogTrace(TRACE_MDI, wxT("child had been scheduled for deactivation, rehighlighting"));
 
-            UMAHighlightAndActivateWindow((WindowRef)s_macDeactivateWindow->MacGetWindowRef(), true);
+            UMAHighlightAndActivateWindow((WindowRef)s_macDeactivateWindow->GetWXWindow(), true);
 
             wxLogTrace(TRACE_MDI, wxT("finished highliting child"));
 
@@ -382,14 +382,10 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
     SetName(name);
 
     if ( id == wxID_ANY )
-        m_windowId = (int)NewControlId();
-    else
-        m_windowId = id;
+        id = (int)NewControlId();
 
-    if (parent)
-        parent->AddChild(this);
-
-    MacCreateRealWindow( pos , size , MacRemoveBordersFromStyle(style) , name ) ;
+    wxNonOwnedWindow::Create( parent, id, pos , size , MacRemoveBordersFromStyle(style) , name ) ;
+    
     SetTitle( title );
 
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
@@ -420,7 +416,7 @@ void wxMDIChildFrame::MacActivate(long timestamp, bool activating)
         {
             wxLogTrace(TRACE_MDI, wxT("parent had been scheduled for deactivation, rehighlighting"));
 
-            UMAHighlightAndActivateWindow((WindowRef)s_macDeactivateWindow->MacGetWindowRef(), true);
+            UMAHighlightAndActivateWindow((WindowRef)s_macDeactivateWindow->GetWXWindow(), true);
 
             wxLogTrace(TRACE_MDI, wxT("finished highliting parent"));
 

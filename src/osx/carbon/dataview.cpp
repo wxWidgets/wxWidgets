@@ -220,7 +220,7 @@ public:
     bool noFailureFlag = (!(parent.IsOk()) && (this->m_dataViewControlPtr->AddItem(kDataBrowserNoItem,&itemID) == noErr) ||
                   parent.IsOk()  && (this->m_dataViewControlPtr->AddItem(reinterpret_cast<DataBrowserItemID>(parent.GetID()),&itemID) == noErr));
     
-    wxDataViewCtrl *dvc = (wxDataViewCtrl*) this->m_dataViewControlPtr->GetPeer();
+    wxDataViewCtrl *dvc = (wxDataViewCtrl*) this->m_dataViewControlPtr->GetWXPeer();
     if (dvc->GetWindowStyle() & wxDV_VARIABLE_LINE_HEIGHT)
     {
         wxDataViewModel *model = GetOwner();
@@ -270,7 +270,7 @@ public:
    // give allocated array space free again:
     delete[] itemIDs;
 
-    wxDataViewCtrl *dvc = (wxDataViewCtrl*) this->m_dataViewControlPtr->GetPeer();
+    wxDataViewCtrl *dvc = (wxDataViewCtrl*) this->m_dataViewControlPtr->GetWXPeer();
     if (dvc->GetWindowStyle() & wxDV_VARIABLE_LINE_HEIGHT)
     {
         wxDataViewModel *model = GetOwner();
@@ -321,7 +321,7 @@ public:
     wxCHECK_MSG(item.IsOk(),false,_("Changed item is invalid."));
     if (this->m_dataViewControlPtr->UpdateItems(&itemID) == noErr)
     {
-      wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->m_dataViewControlPtr->GetPeer()));
+      wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->m_dataViewControlPtr->GetWXPeer()));
       
      // sent the equivalent wxWidget event:
       wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED,dataViewCtrlPtr->GetId()); // variable defintion
@@ -356,7 +356,7 @@ public:
     noFailureFlag = (this->m_dataViewControlPtr->UpdateItems(kDataBrowserNoItem,noOfEntries,itemIDs,kDataBrowserItemNoProperty,kDataBrowserItemNoProperty) == noErr);
     if (noFailureFlag)
     {
-      wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->m_dataViewControlPtr->GetPeer()));
+      wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->m_dataViewControlPtr->GetWXPeer()));
       
      // send for all changed items a wxWidget event:
       wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED,dataViewCtrlPtr->GetId()); // variable defintion
@@ -385,7 +385,7 @@ public:
      // variable definition and initialization:
       DataBrowserItemID itemID(reinterpret_cast<DataBrowserItemID>(item.GetID()));
       OSStatus          errorStatus;
-      wxDataViewCtrl*   dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->m_dataViewControlPtr->GetPeer()));
+      wxDataViewCtrl*   dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->m_dataViewControlPtr->GetWXPeer()));
       
      // when this method is called and currently an item is being edited this item may have already been deleted in the model (the passed item and the being edited item have
      // not to be identical because the being edited item might be below the passed item in the hierarchy);
@@ -407,7 +407,7 @@ public:
 
     DataBrowserItemID* itemIDs;
     
-    wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->m_dataViewControlPtr->GetPeer()));
+    wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->m_dataViewControlPtr->GetWXPeer()));
 
     size_t noOfEntries;
     
@@ -439,7 +439,7 @@ public:
     
     DataBrowserPropertyID propertyID;
 
-    wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->m_dataViewControlPtr->GetPeer()));
+    wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->m_dataViewControlPtr->GetWXPeer()));
 
 
     wxCHECK_MSG(item.IsOk(),             false,_("Passed item is invalid."));

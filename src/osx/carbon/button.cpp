@@ -92,7 +92,7 @@ bool wxButton::Create(wxWindow *parent,
     }
 
     verify_noerr( err );
-    wxASSERT_MSG( m_peer != NULL && m_peer->Ok() , wxT("No valid Mac control") ) ;
+    wxASSERT_MSG( m_peer != NULL && m_peer->IsOk() , wxT("No valid Mac control") ) ;
 
     MacPostControlCreate( pos, size );
 
@@ -236,7 +236,7 @@ bool wxDisclosureTriangle::Create(wxWindow *parent, wxWindowID id, const wxStrin
             m_peer->GetControlRefAddr() );
            
     verify_noerr( err );
-    wxASSERT_MSG( m_peer != NULL && m_peer->Ok() , wxT("No valid Mac control") ) ;
+    wxASSERT_MSG( m_peer != NULL && m_peer->IsOk() , wxT("No valid Mac control") ) ;
 
     MacPostControlCreate( pos, size );
     // passing the text in the param doesn't seem to work, so lets do if again

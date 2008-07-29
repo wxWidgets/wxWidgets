@@ -224,9 +224,12 @@ void wxMacToolTip::Draw()
         HMHelpContentRec tag ;
         tag.version = kMacHelpVersion;
 
-        Point p = { m_position.y , m_position.x };
-        wxMacLocalToGlobal( m_window , &p ) ;
-        SetRect( &tag.absHotRect , p.h - 2 , p.v - 2 , p.h + 2 , p.v + 2 );
+        int x = m_position.x;
+        int y = m_position.y;
+        wxNonOwnedWindow* tlw = wxNonOwnedWindow::GetFromWXWindow((WXWindow) m_window);
+        if ( tlw )
+            tlw->GetNonOwnedPeer()->WindowToScreen( &x, &y );
+        SetRect( &tag.absHotRect , x - 2 , y - 2 , x + 2 , y + 2 );
 
         m_helpTextRef = wxCFStringRef( m_label , wxFONTENCODING_DEFAULT ) ;
         tag.content[kHMMinimumContentIndex].contentType = kHMCFStringContent ;

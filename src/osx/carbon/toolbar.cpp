@@ -664,7 +664,7 @@ static pascal OSStatus ControlToolbarItemHandler( EventHandlerCallRef inCallRef,
             {
                 case kEventControlGetSizeConstraints:
                 {
-                    wxWindow* wxwindow = wxFindControlFromMacControl(object->viewRef ) ;
+                    wxWindow* wxwindow = wxFindWindowFromWXWidget( (WXWidget) object->viewRef ) ;
                     if ( wxwindow )
                     {
                         // during toolbar layout the native window sometimes gets negative sizes,
@@ -1051,10 +1051,9 @@ bool wxToolBar::MacInstallNativeToolbar(bool usesNative)
             ChangeWindowAttributes( tlw, kWindowToolbarButtonAttribute, 0 );
             SetAutomaticControlDragTrackingEnabledForWindow( tlw, true );
 
-            Rect r = { 0, 0, 0, 0 };
-            m_peer->SetRect( &r );
+            m_peer->Move(0,0,0,0 );
             SetSize( wxSIZE_AUTO_WIDTH, 0 );
-            m_peer->SetVisibility( false, true );
+            m_peer->SetVisibility( false );
             wxToolBarBase::Show( false );
         }
     }
@@ -1069,7 +1068,7 @@ bool wxToolBar::MacInstallNativeToolbar(bool usesNative)
             ChangeWindowAttributes( tlw, 0, kWindowToolbarButtonAttribute );
             SetWindowToolbar( tlw, NULL );
 
-            m_peer->SetVisibility( true, true );
+            m_peer->SetVisibility( true );
         }
     }
 
@@ -1125,6 +1124,13 @@ bool wxToolBar::Realize()
     bool insertAll = false;
 
     HIToolbarRef refTB = (HIToolbarRef)m_macHIToolbarRef;
+    wxFont f;
+    wxFontEncoding enc;
+    f = GetFont();
+    if ( f.IsOk() )
+        enc = f.GetEncoding();
+    else
+        enc = wxFont::GetDefaultEncoding();
 #endif
 
     node = m_tools.GetFirst();
@@ -1169,6 +1175,12 @@ bool wxToolBar::Realize()
             HIToolbarItemRef hiItemRef = tool->GetToolbarItemRef();
             if ( hiItemRef != NULL )
             {
+                // since setting the help texts is non-virtual we have to update
+                // the strings now
+                HIToolbarItemSetHelpText( hiItemRef,
+                    wxCFStringRef( tool->GetShortHelp(), enc ),
+                    wxCFStringRef( tool->GetLongHelp(), enc ) );
+
                 if ( insertAll || (tool->GetIndex() != currentPosition) )
                 {
                     OSStatus err = noErr;
@@ -1711,7 +1723,7 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
     int w, h;
     GetSize( &w, &h );
 
-    bool drawMetalTheme = MacGetTopLevelWindow()->MacGetMetalAppearance();
+    bool drawMetalTheme = MacGetTopLevelWindow()->GetExtraStyle() & wxFRAME_EX_METAL;
 
     if ( !drawMetalTheme  )
     {

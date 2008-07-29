@@ -57,7 +57,7 @@
 #include <QuickTime/QuickTimeComponents.h>
 #endif
 
-#if !defined(__LP64__)
+#if wxOSX_USE_CARBON
 #define USE_QUICKTIME 1
 #else
 #define USE_QUICKTIME 0

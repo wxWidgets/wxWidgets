@@ -615,7 +615,7 @@ Boolean wxMacDataViewDataBrowserListViewControl::DataBrowserCompareProc(DataBrow
 
   DataBrowserTableViewColumnIndex modelColumnIndex;
   
-  wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->GetPeer()));
+  wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->GetWXPeer()));
   
 
   wxCHECK_MSG(dataViewCtrlPtr != NULL,            false,_("Pointer to data view control not set correctly."));
@@ -640,7 +640,7 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserGetContextualMenuProc(M
 {
   wxArrayDataBrowserItemID itemIDs;
 
-  wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->GetPeer()));
+  wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->GetWXPeer()));
 
 
   wxCHECK_RET(dataViewCtrlPtr != NULL,_("wxWidget control pointer is not a data view pointer"));
@@ -668,7 +668,7 @@ OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(
    // variable definitions:
     wxDataViewCtrl* dataViewCtrlPtr;
     
-    dataViewCtrlPtr = dynamic_cast<wxDataViewCtrl*>(this->GetPeer());
+    dataViewCtrlPtr = dynamic_cast<wxDataViewCtrl*>(this->GetWXPeer());
     wxCHECK_MSG(dataViewCtrlPtr != NULL,errDataBrowserNotConfigured,_("Pointer to data view control not set correctly."));
     if (dataViewCtrlPtr->IsDeleting())
       return noErr; // if a delete process is running the data of editable fields cannot be saved because the associated model variable may already have been deleted
@@ -762,7 +762,7 @@ OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(
       wxDataViewColumn* dataViewColumnPtr;
       wxDataViewCtrl*   dataViewCtrlPtr;
       
-      dataViewCtrlPtr = dynamic_cast<wxDataViewCtrl*>(this->GetPeer());
+      dataViewCtrlPtr = dynamic_cast<wxDataViewCtrl*>(this->GetWXPeer());
       wxCHECK_MSG(dataViewCtrlPtr             != NULL,errDataBrowserNotConfigured,_("Pointer to data view control not set correctly."));
       wxCHECK_MSG(dataViewCtrlPtr->GetModel() != NULL,errDataBrowserNotConfigured,_("Pointer to model not set correctly."));
       dataViewColumnPtr = dataViewCtrlPtr->GetColumnPtr(propertyID);
@@ -784,7 +784,7 @@ OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(
         case kDataBrowserContainerIsClosableProperty:
           {
            // variable definitions:
-            wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->GetPeer()));
+            wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->GetWXPeer()));
             
             wxCHECK_MSG(dataViewCtrlPtr != NULL,errDataBrowserNotConfigured,_("Pointer to data view control not set correctly."));
            // initialize wxWidget event:
@@ -801,7 +801,7 @@ OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(
         case kDataBrowserContainerIsOpenableProperty:
           {
            // variable definitions:
-            wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->GetPeer()));
+            wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->GetWXPeer()));
             
             wxCHECK_MSG(dataViewCtrlPtr != NULL,errDataBrowserNotConfigured,_("Pointer to data view control not set correctly."));
            // initialize wxWidget event:
@@ -818,7 +818,7 @@ OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(
         case kDataBrowserItemIsContainerProperty:
           {
            // variable definition:
-            wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->GetPeer()));
+            wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->GetWXPeer()));
             
             wxCHECK_MSG(dataViewCtrlPtr             != NULL,errDataBrowserNotConfigured,_("Pointer to data view control not set correctly."));
             wxCHECK_MSG(dataViewCtrlPtr->GetModel() != NULL,errDataBrowserNotConfigured,_("Pointer to model not set correctly."));
@@ -834,7 +834,7 @@ OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(
 
 void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(DataBrowserItemID itemID, DataBrowserItemNotification message, DataBrowserItemDataRef itemData)
 {
-  wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->GetPeer()));
+  wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->GetWXPeer()));
 
 
  // check if the data view control pointer still exists because this call back function can still be called when the control has already been deleted:
@@ -1006,7 +1006,7 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserDrawItemProc(DataBrowse
 
   wxVariant dataToRender;
 
-  dataViewCtrlPtr = dynamic_cast<wxDataViewCtrl*>(this->GetPeer());
+  dataViewCtrlPtr = dynamic_cast<wxDataViewCtrl*>(this->GetWXPeer());
   wxCHECK_RET(dataViewCtrlPtr != NULL,            _("Pointer to data view control not set correctly."));
   wxCHECK_RET(dataViewCtrlPtr->GetModel() != NULL,_("Pointer to model not set correctly."));
   wxCHECK_RET(this->GetColumnIndex(propertyID,&columnIndex) == noErr,_("Could not determine column index."));
@@ -1029,7 +1029,7 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserDrawItemProc(DataBrowse
   if (this->GetRegion(kControlContentMetaPart,rgn) == noErr)
     GetRegionBounds(rgn,&content);
   else
-    this->GetRect(&content);
+    GetControlBounds(m_controlRef, &content);
   ::DisposeRgn(rgn);
  // space for the header
   this->GetHeaderButtonHeight(&headerHeight);
@@ -1111,7 +1111,7 @@ DataBrowserTrackingResult wxMacDataViewDataBrowserListViewControl::DataBrowserTr
 
   dataViewCustomRendererItem = reinterpret_cast<void*>(itemID);
   wxCHECK_MSG(dataViewCustomRendererItem.IsOk(),kDataBrowserNothingHit,_("Invalid data view item"));
-  dataViewCtrlPtr = dynamic_cast<wxDataViewCtrl*>(this->GetPeer());
+  dataViewCtrlPtr = dynamic_cast<wxDataViewCtrl*>(this->GetWXPeer());
   wxCHECK_MSG(dataViewCtrlPtr != NULL,kDataBrowserNothingHit,_("Pointer to data view control not set correctly."));
   dataViewColumnPtr = dataViewCtrlPtr->GetColumnPtr(propertyID);
   wxCHECK_MSG(dataViewColumnPtr != NULL,kDataBrowserNothingHit,_("No column existing."));

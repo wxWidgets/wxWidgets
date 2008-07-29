@@ -62,7 +62,7 @@ void wxDialog::SetModal( bool flag )
     {
         m_isModalStyle = true;
 
-        SetWindowModality( (WindowRef)MacGetWindowRef(), kWindowModalityAppModal, NULL ) ;
+        SetWindowModality( (WindowRef)GetWXWindow(), kWindowModalityAppModal, NULL ) ;
     }
     else
     {
@@ -135,7 +135,7 @@ void wxDialog::DoShowModal()
 
     SetFocus() ;
 
-    WindowRef windowRef = (WindowRef) MacGetWindowRef();
+    WindowRef windowRef = (WindowRef) GetWXWindow();
     WindowGroupRef windowGroup;
     WindowGroupRef formerParentGroup;
     bool resetGroupParent = false;

@@ -186,7 +186,7 @@ public :
     {
         OSStatus err = errDataBrowserPropertyNotSupported;
 
-        wxCheckListBox *checklist = wxDynamicCast( owner->GetPeer() , wxCheckListBox );
+        wxCheckListBox *checklist = wxDynamicCast( owner->GetWXPeer() , wxCheckListBox );
         wxCHECK_MSG( checklist != NULL , errDataBrowserPropertyNotSupported , wxT("wxCheckListBox expected"));
 
         if ( !changeValue )

@@ -28,7 +28,12 @@
 IMPLEMENT_DYNAMIC_CLASS(wxBitmap, wxGDIObject)
 IMPLEMENT_DYNAMIC_CLASS(wxMask, wxObject)
 
+#if wxOSX_USE_CARBON
 #include "wx/osx/uma.h"
+#else
+#include "wx/osx/private.h"
+#endif
+
 #ifndef __WXOSX_IPHONE__
 #include <QuickTime/QuickTime.h>
 #endif
@@ -1688,7 +1693,9 @@ void wxBitmap::InitStandardHandlers()
 #if !defined( __LP64__ ) && !defined(__WXOSX_IPHONE__)
     AddHandler( new wxPICTResourceHandler ) ;
 #endif
+#if wxOSX_USE_COCOA_OR_CARBON
     AddHandler( new wxICONResourceHandler ) ;
+#endif
 }
 
 // ----------------------------------------------------------------------------

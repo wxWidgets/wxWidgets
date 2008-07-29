@@ -66,6 +66,8 @@ public :
 
     virtual void SetDescriptiveText(const wxString& text);
     virtual wxString GetDescriptiveText() const;
+    
+    virtual bool SetFocus();
 
 protected :
     virtual void CreateControl( wxTextCtrl* peer, const Rect* bounds, CFStringRef crf );
@@ -176,6 +178,21 @@ wxString wxMacSearchFieldControl::GetDescriptiveText() const
     }
 }
 
+bool wxMacSearchFieldControl::SetFocus()
+{
+    // NB: We have to implement SetFocus a little differently because kControlFocusNextPart
+    // leads to setting the focus on the search icon rather than the text area.
+    // We get around this by explicitly telling the control to set focus to the
+    // text area.
+
+    OSStatus err = SetKeyboardFocus( GetControlOwner( m_controlRef ), m_controlRef, kControlEditTextPart );
+    if ( err == errCouldntSetFocus )
+        return false ;
+    SetUserFocusWindow(GetControlOwner( m_controlRef ) );
+    return true;
+}
+
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -274,27 +291,6 @@ wxSize wxSearchCtrl::DoGetBestSize() const
     return size;
 }
 
-void wxSearchCtrl::SetFocus()
-{
-    // NB: We have to implement SetFocus a little differently because kControlFocusNextPart
-    // leads to setting the focus on the search icon rather than the text area.
-    // We get around this by explicitly telling the control to set focus to the
-    // text area.
-    if ( !AcceptsFocus() )
-            return ;
-
-    wxWindow* former = FindFocus() ;
-    if ( former == this )
-        return ;
-
-    // as we cannot rely on the control features to find out whether we are in full keyboard mode,
-    // we can only leave in case of an error
-    OSStatus err = m_peer->SetFocus( kControlEditTextPart ) ;
-    if ( err == errCouldntSetFocus )
-        return ;
-
-    SetUserFocusWindow( (WindowRef)MacGetTopLevelWindowRef() );
-}
 
 // search control specific interfaces
 // wxSearchCtrl owns menu after this call

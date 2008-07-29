@@ -225,7 +225,7 @@ void wxFrame::DetachMenuBar()
 
 void wxFrame::AttachMenuBar( wxMenuBar *menuBar )
 {
-    wxFrame* tlf = wxDynamicCast( wxFindWinFromMacWindow( FrontNonFloatingWindow() ) , wxFrame );
+    wxFrame* tlf = wxDynamicCast( wxNonOwnedWindow::GetFromWXWindow( (WXWindow) FrontNonFloatingWindow() ) , wxFrame );
     bool makeCurrent = false;
 
     // if this is already the current menubar or we are the frontmost window

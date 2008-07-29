@@ -12,9 +12,9 @@
 #include "wx/wxprec.h"
 
 #include "wx/dcscreen.h"
-#include "wx/osx/carbon/dcscreen.h"
+#include "wx/osx/dcscreen.h"
 
-#include "wx/osx/uma.h"
+#include "wx/osx/private.h"
 #include "wx/graphics.h"
 
 IMPLEMENT_ABSTRACT_CLASS(wxScreenDCImpl, wxWindowDCImpl)
@@ -27,7 +27,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxScreenDCImpl, wxWindowDCImpl)
 wxScreenDCImpl::wxScreenDCImpl( wxDC *owner ) :
    wxWindowDCImpl( owner )
 {
-#ifdef __LP64__
+#if wxOSX_USE_COCOA_OR_IPHONE
     m_graphicContext = NULL;
     m_ok = false ;
 #else
@@ -52,7 +52,7 @@ wxScreenDCImpl::~wxScreenDCImpl()
 {
     delete m_graphicContext;
     m_graphicContext = NULL;
-#ifdef __LP64__
+#if wxOSX_USE_COCOA_OR_IPHONE
 #else
     DisposeWindow((WindowRef) m_overlayWindow );
 #endif

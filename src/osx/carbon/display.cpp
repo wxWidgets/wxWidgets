@@ -34,9 +34,10 @@
     #include "wx/gdicmn.h"
 #endif
 
-#include <Carbon/Carbon.h>
-
 #include "wx/display_impl.h"
+#include "wx/osx/private.h"
+
+#if wxOSX_USE_COCOA_OR_CARBON
 
 // ----------------------------------------------------------------------------
 // display classes implementation
@@ -251,5 +252,14 @@ bool wxDisplayImplMacOSX::ChangeMode( const wxVideoMode& mode )
 {
     return new wxDisplayFactoryMacOSX;
 }
+
+#else
+
+/* static */ wxDisplayFactory *wxDisplay::CreateFactory()
+{
+    return new wxDisplayFactorySingle;
+}
+
+#endif
 
 #endif // wxUSE_DISPLAY

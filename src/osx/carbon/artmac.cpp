@@ -23,6 +23,8 @@
     #include "wx/image.h"
 #endif
 
+#if !defined(__WXUNIVERSAL__)
+
 #include "wx/artprov.h"
 #include "wx/image.h"
 
@@ -106,3 +108,7 @@ wxBitmap wxMacArtProvider::CreateBitmap(const wxArtID& id,
 
     return wxNullBitmap;
 }
+
+#endif // !defined(__WXUNIVERSAL__)
+
+

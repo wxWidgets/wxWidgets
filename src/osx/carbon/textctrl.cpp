@@ -328,7 +328,7 @@ public :
         return true;
     }
 
-    virtual void            SetRect( Rect *r ) ;
+    virtual void            Move(int x, int y, int width, int height); 
 
 protected :
     OSStatus                 DoCreate();
@@ -1368,7 +1368,7 @@ bool wxMacUnicodeTextControl::Create( wxTextCtrl *wxPeer,
     if ( !(m_windowStyle & wxTE_MULTILINE) )
         SetData<Boolean>( kControlEditTextPart , kControlEditTextSingleLineTag , true ) ;
 
-    InstallControlEventHandler( m_controlRef , GetwxMacUnicodeTextControlEventHandlerUPP(),
+    ::InstallControlEventHandler( m_controlRef , GetwxMacUnicodeTextControlEventHandlerUPP(),
                                 GetEventTypeCount(unicodeTextControlEventList), unicodeTextControlEventList, this,
                                 NULL);
 
@@ -1664,7 +1664,7 @@ void wxMacMLTEControl::SetStringValue( const wxString &str )
 
     {
 #ifndef __LP64__
-        wxMacWindowClipper c( m_peer ) ;
+        wxMacWindowClipper c( GetWXPeer() ) ;
 #endif
 
         {
@@ -2010,7 +2010,7 @@ void wxMacMLTEControl::Replace( long from , long to , const wxString &str )
 
     wxMacEditHelper help( m_txn ) ;
 #ifndef __LP64__
-    wxMacWindowClipper c( m_peer ) ;
+    wxMacWindowClipper c( GetWXPeer() ) ;
 #endif
 
     TXNSetSelection( m_txn, from, to == -1 ? kTXNEndOffset : to ) ;
@@ -2021,7 +2021,7 @@ void wxMacMLTEControl::Replace( long from , long to , const wxString &str )
 void wxMacMLTEControl::Remove( long from , long to )
 {
 #ifndef __LP64__
-    wxMacWindowClipper c( m_peer ) ;
+    wxMacWindowClipper c( GetWXPeer() ) ;
 #endif
     wxMacEditHelper help( m_txn ) ;
     TXNSetSelection( m_txn , from , to ) ;
@@ -2039,7 +2039,7 @@ void wxMacMLTEControl::GetSelection( long* from, long* to) const
 void wxMacMLTEControl::SetSelection( long from , long to )
 {
 #ifndef __LP64__
-    wxMacWindowClipper c( m_peer ) ;
+    wxMacWindowClipper c( GetWXPeer() ) ;
 #endif
 
     // change the selection
@@ -2060,7 +2060,7 @@ void wxMacMLTEControl::WriteText( const wxString& str )
 
     GetSelection( &start , &dummy ) ;
 #ifndef __LP64__
-    wxMacWindowClipper c( m_peer ) ;
+    wxMacWindowClipper c( GetWXPeer() ) ;
 #endif
 
     {
@@ -2076,7 +2076,7 @@ void wxMacMLTEControl::WriteText( const wxString& str )
 void wxMacMLTEControl::Clear()
 {
 #ifndef __LP64__
-    wxMacWindowClipper c( m_peer ) ;
+    wxMacWindowClipper c( GetWXPeer() ) ;
 #endif
     wxMacEditHelper st( m_txn ) ;
     TXNSetSelection( m_txn , kTXNStartOffset , kTXNEndOffset ) ;
@@ -2571,9 +2571,9 @@ void wxMacMLTEClassicControl::MacUpdatePosition()
     }
 }
 
-void wxMacMLTEClassicControl::SetRect( Rect *r )
+void wxMacMLTEClassicControl::Move(int x, int y, int width, int height) 
 {
-    wxMacControl::SetRect( r ) ;
+    wxMacControl::Move(x,y,width,height) ;
     MacUpdatePosition() ;
 }
 
@@ -2770,7 +2770,7 @@ wxMacMLTEClassicControl::wxMacMLTEClassicControl( wxTextCtrl *wxPeer,
     {
         wxString st = str ;
         wxMacConvertNewlines10To13( &st ) ;
-        wxMacWindowClipper clipper( m_peer ) ;
+        wxMacWindowClipper clipper( GetWXPeer() ) ;
         SetTXNData( st , kTXNStartOffset, kTXNEndOffset ) ;
         TXNSetSelection( m_txn, 0, 0 ) ;
     }
@@ -2804,7 +2804,7 @@ ControlUserPaneFocusUPP gTPFocusProc = NULL;
 
 static pascal void wxMacControlUserPaneDrawProc(ControlRef control, SInt16 part)
 {
-    wxTextCtrl *textCtrl =  wxDynamicCast( wxFindControlFromMacControl(control) , wxTextCtrl ) ;
+    wxTextCtrl *textCtrl =  wxDynamicCast( wxFindWindowFromWXWidget( (WXWidget) control) , wxTextCtrl ) ;
     wxMacMLTEClassicControl * win = textCtrl ? (wxMacMLTEClassicControl*)(textCtrl->GetPeer()) : NULL ;
     if ( win )
         win->MacControlUserPaneDrawProc( part ) ;
@@ -2812,7 +2812,7 @@ static pascal void wxMacControlUserPaneDrawProc(ControlRef control, SInt16 part)
 
 static pascal ControlPartCode wxMacControlUserPaneHitTestProc(ControlRef control, Point where)
 {
-    wxTextCtrl *textCtrl =  wxDynamicCast( wxFindControlFromMacControl(control) , wxTextCtrl ) ;
+    wxTextCtrl *textCtrl =  wxDynamicCast( wxFindWindowFromWXWidget( (WXWidget) control) , wxTextCtrl ) ;
     wxMacMLTEClassicControl * win = textCtrl ? (wxMacMLTEClassicControl*)(textCtrl->GetPeer()) : NULL ;
     if ( win )
         return win->MacControlUserPaneHitTestProc( where.h , where.v ) ;
@@ -2822,7 +2822,7 @@ static pascal ControlPartCode wxMacControlUserPaneHitTestProc(ControlRef control
 
 static pascal ControlPartCode wxMacControlUserPaneTrackingProc(ControlRef control, Point startPt, ControlActionUPP actionProc)
 {
-    wxTextCtrl *textCtrl =  wxDynamicCast( wxFindControlFromMacControl(control) , wxTextCtrl ) ;
+    wxTextCtrl *textCtrl =  wxDynamicCast( wxFindWindowFromWXWidget( (WXWidget) control) , wxTextCtrl ) ;
     wxMacMLTEClassicControl * win = textCtrl ? (wxMacMLTEClassicControl*)(textCtrl->GetPeer()) : NULL ;
     if ( win )
         return win->MacControlUserPaneTrackingProc( startPt.h , startPt.v , (void*) actionProc ) ;
@@ -2832,7 +2832,7 @@ static pascal ControlPartCode wxMacControlUserPaneTrackingProc(ControlRef contro
 
 static pascal void wxMacControlUserPaneIdleProc(ControlRef control)
 {
-    wxTextCtrl *textCtrl =  wxDynamicCast( wxFindControlFromMacControl(control) , wxTextCtrl ) ;
+    wxTextCtrl *textCtrl =  wxDynamicCast( wxFindWindowFromWXWidget((WXWidget) control) , wxTextCtrl ) ;
     wxMacMLTEClassicControl * win = textCtrl ? (wxMacMLTEClassicControl*)(textCtrl->GetPeer()) : NULL ;
     if ( win )
         win->MacControlUserPaneIdleProc() ;
@@ -2840,7 +2840,7 @@ static pascal void wxMacControlUserPaneIdleProc(ControlRef control)
 
 static pascal ControlPartCode wxMacControlUserPaneKeyDownProc(ControlRef control, SInt16 keyCode, SInt16 charCode, SInt16 modifiers)
 {
-    wxTextCtrl *textCtrl =  wxDynamicCast( wxFindControlFromMacControl(control) , wxTextCtrl ) ;
+    wxTextCtrl *textCtrl =  wxDynamicCast( wxFindWindowFromWXWidget((WXWidget) control) , wxTextCtrl ) ;
     wxMacMLTEClassicControl * win = textCtrl ? (wxMacMLTEClassicControl*)(textCtrl->GetPeer()) : NULL ;
     if ( win )
         return win->MacControlUserPaneKeyDownProc( keyCode, charCode, modifiers ) ;
@@ -2850,7 +2850,7 @@ static pascal ControlPartCode wxMacControlUserPaneKeyDownProc(ControlRef control
 
 static pascal void wxMacControlUserPaneActivateProc(ControlRef control, Boolean activating)
 {
-    wxTextCtrl *textCtrl =  wxDynamicCast( wxFindControlFromMacControl(control) , wxTextCtrl ) ;
+    wxTextCtrl *textCtrl =  wxDynamicCast( wxFindWindowFromWXWidget( (WXWidget)control) , wxTextCtrl ) ;
     wxMacMLTEClassicControl * win = textCtrl ? (wxMacMLTEClassicControl*)(textCtrl->GetPeer()) : NULL ;
     if ( win )
         win->MacControlUserPaneActivateProc( activating ) ;
@@ -2858,7 +2858,7 @@ static pascal void wxMacControlUserPaneActivateProc(ControlRef control, Boolean 
 
 static pascal ControlPartCode wxMacControlUserPaneFocusProc(ControlRef control, ControlFocusPart action)
 {
-    wxTextCtrl *textCtrl =  wxDynamicCast( wxFindControlFromMacControl(control) , wxTextCtrl ) ;
+    wxTextCtrl *textCtrl =  wxDynamicCast( wxFindWindowFromWXWidget((WXWidget) control) , wxTextCtrl ) ;
     wxMacMLTEClassicControl * win = textCtrl ? (wxMacMLTEClassicControl*)(textCtrl->GetPeer()) : NULL ;
     if ( win )
         return win->MacControlUserPaneFocusProc( action ) ;
@@ -2869,7 +2869,7 @@ static pascal ControlPartCode wxMacControlUserPaneFocusProc(ControlRef control, 
 #if 0
 static pascal void wxMacControlUserPaneBackgroundProc(ControlRef control, ControlBackgroundPtr info)
 {
-    wxTextCtrl *textCtrl =  wxDynamicCast( wxFindControlFromMacControl(control) , wxTextCtrl ) ;
+    wxTextCtrl *textCtrl =  wxDynamicCast( wxFindWindowFromWXWidget(control) , wxTextCtrl ) ;
     wxMacMLTEClassicControl * win = textCtrl ? (wxMacMLTEClassicControl*)(textCtrl->GetPeer()) : NULL ;
     if ( win )
         win->MacControlUserPaneBackgroundProc(info) ;
@@ -3080,7 +3080,7 @@ wxMacMLTEHIViewControl::wxMacMLTEHIViewControl( wxTextCtrl *wxPeer,
     {
         HIViewAddSubview( m_scrollView , m_textView ) ;
         m_controlRef = m_scrollView ;
-        wxPeer->MacInstallEventHandler( (WXWidget) m_textView ) ;
+        wxMacControl::MacInstallEventHandler( m_textView, wxPeer ) ;
     }
     else
     {
@@ -3090,14 +3090,14 @@ wxMacMLTEHIViewControl::wxMacMLTEHIViewControl( wxTextCtrl *wxPeer,
 
     AdjustCreationAttributes( *wxWHITE , true ) ;
 #ifndef __LP64__
-    wxMacWindowClipper c( m_peer ) ;
+    wxMacWindowClipper c( GetWXPeer() ) ;
 #endif
     SetTXNData( st , kTXNStartOffset, kTXNEndOffset ) ;
 
     TXNSetSelection( m_txn, 0, 0 );
     TXNShowSelection( m_txn, kTXNShowStart );
 
-    InstallControlEventHandler( m_textView , GetwxMacTextControlEventHandlerUPP(),
+    ::InstallControlEventHandler( m_textView , GetwxMacTextControlEventHandlerUPP(),
                                 GetEventTypeCount(eventList), eventList, this,
                                 NULL);
 }

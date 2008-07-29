@@ -36,25 +36,32 @@ public:
 
     virtual bool IsOk() const
     {
+#if wxOSX_USE_COCOA_OR_CARBON
         if ( m_hCursor != NULL )
             return true;
-#if !wxMAC_USE_COCOA
+#if wxOSX_USE_CARBON
         if ( m_themeCursor != -1 )
             return true;
 #endif
 
         return false;
+#else
+        // in order to avoid asserts, always claim to have a valid cursor
+        return true;
+#endif
     }
 
 protected:
-#if wxMAC_USE_COCOA
+#if wxOSX_USE_COCOA
     WX_NSCursor m_hCursor;
-#else
+#elif wxOSX_USE_CARBON
     WXHCURSOR     m_hCursor;
     bool        m_disposeHandle;
     bool        m_releaseHandle;
     bool        m_isColorCursor;
     long        m_themeCursor;
+#elif wxOSX_USE_IPHONE
+    void*       m_hCursor;
 #endif
 
     friend class wxCursor;
@@ -63,6 +70,8 @@ protected:
 };
 
 #define M_CURSORDATA wx_static_cast(wxCursorRefData*, m_refData)
+
+#if wxOSX_USE_COCOA_OR_CARBON
 
 ClassicCursor gMacCursors[kwxCursorLast+1] =
 {
@@ -189,9 +198,11 @@ ClassicCursor gMacCursors[kwxCursorLast+1] =
 
 };
 
+#endif
+
 wxCursor    gMacCurrentCursor ;
 
-#if !wxMAC_USE_COCOA
+#if wxOSX_USE_CARBON
 CursHandle wxGetStockCursor( int number )
 {
     wxASSERT_MSG( number >= 0 && number <=kwxCursorLast , wxT("invalid stock cursor id") ) ;
@@ -212,8 +223,7 @@ CursHandle wxGetStockCursor( int number )
 wxCursorRefData::wxCursorRefData()
 {
     m_hCursor = NULL;
-#if wxMAC_USE_COCOA
-#else
+#if wxOSX_USE_CARBON
     m_disposeHandle = false;
     m_releaseHandle = false;
     m_isColorCursor = false;
@@ -226,9 +236,9 @@ wxCursorRefData::wxCursorRefData(const wxCursorRefData& cursor)
     // FIXME: need to copy the cursor
     m_hCursor = NULL;
 
-#if wxMAC_USE_COCOA
+#if wxOSX_USE_COCOA
     wxUnusedVar(cursor);
-#else
+#elif wxOSX_USE_CARBON
     m_disposeHandle = false;
     m_releaseHandle = false;
     m_isColorCursor = cursor.m_isColorCursor;
@@ -238,10 +248,10 @@ wxCursorRefData::wxCursorRefData(const wxCursorRefData& cursor)
 
 wxCursorRefData::~wxCursorRefData()
 {
-#if wxMAC_USE_COCOA
+#if wxOSX_USE_COCOA
     if ( m_hCursor )
         wxMacCocoaRelease(m_hCursor);
-#else
+#elif wxOSX_USE_CARBON
     if ( m_isColorCursor )
     {
 #ifndef __LP64__
@@ -310,7 +320,7 @@ WXHCURSOR wxCursor::GetHCURSOR() const
     return (M_CURSORDATA ? M_CURSORDATA->m_hCursor : 0);
 }
 
-#if !wxMAC_USE_COCOA
+#if wxOSX_USE_CARBON
 short GetCTabIndex( CTabHandle colors , RGBColor *col )
 {
     short retval = 0 ;
@@ -340,7 +350,7 @@ void wxCursor::CreateFromImage(const wxImage & image)
     m_refData = new wxCursorRefData;
     int hotSpotX = image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X);
     int hotSpotY = image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y);
-#if wxMAC_USE_COCOA
+#if wxOSX_USE_COCOA
     wxBitmap bmp( image );
     CGImageRef cgimage = wxMacCreateCGImageFromBitmap(bmp);
     if ( cgimage )
@@ -348,7 +358,7 @@ void wxCursor::CreateFromImage(const wxImage & image)
         M_CURSORDATA->m_hCursor = wxMacCocoaCreateCursorFromCGImage( cgimage, hotSpotX, hotSpotY ); 
         CFRelease( cgimage );
     }
-#else
+#elif wxOSX_USE_CARBON
 #ifndef __LP64__
     int w = 16;
     int h = 16;
@@ -489,9 +499,9 @@ wxCursor::wxCursor(const wxString& cursor_file, wxBitmapType flags, int hotSpotX
     m_refData = new wxCursorRefData;
     if ( flags == wxBITMAP_TYPE_MACCURSOR_RESOURCE )
     {
-#if wxMAC_USE_COCOA
+#if wxOSX_USE_COCOA
         wxFAIL_MSG( wxT("Not implemented") );
-#else
+#elif wxOSX_USE_CARBON
 #ifndef __LP64__
         Str255 theName ;
         wxMacStringToPascal( cursor_file , theName ) ;
@@ -549,9 +559,9 @@ wxCursor::wxCursor(const wxString& cursor_file, wxBitmapType flags, int hotSpotX
 wxCursor::wxCursor(int cursor_type)
 {
     m_refData = new wxCursorRefData;
-#if wxMAC_USE_COCOA
+#if wxOSX_USE_COCOA
     M_CURSORDATA->m_hCursor = wxMacCocoaCreateStockCursor( cursor_type );
-#else
+#elif wxOSX_USE_CARBON
     switch (cursor_type)
     {
     case wxCURSOR_COPY_ARROW:
@@ -660,10 +670,10 @@ wxCursor::wxCursor(int cursor_type)
 void wxCursor::MacInstall() const
 {
     gMacCurrentCursor = *this ;
-#if wxMAC_USE_COCOA
+#if wxOSX_USE_COCOA
     if ( IsOk() )
         wxMacCocoaSetCursor( M_CURSORDATA->m_hCursor );
-#else
+#elif wxOSX_USE_CARBON
     if ( m_refData && M_CURSORDATA->m_themeCursor != -1 )
     {
         SetThemeCursor( M_CURSORDATA->m_themeCursor ) ;

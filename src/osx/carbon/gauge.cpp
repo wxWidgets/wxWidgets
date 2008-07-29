@@ -60,7 +60,7 @@ void wxGauge::SetRange(int r)
     // we are going via the base class in case there is
     // some change behind the values by it
     wxGaugeBase::SetRange( r ) ;
-    if ( m_peer && m_peer->Ok() ){
+    if ( m_peer && m_peer->IsOk() ){
         // switch back to determinate mode if not there already
         if ( m_peer->GetData<Boolean>( kControlNoPart, kControlProgressBarIndeterminateTag ) != false )
         {
@@ -77,7 +77,7 @@ void wxGauge::SetValue(int pos)
     // some change behind the values by it
     wxGaugeBase::SetValue( pos ) ;
 
-    if ( m_peer && m_peer->Ok() )
+    if ( m_peer && m_peer->IsOk() )
     {
         // switch back to determinate mode if not there already
         if ( m_peer->GetData<Boolean>( kControlNoPart, kControlProgressBarIndeterminateTag ) != false )
@@ -110,7 +110,7 @@ int wxGauge::GetValue() const
 
 void wxGauge::Pulse()
 {
-    if ( m_peer && m_peer->Ok() )
+    if ( m_peer && m_peer->IsOk() )
     {
         if ( m_peer->GetData<Boolean>( kControlNoPart, kControlProgressBarIndeterminateTag ) != true )
         {

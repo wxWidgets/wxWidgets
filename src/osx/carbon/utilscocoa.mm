@@ -11,7 +11,11 @@
 
 #include "wx/wxprec.h"
 
+#if wxOSX_USE_COCOA_OR_CARBON
 #include <Cocoa/Cocoa.h>
+#else
+#import <UIKit/UIKit.h>
+#endif
 
 #ifdef __WXMAC__
 #include "wx/osx/private.h"
@@ -19,12 +23,14 @@
 
 #ifdef __WXMAC__
 
+#if wxOSX_USE_CARBON
 bool wxMacInitCocoa()
 {
     bool cocoaLoaded = NSApplicationLoad();
     wxASSERT_MSG(cocoaLoaded,wxT("Couldn't load Cocoa in Carbon Environment")) ;
     return cocoaLoaded;
 }
+#endif
 
 wxMacAutoreleasePool::wxMacAutoreleasePool()
 {
@@ -38,7 +44,7 @@ wxMacAutoreleasePool::~wxMacAutoreleasePool()
 
 #endif
 
-#ifdef __WXCOCOCA__
+#if defined( __WXCOCOCA__ ) || wxOSX_USE_COCOA
 
 CGContextRef wxMacGetContextFromCurrentNSContext()
 {
@@ -68,6 +74,8 @@ void wxMacCocoaRetain( void* obj )
     [(NSObject*)obj retain];
 }
 
+#if wxOSX_USE_COCOA
+
 // ----------------------------------------------------------------------------
 // NSImage Utils
 // ----------------------------------------------------------------------------
@@ -96,8 +104,6 @@ WX_NSImage  CreateNSImageFromCGImage( CGImageRef image )
 // ----------------------------------------------------------------------------
 // NSCursor Utils
 // ----------------------------------------------------------------------------
-
-#if wxMAC_USE_COCOA
 
 // copied from cursor.mm
 
@@ -302,3 +308,4 @@ void  wxMacCocoaShowCursor()
 }
 
 #endif
+

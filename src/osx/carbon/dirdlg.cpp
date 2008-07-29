@@ -11,7 +11,7 @@
 
 #include "wx/wxprec.h"
 
-#if wxUSE_DIRDLG
+#if wxUSE_DIRDLG && !defined(__WXUNIVERSAL__)
 
 #include "wx/dirdlg.h"
 

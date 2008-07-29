@@ -83,7 +83,7 @@ bool wxControl::ProcessCommand( wxCommandEvent &event )
 
 void  wxControl::OnKeyDown( wxKeyEvent &WXUNUSED(event) )
 {
-    if ( m_peer == NULL || !m_peer->Ok() )
+    if ( m_peer == NULL || !m_peer->IsOk() )
         return;
 
     UInt32 keyCode, modifiers;

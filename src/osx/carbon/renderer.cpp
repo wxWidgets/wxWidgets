@@ -27,7 +27,7 @@
 
 #include "wx/renderer.h"
 #include "wx/graphics.h"
-#include "wx/osx/uma.h"
+#include "wx/osx/private.h"
 
 
 class WXDLLEXPORT wxRendererMac : public wxDelegateRendererNative
@@ -236,7 +236,7 @@ void wxRendererMac::DrawSplitterSash( wxWindow *win,
     wxOrientation orient,
     int WXUNUSED(flags) )
 {
-    bool hasMetal = win->MacGetTopLevelWindow()->MacGetMetalAppearance();
+    bool hasMetal = win->MacGetTopLevelWindow()->GetExtraStyle() & wxFRAME_EX_METAL;
     SInt32 height;
     GetThemeMetric( kThemeMetricSmallPaneSplitterHeight, &height );
     HIRect splitterRect;

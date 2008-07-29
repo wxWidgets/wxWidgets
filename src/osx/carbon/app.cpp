@@ -44,14 +44,14 @@
 #include <string.h>
 
 // mac
-
+#if wxOSX_USE_CARBON
 #include "wx/osx/uma.h"
+#else
+#include "wx/osx/private.h"
+#endif
 
-#ifdef __DARWIN__
-#  include <CoreServices/CoreServices.h>
-#  if defined(WXMAKINGDLL_CORE)
-#    include <mach-o/dyld.h>
-#  endif
+#if defined(WXMAKINGDLL_CORE)
+#   include <mach-o/dyld.h>
 #endif
 
 // Keep linker from discarding wxStockGDIMac
@@ -60,8 +60,9 @@ wxFORCE_LINK_MODULE(gdiobj)
 // statics for implementation
 static bool s_inYield = false;
 static bool s_inReceiveEvent = false ;
+#if wxOSX_USE_COCOA_OR_CARBON
 static EventTime sleepTime = kEventDurationNoWait ;
-
+#endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
 BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
@@ -84,15 +85,25 @@ wxString  wxApp::s_macHelpMenuTitleName = wxT("&Help") ;
 
 bool      wxApp::sm_isEmbedded = false; // Normally we're not a plugin
 
+#if wxOSX_USE_COCOA_OR_CARBON
+
 //----------------------------------------------------------------------
 // Core Apple Event Support
 //----------------------------------------------------------------------
+
+AEEventHandlerUPP sODocHandler = NULL ;
+AEEventHandlerUPP sGURLHandler = NULL ;
+AEEventHandlerUPP sOAppHandler = NULL ;
+AEEventHandlerUPP sPDocHandler = NULL ;
+AEEventHandlerUPP sRAppHandler = NULL ;
+AEEventHandlerUPP sQuitHandler = NULL ;
 
 pascal OSErr AEHandleODoc( const AppleEvent *event , AppleEvent *reply , SRefCon refcon ) ;
 pascal OSErr AEHandleOApp( const AppleEvent *event , AppleEvent *reply , SRefCon refcon ) ;
 pascal OSErr AEHandlePDoc( const AppleEvent *event , AppleEvent *reply , SRefCon refcon ) ;
 pascal OSErr AEHandleQuit( const AppleEvent *event , AppleEvent *reply , SRefCon refcon ) ;
 pascal OSErr AEHandleRApp( const AppleEvent *event , AppleEvent *reply , SRefCon refcon ) ;
+pascal OSErr AEHandleGURL( const AppleEvent *event , AppleEvent *reply , SRefCon refcon ) ;
 
 pascal OSErr AEHandleODoc( const AppleEvent *event , AppleEvent *reply , SRefCon WXUNUSED(refcon) )
 {
@@ -268,6 +279,8 @@ short wxApp::MacHandleAERApp(const WXEVENTREF WXUNUSED(event) , WXEVENTREF WXUNU
     return noErr ;
 }
 
+#endif
+
 //----------------------------------------------------------------------
 // Support Routines linking the Mac...File Calls to the Document Manager
 //----------------------------------------------------------------------
@@ -377,6 +390,8 @@ void wxApp::MacReopenApp()
 //----------------------------------------------------------------------
 
 // if no native match they just return the passed-in id
+
+#if wxOSX_USE_CARBON
 
 struct IdPair
 {
@@ -511,9 +526,13 @@ wxMenu* wxFindMenuFromMacCommand( const HICommand &command , wxMenuItem* &item )
     return itemMenu ;
 }
 
+#endif
+
 //----------------------------------------------------------------------
 // Carbon Event Handler
 //----------------------------------------------------------------------
+
+#if wxOSX_USE_CARBON
 
 static const EventTypeSpec eventList[] =
 {
@@ -595,7 +614,6 @@ wxMacAppMenuEventHandler( EventHandlerCallRef WXUNUSED(handler),
     return eventNotHandledErr;
 }
 
-#ifndef __LP64__
 static pascal OSStatus
 wxMacAppCommandEventHandler( EventHandlerCallRef WXUNUSED(handler) ,
                              EventRef event ,
@@ -632,7 +650,6 @@ wxMacAppCommandEventHandler( EventHandlerCallRef WXUNUSED(handler) ,
     }
     return result ;
 }
-#endif
 
 static pascal OSStatus
 wxMacAppApplicationEventHandler( EventHandlerCallRef WXUNUSED(handler) ,
@@ -726,8 +743,9 @@ pascal OSStatus wxMacAppEventHandler( EventHandlerCallRef handler , EventRef eve
 }
 
 DEFINE_ONE_SHOT_HANDLER_GETTER( wxMacAppEventHandler )
+#endif
 
-#ifdef __WXDEBUG__
+#if defined( __WXDEBUG__ ) && wxOSX_USE_COCOA_OR_CARBON
 
 pascal static void
 wxMacAssertOutputHandler(OSType WXUNUSED(componentSignature),
@@ -784,12 +802,9 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 {
     // Mac-specific
 
-#ifdef __WXDEBUG__
+#if defined( __WXDEBUG__ ) && wxOSX_USE_COCOA_OR_CARBON
     InstallDebugAssertOutputHandler( NewDebugAssertOutputHandlerUPP( wxMacAssertOutputHandler ) );
 #endif
-
-    UMAInitToolbox( 4, sm_isEmbedded ) ;
-// TODO CHECK Can Be Removed    SetEventMask( everyEvent ) ;
 
     // Mac OS X passes a process serial number command line argument when
     // the application is launched from the Finder. This argument must be
@@ -838,18 +853,11 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     return true;
 }
 
-AEEventHandlerUPP sODocHandler = NULL ;
-AEEventHandlerUPP sGURLHandler = NULL ;
-AEEventHandlerUPP sOAppHandler = NULL ;
-AEEventHandlerUPP sPDocHandler = NULL ;
-AEEventHandlerUPP sRAppHandler = NULL ;
-AEEventHandlerUPP sQuitHandler = NULL ;
-
 bool wxApp::OnInitGui()
 {
     if ( !wxAppBase::OnInitGui() )
         return false ;
-#ifndef __LP64__
+#if wxOSX_USE_CARBON
     InstallStandardEventHandler( GetApplicationEventTarget() ) ;
     if (!sm_isEmbedded)
     {
@@ -859,6 +867,7 @@ bool wxApp::OnInitGui()
     }
 #endif
 
+#if wxOSX_USE_COCOA_OR_CARBON
     if (!sm_isEmbedded)
     {
         sODocHandler = NewAEEventHandlerUPP(AEHandleODoc) ;
@@ -881,9 +890,11 @@ bool wxApp::OnInitGui()
         AEInstallEventHandler( kCoreEventClass , kAEQuitApplication ,
                                sQuitHandler , 0 , FALSE ) ;
     }
-
+#endif
+#if wxOSX_USE_CARBON
     if ( !wxMacInitCocoa() )
         return false;
+#endif
 
     return true ;
 }
@@ -902,6 +913,8 @@ void wxApp::CleanUp()
 
     // One last chance for pending objects to be cleaned up
     wxTheApp->DeletePendingObjects();
+
+#if wxOSX_USE_COCOA_OR_CARBON
 
     if (!sm_isEmbedded)
         RemoveEventHandler( (EventHandlerRef)(wxTheApp->m_macEventHandler) );
@@ -928,6 +941,8 @@ void wxApp::CleanUp()
         DisposeAEEventHandlerUPP( sRAppHandler ) ;
         DisposeAEEventHandlerUPP( sQuitHandler ) ;
     }
+
+#endif
 
     wxAppBase::CleanUp();
 }
@@ -1108,6 +1123,8 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
     // by definition yield should handle all non-processed events
 
+#if wxOSX_USE_COCOA_OR_CARBON
+
     EventRef theEvent;
 
     OSStatus status = noErr ;
@@ -1134,6 +1151,10 @@ bool wxApp::Yield(bool onlyIfNeeded)
             ReleaseEvent(theEvent);
         }
     }
+    
+#else
+
+#endif
 
     s_inYield = false;
 
@@ -1142,6 +1163,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
 void wxApp::MacDoOneEvent()
 {
+#if wxOSX_USE_COCOA_OR_CARBON
     wxMacAutoreleasePool autoreleasepool;
     EventRef theEvent;
 
@@ -1170,7 +1192,8 @@ void wxApp::MacDoOneEvent()
             break;
     }
     // repeaters
-
+#else
+#endif
     DeletePendingObjects() ;
 }
 
@@ -1188,8 +1211,18 @@ CFMutableArrayRef GetAutoReleaseArray()
     return array;
 }
 
+//
+//
+//
+
+
+//
+//
+//
+
 void wxApp::MacHandleOneEvent( WXEVENTREF evr )
 {
+#if wxOSX_USE_COCOA_OR_CARBON
     EventTargetRef theTarget;
     theTarget = GetEventDispatcherTarget();
     m_macCurrentEvent = evr ;
@@ -1202,6 +1235,11 @@ void wxApp::MacHandleOneEvent( WXEVENTREF evr )
     wxMutexGuiLeaveOrEnter();
 #endif // wxUSE_THREADS
 
+#else
+    // TODO Threads
+#endif
+
+
     CFArrayRemoveAllValues( GetAutoReleaseArray() );
 }
 
@@ -1209,6 +1247,8 @@ void wxApp::MacAddToAutorelease( void* cfrefobj )
 {
     CFArrayAppendValue( GetAutoReleaseArray(), cfrefobj );
 }
+
+#if wxOSX_USE_COCOA_OR_CARBON
 
 long wxMacTranslateKey(unsigned char key, unsigned char code)
 {
@@ -1375,10 +1415,12 @@ int wxMacKeyCodeToModifier(wxKeyCode key)
         return 0;
     }
 }
+#endif
 
 wxMouseState wxGetMouseState()
 {
     wxMouseState ms;
+#if wxOSX_USE_COCOA_OR_CARBON
 
     wxPoint pt = wxGetMousePosition();
     ms.SetX(pt.x);
@@ -1395,6 +1437,7 @@ wxMouseState wxGetMouseState()
     ms.SetAltDown(modifiers & optionKey);
     ms.SetMetaDown(modifiers & cmdKey);
 
+#endif
     return ms;
 }
 
@@ -1465,13 +1508,13 @@ bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers
 {
     if ( !focus )
         return false ;
-
     wxKeyEvent event(wxEVT_CHAR) ;
     MacCreateKeyEvent( event, focus , keymessage , modifiers , when , wherex , wherey , uniChar ) ;
     long keyval = event.m_keyCode ;
 
     bool handled = false ;
 
+#if wxOSX_USE_CARBON
     wxNonOwnedWindow *tlw = focus->MacGetTopLevelWindow() ;
 
     if (tlw)
@@ -1512,12 +1555,12 @@ bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers
     }
 
     // backdoor handler for default return and command escape
-    if ( !handled && (!focus->IsKindOf(CLASSINFO(wxControl) ) || !focus->MacCanFocus() ) )
+    if ( !handled && (!focus->IsKindOf(CLASSINFO(wxControl) ) || !focus->AcceptsFocus() ) )
     {
         // if window is not having a focus still testing for default enter or cancel
         // TODO: add the UMA version for ActiveNonFloatingWindow
 #ifndef __LP64__
-        wxWindow* focus = wxFindWinFromMacWindow( FrontWindow() ) ;
+        wxWindow* focus = wxNonOwnedWindow::GetFromWXWindow( (WXWindow) FrontWindow() ) ;
         if ( focus )
         {
             if ( keyval == WXK_RETURN || keyval == WXK_NUMPAD_ENTER )
@@ -1546,12 +1589,14 @@ bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers
         }
 #endif
     }
+#endif
     return handled ;
 }
 
 // This method handles common code for SendKeyDown, SendKeyUp, and SendChar events.
 void wxApp::MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey , wxChar uniChar )
 {
+#if wxOSX_USE_COCOA_OR_CARBON
     short keycode, keychar ;
 
     keychar = short(keymessage & charCodeMask);
@@ -1634,15 +1679,18 @@ void wxApp::MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymess
     event.m_y = wherey;
     event.SetTimestamp(when);
     event.SetEventObject(focus);
+#endif
 }
 
 
 void wxApp::MacHideApp()
 {
+#if wxOSX_USE_CARBON
     wxMacCarbonEvent event( kEventClassCommand , kEventCommandProcess );
     HICommand command;
     memset( &command, 0 , sizeof(command) );
     command.commandID = kHICommandHide ;
     event.SetParameter<HICommand>(kEventParamDirectObject, command );       
     SendEventToApplication( event );
+#endif
 }

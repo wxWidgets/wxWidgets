@@ -359,7 +359,7 @@ pascal OSErr wxMacWindowDragTrackingHandler(
 
     GetDragAttributes( theDrag, &attributes );
 
-    wxNonOwnedWindow* toplevel = wxFindWinFromMacWindow( theWindow );
+    wxNonOwnedWindow* toplevel = wxNonOwnedWindow::GetFromWXWindow( (WXWindow) theWindow );
 
     bool optionDown = GetCurrentKeyModifiers() & optionKey;
     wxDragResult result = optionDown ? wxDragCopy : wxDragMove;
@@ -385,15 +385,18 @@ pascal OSErr wxMacWindowDragTrackingHandler(
                 break;
 
             GetDragMouse( theDrag, &mouse, 0L );
-            localMouse = mouse;
-            wxMacGlobalToLocal( theWindow, &localMouse );
+            int x = mouse.h ;
+            int y = mouse.v ;
+            toplevel->GetNonOwnedPeer()->ScreenToWindow( &x, &y );
+            localMouse.h = x;
+            localMouse.v = y;
 
             {
                 wxWindow *win = NULL;
                 ControlPartCode controlPart;
                 ControlRef control = FindControlUnderMouse( localMouse, theWindow, &controlPart );
                 if ( control )
-                    win = wxFindControlFromMacControl( control );
+                    win = wxFindWindowFromWXWidget( (WXWidget) control );
                 else
                     win = toplevel;
 
@@ -534,9 +537,11 @@ pascal OSErr wxMacWindowDragReceiveHandler(
         trackingGlobals->m_currentTarget->SetCurrentDrag( theDrag );
         GetDragMouse( theDrag, &mouse, 0L );
         localMouse = mouse;
-        wxMacGlobalToLocal( theWindow, &localMouse );
         localx = localMouse.h;
         localy = localMouse.v;
+        wxNonOwnedWindow* tlw = wxNonOwnedWindow::GetFromWXWindow((WXWindow) theWindow);
+        if ( tlw )
+            tlw->GetNonOwnedPeer()->ScreenToWindow( &localx, &localy );
 
         // TODO : should we use client coordinates?
         if ( trackingGlobals->m_currentTargetWindow )

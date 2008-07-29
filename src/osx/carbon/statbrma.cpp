@@ -58,7 +58,7 @@ bool wxStatusBarMac::Create(wxWindow *parent, wxWindowID id,
     if ( !wxStatusBarGeneric::Create( parent, id, style, name ) )
         return false;
 
-    if ( parent->MacGetTopLevelWindow()->MacGetMetalAppearance() )
+    if ( parent->MacGetTopLevelWindow()->GetExtraStyle() & wxFRAME_EX_METAL )
         SetBackgroundStyle( wxBG_STYLE_TRANSPARENT );
 
     // normal system font is too tall for fitting into the standard height
@@ -86,7 +86,7 @@ void wxStatusBarMac::DrawFieldText(wxDC& dc, int i)
     int xpos = rect.x + leftMargin + 1;
     int ypos = 1;
 
-    if ( MacGetTopLevelWindow()->MacGetMetalAppearance() )
+    if ( MacGetTopLevelWindow()->GetExtraStyle() & wxFRAME_EX_METAL )
         ypos++;
 
     dc.SetClippingRegion(rect.x, 0, rect.width, h);
@@ -136,7 +136,7 @@ void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event))
         if (major >= 10)
         {
             // Finder statusbar border color: (Project Builder similar is 9B9B9B)
-            if ( MacGetTopLevelWindow()->MacGetMetalAppearance() )
+            if ( MacGetTopLevelWindow()->GetExtraStyle() & wxFRAME_EX_METAL )
                 dc.SetPen(wxPen(wxColour(0x40, 0x40, 0x40), 1, wxSOLID));
             else
                 dc.SetPen(wxPen(wxColour(0xB1, 0xB1, 0xB1), 1, wxSOLID));

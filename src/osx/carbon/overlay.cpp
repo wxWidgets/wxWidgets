@@ -60,15 +60,13 @@ void wxOverlayImpl::MacGetBounds( Rect *bounds )
     int x, y;
     x=y=0;
     m_window->MacWindowToRootWindow( &x , &y ) ;
-    WindowRef window = (WindowRef) m_window->MacGetTopLevelWindowRef() ;
+    wxNonOwnedWindow* tlw = m_window->MacGetTopLevelWindow();
+    tlw->GetNonOwnedPeer()->WindowToScreen( &x, &y );
 
-    Point localwhere = { y, x };
-    wxMacLocalToGlobal( window, &localwhere ) ;
-
-    bounds->top = localwhere.v+m_y;
-    bounds->left = localwhere.h+m_x;
-    bounds->bottom = localwhere.v+m_y+m_height;
-    bounds->right = localwhere.h+m_x+m_width;
+    bounds->top = y+m_y;
+    bounds->left = x+m_x;
+    bounds->bottom = y+m_y+m_height;
+    bounds->right = x+m_x+m_width;
 }
 
 OSStatus wxOverlayImpl::CreateOverlayWindow()

@@ -37,16 +37,11 @@
     #include "wx/control.h"
 #endif //WX_PRECOMP
 
-#include "wx/osx/uma.h"
 #include "wx/tooltip.h"
 #include "wx/dnd.h"
 
 #if wxUSE_SYSTEM_OPTIONS
     #include "wx/sysopt.h"
-#endif
-
-#ifndef __DARWIN__
-#include <ToolUtils.h>
 #endif
 
 // for targeting OSX
@@ -63,18 +58,11 @@ END_EVENT_TABLE()
 // wxTopLevelWindowMac creation
 // ----------------------------------------------------------------------------
 
-typedef struct
-{
-    wxPoint m_position ;
-    wxSize m_size ;
-    bool m_wasResizable ;
-} FullScreenData ;
 
 void wxTopLevelWindowMac::Init()
 {
     m_iconized =
     m_maximizeOnShow = false;
-    m_macFullScreenData = NULL ;
 }
 
 bool wxTopLevelWindowMac::Create(wxWindow *parent,
@@ -89,7 +77,7 @@ bool wxTopLevelWindowMac::Create(wxWindow *parent,
         return false;
 
     wxWindow::SetLabel( title ) ;
-    SetWindowTitleWithCFString( (WindowRef) m_macWindow , wxCFStringRef( title , GetFont().GetEncoding() ) );
+    m_nowpeer->SetTitle(title, GetFont().GetEncoding() );
     wxTopLevelWindows.Append(this);
 
     return true;
@@ -97,9 +85,6 @@ bool wxTopLevelWindowMac::Create(wxWindow *parent,
 
 wxTopLevelWindowMac::~wxTopLevelWindowMac()
 {
-    FullScreenData *data = (FullScreenData *) m_macFullScreenData ;
-    delete data ;
-    m_macFullScreenData = NULL ;
 }
 
 
@@ -109,39 +94,24 @@ wxTopLevelWindowMac::~wxTopLevelWindowMac()
 
 void wxTopLevelWindowMac::Maximize(bool maximize)
 {
-    Point idealSize = { 0 , 0 } ;
-    if ( maximize )
-    {
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
-        HIRect bounds ;
-        HIWindowGetAvailablePositioningBounds(kCGNullDirectDisplay,kHICoordSpace72DPIGlobal,
-            &bounds);
-        idealSize.h = bounds.size.width;
-        idealSize.v = bounds.size.height;
-#else
-        Rect rect ;
-        GetAvailableWindowPositioningBounds(GetMainDevice(),&rect) ;
-        idealSize.h = rect.right - rect.left ;
-        idealSize.v = rect.bottom - rect.top ;
-#endif
-    }
-    ZoomWindowIdeal( (WindowRef)m_macWindow , maximize ? inZoomOut : inZoomIn , &idealSize ) ;
+    if ( IsMaximized() != maximize )
+        m_nowpeer->Maximize(maximize);
 }
 
 bool wxTopLevelWindowMac::IsMaximized() const
 {
-    return IsWindowInStandardState( (WindowRef)m_macWindow , NULL , NULL ) ;
+    return m_nowpeer->IsMaximized();
 }
 
 void wxTopLevelWindowMac::Iconize(bool iconize)
 {
-    if ( IsWindowCollapsable( (WindowRef)m_macWindow) )
-        CollapseWindow( (WindowRef)m_macWindow , iconize ) ;
+    if ( IsIconized() != iconize )
+        m_nowpeer->Iconize(iconize);
 }
 
 bool wxTopLevelWindowMac::IsIconized() const
 {
-    return IsWindowCollapsed((WindowRef)m_macWindow ) ;
+    return m_nowpeer->IsIconized();
 }
 
 void wxTopLevelWindowMac::Restore()
@@ -164,7 +134,7 @@ wxPoint wxTopLevelWindowMac::GetClientAreaOrigin() const
 void wxTopLevelWindowMac::SetTitle(const wxString& title)
 {
     wxWindow::SetLabel( title ) ;
-    SetWindowTitleWithCFString( (WindowRef) m_macWindow , wxCFStringRef( title , GetFont().GetEncoding() ) ) ;
+    m_nowpeer->SetTitle(title, GetFont().GetEncoding() );
 }
 
 wxString wxTopLevelWindowMac::GetTitle() const
@@ -174,101 +144,15 @@ wxString wxTopLevelWindowMac::GetTitle() const
 
 bool wxTopLevelWindowMac::ShowFullScreen(bool show, long style)
 {
-    if ( show )
-    {
-        FullScreenData *data = (FullScreenData *)m_macFullScreenData ;
-        delete data ;
-        data = new FullScreenData() ;
-
-        m_macFullScreenData = data ;
-        data->m_position = GetPosition() ;
-        data->m_size = GetSize() ;
-        data->m_wasResizable = MacGetWindowAttributes() & kWindowResizableAttribute ;
-
-        if ( style & wxFULLSCREEN_NOMENUBAR )
-            HideMenuBar() ;
-
-        wxRect client = wxGetClientDisplayRect() ;
-
-        int left , top , right , bottom ;
-        int x, y, w, h ;
-
-        x = client.x ;
-        y = client.y ;
-        w = client.width ;
-        h = client.height ;
-
-        MacGetContentAreaInset( left , top , right , bottom ) ;
-
-        if ( style & wxFULLSCREEN_NOCAPTION )
-        {
-            y -= top ;
-            h += top ;
-        }
-
-        if ( style & wxFULLSCREEN_NOBORDER )
-        {
-            x -= left ;
-            w += left + right ;
-            h += bottom ;
-        }
-
-        if ( style & wxFULLSCREEN_NOTOOLBAR )
-        {
-            // TODO
-        }
-
-        if ( style & wxFULLSCREEN_NOSTATUSBAR )
-        {
-            // TODO
-        }
-
-        SetSize( x , y , w, h ) ;
-        if ( data->m_wasResizable )
-            MacChangeWindowAttributes( kWindowNoAttributes , kWindowResizableAttribute ) ;
-    }
-    else if ( m_macFullScreenData != NULL )
-    {
-        ShowMenuBar() ;
-        FullScreenData *data = (FullScreenData *) m_macFullScreenData ;
-        if ( data->m_wasResizable )
-            MacChangeWindowAttributes( kWindowResizableAttribute ,  kWindowNoAttributes ) ;
-        SetPosition( data->m_position ) ;
-        SetSize( data->m_size ) ;
-
-        delete data ;
-        m_macFullScreenData = NULL ;
-    }
-
-    return false;
+    return m_nowpeer->ShowFullScreen(show, style);
 }
 
 bool wxTopLevelWindowMac::IsFullScreen() const
 {
-    return m_macFullScreenData != NULL ;
+    return m_nowpeer->IsFullScreen();
 }
 
-// Attracts the users attention to this window if the application is
-// inactive (should be called when a background event occurs)
-
-static pascal void wxMacNMResponse( NMRecPtr ptr )
+void wxTopLevelWindowMac::RequestUserAttention(int flags)
 {
-    NMRemove( ptr ) ;
-    DisposePtr( (Ptr)ptr ) ;
-}
-
-void wxTopLevelWindowMac::RequestUserAttention(int WXUNUSED(flags))
-{
-    NMRecPtr notificationRequest = (NMRecPtr) NewPtr( sizeof( NMRec) ) ;
-    static wxMacNMUPP nmupp( wxMacNMResponse );
-
-    memset( notificationRequest , 0 , sizeof(*notificationRequest) ) ;
-    notificationRequest->qType = nmType ;
-    notificationRequest->nmMark = 1 ;
-    notificationRequest->nmIcon = 0 ;
-    notificationRequest->nmSound = 0 ;
-    notificationRequest->nmStr = NULL ;
-    notificationRequest->nmResp = nmupp ;
-
-    verify_noerr( NMInstall( notificationRequest ) ) ;
+    return m_nowpeer->RequestUserAttention(flags);
 }

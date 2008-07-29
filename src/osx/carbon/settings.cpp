@@ -18,7 +18,7 @@
     #include "wx/gdicmn.h"
 #endif
 
-#include "wx/osx/uma.h"
+#include "wx/osx/private.h"
 
 // ----------------------------------------------------------------------------
 // wxSystemSettingsNative
@@ -31,12 +31,18 @@
 wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 {
     wxColour resultColor;
+#if wxOSX_USE_COCOA_OR_CARBON
     ThemeBrush colorBrushID;
+#endif
 
     switch ( index )
     {
         case wxSYS_COLOUR_WINDOW:
-            resultColor = *wxWHITE ;
+#if wxOSX_USE_COCOA_OR_CARBON
+            resultColor = wxColour(wxMacCreateCGColorFromHITheme( kThemeBrushDocumentWindowBackground )) ;
+#else
+            resultColor = *wxWHITE;
+#endif
             break ;
         case wxSYS_COLOUR_SCROLLBAR :
         case wxSYS_COLOUR_BACKGROUND:
@@ -48,7 +54,11 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         case wxSYS_COLOUR_INACTIVEBORDER:
         case wxSYS_COLOUR_BTNFACE:
         case wxSYS_COLOUR_MENUBAR:
-            resultColor = wxColor( 0xDD, 0xDD, 0xDD );
+#if wxOSX_USE_COCOA_OR_CARBON
+            resultColor = wxColour(wxMacCreateCGColorFromHITheme(kThemeBrushDialogBackgroundActive));
+#else
+            resultColor = wxColour( 0xBE, 0xBE, 0xBE ) ;
+#endif
             break ;
 
         case wxSYS_COLOUR_LISTBOX :
@@ -56,7 +66,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
             break ;
 
         case wxSYS_COLOUR_BTNSHADOW:
-            resultColor = wxColor( 0xBE, 0xBE, 0xBE );
+            resultColor = wxColour( 0xBE, 0xBE, 0xBE );
             break ;
 
         case wxSYS_COLOUR_BTNTEXT:
@@ -70,13 +80,17 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 
         case wxSYS_COLOUR_HIGHLIGHT:
             {
+#if wxOSX_USE_COCOA_OR_CARBON
 #if 0
             // NB: enable this case as desired
                 colorBrushID = kThemeBrushAlternatePrimaryHighlightColor;
 #else
                 colorBrushID = kThemeBrushPrimaryHighlightColor;
 #endif
-                resultColor = wxColor( wxMacCreateCGColorFromHITheme(colorBrushID) );
+                resultColor = wxColour( wxMacCreateCGColorFromHITheme(colorBrushID) );
+#else
+                resultColor = wxColor( 0xCC, 0xCC, 0xFF );
+#endif
             }
             break ;
 
@@ -94,10 +108,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
             break ;
 
         case wxSYS_COLOUR_HIGHLIGHTTEXT :
-#if 0 
-            // NB: enable this case as desired
-            resultColor = *wxWHITE ;
-#else
+#if wxOSX_USE_COCOA_OR_CARBON
             {
                 wxColour highlightcolor( wxMacCreateCGColorFromHITheme(kThemeBrushPrimaryHighlightColor) );
                 if ((highlightcolor.Red() + highlightcolor.Green()  + highlightcolor.Blue() ) == 0)
@@ -105,6 +116,8 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
                 else
                     resultColor = *wxBLACK ;
             }
+#else
+            resultColor = *wxWHITE ;
 #endif
             break ;
 
@@ -227,12 +240,12 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow* WXUNUSED(w
         // TODO: case wxSYS_SHOW_SOUNDS:
 
         case wxSYS_DCLICK_MSEC:
-#ifdef __LP64__
+#if wxOSX_USE_CARBON
+            return (int)(GetDblTime() * 1000. / 60.);
+#else
             // default on mac is 30 ticks, we shouldn't really use wxSYS_DCLICK_MSEC anyway 
             // but rather rely on the 'click-count' by the system delivered in a mouse event
             return 500;
-#else
-            return (int)(GetDblTime() * 1000. / 60.);
 #endif
         default:
             // unsupported metric

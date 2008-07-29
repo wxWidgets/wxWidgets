@@ -9,6 +9,7 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+
 #include "wx/wxprec.h"
 
 #include "wx/utils.h"
@@ -24,10 +25,6 @@
 
 #include "wx/apptrait.h"
 
-#if wxUSE_GUI
-    #include "wx/osx/uma.h"
-#endif
-
 #include <ctype.h>
 
 #include <stdio.h>
@@ -41,14 +38,12 @@
     #include <AudioToolbox/AudioServices.h>
 #endif
 
+#include "wx/osx/private.h"
 #if wxUSE_GUI
-    #include <CoreServices/CoreServices.h>
-    #include <Carbon/Carbon.h>
     #include "wx/osx/private/timer.h"
 #endif // wxUSE_GUI
 
 #include "wx/evtloop.h"
-#include "wx/osx/private.h"
 
 #if defined(__MWERKS__) && wxUSE_UNICODE
 #if __MWERKS__ < 0x4100
@@ -56,7 +51,19 @@
 #endif
 #endif
 
+//
+// TODO BEGIN move to utils_osx.cpp
+//
+
 #if wxUSE_BASE
+
+extern bool WXDLLEXPORT wxIsDebuggerRunning()
+{
+    // TODO : try to find out ...
+    return false;
+}
+
+#if wxOSX_USE_COCOA_OR_CARBON
 
 // our OS version is the same in non GUI and GUI cases
 wxOperatingSystemId wxGetOsVersion(int *majorVsn, int *minorVsn)
@@ -70,24 +77,209 @@ wxOperatingSystemId wxGetOsVersion(int *majorVsn, int *minorVsn)
     if ( minorVsn != NULL )
         *minorVsn = (theSystem & 0xFF);
 
-#if defined( __DARWIN__ )
     return wxOS_MAC_OSX_DARWIN;
-#else
-    return wxOS_MAC_OS;
-#endif
 }
 
-extern bool WXDLLEXPORT wxIsDebuggerRunning()
+#include <sys/utsname.h>
+
+wxString wxGetOsDescription()
 {
-    // TODO : try to find out ...
+    struct utsname name;
+    uname(&name);
+    return wxString::Format(_T("Mac OS X (%s %s %s)"),
+            wxString::FromAscii(name.sysname).c_str(),
+            wxString::FromAscii(name.release).c_str(),
+            wxString::FromAscii(name.machine).c_str());
+}
+
+#endif // wxOSX_USE_COCOA_OR_CARBON
+
+
+//---------------------------------------------------------------------------
+// wxMac Specific utility functions
+//---------------------------------------------------------------------------
+
+void wxMacStringToPascal( const wxString&from , StringPtr to )
+{
+    wxCharBuffer buf = from.mb_str( wxConvLocal );
+    int len = strlen(buf);
+
+    if ( len > 255 )
+        len = 255;
+    to[0] = len;
+    memcpy( (char*) &to[1] , buf , len );
+}
+
+wxString wxMacMakeStringFromPascal( ConstStringPtr from )
+{
+    return wxString( (char*) &from[1] , wxConvLocal , from[0] );
+}
+
+#endif // wxUSE_BASE
+
+#if wxUSE_GUI
+
+// Check whether this window wants to process messages, e.g. Stop button
+// in long calculations.
+bool wxCheckForInterrupt(wxWindow *WXUNUSED(wnd))
+{
+    // TODO
     return false;
 }
+
+// Return true if we have a colour display
+bool wxColourDisplay()
+{
+    return true;
+}
+
+#if wxOSX_USE_COCOA_OR_CARBON
+// Returns depth of screen
+int wxDisplayDepth()
+{
+    int theDepth = (int) CGDisplayBitsPerPixel(CGMainDisplayID());
+    return theDepth;
+}
+
+// Get size of display
+void wxDisplaySize(int *width, int *height)
+{
+    // TODO adapt for multi-displays
+    CGRect bounds = CGDisplayBounds(CGMainDisplayID());
+    if ( width )
+        *width = (int)bounds.size.width ;
+    if ( height )
+        *height = (int)bounds.size.height;
+}
+#endif
+
+void wxDisplaySizeMM(int *width, int *height)
+{
+    wxDisplaySize(width, height);
+    // on mac 72 is fixed (at least now;-)
+    double cvPt2Mm = 25.4 / 72;
+
+    if (width != NULL)
+        *width = int( *width * cvPt2Mm );
+
+    if (height != NULL)
+        *height = int( *height * cvPt2Mm );
+}
+
+
+wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
+{
+    // We suppose that toolkit version is the same as OS version under Mac
+    wxGetOsVersion(verMaj, verMin);
+
+    return wxPORT_OSX;
+}
+
+wxEventLoopBase* wxGUIAppTraits::CreateEventLoop()
+{
+    return new wxEventLoop;
+}
+
+wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
+{
+    return wxGenericFindWindowAtPoint(pt);
+}
+
+/*
+    Return the generic RGB color space. This is a 'get' function and the caller should
+    not release the returned value unless the caller retains it first. Usually callers
+    of this routine will immediately use the returned colorspace with CoreGraphics
+    so they typically do not need to retain it themselves.
+
+    This function creates the generic RGB color space once and hangs onto it so it can
+    return it whenever this function is called.
+*/
+
+CGColorSpaceRef wxMacGetGenericRGBColorSpace()
+{
+    static wxCFRef<CGColorSpaceRef> genericRGBColorSpace;
+
+    if (genericRGBColorSpace == NULL)
+    {
+#if wxOSX_USE_IPHONE
+        genericRGBColorSpace.reset( CGColorSpaceCreateDeviceRGB() );
+#else
+        genericRGBColorSpace.reset( CGColorSpaceCreateWithName( kCGColorSpaceGenericRGB ) );
+#endif
+    }
+
+    return genericRGBColorSpace;
+}
+
+#if wxOSX_USE_COCOA_OR_CARBON
+
+CGColorRef wxMacCreateCGColorFromHITheme( ThemeBrush brush )
+{
+    CGColorRef color ;
+    HIThemeBrushCreateCGColor( brush, &color );
+    return color;
+}
+
+#endif // wxOSX_USE_COCOA_OR_CARBON
+
+IMPLEMENT_ABSTRACT_CLASS( wxWidgetImpl , wxObject )
+
+wxWidgetImpl::wxWidgetImpl( wxWindowMac* peer , bool isRootControl )
+{
+    Init();
+    m_isRootControl = isRootControl;
+    m_wxPeer = peer;
+}
+
+wxWidgetImpl::wxWidgetImpl()
+{
+    Init();
+}
+
+wxWidgetImpl::~wxWidgetImpl()
+{
+}
+
+void wxWidgetImpl::Init()
+{
+    m_isRootControl = false;
+    m_wxPeer = NULL;
+    m_needsFocusRect = false;
+}
+
+void wxWidgetImpl::Destroy()
+{
+}
+
+void wxWidgetImpl::SetNeedsFocusRect( bool needs )
+{
+    m_needsFocusRect = needs;
+}
+
+bool wxWidgetImpl::NeedsFocusRect() const
+{
+    return m_needsFocusRect;
+}
+
+#endif // wxUSE_GUI
+
+//
+// TODO END move to utils_osx.cpp
+//
+
+//
+// carbon version
+//
+
+#if wxOSX_USE_CARBON
+
+#if wxUSE_BASE
 
 // Emit a beeeeeep
 void wxBell()
 {
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-    if ( AudioServicesPlayAlertSound )
+    if ( AudioServicesPlayAlertSound != NULL )
         AudioServicesPlayAlertSound(kUserPreferredAlert);
     else
 #endif
@@ -99,23 +291,9 @@ void wxBell()
 #endif
 }
 
-
 #endif // wxUSE_BASE
 
 #if wxUSE_GUI
-
-wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
-{
-    // We suppose that toolkit version is the same as OS version under Mac
-    wxGetOsVersion(verMaj, verMin);
-
-    return wxPORT_MAC;
-}
-
-wxEventLoopBase* wxGUIAppTraits::CreateEventLoop()
-{
-    return new wxEventLoop;
-}
 
 wxTimerImpl* wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
 {
@@ -190,82 +368,21 @@ wxString wxMacFindFolder( short        vol,
 
 #if wxUSE_GUI
 
-// Check whether this window wants to process messages, e.g. Stop button
-// in long calculations.
-bool wxCheckForInterrupt(wxWindow *WXUNUSED(wnd))
-{
-    // TODO
-    return false;
-}
-
 void wxGetMousePosition( int* x, int* y )
 {
-#if wxMAC_USE_QUICKDRAW
     Point pt;
     GetGlobalMouse(&pt);
-    *x = pt.h;
-    *y = pt.v;
-#else
-    // TODO
-#endif
+    if ( x )
+        *x = pt.h;
+    if ( y )
+        *y = pt.v;
 };
-
-// Return true if we have a colour display
-bool wxColourDisplay()
-{
-    return true;
-}
-
-// Returns depth of screen
-int wxDisplayDepth()
-{
-#if wxMAC_USE_QUICKDRAW
-    int theDepth = (int) CGDisplayBitsPerPixel(CGMainDisplayID());
-    Rect globRect;
-    SetRect(&globRect, -32760, -32760, 32760, 32760);
-    GDHandle    theMaxDevice;
-
-    theMaxDevice = GetMaxDevice(&globRect);
-    if (theMaxDevice != NULL)
-        theDepth = (**(**theMaxDevice).gdPMap).pixelSize;
-
-    return theDepth;
-#else
-    return 32; // TODO
-#endif
-}
-
-// Get size of display
-void wxDisplaySize(int *width, int *height)
-{
-    // TODO adapt for multi-displays
-    CGRect bounds = CGDisplayBounds(CGMainDisplayID());
-    if ( width )
-        *width = (int)bounds.size.width ;
-    if ( height )
-        *height = (int)bounds.size.height;
-}
-
-void wxDisplaySizeMM(int *width, int *height)
-{
-    wxDisplaySize(width, height);
-    // on mac 72 is fixed (at least now;-)
-    float cvPt2Mm = 25.4 / 72;
-
-    if (width != NULL)
-        *width = int( *width * cvPt2Mm );
-
-    if (height != NULL)
-        *height = int( *height * cvPt2Mm );
-}
 
 void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 {
 #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
-#if wxMAC_USE_QUICKDRAW
-
-        HIRect bounds ;
-        HIWindowGetAvailablePositioningBounds(kCGNullDirectDisplay,kHICoordSpace72DPIGlobal,
+    HIRect bounds ;
+    HIWindowGetAvailablePositioningBounds(kCGNullDirectDisplay,kHICoordSpace72DPIGlobal,
             &bounds);
     if ( x )
         *x = bounds.origin.x;
@@ -275,18 +392,6 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
         *width = bounds.size.width;
     if ( height )
         *height = bounds.size.height;
-#else
-    int w, h;
-    wxDisplaySize(&w,&h);
-    if ( x )
-        *x = 0;
-    if ( y )
-        *y = 24;
-    if ( width )
-        *width = w;
-    if ( height )
-        *height = h-24;
-#endif
 #else
     Rect r;
     GetAvailableWindowPositioningBounds( GetMainDevice() , &r );
@@ -301,95 +406,9 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 #endif
 }
 
-wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
-{
-    return wxGenericFindWindowAtPoint(pt);
-}
-
 #endif // wxUSE_GUI
 
 #if wxUSE_BASE
-
-#include <sys/utsname.h>
-
-wxString wxGetOsDescription()
-{
-    struct utsname name;
-    uname(&name);
-    return wxString::Format(_T("Mac OS X (%s %s %s)"),
-            wxString::FromAscii(name.sysname).c_str(),
-            wxString::FromAscii(name.release).c_str(),
-            wxString::FromAscii(name.machine).c_str());
-}
-
-#ifndef __DARWIN__
-wxString wxGetUserHome (const wxString& user)
-{
-    // TODO
-    return wxString();
-}
-
-bool wxGetDiskSpace(const wxString& path, wxDiskspaceSize_t *pTotal, wxDiskspaceSize_t *pFree)
-{
-    if ( path.empty() )
-        return false;
-
-    wxString p = path;
-    if (p[0u] == ':' )
-      p = wxGetCwd() + p;
-
-    int pos = p.Find(':');
-    if ( pos != wxNOT_FOUND )
-      p = p.Mid(1,pos);
-
-    p = p + wxT(":");
-
-    OSErr err = noErr;
-
-    FSRef fsRef;
-    err = wxMacPathToFSRef( p , &fsRef );
-    if ( noErr == err )
-    {
-        FSVolumeRefNum vRefNum;
-        err = FSGetVRefNum( &fsRef , &vRefNum );
-        if ( noErr == err )
-        {
-            UInt64 freeBytes , totalBytes;
-            err = FSGetVInfo( vRefNum , NULL , &freeBytes , &totalBytes );
-            if ( noErr == err )
-            {
-                if ( pTotal )
-                    *pTotal = wxDiskspaceSize_t( totalBytes );
-                if ( pFree )
-                    *pFree = wxDiskspaceSize_t( freeBytes );
-            }
-        }
-    }
-
-    return err == noErr;
-}
-#endif // !__DARWIN__
-
-//---------------------------------------------------------------------------
-// wxMac Specific utility functions
-//---------------------------------------------------------------------------
-
-void wxMacStringToPascal( const wxString&from , StringPtr to )
-{
-    wxCharBuffer buf = from.mb_str( wxConvLocal );
-    int len = strlen(buf);
-
-    if ( len > 255 )
-        len = 255;
-    to[0] = len;
-    memcpy( (char*) &to[1] , buf , len );
-}
-
-wxString wxMacMakeStringFromPascal( ConstStringPtr from )
-{
-    return wxString( (char*) &from[1] , wxConvLocal , from[0] );
-}
-
 // ----------------------------------------------------------------------------
 // Common Event Support
 // ----------------------------------------------------------------------------
@@ -398,6 +417,7 @@ void wxMacWakeUp()
 {
     OSStatus err = noErr;
 
+#if wxOSX_USE_CARBON
 #if 0
     // lead sometimes to race conditions, although all calls used should be thread safe ...
     static wxMacCarbonEvent s_wakeupEvent;
@@ -421,6 +441,7 @@ void wxMacWakeUp()
                         kEventAttributeNone );
     err = PostEventToQueue(GetMainEventQueue(), wakeupEvent,
                            kEventPriorityHigh );
+#endif
 #endif
 }
 
@@ -478,492 +499,6 @@ OSStatus wxMacCarbonEvent::SetParameter(EventParamName inName, EventParamType in
 // Control Access Support
 // ----------------------------------------------------------------------------
 
-#if wxMAC_USE_QUICKDRAW
-
-IMPLEMENT_DYNAMIC_CLASS( wxMacControl , wxObject )
-
-wxMacControl::wxMacControl()
-{
-    Init();
-}
-
-wxMacControl::wxMacControl(wxWindow* peer , bool isRootControl )
-{
-    Init();
-    m_peer = peer;
-    m_isRootControl = isRootControl;
-}
-
-wxMacControl::wxMacControl( wxWindow* peer , ControlRef control )
-{
-    Init();
-    m_peer = peer;
-    m_controlRef = control;
-}
-
-wxMacControl::wxMacControl( wxWindow* peer , WXWidget control )
-{
-    Init();
-    m_peer = peer;
-    m_controlRef = (ControlRef) control;
-}
-
-wxMacControl::~wxMacControl()
-{
-}
-
-void wxMacControl::Init()
-{
-    m_peer = NULL;
-    m_controlRef = NULL;
-    m_needsFocusRect = false;
-    m_isRootControl = false;
-}
-
-void wxMacControl::Dispose()
-{
-    wxASSERT_MSG( m_controlRef != NULL , wxT("Control Handle already NULL, Dispose called twice ?") );
-    wxASSERT_MSG( IsValidControlHandle(m_controlRef) , wxT("Invalid Control Handle (maybe already released) in Dispose") );
-
-    // we cannot check the ref count here anymore, as autorelease objects might delete their refs later
-    // we can have situations when being embedded, where the control gets deleted behind our back, so only
-    // CFRelease if we are safe
-    if ( IsValidControlHandle(m_controlRef) )
-        CFRelease(m_controlRef);
-    m_controlRef = NULL;
-}
-
-void wxMacControl::SetReference( URefCon data )
-{
-    SetControlReference( m_controlRef , data );
-}
-
-OSStatus wxMacControl::GetData(ControlPartCode inPartCode , ResType inTag , Size inBufferSize , void * inOutBuffer , Size * outActualSize ) const
-{
-    return ::GetControlData( m_controlRef , inPartCode , inTag , inBufferSize , inOutBuffer , outActualSize );
-}
-
-OSStatus wxMacControl::GetDataSize(ControlPartCode inPartCode , ResType inTag , Size * outActualSize ) const
-{
-    return ::GetControlDataSize( m_controlRef , inPartCode , inTag , outActualSize );
-}
-
-OSStatus wxMacControl::SetData(ControlPartCode inPartCode , ResType inTag , Size inSize , const void * inData)
-{
-    return ::SetControlData( m_controlRef , inPartCode , inTag , inSize , inData );
-}
-
-OSStatus wxMacControl::SendEvent( EventRef event , OptionBits inOptions )
-{
-    return SendEventToEventTargetWithOptions( event,
-        HIObjectGetEventTarget( (HIObjectRef) m_controlRef ), inOptions );
-}
-
-OSStatus wxMacControl::SendHICommand( HICommand &command , OptionBits inOptions )
-{
-    wxMacCarbonEvent event( kEventClassCommand , kEventCommandProcess );
-
-    event.SetParameter<HICommand>(kEventParamDirectObject,command);
-
-    return SendEvent( event , inOptions );
-}
-
-OSStatus wxMacControl::SendHICommand( UInt32 commandID , OptionBits inOptions  )
-{
-    HICommand command;
-
-    memset( &command, 0 , sizeof(command) );
-    command.commandID = commandID;
-    return SendHICommand( command , inOptions );
-}
-
-void wxMacControl::Flash( ControlPartCode part , UInt32 ticks )
-{
-    unsigned long finalTicks;
-
-    HiliteControl( m_controlRef , part );
-    Delay( ticks , &finalTicks );
-    HiliteControl( m_controlRef , kControlNoPart );
-}
-
-SInt32 wxMacControl::GetValue() const
-{
-    return ::GetControl32BitValue( m_controlRef );
-}
-
-SInt32 wxMacControl::GetMaximum() const
-{
-    return ::GetControl32BitMaximum( m_controlRef );
-}
-
-SInt32 wxMacControl::GetMinimum() const
-{
-    return ::GetControl32BitMinimum( m_controlRef );
-}
-
-void wxMacControl::SetValue( SInt32 v )
-{
-    ::SetControl32BitValue( m_controlRef , v );
-}
-
-void wxMacControl::SetMinimum( SInt32 v )
-{
-    ::SetControl32BitMinimum( m_controlRef , v );
-}
-
-void wxMacControl::SetMaximum( SInt32 v )
-{
-    ::SetControl32BitMaximum( m_controlRef , v );
-}
-
-void wxMacControl::SetValueAndRange( SInt32 value , SInt32 minimum , SInt32 maximum )
-{
-    ::SetControl32BitMinimum( m_controlRef , minimum );
-    ::SetControl32BitMaximum( m_controlRef , maximum );
-    ::SetControl32BitValue( m_controlRef , value );
-}
-
-OSStatus wxMacControl::SetFocus( ControlFocusPart focusPart )
-{
-    return SetKeyboardFocus( GetControlOwner( m_controlRef ), m_controlRef, focusPart );
-}
-
-bool wxMacControl::HasFocus() const
-{
-    ControlRef control;
-    GetKeyboardFocus( GetUserFocusWindow() , &control );
-    return control == m_controlRef;
-}
-
-void wxMacControl::SetNeedsFocusRect( bool needs )
-{
-    m_needsFocusRect = needs;
-}
-
-bool wxMacControl::NeedsFocusRect() const
-{
-    return m_needsFocusRect;
-}
-
-void wxMacControl::VisibilityChanged(bool WXUNUSED(shown))
-{
-}
-
-void wxMacControl::SuperChangedPosition()
-{
-}
-
-void wxMacControl::SetFont( const wxFont & font , const wxColour& foreground , long windowStyle )
-{
-    m_font = font;
-#if wxMAC_USE_CORE_TEXT
-    if ( UMAGetSystemVersion() >= 0x1050 )
-    {
-        HIViewPartCode part = 0;
-        HIThemeTextHorizontalFlush flush = kHIThemeTextHorizontalFlushDefault;
-        if ( ( windowStyle & wxALIGN_MASK ) & wxALIGN_CENTER_HORIZONTAL )
-            flush = kHIThemeTextHorizontalFlushCenter;
-        else if ( ( windowStyle & wxALIGN_MASK ) & wxALIGN_RIGHT )
-            flush = kHIThemeTextHorizontalFlushRight;
-        HIViewSetTextFont( m_controlRef , part , (CTFontRef) font.MacGetCTFont() );
-        HIViewSetTextHorizontalFlush( m_controlRef, part, flush );
-
-        if ( foreground != *wxBLACK )
-        {
-            ControlFontStyleRec fontStyle;
-            foreground.GetRGBColor( &fontStyle.foreColor );
-            fontStyle.flags = kControlUseForeColorMask;
-            ::SetControlFontStyle( m_controlRef , &fontStyle );
-        }
-
-    }
-#endif
-#if wxMAC_USE_ATSU_TEXT
-    ControlFontStyleRec fontStyle;
-    if ( font.MacGetThemeFontID() != kThemeCurrentPortFont )
-    {
-        switch ( font.MacGetThemeFontID() )
-        {
-            case kThemeSmallSystemFont :
-                fontStyle.font = kControlFontSmallSystemFont;
-                break;
-
-            case 109 : // mini font
-                fontStyle.font = -5;
-                break;
-
-            case kThemeSystemFont :
-                fontStyle.font = kControlFontBigSystemFont;
-                break;
-
-            default :
-                fontStyle.font = kControlFontBigSystemFont;
-                break;
-        }
-
-        fontStyle.flags = kControlUseFontMask;
-    }
-    else
-    {
-        fontStyle.font = font.MacGetFontNum();
-        fontStyle.style = font.MacGetFontStyle();
-        fontStyle.size = font.MacGetFontSize();
-        fontStyle.flags = kControlUseFontMask | kControlUseFaceMask | kControlUseSizeMask;
-    }
-
-    fontStyle.just = teJustLeft;
-    fontStyle.flags |= kControlUseJustMask;
-    if ( ( windowStyle & wxALIGN_MASK ) & wxALIGN_CENTER_HORIZONTAL )
-        fontStyle.just = teJustCenter;
-    else if ( ( windowStyle & wxALIGN_MASK ) & wxALIGN_RIGHT )
-        fontStyle.just = teJustRight;
-
-
-    // we only should do this in case of a non-standard color, as otherwise 'disabled' controls
-    // won't get grayed out by the system anymore
-
-    if ( foreground != *wxBLACK )
-    {
-        foreground.GetRGBColor( &fontStyle.foreColor );
-        fontStyle.flags |= kControlUseForeColorMask;
-    }
-
-    ::SetControlFontStyle( m_controlRef , &fontStyle );
-#endif
-}
-
-void wxMacControl::SetBackgroundColour( const wxColour &WXUNUSED(col) )
-{
-//    HITextViewSetBackgroundColor( m_textView , color );
-}
-
-void wxMacControl::SetRange( SInt32 minimum , SInt32 maximum )
-{
-    ::SetControl32BitMinimum( m_controlRef , minimum );
-    ::SetControl32BitMaximum( m_controlRef , maximum );
-}
-
-short wxMacControl::HandleKey( SInt16 keyCode,  SInt16 charCode, EventModifiers modifiers )
-{
-#ifndef __LP64__
-    return HandleControlKey( m_controlRef , keyCode , charCode , modifiers );
-#else
-    return 0;
-#endif
-}
-
-void wxMacControl::SetActionProc( ControlActionUPP   actionProc )
-{
-    SetControlAction( m_controlRef , actionProc );
-}
-
-void wxMacControl::SetViewSize( SInt32 viewSize )
-{
-    SetControlViewSize(m_controlRef , viewSize );
-}
-
-SInt32 wxMacControl::GetViewSize() const
-{
-    return GetControlViewSize( m_controlRef );
-}
-
-bool wxMacControl::IsVisible() const
-{
-    return IsControlVisible( m_controlRef );
-}
-
-void wxMacControl::SetVisibility( bool visible , bool redraw )
-{
-    SetControlVisibility( m_controlRef , visible , redraw );
-}
-
-bool wxMacControl::IsEnabled() const
-{
-    return IsControlEnabled( m_controlRef );
-}
-
-bool wxMacControl::IsActive() const
-{
-    return IsControlActive( m_controlRef );
-}
-
-void wxMacControl::Enable( bool enable )
-{
-    if ( enable )
-        EnableControl( m_controlRef );
-    else
-        DisableControl( m_controlRef );
-}
-
-void wxMacControl::SetDrawingEnabled( bool enable )
-{
-    HIViewSetDrawingEnabled( m_controlRef , enable );
-}
-
-bool wxMacControl::GetNeedsDisplay() const
-{
-    return HIViewGetNeedsDisplay( m_controlRef );
-}
-
-void wxMacControl::SetNeedsDisplay( RgnHandle where )
-{
-    if ( !IsVisible() )
-        return;
-
-    HIViewSetNeedsDisplayInRegion( m_controlRef , where , true );
-}
-
-void wxMacControl::SetNeedsDisplay( Rect* where )
-{
-    if ( !IsVisible() )
-        return;
-
-    if ( where != NULL )
-    {
-        RgnHandle update = NewRgn();
-        RectRgn( update , where );
-        HIViewSetNeedsDisplayInRegion( m_controlRef , update , true );
-        DisposeRgn( update );
-    }
-    else
-        HIViewSetNeedsDisplay( m_controlRef , true );
-}
-
-void  wxMacControl::Convert( wxPoint *pt , wxMacControl *from , wxMacControl *to )
-{
-    HIPoint hiPoint;
-
-    hiPoint.x = pt->x;
-    hiPoint.y = pt->y;
-    HIViewConvertPoint( &hiPoint , from->m_controlRef , to->m_controlRef  );
-    pt->x = (int)hiPoint.x;
-    pt->y = (int)hiPoint.y;
-}
-
-void wxMacControl::SetRect( Rect *r )
-{
-        //A HIRect is actually a CGRect on OSX - which consists of two structures -
-        //CGPoint and CGSize, which have two floats each
-        HIRect hir = { { r->left , r->top }, { r->right - r->left , r->bottom - r->top } };
-        HIViewSetFrame ( m_controlRef , &hir );
-        // eventuall we might have to do a SetVisibility( false , true );
-        // before and a SetVisibility( true , true ); after
-}
-
-void wxMacControl::GetRect( Rect *r )
-{
-    GetControlBounds( m_controlRef , r );
-}
-
-void wxMacControl::GetRectInWindowCoords( Rect *r )
-{
-    GetControlBounds( m_controlRef , r ) ;
-
-    WindowRef tlwref = GetControlOwner( m_controlRef ) ;
-
-    wxNonOwnedWindow* tlwwx = wxFindWinFromMacWindow( tlwref ) ;
-    if ( tlwwx != NULL )
-    {
-        ControlRef rootControl = tlwwx->GetPeer()->GetControlRef() ;
-        HIPoint hiPoint = CGPointMake( 0 , 0 ) ;
-        HIViewConvertPoint( &hiPoint , HIViewGetSuperview(m_controlRef) , rootControl ) ;
-        OffsetRect( r , (short) hiPoint.x , (short) hiPoint.y ) ;
-    }
-}
-
-void wxMacControl::GetBestRect( Rect *r )
-{
-    short   baselineoffset;
-
-    GetBestControlRect( m_controlRef , r , &baselineoffset );
-}
-
-void wxMacControl::SetLabel( const wxString &title )
-{
-    wxFontEncoding encoding;
-
-    if ( m_font.Ok() )
-        encoding = m_font.GetEncoding();
-    else
-        encoding = wxFont::GetDefaultEncoding();
-
-    SetControlTitleWithCFString( m_controlRef , wxCFStringRef( title , encoding ) );
-}
-
-void wxMacControl::GetFeatures( UInt32 * features )
-{
-    GetControlFeatures( m_controlRef , features );
-}
-
-OSStatus wxMacControl::GetRegion( ControlPartCode partCode , RgnHandle region )
-{
-    OSStatus err = GetControlRegion( m_controlRef , partCode , region );
-    return err;
-}
-
-OSStatus wxMacControl::SetZOrder( bool above , wxMacControl* other )
-{
-    return HIViewSetZOrder( m_controlRef,above ? kHIViewZOrderAbove : kHIViewZOrderBelow,
-       (other != NULL) ? other->m_controlRef : NULL);
-}
-
-// SetNeedsDisplay would not invalidate the children
-static void InvalidateControlAndChildren( HIViewRef control )
-{
-    HIViewSetNeedsDisplay( control , true );
-    UInt16 childrenCount = 0;
-    OSStatus err = CountSubControls( control , &childrenCount );
-    if ( err == errControlIsNotEmbedder )
-        return;
-
-    wxASSERT_MSG( err == noErr , wxT("Unexpected error when accessing subcontrols") );
-
-    for ( UInt16 i = childrenCount; i >=1; --i )
-    {
-        HIViewRef child;
-
-        err = GetIndexedSubControl( control , i , & child );
-        if ( err == errControlIsNotEmbedder )
-            return;
-
-        InvalidateControlAndChildren( child );
-    }
-}
-
-void wxMacControl::InvalidateWithChildren()
-{
-    InvalidateControlAndChildren( m_controlRef );
-}
-
-void wxMacControl::ScrollRect( wxRect *r , int dx , int dy )
-{
-    wxASSERT( r != NULL );
-
-    HIRect scrollarea = CGRectMake( r->x , r->y , r->width , r->height);
-    HIViewScrollRect ( m_controlRef , &scrollarea , dx ,dy );
-}
-
-OSType wxMacCreator = 'WXMC';
-OSType wxMacControlProperty = 'MCCT';
-
-void wxMacControl::SetReferenceInNativeControl()
-{
-    void * data = this;
-    verify_noerr( SetControlProperty ( m_controlRef ,
-        wxMacCreator,wxMacControlProperty, sizeof(data), &data ) );
-}
-
-wxMacControl* wxMacControl::GetReferenceFromNativeControl(ControlRef control)
-{
-    wxMacControl* ctl = NULL;
-    ByteCount actualSize;
-    if ( GetControlProperty( control ,wxMacCreator,wxMacControlProperty, sizeof(ctl) ,
-        &actualSize , &ctl ) == noErr )
-    {
-        return ctl;
-    }
-    return NULL;
-}
 
 // ============================================================================
 // DataBrowser Wrapper
@@ -1919,7 +1454,7 @@ void wxMacDataItemBrowserControl::MacScrollTo( unsigned int n )
     UInt32 linetop = n * ((UInt32) height );
     UInt32 linebottom = linetop + height;
     Rect rect ;
-    GetRect( &rect );
+    GetControlBounds( m_controlRef, &rect );
 
     if ( linetop < top || linebottom > (top + rect.bottom - rect.top ) )
         SetScrollPosition( wxMax( n-2, 0 ) * ((UInt32)height) , left ) ;
@@ -1927,84 +1462,6 @@ void wxMacDataItemBrowserControl::MacScrollTo( unsigned int n )
     RevealItem( item , kDataBrowserRevealWithoutSelecting );
 }
 
-
-
-//
-// Tab Control
-//
-
-OSStatus wxMacControl::SetTabEnabled( SInt16 tabNo , bool enable )
-{
-    return ::SetTabEnabled( m_controlRef , tabNo , enable );
-}
-
-#endif
-
-//
-// Quartz Support
-//
-
-/*
-    Return the generic RGB color space. This is a 'get' function and the caller should
-    not release the returned value unless the caller retains it first. Usually callers
-    of this routine will immediately use the returned colorspace with CoreGraphics
-    so they typically do not need to retain it themselves.
-
-    This function creates the generic RGB color space once and hangs onto it so it can
-    return it whenever this function is called.
-*/
-
-CGColorSpaceRef wxMacGetGenericRGBColorSpace()
-{
-    static wxCFRef<CGColorSpaceRef> genericRGBColorSpace;
-
-    if (genericRGBColorSpace == NULL)
-    {
-        genericRGBColorSpace.reset( CGColorSpaceCreateWithName( kCGColorSpaceGenericRGB ) );
-    }
-
-    return genericRGBColorSpace;
-}
-
-CGColorRef wxMacCreateCGColorFromHITheme( ThemeBrush brush )
-{
-    CGColorRef color ;
-    HIThemeBrushCreateCGColor( brush, &color );
-    return color;
-}
-
-#if wxMAC_USE_QUICKDRAW
-
-static inline void PointFromHIPoint(const HIPoint& p, Point *pt)
-{
-    pt->h = wx_static_cast(short, p.x);
-    pt->v = wx_static_cast(short, p.y);
-}
-
-void wxMacGlobalToLocal( WindowRef window , Point*pt )
-{
-    HIPoint p = CGPointMake( pt->h, pt->v );
-    HIViewRef contentView ;
-    // TODO check toolbar offset
-    HIViewFindByID( HIViewGetRoot( window ), kHIViewWindowContentID , &contentView) ;
-    HIPointConvert( &p, kHICoordSpace72DPIGlobal, NULL, kHICoordSpaceView, contentView );
-    PointFromHIPoint(p, pt);
-}
-
-void wxMacLocalToGlobal( WindowRef window , Point*pt )
-{
-    HIPoint p = CGPointMake( pt->h, pt->v );
-    HIViewRef contentView ;
-    // TODO check toolbar offset
-    HIViewFindByID( HIViewGetRoot( window ), kHIViewWindowContentID , &contentView) ;
-    HIPointConvert( &p, kHICoordSpaceView, contentView, kHICoordSpace72DPIGlobal, NULL );
-    PointFromHIPoint(p, pt);
-}
-
-#endif // wxMAC_USE_QUICKDRAW
-
 #endif // wxUSE_GUI
 
-#if wxUSE_BASE
-
-#endif
+#endif // wxOSX_USE_CARBON

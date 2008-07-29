@@ -2448,7 +2448,7 @@ void wxMacListCtrlItem::Notification(wxMacDataItemBrowserControl *owner ,
         return  ;
     }
 
-    wxListCtrl *list = wxDynamicCast( owner->GetPeer() , wxListCtrl );
+    wxListCtrl *list = wxDynamicCast( owner->GetWXPeer() , wxListCtrl );
     if ( list && lb )
     {
         bool trigger = false;
@@ -2669,7 +2669,7 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
     int imgIndex = -1;
     short listColumn = property - kMinColumnId;
 
-    wxListCtrl* list = wxDynamicCast( GetPeer() , wxListCtrl );
+    wxListCtrl* list = wxDynamicCast( GetWXPeer() , wxListCtrl );
     wxMacListCtrlItem* lcItem;
     wxColour color = *wxBLACK;
     wxColour bgColor = wxNullColour;
@@ -2905,7 +2905,7 @@ OSStatus wxMacDataBrowserListCtrlControl::GetSetItemData(DataBrowserItemID itemI
     short listColumn = property - kMinColumnId;
 
     OSStatus err = errDataBrowserPropertyNotSupported;
-    wxListCtrl* list = wxDynamicCast( GetPeer() , wxListCtrl );
+    wxListCtrl* list = wxDynamicCast( GetWXPeer() , wxListCtrl );
     wxMacListCtrlItem* lcItem = NULL;
 
     if (listColumn >= 0)
@@ -3024,7 +3024,7 @@ void wxMacDataBrowserListCtrlControl::ItemNotification(DataBrowserItemID itemID,
         return  ;
     }
 
-    wxListCtrl *list = wxDynamicCast( GetPeer() , wxListCtrl );
+    wxListCtrl *list = wxDynamicCast( GetWXPeer() , wxListCtrl );
     if ( list )
     {
         bool trigger = false;
@@ -3102,7 +3102,7 @@ Boolean wxMacDataBrowserListCtrlControl::CompareItems(DataBrowserItemID itemOneI
 
     int colId = sortProperty - kMinColumnId;
 
-    wxListCtrl* list = wxDynamicCast( GetPeer() , wxListCtrl );
+    wxListCtrl* list = wxDynamicCast( GetWXPeer() , wxListCtrl );
 
     DataBrowserSortOrder sort;
     verify_noerr(GetSortOrder(&sort));
@@ -3175,7 +3175,7 @@ void wxMacDataBrowserListCtrlControl::MacSetColumnInfo( unsigned int row, unsign
         listItem->SetOrder(row);
         UpdateState(dataItem, item);
 
-        wxListCtrl* list = wxDynamicCast( GetPeer() , wxListCtrl );
+        wxListCtrl* list = wxDynamicCast( GetWXPeer() , wxListCtrl );
 
         // NB: When this call was made before a control was completely shown, it would
         // update the item prematurely (i.e. no text would be listed) and, on show,

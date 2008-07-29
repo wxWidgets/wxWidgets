@@ -31,35 +31,9 @@ long UMAGetSystemVersion()
     return sUMASystemVersion ; 
 }
 
-void UMAInitToolbox( UInt16 WXUNUSED(inMoreMastersCalls),
-                     bool WXUNUSED(isEmbedded) )
-{
-#if 0 // ndef __LP64__
-    {
-        FontFamilyID fontId ;
-        Str255 fontName ;
-        SInt16 fontSize ;
-        Style fontStyle ;
-
-        GetThemeFont(kThemeSmallSystemFont , GetApplicationScript() , fontName , &fontSize , &fontStyle ) ;
-        GetFNum( fontName, &fontId );
-
-        TXNMacOSPreferredFontDescription fontDescriptions[] =
-        {
-            { fontId , (fontSize << 16) , kTXNDefaultFontStyle, kTXNSystemDefaultEncoding }
-        } ;
-        int noOfFontDescriptions = sizeof( fontDescriptions ) / sizeof(TXNMacOSPreferredFontDescription) ;
-
-        OptionBits options = 0 ;
-
-        TXNInitTextension( fontDescriptions,  noOfFontDescriptions, options );
-    }
-#endif
-}
-
 // menu manager
 
-#if 1 // not yet wxMAC_USE_COCOA == 0
+#if wxOSX_USE_CARBON
 
 MenuRef UMANewMenu( SInt16 id , const wxString& title , wxFontEncoding encoding )
 {
@@ -270,10 +244,6 @@ void UMAInsertMenuItem( MenuRef menu , const wxString& title, wxFontEncoding enc
     UMASetMenuItemText(menu, item+1 , title , encoding );
     UMASetMenuItemShortcut( menu , item+1 , entry ) ;
 }
-
-#endif
-
-#if 1 // not yet wxMAC_USE_COCOA == 0
 
 static OSStatus UMAGetHelpMenu(
                                MenuRef *        outHelpMenu,

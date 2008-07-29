@@ -61,7 +61,7 @@ void wxAboutBox(const wxAboutDialogInfo& info)
     // Mac native about box currently can show only name, version, copyright
     // and description fields and we also shoehorn the credits text into the
     // description but if we have anything else we must use the generic version
-#ifndef __LP64__
+#if wxOSX_USE_CARBON
     if ( info.IsSimple() )
     {
         AboutBoxOptions opts;

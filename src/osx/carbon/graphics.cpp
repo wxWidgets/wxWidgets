@@ -35,8 +35,16 @@
 #endif
 
 #ifdef __WXMAC__
-    #include "wx/osx/uma.h"
+    #include "wx/osx/private.h"
     #include "wx/osx/dcprint.h"
+    #include "wx/osx/dcclient.h"
+    #include "wx/osx/dcmemory.h"
+#if wxOSX_USE_CARBON
+#include "wx/osx/uma.h"
+#else
+#include "wx/osx/private.h"
+#endif
+
 #else
     #include "CoreServices/CoreServices.h"
     #include "ApplicationServices/ApplicationServices.h"
@@ -92,12 +100,12 @@ OSStatus wxMacDrawCGImage(
                   const CGRect *  inBounds,
                   CGImageRef      inImage)
 {
-#if defined( __LP64__ ) || defined(__WXCOCOA__)
+#if wxOSX_USE_CARBON
+    return HIViewDrawCGImage( inContext, inBounds, inImage );
+#else
     // todo flip
     CGContextDrawImage(inContext, *inBounds, inImage );
     return noErr;
-#else
-    return HIViewDrawCGImage( inContext, inBounds, inImage );
 #endif
 }
 
@@ -122,7 +130,7 @@ CGColorRef wxMacCreateCGColor( const wxColour& col )
     return retval;
 }
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5 && defined(wxMAC_USE_CORE_TEXT)
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5 && wxMAC_USE_CORE_TEXT
 
 CTFontRef wxMacCreateCTFont( const wxFont& font )
 {
@@ -758,6 +766,14 @@ CGFunctionRef wxMacCoreGraphicsBrushData::CreateGradientFunction( const wxColour
 // Font
 //
 
+#if wxOSX_USE_IPHONE
+
+extern UIFont* CreateUIFont( const wxFont& font );
+extern void DrawTextInContext( CGContextRef context, CGPoint where, UIFont *font, NSString* text );
+extern CGSize MeasureTextInContext( UIFont *font, NSString* text );
+
+#endif
+
 class wxMacCoreGraphicsFontData : public wxGraphicsObjectRefData
 {
 public:
@@ -773,6 +789,9 @@ public:
     wxColour GetColour() const { return m_colour ; }
 
     bool GetUnderlined() const { return m_underlined ; }
+#if wxOSX_USE_IPHONE
+    UIFont* GetUIFont() const { return m_uiFont; }
+#endif
 private :
     wxColour m_colour;
     bool m_underlined;
@@ -781,6 +800,9 @@ private :
 #endif
 #if wxMAC_USE_CORE_TEXT
     wxCFRef< CTFontRef > m_ctFont;
+#endif
+#if wxOSX_USE_IPHONE
+    UIFont*  m_uiFont;
 #endif
 };
 
@@ -791,6 +813,10 @@ wxMacCoreGraphicsFontData::wxMacCoreGraphicsFontData(wxGraphicsRenderer* rendere
 
 #if wxMAC_USE_CORE_TEXT
     m_ctFont.reset( wxMacCreateCTFont( font ) );
+#endif
+#if wxOSX_USE_IPHONE
+    m_uiFont = CreateUIFont(font);
+    wxMacCocoaRetain( m_uiFont );
 #endif
 #if wxMAC_USE_ATSU_TEXT
     OSStatus status = noErr;
@@ -827,8 +853,6 @@ wxMacCoreGraphicsFontData::wxMacCoreGraphicsFontData(wxGraphicsRenderer* rendere
 
     wxASSERT_MSG( status == noErr , wxT("couldn't modify ATSU style") );
 #endif
-#if wxMAC_USE_CG_TEXT
-#endif
 }
 
 wxMacCoreGraphicsFontData::~wxMacCoreGraphicsFontData()
@@ -842,7 +866,8 @@ wxMacCoreGraphicsFontData::~wxMacCoreGraphicsFontData()
         m_macATSUIStyle = NULL;
     }
 #endif
-#if wxMAC_USE_CG_TEXT
+#if wxOSX_USE_IPHONE
+    wxMacCocoaRelease( m_uiFont );
 #endif
 }
 
@@ -1244,7 +1269,9 @@ class WXDLLEXPORT wxMacCoreGraphicsContext : public wxGraphicsContext
 public:
     wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, CGContextRef cgcontext, wxDouble width = 0, wxDouble height = 0 );
 
+#if wxOSX_USE_CARBON
     wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, WindowRef window );
+#endif
 
     wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, wxWindow* window );
 
@@ -1353,20 +1380,23 @@ public:
 
     void SetNativeContext( CGContextRef cg );
 
-    DECLARE_NO_COPY_CLASS(wxMacCoreGraphicsContext)
-    DECLARE_DYNAMIC_CLASS(wxMacCoreGraphicsContext)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxMacCoreGraphicsContext)
 
 private:
     void EnsureIsValid();
 
     CGContextRef m_cgContext;
+#if wxOSX_USE_CARBON
     WindowRef m_windowRef;
+#endif
     bool m_releaseContext;
     CGAffineTransform m_windowTransform;
     wxDouble m_width;
     wxDouble m_height;
 
+#if wxOSX_USE_CARBON
     wxCFRef<HIShapeRef> m_clipRgn;
+#endif
 };
 
 //-----------------------------------------------------------------------------
@@ -1411,7 +1441,9 @@ void wxMacCoreGraphicsContext::Init()
 {
     m_cgContext = NULL;
     m_releaseContext = false;
+#if wxOSX_USE_CARBON
     m_windowRef = NULL;
+#endif
     m_width = 0;
     m_height = 0;
 }
@@ -1424,11 +1456,13 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer
     m_height = height;
 }
 
+#if wxOSX_USE_CARBON
 wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, WindowRef window ): wxGraphicsContext(renderer)
 {
     Init();
     m_windowRef = window;
 }
+#endif
 
 wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, wxWindow* window ): wxGraphicsContext(renderer)
 {
@@ -1438,7 +1472,7 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer
     originX = originY = 0;
 
     Rect bounds = { 0,0,0,0 };
-#if defined( __LP64__ ) || defined(__WXCOCOA__)
+#if defined(__WXCOCOA__) || !wxOSX_USE_CARBON
 #else
     m_windowRef = (WindowRef) window->MacGetTopLevelWindowRef();
     window->MacWindowToRootWindow( &originX , &originY );
@@ -1499,12 +1533,10 @@ void wxMacCoreGraphicsContext::EnsureIsValid()
 {
     if ( !m_cgContext )
     {
-        OSStatus status =
-#if ! ( defined( __LP64__ ) || defined(__WXCOCOA__) )
-            QDBeginCGContext( GetWindowPort( m_windowRef ) , &m_cgContext );
+#if defined(__WXCOCOA__) || ! wxOSX_USE_CARBON
+        wxFAIL_MSG("Cannot create wxDCs lazily");
 #else
-            paramErr;
-#endif
+        OSStatus status = QDBeginCGContext( GetWindowPort( m_windowRef ) , &m_cgContext );
         if ( status != noErr )
         {
             wxFAIL_MSG("Cannot nest wxDCs on the same window");
@@ -1532,6 +1564,7 @@ void wxMacCoreGraphicsContext::EnsureIsValid()
             }
         }
         CGContextSaveGState( m_cgContext );
+#endif
     }
 }
 
@@ -1548,8 +1581,12 @@ bool wxMacCoreGraphicsContext::SetLogicalFunction( int function )
     bool shouldAntiAlias = true;
     CGBlendMode mode = kCGBlendModeNormal;
 
-#if defined(__WXMAC__) && ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5 )
+#if defined(__WXMAC__) && ( wxOSX_USE_IPHONE || ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5 ) )
+#if wxOSX_USE_IPHONE
+    if ( 1 )
+#else
     if ( UMAGetSystemVersion() >= 0x1050 )
+#endif
     {
         retval = true;
         switch ( function )
@@ -1597,7 +1634,7 @@ bool wxMacCoreGraphicsContext::SetLogicalFunction( int function )
 
 void wxMacCoreGraphicsContext::Clip( const wxRegion &region )
 {
-#ifdef __WXMAC__
+#if wxOSX_USE_CARBON
     if( m_cgContext )
     {
         wxCFRef<HIShapeRef> shape = wxCFRefFromGet(region.GetWXHRGN());
@@ -1623,6 +1660,9 @@ void wxMacCoreGraphicsContext::Clip( const wxRegion &region )
         HIShapeOffset( mutableShape, transformedOrigin.x, transformedOrigin.y );
         m_clipRgn.reset(mutableShape);
     }
+#else
+    // allow usage as measuring context
+    // wxASSERT_MSG( m_cgContext != NULL, "Needs a valid context for clipping" );
 #endif
 }
 
@@ -1636,10 +1676,15 @@ void wxMacCoreGraphicsContext::Clip( wxDouble x, wxDouble y, wxDouble w, wxDoubl
     }
     else
     {
+#if wxOSX_USE_CARBON
         // the clipping itself must be stored as device coordinates, otherwise
         // we cannot apply it back correctly
         r.origin= CGPointApplyAffineTransform( r.origin, m_windowTransform );
         m_clipRgn.reset(HIShapeCreateWithRect(&r));
+#else
+    // allow usage as measuring context
+    // wxFAIL_MSG( "Needs a valid context for clipping" );
+#endif
     }
 }
 
@@ -1660,7 +1705,12 @@ void wxMacCoreGraphicsContext::ResetClip()
     }
     else
     {
+#if wxOSX_USE_CARBON
         m_clipRgn.reset();
+#else
+    // allow usage as measuring context
+    // wxFAIL_MSG( "Needs a valid context for clipping" );
+#endif
     }
 }
 
@@ -1765,7 +1815,7 @@ void wxMacCoreGraphicsContext::SetNativeContext( CGContextRef cg )
         CGContextRestoreGState( m_cgContext );
         if ( m_releaseContext )
         {
-#if ! ( defined( __LP64__ ) || defined(__WXCOCOA__) )
+#if wxOSX_USE_CARBON
             QDEndCGContext( GetWindowPort( m_windowRef ) , &m_cgContext);
 #endif
         }
@@ -1868,7 +1918,7 @@ void wxMacCoreGraphicsContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDoubl
     CGContextSaveGState( m_cgContext );
     CGContextTranslateCTM( m_cgContext,(CGFloat) x ,(CGFloat) (y + h) );
     CGContextScaleCTM( m_cgContext, 1, -1 );
-#ifdef __WXMAC__
+#if wxOSX_USE_CARBON
     PlotIconRefInContext( m_cgContext , &r , kAlignNone , kTransformNone ,
         NULL , kPlotIconRefNormalFlags , MAC_WXHICON( icon.GetHICON() ) );
 #endif
@@ -1930,7 +1980,19 @@ void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDoub
     }
 #endif
 #if wxMAC_USE_CG_TEXT
-    // TODO core graphics text implementation here
+    wxMacCoreGraphicsFontData* fref = (wxMacCoreGraphicsFontData*)m_font.GetRefData();
+
+    CGContextSaveGState(m_cgContext);
+
+    CGColorRef col = wxMacCreateCGColor( fref->GetColour() );
+    CGContextSetTextDrawingMode (m_cgContext, kCGTextFill); 
+    CGContextSetFillColorWithColor( m_cgContext, col );
+
+    wxCFStringRef text(str, wxLocale::GetSystemEncoding() );
+    DrawTextInContext( m_cgContext, CGPointMake( x, y ), fref->GetUIFont() , text.AsNSString() );
+
+    CGContextRestoreGState(m_cgContext);
+    CFRelease( col );
 #endif
 }
 
@@ -2122,7 +2184,21 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
     }
 #endif
 #if wxMAC_USE_CG_TEXT
-    // TODO core graphics text implementation here
+    wxMacCoreGraphicsFontData* fref = (wxMacCoreGraphicsFontData*)m_font.GetRefData();
+
+    wxCFStringRef text(str, wxLocale::GetSystemEncoding() );
+    CGSize sz = MeasureTextInContext( fref->GetUIFont() , text.AsNSString() );
+    
+    if ( height )
+        *height = sz.height;
+        /*
+    if ( descent )
+        *descent = FixedToInt(textDescent);
+    if ( externalLeading )
+        *externalLeading = 0;
+        */
+    if ( width )
+        *width = sz.width;
 #endif
 }
 
@@ -2338,7 +2414,7 @@ wxGraphicsRenderer* wxGraphicsRenderer::GetDefaultRenderer()
     return &gs_MacCoreGraphicsRenderer;
 }
 
-#ifdef __WXCOCOA__
+#if defined( __WXCOCOA__ ) || wxOSX_USE_COCOA
 extern CGContextRef wxMacGetContextFromCurrentNSContext() ;
 #endif
 
@@ -2379,6 +2455,7 @@ wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxMemoryDC& 
 
 wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxPrinterDC& dc )
 {
+#if wxUSE_PRINTING_ARCHITECTURE
 #ifdef __WXMAC__
     const wxDCImpl* impl = dc.GetImpl();
     wxPrinterDCImpl *print_impl = wxDynamicCast( impl, wxPrinterDCImpl );
@@ -2390,6 +2467,7 @@ wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxPrinterDC&
             (CGContextRef)(print_impl->GetGraphicsContext()->GetNativeContext()), (wxDouble) w, (wxDouble) h );
     }
 #endif
+#endif
     return NULL;
 }
 
@@ -2398,10 +2476,13 @@ wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContextFromNativeContext( v
     return new wxMacCoreGraphicsContext(this,(CGContextRef)context);
 }
 
-
 wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContextFromNativeWindow( void * window )
 {
+#if wxOSX_USE_CARBON
     return new wxMacCoreGraphicsContext(this,(WindowRef)window);
+#else
+    return NULL;
+#endif
 }
 
 wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( wxWindow* window )

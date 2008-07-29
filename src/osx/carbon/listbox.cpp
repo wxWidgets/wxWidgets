@@ -426,7 +426,7 @@ void wxMacListBoxItem::Notification(wxMacDataItemBrowserControl *owner ,
         return;
     }
 
-    wxListBox *list = wxDynamicCast( owner->GetPeer() , wxListBox );
+    wxListBox *list = wxDynamicCast( owner->GetWXPeer() , wxListBox );
     wxCHECK_RET( list != NULL , wxT("Listbox expected"));
 
     if (message == kDataBrowserItemDoubleClicked)
@@ -535,7 +535,7 @@ void wxMacDataBrowserListControl::ItemNotification(
                         DataBrowserItemNotification message,
                         DataBrowserItemDataRef itemData)
 {
-    wxListBox *list = wxDynamicCast( GetPeer() , wxListBox );
+    wxListBox *list = wxDynamicCast( GetWXPeer() , wxListBox );
     wxCHECK_RET( list != NULL , wxT("Listbox expected"));
     
     if (list->HasMultipleSelection() && (message == kDataBrowserSelectionSetChanged) && (!list->MacGetBlockEvents()))
@@ -549,7 +549,7 @@ void wxMacDataBrowserListControl::ItemNotification(
         wxCommandEvent event( wxEVT_COMMAND_LISTBOX_SELECTED, list->GetId() );
         
         int sel = list->GetSelection();
-        if ((sel < 0) || (sel > list->GetCount()))  // OS X can select an item below the last item (why?)
+        if ((sel < 0) || (sel > (int) list->GetCount()))  // OS X can select an item below the last item (why?)
            return;
         event.SetEventObject( list );
         if ( list->HasClientObjectData() )
@@ -566,12 +566,12 @@ void wxMacDataBrowserListControl::ItemNotification(
     // call super for item level(wxMacDataItem->Notification) callback processing
     wxMacDataItemBrowserControl::ItemNotification( itemID, message, itemData);
 }
-
+/*
 wxWindow * wxMacDataBrowserListControl::GetPeer() const
 {
-    return wxDynamicCast( wxMacControl::GetPeer() , wxWindow );
+    return wxDynamicCast( wxMacControl::GetWX() , wxWindow );
 }
-
+*/
 wxMacDataItem* wxMacDataBrowserListControl::CreateItem()
 {
     return new wxMacListBoxItem();

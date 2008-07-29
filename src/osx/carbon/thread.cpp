@@ -25,7 +25,12 @@
 
 #include "wx/thread.h"
 
+#if wxOSX_USE_COCOA_OR_CARBON
 #include <CoreServices/CoreServices.h>
+#else
+#include <Foundation/Foundation.h>
+#endif
+
 #include "wx/osx/uma.h"
 
 // the possible states of the thread:

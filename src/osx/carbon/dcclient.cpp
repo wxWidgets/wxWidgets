@@ -26,6 +26,7 @@
 #include "wx/graphics.h"
 #include "wx/rawbmp.h"
 #include "wx/osx/private.h"
+#include "wx/osx/dcclient.h"
 
 //-----------------------------------------------------------------------------
 // wxWindowDCImpl
@@ -39,21 +40,20 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner )
     m_release = false;
 }
 
+
 wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window )
    : wxGCDCImpl( owner )
 {
     m_window = window;
     
-    WindowRef rootwindow = (WindowRef) window->MacGetTopLevelWindowRef() ;
-    if (!rootwindow)
-        return;
-
     m_ok = true ;
 
     m_window->GetSize( &m_width , &m_height);
     if ( !m_window->IsShownOnScreen() )
         m_width = m_height = 0;
+
     CGContextRef cg = (CGContextRef) window->MacGetCGContextRef();
+
     m_release = false;
     if ( cg == NULL )
     {
@@ -96,6 +96,7 @@ void wxWindowDCImpl::DoGetSize( int* width, int* height ) const
         *height = m_height;
 }
 
+#if wxOSX_USE_CARBON
 wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
 {
     // wxScreenDC is derived from wxWindowDC, so a screen dc will
@@ -103,9 +104,6 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
     if (!m_window)
         return wxNullBitmap;
 
-#ifdef __LP64__
-    return wxNullBitmap;
-#else
     ControlRef handle = (ControlRef) m_window->GetHandle();
     if ( !handle )
         return wxNullBitmap;
@@ -139,8 +137,8 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
     CGContextRestoreGState(context);
 
     return bmp;
-#endif
 }
+#endif
 
 /*
  * wxClientDCImpl
