@@ -227,10 +227,21 @@ struct wxFormatStringArgumentFinder<const wxFormatString&>
 
 template<>
 struct wxFormatStringArgumentFinder<wxFormatString>
-{
-    static wxFormatStringArgument find(const wxFormatString& arg)
-        { return wxFormatStringArgument(&arg); }
-};
+    : public wxFormatStringArgumentFinder<const wxFormatString&> {};
+
+// avoid passing big objects by value to wxFormatStringArgumentFinder::find()
+// (and especially wx[W]CharBuffer with its auto_ptr<> style semantics!):
+template<>
+struct wxFormatStringArgumentFinder<wxString>
+    : public wxFormatStringArgumentFinder<const wxString&> {};
+
+template<>
+struct wxFormatStringArgumentFinder<wxCharBuffer>
+    : public wxFormatStringArgumentFinder<const wxCharBuffer&> {};
+
+template<>
+struct wxFormatStringArgumentFinder<wxWCharBuffer>
+    : public wxFormatStringArgumentFinder<const wxWCharBuffer&> {};
 
 
 // ----------------------------------------------------------------------------
