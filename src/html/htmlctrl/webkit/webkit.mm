@@ -682,8 +682,8 @@ void wxWebKitCtrl::OnSize(wxSizeEvent &event){
 
     wxWindow* tlw = MacGetTopLevelWindow();
 
-    NSRect frame = [m_webView frame];
-    NSRect bounds = [m_webView bounds];
+    NSRect frame = [(WebView*)m_webView frame];
+    NSRect bounds = [(WebView*)m_webView bounds];
 
 #if DEBUG_WEBKIT_SIZING
     fprintf(stderr,"Carbon window x=%d, y=%d, width=%d, height=%d\n", GetPosition().x, GetPosition().y, GetSize().x, GetSize().y);
@@ -734,7 +734,7 @@ void wxWebKitCtrl::OnSize(wxSizeEvent &event){
 
     frame.origin.x = x;
     frame.origin.y = y;
-    [m_webView setFrame:frame];
+    [(WebView*)m_webView setFrame:frame];
 
     if (IsShown())
         [(WebView*)m_webView display];
