@@ -16,8 +16,8 @@
 
     The number entered must be in the range @c min to @c max (both of which
     should be positive) and @c value is the initial value of it. If the user
-    enters an invalid value or cancels the dialog, the function will return
-    -1.
+    enters an invalid value, it is forced to fall into the specified range. If
+    the user cancels the dialog, the function returns -1.
 
     Dialog is centered on its @c parent unless an explicit position is given
     in @c pos.
