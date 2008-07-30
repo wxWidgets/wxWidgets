@@ -93,6 +93,7 @@ Major new features in 2.8 release
 
 All:
 
+- Optimize wxString::Replace() for single character arguments.
 - Updated Hindi translation (Priyank Bolia).
 
 All (GUI):
