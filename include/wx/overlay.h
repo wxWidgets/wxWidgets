@@ -14,7 +14,7 @@
 
 #include "wx/defs.h"
 
-#if defined(wxOSX_USE_CORE_GRAPHICS) && wxOSX_USE_CORE_GRAPHICS && wxOSX_USE_QUICKDRAW
+#if wxOSX_USE_CARBON
     #define wxHAS_NATIVE_OVERLAY 1
 #elif defined(__WXDFB__)
     #define wxHAS_NATIVE_OVERLAY 1
