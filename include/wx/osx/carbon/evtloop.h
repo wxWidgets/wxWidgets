@@ -12,7 +12,7 @@
 #ifndef _WX_MAC_CARBON_EVTLOOP_H_
 #define _WX_MAC_CARBON_EVTLOOP_H_
 
-// set wxMAC_USE_RUN_APP_EVENT_LOOP to 1 if the standard
+// set wxOSX_USE_RUN_APP_EVENT_LOOP to 1 if the standard
 // RunApplicationEventLoop function should be used, otherwise
 // the lower level CarbonEventLoop will be used
 //
@@ -21,13 +21,13 @@
 // events etc and perhaps we will also have to pipe events through an
 // ueber-event-handler to make sure we have one place to do all these
 // house-keeping functions
-#define wxMAC_USE_RUN_APP_EVENT_LOOP 0
+#define wxOSX_USE_RUN_APP_EVENT_LOOP 0
 
 // ----------------------------------------------------------------------------
 // wxEventLoop
 // ----------------------------------------------------------------------------
 
-#if wxMAC_USE_RUN_APP_EVENT_LOOP
+#if wxOSX_USE_RUN_APP_EVENT_LOOP
 
 class WXDLLIMPEXP_CORE wxGUIEventLoop : public wxEventLoopBase
 {

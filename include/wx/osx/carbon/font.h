@@ -51,7 +51,7 @@ public:
     bool Create(const wxNativeFontInfo& info);
 
     bool MacCreateFromThemeFont( wxUint16 themeFontID ) ;
-#if wxMAC_USE_CORE_TEXT
+#if wxOSX_USE_CORE_TEXT
     bool MacCreateFromUIFont( wxUint32 coreTextFontType );
     bool MacCreateFromCTFontDescriptor( const void * ctFontDescriptor, int pointSize = 0 );
     bool MacCreateFromCTFont( const void * ctFont );
@@ -89,7 +89,7 @@ public:
 
     // Mac-specific, risks to change, don't use in portable code
 
-#if wxMAC_USE_ATSU_TEXT
+#if wxOSX_USE_ATSU_TEXT
     // 'old' Quickdraw accessors
     short MacGetFontNum() const;
     short MacGetFontSize() const;
@@ -102,11 +102,11 @@ public:
 
     // Returns an ATSUStyle not ATSUStyle*
 #endif
-#if wxMAC_USE_CORE_TEXT
+#if wxOSX_USE_CORE_TEXT
     const void * MacGetCTFont() const;
     const void * MacGetCTFontDescriptor() const;
 #endif
-#if wxMAC_USE_CORE_TEXT || wxMAC_USE_ATSU_TEXT
+#if wxOSX_USE_CORE_TEXT || wxOSX_USE_ATSU_TEXT
     void* MacGetATSUStyle() const ;
 #endif
 

@@ -67,7 +67,7 @@ class WXDLLIMPEXP_CORE wxToolBar: public wxToolBarBase
     void OnMouse(wxMouseEvent& event) ;
     virtual void MacSuperChangedPosition() ;
 
-#if wxMAC_USE_NATIVE_TOOLBAR
+#if wxOSX_USE_NATIVE_TOOLBAR
     bool MacInstallNativeToolbar(bool usesNative);
     bool MacWantsNativeToolbar();
     bool MacTopLevelHasNativeToolbar(bool *ownToolbarInstalled) const;
@@ -97,7 +97,7 @@ protected:
                                           const wxString& label);
 
     DECLARE_EVENT_TABLE()
-#if wxMAC_USE_NATIVE_TOOLBAR
+#if wxOSX_USE_NATIVE_TOOLBAR
     bool m_macUsesNativeToolbar ;
     void* m_macHIToolbarRef ;
 #endif
