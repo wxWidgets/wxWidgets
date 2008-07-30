@@ -382,9 +382,11 @@ public:
 
   // lib.string.access
     // return the character at position n
+  value_type operator[](size_type n) const { return m_pchData[n]; }
   value_type at(size_type n) const
     { wxASSERT_VALID_INDEX( n ); return m_pchData[n]; }
     // returns the writable character at position n
+  reference operator[](size_type n) { CopyBeforeWrite(); return m_pchData[n]; }
   reference at(size_type n)
   {
     wxASSERT_VALID_INDEX( n );
