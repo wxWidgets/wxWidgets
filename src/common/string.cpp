@@ -1239,27 +1239,56 @@ size_t wxString::Replace(const wxString& strOld,
 
     size_t uiCount = 0;   // count of replacements made
 
-    const size_t uiOldLen = strOld.m_impl.length();
-    const size_t uiNewLen = strNew.m_impl.length();
-
-    for ( size_t dwPos = 0; dwPos < m_impl.length(); )
+    // optimize the special common case: replacement of one character by
+    // another one (in UTF-8 case we can only do this for ASCII characters)
+    //
+    // benchmarks show that this special version is around 3 times faster
+    // (depending on the proportion of matching characters and UTF-8/wchar_t
+    // build)
+    if ( strOld.m_impl.length() == 1 && strNew.m_impl.length() == 1 )
     {
-        dwPos = m_impl.find(strOld.m_impl, dwPos);
-        if ( dwPos == npos )
-            break;
+        const wxStringCharType chOld = strOld.m_impl[0],
+                               chNew = strNew.m_impl[0];
 
-        // replace this occurance of the old string with the new one
-        m_impl.replace(dwPos, uiOldLen, strNew.m_impl);
+        // this loop is the simplified version of the one below
+        for ( size_t pos = 0; ; )
+        {
+            pos = m_impl.find(chOld, pos);
+            if ( pos == npos )
+                break;
 
-        // move up pos past the string that was replaced
-        dwPos += uiNewLen;
+            m_impl[pos++] = chNew;
 
-        // increase replace count
-        ++uiCount;
+            uiCount++;
 
-        // stop after the first one?
-        if ( !bReplaceAll )
-            break;
+            if ( !bReplaceAll )
+                break;
+        }
+    }
+    else // general case
+    {
+        const size_t uiOldLen = strOld.m_impl.length();
+        const size_t uiNewLen = strNew.m_impl.length();
+
+        for ( size_t pos = 0; ; )
+        {
+            pos = m_impl.find(strOld.m_impl, pos);
+            if ( pos == npos )
+                break;
+
+            // replace this occurrence of the old string with the new one
+            m_impl.replace(pos, uiOldLen, strNew.m_impl);
+
+            // move up pos past the string that was replaced
+            pos += uiNewLen;
+
+            // increase replace count
+            uiCount++;
+
+            // stop after the first one?
+            if ( !bReplaceAll )
+                break;
+        }
     }
 
     return uiCount;
