@@ -222,3 +222,37 @@ BENCHMARK_FUNC(ForStringRIter)
     return true;
 }
 
+// ----------------------------------------------------------------------------
+// wxString::Replace()
+// ----------------------------------------------------------------------------
+
+const size_t REPLACE_STR_LEN = 1000;
+
+BENCHMARK_FUNC(ReplaceLoop)
+{
+    wxString str('x', REPLACE_STR_LEN);
+    for ( size_t n = 0; n < REPLACE_STR_LEN; n++ )
+    {
+        if ( str[n] == 'a' )
+            str[n] = 'z';
+    }
+
+    return str.length() != 0;
+}
+
+BENCHMARK_FUNC(ReplaceMiss)
+{
+    wxString str('x', REPLACE_STR_LEN);
+    str.Replace("a", "z");
+
+    return str.length() != 0;
+}
+
+BENCHMARK_FUNC(ReplaceHit)
+{
+    wxString str('x', REPLACE_STR_LEN);
+    str.Replace("x", "y");
+
+    return str.length() != 0;
+}
+
