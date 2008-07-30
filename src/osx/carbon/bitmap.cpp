@@ -131,7 +131,7 @@ public:
 };
 
 
-#define wxMAC_USE_PREMULTIPLIED_ALPHA 1
+#define wxOSX_USE_PREMULTIPLIED_ALPHA 1
 static const int kBestByteAlignement = 16;
 static const int kMaskBytesPerPixel = 1;
 
@@ -478,7 +478,7 @@ IconRef wxBitmapRefData::GetIconRef()
                             a = 0xFF ;
                         else
                         {
-#if wxMAC_USE_PREMULTIPLIED_ALPHA
+#if wxOSX_USE_PREMULTIPLIED_ALPHA
                             // this must be non-premultiplied data
                             if ( a != 0xFF && a!= 0 )
                             {
@@ -676,7 +676,7 @@ CGImageRef wxBitmapRefData::CreateCGImage() const
             {
                 if ( m_hasAlpha )
                 {
-#if wxMAC_USE_PREMULTIPLIED_ALPHA
+#if wxOSX_USE_PREMULTIPLIED_ALPHA
                     alphaInfo = kCGImageAlphaPremultipliedFirst ;
 #else
                     alphaInfo = kCGImageAlphaFirst ;
@@ -858,7 +858,7 @@ bool wxBitmap::CopyFromIcon(const wxIcon& icon)
                     unsigned char a = *sourcemask++;
                     *destination++ = a;
                     source++ ;
-#if wxMAC_USE_PREMULTIPLIED_ALPHA
+#if wxOSX_USE_PREMULTIPLIED_ALPHA
                     *destination++ = ( (*source++) * a + 127 ) / 255;
                     *destination++ = ( (*source++) * a + 127 ) / 255;
                     *destination++ = ( (*source++) * a + 127 ) / 255;
@@ -1190,7 +1190,7 @@ wxBitmap::wxBitmap(const wxImage& image, int depth)
                         const unsigned char a = *alpha++;
                         *destination++ = a ;
 
-    #if wxMAC_USE_PREMULTIPLIED_ALPHA
+    #if wxOSX_USE_PREMULTIPLIED_ALPHA
                         *destination++ = ((*data++) * a + 127) / 255 ;
                         *destination++ = ((*data++) * a + 127) / 255 ;
                         *destination++ = ((*data++) * a + 127) / 255 ;
@@ -1300,7 +1300,7 @@ wxImage wxBitmap::ConvertToImage() const
             else if ( hasAlpha )
             {
                 *alpha++ = a ;
-#if wxMAC_USE_PREMULTIPLIED_ALPHA
+#if wxOSX_USE_PREMULTIPLIED_ALPHA
                 // this must be non-premultiplied data
                 if ( a != 0xFF && a!= 0 )
                 {

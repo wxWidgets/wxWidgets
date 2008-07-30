@@ -94,7 +94,7 @@ wxSize wxStaticText::DoGetBestSize() const
 
         wxCFStringRef str( m_label,  GetFont().GetEncoding() );
 
-#if wxMAC_USE_ATSU_TEXT
+#if wxOSX_USE_ATSU_TEXT
         SInt16 baseline;
         if ( m_font.MacGetThemeFontID() != kThemeCurrentPortFont )
         {

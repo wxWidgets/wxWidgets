@@ -42,7 +42,7 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
 
     wxArrayString fontFamilies ;
 
-#if wxMAC_USE_ATSU_TEXT || wxMAC_USE_CORE_TEXT
+#if wxOSX_USE_ATSU_TEXT || wxOSX_USE_CORE_TEXT
 
     //
     // From Apple's QA 1471 http://developer.apple.com/qa/qa2006/qa1471.html

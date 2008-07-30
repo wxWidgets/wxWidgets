@@ -37,7 +37,7 @@
 #include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/string.h"
 
-#if wxMAC_USE_EXPERIMENTAL_FONTDIALOG
+#if wxOSX_USE_EXPERIMENTAL_FONTDIALOG
 
 #import <Foundation/Foundation.h>
 #import <AppKit/AppKit.h>

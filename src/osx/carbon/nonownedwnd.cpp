@@ -1658,7 +1658,7 @@ void wxNonOwnedWindowCarbonImpl::Create(
     }
 
     attr |= kWindowCompositingAttribute;
-#if 0 // wxOSX_USE_CORE_GRAPHICS ; TODO : decide on overall handling of high dpi screens (pixel vs userscale)
+#if 0 // TODO : decide on overall handling of high dpi screens (pixel vs userscale)
     attr |= kWindowFrameworkScaledAttribute;
 #endif
 

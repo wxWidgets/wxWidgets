@@ -42,7 +42,7 @@
 
 #include "wx/fontdlg.h"
 
-#if wxMAC_USE_EXPERIMENTAL_FONTDIALOG
+#if wxOSX_USE_EXPERIMENTAL_FONTDIALOG
 
 IMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog)
 
@@ -73,7 +73,7 @@ wxMacCarbonFontPanelHandler(EventHandlerCallRef WXUNUSED(nextHandler),
         case kEventFontSelection :
         {
             bool setup = false ;
-#if wxMAC_USE_CORE_TEXT
+#if wxOSX_USE_CORE_TEXT
             if (  UMAGetSystemVersion() >= 0x1050 )
             {
                 CTFontDescriptorRef descr;
@@ -86,7 +86,7 @@ wxMacCarbonFontPanelHandler(EventHandlerCallRef WXUNUSED(nextHandler),
                 }
             }
 #endif
-#if wxMAC_USE_ATSU_TEXT
+#if wxOSX_USE_ATSU_TEXT
             ATSUFontID fontId = 0 ;
             if ( !setup && (cEvent.GetParameter<ATSUFontID>(kEventParamATSUFontID, &fontId) == noErr) )
             {
@@ -142,7 +142,7 @@ wxMacCarbonFontPanelHandler(EventHandlerCallRef WXUNUSED(nextHandler),
                     fontdata.m_chosenFont.SetWeight(fontStyle & bold ? wxFONTWEIGHT_BOLD : wxFONTWEIGHT_NORMAL);
                 }
             }
-#endif // wxMAC_USE_ATSU_TEXT
+#endif // wxOSX_USE_ATSU_TEXT
 
             // retrieving the color
             RGBColor fontColor ;
@@ -221,7 +221,7 @@ int wxFontDialog::ShowModal()
     }
 
     bool setup = false;
-#if wxMAC_USE_CORE_TEXT
+#if wxOSX_USE_CORE_TEXT
     if ( UMAGetSystemVersion() >= 0x1050 )
     {
         CTFontDescriptorRef descr = (CTFontDescriptorRef)font.MacGetCTFontDescriptor();
@@ -229,7 +229,7 @@ int wxFontDialog::ShowModal()
         setup = true;
     }
 #endif
-#if wxMAC_USE_ATSU_TEXT
+#if wxOSX_USE_ATSU_TEXT
     if ( !setup )
     {
         ATSUStyle style = (ATSUStyle)font.MacGetATSUStyle();
@@ -823,6 +823,6 @@ int FontFamilyStringToInt(const wxChar *family)
 
 #endif // !USE_NATIVE_FONT_DIALOG_FOR_MACOSX
 
-#endif // wxMAC_USE_EXPERIMENTAL_FONTDIALOG
+#endif // wxOSX_USE_EXPERIMENTAL_FONTDIALOG
 
 #endif // wxUSE_FONTDLG

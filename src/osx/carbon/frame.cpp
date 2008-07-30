@@ -86,7 +86,7 @@ wxPoint wxFrame::GetClientAreaOrigin() const
         }
         else
         {
-#if !wxMAC_USE_NATIVE_TOOLBAR
+#if !wxOSX_USE_NATIVE_TOOLBAR
             pt.y += h;
 #endif
         }
@@ -268,7 +268,7 @@ void wxFrame::DoGetClientSize(int *x, int *y) const
         }
         else
         {
-#if !wxMAC_USE_NATIVE_TOOLBAR
+#if !wxOSX_USE_NATIVE_TOOLBAR
             if ( y )
                 *y -= h;
 #endif
@@ -318,14 +318,14 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
     if ( m_frameToolBar == toolbar )
         return ;
 
-#if wxMAC_USE_NATIVE_TOOLBAR
+#if wxOSX_USE_NATIVE_TOOLBAR
     if ( m_frameToolBar )
         m_frameToolBar->MacInstallNativeToolbar( false ) ;
 #endif
 
     m_frameToolBar = toolbar ;
 
-#if wxMAC_USE_NATIVE_TOOLBAR
+#if wxOSX_USE_NATIVE_TOOLBAR
     if ( toolbar )
         toolbar->MacInstallNativeToolbar( true ) ;
 #endif
@@ -380,7 +380,7 @@ void wxFrame::PositionToolBar()
         }
         else
         {
-#if !wxMAC_USE_NATIVE_TOOLBAR
+#if !wxOSX_USE_NATIVE_TOOLBAR
             // Use the 'real' position
             GetToolBar()->SetSize(tx , ty , cw , th, wxSIZE_NO_ADJUSTMENTS );
 #endif

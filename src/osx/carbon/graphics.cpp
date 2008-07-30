@@ -72,7 +72,7 @@ int UMAGetSystemVersion()
 }
 
 
-#define wxMAC_USE_CORE_TEXT 1
+#define wxOSX_USE_CORE_TEXT 1
 
 #endif
 
@@ -130,7 +130,7 @@ CGColorRef wxMacCreateCGColor( const wxColour& col )
     return retval;
 }
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5 && wxMAC_USE_CORE_TEXT
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5 && wxOSX_USE_CORE_TEXT
 
 CTFontRef wxMacCreateCTFont( const wxFont& font )
 {
@@ -780,10 +780,10 @@ public:
     wxMacCoreGraphicsFontData( wxGraphicsRenderer* renderer, const wxFont &font, const wxColour& col );
     ~wxMacCoreGraphicsFontData();
 
-#if wxMAC_USE_ATSU_TEXT
+#if wxOSX_USE_ATSU_TEXT
     virtual ATSUStyle GetATSUStyle() { return m_macATSUIStyle; }
 #endif
-#if wxMAC_USE_CORE_TEXT
+#if wxOSX_USE_CORE_TEXT
     CTFontRef GetCTFont() const { return m_ctFont ; }
 #endif
     wxColour GetColour() const { return m_colour ; }
@@ -795,10 +795,10 @@ public:
 private :
     wxColour m_colour;
     bool m_underlined;
-#if wxMAC_USE_ATSU_TEXT
+#if wxOSX_USE_ATSU_TEXT
     ATSUStyle m_macATSUIStyle;
 #endif
-#if wxMAC_USE_CORE_TEXT
+#if wxOSX_USE_CORE_TEXT
     wxCFRef< CTFontRef > m_ctFont;
 #endif
 #if wxOSX_USE_IPHONE
@@ -811,14 +811,14 @@ wxMacCoreGraphicsFontData::wxMacCoreGraphicsFontData(wxGraphicsRenderer* rendere
     m_colour = col;
     m_underlined = font.GetUnderlined();
 
-#if wxMAC_USE_CORE_TEXT
+#if wxOSX_USE_CORE_TEXT
     m_ctFont.reset( wxMacCreateCTFont( font ) );
 #endif
 #if wxOSX_USE_IPHONE
     m_uiFont = CreateUIFont(font);
     wxMacCocoaRetain( m_uiFont );
 #endif
-#if wxMAC_USE_ATSU_TEXT
+#if wxOSX_USE_ATSU_TEXT
     OSStatus status = noErr;
     m_macATSUIStyle = NULL;
 
@@ -857,9 +857,9 @@ wxMacCoreGraphicsFontData::wxMacCoreGraphicsFontData(wxGraphicsRenderer* rendere
 
 wxMacCoreGraphicsFontData::~wxMacCoreGraphicsFontData()
 {
-#if wxMAC_USE_CORE_TEXT
+#if wxOSX_USE_CORE_TEXT
 #endif
-#if wxMAC_USE_ATSU_TEXT
+#if wxOSX_USE_ATSU_TEXT
     if ( m_macATSUIStyle )
     {
         ::ATSUDisposeStyle((ATSUStyle)m_macATSUIStyle);
@@ -1945,7 +1945,7 @@ void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDoub
         return;
 
     EnsureIsValid();
-#if wxMAC_USE_CORE_TEXT
+#if wxOSX_USE_CORE_TEXT
     if ( UMAGetSystemVersion() >= 0x1050 )
     {
         wxMacCoreGraphicsFontData* fref = (wxMacCoreGraphicsFontData*)m_font.GetRefData();
@@ -1973,13 +1973,13 @@ void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDoub
         return;
     }
 #endif
-#if wxMAC_USE_ATSU_TEXT
+#if wxOSX_USE_ATSU_TEXT
     {
         DrawText(str, x, y, 0.0);
         return;
     }
 #endif
-#if wxMAC_USE_CG_TEXT
+#if wxOSX_USE_IPHONE
     wxMacCoreGraphicsFontData* fref = (wxMacCoreGraphicsFontData*)m_font.GetRefData();
 
     CGContextSaveGState(m_cgContext);
@@ -2002,7 +2002,7 @@ void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDoub
         return;
 
     EnsureIsValid();
-#if wxMAC_USE_CORE_TEXT
+#if wxOSX_USE_CORE_TEXT
     if ( UMAGetSystemVersion() >= 0x1050 )
     {
         // default implementation takes care of rotation and calls non rotated DrawText afterwards
@@ -2010,7 +2010,7 @@ void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDoub
         return;
     }
 #endif
-#if wxMAC_USE_ATSU_TEXT
+#if wxOSX_USE_ATSU_TEXT
     {
         OSStatus status = noErr;
         ATSUTextLayout atsuLayout;
@@ -2094,7 +2094,7 @@ void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDoub
         return;
     }
 #endif
-#if wxMAC_USE_CG_TEXT
+#if wxOSX_USE_IPHONE
     // default implementation takes care of rotation and calls non rotated DrawText afterwards
     wxGraphicsContext::DrawText( str, x, y, angle );
 #endif
@@ -2117,7 +2117,7 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
     if (str.empty())
         return;
 
-#if wxMAC_USE_CORE_TEXT
+#if wxOSX_USE_CORE_TEXT
     if ( UMAGetSystemVersion() >= 0x1050 )
     {
         wxMacCoreGraphicsFontData* fref = (wxMacCoreGraphicsFontData*)m_font.GetRefData();
@@ -2146,7 +2146,7 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
         return;
     }
 #endif
-#if wxMAC_USE_ATSU_TEXT
+#if wxOSX_USE_ATSU_TEXT
     {
         OSStatus status = noErr;
 
@@ -2183,7 +2183,7 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
         return;
     }
 #endif
-#if wxMAC_USE_CG_TEXT
+#if wxOSX_USE_IPHONE
     wxMacCoreGraphicsFontData* fref = (wxMacCoreGraphicsFontData*)m_font.GetRefData();
 
     wxCFStringRef text(str, wxLocale::GetSystemEncoding() );
@@ -2210,7 +2210,7 @@ void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArr
     if (text.empty())
         return;
 
-#if wxMAC_USE_CORE_TEXT
+#if wxOSX_USE_CORE_TEXT
     {
         wxMacCoreGraphicsFontData* fref = (wxMacCoreGraphicsFontData*)m_font.GetRefData();
         CTFontRef font = fref->GetCTFont();
@@ -2232,7 +2232,7 @@ void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArr
         return;
     }
 #endif
-#if wxMAC_USE_ATSU_TEXT
+#if wxOSX_USE_ATSU_TEXT
     {
         OSStatus status = noErr;
         ATSUTextLayout atsuLayout;
@@ -2293,7 +2293,7 @@ void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArr
         ::ATSUDisposeTextLayout(atsuLayout);
     }
 #endif
-#if wxMAC_USE_CG_TEXT
+#if wxOSX_USE_IPHONE
     // TODO core graphics text implementation here
 #endif
 }

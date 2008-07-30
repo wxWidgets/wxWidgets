@@ -21,7 +21,7 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
 
-#if wxOSX_USE_QUICKDRAW
+#if wxOSX_USE_CARBON
 wxColour::wxColour(const RGBColor& col)
 {
     InitRGBColor(col);
@@ -33,7 +33,7 @@ wxColour::wxColour(CGColorRef col)
     InitCGColorRef(col);
 }
 
-#if wxOSX_USE_QUICKDRAW
+#if wxOSX_USE_CARBON
 void wxColour::GetRGBColor( RGBColor *col ) const
 {
     col->red = (m_red << 8) + m_red;
@@ -84,7 +84,7 @@ void wxColour::InitRGBA (ChannelType r, ChannelType g, ChannelType b, ChannelTyp
     m_cgColour.reset( col );
 }
 
-#if wxOSX_USE_QUICKDRAW
+#if wxOSX_USE_CARBON
 void wxColour::InitRGBColor( const RGBColor& col )
 {
     m_red = col.red >> 8;

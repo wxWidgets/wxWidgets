@@ -45,7 +45,7 @@
 
 
 
-#if wxMAC_USE_RUN_APP_EVENT_LOOP
+#if wxOSX_USE_RUN_APP_EVENT_LOOP
 
 int wxGUIEventLoop::Run()
 {

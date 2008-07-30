@@ -3399,7 +3399,7 @@ void wxMacControl::SuperChangedPosition()
 void wxMacControl::SetFont( const wxFont & font , const wxColour& foreground , long windowStyle )
 {
     m_font = font;
-#if wxMAC_USE_CORE_TEXT
+#if wxOSX_USE_CORE_TEXT
     if ( UMAGetSystemVersion() >= 0x1050 )
     {
         HIViewPartCode part = 0;
@@ -3420,7 +3420,7 @@ void wxMacControl::SetFont( const wxFont & font , const wxColour& foreground , l
         }
     }
 #endif
-#if wxMAC_USE_ATSU_TEXT
+#if wxOSX_USE_ATSU_TEXT
     ControlFontStyleRec fontStyle;
     if ( font.MacGetThemeFontID() != kThemeCurrentPortFont )
     {

@@ -67,7 +67,7 @@ public:
         Init(size, family, style, weight, underlined, faceName, encoding);
     }
 
-#if wxMAC_USE_CORE_TEXT
+#if wxOSX_USE_CORE_TEXT
     wxFontRefData( wxUint32 coreTextFontType );
     wxFontRefData( CTFontRef font );
     wxFontRefData( CTFontDescriptorRef fontdescriptor, int size );
@@ -152,7 +152,7 @@ protected:
               const wxString& faceName,
               wxFontEncoding encoding);
 
-#if wxMAC_USE_CORE_TEXT
+#if wxOSX_USE_CORE_TEXT
     void Init( CTFontRef font );
 #endif
     // font characterstics
@@ -166,7 +166,7 @@ protected:
     bool            m_noAA;      // No anti-aliasing
 
 public:
-#if wxMAC_USE_ATSU_TEXT
+#if wxOSX_USE_ATSU_TEXT
     FMFontFamily    m_macFontFamily;
     FMFontSize      m_macFontSize;
     FMFontStyle     m_macFontStyle;
@@ -184,11 +184,11 @@ public:
     // information here, as this speeds up and optimizes rendering
     ThemeFontID     m_macThemeFontID ;
 #endif
-#if wxMAC_USE_CORE_TEXT
+#if wxOSX_USE_CORE_TEXT
     wxCFRef<CTFontRef> m_ctFont;
     wxCFRef<CTFontDescriptorRef> m_ctFontDescriptor;
 #endif
-#if wxMAC_USE_CORE_TEXT || wxMAC_USE_ATSU_TEXT
+#if wxOSX_USE_CORE_TEXT || wxOSX_USE_ATSU_TEXT
     ATSUStyle       m_macATSUStyle ;
 #endif
     wxNativeFontInfo  m_info;
@@ -222,7 +222,7 @@ void wxFontRefData::Init(int pointSize,
     m_faceName = faceName;
     m_encoding = encoding;
     m_noAA = false;
-#if wxMAC_USE_ATSU_TEXT
+#if wxOSX_USE_ATSU_TEXT
     m_macFontFamily = 0 ;
     m_macFontSize = 0;
     m_macFontStyle = 0;
@@ -230,14 +230,14 @@ void wxFontRefData::Init(int pointSize,
     m_macATSUAdditionalQDStyles = 0 ;
     m_macThemeFontID = kThemeCurrentPortFont ;
 #endif
-#if wxMAC_USE_CORE_TEXT || wxMAC_USE_ATSU_TEXT
+#if wxOSX_USE_CORE_TEXT || wxOSX_USE_ATSU_TEXT
     m_macATSUStyle = NULL ;
 #endif
 }
 
 wxFontRefData::~wxFontRefData()
 {
-#if wxMAC_USE_CORE_TEXT || wxMAC_USE_ATSU_TEXT
+#if wxOSX_USE_CORE_TEXT || wxOSX_USE_ATSU_TEXT
     if ( m_macATSUStyle )
     {
         ::ATSUDisposeStyle((ATSUStyle)m_macATSUStyle);
@@ -248,11 +248,11 @@ wxFontRefData::~wxFontRefData()
 
 void wxFontRefData::MacInvalidateNativeFont()
 {
-#if wxMAC_USE_CORE_TEXT
+#if wxOSX_USE_CORE_TEXT
     m_ctFont.reset();
     m_ctFontDescriptor.reset();
 #endif
-#if wxMAC_USE_CORE_TEXT || wxMAC_USE_ATSU_TEXT
+#if wxOSX_USE_CORE_TEXT || wxOSX_USE_ATSU_TEXT
     if ( m_macATSUStyle )
     {
         ::ATSUDisposeStyle((ATSUStyle)m_macATSUStyle);
@@ -261,7 +261,7 @@ void wxFontRefData::MacInvalidateNativeFont()
 #endif
 }
 
-#if wxMAC_USE_CORE_TEXT
+#if wxOSX_USE_CORE_TEXT
 
 /* from Core Text Manual Common Operations */
 
@@ -361,7 +361,7 @@ void wxFontRefData::Init( CTFontRef font )
 void wxFontRefData::MacFindFont()
 {
 
-#if wxMAC_USE_CORE_TEXT
+#if wxOSX_USE_CORE_TEXT
     if (  UMAGetSystemVersion() >= 0x1050 )
     {
         if ( m_faceName.empty() && m_family == wxDEFAULT )
@@ -461,7 +461,7 @@ void wxFontRefData::MacFindFont()
                 }
             }
         }
-#if wxMAC_USE_ATSU_TEXT
+#if wxOSX_USE_ATSU_TEXT
         OSStatus status = noErr;
         CTFontDescriptorRef desc = m_ctFontDescriptor ;
         ATSFontRef atsfont = CTFontGetPlatformFont( m_ctFont, &desc );
@@ -513,7 +513,7 @@ void wxFontRefData::MacFindFont()
 #endif
     }
 #endif
-#if wxMAC_USE_ATSU_TEXT
+#if wxOSX_USE_ATSU_TEXT
     {
         OSStatus status = noErr;
         Str255 qdFontName ;
@@ -714,7 +714,7 @@ bool wxFont::Create(int pointSize,
     return true;
 }
 
-#if wxMAC_USE_CORE_TEXT
+#if wxOSX_USE_CORE_TEXT
 
 bool wxFont::MacCreateFromUIFont(wxUint32 ctFontType )
 {
@@ -741,13 +741,13 @@ bool wxFont::MacCreateFromCTFontDescriptor( const void * ctFontDescriptor , int 
 
 bool wxFont::MacCreateFromThemeFont(wxUint16 themeFontID)
 {
-#if wxMAC_USE_CORE_TEXT
+#if wxOSX_USE_CORE_TEXT
     if ( UMAGetSystemVersion() >= 0x1050)
     {
         return MacCreateFromUIFont(HIThemeGetUIFontType(themeFontID));
     }
 #endif
-#if wxMAC_USE_ATSU_TEXT
+#if wxOSX_USE_ATSU_TEXT
     {
         UnRef();
 
@@ -953,7 +953,7 @@ bool wxFont::GetNoAntiAliasing() const
     return M_FONTDATA->GetNoAntiAliasing();
 }
 
-#if wxMAC_USE_ATSU_TEXT
+#if wxOSX_USE_ATSU_TEXT
 
 short wxFont::MacGetFontNum() const
 {
@@ -998,7 +998,7 @@ wxUint16 wxFont::MacGetThemeFontID() const
 }
 #endif
 
-#if wxMAC_USE_CORE_TEXT || wxMAC_USE_ATSU_TEXT
+#if wxOSX_USE_CORE_TEXT || wxOSX_USE_ATSU_TEXT
 void * wxFont::MacGetATSUStyle() const
 {
     wxCHECK_MSG( M_FONTDATA != NULL , NULL, wxT("invalid font") );
@@ -1007,7 +1007,7 @@ void * wxFont::MacGetATSUStyle() const
 }
 #endif
 
-#if wxMAC_USE_CORE_TEXT
+#if wxOSX_USE_CORE_TEXT
 
 const void * wxFont::MacGetCTFont() const
 {

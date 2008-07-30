@@ -2829,7 +2829,7 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
     HIThemeTextHorizontalFlush hFlush = kHIThemeTextHorizontalFlushLeft;
     HIThemeTextInfo info;
     bool setup = false;
-#if wxMAC_USE_CORE_TEXT
+#if wxOSX_USE_CORE_TEXT
     if ( UMAGetSystemVersion() >= 0x1050 )
     {
         info.version = kHIThemeTextInfoVersionOne;
@@ -2842,7 +2842,7 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
         }
     }
 #endif
-#if wxMAC_USE_ATSU_TEXT
+#if wxOSX_USE_ATSU_TEXT
     if ( !setup )
     {
         info.version = kHIThemeTextInfoVersionZero;
