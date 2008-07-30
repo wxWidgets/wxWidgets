@@ -179,12 +179,12 @@ public :
     {
     }
 
-    virtual bool Show(bool show)
+    virtual bool Show(bool WXUNUSED(show))
     {
         return false;
     }
     
-    virtual bool ShowWithEffect(bool show, wxShowEffect effect, unsigned timeout)
+    virtual bool ShowWithEffect(bool show, wxShowEffect WXUNUSED(effect), unsigned WXUNUSED(timeout))
     {
         return Show(show);
     }
@@ -193,21 +193,21 @@ public :
     {
     }
 
-    virtual bool SetTransparent(wxByte alpha)
+    virtual bool SetTransparent(wxByte WXUNUSED(alpha))
     {
         return false;
     }
 
-    virtual bool SetBackgroundColour(const wxColour& col )
+    virtual bool SetBackgroundColour(const wxColour& WXUNUSED(col) )
     {
         return false;
     }
 
-    virtual void SetExtraStyle( long exStyle )
+    virtual void SetExtraStyle( long WXUNUSED(exStyle) )
     {
     }
     
-    virtual bool SetBackgroundStyle(wxBackgroundStyle style)
+    virtual bool SetBackgroundStyle(wxBackgroundStyle WXUNUSED(style))
     {            
         return false ;
     }
@@ -222,7 +222,7 @@ public :
     virtual void GetPosition( int &x, int &y ) const = 0;
     virtual void GetSize( int &width, int &height ) const = 0;
 
-    virtual bool SetShape(const wxRegion& region)
+    virtual bool SetShape(const wxRegion& WXUNUSED(region))
     {
         return false;
     }
