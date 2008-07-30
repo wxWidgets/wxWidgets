@@ -226,7 +226,7 @@ BENCHMARK_FUNC(ForStringRIter)
 // wxString::Replace()
 // ----------------------------------------------------------------------------
 
-const size_t REPLACE_STR_LEN = 1000;
+const size_t REPLACE_STR_LEN = strlen(asciistr);
 
 BENCHMARK_FUNC(ReplaceLoop)
 {
@@ -240,19 +240,21 @@ BENCHMARK_FUNC(ReplaceLoop)
     return str.length() != 0;
 }
 
-BENCHMARK_FUNC(ReplaceMiss)
+BENCHMARK_FUNC(ReplaceNone)
 {
     wxString str('x', REPLACE_STR_LEN);
-    str.Replace("a", "z");
-
-    return str.length() != 0;
+    return str.Replace("a", "z") == 0;
 }
 
-BENCHMARK_FUNC(ReplaceHit)
+BENCHMARK_FUNC(ReplaceSome)
+{
+    wxString str(asciistr);
+    return str.Replace("7", "8") != 0;
+}
+
+BENCHMARK_FUNC(ReplaceAll)
 {
     wxString str('x', REPLACE_STR_LEN);
-    str.Replace("x", "y");
-
-    return str.length() != 0;
+    return str.Replace("x", "y") != 0;
 }
 
