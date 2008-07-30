@@ -616,7 +616,7 @@
 
 
 // Enable the new wxGraphicsPath and wxGraphicsContext classes for an advanced
-// 2D drawing API.  (Still somewhat experimental)
+// 2D drawing API.  (Default on OSX, on other platforms still somewhat experimental)
 //
 // Please note that on Windows you will need to link with gdiplus.lib (use
 // USE_GDIPLUS=1 for makefile builds) and distribute gdiplus.dll with your
@@ -1284,15 +1284,11 @@
     #define wxUSE_STD_IOSTREAM  0
 #endif
 
+#undef wxUSE_GRAPHICS_CONTEXT 
+#define wxUSE_GRAPHICS_CONTEXT 1
+
+
 // things not implemented under Mac
-#undef wxUSE_POPUPWIN
-#define wxUSE_POPUPWIN 0
-
-#undef wxUSE_TIPWINDOW
-#define wxUSE_TIPWINDOW 0
-
-#undef wxUSE_TOGGLEBTN
-#define wxUSE_TOGGLEBTN 0
 
 #undef wxUSE_STACKWALKER
 #define wxUSE_STACKWALKER 0
@@ -1300,19 +1296,18 @@
 // wxWebKit is a wrapper for Apple's WebKit framework, use it if you want to
 // embed the Safari browser control
 // 0 by default because of Jaguar compatibility problems
-#define wxUSE_WEBKIT        0
+#define wxUSE_WEBKIT        1
 
 
 // Set to 0 for no libmspack
 #define wxUSE_LIBMSPACK     0
 
-// native toolbar does not support embedding controls yet, please test by setting to 1
-#define wxMAC_USE_NATIVE_TOOLBAR 0
+// native toolbar does support embedding controls, but not comples panels, please test 
+#define wxOSX_USE_NATIVE_TOOLBAR 1
 
 // make sure we have the proper dispatcher for the console event loop
 #define wxUSE_SELECT_DISPATCHER 1
 #define wxUSE_EPOLL_DISPATCHER 0
-
 
 
 #endif

@@ -1,5 +1,5 @@
 /*
- * Name:        wx/mac/chkconf.h
+ * Name:        wx/osx/chkconf.h
  * Purpose:     Mac-specific config settings checks
  * Author:      Vadim Zeitlin
  * Modified by:
@@ -11,15 +11,9 @@
 
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
 
-#if wxUSE_UNICODE
-#    if !TARGET_CARBON
-#        ifdef wxABORT_ON_CONFIG_ERROR
-#            error "wxUSE_UNICODE is only supported for Carbon Targets."
-#        else
-#            define wxUSE_UNICODE 0
-#        endif
-#    endif
-#endif
+#ifndef _WX_OSX_CHKCONF_H_
+#define _WX_OSX_CHKCONF_H_
+
 
 #if wxUSE_STACKWALKER
     /* not supported under Mac */
@@ -27,8 +21,85 @@
 #   define wxUSE_STACKWALKER 0
 #endif /* wxUSE_STACKWALKER */
 
-#ifdef __WXMAC_CLASSIC__
-#   include "wx/osx/classic/chkconf.h"
-#else
-#   include "wx/osx/carbon/chkconf.h"
+/*
+ * disable the settings which don't work for some compilers
+ */
+
+#if defined(__MWERKS__)
+    #undef wxUSE_DEBUG_NEW_ALWAYS
+    #define wxUSE_DEBUG_NEW_ALWAYS      0
+
+    /* DS: Fixes compilation when wxUSE_ON_FATAL_EXCEPTION is 1 */
+    #ifndef wxTYPE_SA_HANDLER
+        #define wxTYPE_SA_HANDLER int
+    #endif
 #endif
+
+/*
+ * check graphics context option, must be on for every os x platform
+ * we only use core graphics now on all builds, try to catch attempts
+ * to configure the build otherwise and give error messages
+ */
+ 
+#if !wxUSE_GRAPHICS_CONTEXT || ( defined( wxMAC_USE_CORE_GRAPHICS ) && !wxMAC_USE_CORE_GRAPHICS )
+#   error "OS X builds use CoreGraphics in this wx version, you cannot turn back to QuickDraw completely"
+#endif
+
+/*
+ * using mixins of cocoa functionality
+ */
+ 
+#ifndef wxOSX_USE_COCOA
+    #define wxOSX_USE_COCOA 0
+#endif
+
+/*
+ * setting flags according to the platform
+ */
+
+#ifdef __LP64__
+    #if wxOSX_USE_COCOA == 0
+        #undef wxOSX_USE_COCOA
+        #define wxOSX_USE_COCOA 1
+    #endif
+    #define wxOSX_USE_CARBON 0
+    #define wxOSX_USE_IPHONE 0
+#else
+    #ifdef __WXOSX_IPHONE__
+        #define wxOSX_USE_CARBON 0
+        #define wxOSX_USE_IPHONE 1
+    #else
+        #define wxOSX_USE_IPHONE 0
+        #if wxOSX_USE_COCOA
+            #define wxOSX_USE_CARBON 0
+        #else
+            #define wxOSX_USE_CARBON 1
+        #endif
+    #endif
+#endif
+
+/*
+ * combination flags
+ */
+ 
+#if wxOSX_USE_COCOA || wxOSX_USE_CARBON
+    #define wxOSX_USE_COCOA_OR_CARBON 1
+#else
+    #define wxOSX_USE_COCOA_OR_CARBON 0
+#endif
+
+#if wxOSX_USE_COCOA || wxOSX_USE_IPHONE
+    #define wxOSX_USE_COCOA_OR_IPHONE 1
+#else
+    #define wxOSX_USE_COCOA_OR_IPHONE 0
+#endif
+
+#if wxOSX_USE_IPHONE
+    #include "wx/osx/iphone/chkconf.h"
+#elif wxOSX_USE_CARBON
+    #include "wx/osx/carbon/chkconf.h"
+#elif wxOSX_USE_COCOA
+    #include "wx/osx/cocoa/chkconf.h"
+#endif
+
+#endif // _WX_OSX_CHKCONF_H_
