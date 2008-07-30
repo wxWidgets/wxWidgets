@@ -48,8 +48,10 @@
     #define __WX_BO_DEBUG "no debug"
 #endif
 
-#if wxUSE_UNICODE
-    #define __WX_BO_UNICODE "Unicode"
+#if wxUSE_UNICODE_UTF8
+    #define __WX_BO_UNICODE "UTF-8"
+#elif wxUSE_UNICODE_WCHAR
+    #define __WX_BO_UNICODE "wchar_t"
 #else
     #define __WX_BO_UNICODE "ANSI"
 #endif
