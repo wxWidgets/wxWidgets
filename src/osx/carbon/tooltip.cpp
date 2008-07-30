@@ -18,6 +18,7 @@
     #include "wx/window.h"
     #include "wx/dc.h"
     #include "wx/timer.h"
+    #include "wx/nonownedwnd.h"
 #endif // WX_PRECOMP
 
 #include "wx/geometry.h"
