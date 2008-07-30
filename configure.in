@@ -7121,6 +7121,10 @@ dnl ---------------------------------------------------------------------------
 dnl wxGraphicsContext
 dnl ---------------------------------------------------------------------------
 
+if test "$wxUSE_MAC" = 1; then
+	wxUSE_GRAPHICS_CONTEXT="yes"
+fi
+
 if test "$wxUSE_GRAPHICS_CONTEXT" = "yes"; then
    if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1; then
       AC_DEFINE(wxUSE_GRAPHICS_CONTEXT)
