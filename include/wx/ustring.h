@@ -13,6 +13,8 @@
 #include "wx/defs.h"
 #include "wx/string.h"
 
+#include <string>
+
 WXDLLIMPEXP_TEMPLATE_INSTANCE_BASE( wxCharTypeBuffer<wxChar32> )
 
 #if SIZEOF_WCHAR_T == 2
