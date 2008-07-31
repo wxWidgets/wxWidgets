@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        sec/osx/core/timer.cpp
+// Name:        src/osx/core/timer.cpp
 // Purpose:     wxTimer implementation using CoreFoundation
 // Author:      Stefan Csomor
 // Modified by:
@@ -88,8 +88,13 @@ bool wxOSXTimerImpl::Start( int milliseconds, bool mode )
     
     wxASSERT_MSG( m_info->m_timerRef != NULL, wxT("unable to create timer"));
     
-    CFRunLoopAddTimer( CFRunLoopGetMain() // or CFRunLoopGetCurrent() ?
-        , m_info->m_timerRef, kCFRunLoopCommonModes) ;
+    CFRunLoopRef runLoop = 0;
+#if wxOSX_USE_IPHONE
+    runLoop = CFRunLoopGetMain();
+#else
+    runLoop = CFRunLoopGetCurrent();
+#endif
+    CFRunLoopAddTimer( runLoop, m_info->m_timerRef, kCFRunLoopCommonModes) ;
 
 
     return true;
