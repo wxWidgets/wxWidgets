@@ -69,10 +69,12 @@ wxGCDC::wxGCDC( const wxMemoryDC& dc) :
 {
 }
 
+#if wxUSE_PRINTING_ARCHITECTURE
 wxGCDC::wxGCDC( const wxPrinterDC& dc) :
   wxDC( new wxGCDCImpl( this, dc ) )
 {
 }
+#endif
 
 wxGCDC::wxGCDC() :
   wxDC( new wxGCDCImpl( this ) )
@@ -136,12 +138,14 @@ wxGCDCImpl::wxGCDCImpl( wxDC *owner, const wxMemoryDC& dc ) :
     SetGraphicsContext( wxGraphicsContext::Create(dc) );
 }
 
+#if wxUSE_PRINTING_ARCHITECTURE
 wxGCDCImpl::wxGCDCImpl( wxDC *owner, const wxPrinterDC& dc ) :
    wxDCImpl( owner )
 {
     Init();
     SetGraphicsContext( wxGraphicsContext::Create(dc) );
 }
+#endif
 
 void wxGCDCImpl::Init()
 {

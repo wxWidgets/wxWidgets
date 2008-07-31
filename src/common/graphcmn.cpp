@@ -800,10 +800,12 @@ wxGraphicsBitmap wxGraphicsContext::CreateSubBitmap( const wxGraphicsBitmap &bmp
     return wxGraphicsRenderer::GetDefaultRenderer()->CreateContext(dc);
 }
 
+#if wxUSE_PRINTING_ARCHITECTURE
 /* static */ wxGraphicsContext* wxGraphicsContext::Create( const wxPrinterDC& dc) 
 {
     return wxGraphicsRenderer::GetDefaultRenderer()->CreateContext(dc);
 }
+#endif
 
 wxGraphicsContext* wxGraphicsContext::CreateFromNative( void * context )
 {
