@@ -297,7 +297,7 @@ void wxBell()
 
 wxTimerImpl* wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
 {
-    return new wxCarbonTimerImpl(timer);
+    return new wxOSXTimerImpl(timer);
 }
 
 int gs_wxBusyCursorCount = 0;
