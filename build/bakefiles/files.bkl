@@ -2211,19 +2211,24 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="MAC_SRC" hints="files">
+    <!-- osx common files -->
+    src/osx/brush.cpp
+    src/osx/pen.cpp
+    <!-- core files -->
+    src/osx/core/colour.cpp
+    src/osx/core/timer.cpp
+    <!-- carbon files -->
     src/osx/carbon/accel.cpp
     src/osx/carbon/app.cpp
     src/osx/carbon/artmac.cpp
     src/osx/carbon/bitmap.cpp
     src/osx/carbon/bmpbuttn.cpp
-    src/osx/carbon/brush.cpp
     src/osx/carbon/button.cpp
     src/osx/carbon/checkbox.cpp
     src/osx/carbon/checklst.cpp
     src/osx/carbon/choice.cpp
     src/osx/carbon/clipbrd.cpp
     src/osx/carbon/colordlg.cpp
-    src/osx/carbon/colour.cpp
     src/osx/carbon/combobox.cpp
     src/osx/carbon/control.cpp
     src/osx/carbon/cursor.cpp
@@ -2260,7 +2265,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/carbon/notebmac.cpp
     src/osx/carbon/overlay.cpp
     src/osx/carbon/palette.cpp
-    src/osx/carbon/pen.cpp
     src/osx/carbon/popupwin.cpp
     src/osx/carbon/printdlg.cpp
     src/osx/carbon/printmac.cpp
@@ -2281,7 +2285,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/carbon/stattext.cpp
     src/osx/carbon/tabctrl.cpp
     src/osx/carbon/textctrl.cpp
-    src/osx/carbon/timer.cpp
     src/osx/carbon/tglbtn.cpp
     src/osx/carbon/toolbar.cpp
     src/osx/carbon/tooltip.cpp
@@ -2384,11 +2387,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <!-- wxMac Carbon header files -->
 <set var="MAC_HDR" hints="files">
+    <!-- core files -->
+    wx/osx/core/colour.h
+    <!-- carbon files -->
     wx/osx/carbon/accel.h
     wx/osx/carbon/app.h
     wx/osx/carbon/bitmap.h
     wx/osx/carbon/bmpbuttn.h
-    wx/osx/carbon/brush.h
     wx/osx/carbon/button.h
     wx/osx/carbon/checkbox.h
     wx/osx/carbon/checklst.h
@@ -2396,7 +2401,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/carbon/choice.h
     wx/osx/carbon/clipbrd.h
     wx/osx/carbon/colordlg.h
-    wx/osx/carbon/colour.h
     wx/osx/carbon/combobox.h
     wx/osx/carbon/control.h
     wx/osx/carbon/cursor.h
@@ -2432,7 +2436,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/carbon/nonownedwnd.h
     wx/osx/carbon/notebook.h
     wx/osx/carbon/palette.h
-    wx/osx/carbon/pen.h
     wx/osx/carbon/popupwin.h
     wx/osx/carbon/pnghand.h
     wx/osx/carbon/pngread.h
