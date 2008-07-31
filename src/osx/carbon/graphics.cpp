@@ -2356,7 +2356,9 @@ public :
 
     virtual wxGraphicsContext * CreateContext( const wxWindowDC& dc);
     virtual wxGraphicsContext * CreateContext( const wxMemoryDC& dc);
+#if wxUSE_PRINTING_ARCHITECTURE
     virtual wxGraphicsContext * CreateContext( const wxPrinterDC& dc);
+#endif
 
     virtual wxGraphicsContext * CreateContextFromNativeContext( void * context );
 
@@ -2453,9 +2455,9 @@ wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxMemoryDC& 
     return NULL;
 }
 
+#if wxUSE_PRINTING_ARCHITECTURE
 wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxPrinterDC& dc )
 {
-#if wxUSE_PRINTING_ARCHITECTURE
 #ifdef __WXMAC__
     const wxDCImpl* impl = dc.GetImpl();
     wxPrinterDCImpl *print_impl = wxDynamicCast( impl, wxPrinterDCImpl );
@@ -2467,9 +2469,9 @@ wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxPrinterDC&
             (CGContextRef)(print_impl->GetGraphicsContext()->GetNativeContext()), (wxDouble) w, (wxDouble) h );
     }
 #endif
-#endif
     return NULL;
 }
+#endif
 
 wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContextFromNativeContext( void * context )
 {
