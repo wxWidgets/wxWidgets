@@ -26,7 +26,9 @@ class WXDLLIMPEXP_CORE wxGCDC: public wxDC
 public:
     wxGCDC( const wxWindowDC& dc );
     wxGCDC( const wxMemoryDC& dc );
+#if wxUSE_PRINTING_ARCHITECTURE
     wxGCDC( const wxPrinterDC& dc );
+#endif
     wxGCDC();
     virtual ~wxGCDC();
  
@@ -43,7 +45,9 @@ class WXDLLIMPEXP_CORE wxGCDCImpl: public wxDCImpl
 public:
     wxGCDCImpl( wxDC *owner, const wxWindowDC& dc );
     wxGCDCImpl( wxDC *owner, const wxMemoryDC& dc );
+#if wxUSE_PRINTING_ARCHITECTURE
     wxGCDCImpl( wxDC *owner, const wxPrinterDC& dc );
+#endif
     wxGCDCImpl( wxDC *owner );
     
     virtual ~wxGCDCImpl();
