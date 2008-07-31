@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/carbon/brush.h
+// Name:        wx/osx/brush.h
 // Purpose:     wxBrush class
 // Author:      Stefan Csomor
 // Modified by:

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/carbon/pen.h
+// Name:        wx/osx/pen.h
 // Purpose:     wxPen class
 // Author:      Stefan Csomor
 // Modified by:
