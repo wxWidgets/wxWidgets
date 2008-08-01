@@ -302,7 +302,7 @@ wxHtmlTag::wxHtmlTag(wxHtmlTag *parent,
 
     /* Find parameters and their values: */
 
-    wxChar c;
+    wxChar c wxDUMMY_INITIALIZE(0);
 
     // fill-in name, params and begin pos:
     wxString::const_iterator i(pos+1);
