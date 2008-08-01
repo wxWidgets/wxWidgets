@@ -35,25 +35,12 @@
 #include "wx/artprov.h"
 #include "wx/dcgraph.h"
 #include "wx/overlay.h"
-
-#define wxTEST_GRAPHICS 1
+#include "wx/graphics.h"
 
 #define TEST_CAIRO_EVERYWHERE 0
 
-#if wxTEST_GRAPHICS
-#include "wx/graphics.h"
-#include "wx/dcgraph.h"
-#if wxUSE_GRAPHICS_CONTEXT == 0
-#undef wxTEST_GRAPHICS
-#define wxTEST_GRAPHICS 0
-#endif
-#else
-#undef wxUSE_GRAPHICS_CONTEXT
-#define wxUSE_GRAPHICS_CONTEXT 0
-#endif
-
 // ----------------------------------------------------------------------------
-// ressources
+// resources
 // ----------------------------------------------------------------------------
 
 // the application icon
@@ -1364,7 +1351,7 @@ void MyCanvas::DrawRegionsHelper(wxDC& dc, wxCoord x, bool firstTime)
     if ( !firstTime )
         region.Offset(10, 10);
 #endif
-    dc.SetClippingRegion(region);
+    dc.SetDeviceClippingRegion(region);
 
     dc.SetBrush( *wxGREY_BRUSH );
     dc.DrawRectangle( x, y, 310, 310 );
@@ -1623,7 +1610,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(File_ShowSplines, _T("&Splines screen\tF11"));
     menuFile->Append(File_ShowGradients, _T("&Gradients screen\tF12"));
 #if wxUSE_GRAPHICS_CONTEXT
-     menuFile->Append(File_ShowGraphics, _T("&Graphics screen\tF13"));
+     menuFile->Append(File_ShowGraphics, _T("&Graphics screen"));
 #endif
     menuFile->AppendSeparator();
     menuFile->AppendCheckItem(File_Clip, _T("&Clip\tCtrl-C"), _T("Clip/unclip drawing"));
