@@ -88,7 +88,7 @@ to foil spam robots, remove one <tt>\@</tt> from them.
     <td>@image html yes.gif</td>
     <td>
         <a href="mailto:leif@@danmos.dk">Leif Jensen</a>,
-        <a href="mailto:Henrik@@fangorn.dk">Henrik Ræder Clausen</a>
+        <a href="mailto:Henrik@@fangorn.dk">Henrik RÃ¦der Clausen</a>
     </td>
 </tr>
 
@@ -146,7 +146,7 @@ to foil spam robots, remove one <tt>\@</tt> from them.
     <td>Hungarian</td>
     <td>@image html yes.gif</td>
     <td>
-        <a href="mailto:Janos_Vegh@@users.sourceforge.net">Végh János Dr.</a>
+        <a href="mailto:Janos_Vegh@@users.sourceforge.net">VÃ©gh JÃ¡nos Dr.</a>
     </td>
 </tr>
 
