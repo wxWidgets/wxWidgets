@@ -148,13 +148,10 @@ CPP_METHODDEF(void) wx_term_source ( j_decompress_ptr cinfo )
 
 // JPEG error manager:
 
-struct wx_error_mgr {
-  struct jpeg_error_mgr pub;    /* "public" fields */
-
+struct wx_error_mgr : jpeg_error_mgr
+{
   jmp_buf setjmp_buffer;    /* for return to caller */
 };
-
-typedef struct wx_error_mgr * wx_error_ptr;
 
 /*
  * Here's the routine that will replace the standard error_exit method:
@@ -163,14 +160,14 @@ typedef struct wx_error_mgr * wx_error_ptr;
 CPP_METHODDEF(void) wx_error_exit (j_common_ptr cinfo)
 {
   /* cinfo->err really points to a wx_error_mgr struct, so coerce pointer */
-  wx_error_ptr myerr = (wx_error_ptr) cinfo->err;
+  wx_error_mgr * const jerr = (wx_error_mgr *) cinfo->err;
 
   /* Always display the message. */
   /* We could postpone this until after returning, if we chose. */
   (*cinfo->err->output_message) (cinfo);
 
   /* Return control to the setjmp point */
-  longjmp(myerr->setjmp_buffer, 1);
+  longjmp(jerr->setjmp_buffer, 1);
 }
 
 /*
@@ -232,12 +229,12 @@ static inline void wx_cmyk_to_rgb(unsigned char* rgb, const unsigned char* cmyk)
 bool wxJPEGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose, int WXUNUSED(index) )
 {
     struct jpeg_decompress_struct cinfo;
-    struct wx_error_mgr jerr;
+    wx_error_mgr jerr;
     unsigned char *ptr;
 
     image->Destroy();
-    cinfo.err = jpeg_std_error( &jerr.pub );
-    jerr.pub.error_exit = wx_error_exit;
+    cinfo.err = jpeg_std_error( &jerr );
+    jerr.error_exit = wx_error_exit;
 
     if (!verbose)
         cinfo.err->output_message = wx_ignore_message;
@@ -389,13 +386,13 @@ GLOBAL(void) wx_jpeg_io_dest (j_compress_ptr cinfo, wxOutputStream& outfile)
 bool wxJPEGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbose )
 {
     struct jpeg_compress_struct cinfo;
-    struct wx_error_mgr jerr;
+    wx_error_mgr jerr;
     JSAMPROW row_pointer[1];    /* pointer to JSAMPLE row[s] */
     JSAMPLE *image_buffer;
     int stride;                /* physical row width in image buffer */
 
-    cinfo.err = jpeg_std_error(&jerr.pub);
-    jerr.pub.error_exit = wx_error_exit;
+    cinfo.err = jpeg_std_error(&jerr);
+    jerr.error_exit = wx_error_exit;
 
     if (!verbose)
         cinfo.err->output_message = wx_ignore_message;
