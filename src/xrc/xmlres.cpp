@@ -1784,6 +1784,24 @@ static void AddStdXRCID_Records()
     stdID(wxID_MAXIMIZE_FRAME);
     stdID(wxID_ICONIZE_FRAME);
     stdID(wxID_RESTORE_FRAME);
+    stdID(wxID_CDROM);
+    stdID(wxID_CONVERT);
+    stdID(wxID_EXECUTE);
+    stdID(wxID_FLOPPY);
+    stdID(wxID_HARDDISK);
+    stdID(wxID_BOTTOM);
+    stdID(wxID_FIRST);
+    stdID(wxID_LAST);
+    stdID(wxID_TOP);
+    stdID(wxID_INFO);
+    stdID(wxID_JUMP_TO);
+    stdID(wxID_NETWORK);
+    stdID(wxID_SELECT_COLOR);
+    stdID(wxID_SELECT_FONT);
+    stdID(wxID_SORT_ASCENDING);
+    stdID(wxID_SORT_DESCENDING);
+    stdID(wxID_SPELL_CHECK);
+    stdID(wxID_STRIKETHROUGH);
 
 #undef stdID
 }
