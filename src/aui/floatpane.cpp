@@ -144,6 +144,11 @@ void wxAuiFloatingFrame::SetPaneWindow(const wxAuiPaneInfo& pane)
 
         SetClientSize(size);
     }
+    
+    if (pane.IsFixed())
+    {
+        SetWindowStyleFlag(GetWindowStyleFlag() & ~wxRESIZE_BORDER);
+    }
 }
 
 wxAuiManager* wxAuiFloatingFrame::GetOwnerManager() const
