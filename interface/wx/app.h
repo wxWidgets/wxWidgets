@@ -76,11 +76,12 @@ public:
     /**
         Returns the user-readable application name.
 
-        The difference between this string and the one returned by GetAppName() is that
-        this one is meant to be shown to the user and so should be used for the window
-        titles, page headers and so on while the other one should be only used internally,
-        e.g. for the file names or configuration file keys.
-        By default, returns the same string as GetAppName().
+        The difference between this string and the one returned by GetAppName()
+        is that this one is meant to be shown to the user and so should be used
+        for the window titles, page headers and so on while the other one
+        should be only used internally, e.g. for the file names or
+        configuration file keys. By default, returns the application name as
+        returned by GetAppName() capitalized using wxString::Capitalize().
 
         @since 2.9.0
     */
@@ -370,9 +371,14 @@ public:
     virtual bool Pending();
 
     /**
-        Set the application name to be used in the user-visible places such as window
-        titles. See GetAppDisplayName() for more about the differences between the
+        Set the application name to be used in the user-visible places such as
+        window titles.
+
+        See GetAppDisplayName() for more about the differences between the
         display name and name.
+
+        Notice that if this function is called, the name is used as is, without
+        any capitalization as done by default by GetAppDisplayName().
     */
     void SetAppDisplayName(const wxString& name);
 

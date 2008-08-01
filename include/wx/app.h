@@ -131,8 +131,10 @@ public:
         // so the app name could be myapp while display name could be "My App"
     wxString GetAppDisplayName() const
     {
-        return m_appDisplayName.empty() ? GetAppName() : m_appDisplayName;
+        return m_appDisplayName.empty() ? GetAppName().Capitalize()
+                                        : m_appDisplayName;
     }
+
     void SetAppDisplayName(const wxString& name) { m_appDisplayName = name; }
 
         // set/get the app class name
