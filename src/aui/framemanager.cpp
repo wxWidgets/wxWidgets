@@ -2863,7 +2863,8 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
                     (part->dock->dock_direction != wxAUI_DOCK_CENTER &&
                      part->dock->dock_direction != wxAUI_DOCK_NONE)))
                 {
-                    drop.Float();
+                    if (drop.IsFloatable())
+                        drop.Float();
                 }
 
                 m_skipping = false;
