@@ -69,7 +69,15 @@ extern int wxEntryCleanupReal(int& argc, wxChar **argv);
 
 #if wxUSE_BASE
 
-#if wxUSE_ON_FATAL_EXCEPTION && defined(__VISUALC__) && !defined(__WXWINCE__)
+// ----------------------------------------------------------------------------
+// wrapper wxEntry catching all Win32 exceptions occurring in a wx program
+// ----------------------------------------------------------------------------
+
+// wrap real wxEntry in a try-except block to be able to call
+// OnFatalException() if necessary
+#if wxUSE_ON_FATAL_EXCEPTION
+
+#if defined(__VISUALC__) && !defined(__WXWINCE__)
     // VC++ (at least from 4.0 up to version 7.1) is incredibly broken in that
     // a "catch ( ... )" will *always* catch SEH exceptions in it even though
     // it should have never been the case... to prevent such catches from
@@ -90,14 +98,6 @@ extern int wxEntryCleanupReal(int& argc, wxChar **argv);
 #else // !__VISUALC__
     #define DisableAutomaticSETranslator()
 #endif // __VISUALC__/!__VISUALC__
-
-// ----------------------------------------------------------------------------
-// wrapper wxEntry catching all Win32 exceptions occurring in a wx program
-// ----------------------------------------------------------------------------
-
-// wrap real wxEntry in a try-except block to be able to call
-// OnFatalException() if necessary
-#if wxUSE_ON_FATAL_EXCEPTION
 
 // global pointer to exception information, only valid inside OnFatalException,
 // used by wxStackWalker and wxCrashReport
@@ -214,21 +214,8 @@ int wxEntry(int& argc, wxChar **argv)
 
 #else // !wxUSE_ON_FATAL_EXCEPTION
 
-#if defined(__VISUALC__) && !defined(__WXWINCE__)
-
-static void
-wxSETranslator(unsigned int WXUNUSED(code), EXCEPTION_POINTERS * WXUNUSED(ep))
-{
-    // see wxSETranslator() version for wxUSE_ON_FATAL_EXCEPTION above
-    throw;
-}
-
-#endif // __VISUALC__
-
 int wxEntry(int& argc, wxChar **argv)
 {
-    DisableAutomaticSETranslator();
-
     return wxEntryReal(argc, argv);
 }
 
