@@ -1177,7 +1177,14 @@ void wxApp::MacDoOneEvent()
             if ( wxTheApp->ProcessIdle() )
                 sleepTime = kEventDurationNoWait ;
             else
+            {
                 sleepTime = kEventDurationSecond;
+#if wxUSE_THREADS
+                wxMutexGuiLeave();
+                wxMilliSleep(20);
+                wxMutexGuiEnter();
+#endif
+            }
             break;
 
         case eventLoopQuitErr :
@@ -1230,11 +1237,6 @@ void wxApp::MacHandleOneEvent( WXEVENTREF evr )
     OSStatus status = SendEventToEventTarget((EventRef) evr , theTarget);
     if (status == eventNotHandledErr)
         MacHandleUnhandledEvent(evr);
-
-#if wxUSE_THREADS
-    wxMutexGuiLeaveOrEnter();
-#endif // wxUSE_THREADS
-
 #else
     // TODO Threads
 #endif

@@ -204,7 +204,7 @@ private:
 
 // in order to avoid any overhead under platforms where critical sections are
 // just mutexes make all wxCriticalSection class functions inline
-#if !defined(__WXMSW__) && ( !defined(__WXMAC__) || wxOSX_USE_COCOA_OR_IPHONE )
+#if !defined(__WXMSW__)
     #define wxCRITSECT_IS_MUTEX 1
 
     #define wxCRITSECT_INLINE inline
@@ -256,8 +256,6 @@ private:
 
         wxCritSectBuffer m_buffer;
     };
-#elif defined(__WXMAC__)
-    void *m_critRegion ;
 #endif // Unix&OS2/Win32
 
     DECLARE_NO_COPY_CLASS(wxCriticalSection)
@@ -774,7 +772,7 @@ public:
 
 #if wxUSE_THREADS
 
-#if defined(__WXMSW__) || defined(__WXMAC__) || defined(__OS2__) || defined(__EMX__)
+#if defined(__WXMSW__) || defined(__OS2__) || defined(__EMX__)
     // unlock GUI if there are threads waiting for and lock it back when
     // there are no more of them - should be called periodically by the main
     // thread
@@ -789,7 +787,7 @@ public:
     // return true if the main thread is waiting for some other to terminate:
     // wxApp then should block all "dangerous" messages
     extern bool WXDLLIMPEXP_BASE wxIsWaitingForThread();
-#endif // MSW, Mac, OS/2
+#endif // MSW, OS/2
 
 #endif // wxUSE_THREADS
 

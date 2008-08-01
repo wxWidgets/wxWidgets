@@ -61,10 +61,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/unix/epolldispatcher.cpp
     src/unix/appunix.cpp
     src/unix/evtloopunix.cpp
+    src/unix/dir.cpp
     src/unix/dlunix.cpp
     src/unix/snglinst.cpp
     src/unix/stdpaths.cpp
     src/unix/timerunx.cpp
+    src/unix/threadpsx.cpp
     src/unix/stackwalk.cpp
     src/unix/utilsunx.cpp
 </set>
@@ -89,9 +91,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
  -->
 <set var="BASE_UNIX_AND_DARWIN_NOTWXMAC_SRC" hints="files">
     $(BASE_UNIX_AND_DARWIN_SRC)
-    src/unix/dir.cpp
     src/unix/mimetype.cpp
-    src/unix/threadpsx.cpp
 </set>
 
 <set var="BASE_UNIX_AND_DARWIN_NOTWXMAC_HDR" hints="files">
@@ -180,7 +180,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!--                                Mac                                     -->
 <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
 
-<!-- Used on Mac OS CarbonLib, Mac OS X wxMac base, and Mac OS X darwin base -->
+<!-- Used on Mac OS X wxMac base, and Mac OS X darwin base -->
 <set var="BASE_COREFOUNDATION_SRC" hints="files">
     src/osx/core/cfstring.cpp
     src/osx/core/gsockosx.cpp
@@ -197,48 +197,22 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/core/private/strconv_cf.h
 </set>
 
-<!-- Base files used by Carbon on OS X and CarbonLib (not true Classic) -->
+<!-- Base files used by wxMac on OS X -->
 <!-- FIXME: Maybe this ought to be named BASE_MAC_CARBON_SRC  -->
 <set var="BASE_MAC_SRC" hints="files">
-    src/osx/carbon/dirmac.cpp
     src/osx/carbon/mimetmac.cpp
-    src/osx/carbon/thread.cpp
-    <!-- One would think MoreFilesX is only for OS X but it seems to
-         apply to CarbonLib as well (FSRefMakeFSSpec) -->
-    src/osx/carbon/morefilex/MoreFilesX.c
     $(BASE_COREFOUNDATION_SRC)
 </set>
 <set var="BASE_MAC_HDR" hints="files">
     $(BASE_COREFOUNDATION_HDR)
 </set>
-<!-- Base and GUI files used by both OS X and CarbonLib -->
+<!-- Base and GUI files used by OS X -->
 <set var="BASE_AND_GUI_MAC_SRC" hints="files">
     src/osx/carbon/utils.cpp
     src/osx/carbon/uma.cpp
 </set>
 
-<!-- Base files used by Classic (not CarbonLib or OS X builds) -->
-<!-- set var="BASE_MAC_CLASSIC_SRC">
-</set -->
-<!-- set var="BASE_MAC_CLASSIC_HDR">
-</set -->
-
-<!-- Base files used only by CarbonLib builds (not Classic or OS X) -->
-<set var="BASE_MAC_CARBONLIB_SRC" hints="files">
-    src/osx/carbon/morefile/DirectoryCopy.c
-    src/osx/carbon/morefile/FSpCompat.c
-    src/osx/carbon/morefile/FileCopy.c
-    src/osx/carbon/morefile/FullPath.c
-    src/osx/carbon/morefile/IterateDirectory.c
-    src/osx/carbon/morefile/MoreDesktopMgr.c
-    src/osx/carbon/morefile/MoreFiles.c
-    src/osx/carbon/morefile/MoreFilesExtras.c
-    src/osx/carbon/morefile/Search.c
-</set>
-<!-- set var="BASE_MAC_CARBONLIB_HDR" hints="files">
-</set -->
-
-<!-- Base files used only by OS X builds (not CarbonLib or Classic)  -->
+<!-- Base files used only by OS X builds -->
 <set var="BASE_MACOSX_WXMAC_SRC" hints="files">
     $(BASE_MAC_SRC)
     $(BASE_UNIX_AND_DARWIN_SRC)
@@ -408,7 +382,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/txtstrm.cpp
     src/common/unichar.cpp
     src/common/uri.cpp
-    src/common/ustring.cpp
+    <!-- src/common/ustring.cpp -->
     src/common/variant.cpp
     src/common/wfstream.cpp
     src/common/wxcrt.cpp
@@ -535,7 +509,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/types.h
     wx/unichar.h
     wx/uri.h
-    wx/ustring.h
+    <!-- wx/ustring.h -->
     wx/utils.h
     wx/variant.h
     wx/vector.h
@@ -593,11 +567,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="NET_OS2_HDR" hints="files">
     wx/unix/gsockunx.h
-</set>
-<!-- Net files used only by CarbonLib (not Classic or OS X) -->
-<set var="NET_MAC_CARBONLIB_SRC" hints="files">
-</set>
-<set var="NET_MAC_CARBONLIB_HDR" hints="files">
 </set>
 
 <set var="NET_CMN_SRC" hints="files">
@@ -3431,7 +3400,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="PLATFORM_UNIX=='1'">$(BASE_UNIX_SRC)</if>
         <if cond="PLATFORM_WIN32=='1'">$(BASE_WIN32_SRC) $(BASE_WINCE_SRC)</if>
         <if cond="PLATFORM_MACOSX=='1'">$(BASE_MACOSX_SRC)</if>
-        <if cond="PLATFORM_MACOS=='1'">$(BASE_MAC_SRC) $(BASE_MAC_CARBONLIB_SRC)</if>
         <if cond="PLATFORM_OS2=='1'">$(BASE_OS2_SRC)</if>
         <if cond="PLATFORM_PALMOS=='1'">$(BASE_PALMOS_SRC)</if>
         <if cond="PLATFORM_MSDOS=='1'">$(BASE_MSDOS_SRC)</if>
@@ -3484,7 +3452,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="PLATFORM_UNIX=='1'">$(NET_UNIX_SRC)</if>
         <if cond="PLATFORM_WIN32=='1'">$(NET_WIN32_SRC) $(NET_WINCE_SRC)</if>
         <if cond="PLATFORM_MACOSX=='1'">$(NET_UNIX_SRC)</if>
-        <if cond="PLATFORM_MACOS=='1'">$(NET_MAC_CARBONLIB_SRC)</if>
         <if cond="PLATFORM_OS2=='1'">$(NET_OS2_SRC)</if>
     </set>
     <set var="NET_PLATFORM_HDR" hints="files">
@@ -3492,7 +3459,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="PLATFORM_WIN32=='1'">$(NET_WIN32_HDR) $(NET_WINCE_HDR)</if>
         <if cond="PLATFORM_OS2=='1'">$(NET_OS2_HDR)</if>
         <if cond="PLATFORM_MACOSX=='1'">$(NET_UNIX_HDR)</if>
-        <if cond="PLATFORM_MACOS=='1'">$(NET_MAC_CARBONLIB_HDR)</if>
     </set>
 
     <set var="NET_SRC" hints="files">
@@ -3676,7 +3642,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         $(NET_WIN32_HDR) $(NET_WINCE_HDR)
         $(NET_OS2_HDR)
         $(NET_UNIX_HDR)
-        $(NET_MAC_CARBONLIB_HDR)
         $(XML_HDR)
     </set>
 
