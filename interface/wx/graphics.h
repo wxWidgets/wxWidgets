@@ -11,8 +11,8 @@
 
     A wxGraphicsPath is a native representation of an geometric path. The contents
     are specific an private to the respective renderer. Instances are ref counted and can
-    therefore be assigned as usual. The only way to get a valid instance is via a
-    CreatePath call on the graphics context or the renderer instance.
+    therefore be assigned as usual. The only way to get a valid instance is via
+    wxGraphicsContext::CreatePath or wxGraphicsRenderer::CreatePath.
 
     @library{wxcore}
     @category{FIXME}
@@ -631,6 +631,10 @@ public:
 /**
     @class wxGraphicsBrush
 
+    A wxGraphicsBrush is a native representation of a brush. The contents
+    are specific and private to the respective renderer. Instances are ref counted and can
+    therefore be assigned as usual. The only way to get a valid instance is via
+    wxGraphicsContext::CreateBrush or wxGraphicsRenderer::CreateBrush.
 
     @library{wxcore}
     @category{FIXME}
@@ -646,6 +650,10 @@ public:
 /**
     @class wxGraphicsFont
 
+    A wxGraphicsFont is a native representation of a font. The contents
+    are specific and private to the respective renderer. Instances are ref counted and can
+    therefore be assigned as usual. The only way to get a valid instance is via
+    wxGraphicsContext::CreateFont or wxGraphicsRenderer::CreateFont.
 
     @library{wxcore}
     @category{FIXME}
@@ -661,6 +669,10 @@ public:
 /**
     @class wxGraphicsPen
 
+    A wxGraphicsPen is a native representation of a pen. The contents
+    are specific and private to the respective renderer. Instances are ref counted and can
+    therefore be assigned as usual. The only way to get a valid instance is via
+    wxGraphicsContext::CreatePen or wxGraphicsRenderer::CreatePen.
 
     @library{wxcore}
     @category{FIXME}
@@ -677,7 +689,9 @@ public:
     @class wxGraphicsMatrix
 
     A wxGraphicsMatrix is a native representation of an affine matrix. The contents
-    are specific and private to the respective renderer. Instances are ref counted and can therefore be assigned as usual. The only way to get a valid instance is via a CreateMatrix call on the graphics context or the renderer instance.
+    are specific and private to the respective renderer. Instances are ref counted and can
+    therefore be assigned as usual. The only way to get a valid instance is via
+    wxGraphicsContext::CreateMatrix or wxGraphicsRenderer::CreateMatrix.
 
     @library{wxcore}
     @category{FIXME}
