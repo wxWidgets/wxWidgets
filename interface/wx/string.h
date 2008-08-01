@@ -27,10 +27,10 @@
     @endcode
 
     Note that the exact usage of this depends on whether or not wxUSE_STL is
-    enabled. If wxUSE_STL is enabled, wxStringBuffer creates a separate empty 
+    enabled. If wxUSE_STL is enabled, wxStringBuffer creates a separate empty
     character buffer, and if wxUSE_STL is disabled, it uses GetWriteBuf() from
-    wxString, keeping the same buffer wxString uses intact. In other words, 
-    relying on wxStringBuffer containing the old wxString data is not a good 
+    wxString, keeping the same buffer wxString uses intact. In other words,
+    relying on wxStringBuffer containing the old wxString data is not a good
     idea if you want to build your program both with and without wxUSE_STL.
 
     @library{wxbase}
@@ -75,16 +75,16 @@ public:
     internally even if wxUSE_STL is not defined.
 
     Since wxWidgets 3.0 wxString internally uses UCS-2 (basically 2-byte per
-    character wchar_t and nearly the same as UTF-16) under Windows and 
-    UTF-8 under Unix, Linux and OS X to store its content. 
+    character wchar_t and nearly the same as UTF-16) under Windows and
+    UTF-8 under Unix, Linux and OS X to store its content.
     Much work has been done to make existing code using ANSI string literals
     work as before. If you need to have a wxString that uses wchar_t on Unix
     and Linux, too, you can specify this on the command line with the
     @c configure @c --disable-utf8 switch.
-    
+
     If you need a Unicode string class with O(1) access on all platforms
     you should consider using wxUString.
-    
+
     Since iterating over a wxString by index can become inefficient in UTF-8
     mode iterators should be used instead of index based access:
 
@@ -154,7 +154,7 @@ public:
         failure in @ref overview_debugging "debug build", but no checks are
         done in release builds.
         This section also contains both implicit and explicit conversions to C style
-        strings. Although implicit conversion is quite convenient, you are advised 
+        strings. Although implicit conversion is quite convenient, you are advised
         to use wc_str() for the sake of clarity.
 
         @li GetChar()
@@ -226,7 +226,7 @@ public:
         @li Empty()
         @li Clear()
 
-        These functions allow you to extract a substring from the string. The 
+        These functions allow you to extract a substring from the string. The
         original string is not modified and the function returns the extracted
         substring.
 
@@ -462,6 +462,16 @@ public:
     */
     wxString BeforeLast(wxUniChar ch) const;
 
+
+    /**
+        Return the copy of the string with the first string character in the
+        upper case and the subsequent ones in the lower case.
+
+        @since 2.9.0
+
+        @see MakeCapitalized()
+     */
+    wxString Capitalize() const;
 
     /**
         Empties the string and frees memory occupied by it.
@@ -759,6 +769,8 @@ public:
 
     /**
         Returns this string converted to the lower case.
+
+        @see MakeLower()
     */
     wxString Lower() const;
 
@@ -770,12 +782,26 @@ public:
     void LowerCase();
 
     /**
+        Converts the first characters of the string to the upper case and all
+        the subsequent ones to the lower case and returns the result.
+
+        @since 2.9.0
+
+        @see Capitalize()
+    */
+    wxString& MakeCapitalized();
+
+    /**
         Converts all characters to lower case and returns the result.
+
+        @see Lower()
     */
     wxString& MakeLower();
 
     /**
         Converts all characters to upper case and returns the result.
+
+        @see Upper()
     */
     wxString& MakeUpper();
 
@@ -1018,6 +1044,8 @@ public:
 
     /**
         Returns this string converted to upper case.
+
+        @see MakeUpper()
     */
     wxString Upper() const;
 
@@ -1033,14 +1061,14 @@ public:
         convertible to both @c const @c char* and to @c const @c wchar_t*.
         Given this ambiguity it is mostly better to use wc_str(), mb_str() or
         utf8_str() instead.
-        
+
         Please see the @ref overview_unicode "Unicode overview" for more
         information about it.
-        
+
         Note that the returned value is not convertible to @c char* or
         @c wchar_t*, use char_str() or wchar_str() if you need to pass
         string value to a function expecting non-const pointer.
-        
+
         @see wc_str(), utf8_str(), c_str(), mb_str(), fn_str()
     */
     const wxCStrData c_str() const;
@@ -1091,8 +1119,8 @@ public:
 
     /**
         Returns the multibyte (C string) representation of the string
-        using @e conv's wxMBConv::cWC2MB method and returns wxCharBuffer. 
-        
+        using @e conv's wxMBConv::cWC2MB method and returns wxCharBuffer.
+
         @see wc_str(), utf8_str(), c_str(), wxMBConv
     */
     const wxCharBuffer mb_str(const wxMBConv& conv = wxConvLibc) const;
@@ -1180,7 +1208,7 @@ public:
         Converts the strings contents to UTF-8 and returns it either as a
         temporary wxCharBuffer object or as a pointer to the internal
         string contents in UTF-8 build.
-        
+
         @see wc_str(), c_str(), mb_str()
     */
     const char* utf8_str() const;
@@ -1190,7 +1218,7 @@ public:
     //@{
     /**
         Converts the strings contents to the wide character represention
-        and returns it as a temporary wxWCharBuffer object (Unix and OS X) 
+        and returns it as a temporary wxWCharBuffer object (Unix and OS X)
         or returns a pointer to the internal string contents in wide character
         mode (Windows).
 
@@ -1214,7 +1242,7 @@ public:
     */
     wxWritableWCharBuffer wchar_str() const;
 
-    /** 
+    /**
        Explicit conversion to C string in the internal representation (either
        wchar_t* or UTF-8-encoded char*, depending on the build).
     */
@@ -1373,10 +1401,10 @@ wxString wxEmptyString;
     @endcode
 
     Note that the exact usage of this depends on whether or not wxUSE_STL is
-    enabled. If wxUSE_STL is enabled, wxStringBuffer creates a separate empty 
+    enabled. If wxUSE_STL is enabled, wxStringBuffer creates a separate empty
     character buffer, and if wxUSE_STL is disabled, it uses GetWriteBuf() from
-    wxString, keeping the same buffer wxString uses intact. In other words, 
-    relying on wxStringBuffer containing the old wxString data is not a good 
+    wxString, keeping the same buffer wxString uses intact. In other words,
+    relying on wxStringBuffer containing the old wxString data is not a good
     idea if you want to build your program both with and without wxUSE_STL.
 
     Note that SetLength @c must be called before wxStringBufferLength destructs.

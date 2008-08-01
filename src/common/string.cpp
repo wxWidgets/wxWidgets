@@ -1363,6 +1363,20 @@ wxString& wxString::MakeLower()
   return *this;
 }
 
+wxString& wxString::MakeCapitalized()
+{
+    const iterator en = end();
+    iterator it = begin();
+    if ( it != en )
+    {
+        *it = (wxChar)wxToupper(*it);
+        for ( ++it; it != en; ++it )
+            *it = (wxChar)wxTolower(*it);
+    }
+
+    return *this;
+}
+
 // ---------------------------------------------------------------------------
 // trimming and padding
 // ---------------------------------------------------------------------------
@@ -1966,13 +1980,6 @@ int wxString::Freq(wxUniChar ch) const
     }
     return count;
 }
-
-// convert to upper case, return the copy of the string
-wxString wxString::Upper() const
-{ wxString s(*this); return s.MakeUpper(); }
-
-// convert to lower case, return the copy of the string
-wxString wxString::Lower() const { wxString s(*this); return s.MakeLower(); }
 
 // ----------------------------------------------------------------------------
 // wxUTF8StringBuffer

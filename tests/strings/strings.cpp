@@ -366,14 +366,26 @@ void StringTestCase::CaseChanges()
     wxString s1l(s1);
     s1u.MakeUpper();
     s1l.MakeLower();
+
+    CPPUNIT_ASSERT_EQUAL( _T("HELLO!"), s1u );
+    CPPUNIT_ASSERT_EQUAL( _T("hello!"), s1l );
+
     wxString s2u, s2l;
     s2u.MakeUpper();
     s2l.MakeLower();
 
-    CPPUNIT_ASSERT( s1u == _T("HELLO!") );
-    CPPUNIT_ASSERT( s1l == _T("hello!") );
-    CPPUNIT_ASSERT( s2u == wxEmptyString );
-    CPPUNIT_ASSERT( s2l == wxEmptyString );
+    CPPUNIT_ASSERT_EQUAL( "", s2u );
+    CPPUNIT_ASSERT_EQUAL( "", s2l );
+
+
+    wxString s3("good bye");
+    CPPUNIT_ASSERT_EQUAL( "Good bye", s3.Capitalize() );
+    s3.MakeCapitalized();
+    CPPUNIT_ASSERT_EQUAL( "Good bye", s3 );
+
+    CPPUNIT_ASSERT_EQUAL( "Abc", wxString("ABC").Capitalize() );
+
+    CPPUNIT_ASSERT_EQUAL( "", wxString().Capitalize() );
 }
 
 void StringTestCase::Compare()

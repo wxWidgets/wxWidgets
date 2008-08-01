@@ -288,6 +288,7 @@ All:
 - Fix reading/writing UTF-7-encoded text streams.
 - Corrected bug in wxTimeSpan::IsShorterThan() for equal time spans.
 - Use std::unordered_{map,set} for wxHashMap/Set if available (Jan van Dijk).
+- Added wxString::Capitalize() and MakeCapitalized().
 
 All (Unix):
 

@@ -1704,12 +1704,17 @@ public:
       // convert to upper case in place, return the string itself
   wxString& MakeUpper();
       // convert to upper case, return the copy of the string
-      // Here's something to remember: BC++ doesn't like returns in inlines.
-  wxString Upper() const ;
+  wxString Upper() const { return wxString(*this).MakeUpper(); }
       // convert to lower case in place, return the string itself
   wxString& MakeLower();
       // convert to lower case, return the copy of the string
-  wxString Lower() const ;
+  wxString Lower() const { return wxString(*this).MakeLower(); }
+      // convert the first character to the upper case and the rest to the
+      // lower one, return the modified string itself
+  wxString& MakeCapitalized();
+      // convert the first character to the upper case and the rest to the
+      // lower one, return the copy of the string
+  wxString Capitalize() const { return wxString(*this).MakeCapitalized(); }
 
   // trimming/padding whitespace (either side) and truncating
       // remove spaces from left or from right (default) side
