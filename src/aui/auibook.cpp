@@ -4257,7 +4257,7 @@ void wxAuiNotebook::OnTabButton(wxCommandEvent& command_evt)
         {
             // if the close button is to the right, use the active
             // page selection to determine which page to close
-            selection = GetSelection();
+            selection = tabs->GetActivePage();
         }
 
         if (selection != -1)
