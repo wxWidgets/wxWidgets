@@ -187,7 +187,7 @@ public:
         return utf16_str();
     }
 #else
-    wchar_t* wx_str()
+    const wchar_t* wx_str()
     {
         return c_str();
     }
