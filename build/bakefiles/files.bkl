@@ -382,7 +382,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/txtstrm.cpp
     src/common/unichar.cpp
     src/common/uri.cpp
-    <!-- src/common/ustring.cpp -->
+    src/common/ustring.cpp
     src/common/variant.cpp
     src/common/wfstream.cpp
     src/common/wxcrt.cpp
@@ -509,7 +509,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/types.h
     wx/unichar.h
     wx/uri.h
-    <!-- wx/ustring.h -->
+    wx/ustring.h
     wx/utils.h
     wx/variant.h
     wx/vector.h

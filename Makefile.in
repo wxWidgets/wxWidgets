@@ -414,6 +414,7 @@ ALL_BASE_HEADERS =  \
 	wx/types.h \
 	wx/unichar.h \
 	wx/uri.h \
+	wx/ustring.h \
 	wx/utils.h \
 	wx/variant.h \
 	wx/vector.h \
@@ -564,6 +565,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/types.h \
 	wx/unichar.h \
 	wx/uri.h \
+	wx/ustring.h \
 	wx/utils.h \
 	wx/variant.h \
 	wx/vector.h \
@@ -715,6 +717,7 @@ ALL_BASE_SOURCES =  \
 	src/common/txtstrm.cpp \
 	src/common/unichar.cpp \
 	src/common/uri.cpp \
+	src/common/ustring.cpp \
 	src/common/variant.cpp \
 	src/common/wfstream.cpp \
 	src/common/wxcrt.cpp \
@@ -896,6 +899,7 @@ MONODLL_OBJECTS =  \
 	monodll_txtstrm.o \
 	monodll_unichar.o \
 	monodll_uri.o \
+	monodll_ustring.o \
 	monodll_variant.o \
 	monodll_wfstream.o \
 	monodll_wxcrt.o \
@@ -1011,6 +1015,7 @@ MONOLIB_OBJECTS =  \
 	monolib_txtstrm.o \
 	monolib_unichar.o \
 	monolib_uri.o \
+	monolib_ustring.o \
 	monolib_variant.o \
 	monolib_wfstream.o \
 	monolib_wxcrt.o \
@@ -1124,6 +1129,7 @@ BASEDLL_OBJECTS =  \
 	basedll_txtstrm.o \
 	basedll_unichar.o \
 	basedll_uri.o \
+	basedll_ustring.o \
 	basedll_variant.o \
 	basedll_wfstream.o \
 	basedll_wxcrt.o \
@@ -1220,6 +1226,7 @@ BASELIB_OBJECTS =  \
 	baselib_txtstrm.o \
 	baselib_unichar.o \
 	baselib_uri.o \
+	baselib_ustring.o \
 	baselib_variant.o \
 	baselib_wfstream.o \
 	baselib_wxcrt.o \
@@ -13743,6 +13750,9 @@ monodll_unichar.o: $(srcdir)/src/common/unichar.cpp $(MONODLL_ODEP)
 monodll_uri.o: $(srcdir)/src/common/uri.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/uri.cpp
 
+monodll_ustring.o: $(srcdir)/src/common/ustring.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/ustring.cpp
+
 monodll_variant.o: $(srcdir)/src/common/variant.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/variant.cpp
 
@@ -18224,6 +18234,9 @@ monolib_unichar.o: $(srcdir)/src/common/unichar.cpp $(MONOLIB_ODEP)
 
 monolib_uri.o: $(srcdir)/src/common/uri.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/uri.cpp
+
+monolib_ustring.o: $(srcdir)/src/common/ustring.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/ustring.cpp
 
 monolib_variant.o: $(srcdir)/src/common/variant.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/variant.cpp
@@ -22707,6 +22720,9 @@ basedll_unichar.o: $(srcdir)/src/common/unichar.cpp $(BASEDLL_ODEP)
 basedll_uri.o: $(srcdir)/src/common/uri.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/uri.cpp
 
+basedll_ustring.o: $(srcdir)/src/common/ustring.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/ustring.cpp
+
 basedll_variant.o: $(srcdir)/src/common/variant.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/variant.cpp
 
@@ -23450,6 +23466,9 @@ baselib_unichar.o: $(srcdir)/src/common/unichar.cpp $(BASELIB_ODEP)
 
 baselib_uri.o: $(srcdir)/src/common/uri.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/uri.cpp
+
+baselib_ustring.o: $(srcdir)/src/common/ustring.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/ustring.cpp
 
 baselib_variant.o: $(srcdir)/src/common/variant.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/variant.cpp
