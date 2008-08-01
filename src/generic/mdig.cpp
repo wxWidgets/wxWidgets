@@ -775,7 +775,7 @@ void wxGenericMDIClientWindow::PageChanged(int OldSelection, int newSelection)
     }
 }
 
-void wxGenericMDIClientWindow::OnPageChanged(wxNotebookEvent& event)
+void wxGenericMDIClientWindow::OnPageChanged(wxBookCtrlEvent& event)
 {
     PageChanged(event.GetOldSelection(), event.GetSelection());
 

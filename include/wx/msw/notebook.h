@@ -150,7 +150,7 @@ public:
   // callbacks
   // ---------
   void OnSize(wxSizeEvent& event);
-  void OnSelChange(wxNotebookEvent& event);
+  void OnSelChange(wxBookCtrlEvent& event);
   void OnNavigationKey(wxNavigationKeyEvent& event);
 
   // base class virtuals

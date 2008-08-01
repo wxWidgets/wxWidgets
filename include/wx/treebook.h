@@ -233,47 +233,28 @@ private:
 // treebook event class and related stuff
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxTreebookEvent : public wxBookCtrlBaseEvent
-{
-public:
-    wxTreebookEvent(wxEventType commandType = wxEVT_NULL, int id = 0,
-                    int nSel = wxNOT_FOUND, int nOldSel = wxNOT_FOUND)
-        : wxBookCtrlBaseEvent(commandType, id, nSel, nOldSel)
-    {
-    }
+// wxTreebookEvent is obsolete and defined for compatibility only
+typedef wxBookCtrlEvent wxTreebookEvent;
+typedef wxBookCtrlEventFunction wxTreebookEventFunction;
+#define wxTreebookEventHandler(func) wxBookCtrlEventHandler(func)
 
-    wxTreebookEvent(const wxTreebookEvent& event)
-        : wxBookCtrlBaseEvent(event)
-    {
-    }
-
-    virtual wxEvent *Clone() const { return new wxTreebookEvent(*this); }
-
-private:
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxTreebookEvent)
-};
 
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED;
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_TREEBOOK_PAGE_CHANGING;
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_TREEBOOK_NODE_COLLAPSED;
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_TREEBOOK_NODE_EXPANDED;
 
-typedef void (wxEvtHandler::*wxTreebookEventFunction)(wxTreebookEvent&);
-
-#define wxTreebookEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxTreebookEventFunction, &func)
-
 #define EVT_TREEBOOK_PAGE_CHANGED(winid, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED, winid, wxTreebookEventHandler(fn))
+    wx__DECLARE_EVT1(wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED, winid, wxBookCtrlEventHandler(fn))
 
 #define EVT_TREEBOOK_PAGE_CHANGING(winid, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_TREEBOOK_PAGE_CHANGING, winid, wxTreebookEventHandler(fn))
+    wx__DECLARE_EVT1(wxEVT_COMMAND_TREEBOOK_PAGE_CHANGING, winid, wxBookCtrlEventHandler(fn))
 
 #define EVT_TREEBOOK_NODE_COLLAPSED(winid, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_TREEBOOK_NODE_COLLAPSED, winid, wxTreebookEventHandler(fn))
+    wx__DECLARE_EVT1(wxEVT_COMMAND_TREEBOOK_NODE_COLLAPSED, winid, wxBookCtrlEventHandler(fn))
 
 #define EVT_TREEBOOK_NODE_EXPANDED(winid, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_TREEBOOK_NODE_EXPANDED, winid, wxTreebookEventHandler(fn))
+    wx__DECLARE_EVT1(wxEVT_COMMAND_TREEBOOK_NODE_EXPANDED, winid, wxBookCtrlEventHandler(fn))
 
 
 #endif // wxUSE_TREEBOOK

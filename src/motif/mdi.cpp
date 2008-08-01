@@ -682,7 +682,7 @@ void wxMDIClientWindow::OnScroll(wxScrollEvent& event)
     event.Skip();
 }
 
-void wxMDIClientWindow::OnPageChanged(wxNotebookEvent& event)
+void wxMDIClientWindow::OnPageChanged(wxBookCtrlEvent& event)
 {
     // Notify child that it has been activated
     if (event.GetOldSelection() != -1)

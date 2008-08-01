@@ -675,10 +675,4 @@ wxNotebook::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
     return GetDefaultAttributesFromGTKWidget(gtk_notebook_new);
 }
 
-//-----------------------------------------------------------------------------
-// wxNotebookEvent
-//-----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxNotifyEvent)
-
 #endif

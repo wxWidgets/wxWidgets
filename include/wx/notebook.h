@@ -118,39 +118,19 @@ protected:
 // notebook event class and related stuff
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxNotebookEvent : public wxBookCtrlBaseEvent
-{
-public:
-    wxNotebookEvent(wxEventType commandType = wxEVT_NULL, int winid = 0,
-                    int nSel = -1, int nOldSel = -1)
-        : wxBookCtrlBaseEvent(commandType, winid, nSel, nOldSel)
-    {
-    }
-
-    wxNotebookEvent(const wxNotebookEvent& event)
-        : wxBookCtrlBaseEvent(event)
-    {
-    }
-
-    virtual wxEvent *Clone() const { return new wxNotebookEvent(*this); }
-
-private:
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxNotebookEvent)
-};
+// wxNotebookEvent is obsolete and defined for compatibility only
+typedef wxBookCtrlEvent wxNotebookEvent;
+typedef wxBookCtrlEventFunction wxNotebookEventFunction;
+#define wxNotebookEventHandler(func) wxBookCtrlEventHandler(func)
 
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED;
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING;
 
-typedef void (wxEvtHandler::*wxNotebookEventFunction)(wxNotebookEvent&);
-
-#define wxNotebookEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxNotebookEventFunction, &func)
-
 #define EVT_NOTEBOOK_PAGE_CHANGED(winid, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, winid, wxNotebookEventHandler(fn))
+    wx__DECLARE_EVT1(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, winid, wxBookCtrlEventHandler(fn))
 
 #define EVT_NOTEBOOK_PAGE_CHANGING(winid, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, winid, wxNotebookEventHandler(fn))
+    wx__DECLARE_EVT1(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, winid, wxBookCtrlEventHandler(fn))
 
 // ----------------------------------------------------------------------------
 // wxNotebook class itself

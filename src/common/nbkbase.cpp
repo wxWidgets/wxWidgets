@@ -65,7 +65,7 @@ wxSize wxNotebookBase::CalcSizeFromPage(const wxSize& sizePage) const
 
 bool wxNotebookBase::SendPageChangingEvent(int nPage)
 {
-    wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, GetId());
+    wxBookCtrlEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, GetId());
     event.SetSelection(nPage);
     event.SetOldSelection(GetSelection());
     event.SetEventObject(this);
@@ -74,7 +74,7 @@ bool wxNotebookBase::SendPageChangingEvent(int nPage)
 
 void wxNotebookBase::SendPageChangedEvent(int nPageOld, int nPageNew)
 {
-    wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, GetId());
+    wxBookCtrlEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, GetId());
     event.SetSelection(nPageNew == -1 ? GetSelection() : nPageNew);
     event.SetOldSelection(nPageOld);
     event.SetEventObject(this);

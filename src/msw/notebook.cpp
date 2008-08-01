@@ -187,8 +187,8 @@ template<> void wxCollectionToVariantArray( wxNotebookPageInfoList const &theLis
 }
 
 wxBEGIN_PROPERTIES_TABLE(wxNotebook)
-    wxEVENT_PROPERTY( PageChanging , wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING , wxNotebookEvent )
-    wxEVENT_PROPERTY( PageChanged , wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED , wxNotebookEvent )
+    wxEVENT_PROPERTY( PageChanging , wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING , wxBookCtrlEvent )
+    wxEVENT_PROPERTY( PageChanged , wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED , wxBookCtrlEvent )
 
     wxPROPERTY_COLLECTION( PageInfos , wxNotebookPageInfoList , wxNotebookPageInfo* , AddPageInfo , GetPageInfos , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
     wxPROPERTY_FLAGS( WindowStyle , wxNotebookStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
@@ -216,7 +216,6 @@ wxCONSTRUCTOR_4( wxNotebookPageInfo , wxNotebookPage* , Page , wxString , Text ,
 IMPLEMENT_DYNAMIC_CLASS(wxNotebook, wxBookCtrlBase)
 IMPLEMENT_DYNAMIC_CLASS(wxNotebookPageInfo, wxObject )
 #endif
-IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxNotifyEvent)
 
 // ============================================================================
 // implementation
@@ -1091,7 +1090,7 @@ void wxNotebook::OnSize(wxSizeEvent& event)
     event.Skip();
 }
 
-void wxNotebook::OnSelChange(wxNotebookEvent& event)
+void wxNotebook::OnSelChange(wxBookCtrlEvent& event)
 {
     // is it our tab control?
     if ( event.GetEventObject() == this )
@@ -1423,7 +1422,7 @@ bool wxNotebook::MSWOnScroll(int orientation, WXWORD nSBCode,
 
 bool wxNotebook::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result)
 {
-  wxNotebookEvent event(wxEVT_NULL, m_windowId);
+  wxBookCtrlEvent event(wxEVT_NULL, m_windowId);
 
   NMHDR* hdr = (NMHDR *)lParam;
   switch ( hdr->code ) {

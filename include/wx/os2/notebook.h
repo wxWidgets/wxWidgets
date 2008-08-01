@@ -155,7 +155,7 @@ public:
     // ---------
     //
     void OnSize(wxSizeEvent& rEvent);
-    void OnSelChange(wxNotebookEvent& rEvent);
+    void OnSelChange(wxBookCtrlEvent& rEvent);
     void OnSetFocus(wxFocusEvent& rEvent);
     void OnNavigationKey(wxNavigationKeyEvent& rEvent);
 

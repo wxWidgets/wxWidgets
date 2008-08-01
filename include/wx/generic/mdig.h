@@ -237,7 +237,7 @@ public:
 protected:
     void PageChanged(int OldSelection, int newSelection);
 
-    void OnPageChanged(wxNotebookEvent& event);
+    void OnPageChanged(wxBookCtrlEvent& event);
     void OnSize(wxSizeEvent& event);
 
 private:

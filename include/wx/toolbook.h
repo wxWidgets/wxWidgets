@@ -111,8 +111,8 @@ protected:
 
     void UpdateSelectedPage(size_t newsel);
 
-    wxBookCtrlBaseEvent* CreatePageChangingEvent() const;
-    void MakeChangedEvent(wxBookCtrlBaseEvent &event);
+    wxBookCtrlEvent* CreatePageChangingEvent() const;
+    void MakeChangedEvent(wxBookCtrlEvent &event);
 
     // the currently selected page or wxNOT_FOUND if none
     int m_selection;
@@ -135,36 +135,17 @@ private:
 // listbook event class and related stuff
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxToolbookEvent : public wxBookCtrlBaseEvent
-{
-public:
-    wxToolbookEvent(wxEventType commandType = wxEVT_NULL, int id = 0,
-                    int nSel = wxNOT_FOUND, int nOldSel = wxNOT_FOUND)
-        : wxBookCtrlBaseEvent(commandType, id, nSel, nOldSel)
-    {
-    }
+// wxToolbookEvent is obsolete and defined for compatibility only
+typedef wxBookCtrlEvent wxToolbookEvent;
+typedef wxBookCtrlEventFunction wxToolbookEventFunction;
+#define wxToolbookEventHandler(func) wxBookCtrlEventHandler(func)
 
-    wxToolbookEvent(const wxToolbookEvent& event)
-        : wxBookCtrlBaseEvent(event)
-    {
-    }
-
-    virtual wxEvent *Clone() const { return new wxToolbookEvent(*this); }
-
-private:
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxToolbookEvent)
-};
-
-typedef void (wxEvtHandler::*wxToolbookEventFunction)(wxToolbookEvent&);
-
-#define wxToolbookEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxToolbookEventFunction, &func)
 
 #define EVT_TOOLBOOK_PAGE_CHANGED(winid, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED, winid, wxToolbookEventHandler(fn))
+    wx__DECLARE_EVT1(wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED, winid, wxBookCtrlEventHandler(fn))
 
 #define EVT_TOOLBOOK_PAGE_CHANGING(winid, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGING, winid, wxToolbookEventHandler(fn))
+    wx__DECLARE_EVT1(wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGING, winid, wxBookCtrlEventHandler(fn))
 
 #endif // wxUSE_TOOLBOOK
 

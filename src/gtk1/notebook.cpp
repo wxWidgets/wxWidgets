@@ -112,7 +112,7 @@ static void gtk_notebook_page_change_callback(GtkNotebook *WXUNUSED(widget),
         notebook->m_skipNextPageChangeEvent = false;
 
         // make wxNotebook::GetSelection() return the correct (i.e. consistent
-        // with wxNotebookEvent::GetSelection()) value even though the page is
+        // with wxBookCtrlEvent::GetSelection()) value even though the page is
         // not really changed in GTK+
         notebook->m_selection = page;
     }
@@ -126,7 +126,7 @@ static void gtk_notebook_page_change_callback(GtkNotebook *WXUNUSED(widget),
         else // change allowed
         {
             // make wxNotebook::GetSelection() return the correct (i.e. consistent
-            // with wxNotebookEvent::GetSelection()) value even though the page is
+            // with wxBookCtrlEvent::GetSelection()) value even though the page is
             // not really changed in GTK+
             notebook->m_selection = page;
 
@@ -864,11 +864,5 @@ wxNotebook::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
     return GetDefaultAttributesFromGTKWidget(gtk_notebook_new);
 }
-
-//-----------------------------------------------------------------------------
-// wxNotebookEvent
-//-----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxNotifyEvent)
 
 #endif

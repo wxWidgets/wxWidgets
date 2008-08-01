@@ -94,8 +94,8 @@ protected:
 
     void UpdateSelectedPage(size_t newsel);
 
-    wxBookCtrlBaseEvent* CreatePageChangingEvent() const;
-    void MakeChangedEvent(wxBookCtrlBaseEvent &event);
+    wxBookCtrlEvent* CreatePageChangingEvent() const;
+    void MakeChangedEvent(wxBookCtrlEvent &event);
 
     // get flags for different list control modes
     long GetListCtrlIconViewFlags() const;
@@ -124,36 +124,16 @@ private:
 // listbook event class and related stuff
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxListbookEvent : public wxBookCtrlBaseEvent
-{
-public:
-    wxListbookEvent(wxEventType commandType = wxEVT_NULL, int id = 0,
-                    int nSel = wxNOT_FOUND, int nOldSel = wxNOT_FOUND)
-        : wxBookCtrlBaseEvent(commandType, id, nSel, nOldSel)
-    {
-    }
-
-    wxListbookEvent(const wxListbookEvent& event)
-        : wxBookCtrlBaseEvent(event)
-    {
-    }
-
-    virtual wxEvent *Clone() const { return new wxListbookEvent(*this); }
-
-private:
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxListbookEvent)
-};
-
-typedef void (wxEvtHandler::*wxListbookEventFunction)(wxListbookEvent&);
-
-#define wxListbookEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxListbookEventFunction, &func)
+// wxListbookEvent is obsolete and defined for compatibility only
+typedef wxBookCtrlEvent wxListbookEvent;
+typedef wxBookCtrlEventFunction wxListbookEventFunction;
+#define wxListbookEventHandler(func) wxBookCtrlEventHandler(func)
 
 #define EVT_LISTBOOK_PAGE_CHANGED(winid, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED, winid, wxListbookEventHandler(fn))
+    wx__DECLARE_EVT1(wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED, winid, wxBookCtrlEventHandler(fn))
 
 #define EVT_LISTBOOK_PAGE_CHANGING(winid, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING, winid, wxListbookEventHandler(fn))
+    wx__DECLARE_EVT1(wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING, winid, wxBookCtrlEventHandler(fn))
 
 #endif // wxUSE_LISTBOOK
 

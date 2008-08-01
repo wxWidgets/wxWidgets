@@ -125,11 +125,10 @@ WX_DECLARE_GET_OBJC_CLASS(WXCTabViewImageItem,NSTabViewItem)
 WX_IMPLEMENT_GET_OBJC_CLASS(WXCTabViewImageItem,NSTabViewItem)
 
 // ========================================================================
-// wxNotebookEvent
+// wxBookCtrlEvent
 // ========================================================================
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING)
-IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxNotifyEvent)
 
 // ========================================================================
 // wxNotebook
@@ -315,7 +314,7 @@ int wxNotebook::GetSelection() const
 void wxNotebook::CocoaDelegate_tabView_didSelectTabViewItem(WX_NSTabViewItem tabViewItem)
 {
     // FIXME: oldSel probably == newSel
-    wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, GetId(),
+    wxBookCtrlEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, GetId(),
         [GetNSTabView() indexOfTabViewItem:tabViewItem], GetSelection());
     event.SetEventObject(this);
     GetEventHandler()->ProcessEvent(event);
@@ -323,7 +322,7 @@ void wxNotebook::CocoaDelegate_tabView_didSelectTabViewItem(WX_NSTabViewItem tab
 
 bool wxNotebook::CocoaDelegate_tabView_shouldSelectTabViewItem(WX_NSTabViewItem tabViewItem)
 {
-    wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, GetId(),
+    wxBookCtrlEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, GetId(),
         [GetNSTabView() indexOfTabViewItem:tabViewItem], GetSelection());
     event.SetEventObject(this);
     return !HandleWindowEvent(event) || event.IsAllowed();

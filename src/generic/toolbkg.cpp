@@ -44,7 +44,6 @@
 // ----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxToolbook, wxBookCtrlBase)
-IMPLEMENT_DYNAMIC_CLASS(wxToolbookEvent, wxNotifyEvent)
 
 const wxEventType wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGING = wxNewEventType();
 const wxEventType wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED = wxNewEventType();
@@ -247,12 +246,12 @@ int wxToolbook::GetSelection() const
     return m_selection;
 }
 
-wxBookCtrlBaseEvent* wxToolbook::CreatePageChangingEvent() const
+wxBookCtrlEvent* wxToolbook::CreatePageChangingEvent() const
 {
-    return new wxToolbookEvent(wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGING, m_windowId);
+    return new wxBookCtrlEvent(wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGING, m_windowId);
 }
 
-void wxToolbook::MakeChangedEvent(wxBookCtrlBaseEvent &event)
+void wxToolbook::MakeChangedEvent(wxBookCtrlEvent &event)
 {
     event.SetEventType(wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED);
 }

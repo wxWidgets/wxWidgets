@@ -46,7 +46,6 @@
 // ----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxTreebook, wxBookCtrlBase)
-IMPLEMENT_DYNAMIC_CLASS(wxTreebookEvent, wxNotifyEvent)
 
 const wxEventType wxEVT_COMMAND_TREEBOOK_PAGE_CHANGING = wxNewEventType();
 const wxEventType wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED = wxNewEventType();
@@ -579,7 +578,7 @@ int wxTreebook::DoSetSelection(size_t pagePos, int flags)
     wxASSERT_MSG( GetPageCount() == DoInternalGetPageCount(),
                   wxT("wxTreebook logic error: m_treeIds and m_pages not in sync!"));
 
-    wxTreebookEvent event(wxEVT_COMMAND_TREEBOOK_PAGE_CHANGING, m_windowId);
+    wxBookCtrlEvent event(wxEVT_COMMAND_TREEBOOK_PAGE_CHANGING, m_windowId);
     const int oldSel = m_selection;
     wxTreeCtrl *tree = GetTreeCtrl();
     bool allowed = false;
@@ -717,7 +716,7 @@ void wxTreebook::OnTreeNodeExpandedCollapsed(wxTreeEvent & event)
     int pagePos = DoInternalFindPageById(nodeId);
     wxCHECK_RET( pagePos != wxNOT_FOUND, wxT("Internal problem in wxTreebook!..") );
 
-    wxTreebookEvent ev(GetTreeCtrl()->IsExpanded(nodeId)
+    wxBookCtrlEvent ev(GetTreeCtrl()->IsExpanded(nodeId)
             ? wxEVT_COMMAND_TREEBOOK_NODE_EXPANDED
             : wxEVT_COMMAND_TREEBOOK_NODE_COLLAPSED,
         m_windowId);

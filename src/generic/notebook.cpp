@@ -62,7 +62,6 @@ BEGIN_EVENT_TABLE(wxNotebook, wxBookCtrlBase)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxNotebook, wxBookCtrlBase)
-IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxCommandEvent)
 
 // ============================================================================
 // implementation
@@ -545,7 +544,7 @@ bool wxNotebook::RefreshLayout(bool force)
     return true;
 }
 
-void wxNotebook::OnSelChange(wxNotebookEvent& event)
+void wxNotebook::OnSelChange(wxBookCtrlEvent& event)
 {
     // is it our tab control?
     if ( event.GetEventObject() == this )
@@ -713,7 +712,7 @@ void wxNotebookTabView::OnTabActivate(int activateId, int deactivateId)
   if (!m_notebook)
     return;
 
-  wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, m_notebook->GetId());
+  wxBookCtrlEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, m_notebook->GetId());
 
   // Translate from wxTabView's ids (which aren't position-dependent)
   // to wxNotebook's (which are).
@@ -736,7 +735,7 @@ bool wxNotebookTabView::OnTabPreActivate(int activateId, int deactivateId)
 
   if (m_notebook)
   {
-    wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, m_notebook->GetId());
+    wxBookCtrlEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, m_notebook->GetId());
 
     // Translate from wxTabView's ids (which aren't position-dependent)
     // to wxNotebook's (which are).

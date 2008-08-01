@@ -43,7 +43,6 @@ BEGIN_EVENT_TABLE(wxNotebook, wxBookCtrlBase)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxNotebook, wxBookCtrlBase)
-IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxCommandEvent)
 
 
 // common part of all ctors
@@ -458,7 +457,7 @@ void wxNotebook::OnSize(wxSizeEvent& event)
     event.Skip();
 }
 
-void wxNotebook::OnSelChange(wxNotebookEvent& event)
+void wxNotebook::OnSelChange(wxBookCtrlEvent& event)
 {
     // is it our tab control?
     if ( event.GetEventObject() == this )
@@ -593,7 +592,7 @@ wxInt32 wxNotebook::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTR
     SInt32 newSel = m_peer->GetValue() - 1 ;
     if ( newSel != m_nSelection )
     {
-        wxNotebookEvent changing(
+        wxBookCtrlEvent changing(
             wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, m_windowId,
             newSel , m_nSelection );
         changing.SetEventObject( this );
@@ -601,7 +600,7 @@ wxInt32 wxNotebook::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTR
 
         if ( changing.IsAllowed() )
         {
-            wxNotebookEvent event(
+            wxBookCtrlEvent event(
                 wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, m_windowId,
                 newSel, m_nSelection );
             event.SetEventObject( this );

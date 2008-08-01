@@ -48,7 +48,6 @@
 // ----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxChoicebook, wxBookCtrlBase)
-IMPLEMENT_DYNAMIC_CLASS(wxChoicebookEvent, wxNotifyEvent)
 
 const wxEventType wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING = wxNewEventType();
 const wxEventType wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED = wxNewEventType();
@@ -205,12 +204,12 @@ int wxChoicebook::GetSelection() const
     return m_selection;
 }
 
-wxBookCtrlBaseEvent* wxChoicebook::CreatePageChangingEvent() const
+wxBookCtrlEvent* wxChoicebook::CreatePageChangingEvent() const
 {
-    return new wxChoicebookEvent(wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING, m_windowId);
+    return new wxBookCtrlEvent(wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING, m_windowId);
 }
 
-void wxChoicebook::MakeChangedEvent(wxBookCtrlBaseEvent &event)
+void wxChoicebook::MakeChangedEvent(wxBookCtrlEvent &event)
 {
     event.SetEventType(wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED);
 }

@@ -36,7 +36,7 @@
            Place labels below the page area.
     @endStyleTable
 
-    @beginEventTable{wxChoicebookEvent}
+    @beginEventTable{wxBookCtrlEvent}
     @event{EVT_CHOICEBOOK_PAGE_CHANGED(id, func)}
            The page selection was changed. Processes a
            wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED event.

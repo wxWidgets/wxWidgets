@@ -2385,7 +2385,7 @@ public:
     @class wxNotifyEvent
 
     This class is not used by the event handlers by itself, but is a base class
-    for other event classes (such as wxNotebookEvent).
+    for other event classes (such as wxBookCtrlEvent).
 
     It (or an object of a derived class) is sent when the controls state is being
     changed and allows the program to wxNotifyEvent::Veto() this change if it wants
@@ -2394,7 +2394,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see wxNotebookEvent
+    @see wxBookCtrlEvent
 */
 class wxNotifyEvent : public wxCommandEvent
 {

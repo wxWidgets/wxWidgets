@@ -64,7 +64,6 @@ BEGIN_EVENT_TABLE(wxNotebook, wxBookCtrlBase)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxNotebook, wxBookCtrlBase)
-IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxNotifyEvent)
 
 // ============================================================================
 // implementation
@@ -216,7 +215,7 @@ int wxNotebook::SetSelection( size_t nPage )
 
     if (nPage != (size_t)m_nSelection)
     {
-        wxNotebookEvent             vEvent( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING
+        wxBookCtrlEvent             vEvent( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING
                                            ,m_windowId
                                           );
 
@@ -683,7 +682,7 @@ void wxNotebook::OnSize(
 } // end of wxNotebook::OnSize
 
 void wxNotebook::OnSelChange (
-  wxNotebookEvent&                  rEvent
+  wxBookCtrlEvent&                  rEvent
 )
 {
     //

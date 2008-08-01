@@ -225,7 +225,7 @@ public:
     void OnScroll(wxScrollEvent& event);
 
     // Implementation
-    void OnPageChanged(wxNotebookEvent& event);
+    void OnPageChanged(wxBookCtrlEvent& event);
 
     int FindPage(const wxNotebookPage* page);
 

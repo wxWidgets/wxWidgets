@@ -115,7 +115,6 @@ END_EVENT_TABLE()
 // ============================================================================
 
 IMPLEMENT_DYNAMIC_CLASS(wxNotebook, wxBookCtrlBase)
-IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxCommandEvent)
 
 // ----------------------------------------------------------------------------
 // wxNotebook creation

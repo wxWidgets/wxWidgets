@@ -97,8 +97,8 @@ protected:
         GetChoiceCtrl()->Select(newsel);
     }
 
-    wxBookCtrlBaseEvent* CreatePageChangingEvent() const;
-    void MakeChangedEvent(wxBookCtrlBaseEvent &event);
+    wxBookCtrlEvent* CreatePageChangingEvent() const;
+    void MakeChangedEvent(wxBookCtrlEvent &event);
 
     // event handlers
     void OnChoiceSelected(wxCommandEvent& event);
@@ -118,36 +118,16 @@ private:
 // choicebook event class and related stuff
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxChoicebookEvent : public wxBookCtrlBaseEvent
-{
-public:
-    wxChoicebookEvent(wxEventType commandType = wxEVT_NULL, int id = 0,
-                      int nSel = -1, int nOldSel = -1)
-        : wxBookCtrlBaseEvent(commandType, id, nSel, nOldSel)
-    {
-    }
-
-    wxChoicebookEvent(const wxChoicebookEvent& event)
-        : wxBookCtrlBaseEvent(event)
-    {
-    }
-
-    virtual wxEvent *Clone() const { return new wxChoicebookEvent(*this); }
-
-private:
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxChoicebookEvent)
-};
-
-typedef void (wxEvtHandler::*wxChoicebookEventFunction)(wxChoicebookEvent&);
-
-#define wxChoicebookEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxChoicebookEventFunction, &func)
+// wxChoicebookEvent is obsolete and defined for compatibility only
+typedef wxBookCtrlEvent wxChoicebookEvent;
+typedef wxBookCtrlEventFunction wxChoicebookEventFunction;
+#define wxChoicebookEventHandler(func) wxBookCtrlEventHandler(func)
 
 #define EVT_CHOICEBOOK_PAGE_CHANGED(winid, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED, winid, wxChoicebookEventHandler(fn))
+    wx__DECLARE_EVT1(wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED, winid, wxBookCtrlEventHandler(fn))
 
 #define EVT_CHOICEBOOK_PAGE_CHANGING(winid, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING, winid, wxChoicebookEventHandler(fn))
+    wx__DECLARE_EVT1(wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING, winid, wxBookCtrlEventHandler(fn))
 
 #endif // wxUSE_CHOICEBOOK
 

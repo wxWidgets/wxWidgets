@@ -2548,7 +2548,7 @@ MRESULT wxWindowOS2::OS2WindowProc( WXUINT uMsg,
                             (pPage->ulPageIdNew > 0L && pPage->ulPageIdCur > 0L))
                         {
                             wxWindowOS2*        pWin = wxFindWinFromHandle(pPage->hwndBook);
-                            wxNotebookEvent     vEvent( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED
+                            wxBookCtrlEvent     vEvent( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED
                                                        ,(int)SHORT1FROMMP(wParam)
                                                        ,(int)pPage->ulPageIdNew
                                                        ,(int)pPage->ulPageIdCur
