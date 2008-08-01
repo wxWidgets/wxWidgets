@@ -925,6 +925,8 @@ void wxAuiManager::SetArtProvider(wxAuiDockArt* art_provider)
 
 bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& pane_info)
 {
+    wxASSERT_MSG(window, wxT("NULL window ptrs are not allowed"));
+    
     // check if the pane has a valid window
     if (!window)
         return false;
@@ -1060,6 +1062,8 @@ bool wxAuiManager::AddPane(wxWindow* window,
 bool wxAuiManager::InsertPane(wxWindow* window, const wxAuiPaneInfo& pane_info,
                                 int insert_level)
 {
+    wxASSERT_MSG(window, wxT("NULL window ptrs are not allowed"));
+
     // shift the panes around, depending on the insert level
     switch (insert_level)
     {
@@ -1120,6 +1124,8 @@ bool wxAuiManager::InsertPane(wxWindow* window, const wxAuiPaneInfo& pane_info,
 // method will not destroy the window that is removed.
 bool wxAuiManager::DetachPane(wxWindow* window)
 {
+    wxASSERT_MSG(window, wxT("NULL window ptrs are not allowed"));
+
     int i, count;
     for (i = 0, count = m_panes.GetCount(); i < count; ++i)
     {
