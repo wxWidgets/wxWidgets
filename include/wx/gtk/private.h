@@ -104,5 +104,27 @@ void gtk_window_set_policy (GtkWindow *window,
 
 } // extern "C"
 
+
+// ----------------------------------------------------------------------------
+// various private helper functions
+// ----------------------------------------------------------------------------
+
+namespace wxGTKPrivate
+{
+
+// these functions create the GTK widgets of the specified types which can then
+// used to retrieve their styles, pass them to drawing functions &c
+//
+// the returned widgets shouldn't be destroyed, this is done automatically on
+// shutdown
+GtkWidget *GetButtonWidget();
+GtkWidget *GetCheckButtonWidget();
+GtkWidget *GetEntryWidget();
+GtkWidget *GetHeaderButtonWidget();
+GtkWidget *GetSplitterWidget();
+GtkWidget *GetTreeWidget();
+
+} // wxGTKPrivate
+
 #endif // _WX_GTK_PRIVATE_H_
 

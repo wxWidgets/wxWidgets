@@ -62,6 +62,8 @@ public:
                               const wxRect& rect,
                               int flags = 0);
 
+    virtual wxSize GetCheckBoxSize(wxWindow* win);
+
     virtual void DrawComboBoxDropButton(wxWindow *win,
                                         wxDC& dc,
                                         const wxRect& rect,
@@ -344,6 +346,27 @@ wxRendererMac::DrawCheckBox(wxWindow *win,
                        kThemeCheckBox, kThemeAdornmentNone);
 }
 
+wxSize wxRendererMac::GetCheckBoxSize(wxWindow* WXUNUSED(win))
+{
+    wxSize size;
+    SInt32 width, height;
+    OSStatus errStatus;
+
+    errStatus = GetThemeMetric(kThemeMetricCheckBoxWidth, &width);
+    if (errStatus == noErr)
+    {
+        size.SetWidth(width);
+    }
+
+    errStatus = GetThemeMetric(kThemeMetricCheckBoxHeight, &height);
+    if (errStatus == noErr)
+    {
+        size.SetHeight(height);
+    }
+
+    return size;
+}
+
 void
 wxRendererMac::DrawComboBoxDropButton(wxWindow *win,
                               wxDC& dc,
@@ -405,4 +428,3 @@ wxRendererMac::DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int fl
 
     HIThemeDrawFocusRect( &cgrect , true , cgContext , kHIThemeOrientationNormal ) ;
 }
-

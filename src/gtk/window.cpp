@@ -301,8 +301,6 @@ gtk_window_expose_callback( GtkWidget* widget,
 
 #ifndef __WXUNIVERSAL__
 
-GtkWidget* GetEntryWidget();
-
 extern "C" {
 static gboolean
 expose_event_border(GtkWidget* widget, GdkEventExpose* gdk_event, wxWindow* win)
@@ -343,7 +341,7 @@ expose_event_border(GtkWidget* widget, GdkEventExpose* gdk_event, wxWindow* win)
             // for scrollable ones
             detail = "viewport";
 
-        GtkWidget* styleWidget = GetEntryWidget();
+        GtkWidget* styleWidget = wxGTKPrivate::GetEntryWidget();
         gtk_paint_shadow(
            styleWidget->style, gdk_event->window, GTK_STATE_NORMAL,
            shadow, NULL, styleWidget, detail, x, y, w, h);

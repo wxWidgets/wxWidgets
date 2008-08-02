@@ -98,6 +98,8 @@ public:
                               const wxRect& rect,
                               int flags = 0);
 
+    virtual wxSize GetCheckBoxSize(wxWindow *win);
+
     virtual void DrawPushButton(wxWindow *win,
                                 wxDC& dc,
                                 const wxRect& rect,
@@ -616,6 +618,11 @@ wxRendererGeneric::DrawCheckBox(wxWindow *WXUNUSED(win),
     {
         dc.DrawCheckMark(rect.Deflate(2, 2));
     }
+}
+
+wxSize wxRendererGeneric::GetCheckBoxSize(wxWindow *WXUNUSED(win))
+{
+    return wxSize(16, 16);
 }
 
 void

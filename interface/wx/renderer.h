@@ -211,6 +211,8 @@ public:
     virtual void DrawCheckBox(wxWindow *win, wxDC& dc,
                               const wxRect& rect, int flags = 0 );
 
+    virtual wxSize GetCheckBoxSize(wxWindow *win);
+
     virtual void DrawPushButton(wxWindow *win, wxDC& dc,
                                 const wxRect& rect, int flags = 0 );
 
@@ -286,7 +288,7 @@ public:
     ~wxRendererNative();
 
     /**
-        Draw a check box (used by wxDataViewCtrl).
+        Draw a check box.
 
         @a flags may have the @c wxCONTROL_CHECKED, @c wxCONTROL_CURRENT or
         @c wxCONTROL_UNDETERMINED bit set, see @ref wxCONTROL_FLAGS.
@@ -426,6 +428,11 @@ public:
         renderer which can be retrieved by calling GetDefault().
     */
     static wxRendererNative GetGeneric();
+
+    /**
+        Returns the size of a check box.
+    */
+    virtual wxSize GetCheckBoxSize(wxWindow *win);
 
     /**
         Returns the height of a header button, either a fixed platform height if

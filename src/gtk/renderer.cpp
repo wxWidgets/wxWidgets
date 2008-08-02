@@ -34,6 +34,7 @@
 #endif
 
 #include "wx/gtk/dc.h"
+#include "wx/gtk/private.h"
 
 #include <gtk/gtk.h>
 
@@ -96,57 +97,14 @@ public:
 
     virtual void DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags = 0);
 
+    virtual wxSize GetCheckBoxSize(wxWindow *win);
+
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
-
-    class Module;
-    friend class Module;
-
-private:
-    // used by DrawPushButton and DrawDropArrow
-    static GtkWidget *GetButtonWidget();
-
-    // used by DrawTreeItemButton()
-    static GtkWidget *GetTreeWidget();
-
-    // used by DrawCheckBox()
-    static GtkWidget *GetCheckButtonWidget();
-
-    // Used by DrawHeaderButton
-    static GtkWidget *GetHeaderButtonWidget();
-
-    static GtkWidget* GetSplitterWidget();
-
-    // container for created widgets
-    static GtkContainer* GetContainer();
-    static GtkWidget* ms_container;
 };
-
-// Module for destroying created widgets
-class wxRendererGTK::Module: public wxModule
-{
-public:
-    virtual bool OnInit()
-    {
-        return true;
-    }
-    virtual void OnExit()
-    {
-        if (wxRendererGTK::ms_container)
-        {
-            GtkWidget* parent =
-                gtk_widget_get_parent(wxRendererGTK::ms_container);
-            gtk_widget_destroy(parent);
-        }
-    }
-    DECLARE_DYNAMIC_CLASS(wxRendererGTK::Module)
-};
-IMPLEMENT_DYNAMIC_CLASS(wxRendererGTK::Module, wxModule)
 
 // ============================================================================
 // implementation
 // ============================================================================
-
-GtkWidget* wxRendererGTK::ms_container;
 
 /* static */
 wxRendererNative& wxRendererNative::GetDefault()
@@ -154,117 +112,6 @@ wxRendererNative& wxRendererNative::GetDefault()
     static wxRendererGTK s_rendererGTK;
 
     return s_rendererGTK;
-}
-
-// ----------------------------------------------------------------------------
-// helper functions
-// ----------------------------------------------------------------------------
-
-GtkContainer* wxRendererGTK::GetContainer()
-{
-    if (ms_container == NULL)
-    {
-        GtkWidget* window = gtk_window_new(GTK_WINDOW_POPUP);
-        ms_container = gtk_fixed_new();
-        gtk_container_add(GTK_CONTAINER(window), ms_container);
-    }
-    return GTK_CONTAINER(ms_container);
-}
-
-GtkWidget *
-wxRendererGTK::GetButtonWidget()
-{
-    static GtkWidget *s_button = NULL;
-
-    if ( !s_button )
-    {
-        s_button = gtk_button_new();
-        gtk_container_add(GetContainer(), s_button);
-        gtk_widget_realize( s_button );
-    }
-
-    return s_button;
-}
-
-GtkWidget *
-wxRendererGTK::GetCheckButtonWidget()
-{
-    static GtkWidget *s_button = NULL;
-
-    if ( !s_button )
-    {
-        s_button = gtk_check_button_new();
-        gtk_container_add(GetContainer(), s_button);
-        gtk_widget_realize( s_button );
-    }
-
-    return s_button;
-}
-
-GtkWidget *
-wxRendererGTK::GetTreeWidget()
-{
-    static GtkWidget *s_tree = NULL;
-
-    if ( !s_tree )
-    {
-        s_tree = gtk_tree_view_new();
-        gtk_container_add(GetContainer(), s_tree);
-        gtk_widget_realize( s_tree );
-    }
-
-    return s_tree;
-}
-
-// used elsewhere
-GtkWidget *GetEntryWidget()
-{
-    static GtkWidget *s_entry = NULL;
-    static GtkWidget *s_window = NULL;
-
-    if ( !s_entry )
-    {
-        s_window = gtk_window_new( GTK_WINDOW_POPUP );
-        gtk_widget_realize( s_window );
-        s_entry = gtk_entry_new();
-        gtk_container_add( GTK_CONTAINER(s_window), s_entry );
-        gtk_widget_realize( s_entry );
-    }
-
-    return s_entry;
-}
-
-// This one just gets the button used by the column header.  Although it's
-// still a gtk_button the themes will typically differentiate and draw them
-// differently if the button is in a treeview.
-GtkWidget *
-wxRendererGTK::GetHeaderButtonWidget()
-{
-    static GtkWidget *s_button = NULL;
-
-    if ( !s_button )
-    {
-        // Get the dummy tree widget, give it a column, and then use the
-        // widget in the column header for the rendering code.
-        GtkWidget* treewidget = GetTreeWidget();
-        GtkTreeViewColumn*  column = gtk_tree_view_column_new();
-        gtk_tree_view_append_column(GTK_TREE_VIEW(treewidget), column);
-        s_button = column->button;
-    }
-
-    return s_button;
-}
-
-GtkWidget* wxRendererGTK::GetSplitterWidget()
-{
-    static GtkWidget* widget;
-    if (widget == NULL)
-    {
-        widget = gtk_vpaned_new();
-        gtk_container_add(GetContainer(), widget);
-        gtk_widget_realize(widget);
-    }
-    return widget;
 }
 
 // ----------------------------------------------------------------------------
@@ -280,7 +127,7 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
                                 wxHeaderButtonParams* params)
 {
 
-    GtkWidget *button = GetHeaderButtonWidget();
+    GtkWidget *button = wxGTKPrivate::GetHeaderButtonWidget();
 
     GdkWindow* gdk_window = NULL;
 #if wxUSE_NEW_DC
@@ -327,7 +174,7 @@ void
 wxRendererGTK::DrawTreeItemButton(wxWindow* win,
                                   wxDC& dc, const wxRect& rect, int flags)
 {
-    GtkWidget *tree = GetTreeWidget();
+    GtkWidget *tree = wxGTKPrivate::GetTreeWidget();
 
     GdkWindow* gdk_window = NULL;
 #if wxUSE_NEW_DC
@@ -387,7 +234,7 @@ wxRendererGTK::GetSplitterParams(const wxWindow *WXUNUSED(win))
     // we don't draw any border, hence 0 for the second field
     return wxSplitterRenderParams
            (
-               GetGtkSplitterFullSize(GetSplitterWidget()),
+               GetGtkSplitterFullSize(wxGTKPrivate::GetSplitterWidget()),
                0,
                true     // hot sensitive
            );
@@ -428,7 +275,7 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
     wxASSERT_MSG( gdk_window,
                   wxT("cannot use wxRendererNative on wxDC of this type") );
 
-    wxCoord full_size = GetGtkSplitterFullSize(GetSplitterWidget());
+    wxCoord full_size = GetGtkSplitterFullSize(wxGTKPrivate::GetSplitterWidget());
 
     // are we drawing vertical or horizontal splitter?
     const bool isVert = orient == wxVERTICAL;
@@ -477,7 +324,7 @@ wxRendererGTK::DrawDropArrow(wxWindow *WXUNUSED(win),
                              const wxRect& rect,
                              int flags)
 {
-    GtkWidget *button = GetButtonWidget();
+    GtkWidget *button = wxGTKPrivate::GetButtonWidget();
 
     // If we give GTK_PIZZA(win->m_wxwindow)->bin_window as
     // a window for gtk_paint_xxx function, then it won't
@@ -546,13 +393,26 @@ wxRendererGTK::DrawComboBoxDropButton(wxWindow *win,
     DrawDropArrow(win,dc,rect);
 }
 
+wxSize
+wxRendererGTK::GetCheckBoxSize(wxWindow *WXUNUSED(win))
+{
+    gint indicator_size, indicator_spacing;
+    gtk_widget_style_get(wxGTKPrivate::GetCheckButtonWidget(),
+                         "indicator_size", &indicator_size,
+                         "indicator_spacing", &indicator_spacing,
+                         NULL);
+
+    int size = indicator_size + indicator_spacing * 2;
+    return wxSize(size, size);
+}
+
 void
 wxRendererGTK::DrawCheckBox(wxWindow *WXUNUSED(win),
                             wxDC& dc,
                             const wxRect& rect,
                             int flags )
 {
-    GtkWidget *button = GetCheckButtonWidget();
+    GtkWidget *button = wxGTKPrivate::GetCheckButtonWidget();
 
     GdkWindow* gdk_window = NULL;
 #if wxUSE_NEW_DC
@@ -565,6 +425,12 @@ wxRendererGTK::DrawCheckBox(wxWindow *WXUNUSED(win),
 #endif
     wxASSERT_MSG( gdk_window,
                   wxT("cannot use wxRendererNative on wxDC of this type") );
+
+    gint indicator_size, indicator_spacing;
+    gtk_widget_style_get(button,
+                         "indicator_size", &indicator_size,
+                         "indicator_spacing", &indicator_spacing,
+                         NULL);
 
     GtkStateType state;
 
@@ -586,9 +452,9 @@ wxRendererGTK::DrawCheckBox(wxWindow *WXUNUSED(win),
         NULL,
         button,
         "cellcheck",
-        dc.LogicalToDeviceX(rect.x)+2,
-        dc.LogicalToDeviceY(rect.y)+3,
-        13, 13
+        dc.LogicalToDeviceX(rect.x) + indicator_spacing,
+        dc.LogicalToDeviceY(rect.y) + indicator_spacing,
+        indicator_size, indicator_size
     );
 }
 
@@ -598,7 +464,7 @@ wxRendererGTK::DrawPushButton(wxWindow *WXUNUSED(win),
                               const wxRect& rect,
                               int flags)
 {
-    GtkWidget *button = GetButtonWidget();
+    GtkWidget *button = wxGTKPrivate::GetButtonWidget();
 
     GdkWindow* gdk_window = NULL;
 #if wxUSE_NEW_DC

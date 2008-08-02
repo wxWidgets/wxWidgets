@@ -8,6 +8,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "wx/defs.h"
+#include "wx/gtk/private.h"
 #include "wx/gtk/private/win_gtk.h"
 
 /*
@@ -382,8 +383,6 @@ void wxPizza::scroll(int dx, int dy)
     }
 }
 
-extern GtkWidget *GetEntryWidget();
-
 void wxPizza::get_border_widths(int& x, int& y)
 {
     x = y = 0;
@@ -391,7 +390,7 @@ void wxPizza::get_border_widths(int& x, int& y)
         x = y = 1;
     else if (m_border_style)
     {
-        GtkWidget *entry_widget = GetEntryWidget();
+        GtkWidget *entry_widget = wxGTKPrivate::GetEntryWidget();
         if (entry_widget->style)
         {
             x = entry_widget->style->xthickness;

@@ -28,7 +28,7 @@
 class WXDLLIMPEXP_FWD_CORE wxDC;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 
-#include "wx/gdicmn.h" // for wxPoint
+#include "wx/gdicmn.h" // for wxPoint, wxSize
 #include "wx/colour.h"
 #include "wx/font.h"
 #include "wx/bitmap.h"
@@ -227,6 +227,9 @@ public:
                               const wxRect& rect,
                               int flags = 0) = 0;
 
+    // Returns the default size of a check box.
+    virtual wxSize GetCheckBoxSize(wxWindow *win) = 0;
+
     // draw blank button
     //
     // flags may use wxCONTROL_PRESSED, wxCONTROL_CURRENT and wxCONTROL_ISDEFAULT
@@ -372,6 +375,9 @@ public:
                               const wxRect& rect,
                               int flags = 0 )
         { m_rendererNative.DrawCheckBox( win, dc, rect, flags ); }
+
+    virtual wxSize GetCheckBoxSize(wxWindow *win)
+        { return m_rendererNative.GetCheckBoxSize(win); }
 
     virtual void DrawPushButton(wxWindow *win,
                                 wxDC& dc,

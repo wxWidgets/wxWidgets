@@ -122,6 +122,8 @@ public:
                                const wxRect& rect,
                                int flags = 0);
 
+    virtual wxSize GetCheckBoxSize(wxWindow *win);
+
     virtual int GetHeaderButtonHeight(wxWindow *win);
 
 private:
@@ -293,6 +295,12 @@ void wxRendererMSW::DrawFocusRect(wxWindow * WXUNUSED(win),
     wxCopyRectToRECT(rect, rc);
 
     ::DrawFocusRect(GetHdcOf(*((wxMSWDCImpl*)dc.GetImpl())), &rc);
+}
+
+wxSize wxRendererMSW::GetCheckBoxSize(wxWindow * WXUNUSED(win))
+{
+    return wxSize(::GetSystemMetrics(SM_CXMENUCHECK),
+                  ::GetSystemMetrics(SM_CYMENUCHECK));
 }
 
 int wxRendererMSW::GetHeaderButtonHeight(wxWindow * WXUNUSED(win))
@@ -560,7 +568,7 @@ wxRendererXP::DrawItemSelectionRect(wxWindow *win,
     dc.SetBrush(brush);
     dc.SetPen(*wxTRANSPARENT_PEN);
     dc.DrawRectangle( rect );
-    
+
     if ((flags & wxCONTROL_FOCUSED) && (flags & wxCONTROL_CURRENT))
         DrawFocusRect( win, dc, rect, flags );
 }
