@@ -1385,6 +1385,9 @@
 				RelativePath="..\..\src\xrc\xh_wizrd.cpp"
 			/>
 			<File
+				RelativePath="..\..\src\xrc\xmladv.cpp"
+			/>
+			<File
 				RelativePath="..\..\src\xrc\xmlres.cpp"
 			/>
 			<File

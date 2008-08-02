@@ -1066,6 +1066,9 @@
 				RelativePath="..\..\src\common\uri.cpp"
 			/>
 			<File
+				RelativePath="..\..\src\common\ustring.cpp"
+			/>
+			<File
 				RelativePath="..\..\src\common\utilscmn.cpp"
 			/>
 			<File
@@ -1804,6 +1807,9 @@
 			/>
 			<File
 				RelativePath="..\..\include\wx\uri.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\ustring.h"
 			/>
 			<File
 				RelativePath="..\..\include\wx\utils.h"

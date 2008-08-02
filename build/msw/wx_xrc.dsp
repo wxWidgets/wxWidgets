@@ -982,6 +982,10 @@ SOURCE=..\..\src\xrc\xh_wizrd.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\xrc\xmladv.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\xrc\xmlres.cpp
 # End Source File
 # Begin Source File

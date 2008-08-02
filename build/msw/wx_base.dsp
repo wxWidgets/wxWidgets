@@ -531,6 +531,10 @@ SOURCE=..\..\src\common\uri.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\ustring.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\utilscmn.cpp
 # End Source File
 # Begin Source File
@@ -1456,6 +1460,10 @@ SOURCE=..\..\include\wx\unichar.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\uri.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\ustring.h
 # End Source File
 # Begin Source File
 

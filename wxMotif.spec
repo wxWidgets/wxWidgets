@@ -219,6 +219,7 @@ wx/txtstrm.h
 wx/types.h
 wx/unichar.h
 wx/uri.h
+wx/ustring.h
 wx/utils.h
 wx/variant.h
 wx/vector.h

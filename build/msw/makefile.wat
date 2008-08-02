@@ -187,6 +187,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_xh_unkwn.obj &
 	$(OBJS)\monodll_xh_wizrd.obj &
 	$(OBJS)\monodll_xmlres.obj &
+	$(OBJS)\monodll_xmladv.obj &
 	$(OBJS)\monodll_xmlrsall.obj &
 	$(OBJS)\monodll_framemanager.obj &
 	$(OBJS)\monodll_dockart.obj &
@@ -853,6 +854,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_xh_unkwn.obj &
 	$(OBJS)\monolib_xh_wizrd.obj &
 	$(OBJS)\monolib_xmlres.obj &
+	$(OBJS)\monolib_xmladv.obj &
 	$(OBJS)\monolib_xmlrsall.obj &
 	$(OBJS)\monolib_framemanager.obj &
 	$(OBJS)\monolib_dockart.obj &
@@ -3358,6 +3360,7 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_txtstrm.obj &
 	$(OBJS)\monodll_unichar.obj &
 	$(OBJS)\monodll_uri.obj &
+	$(OBJS)\monodll_ustring.obj &
 	$(OBJS)\monodll_variant.obj &
 	$(OBJS)\monodll_wfstream.obj &
 	$(OBJS)\monodll_wxcrt.obj &
@@ -3496,6 +3499,7 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_txtstrm.obj &
 	$(OBJS)\monolib_unichar.obj &
 	$(OBJS)\monolib_uri.obj &
+	$(OBJS)\monolib_ustring.obj &
 	$(OBJS)\monolib_variant.obj &
 	$(OBJS)\monolib_wfstream.obj &
 	$(OBJS)\monolib_wxcrt.obj &
@@ -3632,6 +3636,7 @@ BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_txtstrm.obj &
 	$(OBJS)\basedll_unichar.obj &
 	$(OBJS)\basedll_uri.obj &
+	$(OBJS)\basedll_ustring.obj &
 	$(OBJS)\basedll_variant.obj &
 	$(OBJS)\basedll_wfstream.obj &
 	$(OBJS)\basedll_wxcrt.obj &
@@ -3751,6 +3756,7 @@ BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_txtstrm.obj &
 	$(OBJS)\baselib_unichar.obj &
 	$(OBJS)\baselib_uri.obj &
+	$(OBJS)\baselib_ustring.obj &
 	$(OBJS)\baselib_variant.obj &
 	$(OBJS)\baselib_wfstream.obj &
 	$(OBJS)\baselib_wxcrt.obj &
@@ -4111,6 +4117,7 @@ XRCDLL_OBJECTS =  &
 	$(OBJS)\xrcdll_xh_unkwn.obj &
 	$(OBJS)\xrcdll_xh_wizrd.obj &
 	$(OBJS)\xrcdll_xmlres.obj &
+	$(OBJS)\xrcdll_xmladv.obj &
 	$(OBJS)\xrcdll_xmlrsall.obj
 XRCLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
@@ -4178,6 +4185,7 @@ XRCLIB_OBJECTS =  &
 	$(OBJS)\xrclib_xh_unkwn.obj &
 	$(OBJS)\xrclib_xh_wizrd.obj &
 	$(OBJS)\xrclib_xmlres.obj &
+	$(OBJS)\xrclib_xmladv.obj &
 	$(OBJS)\xrclib_xmlrsall.obj
 AUIDLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
@@ -5801,6 +5809,9 @@ $(OBJS)\monodll_unichar.obj :  .AUTODEPEND ..\..\src\common\unichar.cpp
 $(OBJS)\monodll_uri.obj :  .AUTODEPEND ..\..\src\common\uri.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_ustring.obj :  .AUTODEPEND ..\..\src\common\ustring.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_variant.obj :  .AUTODEPEND ..\..\src\common\variant.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -6342,6 +6353,9 @@ $(OBJS)\monodll_xh_wizrd.obj :  .AUTODEPEND ..\..\src\xrc\xh_wizrd.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xmlres.obj :  .AUTODEPEND ..\..\src\xrc\xmlres.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xmladv.obj :  .AUTODEPEND ..\..\src\xrc\xmladv.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xmlrsall.obj :  .AUTODEPEND ..\..\src\xrc\xmlrsall.cpp
@@ -8065,6 +8079,9 @@ $(OBJS)\monolib_unichar.obj :  .AUTODEPEND ..\..\src\common\unichar.cpp
 $(OBJS)\monolib_uri.obj :  .AUTODEPEND ..\..\src\common\uri.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_ustring.obj :  .AUTODEPEND ..\..\src\common\ustring.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_variant.obj :  .AUTODEPEND ..\..\src\common\variant.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -8606,6 +8623,9 @@ $(OBJS)\monolib_xh_wizrd.obj :  .AUTODEPEND ..\..\src\xrc\xh_wizrd.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xmlres.obj :  .AUTODEPEND ..\..\src\xrc\xmlres.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xmladv.obj :  .AUTODEPEND ..\..\src\xrc\xmladv.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xmlrsall.obj :  .AUTODEPEND ..\..\src\xrc\xmlrsall.cpp
@@ -10329,6 +10349,9 @@ $(OBJS)\basedll_unichar.obj :  .AUTODEPEND ..\..\src\common\unichar.cpp
 $(OBJS)\basedll_uri.obj :  .AUTODEPEND ..\..\src\common\uri.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
+$(OBJS)\basedll_ustring.obj :  .AUTODEPEND ..\..\src\common\ustring.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
 $(OBJS)\basedll_variant.obj :  .AUTODEPEND ..\..\src\common\variant.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
@@ -10633,6 +10656,9 @@ $(OBJS)\baselib_unichar.obj :  .AUTODEPEND ..\..\src\common\unichar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_uri.obj :  .AUTODEPEND ..\..\src\common\uri.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_ustring.obj :  .AUTODEPEND ..\..\src\common\ustring.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_variant.obj :  .AUTODEPEND ..\..\src\common\variant.cpp
@@ -14360,6 +14386,9 @@ $(OBJS)\xrcdll_xh_wizrd.obj :  .AUTODEPEND ..\..\src\xrc\xh_wizrd.cpp
 $(OBJS)\xrcdll_xmlres.obj :  .AUTODEPEND ..\..\src\xrc\xmlres.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
+$(OBJS)\xrcdll_xmladv.obj :  .AUTODEPEND ..\..\src\xrc\xmladv.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+
 $(OBJS)\xrcdll_xmlrsall.obj :  .AUTODEPEND ..\..\src\xrc\xmlrsall.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
@@ -14532,6 +14561,9 @@ $(OBJS)\xrclib_xh_wizrd.obj :  .AUTODEPEND ..\..\src\xrc\xh_wizrd.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xmlres.obj :  .AUTODEPEND ..\..\src\xrc\xmlres.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xmladv.obj :  .AUTODEPEND ..\..\src\xrc\xmladv.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xmlrsall.obj :  .AUTODEPEND ..\..\src\xrc\xmlrsall.cpp
