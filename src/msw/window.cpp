@@ -4262,13 +4262,14 @@ bool wxWindowMSW::HandlePower(WXWPARAM WXUNUSED_IN_WINCE(wParam),
 
 bool wxWindowMSW::IsDoubleBuffered() const
 {
-    const wxWindowMSW *wnd = this;
-    do
+    for ( const wxWindowMSW *win = this; win; win = win->GetParent() )
     {
-        if ( wxHasWindowExStyle(wnd, WS_EX_COMPOSITED) )
+        if ( wxHasWindowExStyle(win, WS_EX_COMPOSITED) )
             return true;
-        wnd = wnd->GetParent();
-    } while ( wnd && !wnd->IsTopLevel() );
+
+        if ( win->IsTopLevel() )
+            break;
+    }
 
     return false;
 }
