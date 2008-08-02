@@ -150,6 +150,11 @@ bool wxRadioBox::Create(wxWindow *parent,
     if ( !wxStaticBox::Create(parent, id, title, pos, size, style, name) )
         return false;
 
+    // the code elsewhere in this file supposes that either wxRA_SPECIFY_COLS
+    // or wxRA_SPECIFY_ROWS is set, ensure that this is indeed the case
+    if ( !(style & (wxRA_SPECIFY_ROWS | wxRA_SPECIFY_COLS)) )
+        style |= wxRA_SPECIFY_COLS;
+
 #if wxUSE_VALIDATORS
     SetValidator(val);
 #else
