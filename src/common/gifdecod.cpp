@@ -122,6 +122,7 @@ bool wxGIFDecoder::ConvertToImage(unsigned int frame, wxImage *image) const
     // create the image
     wxSize sz = GetFrameSize(frame);
     image->Create(sz.GetWidth(), sz.GetHeight());
+    image->SetType(wxBITMAP_TYPE_GIF);
 
     if (!image->Ok())
         return false;

@@ -361,6 +361,11 @@ public:
     // Gets the type of image found by LoadFile or specified with SaveFile
     wxBitmapType GetType() const;
 
+    // Set the image type, this is normally only called if the image is being
+    // created from data in the given format but not using LoadFile() (e.g.
+    // wxGIFDecoder uses this)
+    void SetType(wxBitmapType type);
+
     // these functions provide fastest access to wxImage data but should be
     // used carefully as no checks are done
     unsigned char *GetData() const;

@@ -1028,6 +1028,25 @@ public:
                 unsigned char blue);
 
     /**
+        Set the type of image returned by GetType().
+
+        This method is mostly used internally by the library but can also be
+        called from the user code if the image was created from data in the
+        given bitmap format without using LoadFile() (which would set the type
+        correctly automatically).
+
+        Notice that the image must be created before this function is called.
+
+        @since 2.9.0
+
+        @param type
+            One of bitmap type constants, @c wxBITMAP_TYPE_INVALID is a valid
+            value for it and can be used to reset the bitmap type to default
+            but @c wxBITMAP_TYPE_MAX is not allowed here.
+    */
+    void SetType(wxBitmapType type);
+
+    /**
         Returns a resized version of this image without scaling it by adding either a
         border
         with the given colour or cropping as necessary. The image is pasted into a new

@@ -304,6 +304,7 @@ bool wxANIDecoder::Load( wxInputStream& stream )
             if (!sm_handler.DoLoadFile(&image, stream, false /* verbose */, -1))
                 return false;
 
+            image.SetType(wxBITMAP_TYPE_ANI);
             m_images.Add(image);
         }
         else

@@ -1468,6 +1468,16 @@ wxBitmapType wxImage::GetType() const
     return M_IMGDATA->m_type;
 }
 
+void wxImage::SetType(wxBitmapType type)
+{
+    wxCHECK_RET( IsOk(), "must create the image before setting its type");
+
+    // type can be wxBITMAP_TYPE_INVALID to reset the image type to default
+    wxASSERT_MSG( type != wxBITMAP_TYPE_MAX, "invalid bitmap type" );
+
+    M_IMGDATA->m_type = type;
+}
+
 long wxImage::XYToIndex(int x, int y) const
 {
     if ( Ok() &&
