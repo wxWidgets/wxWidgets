@@ -17,7 +17,7 @@
 #include "wx/Wallctrl/WallCtrlDataSource.h"
 #include "wx/Wallctrl/WallCtrlSurface.h"
 
-#include "wx/wallctrl/WallCtrlNavigation.h"
+#include "wx/wallctrl/WallCtrlNavigator.h"
 
 // TODO: Find out what ID should we use? (Maybe auto-numbered?)
 #define TIMER_ID 1
@@ -49,7 +49,7 @@ public:
 	// Render the control (and all its items)
 	void Render();
 
-	void SetNavigator (wxWallCtrlNavigation * navigation = NULL);
+	void SetNavigator (wxWallCtrlNavigator * navigation = NULL);
 
 	void OnEnterWindow( wxMouseEvent& WXUNUSED(event) );
 
@@ -77,7 +77,7 @@ private:
 	bool m_ownDataSource;
 
 	// A pointer to our navigator used to update its surface
-	wxWallCtrlNavigation * m_navigator;
+	wxWallCtrlNavigator * m_navigator;
 
 	// This will point to the single surface that is currently selected.
 	wxWallCtrlSurface * m_surface;

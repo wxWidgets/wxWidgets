@@ -8,18 +8,18 @@
 // Licence:     
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef WX_WALLCTRLNAVIGATIONEVENT_H
-#define WX_WALLCTRLNAVIGATIONEVENT_H
+#ifndef WX_WALLCTRLNAVIGATOREVENT_H
+#define WX_WALLCTRLNAVIGATOREVENT_H
 
 #include "wx/event.h"
 
-class wxWallCtrlNavigationEvent :
+class wxWallCtrlNavigatorEvent :
 	public wxNotifyEvent
 {
-	DECLARE_DYNAMIC_CLASS(wxWallCtrlNavigationEvent)
+	DECLARE_DYNAMIC_CLASS(wxWallCtrlNavigatorEvent)
 public:
-	wxWallCtrlNavigationEvent( wxEventType commandType = wxEVT_NULL, int id = 0 );
-	virtual ~wxWallCtrlNavigationEvent(void);
+	wxWallCtrlNavigatorEvent( wxEventType commandType = wxEVT_NULL, int id = 0 );
+	virtual ~wxWallCtrlNavigatorEvent(void);
 
 	// required for sending with wxPostEvent(). We'll see about that later
 	//virtual wxEvent *Clone() const;
@@ -28,7 +28,7 @@ public:
 
 DECLARE_EVENT_TYPE( wxEVT_WALLCTRL_SELECTION_CHANGED, -1 )
 
-typedef void (wxEvtHandler::*wxSelectionChangedEventFunction)(wxWallCtrlNavigationEvent&);
+typedef void (wxEvtHandler::*wxSelectionChangedEventFunction)(wxWallCtrlNavigatorEvent&);
 
 #define EVT_SELECT(id, fn) \
 	DECLARE_EVENT_TABLE_ENTRY( wxEVT_WALLCTRL_SELECTION_CHANGED, id, -1, \

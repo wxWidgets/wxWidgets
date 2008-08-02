@@ -67,7 +67,7 @@ void wxWallCtrl::Render()
 	}
 }
 
-void wxWallCtrl::SetNavigator( wxWallCtrlNavigation * navigator /*= NULL*/)
+void wxWallCtrl::SetNavigator( wxWallCtrlNavigator * navigator /*= NULL*/)
 {
 	if (navigationSet)
 	{

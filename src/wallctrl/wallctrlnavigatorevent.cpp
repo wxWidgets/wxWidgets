@@ -8,20 +8,20 @@
 // Licence:     
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/wallctrl/wallctrlnavigationevent.h"
+#include "wx/wallctrl/wallctrlnavigatorevent.h"
 
 // TODO: What's wrong here?
-IMPLEMENT_CLASS(wxWallCtrlNavigationEvent, wxNotifyEvent)
+IMPLEMENT_CLASS(wxWallCtrlNavigatorEvent, wxNotifyEvent)
 
 
 DEFINE_EVENT_TYPE( wxEVT_WALLCTRL_SELECTION_CHANGED )
 
 
-wxWallCtrlNavigationEvent::wxWallCtrlNavigationEvent( wxEventType commandType /*= wxEVT_NULL*/, int id /*= 0 */ )
+wxWallCtrlNavigatorEvent::wxWallCtrlNavigatorEvent( wxEventType commandType /*= wxEVT_NULL*/, int id /*= 0 */ )
 {
 
 }
-wxWallCtrlNavigationEvent::~wxWallCtrlNavigationEvent( void )
+wxWallCtrlNavigatorEvent::~wxWallCtrlNavigatorEvent( void )
 {
 
 }

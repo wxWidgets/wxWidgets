@@ -9,19 +9,19 @@
 // Licence:     
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef WX_WALLCTRLNAVIGATION_H
-#define WX_WALLCTRLNAVIGATION_H
+#ifndef WX_WALLCTRLNAVIGATOR_H
+#define WX_WALLCTRLNAVIGATOR_H
 
 #include "wx/wx.h"
 #include "wx/wallctrl/wallctrlsurface.h"
 
-class wxWallCtrlNavigation: 
+class wxWallCtrlNavigator: 
 	public wxEvtHandler
 {
-	DECLARE_DYNAMIC_CLASS(wxWallCtrlNavigation)
+	DECLARE_DYNAMIC_CLASS(wxWallCtrlNavigator)
 public:
-	wxWallCtrlNavigation();
-	virtual ~wxWallCtrlNavigation();
+	wxWallCtrlNavigator();
+	virtual ~wxWallCtrlNavigator();
 
 	virtual wxWallCtrlSurface * GetSurface() const = 0;
 

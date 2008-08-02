@@ -8,17 +8,17 @@
 // Copyright:   (c) Mokhtar M. Khorshid
 // Licence:     
 /////////////////////////////////////////////////////////////////////////////
-#include "wx/wallctrl/wallctrlnavigation.h"
+#include "wx/wallctrl/wallctrlnavigator.h"
 
 // TODO: What's wrong here?
-IMPLEMENT_CLASS(wxWallCtrlNavigation, wxEvtHandler)
+IMPLEMENT_CLASS(wxWallCtrlNavigator, wxEvtHandler)
 
-wxWallCtrlNavigation::wxWallCtrlNavigation()
+wxWallCtrlNavigator::wxWallCtrlNavigator()
 {
 
 }
 
-wxWallCtrlNavigation::~wxWallCtrlNavigation()
+wxWallCtrlNavigator::~wxWallCtrlNavigator()
 {
 
 }

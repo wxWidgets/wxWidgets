@@ -134,15 +134,15 @@
 				>
 			</File>
 			<File
-				RelativePath="src\wallctrl\wallctrldefaultplanenavigation.cpp"
+				RelativePath=".\src\wallctrl\wallctrldefaultplanenavigator.cpp"
 				>
 			</File>
 			<File
-				RelativePath="src\wallctrl\wallctrlnavigation.cpp"
+				RelativePath=".\src\wallctrl\wallctrlnavigator.cpp"
 				>
 			</File>
 			<File
-				RelativePath="src\wallctrl\wallctrlnavigationevent.cpp"
+				RelativePath=".\src\wallctrl\wallctrlnavigatorevent.cpp"
 				>
 			</File>
 			<File
@@ -190,15 +190,15 @@
 				>
 			</File>
 			<File
-				RelativePath="include\wx\wallctrl\wallctrldefaultplanenavigation.h"
+				RelativePath=".\include\wx\wallctrl\wallctrldefaultplanenavigator.h"
 				>
 			</File>
 			<File
-				RelativePath="include\wx\wallctrl\wallctrlnavigation.h"
+				RelativePath=".\include\wx\wallctrl\wallctrlnavigator.h"
 				>
 			</File>
 			<File
-				RelativePath="include\wx\wallctrl\wallctrlnavigationevent.h"
+				RelativePath=".\include\wx\wallctrl\wallctrlnavigatorevent.h"
 				>
 			</File>
 			<File

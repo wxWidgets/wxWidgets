@@ -8,20 +8,20 @@
 // Licence:     
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef WX_WALLCTRLDEFAULTPLANENAVIGATION_H
-#define WX_WALLCTRLDEFAULTPLANENAVIGATION_H
+#ifndef WX_WALLCTRLDEFAULTPLANENAVIGATOR_H
+#define WX_WALLCTRLDEFAULTPLANENAVIGATOR_H
 
-#include "wx/wallctrl/WallCtrlNavigation.h"
+#include "wx/wallctrl/WallCtrlNavigator.h"
 #include "wx/wallctrl/wallctrlplanesurface.h"
-#include "wx/wallctrl/wallctrlnavigationevent.h"
+#include "wx/wallctrl/wallctrlnavigatorevent.h"
 
-class wxWallCtrlDefaultPlaneNavigation :
-	public wxWallCtrlNavigation
+class wxWallCtrlDefaultPlaneNavigator :
+	public wxWallCtrlNavigator
 {
-	DECLARE_DYNAMIC_CLASS(wxWallCtrlDefaultPlaneNavigation);
+	DECLARE_DYNAMIC_CLASS(wxWallCtrlDefaultPlaneNavigator);
 public:
-	wxWallCtrlDefaultPlaneNavigation();
-	virtual ~wxWallCtrlDefaultPlaneNavigation(void);
+	wxWallCtrlDefaultPlaneNavigator();
+	virtual ~wxWallCtrlDefaultPlaneNavigator(void);
 
 	void OnKeyDown(wxKeyEvent &event);
 

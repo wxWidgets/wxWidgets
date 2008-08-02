@@ -24,7 +24,7 @@
 
 #include "include/wx/wallctrl/wallctrl.h"
 #include "include/wx/wallctrl/wallctrlbitmapsource.h"
-#include "include/wx/wallctrl/wallctrldefaultplanenavigation.h"
+#include "include/wx/wallctrl/wallctrldefaultplanenavigator.h"
 
 #include "wx/dir.h"
 
@@ -164,7 +164,7 @@ void wxWallCtrlSample::CreateControls()
 	wxWallCtrlPlaneSurface * surface = new wxWallCtrlPlaneSurface();
 	surface->SetScopeSize(wxSize(3, 3));
 
-	wxWallCtrlDefaultPlaneNavigation * navigation = new wxWallCtrlDefaultPlaneNavigation();
+	wxWallCtrlDefaultPlaneNavigator * navigation = new wxWallCtrlDefaultPlaneNavigator();
 	wall->SetSurface(surface);
 	wall->SetDataSource(bitmapSource);
 	//delete (bitmapSource);
