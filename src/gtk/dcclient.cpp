@@ -2009,9 +2009,7 @@ void wxWindowDCImpl::SetLogicalFunction( int function )
         case wxCOPY:         mode = GDK_COPY;          break;
         case wxNO_OP:        mode = GDK_NOOP;          break;
         case wxSRC_INVERT:   mode = GDK_COPY_INVERT;   break;
-
-        // unsupported by GTK
-        case wxNOR:          mode = GDK_COPY;          break;
+        case wxNOR:          mode = GDK_NOR;           break;
         default:
            wxFAIL_MSG( wxT("unsupported logical function") );
            mode = GDK_COPY;
