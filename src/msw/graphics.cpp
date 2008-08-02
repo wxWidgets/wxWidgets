@@ -1261,7 +1261,9 @@ void wxGDIPlusContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxD
 
 void wxGDIPlusContext::DrawText( const wxString &str, wxDouble x, wxDouble y )
 {
-    if ( m_font.IsNull() || str.IsEmpty())
+    wxCHECK_RET( !m_font.IsNull(), wxT("wxGDIPlusContext::DrawText - no valid font set") );
+
+    if ( str.IsEmpty())
         return ;
 
     wxWCharBuffer s = str.wc_str( *wxConvUI );
@@ -1272,6 +1274,8 @@ void wxGDIPlusContext::DrawText( const wxString &str, wxDouble x, wxDouble y )
 void wxGDIPlusContext::GetTextExtent( const wxString &str, wxDouble *width, wxDouble *height,
                                      wxDouble *descent, wxDouble *externalLeading ) const
 {
+    wxCHECK_RET( !m_font.IsNull(), wxT("wxGDIPlusContext::GetTextExtent - no valid font set") );
+
     wxWCharBuffer s = str.wc_str( *wxConvUI );
     FontFamily ffamily ;
     Font* f = ((wxGDIPlusFontData*)m_font.GetRefData())->GetGDIPlusFont();
@@ -1316,6 +1320,8 @@ void wxGDIPlusContext::GetPartialTextExtents(const wxString& text, wxArrayDouble
 {
     widths.Empty();
     widths.Add(0, text.length());
+
+    wxCHECK_RET( !m_font.IsNull(), wxT("wxGDIPlusContext::GetPartialTextExtents - no valid font set") );
 
     if (text.empty())
         return;
