@@ -966,6 +966,9 @@
 				RelativePath=".\streams\memstream.cpp"
 			/>
 			<File
+				RelativePath=".\misc\misctests.cpp"
+			/>
+			<File
 				RelativePath=".\thread\queue.cpp"
 			/>
 			<File

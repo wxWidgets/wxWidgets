@@ -611,15 +611,33 @@ typedef short int WXTYPE;
 #include <stddef.h>
 #endif
 
-/*  delete pointer if it is not NULL and NULL it afterwards */
-/*  (checking that it's !NULL before passing it to delete is just a */
-/*   a question of style, because delete will do it itself anyhow, but it might */
-/*   be considered as an error by some overzealous debugging implementations of */
-/*   the library, so we do it ourselves) */
-#define wxDELETE(p)      if ( (p) != NULL ) { delete p; p = NULL; }
+#ifdef __cplusplus
+    // delete pointer if it is not NULL and NULL it afterwards
+    template <typename T>
+    inline void wxDELETE(T*& ptr)
+    {
+        typedef char TypeIsCompleteCheck[sizeof(T)];
 
-/*  delete an array and NULL it (see comments above) */
-#define wxDELETEA(p)     if ( (p) ) { delete [] (p); p = NULL; }
+        if ( ptr != NULL )
+        {
+            delete ptr;
+            ptr = NULL;
+        }
+    }
+
+    // delete an array and NULL it (see comments above)
+    template <typename T>
+    inline void wxDELETEA(T*& ptr)
+    {
+        typedef char TypeIsCompleteCheck[sizeof(T)];
+
+        if ( ptr != NULL )
+        {
+            delete [] ptr;
+            ptr = NULL;
+        }
+    }
+#endif /*__cplusplus*/
 
 /*  size of statically declared array */
 #define WXSIZEOF(array)   (sizeof(array)/sizeof(array[0]))

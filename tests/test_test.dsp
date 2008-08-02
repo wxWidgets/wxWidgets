@@ -361,6 +361,10 @@ SOURCE=.\streams\memstream.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\misc\misctests.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\thread\queue.cpp
 # End Source File
 # Begin Source File
