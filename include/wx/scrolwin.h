@@ -348,7 +348,11 @@ private:
         event.Skip();
     }
 
+    // VC++ 6 gives warning for the declaration of template member function
+    // without definition
+#if !defined(__VISUALC__) || wxCHECK_VISUALC_VERSION(7)
     DECLARE_NO_COPY_CLASS(wxScrolled)
+#endif
 };
 
 // VC++ <= 6 requires this; it's unlikely any other specializations would
