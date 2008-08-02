@@ -175,15 +175,16 @@ public:
     wxImage();
 
     /**
-         Creates an image with the given size and clears it if requested.
-         Does not create an alpha channel.
+        Creates an image with the given size and clears it if requested.
+
+        Does not create an alpha channel.
 
         @param width
             Specifies the width of the image.
         @param height
             Specifies the height of the image.
-        @clear
-            Clear the image with zeros.
+        @param clear
+            If @true, initialize the image to black.
     */
     wxImage(int width, int height, bool clear = true);
 
@@ -404,14 +405,17 @@ public:
     wxImage Copy() const;
 
     /**
-        Creates a fresh image.  If @a clear is @true, the new image will be initialized
-        to black.
+        Creates a fresh image.
+
+        If @a clear is @true, the new image will be initialized to black.
         Otherwise, the image data will be uninitialized.
 
         @param width
             The width of the image in pixels.
         @param height
             The height of the image in pixels.
+        @param clear
+            If @true, initialize the image data with zeros.
 
         @return @true if the call succeeded, @false otherwise.
     */
