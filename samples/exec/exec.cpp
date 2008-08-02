@@ -115,6 +115,7 @@ public:
     void OnPOpen(wxCommandEvent& event);
 
     void OnFileExec(wxCommandEvent& event);
+    void OnFileLaunch(wxCommandEvent& event);
     void OnOpenURL(wxCommandEvent& event);
 
     void OnAbout(wxCommandEvent& event);
@@ -304,6 +305,7 @@ enum
     Exec_Shell,
     Exec_POpen,
     Exec_OpenFile,
+    Exec_LaunchFile,
     Exec_OpenURL,
     Exec_DDEExec,
     Exec_DDERequest,
@@ -344,6 +346,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Exec_POpen, MyFrame::OnPOpen)
 
     EVT_MENU(Exec_OpenFile, MyFrame::OnFileExec)
+    EVT_MENU(Exec_LaunchFile, MyFrame::OnFileLaunch)
     EVT_MENU(Exec_OpenURL, MyFrame::OnOpenURL)
 
 #ifdef __WINDOWS__
@@ -460,6 +463,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     execMenu->AppendSeparator();
     execMenu->Append(Exec_OpenFile, _T("Open &file...\tCtrl-F"),
                      _T("Launch the command to open this kind of files"));
+    execMenu->Append(Exec_LaunchFile, _T("La&unch file...\tShift-Ctrl-F"),
+                     _T("Launch the default application associated with the file"));
     execMenu->Append(Exec_OpenURL, _T("Open &URL...\tCtrl-U"),
                      _T("Launch the default browser with the given URL"));
 #ifdef __WINDOWS__
@@ -867,25 +872,33 @@ void MyFrame::OnPOpen(wxCommandEvent& WXUNUSED(event))
     new MyPipeFrame(this, cmd, process);
 }
 
-void MyFrame::OnFileExec(wxCommandEvent& WXUNUSED(event))
-{
-    static wxString s_filename;
+static wxString gs_lastFile;
 
+static bool AskUserForFileName()
+{
     wxString filename;
 
 #if wxUSE_FILEDLG
-    filename = wxLoadFileSelector(_T("any file"), wxEmptyString, s_filename, this);
+    filename = wxLoadFileSelector(_T("any file"), wxEmptyString, gs_lastFile);
 #else // !wxUSE_FILEDLG
     filename = wxGetTextFromUser(_T("Enter the file name"), _T("exec sample"),
-                                 s_filename, this);
+                                 gs_lastFile);
 #endif // wxUSE_FILEDLG/!wxUSE_FILEDLG
 
     if ( filename.empty() )
+        return false;
+
+    gs_lastFile = filename;
+
+    return true;
+}
+
+void MyFrame::OnFileExec(wxCommandEvent& WXUNUSED(event))
+{
+    if ( !AskUserForFileName() )
         return;
 
-    s_filename = filename;
-
-    wxString ext = filename.AfterLast(_T('.'));
+    wxString ext = gs_lastFile.AfterLast(_T('.'));
     wxFileType *ft = wxTheMimeTypesManager->GetFileTypeFromExtension(ext);
     if ( !ft )
     {
@@ -896,7 +909,7 @@ void MyFrame::OnFileExec(wxCommandEvent& WXUNUSED(event))
 
     wxString cmd;
     bool ok = ft->GetOpenCommand(&cmd,
-                                 wxFileType::MessageParameters(filename));
+                                 wxFileType::MessageParameters(gs_lastFile));
     delete ft;
     if ( !ok )
     {
@@ -908,25 +921,36 @@ void MyFrame::OnFileExec(wxCommandEvent& WXUNUSED(event))
     DoAsyncExec(cmd);
 }
 
+void MyFrame::OnFileLaunch(wxCommandEvent& WXUNUSED(event))
+{
+    if ( !AskUserForFileName() )
+        return;
+
+    if ( !wxLaunchDefaultApplication(gs_lastFile) )
+    {
+        wxLogError("Opening \"%s\" in default application failed.", gs_lastFile);
+    }
+}
+
 void MyFrame::OnOpenURL(wxCommandEvent& WXUNUSED(event))
 {
-    static wxString s_filename(_T("http://www.wxwidgets.org/"));
+    static wxString s_url(_T("http://www.wxwidgets.org/"));
 
     wxString filename = wxGetTextFromUser
                         (
                             _T("Enter the URL"),
                             _T("exec sample"),
-                            s_filename,
+                            s_url,
                             this
                         );
 
     if ( filename.empty() )
         return;
 
-    s_filename = filename;
+    s_url = filename;
 
-    if ( !wxLaunchDefaultBrowser(s_filename) )
-        wxLogError(_T("Failed to open URL \"%s\""), s_filename.c_str());
+    if ( !wxLaunchDefaultBrowser(s_url) )
+        wxLogError(_T("Failed to open URL \"%s\""), s_url.c_str());
 }
 
 // ----------------------------------------------------------------------------

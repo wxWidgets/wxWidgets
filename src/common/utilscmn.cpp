@@ -941,7 +941,11 @@ bool wxLaunchDefaultApplication(const wxString& document, int flags)
 {
     wxUnusedVar(flags);
 
-#if defined(__UNIX__)
+#ifdef __WXMAC__
+    static const char * const OPEN_CMD = "/usr/bin/open";
+    if ( wxFileExists(OPEN_CMD) && wxExecute(OPEN_CMD + " " + document) )
+        return true;
+#elif defined(__UNIX__)
     // Our best best is to use xdg-open from freedesktop.org cross-desktop
     // compatibility suite xdg-utils
     // (see http://portland.freedesktop.org/wiki/) -- this is installed on
