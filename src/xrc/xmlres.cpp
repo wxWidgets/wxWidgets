@@ -1031,13 +1031,17 @@ wxString wxXmlResourceHandler::GetName()
 
 
 
+bool wxXmlResourceHandler::GetBoolAttr(const wxString& attr, bool defaultv)
+{
+    wxString v;
+    return m_node->GetAttribute(attr, &v) ? v == '1' : defaultv;
+}
+
 bool wxXmlResourceHandler::GetBool(const wxString& param, bool defaultv)
 {
-    wxString v = GetParamValue(param);
-    v.MakeLower();
-    if (!v) return defaultv;
+    const wxString v = GetParamValue(param);
 
-    return (v == wxT("1"));
+    return v.empty() ? defaultv : (v == '1');
 }
 
 

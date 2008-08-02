@@ -1026,55 +1026,55 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFFile *fileTemp)
 // directory operations
 // ----------------------------------------------------------------------------
 
+// helper of GetTempDir(): check if the given directory exists and return it if
+// it does or an empty string otherwise
+namespace
+{
+
+wxString CheckIfDirExists(const wxString& dir)
+{
+    return wxFileName::DirExists(dir) ? dir : wxString();
+}
+
+} // anonymous namespace
+
 wxString wxFileName::GetTempDir()
 {
-    wxString dir;
-    dir = wxGetenv(_T("TMPDIR"));
-    if (dir.empty())
-    {
-        dir = wxGetenv(_T("TMP"));
-        if (dir.empty())
-        {
-            dir = wxGetenv(_T("TEMP"));
-        }
-    }
-
-#if defined(__WXWINCE__)
-    if (dir.empty())
-    {
-        // FIXME. Create \temp dir?
-        if (DirExists(wxT("\\temp")))
-            dir = wxT("\\temp");
-    }
-#elif defined(__WINDOWS__) && !defined(__WXMICROWIN__)
-
+    // first try getting it from environment: this allows overriding the values
+    // used by default if the user wants to create temporary files in another
+    // directory
+    wxString dir = CheckIfDirExists(wxGetenv("TMPDIR"));
     if ( dir.empty() )
     {
+        dir = CheckIfDirExists(wxGetenv("TMP"));
+        if ( dir.empty() )
+            dir = CheckIfDirExists(wxGetenv("TEMP"));
+    }
+
+    // if no environment variables are set, use the system default
+    if ( dir.empty() )
+    {
+#if defined(__WXWINCE__)
+        dir = CheckIfDirExists(wxT("\\temp"));
+#elif defined(__WINDOWS__) && !defined(__WXMICROWIN__)
         if ( !::GetTempPath(MAX_PATH, wxStringBuffer(dir, MAX_PATH + 1)) )
         {
             wxLogLastError(_T("GetTempPath"));
         }
-
-        if ( dir.empty() )
-        {
-            // GetTempFileName() fails if we pass it an empty string
-            dir = _T('.');
-        }
-    }
-#else // !Windows
-
-    if ( dir.empty() )
-    {
-        // default
-#if defined(__DOS__) || defined(__OS2__)
-        dir = _T(".");
 #elif defined(__WXMAC__) && wxOSX_USE_CARBON
         dir = wxMacFindFolder(short(kOnSystemDisk), kTemporaryFolderType, kCreateFolder);
-#else
-        dir = _T("/tmp");
-#endif
+#endif // systems with native way
     }
-#endif
+
+    // fall back to hard coded value
+    if ( dir.empty() )
+    {
+#ifdef __UNIX_LIKE__
+        dir = CheckIfDirExists("/tmp");
+        if ( dir.empty() )
+#endif // __UNIX_LIKE__
+            dir = ".";
+    }
 
     return dir;
 }

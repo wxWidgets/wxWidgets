@@ -377,6 +377,7 @@ All (GUI):
 - Added wxVListBox::GetItemRect() (Javier Urien).
 - Show busy cursor in wxLaunchDefaultBrowser and add wxBROWSER_NOBUSYCURSOR.
 - Added wxFlexGridSizer::Is{Row,Col}Growable() (Marcin Wojdyr).
+- Added "enabled" and "hidden" attributes to radio box items in XRC.
 
 wxGTK:
 

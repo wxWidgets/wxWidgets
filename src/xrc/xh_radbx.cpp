@@ -47,66 +47,66 @@ wxObject *wxRadioBoxXmlHandler::DoCreateResource()
         m_insideBox = true;
         CreateChildrenPrivately( NULL, GetParamNode(wxT("content")));
 
-        wxString *strings;
-        if ( !labels.empty() )
-        {
-            strings = new wxString[labels.size()];
-            const unsigned count = labels.size();
-            for( unsigned i = 0; i < count; i++ )
-                strings[i] = labels[i];
-        }
-        else
-        {
-            strings = NULL;
-        }
-
         XRC_MAKE_INSTANCE(control, wxRadioBox)
 
         control->Create(m_parentAsWindow,
                         GetID(),
                         GetText(wxT("label")),
                         GetPosition(), GetSize(),
-                        labels.size(),
-                        strings,
+                        m_labels,
                         GetLong(wxT("dimension"), 1),
                         GetStyle(),
                         wxDefaultValidator,
                         GetName());
-
-        delete[] strings;
 
         if (selection != -1)
             control->SetSelection(selection);
 
         SetupWindow(control);
 
-        const unsigned count = labels.size();
+        const unsigned count = m_labels.size();
         for( unsigned i = 0; i < count; i++ )
         {
 #if wxUSE_TOOLTIPS
-            if ( !tooltips[i].empty() )
-                control->SetItemToolTip(i, tooltips[i]);
+            if ( !m_tooltips[i].empty() )
+                control->SetItemToolTip(i, m_tooltips[i]);
 #endif // wxUSE_TOOLTIPS
 #if wxUSE_HELP
-            if ( helptextSpecified[i] )
-                control->SetItemHelpText(i, helptexts[i]);
+            if ( m_helptextSpecified[i] )
+                control->SetItemHelpText(i, m_helptexts[i]);
 #endif // wxUSE_HELP
+
+            if ( !m_isShown[i] )
+                control->Show(i, false);
+            if ( !m_isEnabled[i] )
+                control->Enable(i, false);
         }
 
-        labels.clear();    // dump the strings
 
-        tooltips.clear();    // dump the tooltips
+        // forget information about the items of this radiobox, we should start
+        // afresh for the next one
+        m_labels.clear();
 
-        helptexts.clear();   // dump the helptexts
-        helptextSpecified.clear();
+#if wxUSE_TOOLTIPS
+        m_tooltips.clear();
+#endif // wxUSE_TOOLTIPS
+
+#if wxUSE_HELP
+        m_helptexts.clear();
+        m_helptextSpecified.clear();
+#endif // wxUSE_HELP
+
+        m_isShown.clear();
+        m_isEnabled.clear();
 
         return control;
     }
     else // inside the radiobox element
     {
-        // we handle handle <item tooltip="..." helptext="...">Label</item> constructs here
+        // we handle handle <item>Label</item> constructs here, and the item
+        // tag can have tooltip, helptext, enabled and hidden attributes
 
-        wxString str = GetNodeContent(m_node);
+        wxString label = GetNodeContent(m_node);
 
         wxString tooltip;
         m_node->GetAttribute(wxT("tooltip"), &tooltip);
@@ -116,17 +116,23 @@ wxObject *wxRadioBoxXmlHandler::DoCreateResource()
 
         if (m_resource->GetFlags() & wxXRC_USE_LOCALE)
         {
-            str = wxGetTranslation(str, m_resource->GetDomain());
+            label = wxGetTranslation(label, m_resource->GetDomain());
             if ( !tooltip.empty() )
                 tooltip = wxGetTranslation(tooltip, m_resource->GetDomain());
             if ( hasHelptext )
                 helptext = wxGetTranslation(helptext, m_resource->GetDomain());
         }
 
-        labels.push_back(str);
-        tooltips.push_back(tooltip);
-        helptexts.push_back(helptext);
-        helptextSpecified.push_back(hasHelptext);
+        m_labels.push_back(label);
+#if wxUSE_TOOLTIPS
+        m_tooltips.push_back(tooltip);
+#endif // wxUSE_TOOLTIPS
+#if wxUSE_HELP
+        m_helptexts.push_back(helptext);
+        m_helptextSpecified.push_back(hasHelptext);
+#endif // wxUSE_HELP
+        m_isEnabled.push_back(GetBoolAttr("enabled", 1));
+        m_isShown.push_back(!GetBoolAttr("hidden", 0));
 
         return NULL;
     }
