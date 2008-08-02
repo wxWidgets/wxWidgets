@@ -31,6 +31,7 @@
     #include "wx/app.h"
     #include "wx/intl.h"
     #include "wx/dcclient.h"
+    #include "wx/settings.h"
     #include "wx/msw/private.h"
 #endif
 
@@ -124,7 +125,6 @@ WXDWORD wxDatePickerCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
 wxSize wxDatePickerCtrl::DoGetBestSize() const
 {
     wxClientDC dc(wx_const_cast(wxDatePickerCtrl *, this));
-    dc.SetFont(GetFont());
 
     // we can't use FormatDate() here as the CRT doesn't always use the same
     // format as the date picker control
@@ -156,13 +156,23 @@ wxSize wxDatePickerCtrl::DoGetBestSize() const
         }
     }
 
-    // the control adds a lot of extra space around separators
-    s.Replace(_T(","), _T("    ,    "));
+    // the best size for the control is bigger than just the string
+    // representation of todays date because the control must accommodate any
+    // date and while the widths of all digits are usually about the same, the
+    // width of the month string varies a lot, so try to account for it
+    s += _T("WW");
 
     int x, y;
     dc.GetTextExtent(s, &x, &y);
 
-    wxSize best(x + 40 /* margin + arrows */, EDIT_HEIGHT_FROM_CHAR_HEIGHT(y));
+    // account for the drop-down arrow or spin arrows
+    x += wxSystemSettings::GetMetric(wxSYS_HSCROLL_ARROW_X);
+
+    // and for the checkbox if we have it
+    if ( HasFlag(wxDP_ALLOWNONE) )
+        x += 3*GetCharWidth();
+
+    wxSize best(x, EDIT_HEIGHT_FROM_CHAR_HEIGHT(y));
     CacheBestSize(best);
     return best;
 }
