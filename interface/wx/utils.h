@@ -422,6 +422,18 @@ long wxNewId();
 void wxRegisterId(long id);
 
 /**
+    Opens the @a document in the application associated with the files of this
+    type.
+
+    The @a flags parameter is currently not used
+
+    Returns @true if the application was successfully launched.
+
+    @header{wx/utils.h}
+*/
+bool wxLaunchDefaultApplication(const wxString& document, int flags = 0)
+
+/**
     Opens the @a url in user's default browser.
 
     If the @a flags parameter contains @c wxBROWSER_NEW_WINDOW flag, a new

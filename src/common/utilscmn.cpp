@@ -937,11 +937,11 @@ void wxQsort(void *const pbase, size_t total_elems,
 // Launch document with default app
 // ----------------------------------------------------------------------------
 
-bool wxLaunchDefaultApplication(const wxString &document, int flags)
+bool wxLaunchDefaultApplication(const wxString& document, int flags)
 {
     wxUnusedVar(flags);
 
-#ifdef __UNIX__
+#if defined(__UNIX__)
     // Our best best is to use xdg-open from freedesktop.org cross-desktop
     // compatibility suite xdg-utils
     // (see http://portland.freedesktop.org/wiki/) -- this is installed on
@@ -954,9 +954,21 @@ bool wxLaunchDefaultApplication(const wxString &document, int flags)
         if ( wxExecute(xdg_open + " " + document) )
             return true;
     }
+#elif defined(__WXMSW__)
+    const INT_PTR result = (INT_PTR)::ShellExecute
+                                      (
+                                        NULL,           // parent window
+                                        _T("open"),
+                                        document,
+                                        NULL,           // parameters
+                                        NULL,           // working directory
+                                        SW_SHOWDEFAULT
+                                      );
+    if ( result > 32 )
+        return true;
 #endif
 
-   return false;
+    return false;
 }
 
 // ----------------------------------------------------------------------------
