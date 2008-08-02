@@ -1758,8 +1758,7 @@ void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDoub
 
 void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDouble y, wxDouble angle )
 {
-    if ( m_font.IsNull() )
-        return;
+    wxCHECK_RET( !m_font.IsNull(), wxT("wxMacCoreGraphicsContext::DrawText - no valid font set") );
 
     EnsureIsValid();
 
@@ -1873,7 +1872,7 @@ void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDoub
 void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *width, wxDouble *height,
                             wxDouble *descent, wxDouble *externalLeading ) const
 {
-    wxCHECK_RET( !m_font.IsNull(), wxT("wxDC(cg)::DoGetTextExtent - no valid font set") );
+    wxCHECK_RET( !m_font.IsNull(), wxT("wxMacCoreGraphicsContext::GetTextExtent - no valid font set") );
 
     if ( width )
         *width = 0;
@@ -1950,6 +1949,8 @@ void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArr
 {
     widths.Empty();
     widths.Add(0, text.length());
+
+    wxCHECK_RET( !m_font.IsNull(), wxT("wxMacCoreGraphicsContext::GetPartialTextExtents - no valid font set") );
 
     if (text.empty())
         return;
