@@ -281,12 +281,11 @@ static void EnsureParentHasControlParentStyle(wxWindow *parent)
      */
     while ( parent && !parent->IsTopLevel() )
     {
-        LONG exStyle = ::GetWindowLong(GetHwndOf(parent), GWL_EXSTYLE);
+        LONG exStyle = wxGetWindowExStyle(parent);
         if ( !(exStyle & WS_EX_CONTROLPARENT) )
         {
             // force the parent to have this style
-            ::SetWindowLong(GetHwndOf(parent), GWL_EXSTYLE,
-                            exStyle | WS_EX_CONTROLPARENT);
+            wxSetWindowExStyle(parent, exStyle | WS_EX_CONTROLPARENT);
         }
 
         parent = parent->GetParent();
@@ -1142,10 +1141,10 @@ void wxWindowMSW::SetLayoutDirection(wxLayoutDirection dir)
 #ifdef __WXWINCE__
     wxUnusedVar(dir);
 #else
-    const HWND hwnd = GetHwnd();
-    wxCHECK_RET( hwnd, _T("layout direction must be set after window creation") );
+    wxCHECK_RET( GetHwnd(),
+                 _T("layout direction must be set after window creation") );
 
-    LONG styleOld = ::GetWindowLong(hwnd, GWL_EXSTYLE);
+    LONG styleOld = wxGetWindowExStyle(this);
 
     LONG styleNew = styleOld;
     switch ( dir )
@@ -1165,7 +1164,7 @@ void wxWindowMSW::SetLayoutDirection(wxLayoutDirection dir)
 
     if ( styleNew != styleOld )
     {
-        ::SetWindowLong(hwnd, GWL_EXSTYLE, styleNew);
+        wxSetWindowExStyle(this, styleNew);
     }
 #endif
 }
@@ -1175,12 +1174,10 @@ wxLayoutDirection wxWindowMSW::GetLayoutDirection() const
 #ifdef __WXWINCE__
     return wxLayout_Default;
 #else
-    const HWND hwnd = GetHwnd();
-    wxCHECK_MSG( hwnd, wxLayout_Default, _T("invalid window") );
+    wxCHECK_MSG( GetHwnd(), wxLayout_Default, _T("invalid window") );
 
-    return ::GetWindowLong(hwnd, GWL_EXSTYLE) & WS_EX_LAYOUTRTL
-                ? wxLayout_RightToLeft
-                : wxLayout_LeftToRight;
+    return wxHasWindowExStyle(this, WS_EX_LAYOUTRTL) ? wxLayout_RightToLeft
+                                                     : wxLayout_LeftToRight;
 #endif
 }
 
@@ -1391,14 +1388,14 @@ void wxWindowMSW::MSWUpdateStyle(long flagsOld, long exflagsOld)
     }
 
     // and the extended style
-    long exstyleReal = ::GetWindowLong(GetHwnd(), GWL_EXSTYLE);
+    long exstyleReal = wxGetWindowExStyle(this);
 
     if ( exstyle != exstyleOld )
     {
         exstyleReal &= ~exstyleOld;
         exstyleReal |= exstyle;
 
-        ::SetWindowLong(GetHwnd(), GWL_EXSTYLE, exstyleReal);
+        wxSetWindowExStyle(this, exstyleReal);
 
         // ex style changes don't take effect without calling SetWindowPos
         callSWP = true;
@@ -1606,7 +1603,7 @@ bool wxWindowMSW::Reparent(wxWindowBase *parent)
     ::SetParent(hWndChild, hWndParent);
 
 #ifndef __WXWINCE__
-    if ( ::GetWindowLong(hWndChild, GWL_EXSTYLE) & WS_EX_CONTROLPARENT )
+    if ( wxHasWindowExStyle(this, WS_EX_CONTROLPARENT) )
     {
         EnsureParentHasControlParentStyle(GetParent());
     }
@@ -2550,8 +2547,7 @@ bool wxWindowMSW::MSWShouldPreProcessMessage(WXMSG* msg)
         {
             wxWindow * const win = node->GetData();
             if ( win->CanAcceptFocus() &&
-                    !(::GetWindowLong(GetHwndOf(win), GWL_EXSTYLE) &
-                        WS_EX_CONTROLPARENT) )
+                    !wxHasWindowExStyle(win, WS_EX_CONTROLPARENT) )
             {
                 // it shouldn't hang...
                 canSafelyCallIsDlgMsg = true;
@@ -4267,20 +4263,20 @@ bool wxWindowMSW::HandlePower(WXWPARAM WXUNUSED_IN_WINCE(wParam),
 bool wxWindowMSW::IsDoubleBuffered() const
 {
     const wxWindowMSW *wnd = this;
-    do {
-        long style = ::GetWindowLong(GetHwndOf(wnd), GWL_EXSTYLE);
-        if ( (style & WS_EX_COMPOSITED) != 0 )
+    do
+    {
+        if ( wxHasWindowExStyle(wnd, WS_EX_COMPOSITED) )
             return true;
         wnd = wnd->GetParent();
     } while ( wnd && !wnd->IsTopLevel() );
-        
+
     return false;
 }
 
 void wxWindowMSW::SetDoubleBuffered(bool on)
 {
     // Get the current extended style bits
-    long exstyle = ::GetWindowLong(GetHwnd(), GWL_EXSTYLE);
+    long exstyle = wxGetWindowExStyle(this);
 
     // Twiddle the bit as needed
     if ( on )
@@ -4289,7 +4285,7 @@ void wxWindowMSW::SetDoubleBuffered(bool on)
         exstyle &= ~WS_EX_COMPOSITED;
 
     // put it back
-    ::SetWindowLong(GetHwnd(), GWL_EXSTYLE, exstyle);
+    wxSetWindowExStyle(this, exstyle);
 }
 
 // ---------------------------------------------------------------------------

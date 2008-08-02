@@ -23,6 +23,10 @@
 
 #include "wx/log.h"
 
+#if wxUSE_GUI
+    #include "wx/window.h"
+#endif // wxUSE_GUI
+
 class WXDLLIMPEXP_FWD_CORE wxFont;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLIMPEXP_FWD_CORE wxWindowBase;
@@ -898,6 +902,21 @@ inline bool wxStyleHasBorder(long style)
 {
     return (style & (wxSIMPLE_BORDER | wxRAISED_BORDER |
                      wxSUNKEN_BORDER | wxDOUBLE_BORDER)) != 0;
+}
+
+inline long wxGetWindowExStyle(const wxWindow *win)
+{
+    return ::GetWindowLong(GetHwndOf(win), GWL_EXSTYLE);
+}
+
+inline bool wxHasWindowExStyle(const wxWindow *win, long style)
+{
+    return (wxGetWindowExStyle(win) & style) != 0;
+}
+
+inline long wxSetWindowExStyle(const wxWindow *win, long style)
+{
+    return ::SetWindowLong(GetHwndOf(win), GWL_EXSTYLE, style);
 }
 
 // ----------------------------------------------------------------------------
