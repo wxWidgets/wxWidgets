@@ -116,7 +116,9 @@ protected:
 
     // handlers for various events
     bool HandleSize(WXWPARAM wParam, WXLPARAM lParam);
+#ifndef __WXWINCE__
     bool HandlePaint(WXWPARAM wParam, WXLPARAM lParam);
+#endif // __WXWINCE__
     void HandleMouseMove(WXWPARAM wParam, WXLPARAM lParam);
 
     // should be called whenever the toolbar size changes

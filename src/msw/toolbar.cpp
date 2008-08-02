@@ -1859,12 +1859,14 @@ WXLRESULT wxToolBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam
 
 #ifndef __WXWINCE__
         case WM_PAINT:
-            if ( HandlePaint(wParam, lParam) )
+            // refreshing the controls in the toolbar inside a composite window
+            // results in an endless stream of WM_PAINT messages -- and seems
+            // to be unnecessary anyhow as everything works just fine without
+            // any special workarounds in this case
+            if ( !IsDoubleBuffered() && HandlePaint(wParam, lParam) )
                 return 0;
-#endif
-
-        default:
             break;
+#endif // __WXWINCE__
     }
 
     return wxControl::MSWWindowProc(nMsg, wParam, lParam);
