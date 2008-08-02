@@ -30,7 +30,7 @@
 #include "wx/xrc/xmlres.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/string.h"
+    #include "wx/log.h"
 #endif // WX_PRECOMP
 
 // ============================================================================
