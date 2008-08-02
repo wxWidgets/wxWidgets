@@ -22,8 +22,8 @@
     class that has O(1) access to its content, to be identical on all 
     platforms and to be easily convertable to wxString as well as other
     ways to store strings (C string literals, wide character
-    string literals, character buffer, etc) by providing many overload
-    and built-in conversion to and from the various format.
+    string literals, character buffer, etc) by providing several overloads
+    and built-in conversions to and from the various string formats.
     
     wxUString derives from @c std::basic_string<wxChar32> and therefore
     offers the complete API of @c std::string.
@@ -204,35 +204,35 @@ public:
     operator wxString() const;
 
     /**
-       wxUString assignment. wxUString addtionally provides overloads for
+       wxUString assignment. wxUString additionally provides overloads for
        wxString, C string, UTF-16 strings, 32-bit strings, char buffers,
        single and repeated characters etc.
     */
     wxUString &assign( const wxUString &str );
      
     /**
-       Appending. wxUString addtionally provides overloads for
+       Appending. wxUString additionally provides overloads for
        wxString, C string, UTF-16 strings, 32-bit strings, char buffers,
        single and repeated characters etc.
     */
     wxUString &append( const wxUString &s );
     
     /**
-       Insertion. wxUString addtionally provides overloads for
+       Insertion. wxUString additionally provides overloads for
        wxString, C string, UTF-16 strings, 32-bit strings, char buffers,
        single characters etc.
     */
     wxUString &insert( size_type pos, const wxUString &s );
 
     /**
-       Assignment operator. wxUString addtionally provides overloads for
+       Assignment operator. wxUString additionally provides overloads for
        wxString, C string, UTF-16 strings, 32-bit strings, char buffers,
        single characters etc.
     */
     inline wxUString& operator=(const wxUString& s);
     
     /**
-       Concatenation operator. wxUString addtionally provides overloads for
+       Concatenation operator. wxUString additionally provides overloads for
        wxString, C string, UTF-16 strings, 32-bit strings, char buffers,
        single characters etc.
     */
@@ -241,44 +241,44 @@ public:
 };
 
     /**
-       Concatenation operator. wxUString addtionally provides overloads for
+       Concatenation operator. wxUString additionally provides overloads for
        wxString, C string, UTF-16 strings, 32-bit strings, char buffers,
        single characters etc.
     */
 inline wxUString operator+(const wxUString &s1, const wxUString &s2);
 
     /**
-       Equality operator. wxUString addtionally provides overloads for
+       Equality operator. wxUString additionally provides overloads for
        wxString, C string, UTF-16 strings, 32-bit strings, char buffers,
        single characters etc.
     */
 inline bool operator==(const wxUString& s1, const wxUString& s2);
     /**
-       Inequality operator. wxUString addtionally provides overloads for
+       Inequality operator. wxUString additionally provides overloads for
        wxString, C string, UTF-16 strings, 32-bit strings, char buffers,
        single characters etc.
     */
 inline bool operator!=(const wxUString& s1, const wxUString& s2);
     /**
-       Comparison operator. wxUString addtionally provides overloads for
+       Comparison operator. wxUString additionally provides overloads for
        wxString, C string, UTF-16 strings, 32-bit strings, char buffers,
        single characters etc.
     */
 inline bool operator< (const wxUString& s1, const wxUString& s2);
     /**
-       Comparison operator. wxUString addtionally provides overloads for
+       Comparison operator. wxUString additionally provides overloads for
        wxString, C string, UTF-16 strings, 32-bit strings, char buffers,
        single characters etc.
     */
 inline bool operator> (const wxUString& s1, const wxUString& s2);
     /**
-       Comparison operator. wxUString addtionally provides overloads for
+       Comparison operator. wxUString additionally provides overloads for
        wxString, C string, UTF-16 strings, 32-bit strings, char buffers,
        single characters etc.
     */
 inline bool operator<=(const wxUString& s1, const wxUString& s2);
     /**
-       Comparison operator. wxUString addtionally provides overloads for
+       Comparison operator. wxUString additionally provides overloads for
        wxString, C string, UTF-16 strings, 32-bit strings, char buffers,
        single characters etc.
     */

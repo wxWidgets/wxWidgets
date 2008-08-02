@@ -123,6 +123,8 @@ public:
     append something to a C string (including literal constants), so to do this it
     should be converted to a wxString first.
 
+        @li insert()
+        @li append()
         @li operator<<()
         @li operator+=()
         @li operator+()
@@ -137,6 +139,7 @@ public:
         @li wxString()
         @li operator=()
         @li ~wxString()
+        @li assign()
 
         The MakeXXX() variants modify the string in place, while the other functions
         return a new string which contains the original text converted to the upper or
@@ -146,6 +149,8 @@ public:
         @li Upper()
         @li MakeLower()
         @li Lower()
+        @li MakeCapitalized()
+        @li Capitalize()
 
         Many functions below take a character index in the string. As with C
         strings and arrays, the indices start from 0, so the first character of a
@@ -169,10 +174,9 @@ public:
         @li mb_str()
         @li fn_str()
 
-        The default comparison function Cmp() is case-sensitive and
-        so is the default version of IsSameAs(). For case
-        insensitive comparisons you should use CmpNoCase() or
-        give a second parameter to IsSameAs. This last function is may be more
+        The default comparison function Cmp() is case-sensitive and so is the default
+        version of IsSameAs(). For case insensitive comparisons you should use CmpNoCase()
+        or give a second parameter to IsSameAs(). This last function is maybe more
         convenient if only equality of the strings matters because it returns a boolean
         @true value if the strings are the same and not 0 (which is usually @false
         in C) as Cmp() does.
@@ -182,6 +186,7 @@ public:
         with some predefined prefix and is more efficient than doing direct string
         comparison as you would also have to precalculate the length of the prefix.
 
+        @li compare()
         @li Cmp()
         @li CmpNoCase()
         @li IsSameAs()
@@ -206,6 +211,8 @@ public:
         when working with some external API which requires the caller to provide
         a writable buffer.
 
+        @li reserve()
+        @li resize()
         @li Alloc()
         @li Shrink()
         @li wxStringBuffer
@@ -220,6 +227,8 @@ public:
         These functions return the string length and check whether the string
         is empty or they empty it.
 
+        @li length()
+        @li size()
         @li Len()
         @li IsEmpty()
         @li operator!()
@@ -230,6 +239,7 @@ public:
         original string is not modified and the function returns the extracted
         substring.
 
+        @li substr()
         @li Mid()
         @li operator()()
         @li Left()
@@ -244,6 +254,9 @@ public:
         These functions replace the standard @e strchr() and @e strstr()
         functions.
 
+        @li find()
+        @li rfind()
+        @li replace()
         @li Find()
         @li Replace()
 
