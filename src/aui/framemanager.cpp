@@ -2391,6 +2391,7 @@ void wxAuiManager::GetDockSizeConstraint(double* width_pct, double* height_pct) 
 void wxAuiManager::Update()
 {
     m_hover_button = NULL;
+    m_action_part = NULL;
 
     wxSizer* sizer;
     int i, pane_count = m_panes.GetCount();
@@ -4184,17 +4185,21 @@ void wxAuiManager::OnLeftUp(wxMouseEvent& event)
     {
         m_hover_button = NULL;
         m_frame->ReleaseMouse();
-        UpdateButtonOnScreen(m_action_part, event);
-
-        // make sure we're still over the item that was originally clicked
-        if (m_action_part == HitTest(event.GetX(), event.GetY()))
+        
+        if (m_action_part)
         {
-            // fire button-click event
-            wxAuiManagerEvent e(wxEVT_AUI_PANE_BUTTON);
-            e.SetManager(this);
-            e.SetPane(m_action_part->pane);
-            e.SetButton(m_action_part->button->button_id);
-            ProcessMgrEvent(e);
+            UpdateButtonOnScreen(m_action_part, event);
+
+            // make sure we're still over the item that was originally clicked
+            if (m_action_part == HitTest(event.GetX(), event.GetY()))
+            {
+                // fire button-click event
+                wxAuiManagerEvent e(wxEVT_AUI_PANE_BUTTON);
+                e.SetManager(this);
+                e.SetPane(m_action_part->pane);
+                e.SetButton(m_action_part->button->button_id);
+                ProcessMgrEvent(e);
+            }
         }
     }
     else if (m_action == actionClickCaption)
@@ -4257,20 +4262,23 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
 
     if (m_action == actionResize)
     {
-        wxPoint pos = m_action_part->rect.GetPosition();
-        if (m_action_part->orientation == wxHORIZONTAL)
-            pos.y = wxMax(0, event.m_y - m_action_offset.y);
-        else
-            pos.x = wxMax(0, event.m_x - m_action_offset.x);
+        if (m_action_part)
+        {
+            wxPoint pos = m_action_part->rect.GetPosition();
+            if (m_action_part->orientation == wxHORIZONTAL)
+                pos.y = wxMax(0, event.m_y - m_action_offset.y);
+            else
+                pos.x = wxMax(0, event.m_x - m_action_offset.x);
 
-        wxRect rect(m_frame->ClientToScreen(pos),
-                    m_action_part->rect.GetSize());
+            wxRect rect(m_frame->ClientToScreen(pos),
+                        m_action_part->rect.GetSize());
 
-        wxScreenDC dc;
-        if (!m_action_hintrect.IsEmpty())
-            DrawResizeHint(dc, m_action_hintrect);
-        DrawResizeHint(dc, rect);
-        m_action_hintrect = rect;
+            wxScreenDC dc;
+            if (!m_action_hintrect.IsEmpty())
+                DrawResizeHint(dc, m_action_hintrect);
+            DrawResizeHint(dc, rect);
+            m_action_hintrect = rect;
+        }
     }
     else if (m_action == actionClickCaption)
     {
@@ -4280,8 +4288,9 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
         // caption has been clicked.  we need to check if the mouse
         // is now being dragged. if it is, we need to change the
         // mouse action to 'drag'
-        if (abs(event.m_x - m_action_start.x) > drag_x_threshold ||
-            abs(event.m_y - m_action_start.y) > drag_y_threshold)
+        if (m_action_part &&
+            (abs(event.m_x - m_action_start.x) > drag_x_threshold ||
+             abs(event.m_y - m_action_start.y) > drag_y_threshold))
         {
             wxAuiPaneInfo* pane_info = m_action_part->pane;
 
