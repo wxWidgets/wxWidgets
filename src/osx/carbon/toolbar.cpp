@@ -178,14 +178,7 @@ public:
         m_toolbarItemRef = ref;
         if ( m_toolbarItemRef )
         {
-            wxFont f;
-            wxFontEncoding enc;
-            if ( GetToolBar() )
-                f = GetToolBar()->GetFont();
-            if ( f.IsOk() )
-                enc = f.GetEncoding();
-            else
-                enc = wxFont::GetDefaultEncoding();
+            wxFontEncoding enc = GetToolBarFontEncoding();
 
             HIToolbarItemSetHelpText(
                 m_toolbarItemRef,
@@ -215,25 +208,29 @@ public:
 
         if ( m_toolbarItemRef )
         {
-            wxFont f;
-            wxFontEncoding enc;
-            if ( GetToolBar() )
-                f = GetToolBar()->GetFont();
-            if ( f.IsOk() )
-                enc = f.GetEncoding();
-            else
-                enc = wxFont::GetDefaultEncoding();
-
             // strip mnemonics from the label for compatibility with the usual
             // labels in wxStaticText sense
             wxString labelStr = wxStripMenuCodes(label);
 
-            HIToolbarItemSetLabel( m_toolbarItemRef, wxCFStringRef(labelStr, enc) );
+            HIToolbarItemSetLabel(
+                m_toolbarItemRef,
+                wxCFStringRef(labelStr, GetToolBarFontEncoding()) );
         }
     }
 #endif // wxOSX_USE_NATIVE_TOOLBAR
 
 private:
+#if wxOSX_USE_NATIVE_TOOLBAR
+    wxFontEncoding GetToolBarFontEncoding() const
+    {
+        wxFont f;
+        wxFontEncoding enc;
+        if ( GetToolBar() )
+            f = GetToolBar()->GetFont();
+        return f.IsOk() ? f.GetEncoding() : wxFont::GetDefaultEncoding();
+    }
+#endif // wxOSX_USE_NATIVE_TOOLBAR
+
     void Init()
     {
         m_controlHandle = NULL;
