@@ -208,7 +208,30 @@ public:
     {
         return m_index;
     }
-#endif
+
+    virtual void SetLabel(const wxString& label)
+    {
+        wxToolBarToolBase::SetLabel(label);
+
+        if ( m_toolbarItemRef )
+        {
+            wxFont f;
+            wxFontEncoding enc;
+            if ( GetToolBar() )
+                f = GetToolBar()->GetFont();
+            if ( f.IsOk() )
+                enc = f.GetEncoding();
+            else
+                enc = wxFont::GetDefaultEncoding();
+
+            // strip mnemonics from the label for compatibility with the usual
+            // labels in wxStaticText sense
+            wxString labelStr = wxStripMenuCodes(label);
+
+            HIToolbarItemSetLabel( m_toolbarItemRef, wxCFStringRef(labelStr, enc) );
+        }
+    }
+#endif // wxOSX_USE_NATIVE_TOOLBAR
 
 private:
     void Init()
