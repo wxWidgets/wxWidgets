@@ -959,18 +959,22 @@ bool wxShell(const wxString& command = NULL);
     This function shuts down or reboots the computer depending on the value of
     the @a flags.
 
-    @note Doing this requires the corresponding access rights (superuser under
-          Unix, SE_SHUTDOWN privilege under Windows NT) and that this function
-          is only implemented under Unix and Win32.
+    @note Note that performing the shutdown requires the corresponding access
+        rights (superuser under Unix, SE_SHUTDOWN privilege under Windows NT)
+        and that this function is only implemented under Unix and MSW.
 
     @param flags
-        Either wxSHUTDOWN_POWEROFF or wxSHUTDOWN_REBOOT
+        One of @c wxSHUTDOWN_POWEROFF, @c wxSHUTDOWN_REBOOT or
+        @c wxSHUTDOWN_LOGOFF (currently implemented only for MSW) possibly
+        combined with @c wxSHUTDOWN_FORCE which forces shutdown under MSW by
+        forcefully terminating all the applications. As doing this can result
+        in a data loss, this flag shouldn't be used unless really necessary.
 
     @return @true on success, @false if an error occurred.
 
     @header{wx/utils.h}
 */
-bool wxShutdown(wxShutdownFlags flags);
+bool wxShutdown(int flags = wxSHUTDOWN_POWEROFF);
 
 //@}
 

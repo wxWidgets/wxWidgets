@@ -953,7 +953,7 @@ bool wxShell(const wxString& command)
 }
 
 // Shutdown or reboot the PC
-bool wxShutdown(wxShutdownFlags WXUNUSED_IN_WINCE(wFlags))
+bool wxShutdown(int WXUNUSED_IN_WINCE(flags))
 {
 #ifdef __WXWINCE__
     // TODO-CE
@@ -990,15 +990,25 @@ bool wxShutdown(wxShutdownFlags WXUNUSED_IN_WINCE(wFlags))
 
     if ( bOK )
     {
-        UINT flags = EWX_SHUTDOWN | EWX_FORCE;
-        switch ( wFlags )
+        UINT wFlags = 0;
+        if ( flags & wxSHUTDOWN_FORCE )
+        {
+            wFlags = EWX_FORCE;
+            flags &= ~wxSHUTDOWN_FORCE;
+        }
+
+        switch ( flags )
         {
             case wxSHUTDOWN_POWEROFF:
-                flags |= EWX_POWEROFF;
+                wFlags |= EWX_POWEROFF;
                 break;
 
             case wxSHUTDOWN_REBOOT:
-                flags |= EWX_REBOOT;
+                wFlags |= EWX_REBOOT;
+                break;
+
+            case wxSHUTDOWN_LOGOFF:
+                wFlags |= EWX_LOGOFF;
                 break;
 
             default:
@@ -1006,11 +1016,11 @@ bool wxShutdown(wxShutdownFlags WXUNUSED_IN_WINCE(wFlags))
                 return false;
         }
 
-        bOK = ::ExitWindowsEx(flags, 0) != 0;
+        bOK = ::ExitWindowsEx(wFlags, 0) != 0;
     }
 
     return bOK;
-#endif // Win32/16
+#endif // WinCE/!WinCE
 }
 
 // ----------------------------------------------------------------------------

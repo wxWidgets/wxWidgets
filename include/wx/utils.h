@@ -419,12 +419,14 @@ enum wxKillFlags
 
 enum wxShutdownFlags
 {
-    wxSHUTDOWN_POWEROFF,    // power off the computer
-    wxSHUTDOWN_REBOOT       // shutdown and reboot
+    wxSHUTDOWN_FORCE    = 1,// can be combined with other flags (MSW-only)
+    wxSHUTDOWN_POWEROFF = 2,// power off the computer
+    wxSHUTDOWN_REBOOT   = 4,// shutdown and reboot
+    wxSHUTDOWN_LOGOFF   = 8 // close session (currently MSW-only)
 };
 
 // Shutdown or reboot the PC
-WXDLLIMPEXP_BASE bool wxShutdown(wxShutdownFlags wFlags);
+WXDLLIMPEXP_BASE bool wxShutdown(int flags = wxSHUTDOWN_POWEROFF);
 
 // send the given signal to the process (only NONE and KILL are supported under
 // Windows, all others mean TERM), return 0 if ok and -1 on error
