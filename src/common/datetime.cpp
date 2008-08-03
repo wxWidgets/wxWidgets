@@ -487,8 +487,10 @@ static wxString CallStrftime(const wxString& format, const tm* tm)
 
     if ( !wxStrftime(buf, WXSIZEOF(buf), format, tm) )
     {
-        // buffer is too small?
+        // if the format is valid, buffer must be too small?
         wxFAIL_MSG(_T("strftime() failed"));
+
+        buf[0] = '\0';
     }
 
     s = buf;
