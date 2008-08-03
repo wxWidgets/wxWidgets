@@ -4104,8 +4104,9 @@ wxRect wxListMainWindow::GetViewRect() const
     {
         for ( int i = 0; i < count; i++ )
         {
-            wxRect r;
-            GetItemRect(i, r);
+            // we need logical, not physical, coordinates here, so use
+            // GetLineRect() instead of GetItemRect()
+            wxRect r = GetLineRect(i);
 
             wxCoord x = r.GetRight(),
                     y = r.GetBottom();
