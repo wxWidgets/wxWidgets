@@ -479,32 +479,32 @@ wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxPen &pen )
 
     switch ( m_pen.GetStyle() )
     {
-    case wxSOLID :
+    case wxPENSTYLE_SOLID :
         break;
 
-    case wxDOT :
+    case wxPENSTYLE_DOT :
         m_count = WXSIZEOF(dotted);
         m_userLengths = new double[ m_count ] ;
         memcpy( m_userLengths, dotted, sizeof(dotted) );
         m_lengths = m_userLengths;
         break;
 
-    case wxLONG_DASH :
+    case wxPENSTYLE_LONG_DASH :
         m_lengths = dashed ;
         m_count = WXSIZEOF(dashed);
         break;
 
-    case wxSHORT_DASH :
+    case wxPENSTYLE_SHORT_DASH :
         m_lengths = short_dashed ;
         m_count = WXSIZEOF(short_dashed);
         break;
 
-    case wxDOT_DASH :
+    case wxPENSTYLE_DOT_DASH :
         m_lengths = dotted_dashed ;
         m_count = WXSIZEOF(dotted_dashed);
         break;
 
-    case wxUSER_DASH :
+    case wxPENSTYLE_USER_DASH :
         {
             wxDash *wxdashes ;
             m_count = m_pen.GetDashes( &wxdashes ) ;
@@ -524,7 +524,7 @@ wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxPen &pen )
             m_lengths = m_userLengths ;
         }
         break;
-    case wxSTIPPLE :
+    case wxPENSTYLE_STIPPLE :
         {
             /*
             wxBitmap* bmp = pen.GetStipple();
@@ -540,29 +540,30 @@ wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxPen &pen )
         }
         break;
     default :
-        if ( m_pen.GetStyle() >= wxFIRST_HATCH && m_pen.GetStyle() <= wxLAST_HATCH )
+        if ( m_pen.GetStyle() >= wxPENSTYLE_FIRST_HATCH 
+            && m_pen.GetStyle() <= wxPENSTYLE_LAST_HATCH )
         {
             /*
             wxDELETE( m_penBrush );
             HatchStyle style = HatchStyleHorizontal;
             switch( pen.GetStyle() )
             {
-            case wxBDIAGONAL_HATCH :
+            case wxPENSTYLE_BDIAGONAL_HATCH :
             style = HatchStyleBackwardDiagonal;
             break ;
-            case wxCROSSDIAG_HATCH :
+            case wxPENSTYLE_CROSSDIAG_HATCH :
             style = HatchStyleDiagonalCross;
             break ;
-            case wxFDIAGONAL_HATCH :
+            case wxPENSTYLE_FDIAGONAL_HATCH :
             style = HatchStyleForwardDiagonal;
             break ;
-            case wxCROSS_HATCH :
+            case wxPENSTYLE_CROSS_HATCH :
             style = HatchStyleCross;
             break ;
-            case wxHORIZONTAL_HATCH :
+            case wxPENSTYLE_HORIZONTAL_HATCH :
             style = HatchStyleHorizontal;
             break ;
-            case wxVERTICAL_HATCH :
+            case wxPENSTYLE_VERTICAL_HATCH :
             style = HatchStyleVertical;
             break ;
 
@@ -606,7 +607,7 @@ wxCairoBrushData::wxCairoBrushData( wxGraphicsRenderer* renderer, const wxBrush 
     m_blue = brush.GetColour().Blue()/255.0;
     m_alpha = brush.GetColour().Alpha()/255.0;
     /*
-    if ( brush.GetStyle() == wxSOLID)
+    if ( brush.GetStyle() == wxBRUSHSTYLE_SOLID)
     {
     m_brush = new SolidBrush( Color( brush.GetColour().Alpha() , brush.GetColour().Red() ,
     brush.GetColour().Green() , brush.GetColour().Blue() ) );
@@ -616,22 +617,22 @@ wxCairoBrushData::wxCairoBrushData( wxGraphicsRenderer* renderer, const wxBrush 
     HatchStyle style = HatchStyleHorizontal;
     switch( brush.GetStyle() )
     {
-    case wxBDIAGONAL_HATCH :
+    case wxBRUSHSTYLE_BDIAGONAL_HATCH :
     style = HatchStyleBackwardDiagonal;
     break ;
-    case wxCROSSDIAG_HATCH :
+    case wxBRUSHSTYLE_CROSSDIAG_HATCH :
     style = HatchStyleDiagonalCross;
     break ;
-    case wxFDIAGONAL_HATCH :
+    case wxBRUSHSTYLE_FDIAGONAL_HATCH :
     style = HatchStyleForwardDiagonal;
     break ;
-    case wxCROSS_HATCH :
+    case wxBRUSHSTYLE_CROSS_HATCH :
     style = HatchStyleCross;
     break ;
-    case wxHORIZONTAL_HATCH :
+    case wxBRUSHSTYLE_HORIZONTAL_HATCH :
     style = HatchStyleHorizontal;
     break ;
-    case wxVERTICAL_HATCH :
+    case wxBRUSHSTYLE_VERTICAL_HATCH :
     style = HatchStyleVertical;
     break ;
 
