@@ -809,7 +809,23 @@ wxImage wxXPMDecoder::ReadData(const char* const* xpm_data)
             img_data[2] = entry->second.B;
         }
     }
+#if wxUSE_PALETTE
+    unsigned char* r = new unsigned char[colors_cnt];
+    unsigned char* g = new unsigned char[colors_cnt];
+    unsigned char* b = new unsigned char[colors_cnt];
 
+    for (it = clr_tbl.begin(), i = 0; it != clr_tbl.end(); it++, i++)
+    {
+        r[i] = it->second.R;
+        g[i] = it->second.G;
+        b[i] = it->second.B;
+    }
+    wxASSERT(i == colors_cnt);
+    img.SetPalette(wxPalette(colors_cnt, r, g, b));
+    delete[] r;
+    delete[] g;
+    delete[] b;
+#endif // wxUSE_PALETTE
     return img;
 }
 
