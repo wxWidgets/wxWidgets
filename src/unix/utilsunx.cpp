@@ -266,10 +266,12 @@ int wxKill(long pid, wxSignal sig, wxKillError *rc, int flags)
 }
 
 // Shutdown or reboot the PC
-bool wxShutdown(wxShutdownFlags wFlags)
+bool wxShutdown(int flags)
 {
+    flags &= ~wxSHUTDOWN_FORCE;
+
     wxChar level;
-    switch ( wFlags )
+    switch ( flags )
     {
         case wxSHUTDOWN_POWEROFF:
             level = _T('0');
@@ -279,12 +281,16 @@ bool wxShutdown(wxShutdownFlags wFlags)
             level = _T('6');
             break;
 
+        case wxSHUTDOWN_LOGOFF:
+            // TODO: use dcop to log off?
+            return false;
+
         default:
             wxFAIL_MSG( _T("unknown wxShutdown() flag") );
             return false;
     }
 
-    return system(wxString::Format(_T("init %c"), level).mb_str()) == 0;
+    return system(wxString::Format("init %c", level).mb_str()) == 0;
 }
 
 // ----------------------------------------------------------------------------
