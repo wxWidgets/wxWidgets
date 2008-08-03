@@ -33,6 +33,7 @@
 #include "wx/filefn.h"
 #include "wx/wfstream.h"
 #include "wx/quantize.h"
+#include "wx/scopeguard.h"
 #include "wx/anidecod.h"
 
 // For memcpy
@@ -469,10 +470,12 @@ bool wxBMPHandler::SaveDib(wxImage *image,
 }
 
 
-typedef struct
+struct BMPPalette
 {
+    static void Free(BMPPalette* pal) { delete [] pal; }
+
     unsigned char r, g, b;
-}  _cmap;
+};
 
 bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
                              int bpp, int ncolors, int comp,
@@ -488,11 +491,11 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
     wxUint16        aWord;
 
     // allocate space for palette if needed:
-    _cmap *cmap;
+    BMPPalette *cmap;
 
     if ( bpp < 16 )
     {
-        cmap = new _cmap[ncolors];
+        cmap = new BMPPalette[ncolors];
         if ( !cmap )
         {
             if (verbose)
@@ -500,8 +503,12 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
             return false;
         }
     }
-    else
+    else // no palette
+    {
         cmap = NULL;
+    }
+
+    wxON_BLOCK_EXIT1(&BMPPalette::Free, cmap);
 
     // destroy existing here instead of:
     image->Destroy();
@@ -513,7 +520,6 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
     {
         if ( verbose )
             wxLogError( _("BMP: Couldn't allocate memory.") );
-        delete[] cmap;
         return false;
     }
 
@@ -527,7 +533,6 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
         {
             if ( verbose )
                 wxLogError(_("BMP: Couldn't allocate memory."));
-            delete[] cmap;
             return false;
         }
     }
@@ -878,8 +883,6 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
                 break;
         }
     }
-
-    delete[] cmap;
 
     image->SetMask(false);
 
