@@ -474,6 +474,7 @@ protected:
     void OnSetFocus(wxFocusEvent& event);
     void OnKillFocus(wxFocusEvent& event);
     void OnChar(wxKeyEvent& event);
+    void OnCaptureLost(wxMouseCaptureLostEvent& evt);
 
 protected:
 
