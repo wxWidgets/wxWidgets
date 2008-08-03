@@ -191,7 +191,7 @@ bool wxGIFDecoder::ConvertToImage(unsigned int frame, wxImage *image) const
 
 // Get data for current frame
 
-wxSize wxGIFDecoder::GetFrameSize(unsigned int frame) const 
+wxSize wxGIFDecoder::GetFrameSize(unsigned int frame) const
 {
     return wxSize(GetFrame(frame)->w, GetFrame(frame)->h);
 }
@@ -598,7 +598,7 @@ bool wxGIFDecoder::CanRead(wxInputStream &stream) const
 wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
 {
     unsigned int  global_ncolors = 0;
-    int           bits, interl, transparent, i;
+    int           bits, interl, i;
     wxAnimationDisposal disposal;
     long          size;
     long          delay;
@@ -660,7 +660,7 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
     }
 
     // transparent colour, disposal method and delay default to unused
-    transparent = -1;
+    int transparent = -1;
     disposal = wxANIM_UNSPECIFIED;
     delay = -1;
 
@@ -710,8 +710,7 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
                 delay = 10 * (buf[2] + 256 * buf[3]);
 
                 // read transparent colour index, if used
-                if (buf[1] & 0x01)
-                    transparent = buf[4];
+                transparent = buf[1] & 0x01 ? buf[4] : -1;
 
                 // read disposal method
                 disposal = (wxAnimationDisposal)(((buf[1] & 0x1C) >> 2) - 1);
@@ -757,8 +756,8 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
             pimg->w = buf[4] + 256 * buf[5];
             pimg->h = buf[6] + 256 * buf[7];
 
-            if ( anim && ((pimg->w == 0) || (pimg->w > (unsigned int)m_szAnimation.GetWidth()) || 
-			     (pimg->h == 0) || (pimg->h > (unsigned int)m_szAnimation.GetHeight())) )
+            if ( anim && ((pimg->w == 0) || (pimg->w > (unsigned int)m_szAnimation.GetWidth()) ||
+                  (pimg->h == 0) || (pimg->h > (unsigned int)m_szAnimation.GetHeight())) )
                 return wxGIF_INVFORMAT;
 
             interl = ((buf[8] & 0x40)? 1 : 0);
