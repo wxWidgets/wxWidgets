@@ -112,6 +112,7 @@ All (GUI):
   now sets the cursor to the next line after pressing Shift+Enter.
 - Fix crash when reading malformed PCX images.
 - Fix bug with wrong transparency in GIF animations (troelsk).
+- Store palette information for XPM images in wxImage (troelsk).
 
 All (Unix):
 
