@@ -108,6 +108,7 @@ license is as follows:
     #include "wx/hashmap.h"
     #include "wx/stream.h"
     #include "wx/image.h"
+    #include "wx/palette.h"
 #endif
 
 #include <string.h>
