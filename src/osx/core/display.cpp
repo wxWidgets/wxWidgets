@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/display.cpp
+// Name:        src/osx/core/display.cpp
 // Purpose:     Mac implementation of wxDisplay class
 // Author:      Ryan Norton & Brian Victor
 // Modified by: Royce Mitchell III, Vadim Zeitlin

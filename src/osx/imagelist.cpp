@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/imaglist.cpp
+// Name:        src/osx/imaglist.cpp
 // Purpose:
 // Author:      Robert Roebling
 // RCS_ID:      $Id$

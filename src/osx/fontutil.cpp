@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/fontutil.cpp
-// Purpose:     font-related helper functions for wxMSW
-// Author:      Vadim Zeitlin
+// Name:        src/osx/fontutil.cpp
+// Purpose:     font-related helper functions for OS X
+// Author:      Vadim Zeitlin, Stefan Csomor
 // Modified by:
 // Created:     05.11.99
 // RCS-ID:      $Id$

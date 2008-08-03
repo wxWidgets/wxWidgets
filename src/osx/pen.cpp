@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/pen.cpp
+// Name:        src/osx/pen.cpp
 // Purpose:     wxPen
 // Author:      Stefan Csomor
 // Modified by:

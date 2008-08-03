@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/palette.cpp
+// Name:        src/osx/palette.cpp
 // Purpose:     wxPalette
 // Author:      Stefan Csomor
 // Modified by:

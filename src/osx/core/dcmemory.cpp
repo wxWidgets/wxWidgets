@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/dcmemory.cpp
+// Name:        src/osx/core/dcmemory.cpp
 // Purpose:     wxMemoryDC class
 // Author:      Stefan Csomor
 // Modified by:

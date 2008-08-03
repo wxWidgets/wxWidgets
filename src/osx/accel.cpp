@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/accel.cpp
+// Name:        src/osx/accel.cpp
 // Purpose:     wxAcceleratorTable
 // Author:      Stefan Csomor
 // Modified by:

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/fontenum.cpp
+// Name:        src/osx/core/fontenum.cpp
 // Purpose:     wxFontEnumerator class for MacOS
 // Author:      Stefan Csomor
 // Modified by:

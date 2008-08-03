@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/artmac.cpp
+// Name:        src/osx/artmac.cpp
 // Purpose:     wxArtProvider instance with native Mac stock icons
 // Author:      Alan Shouls
 // Created:     2006-10-30

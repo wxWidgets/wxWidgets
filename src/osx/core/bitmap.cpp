@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/bitmap.cpp
+// Name:        src/osx/core/bitmap.cpp
 // Purpose:     wxBitmap
 // Author:      Stefan Csomor
 // Modified by:

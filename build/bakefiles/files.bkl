@@ -2182,16 +2182,24 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="MAC_SRC" hints="files">
     <!-- osx common files -->
+    src/osx/accel.cpp
+    src/osx/artmac.cpp
     src/osx/brush.cpp
+    src/osx/fontutil.cpp
+    src/osx/imaglist.cpp
+    src/osx/minifram.cpp
+    src/osx/palette.cpp
     src/osx/pen.cpp
     <!-- core files -->
+    src/osx/core/bitmap.cpp
     src/osx/core/colour.cpp
+    src/osx/core/dcmemory.cpp
+    src/osx/core/display.cpp
+    src/osx/core/fontenum.cpp
+    src/osx/core/printmac.cpp
     src/osx/core/timer.cpp
     <!-- carbon files -->
-    src/osx/carbon/accel.cpp
     src/osx/carbon/app.cpp
-    src/osx/carbon/artmac.cpp
-    src/osx/carbon/bitmap.cpp
     src/osx/carbon/bmpbuttn.cpp
     src/osx/carbon/button.cpp
     src/osx/carbon/checkbox.cpp
@@ -2204,40 +2212,32 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/carbon/cursor.cpp
     src/osx/carbon/dataobj.cpp
     src/osx/carbon/dcclient.cpp
-    src/osx/carbon/dcmemory.cpp
     src/osx/carbon/dcprint.cpp
     src/osx/carbon/dcscreen.cpp
     src/osx/carbon/dialog.cpp
     src/osx/carbon/dirdlg.cpp
-    src/osx/carbon/display.cpp
     src/osx/carbon/dnd.cpp
     src/osx/carbon/evtloop.cpp
     src/osx/carbon/filedlg.cpp
     src/osx/carbon/font.cpp
     src/osx/carbon/fontdlg.cpp
-    src/osx/carbon/fontenum.cpp
-    src/osx/carbon/fontutil.cpp
     src/osx/carbon/frame.cpp
     src/osx/carbon/gauge.cpp
     src/osx/carbon/gdiobj.cpp
     src/osx/carbon/graphics.cpp
     src/osx/carbon/icon.cpp
-    src/osx/carbon/imaglist.cpp
     src/osx/carbon/listbox.cpp
     src/osx/carbon/listctrl_mac.cpp
     src/osx/carbon/mdi.cpp
     src/osx/carbon/menu.cpp
     src/osx/carbon/menuitem.cpp
     src/osx/carbon/metafile.cpp
-    src/osx/carbon/minifram.cpp
     src/osx/carbon/msgdlg.cpp
     src/osx/carbon/nonownedwnd.cpp
     src/osx/carbon/notebmac.cpp
     src/osx/carbon/overlay.cpp
-    src/osx/carbon/palette.cpp
     src/osx/carbon/popupwin.cpp
     src/osx/carbon/printdlg.cpp
-    src/osx/carbon/printmac.cpp
     src/osx/carbon/radiobox.cpp
     src/osx/carbon/radiobut.cpp
     src/osx/carbon/region.cpp

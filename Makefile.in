@@ -4631,14 +4631,22 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS =  \
 	monodll_treeentry_gtk.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS)
 COND_TOOLKIT_MAC___GUI_SRC_OBJECTS =  \
-	monodll_brush.o \
-	monodll_pen.o \
-	monodll_colour.o \
-	monodll_timer.o \
 	monodll_accel.o \
-	monodll_app.o \
 	monodll_artmac.o \
+	monodll_brush.o \
+	monodll_fontutil.o \
+	monodll_imaglist.o \
+	monodll_minifram.o \
+	monodll_palette.o \
+	monodll_pen.o \
 	monodll_bitmap.o \
+	monodll_colour.o \
+	monodll_dcmemory.o \
+	monodll_display.o \
+	monodll_fontenum.o \
+	monodll_printmac.o \
+	monodll_timer.o \
+	monodll_app.o \
 	monodll_bmpbuttn.o \
 	monodll_button.o \
 	monodll_checkbox.o \
@@ -4651,40 +4659,32 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS =  \
 	monodll_cursor.o \
 	monodll_dataobj.o \
 	monodll_dcclient.o \
-	monodll_dcmemory.o \
 	monodll_dcprint.o \
 	monodll_dcscreen.o \
 	monodll_dialog.o \
 	monodll_dirdlg.o \
-	monodll_display.o \
 	monodll_dnd.o \
 	monodll_evtloop.o \
 	monodll_filedlg.o \
 	monodll_font.o \
 	monodll_fontdlg.o \
-	monodll_fontenum.o \
-	monodll_fontutil.o \
 	monodll_frame.o \
 	monodll_gauge.o \
 	monodll_gdiobj.o \
 	monodll_graphics.o \
 	monodll_icon.o \
-	monodll_imaglist.o \
 	monodll_listbox.o \
 	monodll_listctrl_mac.o \
 	monodll_mdi.o \
 	monodll_menu.o \
 	monodll_menuitem.o \
 	monodll_metafile.o \
-	monodll_minifram.o \
 	monodll_msgdlg.o \
 	monodll_nonownedwnd.o \
 	monodll_notebmac.o \
 	monodll_overlay.o \
-	monodll_palette.o \
 	monodll_popupwin.o \
 	monodll_printdlg.o \
-	monodll_printmac.o \
 	monodll_radiobox.o \
 	monodll_radiobut.o \
 	monodll_region.o \
@@ -6532,14 +6532,22 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_1 =  \
 	monolib_treeentry_gtk.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_1 =  \
-	monolib_brush.o \
-	monolib_pen.o \
-	monolib_colour.o \
-	monolib_timer.o \
 	monolib_accel.o \
-	monolib_app.o \
 	monolib_artmac.o \
+	monolib_brush.o \
+	monolib_fontutil.o \
+	monolib_imaglist.o \
+	monolib_minifram.o \
+	monolib_palette.o \
+	monolib_pen.o \
 	monolib_bitmap.o \
+	monolib_colour.o \
+	monolib_dcmemory.o \
+	monolib_display.o \
+	monolib_fontenum.o \
+	monolib_printmac.o \
+	monolib_timer.o \
+	monolib_app.o \
 	monolib_bmpbuttn.o \
 	monolib_button.o \
 	monolib_checkbox.o \
@@ -6552,40 +6560,32 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_1 =  \
 	monolib_cursor.o \
 	monolib_dataobj.o \
 	monolib_dcclient.o \
-	monolib_dcmemory.o \
 	monolib_dcprint.o \
 	monolib_dcscreen.o \
 	monolib_dialog.o \
 	monolib_dirdlg.o \
-	monolib_display.o \
 	monolib_dnd.o \
 	monolib_evtloop.o \
 	monolib_filedlg.o \
 	monolib_font.o \
 	monolib_fontdlg.o \
-	monolib_fontenum.o \
-	monolib_fontutil.o \
 	monolib_frame.o \
 	monolib_gauge.o \
 	monolib_gdiobj.o \
 	monolib_graphics.o \
 	monolib_icon.o \
-	monolib_imaglist.o \
 	monolib_listbox.o \
 	monolib_listctrl_mac.o \
 	monolib_mdi.o \
 	monolib_menu.o \
 	monolib_menuitem.o \
 	monolib_metafile.o \
-	monolib_minifram.o \
 	monolib_msgdlg.o \
 	monolib_nonownedwnd.o \
 	monolib_notebmac.o \
 	monolib_overlay.o \
-	monolib_palette.o \
 	monolib_popupwin.o \
 	monolib_printdlg.o \
-	monolib_printmac.o \
 	monolib_radiobox.o \
 	monolib_radiobut.o \
 	monolib_region.o \
@@ -8694,14 +8694,22 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_2 =  \
 	coredll_treeentry_gtk.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_2 =  \
-	coredll_brush.o \
-	coredll_pen.o \
-	coredll_colour.o \
-	coredll_timer.o \
 	coredll_accel.o \
-	coredll_app.o \
 	coredll_artmac.o \
+	coredll_brush.o \
+	coredll_fontutil.o \
+	coredll_imaglist.o \
+	coredll_minifram.o \
+	coredll_palette.o \
+	coredll_pen.o \
 	coredll_bitmap.o \
+	coredll_colour.o \
+	coredll_dcmemory.o \
+	coredll_display.o \
+	coredll_fontenum.o \
+	coredll_printmac.o \
+	coredll_timer.o \
+	coredll_app.o \
 	coredll_bmpbuttn.o \
 	coredll_button.o \
 	coredll_checkbox.o \
@@ -8714,40 +8722,32 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_2 =  \
 	coredll_cursor.o \
 	coredll_dataobj.o \
 	coredll_dcclient.o \
-	coredll_dcmemory.o \
 	coredll_dcprint.o \
 	coredll_dcscreen.o \
 	coredll_dialog.o \
 	coredll_dirdlg.o \
-	coredll_display.o \
 	coredll_dnd.o \
 	coredll_evtloop.o \
 	coredll_filedlg.o \
 	coredll_font.o \
 	coredll_fontdlg.o \
-	coredll_fontenum.o \
-	coredll_fontutil.o \
 	coredll_frame.o \
 	coredll_gauge.o \
 	coredll_gdiobj.o \
 	coredll_graphics.o \
 	coredll_icon.o \
-	coredll_imaglist.o \
 	coredll_listbox.o \
 	coredll_listctrl_mac.o \
 	coredll_mdi.o \
 	coredll_menu.o \
 	coredll_menuitem.o \
 	coredll_metafile.o \
-	coredll_minifram.o \
 	coredll_msgdlg.o \
 	coredll_nonownedwnd.o \
 	coredll_notebmac.o \
 	coredll_overlay.o \
-	coredll_palette.o \
 	coredll_popupwin.o \
 	coredll_printdlg.o \
-	coredll_printmac.o \
 	coredll_radiobox.o \
 	coredll_radiobut.o \
 	coredll_region.o \
@@ -10193,14 +10193,22 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_3 =  \
 	corelib_treeentry_gtk.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_3 =  \
-	corelib_brush.o \
-	corelib_pen.o \
-	corelib_colour.o \
-	corelib_timer.o \
 	corelib_accel.o \
-	corelib_app.o \
 	corelib_artmac.o \
+	corelib_brush.o \
+	corelib_fontutil.o \
+	corelib_imaglist.o \
+	corelib_minifram.o \
+	corelib_palette.o \
+	corelib_pen.o \
 	corelib_bitmap.o \
+	corelib_colour.o \
+	corelib_dcmemory.o \
+	corelib_display.o \
+	corelib_fontenum.o \
+	corelib_printmac.o \
+	corelib_timer.o \
+	corelib_app.o \
 	corelib_bmpbuttn.o \
 	corelib_button.o \
 	corelib_checkbox.o \
@@ -10213,40 +10221,32 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_3 =  \
 	corelib_cursor.o \
 	corelib_dataobj.o \
 	corelib_dcclient.o \
-	corelib_dcmemory.o \
 	corelib_dcprint.o \
 	corelib_dcscreen.o \
 	corelib_dialog.o \
 	corelib_dirdlg.o \
-	corelib_display.o \
 	corelib_dnd.o \
 	corelib_evtloop.o \
 	corelib_filedlg.o \
 	corelib_font.o \
 	corelib_fontdlg.o \
-	corelib_fontenum.o \
-	corelib_fontutil.o \
 	corelib_frame.o \
 	corelib_gauge.o \
 	corelib_gdiobj.o \
 	corelib_graphics.o \
 	corelib_icon.o \
-	corelib_imaglist.o \
 	corelib_listbox.o \
 	corelib_listctrl_mac.o \
 	corelib_mdi.o \
 	corelib_menu.o \
 	corelib_menuitem.o \
 	corelib_metafile.o \
-	corelib_minifram.o \
 	corelib_msgdlg.o \
 	corelib_nonownedwnd.o \
 	corelib_notebmac.o \
 	corelib_overlay.o \
-	corelib_palette.o \
 	corelib_popupwin.o \
 	corelib_printdlg.o \
-	corelib_printmac.o \
 	corelib_radiobox.o \
 	corelib_radiobut.o \
 	corelib_region.o \
@@ -13951,17 +13951,17 @@ monodll_tbarwce.o: $(srcdir)/src/msw/wince/tbarwce.cpp $(MONODLL_ODEP)
 monodll_textctrlce.o: $(srcdir)/src/msw/wince/textctrlce.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/wince/textctrlce.cpp
 
-monodll_artmac.o: $(srcdir)/src/osx/carbon/artmac.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/artmac.cpp
+monodll_artmac.o: $(srcdir)/src/osx/artmac.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/artmac.cpp
+
+monodll_printmac.o: $(srcdir)/src/osx/core/printmac.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/printmac.cpp
 
 monodll_listctrl_mac.o: $(srcdir)/src/osx/carbon/listctrl_mac.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/listctrl_mac.cpp
 
 monodll_notebmac.o: $(srcdir)/src/osx/carbon/notebmac.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/notebmac.cpp
-
-monodll_printmac.o: $(srcdir)/src/osx/carbon/printmac.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/printmac.cpp
 
 monodll_srchctrl.o: $(srcdir)/src/osx/carbon/srchctrl.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/srchctrl.cpp
@@ -15022,8 +15022,8 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@monodll_imaglist.o: $(srcdir)/src/msw/imaglist.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/imaglist.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_imaglist.o: $(srcdir)/src/osx/carbon/imaglist.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/imaglist.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_imaglist.o: $(srcdir)/src/osx/imaglist.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/imaglist.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_dialup.o: $(srcdir)/src/unix/dialup.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/dialup.cpp
@@ -15067,8 +15067,8 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@monodll_fontenum.o: $(srcdir)/src/dfb/fontenum.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/fontenum.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_fontenum.o: $(srcdir)/src/osx/carbon/fontenum.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/fontenum.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_fontenum.o: $(srcdir)/src/osx/core/fontenum.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/fontenum.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_fontenum.o: $(srcdir)/src/cocoa/fontenum.mm $(MONODLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/cocoa/fontenum.mm
@@ -15097,8 +15097,8 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_fontutil.o: $(srcdir)/src/mgl/fontutil.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/fontutil.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_fontutil.o: $(srcdir)/src/osx/carbon/fontutil.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/fontutil.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_fontutil.o: $(srcdir)/src/osx/fontutil.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/fontutil.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_fontutil.o: $(srcdir)/src/cocoa/fontutil.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/cocoa/fontutil.cpp
@@ -15232,8 +15232,8 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@monodll_bitmap.o: $(srcdir)/src/dfb/bitmap.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/bitmap.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_bitmap.o: $(srcdir)/src/osx/carbon/bitmap.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/bitmap.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_bitmap.o: $(srcdir)/src/osx/core/bitmap.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/bitmap.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_bitmap.o: $(srcdir)/src/cocoa/bitmap.mm $(MONODLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/cocoa/bitmap.mm
@@ -15484,8 +15484,8 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_dcmemory.o: $(srcdir)/src/motif/dcmemory.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/motif/dcmemory.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_dcmemory.o: $(srcdir)/src/osx/carbon/dcmemory.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/dcmemory.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_dcmemory.o: $(srcdir)/src/osx/core/dcmemory.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/dcmemory.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_dcmemory.o: $(srcdir)/src/cocoa/dcmemory.mm $(MONODLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/cocoa/dcmemory.mm
@@ -15598,8 +15598,8 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_minifram.o: $(srcdir)/src/motif/minifram.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/motif/minifram.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_minifram.o: $(srcdir)/src/osx/carbon/minifram.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/minifram.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_minifram.o: $(srcdir)/src/osx/minifram.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/minifram.cpp
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_minifram.o: $(srcdir)/src/os2/minifram.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/minifram.cpp
@@ -15883,8 +15883,8 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_palette.o: $(srcdir)/src/mgl/palette.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/palette.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_palette.o: $(srcdir)/src/osx/carbon/palette.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/palette.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_palette.o: $(srcdir)/src/osx/palette.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/palette.cpp
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_palette.o: $(srcdir)/src/os2/palette.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/palette.cpp
@@ -15919,8 +15919,8 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@monodll_display.o: $(srcdir)/src/msw/display.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/display.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_display.o: $(srcdir)/src/osx/carbon/display.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/display.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_display.o: $(srcdir)/src/osx/core/display.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/display.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_display.o: $(srcdir)/src/cocoa/display.mm $(MONODLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/cocoa/display.mm
@@ -16108,8 +16108,8 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_accel.o: $(srcdir)/src/msw/accel.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/accel.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_accel.o: $(srcdir)/src/osx/carbon/accel.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/accel.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_accel.o: $(srcdir)/src/osx/accel.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/accel.cpp
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_accel.o: $(srcdir)/src/os2/accel.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/accel.cpp
@@ -18442,17 +18442,17 @@ monolib_tbarwce.o: $(srcdir)/src/msw/wince/tbarwce.cpp $(MONOLIB_ODEP)
 monolib_textctrlce.o: $(srcdir)/src/msw/wince/textctrlce.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/wince/textctrlce.cpp
 
-monolib_artmac.o: $(srcdir)/src/osx/carbon/artmac.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/artmac.cpp
+monolib_artmac.o: $(srcdir)/src/osx/artmac.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/artmac.cpp
+
+monolib_printmac.o: $(srcdir)/src/osx/core/printmac.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/printmac.cpp
 
 monolib_listctrl_mac.o: $(srcdir)/src/osx/carbon/listctrl_mac.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/listctrl_mac.cpp
 
 monolib_notebmac.o: $(srcdir)/src/osx/carbon/notebmac.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/notebmac.cpp
-
-monolib_printmac.o: $(srcdir)/src/osx/carbon/printmac.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/printmac.cpp
 
 monolib_srchctrl.o: $(srcdir)/src/osx/carbon/srchctrl.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/srchctrl.cpp
@@ -19513,8 +19513,8 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@monolib_imaglist.o: $(srcdir)/src/msw/imaglist.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/imaglist.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_imaglist.o: $(srcdir)/src/osx/carbon/imaglist.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/imaglist.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_imaglist.o: $(srcdir)/src/osx/imaglist.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/imaglist.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_dialup.o: $(srcdir)/src/unix/dialup.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/dialup.cpp
@@ -19558,8 +19558,8 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@monolib_fontenum.o: $(srcdir)/src/dfb/fontenum.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/fontenum.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_fontenum.o: $(srcdir)/src/osx/carbon/fontenum.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/fontenum.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_fontenum.o: $(srcdir)/src/osx/core/fontenum.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/fontenum.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_fontenum.o: $(srcdir)/src/cocoa/fontenum.mm $(MONOLIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/cocoa/fontenum.mm
@@ -19588,8 +19588,8 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_fontutil.o: $(srcdir)/src/mgl/fontutil.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/fontutil.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_fontutil.o: $(srcdir)/src/osx/carbon/fontutil.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/fontutil.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_fontutil.o: $(srcdir)/src/osx/fontutil.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/fontutil.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_fontutil.o: $(srcdir)/src/cocoa/fontutil.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/cocoa/fontutil.cpp
@@ -19723,8 +19723,8 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@monolib_bitmap.o: $(srcdir)/src/dfb/bitmap.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/bitmap.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_bitmap.o: $(srcdir)/src/osx/carbon/bitmap.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/bitmap.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_bitmap.o: $(srcdir)/src/osx/core/bitmap.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/bitmap.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_bitmap.o: $(srcdir)/src/cocoa/bitmap.mm $(MONOLIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/cocoa/bitmap.mm
@@ -19975,8 +19975,8 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_dcmemory.o: $(srcdir)/src/motif/dcmemory.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/motif/dcmemory.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_dcmemory.o: $(srcdir)/src/osx/carbon/dcmemory.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/dcmemory.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_dcmemory.o: $(srcdir)/src/osx/core/dcmemory.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/dcmemory.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_dcmemory.o: $(srcdir)/src/cocoa/dcmemory.mm $(MONOLIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/cocoa/dcmemory.mm
@@ -20089,8 +20089,8 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_minifram.o: $(srcdir)/src/motif/minifram.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/motif/minifram.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_minifram.o: $(srcdir)/src/osx/carbon/minifram.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/minifram.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_minifram.o: $(srcdir)/src/osx/minifram.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/minifram.cpp
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_minifram.o: $(srcdir)/src/os2/minifram.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/minifram.cpp
@@ -20374,8 +20374,8 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_palette.o: $(srcdir)/src/mgl/palette.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/palette.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_palette.o: $(srcdir)/src/osx/carbon/palette.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/palette.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_palette.o: $(srcdir)/src/osx/palette.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/palette.cpp
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_palette.o: $(srcdir)/src/os2/palette.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/palette.cpp
@@ -20410,8 +20410,8 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@monolib_display.o: $(srcdir)/src/msw/display.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/display.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_display.o: $(srcdir)/src/osx/carbon/display.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/display.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_display.o: $(srcdir)/src/osx/core/display.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/display.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_display.o: $(srcdir)/src/cocoa/display.mm $(MONOLIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/cocoa/display.mm
@@ -20599,8 +20599,8 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_accel.o: $(srcdir)/src/msw/accel.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/accel.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_accel.o: $(srcdir)/src/osx/carbon/accel.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/accel.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_accel.o: $(srcdir)/src/osx/accel.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/accel.cpp
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_accel.o: $(srcdir)/src/os2/accel.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/accel.cpp
@@ -24232,17 +24232,17 @@ coredll_tbarwce.o: $(srcdir)/src/msw/wince/tbarwce.cpp $(COREDLL_ODEP)
 coredll_textctrlce.o: $(srcdir)/src/msw/wince/textctrlce.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/wince/textctrlce.cpp
 
-coredll_artmac.o: $(srcdir)/src/osx/carbon/artmac.cpp $(COREDLL_ODEP)
-	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/artmac.cpp
+coredll_artmac.o: $(srcdir)/src/osx/artmac.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/artmac.cpp
+
+coredll_printmac.o: $(srcdir)/src/osx/core/printmac.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/core/printmac.cpp
 
 coredll_listctrl_mac.o: $(srcdir)/src/osx/carbon/listctrl_mac.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/listctrl_mac.cpp
 
 coredll_notebmac.o: $(srcdir)/src/osx/carbon/notebmac.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/notebmac.cpp
-
-coredll_printmac.o: $(srcdir)/src/osx/carbon/printmac.cpp $(COREDLL_ODEP)
-	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/printmac.cpp
 
 coredll_srchctrl.o: $(srcdir)/src/osx/carbon/srchctrl.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/srchctrl.cpp
@@ -24496,8 +24496,8 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@coredll_imaglist.o: $(srcdir)/src/msw/imaglist.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/imaglist.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_imaglist.o: $(srcdir)/src/osx/carbon/imaglist.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/imaglist.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_imaglist.o: $(srcdir)/src/osx/imaglist.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/imaglist.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_dialup.o: $(srcdir)/src/unix/dialup.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/dialup.cpp
@@ -24541,8 +24541,8 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@coredll_fontenum.o: $(srcdir)/src/dfb/fontenum.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/fontenum.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_fontenum.o: $(srcdir)/src/osx/carbon/fontenum.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/fontenum.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_fontenum.o: $(srcdir)/src/osx/core/fontenum.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/core/fontenum.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_fontenum.o: $(srcdir)/src/cocoa/fontenum.mm $(COREDLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/cocoa/fontenum.mm
@@ -24571,8 +24571,8 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@coredll_fontutil.o: $(srcdir)/src/mgl/fontutil.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/fontutil.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_fontutil.o: $(srcdir)/src/osx/carbon/fontutil.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/fontutil.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_fontutil.o: $(srcdir)/src/osx/fontutil.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/fontutil.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_fontutil.o: $(srcdir)/src/cocoa/fontutil.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/cocoa/fontutil.cpp
@@ -24706,8 +24706,8 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@coredll_bitmap.o: $(srcdir)/src/dfb/bitmap.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/bitmap.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_bitmap.o: $(srcdir)/src/osx/carbon/bitmap.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/bitmap.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_bitmap.o: $(srcdir)/src/osx/core/bitmap.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/core/bitmap.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_bitmap.o: $(srcdir)/src/cocoa/bitmap.mm $(COREDLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/cocoa/bitmap.mm
@@ -24958,8 +24958,8 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_dcmemory.o: $(srcdir)/src/motif/dcmemory.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/motif/dcmemory.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_dcmemory.o: $(srcdir)/src/osx/carbon/dcmemory.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/dcmemory.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_dcmemory.o: $(srcdir)/src/osx/core/dcmemory.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/core/dcmemory.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_dcmemory.o: $(srcdir)/src/cocoa/dcmemory.mm $(COREDLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/cocoa/dcmemory.mm
@@ -25072,8 +25072,8 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_minifram.o: $(srcdir)/src/motif/minifram.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/motif/minifram.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_minifram.o: $(srcdir)/src/osx/carbon/minifram.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/minifram.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_minifram.o: $(srcdir)/src/osx/minifram.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/minifram.cpp
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_minifram.o: $(srcdir)/src/os2/minifram.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/os2/minifram.cpp
@@ -25384,8 +25384,8 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@coredll_palette.o: $(srcdir)/src/mgl/palette.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/palette.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_palette.o: $(srcdir)/src/osx/carbon/palette.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/palette.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_palette.o: $(srcdir)/src/osx/palette.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/palette.cpp
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_palette.o: $(srcdir)/src/os2/palette.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/os2/palette.cpp
@@ -25420,8 +25420,8 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@coredll_display.o: $(srcdir)/src/msw/display.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/display.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_display.o: $(srcdir)/src/osx/carbon/display.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/display.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_display.o: $(srcdir)/src/osx/core/display.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/core/display.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_display.o: $(srcdir)/src/cocoa/display.mm $(COREDLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/cocoa/display.mm
@@ -25609,8 +25609,8 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_accel.o: $(srcdir)/src/msw/accel.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/accel.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_accel.o: $(srcdir)/src/osx/carbon/accel.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/accel.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_accel.o: $(srcdir)/src/osx/accel.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/accel.cpp
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_accel.o: $(srcdir)/src/os2/accel.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/os2/accel.cpp
@@ -27307,17 +27307,17 @@ corelib_tbarwce.o: $(srcdir)/src/msw/wince/tbarwce.cpp $(CORELIB_ODEP)
 corelib_textctrlce.o: $(srcdir)/src/msw/wince/textctrlce.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/wince/textctrlce.cpp
 
-corelib_artmac.o: $(srcdir)/src/osx/carbon/artmac.cpp $(CORELIB_ODEP)
-	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/artmac.cpp
+corelib_artmac.o: $(srcdir)/src/osx/artmac.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/artmac.cpp
+
+corelib_printmac.o: $(srcdir)/src/osx/core/printmac.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/core/printmac.cpp
 
 corelib_listctrl_mac.o: $(srcdir)/src/osx/carbon/listctrl_mac.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/listctrl_mac.cpp
 
 corelib_notebmac.o: $(srcdir)/src/osx/carbon/notebmac.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/notebmac.cpp
-
-corelib_printmac.o: $(srcdir)/src/osx/carbon/printmac.cpp $(CORELIB_ODEP)
-	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/printmac.cpp
 
 corelib_srchctrl.o: $(srcdir)/src/osx/carbon/srchctrl.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/srchctrl.cpp
@@ -27571,8 +27571,8 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@corelib_imaglist.o: $(srcdir)/src/msw/imaglist.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/imaglist.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_imaglist.o: $(srcdir)/src/osx/carbon/imaglist.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/imaglist.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_imaglist.o: $(srcdir)/src/osx/imaglist.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/imaglist.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_dialup.o: $(srcdir)/src/unix/dialup.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/dialup.cpp
@@ -27616,8 +27616,8 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@corelib_fontenum.o: $(srcdir)/src/dfb/fontenum.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/fontenum.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_fontenum.o: $(srcdir)/src/osx/carbon/fontenum.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/fontenum.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_fontenum.o: $(srcdir)/src/osx/core/fontenum.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/core/fontenum.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_fontenum.o: $(srcdir)/src/cocoa/fontenum.mm $(CORELIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/cocoa/fontenum.mm
@@ -27646,8 +27646,8 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@corelib_fontutil.o: $(srcdir)/src/mgl/fontutil.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/fontutil.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_fontutil.o: $(srcdir)/src/osx/carbon/fontutil.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/fontutil.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_fontutil.o: $(srcdir)/src/osx/fontutil.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/fontutil.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_fontutil.o: $(srcdir)/src/cocoa/fontutil.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/cocoa/fontutil.cpp
@@ -27781,8 +27781,8 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@corelib_bitmap.o: $(srcdir)/src/dfb/bitmap.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/bitmap.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_bitmap.o: $(srcdir)/src/osx/carbon/bitmap.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/bitmap.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_bitmap.o: $(srcdir)/src/osx/core/bitmap.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/core/bitmap.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_bitmap.o: $(srcdir)/src/cocoa/bitmap.mm $(CORELIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/cocoa/bitmap.mm
@@ -28033,8 +28033,8 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_dcmemory.o: $(srcdir)/src/motif/dcmemory.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/motif/dcmemory.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_dcmemory.o: $(srcdir)/src/osx/carbon/dcmemory.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/dcmemory.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_dcmemory.o: $(srcdir)/src/osx/core/dcmemory.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/core/dcmemory.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_dcmemory.o: $(srcdir)/src/cocoa/dcmemory.mm $(CORELIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/cocoa/dcmemory.mm
@@ -28147,8 +28147,8 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_minifram.o: $(srcdir)/src/motif/minifram.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/motif/minifram.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_minifram.o: $(srcdir)/src/osx/carbon/minifram.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/minifram.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_minifram.o: $(srcdir)/src/osx/minifram.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/minifram.cpp
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_minifram.o: $(srcdir)/src/os2/minifram.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/os2/minifram.cpp
@@ -28459,8 +28459,8 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@corelib_palette.o: $(srcdir)/src/mgl/palette.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/palette.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_palette.o: $(srcdir)/src/osx/carbon/palette.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/palette.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_palette.o: $(srcdir)/src/osx/palette.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/palette.cpp
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_palette.o: $(srcdir)/src/os2/palette.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/os2/palette.cpp
@@ -28495,8 +28495,8 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@corelib_display.o: $(srcdir)/src/msw/display.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/display.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_display.o: $(srcdir)/src/osx/carbon/display.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/display.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_display.o: $(srcdir)/src/osx/core/display.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/core/display.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_display.o: $(srcdir)/src/cocoa/display.mm $(CORELIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/cocoa/display.mm
@@ -28684,8 +28684,8 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_accel.o: $(srcdir)/src/msw/accel.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/accel.cpp
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_accel.o: $(srcdir)/src/osx/carbon/accel.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/accel.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_accel.o: $(srcdir)/src/osx/accel.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/accel.cpp
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_accel.o: $(srcdir)/src/os2/accel.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/os2/accel.cpp

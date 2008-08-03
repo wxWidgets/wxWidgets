@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        minifram.cpp
+// Name:        src/osx/minifram.cpp
 // Purpose:     wxMiniFrame. Optional; identical to wxFrame if not supported.
 // Author:      Stefan Csomor
 // Modified by:

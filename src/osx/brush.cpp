@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/brush.cpp
+// Name:        src/osx/brush.cpp
 // Purpose:     wxBrush
 // Author:      Stefan Csomor
 // Modified by:
