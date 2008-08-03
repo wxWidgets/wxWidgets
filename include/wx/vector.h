@@ -124,7 +124,7 @@ public:
 
     wxVector() : m_size(0), m_capacity(0), m_values(NULL) {}
 
-    wxVector(const wxVector& c)
+    wxVector(const wxVector& c) : m_size(0), m_capacity(0), m_values(NULL)
     {
         Copy(c);
     }
@@ -144,7 +144,8 @@ public:
 
         Ops::Free(m_values);
         m_values = NULL;
-        m_size = m_capacity = 0;
+        m_size =
+        m_capacity = 0;
     }
 
     void reserve(size_type n)
@@ -184,6 +185,7 @@ public:
 
     wxVector& operator=(const wxVector& vb)
     {
+        clear();
         Copy(vb);
         return *this;
     }
@@ -321,7 +323,6 @@ private:
 
     void Copy(const wxVector& vb)
     {
-        clear();
         reserve(vb.size());
 
         for ( const_iterator i = vb.begin(); i != vb.end(); ++i )
