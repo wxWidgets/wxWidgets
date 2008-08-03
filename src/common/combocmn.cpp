@@ -1233,16 +1233,15 @@ void wxComboCtrlBase::SetValidator(const wxValidator& validator)
 
     if ( textCtrl )
         textCtrl->SetValidator( validator );
+    else
+        wxControl::SetValidator( validator );
 }
 
 wxValidator* wxComboCtrlBase::GetValidator()
 {
     wxTextCtrl* textCtrl = GetTextCtrl();
 
-    if ( textCtrl )
-        return textCtrl->GetValidator();
-
-    return wxControl::GetValidator();
+    return textCtrl ? textCtrl->GetValidator() : wxControl::GetValidator();
 }
 #endif // wxUSE_VALIDATORS
 
