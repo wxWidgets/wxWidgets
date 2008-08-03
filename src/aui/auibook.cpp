@@ -2334,6 +2334,7 @@ BEGIN_EVENT_TABLE(wxAuiTabCtrl, wxControl)
     EVT_SET_FOCUS(wxAuiTabCtrl::OnSetFocus)
     EVT_KILL_FOCUS(wxAuiTabCtrl::OnKillFocus)
     EVT_CHAR(wxAuiTabCtrl::OnChar)
+    EVT_MOUSE_CAPTURE_LOST(wxAuiTabCtrl::OnCaptureLost)
 END_EVENT_TABLE()
 
 
@@ -2413,6 +2414,10 @@ void wxAuiTabCtrl::OnLeftDown(wxMouseEvent& evt)
         Refresh();
         Update();
     }
+}
+
+void wxAuiTabCtrl::OnCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(event))
+{
 }
 
 void wxAuiTabCtrl::OnLeftUp(wxMouseEvent& evt)
