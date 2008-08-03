@@ -98,6 +98,7 @@ All:
 
 All (GUI):
 
+- Added support for reading alpha channel in BMP format (Kevin Wright).
 - Fixed help viewer bug whereby the splitter sash in wxHtmlHelpWindow could
   go underneath the left-hand pane, permanently, after resizing the
   help window.
