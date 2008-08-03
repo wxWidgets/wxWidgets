@@ -137,10 +137,6 @@ wxCONSTRUCTOR_6( wxButton , wxWindow* , Parent , wxWindowID , Id , wxString , La
 IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
 #endif
 
-// this macro tries to adjust the default button height to a reasonable value
-// using the char height as the base
-#define BUTTON_HEIGHT_FROM_CHAR_HEIGHT(cy) (11*EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)/10)
-
 // ============================================================================
 // implementation
 // ============================================================================
@@ -246,34 +242,7 @@ void wxButton::SetLabel(const wxString& label)
 
 wxSize wxButton::DoGetBestSize() const
 {
-    wxClientDC dc(wx_const_cast(wxButton *, this));
-    dc.SetFont(GetFont());
-
-    wxCoord wBtn,
-            hBtn;
-    dc.GetMultiLineTextExtent(GetLabelText(), &wBtn, &hBtn);
-
-    // add a margin -- the button is wider than just its label
-    wBtn += 3*GetCharWidth();
-    hBtn = BUTTON_HEIGHT_FROM_CHAR_HEIGHT(hBtn);
-
-    // all buttons have at least the standard size unless the user explicitly
-    // wants them to be of smaller size and used wxBU_EXACTFIT style when
-    // creating the button
-    if ( !HasFlag(wxBU_EXACTFIT) )
-    {
-        wxSize sz = GetDefaultSize();
-        if (wBtn > sz.x)
-            sz.x = wBtn;
-        if (hBtn > sz.y)
-            sz.y = hBtn;
-
-        return sz;
-    }
-
-    wxSize best(wBtn, hBtn);
-    CacheBestSize(best);
-    return best;
+    return wxMSWButton::ComputeBestSize(wx_const_cast(wxButton *, this));
 }
 
 /* static */

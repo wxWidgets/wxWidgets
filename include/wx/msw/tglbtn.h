@@ -44,9 +44,10 @@ public:
     virtual void SetValue(bool value);
     virtual bool GetValue() const ;
 
+    virtual void SetLabel(const wxString& label);
+
     virtual bool MSWCommand(WXUINT param, WXWORD id);
     virtual void Command(wxCommandEvent& event);
-    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const;
 
     // returns true if the platform should explicitly apply a theme border
     virtual bool CanApplyThemeBorder() const { return false; }
@@ -54,6 +55,8 @@ public:
 protected:
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
     virtual wxSize DoGetBestSize() const;
+
+    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const;
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxToggleButton)

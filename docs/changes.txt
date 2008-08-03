@@ -289,6 +289,7 @@ All:
 - Corrected bug in wxTimeSpan::IsShorterThan() for equal time spans.
 - Use std::unordered_{map,set} for wxHashMap/Set if available (Jan van Dijk).
 - Added wxString::Capitalize() and MakeCapitalized().
+- Added wxSHUTDOWN_LOGOFF and wxSHUTDOWN_FORCE wxShutdown() flags (troelsk).
 
 All (Unix):
 
@@ -417,7 +418,7 @@ wxMSW:
 - Show resize gripper on resizeable dialogs (Kolya Kosenko)
 - Implement support for display enumeration under WinCE (Vince Harron)
 - Use different Win32 class names in different wx instances (Thomas Hauk)
-- Support multiline labels for wxCheckBox.
+- Support multiline labels for wxCheckBox and wxToggleButton.
 - Print preview is now rendered in the resolution used by printer and
   accurately represents what will be printed. This fixes wxHtmlEasyPrinting
   preview inaccuracies on Windows; on other platforms, native preview

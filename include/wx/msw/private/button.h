@@ -11,6 +11,27 @@
 #ifndef _WX_MSW_PRIVATE_BUTTON_H_
 #define _WX_MSW_PRIVATE_BUTTON_H_
 
+// define some standard button constants which may be missing in the headers
+#ifndef BS_PUSHLIKE
+    #define BS_PUSHLIKE 0x00001000L
+#endif
+
+#ifndef BST_UNCHECKED
+    #define BST_UNCHECKED 0x0000
+#endif
+
+#ifndef BST_CHECKED
+    #define BST_CHECKED 0x0001
+#endif
+
+#ifndef BST_INDETERMINATE
+    #define BST_INDETERMINATE 0x0002
+#endif
+
+#ifndef DT_HIDEPREFIX
+    #define DT_HIDEPREFIX 0x00100000
+#endif
+
 namespace wxMSWButton
 {
 
@@ -38,6 +59,36 @@ inline void UpdateMultilineStyle(HWND hwnd, const wxString& label)
 
     if ( styleNew != styleOld )
         ::SetWindowLong(hwnd, GWL_STYLE, styleNew);
+}
+
+// common implementation of wxButton and wxToggleButton::DoGetBestSize()
+inline wxSize ComputeBestSize(wxControl *btn)
+{
+    wxClientDC dc(btn);
+
+    wxCoord wBtn,
+            hBtn;
+    dc.GetMultiLineTextExtent(btn->GetLabelText(), &wBtn, &hBtn);
+
+    // FIXME: this is pure guesswork, need to retrieve the real button margins
+    wBtn += 3*btn->GetCharWidth();
+    hBtn = 11*EDIT_HEIGHT_FROM_CHAR_HEIGHT(hBtn)/10;
+
+    // all buttons have at least the standard size unless the user explicitly
+    // wants them to be of smaller size and used wxBU_EXACTFIT style when
+    // creating the button
+    if ( !btn->HasFlag(wxBU_EXACTFIT) )
+    {
+        wxSize sz = wxButton::GetDefaultSize();
+        if ( wBtn < sz.x )
+            wBtn = sz.x;
+        if ( hBtn < sz.y )
+            hBtn = sz.y;
+    }
+
+    wxSize best(wBtn, hBtn);
+    btn->CacheBestSize(best);
+    return best;
 }
 
 } // namespace wxMSWButton

@@ -44,22 +44,6 @@
 // constants
 // ----------------------------------------------------------------------------
 
-#ifndef BST_UNCHECKED
-    #define BST_UNCHECKED 0x0000
-#endif
-
-#ifndef BST_CHECKED
-    #define BST_CHECKED 0x0001
-#endif
-
-#ifndef BST_INDETERMINATE
-    #define BST_INDETERMINATE 0x0002
-#endif
-
-#ifndef DT_HIDEPREFIX
-    #define DT_HIDEPREFIX 0x00100000
-#endif
-
 #ifndef BP_CHECKBOX
     #define BP_CHECKBOX 3
 #endif

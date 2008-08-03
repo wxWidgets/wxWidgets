@@ -39,6 +39,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/button.h"
 
 // ----------------------------------------------------------------------------
 // macros
@@ -46,8 +47,6 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxToggleButton, wxControl)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED)
-
-#define BUTTON_HEIGHT_FROM_CHAR_HEIGHT(cy) (11*EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)/10)
 
 // ============================================================================
 // implementation
@@ -57,17 +56,9 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED)
 // wxToggleButton
 // ----------------------------------------------------------------------------
 
-bool wxToggleButton::MSWCommand(WXUINT WXUNUSED(param), WXWORD WXUNUSED(id))
-{
-   wxCommandEvent event(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, m_windowId);
-   event.SetInt(GetValue());
-   event.SetEventObject(this);
-   ProcessCommand(event);
-   return true;
-}
-
 // Single check box item
-bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
+bool wxToggleButton::Create(wxWindow *parent,
+                            wxWindowID id,
                             const wxString& label,
                             const wxPoint& pos,
                             const wxSize& size, long style,
@@ -77,29 +68,32 @@ bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return false;
 
-    if ( !MSWCreateControl(wxT("BUTTON"), label, pos, size) )
-      return false;
+    // if the label contains several lines we must explicitly tell the button
+    // about it or it wouldn't draw it correctly ("\n"s would just appear as
+    // black boxes)
+    //
+    // NB: we do it here and not in MSWGetStyle() because we need the label
+    //     value and the label is not set yet when MSWGetStyle() is called
+    WXDWORD exstyle;
+    WXDWORD msStyle = MSWGetStyle(style, &exstyle);
+    msStyle |= wxMSWButton::GetMultilineStyle(label);
 
-    return true;
+    return MSWCreateControl(_T("BUTTON"), msStyle, pos, size, label, exstyle);
 }
 
 WXDWORD wxToggleButton::MSWGetStyle(long style, WXDWORD *exstyle) const
 {
     WXDWORD msStyle = wxControl::MSWGetStyle(style, exstyle);
 
-#ifndef BS_PUSHLIKE
-#define BS_PUSHLIKE 0x00001000L
-#endif
-
     msStyle |= BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP;
 
-    if(style & wxBU_LEFT)
+    if ( style & wxBU_LEFT )
       msStyle |= BS_LEFT;
-    if(style & wxBU_RIGHT)
+    if ( style & wxBU_RIGHT )
       msStyle |= BS_RIGHT;
-    if(style & wxBU_TOP)
+    if ( style & wxBU_TOP )
       msStyle |= BS_TOP;
-    if(style & wxBU_BOTTOM)
+    if ( style & wxBU_BOTTOM )
       msStyle |= BS_BOTTOM;
 
     return msStyle;
@@ -107,35 +101,14 @@ WXDWORD wxToggleButton::MSWGetStyle(long style, WXDWORD *exstyle) const
 
 wxSize wxToggleButton::DoGetBestSize() const
 {
-   wxString label = wxGetWindowText(GetHWND());
-   int wBtn;
-   GetTextExtent(GetLabelText(label), &wBtn, NULL);
+    return wxMSWButton::ComputeBestSize(wx_const_cast(wxToggleButton *, this));
+}
 
-   int wChar, hChar;
-   wxGetCharSize(GetHWND(), &wChar, &hChar, GetFont());
+void wxToggleButton::SetLabel(const wxString& label)
+{
+    wxMSWButton::UpdateMultilineStyle(GetHwnd(), label);
 
-   // add a margin - the button is wider than just its label
-   wBtn += 3*wChar;
-
-   // the button height is proportional to the height of the font used
-   int hBtn = BUTTON_HEIGHT_FROM_CHAR_HEIGHT(hChar);
-
-#if wxUSE_BUTTON
-   // make all buttons of at least standard size unless wxBU_EXACTFIT is given
-   if ( !HasFlag(wxBU_EXACTFIT) )
-   {
-       const wxSize szMin = wxButton::GetDefaultSize();
-       if ( wBtn < szMin.x )
-           wBtn = szMin.x;
-       if ( hBtn < szMin.y )
-           hBtn = szMin.y;
-   }
-#endif // wxUSE_BUTTON
-
-   wxSize sz(wBtn, hBtn);
-
-   CacheBestSize(sz);
-   return sz;
+    wxToggleButtonBase::SetLabel(label);
 }
 
 void wxToggleButton::SetValue(bool val)
@@ -143,23 +116,24 @@ void wxToggleButton::SetValue(bool val)
    ::SendMessage(GetHwnd(), BM_SETCHECK, val, 0);
 }
 
-#ifndef BST_CHECKED
-#define BST_CHECKED 0x0001
-#endif
-
 bool wxToggleButton::GetValue() const
 {
-#ifdef __WIN32__
-   return (::SendMessage(GetHwnd(), BM_GETCHECK, 0, 0) == BST_CHECKED);
-#else
-   return ((0x001 & ::SendMessage(GetHwnd(), BM_GETCHECK, 0, 0)) == 0x001);
-#endif
+    return ::SendMessage(GetHwnd(), BM_GETCHECK, 0, 0) == BST_CHECKED;
 }
 
-void wxToggleButton::Command(wxCommandEvent & event)
+void wxToggleButton::Command(wxCommandEvent& event)
 {
-   SetValue((event.GetInt() != 0));
-   ProcessCommand(event);
+    SetValue(event.GetInt() != 0);
+    ProcessCommand(event);
+}
+
+bool wxToggleButton::MSWCommand(WXUINT WXUNUSED(param), WXWORD WXUNUSED(id))
+{
+    wxCommandEvent event(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, m_windowId);
+    event.SetInt(GetValue());
+    event.SetEventObject(this);
+    ProcessCommand(event);
+    return true;
 }
 
 #endif // wxUSE_TOGGLEBTN
