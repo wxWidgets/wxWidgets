@@ -111,6 +111,7 @@ All (GUI):
 - Fixed wrapping bug in wxRichTextCtrl when there were images present;
   now sets the cursor to the next line after pressing Shift+Enter.
 - Fix crash when reading malformed PCX images.
+- Fix bug with wrong transparency in GIF animations (troelsk).
 
 All (Unix):
 
