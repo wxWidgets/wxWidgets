@@ -142,6 +142,57 @@ IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
 // ============================================================================
 
 // ----------------------------------------------------------------------------
+// helper functions from wx/msw/private/button.h
+// ----------------------------------------------------------------------------
+
+void wxMSWButton::UpdateMultilineStyle(HWND hwnd, const wxString& label)
+{
+    // update BS_MULTILINE style depending on the new label (resetting it
+    // doesn't seem to do anything very useful but it shouldn't hurt and we do
+    // have to set it whenever the label becomes multi line as otherwise it
+    // wouldn't be shown correctly as we don't use BS_MULTILINE when creating
+    // the control unless it already has new lines in its label)
+    long styleOld = ::GetWindowLong(hwnd, GWL_STYLE),
+         styleNew;
+    if ( label.find(_T('\n')) != wxString::npos )
+        styleNew = styleOld | BS_MULTILINE;
+    else
+        styleNew = styleOld & ~BS_MULTILINE;
+
+    if ( styleNew != styleOld )
+        ::SetWindowLong(hwnd, GWL_STYLE, styleNew);
+}
+
+wxSize wxMSWButton::ComputeBestSize(wxControl *btn)
+{
+    wxClientDC dc(btn);
+
+    wxCoord wBtn,
+            hBtn;
+    dc.GetMultiLineTextExtent(btn->GetLabelText(), &wBtn, &hBtn);
+
+    // FIXME: this is pure guesswork, need to retrieve the real button margins
+    wBtn += 3*btn->GetCharWidth();
+    hBtn = 11*EDIT_HEIGHT_FROM_CHAR_HEIGHT(hBtn)/10;
+
+    // all buttons have at least the standard size unless the user explicitly
+    // wants them to be of smaller size and used wxBU_EXACTFIT style when
+    // creating the button
+    if ( !btn->HasFlag(wxBU_EXACTFIT) )
+    {
+        wxSize sz = wxButton::GetDefaultSize();
+        if ( wBtn < sz.x )
+            wBtn = sz.x;
+        if ( hBtn < sz.y )
+            hBtn = sz.y;
+    }
+
+    wxSize best(wBtn, hBtn);
+    btn->CacheBestSize(best);
+    return best;
+}
+
+// ----------------------------------------------------------------------------
 // creation/destruction
 // ----------------------------------------------------------------------------
 
@@ -849,3 +900,4 @@ bool wxButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
 }
 
 #endif // wxUSE_BUTTON
+
