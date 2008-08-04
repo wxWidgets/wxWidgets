@@ -40,14 +40,11 @@ class WXDLLIMPEXP_FWD_BASE wxConfigBase;
   #include "wx/stream.h"
 #endif
 
-// Document manager flags
+// Flags for wxDocManager (can be combined).
 enum
 {
-    wxDOC_SDI = 1,
-    wxDOC_MDI,
-    wxDOC_NEW,
-    wxDOC_SILENT,
-    wxDEFAULT_DOCMAN_FLAGS = wxDOC_SDI
+    wxDOC_NEW    = 1,
+    wxDOC_SILENT = 2
 };
 
 // Document template flags
@@ -63,7 +60,7 @@ enum
 class WXDLLIMPEXP_CORE wxDocument : public wxEvtHandler
 {
 public:
-    wxDocument(wxDocument *parent = (wxDocument *) NULL);
+    wxDocument(wxDocument *parent = NULL);
     virtual ~wxDocument();
 
     // accessors
@@ -129,7 +126,7 @@ public:
     const wxList& GetViews() const { return m_documentViews; }
     wxView *GetFirstView() const;
 
-    virtual void UpdateAllViews(wxView *sender = (wxView *) NULL, wxObject *hint = (wxObject *) NULL);
+    virtual void UpdateAllViews(wxView *sender = NULL, wxObject *hint = NULL);
     virtual void NotifyClosing();
 
     // Remove all views (because we're closing the document)
@@ -184,7 +181,6 @@ private:
 class WXDLLIMPEXP_CORE wxView: public wxEvtHandler
 {
 public:
-    //  wxView(wxDocument *doc = (wxDocument *) NULL);
     wxView();
     virtual ~wxView();
 
@@ -200,13 +196,14 @@ public:
     virtual void OnActivateView(bool activate, wxView *activeView, wxView *deactiveView);
     virtual void OnDraw(wxDC *dc) = 0;
     virtual void OnPrint(wxDC *dc, wxObject *info);
-    virtual void OnUpdate(wxView *sender, wxObject *hint = (wxObject *) NULL);
+    virtual void OnUpdate(wxView *sender, wxObject *hint = NULL);
     virtual void OnClosingDocument() {}
     virtual void OnChangeFilename();
 
     // Called by framework if created automatically by the default document
     // manager class: gives view a chance to initialise
-    virtual bool OnCreate(wxDocument *WXUNUSED(doc), long WXUNUSED(flags)) { return true; }
+    virtual bool OnCreate(wxDocument *WXUNUSED(doc), long WXUNUSED(flags))
+        { return true; }
 
     // Checks if the view is the last one for the document; if so, asks user
     // to confirm save data (if modified). If ok, deletes itself and returns
@@ -256,8 +253,8 @@ public:
                   const wxString& ext,
                   const wxString& docTypeName,
                   const wxString& viewTypeName,
-                  wxClassInfo *docClassInfo = (wxClassInfo *) NULL,
-                  wxClassInfo *viewClassInfo = (wxClassInfo *)NULL,
+                  wxClassInfo *docClassInfo = NULL,
+                  wxClassInfo *viewClassInfo = NULL,
                   long flags = wxDEFAULT_TEMPLATE_FLAGS);
 
     virtual ~wxDocTemplate();
@@ -325,7 +322,8 @@ private:
 class WXDLLIMPEXP_CORE wxDocManager: public wxEvtHandler
 {
 public:
-    wxDocManager(long flags = wxDEFAULT_DOCMAN_FLAGS, bool initialize = true);
+    // NB: flags are unused, don't pass wxDOC_XXX to this ctor
+    wxDocManager(long flags = 0, bool initialize = true);
     virtual ~wxDocManager();
 
     virtual bool Initialize();
@@ -345,16 +343,11 @@ public:
 
     // Handlers for UI update commands
     void OnUpdateFileOpen(wxUpdateUIEvent& event);
-    void OnUpdateFileClose(wxUpdateUIEvent& event);
-    void OnUpdateFileRevert(wxUpdateUIEvent& event);
+    void OnUpdateDisableIfNoDoc(wxUpdateUIEvent& event);
     void OnUpdateFileNew(wxUpdateUIEvent& event);
     void OnUpdateFileSave(wxUpdateUIEvent& event);
-    void OnUpdateFileSaveAs(wxUpdateUIEvent& event);
     void OnUpdateUndo(wxUpdateUIEvent& event);
     void OnUpdateRedo(wxUpdateUIEvent& event);
-
-    void OnUpdatePrint(wxUpdateUIEvent& event);
-    void OnUpdatePreview(wxUpdateUIEvent& event);
 
     // Extend event processing to search the view's event table
     virtual bool ProcessEvent(wxEvent& event);
@@ -449,7 +442,6 @@ public:
 #endif // WXWIN_COMPATIBILITY_2_6
 
 protected:
-    long              m_flags;
     int               m_defaultDocumentNameCounter;
     int               m_maxDocsOpen;
     wxList            m_docs;
@@ -499,7 +491,7 @@ public:
     wxView *GetView() const { return m_childView; }
     void SetDocument(wxDocument *doc) { m_childDocument = doc; }
     void SetView(wxView *view) { m_childView = view; }
-    bool Destroy() { m_childView = (wxView *)NULL; return wxFrame::Destroy(); }
+    bool Destroy() { m_childView = NULL; return wxFrame::Destroy(); }
 
 protected:
     wxDocument*       m_childDocument;
@@ -564,7 +556,7 @@ private:
 class WXDLLIMPEXP_CORE wxDocPrintout : public wxPrintout
 {
 public:
-    wxDocPrintout(wxView *view = (wxView *) NULL, const wxString& title = wxT("Printout"));
+    wxDocPrintout(wxView *view = NULL, const wxString& title = wxT("Printout"));
     bool OnPrintPage(int page);
     bool HasPage(int page);
     bool OnBeginDocument(int startPage, int endPage);
@@ -589,7 +581,6 @@ class WXDLLIMPEXP_CORE wxFileHistory : public wxObject
 {
 public:
     wxFileHistory(size_t maxFiles = 9, wxWindowID idBase = wxID_FILE1);
-    virtual ~wxFileHistory();
 
     // Operations
     virtual void AddFileToHistory(const wxString& file);
@@ -659,6 +650,18 @@ bool WXDLLIMPEXP_CORE wxTransferStreamToFile(wxSTD istream& stream, const wxStri
 bool WXDLLIMPEXP_CORE wxTransferFileToStream(const wxString& filename, wxOutputStream& stream);
 bool WXDLLIMPEXP_CORE wxTransferStreamToFile(wxInputStream& stream, const wxString& filename);
 #endif // wxUSE_STD_IOSTREAM
+
+
+// these flags are not used anywhere by wxWidgets and kept only for an unlikely
+// case of existing user code using them for its own purposes
+#ifdef WXWIN_COMPATIBILITY_2_8
+enum
+{
+    wxDOC_SDI = 1,
+    wxDOC_MDI,
+    wxDEFAULT_DOCMAN_FLAGS = wxDOC_SDI
+};
+#endif // WXWIN_COMPATIBILITY_2_8
 
 #endif // wxUSE_DOC_VIEW_ARCHITECTURE
 

@@ -2,7 +2,7 @@
 // Name:        src/common/docview.cpp
 // Purpose:     Document/view classes
 // Author:      Julian Smart
-// Modified by:
+// Modified by: Vadim Zeitlin
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
@@ -44,25 +44,19 @@
     #include "wx/choicdlg.h"
 #endif
 
-#include "wx/ffile.h"
-
-#ifdef __WXMAC__
-    #include "wx/filename.h"
-#endif
-
 #if wxUSE_PRINTING_ARCHITECTURE
     #include "wx/prntbase.h"
     #include "wx/printdlg.h"
 #endif
 
 #include "wx/confbase.h"
+#include "wx/filename.h"
 #include "wx/file.h"
+#include "wx/ffile.h"
 #include "wx/cmdproc.h"
 #include "wx/tokenzr.h"
 #include "wx/filename.h"
-
-#include <stdio.h>
-#include <string.h>
+#include "wx/vector.h"
 
 #if wxUSE_STD_IOSTREAM
     #include "wx/ioswrap.h"
@@ -76,6 +70,8 @@
 #else
     #include "wx/wfstream.h"
 #endif
+
+typedef wxVector<wxDocTemplate *> wxDocTemplates;
 
 // ----------------------------------------------------------------------------
 // wxWidgets macros
@@ -94,27 +90,25 @@ IMPLEMENT_CLASS(wxDocParentFrame, wxFrame)
 
 IMPLEMENT_DYNAMIC_CLASS(wxFileHistory, wxObject)
 
-// ----------------------------------------------------------------------------
-// function prototypes
-// ----------------------------------------------------------------------------
-
-static wxWindow* wxFindSuitableParent(void);
-
-// ----------------------------------------------------------------------------
-// local constants
-// ----------------------------------------------------------------------------
-
-static const wxChar *s_MRUEntryFormat = wxT("&%d %s");
-
 // ============================================================================
 // implementation
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// local functions
+// private helpers
 // ----------------------------------------------------------------------------
 
-static wxString FindExtension(const wxString& path)
+namespace
+{
+
+wxWindow *wxFindSuitableParent()
+{
+    wxWindow * const win = wxGetTopLevelParent(wxWindow::FindFocus());
+
+    return win ? win : wxTheApp->GetTopWindow();
+}
+
+wxString FindExtension(const wxString& path)
 {
     wxString ext;
     wxSplitPath(path, NULL, NULL, &ext);
@@ -124,6 +118,20 @@ static wxString FindExtension(const wxString& path)
     return ext.MakeLower();
 }
 
+// return the string used for the MRU list items in the menu
+//
+// NB: the index n is 0-based, as usual, but the strings start from 1
+wxString GetMRUEntryLabel(int n, const wxString& path)
+{
+    // we need to quote '&' characters which are used for mnemonics
+    wxString pathInMenu(path);
+    pathInMenu.Replace("&", "&&");
+
+    return wxString::Format("&%d %s", n + 1, pathInMenu);
+}
+
+} // anonymous namespace
+
 // ----------------------------------------------------------------------------
 // Definition of wxDocument
 // ----------------------------------------------------------------------------
@@ -132,8 +140,8 @@ wxDocument::wxDocument(wxDocument *parent)
 {
     m_documentModified = false;
     m_documentParent = parent;
-    m_documentTemplate = (wxDocTemplate *) NULL;
-    m_commandProcessor = (wxCommandProcessor*) NULL;
+    m_documentTemplate = NULL;
+    m_commandProcessor = NULL;
     m_savedYet = false;
 }
 
@@ -224,21 +232,22 @@ bool wxDocument::DeleteAllViews()
 wxView *wxDocument::GetFirstView() const
 {
     if (m_documentViews.GetCount() == 0)
-        return (wxView *) NULL;
+        return NULL;
     return (wxView *)m_documentViews.GetFirst()->GetData();
 }
 
 wxDocManager *wxDocument::GetDocumentManager() const
 {
-    return (m_documentTemplate ? m_documentTemplate->GetDocumentManager() : (wxDocManager*) NULL);
+    return m_documentTemplate ? m_documentTemplate->GetDocumentManager() : NULL;
 }
 
 bool wxDocument::OnNewDocument()
 {
-    if (!OnSaveModified())
+    if ( !OnSaveModified() )
         return false;
 
-    if (OnCloseDocument()==false) return false;
+    if ( !OnCloseDocument() )
+        return false;
     DeleteContents();
     Modify(false);
     SetDocumentSaved(false);
@@ -373,7 +382,7 @@ bool wxDocument::OnSaveDocument(const wxString& file)
 
 bool wxDocument::OnOpenDocument(const wxString& file)
 {
-    if (!OnSaveModified())
+    if ( !OnSaveModified() )
         return false;
 
     if ( !DoOpenDocument(file) )
@@ -467,31 +476,32 @@ wxCommandProcessor *wxDocument::OnCreateCommandProcessor()
 // true if safe to close
 bool wxDocument::OnSaveModified()
 {
-    if (IsModified())
+    if ( IsModified() )
     {
-        wxString title = GetUserReadableName();
-
-        wxString msgTitle;
-        if (!wxTheApp->GetAppDisplayName().empty())
-            msgTitle = wxTheApp->GetAppDisplayName();
-        else
-            msgTitle = wxString(_("Warning"));
-
-        wxString prompt;
-        prompt.Printf(_("Do you want to save changes to document %s?"), title);
-        int res = wxMessageBox(prompt, msgTitle,
-                wxYES_NO|wxCANCEL|wxICON_QUESTION,
-                GetDocumentWindow());
-        if (res == wxNO)
+        switch ( wxMessageBox
+                 (
+                    wxString::Format
+                    (
+                     _("Do you want to save changes to document %s?"),
+                     GetUserReadableName()
+                    ),
+                    wxTheApp->GetAppDisplayName(),
+                    wxYES_NO | wxCANCEL | wxICON_QUESTION,
+                    GetDocumentWindow()
+                 ) )
         {
-            Modify(false);
-            return true;
+            case wxNO:
+                Modify(false);
+                break;
+
+            case wxYES:
+                return Save();
+
+            case wxCANCEL:
+                return false;
         }
-        else if (res == wxYES)
-            return Save();
-        else if (res == wxCANCEL)
-            return false;
     }
+
     return true;
 }
 
@@ -502,7 +512,7 @@ bool wxDocument::Draw(wxDC& WXUNUSED(context))
 
 bool wxDocument::AddView(wxView *view)
 {
-    if (!m_documentViews.Member(view))
+    if ( !m_documentViews.Member(view) )
     {
         m_documentViews.Append(view);
         OnChangedViewList();
@@ -519,10 +529,7 @@ bool wxDocument::RemoveView(wxView *view)
 
 bool wxDocument::OnCreate(const wxString& WXUNUSED(path), long flags)
 {
-    if (GetDocumentTemplate()->CreateView(this, flags))
-        return true;
-    else
-        return false;
+    return GetDocumentTemplate()->CreateView(this, flags) != NULL;
 }
 
 // Called after a view is added or removed.
@@ -530,13 +537,8 @@ bool wxDocument::OnCreate(const wxString& WXUNUSED(path), long flags)
 // there are no more views.
 void wxDocument::OnChangedViewList()
 {
-    if (m_documentViews.GetCount() == 0)
-    {
-        if (OnSaveModified())
-        {
-            delete this;
-        }
-    }
+    if ( m_documentViews.empty() && OnSaveModified() )
+        delete this;
 }
 
 void wxDocument::UpdateAllViews(wxView *sender, wxObject *hint)
@@ -641,9 +643,9 @@ bool wxDocument::DoOpenDocument(const wxString& file)
 
 wxView::wxView()
 {
-    m_viewDocument = (wxDocument*) NULL;
+    m_viewDocument = NULL;
 
-    m_viewFrame = (wxFrame *) NULL;
+    m_viewFrame = NULL;
 }
 
 wxView::~wxView()
@@ -697,10 +699,7 @@ void wxView::SetDocument(wxDocument *doc)
 
 bool wxView::Close(bool deleteWindow)
 {
-    if (OnClose(deleteWindow))
-        return true;
-    else
-        return false;
+    return OnClose(deleteWindow);
 }
 
 void wxView::Activate(bool activate)
@@ -761,21 +760,16 @@ wxDocTemplate::~wxDocTemplate()
 // Tries to dynamically construct an object of the right class.
 wxDocument *wxDocTemplate::CreateDocument(const wxString& path, long flags)
 {
-    wxDocument *doc = DoCreateDocument();
-    if ( doc == NULL )
-        return (wxDocument *) NULL;
+    wxDocument * const doc = DoCreateDocument();
 
-    if (InitDocument(doc, path, flags))
-    {
-        return doc;
-    }
-    else
-    {
-        return (wxDocument *) NULL;
-    }
+    // VZ: this code doesn't delete doc if InitDocument() (i.e. doc->OnCreate())
+    //     fails, is this intentional?
+
+    return doc && InitDocument(doc, path, flags) ? doc : NULL;
 }
 
-bool wxDocTemplate::InitDocument(wxDocument* doc, const wxString& path, long flags)
+bool
+wxDocTemplate::InitDocument(wxDocument* doc, const wxString& path, long flags)
 {
     doc->SetFilename(path);
     doc->SetDocumentTemplate(this);
@@ -796,7 +790,7 @@ wxView *wxDocTemplate::CreateView(wxDocument *doc, long flags)
 {
     wxView *view = DoCreateView();
     if ( view == NULL )
-        return (wxView *) NULL;
+        return NULL;
 
     view->SetDocument(doc);
     if (view->OnCreate(doc, flags))
@@ -806,7 +800,7 @@ wxView *wxDocTemplate::CreateView(wxDocument *doc, long flags)
     else
     {
         delete view;
-        return (wxView *) NULL;
+        return NULL;
     }
 }
 
@@ -831,7 +825,7 @@ bool wxDocTemplate::FileMatchesTemplate(const wxString& path)
 wxDocument *wxDocTemplate::DoCreateDocument()
 {
     if (!m_docClassInfo)
-        return (wxDocument *) NULL;
+        return NULL;
 
     return (wxDocument *)m_docClassInfo->CreateObject();
 }
@@ -839,7 +833,7 @@ wxDocument *wxDocTemplate::DoCreateDocument()
 wxView *wxDocTemplate::DoCreateView()
 {
     if (!m_viewClassInfo)
-        return (wxView *) NULL;
+        return NULL;
 
     return (wxView *)m_viewClassInfo->CreateObject();
 }
@@ -860,12 +854,12 @@ BEGIN_EVENT_TABLE(wxDocManager, wxEvtHandler)
     EVT_MENU(wxID_REDO, wxDocManager::OnRedo)
 
     EVT_UPDATE_UI(wxID_OPEN, wxDocManager::OnUpdateFileOpen)
-    EVT_UPDATE_UI(wxID_CLOSE, wxDocManager::OnUpdateFileClose)
-    EVT_UPDATE_UI(wxID_CLOSE_ALL, wxDocManager::OnUpdateFileClose)
-    EVT_UPDATE_UI(wxID_REVERT, wxDocManager::OnUpdateFileRevert)
+    EVT_UPDATE_UI(wxID_CLOSE, wxDocManager::OnUpdateDisableIfNoDoc)
+    EVT_UPDATE_UI(wxID_CLOSE_ALL, wxDocManager::OnUpdateDisableIfNoDoc)
+    EVT_UPDATE_UI(wxID_REVERT, wxDocManager::OnUpdateDisableIfNoDoc)
     EVT_UPDATE_UI(wxID_NEW, wxDocManager::OnUpdateFileNew)
     EVT_UPDATE_UI(wxID_SAVE, wxDocManager::OnUpdateFileSave)
-    EVT_UPDATE_UI(wxID_SAVEAS, wxDocManager::OnUpdateFileSaveAs)
+    EVT_UPDATE_UI(wxID_SAVEAS, wxDocManager::OnUpdateDisableIfNoDoc)
     EVT_UPDATE_UI(wxID_UNDO, wxDocManager::OnUpdateUndo)
     EVT_UPDATE_UI(wxID_REDO, wxDocManager::OnUpdateRedo)
 
@@ -873,31 +867,32 @@ BEGIN_EVENT_TABLE(wxDocManager, wxEvtHandler)
     EVT_MENU(wxID_PRINT, wxDocManager::OnPrint)
     EVT_MENU(wxID_PREVIEW, wxDocManager::OnPreview)
 
-    EVT_UPDATE_UI(wxID_PRINT, wxDocManager::OnUpdatePrint)
-    EVT_UPDATE_UI(wxID_PREVIEW, wxDocManager::OnUpdatePreview)
+    EVT_UPDATE_UI(wxID_PRINT, wxDocManager::OnUpdateDisableIfNoDoc)
+    EVT_UPDATE_UI(wxID_PREVIEW, wxDocManager::OnUpdateDisableIfNoDoc)
 #endif
 END_EVENT_TABLE()
 
-wxDocManager* wxDocManager::sm_docManager = (wxDocManager*) NULL;
+wxDocManager* wxDocManager::sm_docManager = NULL;
 
-wxDocManager::wxDocManager(long flags, bool initialize)
+wxDocManager::wxDocManager(long WXUNUSED(flags), bool initialize)
 {
-    m_defaultDocumentNameCounter = 1;
-    m_flags = flags;
-    m_currentView = (wxView *) NULL;
-    m_maxDocsOpen = 10000;
-    m_fileHistory = (wxFileHistory *) NULL;
-    if (initialize)
-        Initialize();
+    wxASSERT_MSG( !sm_docManager, "multiple wxDocManagers not allowed" );
+
     sm_docManager = this;
+
+    m_defaultDocumentNameCounter = 1;
+    m_currentView = NULL;
+    m_maxDocsOpen = INT_MAX;
+    m_fileHistory = NULL;
+    if ( initialize )
+        Initialize();
 }
 
 wxDocManager::~wxDocManager()
 {
     Clear();
-    if (m_fileHistory)
-        delete m_fileHistory;
-    sm_docManager = (wxDocManager*) NULL;
+    delete m_fileHistory;
+    sm_docManager = NULL;
 }
 
 // closes the specified document
@@ -1096,16 +1091,9 @@ void wxDocManager::OnUpdateFileOpen(wxUpdateUIEvent& event)
     event.Enable( true );
 }
 
-void wxDocManager::OnUpdateFileClose(wxUpdateUIEvent& event)
+void wxDocManager::OnUpdateDisableIfNoDoc(wxUpdateUIEvent& event)
 {
-    wxDocument *doc = GetCurrentDocument();
-    event.Enable( (doc != (wxDocument*) NULL) );
-}
-
-void wxDocManager::OnUpdateFileRevert(wxUpdateUIEvent& event)
-{
-    wxDocument *doc = GetCurrentDocument();
-    event.Enable( (doc != (wxDocument*) NULL) );
+    event.Enable( GetCurrentDocument() != NULL );
 }
 
 void wxDocManager::OnUpdateFileNew(wxUpdateUIEvent& event)
@@ -1117,12 +1105,6 @@ void wxDocManager::OnUpdateFileSave(wxUpdateUIEvent& event)
 {
     wxDocument *doc = GetCurrentDocument();
     event.Enable( doc && doc->IsModified() );
-}
-
-void wxDocManager::OnUpdateFileSaveAs(wxUpdateUIEvent& event)
-{
-    wxDocument *doc = GetCurrentDocument();
-    event.Enable( (doc != (wxDocument*) NULL) );
 }
 
 void wxDocManager::OnUpdateUndo(wxUpdateUIEvent& event)
@@ -1153,18 +1135,6 @@ void wxDocManager::OnUpdateRedo(wxUpdateUIEvent& event)
     }
 }
 
-void wxDocManager::OnUpdatePrint(wxUpdateUIEvent& event)
-{
-    wxDocument *doc = GetCurrentDocument();
-    event.Enable( (doc != (wxDocument*) NULL) );
-}
-
-void wxDocManager::OnUpdatePreview(wxUpdateUIEvent& event)
-{
-    wxDocument *doc = GetCurrentDocument();
-    event.Enable( (doc != (wxDocument*) NULL) );
-}
-
 wxView *wxDocManager::GetCurrentView() const
 {
     if (m_currentView)
@@ -1174,238 +1144,179 @@ wxView *wxDocManager::GetCurrentView() const
         wxDocument* doc = (wxDocument*) m_docs.GetFirst()->GetData();
         return doc->GetFirstView();
     }
-    return (wxView *) NULL;
+    return NULL;
 }
 
 // Extend event processing to search the view's event table
 bool wxDocManager::ProcessEvent(wxEvent& event)
 {
-    wxView* view = GetCurrentView();
-    if (view)
-    {
-        if (view->ProcessEvent(event))
-            return true;
-    }
+    wxView * const view = GetCurrentView();
+    if ( view && view->ProcessEvent(event) )
+        return true;
+
     return wxEvtHandler::ProcessEvent(event);
 }
 
-wxDocument *wxDocManager::CreateDocument(const wxString& path, long flags)
+namespace
 {
-    wxDocTemplate   **templates = new wxDocTemplate *[m_templates.GetCount()];
-    int               n = 0;
 
-    for (size_t i = 0; i < m_templates.GetCount(); i++)
+// helper function: return only the visible templates
+wxDocTemplates GetVisibleTemplates(const wxList& allTemplates)
+{
+    // select only the visible templates
+    const size_t totalNumTemplates = allTemplates.GetCount();
+    wxDocTemplates templates;
+    if ( totalNumTemplates )
     {
-        wxDocTemplate *temp = (wxDocTemplate *)(m_templates.Item(i)->GetData());
-        if (temp->IsVisible())
+        templates.reserve(totalNumTemplates);
+
+        for ( wxList::const_iterator i = allTemplates.begin(),
+                                   end = allTemplates.end();
+              i != end;
+              ++i )
         {
-            templates[n] = temp;
-            n ++;
+            wxDocTemplate * const temp = (wxDocTemplate *)*i;
+            if ( temp->IsVisible() )
+                templates.push_back(temp);
         }
     }
-    if (n == 0)
+
+    return templates;
+}
+
+} // anonymous namespace
+
+wxDocument *wxDocManager::CreateDocument(const wxString& pathOrig, long flags)
+{
+    // this ought to be const but SelectDocumentType/Path() are not
+    // const-correct and can't be changed as, being virtual, this risks
+    // breaking user code overriding them
+    wxDocTemplates templates(GetVisibleTemplates(m_templates));
+    const size_t numTemplates = templates.size();
+    if ( !numTemplates )
     {
-        delete[] templates;
-        return (wxDocument *) NULL;
+        // no templates can be used, can't create document
+        return NULL;
     }
 
-    wxDocument* docToClose = NULL;
 
-    // If we've reached the max number of docs, close the
-    // first one.
+    // normally user should select the template to use but wxDOC_SILENT flag we
+    // choose one ourselves
+    wxString path = pathOrig;   // may be modified below
+    wxDocTemplate *temp;
+    if ( flags & wxDOC_SILENT )
+    {
+        wxASSERT_MSG( !path.empty(),
+                      "using empty path with wxDOC_SILENT doesn't make sense" );
+
+        temp = FindTemplateForPath(path);
+        if ( !temp )
+        {
+            wxLogWarning(_("The format of file '%s' couldn't be determined."),
+                         path);
+        }
+    }
+    else // not silent, ask the user
+    {
+        // for the new file we need just the template, for an existing one we
+        // need the template and the path, unless it's already specified
+        if ( (flags & wxDOC_NEW) || !path.empty() )
+            temp = SelectDocumentType(&templates[0], numTemplates);
+        else
+            temp = SelectDocumentPath(&templates[0], numTemplates, path, flags);
+    }
+
+    if ( !temp )
+        return NULL;
+
+    // check whether the document with this path is already opened
+    if ( !path.empty() )
+    {
+        const wxFileName fn(path);
+        for ( wxList::const_iterator i = m_docs.begin(); i != m_docs.end(); ++i )
+        {
+            wxDocument * const doc = (wxDocument*)*i;
+
+            if ( fn == doc->GetFilename() )
+            {
+                // file already open, just activate it and return
+                if ( doc->GetFirstView() )
+                {
+                    ActivateView(doc->GetFirstView());
+                    if ( doc->GetDocumentWindow() )
+                        doc->GetDocumentWindow()->SetFocus();
+                    return doc;
+                }
+            }
+        }
+    }
+
+
+    // no, we need to create a new document
+
+
+    // if we've reached the max number of docs, close the first one.
     if ( (int)GetDocuments().GetCount() >= m_maxDocsOpen )
     {
-        wxDocument *doc = (wxDocument *)GetDocuments().GetFirst()->GetData();
-        docToClose = doc;
+        if ( !CloseDocument((wxDocument *)GetDocuments().GetFirst()->GetData()) )
+        {
+            // can't open the new document if closing the old one failed
+            return NULL;
+        }
     }
 
-    // New document: user chooses a template, unless there's only one.
-    if (flags & wxDOC_NEW)
+
+    // do create and initialize the new document finally
+    wxDocument * const docNew = temp->CreateDocument(path, flags);
+    if ( !docNew )
+        return NULL;
+
+    docNew->SetDocumentName(temp->GetDocumentName());
+    docNew->SetDocumentTemplate(temp);
+
+    // call the appropriate function depending on whether we're creating a new
+    // file or opening an existing one
+    if ( !(flags & wxDOC_NEW ? docNew->OnNewDocument()
+                             : docNew->OnOpenDocument(path)) )
     {
-        if (n == 1)
-        {
-            if (docToClose)
-            {
-                if (!CloseDocument(docToClose, false))
-                {
-                    delete[] templates;
-                    return NULL;
-                }
-            }
-
-            wxDocTemplate *temp = templates[0];
-            delete[] templates;
-            wxDocument *newDoc = temp->CreateDocument(path, flags);
-
-            if (newDoc)
-            {
-                newDoc->SetDocumentName(temp->GetDocumentName());
-                newDoc->SetDocumentTemplate(temp);
-                if (!newDoc->OnNewDocument() )
-                {
-                     // Document is implicitly deleted by DeleteAllViews
-                     newDoc->DeleteAllViews();
-                     return NULL;
-                }
-            }
-            return newDoc;
-        }
-
-        wxDocTemplate *temp = SelectDocumentType(templates, n);
-        delete[] templates;
-        if (temp)
-        {
-            if (docToClose)
-            {
-                if (!CloseDocument(docToClose, false))
-                {
-                    return NULL;
-                }
-            }
-
-            wxDocument *newDoc = temp->CreateDocument(path, flags);
-
-            if (newDoc)
-            {
-                newDoc->SetDocumentName(temp->GetDocumentName());
-                newDoc->SetDocumentTemplate(temp);
-                if (!newDoc->OnNewDocument() )
-                {
-                     // Document is implicitly deleted by DeleteAllViews
-                     newDoc->DeleteAllViews();
-                     return NULL;
-                }
-            }
-            return newDoc;
-        }
-        else
-            return (wxDocument *) NULL;
+         // Document is implicitly deleted by DeleteAllViews
+         docNew->DeleteAllViews();
+         return NULL;
     }
 
-    // Existing document
-    wxDocTemplate *temp;
+    // add the successfully opened file to MRU, but only if we're going to be
+    // able to reopen it successfully later which requires the template for
+    // this document to be retrievable from the file extension
+    if ( !(flags & wxDOC_NEW) && temp->FileMatchesTemplate(path) )
+        AddFileToHistory(path);
 
-    wxString path2 = path;
-
-    if (flags & wxDOC_SILENT)
-    {
-        temp = FindTemplateForPath(path2);
-        if (!temp)
-        {
-            // Since we do not add files with non-default extensions to the FileHistory this
-            // can only happen if the application changes the allowed templates in runtime.
-            (void)wxMessageBox(_("Sorry, the format for this file is unknown."),
-                                _("Open File"),
-                               wxOK | wxICON_EXCLAMATION, wxFindSuitableParent());
-        }
-    }
-    else
-        temp = SelectDocumentPath(templates, n, path2, flags);
-
-    delete[] templates;
-
-    if (temp)
-    {
-        if (docToClose)
-        {
-            if (!CloseDocument(docToClose, false))
-            {
-                return NULL;
-            }
-        }
-
-        //see if this file is already open
-        for (size_t i = 0; i < GetDocuments().GetCount(); ++i)
-        {
-            wxDocument* currentDoc = (wxDocument*)(GetDocuments().Item(i)->GetData());
-#ifdef __WXMSW__
-            //file paths are case-insensitive on Windows
-            if (path2.CmpNoCase(currentDoc->GetFilename()) == 0)
-#else
-            if (path2.Cmp(currentDoc->GetFilename()) == 0)
-#endif
-            {
-                //file already open. Just activate it and return
-                if (currentDoc->GetFirstView())
-                {
-                    ActivateView(currentDoc->GetFirstView(), true);
-                    if (currentDoc->GetDocumentWindow())
-                        currentDoc->GetDocumentWindow()->SetFocus();
-                    return currentDoc;
-                }
-            }
-        }
-
-        wxDocument *newDoc = temp->CreateDocument(path2, flags);
-        if (newDoc)
-        {
-            newDoc->SetDocumentName(temp->GetDocumentName());
-            newDoc->SetDocumentTemplate(temp);
-            if (!newDoc->OnOpenDocument(path2))
-            {
-                newDoc->DeleteAllViews();
-                // delete newDoc; // Implicitly deleted by DeleteAllViews
-                return (wxDocument *) NULL;
-            }
-            // A file that doesn't use the default extension of its document
-            // template cannot be opened via the FileHistory, so we do not
-            // add it.
-            if (temp->FileMatchesTemplate(path2))
-                AddFileToHistory(path2);
-        }
-        return newDoc;
-    }
-
-    return (wxDocument *) NULL;
+    return docNew;
 }
 
 wxView *wxDocManager::CreateView(wxDocument *doc, long flags)
 {
-    wxDocTemplate   **templates = new wxDocTemplate *[m_templates.GetCount()];
-    int               n =0;
+    wxDocTemplates templates(GetVisibleTemplates(m_templates));
+    const size_t numTemplates = templates.size();
 
-    for (size_t i = 0; i < m_templates.GetCount(); i++)
-    {
-        wxDocTemplate *temp = (wxDocTemplate *)(m_templates.Item(i)->GetData());
-        if (temp->IsVisible())
-        {
-            if (temp->GetDocumentName() == doc->GetDocumentName())
-            {
-                templates[n] = temp;
-                n ++;
-            }
-        }
-    }
-    if (n == 0)
-    {
-        delete[] templates;
-        return (wxView *) NULL;
-    }
-    if (n == 1)
-    {
-        wxDocTemplate *temp = templates[0];
-        delete[] templates;
-        wxView *view = temp->CreateView(doc, flags);
-        if (view)
-            view->SetViewName(temp->GetViewName());
-        return view;
-    }
+    if ( numTemplates == 0 )
+        return NULL;
 
-    wxDocTemplate *temp = SelectViewType(templates, n);
-    delete[] templates;
-    if (temp)
-    {
-        wxView *view = temp->CreateView(doc, flags);
-        if (view)
-            view->SetViewName(temp->GetViewName());
-        return view;
-    }
-    else
-        return (wxView *) NULL;
+    wxDocTemplate * const
+    temp = numTemplates == 1 ? templates[0]
+                             : SelectViewType(&templates[0], numTemplates);
+
+    if ( !temp )
+        return NULL;
+
+    wxView *view = temp->CreateView(doc, flags);
+    if ( view )
+        view->SetViewName(temp->GetViewName());
+    return view;
 }
 
 // Not yet implemented
-void wxDocManager::DeleteTemplate(wxDocTemplate *WXUNUSED(temp), long WXUNUSED(flags))
+void
+wxDocManager::DeleteTemplate(wxDocTemplate *WXUNUSED(temp), long WXUNUSED(flags))
 {
 }
 
@@ -1421,7 +1332,7 @@ wxDocument *wxDocManager::GetCurrentDocument() const
     if (view)
         return view->GetDocument();
     else
-        return (wxDocument *) NULL;
+        return NULL;
 }
 
 // Make a default name for a new document
@@ -1470,7 +1381,7 @@ wxString wxDocManager::MakeFrameTitle(wxDocument* doc)
 // Not yet implemented
 wxDocTemplate *wxDocManager::MatchTemplate(const wxString& WXUNUSED(path))
 {
-    return (wxDocTemplate *) NULL;
+    return NULL;
 }
 
 // File history management
@@ -1544,7 +1455,7 @@ size_t wxDocManager::GetHistoryFilesCount() const
 // against that of the template
 wxDocTemplate *wxDocManager::FindTemplateForPath(const wxString& path)
 {
-    wxDocTemplate *theTemplate = (wxDocTemplate *) NULL;
+    wxDocTemplate *theTemplate = NULL;
 
     // Find the template which this extension corresponds to
     for (size_t i = 0; i < m_templates.GetCount(); i++)
@@ -1559,38 +1470,12 @@ wxDocTemplate *wxDocManager::FindTemplateForPath(const wxString& path)
     return theTemplate;
 }
 
-// Try to get a more suitable parent frame than the top window,
-// for selection dialogs. Otherwise you may get an unexpected
-// window being activated when a dialog is shown.
-static wxWindow* wxFindSuitableParent()
-{
-    wxWindow* parent = wxTheApp->GetTopWindow();
-
-    wxWindow* focusWindow = wxWindow::FindFocus();
-    if (focusWindow)
-    {
-        while (focusWindow &&
-                !focusWindow->IsKindOf(CLASSINFO(wxDialog)) &&
-                !focusWindow->IsKindOf(CLASSINFO(wxFrame)))
-
-            focusWindow = focusWindow->GetParent();
-
-        if (focusWindow)
-            parent = focusWindow;
-    }
-    return parent;
-}
-
 // Prompts user to open a file, using file specs in templates.
 // Must extend the file selector dialog or implement own; OR
 // match the extension to the template extension.
 
 wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
-#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXMAC__)
                                                 int noTemplates,
-#else
-                                                int WXUNUSED(noTemplates),
-#endif
                                                 wxString& path,
                                                 long WXUNUSED(flags),
                                                 bool WXUNUSED(save))
@@ -1615,6 +1500,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
     }
 #else
     wxString descrBuf = wxT("*.*");
+    wxUnusedVar(noTemplates);
 #endif
 
     int FilterIndex = -1;
@@ -1629,7 +1515,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
                                         0,
                                         parent);
 
-    wxDocTemplate *theTemplate = (wxDocTemplate *)NULL;
+    wxDocTemplate *theTemplate = NULL;
     if (!pathTmp.empty())
     {
         if (!wxFileExists(pathTmp))
@@ -1644,7 +1530,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
                 parent);
 
             path = wxEmptyString;
-            return (wxDocTemplate *) NULL;
+            return NULL;
         }
         m_lastDirectory = wxPathOnly(pathTmp);
 
@@ -1733,7 +1619,7 @@ wxDocTemplate *wxDocManager::SelectDocumentType(wxDocTemplate **templates,
             break;
 
         case 1:
-            // don't propose the user to choose if he heas no choice
+            // don't propose the user to choose if he has no choice
             theTemplate = data[0];
             break;
 
@@ -1808,7 +1694,7 @@ wxDocTemplate *wxDocManager::SelectViewType(wxDocTemplate **templates,
     switch ( n )
     {
         case 0:
-            theTemplate = (wxDocTemplate *)NULL;
+            theTemplate = NULL;
             break;
 
         case 1:
@@ -1867,7 +1753,7 @@ void wxDocManager::ActivateView(wxView *view, bool activate)
         if ( m_currentView == view )
         {
             // don't keep stale pointer
-            m_currentView = (wxView *) NULL;
+            m_currentView = NULL;
         }
     }
 }
@@ -1936,8 +1822,8 @@ void wxDocChildFrame::OnCloseWindow(wxCloseEvent& event)
         {
             m_childView->Activate(false);
             delete m_childView;
-            m_childView = (wxView *) NULL;
-            m_childDocument = (wxDocument *) NULL;
+            m_childView = NULL;
+            m_childDocument = NULL;
 
             this->Destroy();
         }
@@ -1998,31 +1884,33 @@ void wxDocParentFrame::OnMRUFile(wxCommandEvent& event)
 {
     int n = event.GetId() - wxID_FILE1;  // the index in MRU list
     wxString filename(m_docManager->GetHistoryFile(n));
-    if ( !filename.empty() )
+    if ( filename.empty() )
+        return;
+
+    wxString errMsg; // must contain exactly one "%s" if non-empty
+    if ( wxFile::Exists(filename) )
     {
-        // verify that the file exists before doing anything else
-        if ( wxFile::Exists(filename) )
-        {
-            // try to open it
-            if (!m_docManager->CreateDocument(filename, wxDOC_SILENT))
-            {
-                // remove the file from the MRU list. The user should already be notified.
-                m_docManager->RemoveFileFromHistory(n);
+        // try to open it
+        if ( m_docManager->CreateDocument(filename, wxDOC_SILENT) )
+            return;
 
-                wxLogError(_("The file '%s' couldn't be opened.\nIt has been removed from the most recently used files list."),
-                       filename.c_str());
-            }
-        }
-        else
-        {
-            // remove the bogus filename from the MRU list and notify the user
-            // about it
-            m_docManager->RemoveFileFromHistory(n);
-
-            wxLogError(_("The file '%s' doesn't exist and couldn't be opened.\nIt has been removed from the most recently used files list."),
-                       filename.c_str());
-        }
+        errMsg = _("The file '%s' couldn't be opened.");
     }
+    else // file doesn't exist
+    {
+        errMsg = _("The file '%s' doesn't exist and couldn't be opened.");
+    }
+
+
+    wxASSERT_MSG( !errMsg.empty(), "should have an error message" );
+
+    // remove the file which we can't open from the MRU list
+    m_docManager->RemoveFileFromHistory(n);
+
+    // and tell the user about it
+    wxLogError(errMsg + '\n' +
+               _("It has been removed from the most recently used files list."),
+               filename);
 }
 
 // Extend event processing to search the view's event table
@@ -2118,7 +2006,7 @@ void wxDocPrintout::GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, in
 #endif // wxUSE_PRINTING_ARCHITECTURE
 
 // ----------------------------------------------------------------------------
-// File history processor
+// File history (a.k.a. MRU, most recently used, files list)
 // ----------------------------------------------------------------------------
 
 wxFileHistory::wxFileHistory(size_t maxFiles, wxWindowID idBase)
@@ -2127,136 +2015,115 @@ wxFileHistory::wxFileHistory(size_t maxFiles, wxWindowID idBase)
     m_idBase = idBase;
 }
 
-wxFileHistory::~wxFileHistory()
-{
-}
-
 void wxFileHistory::AddFileToHistory(const wxString& file)
 {
-    wxFileName fn(file);
-    size_t i;
-
-    // Check we don't already have this file
-    for (i = 0; i < m_fileHistory.GetCount(); i++)
+    // check if we don't already have this file
+    const wxFileName fnNew(file);
+    size_t i,
+           numFiles = m_fileHistory.size();
+    for ( i = 0; i < numFiles; i++ )
     {
-        // we need to do a comparison using wxFileNames because it knows
-        // how to exactly compare files on the different platforms
-        // (e.g. handle case [in]sensitive filesystems)
-        if ( fn == wxFileName(m_fileHistory[i]) )
+        if ( fnNew == m_fileHistory[i] )
         {
             // we do have it, move it to the top of the history
-            RemoveFileFromHistory (i);
-            AddFileToHistory (file);
-            return;
+            RemoveFileFromHistory(i);
+            numFiles--;
+            break;
         }
     }
 
     // if we already have a full history, delete the one at the end
-    if ( m_fileMaxFiles == m_fileHistory.GetCount() )
+    if ( numFiles == m_fileMaxFiles )
     {
-        RemoveFileFromHistory (m_fileHistory.GetCount() - 1);
-        AddFileToHistory (file);
-        return;
+        RemoveFileFromHistory(--numFiles);
     }
-
-    // Add to the project file history:
-    // Move existing files (if any) down so we can insert file at beginning.
-    if (m_fileHistory.GetCount() < m_fileMaxFiles)
+    else // add a new menu item to all file menus (will be updated below)
     {
-        wxList::compatibility_iterator node = m_fileMenus.GetFirst();
-        while (node)
+        for ( wxList::compatibility_iterator node = m_fileMenus.GetFirst();
+              node;
+              node = node->GetNext() )
         {
-            wxMenu* menu = (wxMenu*) node->GetData();
-            if ( m_fileHistory.IsEmpty() && menu->GetMenuItemCount() )
-            {
+            wxMenu * const menu = (wxMenu *)node->GetData();
+
+            if ( !numFiles && menu->GetMenuItemCount() )
                 menu->AppendSeparator();
-            }
-            menu->Append(m_idBase+m_fileHistory.GetCount(), _("[EMPTY]"));
-            node = node->GetNext();
+
+            // label doesn't matter, it will be set below anyhow, but it can't
+            // be empty (this is supposed to indicate a stock item)
+            menu->Append(m_idBase + numFiles, " ");
         }
     }
 
-    m_fileHistory.Insert(file, 0);
 
-    // this is the directory of the last opened file
-    wxString pathCurrent;
-    wxSplitPath( m_fileHistory[0], &pathCurrent, NULL, NULL );
-    for (i = 0; i < m_fileHistory.GetCount(); i++)
+    // insert the new file in the beginning of the file history
+    m_fileHistory.insert(m_fileHistory.begin(), file);
+    numFiles++;
+
+    // update the labels in all menus
+    for ( i = 0; i < numFiles; i++ )
+    {
+        // if in same directory just show the filename; otherwise the full path
+        const wxFileName fnOld(m_fileHistory[i]);
+
+        wxString pathInMenu;
+        if ( fnOld.GetPath() == fnNew.GetPath() )
         {
-            // if in same directory just show the filename; otherwise the full
-            // path
-            wxString pathInMenu, path, filename, ext;
-            wxSplitPath( m_fileHistory[i], &path, &filename, &ext );
-            if ( path == pathCurrent )
-            {
-                pathInMenu = filename;
-                if ( !ext.empty() )
-                    pathInMenu = pathInMenu + wxFILE_SEP_EXT + ext;
-            }
-            else
-            {
-                // absolute path; could also set relative path
-                pathInMenu = m_fileHistory[i];
-            }
-
-            // we need to quote '&' characters which are used for mnemonics
-            pathInMenu.Replace(_T("&"), _T("&&"));
-
-            wxString buf;
-            buf.Printf(s_MRUEntryFormat, i + 1, pathInMenu.c_str());
-
-            wxList::compatibility_iterator node = m_fileMenus.GetFirst();
-            while (node)
-            {
-                wxMenu* menu = (wxMenu*) node->GetData();
-                menu->SetLabel(m_idBase + i, buf);
-                node = node->GetNext();
-            }
+            pathInMenu = fnOld.GetFullName();
         }
+        else // file in different directory
+        {
+            // absolute path; could also set relative path
+            pathInMenu = m_fileHistory[i];
+        }
+
+        for ( wxList::compatibility_iterator node = m_fileMenus.GetFirst();
+              node;
+              node = node->GetNext() )
+        {
+            wxMenu * const menu = (wxMenu *)node->GetData();
+
+            menu->SetLabel(m_idBase + i, GetMRUEntryLabel(i, pathInMenu));
+        }
+    }
 }
 
 void wxFileHistory::RemoveFileFromHistory(size_t i)
 {
-    wxCHECK_RET( i < m_fileHistory.GetCount(),
+    size_t numFiles = m_fileHistory.size();
+    wxCHECK_RET( i < numFiles,
                  wxT("invalid index in wxFileHistory::RemoveFileFromHistory") );
 
     // delete the element from the array
     m_fileHistory.RemoveAt(i);
+    numFiles--;
 
-    wxList::compatibility_iterator node = m_fileMenus.GetFirst();
-    while ( node )
+    for ( wxList::compatibility_iterator node = m_fileMenus.GetFirst();
+          node;
+          node = node->GetNext() )
     {
-        wxMenu* menu = (wxMenu*) node->GetData();
+        wxMenu * const menu = (wxMenu *) node->GetData();
 
-        // shuffle filenames up
-        wxString buf;
-        for ( size_t j = i; j < m_fileHistory.GetCount(); j++ )
+        // shift filenames up
+        for ( size_t j = i; j < numFiles; j++ )
         {
-            buf.Printf(s_MRUEntryFormat, j + 1, m_fileHistory[j].c_str());
-            menu->SetLabel(m_idBase + j, buf);
+            menu->SetLabel(m_idBase + j, GetMRUEntryLabel(j, m_fileHistory[j]));
         }
-
-        node = node->GetNext();
 
         // delete the last menu item which is unused now
-        wxWindowID lastItemId = m_idBase + wx_truncate_cast(wxWindowID, m_fileHistory.GetCount());
-        if (menu->FindItem(lastItemId))
-        {
+        const wxWindowID lastItemId = m_idBase + numFiles;
+        if ( menu->FindItem(lastItemId) )
             menu->Delete(lastItemId);
-        }
 
         // delete the last separator too if no more files are left
-        if ( m_fileHistory.GetCount() == 0 )
+        if ( m_fileHistory.empty() )
         {
-            wxMenuItemList::compatibility_iterator nodeLast = menu->GetMenuItems().GetLast();
+            const wxMenuItemList::compatibility_iterator
+                nodeLast = menu->GetMenuItems().GetLast();
             if ( nodeLast )
             {
-                wxMenuItem *menuItem = nodeLast->GetData();
-                if ( menuItem->IsSeparator() )
-                {
-                    menu->Delete(menuItem);
-                }
-                //else: should we search backwards for the last separator?
+                wxMenuItem * const lastMenuItem = nodeLast->GetData();
+                if ( lastMenuItem->IsSeparator() )
+                    menu->Delete(lastMenuItem);
             }
             //else: menu is empty somehow
         }
@@ -2265,7 +2132,7 @@ void wxFileHistory::RemoveFileFromHistory(size_t i)
 
 void wxFileHistory::UseMenu(wxMenu *menu)
 {
-    if (!m_fileMenus.Member(menu))
+    if ( !m_fileMenus.Member(menu) )
         m_fileMenus.Append(menu);
 }
 
@@ -2312,46 +2179,29 @@ void wxFileHistory::Save(wxConfigBase& config)
 
 void wxFileHistory::AddFilesToMenu()
 {
-    if (m_fileHistory.GetCount() > 0)
-    {
-        wxList::compatibility_iterator node = m_fileMenus.GetFirst();
-        while (node)
-        {
-            wxMenu* menu = (wxMenu*) node->GetData();
-            if (menu->GetMenuItemCount())
-            {
-                menu->AppendSeparator();
-            }
+    if ( m_fileHistory.empty() )
+        return;
 
-            size_t i;
-            for (i = 0; i < m_fileHistory.GetCount(); i++)
-                {
-                    wxString buf;
-                buf.Printf(s_MRUEntryFormat, i+1, m_fileHistory[i].c_str());
-                    menu->Append(m_idBase+i, buf);
-                }
-            node = node->GetNext();
-        }
+    for ( wxList::compatibility_iterator node = m_fileMenus.GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        AddFilesToMenu((wxMenu *) node->GetData());
     }
 }
 
 void wxFileHistory::AddFilesToMenu(wxMenu* menu)
 {
-    if (m_fileHistory.GetCount() > 0)
-    {
-        if (menu->GetMenuItemCount())
-        {
-            menu->AppendSeparator();
-        }
+    if ( m_fileHistory.empty() )
+        return;
 
-        size_t i;
-        for (i = 0; i < m_fileHistory.GetCount(); i++)
-            {
-                wxString buf;
-            buf.Printf(s_MRUEntryFormat, i+1, m_fileHistory[i].c_str());
-                menu->Append(m_idBase+i, buf);
-            }
-        }
+    if ( menu->GetMenuItemCount() )
+        menu->AppendSeparator();
+
+    for ( size_t i = 0; i < m_fileHistory.GetCount(); i++ )
+    {
+        menu->Append(m_idBase + i, GetMRUEntryLabel(i, m_fileHistory[i]));
+    }
 }
 
 // ----------------------------------------------------------------------------

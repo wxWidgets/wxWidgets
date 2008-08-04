@@ -258,16 +258,18 @@ public:
         Constructor. Create a document manager instance dynamically near the
         start of your application before doing any document or view operations.
 
-        @a flags is currently unused.
-
         If @a initialize is @true, the Initialize() function will be called to
         create a default history list object. If you derive from wxDocManager,
         you may wish to call the base constructor with @false, and then call
         Initialize() in your own constructor, to allow your own Initialize() or
         OnCreateFileHistory functions to be called.
+
+        @param flags
+            Currently unused.
+        @param initialize
+            Indicates whether Initialize() should be called by this ctor.
     */
-    wxDocManager(long flags = wxDEFAULT_DOCMAN_FLAGS,
-                 bool initialize = true);
+    wxDocManager(long flags = 0, bool initialize = true);
 
     /**
         Destructor.
@@ -301,25 +303,42 @@ public:
     bool CloseDocuments(bool force = true);
 
     /**
-        Creates a new document in a manner determined by the @a flags
-        parameter, which can be:
+        Creates a new document.
 
-        - wxDOC_NEW - Creates a fresh document.
-        - wxDOC_SILENT - Silently loads the given document file.
+        This function can either create a document corresponding to a new
+        file or to an already existing one depending on whether @c wxDOC_NEW is
+        specified in the @a flags.
 
-        If wxDOC_NEW is present, a new document will be created and returned,
-        possibly after asking the user for a template to use if there is more
-        than one document template. If wxDOC_SILENT is present, a new document
-        will be created and the given file loaded into it. If neither of these
-        flags is present, the user will be presented with a file selector for
-        the file to load, and the template to use will be determined by the
-        extension (Windows) or by popping up a template choice list (other
-        platforms).
+        By default, this function asks the user for the type of document to
+        open and the path to its file if it's not specified, i.e. if @a path is
+        empty. Specifying @c wxDOC_SILENT flag suppresses any prompts and means
+        that the @a path must be non-empty and there must be a registered
+        document template handling the extension of this file, otherwise a
+        warning message is logged and the function returns @NULL. Notice that
+        @c wxDOC_SILENT can be combined with @c wxDOC_NEW, however in this case
+        the @a path must still be specified, even if the file with this path
+        typically won't exist.
 
-        If the maximum number of documents has been reached, this function will
-        delete the oldest currently loaded document before creating a new one.
+        Finally notice that if this document manager was configured to allow
+        only a limited number of simultaneously opened documents using
+        SetMaxDocsOpen(), this function will try to close the oldest existing
+        document if this number was reached before creating a new document.
+        And if closing the old document fails (e.g. because it was vetoed by
+        user), this function fails as well.
+
+        @param path
+            Path to a file or an empty string. If the path is empty, the user
+            will be asked to select it (thus, this is incompatible with the use
+            of @c wxDOC_SILENT). The file should exist unless @a flags includes
+            @c wxDOC_NEW.
+        @param flags
+            By default, none. May include @c wxDOC_NEW to indicate that the new
+            document corresponds to a new file and not an existing one and
+            @c wxDOC_SILENT to suppress any dialogs asking the user about the
+            file path and type.
+        @return a new document object or @NULL on failure.
     */
-    wxDocument* CreateDocument(const wxString& path, long flags);
+    wxDocument *CreateDocument(const wxString& path, long flags = 0);
 
     /**
         Creates a new view for the given document. If more than one view is
@@ -559,11 +578,12 @@ public:
 
     /**
         Sets the maximum number of documents that can be open at a time. By
-        default, this is 10,000. If you set it to 1, existing documents will be
-        saved and deleted when the user tries to open or create a new one
-        (similar to the behaviour of Windows Write, for example). Allowing
-        multiple documents gives behaviour more akin to MS Word and other
-        Multiple Document Interface applications.
+        default, this is @c INT_MAX, i.e. the number of documents is unlimited.
+        If you set it to 1, existing documents will be saved and deleted when
+        the user tries to open or create a new one (similar to the behaviour of
+        Windows Write, for example). Allowing multiple documents gives
+        behaviour more akin to MS Word and other Multiple Document Interface
+        applications.
     */
     void SetMaxDocsOpen(int n);
 
