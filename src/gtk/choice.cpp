@@ -350,7 +350,7 @@ wxSize wxChoice::DoGetBestSize() const
     // in the combobox
     if ( m_widget )
     {
-        ret.x = 60;  // start with something "sensible"
+        ret.x = GetCount() > 0 ? 0 : 60;  // start with something "sensible"
         int width;
         unsigned int count = GetCount();
         for ( unsigned int n = 0; n < count; n++ )
