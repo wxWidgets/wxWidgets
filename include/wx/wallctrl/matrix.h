@@ -1,6 +1,7 @@
 // TODO: Eleminate vectors
 #include <vector>
 
+// WX_DEFINE_ARRAY_PTR( , );
 typedef std::vector <std::vector <float> > MatrixType;
 typedef std::vector <float> VectorType;
 

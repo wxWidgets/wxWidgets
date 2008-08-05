@@ -15,6 +15,7 @@ IMPLEMENT_CLASS(wxWallCtrlBitmapSource, wxWallCtrlDataSource)
 
 wxWallCtrlBitmapSource::wxWallCtrlBitmapSource(void)
 {
+	m_dataChanged = false;
 }
 
 wxWallCtrlBitmapSource::~wxWallCtrlBitmapSource(void)
@@ -42,25 +43,37 @@ bool wxWallCtrlBitmapSource::RenderItem(const wxWallCtrlItemID& itemID, wxDC& dc
 
 wxBitmap wxWallCtrlBitmapSource::GetBitmap(const wxWallCtrlItemID& itemID )
 {
-	// TODO: Validate ItemID
-	return bitmaps[itemID];
+	if (m_bitmaps.count(itemID) == 0)
+	{
+		// TODO: Flag an error
+		wxBitmap invalid;
+		return invalid;
+	}
+	return m_bitmaps[itemID];
 }
 
 bool wxWallCtrlBitmapSource::GetItemInfo(const wxWallCtrlItemID& itemID, wxWallCtrlItem& info )
 {
-	// TODO: Validate ItemID
-	info.size.SetHeight(bitmaps[itemID].GetHeight());
-	info.size.SetWidth(bitmaps[itemID].GetWidth());
+	if (m_bitmaps.count(itemID) == 0)
+	{
+		return false;
+	}
+	info.size.SetHeight(m_bitmaps[itemID].GetHeight());
+	info.size.SetWidth(m_bitmaps[itemID].GetWidth());
 	return true;
 }
 
-unsigned wxWallCtrlBitmapSource::GetCount()
+unsigned wxWallCtrlBitmapSource::GetCount() const
 {
-	return bitmaps.size();
+		int x = m_bitmaps.size();
+	return m_bitmaps.size();
 }
 
 void wxWallCtrlBitmapSource::AppendBitmap( wxBitmap bitmap )
 {
 	// Add the bitmap to the collection and assign it an incremental ID
-	bitmaps[bitmaps.size()] = bitmap;
+	m_bitmaps[m_bitmaps.size()] = bitmap;
+
+	// Flag that data has changed
+	DataChanged();
 }

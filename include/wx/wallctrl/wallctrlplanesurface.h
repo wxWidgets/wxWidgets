@@ -19,6 +19,8 @@
 #include <string>
 #define BYTES_PER_PIXEL 4
 
+class wxWallCtrlLoadingThread;
+
 // A map to hold the texture names for items that were previously cached
 WX_DECLARE_HASH_MAP(int, int, wxIntegerHash, wxIntegerEqual, Int2IntMap);
 
@@ -83,8 +85,6 @@ public:
 
 	// Render the surface with all its items
 	void Render(const wxSize & windowSize);
-
-
 
 	// Initialize OpenGL for first use
 	void InitializeGL();
@@ -156,6 +156,11 @@ public:
 			GetLayerHeight(layer));
 	}
 
+	bool NeedLoading() const
+	{
+		return m_loadingNeeded;
+	}
+
 	void LoadNextLayerItemTexture()
 	{
 		// TODO: We need to auto flag the m_loadingNeeded when no element is valid in the current layer
@@ -174,6 +179,12 @@ public:
 			m_currentLayerRect = GetLayerRect(m_currentLayer);
 			m_nextLayerItemPos.x = m_currentLayerRect.GetLeft();
 			m_nextLayerItemPos.y = m_currentLayerRect.GetTop();
+		}
+
+		if (m_currentLayer > m_maxLoadingLayers)
+		{
+			m_loadingNeeded = false;
+			return;
 		}
 
 		// How many invalid positions will we tolerate
@@ -217,6 +228,22 @@ public:
 		
 	}
 
+	void OnLoadingComplete()
+	{
+		m_loadingInProgress = false;
+	}
+
+	void CreateLoadingThread();
+
+	void DestroyLoadingThread();
+
+	unsigned GetMaxLoadingLayers() const
+	{
+		return m_maxLoadingLayers;
+	}
+
+	// Must be preceeded by a call to CreateLoadingThread
+	void RunLoadingThread();
 protected:
 	// Loads a texture from the DC into the supplied array
 	// Precondition: Texture must be at least Width * Height * BYTES_PER_PIXEL
@@ -232,7 +259,7 @@ protected:
 	// Returns true if the specified item has a loaded & cached texture
 	bool IsItemTextureLoaded(wxWallCtrlItemID itemID)
 	{
-		return (texturesCache.find( itemID ) != texturesCache.end());
+		return (m_texturesCache.find( itemID ) != m_texturesCache.end());
 	}
 
 	// Returns true if the specified coordinates make sense
@@ -353,8 +380,12 @@ private:
 	bool m_loadingNeeded;			// True when we need to load more items and cache them
 	int m_renderCount;				// Used to load textures
 	int m_rendersBeforeTextureLoad;	// The value after which an attempt to load a new texture will be made
+	unsigned m_maxLoadingLayers;	// The max number of layers to pre-load around the currently selected item
 
-	Int2IntMap texturesCache;
+	Int2IntMap m_texturesCache;		// Caches the IDs of loaded textures
+
+	wxWallCtrlLoadingThread * m_loaderThread;	// This is the texture loading thread
+	bool m_loadingInProgress;
 
 	// The dimensions of each item as fractions of the unit size
 	float m_itemWidth;
@@ -388,6 +419,50 @@ private:
 	int m_selectedIndex;
 	float m_selectionMargin;
 	float m_selectionDepth;
+
+	// Synchronization
+	wxCriticalSection m_texturesCS;	// This CS guards the textures
+
+};
+
+// TODO: Move this class out
+class wxWallCtrlLoadingThread: public wxThread
+{
+public:
+	wxWallCtrlLoadingThread(wxWallCtrlPlaneSurface * surface): m_surface(surface)
+	{		
+	};
+	// thread execution starts here
+	virtual void *Entry()
+	{
+		while (m_surface->NeedLoading())
+		{
+			// Load one item
+			m_surface->LoadNextLayerItemTexture();
+			
+			// See if we should die now
+			if (TestDestroy())
+			{
+				// Loading is not complete, but we must stop here
+				return NULL;
+			}
+		}
+		m_surface->OnLoadingComplete();
+		return NULL;
+	}
+
+	// called when the thread exits - whether it terminates normally or is
+	// stopped with Delete() (but not when it is Kill()ed!)
+	virtual void OnExit()
+	{
+		// Nothing here
+	}
+
+private:
+	// Pointer to the surface where loading will occur
+	//wxWallCtrlSurface * m_surface;
+	// TODO: Use the abstract class instead
+	wxWallCtrlPlaneSurface * m_surface;
 
 };
 

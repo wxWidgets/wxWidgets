@@ -15,6 +15,7 @@ IMPLEMENT_CLASS(wxWallCtrlPlaneSurface, wxWallCtrlSurface)
 
 wxWallCtrlPlaneSurface::~wxWallCtrlPlaneSurface(void)
 {
+	DestroyLoadingThread();
 }
 
 wxWallCtrlPlaneSurface::wxWallCtrlPlaneSurface()
@@ -41,6 +42,9 @@ wxWallCtrlPlaneSurface::wxWallCtrlPlaneSurface()
 	m_loadingNeeded = true;
 	m_rendersBeforeTextureLoad = 25;
 	m_renderCount = m_rendersBeforeTextureLoad;
+
+	m_loaderThread = NULL;
+	m_loadingInProgress = false;
 
 	// Set the near and far limits
 	// TODO: The far limit may be a function of the max number of visible item
@@ -117,11 +121,14 @@ void wxWallCtrlPlaneSurface::Render(const wxSize & windowSize)
 
 GLuint wxWallCtrlPlaneSurface::GetItemTexture( wxWallCtrlItemID itemID )
 {
+	// Only one thread can get here at any point in time
+	wxCriticalSectionLocker enter(m_texturesCS);
+
 	// If that texture was previously loaded
-	if (texturesCache.find( itemID ) != texturesCache.end())
+	if (m_texturesCache.find( itemID ) != m_texturesCache.end())
 	{
 		// Then just return its cached name without reloading it
-		return texturesCache[itemID];
+		return m_texturesCache[itemID];
 	}
 
 	// We will use the itemID as the texture identifier since item names are guaranteed to be unique
@@ -194,7 +201,7 @@ GLuint wxWallCtrlPlaneSurface::GetItemTexture( wxWallCtrlItemID itemID )
 	delete [] tex;
 
 	// Cache the texture name before returning it
-	return texturesCache[itemID]=texName;
+	return m_texturesCache[itemID]=texName;
 }
 
 void wxWallCtrlPlaneSurface::InitializeGL()
@@ -230,21 +237,66 @@ unsigned wxWallCtrlPlaneSurface::GetItemIndex( wxPoint position ) const
 
 void wxWallCtrlPlaneSurface::RenderItems()
 {
+	bool useThreads = false; 
+
 	if (!m_dataSource)
 	{
 		// TODO: Signal an error here
 		return;
 	}
 
-	m_renderCount--;
+	// TODO: There might be a better place for this whole code chunk
+	if ((m_dataSource->HasDataChanged() && !m_loadingInProgress))
+	{
+		if (m_dataSource->GetCount() > 0)
+		{
+			// If we have a data source with data, query its first item
+			m_firstItem = m_dataSource->GetFirstItem();
+			Seek(m_firstItem);
+		}
+
+		if (m_rowsCount == 0)
+		{
+			// We have nothing, so stop now
+			return;
+		}
+
+		// Deduce the columns count. We need this each render loop since the bitmaps can change
+		m_colsCount = m_dataSource->GetCount()/m_rowsCount + (m_dataSource->GetCount()%m_rowsCount == 0?0:1);
+
+		if (m_colsCount == 0)
+		{
+			// We have nothing, so stop now
+			return;
+		}
+		
+		// There is new data and nobody is loading it
+		m_loadingInProgress = true;
+		m_loadingNeeded = true;
+
+		m_maxLoadingLayers = wxMax(m_dataSource->GetCount()/m_rowsCount+1, m_dataSource->GetCount()/m_colsCount+1);
+
+		if (useThreads)
+		{
+			CreateLoadingThread();
+			RunLoadingThread();
+		}
+	}
+	if (!useThreads)
+	{
+		// Deduce the columns count. We need this each render loop since the bitmaps can change
+		m_colsCount = m_dataSource->GetCount()/m_rowsCount + (m_dataSource->GetCount()%m_rowsCount == 0?0:1);
+		LoadNextLayerItemTexture();
+	}
+
+/*	m_renderCount--;
 	if (m_renderCount <= 0)
 	{
 		m_rowsCount = m_rendersBeforeTextureLoad;
 		LoadNextLayerItemTexture();
 	}
+*/
 
-	// Deduce the columns count. We need this each render loop since the bitmaps can change
-	m_colsCount = m_dataSource->GetCount()/m_rowsCount + (m_dataSource->GetCount()%m_rowsCount == 0?0:1);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_TEXTURE_2D);
@@ -605,10 +657,19 @@ void wxWallCtrlPlaneSurface::SetDataSource( wxWallCtrlDataSource * dataSource )
 {
 	wxWallCtrlSurface::SetDataSource(dataSource);
 
-	// If we have a data source, query its first item
 	if (dataSource)
 	{
-		m_firstItem = dataSource->GetFirstItem();
+		
+		
+		// Update the columns
+		m_colsCount = m_dataSource->GetCount()/m_rowsCount + (m_dataSource->GetCount()%m_rowsCount == 0?0:1);
+
+		if (dataSource->GetCount() > 0)
+		{
+			// If we have a data source with data, query its first item
+			m_firstItem = dataSource->GetFirstItem();
+			Seek(m_firstItem);
+		}
 	}
 }
 
@@ -680,5 +741,53 @@ void wxWallCtrlPlaneSurface::SeekDown()
 	}
 	Seek(GetItemIndex(Pos));
 
+
+}
+
+void wxWallCtrlPlaneSurface::CreateLoadingThread()
+{
+	// Destroy the previous thread if any
+	DestroyLoadingThread();
+
+	// Start a loading thread
+	m_loaderThread = new wxWallCtrlLoadingThread(this);
+
+	if ( m_loaderThread->Create() != wxTHREAD_NO_ERROR )
+	{
+		wxLogError(wxT("Can't create texture loading thread!"));
+	}
+}
+
+
+void wxWallCtrlPlaneSurface::RunLoadingThread()
+{
+	if (!m_loaderThread)
+	{
+		// TODO: Signal an error, we should never get to this point
+		return;
+	}
+	if (m_loaderThread->Run() != wxTHREAD_NO_ERROR )
+	{
+		wxLogError(wxT("Can't start thread!"));
+	}
+}
+
+void wxWallCtrlPlaneSurface::DestroyLoadingThread()
+{
+	if (m_loaderThread)
+	{
+		m_loaderThread->Kill();
+		delete (m_loaderThread);
+		// TODO: We should destroy the thread more gracefuly, but something is wrong here
+/*		if (!m_loaderThread->IsAlive())
+		{
+			m_loaderThread->Delete();
+		}
+		while (m_loaderThread->IsAlive())
+		{
+			// Just wait for the thread to exit
+		}
+		delete (m_loaderThread);*/
+	}
 
 }

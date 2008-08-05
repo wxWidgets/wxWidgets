@@ -37,7 +37,31 @@ public:
 	virtual bool GetItemInfo(const wxWallCtrlItemID& itemID, wxWallCtrlItem& info);
 
 	// Returns the number of items available in the source
-	virtual unsigned GetCount();
+	virtual unsigned GetCount() const;
+
+	// Returns true if data source data changed since last call to HasDataChanged()
+	virtual bool HasDataChanged()
+	{
+		if (m_dataChanged)
+		{
+			m_dataChanged = false;
+			return true;
+		}
+		
+		return false;
+	}
+
+	// Returns the starting index of the sequence
+	virtual unsigned GetFirstItem() const
+	{
+		return 0;
+	}
+
+	// Flags that data has changed
+	virtual void DataChanged()
+	{
+		m_dataChanged = true;
+	}
 
 	// Appends a bitmap at the end of the list and give it an ordered id
 	void AppendBitmap(wxBitmap bitmap);
@@ -45,7 +69,10 @@ public:
 private:
 	//WX_DEFINE_ARRAY(wxBitmap, ArrayOfBitmaps);
 
-	BitmapMap bitmaps;
+	BitmapMap m_bitmaps;
 	wxBitmap tempTexture;
+
+	// This flag is set to true whenever anything changes in the data
+	bool m_dataChanged;
 };
 #endif

@@ -42,13 +42,19 @@ public:
 	virtual wxWallCtrlRenderType GetRenderType(const wxWallCtrlItemID& itemId, const wxSize& availableResolution, wxSize& desiredResolution)=0;
 
 	virtual bool RenderItem(const wxWallCtrlItemID& itemId, wxDC& dc, const wxSize& dcSize)=0;
-	virtual wxBitmap wxWallCtrlDataSource::GetBitmap(const wxWallCtrlItemID& itemId)=0;
-	virtual bool GetItemInfo(const wxWallCtrlItemID& itemId, wxWallCtrlItem& info)=0;
+	virtual wxBitmap wxWallCtrlDataSource::GetBitmap(const wxWallCtrlItemID& itemId) =0;
+	virtual bool GetItemInfo(const wxWallCtrlItemID& itemId, wxWallCtrlItem& info)  =0;
+
+	// Returns true if data source data changed since last call to HasDataChanged()
+	virtual bool HasDataChanged() =0;
+
+	// Flags that data has changed
+	virtual void DataChanged()=0;
 
 	// Returns the number of the items in the source (those that are accessible)
-	virtual unsigned GetCount()=0;
+	virtual unsigned GetCount() const =0;
 
 	// Returns the starting index of the sequence
-	virtual unsigned GetFirstItem();
+	virtual unsigned GetFirstItem() const = 0;
 };
 #endif

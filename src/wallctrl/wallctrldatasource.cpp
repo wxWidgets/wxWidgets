@@ -20,8 +20,3 @@ wxWallCtrlDataSource::wxWallCtrlDataSource(void)
 wxWallCtrlDataSource::~wxWallCtrlDataSource(void)
 {
 }
-
-unsigned wxWallCtrlDataSource::GetFirstItem()
-{
-	return 0;
-}
