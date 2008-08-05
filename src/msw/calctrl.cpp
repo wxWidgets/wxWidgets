@@ -329,12 +329,20 @@ void wxCalendarCtrl::Mark(size_t day, bool mark)
 
 void wxCalendarCtrl::UpdateMarks()
 {
-    MONTHDAYSTATE states[3];
+    // we show only one full month but there can be some days from the month
+    // before it and from the one after it so days from 3 different months can
+    // be partially shown
+    MONTHDAYSTATE states[3] = { 0 };
     const int nMonths = MonthCal_GetMonthRange(GetHwnd(), GMR_DAYSTATE, NULL);
-    wxCHECK_RET( nMonths <= (int)WXSIZEOF(states), "unexpected months range" );
 
-    for ( int i = 0; i < nMonths; i++ )
-        states[i] = m_marks;
+    // although in principle the calendar might not show any days from the
+    // preceding months, it seems like it always does, consider e.g. Feb 2010
+    // which starts on Monday and ends on Sunday and so could fit on 4 lines
+    // without showing any subsequent months -- the standard control still
+    // shows it on 6 lines and the number of visible months is still 3
+    wxCHECK_RET( nMonths == (int)WXSIZEOF(states), "unexpected months range" );
+
+    states[1] = m_marks; // the fully visible month is the one in the middle
 
     if ( !MonthCal_SetDayState(GetHwnd(), nMonths, states) )
     {
