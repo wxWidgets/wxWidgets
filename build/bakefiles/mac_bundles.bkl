@@ -15,10 +15,10 @@
         `echo $(DOLLAR)(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`
     </set>
     
-    <set var="BUNDLE_PLIST">
+    <set var="BUNDLE_PLIST" overwrite="0">
         $(TOP_SRCDIR)src/osx/carbon/Info.plist.in
     </set>
-    <set var="BUNDLE_ICONS">
+    <set var="BUNDLE_ICONS" overwrite="0">
         $(TOP_SRCDIR)src/osx/carbon/wxmac.icns
     </set>
 
@@ -59,7 +59,7 @@
                 ln -f $(ref("__targetdir",id))$(ref("__targetname",id)) $(BUNDLE)/MacOS/$(id)
 
                 <!-- ditto wxWidgets resources and icons: -->
-                cp -f $(BUNDLE_ICONS) $(BUNDLE)/Resources/wxmac.icns
+                cp -f $(BUNDLE_ICONS) $(BUNDLE)/Resources
             </command>            
         </modify-target>
         
