@@ -45,6 +45,7 @@ public:
     virtual bool EnableMonthChange(bool enable = true);
 
     virtual void Mark(size_t day, bool mark);
+    virtual void SetHoliday(size_t day);
 
     virtual wxCalendarHitTestResult HitTest(const wxPoint& pos,
                                             wxDateTime *date = NULL,
@@ -63,7 +64,7 @@ protected:
     void MSWOnDoubleClick(wxMouseEvent& event);
 
 private:
-    void Init() { m_marks = 0; }
+    void Init();
 
     // bring the control in sync with m_marks
     void UpdateMarks();
@@ -71,6 +72,12 @@ private:
     // set first day of week in the control to correspond to our
     // wxCAL_MONDAY_FIRST flag
     void UpdateFirstDayOfWeek();
+
+    // reset holiday information
+    virtual void ResetHolidayAttrs() { m_holidays = 0; }
+
+    // redisplay holidays
+    virtual void RefreshHolidays() { UpdateMarks(); }
 
 
     // current date, we need to store it instead of simply retrieving it from
@@ -80,6 +87,9 @@ private:
 
     // bit field containing the state (marked or not) of all days in the month
     wxUint32 m_marks;
+
+    // the same but indicating whether a day is a holiday or not
+    wxUint32 m_holidays;
 
 
     DECLARE_DYNAMIC_CLASS(wxCalendarCtrl)

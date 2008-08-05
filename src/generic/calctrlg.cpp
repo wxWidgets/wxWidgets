@@ -1760,45 +1760,6 @@ void wxGenericCalendarCtrl::OnChar(wxKeyEvent& event)
 // holidays handling
 // ----------------------------------------------------------------------------
 
-void wxGenericCalendarCtrl::EnableHolidayDisplay(bool display)
-{
-    long style = GetWindowStyle();
-    if ( display )
-        style |= wxCAL_SHOW_HOLIDAYS;
-    else
-        style &= ~wxCAL_SHOW_HOLIDAYS;
-
-    SetWindowStyle(style);
-
-    if ( display )
-        SetHolidayAttrs();
-    else
-        ResetHolidayAttrs();
-
-    Refresh();
-}
-
-void wxGenericCalendarCtrl::SetHolidayAttrs()
-{
-    if ( GetWindowStyle() & wxCAL_SHOW_HOLIDAYS )
-    {
-        ResetHolidayAttrs();
-
-        wxDateTime::Tm tm = m_date.GetTm();
-        wxDateTime dtStart(1, tm.mon, tm.year),
-                   dtEnd = dtStart.GetLastMonthDay();
-
-        wxDateTimeArray hol;
-        wxDateTimeHolidayAuthority::GetHolidaysInRange(dtStart, dtEnd, hol);
-
-        size_t count = hol.GetCount();
-        for ( size_t n = 0; n < count; n++ )
-        {
-            SetHoliday(hol[n].GetDay());
-        }
-    }
-}
-
 void wxGenericCalendarCtrl::SetHoliday(size_t day)
 {
     wxCHECK_RET( day > 0 && day < 32, _T("invalid day in SetHoliday") );

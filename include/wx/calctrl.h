@@ -259,12 +259,13 @@ public:
 
     // holidays support
     //
-    // currently all functions in this section are implemented in the generic
-    // version of the control only and are simply ignored by native ones
+    // currently only the generic version implements all functions in this
+    // section; wxMSW implements simple support for holidays (they can be
+    // just enabled or disabled) and wxGTK doesn't support them at all
 
     // equivalent to changing wxCAL_SHOW_HOLIDAYS flag but should be called
     // instead of just changing it
-    virtual void EnableHolidayDisplay(bool WXUNUSED(display) = true) { }
+    virtual void EnableHolidayDisplay(bool display = true);
 
     // set/get the colours to use for holidays (if they're enabled)
     virtual void SetHolidayColours(const wxColour& WXUNUSED(colFg),
@@ -313,7 +314,22 @@ protected:
     // generate all the events for the selection change from dateOld to current
     // date: SEL_CHANGED, PAGE_CHANGED if necessary and also one of (deprecated)
     // YEAR/MONTH/DAY_CHANGED ones
-    void GenerateAllChangeEvents(const wxDateTime& dateOld);
+    //
+    // returns true if page changed event was generated, false if the new date
+    // is still in the same month as before
+    bool GenerateAllChangeEvents(const wxDateTime& dateOld);
+
+    // call SetHoliday() for all holidays in the current month
+    //
+    // should be called on month change, does nothing if wxCAL_SHOW_HOLIDAYS is
+    // not set and returns false in this case, true if we do show them
+    bool SetHolidayAttrs();
+
+    // called by SetHolidayAttrs() to forget the previously set holidays
+    virtual void ResetHolidayAttrs() { }
+
+    // called by EnableHolidayDisplay()
+    virtual void RefreshHolidays() { }
 };
 
 // ----------------------------------------------------------------------------

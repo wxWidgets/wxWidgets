@@ -44,6 +44,12 @@ IMPLEMENT_DYNAMIC_CLASS(wxCalendarCtrl, wxControl)
 // wxCalendarCtrl creation
 // ----------------------------------------------------------------------------
 
+void wxCalendarCtrl::Init()
+{
+    m_marks =
+    m_holidays = 0;
+}
+
 bool
 wxCalendarCtrl::Create(wxWindow *parent,
                        wxWindowID id,
@@ -95,7 +101,8 @@ wxCalendarCtrl::Create(wxWindow *parent,
 
     SetDate(dt.IsValid() ? dt : wxDateTime::Today());
 
-    UpdateMarks();
+    if ( SetHolidayAttrs() )
+        UpdateMarks();
 
     Connect(wxEVT_LEFT_DOWN,
             wxMouseEventHandler(wxCalendarCtrl::MSWOnClick));
@@ -327,6 +334,13 @@ void wxCalendarCtrl::Mark(size_t day, bool mark)
     UpdateMarks();
 }
 
+void wxCalendarCtrl::SetHoliday(size_t day)
+{
+    wxCHECK_RET( day > 0 && day < 32, "invalid day" );
+
+    m_holidays |= 1 << (day - 1);
+}
+
 void wxCalendarCtrl::UpdateMarks()
 {
     // we show only one full month but there can be some days from the month
@@ -342,7 +356,8 @@ void wxCalendarCtrl::UpdateMarks()
     // shows it on 6 lines and the number of visible months is still 3
     wxCHECK_RET( nMonths == (int)WXSIZEOF(states), "unexpected months range" );
 
-    states[1] = m_marks; // the fully visible month is the one in the middle
+    // the fully visible month is the one in the middle
+    states[1] = m_marks | m_holidays;
 
     if ( !MonthCal_SetDayState(GetHwnd(), nMonths, states) )
     {
@@ -377,7 +392,13 @@ bool wxCalendarCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 // change anything -- filter it out
                 if ( m_date != dateOld )
                 {
-                    GenerateAllChangeEvents(dateOld);
+                    if ( GenerateAllChangeEvents(dateOld) )
+                    {
+                        // month changed, need to update the holidays if we use
+                        // them
+                        if ( SetHolidayAttrs() )
+                            UpdateMarks();
+                    }
                 }
             }
             break;
@@ -387,7 +408,7 @@ bool wxCalendarCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 const NMDAYSTATE * const ds = (NMDAYSTATE *)lParam;
                 for ( int i = 0; i < ds->cDayState; i++ )
                 {
-                    ds->prgDayState[i] = m_marks;
+                    ds->prgDayState[i] = m_marks | m_holidays;
                 }
             }
             break;

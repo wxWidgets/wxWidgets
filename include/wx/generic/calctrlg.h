@@ -84,9 +84,6 @@ public:
     // corresponds to wxCAL_NO_YEAR_CHANGE bit, deprecated, generic only
     void EnableYearChange(bool enable = true);
 
-    // corresponds to wxCAL_SHOW_HOLIDAYS bit, generic only
-    virtual void EnableHolidayDisplay(bool display = true);
-
 
     // customization
     // -------------
@@ -215,12 +212,6 @@ private:
     // change the date inside the same month/year
     void ChangeDay(const wxDateTime& date);
 
-    // set the attributes for the holidays if needed
-    void SetHolidayAttrs();
-
-    // reset all holidays
-    void ResetHolidayAttrs();
-
     // deprecated
     bool AllowYearChange() const
     {
@@ -240,6 +231,9 @@ public:
     wxControl *GetYearControl() const;
 
 private:
+    virtual void ResetHolidayAttrs();
+    virtual void RefreshHolidays() { Refresh(); }
+
     // OnPaint helper-methods
 
     // Highlight the [fromdate : todate] range using pen and brush

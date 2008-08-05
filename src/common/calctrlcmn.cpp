@@ -60,14 +60,20 @@ bool wxCalendarCtrlBase::EnableMonthChange(bool enable)
     return true;
 }
 
-void wxCalendarCtrlBase::GenerateAllChangeEvents(const wxDateTime& dateOld)
+bool wxCalendarCtrlBase::GenerateAllChangeEvents(const wxDateTime& dateOld)
 {
     const wxDateTime::Tm tm1 = dateOld.GetTm(),
                          tm2 = GetDate().GetTm();
 
+    bool pageChanged = false;
+
     GenerateEvent(wxEVT_CALENDAR_SEL_CHANGED);
     if ( tm1.year != tm2.year || tm1.mon != tm2.mon )
+    {
         GenerateEvent(wxEVT_CALENDAR_PAGE_CHANGED);
+
+        pageChanged = true;
+    }
 
     // send also one of the deprecated events
     if ( tm1.year != tm2.year )
@@ -76,6 +82,52 @@ void wxCalendarCtrlBase::GenerateAllChangeEvents(const wxDateTime& dateOld)
         GenerateEvent(wxEVT_CALENDAR_MONTH_CHANGED);
     else
         GenerateEvent(wxEVT_CALENDAR_DAY_CHANGED);
+
+    return pageChanged;
+}
+
+void wxCalendarCtrlBase::EnableHolidayDisplay(bool display)
+{
+    long style = GetWindowStyle();
+    if ( display )
+        style |= wxCAL_SHOW_HOLIDAYS;
+    else
+        style &= ~wxCAL_SHOW_HOLIDAYS;
+
+    if ( style == GetWindowStyle() )
+        return;
+
+    SetWindowStyle(style);
+
+    if ( display )
+        SetHolidayAttrs();
+    else
+        ResetHolidayAttrs();
+
+    RefreshHolidays();
+}
+
+bool wxCalendarCtrlBase::SetHolidayAttrs()
+{
+    if ( !HasFlag(wxCAL_SHOW_HOLIDAYS) )
+        return false;
+
+    ResetHolidayAttrs();
+
+    wxDateTime::Tm tm = GetDate().GetTm();
+    wxDateTime dtStart(1, tm.mon, tm.year),
+               dtEnd = dtStart.GetLastMonthDay();
+
+    wxDateTimeArray hol;
+    wxDateTimeHolidayAuthority::GetHolidaysInRange(dtStart, dtEnd, hol);
+
+    const size_t count = hol.GetCount();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        SetHoliday(hol[n].GetDay());
+    }
+
+    return true;
 }
 
 #endif // wxUSE_CALENDARCTRL
