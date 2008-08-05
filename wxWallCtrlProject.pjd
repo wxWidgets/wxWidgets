@@ -88,7 +88,7 @@
     <string name="app_class_name">"Application"</string>
     <bool name="generate_app_class">0</bool>
     <string name="external_symbol_filenames">""</string>
-    <string name="configuration">"VC++ Project Unicode Release"</string>
+    <string name="configuration">"VC++ Project Unicode Debug"</string>
     <string name="source_encoding">"iso-8859-1"</string>
     <string name="xrc_encoding">"utf-8"</string>
     <string name="project_encoding">"utf-8"</string>
@@ -519,6 +519,14 @@
             <string name="proxy-type">"wbBoxSizerProxy"</string>
             <string name="proxy-Orientation">"Horizontal"</string>
             <string name="proxy-Member variable name">""</string>
+            <string name="proxy-AlignH">"Centre"</string>
+            <string name="proxy-AlignV">"Centre"</string>
+            <long name="proxy-Stretch factor">0</long>
+            <long name="proxy-Border">5</long>
+            <bool name="proxy-wxLEFT">1</bool>
+            <bool name="proxy-wxRIGHT">1</bool>
+            <bool name="proxy-wxTOP">1</bool>
+            <bool name="proxy-wxBOTTOM">1</bool>
             <bool name="proxy-wxSHAPED">0</bool>
             <bool name="proxy-wxADJUST_MINSIZE">0</bool>
             <bool name="proxy-wxFIXED_MINSIZE">0</bool>
@@ -810,51 +818,15 @@
           <string name="language">""</string>
         </document>
         <document>
-          <string name="title">"wallctrldefaultplanenavigation.cpp"</string>
+          <string name="title">"wallctrldefaultplanenavigator.cpp"</string>
           <string name="type">"source-editor-document"</string>
-          <string name="filename">"src/wallctrl/wallctrldefaultplanenavigation.cpp"</string>
+          <string name="filename">"src/wallctrl/wallctrldefaultplanenavigator.cpp"</string>
           <string name="icon-name">"source-editor"</string>
           <long name="is-transient">0</long>
           <long name="owns-file">0</long>
           <long name="title-mode">1</long>
           <long name="locked">0</long>
-          <string name="created">"30/6/2008"</string>
-          <string name="language">""</string>
-        </document>
-        <document>
-          <string name="title">"wallctrldefaultplanenavigation.h"</string>
-          <string name="type">"source-editor-document"</string>
-          <string name="filename">"include/wx/wallctrl/wallctrldefaultplanenavigation.h"</string>
-          <string name="icon-name">"source-editor"</string>
-          <long name="is-transient">0</long>
-          <long name="owns-file">0</long>
-          <long name="title-mode">1</long>
-          <long name="locked">0</long>
-          <string name="created">"23/7/2008"</string>
-          <string name="language">""</string>
-        </document>
-        <document>
-          <string name="title">"wallctrlnavigation.cpp"</string>
-          <string name="type">"source-editor-document"</string>
-          <string name="filename">"src/wallctrl/wallctrlnavigation.cpp"</string>
-          <string name="icon-name">"source-editor"</string>
-          <long name="is-transient">0</long>
-          <long name="owns-file">0</long>
-          <long name="title-mode">1</long>
-          <long name="locked">0</long>
-          <string name="created">"30/6/2008"</string>
-          <string name="language">""</string>
-        </document>
-        <document>
-          <string name="title">"wallctrlnavigation.h"</string>
-          <string name="type">"source-editor-document"</string>
-          <string name="filename">"include/wx/wallctrl/wallctrlnavigation.h"</string>
-          <string name="icon-name">"source-editor"</string>
-          <long name="is-transient">0</long>
-          <long name="owns-file">0</long>
-          <long name="title-mode">1</long>
-          <long name="locked">0</long>
-          <string name="created">"23/7/2008"</string>
+          <string name="created">"5/8/2008"</string>
           <string name="language">""</string>
         </document>
         <document>
@@ -879,6 +851,18 @@
           <long name="title-mode">1</long>
           <long name="locked">0</long>
           <string name="created">"23/7/2008"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"wallctrlnavigator.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"src/wallctrl/wallctrlnavigator.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"5/8/2008"</string>
           <string name="language">""</string>
         </document>
         <document>
