@@ -1007,7 +1007,7 @@ void wxWindowBase::AddChild(wxWindowBase *child)
     GetChildren().Append((wxWindow*)child);
     child->SetParent(this);
 
-    // adding a child while frozen will assert when thawn, so freeze it as if
+    // adding a child while frozen will assert when thawed, so freeze it as if
     // it had been already present when we were frozen
     if ( IsFrozen() && !child->IsTopLevel() )
         child->Freeze();
@@ -1019,7 +1019,10 @@ void wxWindowBase::RemoveChild(wxWindowBase *child)
 
     // removing a child while frozen may result in permanently frozen window
     // if used e.g. from Reparent(), so thaw it
-    if ( IsFrozen() && !child->IsTopLevel() )
+    //
+    // NB: IsTopLevel() doesn't return true any more when a TLW child is being
+    //     removed from its ~wxWindowBase, so check for IsBeingDeleted() too
+    if ( IsFrozen() && !child->IsBeingDeleted() && !child->IsTopLevel() )
         child->Thaw();
 
     GetChildren().DeleteObject((wxWindow *)child);
