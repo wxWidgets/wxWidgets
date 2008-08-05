@@ -665,10 +665,10 @@ WXDLLIMPEXP_BASE size_t wxCRT_StrftimeW(wchar_t *s, size_t max,
 inline size_t wxStrlen(const char *s) { return s ? wxCRT_StrlenA(s) : 0; }
 inline size_t wxStrlen(const wchar_t *s) { return s ? wxCRT_StrlenW(s) : 0; }
 #ifndef wxWCHAR_T_IS_WXCHAR16
-       size_t wxStrlen(const wxChar16 *s );
+       WXDLLIMPEXP_BASE size_t wxStrlen(const wxChar16 *s );
 #endif
 #ifndef wxWCHAR_T_IS_WXCHAR32
-       size_t wxStrlen(const wxChar32 *s );
+       WXDLLIMPEXP_BASE size_t wxStrlen(const wxChar32 *s );
 #endif
 #define wxWcslen wxCRT_StrlenW
 
@@ -677,10 +677,10 @@ inline size_t wxStrlen(const wchar_t *s) { return s ? wxCRT_StrlenW(s) : 0; }
 inline char* wxStrdup(const char *s) { return wxCRT_StrdupA(s); }
 inline wchar_t* wxStrdup(const wchar_t *s) { return wxCRT_StrdupW(s); }
 #ifndef wxWCHAR_T_IS_WXCHAR16
-       wxChar16* wxStrdup(const wxChar16* s);
+       WXDLLIMPEXP_BASE wxChar16* wxStrdup(const wxChar16* s);
 #endif
 #ifndef wxWCHAR_T_IS_WXCHAR32
-       wxChar32* wxStrdup(const wxChar32* s);
+       WXDLLIMPEXP_BASE wxChar32* wxStrdup(const wxChar32* s);
 #endif
 
 #endif /* __cplusplus */
