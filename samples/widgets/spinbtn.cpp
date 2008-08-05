@@ -42,7 +42,7 @@
 #include "wx/spinctrl.h"
 
 #include "wx/sizer.h"
-
+#include "wx/stattext.h"
 #include "widgets.h"
 
 #include "icons/spinbtn.xpm"
@@ -345,11 +345,18 @@ void SpinBtnWidgetsPage::CreateSpin()
                                          flags,
                                          m_min, m_max, val, 0.1);
 
+    // Add spacers, labels and spin controls to the sizer.
     m_sizerSpin->Add(0, 0, 1);
+    m_sizerSpin->Add(new wxStaticText(this, wxID_ANY, wxT("wxSpinButton")),
+                     0, wxALIGN_CENTRE | wxALL, 5);
     m_sizerSpin->Add(m_spinbtn, 0, wxALIGN_CENTRE | wxALL, 5);
     m_sizerSpin->Add(0, 0, 1);
+    m_sizerSpin->Add(new wxStaticText(this, wxID_ANY, wxT("wxSpinCtrl")),
+                     0, wxALIGN_CENTRE | wxALL, 5);
     m_sizerSpin->Add(m_spinctrl, 0, wxALIGN_CENTRE | wxALL, 5);
     m_sizerSpin->Add(0, 0, 1);
+    m_sizerSpin->Add(new wxStaticText(this, wxID_ANY, wxT("wxSpinCtrlDouble")),
+                     0, wxALIGN_CENTRE | wxALL, 5);
     m_sizerSpin->Add(m_spinctrldbl, 0, wxALIGN_CENTRE | wxALL, 5);
     m_sizerSpin->Add(0, 0, 1);
 
