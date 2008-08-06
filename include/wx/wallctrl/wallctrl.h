@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wallctrl.h
-// Purpose:     A wall control allows easier 3D navigation of data
+// Purpose:     A wall control that allows easier 3D navigation of visual data
 // Author:      Mokhtar M. Khorshid
 // Modified by: 
 // Created:     02/06/2008

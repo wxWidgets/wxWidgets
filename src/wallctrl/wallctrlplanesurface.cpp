@@ -285,18 +285,14 @@ void wxWallCtrlPlaneSurface::RenderItems()
 	if (!useThreads)
 	{
 		// Deduce the columns count. We need this each render loop since the bitmaps can change
-		m_colsCount = m_dataSource->GetCount()/m_rowsCount + (m_dataSource->GetCount()%m_rowsCount == 0?0:1);
-		LoadNextLayerItemTexture();
+		//m_colsCount = m_dataSource->GetCount()/m_rowsCount + (m_dataSource->GetCount()%m_rowsCount == 0?0:1);
+		m_renderCount--;
+		if (m_renderCount <= 0)
+		{
+			m_renderCount = m_rendersBeforeTextureLoad;
+			LoadNextLayerItemTexture();
+		}
 	}
-
-/*	m_renderCount--;
-	if (m_renderCount <= 0)
-	{
-		m_rowsCount = m_rendersBeforeTextureLoad;
-		LoadNextLayerItemTexture();
-	}
-*/
-
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_TEXTURE_2D);
@@ -790,4 +786,174 @@ void wxWallCtrlPlaneSurface::DestroyLoadingThread()
 		delete (m_loaderThread);*/
 	}
 
+}
+
+int wxWallCtrlPlaneSurface::GetLayerWidth( int layer ) const
+{
+	// We want the layers around a specific item
+	return 2*layer + 1;//m_scopeSize.GetWidth();
+}
+
+int wxWallCtrlPlaneSurface::GetLayerHeight( int layer ) const
+{
+	// We want the layers around a specific item
+	return 2*layer + 1;//m_scopeSize.GetHeight();
+}
+
+int wxWallCtrlPlaneSurface::GetLayerItemsCount( int layer ) const
+{
+	if (layer == 0)
+		return 1;
+	return 2*(GetLayerWidth(layer) + GetLayerHeight(layer))-4;
+}
+
+wxRect wxWallCtrlPlaneSurface::GetLayerRect( int layer ) const
+{
+	/*return wxRect (m_scopeOffsetX - 1,
+	m_scopeOffsetY - 1,
+	GetLayerWidth(layer),
+	GetLayerHeight(layer));*/
+	wxPoint pos = GetItemPosition(m_selectedIndex);
+	return wxRect (pos.x-layer,
+		pos.y-layer,
+		GetLayerWidth(layer),
+		GetLayerHeight(layer));
+}
+
+bool wxWallCtrlPlaneSurface::NeedLoading() const
+{
+	return m_loadingNeeded;
+}
+
+void wxWallCtrlPlaneSurface::LoadNextLayerItemTexture()
+{
+	// TODO: We need to auto flag the m_loadingNeeded when no element is valid in the current layer
+
+	// If we do not need to load, then stop
+	if (!m_loadingNeeded)
+	{
+		return;
+	}
+
+	// If we finished this layer, move to the next one
+	if (m_nextLayerItem >= GetLayerItemsCount(m_currentLayer))
+	{
+		m_currentLayer++;
+		m_nextLayerItem = 0;
+		m_currentLayerRect = GetLayerRect(m_currentLayer);
+		m_nextLayerItemPos.x = m_currentLayerRect.GetLeft();
+		m_nextLayerItemPos.y = m_currentLayerRect.GetTop();
+	}
+
+	if (m_currentLayer > m_maxLoadingLayers)
+	{
+		m_loadingNeeded = false;
+		return;
+	}
+
+	// How many invalid positions will we tolerate
+	int threshold = GetLayerItemsCount(m_currentLayer) - m_nextLayerItem-1;
+
+	wxWallCtrlItemID index = m_nextLayerItem;
+	// Get the next item position
+	do 
+	{
+		m_nextLayerItemPos = GetLayerItemPosition(m_nextLayerItem);
+		if (IsValidPosition(m_nextLayerItemPos))
+		{
+			wxWallCtrlItemID index = GetItemIndex(m_nextLayerItemPos);
+			if (!IsItemTextureLoaded(index))
+			{
+				// Load it, move to the next one, and return
+				GetItemTexture(index);
+
+				m_nextLayerItem++;
+				return;
+			}
+		}
+		else
+		{
+			threshold--;		
+			if (threshold < 0)
+			{
+				// Do not proceed in this case, but increment the layer for next time
+				m_currentLayer++;
+				m_nextLayerItem = 0;
+				m_currentLayerRect = GetLayerRect(m_currentLayer);
+				m_nextLayerItemPos.x = m_currentLayerRect.GetLeft();
+				m_nextLayerItemPos.y = m_currentLayerRect.GetRight();
+				return;
+			}
+		}
+		// Move to the next one
+		m_nextLayerItem++;
+	} while(!IsValidPosition(m_nextLayerItemPos) || IsItemTextureLoaded(index));
+}
+
+void wxWallCtrlPlaneSurface::OnLoadingComplete()
+{
+	m_loadingInProgress = false;
+}
+
+unsigned wxWallCtrlPlaneSurface::GetMaxLoadingLayers() const
+{
+	return m_maxLoadingLayers;
+}
+
+bool wxWallCtrlPlaneSurface::IsItemTextureLoaded( wxWallCtrlItemID itemID )
+{
+	return (m_texturesCache.find( itemID ) != m_texturesCache.end());
+}
+
+bool wxWallCtrlPlaneSurface::IsValidPosition( wxPoint pos )
+{
+	return ((pos.x >= 0 && pos.x < m_colsCount) && (pos.y >= 0 && pos.y < m_rowsCount));
+}
+
+wxPoint wxWallCtrlPlaneSurface::GetLayerItemPosition( unsigned index ) const
+{
+	// TODO: This method is bugged
+	wxPoint point;
+	if (index <= m_currentLayerRect.GetWidth() + m_currentLayerRect.GetHeight()-2)
+	{
+		if (index < GetLayerWidth(m_currentLayer))
+		{
+			// Top row
+			point.x = m_currentLayerRect.GetLeft() + index;
+			point.y = m_currentLayerRect.GetTop();
+		}
+		else
+		{
+			// Right column
+			point.x = m_currentLayerRect.GetRight();
+			point.y = m_currentLayerRect.GetTop() + (index - m_currentLayerRect.GetWidth()) + 1;
+		}
+	}
+	else
+	{
+		if (index < GetLayerItemsCount(m_currentLayer) + 1 - m_currentLayerRect.GetHeight() )
+		{
+			// Bottom row
+			point.x = m_currentLayerRect.GetRight() - (index - (m_currentLayerRect.GetHeight() + m_currentLayerRect.GetWidth()-2));
+			point.y = m_currentLayerRect.GetBottom();
+		}
+		else
+		{
+			// Left column
+			point.x = m_currentLayerRect.GetLeft();
+			point.y = m_currentLayerRect.GetTop() + GetLayerItemsCount(m_currentLayer) - index;
+
+		}
+	}
+	return point;
+}
+
+void wxWallCtrlPlaneSurface::AdjustScope()
+{
+	// Find the position of the selected index
+	wxPoint position = GetItemPosition(m_selectedIndex);
+
+	// Try to center it in the scope. Note that we need only clip from the lower bounds.
+	m_scopeOffsetX = wxMax(position.x - m_scopeSize.GetWidth()/2, 0);
+	m_scopeOffsetY = wxMax(position.y - m_scopeSize.GetHeight()/2,0);
 }

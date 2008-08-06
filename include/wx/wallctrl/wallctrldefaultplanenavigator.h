@@ -26,27 +26,12 @@ public:
 	void OnKeyDown(wxKeyEvent &event);
 
 	// Raises an activation event
-/*	bool Activate()
-	{
-		wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, GetId());
-		event.SetEventObject(this);
-
-		return ProcessCommand(event);
-	}
-*/
 	void ChangeSelection();
 
 
-	virtual wxWallCtrlSurface * GetSurface() const
-	{
-		return m_surface;
-	}
+	virtual wxWallCtrlSurface * GetSurface() const;
 
-	virtual void SetSurface(wxWallCtrlSurface * surface)
-	{
-		// TODO: What should we do if the surface is invalid? Probably nothing
-		m_surface = wxDynamicCast(surface, wxWallCtrlPlaneSurface);
-	}
+	virtual void SetSurface(wxWallCtrlSurface * surface);
 
 	DECLARE_EVENT_TABLE();
 

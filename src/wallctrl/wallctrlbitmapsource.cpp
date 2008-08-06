@@ -77,3 +77,24 @@ void wxWallCtrlBitmapSource::AppendBitmap( wxBitmap bitmap )
 	// Flag that data has changed
 	DataChanged();
 }
+
+bool wxWallCtrlBitmapSource::HasDataChanged()
+{
+	if (m_dataChanged)
+	{
+		m_dataChanged = false;
+		return true;
+	}
+
+	return false;
+}
+
+unsigned wxWallCtrlBitmapSource::GetFirstItem() const
+{
+	return 0;
+}
+
+void wxWallCtrlBitmapSource::DataChanged()
+{
+	m_dataChanged = true;
+}

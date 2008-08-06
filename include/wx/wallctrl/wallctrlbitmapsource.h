@@ -40,37 +40,20 @@ public:
 	virtual unsigned GetCount() const;
 
 	// Returns true if data source data changed since last call to HasDataChanged()
-	virtual bool HasDataChanged()
-	{
-		if (m_dataChanged)
-		{
-			m_dataChanged = false;
-			return true;
-		}
-		
-		return false;
-	}
+	virtual bool HasDataChanged();
 
 	// Returns the starting index of the sequence
-	virtual unsigned GetFirstItem() const
-	{
-		return 0;
-	}
+	virtual unsigned GetFirstItem() const;
 
 	// Flags that data has changed
-	virtual void DataChanged()
-	{
-		m_dataChanged = true;
-	}
+	virtual void DataChanged();
 
 	// Appends a bitmap at the end of the list and give it an ordered id
 	void AppendBitmap(wxBitmap bitmap);
 
 private:
-	//WX_DEFINE_ARRAY(wxBitmap, ArrayOfBitmaps);
-
+	// The bitmaps are stored in a map instead of a vector to allow for using non-consecutive IDs
 	BitmapMap m_bitmaps;
-	wxBitmap tempTexture;
 
 	// This flag is set to true whenever anything changes in the data
 	bool m_dataChanged;

@@ -80,3 +80,14 @@ void wxWallCtrlDefaultPlaneNavigator::ChangeSelection()
 	ProcessEvent( event );
 	
 }
+
+wxWallCtrlSurface * wxWallCtrlDefaultPlaneNavigator::GetSurface() const
+{
+	return m_surface;
+}
+
+void wxWallCtrlDefaultPlaneNavigator::SetSurface( wxWallCtrlSurface * surface )
+{
+	// TODO: What should we do if the surface is invalid? Probably nothing
+	m_surface = wxDynamicCast(surface, wxWallCtrlPlaneSurface);
+}
