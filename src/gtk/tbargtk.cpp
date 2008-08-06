@@ -15,32 +15,7 @@
 
 #include "wx/toolbar.h"
 
-#ifndef WX_PRECOMP
-    #include "wx/menu.h"
-#endif
-
-// FIXME: Use GtkImage instead of GtkPixmap. Use the new toolbar API for when gtk runtime is new enough?
-// Beware that the new and old toolbar API may not be mixed in usage.
-#undef GTK_DISABLE_DEPRECATED
-
 #include "wx/gtk/private.h"
-
-/* XPM */
-static const char *arrow_down_xpm[] = {
-/* columns rows colors chars-per-pixel */
-"7 7 2 1",
-"  c None",
-". c Black",
-/* pixels */
-"       ",
-"       ",
-"       ",
-".......",
-" ..... ",
-"  ...  ",
-"   .   "
-};
-
 
 // ----------------------------------------------------------------------------
 // globals
@@ -49,31 +24,6 @@ static const char *arrow_down_xpm[] = {
 // data
 extern bool       g_blockEventsOnDrag;
 extern wxCursor   g_globalCursor;
-
-// ----------------------------------------------------------------------------
-// private functions
-// ----------------------------------------------------------------------------
-
-// translate wxWidgets toolbar style flags to GTK orientation and style
-static void GetGtkStyle(long style,
-                        GtkOrientation *orient, GtkToolbarStyle *gtkStyle)
-{
-    *orient = ( style & wxTB_LEFT || style & wxTB_RIGHT ) ? GTK_ORIENTATION_VERTICAL : GTK_ORIENTATION_HORIZONTAL;
-
-
-    if ( style & wxTB_TEXT )
-    {
-        *gtkStyle = style & wxTB_NOICONS
-                        ? GTK_TOOLBAR_TEXT
-                        : (
-                          style & wxTB_HORZ_LAYOUT ? GTK_TOOLBAR_BOTH_HORIZ :
-                          GTK_TOOLBAR_BOTH);
-    }
-    else // no text, hence we must have the icons or what would we show?
-    {
-        *gtkStyle = GTK_TOOLBAR_ICONS;
-    }
-}
 
 // ----------------------------------------------------------------------------
 // wxToolBarTool
@@ -94,13 +44,13 @@ public:
         : wxToolBarToolBase(tbar, id, label, bitmap1, bitmap2, kind,
                             clientData, shortHelpString, longHelpString)
     {
-        Init();
+        m_item = NULL;
     }
 
     wxToolBarTool(wxToolBar *tbar, wxControl *control, const wxString& label)
         : wxToolBarToolBase(tbar, control, label)
     {
-        Init();
+        m_item = NULL;
         // Hold a reference to keep control alive until DoInsertTool() is
         // called, or if RemoveTool() is called (see DoDeleteTool)
         g_object_ref(control->m_widget);
@@ -109,53 +59,11 @@ public:
             control->m_widget, "destroy", G_CALLBACK(g_object_unref), NULL);
     }
 
-    // is this a radio button?
-    //
-    // unlike GetKind(), can be called for any kind of tools, not just buttons
-    bool IsRadio() const { return IsButton() && GetKind() == wxITEM_RADIO; }
+    void SetImage();
+    void CreateDropDown();
+    void ShowDropdown(GtkToggleButton* button);
 
-    // this is only called for the normal buttons, i.e. not separators nor
-    // controls
-    GtkToolbarChildType GetGtkChildType() const
-    {
-        switch ( GetKind() )
-        {
-            case wxITEM_CHECK:
-                return GTK_TOOLBAR_CHILD_TOGGLEBUTTON;
-
-            case wxITEM_RADIO:
-                return GTK_TOOLBAR_CHILD_RADIOBUTTON;
-
-            default:
-                wxFAIL_MSG( _T("unknown toolbar child type") );
-                // fall through
-
-            case wxITEM_DROPDOWN:
-            case wxITEM_NORMAL:
-                return GTK_TOOLBAR_CHILD_BUTTON;
-        }
-    }
-
-    void SetImage(const wxBitmap& bitmap)
-    {
-        if (bitmap.Ok())
-        {
-            // setting from pixmap doesn't seem to work right, but pixbuf works well
-            gtk_image_set_from_pixbuf((GtkImage*)m_image, bitmap.GetPixbuf());
-        }
-    }
-
-    // the toolbar element for button tools or a GtkAlignment containing the
-    // control for control tools
-    GtkWidget *m_item;
-    // dropdown element for button tools
-    GtkWidget *m_itemDropdown;
-
-    // a GtkImage containing the image for a button-type tool, may be NULL
-    GtkWidget *m_image;
-
-protected:
-    void Init();
+    GtkToolItem* m_item;
 };
 
 // ----------------------------------------------------------------------------
@@ -169,169 +77,98 @@ IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxControl)
 // ============================================================================
 
 //-----------------------------------------------------------------------------
-// "clicked" (internal from gtk_toolbar)
+// "clicked" from m_item
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static void gtk_toolbar_callback( GtkWidget *widget,
-                                  wxToolBarTool *tool )
+static void item_clicked(GtkToolButton*, wxToolBarTool* tool)
 {
-    wxToolBar *tbar = (wxToolBar *)tool->GetToolBar();
-
-    if (tbar->m_blockEvent) return;
-
     if (g_blockEventsOnDrag) return;
-    if (!tool->IsEnabled()) return;
 
-    if (tool->CanBeToggled())
-    {
-        if (tool->IsRadio() &&
-            gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(widget)) &&
-            tool->IsToggled())
-        {
-            // pressed an already pressed radio button
-            return;
-        }
+    tool->GetToolBar()->OnLeftClick(tool->GetId(), false);
+}
+}
 
-        tool->Toggle();
+//-----------------------------------------------------------------------------
+// "toggled" from m_item
+//-----------------------------------------------------------------------------
 
-        tool->SetImage(tool->GetBitmap());
+extern "C" {
+static void item_toggled(GtkToggleToolButton* button, wxToolBarTool* tool)
+{
+    if (g_blockEventsOnDrag) return;
 
-        if ( tool->IsRadio() && !tool->IsToggled() )
-        {
-            // radio button went up, don't report this as a wxWin event
-            return;
-        }
-    }
+    const bool active = gtk_toggle_tool_button_get_active(button) != 0;
+    tool->Toggle(active);
+    if (!active && tool->GetKind() == wxITEM_RADIO)
+        return;
 
-    if( !tbar->OnLeftClick( tool->GetId(), tool->IsToggled() ) && tool->CanBeToggled() )
+    if (!tool->GetToolBar()->OnLeftClick(tool->GetId(), active))
     {
         // revert back
         tool->Toggle();
-
-        tool->SetImage(tool->GetBitmap());
     }
 }
 }
 
 //-----------------------------------------------------------------------------
-// "right-click"
+// "button_press_event" from m_item child
 //-----------------------------------------------------------------------------
+
 extern "C" {
-static gboolean gtk_toolbar_tool_rclick_callback(GtkWidget *WXUNUSED(widget),
-                                                 GdkEventButton *event,
-                                                 wxToolBarToolBase *tool)
+static gboolean
+button_press_event(GtkWidget*, GdkEventButton* event, wxToolBarTool* tool)
 {
     if (event->button != 3)
         return FALSE;
 
-    wxToolBar *tbar = (wxToolBar *)tool->GetToolBar();
-
-    if (tbar->m_blockEvent) return TRUE;
-
     if (g_blockEventsOnDrag) return TRUE;
-    if (!tool->IsEnabled()) return TRUE;
 
-    tbar->OnRightClick( tool->GetId(), (int)event->x, (int)event->y );
+    tool->GetToolBar()->OnRightClick(
+        tool->GetId(), int(event->x), int(event->y));
 
     return TRUE;
 }
 }
 
 //-----------------------------------------------------------------------------
-// "enter_notify_event" / "leave_notify_event" from dropdown
+// "child_detached" from m_widget
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gint gtk_toolbar_buddy_enter_callback( GtkWidget *WXUNUSED(widget),
-                                       GdkEventCrossing *WXUNUSED(gdk_event),
-                                       GtkWidget *tool )
+static void child_detached(GtkWidget*, GtkToolbar* toolbar, void*)
 {
-    guint8 state = GTK_WIDGET_STATE( tool );
-    state |= GTK_STATE_PRELIGHT;
-    gtk_widget_set_state( tool, (GtkStateType) state );
-    return FALSE;
-}
-
-static gint gtk_toolbar_buddy_leave_callback( GtkWidget *WXUNUSED(widget),
-                                       GdkEventCrossing *WXUNUSED(gdk_event),
-                                       GtkWidget *tool )
-{
-    guint8 state = GTK_WIDGET_STATE( tool );
-    state &= ~GTK_STATE_PRELIGHT;
-    gtk_widget_set_state( tool, (GtkStateType) state );
-    return FALSE;
+    // disable showing overflow arrow when toolbar is detached,
+    // otherwise toolbar collapses to just an arrow
+    gtk_toolbar_set_show_arrow(toolbar, false);
 }
 }
 
 //-----------------------------------------------------------------------------
-// "left-click" on dropdown
-//-----------------------------------------------------------------------------
-
-extern "C"
-{
-static void gtk_pop_tb_hide_callback( GtkWidget *WXUNUSED(menu), GtkToggleButton *button  )
-{
-    gtk_toggle_button_set_active( button, FALSE );
-}
-
-static gboolean gtk_toolbar_dropdown_lclick_callback(GtkWidget *widget,
-                                                 GdkEventButton *event,
-                                                 wxToolBarToolBase *tool)
-{
-    if (event->button != 1)
-        return FALSE;
-
-    wxToolBar *tbar = (wxToolBar *)tool->GetToolBar();
-
-    if (tbar->m_blockEvent) return FALSE;
-
-    if (g_blockEventsOnDrag) return FALSE;
-    if (!tool->IsEnabled()) return FALSE;
-
-    wxCommandEvent evt(wxEVT_COMMAND_TOOL_DROPDOWN_CLICKED, tool->GetId() );
-    if ( tbar->HandleWindowEvent(evt) )
-    {
-        return TRUE;
-    }
-
-    wxMenu * const menu = tool->GetDropdownMenu();
-    if (!menu)
-        return TRUE;
-
-    // simulate press
-    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(widget), TRUE );
-
-    g_signal_connect (menu->m_menu, "hide",
-                                    G_CALLBACK (gtk_pop_tb_hide_callback),
-                                    widget);
-
-    tbar->PopupMenu( menu, widget->allocation.x,
-                           widget->allocation.y + widget->allocation.height );
-
-
-    return TRUE;
-}
-}
-
-//-----------------------------------------------------------------------------
-// "enter_notify_event" / "leave_notify_event"
+// "child_attached" from m_widget
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gint gtk_toolbar_tool_callback( GtkWidget *WXUNUSED(widget),
-                                       GdkEventCrossing *gdk_event,
-                                       wxToolBarTool *tool )
+static void child_attached(GtkWidget*, GtkToolbar* toolbar, void*)
+{
+    gtk_toolbar_set_show_arrow(toolbar, true);
+}
+}
+
+//-----------------------------------------------------------------------------
+// "enter_notify_event" / "leave_notify_event" from m_item
+//-----------------------------------------------------------------------------
+
+extern "C" {
+static gboolean
+enter_notify_event(GtkWidget*, GdkEventCrossing* event, wxToolBarTool* tool)
 {
     if (g_blockEventsOnDrag) return TRUE;
 
-    wxToolBar *tb = (wxToolBar *)tool->GetToolBar();
-
-    // emit the event
-    if( gdk_event->type == GDK_ENTER_NOTIFY )
-        tb->OnMouseEnter( tool->GetId() );
-    else
-        tb->OnMouseEnter( -1 );
+    int id = -1;
+    if (event->type == GDK_ENTER_NOTIFY)
+        id = tool->GetId();
+    tool->GetToolBar()->OnMouseEnter(id);
 
     return FALSE;
 }
@@ -352,6 +189,66 @@ size_request(GtkWidget*, GtkRequisition* req, wxToolBar* win)
 }
 
 //-----------------------------------------------------------------------------
+// "expose_event" from GtkImage inside m_item
+//-----------------------------------------------------------------------------
+
+extern "C" {
+static gboolean
+image_expose_event(GtkWidget* widget, GdkEventExpose*, wxToolBarTool* tool)
+{
+    const wxBitmap& bitmap = tool->GetDisabledBitmap();
+    if (tool->IsEnabled() || !bitmap.IsOk())
+        return false;
+
+    // draw disabled bitmap ourselves, GtkImage has no way to specify it
+    const GtkAllocation& alloc = widget->allocation;
+    gdk_draw_pixbuf(
+        widget->window, widget->style->black_gc, bitmap.GetPixbuf(),
+        0, 0,
+        alloc.x + (alloc.width - widget->requisition.width) / 2,
+        alloc.y + (alloc.height - widget->requisition.height) / 2,
+        -1, -1, GDK_RGB_DITHER_NORMAL, 0, 0);
+    return true;
+}
+}
+
+//-----------------------------------------------------------------------------
+// "toggled" from dropdown menu button
+//-----------------------------------------------------------------------------
+
+extern "C" {
+static void arrow_toggled(GtkToggleButton* button, wxToolBarTool* tool)
+{
+    if (gtk_toggle_button_get_active(button))
+    {
+        tool->ShowDropdown(button);
+        gtk_toggle_button_set_active(button, false);
+    }
+}
+}
+
+//-----------------------------------------------------------------------------
+// "button_press_event" from dropdown menu button
+//-----------------------------------------------------------------------------
+
+extern "C" {
+static gboolean
+arrow_button_press_event(GtkToggleButton* button, GdkEventButton* event, wxToolBarTool* tool)
+{
+    if (event->button == 1)
+    {
+        g_signal_handlers_block_by_func(button, (void*)arrow_toggled, tool);
+        gtk_toggle_button_set_active(button, true);
+        tool->ShowDropdown(button);
+        gtk_toggle_button_set_active(button, false);
+        g_signal_handlers_unblock_by_func(button, (void*)arrow_toggled, tool);
+        return true;
+    }
+    return false;
+}
+}
+
+//-----------------------------------------------------------------------------
 // InsertChild callback for wxToolBar
 //-----------------------------------------------------------------------------
 
@@ -365,11 +262,67 @@ static void wxInsertChildInToolBar( wxWindow* WXUNUSED(parent),
 // wxToolBarTool
 // ----------------------------------------------------------------------------
 
-void wxToolBarTool::Init()
+void wxToolBarTool::SetImage()
 {
-    m_item =
-    m_itemDropdown =
-    m_image = NULL;
+    const wxBitmap& bitmap = GetNormalBitmap();
+    wxCHECK_RET(bitmap.IsOk(), "invalid bitmap for wxToolBar icon");
+
+    GtkWidget* image = gtk_tool_button_get_icon_widget(GTK_TOOL_BUTTON(m_item));
+    // always use pixbuf, because pixmap mask does not
+    // work with disabled images in some themes
+    gtk_image_set_from_pixbuf(GTK_IMAGE(image), bitmap.GetPixbuf());
+}
+
+// helper to create a dropdown menu item
+void wxToolBarTool::CreateDropDown()
+{
+    gtk_tool_item_set_homogeneous(m_item, false);
+    GtkWidget* box;
+    GtkWidget* arrow;
+    if (GetToolBar()->HasFlag(wxTB_LEFT | wxTB_RIGHT))
+    {
+        box = gtk_vbox_new(false, 0);
+        arrow = gtk_arrow_new(GTK_ARROW_RIGHT, GTK_SHADOW_NONE);
+    }
+    else
+    {
+        box = gtk_hbox_new(false, 0);
+        arrow = gtk_arrow_new(GTK_ARROW_DOWN, GTK_SHADOW_NONE);
+    }
+    GtkWidget* tool_button = GTK_BIN(m_item)->child;
+    gtk_widget_reparent(tool_button, box);
+    GtkWidget* arrow_button = gtk_toggle_button_new();
+    gtk_button_set_relief(GTK_BUTTON(arrow_button),
+        gtk_tool_item_get_relief_style(GTK_TOOL_ITEM(m_item)));
+    gtk_container_add(GTK_CONTAINER(arrow_button), arrow);
+    gtk_container_add(GTK_CONTAINER(box), arrow_button);
+    gtk_widget_show_all(box);
+    gtk_container_add(GTK_CONTAINER(m_item), box);
+
+    g_signal_connect(arrow_button, "toggled", G_CALLBACK(arrow_toggled), this);
+    g_signal_connect(arrow_button, "button_press_event",
+        G_CALLBACK(arrow_button_press_event), this);
+}
+
+void wxToolBarTool::ShowDropdown(GtkToggleButton* button)
+{
+    wxToolBarBase* toolbar = GetToolBar();
+    wxCommandEvent event(wxEVT_COMMAND_TOOL_DROPDOWN_CLICKED, GetId());
+    if (!toolbar->HandleWindowEvent(event))
+    {
+        wxMenu* menu = GetDropdownMenu();
+        if (menu)
+        {
+            const GtkAllocation& alloc = GTK_WIDGET(button)->allocation;
+            int x = alloc.x;
+            int y = alloc.y;
+            if (toolbar->HasFlag(wxTB_LEFT | wxTB_RIGHT))
+                x += alloc.width;
+            else
+                y += alloc.height;
+            toolbar->PopupMenu(menu, x, y);
+        }
+    }
 }
 
 wxToolBarToolBase *wxToolBar::CreateTool(int id,
@@ -398,13 +351,16 @@ wxToolBar::CreateTool(wxControl *control, const wxString& label)
 void wxToolBar::Init()
 {
     m_toolbar = (GtkToolbar *)NULL;
-    m_blockEvent = false;
-    m_defaultWidth = 32;
-    m_defaultHeight = 32;
+    m_tooltips = NULL;
 }
 
 wxToolBar::~wxToolBar()
 {
+    if (m_tooltips)
+    {
+        gtk_object_destroy(GTK_OBJECT(m_tooltips));
+        g_object_unref(m_tooltips);
+    }
 }
 
 bool wxToolBar::Create( wxWindow *parent,
@@ -427,19 +383,19 @@ bool wxToolBar::Create( wxWindow *parent,
     FixupStyle();
 
     m_toolbar = GTK_TOOLBAR( gtk_toolbar_new() );
+    m_tooltips = gtk_tooltips_new();
+    g_object_ref(m_tooltips);
+    gtk_object_sink(GTK_OBJECT(m_tooltips));
     GtkSetStyle();
-
-    // Doesn't work this way.
-    // GtkToolbarSpaceStyle space_style = GTK_TOOLBAR_SPACE_EMPTY;
-    // gtk_widget_style_set (GTK_WIDGET (m_toolbar), "space_style", &space_style, NULL);
-
-    SetToolSeparation(7);
 
     if (style & wxTB_DOCKABLE)
     {
         m_widget = gtk_handle_box_new();
-        gtk_container_add( GTK_CONTAINER(m_widget), GTK_WIDGET(m_toolbar) );
-        gtk_widget_show( GTK_WIDGET(m_toolbar) );
+
+        g_signal_connect(m_widget, "child_detached",
+            G_CALLBACK(child_detached), NULL);
+        g_signal_connect(m_widget, "child_attached",
+            G_CALLBACK(child_attached), NULL);
 
         if (style & wxTB_FLAT)
             gtk_handle_box_set_shadow_type( GTK_HANDLE_BOX(m_widget), GTK_SHADOW_NONE );
@@ -447,16 +403,10 @@ bool wxToolBar::Create( wxWindow *parent,
     else
     {
         m_widget = gtk_event_box_new();
-        gtk_container_add( GTK_CONTAINER(m_widget), GTK_WIDGET(m_toolbar) );
         ConnectWidget( m_widget );
-        gtk_widget_show(GTK_WIDGET(m_toolbar));
     }
-
-    // FIXME: there is no such function for toolbars in 2.0
-#if 0
-    if (style & wxTB_FLAT)
-        gtk_toolbar_set_button_relief( GTK_TOOLBAR(m_toolbar), GTK_RELIEF_NONE );
-#endif
+    gtk_container_add(GTK_CONTAINER(m_widget), GTK_WIDGET(m_toolbar));
+    gtk_widget_show(GTK_WIDGET(m_toolbar));
 
     m_parent->DoAddChild( this );
 
@@ -475,13 +425,22 @@ GdkWindow *wxToolBar::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 
 void wxToolBar::GtkSetStyle()
 {
-    GtkOrientation orient;
-    GtkToolbarStyle style;
-    GetGtkStyle(GetWindowStyle(), &orient, &style);
+    GtkOrientation orient = GTK_ORIENTATION_HORIZONTAL;
+    if (HasFlag(wxTB_LEFT | wxTB_RIGHT))
+        orient = GTK_ORIENTATION_VERTICAL;
+
+    GtkToolbarStyle style = GTK_TOOLBAR_ICONS;
+    if (HasFlag(wxTB_NOICONS))
+        style = GTK_TOOLBAR_TEXT;
+    else if (HasFlag(wxTB_TEXT))
+    {
+        style = GTK_TOOLBAR_BOTH;
+        if (HasFlag(wxTB_HORZ_LAYOUT))
+            style = GTK_TOOLBAR_BOTH_HORIZ;
+    }
 
     gtk_toolbar_set_orientation(m_toolbar, orient);
     gtk_toolbar_set_style(m_toolbar, style);
-    gtk_toolbar_set_tooltips(m_toolbar, !(style & wxTB_NO_TOOLTIPS));
 }
 
 void wxToolBar::SetWindowStyleFlag( long style )
@@ -496,198 +455,139 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 {
     wxToolBarTool* tool = wx_static_cast(wxToolBarTool*, toolBase);
 
-    if ( tool->IsButton() )
-    {
-        if ( !HasFlag(wxTB_NOICONS) )
-        {
-            wxBitmap bitmap = tool->GetNormalBitmap();
-
-            wxCHECK_MSG( bitmap.Ok(), false,
-                         wxT("invalid bitmap for wxToolBar icon") );
-
-            tool->m_image = gtk_image_new();
-            tool->SetImage(bitmap);
-
-            gtk_misc_set_alignment((GtkMisc*)tool->m_image, 0.5, 0.5);
-        }
-    }
-
-    int posGtk = 0;
-    if ( pos > 0 )
-    {
-        for ( size_t i = 0; i < pos; i++ )
-        {
-            posGtk++;
-
-            // if we have a dropdown menu, we use 2 GTK tools internally
-            wxToolBarToolsList::compatibility_iterator node = m_tools.Item( i );
-            wxToolBarTool * const tool2 = (wxToolBarTool*) node->GetData();
-            if ( tool2->IsButton() && tool2->GetKind() == wxITEM_DROPDOWN )
-                posGtk++;
-        }
-    }
-
-
+    GSList* radioGroup;
     switch ( tool->GetStyle() )
     {
         case wxTOOL_STYLE_BUTTON:
-            // for a radio button we need the widget which starts the radio
-            // group it belongs to, i.e. the first radio button immediately
-            // preceding this one
+            switch (tool->GetKind())
             {
-                GtkWidget *widget = NULL;
-
-                if ( tool->IsRadio() )
-                {
-                    wxToolBarToolsList::compatibility_iterator node
-                        = wxToolBarToolsList::compatibility_iterator();
-                    if ( pos )
-                        node = m_tools.Item(pos - 1);
-
-                    while ( node )
-                    {
-                        wxToolBarTool *toolNext = (wxToolBarTool *)node->GetData();
-                        if ( !toolNext->IsRadio() )
-                            break;
-
-                        widget = toolNext->m_item;
-
-                        node = node->GetPrevious();
-                    }
-
-                    if ( !widget )
+                case wxITEM_CHECK:
+                    tool->m_item = gtk_toggle_tool_button_new();
+                    g_signal_connect(tool->m_item, "toggled",
+                        G_CALLBACK(item_toggled), tool);
+                    break;
+                case wxITEM_RADIO:
+                    radioGroup = GetRadioGroup(pos);
+                    if (radioGroup)
                     {
                         // this is the first button in the radio button group,
                         // it will be toggled automatically by GTK so bring the
                         // internal flag in sync
                         tool->Toggle(true);
                     }
-                }
-
-                tool->m_item = gtk_toolbar_insert_element
-                               (
-                                  m_toolbar,
-                                  tool->GetGtkChildType(),
-                                  widget,
-                                  tool->GetLabel().empty()
-                                    ? NULL
-                                    : (const char*) wxGTK_CONV( tool->GetLabel() ),
-                                  tool->GetShortHelp().empty()
-                                    ? NULL
-                                    : (const char*) wxGTK_CONV( tool->GetShortHelp() ),
-                                  "", // tooltip_private_text (?)
-                                  tool->m_image,
-                                  (GtkSignalFunc)gtk_toolbar_callback,
-                                  (gpointer)tool,
-                                  posGtk
-                               );
-
-                wxCHECK_MSG(tool->m_item != NULL, false, _T("gtk_toolbar_insert_element() failed"));
-
-                g_signal_connect (tool->m_item, "enter_notify_event",
-                                  G_CALLBACK (gtk_toolbar_tool_callback),
-                                  tool);
-                g_signal_connect (tool->m_item, "leave_notify_event",
-                                  G_CALLBACK (gtk_toolbar_tool_callback),
-                                  tool);
-                g_signal_connect(tool->m_item, "button-press-event",
-                                  G_CALLBACK (gtk_toolbar_tool_rclick_callback),
-                                  tool);
-
-                if (tool->GetKind() == wxITEM_DROPDOWN)
-                {
-                    GdkPixbuf *pixbuf = gdk_pixbuf_new_from_xpm_data( arrow_down_xpm );
-                    GtkWidget *dropdown = gtk_toggle_button_new();
-                    GtkWidget *image = gtk_image_new_from_pixbuf( pixbuf );
-                    gtk_widget_show( image );
-                    gtk_container_add( GTK_CONTAINER(dropdown), image );
-                    g_object_unref(pixbuf);
-
-                    if (GetWindowStyle() & wxTB_FLAT)
-                        gtk_button_set_relief( GTK_BUTTON(dropdown), GTK_RELIEF_NONE );
-                    GTK_WIDGET_UNSET_FLAGS (dropdown, GTK_CAN_FOCUS);
-                    gtk_widget_show( dropdown );
-
-                    g_signal_connect (dropdown, "enter_notify_event",
-                                  G_CALLBACK (gtk_toolbar_buddy_enter_callback),
-                                  tool->m_item);
-                    g_signal_connect (dropdown, "leave_notify_event",
-                                  G_CALLBACK (gtk_toolbar_buddy_leave_callback),
-                                  tool->m_item);
-                    g_signal_connect(dropdown, "button-press-event",
-                                  G_CALLBACK (gtk_toolbar_dropdown_lclick_callback),
-                                  tool);
-
-                    GtkRequisition req;
-                    (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(tool->m_item) )->size_request )
-                        (tool->m_item, &req );
-                    gtk_widget_set_size_request( dropdown, -1, req.height );
-
-                    gtk_toolbar_insert_widget(m_toolbar, dropdown, NULL, NULL,
-                                              posGtk + 1);
-                    tool->m_itemDropdown = dropdown;
-                }
+                    tool->m_item = gtk_radio_tool_button_new(radioGroup);
+                    g_signal_connect(tool->m_item, "toggled",
+                        G_CALLBACK(item_toggled), tool);
+                    break;
+                default:
+                    wxFAIL_MSG("unknown toolbar child type");
+                    // fall through
+                case wxITEM_DROPDOWN:
+                case wxITEM_NORMAL:
+                    tool->m_item = gtk_tool_button_new(NULL, "");
+                    g_signal_connect(tool->m_item, "clicked",
+                        G_CALLBACK(item_clicked), tool);
+                    break;
             }
+            if (!HasFlag(wxTB_NOICONS))
+            {
+                GtkWidget* image = gtk_image_new();
+                gtk_tool_button_set_icon_widget(
+                    GTK_TOOL_BUTTON(tool->m_item), image);
+                tool->SetImage();
+                gtk_widget_show(image);
+                g_signal_connect(image, "expose_event",
+                    G_CALLBACK(image_expose_event), tool);
+            }
+            if (!tool->GetLabel().empty())
+            {
+                gtk_tool_button_set_label(
+                    GTK_TOOL_BUTTON(tool->m_item), wxGTK_CONV(tool->GetLabel()));
+                // needed for labels in horizontal toolbar with wxTB_HORZ_LAYOUT
+                gtk_tool_item_set_is_important(tool->m_item, true);
+            }
+            if (!HasFlag(wxTB_NO_TOOLTIPS) && !tool->GetShortHelp().empty())
+            {
+                gtk_tool_item_set_tooltip(tool->m_item,
+                    m_tooltips, wxGTK_CONV(tool->GetShortHelp()), "");
+            }
+            g_signal_connect(GTK_BIN(tool->m_item)->child, "button_press_event",
+                G_CALLBACK(button_press_event), tool);
+            g_signal_connect(tool->m_item, "enter_notify_event",
+                G_CALLBACK(enter_notify_event), tool);
+            g_signal_connect(tool->m_item, "leave_notify_event",
+                G_CALLBACK(enter_notify_event), tool);
+
+            if (tool->GetKind() == wxITEM_DROPDOWN)
+                tool->CreateDropDown();
             break;
 
         case wxTOOL_STYLE_SEPARATOR:
-            gtk_toolbar_insert_space( m_toolbar, posGtk );
+            tool->m_item = gtk_separator_tool_item_new();
             break;
 
         case wxTOOL_STYLE_CONTROL:
             GtkWidget * const align = gtk_alignment_new(0.5, 0.5, 0, 0);
             gtk_widget_show(align);
-            gtk_container_add(GTK_CONTAINER(align),
-                              tool->GetControl()->m_widget);
-            gtk_toolbar_insert_widget(m_toolbar, align, NULL, NULL, posGtk);
-
-            // remember the container we're in so that we could remove
-            // ourselves from it when we're detached from the toolbar
-            tool->m_item = align;
+            wxWindow* control = tool->GetControl();
+            gtk_container_add(GTK_CONTAINER(align), control->m_widget);
+            tool->m_item = gtk_tool_item_new();
+            gtk_container_add(GTK_CONTAINER(tool->m_item), align);
+            // Inserted items "slide" into place using an animated effect that
+            // causes multiple size events on the item. Must set size request
+            // to keep item size from getting permanently set too small by the
+            // first of these size events.
+            const wxSize size = control->GetSize();
+            gtk_widget_set_size_request(control->m_widget, size.x, size.y);
             break;
     }
+    gtk_widget_show(GTK_WIDGET(tool->m_item));
+    gtk_toolbar_insert(m_toolbar, tool->m_item, int(pos));
 
     InvalidateBestSize();
 
     return true;
 }
 
-bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *toolBase)
+bool wxToolBar::DoDeleteTool(size_t /* pos */, wxToolBarToolBase* toolBase)
 {
     wxToolBarTool* tool = wx_static_cast(wxToolBarTool*, toolBase);
 
-    switch ( tool->GetStyle() )
+    if (tool->GetStyle() == wxTOOL_STYLE_CONTROL)
     {
-        case wxTOOL_STYLE_CONTROL:
-            // don't destroy the control here as we can be called from
-            // RemoveTool() and then we need to keep the control alive;
-            // while if we're called from DeleteTool() the control will
-            // be destroyed when wxToolBarToolBase itself is deleted
-            gtk_container_remove(
-                GTK_CONTAINER(tool->m_item), tool->GetControl()->m_widget);
-            // fall through
-
-        case wxTOOL_STYLE_BUTTON:
-            gtk_widget_destroy( tool->m_item );
-            tool->m_item = NULL;
-            if (tool->m_itemDropdown)
-            {
-                gtk_widget_destroy(tool->m_itemDropdown);
-                tool->m_itemDropdown = NULL;
-            }
-            break;
-
-        case wxTOOL_STYLE_SEPARATOR:
-            gtk_toolbar_remove_space( m_toolbar, pos );
-            break;
-
-        default:
-            wxFAIL_MSG( "unknown tool style" );
-            return false;
+        // don't destroy the control here as we can be called from
+        // RemoveTool() and then we need to keep the control alive;
+        // while if we're called from DeleteTool() the control will
+        // be destroyed when wxToolBarToolBase itself is deleted
+        GtkWidget* widget = tool->GetControl()->m_widget;
+        gtk_container_remove(GTK_CONTAINER(widget->parent), widget);
     }
+    gtk_object_destroy(GTK_OBJECT(tool->m_item));
+    tool->m_item = NULL;
 
     InvalidateBestSize();
     return true;
+}
+
+GSList* wxToolBar::GetRadioGroup(size_t pos)
+{
+    GSList* radioGroup = NULL;
+    GtkToolItem* item = NULL;
+    if (pos > 0)
+    {
+        item = gtk_toolbar_get_nth_item(m_toolbar, int(pos) - 1);
+        if (!GTK_IS_RADIO_TOOL_BUTTON(item))
+            item = NULL;
+    }
+    if (item == NULL && pos < m_tools.size())
+    {
+        item = gtk_toolbar_get_nth_item(m_toolbar, int(pos));
+        if (!GTK_IS_RADIO_TOOL_BUTTON(item))
+            item = NULL;
+    }
+    if (item)
+        radioGroup = gtk_radio_tool_button_get_group((GtkRadioToolButton*)item);
+    return radioGroup;
 }
 
 // ----------------------------------------------------------------------------
@@ -699,25 +599,21 @@ void wxToolBar::DoEnableTool(wxToolBarToolBase *toolBase, bool enable)
     wxToolBarTool* tool = wx_static_cast(wxToolBarTool*, toolBase);
 
     if (tool->m_item)
-    {
-        gtk_widget_set_sensitive( tool->m_item, enable );
-    }
+        gtk_widget_set_sensitive(GTK_WIDGET(tool->m_item), enable);
 }
 
 void wxToolBar::DoToggleTool( wxToolBarToolBase *toolBase, bool toggle )
 {
     wxToolBarTool* tool = wx_static_cast(wxToolBarTool*, toolBase);
 
-    GtkWidget *item = tool->m_item;
-    if ( item && GTK_IS_TOGGLE_BUTTON(item) )
+    if (tool->m_item)
     {
-        tool->SetImage(tool->GetBitmap());
+        g_signal_handlers_block_by_func(tool->m_item, (void*)item_toggled, tool);
 
-        m_blockEvent = true;
+        gtk_toggle_tool_button_set_active(
+            GTK_TOGGLE_TOOL_BUTTON(tool->m_item), toggle);
 
-        gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(item), toggle );
-
-        m_blockEvent = false;
+        g_signal_handlers_unblock_by_func(tool->m_item, (void*)item_toggled, tool);
     }
 }
 
@@ -732,6 +628,19 @@ void wxToolBar::DoSetToggle(wxToolBarToolBase * WXUNUSED(tool),
 // wxToolBar geometry
 // ----------------------------------------------------------------------------
 
+wxSize wxToolBar::DoGetBestSize() const
+{
+    // Unfortunately, if overflow arrow is enabled GtkToolbar only reports size
+    // of arrow. To get the real size, the arrow is temporarily disabled here.
+    // This is gross, since it will cause a queue_resize, and could potentially
+    // lead to an infinite loop. But there seems to be no alternative, short of
+    // disabling the arrow entirely.
+    gtk_toolbar_set_show_arrow(m_toolbar, false);
+    const wxSize size = wxToolBarBase::DoGetBestSize();
+    gtk_toolbar_set_show_arrow(m_toolbar, true);
+    return size;
+}
+
 wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord WXUNUSED(x),
                                                   wxCoord WXUNUSED(y)) const
 {
@@ -741,25 +650,6 @@ wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord WXUNUSED(x),
     return (wxToolBarToolBase *)NULL;
 }
 
-void wxToolBar::SetMargins( int x, int y )
-{
-    wxCHECK_RET( GetToolsCount() == 0,
-                 wxT("wxToolBar::SetMargins must be called before adding tools.") );
-
-    m_xMargin = x;
-    m_yMargin = y;
-}
-
-void wxToolBar::SetToolSeparation( int separation )
-{
-    // FIXME: this function disappeared
-#if 0
-    gtk_toolbar_set_space_size( m_toolbar, separation );
-#endif
-
-    m_toolSeparation = separation;
-}
-
 void wxToolBar::SetToolShortHelp( int id, const wxString& helpString )
 {
     wxToolBarTool* tool = wx_static_cast(wxToolBarTool*, FindById(id));
@@ -767,8 +657,11 @@ void wxToolBar::SetToolShortHelp( int id, const wxString& helpString )
     if ( tool )
     {
         (void)tool->SetShortHelp(helpString);
-        gtk_tooltips_set_tip(m_toolbar->tooltips, tool->m_item,
-                             wxGTK_CONV( helpString ), "");
+        if (tool->m_item)
+        {
+            gtk_tool_item_set_tooltip(tool->m_item,
+                m_tooltips, wxGTK_CONV(helpString), "");
+        }
     }
 }
 
@@ -780,7 +673,7 @@ void wxToolBar::SetToolNormalBitmap( int id, const wxBitmap& bitmap )
         wxCHECK_RET( tool->IsButton(), wxT("Can only set bitmap on button tools."));
 
         tool->SetNormalBitmap(bitmap);
-        tool->SetImage(tool->GetBitmap());
+        tool->SetImage();
     }
 }
 
@@ -792,7 +685,6 @@ void wxToolBar::SetToolDisabledBitmap( int id, const wxBitmap& bitmap )
         wxCHECK_RET( tool->IsButton(), wxT("Can only set bitmap on button tools."));
 
         tool->SetDisabledBitmap(bitmap);
-        tool->SetImage(tool->GetBitmap());
     }
 }
 
@@ -832,10 +724,9 @@ void wxToolBar::OnInternalIdle()
             wxToolBarTool *tool = (wxToolBarTool *)node->GetData();
             node = node->GetNext();
 
-            GtkWidget *item = tool->m_item;
-            if ( item )
+            if (tool->m_item)
             {
-                GdkWindow *window = item->window;
+                GdkWindow* window = GTK_WIDGET(tool->m_item)->window;
 
                 if ( window )
                 {

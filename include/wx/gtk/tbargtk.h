@@ -37,14 +37,10 @@ public:
                  wxWindowID id,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
-                 long style = 0,
+                 long style = wxTB_HORIZONTAL,
                  const wxString& name = wxToolBarNameStr );
 
     virtual ~wxToolBar();
-
-    // override base class virtuals
-    virtual void SetMargins(int x, int y);
-    virtual void SetToolSeparation(int separation);
 
     virtual wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y) const;
 
@@ -61,19 +57,10 @@ public:
     // implementation from now on
     // --------------------------
 
-    GtkToolbar   *m_toolbar;
-
-    bool          m_blockEvent;
-
     void OnInternalIdle();
 
 protected:
-    // common part of all ctors
-    void Init();
-
-    // set the GTK toolbar style and orientation
-    void GtkSetStyle();
-
+    virtual wxSize DoGetBestSize() const;
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
 
     // implement base class pure virtuals
@@ -96,6 +83,13 @@ protected:
                                           const wxString& label);
 
 private:
+    void Init();
+    void GtkSetStyle();
+    GSList* GetRadioGroup(size_t pos);
+
+    GtkToolbar* m_toolbar;
+    GtkTooltips* m_tooltips;
+
     DECLARE_DYNAMIC_CLASS(wxToolBar)
 };
 
