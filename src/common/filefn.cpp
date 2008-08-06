@@ -1408,8 +1408,7 @@ wxString wxFindFirstFile(const wxString& spec, int flags)
     if ( !wxEndsWithPathSeparator(gs_dirPath ) )
         gs_dirPath << wxFILE_SEP_PATH;
 
-    if (gs_dir)
-        delete gs_dir;
+    delete gs_dir; // can be NULL, this is ok
     gs_dir = new wxDir(gs_dirPath);
 
     if ( !gs_dir->IsOpened() )
@@ -1439,7 +1438,7 @@ wxString wxFindFirstFile(const wxString& spec, int flags)
 
 wxString wxFindNextFile()
 {
-    wxASSERT_MSG( gs_dir, wxT("You must call wxFindFirstFile before!") );
+    wxCHECK_MSG( gs_dir, "", "You must call wxFindFirstFile before!" );
 
     wxString result;
     gs_dir->GetNext(&result);
