@@ -602,7 +602,6 @@ dnl global compile options
 dnl ---------------------------------------------------------------------------
 
 WX_ARG_DISABLE(shared,     [  --disable-shared        create static library instead of shared], wxUSE_SHARED)
-WX_ARG_DISABLE(optimise,   [  --disable-optimise      compile without optimisations], wxUSE_OPTIMISE)
 WX_ARG_ENABLE(debug,       [  --enable-debug          same as debug_flag and debug_info], wxUSE_DEBUG)
 WX_ARG_ENABLE(stl,         [  --enable-stl            use STL for containers], wxUSE_STL)
 WX_ARG_ENABLE(std_iostreams, [  --enable-std_iostreams  use standard C++ stream classes], wxUSE_STD_IOSTREAM)
@@ -638,6 +637,17 @@ if test "$wxUSE_DEBUG_FLAG" = "yes" -a "$wxUSE_DEBUG_INFO" = "yes"; then
     wxUSE_DEBUG=yes
     BUILD=debug
 fi
+
+dnl disable optimizations by default if --enable-debug was used but leave them
+dnl enabled if just --enable-debug_{flag,info} was
+dnl
+dnl in any case, only set the default value and allow overriding it with an
+dnl explicit --enable-optimise
+if test "$wxUSE_DEBUG" = "yes"; then
+    DEFAULT_wxUSE_OPTIMISE=no
+fi
+
+WX_ARG_DISABLE(optimise,   [  --disable-optimise      compile without optimisations], wxUSE_OPTIMISE)
 
 WX_ARG_ENABLE(debug_gdb,     [  --enable-debug_gdb      create code with extra GDB debugging information], wxUSE_DEBUG_GDB)
 WX_ARG_ENABLE(debug_cntxt,   [  --enable-debug_cntxt    use wxDebugContext], wxUSE_DEBUG_CONTEXT)
@@ -5089,7 +5099,6 @@ dnl compilers: we'd need a separate DEBUG_CXXFLAGS if this is ever not the case)
 DEBUG_CFLAGS=
 if test "$wxUSE_DEBUG_INFO" = "yes" ; then
     DEBUG_CFLAGS="-g"
-    wxUSE_OPTIMISE=no
 fi
 
 if test "$wxUSE_DEBUG_GDB" = "yes" ; then
