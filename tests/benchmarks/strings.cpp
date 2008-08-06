@@ -185,7 +185,7 @@ BENCHMARK_FUNC(ForCString)
 
 BENCHMARK_FUNC(ForStringIndex)
 {
-    const wxString s = wxString::FromAscii(utf8str);
+    const wxString s = wxString::FromAscii(asciistr);
     const size_t len = s.length();
     for ( size_t n = 0; n < len; n++ )
     {
@@ -198,7 +198,7 @@ BENCHMARK_FUNC(ForStringIndex)
 
 BENCHMARK_FUNC(ForStringIter)
 {
-    const wxString s = wxString::FromAscii(utf8str);
+    const wxString s = wxString::FromAscii(asciistr);
     const wxString::const_iterator end = s.end();
     for ( wxString::const_iterator i = s.begin(); i != end; ++i )
     {
@@ -211,7 +211,7 @@ BENCHMARK_FUNC(ForStringIter)
 
 BENCHMARK_FUNC(ForStringRIter)
 {
-    const wxString s = wxString::FromAscii(utf8str);
+    const wxString s = wxString::FromAscii(asciistr);
     const wxString::const_reverse_iterator rend = s.rend();
     for ( wxString::const_reverse_iterator i = s.rbegin(); i != rend; ++i )
     {
