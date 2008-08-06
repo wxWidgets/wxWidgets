@@ -194,7 +194,7 @@ bool wxStringOperationsUtf8::IsValidUtf8LeadByte(unsigned char c)
 //     code in single place
 wxUniChar::Utf8CharBuffer wxUniChar::AsUTF8() const
 {
-    Utf8CharBuffer buf;
+    Utf8CharBuffer buf = { "" }; // init to avoid g++ 4.1 warning with -O2
     char *out = buf.data;
 
     value_type code = GetValue();
