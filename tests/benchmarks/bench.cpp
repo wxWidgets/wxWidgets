@@ -107,11 +107,20 @@ void BenchApp::OnInitCmdLine(wxCmdLineParser& parser)
 
     parser.AddOption(OPTION_AVG_COUNT,
                      "avg-count",
-                     "number of times to run benchmarking loop",
+                     wxString::Format
+                     (
+                        "number of times to run benchmarking loop (default: %ld)",
+                        m_avgCount
+                     ),
                      wxCMD_LINE_VAL_NUMBER);
     parser.AddOption(OPTION_NUM_RUNS,
                      "num-runs",
-                     "number of times to run each benchmark in a loop",
+                     wxString::Format
+                     (
+                         "number of times to run each benchmark in a loop "
+                         "(default: %ld)",
+                         m_numRuns
+                     ),
                      wxCMD_LINE_VAL_NUMBER);
     parser.AddParam("benchmark name",
                     wxCMD_LINE_VAL_STRING,
