@@ -1122,9 +1122,16 @@ public:
     virtual void OnChangedViewList();
 
     /**
+        This virtual function is called when the document is being closed.
+
         The default implementation calls DeleteContents() (an empty
-        implementation) and sets the modified flag to @false. Override this to
-        supply additional behaviour when the document is closed with Close().
+        implementation) and sets the modified flag to @false. You can override
+        it to supply additional behaviour when the document is closed with
+        Close().
+
+        Notice that previous wxWidgets versions used to call this function also
+        from OnNewDocument(), rather counter-intuitively. This is no longer the
+        case since wxWidgets 2.9.0.
     */
     virtual bool OnCloseDocument();
 

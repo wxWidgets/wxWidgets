@@ -246,8 +246,6 @@ bool wxDocument::OnNewDocument()
     if ( !OnSaveModified() )
         return false;
 
-    if ( !OnCloseDocument() )
-        return false;
     DeleteContents();
     Modify(false);
     SetDocumentSaved(false);

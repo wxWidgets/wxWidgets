@@ -102,6 +102,8 @@ Changes in behaviour not resulting in compilation errors, please read this!
 - Under MSW wxExecute() arguments are now always properly quoted, as under
   Unix, and so shouldn't contain quotes unless they are part of the argument.
 
+- wxDocument::OnNewDocument() doesn't call OnCloseDocument() any more.
+
 Changes in behaviour which may result in compilation errors
 -----------------------------------------------------------
 
