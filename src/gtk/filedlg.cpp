@@ -145,6 +145,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxFileDialog,wxFileDialogBase)
 
 BEGIN_EVENT_TABLE(wxFileDialog,wxFileDialogBase)
     EVT_BUTTON(wxID_OK, wxFileDialog::OnFakeOk)
+    EVT_SIZE(wxFileDialog::OnSize)
 END_EVENT_TABLE()
 
 wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
@@ -294,9 +295,7 @@ int wxFileDialog::ShowModal()
     {
         GtkWidget *control = m_extraControl->m_widget;
 
-        // see wxNotebook::InsertPage() for explaination
-        // why gtk_widget_unparent() is not used here
-        control->parent = NULL;
+        wxASSERT(control->parent == NULL);
 
         gtk_widget_show(control);
         gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(m_widget), control);
@@ -309,6 +308,12 @@ void wxFileDialog::DoSetSize(int WXUNUSED(x), int WXUNUSED(y),
                              int WXUNUSED(width), int WXUNUSED(height), 
                              int WXUNUSED(sizeFlags))
 {
+}
+
+void wxFileDialog::OnSize(wxSizeEvent&)
+{
+    // avoid calling DoLayout(), which will set the (wrong) size of
+    // m_extraControl, its size is managed by GtkFileChooser
 }
 
 wxString wxFileDialog::GetPath() const

@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKFILEDLGH__
-#define __GTKFILEDLGH__
+#ifndef _WX_GTKFILEDLG_H_
+#define _WX_GTKFILEDLG_H_
 
 #include "wx/gtk/filectrl.h"    // for wxGtkFileChooser
 
@@ -60,11 +60,13 @@ protected:
 
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxFileDialog)
-    DECLARE_EVENT_TABLE()
     void OnFakeOk( wxCommandEvent &event );
+    void OnSize(wxSizeEvent&);
 
     wxGtkFileChooser    m_fc;
+
+    DECLARE_DYNAMIC_CLASS(wxFileDialog)
+    DECLARE_EVENT_TABLE()
 };
 
-#endif // __GTKFILEDLGH__
+#endif // _WX_GTKFILEDLG_H_
