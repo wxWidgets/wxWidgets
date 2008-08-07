@@ -218,10 +218,21 @@ public:
                                       const wxArtClient& client = wxART_OTHER);
 
     /**
-        Register new art provider and add it to the bottom of providers stack
-        (i.e. it will be queried as the last one).
+        Returns true if the platform uses native icons provider that should
+        take precedence over any customizations.
 
-        @see Push()
+        This is true for any platform that has user-customizable icon themes,
+        currently only wxGTK.
+
+        A typical use for this method is to decide whether a custom art provider
+        should be plugged in using Push() or PushBack().
+
+        @since 2.9.0
+     */
+    static bool HasNativeProvider();
+
+    /**
+        @deprecated Use PushBack() instead.
     */
     static void Insert(wxArtProvider* provider);
 
@@ -234,9 +245,20 @@ public:
         Register new art provider and add it to the top of providers stack
         (i.e. it will be queried as the first provider).
 
-        @see Insert()
+        @see PushBack()
     */
     static void Push(wxArtProvider* provider);
+
+    /**
+        Register new art provider and add it to the bottom of providers stack.
+        In other words, it will be queried as the last one, after all others,
+        including the default provider.
+
+        @see Push()
+
+        @since 2.9.0
+    */
+    static void PushBack(wxArtProvider* provider);
 
     /**
         Remove a provider from the stack if it is on it. The provider is not

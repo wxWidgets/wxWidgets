@@ -160,7 +160,7 @@ wxArtProvider::~wxArtProvider()
     sm_providers->Insert(provider);
 }
 
-/*static*/ void wxArtProvider::Insert(wxArtProvider *provider)
+/*static*/ void wxArtProvider::PushBack(wxArtProvider *provider)
 {
     CommonAddingProvider();
     sm_providers->Append(provider);
@@ -378,6 +378,16 @@ wxIcon wxArtProvider::GetMessageBoxIcon(int flags)
 #endif // GTK+ 2/else
 }
 
+/* static */
+bool wxArtProvider::HasNativeProvider()
+{
+#ifdef __WXGTK20__
+    return true;
+#else
+    return false;
+#endif
+}
+
 // ----------------------------------------------------------------------------
 // deprecated wxArtProvider methods
 // ----------------------------------------------------------------------------
@@ -407,6 +417,13 @@ wxIcon wxArtProvider::GetMessageBoxIcon(int flags)
 }
 
 #endif // WXWIN_COMPATIBILITY_2_6
+
+#if WXWIN_COMPATIBILITY_2_8
+/* static */ void wxArtProvider::Insert(wxArtProvider *provider)
+{
+    PushBack(provider);
+}
+#endif // WXWIN_COMPATIBILITY_2_8
 
 // ============================================================================
 // wxArtProviderModule

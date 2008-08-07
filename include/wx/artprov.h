@@ -117,6 +117,8 @@ public:
     // Dtor removes the provider from providers stack if it's still on it
     virtual ~wxArtProvider();
 
+    // Does this platform implement native icons theme?
+    static bool HasNativeProvider();
 
     // Add new provider to the top of providers stack (i.e. the provider will
     // be queried first of all).
@@ -124,7 +126,12 @@ public:
 
     // Add new provider to the bottom of providers stack (i.e. the provider
     // will be queried as the last one).
-    static void Insert(wxArtProvider *provider);
+    static void PushBack(wxArtProvider *provider);
+
+#if WXWIN_COMPATIBILITY_2_8
+    // use PushBack(), it's the same thing
+    wxDEPRECATED( static void Insert(wxArtProvider *provider) );
+#endif
 
     // Remove latest added provider and delete it.
     static bool Pop();
