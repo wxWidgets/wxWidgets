@@ -131,6 +131,18 @@ static void gtk_filedialog_update_preview_callback(GtkFileChooser *chooser,
 
 } // extern "C"
 
+//-----------------------------------------------------------------------------
+// "size_request" from m_extraControl
+//-----------------------------------------------------------------------------
+
+extern "C" {
+static void extra_widget_size_request(GtkWidget*, GtkRequisition* req, void*)
+{
+    // allow dialog to be resized smaller horizontally
+    req->width = 1;
+}
+}
+
 static void wxInsertChildInFileDialog(wxWindow* WXUNUSED(parent),
                                       wxWindow* WXUNUSED(child))
 {
@@ -298,6 +310,8 @@ int wxFileDialog::ShowModal()
         wxASSERT(control->parent == NULL);
 
         gtk_widget_show(control);
+        g_signal_connect_after(control, "size_request",
+            G_CALLBACK(extra_widget_size_request), NULL);
         gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(m_widget), control);
     }
 
