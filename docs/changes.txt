@@ -145,6 +145,8 @@ wxGTK:
 
 wxMac:
 
+- Fixed a glitch where clicking on a scrollbar (but not moving the scrollbar)
+  would cause the window to scroll.
 
 2.8.8
 -----
