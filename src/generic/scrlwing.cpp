@@ -1341,6 +1341,11 @@ void wxScrollHelper::HandleOnChildFocus(wxChildFocusEvent& event)
     if ( win == m_targetWindow )
         return; // nothing to do
 
+#ifdef __WXMAC__
+    if (wxDynamicCast(win, wxScrollBar))
+        return;
+#endif
+
     // Fixing ticket: http://trac.wxwidgets.org/ticket/9563
     // When a child inside a wxControlContainer receives a focus, the
     // wxControlContainer generates an artificial wxChildFocusEvent for
