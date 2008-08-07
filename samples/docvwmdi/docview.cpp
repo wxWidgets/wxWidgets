@@ -115,7 +115,7 @@ bool MyApp::OnInit(void)
 
 int MyApp::OnExit(void)
 {
-    wxDELETE(m_docManager)
+    wxDELETE(m_docManager);
     return 0;
 }
 

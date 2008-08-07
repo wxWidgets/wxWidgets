@@ -201,8 +201,7 @@ bool TextEditView::OnClose(bool deleteWindow)
 
     if (deleteWindow)
     {
-        wxDELETE(m_frame)
-        return true;
+        wxDELETE(m_frame);
     }
     return true;
 }
