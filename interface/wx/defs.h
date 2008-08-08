@@ -291,6 +291,18 @@ enum wxPaperSize
 #define DECLARE_NO_COPY_CLASS(classname)
 
 /**
+    Equivalent of DECLARE_NO_COPY_CLASS() for template classes.
+
+    This macro can be used for template classes (with a single template
+    parameter) for the same purpose as DECLARE_NO_COPY_CLASS() is used with the
+    non-template classes.
+
+    @param classname The name of the template class.
+    @param arg The name of the template parameter.
+ */
+#define DECLARE_NO_COPY_TEMPLATE_CLASS(classname, arg)
+
+/**
     This macro can be used around a function declaration to generate warnings
     indicating that this function is deprecated (i.e. obsolete and planned to
     be removed in the future) when it is used. Only Visual C++ 7 and higher and
