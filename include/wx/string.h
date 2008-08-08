@@ -508,11 +508,6 @@ private:
   static size_t LenToImpl(size_t len) { return len; }
   static size_t PosFromImpl(size_t pos) { return pos; }
 
-  // we don't want to define this as an empty inline function as it could
-  // result in noticeable (and quite unnecessary in non-UTF-8 build) slowdown
-  // in debug build where the inline functions are not effectively inlined
-  #define wxSTRING_INVALIDATE_INDEX_CACHE()
-
 #else // wxUSE_UNICODE_UTF8
 
   static wxCharBuffer ImplStr(const char* str,
@@ -527,62 +522,13 @@ private:
   static SubstrBufFromWC ImplStr(const wchar_t* str, size_t n)
     { return ConvertStr(str, n, wxMBConvUTF8()); }
 
-  // this is an extremely simple cache used by PosToImpl()
-  struct PosToImplCache
-  {
-      const wxString *str;
-      size_t pos,
-             impl;
-  };
-
-  static PosToImplCache ms_cache;
-
   size_t PosToImpl(size_t pos) const
   {
       if ( pos == 0 || pos == npos )
           return pos;
-
-      PosToImplCache& cache = ms_cache;
-      if ( this == cache.str )
-      {
-          if ( pos == cache.pos )
-              return cache.impl;
-
-          // TODO: is it worth complicating this function even further by going
-          //       backwards from the last position? it might be if we're just
-          //       before it...
-          if ( cache.pos > pos )
-          {
-              cache.pos =
-              cache.impl = 0;
-          }
-      }
-      else // data for this string not cached
-      {
-          cache.str = this;
-          cache.pos =
-          cache.impl = 0;
-      }
-
-      wxStringImpl::const_iterator i(m_impl.begin() + cache.impl);
-      for ( size_t n = cache.pos; n < pos; n++ )
-          wxStringOperations::IncIter(i);
-
-      cache.pos = pos;
-      return cache.impl = i - m_impl.begin();
+      else
+          return (begin() + pos).impl() - m_impl.begin();
   }
-
-  void InvalidatePosToImplCache()
-  {
-      PosToImplCache& cache = ms_cache;
-      if ( cache.str == this )
-      {
-          cache.pos =
-              cache.impl = 0;
-      }
-  }
-
-  #define wxSTRING_INVALIDATE_INDEX_CACHE() InvalidatePosToImplCache()
 
   void PosLenToImpl(size_t pos, size_t len, size_t *implPos, size_t *implLen) const;
 
@@ -791,10 +737,6 @@ public:
   size_t IterToImplPos(wxString::iterator i) const
     { return wxStringImpl::const_iterator(i.impl()) - m_impl.begin(); }
 
-  iterator GetNthIter(size_t n)
-    { return iterator(this, m_impl.begin() + PosToImpl(n)); }
-  const_iterator GetNthIter(size_t n) const
-    { return const_iterator(this, m_impl.begin() + PosToImpl(n)); }
 #else // !wxUSE_UNICODE_UTF8
 
   class WXDLLIMPEXP_BASE iterator
@@ -846,9 +788,6 @@ public:
       const_iterator(const wxString *WXUNUSED(str), underlying_iterator ptr)
           : m_cur(ptr) {}
   };
-
-  iterator GetNthIter(size_t n) { return begin() + n; }
-  const_iterator GetNthIter(size_t n) const { return begin() + n; }
 #endif // wxUSE_UNICODE_UTF8/!wxUSE_UNICODE_UTF8
 
   #undef WX_STR_ITERATOR_TAG
@@ -1132,8 +1071,6 @@ public:
 #if wxUSE_UNICODE_UTF8
     if ( nSize < len )
     {
-        wxSTRING_INVALIDATE_INDEX_CACHE();
-
         // we can't use wxStringImpl::resize() for truncating the string as it
         // counts in bytes, not characters
         erase(nSize);
@@ -1173,7 +1110,11 @@ public:
     wxASSERT_MSG( empty(), _T("string not empty after call to Empty()?") );
   }
     // empty the string and free memory
-  void Clear() { clear(); }
+  void Clear()
+  {
+    wxString tmp(wxEmptyString);
+    swap(tmp);
+  }
 
   // contents test
     // Is an ascii value
@@ -1186,32 +1127,17 @@ public:
   // data access (all indexes are 0 based)
     // read access
     wxUniChar at(size_t n) const
-      { return wxStringOperations::DecodeChar(m_impl.begin() + PosToImpl(n)); }
+      { return *(begin() + n); } // FIXME-UTF8: optimize?
     wxUniChar GetChar(size_t n) const
       { return at(n); }
     // read/write access
     wxUniCharRef at(size_t n)
-      { return *GetNthIter(n); }
+      { return *(begin() + n); } // FIXME-UTF8: optimize?
     wxUniCharRef GetWritableChar(size_t n)
       { return at(n); }
     // write access
-    void SetChar(size_t n, wxUniChar ch)
-    {
-        wxUniCharRef ref(at(n));
-
-#if wxUSE_UNICODE_UTF8
-        // if the new character takes the same number of bytes as the old one,
-        // we can avoid invalidating the index cache and it's an important case
-        // as it is exercised by a simple for loop using indices
-        if ( wxStringOperations::GetUtf8CharLength(ref)
-                != wxStringOperations::GetUtf8CharLength(ch) )
-        {
-            wxSTRING_INVALIDATE_INDEX_CACHE();
-        }
-#endif // wxUSE_UNICODE_UTF8
-
-        ref = ch;
-    }
+    void  SetChar(size_t n, wxUniChar ch)
+      { at(n) = ch; }
 
     // get last character
     wxUniChar Last() const
@@ -1500,33 +1426,20 @@ public:
   // overloaded assignment
     // from another wxString
   wxString& operator=(const wxString& stringSrc)
-  {
-    if ( this != &stringSrc )
-    {
-        wxSTRING_INVALIDATE_INDEX_CACHE();
-
-        m_impl = stringSrc.m_impl;
-    }
-
-    return *this;
-  }
-
+    { if (&stringSrc != this) m_impl = stringSrc.m_impl; return *this; }
   wxString& operator=(const wxCStrData& cstr)
     { return *this = cstr.AsString(); }
     // from a character
   wxString& operator=(wxUniChar ch)
   {
-    wxSTRING_INVALIDATE_INDEX_CACHE();
-
 #if wxUSE_UNICODE_UTF8
     if ( !ch.IsAscii() )
         m_impl = wxStringOperations::EncodeChar(ch);
     else
-#endif // wxUSE_UNICODE_UTF8
+#endif
         m_impl = (wxStringCharType)ch;
     return *this;
   }
-
   wxString& operator=(wxUniCharRef ch)
     { return operator=((wxUniChar)ch); }
   wxString& operator=(char ch)
@@ -1539,48 +1452,15 @@ public:
     // so we need to compensate in that case
 #if wxUSE_STL_BASED_WXSTRING
   wxString& operator=(const char *psz)
-  {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      if ( psz )
-          m_impl = ImplStr(psz);
-      else
-          clear();
-
-      return *this;
-  }
-
+    { if (psz) m_impl = ImplStr(psz); else Clear(); return *this; }
   wxString& operator=(const wchar_t *pwz)
-  {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      if ( pwz )
-          m_impl = ImplStr(pwz);
-      else
-          clear();
-
-      return *this;
-  }
-#else // !wxUSE_STL_BASED_WXSTRING
+    { if (pwz) m_impl = ImplStr(pwz); else Clear(); return *this; }
+#else
   wxString& operator=(const char *psz)
-  {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      m_impl = ImplStr(psz);
-
-      return *this;
-  }
-
+    { m_impl = ImplStr(psz); return *this; }
   wxString& operator=(const wchar_t *pwz)
-  {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      m_impl = ImplStr(pwz);
-
-      return *this;
-  }
-#endif // wxUSE_STL_BASED_WXSTRING/!wxUSE_STL_BASED_WXSTRING
-
+    { m_impl = ImplStr(pwz); return *this; }
+#endif
   wxString& operator=(const unsigned char *psz)
     { return operator=((const char*)psz); }
 
@@ -1720,7 +1600,7 @@ public:
       const wxChar *fmt = _T("%") wxLongLongFmtSpec _T("u");
       return (*this) << Format(fmt , ull);
     }
-#endif // wxLongLong_t && !wxLongLongIsLong
+#endif
       // insert a float into string
   wxString& operator<<(float f)
     { return (*this) << Format(_T("%f"), f); }
@@ -1995,7 +1875,7 @@ public:
 #endif // wxNEEDS_WXSTRING_PRINTF_MIXIN
 
     // use Cmp()
-  int CompareTo(const wxChar* psz, caseCompare cmp = exact) const
+  inline int CompareTo(const wxChar* psz, caseCompare cmp = exact) const
     { return cmp == exact ? Cmp(psz) : CmpNoCase(psz); }
 
     // use length()
@@ -2140,71 +2020,36 @@ public:
 
     // same as `this_string = str'
   wxString& assign(const wxString& str)
-  {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      m_impl = str.m_impl;
-
-      return *this;
-  }
-
+    { m_impl = str.m_impl; return *this; }
   wxString& assign(const wxString& str, size_t len)
   {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      m_impl.assign(str.m_impl, 0, str.LenToImpl(len));
-
-      return *this;
+    m_impl.assign(str.m_impl, 0, str.LenToImpl(len));
+    return *this;
   }
-
     // same as ` = str[pos..pos + n]
   wxString& assign(const wxString& str, size_t pos, size_t n)
   {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      size_t from, len;
-      str.PosLenToImpl(pos, n, &from, &len);
-      m_impl.assign(str.m_impl, from, len);
-      return *this;
+    size_t from, len;
+    str.PosLenToImpl(pos, n, &from, &len);
+    m_impl.assign(str.m_impl, from, len);
+    return *this;
   }
-
     // same as `= first n (or all if n == npos) characters of sz'
   wxString& assign(const char *sz)
-  {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      m_impl.assign(ImplStr(sz));
-
-      return *this;
-  }
-
+    { m_impl.assign(ImplStr(sz)); return *this; }
   wxString& assign(const wchar_t *sz)
-  {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      m_impl.assign(ImplStr(sz));
-
-      return *this;
-  }
-
+    { m_impl.assign(ImplStr(sz)); return *this; }
   wxString& assign(const char *sz, size_t n)
   {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      SubstrBufFromMB str(ImplStr(sz, n));
-      m_impl.assign(str.data, str.len);
-
-      return *this;
+    SubstrBufFromMB str(ImplStr(sz, n));
+    m_impl.assign(str.data, str.len);
+    return *this;
   }
-
   wxString& assign(const wchar_t *sz, size_t n)
   {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      SubstrBufFromWC str(ImplStr(sz, n));
-      m_impl.assign(str.data, str.len);
-
-      return *this;
+    SubstrBufFromWC str(ImplStr(sz, n));
+    m_impl.assign(str.data, str.len);
+    return *this;
   }
 
   wxString& assign(const wxCStrData& str)
@@ -2223,8 +2068,6 @@ public:
     // same as `= n copies of ch'
   wxString& assign(size_t n, wxUniChar ch)
   {
-    wxSTRING_INVALIDATE_INDEX_CACHE();
-
 #if wxUSE_UNICODE_UTF8
     if ( !ch.IsAscii() )
         m_impl.assign(wxStringOperations::EncodeNChars(n, ch));
@@ -2245,13 +2088,7 @@ public:
 
     // assign from first to last
   wxString& assign(const_iterator first, const_iterator last)
-  {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      m_impl.assign(first.impl(), last.impl());
-
-      return *this;
-  }
+    { m_impl.assign(first.impl(), last.impl()); return *this; }
 #if WXWIN_COMPATIBILITY_STRING_PTR_AS_ITER
   wxString& assign(const char *first, const char *last)
     { return assign(first, last - first); }
@@ -2284,61 +2121,35 @@ public:
 
     // insert another string
   wxString& insert(size_t nPos, const wxString& str)
-    { insert(GetNthIter(nPos), str.begin(), str.end()); return *this; }
+    { insert(begin() + nPos, str.begin(), str.end()); return *this; }
     // insert n chars of str starting at nStart (in str)
   wxString& insert(size_t nPos, const wxString& str, size_t nStart, size_t n)
   {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      size_t from, len;
-      str.PosLenToImpl(nStart, n, &from, &len);
-      m_impl.insert(PosToImpl(nPos), str.m_impl, from, len);
-
-      return *this;
+    size_t from, len;
+    str.PosLenToImpl(nStart, n, &from, &len);
+    m_impl.insert(PosToImpl(nPos), str.m_impl, from, len);
+    return *this;
   }
-
     // insert first n (or all if n == npos) characters of sz
   wxString& insert(size_t nPos, const char *sz)
-  {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      m_impl.insert(PosToImpl(nPos), ImplStr(sz));
-
-      return *this;
-  }
-
+    { m_impl.insert(PosToImpl(nPos), ImplStr(sz)); return *this; }
   wxString& insert(size_t nPos, const wchar_t *sz)
-  {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      m_impl.insert(PosToImpl(nPos), ImplStr(sz)); return *this;
-  }
-
+    { m_impl.insert(PosToImpl(nPos), ImplStr(sz)); return *this; }
   wxString& insert(size_t nPos, const char *sz, size_t n)
   {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      SubstrBufFromMB str(ImplStr(sz, n));
-      m_impl.insert(PosToImpl(nPos), str.data, str.len);
-
-      return *this;
+    SubstrBufFromMB str(ImplStr(sz, n));
+    m_impl.insert(PosToImpl(nPos), str.data, str.len);
+    return *this;
   }
-
   wxString& insert(size_t nPos, const wchar_t *sz, size_t n)
   {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      SubstrBufFromWC str(ImplStr(sz, n));
-      m_impl.insert(PosToImpl(nPos), str.data, str.len);
-
-      return *this;
+    SubstrBufFromWC str(ImplStr(sz, n));
+    m_impl.insert(PosToImpl(nPos), str.data, str.len);
+    return *this;
   }
-
     // insert n copies of ch
   wxString& insert(size_t nPos, size_t n, wxUniChar ch)
   {
-    wxSTRING_INVALIDATE_INDEX_CACHE();
-
 #if wxUSE_UNICODE_UTF8
     if ( !ch.IsAscii() )
         m_impl.insert(PosToImpl(nPos), wxStringOperations::EncodeNChars(n, ch));
@@ -2347,11 +2158,8 @@ public:
         m_impl.insert(PosToImpl(nPos), n, (wxStringCharType)ch);
     return *this;
   }
-
   iterator insert(iterator it, wxUniChar ch)
   {
-    wxSTRING_INVALIDATE_INDEX_CACHE();
-
 #if wxUSE_UNICODE_UTF8
     if ( !ch.IsAscii() )
     {
@@ -2363,14 +2171,8 @@ public:
 #endif
         return iterator(this, m_impl.insert(it.impl(), (wxStringCharType)ch));
   }
-
   void insert(iterator it, const_iterator first, const_iterator last)
-  {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      m_impl.insert(it.impl(), first.impl(), last.impl());
-  }
-
+    { m_impl.insert(it.impl(), first.impl(), last.impl()); }
 #if WXWIN_COMPATIBILITY_STRING_PTR_AS_ITER
   void insert(iterator it, const char *first, const char *last)
     { insert(it - begin(), first, last - first); }
@@ -2382,8 +2184,6 @@ public:
 
   void insert(iterator it, size_type n, wxUniChar ch)
   {
-    wxSTRING_INVALIDATE_INDEX_CACHE();
-
 #if wxUSE_UNICODE_UTF8
     if ( !ch.IsAscii() )
         m_impl.insert(IterToImplPos(it), wxStringOperations::EncodeNChars(n, ch));
@@ -2395,225 +2195,139 @@ public:
     // delete characters from nStart to nStart + nLen
   wxString& erase(size_type pos = 0, size_type n = npos)
   {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      size_t from, len;
-      PosLenToImpl(pos, n, &from, &len);
-      m_impl.erase(from, len);
-
-      return *this;
+    size_t from, len;
+    PosLenToImpl(pos, n, &from, &len);
+    m_impl.erase(from, len);
+    return *this;
   }
-
     // delete characters from first up to last
   iterator erase(iterator first, iterator last)
-  {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      return iterator(this, m_impl.erase(first.impl(), last.impl()));
-  }
-
+    { return iterator(this, m_impl.erase(first.impl(), last.impl())); }
   iterator erase(iterator first)
-  {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      return iterator(this, m_impl.erase(first.impl()));
-  }
+    { return iterator(this, m_impl.erase(first.impl())); }
 
 #ifdef wxSTRING_BASE_HASNT_CLEAR
   void clear() { erase(); }
 #else
-  void clear()
-  {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      m_impl.clear();
-  }
+  void clear() { m_impl.clear(); }
 #endif
 
     // replaces the substring of length nLen starting at nStart
   wxString& replace(size_t nStart, size_t nLen, const char* sz)
   {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      size_t from, len;
-      PosLenToImpl(nStart, nLen, &from, &len);
-      m_impl.replace(from, len, ImplStr(sz));
-
-      return *this;
+    size_t from, len;
+    PosLenToImpl(nStart, nLen, &from, &len);
+    m_impl.replace(from, len, ImplStr(sz));
+    return *this;
   }
-
   wxString& replace(size_t nStart, size_t nLen, const wchar_t* sz)
   {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      size_t from, len;
-      PosLenToImpl(nStart, nLen, &from, &len);
-      m_impl.replace(from, len, ImplStr(sz));
-
-      return *this;
+    size_t from, len;
+    PosLenToImpl(nStart, nLen, &from, &len);
+    m_impl.replace(from, len, ImplStr(sz));
+    return *this;
   }
-
     // replaces the substring of length nLen starting at nStart
   wxString& replace(size_t nStart, size_t nLen, const wxString& str)
   {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      size_t from, len;
-      PosLenToImpl(nStart, nLen, &from, &len);
-      m_impl.replace(from, len, str.m_impl);
-
-      return *this;
+    size_t from, len;
+    PosLenToImpl(nStart, nLen, &from, &len);
+    m_impl.replace(from, len, str.m_impl);
+    return *this;
   }
-
     // replaces the substring with nCount copies of ch
   wxString& replace(size_t nStart, size_t nLen, size_t nCount, wxUniChar ch)
   {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      size_t from, len;
-      PosLenToImpl(nStart, nLen, &from, &len);
+    size_t from, len;
+    PosLenToImpl(nStart, nLen, &from, &len);
 #if wxUSE_UNICODE_UTF8
-      if ( !ch.IsAscii() )
-          m_impl.replace(from, len, wxStringOperations::EncodeNChars(nCount, ch));
-      else
+    if ( !ch.IsAscii() )
+        m_impl.replace(from, len, wxStringOperations::EncodeNChars(nCount, ch));
+    else
 #endif
-          m_impl.replace(from, len, nCount, (wxStringCharType)ch);
-
-      return *this;
+        m_impl.replace(from, len, nCount, (wxStringCharType)ch);
+    return *this;
   }
-
     // replaces a substring with another substring
   wxString& replace(size_t nStart, size_t nLen,
                     const wxString& str, size_t nStart2, size_t nLen2)
   {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
+    size_t from, len;
+    PosLenToImpl(nStart, nLen, &from, &len);
 
-      size_t from, len;
-      PosLenToImpl(nStart, nLen, &from, &len);
+    size_t from2, len2;
+    str.PosLenToImpl(nStart2, nLen2, &from2, &len2);
 
-      size_t from2, len2;
-      str.PosLenToImpl(nStart2, nLen2, &from2, &len2);
-
-      m_impl.replace(from, len, str.m_impl, from2, len2);
-
-      return *this;
+    m_impl.replace(from, len, str.m_impl, from2, len2);
+    return *this;
   }
-
      // replaces the substring with first nCount chars of sz
   wxString& replace(size_t nStart, size_t nLen,
                     const char* sz, size_t nCount)
   {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
+    size_t from, len;
+    PosLenToImpl(nStart, nLen, &from, &len);
 
-      size_t from, len;
-      PosLenToImpl(nStart, nLen, &from, &len);
+    SubstrBufFromMB str(ImplStr(sz, nCount));
 
-      SubstrBufFromMB str(ImplStr(sz, nCount));
-
-      m_impl.replace(from, len, str.data, str.len);
-
-      return *this;
+    m_impl.replace(from, len, str.data, str.len);
+    return *this;
   }
-
   wxString& replace(size_t nStart, size_t nLen,
                     const wchar_t* sz, size_t nCount)
   {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
+    size_t from, len;
+    PosLenToImpl(nStart, nLen, &from, &len);
 
-      size_t from, len;
-      PosLenToImpl(nStart, nLen, &from, &len);
+    SubstrBufFromWC str(ImplStr(sz, nCount));
 
-      SubstrBufFromWC str(ImplStr(sz, nCount));
-
-      m_impl.replace(from, len, str.data, str.len);
-
-      return *this;
+    m_impl.replace(from, len, str.data, str.len);
+    return *this;
   }
-
   wxString& replace(size_t nStart, size_t nLen,
                     const wxString& s, size_t nCount)
   {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      size_t from, len;
-      PosLenToImpl(nStart, nLen, &from, &len);
-      m_impl.replace(from, len, s.m_impl.c_str(), s.LenToImpl(nCount));
-
-      return *this;
+    size_t from, len;
+    PosLenToImpl(nStart, nLen, &from, &len);
+    m_impl.replace(from, len, s.m_impl.c_str(), s.LenToImpl(nCount));
+    return *this;
   }
 
   wxString& replace(iterator first, iterator last, const char* s)
-  {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      m_impl.replace(first.impl(), last.impl(), ImplStr(s));
-
-      return *this;
-  }
-
+    { m_impl.replace(first.impl(), last.impl(), ImplStr(s)); return *this; }
   wxString& replace(iterator first, iterator last, const wchar_t* s)
-  {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      m_impl.replace(first.impl(), last.impl(), ImplStr(s));
-
-      return *this;
-  }
-
+    { m_impl.replace(first.impl(), last.impl(), ImplStr(s)); return *this; }
   wxString& replace(iterator first, iterator last, const char* s, size_type n)
   {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      SubstrBufFromMB str(ImplStr(s, n));
-      m_impl.replace(first.impl(), last.impl(), str.data, str.len);
-
-      return *this;
+    SubstrBufFromMB str(ImplStr(s, n));
+    m_impl.replace(first.impl(), last.impl(), str.data, str.len);
+    return *this;
   }
-
   wxString& replace(iterator first, iterator last, const wchar_t* s, size_type n)
   {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      SubstrBufFromWC str(ImplStr(s, n));
-      m_impl.replace(first.impl(), last.impl(), str.data, str.len);
-
-      return *this;
+    SubstrBufFromWC str(ImplStr(s, n));
+    m_impl.replace(first.impl(), last.impl(), str.data, str.len);
+    return *this;
   }
-
   wxString& replace(iterator first, iterator last, const wxString& s)
-  {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      m_impl.replace(first.impl(), last.impl(), s.m_impl);
-
-      return *this;
-  }
-
+    { m_impl.replace(first.impl(), last.impl(), s.m_impl); return *this; }
   wxString& replace(iterator first, iterator last, size_type n, wxUniChar ch)
   {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
 #if wxUSE_UNICODE_UTF8
-      if ( !ch.IsAscii() )
-          m_impl.replace(first.impl(), last.impl(),
-                  wxStringOperations::EncodeNChars(n, ch));
-      else
+    if ( !ch.IsAscii() )
+        m_impl.replace(first.impl(), last.impl(),
+                       wxStringOperations::EncodeNChars(n, ch));
+    else
 #endif
-          m_impl.replace(first.impl(), last.impl(), n, (wxStringCharType)ch);
-
-      return *this;
+        m_impl.replace(first.impl(), last.impl(), n, (wxStringCharType)ch);
+    return *this;
   }
-
   wxString& replace(iterator first, iterator last,
                     const_iterator first1, const_iterator last1)
   {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      m_impl.replace(first.impl(), last.impl(), first1.impl(), last1.impl());
-
-      return *this;
+    m_impl.replace(first.impl(), last.impl(), first1.impl(), last1.impl());
+    return *this;
   }
-
   wxString& replace(iterator first, iterator last,
                     const char *first1, const char *last1)
     { replace(first, last, first1, last1 - first1); return *this; }
@@ -2623,11 +2337,7 @@ public:
 
   // swap two strings
   void swap(wxString& str)
-  {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      m_impl.swap(str.m_impl);
-  }
+    { m_impl.swap(str.m_impl); }
 
     // find a substring
   size_t find(const wxString& str, size_t nStart = 0) const
@@ -2963,23 +2673,11 @@ private:
 #if !wxUSE_STL_BASED_WXSTRING
   // helpers for wxStringBuffer and wxStringBufferLength
   wxStringCharType *DoGetWriteBuf(size_t nLen)
-  {
-      return m_impl.DoGetWriteBuf(nLen);
-  }
-
+    { return m_impl.DoGetWriteBuf(nLen); }
   void DoUngetWriteBuf()
-  {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      m_impl.DoUngetWriteBuf();
-  }
-
+    { m_impl.DoUngetWriteBuf(); }
   void DoUngetWriteBuf(size_t nLen)
-  {
-      wxSTRING_INVALIDATE_INDEX_CACHE();
-
-      m_impl.DoUngetWriteBuf(nLen);
-  }
+    { m_impl.DoUngetWriteBuf(nLen); }
 #endif // !wxUSE_STL_BASED_WXSTRING
 
 #ifndef wxNEEDS_WXSTRING_PRINTF_MIXIN
