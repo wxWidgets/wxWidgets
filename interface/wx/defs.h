@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        defs.h
+// Name:        wx/defs.h
 // Purpose:     interface of global functions
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
@@ -8,7 +8,7 @@
 
 /**
     Item kinds for use with wxMenu, wxMenuItem, and wxToolBar.
-    
+
     @see wxMenu::Append(), wxMenuItem::wxMenuItem(), wxToolBar::AddTool()
 */
 enum wxItemKind
@@ -243,6 +243,52 @@ enum wxPaperSize
 
 /** @ingroup group_funcmacro_misc */
 //@{
+
+/**
+    This macro can be used in a class declaration to disable the generation of
+    default assignment operator.
+
+    Some classes have a well-defined copy constructor but cannot have an
+    assignment operator, typically because they can't be modified once created.
+    In such case, this macro can be used to disable the automatic assignment
+    operator generation.
+
+    @see DECLARE_NO_COPY_CLASS()
+ */
+#define DECLARE_NO_ASSIGN_CLASS(classname)
+
+/**
+    This macro can be used in a class declaration to disable the generation of
+    default copy ctor and assignment operator.
+
+    Some classes don't have a well-defined copying semantics. In this case the
+    standard C++ convention is to not allow copying them. One way of achieving
+    it is to use this macro which simply defines a private copy constructor and
+    assignment operator.
+
+    Beware that simply not defining copy constructor and assignment operator is
+    @em not enough as the compiler would provide its own automatically-generated
+    versions of them -- hence the usefulness of this macro.
+
+    Example of use:
+    @code
+    class FooWidget
+    {
+    public:
+        FooWidget();
+        ...
+
+    private:
+        // widgets can't be copied
+        DECLARE_NO_COPY_CLASS(FooWidget)
+    };
+    @endcode
+
+    Notice that a semicolon should not be used after this macro and that it
+    changes the access specifier to private internally so it is better to use
+    it at the end of the class declaration.
+ */
+#define DECLARE_NO_COPY_CLASS(classname)
 
 /**
     This macro can be used around a function declaration to generate warnings
