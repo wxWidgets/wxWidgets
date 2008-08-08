@@ -241,6 +241,10 @@ SOURCE=.\bench.cpp
 
 SOURCE=.\strings.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=.\tls.cpp
+# End Source File
 # End Group
 # End Target
 # End Project

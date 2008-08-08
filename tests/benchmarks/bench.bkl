@@ -12,6 +12,7 @@
         <sources>
             bench.cpp
             strings.cpp
+            tls.cpp
         </sources>
         <wx-lib>base</wx-lib>
     </exe>

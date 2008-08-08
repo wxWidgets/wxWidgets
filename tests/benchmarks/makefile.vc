@@ -30,7 +30,8 @@ BENCH_CXXFLAGS = /M$(__RUNTIME_LIBS_8)$(__DEBUGRUNTIME_3) /DWIN32 \
 	$(CXXFLAGS)
 BENCH_OBJECTS =  \
 	$(OBJS)\bench_bench.obj \
-	$(OBJS)\bench_strings.obj
+	$(OBJS)\bench_strings.obj \
+	$(OBJS)\bench_tls.obj
 
 ### Conditionally set variables: ###
 
@@ -250,4 +251,7 @@ $(OBJS)\bench_bench.obj: .\bench.cpp
 
 $(OBJS)\bench_strings.obj: .\strings.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BENCH_CXXFLAGS) .\strings.cpp
+
+$(OBJS)\bench_tls.obj: .\tls.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(BENCH_CXXFLAGS) .\tls.cpp
 

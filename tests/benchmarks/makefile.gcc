@@ -29,7 +29,8 @@ BENCH_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG) \
 	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 BENCH_OBJECTS =  \
 	$(OBJS)\bench_bench.o \
-	$(OBJS)\bench_strings.o
+	$(OBJS)\bench_strings.o \
+	$(OBJS)\bench_tls.o
 
 ### Conditionally set variables: ###
 
@@ -182,6 +183,9 @@ $(OBJS)\bench_bench.o: ./bench.cpp
 	$(CXX) -c -o $@ $(BENCH_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\bench_strings.o: ./strings.cpp
+	$(CXX) -c -o $@ $(BENCH_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\bench_tls.o: ./tls.cpp
 	$(CXX) -c -o $@ $(BENCH_CXXFLAGS) $(CPPDEPS) $<
 
 .PHONY: all clean

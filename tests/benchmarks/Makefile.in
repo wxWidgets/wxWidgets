@@ -44,7 +44,8 @@ BENCH_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(CXXFLAGS)
 BENCH_OBJECTS =  \
 	bench_bench.o \
-	bench_strings.o
+	bench_strings.o \
+	bench_tls.o
 
 ### Conditionally set variables: ###
 
@@ -110,6 +111,9 @@ bench_bench.o: $(srcdir)/bench.cpp
 
 bench_strings.o: $(srcdir)/strings.cpp
 	$(CXXC) -c -o $@ $(BENCH_CXXFLAGS) $(srcdir)/strings.cpp
+
+bench_tls.o: $(srcdir)/tls.cpp
+	$(CXXC) -c -o $@ $(BENCH_CXXFLAGS) $(srcdir)/tls.cpp
 
 
 $(srcdir)/include/wx/stc/stc.h: \

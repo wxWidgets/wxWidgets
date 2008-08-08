@@ -36,7 +36,8 @@ BENCH_CXXFLAGS = $(__RUNTIME_LIBS_7) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	-DwxUSE_GUI=0 $(CPPFLAGS) $(CXXFLAGS)
 BENCH_OBJECTS =  \
 	$(OBJS)\bench_bench.obj \
-	$(OBJS)\bench_strings.obj
+	$(OBJS)\bench_strings.obj \
+	$(OBJS)\bench_tls.obj
 
 ### Conditionally set variables: ###
 
@@ -193,4 +194,7 @@ $(OBJS)\bench_bench.obj: .\bench.cpp
 
 $(OBJS)\bench_strings.obj: .\strings.cpp
 	$(CXX) -q -c -P -o$@ $(BENCH_CXXFLAGS) .\strings.cpp
+
+$(OBJS)\bench_tls.obj: .\tls.cpp
+	$(CXX) -q -c -P -o$@ $(BENCH_CXXFLAGS) .\tls.cpp
 

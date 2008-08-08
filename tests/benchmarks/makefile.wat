@@ -210,7 +210,8 @@ BENCH_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG_5) &
 	-dwxUSE_GUI=0 $(__RTTIFLAG_7) $(__EXCEPTIONSFLAG_8) $(CPPFLAGS) $(CXXFLAGS)
 BENCH_OBJECTS =  &
 	$(OBJS)\bench_bench.obj &
-	$(OBJS)\bench_strings.obj
+	$(OBJS)\bench_strings.obj &
+	$(OBJS)\bench_tls.obj
 
 
 all : $(OBJS)
@@ -245,5 +246,8 @@ $(OBJS)\bench_bench.obj :  .AUTODEPEND .\bench.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BENCH_CXXFLAGS) $<
 
 $(OBJS)\bench_strings.obj :  .AUTODEPEND .\strings.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BENCH_CXXFLAGS) $<
+
+$(OBJS)\bench_tls.obj :  .AUTODEPEND .\tls.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BENCH_CXXFLAGS) $<
 
