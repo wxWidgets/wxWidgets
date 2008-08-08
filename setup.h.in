@@ -756,6 +756,10 @@
  * Define if you have pthread_cleanup_push/pop()
  */
 #undef wxHAVE_PTHREAD_CLEANUP
+/*
+ * Define if compiler has __thread keyword.
+ */
+#undef HAVE___THREAD_KEYWORD
 
 /* compatibility */
 /*

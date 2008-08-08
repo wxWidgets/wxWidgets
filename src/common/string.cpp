@@ -58,6 +58,10 @@
 //According to STL _must_ be a -1 size_t
 const size_t wxString::npos = (size_t) -1;
 
+#if wxUSE_UNICODE_UTF8
+wxString::PosToImplCache wxString::ms_cache;
+#endif // wxUSE_UNICODE_UTF8
+
 // ----------------------------------------------------------------------------
 // global functions
 // ----------------------------------------------------------------------------
@@ -1236,6 +1240,8 @@ size_t wxString::Replace(const wxString& strOld,
     // if we tried to replace an empty string we'd enter an infinite loop below
     wxCHECK_MSG( !strOld.empty(), 0,
                  _T("wxString::Replace(): invalid parameter") );
+
+    wxSTRING_INVALIDATE_INDEX_CACHE();
 
     size_t uiCount = 0;   // count of replacements made
 

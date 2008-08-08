@@ -10,6 +10,8 @@
 
 #include "bench.h"
 
+#include "wx/tls.h"
+
 #if defined(__UNIX__)
     #define HAVE_PTHREAD
     #include <pthread.h>
@@ -171,3 +173,18 @@ BENCHMARK_FUNC(BoostTLS)
 }
 
 #endif // HAVE_BOOST_THREAD
+
+BENCHMARK_FUNC(wxTLS)
+{
+    static wxTLS_TYPE(int) s_global;
+
+    for ( int n = 0; n < NUM_ITER; n++ )
+    {
+        if ( n % 2 )
+            s_global = 0;
+        else
+            s_global = n;
+    }
+
+    return !s_global;
+}

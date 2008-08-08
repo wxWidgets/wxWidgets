@@ -4985,13 +4985,31 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
           AC_MSG_WARN([wxMutex won't be recursive on this platform])
         fi
       fi
+
+      dnl test for compiler thread-specific variables support
+      AC_CACHE_CHECK([for __thread keyword],
+                     wx_cv_cc___thread,
+      [
+          AC_TRY_COMPILE([#include <pthread.h>],
+              [
+                  static __thread int n = 0;
+                  static __thread int *p = 0;
+              ],
+              wx_cv_cc___thread=yes,
+              wx_cv_cc___thread=no
+          )
+      ])
+
+      if test "$wx_cv_cc___thread" = "yes"; then
+        AC_DEFINE(HAVE___THREAD_KEYWORD)
+      fi
     fi
 
 dnl from if !MSW
 else
     if test "$wxUSE_THREADS" = "yes" ; then
       case "${host}" in
-	x86_64-*-mingw32* )
+        x86_64-*-mingw32* )
         ;;
         *-*-mingw32* )
             dnl check if the compiler accepts -mthreads
