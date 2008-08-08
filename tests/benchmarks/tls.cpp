@@ -10,19 +10,25 @@
 
 #include "bench.h"
 
-#ifdef __UNIX__
+#if defined(__UNIX__)
     #define HAVE_PTHREAD
     #include <pthread.h>
+#elif defined(__WIN32__)
+    #define HAVE_WIN32_THREAD
+    #include "wx/msw/wrapwin.h"
 #endif
 
 #if wxCHECK_GCC_VERSION(3, 3)
     #define HAVE_COMPILER_THREAD
     #define wxTHREAD_SPECIFIC __thread
+#elif wxCHECK_VISUALC_VERSION(7)
+    #define HAVE_COMPILER_THREAD
+    #define wxTHREAD_SPECIFIC __declspec(thread)
 #endif
 
 // uncomment this to also test Boost version (you will also need to link with
 // libboost_threads)
-//#define HAVE_BOOST_THREAD
+#define HAVE_BOOST_THREAD
 #ifdef HAVE_BOOST_THREAD
     #include <boost/thread/tss.hpp>
 #endif
@@ -104,6 +110,46 @@ BENCHMARK_FUNC(PosixTLS)
 }
 
 #endif // HAVE_PTHREAD
+
+#ifdef HAVE_WIN32_THREAD
+
+class TlsSlot
+{
+public:
+    TlsSlot()
+    {
+        m_slot = ::TlsAlloc();
+    }
+
+    ~TlsSlot()
+    {
+        ::TlsFree(m_slot);
+    }
+
+    operator DWORD() const { return m_slot; }
+
+private:
+    DWORD m_slot;
+
+    DECLARE_NO_COPY_CLASS(TlsSlot)
+};
+
+BENCHMARK_FUNC(Win32TLS)
+{
+    static TlsSlot s_slot;
+
+    for ( int n = 0; n < NUM_ITER; n++ )
+    {
+        if ( n % 2 )
+            ::TlsSetValue(s_slot, 0);
+        else
+            ::TlsSetValue(s_slot, &n);
+    }
+
+    return !::TlsGetValue(s_slot);
+}
+
+#endif // HAVE_WIN32_THREAD
 
 #ifdef HAVE_BOOST_THREAD
 
