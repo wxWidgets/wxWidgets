@@ -333,6 +333,8 @@ void StringTestCase::Replace()
     TEST_WXREPLACE( _T("null\0dehar"), 10, _T("de"), _T("c"), true,
                           _T("null\0char"), 9 );
 
+    TEST_WXREPLACE( "life", 4, "f", "", false, "lie", 3 );
+
     #undef TEST_WXREPLACE
     #undef TEST_NULLCHARREPLACE
     #undef TEST_REPLACE
