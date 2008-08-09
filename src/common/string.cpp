@@ -1503,7 +1503,7 @@ wxString::Replace(const wxChar *szOld, const wxChar *szNew, bool bReplaceAll)
 
     // optimize the special common case of replacing one character with another
     // one
-    if ( szOld[1] == '\0' && szNew[1] == '\0' )
+    if ( szOld[1] == '\0' && (szNew[0] != '\0' && szNew[1] == '\0') )
     {
         // this loop is the simplified version of the one below
         for ( size_t pos = 0; ; )
