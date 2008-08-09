@@ -131,7 +131,16 @@ bool wxStringOperationsUtf8::IsValidUtf8String(const char *str, size_t len)
             if ( !(b >= 0x80 && b <= 0xBF ) )
                 return false;
         }
-        else if ( b <= 0xEF ) // E1..EF
+        else if ( b == 0xED )
+        {
+            b = *(++c);
+            if ( !(b >= 0x80 && b <= 0x9F ) )
+                return false;
+            b = *(++c);
+            if ( !(b >= 0x80 && b <= 0xBF ) )
+                return false;
+        }
+        else if ( b <= 0xEF ) // E1..EC EE..EF
         {
             for ( int i = 0; i < 2; ++i )
             {
