@@ -558,10 +558,6 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
     }
 
 
-    // we'll use this to decide whether we have to change the label of this
-    // button or not (initially the label is "Next")
-    bool btnLabelWasNext = true;
-
     // remember the old bitmap (if any) to compare with the new one later
     wxBitmap bmpPrev;
 
@@ -579,8 +575,6 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
         }
 
         m_page->Hide();
-
-        btnLabelWasNext = HasNextPage(m_page);
 
         bmpPrev = m_page->GetBitmap();
 
@@ -651,15 +645,10 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
     // and update the buttons state
     m_btnPrev->Enable(HasPrevPage(m_page));
 
-    bool hasNext = HasNextPage(m_page);
-    if ( btnLabelWasNext != hasNext )
-    {
-        if ( hasNext )
-            m_btnNext->SetLabel(_("&Next >"));
-        else
-            m_btnNext->SetLabel(_("&Finish"));
-    }
-    // nothing to do: the label was already correct
+    const bool hasNext = HasNextPage(m_page);
+    const wxString label = hasNext ? _("&Next >") : _("&Finish");
+    if ( label != m_btnNext->GetLabel() )
+        m_btnNext->SetLabel(label);
 
     m_btnNext->SetDefault();
 
