@@ -252,10 +252,16 @@ arrow_button_press_event(GtkToggleButton* button, GdkEventButton* event, wxToolB
 // InsertChild callback for wxToolBar
 //-----------------------------------------------------------------------------
 
-static void wxInsertChildInToolBar( wxWindow* WXUNUSED(parent),
-                                    wxWindow* /* child */)
+static void wxInsertChildInToolBar(wxWindow* parent, wxWindow* child)
 {
-    // Child widget will be inserted into GtkToolbar by DoInsertTool()
+    GtkWidget* align = gtk_alignment_new(0.5, 0.5, 0, 0);
+    gtk_widget_show(align);
+    gtk_container_add(GTK_CONTAINER(align), child->m_widget);
+    GtkToolItem* item = gtk_tool_item_new();
+    gtk_container_add(GTK_CONTAINER(item), align);
+    wxToolBar* tbar = static_cast<wxToolBar*>(parent);
+    // position will be corrected in DoInsertTool if necessary
+    gtk_toolbar_insert(GTK_TOOLBAR(GTK_BIN(tbar->m_widget)->child), item, -1);
 }
 
 // ----------------------------------------------------------------------------
@@ -520,19 +526,27 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 
             if (tool->GetKind() == wxITEM_DROPDOWN)
                 tool->CreateDropDown();
+            gtk_toolbar_insert(m_toolbar, tool->m_item, int(pos));
             break;
 
         case wxTOOL_STYLE_SEPARATOR:
             tool->m_item = gtk_separator_tool_item_new();
+            gtk_toolbar_insert(m_toolbar, tool->m_item, int(pos));
             break;
 
         case wxTOOL_STYLE_CONTROL:
-            GtkWidget * const align = gtk_alignment_new(0.5, 0.5, 0, 0);
-            gtk_widget_show(align);
             wxWindow* control = tool->GetControl();
-            gtk_container_add(GTK_CONTAINER(align), control->m_widget);
-            tool->m_item = gtk_tool_item_new();
-            gtk_container_add(GTK_CONTAINER(tool->m_item), align);
+            if (control->m_widget->parent == NULL)
+                wxInsertChildInToolBar(this, control);
+            tool->m_item = GTK_TOOL_ITEM(control->m_widget->parent->parent);
+            if (gtk_toolbar_get_item_index(m_toolbar, tool->m_item) != int(pos))
+            {
+                g_object_ref(tool->m_item);
+                gtk_container_remove(
+                    GTK_CONTAINER(m_toolbar), GTK_WIDGET(tool->m_item));
+                gtk_toolbar_insert(m_toolbar, tool->m_item, int(pos));
+                g_object_unref(tool->m_item);
+            }
             // Inserted items "slide" into place using an animated effect that
             // causes multiple size events on the item. Must set size request
             // to keep item size from getting permanently set too small by the
@@ -542,7 +556,6 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
             break;
     }
     gtk_widget_show(GTK_WIDGET(tool->m_item));
-    gtk_toolbar_insert(m_toolbar, tool->m_item, int(pos));
 
     InvalidateBestSize();
 
