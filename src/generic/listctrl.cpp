@@ -2860,9 +2860,11 @@ void wxListMainWindow::HighlightAll( bool on )
     }
 }
 
-void wxListMainWindow::OnChildFocus(wxChildFocusEvent& event)
+void wxListMainWindow::OnChildFocus(wxChildFocusEvent& WXUNUSED(event))
 {
-    // do nothing
+    // Do nothing here.  This prevents the default handler in wxScrolledWindow
+    // from needlessly scrolling the window when the edit control is
+    // dismissed.  See ticket #9563.
 }
 
 void wxListMainWindow::SendNotify( size_t line,
