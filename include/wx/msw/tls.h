@@ -12,6 +12,7 @@
 #define _WX_MSW_TLS_H_
 
 #include "wx/log.h"
+#include "wx/intl.h"
 
 #include "wx/msw/wrapwin.h"
 
