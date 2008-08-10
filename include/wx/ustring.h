@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+
 // Name:        wx/ustring.h
 // Purpose:     32-bit string (UCS-4)
 // Author:      Robert Roebling
@@ -15,49 +15,18 @@
 
 #include <string>
 
-WXDLLIMPEXP_TEMPLATE_INSTANCE_BASE( wxCharTypeBuffer<wxChar32> )
-
 #if SIZEOF_WCHAR_T == 2
-
 typedef wxWCharBuffer wxU16CharBuffer;
-
 #else
-
-class WXDLLIMPEXP_BASE wxU16CharBuffer : public wxCharTypeBuffer<wxChar16>
-{
-public:
-    typedef wxCharTypeBuffer<wxChar16> wxCharTypeBufferBase;
-
-    wxU16CharBuffer(const wxCharTypeBufferBase& buf)
-        : wxCharTypeBufferBase(buf) {}
-
-    wxU16CharBuffer(const CharType *str = NULL) : wxCharTypeBufferBase(str) {}
-    wxU16CharBuffer(size_t len) : wxCharTypeBufferBase(len) {}
-};
-
+typedef wxCharTypeBuffer<wxChar16> wxU16CharBuffer;
 #endif
 
-
-
-#if SIZEOF_WCHAR_T == 2
-
-class WXDLLIMPEXP_BASE wxU32CharBuffer : public wxCharTypeBuffer<wxChar32>
-{
-public:
-    typedef wxCharTypeBuffer<wxChar32> wxCharTypeBufferBase;
-
-    wxU32CharBuffer(const wxCharTypeBufferBase& buf)
-        : wxCharTypeBufferBase(buf) {}
-
-    wxU32CharBuffer(const CharType *str = NULL) : wxCharTypeBufferBase(str) {}
-    wxU32CharBuffer(size_t len) : wxCharTypeBufferBase(len) {}
-};
-
-#else
-
+#if SIZEOF_WCHAR_T == 4
 typedef wxWCharBuffer wxU32CharBuffer;
-
+#else
+typedef wxCharTypeBuffer<wxChar32> wxU32CharBuffer;
 #endif
+
 
 class WXDLLIMPEXP_BASE wxUString: public std::basic_string<wxChar32>
 {
