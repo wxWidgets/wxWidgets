@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wallctrlnavigationevent.h
+// Name:        wallctrlnavigatorevent.h
 // Purpose:     Represents wxWallCtrl navigation event
 // Author:      Mokhtar M. Khorshid
 // Modified by: 

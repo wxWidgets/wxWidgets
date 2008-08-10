@@ -2,7 +2,7 @@
 
 #include "wx/Wallctrl/Matrix.h"
 #include <cmath>
-
+/*
 VectorType MatrixLib::CrossProduct( VectorType V1, VectorType V2 )
 {
 	VectorType Out(3,0);
@@ -52,3 +52,4 @@ void MatrixLib::Normalize( VectorType &V )
 	V[1]/=Base;
 	V[2]/=Base;
 }
+*/
