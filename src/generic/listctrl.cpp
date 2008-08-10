@@ -621,6 +621,8 @@ public:
 
     void OnPaint( wxPaintEvent &event );
 
+    void OnChildFocus(wxChildFocusEvent& event);
+    
     void DrawImage( int index, wxDC *dc, int x, int y );
     void GetImageSize( int index, int &width, int &height ) const;
     int GetTextLength( const wxString &s ) const;
@@ -2255,6 +2257,7 @@ BEGIN_EVENT_TABLE(wxListMainWindow,wxScrolledWindow)
   EVT_SET_FOCUS      (wxListMainWindow::OnSetFocus)
   EVT_KILL_FOCUS     (wxListMainWindow::OnKillFocus)
   EVT_SCROLLWIN      (wxListMainWindow::OnScroll)
+  EVT_CHILD_FOCUS    (wxListMainWindow::OnChildFocus)
 END_EVENT_TABLE()
 
 void wxListMainWindow::Init()
@@ -2875,6 +2878,11 @@ void wxListMainWindow::HighlightAll( bool on )
         if ( !IsEmpty() )
             HighlightLines(0, GetItemCount() - 1, on);
     }
+}
+
+void wxListMainWindow::OnChildFocus(wxChildFocusEvent& event)
+{
+    // do nothing
 }
 
 void wxListMainWindow::SendNotify( size_t line,
