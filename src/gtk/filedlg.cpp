@@ -40,22 +40,24 @@ static void gtk_filedialog_ok_callback(GtkWidget *widget, wxFileDialog *dialog)
 
     // gtk version numbers must be identical with the one in ctor (that calls set_do_overwrite_confirmation)
 #if GTK_CHECK_VERSION(2,7,3)
-    if(gtk_check_version(2,7,3) != NULL)
+    if (gtk_check_version(2, 7, 3) != NULL)
 #endif
-    if ((style & wxFD_SAVE) && (style & wxFD_OVERWRITE_PROMPT))
     {
-        if ( g_file_test(filename, G_FILE_TEST_EXISTS) )
+        if ((style & wxFD_SAVE) && (style & wxFD_OVERWRITE_PROMPT))
         {
-            wxString msg;
+            if ( g_file_test(filename, G_FILE_TEST_EXISTS) )
+            {
+                wxString msg;
 
-            msg.Printf(
-                _("File '%s' already exists, do you really want to overwrite it?"),
-                wxString(filename, *wxConvFileName));
+                msg.Printf(
+                    _("File '%s' already exists, do you really want to overwrite it?"),
+                    wxString(filename, *wxConvFileName));
 
-            wxMessageDialog dlg(dialog, msg, _("Confirm"),
-                               wxYES_NO | wxICON_QUESTION);
-            if (dlg.ShowModal() != wxID_YES)
-                return;
+                wxMessageDialog dlg(dialog, msg, _("Confirm"),
+                                   wxYES_NO | wxICON_QUESTION);
+                if (dlg.ShowModal() != wxID_YES)
+                    return;
+            }
         }
     }
 
@@ -173,7 +175,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
 {
     m_insertCallback = wxInsertChildInFileDialog;
     parent = GetParentForModalDialog(parent);
-    
+
     if (!wxFileDialogBase::Create(parent, message, defaultDir, defaultFileName,
                                   wildCard, style, pos, sz, name))
     {
@@ -212,22 +214,23 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
                    GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                    ok_btn_stock, GTK_RESPONSE_ACCEPT,
                    NULL);
+    GtkFileChooser* file_chooser = GTK_FILE_CHOOSER(m_widget);
 
-    m_fc.SetWidget( GTK_FILE_CHOOSER(m_widget) );
+    m_fc.SetWidget(file_chooser);
 
     gtk_dialog_set_default_response(GTK_DIALOG(m_widget), GTK_RESPONSE_ACCEPT);
 
     if ( style & wxFD_MULTIPLE )
-        gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(m_widget), true);
+        gtk_file_chooser_set_select_multiple(file_chooser, true);
 
     // gtk_widget_hide_on_delete is used here to avoid that Gtk automatically
     // destroys the dialog when the user press ESC on the dialog: in that case
     // a second call to ShowModal() would result in a bunch of Gtk-CRITICAL
     // errors...
-    g_signal_connect (G_OBJECT(m_widget),
+    g_signal_connect(m_widget,
                     "delete_event",
                     G_CALLBACK (gtk_widget_hide_on_delete),
-                    (gpointer)this);
+                    this);
 
     // local-only property could be set to false to allow non-local files to be
     // loaded. In that case get/set_uri(s) should be used instead of
@@ -258,8 +261,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
     const wxString dir = fn.GetPath();
     if ( !dir.empty() )
     {
-        gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_widget),
-                                            dir.fn_str());
+        gtk_file_chooser_set_current_folder(file_chooser, dir.fn_str());
     }
 
     const wxString fname = fn.GetFullName();
@@ -267,20 +269,19 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
     {
         if ( !fname.empty() )
         {
-            gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(m_widget),
-                                              fname.fn_str());
+            gtk_file_chooser_set_current_name(file_chooser, fname.fn_str());
         }
 
 #if GTK_CHECK_VERSION(2,7,3)
         if ((style & wxFD_OVERWRITE_PROMPT) && !gtk_check_version(2,7,3))
-            gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(m_widget), TRUE);
+            gtk_file_chooser_set_do_overwrite_confirmation(file_chooser, true);
 #endif
     }
     else // wxFD_OPEN
     {
         if ( !fname.empty() )
         {
-            gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(m_widget),
+            gtk_file_chooser_set_filename(file_chooser,
                                           fn.GetFullPath().fn_str());
         }
     }
@@ -289,14 +290,12 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
     {
         GtkWidget *previewImage = gtk_image_new();
 
-        gtk_file_chooser_set_preview_widget(GTK_FILE_CHOOSER(m_widget),
-                                            previewImage);
+        gtk_file_chooser_set_preview_widget(file_chooser, previewImage);
         g_signal_connect(m_widget, "update-preview",
                          G_CALLBACK(gtk_filedialog_update_preview_callback),
                          previewImage);
     }
 }
-
 
 void wxFileDialog::OnFakeOk(wxCommandEvent& WXUNUSED(event))
 {
