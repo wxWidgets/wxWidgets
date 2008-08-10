@@ -21,12 +21,6 @@
 #include "wx/gtk/private.h"
 
 //-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class wxButton;
-
-//-----------------------------------------------------------------------------
 // data
 //-----------------------------------------------------------------------------
 
@@ -52,35 +46,27 @@ static void gtk_button_clicked_callback( GtkWidget *WXUNUSED(widget), wxButton *
 // "style_set" from m_widget
 //-----------------------------------------------------------------------------
 
-static gint
-gtk_button_style_set_callback( GtkWidget *m_widget, GtkStyle *WXUNUSED(style), wxButton *win )
+extern "C" {
+static void
+gtk_button_style_set_callback(GtkWidget* widget, GtkStyle*, wxButton* win)
 {
-    int left_border = 0;
-    int right_border = 0;
-    int top_border = 0;
-    int bottom_border = 0;
-
     /* the default button has a border around it */
-    if (GTK_WIDGET_CAN_DEFAULT(m_widget))
+    wxWindow* parent = win->GetParent();
+    if (parent && parent->m_wxwindow && GTK_WIDGET_CAN_DEFAULT(widget))
     {
-        GtkBorder *default_border = NULL;
-        gtk_widget_style_get( m_widget, "default_border", &default_border, NULL );
-        if (default_border)
+        GtkBorder* border = NULL;
+        gtk_widget_style_get(widget, "default_border", &border, NULL);
+        if (border)
         {
-            left_border += default_border->left;
-            right_border += default_border->right;
-            top_border += default_border->top;
-            bottom_border += default_border->bottom;
-            gtk_border_free( default_border );
+            win->MoveWindow(
+                win->m_x - border->left,
+                win->m_y - border->top,
+                win->m_width + border->left + border->right,
+                win->m_height + border->top + border->bottom);
+            gtk_border_free(border);
         }
-        win->MoveWindow(
-            win->m_x - left_border,
-            win->m_y - top_border,
-            win->m_width + left_border + right_border,
-            win->m_height + top_border + bottom_border);
     }
-
-    return FALSE;
+}
 }
 
 //-----------------------------------------------------------------------------
@@ -209,8 +195,6 @@ void wxButton::SetLabel( const wxString &lbl )
 
     wxControl::SetLabel(label);
 
-    const wxString labelGTK = GTKConvertMnemonics(label);
-
     if (wxIsStockID(m_windowId) && wxIsStockLabel(m_windowId, label))
     {
         const char *stock = wxGetStockGtkID(m_windowId);
@@ -222,6 +206,7 @@ void wxButton::SetLabel( const wxString &lbl )
         }
     }
 
+    const wxString labelGTK = GTKConvertMnemonics(label);
     gtk_button_set_label(GTK_BUTTON(m_widget), wxGTK_CONV(labelGTK));
     gtk_button_set_use_stock(GTK_BUTTON(m_widget), FALSE);
 
