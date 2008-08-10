@@ -143,9 +143,12 @@ static void extra_widget_size_request(GtkWidget*, GtkRequisition* req, wxWindow*
 }
 }
 
-static void wxInsertChildInFileDialog(wxWindow* WXUNUSED(parent),
-                                      wxWindow* WXUNUSED(child))
+static void wxInsertChildInFileDialog(wxWindow* parent, wxWindow* child)
 {
+    g_signal_connect_after(child->m_widget, "size_request",
+        G_CALLBACK(extra_widget_size_request), child);
+    gtk_file_chooser_set_extra_widget(
+        GTK_FILE_CHOOSER(parent->m_widget), child->m_widget);
 }
 
 //-----------------------------------------------------------------------------
@@ -302,17 +305,7 @@ void wxFileDialog::OnFakeOk(wxCommandEvent& WXUNUSED(event))
 
 int wxFileDialog::ShowModal()
 {
-    if (CreateExtraControl())
-    {
-        GtkWidget *control = m_extraControl->m_widget;
-
-        wxASSERT(control->parent == NULL);
-
-        gtk_widget_show(control);
-        g_signal_connect_after(control, "size_request",
-            G_CALLBACK(extra_widget_size_request), m_extraControl);
-        gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(m_widget), control);
-    }
+    CreateExtraControl();
 
     return wxDialog::ShowModal();
 }
