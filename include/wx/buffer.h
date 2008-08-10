@@ -33,126 +33,155 @@ public:
     typedef T CharType;
 
     wxCharTypeBuffer(const CharType *str = NULL)
-        : m_str(str ? wxStrdup(str) : NULL),
-          m_owned(true)
     {
+        if ( str )
+            m_data = new Data(wxStrdup(str));
+        else
+            m_data = &NullData;
     }
 
     wxCharTypeBuffer(size_t len)
-        : m_str((CharType *)malloc((len + 1)*sizeof(CharType))),
-          m_owned(true)
     {
-        m_str[len] = (CharType)0;
+        m_data = new Data((CharType *)malloc((len + 1)*sizeof(CharType)));
+        m_data->m_str[len] = (CharType)0;
     }
 
     static const wxCharTypeBuffer CreateNonOwned(const CharType *str)
     {
         wxCharTypeBuffer buf;
-        buf.m_str = wx_const_cast(CharType*, str);
-        buf.m_owned = false;
+        if ( str )
+            buf.m_data = new Data(wx_const_cast(CharType*, str), Data::NonOwned);
         return buf;
     }
 
-    /* no need to check for NULL, free() does it */
     ~wxCharTypeBuffer()
     {
-        if ( m_owned)
-            free(m_str);
+        DecRef();
     }
 
-    /*
-        WARNING:
-
-        the copy ctor and assignment operators change the passed in object
-        even although it is declared as "const", so:
-
-        a) it shouldn't be really const
-        b) you shouldn't use it afterwards (or know that it was reset)
-
-        This is very ugly but is unfortunately needed to make the normal use
-        of wxCharTypeBuffer buffer objects possible and is very similar to what
-        std::auto_ptr<> does (as if it were an excuse...)
-    */
-
-    /*
-       because of the remark above, release() is declared const even if it
-       isn't really const
-     */
-    CharType *release() const
+    CharType *release()
     {
-        wxASSERT_MSG( m_owned, _T("can't release non-owned buffer") );
-        return DoRelease();
+        if ( m_data == &NullData )
+            return NULL;
+
+        wxASSERT_MSG( m_data->m_owned, _T("can't release non-owned buffer") );
+        wxASSERT_MSG( m_data->m_ref == 1, _T("can't release shared buffer") );
+
+        CharType *p = m_data->m_str;
+        m_data->m_str = NULL;
+        DecRef();
+        return p;
     }
 
     void reset()
     {
-        if ( m_owned )
-            free(m_str);
-        m_str = NULL;
+        DecRef();
     }
 
     wxCharTypeBuffer(const wxCharTypeBuffer& src)
     {
-        CopyFrom(src);
+        m_data = src.m_data;
+        IncRef();
     }
 
     wxCharTypeBuffer& operator=(const CharType *str)
     {
-        if ( m_owned )
-            free(m_str);
-        m_str = str ? wxStrdup(str) : NULL;
-        m_owned = true;
+        DecRef();
+
+        if ( str )
+            m_data = new Data(wxStrdup(str));
         return *this;
     }
 
     wxCharTypeBuffer& operator=(const wxCharTypeBuffer& src)
     {
-        if (&src != this)
-        {
-            if ( m_owned )
-                free(m_str);
-            CopyFrom(src);
-        }
+        if ( &src == this )
+            return *this;
+
+        DecRef();
+        m_data = src.m_data;
+        IncRef();
+
         return *this;
     }
 
     bool extend(size_t len)
     {
-        wxASSERT_MSG( m_owned, _T("cannot extend non-owned buffer") );
+        wxASSERT_MSG( m_data->m_owned, _T("cannot extend non-owned buffer") );
+        wxASSERT_MSG( m_data->m_ref == 1, _T("can't extend shared buffer") );
 
-        CharType *
-            str = (CharType *)realloc(m_str, (len + 1)*sizeof(CharType));
+        CharType *str =
+            (CharType *)realloc(data(), (len + 1) * sizeof(CharType));
         if ( !str )
             return false;
 
-        m_str = str;
+        if ( m_data == &NullData )
+        {
+            m_data = new Data(str);
+        }
+        else
+        {
+            m_data->m_str = str;
+            m_data->m_owned = true;
+        }
 
         return true;
     }
 
-    CharType *data() { return m_str; }
-    const CharType *data() const { return m_str; }
-    operator const CharType *() const { return m_str; }
-    CharType operator[](size_t n) const { return m_str[n]; }
-
-
-private:
-    CharType *DoRelease() const
-    {
-        CharType *p = m_str;
-        ((wxCharTypeBuffer *)this)->m_str = NULL;
-        return p;
-    }
-
-    void CopyFrom(const wxCharTypeBuffer& src)
-    {
-        m_owned = src.m_owned;
-        m_str = src.DoRelease();
-    }
+    CharType *data() { return m_data->m_str; }
+    const CharType *data() const { return  m_data->m_str; }
+    operator const CharType *() const { return data(); }
+    CharType operator[](size_t n) const { return data()[n]; }
 
 private:
-    CharType *m_str;
-    bool m_owned;
+    // reference-counted data
+    struct Data
+    {
+        enum Kind
+        {
+            Owned,
+            NonOwned
+        };
+
+        Data(CharType *str, Kind kind = Owned)
+            : m_str(str), m_ref(1), m_owned(kind == Owned) {}
+
+        ~Data()
+        {
+            if ( m_owned )
+                free(m_str);
+        }
+
+        CharType *m_str;
+
+        // "short" to have sizeof(Data)=8 on 32bit archs
+        unsigned short m_ref;
+
+        bool m_owned;
+    };
+
+    // placeholder for NULL string, to simplify this code
+    // NB: this is defined in string.cpp, not (non-existent) buffer.cpp
+    static Data NullData;
+
+    void IncRef()
+    {
+        if ( m_data == &NullData ) // exception, not ref-counted
+            return;
+        m_data->m_ref++;
+    }
+
+    void DecRef()
+    {
+        if ( m_data == &NullData ) // exception, not ref-counted
+            return;
+        if ( --m_data->m_ref == 0 )
+            delete m_data;
+        m_data = &NullData;
+    }
+
+private:
+    Data *m_data;
 };
 
 WXDLLIMPEXP_TEMPLATE_INSTANCE_BASE( wxCharTypeBuffer<char> )

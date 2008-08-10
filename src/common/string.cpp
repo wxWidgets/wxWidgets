@@ -2009,3 +2009,15 @@ wxUTF8StringBufferLength::~wxUTF8StringBufferLength()
     wbuf.SetLength(wlen);
 }
 #endif // wxUSE_UNICODE_WCHAR
+
+// ----------------------------------------------------------------------------
+// wxCharBufferType<T>
+// ----------------------------------------------------------------------------
+
+template<>
+wxCharTypeBuffer<char>::Data
+wxCharTypeBuffer<char>::NullData(NULL);
+
+template<>
+wxCharTypeBuffer<wchar_t>::Data
+wxCharTypeBuffer<wchar_t>::NullData(NULL);
