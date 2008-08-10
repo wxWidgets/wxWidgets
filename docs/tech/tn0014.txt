@@ -249,7 +249,7 @@ face            comma-separated list of faces
 encoding        charset of the font (meaningless in Unicode build), as string
 sysfont         symbolic name of system standard font
                 (one of wxSYS_*_FONT constants)
-relativesize    Float, font size relative to choosen system font's size;
+relativesize    Float, font size relative to chosen system font's size;
                 can only be used when 'sysfont' is used and when 'size' is not
                 used
 
