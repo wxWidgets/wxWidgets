@@ -20,6 +20,7 @@
  */
 
 #include "wx/wallctrl/wallctrlbitmapsource.h"
+#include "wx/wallctrl/wallctrlnavigatorevent.h"
 
 ////@begin includes
 #include "wx/filepicker.h"
@@ -93,6 +94,14 @@ public:
 
     /// Should we show tooltips?
     static bool ShowToolTips();
+
+	
+
+	void OnSelectionChanged(wxWallCtrlNavigatorEvent &event )
+	{
+		//wxPlotCurve *curve = event.GetCurve();
+		int x =0;
+	}
 
 ////@begin wxWallCtrlSample member variables
 ////@end wxWallCtrlSample member variables

@@ -40,31 +40,37 @@ void wxWallCtrlDefaultPlaneNavigator::OnKeyDown( wxKeyEvent &event )
 	case WXK_HOME:
 		// TODO: Should go to first element, not necessarily 0
 		m_surface->Seek(0);
+		ChangeSelection();
 		break;
 	case WXK_LEFT:
 		m_surface->SeekLeft();
+		ChangeSelection();
 		//m_surface->MoveLeft(0.1);
 		break;
 	case WXK_RIGHT:
 		m_surface->SeekRight();
+		ChangeSelection();
 		//m_surface->MoveRight(0.1);
 		break;
 	case WXK_UP:
 		m_surface->SeekUp();
+		ChangeSelection();
 		//m_surface->MoveIn(0.1);
 		break;
 	case WXK_DOWN:
 		m_surface->SeekDown();
+		ChangeSelection();
 		//m_surface->MoveOut(0.1);
 		break;
 	case WXK_END:
 		m_surface->LoadNextLayerItemTexture();
+		ChangeSelection();
 		break;
 	}
 }
 wxWallCtrlDefaultPlaneNavigator::wxWallCtrlDefaultPlaneNavigator()// wxWallCtrlPlaneSurface * surface ) :m_surface(surface)
 {
-	
+	m_surface = NULL;
 }
 
 wxWallCtrlDefaultPlaneNavigator::~wxWallCtrlDefaultPlaneNavigator(void)
@@ -78,7 +84,6 @@ void wxWallCtrlDefaultPlaneNavigator::ChangeSelection()
 	event.SetEventObject( this );
 	// Set event details here
 	ProcessEvent( event );
-	
 }
 
 wxWallCtrlSurface * wxWallCtrlDefaultPlaneNavigator::GetSurface() const
@@ -88,6 +93,19 @@ wxWallCtrlSurface * wxWallCtrlDefaultPlaneNavigator::GetSurface() const
 
 void wxWallCtrlDefaultPlaneNavigator::SetSurface( wxWallCtrlSurface * surface )
 {
+
+	// If we have a previous surface
+	if (m_surface)
+	{
+		PopEventHandler();
+		m_surface = NULL;
+	}
+
 	// TODO: What should we do if the surface is invalid? Probably nothing
 	m_surface = wxDynamicCast(surface, wxWallCtrlPlaneSurface);
+
+	if (m_surface)
+	{
+		PushEventHandler(m_surface);
+	}
 }

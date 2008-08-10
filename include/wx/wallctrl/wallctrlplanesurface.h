@@ -135,17 +135,6 @@ public:
 	// Must be preceeded by a call to CreateLoadingThread
 	void RunLoadingThread();
 protected:
-	// Loads a texture from the DC into the supplied array
-	// Precondition: Texture must be at least Width * Height * BYTES_PER_PIXEL
-	/*void CreateTextureFromDC(wxMemoryDC &dc, GLubyte * texture, const wxSize& dcSize);
-
-	// Loads a bitmap into a texture array
-	// Precondition: Texture must be at least Width * Height * BYTES_PER_PIXEL
-	void CreateTextureFromBitmap(wxBitmap bitmap, GLubyte * texture);*/
-
-	// Returns the texture ID for a specific item, and if it does not exist it loads it
-	//GLuint GetItemTexture(wxWallCtrlItemID itemID);
-
 	// Returns the number of columns in the specified layer
 	int GetLayerWidth(int layer) const;
 	// Returns the number of columns in the specified layer

@@ -56,6 +56,8 @@ BEGIN_EVENT_TABLE( wxWallCtrlSample, wxDialog )
 
 ////@end wxWallCtrlSample event table entries
 
+	EVT_SELECT(wxEVT_WALLCTRL_SELECTION_CHANGED,  wxWallCtrlSample::OnSelectionChanged)
+
 END_EVENT_TABLE()
 
 
