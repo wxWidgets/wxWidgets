@@ -1,0 +1,37 @@
+wxWallCtrl
+**********
+This is the main control class, it contains a surface, a data source, and is controlled via a navigator. The wxWallCtrl specifies when the control is to be rendered, the data source specifies what gets rendered, and the surface specifies how it gets rendered.
+
+A lot of attributes and settings were hard-coded, all of them should be specified either in the constructors or by setter methods.
+
+wxWallCtrlSurface
+*****************
+A wall control may be displayed in many different ways, the basic concept is that the items are layed on the surface of a geometric solid. So a surface is responsible for arranging and displaying the items in the correct way. A surface doesn't have to resemle a real geometric surface of course.
+
+Loading and caching of textures need some serious work, the current methods should be refined to be applicable to all types of surfaces and to order the pre-loading sequence based on the surface type. Threading or some similar concept need to be used to allow for non-blocking loading of textures.
+
+wxWallCtrlPlaneSurface
+**********************
+The plane surface is a concrete surface that displays the items as a rectangular grid where elements are layed out on a flat planar 2D surface.
+
+wxWallCtrlDataSource
+********************
+Since the wall control may be used to display items comming from any source, it will not directly hold its own contect, but rather will have a data source that can feed it the items it will display and interact with. The data source is responsible for ordering the items in sequence, as well as rendering each individual item.
+
+wxWallCtrlBitmapSource
+**********************
+The bitmap source is a concrete data source that contains a list of bitmaps as its data.
+
+wxWallCtrlNavigator
+*******************
+A wall control navigator handles the interactions with the control.
+
+wxWallCtrlDefaultPlaneNavigator
+*******************************
+The default plane navigator is a concrete navigator meant to be used with wxWallCtrlPlaneSurface in particular. At this time it uses the keyboard arrow keys to change the selected item and the camera will automatically follow to keep it centered in the screen.
+
+Adding mouse support to this navigator would be a good idea. We could use it for either dragging/moving around the surface, or for selecting items by clicking on them.
+
+wxWallCtrlNavigatorEvent
+************************
+This class is the basic wall control event. It contains information about the events that occure and its necessary parameters. At this time this class is trivial, but it is expected that it will be expanded when more event types are developed.
