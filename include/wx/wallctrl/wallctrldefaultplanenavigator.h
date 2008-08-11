@@ -14,6 +14,7 @@
 #include "wx/wallctrl/WallCtrlNavigator.h"
 #include "wx/wallctrl/wallctrlplanesurface.h"
 #include "wx/wallctrl/wallctrlnavigatorevent.h"
+#include "wx/wallctrl/wallctrl.h"
 
 class wxWallCtrlDefaultPlaneNavigator :
 	public wxWallCtrlNavigator

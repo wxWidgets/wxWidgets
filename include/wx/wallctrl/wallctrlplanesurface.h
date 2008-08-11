@@ -76,7 +76,7 @@ class wxWallCtrlPlaneSurface :
 	DECLARE_DYNAMIC_CLASS(wxWallCtrlPlaneSurface)
 public:
 	// Precondition: dataSource must be valid
-	wxWallCtrlPlaneSurface();
+	wxWallCtrlPlaneSurface(wxWallCtrl * parent);
 	virtual ~wxWallCtrlPlaneSurface(void);
 
 	// Recalculates the item size from the number of items in the scope

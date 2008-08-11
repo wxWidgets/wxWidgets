@@ -28,10 +28,9 @@ END_EVENT_TABLE()
 
 void wxWallCtrlDefaultPlaneNavigator::OnKeyDown( wxKeyEvent &event )
 {
-	//wxWallCtrlPlaneSurface * temp = wxDynamicCast(m_surface, wxWallCtrlPlaneSurface);
-	//wxWallCtrlPlaneSurface * m_surface = dynamic_cast<wxWallCtrlPlaneSurface *> (m_surface);
 	if (!m_surface)
 	{
+		
 		// TODO: See if we need a different error signaling approach
 		return;
 	}
@@ -62,10 +61,6 @@ void wxWallCtrlDefaultPlaneNavigator::OnKeyDown( wxKeyEvent &event )
 		ChangeSelection();
 		//m_surface->MoveOut(0.1);
 		break;
-	case WXK_END:
-		m_surface->LoadNextLayerItemTexture();
-		ChangeSelection();
-		break;
 	}
 }
 wxWallCtrlDefaultPlaneNavigator::wxWallCtrlDefaultPlaneNavigator()// wxWallCtrlPlaneSurface * surface ) :m_surface(surface)
@@ -83,7 +78,9 @@ void wxWallCtrlDefaultPlaneNavigator::ChangeSelection()
 	wxWallCtrlNavigatorEvent event( wxEVT_WALLCTRL_SELECTION_CHANGED, 0 );
 	event.SetEventObject( this );
 	// Set event details here
-	ProcessEvent( event );
+	if (!ProcessEvent( event ))
+		if (!m_surface->ProcessEvent( event))
+			m_surface->GetParent()->ProcessEvent(event);
 }
 
 wxWallCtrlSurface * wxWallCtrlDefaultPlaneNavigator::GetSurface() const
@@ -97,7 +94,7 @@ void wxWallCtrlDefaultPlaneNavigator::SetSurface( wxWallCtrlSurface * surface )
 	// If we have a previous surface
 	if (m_surface)
 	{
-		PopEventHandler();
+//		PopEventHandler();
 		m_surface = NULL;
 	}
 
@@ -106,6 +103,6 @@ void wxWallCtrlDefaultPlaneNavigator::SetSurface( wxWallCtrlSurface * surface )
 
 	if (m_surface)
 	{
-		PushEventHandler(m_surface);
+//		PushEventHandler(m_surface);
 	}
 }

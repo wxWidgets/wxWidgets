@@ -18,7 +18,7 @@ wxWallCtrlPlaneSurface::~wxWallCtrlPlaneSurface(void)
 	DestroyLoadingThread();
 }
 
-wxWallCtrlPlaneSurface::wxWallCtrlPlaneSurface()
+wxWallCtrlPlaneSurface::wxWallCtrlPlaneSurface(wxWallCtrl * parent):wxWallCtrlSurface(parent)
 {
 	m_initialized = false;
 	m_defaultDistance = 2;
@@ -645,7 +645,7 @@ void wxWallCtrlPlaneSurface::RunLoadingThread()
 {
 	if (!m_loaderThread)
 	{
-		// TODO: Signal an error, we should never get to this point
+		wxLogError(wxT("Attempt to run wxWallCtrl texture loading thread without first creating it"));
 		return;
 	}
 	if (m_loaderThread->Run() != wxTHREAD_NO_ERROR )

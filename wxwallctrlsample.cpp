@@ -163,7 +163,7 @@ void wxWallCtrlSample::CreateControls()
 		bitmapSource->AppendBitmap(testBitmap);
 	}
 */
-	wxWallCtrlPlaneSurface * surface = new wxWallCtrlPlaneSurface();
+	wxWallCtrlPlaneSurface * surface = new wxWallCtrlPlaneSurface(wall);
 	surface->SetScopeSize(wxSize(3, 3));
 
 	wxWallCtrlDefaultPlaneNavigator * navigation = new wxWallCtrlDefaultPlaneNavigator();

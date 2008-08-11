@@ -16,9 +16,10 @@ wxWallCtrlSurface::~wxWallCtrlSurface(void)
 {
 }
 
-wxWallCtrlSurface::wxWallCtrlSurface()
+wxWallCtrlSurface::wxWallCtrlSurface(wxWallCtrl * parent)
 {
 	m_dataSource = NULL;
+	SetParent(parent);
 }
 
 void wxWallCtrlSurface::SetDataSource( wxWallCtrlDataSource * dataSource )

@@ -21,13 +21,15 @@ const int wxWallCtrlPlaneSurfaceInvalidTexture = -10;
 // A map to hold the texture names for items that were previously cached
 WX_DECLARE_HASH_MAP(int, int, wxIntegerHash, wxIntegerEqual, Int2IntMap);
 
+class wxWallCtrl;
+
 // TODO: Check if inheriting from wxObject is correct
 class wxWallCtrlSurface:
-	public wxObject
+	public wxEvtHandler
 {
 	DECLARE_DYNAMIC_CLASS(wxWallCtrlSurface)
 public:
-	wxWallCtrlSurface();
+	wxWallCtrlSurface(wxWallCtrl * parent);
 	virtual ~wxWallCtrlSurface(void);
 
 	virtual void Render(const wxSize & windowSize)=0;
@@ -92,8 +94,19 @@ public:
 	// returns true if we need to load additional items
 	virtual bool NeedLoading() const;
 
+	void SetParent(wxWallCtrl * parent)
+	{
+		m_parent = parent;
+	}
+
+	wxWallCtrl * GetParent()
+	{
+		return m_parent;
+	}
+
 protected:
 	wxWallCtrlDataSource * m_dataSource;	
+	wxWallCtrl * m_parent;			// Pointer to the control that contains this surface
 
 	// Layer variables used for partial loading and caching
 	unsigned m_currentLayer;		// The current (square) layer that needs to be loaded
