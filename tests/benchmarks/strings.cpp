@@ -226,12 +226,12 @@ BENCHMARK_FUNC(ForStringRIter)
 // wxString::Replace()
 // ----------------------------------------------------------------------------
 
-const size_t REPLACE_STR_LEN = strlen(asciistr);
+const size_t ASCIISTR_LEN = strlen(asciistr);
 
 BENCHMARK_FUNC(ReplaceLoop)
 {
-    wxString str('x', REPLACE_STR_LEN);
-    for ( size_t n = 0; n < REPLACE_STR_LEN; n++ )
+    wxString str('x', ASCIISTR_LEN);
+    for ( size_t n = 0; n < ASCIISTR_LEN; n++ )
     {
         if ( str[n] == 'a' )
             str[n] = 'z';
@@ -242,7 +242,7 @@ BENCHMARK_FUNC(ReplaceLoop)
 
 BENCHMARK_FUNC(ReplaceNone)
 {
-    wxString str('x', REPLACE_STR_LEN);
+    wxString str('x', ASCIISTR_LEN);
     return str.Replace("a", "z") == 0;
 }
 
@@ -254,7 +254,22 @@ BENCHMARK_FUNC(ReplaceSome)
 
 BENCHMARK_FUNC(ReplaceAll)
 {
-    wxString str('x', REPLACE_STR_LEN);
+    wxString str('x', ASCIISTR_LEN);
     return str.Replace("x", "y") != 0;
 }
 
+
+// ----------------------------------------------------------------------------
+// string buffers: wx[W]CharBuffer
+// ----------------------------------------------------------------------------
+
+BENCHMARK_FUNC(CharBuffer)
+{
+    wxString str(asciistr);
+
+    // NB: wxStrlen() is here to simulate some use of the returned buffer.
+    //     Both mb_str() and wc_str() are used so that this code does something
+    //     nontrivial in any build.
+    return wxStrlen(str.mb_str()) == ASCIISTR_LEN &&
+           wxStrlen(str.wc_str()) == ASCIISTR_LEN;
+}
