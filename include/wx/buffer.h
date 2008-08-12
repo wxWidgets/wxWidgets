@@ -59,7 +59,10 @@ public:
         DecRef();
     }
 
-    CharType *release()
+    // NB: this method is only const for backward compatibility. It used to
+    //     be needed for auto_ptr-like semantics of the copy ctor, but now
+    //     that ref-counting is used, it's not really needed.
+    CharType *release() const
     {
         if ( m_data == &NullData )
             return NULL;
@@ -68,8 +71,11 @@ public:
         wxASSERT_MSG( m_data->m_ref == 1, _T("can't release shared buffer") );
 
         CharType *p = m_data->m_str;
-        m_data->m_str = NULL;
-        DecRef();
+
+        wxCharTypeBuffer *self = wx_const_cast(wxCharTypeBuffer*, this);
+        self->m_data->m_str = NULL;
+        self->DecRef();
+
         return p;
     }
 
