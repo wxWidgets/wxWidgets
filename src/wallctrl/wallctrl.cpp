@@ -210,3 +210,11 @@ void wxWallCtrl::SetDataSource( wxWallCtrlDataSource * dataSource )
 		m_surface->SetDataSource(m_dataSource);
 	}
 }
+
+void wxWallCtrl::Reload()
+{
+	if (m_surface)
+	{
+		m_surface->Reload();
+	}
+}

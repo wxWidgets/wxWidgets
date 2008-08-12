@@ -145,7 +145,7 @@ void wxWallCtrlSample::CreateControls()
 
 ////@end wxWallCtrlSample content construction
 
-	wxWallCtrl * wall = itemWallCtrl4;
+	wall = itemWallCtrl4;
 
 	//wxWallCtrlBitmapSource * source = new wxWallCtrlBitmapSource();
 	bitmapSource = new wxWallCtrlBitmapSource();
@@ -216,8 +216,13 @@ wxIcon wxWallCtrlSample::GetIconResource( const wxString& name )
 
 void wxWallCtrlSample::OnDirpickerctrl1DirPickerChanged( wxFileDirPickerEvent& event )
 {	
+	// Clear all previous data to reload new content
+	bitmapSource->ClearDataSource();
+
+	wall->Reload();
+
+	// Temp bitmap used for loading
     wxBitmap testBitmap;
-	// Just add bitmaps manually.
 
 	wxDir dir(event.GetPath());
 

@@ -70,6 +70,9 @@ public:
 	// The idle handler, we do our rendering here when needed
 	void OnIdle(wxIdleEvent& event);
 
+	// Reload all data and reset the control
+	void Reload();
+
 private:	
 	// This is the data source that will supply the bitmaps. Mainly used for clean up
 	wxWallCtrlDataSource * m_dataSource;

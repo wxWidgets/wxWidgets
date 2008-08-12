@@ -137,6 +137,9 @@ protected:
 	// Returns the item rectangle without applying any translation to it
 	wxRealRect GetRawItemRect(int x, int y) const;
 
+	// Causes the control to reload all its content and reset its state
+	virtual void Reload();
+
 private:
 	// Flag used to ensure OpenGL is initialized only once on first render.
 	bool m_initialized;

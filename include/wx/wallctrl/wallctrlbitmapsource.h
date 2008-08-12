@@ -51,6 +51,9 @@ public:
 	// Appends a bitmap at the end of the list and give it an ordered id
 	void AppendBitmap(wxBitmap bitmap);
 
+	// Delete all data
+	void ClearDataSource();
+
 private:
 	// The bitmaps are stored in a map instead of a vector to allow for using non-consecutive IDs
 	BitmapMap m_bitmaps;

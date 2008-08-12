@@ -19,7 +19,11 @@ wxWallCtrlSurface::~wxWallCtrlSurface(void)
 wxWallCtrlSurface::wxWallCtrlSurface(wxWallCtrl * parent)
 {
 	m_dataSource = NULL;
+	m_loadingNeeded = false;
+	m_currentLayer = 0;
+	m_nextLayerItem = 0;
 	SetParent(parent);
+	
 }
 
 void wxWallCtrlSurface::SetDataSource( wxWallCtrlDataSource * dataSource )
@@ -81,6 +85,12 @@ void wxWallCtrlSurface::LoadNextLayerItemTexture()
 		if (IsValidPosition(m_nextLayerItemPos))
 		{
 			wxWallCtrlItemID index = GetItemIndex(m_nextLayerItemPos);
+			if (index >= m_dataSource->GetCount())
+			{
+				// Move to the next one
+				m_nextLayerItem++;
+				continue;
+			}
 			if (!IsItemTextureLoaded(index))
 			{
 				// Load it, move to the next one, and return
@@ -309,4 +319,22 @@ void wxWallCtrlSurface::SetParent( wxWallCtrl * parent )
 wxWallCtrl * wxWallCtrlSurface::GetParent()
 {
 	return m_parent;
+}
+
+void wxWallCtrlSurface::Reload()
+{
+	// Clear all loaded textures
+	m_texturesCache.clear();
+
+	m_currentLayer = 0;
+	m_nextLayerItem = 0;
+
+	if (m_dataSource)
+	{
+		m_loadingNeeded = true;
+	}
+	else
+	{
+		m_loadingNeeded = false;
+	}
 }

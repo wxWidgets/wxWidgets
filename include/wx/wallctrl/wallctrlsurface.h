@@ -97,6 +97,9 @@ public:
 	// returns true if we need to load additional items
 	virtual bool NeedLoading() const;
 
+	// Causes the control to reload all its content and reset its state
+	virtual void Reload();
+
 	// Sets the wxWallCtrl that owns this surface
 	void SetParent(wxWallCtrl * parent);
 

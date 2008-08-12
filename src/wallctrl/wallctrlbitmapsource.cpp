@@ -98,3 +98,9 @@ void wxWallCtrlBitmapSource::DataChanged()
 {
 	m_dataChanged = true;
 }
+
+void wxWallCtrlBitmapSource::ClearDataSource()
+{
+	m_bitmaps.clear();
+	DataChanged();
+}

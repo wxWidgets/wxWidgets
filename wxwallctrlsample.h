@@ -15,12 +15,15 @@
 #define _WXWALLCTRLSAMPLE_H_
 
 
+
 /*!
  * Includes
  */
 
 #include "wx/wallctrl/wallctrlbitmapsource.h"
 #include "wx/wallctrl/wallctrlnavigatorevent.h"
+
+class wxWallCtrl;
 
 ////@begin includes
 #include "wx/filepicker.h"
@@ -104,6 +107,8 @@ public:
 
 ////@begin wxWallCtrlSample member variables
 ////@end wxWallCtrlSample member variables
+private:
+	wxWallCtrl * wall;
 };
 
 #endif

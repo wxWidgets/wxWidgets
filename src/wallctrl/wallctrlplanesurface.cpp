@@ -733,3 +733,9 @@ void wxWallCtrlPlaneSurface::AdjustScope()
 	m_scopeOffsetX = wxMax(position.x - m_scopeSize.GetWidth()/2, 0);
 	m_scopeOffsetY = wxMax(position.y - m_scopeSize.GetHeight()/2,0);
 }
+
+void wxWallCtrlPlaneSurface::Reload()
+{
+	wxWallCtrlSurface::Reload();
+	m_loadingInProgress = false;
+}
