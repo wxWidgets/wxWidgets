@@ -18,61 +18,12 @@
 #include <sstream>
 #include <string>
 
-
 class wxWallCtrlLoadingThread;
-
-
-
-
-
 
 // This is a default surface implementation. This is where all the geometric manipulation and rendering take place
 class wxWallCtrlPlaneSurface :
 	public wxWallCtrlSurface
 {
-	// TODO: See if there is a better place for this struct
-	struct wxRealRect
-	{
-		float GetTop()const
-		{
-			return m_top;
-		}
-		float GetBottom() const
-		{
-			return m_bottom;
-		}
-		float GetRight() const
-		{
-			return m_right;
-		}
-		float GetLeft() const
-		{
-			return m_left;
-		}
-
-		void SetTop(float top)
-		{
-			m_top = top;
-		}
-		void SetBottom(float bottom)
-		{
-			m_bottom = bottom;
-		}
-		void SetRight(float right)
-		{
-			m_right = right;
-		}
-		void SetLeft(float left)
-		{
-			m_left = left;
-		}
-
-		float m_top;
-		float m_bottom;
-		float m_right;
-		float m_left;
-	};
-
 	DECLARE_DYNAMIC_CLASS(wxWallCtrlPlaneSurface)
 public:
 	// Precondition: dataSource must be valid
@@ -106,37 +57,38 @@ public:
 	// Moves out far from the wall
 	void MoveOut(float delta);
 
+	// Sets a data source for this surface
 	virtual void SetDataSource(wxWallCtrlDataSource * dataSource);
 
 	// Returns the point at the center of the specified item in OpenGL coordinates
 	VectorType GetItemCenter(wxWallCtrlItemID itemID) const;
 
+	// Seeking methods changes the selected item either by direct indexing or relative steps from current selection
 	void Seek(wxWallCtrlItemID itemID);
-	
 	void SeekLeft();
 	void SeekRight();
 	void SeekUp();
 	void SeekDown();
 
-
-
-	//bool NeedLoading() const;
-
-
-
+	// An internal handler called when texture loading is complete
 	void OnLoadingComplete();
 
+	// Spawns and runs the texture loading thread
 	void CreateLoadingThread();
 
+	// Destroys the texture loading thread
 	void DestroyLoadingThread();
 
+	// Returns the number of layers around the selected item that would be pre-loaded
 	unsigned GetMaxLoadingLayers() const;
 
 	// Must be preceeded by a call to CreateLoadingThread
 	void RunLoadingThread();
+
 protected:
 	// Returns the number of columns in the specified layer
 	int GetLayerWidth(int layer) const;
+	
 	// Returns the number of columns in the specified layer
 	int GetLayerHeight(int layer) const;
 
@@ -145,15 +97,8 @@ protected:
 
 	wxRect GetLayerRect(int layer) const;
 
-	// Returns true if the specified item has a loaded & cached texture
-	//bool IsItemTextureLoaded(wxWallCtrlItemID itemID);
-
 	// Returns true if the specified coordinates make sense
 	bool IsValidPosition(wxPoint pos);
-
-
-	// Returns the logical position of a specific index in the current layer
-	//wxPoint GetLayerItemPosition(unsigned index) const;
 
 	// Maps an X coordinate to OpenGL space
 	float MapX(float x) const;
@@ -165,10 +110,8 @@ protected:
 	unsigned GetItemIndex(int x, int y) const;
 	unsigned GetItemIndex(wxPoint position) const;
 
-
 	// Returns the index of the item with the specified ID
 	unsigned GetItemIndex(wxWallCtrlItemID itemID) const;
-
 
 	// Returns the logical position of a specific index
 	wxPoint GetItemPosition(unsigned index) const;
@@ -180,20 +123,22 @@ protected:
 	// Attempts to move the scope so that the selected index is in its middle
 	void AdjustScope();
 
-	// Updates the camera each frame
-	// TODO: Consider delta of time passed since last call
+
+	// TODO: Consider using the delta of time passed since last call
+	// Updates all the vectors each frame
 	void UpdateVectors();
 
+	// Updates the camera each frame
 	void UpdateCameraVector();
 
 	// Updates the look vector to match its target (used to make the motion smooth)
 	void UpdateLookVector();
 
-
-
+	// Returns the item rectangle without applying any translation to it
 	wxRealRect GetRawItemRect(int x, int y) const;
 
 private:
+	// Flag used to ensure OpenGL is initialized only once on first render.
 	bool m_initialized;
 	
 	// The number of rows the surface will put the items in
@@ -212,17 +157,17 @@ private:
 	unsigned m_scopeOffsetX;
 	unsigned m_scopeOffsetY;
 
+	// The texture loading thread
+	wxWallCtrlLoadingThread * m_loaderThread;	
 
-
-
-	wxWallCtrlLoadingThread * m_loaderThread;	// This is the texture loading thread
+	// True when we are still loading layers around the selected item
 	bool m_loadingInProgress;
 
 	// The dimensions of each item as fractions of the unit size
 	float m_itemWidth;
 	float m_itemHeight;
 
-	// Camera limits
+	// Camera depth limits
 	float m_nearLimit;
 	float m_farLimit;
 
@@ -235,26 +180,18 @@ private:
 	VectorType m_right;			// A vector looking to the right of the camera
 
 	// Camera motion variables
-	float m_lookDelta;
-	float m_LookThreshold;
+	float m_lookDelta;			// The value with which we update the look vector each time
+	float m_LookThreshold;		// The comparison threshold for the look vector
+	float m_cameraDelta;		// The value with which we update the camera vector each time
+	float m_cameraThreshold;	// The comparison threshold for the camera vector
+	float m_cameraPanningDelta;	// The value with which we update the X component of the target camera vector each time
 
-	float m_cameraDelta;
-	float m_cameraThreshold;
-	float m_cameraPanningDelta;
-
-//	float m_cameraHzDelta;
-
-	float m_defaultDistance;	// The default distance between camera and wall
+	// The default distance between camera and wall
+	float m_defaultDistance;	
 
 	// Selection
-	int m_selectedIndex;
-	float m_selectionMargin;
-	float m_selectionDepth;
-
-
-
+	int m_selectedIndex;		// The selected item index
+	float m_selectionMargin;	// How much will we stretch the selected item
+	float m_selectionDepth;		// How far from the wall will we pull the selected item
 };
-
-
-
 #endif

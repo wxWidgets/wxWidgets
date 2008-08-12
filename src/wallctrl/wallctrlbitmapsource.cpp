@@ -10,7 +10,7 @@
 
 #include "wx/wallctrl/WallCtrlBitmapSource.h"
 
-// TODO: What's wrong here?
+
 IMPLEMENT_CLASS(wxWallCtrlBitmapSource, wxWallCtrlDataSource)
 
 wxWallCtrlBitmapSource::wxWallCtrlBitmapSource(void)
@@ -45,7 +45,7 @@ wxBitmap wxWallCtrlBitmapSource::GetBitmap(const wxWallCtrlItemID& itemID )
 {
 	if (m_bitmaps.count(itemID) == 0)
 	{
-		// TODO: Flag an error
+		wxLogError(wxT("Invalid Item ID specified for wxWallCtrlBitmapSource"));
 		wxBitmap invalid;
 		return invalid;
 	}

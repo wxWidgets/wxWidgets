@@ -17,7 +17,6 @@
 
 #include "wx/Wallctrl/WallCtrl.h"
 
-// TODO: What's wrong here?
 IMPLEMENT_CLASS(wxWallCtrl, wxGLCanvas)
 
 // Declare the event table

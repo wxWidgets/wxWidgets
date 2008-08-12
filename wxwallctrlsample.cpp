@@ -223,7 +223,7 @@ void wxWallCtrlSample::OnDirpickerctrl1DirPickerChanged( wxFileDirPickerEvent& e
 
     if ( !dir.IsOpened() )
     {
-		// TODO: We failed to open the folder, see if we should flag an error
+		wxLogError(wxT("Failed to open folder"));
         return;
     }
 

@@ -1,5 +1,15 @@
-// TODO: Eleminate STL vectors
-#include <vector>
+/////////////////////////////////////////////////////////////////////////////
+// Name:        matrix.h
+// Purpose:     Contains matrix data types and operations
+// Author:      Mokhtar M. Khorshid
+// Modified by: 
+// Created:     04/06/2008
+// Copyright:   (c) Mokhtar M. Khorshid
+// Licence:     
+/////////////////////////////////////////////////////////////////////////////
+
+#ifndef WX_MATRIX_H
+#define WX_MATRIX_H
 
 #include "wx/wx.h"
 
@@ -76,3 +86,5 @@ class MatrixLib
 	static void Normalize( VectorType &V );
 };
 */
+
+#endif

@@ -206,6 +206,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\include\wx\wallctrl\wallctrltypes.h"
+				>
+			</File>
+			<File
 				RelativePath="wxwallctrlprojectapp.h"
 				>
 			</File>

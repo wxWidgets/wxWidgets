@@ -14,6 +14,7 @@
 #include "WallCtrlDataSource.h"
 #include "wx/rawbmp.h"
 #include "gl/glut.h"
+#include "wx/wallctrl/wallctrltypes.h"
 
 const int BYTES_PER_PIXEL = 4;
 const int wxWallCtrlPlaneSurfaceInvalidTexture = -10;
@@ -23,7 +24,6 @@ WX_DECLARE_HASH_MAP(int, int, wxIntegerHash, wxIntegerEqual, Int2IntMap);
 
 class wxWallCtrl;
 
-// TODO: Check if inheriting from wxObject is correct
 class wxWallCtrlSurface:
 	public wxEvtHandler
 {
@@ -32,23 +32,26 @@ public:
 	wxWallCtrlSurface(wxWallCtrl * parent);
 	virtual ~wxWallCtrlSurface(void);
 
+	// Render the surface with all its items
 	virtual void Render(const wxSize & windowSize)=0;
 
+	// Sets a data source for the surface
 	virtual void SetDataSource(wxWallCtrlDataSource * dataSource);
 
+	// Returns the data source associated with the surface
 	virtual wxWallCtrlDataSource * GetDataSource() const;
 
 	// Returns true if the specified item has a loaded & cached texture
 	bool IsItemTextureLoaded( wxWallCtrlItemID itemID );
 
+	// Returns true if we need to load more textures
 	virtual bool TextureLoadingNeeded();
 
-
 	// TODO: After refactoring, height & width as well as x & y coordinates are not generic enough
-
 	// TODO: Width & Height are redundant since the layer is squared
 
 	// Spiral square layers are layers surrounding an item.
+
 	// Returns the number of columns in the specified layer
 	virtual int GetLayerWidth(int layer) const = 0;
 	// Returns the number of columns in the specified layer
@@ -57,15 +60,16 @@ public:
 	// Returns the total number of elements in the specified layer, some of which may be invalid
 	virtual int GetLayerItemsCount(int layer) const = 0;
 
+	// Returns the logical bouding rect of the specified layer
 	virtual wxRect GetLayerRect(int layer) const = 0;
 
+	// An internal handler called when texture loading is complete
 	virtual void OnLoadingComplete() = 0;
-
-
 
 	// Returns true if the specified coordinates make sense
 	virtual bool IsValidPosition(wxPoint pos) = 0;
 
+	// Returns the 'index'th  item in the currently selected layer
 	wxPoint GetLayerItemPosition( unsigned index ) const;
 
 	// Returns the index of the item with the specified ID or position
@@ -73,19 +77,18 @@ public:
 	virtual unsigned GetItemIndex(wxPoint position) const = 0;
 	virtual unsigned GetItemIndex(wxWallCtrlItemID itemID) const = 0;
 
-
 	// Returns the logical position of a specific index
 	virtual wxPoint GetItemPosition(unsigned index) const = 0;
 
-
+	// Loads the next item in the current layer, if all layer items were loaded it will move to the next layer
 	void LoadNextLayerItemTexture();
 
 	// Loads a texture from the DC into the supplied array
-	// Precondition: Texture must be at least Width * Height * BYTES_PER_PIXEL
+	// Precondition: Texture must be at least Width * Height * BYTES_PER_PIXEL in size
 	void CreateTextureFromDC( wxMemoryDC &dc, GLubyte * texture, const wxSize& dcSize );
 
 	// Loads a bitmap into a texture array
-	// Precondition: Texture must be at least Width * Height * BYTES_PER_PIXEL
+	// Precondition: Texture must be at least Width * Height * BYTES_PER_PIXEL in size
 	void CreateTextureFromBitmap( wxBitmap bitmap, GLubyte * texture );
 
 	// Returns the texture ID for a specific item, and if it does not exist it loads it
@@ -94,19 +97,18 @@ public:
 	// returns true if we need to load additional items
 	virtual bool NeedLoading() const;
 
-	void SetParent(wxWallCtrl * parent)
-	{
-		m_parent = parent;
-	}
+	// Sets the wxWallCtrl that owns this surface
+	void SetParent(wxWallCtrl * parent);
 
-	wxWallCtrl * GetParent()
-	{
-		return m_parent;
-	}
+	// Returns the wxWallCtrl that contains this surface
+	wxWallCtrl * GetParent();
 
 protected:
+	// The data source for this surface
 	wxWallCtrlDataSource * m_dataSource;	
-	wxWallCtrl * m_parent;			// Pointer to the control that contains this surface
+	
+	// The control that contains this surface
+	wxWallCtrl * m_parent;			
 
 	// Layer variables used for partial loading and caching
 	unsigned m_currentLayer;		// The current (square) layer that needs to be loaded
@@ -122,17 +124,16 @@ protected:
 
 	// Synchronization
 	wxCriticalSection m_texturesCS;	// This CS guards the textures
-
 };
 
-// TODO: Move this class out
+// TODO: Decide where to put this class
 class wxWallCtrlLoadingThread: public wxThread
 {
 public:
 	wxWallCtrlLoadingThread(wxWallCtrlSurface * surface): m_surface(surface)
 	{		
 	};
-	// thread execution starts here
+	// Thread execution starts here
 	virtual void *Entry()
 	{
 		while (m_surface->NeedLoading())
@@ -151,7 +152,7 @@ public:
 		return NULL;
 	}
 
-	// called when the thread exits - whether it terminates normally or is
+	// Called when the thread exits - whether it terminates normally or is
 	// stopped with Delete() (but not when it is Kill()ed!)
 	virtual void OnExit()
 	{
@@ -161,10 +162,6 @@ public:
 private:
 	// Pointer to the surface where loading will occur
 	wxWallCtrlSurface * m_surface;
-
-
-
 };
-
 
 #endif

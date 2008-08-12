@@ -23,8 +23,10 @@ public:
 	wxWallCtrlNavigator();
 	virtual ~wxWallCtrlNavigator();
 
+	// Returns the associated surface
 	virtual wxWallCtrlSurface * GetSurface() const = 0;
 
+	// Sets a surface for the navigator
 	virtual void SetSurface(wxWallCtrlSurface * surface) = 0;
 
 };

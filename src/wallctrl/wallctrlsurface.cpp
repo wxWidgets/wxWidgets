@@ -116,7 +116,6 @@ bool wxWallCtrlSurface::NeedLoading() const
 
 wxPoint wxWallCtrlSurface::GetLayerItemPosition( unsigned index ) const
 {
-	// TODO: This method is bugged
 	wxPoint point;
 	if (index <= m_currentLayerRect.GetWidth() + m_currentLayerRect.GetHeight()-2)
 	{
@@ -184,7 +183,7 @@ void wxWallCtrlSurface::CreateTextureFromBitmap( wxBitmap bitmap, GLubyte * text
 	PixelData data(bitmap);
 	if ( !data )
 	{
-		// TODO: signal some error
+		wxLogError(wxT("Could not load raw data from bitmap"));
 		return;
 	}
 
@@ -256,10 +255,12 @@ GLuint wxWallCtrlSurface::GetItemTexture( wxWallCtrlItemID itemID )
 
 		break;
 	default:
-		// TODO: This is an error, we do not know the render type. See if we need to signal it
+		// We do not know the render type
+		wxLogError(wxT("Unknown rendering type specified"));
 		// Delete the texture and return
 		delete [] tex;
 		return wxWallCtrlPlaneSurfaceInvalidTexture;
+		break;
 	}
 
 
@@ -298,4 +299,14 @@ GLuint wxWallCtrlSurface::GetItemTexture( wxWallCtrlItemID itemID )
 
 	// Cache the texture name before returning it
 	return m_texturesCache[itemID]=texName;
+}
+
+void wxWallCtrlSurface::SetParent( wxWallCtrl * parent )
+{
+	m_parent = parent;
+}
+
+wxWallCtrl * wxWallCtrlSurface::GetParent()
+{
+	return m_parent;
 }

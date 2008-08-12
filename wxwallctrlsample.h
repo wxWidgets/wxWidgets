@@ -99,7 +99,6 @@ public:
 
 	void OnSelectionChanged(wxWallCtrlNavigatorEvent &event )
 	{
-		//wxPlotCurve *curve = event.GetCurve();
 		int x =0;
 	}
 

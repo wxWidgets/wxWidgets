@@ -1,4 +1,12 @@
-// TODO: Eleminate vectors
+/////////////////////////////////////////////////////////////////////////////
+// Name:        matrix.cpp
+// Purpose:     Contains matrix data types and operations
+// Author:      Mokhtar M. Khorshid
+// Modified by: 
+// Created:     04/06/2008
+// Copyright:   (c) Mokhtar M. Khorshid
+// Licence:     
+/////////////////////////////////////////////////////////////////////////////
 
 #include "wx/Wallctrl/Matrix.h"
 #include <cmath>

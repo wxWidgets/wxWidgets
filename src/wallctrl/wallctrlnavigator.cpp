@@ -10,7 +10,6 @@
 /////////////////////////////////////////////////////////////////////////////
 #include "wx/wallctrl/wallctrlnavigator.h"
 
-// TODO: What's wrong here?
 IMPLEMENT_CLASS(wxWallCtrlNavigator, wxEvtHandler)
 
 wxWallCtrlNavigator::wxWallCtrlNavigator()

@@ -10,7 +10,6 @@
 
 #include "wx/Wallctrl/WallCtrlDataSource.h"
 
-// TODO: What's wrong here?
 IMPLEMENT_CLASS(wxWallCtrlDataSource, wxEvtHandler)
 
 wxWallCtrlDataSource::wxWallCtrlDataSource(void)

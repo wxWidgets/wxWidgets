@@ -49,27 +49,28 @@ public:
 	// Render the control (and all its items)
 	void Render();
 
+	// Sets a navigator to control the wxWallCtrl
 	void SetNavigator (wxWallCtrlNavigator * navigation = NULL);
 
-	void OnEnterWindow( wxMouseEvent& WXUNUSED(event) );
-
-	void OnPaint( wxPaintEvent& WXUNUSED(event) );
-
-	void OnSize(wxSizeEvent& event);
-
-	void OnTimer(wxTimerEvent& event);
-
-	void OnIdle(wxIdleEvent& event);
-
+	// Sets the data source for the control
 	void SetDataSource(wxWallCtrlDataSource * dataSource);
 
-	void OnEraseBackground(wxEraseEvent& WXUNUSED(event));
-	
+	// Sets the surface for the control
 	void SetSurface(wxWallCtrlSurface * surface);
 
-private:
-	//	bool m_init;
-	
+	// Basic event handlers
+	void OnEnterWindow( wxMouseEvent& WXUNUSED(event) );
+	void OnPaint( wxPaintEvent& WXUNUSED(event) );
+	void OnSize(wxSizeEvent& event);
+	void OnEraseBackground(wxEraseEvent& WXUNUSED(event));
+
+	// The timer handler, we wake up the idle handler here
+	void OnTimer(wxTimerEvent& event);
+
+	// The idle handler, we do our rendering here when needed
+	void OnIdle(wxIdleEvent& event);
+
+private:	
 	// This is the data source that will supply the bitmaps. Mainly used for clean up
 	wxWallCtrlDataSource * m_dataSource;
 

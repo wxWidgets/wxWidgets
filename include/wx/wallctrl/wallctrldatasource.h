@@ -12,22 +12,8 @@
 #define WX_WALLCTRLDATASOURCE_H
 
 #include "wx/wx.h"
+#include "wx/wallctrl/wallctrltypes.h"
 
-// TODO: Decide where to put these types
-
-typedef unsigned wxWallCtrlItemID;
-
-enum wxWallCtrlRenderType
-{
-	wxWallCtrlRenderBitmap,
-	wxWallCtrlRenderDC
-};
-
-//typedef wxBitmap wxWallCtrlItem;
-struct wxWallCtrlItem
-{
-	wxSize size;
-};
 
 // This is an abstract class for wxWallCtrl data sources
 // Wall ctrl data items must be supplied in a consecutive sequence of indices
@@ -39,10 +25,16 @@ public:
 	wxWallCtrlDataSource(void);
 	virtual ~wxWallCtrlDataSource(void);
 
+	// Returns the item's preferred rendering type
 	virtual wxWallCtrlRenderType GetRenderType(const wxWallCtrlItemID& itemId, const wxSize& availableResolution, wxSize& desiredResolution)=0;
 
+	// Renders an item into the supplied DC
 	virtual bool RenderItem(const wxWallCtrlItemID& itemId, wxDC& dc, const wxSize& dcSize)=0;
+
+	// Returns a bitmap for the specified item
 	virtual wxBitmap wxWallCtrlDataSource::GetBitmap(const wxWallCtrlItemID& itemId) =0;
+
+	// Returns more information about an item, including its dimensions
 	virtual bool GetItemInfo(const wxWallCtrlItemID& itemId, wxWallCtrlItem& info)  =0;
 
 	// Returns true if data source data changed since last call to HasDataChanged()

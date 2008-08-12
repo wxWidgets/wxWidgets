@@ -10,7 +10,6 @@
 
 #include "wx/wallctrl/WallCtrlDefaultPlaneNavigator.h"
 
-// TODO: What's wrong here?
 IMPLEMENT_CLASS(wxWallCtrlDefaultPlaneNavigator, wxWallCtrlNavigator)
 
 // Declare the event table
@@ -30,36 +29,31 @@ void wxWallCtrlDefaultPlaneNavigator::OnKeyDown( wxKeyEvent &event )
 {
 	if (!m_surface)
 	{
-		
-		// TODO: See if we need a different error signaling approach
+		wxLogError(wxT("Navigator does not have a valid surface"));
 		return;
 	}
+	// Switch on the pressed key and seek accordingly
 	switch (event.GetKeyCode())
 	{
 	case WXK_HOME:
-		// TODO: Should go to first element, not necessarily 0
-		m_surface->Seek(0);
+		m_surface->Seek(m_surface->GetDataSource()->GetFirstItem());
 		ChangeSelection();
 		break;
 	case WXK_LEFT:
 		m_surface->SeekLeft();
 		ChangeSelection();
-		//m_surface->MoveLeft(0.1);
 		break;
 	case WXK_RIGHT:
 		m_surface->SeekRight();
 		ChangeSelection();
-		//m_surface->MoveRight(0.1);
 		break;
 	case WXK_UP:
 		m_surface->SeekUp();
 		ChangeSelection();
-		//m_surface->MoveIn(0.1);
 		break;
 	case WXK_DOWN:
 		m_surface->SeekDown();
 		ChangeSelection();
-		//m_surface->MoveOut(0.1);
 		break;
 	}
 }
@@ -94,6 +88,7 @@ void wxWallCtrlDefaultPlaneNavigator::SetSurface( wxWallCtrlSurface * surface )
 	// If we have a previous surface
 	if (m_surface)
 	{
+		// TODO: We need to see if we should delete the old surface as well
 //		PopEventHandler();
 		m_surface = NULL;
 	}

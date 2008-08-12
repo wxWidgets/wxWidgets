@@ -10,7 +10,6 @@
 
 #include "wx/wallctrl/wallctrlnavigatorevent.h"
 
-// TODO: What's wrong here?
 IMPLEMENT_CLASS(wxWallCtrlNavigatorEvent, wxNotifyEvent)
 
 

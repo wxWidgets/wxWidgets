@@ -24,19 +24,22 @@ public:
 	wxWallCtrlDefaultPlaneNavigator();
 	virtual ~wxWallCtrlDefaultPlaneNavigator(void);
 
+	// Keyboard key event handler
 	void OnKeyDown(wxKeyEvent &event);
 
-	// Raises an activation event
+	// Raises a SelectionChanged event
 	void ChangeSelection();
 
-
+	// Returns the associated surface
 	virtual wxWallCtrlSurface * GetSurface() const;
 
+	// Sets a surface for the navigator
 	virtual void SetSurface(wxWallCtrlSurface * surface);
 
 	DECLARE_EVENT_TABLE();
 
 protected:
+	// The surface this navigator is associated with
 	wxWallCtrlPlaneSurface * m_surface;
 };
 

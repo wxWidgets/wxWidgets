@@ -76,7 +76,6 @@ wxWallCtrlPlaneSurface::wxWallCtrlPlaneSurface(wxWallCtrl * parent):wxWallCtrlSu
 
 void wxWallCtrlPlaneSurface::UpdateItemSize()
 {
-	// TODO: Take border size into consideration
 	m_itemHeight = 1.0/m_scopeSize.GetHeight();
 	m_itemWidth = 1.0/m_scopeSize.GetWidth();
 }
@@ -157,7 +156,7 @@ void wxWallCtrlPlaneSurface::RenderItems()
 
 	if (!m_dataSource)
 	{
-		// TODO: Signal an error here
+		wxLogError(wxT("Surface does not have a valid data source"));
 		return;
 	}
 
@@ -305,8 +304,8 @@ void wxWallCtrlPlaneSurface::SetScopeSize( wxSize size )
 {
 	if ((size.GetHeight() < 1) || (size.GetWidth() < 1) || (size.GetHeight() > m_rowsCount))
 	{
-		// TODO: This is a serious issue, can't proceed. Check how to signal errors
-		assert(false);
+		// We can't proceed here, this is a serious error
+		wxLogError(wxT("Invalid scope size specified to wxWallCtrl"));
 		return;
 	}
 	m_scopeSize = size;
@@ -417,7 +416,6 @@ void wxWallCtrlPlaneSurface::UpdateCameraVector()
 	}
 
 	// Then update the camera vector to match its target
-	// TODO: *Hz* should be replaced by something else
 	for (int i=0; i < 3; ++i)
 	{
 		if (m_camera[i] < m_targetCamera[i] - m_cameraThreshold)
@@ -455,7 +453,7 @@ wxPoint wxWallCtrlPlaneSurface::GetItemPosition( unsigned index ) const
 	return P;
 }
 
-wxWallCtrlPlaneSurface::wxRealRect wxWallCtrlPlaneSurface::GetRawItemRect( int x, int y ) const
+wxRealRect wxWallCtrlPlaneSurface::GetRawItemRect( int x, int y ) const
 {
 	wxRealRect rect;
 	rect.SetTop(MapY(m_itemHeight * y));
