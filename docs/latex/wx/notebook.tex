@@ -170,6 +170,18 @@ the list.
 \helpref{SetImageList}{wxnotebooksetimagelist}
 
 
+\membersection{wxNotebook::ChangeSelection}\label{wxnotebookchangeselection}
+
+\func{int}{ChangeSelection}{\param{size\_t}{ page}}
+
+Changes the selection for the given page, returning the previous selection.
+
+The call to this function \emph{does not} generate the page changing events.
+This is the only difference with \helpref{SetSelection}{wxnotebooksetselection}.
+See \helpref{this topic}{progevent} for more info.
+
+
+
 \membersection{wxNotebook::Create}\label{wxnotebookcreate}
 
 \func{bool}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID }{id}, \param{const wxPoint\&}{ pos = wxDefaultPosition},
@@ -410,15 +422,3 @@ This function is deprecated and should not be used in new code. Please use the
 \wxheading{See also}
 
 \helpref{wxNotebook::GetSelection}{wxnotebookgetselection}
-
-
-\membersection{wxNotebook::ChangeSelection}\label{wxnotebookchangeselection}
-
-\func{int}{ChangeSelection}{\param{size\_t}{ page}}
-
-Changes the selection for the given page, returning the previous selection.
-
-The call to this function \emph{does not} generate the page changing events.
-This is the only difference with \helpref{SetSelection}{wxnotebooksetselection}.
-See \helpref{this topic}{progevent} for more info.
-
