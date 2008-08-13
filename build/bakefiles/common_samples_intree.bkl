@@ -9,14 +9,6 @@
     <!--                    Template for wxWidgets samples:              -->
     <!-- =============================================================== -->
 
-    <if cond="FORMAT=='autoconf'">
-        <set var="MACOSX_RESOURCES">
-            <if cond="TOOLKIT=='MAC'">
-                Carbon.r sample.r
-            </if>
-        </set>
-    </if>
-
     <set var="DLLFLAG">
         <if cond="SHARED=='1'">WXUSINGDLL</if>
     </set>
@@ -28,7 +20,6 @@
 
     <template id="wx_util" template="wx_util_b">
         <app-type>gui</app-type>
-        <mac-res cond="FORMAT=='autoconf'">$(MACOSX_RESOURCES)</mac-res>
         <!-- resource files includes: -->
         <include>$(SRCDIR)/$(WXTOPDIR)samples</include>
         <!-- this include is not added via <include> for autoconf, see
