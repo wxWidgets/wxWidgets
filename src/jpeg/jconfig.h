@@ -11,7 +11,7 @@
 #ifdef __MWERKS__
 #if (__MWERKS__ < 0x0900) || macintosh || defined ( __MACH__ )
 #   ifndef __WXMAC__
-#       define __WWXMAC__
+#       define __WXMAC__
 #   endif
 #endif
 #endif
