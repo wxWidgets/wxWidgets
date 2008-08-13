@@ -76,9 +76,6 @@ protected:
 
 static const size_t INVALID_PAGE = (size_t)-1;
 
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING)
-
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------

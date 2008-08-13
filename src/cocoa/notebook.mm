@@ -125,12 +125,6 @@ WX_DECLARE_GET_OBJC_CLASS(WXCTabViewImageItem,NSTabViewItem)
 WX_IMPLEMENT_GET_OBJC_CLASS(WXCTabViewImageItem,NSTabViewItem)
 
 // ========================================================================
-// wxBookCtrlEvent
-// ========================================================================
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING)
-
-// ========================================================================
 // wxNotebook
 // ========================================================================
 IMPLEMENT_DYNAMIC_CLASS(wxNotebook, wxBookCtrlBase)
