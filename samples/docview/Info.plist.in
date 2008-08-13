@@ -62,7 +62,7 @@
 	<key>CFBundleExecutable</key>
 	<string>EXECUTABLE</string>
 	<key>CFBundleIconFile</key>
-	<string>doc.icns</string>
+	<string>wxmac.icns</string>
 	<key>CFBundleName</key>
 	<string>EXECUTABLE</string>
 	<key>CFBundlePackageType</key>

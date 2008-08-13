@@ -18,9 +18,10 @@
     <set var="BUNDLE_PLIST" overwrite="0">
         $(TOP_SRCDIR)src/osx/carbon/Info.plist.in
     </set>
-    <set var="BUNDLE_ICONS" overwrite="0">
+    <set var="BUNDLE_ICON" overwrite="0">
         $(TOP_SRCDIR)src/osx/carbon/wxmac.icns
     </set>
+    <set var="BUNDLE_RESOURCES" overwrite="0"></set>
 
     <define-tag name="wx-mac-app-bundle" rules="exe">
 
@@ -38,7 +39,8 @@
             <!-- required data: -->
             <depends>$(id)</depends>
             <depends-on-file>$(BUNDLE_PLIST)</depends-on-file>
-            <depends-on-file>$(BUNDLE_ICONS)</depends-on-file>
+            <depends-on-file>$(BUNDLE_ICON)</depends-on-file>
+            <depends-on-file>$(BUNDLE_RESOURCES)</depends-on-file>
 
             <command>
                 <!-- create the directories: -->
@@ -58,9 +60,16 @@
                 <!-- make a hardlink to the binary: -->
                 ln -f $(ref("__targetdir",id))$(ref("__targetname",id)) $(BUNDLE)/MacOS/$(id)
 
-                <!-- ditto wxWidgets resources and icons: -->
-                cp -f $(BUNDLE_ICONS) $(BUNDLE)/Resources
-            </command>            
+                <!-- copy the application icon: -->
+                cp -f $(BUNDLE_ICON) $(BUNDLE)/Resources/wxmac.icns
+	        </command>            
+            <if cond="BUNDLE_RESOURCES!=''">
+                <command>
+                    <!-- copy all other bundle resources: -->
+                    cp -f $(BUNDLE_RESOURCES) $(BUNDLE)/Resources
+                </command>
+            </if>
+ 
         </modify-target>
         
         <!-- add pseudo target id_bundle: -->
