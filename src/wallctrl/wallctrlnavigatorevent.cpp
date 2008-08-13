@@ -16,7 +16,8 @@ IMPLEMENT_CLASS(wxWallCtrlNavigatorEvent, wxNotifyEvent)
 DEFINE_EVENT_TYPE( wxEVT_WALLCTRL_SELECTION_CHANGED )
 
 
-wxWallCtrlNavigatorEvent::wxWallCtrlNavigatorEvent( wxEventType commandType /*= wxEVT_NULL*/, int id /*= 0 */ )
+wxWallCtrlNavigatorEvent::wxWallCtrlNavigatorEvent( wxEventType commandType /*= wxEVT_NULL*/, int id /*= 0 */ ):
+  wxNotifyEvent(commandType, id)
 {
 
 }

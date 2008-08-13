@@ -519,14 +519,6 @@
             <string name="proxy-type">"wbBoxSizerProxy"</string>
             <string name="proxy-Orientation">"Horizontal"</string>
             <string name="proxy-Member variable name">""</string>
-            <string name="proxy-AlignH">"Centre"</string>
-            <string name="proxy-AlignV">"Centre"</string>
-            <long name="proxy-Stretch factor">0</long>
-            <long name="proxy-Border">5</long>
-            <bool name="proxy-wxLEFT">1</bool>
-            <bool name="proxy-wxRIGHT">1</bool>
-            <bool name="proxy-wxTOP">1</bool>
-            <bool name="proxy-wxBOTTOM">1</bool>
             <bool name="proxy-wxSHAPED">0</bool>
             <bool name="proxy-wxADJUST_MINSIZE">0</bool>
             <bool name="proxy-wxFIXED_MINSIZE">0</bool>
@@ -830,30 +822,6 @@
           <string name="language">""</string>
         </document>
         <document>
-          <string name="title">"wallctrlnavigationevent.cpp"</string>
-          <string name="type">"source-editor-document"</string>
-          <string name="filename">"src/wallctrl/wallctrlnavigationevent.cpp"</string>
-          <string name="icon-name">"source-editor"</string>
-          <long name="is-transient">0</long>
-          <long name="owns-file">0</long>
-          <long name="title-mode">1</long>
-          <long name="locked">0</long>
-          <string name="created">"30/6/2008"</string>
-          <string name="language">""</string>
-        </document>
-        <document>
-          <string name="title">"wallctrlnavigationevent.h"</string>
-          <string name="type">"source-editor-document"</string>
-          <string name="filename">"include/wx/wallctrl/wallctrlnavigationevent.h"</string>
-          <string name="icon-name">"source-editor"</string>
-          <long name="is-transient">0</long>
-          <long name="owns-file">0</long>
-          <long name="title-mode">1</long>
-          <long name="locked">0</long>
-          <string name="created">"23/7/2008"</string>
-          <string name="language">""</string>
-        </document>
-        <document>
           <string name="title">"wallctrlnavigator.cpp"</string>
           <string name="type">"source-editor-document"</string>
           <string name="filename">"src/wallctrl/wallctrlnavigator.cpp"</string>
@@ -862,7 +830,31 @@
           <long name="owns-file">0</long>
           <long name="title-mode">1</long>
           <long name="locked">0</long>
-          <string name="created">"5/8/2008"</string>
+          <string name="created">"12/8/2008"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"wallctrlnavigatorevent.cpp"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"src/wallctrl/wallctrlnavigatorevent.cpp"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"12/8/2008"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"wallctrlnavigatorevent.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/wx/wallctrl/wallctrlnavigatorevent.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"12/8/2008"</string>
           <string name="language">""</string>
         </document>
         <document>
