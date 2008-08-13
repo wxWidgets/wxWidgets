@@ -30,7 +30,7 @@
 
 // uncomment this to also test Boost version (you will also need to link with
 // libboost_threads)
-#define HAVE_BOOST_THREAD
+//#define HAVE_BOOST_THREAD
 #ifdef HAVE_BOOST_THREAD
     #include <boost/thread/tss.hpp>
 #endif
