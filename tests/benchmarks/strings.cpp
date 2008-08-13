@@ -9,8 +9,10 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/string.h"
+#include "wx/ffile.h"
 
 #include "bench.h"
+#include "htmlparser/htmlpars.h"
 
 static const char asciistr[] =
     "This is just the first line of a very long 7 bit ASCII string"
@@ -272,4 +274,32 @@ BENCHMARK_FUNC(CharBuffer)
     //     nontrivial in any build.
     return wxStrlen(str.mb_str()) == ASCIISTR_LEN &&
            wxStrlen(str.wc_str()) == ASCIISTR_LEN;
+}
+
+
+// ----------------------------------------------------------------------------
+// wxString::operator[] - parse large HTML page
+// ----------------------------------------------------------------------------
+
+class DummyParser : public wx28HtmlParser
+{
+public:
+    virtual wxObject* GetProduct() { return NULL; }
+    virtual void AddText(const wxChar*) {}
+};
+
+
+BENCHMARK_FUNC(ParseHTML)
+{
+    // static so that construction time is not counted
+    static DummyParser parser;
+    static wxString html;
+    if ( html.empty() )
+    {
+        wxFFile("htmltest.html").ReadAll(&html, wxConvUTF8);
+    }
+
+    parser.Parse(html);
+
+    return true;
 }

@@ -29,6 +29,8 @@ BENCH_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG) \
 	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 BENCH_OBJECTS =  \
 	$(OBJS)\bench_bench.o \
+	$(OBJS)\bench_htmlpars.o \
+	$(OBJS)\bench_htmltag.o \
 	$(OBJS)\bench_strings.o \
 	$(OBJS)\bench_tls.o
 
@@ -169,7 +171,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\bench.exe
+all: $(OBJS)\bench.exe data
 
 clean: 
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
@@ -179,7 +181,17 @@ clean:
 $(OBJS)\bench.exe: $(BENCH_OBJECTS)
 	$(CXX) -o $@ $(BENCH_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)   $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32
 
+data: 
+	if not exist $(OBJS) mkdir $(OBJS)
+	for %%f in (htmltest.html) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
+
 $(OBJS)\bench_bench.o: ./bench.cpp
+	$(CXX) -c -o $@ $(BENCH_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\bench_htmlpars.o: ./htmlparser/htmlpars.cpp
+	$(CXX) -c -o $@ $(BENCH_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\bench_htmltag.o: ./htmlparser/htmltag.cpp
 	$(CXX) -c -o $@ $(BENCH_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\bench_strings.o: ./strings.cpp
@@ -188,7 +200,7 @@ $(OBJS)\bench_strings.o: ./strings.cpp
 $(OBJS)\bench_tls.o: ./tls.cpp
 	$(CXX) -c -o $@ $(BENCH_CXXFLAGS) $(CPPDEPS) $<
 
-.PHONY: all clean
+.PHONY: all clean data
 
 
 SHELL := $(COMSPEC)

@@ -36,6 +36,8 @@ BENCH_CXXFLAGS = $(__RUNTIME_LIBS_7) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	-DwxUSE_GUI=0 $(CPPFLAGS) $(CXXFLAGS)
 BENCH_OBJECTS =  \
 	$(OBJS)\bench_bench.obj \
+	$(OBJS)\bench_htmlpars.obj \
+	$(OBJS)\bench_htmltag.obj \
 	$(OBJS)\bench_strings.obj \
 	$(OBJS)\bench_tls.obj
 
@@ -171,7 +173,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\bench.exe
+all: $(OBJS)\bench.exe data
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -189,8 +191,18 @@ $(OBJS)\bench.exe: $(BENCH_OBJECTS)
 	c0x32.obj $(BENCH_OBJECTS),$@,, $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) ole2w32.lib oleacc.lib import32.lib cw32$(__THREADSFLAG_5)$(__RUNTIME_LIBS_8).lib,,
 |
 
+data: 
+	if not exist $(OBJS) mkdir $(OBJS)
+	for %f in (htmltest.html) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+
 $(OBJS)\bench_bench.obj: .\bench.cpp
 	$(CXX) -q -c -P -o$@ $(BENCH_CXXFLAGS) .\bench.cpp
+
+$(OBJS)\bench_htmlpars.obj: .\htmlparser\htmlpars.cpp
+	$(CXX) -q -c -P -o$@ $(BENCH_CXXFLAGS) .\htmlparser\htmlpars.cpp
+
+$(OBJS)\bench_htmltag.obj: .\htmlparser\htmltag.cpp
+	$(CXX) -q -c -P -o$@ $(BENCH_CXXFLAGS) .\htmlparser\htmltag.cpp
 
 $(OBJS)\bench_strings.obj: .\strings.cpp
 	$(CXX) -q -c -P -o$@ $(BENCH_CXXFLAGS) .\strings.cpp

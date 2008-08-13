@@ -210,6 +210,8 @@ BENCH_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG_5) &
 	-dwxUSE_GUI=0 $(__RTTIFLAG_7) $(__EXCEPTIONSFLAG_8) $(CPPFLAGS) $(CXXFLAGS)
 BENCH_OBJECTS =  &
 	$(OBJS)\bench_bench.obj &
+	$(OBJS)\bench_htmlpars.obj &
+	$(OBJS)\bench_htmltag.obj &
 	$(OBJS)\bench_strings.obj &
 	$(OBJS)\bench_tls.obj
 
@@ -220,7 +222,7 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\bench.exe
+all : .SYMBOLIC $(OBJS)\bench.exe data
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -242,7 +244,17 @@ $(OBJS)\bench.exe :  $(BENCH_OBJECTS)
 	@for %i in () do @%append $(OBJS)\bench.lbc option stack=%i
 	wlink @$(OBJS)\bench.lbc
 
+data : .SYMBOLIC 
+	if not exist $(OBJS) mkdir $(OBJS)
+	for %f in (htmltest.html) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+
 $(OBJS)\bench_bench.obj :  .AUTODEPEND .\bench.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BENCH_CXXFLAGS) $<
+
+$(OBJS)\bench_htmlpars.obj :  .AUTODEPEND .\htmlparser\htmlpars.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BENCH_CXXFLAGS) $<
+
+$(OBJS)\bench_htmltag.obj :  .AUTODEPEND .\htmlparser\htmltag.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BENCH_CXXFLAGS) $<
 
 $(OBJS)\bench_strings.obj :  .AUTODEPEND .\strings.cpp

@@ -11,11 +11,17 @@
                     template_append="wx_append_base">
         <sources>
             bench.cpp
+            htmlparser/htmlpars.cpp
+            htmlparser/htmltag.cpp
             strings.cpp
             tls.cpp
         </sources>
         <wx-lib>base</wx-lib>
     </exe>
+
+    <wx-data id="data">
+        <files>htmltest.html</files>
+    </wx-data>
 
     <!-- this is unused yet
     <exe id="bench_gui" template="wx_sample,wx_bench"
