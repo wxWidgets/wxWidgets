@@ -2641,7 +2641,10 @@ void wxWindowBase::ReleaseMouse()
 
     wxASSERT_MSG( !ms_winCaptureChanging, _T("recursive ReleaseMouse call?") );
 
-    wxASSERT_MSG( GetCapture() == this, wxT("attempt to release mouse, but this window hasn't captured it") );
+    wxASSERT_MSG( GetCapture() == this,
+                  "attempt to release mouse, but this window hasn't captured it" );
+    wxASSERT_MSG( ms_winCaptureCurrent == this,
+                  "attempt to release mouse, but this window hasn't captured it" );
 
     ms_winCaptureChanging = true;
 
