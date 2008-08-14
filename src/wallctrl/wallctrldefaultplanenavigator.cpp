@@ -70,6 +70,7 @@ void wxWallCtrlDefaultPlaneNavigator::ChangeSelection()
 {
 	//wxWallCtrlNavigationEvent event( wxEVT_WALLCTRL_SELECTION_CHANGED, GetId() );
 	wxWallCtrlNavigatorEvent event( wxEVT_WALLCTRL_SELECTION_CHANGED, m_surface->GetParent()->GetId() );
+	event.SetSelectedIndex(m_surface->GetSelectedIndex());
 	event.SetEventObject( this );
 	// Set event details here
 	if (!ProcessEvent( event ))

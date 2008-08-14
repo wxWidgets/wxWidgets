@@ -100,15 +100,13 @@ public:
 
 	
 
-	void OnSelectionChanged(wxWallCtrlNavigatorEvent &event )
-	{
-		int x =0;
-	}
-
+	void OnSelectionChanged(wxWallCtrlNavigatorEvent &event );
+	void LoadDirectory(wxString path);
 ////@begin wxWallCtrlSample member variables
 ////@end wxWallCtrlSample member variables
 private:
 	wxWallCtrl * wall;
+	wxStaticText * text;
 };
 
 #endif

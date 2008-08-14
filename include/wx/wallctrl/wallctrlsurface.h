@@ -77,6 +77,9 @@ public:
 	virtual unsigned GetItemIndex(wxPoint position) const = 0;
 	virtual unsigned GetItemIndex(wxWallCtrlItemID itemID) const = 0;
 
+	// Returns the index of the selected item
+	virtual unsigned GetSelectedIndex() const = 0;
+
 	// Returns the logical position of a specific index
 	virtual wxPoint GetItemPosition(unsigned index) const = 0;
 

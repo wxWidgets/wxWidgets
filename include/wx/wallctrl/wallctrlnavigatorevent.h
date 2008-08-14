@@ -21,8 +21,17 @@ public:
 	wxWallCtrlNavigatorEvent( wxEventType commandType = wxEVT_NULL, int id = 0 );
 	virtual ~wxWallCtrlNavigatorEvent(void);
 
+	// Sets the selected index
+	void SetSelectedIndex (unsigned index);
+
+	// Returns the selected index
+	unsigned GetSelectedIndex() const;;
+
+
 	// TODO: See if we need to implement this
 	//virtual wxEvent *Clone() const;
+private:
+	unsigned m_index;
 };
 
 DECLARE_EVENT_TYPE( wxEVT_WALLCTRL_SELECTION_CHANGED, -1 )

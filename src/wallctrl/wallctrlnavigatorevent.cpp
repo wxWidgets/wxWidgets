@@ -19,23 +19,19 @@ DEFINE_EVENT_TYPE( wxEVT_WALLCTRL_SELECTION_CHANGED )
 wxWallCtrlNavigatorEvent::wxWallCtrlNavigatorEvent( wxEventType commandType /*= wxEVT_NULL*/, int id /*= 0 */ ):
   wxNotifyEvent(commandType, id)
 {
-
+	m_index = 0;
 }
 wxWallCtrlNavigatorEvent::~wxWallCtrlNavigatorEvent( void )
 {
 
 }
 
-/*
-
-// user code intercepting the event
-
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-  EVT_PLOT  (ID_MY_WINDOW,  MyFrame::OnPlot)
-END_EVENT_TABLE()
-
-void MyFrame::OnPlot( wxPlotEvent &event )
+unsigned wxWallCtrlNavigatorEvent::GetSelectedIndex() const
 {
-    wxPlotCurve *curve = event.GetCurve();
+	return m_index;
 }
-*/
+
+void wxWallCtrlNavigatorEvent::SetSelectedIndex( unsigned index )
+{
+	m_index = index;
+}

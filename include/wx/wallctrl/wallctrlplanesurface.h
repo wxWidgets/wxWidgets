@@ -27,7 +27,7 @@ class wxWallCtrlPlaneSurface :
 	DECLARE_DYNAMIC_CLASS(wxWallCtrlPlaneSurface)
 public:
 	// Precondition: dataSource must be valid
-	wxWallCtrlPlaneSurface(wxWallCtrl * parent);
+	wxWallCtrlPlaneSurface(wxWallCtrl * parent, float defaultDistance = 1);
 	virtual ~wxWallCtrlPlaneSurface(void);
 
 	// Recalculates the item size from the number of items in the scope
@@ -69,6 +69,10 @@ public:
 	void SeekRight();
 	void SeekUp();
 	void SeekDown();
+
+	// Returns the index of the selected item
+	virtual unsigned GetSelectedIndex() const;
+
 
 	// An internal handler called when texture loading is complete
 	void OnLoadingComplete();

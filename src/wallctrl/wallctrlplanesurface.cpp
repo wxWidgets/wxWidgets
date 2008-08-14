@@ -18,10 +18,10 @@ wxWallCtrlPlaneSurface::~wxWallCtrlPlaneSurface(void)
 	DestroyLoadingThread();
 }
 
-wxWallCtrlPlaneSurface::wxWallCtrlPlaneSurface(wxWallCtrl * parent):wxWallCtrlSurface(parent)
+wxWallCtrlPlaneSurface::wxWallCtrlPlaneSurface(wxWallCtrl * parent, float defaultDistance /*= 1*/):wxWallCtrlSurface(parent)
 {
 	m_initialized = false;
-	m_defaultDistance = 2;
+	m_defaultDistance = defaultDistance;
 
 	// Scope
 	m_scopeSize.SetHeight(1);
@@ -31,8 +31,8 @@ wxWallCtrlPlaneSurface::wxWallCtrlPlaneSurface(wxWallCtrl * parent):wxWallCtrlSu
 
 	// Selection
 	m_selectedIndex = 0;
-	m_selectionMargin = 0.05;
-	m_selectionDepth = 0.05;
+	m_selectionMargin = 0.25;//05;
+	m_selectionDepth = 0.05;//05;
 
 	// Caching
 	m_currentLayer = 0;
@@ -40,7 +40,7 @@ wxWallCtrlPlaneSurface::wxWallCtrlPlaneSurface(wxWallCtrl * parent):wxWallCtrlSu
 	m_nextLayerItemPos.x = 0;
 	m_nextLayerItemPos.y = 0;
 	m_loadingNeeded = true;
-	m_rendersBeforeTextureLoad = 25;
+	m_rendersBeforeTextureLoad = 5;
 	m_renderCount = m_rendersBeforeTextureLoad;
 
 	m_loaderThread = NULL;
@@ -53,7 +53,7 @@ wxWallCtrlPlaneSurface::wxWallCtrlPlaneSurface(wxWallCtrl * parent):wxWallCtrlSu
 
 	// Initialize camera position
 	m_camera.resize(3,0);
-	m_camera[2] = m_defaultDistance;		// We start the camera at (0,0,2)
+	m_camera[2] = m_defaultDistance;		// We start the camera at (0,0,m_defaultDistance)
 	
 	m_targetCamera = m_camera;	// Both vectors should match initially
 	
@@ -76,8 +76,8 @@ wxWallCtrlPlaneSurface::wxWallCtrlPlaneSurface(wxWallCtrl * parent):wxWallCtrlSu
 
 void wxWallCtrlPlaneSurface::UpdateItemSize()
 {
-	m_itemHeight = 1.0/m_scopeSize.GetHeight();
-	m_itemWidth = 1.0/m_scopeSize.GetWidth();
+	m_itemHeight = 1.0;	// /m_scopeSize.GetHeight();
+	m_itemWidth = 1.0;	// /m_scopeSize.GetWidth();
 }
 
 void wxWallCtrlPlaneSurface::Render(const wxSize & windowSize)
@@ -258,17 +258,20 @@ void wxWallCtrlPlaneSurface::RenderItems()
 			AdjustCoordinates(rect, info.size);
 			//AdjustCoordinates(Top, Bottom, Left, Right, info.size);
 
-			if (index == m_selectedIndex)
+			// Use a black color
+			glColor3f(0,0,0);
+
+			if ((index == m_selectedIndex) && (IsItemTextureLoaded(index)))
 			{
 				glPushMatrix();
 				glTranslatef(0, 0, m_selectionDepth);
 
 				// Draw this item on its own quad
-				glBegin(GL_QUADS);					
+				glBegin(GL_QUADS);		
 				glTexCoord2f(1.0, 1.0);
 				glVertex3f( rect.GetRight()+m_selectionMargin, rect.GetTop()-m_selectionMargin, 0.0f);			// Top Right
 				glTexCoord2f(0.0, 1.0);
-				glVertex3f(rect.GetLeft()-m_selectionMargin, rect.GetTop()-m_selectionMargin, 0.0f);			// Top Left
+				glVertex3f(rect.GetLeft()-m_selectionMargin, rect.GetTop()-m_selectionMargin, 0.0f);			// Top Left		
 				glTexCoord2f(0.0, 0.0);
 				glVertex3f(rect.GetLeft()-m_selectionMargin, rect.GetBottom()+m_selectionMargin, 0.0f);			// Bottom Left
 				glTexCoord2f(1.0, 0.0);
@@ -302,7 +305,7 @@ void wxWallCtrlPlaneSurface::RenderItems()
 
 void wxWallCtrlPlaneSurface::SetScopeSize( wxSize size )
 {
-	if ((size.GetHeight() < 1) || (size.GetWidth() < 1) || (size.GetHeight() > m_rowsCount))
+	if ((size.GetHeight() < 1) || (size.GetWidth() < 1))// || (size.GetHeight() > m_rowsCount))
 	{
 		// We can't proceed here, this is a serious error
 		wxLogError(wxT("Invalid scope size specified to wxWallCtrl"));
@@ -392,10 +395,10 @@ void wxWallCtrlPlaneSurface::MoveOut( float delta )
 void wxWallCtrlPlaneSurface::UpdateVectors()
 {
 	// TODO: Move these into constructor
-	m_lookDelta = 0.05;
-	m_cameraDelta = 0.025;
+	m_lookDelta = 0.1;
+	m_cameraDelta = 0.05;
 	m_LookThreshold = m_cameraThreshold =0.1;
-	m_cameraPanningDelta = 0.05;
+	m_cameraPanningDelta = 0.075;
 
 	UpdateLookVector();
 
@@ -738,4 +741,9 @@ void wxWallCtrlPlaneSurface::Reload()
 {
 	wxWallCtrlSurface::Reload();
 	m_loadingInProgress = false;
+}
+
+unsigned wxWallCtrlPlaneSurface::GetSelectedIndex() const
+{
+	return m_selectedIndex;
 }

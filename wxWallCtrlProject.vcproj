@@ -1,12 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="wxWallCtrlProject"
-	ProjectGUID="{9926C1F5-D07F-43FF-959C-7CD14594951D}">
+	ProjectGUID="{9926C1F5-D07F-43FF-959C-7CD14594951D}"
+	>
 	<Platforms>
 		<Platform
-			Name="Win32"/>
+			Name="Win32"
+		/>
 	</Platforms>
 	<ToolFiles>
 	</ToolFiles>
@@ -17,80 +19,96 @@
 			IntermediateDirectory="VCProjectDebug"
 			ConfigurationType="1"
 			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE">
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="NOPCH,WIN32,__WXMSW__,_WINDOWS,__WXDEBUG__,_DEBUG,_CRT_SECURE_NO_DEPRECATE"
+				MkTypLibCompatible="true"
+				SuppressStartupBanner="true"
+				TargetEnvironment="1"
+				TypeLibraryName="VCProjectDebug\wxWallCtrlProject.tlb"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/EHsc "
 				Optimization="0"
-				AdditionalIncludeDirectories="c:\wxWidgets-2.8.8/include,c:\wxWidgets-2.8.8/contrib/include,c:\wxWidgets-2.8.8/lib/vc_lib/mswd;./include,C:\Program Files\Microsoft Visual Studio\vc98\include"
+				AdditionalIncludeDirectories="&quot;D:\wxWidgets-2.8.7\include&quot;;&quot;D:\wxWidgets-2.8.7\contrib/include&quot;;&quot;D:\wxWidgets-2.8.7/lib/vc_lib/mswd&quot;;./include;&quot;E:\Program Files\Microsoft Visual Studio 8\VC\include&quot;"
 				PreprocessorDefinitions="NOPCH,WIN32,__WXMSW__,_WINDOWS,__WXDEBUG__,_DEBUG,_CRT_SECURE_NO_DEPRECATE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				RuntimeTypeInfo="TRUE"
+				RuntimeTypeInfo="true"
 				PrecompiledHeaderFile="VCProjectDebug\wxWallCtrlProject.pch"
 				AssemblerListingLocation="VCProjectDebug/"
 				ObjectFile="VCProjectDebug/"
 				ProgramDataBaseFileName="VCProjectDebug\wxWallCtrlProject.pdb"
 				WarningLevel="4"
-				SuppressStartupBanner="TRUE"
+				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
-				CompileAs="0"/>
+				CompileAs="0"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NOPCH,WIN32,__WXMSW__,_WINDOWS,__WXDEBUG__,_DEBUG,_CRT_SECURE_NO_DEPRECATE"
+				Culture="1033"
+				AdditionalIncludeDirectories="c:\wxWidgets-2.8.8/include;c:\wxWidgets-2.8.8/contrib/include;c:\wxWidgets-2.8.8/lib/vc_lib/mswd;C:\Program Files\Microsoft Visual Studio\vc98\include"
+			/>
 			<Tool
-				Name="VCManagedResourceCompilerTool"/>
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/nologo /SUBSYSTEM:WINDOWS /machine:i386 /DEBUG"
 				AdditionalDependencies="wxmsw28d_richtext.lib wxmsw28d_aui.lib wxmsw28d_core.lib wxbase28d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxmsw28d_adv.lib wxmsw28d_html.lib wxmsw28d_xrc.lib wxmsw28d_gl.lib wxbase28d_net.lib wxbase28d_xml.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib opengl32.lib"
 				OutputFile="VCProjectDebug\wxWallCtrlProject.exe"
 				LinkIncremental="0"
-				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="c:\wxWidgets-2.8.8/lib/vc_lib,C:\Program Files\Microsoft Visual Studio\vc98\lib"
-				GenerateDebugInformation="TRUE"
+				SuppressStartupBanner="true"
+				AdditionalLibraryDirectories="&quot;D:\wxWidgets-2.8.7/lib/vc_lib&quot;;&quot;E:\Program Files\Microsoft Visual Studio 8\VC\lib&quot;"
+				GenerateDebugInformation="true"
 				ProgramDatabaseFile="VCProjectDebug\wxWallCtrlProject.pdb"
-				SubSystem="2"/>
-			<Tool
-				Name="VCMIDLTool"
-				PreprocessorDefinitions="NOPCH,WIN32,__WXMSW__,_WINDOWS,__WXDEBUG__,_DEBUG,_CRT_SECURE_NO_DEPRECATE"
-				MkTypLibCompatible="TRUE"
-				SuppressStartupBanner="TRUE"
-				TargetEnvironment="1"
-				TypeLibraryName="VCProjectDebug\wxWallCtrlProject.tlb"/>
-			<Tool
-				Name="VCPostBuildEventTool"
+				SubSystem="2"
 			/>
 			<Tool
-				Name="VCPreBuildEventTool"
+				Name="VCALinkTool"
 			/>
 			<Tool
-				Name="VCPreLinkEventTool"
+				Name="VCManifestTool"
 			/>
 			<Tool
-				Name="VCALinkTool"/>
-			<Tool
-				Name="VCManifestTool"/>
-			<Tool
-				Name="VCXDCMakeTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
 				Name="VCBscMakeTool"
 				SuppressStartupBanner="true"
-				OutputFile="VCProjectDebug\wxWallCtrlProject.bsc"/>
+				OutputFile="VCProjectDebug\wxWallCtrlProject.bsc"
+			/>
 			<Tool
-				Name="VCFxCopTool"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCAppVerifierTool"/>
+				Name="VCAppVerifierTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NOPCH,WIN32,__WXMSW__,_WINDOWS,__WXDEBUG__,_DEBUG,_CRT_SECURE_NO_DEPRECATE"
-				Culture="1033"
-				AdditionalIncludeDirectories="c:\wxWidgets-2.8.8/include;c:\wxWidgets-2.8.8/contrib/include;c:\wxWidgets-2.8.8/lib/vc_lib/mswd;C:\Program Files\Microsoft Visual Studio\vc98\include"/>
+				Name="VCWebDeploymentTool"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 	</Configurations>
 	<References>
@@ -98,76 +116,106 @@
 	<Files>
 		<Filter
 			Name="Source Files"
-			Filter="">
+			>
 			<File
-				RelativePath="src\wallctrl\matrix.cpp">
+				RelativePath="src\wallctrl\matrix.cpp"
+				>
 			</File>
 			<File
-				RelativePath="src\wallctrl\wallctrl.cpp">
+				RelativePath="src\wallctrl\wallctrl.cpp"
+				>
 			</File>
 			<File
-				RelativePath="src\wallctrl\wallctrlbitmapsource.cpp">
+				RelativePath="src\wallctrl\wallctrlbitmapsource.cpp"
+				>
 			</File>
 			<File
-				RelativePath="src\wallctrl\wallctrldatasource.cpp">
+				RelativePath="src\wallctrl\wallctrldatasource.cpp"
+				>
 			</File>
 			<File
-				RelativePath="src\wallctrl\wallctrldefaultplanenavigator.cpp">
+				RelativePath=".\src\wallctrl\wallctrldefaultplanenavigator.cpp"
+				>
 			</File>
 			<File
-				RelativePath="src\wallctrl\wallctrlnavigator.cpp">
+				RelativePath=".\src\wallctrl\wallctrlnavigator.cpp"
+				>
 			</File>
 			<File
-				RelativePath="src\wallctrl\wallctrlnavigatorevent.cpp">
+				RelativePath=".\src\wallctrl\wallctrlnavigatorevent.cpp"
+				>
 			</File>
 			<File
-				RelativePath="src\wallctrl\wallctrlplanesurface.cpp">
+				RelativePath="src\wallctrl\wallctrlplanesurface.cpp"
+				>
 			</File>
 			<File
-				RelativePath="src\wallctrl\wallctrlsurface.cpp">
+				RelativePath="src\wallctrl\wallctrlsurface.cpp"
+				>
 			</File>
 			<File
-				RelativePath="wxwallctrlprojectapp.cpp">
+				RelativePath="wxWallCtrlProject.rc"
+				>
 			</File>
 			<File
-				RelativePath="wxwallctrlsample.cpp">
+				RelativePath="wxwallctrlprojectapp.cpp"
+				>
 			</File>
 			<File
-				RelativePath="wxWallCtrlProject.rc">
+				RelativePath="wxwallctrlsample.cpp"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
-			Filter="">
+			>
 			<File
-				RelativePath="include\wx\wallctrl\WallCtrlCommandEvent.h">
+				RelativePath="include\wx\wallctrl\matrix.h"
+				>
 			</File>
 			<File
-				RelativePath="include\wx\wallctrl\matrix.h">
+				RelativePath="include\wx\wallctrl\wallctrl.h"
+				>
 			</File>
 			<File
-				RelativePath="include\wx\wallctrl\wallctrl.h">
+				RelativePath="include\wx\wallctrl\wallctrlbitmapsource.h"
+				>
 			</File>
 			<File
-				RelativePath="include\wx\wallctrl\wallctrlbitmapsource.h">
+				RelativePath="include\wx\wallctrl\wallctrldatasource.h"
+				>
 			</File>
 			<File
-				RelativePath="include\wx\wallctrl\wallctrldatasource.h">
+				RelativePath=".\include\wx\wallctrl\wallctrldefaultplanenavigator.h"
+				>
 			</File>
 			<File
-				RelativePath="include\wx\wallctrl\wallctrlnavigatorevent.h">
+				RelativePath=".\include\wx\wallctrl\wallctrlnavigator.h"
+				>
 			</File>
 			<File
-				RelativePath="include\wx\wallctrl\wallctrlplanesurface.h">
+				RelativePath=".\include\wx\wallctrl\wallctrlnavigatorevent.h"
+				>
 			</File>
 			<File
-				RelativePath="include\wx\wallctrl\wallctrlsurface.h">
+				RelativePath="include\wx\wallctrl\wallctrlplanesurface.h"
+				>
 			</File>
 			<File
-				RelativePath="wxwallctrlprojectapp.h">
+				RelativePath="include\wx\wallctrl\wallctrlsurface.h"
+				>
 			</File>
 			<File
-				RelativePath="wxwallctrlsample.h">
+				RelativePath=".\include\wx\wallctrl\wallctrltypes.h"
+				>
+			</File>
+			<File
+				RelativePath="wxwallctrlprojectapp.h"
+				>
+			</File>
+			<File
+				RelativePath="wxwallctrlsample.h"
+				>
 			</File>
 		</Filter>
 	</Files>

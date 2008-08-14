@@ -128,6 +128,12 @@ void wxWallCtrlSample::Init()
 
 void wxWallCtrlSample::CreateControls()
 {    
+	char buffer[1024];	// Temp buffer to hold current path
+	_getcwd(buffer, sizeof(buffer));
+
+	wxString defaultPath(wxString::FromAscii(buffer));
+	defaultPath += wxT("/Images");
+
 ////@begin wxWallCtrlSample content construction
     wxWallCtrlSample* itemDialog1 = this;
 
@@ -137,15 +143,23 @@ void wxWallCtrlSample::CreateControls()
     wxBoxSizer* itemBoxSizer3 = new wxBoxSizer(wxVERTICAL);
     itemBoxSizer2->Add(itemBoxSizer3, 1, wxGROW|wxALL, 5);
 
-    wxWallCtrl* itemWallCtrl4 = new wxWallCtrl( itemDialog1, ID_WALLCTRL, wxPoint(0, 0), wxSize(300, 300), wxWANTS_CHARS );
+    wxWallCtrl* itemWallCtrl4 = new wxWallCtrl( itemDialog1, ID_WALLCTRL, wxPoint(0, 0), wxSize(800, 560), wxWANTS_CHARS );
     itemBoxSizer3->Add(itemWallCtrl4, 1, wxGROW|wxALL, 5);
 
-    wxDirPickerCtrl* itemDirPickerCtrl5 = new wxDirPickerCtrl( itemDialog1, ID_DIRPICKERCTRL1, _T(""), _T(""), wxDefaultPosition, wxDefaultSize, wxDIRP_DEFAULT_STYLE );
+    wxDirPickerCtrl* itemDirPickerCtrl5 = new wxDirPickerCtrl(itemDialog1, ID_DIRPICKERCTRL1, defaultPath, wxT("Select a folder"), wxDefaultPosition, wxDefaultSize, wxDIRP_DEFAULT_STYLE );
     itemBoxSizer3->Add(itemDirPickerCtrl5, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+
+    wxStaticText* itemStaticText6 = new wxStaticText( itemDialog1, wxID_STATIC, _("Currently selected item: 0"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemBoxSizer3->Add(itemStaticText6, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
 
 ////@end wxWallCtrlSample content construction
 
+
+
+
 	wall = itemWallCtrl4;
+
+	text = itemStaticText6;
 
 	//wxWallCtrlBitmapSource * source = new wxWallCtrlBitmapSource();
 	bitmapSource = new wxWallCtrlBitmapSource();
@@ -163,14 +177,17 @@ void wxWallCtrlSample::CreateControls()
 		bitmapSource->AppendBitmap(testBitmap);
 	}
 */
-	wxWallCtrlPlaneSurface * surface = new wxWallCtrlPlaneSurface(wall);
-	surface->SetScopeSize(wxSize(3, 3));
+	wxWallCtrlPlaneSurface * surface = new wxWallCtrlPlaneSurface(wall, 5);
+	surface->SetScopeSize(wxSize(32, 8));
 
 	wxWallCtrlDefaultPlaneNavigator * navigation = new wxWallCtrlDefaultPlaneNavigator();
 	wall->SetSurface(surface);
 	wall->SetDataSource(bitmapSource);
 	//delete (bitmapSource);
 	wall->SetNavigator(navigation);
+
+	// Load initial directory
+	LoadDirectory(defaultPath);
 }
 
 
@@ -221,34 +238,48 @@ void wxWallCtrlSample::OnDirpickerctrl1DirPickerChanged( wxFileDirPickerEvent& e
 
 	wall->Reload();
 
-	// Temp bitmap used for loading
-    wxBitmap testBitmap;
+	LoadDirectory(event.GetPath());
+}
 
-	wxDir dir(event.GetPath());
+void wxWallCtrlSample::LoadDirectory(wxString path)
+{
+	wxDir dir(path);
 
-    if ( !dir.IsOpened() )
-    {
+	if ( !dir.IsOpened() )
+	{
 		wxLogError(wxT("Failed to open folder"));
-        return;
-    }
+		return;
+	}
+
+	// Temp bitmap used for loading
+	wxBitmap testBitmap;
 
 
-    wxString filename;
+	wxString filename;
 
-    bool cont = dir.GetFirst(&filename, wxT("*.*"), wxDIR_FILES);
-    while ( cont )
-    {
-        wxString f,p,ext;
-        wxSplitPath(filename, & p, & f, & ext);
-        ext.MakeLower();
-        if (ext == wxT("png") || ext == wxT("jpg") || ext == wxT("jpeg"))
-        {
-            // We need to load the images from the selected folder
-            wxString fullPath = event.GetPath() +wxT("/") +filename;
-            testBitmap.LoadFile(fullPath, wxBITMAP_TYPE_ANY);
-            bitmapSource->AppendBitmap(testBitmap);
-        }
+	bool cont = dir.GetFirst(&filename, wxT("*.*"), wxDIR_FILES);
+	while ( cont )
+	{
+		wxString f,p,ext;
+		wxSplitPath(filename, & p, & f, & ext);
+		ext.MakeLower();
+		if (ext == wxT("png") || ext == wxT("jpg") || ext == wxT("jpeg"))
+		{
+			// We need to load the images from the selected folder
+			wxString fullPath = path +wxT("/") +filename;
+			testBitmap.LoadFile(fullPath, wxBITMAP_TYPE_ANY);
+			bitmapSource->AppendBitmap(testBitmap);
+		}
 
-        cont = dir.GetNext(&filename);
-    }
+		cont = dir.GetNext(&filename);
+	}
+
+}
+
+void wxWallCtrlSample::OnSelectionChanged( wxWallCtrlNavigatorEvent &event )
+{
+	wxString label = wxString::Format(wxT("%d"), (int)event.GetSelectedIndex());
+	label = wxT("Currently selected item: ") + label;
+
+	text->SetLabel(label);
 }

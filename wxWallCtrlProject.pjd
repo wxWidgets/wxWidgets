@@ -20,7 +20,6 @@
     <string name="resource_prefix">""</string>
     <bool name="use_two_step_construction">0</bool>
     <bool name="use_enums">0</bool>
-    <bool name="generate_for_xrced">0</bool>
     <string name="current_platform">"&lt;All platforms&gt;"</string>
     <string name="target_wx_version">"2.8.8"</string>
     <string name="cpp_header_comment">"/////////////////////////////////////////////////////////////////////////////
@@ -88,7 +87,7 @@
     <string name="app_class_name">"Application"</string>
     <bool name="generate_app_class">0</bool>
     <string name="external_symbol_filenames">""</string>
-    <string name="configuration">"VC++ Project Unicode Debug"</string>
+    <string name="configuration">"VC++ Project Unicode Release"</string>
     <string name="source_encoding">"iso-8859-1"</string>
     <string name="xrc_encoding">"utf-8"</string>
     <string name="project_encoding">"utf-8"</string>
@@ -107,7 +106,6 @@
     <bool name="archive_all_image_files">0</bool>
     <bool name="xrc_retain_relative_paths">1</bool>
     <bool name="xrc_generate_id_tags">0</bool>
-    <bool name="xrc_use_name_property">0</bool>
   </header>
   <data>
     <document>
@@ -151,7 +149,6 @@
         <string name="Compiler location">"%AUTO%"</string>
         <string name="wxWidgets location">"%AUTO%"</string>
         <string name="C++ command">"%AUTO%"</string>
-        <string name="C command">"%AUTO%"</string>
         <string name="Resource compiler">"%AUTO%"</string>
         <string name="Make command">"%AUTO%"</string>
         <string name="Project makefile">"%AUTO%"</string>
@@ -208,7 +205,6 @@
           <string name="Compiler location">"%AUTO%"</string>
           <string name="wxWidgets location">"%AUTO%"</string>
           <string name="C++ command">"%AUTO%"</string>
-          <string name="C command">"%AUTO%"</string>
           <string name="Resource compiler">"%AUTO%"</string>
           <string name="Make command">"%AUTO%"</string>
           <string name="Project makefile">"%AUTO%"</string>
@@ -240,7 +236,6 @@
           <string name="Pre-build command">"%AUTO%"</string>
           <string name="Post-build command">"%AUTO%"</string>
           <string name="Pre-link command">"%AUTO%"</string>
-          <string name="Ignore libraries">"%AUTO%"</string>
           <string name="CFG">""</string>
         </document>
         <document>
@@ -276,7 +271,6 @@
           <string name="Compiler location">"%AUTO%"</string>
           <string name="wxWidgets location">"%AUTO%"</string>
           <string name="C++ command">"%AUTO%"</string>
-          <string name="C command">"%AUTO%"</string>
           <string name="Resource compiler">"%AUTO%"</string>
           <string name="Make command">"%AUTO%"</string>
           <string name="Project makefile">"%AUTO%"</string>
@@ -308,7 +302,6 @@
           <string name="Pre-build command">"%AUTO%"</string>
           <string name="Post-build command">"%AUTO%"</string>
           <string name="Pre-link command">"%AUTO%"</string>
-          <string name="Ignore libraries">"%AUTO%"</string>
           <string name="CFG">""</string>
         </document>
         <document>
@@ -344,7 +337,6 @@
           <string name="Compiler location">"%AUTO%"</string>
           <string name="wxWidgets location">"%AUTO%"</string>
           <string name="C++ command">"%AUTO%"</string>
-          <string name="C command">"%AUTO%"</string>
           <string name="Resource compiler">"%AUTO%"</string>
           <string name="Make command">"%AUTO%"</string>
           <string name="Project makefile">"%AUTO%"</string>
@@ -376,7 +368,6 @@
           <string name="Pre-build command">"%AUTO%"</string>
           <string name="Post-build command">"%AUTO%"</string>
           <string name="Pre-link command">"%AUTO%"</string>
-          <string name="Ignore libraries">"%AUTO%"</string>
           <string name="CFG">""</string>
         </document>
       </document>
@@ -600,8 +591,8 @@
                 <string name="proxy-Custom styles">""</string>
                 <long name="proxy-X">0</long>
                 <long name="proxy-Y">0</long>
-                <long name="proxy-Width">300</long>
-                <long name="proxy-Height">300</long>
+                <long name="proxy-Width">800</long>
+                <long name="proxy-Height">560</long>
                 <string name="proxy-AlignH">"Expand"</string>
                 <string name="proxy-AlignV">"Expand"</string>
                 <long name="proxy-Stretch factor">1</long>
@@ -734,7 +725,7 @@
           <long name="owns-file">0</long>
           <long name="title-mode">1</long>
           <long name="locked">0</long>
-          <string name="created">"23/7/2008"</string>
+          <string name="created">"13/8/2008"</string>
           <string name="language">""</string>
         </document>
         <document>
@@ -758,7 +749,7 @@
           <long name="owns-file">0</long>
           <long name="title-mode">1</long>
           <long name="locked">0</long>
-          <string name="created">"23/7/2008"</string>
+          <string name="created">"13/8/2008"</string>
           <string name="language">""</string>
         </document>
         <document>
@@ -782,7 +773,7 @@
           <long name="owns-file">0</long>
           <long name="title-mode">1</long>
           <long name="locked">0</long>
-          <string name="created">"23/7/2008"</string>
+          <string name="created">"13/8/2008"</string>
           <string name="language">""</string>
         </document>
         <document>
@@ -806,7 +797,7 @@
           <long name="owns-file">0</long>
           <long name="title-mode">1</long>
           <long name="locked">0</long>
-          <string name="created">"23/7/2008"</string>
+          <string name="created">"13/8/2008"</string>
           <string name="language">""</string>
         </document>
         <document>
@@ -818,7 +809,19 @@
           <long name="owns-file">0</long>
           <long name="title-mode">1</long>
           <long name="locked">0</long>
-          <string name="created">"5/8/2008"</string>
+          <string name="created">"13/8/2008"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"wallctrldefaultplanenavigator.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/wx/wallctrl/wallctrldefaultplanenavigator.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"13/8/2008"</string>
           <string name="language">""</string>
         </document>
         <document>
@@ -830,7 +833,19 @@
           <long name="owns-file">0</long>
           <long name="title-mode">1</long>
           <long name="locked">0</long>
-          <string name="created">"12/8/2008"</string>
+          <string name="created">"13/8/2008"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"wallctrlnavigator.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/wx/wallctrl/wallctrlnavigator.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"13/8/2008"</string>
           <string name="language">""</string>
         </document>
         <document>
@@ -842,7 +857,7 @@
           <long name="owns-file">0</long>
           <long name="title-mode">1</long>
           <long name="locked">0</long>
-          <string name="created">"12/8/2008"</string>
+          <string name="created">"13/8/2008"</string>
           <string name="language">""</string>
         </document>
         <document>
@@ -854,7 +869,7 @@
           <long name="owns-file">0</long>
           <long name="title-mode">1</long>
           <long name="locked">0</long>
-          <string name="created">"12/8/2008"</string>
+          <string name="created">"13/8/2008"</string>
           <string name="language">""</string>
         </document>
         <document>
@@ -878,7 +893,7 @@
           <long name="owns-file">0</long>
           <long name="title-mode">1</long>
           <long name="locked">0</long>
-          <string name="created">"23/7/2008"</string>
+          <string name="created">"13/8/2008"</string>
           <string name="language">""</string>
         </document>
         <document>
@@ -902,7 +917,19 @@
           <long name="owns-file">0</long>
           <long name="title-mode">1</long>
           <long name="locked">0</long>
-          <string name="created">"23/7/2008"</string>
+          <string name="created">"13/8/2008"</string>
+          <string name="language">""</string>
+        </document>
+        <document>
+          <string name="title">"wallctrltypes.h"</string>
+          <string name="type">"source-editor-document"</string>
+          <string name="filename">"include/wx/wallctrl/wallctrltypes.h"</string>
+          <string name="icon-name">"source-editor"</string>
+          <long name="is-transient">0</long>
+          <long name="owns-file">0</long>
+          <long name="title-mode">1</long>
+          <long name="locked">0</long>
+          <string name="created">"13/8/2008"</string>
           <string name="language">""</string>
         </document>
         <document>
