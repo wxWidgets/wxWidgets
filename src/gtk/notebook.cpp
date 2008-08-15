@@ -27,14 +27,6 @@
 
 #include "wx/gtk/private.h"
 
-#include <gdk/gdkkeysyms.h>
-
-//-----------------------------------------------------------------------------
-// data
-//-----------------------------------------------------------------------------
-
-extern bool g_blockEventsOnDrag;
-
 //-----------------------------------------------------------------------------
 // wxGtkNotebookPage
 //-----------------------------------------------------------------------------
@@ -65,40 +57,52 @@ public:
 #include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxGtkNotebookPagesList)
 
+extern "C" {
+static void event_after(GtkNotebook*, GdkEvent*, wxNotebook*);
+}
 
 //-----------------------------------------------------------------------------
 // "switch_page"
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static void gtk_notebook_page_changing_callback( GtkNotebook *widget,
-                                                 GtkNotebookPage *WXUNUSED(gpage),
-                                                 guint page,
-                                                 wxNotebook *notebook )
+static void
+switch_page_after(GtkWidget* widget, GtkNotebookPage*, guint, wxNotebook* win)
 {
-    int old = gtk_notebook_get_current_page( widget );
-
-    if ( !notebook->SendPageChangingEvent(page) )
-    {
-        // program doesn't allow the page change
-        g_signal_stop_emission_by_name( widget, "switch_page" );
-    }
-    else
-    {
-        // the page change event also reports the old page
-        notebook->m_oldSelection = old;
-    }
+    g_signal_handlers_block_by_func(widget, (void*)switch_page_after, win);
+    win->SendPageChangedEvent(win->m_oldSelection);
 }
 }
 
 extern "C" {
-static void gtk_notebook_page_changed_callback( GtkNotebook * WXUNUSED(widget),
-                                                GtkNotebookPage *WXUNUSED(gpage),
-                                                guint WXUNUSED(page),
-                                                wxNotebook *notebook )
+static void
+switch_page(GtkNotebook* widget, GtkNotebookPage*, int page, wxNotebook* win)
 {
-    int old = notebook->m_oldSelection;
-    notebook->SendPageChangedEvent( old );
+    win->m_oldSelection = gtk_notebook_get_current_page(widget);
+
+    if (win->SendPageChangingEvent(page))
+        // allow change, unblock handler for changed event
+        g_signal_handlers_unblock_by_func(widget, (void*)switch_page_after, win);
+    else
+        // change vetoed, unblock handler to set selection back
+        g_signal_handlers_unblock_by_func(widget, (void*)event_after, win);
+}
+}
+
+//-----------------------------------------------------------------------------
+// "event_after" from m_widget
+//-----------------------------------------------------------------------------
+
+extern "C" {
+static void event_after(GtkNotebook* widget, GdkEvent*, wxNotebook* win)
+{
+    g_signal_handlers_block_by_func(widget, (void*)event_after, win);
+    g_signal_handlers_block_by_func(widget, (void*)switch_page, win);
+
+    // restore previous selection
+    gtk_notebook_set_current_page(widget, win->m_oldSelection);
+
+    g_signal_handlers_unblock_by_func(widget, (void*)switch_page, win);
 }
 }
 
@@ -182,10 +186,14 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
     gtk_notebook_set_scrollable( GTK_NOTEBOOK(m_widget), 1 );
 
     g_signal_connect (m_widget, "switch_page",
-                      G_CALLBACK (gtk_notebook_page_changing_callback), this);
+                      G_CALLBACK(switch_page), this);
 
     g_signal_connect_after (m_widget, "switch_page",
-                      G_CALLBACK (gtk_notebook_page_changed_callback), this);
+                      G_CALLBACK(switch_page_after), this);
+    g_signal_handlers_block_by_func(m_widget, (void*)switch_page_after, this);
+
+    g_signal_connect(m_widget, "event_after", G_CALLBACK(event_after), this);
+    g_signal_handlers_block_by_func(m_widget, (void*)event_after, this);
 
     m_parent->DoAddChild( this );
 
@@ -249,22 +257,14 @@ int wxNotebook::DoSetSelection( size_t page, int flags )
 
     if ( !(flags & SetSelection_SendEvent) )
     {
-        g_signal_handlers_block_by_func(m_widget,
-            (gpointer)gtk_notebook_page_changing_callback, this);
-
-        g_signal_handlers_block_by_func(m_widget,
-            (gpointer)gtk_notebook_page_changed_callback, this);
+        g_signal_handlers_block_by_func(m_widget, (void*)switch_page, this);
     }
 
     gtk_notebook_set_current_page( GTK_NOTEBOOK(m_widget), page );
 
     if ( !(flags & SetSelection_SendEvent) )
     {
-        g_signal_handlers_unblock_by_func(m_widget,
-            (gpointer)gtk_notebook_page_changing_callback, this);
-
-        g_signal_handlers_unblock_by_func(m_widget,
-            (gpointer)gtk_notebook_page_changed_callback, this);
+        g_signal_handlers_unblock_by_func(m_widget, (void*)switch_page, this);
     }
 
     wxNotebookPage *client = GetPage(page);
