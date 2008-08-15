@@ -904,17 +904,17 @@ inline bool wxStyleHasBorder(long style)
                      wxSUNKEN_BORDER | wxDOUBLE_BORDER)) != 0;
 }
 
-inline long wxGetWindowExStyle(const wxWindow *win)
+inline long wxGetWindowExStyle(const wxWindowMSW *win)
 {
     return ::GetWindowLong(GetHwndOf(win), GWL_EXSTYLE);
 }
 
-inline bool wxHasWindowExStyle(const wxWindow *win, long style)
+inline bool wxHasWindowExStyle(const wxWindowMSW *win, long style)
 {
     return (wxGetWindowExStyle(win) & style) != 0;
 }
 
-inline long wxSetWindowExStyle(const wxWindow *win, long style)
+inline long wxSetWindowExStyle(const wxWindowMSW *win, long style)
 {
     return ::SetWindowLong(GetHwndOf(win), GWL_EXSTYLE, style);
 }
