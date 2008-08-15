@@ -964,7 +964,7 @@ bool wxLaunchDefaultApplication(const wxString& document, int flags)
                                       (
                                         NULL,           // parent window
                                         _T("open"),
-                                        document,
+                                        document.wx_str(),
                                         NULL,           // parameters
                                         NULL,           // working directory
                                         SW_SHOWDEFAULT
