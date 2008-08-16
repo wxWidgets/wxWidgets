@@ -391,8 +391,11 @@ void wxDialog::DestroyGripper()
     {
         // we used to have trouble with gripper appearing on top (and hence
         // overdrawing) the other, real, dialog children -- check that this
-        // isn't the case automatically
-        wxASSERT_MSG( ::GetNextWindow((HWND)m_hGripper, GW_HWNDNEXT) == 0,
+        // isn't the case automatically (but notice that this could be false if
+        // we're not shown at all as in this case ResizeGripper() might not
+        // have been called yet)
+        wxASSERT_MSG( !IsShown() ||
+                      ::GetNextWindow((HWND)m_hGripper, GW_HWNDNEXT) == 0,
             _T("Bug in wxWidgets: gripper should be at the bottom of Z-order") );
         ::DestroyWindow((HWND) m_hGripper);
         m_hGripper = 0;
