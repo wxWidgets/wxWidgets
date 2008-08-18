@@ -168,7 +168,7 @@ private:
 
     // placeholder for NULL string, to simplify this code
     // NB: this is defined in string.cpp, not (non-existent) buffer.cpp
-    static WXDLLIMPEXP_DATA_BASE(Data) NullData;
+    static Data NullData;
 
     void IncRef()
     {
