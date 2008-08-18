@@ -74,6 +74,10 @@ public:
   bool Set(const wxChar *pc); // from a string, returns true if ok
   void Set(const UUID& uuid); // from another UUID (never fails)
 
+  // comparison operators
+  bool operator==(const Uuid& uuid) const;
+  bool operator!=(const Uuid& uuid) const;
+
   // accessors
   operator const UUID*()   const { return &m_uuid;               }
   operator const wxChar*() const { return (wxChar *)(m_pszUuid); }
