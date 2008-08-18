@@ -737,15 +737,17 @@ MyFrame::MyFrame(wxWindow* parent,
     SetMinSize(wxSize(400,300));
 
     // create some toolbars
+    int tbId = 100;
+
     wxToolBar* tb1 = new wxToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                    wxTB_FLAT | wxTB_NODIVIDER);
     tb1->SetToolBitmapSize(wxSize(48,48));
-    tb1->AddTool(101, wxT("Test"), wxArtProvider::GetBitmap(wxART_ERROR));
+    tb1->AddTool(tbId++, wxT("Test"), wxArtProvider::GetBitmap(wxART_ERROR));
     tb1->AddSeparator();
-    tb1->AddTool(102, wxT("Test"), wxArtProvider::GetBitmap(wxART_QUESTION));
-    tb1->AddTool(103, wxT("Test"), wxArtProvider::GetBitmap(wxART_INFORMATION));
-    tb1->AddTool(103, wxT("Test"), wxArtProvider::GetBitmap(wxART_WARNING));
-    tb1->AddTool(103, wxT("Test"), wxArtProvider::GetBitmap(wxART_MISSING_IMAGE));
+    tb1->AddTool(tbId++, wxT("Test"), wxArtProvider::GetBitmap(wxART_QUESTION));
+    tb1->AddTool(tbId++, wxT("Test"), wxArtProvider::GetBitmap(wxART_INFORMATION));
+    tb1->AddTool(tbId++, wxT("Test"), wxArtProvider::GetBitmap(wxART_WARNING));
+    tb1->AddTool(tbId++, wxT("Test"), wxArtProvider::GetBitmap(wxART_MISSING_IMAGE));
     tb1->Realize();
 
 
@@ -754,18 +756,18 @@ MyFrame::MyFrame(wxWindow* parent,
     tb2->SetToolBitmapSize(wxSize(16,16));
 
     wxBitmap tb2_bmp1 = wxArtProvider::GetBitmap(wxART_QUESTION, wxART_OTHER, wxSize(16,16));
-    tb2->AddTool(101, wxT("Test"), tb2_bmp1);
-    tb2->AddTool(101, wxT("Test"), tb2_bmp1);
-    tb2->AddTool(101, wxT("Test"), tb2_bmp1);
-    tb2->AddTool(101, wxT("Test"), tb2_bmp1);
+    tb2->AddTool(tbId++, wxT("Test"), tb2_bmp1);
+    tb2->AddTool(tbId++, wxT("Test"), tb2_bmp1);
+    tb2->AddTool(tbId++, wxT("Test"), tb2_bmp1);
+    tb2->AddTool(tbId++, wxT("Test"), tb2_bmp1);
     tb2->AddSeparator();
-    tb2->AddTool(101, wxT("Test"), tb2_bmp1);
-    tb2->AddTool(101, wxT("Test"), tb2_bmp1);
+    tb2->AddTool(tbId++, wxT("Test"), tb2_bmp1);
+    tb2->AddTool(tbId++, wxT("Test"), tb2_bmp1);
     tb2->AddSeparator();
-    tb2->AddTool(101, wxT("Test"), tb2_bmp1);
-    tb2->AddTool(101, wxT("Test"), tb2_bmp1);
-    tb2->AddTool(101, wxT("Test"), tb2_bmp1);
-    tb2->AddTool(101, wxT("Test"), tb2_bmp1);
+    tb2->AddTool(tbId++, wxT("Test"), tb2_bmp1);
+    tb2->AddTool(tbId++, wxT("Test"), tb2_bmp1);
+    tb2->AddTool(tbId++, wxT("Test"), tb2_bmp1);
+    tb2->AddTool(tbId++, wxT("Test"), tb2_bmp1);
     tb2->Realize();
 
 
@@ -773,13 +775,13 @@ MyFrame::MyFrame(wxWindow* parent,
                                    wxTB_FLAT | wxTB_NODIVIDER);
     tb3->SetToolBitmapSize(wxSize(16,16));
     wxBitmap tb3_bmp1 = wxArtProvider::GetBitmap(wxART_FOLDER, wxART_OTHER, wxSize(16,16));
-    tb3->AddTool(101, wxT("Test"), tb3_bmp1);
-    tb3->AddTool(101, wxT("Test"), tb3_bmp1);
-    tb3->AddTool(101, wxT("Test"), tb3_bmp1);
-    tb3->AddTool(101, wxT("Test"), tb3_bmp1);
+    tb3->AddTool(tbId++, wxT("Test"), tb3_bmp1);
+    tb3->AddTool(tbId++, wxT("Test"), tb3_bmp1);
+    tb3->AddTool(tbId++, wxT("Test"), tb3_bmp1);
+    tb3->AddTool(tbId++, wxT("Test"), tb3_bmp1);
     tb3->AddSeparator();
-    tb3->AddTool(101, wxT("Test"), tb3_bmp1);
-    tb3->AddTool(101, wxT("Test"), tb3_bmp1);
+    tb3->AddTool(tbId++, wxT("Test"), tb3_bmp1);
+    tb3->AddTool(tbId++, wxT("Test"), tb3_bmp1);
     tb3->Realize();
 
 
@@ -787,15 +789,15 @@ MyFrame::MyFrame(wxWindow* parent,
                                    wxTB_FLAT | wxTB_NODIVIDER | wxTB_HORZ_TEXT);
     tb4->SetToolBitmapSize(wxSize(16,16));
     wxBitmap tb4_bmp1 = wxArtProvider::GetBitmap(wxART_NORMAL_FILE, wxART_OTHER, wxSize(16,16));
-    tb4->AddTool(101, wxT("Item 1"), tb4_bmp1);
-    tb4->AddTool(101, wxT("Item 2"), tb4_bmp1);
-    tb4->AddTool(101, wxT("Item 3"), tb4_bmp1);
-    tb4->AddTool(101, wxT("Item 4"), tb4_bmp1);
+    tb4->AddTool(tbId++, wxT("Item 1"), tb4_bmp1);
+    tb4->AddTool(tbId++, wxT("Item 2"), tb4_bmp1);
+    tb4->AddTool(tbId++, wxT("Item 3"), tb4_bmp1);
+    tb4->AddTool(tbId++, wxT("Item 4"), tb4_bmp1);
     tb4->AddSeparator();
-    tb4->AddTool(101, wxT("Item 5"), tb4_bmp1);
-    tb4->AddTool(101, wxT("Item 6"), tb4_bmp1);
-    tb4->AddTool(101, wxT("Item 7"), tb4_bmp1);
-    tb4->AddTool(101, wxT("Item 8"), tb4_bmp1);
+    tb4->AddTool(tbId++, wxT("Item 5"), tb4_bmp1);
+    tb4->AddTool(tbId++, wxT("Item 6"), tb4_bmp1);
+    tb4->AddTool(tbId++, wxT("Item 7"), tb4_bmp1);
+    tb4->AddTool(tbId++, wxT("Item 8"), tb4_bmp1);
     tb4->AddControl(new wxComboBox(tb4, -1));
     tb4->Realize();
 
@@ -803,12 +805,12 @@ MyFrame::MyFrame(wxWindow* parent,
     wxToolBar* tb5 = new wxToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                    wxTB_FLAT | wxTB_NODIVIDER | wxTB_VERTICAL);
     tb5->SetToolBitmapSize(wxSize(48,48));
-    tb5->AddTool(101, wxT("Test"), wxArtProvider::GetBitmap(wxART_ERROR));
+    tb5->AddTool(tbId++, wxT("Test"), wxArtProvider::GetBitmap(wxART_ERROR), _T("Tooltip1"));
     tb5->AddSeparator();
-    tb5->AddTool(102, wxT("Test"), wxArtProvider::GetBitmap(wxART_QUESTION));
-    tb5->AddTool(103, wxT("Test"), wxArtProvider::GetBitmap(wxART_INFORMATION));
-    tb5->AddTool(103, wxT("Test"), wxArtProvider::GetBitmap(wxART_WARNING));
-    tb5->AddTool(103, wxT("Test"), wxArtProvider::GetBitmap(wxART_MISSING_IMAGE));
+    tb5->AddTool(tbId++, wxT("Test"), wxArtProvider::GetBitmap(wxART_QUESTION), _T("Tooltip2"));
+    tb5->AddTool(tbId++, wxT("Test"), wxArtProvider::GetBitmap(wxART_INFORMATION), _T("Tooltip3"));
+    tb5->AddTool(tbId++, wxT("Test"), wxArtProvider::GetBitmap(wxART_WARNING), _T("Tooltip4"));
+    tb5->AddTool(tbId++, wxT("Test"), wxArtProvider::GetBitmap(wxART_MISSING_IMAGE), _T("Tooltip5"));
     tb5->Realize();
 
     // add a bunch of panes
