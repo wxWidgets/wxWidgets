@@ -539,7 +539,7 @@ bool wxAutomationObject::CreateInstance(const wxString& classId) const
     }
 
     // start a new copy of Excel, grab the IDispatch interface
-    if (FAILED(CoCreateInstance(clsId, NULL, CLSCTX_LOCAL_SERVER, IID_IDispatch, (void**)&m_dispatchPtr)))
+    if (FAILED(CoCreateInstance(clsId, NULL, CLSCTX_ALL, IID_IDispatch, (void**)&m_dispatchPtr)))
     {
         wxLogWarning(wxT("Cannot start an instance of this class."));
         return false;
