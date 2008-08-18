@@ -82,6 +82,16 @@ Uuid& Uuid::operator=(const Uuid& uuid)
   return *this;
 }
 
+bool Uuid::operator==(const Uuid& uuid) const
+{
+  return m_uuid == uuid.m_uuid;
+}
+
+bool Uuid::operator!=(const Uuid& uuid) const
+{
+  return m_uuid != uuid.m_uuid;
+}
+
 // dtor
 Uuid::~Uuid()
 {

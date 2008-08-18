@@ -74,6 +74,12 @@ public:
   bool Set(const wxChar *pc); // from a string, returns true if ok
   void Set(const UUID& uuid); // from another UUID (never fails)
 
+#if wxABI_VERSION >= 20809
+  // comparison operators
+  bool operator==(const Uuid& uuid) const;
+  bool operator!=(const Uuid& uuid) const;
+#endif // wxABI_VERSION >= 2.8.9
+
   // accessors
   operator const UUID*()   const { return &m_uuid;               }
   operator const wxChar*() const { return (wxChar *)(m_pszUuid); }
