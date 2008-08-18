@@ -404,6 +404,30 @@ wxMenuBar and wxStatusBar children; objects of these types are automatically
 set as frame's tool-, menu- and statusbar respectively.
 
 
+wxMenu
+------
+
+wxMenu objects can contain objects of class "separator" and "break" as well as
+normal menu items, of class "wxMenuItem" described below. The menu itself can
+also have the following elements:
+
+label                      I18nString              ""
+help                       I18nString              ""
+enabled                    Boolean                 true
+style                      Style[wxMenu]           only wxMENU_TEAROFF currently
+
+wxMenuItem
+----------
+
+label                      I18nString              ""
+accel                      String                  ""
+bitmap                     Bitmap                  (empty)
+bitmap2                    Bitmap                  checked bitmap, wxMSW only
+checkable                  Boolean                 false
+radio                      Boolean                 false
+enabled                    Boolean                 true
+checked                    Boolean                 false ("checkable" and "radio")
+
 wxMDIParentFrame
 ----------------
 
