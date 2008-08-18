@@ -11,6 +11,8 @@
 #ifndef __GTKDIALOGH__
 #define __GTKDIALOGH__
 
+class WXDLLIMPEXP_FWD_CORE wxGUIEventLoop;
+
 //-----------------------------------------------------------------------------
 // wxDialog
 //-----------------------------------------------------------------------------
@@ -47,7 +49,7 @@ public:
 private:
     // common part of all ctors
     void Init();
-
+    wxGUIEventLoop *m_modalLoop;
     DECLARE_DYNAMIC_CLASS(wxDialog)
 };
 

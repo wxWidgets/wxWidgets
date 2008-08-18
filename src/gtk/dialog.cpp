@@ -18,10 +18,15 @@
 
 #include "wx/evtloop.h"
 
+#include "wx/ptr_scpd.h"
+
 #include <gtk/gtk.h>
 
 // this is defined in src/gtk/toplevel.cpp
 extern int wxOpenModalDialogsCount;
+
+wxDEFINE_TIED_SCOPED_PTR_TYPE(wxGUIEventLoop);
+
 
 //-----------------------------------------------------------------------------
 // wxDialog
@@ -31,6 +36,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxDialog,wxTopLevelWindow)
 
 void wxDialog::Init()
 {
+    m_modalLoop = NULL;
     m_returnCode = 0;
     m_modalShowing = false;
     m_themeEnabled = true;
@@ -130,7 +136,11 @@ int wxDialog::ShowModal()
     // NOTE: gtk_window_set_modal internally calls gtk_grab_add() !
     gtk_window_set_modal(GTK_WINDOW(m_widget), TRUE);
 
-    wxGUIEventLoop().Run();
+    // Run modal dialog event loop.
+    {
+        wxGUIEventLoopTiedPtr modal(&m_modalLoop, new wxGUIEventLoop());
+        m_modalLoop->Run();
+    }
 
     gtk_window_set_modal(GTK_WINDOW(m_widget), FALSE);
 
@@ -151,7 +161,10 @@ void wxDialog::EndModal( int retCode )
 
     m_modalShowing = false;
 
-    gtk_main_quit();
+    // Ensure Exit() is only called once. The dialog's event loop may be terminated
+    // externally due to an uncaught exception.
+    if (m_modalLoop && m_modalLoop->IsRunning())
+        m_modalLoop->Exit();
 
     Show( false );
 }
