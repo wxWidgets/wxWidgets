@@ -1906,6 +1906,19 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
         x += wCol;
     }
+
+    // Fill in what's missing to the right of the columns, otherwise we will
+    // leave an unpainted area when columns are removed (and it looks better)
+    if ( x < w )
+    {
+        wxRendererNative::Get().DrawHeaderButton
+                                (
+                                    this,
+                                    dc,
+                                    wxRect(x, HEADER_OFFSET_Y, w - x, h),
+                                    0
+                                );
+    }
 }
 
 void wxListHeaderWindow::DrawCurrent()
