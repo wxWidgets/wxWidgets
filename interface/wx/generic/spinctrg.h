@@ -1,16 +1,16 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        spinctrl.h
-// Purpose:     interface of wxSpinCtrl
+// Name:        spinctrg.h
+// Purpose:     interface of wxSpinCtrlDouble
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 /**
-    @class wxSpinCtrl
+    @class wxSpinCtrlDouble
 
-    wxSpinCtrl combines wxTextCtrl and
-    wxSpinButton in one control.
+    wxSpinCtrlDouble combines wxTextCtrl and wxSpinButton in one control and
+    displays a real number. (wxSpinCtrl displays an integer.)
 
     @beginStyleTable
     @style{wxSP_ARROW_KEYS}
@@ -21,17 +21,17 @@
 
     @library{wxcore}
     @category{ctrl}
-    <!-- @appearance{spinctrl.png} -->
+    <!-- @appearance{spinctrd.png} -->
 
-    @see wxSpinButton, wxSpinCtrlDouble, wxControl
+    @see wxSpinButton, wxSpinCtrl, wxControl
 */
-class wxSpinCtrl : public wxControl
+class wxSpinCtrlDouble : public wxControl
 {
 public:
     /**
        Default constructor.
     */
-    wxSpinCtrl();
+    wxSpinCtrlDouble();
     
     /**
         Constructor, creating and showing a spin control.
@@ -56,68 +56,83 @@ public:
             Maximal value.
         @param initial
             Initial value.
+        @param inc
+            Increment value.
         @param name
             Window name.
 
         @see Create()
     */
-    wxSpinCtrl(wxWindow* parent, wxWindowID id = -1,
+    wxSpinCtrlDouble(wxWindow* parent, wxWindowID id = -1,
                const wxString& value = wxEmptyString,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = wxSP_ARROW_KEYS,
-               int min = 0, int max = 100,
-               int initial = 0, const wxString& name = _T("wxSpinCtrl"));
+               double min = 0, double max = 100,
+               double initial = 0, double inc = 1,
+               const wxString& name = _T("wxSpinCtrlDouble"));
 
     /**
         Creation function called by the spin control constructor.
-        See wxSpinCtrl() for details.
+        See wxSpinCtrlDouble() for details.
     */
     bool Create(wxWindow* parent, wxWindowID id = -1,
                 const wxString& value = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxSP_ARROW_KEYS,
-                int min = 0, int max = 100,
-                int initial = 0, const wxString& name = _T("wxSpinCtrl"));
+                double min = 0, double max = 100,
+                double initial = 0, double inc = 1,
+                const wxString& name = _T("wxSpinCtrlDouble"));
+
+    /**
+        Gets the number of digits in the display.
+    */
+    unsigned GetDigits() const;
+
+    /**
+        Gets the increment value.
+    */
+    double GetIncrement() const;
 
     /**
         Gets maximal allowable value.
     */
-    int GetMax() const;
+    double GetMax() const;
 
     /**
         Gets minimal allowable value.
     */
-    int GetMin() const;
+    double GetMin() const;
 
     /**
         Gets the value of the spin control.
     */
-    int GetValue() const;
+    double GetValue() const;
+
+    /**
+        Sets the number of digits in the display.
+    */
+    void SetDigits(unsigned digits);
+
+    /**
+        Sets the increment value.
+    */
+    void SetIncrement(double inc);
 
     /**
         Sets range of allowable values.
     */
-    void SetRange(int minVal, int maxVal);
+    void SetRange(double minVal, double maxVal);
 
     /**
-        Select the text in the text part of the control between  positions
-        @a from (inclusive) and @a to (exclusive). This is similar to
-        wxTextCtrl::SetSelection.
-        @note this is currently only implemented for Windows and generic versions
-        of the control.
-    */
-    void SetSelection(long from, long to);
-
-    /**
-        Sets the value of the spin control. Use the variant using int instead.
+        Sets the value of the spin control. Use the variant using double instead.
     */
     void SetValue(const wxString& text);
 
     /**
         Sets the value of the spin control.
     */
-    void SetValue(int value);
+    void SetValue(double value);
 };
 

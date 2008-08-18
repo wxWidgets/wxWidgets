@@ -174,7 +174,10 @@ Controls that are not static can have wxValidator associated with them.
 @li wxTreeCtrl: Tree (hierarchy) control
 @li wxScrollBar: Scrollbar control
 @li wxSpinButton: A spin or `up-down' control
-@li wxSpinCtrl: A spin control - i.e. spin button and text control
+@li wxSpinCtrl: A spin control - i.e. spin button and text control displaying
+    an integer
+@li wxSpinCtrlDouble: A spin control - i.e. spin button and text control displaying
+    a real number
 @li wxStaticText: One or more lines of non-editable text
 @li wxHyperlinkCtrl: A static text which opens an URL when clicked
 @li wxStaticBitmap: A control to display a bitmap
