@@ -647,7 +647,7 @@ inline bool operator==(const wxUString& s1, const wxUString& s2)
 inline bool operator!=(const wxUString& s1, const wxUString& s2)
     { return s1.compare( s2 ) != 0; }
 inline bool operator< (const wxUString& s1, const wxUString& s2)
-    { wxPrintf( "test\n"); return s1.compare( s2 ) < 0; }
+    { return s1.compare( s2 ) < 0; }
 inline bool operator> (const wxUString& s1, const wxUString& s2)
     { return s1.compare( s2 ) > 0; }
 inline bool operator<=(const wxUString& s1, const wxUString& s2)

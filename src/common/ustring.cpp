@@ -15,15 +15,12 @@
     #pragma hdrstop
 #endif
 
+#include "wx/ustring.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/strconv.h"  // wxConvLibc
+    #include "wx/crt.h"
     #include "wx/log.h"
 #endif
-
-#include "wx/ustring.h"
-#include "wx/unichar.h"
-#include "wx/string.h"
-
 
 wxUString &wxUString::assignFromAscii( const char *str )
 {
