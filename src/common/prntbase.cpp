@@ -1856,9 +1856,12 @@ namespace
 class PageFragmentDC : public wxMemoryDC
 {
 public:
-    PageFragmentDC(wxDC *printer, wxBitmap& bmp, const wxRect& rect)
+    PageFragmentDC(wxDC *printer, wxBitmap& bmp,
+                   const wxPoint& offset,
+                   const wxSize& fullSize)
         : wxMemoryDC(printer),
-          m_rect(rect)
+          m_offset(offset),
+          m_fullSize(fullSize)
     {
         SetDeviceOrigin(0, 0);
         SelectObject(bmp);
@@ -1866,26 +1869,27 @@ public:
 
     virtual void SetDeviceOrigin(wxCoord x, wxCoord y)
     {
-        wxMemoryDC::SetDeviceOrigin(x - m_rect.x, y - m_rect.y);
+        wxMemoryDC::SetDeviceOrigin(x - m_offset.x, y - m_offset.y);
     }
 
     virtual void DoGetDeviceOrigin(wxCoord *x, wxCoord *y) const
     {
         wxMemoryDC::DoGetDeviceOrigin(x, y);
-        if ( x ) *x += m_rect.x;
-        if ( x ) *y += m_rect.y;
+        if ( x ) *x += m_offset.x;
+        if ( x ) *y += m_offset.y;
     }
 
     virtual void DoGetSize(int *width, int *height) const
     {
         if ( width )
-            *width = m_rect.width;
+            *width = m_fullSize.x;
         if ( height )
-            *height = m_rect.height;
+            *height = m_fullSize.y;
     }
 
 private:
-    wxRect m_rect;
+    wxPoint m_offset;
+    wxSize m_fullSize;
 };
 
 // estimate how big chunks we can render, given available RAM
@@ -1947,6 +1951,7 @@ static bool RenderPageFragment(wxPrintPreviewBase *preview,
                                wxPrinterDC& printer,
                                wxMemoryDC& finalDC,
                                const wxRect& rect,
+                               int pageHeight, int pageWidth,
                                int pageNum)
 {
     // compute 'rect' equivalent in the small final bitmap:
@@ -1967,7 +1972,9 @@ static bool RenderPageFragment(wxPrintPreviewBase *preview,
 
     // render part of the page into it:
     {
-        PageFragmentDC memoryDC(&printer, large, rect);
+        PageFragmentDC memoryDC(&printer, large,
+                                rect.GetPosition(),
+                                wxSize(pageWidth, pageHeight));
         if ( !memoryDC.IsOk() )
             return false;
 
@@ -2045,6 +2052,7 @@ static bool RenderPageIntoBitmapHQ(wxPrintPreviewBase *preview,
                                  printerDC,
                                  bmpDC,
                                  todo,
+                                 pageWidth, pageHeight,
                                  pageNum) )
         {
             if ( todo.height < 20 )
