@@ -168,7 +168,14 @@ private:
 
     // placeholder for NULL string, to simplify this code
     // NB: this is defined in string.cpp, not (non-existent) buffer.cpp
+#ifdef __MINGW32__
+    // MinGW requires explicit WXDLLIMPEXP_DATA_BASE to avoid compilation
+    // errors
+    static WXDLLIMPEXP_DATA_BASE(Data) NullData;
+#else
+    // but Visual C++ doesn't like it
     static Data NullData;
+#endif
 
     void IncRef()
     {
