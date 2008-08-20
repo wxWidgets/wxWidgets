@@ -465,42 +465,48 @@ namespace
 class PageFragmentDCImpl : public wxMemoryDCImpl
 {
 public:
-    PageFragmentDCImpl(wxMemoryDC *owner, wxDC *printer, const wxRect& rect)
+    PageFragmentDCImpl(wxMemoryDC *owner, wxDC *printer,
+                       const wxPoint& offset,
+                       const wxSize& fullSize)
         : wxMemoryDCImpl(owner, printer),
-          m_rect(rect)
+          m_offset(offset),
+          m_fullSize(fullSize)
     {
         SetDeviceOrigin(0, 0);
     }
 
     virtual void SetDeviceOrigin(wxCoord x, wxCoord y)
     {
-        wxMemoryDCImpl::SetDeviceOrigin(x - m_rect.x, y - m_rect.y);
+        wxMemoryDCImpl::SetDeviceOrigin(x - m_offset.x, y - m_offset.y);
     }
 
     virtual void DoGetDeviceOrigin(wxCoord *x, wxCoord *y) const
     {
         wxMemoryDCImpl::DoGetDeviceOrigin(x, y);
-        if ( x ) *x += m_rect.x;
-        if ( x ) *y += m_rect.y;
+        if ( x ) *x += m_offset.x;
+        if ( x ) *y += m_offset.y;
     }
 
     virtual void DoGetSize(int *width, int *height) const
     {
         if ( width )
-            *width = m_rect.width;
+            *width = m_fullSize.x;
         if ( height )
-            *height = m_rect.height;
+            *height = m_fullSize.y;
     }
 
 private:
-    wxRect m_rect;
+    wxPoint m_offset;
+    wxSize m_fullSize;
 };
 
 class PageFragmentDC : public wxDC
 {
 public:
-    PageFragmentDC(wxDC* printer, wxBitmap& bmp, const wxRect& rect)
-        : wxDC(new PageFragmentDCImpl((wxMemoryDC*)this, printer, rect))
+    PageFragmentDC(wxDC* printer, wxBitmap& bmp,
+                   const wxPoint& offset,
+                   const wxSize& fullSize)
+        : wxDC(new PageFragmentDCImpl((wxMemoryDC*)this, printer, offset, fullSize))
     {
         wx_static_cast(PageFragmentDCImpl*, m_pimpl)->DoSelect(bmp);
     }
@@ -583,7 +589,9 @@ bool wxWindowsPrintPreview::RenderPageFragment(float scaleX, float scaleY,
 
     // render part of the page into it:
     {
-        PageFragmentDC memoryDC(&printer, large, rect);
+        PageFragmentDC memoryDC(&printer, large,
+                                rect.GetPosition(),
+                                wxSize(m_pageWidth, m_pageHeight));
         if ( !memoryDC.IsOk() )
             return false;
 
