@@ -119,7 +119,7 @@ public:
     const wxRichTextHeaderFooterData& GetHeaderFooterData() const { return m_headerFooterData; }
 
     /// Sets margins in 10ths of millimetre. Defaults to 1 inch for margins.
-    void SetMargins(int top = 252, int bottom = 252, int left = 252, int right = 252);
+    void SetMargins(int top = 254, int bottom = 254, int left = 254, int right = 254);
 
     /// Calculate scaling and rectangles, setting the device context scaling
     void CalculateScaling(wxDC* dc, wxRect& textRect, wxRect& headerRect, wxRect& footerRect);
