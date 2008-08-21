@@ -811,20 +811,20 @@ void MyCanvas::DrawText(wxDC& dc)
     // test the logical function effect
     wxCoord y = 150;
     dc.SetLogicalFunction(wxINVERT);
-    dc.DrawText( _T("There should be no text below"), 110, 150 );
+    // text drawing should ignore logical function
+    dc.DrawText( _T("There should be a text below"), 110, 150 );
     dc.DrawRectangle( 110, y, 100, height );
 
-    // twice drawn inverted should result in invisible
     y += height;
-    dc.DrawText( _T("Invisible text"), 110, y );
+    dc.DrawText( _T("Visible text"), 110, y );
     dc.DrawRectangle( 110, y, 100, height );
-    dc.DrawText( _T("Invisible text"), 110, y );
+    dc.DrawText( _T("Visible text"), 110, y );
     dc.DrawRectangle( 110, y, 100, height );
     dc.SetLogicalFunction(wxCOPY);
 
     y += height;
     dc.DrawRectangle( 110, y, 100, height );
-    dc.DrawText( _T("Visible text"), 110, y );
+    dc.DrawText( _T("Another visible text"), 110, y );
 }
 
 static const struct

@@ -445,10 +445,8 @@ public:
         the string. See GetTextExtent() for how to get the dimensions of a text
         string, which can be used to position the text more precisely.
 
-        @note Under wxGTK, the current
-              @ref GetLogicalFunction() "logical function" is used by this
-              function but it is ignored by wxMSW. Thus, you should avoid using
-              logical functions with this function in portable programs.
+        @note The current @ref GetLogicalFunction() "logical function" is 
+              ignored by this function.
     */
     void DrawText(const wxString& text, wxCoord x, wxCoord y);
 
@@ -911,6 +909,7 @@ public:
         determines how a source pixel (from a pen or brush colour, or source
         device context if using Blit()) combines with a destination pixel in
         the current device context.
+        Text drawing is not affected by this function.
 
         The possible values and their meaning in terms of source and
         destination pixel values are as follows:
