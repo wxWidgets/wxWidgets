@@ -1074,10 +1074,15 @@ void wxMSWDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord hei
 
     wxBrushAttrsSetter cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
 
-    wxCoord x2 = (x+width);
-    wxCoord y2 = (y+height);
+    // +1 below makes the ellipse more similar to other platforms.
+    // In particular, DoDrawEllipse(x,y,1,1) should draw one point.
+    wxCoord x2 = x + width + 1;
+    wxCoord y2 = y + height + 1;
 
-    (void)Ellipse(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x2), YLOG2DEV(y2));
+    // Problem: Windows GDI Ellipse() with x2-x == y2-y == 3 and transparent
+    // pen doesn't draw anything. Should we provide a workaround?
+
+    ::Ellipse(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x2), YLOG2DEV(y2));
 
     CalcBoundingBox(x, y);
     CalcBoundingBox(x2, y2);
