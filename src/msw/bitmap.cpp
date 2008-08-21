@@ -808,14 +808,15 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, WXHDC hdc)
     if ( !dib.IsOk() )
         return false;
 
-    if ( depth == -1 )
-        depth = dib.GetDepth(); // Get depth from image if none specified
+    const bool hasAlpha = image.HasAlpha();
 
     // store the bitmap parameters
-    wxBitmapRefData *refData = new wxBitmapRefData;
+    wxBitmapRefData * const refData = new wxBitmapRefData;
     refData->m_width = w;
     refData->m_height = h;
-    refData->m_hasAlpha = image.HasAlpha();
+    refData->m_hasAlpha = hasAlpha;
+    refData->m_depth = depth == -1 ? (hasAlpha ? 32 : 24)
+                                   : depth;
 
     m_refData = refData;
 
@@ -826,20 +827,17 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, WXHDC hdc)
     // are we going to use DIB?
     //
     // NB: DDBs don't support alpha so if we have alpha channel we must use DIB
-    if ( image.HasAlpha() || wxShouldCreateDIB(w, h, depth, hdc) )
+    if ( hasAlpha || wxShouldCreateDIB(w, h, depth, hdc) )
     {
         // don't delete the DIB section in dib object dtor
         hbitmap = dib.Detach();
 
         refData->m_isDIB = true;
-        refData->m_depth = depth;
     }
 #ifndef ALWAYS_USE_DIB
     else // we need to convert DIB to DDB
     {
         hbitmap = dib.CreateDDB((HDC)hdc);
-
-        refData->m_depth = depth;
     }
 #endif // !ALWAYS_USE_DIB
 
