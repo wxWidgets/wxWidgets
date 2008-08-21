@@ -329,7 +329,7 @@ bool DrawingCommand::Undo(void)
 IMPLEMENT_DYNAMIC_CLASS(TextEditDocument, wxDocument)
 
 // Since text windows have their own method for saving to/loading from files,
-// we override OnSave/OpenDocument instead of Save/LoadObject
+// we override DoSave/OpenDocument instead of Save/LoadObject
 bool TextEditDocument::DoSaveDocument(const wxString& filename)
 {
     TextEditView* view = GetFirstView();
