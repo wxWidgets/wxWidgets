@@ -425,6 +425,9 @@ void wxGraphicsPathData::AddCircle( wxDouble x, wxDouble y, wxDouble r )
 
 void wxGraphicsPathData::AddEllipse( wxDouble x, wxDouble y, wxDouble w, wxDouble h)
 {
+    if (w <= 0. || h <= 0.)
+      return;
+      
     wxDouble rw = w/2;
     wxDouble rh = h/2;
     wxDouble xc = x + rw;
