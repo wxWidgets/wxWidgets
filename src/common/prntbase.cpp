@@ -1951,7 +1951,7 @@ static bool RenderPageFragment(wxPrintPreviewBase *preview,
                                wxPrinterDC& printer,
                                wxMemoryDC& finalDC,
                                const wxRect& rect,
-                               int pageHeight, int pageWidth,
+                               int pageWidth, int pageHeight,
                                int pageNum)
 {
     // compute 'rect' equivalent in the small final bitmap:
