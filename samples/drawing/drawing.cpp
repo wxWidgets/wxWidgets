@@ -36,6 +36,7 @@
 #include "wx/dcgraph.h"
 #include "wx/overlay.h"
 #include "wx/graphics.h"
+#include "wx/filename.h"
 
 #define TEST_CAIRO_EVERYWHERE 0
 
@@ -317,6 +318,9 @@ bool MyApp::LoadImages()
     gs_bmp36 = new wxBitmap;
 
     wxPathList pathList;
+    // special hack for Unix in-tree sample build, don't do this in real
+    // programs, use wxStandardPaths instead
+    pathList.Add(wxFileName(argv[0]).GetPath());
     pathList.Add(_T("."));
     pathList.Add(_T(".."));
     pathList.Add(_T("../.."));
@@ -380,10 +384,8 @@ bool MyApp::OnInit()
                    wxT("for this sample from the current or parent ")
                    wxT("directory, please copy them there."));
 
-        // stop here
-        DeleteBitmaps();
-
-        return false;
+        // still continue, the sample can be used without images too if they're
+        // missing for whatever reason
     }
 
     // ok, continue
@@ -1601,7 +1603,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(File_ShowPolygons, _T("&Polygons screen\tF5"));
     menuFile->Append(File_ShowMask, _T("&Mask screen\tF6"));
     menuFile->Append(File_ShowMaskStretch, _T("1/&2 scaled mask\tShift-F6"));
-    menuFile->Append(File_ShowOps, _T("&ROP screen\tF7"));
+    menuFile->Append(File_ShowOps, _T("&Raster operations screen\tF7"));
     menuFile->Append(File_ShowRegions, _T("Re&gions screen\tF8"));
     menuFile->Append(File_ShowCircles, _T("&Circles screen\tF9"));
 #if wxUSE_GRAPHICS_CONTEXT
