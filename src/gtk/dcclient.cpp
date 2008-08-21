@@ -1366,7 +1366,7 @@ void wxWindowDCImpl::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     wxCHECK_RET( m_layout, wxT("no Pango layout") );
     wxCHECK_RET( m_fontdesc, wxT("no Pango font description") );
 
-    gdk_pango_context_set_colormap( m_context, m_cmap );
+    gdk_pango_context_set_colormap( m_context, m_cmap );  // not needed in gtk+ >= 2.6
 
     bool underlined = m_font.IsOk() && m_font.GetUnderlined();
 
@@ -1436,31 +1436,30 @@ void wxWindowDCImpl::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     const bool isScaled = fabs(m_scaleY - 1.0) > 0.00001;
     if (isScaled)
     {
-         // If there is a user or actually any scale applied to
-         // the device context, scale the font.
+        // If there is a user or actually any scale applied to
+        // the device context, scale the font.
 
-         // scale font description
+        // scale font description
         oldSize = pango_font_description_get_size(m_fontdesc);
         pango_font_description_set_size(m_fontdesc, int(oldSize * m_scaleY));
 
-         // actually apply scaled font
-         pango_layout_set_font_description( m_layout, m_fontdesc );
+        // actually apply scaled font
+        pango_layout_set_font_description( m_layout, m_fontdesc );
     }
 
     int w, h;
     pango_layout_get_pixel_size(m_layout, &w, &h);
-    if (m_backgroundMode == wxBRUSHSTYLE_SOLID)
-    {
-        gdk_gc_set_foreground(m_textGC, m_textBackgroundColour.GetColor());
-        gdk_draw_rectangle(m_gdkwindow, m_textGC, true, x, y, w, h);
-        gdk_gc_set_foreground(m_textGC, m_textForegroundColour.GetColor());
-    }
 
     // Draw layout.
     int x_rtl = x;
     if (m_window && m_window->GetLayoutDirection() == wxLayout_RightToLeft)
         x_rtl -= w;
-    gdk_draw_layout(m_gdkwindow, m_textGC, x_rtl, y, m_layout);
+
+    const GdkColor* bg_col = NULL;
+    if (m_backgroundMode == wxBRUSHSTYLE_SOLID) 
+        bg_col = m_textBackgroundColour.GetColor();
+ 
+    gdk_draw_layout_with_colors(m_gdkwindow, m_textGC, x_rtl, y, m_layout, NULL, bg_col);
 
     if (isScaled)
     {
