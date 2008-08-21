@@ -181,11 +181,11 @@ public:
         image.
 
         It sets the device origin according to the current scroll position.
-        DoPrepareDC() is called automatically within the default OnPaint()
-        event handler, so your OnDraw() override will be passed a
+        DoPrepareDC() is called automatically within the default @c wxEVT_PAINT
+        event handler, so your OnDraw() override will be passed an already
         'pre-scrolled' device context. However, if you wish to draw from
-        outside of OnDraw() (via OnPaint()), or you wish to implement OnPaint()
-        yourself, you must call this function yourself.
+        outside of OnDraw() (e.g. from your own @c wxEVT_PAINT handler), you
+        must call this function yourself.
 
         For example:
         @code
@@ -206,6 +206,12 @@ public:
         }
         @endcode
 
+        Notice that the function sets the origin by moving it relatively to the
+        current origin position, so you shouldn't change the origin before
+        calling DoPrepareDC() or, if you do, reset it to (0, 0) later. If you
+        call DoPrepareDC() immediately after device context creation, as in the
+        example above, this problem doesn't arise, of course, so it is
+        customary to do it like this.
     */
     void DoPrepareDC(wxDC& dc);
 
