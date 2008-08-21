@@ -87,6 +87,13 @@ enum
     BitmapComboBoxPage_ContainerTests
 };
 
+// kinds of comboboxes
+enum
+{
+    ComboKind_Default,
+    ComboKind_Simple,
+    ComboKind_DropDown
+};
 
 // ----------------------------------------------------------------------------
 // BitmapComboBoxWidgetsPage
@@ -161,6 +168,9 @@ protected:
     // the controls
     // ------------
 
+    // the sel mode radiobox
+    wxRadioBox *m_radioKind;
+
     // the checkboxes for styles
     wxCheckBox *m_chkSort,
                *m_chkReadonly;
@@ -227,10 +237,14 @@ END_EVENT_TABLE()
 // implementation
 // ============================================================================
 
-
+#if defined(__WXMSW__) || defined(__WXGTK__)
+    #define NATIVE_OR_GENERIC_CTRLS     NATIVE_CTRLS
+#else
+    #define NATIVE_OR_GENERIC_CTRLS     GENERIC_CTRLS
+#endif
 
 IMPLEMENT_WIDGETS_PAGE(BitmapComboBoxWidgetsPage, _T("BitmapCombobox"),
-                       GENERIC_CTRLS | WITH_ITEMS_CTRLS | COMBO_CTRLS
+                       NATIVE_OR_GENERIC_CTRLS | WITH_ITEMS_CTRLS | COMBO_CTRLS
                        );
 
 
@@ -287,6 +301,20 @@ void BitmapComboBoxWidgetsPage::CreateContent()
     // left pane - style box
     wxStaticBox *box = new wxStaticBox(this, wxID_ANY, _T("&Set style"));
 
+
+    // should be in sync with ComboKind_XXX values
+    static const wxString kinds[] =
+    {
+        _T("default"),
+        _T("simple"),
+        _T("drop down"),
+    };
+
+    m_radioKind = new wxRadioBox(this, wxID_ANY, _T("Combobox &kind:"),
+                                 wxDefaultPosition, wxDefaultSize,
+                                 WXSIZEOF(kinds), kinds,
+                                 1, wxRA_SPECIFY_COLS);
+
     wxSizer *sizerStyle = new wxStaticBoxSizer(box, wxVERTICAL);
 
     m_chkSort = CreateCheckBoxAndAddToSizer(sizerStyle, _T("&Sort items"));
@@ -296,6 +324,7 @@ void BitmapComboBoxWidgetsPage::CreateContent()
     sizerStyle->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 3);
 
     sizerLeft->Add(sizerStyle, 0, wxGROW | wxALIGN_CENTRE_HORIZONTAL);
+    sizerLeft->Add(m_radioKind, 0, wxGROW | wxALL, 5);
 
     // left pane - other options box
     box = new wxStaticBox(this, wxID_ANY, _T("Demo options"));
@@ -400,6 +429,24 @@ void BitmapComboBoxWidgetsPage::CreateCombo()
         flags |= wxCB_SORT;
     if ( m_chkReadonly->GetValue() )
         flags |= wxCB_READONLY;
+
+    switch ( m_radioKind->GetSelection() )
+    {
+        default:
+            wxFAIL_MSG( _T("unknown combo kind") );
+            // fall through
+
+        case ComboKind_Default:
+            break;
+
+        case ComboKind_Simple:
+            flags |= wxCB_SIMPLE;
+            break;
+
+        case ComboKind_DropDown:
+            flags = wxCB_DROPDOWN;
+            break;
+    }
 
     wxArrayString items;
     wxArrayPtrVoid bitmaps;
