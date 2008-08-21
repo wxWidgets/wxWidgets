@@ -168,23 +168,34 @@ wxGCDCImpl::~wxGCDCImpl()
     delete m_graphicContext;
 }
 
-void wxGCDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool WXUNUSED(useMask) )
+void wxGCDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y,
+                               bool useMask )
 {
     wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::DoDrawBitmap - invalid DC") );
     wxCHECK_RET( bmp.IsOk(), wxT("wxGCDC(cg)::DoDrawBitmap - invalid bitmap") );
 
+    int w = bmp.GetWidth();
+    int h = bmp.GetHeight();
     if ( bmp.GetDepth() == 1 )
     {
         m_graphicContext->SetPen(*wxTRANSPARENT_PEN);
         m_graphicContext->SetBrush( wxBrush( m_textBackgroundColour , wxSOLID ) );
-        m_graphicContext->DrawRectangle( x , y , bmp.GetWidth() , bmp.GetHeight() );
+        m_graphicContext->DrawRectangle( x, y, w, h );
         m_graphicContext->SetBrush( wxBrush( m_textForegroundColour , wxSOLID ) );
-        m_graphicContext->DrawBitmap( bmp, x , y , bmp.GetWidth() , bmp.GetHeight() );
+        m_graphicContext->DrawBitmap( bmp, x, y, w, h );
         m_graphicContext->SetBrush( m_graphicContext->CreateBrush(m_brush));
         m_graphicContext->SetPen( m_graphicContext->CreatePen(m_pen));
     }
-    else
-        m_graphicContext->DrawBitmap( bmp, x , y , bmp.GetWidth() , bmp.GetHeight() );
+    else // not a monochrome bitmap, handle it normally
+    {
+        // make a copy in case we need to remove its mask, if we don't modify
+        // it the copy is cheap as bitmaps are reference-counted
+        wxBitmap bmpCopy(bmp);
+        if ( !useMask && bmp.GetMask() )
+            bmpCopy.SetMask(NULL);
+
+        m_graphicContext->DrawBitmap( bmpCopy, x, y, w, h );
+    }
 }
 
 void wxGCDCImpl::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y )
@@ -371,13 +382,13 @@ void wxGCDCImpl::ComputeScaleAndOrigin()
     if ( m_graphicContext )
     {
         m_matrixCurrent = m_graphicContext->CreateMatrix();
-        
+
         // the logical origin sets the origin to have new coordinates
-        m_matrixCurrent.Translate( m_deviceOriginX - m_logicalOriginX * m_signX * m_scaleX, 
+        m_matrixCurrent.Translate( m_deviceOriginX - m_logicalOriginX * m_signX * m_scaleX,
                                    m_deviceOriginY-m_logicalOriginY * m_signY * m_scaleY);
-        
+
         m_matrixCurrent.Scale( m_scaleX * m_signX, m_scaleY * m_signY );
-        
+
         m_graphicContext->SetTransform( m_matrixOriginal );
         m_graphicContext->ConcatTransform( m_matrixCurrent );
     }
@@ -801,7 +812,7 @@ bool wxGCDCImpl::DoBlit(
 bool wxGCDCImpl::DoStretchBlit(
     wxCoord xdest, wxCoord ydest, wxCoord dstWidth, wxCoord dstHeight,
     wxDC *source, wxCoord xsrc, wxCoord ysrc, wxCoord srcWidth, wxCoord srcHeight,
-    int logical_func , bool WXUNUSED(useMask),
+    int logical_func , bool useMask,
     wxCoord xsrcMask, wxCoord ysrcMask )
 {
     wxCHECK_MSG( IsOk(), false, wxT("wxGCDC(cg)::DoStretchBlit - invalid DC") );
@@ -810,7 +821,6 @@ bool wxGCDCImpl::DoStretchBlit(
     if ( logical_func == wxNO_OP )
         return true;
     else if ( !m_graphicContext->SetLogicalFunction( logical_func ) )
-
     {
         wxFAIL_MSG( wxT("Blitting is only supported with wxCOPY logical operation.") );
         return false;
@@ -841,6 +851,9 @@ bool wxGCDCImpl::DoStretchBlit(
 
     if ( blit.IsOk() )
     {
+        if ( !useMask && blit.GetMask() )
+            blit.SetMask(NULL);
+
         m_graphicContext->DrawBitmap( blit, xdest, ydest,
                                       dstWidth, dstHeight);
     }
@@ -874,7 +887,7 @@ void wxGCDCImpl::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
 
 void wxGCDCImpl::DoDrawText(const wxString& str, wxCoord x, wxCoord y)
 {
-    wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::DoDrawRotatedText - invalid DC") );
+    wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::DoDrawText - invalid DC") );
 
     if ( str.length() == 0 )
         return;
