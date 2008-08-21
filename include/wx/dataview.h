@@ -27,14 +27,6 @@
 
 class WXDLLIMPEXP_FWD_CORE wxDataFormat;
 
-#if defined(__WXGTK20__)
-    // for testing
-    // #define wxUSE_GENERICDATAVIEWCTRL 1
-#elif defined(__WXMAC__)
-#else
-    #define wxUSE_GENERICDATAVIEWCTRL 1
-#endif
-
 // ----------------------------------------------------------------------------
 // wxDataViewCtrl flags
 // ----------------------------------------------------------------------------
@@ -856,13 +848,13 @@ typedef void (wxEvtHandler::*wxDataViewEventFunction)(wxDataViewEvent&);
 #define EVT_DATAVIEW_COLUMN_SORTED(id, fn) wx__DECLARE_DATAVIEWEVT(COLUMN_SORTED, id, fn)
 #define EVT_DATAVIEW_COLUMN_REORDERED(id, fn) wx__DECLARE_DATAVIEWEVT(COLUMN_REORDERED, id, fn)
 
-#if defined(wxUSE_GENERICDATAVIEWCTRL)
-    #include "wx/generic/dataview.h"
-#elif defined(__WXGTK20__)
+
+#if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
     #include "wx/gtk/dataview.h"
-#elif defined(__WXMAC__)
+#elif defined(__WXMAC__) && !defined(__WXUNIVERSAL__)
     #include "wx/osx/dataview.h"
 #else
+    #define wxUSE_GENERICDATAVIEWCTRL
     #include "wx/generic/dataview.h"
 #endif
 
