@@ -540,7 +540,7 @@ bool wxBitmap::Create(int width, int height, const wxDC& dc)
     wxCHECK_MSG( dc.IsOk(), false, _T("invalid HDC in wxBitmap::Create()") );
 
     const wxMSWDCImpl *impl = wxDynamicCast( dc.GetImpl(), wxMSWDCImpl );
-    
+
     if (impl)
         return DoCreate(width, height, -1, impl->GetHDC());
     else
@@ -816,7 +816,7 @@ bool wxBitmap::CreateFromImage(const wxImage& image, const wxDC& dc)
                     _T("invalid HDC in wxBitmap::CreateFromImage()") );
 
     const wxMSWDCImpl *impl = wxDynamicCast( dc.GetImpl(), wxMSWDCImpl );
-    
+
     if (impl)
         return CreateFromImage(image, -1, impl->GetHDC());
     else
@@ -839,14 +839,15 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, WXHDC hdc)
     if ( !dib.IsOk() )
         return false;
 
-    if ( depth == -1 )
-        depth = dib.GetDepth(); // Get depth from image if none specified
+    const bool hasAlpha = image.HasAlpha();
 
     // store the bitmap parameters
-    wxBitmapRefData *refData = new wxBitmapRefData;
+    wxBitmapRefData * const refData = new wxBitmapRefData;
     refData->m_width = w;
     refData->m_height = h;
-    refData->m_hasAlpha = image.HasAlpha();
+    refData->m_hasAlpha = hasAlpha;
+    refData->m_depth = depth == -1 ? (hasAlpha ? 32 : 24)
+                                   : depth;
 
     m_refData = refData;
 
@@ -857,20 +858,17 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, WXHDC hdc)
     // are we going to use DIB?
     //
     // NB: DDBs don't support alpha so if we have alpha channel we must use DIB
-    if ( image.HasAlpha() || wxShouldCreateDIB(w, h, depth, hdc) )
+    if ( hasAlpha || wxShouldCreateDIB(w, h, depth, hdc) )
     {
         // don't delete the DIB section in dib object dtor
         hbitmap = dib.Detach();
 
         refData->m_isDIB = true;
-        refData->m_depth = depth;
     }
 #ifndef ALWAYS_USE_DIB
     else // we need to convert DIB to DDB
     {
         hbitmap = dib.CreateDDB((HDC)hdc);
-
-        refData->m_depth = depth;
     }
 #endif // !ALWAYS_USE_DIB
 
@@ -1130,7 +1128,7 @@ wxBitmap wxBitmap::GetSubBitmapOfHDC( const wxRect& rect, WXHDC hdc ) const
 
     {
         SelectInHDC selectDst(dcDst, GetHbitmapOf(ret));
-		
+
         if ( !selectDst )
         {
             wxLogLastError(_T("SelectObject(destBitmap)"));
