@@ -97,8 +97,8 @@ public:
 */
     TextEditView* GetFirstView() const;
 
-    virtual bool OnSaveDocument(const wxString& filename);
-    virtual bool OnOpenDocument(const wxString& filename);
+    virtual bool DoSaveDocument(const wxString& filename);
+    virtual bool DoOpenDocument(const wxString& filename);
     virtual bool IsModified(void) const;
     virtual void Modify(bool mod);
 };
