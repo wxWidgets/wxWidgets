@@ -99,7 +99,7 @@ public:
     /**
         Return @true of if we could get access to bitmap data successfully.
     */
-    operator bool() const:
+    operator bool() const;
 
     /**
         Return the iterator pointing to the origin of the image.

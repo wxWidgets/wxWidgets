@@ -283,7 +283,3 @@ inline bool operator<=(const wxUString& s1, const wxUString& s2);
        single characters etc.
     */
 inline bool operator>=(const wxUString& s1, const wxUString& s2);
-
-
-#endif
-    // _WX_USTRING_H_BASE_
