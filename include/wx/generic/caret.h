@@ -70,7 +70,7 @@ protected:
     void Refresh();
 
     // draw the caret on the given DC
-    void DoDraw(wxDC *dc);
+    void DoDraw(wxDC *dc, wxWindow* win);
 
 private:
     // GTK specific initialization
