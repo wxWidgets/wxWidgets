@@ -1091,6 +1091,9 @@ bool wxRichTextCtrl::ExtendSelection(long oldPos, long newPos, int flags)
 {
     if (flags & wxRICHTEXT_SHIFT_DOWN)
     {
+        if (oldPos == newPos)
+            return false;
+
         wxRichTextRange oldSelection = m_selectionRange;
 
         // If not currently selecting, start selecting
@@ -1109,6 +1112,8 @@ bool wxRichTextCtrl::ExtendSelection(long oldPos, long newPos, int flags)
             // the end.
             if (newPos > m_selectionAnchor)
                 m_selectionRange.SetRange(m_selectionAnchor+1, newPos);
+            else if (newPos == m_selectionAnchor)
+                m_selectionRange = wxRichTextRange(-2, -2);
             else
                 m_selectionRange.SetRange(newPos+1, m_selectionAnchor);
         }
