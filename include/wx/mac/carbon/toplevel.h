@@ -92,6 +92,7 @@ public:
 
     virtual void SetTitle( const wxString& title);
     virtual wxString GetTitle() const;
+    virtual void SetLabel( const wxString& title);
 
     virtual void Raise();
     virtual void Lower();

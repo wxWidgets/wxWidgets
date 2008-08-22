@@ -597,8 +597,14 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
 
         if ( currentMouseWindow->GetEventHandler()->ProcessEvent(wxevent) )
         {
+            /*
+            // this code is dangerous in case the delete in the mouse down occured further up in the chain, trying alternative
+            
             if ((currentMouseWindowParent != NULL) &&
                 (currentMouseWindowParent->GetChildren().Find(currentMouseWindow) == NULL))
+            */
+            // deleted in the meantime
+            if ( g_MacLastWindow == NULL )
                 currentMouseWindow = NULL;
 
             result = noErr;
@@ -1373,6 +1379,11 @@ void wxTopLevelWindowMac::MacActivate( long timestamp , bool inIsActivating )
 }
 
 void wxTopLevelWindowMac::SetTitle(const wxString& title)
+{
+    SetLabel( title ) ;
+}
+
+void wxTopLevelWindowMac::SetLabel(const wxString& title)
 {
     wxWindow::SetLabel( title ) ;
     UMASetWTitle( (WindowRef)m_macWindow , title , m_font.GetEncoding() ) ;
