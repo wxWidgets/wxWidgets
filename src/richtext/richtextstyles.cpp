@@ -614,9 +614,9 @@ wxString wxRichTextStyleListBox::CreateHTML(wxRichTextStyleDefinition* def) cons
         str << wxT("<td nowrap>");
 
 #ifdef __WXMSW__
-    int size = 3;
+    int size = 2;
 #else
-    int size = 4;
+    int size = 3;
 #endif
 
     int stdFontSize = 12;
