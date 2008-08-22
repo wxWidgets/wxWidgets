@@ -113,6 +113,7 @@ All (GUI):
 - Fix crash when reading malformed PCX images.
 - Fix bug with wrong transparency in GIF animations (troelsk).
 - Store palette information for XPM images in wxImage (troelsk).
+- Fixed selection bugs and auto list numbering in wxRichTextCtrl.
 
 All (Unix):
 
