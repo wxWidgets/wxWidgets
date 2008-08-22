@@ -573,9 +573,10 @@
 // Recommended setting: 1
 #define wxUSE_MEDIACTRL     1
 
-// Use GStreamer for Unix (req a lot of dependancies)
+// Use GStreamer for Unix.
 //
-// Default is 0
+// Default is 0 as this requires a lot of dependencies which might not be
+// available.
 //
 // Recommended setting: 1 (wxMediaCtrl won't work by default without it)
 #define wxUSE_GSTREAMER    0
@@ -1170,7 +1171,7 @@
 #define wxUSE_AFM_FOR_POSTSCRIPT 1
 
 // Set to 1 to compile in support for wxSVGFileDC, a wxDC subclass which allows
-// to create fiels in SVG (Scalable Vector Graphics) format.
+// to create files in SVG (Scalable Vector Graphics) format.
 #define wxUSE_SVG 1
 
 // ----------------------------------------------------------------------------
