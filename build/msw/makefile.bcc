@@ -1075,7 +1075,8 @@ AUIDLL_OBJECTS =  \
 	$(OBJS)\auidll_dockart.obj \
 	$(OBJS)\auidll_floatpane.obj \
 	$(OBJS)\auidll_auibook.obj \
-	$(OBJS)\auidll_tabmdi.obj
+	$(OBJS)\auidll_tabmdi.obj \
+	$(OBJS)\auidll_auibar.obj
 AUILIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -1090,7 +1091,8 @@ AUILIB_OBJECTS =  \
 	$(OBJS)\auilib_dockart.obj \
 	$(OBJS)\auilib_floatpane.obj \
 	$(OBJS)\auilib_auibook.obj \
-	$(OBJS)\auilib_tabmdi.obj
+	$(OBJS)\auilib_tabmdi.obj \
+	$(OBJS)\auilib_auibar.obj
 RICHTEXTDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -1306,6 +1308,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_floatpane.obj \
 	$(OBJS)\monodll_auibook.obj \
 	$(OBJS)\monodll_tabmdi.obj \
+	$(OBJS)\monodll_auibar.obj \
 	$(OBJS)\monodll_richtextctrl.obj \
 	$(OBJS)\monodll_richtextbuffer.obj \
 	$(OBJS)\monodll_richtextstyles.obj \
@@ -1923,6 +1926,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_floatpane.obj \
 	$(OBJS)\monolib_auibook.obj \
 	$(OBJS)\monolib_tabmdi.obj \
+	$(OBJS)\monolib_auibar.obj \
 	$(OBJS)\monolib_richtextctrl.obj \
 	$(OBJS)\monolib_richtextbuffer.obj \
 	$(OBJS)\monolib_richtextstyles.obj \
@@ -5261,6 +5265,9 @@ $(OBJS)\monodll_auibook.obj: ..\..\src\aui\auibook.cpp
 $(OBJS)\monodll_tabmdi.obj: ..\..\src\aui\tabmdi.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\aui\tabmdi.cpp
 
+$(OBJS)\monodll_auibar.obj: ..\..\src\aui\auibar.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\aui\auibar.cpp
+
 $(OBJS)\monodll_richtextctrl.obj: ..\..\src\richtext\richtextctrl.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\richtext\richtextctrl.cpp
 
@@ -7260,6 +7267,9 @@ $(OBJS)\monolib_auibook.obj: ..\..\src\aui\auibook.cpp
 
 $(OBJS)\monolib_tabmdi.obj: ..\..\src\aui\tabmdi.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\aui\tabmdi.cpp
+
+$(OBJS)\monolib_auibar.obj: ..\..\src\aui\auibar.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\aui\auibar.cpp
 
 $(OBJS)\monolib_richtextctrl.obj: ..\..\src\richtext\richtextctrl.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\richtext\richtextctrl.cpp
@@ -12501,6 +12511,9 @@ $(OBJS)\auidll_auibook.obj: ..\..\src\aui\auibook.cpp
 $(OBJS)\auidll_tabmdi.obj: ..\..\src\aui\tabmdi.cpp
 	$(CXX) -q -c -P -o$@ $(AUIDLL_CXXFLAGS) ..\..\src\aui\tabmdi.cpp
 
+$(OBJS)\auidll_auibar.obj: ..\..\src\aui\auibar.cpp
+	$(CXX) -q -c -P -o$@ $(AUIDLL_CXXFLAGS) ..\..\src\aui\auibar.cpp
+
 $(OBJS)\auilib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(AUILIB_CXXFLAGS) -H ..\..\src\common\dummy.cpp
 
@@ -12518,6 +12531,9 @@ $(OBJS)\auilib_auibook.obj: ..\..\src\aui\auibook.cpp
 
 $(OBJS)\auilib_tabmdi.obj: ..\..\src\aui\tabmdi.cpp
 	$(CXX) -q -c -P -o$@ $(AUILIB_CXXFLAGS) ..\..\src\aui\tabmdi.cpp
+
+$(OBJS)\auilib_auibar.obj: ..\..\src\aui\auibar.cpp
+	$(CXX) -q -c -P -o$@ $(AUILIB_CXXFLAGS) ..\..\src\aui\auibar.cpp
 
 $(OBJS)\richtextdll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(RICHTEXTDLL_CXXFLAGS) -H ..\..\src\common\dummy.cpp

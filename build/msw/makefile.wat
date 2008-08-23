@@ -195,6 +195,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_floatpane.obj &
 	$(OBJS)\monodll_auibook.obj &
 	$(OBJS)\monodll_tabmdi.obj &
+	$(OBJS)\monodll_auibar.obj &
 	$(OBJS)\monodll_richtextctrl.obj &
 	$(OBJS)\monodll_richtextbuffer.obj &
 	$(OBJS)\monodll_richtextstyles.obj &
@@ -822,6 +823,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_floatpane.obj &
 	$(OBJS)\monolib_auibook.obj &
 	$(OBJS)\monolib_tabmdi.obj &
+	$(OBJS)\monolib_auibar.obj &
 	$(OBJS)\monolib_richtextctrl.obj &
 	$(OBJS)\monolib_richtextbuffer.obj &
 	$(OBJS)\monolib_richtextstyles.obj &
@@ -3823,7 +3825,8 @@ AUIDLL_OBJECTS =  &
 	$(OBJS)\auidll_dockart.obj &
 	$(OBJS)\auidll_floatpane.obj &
 	$(OBJS)\auidll_auibook.obj &
-	$(OBJS)\auidll_tabmdi.obj
+	$(OBJS)\auidll_tabmdi.obj &
+	$(OBJS)\auidll_auibar.obj
 AUILIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
@@ -3838,7 +3841,8 @@ AUILIB_OBJECTS =  &
 	$(OBJS)\auilib_dockart.obj &
 	$(OBJS)\auilib_floatpane.obj &
 	$(OBJS)\auilib_auibook.obj &
-	$(OBJS)\auilib_tabmdi.obj
+	$(OBJS)\auilib_tabmdi.obj &
+	$(OBJS)\auilib_auibar.obj
 RICHTEXTDLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
@@ -5604,6 +5608,9 @@ $(OBJS)\monodll_auibook.obj :  .AUTODEPEND ..\..\src\aui\auibook.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_tabmdi.obj :  .AUTODEPEND ..\..\src\aui\tabmdi.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_auibar.obj :  .AUTODEPEND ..\..\src\aui\auibar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_richtextctrl.obj :  .AUTODEPEND ..\..\src\richtext\richtextctrl.cpp
@@ -7704,6 +7711,9 @@ $(OBJS)\monolib_auibook.obj :  .AUTODEPEND ..\..\src\aui\auibook.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_tabmdi.obj :  .AUTODEPEND ..\..\src\aui\tabmdi.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_auibar.obj :  .AUTODEPEND ..\..\src\aui\auibar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_richtextctrl.obj :  .AUTODEPEND ..\..\src\richtext\richtextctrl.cpp
@@ -13246,6 +13256,9 @@ $(OBJS)\auidll_auibook.obj :  .AUTODEPEND ..\..\src\aui\auibook.cpp
 $(OBJS)\auidll_tabmdi.obj :  .AUTODEPEND ..\..\src\aui\tabmdi.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(AUIDLL_CXXFLAGS) $<
 
+$(OBJS)\auidll_auibar.obj :  .AUTODEPEND ..\..\src\aui\auibar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(AUIDLL_CXXFLAGS) $<
+
 $(OBJS)\auilib_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(AUILIB_CXXFLAGS) $<
 
@@ -13262,6 +13275,9 @@ $(OBJS)\auilib_auibook.obj :  .AUTODEPEND ..\..\src\aui\auibook.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(AUILIB_CXXFLAGS) $<
 
 $(OBJS)\auilib_tabmdi.obj :  .AUTODEPEND ..\..\src\aui\tabmdi.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(AUILIB_CXXFLAGS) $<
+
+$(OBJS)\auilib_auibar.obj :  .AUTODEPEND ..\..\src\aui\auibar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(AUILIB_CXXFLAGS) $<
 
 $(OBJS)\richtextdll_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
