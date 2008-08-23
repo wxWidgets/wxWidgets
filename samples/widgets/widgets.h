@@ -27,7 +27,7 @@
     #define WidgetsBookCtrlEvent wxBookCtrlEvent
     #define EVT_WIDGETS_PAGE_CHANGING(id,func) EVT_BOOKCTRL_PAGE_CHANGING(id,func)
     #define wxEVT_COMMAND_WIDGETS_PAGE_CHANGED wxEVT_COMMAND_BOOKCTRL_PAGE_CHANGED
-    #define wxWidgetsbookEventHandler(func) wxBookctrlEventHandler(func)
+    #define wxWidgetsbookEventHandler(func) wxBookCtrlEventHandler(func)
 #endif
 
 #if wxUSE_LOG && !defined(__WXHANDHELD__)
