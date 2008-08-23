@@ -1138,6 +1138,8 @@ bool wxComboCtrlBase::Enable(bool enable)
         m_btn->Enable(enable);
     if ( m_text )
         m_text->Enable(enable);
+        
+    Refresh();
 
     return true;
 }
