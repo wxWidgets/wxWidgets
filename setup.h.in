@@ -626,6 +626,26 @@
 #undef HAVE_GNU_CXX_HASH_MAP
 
 /*
+ * Define if your compiler has std::unordered_map
+ */
+#undef HAVE_STD_UNORDERED_MAP
+
+/*
+ * Define if your compiler has std::unordered_set
+ */
+#undef HAVE_STD_UNORDERED_SET
+
+/*
+ * Define if your compiler has std::tr1::unordered_map
+ */
+#undef HAVE_TR1_UNORDERED_MAP
+
+/*
+ * Define if your compiler has std::tr1::unordered_set
+ */
+#undef HAVE_TR1_UNORDERED_SET
+
+/*
  * The built-in regex supports advanced REs in additional to POSIX's basic
  * and extended. Your system regex probably won't support this, and in this
  * case WX_NO_REGEX_ADVANCED should be defined.

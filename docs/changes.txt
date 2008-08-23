@@ -95,6 +95,9 @@ All:
 
 - Optimize wxString::Replace() for single character arguments.
 - Updated Hindi translation (Priyank Bolia).
+- Use tr1::unordered_{map,set} for wxHash{Map,Set} implementation if available
+  in STL build; in particular do not use deprecated hash_{map,set} which
+  results in a lot of warnings from newer g++ (Jan Van Dijk and Pete Stieber).
 
 All (GUI):
 
