@@ -761,7 +761,7 @@ void wxAuiManager::UpdateHintWindowConfig()
     {
         if (w->IsKindOf(CLASSINFO(wxFrame)))
         {
-            wxFrame* f = static_cast<wxFrame*>(w);
+            wxFrame* f = wx_static_cast(wxFrame*, w);
             can_do_transparent = f->CanSetTransparent();
             break;
         }
@@ -927,7 +927,7 @@ void wxAuiManager::SetArtProvider(wxAuiDockArt* art_provider)
 bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& pane_info)
 {
     wxASSERT_MSG(window, wxT("NULL window ptrs are not allowed"));
-    
+
     // check if the pane has a valid window
     if (!window)
         return false;
@@ -995,7 +995,7 @@ bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& pane_info)
         button.button_id = wxAUI_BUTTON_CLOSE;
         pinfo.buttons.Add(button);
     }
-    
+
     if (pinfo.HasGripper())
     {
         if (pinfo.window->IsKindOf(CLASSINFO(wxAuiToolBar)))
@@ -1004,13 +1004,13 @@ bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& pane_info)
             // have a gripper control.  The toolbar's built-in gripper
             // meshes better with the look and feel of the control than ours,
             // so turn wxAuiManager's gripper off, and the toolbar's on.
-            
-            wxAuiToolBar* tb = static_cast<wxAuiToolBar*>(pinfo.window);
+
+            wxAuiToolBar* tb = wx_static_cast(wxAuiToolBar*, pinfo.window);
             pinfo.SetFlag(wxAuiPaneInfo::optionGripper, false);
             tb->SetGripperVisible(true);
         }
     }
-    
+
 
     if (pinfo.best_size == wxDefaultSize &&
         pinfo.window)
@@ -1043,7 +1043,7 @@ bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& pane_info)
     }
 
 
-    
+
     return true;
 }
 
@@ -2336,7 +2336,7 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
             cont->Add(middle, 1, wxEXPAND);
              else
             delete middle;
-            
+
 
 
         // find any bottom docks in this layer
@@ -3823,7 +3823,7 @@ void wxAuiManager::OnFindManager(wxAuiManagerEvent& evt)
     // if we are managing a child frame, get the 'real' manager
     if (window->IsKindOf(CLASSINFO(wxAuiFloatingFrame)))
     {
-        wxAuiFloatingFrame* float_frame = static_cast<wxAuiFloatingFrame*>(window);
+        wxAuiFloatingFrame* float_frame = wx_static_cast(wxAuiFloatingFrame*, window);
         evt.SetManager(float_frame->GetOwnerManager());
         return;
     }
@@ -4201,7 +4201,7 @@ void wxAuiManager::OnLeftUp(wxMouseEvent& event)
     {
         m_hover_button = NULL;
         m_frame->ReleaseMouse();
-        
+
         if (m_action_part)
         {
             UpdateButtonOnScreen(m_action_part, event);

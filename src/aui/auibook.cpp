@@ -1006,7 +1006,7 @@ wxAuiSimpleTabArt::~wxAuiSimpleTabArt()
 
 wxAuiTabArt* wxAuiSimpleTabArt::Clone()
 {
-    return static_cast<wxAuiTabArt*>(new wxAuiSimpleTabArt);
+    return wx_static_cast(wxAuiTabArt*, new wxAuiSimpleTabArt);
 }
 
 
