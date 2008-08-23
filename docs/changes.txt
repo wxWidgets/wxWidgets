@@ -141,6 +141,7 @@ wxMSW:
 - Fix the bug with wxFileDialog not being shown at all if the default file name
   was invalid.
 - Fix hang in keyboard navigation code with radio buttons under Windows 2000.
+- Implement wxWinINetInputStream::GetSize() (spicerno).
 
 wxGTK:
 
