@@ -133,12 +133,13 @@ wxMSW:
   wxWidgets 2.8.9 or later.
 - Fix keyboard support in wxSpinCtrl broken in 2.8.8.
 - Compile fix for WinCE in window.cpp (no VkKeyScan in Windows CE).
-- Fix quoting of arguments passed to wxExecute(char **) (Brian Ravnsgaard Riis).
 - Support disabling items before adding them to the menu (Christian Walther).
 - Allow to call SetFont(wxNullFont) to reset the font to default.
 - Implement UUID::operator==() and !=() (SQLAware Corporation).
 - Fixed long standing (introduced in 2.6.3) bug which resulted in always
   creating a DIB and not DDB in wxBitmap(const wxImage&) ctor.
+- Fix the bug with wxFileDialog not being shown at all if the default file name
+  was invalid.
 
 wxGTK:
 

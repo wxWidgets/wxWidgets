@@ -438,6 +438,13 @@ int wxFileDialog::ShowModal()
     DWORD errCode;
     bool success = DoShowCommFileDialog(&of, m_windowStyle, &errCode);
 
+    if ( !success && errCode == FNERR_INVALIDFILENAME && of.lpstrFile[0] )
+    {
+        // this can happen if the default file name is invalid, try without it now
+        of.lpstrFile[0] = _T('\0');
+        success = DoShowCommFileDialog(&of, m_windowStyle, &errCode);
+    }
+
 #ifdef wxTRY_SMALLER_OPENFILENAME
     // the system might be too old to support the new version file dialog
     // boxes, try with the old size
