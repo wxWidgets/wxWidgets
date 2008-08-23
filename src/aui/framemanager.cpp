@@ -29,6 +29,7 @@
 #include "wx/aui/dockart.h"
 #include "wx/aui/floatpane.h"
 #include "wx/aui/tabmdi.h"
+#include "wx/aui/auibar.h"
 
 #ifndef WX_PRECOMP
     #include "wx/panel.h"
@@ -994,6 +995,22 @@ bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& pane_info)
         button.button_id = wxAUI_BUTTON_CLOSE;
         pinfo.buttons.Add(button);
     }
+    
+    if (pinfo.HasGripper())
+    {
+        if (pinfo.window->IsKindOf(CLASSINFO(wxAuiToolBar)))
+        {
+            // prevent duplicate gripper -- both wxAuiManager and wxAuiToolBar
+            // have a gripper control.  The toolbar's built-in gripper
+            // meshes better with the look and feel of the control than ours,
+            // so turn wxAuiManager's gripper off, and the toolbar's on.
+            
+            wxAuiToolBar* tb = static_cast<wxAuiToolBar*>(pinfo.window);
+            pinfo.SetFlag(wxAuiPaneInfo::optionGripper, false);
+            tb->SetGripperVisible(true);
+        }
+    }
+    
 
     if (pinfo.best_size == wxDefaultSize &&
         pinfo.window)
@@ -1025,6 +1042,8 @@ bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& pane_info)
         }
     }
 
+
+    
     return true;
 }
 
@@ -3571,7 +3590,6 @@ void wxAuiManager::OnFloatingPaneMoved(wxWindow* wnd, wxDirection dir)
     // of the frame to the mouse pointer
     wxPoint frame_pos = pane.frame->GetPosition();
     wxPoint action_offset(pt.x-frame_pos.x, pt.y-frame_pos.y);
-
 
     // if a key modifier is pressed while dragging the frame,
     // don't dock the window
