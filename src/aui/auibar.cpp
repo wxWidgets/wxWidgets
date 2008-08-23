@@ -69,7 +69,7 @@ const int BUTTON_DROPDOWN_WIDTH = 10;
 wxBitmap wxAuiBitmapFromBits(const unsigned char bits[], int w, int h,
                              const wxColour& color);
 
-double wxAuiBlendColour(double fg, double bg, double alpha);
+unsigned char wxAuiBlendColour(unsigned char fg, unsigned char bg, double alpha);
 wxColor wxAuiStepColour(const wxColor& c, int percent);
 
 static wxBitmap MakeDisabledBitmap(wxBitmap& bmp)
@@ -98,9 +98,9 @@ static wxBitmap MakeDisabledBitmap(wxBitmap& bmp)
             if (has_mask && *r == mr && *g == mg && *b == mb)
                 continue;
 
-            *r = (unsigned char)wxAuiBlendColour((double)*r, 255.0, 0.4);
-            *g = (unsigned char)wxAuiBlendColour((double)*g, 255.0, 0.4);
-            *b = (unsigned char)wxAuiBlendColour((double)*b, 255.0, 0.4);
+            *r = wxAuiBlendColour(*r, 255, 0.4);
+            *g = wxAuiBlendColour(*g, 255, 0.4);
+            *b = wxAuiBlendColour(*b, 255, 0.4);
         }
     }
 
@@ -159,9 +159,11 @@ private:
 
 
 
-const wxColour DISABLED_TEXT_COLOR = wxColour(wxAuiBlendColour(0,255,0.4),
-                                              wxAuiBlendColour(0,255,0.4),
-                                              wxAuiBlendColour(0,255,0.4));
+static const unsigned char
+    DISABLED_TEXT_GREY_HUE = wxAuiBlendColour(0, 255, 0.4);
+const wxColour DISABLED_TEXT_COLOR(DISABLED_TEXT_GREY_HUE,
+                                   DISABLED_TEXT_GREY_HUE,
+                                   DISABLED_TEXT_GREY_HUE);
 
 
 wxAuiDefaultToolBarArt::wxAuiDefaultToolBarArt()
