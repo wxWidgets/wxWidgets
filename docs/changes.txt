@@ -114,6 +114,7 @@ All (GUI):
 - Fix bug with wrong transparency in GIF animations (troelsk).
 - Store palette information for XPM images in wxImage (troelsk).
 - Fixed selection bugs and auto list numbering in wxRichTextCtrl.
+- Significantly optimize wxGrid::BlockToDeviceRect() for large grids (kjones).
 
 All (Unix):
 
