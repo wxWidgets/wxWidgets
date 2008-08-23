@@ -11,11 +11,13 @@
 
 
 
-#ifndef _WX_AUITOOLBAR_H_
-#define _WX_AUITOOLBAR_H_
+#ifndef _WX_AUIBAR_H_
+#define _WX_AUIBAR_H_
 
 
 #include "wx/defs.h"
+
+#if wxUSE_AUI
 
 
 enum wxAuiToolBarStyle
@@ -615,6 +617,6 @@ typedef void (wxEvtHandler::*wxAuiToolBarEventFunction)(wxAuiToolBarEvent&);
 }
 #endif  // SWIG
 
-
-#endif  // __KCL_XMTOOLBAR_H
+#endif  // wxUSE_AUI
+#endif  // _WX_AUIBAR_H_
 

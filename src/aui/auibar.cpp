@@ -24,9 +24,14 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_AUI
 
 #include "wx/statline.h"
 #include "wx/dcbuffer.h"
+#include "wx/sizer.h"
+#include "wx/image.h"
+#include "wx/settings.h"
+#include "wx/menu.h"
 
 #include "wx/aui/auibar.h"
 #include "wx/aui/framemanager.h"
@@ -2614,3 +2619,7 @@ void wxAuiToolBar::OnSetCursor(wxSetCursorEvent& evt)
     
     evt.SetCursor(cursor);
 }
+
+
+#endif // wxUSE_AUI
+
