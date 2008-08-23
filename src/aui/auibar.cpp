@@ -36,6 +36,9 @@
 #include "wx/aui/auibar.h"
 #include "wx/aui/framemanager.h"
 
+#ifdef __WXMAC__
+#include "wx/mac/carbon/private.h"
+#endif
 
 #include "wx/arrimpl.cpp"
 WX_DEFINE_OBJARRAY(wxAuiToolBarItemArray)
