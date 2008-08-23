@@ -265,7 +265,19 @@ GdkWindow *wxButton::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 void wxButton::DoApplyWidgetStyle(GtkRcStyle *style)
 {
     gtk_widget_modify_style(m_widget, style);
-    gtk_widget_modify_style(GTK_BIN(m_widget)->child, style);
+    GtkWidget *child = GTK_BIN(m_widget)->child;
+    gtk_widget_modify_style(child, style);
+
+    // in gtk+ 2.12, in case of button with image, the path to the label is:
+    //  GtkButton -> GtkAlignment -> GtkHBox -> GtkLabel
+    if (GTK_IS_ALIGNMENT (child)) {
+        GtkWidget *box = GTK_BIN(child)->child;
+        if (GTK_IS_BOX (box)) {
+            GList *items = gtk_container_get_children(GTK_CONTAINER(box));
+            for (GList *item = items; item; item = item->next)
+                gtk_widget_modify_style(GTK_WIDGET(item->data), style);
+        }
+    }
 }
 
 wxSize wxButton::DoGetBestSize() const

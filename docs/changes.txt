@@ -147,6 +147,7 @@ wxGTK:
 - Fixed generation of events for an initially empty wxDirPickerCtrl.
 - Fixed detection of Meta key state so that NumLock isn't misdetected
   as Meta (requires GTK+ 2.10).
+- Fix changing font/colour of label in buttons with images (Marcin Wojdyr).
 
 wxMac:
 
