@@ -2467,6 +2467,12 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 // see comment at the end of wxListCtrl::GetColumn()
 #ifdef NM_CUSTOMDRAW // _WIN32_IE >= 0x0300
 
+#if _MSC_VER >= 1400 && _MSC_VER < 1500
+// Turn off optimizations for this function to avoid an ICE in the MSVC8
+// 64-bit compiler, observed with the compiler included with the PDSK-2003.
+// If there is a better way to test for this please do.
+#pragma optimize( "", off )
+#endif
 static RECT GetCustomDrawnItemRect(const NMCUSTOMDRAW& nmcd)
 {
     RECT rc;
@@ -2481,6 +2487,12 @@ static RECT GetCustomDrawnItemRect(const NMCUSTOMDRAW& nmcd)
 
     return rc;
 }
+
+#if _MSC_VER >= 1400 && _MSC_VER < 1500
+// Reset optimizations to their former setting
+#pragma optimize( "", on )
+#endif
+
 
 static
 bool HandleSubItemPrepaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont, int colCount)
