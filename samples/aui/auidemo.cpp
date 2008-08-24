@@ -85,6 +85,8 @@ class MyFrame : public wxFrame
         ID_VerticalGradient,
         ID_HorizontalGradient,
         ID_Settings,
+        ID_CustomizeToolbar,
+        ID_DropDownToolbarItem,
         ID_NotebookNoCloseButton,
         ID_NotebookCloseButton,
         ID_NotebookCloseButtonAll,
@@ -97,6 +99,11 @@ class MyFrame : public wxFrame
         ID_NotebookTabFixedWidth,
         ID_NotebookArtGloss,
         ID_NotebookArtSimple,
+        ID_NotebookAlignTop,
+        ID_NotebookAlignBottom,
+        
+        ID_SampleItem,
+        
         ID_FirstPerspective = ID_CreatePerspective+1000
     };
 
@@ -136,14 +143,17 @@ private:
     void OnCreateText(wxCommandEvent& evt);
     void OnCreateSizeReport(wxCommandEvent& evt);
     void OnChangeContentPane(wxCommandEvent& evt);
+    void OnDropDownToolbarItem(wxAuiToolBarEvent& evt);
     void OnCreatePerspective(wxCommandEvent& evt);
     void OnCopyPerspectiveCode(wxCommandEvent& evt);
     void OnRestorePerspective(wxCommandEvent& evt);
     void OnSettings(wxCommandEvent& evt);
+    void OnCustomizeToolbar(wxCommandEvent& evt);
     void OnAllowNotebookDnD(wxAuiNotebookEvent& evt);
     void OnNotebookPageClose(wxAuiNotebookEvent& evt);
     void OnExit(wxCommandEvent& evt);
     void OnAbout(wxCommandEvent& evt);
+    void OnTabAlignment(wxCommandEvent &evt);
 
     void OnGradient(wxCommandEvent& evt);
     void OnManagerFlag(wxCommandEvent& evt);
@@ -151,7 +161,7 @@ private:
     void OnUpdateUI(wxUpdateUIEvent& evt);
 
     void OnPaneClose(wxAuiManagerEvent& evt);
-    
+
 private:
 
     wxAuiManager m_mgr;
@@ -594,10 +604,13 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_NotebookWindowList, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookArtGloss, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookArtSimple, MyFrame::OnNotebookFlag)
+    EVT_MENU(ID_NotebookAlignTop,     MyFrame::OnTabAlignment)
+    EVT_MENU(ID_NotebookAlignBottom,  MyFrame::OnTabAlignment)
     EVT_MENU(ID_NoGradient, MyFrame::OnGradient)
     EVT_MENU(ID_VerticalGradient, MyFrame::OnGradient)
     EVT_MENU(ID_HorizontalGradient, MyFrame::OnGradient)
     EVT_MENU(ID_Settings, MyFrame::OnSettings)
+    EVT_MENU(ID_CustomizeToolbar, MyFrame::OnCustomizeToolbar)
     EVT_MENU(ID_GridContent, MyFrame::OnChangeContentPane)
     EVT_MENU(ID_TreeContent, MyFrame::OnChangeContentPane)
     EVT_MENU(ID_TextContent, MyFrame::OnChangeContentPane)
@@ -629,6 +642,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_UPDATE_UI(ID_HorizontalGradient, MyFrame::OnUpdateUI)
     EVT_MENU_RANGE(MyFrame::ID_FirstPerspective, MyFrame::ID_FirstPerspective+1000,
                    MyFrame::OnRestorePerspective)
+    EVT_AUITOOLBAR_TOOL_DROPDOWN(ID_DropDownToolbarItem, MyFrame::OnDropDownToolbarItem)
     EVT_AUI_PANE_CLOSE(MyFrame::OnPaneClose)
     EVT_AUINOTEBOOK_ALLOW_DND(wxID_ANY, MyFrame::OnAllowNotebookDnD)
     EVT_AUINOTEBOOK_PAGE_CLOSE(wxID_ANY, MyFrame::OnNotebookPageClose)
@@ -652,7 +666,7 @@ MyFrame::MyFrame(wxWindow* parent,
     // set up default notebook style
     m_notebook_style = wxAUI_NB_DEFAULT_STYLE | wxAUI_NB_TAB_EXTERNAL_MOVE | wxNO_BORDER;
     m_notebook_theme = 0;
-    
+
     // create menu
     wxMenuBar* mb = new wxMenuBar;
 
@@ -701,6 +715,9 @@ MyFrame::MyFrame(wxWindow* parent,
     notebook_menu->AppendRadioItem(ID_NotebookCloseButtonAll, _("Close Button on All Tabs"));
     notebook_menu->AppendRadioItem(ID_NotebookCloseButtonActive, _("Close Button on Active Tab"));
     notebook_menu->AppendSeparator();
+    notebook_menu->AppendRadioItem(ID_NotebookAlignTop, _("Tab Top Alignment"));
+    notebook_menu->AppendRadioItem(ID_NotebookAlignBottom, _("Tab Bottom Alignment"));
+    notebook_menu->AppendSeparator();
     notebook_menu->AppendCheckItem(ID_NotebookAllowTabMove, _("Allow Tab Move"));
     notebook_menu->AppendCheckItem(ID_NotebookAllowTabExternalMove, _("Allow External Tab Move"));
     notebook_menu->AppendCheckItem(ID_NotebookAllowTabSplit, _("Allow Notebook Split"));
@@ -736,81 +753,102 @@ MyFrame::MyFrame(wxWindow* parent,
     // code. For now, just hard code a frame minimum size
     SetMinSize(wxSize(400,300));
 
-    // create some toolbars
-    int tbId = 100;
 
-    wxToolBar* tb1 = new wxToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                   wxTB_FLAT | wxTB_NODIVIDER);
+
+    // prepare a few custom overflow elements for the toolbars' overflow buttons
+    
+    wxAuiToolBarItemArray prepend_items;
+    wxAuiToolBarItemArray append_items;
+    wxAuiToolBarItem item;
+    item.kind = wxITEM_SEPARATOR;
+    append_items.Add(item);
+    item.kind = wxITEM_NORMAL;
+    item.id = ID_CustomizeToolbar;
+    item.label = _("Customize...");
+    append_items.Add(item);
+
+
+    // create some toolbars
+    wxAuiToolBar* tb1 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                         wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW);
     tb1->SetToolBitmapSize(wxSize(48,48));
-    tb1->AddTool(tbId++, wxT("Test"), wxArtProvider::GetBitmap(wxART_ERROR));
+    tb1->AddTool(ID_SampleItem+1, wxT("Test"), wxArtProvider::GetBitmap(wxART_ERROR));
     tb1->AddSeparator();
-    tb1->AddTool(tbId++, wxT("Test"), wxArtProvider::GetBitmap(wxART_QUESTION));
-    tb1->AddTool(tbId++, wxT("Test"), wxArtProvider::GetBitmap(wxART_INFORMATION));
-    tb1->AddTool(tbId++, wxT("Test"), wxArtProvider::GetBitmap(wxART_WARNING));
-    tb1->AddTool(tbId++, wxT("Test"), wxArtProvider::GetBitmap(wxART_MISSING_IMAGE));
+    tb1->AddTool(ID_SampleItem+2, wxT("Test"), wxArtProvider::GetBitmap(wxART_QUESTION));
+    tb1->AddTool(ID_SampleItem+3, wxT("Test"), wxArtProvider::GetBitmap(wxART_INFORMATION));
+    tb1->AddTool(ID_SampleItem+4, wxT("Test"), wxArtProvider::GetBitmap(wxART_WARNING));
+    tb1->AddTool(ID_SampleItem+5, wxT("Test"), wxArtProvider::GetBitmap(wxART_MISSING_IMAGE));
+    tb1->SetCustomOverflowItems(prepend_items, append_items);
     tb1->Realize();
 
 
-    wxToolBar* tb2 = new wxToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                   wxTB_FLAT | wxTB_NODIVIDER);
+    wxAuiToolBar* tb2 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                         wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW);
     tb2->SetToolBitmapSize(wxSize(16,16));
 
     wxBitmap tb2_bmp1 = wxArtProvider::GetBitmap(wxART_QUESTION, wxART_OTHER, wxSize(16,16));
-    tb2->AddTool(tbId++, wxT("Test"), tb2_bmp1);
-    tb2->AddTool(tbId++, wxT("Test"), tb2_bmp1);
-    tb2->AddTool(tbId++, wxT("Test"), tb2_bmp1);
-    tb2->AddTool(tbId++, wxT("Test"), tb2_bmp1);
+    tb2->AddTool(ID_SampleItem+6, wxT("Test"), tb2_bmp1);
+    tb2->AddTool(ID_SampleItem+7, wxT("Test"), tb2_bmp1);
+    tb2->AddTool(ID_SampleItem+8, wxT("Test"), tb2_bmp1);
+    tb2->AddTool(ID_SampleItem+9, wxT("Test"), tb2_bmp1);
     tb2->AddSeparator();
-    tb2->AddTool(tbId++, wxT("Test"), tb2_bmp1);
-    tb2->AddTool(tbId++, wxT("Test"), tb2_bmp1);
+    tb2->AddTool(ID_SampleItem+10, wxT("Test"), tb2_bmp1);
+    tb2->AddTool(ID_SampleItem+11, wxT("Test"), tb2_bmp1);
     tb2->AddSeparator();
-    tb2->AddTool(tbId++, wxT("Test"), tb2_bmp1);
-    tb2->AddTool(tbId++, wxT("Test"), tb2_bmp1);
-    tb2->AddTool(tbId++, wxT("Test"), tb2_bmp1);
-    tb2->AddTool(tbId++, wxT("Test"), tb2_bmp1);
+    tb2->AddTool(ID_SampleItem+12, wxT("Test"), tb2_bmp1);
+    tb2->AddTool(ID_SampleItem+13, wxT("Test"), tb2_bmp1);
+    tb2->AddTool(ID_SampleItem+14, wxT("Test"), tb2_bmp1);
+    tb2->AddTool(ID_SampleItem+15, wxT("Test"), tb2_bmp1);
+    tb2->SetCustomOverflowItems(prepend_items, append_items);
     tb2->Realize();
 
 
-    wxToolBar* tb3 = new wxToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                   wxTB_FLAT | wxTB_NODIVIDER);
+    wxAuiToolBar* tb3 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                         wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW);
     tb3->SetToolBitmapSize(wxSize(16,16));
     wxBitmap tb3_bmp1 = wxArtProvider::GetBitmap(wxART_FOLDER, wxART_OTHER, wxSize(16,16));
-    tb3->AddTool(tbId++, wxT("Test"), tb3_bmp1);
-    tb3->AddTool(tbId++, wxT("Test"), tb3_bmp1);
-    tb3->AddTool(tbId++, wxT("Test"), tb3_bmp1);
-    tb3->AddTool(tbId++, wxT("Test"), tb3_bmp1);
+    tb3->AddTool(ID_SampleItem+16, wxT("Test2"), tb3_bmp1);
+    tb3->AddTool(ID_SampleItem+17, wxT("Test"), tb3_bmp1);
+    tb3->AddTool(ID_SampleItem+18, wxT("Test"), tb3_bmp1);
+    tb3->AddTool(ID_SampleItem+19, wxT("Test"), tb3_bmp1);
     tb3->AddSeparator();
-    tb3->AddTool(tbId++, wxT("Test"), tb3_bmp1);
-    tb3->AddTool(tbId++, wxT("Test"), tb3_bmp1);
+    tb3->AddTool(ID_SampleItem+20, wxT("Test"), tb3_bmp1);
+    tb3->AddTool(ID_SampleItem+21, wxT("Test"), tb3_bmp1);
+    tb3->SetCustomOverflowItems(prepend_items, append_items);
     tb3->Realize();
 
 
-    wxToolBar* tb4 = new wxToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                   wxTB_FLAT | wxTB_NODIVIDER | wxTB_HORZ_TEXT);
+    wxAuiToolBar* tb4 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                         wxAUI_TB_DEFAULT_STYLE | 
+                                         wxAUI_TB_OVERFLOW |
+                                         wxAUI_TB_TEXT |
+                                         wxAUI_TB_HORZ_TEXT);
     tb4->SetToolBitmapSize(wxSize(16,16));
     wxBitmap tb4_bmp1 = wxArtProvider::GetBitmap(wxART_NORMAL_FILE, wxART_OTHER, wxSize(16,16));
-    tb4->AddTool(tbId++, wxT("Item 1"), tb4_bmp1);
-    tb4->AddTool(tbId++, wxT("Item 2"), tb4_bmp1);
-    tb4->AddTool(tbId++, wxT("Item 3"), tb4_bmp1);
-    tb4->AddTool(tbId++, wxT("Item 4"), tb4_bmp1);
+    tb4->AddTool(ID_DropDownToolbarItem, wxT("Item 1"), tb4_bmp1);
+    tb4->AddTool(ID_SampleItem+23, wxT("Item 2"), tb4_bmp1);
+    tb4->AddTool(ID_SampleItem+24, wxT("Item 3"), tb4_bmp1);
+    tb4->AddTool(ID_SampleItem+25, wxT("Item 4"), tb4_bmp1);
     tb4->AddSeparator();
-    tb4->AddTool(tbId++, wxT("Item 5"), tb4_bmp1);
-    tb4->AddTool(tbId++, wxT("Item 6"), tb4_bmp1);
-    tb4->AddTool(tbId++, wxT("Item 7"), tb4_bmp1);
-    tb4->AddTool(tbId++, wxT("Item 8"), tb4_bmp1);
-    tb4->AddControl(new wxComboBox(tb4, -1));
+    tb4->AddTool(ID_SampleItem+26, wxT("Item 5"), tb4_bmp1);
+    tb4->AddTool(ID_SampleItem+27, wxT("Item 6"), tb4_bmp1);
+    tb4->AddTool(ID_SampleItem+28, wxT("Item 7"), tb4_bmp1);
+    tb4->AddTool(ID_SampleItem+29, wxT("Item 8"), tb4_bmp1);
+    tb4->SetToolDropDown(ID_DropDownToolbarItem, true);
+    tb4->SetCustomOverflowItems(prepend_items, append_items);
     tb4->Realize();
 
-    // create some toolbars
-    wxToolBar* tb5 = new wxToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                   wxTB_FLAT | wxTB_NODIVIDER | wxTB_VERTICAL);
+
+    wxAuiToolBar* tb5 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                         wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
     tb5->SetToolBitmapSize(wxSize(48,48));
-    tb5->AddTool(tbId++, wxT("Test"), wxArtProvider::GetBitmap(wxART_ERROR), _T("Tooltip1"));
+    tb5->AddTool(ID_SampleItem+30, wxT("Test"), wxArtProvider::GetBitmap(wxART_ERROR));
     tb5->AddSeparator();
-    tb5->AddTool(tbId++, wxT("Test"), wxArtProvider::GetBitmap(wxART_QUESTION), _T("Tooltip2"));
-    tb5->AddTool(tbId++, wxT("Test"), wxArtProvider::GetBitmap(wxART_INFORMATION), _T("Tooltip3"));
-    tb5->AddTool(tbId++, wxT("Test"), wxArtProvider::GetBitmap(wxART_WARNING), _T("Tooltip4"));
-    tb5->AddTool(tbId++, wxT("Test"), wxArtProvider::GetBitmap(wxART_MISSING_IMAGE), _T("Tooltip5"));
+    tb5->AddTool(ID_SampleItem+31, wxT("Test"), wxArtProvider::GetBitmap(wxART_QUESTION));
+    tb5->AddTool(ID_SampleItem+32, wxT("Test"), wxArtProvider::GetBitmap(wxART_INFORMATION));
+    tb5->AddTool(ID_SampleItem+33, wxT("Test"), wxArtProvider::GetBitmap(wxART_WARNING));
+    tb5->AddTool(ID_SampleItem+34, wxT("Test"), wxArtProvider::GetBitmap(wxART_MISSING_IMAGE));
+    tb5->SetCustomOverflowItems(prepend_items, append_items);
     tb5->Realize();
 
     // add a bunch of panes
@@ -971,7 +1009,7 @@ void MyFrame::OnSize(wxSizeEvent& event)
     event.Skip();
 }
 
-void MyFrame::OnSettings(wxCommandEvent& WXUNUSED(event))
+void MyFrame::OnSettings(wxCommandEvent& WXUNUSED(evt))
 {
     // show the settings pane, and float it
     wxAuiPaneInfo& floating_pane = m_mgr.GetPane(wxT("settings")).Float().Show();
@@ -980,6 +1018,11 @@ void MyFrame::OnSettings(wxCommandEvent& WXUNUSED(event))
         floating_pane.FloatingPosition(GetStartPosition());
 
     m_mgr.Update();
+}
+
+void MyFrame::OnCustomizeToolbar(wxCommandEvent& WXUNUSED(evt))
+{
+    wxMessageBox(_("Customize Toolbar clicked"));
 }
 
 void MyFrame::OnGradient(wxCommandEvent& event)
@@ -1036,12 +1079,12 @@ void MyFrame::OnManagerFlag(wxCommandEvent& event)
         case ID_VenetianBlindsHint: flag = wxAUI_MGR_VENETIAN_BLINDS_HINT; break;
         case ID_RectangleHint: flag = wxAUI_MGR_RECTANGLE_HINT; break;
     }
-    
+
     if (flag)
     {
         m_mgr.SetFlags(m_mgr.GetFlags() ^ flag);
     }
-    
+
     m_mgr.Update();
 }
 
@@ -1049,7 +1092,7 @@ void MyFrame::OnManagerFlag(wxCommandEvent& event)
 void MyFrame::OnNotebookFlag(wxCommandEvent& event)
 {
     int id = event.GetId();
-    
+
     if (id == ID_NotebookNoCloseButton ||
         id == ID_NotebookCloseButton ||
         id == ID_NotebookCloseButtonAll ||
@@ -1058,7 +1101,7 @@ void MyFrame::OnNotebookFlag(wxCommandEvent& event)
         m_notebook_style &= ~(wxAUI_NB_CLOSE_BUTTON |
                               wxAUI_NB_CLOSE_ON_ACTIVE_TAB |
                               wxAUI_NB_CLOSE_ON_ALL_TABS);
-                              
+
         switch (id)
         {
             case ID_NotebookNoCloseButton: break;
@@ -1067,7 +1110,7 @@ void MyFrame::OnNotebookFlag(wxCommandEvent& event)
             case ID_NotebookCloseButtonActive: m_notebook_style |= wxAUI_NB_CLOSE_ON_ACTIVE_TAB; break;
         }
     }
-    
+
     if (id == ID_NotebookAllowTabMove)
     {
         m_notebook_style ^= wxAUI_NB_TAB_MOVE;
@@ -1097,12 +1140,12 @@ void MyFrame::OnNotebookFlag(wxCommandEvent& event)
     size_t i, count;
     wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
     for (i = 0, count = all_panes.GetCount(); i < count; ++i)
-    {  
+    {
         wxAuiPaneInfo& pane = all_panes.Item(i);
         if (pane.window->IsKindOf(CLASSINFO(wxAuiNotebook)))
         {
             wxAuiNotebook* nb = (wxAuiNotebook*)pane.window;
-            
+
             if (id == ID_NotebookArtGloss)
             {
                 nb->SetArtProvider(new wxAuiDefaultTabArt);
@@ -1113,8 +1156,8 @@ void MyFrame::OnNotebookFlag(wxCommandEvent& event)
                 nb->SetArtProvider(new wxAuiSimpleTabArt);
                 m_notebook_theme = 1;
             }
-        
-        
+
+
             nb->SetWindowStyleFlag(m_notebook_style);
             nb->Refresh();
         }
@@ -1158,14 +1201,14 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
             event.Check(((wxAUI_MGR_TRANSPARENT_HINT |
                           wxAUI_MGR_VENETIAN_BLINDS_HINT |
                           wxAUI_MGR_RECTANGLE_HINT) & flags) == 0);
-            break;        
+            break;
         case ID_HintFade:
             event.Check((flags & wxAUI_MGR_HINT_FADE) != 0);
             break;
         case ID_NoVenetianFade:
             event.Check((flags & wxAUI_MGR_NO_VENETIAN_BLINDS_FADE) != 0);
             break;
-            
+
         case ID_NotebookNoCloseButton:
             event.Check((m_notebook_style & (wxAUI_NB_CLOSE_BUTTON|wxAUI_NB_CLOSE_ON_ALL_TABS|wxAUI_NB_CLOSE_ON_ACTIVE_TAB)) != 0);
             break;
@@ -1256,7 +1299,7 @@ void MyFrame::OnRestorePerspective(wxCommandEvent& evt)
 }
 
 void MyFrame::OnNotebookPageClose(wxAuiNotebookEvent& evt)
-{    
+{
     wxAuiNotebook* ctrl = (wxAuiNotebook*)evt.GetEventObject();
     if (ctrl->GetPage(evt.GetSelection())->IsKindOf(CLASSINFO(wxHtmlWindow)))
     {
@@ -1270,7 +1313,7 @@ void MyFrame::OnNotebookPageClose(wxAuiNotebookEvent& evt)
 }
 
 void MyFrame::OnAllowNotebookDnD(wxAuiNotebookEvent& evt)
-{    
+{
     // for the purpose of this test application, explicitly
     // allow all noteboko drag and drop events
     evt.Allow();
@@ -1338,15 +1381,79 @@ void MyFrame::OnCreateSizeReport(wxCommandEvent& WXUNUSED(event))
     m_mgr.Update();
 }
 
-void MyFrame::OnChangeContentPane(wxCommandEvent& event)
+void MyFrame::OnChangeContentPane(wxCommandEvent& evt)
 {
-    m_mgr.GetPane(wxT("grid_content")).Show(event.GetId() == ID_GridContent);
-    m_mgr.GetPane(wxT("text_content")).Show(event.GetId() == ID_TextContent);
-    m_mgr.GetPane(wxT("tree_content")).Show(event.GetId() == ID_TreeContent);
-    m_mgr.GetPane(wxT("sizereport_content")).Show(event.GetId() == ID_SizeReportContent);
-    m_mgr.GetPane(wxT("html_content")).Show(event.GetId() == ID_HTMLContent);
-    m_mgr.GetPane(wxT("notebook_content")).Show(event.GetId() == ID_NotebookContent);
+    m_mgr.GetPane(wxT("grid_content")).Show(evt.GetId() == ID_GridContent);
+    m_mgr.GetPane(wxT("text_content")).Show(evt.GetId() == ID_TextContent);
+    m_mgr.GetPane(wxT("tree_content")).Show(evt.GetId() == ID_TreeContent);
+    m_mgr.GetPane(wxT("sizereport_content")).Show(evt.GetId() == ID_SizeReportContent);
+    m_mgr.GetPane(wxT("html_content")).Show(evt.GetId() == ID_HTMLContent);
+    m_mgr.GetPane(wxT("notebook_content")).Show(evt.GetId() == ID_NotebookContent);
     m_mgr.Update();
+}
+
+void MyFrame::OnDropDownToolbarItem(wxAuiToolBarEvent& evt)
+{
+    if (evt.IsDropDownClicked())
+    {
+        wxAuiToolBar* tb = static_cast<wxAuiToolBar*>(evt.GetEventObject());
+        
+        tb->SetToolSticky(evt.GetId(), true);
+        
+        // create the popup menu
+        wxMenu menuPopup;
+        
+        wxBitmap bmp = wxArtProvider::GetBitmap(wxART_QUESTION, wxART_OTHER, wxSize(16,16));
+        
+        wxMenuItem* m1 =  new wxMenuItem(&menuPopup, 10001, _("Drop Down Item 1"));
+        m1->SetBitmap(bmp);
+        menuPopup.Append(m1);
+        
+        wxMenuItem* m2 =  new wxMenuItem(&menuPopup, 10002, _("Drop Down Item 2"));
+        m2->SetBitmap(bmp);
+        menuPopup.Append(m2);
+        
+        wxMenuItem* m3 =  new wxMenuItem(&menuPopup, 10003, _("Drop Down Item 3"));
+        m3->SetBitmap(bmp);
+        menuPopup.Append(m3);
+        
+        wxMenuItem* m4 =  new wxMenuItem(&menuPopup, 10004, _("Drop Down Item 4"));
+        m4->SetBitmap(bmp);
+        menuPopup.Append(m4);
+        
+        // line up our menu with the button
+        wxRect rect = tb->GetToolRect(evt.GetId());
+        wxPoint pt = tb->ClientToScreen(rect.GetBottomLeft());
+        pt = ScreenToClient(pt);
+        
+
+        PopupMenu(&menuPopup, pt);
+
+
+        // make sure the button is "un-stuck"
+        tb->SetToolSticky(evt.GetId(), false);
+    }
+}
+
+
+void MyFrame::OnTabAlignment(wxCommandEvent &evt)
+{
+   size_t i, count;
+    wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
+    for (i = 0, count = all_panes.GetCount(); i < count; ++i)
+    {
+        wxAuiPaneInfo& pane = all_panes.Item(i);
+        if (pane.window->IsKindOf(CLASSINFO(wxAuiNotebook)))
+        {
+            wxAuiNotebook* nb = (wxAuiNotebook*)pane.window;
+
+            if (evt.GetId() == ID_NotebookAlignTop)
+                nb->SetWindowStyleFlag(nb->GetWindowStyleFlag()^wxAUI_NB_BOTTOM|wxAUI_NB_TOP);
+           else if (evt.GetId() == ID_NotebookAlignBottom)
+               nb->SetWindowStyleFlag(nb->GetWindowStyleFlag()^wxAUI_NB_TOP|wxAUI_NB_BOTTOM);
+            nb->Refresh();
+        }
+    }
 }
 
 void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event))
@@ -1390,7 +1497,7 @@ wxTreeCtrl* MyFrame::CreateTreeCtrl()
     wxTreeCtrl* tree = new wxTreeCtrl(this, wxID_ANY,
                                       wxPoint(0,0), wxSize(160,250),
                                       wxTR_DEFAULT_STYLE | wxNO_BORDER);
-                                      
+
     wxImageList* imglist = new wxImageList(16, 16, true, 2);
     imglist->Add(wxArtProvider::GetBitmap(wxART_FOLDER, wxART_OTHER, wxSize(16,16)));
     imglist->Add(wxArtProvider::GetBitmap(wxART_NORMAL_FILE, wxART_OTHER, wxSize(16,16)));
@@ -1437,7 +1544,7 @@ wxHtmlWindow* MyFrame::CreateHTMLCtrl(wxWindow* parent)
 {
     if (!parent)
         parent = this;
-        
+
     wxHtmlWindow* ctrl = new wxHtmlWindow(parent, wxID_ANY,
                                    wxDefaultPosition,
                                    wxSize(400,300));
@@ -1449,16 +1556,16 @@ wxAuiNotebook* MyFrame::CreateNotebook()
 {
    // create the notebook off-window to avoid flicker
    wxSize client_size = GetClientSize();
-   
+
    wxAuiNotebook* ctrl = new wxAuiNotebook(this, wxID_ANY,
                                     wxPoint(client_size.x, client_size.y),
                                     wxSize(430,200),
                                     m_notebook_style);
-   
+
    wxBitmap page_bmp = wxArtProvider::GetBitmap(wxART_NORMAL_FILE, wxART_OTHER, wxSize(16,16));
-                                    
+
    ctrl->AddPage(CreateHTMLCtrl(ctrl), wxT("Welcome to wxAUI") , false, page_bmp);
-                                    
+
    wxPanel *panel = new wxPanel( ctrl, wxID_ANY );
    wxFlexGridSizer *flex = new wxFlexGridSizer( 2 );
    flex->AddGrowableRow( 0 );
@@ -1466,37 +1573,37 @@ wxAuiNotebook* MyFrame::CreateNotebook()
    flex->AddGrowableCol( 1 );
    flex->Add( 5,5 );   flex->Add( 5,5 );
    flex->Add( new wxStaticText( panel, -1, wxT("wxTextCtrl:") ), 0, wxALL|wxALIGN_CENTRE, 5 );
-   flex->Add( new wxTextCtrl( panel, -1, wxT(""), wxDefaultPosition, wxSize(100,-1)), 
+   flex->Add( new wxTextCtrl( panel, -1, wxT(""), wxDefaultPosition, wxSize(100,-1)),
                 1, wxALL|wxALIGN_CENTRE, 5 );
    flex->Add( new wxStaticText( panel, -1, wxT("wxSpinCtrl:") ), 0, wxALL|wxALIGN_CENTRE, 5 );
-   flex->Add( new wxSpinCtrl( panel, -1, wxT("5"), wxDefaultPosition, wxSize(100,-1), 
+   flex->Add( new wxSpinCtrl( panel, -1, wxT("5"), wxDefaultPosition, wxSize(100,-1),
                 wxSP_ARROW_KEYS, 5, 50, 5 ), 0, wxALL|wxALIGN_CENTRE, 5 );
    flex->Add( 5,5 );   flex->Add( 5,5 );
    panel->SetSizer( flex );
    ctrl->AddPage( panel, wxT("wxPanel"), false, page_bmp );
-   
-   
+
+
    ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, wxT("Some text"),
                 wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , wxT("wxTextCtrl 1"), false, page_bmp );
-                
+
    ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, wxT("Some more text"),
                 wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , wxT("wxTextCtrl 2") );
-                
+
    ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, wxT("Some more text"),
                 wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , wxT("wxTextCtrl 3") );
-                
+
    ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, wxT("Some more text"),
                 wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , wxT("wxTextCtrl 4") );
-                
+
    ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, wxT("Some more text"),
                 wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , wxT("wxTextCtrl 5") );
-   
+
    ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, wxT("Some more text"),
                 wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , wxT("wxTextCtrl 6") );
-                
+
    ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, wxT("Some more text"),
                 wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , wxT("wxTextCtrl 7 (longer title)") );
-   
+
    ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, wxT("Some more text"),
                 wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , wxT("wxTextCtrl 8") );
 
@@ -1522,6 +1629,13 @@ wxString MyFrame::GetIntroText()
         "<li>Completely customizable look-and-feel</li>"
         "<li>Optional transparent window effects (while dragging or docking)</li>"
         "<li>Splittable notebook control</li>"
+        "</ul>"
+        "<p><b>What's new in 0.9.4?</b></p>"
+        "<p>wxAUI 0.9.4, which is bundled with wxWidgets, adds the following features:"
+        "<ul>"
+        "<li>New wxAuiToolBar class, a toolbar control which integrates more "
+        "cleanly with wxAuiFrameManager.</li>"
+        "<li>Lots of bug fixes</li>"
         "</ul>"
         "<p><b>What's new in 0.9.3?</b></p>"
         "<p>wxAUI 0.9.3, which is now bundled with wxWidgets, adds the following features:"
