@@ -110,10 +110,8 @@ static wxBitmap MakeDisabledBitmap(wxBitmap& bmp)
 static wxColor GetBaseColor()
 {
 
-#ifdef __WXMAC__
-    wxBrush toolbarbrush;
-    toolbarbrush.MacSetTheme( kThemeBrushToolbarBackground );
-    wxColor base_color = toolbarbrush.GetColour();
+#if defined( __WXMAC__ ) && wxOSX_USE_COCOA_OR_CARBON
+    wxColor base_colour = wxColour( wxMacCreateCGColorFromHITheme(kThemeBrushToolbarBackground));
 #else
     wxColor base_color = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
 #endif
