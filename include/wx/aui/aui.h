@@ -15,6 +15,7 @@
 #include "wx/aui/framemanager.h"
 #include "wx/aui/dockart.h"
 #include "wx/aui/floatpane.h"
+#include "wx/aui/auibar.h"
 #include "wx/aui/auibook.h"
 #include "wx/aui/tabmdi.h"
 
