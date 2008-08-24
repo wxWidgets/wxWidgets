@@ -113,19 +113,19 @@ static wxColor GetBaseColor()
 #if defined( __WXMAC__ ) && wxOSX_USE_COCOA_OR_CARBON
     wxColor base_colour = wxColour( wxMacCreateCGColorFromHITheme(kThemeBrushToolbarBackground));
 #else
-    wxColor base_color = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
+    wxColor base_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
 #endif
 
     // the base_colour is too pale to use as our base colour,
     // so darken it a bit --
-    if ((255-base_color.Red()) +
-        (255-base_color.Green()) +
-        (255-base_color.Blue()) < 60)
+    if ((255-base_colour.Red()) +
+        (255-base_colour.Green()) +
+        (255-base_colour.Blue()) < 60)
     {
-        base_color = wxAuiStepColour(base_color, 92);
+        base_colour = wxAuiStepColour(base_colour, 92);
     }
 
-    return base_color;
+    return base_colour;
 }
 
 
