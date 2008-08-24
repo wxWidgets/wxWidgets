@@ -5651,6 +5651,10 @@ SOURCE=..\..\include\wx\aui\aui.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\aui\auibar.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\aui\auibook.h
 # End Source File
 # Begin Source File

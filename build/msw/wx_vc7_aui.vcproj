@@ -838,6 +838,8 @@
 			<File
 				RelativePath="..\..\include\wx\aui\aui.h"/>
 			<File
+				RelativePath="..\..\include\wx\aui\auibar.h"/>
+			<File
 				RelativePath="..\..\include\wx\aui\auibook.h"/>
 			<File
 				RelativePath="..\..\include\wx\aui\dockart.h"/>
@@ -852,6 +854,8 @@
 			Name="Source Files"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx">
+			<File
+				RelativePath="..\..\src\aui\auibar.cpp"/>
 			<File
 				RelativePath="..\..\src\aui\auibook.cpp"/>
 			<File

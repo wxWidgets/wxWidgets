@@ -1621,6 +1621,7 @@ AUIDLL_OBJECTS =  \
 	auidll_dockart.o \
 	auidll_floatpane.o \
 	auidll_auibook.o \
+	auidll_auibar.o \
 	auidll_tabmdi.o
 AUIDLL_ODEP =  $(___pch_wxprec_auidll_wx_wxprec_h_gch___depname)
 AUILIB_CXXFLAGS = $(__auilib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
@@ -1633,6 +1634,7 @@ AUILIB_OBJECTS =  \
 	auilib_dockart.o \
 	auilib_floatpane.o \
 	auilib_auibook.o \
+	auilib_auibar.o \
 	auilib_tabmdi.o
 AUILIB_ODEP =  $(___pch_wxprec_auilib_wx_wxprec_h_gch___depname)
 RICHTEXTDLL_CXXFLAGS = $(__richtextdll_PCH_INC) -D__WX$(TOOLKIT)__ \
@@ -3452,6 +3454,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/aui/dockart.h \
 	wx/aui/floatpane.h \
 	wx/aui/auibook.h \
+	wx/aui/auibar.h \
 	wx/aui/tabmdi.h \
 	wx/aui/aui.h \
 	wx/richtext/richtextctrl.h \
@@ -3806,6 +3809,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_dockart.o \
 	monodll_floatpane.o \
 	monodll_auibook.o \
+	monodll_auibar.o \
 	monodll_tabmdi.o \
 	monodll_richtextctrl.o \
 	monodll_richtextbuffer.o \
@@ -5706,6 +5710,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_dockart.o \
 	monolib_floatpane.o \
 	monolib_auibook.o \
+	monolib_auibar.o \
 	monolib_tabmdi.o \
 	monolib_richtextctrl.o \
 	monolib_richtextbuffer.o \
@@ -14353,6 +14358,9 @@ monodll_floatpane.o: $(srcdir)/src/aui/floatpane.cpp $(MONODLL_ODEP)
 monodll_auibook.o: $(srcdir)/src/aui/auibook.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/aui/auibook.cpp
 
+monodll_auibar.o: $(srcdir)/src/aui/auibar.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/aui/auibar.cpp
+
 monodll_tabmdi.o: $(srcdir)/src/aui/tabmdi.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/aui/tabmdi.cpp
 
@@ -18843,6 +18851,9 @@ monolib_floatpane.o: $(srcdir)/src/aui/floatpane.cpp $(MONOLIB_ODEP)
 
 monolib_auibook.o: $(srcdir)/src/aui/auibook.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/aui/auibook.cpp
+
+monolib_auibar.o: $(srcdir)/src/aui/auibar.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/aui/auibar.cpp
 
 monolib_tabmdi.o: $(srcdir)/src/aui/tabmdi.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/aui/tabmdi.cpp
@@ -31516,6 +31527,9 @@ auidll_floatpane.o: $(srcdir)/src/aui/floatpane.cpp $(AUIDLL_ODEP)
 auidll_auibook.o: $(srcdir)/src/aui/auibook.cpp $(AUIDLL_ODEP)
 	$(CXXC) -c -o $@ $(AUIDLL_CXXFLAGS) $(srcdir)/src/aui/auibook.cpp
 
+auidll_auibar.o: $(srcdir)/src/aui/auibar.cpp $(AUIDLL_ODEP)
+	$(CXXC) -c -o $@ $(AUIDLL_CXXFLAGS) $(srcdir)/src/aui/auibar.cpp
+
 auidll_tabmdi.o: $(srcdir)/src/aui/tabmdi.cpp $(AUIDLL_ODEP)
 	$(CXXC) -c -o $@ $(AUIDLL_CXXFLAGS) $(srcdir)/src/aui/tabmdi.cpp
 
@@ -31530,6 +31544,9 @@ auilib_floatpane.o: $(srcdir)/src/aui/floatpane.cpp $(AUILIB_ODEP)
 
 auilib_auibook.o: $(srcdir)/src/aui/auibook.cpp $(AUILIB_ODEP)
 	$(CXXC) -c -o $@ $(AUILIB_CXXFLAGS) $(srcdir)/src/aui/auibook.cpp
+
+auilib_auibar.o: $(srcdir)/src/aui/auibar.cpp $(AUILIB_ODEP)
+	$(CXXC) -c -o $@ $(AUILIB_CXXFLAGS) $(srcdir)/src/aui/auibar.cpp
 
 auilib_tabmdi.o: $(srcdir)/src/aui/tabmdi.cpp $(AUILIB_ODEP)
 	$(CXXC) -c -o $@ $(AUILIB_CXXFLAGS) $(srcdir)/src/aui/tabmdi.cpp

@@ -3159,6 +3159,8 @@
 			<File
 				RelativePath="..\..\include\wx\aui\aui.h"/>
 			<File
+				RelativePath="..\..\include\wx\aui\auibar.h"/>
+			<File
 				RelativePath="..\..\include\wx\aui\auibook.h"/>
 			<File
 				RelativePath="..\..\include\wx\bitmap.h"/>
