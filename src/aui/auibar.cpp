@@ -37,7 +37,7 @@
 #include "wx/aui/framemanager.h"
 
 #ifdef __WXMAC__
-#include "wx/mac/carbon/private.h"
+#include "wx/osx/private.h"
 #endif
 
 #include "wx/arrimpl.cpp"
