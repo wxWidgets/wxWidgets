@@ -1156,9 +1156,16 @@ void  wxTopLevelWindowMac::DoMacCreateRealWindow(
         }
         else
         {
-            wclass = kPlainWindowClass;
-			activationScopeSet = true;
-			activationScope = kWindowActivationScopeNone;
+            if ( HasFlag( wxNO_BORDER ) )
+            {
+                wclass = kSimpleWindowClass ;
+            }
+            else
+            {
+                wclass = kPlainWindowClass ;
+            }
+            activationScopeSet = true;
+            activationScope = kWindowActivationScopeNone;
         }
     }
     else if ( HasFlag( wxPOPUP_WINDOW ) )
