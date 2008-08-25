@@ -402,7 +402,7 @@ public:
 
     /**
         Gets text from param and does some conversions:
-         replaces \n, \r, \t by respective characters (according to C syntax)
+         replaces \\n, \\r, \\t by respective characters (according to C syntax)
          replaces @c $ by @c  and @c $$ by @c $ (needed for @c _File to @c File
         translation because of XML syntax)
          calls wxGetTranslations (unless disabled in wxXmlResource)

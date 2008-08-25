@@ -180,7 +180,7 @@ public:
     /**
         Return the directory for the user-dependent application data files:
              - Unix: @c ~/.appname
-             - Windows: @c C:\\Documents @c and @c Settings\\username\Application @c Data\appname
+             - Windows: @c C:\\Documents @c and @c Settings\\username\Application @c Data\\appname
              - Mac: @c ~/Library/Application @c Support/appname
     */
     wxString GetUserDataDir() const;
@@ -189,7 +189,7 @@ public:
         Return the directory for user data files which shouldn't be shared with
         the other machines.
         This is the same as GetUserDataDir() for all platforms except Windows where it returns
-        @c C:\\Documents @c and @c Settings\\username\\Local @c Settings\\Application @c Data\appname
+        @c C:\\Documents @c and @c Settings\\username\\Local @c Settings\\Application @c Data\\appname
     */
     wxString GetUserLocalDataDir() const;
 

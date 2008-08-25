@@ -510,7 +510,7 @@ void wxSetDisplayName(const wxString& displayName);
     By default, the functions strips both the mnemonics character (@c '&')
     which is used to indicate a keyboard shortkey, and the accelerators, which
     are used only in the menu items and are separated from the main text by the
-    @c \t (TAB) character. By using @a flags of @c wxStrip_Mnemonics or
+    @c \\t (TAB) character. By using @a flags of @c wxStrip_Mnemonics or
     @c wxStrip_Accel to strip only the former or the latter part, respectively.
 
     Notice that in most cases wxMenuItem::GetLabelFromText() or
