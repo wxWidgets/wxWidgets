@@ -1581,7 +1581,7 @@ void wxNonOwnedWindowCarbonImpl::Create(
         }
         else
         {
-            if ( HasFlag( wxNO_BORDER ) )
+            if ( style & wxNO_BORDER )
             {
                 wclass = kSimpleWindowClass ;
             }
