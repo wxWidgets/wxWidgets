@@ -1959,7 +1959,7 @@ size_t wxMBConv_iconv::GetMBNulLen() const
         wxMutexLocker lock(self->m_iconvMutex);
 #endif
 
-        wchar_t *wnul = L"";
+        const wchar_t *wnul = L"";
         char buf[8]; // should be enough for NUL in any encoding
         size_t inLen = sizeof(wchar_t),
                outLen = WXSIZEOF(buf);
