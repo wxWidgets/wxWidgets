@@ -492,7 +492,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                 WindowRef owner = cEvent.GetParameter<WindowRef>(kEventParamWindowRef);
                 if ( !IsWindowActive(owner) )
                 {
-                    cEvent.SetParameter(kEventParamClickActivation,(UInt32) kActivateAndIgnoreClick) ;
+                    cEvent.SetParameter(kEventParamClickActivation,typeClickActivationResult, (UInt32) kActivateAndIgnoreClick) ;
                     result = noErr ;
                 }
             }

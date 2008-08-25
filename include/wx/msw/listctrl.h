@@ -435,6 +435,11 @@ private:
     // UpdateStyle()), only should be called if InReportView()
     void MSWSetExListStyles();
 
+    // initialize the (already created) m_textCtrl with the associated HWND
+    void InitEditControl(WXHWND hWnd);
+
+    // destroy m_textCtrl if it's currently valid and reset it to NULL
+    void DeleteEditControl();
 
     DECLARE_DYNAMIC_CLASS(wxListCtrl)
     DECLARE_EVENT_TABLE()

@@ -575,6 +575,10 @@ protected:
 private:
     void Init(wxPrintout *printout, wxPrintout *printoutForPrinting);
 
+    // helpers for RenderPage():
+    bool RenderPageIntoDC(wxDC& dc, int pageNum);
+    bool RenderPageIntoBitmap(wxBitmap& bmp, int pageNum);
+
     DECLARE_NO_COPY_CLASS(wxPrintPreviewBase)
     DECLARE_CLASS(wxPrintPreviewBase)
 };

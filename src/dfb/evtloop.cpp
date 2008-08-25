@@ -27,6 +27,7 @@
 
 #include "wx/thread.h"
 #include "wx/timer.h"
+#include "wx/toplevel.h"
 #include "wx/private/socketevtdispatch.h"
 #include "wx/dfb/private.h"
 

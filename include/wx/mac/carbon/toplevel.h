@@ -66,7 +66,9 @@ public:
 
     virtual void SetTitle( const wxString& title);
     virtual wxString GetTitle() const;
-     
+
+    virtual void SetLabel( const wxString& title);
+
 protected:
     // common part of all ctors
     void Init();

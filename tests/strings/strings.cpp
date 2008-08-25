@@ -47,10 +47,10 @@ private:
         CPPUNIT_TEST( Contains );
         CPPUNIT_TEST( ToLong );
         CPPUNIT_TEST( ToULong );
-#ifdef wxLongLong_t
+#ifdef wxHAS_STRTOLL
         CPPUNIT_TEST( ToLongLong );
         CPPUNIT_TEST( ToULongLong );
-#endif // wxLongLong_t
+#endif // wxHAS_STRTOLL
         CPPUNIT_TEST( ToDouble );
         CPPUNIT_TEST( WriteBuf );
         CPPUNIT_TEST( CharStr );
@@ -71,10 +71,10 @@ private:
     void Contains();
     void ToLong();
     void ToULong();
-#ifdef wxLongLong_t
+#ifdef wxHAS_STRTOLL
     void ToLongLong();
     void ToULongLong();
-#endif // wxLongLong_t
+#endif // wxHAS_STRTOLL
     void ToDouble();
     void WriteBuf();
     void CharStr();
@@ -324,22 +324,6 @@ void StringTestCase::CaseChanges()
     CPPUNIT_ASSERT( s1l == _T("hello!") );
     CPPUNIT_ASSERT( s2u == wxEmptyString );
     CPPUNIT_ASSERT( s2l == wxEmptyString );
-
-#if !wxUSE_UNICODE
-    wxLocale locRu(wxLANGUAGE_RUSSIAN, 0 /* flags */);
-    if ( locRu.IsOk() )
-    {
-        // try upper casing 8bit strings
-        const wchar_t capital_ya[] = { 0x42f, 0 },
-                      small_ya[]   = { 0x44f, 0 };
-
-        wxString sUpper(wxConvLibc.cWC2MB(capital_ya)),
-                 sLower(wxConvLibc.cWC2MB(small_ya));
-
-        CPPUNIT_ASSERT( sUpper.Lower() == sLower );
-        CPPUNIT_ASSERT( sLower.Upper() == sUpper );
-    }
-#endif // !wxUSE_UNICODE
 }
 
 void StringTestCase::Compare()
@@ -535,7 +519,7 @@ void StringTestCase::ToULong()
     }
 }
 
-#ifdef wxLongLong_t
+#ifdef wxHAS_STRTOLL
 
 void StringTestCase::ToLongLong()
 {
@@ -547,9 +531,31 @@ void StringTestCase::ToLongLong()
         if ( ld.flags & (Number_Long | Number_Unsigned) )
             continue;
 
-        CPPUNIT_ASSERT_EQUAL( ld.IsOk(), wxString(ld.str).ToLongLong(&l) );
         if ( ld.IsOk() )
+        {
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                std::string(wxString::Format
+                (
+                    _T("Conversion of \"%s\" to long long failed"),
+                    ld.str
+                ).mb_str()),
+                wxString(ld.str).ToLongLong(&l)
+            );
             CPPUNIT_ASSERT_EQUAL( ld.LLValue(), l );
+        }
+        else
+        {
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                std::string(wxString::Format
+                (
+                    _T("Conversion of \"%s\" to long long succeeded"),
+                    ld.str
+                ).mb_str()),
+                !wxString(ld.str).ToLongLong(&l)
+            );
+        }
     }
 }
 
@@ -563,13 +569,35 @@ void StringTestCase::ToULongLong()
         if ( ld.flags & (Number_Long | Number_Signed) )
             continue;
 
-        CPPUNIT_ASSERT_EQUAL( ld.IsOk(), wxString(ld.str).ToULongLong(&ul) );
         if ( ld.IsOk() )
+        {
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                std::string(wxString::Format
+                (
+                    _T("Conversion of \"%s\" to unsigned long long failed"),
+                    ld.str
+                ).mb_str()),
+                wxString(ld.str).ToULongLong(&ul)
+            );
             CPPUNIT_ASSERT_EQUAL( ld.ULLValue(), ul );
+        }
+        else
+        {
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                std::string(wxString::Format
+                (
+                    _T("Conversion of \"%s\" to unsigned long long succeeded"),
+                    ld.str
+                ).mb_str()),
+                !wxString(ld.str).ToULongLong(&ul)
+            );
+        }
     }
 }
 
-#endif // wxLongLong_t
+#endif // wxHAS_STRTOLL
 
 void StringTestCase::ToDouble()
 {

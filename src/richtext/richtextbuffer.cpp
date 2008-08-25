@@ -4704,7 +4704,9 @@ bool wxRichTextParagraph::GetContiguousPlainText(wxString& text, const wxRichTex
                     text += textObj->GetTextForRange(range);
                 }
                 else
-                    return true;
+                {
+                    text += wxT(" ");
+                }
             }
 
             node = node->GetNext();
@@ -4724,7 +4726,9 @@ bool wxRichTextParagraph::GetContiguousPlainText(wxString& text, const wxRichTex
                     text = textObj->GetTextForRange(range) + text;
                 }
                 else
-                    return true;
+                {
+                    text = wxT(" ") + text;
+                }
             }
 
             node = node->GetPrevious();
@@ -5890,8 +5894,14 @@ bool wxRichTextBuffer::InsertNewlineWithUndo(long pos, wxRichTextCtrl* ctrl, int
     {
         if (para && para->GetRange().GetEnd() == pos)
             pos1 ++;
+
+        // Now see if we need to number the paragraph.
         if (newPara->GetAttributes().HasBulletNumber())
-            newPara->GetAttributes().SetBulletNumber(newPara->GetAttributes().GetBulletNumber()+1);
+        {
+            wxRichTextAttr numberingAttr;
+            if (FindNextParagraphNumber(para, numberingAttr))
+                wxRichTextApplyStyle(newPara->GetAttributes(), (const wxRichTextAttr&) numberingAttr);
+        }
     }
 
     action->SetPosition(pos);
@@ -5999,6 +6009,25 @@ wxRichTextAttr wxRichTextBuffer::GetStyleForNewParagraph(long pos, bool caretPos
                 }
             }
         }
+
+        // Also apply list style if present
+        if (lookUpNewParaStyle && !para->GetAttributes().GetListStyleName().IsEmpty() && GetStyleSheet())
+        {
+            wxRichTextListStyleDefinition* listDef = GetStyleSheet()->FindListStyle(para->GetAttributes().GetListStyleName());
+            if (listDef)
+            {
+                int thisIndent = para->GetAttributes().GetLeftIndent();
+                int thisLevel = para->GetAttributes().HasOutlineLevel() ? para->GetAttributes().GetOutlineLevel() : listDef->FindLevelForIndent(thisIndent);
+
+                // Apply the overall list style, and item style for this level
+                wxTextAttrEx listStyle(listDef->GetCombinedStyleForLevel(thisLevel, GetStyleSheet()));
+                wxRichTextApplyStyle(attr, listStyle);
+                attr.SetOutlineLevel(thisLevel);
+                if (para->GetAttributes().HasBulletNumber())
+                    attr.SetBulletNumber(para->GetAttributes().GetBulletNumber());
+            }
+        }
+
         if (!foundAttributes)
         {
             attr = para->GetAttributes();
@@ -6009,14 +6038,6 @@ wxRichTextAttr wxRichTextBuffer::GetStyleForNewParagraph(long pos, bool caretPos
                     (~ wxTEXT_ATTR_TEXT_COLOUR) |
                     (~ wxTEXT_ATTR_BACKGROUND_COLOUR) );
             attr.SetFlags(flags);
-        }
-
-        // Now see if we need to number the paragraph.
-        if (attr.HasBulletStyle())
-        {
-            wxRichTextAttr numberingAttr;
-            if (FindNextParagraphNumber(para, numberingAttr))
-                wxRichTextApplyStyle(attr, (const wxRichTextAttr&) numberingAttr);
         }
 
         return attr;

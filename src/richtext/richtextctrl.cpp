@@ -691,6 +691,8 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
             wxString text;
             text = wxRichTextLineBreakChar;
             GetBuffer().InsertTextWithUndo(newPos+1, text, this);
+            m_caretAtLineStart = true;
+            PositionCaret();
         }
         else
             GetBuffer().InsertNewlineWithUndo(newPos+1, this, wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE|wxRICHTEXT_INSERT_INTERACTIVE);
@@ -1089,6 +1091,9 @@ bool wxRichTextCtrl::ExtendSelection(long oldPos, long newPos, int flags)
 {
     if (flags & wxRICHTEXT_SHIFT_DOWN)
     {
+        if (oldPos == newPos)
+            return false;
+
         wxRichTextRange oldSelection = m_selectionRange;
 
         // If not currently selecting, start selecting
@@ -1107,6 +1112,8 @@ bool wxRichTextCtrl::ExtendSelection(long oldPos, long newPos, int flags)
             // the end.
             if (newPos > m_selectionAnchor)
                 m_selectionRange.SetRange(m_selectionAnchor+1, newPos);
+            else if (newPos == m_selectionAnchor)
+                m_selectionRange = wxRichTextRange(-2, -2);
             else
                 m_selectionRange.SetRange(newPos+1, m_selectionAnchor);
         }
@@ -2288,7 +2295,7 @@ bool wxRichTextCtrl::WriteImage(const wxBitmap& bitmap, int bitmapType)
 /// Insert a newline (actually paragraph) at the current insertion point.
 bool wxRichTextCtrl::Newline()
 {
-    return GetBuffer().InsertNewlineWithUndo(m_caretPosition+1, this);
+    return GetBuffer().InsertNewlineWithUndo(m_caretPosition+1, this, wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
 }
 
 /// Insert a line break at the current insertion point.

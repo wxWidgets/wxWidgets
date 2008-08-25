@@ -1138,6 +1138,8 @@ bool wxComboCtrlBase::Enable(bool enable)
         m_btn->Enable(enable);
     if ( m_text )
         m_text->Enable(enable);
+        
+    Refresh();
 
     return true;
 }
@@ -1194,16 +1196,15 @@ void wxComboCtrlBase::SetValidator(const wxValidator& validator)
 
     if ( textCtrl )
         textCtrl->SetValidator( validator );
+    else
+        wxControl::SetValidator( validator );
 }
 
 wxValidator* wxComboCtrlBase::GetValidator()
 {
     wxTextCtrl* textCtrl = GetTextCtrl();
 
-    if ( textCtrl )
-        return textCtrl->GetValidator();
-
-    return wxControl::GetValidator();
+    return textCtrl ? textCtrl->GetValidator() : wxControl::GetValidator();
 }
 #endif // wxUSE_VALIDATORS
 

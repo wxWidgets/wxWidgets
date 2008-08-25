@@ -66,18 +66,9 @@ void wxStaticBitmap::SetBitmap( const wxBitmap &bitmap )
 
     if (m_bitmap.Ok())
     {
-        GdkBitmap *mask = (GdkBitmap *) NULL;
-        if (m_bitmap.GetMask())
-            mask = m_bitmap.GetMask()->GetBitmap();
-
-        if (m_bitmap.HasPixbuf())
-        {
-            gtk_image_set_from_pixbuf(GTK_IMAGE(m_widget),
-                                      m_bitmap.GetPixbuf());
-        }
-        else
-            gtk_image_set_from_pixmap(GTK_IMAGE(m_widget),
-                                      m_bitmap.GetPixmap(), mask);
+        // always use pixbuf, because pixmap mask does not
+        // work with disabled images in some themes
+        gtk_image_set_from_pixbuf(GTK_IMAGE(m_widget), m_bitmap.GetPixbuf());
 
         InvalidateBestSize();
         SetSize(GetBestSize());

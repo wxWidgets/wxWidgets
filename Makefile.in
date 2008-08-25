@@ -1438,7 +1438,8 @@ AUIDLL_OBJECTS =  \
 	auidll_dockart.o \
 	auidll_floatpane.o \
 	auidll_auibook.o \
-	auidll_tabmdi.o
+	auidll_tabmdi.o \
+	auidll_auibar.o
 AUIDLL_ODEP =  $(___pch_wxprec_auidll_wx_wxprec_h_gch___depname)
 AUILIB_CXXFLAGS = $(__auilib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
@@ -1449,7 +1450,8 @@ AUILIB_OBJECTS =  \
 	auilib_dockart.o \
 	auilib_floatpane.o \
 	auilib_auibook.o \
-	auilib_tabmdi.o
+	auilib_tabmdi.o \
+	auilib_auibar.o
 AUILIB_ODEP =  $(___pch_wxprec_auilib_wx_wxprec_h_gch___depname)
 RICHTEXTDLL_CXXFLAGS = $(__richtextdll_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -3122,6 +3124,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/aui/floatpane.h \
 	wx/aui/auibook.h \
 	wx/aui/tabmdi.h \
+	wx/aui/auibar.h \
 	wx/aui/aui.h \
 	wx/richtext/richtextctrl.h \
 	wx/richtext/richtextbuffer.h \
@@ -3438,6 +3441,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_floatpane.o \
 	monodll_auibook.o \
 	monodll_tabmdi.o \
+	monodll_auibar.o \
 	monodll_richtextctrl.o \
 	monodll_richtextbuffer.o \
 	monodll_richtextstyles.o \
@@ -5224,6 +5228,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_floatpane.o \
 	monolib_auibook.o \
 	monolib_tabmdi.o \
+	monolib_auibar.o \
 	monolib_richtextctrl.o \
 	monolib_richtextbuffer.o \
 	monolib_richtextstyles.o \
@@ -13335,6 +13340,9 @@ monodll_auibook.o: $(srcdir)/src/aui/auibook.cpp $(MONODLL_ODEP)
 monodll_tabmdi.o: $(srcdir)/src/aui/tabmdi.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/aui/tabmdi.cpp
 
+monodll_auibar.o: $(srcdir)/src/aui/auibar.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/aui/auibar.cpp
+
 monodll_richtextctrl.o: $(srcdir)/src/richtext/richtextctrl.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/richtext/richtextctrl.cpp
 
@@ -17465,6 +17473,9 @@ monolib_auibook.o: $(srcdir)/src/aui/auibook.cpp $(MONOLIB_ODEP)
 
 monolib_tabmdi.o: $(srcdir)/src/aui/tabmdi.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/aui/tabmdi.cpp
+
+monolib_auibar.o: $(srcdir)/src/aui/auibar.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/aui/auibar.cpp
 
 monolib_richtextctrl.o: $(srcdir)/src/richtext/richtextctrl.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextctrl.cpp
@@ -29112,6 +29123,9 @@ auidll_auibook.o: $(srcdir)/src/aui/auibook.cpp $(AUIDLL_ODEP)
 auidll_tabmdi.o: $(srcdir)/src/aui/tabmdi.cpp $(AUIDLL_ODEP)
 	$(CXXC) -c -o $@ $(AUIDLL_CXXFLAGS) $(srcdir)/src/aui/tabmdi.cpp
 
+auidll_auibar.o: $(srcdir)/src/aui/auibar.cpp $(AUIDLL_ODEP)
+	$(CXXC) -c -o $@ $(AUIDLL_CXXFLAGS) $(srcdir)/src/aui/auibar.cpp
+
 auilib_framemanager.o: $(srcdir)/src/aui/framemanager.cpp $(AUILIB_ODEP)
 	$(CXXC) -c -o $@ $(AUILIB_CXXFLAGS) $(srcdir)/src/aui/framemanager.cpp
 
@@ -29126,6 +29140,9 @@ auilib_auibook.o: $(srcdir)/src/aui/auibook.cpp $(AUILIB_ODEP)
 
 auilib_tabmdi.o: $(srcdir)/src/aui/tabmdi.cpp $(AUILIB_ODEP)
 	$(CXXC) -c -o $@ $(AUILIB_CXXFLAGS) $(srcdir)/src/aui/tabmdi.cpp
+
+auilib_auibar.o: $(srcdir)/src/aui/auibar.cpp $(AUILIB_ODEP)
+	$(CXXC) -c -o $@ $(AUILIB_CXXFLAGS) $(srcdir)/src/aui/auibar.cpp
 
 richtextdll_version_rc.o: $(srcdir)/src/msw/version.rc $(RICHTEXTDLL_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_58)  $(__EXCEPTIONS_DEFINE_p_57) $(__RTTI_DEFINE_p_57) $(__THREAD_DEFINE_p_57)   --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_p_57) $(__INC_JPEG_p_58) $(__INC_PNG_p_57) $(__INC_ZLIB_p_59) $(__INC_ODBC_p_57) $(__INC_REGEX_p_57) $(__INC_EXPAT_p_57) --define WXUSINGDLL --define WXMAKINGDLL_RICHTEXT

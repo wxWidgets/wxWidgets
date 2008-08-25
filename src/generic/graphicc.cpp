@@ -1256,7 +1256,9 @@ void wxCairoContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDou
 
 void wxCairoContext::DrawText( const wxString &str, wxDouble x, wxDouble y )
 {
-    if ( m_font.IsNull() || str.empty())
+    wxCHECK_RET( !m_font.IsNull(), wxT("wxCairoContext::DrawText - no valid font set") );
+
+    if ( str.empty())
         return;
     
     ((wxCairoFontData*)m_font.GetRefData())->Apply(this);
@@ -1274,7 +1276,9 @@ void wxCairoContext::DrawText( const wxString &str, wxDouble x, wxDouble y )
 void wxCairoContext::GetTextExtent( const wxString &str, wxDouble *width, wxDouble *height,
                                     wxDouble *descent, wxDouble *externalLeading ) const
 {
-    if ( m_font.IsNull() || str.empty())
+    wxCHECK_RET( !m_font.IsNull(), wxT("wxCairoContext::GetTextExtent - no valid font set") );
+
+    if ( str.empty())
         return;
 
     ((wxCairoFontData*)m_font.GetRefData())->Apply((wxCairoContext*)this);
@@ -1305,6 +1309,8 @@ void wxCairoContext::GetPartialTextExtents(const wxString& text, wxArrayDouble& 
 {
     widths.Empty();
     widths.Add(0, text.length());
+
+    wxCHECK_RET( !m_font.IsNull(), wxT("wxCairoContext::GetPartialTextExtents - no valid font set") );
 
     if (text.empty())
         return;

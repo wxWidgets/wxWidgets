@@ -29,6 +29,7 @@
 #if wxUSE_THEME_MONO
 
 #ifndef WX_PRECOMP
+    #include "wx/window.h"
     #include "wx/dc.h"
 #endif // WX_PRECOMP
 

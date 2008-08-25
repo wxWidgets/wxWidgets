@@ -811,7 +811,11 @@ bool wxWindowMSW::SetFont(const wxFont& font)
     HWND hWnd = GetHwnd();
     if ( hWnd != 0 )
     {
-        WXHANDLE hFont = m_font.GetResourceHandle();
+        // note the use of GetFont() instead of m_font: our own font could have
+        // just been reset and in this case we need to change the font used by
+        // the native window to the default for this class, i.e. exactly what
+        // GetFont() returns
+        WXHANDLE hFont = GetFont().GetResourceHandle();
 
         wxASSERT_MSG( hFont, wxT("should have valid font") );
 
@@ -4183,7 +4187,7 @@ bool wxWindowMSW::IsDoubleBuffered() const
             return true;
         wnd = wnd->GetParent();
     } while ( wnd && !wnd->IsTopLevel() );
-        
+
     return false;
 }
 
@@ -5961,6 +5965,7 @@ WXWORD wxCharCodeWXToMSW(int wxk, bool *isVirtual)
             break;
 
         default:
+#ifndef __WXWINCE__
             // check to see if its one of the OEM key codes.
             BYTE vks = LOBYTE(VkKeyScan(wxk));
             if ( vks != 0xff )
@@ -5968,6 +5973,7 @@ WXWORD wxCharCodeWXToMSW(int wxk, bool *isVirtual)
                 vk = vks;
             }
             else
+#endif
             {
                 if ( isVirtual )
                     *isVirtual = false;

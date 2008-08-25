@@ -314,7 +314,6 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos,
     : wxFrame(frame, wxID_ANY, title, pos, size, style)
 {
     m_canvas = NULL;
-    SetIcon(wxIcon(sample_xpm));
 }
 
 MyFrame::~MyFrame()

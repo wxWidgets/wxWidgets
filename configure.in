@@ -35,7 +35,7 @@ dnl wx_release_number += 1
 wx_major_version_number=2
 wx_minor_version_number=8
 wx_release_number=8
-wx_subrelease_number=0
+wx_subrelease_number=2
 
 WX_RELEASE=$wx_major_version_number.$wx_minor_version_number
 WX_VERSION=$WX_RELEASE.$wx_release_number
@@ -944,7 +944,7 @@ dnl compile options
 dnl ---------------------------------------------------------------------------
 
 WX_ARG_ENABLE(shared,      [  --enable-shared         create shared library code], wxUSE_SHARED)
-WX_ARG_ENABLE(optimise,    [  --enable-optimise       create optimised code], wxUSE_OPTIMISE)
+WX_ARG_ENABLE(optimise,    [  --enable-optimise       compile without optimisations], wxUSE_OPTIMISE)
 WX_ARG_ENABLE(debug,       [  --enable-debug          same as debug_flag and debug_info], wxUSE_DEBUG)
 WX_ARG_ENABLE(stl,         [  --enable-stl            use STL for containers], wxUSE_STL)
 if test "$USE_OS2" = "1"; then
@@ -2540,6 +2540,86 @@ if test "$wxUSE_STL" = "yes"; then
          AC_DEFINE(HAVE_EXT_HASH_MAP)
          AC_DEFINE(HAVE_GNU_CXX_HASH_MAP)
     fi
+
+    AC_CHECK_HEADER([unordered_map],
+        [AC_CACHE_CHECK([for unordered_map and unordered_set in std],
+            wx_cv_class_stdunorderedmapset,
+            [AC_TRY_COMPILE([#include <unordered_map>
+                #include <unordered_set>],
+                [std::unordered_map<double*, char*> test1;
+                 std::unordered_set<char*> test2;],
+                wx_cv_class_stdunorderedmapset=yes,
+                wx_cv_class_stdunorderedmapset=no)
+            ]
+        )],
+        [],
+        [ ]
+    )
+
+    if test "$wx_cv_class_stdunorderedmapset" = yes; then
+         AC_DEFINE(HAVE_STD_UNORDERED_MAP)
+         AC_DEFINE(HAVE_STD_UNORDERED_SET)
+    else
+        AC_CHECK_HEADER([tr1/unordered_map],
+            [AC_CACHE_CHECK([for unordered_map and unordered_set in std::tr1],
+                wx_cv_class_tr1unorderedmapset,
+                [AC_TRY_COMPILE([#include <tr1/unordered_map>
+                    #include <tr1/unordered_set>],
+                    [std::tr1::unordered_map<double*, char*> test1;
+                     std::tr1::unordered_set<char*> test2;
+            #if defined(__GNUC__) && (__GNUC__==4) && (__GNUC_MINOR__<2)
+            #error can't use unordered_{map,set} with gcc-4.[01]: http://gcc.gnu.org/PR24389
+            #endif],
+                    wx_cv_class_tr1unorderedmapset=yes,
+                    wx_cv_class_tr1unorderedmapset=no)
+                ]
+            )],
+            [],
+            [ ]
+        )
+
+        if test "$wx_cv_class_tr1unorderedmapset" = yes; then
+            AC_DEFINE(HAVE_TR1_UNORDERED_MAP)
+            AC_DEFINE(HAVE_TR1_UNORDERED_SET)
+        else
+            dnl check for hash_map and hash_set headers
+            AC_CHECK_HEADER([hash_map],
+                [AC_CACHE_CHECK([for std::hash_map and hash_set],
+                    wx_cv_class_stdhashmapset,
+                    [AC_TRY_COMPILE([#include <hash_map>
+                        #include <hash_set>],
+                        [std::hash_map<double*, char*, std::hash<double*>, std::equal_to<double*> > test1;
+                         std::hash_set<char*, std::hash<char*>, std::equal_to<char*> > test2;],
+                        wx_cv_class_stdhashmapset=yes,
+                        wx_cv_class_stdhashmapset=no)
+                    ]
+                )],
+                [],
+                [ ]
+            )
+
+            if test "$wx_cv_class_stdhashmapset" = yes; then
+                AC_DEFINE(HAVE_HASH_MAP)
+                AC_DEFINE(HAVE_STD_HASH_MAP)
+            fi
+
+            AC_CHECK_HEADER([ext/hash_map],
+                [AC_CACHE_CHECK([for GNU hash_map and hash_set],
+                    wx_cv_class_gnuhashmapset,
+                    [AC_TRY_COMPILE([#include <ext/hash_map>
+                        #include <ext/hash_set>],
+                        [__gnu_cxx::hash_map<double*, char*, __gnu_cxx::hash<double*>, std::equal_to<double*> > test1;
+                         __gnu_cxx::hash_set<char*, __gnu_cxx::hash<char*>, std::equal_to<char*> > test2;],
+                        wx_cv_class_gnuhashmapset=yes,
+                        wx_cv_class_gnuhashmapset=no)
+                    ]
+                )],
+                [],
+                [ ]
+            )
+
+        fi
+    fi
 fi
 
 dnl pop C++
@@ -2561,6 +2641,10 @@ dnl In the same vein. Motif 2.1 should be tried before Motif 1.2 for the
 dnl systems which have both (AIX 4.x does)
 SEARCH_INCLUDE="\
     /usr/local/include        \
+    /usr/local/X11/include    \
+    /usr/local/include/X11    \
+    /usr/local/X11R6/include  \
+    /usr/local/include/X11R6  \
                               \
     /usr/Motif-2.1/include    \
     /usr/Motif-1.2/include    \
@@ -2573,28 +2657,24 @@ SEARCH_INCLUDE="\
                               \
     /usr/X11R6/include        \
     /usr/X11R6.4/include      \
-    /usr/X11R5/include        \
-    /usr/X11R4/include        \
                               \
     /usr/include/X11R6        \
-    /usr/include/X11R5        \
-    /usr/include/X11R4        \
-                              \
-    /usr/local/X11R6/include  \
-    /usr/local/X11R5/include  \
-    /usr/local/X11R4/include  \
-                              \
-    /usr/local/include/X11R6  \
-    /usr/local/include/X11R5  \
-    /usr/local/include/X11R4  \
                               \
     /usr/X11/include          \
     /usr/include/X11          \
-    /usr/local/X11/include    \
-    /usr/local/include/X11    \
                               \
     /usr/XFree86/include/X11  \
     /usr/pkg/include          \
+                              \
+    /usr/local/X1R5/include  \
+    /usr/local/include/X11R5  \
+    /usr/X11R5/include        \
+    /usr/include/X11R5        \
+                              \
+    /usr/local/X11R4/include  \
+    /usr/local/include/X11R4  \
+    /usr/X11R4/include        \
+    /usr/include/X11R4        \
                               \
     /usr/openwin/share/include"
 
@@ -2786,8 +2866,8 @@ dnl
 dnl at least under SGI these functions are only available in C99 code and not
 dnl in C++ so do these tests using C++ compiler
 AC_LANG_PUSH(C++)
-if test "wxUSE_UNICODE" = "yes"; then
-    WX_CHECK_FUNCS(wcstoull)
+if test "$wxUSE_UNICODE" = "yes"; then
+    WX_CHECK_FUNCS(wcstoull,,,[#include <wchar.h>])
 else
     WX_CHECK_FUNCS(strtoull)
 fi
@@ -7283,6 +7363,11 @@ if test "$wxUSE_TEXTCTRL" = "yes"; then
     AC_DEFINE(wxUSE_TEXTCTRL)
     USES_CONTROLS=1
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS text"
+
+    dnl we don't have special switches to disable wxUSE_RICHEDIT[2], it doesn't
+    dnl seem useful to allow disabling them
+    AC_DEFINE(wxUSE_RICHEDIT)
+    AC_DEFINE(wxUSE_RICHEDIT2)
 fi
 
 if test "$wxUSE_TOGGLEBTN" = "yes"; then

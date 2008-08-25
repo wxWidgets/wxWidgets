@@ -164,6 +164,11 @@ wxPoint wxTopLevelWindowMac::GetClientAreaOrigin() const
 
 void wxTopLevelWindowMac::SetTitle(const wxString& title)
 {
+    SetLabel( title ) ;
+}
+
+void wxTopLevelWindowMac::SetLabel(const wxString& title)
+{
     wxWindow::SetLabel( title ) ;
     UMASetWTitle( (WindowRef)m_macWindow , title , m_font.GetEncoding() ) ;
 }

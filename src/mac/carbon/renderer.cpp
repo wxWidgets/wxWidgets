@@ -510,10 +510,10 @@ wxRendererMac::DrawCheckBox(wxWindow *win,
     
     if (win->GetWindowVariant() == wxWINDOW_VARIANT_SMALL ||
         (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_SMALL))
-        kind = kThemeCheckBoxSmall;
+        kind = kThemeSmallCheckBox;
     else if (win->GetWindowVariant() == wxWINDOW_VARIANT_MINI ||
              (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_MINI))
-        kind = kThemeCheckBoxMini;
+        kind = kThemeMiniCheckBox;
     else
         kind = kThemeCheckBox;
 
@@ -549,7 +549,7 @@ wxRendererMac::DrawPushButton(wxWindow *win,
                               int flags)
 {
     int kind;
-#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_3
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
     if (win->GetWindowVariant() == wxWINDOW_VARIANT_SMALL || (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_SMALL))
         kind = kThemeBevelButtonSmall;
     // There is no kThemeBevelButtonMini, but in this case, use Small
@@ -611,10 +611,10 @@ void wxRenderer_DrawRadioButton(wxWindow* win, wxDC& dc,
     
     if (win->GetWindowVariant() == wxWINDOW_VARIANT_SMALL ||
         (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_SMALL))
-        kind = kThemeRadioButtonSmall;
+        kind = kThemeSmallRadioButton;
     else if (win->GetWindowVariant() == wxWINDOW_VARIANT_MINI ||
              (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_MINI))
-        kind = kThemeRadioButtonMini;
+        kind = kThemeMiniRadioButton;
     else
         kind = kThemeRadioButton;
 

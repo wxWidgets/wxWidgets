@@ -104,15 +104,18 @@ wxTreebook::Create(wxWindow *parent,
                             style, wxDefaultValidator, name) )
         return false;
 
+#ifdef __WXMSW__
+    long treeStyle = GetThemedBorderStyle();
+#else
+    long treeStyle = wxBORDER_SUNKEN;
+#endif
     m_bookctrl = new wxTreeCtrl
                  (
                     this,
                     wxID_ANY,
                     wxDefaultPosition,
                     wxDefaultSize,
-#ifndef __WXMSW__
-                    wxBORDER_SIMPLE | // On wxMSW this produces a black border which is wrong
-#endif
+                    treeStyle|
                     wxTR_DEFAULT_STYLE |
                     wxTR_HIDE_ROOT |
                     wxTR_SINGLE

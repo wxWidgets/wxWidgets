@@ -23,6 +23,8 @@
     #pragma hdrstop
 #endif
 
+#include "wx/dcclient.h"
+#include "wx/window.h"
 #include "wx/private/overlay.h"
 #include "wx/dfb/private.h"
 

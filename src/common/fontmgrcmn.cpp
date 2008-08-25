@@ -24,9 +24,15 @@
 WX_DECLARE_LIST(wxFontInstance, wxFontInstanceList);
 WX_DEFINE_LIST(wxFontInstanceList)
 WX_DEFINE_LIST(wxFontBundleList)
+
 WX_DECLARE_HASH_MAP(wxString, wxFontBundle*,
                     wxStringHash, wxStringEqual,
-                    wxFontBundleHash);
+                    wxFontBundleHashBase);
+// in STL build, hash class is typedef to a template, so it can't be forward
+// declared, as we do; solve it by having a dummy class:
+class wxFontBundleHash : public wxFontBundleHashBase
+{
+};
 
 // ============================================================================
 // implementation
@@ -65,17 +71,14 @@ wxFontInstance *wxFontFaceBase::GetFontInstance(float ptSize, bool aa)
 {
     wxASSERT_MSG( m_refCnt > 0, _T("font library not loaded!") );
 
-    wxFontInstance *i;
-    wxFontInstanceList::Node *node;
-
-    for ( node = m_instances->GetFirst(); node; node = node->GetNext() )
+    for ( wxFontInstanceList::const_iterator i = m_instances->begin();
+          i != m_instances->end(); ++i )
     {
-        i = node->GetData();
-        if ( i->GetPointSize() == ptSize && i->IsAntiAliased() == aa )
-            return i;
+        if ( (*i)->GetPointSize() == ptSize && (*i)->IsAntiAliased() == aa )
+            return *i;
     }
 
-    i = CreateFontInstance(ptSize, aa);
+    wxFontInstance *i = CreateFontInstance(ptSize, aa);
     m_instances->Append(i);
     return i;
 }

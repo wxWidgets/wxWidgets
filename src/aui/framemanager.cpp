@@ -29,6 +29,7 @@
 #include "wx/aui/dockart.h"
 #include "wx/aui/floatpane.h"
 #include "wx/aui/tabmdi.h"
+#include "wx/aui/auibar.h"
 
 #ifndef WX_PRECOMP
     #include "wx/panel.h"
@@ -760,7 +761,7 @@ void wxAuiManager::UpdateHintWindowConfig()
     {
         if (w->IsKindOf(CLASSINFO(wxFrame)))
         {
-            wxFrame* f = static_cast<wxFrame*>(w);
+            wxFrame* f = wx_static_cast(wxFrame*, w);
             can_do_transparent = f->CanSetTransparent();
             break;
         }
@@ -925,6 +926,8 @@ void wxAuiManager::SetArtProvider(wxAuiDockArt* art_provider)
 
 bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& pane_info)
 {
+    wxASSERT_MSG(window, wxT("NULL window ptrs are not allowed"));
+
     // check if the pane has a valid window
     if (!window)
         return false;
@@ -993,6 +996,22 @@ bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& pane_info)
         pinfo.buttons.Add(button);
     }
 
+    if (pinfo.HasGripper())
+    {
+        if (pinfo.window->IsKindOf(CLASSINFO(wxAuiToolBar)))
+        {
+            // prevent duplicate gripper -- both wxAuiManager and wxAuiToolBar
+            // have a gripper control.  The toolbar's built-in gripper
+            // meshes better with the look and feel of the control than ours,
+            // so turn wxAuiManager's gripper off, and the toolbar's on.
+
+            wxAuiToolBar* tb = wx_static_cast(wxAuiToolBar*, pinfo.window);
+            pinfo.SetFlag(wxAuiPaneInfo::optionGripper, false);
+            tb->SetGripperVisible(true);
+        }
+    }
+
+
     if (pinfo.best_size == wxDefaultSize &&
         pinfo.window)
     {
@@ -1022,6 +1041,8 @@ bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& pane_info)
                 pinfo.best_size.y = pinfo.min_size.y;
         }
     }
+
+
 
     return true;
 }
@@ -1060,6 +1081,8 @@ bool wxAuiManager::AddPane(wxWindow* window,
 bool wxAuiManager::InsertPane(wxWindow* window, const wxAuiPaneInfo& pane_info,
                                 int insert_level)
 {
+    wxASSERT_MSG(window, wxT("NULL window ptrs are not allowed"));
+
     // shift the panes around, depending on the insert level
     switch (insert_level)
     {
@@ -1120,6 +1143,8 @@ bool wxAuiManager::InsertPane(wxWindow* window, const wxAuiPaneInfo& pane_info,
 // method will not destroy the window that is removed.
 bool wxAuiManager::DetachPane(wxWindow* window)
 {
+    wxASSERT_MSG(window, wxT("NULL window ptrs are not allowed"));
+
     int i, count;
     for (i = 0, count = m_panes.GetCount(); i < count; ++i)
     {
@@ -2311,7 +2336,7 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
             cont->Add(middle, 1, wxEXPAND);
              else
             delete middle;
-            
+
 
 
         // find any bottom docks in this layer
@@ -2373,6 +2398,7 @@ void wxAuiManager::GetDockSizeConstraint(double* width_pct, double* height_pct) 
 void wxAuiManager::Update()
 {
     m_hover_button = NULL;
+    m_action_part = NULL;
 
     wxSizer* sizer;
     int i, pane_count = m_panes.GetCount();
@@ -2851,7 +2877,8 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
                     (part->dock->dock_direction != wxAUI_DOCK_CENTER &&
                      part->dock->dock_direction != wxAUI_DOCK_NONE)))
                 {
-                    drop.Float();
+                    if (drop.IsFloatable())
+                        drop.Float();
                 }
 
                 m_skipping = false;
@@ -3564,7 +3591,6 @@ void wxAuiManager::OnFloatingPaneMoved(wxWindow* wnd, wxDirection dir)
     wxPoint frame_pos = pane.frame->GetPosition();
     wxPoint action_offset(pt.x-frame_pos.x, pt.y-frame_pos.y);
 
-
     // if a key modifier is pressed while dragging the frame,
     // don't dock the window
     if (!wxGetKeyState(WXK_CONTROL) && !wxGetKeyState(WXK_ALT))
@@ -3797,7 +3823,7 @@ void wxAuiManager::OnFindManager(wxAuiManagerEvent& evt)
     // if we are managing a child frame, get the 'real' manager
     if (window->IsKindOf(CLASSINFO(wxAuiFloatingFrame)))
     {
-        wxAuiFloatingFrame* float_frame = static_cast<wxAuiFloatingFrame*>(window);
+        wxAuiFloatingFrame* float_frame = wx_static_cast(wxAuiFloatingFrame*, window);
         evt.SetManager(float_frame->GetOwnerManager());
         return;
     }
@@ -4175,17 +4201,21 @@ void wxAuiManager::OnLeftUp(wxMouseEvent& event)
     {
         m_hover_button = NULL;
         m_frame->ReleaseMouse();
-        UpdateButtonOnScreen(m_action_part, event);
 
-        // make sure we're still over the item that was originally clicked
-        if (m_action_part == HitTest(event.GetX(), event.GetY()))
+        if (m_action_part)
         {
-            // fire button-click event
-            wxAuiManagerEvent e(wxEVT_AUI_PANE_BUTTON);
-            e.SetManager(this);
-            e.SetPane(m_action_part->pane);
-            e.SetButton(m_action_part->button->button_id);
-            ProcessMgrEvent(e);
+            UpdateButtonOnScreen(m_action_part, event);
+
+            // make sure we're still over the item that was originally clicked
+            if (m_action_part == HitTest(event.GetX(), event.GetY()))
+            {
+                // fire button-click event
+                wxAuiManagerEvent e(wxEVT_AUI_PANE_BUTTON);
+                e.SetManager(this);
+                e.SetPane(m_action_part->pane);
+                e.SetButton(m_action_part->button->button_id);
+                ProcessMgrEvent(e);
+            }
         }
     }
     else if (m_action == actionClickCaption)
@@ -4248,20 +4278,23 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
 
     if (m_action == actionResize)
     {
-        wxPoint pos = m_action_part->rect.GetPosition();
-        if (m_action_part->orientation == wxHORIZONTAL)
-            pos.y = wxMax(0, event.m_y - m_action_offset.y);
-             else
-            pos.x = wxMax(0, event.m_x - m_action_offset.x);
+        if (m_action_part)
+        {
+            wxPoint pos = m_action_part->rect.GetPosition();
+            if (m_action_part->orientation == wxHORIZONTAL)
+                pos.y = wxMax(0, event.m_y - m_action_offset.y);
+                 else
+                pos.x = wxMax(0, event.m_x - m_action_offset.x);
 
-        wxRect rect(m_frame->ClientToScreen(pos),
-                    m_action_part->rect.GetSize());
+            wxRect rect(m_frame->ClientToScreen(pos),
+                        m_action_part->rect.GetSize());
 
-        wxScreenDC dc;
-        if (!m_action_hintrect.IsEmpty())
-            DrawResizeHint(dc, m_action_hintrect);
-        DrawResizeHint(dc, rect);
-        m_action_hintrect = rect;
+            wxScreenDC dc;
+            if (!m_action_hintrect.IsEmpty())
+                DrawResizeHint(dc, m_action_hintrect);
+            DrawResizeHint(dc, rect);
+            m_action_hintrect = rect;
+        }
     }
     else if (m_action == actionClickCaption)
     {
@@ -4271,8 +4304,9 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
         // caption has been clicked.  we need to check if the mouse
         // is now being dragged. if it is, we need to change the
         // mouse action to 'drag'
-        if (abs(event.m_x - m_action_start.x) > drag_x_threshold ||
-            abs(event.m_y - m_action_start.y) > drag_y_threshold)
+        if (m_action_part &&
+            (abs(event.m_x - m_action_start.x) > drag_x_threshold ||
+             abs(event.m_y - m_action_start.y) > drag_y_threshold))
         {
             wxAuiPaneInfo* pane_info = m_action_part->pane;
 

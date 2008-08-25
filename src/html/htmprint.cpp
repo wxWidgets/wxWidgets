@@ -33,6 +33,10 @@
 #include "wx/wfstream.h"
 
 
+// default font size of normal text (HTML font size 0) for printing, in points:
+#define DEFAULT_PRINT_FONT_SIZE   12
+
+
 //--------------------------------------------------------------------------------
 // wxHtmlDCRenderer
 //--------------------------------------------------------------------------------
@@ -46,6 +50,7 @@ wxHtmlDCRenderer::wxHtmlDCRenderer() : wxObject()
     m_Parser = new wxHtmlWinParser();
     m_FS = new wxFileSystem();
     m_Parser->SetFS(m_FS);
+    SetStandardFonts(DEFAULT_PRINT_FONT_SIZE);
 }
 
 
@@ -127,7 +132,7 @@ int wxHtmlDCRenderer::Render(int x, int y,
         m_DC->SetClippingRegion(x, y, m_Width, hght);
         m_Cells->Draw(*m_DC,
                       x, (y - from),
-                      y, pbreak + (y /*- from*/),
+                      y, y + hght,
                       rinfo);
         m_DC->DestroyClippingRegion();
     }
@@ -161,6 +166,7 @@ wxHtmlPrintout::wxHtmlPrintout(const wxString& title) : wxPrintout(title)
     m_Footers[0] = m_Footers[1] = wxEmptyString;
     m_HeaderHeight = m_FooterHeight = 0;
     SetMargins(); // to default values
+    SetStandardFonts(DEFAULT_PRINT_FONT_SIZE);
 }
 
 
@@ -200,7 +206,8 @@ void wxHtmlPrintout::OnPreparePrinting()
     wxDisplaySize(&scr_w, &scr_h);
     GetDC()->GetSize(&dc_w, &dc_h);
 
-    GetDC()->SetUserScale((double)dc_w / (double)pageWidth, (double)dc_w / (double)pageWidth);
+    GetDC()->SetUserScale((double)dc_w / (double)pageWidth,
+                          (double)dc_h / (double)pageHeight);
 
     /* prepare headers/footers renderer: */
 
@@ -406,7 +413,8 @@ void wxHtmlPrintout::RenderPage(wxDC *dc, int page)
     GetPPIScreen(&ppiScreenX, &ppiScreenY);
     wxUnusedVar(ppiScreenX);
 
-    dc->SetUserScale((double)dc_w / (double)pageWidth, (double)dc_w / (double)pageWidth);
+    dc->SetUserScale((double)dc_w / (double)pageWidth,
+                     (double)dc_h / (double)pageHeight);
 
     m_Renderer->SetDC(dc, (double)ppiPrinterY / (double)ppiScreenY);
 
@@ -500,7 +508,7 @@ wxHtmlEasyPrinting::wxHtmlEasyPrinting(const wxString& name, wxWindow *parentWin
     m_PageSetupData->SetMarginTopLeft(wxPoint(25, 25));
     m_PageSetupData->SetMarginBottomRight(wxPoint(25, 25));
 
-    SetFonts(wxEmptyString, wxEmptyString, NULL);
+    SetStandardFonts(DEFAULT_PRINT_FONT_SIZE);
 }
 
 

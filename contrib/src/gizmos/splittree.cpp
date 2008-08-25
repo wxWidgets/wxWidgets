@@ -265,6 +265,10 @@ void wxRemotelyScrolledTreeCtrl::ScrollToLine(int WXUNUSED(posHoriz), int posVer
     if (!IsKindOf(CLASSINFO(wxGenericTreeCtrl)))
 #endif // USE_GENERIC_TREECTRL
     {
+        // JLD - 2008-07-31 - call SetScrollInfo() - Vista ignores nPos passed in WM_VSCROLL wParam
+        SCROLLINFO si = {sizeof(SCROLLINFO), SIF_POS, 0, 0, 0, posVert, 0};
+        SetScrollInfo((HWND) GetHWND(), SB_VERT, &si, FALSE);
+
         UINT sbCode = SB_THUMBPOSITION;
         HWND vertScrollBar = 0;
         MSWDefWindowProc((WXUINT) WM_VSCROLL, MAKELONG(sbCode, posVert), (WXLPARAM) vertScrollBar);
@@ -373,7 +377,7 @@ void wxRemotelyScrolledTreeCtrl::AdjustRemoteScrollbars()
         if (scrolledWindow)
         {
             wxRect itemRect;
-            if (GetBoundingRect(GetFirstVisibleItem(), itemRect))
+            if (GetBoundingRect(GetRootItem(), itemRect))
             {
                 // Actually, the real height seems to be 1 less than reported
                 // (e.g. 16 instead of 16)

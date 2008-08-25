@@ -1066,6 +1066,9 @@ void wxMacCGContext::GetTextExtent( const wxString &str, wxCoord *width, wxCoord
         *width = FixedToInt(textAfter - textBefore) ;
 
     ::ATSUDisposeTextLayout(atsuLayout);
+#if SIZEOF_WCHAR_T == 4
+    free( ubuf ) ;
+#endif
 }
 
 void wxMacCGContext::GetPartialTextExtents(const wxString& text, wxArrayInt& widths) const
@@ -1123,6 +1126,9 @@ void wxMacCGContext::GetPartialTextExtents(const wxString& text, wxArrayInt& wid
     }
 
     ::ATSUDisposeTextLayout(atsuLayout);
+#if SIZEOF_WCHAR_T == 4
+    free( ubuf ) ;
+#endif
 }
 
 void wxMacCGContext::SetFont( const wxFont &font )

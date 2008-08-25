@@ -978,6 +978,10 @@ SOURCE=..\..\include\wx\aui\aui.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\aui\auibar.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\aui\auibook.h
 # End Source File
 # Begin Source File
@@ -1000,6 +1004,10 @@ SOURCE=..\..\include\wx\aui\tabmdi.h
 # Begin Group "Source Files"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\src\aui\auibar.cpp
+# End Source File
 # Begin Source File
 
 SOURCE=..\..\src\aui\auibook.cpp

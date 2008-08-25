@@ -1235,7 +1235,7 @@ wxArrayString wxCmdLineParser::ConvertStringToArgs(const wxChar *p)
                 break;
             }
 
-            lastBS = *p == _T('\\');
+            lastBS = !lastBS && *p == _T('\\');
 
             arg += *p;
         }

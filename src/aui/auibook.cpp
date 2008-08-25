@@ -1006,7 +1006,7 @@ wxAuiSimpleTabArt::~wxAuiSimpleTabArt()
 
 wxAuiTabArt* wxAuiSimpleTabArt::Clone()
 {
-    return static_cast<wxAuiTabArt*>(new wxAuiSimpleTabArt);
+    return wx_static_cast(wxAuiTabArt*, new wxAuiSimpleTabArt);
 }
 
 
@@ -2334,6 +2334,7 @@ BEGIN_EVENT_TABLE(wxAuiTabCtrl, wxControl)
     EVT_SET_FOCUS(wxAuiTabCtrl::OnSetFocus)
     EVT_KILL_FOCUS(wxAuiTabCtrl::OnKillFocus)
     EVT_CHAR(wxAuiTabCtrl::OnChar)
+    EVT_MOUSE_CAPTURE_LOST(wxAuiTabCtrl::OnCaptureLost)
 END_EVENT_TABLE()
 
 
@@ -2413,6 +2414,10 @@ void wxAuiTabCtrl::OnLeftDown(wxMouseEvent& evt)
         Refresh();
         Update();
     }
+}
+
+void wxAuiTabCtrl::OnCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(event))
+{
 }
 
 void wxAuiTabCtrl::OnLeftUp(wxMouseEvent& evt)
@@ -4374,7 +4379,7 @@ void wxAuiNotebook::OnTabButton(wxCommandEvent& command_evt)
         {
             // if the close button is to the right, use the active
             // page selection to determine which page to close
-            selection = GetSelection();
+            selection = tabs->GetActivePage();
         }
 
         if (selection != -1)

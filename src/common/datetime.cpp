@@ -147,59 +147,26 @@ wxCUSTOM_TYPE_INFO(wxDateTime, wxToStringConverter<wxDateTime> , wxFromStringCon
 #if !defined(WX_TIMEZONE) && !defined(WX_GMTOFF_IN_TM)
     #if defined(__WXPALMOS__)
         #define WX_GMTOFF_IN_TM
-    #elif defined(__BORLANDC__) || defined(__MINGW32__) || defined(__VISAGECPP__)
+    #elif defined(__WXMSW__)
+        static long wxGetTimeZone()
+        {
+            static long s_timezone = MAXLONG; // invalid timezone
+            if (s_timezone == MAXLONG)
+            {
+                TIME_ZONE_INFORMATION info;
+                GetTimeZoneInformation(&info);
+                s_timezone = info.Bias * 60;  // convert minutes to seconds
+            }
+            return s_timezone;
+        }
+        #define WX_TIMEZONE wxGetTimeZone()
+    #elif defined(__VISAGECPP__)
         #define WX_TIMEZONE _timezone
     #elif defined(__MWERKS__)
         long wxmw_timezone = 28800;
         #define WX_TIMEZONE wxmw_timezone
-    #elif defined(__DJGPP__) || defined(__WINE__)
-        #include <sys/timeb.h>
-        #include <values.h>
-        static long wxGetTimeZone()
-        {
-            static long timezone = MAXLONG; // invalid timezone
-            if (timezone == MAXLONG)
-            {
-                struct timeb tb;
-                ftime(&tb);
-                timezone = tb.timezone;
-            }
-            return timezone;
-        }
-        #define WX_TIMEZONE wxGetTimeZone()
     #elif defined(__DARWIN__)
         #define WX_GMTOFF_IN_TM
-    #elif defined(__WXWINCE__) && defined(__VISUALC8__)
-        // _timezone is not present in dynamic run-time library
-        #if 0
-        // Solution (1): use the function equivalent of _timezone
-        static long wxGetTimeZone()
-        {
-            static long s_Timezone = MAXLONG; // invalid timezone
-            if (s_Timezone == MAXLONG)
-            {
-                int t;
-                _get_timezone(& t);
-                s_Timezone = (long) t;
-            }
-            return s_Timezone;
-        }
-        #define WX_TIMEZONE wxGetTimeZone()
-        #elif 1
-        // Solution (2): using GetTimeZoneInformation
-        static long wxGetTimeZone()
-        {
-            static long timezone = MAXLONG; // invalid timezone
-            if (timezone == MAXLONG)
-            {
-                TIME_ZONE_INFORMATION tzi;
-                ::GetTimeZoneInformation(&tzi);
-                timezone = tzi.Bias;
-            }
-            return timezone;
-        }
-        #define WX_TIMEZONE wxGetTimeZone()
-        #endif
     #else // unknown platform - try timezone
         #define WX_TIMEZONE timezone
     #endif

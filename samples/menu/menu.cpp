@@ -855,8 +855,9 @@ void MyFrame::OnGetLabelMenuItem(wxCommandEvent& WXUNUSED(event))
 
     if ( item )
     {
+        wxString label(item->GetItemLabelText());
         wxLogMessage(_T("The label of the last menu item is '%s'"),
-                     item->GetLabel().c_str());
+                     label.c_str());
     }
 }
 
@@ -871,14 +872,14 @@ void MyFrame::OnSetLabelMenuItem(wxCommandEvent& WXUNUSED(event))
                          (
                             _T("Enter new label: "),
                             _T("Change last menu item text"),
-                            item->GetLabel(),
+                            item->GetItemLabelText(),
                             this
                          );
         label.Replace( _T("\\t"), _T("\t") );
 
         if ( !label.empty() )
         {
-            item->SetText(label);
+            item->SetItemLabel(label);
         }
     }
 }

@@ -563,9 +563,10 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
     // showtime
     if ( m_NavigPan && m_Splitter )
     {
-        m_Splitter->SetMinimumPaneSize(20);
-        if ( m_Cfg.navig_on )
-            m_Splitter->SplitVertically(m_NavigPan, m_HtmlWin, m_Cfg.sashpos);
+        if (m_NavigPan)
+            m_Splitter->SetMinimumPaneSize(m_NavigPan->GetBestSize().x);
+        else
+            m_Splitter->SetMinimumPaneSize(20);
 
         if ( m_Cfg.navig_on )
         {
@@ -1230,9 +1231,19 @@ public:
 
         topsizer->Add(new wxStaticText(this, wxID_ANY, _("Preview:")),
                         0, wxLEFT | wxTOP, 10);
+
+        int style = wxHW_SCROLLBAR_AUTO;
+
+#ifdef __WXMSW__
+        style |= GetThemedBorderStyle();
+#else
+        style |= wxBORDER_SUNKEN;
+#endif
+        topsizer->AddSpacer(5);
+
         topsizer->Add(TestWin = new wxHtmlWindow(this, wxID_ANY, wxDefaultPosition, wxSize(20, 150),
-                                                 wxHW_SCROLLBAR_AUTO | wxSUNKEN_BORDER),
-                        1, wxEXPAND | wxLEFT|wxTOP|wxRIGHT, 10);
+                                                 style),
+                        1, wxEXPAND | wxLEFT|wxRIGHT, 10);
 
         wxBoxSizer *sizer2 = new wxBoxSizer(wxHORIZONTAL);
         wxButton *ok;

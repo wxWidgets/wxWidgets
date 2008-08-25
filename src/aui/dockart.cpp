@@ -57,14 +57,14 @@
 
 
 // wxAuiBlendColour is used by wxAuiStepColour
-double wxAuiBlendColour(double fg, double bg, double alpha)
+unsigned char wxAuiBlendColour(unsigned char fg, unsigned char bg, double alpha)
 {
     double result = bg + (alpha * (fg - bg));
     if (result < 0.0)
         result = 0.0;
     if (result > 255)
         result = 255;
-    return result;
+    return (unsigned char)result;
 }
 
 // wxAuiStepColour() it a utility function that simply darkens
@@ -75,35 +75,37 @@ wxColor wxAuiStepColour(const wxColor& c, int ialpha)
 {
     if (ialpha == 100)
         return c;
-        
-    double r = c.Red(), g = c.Green(), b = c.Blue();
-    double bg;
-    
+
+    unsigned char r = c.Red(),
+                  g = c.Green(),
+                  b = c.Blue();
+    unsigned char bg;
+
     // ialpha is 0..200 where 0 is completely black
     // and 200 is completely white and 100 is the same
     // convert that to normal alpha 0.0 - 1.0
     ialpha = wxMin(ialpha, 200);
     ialpha = wxMax(ialpha, 0);
     double alpha = ((double)(ialpha - 100.0))/100.0;
-    
+
     if (ialpha > 100)
     {
         // blend with white
-        bg = 255.0;
+        bg = 255;
         alpha = 1.0 - alpha;  // 0 = transparent fg; 1 = opaque fg
     }
-     else
+    else
     {
         // blend with black
-        bg = 0.0;
-        alpha = 1.0 + alpha;  // 0 = transparent fg; 1 = opaque fg
+        bg = 0;
+        alpha += 1.0;         // 0 = transparent fg; 1 = opaque fg
     }
-    
+
     r = wxAuiBlendColour(r, bg, alpha);
     g = wxAuiBlendColour(g, bg, alpha);
     b = wxAuiBlendColour(b, bg, alpha);
-    
-    return wxColour((unsigned char)r, (unsigned char)g, (unsigned char)b);
+
+    return wxColour(r, g, b);
 }
 
 
@@ -130,7 +132,7 @@ wxBitmap wxAuiBitmapFromBits(const unsigned char bits[], int w, int h,
     img.SetMaskColour(123,123,123);
     return wxBitmap(img);
 }
-                             
+
 
 static void DrawGradientRectangle(wxDC& dc,
                                   const wxRect& rect,
@@ -151,8 +153,8 @@ static void DrawGradientRectangle(wxDC& dc,
     for (int i = 0; i <= high; ++i)
     {
         int r,g,b;
-        
-        
+
+
         r = start_color.Red() + (high <= 0 ? 0 : (((i*rd*100)/high)/100));
         g = start_color.Green() + (high <= 0 ? 0 : (((i*gd*100)/high)/100));
         b = start_color.Blue() + (high <= 0 ? 0 : (((i*bd*100)/high)/100));
@@ -172,23 +174,23 @@ static void DrawGradientRectangle(wxDC& dc,
 wxString wxAuiChopText(wxDC& dc, const wxString& text, int max_size)
 {
     wxCoord x,y;
-    
+
     // first check if the text fits with no problems
     dc.GetTextExtent(text, &x, &y);
     if (x <= max_size)
         return text;
-        
+
     size_t i, len = text.Length();
     size_t last_good_length = 0;
     for (i = 0; i < len; ++i)
     {
         wxString s = text.Left(i);
         s += wxT("...");
-        
+
         dc.GetTextExtent(s, &x, &y);
         if (x > max_size)
             break;
-        
+
         last_good_length = i;
     }
 
@@ -215,7 +217,7 @@ wxAuiDefaultDockArt::wxAuiDefaultDockArt()
     {
         base_colour = wxAuiStepColour(base_colour, 92);
     }
-    
+
     m_base_colour = base_colour;
     wxColor darker1_colour = wxAuiStepColour(base_colour, 85);
     wxColor darker2_colour = wxAuiStepColour(base_colour, 75);
@@ -256,11 +258,11 @@ wxAuiDefaultDockArt::wxAuiDefaultDockArt()
          0xFF, 0xFF, 0xFF, 0xFF, 0x0F, 0xFE, 0x03, 0xF8, 0x01, 0xF0, 0x19, 0xF3,
          0xB8, 0xE3, 0xF0, 0xE1, 0xE0, 0xE0, 0xF0, 0xE1, 0xB8, 0xE3, 0x19, 0xF3,
          0x01, 0xF0, 0x03, 0xF8, 0x0F, 0xFE, 0xFF, 0xFF };
-#elif defined( __WXGTK__) 	 
-     static unsigned char close_bits[]={ 	 
-         0xff, 0xff, 0xff, 0xff, 0x07, 0xf0, 0xfb, 0xef, 0xdb, 0xed, 0x8b, 0xe8, 	 
-         0x1b, 0xec, 0x3b, 0xee, 0x1b, 0xec, 0x8b, 0xe8, 0xdb, 0xed, 0xfb, 0xef, 	 
-         0x07, 0xf0, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff }; 	 
+#elif defined( __WXGTK__)
+     static unsigned char close_bits[]={
+         0xff, 0xff, 0xff, 0xff, 0x07, 0xf0, 0xfb, 0xef, 0xdb, 0xed, 0x8b, 0xe8,
+         0x1b, 0xec, 0x3b, 0xee, 0x1b, 0xec, 0x8b, 0xe8, 0xdb, 0xed, 0xfb, 0xef,
+         0x07, 0xf0, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
 #else
     static unsigned char close_bits[]={
          0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xe7, 0xf3, 0xcf, 0xf9,
@@ -277,7 +279,7 @@ wxAuiDefaultDockArt::wxAuiDefaultDockArt()
         0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x1f, 0xf0, 0x1f, 0xf0, 0xdf, 0xf7,
         0x07, 0xf4, 0x07, 0xf4, 0xf7, 0xf5, 0xf7, 0xf1, 0xf7, 0xfd, 0xf7, 0xfd,
         0x07, 0xfc, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
-        
+
     static unsigned char pin_bits[]={
         0xff,0xff,0xff,0xff,0xff,0xff,0x1f,0xfc,0xdf,0xfc,0xdf,0xfc,
         0xdf,0xfc,0xdf,0xfc,0xdf,0xfc,0x0f,0xf8,0x7f,0xff,0x7f,0xff,
@@ -624,9 +626,9 @@ void wxAuiDefaultDockArt::DrawCaption(wxDC& dc, wxWindow *WXUNUSED(window),
     if (pane.HasCloseButton())
         clip_rect.width -= m_button_size;
     if (pane.HasPinButton())
-        clip_rect.width -= m_button_size;    
+        clip_rect.width -= m_button_size;
     if (pane.HasMaximizeButton())
-        clip_rect.width -= m_button_size;    
+        clip_rect.width -= m_button_size;
 
     wxString draw_text = wxAuiChopText(dc, text, clip_rect.width);
 

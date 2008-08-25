@@ -31,7 +31,7 @@
 // wxScreenDC
 //-----------------------------------------------------------------------------
 
-#warning "FIXME: this doesn't work (neither single app nor multiapp core)
+#warning "FIXME: this doesn't work (neither single app nor multiapp core)"
 // FIXME: maybe use a subsurface as well?
 
 IMPLEMENT_DYNAMIC_CLASS(wxScreenDC, wxDC)

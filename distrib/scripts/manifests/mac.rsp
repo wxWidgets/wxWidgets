@@ -61,6 +61,9 @@ src/mac/classic/morefile/*.h
 src/mac/classic/Info.plist.in
 src/mac/classic/wxmac.icns
 
+src/mac/common/*.c
+include/wx/mac/common/*.h
+
 src/mac/corefoundation/*.cpp
 
 include/wx_pb.h

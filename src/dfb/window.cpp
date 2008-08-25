@@ -28,6 +28,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/dcclient.h"
+    #include "wx/toplevel.h"
 #endif
 
 #include "wx/caret.h"
@@ -796,7 +797,10 @@ void wxWindowDFB::PaintOverlays(const wxRect& rect)
     for ( wxDfbOverlaysList::const_iterator i = m_overlays->begin();
           i != m_overlays->end(); ++i )
     {
-        wxOverlayImpl *overlay = *i;
+        // the cast is necessary in STL build because of bug in const_iterator
+        // operator*() return value
+        const wxOverlayImpl * const
+            overlay = wx_static_cast(const wxOverlayImpl *, *i);
 
         wxRect orectOrig(overlay->GetRect());
         wxRect orect(orectOrig);

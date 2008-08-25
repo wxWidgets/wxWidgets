@@ -20,6 +20,8 @@
 #include "wx/filename.h"
 #include "wx/tokenzr.h"
 #include "wx/dir.h"
+#include "wx/log.h"
+#include "wx/utils.h"
 
 #include "wx/private/fontmgr.h"
 #include "wx/dfb/wrapdfb.h"

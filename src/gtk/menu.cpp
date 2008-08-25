@@ -773,12 +773,15 @@ wxMenuItem::~wxMenuItem()
 /* static */
 wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
 {
+#if 0
     // The argument to this function will now always be in wxWidgets standard label
     // format, not GTK+ format, so we do what the other ports do.
+    // Actually, m_text is in GTK+ format this function is used on it
+    // we need to retain the original code below.
 
     return wxStripMenuCodes(text);
 
-#if 0
+#else
     wxString label;
 
     for ( const wxChar *pc = text.c_str(); *pc; pc++ )
@@ -905,10 +908,12 @@ void wxMenuItem::SetText( const wxString& str )
     {
         // if the accelerator was taken from a stock ID, just get it back from GTK+ stock
         if (wxGetStockGtkAccelerator(stockid, &accel_mods, &accel_key))
-            gtk_widget_remove_accelerator( GTK_WIDGET(m_menuItem),
-                                           m_parentMenu->m_accel,
-                                           accel_key,
-                                           accel_mods );
+            gtk_widget_add_accelerator( GTK_WIDGET(m_menuItem),
+                                        "activate",
+                                        m_parentMenu->m_accel,
+                                        accel_key,
+                                        accel_mods,
+                                        GTK_ACCEL_VISIBLE);
     }
 }
 
@@ -1140,18 +1145,9 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
             wxASSERT_MSG( mitem->GetKind() == wxITEM_NORMAL,
                             _T("only normal menu items can have bitmaps") );
 
-            if ( bitmap.HasPixbuf() )
-            {
-                image = gtk_image_new_from_pixbuf(bitmap.GetPixbuf());
-            }
-            else
-            {
-                GdkPixmap *gdk_pixmap = bitmap.GetPixmap();
-                GdkBitmap *gdk_bitmap = bitmap.GetMask() ?
-                                            bitmap.GetMask()->GetBitmap() :
-                                            (GdkBitmap*) NULL;
-                image = gtk_image_new_from_pixmap( gdk_pixmap, gdk_bitmap );
-            }
+            // always use pixbuf, because pixmap mask does not
+            // work with disabled images in some themes
+            image = gtk_image_new_from_pixbuf(bitmap.GetPixbuf());
         }
 
         if ( image )

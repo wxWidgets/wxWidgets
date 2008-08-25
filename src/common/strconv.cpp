@@ -66,6 +66,8 @@
 
 // includes Mac headers
 #include "wx/mac/private.h"
+#include "wx/thread.h"
+
 #endif
 
 
@@ -2800,10 +2802,14 @@ public:
 #else
         ubuf = (UniChar*) (buf ? buf : tbuf) ;
 #endif
-
-        status = TECConvertText(
+        {
+#if wxUSE_THREADS
+            wxMutexLocker lock( m_MB2WC_guard );
+#endif
+            status = TECConvertText(
             m_MB2WC_converter, (ConstTextPtr) psz, byteInLen, &byteInLen,
             (TextPtr) ubuf, byteBufferLen, &byteOutLen);
+        }
 
 #if SIZEOF_WCHAR_T == 4
         // we have to terminate here, because n might be larger for the trailing zero, and if UniChar
@@ -2854,10 +2860,15 @@ public:
         ubuf = (UniChar*) psz ;
 #endif
 
-        status = TECConvertText(
+        {
+#if wxUSE_THREADS
+            wxMutexLocker lock( m_WC2MB_guard );
+#endif
+            status = TECConvertText(
             m_WC2MB_converter, (ConstTextPtr) ubuf, byteInLen, &byteInLen,
             (TextPtr) (buf ? buf : tbuf), byteBufferLen, &byteOutLen);
-
+        }
+        
 #if SIZEOF_WCHAR_T == 4
         free( ubuf ) ;
 #endif
@@ -2898,6 +2909,10 @@ public:
 protected :
     mutable TECObjectRef m_MB2WC_converter;
     mutable TECObjectRef m_WC2MB_converter;
+#if wxUSE_THREADS
+    mutable wxMutex m_MB2WC_guard;
+    mutable wxMutex m_WC2MB_guard;
+#endif
 
     TextEncodingBase m_char_encoding;
     TextEncodingBase m_unicode_encoding;
@@ -2958,15 +2973,20 @@ public :
         ByteCount dcubufread , dcubufwritten ;
         UniChar *dcubuf = (UniChar*) malloc( dcubuflen ) ;
 
-        ConvertFromUnicodeToText( m_uni , byteInLen , ubuf ,
-            kUnicodeDefaultDirectionMask, 0, NULL, NULL, NULL, dcubuflen  , &dcubufread , &dcubufwritten , dcubuf ) ;
+        {
+#if wxUSE_THREADS
+            wxMutexLocker lock( m_WC2MB_guard );
+#endif
+            ConvertFromUnicodeToText( m_uni , byteInLen , ubuf ,
+                kUnicodeDefaultDirectionMask, 0, NULL, NULL, NULL, dcubuflen  , &dcubufread , &dcubufwritten , dcubuf ) ;
 
-        // we now convert that decomposed buffer into UTF8
+            // we now convert that decomposed buffer into UTF8
 
-        status = TECConvertText(
+            status = TECConvertText(
             m_WC2MB_converter, (ConstTextPtr) dcubuf, dcubufwritten, &dcubufread,
             (TextPtr) (buf ? buf : tbuf), byteBufferLen, &byteOutLen);
-
+        }
+        
         free( dcubuf );
 
 #if SIZEOF_WCHAR_T == 4
@@ -3015,16 +3035,21 @@ public :
         ByteCount dcubufread , dcubufwritten ;
         UniChar *dcubuf = (UniChar*) malloc( dcubuflen ) ;
 
-        status = TECConvertText(
+        {
+#if wxUSE_THREADS
+            wxMutexLocker lock( m_MB2WC_guard );
+#endif
+            status = TECConvertText(
                                 m_MB2WC_converter, (ConstTextPtr) psz, byteInLen, &byteInLen,
                                 (TextPtr) dcubuf, dcubuflen, &byteOutLen);
-        // we have to terminate here, because n might be larger for the trailing zero, and if UniChar
-        // is not properly terminated we get random characters at the end
-        dcubuf[byteOutLen / sizeof( UniChar ) ] = 0 ;
+            // we have to terminate here, because n might be larger for the trailing zero, and if UniChar
+            // is not properly terminated we get random characters at the end
+            dcubuf[byteOutLen / sizeof( UniChar ) ] = 0 ;
 
-        // now from the decomposed UniChar to properly composed uniChar
-        ConvertFromUnicodeToText( m_uniBack , byteOutLen , dcubuf ,
+            // now from the decomposed UniChar to properly composed uniChar
+            ConvertFromUnicodeToText( m_uniBack , byteOutLen , dcubuf ,
                                   kUnicodeDefaultDirectionMask, 0, NULL, NULL, NULL, dcubuflen  , &dcubufread , &dcubufwritten , ubuf ) ;
+        }
 
         free( dcubuf );
         byteOutLen = dcubufwritten ;
@@ -3205,6 +3230,16 @@ wxCSConv::wxCSConv(const wxChar *charset)
 
 #if wxUSE_FONTMAP
     m_encoding = wxFontMapperBase::GetEncodingFromName(charset);
+    if ( m_encoding == wxFONTENCODING_MAX )
+    {
+        // set to unknown/invalid value
+        m_encoding = wxFONTENCODING_SYSTEM;
+    }
+    else if ( m_encoding == wxFONTENCODING_DEFAULT )
+    {
+        // wxFONTENCODING_DEFAULT is same as US-ASCII in this context
+        m_encoding = wxFONTENCODING_ISO8859_1;
+    }
 #else
     m_encoding = wxFONTENCODING_SYSTEM;
 #endif
@@ -3506,7 +3541,7 @@ void wxCSConv::CreateConvIfNeeded() const
         if ( !m_name && m_encoding == wxFONTENCODING_SYSTEM )
         {
 #if wxUSE_INTL
-            self->m_name = wxStrdup(wxLocale::GetSystemEncodingName());
+            self->m_encoding = wxLocale::GetSystemEncoding();
 #else
             // fallback to some reasonable default:
             self->m_encoding = wxFONTENCODING_ISO8859_1;
@@ -3540,7 +3575,19 @@ size_t wxCSConv::ToWChar(wchar_t *dst, size_t dstLen,
         return m_convReal->ToWChar(dst, dstLen, src, srcLen);
 
     // latin-1 (direct)
-    return wxMBConv::ToWChar(dst, dstLen, src, srcLen);
+    if ( srcLen == wxNO_LEN )
+        srcLen = strlen(src) + 1; // take trailing NUL too
+
+    if ( dst )
+    {
+        if ( dstLen < srcLen )
+            return wxCONV_FAILED;
+
+        for ( size_t n = 0; n < srcLen; n++ )
+            dst[n] = (unsigned char)(src[n]);
+    }
+
+    return srcLen;
 }
 
 size_t wxCSConv::FromWChar(char *dst, size_t dstLen,
@@ -3552,57 +3599,45 @@ size_t wxCSConv::FromWChar(char *dst, size_t dstLen,
         return m_convReal->FromWChar(dst, dstLen, src, srcLen);
 
     // latin-1 (direct)
-    return wxMBConv::FromWChar(dst, dstLen, src, srcLen);
+    if ( srcLen == wxNO_LEN )
+        srcLen = wxWcslen(src) + 1;
+
+    if ( dst )
+    {
+        if ( dstLen < srcLen )
+            return wxCONV_FAILED;
+
+        for ( size_t n = 0; n < srcLen; n++ )
+        {
+            if ( src[n] > 0xFF )
+                return wxCONV_FAILED;
+
+            dst[n] = (char)src[n];
+        }
+
+    }
+    else // still need to check the input validity
+    {
+        for ( size_t n = 0; n < srcLen; n++ )
+        {
+            if ( src[n] > 0xFF )
+                return wxCONV_FAILED;
+        }
+    }
+
+    return srcLen;
 }
 
 size_t wxCSConv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 {
-    CreateConvIfNeeded();
-
-    if (m_convReal)
-        return m_convReal->MB2WC(buf, psz, n);
-
-    // latin-1 (direct)
-    size_t len = strlen(psz);
-
-    if (buf)
-    {
-        for (size_t c = 0; c <= len; c++)
-            buf[c] = (unsigned char)(psz[c]);
-    }
-
-    return len;
+    // this function exists only for ABI-compatibility in 2.8 branch
+    return wxMBConv::MB2WC(buf, psz, n);
 }
 
 size_t wxCSConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 {
-    CreateConvIfNeeded();
-
-    if (m_convReal)
-        return m_convReal->WC2MB(buf, psz, n);
-
-    // latin-1 (direct)
-    const size_t len = wxWcslen(psz);
-    if (buf)
-    {
-        for (size_t c = 0; c <= len; c++)
-        {
-            if (psz[c] > 0xFF)
-                return wxCONV_FAILED;
-
-            buf[c] = (char)psz[c];
-        }
-    }
-    else
-    {
-        for (size_t c = 0; c <= len; c++)
-        {
-            if (psz[c] > 0xFF)
-                return wxCONV_FAILED;
-        }
-    }
-
-    return len;
+    // this function exists only for ABI-compatibility in 2.8 branch
+    return wxMBConv::WC2MB(buf, psz, n);
 }
 
 size_t wxCSConv::GetMBNulLen() const
