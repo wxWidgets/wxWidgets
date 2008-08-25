@@ -2399,8 +2399,16 @@ public:
     //@{
     /**
         Attach a tooltip to the window.
-        See also: GetToolTip(),
-         wxToolTip
+
+        wxToolTip pointer can be @NULL in the overload taking the pointer,
+        meaning to unset any existing tooltips, however UnsetToolTip() provides
+        a more readable alternative to this operation.
+
+        Notice that these methods are always available, even if wxWidgets was
+        compiled with @c wxUSE_TOOLTIPS set to 0, but don't do anything in this
+        case.
+
+        @see GetToolTip(), wxToolTip
     */
     void SetToolTip(const wxString& tip);
     void SetToolTip(wxToolTip* tip);
@@ -2583,6 +2591,15 @@ public:
              "Window IDs Overview"
     */
     static void UnreserveControlId(wxWindowID id, int count = 1);
+
+    /**
+        Unset any existing tooltip.
+
+        @since 2.9.0
+
+        @see SetToolTip()
+     */
+    void UnsetToolTip();
 
     /**
         Calling this method immediately repaints the invalidated area of the window and
