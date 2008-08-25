@@ -196,11 +196,11 @@ public:
 
     /**
         Set page footer. The following macros can be used inside it:
-         @DATE@ is replaced by the current date in default format
-         @PAGENUM@ is replaced by page number
-         @PAGESCNT@ is replaced by total number of pages
-         @TIME@ is replaced by the current time in default format
-         @TITLE@ is replaced with the title of the document
+         @@DATE@ is replaced by the current date in default format
+         @@PAGENUM@ is replaced by page number
+         @@PAGESCNT@ is replaced by total number of pages
+         @@TIME@ is replaced by the current time in default format
+         @@TITLE@ is replaced with the title of the document
         
         @param footer
             HTML text to be used as footer.
@@ -211,11 +211,11 @@ public:
 
     /**
         Set page header. The following macros can be used inside it:
-         @DATE@ is replaced by the current date in default format
-         @PAGENUM@ is replaced by page number
-         @PAGESCNT@ is replaced by total number of pages
-         @TIME@ is replaced by the current time in default format
-         @TITLE@ is replaced with the title of the document
+         @@DATE@ is replaced by the current date in default format
+         @@PAGENUM@ is replaced by page number
+         @@PAGESCNT@ is replaced by total number of pages
+         @@TIME@ is replaced by the current time in default format
+         @@TITLE@ is replaced with the title of the document
         
         @param header
             HTML text to be used as header.
@@ -265,11 +265,11 @@ public:
 
     /**
         Set page footer. The following macros can be used inside it:
-         @DATE@ is replaced by the current date in default format
-         @PAGENUM@ is replaced by page number
-         @PAGESCNT@ is replaced by total number of pages
-         @TIME@ is replaced by the current time in default format
-         @TITLE@ is replaced with the title of the document
+         @@DATE@ is replaced by the current date in default format
+         @@PAGENUM@ is replaced by page number
+         @@PAGESCNT@ is replaced by total number of pages
+         @@TIME@ is replaced by the current time in default format
+         @@TITLE@ is replaced with the title of the document
         
         @param footer
             HTML text to be used as footer.
@@ -280,11 +280,11 @@ public:
 
     /**
         Set page header. The following macros can be used inside it:
-         @DATE@ is replaced by the current date in default format
-         @PAGENUM@ is replaced by page number
-         @PAGESCNT@ is replaced by total number of pages
-         @TIME@ is replaced by the current time in default format
-         @TITLE@ is replaced with the title of the document
+         @@DATE@ is replaced by the current date in default format
+         @@PAGENUM@ is replaced by page number
+         @@PAGESCNT@ is replaced by total number of pages
+         @@TIME@ is replaced by the current time in default format
+         @@TITLE@ is replaced with the title of the document
         
         @param header
             HTML text to be used as header.
