@@ -1309,7 +1309,7 @@ private:
     DECLARE_NO_COPY_CLASS(wxEndHandler)
 };
 
-#if wxUSE_STREAMS
+#if HAS_PIPE_INPUT_STREAM
 
 // class for monitoring our ends of child stdout/err, should be constructed
 // with the FD and stream from wxExecuteData and will do nothing if they're
@@ -1338,7 +1338,7 @@ private:
     DECLARE_NO_COPY_CLASS(wxRedirectedIOHandler)
 };
 
-#endif // wxUSE_STREAMS
+#endif // HAS_PIPE_INPUT_STREAM
 
 // helper function which calls waitpid() and analyzes the result
 int DoWaitForChild(int pid, int flags = 0)
@@ -1413,7 +1413,7 @@ int wxAppTraits::WaitForChild(wxExecuteData& execData)
     }
     //else: synchronous execution case
 
-#if wxUSE_STREAMS
+#if HAS_PIPE_INPUT_STREAM
     wxProcess * const process = execData.process;
     if ( process && process->IsRedirected() )
     {
@@ -1437,7 +1437,7 @@ int wxAppTraits::WaitForChild(wxExecuteData& execData)
         }
     }
     //else: no IO redirection, just block waiting for the child to exit
-#endif // wxUSE_STREAMS
+#endif // HAS_PIPE_INPUT_STREAM
 
     return DoWaitForChild(execData.pid);
 }
