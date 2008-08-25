@@ -56,14 +56,14 @@
 
 
 // wxAuiBlendColour is used by wxAuiStepColour
-double wxAuiBlendColour(double fg, double bg, double alpha)
+unsigned char wxAuiBlendColour(unsigned char fg, unsigned char bg, double alpha)
 {
     double result = bg + (alpha * (fg - bg));
     if (result < 0.0)
         result = 0.0;
     if (result > 255)
         result = 255;
-    return result;
+    return (unsigned char)result;
 }
 
 // wxAuiStepColour() it a utility function that simply darkens
@@ -75,8 +75,10 @@ wxColor wxAuiStepColour(const wxColor& c, int ialpha)
     if (ialpha == 100)
         return c;
 
-    double r = c.Red(), g = c.Green(), b = c.Blue();
-    double bg;
+    unsigned char r = c.Red(),
+                  g = c.Green(),
+                  b = c.Blue();
+    unsigned char bg;
 
     // ialpha is 0..200 where 0 is completely black
     // and 200 is completely white and 100 is the same
@@ -88,13 +90,13 @@ wxColor wxAuiStepColour(const wxColor& c, int ialpha)
     if (ialpha > 100)
     {
         // blend with white
-        bg = 255.0;
+        bg = 255;
         alpha = 1.0 - alpha;  // 0 = transparent fg; 1 = opaque fg
     }
     else
     {
         // blend with black
-        bg = 0.0;
+        bg = 0;
         alpha = 1.0 + alpha;  // 0 = transparent fg; 1 = opaque fg
     }
 
@@ -102,7 +104,7 @@ wxColor wxAuiStepColour(const wxColor& c, int ialpha)
     g = wxAuiBlendColour(g, bg, alpha);
     b = wxAuiBlendColour(b, bg, alpha);
 
-    return wxColour((unsigned char)r, (unsigned char)g, (unsigned char)b);
+    return wxColour(r, g, b);
 }
 
 
