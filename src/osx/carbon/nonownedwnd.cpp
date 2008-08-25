@@ -1581,7 +1581,14 @@ void wxNonOwnedWindowCarbonImpl::Create(
         }
         else
         {
-            wclass = kPlainWindowClass ;
+            if ( HasFlag( wxNO_BORDER ) )
+            {
+                wclass = kSimpleWindowClass ;
+            }
+            else
+            {
+                wclass = kPlainWindowClass ;
+            }
             activationScopeSet = true;
             activationScope = kWindowActivationScopeNone;
         }
