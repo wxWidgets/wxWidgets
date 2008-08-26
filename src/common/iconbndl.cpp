@@ -25,7 +25,6 @@
     #include "wx/image.h"
 #endif
 
-WX_DECLARE_EXPORTED_OBJARRAY(wxIcon, wxIconArray);
 #include "wx/arrimpl.cpp"
 WX_DEFINE_OBJARRAY(wxIconArray)
 

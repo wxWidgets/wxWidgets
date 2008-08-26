@@ -17,6 +17,8 @@
 #include "wx/gdicmn.h"
 #include "wx/icon.h"
 
+WX_DECLARE_EXPORTED_OBJARRAY(wxIcon, wxIconArray);
+
 // this class can't load bitmaps of type wxBITMAP_TYPE_ICO_RESOURCE,
 // if you need them, you have to load them manually and call
 // wxIconCollection::AddIcon
