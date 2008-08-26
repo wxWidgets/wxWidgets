@@ -31767,6 +31767,7 @@ MACDIR   = $(WXDIR)/src/osx
 COCOADIR = $(WXDIR)/src/cocoa
 FTDIR    = $(WXDIR)/src/freetype
 INCDIR   = $(WXDIR)/include
+IFACEDIR = $(WXDIR)/interface
 SAMPDIR  = $(WXDIR)/samples
 DEMODIR  = $(WXDIR)/demos
 UTILSDIR = $(WXDIR)/utils
@@ -31885,6 +31886,7 @@ ALL_GUI_DIST: ALL_DIST
 	    mkdir $(DISTDIR)/include/wx/$(TOOLKITDIR)/private && \
 	    $(CP_P) $(INCDIR)/wx/$(TOOLKITDIR)/private/*.h $(DISTDIR)/include/wx/$(TOOLKITDIR)/private; \
 	fi
+	mkdir $(DISTDIR)/include/wx/meta
 	mkdir $(DISTDIR)/include/wx/generic
 	mkdir $(DISTDIR)/include/wx/html
 	mkdir $(DISTDIR)/include/wx/richtext
@@ -31892,61 +31894,90 @@ ALL_GUI_DIST: ALL_DIST
 	mkdir $(DISTDIR)/include/wx/stc
 	mkdir $(DISTDIR)/include/wx/protocol
 	mkdir $(DISTDIR)/include/wx/unix
+	mkdir $(DISTDIR)/include/wx/unix/private
 	mkdir $(DISTDIR)/include/wx/xml
 	mkdir $(DISTDIR)/include/wx/xrc
-	-$(CP_P) $(INCDIR)/wx/*.h $(DISTDIR)/include/wx
+	$(CP_P) $(INCDIR)/wx/*.h $(DISTDIR)/include/wx
 	$(CP_P) $(INCDIR)/wx/*.cpp $(DISTDIR)/include/wx
+	$(CP_P) $(INCDIR)/wx/meta/*.h $(DISTDIR)/include/wx/meta
 	$(CP_P) $(INCDIR)/wx/generic/*.h $(DISTDIR)/include/wx/generic
 	$(CP_P) $(INCDIR)/wx/html/*.h $(DISTDIR)/include/wx/html
 	$(CP_P) $(INCDIR)/wx/richtext/*.h $(DISTDIR)/include/wx/richtext
 	$(CP_P) $(INCDIR)/wx/aui/*.h $(DISTDIR)/include/wx/aui
 	$(CP_P) $(INCDIR)/wx/stc/*.h $(DISTDIR)/include/wx/stc
 	$(CP_P) $(INCDIR)/wx/unix/*.h $(DISTDIR)/include/wx/unix
+	$(CP_P) $(INCDIR)/wx/unix/private/*.h $(DISTDIR)/include/wx/unix/private
 	$(CP_P) $(INCDIR)/wx/xml/*.h $(DISTDIR)/include/wx/xml
 	$(CP_P) $(INCDIR)/wx/xrc/*.h $(DISTDIR)/include/wx/xrc
 	$(CP_P) $(INCDIR)/wx/protocol/*.h $(DISTDIR)/include/wx/protocol
+        
 	mkdir $(DISTDIR)/art
 	mkdir $(DISTDIR)/art/gtk
 	mkdir $(DISTDIR)/art/motif
 	$(CP_P) $(WXDIR)/art/*.xpm $(DISTDIR)/art
 	$(CP_P) $(WXDIR)/art/gtk/*.xpm $(DISTDIR)/art/gtk
 	$(CP_P) $(WXDIR)/art/motif/*.xpm $(DISTDIR)/art/motif
-	mkdir $(DISTDIR)/src/generic
-	mkdir $(DISTDIR)/src/html
-	mkdir $(DISTDIR)/src/richtext
-	mkdir $(DISTDIR)/src/aui
-	mkdir $(DISTDIR)/src/stc
+        
 	mkdir $(DISTDIR)/src/$(TOOLKITDIR)
-	mkdir $(DISTDIR)/src/png
-	mkdir $(DISTDIR)/src/jpeg
-	mkdir $(DISTDIR)/src/tiff
-	mkdir $(DISTDIR)/src/tiff/config
-	mkdir $(DISTDIR)/src/tiff/libtiff
-	mkdir $(DISTDIR)/src/tiff/m4
-	mkdir $(DISTDIR)/src/unix
-	mkdir $(DISTDIR)/src/xrc
-	$(CP_P) $(SRCDIR)/xrc/*.cpp $(DISTDIR)/src/xrc
-	-$(CP_P) $(COMMDIR)/*.cpp $(DISTDIR)/src/common
+	$(CP_P) $(COMMDIR)/*.cpp $(DISTDIR)/src/common
 	$(CP_P) $(COMMDIR)/*.c $(DISTDIR)/src/common
 	$(CP_P) $(COMMDIR)/*.inc $(DISTDIR)/src/common
 	$(CP_P) $(COMMDIR)/*.mms $(DISTDIR)/src/common
+        
+	mkdir $(DISTDIR)/src/xrc
+	$(CP_P) $(SRCDIR)/xrc/*.cpp $(DISTDIR)/src/xrc
+        
+	mkdir $(DISTDIR)/src/unix
 	$(CP_P) $(UNIXDIR)/*.cpp $(DISTDIR)/src/unix
 	$(CP_P) $(UNIXDIR)/*.mms $(DISTDIR)/src/unix
+        
+	mkdir $(DISTDIR)/src/generic
 	$(CP_P) $(GENDIR)/*.cpp $(DISTDIR)/src/generic
 	$(CP_P) $(GENDIR)/*.mms $(DISTDIR)/src/generic
+        
+	mkdir $(DISTDIR)/src/html
 	$(CP_P) $(HTMLDIR)/*.cpp $(DISTDIR)/src/html
+        
+	mkdir $(DISTDIR)/src/richtext
 	$(CP_P) $(RICHTEXTDIR)/*.cpp $(DISTDIR)/src/richtext
+        
+	mkdir $(DISTDIR)/src/aui
 	$(CP_P) $(AUIDIR)/*.cpp $(DISTDIR)/src/aui
-	$(CP_P) $(STCDIR)/*.cpp $(DISTDIR)/src/stc
-	$(CP_P) $(PNGDIR)/*.h $(DISTDIR)/src/png
-	$(CP_P) $(PNGDIR)/*.c $(DISTDIR)/src/png
-	$(CP_P) $(PNGDIR)/README $(DISTDIR)/src/png
+        
+	mkdir $(DISTDIR)/src/stc
+	mkdir $(DISTDIR)/src/stc/scintilla
+	mkdir $(DISTDIR)/src/stc/scintilla/src
+	mkdir $(DISTDIR)/src/stc/scintilla/include
+	$(CP_P) $(STCDIR)/*.* $(DISTDIR)/src/stc
+	$(CP_P) $(STCDIR)/scintilla/src/* $(DISTDIR)/src/stc/scintilla/src
+	$(CP_P) $(STCDIR)/scintilla/include/* $(DISTDIR)/src/stc/scintilla/include
+        
+	mkdir $(DISTDIR)/src/png
+	$(CP_PR) $(PNGDIR)/* $(DISTDIR)/src/png
+        
+	mkdir $(DISTDIR)/src/jpeg
 	$(CP_P) $(JPEGDIR)/*.h $(DISTDIR)/src/jpeg
 	$(CP_P) $(JPEGDIR)/*.c $(DISTDIR)/src/jpeg
 	$(CP_P) $(JPEGDIR)/README $(DISTDIR)/src/jpeg
+        
+	mkdir $(DISTDIR)/src/tiff
+	mkdir $(DISTDIR)/src/tiff/config
+	mkdir $(DISTDIR)/src/tiff/contrib
+	mkdir $(DISTDIR)/src/tiff/port
+	mkdir $(DISTDIR)/src/tiff/html
+	mkdir $(DISTDIR)/src/tiff/man
+	mkdir $(DISTDIR)/src/tiff/libtiff
+	mkdir $(DISTDIR)/src/tiff/tools
+	mkdir $(DISTDIR)/src/tiff/test
+	mkdir $(DISTDIR)/src/tiff/m4
 	$(CP_P) $(TIFFDIR)/config/* $(DISTDIR)/src/tiff/config
-	$(CP_P) $(TIFFDIR)/libtiff/*.c $(DISTDIR)/src/tiff/libtiff
-	$(CP_P) $(TIFFDIR)/libtiff/*.h $(DISTDIR)/src/tiff/libtiff
+	$(CP_PR) $(TIFFDIR)/contrib/* $(DISTDIR)/src/tiff/contrib
+	$(CP_P) $(TIFFDIR)/port/* $(DISTDIR)/src/tiff/port
+	$(CP_PR) $(TIFFDIR)/html/* $(DISTDIR)/src/tiff/html
+	$(CP_P) $(TIFFDIR)/man/* $(DISTDIR)/src/tiff/man
+	$(CP_P) $(TIFFDIR)/tools/* $(DISTDIR)/src/tiff/tools
+	$(CP_P) $(TIFFDIR)/test/* $(DISTDIR)/src/tiff/test
+	$(CP_P) $(TIFFDIR)/libtiff/* $(DISTDIR)/src/tiff/libtiff
 	$(CP_P) $(TIFFDIR)/m4/* $(DISTDIR)/src/tiff/m4
 	$(CP_P) $(TIFFDIR)/README $(DISTDIR)/src/tiff
 	$(CP_P) $(TIFFDIR)/VERSION $(DISTDIR)/src/tiff
@@ -32006,25 +32037,6 @@ BASE_DIST: ALL_DIST INTL_DIST
 	$(CP_P) $(SAMPDIR)/console/console.dsp $(DISTDIR)/samples/console
 	$(CP_P) $(SAMPDIR)/console/testdata.fc $(DISTDIR)/samples/console
 
-	mkdir $(DISTDIR)/utils
-	mkdir $(DISTDIR)/utils/HelpGen
-	mkdir $(DISTDIR)/utils/HelpGen/src
-	$(CP_P) $(UTILSDIR)/HelpGen/Makefile.in $(DISTDIR)/utils/HelpGen
-	$(CP_P) $(UTILSDIR)/HelpGen/src/Makefile.in $(DISTDIR)/utils/HelpGen/src
-	$(CP_P) $(UTILSDIR)/HelpGen/src/*.h $(DISTDIR)/utils/HelpGen/src
-	$(CP_P) $(UTILSDIR)/HelpGen/src/*.cpp $(DISTDIR)/utils/HelpGen/src
-
-	mkdir $(DISTDIR)/utils/tex2rtf
-	mkdir $(DISTDIR)/utils/tex2rtf/src
-	$(CP_P) $(UTILSDIR)/tex2rtf/*.in $(DISTDIR)/utils/tex2rtf
-	$(CP_P) $(UTILSDIR)/tex2rtf/src/*.h $(DISTDIR)/utils/tex2rtf/src
-	$(CP_P) $(UTILSDIR)/tex2rtf/src/*.in $(DISTDIR)/utils/tex2rtf/src
-	$(CP_P) $(UTILSDIR)/tex2rtf/src/*.cpp $(DISTDIR)/utils/tex2rtf/src
-	$(CP_P) $(UTILSDIR)/tex2rtf/src/tex2rtf.ico $(DISTDIR)/utils/tex2rtf/src
-	$(CP_P) $(UTILSDIR)/tex2rtf/src/tex2rtf.ini $(DISTDIR)/utils/tex2rtf/src
-	$(CP_P) $(UTILSDIR)/tex2rtf/src/tex2rtf.rc $(DISTDIR)/utils/tex2rtf/src
-	$(CP_P) $(UTILSDIR)/tex2rtf/src/tex2rtf.xpm $(DISTDIR)/utils/tex2rtf/src
-
 	mv $(DISTDIR) $(BASEDISTDIR)
 
 GTK_DIST: UNIV_DIST
@@ -32049,6 +32061,11 @@ GTK_DIST: UNIV_DIST
 	$(CP_P) $(INCDIR)/wx/gtk/gnome/*.h $(DISTDIR)/include/wx/gtk/gnome
 	$(CP_P) $(GTKDIR)/gnome/*.cpp $(DISTDIR)/src/gtk/gnome
 
+	mkdir $(DISTDIR)/include/wx/gtk/hildon
+	mkdir $(DISTDIR)/src/gtk/hildon
+	$(CP_P) $(INCDIR)/wx/gtk/hildon/*.h $(DISTDIR)/include/wx/gtk/hildon
+	$(CP_P) $(GTKDIR)/hildon/*.cpp $(DISTDIR)/src/gtk/hildon
+        
 	mkdir $(DISTDIR)/src/osx
 	mkdir $(DISTDIR)/src/osx/core
 	$(CP_P) $(WXDIR)/src/osx/core/*.cpp $(DISTDIR)/src/osx/core
@@ -32339,13 +32356,13 @@ UTILS_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/utils
 	$(CP_P) $(UTILSDIR)/Makefile.in $(DISTDIR)/utils
 
-	mkdir $(DISTDIR)/utils/tex2rtf
-	mkdir $(DISTDIR)/utils/tex2rtf/src
-	$(CP_P) $(UTILSDIR)/tex2rtf/*.in $(DISTDIR)/utils/tex2rtf
-	$(CP_P) $(UTILSDIR)/tex2rtf/src/*.h $(DISTDIR)/utils/tex2rtf/src
-	$(CP_P) $(UTILSDIR)/tex2rtf/src/*.in $(DISTDIR)/utils/tex2rtf/src
-	$(CP_P) $(UTILSDIR)/tex2rtf/src/*.cpp $(DISTDIR)/utils/tex2rtf/src
-	-$(CP_P) $(UTILSDIR)/tex2rtf/src/tex2rtf.* $(DISTDIR)/utils/tex2rtf/src
+	mkdir $(DISTDIR)/utils/ifacecheck
+	mkdir $(DISTDIR)/utils/ifacecheck/src
+	$(CP_P) $(UTILSDIR)/ifacecheck/README $(DISTDIR)/utils/ifacecheck
+	$(CP_P) $(UTILSDIR)/ifacecheck/*.dtd $(DISTDIR)/utils/ifacecheck
+	$(CP_P) $(UTILSDIR)/ifacecheck/*.xsl $(DISTDIR)/utils/ifacecheck
+	$(CP_P) $(UTILSDIR)/ifacecheck/*.in $(DISTDIR)/utils/ifacecheck
+	$(CP_P) $(UTILSDIR)/ifacecheck/src/* $(DISTDIR)/utils/ifacecheck/src
 
 	mkdir $(DISTDIR)/utils/emulator
 	mkdir $(DISTDIR)/utils/emulator/src
@@ -32364,13 +32381,6 @@ UTILS_DIST: ALL_GUI_DIST
 	$(CP_P) $(UTILSDIR)/hhp2cached/Makefile.in $(DISTDIR)/utils/hhp2cached
 	$(CP_P) $(UTILSDIR)/hhp2cached/*.cpp $(DISTDIR)/utils/hhp2cached
 	$(CP_P) $(UTILSDIR)/hhp2cached/*.rc $(DISTDIR)/utils/hhp2cached
-
-	mkdir $(DISTDIR)/utils/HelpGen
-	mkdir $(DISTDIR)/utils/HelpGen/src
-	$(CP_P) $(UTILSDIR)/HelpGen/Makefile.in $(DISTDIR)/utils/HelpGen
-	$(CP_P) $(UTILSDIR)/HelpGen/src/Makefile.in $(DISTDIR)/utils/HelpGen/src
-	$(CP_P) $(UTILSDIR)/HelpGen/src/*.h $(DISTDIR)/utils/HelpGen/src
-	$(CP_P) $(UTILSDIR)/HelpGen/src/*.cpp $(DISTDIR)/utils/HelpGen/src
 
 	mkdir $(DISTDIR)/utils/helpview
 	mkdir $(DISTDIR)/utils/helpview/src
@@ -32405,14 +32415,45 @@ INTL_DIST:
 
 MANUAL_DIST:
 	mkdir $(DISTDIR)/docs
-	mkdir $(DISTDIR)/docs/latex
-	mkdir $(DISTDIR)/docs/latex/wx
-	$(CP_P) $(DOCDIR)/latex/wx/*.tex $(DISTDIR)/docs/latex/wx
-	$(CP_P) $(DOCDIR)/latex/wx/*.inc $(DISTDIR)/docs/latex/wx
-	$(CP_P) $(DOCDIR)/latex/wx/*.gif $(DISTDIR)/docs/latex/wx
-	$(CP_P) $(DOCDIR)/latex/wx/*.ini $(DISTDIR)/docs/latex/wx
-	$(CP_P) $(DOCDIR)/latex/wx/*.bib $(DISTDIR)/docs/latex/wx
-	$(CP_P) $(DOCDIR)/latex/wx/*.sty $(DISTDIR)/docs/latex/wx
+	mkdir $(DISTDIR)/docs/doxygen
+	mkdir $(DISTDIR)/docs/doxygen/groups
+	mkdir $(DISTDIR)/docs/doxygen/images
+	mkdir $(DISTDIR)/docs/doxygen/images/wxgtk
+	mkdir $(DISTDIR)/docs/doxygen/images/wxmac
+	mkdir $(DISTDIR)/docs/doxygen/images/wxmsw
+	mkdir $(DISTDIR)/docs/doxygen/mainpages
+	mkdir $(DISTDIR)/docs/doxygen/overviews
+	$(CP_P) $(DOCDIR)/doxygen/* $(DISTDIR)/docs/doxygen
+	$(CP_P) $(DOCDIR)/doxygen/groups/*.h $(DISTDIR)/docs/doxygen/groups
+	$(CP_P) $(DOCDIR)/doxygen/mainpages/*.h $(DISTDIR)/docs/doxygen/mainpages
+	$(CP_P) $(DOCDIR)/doxygen/overviews/*.h $(DISTDIR)/docs/doxygen/overviews
+	$(CP_P) $(DOCDIR)/doxygen/images/*.??? $(DISTDIR)/docs/doxygen/images
+	$(CP_P) $(DOCDIR)/doxygen/images/wxgtk/*.??? $(DISTDIR)/docs/doxygen/images/wxgtk
+#	$(CP_P) $(DOCDIR)/doxygen/images/wxmac/*.??? $(DISTDIR)/docs/doxygen/images/wxmac
+#	$(CP_P) $(DOCDIR)/doxygen/images/wxmsw/*.??? $(DISTDIR)/docs/doxygen/images/wxmsw
+	mkdir $(DISTDIR)/interface
+	mkdir $(DISTDIR)/interface/wx
+	mkdir $(DISTDIR)/interface/wx/aui
+	mkdir $(DISTDIR)/interface/wx/generic
+	mkdir $(DISTDIR)/interface/wx/html
+	mkdir $(DISTDIR)/interface/wx/msw
+	mkdir $(DISTDIR)/interface/wx/msw/ole
+	mkdir $(DISTDIR)/interface/wx/protocol
+	mkdir $(DISTDIR)/interface/wx/richtext
+	mkdir $(DISTDIR)/interface/wx/stc
+	mkdir $(DISTDIR)/interface/wx/xml
+	mkdir $(DISTDIR)/interface/wx/xrc
+	$(CP_P) $(IFACEDIR)/wx/*.h $(DISTDIR)/interface/wx
+	$(CP_P) $(IFACEDIR)/wx/aui/*.h $(DISTDIR)/interface/wx/aui
+	$(CP_P) $(IFACEDIR)/wx/generic/*.h $(DISTDIR)/interface/wx/generic
+	$(CP_P) $(IFACEDIR)/wx/html/*.h $(DISTDIR)/interface/wx/html
+	$(CP_P) $(IFACEDIR)/wx/msw/*.h $(DISTDIR)/interface/wx/msw
+	$(CP_P) $(IFACEDIR)/wx/msw/ole/*.h $(DISTDIR)/interface/wx/msw/ole
+	$(CP_P) $(IFACEDIR)/wx/protocol/*.h $(DISTDIR)/interface/wx/protocol
+	$(CP_P) $(IFACEDIR)/wx/richtext/*.h $(DISTDIR)/interface/wx/richtext
+	$(CP_P) $(IFACEDIR)/wx/stc/*.h $(DISTDIR)/interface/wx/stc
+	$(CP_P) $(IFACEDIR)/wx/xml/*.h $(DISTDIR)/interface/wx/xml
+	$(CP_P) $(IFACEDIR)/wx/xrc/*.h $(DISTDIR)/interface/wx/xrc
 
 
 # Copy all the files from wxPython needed for the Debian source package,
