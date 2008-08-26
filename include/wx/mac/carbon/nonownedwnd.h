@@ -82,6 +82,8 @@ public:
     virtual void Raise();
     virtual void Lower();
     virtual bool Show( bool show = true );
+    
+    void ShowNoActivate();
 
 /*
     virtual bool ShowWithEffect(wxShowEffect effect,

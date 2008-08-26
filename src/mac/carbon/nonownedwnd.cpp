@@ -1174,11 +1174,8 @@ void wxNonOwnedWindow::MacActivate( long timestamp , bool WXUNUSED(inIsActivatin
     MacDelayedDeactivation(timestamp);
 }
 
-bool wxNonOwnedWindow::Show(bool show)
+void wxNonOwnedWindow::ShowNoActivate()
 {
-    if ( !wxWindow::Show(show) )
-        return false;
-
     bool plainTransition = true;
 
 #if wxUSE_SYSTEM_OPTIONS
@@ -1186,19 +1183,34 @@ bool wxNonOwnedWindow::Show(bool show)
         plainTransition = ( wxSystemOptions::GetOptionInt( wxMAC_WINDOW_PLAIN_TRANSITION ) == 1 ) ;
 #endif
 
+    if ( plainTransition )
+       ::ShowWindow( (WindowRef)m_macWindow );
+    else
+       ::TransitionWindow( (WindowRef)m_macWindow, kWindowZoomTransitionEffect, kWindowShowTransitionAction, NULL );
+
+    // because apps expect a size event to occur at this moment
+    wxSizeEvent event(GetSize() , m_windowId);
+    event.SetEventObject(this);
+    GetEventHandler()->ProcessEvent( event );
+
+}
+
+bool wxNonOwnedWindow::Show(bool show)
+{
+    bool plainTransition = true;
+
+#if wxUSE_SYSTEM_OPTIONS
+    if ( wxSystemOptions::HasOption(wxMAC_WINDOW_PLAIN_TRANSITION) )
+        plainTransition = ( wxSystemOptions::GetOptionInt( wxMAC_WINDOW_PLAIN_TRANSITION ) == 1 ) ;
+#endif
+
+    if ( !wxWindow::Show(show) )
+        return false;
+
     if (show)
     {
-        if ( plainTransition )
-           ::ShowWindow( (WindowRef)m_macWindow );
-        else
-           ::TransitionWindow( (WindowRef)m_macWindow, kWindowZoomTransitionEffect, kWindowShowTransitionAction, NULL );
-
+        ShowNoActivate();
         ::SelectWindow( (WindowRef)m_macWindow ) ;
-
-        // because apps expect a size event to occur at this moment
-        wxSizeEvent event(GetSize() , m_windowId);
-        event.SetEventObject(this);
-        GetEventHandler()->ProcessEvent( event );
     }
     else
     {
