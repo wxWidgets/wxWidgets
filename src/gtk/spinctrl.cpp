@@ -113,6 +113,7 @@ bool wxSpinCtrlGTKBase::Create(wxWindow *parent, wxWindowID id,
     }
 
     m_widget = gtk_spin_button_new_with_range(min, max, inc);
+    g_object_ref(m_widget);
 
     gtk_spin_button_set_value( GTK_SPIN_BUTTON(m_widget), initial);
     m_value = gtk_spin_button_get_value( GTK_SPIN_BUTTON(m_widget));

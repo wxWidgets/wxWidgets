@@ -79,6 +79,7 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
     }
 
     m_widget = gtk_combo_box_new_text();
+    g_object_ref(m_widget);
 
     Append(n, choices);
 

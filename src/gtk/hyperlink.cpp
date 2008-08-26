@@ -84,6 +84,7 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent, wxWindowID id,
         }
 
         m_widget = gtk_link_button_new("asdfsaf asdfdsaf asdfdsa");
+        g_object_ref(m_widget);
         gtk_widget_show(m_widget);
 
         // alignment

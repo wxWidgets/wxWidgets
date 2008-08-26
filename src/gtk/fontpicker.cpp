@@ -66,6 +66,7 @@ bool wxFontButton::Create( wxWindow *parent, wxWindowID id,
     }
 
     m_widget = gtk_font_button_new();
+    g_object_ref(m_widget);
 
     // set initial font
     m_selectedFont = initial.IsOk() ? initial : *wxNORMAL_FONT;

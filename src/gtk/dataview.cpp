@@ -3610,6 +3610,7 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
     m_insertCallback = wxInsertChildInDataViewCtrl;
 
     m_widget = gtk_scrolled_window_new (NULL, NULL);
+    g_object_ref(m_widget);
 
     GtkScrolledWindowSetBorder(m_widget, style);
 

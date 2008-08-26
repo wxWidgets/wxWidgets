@@ -457,6 +457,7 @@ bool wxMDIClientWindow::CreateClient( wxMDIParentFrame *parent, long style )
     }
 
     m_widget = gtk_notebook_new();
+    g_object_ref(m_widget);
 
     g_signal_connect (m_widget, "switch_page",
                       G_CALLBACK (gtk_mdi_page_change_callback), parent);

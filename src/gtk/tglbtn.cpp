@@ -66,6 +66,7 @@ bool wxBitmapToggleButton::Create(wxWindow *parent, wxWindowID id,
 
     // Create the gtk widget.
     m_widget = gtk_toggle_button_new();
+    g_object_ref(m_widget);
 
     if (style & wxNO_BORDER)
         gtk_button_set_relief( GTK_BUTTON(m_widget), GTK_RELIEF_NONE );
@@ -204,6 +205,7 @@ bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
 
     // Create the gtk widget.
     m_widget = gtk_toggle_button_new_with_mnemonic("");
+    g_object_ref(m_widget);
 
     SetLabel(label);
 

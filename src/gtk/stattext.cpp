@@ -52,6 +52,7 @@ bool wxStaticText::Create(wxWindow *parent,
     }
 
     m_widget = gtk_label_new(NULL);
+    g_object_ref(m_widget);
 
     GtkJustification justify;
     if ( style & wxALIGN_CENTER_HORIZONTAL )

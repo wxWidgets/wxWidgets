@@ -511,6 +511,8 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
             }
         }
 #endif // wxUSE_LIBHILDON/!wxUSE_LIBHILDON
+
+        g_object_ref(m_widget);
     }
 
     wxWindow *topParent = wxGetTopLevelParent(m_parent);

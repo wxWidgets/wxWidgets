@@ -88,6 +88,7 @@ bool wxGtkCalendarCtrl::Create(wxWindow *parent,
     }
 
     m_widget = gtk_calendar_new();
+    g_object_ref(m_widget);
     SetDate(date.IsValid() ? date : wxDateTime::Today());
 
     if (style & wxCAL_NO_MONTH_CHANGE)

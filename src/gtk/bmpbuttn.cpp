@@ -137,6 +137,7 @@ bool wxBitmapButton::Create( wxWindow *parent,
     m_bmpNormal = bitmap;
 
     m_widget = gtk_button_new();
+    g_object_ref(m_widget);
 
     if (style & wxNO_BORDER)
        gtk_button_set_relief( GTK_BUTTON(m_widget), GTK_RELIEF_NONE );

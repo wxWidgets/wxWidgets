@@ -156,6 +156,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
 void wxComboBox::GTKCreateComboBoxWidget()
 {
     m_widget = gtk_combo_box_entry_new_text();
+    g_object_ref(m_widget);
 
     m_entry = GTK_ENTRY(GTK_BIN(m_widget)->child);
 }

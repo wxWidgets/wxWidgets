@@ -2131,6 +2131,7 @@ bool wxWindowGTK::Create( wxWindow *parent,
 
         gtk_widget_show( m_wxwindow );
     }
+    g_object_ref(m_widget);
 
     if (m_parent)
         m_parent->DoAddChild( this );
@@ -2180,17 +2181,17 @@ wxWindowGTK::~wxWindowGTK()
     // delete before the widgets to avoid a crash on solaris
     delete m_imData;
 
-    if (m_wxwindow && (m_wxwindow != m_widget))
-    {
-        gtk_widget_destroy( m_wxwindow );
-        m_wxwindow = (GtkWidget*) NULL;
-    }
-
     if (m_widget)
     {
-        gtk_widget_destroy( m_widget );
-        m_widget = (GtkWidget*) NULL;
+        // Note that gtk_widget_destroy() does not destroy the widget, it just
+        // emits the "destroy" signal. The widget is not actually destroyed
+        // until its reference count drops to zero.
+        gtk_widget_destroy(m_widget);
+        // Release our reference, should be the last one
+        g_object_unref(m_widget);
+        m_widget = NULL;
     }
+    m_wxwindow = NULL;
 }
 
 bool wxWindowGTK::PreCreation( wxWindowGTK *parent, const wxPoint &pos,  const wxSize &size )

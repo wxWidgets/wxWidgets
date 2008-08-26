@@ -144,6 +144,7 @@ bool wxCheckBox::Create(wxWindow *parent,
         m_widgetLabel = GTK_BIN(m_widgetCheckbox)->child;
         m_widget = m_widgetCheckbox;
     }
+    g_object_ref(m_widget);
     SetLabel( label );
 
     g_signal_connect (m_widgetCheckbox, "toggled",

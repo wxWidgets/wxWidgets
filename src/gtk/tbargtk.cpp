@@ -51,12 +51,6 @@ public:
         : wxToolBarToolBase(tbar, control, label)
     {
         m_item = NULL;
-        // Hold a reference to keep control alive until DoInsertTool() is
-        // called, or if RemoveTool() is called (see DoDeleteTool)
-        g_object_ref(control->m_widget);
-        // release reference when gtk_widget_destroy() is called on control
-        g_signal_connect(
-            control->m_widget, "destroy", G_CALLBACK(g_object_unref), NULL);
     }
 
     void SetImage();
@@ -411,6 +405,7 @@ bool wxToolBar::Create( wxWindow *parent,
         m_widget = gtk_event_box_new();
         ConnectWidget( m_widget );
     }
+    g_object_ref(m_widget);
     gtk_container_add(GTK_CONTAINER(m_widget), GTK_WIDGET(m_toolbar));
     gtk_widget_show(GTK_WIDGET(m_toolbar));
 

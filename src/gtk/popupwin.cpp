@@ -154,6 +154,7 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
     m_insertCallback = wxInsertChildInPopupWin;
 
     m_widget = gtk_window_new( GTK_WINDOW_POPUP );
+    g_object_ref(m_widget);
 
     if ((m_parent) && (GTK_IS_WINDOW(m_parent->m_widget)))
         gtk_window_set_transient_for( GTK_WINDOW(m_widget), GTK_WINDOW(m_parent->m_widget) );

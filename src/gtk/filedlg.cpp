@@ -214,6 +214,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
                    GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                    ok_btn_stock, GTK_RESPONSE_ACCEPT,
                    NULL);
+    g_object_ref(m_widget);
     GtkFileChooser* file_chooser = GTK_FILE_CHOOSER(m_widget);
 
     m_fc.SetWidget(file_chooser);
@@ -294,6 +295,17 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
         g_signal_connect(m_widget, "update-preview",
                          G_CALLBACK(gtk_filedialog_update_preview_callback),
                          previewImage);
+    }
+}
+
+wxFileDialog::~wxFileDialog()
+{
+    if (m_extraControl)
+    {
+        // get chooser to drop its reference right now, allowing wxWindow dtor
+        // to verify that ref count drops to zero
+        gtk_file_chooser_set_extra_widget(
+            GTK_FILE_CHOOSER(m_widget), NULL);
     }
 }
 

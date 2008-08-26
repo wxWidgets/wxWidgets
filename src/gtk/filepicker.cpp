@@ -81,6 +81,7 @@ bool wxFileButton::Create( wxWindow *parent, wxWindowID id,
         // NOTE: we deliberately ignore the given label as GtkFileChooserButton
         //       use as label the currently selected file
         m_widget = gtk_file_chooser_button_new_with_dialog( m_dialog->m_widget );
+        g_object_ref(m_widget);
         gtk_widget_show(m_widget);
 
         // we need to know when the dialog has been dismissed clicking OK...
@@ -103,12 +104,6 @@ bool wxFileButton::Create( wxWindow *parent, wxWindowID id,
 
 wxFileButton::~wxFileButton()
 {
-    // GtkFileChooserButton will automatically destroy the
-    // GtkFileChooserDialog associated with m_dialog.
-    // Thus we have to set its m_widget to NULL to avoid
-    // double destruction on same widget
-    if (m_dialog)
-        m_dialog->m_widget = NULL;
 }
 
 void wxFileButton::OnDialogOK(wxCommandEvent& ev)
@@ -229,6 +224,7 @@ bool wxDirButton::Create( wxWindow *parent, wxWindowID id,
         // NOTE: we deliberately ignore the given label as GtkFileChooserButton
         //       use as label the currently selected file
         m_widget = gtk_file_chooser_button_new_with_dialog( m_dialog->m_widget );
+        g_object_ref(m_widget);
 
         gtk_widget_show(m_widget);
 
@@ -249,12 +245,6 @@ bool wxDirButton::Create( wxWindow *parent, wxWindowID id,
 
 wxDirButton::~wxDirButton()
 {
-    // GtkFileChooserButton will automatically destroy the
-    // GtkFileChooserDialog associated with m_dialog.
-    // Thus we have to set its m_widget to NULL to avoid
-    // double destruction on same widget
-    if (m_dialog)
-        m_dialog->m_widget = NULL;
 }
 
 void wxDirButton::SetPath(const wxString& str)

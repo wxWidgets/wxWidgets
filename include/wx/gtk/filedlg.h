@@ -30,7 +30,7 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& sz = wxDefaultSize,
                  const wxString& name = wxFileDialogNameStr);
-    virtual ~wxFileDialog() { delete m_extraControl; }
+    virtual ~wxFileDialog();
 
     virtual wxString GetPath() const;
     virtual void GetPaths(wxArrayString& paths) const;

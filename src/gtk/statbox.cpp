@@ -78,6 +78,7 @@ bool wxStaticBox::Create( wxWindow *parent,
     }
 
     m_widget = GTKCreateFrame(label);
+    g_object_ref(m_widget);
     // only base SetLabel needs to be called after GTKCreateFrame
     wxControl::SetLabel(label);
 

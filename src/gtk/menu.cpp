@@ -94,6 +94,8 @@ void wxMenuBar::Init(size_t n, wxMenu *menus[], const wxString titles[], long st
     ApplyWidgetStyle();
 #endif // wxUSE_LIBHILDON/!wxUSE_LIBHILDON
 
+    g_object_ref(m_widget);
+
     for (size_t i = 0; i < n; ++i )
         Append(menus[i], titles[i]);
 }

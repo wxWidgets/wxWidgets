@@ -687,6 +687,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
             g_object_set (m_text, "has-frame", FALSE, NULL);
 
     }
+    g_object_ref(m_widget);
 
     m_parent->DoAddChild( this );
 

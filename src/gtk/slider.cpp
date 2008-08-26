@@ -307,6 +307,7 @@ bool wxSlider::Create(wxWindow *parent,
         m_widget = gtk_vscale_new( (GtkAdjustment *) NULL );
     else
         m_widget = gtk_hscale_new( (GtkAdjustment *) NULL );
+    g_object_ref(m_widget);
 
     gtk_scale_set_draw_value(GTK_SCALE (m_widget), (style & wxSL_LABELS) != 0);
     // Keep full precision in position value

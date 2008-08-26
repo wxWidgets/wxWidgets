@@ -47,6 +47,7 @@ bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
     m_bitmap = bitmap;
 
     m_widget = gtk_image_new();
+    g_object_ref(m_widget);
 
     if (bitmap.Ok())
         SetBitmap(bitmap);

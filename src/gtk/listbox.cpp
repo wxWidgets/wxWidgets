@@ -169,7 +169,7 @@ gtk_listitem_changed_callback(GtkTreeSelection * WXUNUSED(selection),
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gint
+static gboolean
 gtk_listbox_key_press_callback( GtkWidget *WXUNUSED(widget),
                                 GdkEventKey *gdk_event,
                                 wxListBox *listbox )
@@ -362,6 +362,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
     }
 
     m_widget = gtk_scrolled_window_new( (GtkAdjustment*) NULL, (GtkAdjustment*) NULL );
+    g_object_ref(m_widget);
     if (style & wxLB_ALWAYS_SB)
     {
       gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW(m_widget),

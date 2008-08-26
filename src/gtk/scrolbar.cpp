@@ -144,6 +144,7 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
         m_widget = gtk_vscrollbar_new( (GtkAdjustment *) NULL );
     else
         m_widget = gtk_hscrollbar_new( (GtkAdjustment *) NULL );
+    g_object_ref(m_widget);
 
     m_scrollBar[0] = (GtkRange*)m_widget;
 

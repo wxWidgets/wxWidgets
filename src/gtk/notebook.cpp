@@ -174,6 +174,7 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
 
 
     m_widget = gtk_notebook_new();
+    g_object_ref(m_widget);
 
     gtk_notebook_set_scrollable( GTK_NOTEBOOK(m_widget), 1 );
 
@@ -345,7 +346,6 @@ wxNotebookPage *wxNotebook::DoRemovePage( size_t page )
     if ( !client )
         return NULL;
 
-    gtk_widget_ref( client->m_widget );
     gtk_widget_unrealize( client->m_widget );
 
     // we don't need to unparent the client->m_widget; GTK+ will do
@@ -378,11 +378,8 @@ bool wxNotebook::InsertPage( size_t position,
                  _T("invalid page index in wxNotebookPage::InsertPage()") );
 
     // Hack Alert! (Part II): See above in wxInsertChildInNotebook callback
-    // why this has to be done.  NOTE: using gtk_widget_unparent here does not
-    // work as it seems to undo too much and will cause errors in the
-    // gtk_notebook_insert_page below, so instead just clear the parent by
-    // hand here.
-    win->m_widget->parent = NULL;
+    // why this has to be done.
+    gtk_widget_unparent(win->m_widget);
 
     if (m_themeEnabled)
         win->SetThemeEnabled(true);

@@ -287,6 +287,7 @@ bool wxGtkFileCtrl::Create( wxWindow *parent,
         gtkAction = GTK_FILE_CHOOSER_ACTION_SAVE;
 
     m_widget =  gtk_alignment_new ( 0, 0, 1, 1 );
+    g_object_ref(m_widget);
     m_fcWidget = GTK_FILE_CHOOSER( gtk_file_chooser_widget_new(gtkAction) );
     gtk_widget_show ( GTK_WIDGET( m_fcWidget ) );
     gtk_container_add ( GTK_CONTAINER ( m_widget ), GTK_WIDGET( m_fcWidget ) );

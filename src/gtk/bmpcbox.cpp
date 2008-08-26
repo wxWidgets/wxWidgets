@@ -32,14 +32,6 @@
 
 #include "wx/gtk/private.h"
 
-#ifdef __WXGTK24__
-    #include "wx/gtk/win_gtk.h"
-
-    #include <gobject/gvaluecollector.h>
-    #include <gtk/gtktreemodel.h>
-#endif
-
-
 // ============================================================================
 // implementation
 // ============================================================================
@@ -133,6 +125,7 @@ void wxBitmapComboBox::GTKCreateComboBoxWidget()
         m_entry = GTK_ENTRY( GTK_BIN(m_widget)->child );
         gtk_entry_set_editable( m_entry, TRUE );
     }
+    g_object_ref(m_widget);
 
     // This must be called as gtk_combo_box_entry_new_with_model adds
     // automatically adds one text column.

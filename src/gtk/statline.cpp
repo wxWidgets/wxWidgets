@@ -65,6 +65,7 @@ bool wxStaticLine::Create( wxWindow *parent, wxWindowID id,
             SetSize( new_size );
         }
     }
+    g_object_ref(m_widget);
 
     m_parent->DoAddChild( this );
 

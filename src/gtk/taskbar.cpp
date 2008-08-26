@@ -32,6 +32,7 @@ wxTaskBarIconAreaBase::wxTaskBarIconAreaBase()
     if (IsProtocolSupported())
     {
         m_widget = GTK_WIDGET(egg_tray_icon_new("systray icon"));
+        g_object_ref(m_widget);
         gtk_window_set_resizable(GTK_WINDOW(m_widget), false);
 
         wxLogTrace(_T("systray"), _T("using freedesktop.org systray spec"));

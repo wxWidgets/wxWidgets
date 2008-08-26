@@ -224,6 +224,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
     }
 
     m_widget = GTKCreateFrame(title);
+    g_object_ref(m_widget);
     wxControl::SetLabel(title);
     if ( HasFlag(wxNO_BORDER) )
     {

@@ -83,6 +83,7 @@ bool wxRadioButton::Create( wxWindow *parent,
     }
 
     m_widget = gtk_radio_button_new_with_label( radioButtonGroup, wxGTK_CONV( label ) );
+    g_object_ref(m_widget);
 
     SetLabel(label);
 

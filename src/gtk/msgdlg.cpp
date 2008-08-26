@@ -140,6 +140,8 @@ void wxMessageDialog::GTKCreateMsgDialog()
 #endif // GTK+ 2.6+
 #endif // wxUSE_LIBHILDON/!wxUSE_LIBHILDON
 
+    g_object_ref(m_widget);
+
     if (m_caption != wxMessageBoxCaptionStr)
         gtk_window_set_title(GTK_WINDOW(m_widget), wxGTK_CONV(m_caption));
 
@@ -204,6 +206,7 @@ int wxMessageDialog::ShowModal()
 
     gint result = gtk_dialog_run(GTK_DIALOG(m_widget));
     gtk_widget_destroy(m_widget);
+    g_object_unref(m_widget);
     m_widget = NULL;
 
     switch (result)

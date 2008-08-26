@@ -98,6 +98,7 @@ bool wxFontDialog::DoCreate(wxWindow *parent)
 
     wxString m_message( _("Choose font") );
     m_widget = gtk_font_selection_dialog_new( wxGTK_CONV( m_message ) );
+    g_object_ref(m_widget);
 
     if (parent)
         gtk_window_set_transient_for(GTK_WINDOW(m_widget),

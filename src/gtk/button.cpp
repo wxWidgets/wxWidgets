@@ -100,6 +100,7 @@ bool wxButton::Create(wxWindow *parent,
     }
 
     m_widget = gtk_button_new_with_mnemonic("");
+    g_object_ref(m_widget);
 
     float x_alignment = 0.5;
     if (HasFlag(wxBU_LEFT))

@@ -53,6 +53,8 @@ bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
     m_widget = gtk_color_selection_dialog_new(wxGTK_CONV(title));
 #endif // wxUSE_LIBHILDON/!wxUSE_LIBHILDON
 
+    g_object_ref(m_widget);
+
     if ( parentGTK )
     {
         gtk_window_set_transient_for(GTK_WINDOW(m_widget), parentGTK);
