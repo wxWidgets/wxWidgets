@@ -317,13 +317,9 @@ gtk_frame_realized_callback( GtkWidget * WXUNUSED(widget),
     else
         gtk_window_set_policy(GTK_WINDOW(win->m_widget), 1, 1, 1);
 
-    // reset the icon
-    wxIconBundle iconsOld = win->GetIcons();
-    if ( !iconsOld.IsEmpty() )
-    {
-        win->SetIcon( wxNullIcon );
-        win->SetIcons( iconsOld );
-    }
+    const wxIconBundle& icons = win->GetIcons();
+    if (icons.GetIconCount())
+        win->SetIcons(icons);
 
     if (win->HasFlag(wxFRAME_SHAPED))
         win->SetShape(win->m_shape); // it will really set the window shape now
@@ -1101,16 +1097,17 @@ void wxTopLevelWindowGTK::SetIcons( const wxIconBundle &icons )
 
     wxTopLevelWindowBase::SetIcons( icons );
 
-    GList *list = NULL;
-
-    const size_t numIcons = icons.GetIconCount();
-    for ( size_t i = 0; i < numIcons; i++ )
+    // Setting icons before window is realized can cause a GTK assertion if
+    // another TLW is realized before this one, and it has this one as it's
+    // transient parent. The life demo exibits this problem.
+    //if (GTK_WIDGET_REALIZED(m_widget))
     {
-        list = g_list_prepend(list, icons.GetIconByIndex(i).GetPixbuf());
+        GList* list = NULL;
+        for (size_t i = icons.GetIconCount(); i--;)
+            list = g_list_prepend(list, icons.GetIconByIndex(i).GetPixbuf());
+        gtk_window_set_icon_list(GTK_WINDOW(m_widget), list);
+        g_list_free(list);
     }
-
-    gtk_window_set_icon_list(GTK_WINDOW(m_widget), list);
-    g_list_free(list);
 }
 
 // ----------------------------------------------------------------------------
