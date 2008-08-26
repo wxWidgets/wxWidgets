@@ -150,7 +150,7 @@ IMPLEMENT_APP(LifeApp)
 
 // some shortcuts
 #define ADD_TOOL(id, bmp, tooltip, help) \
-    toolBar->AddTool(id, bmp, wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, (wxObject *)NULL, tooltip, help)
+    toolBar->AddTool(id, wxEmptyString, bmp, wxNullBitmap, wxITEM_NORMAL, tooltip, help)
 
 
 // --------------------------------------------------------------------------
