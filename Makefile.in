@@ -32013,7 +32013,6 @@ BASE_DIST: ALL_DIST INTL_DIST
 	mkdir $(DISTDIR)/src/osx
 	mkdir $(DISTDIR)/src/osx/core
 	mkdir $(DISTDIR)/src/osx/carbon
-	mkdir $(DISTDIR)/src/osx/carbon/morefilex
 	mkdir $(DISTDIR)/src/msdos
 	mkdir $(DISTDIR)/src/msw
 	mkdir $(DISTDIR)/src/os2
@@ -32109,16 +32108,25 @@ MOTIF_DIST: ALL_GUI_DIST
 MACX_DIST: ALL_GUI_DIST
 	$(CP_P) $(INCDIR)/*.* $(DISTDIR)/include
 	mkdir $(DISTDIR)/include/wx/osx/carbon
-	mkdir $(DISTDIR)/include/wx/osx/private
 	mkdir $(DISTDIR)/include/wx/osx/carbon/private
+	mkdir $(DISTDIR)/include/wx/osx/cocoa
+	mkdir $(DISTDIR)/include/wx/osx/iphone
 	$(CP_P) $(INCDIR)/wx/osx/*.h $(DISTDIR)/include/wx/osx
 	$(CP_P) $(INCDIR)/wx/osx/carbon/*.h $(DISTDIR)/include/wx/osx/carbon
 	$(CP_P) $(INCDIR)/wx/osx/carbon/private/*.h $(DISTDIR)/include/wx/osx/carbon/private
 	$(CP_P) $(INCDIR)/wx/osx/private/*.h $(DISTDIR)/include/wx/osx/private
+	$(CP_P) $(INCDIR)/wx/osx/cocoa/*.h $(DISTDIR)/include/wx/osx/cocoa
+	$(CP_P) $(INCDIR)/wx/osx/iphone/*.h $(DISTDIR)/include/wx/osx/iphone
 	mkdir $(DISTDIR)/include/wx/osx/core
+	mkdir $(DISTDIR)/include/wx/osx/core/private
 	$(CP_P) $(INCDIR)/wx/osx/core/*.h $(DISTDIR)/include/wx/osx/core
+	$(CP_P) $(INCDIR)/wx/osx/core/private/*.h $(DISTDIR)/include/wx/osx/core/private
 	mkdir $(DISTDIR)/src/osx/core
 	$(CP_P) $(MACDIR)/core/*.cpp $(DISTDIR)/src/osx/core
+	mkdir $(DISTDIR)/src/osx/cocoa
+	$(CP_P) $(MACDIR)/cocoa/*.mm $(DISTDIR)/src/osx/cocoa
+	mkdir $(DISTDIR)/src/osx/iphone
+	$(CP_P) $(MACDIR)/iphone/*.mm $(DISTDIR)/src/osx/iphone
 	mkdir $(DISTDIR)/src/html/htmlctrl
 	mkdir $(DISTDIR)/src/html/htmlctrl/webkit
 	$(CP_P) $(WXDIR)/src/html/htmlctrl/webkit/*.mm $(DISTDIR)/src/html/htmlctrl/webkit
@@ -32129,13 +32137,6 @@ MACX_DIST: ALL_GUI_DIST
 	$(CP_P) $(MACDIR)/carbon/Info.plist.in $(DISTDIR)/src/osx/carbon
 	$(CP_P) $(MACDIR)/carbon/*.h $(DISTDIR)/src/osx/carbon
 	$(CP_P) $(MACDIR)/carbon/*.r $(DISTDIR)/src/osx/carbon
-	mkdir $(DISTDIR)/src/osx/carbon/morefile
-	$(CP_P) $(MACDIR)/carbon/morefile/*.h $(DISTDIR)/src/osx/carbon/morefile
-	$(CP_P) $(MACDIR)/carbon/morefile/*.c $(DISTDIR)/src/osx/carbon/morefile
-	mkdir $(DISTDIR)/src/osx/carbon/morefilex
-	$(CP_P) $(MACDIR)/carbon/morefilex/*.h $(DISTDIR)/src/osx/carbon/morefilex
-	$(CP_P) $(MACDIR)/carbon/morefilex/*.c $(DISTDIR)/src/osx/carbon/morefilex
-	$(CP_P) $(MACDIR)/carbon/morefilex/*.cpp $(DISTDIR)/src/osx/carbon/morefilex
 
 COCOA_DIST: ALL_GUI_DIST
 	$(CP_P) $(INCDIR)/wx/cocoa/*.h $(DISTDIR)/include/wx/cocoa
