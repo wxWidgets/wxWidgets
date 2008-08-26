@@ -118,12 +118,13 @@ All (GUI):
 - Store palette information for XPM images in wxImage (troelsk).
 - Fixed selection bugs and auto list numbering in wxRichTextCtrl.
 - Significantly optimize wxGrid::BlockToDeviceRect() for large grids (kjones).
-- Introduced new wxAuiToolBar class for better integration and look-and-feel
-- In wxAuiFrameManager, fixed a segfault when Update() is called
-  in between mouse-up and mouse-down events
-- In wxAUI, Added various NULL-ptr asserts
-- Fixed problem with Floatable(false) not working in wxAuiFrameManager
-- Fixed maximize bug in wxAUI
+- Introduced new wxAuiToolBar class for better integration and look-and-feel.
+- Fix a crash in wxAuiFrameManager when Update() was called in between mouse-up
+  and mouse-down events
+- wxAUI: added various NULL-ptr asserts.
+- Fixed problem with Floatable(false) not working in wxAuiFrameManager.
+- Fixed maximize bug in wxAUI.
+- Allow period in link anchors in wxHTML.
 
 All (Unix):
 
