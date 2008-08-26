@@ -12,7 +12,7 @@
        {wx}/*.spec
        {wx}/include/wx/version.h
        {wx}/include/msvc/wx/setup.h  {major release only}
-       {wx}/docs/latex/wx/manual.tex
+       {wx}/docs/latex/wx/manual.tex  {and change the date}
        {wx}/docs/msw/install.txt {major release only}
        {wx}/docs/changes.txt    
        {wx}/docs/readme.txt       
