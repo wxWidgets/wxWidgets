@@ -12,18 +12,10 @@
 #ifndef _WX_ICONBNDL_H_
 #define _WX_ICONBNDL_H_
 
-#include "wx/dynarray.h"
 #include "wx/gdiobj.h"
 // for wxSize
 #include "wx/gdicmn.h"
 #include "wx/icon.h"
-
-class WXDLLIMPEXP_FWD_CORE wxIcon;
-class WXDLLIMPEXP_FWD_BASE wxString;
-
-class WXDLLIMPEXP_FWD_CORE wxIconBundle;
-
-WX_DECLARE_EXPORTED_OBJARRAY(wxIcon, wxIconArray);
 
 // this class can't load bitmaps of type wxBITMAP_TYPE_ICO_RESOURCE,
 // if you need them, you have to load them manually and call
@@ -40,12 +32,7 @@ public:
     // initializes the bundle with a single icon
     wxIconBundle(const wxIcon& icon);
 
-    // initializes the bundle from another icon bundle
-    wxIconBundle(const wxIconBundle& icon);
-
-    wxIconBundle& operator=(const wxIconBundle& ic)
-        { if ( this != &ic) Ref(ic); return *this; }
-
+    // default copy ctor and assignment operator are OK
 
     // adds all the icons contained in the file to the collection,
     // if the collection already contains icons with the same

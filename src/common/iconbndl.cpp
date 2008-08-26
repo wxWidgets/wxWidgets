@@ -8,14 +8,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-// ============================================================================
-// declarations
-// ============================================================================
-
-// ----------------------------------------------------------------------------
-// headers
-// ----------------------------------------------------------------------------
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -27,20 +19,19 @@
 
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
-    #include "wx/icon.h"
     #include "wx/log.h"
     #include "wx/intl.h"
     #include "wx/bitmap.h"
     #include "wx/image.h"
 #endif
 
+WX_DECLARE_EXPORTED_OBJARRAY(wxIcon, wxIconArray);
 #include "wx/arrimpl.cpp"
-
 WX_DEFINE_OBJARRAY(wxIconArray)
 
 IMPLEMENT_DYNAMIC_CLASS(wxIconBundle, wxGDIObject)
 
-#define M_ICONBUNDLEDATA ((wxIconBundleRefData *)m_refData)
+#define M_ICONBUNDLEDATA static_cast<wxIconBundleRefData*>(m_refData)
 
 // ----------------------------------------------------------------------------
 // wxIconBundleRefData
@@ -53,10 +44,7 @@ public:
 
     virtual bool IsOk() const { return !m_icons.empty(); }
 
-protected:
     wxIconArray m_icons;
-
-    friend class wxIconBundle;
 };
 
 // ============================================================================
@@ -64,7 +52,6 @@ protected:
 // ============================================================================
 
 wxIconBundle::wxIconBundle()
-            : wxGDIObject()
 {
 }
 
@@ -72,12 +59,6 @@ wxIconBundle::wxIconBundle(const wxString& file, wxBitmapType type)
             : wxGDIObject()
 {
     AddIcon(file, type);
-}
-
-wxIconBundle::wxIconBundle(const wxIconBundle& icon)
-            : wxGDIObject()
-{
-    Ref(icon);
 }
 
 wxIconBundle::wxIconBundle(const wxIcon& icon)
@@ -237,5 +218,3 @@ wxIcon wxIconBundle::GetIconByIndex(size_t n) const
 
     return M_ICONBUNDLEDATA->m_icons[n];
 }
-
-
