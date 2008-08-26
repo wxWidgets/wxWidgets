@@ -59,6 +59,7 @@ private:
         CPPUNIT_TEST( CStrDataOperators );
         CPPUNIT_TEST( CStrDataImplicitConversion );
         CPPUNIT_TEST( ExplicitConversion );
+        CPPUNIT_TEST( IndexedAccess );
     CPPUNIT_TEST_SUITE_END();
 
     void String();
@@ -89,6 +90,7 @@ private:
     void CStrDataOperators();
     void CStrDataImplicitConversion();
     void ExplicitConversion();
+    void IndexedAccess();
 
     DECLARE_NO_COPY_CLASS(StringTestCase)
 };
@@ -826,3 +828,16 @@ void StringTestCase::ExplicitConversion()
     CPPUNIT_ASSERT( CheckStrConstWChar(s, s.wc_str()) );
     CPPUNIT_ASSERT( CheckStrWChar(s, s.wchar_str()) );
 }
+
+void StringTestCase::IndexedAccess()
+{
+    wxString s("bar");
+    CPPUNIT_ASSERT_EQUAL( 'r', s[2] );
+
+    // this tests for a possible bug in UTF-8 based wxString implementation:
+    // the 3rd character of the underlying byte string is going to change, but
+    // the 3rd character of wxString should remain the same
+    s[0] = L'\u00e9';
+    CPPUNIT_ASSERT_EQUAL( 'r', s[2] );
+}
+

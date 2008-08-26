@@ -106,8 +106,7 @@ wxUniCharRef& wxUniCharRef::operator=(const wxUniChar& c)
         // code -- in that case, we have to use wxStringImpl::replace() and
         // this invalidates all iterators, so we have to update them too:
 
-        wxString& str = *wx_const_cast(wxString*, m_node.m_str);
-        wxStringImpl& strimpl = str.m_impl;
+        wxStringImpl& strimpl = m_str.m_impl;
 
         int iterDiff = lenNew - lenOld;
         size_t posIdx = m_pos - strimpl.begin();
@@ -121,7 +120,7 @@ wxUniCharRef& wxUniCharRef::operator=(const wxUniChar& c)
         size_t *indexes = indexes_a;
         size_t iterNum = 0;
         wxStringIteratorNode *it;
-        for ( it = str.m_iterators.ptr; it; it = it->m_next, ++iterNum )
+        for ( it = m_str.m_iterators.ptr; it; it = it->m_next, ++iterNum )
         {
             wxASSERT( it->m_iter || it->m_citer );
 
@@ -152,7 +151,7 @@ wxUniCharRef& wxUniCharRef::operator=(const wxUniChar& c)
         // finally, set the iterators to valid values again (note that this
         // updates m_pos as well):
         size_t i;
-        for ( i = 0, it = str.m_iterators.ptr; it; it = it->m_next, ++i )
+        for ( i = 0, it = m_str.m_iterators.ptr; it; it = it->m_next, ++i )
         {
             wxASSERT( i < iterNum );
             wxASSERT( it->m_iter || it->m_citer );

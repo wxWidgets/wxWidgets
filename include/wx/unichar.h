@@ -183,7 +183,7 @@ private:
 
     // create the reference
 #if wxUSE_UNICODE_UTF8
-    wxUniCharRef(wxStringIteratorNode& node, iterator pos) : m_node(node), m_pos(pos) {}
+    wxUniCharRef(wxString& str, iterator pos) : m_str(str), m_pos(pos) {}
 #else
     wxUniCharRef(iterator pos) : m_pos(pos) {}
 #endif
@@ -195,8 +195,8 @@ public:
     //     that must be used explicitly (this is more than using 'explicit'
     //     keyword on ctor!):
 #if wxUSE_UNICODE_UTF8
-    static wxUniCharRef CreateForString(wxStringIteratorNode& node, iterator pos)
-        { return wxUniCharRef(node, pos); }
+    static wxUniCharRef CreateForString(wxString& str, iterator pos)
+        { return wxUniCharRef(str, pos); }
 #else
     static wxUniCharRef CreateForString(iterator pos)
         { return wxUniCharRef(pos); }
@@ -287,7 +287,7 @@ private:
 private:
     // reference to the string and pointer to the character in string
 #if wxUSE_UNICODE_UTF8
-    wxStringIteratorNode& m_node;
+    wxString& m_str;
 #endif
     iterator m_pos;
 };

@@ -673,7 +673,7 @@ public:
       }
 
       reference operator*()
-        { return wxUniCharRef::CreateForString(m_node, m_cur); }
+        { return wxUniCharRef::CreateForString(*str(), m_cur); }
 
       iterator operator+(ptrdiff_t n) const
         { return iterator(str(), wxStringOperations::AddToIter(m_cur, n)); }
