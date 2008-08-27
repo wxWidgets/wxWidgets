@@ -16,7 +16,6 @@
 
 class WXDLLIMPEXP_CORE wxTopLevelWindowGTK : public wxTopLevelWindowBase
 {
-    DECLARE_EVENT_TABLE()
 public:
     // construction
     wxTopLevelWindowGTK() { Init(); }
@@ -85,9 +84,6 @@ public:
 
     // GTK callbacks
     virtual void OnInternalIdle();
-
-    // Respond to system colour change
-    void OnSysColourChanged(wxSysColourChangedEvent& event);
 
     // do *not* call this to iconize the frame, this is a private function!
     void SetIconizeState(bool iconic);

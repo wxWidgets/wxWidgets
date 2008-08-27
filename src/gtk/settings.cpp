@@ -20,213 +20,137 @@
 
 #include "wx/fontutil.h"
 
-#include <gtk/gtkversion.h>
-#if GTK_CHECK_VERSION(2, 9, 0)
-    // gtk_object_sink
-    #undef GTK_DISABLE_DEPRECATED
-#endif
 #include <gtk/gtk.h>
 
 bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* bottom);
 
 // ----------------------------------------------------------------------------
-// wxSystemObjects
-// ----------------------------------------------------------------------------
-
-struct wxSystemObjects
-{
-    wxColour m_colBtnFace,
-             m_colBtnShadow,
-             m_colBtnHighlight,
-             m_colHighlight,
-             m_colHighlightText,
-             m_colListBox,
-             m_colWindow,
-             m_colWindowText,
-             m_colBtnText,
-             m_colMenuItemHighlight,
-             m_colTooltip,
-             m_colTooltipText,
-             m_colMenubarBg;
-
-    wxFont m_fontSystem;
-};
-
-static wxSystemObjects gs_objects;
-
-void wxClearGtkSystemObjects()
-{
-    gs_objects.m_colBtnFace = wxColour();
-    gs_objects.m_colBtnShadow = wxColour();
-    gs_objects.m_colBtnHighlight = wxColour();
-    gs_objects.m_colHighlightText = wxColour();
-    gs_objects.m_colListBox = wxColour();
-    gs_objects.m_colWindow = wxColour();
-    gs_objects.m_colWindowText = wxColour();
-    gs_objects.m_colBtnText = wxColour();
-    gs_objects.m_colMenuItemHighlight = wxColour();
-    gs_objects.m_colTooltip = wxColour();
-    gs_objects.m_colTooltipText = wxColour();
-    gs_objects.m_colMenubarBg = wxColour();
-    gs_objects.m_fontSystem = wxNullFont;
-}
-
-// ----------------------------------------------------------------------------
 // wxSystemSettings implementation
 // ----------------------------------------------------------------------------
 
-// kind of widget to use in GetColourFromGTKWidget
-enum wxGtkWidgetType
-{
-    wxGTK_BUTTON,
-    wxGTK_LIST,
-    wxGTK_MENUITEM,
-    wxGTK_TEXTCTRL,
-    wxGTK_MENUBAR, 
-};
+static wxFont gs_fontSystem;
 
-// the colour we need
-enum wxGtkColourType
+static GtkContainer* ContainerWidget()
 {
-    wxGTK_FG,
-    wxGTK_BG,
-    wxGTK_BASE
-};
-
-// wxSystemSettings::GetColour() helper: get the colours from a GTK+
-// widget style, return true if we did get them
-static bool GetColourFromGTKWidget(GdkColor& gdkColor,
-                                   wxGtkWidgetType type = wxGTK_BUTTON,
-                                   GtkStateType state = GTK_STATE_NORMAL,
-                                   wxGtkColourType colour = wxGTK_BG)
-{
-    GtkWidget *widget;
-    switch ( type )
+    static GtkContainer* s_widget;
+    if (s_widget == NULL)
     {
-        default:
-            wxFAIL_MSG( _T("unexpected GTK widget type") );
-            // fall through
-
-        case wxGTK_BUTTON:
-            widget = gtk_button_new();
-            break;
-
-        case wxGTK_TEXTCTRL:
-            widget = gtk_text_view_new();
-            break;
-
-        case wxGTK_LIST:
-            widget = gtk_tree_view_new_with_model(
-                (GtkTreeModel*)gtk_list_store_new(1, G_TYPE_INT));
-            break;
-
-        case wxGTK_MENUITEM:
-            widget = gtk_menu_item_new();
-            break;
-
-        case wxGTK_MENUBAR:
-            widget = gtk_menu_bar_new();
-            break;
+        s_widget = GTK_CONTAINER(gtk_fixed_new());
+        GtkWidget* window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+        gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(s_widget));
     }
-
-    GtkStyle *def = gtk_rc_get_style( widget );
-    if ( !def )
-        def = gtk_widget_get_default_style();
-
-    const bool ok = def != NULL;
-    if (ok)
-    {
-        switch ( colour )
-        {
-            default:
-                wxFAIL_MSG( _T("unexpected GTK colour type") );
-                // fall through
-
-            case wxGTK_FG:
-                gdkColor = def->fg[state];
-                break;
-
-            case wxGTK_BG:
-                gdkColor = def->bg[state];
-                break;
-
-            case wxGTK_BASE:
-                gdkColor = def->base[state];
-                break;
-        }
-    }
-
-    gtk_object_sink((GtkObject*)widget);
-
-    return ok;
+    return s_widget;
 }
 
-static void GetTooltipColors()
+extern "C" {
+static void style_set(GtkWidget*, GtkStyle*, void*)
 {
-    GtkWidget* widget = gtk_window_new(GTK_WINDOW_POPUP);
-    const char* name = "gtk-tooltip";
-    if (gtk_check_version(2, 11, 0))
-        name = "gtk-tooltips";
-    gtk_widget_set_name(widget, name);
-    gtk_widget_ensure_style(widget);
+    gs_fontSystem = wxNullFont;
+}
+}
 
-    GdkColor c = widget->style->bg[GTK_STATE_NORMAL];
-    gs_objects.m_colTooltip = wxColor(c);
-    c = widget->style->fg[GTK_STATE_NORMAL];
-    gs_objects.m_colTooltipText = wxColor(c);
+static const GtkStyle* ButtonStyle()
+{
+    static GtkWidget* s_widget;
+    if (s_widget == NULL)
+    {
+        s_widget = gtk_button_new();
+        gtk_container_add(ContainerWidget(), s_widget);
+        gtk_widget_ensure_style(s_widget);
+        g_signal_connect(s_widget, "style_set", G_CALLBACK(style_set), NULL);
+    }
+    return s_widget->style;
+}
 
-    gtk_widget_destroy(widget);
+static const GtkStyle* ListStyle()
+{
+    static GtkWidget* s_widget;
+    if (s_widget == NULL)
+    {
+        s_widget = gtk_tree_view_new_with_model(
+            GTK_TREE_MODEL(gtk_list_store_new(1, G_TYPE_INT)));
+        gtk_container_add(ContainerWidget(), s_widget);
+        gtk_widget_ensure_style(s_widget);
+    }
+    return s_widget->style;
+}
+
+static const GtkStyle* TextCtrlStyle()
+{
+    static GtkWidget* s_widget;
+    if (s_widget == NULL)
+    {
+        s_widget = gtk_text_view_new();
+        gtk_container_add(ContainerWidget(), s_widget);
+        gtk_widget_ensure_style(s_widget);
+    }
+    return s_widget->style;
+}
+
+static const GtkStyle* MenuItemStyle()
+{
+    static GtkWidget* s_widget;
+    if (s_widget == NULL)
+    {
+        s_widget = gtk_menu_item_new();
+        gtk_container_add(ContainerWidget(), s_widget);
+        gtk_widget_ensure_style(s_widget);
+    }
+    return s_widget->style;
+}
+
+static const GtkStyle* MenuBarStyle()
+{
+    static GtkWidget* s_widget;
+    if (s_widget == NULL)
+    {
+        s_widget = gtk_menu_bar_new();
+        gtk_container_add(ContainerWidget(), s_widget);
+        gtk_widget_ensure_style(s_widget);
+    }
+    return s_widget->style;
+}
+
+static const GtkStyle* ToolTipStyle()
+{
+    static GtkWidget* s_widget;
+    if (s_widget == NULL)
+    {
+        s_widget = gtk_window_new(GTK_WINDOW_POPUP);
+        const char* name = "gtk-tooltip";
+        if (gtk_check_version(2, 11, 0))
+            name = "gtk-tooltips";
+        gtk_widget_set_name(s_widget, name);
+        gtk_widget_ensure_style(s_widget);
+    }
+    return s_widget->style;
 }
 
 wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
 {
     wxColor color;
-    GdkColor gdkColor;
     switch (index)
     {
         case wxSYS_COLOUR_SCROLLBAR:
         case wxSYS_COLOUR_BACKGROUND:
+        //case wxSYS_COLOUR_DESKTOP:
         case wxSYS_COLOUR_INACTIVECAPTION:
         case wxSYS_COLOUR_MENU:
         case wxSYS_COLOUR_WINDOWFRAME:
         case wxSYS_COLOUR_ACTIVEBORDER:
         case wxSYS_COLOUR_INACTIVEBORDER:
         case wxSYS_COLOUR_BTNFACE:
+        //case wxSYS_COLOUR_3DFACE:
         case wxSYS_COLOUR_3DLIGHT:
-            if (!gs_objects.m_colBtnFace.Ok())
-            {
-                gdkColor.red =
-                gdkColor.green = 0;
-                gdkColor.blue = 0x9c40;
-                GetColourFromGTKWidget(gdkColor);
-                gs_objects.m_colBtnFace = wxColor(gdkColor);
-            }
-            color = gs_objects.m_colBtnFace;
+            color = wxColor(ButtonStyle()->bg[GTK_STATE_NORMAL]);
             break;
 
         case wxSYS_COLOUR_WINDOW:
-            if (!gs_objects.m_colWindow.Ok())
-            {
-                gdkColor.red =
-                gdkColor.green =
-                gdkColor.blue = 0xFFFF;
-                GetColourFromGTKWidget(gdkColor, wxGTK_TEXTCTRL, GTK_STATE_NORMAL, wxGTK_BASE);
-                gs_objects.m_colWindow = wxColor(gdkColor);
-            }
-            color = gs_objects.m_colWindow;
+            color = wxColor(TextCtrlStyle()->base[GTK_STATE_NORMAL]);
             break;
 
-
         case wxSYS_COLOUR_MENUBAR:
-            if (!gs_objects.m_colMenubarBg.Ok())
-            {
-                gdkColor.red =
-                gdkColor.green = 0;
-                gdkColor.blue = 0x9c40;
-                GetColourFromGTKWidget(gdkColor,wxGTK_MENUBAR);
-                gs_objects.m_colMenubarBg = wxColor(gdkColor);
-            }
-            color = gs_objects.m_colMenubarBg;
+            color = wxColor(MenuBarStyle()->bg[GTK_STATE_NORMAL]);
             break;
 
         case wxSYS_COLOUR_3DDKSHADOW:
@@ -236,51 +160,28 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
         case wxSYS_COLOUR_GRAYTEXT:
         case wxSYS_COLOUR_BTNSHADOW:
         //case wxSYS_COLOUR_3DSHADOW:
-            if (!gs_objects.m_colBtnShadow.Ok())
             {
                 wxColour faceColour(GetColour(wxSYS_COLOUR_3DFACE));
-                gs_objects.m_colBtnShadow =
+                color =
                    wxColour((unsigned char) (faceColour.Red() * 2 / 3),
                             (unsigned char) (faceColour.Green() * 2 / 3),
                             (unsigned char) (faceColour.Blue() * 2 / 3));
             }
-            color = gs_objects.m_colBtnShadow;
             break;
 
-        case wxSYS_COLOUR_3DHIGHLIGHT:
-        //case wxSYS_COLOUR_BTNHIGHLIGHT:
+        case wxSYS_COLOUR_BTNHIGHLIGHT:
+        //case wxSYS_COLOUR_BTNHILIGHT:
+        //case wxSYS_COLOUR_3DHIGHLIGHT:
+        //case wxSYS_COLOUR_3DHILIGHT:
             color = *wxWHITE;
             break;
 
         case wxSYS_COLOUR_HIGHLIGHT:
-            if (!gs_objects.m_colHighlight.Ok())
-            {
-                gdkColor.red =
-                gdkColor.green = 0;
-                gdkColor.blue = 0x9c40;
-                GetColourFromGTKWidget(
-                    gdkColor, wxGTK_BUTTON, GTK_STATE_SELECTED);
-                gs_objects.m_colHighlight = wxColour(gdkColor);
-            }
-            color = gs_objects.m_colHighlight;
+            color = wxColor(ButtonStyle()->bg[GTK_STATE_SELECTED]);
             break;
 
         case wxSYS_COLOUR_LISTBOX:
-            if (!gs_objects.m_colListBox.Ok())
-            {
-                if ( GetColourFromGTKWidget(gdkColor,
-                                            wxGTK_LIST,
-                                            GTK_STATE_NORMAL,
-                                            wxGTK_BASE) )
-                {
-                    gs_objects.m_colListBox = wxColour(gdkColor);
-                }
-                else
-                {
-                    gs_objects.m_colListBox = *wxWHITE;
-                }
-            }
-            color = gs_objects.m_colListBox;
+            color = wxColor(ListStyle()->base[GTK_STATE_NORMAL]);
             break;
 
         case wxSYS_COLOUR_MENUTEXT:
@@ -288,43 +189,19 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
         case wxSYS_COLOUR_CAPTIONTEXT:
         case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
         case wxSYS_COLOUR_BTNTEXT:
-            if (!gs_objects.m_colBtnText.Ok())
-            {
-                gdkColor.red =
-                gdkColor.green =
-                gdkColor.blue = 0;
-                GetColourFromGTKWidget(
-                    gdkColor, wxGTK_BUTTON, GTK_STATE_NORMAL, wxGTK_FG);
-                gs_objects.m_colBtnText = wxColour(gdkColor);
-            }
-            color = gs_objects.m_colBtnText;
+            color = wxColor(ButtonStyle()->fg[GTK_STATE_NORMAL]);
             break;
 
         case wxSYS_COLOUR_INFOBK:
-            if (!gs_objects.m_colTooltip.Ok()) {
-                GetTooltipColors();
-            }
-            color = gs_objects.m_colTooltip;
+            color = wxColor(ToolTipStyle()->bg[GTK_STATE_NORMAL]);
             break;
 
         case wxSYS_COLOUR_INFOTEXT:
-            if (!gs_objects.m_colTooltipText.Ok()) {
-                GetTooltipColors();
-            }
-            color = gs_objects.m_colTooltipText;
+            color = wxColor(ToolTipStyle()->fg[GTK_STATE_NORMAL]);
             break;
 
         case wxSYS_COLOUR_HIGHLIGHTTEXT:
-            if (!gs_objects.m_colHighlightText.Ok())
-            {
-                gdkColor.red =
-                gdkColor.green =
-                gdkColor.blue = 0;
-                GetColourFromGTKWidget(
-                    gdkColor, wxGTK_BUTTON, GTK_STATE_SELECTED, wxGTK_FG);
-                gs_objects.m_colHighlightText = wxColour(gdkColor);
-            }
-            color = gs_objects.m_colHighlightText;
+            color = wxColor(ButtonStyle()->fg[GTK_STATE_SELECTED]);
             break;
 
         case wxSYS_COLOUR_APPWORKSPACE:
@@ -333,16 +210,7 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
 
         case wxSYS_COLOUR_ACTIVECAPTION:
         case wxSYS_COLOUR_MENUHILIGHT:
-            if (!gs_objects.m_colMenuItemHighlight.Ok())
-            {
-                gdkColor.red =
-                gdkColor.green =
-                gdkColor.blue = 0;
-                GetColourFromGTKWidget(
-                    gdkColor, wxGTK_MENUITEM, GTK_STATE_SELECTED, wxGTK_BG);
-                gs_objects.m_colMenuItemHighlight = wxColour(gdkColor);
-            }
-            color = gs_objects.m_colMenuItemHighlight;
+            color = wxColor(MenuItemStyle()->bg[GTK_STATE_SELECTED]);
             break;
 
         case wxSYS_COLOUR_HOTLIGHT:
@@ -377,36 +245,14 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
         case wxSYS_SYSTEM_FONT:
         case wxSYS_DEVICE_DEFAULT_FONT:
         case wxSYS_DEFAULT_GUI_FONT:
-            if (!gs_objects.m_fontSystem.Ok())
+            if (!gs_fontSystem.Ok())
             {
-                GtkWidget *widget = gtk_button_new();
-                GtkStyle *def = gtk_rc_get_style( widget );
-                if ( !def || !def->font_desc )
-                    def = gtk_widget_get_default_style();
-                if ( def && def->font_desc )
-                {
-                    wxNativeFontInfo info;
-                    info.description =
-                        pango_font_description_copy(def->font_desc);
-                    gs_objects.m_fontSystem = wxFont(info);
-                }
-                else
-                {
-                    GtkSettings *settings = gtk_settings_get_default();
-                    gchar *font_name = NULL;
-                    g_object_get ( settings,
-                                   "gtk-font-name",
-                                   &font_name,
-                                   NULL);
-                    if (!font_name)
-                        gs_objects.m_fontSystem = wxFont( 12, wxSWISS, wxNORMAL, wxNORMAL );
-                    else
-                        gs_objects.m_fontSystem = wxFont(wxString::FromAscii(font_name));
-                    g_free (font_name);
-                }
-                gtk_object_sink((GtkObject*)widget);
+                wxNativeFontInfo info;
+                info.description = ButtonStyle()->font_desc;
+                gs_fontSystem = wxFont(info);
+                info.description = NULL;
             }
-            font = gs_objects.m_fontSystem;
+            font = gs_fontSystem;
             break;
 
         default:
