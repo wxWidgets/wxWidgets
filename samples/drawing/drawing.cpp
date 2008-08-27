@@ -50,33 +50,6 @@
 #endif
 
 // ----------------------------------------------------------------------------
-// constants
-// ----------------------------------------------------------------------------
-
-// what do we show on screen (there are too many shapes to put them all on
-// screen simultaneously)
-enum ScreenToShow
-{
-    Show_Default,
-    Show_Text,
-    Show_Lines,
-    Show_Brushes,
-    Show_Polygons,
-    Show_Mask,
-    Show_Mask_Stretch,
-    Show_Ops,
-    Show_Regions,
-    Show_Circles,
-    Show_Splines,
-#if wxUSE_GRAPHICS_CONTEXT
-    Show_Alpha,
-    Show_Graphics,
-#endif
-    Show_Gradient,
-    Show_Max
-};
-
-// ----------------------------------------------------------------------------
 // global variables
 // ----------------------------------------------------------------------------
 
@@ -166,7 +139,7 @@ public:
     void OnMouseDown(wxMouseEvent &event);
     void OnMouseUp(wxMouseEvent &event);
 
-    void ToShow(ScreenToShow show) { m_show = show; Refresh(); }
+    void ToShow(int show) { m_show = show; Refresh(); }
 
     // set or remove the clipping region
     void Clip(bool clip) { m_clip = clip; Refresh(); }
@@ -202,7 +175,7 @@ protected:
 private:
     MyFrame *m_owner;
 
-    ScreenToShow m_show;
+    int          m_show;
     wxBitmap     m_smile_bmp;
     wxIcon       m_std_icon;
     bool         m_clip;
@@ -388,7 +361,6 @@ bool MyApp::OnInit()
         // missing for whatever reason
     }
 
-    // ok, continue
     return true;
 }
 
@@ -431,7 +403,7 @@ MyCanvas::MyCanvas(MyFrame *parent)
                            wxHSCROLL | wxVSCROLL | wxNO_FULL_REPAINT_ON_RESIZE)
 {
     m_owner = parent;
-    m_show = Show_Default;
+    m_show = File_ShowDefault;
     m_smile_bmp = wxBitmap(smile_xpm);
     m_std_icon = wxArtProvider::GetIcon(wxART_INFORMATION);
     m_clip = false;
@@ -1422,63 +1394,63 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
 
     switch ( m_show )
     {
-        case Show_Default:
+        case File_ShowDefault:
             DrawDefault(dc);
             break;
 
-        case Show_Circles:
+        case File_ShowCircles:
             DrawCircles(dc);
             break;
 
-        case Show_Splines:
+        case File_ShowSplines:
             DrawSplines(dc);
             break;
 
-        case Show_Regions:
+        case File_ShowRegions:
             DrawRegions(dc);
             break;
 
-        case Show_Text:
+        case File_ShowText:
             DrawText(dc);
             break;
 
-        case Show_Lines:
+        case File_ShowLines:
             DrawTestLines( 0, 100, 0, dc );
             DrawTestLines( 0, 320, 1, dc );
             DrawTestLines( 0, 540, 2, dc );
             DrawTestLines( 0, 760, 6, dc );
             break;
 
-        case Show_Brushes:
+        case File_ShowBrushes:
             DrawTestBrushes(dc);
             break;
 
-        case Show_Polygons:
+        case File_ShowPolygons:
             DrawTestPoly(dc);
             break;
 
-        case Show_Mask:
+        case File_ShowMask:
             DrawImages(dc, Draw_Normal);
             break;
 
-        case Show_Mask_Stretch:
+        case File_ShowMaskStretch:
             DrawImages(dc, Draw_Stretch);
             break;
 
-        case Show_Ops:
+        case File_ShowOps:
             DrawWithLogicalOps(dc);
             break;
 
 #if wxUSE_GRAPHICS_CONTEXT
-        case Show_Alpha:
+        case File_ShowAlpha:
             DrawAlpha(dc);
             break;
-        case Show_Graphics:
+        case File_ShowGraphics:
             DrawGraphics(gdc.GetGraphicsContext());
             break;
 #endif
 
-        case Show_Gradient:
+        case File_ShowGradients:
             DrawGradients(dc);
             break;
 
@@ -1728,7 +1700,7 @@ void MyFrame::OnGraphicContext(wxCommandEvent& event)
 
 void MyFrame::OnShow(wxCommandEvent& event)
 {
-    m_canvas->ToShow((ScreenToShow)(event.GetId() - MenuShow_First));
+    m_canvas->ToShow(event.GetId());
 }
 
 void MyFrame::OnOption(wxCommandEvent& event)
