@@ -1,23 +1,22 @@
 wxWidgets 2.9.x
 ---------------------------------------------------------
 
-Welcome to wxWidgets, a sophisticated cross-platform C++
-framework for writing advanced GUI applications using
-native controls where possible.
+Welcome to wxWidgets, a cross-platform C++ framework for
+writing advanced GUI applications using native controls
+where possible.
 
 In addition to common and advanced GUI facilities such as
 frames, scrolling windows, toolbars, tree controls, icons,
-device contexts, printing, splitter windows and so on, there are
-wrappers for common file operations, and facilities for writing
-TCP/IP applications, thread handling, and more. Where certain
-features are not available on a platform, such as MDI and tree
-controls on Unix, they are emulated.
+device contexts, printing, splitter windows and so on, there
+are wrappers for common file operations, and facilities for
+writing TCP/IP applications, thread handling, and more.
 
-A detailed 2000-page reference manual is supplied in HTML, PDF
-and Windows Help form: see the docs hierarchy.
+Where certain features are not available on a platform, such
+as MDI under Unix and OS X, they are emulated.
 
-For a quick start, point your Web browser at docs/html/index.htm
-for a list of important documents and samples.
+A detailed reference manual including in-depth overviews for
+various topics is supplied in various formats and can be
+accessed online.
 
 Changes in this release
 -----------------------
@@ -31,22 +30,21 @@ Platforms supported
 wxWidgets currently supports the following platforms:
 
 - Windows 95/98/ME, NT, 2000, XP, Vista, Pocket PC/Mobile, Smartphone
-- Most Unix variants with GTK+ 1 and GTK+ 2
-- Most Unix variants with X11 (beta)
+- Most Unix variants using the  GTK+ 2 toolkit (version 2.6 or newer)
+- MacOS OS X (10.4 or newer) using the Carbon and some Cocao mix-in
+
+There is some support for the followig platforms:
+
+- Most Unix variants with X11
 - Most Unix variants with Motif/Lesstif
-- MacOS 9.x and 10.x using Carbon (10.3 and above preferred)
-- MacOS 10.x using Cocoa (beta)
-- OS/2 (beta)
-- PalmOS (alpha)
+- Most Unix variants with GTK+ 1.2
+- MacOS 10.x using the Cocoa API
+- OS/2
+- PalmOS
 
 Most popular C++ compilers are supported; see the install.txt
 file for each platform (available via docs/html/index.htm) for details.
 See also http://www.wxwidgets.org/platform.htm.
-
-Note that 2.6 series were the last to fully support GTK+ 1.2, and Mac OS
-9/Mac OS 10.2 and below. wxWidgets 2.7 and above focuses on GTK+ 2 and Mac OS
-10.3 and above and compatibility with earlier systems is not guaranteed any
-more.
 
 Files
 -----
@@ -64,7 +62,7 @@ see the install.txt file in the individual directories:
   docs/msw
   docs/gtk
   docs/motif
-  docs/mac
+  docs/osx
   docs/cocoa
   docs/x11
   docs/mgl
@@ -99,9 +97,7 @@ against LGPL glibc as well. Please read carefully LGPL, section
 applications linked against LGPL library. Basically you should
 link dynamically and include source code of LGPL libraries with
 your product (unless it is already present in user's system -
-like glibc usually is). If compiled with --enable-odbc (Unix
-only), wxWidgets library will contain iODBC library which is
-covered by LGPL.
+like glibc usually is). 
 
 If you use TIFF image handler, please see src/tiff/COPYRIGHT
 for libtiff licence details.
