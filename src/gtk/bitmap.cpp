@@ -300,19 +300,18 @@ bool wxBitmap::Create( int width, int height, int depth )
     return Ok();
 }
 
-wxBitmap wxBitmap::Rescale(int clipx, int clipy, int clipwidth, int clipheight, int newx, int newy) const
+wxBitmap wxBitmap::Rescale(int clipx, int clipy, int clipwidth, int clipheight,
+                           int width, int height) const
 {
     wxBitmap bmp;
 
     wxCHECK_MSG(Ok(), bmp, wxT("invalid bitmap"));
 
-    int width = wxMax(newx, 1);
-    int height = wxMax(newy, 1);
-    width = wxMin(width, clipwidth);
-    height = wxMin(height, clipheight);
+    width = wxMax(width, 1);
+    height = wxMax(height, 1);
 
-    const double scale_x = double(newx) / M_BMPDATA->m_width;
-    const double scale_y = double(newy) / M_BMPDATA->m_height;
+    const double scale_x = double(width) / clipwidth;
+    const double scale_y = double(height) / clipheight;
 
     // Converting to pixbuf, scaling with gdk_pixbuf_scale, and converting
     // back, is faster than scaling pixmap ourselves.
@@ -335,7 +334,7 @@ wxBitmap wxBitmap::Rescale(int clipx, int clipy, int clipwidth, int clipheight, 
     // images, but the only one which preserves sharp edges
     gdk_pixbuf_scale(
         pixbuf, pixbuf_scaled,
-        0, 0, width, height, -clipx, -clipy, scale_x, scale_y,
+        0, 0, width, height, -clipx*scale_x, -clipy*scale_y, scale_x, scale_y,
         GDK_INTERP_NEAREST);
 
     g_object_unref(pixbuf);

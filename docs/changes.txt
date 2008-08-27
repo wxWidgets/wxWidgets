@@ -398,6 +398,7 @@ wxGTK:
 - Added gtk.tlw.can-set-transparency system option.
 - Added support for GTK+ print backend
 - Fix changing font/colour of label in buttons with images (Marcin Wojdyr).
+- Fix wxDC::Blit() support for user scale and source offset (Marcin Wojdyr).
 
 wxMac:
 

@@ -974,6 +974,80 @@ void wxWindowDCImpl::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y )
     DoDrawBitmap( (const wxBitmap&)icon, x, y, true );
 }
 
+// compare to current clipping region
+bool wxWindowDCImpl::IsOutsideOfClippingRegion(int x, int y, int w, int h)
+{
+    if (m_currentClippingRegion.IsNull())
+        return false;
+
+    wxRegion region(x, y, w, h);
+    region.Intersect( m_currentClippingRegion );
+    return region.IsEmpty();
+}
+
+void wxWindowDCImpl::RemoveClipMask(GdkGC *gc)
+{
+    gdk_gc_set_clip_mask(gc, NULL);
+    gdk_gc_set_clip_origin(gc, 0, 0);
+    if (!m_currentClippingRegion.IsNull())
+        gdk_gc_set_clip_region(gc, m_currentClippingRegion.GetRegion());
+}
+
+// For drawing a mono-bitmap (XBitmap) we use the current text GC
+void wxWindowDCImpl::DoDrawMonoBitmap(const wxBitmap& bitmap,
+                                      int bmp_w, int bmp_h,
+                                      int xsrc, int ysrc,
+                                      int xdest, int ydest,
+                                      int width, int height)
+{
+    GdkPixmap *bitmap2
+        = gdk_pixmap_new( wxGetRootWindow()->window, bmp_w, bmp_h, -1 );
+    GdkGC *gc = gdk_gc_new( bitmap2 );
+    gdk_gc_set_foreground( gc, m_textForegroundColour.GetColor() );
+    gdk_gc_set_background( gc, m_textBackgroundColour.GetColor() );
+    gdk_wx_draw_bitmap(bitmap2, gc, bitmap.GetPixmap(), 0, 0);
+
+    gdk_draw_drawable(m_gdkwindow, m_textGC, bitmap2, xsrc, ysrc, xdest, ydest,
+                      width, height);
+
+    g_object_unref (bitmap2);
+    g_object_unref (gc);
+}
+
+// Returns a new mask that is the intersection of the old mask
+// and m_currentClippingRegion with proper offsets
+GdkBitmap* wxWindowDCImpl::GetClippedMask(GdkBitmap* mask, int w, int h,
+                                          int x, int y,
+                                          int xsrcMask, int ysrcMask)
+{
+    // create monochrome bitmap that will be used as the new mask
+    GdkBitmap *new_mask = gdk_pixmap_new( wxGetRootWindow()->window, w, h, 1 );
+
+    GdkColor c0, c1;
+    c0.pixel = 0;
+    c1.pixel = 1;
+    GdkGC *gc = gdk_gc_new( new_mask );
+
+    // zero-ing new_mask
+    gdk_gc_set_foreground( gc, &c0 );
+    gdk_draw_rectangle( new_mask, gc, TRUE, 0, 0, w, h );
+
+    // clipping region
+    gdk_gc_set_clip_region( gc, m_currentClippingRegion.GetRegion() );
+    gdk_gc_set_clip_origin( gc, -x, -y );
+
+    // copy the old mask to the new_mask in the clip region area
+    gdk_gc_set_background( gc, &c0 );
+    gdk_gc_set_foreground( gc, &c1 );
+    gdk_gc_set_fill( gc, GDK_OPAQUE_STIPPLED );
+    gdk_gc_set_ts_origin( gc, -xsrcMask, -ysrcMask );
+    gdk_gc_set_stipple( gc, mask );
+    gdk_draw_rectangle( new_mask, gc, TRUE, 0, 0, w, h );
+
+    g_object_unref (gc);
+    return new_mask;
+}
+
 void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
                                wxCoord x, wxCoord y,
                                bool useMask )
@@ -1002,70 +1076,40 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
     int ww = XLOG2DEVREL(w);
     int hh = YLOG2DEVREL(h);
 
-    // compare to current clipping region
-    if (!m_currentClippingRegion.IsNull())
-    {
-        wxRegion tmp( xx,yy,ww,hh );
-        tmp.Intersect( m_currentClippingRegion );
-        if (tmp.IsEmpty())
-            return;
-    }
+    if (IsOutsideOfClippingRegion( xx,yy,ww,hh ))
+        return;
 
     // scale bitmap if required
     wxBitmap use_bitmap = bitmap;
     if ((w != ww) || (h != hh))
-        use_bitmap = use_bitmap.Rescale( 0, 0, ww, hh, ww, hh );
+        use_bitmap = use_bitmap.Rescale( 0, 0, w, h, ww, hh );
 
-    // apply mask if any
+    // get mask if any
     GdkBitmap *mask = (GdkBitmap *) NULL;
     if (useMask && use_bitmap.GetMask())
         mask = use_bitmap.GetMask()->GetBitmap();
 
+    // for drawing a mono-bitmap we use the current text GC
     GdkGC* use_gc = is_mono ? m_textGC : m_penGC;
 
-    GdkBitmap *new_mask = (GdkBitmap*) NULL;
+    bool mask_owned = false;
 
     if (mask != NULL)
     {
         if (!m_currentClippingRegion.IsNull())
         {
-            GdkColor col;
-            new_mask = gdk_pixmap_new( wxGetRootWindow()->window, ww, hh, 1 );
-            GdkGC *gc = gdk_gc_new( new_mask );
-            col.pixel = 0;
-            gdk_gc_set_foreground( gc, &col );
-            gdk_draw_rectangle( new_mask, gc, TRUE, 0, 0, ww, hh );
-            col.pixel = 0;
-            gdk_gc_set_background( gc, &col );
-            col.pixel = 1;
-            gdk_gc_set_foreground( gc, &col );
-            gdk_gc_set_clip_region( gc, m_currentClippingRegion.GetRegion() );
-            gdk_gc_set_clip_origin( gc, -xx, -yy );
-            gdk_gc_set_fill( gc, GDK_OPAQUE_STIPPLED );
-            gdk_gc_set_stipple( gc, mask );
-            gdk_draw_rectangle( new_mask, gc, TRUE, 0, 0, ww, hh );
-            mask = new_mask;
-            g_object_unref (gc);
+            mask = GetClippedMask(mask, ww, hh, xx, yy, 0, 0);
+            mask_owned = true;
         }
 
         gdk_gc_set_clip_mask(use_gc, mask);
         gdk_gc_set_clip_origin(use_gc, xx, yy);
     }
 
-    // Draw XPixmap or XBitmap, depending on what the wxBitmap contains. For
-    // drawing a mono-bitmap (XBitmap) we use the current text GC
+    // Draw XPixmap or XBitmap, depending on what the wxBitmap contains.
     if (is_mono)
     {
-        GdkPixmap *bitmap2 = gdk_pixmap_new( wxGetRootWindow()->window, ww, hh, -1 );
-        GdkGC *gc = gdk_gc_new( bitmap2 );
-        gdk_gc_set_foreground( gc, m_textForegroundColour.GetColor() );
-        gdk_gc_set_background( gc, m_textBackgroundColour.GetColor() );
-        gdk_wx_draw_bitmap(bitmap2, gc, use_bitmap.GetPixmap(), 0, 0);
-
-        gdk_draw_drawable(m_gdkwindow, use_gc, bitmap2, 0, 0, xx, yy, -1, -1);
-
-        g_object_unref (bitmap2);
-        g_object_unref (gc);
+        DoDrawMonoBitmap(use_bitmap, ww, hh, 0, 0, xx, yy, -1, -1);
     }
     else
     {
@@ -1087,12 +1131,9 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
     // remove mask again if any
     if (mask != NULL)
     {
-        gdk_gc_set_clip_mask(use_gc, NULL);
-        gdk_gc_set_clip_origin(use_gc, 0, 0);
-        if (!m_currentClippingRegion.IsNull())
-            gdk_gc_set_clip_region(use_gc, m_currentClippingRegion.GetRegion());
-        if (new_mask != NULL)
-            g_object_unref(new_mask);
+        RemoveClipMask(use_gc);
+        if (mask_owned)
+            g_object_unref(mask);
     }
 }
 
@@ -1179,13 +1220,8 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest,
     wxCoord hh = YLOG2DEVREL(height);
 
     // compare to current clipping region
-    if (!m_currentClippingRegion.IsNull())
-    {
-        wxRegion tmp( xx,yy,ww,hh );
-        tmp.Intersect( m_currentClippingRegion );
-        if (tmp.IsEmpty())
-            return true;
-    }
+    if (IsOutsideOfClippingRegion( xx,yy,ww,hh ))
+        return true;
 
     int old_logical_func = m_logicalFunction;
     SetLogicalFunction( logical_func );
@@ -1237,55 +1273,29 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest,
 
         GdkGC* use_gc = is_mono ? m_textGC : m_penGC;
 
-        GdkBitmap *new_mask = (GdkBitmap*) NULL;
+        bool mask_owned = false;
 
         if (mask != NULL)
         {
             if (!m_currentClippingRegion.IsNull())
             {
-                GdkColor col;
-                new_mask = gdk_pixmap_new( wxGetRootWindow()->window, bm_ww, bm_hh, 1 );
-                GdkGC *gc = gdk_gc_new( new_mask );
-                col.pixel = 0;
-                gdk_gc_set_foreground( gc, &col );
-                gdk_gc_set_ts_origin( gc, -xsrcMask, -ysrcMask);
-                gdk_draw_rectangle( new_mask, gc, TRUE, 0, 0, bm_ww, bm_hh );
-                col.pixel = 0;
-                gdk_gc_set_background( gc, &col );
-                col.pixel = 1;
-                gdk_gc_set_foreground( gc, &col );
-                gdk_gc_set_clip_region( gc, m_currentClippingRegion.GetRegion() );
-                // was: gdk_gc_set_clip_origin( gc, -xx, -yy );
-                gdk_gc_set_clip_origin( gc, -cx, -cy );
-                gdk_gc_set_fill( gc, GDK_OPAQUE_STIPPLED );
-                gdk_gc_set_stipple( gc, mask );
-                gdk_draw_rectangle( new_mask, gc, TRUE, 0, 0, bm_ww, bm_hh );
-                mask = new_mask;
-                g_object_unref (gc);
+                mask = GetClippedMask(mask, bm_ww, bm_hh, cx, cy,
+                                      xsrcMask, ysrcMask);
+                mask_owned = true;
             }
 
             gdk_gc_set_clip_mask(use_gc, mask);
-            if (new_mask != NULL)
+            if (mask_owned)
                 gdk_gc_set_clip_origin(use_gc, cx, cy);
             else
                 gdk_gc_set_clip_origin(use_gc, cx - xsrcMask, cy - ysrcMask);
         }
 
-        // Draw XPixmap or XBitmap, depending on what the wxBitmap contains. For
-        // drawing a mono-bitmap (XBitmap) we use the current text GC
-
+        // Draw XPixmap or XBitmap, depending on what the wxBitmap contains.
         if (is_mono)
         {
-            GdkPixmap *bitmap = gdk_pixmap_new( wxGetRootWindow()->window, bm_ww, bm_hh, -1 );
-            GdkGC *gc = gdk_gc_new( bitmap );
-            gdk_gc_set_foreground( gc, m_textForegroundColour.GetColor() );
-            gdk_gc_set_background( gc, m_textBackgroundColour.GetColor() );
-            gdk_wx_draw_bitmap(bitmap, gc, use_bitmap.GetPixmap(), 0, 0);
-
-            gdk_draw_drawable(m_gdkwindow, use_gc, bitmap, xsrc, ysrc, cx, cy, cw, ch);
-
-            g_object_unref (bitmap);
-            g_object_unref (gc);
+            DoDrawMonoBitmap(use_bitmap, bm_ww, bm_hh,
+                             xsrc, ysrc, cx, cy, cw, ch);
         }
         else
         {
@@ -1296,31 +1306,18 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest,
         // remove mask again if any
         if (mask != NULL)
         {
-            gdk_gc_set_clip_mask(use_gc, NULL);
-            gdk_gc_set_clip_origin(use_gc, 0, 0);
-            if (!m_currentClippingRegion.IsNull())
-                gdk_gc_set_clip_region(use_gc, m_currentClippingRegion.GetRegion());
+            RemoveClipMask(use_gc);
+            if (mask_owned)
+                g_object_unref (mask);
         }
-
-        if (new_mask)
-            g_object_unref (new_mask);
     }
     else // use_bitmap_method
     {
         if (selected.IsOk() && ((width != ww) || (height != hh)))
         {
-            // get clip coords
-            wxRegion tmp( xx,yy,ww,hh );
-            tmp.Intersect( m_currentClippingRegion );
-            wxCoord cx,cy,cw,ch;
-            tmp.GetBox(cx,cy,cw,ch);
-
-            // rescale bitmap
-            wxBitmap bitmap = selected.Rescale( cx-xx, cy-yy, cw, ch, ww, hh );
-
+            wxBitmap bitmap = selected.Rescale( xsrc, ysrc, width, height, ww, hh );
             // draw scaled bitmap
-            // was: gdk_draw_drawable( m_gdkwindow, m_penGC, bitmap.GetPixmap(), 0, 0, xx, yy, -1, -1 );
-            gdk_draw_drawable( m_gdkwindow, m_penGC, bitmap.GetPixmap(), 0, 0, cx, cy, -1, -1 );
+            gdk_draw_drawable( m_gdkwindow, m_penGC, bitmap.GetPixmap(), 0, 0, xx, yy, -1, -1 );
         }
         else
         {
@@ -2179,25 +2176,7 @@ void wxWindowDCImpl::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, w
         rect.x -= rect.width;
     }
 
-    if (!m_currentClippingRegion.IsNull())
-        m_currentClippingRegion.Intersect( rect );
-    else
-        m_currentClippingRegion.Union( rect );
-
-#if USE_PAINT_REGION
-    if (!m_paintClippingRegion.IsNull())
-        m_currentClippingRegion.Intersect( m_paintClippingRegion );
-#endif
-
-    wxCoord xx, yy, ww, hh;
-    m_currentClippingRegion.GetBox( xx, yy, ww, hh );
-    wxGTKDCImpl::DoSetClippingRegion( xx, yy, ww, hh );
-
-    GdkRegion* gdkRegion = m_currentClippingRegion.GetRegion();
-    gdk_gc_set_clip_region(m_penGC,   gdkRegion);
-    gdk_gc_set_clip_region(m_brushGC, gdkRegion);
-    gdk_gc_set_clip_region(m_textGC,  gdkRegion);
-    gdk_gc_set_clip_region(m_bgGC,    gdkRegion);
+    DoSetDeviceClippingRegion(wxRegion(rect));
 }
 
 void wxWindowDCImpl::DoSetDeviceClippingRegion( const wxRegion &region  )
