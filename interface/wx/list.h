@@ -93,7 +93,7 @@ public:
     wxList<T>();
     
     /**
-        Constructor which initialized the list with an array of @count elements.
+        Constructor which initialized the list with an array of @a count elements.
     */
     wxList<T>(size_t count, T* elements[]);
 

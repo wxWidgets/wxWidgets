@@ -113,7 +113,7 @@ public:
             Pointer to output buffer of the size of at least @a dstLen or @NULL.
         @param dstLen
             Maximal number of characters to be written to the output buffer if
-            @dst is non-@NULL, unused otherwise.
+            @a dst is non-@NULL, unused otherwise.
         @param src
             Point to the source string, must not be @NULL.
         @param
@@ -140,7 +140,7 @@ public:
             Pointer to output buffer of the size of at least @a dstLen or @NULL.
         @param dstLen
             Maximal number of characters to be written to the output buffer if
-            @dst is non-@NULL, unused otherwise.
+            @a dst is non-@NULL, unused otherwise.
         @param src
             Point to the source string, must not be @NULL.
         @param

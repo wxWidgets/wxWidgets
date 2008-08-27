@@ -107,13 +107,13 @@ enum wxPaperSize
     wxPAPER_10X11,              ///<  10 x 11 in
     wxPAPER_15X11,              ///<  15 x 11 in
     wxPAPER_ENV_INVITE,         ///<  Envelope Invite 220 x 220 mm
-    wxPAPER_LETTER_EXTRA,       ///<  Letter Extra 9 \275 x 12 in
-    wxPAPER_LEGAL_EXTRA,        ///<  Legal Extra 9 \275 x 15 in
+    wxPAPER_LETTER_EXTRA,       ///<  Letter Extra 9.5 x 12 in
+    wxPAPER_LEGAL_EXTRA,        ///<  Legal Extra 9.5 x 15 in
     wxPAPER_TABLOID_EXTRA,      ///<  Tabloid Extra 11.69 x 18 in
     wxPAPER_A4_EXTRA,           ///<  A4 Extra 9.27 x 12.69 in
-    wxPAPER_LETTER_TRANSVERSE,  ///<  Letter Transverse 8 \275 x 11 in
+    wxPAPER_LETTER_TRANSVERSE,  ///<  Letter Transverse 8.5 x 11 in
     wxPAPER_A4_TRANSVERSE,      ///<  A4 Transverse 210 x 297 mm
-    wxPAPER_LETTER_EXTRA_TRANSVERSE, ///<  Letter Extra Transverse 9\275 x 12 in
+    wxPAPER_LETTER_EXTRA_TRANSVERSE, ///<  Letter Extra Transverse 9.5 x 12 in
     wxPAPER_A_PLUS,             ///<  SuperA/SuperA/A4 227 x 356 mm
     wxPAPER_B_PLUS,             ///<  SuperB/SuperB/A3 305 x 487 mm
     wxPAPER_LETTER_PLUS,        ///<  Letter Plus 8.5 x 12.69 in

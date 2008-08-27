@@ -325,7 +325,7 @@ public:
     /**
        Write data to the file (descriptor).
        
-       @buffer
+       @param buffer
           Buffer from which to read data
        @param count
          Number of bytes to write

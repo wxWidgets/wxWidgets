@@ -50,7 +50,7 @@ public:
 
     //@{
     /**
-        Creates a buffer for the provided @dc. Init() must not be called when
+        Creates a buffer for the provided @a dc. Init() must not be called when
         using this constructor.
 
         @param dc
@@ -60,6 +60,21 @@ public:
         @param area
             The size of the bitmap to be used for buffering (this bitmap is
             created internally when it is not given explicitly).
+        @param style
+            wxBUFFER_CLIENT_AREA to indicate that just the client area of the
+            window is buffered, or wxBUFFER_VIRTUAL_AREA to indicate that the
+            buffer bitmap covers the virtual area.
+    */
+    wxBufferedDC(wxDC* dc, const wxSize& area,
+                 int style = wxBUFFER_CLIENT_AREA);
+    /**
+        Creates a buffer for the provided dc. Init() must not be called when
+        using this constructor.
+
+        @param dc
+            The underlying DC: everything drawn to this object will be flushed
+            to this DC when this object is destroyed. You may pass @NULL in
+            order to just initialize the buffer, and not flush it.
         @param buffer
             Explicitly provided bitmap to be used for buffering: this is the
             most efficient solution as the bitmap doesn't have to be recreated
@@ -71,8 +86,6 @@ public:
             window is buffered, or wxBUFFER_VIRTUAL_AREA to indicate that the
             buffer bitmap covers the virtual area.
     */
-    wxBufferedDC(wxDC* dc, const wxSize& area,
-                 int style = wxBUFFER_CLIENT_AREA);
     wxBufferedDC(wxDC* dc, wxBitmap& buffer,
                  int style = wxBUFFER_CLIENT_AREA);
     //@}

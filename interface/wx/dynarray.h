@@ -397,7 +397,7 @@ public:
         @c T.
 
         This version is used with wxObjArray. The array will take ownership of
-        the @item, deleting it when the item is deleted from the array. Note
+        the @a item, deleting it when the item is deleted from the array. Note
         that you cannot append more than one pointer as reusing it would lead
         to deleting it twice (or more) resulting in a crash.
 
