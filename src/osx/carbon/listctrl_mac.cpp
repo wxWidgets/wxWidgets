@@ -894,7 +894,7 @@ bool wxListCtrl::SetBackgroundColour(const wxColour& colour)
     return rv;
 }
 
-wxColour wxListCtrl::GetBackgroundColour()
+wxColour wxListCtrl::GetBackgroundColour() const
 {
     if (m_genericImpl)
         return m_genericImpl->GetBackgroundColour();

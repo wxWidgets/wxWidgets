@@ -322,7 +322,7 @@ class WXDLLIMPEXP_CORE wxListCtrl: public wxControl
   virtual bool SetFont(const wxFont& font);
   virtual bool SetForegroundColour(const wxColour& colour);
   virtual bool SetBackgroundColour(const wxColour& colour);
-  virtual wxColour GetBackgroundColour();
+  virtual wxColour GetBackgroundColour() const;
 
   // functions for editing/timer
   void OnRenameTimer();
