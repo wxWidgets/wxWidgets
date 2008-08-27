@@ -406,6 +406,8 @@ MACX_DIST: ALL_GUI_DIST
 	$(CP_P) $(MACDIR)/carbon/Info.plist.in $(DISTDIR)/src/osx/carbon
 	$(CP_P) $(MACDIR)/carbon/*.h $(DISTDIR)/src/osx/carbon
 	$(CP_P) $(MACDIR)/carbon/*.r $(DISTDIR)/src/osx/carbon
+	mkdir $(DISTDIR)/src/wxWindows.xcodeproj
+	$(CP_P) $(WXDIR)/src/wxWindows.xcodeproj/* $(DISTDIR)/src/wxWindows.xcodeproj
 
 COCOA_DIST: ALL_GUI_DIST
 	$(CP_P) $(INCDIR)/wx/cocoa/*.h $(DISTDIR)/include/wx/cocoa
