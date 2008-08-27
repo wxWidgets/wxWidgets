@@ -23,6 +23,8 @@
 
 #include "wx/rawbmp.h"
 
+#include "wx/gtk/private/object.h"
+
 #include <gtk/gtk.h>
 
 //-----------------------------------------------------------------------------
@@ -164,10 +166,9 @@ bool wxMask::Create( const wxBitmap& bitmap )
 
     if (!m_bitmap) return false;
 
-    GdkGC *gc = gdk_gc_new( m_bitmap );
+    wxGtkObject<GdkGC> gc(gdk_gc_new( m_bitmap ));
     gdk_gc_set_function(gc, GDK_COPY_INVERT);
     gdk_draw_drawable(m_bitmap, gc, bitmap.GetPixmap(), 0, 0, 0, 0, bitmap.GetWidth(), bitmap.GetHeight());
-    g_object_unref (gc);
 
     return true;
 }
@@ -413,12 +414,11 @@ bool wxBitmap::CreateFromImageAsPixmap(const wxImage& image, int depth)
     else
     {
         SetPixmap(gdk_pixmap_new(wxGetRootWindow()->window, w, h, depth));
-        GdkGC* gc = gdk_gc_new(M_BMPDATA->m_pixmap);
+        wxGtkObject<GdkGC> gc(gdk_gc_new(M_BMPDATA->m_pixmap));
         gdk_draw_rgb_image(
             M_BMPDATA->m_pixmap, gc,
             0, 0, w, h,
             GDK_RGB_DITHER_NONE, image.GetData(), w * 3);
-        g_object_unref(gc);
     }
 
     const wxByte* alpha = image.GetAlpha();
@@ -541,10 +541,9 @@ wxImage wxBitmap::ConvertToImage() const
         {
             // mono bitmaps are inverted, i.e. 0 is white
             pixmap_invert = gdk_pixmap_new(pixmap, w, h, 1);
-            GdkGC* gc = gdk_gc_new(pixmap_invert);
+            wxGtkObject<GdkGC> gc(gdk_gc_new(pixmap_invert));
             gdk_gc_set_function(gc, GDK_COPY_INVERT);
             gdk_draw_drawable(pixmap_invert, gc, pixmap, 0, 0, 0, 0, w, h);
-            g_object_unref(gc);
             pixmap = pixmap_invert;
         }
         // create a pixbuf which shares data with the wxImage
@@ -664,9 +663,8 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
     else
     {
         ret.Create(rect.width, rect.height, M_BMPDATA->m_bpp);
-        GdkGC *gc = gdk_gc_new( ret.GetPixmap() );
+        wxGtkObject<GdkGC> gc(gdk_gc_new( ret.GetPixmap() ));
         gdk_draw_drawable( ret.GetPixmap(), gc, GetPixmap(), rect.x, rect.y, 0, 0, rect.width, rect.height );
-        g_object_unref (gc);
     }
     // make mask, unless there is already alpha
     if (GetMask() && !HasAlpha())
@@ -674,9 +672,8 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
         wxMask *mask = new wxMask;
         mask->m_bitmap = gdk_pixmap_new( wxGetRootWindow()->window, rect.width, rect.height, 1 );
 
-        GdkGC *gc = gdk_gc_new( mask->m_bitmap );
+        wxGtkObject<GdkGC> gc(gdk_gc_new( mask->m_bitmap ));
         gdk_draw_drawable(mask->m_bitmap, gc, M_BMPDATA->m_mask->m_bitmap, rect.x, rect.y, 0, 0, rect.width, rect.height);
-        g_object_unref (gc);
 
         ret.SetMask( mask );
     }
@@ -938,10 +935,9 @@ wxGDIRefData* wxBitmap::CloneGDIRefData(const wxGDIRefData* data) const
             oldRef->m_pixmap, oldRef->m_width, oldRef->m_height,
             // use pixmap depth, m_bpp may not match
             gdk_drawable_get_depth(oldRef->m_pixmap));
-        GdkGC* gc = gdk_gc_new(newRef->m_pixmap);
+        wxGtkObject<GdkGC> gc(gdk_gc_new(newRef->m_pixmap));
         gdk_draw_drawable(
             newRef->m_pixmap, gc, oldRef->m_pixmap, 0, 0, 0, 0, -1, -1);
-        g_object_unref(gc);
     }
     if (oldRef->m_pixbuf != NULL)
     {
@@ -952,10 +948,9 @@ wxGDIRefData* wxBitmap::CloneGDIRefData(const wxGDIRefData* data) const
         newRef->m_mask = new wxMask;
         newRef->m_mask->m_bitmap = gdk_pixmap_new(
             oldRef->m_mask->m_bitmap, oldRef->m_width, oldRef->m_height, 1);
-        GdkGC* gc = gdk_gc_new(newRef->m_mask->m_bitmap);
+        wxGtkObject<GdkGC> gc(gdk_gc_new(newRef->m_mask->m_bitmap));
         gdk_draw_drawable(newRef->m_mask->m_bitmap,
             gc, oldRef->m_mask->m_bitmap, 0, 0, 0, 0, -1, -1);
-        g_object_unref(gc);
     }
 #if wxUSE_PALETTE
     // implement this if SetPalette is ever implemented

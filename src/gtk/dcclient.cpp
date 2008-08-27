@@ -28,6 +28,7 @@
 #include "wx/fontutil.h"
 
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/object.h"
 
 #include <gdk/gdkx.h>
 
@@ -1000,18 +1001,15 @@ void wxWindowDCImpl::DoDrawMonoBitmap(const wxBitmap& bitmap,
                                       int xdest, int ydest,
                                       int width, int height)
 {
-    GdkPixmap *bitmap2
-        = gdk_pixmap_new( wxGetRootWindow()->window, bmp_w, bmp_h, -1 );
-    GdkGC *gc = gdk_gc_new( bitmap2 );
+    wxGtkObject<GdkPixmap>
+        bitmap2(gdk_pixmap_new( wxGetRootWindow()->window, bmp_w, bmp_h, -1 ));
+    wxGtkObject<GdkGC> gc(gdk_gc_new( bitmap2 ));
     gdk_gc_set_foreground( gc, m_textForegroundColour.GetColor() );
     gdk_gc_set_background( gc, m_textBackgroundColour.GetColor() );
     gdk_wx_draw_bitmap(bitmap2, gc, bitmap.GetPixmap(), 0, 0);
 
     gdk_draw_drawable(m_gdkwindow, m_textGC, bitmap2, xsrc, ysrc, xdest, ydest,
                       width, height);
-
-    g_object_unref (bitmap2);
-    g_object_unref (gc);
 }
 
 // Returns a new mask that is the intersection of the old mask
@@ -1026,7 +1024,7 @@ GdkBitmap* wxWindowDCImpl::GetClippedMask(GdkBitmap* mask, int w, int h,
     GdkColor c0, c1;
     c0.pixel = 0;
     c1.pixel = 1;
-    GdkGC *gc = gdk_gc_new( new_mask );
+    wxGtkObject<GdkGC> gc(gdk_gc_new( new_mask ));
 
     // zero-ing new_mask
     gdk_gc_set_foreground( gc, &c0 );
@@ -1044,7 +1042,6 @@ GdkBitmap* wxWindowDCImpl::GetClippedMask(GdkBitmap* mask, int w, int h,
     gdk_gc_set_stipple( gc, mask );
     gdk_draw_rectangle( new_mask, gc, TRUE, 0, 0, w, h );
 
-    g_object_unref (gc);
     return new_mask;
 }
 
