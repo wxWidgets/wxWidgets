@@ -15,9 +15,6 @@
 #include "wx/defs.h"
 #include "wx/string.h"
 
-WXDLLIMPEXP_BASE int wxCMPFUNC_CONV wxStringSortAscending(wxString*, wxString*);
-WXDLLIMPEXP_BASE int wxCMPFUNC_CONV wxStringSortDescending(wxString*, wxString*);
-
 #if wxUSE_STL
 
 #include "wx/dynarray.h"
@@ -177,7 +174,7 @@ public:
     // sort array elements in alphabetical order (or reversed alphabetical
     // order if reverseOrder parameter is true)
   void Sort(bool reverseOrder = false);
-    // sort array elements using specified comparaison function
+    // sort array elements using specified comparison function
   void Sort(CompareFunction compareFunction);
   void Sort(CompareFunction2 compareFunction);
 
@@ -298,8 +295,6 @@ protected:
 
 private:
   void Grow(size_t nIncrement = 0);     // makes array bigger if needed
-
-  void DoSort();                        // common part of all Sort() variants
 
   size_t  m_nSize,    // current size of the array
           m_nCount;   // current number of elements

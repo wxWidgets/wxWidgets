@@ -21,7 +21,11 @@
 #endif
 
 #include "wx/arrstr.h"
-#include "wx/thread.h" 
+
+#include "wx/beforestd.h"
+#include <algorithm>
+#include <functional>
+#include "wx/afterstd.h"
 
 // ============================================================================
 // ArrayString
@@ -138,7 +142,7 @@ void wxArrayString::Grow(size_t nIncrement)
           pNew[j] = m_pItems[j];
 
       // delete old memory (but do not release the strings!)
-      wxDELETEA(m_pItems);
+      delete [] m_pItems;
 
       m_pItems = pNew;
     }
@@ -163,7 +167,7 @@ void wxArrayString::Clear()
 // dtor
 wxArrayString::~wxArrayString()
 {
-  wxDELETEA(m_pItems);
+  delete [] m_pItems;
 }
 
 void wxArrayString::reserve(size_t nSize)
@@ -385,74 +389,61 @@ void wxArrayString::assign(const_iterator first, const_iterator last)
 // sorting
 // ----------------------------------------------------------------------------
 
-// we can only sort one array at a time with the quick-sort based
-// implementation
-#if wxUSE_THREADS
-  // need a critical section to protect access to gs_compareFunction and
-  // gs_sortAscending variables
-  static wxCriticalSection gs_critsectStringSort;
-#endif // wxUSE_THREADS
-
-// function to use for string comparaison
-static wxArrayString::CompareFunction gs_compareFunction = NULL;
-
-// if we don't use the compare function, this flag tells us if we sort the
-// array in ascending or descending order
-static bool gs_sortAscending = true;
-
-// function which is called by quick sort
-extern "C" int wxC_CALLING_CONV     // LINKAGEMODE
-wxStringCompareFunction(const void *first, const void *second)
+// we need an adaptor as our predicates use qsort() convention and so return
+// negative, null or positive value depending on whether the first item is less
+// than, equal to or greater than the other one while we need a real boolean
+// predicate now that we use std::sort()
+struct wxSortPredicateAdaptor
 {
-  wxString *strFirst = (wxString *)first;
-  wxString *strSecond = (wxString *)second;
+    wxSortPredicateAdaptor(wxArrayString::CompareFunction compareFunction)
+        : m_compareFunction(compareFunction)
+    {
+    }
 
-  if ( gs_compareFunction ) {
-    return gs_compareFunction(*strFirst, *strSecond);
-  }
-  else {
-    // maybe we should use wxStrcoll
-    int result = strFirst->Cmp(*strSecond);
+    bool operator()(const wxString& first, const wxString& second) const
+    {
+        return (*m_compareFunction)(first, second) < 0;
+    }
 
-    return gs_sortAscending ? result : -result;
-  }
-}
+    wxArrayString::CompareFunction m_compareFunction;
+};
 
-// sort array elements using passed comparaison function
 void wxArrayString::Sort(CompareFunction compareFunction)
 {
-  wxCRIT_SECT_LOCKER(lockCmpFunc, gs_critsectStringSort);
+    wxCHECK_RET( !m_autoSort, wxT("can't use this method with sorted arrays") );
 
-  wxASSERT( !gs_compareFunction );  // must have been reset to NULL
-  gs_compareFunction = compareFunction;
-
-  DoSort();
-
-  // reset it to NULL so that Sort(bool) will work the next time
-  gs_compareFunction = NULL;
+    std::sort(m_pItems, m_pItems + m_nCount,
+                wxSortPredicateAdaptor(compareFunction));
 }
 
-extern "C"
+struct wxSortPredicateAdaptor2
 {
-    typedef int (wxC_CALLING_CONV * wxStringCompareFn)(const void *first,
-                                                       const void *second);
-}
+    wxSortPredicateAdaptor2(wxArrayString::CompareFunction2 compareFunction)
+        : m_compareFunction(compareFunction)
+    {
+    }
+
+    bool operator()(const wxString& first, const wxString& second) const
+    {
+        return (*m_compareFunction)(const_cast<wxString *>(&first),
+                                    const_cast<wxString *>(&second)) < 0;
+    }
+
+    wxArrayString::CompareFunction2 m_compareFunction;
+};
 
 void wxArrayString::Sort(CompareFunction2 compareFunction)
 {
-  qsort(m_pItems, m_nCount, sizeof(wxString), (wxStringCompareFn)compareFunction);
+    std::sort(m_pItems, m_pItems + m_nCount,
+                wxSortPredicateAdaptor2(compareFunction));
 }
 
 void wxArrayString::Sort(bool reverseOrder)
 {
-  Sort(reverseOrder ? wxStringSortDescending : wxStringSortAscending);
-}
-
-void wxArrayString::DoSort()
-{
-  wxCHECK_RET( !m_autoSort, wxT("can't use this method with sorted arrays") );
-
-  qsort(m_pItems, m_nCount, sizeof(wxString), wxStringCompareFunction);
+    if ( reverseOrder )
+        std::sort(m_pItems, m_pItems + m_nCount, std::greater<wxString>());
+    else // normal sort
+        std::sort(m_pItems, m_pItems + m_nCount);
 }
 
 bool wxArrayString::operator==(const wxArrayString& a) const
@@ -470,18 +461,6 @@ bool wxArrayString::operator==(const wxArrayString& a) const
 }
 
 #endif // !wxUSE_STL
-
-int wxCMPFUNC_CONV wxStringSortAscending(wxString* s1, wxString* s2)
-{
-    return  s1->Cmp(*s2);
-}
-
-int wxCMPFUNC_CONV wxStringSortDescending(wxString* s1, wxString* s2)
-{
-    return -s1->Cmp(*s2);
-}
-
-
 
 // ===========================================================================
 // wxJoin and wxSplit
