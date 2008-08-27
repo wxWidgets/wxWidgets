@@ -515,10 +515,11 @@ int wxRegExImpl::Replace(wxString *text,
     // note that "^" shouldn't match after the first call to Matches() so we
     // use wxRE_NOTBOL to prevent it from happening
     while ( (!maxMatches || countRepl < maxMatches) &&
+             Matches(
 #ifndef WXREGEX_CONVERT_TO_MB
-            Matches(textstr + matchStart,
+                    textstr + matchStart,
 #else
-            Matches(textstr.data() + matchStart,
+                    textstr.data() + matchStart,
 #endif 
                     countRepl ? wxRE_NOTBOL : 0
                     WXREGEX_IF_NEED_LEN(textlen - matchStart)) )
