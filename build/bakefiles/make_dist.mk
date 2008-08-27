@@ -441,7 +441,9 @@ MSW_DIST: UNIV_DIST
 	$(CP_P) $(MSWDIR)/ole/*.cpp $(DISTDIR)/src/msw/ole
 
 MSW_ZIP_TEXT_DIST: ALL_GUI_DIST
-	mkdir $(DISTDIR)/include/wx/msw
+	mkdir $(DISTDIR)/build/msw
+	$(CP_P) $(WXDIR)/build/msw/* $(DISTDIR)/build/msw
+	$(CP_P) $(INCDIR)/wx/msw/*.h $(DISTDIR)/include/wx/msw
 	mkdir $(DISTDIR)/include/wx/msw/ole
 	mkdir $(DISTDIR)/include/wx/msw/wince
 	$(CP_P) $(INCDIR)/wx/msw/*.h $(DISTDIR)/include/wx/msw
@@ -449,7 +451,6 @@ MSW_ZIP_TEXT_DIST: ALL_GUI_DIST
 	$(CP_P) $(INCDIR)/wx/msw/*.manifest $(DISTDIR)/include/wx/msw
 	$(CP_P) $(INCDIR)/wx/msw/ole/*.h $(DISTDIR)/include/wx/msw/ole
 	$(CP_P) $(INCDIR)/wx/msw/wince/*.h $(DISTDIR)/include/wx/msw/wince
-	mkdir $(DISTDIR)/src/msw
 	mkdir $(DISTDIR)/src/msw/ole
 	mkdir $(DISTDIR)/src/msw/wince
 	$(CP_P) $(MSWDIR)/*.cpp $(DISTDIR)/src/msw
@@ -457,7 +458,6 @@ MSW_ZIP_TEXT_DIST: ALL_GUI_DIST
 	$(CP_P) $(MSWDIR)/ole/*.cpp $(DISTDIR)/src/msw/ole
 	$(CP_P) $(MSWDIR)/wince/*.* $(DISTDIR)/src/msw/wince
 	$(CP_P) $(SRCDIR)/*.??? $(DISTDIR)/src
-	$(CP_P) $(SRCDIR)/*.?? $(DISTDIR)/src
 
 UNIV_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/include/wx/univ
@@ -818,8 +818,15 @@ bzip-dist: @GUIDIST@
 	mv wxDemos demos; \
 	fi
 
-# RR: Copy text and binary data separatly
-win-dist: MSW_ZIP_TEXT_DIST
+win-dist: MSW_ZIP_TEXT_DIST SAMPLES_DIST DEMOS_DIST UTILS_DIST MISC_DIST INTL_DIST
+# RR: copy VC files common to all samples in a general way
+	for s in `find $(SAMPDIR) $(SAMPDIR)/html $(SAMPDIR)/mobile $(SAMPDIR)/opengl \
+		    -mindepth 1 -maxdepth 1 -type d -not -name CVS`; do \
+	    t="$(DISTDIR)/samples/`echo $$s | sed 's@$(SAMPDIR)/@@'`"; \
+	    $(CP_P) \
+		    `find $$s -maxdepth 1 -name '*.dsp' -o -name '*.vcproj'` $$t; \
+	done
+# RR: Copy text and binary data separately
 	@echo "*** Creating wxWidgets ZIP distribution in $(DISTDIR)..."
 	@cd _dist_dir && mv $(DISTDIRNAME) wxMSW
 	@cd _dist_dir && zip -r -l  ../$(WXARCHIVE_ZIP) *
