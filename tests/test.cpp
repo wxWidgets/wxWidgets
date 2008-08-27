@@ -26,8 +26,6 @@
 using CppUnit::Test;
 using CppUnit::TestSuite;
 using CppUnit::TestFactoryRegistry;
-using CppUnit::TextUi::TestRunner;
-using CppUnit::CompilerOutputter;
 
 using namespace std;
 
@@ -127,7 +125,7 @@ bool TestApp::OnCmdLineParsed(wxCmdLineParser& parser)
 //
 int TestApp::OnRun()
 {
-    TestRunner runner;
+    CppUnit::TextTestRunner runner;
 
     for (size_t i = 0; i < m_registries.size(); i++) {
         auto_ptr<Test> test(m_registries[i].empty() ?
@@ -145,7 +143,10 @@ int TestApp::OnRun()
             runner.addTest(test.release());
     }
 
-    runner.setOutputter(new CompilerOutputter(&runner.result(), cout));
+    if ( m_list )
+        return EXIT_SUCCESS;
+
+    runner.setOutputter(new CppUnit::CompilerOutputter(&runner.result(), cout));
 
 #if wxUSE_LOG
     // Switch off logging unless --verbose
@@ -155,9 +156,14 @@ int TestApp::OnRun()
     bool verbose = false;
 #endif
 
-    return ( m_list || runner.run("", false, true, !verbose) )
-           ? EXIT_SUCCESS
-           : EXIT_FAILURE;
+    // there is a bug
+    // (http://sf.net/tracker/index.php?func=detail&aid=1649369&group_id=11795&atid=111795)
+    // in some versions of cppunit: they write progress dots to cout (and not
+    // cerr) and don't flush it so all the dots appear at once at the end which
+    // is not very useful so unbuffer cout to work around this
+    cout.setf(ios::unitbuf);
+
+    return runner.run("", false, true, !verbose) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 
 int TestApp::OnExit()
