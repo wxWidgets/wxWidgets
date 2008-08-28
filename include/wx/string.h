@@ -75,6 +75,12 @@
     #define wxUSE_STRING_POS_CACHE 0
 #endif
 
+#ifndef wxHAS_COMPILER_TLS
+    // FIXME: currently the code only works with compiler TLS support
+    #undef wxUSE_STRING_POS_CACHE
+    #define wxUSE_STRING_POS_CACHE 0
+#endif
+
 #if wxUSE_STRING_POS_CACHE
     #include "wx/tls.h"
 
