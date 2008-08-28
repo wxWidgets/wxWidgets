@@ -227,6 +227,8 @@ ALL_GUI_DIST: ALL_DIST
 	mkdir $(DISTDIR)/src/jpeg
 	$(CP_P) $(JPEGDIR)/*.h $(DISTDIR)/src/jpeg
 	$(CP_P) $(JPEGDIR)/*.c $(DISTDIR)/src/jpeg
+	$(CP_P) $(JPEGDIR)/*.vc $(DISTDIR)/src/jpeg
+	$(CP_P) $(JPEGDIR)/makefile.* $(DISTDIR)/src/jpeg
 	$(CP_P) $(JPEGDIR)/README $(DISTDIR)/src/jpeg
         
 	mkdir $(DISTDIR)/src/tiff
@@ -297,6 +299,10 @@ BASE_DIST: ALL_DIST INTL_DIST
 
 	mkdir $(DISTDIR)/samples
 	$(CP_P) $(SAMPDIR)/Makefile.in $(DISTDIR)/samples
+	$(CP_P) $(SAMPDIR)/makefile.* $(DISTDIR)/samples
+	$(CP_P) $(SAMPDIR)/Info.plist $(DISTDIR)/samples
+	$(CP_P) $(SAMPDIR)/sample.* $(DISTDIR)/samples
+	$(CP_P) $(SAMPDIR)/samples.* $(DISTDIR)/samples
 
 	mkdir $(DISTDIR)/samples/console
 	$(CP_P) $(SAMPDIR)/console/Makefile.in $(DISTDIR)/samples/console
@@ -560,7 +566,7 @@ SAMPLES_DIST: ALL_GUI_DIST
 	done
 
 	# copy the rest, not covered by the above loop
-	$(CP_P) $(SAMPDIR)/animate/hourglass.ani $(DISTDIR)/samples/hourglass.ani
+	$(CP_P) $(SAMPDIR)/animate/hourglass.ani $(DISTDIR)/samples/animate
 	$(CP_P) $(SAMPDIR)/animate/throbber.gif $(DISTDIR)/samples/animate
 
 	$(CP_P) $(SAMPDIR)/console/testdata.fc $(DISTDIR)/samples/console
