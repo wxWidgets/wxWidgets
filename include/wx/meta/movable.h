@@ -84,11 +84,12 @@ struct wxIsMovable<const T*>
 #endif // !VC++ < 7
 
 // Our implementation of wxString is written in such way that it's safe to move
-// it around. OTOH, we don't know anything about std::string.
+// it around (unless position cache is used which unfortunately breaks this).
+// OTOH, we don't know anything about std::string.
 // (NB: we don't put this into string.h and choose to include wx/string.h from
 // here instead so that rarely-used wxIsMovable<T> code isn't included by
 // everything)
-#if !wxUSE_STL
+#if !wxUSE_STL && !wxUSE_STRING_POS_CACHE
 WX_DECLARE_TYPE_MOVABLE(wxString)
 #endif
 

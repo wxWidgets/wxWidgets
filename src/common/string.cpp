@@ -58,6 +58,80 @@
 //According to STL _must_ be a -1 size_t
 const size_t wxString::npos = (size_t) -1;
 
+#if wxUSE_STRING_POS_CACHE
+wxTLS_TYPE(wxString::Cache) wxString::ms_cache;
+
+// gdb seems to be unable to display thread-local variables correctly, at least
+// not my 6.4.98 version under amd64, so provide this debugging helper to do it
+#ifdef __WXDEBUG__
+
+struct wxStrCacheDumper
+{
+    static void ShowAll()
+    {
+        puts("*** wxString cache dump:");
+        for ( unsigned n = 0; n < wxString::Cache::SIZE; n++ )
+        {
+            const wxString::Cache::Element&
+                c = wxString::ms_cache.cached[n];
+
+            printf("\t%u%s\t%p: pos=(%lu, %lu), len=%ld\n",
+                   n,
+                   n == wxString::ms_cache.lastUsed ? " [*]" : "",
+                   c.str,
+                   (unsigned long)c.pos,
+                   (unsigned long)c.impl,
+                   (long)c.len);
+        }
+    }
+};
+
+void wxDumpStrCache() { wxStrCacheDumper::ShowAll(); }
+
+#endif // __WXDEBUG__
+
+#ifdef wxPROFILE_STRING_CACHE
+
+wxString::CacheStats wxString::ms_cacheStats;
+
+namespace
+{
+
+struct ShowCacheStats
+{
+    ~ShowCacheStats()
+    {
+        const wxString::CacheStats& stats = wxString::ms_cacheStats;
+
+        if ( stats.postot )
+        {
+            puts("*** wxString cache statistics:");
+            printf("\tTotal non-trivial calls to PosToImpl(): %u\n",
+                   stats.postot);
+            printf("\tHits %u (of which %u not used) or %.2f%%\n",
+                   stats.poshits,
+                   stats.mishits,
+                   100.*float(stats.poshits - stats.mishits)/stats.postot);
+            printf("\tAverage position requested: %.2f\n",
+                   float(stats.sumpos) / stats.postot);
+            printf("\tAverage offset after cached hint: %.2f\n",
+                   float(stats.sumofs) / stats.postot);
+        }
+
+        if ( stats.lentot )
+        {
+            printf("\tNumber of calls to length(): %u, hits=%.2f%%\n",
+                   stats.lentot, 100.*float(stats.lenhits)/stats.lentot);
+        }
+    }
+} s_showCacheStats;
+
+} // anonymous namespace
+
+#endif // wxPROFILE_STRING_CACHE
+
+#endif // wxUSE_STRING_POS_CACHE
+
 // ----------------------------------------------------------------------------
 // global functions
 // ----------------------------------------------------------------------------
@@ -123,22 +197,30 @@ void wxString::PosLenToImpl(size_t pos, size_t len,
                             size_t *implPos, size_t *implLen) const
 {
     if ( pos == npos )
-        *implPos = npos;
-    else
     {
-        const_iterator i = begin() + pos;
-        *implPos = wxStringImpl::const_iterator(i.impl()) - m_impl.begin();
+        *implPos = npos;
+    }
+    else // have valid start position
+    {
+        const const_iterator b = GetIterForNthChar(pos);
+        *implPos = wxStringImpl::const_iterator(b.impl()) - m_impl.begin();
         if ( len == npos )
-            *implLen = npos;
-        else
         {
-            // too large length is interpreted as "to the end of the string"
-            // FIXME-UTF8: verify this is the case in std::string, assert
-            // otherwise
-            if ( pos + len > length() )
-                len = length() - pos;
+            *implLen = npos;
+        }
+        else // have valid length too
+        {
+            // we need to handle the case of length specifying a substring
+            // going beyond the end of the string, just as std::string does
+            const const_iterator e(end());
+            const_iterator i(b);
+            while ( len && i <= e )
+            {
+                ++i;
+                --len;
+            }
 
-            *implLen = (i + len).impl() - i.impl();
+            *implLen = i.impl() - b.impl();
         }
     }
 }
@@ -1236,6 +1318,8 @@ size_t wxString::Replace(const wxString& strOld,
     // if we tried to replace an empty string we'd enter an infinite loop below
     wxCHECK_MSG( !strOld.empty(), 0,
                  _T("wxString::Replace(): invalid parameter") );
+
+    wxSTRING_INVALIDATE_CACHE();
 
     size_t uiCount = 0;   // count of replacements made
 

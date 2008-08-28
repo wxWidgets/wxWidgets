@@ -100,7 +100,7 @@ wxUniCharRef& wxUniCharRef::operator=(const wxUniChar& c)
         for ( size_t i = 0; i < lenNew; ++i, ++pos )
             *pos = utf[i];
     }
-    else
+    else // length of character encoding in UTF-8 changed
     {
         // the worse case is when the new value has either longer or shorter
         // code -- in that case, we have to use wxStringImpl::replace() and
@@ -147,6 +147,10 @@ wxUniCharRef& wxUniCharRef::operator=(const wxUniChar& c)
 
         // update the string:
         strimpl.replace(m_pos, m_pos + lenOld, utf, lenNew);
+
+#if wxUSE_STRING_POS_CACHE
+        m_str.InvalidateCache();
+#endif // wxUSE_STRING_POS_CACHE
 
         // finally, set the iterators to valid values again (note that this
         // updates m_pos as well):
