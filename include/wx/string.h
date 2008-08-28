@@ -2899,8 +2899,13 @@ public:
   // swap two strings
   void swap(wxString& str)
   {
-      wxSTRING_INVALIDATE_CACHE();
-      str.wxSTRING_INVALIDATE_CACHE();
+#if wxUSE_STRING_POS_CACHE
+      // we modify not only this string but also the other one directly so we
+      // need to invalidate cache for both of them (we could also try to
+      // exchange their cache entries but it seems unlikely to be worth it)
+      InvalidateCache();
+      str.InvalidateCache();
+#endif // wxUSE_STRING_POS_CACHE
 
       m_impl.swap(str.m_impl);
   }
