@@ -257,6 +257,9 @@ public:
         m_title = title;
 
         m_widget = gtk_window_new( GTK_WINDOW_POPUP );
+        g_object_ref(m_widget);
+
+        if (parent) parent->AddChild(this);
 
         g_signal_connect( m_widget, "realize",
                       G_CALLBACK (gtk_pseudo_window_realized_callback), this );
