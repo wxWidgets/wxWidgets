@@ -30,8 +30,8 @@ Platforms supported
 wxWidgets currently supports the following platforms:
 
 - Windows 95/98/ME, NT, 2000, XP, Vista, Pocket PC/Mobile, Smartphone
-- Most Unix variants using the  GTK+ 2 toolkit (version 2.6 or newer)
-- MacOS OS X (10.4 or newer) using the Carbon and some Cocao mix-in
+- Most Unix variants using the  GTK+ 2 toolkit (version 2.4 or newer)
+- MacOS OS X (10.4 or newer) using Carbon and some Cocao mix-in
 
 There is some support for the followig platforms:
 
