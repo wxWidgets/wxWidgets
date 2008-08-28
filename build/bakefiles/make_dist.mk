@@ -544,11 +544,14 @@ DEMOS_DIST: ALL_GUI_DIST
 SAMPLES_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/samples
 	$(CP_P) $(SAMPDIR)/Makefile.in $(DISTDIR)/samples
+	$(CP_P) $(SAMPDIR)/makefile.* $(DISTDIR)/samples
+	$(CP_P) $(SAMPDIR)/Info.plist $(DISTDIR)/samples
 	$(CP_P) $(SAMPDIR)/sample.* $(DISTDIR)/samples
+	$(CP_P) $(SAMPDIR)/samples.* $(DISTDIR)/samples
 
 	# copy files common to all samples in a general way
 	for s in `find $(SAMPDIR) $(SAMPDIR)/html $(SAMPDIR)/mobile $(SAMPDIR)/opengl \
-		    -mindepth 1 -maxdepth 1 -type d -not -name CVS`; do \
+		    -mindepth 1 -maxdepth 1 -type d -not -name .svn`; do \
 	    t="$(DISTDIR)/samples/`echo $$s | sed 's@$(SAMPDIR)/@@'`"; \
 	    mkdir -p $$t; \
 	    $(CP_P) $$s/Makefile.in \
@@ -779,7 +782,7 @@ distdir: @GUIDIST@
 	@# now prune away a lot of the crap included by using cp -R
 	@# in other dist targets.
 	find $(DISTDIR) \( -name "CVS" -o -name ".cvsignore" -o -name "*.dsp" -o -name "*.dsw" -o -name "*.hh*" -o \
-			\( -name "makefile.*" -a ! -name "makefile.unx" \) \) \
+			\( -name "makefile.*" -a ! -name "makefile.gcc" -a ! -name "makefile.unx" \) \) \
 			-print | egrep -v '/samples/.*\.hh.$$' | xargs rm -rf
 
 dist: distdir
