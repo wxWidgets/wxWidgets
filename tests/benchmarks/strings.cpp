@@ -296,7 +296,13 @@ BENCHMARK_FUNC(ParseHTML)
     static wxString html;
     if ( html.empty() )
     {
-        wxFFile("htmltest.html").ReadAll(&html, wxConvUTF8);
+        wxString html1;
+        wxFFile("htmltest.html").ReadAll(&html1, wxConvUTF8);
+
+        // this is going to make for some invalid HTML, of course, but it
+        // doesn't really matter
+        for ( long n = 0; n < Bench::GetNumericParameter(); n++ )
+            html += html1;
     }
 
     parser.Parse(html);

@@ -63,6 +63,14 @@ private:
     DECLARE_NO_COPY_CLASS(Function)
 };
 
+/**
+    Get the numeric parameter.
+
+    Tests may use this parameter in whatever way they see fit, by default it is
+    1 but can be set to a different value by user from the command line.
+ */
+long GetNumericParameter();
+
 } // namespace Bench
 
 /**
