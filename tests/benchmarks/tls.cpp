@@ -176,7 +176,8 @@ BENCHMARK_FUNC(BoostTLS)
 
 BENCHMARK_FUNC(wxTLS)
 {
-    static wxTLS_TYPE(int) s_global;
+    static wxTLS_TYPE(int) s_globalVar;
+    #define s_global wxTLS_VALUE(s_globalVar)
 
     for ( int n = 0; n < NUM_ITER; n++ )
     {

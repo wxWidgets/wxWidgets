@@ -787,6 +787,8 @@
 			<File
 				RelativePath=".\streams\textstreamtest.cpp"/>
 			<File
+				RelativePath=".\thread\tls.cpp"/>
+			<File
 				RelativePath=".\strings\tokenizer.cpp"/>
 			<File
 				RelativePath=".\strings\unichar.cpp"/>

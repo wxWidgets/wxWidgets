@@ -11,9 +11,6 @@
 #ifndef _WX_UNIX_TLS_H_
 #define _WX_UNIX_TLS_H_
 
-#include "wx/intl.h"
-#include "wx/log.h"
-
 #include <pthread.h>
 
 // ----------------------------------------------------------------------------
@@ -23,12 +20,13 @@
 class wxTlsKey
 {
 public:
-    // ctor allocates a new key
-    wxTlsKey()
+    // ctor allocates a new key and possibly registering a destructor function
+    // for it (notice that using destructor function is Pthreads-specific and
+    // not supported in Win32 implementation)
+    wxTlsKey(void (*destructor)(void *) = NULL)
     {
-        int rc = pthread_key_create(&m_key, NULL);
-        if ( rc )
-            wxLogSysError(_("Creating TLS key failed"), rc);
+        if ( pthread_key_create(&m_key, destructor) != 0 )
+            m_key = 0;
     }
 
     // return true if the key was successfully allocated
@@ -43,14 +41,7 @@ public:
     // change the key value, return true if ok
     bool Set(void *value)
     {
-        int rc = pthread_setspecific(m_key, value);
-        if ( rc )
-        {
-            wxLogSysError(_("Failed to set TLS value"));
-            return false;
-        }
-
-        return true;
+        return pthread_setspecific(m_key, value) == 0;
     }
 
     // free the key

@@ -11,9 +11,6 @@
 #ifndef _WX_MSW_TLS_H_
 #define _WX_MSW_TLS_H_
 
-#include "wx/log.h"
-#include "wx/intl.h"
-
 #include "wx/msw/wrapwin.h"
 
 // ----------------------------------------------------------------------------
@@ -27,8 +24,6 @@ public:
     wxTlsKey()
     {
         m_slot = ::TlsAlloc();
-        if ( m_slot == TLS_OUT_OF_INDEXES )
-            wxLogError("Creating TLS key failed");
     }
 
     // return true if the key was successfully allocated
@@ -43,25 +38,14 @@ public:
     // change the key value, return true if ok
     bool Set(void *value)
     {
-        if ( !::TlsSetValue(m_slot, value) )
-        {
-            wxLogSysError(_("Failed to set TLS value"));
-            return false;
-        }
-
-        return true;
+        return ::TlsSetValue(m_slot, value) != 0;
     }
 
     // free the key
     ~wxTlsKey()
     {
         if ( IsOk() )
-        {
-            if ( !::TlsFree(m_slot) )
-            {
-                wxLogDebug("TlsFree() failed: %08x", ::GetLastError());
-            }
-        }
+            ::TlsFree(m_slot);
     }
 
 private:

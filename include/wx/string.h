@@ -75,12 +75,6 @@
     #define wxUSE_STRING_POS_CACHE 0
 #endif
 
-#ifndef wxHAS_COMPILER_TLS
-    // FIXME: currently the code only works with compiler TLS support
-    #undef wxUSE_STRING_POS_CACHE
-    #define wxUSE_STRING_POS_CACHE 0
-#endif
-
 #if wxUSE_STRING_POS_CACHE
     #include "wx/tls.h"
 
@@ -600,7 +594,26 @@ private:
       unsigned lastUsed;
   };
 
-  static wxTLS_TYPE(Cache) ms_cache;
+  // notice that we must use an accessor function and not a static variable
+  // because when the TLS variables support is implemented in the library (and
+  // not by the compiler), the global s_cache variable could be not yet
+  // initialized when a ctor of another global object is executed and if that
+  // ctor uses any wxString methods, bad things happen
+  //
+  // also note that for the same reason this function _is_ MT-safe: we know
+  // it's going to be called during the program startup (currently during
+  // globals initialization but even if they ever stop using wxString, it would
+  // still be called by wxInitialize()), i.e. before any threads are created
+  static Cache& GetCache()
+  {
+      static wxTLS_TYPE(Cache) s_cache;
+
+      return wxTLS_VALUE(s_cache);
+  }
+
+  static Cache::Element *GetCacheBegin() { return GetCache().cached; }
+  static Cache::Element *GetCacheEnd() { return GetCacheBegin() + Cache::SIZE; }
+  static unsigned& LastUsedCacheElement() { return GetCache().lastUsed; }
 
   friend struct wxStrCacheDumper;
 
@@ -644,9 +657,7 @@ private:
       // profiling seems to show a small but consistent gain if we use this
       // simple loop instead of starting from the last used element (there are
       // a lot of misses in this function...)
-      for ( Cache::Element *c = ms_cache.cached;
-            c != ms_cache.cached + Cache::SIZE;
-            c++ )
+      for ( Cache::Element *c = GetCacheBegin(); c != GetCacheEnd(); c++ )
       {
           if ( c->str == this )
               return c;
@@ -660,9 +671,9 @@ private:
   // its corresponding index in the byte string or not
   Cache::Element *GetCacheElement() const
   {
-      Cache::Element * const cacheBegin = ms_cache.cached;
-      Cache::Element * const cacheEnd = ms_cache.cached + Cache::SIZE;
-      Cache::Element * const cacheStart = cacheBegin + ms_cache.lastUsed;
+      Cache::Element * const cacheBegin = GetCacheBegin();
+      Cache::Element * const cacheEnd = GetCacheEnd();
+      Cache::Element * const cacheStart = cacheBegin + LastUsedCacheElement();
 
       // check the last used first, this does no (measurable) harm for a miss
       // but does help for simple loops addressing the same string all the time
@@ -685,7 +696,7 @@ private:
           c->Reset();
 
           // and remember the last used element
-          ms_cache.lastUsed = c - cacheBegin;
+          LastUsedCacheElement() = c - cacheBegin;
       }
 
       return c;

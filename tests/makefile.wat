@@ -292,6 +292,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_textfiletest.obj &
 	$(OBJS)\test_atomic.obj &
 	$(OBJS)\test_queue.obj &
+	$(OBJS)\test_tls.obj &
 	$(OBJS)\test_uris.obj &
 	$(OBJS)\test_vectors.obj &
 	$(OBJS)\test_evtconnection.obj &
@@ -544,6 +545,9 @@ $(OBJS)\test_atomic.obj :  .AUTODEPEND .\thread\atomic.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_queue.obj :  .AUTODEPEND .\thread\queue.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_tls.obj :  .AUTODEPEND .\thread\tls.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_uris.obj :  .AUTODEPEND .\uris\uris.cpp

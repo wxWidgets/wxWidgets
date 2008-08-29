@@ -413,6 +413,10 @@ SOURCE=.\streams\textstreamtest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\thread\tls.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\strings\tokenizer.cpp
 # End Source File
 # Begin Source File

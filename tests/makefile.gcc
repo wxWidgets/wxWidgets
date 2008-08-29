@@ -79,6 +79,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_textfiletest.o \
 	$(OBJS)\test_atomic.o \
 	$(OBJS)\test_queue.o \
+	$(OBJS)\test_tls.o \
 	$(OBJS)\test_uris.o \
 	$(OBJS)\test_vectors.o \
 	$(OBJS)\test_evtconnection.o \
@@ -491,6 +492,9 @@ $(OBJS)\test_atomic.o: ./thread/atomic.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_queue.o: ./thread/queue.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_tls.o: ./thread/tls.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_uris.o: ./uris/uris.cpp

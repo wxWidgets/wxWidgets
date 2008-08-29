@@ -59,7 +59,6 @@
 const size_t wxString::npos = (size_t) -1;
 
 #if wxUSE_STRING_POS_CACHE
-wxTLS_TYPE(wxString::Cache) wxString::ms_cache;
 
 // gdb seems to be unable to display thread-local variables correctly, at least
 // not my 6.4.98 version under amd64, so provide this debugging helper to do it
@@ -73,11 +72,11 @@ struct wxStrCacheDumper
         for ( unsigned n = 0; n < wxString::Cache::SIZE; n++ )
         {
             const wxString::Cache::Element&
-                c = wxString::ms_cache.cached[n];
+                c = wxString::GetCacheBegin()[n];
 
             printf("\t%u%s\t%p: pos=(%lu, %lu), len=%ld\n",
                    n,
-                   n == wxString::ms_cache.lastUsed ? " [*]" : "",
+                   n == wxString::LastUsedCacheElement() ? " [*]" : "",
                    c.str,
                    (unsigned long)c.pos,
                    (unsigned long)c.impl,

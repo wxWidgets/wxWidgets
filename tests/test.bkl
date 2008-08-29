@@ -73,6 +73,7 @@
             textfile/textfiletest.cpp
             thread/atomic.cpp
             thread/queue.cpp
+            thread/tls.cpp
             uris/uris.cpp
             vectors/vectors.cpp
             weakref/evtconnection.cpp
