@@ -40,6 +40,23 @@ static const char utf8str[] =
     "\xD0\xA6\xD0\xB5\xD0\xBB\xD0\xBE\xD0\xB5 \xD1\x87\xD0\xB8\xD1\x81\xD0\xBB\xD0\xBE 9"
     ;
 
+namespace
+{
+
+const wxString& GetTestAsciiString()
+{
+    static wxString testString;
+    if ( testString.empty() )
+    {
+        for ( long n = 0; n < Bench::GetNumericParameter(); n++ )
+            testString += wxString::FromAscii(asciistr);
+    }
+
+    return testString;
+}
+
+} // anonymous namespace
+
 // this is just a baseline
 BENCHMARK_FUNC(Strlen)
 {
@@ -187,7 +204,7 @@ BENCHMARK_FUNC(ForCString)
 
 BENCHMARK_FUNC(ForStringIndex)
 {
-    const wxString s = wxString::FromAscii(asciistr);
+    const wxString& s = GetTestAsciiString();
     const size_t len = s.length();
     for ( size_t n = 0; n < len; n++ )
     {
@@ -200,7 +217,7 @@ BENCHMARK_FUNC(ForStringIndex)
 
 BENCHMARK_FUNC(ForStringIter)
 {
-    const wxString s = wxString::FromAscii(asciistr);
+    const wxString& s = GetTestAsciiString();
     const wxString::const_iterator end = s.end();
     for ( wxString::const_iterator i = s.begin(); i != end; ++i )
     {
@@ -213,7 +230,7 @@ BENCHMARK_FUNC(ForStringIter)
 
 BENCHMARK_FUNC(ForStringRIter)
 {
-    const wxString s = wxString::FromAscii(asciistr);
+    const wxString& s = GetTestAsciiString();
     const wxString::const_reverse_iterator rend = s.rend();
     for ( wxString::const_reverse_iterator i = s.rbegin(); i != rend; ++i )
     {
