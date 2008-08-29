@@ -98,7 +98,7 @@ public:
     wxString implements caching of the last used index so that iterating over
     a string is a linear operation even in UTF-8 mode.
     
-    It is nonetheless recommended to use iterators (instead of index bases
+    It is nonetheless recommended to use iterators (instead of index based
     access) like this:
 
     @code
