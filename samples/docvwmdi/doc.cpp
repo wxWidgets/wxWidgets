@@ -321,42 +321,30 @@ bool DrawingCommand::Undo(void)
 IMPLEMENT_DYNAMIC_CLASS(TextEditDocument, wxDocument)
 
 // Since text windows have their own method for saving to/loading from files,
-// we override OnSave/OpenDocument instead of Save/LoadObject
-bool TextEditDocument::OnSaveDocument(const wxString& filename)
+// we override DoSave/OpenDocument instead of Save/LoadObject
+bool TextEditDocument::DoSaveDocument(const wxString& filename)
 {
-    TextEditView* view = GetFirstView();
-
-    if (!view->m_textsw->SaveFile(filename))
-        return false;
-    Modify(false);
-    return true;
+    return GetFirstView()->m_textsw->SaveFile(filename);
 }
 
-bool TextEditDocument::OnOpenDocument(const wxString& filename)
+bool TextEditDocument::DoOpenDocument(const wxString& filename)
 {
-    TextEditView *view = GetFirstView();
-    if (!view->m_textsw->LoadFile(filename))
-        return false;
-
-    SetFilename(filename, true);
-    Modify(false);
-    UpdateAllViews();
-    return true;
+    return GetFirstView()->m_textsw->LoadFile(filename);
 }
 
 bool TextEditDocument::IsModified(void) const
 {
-    TextEditView* view = GetFirstView();
-    return (wxDocument::IsModified() || (view && view->m_textsw->IsModified()));
+    TextEditView *view = GetFirstView();
+    return wxDocument::IsModified() || (view && view->m_textsw->IsModified());
 }
 
 void TextEditDocument::Modify(bool mod)
 {
-    TextEditView* view = GetFirstView();
+    TextEditView *view = GetFirstView();
 
     wxDocument::Modify(mod);
 
-    if ((!mod) && view && view->m_textsw)
+    if (!mod && view && view->m_textsw)
     {
         view->m_textsw->DiscardEdits();
     }
