@@ -145,12 +145,12 @@ static void extra_widget_size_request(GtkWidget*, GtkRequisition* req, wxWindow*
 }
 }
 
-static void wxInsertChildInFileDialog(wxWindow* parent, wxWindow* child)
+void wxFileDialog::AddChildGTK(wxWindowGTK* child)
 {
     g_signal_connect_after(child->m_widget, "size_request",
         G_CALLBACK(extra_widget_size_request), child);
     gtk_file_chooser_set_extra_widget(
-        GTK_FILE_CHOOSER(parent->m_widget), child->m_widget);
+        GTK_FILE_CHOOSER(m_widget), child->m_widget);
 }
 
 //-----------------------------------------------------------------------------
@@ -173,7 +173,6 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
                            const wxString& name)
     : wxFileDialogBase()
 {
-    m_insertCallback = wxInsertChildInFileDialog;
     parent = GetParentForModalDialog(parent);
 
     if (!wxFileDialogBase::Create(parent, message, defaultDir, defaultFileName,

@@ -86,6 +86,7 @@ private:
     void Init();
     void GtkSetStyle();
     GSList* GetRadioGroup(size_t pos);
+    virtual void AddChildGTK(wxWindowGTK* child);
 
     GtkToolbar* m_toolbar;
     GtkTooltips* m_tooltips;

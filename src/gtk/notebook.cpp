@@ -104,7 +104,7 @@ static void event_after(GtkNotebook* widget, GdkEvent*, wxNotebook* win)
 // InsertChild callback for wxNotebook
 //-----------------------------------------------------------------------------
 
-static void wxInsertChildInNotebook(wxWindow* parent, wxWindow* child)
+void wxNotebook::AddChildGTK(wxWindowGTK* child)
 {
     // Hack Alert! (Part I): This sets the notebook as the parent of the child
     // widget, and takes care of some details such as updating the state and
@@ -114,7 +114,7 @@ static void wxInsertChildInNotebook(wxWindow* parent, wxWindow* child)
     // incorrect sizes since the widget's style context is not fully known.
     // See bug #901694 for details
     // (http://sourceforge.net/tracker/?func=detail&aid=901694&group_id=9863&atid=109863)
-    gtk_widget_set_parent(child->m_widget, parent->m_widget);
+    gtk_widget_set_parent(child->m_widget, m_widget);
 
     // NOTE: This should be considered a temporary workaround until we can
     // work out the details and implement delaying the setting of the initial
@@ -160,8 +160,6 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
                         const wxPoint& pos, const wxSize& size,
                         long style, const wxString& name )
 {
-    m_insertCallback = wxInsertChildInNotebook;
-
     if ( (style & wxBK_ALIGN_MASK) == wxBK_DEFAULT )
         style |= wxBK_TOP;
 
@@ -377,7 +375,7 @@ bool wxNotebook::InsertPage( size_t position,
     wxCHECK_MSG( position <= GetPageCount(), false,
                  _T("invalid page index in wxNotebookPage::InsertPage()") );
 
-    // Hack Alert! (Part II): See above in wxInsertChildInNotebook callback
+    // Hack Alert! (Part II): See above in wxNotebook::AddChildGTK
     // why this has to be done.
     gtk_widget_unparent(win->m_widget);
 

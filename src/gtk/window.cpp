@@ -1905,29 +1905,18 @@ wxWindow *wxWindowBase::DoFindFocus()
     return wx_static_cast(wxWindow*, focus);
 }
 
-//-----------------------------------------------------------------------------
-// InsertChild for wxWindowGTK.
-//-----------------------------------------------------------------------------
-
-/* Callback for wxWindowGTK. This very strange beast has to be used because
- * C++ has no virtual methods in a constructor. We have to emulate a
- * virtual function here as wxNotebook requires a different way to insert
- * a child in it. I had opted for creating a wxNotebookPage window class
- * which would have made this superfluous (such in the MDI window system),
- * but no-one was listening to me... */
-
-static void wxInsertChildInWindow( wxWindowGTK* parent, wxWindowGTK* child )
+void wxWindowGTK::AddChildGTK(wxWindowGTK* child)
 {
     /* the window might have been scrolled already, do we
        have to adapt the position */
-    wxPizza* pizza = WX_PIZZA(parent->m_wxwindow);
+    wxPizza* pizza = WX_PIZZA(m_wxwindow);
     child->m_x += pizza->m_scroll_x;
     child->m_y += pizza->m_scroll_y;
 
     gtk_widget_set_size_request(
         child->m_widget, child->m_width, child->m_height);
     gtk_fixed_put(
-        GTK_FIXED(parent->m_wxwindow), child->m_widget, child->m_x, child->m_y);
+        GTK_FIXED(m_wxwindow), child->m_widget, child->m_x, child->m_y);
 }
 
 //-----------------------------------------------------------------------------
@@ -2011,8 +2000,6 @@ void wxWindowGTK::Init()
 
     m_oldClientWidth =
     m_oldClientHeight = 0;
-
-    m_insertCallback = wxInsertChildInWindow;
 
     m_clipPaintRegion = false;
 
@@ -3100,13 +3087,8 @@ bool wxWindowGTK::Reparent( wxWindowBase *newParentBase )
 
     wxASSERT( GTK_IS_WIDGET(m_widget) );
 
-    /* prevent GTK from deleting the widget arbitrarily */
-    gtk_widget_ref( m_widget );
-
     if (oldParent)
-    {
         gtk_container_remove( GTK_CONTAINER(m_widget->parent), m_widget );
-    }
 
     wxASSERT( GTK_IS_WIDGET(m_widget) );
 
@@ -3117,13 +3099,9 @@ bool wxWindowGTK::Reparent( wxWindowBase *newParentBase )
             m_showOnIdle = true;
             gtk_widget_hide( m_widget );
         }
-
         /* insert GTK representation */
-        (*(newParent->m_insertCallback))(newParent, this);
+        newParent->AddChildGTK(this);
     }
-
-    /* reverse: prevent GTK from deleting the widget arbitrarily */
-    gtk_widget_unref( m_widget );
 
     SetLayoutDirection(wxLayout_Default);
 
@@ -3139,7 +3117,7 @@ void wxWindowGTK::DoAddChild(wxWindowGTK *child)
     AddChild( child );
 
     /* insert GTK representation */
-    (*m_insertCallback)(this, child);
+    AddChildGTK(child);
 }
 
 void wxWindowGTK::AddChild(wxWindowBase *child)

@@ -183,6 +183,8 @@ public:
     virtual bool CreateClient( wxMDIParentFrame *parent, long style = wxVSCROLL | wxHSCROLL );
 
 private:
+    virtual void AddChildGTK(wxWindowGTK* child);
+
     DECLARE_DYNAMIC_CLASS(wxMDIClientWindow)
 };
 

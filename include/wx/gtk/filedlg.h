@@ -62,6 +62,7 @@ protected:
 private:
     void OnFakeOk( wxCommandEvent &event );
     void OnSize(wxSizeEvent&);
+    virtual void AddChildGTK(wxWindowGTK* child);
 
     wxGtkFileChooser    m_fc;
 

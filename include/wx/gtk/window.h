@@ -139,9 +139,7 @@ public:
     bool PreCreation( wxWindowGTK *parent, const wxPoint &pos, const wxSize &size );
     void PostCreation();
 
-    // Internal addition of child windows. differs from class
-    // to class not by using virtual functions but by using
-    // the m_insertCallback.
+    // Internal addition of child windows
     void DoAddChild(wxWindowGTK *child);
 
     // This methods sends wxPaintEvents to the window. It reads the
@@ -303,12 +301,6 @@ public:
     bool                 m_showOnIdle:1;        // postpone showing the window until idle
 
 protected:
-    // C++ has no virtual methods in the constrcutor of any class but we need
-    // different methods of inserting a child window into a wxFrame,
-    // wxMDIFrame, wxNotebook etc. this is the callback that will get used.
-    typedef void (*InsertChildFunction)(wxWindowGTK*, wxWindowGTK*);
-    InsertChildFunction m_insertCallback;
-
     // implement the base class pure virtuals
     virtual void DoClientToScreen( int *x, int *y ) const;
     virtual void DoScreenToClient( int *x, int *y ) const;
@@ -384,6 +376,7 @@ private:
     // return true if we scrolled, false otherwise (on error or simply if we
     // are already at the end)
     bool DoScrollByUnits(ScrollDir dir, ScrollUnit unit, int units);
+    virtual void AddChildGTK(wxWindowGTK* child);
 
 
     DECLARE_DYNAMIC_CLASS(wxWindowGTK)

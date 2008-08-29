@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKNOTEBOOKH__
-#define __GTKNOTEBOOKH__
+#ifndef _WX_GTKNOTEBOOK_H_
+#define _WX_GTKNOTEBOOK_H_
 
 //-----------------------------------------------------------------------------
 // internal class
@@ -135,9 +135,10 @@ private:
     // the padding set by SetPadding()
     int m_padding;
 
+    virtual void AddChildGTK(wxWindowGTK* child);
+
     DECLARE_DYNAMIC_CLASS(wxNotebook)
     DECLARE_EVENT_TABLE()
 };
 
-#endif
-    // __GTKNOTEBOOKH__
+#endif // _WX_GTKNOTEBOOK_H_

@@ -148,15 +148,14 @@ gtk_collapsiblepane_expanded_callback(GObject * WXUNUSED(object),
 }
 }
 
-static void
-gtk_collapsiblepane_insert_callback(wxWindowGTK* parent, wxWindowGTK* child)
+void wxCollapsiblePane::AddChildGTK(wxWindowGTK* child)
 {
-    // this callback should be used only once to insert the "pane" into the
+    // should be used only once to insert the "pane" into the
     // GtkExpander widget. wxGenericCollapsiblePane::DoAddChild() will check if
     // it has been called only once (and in any case we would get a warning
     // from the following call as GtkExpander is a GtkBin and can contain only
     // a single child!).
-    gtk_container_add (GTK_CONTAINER (parent->m_widget), child->m_widget);
+    gtk_container_add(GTK_CONTAINER(m_widget), child->m_widget);
 }
 
 //-----------------------------------------------------------------------------
@@ -196,10 +195,6 @@ bool wxCollapsiblePane::Create(wxWindow *parent,
     // "activate" one
     g_signal_connect(m_widget, "notify::expanded",
                      G_CALLBACK(gtk_collapsiblepane_expanded_callback), this);
-
-    // before creating m_pPane, we need to makesure our own insert callback
-    // will be used
-    m_insertCallback = gtk_collapsiblepane_insert_callback;
 
     // this the real "pane"
     m_pPane = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,

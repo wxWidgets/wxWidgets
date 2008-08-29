@@ -431,6 +431,7 @@ private:
     wxDataViewCtrlInternal  *m_internal;
     wxDataViewColumnList     m_cols;
 
+    virtual void AddChildGTK(wxWindowGTK* child);
     void GtkEnableSelectionEvents();
     void GtkDisableSelectionEvents();
     

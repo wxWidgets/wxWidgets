@@ -3439,14 +3439,9 @@ wxdataview_row_collapsed_callback( GtkTreeView* WXUNUSED(treeview), GtkTreeIter*
     // wxDataViewCtrl
 //-----------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
-// InsertChild for wxDataViewCtrl
-//-----------------------------------------------------------------------------
-
-static void wxInsertChildInDataViewCtrl( wxWindowGTK* parent, wxWindowGTK* child )
+void wxDataViewCtrl::AddChildGTK(wxWindowGTK* child)
 {
-    wxDataViewCtrl * dvc = (wxDataViewCtrl*) parent;
-    GtkWidget *treeview = dvc->GtkGetTreeView();
+    GtkWidget* treeview = GtkGetTreeView();
 
     // Insert widget in GtkTreeView
     if (GTK_WIDGET_REALIZED(treeview))
@@ -3606,8 +3601,6 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
         wxFAIL_MSG( wxT("wxDataViewCtrl creation failed") );
         return false;
     }
-
-    m_insertCallback = wxInsertChildInDataViewCtrl;
 
     m_widget = gtk_scrolled_window_new (NULL, NULL);
     g_object_ref(m_widget);

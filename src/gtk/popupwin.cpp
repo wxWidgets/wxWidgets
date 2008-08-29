@@ -98,27 +98,18 @@ gtk_dialog_realized_callback( GtkWidget * WXUNUSED(widget), wxPopupWindow *win )
 }
 }
 
-//-----------------------------------------------------------------------------
-// InsertChild for wxPopupWindow
-//-----------------------------------------------------------------------------
-
-/* Callback for wxFrame. This very strange beast has to be used because
- * C++ has no virtual methods in a constructor. We have to emulate a
- * virtual function here as wxWidgets requires different ways to insert
- * a child in container classes. */
-
-static void wxInsertChildInPopupWin(wxWindowGTK* parent, wxWindowGTK* child)
+void wxPopupWindow::AddChildGTK(wxWindowGTK* child)
 {
     gtk_widget_set_size_request(
         child->m_widget, child->m_width, child->m_height);
     gtk_fixed_put(
-        GTK_FIXED(parent->m_wxwindow), child->m_widget, child->m_x, child->m_y);
+        GTK_FIXED(m_wxwindow), child->m_widget, child->m_x, child->m_y);
 
-    if (parent->HasFlag(wxTAB_TRAVERSAL))
+    if (HasFlag(wxTAB_TRAVERSAL))
     {
         /* we now allow a window to get the focus as long as it
            doesn't have any children. */
-        GTK_WIDGET_UNSET_FLAGS( parent->m_wxwindow, GTK_CAN_FOCUS );
+        GTK_WIDGET_UNSET_FLAGS(m_wxwindow, GTK_CAN_FOCUS);
     }
 }
 
@@ -150,8 +141,6 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
 
     // All dialogs should really have this style
     m_windowStyle |= wxTAB_TRAVERSAL;
-
-    m_insertCallback = wxInsertChildInPopupWin;
 
     m_widget = gtk_window_new( GTK_WINDOW_POPUP );
     g_object_ref(m_widget);

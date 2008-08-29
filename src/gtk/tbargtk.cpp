@@ -242,20 +242,15 @@ arrow_button_press_event(GtkToggleButton* button, GdkEventButton* event, wxToolB
 }
 }
 
-//-----------------------------------------------------------------------------
-// InsertChild callback for wxToolBar
-//-----------------------------------------------------------------------------
-
-static void wxInsertChildInToolBar(wxWindow* parent, wxWindow* child)
+void wxToolBar::AddChildGTK(wxWindowGTK* child)
 {
     GtkWidget* align = gtk_alignment_new(0.5, 0.5, 0, 0);
     gtk_widget_show(align);
     gtk_container_add(GTK_CONTAINER(align), child->m_widget);
     GtkToolItem* item = gtk_tool_item_new();
     gtk_container_add(GTK_CONTAINER(item), align);
-    wxToolBar* tbar = static_cast<wxToolBar*>(parent);
     // position will be corrected in DoInsertTool if necessary
-    gtk_toolbar_insert(GTK_TOOLBAR(GTK_BIN(tbar->m_widget)->child), item, -1);
+    gtk_toolbar_insert(GTK_TOOLBAR(GTK_BIN(m_widget)->child), item, -1);
 }
 
 // ----------------------------------------------------------------------------
@@ -370,8 +365,6 @@ bool wxToolBar::Create( wxWindow *parent,
                         long style,
                         const wxString& name )
 {
-    m_insertCallback = wxInsertChildInToolBar;
-
     if ( !PreCreation( parent, pos, size ) ||
          !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
     {
@@ -532,7 +525,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
         case wxTOOL_STYLE_CONTROL:
             wxWindow* control = tool->GetControl();
             if (control->m_widget->parent == NULL)
-                wxInsertChildInToolBar(this, control);
+                AddChildGTK(control);
             tool->m_item = GTK_TOOL_ITEM(control->m_widget->parent->parent);
             if (gtk_toolbar_get_item_index(m_toolbar, tool->m_item) != int(pos))
             {
