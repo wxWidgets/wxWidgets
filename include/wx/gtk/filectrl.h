@@ -48,8 +48,14 @@ public:
     void SetWildcard( const wxString& wildCard );
     void SetFilterIndex( int filterIndex );
 
+    wxString GetCurrentWildCard() const
+       { return m_wildcards[GetFilterIndex()]; }
+
 private:
     GtkFileChooser *m_widget;
+    // First wildcard in filter, to be used when the user
+    // saves a file without giving an extension.
+    wxArrayString   m_wildcards; 
 };
 
 #if wxUSE_FILECTRL

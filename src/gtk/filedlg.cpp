@@ -335,7 +335,21 @@ void wxFileDialog::OnSize(wxSizeEvent&)
 
 wxString wxFileDialog::GetPath() const
 {
-    return m_fc.GetPath();
+    wxFileName fn = m_fc.GetPath();
+    
+    if (HasFdFlag(wxFD_SAVE))
+    {
+        // add extension
+        if (!fn.HasExt())
+        {
+           wxFileName wildcard( "/dummy", m_fc.GetCurrentWildCard() );
+           wxString ext = wildcard.GetExt();
+           if (!ext.empty() && (ext.Find('?') == wxNOT_FOUND) && (ext.Find('*') == wxNOT_FOUND))
+               fn.SetExt( ext );
+        }
+    }
+
+    return fn.GetFullPath();
 }
 
 void wxFileDialog::GetFilenames(wxArrayString& files) const

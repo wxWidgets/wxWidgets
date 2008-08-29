@@ -111,6 +111,8 @@ wxString wxGtkFileChooser::GetFilename() const
 
 void wxGtkFileChooser::SetWildcard( const wxString& wildCard )
 {
+    m_wildcards.Empty();
+
     // parse filters
     wxArrayString wildDescriptions, wildFilters;
 
@@ -144,10 +146,16 @@ void wxGtkFileChooser::SetWildcard( const wxString& wildCard )
                 gtk_file_filter_set_name( filter, wxGTK_CONV_SYS( wildDescriptions[n] ) );
 
                 wxStringTokenizer exttok( wildFilters[n], wxT( ";" ) );
+                
+                int n = 1;
                 while ( exttok.HasMoreTokens() )
                 {
                     wxString token = exttok.GetNextToken();
                     gtk_file_filter_add_pattern( filter, wxGTK_CONV_SYS( token ) );
+                    
+                    if (n == 1)
+                        m_wildcards.Add( token ); // Only add first pattern to list, used later when saving
+                    n++;
                 }
 
                 gtk_file_chooser_add_filter( chooser, filter );
