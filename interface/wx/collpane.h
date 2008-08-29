@@ -82,7 +82,13 @@ public:
 
     @beginStyleTable
     @style{wxCP_DEFAULT_STYLE}
-           The default style: 0.
+        The default style. It includes wxTAB_TRAVERSAL and wxBORDER_NONE.
+    @style{wxCP_NO_TLW_RESIZE}
+        By default wxCollapsiblePane resizes the top level window containing it
+        when its own size changes. This allows to easily implement dialogs
+        containing an optionally shown part, for example, and so is the default
+        behaviour but can be inconvenient in some specific cases -- use this
+        flag to disable this automatic parent resizing then.
     @endStyleTable
 
     @beginEventTable{wxCollapsiblePaneEvent}
