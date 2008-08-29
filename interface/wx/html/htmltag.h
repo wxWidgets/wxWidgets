@@ -101,7 +101,7 @@ public:
 
     /**
         Returns @true if the tag has a parameter of the given name.
-        Example : @c FONT SIZE=+2 COLOR="#FF00FF" has two parameters named
+        Example : @c FONT SIZE=+2 COLOR="\#FF00FF" has two parameters named
         "SIZE" and "COLOR".
         
         @param par

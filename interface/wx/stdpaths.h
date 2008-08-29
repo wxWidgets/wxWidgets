@@ -180,7 +180,7 @@ public:
     /**
         Return the directory for the user-dependent application data files:
              - Unix: @c ~/.appname
-             - Windows: @c C:\\Documents @c and @c Settings\\username\Application @c Data\\appname
+             - Windows: @c C:\\Documents @c and @c Settings\\username\\Application @c Data\\appname
              - Mac: @c ~/Library/Application @c Support/appname
     */
     wxString GetUserDataDir() const;

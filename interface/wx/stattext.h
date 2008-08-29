@@ -117,77 +117,81 @@ public:
         support it (currently only GTK+ 2). For the other platforms, the markup is
         ignored.
         The supported tags are:
-
-        b
-
-        bold text
-
-        big
-
-        bigger text
-
-        i
-
-        italic text
-
-        s
-
-        strike-through text
-
-        sub
-
-        subscript text
-
-        sup
-
-        superscript text
-
-        small
-
-        smaller text
-
-        tt
-
-        monospaced text
-
-        u
-
-        underlined text
-
-        span
-
-        generic formatter tag; see Pango Markup for more information.
+        <TABLE>
+            <TR>
+                <TD>&lt;b&gt;</TD>
+                <TD>bold text</TD>
+            </TR>
+            <TR>
+                <TD>&lt;big&gt;</TD>
+                <TD>bigger text</TD>
+            </TR>
+            <TR>
+                <TD>&lt;i&gt;</TD>
+                <TD>italic text</TD>
+            </TR>
+            <TR>
+                <TD>&lt;s&gt;</TD>
+                <TD>strike-through text</TD>
+            </TR>
+            <TR>
+                <TD>&lt;sub&gt;</TD>
+                <TD>subscript text</TD>
+            </TR>
+            <TR>
+                <TD>&lt;sup&gt;</TD>
+                <TD>superscript text</TD>
+            </TR>
+            <TR>
+                <TD>&lt;small&gt;</TD>
+                <TD>smaller text</TD>
+            </TR>
+            <TR>
+                <TD>&lt;tt&gt;</TD>
+                <TD>monospaced text</TD>
+            </TR>
+            <TR>
+                <TD>&lt;u&gt;</TD>
+                <TD>underlined text</TD>
+            </TR>
+            <TR>
+                <TD>&lt;span&gt;</TD>
+                <TD>generic formatter tag; see Pango Markup for more information.</TD>
+            </TR>
+        </TABLE>
 
         Note that the string must be well-formed (e.g. all tags must be correctly
         closed)
         otherwise it can be not shown correctly or at all.
         Also note that you need to escape the following special characters:
-
-        @b Special character
-
-        @b Escape as
-
-        @c
-
-        @c amp; or as @c
-
-        @c '
-
-        @c apos;
-
-        @c "
-
-        @c quot;
-
-        @c
-
-        @c lt;
-
-        @c
-
-        @c gt;
-
-        The non-escaped ampersand @c  characters are interpreted as
+        <TABLE>
+            <TR>
+                <TD>@b Special character</TD>
+                <TD>@b Escape as</TD>
+            </TR>
+            <TR>
+                <TD>@c &amp;</TD>
+                <TD>@c &amp;amp; or as &amp;&amp;</TD>
+            </TR>
+            <TR>
+                <TD>@c &apos;</TD>
+                <TD>@c &amp;apos;</TD>
+            </TR>
+            <TR>
+                <TD>@c &quot;</TD>
+                <TD>@c &amp;quot;</TD>
+            </TR>
+            <TR>
+                <TD>@c &lt;</TD>
+                <TD>@c &amp;lt;</TD>
+            </TR>
+            <TR>
+                <TD>@c &gt;</TD>
+                <TD>@c &amp;gt;</TD>
+            </TR>
+        </TABLE>
+        
+        The non-escaped ampersand @c &amp; characters are interpreted as
         mnemonics; see wxControl::SetLabel.
 
         Example:

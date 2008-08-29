@@ -324,7 +324,7 @@ public:
     bool GetBool(const wxString& param, bool defaultv = false);
 
     /**
-        Gets colour in HTML syntax (#RRGGBB).
+        Gets colour in HTML syntax (\#RRGGBB).
     */
     wxColour GetColour(const wxString& param,
                    const wxColour& default = wxNullColour);
