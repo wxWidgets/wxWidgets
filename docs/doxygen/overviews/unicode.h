@@ -232,11 +232,12 @@ internal representation and this implies that it can't guarantee constant-time
 access to N-th element of the string any longer as to find the position of this
 character in the string we have to examine all the preceding ones. Usually this
 doesn't matter much because most algorithms used on the strings examine them
-sequentially anyhow, but it can have serious consequences for the algorithms
-using indexed access to string elements as they typically acquire O(N^2) time
+sequentially anyhow and because wxString implements a cache for iterating over
+the string by index but it can have serious consequences for algorithms
+using random access to string elements as they typically acquire O(N^2) time
 complexity instead of O(N) where N is the length of the string.
 
-To return to the linear complexity, indexed access should be replaced with
+Even despite caching the index, indexed access should be replaced with
 sequential access using string iterators. For example a typical loop:
 @code
 wxString s("hello");

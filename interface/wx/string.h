@@ -65,28 +65,41 @@ public:
 /**
     @class wxString
 
+    The wxString class has been completely rewritten for wxWidgets 3.0
+    and this change was actually the main reason for the calling that
+    version wxWidgets 3.0.
+
     wxString is a class representing a Unicode character string.
     wxString uses @c std::string internally to store its content
     unless this is not supported by the compiler or disabled
-    specifically when building wxWidgets. Therefore wxString
-    inherits many features from @c std::string. Most
-    implementations of @c std::string are thread-safe and don't
-    use reference counting. By default, wxString uses @c std::string
-    internally even if wxUSE_STL is not defined.
+    specifically when building wxWidgets and it therefore inherits
+    many features from @c std::string. Most implementations of
+    @c std::string are thread-safe and don't use reference counting.
+    By default, wxString uses @c std::string internally even if
+    wxUSE_STL is not defined.
 
-    Since wxWidgets 3.0 wxString internally uses UCS-2 (basically 2-byte per
-    character wchar_t and nearly the same as UTF-16) under Windows and
-    UTF-8 under Unix, Linux and OS X to store its content.
+    wxString now internally uses UTF-16 under Windows and UTF-8 under
+    Unix, Linux and OS X to store its content. Note that when iterating
+    over a UTF-16 string under Windows, the user code has to take care
+    of surrogate pair handling whereas Windows itself has built-in
+    support pairs in UTF-16, such as for drawing strings on screen.
+    
     Much work has been done to make existing code using ANSI string literals
-    work as before. If you need to have a wxString that uses wchar_t on Unix
-    and Linux, too, you can specify this on the command line with the
-    @c configure @c --disable-utf8 switch.
+    work as before. If you nonetheless need to have a wxString that uses wchar_t
+    on Unix and Linux, too, you can specify this on the command line with the
+    @c configure @c --disable-utf8 switch or you can consider using wxUString
+    or std::wstring instead.
 
-    If you need a Unicode string class with O(1) access on all platforms
-    you should consider using wxUString.
-
-    Since iterating over a wxString by index can become inefficient in UTF-8
-    mode iterators should be used instead of index based access:
+    Accessing a UTF-8 string by index can be very inefficient because
+    a single character is represented by a variable number of bytes so that
+    the entire string has to be parsed in order to find the character.
+    Since iterating over a string by index is a common programming technique and
+    was also possible and encouraged by wxString using the access operator[]()
+    wxString implements caching of the last used index so that iterating over
+    a string is a linear operation even in UTF-8 mode.
+    
+    It is nonetheless recommended to use iterators (instead of index bases
+    access) like this:
 
     @code
     wxString s = "hello";
