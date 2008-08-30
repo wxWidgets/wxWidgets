@@ -1364,7 +1364,7 @@ bool wxDataViewHeaderWindowMSW::Create( wxDataViewCtrl *parent, wxWindowID id,
     }
 
     m_imageList = new wxImageList( 16, 16 );
-    Header_SetImageList( (HWND) m_hWnd, m_imageList->GetHIMAGELIST() );
+    (void)Header_SetImageList((HWND) m_hWnd, m_imageList->GetHIMAGELIST());
 
     // we need to subclass the m_hWnd to force wxWindow::HandleNotify
     // to call wxDataViewHeaderWindow::MSWOnNotify

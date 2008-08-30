@@ -2831,10 +2831,10 @@ WXLPARAM wxListCtrl::OnCustomDraw(WXLPARAM lParam)
 // Necessary for drawing hrules and vrules, if specified
 void wxListCtrl::OnPaint(wxPaintEvent& event)
 {
-    bool drawHRules = HasFlag(wxLC_HRULES);
-    bool drawVRules = HasFlag(wxLC_VRULES);
+    const bool drawHRules = HasFlag(wxLC_HRULES);
+    const bool drawVRules = HasFlag(wxLC_VRULES);
 
-    if (!InReportView() || !drawHRules && !drawVRules)
+    if (!InReportView() || !(drawHRules || drawVRules))
     {
         event.Skip();
         return;
