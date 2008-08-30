@@ -107,6 +107,36 @@ public:
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
                const wxString& name = "comboBox");
+    /**
+        Constructor, creating and showing a combobox.
+
+        @param parent
+            Parent window. Must not be @NULL.
+        @param id
+            Window identifier. The value wxID_ANY indicates a default value.
+        @param value
+            Initial selection string. An empty string indicates no selection.
+        @param pos
+            Window position.
+        @param size
+            Window size. If wxDefaultSize is specified then the window is sized
+            appropriately.
+        @param choices
+            An array of strings with which to initialise the control.
+        @param style
+            Window style. See wxComboBox.
+        @param validator
+            Window validator.
+        @param name
+            Window name.
+
+        @beginWxPythonOnly
+        The wxComboBox constructor in wxPython reduces the @a n and @a choices
+        arguments are to a single argument, which is a list of strings.
+        @endWxPythonOnly
+
+        @see Create(), wxValidator
+    */
     wxComboBox(wxWindow* parent, wxWindowID id,
                const wxString& value,
                const wxPoint& pos,

@@ -1211,7 +1211,7 @@ public:
 
         @see wxListCtrl::SetItemState
     */
-    void Select(bool on = true);
+    void Select(long n, bool on = true);
 
     /**
         Sets the column image for the specified column. To use the column images, the

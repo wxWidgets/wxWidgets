@@ -105,6 +105,31 @@ public:
                          long style = 0,
                          const wxValidator& validator = wxDefaultValidator,
                          const wxString& name = "comboBox");
+    /**
+        Constructor, creating and showing a owner-drawn combobox.
+
+        @param parent
+            Parent window. Must not be @NULL.
+        @param id
+            Window identifier. The value @c wxID_ANY indicates a default value.
+        @param value
+            Initial selection string. An empty string indicates no selection.
+        @param pos
+            Window position.
+        @param size
+            Window size.
+            If ::wxDefaultSize is specified then the window is sized appropriately.
+        @param choices
+            An array of strings with which to initialise the control.
+        @param style
+            Window style. See wxOwnerDrawnComboBox.
+        @param validator
+            Window validator.
+        @param name
+            Window name.
+
+        @see Create(), wxValidator
+    */
     wxOwnerDrawnComboBox(wxWindow* parent, wxWindowID id,
                          const wxString& value,
                          const wxPoint& pos,

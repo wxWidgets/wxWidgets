@@ -67,11 +67,32 @@ public:
     wxCheckListBox(wxWindow* parent, wxWindowID id,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
-                   int n,
+                   int n = 0,
                    const wxString choices[] = NULL,
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
                    const wxString& name = "listBox");
+    /**
+        Constructor, creating and showing a list box.
+
+        @param parent
+            Parent window. Must not be @NULL.
+        @param id
+            Window identifier. The value wxID_ANY indicates a default value.
+        @param pos
+            Window position.
+        @param size
+            Window size. If wxDefaultSize is specified then the window is sized
+            appropriately.
+        @param choices
+            An array of strings with which to initialise the control.
+        @param style
+            Window style. See wxCheckListBox.
+        @param validator
+            Window validator.
+        @param name
+            Window name.
+    */
     wxCheckListBox(wxWindow* parent, wxWindowID id,
                    const wxPoint& pos,
                    const wxSize& size,

@@ -66,6 +66,44 @@ public:
                         int n, const wxString* choices,
                         long style = wxCHOICEDLG_STYLE,
                         const wxPoint& pos = wxDefaultPosition);
+    /**
+        Constructor taking an array of wxString choices.
+
+        @param parent
+            Parent window.
+        @param message
+            Message to show on the dialog.
+        @param caption
+            The dialog caption.
+        @param choices
+            An array of strings, or a string list, containing the choices.
+        @param style
+            A dialog style (bitlist) containing flags chosen from standard
+            dialog style and the ones listed below. The default value is
+            equivalent to wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxOK |
+            wxCANCEL | wxCENTRE.
+        @param pos
+            Dialog position. Not Windows.
+
+        @beginStyleTable
+        @style{wxOK}
+            Show an OK button.
+        @style{wxCANCEL}
+            Show a Cancel button.
+        @style{wxCENTRE}
+            Centre the message. Not Windows.
+        @endStyleTable
+
+        @remarks Use ShowModal() to show the dialog.
+
+        @beginWxPythonOnly
+
+        For Python the two parameters @a n and @a choices are collapsed into a
+        multi parameter @a choices which is expected to be a Python list of
+        strings.
+
+        @endWxPythonOnly
+    */
     wxMultiChoiceDialog(wxWindow* parent,
                         const wxString& message,
                         const wxString& caption,
@@ -158,6 +196,48 @@ public:
                          void** clientData = NULL,
                          long style = wxCHOICEDLG_STYLE,
                          const wxPoint& pos = wxDefaultPosition);
+    /**
+        Constructor, taking an array of wxString choices and optional client
+        data.
+
+        @param parent
+            Parent window.
+        @param message
+            Message to show on the dialog.
+        @param caption
+            The dialog caption.
+        @param choices
+            An array of strings, or a string list, containing the choices.
+        @param clientData
+            An array of client data to be associated with the items. See
+            GetSelectionClientData().
+        @param style
+            A dialog style (bitlist) containing flags chosen from standard
+            dialog styles and the ones listed below. The default value is
+            equivalent to wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxOK |
+            wxCANCEL | wxCENTRE.
+        @param pos
+            Dialog position. Not Windows.
+
+        @beginStyleTable
+        @style{wxOK}
+            Show an OK button.
+        @style{wxCANCEL}
+            Show a Cancel button.
+        @style{wxCENTRE}
+            Centre the message. Not Windows.
+        @endStyleTable
+
+        @remarks Use ShowModal() to show the dialog.
+
+        @beginWxPythonOnly
+
+        For Python the two parameters @a n and @a choices are collapsed into a
+        multi parameter @a choices which is expected to be a Python list of
+        strings.
+
+        @endWxPythonOnly
+    */
     wxSingleChoiceDialog(wxWindow* parent,
                          const wxString& message,
                          const wxString& caption,

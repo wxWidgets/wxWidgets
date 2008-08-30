@@ -80,6 +80,37 @@ public:
              long style = 0,
              const wxValidator& validator = wxDefaultValidator,
              const wxString& name = "choice");
+
+    /**
+        Constructor, creating and showing a choice.
+
+        @param parent
+            Parent window. Must not be @NULL.
+        @param id
+            Window identifier. The value wxID_ANY indicates a default value.
+        @param pos
+            Window position.
+        @param size
+            Window size. If wxDefaultSize is specified then the choice is sized
+            appropriately.
+        @param choices
+            An array of strings with which to initialise the choice control.
+        @param style
+            Window style. See wxChoice.
+        @param validator
+            Window validator.
+        @param name
+            Window name.
+
+        @see Create(), wxValidator
+
+        @beginWxPythonOnly
+
+        The wxChoice constructor in wxPython reduces the @a n and @a choices
+        arguments to a single argument, which is a list of strings.
+
+        @endWxPythonOnly
+    */
     wxChoice(wxWindow* parent, wxWindowID id,
              const wxPoint& pos,
              const wxSize& size,

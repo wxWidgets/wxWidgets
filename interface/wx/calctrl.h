@@ -493,7 +493,7 @@ public:
         @param lowerdate
             The low limit for the dates shown by the control or
             @c wxDefaultDateTime.
-        @param highlighting
+        @param upperdate
             The high limit for the dates shown by the control or
             @c wxDefaultDateTime.
         @return

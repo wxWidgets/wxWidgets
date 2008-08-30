@@ -46,7 +46,7 @@
     type emulating @c T @c *, i.e. a pointer to this type otherwise. This macro
     always returns an expression of type @c T itself.
 
-    As shown in wxTLS_TYPE() example, you may want to @c #define a symbol
+    As shown in wxTLS_TYPE() example, you may want to @c \#define a symbol
     wrapping a thread-specific variable with this macro. And, as also explained
     in wxTLS_TYPE() documentation, you may avoid using it entirely if you
     target only recent compilers.
