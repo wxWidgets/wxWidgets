@@ -1274,7 +1274,6 @@ void wxImage::Paste( const wxImage &image, int x, int y )
          (GetMaskGreen()==image.GetMaskGreen()) &&
          (GetMaskBlue()==image.GetMaskBlue()))))
     {
-        width *= 3;
         unsigned char* source_data = image.GetData() + xx*3 + yy*3*image.GetWidth();
         int source_step = image.GetWidth()*3;
 
@@ -1282,11 +1281,10 @@ void wxImage::Paste( const wxImage &image, int x, int y )
         int target_step = M_IMGDATA->m_width*3;
         for (int j = 0; j < height; j++)
         {
-            memcpy( target_data, source_data, width );
+            memcpy( target_data, source_data, width*3 );
             source_data += source_step;
             target_data += target_step;
         }
-        return;
     }
 
     // Copy over the alpha channel from the original image
@@ -1315,7 +1313,6 @@ void wxImage::Paste( const wxImage &image, int x, int y )
         unsigned char g = image.GetMaskGreen();
         unsigned char b = image.GetMaskBlue();
 
-        width *= 3;
         unsigned char* source_data = image.GetData() + xx*3 + yy*3*image.GetWidth();
         int source_step = image.GetWidth()*3;
 
@@ -1324,7 +1321,7 @@ void wxImage::Paste( const wxImage &image, int x, int y )
 
         for (int j = 0; j < height; j++)
         {
-            for (int i = 0; i < width; i+=3)
+            for (int i = 0; i < width*3; i+=3)
             {
                 if ((source_data[i]   != r) ||
                     (source_data[i+1] != g) ||
