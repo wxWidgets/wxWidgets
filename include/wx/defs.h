@@ -1119,19 +1119,21 @@ typedef wxUint32 wxDword;
 #endif
 
 
-/* Make sure ssize_t is defined (a signed type the same size as size_t) */
-/* HAVE_SSIZE_T should be defined for compiliers that already have it */
+/* Make sure ssize_t is defined (a signed type the same size as size_t). */
+/* (HAVE_SSIZE_T is not already defined by configure) */
+#ifndef HAVE_SSIZE_T
 #ifdef __MINGW32__
-    #if defined(_SSIZE_T_) && !defined(HAVE_SSIZE_T)
+    #if defined(_SSIZE_T_) || defined(_SSIZE_T_DEFINED)
         #define HAVE_SSIZE_T
     #endif
-#endif
-#if defined(__PALMOS__) && !defined(HAVE_SSIZE_T)
+#elif defined(__PALMOS__)
+    #define HAVE_SSIZE_T
+#elif wxCHECK_WATCOM_VERSION(1,4)
     #define HAVE_SSIZE_T
 #endif
-#if wxCHECK_WATCOM_VERSION(1,4)
-    #define HAVE_SSIZE_T
-#endif
+#endif /* !HAVE_SSIZE_T */
+
+/* If we really don't have ssize_t, provide our own version. */
 #ifdef HAVE_SSIZE_T
     #ifdef __UNIX__
         #include <sys/types.h>
