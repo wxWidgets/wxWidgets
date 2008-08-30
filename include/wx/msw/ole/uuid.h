@@ -76,7 +76,7 @@ public:
 
   // comparison operators
   bool operator==(const Uuid& uuid) const;
-  bool operator!=(const Uuid& uuid) const;
+  bool operator!=(const Uuid& uuid) const { return !(*this == uuid); }
 
   // accessors
   operator const UUID*()   const { return &m_uuid;               }
