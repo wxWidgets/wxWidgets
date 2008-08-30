@@ -116,7 +116,7 @@ protected:
 
     #define wxMessageDialog wxGenericMessageDialog
 #elif defined(__WXCOCOA__)
-	#include "wx/cocoa/msgdlg.h"
+    #include "wx/cocoa/msgdlg.h"
 #elif defined(__WXPALMOS__)
     #include "wx/palmos/msgdlg.h"
 #elif defined(__WXMSW__)

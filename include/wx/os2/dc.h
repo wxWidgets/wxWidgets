@@ -196,23 +196,23 @@ public:
 protected:
     void Init()
     {
-	m_pCanvas      = NULL;
-	m_hOldBitmap   = 0;
-	m_hOldPen      = 0;
-	m_hOldBrush    = 0;
-	m_hOldFont     = 0;
+        m_pCanvas      = NULL;
+        m_hOldBitmap   = 0;
+        m_hOldPen      = 0;
+        m_hOldBrush    = 0;
+        m_hOldFont     = 0;
 #if wxUSE_PALETTE
         m_hOldPalette  = 0;
 #endif // wxUSE_PALETTE
 
-	m_bOwnsDC      = false;
-	m_hDC          = 0;
-	m_hOldPS       = NULL;
-	m_hPS          = NULL;
-	m_bIsPaintTime = false; // True at Paint Time
+        m_bOwnsDC      = false;
+        m_hDC          = 0;
+        m_hOldPS       = NULL;
+        m_hPS          = NULL;
+        m_bIsPaintTime = false; // True at Paint Time
 
-	m_pen.SetColour(*wxBLACK);
-	m_brush.SetColour(*wxWHITE);
+        m_pen.SetColour(*wxBLACK);
+        m_brush.SetColour(*wxWHITE);
     }
 
     // create an uninitialized DC: this should be only used by the derived

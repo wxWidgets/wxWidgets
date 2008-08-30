@@ -24,8 +24,8 @@ public:
     wxTlsKey()
     {
         APIRET rc = ::DosAllocThreadLocalMemory(1, &m_slot);
-	if (rc != NO_ERROR)
-	    m_slot = NULL;
+        if (rc != NO_ERROR)
+            m_slot = NULL;
     }
 
     // return true if the key was successfully allocated
@@ -41,7 +41,7 @@ public:
     bool Set(void *value)
     {
         m_slot = (ULONG*)value;
-	return true;
+        return true;
     }
 
     // free the key

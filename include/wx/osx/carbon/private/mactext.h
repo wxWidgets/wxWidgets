@@ -4,7 +4,7 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     03/02/99
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -58,8 +58,8 @@ public :
     virtual int GetLineLength(long lineNo) const ;
     virtual wxString GetLineText(long lineNo) const ;
     virtual void CheckSpelling(bool WXUNUSED(check)) { }
-    virtual void SetFont( const wxFont & font , const wxColour& foreground , long windowStyle );    
-} ;
+    virtual void SetFont( const wxFont & font , const wxColour& foreground , long windowStyle );
+};
 
 class wxMacUnicodeTextControl : public wxMacTextControl
 {
@@ -88,7 +88,7 @@ public :
     virtual void WriteText(const wxString& str) ;
 
 protected :
-	virtual void CreateControl( wxTextCtrl* peer, const Rect* bounds, CFStringRef cfr );
+    virtual void CreateControl( wxTextCtrl* peer, const Rect* bounds, CFStringRef cfr );
 
     // contains the tag for the content (is different for password and non-password controls)
     OSType m_valueTag ;

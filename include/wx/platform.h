@@ -52,8 +52,8 @@
 #   elif defined(TARGET_OS_MAC) && TARGET_OS_MAC
 #       undef __WXOSX_IPHONE__
 #       define __WXOSX_MAC__
-#	else
-#		error "unknown SDK, neither TARGET_OS_MAC nor TARGET_OS_IPHONE set in <TargetConditionals.h>"
+#   else
+#       error "unknown SDK, neither TARGET_OS_MAC nor TARGET_OS_IPHONE set in <TargetConditionals.h>"
 #   endif
 #endif
 
