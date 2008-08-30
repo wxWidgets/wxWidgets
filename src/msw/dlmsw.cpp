@@ -205,7 +205,10 @@ wxString wxVersionDLL::GetFileVersion(const wxString& filename) const
             {
                 void *pVer;
                 UINT sizeInfo;
-                if ( m_pfnVerQueryValue(buf.data(), _T("\\"), &pVer, &sizeInfo) )
+                if ( m_pfnVerQueryValue(buf.data(),
+                                        const_cast<wxChar *>(_T("\\")),
+                                        &pVer,
+                                        &sizeInfo) )
                 {
                     VS_FIXEDFILEINFO *info = (VS_FIXEDFILEINFO *)pVer;
                     ver.Printf(_T("%d.%d.%d.%d"),
