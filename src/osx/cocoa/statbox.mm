@@ -16,6 +16,25 @@
 #include "wx/statbox.h"
 #include "wx/osx/private.h"
 
+@implementation wxNSBox
+
+- (void)setImplementation: (wxWidgetImpl *) theImplementation
+{
+    impl = theImplementation;
+}
+
+- (wxWidgetImpl*) implementation
+{
+    return impl;
+}
+
+- (BOOL) isFlipped
+{
+    return NO;
+}
+
+@end
+
 wxWidgetImplType* wxWidgetImpl::CreateGroupBox( wxWindowMac* wxpeer, 
                                     wxWindowMac* parent, 
                                     wxWindowID id, 
@@ -27,8 +46,7 @@ wxWidgetImplType* wxWidgetImpl::CreateGroupBox( wxWindowMac* wxpeer,
 {
     NSView* sv = (wxpeer->GetParent()->GetHandle() );
     
-    NSRect r = wxToNSRect( sv, wxRect( pos, size) );
-    // Rect bounds = wxMacGetBoundsForControl( wxpeer, pos , size ) ;
+    NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSBox* v = [[wxNSBox alloc] initWithFrame:r];
     [sv addSubview:v];
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );

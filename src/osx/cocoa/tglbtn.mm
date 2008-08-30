@@ -36,8 +36,7 @@ wxWidgetImplType* wxWidgetImpl::CreateToggleButton( wxWindowMac* wxpeer,
 {
     NSView* sv = (wxpeer->GetParent()->GetHandle() );
     
-    NSRect r = wxToNSRect( sv, wxRect( pos, size) );
-    // Rect bounds = wxMacGetBoundsForControl( wxpeer, pos , size ) ;
+    NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
     
     [v setBezelStyle:NSRoundedBezelStyle];    
@@ -59,8 +58,7 @@ wxWidgetImplType* wxWidgetImpl::CreateBitmapToggleButton( wxWindowMac* wxpeer,
 {    
     NSView* sv = (wxpeer->GetParent()->GetHandle() );
     
-    NSRect r = wxToNSRect( sv, wxRect( pos, size) );
-    // Rect bounds = wxMacGetBoundsForControl( wxpeer, pos , size ) ;
+    NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
     
     [v setBezelStyle:NSRegularSquareBezelStyle];

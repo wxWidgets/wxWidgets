@@ -26,6 +26,9 @@ extern wxList wxModalDialogs;
 
 void wxDialog::DoShowModal()
 {
+    wxCHECK_RET( !IsModal(), wxT("DoShowModal() called twice") );
+
+    wxModalDialogs.Append(this);
 
     SetFocus() ;
 /*
@@ -41,12 +44,12 @@ void wxDialog::DoShowModal()
         resetGroupParent = true;
     }
 */
-
     NSWindow* theWindow = GetWXWindow();
     
     NSModalSession session = [NSApp beginModalSessionForWindow:theWindow];
     while (IsModal()) 
     {
+        wxMacAutoreleasePool autoreleasepool;
         if ([NSApp runModalSession:session] != NSRunContinuesResponse)
             break;
         // TODO should we do some idle processing ?

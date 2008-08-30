@@ -33,25 +33,6 @@
 
 #include "wx/osx/private.h"
 
-@implementation wxNSBox
-
-- (void)setImplementation: (wxWidgetImpl *) theImplementation
-{
-    m_impl = theImplementation;
-}
-
-- (wxWidgetImpl*) implementation
-{
-    return m_impl;
-}
-
-- (BOOL) isFlipped
-{
-    return YES;
-}
-
-@end
-
 wxWidgetImplType* wxWidgetImpl::CreateStaticLine( wxWindowMac* wxpeer, 
                                     wxWindowMac* parent, 
                                     wxWindowID id, 
@@ -62,8 +43,7 @@ wxWidgetImplType* wxWidgetImpl::CreateStaticLine( wxWindowMac* wxpeer,
 {
     NSView* sv = (wxpeer->GetParent()->GetHandle() );
     
-    NSRect r = wxToNSRect( sv, wxRect( pos, size) );
-    // Rect bounds = wxMacGetBoundsForControl( wxpeer, pos , size ) ;
+    NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSBox* v = [[wxNSBox alloc] initWithFrame:r];
     [sv addSubview:v];
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );

@@ -26,29 +26,73 @@
 #include "wx/imaglist.h"
 #include "wx/osx/private.h"
 
-@interface wxNSTabView : NSTabView
+//
+// controller
+//
+
+@interface wxTabViewController : NSObject
 {
-    wxWidgetImpl* m_impl;
 }
 
-- (void)setImplementation: (wxWidgetImpl *) theImplementation;
-- (wxWidgetImpl*) implementation;
+- (BOOL)tabView:(NSTabView *)tabView shouldSelectTabViewItem:(NSTabViewItem *)tabViewItem;
+- (void)tabView:(NSTabView *)tabView didSelectTabViewItem:(NSTabViewItem *)tabViewItem;
+
+@end
+
+@interface wxNSTabView : NSTabView
+{
+    wxWidgetCocoaImpl* impl;
+}
+
+- (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation;
+- (wxWidgetCocoaImpl*) implementation;
 - (BOOL) isFlipped;
-- (int) intValue;
-- (void) setIntValue:(int) v;
+
+@end
+
+@implementation wxTabViewController
+
+- (id) init
+{
+    [super init];
+    return self;
+}
+
+- (BOOL)tabView:(NSTabView *)tabView shouldSelectTabViewItem:(NSTabViewItem *)tabViewItem
+{
+    wxNSTabView* view = (wxNSTabView*) tabView;
+    wxWidgetCocoaImpl* viewimpl = [view implementation];
+    if ( viewimpl )
+    {
+        wxNotebook* wxpeer = (wxNotebook*) viewimpl->GetWXPeer();
+    }
+    return YES;
+}
+
+- (void)tabView:(NSTabView *)tabView didSelectTabViewItem:(NSTabViewItem *)tabViewItem;
+
+{
+    wxNSTabView* view = (wxNSTabView*) tabView;
+    wxWidgetCocoaImpl* viewimpl = [view implementation];
+    if ( viewimpl )
+    {
+        wxNotebook* wxpeer = (wxNotebook*) viewimpl->GetWXPeer();
+        wxpeer->HandleClicked(0);
+    }
+}
 
 @end
 
 @implementation wxNSTabView
 
-- (void)setImplementation: (wxWidgetImpl *) theImplementation
+- (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation
 {
-    m_impl = theImplementation;
+    impl = theImplementation;
 }
 
-- (wxWidgetImpl*) implementation
+- (wxWidgetCocoaImpl*) implementation
 {
-    return m_impl;
+    return impl;
 }
 
 - (BOOL) isFlipped
@@ -56,21 +100,98 @@
     return YES;
 }
 
-- (int) intValue
-{
-    NSTabViewItem* selectedItem = [self selectedTabViewItem];
-    if ( selectedItem == nil )
-        return 0;
-    else
-        return [self indexOfTabViewItem:selectedItem]+1;
-}
-
-- (void) setIntValue:(int) v
-{
-    [self selectTabViewItemAtIndex:(v-1)];
-}
-
 @end
+
+class wxCocoaTabView : public wxWidgetCocoaImpl
+{
+public:
+    wxCocoaTabView( wxWindowMac* peer , WXWidget w ) : wxWidgetCocoaImpl(peer, w)
+    {
+    }
+    
+    void GetContentArea( int &left , int &top , int &width , int &height ) const 
+    {
+        wxNSTabView* slf = (wxNSTabView*) m_osxView;
+        NSRect r = [slf contentRect];
+        left = r.origin.x;
+        top = r.origin.y;
+        width = r.size.width;
+        height = r.size.height;
+    }
+    
+    void SetValue( wxInt32 value ) 
+    {
+        wxNSTabView* slf = (wxNSTabView*) m_osxView;
+        // avoid 'changed' events when setting the tab programmatically
+        wxTabViewController* controller = [slf delegate];
+        [slf setDelegate:nil];
+        [slf selectTabViewItemAtIndex:(value-1)];
+        [slf setDelegate:controller];
+    }
+    
+    wxInt32 GetValue() const
+    {
+        wxNSTabView* slf = (wxNSTabView*) m_osxView;
+        NSTabViewItem* selectedItem = [slf selectedTabViewItem];
+        if ( selectedItem == nil )
+            return 0;
+        else
+            return [slf indexOfTabViewItem:selectedItem]+1;
+    }
+    
+    void SetMaximum( wxInt32 maximum )
+    {
+        wxNSTabView* slf = (wxNSTabView*) m_osxView;
+        int cocoacount = [slf numberOfTabViewItems ];
+        // avoid 'changed' events when setting the tab programmatically
+        wxTabViewController* controller = [slf delegate];
+        [slf setDelegate:nil];
+        
+        if ( maximum > cocoacount )
+        {
+            for ( int i = cocoacount ; i < maximum ; ++i )
+            {
+                NSTabViewItem* item = [[NSTabViewItem alloc] init];
+                [slf addTabViewItem:item];
+                [item release];
+            }
+        }
+        else if ( maximum < cocoacount )
+        {
+            for ( int i = cocoacount -1 ; i >= maximum ; --i )
+            {
+                NSTabViewItem* item = [(wxNSTabView*) m_osxView tabViewItemAtIndex:i];
+                [slf removeTabViewItem:item];
+            }
+        }
+        [slf setDelegate:controller];
+    }
+
+    void SetupTabs( const wxNotebook& notebook)
+    {
+        int pcount = notebook.GetPageCount();
+        
+        SetMaximum( pcount );
+        
+        for ( int i = 0 ; i < pcount ; ++i )
+        {
+            wxNotebookPage* page = notebook.GetPage(i);
+            NSTabViewItem* item = [(wxNSTabView*) m_osxView tabViewItemAtIndex:i];
+            [item setView:page->GetHandle() ];
+            wxCFStringRef cf( page->GetLabel() , notebook.GetFont().GetEncoding() );
+            [item setLabel:cf.AsNSString()];
+            if ( notebook.GetImageList() && notebook.GetPageImage(i) >= 0 )
+            {
+                const wxBitmap bmap = notebook.GetImageList()->GetBitmap( notebook.GetPageImage( i ) ) ;
+                if ( bmap.Ok() )
+                {
+                    // TODO how to set an image on a tab
+                }
+            }
+        }
+    }
+};
+
 
 /*
 #if 0
@@ -120,18 +241,17 @@ wxWidgetImplType* wxWidgetImpl::CreateTabView( wxWindowMac* wxpeer,
                                     long style, 
                                     long extraStyle)
 {
+    static wxTabViewController* controller = NULL;
+
+    if ( !controller )
+        controller =[[wxTabViewController alloc] init];
+
     NSView* sv = (wxpeer->GetParent()->GetHandle() );
     
-    NSRect r = wxToNSRect( sv, wxRect( pos, size) );
-    // Rect bounds = wxMacGetBoundsForControl( wxpeer, pos , size ) ;
-    /*    if ( bounds.right <= bounds.left )
-        bounds.right = bounds.left + 100;
-    if ( bounds.bottom <= bounds.top )
-        bounds.bottom = bounds.top + 100;
-    */
+    NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     
     NSTabViewType tabstyle = NSTopTabsBezelBorder;
-   if ( style & wxBK_LEFT )
+    if ( style & wxBK_LEFT )
         tabstyle = NSLeftTabsBezelBorder;
     else if ( style & wxBK_RIGHT )
         tabstyle = NSRightTabsBezelBorder;
@@ -141,77 +261,10 @@ wxWidgetImplType* wxWidgetImpl::CreateTabView( wxWindowMac* wxpeer,
     wxNSTabView* v = [[wxNSTabView alloc] initWithFrame:r];
     [sv addSubview:v];
     [v setTabViewType:tabstyle];
-    wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
+    wxWidgetCocoaImpl* c = new wxCocoaTabView( wxpeer, v );
     [v setImplementation:c];
+    [v setDelegate: controller];
     return c;
-}
-
-void wxWidgetCocoaImpl::SetupTabs( const wxNotebook& notebook)
-{
-    int pcount = notebook.GetPageCount();
-    int cocoacount = [ (wxNSTabView*) m_osxView numberOfTabViewItems ];
-    
-    if ( pcount > cocoacount )
-    {
-        for ( int i = cocoacount ; i < pcount ; ++i )
-        {
-            NSTabViewItem* item = [[NSTabViewItem alloc] init];
-            [(wxNSTabView*) m_osxView addTabViewItem:item];
-            [item release];
-        }
-    }
-    else if ( pcount < cocoacount )
-    {
-        for ( int i = cocoacount -1 ; i >= pcount ; --i )
-        {
-            NSTabViewItem* item = [(wxNSTabView*) m_osxView tabViewItemAtIndex:i];
-            [(wxNSTabView*) m_osxView removeTabViewItem:item];
-        }
-    }
-    
-    for ( int i = 0 ; i < pcount ; ++i )
-    {
-        wxNotebookPage* page = notebook.GetPage(i);
-        NSTabViewItem* item = [(wxNSTabView*) m_osxView tabViewItemAtIndex:i];
-        [item setLabel:wxCFStringRef( page->GetLabel() , notebook.GetFont().GetEncoding() ).AsNSString()];
-    }
-/*
-    SetMaximum( GetPageCount() ) ;
-
-    wxNotebookPage *page;
-    ControlTabInfoRecV1 info;
-
-    const size_t countPages = GetPageCount();
-    for (size_t ii = 0; ii < countPages; ii++)
-    {
-        page = (wxNotebookPage*) notebook->GetPage[ii];
-        info.version = kControlTabInfoVersionOne;
-        info.iconSuiteID = 0;
-        wxCFStringRef cflabel( page->GetLabel(), GetFont().GetEncoding() ) ;
-        info.name = cflabel ;
-        SetData<ControlTabInfoRecV1>( ii + 1, kControlTabInfoTag, &info ) ;
-
-        if ( GetImageList() && GetPageImage(ii) >= 0 )
-        {
-            const wxBitmap bmap = GetImageList()->GetBitmap( GetPageImage( ii ) ) ;
-            if ( bmap.Ok() )
-            {
-                ControlButtonContentInfo info ;
-
-                wxMacCreateBitmapButton( &info, bmap ) ;
-
-                OSStatus err = SetData<ControlButtonContentInfo>( ii + 1, kControlTabImageContentTag, &info );
-                if ( err != noErr )
-                {
-                    wxFAIL_MSG("Error when setting icon on tab");
-                }
-
-                wxMacReleaseBitmapButton( &info ) ;
-            }
-        }
-        SetTabEnabled( ii + 1, true ) ;
-    }
-*/
 }
 
 #endif

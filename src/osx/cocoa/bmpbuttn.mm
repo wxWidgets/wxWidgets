@@ -33,8 +33,7 @@ wxWidgetImplType* wxWidgetImpl::CreateBitmapButton( wxWindowMac* wxpeer,
 {
     NSView* sv = (wxpeer->GetParent()->GetHandle() );
     
-    NSRect r = wxToNSRect( sv, wxRect( pos, size) );
-    // Rect bounds = wxMacGetBoundsForControl( wxpeer, pos , size ) ;
+    NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
     
     [v setBezelStyle:NSRegularSquareBezelStyle];

@@ -50,6 +50,7 @@ void wxGUIEventLoop::WakeUp()
 
 bool wxGUIEventLoop::Pending() const
 {
+    wxMacAutoreleasePool autoreleasepool;
     // a pointer to the event is returned if there is one, or nil if not
     return [[NSApplication sharedApplication]
             nextEventMatchingMask: NSAnyEventMask

@@ -34,7 +34,7 @@ wxSize wxButton::DoGetBestSize() const
     {
         case wxWINDOW_VARIANT_NORMAL:
         case wxWINDOW_VARIANT_LARGE:
-            sz.y = 20 ;
+            sz.y = 23 ;
             break;
 
         case wxWINDOW_VARIANT_SMALL:
@@ -48,6 +48,21 @@ wxSize wxButton::DoGetBestSize() const
         default:
             break;
     }
+
+    wxRect r ;
+        
+    m_peer->GetBestRect(&r);
+
+    if ( r.GetWidth() == 0 && r.GetHeight() == 0 )
+    {
+    }
+    sz.x = r.GetWidth();
+    sz.y = r.GetHeight();
+
+    int wBtn = 96;
+    
+    if ((wBtn > sz.x) || ( GetWindowStyle() & wxBU_EXACTFIT))
+        sz.x = wBtn;
 
 #if wxOSX_USE_CARBON
     Rect    bestsize = { 0 , 0 , 0 , 0 } ;
@@ -111,7 +126,7 @@ wxSize wxButton::GetDefaultSize()
 - (id)initWithFrame:(NSRect)frame
 {
     [super initWithFrame:frame];
-    m_impl = NULL;
+    impl = NULL;
     [self setTarget: self];
     [self setAction: @selector(clickedAction:)];
     return self;
@@ -119,9 +134,9 @@ wxSize wxButton::GetDefaultSize()
 
 - (void) clickedAction: (id) sender
 {
-    if ( m_impl )
+    if ( impl )
     {
-        wxButton* wxpeer = (wxButton*) m_impl->GetWXPeer();
+        wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
         if ( wxpeer )
             wxpeer->HandleClicked(0);
     }
@@ -129,12 +144,12 @@ wxSize wxButton::GetDefaultSize()
 
 - (void)setImplementation: (wxWidgetImpl *) theImplementation
 {
-    m_impl = theImplementation;
+    impl = theImplementation;
 }
 
 - (wxWidgetImpl*) implementation
 {
-    return m_impl;
+    return impl;
 }
 
 - (BOOL) isFlipped
@@ -185,8 +200,7 @@ wxWidgetImplType* wxWidgetImpl::CreateButton( wxWindowMac* wxpeer,
 {
     NSView* sv = (wxpeer->GetParent()->GetHandle() );
     
-    NSRect r = wxToNSRect( sv, wxRect( pos, size) );
-    // Rect bounds = wxMacGetBoundsForControl( wxpeer, pos , size ) ;
+    NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
     
     if ( id == wxID_HELP )
@@ -256,12 +270,33 @@ wxWidgetImplType* wxWidgetImpl::CreateButton( wxWindowMac* wxpeer,
 
 void wxWidgetCocoaImpl::SetDefaultButton( bool isDefault )
 { 
-    [m_osxView setKeyEquivalent: isDefault ? @"\r" : nil ];
-//    SetData(kControlButtonPart , kControlPushButtonDefaultTag , (Boolean) isDefault ) ;
+    if ( [m_osxView isKindOfClass:[NSButton class]] )
+        [(NSButton*)m_osxView setKeyEquivalent: isDefault ? @"\r" : nil ];
 }
 
 void wxWidgetCocoaImpl::PerformClick() 
 {
 }
 
-// TODO for the disclosure button : NSDisclosureBezelStyle and the button type to NSOnOffButton.
+wxWidgetImplType* wxWidgetImpl::CreateDisclosureTriangle( wxWindowMac* wxpeer, 
+                                    wxWindowMac* parent, 
+                                    wxWindowID id, 
+                                    const wxString& label,
+                                    const wxPoint& pos, 
+                                    const wxSize& size,
+                                    long style, 
+                                    long extraStyle) 
+{
+    NSView* sv = (wxpeer->GetParent()->GetHandle() );
+    
+    NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
+    wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
+    [v setBezelStyle:NSDisclosureBezelStyle];
+    [v setButtonType:NSOnOffButton];
+    [v setTitle:wxCFStringRef( label).AsNSString()];
+    [v setImagePosition:NSImageRight];
+    [sv addSubview:v];
+    wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
+    [v setImplementation:c];
+    return c;
+}

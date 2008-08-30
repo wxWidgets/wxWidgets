@@ -17,11 +17,20 @@
 #include "wx/osx/private.h"
 #endif
 
-#if wxOSX_USE_COCOA
+NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const wxSize &size , bool adjustForOrigin )
+{
+    int x, y, w, h ;
+
+    window->MacGetBoundsForControl( pos , size , x , y, w, h , adjustForOrigin ) ;
+    wxRect bounds(x,y,w,h);
+    NSView* sv = (window->GetParent()->GetHandle() );
+
+    return wxToNSRect( sv, bounds );
+}
 
 @interface wxNSView : NSView
 {
-    wxWidgetImpl* m_impl;
+    wxWidgetImpl* impl;
 }
 
 - (void)drawRect: (NSRect) rect;
@@ -59,7 +68,7 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
     wxevent.m_altDown = modifiers & NSAlternateKeyMask;
     wxevent.m_metaDown = modifiers & NSCommandKeyMask;
     wxevent.m_clickCount = clickCount;
-    wxevent.SetTimestamp( [nsEvent timestamp] ) ;
+    wxevent.SetTimestamp( [nsEvent timestamp] * 1000.0 ) ;
 /*
     // a control click is interpreted as a right click
     bool thisButtonIsFakeRight = false ;
@@ -182,12 +191,15 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
 
 @implementation wxNSView
 
+#define OSX_DEBUG_DRAWING 0
+
 - (void)drawRect: (NSRect) rect
 {
-    if ( m_impl )
+    if ( impl )
     {
         CGContextRef context = (CGContextRef) [[NSGraphicsContext currentContext] graphicsPort];
         CGContextSaveGState( context );
+#if OSX_DEBUG_DRAWING
         CGContextBeginPath( context );
         CGContextMoveToPoint(context, 0, 0);
         NSRect bounds = [self bounds];
@@ -200,19 +212,33 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
         CGContextAddLineToPoint(context, bounds.size.width-10, bounds.size.height);
         CGContextClosePath( context );
         CGContextStrokePath(context);
+#endif
 
         if ( [ self isFlipped ] == NO )
         {
             CGContextTranslateCTM( context, 0,  [self bounds].size.height );
             CGContextScaleCTM( context, 1, -1 );
         }
-        m_impl->GetWXPeer()->MacSetCGContextRef( context );
+        
+        wxRegion updateRgn;
+        const NSRect *rects;
+        int count ;
 
+        [self getRectsBeingDrawn:&rects count:&count];
+        for ( int i = 0 ; i < count ; ++i )
+        {
+            updateRgn.Union(wxFromNSRect(self, rects[i]) );
+        }
+
+        wxWindow* wxpeer = impl->GetWXPeer();
+        wxpeer->GetUpdateRegion() = updateRgn;
+        wxpeer->MacSetCGContextRef( context );
+        
         wxPaintEvent event;
         event.SetTimestamp(0); //  todo
-        event.SetEventObject(m_impl->GetWXPeer());
-        m_impl->GetWXPeer()->HandleWindowEvent(event);
-        
+        event.SetEventObject(wxpeer);
+        wxpeer->HandleWindowEvent(event);
+                
         CGContextRestoreGState( context );
     }
 }
@@ -256,17 +282,17 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
     SetupMouseEvent( wxevent , event ) ;
     wxevent.m_x = pt.x;
     wxevent.m_y = pt.y;
-    m_impl->GetWXPeer()->HandleWindowEvent(wxevent);
+    impl->GetWXPeer()->HandleWindowEvent(wxevent);
 }
 
 - (void)setImplementation: (wxWidgetImpl *) theImplementation
 {
-    m_impl = theImplementation;
+    impl = theImplementation;
 }
 
 - (wxWidgetImpl*) implementation
 {
-    return m_impl;
+    return impl;
 }
 
 - (BOOL) isFlipped
@@ -313,13 +339,25 @@ void wxWidgetCocoaImpl::Init()
 
 wxWidgetCocoaImpl::~wxWidgetCocoaImpl()
 {
-    [m_osxView setImplementation:NULL];
+    if ( [m_osxView respondsToSelector:@selector(setImplementation:) ] )
+        [m_osxView setImplementation:NULL];
+    if ( !IsRootControl() )
+    {
+        NSView *sv = [m_osxView superview];
+        if ( sv != nil )
+            [m_osxView removeFromSuperview];
+    }
     [m_osxView release];
 }
     
 bool wxWidgetCocoaImpl::IsVisible() const 
 {
     return [m_osxView isHiddenOrHasHiddenAncestor] == NO;
+}
+
+void wxWidgetCocoaImpl::SetVisibility( bool visible )
+{
+    [m_osxView setHidden:(visible ? NO:YES)];
 }
 
 void wxWidgetCocoaImpl::Raise()
@@ -354,7 +392,7 @@ void wxWidgetCocoaImpl::GetSize( int &width, int &height ) const
     height = rect.size.height;
 }
 
-void wxWidgetCocoaImpl::GetContentArea( int&left, int &top, int &width, int &height )
+void wxWidgetCocoaImpl::GetContentArea( int&left, int &top, int &width, int &height ) const
 {
     left = top = 0;
     GetSize( width, height );
@@ -373,19 +411,23 @@ bool wxWidgetCocoaImpl::GetNeedsDisplay() const
     return [m_osxView needsDisplay];
 }
 
-void wxWidgetCocoaImpl::CanFocus() const
+bool wxWidgetCocoaImpl::CanFocus() const
 {
-    return [m_osxView acceptsFirstResponder] == YES;
+    return [m_osxView canBecomeKeyView] == YES;
 }
 
 bool wxWidgetCocoaImpl::HasFocus() const
 {
-    return [m_osxView isFirstResponder] == YES;
+    return ( [[m_osxView window] firstResponder] == m_osxView );
 }
 
 bool wxWidgetCocoaImpl::SetFocus() 
 {
-    [m_osxView makeKeyWindow] ;
+    if ( [m_osxView canBecomeKeyView] == NO )
+        return false;
+        
+    [[m_osxView window] makeFirstResponder: m_osxView] ;
+    return true;
 }
 
 
@@ -401,18 +443,121 @@ void wxWidgetCocoaImpl::Embed( wxWidgetImpl *parent )
     [container addSubview:m_osxView];
 }
 
+void wxWidgetCocoaImpl::SetBackgroundColour( const wxColour &WXUNUSED(col) )
+{
+    // m_osxView.backgroundColor = [[UIColor alloc] initWithCGColor:col.GetCGColor()];
+}
+
+void wxWidgetCocoaImpl::SetLabel( const wxString& title, wxFontEncoding encoding )
+{
+    if ( [m_osxView respondsToSelector:@selector(setTitle:) ] )
+    {
+        wxCFStringRef cf( title , m_wxPeer->GetFont().GetEncoding() );
+        [m_osxView setTitle:cf.AsNSString()];
+    }
+}
+    
+
+void  wxWidgetImpl::Convert( wxPoint *pt , wxWidgetImpl *from , wxWidgetImpl *to )
+{
+    NSPoint p = wxToNSPoint( from->GetWXWidget(), *pt );
+    p = [from->GetWXWidget() convertPoint:p toView:to->GetWXWidget() ]; 
+    *pt = wxFromNSPoint( to->GetWXWidget(), p );
+}
+
+wxInt32 wxWidgetCocoaImpl::GetValue() const 
+{
+    return [(NSControl*)m_osxView intValue];
+}
+
+void wxWidgetCocoaImpl::SetValue( wxInt32 v ) 
+{
+    if (  [m_osxView respondsToSelector:@selector(setIntValue:)] )
+    {
+        [m_osxView setIntValue:v];
+    }
+    else if (  [m_osxView respondsToSelector:@selector(setFloatValue:)] )
+    {
+        [m_osxView setFloatValue:(double)v];
+    }
+    else if (  [m_osxView respondsToSelector:@selector(setDoubleValue:)] )
+    {
+        [m_osxView setDoubleValue:(double)v];
+    }
+}
+
+void wxWidgetCocoaImpl::SetMinimum( wxInt32 v ) 
+{
+    if (  [m_osxView respondsToSelector:@selector(setMinValue:)] )
+    {
+        [m_osxView setMinValue:(double)v];
+    }
+}
+
+void wxWidgetCocoaImpl::SetMaximum( wxInt32 v ) 
+{
+    if (  [m_osxView respondsToSelector:@selector(setMaxValue:)] )
+    {
+        [m_osxView setMaxValue:(double)v];
+    }
+}
+
+void wxWidgetCocoaImpl::SetBitmap( const wxBitmap& bitmap )
+{
+    if (  [m_osxView respondsToSelector:@selector(setImage:)] )
+    {
+        [m_osxView setImage:bitmap.GetNSImage()];
+    }
+}
+
+void wxWidgetCocoaImpl::SetupTabs( const wxNotebook& notebook)
+{
+    // implementation in subclass
+}
+
+void wxWidgetCocoaImpl::GetBestRect( wxRect *r ) const
+{
+    r->x = r->y = r->width = r->height = 0;
+//    if (  [m_osxView isKindOfClass:[NSControl class]] )
+    if (  [m_osxView respondsToSelector:@selector(sizeToFit)] )
+    {
+        NSRect former = [m_osxView frame];
+        [m_osxView sizeToFit];
+        NSRect best = [m_osxView frame];
+        [m_osxView setFrame:former];
+        r->width = best.size.width;
+        r->height = best.size.height;
+    }
+}
+
+bool wxWidgetCocoaImpl::IsEnabled() const
+{
+    return [m_osxView enable];
+}
+
+void wxWidgetCocoaImpl::Enable( bool enable )
+{
+    [m_osxView setEnabled:enable];
+}
+
+void wxWidgetCocoaImpl::PulseGauge()
+{
+}
+
+void wxWidgetCocoaImpl::SetScrollThumb( wxInt32 val, wxInt32 view )
+{
+}
 
 //
 // Factory methods
 //
 
-wxWidgetImpl* wxWidgetImpl::CreateUserPane( wxWindowMac* wxpeer, const wxPoint& pos, const wxSize& size,
-                            long style, long extraStyle, const wxString& name)
+wxWidgetImpl* wxWidgetImpl::CreateUserPane( wxWindowMac* wxpeer, wxWindowMac* parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
+                            long style, long extraStyle)
 {
     NSView* sv = (wxpeer->GetParent()->GetHandle() );
     
-    NSRect r = wxToNSRect( sv, wxRect( pos, size) );
-    // Rect bounds = wxMacGetBoundsForControl( wxpeer, pos , size ) ;
+    NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSView* v = [[wxNSView alloc] initWithFrame:r];
     [sv addSubview:v];
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
@@ -429,6 +574,3 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
     [tlw setContentView:v];
     return c;
 }
-
-
-#endif

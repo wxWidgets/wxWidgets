@@ -30,9 +30,7 @@
 
 #if wxUSE_GUI
 #if wxOSX_USE_COCOA_OR_CARBON
-    #include "wx/osx/uma.h"
     #include <CoreServices/CoreServices.h>
-    #include <Carbon/Carbon.h>
     #include "wx/osx/private/timer.h"
 #endif
 #endif // wxUSE_GUI
@@ -57,6 +55,17 @@ void wxMacWakeUp()
 }
 
 #endif // wxUSE_BASE
+ 
+bool wxApp::DoInitGui()
+{
+    [NSApplication sharedApplication];
+    [NSApp finishLaunching];
+    return true;
+}
+
+void wxApp::DoCleanUp()
+{
+}
 
 #if wxUSE_GUI
 
@@ -82,7 +91,7 @@ void wxGetMousePosition( int* x, int* y )
 
 wxTimerImpl* wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
 {
-    return new wxCarbonTimerImpl(timer);
+    return new wxOSXTimerImpl(timer);
 }
 
 int gs_wxBusyCursorCount = 0;

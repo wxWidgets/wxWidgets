@@ -92,43 +92,6 @@ wxSize wxStaticText::DoGetBestSize() const
           to allow correct dynamic ellipsizing of the label
 */
 
-@interface wxNSTextField : NSTextField
-{
-    wxWidgetImpl* m_impl;
-}
-
-- (void)setImplementation: (wxWidgetImpl *) theImplementation;
-- (wxWidgetImpl*) implementation;
-- (BOOL) isFlipped;
-
-@end
-
-@implementation wxNSTextField
-
-- (void)setImplementation: (wxWidgetImpl *) theImplementation
-{
-    m_impl = theImplementation;
-}
-
-- (wxWidgetImpl*) implementation
-{
-    return m_impl;
-}
-
-- (BOOL) isFlipped
-{
-    return YES;
-}
-
-// use our common calls
-- (void) setTitle:(NSString *) title
-{
-    [self setStringValue: title];
-}
-
-@end
-
-
 wxWidgetImplType* wxWidgetImpl::CreateStaticText( wxWindowMac* wxpeer, 
                                     wxWindowMac* parent, 
                                     wxWindowID id, 
@@ -140,8 +103,7 @@ wxWidgetImplType* wxWidgetImpl::CreateStaticText( wxWindowMac* wxpeer,
 {
     NSView* sv = (wxpeer->GetParent()->GetHandle() );
     
-    NSRect r = wxToNSRect( sv, wxRect( pos, size) );
-    // Rect bounds = wxMacGetBoundsForControl( wxpeer, pos , size ) ;
+    NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSTextField* v = [[wxNSTextField alloc] initWithFrame:r];
     [sv addSubview:v];
 

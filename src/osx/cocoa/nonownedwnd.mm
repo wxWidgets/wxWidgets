@@ -21,9 +21,6 @@
 #include "wx/osx/private.h"
 #endif
 
-#if wxOSX_USE_COCOA
-
-
 NSRect wxToNSRect( NSView* parent, const wxRect& r )
 {
     NSRect frame = parent ? [parent bounds] : [[NSScreen mainScreen] frame];
@@ -64,6 +61,143 @@ wxPoint wxFromNSPoint( NSView* parent, const NSPoint& p )
     return wxPoint( x, y);
 }
 
+//
+// wx native implementation classes
+//
+
+@interface wxNSWindow : NSWindow
+
+{
+    wxNonOwnedWindowCocoaImpl* impl;
+}
+
+- (void)setImplementation: (wxNonOwnedWindowCocoaImpl *) theImplementation;
+- (wxNonOwnedWindowCocoaImpl*) implementation;
+
+@end
+
+@implementation wxNSWindow
+
+- (void)setImplementation: (wxNonOwnedWindowCocoaImpl *) theImplementation
+{
+    impl = theImplementation;
+}
+
+- (wxNonOwnedWindowCocoaImpl*) implementation
+{
+    return impl;
+}
+
+
+@end
+
+@interface wxNSPanel : wxNSWindow
+
+{
+}
+
+@end
+
+@implementation wxNSPanel 
+
+@end
+
+
+//
+// controller
+//
+
+@interface wxNonOwnedWindowController : NSObject
+{
+}
+
+- (void)windowDidResize:(NSNotification *)notification;
+- (NSSize)windowWillResize:(NSWindow *)window toSize:(NSSize)proposedFrameSize;
+- (void)windowDidResignMain:(NSNotification *)notification;
+- (void)windowDidBecomeMain:(NSNotification *)notification;
+- (void)windowDidMove:(NSNotification *)notification;
+- (BOOL)windowShouldClose:(id)window;
+
+@end
+
+@implementation wxNonOwnedWindowController
+
+- (id) init
+{
+    [super init];
+    return self;
+}
+
+- (BOOL)windowShouldClose:(id)nwindow
+{
+    wxNSWindow* window = (wxNSWindow*) nwindow;
+    wxNonOwnedWindowCocoaImpl* windowimpl = [window implementation];
+    if ( windowimpl )
+    {
+        wxNonOwnedWindow* wxpeer = windowimpl->GetWXPeer();
+        if ( wxpeer )
+            wxpeer->Close();
+    }
+    return NO;
+}
+
+- (NSSize)windowWillResize:(NSWindow *)window
+                    toSize:(NSSize)proposedFrameSize
+{
+    // todo
+    return proposedFrameSize;
+}
+
+- (void)windowDidResize:(NSNotification *)notification
+{
+    wxNSWindow* window = (wxNSWindow*) [notification object];
+    wxNonOwnedWindowCocoaImpl* windowimpl = [window implementation];
+    if ( windowimpl )
+    {
+        wxNonOwnedWindow* wxpeer = windowimpl->GetWXPeer();
+        if ( wxpeer )
+            wxpeer->HandleResized(0);
+    }
+}
+
+- (void)windowDidMove:(NSNotification *)notification
+{
+    wxNSWindow* window = (wxNSWindow*) [notification object];
+    wxNonOwnedWindowCocoaImpl* windowimpl = [window implementation];
+    if ( windowimpl )
+    {
+        wxNonOwnedWindow* wxpeer = windowimpl->GetWXPeer();
+        if ( wxpeer )
+            wxpeer->HandleMoved(0);
+    }
+}
+
+- (void)windowDidBecomeMain:(NSNotification *)notification
+{
+    wxNSWindow* window = (wxNSWindow*) [notification object];
+    wxNonOwnedWindowCocoaImpl* windowimpl = [window implementation];
+    if ( windowimpl )
+    {
+        wxNonOwnedWindow* wxpeer = windowimpl->GetWXPeer();
+        if ( wxpeer )
+            wxpeer->HandleActivated(0, true);
+    }
+}
+
+- (void)windowDidResignMain:(NSNotification *)notification
+{
+    wxNSWindow* window = (wxNSWindow*) [notification object];
+    wxNonOwnedWindowCocoaImpl* windowimpl = [window implementation];
+    if ( windowimpl )
+    {
+        wxNonOwnedWindow* wxpeer = windowimpl->GetWXPeer();
+        if ( wxpeer )
+            wxpeer->HandleActivated(0, false);
+    }
+}
+
+@end
+
 IMPLEMENT_DYNAMIC_CLASS( wxNonOwnedWindowCocoaImpl , wxNonOwnedWindowImpl )
 
 wxNonOwnedWindowCocoaImpl::wxNonOwnedWindowCocoaImpl( wxNonOwnedWindow* nonownedwnd) : 
@@ -92,12 +226,18 @@ void wxNonOwnedWindowCocoaImpl::Destroy()
 void wxNonOwnedWindowCocoaImpl::Create( wxWindow* parent, const wxPoint& pos, const wxSize& size,
 long style, long extraStyle, const wxString& name )
 {
+    static wxNonOwnedWindowController* controller = NULL;
+    
+    if ( !controller )
+        controller =[[wxNonOwnedWindowController alloc] init];
+
+
     int windowstyle = NSBorderlessWindowMask;
     
     if ( style & wxFRAME_TOOL_WINDOW )
-        m_macWindow = [NSPanel alloc];
+        m_macWindow = [wxNSPanel alloc];
     else
-        m_macWindow = [NSWindow alloc];
+        m_macWindow = [wxNSWindow alloc];
     
     CGWindowLevel level = kCGNormalWindowLevelKey;
     
@@ -180,6 +320,8 @@ long style, long extraStyle, const wxString& name )
     
     NSRect r = wxToNSRect( NULL, wxRect( pos, size) );
     
+    [m_macWindow setImplementation:this];
+    
     [m_macWindow initWithContentRect:r
         styleMask:windowstyle
         backing:NSBackingStoreBuffered
@@ -187,6 +329,9 @@ long style, long extraStyle, const wxString& name )
         ];
         
     [m_macWindow setLevel:level];
+
+    [m_macWindow setDelegate:controller];
+    
     // [m_macWindow makeKeyAndOrderFront:nil];
 }
 
@@ -373,4 +518,38 @@ bool wxNonOwnedWindowCocoaImpl::ShowFullScreen(bool show, long style)
 void wxNonOwnedWindowCocoaImpl::RequestUserAttention(int WXUNUSED(flags))
 {
 }
-#endif
+
+void wxNonOwnedWindowCocoaImpl::ScreenToWindow( int *x, int *y )
+{
+    wxPoint p((x ? *x : 0), (y ? *y : 0) );
+    /*
+    NSPoint nspt = wxToNSPoint( NULL, p );
+    
+    nspt = [[m_macWindow contentView] convertPoint:p toV:nil];
+    p = wxFromNSPoint( 
+    */
+    if ( x )
+        *x = p.x;
+    if ( y )
+        *y = p.y;
+}
+
+void wxNonOwnedWindowCocoaImpl::WindowToScreen( int *x, int *y )
+{
+    wxPoint p(  (x ? *x : 0), (y ? *y : 0) );
+    /*
+    p = [m_macWindow convertPoint:p toWindow:nil];
+    */
+    if ( x )
+        *x = p.x;
+    if ( y )
+        *y = p.y;
+}
+
+wxNonOwnedWindowImpl* wxNonOwnedWindowImpl::CreateNonOwnedWindow( wxNonOwnedWindow* wxpeer, wxWindow* parent, const wxPoint& pos, const wxSize& size,
+    long style, long extraStyle, const wxString& name )
+{
+    wxNonOwnedWindowImpl* now = new wxNonOwnedWindowCocoaImpl( wxpeer );
+    now->Create( parent, pos, size, style , extraStyle, name );
+    return now;
+}
