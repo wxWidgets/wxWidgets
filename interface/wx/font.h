@@ -38,137 +38,44 @@ class wxFont : public wxGDIObject
 public:
     //@{
     /**
+        Creates a font object.
+    */
+    wxFont();
+
+    /**
+        Creates a font object with the specified font.
+        
+        @param font
+           font object.     
+    */
+    wxFont(const wxFont& font);
+
+    /**
         Creates a font object with the specified attributes.
 
         @param pointSize
             Size in points.
-        @param pixelSize
-            Size in pixels: this is directly supported only under MSW
-            currently where this constructor can be used directly, under other
-        platforms a
-            font with the closest size to the given one is found using binary search and
-            the static New method must be used.
         @param family
             Font family, a generic way of referring to fonts without specifying actual
         facename. One of:
-
-
-
-
-
-
-
-            wxFONTFAMILY_DEFAULT
-
-
-
-
-            Chooses a default font.
-
-
-
-
-
-            wxFONTFAMILY_DECORATIVE
-
-
-
-
-            A decorative font.
-
-
-
-
-
-            wxFONTFAMILY_ROMAN
-
-
-
-
-            A formal, serif font.
-
-
-
-
-
-            wxFONTFAMILY_SCRIPT
-
-
-
-
-            A handwriting font.
-
-
-
-
-
-            wxFONTFAMILY_SWISS
-
-
-
-
-            A sans-serif font.
-
-
-
-
-
-            wxFONTFAMILY_MODERN
-
-
-
-
-            A fixed pitch font.
-
-
-
-
-
-            wxFONTFAMILY_TELETYPE
-
-
-
-
-            A teletype font.
+        <TABLE>
+            <TR><TD>wxFONTFAMILY_DEFAULT</TD><TD>Chooses a default font.</TD></TR>
+            <TR><TD>wxFONTFAMILY_DECORATIVE</TD><TD>A decorative font.</TD></TR>
+            <TR><TD>wxFONTFAMILY_ROMAN</TD><TD>A formal, serif font.</TD></TR>
+            <TR><TD>wxFONTFAMILY_SCRIPT</TD><TD>A handwriting font.</TD></TR>
+            <TR><TD>wxFONTFAMILY_SWISS</TD><TD>A sans-serif font.</TD></TR>
+            <TR><TD>wxFONTFAMILY_MODERN</TD><TD>A fixed pitch font.</TD></TR>
+            <TR><TD>wxFONTFAMILY_TELETYPE</TD><TD>A teletype font.</TD></TR>
+        </TABLE>
         @param style
             One of wxFONTSTYLE_NORMAL, wxFONTSTYLE_SLANT and wxFONTSTYLE_ITALIC.
         @param weight
             Font weight, sometimes also referred to as font boldness. One of:
-
-
-
-
-
-
-
-            wxFONTWEIGHT_NORMAL
-
-
-
-
-            Normal font.
-
-
-
-
-
-            wxFONTWEIGHT_LIGHT
-
-
-
-
-            Light font.
-
-
-
-
-
-            wxFONTWEIGHT_BOLD
-
-
-
-
-            Bold font.
+        <TABLE>
+            <TR><TD>wxFONTWEIGHT_NORMAL</TD><TD>Normal font.</TD></TR>
+            <TR><TD>wxFONTWEIGHT_LIGHT</TD><TD>Light font.</TD></TR>
+            <TR><TD>wxFONTWEIGHT_BOLD</TD><TD>Bold font.</TD></TR>
+        </TABLE>    
         @param underline
             The value can be @true or @false. At present this has an effect on Windows
         and Motif 2.x only.
@@ -178,71 +85,18 @@ public:
             a default typeface will be chosen based on the family.
         @param encoding
             An encoding which may be one of
-
-
-
-
-
-
-
-            wxFONTENCODING_SYSTEM
-
-
-
-
-            Default system encoding.
-
-
-
-
-
-            wxFONTENCODING_DEFAULT
-
-
-
-
-            Default application encoding: this
-            is the encoding set by calls to
-            SetDefaultEncoding and which may be set to,
-            say, KOI8 to create all fonts by default with KOI8 encoding. Initially, the
-            default application encoding is the same as default system encoding.
-
-
-
-
-
-            wxFONTENCODING_ISO8859_1...15
-
-
-
-
-            ISO8859 encodings.
-
-
-
-
-
-            wxFONTENCODING_KOI8
-
-
-
-
-            The standard Russian encoding for Internet.
-
-
-
-
-
-            wxFONTENCODING_CP1250...1252
-
-
-
-
-            Windows encodings similar to ISO8859 (but not identical).
-
-
-
-
+        <TABLE>
+            <TR><TD>wxFONTENCODING_SYSTEM</TD><TD>Default system encoding.</TD></TR>
+            <TR><TD>wxFONTENCODING_DEFAULT</TD><TD>
+                Default application encoding: this
+                is the encoding set by calls to
+                SetDefaultEncoding and which may be set to,
+                say, KOI8 to create all fonts by default with KOI8 encoding. Initially, the
+                default application encoding is the same as default system encoding.</TD></TR>
+            <TR><TD>wxFONTENCODING_ISO8859_1...15</TD><TD>ISO8859 encodings.</TD></TR>
+            <TR><TD>wxFONTENCODING_KOI8</TD><TD>The standard Russian encoding for Internet.</TD></TR>
+            <TR><TD>wxFONTENCODING_CP1250...1252</TD><TD>Windows encodings similar to ISO8859 (but not identical).</TD></TR>
+        </TABLE> 
 
             If the specified encoding isn't available, no font is created
             (see also font encoding overview).
@@ -251,13 +105,70 @@ public:
                  chosen. Under Windows, only scalable TrueType fonts are
                  used.
     */
-    wxFont();
-    wxFont(const wxFont& font);
     wxFont(int pointSize, wxFontFamily family, int style,
            wxFontWeight weight,
            const bool underline = false,
            const wxString& faceName = "",
            wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+    /**
+        Creates a font object with the specified attributes.
+
+        @param pixelSize
+            Size in pixels: this is directly supported only under MSW
+            currently where this constructor can be used directly, under other
+        platforms a
+            font with the closest size to the given one is found using binary search and
+            the static New method must be used.
+        @param family
+            Font family, a generic way of referring to fonts without specifying actual
+        facename. One of:
+        <TABLE>
+            <TR><TD>wxFONTFAMILY_DEFAULT</TD><TD>Chooses a default font.</TD></TR>
+            <TR><TD>wxFONTFAMILY_DECORATIVE</TD><TD>A decorative font.</TD></TR>
+            <TR><TD>wxFONTFAMILY_ROMAN</TD><TD>A formal, serif font.</TD></TR>
+            <TR><TD>wxFONTFAMILY_SCRIPT</TD><TD>A handwriting font.</TD></TR>
+            <TR><TD>wxFONTFAMILY_SWISS</TD><TD>A sans-serif font.</TD></TR>
+            <TR><TD>wxFONTFAMILY_MODERN</TD><TD>A fixed pitch font.</TD></TR>
+            <TR><TD>wxFONTFAMILY_TELETYPE</TD><TD>A teletype font.</TD></TR>
+        </TABLE>
+        @param style
+            One of wxFONTSTYLE_NORMAL, wxFONTSTYLE_SLANT and wxFONTSTYLE_ITALIC.
+        @param weight
+            Font weight, sometimes also referred to as font boldness. One of:
+        <TABLE>
+            <TR><TD>wxFONTWEIGHT_NORMAL</TD><TD>Normal font.</TD></TR>
+            <TR><TD>wxFONTWEIGHT_LIGHT</TD><TD>Light font.</TD></TR>
+            <TR><TD>wxFONTWEIGHT_BOLD</TD><TD>Bold font.</TD></TR>
+        </TABLE>    
+        @param underline
+            The value can be @true or @false. At present this has an effect on Windows
+        and Motif 2.x only.
+        @param faceName
+            An optional string specifying the actual typeface to be used. If it is an
+        empty string,
+            a default typeface will be chosen based on the family.
+        @param encoding
+            An encoding which may be one of
+        <TABLE>
+            <TR><TD>wxFONTENCODING_SYSTEM</TD><TD>Default system encoding.</TD></TR>
+            <TR><TD>wxFONTENCODING_DEFAULT</TD><TD>
+                Default application encoding: this
+                is the encoding set by calls to
+                SetDefaultEncoding and which may be set to,
+                say, KOI8 to create all fonts by default with KOI8 encoding. Initially, the
+                default application encoding is the same as default system encoding.</TD></TR>
+            <TR><TD>wxFONTENCODING_ISO8859_1...15</TD><TD>ISO8859 encodings.</TD></TR>
+            <TR><TD>wxFONTENCODING_KOI8</TD><TD>The standard Russian encoding for Internet.</TD></TR>
+            <TR><TD>wxFONTENCODING_CP1250...1252</TD><TD>Windows encodings similar to ISO8859 (but not identical).</TD></TR>
+        </TABLE> 
+
+            If the specified encoding isn't available, no font is created
+            (see also font encoding overview).
+
+        @remarks If the desired font does not exist, the closest match will be
+                 chosen. Under Windows, only scalable TrueType fonts are
+                 used.
+    */
     wxFont(const wxSize& pixelSize, wxFontFamily family,
            int style, wxFontWeight weight,
            const bool underline = false,
@@ -424,85 +335,14 @@ public:
 
         @param family
             One of:
-
-
-
-
-
-
-
-            wxFONTFAMILY_DEFAULT
-
-
-
-
-            Chooses a default font.
-
-
-
-
-
-            wxFONTFAMILY_DECORATIVE
-
-
-
-
-            A decorative font.
-
-
-
-
-
-            wxFONTFAMILY_ROMAN
-
-
-
-
-            A formal, serif font.
-
-
-
-
-
-            wxFONTFAMILY_SCRIPT
-
-
-
-
-            A handwriting font.
-
-
-
-
-
-            wxFONTFAMILY_SWISS
-
-
-
-
-            A sans-serif font.
-
-
-
-
-
-            wxFONTFAMILY_MODERN
-
-
-
-
-            A fixed pitch font.
-
-
-
-
-
-            wxFONTFAMILY_TELETYPE
-
-
-
-
-            A teletype font.
+        <TABLE>
+            <TR><TD>wxFONTFAMILY_DEFAULT</TD><TD>Chooses a default font.</TD></TR>
+            <TR><TD>wxFONTFAMILY_DECORATIVE</TD><TD>A decorative font.</TD></TR>
+            <TR><TD>wxFONTFAMILY_ROMAN</TD><TD>A formal, serif font.</TD></TR>
+            <TR><TD>wxFONTFAMILY_SCRIPT</TD><TD>A handwriting font.</TD></TR>
+            <TR><TD>wxFONTFAMILY_SWISS</TD><TD>A sans-serif font.</TD></TR>
+            <TR><TD>wxFONTFAMILY_MODERN</TD><TD>A fixed pitch font.</TD></TR>
+            <TR><TD>wxFONTFAMILY_TELETYPE</TD><TD>A teletype font.</TD></TR>
 
         @see GetFamily(), SetFaceName()
     */
@@ -576,7 +416,7 @@ public:
     /**
         Sets underlining.
 
-        @param underlining
+        @param underlined
             @true to underline, @false otherwise.
 
         @see GetUnderlined()
@@ -588,41 +428,11 @@ public:
 
         @param weight
             One of:
-
-
-
-
-
-
-
-            wxFONTWEIGHT_NORMAL
-
-
-
-
-            Normal font.
-
-
-
-
-
-            wxFONTWEIGHT_LIGHT
-
-
-
-
-            Light font.
-
-
-
-
-
-            wxFONTWEIGHT_BOLD
-
-
-
-
-            Bold font.
+        <TABLE>
+            <TR><TD>wxFONTWEIGHT_NORMAL</TD><TD>Normal font.</TD></TR>
+            <TR><TD>wxFONTWEIGHT_LIGHT</TD><TD>Light font.</TD></TR>
+            <TR><TD>wxFONTWEIGHT_BOLD</TD><TD>Bold font.</TD></TR>
+        </TABLE>
 
         @see GetWeight()
     */

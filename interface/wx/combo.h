@@ -49,7 +49,7 @@ public:
             Preferred minimum width.
         @param prefHeight
             Preferred height. May be -1 to indicate no preference.
-        @param maxWidth
+        @param maxHeight
             Max height for window, as limited by screen size.
 
         @remarks This function is called each time popup is about to be shown.
@@ -584,7 +584,7 @@ public:
         @param text
             The text to insert.
     */
-    virtual void Replace(long from, long to, const wxString& value);
+    virtual void Replace(long from, long to, const wxString& text);
 
     /**
         Sets custom dropdown button graphics.

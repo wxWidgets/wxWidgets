@@ -61,22 +61,6 @@ public:
         first and fall back to "/usr/local/myapp/help" if that
         doesn't exist.
 
-        @param file
-            NOT a filename, but a directory name.
-
-        @return @true on success
-    */
-    virtual bool Initialize(const wxString& dir, int server);
-
-    /**
-        This must be called to tell the controller where to find the
-        documentation.
-        If a locale is set, look in file/localename, i.e.
-        If passed "/usr/local/myapp/help" and the current wxLocale is
-        set to be "de", then look in "/usr/local/myapp/help/de/"
-        first and fall back to "/usr/local/myapp/help" if that
-        doesn't exist.
-
         @param dir
             directory name where to fine the help files
 
@@ -128,6 +112,10 @@ public:
 
         @param k
             string to search for, empty string will list all entries
+        
+        @param mode    
+            optional parameter allows the search the index (wxHELP_SEARCH_INDEX) 
+            but this currently only supported by the wxHtmlHelpController.
 
         @return @true on success
     */
