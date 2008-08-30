@@ -163,6 +163,7 @@ enum wxFileKind
 #elif (defined(__WXMSW__) || defined(__OS2__)) && !defined(__WXPALMOS__) && \
       ( \
         defined(__VISUALC__) || \
+        defined(__MINGW64__) || \
         (defined(__MINGW32__) && !defined(__WINE__) && \
                                 wxCHECK_W32API_VERSION(0, 5)) || \
         defined(__MWERKS__) || \
@@ -176,7 +177,7 @@ enum wxFileKind
     // detect compilers which have support for huge files
     #if defined(__VISUALC__)
         #define wxHAS_HUGE_FILES 1
-    #elif defined(__MINGW32__)
+    #elif defined(__MINGW32__) || defined(__MINGW64__)
         #define wxHAS_HUGE_FILES 1
     #elif defined(_LARGE_FILES)
         #define wxHAS_HUGE_FILES 1
