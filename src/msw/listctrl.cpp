@@ -82,6 +82,31 @@ static void wxConvertToMSWListCol(HWND hwndList,
                                   const wxListItem& item,
                                   LV_COLUMN& lvCol);
 
+namespace
+{
+
+// replacement for ListView_GetSubItemRect() which provokes warnings like
+// "the address of 'rc' will always evaluate as 'true'" when used with mingw32
+// 4.3+
+//
+// this function does no error checking on item and subitem parameters, notice
+// that subitem is 0 for whole item or 1-based for the individual columns
+inline bool
+wxGetListCtrlSubItemRect(HWND hwnd, int item, int subitem, int flags, RECT& rect)
+{
+    rect.top = subitem;
+    rect.left = flags;
+    return ::SendMessage(hwnd, LVM_GETSUBITEMRECT, item, (LPARAM)&rect) != 0;
+}
+
+inline bool
+wxGetListCtrlItemRect(HWND hwnd, int item, int flags, RECT& rect)
+{
+    return wxGetListCtrlSubItemRect(hwnd, item, 0, flags, rect);
+}
+
+} // anonymous namespace
+
 // ----------------------------------------------------------------------------
 // private helper classes
 // ----------------------------------------------------------------------------
@@ -1162,13 +1187,13 @@ bool wxListCtrl::GetSubItemRect(long item, long subItem, wxRect& rect, int code)
     }
 
     RECT rectWin;
-    if ( !ListView_GetSubItemRect
+    if ( !wxGetListCtrlSubItemRect
           (
             GetHwnd(),
             item,
             subItem == wxLIST_GETSUBITEMRECT_WHOLEITEM ? 0 : subItem,
             codeWin,
-            &rectWin
+            rectWin
           ) )
     {
         return false;
@@ -2551,10 +2576,10 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 static RECT GetCustomDrawnItemRect(const NMCUSTOMDRAW& nmcd)
 {
     RECT rc;
-    ListView_GetItemRect(nmcd.hdr.hwndFrom, nmcd.dwItemSpec, &rc, LVIR_BOUNDS);
+    wxGetListCtrlItemRect(nmcd.hdr.hwndFrom, nmcd.dwItemSpec, LVIR_BOUNDS, rc);
 
     RECT rcIcon;
-    ListView_GetItemRect(nmcd.hdr.hwndFrom, nmcd.dwItemSpec, &rcIcon, LVIR_ICON);
+    wxGetListCtrlItemRect(nmcd.hdr.hwndFrom, nmcd.dwItemSpec, LVIR_ICON, rcIcon);
 
     // exclude the icon part, neither the selection background nor focus rect
     // should cover it
@@ -2577,22 +2602,10 @@ bool HandleSubItemPrepaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont, int colCount)
     SelectInHDC selFont(hdc, hfont);
 
     // get the rectangle to paint
+    int subitem = colCount ? col + 1 : col;
     RECT rc;
-    ListView_GetSubItemRect(hwndList, item, col, LVIR_BOUNDS, &rc);
-    if ( !col && colCount > 1 )
-    {
-        // broken ListView_GetSubItemRect() returns the entire item rect for
-        // 0th subitem while we really need just the part for this column
-        RECT rc2;
-        ListView_GetSubItemRect(hwndList, item, 1, LVIR_BOUNDS, &rc2);
-
-        rc.right = rc2.left;
-        rc.left += 4;
-    }
-    else // not first subitem
-    {
-        rc.left += 6;
-    }
+    wxGetListCtrlSubItemRect(hwndList, item, subitem, LVIR_BOUNDS, rc);
+    rc.left += 6;
 
     // get the image and text to draw
     wxChar text[512];
