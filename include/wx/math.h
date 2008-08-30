@@ -93,7 +93,7 @@
             //     shouldn't be used with doubles, but we get too many of them and
             //     removing these operators is probably not a good idea
             //
-            //     Maybe we should alway compare doubles up to some "epsilon" precision
+            //     Maybe we should always compare doubles up to some "epsilon" precision
             #pragma warning(push)
 
             // floating-point equality and inequality comparisons are unreliable
