@@ -440,8 +440,10 @@ public:
     static RGBValue HSVtoRGB(const HSVValue& hsv);
 
 #if WXWIN_COMPATIBILITY_2_8
+    // explicitly specifying inline allows gcc < 3.4 to
+    // handle the deprecation attribute even in the constructor.
     wxDEPRECATED(
-        wxImage(const wxString& name, long type, int index = -1)
+        inline wxImage(const wxString& name, long type, int index = -1)
         {
             LoadFile(name, (wxBitmapType)type, index);
         }
@@ -449,7 +451,7 @@ public:
 
 #if wxUSE_STREAMS
     wxDEPRECATED(
-        wxImage(wxInputStream& stream, long type, int index = -1)
+        inline wxImage(wxInputStream& stream, long type, int index = -1)
         {
             LoadFile(stream, (wxBitmapType)type, index);
         }

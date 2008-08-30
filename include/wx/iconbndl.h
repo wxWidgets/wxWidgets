@@ -79,8 +79,9 @@ public:
             AddIcon(file, (wxBitmapType)type);
         }
     )
-
-    wxDEPRECATED( wxIconBundle(const wxString& file, long type)
+    // explicitly specifying inline allows gcc < 3.4 to
+    // handle the deprecation attribute even in the constructor.
+    wxDEPRECATED( inline wxIconBundle (const wxString& file, long type)
         {
             AddIcon(file, (wxBitmapType)type);
         }
