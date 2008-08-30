@@ -46,6 +46,8 @@
 #else // !wxHAS_COMPILER_TLS
     #ifdef __WXMSW__
         #include "wx/msw/tls.h"
+    #elif defined(__OS2__)
+        #include "wx/os2/tls.h"
     #elif defined(__UNIX__)
         #include "wx/unix/tls.h"
     #else
@@ -71,7 +73,7 @@
         //        there somehow (probably by keeping a list of all TLS objects
         //        and cleaning them up in wxThread cleanup)
         wxTlsValue()
-#ifdef __UNIX__
+#if !defined(__OS2__) && defined(__UNIX__)
             : m_key(free)
 #endif
         {
