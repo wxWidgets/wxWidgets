@@ -557,6 +557,9 @@ wxChar wxHtmlEntitiesParser::GetEntityChar(const wxString& entity) const
 {
     unsigned code = 0;
 
+    if (entity.empty())
+      return 0; // invalid entity reference
+
     if (entity[0] == wxT('#'))
     {
         // NB: parsed value is a number, so it's OK to use wx_str(), internal
