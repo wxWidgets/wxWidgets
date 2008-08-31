@@ -19,6 +19,16 @@
 
 #include "wx/dynarray.h"
 
+inline int wxCMPFUNC_CONV wxStringSortAscending(wxString* s1, wxString* s2)
+{
+    return s1->Cmp(*s2);
+}
+
+inline int wxCMPFUNC_CONV wxStringSortDescending(wxString* s1, wxString* s2)
+{
+    return wxStringSortAscending(s2, s1);
+}
+
 typedef int (wxCMPFUNC_CONV *CMPFUNCwxString)(wxString*, wxString*);
 typedef wxString _wxArraywxBaseArrayStringBase;
 _WX_DECLARE_BASEARRAY_2(_wxArraywxBaseArrayStringBase, wxBaseArrayStringBase,
