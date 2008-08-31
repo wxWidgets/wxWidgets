@@ -721,7 +721,9 @@ private:
       // used for length caching only so far, i.e. it doesn't count as a hit
       // from our point of view
       if ( cache->pos )
+      {
           wxCACHE_PROFILE_FIELD_INC(poshits);
+      }
 
       if ( pos == cache->pos )
           return cache->impl;
