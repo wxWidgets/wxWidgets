@@ -841,19 +841,19 @@ public:
   #else
     #define WX_STR_ITERATOR_TAG std::random_access_iterator_tag
   #endif
-  #define WX_STR_ITERATOR_CATEGORY typedef WX_STR_ITERATOR_TAG iterator_category;
+  #define WX_DEFINE_ITERATOR_CATEGORY(cat) typedef cat iterator_category;
 #else
   // not defining iterator_category at all in this case is better than defining
   // it as some dummy type -- at least it results in more intelligible error
   // messages
-  #define WX_STR_ITERATOR_CATEGORY
+  #define WX_DEFINE_ITERATOR_CATEGORY(cat)
 #endif
 
   #define WX_STR_ITERATOR_IMPL(iterator_name, pointer_type, reference_type) \
       private:                                                              \
           typedef wxStringImpl::iterator_name underlying_iterator;          \
       public:                                                               \
-          WX_STR_ITERATOR_CATEGORY                                          \
+          WX_DEFINE_ITERATOR_CATEGORY(WX_STR_ITERATOR_TAG)                  \
           typedef wxUniChar value_type;                                     \
           typedef int difference_type;                                      \
           typedef reference_type reference;                                 \
@@ -1088,7 +1088,7 @@ public:
   public:
       typedef T iterator_type;
 
-      typedef typename T::iterator_category iterator_category;
+      WX_DEFINE_ITERATOR_CATEGORY(typename T::iterator_category)
       typedef typename T::value_type value_type;
       typedef typename T::difference_type difference_type;
       typedef typename T::reference reference;
