@@ -125,6 +125,7 @@ All (GUI):
 - Fixed problem with Floatable(false) not working in wxAuiFrameManager.
 - Fixed maximize bug in wxAUI.
 - Allow period in link anchors in wxHTML.
+- Fixed memory corruption in wxHTML when parsing "&;" in the markup.
 
 All (Unix):
 
