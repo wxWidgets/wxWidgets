@@ -60,9 +60,24 @@ const size_t wxString::npos = (size_t) -1;
 
 #if wxUSE_STRING_POS_CACHE
 
+struct wxStrCacheInitializer
+{
+    wxStrCacheInitializer()
+    {
+        // calling this function triggers s_cache initialization in it, and
+        // from now on it becomes safe to call from multiple threads
+        wxString::GetCache();
+    }
+};
+
+static wxStrCacheInitializer gs_stringCacheInit;
+
 // gdb seems to be unable to display thread-local variables correctly, at least
 // not my 6.4.98 version under amd64, so provide this debugging helper to do it
 #ifdef __WXDEBUG__
+
+namespace
+{
 
 struct wxStrCacheDumper
 {
@@ -84,6 +99,8 @@ struct wxStrCacheDumper
         }
     }
 };
+
+} // anonymous namespace
 
 void wxDumpStrCache() { wxStrCacheDumper::ShowAll(); }
 

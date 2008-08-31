@@ -599,11 +599,6 @@ private:
   // not by the compiler), the global s_cache variable could be not yet
   // initialized when a ctor of another global object is executed and if that
   // ctor uses any wxString methods, bad things happen
-  //
-  // also note that for the same reason this function _is_ MT-safe: we know
-  // it's going to be called during the program startup (currently during
-  // globals initialization but even if they ever stop using wxString, it would
-  // still be called by wxInitialize()), i.e. before any threads are created
   static Cache& GetCache()
   {
       static wxTLS_TYPE(Cache) s_cache;
@@ -615,6 +610,13 @@ private:
   static Cache::Element *GetCacheEnd() { return GetCacheBegin() + Cache::SIZE; }
   static unsigned& LastUsedCacheElement() { return GetCache().lastUsed; }
 
+  // this helper struct is used to ensure that GetCache() is called during
+  // static initialization time, i.e. before any threads creation, as otherwise
+  // the static s_cache construction inside GetCache() wouldn't be MT-safe
+  friend struct wxStrCacheInitializer;
+
+  // this is used in debug builds only to provide a convenient function,
+  // callable from a debugger, to show the cache contents
   friend struct wxStrCacheDumper;
 
   // uncomment this to have access to some profiling statistics on program
