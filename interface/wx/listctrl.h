@@ -91,9 +91,8 @@
 class wxListCtrl : public wxControl
 {
 public:
-    //@{
     /**
-    Constructor, creating and showing a list control.
+       Default constructor.
     */
     wxListCtrl();
 
@@ -124,7 +123,6 @@ public:
                long style = wxLC_ICON,
                const wxValidator& validator = wxDefaultValidator,
                const wxString& name = wxListCtrlNameStr);
-    //@}
 
     /**
         Destructor, destroying the list control.
@@ -135,21 +133,10 @@ public:
         Arranges the items in icon or small icon view. This only has effect on Win32.
         @a flag is one of:
 
-        wxLIST_ALIGN_DEFAULT
-
-        Default alignment.
-
-        wxLIST_ALIGN_LEFT
-
-        Align to the left side of the control.
-
-        wxLIST_ALIGN_TOP
-
-        Align to the top side of the control.
-
-        wxLIST_ALIGN_SNAP_TO_GRID
-
-        Snap to grid.
+        - wxLIST_ALIGN_DEFAULT: Default alignment.
+        - wxLIST_ALIGN_LEFT: Align to the left side of the control.
+        - wxLIST_ALIGN_TOP: Align to the top side of the control.
+        - wxLIST_ALIGN_SNAP_TO_GRID: Snap to grid.
     */
     bool Arrange(int flag = wxLIST_ALIGN_DEFAULT);
 
@@ -214,25 +201,22 @@ public:
     */
     bool EnsureVisible(long item);
 
-    //@{
     /**
-        Find an item nearest this position in the specified direction, starting from
-        @a start or the beginning if @a start is -1.
-
-
-        @b FindItem( start, str, partial = @false )
-
-
-        @b FindItemData( start, data )
-
-
-        @b FindItemAtPos( start, point, direction )
+        Find an item nearest this position in the specified direction,
+        starting from @a start or the beginning if @a start is -1.
     */
     long FindItem(long start, const wxString& str,
                   bool partial = false);
+    /**
+        Find an item nearest this position in the specified direction,
+        starting from @a start or the beginning if @a start is -1.
+    */
     long FindItem(long start, long data);
+    /**
+        Find an item nearest this position in the specified direction,
+        starting from @a start or the beginning if @a start is -1.
+    */
     long FindItem(long start, const wxPoint& pt, int direction);
-    //@}
 
     /**
         Gets information about this column. See SetItem() for more
@@ -285,17 +269,9 @@ public:
     /**
         Returns the specified image list. @a which may be one of:
 
-        @b wxIMAGE_LIST_NORMAL
-
-        The normal (large icon) image list.
-
-        @b wxIMAGE_LIST_SMALL
-
-        The small icon image list.
-
-        @b wxIMAGE_LIST_STATE
-
-        The user-defined state image list (unimplemented).
+        - wxIMAGE_LIST_NORMAL: The normal (large icon) image list.
+        - wxIMAGE_LIST_SMALL: The small icon image list.
+        - wxIMAGE_LIST_STATE: The user-defined state image list (unimplemented).
     */
     wxImageList* GetImageList(int which) const;
 
@@ -527,17 +503,17 @@ public:
     long HitTest(const wxPoint& point, int& flags,
                  long* ptrSubItem) const;
 
-    //@{
     /**
         For report view mode (only), inserts a column. For more details, see SetItem().
     */
     long InsertColumn(long col, wxListItem& info);
+    /**
+        For report view mode (only), inserts a column. For more details, see SetItem().
+    */
     long InsertColumn(long col, const wxString& heading,
                       int format = wxLIST_FORMAT_LEFT,
                       int width = -1);
-    //@}
 
-    //@{
     /**
         Insert a wxListItem.
         @param info
@@ -574,7 +550,6 @@ public:
     */    
     long InsertItem(long index, const wxString& label,
                     int imageIndex);
-    //@}
 
     /**
         This function may be overloaded in the derived class for a control with
@@ -697,158 +672,63 @@ public:
     */
     void SetImageList(wxImageList* imageList, int which);
 
-    //@{
+    /**
+        Sets the data of an item.
+        
+        wxListItem is a class with the following members
+        
+          - long m_mask: Indicates which fields are valid. See below.
+          - long m_itemId: Zero based item position.
+          - int m_col: Zero based column index.
+          - long m_state: The state of the item: See below for valid state flags.
+          - long m_stateMask: A mask indicating which state flags are valid. See below.
+          - wxStrign m_text: the label (or header for columns)
+          - int m_image: The zero based index into an image list
+          - long m_data: Application defined data
+          - int m_format: For columns only: Either of wxLIST_FORMAT_LEFT, wxLIST_FORMAT_RIGHT, wxLIST_FORMAT_CENTRE
+          - int m_width: For columns only: the width of the column
+        
+        The @b m_mask member contains a bitlist specifying which of the other fields
+        are valid. The flags are:
+          - wxLIST_MASK_STATE: The m_state field is valid.
+          - wxLIST_MASK_TEXT: The m_text field is valid.
+          - wxLIST_MASK_IMAGE: The m_image field is valid.
+          - wxLIST_MASK_DATA: The m_data field is valid.
+          - wxLIST_MASK_WIDTH: The m_width field is valid.
+          - wxLIST_MASK_FORMAT: The m_format field is valid.
+
+        The @b m_stateMask and @b m_state members take flags from the following:
+
+          - wxLIST_STATE_DONTCARE: Don't care what the state is. Win32 only.
+          - wxLIST_STATE_DROPHILITED: The item is highlighted to receive a drop event. Win32 only.
+          - wxLIST_STATE_FOCUSED: The item has the focus.
+          - wxLIST_STATE_SELECTED: The item is selected.
+          - wxLIST_STATE_CUT: The item is in the cut state. Win32 only.
+
+      The wxListItem object can also contain item-specific colour and font
+      information: for this you need to call one of SetTextColour(),
+      SetBackgroundColour() or SetFont() functions on it passing it the colour/font
+      to use. If the colour/font is not specified, the default list control
+      colour/font is used.
+    */
+    bool SetItem(wxListItem& info);
+    
     /**
         Sets a string field at a particular column.
     */
-    bool SetItem(wxListItem& info);
     long SetItem(long index, int col, const wxString& label,
                  int imageId = -1);
-    m_mask m_state field is valid.
-
-
-
-
-
-    wxLIST_MASK_TEXT
-
-
-
-
-    The m_text field is valid.
-
-
-
-
-
-    wxLIST_MASK_IMAGE
-
-
-
-
-    The m_image field is valid.
-
-
-
-
-
-    wxLIST_MASK_DATA
-
-
-
-
-    The m_data field is valid.
-
-
-
-
-
-    wxLIST_MASK_WIDTH
-
-
-
-
-    The m_width field is valid.
-
-
-
-
-
-    wxLIST_MASK_FORMAT
-
-
-
-
-    The m_format field is valid.
-
-
-
-
-
-The m_stateMask and m_state members take flags from the following:
-
-
-
-
-
-
-
-    wxLIST_STATE_DONTCARE
-
-
-
-
-    Don't care what the state is. Win32 only.
-
-
-
-
-
-    wxLIST_STATE_DROPHILITED
-
-
-
-
-    The item is highlighted to receive a drop event. Win32 only.
-
-
-
-
-
-    wxLIST_STATE_FOCUSED
-
-
-
-
-    The item has the focus.
-
-
-
-
-
-    wxLIST_STATE_SELECTED
-
-
-
-
-    The item is selected.
-
-
-
-
-
-    wxLIST_STATE_CUT
-
-
-
-
-    The item is in the cut state. Win32 only.
-
-
-
-
-
-    The wxListItem object can also contain item-specific colour and font
-    information: for this you need to call one of SetTextColour(),
-    SetBackgroundColour() or SetFont() functions on it passing it the colour/font
-    to use. If the colour/font is not specified, the default list control
-    colour/font is used.
-    long SetItem(long index, int col, const wxString& label,
-    int imageId = -1);
-    //@}
 
     /**
-    Sets the background colour for this item. This function only works in report
-    view.
-    The colour can be retrieved using
-    GetItemBackgroundColour().
+         Sets the background colour for this item. This function only works
+         in report view. The colour can be retrieved using GetItemBackgroundColour().
     */
     void SetItemBackgroundColour(long item, const wxColour& col);
 
     /**
-    Sets the image associated with the item. In report view, you can specify the
-    column.
-    The image is an index into the image list associated with the list control.
+         Sets the image associated with the item. In report view, you can
+         specify the column. The image is an index into the image list
+         associated with the list control.
     */
     bool SetItemColumnImage(long item, long column, int image);
 
@@ -875,21 +755,22 @@ The m_stateMask and m_state members take flags from the following:
     bool SetItemData(long item, long data);
 
     /**
-    Sets the item's font.
+         Sets the item's font.
     */
     void SetItemFont(long item, const wxFont& font);
 
-    //@{
     /**
-        Sets the unselected and selected images associated with the item. The images
-        are indices into the
-        image list associated with the list control. This form is deprecated: @a
-        selImage is not
-        used.
+        Sets the unselected and selected images associated with the item. The
+        images are indices into the image list associated with the list control.
     */
     bool SetItemImage(long item, int image);
+    
+    /**
+        Sets the unselected and selected images associated with the item. The
+        images are indices into the image list associated with the list control.
+        This form is deprecated: @a selImage is not used.
+    */
     bool SetItemImage(long item, int image, int selImage);
-    //@}
 
     /**
         Sets the position of the item, in icon or small icon view. Windows only.
@@ -1072,16 +953,17 @@ public:
 class wxListItemAttr
 {
 public:
-    //@{
+    /**
+        Default Constructor.
+    */
+    wxListItemAttr();
     /**
         Construct a wxListItemAttr with the specified foreground and
         background colors and font.
     */
-    wxListItemAttr();
     wxListItemAttr(const wxColour colText,
                    const wxColour colBack,
                    const wxFont font);
-    //@}
 
     /**
         Returns the currently set background color.
