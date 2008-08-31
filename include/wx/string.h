@@ -834,22 +834,26 @@ public:
   typedef size_t size_type;
   typedef wxUniChar const_reference;
 
-#if wxUSE_STL
+#if wxUSE_STD_STRING
   #if wxUSE_UNICODE_UTF8
     // random access is not O(1), as required by Random Access Iterator
     #define WX_STR_ITERATOR_TAG std::bidirectional_iterator_tag
   #else
     #define WX_STR_ITERATOR_TAG std::random_access_iterator_tag
   #endif
+  #define WX_STR_ITERATOR_CATEGORY typedef WX_STR_ITERATOR_TAG iterator_category;
 #else
-  #define WX_STR_ITERATOR_TAG void /* dummy type */
+  // not defining iterator_category at all in this case is better than defining
+  // it as some dummy type -- at least it results in more intelligible error
+  // messages
+  #define WX_STR_ITERATOR_CATEGORY
 #endif
 
   #define WX_STR_ITERATOR_IMPL(iterator_name, pointer_type, reference_type) \
       private:                                                              \
           typedef wxStringImpl::iterator_name underlying_iterator;          \
       public:                                                               \
-          typedef WX_STR_ITERATOR_TAG iterator_category;                    \
+          WX_STR_ITERATOR_CATEGORY                                          \
           typedef wxUniChar value_type;                                     \
           typedef int difference_type;                                      \
           typedef reference_type reference;                                 \
