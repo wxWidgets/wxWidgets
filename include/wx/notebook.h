@@ -68,13 +68,6 @@ public:
 
     wxNotebookBase() { }
 
-    wxNotebookBase(wxWindow *parent,
-                   wxWindowID winid,
-                   const wxPoint& pos = wxDefaultPosition,
-                   const wxSize& size = wxDefaultSize,
-                   long style = 0,
-                   const wxString& name = wxNotebookNameStr) ;
-
     // wxNotebook-specific additions to wxBookCtrlBase interface
     // ---------------------------------------------------------
 
