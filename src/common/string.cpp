@@ -76,9 +76,6 @@ static wxStrCacheInitializer gs_stringCacheInit;
 // not my 6.4.98 version under amd64, so provide this debugging helper to do it
 #ifdef __WXDEBUG__
 
-namespace
-{
-
 struct wxStrCacheDumper
 {
     static void ShowAll()
@@ -100,8 +97,6 @@ struct wxStrCacheDumper
     }
 };
 
-} // anonymous namespace
-
 void wxDumpStrCache() { wxStrCacheDumper::ShowAll(); }
 
 #endif // __WXDEBUG__
@@ -110,12 +105,9 @@ void wxDumpStrCache() { wxStrCacheDumper::ShowAll(); }
 
 wxString::CacheStats wxString::ms_cacheStats;
 
-namespace
+struct wxStrCacheStatsDumper
 {
-
-struct ShowCacheStats
-{
-    ~ShowCacheStats()
+    ~wxStrCacheStatsDumper()
     {
         const wxString::CacheStats& stats = wxString::ms_cacheStats;
 
@@ -140,9 +132,9 @@ struct ShowCacheStats
                    stats.lentot, 100.*float(stats.lenhits)/stats.lentot);
         }
     }
-} s_showCacheStats;
+};
 
-} // anonymous namespace
+static wxStrCacheStatsDumper s_showCacheStats;
 
 #endif // wxPROFILE_STRING_CACHE
 

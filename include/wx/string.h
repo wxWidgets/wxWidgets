@@ -637,7 +637,7 @@ private:
                lenhits; // number of cache hits in length()
   } ms_cacheStats;
 
-  friend struct ShowCacheStats;
+  friend struct wxStrCacheStatsDumper;
 
   #define wxCACHE_PROFILE_FIELD_INC(field) ms_cacheStats.field++
   #define wxCACHE_PROFILE_FIELD_ADD(field, val) ms_cacheStats.field += (val)
