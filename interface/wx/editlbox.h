@@ -25,10 +25,12 @@
            Default style: wxEL_ALLOW_NEW|wxEL_ALLOW_EDIT|wxEL_ALLOW_DELETE.
     @endStyleTable
 
+    The control uses a wxListCtrl internally and emit its events.
+
     @library{wxadv}
     @category{ctrl}
 
-    @see wxListBox
+    @see wxListBox, wxListCtrl
 */
 class wxEditableListBox : public wxPanel
 {
