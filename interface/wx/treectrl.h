@@ -60,6 +60,52 @@
         for a particular toolkit.
     @endStyleTable
 
+    @beginEventTable{wxTreeEvent}
+    @event{EVT_TREE_BEGIN_DRAG(id, func)}
+          Begin dragging with the left mouse button.
+    @event{EVT_TREE_BEGIN_RDRAG(id, func)}
+          Begin dragging with the right mouse button.
+    @event{EVT_TREE_END_DRAG(id, func)}
+          End dragging with the left or right mouse button.
+    @event{EVT_TREE_BEGIN_LABEL_EDIT(id, func)}
+          Begin editing a label. This can be prevented by calling Veto().
+    @event{EVT_TREE_END_LABEL_EDIT(id, func)}
+          Finish editing a label. This can be prevented by calling Veto().
+    @event{EVT_TREE_DELETE_ITEM(id, func)}
+          An item was deleted.
+    @event{EVT_TREE_GET_INFO(id, func)}
+          Request information from the application.
+    @event{EVT_TREE_SET_INFO(id, func)}
+          Information is being supplied.
+    @event{EVT_TREE_ITEM_ACTIVATED(id, func)}
+          The item has been activated, i.e. chosen by double clicking it with mouse or from keyboard.
+    @event{EVT_TREE_ITEM_COLLAPSED(id, func)}
+          The item has been collapsed.
+    @event{EVT_TREE_ITEM_COLLAPSING(id, func)}
+          The item is being collapsed. This can be prevented by calling Veto().
+    @event{EVT_TREE_ITEM_EXPANDED(id, func)}
+          The item has been expanded.
+    @event{EVT_TREE_ITEM_EXPANDING(id, func)}
+          The item is being expanded. This can be prevented by calling Veto().
+    @event{EVT_TREE_ITEM_RIGHT_CLICK(id, func)}
+          The user has clicked the item with the right mouse button.
+    @event{EVT_TREE_ITEM_MIDDLE_CLICK(id, func)}
+          The user has clicked the item with the middle mouse button.
+    @event{EVT_TREE_SEL_CHANGED(id, func)}
+          Selection has changed.
+    @event{EVT_TREE_SEL_CHANGING(id, func)}
+          Selection is changing. This can be prevented by calling Veto().
+    @event{EVT_TREE_KEY_DOWN(id, func)}
+          A key has been pressed.
+    @event{EVT_TREE_ITEM_GETTOOLTIP(id, func)}
+          The opportunity to set the item tooltip is being given to the application (call wxTreeEvent::SetToolTip). Windows only.
+    @event{EVT_TREE_ITEM_MENU(id, func)}
+          The context menu for the selected item has been requested, either by a right click or by using the menu key.
+    @event{EVT_TREE_STATE_IMAGE_CLICK(id, func)}
+          The state image has been clicked. Windows only.
+    @endEventTable
+
+
     See also @ref overview_windowstyles.
 
     @b Win32 @b notes:
