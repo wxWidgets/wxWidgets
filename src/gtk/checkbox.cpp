@@ -33,8 +33,6 @@ static void gtk_checkbox_toggled_callback(GtkWidget *widget, wxCheckBox *cb)
 
     if (g_blockEventsOnDrag) return;
 
-    if (cb->m_blockEvent) return;
-
     // Transitions for 3state checkbox must be done manually, GTK's checkbox
     // is 2state with additional "undetermined state" flag which isn't
     // changed automatically:
@@ -49,7 +47,7 @@ static void gtk_checkbox_toggled_callback(GtkWidget *widget, wxCheckBox *cb)
             bool active = gtk_toggle_button_get_active(toggle);
             bool inconsistent = gtk_toggle_button_get_inconsistent(toggle);
 
-            cb->m_blockEvent = true;
+            cb->GTKDisableEvents();
 
             if (!active && !inconsistent)
             {
@@ -72,7 +70,7 @@ static void gtk_checkbox_toggled_callback(GtkWidget *widget, wxCheckBox *cb)
                 wxFAIL_MSG(_T("3state wxCheckBox in unexpected state!"));
             }
 
-            cb->m_blockEvent = false;
+            cb->GTKEnableEvents();
         }
         else
         {
@@ -107,8 +105,6 @@ bool wxCheckBox::Create(wxWindow *parent,
                         const wxValidator& validator,
                         const wxString &name )
 {
-    m_blockEvent = false;
-
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
@@ -157,18 +153,30 @@ bool wxCheckBox::Create(wxWindow *parent,
     return true;
 }
 
+void wxCheckBox::GTKDisableEvents()
+{
+    g_signal_handlers_block_by_func(m_widgetCheckbox,
+        (gpointer) gtk_checkbox_toggled_callback, this);
+}
+
+void wxCheckBox::GTKEnableEvents()
+{
+    g_signal_handlers_unblock_by_func(m_widgetCheckbox,
+        (gpointer) gtk_checkbox_toggled_callback, this);
+}
+
 void wxCheckBox::SetValue( bool state )
 {
     wxCHECK_RET( m_widgetCheckbox != NULL, wxT("invalid checkbox") );
 
     if (state == GetValue())
         return;
-
-    m_blockEvent = true;
+ 
+    GTKDisableEvents();
 
     gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(m_widgetCheckbox), state );
 
-    m_blockEvent = false;
+    GTKEnableEvents();
 }
 
 bool wxCheckBox::GetValue() const

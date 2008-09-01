@@ -31,8 +31,6 @@ static void gtk_togglebutton_clicked_callback(GtkWidget *WXUNUSED(widget), wxTog
     if (!cb->m_hasVMT || g_blockEventsOnDrag)
         return;
 
-    if (cb->m_blockEvent) return;
-
     // Generate a wx event.
     wxCommandEvent event(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, cb->GetId());
     event.SetInt(cb->GetValue());
@@ -55,8 +53,6 @@ bool wxBitmapToggleButton::Create(wxWindow *parent, wxWindowID id,
                             const wxValidator& validator,
                             const wxString &name)
 {
-    m_blockEvent = false;
-
     if (!PreCreation(parent, pos, size) ||
        !CreateBase(parent, id, pos, size, style, validator, name ))
     {
@@ -85,6 +81,18 @@ bool wxBitmapToggleButton::Create(wxWindow *parent, wxWindowID id,
     return true;
 }
 
+void wxBitmapToggleButton::GTKDisableEvents()
+{
+    g_signal_handlers_block_by_func(m_widget,
+                                (gpointer) gtk_togglebutton_clicked_callback, this);
+}
+
+void wxBitmapToggleButton::GTKEnableEvents()
+{
+    g_signal_handlers_unblock_by_func(m_widget,
+                                (gpointer) gtk_togglebutton_clicked_callback, this);
+}
+
 // void SetValue(bool state)
 // Set the value of the toggle button.
 void wxBitmapToggleButton::SetValue(bool state)
@@ -94,11 +102,11 @@ void wxBitmapToggleButton::SetValue(bool state)
     if (state == GetValue())
         return;
 
-    m_blockEvent = true;
+    GTKDisableEvents();
 
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_widget), state);
 
-    m_blockEvent = false;
+    GTKEnableEvents();
 }
 
 // bool GetValue() const
@@ -194,8 +202,6 @@ bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
                             const wxValidator& validator,
                             const wxString &name)
 {
-    m_blockEvent = false;
-
     if (!PreCreation(parent, pos, size) ||
         !CreateBase(parent, id, pos, size, style, validator, name ))
     {
@@ -220,6 +226,18 @@ bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
     return true;
 }
 
+void wxToggleButton::GTKDisableEvents()
+{
+    g_signal_handlers_block_by_func(m_widget,
+                                (gpointer) gtk_togglebutton_clicked_callback, this);
+}
+
+void wxToggleButton::GTKEnableEvents()
+{
+    g_signal_handlers_unblock_by_func(m_widget,
+                                (gpointer) gtk_togglebutton_clicked_callback, this);
+}
+
 // void SetValue(bool state)
 // Set the value of the toggle button.
 void wxToggleButton::SetValue(bool state)
@@ -229,11 +247,11 @@ void wxToggleButton::SetValue(bool state)
     if (state == GetValue())
         return;
 
-    m_blockEvent = true;
+    GTKEnableEvents();
 
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_widget), state);
 
-    m_blockEvent = false;
+    GTKDisableEvents();
 }
 
 // bool GetValue() const

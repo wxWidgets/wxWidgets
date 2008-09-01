@@ -71,12 +71,14 @@ public:
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
     // implementation
-    bool      m_blockEvent;
     wxBitmap  m_bitmap;
 
     void OnSetBitmap();
 
 protected:
+    void GTKDisableEvents();
+    void GTKEnableEvents();
+    
     virtual wxSize DoGetBestSize() const;
     virtual void DoApplyWidgetStyle(GtkRcStyle *style);
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
@@ -126,10 +128,10 @@ public:
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
  
-    // implementation
-    bool m_blockEvent;
-
 protected:
+    void GTKDisableEvents();
+    void GTKEnableEvents();
+    
     virtual wxSize DoGetBestSize() const;
     virtual void DoApplyWidgetStyle(GtkRcStyle *style);
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;

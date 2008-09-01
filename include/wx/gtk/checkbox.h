@@ -44,14 +44,6 @@ public:
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
-    // implementation
-    // --------------
-
-    GtkWidget *m_widgetCheckbox;
-    GtkWidget *m_widgetLabel;
-
-    bool       m_blockEvent;
-
 protected:
     virtual wxSize DoGetBestSize() const;
     virtual void DoApplyWidgetStyle(GtkRcStyle *style);
@@ -59,6 +51,14 @@ protected:
 
     void DoSet3StateValue(wxCheckBoxState state);
     wxCheckBoxState DoGet3StateValue() const;
+
+public:
+    // implementation
+    void GTKDisableEvents();
+    void GTKEnableEvents();
+
+    GtkWidget *m_widgetCheckbox;
+    GtkWidget *m_widgetLabel;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxCheckBox)
