@@ -672,6 +672,37 @@ public:
            Allow variable line heights. This can be inefficient when displaying large number of items.
     @endStyleTable
 
+    @beginEventTable{wxDataViewEvent}
+    @event{EVT_DATAVIEW_SELECTION_CHANGED(id, func)}
+           Process a wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED event.
+    @event{EVT_DATAVIEW_ITEM_ACTIVATED(id, func)}
+           Process a wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED event.
+    @event{EVT_DATAVIEW_ITEM_EDITING_STARTED(id, func)}
+           Process a wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED event.
+    @event{EVT_DATAVIEW_ITEM_EDITING_DONE(id, func)}
+           Process a wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE event.
+    @event{EVT_DATAVIEW_ITEM_COLLAPSING(id, func)}
+           Process a wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING event.
+    @event{EVT_DATAVIEW_ITEM_COLLAPSED(id, func)}
+           Process a wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSED event.
+    @event{EVT_DATAVIEW_ITEM_EXPANDING(id, func)}
+           Process a wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING event.
+    @event{EVT_DATAVIEW_ITEM_EXPANDED(id, func)}
+           Process a wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDED event.
+    @event{EVT_DATAVIEW_ITEM_VALUE_CHANGED(id, func)}
+           Process a wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED event.
+    @event{EVT_DATAVIEW_ITEM_CONTEXT_MENU(id, func)}
+           Process a wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU event.
+    @event{EVT_DATAVIEW_COLUMN_HEADER_CLICK(id, func)}
+           Process a wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICKED event.
+    @event{EVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK(id, func)}
+           Process a wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICKED event.
+    @event{EVT_DATAVIEW_COLUMN_SORTED(id, func)}
+           Process a wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED event.
+    @event{EVT_DATAVIEW_COLUMN_REORDERED(id, func)}
+           Process a wxEVT_COMMAND_DATAVIEW_COLUMN_REORDERED event.
+    @endEventTable
+    
     @library{wxadv}
     @category{ctrl,dvc}
     <!-- @appearance{dataviewctrl.png} -->
