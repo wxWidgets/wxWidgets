@@ -39,8 +39,18 @@
     @b Mac Note: Starting with 2.8, wxListCtrl uses a native implementation for
     report mode, and uses a generic implementation for other modes. You can use the
     generic implementation for report mode as well by setting the
-    mac.listctrl.always_use_generic wxSystemOption() to
-    1.
+    mac.listctrl.always_use_generic wxSystemOption() to 1.
+
+    Column reordering (only wxMSW): In report view, the control has several columns
+    which are identified by their internal indices. By default, these indices
+    correspond to their order on screen, i.e. the column 0 appears first (in the
+    left-to-right or maybe right-to-left if the current language uses this writing
+    direction), the column 1 next and so on. However it is possible to reorder the
+    columns visual order using SetColumnsOrder() method and the user can also
+    rearrange the columns interactively by dragging them. In this case, the index
+    of the column is not the same as its order and the functions GetColumnOrder() and
+    GetColumnIndexFromOrder() should be used to translate between them.
+
 
     @beginStyleTable
     @style{wxLC_LIST}
@@ -80,6 +90,51 @@
     @style{wxLC_VRULES}
            Draws light vertical rules between columns in report mode.
     @endStyleTable
+
+
+    @beginEventTable{wxListEvent}
+    @event{EVT_LIST_BEGIN_DRAG(id, func)}
+           Begin dragging with the left mouse button.
+    @event{EVT_LIST_BEGIN_RDRAG(id, func)}
+           Begin dragging with the right mouse button..
+    @event{EVT_BEGIN_LABEL_EDIT(id, func)}
+           Begin editing a label. This can be prevented by calling Veto().
+    @event{EVT_LIST_END_LABEL_EDIT(id, func)}
+           Finish editing a label. This can be prevented by calling Veto().
+    @event{EVT_LIST_DELETE_ITEM(id, func)}
+           An item was deleted.
+    @event{EVT_LIST_DELETE_ALL_ITEMS(id, func)}
+           All items were deleted.
+    @event{EVT_LIST_ITEM_SELECTED(id, func)}
+           The item has been selected.
+    @event{EVT_LIST_ITEM_DESELECTED(id, func)}
+           The item has been deselected.
+    @event{EVT_LIST_ITEM_ACTIVATED(id, func)}
+           The item has been activated (ENTER or double click).
+    @event{EVT_LIST_ITEM_FOCUSED(id, func)}
+           The currently focused item has changed.
+    @event{EVT_LIST_ITEM_MIDDLE_CLICK(id, func)}
+           The middle mouse button has been clicked on an item.
+    @event{EVT_LIST_ITEM_RIGHT_CLICK(id, func)}
+          The right mouse button has been clicked on an item. 
+    @event{EVT_LIST_KEY_DOWN(id, func)}
+           A key has been pressed.
+    @event{EVT_LIST_INSERT_ITEM(id, func)}
+           An item has been inserted.
+    @event{EVT_LIST_COL_CLICK(id, func)}
+           A column (m_col) has been left-clicked.
+    @event{EVT_LIST_COL_RIGHT_CLICK(id, func)}
+           A column (m_col) has been right-clicked.
+    @event{EVT_LIST_COL_BEGIN_DRAG(id, func)}
+           The user started resizing a column - can be vetoed.
+    @event{EVT_LIST_COL_DRAGGING(id, func)}
+           The divider between columns is being dragged.
+    @event{EVT_LIST_COL_END_DRAG(id, func)}
+           A column has been resized by the user.
+    @event{EVT_LIST_CACHE_HINT(id, func)}
+           Prepare cache for a virtual list control.
+    @endEventTable
+
 
     @library{wxcore}
     @category{ctrl}
