@@ -146,7 +146,6 @@ Controls that are not static can have wxValidator associated with them.
 @li wxButton: Push button control, displaying text
 @li wxBitmapButton: Push button control, displaying a bitmap
 @li wxBitmapComboBox: A combobox with bitmaps next to text items
-@li wxToggleButton: A button which stays pressed when clicked by user.
 @li wxBitmapToggleButton: A toggle button with bitmaps.
 @li wxCalendarCtrl: Control showing an entire calendar month
 @li wxCheckBox: Checkbox control
@@ -157,8 +156,10 @@ Controls that are not static can have wxValidator associated with them.
 @li wxComboCtrl: A combobox with application defined popup
 @li wxDataViewCtrl: A control to tabular or tree like data
 @li wxDataViewTreeCtrl: A specialized wxDataViewCtrl with wxTreeCtrl-like API
+@li wxEditableListBox: A listbox with editable items.
 @li wxGauge: A control to represent a varying quantity, such as time remaining
 @li wxGenericDirCtrl: A control for displaying a directory tree
+@li wxGrid: A grid (table) window
 @li wxHtmlListBox: An abstract class for creating listboxes showing HTML
     content
 @li wxSimpleHtmlListBox: A listbox showing HTML content
@@ -168,9 +169,11 @@ Controls that are not static can have wxValidator associated with them.
     multicolumn report view
 @li wxListView: A simpler interface (fa&ccedil;ade) for wxListCtrl in report
     mode
+@li wxNotebook: A notebook class
 @li wxOwnerDrawnComboBox: A combobox with owner-drawn list items
 @li wxRichTextCtrl: Generic rich text editing control
 @li wxTextCtrl: Single or multiline text editing control
+@li wxToggleButton: A button which stays pressed when clicked by user.
 @li wxTreeCtrl: Tree (hierarchy) control
 @li wxScrollBar: Scrollbar control
 @li wxSpinButton: A spin or `up-down' control
@@ -208,6 +211,7 @@ platform-dependent.
 
 The following are a variety of classes that are derived from wxWindow.
 
+@li wxCollapsiblePane: A panel which can be shown/hidden by the user
 @li wxPanel: A window whose colour changes according to current user settings
 @li ::wxScrolledWindow: Window with automatically managed scrollbars (see
     wxScrolled)

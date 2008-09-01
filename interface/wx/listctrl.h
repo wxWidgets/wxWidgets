@@ -86,7 +86,7 @@
     <!-- @appearance{listctrl.png} -->
 
     @see @ref overview_listctrl "wxListCtrl Overview", wxListView,
-    wxListBox, wxTreeCtrl, wxImageList, wxListEvent, wxListItem
+    wxListBox, wxTreeCtrl, wxImageList, wxListEvent, wxListItem, wxEditableListBox
 */
 class wxListCtrl : public wxControl
 {

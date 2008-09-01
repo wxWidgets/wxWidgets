@@ -55,7 +55,7 @@
     @category{ctrl}
     <!-- @appearance{listbox.png} -->
 
-    @see wxChoice, wxComboBox, wxListCtrl, wxCommandEvent
+    @see wxEditableListBox, wxChoice, wxComboBox, wxListCtrl, wxCommandEvent
 */
 class wxListBox : public wxControlWithItems
 {
