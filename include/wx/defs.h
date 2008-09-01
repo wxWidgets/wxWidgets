@@ -2693,7 +2693,6 @@ typedef void*       WXEVENTREF;
 typedef void*       WXEVENTHANDLERREF;
 typedef void*       WXEVENTHANDLERCALLREF;
 typedef void*       WXAPPLEEVENTREF;
-typedef void*       WXHMENU;
 
 typedef unsigned int    WXUINT;
 typedef unsigned long   WXDWORD;
@@ -2703,6 +2702,8 @@ typedef WX_OPAQUE_TYPE(PicHandle ) * WXHMETAFILE ;
 #if wxOSX_USE_CARBON
 typedef WX_OPAQUE_TYPE(ControlRef ) * WXWidget ;
 typedef WX_OPAQUE_TYPE(WindowRef) * WXWindow ;
+typedef struct __AGLPixelFormatRec   *WXGLPixelFormat;
+typedef struct __AGLContextRec       *WXGLContext;
 #endif
 
 typedef void*       WXDisplay;
@@ -2739,9 +2740,13 @@ typedef struct __HIShape * HIMutableShapeRef;
 
 DECLARE_WXMAC_OPAQUE_REF( PasteboardRef )
 DECLARE_WXMAC_OPAQUE_REF( IconRef )
+DECLARE_WXMAC_OPAQUE_REF( MenuRef )
 
 typedef IconRef WXHICON ;
 typedef HIShapeRef WXHRGN;
+#if wxOSX_USE_CARBON
+typedef MenuRef WXHMENU;
+#endif
 
 #endif
 
@@ -2840,6 +2845,8 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSTextStorage);
 DECLARE_WXCOCOA_OBJC_CLASS(NSThread);
 DECLARE_WXCOCOA_OBJC_CLASS(NSWindow);
 DECLARE_WXCOCOA_OBJC_CLASS(NSView);
+DECLARE_WXCOCOA_OBJC_CLASS(NSOpenGLContext);
+DECLARE_WXCOCOA_OBJC_CLASS(NSOpenGLPixelFormat);
 #ifndef __WXMAC__
 typedef WX_NSView WXWidget; /*  wxWidgets BASE definition */
 #endif
@@ -2853,6 +2860,9 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSString);
 
 typedef WX_NSWindow WXWindow;
 typedef WX_NSView WXWidget;
+typedef WX_NSMenu WXHMENU;
+typedef WX_NSOpenGLPixelFormat WXGLPixelFormat;
+typedef WX_NSOpenGLContext WXGLContext;
 
 #elif wxOSX_USE_IPHONE
 
