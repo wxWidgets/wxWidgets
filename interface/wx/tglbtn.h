@@ -33,7 +33,11 @@
 class wxToggleButton : public wxControl
 {
 public:
-    //@{
+    /**
+      Default constructor.
+    */
+    wxToggleButton();
+    
     /**
         Constructor, creating and showing a toggle button.
 
@@ -58,7 +62,6 @@ public:
 
         @see Create(), wxValidator
     */
-    wxToggleButton();
     wxToggleButton(wxWindow* parent, wxWindowID id,
                    const wxString& label,
                    const wxPoint& pos = wxDefaultPosition,
@@ -66,7 +69,6 @@ public:
                    long style = 0,
                    const wxValidator& val = wxDefaultValidator,
                    const wxString& name = "checkBox");
-    //@}
 
     /**
         Destructor, destroying the toggle button.
@@ -123,12 +125,15 @@ public:
 class wxBitmapToggleButton : public wxControl
 {
 public:
-    //@{
+    /**
+        Default constructor.
+    */
+    wxBitmapToggleButton();
+    
     /**
         Constructor, creating and showing a toggle button with the bitmap @e label.
         Internally calls Create().
     */
-    wxBitmapToggleButton();
     wxBitmapToggleButton(wxWindow* parent, wxWindowID id,
                          const wxBitmap& label,
                          const wxPoint& pos = wxDefaultPosition,
@@ -136,7 +141,6 @@ public:
                          long style = 0,
                          const wxValidator& val = wxDefaultValidator,
                          const wxString& name = "checkBox");
-    //@}
 
     /**
         Create method for two-step construction.
