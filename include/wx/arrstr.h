@@ -15,10 +15,9 @@
 #include "wx/defs.h"
 #include "wx/string.h"
 
-#if wxUSE_STL
-
-#include "wx/dynarray.h"
-
+// these functions are only used in STL build now but we define them in any
+// case for compatibility with the existing code outside of the library which
+// could be using them
 inline int wxCMPFUNC_CONV wxStringSortAscending(wxString* s1, wxString* s2)
 {
     return s1->Cmp(*s2);
@@ -28,6 +27,10 @@ inline int wxCMPFUNC_CONV wxStringSortDescending(wxString* s1, wxString* s2)
 {
     return wxStringSortAscending(s2, s1);
 }
+
+#if wxUSE_STL
+
+#include "wx/dynarray.h"
 
 typedef int (wxCMPFUNC_CONV *CMPFUNCwxString)(wxString*, wxString*);
 typedef wxString _wxArraywxBaseArrayStringBase;
