@@ -32,28 +32,28 @@ fi
 # Copy stock setup0.h to setup.h if it doesn't exist
 #   preserve user modifications made to setup.h
 #
-if [ ! -f "${1}/../include/wx/mac/setup.h" ]; then
-    echo "${0}:${LINENO}: warning: copying \"include/wx/mac/setup0.h\" to \"include/wx/mac/setup.h\""
-    echo "${0}:${LINENO}: warning: edit \"include/wx/mac/setup.h\" to choose the features you would like to compile wxWindows with[out]"
-    cp "${1}/../include/wx/mac/setup0.h" "${1}/../include/wx/mac/setup.h"
-    if [ ! -f "${1}/../include/wx/mac/setup.h" ]; then
-        echo "${0}:${LINENO}: error: unable to create setup file \"${1}/../include/wx/mac/setup.h\""
+if [ ! -f "${1}/../include/wx/osx/setup.h" ]; then
+    echo "${0}:${LINENO}: warning: copying \"include/wx/osx/setup0.h\" to \"include/wx/osx/setup.h\""
+    echo "${0}:${LINENO}: warning: edit \"include/wx/osx/setup.h\" to choose the features you would like to compile wxWindows with[out]"
+    cp "${1}/../include/wx/osx/setup0.h" "${1}/../include/wx/osx/setup.h"
+    if [ ! -f "${1}/../include/wx/osx/setup.h" ]; then
+        echo "${0}:${LINENO}: error: unable to create setup file \"${1}/../include/wx/osx/setup.h\""
         exit 1
     fi
 fi
 #
 # Check that stock setup0.h is not newer than user setup.h
 #
-if [ "${1}/../include/wx/mac/setup0.h" -nt "${1}/../include/wx/mac/setup.h" ] ; then
-    echo "${0}:${LINENO}: warning: \"include/wx/mac/setup0.h\" is more recent than \"include/wx/mac/setup.h\""
-    echo "${0}:${LINENO}: warning: edit or replace \"include/wx/mac/setup.h\" to integrate changes"
+if [ "${1}/../include/wx/osx/setup0.h" -nt "${1}/../include/wx/osx/setup.h" ] ; then
+    echo "${0}:${LINENO}: warning: \"include/wx/osx/setup0.h\" is more recent than \"include/wx/osx/setup.h\""
+    echo "${0}:${LINENO}: warning: edit or replace \"include/wx/osx/setup.h\" to integrate changes"
 fi
 #
 # Copy user setup.h to build setup.h if the latter doesn't exist or is older
 #
 if [ ! -f "${2}/include/wx/setup.h" -o \
-     "${1}/../include/wx/mac/setup.h" -nt "${2}/include/wx/setup.h" ] ; then 
-    cp "${1}/../include/wx/mac/setup.h" "${2}/include/wx/setup.h"
+     "${1}/../include/wx/osx/setup.h" -nt "${2}/include/wx/setup.h" ] ; then 
+    cp "${1}/../include/wx/osx/setup.h" "${2}/include/wx/setup.h"
     if [ ! -f "${2}/include/wx/setup.h" ] ; then
         echo "${0}:${LINENO}: error: unable to create target setup file \"${2}/include/wx/setup.h\""
         exit 1
