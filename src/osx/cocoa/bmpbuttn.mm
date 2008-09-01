@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/bmpbuttn.cpp
+// Name:        src/osx/carbon/bmpbuttn.cpp
 // Purpose:     wxBitmapButton
 // Author:      Stefan Csomor
 // Modified by:
@@ -37,7 +37,7 @@ wxWidgetImplType* wxWidgetImpl::CreateBitmapButton( wxWindowMac* wxpeer,
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
     
     [v setBezelStyle:NSRegularSquareBezelStyle];
-    
+    [v setImage:bitmap.GetNSImage() ];
     [v setButtonType:NSMomentaryPushInButton];
     [sv addSubview:v];
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );

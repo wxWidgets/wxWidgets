@@ -532,12 +532,15 @@ void wxWidgetCocoaImpl::GetBestRect( wxRect *r ) const
 
 bool wxWidgetCocoaImpl::IsEnabled() const
 {
-    return [m_osxView enable];
+    if ( [m_osxView respondsToSelector:@selector(isEnabled) ] )
+        return [m_osxView isEnabled];
+    return true;
 }
 
 void wxWidgetCocoaImpl::Enable( bool enable )
 {
-    [m_osxView setEnabled:enable];
+    if ( [m_osxView respondsToSelector:@selector(setEnabled:) ] )
+        [m_osxView setEnabled:enable];
 }
 
 void wxWidgetCocoaImpl::PulseGauge()
@@ -546,6 +549,36 @@ void wxWidgetCocoaImpl::PulseGauge()
 
 void wxWidgetCocoaImpl::SetScrollThumb( wxInt32 val, wxInt32 view )
 {
+}
+
+void wxWidgetCocoaImpl::SetControlSize( wxWindowVariant variant ) 
+{
+    NSControlSize size = NSRegularControlSize;
+    
+    switch ( variant )
+    {
+        case wxWINDOW_VARIANT_NORMAL :
+            size = NSRegularControlSize;
+            break ;
+
+        case wxWINDOW_VARIANT_SMALL :
+            size = NSSmallControlSize;
+            break ;
+
+        case wxWINDOW_VARIANT_MINI :
+            size = NSMiniControlSize;
+            break ;
+
+        case wxWINDOW_VARIANT_LARGE :
+            size = NSRegularControlSize;
+            break ;
+
+        default:
+            wxFAIL_MSG(_T("unexpected window variant"));
+            break ;
+    }
+    if ( [m_osxView respondsToSelector:@selector(setControlSize:)] )
+        [m_osxView setControlSize:size];
 }
 
 //

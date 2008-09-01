@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/cocoa/nonownedwnd.mm
+// Name:        src/osx/cocoa/nonownedwnd.mm
 // Purpose:     non owned window for cocoa
 // Author:      DavidStefan Csomor
 // Modified by:
