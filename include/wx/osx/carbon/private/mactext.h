@@ -15,10 +15,19 @@
 #include "wx/osx/private.h"
 
 // common interface for all implementations
-class wxMacTextControl : public wxMacControl
+class wxMacTextControl :
+#if wxOSX_USE_CARBON 
+    public wxMacControl
+#else
+    public wxWidgetCocoaImpl
+#endif
 {
 public :
+#if wxOSX_USE_CARBON 
     wxMacTextControl( wxTextCtrl *peer ) ;
+#else
+    wxMacTextControl::wxMacTextControl(wxTextCtrl* peer, WXWidget w) ;
+#endif
     virtual ~wxMacTextControl() ;
 
     virtual bool CanFocus() const { return true; }
@@ -61,6 +70,7 @@ public :
     virtual void SetFont( const wxFont & font , const wxColour& foreground , long windowStyle );
 };
 
+#if wxOSX_USE_CARBON
 class wxMacUnicodeTextControl : public wxMacTextControl
 {
 public :
@@ -95,5 +105,6 @@ protected :
 public :
     ControlEditTextSelectionRec m_selection ;
 };
+#endif
 
 #endif // _WX_MAC_PRIVATE_MACTEXT_H_

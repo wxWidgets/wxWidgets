@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/font.cpp
+// Name:        src/osx/carbon/font.cpp
 // Purpose:     wxFont class
 // Author:      Stefan Csomor
 // Modified by:
@@ -29,10 +29,6 @@
 #include "wx/osx/uma.h"
 #else
 #include "wx/osx/private.h"
-#endif
-
-#ifndef __DARWIN__
-#include <ATSUnicode.h>
 #endif
 
 #include <map>
@@ -739,6 +735,7 @@ bool wxFont::MacCreateFromCTFontDescriptor( const void * ctFontDescriptor , int 
 
 #endif
 
+#if wxOSX_USE_CARBON
 bool wxFont::MacCreateFromThemeFont(wxUint16 themeFontID)
 {
 #if wxOSX_USE_CORE_TEXT
@@ -762,6 +759,7 @@ bool wxFont::MacCreateFromThemeFont(wxUint16 themeFontID)
 #endif
     return false;
 }
+#endif
 
 wxFont::~wxFont()
 {

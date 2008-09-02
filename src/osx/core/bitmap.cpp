@@ -791,8 +791,8 @@ bool wxBitmap::CopyFromIcon(const wxIcon& icon)
     int w = icon.GetWidth() ;
     int h = icon.GetHeight() ;
 
-    Create( icon.GetWidth() , icon.GetHeight() ) ;
-#ifndef __WXOSX_IPHONE__
+    Create( w , h ) ;
+#ifdef __WXOSX_CARBON__
     if ( w == h && ( w == 16 || w == 32 || w == 48 || w == 128 ) )
     {
         IconFamilyHandle iconFamily = NULL ;
@@ -1019,6 +1019,16 @@ IconRef wxBitmap::CreateIconRef() const
     verify_noerr( AcquireIconRef(icon) );
     return icon;
 }
+#endif
+
+#if wxOSX_USE_COCOA_OR_IPHONE
+
+WX_NSImage wxBitmap::GetNSImage() const
+{
+    wxCFRef< CGImageRef > cgimage(CreateCGImage());
+    return wxOSXCreateNSImageFromCGImage( cgimage );
+}
+
 #endif
 
 wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
@@ -1693,7 +1703,7 @@ void wxBitmap::InitStandardHandlers()
 #if !defined( __LP64__ ) && !defined(__WXOSX_IPHONE__)
     AddHandler( new wxPICTResourceHandler ) ;
 #endif
-#if wxOSX_USE_COCOA_OR_CARBON
+#if wxOSX_USE_CARBON
     AddHandler( new wxICONResourceHandler ) ;
 #endif
 }

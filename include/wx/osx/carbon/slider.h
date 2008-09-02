@@ -75,7 +75,9 @@ public:
     void SetTick(int tickPos) ;
 
     void Command(wxCommandEvent& event);
-    virtual wxInt32 MacControlHit(WXEVENTHANDLERREF handler, WXEVENTREF event);
+    // osx specific event handling common for all osx-ports
+    
+    virtual bool        HandleClicked( double timestampsec );
     void MacHandleControlClick(WXWidget control, wxInt16 controlpart, bool mouseStillDown);
 
 protected:

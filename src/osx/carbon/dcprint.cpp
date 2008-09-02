@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/dcprint.cpp
+// Name:        src/osx/carbon/dcprint.cpp
 // Purpose:     wxPrinterDC class
 // Author:      Julian Smart
 // Modified by:
@@ -25,7 +25,7 @@
     #include "wx/math.h"
 #endif
 
-#include "wx/osx/uma.h"
+#include "wx/osx/private.h"
 #include "wx/osx/private/print.h"
 #include "wx/osx/carbon/dcprint.h"
 #include "wx/graphics.h"

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/filedlg.cpp
+// Name:        src/osx/carbon/filedlg.cpp
 // Purpose:     wxFileDialog
 // Author:      Stefan Csomor
 // Modified by:

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/uma.cpp
+// Name:        src/osx/carbon/uma.cpp
 // Purpose:     UMA support
 // Author:      Stefan Csomor
 // Modified by:
@@ -19,17 +19,6 @@
 #include "wx/dc.h"
 
 #include "wx/osx/uma.h"
-
-static SInt32 sUMASystemVersion = 0 ;
-
-long UMAGetSystemVersion() 
-{ 
-    if ( sUMASystemVersion == 0 )
-    {
-        verify_noerr(Gestalt(gestaltSystemVersion, &sUMASystemVersion));
-    }
-    return sUMASystemVersion ; 
-}
 
 // menu manager
 
@@ -69,12 +58,13 @@ void UMAEnableMenuItem( MenuRef inMenu , MenuItemIndex inItem , bool enable)
         DisableMenuItem( inMenu , inItem ) ;
 }
 
-void UMAAppendSubMenuItem( MenuRef menu , const wxString& title, wxFontEncoding encoding , SInt16 id )
+void UMAAppendSubMenuItem( MenuRef menu , const wxString& title, wxFontEncoding encoding , MenuRef submenu )
 {
     AppendMenuItemTextWithCFString( menu,
                                 CFSTR("A"), 0, 0,NULL);
     UMASetMenuItemText( menu, (SInt16) ::CountMenuItems(menu), title , encoding );
-    SetMenuItemHierarchicalID( menu , CountMenuItems( menu ) , id ) ;
+    SetMenuItemHierarchicalMenu( menu , CountMenuItems( menu ) , submenu ) ;
+    SetMenuTitleWithCFString(submenu , wxCFStringRef(title , encoding) );
 }
 
 void UMAInsertSubMenuItem( MenuRef menu , const wxString& title, wxFontEncoding encoding , MenuItemIndex item , SInt16 id  )

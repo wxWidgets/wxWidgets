@@ -41,12 +41,14 @@ public:
 
     // implementation 
     
-      virtual wxInt32 MacControlHit( WXEVENTHANDLERREF handler , WXEVENTREF event ) ;
     void Command(wxCommandEvent& event);
     wxRadioButton *AddInCycle(wxRadioButton *cycle);
     void RemoveFromCycle();
     inline wxRadioButton *NextInCycle() {return m_cycle;}
     
+    // osx specific event handling common for all osx-ports
+    
+    virtual bool        HandleClicked( double timestampsec );
   protected:
   
     wxRadioButton *m_cycle;

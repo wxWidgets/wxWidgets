@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/dnd.cpp
+// Name:        src/osx/carbon/dnd.cpp
 // Purpose:     wxDropTarget, wxDropSource implementations
 // Author:      Stefan Csomor
 // Modified by:

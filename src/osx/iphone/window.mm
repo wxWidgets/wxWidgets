@@ -19,7 +19,7 @@
 
 @interface wxUIView : UIView
 {
-    wxWidgetImpl* m_impl;
+    wxWidgetImpl* ;
 }
 
 - (void)drawRect: (CGRect) rect;
@@ -171,13 +171,13 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSSet* touches, UIEvent * nsEvent 
 
 - (void)drawRect: (CGRect) rect
 {
-    if ( m_impl )
+    if (  )
     {
         CGContextRef context = (CGContextRef) UIGraphicsGetCurrentContext();
         CGContextSaveGState( context );
         // draw background
         
-        CGContextSetFillColorWithColor( context, m_impl->GetWXPeer()->GetBackgroundColour().GetCGColor());
+        CGContextSetFillColorWithColor( context, ->GetWXPeer()->GetBackgroundColour().GetCGColor());
         CGContextFillRect(context, rect );
 
         if ( [ self isFlipped ] == NO )
@@ -186,15 +186,15 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSSet* touches, UIEvent * nsEvent 
             CGContextScaleCTM( context, 1, -1 );
         }
 
-        m_impl->GetWXPeer()->MacSetCGContextRef( context );
+        ->GetWXPeer()->MacSetCGContextRef( context );
 
-        m_impl->GetWXPeer()->GetUpdateRegion() = 
+        ->GetWXPeer()->GetUpdateRegion() = 
             wxRegion(rect.origin.x,rect.origin.y,rect.size.width,rect.size.height) ;
 
         wxPaintEvent event;
         event.SetTimestamp(0); //  todo
-        event.SetEventObject(m_impl->GetWXPeer());
-        m_impl->GetWXPeer()->HandleWindowEvent(event);
+        event.SetEventObject(->GetWXPeer());
+        ->GetWXPeer()->HandleWindowEvent(event);
 
         CGContextRestoreGState( context );
     }
@@ -226,19 +226,19 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSSet* touches, UIEvent * nsEvent 
     SetupMouseEvent( wxevent , touches, event ) ;
     wxevent.m_x = clickLocation.x;
     wxevent.m_y = clickLocation.y;
-    wxevent.SetEventObject( m_impl->GetWXPeer() ) ;
-    wxevent.SetId( m_impl->GetWXPeer()->GetId() ) ;
-    m_impl->GetWXPeer()->HandleWindowEvent(wxevent);
+    wxevent.SetEventObject( ->GetWXPeer() ) ;
+    wxevent.SetId( ->GetWXPeer()->GetId() ) ;
+    ->GetWXPeer()->HandleWindowEvent(wxevent);
 }
 
 - (void)setImplementation: (wxWidgetImpl *) theImplementation
 {
-    m_impl = theImplementation;
+     = theImplementation;
 }
 
 - (wxWidgetImpl*) implementation
 {
-    return m_impl;
+    return ;
 }
 
 - (BOOL) isFlipped
@@ -430,7 +430,7 @@ void wxWidgetIPhoneImpl::SetBackgroundColour( const wxColour &col )
 //
 
 wxWidgetImpl* wxWidgetImpl::CreateUserPane( wxWindowMac* wxpeer, const wxPoint& pos, const wxSize& size,
-                            long style, long extraStyle, const wxString& name)
+                            long style, long extraStyle)
 {
     UIView* sv = (wxpeer->GetParent()->GetHandle() );
     

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/thread.cpp
+// Name:        src/osx/carbon/thread.cpp
 // Purpose:     wxThread Implementation
 // Author:      Original from Wolfram Gloger/Guilhem Lavaux/Vadim Zeitlin
 // Modified by: Aj Lavin, Stefan Csomor

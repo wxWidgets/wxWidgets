@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/cocoa/nonownedwnd.mm
+// Name:        src/osx/cocoa/nonownedwnd.mm
 // Purpose:     non owned window for iphone
 // Author:      Stefan Csomor
 // Modified by:
@@ -230,3 +230,10 @@ void wxNonOwnedWindowIPhoneImpl::WindowToScreen( int *x, int *y )
         *y = p.y;
 }
 
+wxNonOwnedWindowImpl* wxNonOwnedWindowImpl::CreateNonOwnedWindow( wxNonOwnedWindow* wxpeer, wxWindow* parent, const wxPoint& pos, const wxSize& size,
+    long style, long extraStyle, const wxString& name )
+{
+    wxNonOwnedWindowImpl* now = new wxNonOwnedWindowIPhoneImpl( wxpeer );
+    now->Create( parent, pos, size, style , extraStyle, name );
+    return now;
+}

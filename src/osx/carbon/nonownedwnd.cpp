@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/nonownedwnd.cpp
+// Name:        src/osx/carbon/nonownedwnd.cpp
 // Purpose:     implementation of wxNonOwnedWindow
 // Author:      Stefan Csomor
 // Created:     2008-03-24
@@ -28,373 +28,14 @@
     #include "wx/sysopt.h"
 #endif
 
-//
-// TODO BEGIN move to nonowned_osx.cpp
-//
-
-// ----------------------------------------------------------------------------
-// constants
-// ----------------------------------------------------------------------------
-
-// trace mask for activation tracing messages
-#define TRACE_ACTIVATE "activation"
-
-wxWindow* g_MacLastWindow = NULL ;
+// ============================================================================
+// wxNonOwnedWindow implementation
+// ============================================================================
 
 // unified title and toolbar constant - not in Tiger headers, so we duplicate it here
 #define kWindowUnifiedTitleAndToolbarAttribute (1 << 7)
 
-// ---------------------------------------------------------------------------
-// wxWindowMac utility functions
-// ---------------------------------------------------------------------------
-
-// Find an item given the Macintosh Window Reference
-
-WX_DECLARE_HASH_MAP(WXWindow, wxNonOwnedWindow*, wxPointerHash, wxPointerEqual, MacWindowMap);
-
-static MacWindowMap wxWinMacWindowList;
-
-wxNonOwnedWindow *wxFindWindowFromWXWindow(WXWindow inWindowRef)
-{
-    MacWindowMap::iterator node = wxWinMacWindowList.find(inWindowRef);
-
-    return (node == wxWinMacWindowList.end()) ? NULL : node->second;
-}
-
-void wxAssociateWindowWithWXWindow(WXWindow inWindowRef, wxNonOwnedWindow *win) ;
-void wxAssociateWindowWithWXWindow(WXWindow inWindowRef, wxNonOwnedWindow *win)
-{
-    // adding NULL WindowRef is (first) surely a result of an error and
-    // nothing else :-)
-    wxCHECK_RET( inWindowRef != (WXWindow) NULL, wxT("attempt to add a NULL WindowRef to window list") );
-
-    wxWinMacWindowList[inWindowRef] = win;
-}
-
-void wxRemoveWXWindowAssociation(wxNonOwnedWindow *win) ;
-void wxRemoveWXWindowAssociation(wxNonOwnedWindow *win)
-{
-    MacWindowMap::iterator it;
-    for ( it = wxWinMacWindowList.begin(); it != wxWinMacWindowList.end(); ++it )
-    {
-        if ( it->second == win )
-        {
-            wxWinMacWindowList.erase(it);
-            break;
-        }
-    }
-}
-
-wxNonOwnedWindow* wxNonOwnedWindow::GetFromWXWindow( WXWindow win )
-{
-    return wxFindWindowFromWXWindow( win );
-}
-
-// ----------------------------------------------------------------------------
-// wxNonOwnedWindow creation
-// ----------------------------------------------------------------------------
-
-IMPLEMENT_ABSTRACT_CLASS( wxNonOwnedWindowImpl , wxObject )
-
-wxNonOwnedWindow *wxNonOwnedWindow::s_macDeactivateWindow = NULL;
-
-void wxNonOwnedWindow::Init()
-{
-    m_nowpeer = NULL;
-}
-
-bool wxNonOwnedWindow::Create(wxWindow *parent,
-                                 wxWindowID id,
-                                 const wxPoint& pos,
-                                 const wxSize& size,
-                                 long style,
-                                 const wxString& name)
-{
-    // init our fields
-    Init();
-
-    m_windowStyle = style;
-
-    SetName( name );
-
-    m_windowId = id == -1 ? NewControlId() : id;
-    m_windowStyle = style;
-    m_isShown = false;
-
-    // create frame.
-    int x = (int)pos.x;
-    int y = (int)pos.y;
-
-    wxRect display = wxGetClientDisplayRect() ;
-
-    if ( x == wxDefaultPosition.x )
-        x = display.x ;
-
-    if ( y == wxDefaultPosition.y )
-        y = display.y ;
-
-    int w = WidthDefault(size.x);
-    int h = HeightDefault(size.y);
-
-    // temporary define, TODO
-#if wxOSX_USE_CARBON
-    m_nowpeer = new wxNonOwnedWindowCarbonImpl( this );    
-#elif wxOSX_USE_COCOA
-    m_nowpeer = new wxNonOwnedWindowCocoaImpl( this );    
-#elif wxOSX_USE_IPHONE
-    m_nowpeer = new wxNonOwnedWindowIPhoneImpl( this );  
-#endif
-
-    m_nowpeer->Create( parent, wxPoint(x,y) , wxSize(w,h) , style , GetExtraStyle(), name ) ;
-    wxAssociateWindowWithWXWindow( m_nowpeer->GetWXWindow() , this ) ;
-#if wxOSX_USE_CARBON
-    // temporary cast, TODO
-    m_peer = (wxMacControl*) wxWidgetImpl::CreateContentView(this);
-#else
-    m_peer = wxWidgetImpl::CreateContentView(this);
-#endif
-
-    DoSetWindowVariant( m_windowVariant ) ;
-
-    wxWindowCreateEvent event(this);
-    HandleWindowEvent(event);
-
-    SetBackgroundColour(wxSystemSettings::GetColour( wxSYS_COLOUR_3DFACE ));
-
-    if ( parent )
-        parent->AddChild(this);
-
-    return true;
-}
-
-wxNonOwnedWindow::~wxNonOwnedWindow()
-{
-    wxRemoveWXWindowAssociation( this ) ;
-    if ( m_nowpeer )
-        m_nowpeer->Destroy();
-
-    // avoid dangling refs
-    if ( s_macDeactivateWindow == this )
-        s_macDeactivateWindow = NULL;
-}
-
-// ----------------------------------------------------------------------------
-// wxNonOwnedWindow misc
-// ----------------------------------------------------------------------------
-
-bool wxNonOwnedWindow::ShowWithEffect(wxShowEffect effect,
-                                unsigned timeout )
-{ 
-    if ( !wxWindow::Show(true) )
-        return false;
-
-    // because apps expect a size event to occur at this moment
-    wxSizeEvent event(GetSize() , m_windowId);
-    event.SetEventObject(this);
-    HandleWindowEvent(event);
-
-
-    return m_nowpeer->ShowWithEffect(true, effect, timeout); 
-}
-
-bool wxNonOwnedWindow::HideWithEffect(wxShowEffect effect,
-                                unsigned timeout )
-{ 
-    if ( !wxWindow::Show(false) )
-        return false;
-
-    return m_nowpeer->ShowWithEffect(false, effect, timeout); 
-}
-
-wxPoint wxNonOwnedWindow::GetClientAreaOrigin() const
-{
-    int left, top, width, height;
-    m_nowpeer->GetContentArea(left, top, width, height);
-    return wxPoint(left, top);
-}
-
-bool wxNonOwnedWindow::SetBackgroundColour(const wxColour& c )
-{        
-    if ( !wxWindow::SetBackgroundColour(c) && m_hasBgCol )
-        return false ;
-    
-    if ( GetBackgroundStyle() != wxBG_STYLE_CUSTOM )
-    {
-        return m_nowpeer->SetBackgroundColour(c);
-    }
-    return true;
-}    
-
-// Raise the window to the top of the Z order
-void wxNonOwnedWindow::Raise()
-{
-    m_nowpeer->Raise();
-}
-
-// Lower the window to the bottom of the Z order
-void wxNonOwnedWindow::Lower()
-{
-    m_nowpeer->Lower();
-}
-
-void wxNonOwnedWindow::MacDelayedDeactivation(long timestamp)
-{
-    if (s_macDeactivateWindow)
-    {
-        wxLogTrace(TRACE_ACTIVATE,
-                   wxT("Doing delayed deactivation of %p"),
-                   s_macDeactivateWindow);
-
-        s_macDeactivateWindow->MacActivate(timestamp, false);
-    }
-}
-
-void wxNonOwnedWindow::MacActivate( long timestamp , bool WXUNUSED(inIsActivating) )
-{
-    wxLogTrace(TRACE_ACTIVATE, wxT("TopLevel=%p::MacActivate"), this);
-
-    if (s_macDeactivateWindow == this)
-        s_macDeactivateWindow = NULL;
-
-    MacDelayedDeactivation(timestamp);
-}
-
-bool wxNonOwnedWindow::Show(bool show)
-{
-    if ( !wxWindow::Show(show) )
-        return false;
-
-    if ( m_nowpeer )
-        m_nowpeer->Show(show);
-    
-    if ( show )
-    {
-        // because apps expect a size event to occur at this moment
-        wxSizeEvent event(GetSize() , m_windowId);
-        event.SetEventObject(this);
-        HandleWindowEvent(event);
-    }
-    
-    return true ;
-}
-
-bool wxNonOwnedWindow::SetTransparent(wxByte alpha)
-{
-    return m_nowpeer->SetTransparent(alpha);
-}
-
-
-bool wxNonOwnedWindow::CanSetTransparent()
-{
-    return m_nowpeer->CanSetTransparent();
-}
-
-
-void wxNonOwnedWindow::SetExtraStyle(long exStyle)
-{
-    if ( GetExtraStyle() == exStyle )
-        return ;
-
-    wxWindow::SetExtraStyle( exStyle ) ;
-
-    if ( m_nowpeer )
-        m_nowpeer->SetExtraStyle(exStyle);
-}
-
-bool wxNonOwnedWindow::SetBackgroundStyle(wxBackgroundStyle style)
-{
-    if ( !wxWindow::SetBackgroundStyle(style) )
-        return false ;
-        
-    return m_nowpeer->SetBackgroundStyle(style);
-}
-
-void wxNonOwnedWindow::DoMoveWindow(int x, int y, int width, int height)
-{
-    m_cachedClippedRectValid = false ;
-
-    m_nowpeer->MoveWindow(x, y, width, height);
-    wxWindowMac::MacSuperChangedPosition() ; // like this only children will be notified
-}
-
-void wxNonOwnedWindow::DoGetPosition( int *x, int *y ) const
-{
-    int x1,y1 ;
-    m_nowpeer->GetPosition(x1, y1);
-
-    if (x)
-       *x = x1 ;
-    if (y)
-       *y = y1 ;
-}
-
-void wxNonOwnedWindow::DoGetSize( int *width, int *height ) const
-{
-    int w,h;
-    
-    m_nowpeer->GetSize(w, h);
-
-    if (width)
-       *width = w ;
-    if (height)
-       *height = h ;
-}
-
-void wxNonOwnedWindow::DoGetClientSize( int *width, int *height ) const
-{
-    int left, top, w, h;
-    m_nowpeer->GetContentArea(left, top, w, h);
-
-    if (width)
-       *width = w ;
-    if (height)
-       *height = h ;
-}
-
-
-void wxNonOwnedWindow::Update()
-{
-    m_nowpeer->Update();
-}
-
-WXWindow wxNonOwnedWindow::GetWXWindow() const
-{
-    return m_nowpeer ? m_nowpeer->GetWXWindow() : NULL;
-}
-
-// ---------------------------------------------------------------------------
-// Shape implementation
-// ---------------------------------------------------------------------------
-
-
-bool wxNonOwnedWindow::SetShape(const wxRegion& region)
-{
-    wxCHECK_MSG( HasFlag(wxFRAME_SHAPED), false,
-                 _T("Shaped windows must be created with the wxFRAME_SHAPED style."));
-
-    // The empty region signifies that the shape
-    // should be removed from the window.
-    if ( region.IsEmpty() )
-    {
-        wxSize sz = GetClientSize();
-        wxRegion rgn(0, 0, sz.x, sz.y);
-        if ( rgn.IsEmpty() )
-            return false ;
-        else
-            return SetShape(rgn);
-    }
-
-    return m_nowpeer->SetShape(region);
-}
-
-//
-// TODO END move to nonowned_osx.cpp
-//
-
-#if wxOSX_USE_CARBON
-
 IMPLEMENT_DYNAMIC_CLASS( wxNonOwnedWindowCarbonImpl , wxNonOwnedWindowImpl )
-
 
 WXWindow wxNonOwnedWindowCarbonImpl::GetWXWindow() const
 {
@@ -585,7 +226,10 @@ void wxNonOwnedWindowCarbonImpl::MacSetUnifiedAppearance( bool set )
     // for wx.
     // TODO: Determine if we need this on Leopard as well. (should be harmless either way,
     // though)
+    // since when creating the peering is not yet completely set-up we call both setters 
+    // explicitely
     m_wxPeer->SetBackgroundColour( wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW) ) ;
+    SetBackgroundColour( wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW) ) ;
 }
 
 
@@ -595,12 +239,6 @@ void wxNonOwnedWindowCarbonImpl::MacSetUnifiedAppearance( bool set )
 
 static pascal long wxShapedMacWindowDef(short varCode, WindowRef window, SInt16 message, SInt32 param);
 
-// ============================================================================
-// wxNonOwnedWindow implementation
-// ============================================================================
-
-// unified title and toolbar constant - not in Tiger headers, so we duplicate it here
-#define kWindowUnifiedTitleAndToolbarAttribute (1 << 7)
 
 // ---------------------------------------------------------------------------
 // Carbon Events
@@ -1036,6 +674,18 @@ wxMacTopLevelMouseEventHandler(EventHandlerCallRef WXUNUSED(handler),
             ::HiliteMenu(0);
             result = noErr ;
         }
+    } 
+    else if ( window && windowPart == inProxyIcon )
+    {
+        // special case proxy icon bar, as we are having a low-level runloop we must do it ourselves
+        if ( cEvent.GetKind() == kEventMouseDown )
+        {
+            if ( ::TrackWindowProxyDrag( window, screenMouseLocation ) != errUserWantsToDragWindow )
+            {
+                // TODO Track change of file path and report back
+                result = noErr ;
+            }
+        }
     }
     else if ( currentMouseWindow )
     {
@@ -1138,22 +788,14 @@ wxNonOwnedWindowEventHandler(EventHandlerCallRef WXUNUSED(handler),
     {
         case kEventWindowActivated :
         {
-            toplevelWindow->MacActivate( cEvent.GetTicks() , true) ;
-            wxActivateEvent wxevent(wxEVT_ACTIVATE, true , toplevelWindow->GetId());
-            wxevent.SetTimestamp( cEvent.GetTicks() ) ;
-            wxevent.SetEventObject(toplevelWindow);
-            toplevelWindow->HandleWindowEvent(wxevent);
+            toplevelWindow->HandleActivated( cEvent.GetTicks() , true) ;
             // we still sending an eventNotHandledErr in order to allow for default processing
         }
             break ;
 
         case kEventWindowDeactivated :
         {
-            toplevelWindow->MacActivate(cEvent.GetTicks() , false) ;
-            wxActivateEvent wxevent(wxEVT_ACTIVATE, false , toplevelWindow->GetId());
-            wxevent.SetTimestamp( cEvent.GetTicks() ) ;
-            wxevent.SetEventObject(toplevelWindow);
-            toplevelWindow->HandleWindowEvent(wxevent);
+            toplevelWindow->HandleActivated( cEvent.GetTicks() , false) ;
             // we still sending an eventNotHandledErr in order to allow for default processing
         }
             break ;
@@ -1175,27 +817,12 @@ wxNonOwnedWindowEventHandler(EventHandlerCallRef WXUNUSED(handler),
             wxRect r( newRect.left , newRect.top , newRect.right - newRect.left , newRect.bottom - newRect.top ) ;
             if ( attributes & kWindowBoundsChangeSizeChanged )
             {
-#ifndef __WXUNIVERSAL__
-                // according to the other ports we handle this within the OS level
-                // resize event, not within a wxSizeEvent
-                wxFrame *frame = wxDynamicCast( toplevelWindow , wxFrame ) ;
-                if ( frame )
-                {
-                    frame->PositionBars();
-                }
-#endif
-                wxSizeEvent event( r.GetSize() , toplevelWindow->GetId() ) ;
-                event.SetEventObject( toplevelWindow ) ;
-
-                toplevelWindow->HandleWindowEvent(event) ;
-                toplevelWindow->wxWindowMac::MacSuperChangedPosition() ; // like this only children will be notified
+                toplevelWindow->HandleResized(cEvent.GetTicks() ) ;
             }
 
             if ( attributes & kWindowBoundsChangeOriginChanged )
             {
-                wxMoveEvent event( r.GetLeftTop() , toplevelWindow->GetId() ) ;
-                event.SetEventObject( toplevelWindow ) ;
-                toplevelWindow->HandleWindowEvent(event) ;
+                toplevelWindow->HandleMoved(cEvent.GetTicks() ) ;
             }
 
             result = noErr ;
@@ -1214,31 +841,17 @@ wxNonOwnedWindowEventHandler(EventHandlerCallRef WXUNUSED(handler),
 
                 toplevelWindow->GetNonOwnedPeer()->GetContentArea(left, top, right, bottom);
 
-                wxRect r(
+                wxRect adjustR(
                     newRect.left - left,
                     newRect.top - top,
                     newRect.right - newRect.left + left + right,
                     newRect.bottom - newRect.top + top + bottom ) ;
 
-                // this is a EVT_SIZING not a EVT_SIZE type !
-                wxSizeEvent wxevent( r , toplevelWindow->GetId() ) ;
-                wxevent.SetEventObject( toplevelWindow ) ;
-                wxRect adjustR = r ;
-                if ( toplevelWindow->HandleWindowEvent(wxevent) )
-                    adjustR = wxevent.GetRect() ;
-
-                if ( toplevelWindow->GetMaxWidth() != -1 && adjustR.GetWidth() > toplevelWindow->GetMaxWidth() )
-                    adjustR.SetWidth( toplevelWindow->GetMaxWidth() ) ;
-                if ( toplevelWindow->GetMaxHeight() != -1 && adjustR.GetHeight() > toplevelWindow->GetMaxHeight() )
-                    adjustR.SetHeight( toplevelWindow->GetMaxHeight() ) ;
-                if ( toplevelWindow->GetMinWidth() != -1 && adjustR.GetWidth() < toplevelWindow->GetMinWidth() )
-                    adjustR.SetWidth( toplevelWindow->GetMinWidth() ) ;
-                if ( toplevelWindow->GetMinHeight() != -1 && adjustR.GetHeight() < toplevelWindow->GetMinHeight() )
-                    adjustR.SetHeight( toplevelWindow->GetMinHeight() ) ;
+                toplevelWindow->HandleResizing( cEvent.GetTicks(), &adjustR );
+                
                 const Rect adjustedRect = { adjustR.y + top  , adjustR.x + left , adjustR.y + adjustR.height - bottom , adjustR.x + adjustR.width - right } ;
                 if ( !EqualRect( &newRect , &adjustedRect ) )
                     cEvent.SetParameter<Rect>( kEventParamCurrentBounds , &adjustedRect ) ;
-                toplevelWindow->wxWindowMac::MacSuperChangedPosition() ; // like this only children will be notified
             }
 
             result = noErr ;
@@ -1292,7 +905,12 @@ pascal OSStatus wxNonOwnedEventHandler( EventHandlerCallRef handler , EventRef e
     switch ( GetEventClass( event ) )
     {
         case kEventClassTextInput :
-            result = wxMacUnicodeTextEventHandler( handler, event , data ) ;
+        {
+            // TODO remove as soon as all events are on implementation classes only
+            wxNonOwnedWindow* toplevelWindow = data ? ((wxNonOwnedWindowImpl*) data)->GetWXPeer() : NULL;
+
+            result = wxMacUnicodeTextEventHandler( handler, event , toplevelWindow ) ;
+        }
             break ;
 
         case kEventClassKeyboard :
@@ -1498,6 +1116,12 @@ wxNonOwnedWindowCarbonImpl::~wxNonOwnedWindowCarbonImpl()
 
 void wxNonOwnedWindowCarbonImpl::Destroy()
 {    
+    if ( m_macEventHandler )
+    {
+        ::RemoveEventHandler((EventHandlerRef) m_macEventHandler);
+        m_macEventHandler = NULL ;
+    }
+
     wxPendingDelete.Append( new wxDeferredObjectDeleter( this ) ) ;
 }
 
@@ -2014,4 +1638,11 @@ void wxNonOwnedWindowCarbonImpl::WindowToScreen( int *x, int *y )
     if ( y )
         *y = p.y;
 }
-#endif // wxOSX_USE_CARBON
+
+wxNonOwnedWindowImpl* wxNonOwnedWindowImpl::CreateNonOwnedWindow( wxNonOwnedWindow* wxpeer, wxWindow* parent, const wxPoint& pos, const wxSize& size,
+    long style, long extraStyle, const wxString& name )
+{
+    wxNonOwnedWindowImpl* now = new wxNonOwnedWindowCarbonImpl( wxpeer );
+    now->Create( parent, pos, size, style , extraStyle, name );
+    return now;
+}

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/corefoundation/utilsexec_cf.cpp
+// Name:        src/osx/corefoundation/utilsexec_cf.cpp
 // Purpose:     Execution-related utilities for Darwin
 // Author:      David Elliott, Ryan Norton (wxMacExecute)
 // Modified by: Stefan Csomor (added necessary wxT for unicode builds)
@@ -7,7 +7,7 @@
 // RCS-ID:      $Id$
 // Copyright:   (c) David Elliott, Ryan Norton
 // Licence:     wxWindows licence
-// Notes:       This code comes from src/mac/carbon/utilsexc.cpp,1.11
+// Notes:       This code comes from src/osx/carbon/utilsexc.cpp,1.11
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"

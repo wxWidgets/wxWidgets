@@ -13,15 +13,6 @@
 #ifndef _WX_MAC_CHECKLST_H_
 #define _WX_MAC_CHECKLST_H_
 
-class wxMacCheckListControl
-{
-public :
-    virtual bool            MacIsChecked(unsigned int n) const = 0;
-    virtual void            MacCheck(unsigned int n, bool bCheck = true) = 0;
-
-    virtual ~wxMacCheckListControl() { }
-};
-
 class WXDLLIMPEXP_CORE wxCheckListBox : public wxCheckListBoxBase
 {
 public:
@@ -77,9 +68,22 @@ public:
     bool  IsChecked(unsigned int uiIndex) const;
     void  Check(unsigned int uiIndex, bool bCheck = true);
 
-    wxMacCheckListControl* GetPeer() const;
+    // data callbacks
+    virtual void GetValueCallback( unsigned int n, wxListWidgetColumn* col , wxListWidgetCellValue& value );
+    virtual void SetValueCallback( unsigned int n, wxListWidgetColumn* col , wxListWidgetCellValue& value );
 
 protected:
+   // override all methods which add/delete items to update m_checks array as
+    // well
+    virtual void OnItemInserted(unsigned int pos);
+    virtual void DoDeleteOneItem(unsigned int n);
+    virtual void DoClear();
+
+    // the array containing the checked status of the items
+    wxArrayInt m_checks;
+    
+    wxListWidgetColumn* m_checkColumn ;
+
     void Init();
 
 private:

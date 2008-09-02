@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/metafile.cpp
+// Name:        src/osx/carbon/metafile.cpp
 // Purpose:     wxMetaFile, wxMetaFileDC etc. These classes are optional.
 // Author:      Stefan Csomor
 // Modified by:
@@ -24,7 +24,7 @@
 
 #include "wx/metafile.h"
 #include "wx/clipbrd.h"
-#include "wx/osx/uma.h"
+#include "wx/osx/private.h"
 #include "wx/graphics.h"
 #include "wx/osx/carbon/metafile.h"
 

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/icon.cpp
+// Name:        src/osx/carbon/icon.cpp
 // Purpose:     wxIcon class
 // Author:      Stefan Csomor
 // Modified by:
@@ -53,7 +53,7 @@ private:
 
 wxIconRefData::wxIconRefData( WXHICON icon, int desiredWidth, int desiredHeight )
 {
-    m_iconRef = MAC_WXHICON( icon ) ;
+    m_iconRef = (IconRef)( icon ) ;
 
     // Standard sizes
     SetWidth( desiredWidth == -1 ? 32 : desiredWidth ) ;

@@ -24,8 +24,71 @@
     extern wxRect wxFromNSRect( NSView* parent, const NSRect& rect );
     extern NSPoint wxToNSPoint( NSView* parent, const wxPoint& p );
     extern wxPoint wxFromNSPoint( NSView* parent, const NSPoint& p );
+    
+    // used for many wxControls
+    
+    @interface wxNSButton : NSButton
+    {
+        wxWidgetImpl* impl;
+    }
+
+    - (void)setImplementation: (wxWidgetImpl *) theImplementation;
+    - (wxWidgetImpl*) implementation;
+    - (BOOL) isFlipped;
+    - (void) clickedAction: (id) sender;
+
+    @end
+
+    @interface wxNSBox : NSBox
+    {
+        wxWidgetImpl* impl;
+    }
+
+    - (void)setImplementation: (wxWidgetImpl *) theImplementation;
+    - (wxWidgetImpl*) implementation;
+    - (BOOL) isFlipped;
+
+    @end
+
+    @interface wxNSTextField : NSTextField
+    {
+        wxWidgetImpl* impl;
+    }
+
+    - (void)setImplementation: (wxWidgetImpl *) theImplementation;
+    - (wxWidgetImpl*) implementation;
+    - (BOOL) isFlipped;
+
+    @end
+
+    NSRect WXDLLIMPEXP_CORE wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const wxSize &size , 
+        bool adjustForOrigin = true );
 
 #endif // __OBJC__
+
+//
+// shared between Cocoa and Carbon
+//
+
+// bring in themeing types without pulling in the headers
+
+typedef SInt16 ThemeBrush;
+long UMAGetSystemVersion() ;
+CGColorRef wxMacCreateCGColorFromHITheme( ThemeBrush brush ) ;
+OSStatus WXDLLIMPEXP_CORE wxMacDrawCGImage(
+                               CGContextRef    inContext,
+                               const CGRect *  inBounds,
+                               CGImageRef      inImage) ;
+WX_NSImage  wxOSXCreateNSImageFromCGImage( CGImageRef image );
+
+WXDLLIMPEXP_BASE void wxMacStringToPascal( const wxString&from , StringPtr to );
+WXDLLIMPEXP_BASE wxString wxMacFSRefToPath( const FSRef *fsRef , CFStringRef additionalPathComponent = NULL );
+WXDLLIMPEXP_BASE OSStatus wxMacPathToFSRef( const wxString&path , FSRef *fsRef );
+WXDLLIMPEXP_BASE wxString wxMacHFSUniStrToString( ConstHFSUniStr255Param uniname );
+
+//
+//
+//
 
 #if wxUSE_GUI
 
@@ -39,7 +102,8 @@ public :
     void Init();
     
     virtual bool        IsVisible() const ;
-    
+    virtual void        SetVisibility(bool);
+
     virtual void        Raise();
     
     virtual void        Lower();
@@ -48,10 +112,13 @@ public :
 
     virtual WXWidget    GetWXWidget() const { return m_osxView; }
 
+    virtual void        SetBackgroundColour(const wxColour&);
+
     virtual void        GetContentArea( int &left , int &top , int &width , int &height ) const;
     virtual void        Move(int x, int y, int width, int height);
     virtual void        GetPosition( int &x, int &y ) const;
     virtual void        GetSize( int &width, int &height ) const;
+    virtual void        SetControlSize( wxWindowVariant variant );
 
     virtual void        SetNeedsDisplay( const wxRect* where = NULL );
     virtual bool        GetNeedsDisplay() const;
@@ -63,6 +130,24 @@ public :
 
     void                RemoveFromParent();
     void                Embed( wxWidgetImpl *parent );
+
+    void                SetDefaultButton( bool isDefault );
+    void                PerformClick();
+    void                SetLabel(const wxString& title, wxFontEncoding encoding);
+
+    wxInt32             GetValue() const;
+    void                SetValue( wxInt32 v );
+    void                SetBitmap( const wxBitmap& bitmap );
+    void                SetupTabs( const wxNotebook &notebook );
+    void                GetBestRect( wxRect *r ) const;
+    bool                IsEnabled() const;
+    void                Enable( bool enable );
+    bool                ButtonClickDidStateChange() { return true ;}
+    void                SetMinimum( wxInt32 v );
+    void                SetMaximum( wxInt32 v );
+    void                PulseGauge();
+    void                SetScrollThumb( wxInt32 value, wxInt32 thumbSize );
+
 protected:
     WXWidget m_osxView;
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetCocoaImpl)
@@ -141,6 +226,27 @@ typedef struct tagClassicCursor
     wxUint16 mask[16];
     wxInt16 hotspot[2];
 }ClassicCursor;
+
+const short kwxCursorBullseye = 0;
+const short kwxCursorBlank = 1;
+const short kwxCursorPencil = 2;
+const short kwxCursorMagnifier = 3;
+const short kwxCursorNoEntry = 4;
+const short kwxCursorPaintBrush = 5;
+const short kwxCursorPointRight = 6;
+const short kwxCursorPointLeft = 7;
+const short kwxCursorQuestionArrow = 8;
+const short kwxCursorRightArrow = 9;
+const short kwxCursorSizeNS = 10;
+const short kwxCursorSize = 11;
+const short kwxCursorSizeNESW = 12;
+const short kwxCursorSizeNWSE = 13;
+const short kwxCursorRoller = 14;
+const short kwxCursorLast = kwxCursorRoller;
+
+// exposing our fallback cursor map
+
+extern ClassicCursor gMacCursors[];
 
 #endif
 

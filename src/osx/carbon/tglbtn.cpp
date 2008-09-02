@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/tglbtn.cpp
+// Name:        src/osx/carbon/tglbtn.cpp
 // Purpose:     Definition of the wxToggleButton class, which implements a
 //              toggle button under wxMac.
 // Author:      Stefan Csomor
@@ -23,152 +23,47 @@
 #if wxUSE_TOGGLEBTN
 
 #include "wx/tglbtn.h"
-#include "wx/osx/uma.h"
+#include "wx/osx/private.h"
 // Button
 
-// ----------------------------------------------------------------------------
-// macros
-// ----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxToggleButton, wxControl)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED)
-
-// ============================================================================
-// implementation
-// ============================================================================
-// ----------------------------------------------------------------------------
-// wxToggleButton
-// ----------------------------------------------------------------------------
-
-bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
-                            const wxString& label,
-                            const wxPoint& pos,
-                            const wxSize& size, long style,
-                            const wxValidator& validator,
-                            const wxString& name)
+wxWidgetImplType* wxWidgetImpl::CreateToggleButton( wxWindowMac* wxpeer, 
+                                    wxWindowMac* parent, 
+                                    wxWindowID id, 
+                                    const wxString& label,
+                                    const wxPoint& pos, 
+                                    const wxSize& size,
+                                    long style, 
+                                    long extraStyle)
 {
-    m_macIsUserPane = FALSE ;
+    Rect bounds = wxMacGetBoundsForControl( wxpeer , pos , size ) ;
     
-    if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
-        return false;
-    
-    m_labelOrig = m_label = label ;
-
-    Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
-    
-    m_peer = new wxMacControl(this) ;
+    wxMacControl* peer = new wxMacControl(wxpeer) ;
     verify_noerr ( CreateBevelButtonControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , CFSTR("") , 
-        kControlBevelButtonNormalBevel , kControlBehaviorToggles , NULL , 0 , 0 , 0 , m_peer->GetControlRefAddr() ) );
-    
-    
-    MacPostControlCreate(pos,size) ;
-    
-  return TRUE;
+        kControlBevelButtonNormalBevel , kControlBehaviorToggles , NULL , 0 , 0 , 0 , peer->GetControlRefAddr() ) );
+    return peer;
 }
-
-wxSize wxToggleButton::DoGetBestSize() const
-{
-    int wBtn = 70 ; 
-    int hBtn = 20 ;
-
-    int lBtn = m_label.Length() * 8 + 12 ;
-    if (lBtn > wBtn) 
-        wBtn = lBtn;
-
-    return wxSize ( wBtn , hBtn ) ;
-}
-
-void wxToggleButton::SetValue(bool val)
-{
-    m_peer->SetValue( val ) ;
-}
-
-bool wxToggleButton::GetValue() const
-{
-    return m_peer->GetValue() ;
-}
-
-void wxToggleButton::Command(wxCommandEvent & event)
-{
-   SetValue((event.GetInt() != 0));
-   ProcessCommand(event);
-}
-
-wxInt32 wxToggleButton::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) ) 
-{
-    wxCommandEvent event(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, m_windowId);
-    event.SetInt(GetValue());
-    event.SetEventObject(this);
-    ProcessCommand(event);
-    return noErr ;
-}
-
-// ----------------------------------------------------------------------------
-// wxBitmapToggleButton
-// ----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxBitmapToggleButton, wxControl)
-
-bool wxBitmapToggleButton::Create(wxWindow *parent, wxWindowID id,
-                            const wxBitmap& label,
-                            const wxPoint& pos,
-                            const wxSize& size, long style,
-                            const wxValidator& validator,
-                            const wxString& name)
-{
-    m_macIsUserPane = FALSE ;
     
-    m_bitmap = label;
-    
-    if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
-        return false;
-    
-    Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
-    
-    m_peer = new wxMacControl(this) ;
+wxWidgetImplType* wxWidgetImpl::CreateBitmapToggleButton( wxWindowMac* wxpeer, 
+                                    wxWindowMac* parent, 
+                                    wxWindowID id, 
+                                    const wxBitmap& label,
+                                    const wxPoint& pos, 
+                                    const wxSize& size,
+                                    long style, 
+                                    long extraStyle)
+{    
+    Rect bounds = wxMacGetBoundsForControl( wxpeer , pos , size ) ;
+    wxMacControl* peer = new wxMacControl(wxpeer) ;
     
     ControlButtonContentInfo info;
-    wxMacCreateBitmapButton( &info, m_bitmap );
+    wxMacCreateBitmapButton( &info, label );
     verify_noerr ( CreateBevelButtonControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , CFSTR("") , 
-        kControlBevelButtonNormalBevel , kControlBehaviorOffsetContents | kControlBehaviorToggles , &info , 0 , 0 , 0 , m_peer->GetControlRefAddr() ) );
-    
-    MacPostControlCreate(pos,size) ;
-    
-    return TRUE;
+        kControlBevelButtonNormalBevel , kControlBehaviorOffsetContents | kControlBehaviorToggles , &info , 0 , 0 , 0 , peer->GetControlRefAddr() ) );
+
+    wxMacReleaseBitmapButton( &info ) ;
+    return peer;
 }
 
-wxSize wxBitmapToggleButton::DoGetBestSize() const
-{
-    if (!m_bitmap.IsOk())
-       return wxSize(20,20);
-       
-    return wxSize ( m_bitmap.GetWidth()+6, m_bitmap.GetHeight()+6 ) ;
-}
-
-void wxBitmapToggleButton::SetValue(bool val)
-{
-    m_peer->SetValue( val ) ;
-}
-
-bool wxBitmapToggleButton::GetValue() const
-{
-    return m_peer->GetValue() ;
-}
-
-void wxBitmapToggleButton::Command(wxCommandEvent & event)
-{
-   SetValue((event.GetInt() != 0));
-   ProcessCommand(event);
-}
-
-wxInt32 wxBitmapToggleButton::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) ) 
-{
-    wxCommandEvent event(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, m_windowId);
-    event.SetInt(GetValue());
-    event.SetEventObject(this);
-    ProcessCommand(event);
-    return noErr ;
-}
 
 #endif // wxUSE_TOGGLEBTN
 

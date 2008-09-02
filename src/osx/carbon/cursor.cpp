@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/cursor.cpp
+// Name:        src/osx/carbon/cursor.cpp
 // Purpose:     wxCursor class
 // Author:      Stefan Csomor
 // Modified by:

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/statlmac.cpp
+// Name:        src/osx/carbon/statlmac.cpp
 // Purpose:     a generic wxStaticLine class
 // Author:      Vadim Zeitlin
 // Created:     28.06.99
@@ -31,38 +31,24 @@
     #include "wx/statbox.h"
 #endif
 
-#include "wx/osx/uma.h"
+#include "wx/osx/private.h"
 
 // ============================================================================
 // implementation
 // ============================================================================
 
-IMPLEMENT_DYNAMIC_CLASS(wxStaticLine, wxControl)
-
-// ----------------------------------------------------------------------------
-// wxStaticLine
-// ----------------------------------------------------------------------------
-
-bool wxStaticLine::Create( wxWindow *parent,
-                           wxWindowID id,
-                           const wxPoint &pos,
-                           const wxSize &size,
-                           long style,
-                           const wxString &name)
+wxWidgetImplType* wxWidgetImpl::CreateStaticLine( wxWindowMac* wxpeer, 
+                                    wxWindowMac* parent, 
+                                    wxWindowID id, 
+                                    const wxPoint& pos, 
+                                    const wxSize& size,
+                                    long style, 
+                                    long extraStyle) 
 {
-    m_macIsUserPane = false ;
-
-    if ( !wxStaticLineBase::Create(parent, id, pos, size,
-                                   style, wxDefaultValidator, name) )
-        return false;
-
-    Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
-    m_peer = new wxMacControl(this) ;
-    verify_noerr(CreateSeparatorControl(MAC_WXHWND(parent->MacGetTopLevelWindowRef()),&bounds, m_peer->GetControlRefAddr() ) ) ;
-
-    MacPostControlCreate(pos,size) ;
-
-    return true;
+    Rect bounds = wxMacGetBoundsForControl( wxpeer , pos , size ) ;
+    wxMacControl* peer = new wxMacControl(wxpeer) ;
+    verify_noerr(CreateSeparatorControl(MAC_WXHWND(parent->MacGetTopLevelWindowRef()),&bounds, peer->GetControlRefAddr() ) ) ;
+    return peer;
 }
 
 #endif //wxUSE_STATLINE

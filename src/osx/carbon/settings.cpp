@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/settings.cpp
+// Name:        src/osx/carbon/settings.cpp
 // Purpose:     wxSettings
 // Author:      Stefan Csomor
 // Modified by:
@@ -39,7 +39,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
     {
         case wxSYS_COLOUR_WINDOW:
 #if wxOSX_USE_COCOA_OR_CARBON
-            resultColor = wxColour(wxMacCreateCGColorFromHITheme( kThemeBrushDocumentWindowBackground )) ;
+            resultColor = wxColour(wxMacCreateCGColorFromHITheme( 15 /* kThemeBrushDocumentWindowBackground */ )) ;
 #else
             resultColor = *wxWHITE;
 #endif
@@ -55,7 +55,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         case wxSYS_COLOUR_BTNFACE:
         case wxSYS_COLOUR_MENUBAR:
 #if wxOSX_USE_COCOA_OR_CARBON
-            resultColor = wxColour(wxMacCreateCGColorFromHITheme(kThemeBrushDialogBackgroundActive));
+            resultColor = wxColour(wxMacCreateCGColorFromHITheme( 3 /* kThemeBrushDialogBackgroundActive */));
 #else
             resultColor = wxColour( 0xBE, 0xBE, 0xBE ) ;
 #endif
@@ -85,7 +85,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
             // NB: enable this case as desired
                 colorBrushID = kThemeBrushAlternatePrimaryHighlightColor;
 #else
-                colorBrushID = kThemeBrushPrimaryHighlightColor;
+                colorBrushID = -3 /* kThemeBrushPrimaryHighlightColor */;
 #endif
                 resultColor = wxColour( wxMacCreateCGColorFromHITheme(colorBrushID) );
 #else
@@ -110,7 +110,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         case wxSYS_COLOUR_HIGHLIGHTTEXT :
 #if wxOSX_USE_COCOA_OR_CARBON
             {
-                wxColour highlightcolor( wxMacCreateCGColorFromHITheme(kThemeBrushPrimaryHighlightColor) );
+                wxColour highlightcolor( wxMacCreateCGColorFromHITheme(-3 /* kThemeBrushPrimaryHighlightColor */) );
                 if ((highlightcolor.Red() + highlightcolor.Green()  + highlightcolor.Blue() ) == 0)
                     resultColor = *wxWHITE ;
                 else

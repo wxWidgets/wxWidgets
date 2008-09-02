@@ -44,20 +44,19 @@ class WXDLLIMPEXP_CORE wxApp: public wxAppBase
     virtual void SetPrintMode(int mode) { m_printMode = mode; }
     virtual int GetPrintMode() const { return m_printMode; }
 
+    // calling OnInit with an auto-release pool ready ...
+    virtual bool CallOnInit();
 #if wxUSE_GUI
     // setting up all MacOS Specific Event-Handlers etc
     virtual bool OnInitGui();
 #endif // wxUSE_GUI
-#if wxOSX_USE_IPHONE
-    virtual bool CallOnInit();
-    virtual int OnRun();
-#endif
+
+    virtual bool ProcessIdle();
+
     // implementation only
     void OnIdle(wxIdleEvent& event);
     void OnEndSession(wxCloseEvent& event);
     void OnQueryEndSession(wxCloseEvent& event);
-
-    void                  MacDoOneEvent() ;
 
 protected:
     int                   m_printMode; // wxPRINT_WINDOWS, wxPRINT_POSTSCRIPT
@@ -88,6 +87,8 @@ public:
 
 private:
     // mac specifics
+    virtual bool        DoInitGui();
+    virtual void        DoCleanUp();  
 
     WXEVENTHANDLERREF     m_macEventHandler ;
     WXEVENTHANDLERCALLREF m_macCurrentEventHandlerCallRef ;
@@ -101,7 +102,6 @@ public:
     static wxString       s_macHelpMenuTitleName ;
 
     WXEVENTREF            MacGetCurrentEvent() { return m_macCurrentEvent ; }
-    void                  MacHandleOneEvent( WXEVENTREF ev ) ;
 
     // For embedded use. By default does nothing.
     virtual void          MacHandleUnhandledEvent( WXEVENTREF ev );

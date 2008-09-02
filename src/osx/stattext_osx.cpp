@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/stattext.cpp
+// Name:        src/osx/carbon/stattext.cpp
 // Purpose:     wxStaticText
 // Author:      Stefan Csomor
 // Modified by:

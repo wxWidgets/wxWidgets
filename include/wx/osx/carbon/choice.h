@@ -28,7 +28,7 @@ class WXDLLIMPEXP_CORE wxChoice: public wxChoiceBase
 
 public:
     wxChoice()
-        : m_strings(), m_datas(), m_macPopUpMenuHandle(NULL)
+        : m_strings(), m_datas()
         {}
 
     virtual ~wxChoice() ;
@@ -76,7 +76,9 @@ public:
     virtual int FindString(const wxString& s, bool bCase = false) const;
     virtual wxString GetString(unsigned int n) const ;
     virtual void SetString(unsigned int pos, const wxString& s);
-    virtual wxInt32 MacControlHit( WXEVENTHANDLERREF handler , WXEVENTREF event ) ;
+    // osx specific event handling common for all osx-ports
+    
+    virtual bool        HandleClicked( double timestampsec );
 
 protected:
     virtual void DoDeleteOneItem(unsigned int n);
@@ -92,7 +94,7 @@ protected:
 
     wxArrayString m_strings;
     wxChoiceDataArray m_datas ;
-    WXHMENU    m_macPopUpMenuHandle ;
+    wxMenu*    m_popUpMenu ;
 };
 
 #endif

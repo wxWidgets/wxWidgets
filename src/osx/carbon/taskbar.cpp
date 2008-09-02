@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/taskbar.cpp
+// Name:        src/osx/carbon/taskbar.cpp
 // Purpose:     wxTaskBarIcon
 // Author:      Ryan Norton
 // Modified by:
@@ -186,9 +186,15 @@ wxDockEventHandler(EventHandlerCallRef WXUNUSED(inHandlerCallRef),
                     if (item && itemMenu )
                     {
                         if ( eventKind == kEventCommandProcess )
-                            err = itemMenu->MacHandleCommandProcess( item, id );
+                        {
+                            if ( itemMenu->HandleCommandProcess( item ) )
+                                err = noErr;
+                        }
                         else if ( eventKind == kEventCommandUpdateStatus )
-                            err = itemMenu->MacHandleCommandUpdateStatus( item, id );
+                        {
+                            if ( itemMenu->HandleCommandUpdateStatus( item ) )
+                                err = noErr;
+                        }
                     }
                 }
             }

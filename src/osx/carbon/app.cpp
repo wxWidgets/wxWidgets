@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/app.cpp
+// Name:        src/osx/carbon/app.cpp
 // Purpose:     wxApp
 // Author:      Stefan Csomor
 // Modified by:
@@ -40,6 +40,7 @@
 #include "wx/filename.h"
 #include "wx/link.h"
 #include "wx/thread.h"
+#include "wx/evtloop.h"
 
 #include <string.h>
 
@@ -56,13 +57,6 @@
 
 // Keep linker from discarding wxStockGDIMac
 wxFORCE_LINK_MODULE(gdiobj)
-
-// statics for implementation
-static bool s_inYield = false;
-static bool s_inReceiveEvent = false ;
-#if wxOSX_USE_COCOA_OR_CARBON
-static EventTime sleepTime = kEventDurationNoWait ;
-#endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
 BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
@@ -514,12 +508,12 @@ wxMenu* wxFindMenuFromMacCommand( const HICommand &command , wxMenuItem* &item )
         }
         else
         {
-            URefCon refCon ;
+            URefCon refCon = NULL ;
 
             GetMenuItemRefCon( command.menu.menuRef , command.menu.menuItemIndex , &refCon ) ;
             itemMenu = wxFindMenuFromMacMenu( command.menu.menuRef ) ;
-            if ( itemMenu != NULL )
-                item = (wxMenuItem*) refCon ;
+            if ( itemMenu != NULL && refCon != 0)
+                item = ((wxMenuItemImpl*) refCon)->GetWXPeer() ;
         }
     }
 #endif
@@ -569,22 +563,31 @@ wxMacAppMenuEventHandler( EventHandlerCallRef WXUNUSED(handler),
 
     if ( menu )
     {
-        wxEventType type=0;
-        MenuCommand cmd=0;
         switch (GetEventKind(event))
         {
             case kEventMenuOpening:
-                type = wxEVT_MENU_OPEN;
+                menu->HandleMenuOpened();
                 break;
 
             case kEventMenuClosed:
-                type = wxEVT_MENU_CLOSE;
+                menu->HandleMenuClosed();
                 break;
 
             case kEventMenuTargetItem:
-                cmd = cEvent.GetParameter<MenuCommand>(kEventParamMenuCommand,typeMenuCommand) ;
-                if (cmd != 0)
-                    type = wxEVT_MENU_HIGHLIGHT;
+                {
+                    HICommand command ;
+                    
+                    command.menu.menuRef = menuRef;
+                    command.menu.menuItemIndex = cEvent.GetParameter<MenuItemIndex>(kEventParamMenuItemIndex,typeMenuItemIndex) ;
+                    command.commandID = cEvent.GetParameter<MenuCommand>(kEventParamMenuCommand,typeMenuCommand) ;
+                    if (command.commandID != 0)
+                    {
+                        wxMenuItem* item = NULL ;
+                        wxMenu* itemMenu = wxFindMenuFromMacCommand( command , item ) ;
+                        if ( itemMenu && item )
+                            itemMenu->HandleMenuItemHighlighted( item );
+                    }
+                }
                 break;
 
             default:
@@ -592,23 +595,6 @@ wxMacAppMenuEventHandler( EventHandlerCallRef WXUNUSED(handler),
                 break;
         }
 
-        if ( type )
-        {
-            wxMenuEvent wxevent(type, cmd, menu);
-            wxevent.SetEventObject(menu);
-
-            wxEvtHandler* handler = menu->GetEventHandler();
-            if (handler && handler->ProcessEvent(wxevent))
-            {
-                // handled
-            }
-            else
-            {
-                wxWindow *win = menu->GetInvokingWindow();
-                if (win)
-                    win->HandleWindowEvent(wxevent);
-                }
-            }
     }
 #endif
     return eventNotHandledErr;
@@ -628,7 +614,6 @@ wxMacAppCommandEventHandler( EventHandlerCallRef WXUNUSED(handler) ,
 
     wxMenuItem* item = NULL ;
     wxMenu* itemMenu = wxFindMenuFromMacCommand( command , item ) ;
-    int id = wxMacCommandToId( command.commandID ) ;
 
     if ( item )
     {
@@ -637,11 +622,13 @@ wxMacAppCommandEventHandler( EventHandlerCallRef WXUNUSED(handler) ,
         switch ( cEvent.GetKind() )
         {
             case kEventProcessCommand :
-                result = itemMenu->MacHandleCommandProcess( item, id );
+                if ( itemMenu->HandleCommandProcess( item ) )
+                    result = noErr;
             break ;
 
         case kEventCommandUpdateStatus:
-                result = itemMenu->MacHandleCommandUpdateStatus( item, id );
+            if ( itemMenu->HandleCommandUpdateStatus( item ) )
+                    result = noErr;
             break ;
 
         default :
@@ -843,21 +830,43 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 
     /* connect posted events to common-mode run loop so that wxPostEvent events
        are handled even while we're in the menu or on a scrollbar */
+       /*
     CFRunLoopSourceContext event_posted_context = {0};
     event_posted_context.perform = macPostedEventCallback;
     m_macEventPosted = CFRunLoopSourceCreate(NULL,0,&event_posted_context);
     CFRunLoopAddSource(CFRunLoopGetCurrent(), m_macEventPosted, kCFRunLoopCommonModes);
 	// run loop takes ownership
 	CFRelease(m_macEventPosted);
-
+        */
     return true;
+}
+
+bool wxApp::CallOnInit()
+{
+    wxMacAutoreleasePool autoreleasepool;
+    return OnInit();
 }
 
 bool wxApp::OnInitGui()
 {
     if ( !wxAppBase::OnInitGui() )
         return false ;
+
+    if ( !DoInitGui() )
+        return false;
+
+    return true ;
+}
+
+bool wxApp::ProcessIdle()
+{
+    wxMacAutoreleasePool autoreleasepool;
+    return wxAppBase::ProcessIdle();
+}
+
 #if wxOSX_USE_CARBON
+bool wxApp::DoInitGui()
+{
     InstallStandardEventHandler( GetApplicationEventTarget() ) ;
     if (!sm_isEmbedded)
     {
@@ -865,9 +874,7 @@ bool wxApp::OnInitGui()
             GetwxMacAppEventHandlerUPP(),
             GetEventTypeCount(eventList), eventList, wxTheApp, (EventHandlerRef *)&(wxTheApp->m_macEventHandler));
     }
-#endif
 
-#if wxOSX_USE_COCOA_OR_CARBON
     if (!sm_isEmbedded)
     {
         sODocHandler = NewAEEventHandlerUPP(AEHandleODoc) ;
@@ -890,32 +897,15 @@ bool wxApp::OnInitGui()
         AEInstallEventHandler( kCoreEventClass , kAEQuitApplication ,
                                sQuitHandler , 0 , FALSE ) ;
     }
-#endif
-#if wxOSX_USE_CARBON
+
     if ( !wxMacInitCocoa() )
         return false;
-#endif
-
-    return true ;
+        
+    return true;
 }
 
-void wxApp::CleanUp()
+void wxApp::DoCleanUp()
 {
-#if wxUSE_TOOLTIPS
-    wxToolTip::RemoveToolTips() ;
-#endif
-
-    if (m_macEventPosted)
-	{
-		CFRunLoopRemoveSource(CFRunLoopGetCurrent(), m_macEventPosted, kCFRunLoopCommonModes);
-		m_macEventPosted = NULL;
-	}
-
-    // One last chance for pending objects to be cleaned up
-    wxTheApp->DeletePendingObjects();
-
-#if wxOSX_USE_COCOA_OR_CARBON
-
     if (!sm_isEmbedded)
         RemoveEventHandler( (EventHandlerRef)(wxTheApp->m_macEventHandler) );
 
@@ -941,8 +931,23 @@ void wxApp::CleanUp()
         DisposeAEEventHandlerUPP( sRAppHandler ) ;
         DisposeAEEventHandlerUPP( sQuitHandler ) ;
     }
+}
 
 #endif
+
+void wxApp::CleanUp()
+{
+#if wxUSE_TOOLTIPS
+    wxToolTip::RemoveToolTips() ;
+#endif
+
+    if (m_macEventPosted)
+	{
+		CFRunLoopRemoveSource(CFRunLoopGetCurrent(), m_macEventPosted, kCFRunLoopCommonModes);
+		m_macEventPosted = NULL;
+	}
+
+    DoCleanUp();
 
     wxAppBase::CleanUp();
 }
@@ -1052,15 +1057,31 @@ wxApp::wxApp()
     m_macEventPosted = NULL ;
 }
 
+CFMutableArrayRef GetAutoReleaseArray()
+{
+    static CFMutableArrayRef array = 0;
+    if ( array == 0)
+        array= CFArrayCreateMutable(kCFAllocatorDefault,0,&kCFTypeArrayCallBacks);
+    return array;
+}
+
+void wxApp::MacAddToAutorelease( void* cfrefobj )
+{
+    CFArrayAppendValue( GetAutoReleaseArray(), cfrefobj );
+}
+
 void wxApp::OnIdle(wxIdleEvent& WXUNUSED(event))
 {
     // If they are pending events, we must process them: pending events are
     // either events to the threads other than main or events posted with
     // wxPostEvent() functions
 #ifndef __WXUNIVERSAL__
+#if wxUSE_MENU
   if (!wxMenuBar::MacGetInstalledMenuBar() && wxMenuBar::MacGetCommonMenuBar())
     wxMenuBar::MacGetCommonMenuBar()->MacInstallMenuBar();
 #endif
+#endif
+    CFArrayRemoveAllValues( GetAutoReleaseArray() );
 }
 
 void wxApp::WakeUpIdle()
@@ -1100,6 +1121,17 @@ void wxCYield()
 
 bool wxApp::Yield(bool onlyIfNeeded)
 {
+#if wxUSE_THREADS
+    // Yielding from a non-gui thread needs to bail out, otherwise we end up
+    // possibly sending events in the thread too.
+    if ( !wxThread::IsMain() )
+    {
+        return true;
+    }
+#endif // wxUSE_THREADS
+
+    static bool s_inYield = false;
+
     if (s_inYield)
     {
         if ( !onlyIfNeeded )
@@ -1110,98 +1142,34 @@ bool wxApp::Yield(bool onlyIfNeeded)
         return false;
     }
 
-#if wxUSE_THREADS
-    // Yielding from a non-gui thread needs to bail out, otherwise we end up
-    // possibly sending events in the thread too.
-    if ( !wxThread::IsMain() )
-    {
-        return true;
-    }
-#endif // wxUSE_THREADS
-
     s_inYield = true;
 
-    // by definition yield should handle all non-processed events
+#if wxUSE_LOG
+    // disable log flushing from here because a call to wxYield() shouldn't
+    // normally result in message boxes popping up &c
+    wxLog::Suspend();
+#endif // wxUSE_LOG
 
-#if wxOSX_USE_COCOA_OR_CARBON
-
-    EventRef theEvent;
-
-    OSStatus status = noErr ;
-
-    while ( status == noErr )
+    wxEventLoop * const
+        loop = wx_static_cast(wxEventLoop *, wxEventLoop::GetActive());
+    if ( loop )
     {
-        s_inReceiveEvent = true ;
-        status = ReceiveNextEvent(0, NULL,kEventDurationNoWait,true,&theEvent) ;
-        s_inReceiveEvent = false ;
-
-        if ( status == eventLoopTimedOutErr )
-        {
-            // make sure next time the event loop will trigger idle events
-            sleepTime = kEventDurationNoWait ;
-        }
-        else if ( status == eventLoopQuitErr )
-        {
-            // according to QA1061 this may also occur when a WakeUp Process
-            // is executed
-        }
-        else
-        {
-            MacHandleOneEvent( theEvent ) ;
-            ReleaseEvent(theEvent);
-        }
+        // process all pending events:
+        while ( loop->Pending() )
+            loop->Dispatch();
     }
     
-#else
-
-#endif
-
+    // it's necessary to call ProcessIdle() to update the frames sizes which
+    // might have been changed (it also will update other things set from
+    // OnUpdateUI() which is a nice (and desired) side effect)
+    while ( ProcessIdle() ) {}
+    
+#if wxUSE_LOG
+    wxLog::Resume();
+#endif // wxUSE_LOG
     s_inYield = false;
 
     return true;
-}
-
-void wxApp::MacDoOneEvent()
-{
-#if wxOSX_USE_COCOA_OR_CARBON
-    wxMacAutoreleasePool autoreleasepool;
-    EventRef theEvent;
-
-    s_inReceiveEvent = true ;
-    OSStatus status = ReceiveNextEvent(0, NULL, sleepTime, true, &theEvent) ;
-    s_inReceiveEvent = false ;
-
-    switch (status)
-    {
-        case eventLoopTimedOutErr :
-            if ( wxTheApp->ProcessIdle() )
-                sleepTime = kEventDurationNoWait ;
-            else
-            {
-                sleepTime = kEventDurationSecond;
-#if wxUSE_THREADS
-                wxMutexGuiLeave();
-                wxMilliSleep(20);
-                wxMutexGuiEnter();
-#endif
-            }
-            break;
-
-        case eventLoopQuitErr :
-            // according to QA1061 this may also occur
-            // when a WakeUp Process is executed
-            break;
-
-        default:
-            MacHandleOneEvent( theEvent ) ;
-            ReleaseEvent( theEvent );
-            sleepTime = kEventDurationNoWait ;
-            break;
-    }
-    // repeaters
-#else
-#endif
-    DeletePendingObjects() ;
 }
 
 // virtual
@@ -1210,47 +1178,7 @@ void wxApp::MacHandleUnhandledEvent( WXEVENTREF WXUNUSED(evr) )
     // Override to process unhandled events as you please
 }
 
-CFMutableArrayRef GetAutoReleaseArray()
-{
-    static CFMutableArrayRef array = 0;
-    if ( array == 0)
-        array= CFArrayCreateMutable(kCFAllocatorDefault,0,&kCFTypeArrayCallBacks);
-    return array;
-}
-
-//
-//
-//
-
-
-//
-//
-//
-
-void wxApp::MacHandleOneEvent( WXEVENTREF evr )
-{
-#if wxOSX_USE_COCOA_OR_CARBON
-    EventTargetRef theTarget;
-    theTarget = GetEventDispatcherTarget();
-    m_macCurrentEvent = evr ;
-
-    OSStatus status = SendEventToEventTarget((EventRef) evr , theTarget);
-    if (status == eventNotHandledErr)
-        MacHandleUnhandledEvent(evr);
-#else
-    // TODO Threads
-#endif
-
-
-    CFArrayRemoveAllValues( GetAutoReleaseArray() );
-}
-
-void wxApp::MacAddToAutorelease( void* cfrefobj )
-{
-    CFArrayAppendValue( GetAutoReleaseArray(), cfrefobj );
-}
-
-#if wxOSX_USE_COCOA_OR_CARBON
+#if wxOSX_USE_CARBON
 
 long wxMacTranslateKey(unsigned char key, unsigned char code)
 {
@@ -1422,12 +1350,12 @@ int wxMacKeyCodeToModifier(wxKeyCode key)
 wxMouseState wxGetMouseState()
 {
     wxMouseState ms;
-#if wxOSX_USE_COCOA_OR_CARBON
 
     wxPoint pt = wxGetMousePosition();
     ms.SetX(pt.x);
     ms.SetY(pt.y);
 
+#if wxOSX_USE_CARBON
     UInt32 buttons = GetCurrentButtonState();
     ms.SetLeftDown( (buttons & 0x01) != 0 );
     ms.SetMiddleDown( (buttons & 0x04) != 0 );
@@ -1438,7 +1366,8 @@ wxMouseState wxGetMouseState()
     ms.SetShiftDown(modifiers & shiftKey);
     ms.SetAltDown(modifiers & optionKey);
     ms.SetMetaDown(modifiers & cmdKey);
-
+#else
+    // TODO
 #endif
     return ms;
 }
@@ -1598,7 +1527,7 @@ bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers
 // This method handles common code for SendKeyDown, SendKeyUp, and SendChar events.
 void wxApp::MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey , wxChar uniChar )
 {
-#if wxOSX_USE_COCOA_OR_CARBON
+#if wxOSX_USE_CARBON
     short keycode, keychar ;
 
     keychar = short(keymessage & charCodeMask);

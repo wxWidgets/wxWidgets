@@ -12,13 +12,17 @@
 #ifndef _WX_GLCANVAS_H_
 #define _WX_GLCANVAS_H_
 
-#ifdef __DARWIN__
-#  include <OpenGL/gl.h>
-#  include <AGL/agl.h>
-#else
-#  include <gl.h>
-#  include <agl.h>
-#endif
+#include <OpenGL/gl.h>
+
+// low level calls
+
+WXDLLIMPEXP_GL WXGLContext WXGLCreateContext( WXGLPixelFormat pixelFormat, WXGLContext shareContext );
+WXDLLIMPEXP_GL void WXGLDestroyContext( WXGLContext context );
+WXDLLIMPEXP_GL WXGLContext WXGLGetCurrentContext();
+WXDLLIMPEXP_GL void WXGLSwapBuffers( WXGLContext context );
+
+WXDLLIMPEXP_GL WXGLPixelFormat WXGLChoosePixelFormat(const int *attribList);
+WXDLLIMPEXP_GL void WXGLDestroyPixelFormat( WXGLPixelFormat pixelFormat );
 
 class WXDLLIMPEXP_GL wxGLContext : public wxGLContextBase
 {
@@ -29,10 +33,10 @@ public:
     virtual bool SetCurrent(const wxGLCanvas& win) const;
 
     // Mac-specific
-    AGLContext GetAGLContext() const { return m_aglContext; }
-
+    WXGLContext GetWXGLContext() const { return m_glContext; }
+    
 private:
-    AGLContext m_aglContext;
+    WXGLContext m_glContext;
 
     DECLARE_NO_COPY_CLASS(wxGLContext)
 };
@@ -71,7 +75,7 @@ public:
     static bool IsAGLMultiSampleAvailable();
 
     // return the pixel format used by this window
-    AGLPixelFormat GetAGLPixelFormat() const { return m_aglFormat; }
+    WXGLPixelFormat GetWXGLPixelFormat() const { return m_glFormat; }
 
     // update the view port of the current context to match this window
     void SetViewport();
@@ -119,6 +123,7 @@ public:
 
     // implementation-only from now on
 
+#if wxOSX_USE_CARBON
     // Unlike some other platforms, this must get called if you override it,
     // i.e. don't forget "event.Skip()" in your EVT_SIZE handler
     void OnSize(wxSizeEvent& event);
@@ -128,12 +133,19 @@ public:
     virtual void MacVisibilityChanged();
 
     void MacUpdateView();
+    
+    GLint GetAglBufferName() const { return m_bufferName; }
+#endif
 
 protected:
-    AGLPixelFormat m_aglFormat;
+    WXGLPixelFormat m_glFormat;
 
+#if wxOSX_USE_CARBON
     bool m_macCanvasIsShown,
          m_needsUpdate;
+    WXGLContext m_dummyContext;
+    GLint m_bufferName;
+#endif
 
     DECLARE_EVENT_TABLE()
     DECLARE_CLASS(wxGLCanvas)

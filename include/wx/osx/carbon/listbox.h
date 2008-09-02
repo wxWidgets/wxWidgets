@@ -21,8 +21,8 @@
 // forward decl for GetSelections()
 class wxArrayInt;
 
-// forward decl for wxMacListControl data type.
-class wxMacListControl;
+// forward decl for wxListWidgetImpl data type.
+class wxListWidgetImpl;
 
 // List box item
 
@@ -31,6 +31,10 @@ WX_DEFINE_ARRAY( char* , wxListDataArray );
 // ----------------------------------------------------------------------------
 // List box control
 // ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxListWidgetColumn;
+
+class WXDLLIMPEXP_CORE wxListWidgetCellValue;
 
 class WXDLLIMPEXP_CORE wxListBox : public wxListBoxBase
 {
@@ -86,7 +90,7 @@ public:
         const wxString& name = wxListBoxNameStr);
 
     virtual ~wxListBox();
-
+    
     // implement base class pure virtuals
     virtual void Refresh(bool eraseBack = true, const wxRect *rect = NULL);
 
@@ -95,6 +99,10 @@ public:
     virtual void SetString(unsigned int n, const wxString& s);
     virtual int FindString(const wxString& s, bool bCase = false) const;
 
+    // data callbacks
+    virtual void GetValueCallback( unsigned int n, wxListWidgetColumn* col , wxListWidgetCellValue& value );
+    virtual void SetValueCallback( unsigned int n, wxListWidgetColumn* col , wxListWidgetCellValue& value );
+    
     virtual bool IsSelected(int n) const;
     virtual int GetSelection() const;
     virtual int GetSelections(wxArrayInt& aSelections) const;
@@ -110,11 +118,15 @@ public:
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
-    wxMacListControl* GetPeer() const;
+    wxListWidgetImpl* GetListPeer() const;
     
     bool MacGetBlockEvents() const { return m_blockEvents; }
 
 protected:
+    // callback for derived classes which may have to insert additional data
+    // at a certain line - which cannot be predetermined for sorted list data
+    virtual void OnItemInserted(unsigned int pos);
+
     virtual void DoClear();
     virtual void DoDeleteOneItem(unsigned int n);
 
@@ -138,6 +150,21 @@ protected:
     virtual wxSize DoGetBestSize() const;
 
     bool m_blockEvents;
+    
+    wxListWidgetColumn* m_textColumn;
+    
+    // data storage (copied from univ)
+    
+    // the array containing all items (it is sorted if the listbox has
+    // wxLB_SORT style)
+    union
+    {
+        wxArrayString *unsorted;
+        wxSortedArrayString *sorted;
+    } m_strings;
+
+    // and this one the client data (either void or wxClientData)
+    wxArrayPtrVoid m_itemsClientData;
     
 private:
     DECLARE_DYNAMIC_CLASS(wxListBox)

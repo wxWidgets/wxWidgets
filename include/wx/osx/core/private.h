@@ -21,6 +21,10 @@
 #include "wx/osx/core/cfstring.h"
 #include "wx/osx/core/cfdataref.h"
 
+#if wxOSX_USE_COCOA_OR_CARBON
+WXDLLIMPEXP_BASE long UMAGetSystemVersion() ;
+#endif
+
 #if wxUSE_GUI
 
 #if wxOSX_USE_IPHONE
@@ -79,6 +83,79 @@ class wxWindowMac;
 extern wxWindow* g_MacLastWindow;
 class wxNonOwnedWindow;
 
+// temporary typedef so that no additional casts are necessary within carbon code at the moment
+
+class wxMacControl;
+class wxWidgetImpl;
+class wxNotebook;
+
+#if wxOSX_USE_CARBON
+typedef wxMacControl wxWidgetImplType;
+#else
+typedef wxWidgetImpl wxWidgetImplType;
+#endif
+
+class wxMenuItemImpl : public wxObject 
+{
+public :
+    wxMenuItemImpl( wxMenuItem* peer ) : m_peer(peer)
+    {
+    }
+    
+    virtual ~wxMenuItemImpl() ;
+    virtual void SetBitmap( const wxBitmap& bitmap ) = 0;
+    virtual void Enable( bool enable ) = 0;
+    virtual void Check( bool check ) = 0;
+    virtual void SetLabel( const wxString& text, wxAcceleratorEntry *entry ) = 0;
+    virtual void Hide( bool hide = true ) = 0;
+    
+    virtual void * GetHMenuItem() = 0;
+
+    wxMenuItem* GetWXPeer() { return m_peer ; }
+
+    static wxMenuItemImpl* Create( wxMenuItem* peer, wxMenu *pParentMenu,
+                       int id,
+                       const wxString& text,
+                       wxAcceleratorEntry *entry,
+                       const wxString& strHelp,
+                       wxItemKind kind,
+                       wxMenu *pSubMenu );
+
+protected :
+    wxMenuItem* m_peer;
+    
+    DECLARE_ABSTRACT_CLASS(wxMenuItemImpl);
+} ;
+
+class wxMenuImpl : public wxObject 
+{
+public :
+    wxMenuImpl( wxMenu* peer ) : m_peer(peer)
+    {
+    }
+    
+    virtual ~wxMenuImpl() ;    
+    virtual void InsertOrAppend(wxMenuItem *pItem, size_t pos) = 0;    
+    virtual void Remove( wxMenuItem *pItem ) = 0;
+    
+    virtual void MakeRoot() = 0;
+
+    virtual void SetTitle( const wxString& text ) = 0;
+
+    virtual WXHMENU GetHMenu() = 0;
+    
+    wxMenu* GetWXPeer() { return m_peer ; }
+
+    static wxMenuImpl* Create( wxMenu* peer, const wxString& title );
+    static wxMenuImpl* CreateRootMenu( wxMenu* peer );
+protected :
+    wxMenu* m_peer;
+    
+    DECLARE_ABSTRACT_CLASS(wxMenuItemImpl);
+} ;
+
+
+
 class WXDLLIMPEXP_CORE wxWidgetImpl : public wxObject
 {
 public :
@@ -88,8 +165,6 @@ public :
 
     void Init();
 
-    virtual void        Destroy();
-    
     bool                IsRootControl() const { return m_isRootControl; }
 
     wxWindowMac*        GetWXPeer() const { return m_wxPeer; }
@@ -117,6 +192,7 @@ public :
     virtual void        Move(int x, int y, int width, int height) = 0;
     virtual void        GetPosition( int &x, int &y ) const = 0;
     virtual void        GetSize( int &width, int &height ) const = 0;
+    virtual void        SetControlSize( wxWindowVariant variant ) = 0;
 
     virtual void        SetNeedsDisplay( const wxRect* where = NULL ) = 0;
     virtual bool        GetNeedsDisplay() const = 0;
@@ -131,12 +207,201 @@ public :
     
     virtual void        RemoveFromParent() = 0;
     virtual void        Embed( wxWidgetImpl *parent ) = 0;
+    
+    virtual void        SetDefaultButton( bool isDefault ) = 0;
+    virtual void        PerformClick() = 0;
+    virtual void        SetLabel( const wxString& title, wxFontEncoding encoding ) = 0;
+
+    virtual wxInt32     GetValue() const = 0;
+    virtual void        SetValue( wxInt32 v ) = 0;
+    virtual void        SetBitmap( const wxBitmap& bitmap ) = 0;
+    virtual void        SetupTabs( const wxNotebook &notebook ) =0;
+    virtual void        GetBestRect( wxRect *r ) const = 0;
+    virtual bool        IsEnabled() const = 0;
+    virtual void        Enable( bool enable ) = 0;
+    virtual void        SetMinimum( wxInt32 v ) = 0;
+    virtual void        SetMaximum( wxInt32 v ) = 0;
+    virtual void        PulseGauge() = 0;
+    virtual void        SetScrollThumb( wxInt32 value, wxInt32 thumbSize ) = 0;
+
+    // is the clicked event sent AFTER the state already changed, so no additional
+    // state changing logic is required from the outside
+    virtual bool        ButtonClickDidStateChange() = 0;
 
     // static creation methods, must be implemented by all toolkits
     
-    static wxWidgetImpl*    CreateUserPane( wxWindowMac* wxpeer, const wxPoint& pos, const wxSize& size,
-                            long style, long extraStyle, const wxString& name) ;
-    static wxWidgetImpl*    CreateContentView( wxNonOwnedWindow* now ) ;
+    static wxWidgetImplType*    CreateUserPane( wxWindowMac* wxpeer, 
+                                    wxWindowMac* parent, 
+                                    wxWindowID id, 
+                                    const wxPoint& pos, 
+                                    const wxSize& size,
+                                    long style, 
+                                    long extraStyle) ;
+    static wxWidgetImplType*    CreateContentView( wxNonOwnedWindow* now ) ;
+
+    static wxWidgetImplType*    CreateButton( wxWindowMac* wxpeer, 
+                                    wxWindowMac* parent, 
+                                    wxWindowID id, 
+                                    const wxString& label,
+                                    const wxPoint& pos, 
+                                    const wxSize& size,
+                                    long style, 
+                                    long extraStyle) ;
+
+    static wxWidgetImplType*    CreateDisclosureTriangle( wxWindowMac* wxpeer, 
+                                    wxWindowMac* parent, 
+                                    wxWindowID id, 
+                                    const wxString& label,
+                                    const wxPoint& pos, 
+                                    const wxSize& size,
+                                    long style, 
+                                    long extraStyle) ;
+                                    
+    static wxWidgetImplType*    CreateStaticLine( wxWindowMac* wxpeer, 
+                                    wxWindowMac* parent, 
+                                    wxWindowID id, 
+                                    const wxPoint& pos, 
+                                    const wxSize& size,
+                                    long style, 
+                                    long extraStyle) ;
+
+    static wxWidgetImplType*    CreateGroupBox( wxWindowMac* wxpeer, 
+                                    wxWindowMac* parent, 
+                                    wxWindowID id, 
+                                    const wxString& label,
+                                    const wxPoint& pos, 
+                                    const wxSize& size,
+                                    long style, 
+                                    long extraStyle) ;
+
+    static wxWidgetImplType*    CreateStaticText( wxWindowMac* wxpeer, 
+                                    wxWindowMac* parent, 
+                                    wxWindowID id, 
+                                    const wxString& label,
+                                    const wxPoint& pos, 
+                                    const wxSize& size,
+                                    long style, 
+                                    long extraStyle) ;
+
+    static wxWidgetImplType*    CreateTextControl( wxTextCtrl* wxpeer, 
+                                    wxWindowMac* parent, 
+                                    wxWindowID id, 
+                                    const wxString& content,
+                                    const wxPoint& pos, 
+                                    const wxSize& size,
+                                    long style, 
+                                    long extraStyle) ;
+
+    static wxWidgetImplType*    CreateCheckBox( wxWindowMac* wxpeer, 
+                                    wxWindowMac* parent, 
+                                    wxWindowID id, 
+                                    const wxString& label,
+                                    const wxPoint& pos, 
+                                    const wxSize& size,
+                                    long style, 
+                                    long extraStyle);
+                                    
+    static wxWidgetImplType*    CreateRadioButton( wxWindowMac* wxpeer, 
+                                    wxWindowMac* parent, 
+                                    wxWindowID id, 
+                                    const wxString& label,
+                                    const wxPoint& pos, 
+                                    const wxSize& size,
+                                    long style, 
+                                    long extraStyle);
+
+    static wxWidgetImplType*    CreateToggleButton( wxWindowMac* wxpeer, 
+                                    wxWindowMac* parent, 
+                                    wxWindowID id, 
+                                    const wxString& label,
+                                    const wxPoint& pos, 
+                                    const wxSize& size,
+                                    long style, 
+                                    long extraStyle);
+
+    static wxWidgetImplType*    CreateBitmapToggleButton( wxWindowMac* wxpeer, 
+                                    wxWindowMac* parent, 
+                                    wxWindowID id, 
+                                    const wxBitmap& bitmap,
+                                    const wxPoint& pos, 
+                                    const wxSize& size,
+                                    long style, 
+                                    long extraStyle);
+
+    static wxWidgetImplType*    CreateBitmapButton( wxWindowMac* wxpeer, 
+                                    wxWindowMac* parent, 
+                                    wxWindowID id, 
+                                    const wxBitmap& bitmap,
+                                    const wxPoint& pos, 
+                                    const wxSize& size,
+                                    long style, 
+                                    long extraStyle);
+
+    static wxWidgetImplType*    CreateTabView( wxWindowMac* wxpeer, 
+                                    wxWindowMac* parent, 
+                                    wxWindowID id, 
+                                    const wxPoint& pos, 
+                                    const wxSize& size,
+                                    long style, 
+                                    long extraStyle);
+
+    static wxWidgetImplType*    CreateGauge( wxWindowMac* wxpeer, 
+                                    wxWindowMac* parent, 
+                                    wxWindowID id, 
+                                    wxInt32 value,
+                                    wxInt32 minimum,
+                                    wxInt32 maximum,
+                                    const wxPoint& pos, 
+                                    const wxSize& size,
+                                    long style, 
+                                    long extraStyle);
+
+    static wxWidgetImplType*    CreateSlider( wxWindowMac* wxpeer, 
+                                    wxWindowMac* parent, 
+                                    wxWindowID id, 
+                                    wxInt32 value,
+                                    wxInt32 minimum,
+                                    wxInt32 maximum,
+                                    const wxPoint& pos, 
+                                    const wxSize& size,
+                                    long style, 
+                                    long extraStyle);
+
+    static wxWidgetImplType*    CreateSpinButton( wxWindowMac* wxpeer, 
+                                    wxWindowMac* parent, 
+                                    wxWindowID id, 
+                                    wxInt32 value,
+                                    wxInt32 minimum,
+                                    wxInt32 maximum,
+                                    const wxPoint& pos, 
+                                    const wxSize& size,
+                                    long style, 
+                                    long extraStyle);
+
+    static wxWidgetImplType*    CreateScrollBar( wxWindowMac* wxpeer, 
+                                    wxWindowMac* parent, 
+                                    wxWindowID id, 
+                                    const wxPoint& pos, 
+                                    const wxSize& size,
+                                    long style, 
+                                    long extraStyle);
+
+    static wxWidgetImplType*    CreateChoice( wxWindowMac* wxpeer, 
+                                    wxWindowMac* parent, 
+                                    wxWindowID id, 
+                                    wxMenu* menu,
+                                    const wxPoint& pos, 
+                                    const wxSize& size,
+                                    long style, 
+                                    long extraStyle);
+
+    static wxWidgetImplType*    CreateListBox( wxWindowMac* wxpeer, 
+                                    wxWindowMac* parent, 
+                                    wxWindowID id, 
+                                    const wxPoint& pos, 
+                                    const wxSize& size,
+                                    long style, 
+                                    long extraStyle);
 
     // converts from Toplevel-Content relative to local
     static void Convert( wxPoint *pt , wxWidgetImpl *from , wxWidgetImpl *to );
@@ -147,6 +412,73 @@ protected :
 
     DECLARE_ABSTRACT_CLASS(wxWidgetImpl)
 };
+
+//
+// the interface to be implemented eg by a listbox
+//
+
+class WXDLLIMPEXP_CORE wxMacDataItem ;
+
+class WXDLLIMPEXP_CORE wxListWidgetColumn 
+{
+public :
+    virtual ~wxListWidgetColumn() {}
+} ;
+
+class WXDLLIMPEXP_CORE wxListWidgetCellValue
+{
+public :
+    wxListWidgetCellValue() {}
+    virtual ~wxListWidgetCellValue() {}
+    
+   virtual void Set( CFStringRef value ) = 0;
+    virtual void Set( const wxString& value ) = 0;
+    virtual void Set( int value ) = 0;
+    
+    virtual int GetIntValue() const = 0;
+    virtual wxString GetStringValue() const = 0;
+} ;
+
+class WXDLLIMPEXP_CORE wxListWidgetImpl
+{
+public:
+    wxListWidgetImpl() {}
+    virtual ~wxListWidgetImpl() { }
+    
+    virtual wxListWidgetColumn*     InsertTextColumn( unsigned pos, const wxString& title, bool editable = false, 
+                                wxAlignment just = wxALIGN_LEFT , int defaultWidth = -1) = 0 ;
+    virtual wxListWidgetColumn*     InsertCheckColumn( unsigned pos , const wxString& title, bool editable = false, 
+                                wxAlignment just = wxALIGN_LEFT , int defaultWidth =  -1) = 0 ;
+    
+    // add and remove
+
+    // TODO will be replaced
+    virtual void            ListDelete( unsigned int n ) = 0;
+    virtual void            ListInsert( unsigned int n ) = 0;
+    virtual void            ListClear() = 0;
+
+    // selecting
+
+    virtual void            ListDeselectAll() = 0;
+    virtual void            ListSetSelection( unsigned int n, bool select, bool multi ) = 0;
+    virtual int             ListGetSelection() const = 0;
+    virtual int             ListGetSelections( wxArrayInt& aSelections ) const = 0;
+    virtual bool            ListIsSelected( unsigned int n ) const = 0;
+    
+    // display
+
+    virtual void            ListScrollTo( unsigned int n ) = 0;
+    virtual void            UpdateLine( unsigned int n, wxListWidgetColumn* col = NULL ) = 0;
+    virtual void            UpdateLineToEnd( unsigned int n) = 0;
+
+    // accessing content
+
+    virtual unsigned int    ListGetCount() const = 0;
+};
+
+//
+// toplevel window implementation class
+//
 
 class wxNonOwnedWindowImpl : public wxObject
 {
@@ -248,6 +580,12 @@ public :
     virtual void WindowToScreen( int *x, int *y ) = 0;
     
     wxNonOwnedWindow*   GetWXPeer() { return m_wxPeer; }
+    
+    // static creation methods, must be implemented by all toolkits
+    
+    static wxNonOwnedWindowImpl* CreateNonOwnedWindow( wxNonOwnedWindow* wxpeer, wxWindow* parent, const wxPoint& pos, const wxSize& size,
+    long style, long extraStyle, const wxString& name  ) ;
+
 protected :
     wxNonOwnedWindow*   m_wxPeer;
     DECLARE_ABSTRACT_CLASS(wxNonOwnedWindowImpl)

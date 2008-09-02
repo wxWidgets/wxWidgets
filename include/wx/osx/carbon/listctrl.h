@@ -18,7 +18,6 @@
 #define wxMAC_ALWAYS_USE_GENERIC_LISTCTRL wxT("mac.listctrl.always_use_generic")
 
 class wxMacDataBrowserListCtrlControl;
-class wxMacListControl;
 class wxListCtrlTextCtrlWrapper;
 class wxListCtrlRenameTimer;
 
@@ -281,7 +280,7 @@ class WXDLLIMPEXP_CORE wxListCtrl: public wxControl
   // data is arbitrary data to be passed to the sort function.
   bool SortItems(wxListCtrlCompare fn, long data);
 
-  wxMacListControl* GetPeer() const;
+  wxMacDataBrowserListCtrlControl* GetListPeer() const;
 
     // these functions are only used for virtual list view controls, i.e. the
     // ones with wxLC_VIRTUAL style

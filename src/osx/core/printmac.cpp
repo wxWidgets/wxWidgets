@@ -27,7 +27,7 @@
     #include "wx/math.h"
 #endif
 
-#include "wx/osx/uma.h"
+#include "wx/osx/private.h"
 
 #include "wx/osx/printmac.h"
 #include "wx/osx/private/print.h"

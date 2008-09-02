@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/dirdlg.cpp
+// Name:        src/osx/carbon/dirdlg.cpp
 // Purpose:     wxDirDialog
 // Author:      Stefan Csomor
 // Modified by:
@@ -24,12 +24,6 @@
 #include "wx/filename.h"
 
 #include "wx/osx/private.h"
-
-#ifdef __DARWIN__
-    #include <Carbon/Carbon.h>
-#else
-    #include <Navigation.h>
-#endif
 
 IMPLEMENT_CLASS(wxDirDialog, wxDialog)
 
@@ -64,15 +58,17 @@ static pascal void NavEventProc(
 wxDirDialog::wxDirDialog(wxWindow *parent,
                          const wxString& message,
                          const wxString& defaultPath,
-                         long WXUNUSED(style),
+                         long style,
                          const wxPoint& WXUNUSED(pos),
                          const wxSize& WXUNUSED(size),
                          const wxString& WXUNUSED(name))
 {
     wxASSERT_MSG( NavServicesAvailable() , wxT("Navigation Services are not running") ) ;
-    m_message = message;
     m_parent = parent;
-    m_path = defaultPath;
+
+    SetMessage( message );
+    SetWindowStyle(style);
+    SetPath(defaultPath);
 }
 
 int wxDirDialog::ShowModal()

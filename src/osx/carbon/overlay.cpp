@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/overlay.cpp
+// Name:        src/osx/carbon/overlay.cpp
 // Purpose:     common wxOverlay code
 // Author:      Stefan Csomor
 // Modified by:

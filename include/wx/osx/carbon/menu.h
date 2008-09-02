@@ -20,6 +20,8 @@ class WXDLLIMPEXP_FWD_CORE wxFrame;
 // Menu
 // ----------------------------------------------------------------------------
 
+class WXDLLIMPEXP_FWD_CORE wxMenuImpl ;
+
 class WXDLLIMPEXP_CORE wxMenu : public wxMenuBase
 {
 public:
@@ -37,34 +39,40 @@ public:
 
     virtual void SetTitle(const wxString& title);
 
-    // MSW-specific
     bool ProcessCommand(wxCommandEvent& event);
+
+    // semi-private accessors
+
+    // get the window which contains this menu
+    wxWindow *GetWindow() const;
+    // get the menu handle
+    WXHMENU GetHMenu() const ;
 
     // implementation only from now on
     // -------------------------------
 
-      int    MacGetIndexFromId( int id ) ;
-      int    MacGetIndexFromItem( wxMenuItem *pItem ) ;
-      void MacEnableMenu( bool bDoEnable ) ;
-      // MacOS needs to know about submenus somewhere within this menu
-      // before it can be displayed , also hide special menu items like preferences
-      // that are handled by the OS
-      void  MacBeforeDisplay( bool isSubMenu ) ;
-      // undo all changes from the MacBeforeDisplay call
-      void  MacAfterDisplay( bool isSubMenu ) ;
+    bool HandleCommandUpdateStatus( wxMenuItem* menuItem, wxWindow* senderWindow = NULL);
+    bool HandleCommandProcess( wxMenuItem* menuItem, wxWindow* senderWindow = NULL);
+    void HandleMenuItemHighlighted( wxMenuItem* menuItem );
+    void HandleMenuOpened();
+    void HandleMenuClosed();
 
-    // semi-private accessors
-        // get the window which contains this menu
-    wxWindow *GetWindow() const;
-        // get the menu handle
-    WXHMENU GetHMenu() const { return m_hMenu; }
-
-    short MacGetMenuId() { return m_macMenuId ; }
-
-    wxInt32 MacHandleCommandProcess( wxMenuItem* item, int id, wxWindow* targetWindow = NULL );
-    wxInt32 MacHandleCommandUpdateStatus( wxMenuItem* item, int id, wxWindow* targetWindow = NULL);
-
+    wxMenuImpl* GetPeer() { return m_peer; }
+    
+    // make sure we can veto
+    void SetAllowRearrange( bool allow );
+    bool AllowRearrange() const { return m_allowRearrange; }
+    
+    // if a menu is used purely for internal implementation reasons (eg wxChoice)
+    // we don't want native menu events being triggered
+    void SetNoEventsMode( bool noEvents );
+    bool GetNoEventsMode() const { return m_noEventsMode; }
 protected:
+    // hide special menu items like exit, preferences etc
+    // that are expected in the app menu  
+    void DoRearrange() ;
+    
+    bool DoHandleMenuEvent( wxEvent& evt );
     virtual wxMenuItem* DoAppend(wxMenuItem *item);
     virtual wxMenuItem* DoInsert(size_t pos, wxMenuItem *item);
     virtual wxMenuItem* DoRemove(wxMenuItem *item);
@@ -82,18 +90,23 @@ private:
     // if TRUE, insert a breal before appending the next item
     bool m_doBreak;
 
+    // in this menu rearranging of menu items (esp hiding) is allowed
+    bool m_allowRearrange;
+    
+    // don't trigger native events
+    bool m_noEventsMode;
+    
     // the position of the first item in the current radio group or -1
     int m_startRadioGroup;
-
-    // the menu handle of this menu
-    WXHMENU m_hMenu;
-
-      short                m_macMenuId;
-
-      static short        s_macNextMenuId ;
+    
+    wxMenuImpl* m_peer;
 
     DECLARE_DYNAMIC_CLASS(wxMenu)
 };
+
+#if wxOSX_USE_COCOA_OR_CARBON
+
+// the iphone only has popup-menus
 
 // ----------------------------------------------------------------------------
 // Menu Bar (a la Windows)
@@ -132,7 +145,6 @@ public:
     }
 
     // implementation from now on
-    WXHMENU Create();
     int  FindMenu(const wxString& title);
     void Detach();
 
@@ -173,10 +185,14 @@ protected:
     static WXHMENU  s_macWindowMenuHandle ;
 
 private:
-  static wxMenuBar*            s_macInstalledMenuBar ;
-  static wxMenuBar*            s_macCommonMenuBar ;
+    static wxMenuBar*            s_macInstalledMenuBar ;
+    static wxMenuBar*            s_macCommonMenuBar ;
+  
+    wxMenu* m_rootMenu;
 
     DECLARE_DYNAMIC_CLASS(wxMenuBar)
 };
+
+#endif
 
 #endif // _WX_MENU_H_

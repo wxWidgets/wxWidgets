@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/gdiobj.cpp
+// Name:        src/osx/carbon/gdiobj.cpp
 // Purpose:     wxGDIObject class
 // Author:      Stefan Csomor
 // Modified by:
@@ -64,11 +64,19 @@ const wxFont* wxStockGDIMac::GetFont(Item item)
 #if wxOSX_USE_COCOA_OR_CARBON
         case FONT_NORMAL:
             font = new wxFont;
+#if wxOSX_USE_CARBON
             font->MacCreateFromThemeFont(kThemeSystemFont);
+#else
+            font->MacCreateFromUIFont(kCTFontSystemFontType);
+#endif
             break;
         case FONT_SMALL:
             font = new wxFont;
+#if wxOSX_USE_CARBON
             font->MacCreateFromThemeFont(kThemeSmallSystemFont);
+#else
+            font->MacCreateFromUIFont(kCTFontSmallSystemFontType);
+#endif
             break;
 #else
         case FONT_NORMAL:

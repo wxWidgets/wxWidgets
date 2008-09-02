@@ -52,21 +52,23 @@ public:
 
 
     // accessors
-    virtual int GetMin() const;
-    virtual int GetMax() const;
-    virtual int GetValue() const;
-    virtual void SetValue(int val);
     virtual void SetRange(int minVal, int maxVal);
+    virtual int GetValue() const ;
+    virtual void SetValue(int val);
 
     // implementation
     
+#if wxOSX_USE_CARBON
     virtual void MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown ) ;
-    virtual wxInt32 MacControlHit( WXEVENTHANDLERREF handler , WXEVENTREF event ) ;
+#endif
+    // osx specific event handling common for all osx-ports
+    
+    virtual bool HandleClicked( double timestampsec );
 
 protected:
-    void         MacHandleValueChanged( int inc ) ;
-   virtual wxSize DoGetBestSize() const;
-   int m_value ;
+    void         SendThumbTrackEvent() ;
+
+    virtual wxSize DoGetBestSize() const;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxSpinButton)

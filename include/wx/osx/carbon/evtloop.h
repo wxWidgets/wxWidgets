@@ -12,53 +12,19 @@
 #ifndef _WX_MAC_CARBON_EVTLOOP_H_
 #define _WX_MAC_CARBON_EVTLOOP_H_
 
-// set wxOSX_USE_RUN_APP_EVENT_LOOP to 1 if the standard
-// RunApplicationEventLoop function should be used, otherwise
-// the lower level CarbonEventLoop will be used
-//
-// in the long run we should make this 1 by default but we will have to clean
-// up event handling to make sure we don't miss handling of things like pending
-// events etc and perhaps we will also have to pipe events through an
-// ueber-event-handler to make sure we have one place to do all these
-// house-keeping functions
-#define wxOSX_USE_RUN_APP_EVENT_LOOP 0
-
-// ----------------------------------------------------------------------------
-// wxEventLoop
-// ----------------------------------------------------------------------------
-
-#if wxOSX_USE_RUN_APP_EVENT_LOOP
-
-class WXDLLIMPEXP_CORE wxGUIEventLoop : public wxEventLoopBase
-{
-public:
-    wxGUIEventLoop() { m_exitcode = 0; }
-
-    // implement base class pure virtuals
-    virtual int Run();
-    virtual void Exit(int rc = 0);
-    virtual bool Pending() const;
-    virtual bool Dispatch();
-
-private:
-    int m_exitcode;
-};
-
-#else // manual event loop
-
 class WXDLLIMPEXP_CORE wxGUIEventLoop : public wxEventLoopManual
 {
 public:
-    wxGUIEventLoop() { }
+    wxGUIEventLoop();
 
     virtual bool Pending() const;
     virtual bool Dispatch();
 
     // implement base class pure virtual
     virtual void WakeUp();
+private:
+    double      m_sleepTime;
 };
-
-#endif // auto/manual event loop
 
 #endif // _WX_MAC_CARBON_EVTLOOP_H_
 

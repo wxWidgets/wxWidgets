@@ -117,7 +117,9 @@ public:
   // base class virtuals
   // -------------------
   virtual void Command(wxCommandEvent& event);
-    virtual wxInt32 MacControlHit(WXEVENTHANDLERREF handler, WXEVENTREF event);
+    // osx specific event handling common for all osx-ports
+    
+    virtual bool        HandleClicked( double timestampsec );
 
 protected:
   virtual wxNotebookPage *DoRemovePage(size_t page) ;

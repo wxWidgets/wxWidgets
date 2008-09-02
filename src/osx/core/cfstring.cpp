@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/corefoundation/cfstring.cpp
+// Name:        src/osx/corefoundation/cfstring.cpp
 // Purpose:     wxCFStringHolder and other string functions
 // Author:      Stefan Csomor
 // Modified by:
-// Created:     2004-10-29 (from code in src/mac/carbon/utils.cpp)
+// Created:     2004-10-29 (from code in src/osx/carbon/utils.cpp)
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence

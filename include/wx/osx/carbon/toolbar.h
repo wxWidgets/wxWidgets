@@ -99,7 +99,7 @@ protected:
     DECLARE_EVENT_TABLE()
 #if wxOSX_USE_NATIVE_TOOLBAR
     bool m_macUsesNativeToolbar ;
-    void* m_macHIToolbarRef ;
+    void* m_macToolbar ;
 #endif
 };
 

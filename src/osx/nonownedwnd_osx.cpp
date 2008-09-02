@@ -132,23 +132,9 @@ bool wxNonOwnedWindow::Create(wxWindow *parent,
     int w = WidthDefault(size.x);
     int h = HeightDefault(size.y);
 
-    // temporary define, TODO
-#if wxOSX_USE_CARBON
-    m_nowpeer = new wxNonOwnedWindowCarbonImpl( this );    
-#elif wxOSX_USE_COCOA
-    m_nowpeer = new wxNonOwnedWindowCocoaImpl( this );    
-#elif wxOSX_USE_IPHONE
-    m_nowpeer = new wxNonOwnedWindowIPhoneImpl( this );  
-#endif
-
-    m_nowpeer->Create( parent, wxPoint(x,y) , wxSize(w,h) , style , GetExtraStyle(), name ) ;
+    m_nowpeer = wxNonOwnedWindowImpl::CreateNonOwnedWindow(this, parent, wxPoint(x,y) , wxSize(w,h) , style , GetExtraStyle(), name );
     wxAssociateWindowWithWXWindow( m_nowpeer->GetWXWindow() , this ) ;
-#if wxOSX_USE_CARBON
-    // temporary cast, TODO
-    m_peer = (wxMacControl*) wxWidgetImpl::CreateContentView(this);
-#else
     m_peer = wxWidgetImpl::CreateContentView(this);
-#endif
 
     DoSetWindowVariant( m_windowVariant ) ;
 
@@ -165,9 +151,13 @@ bool wxNonOwnedWindow::Create(wxWindow *parent,
 
 wxNonOwnedWindow::~wxNonOwnedWindow()
 {
+    m_isBeingDeleted = true;
+    
     wxRemoveWXWindowAssociation( this ) ;
-    if ( m_nowpeer )
-        m_nowpeer->Destroy();
+    
+    DestroyChildren();
+    
+    delete m_nowpeer;
 
     // avoid dangling refs
     if ( s_macDeactivateWindow == this )
@@ -216,7 +206,8 @@ bool wxNonOwnedWindow::SetBackgroundColour(const wxColour& c )
     
     if ( GetBackgroundStyle() != wxBG_STYLE_CUSTOM )
     {
-        return m_nowpeer->SetBackgroundColour(c);
+        if ( m_nowpeer )
+            return m_nowpeer->SetBackgroundColour(c);
     }
     return true;
 }    

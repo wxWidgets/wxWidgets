@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/databrow.cpp
+// Name:        src/osx/carbon/databrow.cpp
 // Purpose:     Classes and functions for the Carbon data browser
 // Author:      
 // Modified by:

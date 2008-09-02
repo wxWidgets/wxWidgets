@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/utils.mm
+// Name:        src/osx/carbon/utils.mm
 // Purpose:     various cocoa mixin utility functions
 // Author:      Stefan Csomor
 // Modified by:
@@ -81,7 +81,7 @@ void wxMacCocoaRetain( void* obj )
 // ----------------------------------------------------------------------------
 
 //  From "Cocoa Drawing Guide:Working with Images"
-WX_NSImage  CreateNSImageFromCGImage( CGImageRef image )
+WX_NSImage  wxOSXCreateNSImageFromCGImage( CGImageRef image )
 {
     NSRect      imageRect    = NSMakeRect(0.0, 0.0, 0.0, 0.0);
     
@@ -98,6 +98,15 @@ WX_NSImage  CreateNSImageFromCGImage( CGImageRef image )
     CGContextDrawImage( imageContext, *(CGRect*)&imageRect, image );
     [newImage unlockFocus];
     
+    /*
+        // Create a bitmap rep from the image...
+        NSBitmapImageRep *bitmapRep = [[NSBitmapImageRep alloc] initWithCGImage:cgImage];
+        // Create an NSImage and add the bitmap rep to it...
+        NSImage *image = [[NSImage alloc] init];
+        [image addRepresentation:bitmapRep];
+        [bitmapRep release];
+    */
+    [newImage autorelease];
     return( newImage );
 }
 
@@ -284,7 +293,7 @@ WX_NSCursor  wxMacCocoaCreateCursorFromCGImage( CGImageRef cgImageRef, float hot
         firstTime = NO;
     }
     
-    NSImage    *nsImage  = CreateNSImageFromCGImage( cgImageRef );
+    NSImage    *nsImage  = wxOSXCreateNSImageFromCGImage( cgImageRef );
     NSCursor  *cursor    = [[NSCursor alloc] initWithImage:nsImage hotSpot:NSMakePoint( hotSpotX, hotSpotY )];
     
     [nsImage release];

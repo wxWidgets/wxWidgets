@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/clipbrd.cpp
+// Name:        src/osx/carbon/clipbrd.cpp
 // Purpose:     Clipboard functionality
 // Author:      Stefan Csomor;
 //              Generalized clipboard implementation by Matthew Flatt

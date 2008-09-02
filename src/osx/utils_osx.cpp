@@ -57,10 +57,6 @@
 #endif
 #endif
 
-//
-// TODO BEGIN move to utils_osx.cpp
-//
-
 #if wxUSE_BASE
 
 extern bool WXDLLEXPORT wxIsDebuggerRunning()
@@ -239,44 +235,5 @@ CGColorRef wxMacCreateCGColorFromHITheme( ThemeBrush brush )
 }
 
 #endif // wxOSX_USE_COCOA_OR_CARBON
-
-IMPLEMENT_ABSTRACT_CLASS( wxWidgetImpl , wxObject )
-
-wxWidgetImpl::wxWidgetImpl( wxWindowMac* peer , bool isRootControl )
-{
-    Init();
-    m_isRootControl = isRootControl;
-    m_wxPeer = peer;
-}
-
-wxWidgetImpl::wxWidgetImpl()
-{
-    Init();
-}
-
-wxWidgetImpl::~wxWidgetImpl()
-{
-}
-
-void wxWidgetImpl::Init()
-{
-    m_isRootControl = false;
-    m_wxPeer = NULL;
-    m_needsFocusRect = false;
-}
-
-void wxWidgetImpl::Destroy()
-{
-}
-
-void wxWidgetImpl::SetNeedsFocusRect( bool needs )
-{
-    m_needsFocusRect = needs;
-}
-
-bool wxWidgetImpl::NeedsFocusRect() const
-{
-    return m_needsFocusRect;
-}
 
 #endif // wxUSE_GUI

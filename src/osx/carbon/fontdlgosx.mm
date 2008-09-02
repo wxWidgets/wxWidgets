@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/fontdlgosx.cpp
+// Name:        src/osx/carbon/fontdlgosx.cpp
 // Purpose:     wxFontDialog class.
 // Author:      Ryan Norton
 // Modified by:
@@ -42,7 +42,7 @@
 #import <Foundation/Foundation.h>
 #import <AppKit/AppKit.h>
 
-#include "wx/osx/uma.h"
+#include "wx/osx/private.h"
 
 @interface wxMacFontPanelAccView : NSView
 {
@@ -152,9 +152,11 @@ int RunMixedFontDialog(wxFontDialog* WXUNUSED(dialog))
     NSFontPanel* fontPanel = [NSFontPanel sharedFontPanel] ;
 
     // adjust modality for carbon environment
+#if wxOSX_USE_CARBON
     WindowRef carbonWindowRef = (WindowRef)[fontPanel windowRef] ;
     SetWindowModality(carbonWindowRef, kWindowModalityAppModal , 0) ;
     SetWindowGroup(carbonWindowRef , GetWindowGroupOfClass(kMovableModalWindowClass));
+#endif
 
     [fontPanel setFloatingPanel:NO] ;
     [[fontPanel standardWindowButton:NSWindowCloseButton] setEnabled:NO] ;
@@ -179,8 +181,10 @@ int RunMixedFontDialog(wxFontDialog* WXUNUSED(dialog))
 
     // if we don't reenable it, FPShowHideFontPanel does not work
     [[fontPanel standardWindowButton:NSWindowCloseButton] setEnabled:YES] ;
+#if wxOSX_USE_CARBON
     if( FPIsFontPanelVisible())
         FPShowHideFontPanel() ;
+#endif
 
     if ( [accessoryView closedWithOk])
     {

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/statbmp.cpp
+// Name:        src/osx/carbon/statbmp.cpp
 // Purpose:     wxStaticBitmap
 // Author:      Stefan Csomor
 // Modified by:

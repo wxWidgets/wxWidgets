@@ -25,6 +25,8 @@ typedef SInt32 SRefCon;
 
 #if wxUSE_GUI
 
+#include "wx/osx/uma.h"
+
 #include "wx/listbox.h"
 #include "wx/osx/carbon/dc.h"
 #include "wx/osx/carbon/dcclient.h"
@@ -289,8 +291,6 @@ public :
 
     void Init();
 
-    virtual void Destroy();
-
     void SetReferenceInNativeControl();
     static wxMacControl* GetReferenceFromNativeControl(ControlRef control);
 
@@ -313,6 +313,7 @@ public :
     virtual void        Move(int x, int y, int width, int height);
     virtual void        GetPosition( int &x, int &y ) const;
     virtual void        GetSize( int &width, int &height ) const;
+    virtual void        SetControlSize( wxWindowVariant variant ) ;
 
     // where is in native window relative coordinates
     virtual void        SetNeedsDisplay( const wxRect* where = NULL );
@@ -325,6 +326,28 @@ public :
 
     void                RemoveFromParent();
     void                Embed( wxWidgetImpl *parent );
+    
+    void                SetDefaultButton( bool isDefault );
+    void                PerformClick();
+    void                SetLabel( const wxString& title, wxFontEncoding encoding );
+
+    wxInt32             GetValue() const;
+    void                SetValue( wxInt32 v );
+    void                SetBitmap( const wxBitmap& bitmap );
+    void                SetupTabs( const wxNotebook &notebook );
+
+    void                GetBestRect( wxRect *r ) const;
+    bool                IsEnabled() const;
+    void                Enable( bool enable );
+    bool                ButtonClickDidStateChange() { return false ;}
+    void                SetMinimum( wxInt32 v );
+    void                SetMaximum( wxInt32 v );
+    void                PulseGauge() ;
+    void                SetScrollThumb( wxInt32 value, wxInt32 thumbSize );
+
+    // temp convenience methods
+
+    void                GetBestRect( Rect *r ) const;
     /*
     void operator= (ControlRef c) { m_controlRef = c; }
     operator ControlRef () { return m_controlRef; }
@@ -340,14 +363,8 @@ public :
 
     virtual OSStatus SendHICommand( UInt32 commandID , OptionBits inOptions = 0 );
 
-    virtual SInt32 GetValue() const;
     virtual SInt32 GetMaximum() const;
-    virtual SInt32 GetMinimum() const;
-
-    virtual void SetValue( SInt32 v );
-    virtual void SetMinimum( SInt32 v );
-    virtual void SetMaximum( SInt32 v );
-
+ 
     virtual void SetValueAndRange( SInt32 value , SInt32 minimum , SInt32 maximum );
     virtual void SetRange( SInt32 minimum , SInt32 maximum );
 
@@ -404,7 +421,6 @@ public :
     }
 
     // Flash the control for the specified amount of time
-    virtual void Flash( ControlPartCode part , UInt32 ticks = 8 );
 
     virtual void VisibilityChanged( bool shown );
     virtual void SuperChangedPosition();
@@ -414,13 +430,11 @@ public :
     virtual void SetBackgroundColour( const wxColour& col );
     virtual ControlPartCode HandleKey(  SInt16 keyCode,  SInt16 charCode, EventModifiers modifiers );
     void SetActionProc( ControlActionUPP   actionProc );
-    void SetViewSize( SInt32 viewSize );
     SInt32 GetViewSize() const;
 
     virtual void SetVisibility( bool visible );
-    virtual bool IsEnabled() const;
+
     virtual bool IsActive() const;
-    virtual void Enable( bool enable );
 
     // invalidates this control and all children
     virtual void InvalidateWithChildren();
@@ -429,9 +443,7 @@ public :
     // in native parent window relative coordinates
 
     virtual void GetRectInWindowCoords( Rect *r );
-    virtual void GetBestRect( Rect *r );
 
-    virtual void SetLabel( const wxString &title );
 
     virtual void GetFeatures( UInt32 *features );
     virtual OSStatus GetRegion( ControlPartCode partCode , RgnHandle region );
@@ -614,37 +626,22 @@ const DataBrowserPropertyID kMinColumnId = 1050;
 
 // base API for high-level databrowser operations
 
-class WXDLLIMPEXP_CORE wxMacListControl
-{
-public:
-    virtual void            MacDelete( unsigned int n ) = 0;
-    virtual void            MacInsert( unsigned int n, const wxArrayStringsAdapter& items, int column = -1 ) = 0;
-    // returns index of newly created line
-    virtual int             MacAppend( const wxString& item ) = 0;
-    virtual void            MacSetString( unsigned int n, const wxString& item ) = 0;
-    virtual void            MacClear() = 0;
-    virtual void            MacDeselectAll() = 0;
-    virtual void            MacSetSelection( unsigned int n, bool select, bool multi ) = 0;
-    virtual int             MacGetSelection() const = 0;
-    virtual int             MacGetSelections( wxArrayInt& aSelections ) const = 0;
-    virtual bool            MacIsSelected( unsigned int n ) const = 0;
-    virtual void            MacScrollTo( unsigned int n ) = 0;
-    virtual wxString        MacGetString( unsigned int n) const = 0;
-    virtual unsigned int    MacGetCount() const = 0;
-
-    virtual void            MacSetClientData( unsigned int n, void * data) = 0;
-    virtual void *          MacGetClientData( unsigned int) const = 0;
-
-    virtual ~wxMacListControl() { }
-};
-
 // base class for databrowser items
 
 enum DataItemType {
     DataItem_Text
 };
 
+/*
 class WXDLLIMPEXP_CORE wxMacDataItem
+{
+public :
+    wxMacDataItem();
+    virtual ~wxMacDataItem();
+} ;
+*/
+
+class WXDLLIMPEXP_CORE wxMacDataItem 
 {
 public :
     wxMacDataItem();
@@ -664,24 +661,11 @@ public :
         DataBrowserItemNotification message,
         DataBrowserItemDataRef itemData ) const;
 
-    void SetLabel( const wxString& str);
-    const wxString& GetLabel() const;
-
     void SetOrder( SInt32 order );
     SInt32 GetOrder() const;
 
-    void SetData( void* data);
-    void* GetData() const;
-
-    void SetColumn( short col );
-    short GetColumn();
-
 protected :
-    wxString    m_label;
-    wxCFStringRef m_cfLabel;
-    void *      m_data;
     SInt32      m_order;
-    DataBrowserPropertyID m_colId;
 
 };
 
@@ -693,17 +677,16 @@ enum ListSortOrder {
 
 typedef wxMacDataItem* wxMacDataItemPtr;
 const wxMacDataItemPtr wxMacDataBrowserRootContainer = NULL;
+typedef void * wxListColumnId ;
 
 WX_DEFINE_USER_EXPORTED_ARRAY_PTR(wxMacDataItemPtr, wxArrayMacDataItemPtr, class WXDLLIMPEXP_CORE);
 
-class WXDLLIMPEXP_CORE wxMacDataItemBrowserControl : public wxMacDataBrowserControl, public wxMacListControl
+class WXDLLIMPEXP_CORE wxMacDataItemBrowserControl : public wxMacDataBrowserControl
 {
 public :
     wxMacDataItemBrowserControl( wxWindow* peer , const wxPoint& pos, const wxSize& size, long style);
     wxMacDataItemBrowserControl() {}
     // create a list item (can be a subclass of wxMacListBoxItem)
-
-    virtual wxMacDataItem* CreateItem();
 
     unsigned int    GetItemCount(const wxMacDataItem* container, bool recurse , DataBrowserItemState state) const;
     void            GetItems(const wxMacDataItem* container, bool recurse ,
@@ -741,6 +724,18 @@ public :
 
     void            GetSelectionAnchor( wxMacDataItemPtr* first , wxMacDataItemPtr* last) const;
 
+    // add and remove
+
+    virtual void            MacDelete( unsigned int n );
+    virtual void            MacInsert( unsigned int n, wxMacDataItem* item);
+    virtual void            MacClear();
+
+    // accessing content
+
+    virtual unsigned int    MacGetCount() const;
+
+public :
+
     // item aware methods, to be used in subclasses
 
     virtual Boolean CompareItems(const wxMacDataItem* itemOneID,
@@ -762,35 +757,6 @@ public :
 
     bool            IsSelectionSuppressed() const { return m_suppressSelection; }
     bool            SuppressSelection( bool suppress );
-
-
-    // wxMacListControl Methods
-    // add and remove
-
-    virtual void            MacDelete( unsigned int n );
-    virtual void            MacInsert( unsigned int n, const wxArrayStringsAdapter& items, int column = -1 );
-    virtual int             MacAppend( const wxString& item );
-    virtual void            MacClear();
-
-    // selecting
-
-    virtual void            MacDeselectAll();
-    virtual void            MacSetSelection( unsigned int n, bool select, bool multi = false );
-    virtual int             MacGetSelection() const;
-    virtual int             MacGetSelections( wxArrayInt& aSelections ) const;
-    virtual bool            MacIsSelected( unsigned int n ) const;
-
-    // display
-
-    virtual void            MacScrollTo( unsigned int n );
-
-    // accessing content
-
-    virtual void            MacSetString( unsigned int n, const wxString& item );
-    virtual void            MacSetClientData( unsigned int n, void * data);
-    virtual wxString        MacGetString( unsigned int n) const;
-    virtual void *          MacGetClientData( unsigned int) const;
-    virtual unsigned int    MacGetCount() const;
 
     // client data
 
@@ -854,28 +820,112 @@ public :
 
     virtual ~wxMacListBoxItem();
 
+    virtual OSStatus GetSetData(wxMacDataItemBrowserControl *owner ,
+        DataBrowserPropertyID property,
+        DataBrowserItemDataRef itemData,
+        bool changeValue );
+
     virtual void Notification(wxMacDataItemBrowserControl *owner ,
         DataBrowserItemNotification message,
         DataBrowserItemDataRef itemData ) const;
+protected :
 };
 
-class WXDLLIMPEXP_CORE wxMacDataBrowserListControl : public wxMacDataItemBrowserControl
+class WXDLLIMPEXP_CORE wxMacDataBrowserColumn : public wxListWidgetColumn
+{
+public :
+    wxMacDataBrowserColumn( DataBrowserPropertyID propertyId, DataBrowserPropertyType colType, bool editable ) 
+        : m_property(propertyId), m_editable(editable), m_type( colType )
+    {
+    }
+    ~wxMacDataBrowserColumn()
+    {
+    }
+    DataBrowserPropertyID GetProperty() const { return m_property ; }
+    
+    bool IsEditable() const { return m_editable; }
+    
+    DataBrowserPropertyType GetType() const { return m_type; }
+
+protected :
+    DataBrowserPropertyID m_property;
+    bool m_editable;
+    DataBrowserPropertyType m_type;
+} ;
+
+WX_DEFINE_ARRAY_PTR(wxMacDataBrowserColumn *, wxArrayMacDataBrowserColumns);
+
+
+class WXDLLIMPEXP_CORE wxMacDataBrowserCellValue : public wxListWidgetCellValue
+{
+public :
+    wxMacDataBrowserCellValue(DataBrowserItemDataRef data) : m_data(data) {}
+    virtual ~wxMacDataBrowserCellValue() {}
+    
+   virtual void Set( CFStringRef value );
+    virtual void Set( const wxString& value );
+    virtual void Set( int value ) ;
+    
+    virtual int GetIntValue() const ;
+    virtual wxString GetStringValue() const ;
+protected :
+    DataBrowserItemDataRef m_data;
+} ;
+
+
+class WXDLLIMPEXP_CORE wxMacDataBrowserListControl : public wxMacDataItemBrowserControl, public wxListWidgetImpl
 {
 public:
     wxMacDataBrowserListControl( wxWindow *peer, const wxPoint& pos, const wxSize& size, long style );
     wxMacDataBrowserListControl() {}
     virtual ~wxMacDataBrowserListControl();
 
-    virtual wxMacDataItem* CreateItem();
+    // wxListWidgetImpl Methods
 
-    virtual void    ItemNotification(
-                        const wxMacDataItem* itemID,
-                        DataBrowserItemNotification message,
-                        DataBrowserItemDataRef itemData);
+    wxListWidgetColumn*     InsertTextColumn( unsigned int pos, const wxString& title, bool editable = false,
+                                wxAlignment just = wxALIGN_LEFT , int defaultWidth = -1) ;
+    wxListWidgetColumn*     InsertCheckColumn( unsigned int pos , const wxString& title, bool editable = false, 
+                                wxAlignment just = wxALIGN_LEFT , int defaultWidth = -1) ;
+
+    wxMacDataBrowserColumn* DoInsertColumn( unsigned int pos, DataBrowserPropertyID property, 
+                                const wxString& title, bool editable,
+                                DataBrowserPropertyType colType, SInt16 just, int width );
+    // add and remove
+
+    virtual void            ListDelete( unsigned int n );
+    virtual void            ListInsert( unsigned int n );
+    virtual void            ListClear();
+
+    // selecting
+
+    virtual void            ListDeselectAll();
+    virtual void            ListSetSelection( unsigned int n, bool select, bool multi = false );
+    virtual int             ListGetSelection() const;
+    virtual int             ListGetSelections( wxArrayInt& aSelections ) const;
+    virtual bool            ListIsSelected( unsigned int n ) const;
+
+    // display
+
+    virtual void            ListScrollTo( unsigned int n );
+
+    // accessing content
+
+    virtual unsigned int    ListGetCount() const;
+
+    virtual void            UpdateLine( unsigned int n, wxListWidgetColumn* col = NULL );
+    virtual void            UpdateLineToEnd( unsigned int n) ;
+
+    virtual void            ItemNotification(
+                                const wxMacDataItem* itemID,
+                                DataBrowserItemNotification message,
+                                DataBrowserItemDataRef itemData);
 
     // pointing back
 
-    // wxWindow * GetPeer() const;
+    wxMacDataBrowserColumn*     GetColumnFromProperty( DataBrowserPropertyID );
+private:
+    wxArrayMacDataBrowserColumns m_columns;
+    int m_nextColumnId ;
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxMacDataBrowserListControl)
 };

@@ -48,12 +48,12 @@ public:
 
     // implementation only from now on
     void Command(wxCommandEvent& event);
+#if wxOSX_USE_CARBON
     virtual void MacHandleControlClick( WXWidget control ,
                                         wxInt16 controlpart ,
                                         bool mouseStillDown ) ;
-    virtual wxInt32 MacControlHit( WXEVENTHANDLERREF handler ,
-                                   WXEVENTREF mevent ) ;
-
+#endif
+    virtual bool HandleClicked( double timestampsec );
 protected:
     virtual wxSize DoGetBestSize() const;
 

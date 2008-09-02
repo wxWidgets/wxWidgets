@@ -44,7 +44,7 @@ public:
     virtual void SetValue(bool value);
     virtual bool GetValue() const ;
 
-    virtual wxInt32 MacControlHit( WXEVENTHANDLERREF handler , WXEVENTREF event ) ;
+    virtual bool HandleClicked( double timestampsec );
 
     virtual void Command(wxCommandEvent& event);
 
@@ -88,7 +88,7 @@ public:
     virtual void SetValue(bool value);
     virtual bool GetValue() const ;
 
-    virtual wxInt32 MacControlHit( WXEVENTHANDLERREF handler , WXEVENTREF event ) ;
+    virtual bool HandleClicked( double timestampsec );
 
     virtual void Command(wxCommandEvent& event);
 

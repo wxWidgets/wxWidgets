@@ -22,6 +22,9 @@
 // ----------------------------------------------------------------------------
 // wxMenuItem: an item in the menu, optionally implements owner-drawn behaviour
 // ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_FWD_CORE wxMenuItemImpl ;
+
 class WXDLLIMPEXP_CORE wxMenuItem: public wxMenuItemBase
 {
 public:
@@ -53,9 +56,8 @@ public:
     void SetRadioGroupStart(int start);
     void SetRadioGroupEnd(int end);
 
+    wxMenuItemImpl* GetPeer() { return m_peer; }
 private:
-    void DoUpdateItemBitmap( WXHMENU menu, wxUint16 index) ;
-
     void UncheckRadio() ;
 
     // the positions of the first and last items of the radio group this item
@@ -73,6 +75,8 @@ private:
 
     wxBitmap  m_bitmap; // Bitmap for menuitem, if any
     void* m_menu ; // the appropriate menu , may also be a system menu
+    
+    wxMenuItemImpl* m_peer;
 
     DECLARE_DYNAMIC_CLASS(wxMenuItem)
 };

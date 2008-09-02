@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/stattext.cpp
+// Name:        src/osx/carbon/stattext.cpp
 // Purpose:     wxStaticText
 // Author:      Stefan Csomor
 // Modified by:
@@ -26,55 +26,29 @@
 #include "wx/notebook.h"
 #include "wx/tabctrl.h"
 
-#include "wx/osx/uma.h"
+#include "wx/osx/private.h"
 
 #include <stdio.h>
 
-IMPLEMENT_DYNAMIC_CLASS(wxStaticText, wxControl)
-
-
-bool wxStaticText::Create( wxWindow *parent,
-    wxWindowID id,
-    const wxString& label,
-    const wxPoint& pos,
-    const wxSize& size,
-    long style,
-    const wxString& name )
+class wxMacStaticText : public wxMacControl
 {
-    m_macIsUserPane = false;
-
-    if ( !wxControl::Create( parent, id, pos, size, style, wxDefaultValidator, name ) )
-        return false;
-
-    Rect bounds = wxMacGetBoundsForControl( this, pos, size );
-
-    m_peer = new wxMacControl( this );
-    OSStatus err = CreateStaticTextControl(
-        MAC_WXHWND(parent->MacGetTopLevelWindowRef()),
-        &bounds, NULL, NULL, m_peer->GetControlRefAddr() );
-    verify_noerr( err );
-
-    if ( ( style & wxST_ELLIPSIZE_END ) || ( style & wxST_ELLIPSIZE_MIDDLE ) )
+public:
+    wxMacStaticText( wxWindowMac* peer ) : wxMacControl(peer)
     {
-        TruncCode tCode = truncEnd;
-        if ( style & wxST_ELLIPSIZE_MIDDLE )
-            tCode = truncMiddle;
-
-        err = m_peer->SetData( kControlStaticTextTruncTag, tCode );
-        err = m_peer->SetData( kControlStaticTextIsMultilineTag, (Boolean)0 );
     }
-
-    MacPostControlCreate( pos, size );
-
-    SetLabel(label);
-
-    return true;
-}
+    void SetLabel(const wxString& title, wxFontEncoding encoding)
+    {
+        wxCFStringRef str( title, encoding );
+        OSStatus err = SetData<CFStringRef>(kControlEntireControl, kControlStaticTextCFStringTag, str);
+        verify_noerr( err );
+    }
+};
 
 wxSize wxStaticText::DoGetBestSize() const
 {
-    Rect bestsize = { 0 , 0 , 0 , 0 } ;
     Point bounds;
+#if wxOSX_USE_CARBON
+    Rect bestsize = { 0 , 0 , 0 , 0 } ;
 
     // try the built-in best size if available
     Boolean former = m_peer->GetData<Boolean>( kControlStaticTextIsMultilineTag);
@@ -87,7 +61,9 @@ wxSize wxStaticText::DoGetBestSize() const
         bounds.v = bestsize.bottom - bestsize.top ;
     }
     else
+#endif
     {
+#if wxOSX_USE_CARBON
         ControlFontStyleRec controlFont;
         OSStatus err = m_peer->GetData<ControlFontStyleRec>( kControlEntireControl, kControlFontStyleTag, &controlFont );
         verify_noerr( err );
@@ -104,6 +80,7 @@ wxSize wxStaticText::DoGetBestSize() const
             verify_noerr( err );
         }
         else
+#endif
 #endif
         {
             wxClientDC dc(const_cast<wxStaticText*>(this));
@@ -122,76 +99,38 @@ wxSize wxStaticText::DoGetBestSize() const
     return wxSize( bounds.h, bounds.v );
 }
 
-void wxStaticText::SetLabel(const wxString& label)
-{
-    m_labelOrig = label;
-
-    // middle/end ellipsization is handled by the OS:
-    if ( HasFlag(wxST_ELLIPSIZE_END) || HasFlag(wxST_ELLIPSIZE_MIDDLE) )
-    {
-        // remove markup
-        wxString str(label);
-        if (HasFlag(wxST_MARKUP))
-            str = RemoveMarkup(label);
-
-        // and leave ellipsization to the OS
-        DoSetLabel(str);
-    }
-    else // not supported natively
-    {
-        DoSetLabel(GetEllipsizedLabelWithoutMarkup());
-    }
-
-    if ( !(GetWindowStyle() & wxST_NO_AUTORESIZE) &&
-         !IsEllipsized() )  // don't resize if we adjust to current size
-    {
-        InvalidateBestSize();
-        SetSize( GetBestSize() );
-    }
-
-    Refresh();
-
-    // we shouldn't need forced updates
-    // Update();
-}
-
-bool wxStaticText::SetFont(const wxFont& font)
-{
-    bool ret = wxControl::SetFont( font );
-
-    if ( ret )
-    {
-        if ( !(GetWindowStyle() & wxST_NO_AUTORESIZE) )
-        {
-            InvalidateBestSize();
-            SetSize( GetBestSize() );
-        }
-    }
-
-    return ret;
-}
-
-
-// for wxST_ELLIPSIZE_* support:
-
-void wxStaticText::DoSetLabel(const wxString& label)
-{
-    m_labelOrig = label;
-    m_label = RemoveMnemonics(label);
-
-    wxCFStringRef str( m_label, GetFont().GetEncoding() );
-    OSStatus err = m_peer->SetData<CFStringRef>(kControlEntireControl, kControlStaticTextCFStringTag, str);
-    verify_noerr( err );
-}
-
-wxString wxStaticText::DoGetLabel() const
-{
-    return m_label;
-}
-
 /*
    FIXME: UpdateLabel() should be called on size events when wxST_ELLIPSIZE_START is set
           to allow correct dynamic ellipsizing of the label
 */
+
+wxWidgetImplType* wxWidgetImpl::CreateStaticText( wxWindowMac* wxpeer, 
+                                    wxWindowMac* parent, 
+                                    wxWindowID id, 
+                                    const wxString& label,
+                                    const wxPoint& pos, 
+                                    const wxSize& size,
+                                    long style, 
+                                    long extraStyle) 
+{
+    Rect bounds = wxMacGetBoundsForControl( wxpeer, pos, size );
+
+    wxMacControl* peer = new wxMacStaticText( wxpeer );
+    OSStatus err = CreateStaticTextControl(
+        MAC_WXHWND(parent->MacGetTopLevelWindowRef()),
+        &bounds, NULL, NULL, peer->GetControlRefAddr() );
+    verify_noerr( err );
+
+    if ( ( style & wxST_ELLIPSIZE_END ) || ( style & wxST_ELLIPSIZE_MIDDLE ) )
+    {
+        TruncCode tCode = truncEnd;
+        if ( style & wxST_ELLIPSIZE_MIDDLE )
+            tCode = truncMiddle;
+
+        err = peer->SetData( kControlStaticTextTruncTag, tCode );
+        err = peer->SetData( kControlStaticTextIsMultilineTag, (Boolean)0 );
+    }
+    return peer;
+}
 
 #endif //if wxUSE_STATTEXT

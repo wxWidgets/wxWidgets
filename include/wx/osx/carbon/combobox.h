@@ -125,7 +125,9 @@ class WXDLLIMPEXP_CORE wxComboBox : public wxControl, public wxComboBoxBase
 
     virtual wxClientDataType GetClientDataType() const;
 
-    wxInt32 MacControlHit( WXEVENTHANDLERREF handler, WXEVENTREF event );
+    // osx specific event handling common for all osx-ports
+    
+    virtual bool        HandleClicked( double timestampsec );
 
     wxCONTROL_ITEMCONTAINER_CLIENTDATAOBJECT_RECAST
 

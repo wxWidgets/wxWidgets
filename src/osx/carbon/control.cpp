@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/control.cpp
+// Name:        src/osx/carbon/control.cpp
 // Purpose:     wxControl class
 // Author:      Stefan Csomor
 // Modified by:
@@ -31,7 +31,6 @@
 #include "wx/tabctrl.h"
 #include "wx/spinbutt.h"
 
-#include "wx/osx/uma.h"
 #include "wx/osx/private.h"
 
 IMPLEMENT_ABSTRACT_CLASS(wxControl, wxWindow)
@@ -86,6 +85,7 @@ void  wxControl::OnKeyDown( wxKeyEvent &WXUNUSED(event) )
     if ( m_peer == NULL || !m_peer->IsOk() )
         return;
 
+#if wxOSX_USE_CARBON
     UInt32 keyCode, modifiers;
     char charCode;
 
@@ -94,4 +94,7 @@ void  wxControl::OnKeyDown( wxKeyEvent &WXUNUSED(event) )
     GetEventParameter( (EventRef)wxTheApp->MacGetCurrentEvent(), kEventParamKeyModifiers, typeUInt32, NULL, sizeof(UInt32), NULL, &modifiers );
 
     m_peer->HandleKey( keyCode, charCode, modifiers );
+#else
+    // TODO
+#endif
 }

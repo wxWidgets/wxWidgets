@@ -84,44 +84,8 @@
 #define wxUSE_TASKBARICON 0
 #endif
 
-/*
-#if wxUSE_POPUPWIN
-#undef wxUSE_POPUPWIN
-#define wxUSE_POPUPWIN 0
-#endif
-
-#if wxUSE_COMBOBOX
-#undef wxUSE_COMBOBOX
-#define wxUSE_COMBOBOX 0
-#endif
-
-
-#if wxUSE_MENUS
-#undef wxUSE_MENUS
-#define wxUSE_MENUS 0
-#endif
-
-#if wxUSE_CALENDARCTRL
-#undef wxUSE_CALENDARCTRL
-#define wxUSE_CALENDARCTRL 0
-#endif
-
-#if wxUSE_WXHTML_HELP
-#undef wxUSE_WXHTML_HELP
-#define wxUSE_WXHTML_HELP 0
-#endif
-
-#if wxUSE_DOC_VIEW_ARCHITECTURE
-#undef wxUSE_DOC_VIEW_ARCHITECTURE
 #define wxUSE_DOC_VIEW_ARCHITECTURE 0
-#endif
-
-#if wxUSE_PRINTING_ARCHITECTURE
-#undef wxUSE_PRINTING_ARCHITECTURE
-#define wxUSE_PRINTING_ARCHITECTURE 0
-#endif
-
-*/
+#define wxUSE_WXHTML_HELP 0
 
 #endif
     /* _WX_MAC_CHKCONF_H_ */

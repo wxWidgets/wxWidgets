@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/checkbox.cpp
+// Name:        src/osx/carbon/checkbox.cpp
 // Purpose:     wxCheckBox
 // Author:      Stefan Csomor
 // Modified by:
@@ -82,31 +82,39 @@ void wxCheckBox::DoSet3StateValue(wxCheckBoxState val)
 
 bool wxCheckBox::HandleClicked( double timestampsec ) 
 {
-    wxCheckBoxState origState, newState;
-
-    newState = origState = Get3StateValue();
-
-    switch (origState)
+    bool sendEvent = true;
+    wxCheckBoxState newState = Get3StateValue();
+    
+    if ( !m_peer->ButtonClickDidStateChange() )
     {
-        case wxCHK_UNCHECKED:
-            newState = wxCHK_CHECKED;
-            break;
+        wxCheckBoxState origState ;
 
-        case wxCHK_CHECKED:
-            // If the style flag to allow the user setting the undetermined state is set,
-            // then set the state to undetermined; otherwise set state to unchecked.
-            newState = Is3rdStateAllowedForUser() ? wxCHK_UNDETERMINED : wxCHK_UNCHECKED;
-            break;
+        newState = origState = Get3StateValue();
 
-        case wxCHK_UNDETERMINED:
-            newState = wxCHK_UNCHECKED;
-            break;
+        switch (origState)
+        {
+            case wxCHK_UNCHECKED:
+                newState = wxCHK_CHECKED;
+                break;
 
-        default:
-            break;
+            case wxCHK_CHECKED:
+                // If the style flag to allow the user setting the undetermined state is set,
+                // then set the state to undetermined; otherwise set state to unchecked.
+                newState = Is3rdStateAllowedForUser() ? wxCHK_UNDETERMINED : wxCHK_UNCHECKED;
+                break;
+
+            case wxCHK_UNDETERMINED:
+                newState = wxCHK_UNCHECKED;
+                break;
+
+            default:
+                break;
+        }
+        if (newState == origState)
+            sendEvent = false;
     }
 
-    if (newState != origState)
+    if (sendEvent)
     {
         Set3StateValue( newState );
 

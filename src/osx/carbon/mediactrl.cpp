@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/mediactrl.cpp
+// Name:        src/osx/carbon/mediactrl.cpp
 // Purpose:     Built-in Media Backends for Mac
 // Author:      Ryan Norton <wxprojects@comcast.net>
 // Modified by:
@@ -45,18 +45,6 @@
     #include "wx/timer.h"
 #endif
 
-// uma is for wxMacFSSpec
-#include "wx/osx/uma.h"
-
-// standard QT stuff
-#ifndef __DARWIN__
-#include <Movies.h>
-#include <Gestalt.h>
-#include <QuickTimeComponents.h>
-#else
-#include <QuickTime/QuickTimeComponents.h>
-#endif
-
 #if wxOSX_USE_CARBON
 #define USE_QUICKTIME 1
 #else
@@ -64,6 +52,9 @@
 #endif
 
 #if USE_QUICKTIME
+
+#include "wx/osx/private.h"
+#include <QuickTime/QuickTimeComponents.h>
 
 //---------------------------------------------------------------------------
 // Height and Width of movie controller in the movie control (apple samples)

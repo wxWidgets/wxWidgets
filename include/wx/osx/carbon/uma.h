@@ -14,8 +14,6 @@
 
 #include "wx/osx/private.h"
 
-long UMAGetSystemVersion() ;
-
 #if wxUSE_GUI
 
 // menu manager
@@ -24,8 +22,6 @@ MenuRef         UMANewMenu( SInt16 id , const wxString& title , wxFontEncoding e
 void             UMASetMenuTitle( MenuRef menu , const wxString& title , wxFontEncoding encoding) ;
 void             UMAEnableMenuItem( MenuRef inMenu , MenuItemIndex item , bool enable ) ;
 
-void            UMAAppendSubMenuItem( MenuRef menu , const wxString& title , wxFontEncoding encoding , SInt16 submenuid ) ;
-void            UMAInsertSubMenuItem( MenuRef menu , const wxString& title , wxFontEncoding encoding , MenuItemIndex item , SInt16 submenuid ) ;
 void            UMAAppendMenuItem( MenuRef menu , const wxString& title , wxFontEncoding encoding , wxAcceleratorEntry *entry = NULL  ) ;
 void            UMAInsertMenuItem( MenuRef menu , const wxString& title , wxFontEncoding encoding , MenuItemIndex item , wxAcceleratorEntry *entry = NULL ) ;
 void             UMASetMenuItemShortcut( MenuRef menu , MenuItemIndex item , wxAcceleratorEntry *entry ) ;

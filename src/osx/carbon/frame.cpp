@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/frame.cpp
+// Name:        src/osx/carbon/frame.cpp
 // Purpose:     wxFrame
 // Author:      Stefan Csomor
 // Modified by:
@@ -24,14 +24,11 @@
     #include "wx/menuitem.h"
 #endif // WX_PRECOMP
 
-#include "wx/osx/uma.h"
+#include "wx/osx/private.h"
 
 BEGIN_EVENT_TABLE(wxFrame, wxFrameBase)
   EVT_ACTIVATE(wxFrame::OnActivate)
- // EVT_MENU_HIGHLIGHT_ALL(wxFrame::OnMenuHighlight)
   EVT_SYS_COLOUR_CHANGED(wxFrame::OnSysColourChanged)
-//  EVT_IDLE(wxFrame::OnIdle)
-//  EVT_CLOSE(wxFrame::OnCloseWindow)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxTopLevelWindow)
@@ -101,6 +98,7 @@ bool wxFrame::Enable(bool enable)
     if ( !wxWindow::Enable(enable) )
         return false;
 
+#if wxUSE_MENUS
     if ( m_frameMenuBar && m_frameMenuBar == wxMenuBar::MacGetInstalledMenuBar() )
     {
         int iMaxMenu = m_frameMenuBar->GetMenuCount();
@@ -109,7 +107,7 @@ bool wxFrame::Enable(bool enable)
             m_frameMenuBar->EnableTop( i , enable ) ;
         }
     }
-
+#endif
     return true;
 }
 
@@ -198,6 +196,7 @@ void wxFrame::OnActivate(wxActivateEvent& event)
 
         wxSetFocusToChild(parent, &m_winLastFocused);
 
+#if wxUSE_MENUS
         if (m_frameMenuBar != NULL)
         {
             m_frameMenuBar->MacInstallMenuBar();
@@ -212,9 +211,21 @@ void wxFrame::OnActivate(wxActivateEvent& event)
                     tlf->GetMenuBar()->MacInstallMenuBar();
             }
         }
+#endif
     }
 }
 
+void wxFrame::HandleResized( long timestamp )
+{
+    // according to the other ports we handle this within the OS level
+    // resize event, not within a wxSizeEvent
+
+    PositionBars();
+
+    wxNonOwnedWindow::HandleResized( timestamp );
+}
+
+#if wxUSE_MENUS
 void wxFrame::DetachMenuBar()
 {
     if ( m_frameMenuBar )
@@ -225,7 +236,11 @@ void wxFrame::DetachMenuBar()
 
 void wxFrame::AttachMenuBar( wxMenuBar *menuBar )
 {
+#if wxOSX_USE_CARBON
     wxFrame* tlf = wxDynamicCast( wxNonOwnedWindow::GetFromWXWindow( (WXWindow) FrontNonFloatingWindow() ) , wxFrame );
+#else
+    wxFrame* tlf = (wxFrame*) wxTheApp->GetTopWindow();
+#endif
     bool makeCurrent = false;
 
     // if this is already the current menubar or we are the frontmost window
@@ -244,6 +259,7 @@ void wxFrame::AttachMenuBar( wxMenuBar *menuBar )
             m_frameMenuBar->MacInstallMenuBar();
     }
 }
+#endif
 
 void wxFrame::DoGetClientSize(int *x, int *y) const
 {

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/sound.cpp
+// Name:        src/osx/carbon/sound.cpp
 // Purpose:     wxSound class implementation: optional
 // Author:      Ryan Norton
 // Modified by: Stefan Csomor

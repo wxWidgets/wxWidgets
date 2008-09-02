@@ -23,7 +23,7 @@
     #include "wx/image.h"
 #endif
 
-#if !defined(__WXUNIVERSAL__)
+#if !defined(__WXUNIVERSAL__) && wxOSX_USE_CARBON
 
 #include "wx/artprov.h"
 #include "wx/image.h"

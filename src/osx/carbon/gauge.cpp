@@ -15,113 +15,81 @@
 
 #include "wx/gauge.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxGauge, wxControl)
+#include "wx/osx/private.h"
 
-#include "wx/osx/uma.h"
-
-bool wxGauge::Create( wxWindow *parent,
-    wxWindowID id,
-    int range,
-    const wxPoint& pos,
-    const wxSize& s,
-    long style,
-    const wxValidator& validator,
-    const wxString& name )
+class wxMacGaugeCarbonControl : public wxMacControl
 {
-    m_macIsUserPane = false;
-
-    if ( !wxGaugeBase::Create( parent, id, range, pos, s, style & 0xE0FFFFFF, validator, name ) )
-        return false;
-
-    wxSize size = s;
-
-#if 0
-    if (size.x == wxDefaultCoord && size.y == wxDefaultCoord)
-        size = wxSize( 200 , 16 );
-#endif
-
-    Rect bounds = wxMacGetBoundsForControl( this, pos, size );
-    m_peer = new wxMacControl( this );
-    OSStatus err = CreateProgressBarControl(
-        MAC_WXHWND(parent->MacGetTopLevelWindowRef()), &bounds,
-        GetValue(), 0, GetRange(), false /* not indeterminate */, m_peer->GetControlRefAddr() );
-    verify_noerr( err );
-
-    if ( GetValue() == 0 )
-        m_peer->SetData<Boolean>( kControlEntireControl, kControlProgressBarAnimatingTag, (Boolean)false );
-
-    MacPostControlCreate( pos, size );
-
-    return true;
-}
-
-void wxGauge::SetRange(int r)
-{
-    // we are going via the base class in case there is
-    // some change behind the values by it
-    wxGaugeBase::SetRange( r ) ;
-    if ( m_peer && m_peer->IsOk() ){
-        // switch back to determinate mode if not there already
-        if ( m_peer->GetData<Boolean>( kControlNoPart, kControlProgressBarIndeterminateTag ) != false )
-        {
-             m_peer->SetData<Boolean>( kControlNoPart, kControlProgressBarIndeterminateTag, (Boolean)false );
-        }
-
-        m_peer->SetMaximum( GetRange() ) ;
+public :
+    wxMacGaugeCarbonControl( wxWindowMac* peer ) : wxMacControl( peer )
+    {
     }
-}
-
-void wxGauge::SetValue(int pos)
-{
-    // we are going via the base class in case there is
-    // some change behind the values by it
-    wxGaugeBase::SetValue( pos ) ;
-
-    if ( m_peer && m_peer->IsOk() )
+    
+    void SetMaximum(wxInt32 v)
     {
         // switch back to determinate mode if not there already
-        if ( m_peer->GetData<Boolean>( kControlNoPart, kControlProgressBarIndeterminateTag ) != false )
+        if ( GetData<Boolean>( kControlNoPart, kControlProgressBarIndeterminateTag ) != false )
         {
-            m_peer->SetData<Boolean>( kControlNoPart, kControlProgressBarIndeterminateTag, (Boolean)false );
+             SetData<Boolean>( kControlNoPart, kControlProgressBarIndeterminateTag, (Boolean)false );
         }
 
-        m_peer->SetValue( GetValue() ) ;
+        wxMacControl::SetMaximum( v ) ;
+    }
+    
+    void SetValue(wxInt32 v)
+    {
+        // switch back to determinate mode if not there already
+        if ( GetData<Boolean>( kControlNoPart, kControlProgressBarIndeterminateTag ) != false )
+        {
+            SetData<Boolean>( kControlNoPart, kControlProgressBarIndeterminateTag, (Boolean)false );
+        }
+
+        wxMacControl::SetValue( v ) ;
 
         // turn off animation in the unnecessary situations as this is consuming a lot of CPU otherwise
-        Boolean shouldAnimate = ( GetValue() > 0 && GetValue() < GetRange() ) ;
-        if ( m_peer->GetData<Boolean>( kControlEntireControl, kControlProgressBarAnimatingTag ) != shouldAnimate )
+        Boolean shouldAnimate = ( v > 0 && v < GetMaximum() ) ;
+        if ( GetData<Boolean>( kControlEntireControl, kControlProgressBarAnimatingTag ) != shouldAnimate )
         {
-            m_peer->SetData<Boolean>( kControlEntireControl, kControlProgressBarAnimatingTag, shouldAnimate ) ;
+            SetData<Boolean>( kControlEntireControl, kControlProgressBarAnimatingTag, shouldAnimate ) ;
             if ( !shouldAnimate )
-                Refresh() ;
+                SetNeedsDisplay(NULL) ;
         }
     }
-}
-
-int wxGauge::GetValue() const
-{
-#if 0
-    if ( m_peer && m_peer->Ok() )
-        return m_peer->GetValue() ;
-#endif
-
-    return m_gaugePos ;
-}
-
-void wxGauge::Pulse()
-{
-    if ( m_peer && m_peer->IsOk() )
+    
+    void PulseGauge()
     {
-        if ( m_peer->GetData<Boolean>( kControlNoPart, kControlProgressBarIndeterminateTag ) != true )
+        if ( GetData<Boolean>( kControlNoPart, kControlProgressBarIndeterminateTag ) != true )
         {
-        m_peer->SetData<Boolean>( kControlNoPart, kControlProgressBarIndeterminateTag, true);
+            SetData<Boolean>( kControlNoPart, kControlProgressBarIndeterminateTag, true);
         }
 
-        if ( m_peer->GetData<Boolean>( kControlEntireControl, kControlProgressBarAnimatingTag ) != true )
+        if ( GetData<Boolean>( kControlEntireControl, kControlProgressBarAnimatingTag ) != true )
         {
-            m_peer->SetData<Boolean>( kControlEntireControl, kControlProgressBarAnimatingTag, true ) ;
+            SetData<Boolean>( kControlEntireControl, kControlProgressBarAnimatingTag, true ) ;
         }
     }
+};
+
+
+wxWidgetImplType* wxWidgetImpl::CreateGauge( wxWindowMac* wxpeer, 
+                                    wxWindowMac* parent, 
+                                    wxWindowID id, 
+                                    wxInt32 value,
+                                    wxInt32 minimum,
+                                    wxInt32 maximum,
+                                    const wxPoint& pos, 
+                                    const wxSize& size,
+                                    long style, 
+                                    long extraStyle)
+{
+    Rect bounds = wxMacGetBoundsForControl( wxpeer, pos, size );
+    wxMacGaugeCarbonControl* peer = new wxMacGaugeCarbonControl( wxpeer );
+    OSStatus err = CreateProgressBarControl(
+        MAC_WXHWND(parent->MacGetTopLevelWindowRef()), &bounds,
+        value, minimum, maximum, false /* not indeterminate */, peer->GetControlRefAddr() );
+    verify_noerr( err );
+    if ( value == 0 )
+        peer->SetData<Boolean>( kControlEntireControl, kControlProgressBarAnimatingTag, (Boolean)false );
+    return peer;
 }
 
 #endif // wxUSE_GAUGE

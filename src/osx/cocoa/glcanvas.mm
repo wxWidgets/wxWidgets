@@ -77,6 +77,10 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *attribList)
     const NSOpenGLPixelFormatAttribute defaultAttribs[] =
     {
         NSOpenGLPFADoubleBuffer,
+        NSOpenGLPFAMinimumPolicy,
+        NSOpenGLPFAColorSize,8,
+        NSOpenGLPFAAlphaSize,0,
+        NSOpenGLPFADepthSize,8,
         (NSOpenGLPixelFormatAttribute)nil
     };
 
@@ -217,6 +221,7 @@ bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
         return false;  
 
     [m_glContext setView: win.GetHandle() ];
+    [m_glContext update];
     
     [m_glContext makeCurrentContext];
     
@@ -280,12 +285,12 @@ bool wxGLCanvas::Create(wxWindow *parent,
     if ( !m_glFormat )
         return false;
 
-    m_macIsUserPane = false ;
+   // m_macIsUserPane = false ;
 
     if ( !wxWindow::Create(parent, id, pos, size, style, name) )
         return false;
 
-
+/*
     NSView* sv = (parent->GetHandle() );
     
     NSRect r = wxOSXGetFrameForControl( this, pos , size ) ;
@@ -295,8 +300,48 @@ bool wxGLCanvas::Create(wxWindow *parent,
     [v setImplementation:m_peer];
 
     MacPostControlCreate(pos, size) ;
+*/
+    return true;
+}
+
+bool wxGLCanvas::Create(wxWindow *parent,
+                        wxWindowID id,
+                        const wxPoint& pos,
+                        const wxSize& size,
+                        long style,
+                        const wxString& name,
+                        const int *attribList,
+                        const wxPalette& WXUNUSED(palette))
+{
+    m_needsUpdate = false;
+    m_macCanvasIsShown = false;
+
+    m_glFormat = WXGLChoosePixelFormat(attribList);
+    if ( !m_glFormat )
+        return false;
+
+    if ( !wxWindow::Create(parent, id, pos, size, style, name) )
+        return false;
+
+    m_dummyContext = WXGLCreateContext(m_glFormat, NULL);
+
+    static GLint gCurrentBufferName = 1;
+    m_bufferName = gCurrentBufferName++;
+    aglSetInteger (m_dummyContext, AGL_BUFFER_NAME, &m_bufferName); 
+    
+    AGLDrawable drawable = (AGLDrawable)GetWindowPort(MAC_WXHWND(MacGetTopLevelWindowRef()));
+    aglSetDrawable(m_dummyContext, drawable);
+
+    m_macCanvasIsShown = true;
 
     return true;
 }
+
+wxGLCanvas::~wxGLCanvas()
+{
+    if ( m_glFormat )
+        WXGLDestroyPixelFormat(m_glFormat);
+}
+
 
 #endif // wxUSE_GLCANVAS

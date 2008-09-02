@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/dcscreen.cpp
+// Name:        src/osx/carbon/dcscreen.cpp
 // Purpose:     wxScreenDC class
 // Author:      Stefan Csomor
 // Modified by:

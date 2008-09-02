@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/fontdlg.cpp
+// Name:        src/osx/carbon/fontdlg.cpp
 // Purpose:     wxFontDialog class for carbon 10.2+.
 // Author:      Ryan Norton
 // Modified by:
@@ -46,11 +46,13 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog)
 
-#include "wx/osx/uma.h"
+#include "wx/osx/private.h"
 
 // ---------------------------------------------------------------------------
 // wxFontDialog
 // ---------------------------------------------------------------------------
+
+#if wxOSX_USE_CARBON
 
 static const EventTypeSpec eventList[] =
 {
@@ -191,6 +193,7 @@ wxMacCarbonFontPanelHandler(EventHandlerCallRef WXUNUSED(nextHandler),
 }
 
 DEFINE_ONE_SHOT_HANDLER_GETTER( wxMacCarbonFontPanelHandler )
+#endif
 
 wxFontDialog::wxFontDialog()
 {
@@ -213,6 +216,8 @@ bool wxFontDialog::Create(wxWindow *WXUNUSED(parent), const wxFontData& data)
 
 int wxFontDialog::ShowModal()
 {
+#if wxOSX_USE_CARBON
+
     OSStatus err ;
     wxFont font = *wxNORMAL_FONT ;
     if ( m_fontData.m_initialFont.Ok() )
@@ -247,10 +252,12 @@ int wxFontDialog::ShowModal()
 
     if ( !FPIsFontPanelVisible() )
         FPShowHideFontPanel();
-
+#endif
     int retval = RunMixedFontDialog(this);
 
+#if wxOSX_USE_CARBON
     ::RemoveEventHandler(handler);
+#endif
 
     return retval ;
 }

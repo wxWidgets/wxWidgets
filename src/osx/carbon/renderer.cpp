@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/renderer.cpp
+// Name:        src/osx/carbon/renderer.cpp
 // Purpose:     implementation of wxRendererNative for Mac
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -27,8 +27,13 @@
 
 #include "wx/renderer.h"
 #include "wx/graphics.h"
+#include "wx/dcgraph.h"
 #include "wx/osx/private.h"
 
+#if wxOSX_USE_COCOA
+// bring in the theme headers
+#include <Carbon/Carbon.h>
+#endif
 
 class WXDLLEXPORT wxRendererMac : public wxDelegateRendererNative
 {

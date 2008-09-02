@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/dataobj.cpp
+// Name:        src/osx/carbon/dataobj.cpp
 // Purpose:     implementation of wxDataObject class
 // Author:      Stefan Csomor
 // Modified by:
@@ -27,7 +27,7 @@
 #include "wx/metafile.h"
 #include "wx/tokenzr.h"
 
-#include "wx/osx/uma.h"
+#include "wx/osx/private.h"
 
 #ifdef __DARWIN__
     #include <QuickTime/QuickTime.h>

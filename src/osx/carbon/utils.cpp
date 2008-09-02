@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/utils.cpp
+// Name:        src/osx/carbon/utils.cpp
 // Purpose:     Various utilities
 // Author:      Stefan Csomor
 // Modified by:
@@ -50,228 +50,6 @@
     #include <wtime.h>
 #endif
 #endif
-
-//
-// TODO BEGIN move to utils_osx.cpp
-//
-
-#if wxUSE_BASE
-
-extern bool WXDLLEXPORT wxIsDebuggerRunning()
-{
-    // TODO : try to find out ...
-    return false;
-}
-
-#if wxOSX_USE_COCOA_OR_CARBON
-
-// our OS version is the same in non GUI and GUI cases
-wxOperatingSystemId wxGetOsVersion(int *majorVsn, int *minorVsn)
-{
-    SInt32 theSystem;
-    Gestalt(gestaltSystemVersion, &theSystem);
-
-    if ( majorVsn != NULL )
-        *majorVsn = (theSystem >> 8);
-
-    if ( minorVsn != NULL )
-        *minorVsn = (theSystem & 0xFF);
-
-    return wxOS_MAC_OSX_DARWIN;
-}
-
-#include <sys/utsname.h>
-
-wxString wxGetOsDescription()
-{
-    struct utsname name;
-    uname(&name);
-    return wxString::Format(_T("Mac OS X (%s %s %s)"),
-            wxString::FromAscii(name.sysname).c_str(),
-            wxString::FromAscii(name.release).c_str(),
-            wxString::FromAscii(name.machine).c_str());
-}
-
-#endif // wxOSX_USE_COCOA_OR_CARBON
-
-
-//---------------------------------------------------------------------------
-// wxMac Specific utility functions
-//---------------------------------------------------------------------------
-
-void wxMacStringToPascal( const wxString&from , StringPtr to )
-{
-    wxCharBuffer buf = from.mb_str( wxConvLocal );
-    int len = strlen(buf);
-
-    if ( len > 255 )
-        len = 255;
-    to[0] = len;
-    memcpy( (char*) &to[1] , buf , len );
-}
-
-wxString wxMacMakeStringFromPascal( ConstStringPtr from )
-{
-    return wxString( (char*) &from[1] , wxConvLocal , from[0] );
-}
-
-#endif // wxUSE_BASE
-
-#if wxUSE_GUI
-
-// Check whether this window wants to process messages, e.g. Stop button
-// in long calculations.
-bool wxCheckForInterrupt(wxWindow *WXUNUSED(wnd))
-{
-    // TODO
-    return false;
-}
-
-// Return true if we have a colour display
-bool wxColourDisplay()
-{
-    return true;
-}
-
-#if wxOSX_USE_COCOA_OR_CARBON
-// Returns depth of screen
-int wxDisplayDepth()
-{
-    int theDepth = (int) CGDisplayBitsPerPixel(CGMainDisplayID());
-    return theDepth;
-}
-
-// Get size of display
-void wxDisplaySize(int *width, int *height)
-{
-    // TODO adapt for multi-displays
-    CGRect bounds = CGDisplayBounds(CGMainDisplayID());
-    if ( width )
-        *width = (int)bounds.size.width ;
-    if ( height )
-        *height = (int)bounds.size.height;
-}
-#endif
-
-void wxDisplaySizeMM(int *width, int *height)
-{
-    wxDisplaySize(width, height);
-    // on mac 72 is fixed (at least now;-)
-    double cvPt2Mm = 25.4 / 72;
-
-    if (width != NULL)
-        *width = int( *width * cvPt2Mm );
-
-    if (height != NULL)
-        *height = int( *height * cvPt2Mm );
-}
-
-
-wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
-{
-    // We suppose that toolkit version is the same as OS version under Mac
-    wxGetOsVersion(verMaj, verMin);
-
-    return wxPORT_OSX;
-}
-
-wxEventLoopBase* wxGUIAppTraits::CreateEventLoop()
-{
-    return new wxEventLoop;
-}
-
-wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
-{
-    return wxGenericFindWindowAtPoint(pt);
-}
-
-/*
-    Return the generic RGB color space. This is a 'get' function and the caller should
-    not release the returned value unless the caller retains it first. Usually callers
-    of this routine will immediately use the returned colorspace with CoreGraphics
-    so they typically do not need to retain it themselves.
-
-    This function creates the generic RGB color space once and hangs onto it so it can
-    return it whenever this function is called.
-*/
-
-CGColorSpaceRef wxMacGetGenericRGBColorSpace()
-{
-    static wxCFRef<CGColorSpaceRef> genericRGBColorSpace;
-
-    if (genericRGBColorSpace == NULL)
-    {
-#if wxOSX_USE_IPHONE
-        genericRGBColorSpace.reset( CGColorSpaceCreateDeviceRGB() );
-#else
-        genericRGBColorSpace.reset( CGColorSpaceCreateWithName( kCGColorSpaceGenericRGB ) );
-#endif
-    }
-
-    return genericRGBColorSpace;
-}
-
-#if wxOSX_USE_COCOA_OR_CARBON
-
-CGColorRef wxMacCreateCGColorFromHITheme( ThemeBrush brush )
-{
-    CGColorRef color ;
-    HIThemeBrushCreateCGColor( brush, &color );
-    return color;
-}
-
-#endif // wxOSX_USE_COCOA_OR_CARBON
-
-IMPLEMENT_ABSTRACT_CLASS( wxWidgetImpl , wxObject )
-
-wxWidgetImpl::wxWidgetImpl( wxWindowMac* peer , bool isRootControl )
-{
-    Init();
-    m_isRootControl = isRootControl;
-    m_wxPeer = peer;
-}
-
-wxWidgetImpl::wxWidgetImpl()
-{
-    Init();
-}
-
-wxWidgetImpl::~wxWidgetImpl()
-{
-}
-
-void wxWidgetImpl::Init()
-{
-    m_isRootControl = false;
-    m_wxPeer = NULL;
-    m_needsFocusRect = false;
-}
-
-void wxWidgetImpl::Destroy()
-{
-}
-
-void wxWidgetImpl::SetNeedsFocusRect( bool needs )
-{
-    m_needsFocusRect = needs;
-}
-
-bool wxWidgetImpl::NeedsFocusRect() const
-{
-    return m_needsFocusRect;
-}
-
-#endif // wxUSE_GUI
-
-//
-// TODO END move to utils_osx.cpp
-//
-
-//
-// carbon version
-//
-
-#if wxOSX_USE_CARBON
 
 #if wxUSE_BASE
 
@@ -845,10 +623,10 @@ OSStatus wxMacDataBrowserControl::SetDisclosureColumn( DataBrowserPropertyID pro
 
 wxMacDataItem::wxMacDataItem()
 {
-    m_data = NULL;
+//    m_data = NULL;
 
     m_order = 0;
-    m_colId = kTextColumnId; // for compat with existing wx*ListBox impls.
+//    m_colId = kTextColumnId; // for compat with existing wx*ListBox impls.
 }
 
 wxMacDataItem::~wxMacDataItem()
@@ -864,7 +642,7 @@ SInt32 wxMacDataItem::GetOrder() const
 {
     return m_order;
 }
-
+/*
 void wxMacDataItem::SetData( void* data)
 {
     m_data = data;
@@ -895,6 +673,7 @@ const wxString& wxMacDataItem::GetLabel() const
 {
     return m_label;
 }
+*/
 
 bool wxMacDataItem::IsLessThan(wxMacDataItemBrowserControl *WXUNUSED(owner) ,
     const wxMacDataItem* rhs,
@@ -903,11 +682,7 @@ bool wxMacDataItem::IsLessThan(wxMacDataItemBrowserControl *WXUNUSED(owner) ,
     const wxMacDataItem* otherItem = wx_const_cast(wxMacDataItem*,rhs);
     bool retval = false;
 
-    if ( sortProperty == m_colId ){
-        retval = m_label.CmpNoCase( otherItem->m_label) < 0;
-    }
-
-    else if ( sortProperty == kNumericOrderColumnId )
+    if ( sortProperty == kNumericOrderColumnId )
         retval = m_order < otherItem->m_order;
 
     return retval;
@@ -921,24 +696,10 @@ OSStatus wxMacDataItem::GetSetData( wxMacDataItemBrowserControl *WXUNUSED(owner)
     OSStatus err = errDataBrowserPropertyNotSupported;
     if ( !changeValue )
     {
-        if ( property == m_colId ){
-            err = ::SetDataBrowserItemDataText( itemData, m_cfLabel );
-            err = noErr;
-        }
-        else if ( property == kNumericOrderColumnId ){
+        if ( property == kNumericOrderColumnId )
+        {
             err = ::SetDataBrowserItemDataValue( itemData, m_order );
             err = noErr;
-        }
-        else{
-        }
-    }
-    else
-    {
-        switch (property)
-        {
-            // no editable props here
-            default:
-                break;
         }
     }
 
@@ -959,11 +720,6 @@ wxMacDataItemBrowserControl::wxMacDataItemBrowserControl( wxWindow* peer , const
     m_suppressSelection = false;
     m_sortOrder = SortOrder_None;
     m_clientDataItemsType = wxClientData_None;
-}
-
-wxMacDataItem* wxMacDataItemBrowserControl::CreateItem()
-{
-    return new wxMacDataItem();
 }
 
 wxMacDataItemBrowserSelectionSuppressor::wxMacDataItemBrowserSelectionSuppressor(wxMacDataItemBrowserControl *browser)
@@ -1274,25 +1030,14 @@ void wxMacDataItemBrowserControl::SetClientDataType(wxClientDataType clientDataI
     m_clientDataItemsType = clientDataItemsType;
 }
 
-unsigned int wxMacDataItemBrowserControl::MacGetCount() const
-{
-    return GetItemCount(wxMacDataBrowserRootContainer,false,kDataBrowserItemAnyState);
-}
-
 void wxMacDataItemBrowserControl::MacDelete( unsigned int n )
 {
     wxMacDataItem* item = (wxMacDataItem*)GetItemFromLine( n );
     RemoveItem( wxMacDataBrowserRootContainer, item );
 }
 
-void wxMacDataItemBrowserControl::MacInsert( unsigned int n,
-                                             const wxArrayStringsAdapter& items,
-                                             int column )
+void wxMacDataItemBrowserControl::MacInsert( unsigned int n, wxMacDataItem* item)
 {
-    size_t itemsCount = items.GetCount();
-    if ( itemsCount == 0 )
-        return;
-
     SInt32 frontLineOrder = 0;
 
     if ( m_sortOrder == SortOrder_None )
@@ -1302,7 +1047,7 @@ void wxMacDataItemBrowserControl::MacInsert( unsigned int n,
         for ( unsigned int i = n; i < lines; ++i)
         {
             wxMacDataItem* iter = (wxMacDataItem*) GetItemFromLine(i);
-            iter->SetOrder( iter->GetOrder() + itemsCount );
+            iter->SetOrder( iter->GetOrder() + 1 );
         }
         if ( n > 0 )
         {
@@ -1312,42 +1057,14 @@ void wxMacDataItemBrowserControl::MacInsert( unsigned int n,
     }
 
     wxArrayMacDataItemPtr ids;
-    ids.SetCount( itemsCount );
+    ids.SetCount( 1 );
 
-    for ( unsigned int i = 0; i < itemsCount; ++i )
-    {
-        wxMacDataItem* item = CreateItem();
-        item->SetLabel( items[i]);
-        if ( column != -1 )
-            item->SetColumn( kMinColumnId + column );
+    if ( m_sortOrder == SortOrder_None )
+        item->SetOrder( frontLineOrder + 1 );
 
-        if ( m_sortOrder == SortOrder_None )
-            item->SetOrder( frontLineOrder + 1 + i );
-
-        ids[i] = item;
-    }
+    ids[0] = item;
 
     AddItems( wxMacDataBrowserRootContainer, ids );
-}
-
-int wxMacDataItemBrowserControl::MacAppend( const wxString& text)
-{
-    wxMacDataItem* item = CreateItem();
-    item->SetLabel( text );
-    if ( m_sortOrder == SortOrder_None )
-    {
-        unsigned int lines = MacGetCount();
-        if ( lines == 0 )
-            item->SetOrder( 1 );
-        else
-        {
-            wxMacDataItem* frontItem = (wxMacDataItem*) GetItemFromLine(lines-1);
-            item->SetOrder( frontItem->GetOrder() + 1 );
-        }
-    }
-    AddItem( wxMacDataBrowserRootContainer, item );
-
-    return GetLineFromItem(item);
 }
 
 void wxMacDataItemBrowserControl::MacClear()
@@ -1356,112 +1073,10 @@ void wxMacDataItemBrowserControl::MacClear()
     RemoveAllItems(wxMacDataBrowserRootContainer);
 }
 
-void wxMacDataItemBrowserControl::MacDeselectAll()
+unsigned int wxMacDataItemBrowserControl::MacGetCount() const
 {
-    wxMacDataItemBrowserSelectionSuppressor suppressor(this);
-    SetSelectedAllItems( kDataBrowserItemsRemove );
-}
-
-void wxMacDataItemBrowserControl::MacSetSelection( unsigned int n, bool select, bool multi )
-{
-    wxMacDataItem* item = (wxMacDataItem*) GetItemFromLine(n);
-    wxMacDataItemBrowserSelectionSuppressor suppressor(this);
-
-    if ( IsItemSelected( item ) != select )
-    {
-        if ( select )
-            SetSelectedItem( item, multi ? kDataBrowserItemsAdd : kDataBrowserItemsAssign );
-        else
-            SetSelectedItem( item, kDataBrowserItemsRemove );
-    }
-
-    MacScrollTo( n );
-}
-
-bool wxMacDataItemBrowserControl::MacIsSelected( unsigned int n ) const
-{
-    wxMacDataItem* item = (wxMacDataItem*) GetItemFromLine(n);
-    return IsItemSelected( item );
-}
-
-int wxMacDataItemBrowserControl::MacGetSelection() const
-{
-    wxMacDataItemPtr first, last;
-    GetSelectionAnchor( &first, &last );
-
-    if ( first != NULL )
-    {
-        return GetLineFromItem( first );
-    }
-
-    return -1;
-}
-
-int wxMacDataItemBrowserControl::MacGetSelections( wxArrayInt& aSelections ) const
-{
-    aSelections.Empty();
-    wxArrayMacDataItemPtr selectedItems;
-    GetItems( wxMacDataBrowserRootContainer, false , kDataBrowserItemIsSelected, selectedItems);
-
-    int count = selectedItems.GetCount();
-
-    for ( int i = 0; i < count; ++i)
-    {
-        aSelections.Add(GetLineFromItem(selectedItems[i]));
-    }
-
-    return count;
-}
-
-void wxMacDataItemBrowserControl::MacSetString( unsigned int n, const wxString& text )
-{
-    // as we don't store the strings we only have to issue a redraw
-    wxMacDataItem* item = (wxMacDataItem*) GetItemFromLine( n);
-    item->SetLabel( text );
-    UpdateItem( wxMacDataBrowserRootContainer, item , kTextColumnId );
-}
-
-wxString wxMacDataItemBrowserControl::MacGetString( unsigned int n ) const
-{
-    wxMacDataItem * item = (wxMacDataItem*) GetItemFromLine( n );
-    return item->GetLabel();
-}
-
-void wxMacDataItemBrowserControl::MacSetClientData( unsigned int n, void * data)
-{
-    wxMacDataItem* item = (wxMacDataItem*) GetItemFromLine( n);
-    item->SetData( data );
-    // not displayed, therefore no Update infos to DataBrowser
-}
-
-void * wxMacDataItemBrowserControl::MacGetClientData( unsigned int n) const
-{
-    wxMacDataItem * item = (wxMacDataItem*) GetItemFromLine( n );
-    return item->GetData();
-}
-
-void wxMacDataItemBrowserControl::MacScrollTo( unsigned int n )
-{
-    UInt32 top , left ;
-    GetScrollPosition( &top , &left ) ;
-    wxMacDataItem * item = (wxMacDataItem*) GetItemFromLine( n );
-
-    // there is a bug in RevealItem that leads to situations
-    // in large lists, where the item does not get scrolled
-    // into sight, so we do a pre-scroll if necessary
-    UInt16 height ;
-    GetRowHeight( (DataBrowserItemID) item , &height ) ;
-    UInt32 linetop = n * ((UInt32) height );
-    UInt32 linebottom = linetop + height;
-    Rect rect ;
-    GetControlBounds( m_controlRef, &rect );
-
-    if ( linetop < top || linebottom > (top + rect.bottom - rect.top ) )
-        SetScrollPosition( wxMax( n-2, 0 ) * ((UInt32)height) , left ) ;
-
-    RevealItem( item , kDataBrowserRevealWithoutSelecting );
+    return GetItemCount(wxMacDataBrowserRootContainer,false,kDataBrowserItemAnyState);
 }
 
 #endif // wxUSE_GUI
 
-#endif // wxOSX_USE_CARBON

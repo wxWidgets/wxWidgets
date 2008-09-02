@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/listctrl_mac.cpp
+// Name:        src/osx/listctrl_mac.cpp
 // Purpose:     wxListCtrl
 // Author:      Julian Smart
 // Modified by: Agron Selimaj
@@ -176,7 +176,7 @@ static pascal OSStatus wxMacListCtrlEventHandler( EventHandlerCallRef handler , 
 
 DEFINE_ONE_SHOT_HANDLER_GETTER( wxMacListCtrlEventHandler )
 
-class wxMacListCtrlItem : public wxMacListBoxItem
+class wxMacListCtrlItem : public wxMacDataItem
 {
 public:
     wxMacListCtrlItem();
@@ -213,8 +213,6 @@ public:
     virtual ~wxMacDataBrowserListCtrlControl();
 
     // create a list item (can be a subclass of wxMacListBoxItem)
-
-    virtual wxMacDataItem* CreateItem();
 
     virtual void MacInsertItem( unsigned int n, wxListItem* item );
     virtual void MacSetColumnInfo( unsigned int row, unsigned int column, wxListItem* item );
@@ -517,10 +515,9 @@ END_EVENT_TABLE()
 // implementation
 // ============================================================================
 
-wxMacListControl* wxListCtrl::GetPeer() const
+wxMacDataBrowserListCtrlControl* wxListCtrl::GetListPeer() const
 {
-    wxMacDataBrowserListCtrlControl *lb = wxDynamicCast(m_peer,wxMacDataBrowserListCtrlControl);
-    return lb ? wx_static_cast(wxMacListControl*,lb) : 0 ;
+    return dynamic_cast<wxMacDataBrowserListCtrlControl*> ( GetPeer() );
 }
 
 // ----------------------------------------------------------------------------
@@ -2433,11 +2430,6 @@ void wxMacListCtrlItem::Notification(wxMacDataItemBrowserControl *owner ,
     // we want to depend on as little as possible to make sure tear-down of controls is safe
     if ( message == kDataBrowserItemRemoved)
     {
-        if ( lb != NULL && lb->GetClientDataType() == wxClientData_Object )
-        {
-            delete (wxClientData*) (m_data);
-        }
-
         delete this;
         return;
     }
@@ -3245,16 +3237,12 @@ void wxMacDataBrowserListCtrlControl::MacGetColumnInfo( unsigned int row, unsign
         }
     }
 }
-
+ 
 void wxMacDataBrowserListCtrlControl::MacInsertItem( unsigned int n, wxListItem* item )
 {
-    wxMacDataItemBrowserControl::MacInsert(n, item->GetText());
+    
+    wxMacDataItemBrowserControl::MacInsert(n, new wxMacListCtrlItem() );
     MacSetColumnInfo(n, 0, item);
-}
-
-wxMacDataItem* wxMacDataBrowserListCtrlControl::CreateItem()
-{
-    return new wxMacListCtrlItem();
 }
 
 wxMacListCtrlItem::wxMacListCtrlItem()
@@ -3278,9 +3266,10 @@ void wxMacListCtrlItem::SetColumnImageValue( unsigned int column, int imageIndex
 
 wxString wxMacListCtrlItem::GetColumnTextValue( unsigned int column )
 {
+/* TODO CHECK REMOVE
     if ( column == 0 )
         return GetLabel();
-
+*/
     if ( HasColumnInfo(column) )
         return GetColumnInfo(column)->GetText();
 
@@ -3292,9 +3281,11 @@ void wxMacListCtrlItem::SetColumnTextValue( unsigned int column, const wxString&
     if ( HasColumnInfo(column) )
         GetColumnInfo(column)->SetText(text);
 
+/* TODO CHECK REMOVE
     // for compatibility with superclass APIs
     if ( column == 0 )
         SetLabel(text);
+*/
 }
 
 wxListItem* wxMacListCtrlItem::GetColumnInfo( unsigned int column )

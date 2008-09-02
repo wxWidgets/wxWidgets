@@ -43,13 +43,113 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 -(void)otherMouseUp:(NSEvent *)event ;
 -(void)handleMouseEvent:(NSEvent *)event;
 
+- (void)keyDown:(NSEvent *)event;
+- (void)keyUp:(NSEvent *)event;
+- (void)flagsChanged:(NSEvent *)event;
+- (void)handleKeyEvent:(NSEvent *)event;
+
 - (void)setImplementation: (wxWidgetImpl *) theImplementation;
 - (wxWidgetImpl*) implementation;
 - (BOOL) isFlipped;
 - (BOOL) becomeFirstResponder;
 - (BOOL) resignFirstResponder;
+- (BOOL) canBecomeKeyView;
 
 @end // wxNSView
+
+long wxOSXTranslateCocoaKey(unsigned short code, int unichar )
+{
+    long retval = code;
+    switch( unichar )
+    {
+        case NSUpArrowFunctionKey :
+            retval = WXK_UP;
+            break;
+        case NSDownArrowFunctionKey :
+            retval = WXK_DOWN;
+            break;
+        case NSLeftArrowFunctionKey :
+            retval = WXK_LEFT;
+            break;
+        case NSRightArrowFunctionKey :
+            retval = WXK_RIGHT;
+            break;
+        case NSInsertFunctionKey  :
+            retval = WXK_INSERT;
+            break;
+        case NSDeleteFunctionKey  :
+            retval = WXK_DELETE;
+            break;
+        case NSHomeFunctionKey  :
+            retval = WXK_HOME;
+            break;
+//        case NSBeginFunctionKey  :
+//            retval = WXK_BEGIN;
+//            break;
+        case NSEndFunctionKey  :
+            retval = WXK_END;
+            break;
+        case NSPageUpFunctionKey  :
+            retval = WXK_PAGEUP;
+            break;
+       case NSPageDownFunctionKey  :
+            retval = WXK_PAGEDOWN;
+            break;
+       case NSHelpFunctionKey  :
+            retval = WXK_HELP;
+            break;
+
+        default :
+            if ( unichar >= NSF1FunctionKey && unichar >= NSF24FunctionKey )
+                retval = WXK_F1 + (unichar - NSF1FunctionKey );
+            break;
+    }
+    return retval;
+}
+
+void SetupKeyEvent( wxKeyEvent &wxevent , NSEvent * nsEvent )
+{
+    UInt32 modifiers = [nsEvent modifierFlags] ;
+
+    wxevent.m_shiftDown = modifiers & NSShiftKeyMask;
+    wxevent.m_controlDown = modifiers & NSControlKeyMask;
+    wxevent.m_altDown = modifiers & NSAlternateKeyMask;
+    wxevent.m_metaDown = modifiers & NSCommandKeyMask;
+
+    wxString chars;
+    NSString* nschars = [nsEvent characters];
+    if ( nschars )
+    {
+        wxCFStringRef cfchars((CFStringRef)[nschars retain]);
+        chars = cfchars.AsString();
+    }
+    
+    int unichar = chars.Length() > 0 ? chars[0] : 0;
+    
+#if wxUSE_UNICODE
+    wxevent.m_uniChar = unichar;
+#endif
+    wxevent.m_keyCode = wxOSXTranslateCocoaKey( [nsEvent keyCode], unichar ) ;
+//    wxevent.m_rawCode = keymessage;
+    wxevent.m_rawFlags = modifiers;
+    
+    wxevent.SetTimestamp( [nsEvent timestamp] * 1000.0 ) ;
+    int eventType = [nsEvent type];
+    switch (eventType)
+    {
+        case NSKeyDown :
+            wxevent.SetEventType( wxEVT_KEY_DOWN )  ;
+            break;
+        case NSKeyUp :
+            wxevent.SetEventType( wxEVT_KEY_UP )  ;
+            break;
+        case NSFlagsChanged :
+            // setup common code here
+            break;
+        default :
+            break ;
+    }
+}
 
 void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
 {
@@ -285,6 +385,29 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
     impl->GetWXPeer()->HandleWindowEvent(wxevent);
 }
 
+- (void)keyDown:(NSEvent *)event
+{
+    [self handleKeyEvent:event];
+}
+
+- (void)keyUp:(NSEvent *)event
+{
+    [self handleKeyEvent:event];
+}
+
+- (void)flagsChanged:(NSEvent *)event
+{
+    [self handleKeyEvent:event];
+}
+
+- (void)handleKeyEvent:(NSEvent *)event
+{
+    wxKeyEvent wxevent(wxEVT_KEY_DOWN);
+    SetupKeyEvent( wxevent, event );
+    impl->GetWXPeer()->HandleWindowEvent(wxevent);
+}
+
+
 - (void)setImplementation: (wxWidgetImpl *) theImplementation
 {
     impl = theImplementation;
@@ -318,6 +441,10 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
     return r;
 }
 
+- (BOOL) canBecomeKeyView
+{
+    return YES;
+}
 
 @end // wxNSView
 

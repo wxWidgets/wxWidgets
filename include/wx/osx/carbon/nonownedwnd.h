@@ -97,7 +97,13 @@ public:
     
     wxNonOwnedWindowImpl* GetNonOwnedPeer() const { return m_nowpeer; }
     
+    // osx specific event handling common for all osx-ports
     
+    virtual void HandleActivated( double timestampsec, bool didActivate );
+    virtual void HandleResized( double timestampsec );
+    virtual void HandleMoved( double timestampsec );
+    virtual void HandleResizing( double timestampsec, wxRect* rect );
+        
 protected:
     // common part of all ctors
     void Init();

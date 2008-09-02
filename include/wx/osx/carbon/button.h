@@ -43,11 +43,14 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxButtonNameStr);
 
-    virtual wxInt32 MacControlHit( WXEVENTHANDLERREF handler , WXEVENTREF event ) ;
     static wxSize GetDefaultSize();
 
     virtual wxWindow *SetDefault();
     virtual void Command(wxCommandEvent& event);
+
+    // osx specific event handling common for all osx-ports
+    
+    virtual bool        HandleClicked( double timestampsec );
 
 protected:
     virtual wxSize DoGetBestSize() const ;
@@ -82,7 +85,9 @@ public:
     void SetOpen( bool open );
     bool IsOpen() const;
 
-    virtual wxInt32 MacControlHit( WXEVENTHANDLERREF handler , WXEVENTREF event ) ;
+    // osx specific event handling common for all osx-ports
+    
+    virtual bool        HandleClicked( double timestampsec );
 
 protected:
     virtual wxSize DoGetBestSize() const ;

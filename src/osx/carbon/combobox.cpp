@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/combobox.cpp
+// Name:        src/osx/carbon/combobox.cpp
 // Purpose:     wxComboBox class
 // Author:      Stefan Csomor, Dan "Bud" Keith (composite combobox)
 // Modified by:
@@ -23,7 +23,7 @@
     #include "wx/textctrl.h"
 #endif
 
-#include "wx/osx/uma.h"
+#include "wx/osx/private.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
 
@@ -32,17 +32,6 @@ WX_DELEGATE_TO_CONTROL_CONTAINER(wxComboBox, wxControl)
 BEGIN_EVENT_TABLE(wxComboBox, wxControl)
     WX_EVENT_TABLE_CONTROL_CONTAINER(wxComboBox)
 END_EVENT_TABLE()
-
-
-static int nextPopUpMenuId = 1000 ;
-
-MenuHandle NewUniqueMenu()
-{
-    MenuHandle handle = UMANewMenu(nextPopUpMenuId, wxString(wxT("Menu")), wxFont::GetDefaultEncoding() );
-    nextPopUpMenuId++ ;
-
-    return handle ;
-}
 
 
 // ----------------------------------------------------------------------------
@@ -651,7 +640,7 @@ bool wxComboBox::CanRedo() const
         return false;
 }
 
-wxInt32 wxComboBox::MacControlHit( WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) )
+bool wxComboBox::HandleClicked( double timestampsec )
 {
 /*
     For consistency with other platforms, clicking in the text area does not constitute a selection
@@ -662,7 +651,7 @@ wxInt32 wxComboBox::MacControlHit( WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENT
     ProcessCommand(event);
 */
 
-    return noErr ;
+    return true ;
 }
 
 #endif // wxUSE_COMBOBOX

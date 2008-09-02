@@ -162,6 +162,10 @@ public:
     // returns a CGImageRef which must released after usage with CGImageRelease
     CGImageRef CreateCGImage() const ;
 
+#if wxOSX_USE_COCOA_OR_IPHONE
+    // returns an autoreleased version of the image
+    WX_NSImage GetNSImage() const;
+#endif
     // returns a IconRef which must be retained before and released after usage
     IconRef GetIconRef() const;
     // returns a IconRef which must be released after usage

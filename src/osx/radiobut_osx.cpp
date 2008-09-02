@@ -108,9 +108,12 @@ void wxRadioButton::Command(wxCommandEvent& event)
 
 bool wxRadioButton::HandleClicked( double timestampsec )
 {
-    // if already set -> no action
-    if (GetValue())
-        return true;
+    if ( !m_peer->ButtonClickDidStateChange() )
+    {
+        // if already set -> no action
+        if (GetValue())
+            return true;
+    }
 
     wxRadioButton *cycle;
     cycle = this->NextInCycle();

@@ -50,7 +50,9 @@ public:
 
     bool Create(const wxNativeFontInfo& info);
 
+#if wxOSX_USE_CARBON
     bool MacCreateFromThemeFont( wxUint16 themeFontID ) ;
+#endif
 #if wxOSX_USE_CORE_TEXT
     bool MacCreateFromUIFont( wxUint32 coreTextFontType );
     bool MacCreateFromCTFontDescriptor( const void * ctFontDescriptor, int pointSize = 0 );

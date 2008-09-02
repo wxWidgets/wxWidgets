@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/radiobox.cpp
+// Name:        src/osx/radiobox.cpp
 // Purpose:     wxRadioBox
 // Author:      Stefan Csomor
 // Modified by: JS Lair (99/11/15) first implementation
@@ -20,7 +20,7 @@
     #include "wx/arrstr.h"
 #endif
 
-#include "wx/osx/uma.h"
+#include "wx/osx/private.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl)
 
@@ -109,19 +109,7 @@ bool wxRadioBox::Create( wxWindow *parent,
 
     m_labelOrig = m_label = label;
 
-    Rect bounds = wxMacGetBoundsForControl( this, pos, size );
-    if ( bounds.right <= bounds.left )
-        bounds.right = bounds.left + 100;
-    if ( bounds.bottom <= bounds.top )
-        bounds.bottom = bounds.top + 100;
-
-    m_peer = new wxMacControl( this );
-
-    OSStatus err = CreateGroupBoxControl(
-        MAC_WXHWND(parent->MacGetTopLevelWindowRef()),
-        &bounds, CFSTR("") , true /*primary*/,
-        m_peer->GetControlRefAddr() );
-    verify_noerr( err );
+    m_peer = wxWidgetImpl::CreateGroupBox( this, parent, id, label, pos, size, style, GetExtraStyle() );
 
     for (i = 0; i < n; i++)
     {

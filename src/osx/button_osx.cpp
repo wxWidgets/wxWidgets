@@ -92,22 +92,7 @@ bool wxDisclosureTriangle::Create(wxWindow *parent, wxWindowID id, const wxStrin
     if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
         return false;
 
-#if wxOSX_USE_CARBON
-    Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
-    m_peer = new wxMacControl(this) ;
-
-    OSStatus err = CreateDisclosureTriangleControl(
-            MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds, 
-            kControlDisclosureTrianglePointDefault,
-            wxCFStringRef( label ),
-            0,    // closed
-            TRUE, // draw title
-            TRUE, // auto toggle back and forth
-            m_peer->GetControlRefAddr() );
-           
-    verify_noerr( err );
-#endif
-    wxASSERT_MSG( m_peer != NULL && m_peer->IsOk() , wxT("No valid Mac control") ) ;
+    m_peer = wxWidgetImpl::CreateDisclosureTriangle(this, parent, id, label, pos, size, style, GetExtraStyle() );
 
     MacPostControlCreate( pos, size );
     // passing the text in the param doesn't seem to work, so lets do if again
@@ -118,16 +103,12 @@ bool wxDisclosureTriangle::Create(wxWindow *parent, wxWindowID id, const wxStrin
 
 void wxDisclosureTriangle::SetOpen( bool open )
 {
-#if wxOSX_USE_CARBON
     m_peer->SetValue( open ? 1 : 0 );
-#endif
 }
 
 bool wxDisclosureTriangle::IsOpen() const
 {
-#if wxOSX_USE_CARBON
    return m_peer->GetValue() == 1;
-#endif
 }
 
 bool wxDisclosureTriangle::HandleClicked( double timestampsec )

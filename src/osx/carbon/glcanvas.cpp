@@ -36,6 +36,7 @@
 #include "wx/osx/uma.h"
 
 #include "wx/osx/private.h"
+#include <AGL/agl.h>
 
 // ----------------------------------------------------------------------------
 // helper functions
@@ -54,146 +55,47 @@ static void wxLogAGLError(const char *func)
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// wxGLContext
+// low level implementation routines
 // ----------------------------------------------------------------------------
 
-wxGLContext::wxGLContext(wxGLCanvas *win, const wxGLContext *other)
+WXGLContext WXGLCreateContext( WXGLPixelFormat pixelFormat, WXGLContext shareContext )
 {
-    m_aglContext = aglCreateContext(win->GetAGLPixelFormat(),
-                                    other ? other->m_aglContext : NULL);
-    if ( !m_aglContext )
+    WXGLContext context = aglCreateContext(pixelFormat, shareContext);
+    if ( !context )
         wxLogAGLError("aglCreateContext");
+    return context ;
 }
 
-wxGLContext::~wxGLContext()
+void WXGLDestroyContext( WXGLContext context )
 {
-    if ( m_aglContext )
+    if ( context )
     {
-        // it's ok to pass the current context to this function
-        if ( !aglDestroyContext(m_aglContext) )
+        if ( !aglDestroyContext(context) )
+        {
             wxLogAGLError("aglDestroyContext");
+        }
     }
 }
 
-bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
+void WXGLSwapBuffers( WXGLContext context )
 {
-    if ( !m_aglContext )
-        return false;
+    aglSwapBuffers(context);
+}
 
-    AGLDrawable drawable = (AGLDrawable)GetWindowPort(
-                                MAC_WXHWND(win.MacGetTopLevelWindowRef()));
-    if ( !aglSetDrawable(m_aglContext, drawable) )
+WXGLContext WXGLGetCurrentContext()
+{
+    return aglGetCurrentContext();
+}
+
+void WXGLDestroyPixelFormat( WXGLPixelFormat pixelFormat )
+{
+    if ( pixelFormat )
     {
-        wxLogAGLError("aglSetDrawable");
-        return false;
+        aglDestroyPixelFormat(pixelFormat);
     }
-
-    if ( !aglSetCurrentContext(m_aglContext) )
-    {
-        wxLogAGLError("aglSetCurrentContext");
-        return false;
-    }
-
-    wx_const_cast(wxGLCanvas&, win).SetViewport();
-    return true;
 }
 
-// ----------------------------------------------------------------------------
-// wxGLCanvas
-// ----------------------------------------------------------------------------
-
-IMPLEMENT_CLASS(wxGLCanvas, wxWindow)
-
-BEGIN_EVENT_TABLE(wxGLCanvas, wxWindow)
-    EVT_SIZE(wxGLCanvas::OnSize)
-END_EVENT_TABLE()
-
-wxGLCanvas::wxGLCanvas(wxWindow *parent,
-                       wxWindowID id,
-                       const int *attribList,
-                       const wxPoint& pos,
-                       const wxSize& size,
-                       long style,
-                       const wxString& name,
-                       const wxPalette& palette)
-{
-    Create(parent, id, pos, size, style, name, attribList, palette);
-}
-
-#if WXWIN_COMPATIBILITY_2_8
-
-wxGLCanvas::wxGLCanvas(wxWindow *parent,
-                       wxWindowID id,
-                       const wxPoint& pos,
-                       const wxSize& size,
-                       long style,
-                       const wxString& name,
-                       const int *attribList,
-                       const wxPalette& palette)
-{
-    if ( Create(parent, id, pos, size, style, name, attribList, palette) )
-        m_glContext = new wxGLContext(this);
-}
-
-wxGLCanvas::wxGLCanvas(wxWindow *parent,
-                       const wxGLContext *shared,
-                       wxWindowID id,
-                       const wxPoint& pos,
-                       const wxSize& size,
-                       long style,
-                       const wxString& name,
-                       const int *attribList,
-                       const wxPalette& palette)
-{
-    if ( Create(parent, id, pos, size, style, name, attribList, palette) )
-        m_glContext = new wxGLContext(this, shared);
-}
-
-wxGLCanvas::wxGLCanvas(wxWindow *parent,
-                       const wxGLCanvas *shared,
-                       wxWindowID id,
-                       const wxPoint& pos,
-                       const wxSize& size,
-                       long style,
-                       const wxString& name,
-                       const int *attribList,
-                       const wxPalette& palette)
-{
-    if ( Create(parent, id, pos, size, style, name, attribList, palette) )
-        m_glContext = new wxGLContext(this, shared ? shared->m_glContext : NULL);
-}
-
-#endif // WXWIN_COMPATIBILITY_2_8
-
-/* static */
-bool wxGLCanvasBase::IsExtensionSupported(const char *extension)
-{
-    // we need a valid context to query for extensions.
-    const GLint defaultAttribs[] = { AGL_RGBA, AGL_DOUBLEBUFFER, AGL_NONE };
-    AGLPixelFormat fmt = aglChoosePixelFormat(NULL, 0, defaultAttribs);
-    AGLContext ctx = aglCreateContext(fmt, NULL);
-    if ( !ctx )
-        return false;
-
-    wxString extensions = wxString::FromAscii(glGetString(GL_EXTENSIONS));
-
-    aglDestroyPixelFormat(fmt);
-    aglDestroyContext(ctx);
-
-    return IsExtensionInList(extensions, extension);
-}
-
-/* static */
-bool wxGLCanvas::IsAGLMultiSampleAvailable()
-{
-    static int s_isMultiSampleAvailable = -1;
-    if ( s_isMultiSampleAvailable == -1 )
-        s_isMultiSampleAvailable = IsExtensionSupported("GL_ARB_multisample");
-
-    return s_isMultiSampleAvailable != 0;
-}
-
-static AGLPixelFormat ChoosePixelFormat(const int *attribList)
+WXGLPixelFormat WXGLChoosePixelFormat(const int *attribList)
 {
     GLint data[512];
     const GLint defaultAttribs[] =
@@ -340,6 +242,83 @@ static AGLPixelFormat ChoosePixelFormat(const int *attribList)
     return aglChoosePixelFormat(NULL, 0, attribs);
 }
 
+// ----------------------------------------------------------------------------
+// wxGLContext
+// ----------------------------------------------------------------------------
+
+bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
+{
+    if ( !m_glContext )
+        return false;
+
+    AGLDrawable drawable = (AGLDrawable)GetWindowPort(
+                                MAC_WXHWND(win.MacGetTopLevelWindowRef()));
+
+    GLint bufnummer = win.GetAglBufferName();
+    aglSetInteger(m_glContext, AGL_BUFFER_NAME, &bufnummer);
+    //win.SetLastContext(m_glContext);
+    
+    wx_const_cast(wxGLCanvas&, win).SetViewport();
+
+    if ( !aglSetDrawable(m_glContext, drawable) )
+    {
+        wxLogAGLError("aglSetDrawable");
+        return false;
+    }
+
+    if ( !aglSetCurrentContext(m_glContext) )
+    {
+        wxLogAGLError("aglSetCurrentContext");
+        return false;
+    }
+    return true;
+}
+
+// ----------------------------------------------------------------------------
+// wxGLCanvas
+// ----------------------------------------------------------------------------
+
+/*
+
+sharing contexts under AGL is not straightforward, to quote from 
+
+http://lists.apple.com/archives/mac-opengl/2003/Jan/msg00402.html :
+
+In Carbon OpenGL (AGL) you would use call aglSetInteger to setup a 
+buffer name and attached each context to that same name. From AGL 
+you can do:
+
+GLint id = 1;
+
+ctx1 = aglCreateContext...
+aglSetInteger(ctx1, AGL_BUFFER_NAME, &id); // create name
+aglAttachDrawable (ctx1,...); // create surface with associated with 
+name (first time)
+ctx2 = aglCreateContext...
+aglSetInteger(ctx2, AGL_BUFFER_NAME, &id); // uses previously created name
+aglAttachDrawable (ctx2, ...); // uses existing surface with existing name
+
+AGL Docs say:
+AGL_BUFFER_NAME
+params contains one value: a non-negative integer name of the surface to be
+associated to be with the current context. If this value is non-zero, and a
+surface of this name is not associated to this drawable, a new surface with
+this name is created and associated with the context when
+aglSetDrawable is called subsequently. If this is a previously allocated
+buffer name within the namespace of the current window (e.g., drawable),
+that previously allocated surface is associated with the context (e.g., no
+new surface is created) and the subsequent call to aglSetDrawable will
+attach that surface. This allows multiple contexts to be attached to a single
+surface. Using the default buffer name zero, returns to one surface per
+context behavior.
+*/
+
+/*
+so what I'm doing is to have a dummy aglContext attached to a wxGLCanvas, 
+assign it a buffer number
+*/
+
+
 bool wxGLCanvas::Create(wxWindow *parent,
                         wxWindowID id,
                         const wxPoint& pos,
@@ -352,12 +331,21 @@ bool wxGLCanvas::Create(wxWindow *parent,
     m_needsUpdate = false;
     m_macCanvasIsShown = false;
 
-    m_aglFormat = ChoosePixelFormat(attribList);
-    if ( !m_aglFormat )
+    m_glFormat = WXGLChoosePixelFormat(attribList);
+    if ( !m_glFormat )
         return false;
 
     if ( !wxWindow::Create(parent, id, pos, size, style, name) )
         return false;
+
+    m_dummyContext = WXGLCreateContext(m_glFormat, NULL);
+
+    static GLint gCurrentBufferName = 1;
+    m_bufferName = gCurrentBufferName++;
+    aglSetInteger (m_dummyContext, AGL_BUFFER_NAME, &m_bufferName); 
+    
+    AGLDrawable drawable = (AGLDrawable)GetWindowPort(MAC_WXHWND(MacGetTopLevelWindowRef()));
+    aglSetDrawable(m_dummyContext, drawable);
 
     m_macCanvasIsShown = true;
 
@@ -366,30 +354,11 @@ bool wxGLCanvas::Create(wxWindow *parent,
 
 wxGLCanvas::~wxGLCanvas()
 {
-    if ( m_aglFormat )
-        aglDestroyPixelFormat(m_aglFormat);
-}
-
-/* static */
-bool wxGLCanvasBase::IsDisplaySupported(const int *attribList)
-{
-    AGLPixelFormat aglFormat = ChoosePixelFormat(attribList);
-
-    if ( !aglFormat )
-       return false;
-
-    aglDestroyPixelFormat(aglFormat);
-
-    return true;
-}
-
-bool wxGLCanvas::SwapBuffers()
-{
-    AGLContext context = aglGetCurrentContext();
-    wxCHECK_MSG(context, false, _T("should have current context"));
-
-    aglSwapBuffers(context);
-    return true;
+    if ( m_glFormat )
+        WXGLDestroyPixelFormat(m_glFormat);
+        
+    if ( m_dummyContext )
+        WXGLDestroyContext(m_dummyContext);
 }
 
 void wxGLCanvas::SetViewport()
@@ -399,9 +368,9 @@ void wxGLCanvas::SetViewport()
 
     m_needsUpdate = false;
 
-    AGLContext context = aglGetCurrentContext();
-    if ( !context )
-        return;
+//    AGLContext context = aglGetCurrentContext();
+//    if ( !context )
+//        return;
 
     // viewport is initially set to entire port, adjust it to just this window
     int x = 0,
@@ -414,36 +383,23 @@ void wxGLCanvas::SetViewport()
     Rect bounds;
     GetWindowPortBounds(MAC_WXHWND(MacGetTopLevelWindowRef()) , &bounds);
 
-#if 0
-    // TODO in case we adopt point vs pixel coordinates, this will make the conversion
-    HIRect hiRect = CGRectMake( x, y, width, height );
-    HIRectConvert( &hiRect, kHICoordSpace72DPIGlobal, NULL, kHICoordSpaceScreenPixel, NULL);
-    HIRect hiBounds = CGRectMake( 0, 0, bounds.right - bounds.left , bounds.bottom - bounds.top );
-    HIRectConvert( &hiBounds, kHICoordSpace72DPIGlobal, NULL, kHICoordSpaceScreenPixel, NULL);
-    GLint parms[4];
-    parms[0] = hiRect.origin.x;
-    parms[1] = hiBounds.size.height - (hiRect.origin.y + hiRect.size.height);
-    parms[2] = hiRect.size.width;
-    parms[3] = hiRect.size.height;
-#else
     GLint parms[4];
     parms[0] = x;
     parms[1] = bounds.bottom - bounds.top - ( y + height );
     parms[2] = width;
     parms[3] = height;
-#endif
 
     // move the buffer rect out of sight if we're hidden
     if ( !m_macCanvasIsShown )
         parms[0] += 20000;
 
-    if ( !aglSetInteger(context, AGL_BUFFER_RECT, parms) )
+    if ( !aglSetInteger(m_dummyContext, AGL_BUFFER_RECT, parms) )
         wxLogAGLError("aglSetInteger(AGL_BUFFER_RECT)");
 
-    if ( !aglEnable(context, AGL_BUFFER_RECT) )
+    if ( !aglEnable(m_dummyContext, AGL_BUFFER_RECT) )
         wxLogAGLError("aglEnable(AGL_BUFFER_RECT)");
 
-    if ( !aglUpdateContext(context) )
+    if ( !aglUpdateContext(m_dummyContext) )
         wxLogAGLError("aglUpdateContext");
 }
 
@@ -462,6 +418,7 @@ void wxGLCanvas::MacUpdateView()
 void wxGLCanvas::MacSuperChangedPosition()
 {
     MacUpdateView();
+    SetViewport();
     wxWindow::MacSuperChangedPosition();
 }
 
@@ -480,20 +437,6 @@ void wxGLCanvas::MacVisibilityChanged()
     }
 
     wxWindowMac::MacVisibilityChanged();
-}
-
-// ----------------------------------------------------------------------------
-// wxGLApp
-// ----------------------------------------------------------------------------
-
-bool wxGLApp::InitGLVisual(const int *attribList)
-{
-    AGLPixelFormat fmt = ChoosePixelFormat(attribList);
-    if ( !fmt )
-        return false;
-
-    aglDestroyPixelFormat(fmt);
-    return true;
 }
 
 #endif // wxUSE_GLCANVAS

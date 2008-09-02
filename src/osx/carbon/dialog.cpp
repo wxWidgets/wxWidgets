@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/dialog.cpp
+// Name:        src/osx/carbon/dialog.cpp
 // Purpose:     wxDialog class
 // Author:      Stefan Csomor
 // Modified by:
@@ -20,112 +20,10 @@
     #include "wx/settings.h"
 #endif // WX_PRECOMP
 
-#include "wx/osx/uma.h"
+#include "wx/osx/private.h"
+#include "wx/evtloop.h"
 
-
-// Lists to keep track of windows, so we can disable/enable them
-// for modal dialogs
-wxList wxModalDialogs;
-
-IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxTopLevelWindow)
-
-void wxDialog::Init()
-{
-    m_isModalStyle = false;
-}
-
-bool wxDialog::Create( wxWindow *parent,
-    wxWindowID id,
-    const wxString& title,
-    const wxPoint& pos,
-    const wxSize& size,
-    long style,
-    const wxString& name )
-{
-    SetExtraStyle( GetExtraStyle() | wxTOPLEVEL_EX_DIALOG );
-
-    // All dialogs should really have this style...
-    style |= wxTAB_TRAVERSAL;
-
-    // ...but not these styles
-    style &= ~(wxYES | wxOK | wxNO); // | wxCANCEL
-
-    if ( !wxTopLevelWindow::Create( parent, id, title, pos, size, style, name ) )
-        return false;
-
-    return true;
-}
-
-void wxDialog::SetModal( bool flag )
-{
-    if ( flag )
-    {
-        m_isModalStyle = true;
-
-        SetWindowModality( (WindowRef)GetWXWindow(), kWindowModalityAppModal, NULL ) ;
-    }
-    else
-    {
-        m_isModalStyle = false;
-    }
-}
-
-wxDialog::~wxDialog()
-{
-    m_isBeingDeleted = true;
-
-    // if the dialog is modal, this will end its event loop
-    Show(false);
-}
-
-// On mac command-stop does the same thing as Esc, let the base class know
-// about it
-bool wxDialog::IsEscapeKey(const wxKeyEvent& event)
-{
-    if ( event.GetKeyCode() == '.' && event.GetModifiers() == wxMOD_CMD )
-        return true;
-
-    return wxDialogBase::IsEscapeKey(event);
-}
-
-bool wxDialog::IsModal() const
-{
-    return wxModalDialogs.Find((wxDialog *)this) != NULL; // const_cast
-    //    return m_isModalStyle;
-}
-
-
-bool wxDialog::Show(bool show)
-{
-    if ( !wxDialogBase::Show(show) )
-        // nothing to do
-        return false;
-
-    if (show && CanDoLayoutAdaptation())
-        DoLayoutAdaptation();
-
-    if ( show )
-        // usually will result in TransferDataToWindow() being called
-        InitDialog();
-
-    HiliteMenu(0);
-
-    if ( m_isModalStyle )
-    {
-        if ( show )
-        {
-            DoShowModal();
-        }
-        else // end of modal dialog
-        {
-            // this will cause IsModalShowing() return false and our local
-            // message loop will terminate
-            wxModalDialogs.DeleteObject(this);
-        }
-    }
-
-    return true;
-}
+extern wxList wxModalDialogs;
 
 void wxDialog::DoShowModal()
 {
@@ -149,10 +47,16 @@ void wxDialog::DoShowModal()
     }
     BeginAppModalStateForWindow(windowRef) ;
 
-    while ( IsModal() )
+    wxEventLoop * const
+        loop = wx_static_cast(wxEventLoop *, wxEventLoop::GetActive());
+        
+    
+    wxASSERT_MSG( loop , wxT("No Event Loop in place") );
+        
+    if ( loop )
     {
-        wxTheApp->MacDoOneEvent() ;
-        // calls process idle itself
+        while ( IsModal() )
+            loop->Dispatch();
     }
 
     EndAppModalStateForWindow(windowRef) ;
@@ -161,28 +65,3 @@ void wxDialog::DoShowModal()
         SetWindowGroupParent( windowGroup , formerParentGroup );
     }
 }
-
-
-// Replacement for Show(true) for modal dialogs - returns return code
-int wxDialog::ShowModal()
-{
-    if ( !m_isModalStyle )
-        SetModal(true);
-
-    if ( IsShown() )
-        DoShowModal();
-    else
-        Show(true);
-
-    return GetReturnCode();
-}
-
-// NB: this function (surprizingly) may be called for both modal and modeless
-//     dialogs and should work for both of them
-void wxDialog::EndModal(int retCode)
-{
-    SetReturnCode(retCode);
-    Show(false);
-    SetModal(false);
-}
-

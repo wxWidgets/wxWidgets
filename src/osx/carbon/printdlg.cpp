@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/printdlg.cpp
+// Name:        src/osx/carbon/printdlg.cpp
 // Purpose:     wxPrintDialog, wxPageSetupDialog
 // Author:      Stefan Csomor
 // Modified by:
@@ -84,9 +84,7 @@ int wxMacPrintDialog::ShowModal()
 
     int result = wxID_CANCEL;
     
-#ifdef __LP64__
-    // TODO use NSPrintPanel
-#else
+#if wxOSX_USE_CARBON
     OSErr err = noErr;
     Boolean accepted;
     err = PMSessionPrintDialog(
@@ -120,6 +118,8 @@ int wxMacPrintDialog::ShowModal()
         m_printDialogData.GetPrintData().ConvertFromNative();
         ((wxMacCarbonPrintData*)m_printDialogData.GetPrintData().GetNativeData())->TransferTo( &m_printDialogData );
     }
+#else
+    // TODO use NSPrintPanel
 #endif
     return result;
 }
@@ -162,8 +162,7 @@ int wxMacPageSetupDialog::ShowModal()
     ((wxMacCarbonPrintData*)m_pageSetupData.GetPrintData().GetNativeData())->TransferFrom( &m_pageSetupData );
 
     int result = wxID_CANCEL;
-#ifdef __LP64__
-#else
+#if wxOSX_USE_CARBON
     OSErr err = noErr;
     Boolean accepted;
 
@@ -200,6 +199,8 @@ int wxMacPageSetupDialog::ShowModal()
         m_pageSetupData.SetPaperSize( m_pageSetupData.GetPrintData().GetPaperSize() );
         ((wxMacCarbonPrintData*)m_pageSetupData.GetPrintData().GetNativeData())->TransferTo( &m_pageSetupData );
     }
+#else
+    // TODO
 #endif
     return result;
 }

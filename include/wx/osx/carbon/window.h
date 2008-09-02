@@ -84,7 +84,9 @@ public:
                                const;
 protected:
     virtual void DoEnable( bool enable );
+#if wxUSE_MENUS
     virtual bool DoPopupMenu( wxMenu *menu, int x, int y );
+#endif
 
     virtual void DoFreeze();
     virtual void DoThaw();
@@ -247,6 +249,9 @@ public:
     void *              MacGetCGContextRef() { return m_cgContextRef ; }
     void                MacSetCGContextRef(void * cg) { m_cgContextRef = cg ; }
 
+    // osx specific event handling common for all osx-ports
+    
+    virtual bool        HandleClicked( double timestampsec );
 protected:
     // For controls like radio buttons which are genuinely composite
     wxList              m_subControls;

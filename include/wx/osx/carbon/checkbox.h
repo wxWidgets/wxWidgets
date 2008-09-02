@@ -34,9 +34,11 @@ public:
     virtual void SetValue(bool);
     virtual bool GetValue() const;
 
-    virtual wxInt32 MacControlHit( WXEVENTHANDLERREF handler , WXEVENTREF event ) ;
     virtual void Command(wxCommandEvent& event);
 
+    // osx specific event handling common for all osx-ports
+    
+    virtual bool        HandleClicked( double timestampsec );
 protected:
     void DoSet3StateValue(wxCheckBoxState val);
     virtual wxCheckBoxState DoGet3StateValue() const;

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/msgdlg.cpp
+// Name:        src/osx/carbon/msgdlg.cpp
 // Purpose:     wxMessageDialog
 // Author:      Stefan Csomor
 // Modified by:

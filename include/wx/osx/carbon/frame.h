@@ -103,8 +103,13 @@ protected:
     virtual void DoGetClientSize(int *width, int *height) const;
     virtual void DoSetClientSize(int width, int height);
 
+#if wxUSE_MENUS
     virtual void DetachMenuBar();
     virtual void AttachMenuBar(wxMenuBar *menubar);
+#endif
+
+    // osx specific event handling common for all osx-ports
+    virtual void HandleResized( long timestamp );
 
 protected:
     // the last focused child: we restore focus to it on activation

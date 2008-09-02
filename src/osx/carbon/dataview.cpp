@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/datavgen.cpp
+// Name:        src/osx/carbon/datavgen.cpp
 // Purpose:     wxDataViewCtrl native mac implementation
 // Author:      
 // Id:          $Id$

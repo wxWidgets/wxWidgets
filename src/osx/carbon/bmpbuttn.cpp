@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/bmpbuttn.cpp
+// Name:        src/osx/carbon/bmpbuttn.cpp
 // Purpose:     wxBitmapButton
 // Author:      Stefan Csomor
 // Modified by:
@@ -20,9 +20,7 @@
     #include "wx/dcmemory.h"
 #endif
 
-IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton, wxButton)
-
-#include "wx/osx/uma.h"
+#include "wx/osx/private.h"
 
 //---------------------------------------------------------------------------
 // Helper functions
@@ -79,111 +77,88 @@ static wxBitmap wxMakeStdSizeBitmap(const wxBitmap& bitmap)
 
 //---------------------------------------------------------------------------
 
-bool wxBitmapButton::Create( wxWindow *parent,
-                             wxWindowID id, const wxBitmap& bitmap,
-                             const wxPoint& pos,
-                             const wxSize& size,
-                             long style,
-                             const wxValidator& validator,
-                             const wxString& name )
+class wxMacBitmapButton : public wxMacControl
 {
-    m_macIsUserPane = false;
-
-    // since bitmapbuttonbase is subclass of button calling wxBitmapButtonBase::Create
-    // essentially creates an additional button
-    if ( !wxControl::Create( parent, id, pos, size, style, validator, name ) )
-        return false;
-
-    if ( style & wxBU_AUTODRAW )
+public:
+    wxMacBitmapButton( wxWindowMac* peer ) : wxMacControl(peer)
     {
-        m_marginX =
-        m_marginY = wxDEFAULT_BUTTON_MARGIN;
     }
-    else
+    
+    void SetBitmap(const wxBitmap& bitmap)
     {
-        m_marginX =
-        m_marginY = 0;
-    }
+        wxBitmap bmp;
+        if ( GetWXPeer()->HasFlag( wxBORDER_NONE ) )
+        {
+            bmp = wxMakeStdSizeBitmap(bitmap);
+            // TODO set bitmap in peer as well
+        }
+        else
+            bmp = bitmap;
 
+        ControlButtonContentInfo info;
+
+        if ( GetWXPeer()->HasFlag( wxBORDER_NONE ) )
+        {        
+            wxMacCreateBitmapButton( &info, bmp, kControlContentIconRef );
+            if ( info.contentType != kControlNoContent )
+                SetData( kControlIconPart, kControlIconContentTag, info );
+        }
+        else
+        {
+            wxMacCreateBitmapButton( &info, bmp );
+            if ( info.contentType != kControlNoContent )
+                SetData( kControlButtonPart, kControlBevelButtonContentTag, info );
+        }
+
+        wxMacReleaseBitmapButton( &info );
+    }
+};
+
+wxWidgetImplType* wxWidgetImpl::CreateBitmapButton( wxWindowMac* wxpeer, 
+                                    wxWindowMac* parent, 
+                                    wxWindowID id, 
+                                    const wxBitmap& bitmap,
+                                    const wxPoint& pos, 
+                                    const wxSize& size,
+                                    long style, 
+                                    long extraStyle)
+{
     OSStatus err = noErr;
     ControlButtonContentInfo info;
 
-    Rect bounds = wxMacGetBoundsForControl( this, pos, size );
-    m_peer = new wxMacControl( this );
+    Rect bounds = wxMacGetBoundsForControl( wxpeer, pos, size );
+    wxMacControl* peer = new wxMacBitmapButton( wxpeer );
+    wxBitmap bmp;
 
-    if ( bitmap.Ok() && HasFlag(wxBORDER_NONE) )
-        m_bmpNormal = wxMakeStdSizeBitmap(bitmap);
+    if ( bitmap.Ok() && (style & wxBORDER_NONE) )
+    {
+        bmp = wxMakeStdSizeBitmap(bitmap);
+        // TODO set bitmap in peer as well
+    }
     else
-        m_bmpNormal = bitmap;
+        bmp = bitmap;
 
 
-    if ( HasFlag( wxBORDER_NONE ) )
+    if ( style & wxBORDER_NONE )
     {
 		// contrary to the docs this control only works with iconrefs
-        wxMacCreateBitmapButton( &info, m_bmpNormal, kControlContentIconRef );
+        wxMacCreateBitmapButton( &info, bmp, kControlContentIconRef );
         err = CreateIconControl(
                 MAC_WXHWND(parent->MacGetTopLevelWindowRef()),
-                &bounds, &info, false, m_peer->GetControlRefAddr() );
+                &bounds, &info, false, peer->GetControlRefAddr() );
     }
     else
     {
-        wxMacCreateBitmapButton( &info, m_bmpNormal );
+        wxMacCreateBitmapButton( &info, bmp );
         err = CreateBevelButtonControl(
                 MAC_WXHWND(parent->MacGetTopLevelWindowRef()), &bounds, CFSTR(""),
                 ((style & wxBU_AUTODRAW) ? kControlBevelButtonSmallBevel : kControlBevelButtonNormalBevel ),
-                kControlBehaviorOffsetContents, &info, 0, 0, 0, m_peer->GetControlRefAddr() );
+                kControlBehaviorOffsetContents, &info, 0, 0, 0, peer->GetControlRefAddr() );
     }
 
     verify_noerr( err );
 
     wxMacReleaseBitmapButton( &info );
-    wxASSERT_MSG( m_peer != NULL && m_peer->IsOk(), wxT("No valid native Mac control") );
-
-    MacPostControlCreate( pos, size );
-
-    return true;
+    return peer;
 }
-
-void wxBitmapButton::SetBitmapLabel( const wxBitmap& bitmap )
-{
-    if ( HasFlag( wxBORDER_NONE ) )
-        m_bmpNormal = wxMakeStdSizeBitmap(bitmap);
-    else
-        m_bmpNormal = bitmap;
-    
-    InvalidateBestSize();
-
-    ControlButtonContentInfo info;
-
-    if ( HasFlag( wxBORDER_NONE ) )
-    {        
-        wxMacCreateBitmapButton( &info, m_bmpNormal, kControlContentIconRef );
-        if ( info.contentType != kControlNoContent )
-            m_peer->SetData( kControlIconPart, kControlIconContentTag, info );
-    }
-    else
-    {
-        wxMacCreateBitmapButton( &info, m_bmpNormal );
-        if ( info.contentType != kControlNoContent )
-            m_peer->SetData( kControlButtonPart, kControlBevelButtonContentTag, info );
-    }
-
-    wxMacReleaseBitmapButton( &info );
-}
-
-wxSize wxBitmapButton::DoGetBestSize() const
-{
-    wxSize best;
-
-    best.x = 2 * m_marginX;
-    best.y = 2 * m_marginY;
-    if ( m_bmpNormal.Ok() )
-    {
-        best.x += m_bmpNormal.GetWidth();
-        best.y += m_bmpNormal.GetHeight();
-    }
-
-    return best;
-}
-
 #endif

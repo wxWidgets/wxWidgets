@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/mdi.cpp
+// Name:        src/osx/carbon/mdi.cpp
 // Purpose:     MDI classes
 // Author:      Stefan Csomor
 // Modified by:

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/corefoundation/strconv.cpp
+// Name:        src/osx/corefoundation/strconv.cpp
 // Purpose:     Unicode conversion classes
 // Author:      David Elliott
 // Modified by:
