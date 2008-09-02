@@ -244,8 +244,6 @@ public :
                 DeleteMenuItem(m_osxMenu , i);
                 impl->AttachToParent( NULL, 0 );
             }
-            
-            delete entry;
         }
     }
     
