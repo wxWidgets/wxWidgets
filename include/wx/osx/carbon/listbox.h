@@ -32,9 +32,9 @@ WX_DEFINE_ARRAY( char* , wxListDataArray );
 // List box control
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxListWidgetColumn;
+class WXDLLIMPEXP_FWD_CORE wxListWidgetColumn;
 
-class WXDLLIMPEXP_CORE wxListWidgetCellValue;
+class WXDLLIMPEXP_FWD_CORE wxListWidgetCellValue;
 
 class WXDLLIMPEXP_CORE wxListBox : public wxListBoxBase
 {

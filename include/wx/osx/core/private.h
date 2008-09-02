@@ -88,6 +88,7 @@ class wxNonOwnedWindow;
 class wxMacControl;
 class wxWidgetImpl;
 class wxNotebook;
+class wxTextCtrl;
 
 #if wxOSX_USE_CARBON
 typedef wxMacControl wxWidgetImplType;
@@ -416,8 +417,6 @@ protected :
 //
 // the interface to be implemented eg by a listbox
 //
-
-class WXDLLIMPEXP_CORE wxMacDataItem ;
 
 class WXDLLIMPEXP_CORE wxListWidgetColumn 
 {
