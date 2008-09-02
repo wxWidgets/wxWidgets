@@ -132,7 +132,6 @@ ALIASES += row3col{7}="<tr><td>\1</td> <td>\2</td> <td>\3,\4,\5,\6,\7</td></tr>"
 ALIASES += row3col{8}="<tr><td>\1</td> <td>\2</td> <td>\3,\4,\5,\6,\7,\8</td></tr>"
 ALIASES += row3col{9}="<tr><td>\1</td> <td>\2</td> <td>\3,\4,\5,\6,\7,\8,\9</td></tr>"
 ALIASES += row3col{10}="<tr><td>\1</td> <td>\2</td> <td>\3,\4,\5,\6,\7,\8,\9,\10</td></tr>"
-ALIASES += hdr3col{3}="<tr><th>\1</th> <th>\2</th> <th>\3</th></tr>"
 ALIASES += endTable="</table></center>"
 
 # definition list aliases
