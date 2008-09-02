@@ -794,6 +794,11 @@ typedef pid_t GPid;
  */
 #define wxHAVE_PTHREAD_CLEANUP 1
 
+/*
+ * Define if compiler has __thread keyword.
+ */
+#undef HAVE___THREAD_KEYWORD
+
 /* compatibility */
 /*
  * Use OpenGL
