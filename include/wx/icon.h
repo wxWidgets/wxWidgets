@@ -32,7 +32,7 @@
 #elif defined(__WXDFB__)
   #include "wx/generic/icon.h"
 #elif defined(__WXMAC__)
-#if wxOSX_USE_CARBON
+#if wxOSX_USE_COCOA_OR_CARBON
   #include "wx/osx/icon.h"
 #else
   #include "wx/generic/icon.h"
