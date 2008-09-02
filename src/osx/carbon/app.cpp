@@ -1076,7 +1076,7 @@ void wxApp::OnIdle(wxIdleEvent& WXUNUSED(event))
     // either events to the threads other than main or events posted with
     // wxPostEvent() functions
 #ifndef __WXUNIVERSAL__
-#if wxUSE_MENU
+#if wxUSE_MENUS
   if (!wxMenuBar::MacGetInstalledMenuBar() && wxMenuBar::MacGetCommonMenuBar())
     wxMenuBar::MacGetCommonMenuBar()->MacInstallMenuBar();
 #endif
