@@ -907,8 +907,8 @@ void wxAuiToolBar::AddTool(int tool_id,
                            const wxBitmap& bitmap,
                            const wxBitmap& disabled_bitmap,
                            wxItemKind kind,
-                           const wxString& WXUNUSED(short_help_string),
-                           const wxString& WXUNUSED(long_help_string),
+                           const wxString& short_help_string,
+                           const wxString& long_help_string,
                            wxObject* WXUNUSED(client_data))
 {
     wxAuiToolBarItem item;
@@ -916,6 +916,8 @@ void wxAuiToolBar::AddTool(int tool_id,
     item.label = label;
     item.bitmap = bitmap;
     item.disabled_bitmap = disabled_bitmap;
+    item.short_help = short_help_string;
+    item.long_help = long_help_string;
     item.active = true;
     item.dropdown = false;
     item.space_pixels = 0;
