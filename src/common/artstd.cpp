@@ -47,7 +47,7 @@ protected:
 
 // There are two ways of getting the standard icon: either via XPMs or via
 // wxIcon ctor. This depends on the platform:
-#if defined(__WXUNIVERSAL__)
+#if defined(__WXUNIVERSAL__) || ( defined(__WXMAC__) && wxOSX_USE_IPHONE )
     #define CREATE_STD_ICON(iconId, xpmRc) return wxNullBitmap;
 #elif defined(__WXGTK__) || defined(__WXMOTIF__)
     #define CREATE_STD_ICON(iconId, xpmRc) return wxBitmap(xpmRc##_xpm);
@@ -77,7 +77,7 @@ protected:
     wxArtProvider::Push(new wxDefaultArtProvider);
 }
 
-#if !(defined(__WXGTK20__) || defined(__WXMAC__)) || defined(__WXUNIVERSAL__)
+#if !(defined(__WXGTK20__) || (defined(__WXMAC__) && wxOSX_USE_CARBON)) || defined(__WXUNIVERSAL__)
 /*static*/ void wxArtProvider::InitNativeProvider()
 {
 }

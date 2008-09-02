@@ -25,7 +25,7 @@
 
 #include "wx/listctrl.h"
 
-#if ((!defined(__WXMSW__) && !defined(__WXMAC__)) || defined(__WXUNIVERSAL__))
+#if ((!defined(__WXMSW__) && !(defined(__WXMAC__) && wxOSX_USE_CARBON)) || defined(__WXUNIVERSAL__))
     // if we have a native version, its implementation file does all this
     IMPLEMENT_DYNAMIC_CLASS(wxListItem, wxObject)
     IMPLEMENT_DYNAMIC_CLASS(wxListView, wxListCtrl)
@@ -51,6 +51,8 @@
 
 #ifdef __WXMAC__
     #include "wx/osx/private.h"
+    // for themeing support
+    #include <Carbon/Carbon.h>
 #endif
 
 
@@ -5064,7 +5066,11 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
     if ( GetWindowVariant() == wxWINDOW_VARIANT_NORMAL )
     {
         wxFont font;
+#if wxOSX_USE_CARBON
         font.MacCreateFromThemeFont( kThemeViewsFont );
+#else
+        font.MacCreateFromUIFont( kCTFontViewsFontType );
+#endif
         SetFont( font );
     }
 #endif
@@ -5077,7 +5083,11 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
         if (m_headerWin)
         {
             wxFont font;
+#if wxOSX_USE_CARBON
             font.MacCreateFromThemeFont( kThemeSmallSystemFont );
+#else
+        font.MacCreateFromUIFont( kCTFontSystemFontType );
+#endif
             m_headerWin->SetFont( font );
             CalculateAndSetHeaderHeight();
         }

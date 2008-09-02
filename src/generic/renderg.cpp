@@ -673,7 +673,7 @@ wxRendererGeneric::DrawItemSelectionRect(wxWindow * WXUNUSED(win),
 
     dc.SetBrush(brush);
     if ((flags & wxCONTROL_CURRENT) && (flags & wxCONTROL_FOCUSED)
-#if defined( __WXMAC__ ) && !defined(__WXUNIVERSAL__)
+#if defined( __WXMAC__ ) && !defined(__WXUNIVERSAL__) && wxOSX_USE_CARBON
                 && IsControlActive( (ControlRef)win->GetHandle() )
 #endif
     )
