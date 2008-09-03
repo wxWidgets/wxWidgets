@@ -85,7 +85,8 @@ public:
     int GetToolId() const  { return tool_id; }
     void SetToolId(int id) { tool_id = id;   }
 
-public:
+private:
+
     bool is_dropdown_clicked;
     wxPoint click_pt;
     wxRect rect;
@@ -100,13 +101,15 @@ private:
 
 class WXDLLIMPEXP_AUI wxAuiToolBarItem
 {
+    friend class wxAuiToolBar;
+    
 public:
 
     wxAuiToolBarItem()
     {
         window = NULL;
         sizer_item = NULL;
-        space_pixels = 0;
+        spacer_pixels = 0;
         id = 0;
         kind = wxITEM_NORMAL;
         state = 0;  // normal, enabled
@@ -139,7 +142,7 @@ public:
         long_help = c.long_help;
         sizer_item = c.sizer_item;
         min_size = c.min_size;
-        space_pixels = c.space_pixels;
+        spacer_pixels = c.spacer_pixels;
         id = c.id;
         kind = c.kind;
         state = c.state;
@@ -149,8 +152,54 @@ public:
         sticky = c.sticky;
         user_data = c.user_data;
     }
+    
+    
+    wxWindow* GetWindow() { return window; }
+    int GetId() const { return id; }
+    int GetKind() const { return kind; }
+    int GetState() const { return state; }
+    wxSizerItem* GetSizerItem() const { return sizer_item; }
+    
+    void SetLabel(const wxString& s) { label = s; }
+    const wxString& GetLabel() const { return label; }
+    
+    void SetBitmap(const wxBitmap& bmp) { bitmap = bmp; }
+    const wxBitmap& GetBitmap() const { return bitmap; }
+    
+    void SetDisabledBitmap(const wxBitmap& bmp) { disabled_bitmap = bmp; }
+    const wxBitmap& GetDisabledBitmap() const { return disabled_bitmap; }
+    
+    void SetHoverBitmap(const wxBitmap& bmp) { hover_bitmap = bmp; }
+    const wxBitmap& GetHoverBitmap() const { return hover_bitmap; }
+    
+    void SetShortHelp(const wxString& s) { short_help = s; }
+    const wxString& GetShortHelp() const { return short_help; }
+    
+    void SetLongHelp(const wxString& s) { long_help = s; }
+    const wxString& GetLongHelp() const { return long_help; }
+    
+    void SetMinSize(const wxSize& s) { min_size = s; }
+    const wxSize& GetMinSize() const { return min_size; }
+    
+    void SetSpacerPixels(int s) { spacer_pixels = s; }
+    int GetSpacerPixels() const { return spacer_pixels; }
+    
+    void SetProportion(int p) { proportion = p; }
+    int GetProportion() const { return proportion; }
+    
+    void SetActive(bool b) { active = b; }
+    bool IsActive() const { return active; }
+    
+    void SetHasDropDown(bool b) { dropdown = b; }
+    bool HasDropDown() const { return dropdown; }
+    
+    void SetSticky(bool b) { sticky = b; }
+    bool IsSticky() const { return sticky; }
+    
+    void SetUserData(long l) { user_data = l; }
+    long GetUserData() const { return user_data; }
 
-public:
+private:
 
     wxWindow* window;          // item's associated window
     wxString label;            // label displayed on the item
@@ -161,7 +210,7 @@ public:
     wxString long_help;        // long help (for status bar)
     wxSizerItem* sizer_item;   // sizer item
     wxSize min_size;           // item's minimum size
-    int space_pixels;          // size of a spacer
+    int spacer_pixels;         // size of a spacer
     int id;                    // item's id
     int kind;                  // item's kind
     int state;                 // state
