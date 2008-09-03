@@ -1790,7 +1790,9 @@ bool wxAuiToolBar::Realize()
                 vert_sizer->AddStretchSpacer(1);
                 ctrl_sizer_item = vert_sizer->Add(item.window, 0, wxEXPAND);
                 vert_sizer->AddStretchSpacer(1);
-                if ((m_style & wxAUI_TB_TEXT) && item.label.Length() > 0)
+                if ((m_style & wxAUI_TB_TEXT) &&
+                    m_tool_text_orientation == wxAUI_TBTOOL_TEXT_BOTTOM &&
+                    item.label.Length() > 0)
                 {
                     wxSize s = GetLabelSize(item.label);
                     vert_sizer->Add(1, s.y);
