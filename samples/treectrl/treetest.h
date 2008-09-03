@@ -246,9 +246,16 @@ public:
 #endif // wxHAS_LAST_VISIBLE
 
     void OnShowNextVisible(wxCommandEvent& WXUNUSED(event))
-        { DoShowNextOrPrev(&wxTreeCtrl::GetNextVisible, "next visible"); }
+        { DoShowRelativeItem(&wxTreeCtrl::GetNextVisible, "next visible"); }
     void OnShowPrevVisible(wxCommandEvent& WXUNUSED(event))
-        { DoShowNextOrPrev(&wxTreeCtrl::GetPrevVisible, "previous visible"); }
+        { DoShowRelativeItem(&wxTreeCtrl::GetPrevVisible, "previous visible"); }
+
+    void OnShowParent(wxCommandEvent& WXUNUSED(event))
+        { DoShowRelativeItem(&wxTreeCtrl::GetItemParent, "parent"); }
+    void OnShowPrevSibling(wxCommandEvent& WXUNUSED(event))
+        { DoShowRelativeItem(&wxTreeCtrl::GetPrevSibling, "previous sibling"); }
+    void OnShowNextSibling(wxCommandEvent& WXUNUSED(event))
+        { DoShowRelativeItem(&wxTreeCtrl::GetNextSibling, "next sibling"); }
 
     void OnIdle(wxIdleEvent& event);
     void OnSize(wxSizeEvent& event);
@@ -268,7 +275,7 @@ private:
     void DoShowFirstOrLast(TreeFunc0_t pfn, const wxString& label);
 
     typedef wxTreeItemId (wxTreeCtrl::*TreeFunc1_t)(const wxTreeItemId&) const;
-    void DoShowNextOrPrev(TreeFunc1_t pfn, const wxString& label);
+    void DoShowRelativeItem(TreeFunc1_t pfn, const wxString& label);
 
 
     wxPanel *m_panel;
@@ -337,5 +344,8 @@ enum
     TreeTest_ShowLastVisible,
     TreeTest_ShowNextVisible,
     TreeTest_ShowPrevVisible,
+    TreeTest_ShowParent,
+    TreeTest_ShowPrevSibling,
+    TreeTest_ShowNextSibling,
     TreeTest_Ctrl = 1000
 };

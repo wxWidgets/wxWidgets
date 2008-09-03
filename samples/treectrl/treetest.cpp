@@ -128,6 +128,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #endif // wxHAS_LAST_VISIBLE
     MENU_LINK(ShowNextVisible)
     MENU_LINK(ShowPrevVisible)
+    MENU_LINK(ShowParent)
+    MENU_LINK(ShowPrevSibling)
+    MENU_LINK(ShowNextSibling)
 #undef MENU_LINK
 
 END_EVENT_TABLE()
@@ -282,6 +285,10 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
 #endif // wxHAS_LAST_VISIBLE
     item_menu->Append(TreeTest_ShowNextVisible, wxT("Show &next visible"));
     item_menu->Append(TreeTest_ShowPrevVisible, wxT("Show &previous visible"));
+    item_menu->AppendSeparator();
+    item_menu->Append(TreeTest_ShowParent, "Show pa&rent");
+    item_menu->Append(TreeTest_ShowPrevSibling, "Show &previous sibling");
+    item_menu->Append(TreeTest_ShowNextSibling, "Show &next sibling");
 
 #ifndef NO_MULTIPLE_SELECTION
     item_menu->AppendSeparator();
@@ -773,25 +780,27 @@ void MyFrame::DoShowFirstOrLast(TreeFunc0_t pfn, const wxString& label)
                      label, m_treeCtrl->GetItemText(item));
 }
 
-void MyFrame::DoShowNextOrPrev(TreeFunc1_t pfn, const wxString& label)
+void MyFrame::DoShowRelativeItem(TreeFunc1_t pfn, const wxString& label)
 {
     wxTreeItemId item = m_treeCtrl->GetSelection();
 
     CHECK_ITEM( item );
 
-    if ( !m_treeCtrl->IsVisible(item) )
+    if ((pfn == (TreeFunc1_t) &wxTreeCtrl::GetPrevVisible
+         || pfn == (TreeFunc1_t) &wxTreeCtrl::GetNextVisible)
+        && !m_treeCtrl->IsVisible(item))
     {
         wxLogMessage("The selected item must be visible.");
         return;
     }
 
-    item = (m_treeCtrl->*pfn)(item);
+    wxTreeItemId new_item = (m_treeCtrl->*pfn)(item);
 
-    if ( !item.IsOk() )
+    if ( !new_item.IsOk() )
         wxLogMessage("There is no %s item", label);
     else
         wxLogMessage("The %s item is \"%s\"",
-                     label, m_treeCtrl->GetItemText(item));
+                     label, m_treeCtrl->GetItemText(new_item));
 }
 
 void MyFrame::OnSetFgColour(wxCommandEvent& WXUNUSED(event))
