@@ -19,6 +19,7 @@
 // ----------------------------------------------------------------------------
 
 #define wxSP_NOBORDER         0x0000
+#define wxSP_THIN_SASH        0x0000    // NB: the default is 3D sash
 #define wxSP_NOSASH           0x0010
 #define wxSP_PERMIT_UNSPLIT   0x0040
 #define wxSP_LIVE_UPDATE      0x0080

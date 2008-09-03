@@ -18,8 +18,10 @@
     @beginStyleTable
     @style{wxSP_3D}
            Draws a 3D effect border and sash.
+    @style{wxSP_THIN_SASH}
+           Draws a thin sash.
     @style{wxSP_3DSASH}
-           Draws a 3D effect sash.
+           Draws a 3D effect sash (part of default style).
     @style{wxSP_3DBORDER}
            Synonym for wxSP_BORDER.
     @style{wxSP_BORDER}
