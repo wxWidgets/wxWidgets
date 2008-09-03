@@ -159,27 +159,27 @@ public:
 
     /**
         Convert device X coordinate to logical coordinate, using the current
-        mapping mode.
+        mapping mode, user scale factor, device origin and axis orientation.
     */
     virtual wxCoord DeviceToLogicalX(wxCoord x);
 
     /**
         Convert device X coordinate to relative logical coordinate, using the
-        current mapping mode but ignoring the x axis orientation. Use this
-        function for converting a width, for example.
+        current mapping mode and user scale factor but ignoring the
+        axis orientation. Use this for converting a width, for example.
     */
     virtual wxCoord DeviceToLogicalXRel(wxCoord x);
 
     /**
         Converts device Y coordinate to logical coordinate, using the current
-        mapping mode.
+        mapping mode, user scale factor, device origin and axis orientation.
     */
     virtual wxCoord DeviceToLogicalY(wxCoord y);
 
     /**
         Convert device Y coordinate to relative logical coordinate, using the
-        current mapping mode but ignoring the y axis orientation. Use this
-        function for converting a height, for example.
+        current mapping mode and user scale factor but ignoring the
+        axis orientation. Use this for converting a height, for example.
     */
     virtual wxCoord DeviceToLogicalYRel(wxCoord y);
 
@@ -764,27 +764,27 @@ public:
 
     /**
         Converts logical X coordinate to device coordinate, using the current
-        mapping mode.
+        mapping mode, user scale factor, device origin and axis orientation.
     */
     virtual wxCoord LogicalToDeviceX(wxCoord x);
 
     /**
         Converts logical X coordinate to relative device coordinate, using the
-        current mapping mode but ignoring the x axis orientation. Use this for
-        converting a width, for example.
+        current mapping mode and user scale factor but ignoring the
+        axis orientation. Use this for converting a width, for example.
     */
     virtual wxCoord LogicalToDeviceXRel(wxCoord x);
 
     /**
         Converts logical Y coordinate to device coordinate, using the current
-        mapping mode.
+        mapping mode, user scale factor, device origin and axis orientation.
     */
     virtual wxCoord LogicalToDeviceY(wxCoord y);
 
     /**
         Converts logical Y coordinate to relative device coordinate, using the
-        current mapping mode but ignoring the y axis orientation. Use this for
-        converting a height, for example.
+        current mapping mode and user scale factor but ignoring the
+        axis orientation. Use this for converting a height, for example.
     */
     virtual wxCoord LogicalToDeviceYRel(wxCoord y);
 
