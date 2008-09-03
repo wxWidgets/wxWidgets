@@ -830,7 +830,7 @@ wxAuiToolBar::wxAuiToolBar(wxWindow* parent,
     SetFont(*wxNORMAL_FONT);
     m_art->SetFlags((unsigned int)m_style);
     SetExtraStyle(wxWS_EX_PROCESS_IDLE);
-    if (style & wxAUI_TB_HORZ_TEXT)
+    if (style & wxAUI_TB_HORZ_LAYOUT)
         SetToolTextOrientation(wxAUI_TBTOOL_TEXT_RIGHT);
 }
 
@@ -863,7 +863,7 @@ void wxAuiToolBar::SetWindowStyleFlag(long style)
          else
         m_overflow_visible = false;
 
-    if (style & wxAUI_TB_HORZ_TEXT)
+    if (style & wxAUI_TB_HORZ_LAYOUT)
         SetToolTextOrientation(wxAUI_TBTOOL_TEXT_RIGHT);
          else
         SetToolTextOrientation(wxAUI_TBTOOL_TEXT_BOTTOM);
