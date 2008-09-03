@@ -79,7 +79,7 @@ public:
 
     /**
         Compares the XRC version to the argument. Returns -1 if the XRC version
-        is less than the argument, +1 if greater, and 0 if they equal.
+        is less than the argument, +1 if greater, and 0 if they are equal.
     */
     int CompareVersion(int major, int minor, int release,
                        int revision) const;

@@ -107,7 +107,7 @@ public:
 
     /**
         Returns the one and only global application object.
-        Usually ::wxTheApp is usead instead.
+        Usually wxTheApp is used instead.
 
         @see SetInstance()
     */

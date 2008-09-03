@@ -264,7 +264,7 @@ public:
             @true if the window is scrolling. MSW only.
 
         @return @false if you want default feedback, or @true if you implement
-                 your own feedback. The return values is ignored under GTK.
+                your own feedback. The return value is ignored under GTK.
     */
     virtual bool GiveFeedback(wxDragResult effect);
 

@@ -1202,10 +1202,10 @@ public:
 
     /**
         Returns the @e "Modified Julian Day Number" (MJD) which is, by
-        definition, is equal to JDN - 2400000.5. The MJDs are simpler to work
-        with as the integral MJDs correspond to midnights of the dates in the
-        Gregorian calendar and not the noons like JDN. The MJD 0 represents
-        Nov 17, 1858.
+        definition, is equal to JDN - 2400000.5.
+        The MJDs are simpler to work with as the integral MJDs correspond to
+        midnights of the dates in the Gregorian calendar and not the noons like
+        JDN. The MJD 0 represents Nov 17, 1858.
     */
     double GetModifiedJulianDayNumber() const;
 
@@ -1410,7 +1410,7 @@ public:
                                     NameFlags flags = Name_Full);
 
     /**
-        Returns @true if DST was used n the given year (the current one by
+        Returns @true if DST was used in the given year (the current one by
         default) in the given country.
     */
     static bool IsDSTApplicable(int year = Inv_Year,

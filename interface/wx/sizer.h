@@ -302,7 +302,7 @@ public:
     void SetSpacer(const wxSize& size);
 
     /**
-        Set the window to be tracked by thsi item.
+        Set the window to be tracked by this item.
     */
     void SetWindow(wxWindow* window);
 

@@ -818,14 +818,16 @@ public:
     wxString& MakeCapitalized();
 
     /**
-        Converts all characters to lower case and returns the result.
+        Converts all characters to lower case and returns the reference to the
+        modified string.
 
         @see Lower()
     */
     wxString& MakeLower();
 
     /**
-        Converts all characters to upper case and returns the result.
+        Converts all characters to upper case and returns the reference to the
+        modified string.
 
         @see Upper()
     */
