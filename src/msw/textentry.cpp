@@ -287,6 +287,7 @@ void wxTextEntry::GetSelection(long *from, long *to) const
 // auto-completion
 // ----------------------------------------------------------------------------
 
+#if wxUSE_OLE
 bool wxTextEntry::AutoCompleteFileNames()
 {
 #ifdef HAS_AUTOCOMPLETE
@@ -378,6 +379,7 @@ bool wxTextEntry::AutoComplete(const wxArrayString& choices)
     return false;
 #endif // HAS_AUTOCOMPLETE/!HAS_AUTOCOMPLETE
 }
+#endif // wxUSE_OLE
 
 // ----------------------------------------------------------------------------
 // editable state

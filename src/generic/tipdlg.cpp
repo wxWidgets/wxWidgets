@@ -71,6 +71,7 @@ static const int wxID_NEXT_TIP = 32000;  // whatever
 
 // an implementation which takes the tips from the text file - each line
 // represents a tip
+#if wxUSE_TEXTFILE
 class WXDLLIMPEXP_ADV wxFileTipProvider : public wxTipProvider
 {
 public:
@@ -83,6 +84,7 @@ private:
 
     DECLARE_NO_COPY_CLASS(wxFileTipProvider)
 };
+#endif // wxUSE_TEXTFILE
 
 #ifdef __WIN32__
 // TODO an implementation which takes the tips from the given registry key
@@ -137,7 +139,7 @@ private:
 // ----------------------------------------------------------------------------
 // wxFileTipProvider
 // ----------------------------------------------------------------------------
-
+#if wxUSE_TEXTFILE
 wxFileTipProvider::wxFileTipProvider(const wxString& filename,
                                      size_t currentTip)
                  : wxTipProvider(currentTip), m_textfile(filename)
@@ -203,6 +205,7 @@ wxString wxFileTipProvider::GetTip()
 
     return tip;
 }
+#endif // wxUSE_TEXTFILE
 
 // ----------------------------------------------------------------------------
 // wxTipDialog
@@ -328,11 +331,13 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
 // our public interface
 // ----------------------------------------------------------------------------
 
+#if wxUSE_TEXTFILE
 wxTipProvider *wxCreateFileTipProvider(const wxString& filename,
                                        size_t currentTip)
 {
     return new wxFileTipProvider(filename, currentTip);
 }
+#endif // wxUSE_TEXTFILE
 
 bool wxShowTip(wxWindow *parent,
                wxTipProvider *tipProvider,
