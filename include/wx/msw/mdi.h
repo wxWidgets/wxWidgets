@@ -51,7 +51,7 @@ public:
     // accessors
     // ---------
 
-    // Get the active MDI child window (Windows only)
+    // Get the active MDI child window
     wxMDIChildFrame *GetActiveChild() const;
 
     // Get the client window
@@ -59,11 +59,20 @@ public:
 
     // Create the client window class (don't Create the window,
     // just return a new class)
-    virtual wxMDIClientWindow *OnCreateClient(void);
+    virtual wxMDIClientWindow *OnCreateClient();
 
-    // MDI windows menu
-    wxMenu* GetWindowMenu() const { return m_windowMenu; }
+    // MDI windows menu functions
+    // --------------------------
+
+    // return the pointer to the current window menu or NULL if we don't have
+    // because of wxFRAME_NO_WINDOW_MENU style
+    wxMenu *GetWindowMenu() const { return m_windowMenu; }
+
+    // use the given menu instead of the default window menu
+    //
+    // menu can be NULL to disable the window menu completely
     void SetWindowMenu(wxMenu* menu) ;
+
     virtual void DoMenuUpdates(wxMenu* menu = NULL);
 
     // MDI operations
@@ -73,6 +82,18 @@ public:
     virtual void ArrangeIcons();
     virtual void ActivateNext();
     virtual void ActivatePrevious();
+
+
+    // implementation only from now on
+
+    // MDI helpers
+    // -----------
+
+    // called by wxMDIChildFrame after it was successfully created
+    virtual void AddMDIChild(wxMDIChildFrame *child);
+
+    // called by wxMDIChildFrame just before it is destroyed
+    virtual void RemoveMDIChild(wxMDIChildFrame *child);
 
     // handlers
     // --------
@@ -108,12 +129,21 @@ protected:
 
     wxMDIClientWindow *             m_clientWindow;
     wxMDIChildFrame *               m_currentChild;
-    wxMenu*                         m_windowMenu;
+
+    // the current window menu or NULL if we are not using it
+    wxMenu *m_windowMenu;
 
     // true if MDI Frame is intercepting commands, not child
     bool m_parentFrameActive;
 
 private:
+    // add/remove window menu if we have it (i.e. m_windowMenu != NULL)
+    void AddWindowMenu();
+    void RemoveWindowMenu();
+
+    // return the number of child frames we currently have (maybe 0)
+    int GetChildFramesCount() const;
+
     friend class WXDLLIMPEXP_FWD_CORE wxMDIChildFrame;
 
     DECLARE_EVENT_TABLE()
