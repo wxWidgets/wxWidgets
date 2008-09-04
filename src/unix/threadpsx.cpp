@@ -67,6 +67,16 @@
     #define THR_ID(thr) ((long)(thr)->GetId())
 #endif
 
+#ifdef __WXMAC__
+
+    // implement wxCriticalSection using mutexes
+wxCriticalSection::wxCriticalSection() { }
+wxCriticalSection::~wxCriticalSection() { }
+
+void wxCriticalSection::Enter() { (void)m_mutex.Lock(); }
+void wxCriticalSection::Leave() { (void)m_mutex.Unlock(); }
+
+#endif
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------

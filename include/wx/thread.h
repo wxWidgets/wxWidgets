@@ -207,7 +207,11 @@ private:
 #if !defined(__WXMSW__)
     #define wxCRITSECT_IS_MUTEX 1
 
+#ifdef __WXMAC__
+    #define wxCRITSECT_INLINE
+#else
     #define wxCRITSECT_INLINE inline
+#endif
 #else // MSW
     #define wxCRITSECT_IS_MUTEX 0
 
@@ -222,7 +226,6 @@ public:
     // ctor & dtor
     wxCRITSECT_INLINE wxCriticalSection();
     wxCRITSECT_INLINE ~wxCriticalSection();
-
     // enter the section (the same as locking a mutex)
     wxCRITSECT_INLINE void Enter();
 
@@ -261,7 +264,7 @@ private:
     DECLARE_NO_COPY_CLASS(wxCriticalSection)
 };
 
-#if wxCRITSECT_IS_MUTEX
+#if wxCRITSECT_IS_MUTEX && !defined(__WXMAC__)
     // implement wxCriticalSection using mutexes
     inline wxCriticalSection::wxCriticalSection() { }
     inline wxCriticalSection::~wxCriticalSection() { }
