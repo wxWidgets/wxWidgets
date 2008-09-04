@@ -961,8 +961,9 @@ UPP Get##x()                                \
 void wxMacSetupConverters();
 void wxMacCleanupConverters();
 
-WXDLLIMPEXP_BASE void wxMacStringToPascal( const wxString&from , StringPtr to );
-WXDLLIMPEXP_BASE wxString wxMacMakeStringFromPascal( ConstStringPtr from );
+// utils.cpp
+void WXDLLIMPEXP_CORE wxMacStringToPascal( const wxString&from , StringPtr to );
+wxString WXDLLIMPEXP_CORE wxMacMakeStringFromPascal( ConstStringPtr from );
 
 // filefn.cpp
 

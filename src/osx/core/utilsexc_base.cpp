@@ -40,9 +40,59 @@
 // More WX Includes
 #include "wx/filename.h"
 #include "wx/osx/core/cfstring.h"
+#include "wx/osx/core/private.h"
 
 // Default path style
 #define kDefaultPathStyle kCFURLPOSIXPathStyle
+
+extern bool WXDLLEXPORT wxIsDebuggerRunning()
+{
+    // TODO : try to find out ...
+    return false;
+}
+
+#if wxOSX_USE_COCOA_OR_CARBON
+
+// have a fast version for mac code that returns the version as a return value
+
+long UMAGetSystemVersion() 
+{ 
+    static SInt32 sUMASystemVersion = 0 ;
+    if ( sUMASystemVersion == 0 )
+    {
+        verify_noerr(Gestalt(gestaltSystemVersion, &sUMASystemVersion));
+    }
+    return sUMASystemVersion ; 
+}
+
+// our OS version is the same in non GUI and GUI cases
+wxOperatingSystemId wxGetOsVersion(int *majorVsn, int *minorVsn)
+{
+    SInt32 theSystem;
+    Gestalt(gestaltSystemVersion, &theSystem);
+
+    if ( majorVsn != NULL )
+        *majorVsn = (theSystem >> 8);
+
+    if ( minorVsn != NULL )
+        *minorVsn = (theSystem & 0xFF);
+
+    return wxOS_MAC_OSX_DARWIN;
+}
+
+#include <sys/utsname.h>
+
+wxString wxGetOsDescription()
+{
+    struct utsname name;
+    uname(&name);
+    return wxString::Format(_T("Mac OS X (%s %s %s)"),
+            wxString::FromAscii(name.sysname).c_str(),
+            wxString::FromAscii(name.release).c_str(),
+            wxString::FromAscii(name.machine).c_str());
+}
+
+#endif // wxOSX_USE_COCOA_OR_CARBON
 
 //===========================================================================
 //  IMPLEMENTATION
