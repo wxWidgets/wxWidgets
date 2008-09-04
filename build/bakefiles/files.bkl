@@ -82,6 +82,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/unix/pipe.h
     wx/unix/stdpaths.h
     wx/unix/stackwalk.h
+    wx/unix/tls.h
 </set>
 
 <!--
@@ -193,6 +194,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/core/cfref.h
     wx/osx/core/cfstring.h
     wx/osx/core/hid.h
+    wx/osx/core/private.h
     wx/osx/core/stdpaths.h
     wx/osx/core/private/strconv_cf.h
 </set>
@@ -200,7 +202,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- Base files used by wxMac on OS X -->
 <!-- FIXME: Maybe this ought to be named BASE_MAC_CARBON_SRC  -->
 <set var="BASE_MAC_SRC" hints="files">
-    src/osx/carbon/mimetmac.cpp
+    src/osx/core/mimetype.cpp
     $(BASE_COREFOUNDATION_SRC)
 </set>
 <set var="BASE_MAC_HDR" hints="files">
@@ -829,6 +831,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/textctrl.h
     wx/textdlg.h
     wx/textentry.h
+    wx/tls.h
     wx/toolbar.h
     wx/validate.h
     wx/valtext.h
@@ -2154,7 +2157,53 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="MAC_OSX_LOWLEVEL_SRC" hints="files">
     <!-- Shared wxMac and wxCocoa files -->
+    src/osx/accel.cpp
+    src/osx/artmac.cpp
+    src/osx/bmpbuttn_osx.cpp
+    src/osx/brush.cpp
+    src/osx/button_osx.cpp
+    src/osx/checkbox_osx.cpp
+    src/osx/checklst_osx.cpp
+    src/osx/choice_osx.cpp
+    src/osx/dialog_osx.cpp
+    src/osx/fontutil.cpp
+    src/osx/gauge_osx.cpp
+    src/osx/imaglist.cpp
+    src/osx/listbox_osx.cpp
+    src/osx/menu_osx.cpp
+    src/osx/menuitem_osx.cpp
+    src/osx/minifram.cpp
+    src/osx/nonownedwnd_osx.cpp
+    src/osx/notebook_osx.cpp
+    src/osx/palette.cpp
+    src/osx/pen.cpp
+    src/osx/radiobox_osx.cpp
+    src/osx/radiobut_osx.cpp
+    src/osx/scrolbar_osx.cpp
+    src/osx/slider_osx.cpp
+    src/osx/spinbutt_osx.cpp
+    src/osx/spinctrl_osx.cpp
+    <!-- src/osx/srchctrl.cpp -->
+    src/osx/statbox_osx.cpp
+    src/osx/statline_osx.cpp
+    src/osx/stattext_osx.cpp
+    src/osx/tabctrl_osx.cpp
+    src/osx/textctrl_osx.cpp
+    src/osx/tglbtn_osx.cpp
+    src/osx/toolbar_osx.cpp
+    src/osx/toplevel_osx.cpp
+    src/osx/utils_osx.cpp
+    <!-- src/osx/treectrl.cpp -->
+    src/osx/window_osx.cpp
+
+    src/osx/core/bitmap.cpp
+    src/osx/core/colour.cpp
+    src/osx/core/dcmemory.cpp
+    src/osx/core/display.cpp
+    src/osx/core/fontenum.cpp
     src/osx/core/hid.cpp
+    src/osx/core/printmac.cpp
+    src/osx/core/timer.cpp
     src/osx/core/utilsexc_cf.cpp
 </set>
 
@@ -2181,29 +2230,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="MAC_SRC" hints="files">
-    <!-- osx common files -->
-    src/osx/accel.cpp
-    src/osx/artmac.cpp
-    src/osx/brush.cpp
-    src/osx/fontutil.cpp
-    src/osx/imaglist.cpp
-    src/osx/minifram.cpp
-    src/osx/palette.cpp
-    src/osx/pen.cpp
-    <!-- core files -->
-    src/osx/core/bitmap.cpp
-    src/osx/core/colour.cpp
-    src/osx/core/dcmemory.cpp
-    src/osx/core/display.cpp
-    src/osx/core/fontenum.cpp
-    src/osx/core/printmac.cpp
-    src/osx/core/timer.cpp
     <!-- carbon files -->
     src/osx/carbon/app.cpp
     src/osx/carbon/bmpbuttn.cpp
     src/osx/carbon/button.cpp
     src/osx/carbon/checkbox.cpp
-    src/osx/carbon/checklst.cpp
     src/osx/carbon/choice.cpp
     src/osx/carbon/clipbrd.cpp
     src/osx/carbon/colordlg.cpp
@@ -2238,7 +2269,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/carbon/overlay.cpp
     src/osx/carbon/popupwin.cpp
     src/osx/carbon/printdlg.cpp
-    src/osx/carbon/radiobox.cpp
     src/osx/carbon/radiobut.cpp
     src/osx/carbon/region.cpp
     src/osx/carbon/renderer.cpp
@@ -2246,7 +2276,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/carbon/settings.cpp
     src/osx/carbon/slider.cpp
     src/osx/carbon/spinbutt.cpp
-    src/osx/carbon/spinctrl.cpp
     src/osx/carbon/srchctrl.cpp
     src/osx/carbon/statbmp.cpp
     src/osx/carbon/statbox.cpp
@@ -2258,7 +2287,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/carbon/tglbtn.cpp
     src/osx/carbon/toolbar.cpp
     src/osx/carbon/tooltip.cpp
-    src/osx/carbon/toplevel.cpp
     src/osx/carbon/window.cpp
     <!-- Generic implementations used by wxMac: -->
     src/generic/caret.cpp
@@ -3263,7 +3291,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- ====================================================================== -->
 
 <set var="OPENGL_SRC_PLATFORM" hints="files">
-    <if cond="TOOLKIT=='MAC'">src/osx/carbon/glcanvas.cpp</if>
+    <if cond="TOOLKIT=='MAC'">src/osx/carbon/glcanvas.cpp src/osx/glcanvas_osx.cpp</if>
     <if cond="TOOLKIT=='COCOA'">src/cocoa/glcanvas.mm</if>
     <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">
         src/gtk/glcanvas.cpp
