@@ -63,6 +63,6 @@ poem:
 
 
 # Include dependency info, if present:
-@IF_GNU_MAKE@-include .deps/*.d
+@IF_GNU_MAKE@-include ./.deps/*.d
 
 .PHONY: all install uninstall clean distclean bombs forty fractal life poem

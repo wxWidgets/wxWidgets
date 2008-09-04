@@ -48,7 +48,7 @@ WX_VERSION := $(shell $(WX_CONFIG) --selected-config | sed -e 's/.*-\([0-9]*\)\.
 
 ### Variables: ###
 
-CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
+CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD -MP
 WX_VERSION_MAJOR = $(shell echo $(WX_VERSION) | cut -c1,1)
 WX_VERSION_MINOR = $(shell echo $(WX_VERSION) | cut -c2,2)
 WX_CONFIG_FLAGS = $(WX_CONFIG_DEBUG_FLAG) $(WX_CONFIG_UNICODE_FLAG) \
@@ -98,7 +98,7 @@ test_for_selected_wxbuild:
 	@$(WX_CONFIG) $(WX_CONFIG_FLAGS)
 
 mdi: $(MDI_OBJECTS)
-	$(CXX) -o $@ $(MDI_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs core,base`
+	$(CXX) -o $@ $(MDI_OBJECTS)   `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs core,base` $(LDFLAGS)
 
 mdi_mdi.o: ./mdi.cpp
 	$(CXX) -c -o $@ $(MDI_CXXFLAGS) $(CPPDEPS) $<

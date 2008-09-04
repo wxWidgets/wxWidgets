@@ -36,7 +36,7 @@
 
 #ifdef __WXMAC__
     #undef wxFontDialog
-    #include "wx/mac/fontdlg.h"
+    #include "wx/osx/fontdlg.h"
 #endif
 
 // used as title for several dialog boxes

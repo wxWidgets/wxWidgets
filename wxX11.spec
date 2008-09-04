@@ -276,6 +276,7 @@ wx/unix/evtloop.h
 wx/unix/pipe.h
 wx/unix/stdpaths.h
 wx/unix/stackwalk.h
+wx/unix/tls.h
 wx/unix/execute.h
 wx/unix/mimetype.h
 wx/unix/private.h

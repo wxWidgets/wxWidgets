@@ -62,6 +62,7 @@ install-strip_ifacecheck:
 
 
 # Include dependency info, if present:
-@IF_GNU_MAKE@-include .deps/*.d
+@IF_GNU_MAKE@-include ./.deps/*.d
 
-.PHONY: all install uninstall clean distclean emulator helpview ifacecheck install_ifacecheck uninstall_ifacecheck install-strip_ifacecheck
+.PHONY: all install uninstall clean distclean emulator helpview ifacecheck \
+	install_ifacecheck uninstall_ifacecheck install-strip_ifacecheck

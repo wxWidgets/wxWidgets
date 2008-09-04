@@ -154,7 +154,7 @@ SimpleTransientPopup::~SimpleTransientPopup()
 void SimpleTransientPopup::Popup(wxWindow *focus)
 {
     wxLogMessage( wxT("0x%lx SimpleTransientPopup::Popup"), long(this) );
-    wxPopupTransientWindow::Popup(focus ? focus : m_panel);
+    wxPopupTransientWindow::Popup();
 }
 
 void SimpleTransientPopup::OnDismiss()
@@ -263,6 +263,7 @@ public:
     void OnTestDialog(wxCommandEvent& event);
     void OnStartSimplePopup(wxCommandEvent& event);
     void OnStartScrolledPopup(wxCommandEvent& event);
+    void OnActivate(wxActivateEvent& event);
 
 private:
     SimpleTransientPopup *m_simplePopup;
@@ -314,6 +315,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Minimal_Quit,  MyFrame::OnQuit)
     EVT_MENU(Minimal_About, MyFrame::OnAbout)
     EVT_MENU(Minimal_TestDialog, MyFrame::OnTestDialog)
+    EVT_ACTIVATE(MyFrame::OnActivate)
     EVT_BUTTON(Minimal_StartSimplePopup, MyFrame::OnStartSimplePopup)
     EVT_BUTTON(Minimal_StartScrolledPopup, MyFrame::OnStartScrolledPopup)
 END_EVENT_TABLE()
@@ -377,6 +379,11 @@ MyFrame::~MyFrame()
 
 
 // event handlers
+
+void MyFrame::OnActivate(wxActivateEvent& event)
+{
+    wxLogMessage( wxT("In activate...") );
+}
 
 void MyFrame::OnStartSimplePopup(wxCommandEvent& event)
 {

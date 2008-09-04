@@ -3525,6 +3525,8 @@
 			<File
 				RelativePath="..\..\include\wx\tipwin.h"/>
 			<File
+				RelativePath="..\..\include\wx\tls.h"/>
+			<File
 				RelativePath="..\..\include\wx\toolbar.h"/>
 			<File
 				RelativePath="..\..\include\wx\toolbook.h"/>
