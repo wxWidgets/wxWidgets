@@ -70,7 +70,8 @@
 #ifdef __WXMAC__
 
     // implement wxCriticalSection using mutexes
-wxCriticalSection::wxCriticalSection() { }
+wxCriticalSection::wxCriticalSection( wxCriticalSectionType critSecType )
+       : m_mutex( critSecType == wxCRITSEC_DEFAULT ? wxMUTEX_RECURSIVE : wxMUTEX_DEFAULT )  { }
 wxCriticalSection::~wxCriticalSection() { }
 
 void wxCriticalSection::Enter() { (void)m_mutex.Lock(); }
