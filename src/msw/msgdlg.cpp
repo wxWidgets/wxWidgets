@@ -98,14 +98,15 @@ wxMessageDialog::HookFunction(int code, WXWPARAM wParam, WXLPARAM lParam)
 
         wnd->SetHWND((HWND)wParam);
 
+        // update the labels if necessary: we need to do it before centering
+        // the dialog as this can change its size
+        if ( wnd->HasCustomLabels() )
+            wnd->AdjustButtonLabels();
+
         // centre the message box on its parent if requested
         if ( wnd->GetMessageDialogStyle() & wxCENTER )
             wnd->Center(); // center on parent
         //else: default behaviour, center on screen
-
-        // also update the labels if necessary
-        if ( wnd->HasCustomLabels() )
-            wnd->AdjustButtonLabels();
 
         // there seems to be no reason to leave it set
         wnd->SetHWND(NULL);
