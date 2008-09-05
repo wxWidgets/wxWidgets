@@ -13,10 +13,9 @@
 #include "wx/cursor.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/window.h"
     #include "wx/app.h"
-    #include "wx/utils.h"
     #include "wx/image.h"
-    #include "wx/colour.h"
     #include "wx/bitmap.h"
 #endif // WX_PRECOMP
 
@@ -345,19 +344,31 @@ const wxCursor wxBusyCursor::GetBusyCursor()
     return wxCursor(wxCURSOR_WATCH);
 }
 
+static void InternalIdle(const wxWindowList& list, GdkDisplay*& display)
+{
+    wxWindowList::const_iterator i = list.begin();
+    for (size_t n = list.size(); n--; ++i)
+    {
+        wxWindow* win = *i;
+        if (display == NULL && win->m_widget && win->m_widget->window)
+            display = gdk_drawable_get_display(win->m_widget->window);
+        win->OnInternalIdle();
+        InternalIdle(win->GetChildren(), display);
+    }
+}
+
 void wxEndBusyCursor()
 {
     if (--gs_busyCount > 0)
         return;
 
-    wxSetCursor( gs_savedCursor );
+    g_globalCursor = gs_savedCursor;
     gs_savedCursor = wxNullCursor;
-
-    if (wxTheApp)
-        wxTheApp->ProcessIdle();
+    GdkDisplay* unused = NULL;
+    InternalIdle(wxTopLevelWindows, unused);
 }
 
-void wxBeginBusyCursor( const wxCursor *WXUNUSED(cursor) )
+void wxBeginBusyCursor(const wxCursor* cursor)
 {
     if (gs_busyCount++ > 0)
         return;
@@ -366,13 +377,11 @@ void wxBeginBusyCursor( const wxCursor *WXUNUSED(cursor) )
                   wxT("forgot to call wxEndBusyCursor, will leak memory") );
 
     gs_savedCursor = g_globalCursor;
-
-    wxSetCursor( wxCursor(wxCURSOR_WATCH) );
-
-    if (wxTheApp)
-        wxTheApp->ProcessIdle();
-
-    gdk_flush();
+    g_globalCursor = *cursor;
+    GdkDisplay* display = NULL;
+    InternalIdle(wxTopLevelWindows, display);
+    if (display)
+        gdk_display_flush(display);
 }
 
 bool wxIsBusy()
