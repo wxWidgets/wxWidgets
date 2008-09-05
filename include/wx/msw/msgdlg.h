@@ -12,7 +12,7 @@
 #ifndef _WX_MSGBOXDLG_H_
 #define _WX_MSGBOXDLG_H_
 
-class WXDLLIMPEXP_CORE wxMessageDialog : public wxMessageDialogBase
+class WXDLLIMPEXP_CORE wxMessageDialog : public wxMessageDialogWithCustomLabels
 {
 public:
     wxMessageDialog(wxWindow *parent,
@@ -20,16 +20,23 @@ public:
                     const wxString& caption = wxMessageBoxCaptionStr,
                     long style = wxOK|wxCENTRE,
                     const wxPoint& WXUNUSED(pos) = wxDefaultPosition)
-        : wxMessageDialogBase(parent, message, caption, style)
+        : wxMessageDialogWithCustomLabels(parent, message, caption, style)
     {
         m_hook = NULL;
     }
 
-
     virtual int ShowModal();
 
 private:
+    // hook procedure used to adjust the message box beyond what the standard
+    // MessageBox() function can do for us
     static WXLRESULT wxCALLBACK HookFunction(int code, WXWPARAM, WXLPARAM);
+
+    // adjust the button labels
+    //
+    // this is called from HookFunction() and our HWND is valid at this moment
+    void AdjustButtonLabels();
+
 
     WXHANDLE m_hook; // HHOOK used to position the message box
 

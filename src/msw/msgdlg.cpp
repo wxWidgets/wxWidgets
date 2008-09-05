@@ -38,10 +38,16 @@
 #endif
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/button.h"
+#include "wx/msw/private/metrics.h"
+
+#if wxUSE_MSGBOX_HOOK
+    #include "wx/fontutil.h"
+#endif
 
 // For MB_TASKMODAL
 #ifdef __WXWINCE__
-#include "wx/msw/wince/missing.h"
+    #include "wx/msw/wince/missing.h"
 #endif
 
 IMPLEMENT_CLASS(wxMessageDialog, wxDialog)
@@ -83,28 +89,144 @@ wxMessageDialog::HookFunction(int code, WXWPARAM wParam, WXLPARAM lParam)
     const HHOOK hhook = (HHOOK)wnd->m_hook;
     const LRESULT rc = ::CallNextHookEx(hhook, code, wParam, lParam);
 
-    if ( code == HC_ACTION && lParam )
+    if ( code == HCBT_ACTIVATE )
     {
-        const CWPRETSTRUCT * const s = (CWPRETSTRUCT *)lParam;
+        // we won't need this hook any longer
+        ::UnhookWindowsHookEx(hhook);
+        wnd->m_hook = NULL;
+        HookMap().erase(tid);
 
-        if ( s->message == HCBT_ACTIVATE )
-        {
-            // we won't need this hook any longer
-            ::UnhookWindowsHookEx(hhook);
-            wnd->m_hook = NULL;
-            HookMap().erase(tid);
+        wnd->SetHWND((HWND)wParam);
 
-            if ( wnd->GetMessageDialogStyle() & wxCENTER )
-            {
-                wnd->SetHWND(s->hwnd);
-                wnd->Center(); // center on parent
-                wnd->SetHWND(NULL);
-            }
-            //else: default behaviour, center on screen
-        }
+        // centre the message box on its parent if requested
+        if ( wnd->GetMessageDialogStyle() & wxCENTER )
+            wnd->Center(); // center on parent
+        //else: default behaviour, center on screen
+
+        // also update the labels if necessary
+        if ( wnd->HasCustomLabels() )
+            wnd->AdjustButtonLabels();
+
+        // there seems to be no reason to leave it set
+        wnd->SetHWND(NULL);
     }
 
     return rc;
+}
+
+namespace
+{
+
+// helper of AdjustButtonLabels(): set window position expressed in screen
+// coordinates, whether the window is child or top level
+void MoveWindowToScreenRect(HWND hwnd, RECT rc)
+{
+    if ( const HWND hwndParent = ::GetAncestor(hwnd, GA_PARENT) )
+    {
+        // map to parent window coordinates (notice that a RECT is laid out as
+        // 2 consecutive POINTs)
+        ::MapWindowPoints(HWND_DESKTOP, hwndParent,
+                          reinterpret_cast<POINT *>(&rc), 2);
+    }
+
+    ::MoveWindow(hwnd,
+                 rc.left, rc.top,
+                 rc.right - rc.left, rc.bottom - rc.top,
+                 FALSE);
+}
+
+// helper of AdjustButtonLabels(): move the given window by dx
+//
+// works for both child and top level windows
+void OffsetWindow(HWND hwnd, int dx)
+{
+    RECT rc = wxGetWindowRect(hwnd);
+
+    rc.left += dx;
+    rc.right += dx;
+
+    MoveWindowToScreenRect(hwnd, rc);
+}
+
+} // anonymous namespace
+
+void wxMessageDialog::AdjustButtonLabels()
+{
+    // changing the button labels is the easy part but we also need to ensure
+    // that the buttons are big enough for the label strings and increase their
+    // size (and hence the size of the message box itself) if they are not
+
+    // TODO-RTL: check whether this works correctly in RTL
+
+    // the order in this array is the one in which buttons appear in the
+    // message box
+    const static struct ButtonAccessors
+    {
+        int id;
+        wxString (wxMessageDialog::*getter)() const;
+    }
+    buttons[] =
+    {
+        { IDYES,    &wxMessageDialog::GetYesLabel    },
+        { IDNO,     &wxMessageDialog::GetNoLabel     },
+        { IDOK,     &wxMessageDialog::GetOKLabel     },
+        { IDCANCEL, &wxMessageDialog::GetCancelLabel },
+    };
+
+    // this contains the amount by which we increased the message box width
+    int dx = 0;
+
+    const NONCLIENTMETRICS& ncm = wxMSWImpl::GetNonClientMetrics();
+    const wxFont fontMsgBox(wxNativeFontInfo(ncm.lfMessageFont));
+
+    // we want to use this font in GetTextExtent() calls below but we don't
+    // want to send WM_SETFONT to the message box, who knows how is it going to
+    // react to it (right now it doesn't seem to do anything but what if this
+    // changes)
+    wxWindowBase::SetFont(fontMsgBox);
+
+    for ( unsigned n = 0; n < WXSIZEOF(buttons); n++ )
+    {
+        const HWND hwndBtn = ::GetDlgItem(GetHwnd(), buttons[n].id);
+        if ( !hwndBtn )
+            continue;   // it's ok, not all buttons are always present
+
+        const wxString label = (this->*buttons[n].getter)();
+        const wxSize sizeLabel = wxWindowBase::GetTextExtent(label);
+
+        // check if the button is big enough for this label
+        RECT rc = wxGetWindowRect(hwndBtn);
+        const int widthOld = rc.right - rc.left;
+        const int widthNew = wxMSWButton::GetFittingSize(this, sizeLabel).x;
+        const int dw = widthNew - widthOld;
+        if ( dw > 0 )
+        {
+            // we need to resize the button
+            rc.right += dw;
+            MoveWindowToScreenRect(hwndBtn, rc);
+
+            // and also move all the other buttons
+            for ( unsigned m = n + 1; m < WXSIZEOF(buttons); m++ )
+            {
+                const HWND hwndBtnNext = ::GetDlgItem(GetHwnd(), buttons[m].id);
+                if ( hwndBtnNext )
+                    OffsetWindow(hwndBtnNext, dw);
+            }
+
+            dx += dw;
+        }
+
+        ::SetWindowText(hwndBtn, label.wx_str());
+    }
+
+
+    // resize the message box itself if needed
+    if ( dx )
+        OffsetWindow(GetHwnd(), dx);
+
+    // surprisingly, we don't need to resize the static text control, it seems
+    // to adjust itself to the new size, at least under Windows 2003
+    // (TODO: test if this happens on older Windows versions)
 }
 
 #endif // wxUSE_MSGBOX_HOOK
@@ -187,10 +309,11 @@ int wxMessageDialog::ShowModal()
 
 #if wxUSE_MSGBOX_HOOK
     // install the hook if we need to position the dialog in a non-default way
-    if ( wxStyle & wxCENTER )
+    // or change the labels
+    if ( (wxStyle & wxCENTER) || HasCustomLabels() )
     {
         const DWORD tid = ::GetCurrentThreadId();
-        m_hook = ::SetWindowsHookEx(WH_CALLWNDPROCRET,
+        m_hook = ::SetWindowsHookEx(WH_CBT,
                                     &wxMessageDialog::HookFunction, NULL, tid);
         HookMap()[tid] = this;
     }

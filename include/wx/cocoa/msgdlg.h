@@ -25,26 +25,22 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSAlert);
     #endif
 #endif
 
-#include "wx/generic/msgdlgg.h"
-
 #if wxUSE_COCOA_NATIVE_MSGDLG
     #define wxMessageDialog wxCocoaMessageDialog
 #else
+    #include "wx/generic/msgdlgg.h"
+
     #define wxMessageDialog wxGenericMessageDialog
 #endif
 
-//-------------------------------------------------------------------------
-// wxMsgDialog
-//-------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// wxCocoaMessageDialog
+// ----------------------------------------------------------------------------
 
 
-
-class WXDLLIMPEXP_CORE wxCocoaMessageDialog: public wxMessageDialogBase
+class WXDLLIMPEXP_CORE wxCocoaMessageDialog
+    : public wxMessageDialogWithCustomLabels
 {
-    DECLARE_DYNAMIC_CLASS(wxCocoaMessageDialog)
-    DECLARE_NO_COPY_CLASS(wxCocoaMessageDialog)
-
-
 public:
     wxCocoaMessageDialog(wxWindow *parent,
                     const wxString& message,
@@ -52,15 +48,7 @@ public:
                     long style = wxOK|wxCENTRE,
                     const wxPoint& pos = wxDefaultPosition);
 
-    virtual ~wxCocoaMessageDialog();
-
     virtual int ShowModal();
-
-    // customization of the message box
-    virtual bool SetYesNoLabels(const wxString& yes,const wxString& no);
-    virtual bool SetYesNoCancelLabels(const wxString& yes, const wxString& no, const wxString& cancel);
-    virtual bool SetOKLabel(const wxString& ok);
-    virtual bool SetOKCancelLabels(const wxString& ok, const wxString& cancel);
 
 protected:
     // not supported for message dialog
@@ -68,12 +56,15 @@ protected:
                            int WXUNUSED(width), int WXUNUSED(height),
                            int WXUNUSED(sizeFlags) = wxSIZE_AUTO) {}
 
-private:
-    wxString m_yes,
-             m_no,
-             m_ok,
-             m_cancel;
+    // override wxMessageDialogWithCustomLabels method to get rid of
+    // accelerators in the custom label strings
+    //
+    // VZ: I have no idea _why_ do we do this but the old version did and
+    //     I didn't want to change the existing behaviour
+    virtual void DoSetCustomLabel(wxString& var, const wxString& value);
 
+    DECLARE_DYNAMIC_CLASS(wxCocoaMessageDialog)
+    DECLARE_NO_COPY_CLASS(wxCocoaMessageDialog)
 };
 
 #endif // _WX_MSGDLG_H_

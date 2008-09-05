@@ -24,23 +24,11 @@ public:
 
     virtual int ShowModal();
 
-    // customization of the message box
-    virtual bool SetYesNoLabels(const wxString& yes,const wxString& no);
-    virtual bool SetYesNoCancelLabels(const wxString& yes, const wxString& no, const wxString& cancel);
-    virtual bool SetOKLabel(const wxString& ok);
-    virtual bool SetOKCancelLabels(const wxString& ok, const wxString& cancel);
-
 protected:
     // not supported for message dialog
     virtual void DoSetSize(int WXUNUSED(x), int WXUNUSED(y),
                            int WXUNUSED(width), int WXUNUSED(height),
                            int WXUNUSED(sizeFlags) = wxSIZE_AUTO) {}
-
-    // labels for the buttons
-    wxString m_yes,
-             m_no,
-             m_ok,
-             m_cancel;
 
     DECLARE_DYNAMIC_CLASS(wxMessageDialog)
 };
