@@ -316,8 +316,11 @@ public:
 */
 enum wxThreadKind
 {
-    wxTHREAD_DETACHED,  /** Detached thread */
-    wxTHREAD_JOINABLE   /** Joinable thread */
+    /** Detached thread */
+    wxTHREAD_DETACHED,  
+    
+    /** Joinable thread */
+    wxTHREAD_JOINABLE   
 };
 
 /**
@@ -325,12 +328,23 @@ enum wxThreadKind
 */
 enum wxThreadError
 {
-    wxTHREAD_NO_ERROR = 0,      /** No error */
-    wxTHREAD_NO_RESOURCE,       /** No resource left to create a new thread */
-    wxTHREAD_RUNNING,           /** The thread is already running */
-    wxTHREAD_NOT_RUNNING,       /** The thread isn't running */
-    wxTHREAD_KILLED,            /** Thread we waited for had to be killed */
-    wxTHREAD_MISC_ERROR         /** Some other error */
+    /** No error */
+    wxTHREAD_NO_ERROR = 0,      
+    
+    /** No resource left to create a new thread. */
+    wxTHREAD_NO_RESOURCE,       
+    
+    /** The thread is already running. */
+    wxTHREAD_RUNNING,          
+    
+    /** The thread isn't running. */ 
+    wxTHREAD_NOT_RUNNING,       
+    
+    /** Thread we waited for had to be killed. */
+    wxTHREAD_KILLED,            
+    
+    /** Some other error */
+    wxTHREAD_MISC_ERROR         
 };
 
 /**
@@ -846,9 +860,11 @@ public:
 */
 enum wxMutexType
 {
-    wxMUTEX_DEFAULT,   /** Normal mutex: try to always use this one. Recursive under Windows. */
+    /** Normal mutex: try to always use this one. Recursive under Windows. */
+    wxMUTEX_DEFAULT,   
 
-    wxMUTEX_RECURSIVE  /** Recursive mutex: don't use these ones with wxCondition. */
+    /** Recursive mutex: don't use these ones with wxCondition. */
+    wxMUTEX_RECURSIVE  
 };
 
 
@@ -857,13 +873,26 @@ enum wxMutexType
 */
 enum wxMutexError
 {
-    wxMUTEX_NO_ERROR = 0,   /** operation completed successfully */
-    wxMUTEX_INVALID,        /** mutex hasn't been initialized */
-    wxMUTEX_DEAD_LOCK,      /** mutex is already locked by the calling thread */
-    wxMUTEX_BUSY,           /** mutex is already locked by another thread */
-    wxMUTEX_UNLOCKED,       /** attempt to unlock a mutex which is not locked */
-    wxMUTEX_TIMEOUT,        /** LockTimeout() has timed out */
-    wxMUTEX_MISC_ERROR      /** any other error */
+    /** The operation completed successfully. */
+    wxMUTEX_NO_ERROR = 0,   
+    
+    /** The mutex hasn't been initialized. */
+    wxMUTEX_INVALID,       
+    
+     /** The mutex is already locked by the calling thread. */ 
+    wxMUTEX_DEAD_LOCK,     
+    
+    /** The mutex is already locked by another thread. */
+    wxMUTEX_BUSY,           
+    
+    /** An attempt to unlock a mutex which is not locked. */
+    wxMUTEX_UNLOCKED,       
+    
+    /** wxMutex::LockTimeout() has timed out. */
+    wxMUTEX_TIMEOUT,        
+    
+    /** Any other error */
+    wxMUTEX_MISC_ERROR      
 };
 
 
