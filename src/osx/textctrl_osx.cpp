@@ -290,7 +290,7 @@ void wxTextCtrl::SetInsertionPoint(long pos)
 
 void wxTextCtrl::SetInsertionPointEnd()
 {
-    wxTextPos pos = GetLastPosition();
+    long pos = GetLastPosition();
     SetInsertionPoint( pos );
 }
 
@@ -767,7 +767,7 @@ void wxTextWidgetImpl::SetEditable(bool WXUNUSED(editable))
 {
 }
 
-wxTextPos wxTextWidgetImpl::GetLastPosition() const
+long wxTextWidgetImpl::GetLastPosition() const
 {
     return GetStringValue().length() ;
 }

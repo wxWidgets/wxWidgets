@@ -30,7 +30,7 @@
 
 #include "wx/dcclient.h"
 
-#ifdef __WXOSX__
+#ifdef __WXOSX_OR_COCOA__
 #ifdef __WXOSX_IPHONE__
     #include <CoreGraphics/CoreGraphics.h>
 #else
@@ -228,7 +228,7 @@ void wxGCDCImpl::EndPage()
 
 void wxGCDCImpl::Flush()
 {
-#ifdef __WXOSX__
+#ifdef __WXOSX_OR_COCOA__
     CGContextFlush( (CGContextRef) m_graphicContext->GetNativeContext() );
 #endif
 }

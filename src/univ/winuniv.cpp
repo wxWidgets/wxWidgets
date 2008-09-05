@@ -92,7 +92,7 @@ public:
     IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowMSW)
 #elif defined(__WXGTK__)
     IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowGTK)
-#elif defined(__WXOSX__)
+#elif defined(__WXOSX_OR_COCOA__)
     IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowMac)
 #elif defined(__WXMGL__)
     IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowMGL)

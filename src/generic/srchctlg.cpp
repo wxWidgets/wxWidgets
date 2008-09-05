@@ -811,7 +811,7 @@ long wxSearchCtrl::GetInsertionPoint() const
 {
     return m_text->GetInsertionPoint();
 }
-wxTextPos wxSearchCtrl::GetLastPosition() const
+long wxSearchCtrl::GetLastPosition() const
 {
     return m_text->GetLastPosition();
 }

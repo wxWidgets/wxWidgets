@@ -520,7 +520,7 @@ public :
     virtual void Paste() ;
     virtual bool CanPaste() const ;
     virtual void SetEditable( bool editable ) ;
-    virtual wxTextPos GetLastPosition() const ;
+    virtual long GetLastPosition() const ;
     virtual void Replace( long from, long to, const wxString &str ) ;
     virtual void Remove( long from, long to ) ;
 

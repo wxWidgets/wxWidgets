@@ -774,8 +774,6 @@ bool wxWindowMac::DoPopupMenu(wxMenu *menu, int x, int y)
         }
     }
 
-    menu->MacAfterDisplay( true ) ;
-    menu->SetInvokingWindow( NULL );
 #else
     menu->SetInvokingWindow( NULL );
     return false;

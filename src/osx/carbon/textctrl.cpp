@@ -238,7 +238,7 @@ public :
     virtual void Paste() ;
     virtual bool CanPaste() const ;
     virtual void SetEditable( bool editable ) ;
-    virtual wxTextPos GetLastPosition() const ;
+    virtual long GetLastPosition() const ;
     virtual void Replace( long from, long to, const wxString &str ) ;
     virtual void Remove( long from, long to ) ;
     virtual void GetSelection( long* from, long* to ) const ;
@@ -1113,7 +1113,7 @@ void wxMacMLTEControl::SetEditable(bool editable)
     TXNSetTXNObjectControls( m_txn, false, WXSIZEOF(tag), tag, data ) ;
 }
 
-wxTextPos wxMacMLTEControl::GetLastPosition() const
+long wxMacMLTEControl::GetLastPosition() const
 {
     wxTextPos actualsize = 0 ;
 

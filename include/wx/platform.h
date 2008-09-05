@@ -33,27 +33,33 @@
     __WXOSX_IPHONE__ means OS X iPhone
 */
 
-/* supporting the old short name */
+/* backwards compatible define, until configure gets updated */
+#if defined __WXMAC__
+#define __WXOSX_CARBON__
+#endif
 
-#ifdef __WXMAC__ 
+#if defined(__WXOSX_CARBON__) || defined(__WXOSX_COCOA__) || defined(__WXOSX_IPHONE__) 
 #   define __WXOSX__
 #endif
 
 #ifdef __WXOSX__
 /* for backwards compatibility of code (including our own) define __WXMAC__ */
-#ifndef __WXMAC__
-#define __WXMAC__
-#endif
+#   ifndef __WXMAC__
+#       define __WXMAC__
+#   endif
 /* setup precise defines according to sdk used */
 #   include <TargetConditionals.h>
-#   if defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE
-#       define __WXOSX_IPHONE__
-#       undef __WXOSX_MAC__
-#   elif defined(TARGET_OS_MAC) && TARGET_OS_MAC
-#       undef __WXOSX_IPHONE__
+#   if defined(__WXOSX_IPHONE__) 
+#       if !( defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE )
+#           error "incorrect SDK for an iPhone build"
+#       endif
+#   elif defined(__WXOSX_CARBON__) || defined(__WXOSX_COCOA__)
+#       if !( defined(TARGET_OS_MAC) && TARGET_OS_MAC )
+#           error "incorrect SDK for a Mac OS X build"
+#       endif
 #       define __WXOSX_MAC__
 #   else
-#       error "unknown SDK, neither TARGET_OS_MAC nor TARGET_OS_IPHONE set in <TargetConditionals.h>"
+#       error "one of __WXOSX_IPHONE__, __WXOSX_CARBON__ or __WXOSX_COCOA__ must be defined"
 #   endif
 #endif
 
@@ -75,13 +81,13 @@
 #endif
 
 /*
-    __WXOSX__ is a common define to wxMac (Carbon) and wxCocoa ports under OS X.
+    __WXOSX_OR_COCOA__ is a common define to wxOSX (Carbon or Cocoa) and wxCocoa ports under OS X.
 
     DO NOT use this define in base library code.  Although wxMac has its own
-    private base library (and thus __WXOSX__,__WXMAC__ and related defines are
+    private base library (and thus __WXOSX_OR_COCOA__,__WXMAC__ and related defines are
     valid there), wxCocoa shares its library with other ports like wxGTK and wxX11.
 
-    To keep wx authors from screwing this up, only enable __WXOSX__ for wxCocoa when
+    To keep wx authors from screwing this up, only enable __WXOSX_OR_COCOA__ for wxCocoa when
     not compiling the base library.  We determine this by first checking if
     wxUSE_BASE is not defined.  If it is not defined, then we're not buildling
     the base library, and possibly not building wx at all (but actually building
@@ -93,11 +99,11 @@
     using OS X libraries like Carbon or CoreServices.
 
  */
-#if defined(__WXOSX_MAC__) || (defined(__WXCOCOA__) && (!defined(wxUSE_BASE) || !wxUSE_BASE)) || defined(__WXOSX_IPHONE__)
-#   define __WXOSX__
+#if defined(__WXOSX__) || (defined(__WXCOCOA__) && (!defined(wxUSE_BASE) || !wxUSE_BASE))
+#   define __WXOSX_OR_COCOA__
 #endif
 
-#ifdef __WXOSX__
+#ifdef __WXOSX_OR_COCOA__
 #    ifdef __WXMAC_XCODE__
 #        include <unistd.h>
 #        include <TargetConditionals.h>
