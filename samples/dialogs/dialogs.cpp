@@ -668,7 +668,7 @@ void MyFrame::MessageBox(wxCommandEvent& WXUNUSED(event) )
                 ) )
     {
         extmsg = "This platform supports custom button labels,\n"
-                 "so you should see the descriptiva text below.";
+                 "so you should see the descriptive labels below.";
     }
     else
     {
