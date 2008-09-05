@@ -30,40 +30,8 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
                                  const wxString& caption,
                                  long style,
                                  const wxPoint& WXUNUSED(pos))
-               : wxMessageDialogBase(parent, message, caption, style)
+               : wxMessageDialogWithCustomLabels(parent, message, caption, style)
 {
-    m_yes = _("Yes");
-    m_no  = _("No");
-    m_ok  = _("OK");
-    m_cancel = _("Cancel");
-}
-
-bool wxMessageDialog::SetYesNoLabels(const wxString& yes,const wxString& no)
-{
-    m_yes = yes;
-    m_no = no;
-    return true;
-}
-
-bool wxMessageDialog::SetYesNoCancelLabels(const wxString& yes, const wxString& no, const wxString& cancel)
-{
-    m_yes = yes;
-    m_no = no;
-    m_cancel = cancel;
-    return true;
-}
-
-bool wxMessageDialog::SetOKLabel(const wxString& ok)
-{
-    m_ok = ok;
-    return true;
-}
-
-bool wxMessageDialog::SetOKCancelLabels(const wxString& ok, const wxString& cancel)
-{
-    m_ok = ok;
-    m_cancel = cancel;
-    return true;
 }
 
 int wxMessageDialog::ShowModal()
@@ -113,10 +81,10 @@ int wxMessageDialog::ShowModal()
         wxCFStringRef cfTitle( msgtitle, GetFont().GetEncoding() );
         wxCFStringRef cfText( msgtext, GetFont().GetEncoding() );
 
-        wxCFStringRef cfNoString( m_no.c_str(), GetFont().GetEncoding() );
-        wxCFStringRef cfYesString( m_yes.c_str(), GetFont().GetEncoding() );
-        wxCFStringRef cfOKString( m_ok.c_str() , GetFont().GetEncoding()) ;
-        wxCFStringRef cfCancelString( m_cancel.c_str(), GetFont().GetEncoding() );
+        wxCFStringRef cfNoString( GetNoLabel(), GetFont().GetEncoding() );
+        wxCFStringRef cfYesString( GetYesLabel(), GetFont().GetEncoding() );
+        wxCFStringRef cfOKString( GetOKLabel(), GetFont().GetEncoding()) ;
+        wxCFStringRef cfCancelString( GetCancelLabel(), GetFont().GetEncoding() );
 
         int buttonId[4] = { 0, 0, 0, wxID_CANCEL /* time-out */ };
 
@@ -166,10 +134,10 @@ int wxMessageDialog::ShowModal()
     {
         NSAlert* alert = [[NSAlert alloc] init];
         
-        wxCFStringRef cfNoString( m_no.c_str(), GetFont().GetEncoding() );
-        wxCFStringRef cfYesString( m_yes.c_str(), GetFont().GetEncoding() );
-        wxCFStringRef cfOKString( m_ok.c_str(), GetFont().GetEncoding() );
-        wxCFStringRef cfCancelString( m_cancel.c_str(), GetFont().GetEncoding() );
+        wxCFStringRef cfNoString( GetNoLabel(), GetFont().GetEncoding() );
+        wxCFStringRef cfYesString( GetYesLabel(), GetFont().GetEncoding() );
+        wxCFStringRef cfOKString( GetOKLabel(), GetFont().GetEncoding() );
+        wxCFStringRef cfCancelString( GetCancelLabel(), GetFont().GetEncoding() );
 
         wxCFStringRef cfTitle( msgtitle, GetFont().GetEncoding() );
         wxCFStringRef cfText( msgtext, GetFont().GetEncoding() );
