@@ -250,24 +250,33 @@ public:
     */
 };
 
+/**
+   Possible critical section types
+*/
 
+enum wxCriticalSectionType
+{
+    wxCRITSEC_DEFAULT,
+      /** Recursive critical section under both Windows and Unix */
+
+    wxCRITSEC_NON_RECURSIVE  
+      /** Non-recursive critical section under Unix, recursive under Windows */
+};
 
 /**
     @class wxCriticalSection
 
     A critical section object is used for exactly the same purpose as
-    mutexes(). The only difference is that under Windows platform
+    a wxMutex. The only difference is that under Windows platform
     critical sections are only visible inside one process, while mutexes may be
     shared among processes, so using critical sections is slightly more
-    efficient. The terminology is also slightly different: mutex may be locked (or
-    acquired) and unlocked (or released) while critical section is entered and left
-    by the program.
+    efficient. The terminology is also slightly different: mutex may be locked
+    (or acquired) and unlocked (or released) while critical section is entered
+    and left by the program.
 
-    Finally, you should try to use
-    wxCriticalSectionLocker class whenever
+    Finally, you should try to use wxCriticalSectionLocker class whenever
     possible instead of directly using wxCriticalSection for the same reasons
-    wxMutexLocker is preferrable to
-    wxMutex - please see wxMutex for an example.
+    wxMutexLocker is preferrable to wxMutex - please see wxMutex for an example.
 
     @library{wxbase}
     @category{threading}
@@ -278,9 +287,10 @@ class wxCriticalSection
 {
 public:
     /**
-        Default constructor initializes critical section object.
+        Default constructor initializes critical section object. By default
+        critical sections are recursive under Unix and Windows.
     */
-    wxCriticalSection();
+    wxCriticalSection( wxCriticalSectionType critSecType = wxCRITSEC_DEFAULT );
 
     /**
         Destructor frees the resources.
@@ -301,6 +311,37 @@ public:
     void Leave();
 };
 
+/**
+  The possible thread kinds.
+*/
+enum wxThreadKind
+{
+    wxTHREAD_DETACHED,  /** Detached thread */
+    wxTHREAD_JOINABLE   /** Joinable thread */
+};
+
+/**
+  The possible thread errors.
+*/
+enum wxThreadError
+{
+    wxTHREAD_NO_ERROR = 0,      /** No error */
+    wxTHREAD_NO_RESOURCE,       /** No resource left to create a new thread */
+    wxTHREAD_RUNNING,           /** The thread is already running */
+    wxTHREAD_NOT_RUNNING,       /** The thread isn't running */
+    wxTHREAD_KILLED,            /** Thread we waited for had to be killed */
+    wxTHREAD_MISC_ERROR         /** Some other error */
+};
+
+/**
+   Defines the interval of priority
+*/
+enum
+{
+    WXTHREAD_MIN_PRIORITY      = 0u,
+    WXTHREAD_DEFAULT_PRIORITY  = 50u,
+    WXTHREAD_MAX_PRIORITY      = 100u
+};
 
 
 /**
@@ -801,6 +842,32 @@ public:
 };
 
 
+/**
+    The possible wxMutex kinds.
+*/
+enum wxMutexType
+{
+    wxMUTEX_DEFAULT,   /** Normal mutex: try to always use this one. Recursive under Windows. */
+
+    wxMUTEX_RECURSIVE  /** Recursive mutex: don't use these ones with wxCondition. */
+};
+
+
+/**
+    The possible wxMutex errors.
+*/
+enum wxMutexError
+{
+    wxMUTEX_NO_ERROR = 0,   /** operation completed successfully */
+    wxMUTEX_INVALID,        /** mutex hasn't been initialized */
+    wxMUTEX_DEAD_LOCK,      /** mutex is already locked by the calling thread */
+    wxMUTEX_BUSY,           /** mutex is already locked by another thread */
+    wxMUTEX_UNLOCKED,       /** attempt to unlock a mutex which is not locked */
+    wxMUTEX_TIMEOUT,        /** LockTimeout() has timed out */
+    wxMUTEX_MISC_ERROR      /** any other error */
+};
+
+
 
 /**
     @class wxMutex
@@ -816,13 +883,55 @@ public:
     thread is waiting) but using them is not recommended under Unix and they are
     @b not recursive there by default. The reason for this is that recursive
     mutexes are not supported by all Unix flavours and, worse, they cannot be used
-    with wxCondition. On the other hand, Win32 mutexes are
-    always recursive.
+    with wxCondition. On the other hand, Win32 mutexes are always recursive.
 
     For example, when several threads use the data stored in the linked list,
     modifications to the list should only be allowed to one thread at a time
     because during a new node addition the list integrity is temporarily broken
     (this is also called @e program invariant).
+
+    @code
+    // this variable has an "s_" prefix because it is static: seeing an "s_" in
+    // a multithreaded program is in general a good sign that you should use a
+    // mutex (or a critical section)
+    static wxMutex *s_mutexProtectingTheGlobalData;
+
+    // we store some numbers in this global array which is presumably used by
+    // several threads simultaneously
+    wxArrayInt s_data;
+
+    void MyThread::AddNewNode(int num)
+    {
+        // ensure that no other thread accesses the list
+        s_mutexProtectingTheGlobalList->Lock();
+
+        s_data.Add(num);
+
+        s_mutexProtectingTheGlobalList->Unlock();
+    }
+
+    // return true if the given number is greater than all array elements
+    bool MyThread::IsGreater(int num)
+    {
+        // before using the list we must acquire the mutex
+        wxMutexLocker lock(s_mutexProtectingTheGlobalData);
+
+        size_t count = s_data.Count();
+        for ( size_t n = 0; n < count; n++ )
+        {
+            if ( s_data[n] > num )
+                return false;
+        }
+
+        return true;
+    }
+    @endcode
+
+    Notice how wxMutexLocker was used in the second function to ensure that the
+    mutex is unlocked in any case: whether the function returns true or false
+    (because the destructor of the local object lock is always called). Using
+    this class instead of directly using wxMutex is, in general safer and is
+    even more so if your program uses C++ exceptions.
 
     @library{wxbase}
     @category{threading}

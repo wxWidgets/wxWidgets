@@ -145,7 +145,7 @@ static bool gs_waitingForThread = false;
 // wxCriticalSection
 // ----------------------------------------------------------------------------
 
-wxCriticalSection::wxCriticalSection()
+wxCriticalSection::wxCriticalSection( wxCriticalSectionType WXUNUSED(critSecType) )
 {
     wxCOMPILE_TIME_ASSERT( sizeof(CRITICAL_SECTION) <= sizeof(wxCritSectBuffer),
                            wxCriticalSectionBufferTooSmall );

@@ -218,13 +218,22 @@ private:
     #define wxCRITSECT_INLINE
 #endif // MSW/!MSW
 
+enum wxCriticalSectionType
+{
+    // recursive critical section
+    wxCRITSEC_DEFAULT,
+
+    // non-recursive critical section
+    wxCRITSEC_NON_RECURSIVE
+};
+
 // you should consider wxCriticalSectionLocker whenever possible instead of
 // directly working with wxCriticalSection class - it is safer
 class WXDLLIMPEXP_BASE wxCriticalSection
 {
 public:
     // ctor & dtor
-    wxCRITSECT_INLINE wxCriticalSection();
+    wxCRITSECT_INLINE wxCriticalSection( wxCriticalSectionType critSecType = wxCRITSEC_DEFAULT );
     wxCRITSECT_INLINE ~wxCriticalSection();
     // enter the section (the same as locking a mutex)
     wxCRITSECT_INLINE void Enter();
@@ -266,7 +275,8 @@ private:
 
 #if wxCRITSECT_IS_MUTEX && !defined(__WXMAC__)
     // implement wxCriticalSection using mutexes
-    inline wxCriticalSection::wxCriticalSection() { }
+    inline wxCriticalSection::wxCriticalSection( wxCriticalSectionType critSecType ) 
+       : m_mutex( critSecType == wxCRITSEC_DEFAULT ? wxMUTEX_RECURSIVE : wxMUTEX_DEFAULT )  { }
     inline wxCriticalSection::~wxCriticalSection() { }
 
     inline void wxCriticalSection::Enter() { (void)m_mutex.Lock(); }

@@ -106,7 +106,7 @@ MPCriticalRegionID gs_guiCritical = kInvalidID;
 // wxCriticalSection
 // ----------------------------------------------------------------------------
 
-wxCriticalSection::wxCriticalSection()
+wxCriticalSection::wxCriticalSection( wxCriticalSectionType WXUNUSED(critSecType) )
 {
     MPCreateCriticalRegion( (MPCriticalRegionID*) &m_critRegion );
 }
