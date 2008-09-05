@@ -825,8 +825,7 @@ class wxMutexLocker
 public:
     /**
         Constructs a wxMutexLocker object associated with mutex and locks it.
-        Call @ref IsOk() IsLocked to check if the mutex was
-        successfully locked.
+        Call IsOk() to check if the mutex was successfully locked.
     */
     wxMutexLocker(wxMutex& mutex);
 
@@ -955,28 +954,28 @@ public:
         Locks the mutex object. This is equivalent to
         LockTimeout() with infinite timeout.
 
-        @return One of:
+        @return One of: @c wxMUTEX_NO_ERROR, @c wxMUTEX_DEAD_LOCK.
     */
     wxMutexError Lock();
 
     /**
         Try to lock the mutex object during the specified time interval.
 
-        @return One of:
+        @return One of: @c wxMUTEX_NO_ERROR, @c wxMUTEX_DEAD_LOCK, @c wxMUTEX_TIMEOUT.
     */
     wxMutexError LockTimeout(unsigned long msec);
 
     /**
         Tries to lock the mutex object. If it can't, returns immediately with an error.
 
-        @return One of:
+        @return One of: @c wxMUTEX_NO_ERROR, @c wxMUTEX_BUSY.
     */
     wxMutexError TryLock();
 
     /**
         Unlocks the mutex object.
 
-        @return One of:
+        @return One of: @c wxMUTEX_NO_ERROR, @c wxMUTEX_UNLOCKED.
     */
     wxMutexError Unlock();
 };
