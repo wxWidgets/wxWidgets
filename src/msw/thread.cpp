@@ -189,12 +189,16 @@ private:
     wxMutexError LockTimeout(DWORD milliseconds);
 
     HANDLE m_mutex;
+    
+    unsigned long m_owningThread;
+    bool m_isLocked;
+    wxMutexType m_type;
 
     DECLARE_NO_COPY_CLASS(wxMutexInternal)
 };
 
 // all mutexes are recursive under Win32 so we don't use mutexType
-wxMutexInternal::wxMutexInternal(wxMutexType WXUNUSED(mutexType))
+wxMutexInternal::wxMutexInternal(wxMutexType mutexType)
 {
     // create a nameless (hence intra process and always private) mutex
     m_mutex = ::CreateMutex
@@ -204,10 +208,15 @@ wxMutexInternal::wxMutexInternal(wxMutexType WXUNUSED(mutexType))
                     NULL        // no name
                 );
 
+    m_type = mutexType;
+    m_owningThread = 0;
+    m_isLocked = false;
+
     if ( !m_mutex )
     {
         wxLogLastError(_T("CreateMutex()"));
     }
+    
 }
 
 wxMutexInternal::~wxMutexInternal()
@@ -231,6 +240,16 @@ wxMutexError wxMutexInternal::TryLock()
 
 wxMutexError wxMutexInternal::LockTimeout(DWORD milliseconds)
 {
+    if (m_type == wxMUTEX_DEFAULT)
+    {
+        // Don't allow recursive
+        if (m_isLocked)
+        {
+            if (m_owningThread == wxThread::GetCurrentId())
+                return wxMUTEX_DEAD_LOCK;
+        }
+    }
+
     DWORD rc = ::WaitForSingleObject(m_mutex, milliseconds);
     if ( rc == WAIT_ABANDONED )
     {
@@ -261,6 +280,13 @@ wxMutexError wxMutexInternal::LockTimeout(DWORD milliseconds)
             return wxMUTEX_MISC_ERROR;
     }
 
+    if (m_type == wxMUTEX_DEFAULT)
+    { 
+        // required for checking recursiveness
+        m_isLocked = true;
+        m_owningThread = wxThread::GetCurrentId();
+    }
+    
     return wxMUTEX_NO_ERROR;
 }
 
@@ -272,6 +298,9 @@ wxMutexError wxMutexInternal::Unlock()
 
         return wxMUTEX_MISC_ERROR;
     }
+    
+    // required for checking recursiveness
+    m_isLocked = false;
 
     return wxMUTEX_NO_ERROR;
 }

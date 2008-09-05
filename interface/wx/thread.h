@@ -860,7 +860,7 @@ public:
 */
 enum wxMutexType
 {
-    /** Normal mutex: try to always use this one. Recursive under Windows. */
+    /** Normal non-recursive mutex: try to always use this one. */
     wxMUTEX_DEFAULT,   
 
     /** Recursive mutex: don't use these ones with wxCondition. */
@@ -909,9 +909,9 @@ enum wxMutexError
     had already locked before (instead of dead locking the entire process in this
     situation by starting to wait on a mutex which will never be released while the
     thread is waiting) but using them is not recommended under Unix and they are
-    @b not recursive there by default. The reason for this is that recursive
+    @b not recursive by default. The reason for this is that recursive
     mutexes are not supported by all Unix flavours and, worse, they cannot be used
-    with wxCondition. On the other hand, Win32 mutexes are always recursive.
+    with wxCondition.
 
     For example, when several threads use the data stored in the linked list,
     modifications to the list should only be allowed to one thread at a time
