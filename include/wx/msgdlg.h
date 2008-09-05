@@ -46,6 +46,21 @@ public:
         {
         }
 
+        ButtonLabel(const char *label)
+            : m_label(label), m_stockId(wxID_NONE)
+        {
+        }
+
+        ButtonLabel(const wchar_t *label)
+            : m_label(label), m_stockId(wxID_NONE)
+        {
+        }
+
+        ButtonLabel(const wxCStrData& label)
+            : m_label(label), m_stockId(wxID_NONE)
+        {
+        }
+
         // default copy ctor and dtor are ok
 
         // get the string label, whether it was originally specified directly
@@ -122,8 +137,7 @@ public:
         m_extendedMessage = extendedMessage;
     }
 
-protected:
-    // common validation of wxMessageDialog style
+    // change the dialog style flag
     void SetMessageDialogStyle(long style)
     {
         wxASSERT_MSG( ((style & wxYES_NO) == wxYES_NO) || !(style & wxYES_NO),
@@ -135,6 +149,7 @@ protected:
         m_dialogStyle = style;
     }
 
+protected:
     long GetMessageDialogStyle() const { return m_dialogStyle; }
 
 
