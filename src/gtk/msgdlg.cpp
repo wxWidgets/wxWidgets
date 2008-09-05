@@ -178,10 +178,6 @@ void wxMessageDialog::GTKCreateMsgDialog()
             gtk_dialog_add_button(dlg, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
     }
 #endif // wxUSE_LIBHILDON
-
-    // VZ: isn't this done by GTK+ itself?
-    if (parent)
-        gtk_window_set_transient_for(GTK_WINDOW(m_widget), parent);
 }
 
 int wxMessageDialog::ShowModal()
