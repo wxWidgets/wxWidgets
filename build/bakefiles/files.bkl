@@ -2183,7 +2183,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/slider_osx.cpp
     src/osx/spinbutt_osx.cpp
     src/osx/spinctrl_osx.cpp
-    <!-- src/osx/srchctrl.cpp -->
+    src/osx/srchctrl_osx.cpp
     src/osx/statbox_osx.cpp
     src/osx/statline_osx.cpp
     src/osx/stattext_osx.cpp
