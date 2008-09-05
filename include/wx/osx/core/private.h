@@ -495,6 +495,8 @@ public:
 // interface to be implemented by a textcontrol
 //
 
+class WXDLLIMPEXP_FWD_CORE wxTextAttr;
+
 // common interface for all implementations
 class WXDLLIMPEXP_CORE wxTextWidgetImpl
 
