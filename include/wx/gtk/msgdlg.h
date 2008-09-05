@@ -12,7 +12,7 @@
 #ifndef _WX_GTK_MSGDLG_H_
 #define _WX_GTK_MSGDLG_H_
 
-class WXDLLIMPEXP_CORE wxMessageDialog : public wxMessageDialogBase
+class WXDLLIMPEXP_CORE wxMessageDialog : public wxMessageDialogWithCustomLabels
 {
 public:
     wxMessageDialog(wxWindow *parent, const wxString& message,
@@ -21,7 +21,7 @@ public:
                     const wxPoint& pos = wxDefaultPosition);
 
     virtual int ShowModal();
-    virtual bool Show( bool WXUNUSED(show) = true ) { return false; };
+    virtual bool Show(bool WXUNUSED(show) = true) { return false; }
 
 protected:
     // implement some base class methods to do nothing to avoid asserts and
@@ -33,6 +33,15 @@ protected:
                               int WXUNUSED(width), int WXUNUSED(height)) {}
 
 private:
+    // override to use stock GTK+ defaults instead of just string ones
+    virtual wxString GetDefaultYesLabel() const;
+    virtual wxString GetDefaultNoLabel() const;
+    virtual wxString GetDefaultOKLabel() const;
+    virtual wxString GetDefaultCancelLabel() const;
+
+    // override to convert wx mnemonics to GTK+ ones
+    virtual void DoSetCustomLabel(wxString& var, const wxString& value);
+
     // create the real GTK+ dialog: this is done from ShowModal() to allow
     // changing the message between constructing the dialog and showing it
     void GTKCreateMsgDialog();

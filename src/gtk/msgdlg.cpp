@@ -25,6 +25,7 @@
 #endif
 
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/mnemonics.h"
 #include <gtk/gtk.h>
 
 #if wxUSE_LIBHILDON
@@ -38,11 +39,36 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
                                  const wxString& caption,
                                  long style,
                                  const wxPoint& WXUNUSED(pos))
-               : wxMessageDialogBase(GetParentForModalDialog(parent),
-                                     message,
-                                     caption,
-                                     style)
+               : wxMessageDialogWithCustomLabels(GetParentForModalDialog(parent),
+                                                 message,
+                                                 caption,
+                                                 style)
 {
+}
+
+wxString wxMessageDialog::GetDefaultYesLabel() const
+{
+    return GTK_STOCK_YES;
+}
+
+wxString wxMessageDialog::GetDefaultNoLabel() const
+{
+    return GTK_STOCK_NO;
+}
+
+wxString wxMessageDialog::GetDefaultOKLabel() const
+{
+    return GTK_STOCK_OK;
+}
+
+wxString wxMessageDialog::GetDefaultCancelLabel() const
+{
+    return GTK_STOCK_CANCEL;
+}
+
+void wxMessageDialog::DoSetCustomLabel(wxString& var, const wxString& value)
+{
+    var = wxConvertMnemonicsToGTK(value);
 }
 
 void wxMessageDialog::GTKCreateMsgDialog()
@@ -74,22 +100,22 @@ void wxMessageDialog::GTKCreateMsgDialog()
                );
 #else // !wxUSE_LIBHILDON
     GtkMessageType type = GTK_MESSAGE_ERROR;
-    GtkButtonsType buttons = GTK_BUTTONS_OK;
+    GtkButtonsType buttons = GTK_BUTTONS_NONE;
 
-    if (m_dialogStyle & wxYES_NO)
+    // when using custom labels, we have to add all the buttons ourselves
+    if ( !HasCustomLabels() )
     {
-        if (m_dialogStyle & wxCANCEL)
-            buttons = GTK_BUTTONS_NONE;
-        else
-            buttons = GTK_BUTTONS_YES_NO;
-    }
-
-    if (m_dialogStyle & wxOK)
-    {
-        if (m_dialogStyle & wxCANCEL)
-            buttons = GTK_BUTTONS_OK_CANCEL;
-        else
-            buttons = GTK_BUTTONS_OK;
+        if ( m_dialogStyle & wxYES_NO )
+        {
+            if ( !(m_dialogStyle & wxCANCEL) )
+                buttons = GTK_BUTTONS_YES_NO;
+            //else: no standard GTK_BUTTONS_YES_NO_CANCEL so leave as NONE
+        }
+        else if ( m_dialogStyle & wxOK )
+        {
+            buttons = m_dialogStyle & wxCANCEL ? GTK_BUTTONS_OK_CANCEL
+                                               : GTK_BUTTONS_OK;
+        }
     }
 
     if (m_dialogStyle & wxICON_EXCLAMATION)
@@ -145,39 +171,43 @@ void wxMessageDialog::GTKCreateMsgDialog()
     if (m_caption != wxMessageBoxCaptionStr)
         gtk_window_set_title(GTK_WINDOW(m_widget), wxGTK_CONV(m_caption));
 
-    // we need to add dialogs manually when using Yes/No/Cancel dialog as GTK+
-    // doesn't support it natively and when using Hildon we add all the buttons
-    // manually as it doesn't support too many of the combinations we have
     GtkDialog * const dlg = GTK_DIALOG(m_widget);
-    if ( m_dialogStyle & wxYES_NO )
-    {
-        if ( m_dialogStyle & wxCANCEL )
-        {
-            gtk_dialog_add_button(dlg, GTK_STOCK_NO, GTK_RESPONSE_NO);
-            gtk_dialog_add_button(dlg, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
-            gtk_dialog_add_button(dlg, GTK_STOCK_YES, GTK_RESPONSE_YES);
-        }
+
+    // we need to add buttons manually if we use custom labels or always for
+    // Yes/No/Cancel dialog as GTK+ doesn't support it natively and when using
+    // Hildon we add all the buttons manually as it doesn't support too many of
+    // the combinations we may have
 #if wxUSE_LIBHILDON
-        else // just Yes/No
+    static const bool addButtons = true;
+#else // !wxUSE_LIBHILDON
+    const bool addButtons = buttons == GTK_BUTTONS_NONE;
+#endif // wxUSE_LIBHILDON/!wxUSE_LIBHILDON
+
+    if ( m_dialogStyle & wxYES_NO ) // Yes/No or Yes/No/Cancel dialog
+    {
+        if ( addButtons )
         {
-            gtk_dialog_add_button(dlg, GTK_STOCK_NO, GTK_RESPONSE_NO);
-            gtk_dialog_add_button(dlg, GTK_STOCK_YES, GTK_RESPONSE_YES);
+            gtk_dialog_add_button(dlg, GetNoLabel(), GTK_RESPONSE_NO);
+            gtk_dialog_add_button(dlg, GetYesLabel(), GTK_RESPONSE_YES);
+
+            if ( m_dialogStyle & wxCANCEL )
+            {
+                gtk_dialog_add_button(dlg, GetCancelLabel(),
+                                      GTK_RESPONSE_CANCEL);
+            }
         }
-#endif // wxUSE_LIBHILDON
 
         gtk_dialog_set_default_response(dlg,
                                         m_dialogStyle & wxNO_DEFAULT
                                             ? GTK_RESPONSE_NO
                                             : GTK_RESPONSE_YES);
     }
-#if wxUSE_LIBHILDON
-    else // Ok or Ok/Cancel dialog
+    else if ( addButtons ) // Ok or Ok/Cancel dialog
     {
-        gtk_dialog_add_button(dlg, GTK_STOCK_OK, GTK_RESPONSE_OK);
+        gtk_dialog_add_button(dlg, GetOKLabel(), GTK_RESPONSE_OK);
         if ( m_dialogStyle & wxCANCEL )
-            gtk_dialog_add_button(dlg, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+            gtk_dialog_add_button(dlg, GetCancelLabel(), GTK_RESPONSE_CANCEL);
     }
-#endif // wxUSE_LIBHILDON
 }
 
 int wxMessageDialog::ShowModal()

@@ -117,7 +117,10 @@ protected:
 // functions for setting these labels immediately and we also don't need to
 // store them at all if custom labels are not supported, which is why we do
 // this in a separate class and not wxMessageDialogBase itself)
-#if defined(__WXCOCOA__) || defined(__WXMAC__) || defined(__WXMSW__)
+#if defined(__WXCOCOA__) || \
+    defined(__WXGTK20__) || \
+    defined(__WXMAC__) || \
+    defined(__WXMSW__)
 
 class WXDLLIMPEXP_CORE wxMessageDialogWithCustomLabels
     : public wxMessageDialogBase
@@ -175,11 +178,14 @@ protected:
     // these functions return the label to be used for the button which is
     // either a custom label explicitly set by the user or the default label,
     // i.e. they always return a valid string
-    wxString GetYesLabel() const { return m_yes.empty() ? _("Yes") : m_yes; }
-    wxString GetNoLabel() const { return m_no.empty() ? _("No") : m_no; }
-    wxString GetOKLabel() const { return m_ok.empty() ? _("OK") : m_ok; }
+    wxString GetYesLabel() const
+        { return m_yes.empty() ? GetDefaultYesLabel() : m_yes; }
+    wxString GetNoLabel() const
+        { return m_no.empty() ? GetDefaultNoLabel() : m_no; }
+    wxString GetOKLabel() const
+        { return m_ok.empty() ? GetDefaultOKLabel() : m_ok; }
     wxString GetCancelLabel() const
-        { return m_cancel.empty() ? _("Cancel") : m_cancel; }
+        { return m_cancel.empty() ? GetDefaultCancelLabel() : m_cancel; }
 
 private:
     // this function is called by our public SetXXXLabels() and should assign
@@ -189,6 +195,13 @@ private:
     {
         var = value;
     }
+
+    // these functions may be overridden to provide different defaults for the
+    // default button labels (this is used by wxGTK)
+    virtual wxString GetDefaultYesLabel() const { return _("Yes"); }
+    virtual wxString GetDefaultNoLabel() const { return _("No"); }
+    virtual wxString GetDefaultOKLabel() const { return _("OK"); }
+    virtual wxString GetDefaultCancelLabel() const { return _("Cancel"); }
 
     // labels for the buttons, initially empty meaning that the defaults should
     // be used, use GetYes/No/OK/CancelLabel() to access them

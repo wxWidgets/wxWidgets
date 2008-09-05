@@ -307,6 +307,7 @@ All (GUI):
 - Added wxWindow::Show/HideWithEffect()
 - Added wxWrapSizer (Arne Steinarson)
 - Added wxSpinCtrlDouble (John Labenski)
+- Support custom labels in wxMessageDialog/wxMessageBox in wxMSW and wxGTK.
 - Added multisample (anti-aliasing) support to wxGLCanvas (Olivier Playez).
 - Initialize wx{Client,Paint,Window}DC with fonts/colours of its window.
 - Added wxNativeContainerWindow to allow embedding wx into native windows
