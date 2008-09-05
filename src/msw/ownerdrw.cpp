@@ -35,6 +35,7 @@
 #include "wx/fontutil.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/metrics.h"
 #include "wx/msw/dc.h"
 
 #ifndef SPI_GETKEYBOARDCUES
@@ -87,33 +88,11 @@ public:
     }
 
 private:
-    static NONCLIENTMETRICS GetNCM()
-    {
-        WinStruct<NONCLIENTMETRICS> nm;
-        if ( !::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, &nm, 0) )
-        {
-#if WINVER >= 0x0600
-            // a new field has been added to NONCLIENTMETRICS under Vista, so
-            // the call to SystemParametersInfo() fails if we use the struct
-            // size incorporating this new value on an older system -- retry
-            // without it
-            nm.cbSize -= sizeof(int);
-            if ( !::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, &nm, 0) )
-#endif // WINVER >= 0x0600
-            {
-                // maybe we should initialize the struct with some defaults?
-                wxLogLastError(_T("SystemParametersInfo(SPI_GETNONCLIENTMETRICS)"));
-            }
-        }
-
-        return nm;
-    }
-
     static void DoInitMetrics()
     {
         // iMenuHeight is the menu bar height and the menu items are less tall,
         // although I don't know by how much -- below is the value for my system
-        ms_systemMenuHeight = GetNCM().iMenuHeight - 4;
+        ms_systemMenuHeight = wxMSWImpl::GetNonClientMetrics().iMenuHeight - 4;
 
         wxASSERT_MSG( ms_systemMenuHeight > 0,
                         "menu height should be positive" );
@@ -129,7 +108,8 @@ private:
 
     static void DoInitFont()
     {
-        ms_systemMenuFont = new wxFont(wxNativeFontInfo(GetNCM().lfMenuFont));
+        ms_systemMenuFont = new
+          wxFont(wxNativeFontInfo(wxMSWImpl::GetNonClientMetrics().lfMenuFont));
     }
 
     static wxFont* ms_systemMenuFont;
