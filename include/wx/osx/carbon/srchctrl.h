@@ -13,7 +13,7 @@
 
 #if wxUSE_SEARCHCTRL
 
-class wxMacSearchFieldControl;
+class wxSearchWidgetImpl;
 
 class WXDLLIMPEXP_CORE wxSearchCtrl : public wxSearchCtrlBase
 {
@@ -54,14 +54,13 @@ public:
     virtual bool IsCancelButtonVisible() const;
 
     // TODO: In 2.9 these should probably be virtual, and declared in the base class...
-    void SetDescriptiveText(const wxString& text);
-    wxString GetDescriptiveText() const;
+    void        SetDescriptiveText(const wxString& text);
+    wxString    GetDescriptiveText() const;
 
-    virtual wxInt32     MacSearchFieldSearchHit( WXEVENTHANDLERREF handler , WXEVENTREF event ) ;
-    virtual wxInt32     MacSearchFieldCancelHit( WXEVENTHANDLERREF handler , WXEVENTREF event ) ;
+    virtual bool    HandleSearchFieldSearchHit() ;
+    virtual bool    HandleSearchFieldCancelHit() ;
 
-    wxMacSearchFieldControl * GetPeer() const
-    { return (wxMacSearchFieldControl*) m_peer; }
+    wxSearchWidgetImpl * GetSearchPeer() const;
 
 protected:
 
@@ -69,12 +68,9 @@ protected:
 
     void Init();
 
-    virtual void CreatePeer(
-           const wxString& str,
-           const wxPoint& pos,
-           const wxSize& size, long style );
-
     wxMenu *m_menu;
+    
+    wxString m_descriptiveText;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxSearchCtrl)

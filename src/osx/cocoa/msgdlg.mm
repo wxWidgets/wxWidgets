@@ -74,15 +74,15 @@ int wxMessageDialog::ShowModal()
 
     wxASSERT_MSG( (style & 0x3F) != wxYES, wxT("this style is not supported on Mac") );
 
-    AlertType alertType = kAlertPlainAlert;
+    NSAlertStyle alertType = NSWarningAlertStyle;
     if (style & wxICON_EXCLAMATION)
-        alertType = kAlertCautionAlert;
+        alertType = NSCriticalAlertStyle;
     else if (style & wxICON_HAND)
-        alertType = kAlertStopAlert;
+        alertType = NSWarningAlertStyle;
     else if (style & wxICON_INFORMATION)
-        alertType = kAlertNoteAlert;
+        alertType = NSInformationalAlertStyle;
     else if (style & wxICON_QUESTION)
-        alertType = kAlertNoteAlert;
+        alertType = NSInformationalAlertStyle;
 
 
     // work out what to display
@@ -164,9 +164,8 @@ int wxMessageDialog::ShowModal()
     }
     else
     {
-        short result;
-
-        AlertStdCFStringAlertParamRec param;
+        NSAlert* alert = [[NSAlert alloc] init];
+        
         wxCFStringRef cfNoString( m_no.c_str(), GetFont().GetEncoding() );
         wxCFStringRef cfYesString( m_yes.c_str(), GetFont().GetEncoding() );
         wxCFStringRef cfOKString( m_ok.c_str(), GetFont().GetEncoding() );
@@ -175,108 +174,59 @@ int wxMessageDialog::ShowModal()
         wxCFStringRef cfTitle( msgtitle, GetFont().GetEncoding() );
         wxCFStringRef cfText( msgtext, GetFont().GetEncoding() );
 
-        param.movable = true;
-        param.flags = 0;
-        param.version = kStdCFStringAlertVersionOne;
-
-        bool skipDialog = false;
+        [alert setMessageText:cfTitle.AsNSString()];
+        [alert setInformativeText:cfText.AsNSString()];
+        
+        int buttonId[3] = { 0, 0, 0 };
+        int buttonCount = 0;
 
         if (style & wxYES_NO)
         {
-            if (style & wxCANCEL)
+            if ( style & wxNO_DEFAULT )
             {
-                param.defaultText = cfYesString;
-                param.cancelText = cfCancelString;
-                param.otherText = cfNoString;
-                param.helpButton = false;
-                param.defaultButton = style & wxNO_DEFAULT ? kAlertStdAlertOtherButton : kAlertStdAlertOKButton;
-                param.cancelButton = kAlertStdAlertCancelButton;
+                [alert addButtonWithTitle:cfNoString.AsNSString()];
+                buttonId[ buttonCount++ ] = wxID_NO;
+                [alert addButtonWithTitle:cfYesString.AsNSString()];
+                buttonId[ buttonCount++ ] = wxID_YES;
             }
             else
             {
-                param.defaultText = cfYesString;
-                param.cancelText = NULL;
-                param.otherText = cfNoString;
-                param.helpButton = false;
-                param.defaultButton = style & wxNO_DEFAULT ? kAlertStdAlertOtherButton : kAlertStdAlertOKButton;
-                param.cancelButton = 0;
+                [alert addButtonWithTitle:cfYesString.AsNSString()];
+                buttonId[ buttonCount++ ] = wxID_YES;
+                [alert addButtonWithTitle:cfNoString.AsNSString()];
+                buttonId[ buttonCount++ ] = wxID_NO;
+            }
+
+            if (style & wxCANCEL)
+            {
+                [alert addButtonWithTitle:cfCancelString.AsNSString()];
+                buttonId[ buttonCount++ ] = wxID_CANCEL;
             }
         }
         // the MSW implementation even shows an OK button if it is not specified, we'll do the same
         else
         {
+            [alert addButtonWithTitle:cfOKString.AsNSString()];
+            buttonId[ buttonCount++ ] = wxID_OK;
             if (style & wxCANCEL)
             {
-                // that's a cancel missing
-                param.defaultText = cfOKString;
-                param.cancelText = cfCancelString;
-                param.otherText = NULL;
-                param.helpButton = false;
-                param.defaultButton = kAlertStdAlertOKButton;
-                param.cancelButton = 0;
-            }
-            else
-            {
-                param.defaultText = cfOKString;
-                param.cancelText = NULL;
-                param.otherText = NULL;
-                param.helpButton = false;
-                param.defaultButton = kAlertStdAlertOKButton;
-                param.cancelButton = 0;
+                [alert addButtonWithTitle:cfCancelString.AsNSString()];
+                buttonId[ buttonCount++ ] = wxID_CANCEL;
             }
         }
 
-        param.position = kWindowDefaultPosition;
-        if ( !skipDialog )
-        {
-            DialogRef alertRef;
-            CreateStandardAlert( alertType, cfTitle, cfText, &param, &alertRef );
-            RunStandardAlert( alertRef, NULL, &result );
-        }
+        int button = [alert runModal];
+        
+        [alert release];
+        
+        if ( button < NSAlertFirstButtonReturn )
+            resultbutton = wxID_CANCEL;
         else
         {
-            return wxID_CANCEL;
-        }
-
-        if (style & wxOK)
-        {
-            switch ( result )
-            {
-            case 1:
-                resultbutton = wxID_OK;
-                break;
-
-            case 2:
-                // TODO: add Cancel button
-                // if (style & wxCANCEL)
-                //     resultbutton = wxID_CANCEL;
-                break;
-
-            case 3:
-            default:
-                break;
-            }
-        }
-        else if (style & wxYES_NO)
-        {
-            switch ( result )
-            {
-            case 1:
-                resultbutton = wxID_YES;
-                break;
-
-            case 2:
-                if (!(style & wxCANCEL))
-                    resultbutton = wxID_CANCEL;
-                break;
-
-            case 3:
-                resultbutton = wxID_NO;
-                break;
-
-            default:
-                break;
-            }
+            if ( button - NSAlertFirstButtonReturn < buttonCount )
+                resultbutton = buttonId[ button - NSAlertFirstButtonReturn ];
+            else
+                resultbutton = wxID_CANCEL;
         }
     }
 

@@ -14,64 +14,9 @@
 
 #include "wx/osx/private.h"
 
-// common interface for all implementations
-class wxMacTextControl :
-#if wxOSX_USE_CARBON 
-    public wxMacControl
-#else
-    public wxWidgetCocoaImpl
-#endif
-{
-public :
-#if wxOSX_USE_CARBON 
-    wxMacTextControl( wxTextCtrl *peer ) ;
-#else
-    wxMacTextControl::wxMacTextControl(wxTextCtrl* peer, WXWidget w) ;
-#endif
-    virtual ~wxMacTextControl() ;
+// implementation exposed, so that search control can pull it 
 
-    virtual bool CanFocus() const { return true; }
-
-    virtual wxString GetStringValue() const = 0 ;
-    virtual void SetStringValue( const wxString &val ) = 0 ;
-    virtual void SetSelection( long from, long to ) = 0 ;
-    virtual void GetSelection( long* from, long* to ) const = 0 ;
-    virtual void WriteText( const wxString& str ) = 0 ;
-
-    virtual void SetStyle( long start, long end, const wxTextAttr& style ) ;
-    virtual void Copy() ;
-    virtual void Cut() ;
-    virtual void Paste() ;
-    virtual bool CanPaste() const ;
-    virtual void SetEditable( bool editable ) ;
-    virtual wxTextPos GetLastPosition() const ;
-    virtual void Replace( long from, long to, const wxString &str ) ;
-    virtual void Remove( long from, long to ) ;
-
-
-    virtual bool HasOwnContextMenu() const
-        { return false ; }
-
-    virtual bool SetupCursor( const wxPoint& WXUNUSED(pt) )
-        { return false ; }
-
-    virtual void Clear() ;
-    virtual bool CanUndo() const;
-    virtual void Undo() ;
-    virtual bool CanRedo() const;
-    virtual void Redo() ;
-    virtual int GetNumberOfLines() const ;
-    virtual long XYToPosition(long x, long y) const;
-    virtual bool PositionToXY(long pos, long *x, long *y) const ;
-    virtual void ShowPosition(long WXUNUSED(pos)) ;
-    virtual int GetLineLength(long lineNo) const ;
-    virtual wxString GetLineText(long lineNo) const ;
-    virtual void CheckSpelling(bool WXUNUSED(check)) { }
-    virtual void SetFont( const wxFont & font , const wxColour& foreground , long windowStyle );
-};
-
-#if wxOSX_USE_CARBON
-class wxMacUnicodeTextControl : public wxMacTextControl
+class wxMacUnicodeTextControl : public wxMacControl, public wxTextWidgetImpl
 {
 public :
     wxMacUnicodeTextControl( wxTextCtrl *wxPeer ) ;
@@ -81,10 +26,6 @@ public :
                              const wxSize& size, long style ) ;
     virtual ~wxMacUnicodeTextControl();
 
-    virtual bool Create( wxTextCtrl *wxPeer,
-                         const wxString& str,
-                         const wxPoint& pos,
-                         const wxSize& size, long style ) ;
     virtual void VisibilityChanged(bool shown);
     virtual wxString GetStringValue() const ;
     virtual void SetStringValue( const wxString &str) ;
@@ -98,13 +39,12 @@ public :
     virtual void WriteText(const wxString& str) ;
 
 protected :
-    virtual void CreateControl( wxTextCtrl* peer, const Rect* bounds, CFStringRef cfr );
+    void    InstallEventHandlers();
 
     // contains the tag for the content (is different for password and non-password controls)
     OSType m_valueTag ;
 public :
     ControlEditTextSelectionRec m_selection ;
 };
-#endif
 
 #endif // _WX_MAC_PRIVATE_MACTEXT_H_

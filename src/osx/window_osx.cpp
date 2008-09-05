@@ -384,9 +384,9 @@ void wxWindowMac::DoSetWindowVariant( wxWindowVariant variant )
 
 void wxWindowMac::MacUpdateControlFont()
 {
-#if wxOSX_USE_CARBON
+
     m_peer->SetFont( GetFont() , GetForegroundColour() , GetWindowStyle() ) ;
-#endif
+
     // do not trigger refreshes upon invisible and possible partly created objects
     if ( IsShownOnScreen() )
         Refresh() ;

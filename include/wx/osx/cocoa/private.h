@@ -148,6 +148,8 @@ public :
     void                PulseGauge();
     void                SetScrollThumb( wxInt32 value, wxInt32 thumbSize );
 
+    void                SetFont( const wxFont & font , const wxColour& foreground , long windowStyle, bool ignoreBlack = true );
+
 protected:
     WXWidget m_osxView;
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetCocoaImpl)

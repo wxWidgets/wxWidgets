@@ -708,6 +708,11 @@ void wxWidgetCocoaImpl::SetControlSize( wxWindowVariant variant )
         [m_osxView setControlSize:size];
 }
 
+void wxWidgetCocoaImpl::SetFont(wxFont const&, wxColour const&, long, bool)
+{
+    // TODO
+}
+
 //
 // Factory methods
 //

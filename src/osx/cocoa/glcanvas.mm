@@ -304,39 +304,6 @@ bool wxGLCanvas::Create(wxWindow *parent,
     return true;
 }
 
-bool wxGLCanvas::Create(wxWindow *parent,
-                        wxWindowID id,
-                        const wxPoint& pos,
-                        const wxSize& size,
-                        long style,
-                        const wxString& name,
-                        const int *attribList,
-                        const wxPalette& WXUNUSED(palette))
-{
-    m_needsUpdate = false;
-    m_macCanvasIsShown = false;
-
-    m_glFormat = WXGLChoosePixelFormat(attribList);
-    if ( !m_glFormat )
-        return false;
-
-    if ( !wxWindow::Create(parent, id, pos, size, style, name) )
-        return false;
-
-    m_dummyContext = WXGLCreateContext(m_glFormat, NULL);
-
-    static GLint gCurrentBufferName = 1;
-    m_bufferName = gCurrentBufferName++;
-    aglSetInteger (m_dummyContext, AGL_BUFFER_NAME, &m_bufferName); 
-    
-    AGLDrawable drawable = (AGLDrawable)GetWindowPort(MAC_WXHWND(MacGetTopLevelWindowRef()));
-    aglSetDrawable(m_dummyContext, drawable);
-
-    m_macCanvasIsShown = true;
-
-    return true;
-}
-
 wxGLCanvas::~wxGLCanvas()
 {
     if ( m_glFormat )

@@ -218,11 +218,11 @@ wxMacWindowClipper::~wxMacWindowClipper()
 
 // common parts for implementations based on MLTE
 
-class wxMacMLTEControl : public wxMacTextControl
+class wxMacMLTEControl : public wxMacControl, public wxTextWidgetImpl
 {
 public :
     wxMacMLTEControl( wxTextCtrl *peer ) ;
-
+    ~wxMacMLTEControl() {}
     virtual wxString GetStringValue() const ;
     virtual void SetStringValue( const wxString &str ) ;
 
@@ -378,7 +378,7 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
     if ( UMAGetSystemVersion() >= 0x1050 )
         forceMLTE = false;
 
-    wxMacTextControl*  peer = NULL;
+    wxMacControl*  peer = NULL;
 
     if ( !forceMLTE )
     {
@@ -466,7 +466,7 @@ static pascal OSStatus wxMacUnicodeTextControlEventHandler( EventHandlerCallRef 
 
 DEFINE_ONE_SHOT_HANDLER_GETTER( wxMacUnicodeTextControlEventHandler )
 
-wxMacUnicodeTextControl::wxMacUnicodeTextControl( wxTextCtrl *wxPeer ) : wxMacTextControl( wxPeer )
+wxMacUnicodeTextControl::wxMacUnicodeTextControl( wxTextCtrl *wxPeer ) : wxMacControl( wxPeer )
 {
 }
 
@@ -474,15 +474,7 @@ wxMacUnicodeTextControl::wxMacUnicodeTextControl( wxTextCtrl *wxPeer,
     const wxString& str,
     const wxPoint& pos,
     const wxSize& size, long style )
-    : wxMacTextControl( wxPeer )
-{
-    Create( wxPeer, str, pos, size, style );
-}
-
-bool wxMacUnicodeTextControl::Create( wxTextCtrl *wxPeer,
-    const wxString& str,
-    const wxPoint& pos,
-    const wxSize& size, long style )
+    : wxMacControl( wxPeer )
 {
     m_font = wxPeer->GetFont() ;
     m_windowStyle = style ;
@@ -491,19 +483,29 @@ bool wxMacUnicodeTextControl::Create( wxTextCtrl *wxPeer,
     wxString st = str ;
     wxMacConvertNewlines10To13( &st ) ;
     wxCFStringRef cf(st , m_font.GetEncoding()) ;
-    CFStringRef cfr = cf ;
 
     m_valueTag = kControlEditTextCFStringTag ;
-    CreateControl( wxPeer, &bounds, cfr );
+    Boolean isPassword = ( m_windowStyle & wxTE_PASSWORD ) != 0 ;
+    if ( isPassword )
+    {
+        m_valueTag = kControlEditTextPasswordCFStringTag ;
+    }
+    OSStatus err = CreateEditUnicodeTextControl(
+        MAC_WXHWND(wxPeer->MacGetTopLevelWindowRef()), &bounds , cf ,
+        isPassword , NULL , &m_controlRef ) ;
+    verify_noerr( err );
 
     if ( !(m_windowStyle & wxTE_MULTILINE) )
         SetData<Boolean>( kControlEditTextPart , kControlEditTextSingleLineTag , true ) ;
 
+    InstallEventHandlers();
+}
+
+void wxMacUnicodeTextControl::InstallEventHandlers()
+{
     ::InstallControlEventHandler( m_controlRef , GetwxMacUnicodeTextControlEventHandlerUPP(),
                                 GetEventTypeCount(unicodeTextControlEventList), unicodeTextControlEventList, this,
                                 NULL);
-
-    return true;
 }
 
 wxMacUnicodeTextControl::~wxMacUnicodeTextControl()
@@ -553,19 +555,6 @@ void wxMacUnicodeTextControl::SetStringValue( const wxString &str )
     wxMacConvertNewlines10To13( &st ) ;
     wxCFStringRef cf( st , m_font.GetEncoding() ) ;
     verify_noerr( SetData<CFStringRef>( 0, m_valueTag , cf ) ) ;
-}
-
-void wxMacUnicodeTextControl::CreateControl( wxTextCtrl* peer, const Rect* bounds, CFStringRef cfr )
-{
-    Boolean isPassword = ( m_windowStyle & wxTE_PASSWORD ) != 0 ;
-    if ( isPassword )
-    {
-        m_valueTag = kControlEditTextPasswordCFStringTag ;
-    }
-    OSStatus err = CreateEditUnicodeTextControl(
-        MAC_WXHWND(peer->MacGetTopLevelWindowRef()), bounds , cfr ,
-        isPassword , NULL , &m_controlRef ) ;
-    verify_noerr( err );
 }
 
 void wxMacUnicodeTextControl::Copy()
@@ -713,7 +702,7 @@ protected :
 } ;
 
 wxMacMLTEControl::wxMacMLTEControl( wxTextCtrl *peer )
-    : wxMacTextControl( peer )
+    : wxMacControl( peer )
 {
     SetNeedsFocusRect( true ) ;
 }

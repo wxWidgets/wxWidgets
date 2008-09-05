@@ -47,7 +47,6 @@
 #include "wx/thread.h"
 
 #include "wx/osx/private.h"
-#include "wx/osx/carbon/private/mactext.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxTextCtrlBase)
 
@@ -116,9 +115,8 @@ bool wxTextCtrl::Create( wxWindow *parent,
         style |= wxTE_PROCESS_ENTER ;
     }
 
-    m_peer = wxWidgetImpl::CreateTextControl( this, parent, id, str, pos, size, style, GetExtraStyle() );
 
-    // CreatePeer( str, pos, size, style );
+    m_peer = wxWidgetImpl::CreateTextControl( this, GetParent(), GetId(), str, pos, size, style, GetExtraStyle() );
 
     MacPostControlCreate(pos, size) ;
 
@@ -134,11 +132,9 @@ bool wxTextCtrl::Create( wxWindow *parent,
     return true;
 }
 
-void wxTextCtrl::CreatePeer(
-           const wxString& str,
-           const wxPoint& pos,
-           const wxSize& size, long style )
+wxTextWidgetImpl* wxTextCtrl::GetTextPeer() const
 {
+    return dynamic_cast<wxTextWidgetImpl*> (m_peer); 
 }
 
 void wxTextCtrl::MacSuperChangedPosition()
@@ -158,17 +154,17 @@ void wxTextCtrl::MacVisibilityChanged()
 
 void wxTextCtrl::MacCheckSpelling(bool check)
 {
-    GetPeer()->CheckSpelling(check);
+    GetTextPeer()->CheckSpelling(check);
 }
 
 wxString wxTextCtrl::GetValue() const
 {
-    return GetPeer()->GetStringValue() ;
+    return GetTextPeer()->GetStringValue() ;
 }
 
 void wxTextCtrl::GetSelection(long* from, long* to) const
 {
-    GetPeer()->GetSelection( from , to ) ;
+    GetTextPeer()->GetSelection( from , to ) ;
 }
 
 void wxTextCtrl::DoSetValue(const wxString& str, int flags)
@@ -177,7 +173,7 @@ void wxTextCtrl::DoSetValue(const wxString& str, int flags)
     if ( GetValue() == str )
         return;
 
-    GetPeer()->SetStringValue( str ) ;
+    GetTextPeer()->SetStringValue( str ) ;
 
     if ( (flags & SetValue_SendEvent) && m_triggerOnSetValue )
     {
@@ -195,14 +191,14 @@ bool wxTextCtrl::SetFont( const wxFont& font )
     if ( !wxTextCtrlBase::SetFont( font ) )
         return false ;
 
-    GetPeer()->SetFont( font , GetForegroundColour() , GetWindowStyle() ) ;
+    GetPeer()->SetFont( font , GetForegroundColour() , GetWindowStyle(), false /* dont ignore black */ ) ;
 
     return true ;
 }
 
 bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
 {
-    GetPeer()->SetStyle( start , end , style ) ;
+    GetTextPeer()->SetStyle( start , end , style ) ;
 
     return true ;
 }
@@ -220,14 +216,14 @@ bool wxTextCtrl::SetDefaultStyle(const wxTextAttr& style)
 void wxTextCtrl::Copy()
 {
     if (CanCopy())
-        GetPeer()->Copy() ;
+        GetTextPeer()->Copy() ;
 }
 
 void wxTextCtrl::Cut()
 {
     if (CanCut())
     {
-        GetPeer()->Cut() ;
+        GetTextPeer()->Cut() ;
 
         wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, m_windowId );
         event.SetEventObject( this );
@@ -239,7 +235,7 @@ void wxTextCtrl::Paste()
 {
     if (CanPaste())
     {
-        GetPeer()->Paste() ;
+        GetTextPeer()->Paste() ;
 
         // TODO: eventually we should add setting the default style again
 
@@ -275,7 +271,7 @@ bool wxTextCtrl::CanPaste() const
     if (!IsEditable())
         return false;
 
-    return GetPeer()->CanPaste() ;
+    return GetTextPeer()->CanPaste() ;
 }
 
 void wxTextCtrl::SetEditable(bool editable)
@@ -283,7 +279,7 @@ void wxTextCtrl::SetEditable(bool editable)
     if ( editable != m_editable )
     {
         m_editable = editable ;
-        GetPeer()->SetEditable( editable ) ;
+        GetTextPeer()->SetEditable( editable ) ;
     }
 }
 
@@ -308,27 +304,27 @@ long wxTextCtrl::GetInsertionPoint() const
 
 wxTextPos wxTextCtrl::GetLastPosition() const
 {
-    return GetPeer()->GetLastPosition() ;
+    return GetTextPeer()->GetLastPosition() ;
 }
 
 void wxTextCtrl::Replace(long from, long to, const wxString& str)
 {
-    GetPeer()->Replace( from , to , str ) ;
+    GetTextPeer()->Replace( from , to , str ) ;
 }
 
 void wxTextCtrl::Remove(long from, long to)
 {
-    GetPeer()->Remove( from , to ) ;
+    GetTextPeer()->Remove( from , to ) ;
 }
 
 void wxTextCtrl::SetSelection(long from, long to)
 {
-    GetPeer()->SetSelection( from , to ) ;
+    GetTextPeer()->SetSelection( from , to ) ;
 }
 
 void wxTextCtrl::WriteText(const wxString& str)
 {
-    GetPeer()->WriteText( str ) ;
+    GetTextPeer()->WriteText( str ) ;
 }
 
 void wxTextCtrl::AppendText(const wxString& text)
@@ -339,7 +335,7 @@ void wxTextCtrl::AppendText(const wxString& text)
 
 void wxTextCtrl::Clear()
 {
-    GetPeer()->Clear() ;
+    GetTextPeer()->Clear() ;
 }
 
 bool wxTextCtrl::IsModified() const
@@ -403,13 +399,13 @@ wxSize wxTextCtrl::DoGetBestSize() const
 void wxTextCtrl::Undo()
 {
     if (CanUndo())
-        GetPeer()->Undo() ;
+        GetTextPeer()->Undo() ;
 }
 
 void wxTextCtrl::Redo()
 {
     if (CanRedo())
-        GetPeer()->Redo() ;
+        GetTextPeer()->Redo() ;
 }
 
 bool wxTextCtrl::CanUndo() const
@@ -417,7 +413,7 @@ bool wxTextCtrl::CanUndo() const
     if ( !IsEditable() )
         return false ;
 
-    return GetPeer()->CanUndo() ;
+    return GetTextPeer()->CanUndo() ;
 }
 
 bool wxTextCtrl::CanRedo() const
@@ -425,7 +421,7 @@ bool wxTextCtrl::CanRedo() const
     if ( !IsEditable() )
         return false ;
 
-    return GetPeer()->CanRedo() ;
+    return GetTextPeer()->CanRedo() ;
 }
 
 void wxTextCtrl::MarkDirty()
@@ -440,32 +436,32 @@ void wxTextCtrl::DiscardEdits()
 
 int wxTextCtrl::GetNumberOfLines() const
 {
-    return GetPeer()->GetNumberOfLines() ;
+    return GetTextPeer()->GetNumberOfLines() ;
 }
 
 long wxTextCtrl::XYToPosition(long x, long y) const
 {
-    return GetPeer()->XYToPosition( x , y ) ;
+    return GetTextPeer()->XYToPosition( x , y ) ;
 }
 
 bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
 {
-    return GetPeer()->PositionToXY( pos , x , y ) ;
+    return GetTextPeer()->PositionToXY( pos , x , y ) ;
 }
 
 void wxTextCtrl::ShowPosition(long pos)
 {
-    return GetPeer()->ShowPosition(pos) ;
+    return GetTextPeer()->ShowPosition(pos) ;
 }
 
 int wxTextCtrl::GetLineLength(long lineNo) const
 {
-    return GetPeer()->GetLineLength(lineNo) ;
+    return GetTextPeer()->GetLineLength(lineNo) ;
 }
 
 wxString wxTextCtrl::GetLineText(long lineNo) const
 {
-    return GetPeer()->GetLineText(lineNo) ;
+    return GetTextPeer()->GetLineText(lineNo) ;
 }
 
 void wxTextCtrl::Command(wxCommandEvent & event)
@@ -706,7 +702,7 @@ void wxTextCtrl::OnUpdateSelectAll(wxUpdateUIEvent& event)
 
 void wxTextCtrl::OnContextMenu(wxContextMenuEvent& event)
 {
-    if ( GetPeer()->HasOwnContextMenu() )
+    if ( GetTextPeer()->HasOwnContextMenu() )
     {
         event.Skip() ;
         return ;
@@ -734,7 +730,7 @@ void wxTextCtrl::OnContextMenu(wxContextMenuEvent& event)
 
 bool wxTextCtrl::MacSetupCursor( const wxPoint& pt )
 {
-    if ( !GetPeer()->SetupCursor( pt ) )
+    if ( !GetTextPeer()->SetupCursor( pt ) )
         return wxWindow::MacSetupCursor( pt ) ;
     else
         return true ;
@@ -744,104 +740,90 @@ bool wxTextCtrl::MacSetupCursor( const wxPoint& pt )
 // implementation base class
 // ----------------------------------------------------------------------------
 
-#if wxOSX_USE_CARBON
-    wxMacTextControl::wxMacTextControl(wxTextCtrl* peer) :
-    wxMacControl( peer )
-#else
-    wxMacTextControl::wxMacTextControl(wxTextCtrl* peer, WXWidget w) :
-    wxWidgetCocoaImpl( peer, w )
-#endif 
-{
-}
-
-wxMacTextControl::~wxMacTextControl()
-{
-}
-
-void wxMacTextControl::SetStyle(long WXUNUSED(start),
+void wxTextWidgetImpl::SetStyle(long WXUNUSED(start),
                                 long WXUNUSED(end),
                                 const wxTextAttr& WXUNUSED(style))
 {
 }
 
-void wxMacTextControl::Copy()
+void wxTextWidgetImpl::Copy()
 {
 }
 
-void wxMacTextControl::Cut()
+void wxTextWidgetImpl::Cut()
 {
 }
 
-void wxMacTextControl::Paste()
+void wxTextWidgetImpl::Paste()
 {
 }
 
-bool wxMacTextControl::CanPaste() const
+bool wxTextWidgetImpl::CanPaste() const
 {
     return false ;
 }
 
-void wxMacTextControl::SetEditable(bool WXUNUSED(editable))
+void wxTextWidgetImpl::SetEditable(bool WXUNUSED(editable))
 {
 }
 
-wxTextPos wxMacTextControl::GetLastPosition() const
+wxTextPos wxTextWidgetImpl::GetLastPosition() const
 {
     return GetStringValue().length() ;
 }
 
-void wxMacTextControl::Replace( long from , long to , const wxString &val )
+void wxTextWidgetImpl::Replace( long from , long to , const wxString &val )
 {
     SetSelection( from , to ) ;
     WriteText( val ) ;
 }
 
-void wxMacTextControl::Remove( long from , long to )
+void wxTextWidgetImpl::Remove( long from , long to )
 {
     SetSelection( from , to ) ;
     WriteText( wxEmptyString) ;
 }
 
-void wxMacTextControl::Clear()
+void wxTextWidgetImpl::Clear()
 {
     SetStringValue( wxEmptyString ) ;
 }
 
-bool wxMacTextControl::CanUndo() const
+bool wxTextWidgetImpl::CanUndo() const
 {
     return false ;
 }
 
-void wxMacTextControl::Undo()
+void wxTextWidgetImpl::Undo()
 {
 }
 
-bool wxMacTextControl::CanRedo()  const
+bool wxTextWidgetImpl::CanRedo()  const
 {
     return false ;
 }
 
-void wxMacTextControl::Redo()
+void wxTextWidgetImpl::Redo()
 {
 }
 
-long wxMacTextControl::XYToPosition(long WXUNUSED(x), long WXUNUSED(y)) const
+long wxTextWidgetImpl::XYToPosition(long WXUNUSED(x), long WXUNUSED(y)) const
 {
     return 0 ;
 }
 
-bool wxMacTextControl::PositionToXY(long WXUNUSED(pos),
+bool wxTextWidgetImpl::PositionToXY(long WXUNUSED(pos),
                                     long *WXUNUSED(x),
                                     long *WXUNUSED(y)) const
 {
     return false ;
 }
 
-void wxMacTextControl::ShowPosition( long WXUNUSED(pos) )
+void wxTextWidgetImpl::ShowPosition( long WXUNUSED(pos) )
 {
 }
 
-int wxMacTextControl::GetNumberOfLines() const
+int wxTextWidgetImpl::GetNumberOfLines() const
 {
     ItemCount lines = 0 ;
     wxString content = GetStringValue() ;
@@ -856,7 +838,7 @@ int wxMacTextControl::GetNumberOfLines() const
     return lines ;
 }
 
-wxString wxMacTextControl::GetLineText(long lineNo) const
+wxString wxTextWidgetImpl::GetLineText(long lineNo) const
 {
     // TODO: change this if possible to reflect real lines
     wxString content = GetStringValue() ;
@@ -888,7 +870,7 @@ wxString wxMacTextControl::GetLineText(long lineNo) const
     return wxEmptyString ;
 }
 
-int wxMacTextControl::GetLineLength(long lineNo) const
+int wxTextWidgetImpl::GetLineLength(long lineNo) const
 {
     // TODO: change this if possible to reflect real lines
     wxString content = GetStringValue() ;
@@ -916,24 +898,6 @@ int wxMacTextControl::GetLineLength(long lineNo) const
     }
 
     return 0 ;
-}
-
-void wxMacTextControl::SetFont( const wxFont & font , const wxColour& foreground , long windowStyle )
-{
-#if wxOSX_USE_CARBON
-    wxMacControl::SetFont(font, foreground, windowStyle );
-
-    // overrule the barrier in wxMacControl for supporting disabled controls, in order to support
-    // setting the color to eg red and back to black by controllers
-
-    if ( foreground == *wxBLACK )
-    {
-        ControlFontStyleRec fontStyle;
-        fontStyle.foreColor.red = fontStyle.foreColor.green = fontStyle.foreColor.blue = 0;
-        fontStyle.flags = kControlUseForeColorMask;
-        ::SetControlFontStyle( m_controlRef , &fontStyle );
-    }
-#endif
 }
 
 #endif // wxUSE_TEXTCTRL

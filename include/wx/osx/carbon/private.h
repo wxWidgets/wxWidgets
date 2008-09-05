@@ -426,7 +426,7 @@ public :
     virtual void SuperChangedPosition();
 
 
-    virtual void SetFont( const wxFont & font , const wxColour& foreground , long windowStyle );
+    virtual void SetFont( const wxFont & font , const wxColour& foreground , long windowStyle, bool ignoreBlack = true );
     virtual void SetBackgroundColour( const wxColour& col );
     virtual ControlPartCode HandleKey(  SInt16 keyCode,  SInt16 charCode, EventModifiers modifiers );
     void SetActionProc( ControlActionUPP   actionProc );
@@ -962,8 +962,6 @@ void wxMacSetupConverters();
 void wxMacCleanupConverters();
 
 // utils.cpp
-void WXDLLIMPEXP_CORE wxMacStringToPascal( const wxString&from , StringPtr to );
-wxString WXDLLIMPEXP_CORE wxMacMakeStringFromPascal( ConstStringPtr from );
 
 // filefn.cpp
 

@@ -156,4 +156,24 @@ CGColorRef wxMacCreateCGColorFromHITheme( ThemeBrush brush )
     return color;
 }
 
+//---------------------------------------------------------------------------
+// Mac Specific string utility functions
+//---------------------------------------------------------------------------
+
+void wxMacStringToPascal( const wxString&from , unsigned char * to )
+{
+    wxCharBuffer buf = from.mb_str( wxConvLocal );
+    int len = strlen(buf);
+
+    if ( len > 255 )
+        len = 255;
+    to[0] = len;
+    memcpy( (char*) &to[1] , buf , len );
+}
+
+wxString wxMacMakeStringFromPascal( const unsigned char * from )
+{
+    return wxString( (char*) &from[1] , wxConvLocal , from[0] );
+}
+
 #endif // wxOSX_USE_COCOA_OR_CARBON

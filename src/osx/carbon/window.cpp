@@ -1184,7 +1184,7 @@ void wxMacControl::SuperChangedPosition()
 {
 }
 
-void wxMacControl::SetFont( const wxFont & font , const wxColour& foreground , long windowStyle )
+void wxMacControl::SetFont( const wxFont & font , const wxColour& foreground , long windowStyle, bool ignoreBlack )
 {
     m_font = font;
 #if wxOSX_USE_CORE_TEXT
@@ -1199,7 +1199,7 @@ void wxMacControl::SetFont( const wxFont & font , const wxColour& foreground , l
         HIViewSetTextFont( m_controlRef , part , (CTFontRef) font.MacGetCTFont() );
         HIViewSetTextHorizontalFlush( m_controlRef, part, flush );
 
-        if ( foreground != *wxBLACK )
+        if ( foreground != *wxBLACK || ignoreBlack == false )
         {
             ControlFontStyleRec fontStyle;
             foreground.GetRGBColor( &fontStyle.foreColor );
@@ -1252,7 +1252,7 @@ void wxMacControl::SetFont( const wxFont & font , const wxColour& foreground , l
     // we only should do this in case of a non-standard color, as otherwise 'disabled' controls
     // won't get grayed out by the system anymore
 
-    if ( foreground != *wxBLACK )
+    if ( foreground != *wxBLACK || ignoreBlack == false )
     {
         foreground.GetRGBColor( &fontStyle.foreColor );
         fontStyle.flags |= kControlUseForeColorMask;

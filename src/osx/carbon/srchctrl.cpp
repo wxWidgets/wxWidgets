@@ -28,32 +28,18 @@
 #include "wx/osx/uma.h"
 #include "wx/osx/carbon/private/mactext.h"
 
-BEGIN_EVENT_TABLE(wxSearchCtrl, wxSearchCtrlBase)
-END_EVENT_TABLE()
-
-IMPLEMENT_DYNAMIC_CLASS(wxSearchCtrl, wxSearchCtrlBase)
-
 // ============================================================================
 // wxMacSearchFieldControl
 // ============================================================================
 
-static const EventTypeSpec eventList[] =
-{
-    { kEventClassSearchField, kEventSearchFieldCancelClicked } ,
-    { kEventClassSearchField, kEventSearchFieldSearchClicked } ,
-};
-
-class wxMacSearchFieldControl : public wxMacUnicodeTextControl
+class wxMacSearchFieldControl : public wxMacUnicodeTextControl, public wxSearchWidgetImpl
 {
 public :
     wxMacSearchFieldControl( wxTextCtrl *wxPeer,
                              const wxString& str,
                              const wxPoint& pos,
-                             const wxSize& size, long style ) : wxMacUnicodeTextControl( wxPeer )
-    {
-        Create( wxPeer, str, pos, size, style );
-    }
-
+                             const wxSize& size, long style ) ;
+                             
     // search field options
     virtual void ShowSearchButton( bool show );
     virtual bool IsSearchButtonVisible() const;
@@ -62,35 +48,81 @@ public :
     virtual bool IsCancelButtonVisible() const;
 
     virtual void SetSearchMenu( wxMenu* menu );
-    virtual wxMenu* GetSearchMenu() const;
 
     virtual void SetDescriptiveText(const wxString& text);
-    virtual wxString GetDescriptiveText() const;
     
     virtual bool SetFocus();
 
-protected :
-    virtual void CreateControl( wxTextCtrl* peer, const Rect* bounds, CFStringRef crf );
-
 private:
-    wxMenu* m_menu;
 } ;
 
-void wxMacSearchFieldControl::CreateControl(wxTextCtrl* WXUNUSED(peer),
-                                            const Rect* bounds,
-                                            CFStringRef WXUNUSED(crf))
+static const EventTypeSpec eventList[] =
 {
+    { kEventClassSearchField, kEventSearchFieldCancelClicked } ,
+    { kEventClassSearchField, kEventSearchFieldSearchClicked } ,
+};
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+static pascal OSStatus wxMacSearchControlEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+{
+    OSStatus result = eventNotHandledErr ;
+
+    wxMacCarbonEvent cEvent( event ) ;
+
+    ControlRef controlRef ;
+    wxSearchCtrl* thisWindow = (wxSearchCtrl*) data ;
+    cEvent.GetParameter( kEventParamDirectObject , &controlRef ) ;
+
+    switch( GetEventKind( event ) )
+    {
+        case kEventSearchFieldCancelClicked :
+            thisWindow->HandleSearchFieldCancelHit() ;
+            break ;
+        case kEventSearchFieldSearchClicked :
+            thisWindow->HandleSearchFieldSearchHit() ;
+            break ;
+    }
+
+    return result ;
+}
+
+DEFINE_ONE_SHOT_HANDLER_GETTER( wxMacSearchControlEventHandler )
+
+wxMacSearchFieldControl::wxMacSearchFieldControl( wxTextCtrl *wxPeer,
+                         const wxString& str,
+                         const wxPoint& pos,
+                         const wxSize& size, long style ) : wxMacUnicodeTextControl( wxPeer )
+{
+    m_font = wxPeer->GetFont() ;
+    m_windowStyle = style ;
+    m_selection.selStart = m_selection.selEnd = 0;
+    Rect bounds = wxMacGetBoundsForControl( wxPeer , pos , size ) ;
+    wxString st = str ;
+    wxMacConvertNewlines10To13( &st ) ;
+    wxCFStringRef cf(st , m_font.GetEncoding()) ;
+
+    m_valueTag = kControlEditTextCFStringTag ;
+
     OptionBits attributes = kHISearchFieldAttributesSearchIcon;
 
-    HIRect hibounds = { { bounds->left, bounds->top }, { bounds->right-bounds->left, bounds->bottom-bounds->top } };
+    HIRect hibounds = { { bounds.left, bounds.top }, { bounds.right-bounds.left, bounds.bottom-bounds.top } };
     verify_noerr( HISearchFieldCreate(
         &hibounds,
         attributes,
         0, // MenuRef
-        CFSTR("Search"),
+        CFSTR(""),
         &m_controlRef
         ) );
     HIViewSetVisible (m_controlRef, true);
+
+    verify_noerr( SetData<CFStringRef>( 0, kControlEditTextCFStringTag , cf ) ) ;
+
+    ::InstallControlEventHandler( m_controlRef, GetwxMacSearchControlEventHandlerUPP(),
+        GetEventTypeCount(eventList), eventList, wxPeer, NULL);
+    wxMacUnicodeTextControl::InstallEventHandlers();
 }
 
 // search field options
@@ -140,10 +172,9 @@ bool wxMacSearchFieldControl::IsCancelButtonVisible() const
 
 void wxMacSearchFieldControl::SetSearchMenu( wxMenu* menu )
 {
-    m_menu = menu;
-    if ( m_menu )
+    if ( menu )
     {
-        verify_noerr( HISearchFieldSetSearchMenu( m_controlRef, MAC_WXHMENU(m_menu->GetHMenu()) ) );
+        verify_noerr( HISearchFieldSetSearchMenu( m_controlRef, MAC_WXHMENU(menu->GetHMenu()) ) );
     }
     else
     {
@@ -151,31 +182,11 @@ void wxMacSearchFieldControl::SetSearchMenu( wxMenu* menu )
     }
 }
 
-wxMenu* wxMacSearchFieldControl::GetSearchMenu() const
-{
-    return m_menu;
-}
-
-
 void wxMacSearchFieldControl::SetDescriptiveText(const wxString& text)
 {
     verify_noerr( HISearchFieldSetDescriptiveText(
                       m_controlRef,
                       wxCFStringRef( text, wxFont::GetDefaultEncoding() )));
-}
-
-wxString wxMacSearchFieldControl::GetDescriptiveText() const
-{
-    CFStringRef cfStr;
-    verify_noerr( HISearchFieldCopyDescriptiveText( m_controlRef, &cfStr ));
-    if ( cfStr )
-    {
-        return wxCFStringRef(cfStr).AsString();
-    }
-    else
-    {
-        return wxEmptyString;
-    }
 }
 
 bool wxMacSearchFieldControl::SetFocus()
@@ -192,201 +203,18 @@ bool wxMacSearchFieldControl::SetFocus()
     return true;
 }
 
-
-// ============================================================================
-// implementation
-// ============================================================================
-
-static pascal OSStatus wxMacSearchControlEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+wxWidgetImplType* wxWidgetImpl::CreateSearchControl( wxTextCtrl* wxpeer, 
+                                    wxWindowMac* parent, 
+                                    wxWindowID id, 
+                                    const wxString& str,
+                                    const wxPoint& pos, 
+                                    const wxSize& size,
+                                    long style, 
+                                    long extraStyle)
 {
-    OSStatus result = eventNotHandledErr ;
+    wxMacControl* peer = new wxMacSearchFieldControl( wxpeer , str , pos , size , style );
 
-    wxMacCarbonEvent cEvent( event ) ;
-
-    ControlRef controlRef ;
-    wxSearchCtrl* thisWindow = (wxSearchCtrl*) data ;
-    cEvent.GetParameter( kEventParamDirectObject , &controlRef ) ;
-
-    switch( GetEventKind( event ) )
-    {
-        case kEventSearchFieldCancelClicked :
-            thisWindow->MacSearchFieldCancelHit( handler , event ) ;
-            break ;
-        case kEventSearchFieldSearchClicked :
-            thisWindow->MacSearchFieldSearchHit( handler , event ) ;
-            break ;
-    }
-
-    return result ;
-}
-
-DEFINE_ONE_SHOT_HANDLER_GETTER( wxMacSearchControlEventHandler )
-
-
-// ----------------------------------------------------------------------------
-// wxSearchCtrl creation
-// ----------------------------------------------------------------------------
-
-// creation
-// --------
-
-wxSearchCtrl::wxSearchCtrl()
-{
-    Init();
-}
-
-wxSearchCtrl::wxSearchCtrl(wxWindow *parent, wxWindowID id,
-           const wxString& value,
-           const wxPoint& pos,
-           const wxSize& size,
-           long style,
-           const wxValidator& validator,
-           const wxString& name)
-{
-    Init();
-
-    Create(parent, id, value, pos, size, style, validator, name);
-}
-
-void wxSearchCtrl::Init()
-{
-    m_menu = 0;
-}
-
-bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
-            const wxString& value,
-            const wxPoint& pos,
-            const wxSize& size,
-            long style,
-            const wxValidator& validator,
-            const wxString& name)
-{
-    if ( !wxTextCtrl::Create(parent, id, wxEmptyString, pos, size, wxBORDER_NONE | style, validator, name) )
-    {
-        return false;
-    }
-
-    EventHandlerRef searchEventHandler;
-    InstallControlEventHandler( m_peer->GetControlRef(), GetwxMacSearchControlEventHandlerUPP(),
-        GetEventTypeCount(eventList), eventList, this,
-        (EventHandlerRef *)&searchEventHandler);
-
-    SetValue(value);
-
-    return true;
-}
-
-wxSearchCtrl::~wxSearchCtrl()
-{
-    delete m_menu;
-}
-
-wxSize wxSearchCtrl::DoGetBestSize() const
-{
-    wxSize size = wxWindow::DoGetBestSize();
-    // it seems to return a default width of about 16, which is way too small here.
-    if (size.GetWidth() < 100)
-        size.SetWidth(100);
-
-    return size;
-}
-
-
-// search control specific interfaces
-// wxSearchCtrl owns menu after this call
-void wxSearchCtrl::SetMenu( wxMenu* menu )
-{
-    if ( menu == m_menu )
-    {
-        // no change
-        return;
-    }
-
-    if ( m_menu )
-    {
-        m_menu->SetInvokingWindow( 0 );
-    }
-
-    delete m_menu;
-    m_menu = menu;
-
-    if ( m_menu )
-    {
-        m_menu->SetInvokingWindow( this );
-    }
-
-    GetPeer()->SetSearchMenu( m_menu );
-}
-
-wxMenu* wxSearchCtrl::GetMenu()
-{
-    return m_menu;
-}
-
-void wxSearchCtrl::ShowSearchButton( bool show )
-{
-    if ( IsSearchButtonVisible() == show )
-    {
-        // no change
-        return;
-    }
-    GetPeer()->ShowSearchButton( show );
-}
-
-bool wxSearchCtrl::IsSearchButtonVisible() const
-{
-    return GetPeer()->IsSearchButtonVisible();
-}
-
-
-void wxSearchCtrl::ShowCancelButton( bool show )
-{
-    if ( IsCancelButtonVisible() == show )
-    {
-        // no change
-        return;
-    }
-    GetPeer()->ShowCancelButton( show );
-}
-
-bool wxSearchCtrl::IsCancelButtonVisible() const
-{
-    return GetPeer()->IsCancelButtonVisible();
-}
-
-void wxSearchCtrl::SetDescriptiveText(const wxString& text)
-{
-    GetPeer()->SetDescriptiveText(text);
-}
-
-wxString wxSearchCtrl::GetDescriptiveText() const
-{
-    return GetPeer()->GetDescriptiveText();
-}
-
-wxInt32 wxSearchCtrl::MacSearchFieldSearchHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) )
-{
-    wxCommandEvent event(wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, m_windowId );
-    event.SetEventObject(this);
-    ProcessCommand(event);
-    return eventNotHandledErr ;
-}
-
-wxInt32 wxSearchCtrl::MacSearchFieldCancelHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) )
-{
-    wxCommandEvent event(wxEVT_COMMAND_SEARCHCTRL_CANCEL_BTN, m_windowId );
-    event.SetEventObject(this);
-    ProcessCommand(event);
-    return eventNotHandledErr ;
-}
-
-
-void wxSearchCtrl::CreatePeer(
-           const wxString& str,
-           const wxPoint& pos,
-           const wxSize& size, long style )
-{
-    m_peer = new wxMacSearchFieldControl( this , str , pos , size , style );
+    return peer;
 }
 
 #endif // wxUSE_NATIVE_SEARCH_CONTROL

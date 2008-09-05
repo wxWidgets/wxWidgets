@@ -21,7 +21,7 @@
 // forward decl for GetSelections()
 class wxArrayInt;
 
-// forward decl for wxListWidgetImpl data type.
+// forward decl for wxListWidgetImpl implementation type.
 class wxListWidgetImpl;
 
 // List box item

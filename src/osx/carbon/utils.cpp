@@ -259,27 +259,6 @@ void wxMacNativeToPoint( const Point *n , wxPoint* wx )
     wx->y = n->v;
 }
 
-//---------------------------------------------------------------------------
-// wxMac Specific string utility functions
-//---------------------------------------------------------------------------
-
-void wxMacStringToPascal( const wxString&from , StringPtr to )
-{
-    wxCharBuffer buf = from.mb_str( wxConvLocal );
-    int len = strlen(buf);
-
-    if ( len > 255 )
-        len = 255;
-    to[0] = len;
-    memcpy( (char*) &to[1] , buf , len );
-}
-
-wxString wxMacMakeStringFromPascal( ConstStringPtr from )
-{
-    return wxString( (char*) &from[1] , wxConvLocal , from[0] );
-}
-
-
 // ----------------------------------------------------------------------------
 // Carbon Event Support
 // ----------------------------------------------------------------------------

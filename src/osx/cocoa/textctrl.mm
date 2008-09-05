@@ -47,8 +47,7 @@
 #include "wx/thread.h"
 
 #include "wx/osx/private.h"
-#include "wx/osx/carbon/private/mactext.h"
-
+#include "wx/osx/cocoa/private/textimpl.h"
 
 @implementation wxNSTextField
 
@@ -75,40 +74,58 @@
 
 @end
 
-class wxNSTextFieldControl : public wxMacTextControl
+wxNSTextFieldControl::wxNSTextFieldControl( wxTextCtrl *wxPeer, WXWidget w ) : wxWidgetCocoaImpl(wxPeer, w)
 {
-public :
-    wxNSTextFieldControl( wxTextCtrl *wxPeer, WXWidget w ) : wxMacTextControl(wxPeer, w)
-    {
-    }
-    virtual ~wxNSTextFieldControl()
-    {
-    }
+}
 
-    virtual void VisibilityChanged(bool shown){}
-    virtual wxString GetStringValue() const 
-    {
-        wxCFStringRef cf( (CFStringRef) [[(wxNSTextField*) m_osxView stringValue] retain] );
-        return cf.AsString(m_wxPeer->GetFont().GetEncoding());
-    }
-    virtual void SetStringValue( const wxString &str) 
-    {
-        [(wxNSTextField*) m_osxView setStringValue: wxCFStringRef( str , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
-    }
-    virtual void Copy() {}
-    virtual void Cut() {}
-    virtual void Paste() {}
-    virtual bool CanPaste() const { return false;}
-    virtual void SetEditable(bool editable) {}
-    virtual void GetSelection( long* from, long* to) const {}
-    virtual void SetSelection( long from , long to ){}
-    virtual void WriteText(const wxString& str) 
-    {
-        // temp hack to get logging working early
-        wxString former = GetStringValue();
-        SetStringValue( former + str );
-    }
-};
+wxNSTextFieldControl::~wxNSTextFieldControl()
+{
+}
+
+wxString wxNSTextFieldControl::GetStringValue() const 
+{
+    wxCFStringRef cf( (CFStringRef) [[(wxNSTextField*) m_osxView stringValue] retain] );
+    return cf.AsString(m_wxPeer->GetFont().GetEncoding());
+}
+void wxNSTextFieldControl::SetStringValue( const wxString &str) 
+{
+    [(wxNSTextField*) m_osxView setStringValue: wxCFStringRef( str , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
+}
+void wxNSTextFieldControl::Copy() 
+{
+}
+
+void wxNSTextFieldControl::Cut() 
+{
+}
+
+void wxNSTextFieldControl::Paste() 
+{
+}
+
+bool wxNSTextFieldControl::CanPaste() const 
+{ 
+    return false;
+}
+
+void wxNSTextFieldControl::SetEditable(bool editable) 
+{
+}
+
+void wxNSTextFieldControl::GetSelection( long* from, long* to) const 
+{
+}
+
+void wxNSTextFieldControl::SetSelection( long from , long to )
+{
+}
+
+void wxNSTextFieldControl::WriteText(const wxString& str) 
+{
+    // temp hack to get logging working early
+    wxString former = GetStringValue();
+    SetStringValue( former + str );
+}
 
 wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer, 
                                     wxWindowMac* parent, 

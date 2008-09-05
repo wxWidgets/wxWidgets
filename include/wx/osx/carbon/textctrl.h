@@ -26,8 +26,8 @@
 #include "wx/control.h"
 #include "wx/textctrl.h"
 
-class wxMacTextControl;
-
+// forward decl for wxListWidgetImpl implementation type.
+class WXDLLIMPEXP_FWD_CORE wxTextWidgetImpl;
 
 class WXDLLIMPEXP_CORE wxTextCtrl: public wxTextCtrlBase
 {
@@ -170,16 +170,12 @@ public:
     virtual void MacSuperChangedPosition();
     virtual void MacCheckSpelling(bool check);
 
-    wxMacTextControl * GetPeer() const
-    { return (wxMacTextControl*) m_peer; }
-
+    wxTextWidgetImpl * GetTextPeer() const;
 protected:
     // common part of all ctors
     void Init();
 
     virtual wxSize DoGetBestSize() const;
-
-    virtual void CreatePeer(const wxString& str, const wxPoint& pos, const wxSize& size, long style );
 
     virtual void DoSetValue(const wxString& value, int flags = 0);
 
