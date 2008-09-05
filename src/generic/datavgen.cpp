@@ -3274,6 +3274,9 @@ wxDataViewEvent wxDataViewMainWindow::SendExpanderEvent( wxEventType type, const
 
 void wxDataViewMainWindow::OnExpanding( unsigned int row )
 {
+    if (IsVirtualList())
+       return;
+
     wxDataViewTreeNode * node = GetTreeNodeByRow(row);
     if( node != NULL )
     {
@@ -3313,6 +3316,9 @@ void wxDataViewMainWindow::OnExpanding( unsigned int row )
 
 void wxDataViewMainWindow::OnCollapsing(unsigned int row)
 {
+    if (IsVirtualList())
+       return;
+       
     wxDataViewTreeNode * node = GetTreeNodeByRow(row);
     if( node != NULL )
     {
