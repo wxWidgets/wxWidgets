@@ -66,9 +66,18 @@ wxString wxMessageDialog::GetDefaultCancelLabel() const
     return GTK_STOCK_CANCEL;
 }
 
-void wxMessageDialog::DoSetCustomLabel(wxString& var, const wxString& value)
+void wxMessageDialog::DoSetCustomLabel(wxString& var, const ButtonLabel& label)
 {
-    var = wxConvertMnemonicsToGTK(value);
+    int stockId = label.GetStockId();
+    if ( stockId == wxID_NONE )
+    {
+        wxMessageDialogWithCustomLabels::DoSetCustomLabel(var, label);
+        var = wxConvertMnemonicsToGTK(var);
+    }
+    else // stock label
+    {
+        var = wxGetStockGtkID(stockId);
+    }
 }
 
 void wxMessageDialog::GTKCreateMsgDialog()

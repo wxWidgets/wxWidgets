@@ -39,8 +39,8 @@ private:
     virtual wxString GetDefaultOKLabel() const;
     virtual wxString GetDefaultCancelLabel() const;
 
-    // override to convert wx mnemonics to GTK+ ones
-    virtual void DoSetCustomLabel(wxString& var, const wxString& value);
+    // override to convert wx mnemonics to GTK+ ones and handle stock ids
+    virtual void DoSetCustomLabel(wxString& var, const ButtonLabel& label);
 
     // create the real GTK+ dialog: this is done from ShowModal() to allow
     // changing the message between constructing the dialog and showing it

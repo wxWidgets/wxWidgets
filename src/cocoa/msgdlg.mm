@@ -63,7 +63,7 @@ wxCocoaMessageDialog::wxCocoaMessageDialog(wxWindow *parent,
     m_cocoaNSView = nil;
 }
 
-void wxCocoaMessageDialog::DoSetCustomLabel(wxString& var, const wxString& value)
+void wxCocoaMessageDialog::DoSetCustomLabel(wxString& var, const ButtonLabel& value)
 {
     wxMessageDialogWithCustomLabels::DoSetCustomLabel(var, value);
 

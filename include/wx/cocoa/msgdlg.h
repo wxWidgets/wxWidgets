@@ -61,7 +61,7 @@ protected:
     //
     // VZ: I have no idea _why_ do we do this but the old version did and
     //     I didn't want to change the existing behaviour
-    virtual void DoSetCustomLabel(wxString& var, const wxString& value);
+    virtual void DoSetCustomLabel(wxString& var, const ButtonLabel& label);
 
     DECLARE_DYNAMIC_CLASS(wxCocoaMessageDialog)
     DECLARE_NO_COPY_CLASS(wxCocoaMessageDialog)

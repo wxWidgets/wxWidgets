@@ -17,12 +17,58 @@
 #if wxUSE_MSGDLG
 
 #include "wx/dialog.h"
+#include "wx/stockitem.h"
 
 WXDLLIMPEXP_DATA_CORE(extern const char) wxMessageBoxCaptionStr[];
+
+// ----------------------------------------------------------------------------
+// wxMessageDialogBase: base class defining wxMessageDialog interface
+// ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_CORE wxMessageDialogBase : public wxDialog
 {
 public:
+    // helper class for SetXXXLabels() methods: it makes it possible to pass
+    // either a stock id (wxID_CLOSE) or a string ("&Close") to them
+    class ButtonLabel
+    {
+    public:
+        // ctors are not explicit, objects of this class can be implicitly
+        // constructed from either stock ids or strings
+        ButtonLabel(int stockId)
+            : m_stockId(stockId)
+        {
+            wxASSERT_MSG( wxIsStockID(stockId), "invalid stock id" );
+        }
+
+        ButtonLabel(const wxString& label)
+            : m_label(label), m_stockId(wxID_NONE)
+        {
+        }
+
+        // default copy ctor and dtor are ok
+
+        // get the string label, whether it was originally specified directly
+        // or as a stock id -- this is only useful for platforms without native
+        // stock items id support
+        wxString GetAsString() const
+        {
+            return m_stockId == wxID_NONE ? m_label
+                                          : wxGetStockLabel(m_stockId);
+        }
+
+        // return the stock id or wxID_NONE if this is not a stock label
+        int GetStockId() const { return m_stockId; }
+
+    private:
+        // the label if explicitly given or empty if this is a stock item
+        const wxString m_label;
+
+        // the stock item id or wxID_NONE if m_label should be used
+        const int m_stockId;
+    };
+
+
     // ctors
     wxMessageDialogBase() { m_dialogStyle = 0; }
     wxMessageDialogBase(wxWindow *parent,
@@ -42,26 +88,26 @@ public:
 
     // methods for setting up more custom message dialogs -- all functions
     // return false if they're not implemented
-    virtual bool SetYesNoLabels(const wxString& WXUNUSED(yes),
-                                const wxString& WXUNUSED(no))
+    virtual bool SetYesNoLabels(const ButtonLabel& WXUNUSED(yes),
+                                const ButtonLabel& WXUNUSED(no))
     {
         return false;
     }
 
-    virtual bool SetYesNoCancelLabels(const wxString& WXUNUSED(yes),
-                                      const wxString& WXUNUSED(no),
-                                      const wxString& WXUNUSED(cancel))
+    virtual bool SetYesNoCancelLabels(const ButtonLabel& WXUNUSED(yes),
+                                      const ButtonLabel& WXUNUSED(no),
+                                      const ButtonLabel& WXUNUSED(cancel))
     {
         return false;
     }
 
-    virtual bool SetOKLabel(const wxString& WXUNUSED(ok))
+    virtual bool SetOKLabel(const ButtonLabel& WXUNUSED(ok))
     {
         return false;
     }
 
-    virtual bool SetOKCancelLabels(const wxString& WXUNUSED(ok),
-                                   const wxString& WXUNUSED(cancel))
+    virtual bool SetOKCancelLabels(const ButtonLabel& WXUNUSED(ok),
+                                   const ButtonLabel& WXUNUSED(cancel))
     {
         return false;
     }
@@ -80,11 +126,11 @@ protected:
     // common validation of wxMessageDialog style
     void SetMessageDialogStyle(long style)
     {
-        wxASSERT_MSG( ((style & wxYES_NO) == wxYES_NO) || ((style & wxYES_NO) == 0),
-                      _T("wxYES and wxNO may only be used together in wxMessageDialog") );
+        wxASSERT_MSG( ((style & wxYES_NO) == wxYES_NO) || !(style & wxYES_NO),
+                      "wxYES and wxNO may only be used together" );
 
         wxASSERT_MSG( (style & wxID_OK) != wxID_OK,
-                      _T("wxMessageBox: Did you mean wxOK (and not wxID_OK)?") );
+                      "wxMessageBox: Did you mean wxOK (and not wxID_OK)?" );
 
         m_dialogStyle = style;
     }
@@ -137,16 +183,16 @@ public:
     }
 
     // customization of the message box buttons
-    virtual bool SetYesNoLabels(const wxString& yes,const wxString& no)
+    virtual bool SetYesNoLabels(const ButtonLabel& yes,const ButtonLabel& no)
     {
         DoSetCustomLabel(m_yes, yes);
         DoSetCustomLabel(m_no, no);
         return true;
     }
 
-    virtual bool SetYesNoCancelLabels(const wxString& yes,
-                                      const wxString& no,
-                                      const wxString& cancel)
+    virtual bool SetYesNoCancelLabels(const ButtonLabel& yes,
+                                      const ButtonLabel& no,
+                                      const ButtonLabel& cancel)
     {
         DoSetCustomLabel(m_yes, yes);
         DoSetCustomLabel(m_no, no);
@@ -154,13 +200,14 @@ public:
         return true;
     }
 
-    virtual bool SetOKLabel(const wxString& ok)
+    virtual bool SetOKLabel(const ButtonLabel& ok)
     {
         DoSetCustomLabel(m_ok, ok);
         return true;
     }
 
-    virtual bool SetOKCancelLabels(const wxString& ok, const wxString& cancel)
+    virtual bool SetOKCancelLabels(const ButtonLabel& ok,
+                                   const ButtonLabel& cancel)
     {
         DoSetCustomLabel(m_ok, ok);
         DoSetCustomLabel(m_cancel, cancel);
@@ -187,15 +234,16 @@ protected:
     wxString GetCancelLabel() const
         { return m_cancel.empty() ? GetDefaultCancelLabel() : m_cancel; }
 
-private:
     // this function is called by our public SetXXXLabels() and should assign
     // the value to var with possibly some transformation (e.g. Cocoa version
-    // currently uses this to remove any accelerators from the button strings)
-    virtual void DoSetCustomLabel(wxString& var, const wxString& value)
+    // currently uses this to remove any accelerators from the button strings
+    // while GTK+ one handles stock items specifically here)
+    virtual void DoSetCustomLabel(wxString& var, const ButtonLabel& label)
     {
-        var = value;
+        var = label.GetAsString();
     }
 
+private:
     // these functions may be overridden to provide different defaults for the
     // default button labels (this is used by wxGTK)
     virtual wxString GetDefaultYesLabel() const { return _("Yes"); }
