@@ -653,18 +653,29 @@ void MyFrame::LogDialog(wxCommandEvent& WXUNUSED(event))
 void MyFrame::MessageBox(wxCommandEvent& WXUNUSED(event) )
 {
     wxMessageDialog dialog(this,
-                           _T("This is a message box\nA long, long string to test out the message box properly"),
-                           _T("Message box text"),
+                           "This is a message box\n"
+                           "A long, long string to test out the message box "
+                           "layout properly.",
+                           "Message box text",
                            wxCENTER | wxNO_DEFAULT | wxYES_NO | wxCANCEL | wxICON_INFORMATION);
 
-    if ( dialog.SetYesNoLabels(_T("Answer &Yes"),_T("Answer &No")) )
+    wxString extmsg;
+    if ( dialog.SetYesNoCancelLabels
+                (
+                    "Answer &Yes",
+                    "Answer &No",
+                    "Refuse to answer"
+                ) )
     {
-        dialog.SetExtendedMessage(_T("This platform supports custom button labels"));
+        extmsg = "This platform supports custom button labels,\n"
+                 "so you should see the descriptiva text below.";
     }
     else
     {
-        dialog.SetExtendedMessage(_T("Custom button labels are not supported."));
+        extmsg = "Custom button labels are not supported on this platform,\n"
+                 "so the default \"Yes\"/\"No\"/\"Cancel\" buttons are used.";
     }
+    dialog.SetExtendedMessage(extmsg);
 
     switch ( dialog.ShowModal() )
     {
