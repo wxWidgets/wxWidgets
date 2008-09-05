@@ -49,6 +49,10 @@ void UpdateMultilineStyle(HWND hwnd, const wxString& label);
 // (implemented in src/msw/button.cpp)
 wxSize ComputeBestSize(wxControl *btn);
 
+// compute the button size (as if wxBU_EXACTFIT were specified, i.e. without
+// adjusting it to be of default size if it's smaller) for the given label size
+wxSize GetFittingSize(wxWindow *win, const wxSize& sizeLabel);
+
 } // namespace wxMSWButton
 
 #endif // _WX_MSW_PRIVATE_BUTTON_H_

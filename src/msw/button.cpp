@@ -163,33 +163,41 @@ void wxMSWButton::UpdateMultilineStyle(HWND hwnd, const wxString& label)
         ::SetWindowLong(hwnd, GWL_STYLE, styleNew);
 }
 
+wxSize wxMSWButton::GetFittingSize(wxWindow *win, const wxSize& sizeLabel)
+{
+    // FIXME: this is pure guesswork, need to retrieve the real button margins
+    wxSize sizeBtn = sizeLabel;
+
+    sizeBtn.x += 3*win->GetCharWidth();
+    sizeBtn.y = 11*EDIT_HEIGHT_FROM_CHAR_HEIGHT(sizeLabel.y)/10;
+
+    return sizeBtn;
+}
+
 wxSize wxMSWButton::ComputeBestSize(wxControl *btn)
 {
     wxClientDC dc(btn);
 
-    wxCoord wBtn,
-            hBtn;
-    dc.GetMultiLineTextExtent(btn->GetLabelText(), &wBtn, &hBtn);
+    wxSize sizeBtn;
+    dc.GetMultiLineTextExtent(btn->GetLabelText(), &sizeBtn.x, &sizeBtn.y);
 
-    // FIXME: this is pure guesswork, need to retrieve the real button margins
-    wBtn += 3*btn->GetCharWidth();
-    hBtn = 11*EDIT_HEIGHT_FROM_CHAR_HEIGHT(hBtn)/10;
+    sizeBtn = GetFittingSize(btn, sizeBtn);
 
     // all buttons have at least the standard size unless the user explicitly
     // wants them to be of smaller size and used wxBU_EXACTFIT style when
     // creating the button
     if ( !btn->HasFlag(wxBU_EXACTFIT) )
     {
-        wxSize sz = wxButton::GetDefaultSize();
-        if ( wBtn < sz.x )
-            wBtn = sz.x;
-        if ( hBtn < sz.y )
-            hBtn = sz.y;
+        wxSize sizeDef = wxButton::GetDefaultSize();
+        if ( sizeBtn.x < sizeDef.x )
+            sizeBtn.x = sizeDef.x;
+        if ( sizeBtn.y < sizeDef.y )
+            sizeBtn.y = sizeDef.y;
     }
 
-    wxSize best(wBtn, hBtn);
-    btn->CacheBestSize(best);
-    return best;
+    btn->CacheBestSize(sizeBtn);
+
+    return sizeBtn;
 }
 
 // ----------------------------------------------------------------------------
