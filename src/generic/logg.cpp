@@ -45,6 +45,7 @@
 
 #include "wx/file.h"
 #include "wx/clipbrd.h"
+#include "wx/dataobj.h"
 #include "wx/textfile.h"
 #include "wx/statline.h"
 #include "wx/artprov.h"
