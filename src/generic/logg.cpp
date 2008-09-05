@@ -44,6 +44,7 @@
 #if wxUSE_LOGGUI || wxUSE_LOGWINDOW
 
 #include "wx/file.h"
+#include "wx/clipbrd.h"
 #include "wx/textfile.h"
 #include "wx/statline.h"
 #include "wx/artprov.h"
@@ -78,6 +79,8 @@
 
 // the suffix we add to the button to show that the dialog can be expanded
 #define EXPAND_SUFFIX _T(" >>")
+
+#define CAN_SAVE_FILES (wxUSE_FILE && wxUSE_FILEDLG)
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -117,9 +120,12 @@ public:
 
     // event handlers
     void OnOk(wxCommandEvent& event);
-#if wxUSE_FILE
+#if wxUSE_CLIPBOARD
+    void OnCopy(wxCommandEvent& event);
+#endif // wxUSE_CLIPBOARD
+#if CAN_SAVE_FILES
     void OnSave(wxCommandEvent& event);
-#endif // wxUSE_FILE
+#endif // CAN_SAVE_FILES
     void OnListSelect(wxListEvent& event);
     void OnListItemActivated(wxListEvent& event);
 
@@ -142,6 +148,12 @@ private:
         return text;
     }
 
+#if CAN_SAVE_FILES || wxUSE_CLIPBOARD
+    // return the contents of the dialog as a multiline string
+    wxString GetLogMessages() const;
+#endif // CAN_SAVE_FILES || wxUSE_CLIPBOARD
+
+
     // the data for the listctrl
     wxArrayString m_messages;
     wxArrayInt m_severity;
@@ -150,14 +162,6 @@ private:
     // the controls which are not shown initially (but only when details
     // button is pressed)
     wxListCtrl *m_listctrl;
-#ifndef __SMARTPHONE__
-#if wxUSE_STATLINE
-    wxStaticLine *m_statline;
-#endif // wxUSE_STATLINE
-#if wxUSE_FILE
-    wxButton *m_btnSave;
-#endif // wxUSE_FILE
-#endif // __SMARTPHONE__
 
     // the translated "Details" string
     static wxString ms_details;
@@ -171,9 +175,12 @@ private:
 
 BEGIN_EVENT_TABLE(wxLogDialog, wxDialog)
     EVT_BUTTON(wxID_OK, wxLogDialog::OnOk)
-#if wxUSE_FILE
+#if wxUSE_CLIPBOARD
+    EVT_BUTTON(wxID_COPY,   wxLogDialog::OnCopy)
+#endif // wxUSE_CLIPBOARD
+#if CAN_SAVE_FILES
     EVT_BUTTON(wxID_SAVE,   wxLogDialog::OnSave)
-#endif // wxUSE_FILE
+#endif // CAN_SAVE_FILES
     EVT_LIST_ITEM_SELECTED(wxID_ANY, wxLogDialog::OnListSelect)
     EVT_LIST_ITEM_ACTIVATED(wxID_ANY, wxLogDialog::OnListItemActivated)
 END_EVENT_TABLE()
@@ -184,7 +191,7 @@ END_EVENT_TABLE()
 // private functions
 // ----------------------------------------------------------------------------
 
-#if wxUSE_FILE && wxUSE_FILEDLG
+#if CAN_SAVE_FILES
 
 // pass an uninitialized file object, the function will ask the user for the
 // filename and try to open it, returns true on success (file was opened),
@@ -192,7 +199,7 @@ END_EVENT_TABLE()
 // dialog was cancelled
 static int OpenLogFile(wxFile& file, wxString *filename = NULL, wxWindow *parent = NULL);
 
-#endif // wxUSE_FILE
+#endif // CAN_SAVE_FILES
 
 // ----------------------------------------------------------------------------
 // global variables
@@ -356,7 +363,27 @@ void wxLogGui::Flush()
     // situation without it
     if ( !str.empty() )
     {
-        wxMessageBox(str, title, wxOK | style);
+        // we use a message dialog with 2 buttons to be able to use one of them
+        // for copying the message text to clipboard
+#if wxUSE_CLIPBOARD
+        wxMessageDialog dlg(NULL, str, title, style | wxYES_NO);
+        if ( !dlg.SetYesNoLabels(wxID_COPY, wxID_OK) )
+#endif // wxUSE_CLIPBOARD
+        {
+            // but if custom labels are not supported it makes no sense to keep
+            // two buttons so revert to a single one
+            dlg.SetMessageDialogStyle(style | wxOK);
+        }
+
+#if wxUSE_CLIPBOARD
+        if ( dlg.ShowModal() == wxID_YES )
+        {
+            // this means the wxID_COPY button was selected
+            wxClipboardLocker clip;
+            if ( !clip || !wxTheClipboard->AddData(new wxTextDataObject(str)) )
+                wxLogError(_("Failed to copy dialog contents to the clipboard."));
+        }
+#endif // wxUSE_CLIPBOARD
 
         // no undisplayed messages whatsoever
         Clear();
@@ -479,9 +506,9 @@ public:
     // menu callbacks
     void OnClose(wxCommandEvent& event);
     void OnCloseWindow(wxCloseEvent& event);
-#if wxUSE_FILE
-    void OnSave (wxCommandEvent& event);
-#endif // wxUSE_FILE
+#if CAN_SAVE_FILES
+    void OnSave(wxCommandEvent& event);
+#endif // CAN_SAVE_FILES
     void OnClear(wxCommandEvent& event);
 
     // this function is safe to call from any thread (notice that it should be
@@ -530,9 +557,9 @@ private:
 BEGIN_EVENT_TABLE(wxLogFrame, wxFrame)
     // wxLogWindow menu events
     EVT_MENU(Menu_Close, wxLogFrame::OnClose)
-#if wxUSE_FILE
+#if CAN_SAVE_FILES
     EVT_MENU(Menu_Save,  wxLogFrame::OnSave)
-#endif // wxUSE_FILE
+#endif // CAN_SAVE_FILES
     EVT_MENU(Menu_Clear, wxLogFrame::OnClear)
 
     EVT_CLOSE(wxLogFrame::OnCloseWindow)
@@ -558,9 +585,9 @@ wxLogFrame::wxLogFrame(wxWindow *pParent, wxLogWindow *log, const wxString& szTi
     // create menu
     wxMenuBar *pMenuBar = new wxMenuBar;
     wxMenu *pMenu = new wxMenu;
-#if wxUSE_FILE
+#if CAN_SAVE_FILES
     pMenu->Append(Menu_Save,  _("&Save..."), _("Save log contents to file"));
-#endif // wxUSE_FILE
+#endif // CAN_SAVE_FILES
     pMenu->Append(Menu_Clear, _("C&lear"), _("Clear the log contents"));
     pMenu->AppendSeparator();
     pMenu->Append(Menu_Close, _("&Close"), _("Close this window"));
@@ -596,10 +623,9 @@ void wxLogFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
     DoClose();
 }
 
-#if wxUSE_FILE
+#if CAN_SAVE_FILES
 void wxLogFrame::OnSave(wxCommandEvent& WXUNUSED(event))
 {
-#if wxUSE_FILEDLG
     wxString filename;
     wxFile file;
     int rc = OpenLogFile(file, &filename, this);
@@ -628,9 +654,8 @@ void wxLogFrame::OnSave(wxCommandEvent& WXUNUSED(event))
     else {
         wxLogStatus((wxFrame*)this, _("Log saved to the file '%s'."), filename.c_str());
     }
-#endif
 }
-#endif // wxUSE_FILE
+#endif // CAN_SAVE_FILES
 
 void wxLogFrame::OnClear(wxCommandEvent& WXUNUSED(event))
 {
@@ -776,12 +801,6 @@ wxLogWindow::~wxLogWindow()
 
 #if wxUSE_LOG_DIALOG
 
-#ifndef __SMARTPHONE__
-static const size_t MARGIN = 10;
-#else
-static const size_t MARGIN = 0;
-#endif
-
 wxString wxLogDialog::ms_details;
 size_t wxLogDialog::ms_maxLength = 0;
 
@@ -825,19 +844,7 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
         m_times.Add(times[n]);
     }
 
-    m_listctrl = (wxListCtrl *)NULL;
-
-#ifndef __SMARTPHONE__
-
-#if wxUSE_STATLINE
-    m_statline = (wxStaticLine *)NULL;
-#endif // wxUSE_STATLINE
-
-#if wxUSE_FILE
-    m_btnSave = (wxButton *)NULL;
-#endif // wxUSE_FILE
-
-#endif // __SMARTPHONE__
+    m_listctrl = NULL;
 
     bool isPda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
 
@@ -855,7 +862,7 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
                                     wxID_ANY,
                                     wxArtProvider::GetMessageBoxIcon(style)
                                    );
-        sizerAll->Add(icon, 0, wxALIGN_CENTRE_VERTICAL);
+        sizerAll->Add(icon, wxSizerFlags().Centre());
     }
 
     // create the text sizer with a minimal size so that we are sure it won't be too small
@@ -863,31 +870,43 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     wxSizer *szText = CreateTextSizer(message);
     szText->SetMinSize(wxMin(300, wxGetDisplaySize().x / 3), -1);
 
-    sizerAll->Add(szText, 1,
-                  wxALIGN_CENTRE_VERTICAL | wxLEFT | wxRIGHT, MARGIN);
+    sizerAll->Add(szText, wxSizerFlags(1).Centre().Border(wxLEFT | wxRIGHT));
 
     wxButton *btnOk = new wxButton(this, wxID_OK);
-    sizerAll->Add(btnOk, 0, isPda ? wxCENTRE : wxCENTRE|wxBOTTOM, MARGIN/2);
+    sizerAll->Add(btnOk, wxSizerFlags().Centre());
 
-    sizerTop->Add(sizerAll, 0, wxALL | wxEXPAND, MARGIN);
+    sizerTop->Add(sizerAll, wxSizerFlags().Expand().Border());
 
 
     // add the details pane
-
 #ifndef __SMARTPHONE__
-    wxCollapsiblePane *collpane = new wxCollapsiblePane(this, wxID_ANY, ms_details);
-    sizerTop->Add(collpane, 1, wxGROW|wxALL, MARGIN);
+    wxCollapsiblePane * const
+        collpane = new wxCollapsiblePane(this, wxID_ANY, ms_details);
+    sizerTop->Add(collpane, wxSizerFlags(1).Expand().Border());
 
     wxWindow *win = collpane->GetPane();
-    wxSizer *paneSz = new wxBoxSizer(wxVERTICAL);
+    wxSizer * const paneSz = new wxBoxSizer(wxVERTICAL);
 
     CreateDetailsControls(win);
 
-    paneSz->Add(m_listctrl, 1, wxEXPAND | wxTOP, MARGIN);
+    paneSz->Add(m_listctrl, wxSizerFlags(1).Expand().Border(wxTOP));
 
-#if wxUSE_FILE && !defined(__SMARTPHONE__)
-    paneSz->Add(m_btnSave, 0, wxALIGN_RIGHT | wxTOP, MARGIN);
-#endif // wxUSE_FILE
+#if wxUSE_CLIPBOARD || CAN_SAVE_FILES
+    wxBoxSizer * const btnSizer = new wxBoxSizer(wxHORIZONTAL);
+
+    wxSizerFlags flagsBtn;
+    flagsBtn.Border(wxLEFT);
+
+#if wxUSE_CLIPBOARD
+    btnSizer->Add(new wxButton(win, wxID_COPY), flagsBtn);
+#endif // wxUSE_CLIPBOARD
+
+#if CAN_SAVE_FILES
+    btnSizer->Add(new wxButton(win, wxID_SAVE), flagsBtn);
+#endif // CAN_SAVE_FILES
+
+    paneSz->Add(btnSizer, wxSizerFlags().Right().Border(wxTOP));
+#endif // wxUSE_CLIPBOARD || CAN_SAVE_FILES
 
     win->SetSizer(paneSz);
     paneSz->SetSizeHints(win);
@@ -910,14 +929,6 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
 
 void wxLogDialog::CreateDetailsControls(wxWindow *parent)
 {
-#ifndef __SMARTPHONE__
-    // create the save button and separator line if possible
-#if wxUSE_FILE
-    m_btnSave = new wxButton(parent, wxID_SAVE);
-#endif // wxUSE_FILE
-
-#endif // __SMARTPHONE__
-
     // create the list ctrl now
     m_listctrl = new wxListCtrl(parent, wxID_ANY,
                                 wxDefaultPosition, wxDefaultSize,
@@ -1062,11 +1073,52 @@ void wxLogDialog::OnOk(wxCommandEvent& WXUNUSED(event))
     EndModal(wxID_OK);
 }
 
-#if wxUSE_FILE
+#if CAN_SAVE_FILES || wxUSE_CLIPBOARD
+
+wxString wxLogDialog::GetLogMessages() const
+{
+    wxString fmt = wxLog::GetTimestamp();
+    if ( fmt.empty() )
+    {
+        // use the default format
+        fmt = "%c";
+    }
+
+    const size_t count = m_messages.GetCount();
+
+    wxString text;
+    text.reserve(count*m_messages[0].length());
+    for ( size_t n = 0; n < count; n++ )
+    {
+        text << TimeStamp(fmt, (time_t)m_times[n])
+             << ": "
+             << m_messages[n]
+             << wxTextFile::GetEOL();
+    }
+
+    return text;
+}
+
+#endif // CAN_SAVE_FILES || wxUSE_CLIPBOARD
+
+#if wxUSE_CLIPBOARD
+
+void wxLogDialog::OnCopy(wxCommandEvent& WXUNUSED(event))
+{
+    wxClipboardLocker clip;
+    if ( !clip ||
+            !wxTheClipboard->AddData(new wxTextDataObject(GetLogMessages())) )
+    {
+        wxLogError(_("Failed to copy dialog contents to the clipboard."));
+    }
+}
+
+#endif // wxUSE_CLIPBOARD
+
+#if CAN_SAVE_FILES
 
 void wxLogDialog::OnSave(wxCommandEvent& WXUNUSED(event))
 {
-#if wxUSE_FILEDLG
     wxFile file;
     int rc = OpenLogFile(file, NULL, this);
     if ( rc == -1 )
@@ -1075,36 +1127,11 @@ void wxLogDialog::OnSave(wxCommandEvent& WXUNUSED(event))
         return;
     }
 
-    bool ok = rc != 0;
-
-    wxString fmt = wxLog::GetTimestamp();
-    if ( !fmt )
-    {
-        // default format
-        fmt = _T("%c");
-    }
-
-    size_t count = m_messages.GetCount();
-    for ( size_t n = 0; ok && (n < count); n++ )
-    {
-        wxString line;
-        line << TimeStamp(fmt, (time_t)m_times[n])
-             << _T(": ")
-             << m_messages[n]
-             << wxTextFile::GetEOL();
-
-        ok = file.Write(line);
-    }
-
-    if ( ok )
-        ok = file.Close();
-
-    if ( !ok )
+    if ( !rc || !file.Write(GetLogMessages()) || !file.Close() )
         wxLogError(_("Can't save log contents to file."));
-#endif // wxUSE_FILEDLG
 }
 
-#endif // wxUSE_FILE
+#endif // CAN_SAVE_FILES
 
 wxLogDialog::~wxLogDialog()
 {
@@ -1116,7 +1143,7 @@ wxLogDialog::~wxLogDialog()
 
 #endif // wxUSE_LOG_DIALOG
 
-#if wxUSE_FILE && wxUSE_FILEDLG
+#if CAN_SAVE_FILES
 
 // pass an uninitialized file object, the function will ask the user for the
 // filename and try to open it, returns true on success (file was opened),
@@ -1174,7 +1201,7 @@ static int OpenLogFile(wxFile& file, wxString *pFilename, wxWindow *parent)
     return bOk;
 }
 
-#endif // wxUSE_FILE
+#endif // CAN_SAVE_FILES
 
 #endif // !(wxUSE_LOGGUI || wxUSE_LOGWINDOW)
 
