@@ -1450,12 +1450,7 @@ public:
     // truncate the string to given length
   wxString& Truncate(size_t uiLen);
     // empty string contents
-  void Empty()
-  {
-    Truncate(0);
-
-    wxASSERT_MSG( empty(), _T("string not empty after call to Empty()?") );
-  }
+  void Empty() { clear(); }
     // empty the string and free memory
   void Clear() { clear(); }
 
