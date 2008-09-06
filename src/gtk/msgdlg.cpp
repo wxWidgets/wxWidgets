@@ -196,12 +196,14 @@ void wxMessageDialog::GTKCreateMsgDialog()
     {
         if ( addButtons )
         {
-            gtk_dialog_add_button(dlg, GetNoLabel(), GTK_RESPONSE_NO);
-            gtk_dialog_add_button(dlg, GetYesLabel(), GTK_RESPONSE_YES);
+            gtk_dialog_add_button(dlg, wxGTK_CONV(GetNoLabel()),
+                                  GTK_RESPONSE_NO);
+            gtk_dialog_add_button(dlg, wxGTK_CONV(GetYesLabel()),
+                                  GTK_RESPONSE_YES);
 
             if ( m_dialogStyle & wxCANCEL )
             {
-                gtk_dialog_add_button(dlg, GetCancelLabel(),
+                gtk_dialog_add_button(dlg, wxGTK_CONV(GetCancelLabel()),
                                       GTK_RESPONSE_CANCEL);
             }
         }
@@ -213,9 +215,12 @@ void wxMessageDialog::GTKCreateMsgDialog()
     }
     else if ( addButtons ) // Ok or Ok/Cancel dialog
     {
-        gtk_dialog_add_button(dlg, GetOKLabel(), GTK_RESPONSE_OK);
+        gtk_dialog_add_button(dlg, wxGTK_CONV(GetOKLabel()), GTK_RESPONSE_OK);
         if ( m_dialogStyle & wxCANCEL )
-            gtk_dialog_add_button(dlg, GetCancelLabel(), GTK_RESPONSE_CANCEL);
+        {
+            gtk_dialog_add_button(dlg, wxGTK_CONV(GetCancelLabel()),
+                                  GTK_RESPONSE_CANCEL);
+        }
     }
 }
 
