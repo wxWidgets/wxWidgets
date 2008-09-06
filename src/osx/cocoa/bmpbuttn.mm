@@ -31,7 +31,7 @@ wxWidgetImplType* wxWidgetImpl::CreateBitmapButton( wxWindowMac* wxpeer,
                                     long style, 
                                     long extraStyle) 
 {
-    NSView* sv = (wxpeer->GetParent()->GetHandle() );
+    NSView* sv = static_cast<NSView*>(wxpeer->GetParent()->GetHandle() );
     
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];

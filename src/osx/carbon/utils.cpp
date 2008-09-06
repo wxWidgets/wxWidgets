@@ -62,7 +62,7 @@ void wxBell()
     else
 #endif
 #if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
-        SysBeep(30);
+        AlertSoundPlay();
 #else
     {
     }

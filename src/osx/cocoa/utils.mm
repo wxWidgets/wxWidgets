@@ -56,6 +56,8 @@ void wxMacWakeUp()
 
 #endif // wxUSE_BASE
  
+#if wxUSE_GUI
+
 bool wxApp::DoInitGui()
 {
     [NSApplication sharedApplication];
@@ -66,8 +68,6 @@ bool wxApp::DoInitGui()
 void wxApp::DoCleanUp()
 {
 }
-
-#if wxUSE_GUI
 
 void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 {

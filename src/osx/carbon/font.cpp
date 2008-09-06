@@ -451,10 +451,12 @@ void wxFontRefData::MacFindFont()
                 CTFontRef font2 = CTFontCreateCopyWithSymbolicTraits( font, m_pointSize, NULL, traits, 0x03 );
                 CFRelease(font);
                 m_ctFont.reset( font2 );
+#if 0 // debugging coretext font matching
                 if ( (CTFontGetSymbolicTraits( m_ctFont ) & 0x03) != traits )
                 {
                     wxMessageBox( wxString::Format( "expected %d but got %d traits" , traits, (CTFontGetSymbolicTraits( m_ctFont ) & 0x03) ) );
                 }
+#endif
             }
         }
 #if wxOSX_USE_ATSU_TEXT
