@@ -41,10 +41,9 @@ XRC was written by Vaclav Slavik.
 @li @ref overview_xrc_embeddedresource
 @li @ref overview_xrc_cppsample
 @li @ref overview_xrc_sample
-@li @ref overview_xrc_fileformat
 @li @ref overview_xrc_cppheader
 @li @ref overview_xrc_newresourcehandlers
-
+@li @ref xrc_format
 
 <hr>
 
@@ -442,12 +441,6 @@ This is the XML file (resource.xrc) for the XRC sample.
   </object>
 </resource>
 @endcode
-
-
-@section overview_xrc_fileformat XRC File Format
-
-Please see Technical Note 14 (docs/tech/tn0014.txt) in your wxWidgets
-distribution.
 
 
 @section overview_xrc_cppheader C++ header file generation

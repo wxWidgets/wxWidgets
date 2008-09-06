@@ -14,7 +14,7 @@
     The class holds XML resources from one or more .xml files, binary files or zip
     archive files.
 
-    See @ref overview_xrcoverview "XML-based resource system overview" for details.
+    @see @ref overview_xrc, @ref xrc_format
 
     @library{wxxrc}
     @category{xrc}
