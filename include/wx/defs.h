@@ -36,7 +36,9 @@
          !defined(__WXPALMOS__)&& \
          !defined(__WXGTK__)   && \
          !defined(__WXPM__)    && \
-         !defined(__WXMAC__)   && \
+         !defined(__WXOSX_CARBON__)   && \
+         !defined(__WXOSX_COCOA__)   && \
+         !defined(__WXOSX_IPHONE__)   && \
          !defined(__WXCOCOA__) && \
          !defined(__X__)       && \
          !defined(__WXMGL__)   && \
