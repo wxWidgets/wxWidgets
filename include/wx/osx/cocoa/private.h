@@ -16,9 +16,15 @@
 
 #include "wx/osx/core/private.h"
 
+#include "wx/defs.h"
+
+#include <ApplicationServices/ApplicationServices.h>
+
 #ifdef __OBJC__
 
     #import <Cocoa/Cocoa.h>
+
+    #if wxUSE_GUI
 
     extern NSRect wxToNSRect( NSView* parent, const wxRect& r );
     extern wxRect wxFromNSRect( NSView* parent, const NSRect& rect );
@@ -63,6 +69,8 @@
 
     NSRect WXDLLIMPEXP_CORE wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const wxSize &size , 
         bool adjustForOrigin = true );
+        
+    #endif // wxUSE_GUI
 
 #endif // __OBJC__
 
@@ -72,15 +80,17 @@
 
 // bring in themeing types without pulling in the headers
 
+#if wxUSE_GUI
 typedef SInt16 ThemeBrush;
-long UMAGetSystemVersion() ;
 CGColorRef wxMacCreateCGColorFromHITheme( ThemeBrush brush ) ;
 OSStatus WXDLLIMPEXP_CORE wxMacDrawCGImage(
                                CGContextRef    inContext,
                                const CGRect *  inBounds,
                                CGImageRef      inImage) ;
 WX_NSImage  wxOSXCreateNSImageFromCGImage( CGImageRef image );
+#endif
 
+long UMAGetSystemVersion() ;
 WXDLLIMPEXP_BASE void wxMacStringToPascal( const wxString&from , StringPtr to );
 WXDLLIMPEXP_BASE wxString wxMacFSRefToPath( const FSRef *fsRef , CFStringRef additionalPathComponent = NULL );
 WXDLLIMPEXP_BASE OSStatus wxMacPathToFSRef( const wxString&path , FSRef *fsRef );

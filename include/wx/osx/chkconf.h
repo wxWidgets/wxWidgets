@@ -49,8 +49,16 @@
  * using mixins of cocoa functionality
  */
  
-#ifndef wxOSX_USE_COCOA
+#ifdef __WXOSX_COCOA__
+    #define wxOSX_USE_COCOA 1
+#else
     #define wxOSX_USE_COCOA 0
+#endif
+
+#ifdef __WXOSX_CARBON__
+    #define wxOSX_USE_CARBON 1
+#else
+    #define wxOSX_USE_CARBON 0
 #endif
 
 /*
@@ -66,15 +74,9 @@
     #define wxOSX_USE_IPHONE 0
 #else
     #ifdef __WXOSX_IPHONE__
-        #define wxOSX_USE_CARBON 0
         #define wxOSX_USE_IPHONE 1
     #else
         #define wxOSX_USE_IPHONE 0
-        #if wxOSX_USE_COCOA
-            #define wxOSX_USE_CARBON 0
-        #else
-            #define wxOSX_USE_CARBON 1
-        #endif
     #endif
 #endif
 
