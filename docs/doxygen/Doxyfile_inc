@@ -113,8 +113,8 @@ ALIASES += if_="<span class='literal'>\#if</span>"
 ALIASES += endif_="<span class='literal'>\#endif</span>"
 
 # table aliases for 2 and 3 column tables
-ALIASES += beginTable="<center><table class='doctable' border='1' cellspacing='0' cellpadding='3'>"
-ALIASES += beginInvisibleTable="<center><table class='doctable' border='0' cellspacing='0' cellpadding='4'>"
+ALIASES += beginTable="<table class='doctable' border='1' cellspacing='0' cellpadding='3'>"
+ALIASES += beginInvisibleTable="<table class='doctable' border='0' cellspacing='0' cellpadding='4'>"
 ALIASES += row2col{2}="<tr><td>\1</td> <td>\2</td></tr>"
 ALIASES += row2col{3}="<tr><td>\1</td> <td>\2,\3</td></tr>"
 ALIASES += row2col{4}="<tr><td>\1</td> <td>\2,\3,\4</td></tr>"
@@ -132,7 +132,7 @@ ALIASES += row3col{7}="<tr><td>\1</td> <td>\2</td> <td>\3,\4,\5,\6,\7</td></tr>"
 ALIASES += row3col{8}="<tr><td>\1</td> <td>\2</td> <td>\3,\4,\5,\6,\7,\8</td></tr>"
 ALIASES += row3col{9}="<tr><td>\1</td> <td>\2</td> <td>\3,\4,\5,\6,\7,\8,\9</td></tr>"
 ALIASES += row3col{10}="<tr><td>\1</td> <td>\2</td> <td>\3,\4,\5,\6,\7,\8,\9,\10</td></tr>"
-ALIASES += endTable="</table></center>"
+ALIASES += endTable="</table>"
 
 # definition list aliases
 # a definition list currently is rendered as 2-column table but it may use as
