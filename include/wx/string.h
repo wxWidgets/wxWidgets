@@ -594,11 +594,19 @@ private:
       unsigned lastUsed;
   };
 
-  // notice that we must use an accessor function and not a static variable
-  // because when the TLS variables support is implemented in the library (and
-  // not by the compiler), the global s_cache variable could be not yet
-  // initialized when a ctor of another global object is executed and if that
-  // ctor uses any wxString methods, bad things happen
+#ifndef wxHAS_COMPILER_TLS
+  // we must use an accessor function and not a static variable when the TLS
+  // variables support is implemented in the library (and not by the compiler)
+  // because the global s_cache variable could be not yet initialized when a
+  // ctor of another global object is executed and if that ctor uses any
+  // wxString methods, bad things happen
+  //
+  // however notice that this approach does not work when compiler TLS is used,
+  // at least not with g++ 4.1.2 under amd64 as it apparently compiles code
+  // using this accessor incorrectly when optimizations are enabled (-O2 is
+  // enough) -- luckily we don't need it then neither as static __thread
+  // variables are initialized by 0 anyhow then and so we can use the variable
+  // directly
   static Cache& GetCache()
   {
       static wxTLS_TYPE(Cache) s_cache;
@@ -606,14 +614,18 @@ private:
       return wxTLS_VALUE(s_cache);
   }
 
-  static Cache::Element *GetCacheBegin() { return GetCache().cached; }
-  static Cache::Element *GetCacheEnd() { return GetCacheBegin() + Cache::SIZE; }
-  static unsigned& LastUsedCacheElement() { return GetCache().lastUsed; }
-
   // this helper struct is used to ensure that GetCache() is called during
   // static initialization time, i.e. before any threads creation, as otherwise
   // the static s_cache construction inside GetCache() wouldn't be MT-safe
   friend struct wxStrCacheInitializer;
+#else // wxHAS_COMPILER_TLS
+  static wxTLS_TYPE(Cache) ms_cache;
+  static Cache& GetCache() { return wxTLS_VALUE(ms_cache); }
+#endif // !wxHAS_COMPILER_TLS/wxHAS_COMPILER_TLS
+
+  static Cache::Element *GetCacheBegin() { return GetCache().cached; }
+  static Cache::Element *GetCacheEnd() { return GetCacheBegin() + Cache::SIZE; }
+  static unsigned& LastUsedCacheElement() { return GetCache().lastUsed; }
 
   // this is used in debug builds only to provide a convenient function,
   // callable from a debugger, to show the cache contents

@@ -60,6 +60,12 @@ const size_t wxString::npos = (size_t) -1;
 
 #if wxUSE_STRING_POS_CACHE
 
+#ifdef wxHAS_COMPILER_TLS
+
+wxTLS_TYPE(wxString::Cache) wxString::ms_cache;
+
+#else // !wxHAS_COMPILER_TLS
+
 struct wxStrCacheInitializer
 {
     wxStrCacheInitializer()
@@ -71,6 +77,8 @@ struct wxStrCacheInitializer
 };
 
 static wxStrCacheInitializer gs_stringCacheInit;
+
+#endif // wxHAS_COMPILER_TLS/!wxHAS_COMPILER_TLS
 
 // gdb seems to be unable to display thread-local variables correctly, at least
 // not my 6.4.98 version under amd64, so provide this debugging helper to do it
