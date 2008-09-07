@@ -326,48 +326,30 @@ dnl ### begin block 20_COND_PLATFORM_MACOSX_1_PLATFORM_MSDOS_0[../../samples/dia
         COND_PLATFORM_MACOSX_1_PLATFORM_MSDOS_0=""
     fi
     AC_SUBST(COND_PLATFORM_MACOSX_1_PLATFORM_MSDOS_0)
-dnl ### begin block 20_COND_PLATFORM_MACOSX_1_TOOLKIT_[wx.bkl] ###
-    COND_PLATFORM_MACOSX_1_TOOLKIT_="#"
-    if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "x" ; then
-        COND_PLATFORM_MACOSX_1_TOOLKIT_=""
+dnl ### begin block 20_COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1[wx.bkl] ###
+    COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1="#"
+    if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "xOSX_CARBON" -a "x$USE_GUI" = "x1" ; then
+        COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1=""
     fi
-    AC_SUBST(COND_PLATFORM_MACOSX_1_TOOLKIT_)
-dnl ### begin block 20_COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA[wx.bkl] ###
-    COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA="#"
-    if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "xCOCOA" ; then
-        COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA=""
+    AC_SUBST(COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1)
+dnl ### begin block 20_COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0[wx.bkl] ###
+    COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0="#"
+    if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "xOSX_CARBON" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
+        COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0=""
     fi
-    AC_SUBST(COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA)
-dnl ### begin block 20_COND_PLATFORM_MACOSX_1_TOOLKIT_GTK[wx.bkl] ###
-    COND_PLATFORM_MACOSX_1_TOOLKIT_GTK="#"
-    if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "xGTK" ; then
-        COND_PLATFORM_MACOSX_1_TOOLKIT_GTK=""
+    AC_SUBST(COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0)
+dnl ### begin block 20_COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1[wx.bkl] ###
+    COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1="#"
+    if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "xOSX_COCOA" -a "x$USE_GUI" = "x1" ; then
+        COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1=""
     fi
-    AC_SUBST(COND_PLATFORM_MACOSX_1_TOOLKIT_GTK)
-dnl ### begin block 20_COND_PLATFORM_MACOSX_1_TOOLKIT_MAC[wx.bkl] ###
-    COND_PLATFORM_MACOSX_1_TOOLKIT_MAC="#"
-    if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "xMAC" ; then
-        COND_PLATFORM_MACOSX_1_TOOLKIT_MAC=""
+    AC_SUBST(COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1)
+dnl ### begin block 20_COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0[wx.bkl] ###
+    COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0="#"
+    if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "xOSX_COCOA" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
+        COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0=""
     fi
-    AC_SUBST(COND_PLATFORM_MACOSX_1_TOOLKIT_MAC)
-dnl ### begin block 20_COND_PLATFORM_MACOSX_1_TOOLKIT_MAC_USE_GUI_1[wx.bkl] ###
-    COND_PLATFORM_MACOSX_1_TOOLKIT_MAC_USE_GUI_1="#"
-    if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "xMAC" -a "x$USE_GUI" = "x1" ; then
-        COND_PLATFORM_MACOSX_1_TOOLKIT_MAC_USE_GUI_1=""
-    fi
-    AC_SUBST(COND_PLATFORM_MACOSX_1_TOOLKIT_MAC_USE_GUI_1)
-dnl ### begin block 20_COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF[wx.bkl] ###
-    COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF="#"
-    if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "xMOTIF" ; then
-        COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF=""
-    fi
-    AC_SUBST(COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF)
-dnl ### begin block 20_COND_PLATFORM_MACOSX_1_TOOLKIT_X11[wx.bkl] ###
-    COND_PLATFORM_MACOSX_1_TOOLKIT_X11="#"
-    if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "xX11" ; then
-        COND_PLATFORM_MACOSX_1_TOOLKIT_X11=""
-    fi
-    AC_SUBST(COND_PLATFORM_MACOSX_1_TOOLKIT_X11)
+    AC_SUBST(COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0)
 dnl ### begin block 20_COND_PLATFORM_MACOSX_1_USE_GUI_1[../../samples/ipc/ipc.bkl,../../samples/sockets/sockets.bkl,../../tests/test.bkl,wx.bkl] ###
     COND_PLATFORM_MACOSX_1_USE_GUI_1="#"
     if test "x$PLATFORM_MACOSX" = "x1" -a "x$USE_GUI" = "x1" ; then
@@ -650,18 +632,6 @@ dnl ### begin block 20_COND_TOOLKIT_MAC[../../demos/bombs/bombs.bkl,../../demos/
         COND_TOOLKIT_MAC=""
     fi
     AC_SUBST(COND_TOOLKIT_MAC)
-dnl ### begin block 20_COND_TOOLKIT_MAC_USE_GUI_1[wx.bkl] ###
-    COND_TOOLKIT_MAC_USE_GUI_1="#"
-    if test "x$TOOLKIT" = "xMAC" -a "x$USE_GUI" = "x1" ; then
-        COND_TOOLKIT_MAC_USE_GUI_1=""
-    fi
-    AC_SUBST(COND_TOOLKIT_MAC_USE_GUI_1)
-dnl ### begin block 20_COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0[wx.bkl] ###
-    COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0="#"
-    if test "x$TOOLKIT" = "xMAC" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
-        COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0=""
-    fi
-    AC_SUBST(COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0)
 dnl ### begin block 20_COND_TOOLKIT_MGL[wx.bkl] ###
     COND_TOOLKIT_MGL="#"
     if test "x$TOOLKIT" = "xMGL" ; then
@@ -716,6 +686,48 @@ dnl ### begin block 20_COND_TOOLKIT_MSW_WXUNIV_0[wx.bkl] ###
         COND_TOOLKIT_MSW_WXUNIV_0=""
     fi
     AC_SUBST(COND_TOOLKIT_MSW_WXUNIV_0)
+dnl ### begin block 20_COND_TOOLKIT_OSX_CARBON[../../demos/bombs/bombs.bkl,../../demos/forty/forty.bkl,../../demos/fractal/fractal.bkl,../../demos/life/life.bkl,../../demos/poem/poem.bkl,../../samples/access/access.bkl,../../samples/animate/anitest.bkl,../../samples/artprov/artprov.bkl,../../samples/aui/auidemo.bkl,../../samples/calendar/calendar.bkl,../../samples/caret/caret.bkl,../../samples/collpane/collpane.bkl,../../samples/combo/combo.bkl,../../samples/config/config.bkl,../../samples/controls/controls.bkl,../../samples/dataview/dataview.bkl,../../samples/debugrpt/debugrpt.bkl,../../samples/dialogs/dialogs.bkl,../../samples/dialup/dialup.bkl,../../samples/display/display.bkl,../../samples/dnd/dnd.bkl,../../samples/docview/docview.bkl,../../samples/docvwmdi/docvwmdi.bkl,../../samples/dragimag/dragimag.bkl,../../samples/drawing/drawing.bkl,../../samples/editlbox/editlbox.bkl,../../samples/erase/erase.bkl,../../samples/event/event.bkl,../../samples/except/except.bkl,../../samples/exec/exec.bkl,../../samples/font/font.bkl,../../samples/grid/grid.bkl,../../samples/help/help.bkl,../../samples/htlbox/htlbox.bkl,../../samples/html/about/about.bkl,../../samples/html/help/help.bkl,../../samples/html/helpview/helpview.bkl,../../samples/html/htmlctrl/htmlctrl.bkl,../../samples/html/printing/printing.bkl,../../samples/html/test/test.bkl,../../samples/html/virtual/virtual.bkl,../../samples/html/widget/widget.bkl,../../samples/html/zip/zip.bkl,../../samples/image/image.bkl,../../samples/internat/internat.bkl,../../samples/ipc/ipc.bkl,../../samples/joytest/joytest.bkl,../../samples/keyboard/keyboard.bkl,../../samples/layout/layout.bkl,../../samples/listctrl/listctrl.bkl,../../samples/mdi/mdi.bkl,../../samples/mediaplayer/mediaplayer.bkl,../../samples/memcheck/memcheck.bkl,../../samples/menu/menu.bkl,../../samples/mfc/mfc.bkl,../../samples/minimal/minimal.bkl,../../samples/mobile/styles/styles.bkl,../../samples/mobile/wxedit/wxedit.bkl,../../samples/nativdlg/nativdlg.bkl,../../samples/notebook/notebook.bkl,../../samples/oleauto/oleauto.bkl,../../samples/opengl/cube/cube.bkl,../../samples/opengl/isosurf/isosurf.bkl,../../samples/opengl/penguin/penguin.bkl,../../samples/ownerdrw/ownerdrw.bkl,../../samples/popup/popup.bkl,../../samples/power/power.bkl,../../samples/printing/printing.bkl,../../samples/regtest/regtest.bkl,../../samples/render/render.bkl,../../samples/richtext/richtext.bkl,../../samples/sashtest/sashtest.bkl,../../samples/scroll/scroll.bkl,../../samples/scrollsub/scrollsub.bkl,../../samples/shaped/shaped.bkl,../../samples/sockets/sockets.bkl,../../samples/sound/sound.bkl,../../samples/splash/splash.bkl,../../samples/splitter/splitter.bkl,../../samples/statbar/statbar.bkl,../../samples/stc/stctest.bkl,../../samples/svg/svgtest.bkl,../../samples/taborder/taborder.bkl,../../samples/taskbar/taskbar.bkl,../../samples/text/text.bkl,../../samples/thread/thread.bkl,../../samples/toolbar/toolbar.bkl,../../samples/treectrl/treectrl.bkl,../../samples/typetest/typetest.bkl,../../samples/validate/validate.bkl,../../samples/vscroll/vscroll.bkl,../../samples/widgets/widgets.bkl,../../samples/wizard/wizard.bkl,../../samples/wrapsizer/wrapsizer.bkl,../../samples/xrc/xrcdemo.bkl,../../tests/test.bkl,../../utils/helpview/src/helpview.bkl,wx.bkl] ###
+    COND_TOOLKIT_OSX_CARBON="#"
+    if test "x$TOOLKIT" = "xOSX_CARBON" ; then
+        COND_TOOLKIT_OSX_CARBON=""
+    fi
+    AC_SUBST(COND_TOOLKIT_OSX_CARBON)
+dnl ### begin block 20_COND_TOOLKIT_OSX_CARBON_USE_GUI_1[wx.bkl] ###
+    COND_TOOLKIT_OSX_CARBON_USE_GUI_1="#"
+    if test "x$TOOLKIT" = "xOSX_CARBON" -a "x$USE_GUI" = "x1" ; then
+        COND_TOOLKIT_OSX_CARBON_USE_GUI_1=""
+    fi
+    AC_SUBST(COND_TOOLKIT_OSX_CARBON_USE_GUI_1)
+dnl ### begin block 20_COND_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0[wx.bkl] ###
+    COND_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0="#"
+    if test "x$TOOLKIT" = "xOSX_CARBON" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
+        COND_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0=""
+    fi
+    AC_SUBST(COND_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0)
+dnl ### begin block 20_COND_TOOLKIT_OSX_COCOA[../../demos/bombs/bombs.bkl,../../demos/forty/forty.bkl,../../demos/fractal/fractal.bkl,../../demos/life/life.bkl,../../demos/poem/poem.bkl,../../samples/access/access.bkl,../../samples/animate/anitest.bkl,../../samples/artprov/artprov.bkl,../../samples/aui/auidemo.bkl,../../samples/calendar/calendar.bkl,../../samples/caret/caret.bkl,../../samples/collpane/collpane.bkl,../../samples/combo/combo.bkl,../../samples/config/config.bkl,../../samples/controls/controls.bkl,../../samples/dataview/dataview.bkl,../../samples/debugrpt/debugrpt.bkl,../../samples/dialogs/dialogs.bkl,../../samples/dialup/dialup.bkl,../../samples/display/display.bkl,../../samples/dnd/dnd.bkl,../../samples/docview/docview.bkl,../../samples/docvwmdi/docvwmdi.bkl,../../samples/dragimag/dragimag.bkl,../../samples/drawing/drawing.bkl,../../samples/editlbox/editlbox.bkl,../../samples/erase/erase.bkl,../../samples/event/event.bkl,../../samples/except/except.bkl,../../samples/exec/exec.bkl,../../samples/font/font.bkl,../../samples/grid/grid.bkl,../../samples/help/help.bkl,../../samples/htlbox/htlbox.bkl,../../samples/html/about/about.bkl,../../samples/html/help/help.bkl,../../samples/html/helpview/helpview.bkl,../../samples/html/htmlctrl/htmlctrl.bkl,../../samples/html/printing/printing.bkl,../../samples/html/test/test.bkl,../../samples/html/virtual/virtual.bkl,../../samples/html/widget/widget.bkl,../../samples/html/zip/zip.bkl,../../samples/image/image.bkl,../../samples/internat/internat.bkl,../../samples/ipc/ipc.bkl,../../samples/joytest/joytest.bkl,../../samples/keyboard/keyboard.bkl,../../samples/layout/layout.bkl,../../samples/listctrl/listctrl.bkl,../../samples/mdi/mdi.bkl,../../samples/mediaplayer/mediaplayer.bkl,../../samples/memcheck/memcheck.bkl,../../samples/menu/menu.bkl,../../samples/mfc/mfc.bkl,../../samples/minimal/minimal.bkl,../../samples/mobile/styles/styles.bkl,../../samples/mobile/wxedit/wxedit.bkl,../../samples/nativdlg/nativdlg.bkl,../../samples/notebook/notebook.bkl,../../samples/oleauto/oleauto.bkl,../../samples/opengl/cube/cube.bkl,../../samples/opengl/isosurf/isosurf.bkl,../../samples/opengl/penguin/penguin.bkl,../../samples/ownerdrw/ownerdrw.bkl,../../samples/popup/popup.bkl,../../samples/power/power.bkl,../../samples/printing/printing.bkl,../../samples/regtest/regtest.bkl,../../samples/render/render.bkl,../../samples/richtext/richtext.bkl,../../samples/sashtest/sashtest.bkl,../../samples/scroll/scroll.bkl,../../samples/scrollsub/scrollsub.bkl,../../samples/shaped/shaped.bkl,../../samples/sockets/sockets.bkl,../../samples/sound/sound.bkl,../../samples/splash/splash.bkl,../../samples/splitter/splitter.bkl,../../samples/statbar/statbar.bkl,../../samples/stc/stctest.bkl,../../samples/svg/svgtest.bkl,../../samples/taborder/taborder.bkl,../../samples/taskbar/taskbar.bkl,../../samples/text/text.bkl,../../samples/thread/thread.bkl,../../samples/toolbar/toolbar.bkl,../../samples/treectrl/treectrl.bkl,../../samples/typetest/typetest.bkl,../../samples/validate/validate.bkl,../../samples/vscroll/vscroll.bkl,../../samples/widgets/widgets.bkl,../../samples/wizard/wizard.bkl,../../samples/wrapsizer/wrapsizer.bkl,../../samples/xrc/xrcdemo.bkl,../../tests/test.bkl,../../utils/helpview/src/helpview.bkl,wx.bkl] ###
+    COND_TOOLKIT_OSX_COCOA="#"
+    if test "x$TOOLKIT" = "xOSX_COCOA" ; then
+        COND_TOOLKIT_OSX_COCOA=""
+    fi
+    AC_SUBST(COND_TOOLKIT_OSX_COCOA)
+dnl ### begin block 20_COND_TOOLKIT_OSX_COCOA_USE_GUI_1[wx.bkl] ###
+    COND_TOOLKIT_OSX_COCOA_USE_GUI_1="#"
+    if test "x$TOOLKIT" = "xOSX_COCOA" -a "x$USE_GUI" = "x1" ; then
+        COND_TOOLKIT_OSX_COCOA_USE_GUI_1=""
+    fi
+    AC_SUBST(COND_TOOLKIT_OSX_COCOA_USE_GUI_1)
+dnl ### begin block 20_COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0[wx.bkl] ###
+    COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0="#"
+    if test "x$TOOLKIT" = "xOSX_COCOA" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
+        COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0=""
+    fi
+    AC_SUBST(COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0)
+dnl ### begin block 20_COND_TOOLKIT_OSX_IPHONE[../../demos/bombs/bombs.bkl,../../demos/forty/forty.bkl,../../demos/fractal/fractal.bkl,../../demos/life/life.bkl,../../demos/poem/poem.bkl,../../samples/access/access.bkl,../../samples/animate/anitest.bkl,../../samples/artprov/artprov.bkl,../../samples/aui/auidemo.bkl,../../samples/calendar/calendar.bkl,../../samples/caret/caret.bkl,../../samples/collpane/collpane.bkl,../../samples/combo/combo.bkl,../../samples/config/config.bkl,../../samples/controls/controls.bkl,../../samples/dataview/dataview.bkl,../../samples/debugrpt/debugrpt.bkl,../../samples/dialogs/dialogs.bkl,../../samples/dialup/dialup.bkl,../../samples/display/display.bkl,../../samples/dnd/dnd.bkl,../../samples/docview/docview.bkl,../../samples/docvwmdi/docvwmdi.bkl,../../samples/dragimag/dragimag.bkl,../../samples/drawing/drawing.bkl,../../samples/editlbox/editlbox.bkl,../../samples/erase/erase.bkl,../../samples/event/event.bkl,../../samples/except/except.bkl,../../samples/exec/exec.bkl,../../samples/font/font.bkl,../../samples/grid/grid.bkl,../../samples/help/help.bkl,../../samples/htlbox/htlbox.bkl,../../samples/html/about/about.bkl,../../samples/html/help/help.bkl,../../samples/html/helpview/helpview.bkl,../../samples/html/htmlctrl/htmlctrl.bkl,../../samples/html/printing/printing.bkl,../../samples/html/test/test.bkl,../../samples/html/virtual/virtual.bkl,../../samples/html/widget/widget.bkl,../../samples/html/zip/zip.bkl,../../samples/image/image.bkl,../../samples/internat/internat.bkl,../../samples/ipc/ipc.bkl,../../samples/joytest/joytest.bkl,../../samples/keyboard/keyboard.bkl,../../samples/layout/layout.bkl,../../samples/listctrl/listctrl.bkl,../../samples/mdi/mdi.bkl,../../samples/mediaplayer/mediaplayer.bkl,../../samples/memcheck/memcheck.bkl,../../samples/menu/menu.bkl,../../samples/mfc/mfc.bkl,../../samples/minimal/minimal.bkl,../../samples/mobile/styles/styles.bkl,../../samples/mobile/wxedit/wxedit.bkl,../../samples/nativdlg/nativdlg.bkl,../../samples/notebook/notebook.bkl,../../samples/oleauto/oleauto.bkl,../../samples/opengl/cube/cube.bkl,../../samples/opengl/isosurf/isosurf.bkl,../../samples/opengl/penguin/penguin.bkl,../../samples/ownerdrw/ownerdrw.bkl,../../samples/popup/popup.bkl,../../samples/power/power.bkl,../../samples/printing/printing.bkl,../../samples/regtest/regtest.bkl,../../samples/render/render.bkl,../../samples/richtext/richtext.bkl,../../samples/sashtest/sashtest.bkl,../../samples/scroll/scroll.bkl,../../samples/scrollsub/scrollsub.bkl,../../samples/shaped/shaped.bkl,../../samples/sockets/sockets.bkl,../../samples/sound/sound.bkl,../../samples/splash/splash.bkl,../../samples/splitter/splitter.bkl,../../samples/statbar/statbar.bkl,../../samples/stc/stctest.bkl,../../samples/svg/svgtest.bkl,../../samples/taborder/taborder.bkl,../../samples/taskbar/taskbar.bkl,../../samples/text/text.bkl,../../samples/thread/thread.bkl,../../samples/toolbar/toolbar.bkl,../../samples/treectrl/treectrl.bkl,../../samples/typetest/typetest.bkl,../../samples/validate/validate.bkl,../../samples/vscroll/vscroll.bkl,../../samples/widgets/widgets.bkl,../../samples/wizard/wizard.bkl,../../samples/wrapsizer/wrapsizer.bkl,../../samples/xrc/xrcdemo.bkl,../../tests/test.bkl,../../utils/helpview/src/helpview.bkl] ###
+    COND_TOOLKIT_OSX_IPHONE="#"
+    if test "x$TOOLKIT" = "xOSX_IPHONE" ; then
+        COND_TOOLKIT_OSX_IPHONE=""
+    fi
+    AC_SUBST(COND_TOOLKIT_OSX_IPHONE)
 dnl ### begin block 20_COND_TOOLKIT_PM[wx.bkl] ###
     COND_TOOLKIT_PM="#"
     if test "x$TOOLKIT" = "xPM" ; then

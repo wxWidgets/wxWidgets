@@ -29,7 +29,11 @@
         <set var="BUNDLE">$(id).app/Contents</set>
         <set var="BUNDLE_TGT">$(BUNDLE)/PkgInfo</set>
         <set var="BUNDLE_TGT_REF">
+            <!-- TODO Remove Mac -->
             <if cond="TOOLKIT=='MAC'">$(BUNDLE)/PkgInfo</if>
+            <if cond="TOOLKIT=='OSX_CARBON'">$(BUNDLE)/PkgInfo</if>
+            <if cond="TOOLKIT=='OSX_COCOA'">$(BUNDLE)/PkgInfo</if>
+            <if cond="TOOLKIT=='OSX_IPHONE'">$(BUNDLE)/PkgInfo</if>
             <if cond="TOOLKIT=='COCOA'">$(BUNDLE)/PkgInfo</if>
         </set>
 

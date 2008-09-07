@@ -94,13 +94,14 @@ NEEDS_D_REENTRANT_FOR_R_FUNCS=0
 dnl the list of all available toolkits
 dnl
 dnl update NUM_TOOLKITS calculation below when adding a new toolkit here!
-ALL_TOOLKITS="COCOA GTK MAC MGL MICROWIN MOTIF MSW PM X11 DFB"
+ALL_TOOLKITS="COCOA GTK OSX_CARBON OSX_COCOA MGL MICROWIN MOTIF MSW PM X11 DFB"
 
 dnl NB: these wxUSE_XXX constants have value of 0 or 1 unlike all the other ones
 dnl     which are either yes or no
 DEFAULT_wxUSE_COCOA=0
 DEFAULT_wxUSE_GTK=0
-DEFAULT_wxUSE_MAC=0
+DEFAULT_wxUSE_OSX_CARBON=0
+DEFAULT_wxUSE_OSX_COCOA=0
 DEFAULT_wxUSE_MGL=0
 DEFAULT_wxUSE_MICROWIN=0
 DEFAULT_wxUSE_MOTIF=0
@@ -114,7 +115,8 @@ dnl they're used if no --with-<toolkit> options were given to detect the
 dnl toolkit to use by default for the target platform
 DEFAULT_DEFAULT_wxUSE_COCOA=0
 DEFAULT_DEFAULT_wxUSE_GTK=0
-DEFAULT_DEFAULT_wxUSE_MAC=0
+DEFAULT_DEFAULT_wxUSE_OSX_CARBON=0
+DEFAULT_DEFAULT_wxUSE_OSX_COCOA=0
 DEFAULT_DEFAULT_wxUSE_MGL=0
 DEFAULT_DEFAULT_wxUSE_MICROWIN=0
 DEFAULT_DEFAULT_wxUSE_MOTIF=0
@@ -321,7 +323,7 @@ case "${host}" in
     AC_DEFINE(__BSD__)
     AC_DEFINE(__DARWIN__)
     AC_DEFINE(TARGET_CARBON)
-    DEFAULT_DEFAULT_wxUSE_MAC=1
+    DEFAULT_DEFAULT_wxUSE_OSX_CARBON=1
     DEFAULT_STD_FLAG=no
   ;;
   powerpc-apple-macos* )
@@ -333,7 +335,7 @@ case "${host}" in
     SO_SUFFIX=shlib
     dnl AC_DEFINE(TARGET_CARBON)
     dnl platform.h needs TARGET_CARBON before setup.h, we'll add it to CPPFLAGS
-    DEFAULT_DEFAULT_wxUSE_MAC=1
+    DEFAULT_DEFAULT_wxUSE_OSX_CARBON=1
     DEFAULT_STD_FLAG=no
   ;;
 
@@ -453,7 +455,9 @@ dnl we use AC_ARG_WITH and not WX_ARG_WITH for the toolkit options as they
 dnl shouldn't default to wxUSE_ALL_FEATURES
 AC_ARG_WITH(gtk,          [[  --with-gtk[=VERSION]    use GTK+, VERSION can be 2 (default), 1 or "any"]], [wxUSE_GTK="$withval" CACHE_GTK=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(motif,         [  --with-motif            use Motif/Lesstif], [wxUSE_MOTIF="$withval" CACHE_MOTIF=1 TOOLKIT_GIVEN=1])
-AC_ARG_WITH(mac,           [  --with-mac              use Mac OS X], [wxUSE_MAC="$withval" CACHE_MAC=1 TOOLKIT_GIVEN=1])
+AC_ARG_WITH(osx_carbon,    [  --with-osx_carbon       use Mac OS X (Carbon) ], [wxUSE_OSX_CARBON="$withval" CACHE_OSX_CARBON=1 TOOLKIT_GIVEN=1])
+AC_ARG_WITH(osx_cocoa,     [  --with-osx_cocoa        use Mac OS X (Cocoa) ], [wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1])
+AC_ARG_WITH(mac,           [  --with-mac              use Mac OS X (Default) ], [wxUSE_OSX_CARBON="$withval" CACHE_OSX_CARBON=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(cocoa,         [  --with-cocoa            use Cocoa], [wxUSE_COCOA="$withval" CACHE_COCOA=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(wine,          [  --with-wine             use Wine], [wxUSE_WINE="$withval" CACHE_WINE=1])
 AC_ARG_WITH(msw,           [  --with-msw              use MS-Windows], [wxUSE_MSW="$withval" CACHE_MSW=1 TOOLKIT_GIVEN=1])
@@ -471,6 +475,8 @@ dnl check that no more than one toolkit is given and that if none are given that
 dnl we have a default one
 
 AC_MSG_CHECKING(for toolkit)
+
+
 
 # In Wine, we need to default to MSW, not GTK or MOTIF
 if test "$wxUSE_WINE" = "yes"; then
@@ -514,9 +520,9 @@ if test "$wxUSE_GUI" = "yes"; then
 
     dnl we suppose that expr is available (maybe there is a better way to do
     dnl this? what about using ALL_TOOLKITS? TODO)
-    NUM_TOOLKITS=`expr ${wxUSE_COCOA:-0} + ${wxUSE_GTK:-0} + ${wxUSE_MAC:-0} \
-                  + ${wxUSE_MGL:-0} + ${wxUSE_DFB:-0} + ${wxUSE_MICROWIN:-0} \
-                  + ${wxUSE_MOTIF:-0} + ${wxUSE_MSW:-0} + ${wxUSE_X11:-0}`
+    NUM_TOOLKITS=`expr ${wxUSE_COCOA:-0} + ${wxUSE_GTK:-0} + ${wxUSE_OSX_CARBON:-0} \
+                  + ${wxUSE_OSX_COCOA:-0} + ${wxUSE_MGL:-0} + ${wxUSE_DFB:-0} \
+                  + ${wxUSE_MICROWIN:-0} + ${wxUSE_MOTIF:-0} + ${wxUSE_MSW:-0} + ${wxUSE_X11:-0}`
 
     dnl Allow wxUSE_PM only for OS/2 with EMX.
     case "${host}" in
@@ -555,6 +561,11 @@ else
     else
         AC_MSG_RESULT(base only)
     fi
+fi
+
+wxUSE_MAC=0
+if test "$wxUSE_OSX_CARBON" = 1 -o "$wxUSE_OSX_COCOA" = 1; then
+    wxUSE_MAC=1
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -3405,7 +3416,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         fi
     fi
 
-    if test "$wxUSE_MAC" = 1; then
+    if test "$wxUSE_OSX_CARBON" = 1; then
         AC_MSG_CHECKING([for compiler syntax to enable Pascal strings])
         if test "$GCC" = yes; then
             AC_MSG_RESULT([gcc])
@@ -3424,12 +3435,17 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             CPPFLAGS="$CPPFLAGS_PASCAL -I\${top_srcdir}/src/mac/carbon/morefilex -DTARGET_CARBON $CPPFLAGS"
         fi
 
-        TOOLKIT=MAC
+        TOOLKIT=OSX_CARBON
         dnl we can't call this MAC_DIST or autoconf thinks its a macro
-        GUIDIST=MACX_DIST
+        GUIDIST=OSX_CARBON_DIST
         dnl wxMac version of wxBase and wxCocoa or wxBase-only built on Darwin
         dnl are different, so they need different names:
         WXBASEPORT="_carbon"
+    fi
+
+    if test "$wxUSE_OSX_COCOA" = 1; then
+        TOOLKIT=OSX_COCOA
+        GUIDIST=OSX_COCOA_DIST
     fi
 
     if test "$wxUSE_COCOA" = 1; then
@@ -3619,7 +3635,7 @@ if test "$wxUSE_OPENGL" = "yes"; then
     if test "$wxUSE_MGL" = 1 -o "$wxUSE_DFB" = 1; then
         AC_MSG_WARN([wxGLCanvas not implemented for this port, library will be compiled without it.])
         wxUSE_OPENGL="no"
-    elif test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1; then
+    elif test "$wxUSE_OSX_CARBON" = 1 -o test "$wxUSE_OSX_COCOA" = 1 -o "$wxUSE_COCOA" = 1; then
         OPENGL_LIBS="-framework OpenGL -framework AGL"
     elif test "$wxUSE_MSW" = 1; then
         OPENGL_LIBS="-lopengl32 -lglu32"
@@ -6874,9 +6890,6 @@ if test "$wxUSE_HTML" = "yes"; then
     AC_DEFINE(wxUSE_HTML)
     USE_HTML=1
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS html html/about html/help html/helpview html/printing html/test html/virtual html/widget html/zip htlbox"
-    if test "$wxUSE_MAC" = 1; then
-        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS html/htmlctrl"
-    fi
 fi
 if test "$wxUSE_WEBKIT" = "yes"; then
     if test "$wxUSE_MAC" = 1 -a "$USE_DARWIN" = 1; then
@@ -6900,6 +6913,9 @@ if test "$wxUSE_WEBKIT" = "yes"; then
         AC_DEFINE(wxUSE_WEBKIT)
     else
         wxUSE_WEBKIT=no
+    fi
+    if test "$wxUSE_WEBKIT" = "yes"; then
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS html/htmlctrl"
     fi
 fi
 
@@ -7327,14 +7343,10 @@ if test "$wxUSE_MAC" = 1 ; then
     if test "$wxUSE_SOUND" = "yes" || test "$wxUSE_MEDIACTRL" = "yes"; then
         if test "$USE_DARWIN" = 1; then
             LDFLAGS="$LDFLAGS -framework QuickTime"
-        else
-            LDFLAGS="$LDFLAGS -lQuickTimeLib"
         fi
     fi
     if test "$USE_DARWIN" = 1; then
         LDFLAGS="$LDFLAGS -framework IOKit -framework Carbon -framework Cocoa -framework AudioToolbox -framework System"
-    else
-        LDFLAGS="$LDFLAGS -lCarbonLib"
     fi
 fi
 if test "$wxUSE_COCOA" = 1 ; then
@@ -7718,7 +7730,7 @@ if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1; then
 
     dnl resources are bundled both with shared library and applications
     dnl since the carb resource *must* be included in the application
-    if test "$wxUSE_MAC" = 1; then
+    if test "$wxUSE_OSX_CARBON" = 1; then
         POSTLINK_COMMAND="\$(REZ) -d __DARWIN__ -t APPL Carbon.r -o"
         RESCOMP="$REZ"
         WXCONFIG_RESFLAGS="-d __DARWIN__ -t APPL Carbon.r -o"
