@@ -740,11 +740,7 @@ int wxAuiDefaultToolBarArt::ShowDropDown(wxWindow* wnd,
             if (text.empty())
                 text = wxT(" ");
 
-            #ifdef __WXMAC__
             wxMenuItem* m =  new wxMenuItem(&menuPopup, item.GetId(), text, item.GetShortHelp());
-            #else
-            wxMenuItem* m =  new wxMenuItem(&menuPopup, item.GetId(), text, item.GetShortHelp(), false);
-            #endif
 
             m->SetBitmap(item.GetBitmap());
             menuPopup.Append(m);
