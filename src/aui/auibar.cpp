@@ -37,7 +37,7 @@
 #include "wx/aui/framemanager.h"
 
 #ifdef __WXMAC__
-#include "wx/osx/private.h"
+#include "wx/mac/carbon/private.h"
 // for themeing support
 #include <Carbon/Carbon.h>
 #endif
