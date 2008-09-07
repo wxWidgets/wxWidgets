@@ -82,12 +82,12 @@
 
 #if wxUSE_GUI
 typedef SInt16 ThemeBrush;
-CGColorRef wxMacCreateCGColorFromHITheme( ThemeBrush brush ) ;
+CGColorRef WXDLLIMPEXP_CORE wxMacCreateCGColorFromHITheme( ThemeBrush brush ) ;
 OSStatus WXDLLIMPEXP_CORE wxMacDrawCGImage(
                                CGContextRef    inContext,
                                const CGRect *  inBounds,
                                CGImageRef      inImage) ;
-WX_NSImage  wxOSXCreateNSImageFromCGImage( CGImageRef image );
+WX_NSImage WXDLLIMPEXP_CORE wxOSXCreateNSImageFromCGImage( CGImageRef image );
 #endif
 
 long UMAGetSystemVersion() ;
