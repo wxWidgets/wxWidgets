@@ -11,7 +11,9 @@
 
 #include "wx/wxprec.h"
 
-#include <Cocoa/Cocoa.h>
+#ifndef WX_PRECOMP
+#include "wx/nonownedwnd.h"
+#endif
 
 #ifdef __WXMAC__
 #include "wx/osx/private.h"

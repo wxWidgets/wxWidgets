@@ -10,16 +10,12 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
-
-#if wxOSX_USE_COCOA
-#include <Cocoa/Cocoa.h>
-#else
-#include <UIKit/UIKit.h>
+#ifndef WX_PRECOMP
+    #include "wx/nonownedwnd.h"
+    #include "wx/frame.h"
 #endif
 
-#ifdef __WXMAC__
 #include "wx/osx/private.h"
-#endif
 
 NSRect wxToNSRect( NSView* parent, const wxRect& r )
 {
