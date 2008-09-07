@@ -671,6 +671,10 @@ private:
       // profiling seems to show a small but consistent gain if we use this
       // simple loop instead of starting from the last used element (there are
       // a lot of misses in this function...)
+      // during destruction tls calls may return NULL, thus return NULL 
+      // immediately
+      if ( GetCacheBegin() == NULL )
+        return NULL;
       for ( Cache::Element *c = GetCacheBegin(); c != GetCacheEnd(); c++ )
       {
           if ( c->str == this )
