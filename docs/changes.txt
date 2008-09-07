@@ -113,6 +113,7 @@ All (GUI):
 - Fix changing size of merged cells in wxGrid (Laurent Humbertclaude).
 - Fixed wrapping bug in wxRichTextCtrl when there were images present;
   now sets the cursor to the next line after pressing Shift+Enter.
+- Fixed Cmd+Back, Cmd+Del word deletion behaviour in wxRichTextCtrl.
 - Fix crash when reading malformed PCX images.
 - Fix bug with wrong transparency in GIF animations (troelsk).
 - Store palette information for XPM images in wxImage (troelsk).
