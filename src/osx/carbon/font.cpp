@@ -25,10 +25,11 @@
 #include "wx/graphics.h"
 #include "wx/settings.h"
 
-#if wxOSX_USE_CARBON
-#include "wx/osx/uma.h"
-#else
 #include "wx/osx/private.h"
+
+#if wxOSX_USE_ATSU_TEXT && !wxOSX_USE_CARBON
+// include themeing support
+#include <Carbon/Carbon.h>
 #endif
 
 #include <map>
