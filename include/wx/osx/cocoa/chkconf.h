@@ -74,17 +74,16 @@
 #define wxUSE_DATAVIEWCTRL 0
 #endif
 
-#if wxUSE_DRAG_AND_DROP
-#undef wxUSE_DRAG_AND_DROP
-#define wxUSE_DRAG_AND_DROP 0
-#endif
-
-#if wxUSE_TASKBARICON
-#undef wxUSE_TASKBARICON
-#define wxUSE_TASKBARICON 0
+#if wxUSE_DOC_VIEW_ARCHITECTURE
+#undef wxUSE_DOC_VIEW_ARCHITECTURE
 #endif
 
 #define wxUSE_DOC_VIEW_ARCHITECTURE 0
+
+#if wxUSE_WXHTML_HELP
+#undef wxUSE_WXHTML_HELP
+#endif
+
 #define wxUSE_WXHTML_HELP 0
 
 #endif
