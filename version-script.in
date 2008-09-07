@@ -29,6 +29,7 @@
 @WX_VERSION_TAG@.9 {
         *wxAuiTabCtrl*OnCaptureLost*;
         *wxAuiToolBar*;
+        *wxWindow*UnsetToolTip*;
 };
 
 @WX_VERSION_TAG@.8 {
