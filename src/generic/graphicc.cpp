@@ -12,32 +12,23 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #if wxUSE_GRAPHICS_CONTEXT
 
-#include "wx/dc.h"
-
 #ifndef WX_PRECOMP
-#include "wx/image.h"
-#include "wx/window.h"
-#include "wx/dc.h"
-#include "wx/utils.h"
-#include "wx/dialog.h"
-#include "wx/app.h"
-#include "wx/bitmap.h"
-#include "wx/dcmemory.h"
-#include "wx/log.h"
-#include "wx/icon.h"
-#include "wx/dcprint.h"
-#include "wx/module.h"
+    #include "wx/bitmap.h"
+    #include "wx/icon.h"
+
+    #include "wx/dc.h"
+    #include "wx/dcclient.h"
+    #include "wx/dcmemory.h"
+    #include "wx/dcprint.h"
 #endif
 
 #include "wx/private/graphics.h"
 #include "wx/rawbmp.h"
-
-#include <vector>
 
 using namespace std;
 
