@@ -191,7 +191,6 @@ private:
     HANDLE m_mutex;
     
     unsigned long m_owningThread;
-    bool m_isLocked;
     wxMutexType m_type;
 
     DECLARE_NO_COPY_CLASS(wxMutexInternal)
@@ -210,7 +209,6 @@ wxMutexInternal::wxMutexInternal(wxMutexType mutexType)
 
     m_type = mutexType;
     m_owningThread = 0;
-    m_isLocked = false;
 
     if ( !m_mutex )
     {
@@ -243,7 +241,7 @@ wxMutexError wxMutexInternal::LockTimeout(DWORD milliseconds)
     if (m_type == wxMUTEX_DEFAULT)
     {
         // Don't allow recursive
-        if (m_isLocked)
+        if (m_owningThread != 0)
         {
             if (m_owningThread == wxThread::GetCurrentId())
                 return wxMUTEX_DEAD_LOCK;
@@ -283,7 +281,6 @@ wxMutexError wxMutexInternal::LockTimeout(DWORD milliseconds)
     if (m_type == wxMUTEX_DEFAULT)
     { 
         // required for checking recursiveness
-        m_isLocked = true;
         m_owningThread = wxThread::GetCurrentId();
     }
     
@@ -292,15 +289,15 @@ wxMutexError wxMutexInternal::LockTimeout(DWORD milliseconds)
 
 wxMutexError wxMutexInternal::Unlock()
 {
+    // required for checking recursiveness
+    m_owningThread = 0;
+
     if ( !::ReleaseMutex(m_mutex) )
     {
         wxLogLastError(_T("ReleaseMutex()"));
 
         return wxMUTEX_MISC_ERROR;
     }
-    
-    // required for checking recursiveness
-    m_isLocked = false;
 
     return wxMUTEX_NO_ERROR;
 }

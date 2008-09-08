@@ -189,6 +189,8 @@ private:
 private:
     pthread_mutex_t m_mutex;
     bool m_isOk;
+    wxMutexType m_type;
+    unsigned long m_owningThread;
 
     // wxConditionInternal uses our m_mutex
     friend class wxConditionInternal;
@@ -203,6 +205,9 @@ extern "C" int pthread_mutexattr_settype(pthread_mutexattr_t *, int);
 
 wxMutexInternal::wxMutexInternal(wxMutexType mutexType)
 {
+    m_type = mutexType;
+    m_owningThread = 0;
+
     int err;
     switch ( mutexType )
     {
@@ -263,6 +268,12 @@ wxMutexInternal::~wxMutexInternal()
 
 wxMutexError wxMutexInternal::Lock()
 {
+    if ((m_type == wxMUTEX_DEFAULT) && (m_owningThread != 0))
+    {
+        if (m_owningThread == wxThread::GetCurrentId())
+           return wxMUTEX_DEAD_LOCK;
+    }
+        
     return HandleLockResult(pthread_mutex_lock(&m_mutex));
 }
 
@@ -318,6 +329,8 @@ wxMutexError wxMutexInternal::Lock(unsigned long ms)
 
 wxMutexError wxMutexInternal::HandleLockResult(int err)
 {
+    // wxPrintf( "err %d\n", err );
+
     switch ( err )
     {
         case EDEADLK:
@@ -334,6 +347,8 @@ wxMutexError wxMutexInternal::HandleLockResult(int err)
             return wxMUTEX_TIMEOUT;
 
         case 0:
+            if (m_type == wxMUTEX_DEFAULT)
+                m_owningThread = wxThread::GetCurrentId();
             return wxMUTEX_NO_ERROR;
 
         default:
@@ -359,6 +374,8 @@ wxMutexError wxMutexInternal::TryLock()
             break;
 
         case 0:
+            if (m_type == wxMUTEX_DEFAULT)
+                m_owningThread = wxThread::GetCurrentId();
             return wxMUTEX_NO_ERROR;
 
         default:
@@ -370,6 +387,8 @@ wxMutexError wxMutexInternal::TryLock()
 
 wxMutexError wxMutexInternal::Unlock()
 {
+    m_owningThread = 0;
+                
     int err = pthread_mutex_unlock(&m_mutex);
     switch ( err )
     {
