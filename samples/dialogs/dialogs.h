@@ -142,6 +142,7 @@ private:
 
 #endif // USE_MODAL_PRESENTATION
 
+// A class demonstrating CreateStdDialogButtonSizer()
 class StdButtonSizerDialog : public wxDialog
 {
 public:
@@ -170,14 +171,54 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
+// Test harness for wxMessageDialog.
+class TestMessageBoxDialog : public wxDialog
+{
+public:
+    TestMessageBoxDialog(wxWindow *parent);
+
+private:
+    void OnApply(wxCommandEvent& event);
+    void OnClose(wxCommandEvent& event);
+    void OnUpdateLabelUI(wxUpdateUIEvent& event);
+
+    enum
+    {
+        Btn_Yes,
+        Btn_No,
+        Btn_Ok,
+        Btn_Cancel,
+        Btn_Max
+    };
+
+    struct BtnInfo
+    {
+        int flag;
+        wxString name;
+    };
+
+    static BtnInfo ms_btnInfo[Btn_Max];
+
+    wxTextCtrl *m_textMsg,
+               *m_textExtMsg;
+
+    wxCheckBox *m_buttons[Btn_Max];
+    wxTextCtrl *m_labels[Btn_Max];
+
+    wxRadioBox *m_icons;
+
+    DECLARE_EVENT_TABLE()
+    DECLARE_NO_COPY_CLASS(TestMessageBoxDialog)
+};
+
 class TestDefaultActionDialog: public wxDialog
 {
 public:
     TestDefaultActionDialog( wxWindow *parent );
-    
+
     void OnListBoxDClick(wxCommandEvent& event);
     void OnCatchListBoxDClick(wxCommandEvent& event);
-    
+
 private:
     bool   m_catchListBoxDClick;
 
@@ -227,6 +268,7 @@ public:
 
 #if wxUSE_MSGDLG
     void MessageBox(wxCommandEvent& event);
+    void MessageBoxDialog(wxCommandEvent& event);
     void MessageBoxInfo(wxCommandEvent& event);
 #endif // wxUSE_MSGDLG
 
@@ -331,9 +373,9 @@ public:
 #endif // wxUSE_NOTIFICATION_MESSAGE
 
     void OnStandardButtonsSizerDialog(wxCommandEvent& event);
-    
+
     void OnTestDefaultActionDialog(wxCommandEvent& event);
-    
+
     void OnExit(wxCommandEvent& event);
 
 private:
@@ -382,6 +424,7 @@ enum
     DIALOGS_CHOOSE_FONT,
     DIALOGS_CHOOSE_FONT_GENERIC,
     DIALOGS_MESSAGE_BOX,
+    DIALOGS_MESSAGE_DIALOG,
     DIALOGS_MESSAGE_BOX_WXINFO,
     DIALOGS_SINGLE_CHOICE,
     DIALOGS_MULTI_CHOICE,

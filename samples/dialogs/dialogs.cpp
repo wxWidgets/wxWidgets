@@ -118,6 +118,7 @@ END_EVENT_TABLE()
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #if wxUSE_MSGDLG
     EVT_MENU(DIALOGS_MESSAGE_BOX,                   MyFrame::MessageBox)
+    EVT_MENU(DIALOGS_MESSAGE_DIALOG,                MyFrame::MessageBoxDialog)
     EVT_MENU(DIALOGS_MESSAGE_BOX_WXINFO,            MyFrame::MessageBoxInfo)
 #endif // wxUSE_MSGDLG
 #if wxUSE_COLOURDLG
@@ -275,6 +276,7 @@ bool MyApp::OnInit()
     wxMenu *menuDlg = new wxMenu;
 
     menuDlg->Append(DIALOGS_MESSAGE_BOX, _T("&Message box\tCtrl-M"));
+    menuDlg->Append(DIALOGS_MESSAGE_DIALOG, _T("Message dialog\tShift-Ctrl-M"));
 
 
 #if wxUSE_COLOURDLG || wxUSE_FONTDLG || wxUSE_CHOICEDLG
@@ -650,14 +652,16 @@ void MyFrame::LogDialog(wxCommandEvent& WXUNUSED(event))
 #endif // wxUSE_LOG_DIALOG
 
 #if wxUSE_MSGDLG
-void MyFrame::MessageBox(wxCommandEvent& WXUNUSED(event) )
+void MyFrame::MessageBox(wxCommandEvent& WXUNUSED(event))
 {
     wxMessageDialog dialog(this,
                            "This is a message box\n"
                            "A long, long string to test out the message box "
                            "layout properly.",
                            "Message box text",
-                           wxCENTER | wxNO_DEFAULT | wxYES_NO | wxCANCEL | wxICON_INFORMATION);
+                           wxVSCROLL | wxCENTER |
+                           wxNO_DEFAULT | wxYES_NO | wxCANCEL |
+                           wxICON_INFORMATION);
 
     wxString extmsg;
     if ( dialog.SetYesNoCancelLabels
@@ -694,6 +698,12 @@ void MyFrame::MessageBox(wxCommandEvent& WXUNUSED(event) )
         default:
             wxLogError(wxT("Unexpected wxMessageDialog return code!"));
     }
+}
+
+void MyFrame::MessageBoxDialog(wxCommandEvent& WXUNUSED(event))
+{
+    TestMessageBoxDialog dlg(this);
+    dlg.ShowModal();
 }
 
 void MyFrame::MessageBoxInfo(wxCommandEvent& WXUNUSED(event))
@@ -1294,33 +1304,33 @@ TestDefaultActionDialog::TestDefaultActionDialog( wxWindow *parent ) :
     m_catchListBoxDClick = false;
 
     wxBoxSizer *main_sizer = new wxBoxSizer( wxVERTICAL );
-    
+
     wxFlexGridSizer *grid_sizer = new wxFlexGridSizer( 2, 5, 5 );
-    
+
     wxListBox *listbox = new wxListBox( this, ID_LISTBOX );
     listbox->Append( "String 1" );
     listbox->Append( "String 2" );
     listbox->Append( "String 3" );
     listbox->Append( "String 4" );
     grid_sizer->Add( listbox );
-    
+
     grid_sizer->Add( new wxCheckBox( this, ID_CATCH_LISTBOX_DCLICK, "Catch DoubleClick from wxListBox" ), 0, wxALIGN_CENTRE_VERTICAL );
-    
+
     grid_sizer->Add( new wxTextCtrl( this, -1, "", wxDefaultPosition, wxSize(80,-1), 0 ), 0, wxALIGN_CENTRE_VERTICAL );
     grid_sizer->Add( new wxStaticText( this, -1, "wxTextCtrl without wxTE_PROCESS_ENTER" ), 0, wxALIGN_CENTRE_VERTICAL );
-    
+
     grid_sizer->Add( new wxTextCtrl( this, -1, "", wxDefaultPosition, wxSize(80,-1), wxTE_PROCESS_ENTER ), 0, wxALIGN_CENTRE_VERTICAL );
     grid_sizer->Add( new wxStaticText( this, -1, "wxTextCtrl with wxTE_PROCESS_ENTER" ), 0, wxALIGN_CENTRE_VERTICAL );
-    
+
     main_sizer->Add( grid_sizer, 0, wxALL, 10 );
-    
+
     wxSizer *button_sizer = CreateSeparatedButtonSizer( wxOK|wxCANCEL );
     if (button_sizer)
         main_sizer->Add( button_sizer, 0, wxALL|wxGROW, 5 );
-        
+
     SetSizerAndFit( main_sizer );
 }
-    
+
 void TestDefaultActionDialog::OnListBoxDClick(wxCommandEvent& event)
 {
     event.Skip( !m_catchListBoxDClick );
@@ -2122,6 +2132,166 @@ wxPanel* SettingsDialog::CreateAestheticSettingsPage(wxWindow* parent)
     panel->SetSizerAndFit(topSizer);
 
     return panel;
+}
+
+// ----------------------------------------------------------------------------
+// TestMessageBoxDialog
+// ----------------------------------------------------------------------------
+
+TestMessageBoxDialog::BtnInfo TestMessageBoxDialog::ms_btnInfo[] =
+{
+    { wxYES,    "&Yes"    },
+    { wxNO,     "&No"     },
+    { wxOK,     "&Ok"     },
+    { wxCANCEL, "&Cancel" },
+};
+
+BEGIN_EVENT_TABLE(TestMessageBoxDialog, wxDialog)
+    EVT_BUTTON(wxID_APPLY, TestMessageBoxDialog::OnApply)
+    EVT_BUTTON(wxID_CLOSE, TestMessageBoxDialog::OnClose)
+END_EVENT_TABLE()
+
+TestMessageBoxDialog::TestMessageBoxDialog(wxWindow *parent)
+                    : wxDialog(parent, wxID_ANY, "Message Box Test Dialog",
+                               wxDefaultPosition, wxDefaultSize,
+                               wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
+{
+    wxSizer * const sizerTop = new wxBoxSizer(wxVERTICAL);
+
+    // this sizer allows to configure the messages shown in the message box
+    wxSizer * const
+        sizerMsgs = new wxStaticBoxSizer(wxVERTICAL, this, "&Messages");
+    sizerMsgs->Add(new wxStaticText(this, wxID_ANY, "&Main message:"));
+    m_textMsg = new wxTextCtrl(this, wxID_ANY, "",
+                               wxDefaultPosition, wxDefaultSize,
+                               wxTE_MULTILINE);
+    sizerMsgs->Add(m_textMsg, wxSizerFlags(1).Expand().Border(wxBOTTOM));
+
+    sizerMsgs->Add(new wxStaticText(this, wxID_ANY, "&Extended message:"));
+    m_textExtMsg = new wxTextCtrl(this, wxID_ANY, "",
+                                  wxDefaultPosition, wxDefaultSize,
+                                  wxTE_MULTILINE);
+    sizerMsgs->Add(m_textExtMsg, wxSizerFlags(1).Expand());
+
+    sizerTop->Add(sizerMsgs, wxSizerFlags(1).Expand().Border());
+
+
+    // this one is for configuring the buttons
+    wxFlexGridSizer * const sizerBtns = new wxFlexGridSizer(2, 5, 5);
+    sizerBtns->AddGrowableCol(1);
+
+    sizerBtns->Add(new wxStaticText(this, wxID_ANY, "Button(s)"));
+    sizerBtns->Add(new wxStaticText(this, wxID_ANY, "Custom label"));
+
+    for ( int n = 0; n < Btn_Max; n++ )
+    {
+        m_buttons[n] = new wxCheckBox(this, wxID_ANY, ms_btnInfo[n].name);
+        sizerBtns->Add(m_buttons[n], wxSizerFlags().Centre().Left());
+
+        m_labels[n] = new wxTextCtrl(this, wxID_ANY);
+        sizerBtns->Add(m_labels[n], wxSizerFlags(1).Centre().Expand());
+
+        m_labels[n]->Connect(wxEVT_UPDATE_UI,
+                             wxUpdateUIEventHandler(
+                                 TestMessageBoxDialog::OnUpdateLabelUI),
+                             NULL,
+                             this);
+    }
+
+    wxSizer * const
+        sizerBtnsBox = new wxStaticBoxSizer(wxVERTICAL, this, "&Buttons");
+    sizerBtnsBox->Add(sizerBtns, wxSizerFlags(1).Expand());
+    sizerTop->Add(sizerBtnsBox, wxSizerFlags().Expand().Border());
+
+
+    // icon choice
+    const wxString icons[] = {
+        "&Information", "&Question", "&Warning", "&Error"
+    };
+
+    m_icons = new wxRadioBox(this, wxID_ANY, "&Icon:",
+                             wxDefaultPosition, wxDefaultSize,
+                             WXSIZEOF(icons), icons);
+    sizerTop->Add(m_icons, wxSizerFlags().Expand().Border());
+
+
+    // finally buttons to show the resulting message box and close this dialog
+    sizerTop->Add(CreateStdDialogButtonSizer(wxAPPLY | wxCLOSE),
+                  wxSizerFlags().Right().Border());
+
+    SetSizerAndFit(sizerTop);
+}
+
+void TestMessageBoxDialog::OnUpdateLabelUI(wxUpdateUIEvent& event)
+{
+    for ( int n = 0; n < Btn_Max; n++ )
+    {
+        if ( event.GetEventObject() == m_labels[n] )
+        {
+            event.Enable( m_buttons[n]->IsChecked() );
+            return;
+        }
+    }
+
+    wxFAIL_MSG( "called for unknown label" );
+}
+
+void TestMessageBoxDialog::OnApply(wxCommandEvent& WXUNUSED(event))
+{
+    long style = 0;
+
+    for ( int n = 0; n < Btn_Max; n++ )
+    {
+        if ( m_buttons[n]->IsChecked() )
+            style |= ms_btnInfo[n].flag;
+    }
+
+    switch ( m_icons->GetSelection() )
+    {
+        case 0: style |= wxICON_INFORMATION; break;
+        case 1: style |= wxICON_QUESTION; break;
+        case 2: style |= wxICON_WARNING; break;
+        case 3: style |= wxICON_ERROR; break;
+    }
+
+    wxMessageDialog dlg(this, m_textMsg->GetValue(), "Test Message Box",
+                        style);
+    if ( !m_textExtMsg->IsEmpty() )
+        dlg.SetExtendedMessage(m_textExtMsg->GetValue());
+
+    if ( style & wxYES_NO )
+    {
+        if ( style & wxCANCEL )
+        {
+            dlg.SetYesNoCancelLabels(m_labels[Btn_Yes]->GetValue(),
+                                     m_labels[Btn_No]->GetValue(),
+                                     m_labels[Btn_Cancel]->GetValue());
+        }
+        else
+        {
+            dlg.SetYesNoLabels(m_labels[Btn_Yes]->GetValue(),
+                               m_labels[Btn_No]->GetValue());
+        }
+    }
+    else
+    {
+        if ( style & wxCANCEL )
+        {
+            dlg.SetOKCancelLabels(m_labels[Btn_Ok]->GetValue(),
+                                  m_labels[Btn_Cancel]->GetValue());
+        }
+        else
+        {
+            dlg.SetOKLabel(m_labels[Btn_Ok]->GetValue());
+        }
+    }
+
+    dlg.ShowModal();
+}
+
+void TestMessageBoxDialog::OnClose(wxCommandEvent& WXUNUSED(event))
+{
+    EndModal(wxID_CANCEL);
 }
 
 #endif // USE_SETTINGS_DIALOG
