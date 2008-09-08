@@ -155,10 +155,19 @@ public:
     }
     
     
+    void SetWindow(wxWindow* w) { window = w; }
     wxWindow* GetWindow() { return window; }
+    
+    void SetId(int new_id) { id = new_id; }
     int GetId() const { return id; }
+    
+    void SetKind(int new_kind) { kind = new_kind; }
     int GetKind() const { return kind; }
+    
+    void SetState(int new_state) { state = new_state; }
     int GetState() const { return state; }
+    
+    void SetSizerItem(wxSizerItem* s) { sizer_item = s; }
     wxSizerItem* GetSizerItem() const { return sizer_item; }
     
     void SetLabel(const wxString& s) { label = s; }
