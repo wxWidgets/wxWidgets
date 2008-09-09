@@ -181,6 +181,7 @@ private:
     void OnApply(wxCommandEvent& event);
     void OnClose(wxCommandEvent& event);
     void OnUpdateLabelUI(wxUpdateUIEvent& event);
+    void OnUpdateNoDefaultUI(wxUpdateUIEvent& event);
 
     enum
     {
@@ -206,6 +207,9 @@ private:
     wxTextCtrl *m_labels[Btn_Max];
 
     wxRadioBox *m_icons;
+
+    wxCheckBox *m_chkNoDefault,
+               *m_chkCentre;
 
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(TestMessageBoxDialog)

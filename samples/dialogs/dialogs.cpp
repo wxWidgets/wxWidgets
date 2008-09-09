@@ -2162,7 +2162,7 @@ TestMessageBoxDialog::TestMessageBoxDialog(wxWindow *parent)
     wxSizer * const
         sizerMsgs = new wxStaticBoxSizer(wxVERTICAL, this, "&Messages");
     sizerMsgs->Add(new wxStaticText(this, wxID_ANY, "&Main message:"));
-    m_textMsg = new wxTextCtrl(this, wxID_ANY, "",
+    m_textMsg = new wxTextCtrl(this, wxID_ANY, "Hello from a box!",
                                wxDefaultPosition, wxDefaultSize,
                                wxTE_MULTILINE);
     sizerMsgs->Add(m_textMsg, wxSizerFlags(1).Expand().Border(wxBOTTOM));
@@ -2215,11 +2215,30 @@ TestMessageBoxDialog::TestMessageBoxDialog(wxWindow *parent)
     sizerTop->Add(m_icons, wxSizerFlags().Expand().Border());
 
 
+    // miscellaneous other stuff
+    wxSizer * const
+        sizerFlags = new wxStaticBoxSizer(wxHORIZONTAL, this, "&Other flags");
+
+    m_chkNoDefault = new wxCheckBox(this, wxID_ANY, "Make \"No\" &default");
+    m_chkNoDefault->Connect(wxEVT_UPDATE_UI,
+                            wxUpdateUIEventHandler(
+                                TestMessageBoxDialog::OnUpdateNoDefaultUI),
+                            NULL,
+                            this);
+    sizerFlags->Add(m_chkNoDefault, wxSizerFlags(1).Border());
+
+    m_chkCentre = new wxCheckBox(this, wxID_ANY, "Centre on &parent");
+    sizerFlags->Add(m_chkCentre, wxSizerFlags(1).Border());
+
+    sizerTop->Add(sizerFlags, wxSizerFlags().Expand().Border());
+
     // finally buttons to show the resulting message box and close this dialog
     sizerTop->Add(CreateStdDialogButtonSizer(wxAPPLY | wxCLOSE),
                   wxSizerFlags().Right().Border());
 
     SetSizerAndFit(sizerTop);
+
+    m_buttons[Btn_Ok]->SetValue(true);
 }
 
 void TestMessageBoxDialog::OnUpdateLabelUI(wxUpdateUIEvent& event)
@@ -2234,6 +2253,11 @@ void TestMessageBoxDialog::OnUpdateLabelUI(wxUpdateUIEvent& event)
     }
 
     wxFAIL_MSG( "called for unknown label" );
+}
+
+void TestMessageBoxDialog::OnUpdateNoDefaultUI(wxUpdateUIEvent& event)
+{
+    event.Enable( m_buttons[Btn_No]->IsChecked() );
 }
 
 void TestMessageBoxDialog::OnApply(wxCommandEvent& WXUNUSED(event))
@@ -2253,6 +2277,13 @@ void TestMessageBoxDialog::OnApply(wxCommandEvent& WXUNUSED(event))
         case 2: style |= wxICON_WARNING; break;
         case 3: style |= wxICON_ERROR; break;
     }
+
+    if ( m_chkCentre->IsChecked() )
+        style |= wxCENTRE;
+
+    if ( m_chkNoDefault->IsEnabled() && m_chkNoDefault->IsChecked() )
+        style |= wxNO_DEFAULT;
+
 
     wxMessageDialog dlg(this, m_textMsg->GetValue(), "Test Message Box",
                         style);
