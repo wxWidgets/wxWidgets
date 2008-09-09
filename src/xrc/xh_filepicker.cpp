@@ -41,7 +41,7 @@ wxObject *wxFilePickerCtrlXmlHandler::DoCreateResource()
     picker->Create(m_parentAsWindow,
                   GetID(),
                   GetParamValue(wxT("value")),
-                  GetParamValue(wxT("message")),
+                  GetText(wxT("message")),
                   GetParamValue(wxT("wildcard")),
                   GetPosition(), GetSize(),
                   GetStyle(_T("style"), wxFLP_DEFAULT_STYLE),
