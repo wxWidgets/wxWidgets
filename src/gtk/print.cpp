@@ -1911,14 +1911,8 @@ void wxGtkPrinterDCImpl::SetFont( const wxFont& font )
         if (m_fontdesc)
             pango_font_description_free( m_fontdesc );
 
-        m_fontdesc = pango_font_description_copy( m_font.GetNativeFontInfo()->description ); // m_fontdesc is now set to device units
+        m_fontdesc = pango_font_description_copy( m_font.GetNativeFontInfo()->description );
 
-        // Scale font description from device units to pango units
-        gint oldSize = pango_font_description_get_size( m_fontdesc );
-        double size = oldSize *m_DEV2PS;                          // scale to cairo units
-        pango_font_description_set_size( m_fontdesc, (gint)size );    // apply to description
-
-        // Actually apply scaled font.
         pango_layout_set_font_description( m_layout, m_fontdesc );
     }
 }
