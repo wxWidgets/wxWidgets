@@ -38,7 +38,7 @@ wxObject *wxDirPickerCtrlXmlHandler::DoCreateResource()
    picker->Create(m_parentAsWindow,
                   GetID(),
                   GetParamValue(wxT("value")),
-                  GetParamValue(wxT("message")),
+                  GetText(wxT("message")),
                   GetPosition(), GetSize(),
                   GetStyle(_T("style"), wxDIRP_DEFAULT_STYLE),
                   wxDefaultValidator,
