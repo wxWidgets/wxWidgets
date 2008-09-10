@@ -324,7 +324,7 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
         
         wxRegion updateRgn;
         const NSRect *rects;
-        int count ;
+        NSInteger count;
 
         [self getRectsBeingDrawn:&rects count:&count];
         for ( int i = 0 ; i < count ; ++i )

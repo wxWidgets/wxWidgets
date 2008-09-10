@@ -348,7 +348,11 @@ private:
 
 - (NSToolbarItem*) toolbar:(NSToolbar*) toolbar itemForItemIdentifier:(NSString*) itemIdentifier willBeInsertedIntoToolbar:(BOOL) flag
 {
+#ifdef __LP64__
+    wxToolBarTool* tool = (wxToolBarTool*) [itemIdentifier longLongValue];
+#else
     wxToolBarTool* tool = (wxToolBarTool*) [itemIdentifier intValue];
+#endif
     if ( tool )
     {
         wxNSToolbarItem* item = (wxNSToolbarItem*) tool->GetToolbarItemRef();
@@ -943,7 +947,7 @@ bool wxToolBar::Realize()
                             }
                         }
                     }
-                    wxString identifier = wxString::Format( wxT("%d"), (int) tool );
+                    wxString identifier = wxString::Format( wxT("%ld"), (long) tool );
                     wxCFStringRef cfidentifier(identifier);
 
                     [refTB insertItemWithItemIdentifier:cfidentifier.AsNSString() atIndex:currentPosition];
@@ -1225,7 +1229,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
 #if wxOSX_USE_NATIVE_TOOLBAR
                 if (m_macToolbar != NULL)
                 {
-                    wxString identifier = wxString::Format(wxT("%d"), (int) tool);
+                    wxString identifier = wxString::Format(wxT("%ld"), (long) tool);
                     wxCFStringRef cfidentifier( identifier, wxFont::GetDefaultEncoding() );
                     wxNSToolbarItem* item = [[wxNSToolbarItem alloc] initWithItemIdentifier:cfidentifier.AsNSString() ];
                     [item setImplementation:tool];
@@ -1256,7 +1260,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
                 WXWidget view = (WXWidget) tool->GetControl()->GetHandle() ;
                 wxCHECK_MSG( view, false, _T("control must be non-NULL") );
 
-                wxString identifier = wxString::Format(wxT("%d"), (int) tool);
+                wxString identifier = wxString::Format(wxT("%ld"), (long) tool);
                 wxCFStringRef cfidentifier( identifier, wxFont::GetDefaultEncoding() );
                 wxNSToolbarItem* item = [[wxNSToolbarItem alloc] initWithItemIdentifier:cfidentifier.AsNSString() ];
                 [item setImplementation:tool];
