@@ -1414,7 +1414,7 @@ bool wxListLineData::SetAttributes(wxDC *dc,
 #ifdef __WXMAC__
     {
         if (m_owner->HasFocus()
-#if !defined(__WXUNIVERSAL__)
+#if !defined(__WXUNIVERSAL__) && wxOSX_USE_CARBON
                 && IsControlActive( (ControlRef)m_owner->GetHandle() )
 #endif
         )
@@ -1478,7 +1478,7 @@ void wxListLineData::Draw( wxDC *dc )
         {
             int flags = wxCONTROL_SELECTED;
             if (m_owner->HasFocus()
-#if defined( __WXMAC__ ) && !defined(__WXUNIVERSAL__)
+#if defined( __WXMAC__ ) && !defined(__WXUNIVERSAL__) && wxOSX_USE_CARBON
                 && IsControlActive( (ControlRef)m_owner->GetHandle() )
 #endif
             )
