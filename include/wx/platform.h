@@ -662,7 +662,18 @@
 /*  According to Stefan even ancient Mac compilers defined __BIG_ENDIAN__ */
 #    warning "Compiling wxMac with probably wrong endianness"
 #endif
-
+/* also the 32/64 bit universal builds must be handled accordingly */
+#ifdef __DARWIN__
+#	ifdef __LP64__
+#		define SIZEOF_VOID_P 8
+#		define SIZEOF_LONG 8
+#		define SIZEOF_SIZE_T 8
+#	else
+#		define SIZEOF_VOID_P 4
+#		define SIZEOF_LONG 4
+#		define SIZEOF_SIZE_T 4
+#	endif
+#endif
 /*
    check the consistency of the settings in setup.h: note that this must be
    done after setting wxUSE_UNICODE correctly as it is used in wx/chkconf.h
