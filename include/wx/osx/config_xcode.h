@@ -30,6 +30,8 @@
 #define HAVE_STATIC_CAST 
 #define HAVE_VA_COPY 1
 #define HAVE_VARIADIC_MACROS 1
+#define HAVE_VISIBILITY 1
+#define wxHAVE_PTHREAD_CLEANUP 1
 #define CONST_COMPATIBILITY 0
 #define WX_TIMEZONE timezone
 #define WX_SOCKLEN_T socklen_t
@@ -39,8 +41,14 @@
 #define WX_GMTOFF_IN_TM 1
 #define HAVE_PW_GECOS 1
 #define HAVE_DLOPEN 1
+#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
+/* #undef HAVE_CXA_DEMANGLE */
+#else
+#define HAVE_CXA_DEMANGLE 1
+#endif
 #define HAVE_GETTIMEOFDAY 1
 #define HAVE_FSYNC 1
+#define HAVE_ROUND 1
 #define HAVE_SCHED_YIELD 1
 #define HAVE_PTHREAD_MUTEXATTR_T 1
 #define HAVE_PTHREAD_MUTEXATTR_SETTYPE_DECL 1
@@ -53,9 +61,12 @@
 #define HAVE_STATFS_DECL 1
 #define HAVE_STRPTIME 1
 #define HAVE_STRPTIME_DECL 1
+#define HAVE_STRTOULL 1
 #define HAVE_THREAD_PRIORITY_FUNCTIONS 1
 #define HAVE_VSNPRINTF 1
 #define HAVE_VSNPRINTF_DECL 1
+#define HAVE_VSSCANF 1
+#define HAVE_VSSCANF_DECL 1
 #define HAVE_USLEEP 1
 #define HAVE_WCSLEN 1
 #define SIZEOF_WCHAR_T 4
@@ -70,9 +81,10 @@
 #define SIZEOF_LONG 4
 #define SIZEOF_SIZE_T 4
 #endif
-
 #define SIZEOF_LONG_LONG 8
 #define wxSIZE_T_IS_ULONG 1
+#define wxWCHAR_T_IS_REAL_TYPE 1
+#define HAVE_DLERROR 1
 #define HAVE_FCNTL 1
 #define HAVE_GETHOSTBYNAME 1
 #define HAVE_GETSERVBYNAME 1
@@ -81,7 +93,8 @@
 #define HAVE_INET_ATON 1
 #define HAVE_LOCALTIME_R 1
 #define HAVE_MKSTEMP 1
-#define HAVE_PUTENV 1
+#define HAVE_SETENV 1
+/* #define HAVE_PUTENV 1 */
 #define HAVE_STRTOK_R 1
 #define HAVE_UNAME 1
 #define HAVE_USLEEP 1
@@ -105,6 +118,11 @@
 #define HAVE_VSWSCANF 1
 #define HAVE_FSEEKO 1
 #define HAVE_SYS_SELECT_H 1
+#define HAVE_FDOPEN 1
+#define HAVE_SYSCONF 1
+#define HAVE_GETPWUID_R 1
+#define HAVE_GETGRGID_R 1
+#define HAVE_LOCALE_T 1
 
 #define WXWIN_OS_DESCRIPTION "Darwin 7.9.0 Power Macintosh"
 #define PACKAGE_BUGREPORT "wx-dev@lists.wxwidgets.org"
