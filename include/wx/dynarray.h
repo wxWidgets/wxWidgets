@@ -282,6 +282,21 @@ protected:                                                          \
   const_iterator begin() const { return m_pItems; }                 \
   const_iterator end() const { return m_pItems + m_nCount; }        \
                                                                     \
+  void swap(name& other)                                            \
+  {                                                                 \
+    const size_t savedSize = m_nSize;                               \
+    const size_t savedCount = m_nCount;                             \
+    T * const savedItems = m_pItems;                                \
+                                                                    \
+    m_nSize = other.m_nSize;                                        \
+    m_nCount = other.m_nCount;                                      \
+    m_pItems = other.m_pItems;                                      \
+                                                                    \
+    other.m_nSize = savedSize;                                      \
+    other.m_nCount = savedCount;                                    \
+    other.m_pItems = savedItems;                                    \
+  }                                                                 \
+                                                                    \
   /* the following functions may be made directly public because */ \
   /* they don't use the type of the elements at all */              \
 public:                                                             \
@@ -487,6 +502,7 @@ public:                                                               \
   void reserve(size_type n) { base::reserve(n); }                     \
   void resize(size_type n, value_type v = value_type())               \
     { base::resize(n, v); }                                           \
+  void swap(name& other) { base::swap(other); }                       \
 }
 
 #define _WX_PTROP pointer operator->() const { return m_ptr; }
