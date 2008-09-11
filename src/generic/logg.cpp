@@ -364,27 +364,7 @@ void wxLogGui::Flush()
     // situation without it
     if ( !str.empty() )
     {
-        // we use a message dialog with 2 buttons to be able to use one of them
-        // for copying the message text to clipboard
-#if wxUSE_CLIPBOARD
-        wxMessageDialog dlg(NULL, str, title, style | wxYES_NO);
-        if ( !dlg.SetYesNoLabels(wxID_COPY, wxID_OK) )
-#endif // wxUSE_CLIPBOARD
-        {
-            // but if custom labels are not supported it makes no sense to keep
-            // two buttons so revert to a single one
-            dlg.SetMessageDialogStyle(style | wxOK);
-        }
-
-#if wxUSE_CLIPBOARD
-        if ( dlg.ShowModal() == wxID_YES )
-        {
-            // this means the wxID_COPY button was selected
-            wxClipboardLocker clip;
-            if ( !clip || !wxTheClipboard->AddData(new wxTextDataObject(str)) )
-                wxLogError(_("Failed to copy dialog contents to the clipboard."));
-        }
-#endif // wxUSE_CLIPBOARD
+        wxMessageBox(str, title, wxOK | style);
 
         // no undisplayed messages whatsoever
         Clear();
