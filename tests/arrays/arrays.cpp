@@ -170,6 +170,7 @@ private:
         CPPUNIT_TEST( wxArrayCharTest );
         CPPUNIT_TEST( TestSTL );
         CPPUNIT_TEST( Alloc );
+        CPPUNIT_TEST( Swap );
     CPPUNIT_TEST_SUITE_END();
 
     void wxStringArrayTest();
@@ -182,6 +183,7 @@ private:
     void wxArrayCharTest();
     void TestSTL();
     void Alloc();
+    void Swap();
 
     DECLARE_NO_COPY_CLASS(ArraysTestCase)
 };
@@ -553,6 +555,28 @@ void ArraysTestCase::Alloc()
     CPPUNIT_ASSERT_EQUAL( size_t(2), a.GetCount() );
     CPPUNIT_ASSERT_EQUAL( 17, a[0] );
     CPPUNIT_ASSERT_EQUAL( 9, a[1] );
+}
+
+void ArraysTestCase::Swap()
+{
+    wxArrayString a1, a2;
+    a1.swap(a2);
+    CPPUNIT_ASSERT( a1.empty() && a2.empty() );
+
+    a1.push_back("Foo");
+    a1.swap(a2);
+    CPPUNIT_ASSERT( a1.empty() );
+    CPPUNIT_ASSERT_EQUAL( 1, a2.size() );
+
+    a1.push_back("Bar");
+    a1.push_back("Baz");
+    a2.swap(a1);
+    CPPUNIT_ASSERT_EQUAL( 1, a1.size() );
+    CPPUNIT_ASSERT_EQUAL( 2, a2.size() );
+
+    a1.swap(a2);
+    CPPUNIT_ASSERT_EQUAL( 2, a1.size() );
+    CPPUNIT_ASSERT_EQUAL( 1, a2.size() );
 }
 
 void ArraysTestCase::TestSTL()

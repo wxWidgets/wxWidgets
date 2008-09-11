@@ -301,6 +301,25 @@ public:
   void reserve(size_type n) /* base::reserve*/;
   void resize(size_type n, value_type v = value_type());
   size_type size() const { return GetCount(); }
+  void swap(wxArrayString& other)
+  {
+      // not sure if we can rely on having std::swap() everywhere so do it
+      // manually
+      const size_t savedSize = m_nSize;
+      const size_t savedCount = m_nCount;
+      wxString * const savedItems = m_pItems;
+      const bool savedAutoSort = m_autoSort;
+
+      m_nSize = other.m_nSize;
+      m_nCount = other.m_nCount;
+      m_pItems = other.m_pItems;
+      m_autoSort = other.m_autoSort;
+
+      other.m_nSize = savedSize;
+      other.m_nCount = savedCount;
+      other.m_pItems = savedItems;
+      other.m_autoSort = savedAutoSort;
+  }
 
 protected:
   void Init(bool autoSort);             // common part of all ctors
