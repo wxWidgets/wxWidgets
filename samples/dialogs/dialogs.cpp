@@ -2339,7 +2339,9 @@ private:
                                         const wxString& title,
                                         int style)
     {
-        wxMessageDialog dlg(NULL, message, title, wxOK | style);
+        wxMessageDialog dlg(NULL, message, title,
+                            wxOK | wxCANCEL | wxCANCEL_DEFAULT | style);
+        dlg.SetOKCancelLabels(wxID_COPY, wxID_OK);
         dlg.SetExtendedMessage("Note that this is a custom log dialog.");
         dlg.ShowModal();
     }
