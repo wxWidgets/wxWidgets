@@ -2138,7 +2138,8 @@ wxPanel* SettingsDialog::CreateAestheticSettingsPage(wxWindow* parent)
 // TestMessageBoxDialog
 // ----------------------------------------------------------------------------
 
-TestMessageBoxDialog::BtnInfo TestMessageBoxDialog::ms_btnInfo[] =
+/* static */
+const TestMessageBoxDialog::BtnInfo TestMessageBoxDialog::ms_btnInfo[] =
 {
     { wxYES,    "&Yes"    },
     { wxNO,     "&No"     },

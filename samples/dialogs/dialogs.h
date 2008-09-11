@@ -195,10 +195,10 @@ private:
     struct BtnInfo
     {
         int flag;
-        wxString name;
+        const char *name;
     };
 
-    static BtnInfo ms_btnInfo[Btn_Max];
+    static const BtnInfo ms_btnInfo[Btn_Max];
 
     wxTextCtrl *m_textMsg,
                *m_textExtMsg;
