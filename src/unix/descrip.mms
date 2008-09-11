@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 8 April 2008                                                        *
+# Date : 10 September 2008                                                   *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -61,7 +61,7 @@ OBJECTS = appunix.obj,apptraits.obj,\
 		sound_sdl.obj,\
 		stdpaths.obj,\
 		taskbarx11.obj,\
-		timerunx.obj
+		timerunx.obj,evtloopunix.obj
 
 SOURCES = appunix.cpp,apptraits.cpp,\
 		dialup.cpp,\
@@ -81,7 +81,7 @@ SOURCES = appunix.cpp,apptraits.cpp,\
 		sound_sdl.cpp,\
 		stdpaths.cpp,\
 		taskbarx11.cpp,\
-		timerunx.cpp
+		timerunx.cpp,evtloopunix.cpp
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -122,3 +122,4 @@ stdpaths.obj : stdpaths.cpp
 taskbarx11.obj : taskbarx11.cpp
 displayx11.obj : displayx11.cpp
 timerunx.obj : timerunx.cpp
+evtloopunix.obj : evtloopunix.cpp

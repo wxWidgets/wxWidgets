@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 20 June 2008                                                       *
+ * Date : 10 September 2008                                                  *
  *                                                                           *
  *****************************************************************************/
 
@@ -235,7 +235,7 @@ typedef pid_t GPid;
 
 #define wxUSE_BASE64        1
 
-#define wxUSE_CONSOLE_EVENTLOOP 0
+#define wxUSE_CONSOLE_EVENTLOOP 1
 
 #define wxUSE_FILE          1
 #define wxUSE_FFILE         1
@@ -1273,5 +1273,6 @@ typedef pid_t GPid;
 
 #undef HAVE_SYS_SELECT_H
 
+#define __VMS_BROKEN_TEMPLATES
 
 #endif /* __WX_SETUP_H__ */
