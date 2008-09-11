@@ -78,7 +78,6 @@ zip:
 
 
 # Include dependency info, if present:
-@IF_GNU_MAKE@-include ./.deps/*.d
+@IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all install uninstall clean distclean about help helpview printing test \
-	virtual widget zip
+.PHONY: all install uninstall clean distclean about help helpview printing test virtual widget zip

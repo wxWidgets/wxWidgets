@@ -88,10 +88,10 @@ RENDDLL_OBJECTS =  \
 @COND_PLATFORM_UNIX_1@PLUGIN_VERSION0 = $(WX_VERSION)
 @COND_PLATFORM_UNIX_0@PLUGVERDELIM = 
 @COND_PLATFORM_UNIX_1@PLUGVERDELIM = -
-@COND_BUILD_RELEASE_UNICODE_0@PLUGINSUFFIX = 
 @COND_BUILD_DEBUG_UNICODE_0@PLUGINSUFFIX = d
-@COND_BUILD_RELEASE_UNICODE_1@PLUGINSUFFIX = u
 @COND_BUILD_DEBUG_UNICODE_1@PLUGINSUFFIX = ud
+@COND_BUILD_RELEASE_UNICODE_0@PLUGINSUFFIX = 
+@COND_BUILD_RELEASE_UNICODE_1@PLUGINSUFFIX = u
 @COND_PLATFORM_MAC_0@__render___mac_setfilecmd = @true
 @COND_PLATFORM_MAC_1@__render___mac_setfilecmd = \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -t APPL render$(EXEEXT)
@@ -114,8 +114,12 @@ COND_PLATFORM_OS2_1___render___os2_emxbindcmd = $(NM) render$(EXEEXT) | if grep 
 @COND_PLATFORM_MACOSX_1@__render_bundle___depname = render_bundle
 @COND_TOOLKIT_COCOA@____render_BUNDLE_TGT_REF_DEP = \
 @COND_TOOLKIT_COCOA@	$(__render_app_Contents_PkgInfo___depname)
-@COND_TOOLKIT_MAC@____render_BUNDLE_TGT_REF_DEP = \
-@COND_TOOLKIT_MAC@	$(__render_app_Contents_PkgInfo___depname)
+@COND_TOOLKIT_OSX_CARBON@____render_BUNDLE_TGT_REF_DEP \
+@COND_TOOLKIT_OSX_CARBON@	= $(__render_app_Contents_PkgInfo___depname)
+@COND_TOOLKIT_OSX_COCOA@____render_BUNDLE_TGT_REF_DEP \
+@COND_TOOLKIT_OSX_COCOA@	= $(__render_app_Contents_PkgInfo___depname)
+@COND_TOOLKIT_OSX_IPHONE@____render_BUNDLE_TGT_REF_DEP \
+@COND_TOOLKIT_OSX_IPHONE@	= $(__render_app_Contents_PkgInfo___depname)
 COND_SHARED_1___renddll___depname = \
 	$(DLLPREFIX_MODULE)renddll_$(PORTNAME)$(WXUNIVNAME)$(PLUGINSUFFIX)$(PLUGVERDELIM)$(PLUGIN_VERSION0)$(WXCOMPILER).$(SO_SUFFIX_MODULE)
 @COND_SHARED_1@__renddll___depname = $(COND_SHARED_1___renddll___depname)
@@ -173,7 +177,7 @@ distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 render$(EXEEXT): $(RENDER_OBJECTS) $(__render___win32rc)
-	$(CXX) -o $@ $(RENDER_OBJECTS)    -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
+	$(CXX) -o $@ $(RENDER_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  $(LIBS) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
 	
 	$(__render___mac_setfilecmd)
 	$(__render___os2_emxbindcmd)
@@ -202,7 +206,7 @@ render$(EXEEXT): $(RENDER_OBJECTS) $(__render___win32rc)
 @COND_PLATFORM_MACOSX_1@render_bundle: $(____render_BUNDLE_TGT_REF_DEP)
 
 @COND_SHARED_1@$(DLLPREFIX_MODULE)renddll_$(PORTNAME)$(WXUNIVNAME)$(PLUGINSUFFIX)$(PLUGVERDELIM)$(PLUGIN_VERSION0)$(WXCOMPILER).$(SO_SUFFIX_MODULE): $(RENDDLL_OBJECTS)
-@COND_SHARED_1@	$(SHARED_LD_MODULE_CXX) $@ $(RENDDLL_OBJECTS)    -L$(LIBDIRNAME) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
+@COND_SHARED_1@	$(SHARED_LD_MODULE_CXX) $@ $(RENDDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME)  $(LIBS) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
 
 @COND_SHARED_1@install_renddll: 
 @COND_SHARED_1@	$(INSTALL_DIR) $(DESTDIR)$(PLUGINS_INST_DIR)
@@ -231,7 +235,6 @@ monolib_stc.o monodll_stc.o stcdll_stc.o stclib_stc.o: \
 $(srcdir)/include/wx/stc/stc.h
 
 # Include dependency info, if present:
-@IF_GNU_MAKE@-include ./.deps/*.d
+@IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all install uninstall clean distclean render_bundle install_renddll \
-	uninstall_renddll
+.PHONY: all install uninstall clean distclean render_bundle install_renddll uninstall_renddll
