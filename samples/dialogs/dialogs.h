@@ -98,15 +98,31 @@ of MSW, MAC and OS2
     #define USE_SETTINGS_DIALOG 0
 #endif
 
+#if wxUSE_LOG
+
+// Custom application traits class which we use to override the default log
+// target creation
+class MyAppTraits : public wxGUIAppTraits
+{
+public:
+    virtual wxLog *CreateLogTarget();
+};
+
+#endif // wxUSE_LOG
 
 // Define a new application type
 class MyApp: public wxApp
 {
 public:
-    bool OnInit();
+    virtual bool OnInit();
 
     wxFont       m_canvasFont;
     wxColour     m_canvasTextColour;
+
+protected:
+#if wxUSE_LOG
+    virtual wxAppTraits *CreateTraits() { return new MyAppTraits; }
+#endif // wxUSE_LOG
 };
 
 #if USE_MODAL_PRESENTATION

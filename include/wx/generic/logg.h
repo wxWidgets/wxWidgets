@@ -63,8 +63,17 @@ protected:
 
     wxSUPPRESS_DOLOG_HIDE_WARNING()
 
+    // return the title to be used for the log dialog, depending on m_bErrors
+    // and m_bWarnings values
+    wxString GetTitle() const;
+
+    // return the icon (one of wxICON_XXX constants) to be used for the dialog
+    // depending on m_bErrors/m_bWarnings
+    int GetSeverityIcon() const;
+
     // empty everything
     void Clear();
+
 
     wxArrayString m_aMessages;      // the log message texts
     wxArrayInt    m_aSeverity;      // one of wxLOG_XXX values
@@ -73,6 +82,19 @@ protected:
                   m_bWarnings,      // any warnings?
                   m_bHasMessages;   // any messages at all?
 
+private:
+    // this method is called to show a single log message, it uses
+    // wxMessageBox() by default
+    virtual void DoShowSingleLogMessage(const wxString& message,
+                                        const wxString& title,
+                                        int style);
+
+    // this method is called to show multiple log messages, it uses wxLogDialog
+    virtual void DoShowMultipleLogMessages(const wxArrayString& messages,
+                                           const wxArrayInt& severities,
+                                           const wxArrayLong& times,
+                                           const wxString& title,
+                                           int style);
 };
 
 #endif // wxUSE_LOGGUI

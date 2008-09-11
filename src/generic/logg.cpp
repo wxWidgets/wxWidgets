@@ -281,6 +281,74 @@ void wxLogGui::Clear()
     m_aTimes.Empty();
 }
 
+int wxLogGui::GetSeverityIcon() const
+{
+    return m_bErrors ? wxICON_STOP
+                     : m_bWarnings ? wxICON_EXCLAMATION
+                                   : wxICON_INFORMATION;
+}
+
+wxString wxLogGui::GetTitle() const
+{
+    wxString titleFormat;
+    switch ( GetSeverityIcon() )
+    {
+        case wxICON_STOP:
+            titleFormat = _("%s Error");
+            break;
+
+        case wxICON_EXCLAMATION:
+            titleFormat = _("%s Warning");
+            break;
+
+        default:
+            wxFAIL_MSG( "unexpected icon severity" );
+            // fall through
+
+        case wxICON_INFORMATION:
+            titleFormat = _("%s Information");
+    }
+
+    return wxString::Format(titleFormat, wxTheApp->GetAppDisplayName());
+}
+
+void
+wxLogGui::DoShowSingleLogMessage(const wxString& message,
+                                 const wxString& title,
+                                 int style)
+{
+    wxMessageBox(message, title, wxOK | style);
+}
+
+void
+wxLogGui::DoShowMultipleLogMessages(const wxArrayString& messages,
+                                    const wxArrayInt& severities,
+                                    const wxArrayLong& times,
+                                    const wxString& title,
+                                    int style)
+{
+#if wxUSE_LOG_DIALOG
+    wxLogDialog dlg(NULL,
+                    messages, severities, times,
+                    title, style);
+
+    // clear the message list before showing the dialog because while it's
+    // shown some new messages may appear
+    Clear();
+
+    (void)dlg.ShowModal();
+#else // !wxUSE_LOG_DIALOG
+    // start from the most recent message
+    wxString message;
+    str.reserve(nMsgCount*100);
+    for ( size_t n = nMsgCount; n > 0; n-- ) {
+        message << m_aMessages[n - 1] << wxT("\n");
+    }
+
+    DoShowSingleLogMessage(message, title, style);
+#endif // wxUSE_LOG_DIALOG/!wxUSE_LOG_DIALOG
+}
+
 void wxLogGui::Flush()
 {
     if ( !m_bHasMessages )
@@ -289,85 +357,45 @@ void wxLogGui::Flush()
     // do it right now to block any new calls to Flush() while we're here
     m_bHasMessages = false;
 
+    // note that this must be done before examining m_aMessages as it may log
+    // yet another message
     const unsigned repeatCount = LogLastRepeatIfNeeded();
 
-    wxString appName = wxTheApp->GetAppDisplayName();
+    const size_t nMsgCount = m_aMessages.size();
 
-    long style;
-    wxString titleFormat;
-    if ( m_bErrors ) {
-        titleFormat = _("%s Error");
-        style = wxICON_STOP;
-    }
-    else if ( m_bWarnings ) {
-        titleFormat = _("%s Warning");
-        style = wxICON_EXCLAMATION;
-    }
-    else {
-        titleFormat = _("%s Information");
-        style = wxICON_INFORMATION;
+    if ( repeatCount > 0 )
+    {
+        m_aMessages[nMsgCount - 1] << " (" << m_aMessages[nMsgCount - 2] << ")";
     }
 
-    wxString title;
-    title.Printf(titleFormat, appName.c_str());
-
-    size_t nMsgCount = m_aMessages.GetCount();
+    const wxString title = GetTitle();
+    const int style = GetSeverityIcon();
 
     // avoid showing other log dialogs until we're done with the dialog we're
     // showing right now: nested modal dialogs make for really bad UI!
     Suspend();
 
-    wxString str;
     if ( nMsgCount == 1 )
     {
-        str = m_aMessages[0];
+        // make a copy before calling Clear()
+        const wxString message(m_aMessages[0]);
+        Clear();
+
+        DoShowSingleLogMessage(message, title, style);
     }
     else // more than one message
     {
-#if wxUSE_LOG_DIALOG
+        wxArrayString messages;
+        wxArrayInt severities;
+        wxArrayLong times;
 
-        if ( repeatCount > 0 )
-        {
-            m_aMessages[nMsgCount - 1]
-                << " (" << m_aMessages[nMsgCount - 2] << ")";
-        }
+        messages.swap(m_aMessages);
+        severities.swap(m_aSeverity);
+        times.swap(m_aTimes);
 
-        wxLogDialog dlg(NULL,
-                        m_aMessages, m_aSeverity, m_aTimes,
-                        title, style);
-
-        // clear the message list before showing the dialog because while it's
-        // shown some new messages may appear
         Clear();
 
-        (void)dlg.ShowModal();
-#else // !wxUSE_LOG_DIALOG
-        // concatenate all strings (but not too many to not overfill the msg box)
-        size_t nLines = 0;
-
-        // start from the most recent message
-        for ( size_t n = nMsgCount; n > 0; n-- ) {
-            // for Windows strings longer than this value are wrapped (NT 4.0)
-            const size_t nMsgLineWidth = 156;
-
-            nLines += (m_aMessages[n - 1].Len() + nMsgLineWidth - 1) / nMsgLineWidth;
-
-            if ( nLines > 25 )  // don't put too many lines in message box
-                break;
-
-            str << m_aMessages[n - 1] << wxT("\n");
-        }
-#endif // wxUSE_LOG_DIALOG/!wxUSE_LOG_DIALOG
-    }
-
-    // this catches both cases of 1 message with wxUSE_LOG_DIALOG and any
-    // situation without it
-    if ( !str.empty() )
-    {
-        wxMessageBox(str, title, wxOK | style);
-
-        // no undisplayed messages whatsoever
-        Clear();
+        DoShowMultipleLogMessages(messages, severities, times, title, style);
     }
 
     // allow flushing the logs again

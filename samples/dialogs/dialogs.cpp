@@ -22,6 +22,7 @@
 
 #include "../sample.xpm"
 
+#include "wx/apptrait.h"
 #include "wx/datetime.h"
 #include "wx/image.h"
 #include "wx/bookctrl.h"
@@ -83,10 +84,7 @@
     #include "wx/fdrepdlg.h"
 #endif // wxUSE_FINDREPLDLG
 
-#if wxUSE_SPINCTRL
 #include "wx/spinctrl.h"
-#endif
-
 #include "wx/propdlg.h"
 
 #include "dialogs.h"
@@ -2327,3 +2325,29 @@ void TestMessageBoxDialog::OnClose(wxCommandEvent& WXUNUSED(event))
 }
 
 #endif // USE_SETTINGS_DIALOG
+
+#if wxUSE_LOG
+
+// ----------------------------------------------------------------------------
+// custom log target
+// ----------------------------------------------------------------------------
+
+class MyLogGui : public wxLogGui
+{
+private:
+    virtual void DoShowSingleLogMessage(const wxString& message,
+                                        const wxString& title,
+                                        int style)
+    {
+        wxMessageDialog dlg(NULL, message, title, wxOK | style);
+        dlg.SetExtendedMessage("Note that this is a custom log dialog.");
+        dlg.ShowModal();
+    }
+};
+
+wxLog *MyAppTraits::CreateLogTarget()
+{
+    return new MyLogGui;
+}
+
+#endif // wxUSE_LOG

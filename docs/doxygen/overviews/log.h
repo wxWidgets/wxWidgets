@@ -24,6 +24,13 @@ Classes:
 @li wxLogInterposerTemp
 @li wxStreamToTextRedirector
 
+@li @ref overview_log_introduction
+@li @ref overview_log_targets
+@li @ref overview_log_customize
+
+
+@section overview_log_introduction Introduction
+
 This is a general overview of logging classes provided by wxWidgets. The word
 logging here has a broad sense, including all of the program output, not only
 non-interactive messages. The logging facilities included in wxWidgets provide
@@ -108,6 +115,9 @@ classes are. Some of advantages in using wxWidgets log functions are:
     error message) will be given to the user together with "high level" message
     about data file writing error.
 
+
+@section overview_log_targets Log Targets
+
 After having enumerated all the functions which are normally used to log the
 messages, and why would you want to use them we now describe how all this
 works.
@@ -169,6 +179,28 @@ The log targets can also be combined: for example you may wish to redirect the
 messages somewhere else (for example, to a log file) but also process them as
 normally. For this the wxLogChain, wxLogInterposer, and wxLogInterposerTemp can
 be used.
+
+
+@section overview_log_customize Logging Customization
+
+To completely change the logging behaviour you may define a custom log target.
+For example, you could define a class inheriting from wxLog which shows all the
+log messages in some part of your main application window reserved for the
+message output without interrupting the user work flow with modal message
+boxes.
+
+To use your custom log target you may either call wxLog::SetActiveTarget() with
+your custom log object or create a wxAppTraits-derived class and override
+CreateLogTarget() virtual method in it and also override wxApp::CreateTraits()
+to return an instance of your custom traits object. Notice that in the latter
+case you should be prepared for logging messages early during the program
+startup and also during program shutdown so you shouldn't rely on existence of
+the main application window, for example. You can however safely assume that
+GUI is (already/still) available when your log target as used as wxWidgets
+automatically switches to using wxLogStderr if it isn't.
+
+The dialog sample illustrates this approach by defining a custom log target
+customizing the dialog used by wxLogGui for the single messages.
 
 */
 
