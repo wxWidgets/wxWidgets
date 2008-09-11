@@ -137,10 +137,26 @@ wxPoint wxFromNSPoint( NSView* parent, const NSPoint& p )
     return NO;
 }
 
-- (NSSize)windowWillResize:(NSWindow *)window
+- (NSSize)windowWillResize:(NSWindow *)win
                     toSize:(NSSize)proposedFrameSize
 {
-    // todo
+    NSRect frame = [win frame];
+    wxRect wxframe = wxFromNSRect( NULL, frame );
+    wxframe.SetWidth( proposedFrameSize.width );
+    wxframe.SetHeight( proposedFrameSize.height );
+    wxNSWindow* window = (wxNSWindow*) win;
+    wxNonOwnedWindowCocoaImpl* windowimpl = [window implementation];
+    if ( windowimpl )
+    {
+        wxNonOwnedWindow* wxpeer = windowimpl->GetWXPeer();
+        if ( wxpeer )
+        {
+            wxpeer->HandleResizing( 0, &wxframe );
+            NSSize newSize = NSMakeSize(wxframe.GetWidth(), wxframe.GetHeight());
+            return newSize;
+        }
+    }
+
     return proposedFrameSize;
 }
 
