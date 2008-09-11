@@ -837,19 +837,24 @@ wxNonOwnedWindowEventHandler(EventHandlerCallRef WXUNUSED(handler),
             if ( (attributes & kWindowBoundsChangeSizeChanged) || (attributes & kWindowBoundsChangeOriginChanged) )
             {
                 // all (Mac) rects are in content area coordinates, all wxRects in structure coordinates
-                int left , top , right , bottom ;
+                int left , top , width , height ;
+                // structure width
+                int swidth, sheight;
 
-                toplevelWindow->GetNonOwnedPeer()->GetContentArea(left, top, right, bottom);
-
+                toplevelWindow->GetNonOwnedPeer()->GetContentArea(left, top, width, height);
+                toplevelWindow->GetNonOwnedPeer()->GetSize(swidth, sheight);
+                int deltawidth = swidth - width;
+                int deltaheight = sheight - height;
                 wxRect adjustR(
                     newRect.left - left,
                     newRect.top - top,
-                    newRect.right - newRect.left + left + right,
-                    newRect.bottom - newRect.top + top + bottom ) ;
+                    newRect.right - newRect.left + deltawidth,
+                    newRect.bottom - newRect.top + deltaheight ) ;
 
                 toplevelWindow->HandleResizing( cEvent.GetTicks(), &adjustR );
                 
-                const Rect adjustedRect = { adjustR.y + top  , adjustR.x + left , adjustR.y + adjustR.height - bottom , adjustR.x + adjustR.width - right } ;
+                const Rect adjustedRect = { adjustR.y + top  , adjustR.x + left , adjustR.y + top + adjustR.height - deltaheight , 
+                    adjustR.x + left + adjustR.width - deltawidth } ;
                 if ( !EqualRect( &newRect , &adjustedRect ) )
                     cEvent.SetParameter<Rect>( kEventParamCurrentBounds , &adjustedRect ) ;
             }
