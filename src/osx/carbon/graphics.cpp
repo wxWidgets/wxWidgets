@@ -103,8 +103,13 @@ OSStatus wxMacDrawCGImage(
 #if wxOSX_USE_CARBON
     return HIViewDrawCGImage( inContext, inBounds, inImage );
 #else
-    // todo flip
-    CGContextDrawImage(inContext, *inBounds, inImage );
+    CGContextSaveGState(inContext);
+    CGContextTranslateCTM(inContext, inBounds->origin.x, inBounds->origin.y + inBounds->size.height);
+    CGRect r = *inBounds;
+    r.origin.x = r.origin.y = 0;
+    CGContextScaleCTM(inContext, 1, -1);
+    CGContextDrawImage(inContext, r, inImage );
+    CGContextRestoreGState(inContext);
     return noErr;
 #endif
 }
