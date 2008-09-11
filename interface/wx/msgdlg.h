@@ -39,9 +39,14 @@ public:
             @c wxCANCEL.
         @style{wxNO_DEFAULT}
             Makes the "No" button default, can only be used with @c wxYES_NO.
+        @style{wxCANCEL_DEFAULT}
+            Makes the "Cancel" button default, can only be used with @c wxCANCEL
         @style{wxYES_DEFAULT}
             Makes the "Yes" button default, this is the default behaviour and
             this flag exists solely for symmetry with @c wxNO_DEFAULT.
+        @style{wxOK_DEFAULT}
+            Makes the "OK" button default, this is the default behaviour and
+            this flag exists solely for symmetry with @c wxCANCEL_DEFAULT.
         @style{wxICON_EXCLAMATION}
             Displays an exclamation mark symbol.
         @style{wxICON_ERROR}
@@ -62,6 +67,11 @@ public:
             implemented only under MSW).
         @endStyleTable
 
+        Notice that not all styles are compatible: only one of @c wxOK and @c
+        wxYES_NO may be specified (and one of them must be specified) and at
+        most one default button style can be used and it is only valid if the
+        corresponding button is shown in the message box.
+
         @param parent
             Parent window.
         @param message
@@ -75,7 +85,7 @@ public:
     */
     wxMessageDialog(wxWindow* parent, const wxString& message,
                     const wxString& caption = "Message box",
-                    long style = wxOK | wxCANCEL,
+                    long style = wxOK | wxCENTRE,
                     const wxPoint& pos = wxDefaultPosition);
 
     /**

@@ -309,6 +309,7 @@ All (GUI):
 - Added wxWrapSizer (Arne Steinarson)
 - Added wxSpinCtrlDouble (John Labenski)
 - Support custom labels in wxMessageDialog (Gareth Simpson for wxMac version).
+- Also added wxCANCEL_DEFAULT to wxMessageDialog.
 - Allow copying text in the log dialogs.
 - Added multisample (anti-aliasing) support to wxGLCanvas (Olivier Playez).
 - Initialize wx{Client,Paint,Window}DC with fonts/colours of its window.

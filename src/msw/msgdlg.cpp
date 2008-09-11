@@ -446,9 +446,9 @@ int wxMessageDialog::ShowModal()
     HWND hWnd = m_parent ? GetHwndOf(m_parent) : NULL;
 
     // translate wx style in MSW
-    unsigned int msStyle = MB_OK;
+    unsigned int msStyle;
     const long wxStyle = GetMessageDialogStyle();
-    if (wxStyle & wxYES_NO)
+    if ( wxStyle & wxYES_NO )
     {
 #if !(defined(__SMARTPHONE__) && defined(__WXWINCE__))
         if (wxStyle & wxCANCEL)
@@ -457,17 +457,26 @@ int wxMessageDialog::ShowModal()
 #endif // !(__SMARTPHONE__ && __WXWINCE__)
             msStyle = MB_YESNO;
 
-        if (wxStyle & wxNO_DEFAULT)
+        if ( wxStyle & wxNO_DEFAULT )
             msStyle |= MB_DEFBUTTON2;
+        else if ( wxStyle & wxCANCEL_DEFAULT )
+            msStyle |= MB_DEFBUTTON3;
+    }
+    else // without Yes/No we're going to have an OK button
+    {
+        if ( wxStyle & wxCANCEL )
+        {
+            msStyle = MB_OKCANCEL;
+
+            if ( wxStyle & wxCANCEL_DEFAULT )
+                msStyle |= MB_DEFBUTTON2;
+        }
+        else // just "OK"
+        {
+            msStyle = MB_OK;
+        }
     }
 
-    if (wxStyle & wxOK)
-    {
-        if (wxStyle & wxCANCEL)
-            msStyle = MB_OKCANCEL;
-        else
-            msStyle = MB_OK;
-    }
     if (wxStyle & wxICON_EXCLAMATION)
         msStyle |= MB_ICONEXCLAMATION;
     else if (wxStyle & wxICON_HAND)

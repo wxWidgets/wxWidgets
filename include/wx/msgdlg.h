@@ -143,8 +143,23 @@ public:
         wxASSERT_MSG( ((style & wxYES_NO) == wxYES_NO) || !(style & wxYES_NO),
                       "wxYES and wxNO may only be used together" );
 
+        wxASSERT_MSG( !(style & wxYES) || !(style & wxOK),
+                      "wxOK and wxYES/wxNO can't be used together" );
+
+        wxASSERT_MSG( (style & wxYES) || (style & wxOK),
+                      "one of wxOK and wxYES/wxNO must be used" );
+
         wxASSERT_MSG( (style & wxID_OK) != wxID_OK,
                       "wxMessageBox: Did you mean wxOK (and not wxID_OK)?" );
+
+        wxASSERT_MSG( !(style & wxNO_DEFAULT) || (style & wxNO),
+                      "wxNO_DEFAULT is invalid without wxNO" );
+
+        wxASSERT_MSG( !(style & wxCANCEL_DEFAULT) || (style & wxCANCEL),
+                      "wxCANCEL_DEFAULT is invalid without wxCANCEL" );
+
+        wxASSERT_MSG( !(style & wxCANCEL_DEFAULT) || !(style & wxNO_DEFAULT),
+                      "only one default button can be specified" );
 
         m_dialogStyle = style;
     }
