@@ -291,7 +291,7 @@ All:
 - Corrected bug in wxTimeSpan::IsShorterThan() for equal time spans.
 - Use std::unordered_{map,set} for wxHashMap/Set if available (Jan van Dijk).
 - Added wxString::Capitalize() and MakeCapitalized().
-- Added wxArrayString::swap().
+- Added wxArray::swap().
 - Added wxSHUTDOWN_LOGOFF and wxSHUTDOWN_FORCE wxShutdown() flags (troelsk).
 
 All (Unix):

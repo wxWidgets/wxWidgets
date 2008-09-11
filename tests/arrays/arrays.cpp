@@ -557,26 +557,42 @@ void ArraysTestCase::Alloc()
     CPPUNIT_ASSERT_EQUAL( 9, a[1] );
 }
 
-void ArraysTestCase::Swap()
+namespace
 {
-    wxArrayString a1, a2;
+
+template <typename A, typename T>
+void DoTestSwap(T v1, T v2, T v3,
+                A * WXUNUSED(dummyUglyVC6Workaround))
+{
+    A a1, a2;
     a1.swap(a2);
     CPPUNIT_ASSERT( a1.empty() && a2.empty() );
 
-    a1.push_back("Foo");
+    a1.push_back(v1);
     a1.swap(a2);
     CPPUNIT_ASSERT( a1.empty() );
     CPPUNIT_ASSERT_EQUAL( 1, a2.size() );
 
-    a1.push_back("Bar");
-    a1.push_back("Baz");
+    a1.push_back(v2);
+    a1.push_back(v3);
     a2.swap(a1);
     CPPUNIT_ASSERT_EQUAL( 1, a1.size() );
     CPPUNIT_ASSERT_EQUAL( 2, a2.size() );
+    CPPUNIT_ASSERT_EQUAL( v1, a1[0] );
+    CPPUNIT_ASSERT_EQUAL( v3, a2[1] );
 
     a1.swap(a2);
     CPPUNIT_ASSERT_EQUAL( 2, a1.size() );
     CPPUNIT_ASSERT_EQUAL( 1, a2.size() );
+}
+
+} // anonymous namespace
+
+void ArraysTestCase::Swap()
+{
+    DoTestSwap("Foo", "Bar", "Baz", (wxArrayString *)NULL);
+    DoTestSwap(1, 10, 100, (wxArrayInt *)NULL);
+    DoTestSwap(6, 28, 496, (wxArrayLong *)NULL);
 }
 
 void ArraysTestCase::TestSTL()
