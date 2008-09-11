@@ -207,11 +207,7 @@ private:
 #if !defined(__WXMSW__)
     #define wxCRITSECT_IS_MUTEX 1
 
-#ifdef __WXMAC__
-    #define wxCRITSECT_INLINE
-#else
-    #define wxCRITSECT_INLINE inline
-#endif
+    #define wxCRITSECT_INLINE WXEXPORT inline
 #else // MSW
     #define wxCRITSECT_IS_MUTEX 0
 
@@ -273,7 +269,7 @@ private:
     DECLARE_NO_COPY_CLASS(wxCriticalSection)
 };
 
-#if wxCRITSECT_IS_MUTEX && !defined(__WXMAC__)
+#if wxCRITSECT_IS_MUTEX
     // implement wxCriticalSection using mutexes
     inline wxCriticalSection::wxCriticalSection( wxCriticalSectionType critSecType ) 
        : m_mutex( critSecType == wxCRITSEC_DEFAULT ? wxMUTEX_RECURSIVE : wxMUTEX_DEFAULT )  { }

@@ -607,13 +607,13 @@ private:
   // enough) -- luckily we don't need it then neither as static __thread
   // variables are initialized by 0 anyhow then and so we can use the variable
   // directly
-  static Cache& GetCache()
+  WXEXPORT static Cache& GetCache()
   {
       static wxTLS_TYPE(Cache) s_cache;
 
       return wxTLS_VALUE(s_cache);
   }
-
+  
   // this helper struct is used to ensure that GetCache() is called during
   // static initialization time, i.e. before any threads creation, as otherwise
   // the static s_cache construction inside GetCache() wouldn't be MT-safe
@@ -671,11 +671,15 @@ private:
       // profiling seems to show a small but consistent gain if we use this
       // simple loop instead of starting from the last used element (there are
       // a lot of misses in this function...)
-      // during destruction tls calls may return NULL, thus return NULL 
-      // immediately
-      if ( GetCacheBegin() == NULL )
+      Cache::Element * const cacheBegin = GetCacheBegin();
+ #if !wxHAS_COMPILER_TLS
+      // during destruction tls calls may return NULL, in this case return NULL 
+      // immediately without accessing anything else
+      if ( cacheBegin == NULL )
         return NULL;
-      for ( Cache::Element *c = GetCacheBegin(); c != GetCacheEnd(); c++ )
+#endif
+      Cache::Element * const cacheEnd = GetCacheEnd();
+      for ( Cache::Element *c = cacheBegin; c != cacheEnd; c++ )
       {
           if ( c->str == this )
               return c;
