@@ -147,15 +147,15 @@ void wxGtkFileChooser::SetWildcard( const wxString& wildCard )
 
                 wxStringTokenizer exttok( wildFilters[n], wxT( ";" ) );
                 
-                int n = 1;
+                int n1 = 1;
                 while ( exttok.HasMoreTokens() )
                 {
                     wxString token = exttok.GetNextToken();
                     gtk_file_filter_add_pattern( filter, wxGTK_CONV_SYS( token ) );
                     
-                    if (n == 1)
+                    if (n1 == 1)
                         m_wildcards.Add( token ); // Only add first pattern to list, used later when saving
-                    n++;
+                    n1++;
                 }
 
                 gtk_file_chooser_add_filter( chooser, filter );
