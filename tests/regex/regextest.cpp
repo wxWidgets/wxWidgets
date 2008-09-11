@@ -272,19 +272,23 @@ void RegExTestCase::doTest(int flavor)
 
         // m - check the match returns the strings given
         if (m_mode == 'm')
+        {
             if (start < INT_MAX)
                 result = m_data.substr(start, len);
             else
                 result = _T("");
+        }
 
         // i - check the match returns the offsets given
         else if (m_mode == 'i')
+        {
             if (start > INT_MAX)
                 result = _T("-1 -1");
             else if (start + len > 0)
                 result << start << _T(" ") << start + len - 1;
             else
                 result << start << _T(" -1");
+        }
 
         msg.clear();
         msg << _T("match(") << i << _T(") == ") << quote(result)

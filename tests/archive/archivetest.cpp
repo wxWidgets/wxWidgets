@@ -269,10 +269,12 @@ size_t TestInputStream::OnSysRead(void *buffer, size_t size)
     }
 
     if (((m_eoftype & AtLast) != 0 && m_pos >= m_size) || count < size)
+    {
         if ((m_eoftype & WithError) != 0)
             m_lasterror = wxSTREAM_READ_ERROR;
         else
             m_lasterror = wxSTREAM_EOF;
+    }
 
     return count;
 }
