@@ -96,6 +96,7 @@ void wxWindowDCImpl::DoGetSize( int* width, int* height ) const
         *height = m_height;
 }
 
+#if wxOSX_USE_CARBON
 wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
 {
     // wxScreenDC is derived from wxWindowDC, so a screen dc will
@@ -103,7 +104,6 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
     if (!m_window)
         return wxNullBitmap;
 
-#if wxOSX_USE_CARBON
     ControlRef handle = (ControlRef) m_window->GetHandle();
     if ( !handle )
         return wxNullBitmap;
@@ -136,10 +136,8 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
 
     CGContextRestoreGState(context);
     return bmp;
-#else
-    return wxNullBitmap;
-#endif
 }
+#endif
 
 /*
  * wxClientDCImpl

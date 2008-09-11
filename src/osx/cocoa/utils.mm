@@ -31,6 +31,7 @@
 #if wxUSE_GUI
 #if wxOSX_USE_COCOA_OR_CARBON
     #include <CoreServices/CoreServices.h>
+    #include "wx/osx/dcclient.h"
     #include "wx/osx/private/timer.h"
 #endif
 #endif // wxUSE_GUI
@@ -138,6 +139,41 @@ void wxMacGlobalToLocal( WindowRef window , Point*pt )
 
 void wxMacLocalToGlobal( WindowRef window , Point*pt )
 {
+}
+
+wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
+{
+    // wxScreenDC is derived from wxWindowDC, so a screen dc will
+    // call this method when a Blit is performed with it as a source.
+    if (!m_window)
+        return wxNullBitmap;
+        
+    wxSize sz = m_window->GetSize();
+    
+    int left = subrect != NULL ? subrect->x : 0 ;
+    int top = subrect != NULL ? subrect->y : 0 ;
+    int width = subrect != NULL ? subrect->width : sz.x;
+    int height = subrect !=  NULL ? subrect->height : sz.y ;
+    
+    NSRect rect = NSMakeRect(left, top, width, height );
+    NSView* view = (NSView*) m_window->GetHandle();
+    [view lockFocus];
+    // we use this method as other methods force a repaint, and this method can be 
+    // called from OnPaint, even with the window's paint dc as source (see wxHTMLWindow)
+    NSBitmapImageRep *rep = [[[NSBitmapImageRep alloc] initWithFocusedViewRect: [view bounds]] retain];
+    [view unlockFocus];
+    
+    CGImageRef cgImageRef = [rep CGImage]; 
+
+    wxBitmap bitmap(CGImageGetWidth(cgImageRef)  , CGImageGetHeight(cgImageRef) );
+    CGRect r = CGRectMake( 0 , 0 , CGImageGetWidth(cgImageRef)  , CGImageGetHeight(cgImageRef) );
+    // since our context is upside down we dont use CGContextDrawImage
+    wxMacDrawCGImage( (CGContextRef) bitmap.GetHBITMAP() , &r, cgImageRef ) ;
+    CGImageRelease(cgImageRef);
+    cgImageRef = NULL;
+    [rep release];
+        
+    return bitmap;
 }
 
 #endif // wxUSE_GUI
