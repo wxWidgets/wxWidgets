@@ -215,14 +215,14 @@ void wxFrame::OnActivate(wxActivateEvent& event)
     }
 }
 
-void wxFrame::HandleResized( long timestamp )
+void wxFrame::HandleResized( double timestampsec )
 {
     // according to the other ports we handle this within the OS level
     // resize event, not within a wxSizeEvent
 
     PositionBars();
 
-    wxNonOwnedWindow::HandleResized( timestamp );
+    wxNonOwnedWindow::HandleResized( timestampsec );
 }
 
 #if wxUSE_MENUS

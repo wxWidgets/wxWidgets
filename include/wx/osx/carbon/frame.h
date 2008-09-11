@@ -109,7 +109,7 @@ protected:
 #endif
 
     // osx specific event handling common for all osx-ports
-    virtual void HandleResized( long timestamp );
+    virtual void HandleResized( double timestampsec );
 
 protected:
     // the last focused child: we restore focus to it on activation
