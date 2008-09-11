@@ -2123,10 +2123,14 @@ wxUTF8StringBufferLength::~wxUTF8StringBufferLength()
 // wxCharBufferType<T>
 // ----------------------------------------------------------------------------
 
+#ifndef __VMS_BROKEN_TEMPLATES
 template<>
+#endif
 wxCharTypeBuffer<char>::Data
 wxCharTypeBuffer<char>::NullData(NULL);
 
+#ifndef __VMS_BROKEN_TEMPLATES
 template<>
+#endif
 wxCharTypeBuffer<wchar_t>::Data
 wxCharTypeBuffer<wchar_t>::NullData(NULL);
