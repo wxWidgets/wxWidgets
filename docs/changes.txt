@@ -250,10 +250,10 @@ Major new features in this release
 
 All:
 
-- Added (experimental) IPv6 support to wxSocket (Arcen)
+- Added (experimental) IPv6 support to wxSocket (Arcen).
 - Cleaned up wxURI and made it Unicode-friendly.
 - Add support for wxExecute(wxEXEC_ASYNC) in wxBase (Lukasz Michalski)
-- Added wxXLocale class and xlocale-like functions using it
+- Added wxXLocale class and xlocale-like functions using it.
 - Allow loading message catalogs from wxFileSystem (Axel Gembe)
 - Added wxMessageQueue class for inter-thread communications
 - Use UTF-8 for Unicode data in wxIPC classes (Anders Larsen)
@@ -307,7 +307,7 @@ All (GUI):
 - Added wxWindow::Show/HideWithEffect()
 - Added wxWrapSizer (Arne Steinarson)
 - Added wxSpinCtrlDouble (John Labenski)
-- Support custom labels in wxMessageDialog/wxMessageBox in wxMSW and wxGTK.
+- Support custom labels in wxMessageDialog (Gareth Simpson for wxMac version).
 - Allow copying text in the log dialogs.
 - Added multisample (anti-aliasing) support to wxGLCanvas (Olivier Playez).
 - Initialize wx{Client,Paint,Window}DC with fonts/colours of its window.
@@ -405,12 +405,11 @@ wxGTK:
 wxMac:
 
 - Better IconRef support (Alan Shouls).
-- Added support for changing button labels in wxMessageDialog (Gareth Simpson).
 - Fix duplicate (empty) help menu in non-English programs (Andreas Jacobs).
 - Allow accelerators to be used with buttons too (Ryan Wilcox).
 - Support resource forks in wxCopyFile() (Hank Schultz).
-- Implement wxLocale::GetInfo() using CFLocale
-- Added native wxCollapsiblePane
+- Implement wxLocale::GetInfo() using CFLocale.
+- Native wxCollapsiblePane implementation.
 
 wxMSW:
 
@@ -418,11 +417,12 @@ wxMSW:
 - Return the restored window size from GetSize() when window is minimized.
 - wxCheckListBox now looks more native, especially under XP (Marcin Malich).
 - Allow tooltips longer than 64 (up to 128) characters in wxTaskBarIcon
-- Fix centering wxFileDialog and allow positioning it
-- Allow centering wxMessageDialog on its parent window (troelsk)
-- Show resize gripper on resizeable dialogs (Kolya Kosenko)
-- Implement support for display enumeration under WinCE (Vince Harron)
-- Use different Win32 class names in different wx instances (Thomas Hauk)
+- Fix centering wxFileDialog and allow positioning it.
+- Allow centering wxMessageDialog on its parent window (troelsk).
+- Use vertical scrollbar in wxMessageDialog if it's too big to fit on screen.
+- Show resize gripper on resizeable dialogs (Kolya Kosenko).
+- Implement support for display enumeration under WinCE (Vince Harron).
+- Use different Win32 class names in different wx instances (Thomas Hauk).
 - Support multiline labels for wxCheckBox and wxToggleButton.
 - Print preview is now rendered in the resolution used by printer and
   accurately represents what will be printed. This fixes wxHtmlEasyPrinting

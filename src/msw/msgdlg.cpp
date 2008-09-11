@@ -43,6 +43,8 @@
 
 #if wxUSE_MSGBOX_HOOK
     #include "wx/fontutil.h"
+    #include "wx/textbuf.h"
+    #include "wx/display.h"
 #endif
 
 // For MB_TASKMODAL
@@ -62,6 +64,16 @@ WX_DECLARE_HASH_MAP(unsigned long, wxMessageDialog *,
                     wxIntegerHash, wxIntegerEqual,
                     wxMessageDialogMap);
 
+// the order in this array is the one in which buttons appear in the
+// message box
+const wxMessageDialog::ButtonAccessors wxMessageDialog::ms_buttons[] =
+{
+    { IDYES,    &wxMessageDialog::GetYesLabel    },
+    { IDNO,     &wxMessageDialog::GetNoLabel     },
+    { IDOK,     &wxMessageDialog::GetOKLabel     },
+    { IDCANCEL, &wxMessageDialog::GetCancelLabel },
+};
+
 namespace
 {
 
@@ -70,6 +82,57 @@ wxMessageDialogMap& HookMap()
     static wxMessageDialogMap s_Map;
 
     return s_Map;
+}
+
+/*
+    All this code is used for adjusting the message box layout when we mess
+    with its contents. It's rather complicated because we try hard to avoid
+    assuming much about the standard layout details and so, instead of just
+    laying out everything ourselves (which would have been so much simpler!)
+    we try to only modify the existing controls positions by offsetting them
+    from their default ones in the hope that this will continue to work with
+    the future Windows versions.
+ */
+
+// convert the given RECT from screen to client coordinates in place
+void ScreenRectToClient(HWND hwnd, RECT& rc)
+{
+    // map from desktop (i.e. screen) coordinates to ones of this window
+    //
+    // notice that a RECT is laid out as 2 consecutive POINTs so the cast is
+    // valid
+    ::MapWindowPoints(HWND_DESKTOP, hwnd, reinterpret_cast<POINT *>(&rc), 2);
+}
+
+// set window position to the given rect
+inline void SetWindowRect(HWND hwnd, const RECT& rc)
+{
+    ::MoveWindow(hwnd,
+                 rc.left, rc.top,
+                 rc.right - rc.left, rc.bottom - rc.top,
+                 FALSE);
+}
+
+// set window position expressed in screen coordinates, whether the window is
+// child or top level
+void MoveWindowToScreenRect(HWND hwnd, RECT rc)
+{
+    ScreenRectToClient(::GetParent(hwnd), rc);
+
+    SetWindowRect(hwnd, rc);
+}
+
+// helper of AdjustButtonLabels(): move the given window by dx
+//
+// works for both child and top level windows
+void OffsetWindow(HWND hwnd, int dx)
+{
+    RECT rc = wxGetWindowRect(hwnd);
+
+    rc.left += dx;
+    rc.right += dx;
+
+    MoveWindowToScreenRect(hwnd, rc);
 }
 
 } // anonymous namespace
@@ -98,6 +161,10 @@ wxMessageDialog::HookFunction(int code, WXWPARAM wParam, WXLPARAM lParam)
 
         wnd->SetHWND((HWND)wParam);
 
+        // replace the static text with an edit control if the message box is
+        // too big to fit the display
+        wnd->ReplaceStaticWithEdit();
+
         // update the labels if necessary: we need to do it before centering
         // the dialog as this can change its size
         if ( wnd->HasCustomLabels() )
@@ -115,123 +182,251 @@ wxMessageDialog::HookFunction(int code, WXWPARAM wParam, WXLPARAM lParam)
     return rc;
 }
 
-namespace
+void wxMessageDialog::ReplaceStaticWithEdit()
 {
+    // check if the message box fits the display
+    int nDisplay = wxDisplay::GetFromWindow(this);
+    if ( nDisplay == wxNOT_FOUND )
+        nDisplay = 0;
+    const wxRect rectDisplay = wxDisplay(nDisplay).GetClientArea();
 
-// helper of AdjustButtonLabels(): set window position expressed in screen
-// coordinates, whether the window is child or top level
-void MoveWindowToScreenRect(HWND hwnd, RECT rc)
-{
-    if ( const HWND hwndParent = ::GetAncestor(hwnd, GA_PARENT) )
+    if ( rectDisplay.Contains(GetRect()) )
     {
-        // map to parent window coordinates (notice that a RECT is laid out as
-        // 2 consecutive POINTs)
-        ::MapWindowPoints(HWND_DESKTOP, hwndParent,
-                          reinterpret_cast<POINT *>(&rc), 2);
+        // nothing to do
+        return;
     }
 
-    ::MoveWindow(hwnd,
-                 rc.left, rc.top,
-                 rc.right - rc.left, rc.bottom - rc.top,
-                 FALSE);
+
+    // find the static control to replace: normally there are two of them, the
+    // icon and the text itself so search for all of them and ignore the icon
+    // ones
+    HWND hwndStatic = ::FindWindowEx(GetHwnd(), NULL, _T("STATIC"), NULL);
+    if ( ::GetWindowLong(hwndStatic, GWL_STYLE) & SS_ICON )
+        hwndStatic = ::FindWindowEx(GetHwnd(), hwndStatic, _T("STATIC"), NULL);
+
+    if ( !hwndStatic )
+    {
+        wxLogDebug("Failed to find the static text control in message box.");
+        return;
+    }
+
+    // set the right font for GetCharHeight() call below
+    wxWindowBase::SetFont(GetMessageFont());
+
+    // put the new edit control at the same place
+    RECT rc = wxGetWindowRect(hwndStatic);
+    ScreenRectToClient(GetHwnd(), rc);
+
+    // but make it less tall so that the message box fits on the screen: we try
+    // to make the message box take no more than 7/8 of the screen to leave
+    // some space above and below it
+    const int hText = (7*rectDisplay.height)/8 -
+                      (
+                         2*::GetSystemMetrics(SM_CYFIXEDFRAME) +
+                         ::GetSystemMetrics(SM_CYCAPTION) +
+                         5*GetCharHeight() // buttons + margins
+                      );
+    const int dh = (rc.bottom - rc.top) - hText; // vertical space we save
+    rc.bottom -= dh;
+
+    // and it also must be wider as it needs a vertical scrollbar (in order
+    // to preserve the word wrap, otherwise the number of lines would change
+    // and we want the control to look as similar as possible to the original)
+    //
+    // NB: you would have thought that 2*SM_CXEDGE would be enough but it
+    //     isn't, somehow, and the text control breaks lines differently from
+    //     the static one so fudge by adding some extra space
+    const int dw = ::GetSystemMetrics(SM_CXVSCROLL) +
+                        4*::GetSystemMetrics(SM_CXEDGE);
+    rc.right += dw;
+
+
+    // chop of the trailing new line(s) from the message box text, they are
+    // ignored by the static control but result in extra lines and hence extra
+    // scrollbar position in the edit one
+    wxString text(wxGetWindowText(hwndStatic));
+    for ( wxString::iterator i = text.end() - 1; i != text.begin(); --i )
+    {
+        if ( *i != '\n' )
+        {
+            text.erase(i + 1, text.end());
+            break;
+        }
+    }
+
+    // do create the new control
+    HWND hwndEdit = ::CreateWindow
+                      (
+                        _T("EDIT"),
+                        wxTextBuffer::Translate(text),
+                        WS_CHILD | WS_VSCROLL | WS_VISIBLE |
+                        ES_MULTILINE | ES_READONLY | ES_AUTOVSCROLL,
+                        rc.left, rc.top,
+                        rc.right - rc.left, rc.bottom - rc.top,
+                        GetHwnd(),
+                        NULL,
+                        wxhInstance,
+                        NULL
+                      );
+
+    if ( !hwndEdit )
+    {
+        wxLogDebug("Creation of replacement edit control failed in message box");
+        return;
+    }
+
+    // copy the font from the original control
+    LRESULT hfont = ::SendMessage(hwndStatic, WM_GETFONT, 0, 0);
+    ::SendMessage(hwndEdit, WM_SETFONT, hfont, 0);
+
+    // and get rid of it
+    ::DestroyWindow(hwndStatic);
+
+
+    // shrink and centre the message box vertically and widen it box to account
+    // for the extra scrollbar
+    RECT rcBox = wxGetWindowRect(GetHwnd());
+    const int hMsgBox = rcBox.bottom - rcBox.top - dh;
+    rcBox.top = (rectDisplay.height - hMsgBox)/2;
+    rcBox.bottom = rcBox.top + hMsgBox + (rectDisplay.height - hMsgBox)%2;
+    rcBox.left -= dw/2;
+    rcBox.right += dw - dw/2;
+    SetWindowRect(GetHwnd(), rcBox);
+
+    // and adjust all the buttons positions
+    for ( unsigned n = 0; n < WXSIZEOF(ms_buttons); n++ )
+    {
+        const HWND hwndBtn = ::GetDlgItem(GetHwnd(), ms_buttons[n].id);
+        if ( !hwndBtn )
+            continue;   // it's ok, not all buttons are always present
+
+        RECT rc = wxGetWindowRect(hwndBtn);
+        rc.top -= dh;
+        rc.bottom -= dh;
+        rc.left += dw/2;
+        rc.right += dw/2;
+        MoveWindowToScreenRect(hwndBtn, rc);
+    }
 }
-
-// helper of AdjustButtonLabels(): move the given window by dx
-//
-// works for both child and top level windows
-void OffsetWindow(HWND hwnd, int dx)
-{
-    RECT rc = wxGetWindowRect(hwnd);
-
-    rc.left += dx;
-    rc.right += dx;
-
-    MoveWindowToScreenRect(hwnd, rc);
-}
-
-} // anonymous namespace
 
 void wxMessageDialog::AdjustButtonLabels()
 {
     // changing the button labels is the easy part but we also need to ensure
     // that the buttons are big enough for the label strings and increase their
-    // size (and hence the size of the message box itself) if they are not
+    // size (and maybe the size of the message box itself) if they are not
 
     // TODO-RTL: check whether this works correctly in RTL
-
-    // the order in this array is the one in which buttons appear in the
-    // message box
-    const static struct ButtonAccessors
-    {
-        int id;
-        wxString (wxMessageDialog::*getter)() const;
-    }
-    buttons[] =
-    {
-        { IDYES,    &wxMessageDialog::GetYesLabel    },
-        { IDNO,     &wxMessageDialog::GetNoLabel     },
-        { IDOK,     &wxMessageDialog::GetOKLabel     },
-        { IDCANCEL, &wxMessageDialog::GetCancelLabel },
-    };
-
-    // this contains the amount by which we increased the message box width
-    int dx = 0;
-
-    const NONCLIENTMETRICS& ncm = wxMSWImpl::GetNonClientMetrics();
-    const wxFont fontMsgBox(wxNativeFontInfo(ncm.lfMessageFont));
 
     // we want to use this font in GetTextExtent() calls below but we don't
     // want to send WM_SETFONT to the message box, who knows how is it going to
     // react to it (right now it doesn't seem to do anything but what if this
     // changes)
-    wxWindowBase::SetFont(fontMsgBox);
+    wxWindowBase::SetFont(GetMessageFont());
 
-    for ( unsigned n = 0; n < WXSIZEOF(buttons); n++ )
+    // first iteration: find the widest button and update the buttons labels
+    int wBtnOld = 0,            // current buttons width
+        wBtnNew = 0;            // required new buttons width
+    RECT rcBtn;                 // stores the button height and y positions
+    unsigned numButtons = 0;    // total number of buttons in the message box
+    unsigned n;
+    for ( n = 0; n < WXSIZEOF(ms_buttons); n++ )
     {
-        const HWND hwndBtn = ::GetDlgItem(GetHwnd(), buttons[n].id);
+        const HWND hwndBtn = ::GetDlgItem(GetHwnd(), ms_buttons[n].id);
         if ( !hwndBtn )
             continue;   // it's ok, not all buttons are always present
 
-        const wxString label = (this->*buttons[n].getter)();
+        numButtons++;
+
+        const wxString label = (this->*ms_buttons[n].getter)();
         const wxSize sizeLabel = wxWindowBase::GetTextExtent(label);
 
         // check if the button is big enough for this label
-        RECT rc = wxGetWindowRect(hwndBtn);
-        const int widthOld = rc.right - rc.left;
-        const int widthNew = wxMSWButton::GetFittingSize(this, sizeLabel).x;
-        const int dw = widthNew - widthOld;
-        if ( dw > 0 )
+        const RECT rc = wxGetWindowRect(hwndBtn);
+        if ( !wBtnOld )
         {
-            // we need to resize the button
-            rc.right += dw;
-            MoveWindowToScreenRect(hwndBtn, rc);
+            // initialize wBtnOld using the first button width, all the other
+            // ones should have the same one
+            wBtnOld = rc.right - rc.left;
 
-            // and also move all the other buttons
-            for ( unsigned m = n + 1; m < WXSIZEOF(buttons); m++ )
-            {
-                const HWND hwndBtnNext = ::GetDlgItem(GetHwnd(), buttons[m].id);
-                if ( hwndBtnNext )
-                    OffsetWindow(hwndBtnNext, dw);
-            }
-
-            dx += dw;
+            rcBtn = rc; // remember for use below when we reposition the buttons
         }
+        else
+        {
+            wxASSERT_MSG( wBtnOld == rc.right - rc.left,
+                          "all buttons are supposed to be of same width" );
+        }
+
+        const int widthNeeded = wxMSWButton::GetFittingSize(this, sizeLabel).x;
+        if ( widthNeeded > wBtnNew )
+            wBtnNew = widthNeeded;
 
         ::SetWindowText(hwndBtn, label.wx_str());
     }
 
+    if ( wBtnNew <= wBtnOld )
+    {
+        // all buttons fit, nothing else to do
+        return;
+    }
 
-    // resize the message box itself if needed
-    if ( dx )
-        OffsetWindow(GetHwnd(), dx);
+    // resize the message box to be wider if needed
+    const int wBoxOld = wxGetClientRect(GetHwnd()).right;
 
-    // surprisingly, we don't need to resize the static text control, it seems
-    // to adjust itself to the new size, at least under Windows 2003
-    // (TODO: test if this happens on older Windows versions)
+    const int CHAR_WIDTH = GetCharWidth();
+    const int MARGIN_OUTER = 2*CHAR_WIDTH;  // margin between box and buttons
+    const int MARGIN_INNER = CHAR_WIDTH;    // margin between buttons
+
+    RECT rcBox = wxGetWindowRect(GetHwnd());
+
+    const int wAllButtons = numButtons*(wBtnNew + MARGIN_INNER) - MARGIN_INNER;
+    int wBoxNew = 2*MARGIN_OUTER + wAllButtons;
+    if ( wBoxNew > wBoxOld )
+    {
+        const int dw = wBoxNew - wBoxOld;
+        rcBox.left -= dw/2;
+        rcBox.right += dw - dw/2;
+
+        SetWindowRect(GetHwnd(), rcBox);
+
+        // surprisingly, we don't need to resize the static text control, it
+        // seems to adjust itself to the new size, at least under Windows 2003
+        // (TODO: test if this happens on older Windows versions)
+    }
+    else // the current width is big enough
+    {
+        wBoxNew = wBoxOld;
+    }
+
+
+    // finally position all buttons
+
+    // notice that we have to take into account the difference between window
+    // and client width
+    rcBtn.left = (rcBox.left + rcBox.right - wxGetClientRect(GetHwnd()).right +
+                  wBoxNew - wAllButtons) / 2;
+    rcBtn.right = rcBtn.left + wBtnNew;
+
+    for ( n = 0; n < WXSIZEOF(ms_buttons); n++ )
+    {
+        const HWND hwndBtn = ::GetDlgItem(GetHwnd(), ms_buttons[n].id);
+        if ( !hwndBtn )
+            continue;
+
+        MoveWindowToScreenRect(hwndBtn, rcBtn);
+
+        rcBtn.left += wBtnNew + MARGIN_INNER;
+        rcBtn.right += wBtnNew + MARGIN_INNER;
+    }
 }
 
 #endif // wxUSE_MSGBOX_HOOK
 
+/* static */
+wxFont wxMessageDialog::GetMessageFont()
+{
+    const NONCLIENTMETRICS& ncm = wxMSWImpl::GetNonClientMetrics();
+    return wxNativeFontInfo(ncm.lfMessageFont);
+}
 
 int wxMessageDialog::ShowModal()
 {
@@ -309,15 +504,13 @@ int wxMessageDialog::ShowModal()
 #endif // wxUSE_UNICODE
 
 #if wxUSE_MSGBOX_HOOK
-    // install the hook if we need to position the dialog in a non-default way
-    // or change the labels
-    if ( (wxStyle & wxCENTER) || HasCustomLabels() )
-    {
-        const DWORD tid = ::GetCurrentThreadId();
-        m_hook = ::SetWindowsHookEx(WH_CBT,
-                                    &wxMessageDialog::HookFunction, NULL, tid);
-        HookMap()[tid] = this;
-    }
+    // install the hook in any case as we don't know in advance if the message
+    // box is not going to be too big (requiring the replacement of the static
+    // control with an edit one)
+    const DWORD tid = ::GetCurrentThreadId();
+    m_hook = ::SetWindowsHookEx(WH_CBT,
+                                &wxMessageDialog::HookFunction, NULL, tid);
+    HookMap()[tid] = this;
 #endif // wxUSE_MSGBOX_HOOK
 
     // do show the dialog
