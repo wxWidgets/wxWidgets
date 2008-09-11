@@ -496,7 +496,7 @@ bool wxWindowMac::MacGetBoundsForControl(
         AdjustForParentClientOrigin( x , y ) ;
 
     // this is in window relative coordinate, as this parent may have a border, its physical position is offset by this border
-    if ( !GetParent()->IsTopLevel() )
+    if ( GetParent() && !GetParent()->IsTopLevel() )
     {
         x -= GetParent()->MacGetLeftBorderSize() ;
         y -= GetParent()->MacGetTopBorderSize() ;
@@ -834,10 +834,12 @@ void wxWindowMac::MacInvalidateBorders()
     wxRect topupdate( tx-outerBorder, ty-outerBorder, tw + 2 * outerBorder, outerBorder );
     wxRect bottomupdate( tx-outerBorder, ty + th, tw + 2 * outerBorder, outerBorder );
     
-    GetParent()->m_peer->SetNeedsDisplay(&leftupdate);
-    GetParent()->m_peer->SetNeedsDisplay(&rightupdate);
-    GetParent()->m_peer->SetNeedsDisplay(&topupdate);
-    GetParent()->m_peer->SetNeedsDisplay(&bottomupdate);
+    if (GetParent()) {
+        GetParent()->m_peer->SetNeedsDisplay(&leftupdate);
+        GetParent()->m_peer->SetNeedsDisplay(&rightupdate);
+        GetParent()->m_peer->SetNeedsDisplay(&topupdate);
+        GetParent()->m_peer->SetNeedsDisplay(&bottomupdate);
+    }
 }
 
 void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
@@ -887,9 +889,9 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
             wxSize( actualWidth - (MacGetLeftBorderSize() + MacGetRightBorderSize()) ,
                 actualHeight - (MacGetTopBorderSize() + MacGetBottomBorderSize()) ) ) ;
 
-        if ( !GetParent()->IsTopLevel() )
+        if ( parent && !parent->IsTopLevel() )
         {
-            bounds.Offset( -GetParent()->MacGetLeftBorderSize(), -GetParent()->MacGetTopBorderSize() );
+            bounds.Offset( -parent->MacGetLeftBorderSize(), -parent->MacGetTopBorderSize() );
         }
 
         MacInvalidateBorders() ;
