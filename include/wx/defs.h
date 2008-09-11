@@ -1866,8 +1866,10 @@ enum wxBorder
 #define wxAPPLY                 0x00000020
 #define wxCLOSE                 0x00000040
 
-#define wxYES_DEFAULT           0x00000000  /*  has no effect (default) */
-#define wxNO_DEFAULT            0x00000080
+#define wxOK_DEFAULT            0x00000000  /* has no effect (default) */
+#define wxYES_DEFAULT           0x00000000  /* has no effect (default) */
+#define wxNO_DEFAULT            0x00000080  /* only valid with wxYES_NO */
+#define wxCANCEL_DEFAULT        0x80000000  /* only valid with wxCANCEL */
 
 #define wxICON_EXCLAMATION      0x00000100
 #define wxICON_HAND             0x00000200
