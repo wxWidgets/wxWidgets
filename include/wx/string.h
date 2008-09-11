@@ -672,7 +672,7 @@ private:
       // simple loop instead of starting from the last used element (there are
       // a lot of misses in this function...)
       Cache::Element * const cacheBegin = GetCacheBegin();
- #if !wxHAS_COMPILER_TLS
+#ifndef wxHAS_COMPILER_TLS
       // during destruction tls calls may return NULL, in this case return NULL 
       // immediately without accessing anything else
       if ( cacheBegin == NULL )
