@@ -274,6 +274,8 @@ wxRegionGeneric::wxRegionGeneric(const wxPoint& topLeft, const wxPoint& bottomRi
 void wxRegionGeneric::Clear()
 {
     UnRef();
+    if (!m_refData)
+        m_refData = new wxRegionRefData(wxRect(0,0,0,0));
 }
 
 wxGDIRefData *wxRegionGeneric::CreateGDIRefData() const
