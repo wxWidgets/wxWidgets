@@ -159,9 +159,74 @@ public:
         return wxPoint( m_x, m_y );
     }
 
-    bool DoEnable( bool enable );
+    virtual bool Enable( bool enable );
 
     void UpdateToggleImage( bool toggle );
+
+    virtual bool Toggle(bool toggle)
+    {
+        if ( wxToolBarToolBase::Toggle( toggle ) == false )
+            return false;
+            
+        UpdateToggleImage(toggle);
+        return true;
+    }
+    
+    void UpdateHelpStrings()
+    {
+#if wxOSX_USE_NATIVE_TOOLBAR            
+        if ( m_toolbarItemRef )
+        {
+            wxFontEncoding enc = GetToolBarFontEncoding();
+
+            HIToolbarItemSetHelpText(
+                m_toolbarItemRef,
+                wxCFStringRef( GetShortHelp(), enc ),
+                wxCFStringRef( GetLongHelp(), enc ) );
+        }
+#endif
+    }
+    
+    virtual bool SetShortHelp(const wxString& help)
+    {
+        if ( wxToolBarToolBase::SetShortHelp( help ) == false )
+            return false;
+            
+        UpdateHelpStrings();        
+        return true;
+    }
+    
+    virtual bool SetLongHelp(const wxString& help)
+    {
+        if ( wxToolBarToolBase::SetLongHelp( help ) == false )
+            return false;
+
+        UpdateHelpStrings();
+        return true;
+    }
+
+    virtual void SetNormalBitmap(const wxBitmap& bmp) 
+    {
+        wxToolBarToolBase::SetNormalBitmap(bmp);
+        UpdateToggleImage(CanBeToggled() && IsToggled());
+    }
+        
+    virtual void SetLabel(const wxString& label)
+    {
+        wxToolBarToolBase::SetLabel(label);
+#if wxOSX_USE_NATIVE_TOOLBAR
+        if ( m_toolbarItemRef )
+        {
+            // strip mnemonics from the label for compatibility with the usual
+            // labels in wxStaticText sense
+            wxString labelStr = wxStripMenuCodes(label);
+
+            HIToolbarItemSetLabel(
+                m_toolbarItemRef,
+                wxCFStringRef(labelStr, GetToolBarFontEncoding()) );
+        }
+#endif
+    }
 
 #if wxOSX_USE_NATIVE_TOOLBAR
     void SetToolbarItemRef( HIToolbarItemRef ref )
@@ -172,15 +237,7 @@ public:
             CFRelease( m_toolbarItemRef );
 
         m_toolbarItemRef = ref;
-        if ( m_toolbarItemRef )
-        {
-            wxFontEncoding enc = GetToolBarFontEncoding();
-
-            HIToolbarItemSetHelpText(
-                m_toolbarItemRef,
-                wxCFStringRef( GetShortHelp(), enc ),
-                wxCFStringRef( GetLongHelp(), enc ) );
-        }
+        UpdateHelpStrings();
     }
 
     HIToolbarItemRef GetToolbarItemRef() const
@@ -196,22 +253,6 @@ public:
     CFIndex GetIndex() const
     {
         return m_index;
-    }
-
-    virtual void SetLabel(const wxString& label)
-    {
-        wxToolBarToolBase::SetLabel(label);
-
-        if ( m_toolbarItemRef )
-        {
-            // strip mnemonics from the label for compatibility with the usual
-            // labels in wxStaticText sense
-            wxString labelStr = wxStripMenuCodes(label);
-
-            HIToolbarItemSetLabel(
-                m_toolbarItemRef,
-                wxCFStringRef(labelStr, GetToolBarFontEncoding()) );
-        }
     }
 #endif // wxOSX_USE_NATIVE_TOOLBAR
 
@@ -384,8 +425,11 @@ DEFINE_ONE_SHOT_HANDLER_GETTER( wxMacToolBarEventHandler )
 
 #endif
 
-bool wxToolBarTool::DoEnable( bool enable )
+bool wxToolBarTool::Enable( bool enable )
 {
+    if ( wxToolBarToolBase::Enable( enable ) == false )
+        return false;
+    
     if ( IsControl() )
     {
         GetControl()->Enable( enable );
@@ -1190,10 +1234,6 @@ bool wxToolBar::Realize()
             {
                 // since setting the help texts is non-virtual we have to update
                 // the strings now
-                HIToolbarItemSetHelpText( hiItemRef,
-                    wxCFStringRef( tool->GetShortHelp(), enc ),
-                    wxCFStringRef( tool->GetLongHelp(), enc ) );
-
                 if ( insertAll || (tool->GetIndex() != currentPosition) )
                 {
                     OSStatus err = noErr;
@@ -1461,17 +1501,14 @@ wxString wxToolBar::MacGetToolTipString( wxPoint &pt )
     return wxEmptyString;
 }
 
-void wxToolBar::DoEnableTool(wxToolBarToolBase *t, bool enable)
+void wxToolBar::DoEnableTool(wxToolBarToolBase *WXUNUSED(t), bool WXUNUSED(enable))
 {
-    if ( t != NULL )
-        ((wxToolBarTool*)t)->DoEnable( enable );
+    // everything already done in the tool's implementation
 }
 
 void wxToolBar::DoToggleTool(wxToolBarToolBase *t, bool toggle)
 {
-    wxToolBarTool *tool = (wxToolBarTool *)t;
-    if ( ( tool != NULL ) && tool->IsButton() )
-        tool->UpdateToggleImage( toggle );
+    // everything already done in the tool's implementation
 }
 
 bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
@@ -1655,7 +1692,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
 
 void wxToolBar::DoSetToggle(wxToolBarToolBase *WXUNUSED(tool), bool WXUNUSED(toggle))
 {
-    wxFAIL_MSG( wxT("not implemented") );
+    // nothing to do
 }
 
 bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolbase)
