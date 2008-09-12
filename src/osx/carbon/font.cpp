@@ -183,7 +183,6 @@ public:
 #endif
 #if wxOSX_USE_CORE_TEXT
     wxCFRef<CTFontRef> m_ctFont;
-    wxCFRef<CTFontDescriptorRef> m_ctFontDescriptor;
 #endif
 #if wxOSX_USE_CORE_TEXT || wxOSX_USE_ATSU_TEXT
     ATSUStyle       m_macATSUStyle ;
@@ -247,7 +246,6 @@ void wxFontRefData::MacInvalidateNativeFont()
 {
 #if wxOSX_USE_CORE_TEXT
     m_ctFont.reset();
-    m_ctFontDescriptor.reset();
 #endif
 #if wxOSX_USE_CORE_TEXT || wxOSX_USE_ATSU_TEXT
     if ( m_macATSUStyle )
@@ -339,7 +337,7 @@ wxFontRefData::wxFontRefData( CTFontDescriptorRef fontdescriptor, int size )
         float fsize;
         if ( CFNumberGetValue( value , kCFNumberFloatType , &fsize ) )
         {
-            size = (int) fsize + 0.5 ;
+            size = (int)( fsize + 0.5 );
         }
     }
     Init( CTFontCreateWithFontDescriptor(fontdescriptor, size,NULL)  );
@@ -376,8 +374,6 @@ void wxFontRefData::MacFindFont()
                 m_style = wxITALIC;
             if (  traits & kCTFontBoldTrait )
                 m_weight = wxBOLD ;
-            if ( !m_ctFontDescriptor.get() )
-                m_ctFontDescriptor.reset( CTFontCopyFontDescriptor( m_ctFont ) );
         }
         else
         {
@@ -398,6 +394,10 @@ void wxFontRefData::MacFindFont()
                     case wxMODERN :
                     case wxTELETYPE:
                         m_faceName =  wxT("Courier");
+                        if ( m_style == wxITALIC && m_weight == wxNORMAL )
+                        {
+                            m_style = wxITALIC;
+                        }
                         break ;
 
                     default:
@@ -414,56 +414,70 @@ void wxFontRefData::MacFindFont()
             if (m_style == wxITALIC || m_style == wxSLANT)
                 traits |= kCTFontItalicTrait;
      
-// use font descriptor caching
-#if 0
-            wxString lookupname = wxString::Format( "%s_%ld", m_faceName.c_str(), traits );
-            
-            static std::map< std::wstring , wxCFRef< CTFontDescriptorRef > > fontdescriptorcache ;
-            
-            m_ctFontDescriptor = fontdescriptorcache[ std::wstring(lookupname.wc_str()) ];
-            if ( !m_ctFontDescriptor )
-            {
-                wxCFStringRef cf( m_faceName, wxLocale::GetSystemEncoding() );
-                m_ctFontDescriptor.reset( wxMacCreateCTFontDescriptor( cf, traits ) );
-                fontdescriptorcache[ std::wstring(lookupname.wc_str()) ] = m_ctFontDescriptor;
-            }
-#else
-            wxCFStringRef cf( m_faceName, wxLocale::GetSystemEncoding() );
-            m_ctFontDescriptor.reset( wxMacCreateCTFontDescriptor( cf, traits ) );
-#endif
-            
-// use font caching
-#if 0
+            // use font caching
             wxString lookupnameWithSize = wxString::Format( "%s_%ld_%ld", m_faceName.c_str(), traits, m_pointSize );
             
             static std::map< std::wstring , wxCFRef< CTFontRef > > fontcache ;
             m_ctFont = fontcache[ std::wstring(lookupnameWithSize.wc_str()) ];
             if ( !m_ctFont )
             {
-                m_ctFont.reset( CTFontCreateWithFontDescriptor( m_ctFontDescriptor, m_pointSize, NULL ) );
-                fontcache[ std::wstring(lookupnameWithSize.wc_str()) ] = m_ctFont;
-            }
-#else
-            m_ctFont.reset( CTFontCreateWithFontDescriptor( m_ctFontDescriptor, m_pointSize, NULL ) );
-#endif
-            if ( /* (CTFontGetSymbolicTraits( m_ctFont ) & 0x03) !=*/ traits )
-            {
-                CTFontRef font = CTFontCreateWithName( cf, m_pointSize,  NULL );
-                CTFontRef font2 = CTFontCreateCopyWithSymbolicTraits( font, m_pointSize, NULL, traits, 0x03 );
-                CFRelease(font);
-                m_ctFont.reset( font2 );
-#if 0 // debugging coretext font matching
-                if ( (CTFontGetSymbolicTraits( m_ctFont ) & 0x03) != traits )
+                // QD selection algorithm is the fastest by orders of magnitude on 10.5
+                if ( m_faceName.IsAscii() )
                 {
-                    wxMessageBox( wxString::Format( "expected %d but got %d traits" , traits, (CTFontGetSymbolicTraits( m_ctFont ) & 0x03) ) );
+                    uint8 qdstyle = 0;
+                    if (m_weight == wxBOLD)
+                        qdstyle |= bold;
+                    if (m_style == wxITALIC || m_style == wxSLANT)
+                        qdstyle |= italic;
+                    
+                    Str255 qdFontName ;
+                    wxMacStringToPascal( m_faceName , qdFontName );
+                    m_ctFont.reset( CTFontCreateWithQuickdrawInstance(qdFontName, 0 , qdstyle, m_pointSize) );
                 }
-#endif
+                else
+                {
+
+                    static std::map< std::wstring , wxCFRef< CTFontDescriptorRef > > fontdescriptorcache ;
+                    wxString lookupname = wxString::Format( "%s_%ld", m_faceName.c_str(), traits );
+                    // descriptor caching
+                    wxCFRef< CTFontDescriptorRef > descriptor = fontdescriptorcache[ std::wstring(lookupname.wc_str()) ];
+                    if ( !descriptor )
+                    {
+                        wxCFStringRef cf( m_faceName, wxLocale::GetSystemEncoding() );
+                        descriptor.reset( wxMacCreateCTFontDescriptor( cf, traits ) );
+                        fontdescriptorcache[ std::wstring(lookupname.wc_str()) ] = descriptor;
+                    }
+                    m_ctFont.reset( CTFontCreateWithFontDescriptor( descriptor, m_pointSize, NULL ) );
+                    CTFontSymbolicTraits received = CTFontGetSymbolicTraits( m_ctFont ) & 0x03;
+                    if ( traits != received )
+                    {
+                        // TODO further fallbacks, synthesizing bold and italic, trying direct PostScript names etc
+                    }
+                }
+                
+                fontcache[ std::wstring(lookupnameWithSize.wc_str()) ] = m_ctFont;
+#if 1 // debugging coretext font matching
+                CTFontSymbolicTraits received = CTFontGetSymbolicTraits( m_ctFont ) & 0x03;
+                if ( received != traits )
+                {
+                    float angle = CTFontGetSlantAngle( m_ctFont );
+                    CFDictionaryRef dict = CTFontCopyTraits( m_ctFont );
+                    CFNumberRef number = (CFNumberRef) CFDictionaryGetValue(dict, kCTFontWeightTrait );
+                    float floatnumber;
+                    CFNumberGetValue( number, kCFNumberFloatType, &floatnumber );
+                    {
+                        printf( wxString::Format( "font %s expected %d but got %d traits, %f angle \n" , m_faceName.c_str(), traits, received, angle ) );
+                    }
+                    CFShow( dict );
+                    CFRelease( dict );
+                }
+#endif  
             }
+
         }
 #if wxOSX_USE_ATSU_TEXT
         OSStatus status = noErr;
-        CTFontDescriptorRef desc = m_ctFontDescriptor ;
-        ATSFontRef atsfont = CTFontGetPlatformFont( m_ctFont, &desc );
+        ATSFontRef atsfont = CTFontGetPlatformFont( m_ctFont, NULL );
         FMFont fmfont = FMGetFontFromATSFontRef( atsfont );
         ATSUAttributeTag atsuTags[] =
         {
@@ -1015,13 +1029,6 @@ const void * wxFont::MacGetCTFont() const
     wxCHECK_MSG( M_FONTDATA != NULL , 0, wxT("invalid font") );
 
     return (CTFontRef)(M_FONTDATA->m_ctFont);
-}
-
-const void * wxFont::MacGetCTFontDescriptor() const
-{
-    wxCHECK_MSG( M_FONTDATA != NULL , 0, wxT("invalid font") );
-
-    return (CTFontDescriptorRef)(M_FONTDATA->m_ctFontDescriptor);
 }
 
 #endif

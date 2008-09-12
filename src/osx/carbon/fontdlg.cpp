@@ -229,8 +229,9 @@ int wxFontDialog::ShowModal()
 #if wxOSX_USE_CORE_TEXT
     if ( UMAGetSystemVersion() >= 0x1050 )
     {
-        CTFontDescriptorRef descr = (CTFontDescriptorRef)font.MacGetCTFontDescriptor();
+        CTFontDescriptorRef descr = (CTFontDescriptorRef) CTFontCopyFontDescriptor( (CTFontRef) font.MacGetCTFont() );
         err = SetFontInfoForSelection (kFontSelectionCoreTextType,1, &descr , NULL);
+        CFRelease( descr );
         setup = true;
     }
 #endif
