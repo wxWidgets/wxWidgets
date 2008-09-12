@@ -45,6 +45,7 @@
     #include "wx/statusbr.h"
     #include "wx/intl.h"
     #include "wx/frame.h"
+    #include "wx/stopwatch.h"
 #endif
 
 // This define is necessary to prevent macro clearing
