@@ -284,6 +284,31 @@
     <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">aui=auilib+auidll</set>
 
     <!-- ================================================================ -->
+    <!--                            PROPGRID                              -->
+    <!-- ================================================================ -->
+
+    <dll id="propgriddll" template="wx_dll"
+         cond="SHARED=='1' and USE_PROPGRID=='1' and MONOLITHIC=='0'">
+        <define>WXUSINGDLL</define>
+        <define>WXMAKINGDLL_PROPGRID</define>
+        <sources>$(PROPGRID_SRC)</sources>
+        <library>advdll</library>
+        <library>coredll</library>
+        <library>basedll</library>
+        <msvc-headers>$(PROPGRID_HDR)</msvc-headers>
+    </dll>
+
+    <lib id="propgridlib" template="wx_lib"
+         cond="SHARED=='0' and USE_PROPGRID=='1' and MONOLITHIC=='0'">
+        <sources>$(PROPGRID_SRC)</sources>
+        <msvc-headers>$(PROPGRID_HDR)</msvc-headers>
+    </lib>
+    
+    <wxshortcut id="wxpropgrid" cond="MONOLITHIC=='0' and USE_PROPGRID=='1'"/>
+
+    <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">propgrid=propgridlib+propgriddll</set>
+
+    <!-- ================================================================ -->
     <!--                            RICHTEXT                              -->
     <!-- ================================================================ -->
 

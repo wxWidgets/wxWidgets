@@ -27,6 +27,7 @@ This page contains a summarized listing of classes, please see the
 @li @ref page_class_cat_richtext
 @li @ref page_class_cat_grid
 @li @ref page_class_cat_miscwnd
+@li @ref page_class_cat_propgrid
 </td><td>
 @li @ref page_class_cat_dc
 @li @ref page_class_cat_gdi
@@ -371,6 +372,12 @@ data.
 @li wxGridSelection: The object efficiently representing the grid selection.
 @li wxGridTypeRegistry: Contains information about the data types supported by
     the grid.
+
+@section page_class_cat_propgrid Property Grid
+
+wxPropertyGrid is a property sheet control, which API consists of
+various classes listed here.
+
 
 @section page_class_cat_dc Device Contexts
 

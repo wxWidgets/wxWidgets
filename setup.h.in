@@ -307,6 +307,8 @@
 
 #define wxUSE_AUI       0
 
+#define wxUSE_PROPGRID  0
+
 #define wxUSE_STC 0
 
 

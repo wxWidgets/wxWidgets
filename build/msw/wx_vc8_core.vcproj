@@ -4260,6 +4260,9 @@
 				RelativePath="..\..\include\wx\access.h"
 			/>
 			<File
+				RelativePath="..\..\include\wx\propgrid\advprops.h"
+			/>
+			<File
 				RelativePath="..\..\include\wx\anidecod.h"
 			/>
 			<File
@@ -4446,6 +4449,9 @@
 				RelativePath="..\..\include\wx\editlbox.h"
 			/>
 			<File
+				RelativePath="..\..\include\wx\propgrid\editors.h"
+			/>
+			<File
 				RelativePath="..\..\include\wx\effects.h"
 			/>
 			<File
@@ -4602,6 +4608,9 @@
 				RelativePath="..\..\include\wx\listctrl.h"
 			/>
 			<File
+				RelativePath="..\..\include\wx\propgrid\manager.h"
+			/>
+			<File
 				RelativePath="..\..\include\wx\matrix.h"
 			/>
 			<File
@@ -4684,6 +4693,24 @@
 			/>
 			<File
 				RelativePath="..\..\include\wx\propdlg.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\propgrid\property.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\propgrid\propgrid.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\propgrid\propgriddefs.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\propgrid\propgridiface.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\propgrid\propgridpagestate.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\propgrid\props.h"
 			/>
 			<File
 				RelativePath="..\..\include\wx\quantize.h"

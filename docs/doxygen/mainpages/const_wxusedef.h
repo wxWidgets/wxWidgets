@@ -191,6 +191,7 @@ library:
 @itemdef{wxUSE_PRINTF_POS_PARAMS, Use wxVsnprintf which supports positional parameters.}
 @itemdef{wxUSE_PRINTING_ARCHITECTURE, Enable printer classes.}
 @itemdef{wxUSE_PROGRESSDLG, Enables progress dialog classes.}
+@itemdef{wxUSE_PROPGRID, Use wxPropertyGrid library.}
 @itemdef{wxUSE_PROTOCOL, Use wxProtocol and derived classes.}
 @itemdef{wxUSE_PROTOCOL_FILE, Use wxFileProto class. (requires wxProtocol)}
 @itemdef{wxUSE_PROTOCOL_FTP, Use wxFTP class. (requires wxProtocol)}

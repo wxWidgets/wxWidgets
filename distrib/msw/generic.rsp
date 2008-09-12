@@ -102,6 +102,8 @@ src/richtext/*.cpp
 
 src/aui/*.cpp
 
+src/propgrid/*.cpp
+
 src/unix/*.cpp
 src/unix/*.c
 
@@ -159,6 +161,7 @@ include/wx/html/msw/*.ico
 include/wx/html/msw/*.rc
 include/wx/richtext/*.h
 include/wx/aui/*.h
+include/wx/propgrid/*.h
 lib/dummy
 
 tools/gettext/*.*

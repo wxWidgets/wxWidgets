@@ -149,6 +149,8 @@ samples/popup/popup.dsp
 
 samples/printing/printing.dsp
 
+samples/propgrid/propgrid.dsp
+
 samples/propsize/propsize.dsp
 
 samples/regtest/regtest.dsp

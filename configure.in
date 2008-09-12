@@ -767,6 +767,7 @@ WX_ARG_FEATURE(html,        [  --enable-html           use wxHTML sub-library], 
 WX_ARG_FEATURE(htmlhelp,    [  --enable-htmlhelp       use wxHTML-based help], wxUSE_WXHTML_HELP)
 WX_ARG_FEATURE(xrc,         [  --enable-xrc            use XRC resources sub-library], wxUSE_XRC)
 WX_ARG_FEATURE(aui,         [  --enable-aui            use AUI docking library], wxUSE_AUI)
+WX_ARG_FEATURE(propgrid,    [  --enable-propgrid       use wxPropertyGrid library], wxUSE_PROPGRID)
 WX_ARG_FEATURE(stc,         [  --enable-stc            use wxStyledTextCtrl library], wxUSE_STC)
 WX_ARG_FEATURE(constraints, [  --enable-constraints    use layout-constraints system], wxUSE_CONSTRAINTS)
 WX_ARG_FEATURE(loggui,      [  --enable-loggui         use standard GUI logger], wxUSE_LOGGUI)
@@ -6939,6 +6940,13 @@ if test "$wxUSE_AUI" = "yes"; then
    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS aui"
 fi
 
+USE_PROPGRID=0
+if test "$wxUSE_PROPGRID" = "yes"; then
+   AC_DEFINE(wxUSE_PROPGRID)
+   USE_PROPGRID=1
+   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS propgrid"
+fi
+
 USE_STC=0
 if test "$wxUSE_STC" = "yes"; then
    AC_DEFINE(wxUSE_STC)
@@ -7319,6 +7327,9 @@ if test "$wxUSE_GUI" = "yes"; then
     fi
     if test "$wxUSE_AUI" = "yes" ; then
         BUILT_WX_LIBS="aui $BUILT_WX_LIBS"
+    fi
+    if test "$wxUSE_PROPGRID" = "yes" ; then
+        BUILT_WX_LIBS="propgrid $BUILT_WX_LIBS"
     fi
     if test "$wxUSE_STC" = "yes" ; then
         BUILT_WX_LIBS="stc $BUILT_WX_LIBS"

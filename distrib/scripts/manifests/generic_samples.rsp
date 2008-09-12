@@ -1007,6 +1007,17 @@ samples/printing/makefile.unx
 samples/printing/makefile.wat
 samples/printing/makefile.vc
 samples/printing/printing.cpp
+samples/propgrid/propgrid.bkl
+samples/propgrid/propgrid.dsp
+samples/propgrid/Makefile.in
+samples/propgrid/makefile.bcc
+samples/propgrid/makefile.gcc
+samples/propgrid/propgrid.cpp
+samples/propgrid/propgrid.h
+samples/propgrid/propgrid_minimal.cpp
+samples/propgrid/sampleprops.cpp
+samples/propgrid/sampleprops.h
+samples/propgrid/tests.cpp
 samples/regtest/key1.ico
 samples/regtest/key2.ico
 samples/regtest/key3.ico

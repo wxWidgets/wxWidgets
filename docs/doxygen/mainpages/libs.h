@@ -33,6 +33,7 @@ digraph Dependancies
     wxGL       [fillcolor = green, URL = "\ref page_libs_wxgl"];
     wxHTML     [fillcolor = green, URL = "\ref page_libs_wxhtml"];
     wxMedia    [fillcolor = green, URL = "\ref page_libs_wxmedia"];
+    wxPropertyGrid [fillcolor = green, URL = "\ref page_libs_wxpropgrid"];
     wxQA       [fillcolor = green, URL = "\ref page_libs_wxqa"];
     wxRichText [fillcolor = green, URL = "\ref page_libs_wxrichtext"];
     wxSTC      [fillcolor = green, URL = "\ref page_libs_wxstc"];
@@ -47,6 +48,7 @@ digraph Dependancies
     wxGL -> wxCore;
     wxHTML -> wxCore;
     wxMedia -> wxCore;
+    wxPropertyGrid -> wxAdvanced;
     wxQA -> wxCore; wxQA -> wxXML;
     wxRichText -> wxAdvanced; wxRichText -> wxHTML; wxRichText -> wxXML;
     wxSTC -> wxCore;
@@ -97,6 +99,13 @@ Classes for network access:
 @li wxInternetFSHandler (a wxFileSystem handler)
 
 Requires @ref page_libs_wxbase.
+
+
+@section page_libs_wxpropgrid wxPropertyGrid
+
+This contains the wxPropertyGrid control.
+
+Requires @ref page_libs_wxadv, @ref page_libs_wxcore, @ref page_libs_wxbase.
 
 
 @section page_libs_wxrichtext wxRichText

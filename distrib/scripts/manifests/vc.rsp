@@ -171,6 +171,8 @@ samples/power/power.dsp
 samples/power/power.dsw
 samples/printing/printing.dsp
 samples/printing/printing.dsw
+samples/propgrid/propgrid.dsp
+samples/propgrid/propgrid.dsw
 samples/propsize/propsize.dsp
 samples/propsize/propsize.dsw
 samples/regtest/regtest.dsp

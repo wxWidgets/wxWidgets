@@ -24,6 +24,7 @@ ctags --totals --c++-kinds=+px --language-force=c++ \
 	-I WXDLLIMPEXP_DATA_MEDIA+ -I WXDLLIMPEXP_MEDIA \
 	-I WXDLLIMPEXP_DATA_NET+ -I WXDLLIMPEXP_NET \
 	-I WXDLLIMPEXP_DATA_ODBC+ -I WXDLLIMPEXP_ODBC \
+	-I WXDLLIMPEXP_DATA_PROPGRID+ -I WXDLLIMPEXP_PROPGRID \
 	-I WXDLLIMPEXP_DATA_QA+ -I WXDLLIMPEXP_QA \
 	-I WXDLLIMPEXP_DATA_RICHTEXT+ -I WXDLLIMPEXP_RICHTEXT \
 	-I WXDLLIMPEXP_DATA_STC+ -I WXDLLIMPEXP_STC \
@@ -36,6 +37,7 @@ ctags --totals --c++-kinds=+px --language-force=c++ \
 	include/wx/$1/*.h \
 	include/wx/$1/private/*.h \
 	include/wx/html/*.h \
+	include/wx/propgrid/*.h \
 	include/wx/protocol/*.h \
 	include/wx/richtext/*.h \
 	include/wx/xml/*.h \

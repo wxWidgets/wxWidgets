@@ -5631,6 +5631,10 @@ SOURCE=..\..\include\wx\access.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\propgrid\advprops.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\anidecod.h
 # End Source File
 # Begin Source File
@@ -5879,6 +5883,10 @@ SOURCE=..\..\include\wx\editlbox.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\propgrid\editors.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\effects.h
 # End Source File
 # Begin Source File
@@ -6087,6 +6095,10 @@ SOURCE=..\..\include\wx\listctrl.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\propgrid\manager.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\matrix.h
 # End Source File
 # Begin Source File
@@ -6196,6 +6208,30 @@ SOURCE=..\..\include\wx\progdlg.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\propdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\propgrid\property.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\propgrid\propgrid.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\propgrid\propgriddefs.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\propgrid\propgridiface.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\propgrid\propgridpagestate.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\propgrid\props.h
 # End Source File
 # Begin Source File
 

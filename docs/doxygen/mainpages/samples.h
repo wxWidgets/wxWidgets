@@ -107,6 +107,7 @@ TODO: Organize them in a more human-readable way.
 @li @sample{popup}
 @li @sample{power}
 @li @sample{printing}
+@li @sample{propgrid}
 </td><td>
 @li @sample{regtest}
 @li @sample{render}
@@ -687,6 +688,21 @@ commands through menu.
 @buildwith{wxUSE_PRINTING_ARCHITECTURE}
 
 @sampledir{printing}
+
+@section page_samples_propgrid wxPropertyGrid Sample
+
+Sample application has following additional examples of custom properties:
+- wxFontDataProperty ( edits wxFontData )
+- wxPointProperty ( edits wxPoint )
+- wxSizeProperty ( edits wxSize )
+- wxAdvImageFileProperty ( like wxImageFileProperty, but also has a drop-down
+  for recent image selection )
+- wxDirsProperty ( edits a wxArrayString consisting of directory strings)
+- wxArrayDoubleProperty ( edits wxArrayDouble )
+
+@sampleabout{wxPropertyGrid}
+
+@sampledir{propgrid}
 
 @section page_samples_regtest Registry Sample
 

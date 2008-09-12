@@ -80,6 +80,8 @@ src/richtext/*.cpp
 
 src/aui/*.cpp
 
+src/propgrid/*.cpp
+
 src/png/*.c
 src/png/*.h
 src/png/makefile*
@@ -103,6 +105,7 @@ include/wx/generic/*.xpm
 include/wx/html/*.h
 include/wx/richtext/*.h
 include/wx/aui/*.h
+include/wx/propgrid/*.h
 lib/dummy
 
 utils/*.bkl

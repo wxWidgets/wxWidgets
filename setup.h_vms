@@ -328,6 +328,8 @@ typedef pid_t GPid;
 
 #define wxUSE_AUI       1
 
+#define wxUSE_PROPGRID  1
+
 #ifndef wxUSE_GRAPHICS_CONTEXT
 #define wxUSE_GRAPHICS_CONTEXT 0
 #endif

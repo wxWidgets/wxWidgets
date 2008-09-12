@@ -193,6 +193,14 @@
 #    define WXDLLIMPEXP_AUI
 #endif
 
+#ifdef WXMAKINGDLL_PROPGRID
+#    define WXDLLIMPEXP_PROPGRID WXEXPORT
+#elif defined(WXUSINGDLL)
+#    define WXDLLIMPEXP_PROPGRID WXIMPORT
+#else /* not making nor using DLL */
+#    define WXDLLIMPEXP_PROPGRID
+#endif
+
 #ifdef WXMAKINGDLL_RICHTEXT
 #    define WXDLLIMPEXP_RICHTEXT WXEXPORT
 #elif defined(WXUSINGDLL)

@@ -140,8 +140,8 @@ Using project files (VC++ 6 and later):
 
    If you want to build DLL configurations in wx.dsw project you unfortunately
    need to build them in the proper order (jpeg, png, tiff, zlib, regex, expat,
-   base, net, odbc, core, gl, html, media, qa, adv, dbgrid, xrc, aui, richtext)
-   manually because VC6 doesn't always respect the correct build order.
+   base, net, odbc, core, gl, html, media, qa, adv, dbgrid, xrc, aui, richtext,
+   propgrid) manually because VC6 doesn't always respect the correct build order.
 
    Alternatively, use the special wx_dll.dsw project which adds the
    dependencies to force the correct order (but, because of this, doesn't work

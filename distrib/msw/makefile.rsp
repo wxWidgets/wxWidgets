@@ -64,6 +64,7 @@ samples/ownerdrw/Makefile.in
 samples/png/Makefile.in
 samples/popup/Makefile.in
 samples/printing/Makefile.in
+samples/propgrid/Makefile.in
 samples/propsize/Makefile.in
 samples/regtest/Makefile.in
 samples/render/Makefile.in

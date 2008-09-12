@@ -3457,6 +3457,32 @@ src/osx/iphone/window.mm
 </set>
 
 <!-- ====================================================================== -->
+<!--                                  wxPropertyGrid                        -->
+<!-- ====================================================================== -->
+
+<set var="PROPGRID_SRC" hints="files">
+    src/propgrid/advprops.cpp
+    src/propgrid/editors.cpp
+    src/propgrid/manager.cpp
+    src/propgrid/property.cpp
+    src/propgrid/propgrid.cpp
+    src/propgrid/propgridiface.cpp
+    src/propgrid/propgridpagestate.cpp
+    src/propgrid/props.cpp
+</set>
+<set var="PROPGRID_HDR" hints="files">
+    wx/propgrid/advprops.h
+    wx/propgrid/editors.h
+    wx/propgrid/manager.h
+    wx/propgrid/property.h
+    wx/propgrid/propgrid.h
+    wx/propgrid/propgriddefs.h
+    wx/propgrid/propgridiface.h
+    wx/propgrid/propgridpagestate.h
+    wx/propgrid/props.h
+</set>
+
+<!-- ====================================================================== -->
 <!--                                  wxRichTextCtrl                        -->
 <!-- ====================================================================== -->
 
@@ -3744,8 +3770,8 @@ src/osx/iphone/window.mm
             $(LOWLEVEL_HDR)
             $(GUI_CORE_HEADERS)
             $(ADVANCED_HDR) $(MEDIA_HDR) $(HTML_HDR)
-            $(OPENGL_HDR) $(QA_HDR) $(XRC_HDR) $(AUI_HDR) $(RICHTEXT_HDR)
-            $(STC_HDR)
+            $(OPENGL_HDR) $(QA_HDR) $(XRC_HDR) $(AUI_HDR) $(PROPGRID_HDR)
+            $(RICHTEXT_HDR) $(STC_HDR)
         </if>
     </set>
 

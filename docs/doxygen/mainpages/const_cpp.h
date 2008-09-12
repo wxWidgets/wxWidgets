@@ -220,6 +220,7 @@ with the corresponding library. The following symbols are honoured:
     - wxNO_HTML_LIB
     - wxNO_MEDIA_LIB
     - wxNO_NET_LIB
+    - wxNO_PROPGRID_LIB
     - wxNO_QA_LIB
     - wxNO_RICHTEXT_LIB
     - wxNO_XML_LIB

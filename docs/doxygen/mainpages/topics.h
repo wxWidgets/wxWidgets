@@ -91,6 +91,7 @@ The following is a basic categorization of them:
 @li @subpage overview_html
 @li @subpage overview_richtextctrl
 @li @subpage overview_aui
+@li @subpage overview_propgrid
 @li @subpage overview_cmndlg
 @li @subpage overview_toolbar
 @li @subpage overview_grid

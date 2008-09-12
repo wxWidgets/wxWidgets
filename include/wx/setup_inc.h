@@ -603,6 +603,13 @@
 // Recommended setting: 1
 #define wxUSE_AUI       1
 
+// Use wxPropertyGrid.
+//
+// Default is 1
+//
+// Recommended setting: 1
+#define wxUSE_PROPGRID  1
+
 // Use wxStyledTextCtrl, a wxWidgets implementation of Scintilla.
 //
 // Default is 1

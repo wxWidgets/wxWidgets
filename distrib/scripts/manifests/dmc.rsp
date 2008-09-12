@@ -160,6 +160,8 @@ samples/power/makefile.dmc
 samples/power/makefile.dms
 samples/printing/makefile.dmc
 samples/printing/makefile.dms
+samples/propgrid/makefile.dmc
+samples/propgrid/makefile.dms
 samples/propsize/makefile.dmc
 samples/propsize/makefile.dms
 samples/regtest/makefile.dmc
