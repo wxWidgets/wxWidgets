@@ -183,7 +183,7 @@ private:
     DECLARE_NO_COPY_CLASS(IPCTestClient)
 };
 
-static IPCTestClient gs_client;
+static IPCTestClient *gs_client = NULL;
 
 // ----------------------------------------------------------------------------
 // the test code itself
@@ -214,21 +214,22 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( IPCTestCase, "IPCTestCase" );
 void IPCTestCase::Connect()
 {
     gs_server = new IPCTestServer;
+    gs_client = new IPCTestClient;
 
     // connecting to the wrong port should fail
-    CPPUNIT_ASSERT( !gs_client.Connect("localhost", "2424", IPC_TEST_TOPIC) );
+    CPPUNIT_ASSERT( !gs_client->Connect("localhost", "2424", IPC_TEST_TOPIC) );
 
     // connecting using an unsupported topic should fail (unless the server
     // expects a ROT-13'd topic name...)
-    CPPUNIT_ASSERT( !gs_client.Connect("localhost", IPC_TEST_PORT, "VCP GRFG") );
+    CPPUNIT_ASSERT( !gs_client->Connect("localhost", IPC_TEST_PORT, "VCP GRFG") );
 
     // connecting to the right port on the right topic should succeed
-    CPPUNIT_ASSERT( gs_client.Connect("localhost", IPC_TEST_PORT, IPC_TEST_TOPIC) );
+    CPPUNIT_ASSERT( gs_client->Connect("localhost", IPC_TEST_PORT, IPC_TEST_TOPIC) );
 }
 
 void IPCTestCase::Execute()
 {
-    wxConnectionBase& conn = gs_client.GetConn();
+    wxConnectionBase& conn = gs_client->GetConn();
 
     const wxString s("Date");
     CPPUNIT_ASSERT( conn.Execute(s) );
@@ -240,7 +241,12 @@ void IPCTestCase::Execute()
 
 void IPCTestCase::Disconnect()
 {
-    gs_client.Disconnect();
+    if ( gs_client )
+    {
+        gs_client->Disconnect();
+        delete gs_client;
+        gs_client = NULL;
+    }
 
     if ( gs_server )
     {
