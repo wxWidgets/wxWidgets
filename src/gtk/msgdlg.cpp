@@ -208,10 +208,16 @@ void wxMessageDialog::GTKCreateMsgDialog()
             }
         }
 
-        gtk_dialog_set_default_response(dlg,
-                                        m_dialogStyle & wxNO_DEFAULT
-                                            ? GTK_RESPONSE_NO
-                                            : GTK_RESPONSE_YES);
+        // it'd probably be harmless to call gtk_dialog_set_default_response()
+        // twice but why do it if we're going to change the default below
+        // anyhow
+        if ( !(m_dialogStyle & wxCANCEL_DEFAULT) )
+        {
+            gtk_dialog_set_default_response(dlg,
+                                            m_dialogStyle & wxNO_DEFAULT
+                                                ? GTK_RESPONSE_NO
+                                                : GTK_RESPONSE_YES);
+        }
     }
     else if ( addButtons ) // Ok or Ok/Cancel dialog
     {
@@ -221,6 +227,11 @@ void wxMessageDialog::GTKCreateMsgDialog()
             gtk_dialog_add_button(dlg, wxGTK_CONV(GetCancelLabel()),
                                   GTK_RESPONSE_CANCEL);
         }
+    }
+
+    if ( m_dialogStyle & wxCANCEL_DEFAULT )
+    {
+        gtk_dialog_set_default_response(dlg, GTK_RESPONSE_CANCEL);
     }
 }
 
