@@ -106,7 +106,6 @@ public:
 #endif
 #if wxOSX_USE_CORE_TEXT
     const void * MacGetCTFont() const;
-    const void * MacGetCTFontDescriptor() const;
 #endif
 #if wxOSX_USE_CORE_TEXT || wxOSX_USE_ATSU_TEXT
     void* MacGetATSUStyle() const ;
