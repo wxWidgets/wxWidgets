@@ -171,16 +171,16 @@ public:
     }
 
     // modifiers: return true if the state really changed
-    bool Enable(bool enable);
-    bool Toggle(bool toggle);
-    bool SetToggle(bool toggle);
-    bool SetShortHelp(const wxString& help);
-    bool SetLongHelp(const wxString& help);
+    virtual bool Enable(bool enable);
+    virtual bool Toggle(bool toggle);
+    virtual bool SetToggle(bool toggle);
+    virtual bool SetShortHelp(const wxString& help);
+    virtual bool SetLongHelp(const wxString& help);
 
     void Toggle() { Toggle(!IsToggled()); }
 
-    void SetNormalBitmap(const wxBitmap& bmp) { m_bmpNormal = bmp; }
-    void SetDisabledBitmap(const wxBitmap& bmp) { m_bmpDisabled = bmp; }
+    virtual void SetNormalBitmap(const wxBitmap& bmp) { m_bmpNormal = bmp; }
+    virtual void SetDisabledBitmap(const wxBitmap& bmp) { m_bmpDisabled = bmp; }
 
     virtual void SetLabel(const wxString& label) { m_label = label; }
 
@@ -202,7 +202,7 @@ public:
 
     // these methods are only for tools of wxITEM_DROPDOWN kind (but even such
     // tools can have a NULL associated menu)
-    void SetDropdownMenu(wxMenu *menu);
+    virtual void SetDropdownMenu(wxMenu *menu);
     wxMenu *GetDropdownMenu() const { return m_dropdownMenu; }
 
 protected:
