@@ -1,7 +1,7 @@
 /* common warning snippet for all osx direct includes */
 
 #ifndef wxOSX_USE_CARBON
-#error "this files should only be included after platform.h was included
+#error "this files should only be included after platform.h was included"
 #endif
 
 #ifndef _WX_PRIVATE_OSX_H_
