@@ -2256,7 +2256,7 @@ typedef void (wxEvtHandler::*wxGridEditorCreatedEventFunction)(wxGridEditorCreat
 #define EVT_GRID_CMD_LABEL_RIGHT_DCLICK(id, fn)  wx__DECLARE_GRIDEVT(LABEL_RIGHT_DCLICK, id, fn)
 #define EVT_GRID_CMD_ROW_SIZE(id, fn)            wx__DECLARE_GRIDSIZEEVT(ROW_SIZE, id, fn)
 #define EVT_GRID_CMD_COL_SIZE(id, fn)            wx__DECLARE_GRIDSIZEEVT(COL_SIZE, id, fn)
-#define EVT_GRID_CMD_COL_MOVE(id, fn)            wx__DECLARE_GRIDSIZEEVT(COL_MOVE, id, fn)
+#define EVT_GRID_CMD_COL_MOVE(id, fn)            wx__DECLARE_GRIDEVT(COL_MOVE, id, fn)
 #define EVT_GRID_CMD_RANGE_SELECT(id, fn)        wx__DECLARE_GRIDRANGESELEVT(RANGE_SELECT, id, fn)
 #define EVT_GRID_CMD_CELL_CHANGE(id, fn)         wx__DECLARE_GRIDEVT(CELL_CHANGE, id, fn)
 #define EVT_GRID_CMD_SELECT_CELL(id, fn)         wx__DECLARE_GRIDEVT(SELECT_CELL, id, fn)
