@@ -199,7 +199,7 @@ public:
     bool DestroyChildren();
 
         // is the window being deleted?
-    bool IsBeingDeleted() const { return m_isBeingDeleted; }
+    bool IsBeingDeleted() const;
 
     // window attributes
     // -----------------

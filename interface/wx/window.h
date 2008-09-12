@@ -126,7 +126,7 @@
     @library{wxcore}
     @category{FIXME}
 
-    @see @ref overview_eventhandling "Event handling overview", 
+    @see @ref overview_eventhandling "Event handling overview",
          @ref overview_windowsizing "Window sizing overview"
 */
 class wxWindow : public wxEvtHandler
@@ -136,7 +136,7 @@ public:
        Default constructor
     */
     wxWindow();
-    
+
     /**
         Constructs a window, which can be a child of a frame, dialog or any other
         non-control window.
@@ -202,7 +202,7 @@ public:
         container windows
      */
     virtual bool AcceptsFocusRecursively() const;
-    
+
     /**
         Adds a child window.  This is called automatically by window creation
         functions so should not be required by the application programmer.
@@ -440,6 +440,20 @@ public:
     virtual void DestroyChildren();
 
     /**
+        Returns true if this window is in process of being destroyed.
+
+        The top level windows are not deleted immediately but are rather
+        scheduled for later destruction to give them time to process any
+        pending messages, see Destroy() description.
+
+        This function returns @true if this window, or one of its parent
+        windows, is scheduled for destruction and can be useful to avoid
+        manipulating it as it's usually useless to do something with a window
+        which is on the point of disappearing anyhow.
+     */
+    bool IsBeingDeleted() const;
+
+    /**
         Disables the window. Same as @ref Enable() Enable(@false).
 
         @return Returns @true if the window has been disabled, @false if it had
@@ -517,7 +531,7 @@ public:
         it matches itself.
     */
     wxWindow* FindWindow(long id) const;
-    
+
 
     /**
         Find a child of this window, by name. May return @a this if

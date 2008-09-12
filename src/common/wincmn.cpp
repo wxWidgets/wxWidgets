@@ -379,6 +379,12 @@ wxWindowBase::~wxWindowBase()
 #endif
 }
 
+bool wxWindowBase::IsBeingDeleted() const
+{
+    return m_isBeingDeleted ||
+            (!IsTopLevel() && m_parent && m_parent->IsBeingDeleted());
+}
+
 void wxWindowBase::SendDestroyEvent()
 {
     wxWindowDestroyEvent event;

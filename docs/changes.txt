@@ -385,6 +385,8 @@ All (GUI):
 - Show busy cursor in wxLaunchDefaultBrowser and add wxBROWSER_NOBUSYCURSOR.
 - Added wxFlexGridSizer::Is{Row,Col}Growable() (Marcin Wojdyr).
 - Added "enabled" and "hidden" attributes to radio box items in XRC.
+- wxWindow::IsBeingDeleted() now returns true not only if the window itself is
+  marked for destruction but also if any of its parent windows are.
 
 wxGTK:
 
