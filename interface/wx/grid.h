@@ -12,7 +12,7 @@
     This class may be used to format floating point data in a cell.
 
     @library{wxadv}
-    @category{FIXME}
+    @category{grid}
 
     @see wxGridCellRenderer, wxGridCellNumberRenderer, wxGridCellStringRenderer,
     wxGridCellBoolRenderer
@@ -29,12 +29,12 @@ public:
     wxGridCellFloatRenderer(int width = -1, int precision = -1);
 
     /**
-        Returns the precision ( see @ref constr() wxGridCellFloatRenderer ).
+        Returns the precision.
     */
     int GetPrecision() const;
 
     /**
-        Returns the width ( see @ref constr() wxGridCellFloatRenderer ).
+        Returns the width.
     */
     int GetWidth() const;
 
@@ -44,12 +44,12 @@ public:
     void SetParameters(const wxString& params);
 
     /**
-        Sets the precision ( see @ref constr() wxGridCellFloatRenderer ).
+        Sets the precision.
     */
     void SetPrecision(int precision);
 
     /**
-        Sets the width ( see @ref constr() wxGridCellFloatRenderer )
+        Sets the width.
     */
     void SetWidth(int width);
 };
@@ -62,7 +62,7 @@ public:
     Grid table classes.
 
     @library{wxadv}
-    @category{FIXME}
+    @category{grid}
 */
 class wxGridTableBase : public wxObject
 {
@@ -285,7 +285,7 @@ public:
     even for the entire grid.
 
     @library{wxadv}
-    @category{FIXME}
+    @category{grid}
 
     @see wxGridCellTextEditor, wxGridCellFloatEditor, wxGridCellBoolEditor,
     wxGridCellNumberEditor, wxGridCellChoiceEditor
@@ -387,7 +387,7 @@ public:
     The editor for string/text data.
 
     @library{wxadv}
-    @category{FIXME}
+    @category{grid}
 
     @see wxGridCellEditor, wxGridCellFloatEditor, wxGridCellBoolEditor,
     wxGridCellNumberEditor, wxGridCellChoiceEditor
@@ -416,7 +416,7 @@ public:
     for string cells.
 
     @library{wxadv}
-    @category{FIXME}
+    @category{grid}
 
     @see wxGridCellRenderer, wxGridCellNumberRenderer, wxGridCellFloatRenderer,
     wxGridCellBoolRenderer
@@ -438,7 +438,7 @@ public:
     The editor for string data allowing to choose from a list of strings.
 
     @library{wxadv}
-    @category{FIXME}
+    @category{grid}
 
     @see wxGridCellEditor, wxGridCellFloatEditor, wxGridCellBoolEditor,
     wxGridCellTextEditor, wxGridCellNumberEditor
@@ -475,7 +475,7 @@ public:
 
 
     @library{wxadv}
-    @category{FIXME}
+    @category{grid}
 */
 class wxGridEditorCreatedEvent : public wxCommandEvent
 {
@@ -530,7 +530,7 @@ public:
 
 
     @library{wxadv}
-    @category{FIXME}
+    @category{grid}
 */
 class wxGridRangeSelectEvent : public wxNotifyEvent
 {
@@ -620,7 +620,7 @@ public:
     predefined derived classes or derive your own class from it.
 
     @library{wxadv}
-    @category{FIXME}
+    @category{grid}
 
     @see wxGridCellStringRenderer, wxGridCellNumberRenderer,
     wxGridCellFloatRenderer, wxGridCellBoolRenderer
@@ -660,7 +660,7 @@ public:
     The editor for numeric integer data.
 
     @library{wxadv}
-    @category{FIXME}
+    @category{grid}
 
     @see wxGridCellEditor, wxGridCellFloatEditor, wxGridCellBoolEditor,
     wxGridCellTextEditor, wxGridCellChoiceEditor
@@ -699,7 +699,7 @@ public:
     This event class contains information about a row/column resize event.
 
     @library{wxadv}
-    @category{FIXME}
+    @category{grid}
 */
 class wxGridSizeEvent : public wxNotifyEvent
 {
@@ -758,7 +758,7 @@ public:
     This class may be used to format integer data in a cell.
 
     @library{wxadv}
-    @category{FIXME}
+    @category{grid}
 
     @see wxGridCellRenderer, wxGridCellStringRenderer, wxGridCellFloatRenderer,
     wxGridCellBoolRenderer
@@ -782,7 +782,7 @@ public:
     class may be returned by wxGridTableBase::GetAttr.
 
     @library{wxadv}
-    @category{FIXME}
+    @category{grid}
 */
 class wxGridCellAttr
 {
@@ -932,7 +932,7 @@ public:
     for string cells.
 
     @library{wxadv}
-    @category{FIXME}
+    @category{grid}
 
     @see wxGridCellRenderer, wxGridCellStringRenderer, wxGridCellFloatRenderer,
     wxGridCellNumberRenderer
@@ -954,7 +954,7 @@ public:
     This event class contains information about various grid events.
 
     @library{wxadv}
-    @category{FIXME}
+    @category{grid}
 */
 class wxGridEvent : public wxNotifyEvent
 {
@@ -1024,7 +1024,7 @@ public:
     The editor for floating point numbers data.
 
     @library{wxadv}
-    @category{FIXME}
+    @category{grid}
 
     @see wxGridCellEditor, wxGridCellNumberEditor, wxGridCellBoolEditor,
     wxGridCellTextEditor, wxGridCellChoiceEditor
@@ -2716,7 +2716,7 @@ public:
     The editor for boolean data.
 
     @library{wxadv}
-    @category{FIXME}
+    @category{grid}
 
     @see wxGridCellEditor, wxGridCellFloatEditor, wxGridCellNumberEditor,
     wxGridCellTextEditor, wxGridCellChoiceEditor
@@ -2776,7 +2776,7 @@ public:
     because you don't risk not to call the latter (due to an exception for example).
 
     @library{wxadv}
-    @category{FIXME}
+    @category{grid}
 */
 class wxGridUpdateLocker
 {

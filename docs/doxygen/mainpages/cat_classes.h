@@ -21,11 +21,12 @@ This page contains a summarized listing of classes, please see the
 @li @ref page_class_cat_menus
 @li @ref page_class_cat_ctrl
 @li @ref page_class_cat_pickers
-@li @ref page_class_cat_miscwnd
 @li @ref page_class_cat_aui
 @li @ref page_class_cat_cmndlg
 @li @ref page_class_cat_html
 @li @ref page_class_cat_richtext
+@li @ref page_class_cat_grid
+@li @ref page_class_cat_miscwnd
 </td><td>
 @li @ref page_class_cat_dc
 @li @ref page_class_cat_gdi
@@ -159,7 +160,6 @@ Controls that are not static can have wxValidator associated with them.
 @li wxEditableListBox: A listbox with editable items.
 @li wxGauge: A control to represent a varying quantity, such as time remaining
 @li wxGenericDirCtrl: A control for displaying a directory tree
-@li wxGrid: A grid (table) window
 @li wxHtmlListBox: An abstract class for creating listboxes showing HTML
     content
 @li wxSimpleHtmlListBox: A listbox showing HTML content
@@ -325,6 +325,52 @@ with character and paragraph formatting.
 @li wxRichTextPrintout: A class used by wxRichTextPrinting.
 @li wxRichTextHeaderFooterData: Header and footer data specification.
 
+
+@section page_class_cat_grid Grid
+
+wxGrid represents a two-dimensional table of data. It supports custom
+attributes for the table cells, allowing to completely customize its
+appearance and uses a separate grid table (wxGridTableBase-derived) class for
+the data management meaning that it can be used to display arbitrary amounts of
+data.
+
+@li wxGrid: The main grid control class itself.
+@li wxGridTableBase: The base class for grid data provider.
+@li wxGridStringTable: Simple wxGridTableBase implementation supporting only
+    string data items and storing them all in memory (hence suitable for not
+    too large grids only).
+@li wxGridCellAttr: A cell attribute, allowing to customize its appearance as
+    well as the renderer and editor used for displaying and editing it.
+@li wxGridCellAttrProvider: The object responsible for storing and retrieving
+    the cell attributes.
+@li wxGridColLabelWindow: The window showing the grid columns labels.
+@li wxGridRowLabelWindow: The window showing the grid rows labels.
+@li wxGridCornerLabelWindow: The window used in the upper left grid corner.
+@li wxGridWindow: The window representing the main part of the grid.
+@li wxGridCellRenderer: Base class for objects used to display a cell value.
+@li wxGridCellStringRenderer: Renderer showing the cell as a text string.
+@li wxGridCellNumberRenderer: Renderer showing the cell as an integer number.
+@li wxGridCellFloatRenderer: Renderer showing the cell as a floating point
+    number.
+@li wxGridCellBoolRenderer: Renderer showing the cell as checked or unchecked
+    box.
+@li wxGridCellEditor: Base class for objects used to edit the cell value.
+@li wxGridCellStringEditor: Editor for cells containing text strings.
+@li wxGridCellNumberEditor: Editor for cells containing integer numbers.
+@li wxGridCellFloatEditor: Editor for cells containing floating point numbers.
+@li wxGridCellBoolEditor: Editor for boolean-valued cells.
+@li wxGridCellChoiceEditor: Editor allowing to choose one of the predefined
+    strings (and possibly enter new one).
+@li wxGridEvent: The event sent by most of wxGrid actions.
+@li wxGridSizeEvent: The special event sent when a grid column or row is
+    resized.
+@li wxGridRangeSelectEvent: The special event sent when a range of cells is
+    selected in the grid.
+@li wxGridEditorCreatedEvent: The special event sent when a cell editor is
+    created.
+@li wxGridSelection: The object efficiently representing the grid selection.
+@li wxGridTypeRegistry: Contains information about the data types supported by
+    the grid.
 
 @section page_class_cat_dc Device Contexts
 
