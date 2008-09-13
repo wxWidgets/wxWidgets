@@ -1632,9 +1632,6 @@ protected:
     // background colour for empty space below the grid
     wxColour            m_colEmptySpace;
 
-    // temp property array used in DoDrawItems
-    wxArrayPtrVoid      m_visPropArray;
-
     // NB: These *cannot* be moved to globals.
 
     // Array of background colour brushes.

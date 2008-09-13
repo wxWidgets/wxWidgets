@@ -1060,7 +1060,6 @@ void wxPropertyGrid::CalculateFontAndBitmapStuff( int vspacing )
 	GetTextExtent(wxS("jG"), &x, &y, 0, 0, &m_captionFont);
 
     m_lineHeight = m_fontHeight+(2*m_spacingy)+1;
-    m_visPropArray.SetCount((m_height/m_lineHeight)+10);
 
     // button spacing
     m_buttonSpacingY = (m_lineHeight - m_iconHeight) / 2;
@@ -2089,7 +2088,11 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
     wxPropertyGridConstIterator it( state, wxPG_ITERATE_VISIBLE, firstItem );
     int endScanBottomY = lastItemBottomY + lh;
     int y = firstItemTopY;
-    unsigned int arrInd = 0;
+
+    //
+    // Pregenerate list of visible properties.
+    wxArrayPGProperty visPropArray;
+    visPropArray.reserve((m_height/m_lineHeight)+6);
 
     for ( ; !it.AtEnd(); it.Next() )
     {
@@ -2097,8 +2100,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
         if ( !p->HasFlag(wxPG_PROP_HIDDEN) )
         {
-            m_visPropArray[arrInd] = (wxPGProperty*)p;
-            arrInd++;
+            visPropArray.push_back((wxPGProperty*)p);
 
             if ( y > endScanBottomY )
                 break;
@@ -2107,17 +2109,19 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
         }
     }
 
-    m_visPropArray[arrInd] = NULL;
+    visPropArray.push_back(NULL);
+
+    wxPGProperty* nextP = visPropArray[0];
 
     int gridWidth = state->m_width;
 
     y = firstItemTopY;
-    for ( arrInd=0;
-          m_visPropArray[arrInd] != NULL && y <= lastItemBottomY;
+    for ( unsigned int arrInd=1;
+          nextP && y <= lastItemBottomY;
           arrInd++ )
     {
-        wxPGProperty* p =(wxPGProperty*) m_visPropArray[arrInd];
-        wxPGProperty* nextP = (wxPGProperty*) m_visPropArray[arrInd+1];
+        wxPGProperty* p = nextP;
+        nextP = visPropArray[arrInd];
 
         int rowHeight = m_fontHeight+(m_spacingy*2)+1;
         int textMarginHere = x;
@@ -4139,8 +4143,6 @@ void wxPropertyGrid::OnResize( wxSizeEvent& event )
 
     m_width = width;
     m_height = height;
-
-    m_visPropArray.SetCount((height/m_lineHeight)+10);
 
 #if wxPG_DOUBLE_BUFFER
     if ( !(GetExtraStyle() & wxPG_EX_NATIVE_DOUBLE_BUFFERING) )
