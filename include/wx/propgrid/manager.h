@@ -636,10 +636,8 @@ public:
                               dict_=None,
                               as_strings=False,
                               inc_attributes=False):
-            """
-            Same as GetValues, but returns values from specific page only.
-            For argument descriptions, see GetValues.
-            """
+            "Same as GetValues, but returns values from specific page only."
+            "For argument descriptions, see GetValues."
             return page.GetPropertyValues(dict_, as_strings, inc_attributes)
     }
 #endif
