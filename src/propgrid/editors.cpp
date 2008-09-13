@@ -469,7 +469,8 @@ void wxPGTextCtrlEditor::DrawValue( wxDC& dc, wxPGProperty* property, const wxRe
 
 void wxPGTextCtrlEditor::UpdateControl( wxPGProperty* property, wxWindow* ctrl ) const
 {
-    wxTextCtrl* tc = wxStaticCast(ctrl, wxTextCtrl);
+    wxTextCtrl* tc = wxDynamicCast(ctrl, wxTextCtrl);
+    if (!tc) return;
 
     wxString s;
 
