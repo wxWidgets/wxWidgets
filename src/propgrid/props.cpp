@@ -740,13 +740,13 @@ wxString wxBoolProperty::GetValueAsString( int argFlags ) const
             if ( argFlags & wxPG_UNEDITABLE_COMPOSITE_FRAGMENT )
                 return wxEmptyString;
 
-            const wxChar* notFmt;
+            wxString notFmt;
             if ( wxPGGlobalVars->m_autoGetTranslation )
                 notFmt = _("Not %s");
             else
-                notFmt = wxT("Not %s");
+                notFmt = wxS("Not %s");
 
-            return wxString::Format(notFmt,m_label.c_str());
+            return wxString::Format(notFmt.c_str(), m_label.c_str());
         }
     }
 
