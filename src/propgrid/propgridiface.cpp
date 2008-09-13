@@ -50,6 +50,8 @@
 #include <wx/propgrid/property.h>
 #include <wx/propgrid/propgrid.h>
 
+#include <typeinfo>
+
 
 const wxChar *wxPGTypeName_long = wxT("long");
 const wxChar *wxPGTypeName_bool = wxT("bool");

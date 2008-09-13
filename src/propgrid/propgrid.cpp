@@ -69,6 +69,7 @@
     #include <wx/msw/private.h>
 #endif
 
+#include <typeinfo>
 
 // Two pics for the expand / collapse buttons.
 // Files are not supplied with this project (since it is
