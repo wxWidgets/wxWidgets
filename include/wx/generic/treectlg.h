@@ -315,7 +315,6 @@ protected:
 
     void CalculateLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &y );
     void CalculatePositions();
-    void CalculateSize( wxGenericTreeItem *item, wxDC &dc );
 
     void RefreshSubtree( wxGenericTreeItem *item );
     void RefreshLine( wxGenericTreeItem *item );
