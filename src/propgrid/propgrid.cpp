@@ -3055,6 +3055,8 @@ bool wxPropertyGrid::DoPropertyChanged( wxPGProperty* p, unsigned int selFlags )
     if ( m_inDoPropertyChanged )
         return true;
 
+    wxWindow* editor = GetEditorControl();
+
     m_pState->m_anyModified = 1;
 
     m_inDoPropertyChanged = 1;
@@ -3082,7 +3084,7 @@ bool wxPropertyGrid::DoPropertyChanged( wxPGProperty* p, unsigned int selFlags )
         p->m_flags |= wxPG_PROP_MODIFIED;
         if ( p == m_selected && (m_windowStyle & wxPG_BOLD_MODIFIED) )
         {
-            if ( m_wndEditor )
+            if ( editor )
                 SetCurControlBoldFont();
         }
     }
@@ -3099,7 +3101,7 @@ bool wxPropertyGrid::DoPropertyChanged( wxPGProperty* p, unsigned int selFlags )
 
         if ( pwc == m_selected && (m_windowStyle & wxPG_BOLD_MODIFIED) )
         {
-            if ( m_wndEditor )
+            if ( editor )
                 SetCurControlBoldFont();
         }
 
@@ -3115,8 +3117,8 @@ bool wxPropertyGrid::DoPropertyChanged( wxPGProperty* p, unsigned int selFlags )
     // control.
     if ( selFlags & wxPG_SEL_DIALOGVAL )
     {
-        if ( m_wndEditor )
-            p->GetEditorClass()->UpdateControl(p, m_wndEditor);
+        if ( editor )
+            p->GetEditorClass()->UpdateControl(p, editor);
     }
     else
     {
