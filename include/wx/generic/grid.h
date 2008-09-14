@@ -2036,6 +2036,10 @@ protected:
 
     friend class WXDLLIMPEXP_FWD_ADV wxGridSelection;
 
+private:
+    // implement wxScrolledWindow method to return m_gridWin size
+    virtual wxSize GetSizeAvailableForScrollTarget(const wxSize& size);
+
     DECLARE_DYNAMIC_CLASS( wxGrid )
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxGrid)

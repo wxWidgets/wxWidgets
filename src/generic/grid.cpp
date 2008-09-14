@@ -4698,6 +4698,15 @@ void wxGrid::CalcDimensions()
     CalcWindowSizes();
 }
 
+wxSize wxGrid::GetSizeAvailableForScrollTarget(const wxSize& size)
+{
+    wxSize sizeGridWin(size);
+    sizeGridWin.x -= m_rowLabelWidth;
+    sizeGridWin.y -= m_colLabelHeight;
+
+    return sizeGridWin;
+}
+
 void wxGrid::CalcWindowSizes()
 {
     // escape if the window is has not been fully created yet
@@ -4707,33 +4716,6 @@ void wxGrid::CalcWindowSizes()
 
     int cw, ch;
     GetClientSize( &cw, &ch );
-
-    // this block of code tries to work around the following problem: the grid
-    // could have been just resized to have enough space to show the full grid
-    // window contents without the scrollbars, but its client size could be
-    // not big enough because the grid has the scrollbars right now and so the
-    // scrollbars would remain even though we don't need them any more
-    //
-    // to prevent this from happening, check if we have enough space for
-    // everything without the scrollbars and explicitly disable them then
-    wxSize size = GetSize() - GetWindowBorderSize();
-    if ( size != wxSize(cw, ch) )
-    {
-        // check if we have enough space for grid window after accounting for
-        // the fixed size elements
-        size.x -= m_rowLabelWidth;
-        size.y -= m_colLabelHeight;
-
-        const wxSize vsize = m_gridWin->GetVirtualSize();
-
-        if ( size.x >= vsize.x && size.y >= vsize.y )
-        {
-            // yes, we do, so remove the scrollbars and use the new client size
-            // (which should be the same as full window size - borders now)
-            SetScrollbars(0, 0, 0, 0);
-            GetClientSize(&cw, &ch);
-        }
-    }
 
     // the grid may be too small to have enough space for the labels yet, don't
     // size the windows to negative sizes in this case

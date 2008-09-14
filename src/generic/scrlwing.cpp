@@ -644,7 +644,61 @@ int wxScrollHelper::CalcScrollInc(wxScrollWinEvent& event)
     return nScrollInc;
 }
 
-// Adjust the scrollbars - new version.
+void
+wxScrollHelper::AdjustScrollbar(int orient,
+                                int clientSize,
+                                int virtSize,
+                                int& pixelsPerUnit,
+                                int& scrollUnits,
+                                int& scrollPosition)
+{
+    // scroll lines per page: if 0, no scrolling is needed
+    int unitsPerPage;
+
+    // check if we need scrollbar in this direction at all
+    if ( pixelsPerUnit == 0 || clientSize >= virtSize )
+    {
+        // scrolling is disabled or unnecessary
+        scrollUnits =
+        scrollPosition = 0;
+        unitsPerPage = 0;
+    }
+    else // might need scrolling
+    {
+        // Round up integer division to catch any "leftover" client space.
+        scrollUnits = (virtSize + pixelsPerUnit - 1) / pixelsPerUnit;
+
+        // Calculate the number of fully scroll units
+        unitsPerPage = clientSize / pixelsPerUnit;
+
+        if (unitsPerPage >= scrollUnits)
+        {
+            // we're big enough to not need scrolling
+            scrollUnits =
+            scrollPosition = 0;
+            unitsPerPage = 0;
+        }
+        else // we do need a scrollbar
+        {
+            if ( unitsPerPage < 1 )
+                unitsPerPage = 1;
+
+            // Correct position if greater than extent of canvas minus
+            // the visible portion of it or if below zero
+            const int posMax = scrollUnits - unitsPerPage;
+            if ( scrollPosition > posMax )
+                scrollPosition = posMax;
+            else if ( scrollPosition < 0 )
+                scrollPosition = 0;
+        }
+    }
+
+    m_win->SetScrollbar(orient, scrollPosition, unitsPerPage, scrollUnits);
+
+    // The amount by which we scroll when paging
+    SetScrollPageSize(orient, unitsPerPage);
+}
+
 void wxScrollHelper::AdjustScrollbars()
 {
     static wxRecursionGuardFlag s_flagReentrancy;
@@ -660,137 +714,62 @@ void wxScrollHelper::AdjustScrollbars()
         return;
     }
 
-    int w = 0, h = 0;
-    int oldw, oldh;
-
     int oldXScroll = m_xScrollPosition;
     int oldYScroll = m_yScrollPosition;
 
-    // VZ: at least under Windows this loop is useless because when scrollbars
-    //     [dis]appear we get a WM_SIZE resulting in another call to
-    //     AdjustScrollbars() anyhow. As it doesn't seem to do any harm I leave
-    //     it here for now but it would be better to ensure that all ports
-    //     generate EVT_SIZE when scrollbars [dis]appear, emulating it if
-    //     necessary, and remove it later
-    // JACS: Stop potential infinite loop by limiting number of iterations
-    int iterationCount = 0;
-    const int iterationMax = 5;
-    do
+    // we may need to readjust the scrollbars several times as enabling one of
+    // them reduces the area available for the window contents and so can make
+    // the other scrollbar necessary now although it wasn't necessary before
+    //
+    // VZ: normally this loop should be over in at most 2 iterations, I don't
+    //     know why do we need 5 of them
+    for ( int iterationCount = 0; iterationCount < 5; iterationCount++ )
     {
-        iterationCount ++;
+        wxSize clientSize = GetTargetSize();
+        const wxSize virtSize = m_targetWindow->GetVirtualSize();
 
-        GetTargetSize(&w, 0);
-
-        // scroll lines per page: if 0, no scrolling is needed
-        int linesPerPage;
-
-        if ( m_xScrollPixelsPerLine == 0 )
+        // this block of code tries to work around the following problem: the
+        // window could have been just resized to have enough space to show its
+        // full contents without the scrollbars, but its client size could be
+        // not big enough because it does have the scrollbars right now and so
+        // the scrollbars would remain even though we don't need them any more
+        //
+        // to prevent this from happening, check if we have enough space for
+        // everything without the scrollbars and explicitly disable them then
+        const wxSize availSize = GetSizeAvailableForScrollTarget(
+            m_win->GetSize() - m_win->GetWindowBorderSize());
+        if ( availSize != clientSize )
         {
-            // scrolling is disabled
-            m_xScrollLines = 0;
-            m_xScrollPosition = 0;
-            linesPerPage = 0;
-        }
-        else // might need scrolling
-        {
-            // Round up integer division to catch any "leftover" client space.
-            const int wVirt = m_targetWindow->GetVirtualSize().GetWidth();
-            m_xScrollLines = (wVirt + m_xScrollPixelsPerLine - 1) / m_xScrollPixelsPerLine;
-
-            // Calculate page size i.e. number of scroll units you get on the
-            // current client window.
-            linesPerPage = w / m_xScrollPixelsPerLine;
-
-            // Special case. When client and virtual size are very close but
-            // the client is big enough, kill scrollbar.
-            if ((linesPerPage < m_xScrollLines) && (w >= wVirt)) ++linesPerPage;
-
-            if (linesPerPage >= m_xScrollLines)
+            if ( availSize.x >= virtSize.x && availSize.y >= virtSize.y )
             {
-                // we're big enough to not need scrolling
-                linesPerPage =
-                m_xScrollLines =
-                m_xScrollPosition = 0;
-            }
-            else // we do need a scrollbar
-            {
-                if ( linesPerPage < 1 )
-                    linesPerPage = 1;
-
-                // Correct position if greater than extent of canvas minus
-                // the visible portion of it or if below zero
-                const int posMax = m_xScrollLines - linesPerPage;
-                if ( m_xScrollPosition > posMax )
-                    m_xScrollPosition = posMax;
-                else if ( m_xScrollPosition < 0 )
-                    m_xScrollPosition = 0;
+                // this will be enough to make the scrollbars disappear below
+                // and then the client size will indeed become equal to the
+                // full available size
+                clientSize = availSize;
             }
         }
 
-        m_win->SetScrollbar(wxHORIZONTAL, m_xScrollPosition,
-                            linesPerPage, m_xScrollLines);
 
-        // The amount by which we scroll when paging
-        SetScrollPageSize(wxHORIZONTAL, linesPerPage);
+        AdjustScrollbar(wxHORIZONTAL,
+                        clientSize.x,
+                        virtSize.x,
+                        m_xScrollPixelsPerLine,
+                        m_xScrollLines,
+                        m_xScrollPosition);
 
-        GetTargetSize(0, &h);
-
-        if ( m_yScrollPixelsPerLine == 0 )
-        {
-            // scrolling is disabled
-            m_yScrollLines = 0;
-            m_yScrollPosition = 0;
-            linesPerPage = 0;
-        }
-        else // might need scrolling
-        {
-            // Round up integer division to catch any "leftover" client space.
-            const int hVirt = m_targetWindow->GetVirtualSize().GetHeight();
-            m_yScrollLines = ( hVirt + m_yScrollPixelsPerLine - 1 ) / m_yScrollPixelsPerLine;
-
-            // Calculate page size i.e. number of scroll units you get on the
-            // current client window.
-            linesPerPage = h / m_yScrollPixelsPerLine;
-
-            // Special case. When client and virtual size are very close but
-            // the client is big enough, kill scrollbar.
-            if ((linesPerPage < m_yScrollLines) && (h >= hVirt)) ++linesPerPage;
-
-            if (linesPerPage >= m_yScrollLines)
-            {
-                // we're big enough to not need scrolling
-                linesPerPage =
-                m_yScrollLines =
-                m_yScrollPosition = 0;
-            }
-            else // we do need a scrollbar
-            {
-                if ( linesPerPage < 1 )
-                    linesPerPage = 1;
-
-                // Correct position if greater than extent of canvas minus
-                // the visible portion of it or if below zero
-                const int posMax = m_yScrollLines - linesPerPage;
-                if ( m_yScrollPosition > posMax )
-                    m_yScrollPosition = posMax;
-                else if ( m_yScrollPosition < 0 )
-                    m_yScrollPosition = 0;
-            }
-        }
-
-        m_win->SetScrollbar(wxVERTICAL, m_yScrollPosition,
-                            linesPerPage, m_yScrollLines);
-
-        // The amount by which we scroll when paging
-        SetScrollPageSize(wxVERTICAL, linesPerPage);
+        AdjustScrollbar(wxVERTICAL,
+                        clientSize.y,
+                        virtSize.y,
+                        m_yScrollPixelsPerLine,
+                        m_yScrollLines,
+                        m_yScrollPosition);
 
 
-        // If a scrollbar (dis)appeared as a result of this, adjust them again.
-        oldw = w;
-        oldh = h;
-
-        GetTargetSize( &w, &h );
-    } while ( (w != oldw || h != oldh) && (iterationCount < iterationMax) );
+        // If a scrollbar (dis)appeared as a result of this, we need to adjust
+        // them again but if the client size didn't change, then we're done
+        if ( GetTargetSize() == clientSize )
+            break;
+    }
 
 #ifdef __WXMOTIF__
     // Sorry, some Motif-specific code to implement a backing pixmap
@@ -849,7 +828,7 @@ void wxScrollHelper::DoPrepareDC(wxDC& dc)
     wxPoint pt = dc.GetDeviceOrigin();
 #ifdef __WXGTK__
     // It may actually be correct to always query
-    // the m_sign from the DC here, but I leve the
+    // the m_sign from the DC here, but I leave the
     // #ifdef GTK for now.
     if (m_win->GetLayoutDirection() == wxLayout_RightToLeft)
         dc.SetDeviceOrigin( pt.x + m_xScrollPosition * m_xScrollPixelsPerLine,

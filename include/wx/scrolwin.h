@@ -208,6 +208,17 @@ protected:
     // in wxScrollHelperEvtHandler::ProcessEvent()
     void ResetDrawnFlag();
 
+    // helper of AdjustScrollbars(): does the work for the single scrollbar
+    //
+    // notice that the parameters passed by non-const references are modified
+    // by this function
+    void AdjustScrollbar(int orient,
+                         int clientSize,
+                         int virtSize,
+                         int& pixelsPerUnit,
+                         int& scrollUnits,
+                         int& scrollPosition);
+
 
     double                m_scaleX;
     double                m_scaleY;
@@ -236,6 +247,19 @@ protected:
 #endif // wxUSE_MOUSEWHEEL
 
     wxScrollHelperEvtHandler *m_handler;
+
+private:
+    // this function should be overridden to return the size available for
+    // m_targetWindow inside m_win of the given size
+    //
+    // the default implementation is only good for m_targetWindow == m_win
+    // case, if we're scrolling a subwindow you must override this method
+    virtual wxSize GetSizeAvailableForScrollTarget(const wxSize& size)
+    {
+        wxASSERT_MSG( m_targetWindow == m_win, "must be overridden" );
+
+        return size;
+    }
 
     DECLARE_NO_COPY_CLASS(wxScrollHelper)
 };
