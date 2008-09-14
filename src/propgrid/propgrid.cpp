@@ -3307,7 +3307,7 @@ void wxPropertyGrid::OnCustomEditorEvent( wxCommandEvent &event )
         }
     }
 
-    if ( !buttonWasHandled )
+    if ( wnd && !buttonWasHandled )
     {
         // First call editor class' event handler.
         const wxPGEditor* editor = selected->GetEditorClass();
