@@ -3979,7 +3979,7 @@ bool wxPropertyGrid::DoCollapse( wxPGProperty* p, bool sendEvents )
     }
 
     // Clear dont-center-splitter flag if it wasn't set
-    m_iFlags = m_iFlags & ~(wxPG_FL_DONT_CENTER_SPLITTER) | old_flag;
+    m_iFlags = (m_iFlags & ~wxPG_FL_DONT_CENTER_SPLITTER) | old_flag;
 
     return res;
 }
