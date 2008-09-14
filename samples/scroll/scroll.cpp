@@ -34,20 +34,22 @@ const long ID_INSERT_NEW = 101;
 // a trivial example
 // ----------------------------------------------------------------------
 
-class MySimpleFrame;
-class MySimpleCanvas;
-
-// MySimpleCanvas
-
+// MySimpleCanvas: a scrolled window which draws a simple rectangle
 class MySimpleCanvas: public wxScrolledWindow
 {
 public:
     MySimpleCanvas() { }
-    MySimpleCanvas( wxWindow *parent, wxWindowID, const wxPoint &pos, const wxSize &size );
-
-    void OnPaint( wxPaintEvent &event );
+    MySimpleCanvas(wxWindow *parent);
 
 private:
+    void OnPaint(wxPaintEvent& event);
+
+    enum
+    {
+        CANVAS_WIDTH = 292,
+        CANVAS_HEIGHT = 297
+    };
+
     DECLARE_DYNAMIC_CLASS(MyCanvas)
     DECLARE_EVENT_TABLE()
 };
@@ -58,12 +60,14 @@ BEGIN_EVENT_TABLE(MySimpleCanvas, wxScrolledWindow)
   EVT_PAINT(      MySimpleCanvas::OnPaint)
 END_EVENT_TABLE()
 
-MySimpleCanvas::MySimpleCanvas( wxWindow *parent, wxWindowID id,
-                    const wxPoint &pos, const wxSize &size )
-    : wxScrolledWindow( parent, id, pos, size, wxSUNKEN_BORDER, _T("test canvas") )
+MySimpleCanvas::MySimpleCanvas(wxWindow *parent)
+              : wxScrolledWindow(parent, wxID_ANY,
+                                 wxDefaultPosition,
+                                 wxDefaultSize,
+                                 wxSUNKEN_BORDER)
 {
     SetScrollRate( 10, 10 );
-    SetVirtualSize( 92, 97 );
+    SetVirtualSize( CANVAS_WIDTH, CANVAS_HEIGHT );
     SetBackgroundColour( *wxWHITE );
 }
 
@@ -74,21 +78,18 @@ void MySimpleCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     dc.SetPen( *wxRED_PEN );
     dc.SetBrush( *wxTRANSPARENT_BRUSH );
-    dc.DrawRectangle( 0,0,92,97 );
+    dc.DrawRectangle( 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT );
 }
 
-// MySimpleFrame
-
+// MySimpleFrame: a frame which contains a MySimpleCanvas
 class MySimpleFrame: public wxFrame
 {
 public:
     MySimpleFrame();
 
-    void OnQuit( wxCommandEvent &event );
-
-    MySimpleCanvas         *m_canvas;
-
 private:
+    void OnClose(wxCommandEvent& WXUNUSED(event)) { Close(true); }
+
     DECLARE_DYNAMIC_CLASS(MySimpleFrame)
     DECLARE_EVENT_TABLE()
 };
@@ -97,27 +98,22 @@ private:
 IMPLEMENT_DYNAMIC_CLASS( MySimpleFrame, wxFrame )
 
 BEGIN_EVENT_TABLE(MySimpleFrame,wxFrame)
-  EVT_MENU    (ID_QUIT,  MySimpleFrame::OnQuit)
+  EVT_MENU(wxID_CLOSE, MySimpleFrame::OnClose)
 END_EVENT_TABLE()
 
 MySimpleFrame::MySimpleFrame()
-       : wxFrame( (wxFrame *)NULL, wxID_ANY, _T("wxScrolledWindow sample"),
-                  wxPoint(120,120), wxSize(150,150) )
+             : wxFrame(NULL, wxID_ANY, _T("wxScrolledWindow sample"),
+                       wxDefaultPosition, wxSize(200, 200))
 {
     wxMenu *file_menu = new wxMenu();
-    file_menu->Append( ID_QUIT,       _T("E&xit\tAlt-X"));
+    file_menu->Append(wxID_CLOSE);
 
     wxMenuBar *menu_bar = new wxMenuBar();
     menu_bar->Append(file_menu, _T("&File"));
 
     SetMenuBar( menu_bar );
 
-    m_canvas = new MySimpleCanvas( this, wxID_ANY, wxPoint(0,0), wxSize(100,100) );
-}
-
-void MySimpleFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
-{
-  Close( true );
+    new MySimpleCanvas(this);
 }
 
 // ----------------------------------------------------------------------
