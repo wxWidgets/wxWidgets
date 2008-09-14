@@ -201,6 +201,29 @@ bool wxPGVariantToDouble( const wxVariant& variant, double* pResult )
 }
 
 // -----------------------------------------------------------------------
+// wxPGPropArgCls
+// -----------------------------------------------------------------------
+
+wxPGProperty* wxPGPropArgCls::GetPtr( wxPropertyGridInterface* iface ) const
+{
+    if ( m_flags == IsProperty )
+    {
+        wxASSERT_MSG( m_ptr.property, wxT("invalid property ptr") );
+        return m_ptr.property;
+    }
+    else if ( m_flags & IsWxString )
+        return iface->GetPropertyByNameA(*m_ptr.stringName);
+    else if ( m_flags & IsCharPtr )
+        return iface->GetPropertyByNameA(m_ptr.charName);
+#if wxUSE_WCHAR_T
+    else if ( m_flags & IsWCharPtr )
+        return iface->GetPropertyByNameA(m_ptr.wcharName);
+#endif
+
+    return NULL;
+}
+
+// -----------------------------------------------------------------------
 // Choice related methods
 // -----------------------------------------------------------------------
 

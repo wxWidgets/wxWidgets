@@ -739,6 +739,10 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
     {
         RT_START_TEST(SetPropertyValue_and_GetPropertyValue)
 
+        // In this section, mixed up usage of wxT("propname") and "propname"
+        // in wxPropertyGridInterface functions is intentional.
+        // Purpose is to test wxPGPropArgCls ctors.
+
         //pg = (wxPropertyGrid*) NULL;
 
         wxArrayString test_arrstr_1;
@@ -879,25 +883,26 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         // Make sure children of composite parent get updated as well
         // Original string value: "Lamborghini Diablo SV; 5707; [300; 3.9; 8.6] 300000"
 
+        //
         // This updates children as well
         wxString nvs = "Lamborghini Diablo XYZ; 5707; [100; 3.9; 8.6] 3000002";
-        pgman->SetPropertyValue(wxT("Car"), nvs);
+        pgman->SetPropertyValue("Car", nvs);
 
-        if ( pgman->GetPropertyValueAsString(wxT("Car.Model")) != "Lamborghini Diablo XYZ" )
+        if ( pgman->GetPropertyValueAsString("Car.Model") != "Lamborghini Diablo XYZ" )
         {
-            wxLogDebug("Did not match: Car.Model=%s", pgman->GetPropertyValueAsString(wxT("Car.Model")).c_str());
+            wxLogDebug("Did not match: Car.Model=%s", pgman->GetPropertyValueAsString("Car.Model").c_str());
             RT_FAILURE();
         }
 
-        if ( pgman->GetPropertyValueAsInt(wxT("Car.Speeds.Max. Speed (mph)")) != 100 )
+        if ( pgman->GetPropertyValueAsInt("Car.Speeds.Max. Speed (mph)") != 100 )
         {
-            wxLogDebug("Did not match: Car.Speeds.Max. Speed (mph)=%s", pgman->GetPropertyValueAsString(wxT("Car.Speeds.Max. Speed (mph)")).c_str());
+            wxLogDebug("Did not match: Car.Speeds.Max. Speed (mph)=%s", pgman->GetPropertyValueAsString("Car.Speeds.Max. Speed (mph)").c_str());
             RT_FAILURE();
         }
 
-        if ( pgman->GetPropertyValueAsInt(wxT("Car.Price ($)")) != 3000002 )
+        if ( pgman->GetPropertyValueAsInt("Car.Price ($)") != 3000002 )
         {
-            wxLogDebug("Did not match: Car.Price ($)=%s", pgman->GetPropertyValueAsString(wxT("Car.Price ($)")).c_str());
+            wxLogDebug("Did not match: Car.Price ($)=%s", pgman->GetPropertyValueAsString("Car.Price ($)").c_str());
             RT_FAILURE();
         }
     }

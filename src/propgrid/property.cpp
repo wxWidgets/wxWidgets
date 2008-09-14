@@ -1603,26 +1603,6 @@ int wxPGProperty::GetY() const
     return GetY2(GetGrid()->GetRowHeight());
 }
 
-
-wxPGProperty* wxPGPropArgCls::GetPtr( wxPropertyGridInterface* methods ) const
-{
-    if ( !m_isName )
-    {
-        wxASSERT_MSG( m_ptr.property, wxT("invalid property ptr") );
-        return m_ptr.property;
-    }
-    else if ( m_isName == 1 )
-        return methods->GetPropertyByNameA(*m_ptr.name);
-    else if ( m_isName == 2 )
-        return methods->GetPropertyByNameA(m_ptr.rawname);
-    // 3 is like 1, but ptr is freed in dtor - only needed by wxPython bindings.
-    else if ( m_isName == 3 )
-        return methods->GetPropertyByNameA(*m_ptr.name);
-
-    wxASSERT( m_isName <= 3 );
-    return NULL;
-}
-
 // This is used by Insert etc.
 void wxPGProperty::AddChild2( wxPGProperty* prop, int index, bool correct_mode )
 {
