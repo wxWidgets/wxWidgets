@@ -1197,11 +1197,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         //
         // Ok, this time only hide half of them
         arr1 = GetPropertiesInRandomOrder(page);
-#if wxCHECK_VERSION(2,8,0)
         arr1.resize(arr1.size()/2);
-#else
-        arr1.SetCount(arr1.size()/2);
-#endif
 
         if ( !_failed_ )
         {
