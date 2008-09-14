@@ -13,7 +13,7 @@ static const char *state2_xpm[] = {
 "'  c #3F8620",
 "x  c #9FD488",
 "6. c #37751C",
-"   c #FFFFFF",
+"   c None",
 "A  c #8CCB71",
 "#  c #98D07F",
 "5. c #3A7C1E",

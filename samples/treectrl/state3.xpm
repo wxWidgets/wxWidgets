@@ -17,7 +17,7 @@ static const char *state3_xpm[] = {
 "0  c #C62B2B",
 "$  c #DF7A7A",
 "t  c #D14949",
-"   c #FFFFFF",
+"   c None",
 "o. c #962020",
 "&. c #B82C2C",
 "p  c #E8A1A1",

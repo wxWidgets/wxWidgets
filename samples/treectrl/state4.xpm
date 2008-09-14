@@ -12,7 +12,7 @@ static const char *state4_xpm[] = {
 "=. c #2C67B8",
 "|  c #2760AD",
 ".. c #3672C5",
-"   c #FFFFFF",
+"   c None",
 "U  c #548AD4",
 "s  c #2A6AC1",
 "%  c #3475CD",

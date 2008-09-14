@@ -925,21 +925,15 @@ void MyTreeCtrl::CreateStateImageList(bool del)
     }
     else
     {
-#if 0
-        int width  = ::GetSystemMetrics(SM_CXMENUCHECK),
-            height = ::GetSystemMetrics(SM_CYMENUCHECK);
-#else
-        int width = 16;
-        int height = 16;
-#endif
+        wxRendererNative& renderer = wxRendererNative::Get();
+
+        wxSize size(renderer.GetCheckBoxSize(this));
 
         // make an state checkbox image list
-        states = new wxImageList(width, height, true);
+        states = new wxImageList(size.GetWidth(), size.GetHeight(), true);
 
-        wxBitmap checkBmp(width, height);
-        wxRect rect (0, 0, width, height);
-
-        wxRendererNative& renderer = wxRendererNative::Get();
+        wxBitmap checkBmp(size.GetWidth(), size.GetHeight());
+        wxRect rect(size);
 
         // create no checked image
         {
@@ -955,6 +949,7 @@ void MyTreeCtrl::CreateStateImageList(bool del)
         // create checked image
         {
             wxMemoryDC memDC(checkBmp);
+            memDC.Clear();
             renderer.DrawCheckBox(this, memDC, rect, wxCONTROL_CHECKED);
         }
 

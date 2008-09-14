@@ -14,7 +14,7 @@ static const char *state1_xpm[] = {
 "6. c #A6A800",
 "M  c #EDF00E",
 "$. c #A6A802",
-"   c #FFFFFF",
+"   c None",
 "H  c #DEE104",
 "0  c #F5F802",
 "o  c #FCFF22",

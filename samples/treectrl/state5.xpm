@@ -7,7 +7,7 @@ static const char *state5_xpm[] = {
 "O c #3C3C3C",
 "l c #080808",
 "w c #353535",
-"  c #FFFFFF",
+"  c None",
 "u c #010101",
 "C c #101010",
 "< c #1F1F1F",
