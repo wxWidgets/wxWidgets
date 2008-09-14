@@ -317,7 +317,7 @@ typedef wxString wxPGCachedString;
 #ifndef SWIG
 
 #if wxUSE_STL
-typedef WXDLLIMPEXP_PROPGRID std::vector<wxPGProperty*>  wxArrayPGProperty;
+typedef std::vector<wxPGProperty*> wxArrayPGProperty;
 #else
 WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(wxPGProperty*, wxArrayPGProperty,
                                   wxBaseArrayPtrVoid,
