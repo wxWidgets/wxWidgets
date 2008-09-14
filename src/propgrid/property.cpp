@@ -892,12 +892,22 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
 {
     if ( !value.IsNull() )
     {
+        wxVariant tempListVariant;
+
         SetCommonValue(-1);
         // List variants are reserved a special purpose
         // as intermediate containers for child values
         // of properties with children.
         if ( wxPGIsVariantType(value, list) )
         {
+            //
+            // However, situation is different for composed string properties
+            if ( HasFlag(wxPG_PROP_COMPOSED_VALUE) )
+            {
+                tempListVariant = value;
+                pList = &tempListVariant;
+            }
+
             wxVariant newValue;
             AdaptListToValue(value, &newValue);
             value = newValue;
@@ -942,15 +952,13 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
                         }
                     }
                     else if ( !wxPG_VARIANT_EQ(child->GetValue(), childValue) )
-                        // This flag is not normally set when setting value programmatically.
-                        // However, this loop is usually only executed when called from
-                        // DoPropertyChanged, which should set this flag.
                     {
                         // For aggregate properties, we will trust RefreshChildren()
                         // to update child values.
                         if ( !HasFlag(wxPG_PROP_AGGREGATE) )
                             child->SetValue(childValue, NULL, flags|wxPG_SETVAL_FROM_PARENT);
-                        child->SetFlag(wxPG_PROP_MODIFIED);
+                        if ( flags & wxPG_SETVAL_BY_USER )
+                            child->SetFlag(wxPG_PROP_MODIFIED);
                     }
                 }
                 i++;
@@ -966,7 +974,7 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
                 UpdateParentValues();
         }
 
-        if ( pList )
+        if ( flags & wxPG_SETVAL_BY_USER )
             SetFlag(wxPG_PROP_MODIFIED);
 
         if ( HasFlag(wxPG_PROP_AGGREGATE) )

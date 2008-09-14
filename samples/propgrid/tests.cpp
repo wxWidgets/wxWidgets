@@ -875,6 +875,31 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         pgman->SetPropertyValue(wxT("IntProperty"),wxLL(-80000000000));
         if ( pgman->GetPropertyValueAsLongLong(wxT("IntProperty")) != wxLL(-80000000000) )
             RT_FAILURE();
+
+        // Make sure children of composite parent get updated as well
+        // Original string value: "Lamborghini Diablo SV; 5707; [300; 3.9; 8.6] 300000"
+
+        // This updates children as well
+        wxString nvs = "Lamborghini Diablo XYZ; 5707; [100; 3.9; 8.6] 3000002";
+        pgman->SetPropertyValue(wxT("Car"), nvs);
+
+        if ( pgman->GetPropertyValueAsString(wxT("Car.Model")) != "Lamborghini Diablo XYZ" )
+        {
+            wxLogDebug("Did not match: Car.Model=%s", pgman->GetPropertyValueAsString(wxT("Car.Model")).c_str());
+            RT_FAILURE();
+        }
+
+        if ( pgman->GetPropertyValueAsInt(wxT("Car.Speeds.Max. Speed (mph)")) != 100 )
+        {
+            wxLogDebug("Did not match: Car.Speeds.Max. Speed (mph)=%s", pgman->GetPropertyValueAsString(wxT("Car.Speeds.Max. Speed (mph)")).c_str());
+            RT_FAILURE();
+        }
+
+        if ( pgman->GetPropertyValueAsInt(wxT("Car.Price ($)")) != 3000002 )
+        {
+            wxLogDebug("Did not match: Car.Price ($)=%s", pgman->GetPropertyValueAsString(wxT("Car.Price ($)")).c_str());
+            RT_FAILURE();
+        }
     }
 
     {

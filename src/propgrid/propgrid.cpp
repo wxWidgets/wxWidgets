@@ -3076,7 +3076,7 @@ bool wxPropertyGrid::DoPropertyChanged( wxPGProperty* p, unsigned int selFlags )
         topPaintedProperty = topPaintedProperty->GetParent();
     }
 
-    changedProperty->SetValue(value, &m_chgInfo_valueList);
+    changedProperty->SetValue(value, &m_chgInfo_valueList, wxPG_SETVAL_BY_USER);
 
     // Set as Modified (not if dragging just began)
     if ( !(p->m_flags & wxPG_PROP_MODIFIED) )

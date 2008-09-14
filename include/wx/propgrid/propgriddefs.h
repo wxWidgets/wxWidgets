@@ -399,7 +399,8 @@ enum wxPG_SETVALUE_FLAGS
 {
     wxPG_SETVAL_REFRESH_EDITOR      = 0x0001,
     wxPG_SETVAL_AGGREGATED          = 0x0002,
-    wxPG_SETVAL_FROM_PARENT         = 0x0004
+    wxPG_SETVAL_FROM_PARENT         = 0x0004,
+    wxPG_SETVAL_BY_USER             = 0x0008  // Set if value changed by user
 };
 
 // -----------------------------------------------------------------------
