@@ -399,7 +399,8 @@ void BitmapComboBoxWidgetsPage::CreateCombo()
         for ( unsigned int n = 0; n < count; n++ )
         {
             items.Add(m_combobox->GetString(n));
-            bitmaps.Add(new wxBitmap(m_combobox->GetItemBitmap(n)));
+            wxBitmap bmp = m_combobox->GetItemBitmap(n);
+            bitmaps.Add(new wxBitmap(bmp));
         }
 
         m_sizerCombo->Detach( m_combobox );
