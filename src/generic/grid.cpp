@@ -4689,10 +4689,9 @@ void wxGrid::CalcDimensions()
         y = wxMax( h - 1, 0 );
 
     // do set scrollbar parameters
-    SetScrollbars( m_scrollLineX, m_scrollLineY,
-                   GetScrollX(w), GetScrollY(h),
-                   x, y,
-                   GetBatchCount() != 0);
+    SetScrollRate(m_scrollLineX, m_scrollLineY);
+    m_gridWin->SetVirtualSize(w, h);
+    Scroll(x, y);
 
     // if our OnSize() hadn't been called (it would if we have scrollbars), we
     // still must reposition the children
@@ -6980,8 +6979,8 @@ void wxGrid::OnSize(wxSizeEvent& WXUNUSED(event))
 {
     if (m_targetWindow != this) // check whether initialisation has been done
     {
-        // update our children window positions and scrollbars
-        CalcDimensions();
+        // reposition our children windows
+        CalcWindowSizes();
     }
 }
 
