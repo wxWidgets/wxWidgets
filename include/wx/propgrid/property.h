@@ -2142,13 +2142,12 @@ public:
     // Delete all entries
     void Clear();
 
-    size_t GetCount() const
-    {
-        return m_items.size();
-    }
+    size_t GetCount() const { return m_items.size(); }
 
     wxPGChoiceEntry* Item( unsigned int i ) const
     {
+        wxCHECK_MSG( i < GetCount(), NULL, "invalid index" );
+
         return (wxPGChoiceEntry*) m_items[i];
     }
 
@@ -2291,7 +2290,6 @@ public:
 
     const wxString& GetLabel( size_t ind ) const
     {
-        wxASSERT( ind >= 0 && ind < GetCount() );
         return Item(ind).GetText();
     }
 
@@ -2321,7 +2319,7 @@ public:
     bool HasValues() const;
 
     bool HasValue( unsigned int i ) const
-        { return (m_data->GetCount() > i && m_data->Item(i)->HasValue()); }
+        { return (i < m_data->GetCount()) && m_data->Item(i)->HasValue(); }
 
     int Index( const wxString& str ) const;
     int Index( int val ) const;
