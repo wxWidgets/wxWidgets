@@ -132,10 +132,12 @@ public:
     // notice that Walk() frame itself is not included if skip >= 1)
     virtual void Walk(size_t skip = 1, size_t maxDepth = 200) = 0;
 
+#if wxUSE_ON_FATAL_EXCEPTION
     // enumerate stack frames from the location of uncaught exception
     //
     // this version can only be called from wxApp::OnFatalException()
     virtual void WalkFromException(size_t maxDepth = 200) = 0;
+#endif // wxUSE_ON_FATAL_EXCEPTION
 
 protected:
     // this function must be overrided to process the given frame

@@ -315,6 +315,8 @@ void wxStackWalker::WalkFrom(const _EXCEPTION_POINTERS *ep, size_t skip, size_t 
     WalkFrom(ep->ContextRecord, skip, maxDepth);
 }
 
+#if wxUSE_ON_FATAL_EXCEPTION
+
 void wxStackWalker::WalkFromException(size_t maxDepth)
 {
     extern EXCEPTION_POINTERS *wxGlobalSEInformation;
@@ -326,13 +328,15 @@ void wxStackWalker::WalkFromException(size_t maxDepth)
     WalkFrom(wxGlobalSEInformation, 0, maxDepth);
 }
 
+#endif // wxUSE_ON_FATAL_EXCEPTION
+
 void wxStackWalker::Walk(size_t skip, size_t WXUNUSED(maxDepth))
 {
     // to get a CONTEXT for the current location, simply force an exception and
     // get EXCEPTION_POINTERS from it
     //
     // note:
-    //  1. we additionally skip RaiseException() and WalkFromException() frames
+    //  1. we additionally skip RaiseException() and WalkFrom() frames
     //  2. explicit cast to EXCEPTION_POINTERS is needed with VC7.1 even if it
     //     shouldn't have been according to the docs
     __try
@@ -342,7 +346,8 @@ void wxStackWalker::Walk(size_t skip, size_t WXUNUSED(maxDepth))
     __except( WalkFrom((EXCEPTION_POINTERS *)GetExceptionInformation(),
                        skip + 2), EXCEPTION_CONTINUE_EXECUTION )
     {
-        // never executed because of WalkFromException() return value
+        // never executed because the above expression always evaluates to
+        // EXCEPTION_CONTINUE_EXECUTION
     }
 }
 
@@ -399,9 +404,11 @@ wxStackWalker::WalkFrom(const _EXCEPTION_POINTERS * WXUNUSED(ep),
 {
 }
 
+#if wxUSE_ON_FATAL_EXCEPTION
 void wxStackWalker::WalkFromException(size_t WXUNUSED(maxDepth))
 {
 }
+#endif // wxUSE_ON_FATAL_EXCEPTION
 
 void wxStackWalker::Walk(size_t WXUNUSED(skip), size_t WXUNUSED(maxDepth))
 {

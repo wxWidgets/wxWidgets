@@ -478,11 +478,13 @@ bool wxDebugReport::AddContext(wxDebugReport::Context ctx)
 #if wxUSE_STACKWALKER
     wxXmlNode *nodeStack = new wxXmlNode(wxXML_ELEMENT_NODE, _T("stack"));
     XmlStackWalker sw(nodeStack);
+#if wxUSE_ON_FATAL_EXCEPTION
     if ( ctx == Context_Exception )
     {
         sw.WalkFromException();
     }
     else // Context_Current
+#endif // wxUSE_ON_FATAL_EXCEPTION
     {
         sw.Walk();
     }
