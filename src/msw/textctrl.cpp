@@ -1922,7 +1922,7 @@ WXLRESULT wxTextCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                 else // !editable
                 {
                     // NB: use "=", not "|=" as the base class version returns
-                    //     the same flags is this state as usual (i.e.
+                    //     the same flags in the disabled state as usual (i.e.
                     //     including DLGC_WANTMESSAGE). This is strange (how
                     //     does it work in the native Win32 apps?) but for now
                     //     live with it.
