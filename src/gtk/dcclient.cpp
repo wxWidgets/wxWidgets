@@ -955,6 +955,14 @@ void wxWindowDCImpl::DoDrawEllipse( wxCoord x, wxCoord y, wxCoord width, wxCoord
             bool originChanged;
             DrawingSetup(gc, originChanged);
 
+            // If the pen is transparent pen we increase the size
+            // for better compatibility with other platforms.
+            if (m_pen.GetStyle() == wxPENSTYLE_TRANSPARENT)
+            {
+                ++ww;
+                ++hh;
+            }
+
             gdk_draw_arc(m_gdkwindow, gc, true, xx, yy, ww, hh, 0, 360*64);
 
             if (originChanged)
@@ -962,7 +970,7 @@ void wxWindowDCImpl::DoDrawEllipse( wxCoord x, wxCoord y, wxCoord width, wxCoord
         }
 
         if (m_pen.GetStyle() != wxPENSTYLE_TRANSPARENT)
-            gdk_draw_arc( m_gdkwindow, m_penGC, FALSE, xx, yy, ww, hh, 0, 360*64 );
+            gdk_draw_arc( m_gdkwindow, m_penGC, false, xx, yy, ww, hh, 0, 360*64 );
     }
 
     CalcBoundingBox( x, y );
