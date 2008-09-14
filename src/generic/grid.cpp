@@ -96,7 +96,7 @@ struct wxGridCellWithAttr
     {
         if (attr != new_attr)
         {
-	    // "Delete" (i.e. DecRef) the old attribute.
+            // "Delete" (i.e. DecRef) the old attribute.
             attr->DecRef();
             attr = new_attr;
             // Take ownership of the new attribute, i.e. no IncRef.
@@ -4688,10 +4688,11 @@ void wxGrid::CalcDimensions()
     if ( y >= h )
         y = wxMax( h - 1, 0 );
 
-    // do set scrollbar parameters
+    // update the virtual size and refresh the scrollbars to reflect it
     SetScrollRate(m_scrollLineX, m_scrollLineY);
     m_gridWin->SetVirtualSize(w, h);
     Scroll(x, y);
+    AdjustScrollbars();
 
     // if our OnSize() hadn't been called (it would if we have scrollbars), we
     // still must reposition the children
@@ -9931,7 +9932,7 @@ void wxGrid::ClearAttrCache()
         // wxSafeDecRec(...) might cause event processing that accesses
         // the cached attribute, if one exists (e.g. by deleting the
         // editor stored within the attribute). Therefore it is important
-	// to invalidate the cache  before calling wxSafeDecRef!
+        // to invalidate the cache  before calling wxSafeDecRef!
         wxSafeDecRef(oldAttr);
     }
 }
@@ -10346,9 +10347,9 @@ void wxGrid::SetRowSize( int row, int height )
         wxClientDC dc(m_rowLabelWin);
         dc.SetFont(GetLabelFont());
         StringToLines(GetRowLabelValue( row ), lines);
-	GetTextBoxSize( dc, lines, &w, &h );
-	//check that it is not less than the minimal height
-	height = wxMax(h, GetRowMinimalAcceptableHeight());
+        GetTextBoxSize( dc, lines, &w, &h );
+        //check that it is not less than the minimal height
+        height = wxMax(h, GetRowMinimalAcceptableHeight());
     }
 
     // See comment in SetColSize
@@ -10409,8 +10410,8 @@ void wxGrid::SetColSize( int col, int width )
         else
             GetTextBoxSize( dc, lines, &h, &w );
         width = w + 6;
-	//check that it is not less than the minimal width
-	width = wxMax(width, GetColMinimalAcceptableWidth()); 
+        //check that it is not less than the minimal width
+        width = wxMax(width, GetColMinimalAcceptableWidth()); 
     }
 
     // should we check that it's bigger than GetColMinimalWidth(col) here?
