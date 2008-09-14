@@ -1953,6 +1953,23 @@ wxPathFormat wxFileName::GetFormat( wxPathFormat format )
     return format;
 }
 
+#ifdef wxHAS_FILESYSTEM_VOLUMES
+
+/* static */
+wxString wxFileName::GetVolumeString(char drive, int flags)
+{
+    wxASSERT_MSG( !(flags & ~wxPATH_GET_SEPARATOR), "invalid flag specified" );
+
+    wxString vol(drive);
+    vol += wxFILE_SEP_DSK;
+    if ( flags & wxPATH_GET_SEPARATOR )
+        vol += wxFILE_SEP_PATH;
+
+    return vol;
+}
+
+#endif // wxHAS_FILESYSTEM_VOLUMES
+
 // ----------------------------------------------------------------------------
 // path splitting function
 // ----------------------------------------------------------------------------

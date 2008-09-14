@@ -40,6 +40,7 @@
     #include "wx/module.h"
 #endif
 
+#include "wx/filename.h"
 #include "wx/filefn.h"
 #include "wx/imaglist.h"
 #include "wx/tokenzr.h"
@@ -108,7 +109,7 @@ bool wxIsDriveAvailable(const wxString& dirName);
 
 size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayInt &icon_ids)
 {
-#if defined(__WINDOWS__) || defined(__DOS__) || defined(__OS2__)
+#ifdef wxHAS_FILESYSTEM_VOLUMES
 
 #ifdef __WXWINCE__
     // No logical drives; return "\"
@@ -164,9 +165,10 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
         {
             if (ulDriveMap & ( 1 << i ))
             {
-                wxString path, name;
-                path.Printf(wxT("%c:\\"), 'A' + i);
-                name.Printf(wxT("%c:"), 'A' + i);
+                const wxString path = wxFileName::GetVolumeString(
+                                        'A' + i, wxPATH_GET_SEPARATOR);
+                const wxString name = wxFileName::GetVolumeString(
+                                        'A' + i, wxPATH_NO_SEPARATOR);
 
                 // Note: If _filesys is unsupported by some compilers,
                 //       we can always replace it by DosQueryFSAttach
@@ -201,20 +203,18 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
         }
     }
 #else // !__WIN32__, !__OS2__
-    int drive;
-
     /* If we can switch to the drive, it exists. */
-    for( drive = 1; drive <= 26; drive++ )
+    for ( char drive = 'A'; drive <= 'Z'; drive++ )
     {
-        wxString path, name;
-        path.Printf(wxT("%c:\\"), (char) (drive + 'a' - 1));
-        name.Printf(wxT("%c:"), (char) (drive + 'A' - 1));
+        const wxString
+            path = wxFileName::GetVolumeString(drive, wxPATH_GET_SEPARATOR);
 
         if (wxIsDriveAvailable(path))
         {
             paths.Add(path);
-            names.Add(name);
-            icon_ids.Add((drive <= 2) ? wxFileIconsTable::floppy : wxFileIconsTable::drive);
+            names.Add(wxFileName::GetVolumeString(drive, wxPATH_NO_SEPARATOR));
+            icon_ids.Add(drive <= 2 ? wxFileIconsTable::floppy
+                                    : wxFileIconsTable::drive);
         }
     }
 #endif // __WIN32__/!__WIN32__

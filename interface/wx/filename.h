@@ -427,18 +427,25 @@ public:
     wxString GetName() const;
 
     /**
-        Returns the path part of the filename (without the name or extension). The
-        possible flags values are:
+        Returns the path part of the filename (without the name or extension).
+
+        The possible flags values are:
 
         @b wxPATH_GET_VOLUME
 
-        Return the path with the volume (does nothing for the filename formats without
-        volumes), otherwise the path without volume part is returned.
+        Return the path with the volume (does nothing for the filename formats
+        without volumes), otherwise the path without volume part is returned.
 
         @b wxPATH_GET_SEPARATOR
 
-        Return the path with the trailing separator, if this flag is not given there
-        will be no separator at the end of the path.
+        Return the path with the trailing separator, if this flag is not given
+        there will be no separator at the end of the path.
+
+        @b wxPATH_NO_SEPARATOR
+
+        Don't include the trailing separator in the returned string. This is
+        the default (the value of this flag is 0) and exists only for symmetry
+        with wxPATH_GET_SEPARATOR.
     */
     wxString GetPath(int flags = wxPATH_GET_VOLUME,
                      wxPathFormat format = wxPATH_NATIVE) const;
@@ -533,6 +540,25 @@ public:
         Returns the string separating the volume from the path for this format.
     */
     static wxString GetVolumeSeparator(wxPathFormat format = wxPATH_NATIVE);
+
+     /**
+        This function builds a volume path string, for example "C:\\".
+
+        Implemented for the platforms which use drive letters, i.e. DOS, MSW
+        and OS/2 only.
+
+        @since 2.9.0
+
+        @param drive
+           The drive letter, 'A' through 'Z' or 'a' through 'z'.
+
+        @param flags
+           @c wxPATH_NO_SEPARATOR or @c wxPATH_GET_SEPARATOR to omit or include
+           the trailing path separator, the default is to include it.
+
+        @return Volume path string.
+    */
+    static wxString GetVolumeString(char drive, int flags = wxPATH_GET_SEPARATOR);
 
     /**
         Returns @true if an extension is present.

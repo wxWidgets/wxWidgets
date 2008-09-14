@@ -37,6 +37,12 @@ class WXDLLIMPEXP_FWD_BASE wxFile;
 class WXDLLIMPEXP_FWD_BASE wxFFile;
 #endif
 
+// this symbol is defined for the platforms where file systems use volumes in
+// paths
+#if defined(__WXMSW__) || defined(__DOS__) || defined(__OS2__)
+    #define wxHAS_FILESYSTEM_VOLUMES
+#endif
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -75,6 +81,7 @@ enum wxPathNormalize
 // what exactly should GetPath() return?
 enum
 {
+    wxPATH_NO_SEPARATOR  = 0x0000,  // for symmetry with wxPATH_GET_SEPARATOR
     wxPATH_GET_VOLUME    = 0x0001,  // include the volume if applicable
     wxPATH_GET_SEPARATOR = 0x0002   // terminate the path with the separator
 };
@@ -484,7 +491,12 @@ public:
                             wxString *path,
                             wxPathFormat format = wxPATH_NATIVE);
 
-    // Filesize
+#ifdef wxHAS_FILESYSTEM_VOLUMES
+        // return the string representing a file system volume, or drive
+    static wxString GetVolumeString(char drive, int flags = wxPATH_GET_SEPARATOR);
+#endif // wxHAS_FILESYSTEM_VOLUMES
+
+    // File size
 
 #if wxUSE_LONGLONG
         // returns the size of the given filename
