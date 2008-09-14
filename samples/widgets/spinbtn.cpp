@@ -127,7 +127,8 @@ protected:
 
     // the check/radio boxes for styles
     wxCheckBox *m_chkVert,
-               *m_chkWrap;
+               *m_chkWrap,
+               *m_chkProcessEnter;
 
     // the spinbtn and the spinctrl and the sizer containing them
     wxSpinButton *m_spinbtn;
@@ -195,6 +196,7 @@ SpinBtnWidgetsPage::SpinBtnWidgetsPage(WidgetsBookCtrl *book,
 {
     m_chkVert = NULL;
     m_chkWrap = NULL;
+    m_chkProcessEnter = NULL;
     m_spinbtn = NULL;
     m_spinctrl = NULL;
     m_spinctrldbl = NULL;
@@ -202,15 +204,10 @@ SpinBtnWidgetsPage::SpinBtnWidgetsPage(WidgetsBookCtrl *book,
     m_textMin = NULL;
     m_textMax = NULL;
 
-    // init everything
     m_min = 0;
     m_max = 10;
 
-    m_chkVert =
-    m_chkWrap = (wxCheckBox *)NULL;
-
-    m_spinbtn = (wxSpinButton *)NULL;
-    m_sizerSpin = (wxSizer *)NULL;
+    m_sizerSpin = NULL;
 }
 
 void SpinBtnWidgetsPage::CreateContent()
@@ -223,6 +220,8 @@ void SpinBtnWidgetsPage::CreateContent()
 
     m_chkVert = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Vertical"));
     m_chkWrap = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Wrap"));
+    m_chkProcessEnter = CreateCheckBoxAndAddToSizer(sizerLeft,
+                                                    _T("Process &Enter"));
 
     sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
 
@@ -287,6 +286,7 @@ void SpinBtnWidgetsPage::Reset()
 {
     m_chkVert->SetValue(true);
     m_chkWrap->SetValue(false);
+    m_chkProcessEnter->SetValue(false);
 }
 
 void SpinBtnWidgetsPage::CreateSpin()
@@ -301,6 +301,9 @@ void SpinBtnWidgetsPage::CreateSpin()
 
     if ( m_chkWrap->GetValue() )
         flags |= wxSP_WRAP;
+
+    if ( m_chkProcessEnter->GetValue() )
+        flags |= wxTE_PROCESS_ENTER;
 
     int val = m_min;
     if ( m_spinbtn )
@@ -426,7 +429,9 @@ void SpinBtnWidgetsPage::OnUpdateUIMinMaxButton(wxUpdateUIEvent& event)
 
 void SpinBtnWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)
 {
-    event.Enable( !m_chkVert->GetValue() || m_chkWrap->GetValue() );
+    event.Enable( !m_chkVert->GetValue() ||
+                  m_chkWrap->GetValue() ||
+                  m_chkProcessEnter->GetValue() );
 }
 
 void SpinBtnWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))
