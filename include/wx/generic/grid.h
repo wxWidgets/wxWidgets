@@ -1108,16 +1108,18 @@ public:
 
     virtual ~wxGrid();
 
-    enum wxGridSelectionModes {wxGridSelectCells,
-                               wxGridSelectRows,
-                               wxGridSelectColumns};
+    enum wxGridSelectionModes
+    {
+        wxGridSelectCells,
+        wxGridSelectRows,
+        wxGridSelectColumns
+    };
 
     bool CreateGrid( int numRows, int numCols,
-                     wxGrid::wxGridSelectionModes selmode =
-                     wxGrid::wxGridSelectCells );
+                     wxGridSelectionModes selmode = wxGridSelectCells );
 
-    void SetSelectionMode(wxGrid::wxGridSelectionModes selmode);
-    wxGrid::wxGridSelectionModes GetSelectionMode() const;
+    void SetSelectionMode(wxGridSelectionModes selmode);
+    wxGridSelectionModes GetSelectionMode() const;
 
     // ------ grid dimensions
     //
@@ -1147,8 +1149,7 @@ public:
 
     wxGridTableBase * GetTable() const { return m_table; }
     bool SetTable( wxGridTableBase *table, bool takeOwnership = false,
-                   wxGrid::wxGridSelectionModes selmode =
-                   wxGrid::wxGridSelectCells );
+                   wxGridSelectionModes selmode = wxGridSelectCells );
 
     void ClearGrid();
     bool InsertRows( int pos = 0, int numRows = 1, bool updateLabels = true );
