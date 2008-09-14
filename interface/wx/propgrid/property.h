@@ -1165,6 +1165,12 @@ public:
         m_helpString = helpString;
     }
 
+    /** Sets property's label.
+
+        @remarks
+        - Properties under same parent may have same labels. However,
+        property names must still remain unique.
+    */
     void SetLabel( const wxString& label ) { m_label = label; }
 
     inline void SetName( const wxString& newName );

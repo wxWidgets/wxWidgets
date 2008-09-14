@@ -1028,12 +1028,16 @@ Few things to note:
 
 @subsection namescope Property Name Scope
 
-- All properties which parent is category or root have their names
-  globally accessible.
+  All properties which parent is category or root can be accessed
+directly by their base name (ie. name given for property in its constructor).
+Other properties can be accessed via "ParentsName.BaseName" notation,
+Naturally, all property names should be unique.
 
-- Sub-properties (i.e. private child properties which have parent that is not category or
-  root or non-aggregate property) can not be accessed globally by their name. Instead, use
-  "<property>.<subproperty>".
+@subsection nonuniquelabels Non-unique Labels
+
+  It is possible to have properties with identical label under same parent.
+However, care must be taken to ensure that each property still has
+unique (base) name.
 
 @subsection boolproperty wxBoolProperty
 

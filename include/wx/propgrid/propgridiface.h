@@ -1004,9 +1004,6 @@ public:
     }
 
     /** Sets label of a property.
-        @remarks
-        This is the only way to set property's name. There is not
-        wxPGProperty::SetLabel() method.
     */
     void SetPropertyLabel( wxPGPropArg id, const wxString& newproplabel );
 
