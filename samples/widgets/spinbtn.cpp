@@ -314,19 +314,7 @@ void SpinBtnWidgetsPage::CreateSpin()
             val = valOld;
         }
 
-        m_sizerSpin->Detach( m_spinbtn );
-        m_sizerSpin->Detach( m_spinctrl );
-        m_sizerSpin->Detach( m_spinctrldbl );
-
-        // there are 4 spacers left
-        m_sizerSpin->Remove( 0 );
-        m_sizerSpin->Remove( 0 );
-        m_sizerSpin->Remove( 0 );
-        m_sizerSpin->Remove( 0 );
-
-        delete m_spinbtn;
-        delete m_spinctrl;
-        delete m_spinctrldbl;
+        m_sizerSpin->Clear(true /* delete windows */);
     }
 
     m_spinbtn = new wxSpinButton(this, SpinBtnPage_SpinBtn,
