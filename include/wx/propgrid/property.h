@@ -1872,7 +1872,7 @@ protected:
     */
     wxString GetColumnText( unsigned int col ) const;
 
-    /** Returns (direct) child property with given label (or NULL if not found),
+    /** Returns (direct) child property with given name (or NULL if not found),
         with hint index.
 
         @param hintIndex
@@ -1881,8 +1881,8 @@ protected:
         @remarks
         Does not support scope (ie. Parent.Child notation).
     */
-    wxPGProperty* GetPropertyByLabelWH( const wxString& label,
-                                        unsigned int hintIndex ) const;
+    wxPGProperty* GetPropertyByNameWH( const wxString& name,
+                                       unsigned int hintIndex ) const;
 
     /** This is used by Insert etc. */
     void AddChild2( wxPGProperty* prop,

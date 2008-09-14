@@ -2849,13 +2849,13 @@ bool wxPropertyGrid::PerformValidation( wxPGProperty* p, wxVariant& pendingValue
     wxVariant bcpPendingList;
 
     listValue = pendingValue;
-    listValue.SetName(p->GetLabel());
+    listValue.SetName(p->GetBaseName());
 
     while ( pwc &&
             (pwc->HasFlag(wxPG_PROP_AGGREGATE) || pwc->HasFlag(wxPG_PROP_COMPOSED_VALUE)) )
     {
         wxVariantList tempList;
-        wxVariant lv(tempList, pwc->GetLabel());
+        wxVariant lv(tempList, pwc->GetBaseName());
         lv.Append(listValue);
         listValue = lv;
         pPendingValue = &listValue;

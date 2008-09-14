@@ -1615,9 +1615,9 @@ void FormMain::PopulateWithExamples ()
     wxPGProperty* topId = pg->Append( new wxStringProperty(wxT("3D Object"), wxPG_LABEL, wxT("<composed>")) );
 
     pid = pg->AppendIn( topId, new wxStringProperty(wxT("Triangle 1"), wxT("Triangle 1"), wxT("<composed>")) );
-    pg->AppendIn( pid, new wxVectorProperty( wxT("A"), wxEmptyString ) );
-    pg->AppendIn( pid, new wxVectorProperty( wxT("B"), wxEmptyString ) );
-    pg->AppendIn( pid, new wxVectorProperty( wxT("C"), wxEmptyString ) );
+    pg->AppendIn( pid, new wxVectorProperty( wxT("A"), wxPG_LABEL ) );
+    pg->AppendIn( pid, new wxVectorProperty( wxT("B"), wxPG_LABEL ) );
+    pg->AppendIn( pid, new wxVectorProperty( wxT("C"), wxPG_LABEL ) );
 
     pg->AppendIn( topId, new wxTriangleProperty( wxT("Triangle 2"), wxT("Triangle 2") ) );
 
@@ -1626,9 +1626,9 @@ void FormMain::PopulateWithExamples ()
         wxT("three wxVectorProperty children, and other two are custom wxTriangleProperties.") );
 
     pid = pg->AppendIn( topId, new wxStringProperty(wxT("Triangle 3"), wxT("Triangle 3"), wxT("<composed>")) );
-    pg->AppendIn( pid, new wxVectorProperty( wxT("A"), wxEmptyString ) );
-    pg->AppendIn( pid, new wxVectorProperty( wxT("B"), wxEmptyString ) );
-    pg->AppendIn( pid, new wxVectorProperty( wxT("C"), wxEmptyString ) );
+    pg->AppendIn( pid, new wxVectorProperty( wxT("A"), wxPG_LABEL ) );
+    pg->AppendIn( pid, new wxVectorProperty( wxT("B"), wxPG_LABEL ) );
+    pg->AppendIn( pid, new wxVectorProperty( wxT("C"), wxPG_LABEL ) );
 
     pg->AppendIn( topId, new wxTriangleProperty( wxT("Triangle 4"), wxT("Triangle 4") ) );
 

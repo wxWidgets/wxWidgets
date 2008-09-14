@@ -88,10 +88,9 @@ other wxWidgets controls:
 Naturally, wxStringProperty is a property class. Only the first function argument (label)
 is mandatory. Second one, name, defaults to label and, third, the initial value, to
 default value. If constant wxPG_LABEL is used as the name argument, then the label is
-automatically used as a name as well (this is more efficient than manually
-defining both as the same). Empty name is also allowed, but in this case the
-property cannot be accessed by its name. Note that all property class constructors have
-quite similar constructor argument list.
+automatically used as a name as well (this is more efficient than manually defining both
+as the same). Use of empty name is discouraged and will sometimes result in run-time error.
+Note that all property class constructors have quite similar constructor argument list.
 
 To demonstrate other common property classes, here's another code snippet:
 

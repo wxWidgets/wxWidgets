@@ -705,9 +705,7 @@ bool wxPGProperty::StringToValue( wxVariant& variant, const wxString& text, int 
                         wxVariant variant(child->GetValueRef());
                         if ( child->StringToValue(variant, token, propagatedFlags|wxPG_COMPOSITE_FRAGMENT) )
                         {
-                            // Use label instead of name, as name can be empty string, but
-                            // label in practice never is.
-                            variant.SetName(child->GetLabel());
+                            variant.SetName(child->GetBaseName());
 
                             // Clear unspecified flag only if OnSetValue() didn't
                             // affect it.
@@ -726,7 +724,7 @@ bool wxPGProperty::StringToValue( wxVariant& variant, const wxString& text, int 
                     {
                         // Empty, becomes unspecified
                         wxVariant variant2;
-                        variant2.SetName(child->GetLabel());
+                        variant2.SetName(child->GetBaseName());
                         list.Append(variant2);
                         changed = true;
                     }
@@ -779,9 +777,7 @@ bool wxPGProperty::StringToValue( wxVariant& variant, const wxString& text, int 
                     wxVariant variant(child->GetValueRef());
                     if ( child->StringToValue( variant, token, propagatedFlags ) )
                     {
-                        // Use label instead of name, as name can be empty string, but
-                        // label in practice never is.
-                        variant.SetName(child->GetLabel());
+                        variant.SetName(child->GetBaseName());
                         list.Append(variant);
                         changed = true;
                     }
@@ -789,7 +785,7 @@ bool wxPGProperty::StringToValue( wxVariant& variant, const wxString& text, int 
                     {
                         // Failed, becomes unspecified
                         wxVariant variant2;
-                        variant2.SetName(child->GetLabel());
+                        variant2.SetName(child->GetBaseName());
                         list.Append(variant2);
                         changed = true;
                     }
@@ -924,14 +920,14 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
             //wxLogDebug(wxT(">> %s.SetValue() pList parsing"),GetName().c_str());
 
             // Children in list can be in any order, but we will give hint to
-            // GetPropertyByLabelWH(). This optimizes for full list parsing.
+            // GetPropertyByNameWH(). This optimizes for full list parsing.
             for ( node = list.begin(); node != list.end(); node++ )
             {
                 wxVariant& childValue = *((wxVariant*)*node);
-                wxPGProperty* child = GetPropertyByLabelWH(childValue.GetName(), i);
+                wxPGProperty* child = GetPropertyByNameWH(childValue.GetName(), i);
                 if ( child )
                 {
-                    //wxLogDebug(wxT("%i: child = %s, childValue.GetType()=%s"),i,child->GetLabel().c_str(),childValue.GetType().c_str());
+                    //wxLogDebug(wxT("%i: child = %s, childValue.GetType()=%s"),i,child->GetBaseName().c_str(),childValue.GetType().c_str());
                     if ( wxPGIsVariantType(childValue, list) )
                     {
                         if ( child->HasFlag(wxPG_PROP_AGGREGATE) && !(flags & wxPG_SETVAL_AGGREGATED) )
@@ -1639,6 +1635,9 @@ void wxPGProperty::AddChild2( wxPGProperty* prop, int index, bool correct_mode )
 // This is used by properties that have fixed sub-properties
 void wxPGProperty::AddChild( wxPGProperty* prop )
 {
+    wxASSERT_MSG( prop->GetBaseName().length(),
+                  "Property's children must have unique, non-empty names within their scope" );
+
     prop->m_arrIndex = m_children.GetCount();
     m_children.Add( prop );
 
@@ -1675,13 +1674,13 @@ void wxPGProperty::AdaptListToValue( wxVariant& list, wxVariant* value ) const
     unsigned int i;
     unsigned int n = 0;
 
-    //wxLogDebug(wxT(">> %s.AdaptListToValue()"),GetLabel().c_str());
+    //wxLogDebug(wxT(">> %s.AdaptListToValue()"),GetBaseName().c_str());
 
     for ( i=0; i<GetChildCount(); i++ )
     {
         const wxPGProperty* child = Item(i);
 
-        if ( childValue.GetName() == child->GetLabel() )
+        if ( childValue.GetName() == child->GetBaseName() )
         {
             //wxLogDebug(wxT("  %s(n=%i), %s"),childValue.GetName().c_str(),n,childValue.GetType().c_str());
 
@@ -1736,7 +1735,7 @@ wxPGProperty* wxPGProperty::GetPropertyByName( const wxString& name ) const
     return p->GetPropertyByName(name.substr(pos+1,name.length()-pos-1));
 }
 
-wxPGProperty* wxPGProperty::GetPropertyByLabelWH( const wxString& label, unsigned int hintIndex ) const
+wxPGProperty* wxPGProperty::GetPropertyByNameWH( const wxString& name, unsigned int hintIndex ) const
 {
     unsigned int i = hintIndex;
 
@@ -1751,7 +1750,7 @@ wxPGProperty* wxPGProperty::GetPropertyByLabelWH( const wxString& label, unsigne
     for (;;)
     {
         wxPGProperty* p = Item(i);
-        if ( p->m_label == label )
+        if ( p->m_name == name )
             return p;
 
         if ( i == lastIndex )
@@ -1896,8 +1895,6 @@ bool wxPGProperty::AreAllChildrenSpecified( wxVariant* pendingList ) const
         node = pList->begin();
     }
 
-    // Children in list can be in any order, but we will give hint to
-    // GetPropertyByLabelWH(). This optimizes for full list parsing.
     for ( i=0; i<GetChildCount(); i++ )
     {
         wxPGProperty* child = Item(i);
@@ -1906,12 +1903,12 @@ bool wxPGProperty::AreAllChildrenSpecified( wxVariant* pendingList ) const
 
         if ( pendingList )
         {
-            const wxString& childLabel = child->GetLabel();
+            const wxString& childName = child->GetBaseName();
 
             for ( ; node != pList->end(); node++ )
             {
                 const wxVariant& item = *((const wxVariant*)*node);
-                if ( item.GetName() == childLabel )
+                if ( item.GetName() == childName )
                 {
                     listValue = &item;
                     value = item;

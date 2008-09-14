@@ -1241,16 +1241,17 @@ void wxFlagsProperty::Init()
                 child_val = ( value & (1<<i) )?true:false;
 
             wxPGProperty* boolProp;
+            wxString label = GetLabel(i);
 
         #if wxUSE_INTL
             if ( wxPGGlobalVars->m_autoGetTranslation )
             {
-                boolProp = new wxBoolProperty( ::wxGetTranslation( GetLabel(i) ), wxEmptyString, child_val );
+                boolProp = new wxBoolProperty( ::wxGetTranslation(label), label, child_val );
             }
             else
         #endif
             {
-                boolProp = new wxBoolProperty( GetLabel(i), wxEmptyString, child_val );
+                boolProp = new wxBoolProperty( label, label, child_val );
             }
             AddChild(boolProp);
         }

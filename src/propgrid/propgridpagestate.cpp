@@ -1503,6 +1503,12 @@ int wxPropertyGridPageState::PrepareToAddItem( wxPGProperty* property,
     if ( scheduledParent == m_properties )
         scheduledParent = (wxPGProperty*) NULL;
 
+    if ( scheduledParent && !scheduledParent->IsCategory() )
+    {
+        wxASSERT_MSG( property->GetBaseName().length(),
+                      "Property's children must have unique, non-empty names within their scope" );
+    }
+
     property->m_parentState = this;
 
     if ( property->IsCategory() )
