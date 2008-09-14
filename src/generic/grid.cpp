@@ -4222,6 +4222,7 @@ bool wxGrid::Create(wxWindow *parent, wxWindowID id,
 
     Create();
     SetInitialSize(size);
+    SetScrollRate(m_scrollLineX, m_scrollLineY);
     CalcDimensions();
 
     return true;
@@ -4689,7 +4690,6 @@ void wxGrid::CalcDimensions()
         y = wxMax( h - 1, 0 );
 
     // update the virtual size and refresh the scrollbars to reflect it
-    SetScrollRate(m_scrollLineX, m_scrollLineY);
     m_gridWin->SetVirtualSize(w, h);
     Scroll(x, y);
     AdjustScrollbars();
@@ -10730,70 +10730,18 @@ void wxGrid::AutoSize()
 {
     wxGridUpdateLocker locker(this);
 
-    // we need to round up the size of the scrollable area to a multiple of
-    // scroll step to ensure that we don't get the scrollbars when we're sized
-    // exactly to fit our contents
     wxSize size(SetOrCalcColumnSizes(false) - m_rowLabelWidth + m_extraWidth,
                 SetOrCalcRowSizes(false) - m_colLabelHeight + m_extraHeight);
-    wxSize sizeFit(GetScrollX(size.x) * GetScrollLineX(),
-                   GetScrollY(size.y) * GetScrollLineY());
-
-    // distribute the extra space between the columns/rows to avoid having
-    // extra white space
-    wxCoord diff = sizeFit.x - size.x;
-    if ( diff && m_numCols )
-    {
-        // try to resize the columns uniformly
-        wxCoord diffPerCol = diff / m_numCols;
-        if ( diffPerCol )
-        {
-            for ( int col = 0; col < m_numCols; col++ )
-            {
-                SetColSize(col, GetColWidth(col) + diffPerCol);
-            }
-        }
-
-        // add remaining amount to the last columns
-        diff -= diffPerCol * m_numCols;
-        if ( diff )
-        {
-            for ( int col = m_numCols - 1; col >= m_numCols - diff; col-- )
-            {
-                SetColSize(col, GetColWidth(col) + 1);
-            }
-        }
-    }
-
-    // same for rows
-    diff = sizeFit.y - size.y;
-    if ( diff && m_numRows )
-    {
-        // try to resize the columns uniformly
-        wxCoord diffPerRow = diff / m_numRows;
-        if ( diffPerRow )
-        {
-            for ( int row = 0; row < m_numRows; row++ )
-            {
-                SetRowSize(row, GetRowHeight(row) + diffPerRow);
-            }
-        }
-
-        // add remaining amount to the last rows
-        diff -= diffPerRow * m_numRows;
-        if ( diff )
-        {
-            for ( int row = m_numRows - 1; row >= m_numRows - diff; row-- )
-            {
-                SetRowSize(row, GetRowHeight(row) + 1);
-            }
-        }
-    }
 
     // we know that we're not going to have scrollbars so disable them now to
     // avoid trouble in SetClientSize() which can otherwise set the correct
     // client size but also leave space for (not needed any more) scrollbars
     SetScrollbars(0, 0, 0, 0, 0, 0, true);
-    SetClientSize(sizeFit.x + m_rowLabelWidth, sizeFit.y + m_colLabelHeight);
+
+    // restore the scroll rate parameters overwritten by SetScrollbars()
+    SetScrollRate(m_scrollLineX, m_scrollLineY);
+
+    SetClientSize(size.x + m_rowLabelWidth, size.y + m_colLabelHeight);
 }
 
 void wxGrid::AutoSizeRowLabelSize( int row )
@@ -10834,15 +10782,13 @@ wxSize wxGrid::DoGetBestSize() const
     // change the column/row sizes, only calculate them
     wxSize size(self->SetOrCalcColumnSizes(true) - m_rowLabelWidth + m_extraWidth,
                 self->SetOrCalcRowSizes(true) - m_colLabelHeight + m_extraHeight);
-    wxSize sizeFit(GetScrollX(size.x) * GetScrollLineX(),
-                   GetScrollY(size.y) * GetScrollLineY());
 
     // NOTE: This size should be cached, but first we need to add calls to
     // InvalidateBestSize everywhere that could change the results of this
     // calculation.
     // CacheBestSize(size);
 
-    return wxSize(sizeFit.x + m_rowLabelWidth, sizeFit.y + m_colLabelHeight)
+    return wxSize(size.x + m_rowLabelWidth, size.y + m_colLabelHeight)
             + GetWindowBorderSize();
 }
 
