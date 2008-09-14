@@ -55,6 +55,7 @@
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/editors.h>
 
+#include <typeinfo>
 
 #define wxPG_DEFAULT_SPLITTERX      110
 
@@ -399,7 +400,8 @@ wxPGProperty* wxPropertyGridPageState::GetLastItem( int flags )
     if ( pwc->GetFlags() & itemExMask )
     {
         wxPropertyGridIterator it( this, flags, pwc );
-        for ( ; !it.AtEnd(); it.Prev() );
+        for ( ; !it.AtEnd(); it.Prev() )
+            ;
         pwc = (wxPGProperty*) it.GetProperty();
     }
 
