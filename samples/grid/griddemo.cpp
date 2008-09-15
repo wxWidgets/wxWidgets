@@ -71,6 +71,7 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_TOGGLECOLMOVING, GridFrame::ToggleColMoving )
     EVT_MENU( ID_TOGGLEGRIDSIZING, GridFrame::ToggleGridSizing )
     EVT_MENU( ID_TOGGLEGRIDDRAGCELL, GridFrame::ToggleGridDragCell )
+    EVT_MENU( ID_TOGGLENATIVEHEADER, GridFrame::ToggleNativeHeader )
     EVT_MENU( ID_TOGGLEGRIDLINES, GridFrame::ToggleGridLines )
     EVT_MENU( ID_AUTOSIZECOLS, GridFrame::AutoSizeCols )
     EVT_MENU( ID_CELLOVERFLOW, GridFrame::CellOverflow )
@@ -152,20 +153,21 @@ GridFrame::GridFrame()
     fileMenu->Append( wxID_EXIT, _T("E&xit\tAlt-X") );
 
     wxMenu *viewMenu = new wxMenu;
-    viewMenu->Append( ID_TOGGLEROWLABELS,  _T("&Row labels"), wxEmptyString, wxITEM_CHECK );
-    viewMenu->Append( ID_TOGGLECOLLABELS,  _T("&Col labels"), wxEmptyString, wxITEM_CHECK );
-    viewMenu->Append( ID_TOGGLEEDIT,  _T("&Editable"), wxEmptyString, wxITEM_CHECK );
-    viewMenu->Append( ID_TOGGLEROWSIZING, _T("Ro&w drag-resize"), wxEmptyString, wxITEM_CHECK );
-    viewMenu->Append( ID_TOGGLECOLSIZING, _T("C&ol drag-resize"), wxEmptyString, wxITEM_CHECK );
-    viewMenu->Append( ID_TOGGLECOLMOVING, _T("Col drag-&move"), wxEmptyString, wxITEM_CHECK );
-    viewMenu->Append( ID_TOGGLEGRIDSIZING, _T("&Grid drag-resize"), wxEmptyString, wxITEM_CHECK );
-    viewMenu->Append( ID_TOGGLEGRIDDRAGCELL, _T("&Grid drag-cell"), wxEmptyString, wxITEM_CHECK );
-    viewMenu->Append( ID_TOGGLEGRIDLINES, _T("&Grid Lines"), wxEmptyString, wxITEM_CHECK );
-    viewMenu->Append( ID_SET_HIGHLIGHT_WIDTH, _T("&Set Cell Highlight Width...") );
-    viewMenu->Append( ID_SET_RO_HIGHLIGHT_WIDTH, _T("&Set Cell RO Highlight Width...") );
-    viewMenu->Append( ID_AUTOSIZECOLS, _T("&Auto-size cols") );
-    viewMenu->Append( ID_CELLOVERFLOW, _T("&Overflow cells"), wxEmptyString, wxITEM_CHECK );
-    viewMenu->Append( ID_RESIZECELL, _T("&Resize cell (7,1)"), wxEmptyString, wxITEM_CHECK );
+    viewMenu->AppendCheckItem(ID_TOGGLEROWLABELS, "&Row labels");
+    viewMenu->AppendCheckItem(ID_TOGGLECOLLABELS, "&Col labels");
+    viewMenu->AppendCheckItem(ID_TOGGLEEDIT,"&Editable");
+    viewMenu->AppendCheckItem(ID_TOGGLEROWSIZING, "Ro&w drag-resize");
+    viewMenu->AppendCheckItem(ID_TOGGLECOLSIZING, "C&ol drag-resize");
+    viewMenu->AppendCheckItem(ID_TOGGLECOLMOVING, "Col drag-&move");
+    viewMenu->AppendCheckItem(ID_TOGGLEGRIDSIZING, "&Grid drag-resize");
+    viewMenu->AppendCheckItem(ID_TOGGLEGRIDDRAGCELL, "&Grid drag-cell");
+    viewMenu->AppendCheckItem(ID_TOGGLENATIVEHEADER, "&Native column headers");
+    viewMenu->AppendCheckItem(ID_TOGGLEGRIDLINES, "&Grid Lines");
+    viewMenu->AppendCheckItem(ID_SET_HIGHLIGHT_WIDTH, "&Set Cell Highlight Width...");
+    viewMenu->AppendCheckItem(ID_SET_RO_HIGHLIGHT_WIDTH, "&Set Cell RO Highlight Width...");
+    viewMenu->AppendCheckItem(ID_AUTOSIZECOLS, "&Auto-size cols");
+    viewMenu->AppendCheckItem(ID_CELLOVERFLOW, "&Overflow cells");
+    viewMenu->AppendCheckItem(ID_RESIZECELL, "&Resize cell (7,1)");
 
     wxMenu *rowLabelMenu = new wxMenu;
 
@@ -239,7 +241,7 @@ GridFrame::GridFrame()
 
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append( fileMenu, _T("&File") );
-    menuBar->Append( viewMenu, _T("&View") );
+    menuBar->Append( viewMenu, _T("&Grid") );
     menuBar->Append( colMenu,  _T("&Colours") );
     menuBar->Append( editMenu, _T("&Edit") );
     menuBar->Append( selectMenu, _T("&Select") );
@@ -407,6 +409,7 @@ void GridFrame::SetDefaults()
     GetMenuBar()->Check( ID_TOGGLECOLMOVING, false );
     GetMenuBar()->Check( ID_TOGGLEGRIDSIZING, true );
     GetMenuBar()->Check( ID_TOGGLEGRIDDRAGCELL, false );
+    GetMenuBar()->Check( ID_TOGGLENATIVEHEADER, false );
     GetMenuBar()->Check( ID_TOGGLEGRIDLINES, true );
     GetMenuBar()->Check( ID_CELLOVERFLOW, true );
 }
@@ -474,6 +477,12 @@ void GridFrame::ToggleGridDragCell( wxCommandEvent& WXUNUSED(ev) )
 {
     grid->EnableDragCell(
         GetMenuBar()->IsChecked( ID_TOGGLEGRIDDRAGCELL ) );
+}
+
+void GridFrame::ToggleNativeHeader( wxCommandEvent& WXUNUSED(ev) )
+{
+    grid->SetUseNativeColLabels(
+        GetMenuBar()->IsChecked( ID_TOGGLENATIVEHEADER ) );
 }
 
 void GridFrame::ToggleGridLines( wxCommandEvent& WXUNUSED(ev) )

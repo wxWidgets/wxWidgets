@@ -39,6 +39,7 @@ class GridFrame : public wxFrame
     void ToggleColMoving( wxCommandEvent& );
     void ToggleGridSizing( wxCommandEvent& );
     void ToggleGridDragCell ( wxCommandEvent& );
+    void ToggleNativeHeader ( wxCommandEvent& );
     void ToggleGridLines( wxCommandEvent& );
     void AutoSizeCols( wxCommandEvent& );
     void CellOverflow( wxCommandEvent& );
@@ -119,6 +120,7 @@ public:
         ID_TOGGLECOLMOVING,
         ID_TOGGLEGRIDSIZING,
         ID_TOGGLEGRIDDRAGCELL,
+        ID_TOGGLENATIVEHEADER,
         ID_TOGGLEGRIDLINES,
         ID_AUTOSIZECOLS,
         ID_CELLOVERFLOW,
