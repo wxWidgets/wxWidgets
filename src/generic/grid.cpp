@@ -439,6 +439,23 @@ static const size_t GRID_SCROLL_LINE_Y = GRID_SCROLL_LINE_X;
 // in these hash tables is the number of rows/columns)
 static const int GRID_HASH_SIZE = 100;
 
+// ----------------------------------------------------------------------------
+// private helpers
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+// ensure that first is less or equal to second, swapping the values if
+// necessary
+void EnsureFirstLessThanSecond(int& first, int& second)
+{
+    if ( first > second )
+        wxSwap(first, second);
+}
+
+} // anonymous namespace
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -7179,9 +7196,8 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
     attr->DecRef();
 }
 
-void wxGrid::HighlightBlock( int topRow, int leftCol, int bottomRow, int rightCol )
+void wxGrid::HighlightBlock(int topRow, int leftCol, int bottomRow, int rightCol)
 {
-    int temp;
     wxGridCellCoords updateTopLeft, updateBottomRight;
 
     if ( m_selection )
@@ -7198,19 +7214,8 @@ void wxGrid::HighlightBlock( int topRow, int leftCol, int bottomRow, int rightCo
         }
     }
 
-    if ( topRow > bottomRow )
-    {
-        temp = topRow;
-        topRow = bottomRow;
-        bottomRow = temp;
-    }
-
-    if ( leftCol > rightCol )
-    {
-        temp = leftCol;
-        leftCol = rightCol;
-        rightCol = temp;
-    }
+    EnsureFirstLessThanSecond(topRow, bottomRow);
+    EnsureFirstLessThanSecond(leftCol, rightCol);
 
     updateTopLeft = wxGridCellCoords( topRow, leftCol );
     updateBottomRight = wxGridCellCoords( bottomRow, rightCol );
@@ -7247,30 +7252,10 @@ void wxGrid::HighlightBlock( int topRow, int leftCol, int bottomRow, int rightCo
         wxCoord oldBottom = m_selectingBottomRight.GetRow();
 
         // Determine the outer/inner coordinates.
-        if (oldLeft > leftCol)
-        {
-            temp = oldLeft;
-            oldLeft = leftCol;
-            leftCol = temp;
-        }
-        if (oldTop > topRow )
-        {
-            temp = oldTop;
-            oldTop = topRow;
-            topRow = temp;
-        }
-        if (oldRight < rightCol )
-        {
-            temp = oldRight;
-            oldRight = rightCol;
-            rightCol = temp;
-        }
-        if (oldBottom < bottomRow)
-        {
-            temp = oldBottom;
-            oldBottom = bottomRow;
-            bottomRow = temp;
-        }
+        EnsureFirstLessThanSecond(oldLeft, leftCol);
+        EnsureFirstLessThanSecond(oldTop, topRow);
+        EnsureFirstLessThanSecond(rightCol, oldRight);
+        EnsureFirstLessThanSecond(bottomRow, oldBottom);
 
         // Now, either the stuff marked old is the outer
         // rectangle or we don't have a situation where one

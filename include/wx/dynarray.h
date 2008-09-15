@@ -284,17 +284,9 @@ protected:                                                          \
                                                                     \
   void swap(name& other)                                            \
   {                                                                 \
-    const size_t savedSize = m_nSize;                               \
-    const size_t savedCount = m_nCount;                             \
-    T * const savedItems = m_pItems;                                \
-                                                                    \
-    m_nSize = other.m_nSize;                                        \
-    m_nCount = other.m_nCount;                                      \
-    m_pItems = other.m_pItems;                                      \
-                                                                    \
-    other.m_nSize = savedSize;                                      \
-    other.m_nCount = savedCount;                                    \
-    other.m_pItems = savedItems;                                    \
+    wxSwap(m_nSize, other.m_nSize);                                 \
+    wxSwap(m_nCount, other.m_nCount);                               \
+    wxSwap(m_pItems, other.m_pItems);                               \
   }                                                                 \
                                                                     \
   /* the following functions may be made directly public because */ \
