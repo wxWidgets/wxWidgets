@@ -639,6 +639,15 @@ typedef short int WXTYPE;
             ptr = NULL;
         }
     }
+
+    // trivial implementation of std::swap() for primitive types
+    template <typename T>
+    inline void wxSwap(T& first, T& second)
+    {
+        T tmp(first);
+        first = second;
+        second = tmp;
+    }
 #endif /*__cplusplus*/
 
 /*  size of statically declared array */
