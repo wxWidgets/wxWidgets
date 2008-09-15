@@ -303,6 +303,44 @@ enum wxPaperSize
 #define DECLARE_NO_COPY_TEMPLATE_CLASS(classname, arg)
 
 /**
+    A function which deletes and nulls the pointer.
+
+    This function uses operator delete to free the pointer and also sets it to
+    @NULL. Notice that this does @em not work for arrays, use wxDELETEA() for
+    them.
+
+    @code
+        MyClass *ptr = new MyClass;
+        ...
+        wxDELETE(ptr);
+        wxASSERT(!ptr);
+    @endcode
+
+    @header{wx/defs.h}
+*/
+template <typename T> wxDELETE(T*& ptr);
+
+/**
+    A function which deletes and nulls the pointer.
+
+    This function uses vector operator delete (@c delete[]) to free the array
+    pointer and also sets it to @NULL. Notice that this does @em not work for
+    non-array pointers, use wxDELETE() for them.
+
+    @code
+        MyClass *array = new MyClass[17];
+        ...
+        wxDELETEA(array);
+        wxASSERT(!array);
+    @endcode
+
+    @see wxDELETE()
+
+    @header{wx/defs.h}
+*/
+template <typename T> wxDELETEA(T*& array);
+
+/**
     This macro can be used around a function declaration to generate warnings
     indicating that this function is deprecated (i.e. obsolete and planned to
     be removed in the future) when it is used. Only Visual C++ 7 and higher and
@@ -401,6 +439,25 @@ enum wxPaperSize
     @header{wx/defs.h}
 */
 #define wxSUPPRESS_GCC_PRIVATE_DTOR_WARNING(name)
+
+/**
+    Swaps the contents of two variables.
+
+    This is similar to std::swap() but can be used even on the platforms where
+    the standard C++ library is not available (if you don't target such
+    platforms, please use std::swap() instead).
+
+    The function relies on type T being copy constructible and assignable.
+
+    Example of use:
+    @code
+        int x = 3,
+            y = 4;
+        wxSwap(x, y);
+        wxASSERT( x == 4 && y == 3 );
+    @endcode
+ */
+template <typename T> wxSwap(T& first, T& second);
 
 /**
     This macro is the same as the standard C99 @c va_copy for the compilers
