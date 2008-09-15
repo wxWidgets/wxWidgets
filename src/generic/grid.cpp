@@ -5580,6 +5580,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
                     if ( markerX != m_dragLastPos )
                     {
                         wxClientDC dc( m_colLabelWin );
+                        DoPrepareDC(dc);
 
                         int cw, ch;
                         m_colLabelWin->GetClientSize( &cw, &ch );
