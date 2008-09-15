@@ -7117,25 +7117,34 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 break;
 
             case WXK_SPACE:
-                if ( event.ControlDown() )
+                // Ctrl-Space selects the current column, Shift-Space -- the
+                // current row and Ctrl-Shift-Space -- everything
+                switch ( m_selection ? event.GetModifiers() : wxMOD_NONE )
                 {
-                    if ( m_selection )
-                    {
-                        m_selection->ToggleCellSelection(
-                            m_currentCellCoords.GetRow(),
-                            m_currentCellCoords.GetCol(),
-                            event.ControlDown(),
-                            event.ShiftDown(),
-                            event.AltDown(),
-                            event.MetaDown() );
-                    }
-                    break;
-                }
+                    case wxMOD_CONTROL:
+                        m_selection->SelectCol(m_currentCellCoords.GetCol());
+                        break;
 
-                if ( !IsEditable() )
-                    MoveCursorRight( false );
-                else
-                    event.Skip();
+                    case wxMOD_SHIFT:
+                        m_selection->SelectRow(m_currentCellCoords.GetRow());
+                        break;
+
+                    case wxMOD_CONTROL | wxMOD_SHIFT:
+                        m_selection->SelectBlock(0, 0,
+                                                 m_numRows - 1, m_numCols - 1);
+                        break;
+
+                    case wxMOD_NONE:
+                        if ( !IsEditable() )
+                        {
+                            MoveCursorRight(false);
+                            break;
+                        }
+                        //else: fall through
+
+                    default:
+                        event.Skip();
+                }
                 break;
 
             default:
