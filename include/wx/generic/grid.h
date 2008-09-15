@@ -1628,18 +1628,6 @@ public:
     int GetScrollLineX() const { return m_scrollLineX; }
     int GetScrollLineY() const { return m_scrollLineY; }
 
-    // Implementation
-    int GetScrollX(int x) const
-    {
-        return (x + GetScrollLineX() - 1) / GetScrollLineX();
-    }
-
-    int GetScrollY(int y) const
-    {
-        return (y + GetScrollLineY() - 1) / GetScrollLineY();
-    }
-
-
     // ------- drag and drop
 #if wxUSE_DRAG_AND_DROP
     virtual void SetDropTarget(wxDropTarget *dropTarget);
