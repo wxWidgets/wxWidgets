@@ -96,7 +96,7 @@ struct wxGridCellWithAttr
     {
         if (attr != new_attr)
         {
-	    // "Delete" (i.e. DecRef) the old attribute.
+            // "Delete" (i.e. DecRef) the old attribute.
             attr->DecRef();
             attr = new_attr;
             // Take ownership of the new attribute, i.e. no IncRef.
@@ -2821,7 +2821,7 @@ void wxGridRowOrColAttrData::SetAttr(wxGridCellAttr *attr, int rowOrCol)
         size_t n = (size_t)i;
         if ( m_attrs[n] == attr )
             // nothing to do
-            return; 
+            return;
         if ( attr )
         {
             // change the attribute, handling reference count manually,
@@ -5672,6 +5672,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
                     if ( markerX != m_dragLastPos )
                     {
                         wxClientDC dc( m_colLabelWin );
+                        DoPrepareDC(dc);
 
                         int cw, ch;
                         m_colLabelWin->GetClientSize( &cw, &ch );
@@ -10029,13 +10030,13 @@ void wxGrid::ClearAttrCache()
 {
     if ( m_attrCache.row != -1 )
     {
-        wxGridCellAttr *oldAttr = m_attrCache.attr; 
+        wxGridCellAttr *oldAttr = m_attrCache.attr;
         m_attrCache.attr = NULL;
         m_attrCache.row = -1;
         // wxSafeDecRec(...) might cause event processing that accesses
         // the cached attribute, if one exists (e.g. by deleting the
         // editor stored within the attribute). Therefore it is important
-	// to invalidate the cache  before calling wxSafeDecRef!
+        // to invalidate the cache  before calling wxSafeDecRef!
         wxSafeDecRef(oldAttr);
     }
 }
@@ -10454,9 +10455,9 @@ void wxGrid::SetRowSize( int row, int height )
         wxClientDC dc(m_rowLabelWin);
         dc.SetFont(GetLabelFont());
         StringToLines(GetRowLabelValue( row ), lines);
-	GetTextBoxSize( dc, lines, &w, &h );
-	//check that it is not less than the minimal height
-	height = wxMax(h, GetRowMinimalAcceptableHeight());
+        GetTextBoxSize( dc, lines, &w, &h );
+        //check that it is not less than the minimal height
+        height = wxMax(h, GetRowMinimalAcceptableHeight());
     }
 
     // See comment in SetColSize
@@ -10516,8 +10517,8 @@ void wxGrid::SetColSize( int col, int width )
         else
             GetTextBoxSize( dc, lines, &h, &w );
         width = w + 6;
-	//check that it is not less than the minimal width
-	width = wxMax(width, GetColMinimalAcceptableWidth()); 
+        //check that it is not less than the minimal width
+        width = wxMax(width, GetColMinimalAcceptableWidth());
     }
 
     // should we check that it's bigger than GetColMinimalWidth(col) here?
