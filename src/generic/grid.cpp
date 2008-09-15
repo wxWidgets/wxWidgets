@@ -5574,6 +5574,14 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
 
                     if ( m_moveToCol < 0 )
                         markerX = GetColRight( GetColAt( m_numCols - 1 ) );
+                    else if ( x >= (GetColLeft( m_moveToCol ) + (GetColWidth(m_moveToCol) / 2)) )
+                    {
+                        m_moveToCol = GetColAt( GetColPos( m_moveToCol ) + 1 );
+                        if ( m_moveToCol < 0 )
+                            markerX = GetColRight( GetColAt( m_numCols - 1 ) );
+                        else
+                            markerX = GetColLeft( m_moveToCol );
+                    }
                     else
                         markerX = GetColLeft( m_moveToCol );
 
@@ -5599,17 +5607,17 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
                                 DrawColLabel( dc, XToCol( m_dragLastPos ) );
                         }
 
+                        const wxColour *color;
                         //Moving to the same place? Don't draw a marker
                         if ( (m_moveToCol == m_dragRowOrCol)
                           || (GetColPos( m_moveToCol ) == GetColPos( m_dragRowOrCol ) + 1)
                           || (m_moveToCol < 0 && m_dragRowOrCol == GetColAt( m_numCols - 1 )))
-                        {
-                            m_dragLastPos = -1;
-                            return;
-                        }
+                            color = wxLIGHT_GREY;
+                        else
+                            color = wxBLUE;
 
                         //Draw the marker
-                        wxPen pen( *wxBLUE, 2 );
+                        wxPen pen( *color, 2 );
                         dc.SetPen(pen);
 
                         dc.DrawLine( markerX, 0, markerX, ch );

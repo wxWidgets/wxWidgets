@@ -391,6 +391,7 @@ All (GUI):
 - Added "enabled" and "hidden" attributes to radio box items in XRC.
 - wxWindow::IsBeingDeleted() now returns true not only if the window itself is
   marked for destruction but also if any of its parent windows are.
+- Improved drawing of the hint during column move in wxGrid.
 
 wxGTK:
 
