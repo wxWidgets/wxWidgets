@@ -2812,7 +2812,7 @@ void wxGridRowOrColAttrData::SetAttr(wxGridCellAttr *attr, int rowOrCol)
         size_t n = (size_t)i;
         if ( m_attrs[n] == attr )
             // nothing to do
-            return; 
+            return;
         if ( attr )
         {
             // change the attribute, handling reference count manually,
@@ -7773,7 +7773,27 @@ void wxGrid::DrawHighlight(wxDC& dc, const wxGridCellCoordsArray& cells)
     size_t count = cells.GetCount();
     for ( size_t n = 0; n < count; n++ )
     {
-        if ( cells[n] == m_currentCellCoords )
+        wxGridCellCoords cell = cells[n];
+
+        // If we are using attributes, then we may have just exposed another
+        // cell in a partially-visible merged cluster of cells. If the "anchor"
+        // (upper left) cell of this merged cluster is the cell indicated by
+        // m_currentCellCoords, then we need to refresh the cell highlight even
+        // though the "anchor" itself is not part of our update segment.
+        if ( CanHaveAttributes() )
+        {
+            int rows = 0,
+                cols = 0;
+            GetCellSize(cell.GetRow(), cell.GetCol(), &rows, &cols);
+
+            if ( rows < 0 )
+                cell.SetRow(cell.GetRow() + rows);
+
+            if ( cols < 0 )
+                cell.SetCol(cell.GetCol() + cols);
+        }
+
+        if ( cell == m_currentCellCoords )
         {
             wxGridCellAttr* attr = GetCellAttr(m_currentCellCoords);
             DrawCellHighlight(dc, attr);
@@ -9926,7 +9946,7 @@ void wxGrid::ClearAttrCache()
 {
     if ( m_attrCache.row != -1 )
     {
-        wxGridCellAttr *oldAttr = m_attrCache.attr; 
+        wxGridCellAttr *oldAttr = m_attrCache.attr;
         m_attrCache.attr = NULL;
         m_attrCache.row = -1;
         // wxSafeDecRec(...) might cause event processing that accesses
@@ -10055,8 +10075,8 @@ void wxGrid::SetColFormatCustom(int col, const wxString& typeName)
         attr = new wxGridCellAttr;
     wxGridCellRenderer *renderer = GetDefaultRendererForType(typeName);
     attr->SetRenderer(renderer);
-    wxGridCellEditor *editor = GetDefaultEditorForType(typeName); 
-    attr->SetEditor(editor); 
+    wxGridCellEditor *editor = GetDefaultEditorForType(typeName);
+    attr->SetEditor(editor);
 
     SetColAttr(col, attr);
 
@@ -10411,7 +10431,7 @@ void wxGrid::SetColSize( int col, int width )
             GetTextBoxSize( dc, lines, &h, &w );
         width = w + 6;
         //check that it is not less than the minimal width
-        width = wxMax(width, GetColMinimalAcceptableWidth()); 
+        width = wxMax(width, GetColMinimalAcceptableWidth());
     }
 
     // should we check that it's bigger than GetColMinimalWidth(col) here?
