@@ -6143,16 +6143,9 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                 }
                 else
                 {
-                    m_waitForSlowClick = m_currentCellCoords == coords && coords != wxGridNoCellCoords;
+                    m_waitForSlowClick = m_currentCellCoords == coords &&
+                                                coords != wxGridNoCellCoords;
                     SetCurrentCell( coords );
-                    if ( m_selection )
-                    {
-                        if ( m_selection->GetSelectionMode() !=
-                                wxGrid::wxGridSelectCells )
-                        {
-                            HighlightBlock( coords, coords );
-                        }
-                    }
                 }
             }
         }
