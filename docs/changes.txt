@@ -128,6 +128,7 @@ All (GUI):
 - Allow period in link anchors in wxHTML.
 - Fixed memory corruption in wxHTML when parsing "&;" in the markup.
 - Fixed event type in EVT_GRID_CMD_COL_MOVE and EVT_GRID_COL_MOVE.
+- wxGrid doesn't steal focus when hiding editor any more (Tom Eckert).
 
 All (Unix):
 

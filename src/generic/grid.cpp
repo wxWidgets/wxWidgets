@@ -8590,11 +8590,19 @@ void wxGrid::HideCellEditControl()
 
         wxGridCellAttr *attr = GetCellAttr(row, col);
         wxGridCellEditor *editor = attr->GetEditor(this, row, col);
+        const bool
+            editorHadFocus = wxWindow::FindFocus() == editor->GetControl();
         editor->Show( false );
         editor->DecRef();
         attr->DecRef();
 
-        m_gridWin->SetFocus();
+        // return the focus to the grid itself if the editor had it
+        //
+        // note that we must not do this unconditionally to avoid stealing
+        // focus from the window which just received it if we are hiding the
+        // editor precisely because we lost focus
+        if ( editorHadFocus )
+            m_gridWin->SetFocus();
 
         // refresh whole row to the right
         wxRect rect( CellToRect(row, col) );
