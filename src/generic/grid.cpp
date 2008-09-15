@@ -4279,28 +4279,16 @@ void wxGrid::Create()
 }
 
 bool wxGrid::CreateGrid( int numRows, int numCols,
-                         wxGrid::wxGridSelectionModes selmode )
+                         wxGridSelectionModes selmode )
 {
     wxCHECK_MSG( !m_created,
                  false,
                  wxT("wxGrid::CreateGrid or wxGrid::SetTable called more than once") );
 
-    m_numRows = numRows;
-    m_numCols = numCols;
-
-    m_table = new wxGridStringTable( m_numRows, m_numCols );
-    m_table->SetView( this );
-    m_ownTable = true;
-    m_selection = new wxGridSelection( this, selmode );
-
-    CalcDimensions();
-
-    m_created = true;
-
-    return m_created;
+    return SetTable(new wxGridStringTable(numRows, numCols), true, selmode);
 }
 
-void wxGrid::SetSelectionMode(wxGrid::wxGridSelectionModes selmode)
+void wxGrid::SetSelectionMode(wxGridSelectionModes selmode)
 {
     wxCHECK_RET( m_created,
                  wxT("Called wxGrid::SetSelectionMode() before calling CreateGrid()") );
@@ -4310,14 +4298,16 @@ void wxGrid::SetSelectionMode(wxGrid::wxGridSelectionModes selmode)
 
 wxGrid::wxGridSelectionModes wxGrid::GetSelectionMode() const
 {
-    wxCHECK_MSG( m_created, wxGrid::wxGridSelectCells,
+    wxCHECK_MSG( m_created, wxGridSelectCells,
                  wxT("Called wxGrid::GetSelectionMode() before calling CreateGrid()") );
 
     return m_selection->GetSelectionMode();
 }
 
-bool wxGrid::SetTable( wxGridTableBase *table, bool takeOwnership,
-                       wxGrid::wxGridSelectionModes selmode )
+bool
+wxGrid::SetTable(wxGridTableBase *table,
+                 bool takeOwnership,
+                 wxGrid::wxGridSelectionModes selmode )
 {
     bool checkSelection = false;
     if ( m_created )
