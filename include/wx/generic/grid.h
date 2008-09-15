@@ -1192,6 +1192,7 @@ public:
     virtual void DrawColLabels( wxDC& dc, const wxArrayInt& cols );
     virtual void DrawColLabel( wxDC& dc, int col );
 
+    virtual void DrawCornerLabel(wxDC& dc);
 
     // ------ Cell text drawing functions
     //

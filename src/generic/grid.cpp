@@ -414,15 +414,6 @@ private:
     wxGridDataTypeInfoArray m_typeinfo;
 };
 
-
-// ----------------------------------------------------------------------------
-// conditional compilation
-// ----------------------------------------------------------------------------
-
-#ifndef WXGRID_DRAW_LINES
-#define WXGRID_DRAW_LINES 1
-#endif
-
 // ----------------------------------------------------------------------------
 // globals
 // ----------------------------------------------------------------------------
@@ -441,18 +432,7 @@ wxGridCellCoords wxGridNoCellCoords( -1, -1 );
 wxRect wxGridNoCellRect( -1, -1, -1, -1 );
 
 // scroll line size
-// TODO: this doesn't work at all, grid cells have different sizes and approx
-//       calculations don't work as because of the size mismatch scrollbars
-//       sometimes fail to be shown when they should be or vice versa
-//
-//       The scroll bars may be a little flakey once in a while, but that is
-//       surely much less horrible than having scroll lines of only 1!!!
-//       -- Robin
-//
-//       Well, it's still seriously broken so it might be better but needs
-//       fixing anyhow
-//       -- Vadim
-static const size_t GRID_SCROLL_LINE_X = 15;  // 1;
+static const size_t GRID_SCROLL_LINE_X = 15;
 static const size_t GRID_SCROLL_LINE_Y = GRID_SCROLL_LINE_X;
 
 // the size of hash tables used a bit everywhere (the max number of elements
@@ -496,7 +476,7 @@ void wxGridCellEditor::PaintBackground(const wxRect& rectCell,
         gridWindow->GetOwner()->PrepareDC(dc);
 
     dc.SetPen(*wxTRANSPARENT_PEN);
-    dc.SetBrush(wxBrush(attr->GetBackgroundColour(), wxBRUSHSTYLE_SOLID));
+    dc.SetBrush(wxBrush(attr->GetBackgroundColour()));
     dc.DrawRectangle(rectCell);
 
     // redraw the control we just painted over
@@ -1843,28 +1823,27 @@ void wxGridCellRenderer::Draw(wxGrid& grid,
 {
     dc.SetBackgroundMode( wxBRUSHSTYLE_SOLID );
 
-    // grey out fields if the grid is disabled
+    wxColour clr;
     if ( grid.IsEnabled() )
     {
         if ( isSelected )
         {
-            wxColour clr;
             if ( grid.HasFocus() )
                 clr = grid.GetSelectionBackground();
             else
                 clr = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW);
-            dc.SetBrush( wxBrush(clr, wxBRUSHSTYLE_SOLID) );
         }
         else
         {
-            dc.SetBrush( wxBrush(attr.GetBackgroundColour(), wxBRUSHSTYLE_SOLID) );
+            clr = attr.GetBackgroundColour();
         }
     }
-    else
+    else // grey out fields if the grid is disabled
     {
-        dc.SetBrush(wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE), wxBRUSHSTYLE_SOLID));
+        clr = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
     }
 
+    dc.SetBrush(clr);
     dc.SetPen( *wxTRANSPARENT_PEN );
     dc.DrawRectangle(rect);
 }
@@ -3655,16 +3634,6 @@ bool wxGridStringTable::AppendCols( size_t numCols )
 
     size_t curNumRows = m_data.GetCount();
 
-#if 0
-    if ( !curNumRows )
-    {
-        // TODO: something better than this ?
-        //
-        wxFAIL_MSG( wxT("Unable to append cols to a grid table with no rows.\nCall AppendRows() first") );
-        return false;
-    }
-#endif
-
     for ( row = 0; row < curNumRows; row++ )
     {
         m_data[row].Add( wxEmptyString, numCols );
@@ -3928,7 +3897,8 @@ END_EVENT_TABLE()
 
 wxGridCornerLabelWindow::wxGridCornerLabelWindow( wxGrid *parent,
                                                   wxWindowID id,
-                                                  const wxPoint &pos, const wxSize &size )
+                                                  const wxPoint& pos,
+                                                  const wxSize& size )
   : wxGridSubwindow(parent, id, pos, size)
 {
     m_owner = parent;
@@ -3938,31 +3908,7 @@ void wxGridCornerLabelWindow::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
     wxPaintDC dc(this);
 
-    int client_height = 0;
-    int client_width = 0;
-    GetClientSize( &client_width, &client_height );
-
-    // VZ: any reason for this ifdef? (FIXME)
-#if 0
-def __WXGTK__
-    wxRect rect;
-    rect.SetX( 1 );
-    rect.SetY( 1 );
-    rect.SetWidth( client_width - 2 );
-    rect.SetHeight( client_height - 2 );
-
-    wxRendererNative::Get().DrawHeaderButton( this, dc, rect, 0 );
-#else // !__WXGTK__
-    dc.SetPen( wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW), 1, wxPENSTYLE_SOLID) );
-    dc.DrawLine( client_width - 1, client_height - 1, client_width - 1, 0 );
-    dc.DrawLine( client_width - 1, client_height - 1, 0, client_height - 1 );
-    dc.DrawLine( 0, 0, client_width, 0 );
-    dc.DrawLine( 0, 0, 0, client_height );
-
-    dc.SetPen( *wxWHITE_PEN );
-    dc.DrawLine( 1, 1, client_width - 1, 1 );
-    dc.DrawLine( 1, 1, 1, client_height - 1 );
-#endif
+    m_owner->DrawCornerLabel(dc);
 }
 
 void wxGridCornerLabelWindow::OnMouseEvent( wxMouseEvent& event )
@@ -4014,9 +3960,7 @@ void wxGridWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     wxGridCellCoordsArray dirtyCells = m_owner->CalcCellsExposed( reg );
     m_owner->DrawGridCellArea( dc, dirtyCells );
 
-#if WXGRID_DRAW_LINES
     m_owner->DrawAllGridLines( dc, reg );
-#endif
 
     m_owner->DrawGridSpace( dc );
     m_owner->DrawHighlight( dc, dirtyCells );
@@ -4482,9 +4426,7 @@ void wxGrid::Init()
     m_attrCache.col = -1;
     m_attrCache.attr = NULL;
 
-    // TODO: something better than this ?
-    //
-    m_labelFont = this->GetFont();
+    m_labelFont = GetFont();
     m_labelFont.SetWeight( wxBOLD );
 
     m_rowLabelHorizAlign = wxALIGN_CENTRE;
@@ -6010,7 +5952,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                 {
                     MakeCellVisible(coords);
                     // TODO: need to introduce a delay or something here.  The
-                    // scrolling is way to fast, at least on MSW - also on GTK.
+                    // scrolling is way too fast, at least under MSW and GTK.
                 }
             }
             // Have we captured the mouse yet?
@@ -6581,8 +6523,6 @@ void wxGrid::ClearGrid()
 
 bool wxGrid::InsertRows( int pos, int numRows, bool WXUNUSED(updateLabels) )
 {
-    // TODO: something with updateLabels flag
-
     if ( !m_created )
     {
         wxFAIL_MSG( wxT("Called wxGrid::InsertRows() before calling CreateGrid()") );
@@ -6606,8 +6546,6 @@ bool wxGrid::InsertRows( int pos, int numRows, bool WXUNUSED(updateLabels) )
 
 bool wxGrid::AppendRows( int numRows, bool WXUNUSED(updateLabels) )
 {
-    // TODO: something with updateLabels flag
-
     if ( !m_created )
     {
         wxFAIL_MSG( wxT("Called wxGrid::AppendRows() before calling CreateGrid()") );
@@ -6628,8 +6566,6 @@ bool wxGrid::AppendRows( int numRows, bool WXUNUSED(updateLabels) )
 
 bool wxGrid::DeleteRows( int pos, int numRows, bool WXUNUSED(updateLabels) )
 {
-    // TODO: something with updateLabels flag
-
     if ( !m_created )
     {
         wxFAIL_MSG( wxT("Called wxGrid::DeleteRows() before calling CreateGrid()") );
@@ -6652,8 +6588,6 @@ bool wxGrid::DeleteRows( int pos, int numRows, bool WXUNUSED(updateLabels) )
 
 bool wxGrid::InsertCols( int pos, int numCols, bool WXUNUSED(updateLabels) )
 {
-    // TODO: something with updateLabels flag
-
     if ( !m_created )
     {
         wxFAIL_MSG( wxT("Called wxGrid::InsertCols() before calling CreateGrid()") );
@@ -6676,8 +6610,6 @@ bool wxGrid::InsertCols( int pos, int numCols, bool WXUNUSED(updateLabels) )
 
 bool wxGrid::AppendCols( int numCols, bool WXUNUSED(updateLabels) )
 {
-    // TODO: something with updateLabels flag
-
     if ( !m_created )
     {
         wxFAIL_MSG( wxT("Called wxGrid::AppendCols() before calling CreateGrid()") );
@@ -6697,8 +6629,6 @@ bool wxGrid::AppendCols( int numCols, bool WXUNUSED(updateLabels) )
 
 bool wxGrid::DeleteCols( int pos, int numCols, bool WXUNUSED(updateLabels) )
 {
-    // TODO: something with updateLabels flag
-
     if ( !m_created )
     {
         wxFAIL_MSG( wxT("Called wxGrid::DeleteCols() before calling CreateGrid()") );
@@ -7588,7 +7518,7 @@ void wxGrid::DrawGridSpace( wxDC& dc )
       int left, top;
       CalcUnscrolledPosition( 0, 0, &left, &top );
 
-      dc.SetBrush( wxBrush(GetDefaultCellBackgroundColour(), wxBRUSHSTYLE_SOLID) );
+      dc.SetBrush(GetDefaultCellBackgroundColour());
       dc.SetPen( *wxTRANSPARENT_PEN );
 
       if ( right > rightCol )
@@ -7612,11 +7542,6 @@ void wxGrid::DrawCell( wxDC& dc, const wxGridCellCoords& coords )
         return;
 
     // we draw the cell border ourselves
-#if !WXGRID_DRAW_LINES
-    if ( m_gridLinesEnabled )
-        DrawCellBorder( dc, coords );
-#endif
-
     wxGridCellAttr* attr = GetCellAttr(row, col);
 
     bool isCurrent = coords == m_currentCellCoords;
@@ -7683,7 +7608,9 @@ void wxGrid::DrawCellHighlight( wxDC& dc, const wxGridCellAttr *attr )
         // Now draw the rectangle
         // use the cellHighlightColour if the cell is inside a selection, this
         // will ensure the cell is always visible.
-        dc.SetPen(wxPen(IsInSelection(row,col) ? m_selectionForeground : m_cellHighlightColour, penWidth, wxPENSTYLE_SOLID));
+        dc.SetPen(wxPen(IsInSelection(row,col) ? m_selectionForeground
+                                               : m_cellHighlightColour,
+                        penWidth));
         dc.SetBrush(*wxTRANSPARENT_BRUSH);
         dc.DrawRectangle(rect);
     }
@@ -7712,7 +7639,7 @@ void wxGrid::DrawCellHighlight( wxDC& dc, const wxGridCellAttr *attr )
 
 wxPen wxGrid::GetDefaultGridLinePen()
 {
-    return wxPen(GetGridLineColour(), 1, wxPENSTYLE_SOLID);
+    return wxPen(GetGridLineColour());
 }
 
 wxPen wxGrid::GetRowGridLinePen(int WXUNUSED(row))
@@ -7799,45 +7726,20 @@ void wxGrid::DrawHighlight(wxDC& dc, const wxGridCellCoordsArray& cells)
     }
 }
 
-// TODO: remove this ???
 // This is used to redraw all grid lines e.g. when the grid line colour
 // has been changed
 //
 void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & WXUNUSED(reg) )
 {
-#if !WXGRID_DRAW_LINES
-    return;
-#endif
-
     if ( !m_gridLinesEnabled || !m_numRows || !m_numCols )
          return;
 
     int top, bottom, left, right;
 
-#if 0  //#ifndef __WXGTK__
-    if (reg.IsEmpty())
-    {
-      int cw, ch;
-      m_gridWin->GetClientSize(&cw, &ch);
-
-      // virtual coords of visible area
-      //
-      CalcUnscrolledPosition( 0, 0, &left, &top );
-      CalcUnscrolledPosition( cw, ch, &right, &bottom );
-    }
-    else
-    {
-      wxCoord x, y, w, h;
-      reg.GetBox(x, y, w, h);
-      CalcUnscrolledPosition( x, y, &left, &top );
-      CalcUnscrolledPosition( x + w, y + h, &right, &bottom );
-    }
-#else
-      int cw, ch;
-      m_gridWin->GetClientSize(&cw, &ch);
-      CalcUnscrolledPosition( 0, 0, &left, &top );
-      CalcUnscrolledPosition( cw, ch, &right, &bottom );
-#endif
+    int cw, ch;
+    m_gridWin->GetClientSize(&cw, &ch);
+    CalcUnscrolledPosition( 0, 0, &left, &top );
+    CalcUnscrolledPosition( cw, ch, &right, &bottom );
 
     // avoid drawing grid lines past the last row and col
     //
@@ -7852,15 +7754,14 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & WXUNUSED(reg) )
 
     wxRegion clippedcells(0, 0, cw, ch);
 
-    int i, j, cell_rows, cell_cols;
+    int cell_rows, cell_cols;
     wxRect rect;
 
-    for (j=topRow; j<=bottomRow; j++)
+    for ( int j = topRow; j <= bottomRow; j++ )
     {
-        int colPos;
-        for (colPos=leftCol; colPos<=rightCol; colPos++)
+        for ( int colPos = leftCol; colPos <= rightCol; colPos++ )
         {
-            i = GetColAt( colPos );
+            int i = GetColAt( colPos );
 
             GetCellSize( j, i, &cell_rows, &cell_cols );
             if ((cell_rows > 1) || (cell_cols > 1))
@@ -7882,16 +7783,12 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & WXUNUSED(reg) )
 
 
     // horizontal grid lines
-    //
-    // already declared above - int i;
-    for ( i = internalYToRow(top); i < m_numRows; i++ )
+    for ( int i = internalYToRow(top); i < m_numRows; i++ )
     {
         int bot = GetRowBottom(i) - 1;
 
         if ( bot > bottom )
-        {
             break;
-        }
 
         if ( bot >= top )
         {
@@ -7901,11 +7798,9 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & WXUNUSED(reg) )
     }
 
     // vertical grid lines
-    //
-    int colPos;
-    for ( colPos = leftCol; colPos < m_numCols; colPos++ )
+    for ( int colPos = leftCol; colPos < m_numCols; colPos++ )
     {
-        i = GetColAt( colPos );
+        int i = GetColAt( colPos );
 
         int colRight = GetColRight(i);
 #ifdef __WXGTK__
@@ -7914,9 +7809,7 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & WXUNUSED(reg) )
             colRight--;
 
         if ( colRight > right )
-        {
             break;
-        }
 
         if ( colRight >= left )
         {
@@ -7933,10 +7826,8 @@ void wxGrid::DrawRowLabels( wxDC& dc, const wxArrayInt& rows)
     if ( !m_numRows )
         return;
 
-    size_t i;
-    size_t numLabels = rows.GetCount();
-
-    for ( i = 0; i < numLabels; i++ )
+    const size_t numLabels = rows.GetCount();
+    for ( size_t i = 0; i < numLabels; i++ )
     {
         DrawRowLabel( dc, rows[i] );
     }
@@ -7952,7 +7843,7 @@ void wxGrid::DrawRowLabel( wxDC& dc, int row )
     int rowTop = GetRowTop(row),
         rowBottom = GetRowBottom(row) - 1;
 
-    dc.SetPen( wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW), 1, wxPENSTYLE_SOLID) );
+    dc.SetPen( wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW)));
     dc.DrawLine( m_rowLabelWidth - 1, rowTop, m_rowLabelWidth - 1, rowBottom );
     dc.DrawLine( 0, rowTop, 0, rowBottom );
     dc.DrawLine( 0, rowBottom, m_rowLabelWidth, rowBottom );
@@ -7985,6 +7876,7 @@ void wxGrid::SetUseNativeColLabels( bool native )
     }
 
     m_colLabelWin->Refresh();
+    m_cornerLabelWin->Refresh();
 }
 
 void wxGrid::DrawColLabels( wxDC& dc,const wxArrayInt& cols )
@@ -7992,43 +7884,62 @@ void wxGrid::DrawColLabels( wxDC& dc,const wxArrayInt& cols )
     if ( !m_numCols )
         return;
 
-    size_t i;
-    size_t numLabels = cols.GetCount();
-
-    for ( i = 0; i < numLabels; i++ )
+    const size_t numLabels = cols.GetCount();
+    for ( size_t i = 0; i < numLabels; i++ )
     {
         DrawColLabel( dc, cols[i] );
     }
 }
 
-void wxGrid::DrawColLabel( wxDC& dc, int col )
+void wxGrid::DrawCornerLabel(wxDC& dc)
+{
+    if ( m_nativeColumnLabels )
+    {
+        wxRect rect(wxSize(m_rowLabelWidth, m_colLabelHeight));
+        rect.Deflate(1);
+
+        wxRendererNative::Get().DrawHeaderButton(m_cornerLabelWin, dc, rect, 0);
+    }
+    else
+    {
+        dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW)));
+        dc.DrawLine( m_rowLabelWidth - 1, m_colLabelHeight - 1,
+                     m_rowLabelWidth - 1, 0 );
+        dc.DrawLine( m_rowLabelWidth - 1, m_colLabelHeight - 1,
+                     0, m_colLabelHeight - 1 );
+        dc.DrawLine( 0, 0, m_rowLabelWidth, 0 );
+        dc.DrawLine( 0, 0, 0, m_colLabelHeight );
+
+        dc.SetPen( *wxWHITE_PEN );
+        dc.DrawLine( 1, 1, m_rowLabelWidth - 1, 1 );
+        dc.DrawLine( 1, 1, 1, m_colLabelHeight - 1 );
+    }
+}
+
+void wxGrid::DrawColLabel(wxDC& dc, int col)
 {
     if ( GetColWidth(col) <= 0 || m_colLabelHeight <= 0 )
         return;
 
     int colLeft = GetColLeft(col);
 
-    wxRect rect;
+    wxRect rect(colLeft, 0, GetColWidth(col), m_colLabelHeight);
 
-    if (m_nativeColumnLabels)
+    if ( m_nativeColumnLabels )
     {
-        rect.SetX( colLeft);
-        rect.SetY( 0 );
-        rect.SetWidth( GetColWidth(col));
-        rect.SetHeight( m_colLabelHeight );
-
-        wxWindowDC *win_dc = (wxWindowDC*) &dc;
-        wxRendererNative::Get().DrawHeaderButton( win_dc->GetWindow(), dc, rect, 0 );
+        wxRendererNative::Get().DrawHeaderButton(m_colLabelWin, dc, rect, 0);
     }
     else
     {
         int colRight = GetColRight(col) - 1;
 
-        dc.SetPen( wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW), 1, wxPENSTYLE_SOLID) );
-        dc.DrawLine( colRight, 0, colRight, m_colLabelHeight - 1 );
-        dc.DrawLine( colLeft, 0, colRight, 0 );
+        dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW)));
+        dc.DrawLine( colRight, 0,
+                     colRight, m_colLabelHeight - 1 );
+        dc.DrawLine( colLeft, 0,
+                     colRight, 0 );
         dc.DrawLine( colLeft, m_colLabelHeight - 1,
-                 colRight + 1, m_colLabelHeight - 1 );
+                     colRight + 1, m_colLabelHeight - 1 );
 
         dc.SetPen( *wxWHITE_PEN );
         dc.DrawLine( colLeft, 1, colLeft, m_colLabelHeight - 1 );
@@ -8039,17 +7950,16 @@ void wxGrid::DrawColLabel( wxDC& dc, int col )
     dc.SetTextForeground( GetLabelTextColour() );
     dc.SetFont( GetLabelFont() );
 
-    int hAlign, vAlign, orient;
+    int hAlign, vAlign;
     GetColLabelAlignment( &hAlign, &vAlign );
-    orient = GetColLabelTextOrientation();
+    const int orient = GetColLabelTextOrientation();
 
-    rect.SetX( colLeft + 2 );
-    rect.SetY( 2 );
-    rect.SetWidth( GetColWidth(col) - 4 );
-    rect.SetHeight( m_colLabelHeight - 4 );
-    DrawTextRectangle( dc, GetColLabelValue( col ), rect, hAlign, vAlign, orient );
+    rect.Deflate(2);
+    DrawTextRectangle(dc, GetColLabelValue(col), rect, hAlign, vAlign, orient);
 }
 
+// TODO: these 2 functions should be replaced with wxDC::DrawLabel() to which
+//       we just have to add textOrientation support
 void wxGrid::DrawTextRectangle( wxDC& dc,
                                 const wxString& value,
                                 const wxRect& rect,
@@ -8061,17 +7971,9 @@ void wxGrid::DrawTextRectangle( wxDC& dc,
 
     StringToLines( value, lines );
 
-    // Forward to new API.
-    DrawTextRectangle( dc,
-        lines,
-        rect,
-        horizAlign,
-        vertAlign,
-        textOrientation );
+    DrawTextRectangle(dc, lines, rect, horizAlign, vertAlign, textOrientation);
 }
 
-// VZ: this should be replaced with wxDC::DrawLabel() to which we just have to
-//     add textOrientation support
 void wxGrid::DrawTextRectangle(wxDC& dc,
                                const wxArrayString& lines,
                                const wxRect& rect,
@@ -8399,7 +8301,7 @@ void wxGrid::ShowCellEditControl()
             wxClientDC dc( m_gridWin );
             PrepareDC( dc );
             wxGridCellAttr* attr = GetCellAttr(row, col);
-            dc.SetBrush(wxBrush(attr->GetBackgroundColour(), wxBRUSHSTYLE_SOLID));
+            dc.SetBrush(wxBrush(attr->GetBackgroundColour()));
             dc.SetPen(*wxTRANSPARENT_PEN);
             dc.DrawRectangle(rect);
 
