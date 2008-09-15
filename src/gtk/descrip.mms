@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 21 May 2008                                                         *
+# Date : 15 September 2008                                                   *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -99,7 +99,7 @@ OBJECTS0= \
 	tglbtn.obj,\
 	msgdlg.obj,\
 	treeentry_gtk.obj,textentry.obj,filectrl.obj,print.obj,win_gtk.obj,\
-	mnemonics.obj
+	mnemonics.obj,private.obj
 
 SOURCES =\
 	animate.cpp,\
@@ -165,7 +165,7 @@ SOURCES =\
 	utilsgtk.cpp,\
 	window.cpp,\
 	treeentry_gtk.c,textentry.cpp,filectrl.cpp,print.cpp,win_gtk.cpp,\
-	mnemonics.cpp
+	mnemonics.cpp,private.cpp
    
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -257,3 +257,4 @@ filectrl.obj : filectrl.cpp
 print.obj : print.cpp
 win_gtk.obj : win_gtk.cpp
 mnemonics.obj : mnemonics.cpp
+private.obj : private.cpp
