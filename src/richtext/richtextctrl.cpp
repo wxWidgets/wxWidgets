@@ -300,7 +300,8 @@ void wxRichTextCtrl::DoThaw()
         LayoutContent();
     else
         SetupScrollbars();
-    Refresh(false);
+    
+    wxWindow::DoThaw();
 }
 
 /// Clear all text
