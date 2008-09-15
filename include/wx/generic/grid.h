@@ -1090,33 +1090,51 @@ WX_DECLARE_OBJARRAY_WITH_DECL(wxGridCellCoords, wxGridCellCoordsArray,
 class WXDLLIMPEXP_ADV wxGrid : public wxScrolledWindow
 {
 public:
+    // possible selection modes
+    enum wxGridSelectionModes
+    {
+        wxGridSelectCells         = 0,  // allow selecting anything
+        wxGridSelectRows          = 1,  // allow selecting only entire rows
+        wxGridSelectColumns       = 2,  // allow selecting only entire columns
+        wxGridSelectRowsOrColumns = wxGridSelectRows | wxGridSelectColumns
+    };
+
+    // creation and destruction
+    // ------------------------
+
+    // ctor and Create() create the grid window, as with the other controls
     wxGrid();
 
-    wxGrid( wxWindow *parent,
+    wxGrid(wxWindow *parent,
             wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = wxWANTS_CHARS,
-            const wxString& name = wxGridNameStr );
+            const wxString& name = wxGridNameStr);
 
-    bool Create( wxWindow *parent,
-            wxWindowID id,
-            const wxPoint& pos = wxDefaultPosition,
-            const wxSize& size = wxDefaultSize,
-            long style = wxWANTS_CHARS,
-            const wxString& name = wxGridNameStr );
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxWANTS_CHARS,
+                const wxString& name = wxGridNameStr);
 
     virtual ~wxGrid();
 
-    enum wxGridSelectionModes
-    {
-        wxGridSelectCells,
-        wxGridSelectRows,
-        wxGridSelectColumns
-    };
+    // however to initialize grid data either CreateGrid() or SetTable() must
+    // be also called
 
+    // this is basically equivalent to
+    //
+    //   SetTable(new wxGridStringTable(numRows, numCols), true, selmode)
+    //
     bool CreateGrid( int numRows, int numCols,
                      wxGridSelectionModes selmode = wxGridSelectCells );
+
+    bool SetTable( wxGridTableBase *table,
+                   bool takeOwnership = false,
+                   wxGridSelectionModes selmode = wxGridSelectCells );
+
 
     void SetSelectionMode(wxGridSelectionModes selmode);
     wxGridSelectionModes GetSelectionMode() const;
@@ -1148,8 +1166,6 @@ public:
     void DoEndDragMoveCol();
 
     wxGridTableBase * GetTable() const { return m_table; }
-    bool SetTable( wxGridTableBase *table, bool takeOwnership = false,
-                   wxGridSelectionModes selmode = wxGridSelectCells );
 
     void ClearGrid();
     bool InsertRows( int pos = 0, int numRows = 1, bool updateLabels = true );
@@ -1624,16 +1640,13 @@ public:
     }
 
 
-    // override some base class functions
-    virtual bool Enable(bool enable = true);
-    virtual wxWindow *GetMainWindowOfCompositeControl()
-        { return (wxWindow*)m_gridWin; }
-
     // ------- drag and drop
 #if wxUSE_DRAG_AND_DROP
     virtual void SetDropTarget(wxDropTarget *dropTarget);
 #endif // wxUSE_DRAG_AND_DROP
 
+
+#ifdef WXWIN_COMPATIBILITY_2_8
     // ------ For compatibility with previous wxGrid only...
     //
     //  ************************************************
@@ -1795,8 +1808,13 @@ public:
            wxGRID_CHECKBOX,
            wxGRID_CHOICE,
            wxGRID_COMBOBOX };
+#endif // WXWIN_COMPATIBILITY_2_8
 
-    // overridden wxWindow methods
+
+    // override some base class functions
+    virtual bool Enable(bool enable = true);
+    virtual wxWindow *GetMainWindowOfCompositeControl()
+        { return (wxWindow*)m_gridWin; }
     virtual void Fit();
 
     // implementation only
@@ -1845,7 +1863,7 @@ protected:
     int        m_minAcceptableColWidth;
     wxArrayInt m_colWidths;
     wxArrayInt m_colRights;
-    
+
     bool m_nativeColumnLabels;
 
     // get the col/row coords
