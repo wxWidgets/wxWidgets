@@ -331,7 +331,13 @@ static bool ShowCommFileDialog(OPENFILENAME *of, long style)
     }
 #endif // wxTRY_SMALLER_OPENFILENAME
 
-    if ( !success && errCode == FNERR_INVALIDFILENAME && of->lpstrFile[0] )
+    if ( !success &&
+            // FNERR_INVALIDFILENAME is not defined under CE (besides we don't
+            // use CommDlgExtendedError() there anyhow)
+#ifndef __WXWINCE__
+            errCode == FNERR_INVALIDFILENAME &&
+#endif // !__WXWINCE__
+                of->lpstrFile[0] )
     {
         // this can happen if the default file name is invalid, try without it
         // now
