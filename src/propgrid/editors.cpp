@@ -1999,16 +1999,28 @@ wxWindow* wxPropertyGrid::GenerateEditorButton( const wxPoint& pos, const wxSize
     if ( s.x > m_lineHeight )
         s.x = m_lineHeight;
 
+#ifdef __WXGTK__
+    // On wxGTK, take fixed button margins into account
+    if ( s.x < 25 )
+        s.x = 25;
+#endif
+
     wxPoint p(pos.x+sz.x-s.x,
         pos.y+wxPG_BUTTON_SIZEDEC-wxPG_NAT_BUTTON_BORDER_Y);
 
     wxButton* but = new wxButton();
-#ifdef __WXMSW__
+  #ifdef __WXMSW__
     but->Hide();
-#endif
+  #endif
     but->Create(GetPanel(),wxPG_SUBID2,wxS("..."),p,s,wxWANTS_CHARS);
 
-    but->SetFont( m_captionFont );
+  #ifdef __WXGTK__
+    wxFont font = GetFont();
+    font.SetPointSize(font.GetPointSize()-2);
+    but->SetFont(font);
+  #else
+    but->SetFont(GetFont());
+  #endif
 #endif
 
     if ( selected->HasFlag(wxPG_PROP_READONLY) )
