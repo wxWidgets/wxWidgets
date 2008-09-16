@@ -101,6 +101,14 @@ public:
     /// Must be overridden to implement testing for empty cells.
     virtual bool IsEmptyCell(int row, int col) = 0;
 
+    /**
+        Same as IsEmptyCell() but taking wxGridCellCoords.
+
+        Notice that this method is not virtual, only IsEmptyCell() should be
+        overridden.
+     */
+    bool IsEmpty(const wxGridCellCoords& coords);
+
     /// Must be overridden to implement accessing the table values as text.
     virtual wxString GetValue(int row, int col) = 0;
 

@@ -87,6 +87,7 @@ class WXDLLIMPEXP_FWD_CORE wxSpinCtrl;
 class wxGridOperations;
 class wxGridRowOperations;
 class wxGridColumnOperations;
+class wxGridDirectionOperations;
 
 // ----------------------------------------------------------------------------
 // macros
@@ -829,14 +830,72 @@ private:
     DECLARE_NO_COPY_CLASS(wxGridCellAttrProvider)
 };
 
-//////////////////////////////////////////////////////////////////////
-//
-//  Grid table classes
-//
-//////////////////////////////////////////////////////////////////////
+// ----------------------------------------------------------------------------
+// wxGridCellCoords: location of a cell in the grid
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_ADV wxGridCellCoords
+{
+public:
+    wxGridCellCoords() { m_row = m_col = -1; }
+    wxGridCellCoords( int r, int c ) { m_row = r; m_col = c; }
+
+    // default copy ctor is ok
+
+    int GetRow() const { return m_row; }
+    void SetRow( int n ) { m_row = n; }
+    int GetCol() const { return m_col; }
+    void SetCol( int n ) { m_col = n; }
+    void Set( int row, int col ) { m_row = row; m_col = col; }
+
+    wxGridCellCoords& operator=( const wxGridCellCoords& other )
+    {
+        if ( &other != this )
+        {
+            m_row=other.m_row;
+            m_col=other.m_col;
+        }
+        return *this;
+    }
+
+    bool operator==( const wxGridCellCoords& other ) const
+    {
+        return (m_row == other.m_row  &&  m_col == other.m_col);
+    }
+
+    bool operator!=( const wxGridCellCoords& other ) const
+    {
+        return (m_row != other.m_row  ||  m_col != other.m_col);
+    }
+
+    bool operator!() const
+    {
+        return (m_row == -1 && m_col == -1 );
+    }
+
+private:
+    int m_row;
+    int m_col;
+};
 
 
-class WXDLLIMPEXP_ADV wxGridTableBase : public wxObject, public wxClientDataContainer
+// For comparisons...
+//
+extern WXDLLIMPEXP_ADV wxGridCellCoords wxGridNoCellCoords;
+extern WXDLLIMPEXP_ADV wxRect           wxGridNoCellRect;
+
+// An array of cell coords...
+//
+WX_DECLARE_OBJARRAY_WITH_DECL(wxGridCellCoords, wxGridCellCoordsArray,
+                              class WXDLLIMPEXP_ADV);
+
+// ----------------------------------------------------------------------------
+// Grid table classes
+// ----------------------------------------------------------------------------
+
+// the abstract base class
+class WXDLLIMPEXP_ADV wxGridTableBase : public wxObject,
+                                        public wxClientDataContainer
 {
 public:
     wxGridTableBase();
@@ -847,6 +906,12 @@ public:
     virtual int GetNumberRows() = 0;
     virtual int GetNumberCols() = 0;
     virtual bool IsEmptyCell( int row, int col ) = 0;
+
+    bool IsEmpty(const wxGridCellCoords& coord)
+    {
+        return IsEmptyCell(coord.GetRow(), coord.GetCol());
+    }
+
     virtual wxString GetValue( int row, int col ) = 0;
     virtual void SetValue( int row, int col, const wxString& value ) = 0;
 
@@ -1029,65 +1094,6 @@ private:
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// wxGridCellCoords: location of a cell in the grid
-// ----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_ADV wxGridCellCoords
-{
-public:
-    wxGridCellCoords() { m_row = m_col = -1; }
-    wxGridCellCoords( int r, int c ) { m_row = r; m_col = c; }
-
-    // default copy ctor is ok
-
-    int GetRow() const { return m_row; }
-    void SetRow( int n ) { m_row = n; }
-    int GetCol() const { return m_col; }
-    void SetCol( int n ) { m_col = n; }
-    void Set( int row, int col ) { m_row = row; m_col = col; }
-
-    wxGridCellCoords& operator=( const wxGridCellCoords& other )
-    {
-        if ( &other != this )
-        {
-            m_row=other.m_row;
-            m_col=other.m_col;
-        }
-        return *this;
-    }
-
-    bool operator==( const wxGridCellCoords& other ) const
-    {
-        return (m_row == other.m_row  &&  m_col == other.m_col);
-    }
-
-    bool operator!=( const wxGridCellCoords& other ) const
-    {
-        return (m_row != other.m_row  ||  m_col != other.m_col);
-    }
-
-    bool operator!() const
-    {
-        return (m_row == -1 && m_col == -1 );
-    }
-
-private:
-    int m_row;
-    int m_col;
-};
-
-
-// For comparisons...
-//
-extern WXDLLIMPEXP_ADV wxGridCellCoords wxGridNoCellCoords;
-extern WXDLLIMPEXP_ADV wxRect           wxGridNoCellRect;
-
-// An array of cell coords...
-//
-WX_DECLARE_OBJARRAY_WITH_DECL(wxGridCellCoords, wxGridCellCoordsArray,
-                              class WXDLLIMPEXP_ADV);
-
-// ----------------------------------------------------------------------------
 // wxGrid
 // ----------------------------------------------------------------------------
 
@@ -1172,12 +1178,36 @@ public:
     wxGridTableBase * GetTable() const { return m_table; }
 
     void ClearGrid();
-    bool InsertRows( int pos = 0, int numRows = 1, bool updateLabels = true );
-    bool AppendRows( int numRows = 1, bool updateLabels = true );
-    bool DeleteRows( int pos = 0, int numRows = 1, bool updateLabels = true );
-    bool InsertCols( int pos = 0, int numCols = 1, bool updateLabels = true );
-    bool AppendCols( int numCols = 1, bool updateLabels = true );
-    bool DeleteCols( int pos = 0, int numCols = 1, bool updateLabels = true );
+    bool InsertRows(int pos = 0, int numRows = 1, bool updateLabels = true)
+    {
+        return DoModifyLines(&wxGridTableBase::InsertRows,
+                             pos, numRows, updateLabels);
+    }
+    bool InsertCols(int pos = 0, int numCols = 1, bool updateLabels = true)
+    {
+        return DoModifyLines(&wxGridTableBase::InsertCols,
+                             pos, numCols, updateLabels);
+    }
+
+    bool AppendRows(int numRows = 1, bool updateLabels = true)
+    {
+        return DoAppendLines(&wxGridTableBase::AppendRows, numRows, updateLabels);
+    }
+    bool AppendCols(int numCols = 1, bool updateLabels = true)
+    {
+        return DoAppendLines(&wxGridTableBase::AppendCols, numCols, updateLabels);
+    }
+
+    bool DeleteRows(int pos = 0, int numRows = 1, bool updateLabels = true)
+    {
+        return DoModifyLines(&wxGridTableBase::DeleteRows,
+                             pos, numRows, updateLabels);
+    }
+    bool DeleteCols(int pos = 0, int numCols = 1, bool updateLabels = true)
+    {
+        return DoModifyLines(&wxGridTableBase::DeleteCols,
+                             pos, numCols, updateLabels);
+    }
 
     void DrawGridCellArea( wxDC& dc , const wxGridCellCoordsArray& cells );
     void DrawGridSpace( wxDC& dc );
@@ -2070,7 +2100,22 @@ private:
     void DoEndDragResizeLine(const wxGridOperations& oper);
     int  PosToLine(int pos, bool clipToMinMax,
                    const wxGridOperations& oper) const;
+    int PosToEdgeOfLine(int pos, const wxGridOperations& oper) const;
 
+    bool DoMoveCursor(bool expandSelection,
+                      const wxGridDirectionOperations& diroper);
+    bool DoMoveCursorByPage(const wxGridDirectionOperations& diroper);
+    bool DoMoveCursorByBlock(bool expandSelection,
+                             const wxGridDirectionOperations& diroper);
+    void AdvanceToNextNonEmpty(wxGridCellCoords& coords,
+                               const wxGridDirectionOperations& diroper);
+
+    // common part of {Insert,Delete}{Rows,Cols}
+    bool DoModifyLines(bool (wxGridTableBase::*funcModify)(size_t, size_t),
+                       int pos, int num, bool updateLabels);
+    // Append{Rows,Cols} is a bit different because of one less parameter
+    bool DoAppendLines(bool (wxGridTableBase::*funcAppend)(size_t),
+                       int num, bool updateLabels);
 
     DECLARE_DYNAMIC_CLASS( wxGrid )
     DECLARE_EVENT_TABLE()
