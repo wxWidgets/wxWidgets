@@ -16,7 +16,8 @@
 <build>
     <name>OSX 10.5 Intel wxOSX Carbon trunk</name>
     <builddir>csleo</builddir>
-
+    <scheduler>trunk_quick</scheduler>
+    
     <steps>
         <checkout/>
         <configure/>
