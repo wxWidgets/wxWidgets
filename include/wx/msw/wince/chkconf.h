@@ -29,6 +29,16 @@
 #undef wxUSE_IPC
 #define wxUSE_IPC 0
 
+// no AUI under CE: it's unnecessary and currently doesn't compile
+#undef wxUSE_AUI
+#define wxUSE_AUI 0
+
+// no MDI under CE
+#undef wxUSE_MDI
+#define wxUSE_MDI 0
+#undef wxUSE_MDI_ARCHITECTURE
+#define wxUSE_MDI_ARCHITECTURE 0
+
 // metafiles are not supported neither
 #undef wxUSE_ENH_METAFILE
 #define wxUSE_ENH_METAFILE 0
