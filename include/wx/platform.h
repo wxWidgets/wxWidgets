@@ -665,10 +665,16 @@
 /* also the 32/64 bit universal builds must be handled accordingly */
 #ifdef __DARWIN__
 #	ifdef __LP64__
+#		undef SIZEOF_VOID_P 
+#		undef SIZEOF_LONG 
+#		undef SIZEOF_SIZE_T 
 #		define SIZEOF_VOID_P 8
 #		define SIZEOF_LONG 8
 #		define SIZEOF_SIZE_T 8
 #	else
+#		undef SIZEOF_VOID_P 
+#		undef SIZEOF_LONG 
+#		undef SIZEOF_SIZE_T 
 #		define SIZEOF_VOID_P 4
 #		define SIZEOF_LONG 4
 #		define SIZEOF_SIZE_T 4
