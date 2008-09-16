@@ -14,11 +14,36 @@
 <xi:include href="include/defs.xml"/>
 
 <build>
-    <name>OSX 10.5 wxMac trunk</name>
+    <name>OSX 10.5 Intel wxOSX Carbon trunk</name>
     <builddir>csleo</builddir>
+    <scheduler>trunk_quick</scheduler>
 
     <steps>
         <checkout/>
+        <configure/>
+        <compile-all/>
+        <run-tests/>
+    </steps>
+</build>
+<build>
+    <name>OSX 10.5 Intel wxOSX Cocoa trunk</name>
+    <builddir>csleo</builddir>
+    <scheduler>trunk_quick</scheduler>
+
+    <steps>
+        <checkout/>
+        <configure options="--with-osx_cocoa"/>
+        <compile-all/>
+        <run-tests/>
+    </steps>
+</build>
+<build>
+    <name>OSX 10.5 Intel wxMac Stable</name>
+    <builddir>csleo_stable</builddir>
+    <scheduler>stable_quick</scheduler>
+
+    <steps>
+        <checkout branch="{$STABLE_BRANCH}"/>
         <configure/>
         <compile-all/>
         <run-tests/>
