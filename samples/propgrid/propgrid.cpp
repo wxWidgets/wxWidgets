@@ -459,7 +459,7 @@ void wxAdvImageFileProperty::OnCustomPaint( wxDC& dc,
 
 // See propgridsample.h for wxVector3f class
 
-WX_PG_IMPLEMENT_VARIANT_DATA(wxVector3fVariantData, wxVector3f)
+WX_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ(wxVector3f)
 
 WX_PG_IMPLEMENT_PROPERTY_CLASS(wxVectorProperty,wxPGProperty,
                                wxVector3f,const wxVector3f&,TextCtrl)
@@ -470,7 +470,7 @@ wxVectorProperty::wxVectorProperty( const wxString& label,
                                               const wxVector3f& value )
     : wxPGProperty(label,name)
 {
-    SetValue( wxVector3fToVariant(value) );
+    SetValue( WXVARIANT(value) );
     AddChild( new wxFloatProperty(wxT("X"),wxPG_LABEL,value.x) );
     AddChild( new wxFloatProperty(wxT("Y"),wxPG_LABEL,value.y) );
     AddChild( new wxFloatProperty(wxT("Z"),wxPG_LABEL,value.z) );
@@ -481,7 +481,7 @@ wxVectorProperty::~wxVectorProperty() { }
 void wxVectorProperty::RefreshChildren()
 {
     if ( !GetChildCount() ) return;
-    wxVector3f& vector = wxVector3fFromVariant(m_value);
+    const wxVector3f& vector = wxVector3fRefFromVariant(m_value);
     Item(0)->SetValue( vector.x );
     Item(1)->SetValue( vector.y );
     Item(2)->SetValue( vector.z );
@@ -489,13 +489,15 @@ void wxVectorProperty::RefreshChildren()
 
 void wxVectorProperty::ChildChanged( wxVariant& thisValue, int childIndex, wxVariant& childValue ) const
 {
-    wxVector3f& vector = wxVector3fFromVariant(thisValue);
+    wxVector3f vector;
+    vector << thisValue;
     switch ( childIndex )
     {
         case 0: vector.x = childValue.GetDouble(); break;
         case 1: vector.y = childValue.GetDouble(); break;
         case 2: vector.z = childValue.GetDouble(); break;
     }
+    thisValue << vector;
 }
 
 
@@ -505,7 +507,7 @@ void wxVectorProperty::ChildChanged( wxVariant& thisValue, int childIndex, wxVar
 
 // See propgridsample.h for wxTriangle class
 
-WX_PG_IMPLEMENT_VARIANT_DATA(wxTriangleVariantData, wxTriangle)
+WX_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ(wxTriangle)
 
 WX_PG_IMPLEMENT_PROPERTY_CLASS(wxTriangleProperty,wxPGProperty,
                                wxTriangle,const wxTriangle&,TextCtrl)
@@ -516,7 +518,7 @@ wxTriangleProperty::wxTriangleProperty( const wxString& label,
                                                   const wxTriangle& value)
     : wxPGProperty(label,name)
 {
-    SetValue( wxTriangleToVariant(value) );
+    SetValue( WXVARIANT(value) );
     AddChild( new wxVectorProperty(wxT("A"),wxPG_LABEL,value.a) );
     AddChild( new wxVectorProperty(wxT("B"),wxPG_LABEL,value.b) );
     AddChild( new wxVectorProperty(wxT("C"),wxPG_LABEL,value.c) );
@@ -527,22 +529,24 @@ wxTriangleProperty::~wxTriangleProperty() { }
 void wxTriangleProperty::RefreshChildren()
 {
     if ( !GetChildCount() ) return;
-    wxTriangle& triangle = wxTriangleFromVariant(m_value);
-    Item(0)->SetValue( wxVector3fToVariant(triangle.a) );
-    Item(1)->SetValue( wxVector3fToVariant(triangle.b) );
-    Item(2)->SetValue( wxVector3fToVariant(triangle.c) );
+    const wxTriangle& triangle = wxTriangleRefFromVariant(m_value);
+    Item(0)->SetValue( WXVARIANT(triangle.a) );
+    Item(1)->SetValue( WXVARIANT(triangle.b) );
+    Item(2)->SetValue( WXVARIANT(triangle.c) );
 }
 
 void wxTriangleProperty::ChildChanged( wxVariant& thisValue, int childIndex, wxVariant& childValue ) const
 {
-    wxTriangle& triangle = wxTriangleFromVariant(thisValue);
-    wxVector3f& vector = wxVector3fFromVariant(childValue);
+    wxTriangle triangle;
+    triangle << thisValue;
+    const wxVector3f& vector = wxVector3fRefFromVariant(childValue);
     switch ( childIndex )
     {
         case 0: triangle.a = vector; break;
         case 1: triangle.b = vector; break;
         case 2: triangle.c = vector; break;
     }
+    thisValue << triangle;
 }
 
 
@@ -922,34 +926,36 @@ void FormMain::OnPropertyGridChange( wxPropertyGridEvent& event )
     else
     if ( name == wxT("Font") )
     {
-        wxFont& font = *wxDynamicCast(m_pPropGridManager->GetPropertyValueAsWxObjectPtr(property), wxFont);
-        wxASSERT( &font && font.Ok() );
+        wxFont font;
+        font << value;
+        wxASSERT( font.Ok() );
 
         m_pPropGridManager->SetFont( font );
     }
     else
     if ( name == wxT("Margin Colour") )
     {
-        wxColourPropertyValue& cpv = *wxGetVariantCast(value,wxColourPropertyValue);
-        m_pPropGridManager->GetGrid()->SetMarginColour ( cpv.m_colour );
+        wxColourPropertyValue cpv;
+        cpv << value;
+        m_pPropGridManager->GetGrid()->SetMarginColour( cpv.m_colour );
     }
     else if ( name == wxT("Cell Colour") )
     {
-        wxColourPropertyValue* cpv = wxGetVariantCast(value,wxColourPropertyValue);
-        wxASSERT( cpv );
-        m_pPropGridManager->GetGrid()->SetCellBackgroundColour( cpv->m_colour );
+        wxColourPropertyValue cpv;
+        cpv << value;
+        m_pPropGridManager->GetGrid()->SetCellBackgroundColour( cpv.m_colour );
     }
     else if ( name == wxT("Line Colour") )
     {
-        wxColourPropertyValue* cpv = wxGetVariantCast(value,wxColourPropertyValue);
-        wxASSERT( cpv );
-        m_pPropGridManager->GetGrid()->SetLineColour( cpv->m_colour );
+        wxColourPropertyValue cpv;
+        cpv << value;
+        m_pPropGridManager->GetGrid()->SetLineColour( cpv.m_colour );
     }
     else if ( name == wxT("Cell Text Colour") )
     {
-        wxColourPropertyValue* cpv = wxGetVariantCast(value,wxColourPropertyValue);
-        wxASSERT( cpv );
-        m_pPropGridManager->GetGrid()->SetCellTextColour( cpv->m_colour );
+        wxColourPropertyValue cpv;
+        cpv << value;
+        m_pPropGridManager->GetGrid()->SetCellTextColour( cpv.m_colour );
     }
 }
 

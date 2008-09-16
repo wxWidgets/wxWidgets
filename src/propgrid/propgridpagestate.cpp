@@ -1449,7 +1449,7 @@ void wxPropertyGridPageState::DoSetPropertyValues( const wxVariantList& list, wx
                             wxPGProperty* foundProp = BaseGetPropertyByName(propName);
                             if ( foundProp )
                             {
-                                wxASSERT( wxPGIsVariantType(*current, list) );
+                                wxASSERT( current->GetType() == wxPG_VARIANT_TYPE_LIST );
 
                                 wxVariantList& list2 = current->GetList();
                                 wxVariantList::const_iterator node2;

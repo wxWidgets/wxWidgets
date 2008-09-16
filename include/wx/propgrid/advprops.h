@@ -134,8 +134,8 @@ private:
 bool WXDLLIMPEXP_PROPGRID
 operator==(const wxColourPropertyValue&, const wxColourPropertyValue&);
 
-WX_PG_DECLARE_WXOBJECT_VARIANT_DATA(wxPGVariantDataColourPropertyValue,
-                                    wxColourPropertyValue, WXDLLIMPEXP_PROPGRID)
+DECLARE_VARIANT_OBJECT_EXPORTED(wxColourPropertyValue, WXDLLIMPEXP_PROPGRID)
+
 #endif
 
 #ifndef SWIG

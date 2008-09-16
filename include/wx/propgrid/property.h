@@ -813,18 +813,20 @@ wxPG_PROP_CLASS_SPECIFIC_2          = 0x00100000
 
     You can change the 'value type' of a property by simply assigning different
     type of variant with SetValue. <b>It is mandatory to implement
-    wxVariantData class for all data types used as property values.</b> Also,
-    it is further recommended to derive your class from wxPGVariantData, like
-    this:
+    wxVariantData class for all data types used as property values.</b>
+    You can use macros declared in wxPropertyGrid headers. For instance:
 
     @code
         // In header file:
-        // (replace DECL with required data declaration, use
-        // wxEMPTY_PARAMETER_VALUE if none)
-        WX_PG_DECLARE_VARIANT_DATA(wxPGVariantMyDataClass, MyDataClass, DECL)
+        // (If you need to have export declaration, use version of macros
+        // with _EXPORTED postfix)
+        WX_PG_DECLARE_VARIANT_DATA(MyDataClass)
 
         // In sources file:
-        WX_PG_IMPLEMENT_VARIANT_DATA(wxPGVariantMyDataClass, MyDataClass)
+        WX_PG_IMPLEMENT_VARIANT_DATA(MyDataClass)
+
+        // Or, if you don't have valid == operator:
+        WX_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ(MyDataClass)
     @endcode
 
     @library{wxpropgrid}

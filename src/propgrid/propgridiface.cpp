@@ -65,30 +65,13 @@ const wxChar *wxPGTypeName_wxArrayString = wxT("arrstring");
 // VariantDatas
 // ----------------------------------------------------------------------------
 
-WX_PG_IMPLEMENT_VARIANT_DATA(wxPGVariantDataPoint, wxPoint)
-WX_PG_IMPLEMENT_VARIANT_DATA(wxPGVariantDataSize, wxSize)
-WX_PG_IMPLEMENT_VARIANT_DATA(wxPGVariantDataArrayInt, wxArrayInt)
-WX_PG_IMPLEMENT_VARIANT_DATA(wxPGVariantDataLongLong, wxLongLong)
-WX_PG_IMPLEMENT_VARIANT_DATA(wxPGVariantDataULongLong, wxULongLong)
+WX_PG_IMPLEMENT_VARIANT_DATA_EXPORTED(wxPoint, WXDLLIMPEXP_PROPGRID)
+WX_PG_IMPLEMENT_VARIANT_DATA_EXPORTED(wxSize, WXDLLIMPEXP_PROPGRID)
+WX_PG_IMPLEMENT_VARIANT_DATA_EXPORTED_DUMMY_EQ(wxArrayInt, WXDLLIMPEXP_PROPGRID)
+WX_PG_IMPLEMENT_VARIANT_DATA_EXPORTED(wxLongLong, WXDLLIMPEXP_PROPGRID)
+WX_PG_IMPLEMENT_VARIANT_DATA_EXPORTED(wxULongLong, WXDLLIMPEXP_PROPGRID)
 
-WX_PG_IMPLEMENT_WXOBJECT_VARIANT_DATA(wxPGVariantDataFont, wxFont)
-
-wxObject* wxPG_VariantToWxObject( const wxVariant& variant, wxClassInfo* classInfo )
-{
-    if ( !variant.IsValueKindOf(classInfo) )
-        return (wxObject*) NULL;
-
-    wxVariantData* vdata = variant.GetData();
-
-    wxPGVariantData* pgvdata = wxDynamicCastVariantData(vdata, wxPGVariantData);
-    if ( pgvdata )
-         return (wxObject*) pgvdata->GetValuePtr();
-
-    if ( wxPGIsVariantClassInfo(wxPGVariantDataGetClassInfo(vdata), wxobject) )
-        return variant.GetWxObjectPtr();
-
-    return (wxObject*) NULL;
-}
+IMPLEMENT_VARIANT_OBJECT_EXPORTED(wxFont, WXDLLIMPEXP_PROPGRID)
 
 // -----------------------------------------------------------------------
 // wxVariant helpers
@@ -99,15 +82,16 @@ long wxPGVariantToInt( const wxVariant& variant, long defVal )
     if ( variant.IsNull() )
         return defVal;
 
-    if ( wxPGIsVariantType(variant, long) )
+    if ( variant.GetType() == wxS("long") )
         return variant.GetLong();
 
-    if ( wxPGIsVariantType(variant, bool) )
+    if ( variant.GetType() == wxS("bool") )
         return variant.GetBool() ? 1 : 0;
 
-    if ( typeid(*variant.GetData()) == typeid(wxPGVariantDataLongLong) )
+    if ( variant.GetType() == wxS("wxLongLong") )
     {
-        wxLongLong ll = ((const wxPGVariantDataLongLong&)variant).GetValue();
+        wxLongLong ll;
+        ll << variant;
         if ( ll >= LONG_MAX )
             return LONG_MAX;
         else if ( ll <= LONG_MIN )
@@ -117,7 +101,7 @@ long wxPGVariantToInt( const wxVariant& variant, long defVal )
 
     long l = defVal;
 
-    if ( wxPGIsVariantType(variant, string) )
+    if ( variant.GetType() == wxPG_VARIANT_TYPE_STRING )
         variant.GetString().ToLong(&l, 0);
 
     return l;
@@ -130,15 +114,19 @@ bool wxPGVariantToLongLong( const wxVariant& variant, wxLongLong_t* pResult )
     if ( variant.IsNull() )
         return false;
 
-    if ( wxPGIsVariantType(variant, long) )
+    wxString variantType = variant.GetType();
+
+    if ( variantType == wxPG_VARIANT_TYPE_LONG )
     {
         *pResult = variant.GetLong();
         return true;
     }
 
-    if ( typeid(*variant.GetData()) == typeid(wxPGVariantDataLongLong) )
+    if ( variantType == wxLongLong_VariantType )
     {
-        *pResult = ((const wxPGVariantDataLongLong&)variant).GetValue().GetValue();
+        wxLongLong ll;
+        ll << variant;
+        *pResult = ll.GetValue();
         return true;
     }
 
@@ -152,15 +140,19 @@ bool wxPGVariantToULongLong( const wxVariant& variant, wxULongLong_t* pResult )
     if ( variant.IsNull() )
         return false;
 
-    if ( wxPGIsVariantType(variant, long) )
+    wxString variantType = variant.GetType();
+
+    if ( variantType == wxPG_VARIANT_TYPE_LONG )
     {
         *pResult = (unsigned long)variant.GetLong();
         return true;
     }
 
-    if ( typeid(*variant.GetData()) == typeid(wxPGVariantDataULongLong) )
+    if ( variantType == wxULongLong_VariantType )
     {
-        *pResult = ((const wxPGVariantDataULongLong&)variant).GetValue().GetValue();
+        wxULongLong ull;
+        ull << variant;
+        *pResult = ull.GetValue();
         return true;
     }
 
@@ -174,26 +166,29 @@ bool wxPGVariantToDouble( const wxVariant& variant, double* pResult )
     if ( variant.IsNull() )
         return false;
 
-    if ( wxPGIsVariantType(variant, double) )
+    wxString variantType = variant.GetType();
+
+    if ( variantType == wxPG_VARIANT_TYPE_DOUBLE )
     {
         *pResult = variant.GetDouble();
         return true;
     }
 
-    if ( wxPGIsVariantType(variant, long) )
+    if ( variantType == wxPG_VARIANT_TYPE_LONG )
     {
         *pResult = (double)variant.GetLong();
         return true;
     }
 
-    if ( typeid(*variant.GetData()) == typeid(wxPGVariantDataLongLong) )
+    if ( variantType == wxLongLong_VariantType )
     {
-        wxLongLong ll = ((const wxPGVariantDataLongLong&)variant).GetValue();
+        wxLongLong ll;
+        ll << variant;
         *pResult = ll.ToDouble();
         return true;
     }
 
-    if ( wxPGIsVariantType(variant, string) )
+    if ( variantType == wxPG_VARIANT_TYPE_STRING )
         if ( variant.GetString().ToDouble(pResult) )
             return true;
 
@@ -487,19 +482,20 @@ void wxPropertyGridInterface::SetPropertyValueUnspecified( wxPGPropArg id )
 // wxPropertyGridInterface property value setting and getting
 // -----------------------------------------------------------------------
 
-void wxPGGetFailed( const wxPGProperty* p, const wxChar* typestr )
+void wxPGGetFailed( const wxPGProperty* p, const wxString& typestr )
 {
-    wxPGTypeOperationFailed(p,typestr,wxT("Get"));
+    wxPGTypeOperationFailed(p, typestr, wxS("Get"));
 }
 
 // -----------------------------------------------------------------------
 
-void wxPGTypeOperationFailed( const wxPGProperty* p, const wxChar* typestr,
-    const wxChar* op )
+void wxPGTypeOperationFailed( const wxPGProperty* p,
+                              const wxString& typestr,
+                              const wxString& op )
 {
     wxASSERT( p != NULL );
     wxLogError( _("Type operation \"%s\" failed: Property labeled \"%s\" is of type \"%s\", NOT \"%s\"."),
-        op,p->GetLabel().c_str(),p->GetValue().GetType().c_str(),typestr );
+        op.c_str(), p->GetLabel().c_str(), p->GetValue().GetType().c_str(), typestr.c_str() );
 }
 
 // -----------------------------------------------------------------------
@@ -833,29 +829,6 @@ bool wxPropertyGridInterface::GetPropertyValueAsBool( wxPGPropArg id ) const
 IMPLEMENT_GET_VALUE(long,long,Long,0)
 IMPLEMENT_GET_VALUE(double,double,Double,0.0)
 IMPLEMENT_GET_VALUE(void,void*,VoidPtr,NULL)
-
-// wxObject is different than others.
-wxObject* wxPropertyGridInterface::GetPropertyValueAsWxObjectPtr( wxPGPropArg id ) const
-{
-    wxPG_PROP_ARG_CALL_PROLOG_RETVAL((wxObject*)NULL)
-
-    wxVariant value = p->GetValue();
-    wxVariantData* vdata = value.GetData();
-
-    if ( !vdata->GetValueClassInfo() )
-        return (wxObject*) NULL;
-
-	wxPGVariantData* pgvdata = wxDynamicCastVariantData(vdata, wxPGVariantData);
-    if ( pgvdata )
-         return (wxObject*) pgvdata->GetValuePtr();
-
-    if ( wxPGIsVariantClassInfo(wxPGVariantDataGetClassInfo(vdata), wxobject) )
-        return (wxObject*) value.GetWxObjectPtr();
-
-    return (wxObject*) NULL;
-}
-
-// -----------------------------------------------------------------------
 
 bool wxPropertyGridInterface::IsPropertyExpanded( wxPGPropArg id ) const
 {

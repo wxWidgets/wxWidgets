@@ -350,8 +350,7 @@ public:
         return p->GetValidator();
     }
 
-    /** Returns value as wxVariant. To get wxObject pointer from it,
-        you will have to use WX_PG_VARIANT_TO_WXOBJECT(VARIANT,CLASSNAME) macro.
+    /** Returns value as wxVariant.
 
         If property value is unspecified, Null variant is returned.
     */
@@ -370,7 +369,6 @@ public:
     int GetPropertyValueAsInt( wxPGPropArg id ) const { return (int)GetPropertyValueAsLong(id); }
     bool GetPropertyValueAsBool( wxPGPropArg id ) const;
     double GetPropertyValueAsDouble( wxPGPropArg id ) const;
-    wxObject* GetPropertyValueAsWxObjectPtr( wxPGPropArg id ) const;
     void* GetPropertyValueAsVoidPtr( wxPGPropArg id ) const;
 
     wxArrayString GetPropertyValueAsArrayString( wxPGPropArg id ) const

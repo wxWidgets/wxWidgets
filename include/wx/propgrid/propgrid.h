@@ -57,19 +57,6 @@ public:
     // Replace with your own to affect all properties using default renderer.
     wxPGCellRenderer*   m_defaultRenderer;
 
-    // These are for fast variant type comparison
-    wxPGVariantDataClassInfo wxVariantClassInfo_long;
-    wxPGVariantDataClassInfo wxVariantClassInfo_string;
-    wxPGVariantDataClassInfo wxVariantClassInfo_double;
-    wxPGVariantDataClassInfo wxVariantClassInfo_bool;
-    wxPGVariantDataClassInfo wxVariantClassInfo_arrstring;
-    wxPGVariantDataClassInfo wxVariantClassInfo_wxobject;
-    wxPGVariantDataClassInfo wxVariantClassInfo_list;
-    wxPGVariantDataClassInfo wxVariantClassInfo_wxColour;
-#if wxUSE_DATETIME
-    wxPGVariantDataClassInfo wxVariantClassInfo_datetime;
-#endif
-
     wxPGChoices         m_boolChoices;
 
     wxVariant           m_vEmptyString;
@@ -79,6 +66,11 @@ public:
     wxVariant           m_vFalse;
 
     // Cached constant strings
+    wxPGCachedString    m_strstring;
+    wxPGCachedString    m_strlong;
+    wxPGCachedString    m_strbool;
+    wxPGCachedString    m_strlist;
+
     wxPGCachedString    m_strMin;
     wxPGCachedString    m_strMax;
     wxPGCachedString    m_strUnits;
@@ -101,13 +93,6 @@ public:
 
 extern WXDLLIMPEXP_PROPGRID wxPGGlobalVarsClass* wxPGGlobalVars;
 
-#define wxPGIsVariantType(VARIANT, T) \
-    ((VARIANT).GetData() && \
-     typeid(*(VARIANT).GetData()) == *wxPGGlobalVars->wxVariantClassInfo_##T)
-
-#define wxPGIsVariantClassInfo(CLASSINFO, T) \
-    (*CLASSINFO == *wxPGGlobalVars->wxVariantClassInfo_##T)
-
 #define wxPGVariant_EmptyString     (wxPGGlobalVars->m_vEmptyString)
 #define wxPGVariant_Zero            (wxPGGlobalVars->m_vZero)
 #define wxPGVariant_MinusOne        (wxPGGlobalVars->m_vMinusOne)
@@ -115,8 +100,6 @@ extern WXDLLIMPEXP_PROPGRID wxPGGlobalVarsClass* wxPGGlobalVars;
 #define wxPGVariant_False           (wxPGGlobalVars->m_vFalse)
 
 #define wxPGVariant_Bool(A)     (A?wxPGVariant_True:wxPGVariant_False)
-
-#define wxPGVariantAssign(A, B) A = B
 
 #endif // !SWIG
 

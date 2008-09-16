@@ -150,21 +150,25 @@ wxIntProperty::wxIntProperty( const wxString& label, const wxString& name,
 wxIntProperty::wxIntProperty( const wxString& label, const wxString& name,
     const wxLongLong& value ) : wxPGProperty(label,name)
 {
-    SetValue(wxLongLongToVariant(value));
+    SetValue(WXVARIANT(value));
 }
 
 wxIntProperty::~wxIntProperty() { }
 
 wxString wxIntProperty::GetValueAsString( int ) const
 {
-    if ( wxPGIsVariantType(m_value, long) )
+    if ( m_value.GetType() == wxPG_VARIANT_TYPE_LONG )
+    {
         return wxString::Format(wxS("%li"),m_value.GetLong());
+    }
+    else if ( m_value.GetType() == wxLongLong_VariantType )
+    {
+	    wxLongLong ll;
+        ll << m_value;
+	    return ll.ToString();
+    }
 
-	wxLongLong* ll = &wxLongLongFromVariant(m_value);
-	if ( ll )
-		return ll->ToString();
-
-	return wxEmptyString;
+    return wxEmptyString;
 }
 
 bool wxIntProperty::StringToValue( wxVariant& variant, const wxString& text, int argFlags ) const
@@ -198,7 +202,8 @@ bool wxIntProperty::StringToValue( wxVariant& variant, const wxString& text, int
 
         wxString useText = text.substr(firstNonZeroPos, text.length() - firstNonZeroPos);
 
-        bool isPrevLong = wxPGIsVariantType(variant, long);
+        wxString variantType = variant.GetType();
+        bool isPrevLong = variantType == wxPG_VARIANT_TYPE_LONG;
 
         wxLongLong_t value64 = 0;
 
@@ -206,10 +211,20 @@ bool wxIntProperty::StringToValue( wxVariant& variant, const wxString& text, int
              ( value64 >= INT_MAX || value64 <= INT_MIN )
            )
         {
-            wxLongLong* _m_value64 = &wxLongLongFromVariant(m_value);
-            if ( isPrevLong || !_m_value64 || _m_value64->GetValue() != value64 )
+            bool doChangeValue = isPrevLong;
+
+            if ( !isPrevLong && variantType == wxLongLong_VariantType )
             {
-                variant = wxLongLongToVariant(value64);
+                wxLongLong oldValue;
+                oldValue << variant;
+                if ( oldValue.GetValue() != value64 )
+                    doChangeValue = true;
+            }
+
+            if ( doChangeValue )
+            {
+                wxLongLong ll(value64);
+                variant << ll;
                 return true;
             }
         }
@@ -231,7 +246,7 @@ bool wxIntProperty::StringToValue( wxVariant& variant, const wxString& text, int
 
 bool wxIntProperty::IntToValue( wxVariant& variant, int value, int WXUNUSED(argFlags) ) const
 {
-    if ( !wxPGIsVariantType(variant, long) || variant.GetLong() != value )
+    if ( variant.GetType() != wxPG_VARIANT_TYPE_LONG || variant.GetLong() != value )
     {
         variant = (long)value;
         return true;
@@ -365,7 +380,7 @@ wxUIntProperty::wxUIntProperty( const wxString& label, const wxString& name,
     const wxULongLong& value ) : wxPGProperty(label,name)
 {
     Init();
-    SetValue(wxULongLongToVariant(value));
+    SetValue(WXVARIANT(value));
 }
 
 wxUIntProperty::~wxUIntProperty() { }
@@ -376,16 +391,21 @@ wxString wxUIntProperty::GetValueAsString( int ) const
     if ( index >= wxPG_UINT_TEMPLATE_MAX )
         index = wxPG_BASE_DEC;
 
-    if ( wxPGIsVariantType(m_value, long) )
-        return wxString::Format(gs_uintTemplates32[index],(unsigned long)m_value.GetLong());
-    else
-        return wxString::Format(gs_uintTemplates64[index],wxULongLongFromVariant(m_value).GetValue());
+    if ( m_value.GetType() == wxPG_VARIANT_TYPE_LONG )
+    {
+        return wxString::Format(gs_uintTemplates32[index], (unsigned long)m_value.GetLong());
+    }
+
+    wxULongLong ull;
+    ull << m_value;
+
+    return wxString::Format(gs_uintTemplates64[index], ull.GetValue());
 }
 
 bool wxUIntProperty::StringToValue( wxVariant& variant, const wxString& text, int WXUNUSED(argFlags) ) const
 {
-    //long unsigned value32 = 0;
-    bool isPrevLong = wxPGIsVariantType(variant, long);
+    wxString variantType = variant.GetType();
+    bool isPrevLong = variantType == wxPG_VARIANT_TYPE_LONG;
 
     if ( text.length() == 0 )
     {
@@ -404,10 +424,20 @@ bool wxUIntProperty::StringToValue( wxVariant& variant, const wxString& text, in
     {
         if ( value64 >= LONG_MAX )
         {
-            wxULongLong* _m_value64 = &wxULongLongFromVariant(m_value);
-            if ( isPrevLong || !_m_value64 || _m_value64->GetValue() != value64 )
+            bool doChangeValue = isPrevLong;
+
+            if ( !isPrevLong && variantType == wxULongLong_VariantType )
             {
-                variant = wxULongLongToVariant(value64);
+                wxULongLong oldValue;
+                oldValue << variant;
+                if ( oldValue.GetValue() != value64 )
+                    doChangeValue = true;
+            }
+
+            if ( doChangeValue )
+            {
+                wxULongLong ull(value64);
+                variant << ull;
                 return true;
             }
         }
@@ -857,9 +887,11 @@ int wxBaseEnumProperty::GetIndexForValue( int value ) const
 
 void wxBaseEnumProperty::OnSetValue()
 {
-    if ( wxPGIsVariantType(m_value, long) )
+    wxString variantType = m_value.GetType();
+
+    if ( variantType == wxPG_VARIANT_TYPE_LONG )
         ValueFromInt_( m_value, m_value.GetLong(), wxPG_FULL_VALUE );
-    else if ( wxPGIsVariantType(m_value, string) )
+    else if ( variantType == wxPG_VARIANT_TYPE_STRING )
         ValueFromString_( m_value, m_value.GetString(), 0 );
     else
         wxASSERT( false );
@@ -876,7 +908,7 @@ bool wxBaseEnumProperty::ValidateValue( wxVariant& value, wxPGValidationInfo& WX
     // Make sure string value is in the list,
     // unless property has string as preferred value type
     // To reduce code size, use conversion here as well
-    if ( wxPGIsVariantType(value, string) &&
+    if ( value.GetType() == wxPG_VARIANT_TYPE_STRING &&
          !this->IsKindOf(CLASSINFO(wxEditEnumProperty)) )
         return ValueFromString_( value, value.GetString(), wxPG_PROPERTY_SPECIFIC );
 
@@ -885,7 +917,7 @@ bool wxBaseEnumProperty::ValidateValue( wxVariant& value, wxPGValidationInfo& WX
 
 wxString wxBaseEnumProperty::GetValueAsString( int ) const
 {
-    if ( wxPGIsVariantType(m_value, string) )
+    if ( m_value.GetType() == wxPG_VARIANT_TYPE_STRING )
         return m_value.GetString();
 
     if ( m_index >= 0 )
@@ -938,7 +970,7 @@ bool wxBaseEnumProperty::ValueFromString_( wxVariant& value, const wxString& tex
     // If text not any of the choices, store as text instead
     // (but only if we are wxEditEnumProperty)
     if ( useIndex == -1 &&
-         (!wxPGIsVariantType(m_value, string) || (m_value.GetString() != text)) &&
+         (value.GetType() != wxPG_VARIANT_TYPE_STRING || (m_value.GetString() != text)) &&
          isEdit )
     {
         asText = true;

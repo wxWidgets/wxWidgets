@@ -453,93 +453,15 @@ WX_PG_DECLARE_EDITOR_WITH_DECL(ChoiceAndButton,WXDLLIMPEXP_PROPGRID)
 
 #ifndef SWIG
 
-/** @class wxPGVariantData
-    @ingroup classes
-    wxVariantData with additional functionality.
-
-    It is usually enough to use supplied to macros to automatically generate
-    variant data class. Like so:
-
-    @code
-
-    // In header
-    WX_PG_DECLARE_VARIANT_DATA(wxPGVariantDataMyClass,  // Name of the class
-                               MyClass,  // Name of the data type
-                               wxEMPTY_PARAMETER_VALUE)  // Declaration
-
-    // In source
-    WX_PG_IMPLEMENT_VARIANT_DATA(wxPGVariantDataMyClass, MyClass)
-
-    @endcode
-
-    If your class is derived from wxObject, it is recommended that you use
-    wxObject-versions of the macros (WX_PG_DECLARE_WXOBJECT_VARIANT_DATA and
-    WX_PG_IMPLEMENT_WXOBJECT_VARIANT_DATA).
-
-*/
-class WXDLLIMPEXP_PROPGRID wxPGVariantData : public wxVariantData
-{
-public:
-    virtual void* GetValuePtr() = 0;
-    virtual wxVariant GetDefaultValue() const = 0;
-protected:
-};
-
-
-//
-// With wxWidgets 2.9 and later we demand native C++ RTTI support
-#ifdef wxNO_RTTI
-    #error "You need to enable compiler RTTI support for wxPropertyGrid"
-#endif
-#define WX_PG_DECLARE_DYNAMIC_CLASS_VARIANTDATA(A)
-#define WX_PG_IMPLEMENT_DYNAMIC_CLASS_VARIANTDATA(A, B)
-typedef const std::type_info* wxPGVariantDataClassInfo;
-#define wxPGVariantDataGetClassInfo(A) (&typeid(*A))
-#define wxPG_VARIANT_EQ(A, B) \
-    ( ((A).GetData() && \
-       (B).GetData() && typeid(*(A).GetData()) == typeid(*(B).GetData()) && \
-       (A == B)) || !((A).GetData() && (B).GetData()) )
-
-#ifndef wxDynamicCastVariantData
-    #define wxDynamicCastVariantData wxDynamicCast
-#endif
-
-
-inline void wxPGDoesNothing() {}
-
-
-#define _WX_PG_IMPLEMENT_VARIANT_DATA_CLASS(CLASSNAME, \
-                                            DATATYPE, \
-                                            AS_ARG, \
-                                            AS_ARG_CONST, \
-                                            CTOR_CODE, \
-                                            DEFAULT_VALUE, \
-                                            SET_CODE) \
-    WX_PG_DECLARE_DYNAMIC_CLASS_VARIANTDATA(CLASSNAME) \
-protected: \
-    DATATYPE m_value; \
-public: \
-    CLASSNAME() { CTOR_CODE; } \
-    CLASSNAME(AS_ARG_CONST value) { CTOR_CODE; SET_CODE; m_value = value; } \
-    DATATYPE GetValue() const { return m_value; } \
-    AS_ARG_CONST GetValueRef() const { return m_value; } \
-    AS_ARG GetValueRef() { return m_value; } \
-    void SetValue(AS_ARG_CONST value) { SET_CODE; m_value = value; } \
-    virtual bool Eq(wxVariantData&) const { return false; } \
-    virtual wxString GetType() const { return wxS(#DATATYPE); } \
-    virtual wxVariantData* Clone() { return new CLASSNAME; } \
-    virtual bool Read(wxString &) { return false; } \
-    virtual bool Write(wxString &) const { return true; } \
-    virtual wxVariant GetDefaultValue() const { return DEFAULT_VALUE; }
-
 //
 // Macro WXVARIANT allows creation of wxVariant from any type supported by
 // wxWidgets internally, and of all types created using
 // WX_PG_DECLARE_VARIANT_DATA.
 template<class T>
-wxVariant WXVARIANT( const T& value )
+wxVariant WXVARIANT( const T& WXUNUSED(value) )
 {
-    return wxVariant((void*)&value);
+    wxFAIL_MSG("Code should always call specializations of this template");
+    return wxVariant();
 }
 
 template<> inline wxVariant WXVARIANT( const int& value )
@@ -559,127 +481,135 @@ template<> inline wxVariant WXVARIANT( const wxDateTime& value )
     { return wxVariant(value); }
 #endif
 
-#define _WX_PG_VARIANT_DATA_CLASSINFO_CONTAINER_DECL(CLASSNAME) \
-    extern int CLASSNAME##_d_;
-#define _WX_PG_VARIANT_DATA_CLASSINFO_CONTAINER(CLASSNAME) \
-    int CLASSNAME##_d_;
 
-#define _WX_PG_IMPLEMENT_VARIANT_DATA(CLASSNAME, \
-                                      DATATYPE, \
-                                      AS_ARG, \
-                                      AS_CONST_ARG, \
-                                      NULLVAL, \
-                                      BASECLASS) \
-_WX_PG_VARIANT_DATA_CLASSINFO_CONTAINER(CLASSNAME) \
-WX_PG_IMPLEMENT_DYNAMIC_CLASS_VARIANTDATA(CLASSNAME, BASECLASS) \
-AS_ARG operator <<( AS_ARG value, const wxVariant &variant ) \
+//
+// These are modified versions of DECLARE/WX_PG_IMPLEMENT_VARIANT_DATA
+// macros found in variant.h. Difference are as follows:
+//   * These support non-wxObject data
+//   * These implement classname##RefFromVariant function which returns
+//     reference to data within.
+//   * const char* classname##_VariantType which equals classname.
+//   * WXVARIANT
+//
+#define WX_PG_DECLARE_VARIANT_DATA(classname) \
+    WX_PG_DECLARE_VARIANT_DATA_EXPORTED(classname, wxEMPTY_PARAMETER_VALUE)
+
+#define WX_PG_DECLARE_VARIANT_DATA_EXPORTED(classname,expdecl) \
+expdecl classname& operator << ( classname &object, const wxVariant &variant ); \
+expdecl wxVariant& operator << ( wxVariant &variant, const classname &object ); \
+expdecl const classname& classname##RefFromVariant( const wxVariant& variant ); \
+expdecl classname& classname##RefFromVariant( wxVariant& variant ); \
+template<> inline wxVariant WXVARIANT( const classname& value ) \
 { \
-    CLASSNAME *data = wxDynamicCastVariantData( variant.GetData(), CLASSNAME ); \
-    wxASSERT( data ); \
-    value = data->GetValue(); \
-    return value; \
-} \
-wxVariant& operator <<( wxVariant &variant, AS_CONST_ARG value ) \
-{ \
-    CLASSNAME *data = new CLASSNAME( value ); \
-    variant.SetData( data ); \
+    wxVariant variant; \
+    variant << value; \
     return variant; \
 } \
-AS_ARG DATATYPE##FromVariant( const wxVariant& v ) \
+extern expdecl const char* classname##_VariantType;
+
+
+#define WX_PG_IMPLEMENT_VARIANT_DATA(classname) \
+    WX_PG_IMPLEMENT_VARIANT_DATA_EXPORTED(classname, wxEMPTY_PARAMETER_VALUE)
+
+#define WX_PG_IMPLEMENT_VARIANT_DATA_EXPORTED_NO_EQ(classname,expdecl) \
+const char* classname##_VariantType = #classname; \
+class classname##VariantData: public wxVariantData \
 { \
-    CLASSNAME *data = wxDynamicCastVariantData( v.GetData(), CLASSNAME ); \
-    if ( !data ) \
-        return NULLVAL; \
-    return data->GetValueRef(); \
+public:\
+    classname##VariantData() {} \
+    classname##VariantData( const classname &value ) { m_value = value; } \
+\
+    classname &GetValue() { return m_value; } \
+\
+    virtual bool Eq(wxVariantData& data) const; \
+\
+    virtual wxString GetType() const; \
+\
+    virtual wxVariantData* Clone() const { return new classname##VariantData(m_value); } \
+\
+    classname& GetValueRef() { return m_value; } \
+\
+    const classname& GetValueRef() const { return m_value; } \
+\
+protected:\
+    classname m_value; \
+};\
+\
+wxString classname##VariantData::GetType() const\
+{\
+    return wxS(#classname);\
+}\
+\
+expdecl classname& operator << ( classname &value, const wxVariant &variant )\
+{\
+    wxASSERT( variant.GetType() == #classname );\
+    \
+    classname##VariantData *data = (classname##VariantData*) variant.GetData();\
+    value = data->GetValue();\
+    return value;\
+}\
+\
+expdecl wxVariant& operator << ( wxVariant &variant, const classname &value )\
+{\
+    classname##VariantData *data = new classname##VariantData( value );\
+    variant.SetData( data );\
+    return variant;\
 } \
-wxVariant DATATYPE##ToVariant( AS_CONST_ARG value ) \
+expdecl classname& classname##RefFromVariant( wxVariant& variant ) \
 { \
-    wxVariant variant( new CLASSNAME( value ) ); \
-    return variant; \
+    wxASSERT( variant.GetType() == #classname );\
+    classname##VariantData *data = (classname##VariantData*) variant.GetData();\
+    return data->GetValueRef();\
+} \
+expdecl const classname& classname##RefFromVariant( const wxVariant& variant ) \
+{ \
+    wxASSERT( variant.GetType() == #classname );\
+    classname##VariantData *data = (classname##VariantData*) variant.GetData();\
+    return data->GetValueRef();\
 }
 
-#define WX_PG_IMPLEMENT_VARIANT_DATA(CLASSNAME, DATATYPE) \
-class CLASSNAME : public wxPGVariantData \
-{ \
-_WX_PG_IMPLEMENT_VARIANT_DATA_CLASS(CLASSNAME, DATATYPE, DATATYPE&, \
-                                    const DATATYPE&, wxPGDoesNothing(), \
-                                    wxVariant(new CLASSNAME(DATATYPE())), \
-                                    wxPGDoesNothing()) \
-public: \
-    virtual void* GetValuePtr() { return (void*)&m_value; } \
-}; \
-_WX_PG_IMPLEMENT_VARIANT_DATA(CLASSNAME, \
-                              DATATYPE, \
-                              DATATYPE&, \
-                              const DATATYPE&, \
-                              (DATATYPE&)*((DATATYPE*)NULL), \
-                              wxPGVariantData)
+// implements a wxVariantData-derived class using for the Eq() method the
+// operator== which must have been provided by "classname"
+#define WX_PG_IMPLEMENT_VARIANT_DATA_EXPORTED(classname,expdecl) \
+WX_PG_IMPLEMENT_VARIANT_DATA_EXPORTED_NO_EQ(classname,wxEMPTY_PARAMETER_VALUE expdecl) \
+\
+bool classname##VariantData::Eq(wxVariantData& data) const \
+{\
+    wxASSERT( GetType() == data.GetType() );\
+\
+    classname##VariantData & otherData = (classname##VariantData &) data;\
+\
+    return otherData.m_value == m_value;\
+}
 
-#define WX_PG_IMPLEMENT_WXOBJECT_VARIANT_DATA(CLASSNAME, DATATYPE) \
-class CLASSNAME : public wxPGVariantData \
-{ \
-_WX_PG_IMPLEMENT_VARIANT_DATA_CLASS(CLASSNAME, DATATYPE, DATATYPE&, \
-                                    const DATATYPE&, wxPGDoesNothing(), \
-                                    wxVariant(new CLASSNAME(DATATYPE())), \
-                                    wxPGDoesNothing()) \
-public: \
-    virtual void* GetValuePtr() { return (void*)&m_value; } \
-    virtual wxClassInfo* GetValueClassInfo() \
-        { return m_value.GetClassInfo(); } \
-}; \
-_WX_PG_IMPLEMENT_VARIANT_DATA(CLASSNAME, DATATYPE, DATATYPE&, \
-                              const DATATYPE&, \
-                              (DATATYPE&)*((DATATYPE*)NULL), \
-                              wxPGVariantData)
+#define WX_PG_IMPLEMENT_VARIANT_DATA(classname) \
+WX_PG_IMPLEMENT_VARIANT_DATA_EXPORTED(classname, wxEMPTY_PARAMETER_VALUE)
 
+// with Eq() implementation that always returns false
+#define WX_PG_IMPLEMENT_VARIANT_DATA_EXPORTED_DUMMY_EQ(classname,expdecl) \
+WX_PG_IMPLEMENT_VARIANT_DATA_EXPORTED_NO_EQ(classname,wxEMPTY_PARAMETER_VALUE expdecl) \
+\
+bool classname##VariantData::Eq(wxVariantData& WXUNUSED(data)) const \
+{\
+    return false; \
+}
 
-#define WX_PG_DECLARE_VARIANT_DATA(CLASSNAME, DATATYPE, DECL) \
-DECL DATATYPE& operator <<( DATATYPE& value, const wxVariant &variant ); \
-DECL wxVariant& operator <<( wxVariant &variant, const DATATYPE& value ); \
-DECL DATATYPE& DATATYPE##FromVariant( const wxVariant& variant ); \
-DECL wxVariant DATATYPE##ToVariant( const DATATYPE& value ); \
-template<> inline wxVariant WXVARIANT( const DATATYPE& value ) \
-    { return DATATYPE##ToVariant(value); } \
-DECL _WX_PG_VARIANT_DATA_CLASSINFO_CONTAINER_DECL(CLASSNAME);
+#define WX_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ(classname) \
+WX_PG_IMPLEMENT_VARIANT_DATA_EXPORTED_DUMMY_EQ(classname, wxEMPTY_PARAMETER_VALUE)
 
-#define WX_PG_DECLARE_WXOBJECT_VARIANT_DATA WX_PG_DECLARE_VARIANT_DATA
+WX_PG_DECLARE_VARIANT_DATA_EXPORTED(wxPoint, WXDLLIMPEXP_PROPGRID)
+WX_PG_DECLARE_VARIANT_DATA_EXPORTED(wxSize, WXDLLIMPEXP_PROPGRID)
+WX_PG_DECLARE_VARIANT_DATA_EXPORTED(wxArrayInt, WXDLLIMPEXP_PROPGRID)
+WX_PG_DECLARE_VARIANT_DATA_EXPORTED(wxLongLong, WXDLLIMPEXP_PROPGRID)
+WX_PG_DECLARE_VARIANT_DATA_EXPORTED(wxULongLong, WXDLLIMPEXP_PROPGRID)
+DECLARE_VARIANT_OBJECT_EXPORTED(wxFont, WXDLLIMPEXP_PROPGRID)
+template<> inline wxVariant WXVARIANT( const wxFont& value )
+{
+    wxVariant variant;
+    variant << value;
+    return variant;
+}
 
-#define WX_PG_DECLARE_PTR_VARIANT_DATA(CLASSNAME, DATATYPE, DECL) \
-DECL DATATYPE* operator <<( DATATYPE* value, const wxVariant &variant ); \
-DECL wxVariant& operator <<( wxVariant &variant, DATATYPE* value ); \
-DECL DATATYPE* DATATYPE##FromVariant( const wxVariant& variant ); \
-DECL wxVariant DATATYPE##ToVariant( DATATYPE* value ); \
-DECL _WX_PG_VARIANT_DATA_CLASSINFO_CONTAINER_DECL(CLASSNAME);
-
-
-#define WX_PG_IMPLEMENT_PTR_VARIANT_DATA(CLASSNAME, DATATYPE, DEFAULT) \
-class CLASSNAME : public wxPGVariantData \
-{ \
-_WX_PG_IMPLEMENT_VARIANT_DATA_CLASS(CLASSNAME, DATATYPE*, DATATYPE*, \
-                                    DATATYPE*, m_value = NULL, \
-                                    DEFAULT, \
-                                    if (m_value) Py_DECREF(m_value); \
-                                    if (!value) value = Py_None; \
-                                    Py_INCREF(value) ) \
-    ~CLASSNAME() { if (m_value) Py_DECREF(m_value); } \
-public: \
-    virtual void* GetValuePtr() { return (void*)m_value; } \
-}; \
-_WX_PG_IMPLEMENT_VARIANT_DATA(CLASSNAME, DATATYPE, DATATYPE*, DATATYPE*, \
-                              NULL, wxPGVariantData)
-
-
-WX_PG_DECLARE_VARIANT_DATA(wxPGVariantDataPoint, wxPoint, WXDLLIMPEXP_PROPGRID)
-WX_PG_DECLARE_VARIANT_DATA(wxPGVariantDataSize, wxSize, WXDLLIMPEXP_PROPGRID)
-WX_PG_DECLARE_VARIANT_DATA(wxPGVariantDataArrayInt,
-                           wxArrayInt, WXDLLIMPEXP_PROPGRID)
-WX_PG_DECLARE_VARIANT_DATA(wxPGVariantDataLongLong,
-                           wxLongLong, WXDLLIMPEXP_PROPGRID)
-WX_PG_DECLARE_VARIANT_DATA(wxPGVariantDataULongLong,
-                           wxULongLong, WXDLLIMPEXP_PROPGRID)
-
-WX_PG_DECLARE_WXOBJECT_VARIANT_DATA(wxPGVariantDataFont,
-                                    wxFont, WXDLLIMPEXP_PROPGRID)
 template<> inline wxVariant WXVARIANT( const wxColour& value )
 {
     wxVariant variant;
@@ -687,8 +617,15 @@ template<> inline wxVariant WXVARIANT( const wxColour& value )
     return variant;
 }
 
-#define WX_PG_VARIANT_GETVALUEREF(P, T) \
-    (*((T*)((wxPGVariantData*)(P.GetData()))->GetValuePtr()))
+// Define constants for common wxVariant type strings
+
+#define wxPG_VARIANT_TYPE_STRING        wxPGGlobalVars->m_strstring
+#define wxPG_VARIANT_TYPE_LONG          wxPGGlobalVars->m_strlong
+#define wxPG_VARIANT_TYPE_BOOL          wxPGGlobalVars->m_strbool
+#define wxPG_VARIANT_TYPE_LIST          wxPGGlobalVars->m_strlist
+#define wxPG_VARIANT_TYPE_DOUBLE        wxS("double")
+#define wxPG_VARIANT_TYPE_ARRSTRING     wxS("arrstring")
+#define wxPG_VARIANT_TYPE_DATETIME      wxS("datetime")
 
 // Safely converts a wxVariant to (long) int. Supports converting from string
 // and boolean as well.
@@ -707,28 +644,6 @@ bool wxPGVariantToULongLong( const wxVariant& variant, wxULongLong_t* pResult );
 // wxLongLong as well.
 WXDLLIMPEXP_PROPGRID
 bool wxPGVariantToDouble( const wxVariant& variant, double* pResult );
-
-#endif // !SWIG
-
-// -----------------------------------------------------------------------
-
-#ifndef SWIG
-
-WXDLLIMPEXP_PROPGRID
-wxObject*
-wxPG_VariantToWxObject( const wxVariant& variant, wxClassInfo* classInfo );
-
-//
-// Redefine wxGetVariantCast to also take propertygrid variantdata
-// classes into account.
-//
-#undef wxGetVariantCast
-#define wxGetVariantCast(var,classname) \
-    (classname*)wxPG_VariantToWxObject(var,&classname::ms_classInfo)
-
-// TODO: After a while, remove this.
-#define WX_PG_VARIANT_TO_WXOBJECT(VARIANT,CLASSNAME) \
-    (CLASSNAME*)wxPG_VariantToWxObject(VARIANT,&CLASSNAME::ms_classInfo)
 
 #endif // !SWIG
 

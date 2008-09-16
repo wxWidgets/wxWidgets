@@ -446,7 +446,7 @@ wxFontProperty::wxFontProperty( const wxString& label, const wxString& name,
                                 const wxFont& value )
     : wxPGProperty(label,name)
 {
-    SetValue( wxFontToVariant(value) );
+    SetValue(WXVARIANT(value));
 
     // Initialize font family choices list
     if ( !wxPGGlobalVars->m_fontFamilyChoices )
@@ -467,7 +467,8 @@ wxFontProperty::wxFontProperty( const wxString& label, const wxString& name,
 
     wxString emptyString(wxEmptyString);
 
-    wxFont& font = wxFontFromVariant(m_value);
+    wxFont font;
+    font << m_value;
 
     AddChild( new wxIntProperty( _("Point Size"), wxS("Point Size"),(long)font.GetPointSize() ) );
 
@@ -502,16 +503,14 @@ wxFontProperty::~wxFontProperty() { }
 
 void wxFontProperty::OnSetValue()
 {
-    wxFont& font = wxFontFromVariant(m_value);
-    wxASSERT(&font);
+    wxFont font;
+    font << m_value;
 
-    wxFont font2;
     if ( !font.Ok() )
-        font2 = wxFont(10,wxSWISS,wxNORMAL,wxNORMAL);
-    else
-        font2 = font;
-
-    m_value = wxFontToVariant(font2);
+    {
+        font = wxFont(10,wxSWISS,wxNORMAL,wxNORMAL);
+        m_value << font;
+    }
 }
 
 wxString wxFontProperty::GetValueAsString( int argFlags ) const
@@ -528,7 +527,9 @@ bool wxFontProperty::OnEvent( wxPropertyGrid* propgrid, wxWindow* WXUNUSED(prima
         PrepareValueForDialogEditing(propgrid);
 
         wxFontData data;
-        data.SetInitialFont( wxFontFromVariant(m_value) );
+        wxFont font;
+        font << m_value;
+        data.SetInitialFont( font );
         data.SetColour(*wxBLACK);
 
         wxFontDialog dlg(propgrid, data);
@@ -536,7 +537,8 @@ bool wxFontProperty::OnEvent( wxPropertyGrid* propgrid, wxWindow* WXUNUSED(prima
         {
             propgrid->EditorsValueWasModified();
 
-            wxVariant variant = wxFontToVariant(dlg.GetFontData().GetChosenFont());
+            wxVariant variant;
+            variant << dlg.GetFontData().GetChosenFont();
             SetValueInEvent( variant );
             return true;
         }
@@ -547,7 +549,8 @@ bool wxFontProperty::OnEvent( wxPropertyGrid* propgrid, wxWindow* WXUNUSED(prima
 void wxFontProperty::RefreshChildren()
 {
     if ( !GetChildCount() ) return;
-    const wxFont& font = wxFontFromVariant(m_value);
+    wxFont font;
+    font << m_value;
     Item(0)->SetValue( (long)font.GetPointSize() );
     Item(1)->SetValue( (long)font.GetFamily() );
     Item(2)->SetValueFromString( font.GetFaceName(), wxPG_FULL_VALUE );
@@ -558,7 +561,8 @@ void wxFontProperty::RefreshChildren()
 
 void wxFontProperty::ChildChanged( wxVariant& thisValue, int ind, wxVariant& childValue ) const
 {
-    wxFont& font = wxFontFromVariant(thisValue);
+    wxFont font;
+    font << thisValue;
 
     if ( ind == 0 )
     {
@@ -604,6 +608,8 @@ void wxFontProperty::ChildChanged( wxVariant& thisValue, int ind, wxVariant& chi
     {
         font.SetUnderlined( childValue.GetBool() );
     }
+
+    thisValue << font;
 }
 
 /*
@@ -718,7 +724,7 @@ static long gs_cp_es_syscolour_values[] = {
 };
 
 
-WX_PG_IMPLEMENT_WXOBJECT_VARIANT_DATA(wxPGVariantDataColourPropertyValue, wxColourPropertyValue)
+IMPLEMENT_VARIANT_OBJECT_EXPORTED_SHALLOWCMP(wxColourPropertyValue, WXDLLIMPEXP_PROPGRID)
 
 
 // Class body is in advprops.h
@@ -738,7 +744,7 @@ void wxSystemColourProperty::Init( int type, const wxColour& colour )
 
     m_flags |= wxPG_PROP_STATIC_CHOICES; // Colour selection cannot be changed.
 
-    m_value = wxColourPropertyValueToVariant(cpv);
+    m_value << cpv;
 
     OnSetValue();
 }
@@ -797,20 +803,29 @@ wxColourPropertyValue wxSystemColourProperty::GetVal( const wxVariant* pVariant 
     if ( pVariant->IsNull() )
         return wxColourPropertyValue(wxPG_COLOUR_UNSPECIFIED, wxColour());
 
-    wxColourPropertyValue* v1 = &wxColourPropertyValueFromVariant(*pVariant);
-    if ( v1 )
-        return *v1;
+    if ( pVariant->GetType() == wxS("wxColourPropertyValue") )
+    {
+        wxColourPropertyValue v;
+        v << *pVariant;
+        return v;
+    }
 
-    wxColour* pCol = wxGetVariantCast(*pVariant, wxColour);
     wxColour col;
     bool variantProcessed = true;
 
-    if ( pCol )
+    if ( pVariant->GetType() == wxS("wxColour*") )
     {
+        wxColour* pCol = wxStaticCast(pVariant->GetWxObjectPtr(), wxColour);
         col = *pCol;
     }
-    else if ( pVariant->GetType() == wxT("wxArrayInt") )
+    else if ( pVariant->GetType() == wxS("wxColour") )
     {
+        col << *pVariant;
+    }
+    else if ( pVariant->GetType() == wxArrayInt_VariantType )
+    {
+        // This code is mostly needed for wxPython bindings, which
+        // may offer tuple of integers as colour value.
         wxArrayInt arr;
         arr << *pVariant;
 
@@ -832,10 +847,6 @@ wxColourPropertyValue wxSystemColourProperty::GetVal( const wxVariant* pVariant 
             variantProcessed = false;
         }
     }
-    else if ( pVariant->GetType() == wxT("wxColour") )
-    {
-        col << *pVariant;
-    }
     else
     {
         variantProcessed = false;
@@ -855,7 +866,9 @@ wxColourPropertyValue wxSystemColourProperty::GetVal( const wxVariant* pVariant 
 
 wxVariant wxSystemColourProperty::DoTranslateVal( wxColourPropertyValue& v ) const
 {
-    return wxColourPropertyValueToVariant(v);
+    wxVariant variant;
+    variant << v;
+    return variant;
 }
 
 int wxSystemColourProperty::ColToInd( const wxColour& colour ) const
@@ -889,10 +902,9 @@ static inline wxColour wxColourFromPGLong( long col )
 void wxSystemColourProperty::OnSetValue()
 {
     // Convert from generic wxobject ptr to wxPGVariantDataColour
-    if ( wxPGIsVariantType(m_value, wxobject) )
+    if ( m_value.GetType() == wxS("wxColour*") )
     {
-        wxASSERT( m_value.IsValueKindOf(CLASSINFO(wxColour)) );
-        wxColour* pCol = (wxColour*) m_value.GetWxObjectPtr();
+        wxColour* pCol = wxStaticCast(m_value.GetWxObjectPtr(), wxColour);
         m_value << *pCol;
     }
 
@@ -912,39 +924,46 @@ void wxSystemColourProperty::OnSetValue()
         m_value = TranslateVal(val);
     }
 
-    wxColourPropertyValue* pCpv = &wxColourPropertyValueFromVariant(m_value);
-    wxColour col;
-    if ( pCpv )
-        col = pCpv->m_colour;
-    else
-        col << m_value;
-
-    if ( !col.Ok() )
-    {
-        SetValueToUnspecified();
-        SetIndex(wxNOT_FOUND);
-        return;
-    }
-
     int ind;
 
-    if ( pCpv )
+    if ( m_value.GetType() == wxS("wxColourPropertyValue") )
     {
-        if ( pCpv->m_type < wxPG_COLOUR_WEB_BASE )
+        wxColourPropertyValue cpv;
+        cpv << m_value;
+        wxColour col = cpv.m_colour;
+
+        if ( !col.Ok() )
+        {
+            SetValueToUnspecified();
+            SetIndex(wxNOT_FOUND);
+            return;
+        }
+
+        if ( cpv.m_type < wxPG_COLOUR_WEB_BASE )
         {
             if ( m_choices.HasValues() )
-                ind = GetIndexForValue(pCpv->m_type);
+                ind = GetIndexForValue(cpv.m_type);
             else
                 ind = ColToInd(col);
         }
         else
         {
-            pCpv->m_type = wxPG_COLOUR_CUSTOM;
+            cpv.m_type = wxPG_COLOUR_CUSTOM;
             ind = GetCustomColourIndex();
         }
     }
     else
     {
+        wxColour col;
+        col << m_value;
+
+        if ( !col.Ok() )
+        {
+            SetValueToUnspecified();
+            SetIndex(wxNOT_FOUND);
+            return;
+        }
+
         ind = ColToInd(col);
 
         if ( ind == wxNOT_FOUND )
@@ -1006,7 +1025,7 @@ int wxSystemColourProperty::GetCustomColourIndex() const
 
 bool wxSystemColourProperty::QueryColourFromUser( wxVariant& variant ) const
 {
-    wxASSERT( m_value.GetType() != wxT("string") );
+    wxASSERT( m_value.GetType() != wxPG_VARIANT_TYPE_STRING );
     bool res = false;
 
     wxPropertyGrid* propgrid = GetGrid();
@@ -1668,7 +1687,7 @@ void wxMultiChoiceProperty::GenerateValueAsString()
 {
     wxArrayString strings;
 
-    if ( wxPGIsVariantType(m_value, arrstring) )
+    if ( m_value.GetType() == wxPG_VARIANT_TYPE_ARRSTRING )
         strings = m_value.GetArrayString();
 
     wxString& tempStr = m_display;
@@ -1691,7 +1710,7 @@ void wxMultiChoiceProperty::GenerateValueAsString()
 
 wxArrayInt wxMultiChoiceProperty::GetValueAsIndices() const
 {
-    const wxArrayInt& valueArr = wxArrayIntFromVariant(GetValue());
+    const wxArrayInt& valueArr = wxArrayIntRefFromVariant(GetValue());
     unsigned int i;
 
     // Translate values to string indices.

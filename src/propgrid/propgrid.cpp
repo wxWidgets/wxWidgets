@@ -199,37 +199,6 @@ wxPGGlobalVarsClass::wxPGGlobalVarsClass()
 
     wxVariant v;
 
-    v = (long)0;
-    wxVariantClassInfo_long = wxPGVariantDataGetClassInfo(v.GetData());
-
-    v = wxString();
-    wxVariantClassInfo_string = wxPGVariantDataGetClassInfo(v.GetData());
-
-    v = (double)0.0;
-    wxVariantClassInfo_double = wxPGVariantDataGetClassInfo(v.GetData());
-
-    v = (bool)false;
-    wxVariantClassInfo_bool = wxPGVariantDataGetClassInfo(v.GetData());
-
-    v = wxArrayString();
-    wxVariantClassInfo_arrstring = wxPGVariantDataGetClassInfo(v.GetData());
-
-    wxColour col;
-    wxVariant v2((wxObject*)&col);
-    wxVariantClassInfo_wxobject = wxPGVariantDataGetClassInfo(v2.GetData());
-
-    wxVariantList list;
-    v = wxVariant(list);
-    wxVariantClassInfo_list = wxPGVariantDataGetClassInfo(v.GetData());
-
-    v << *wxRED;
-    wxVariantClassInfo_wxColour = wxPGVariantDataGetClassInfo(v.GetData());
-
-#if wxUSE_DATETIME
-    v = wxVariant(wxDateTime::Now());
-    wxVariantClassInfo_datetime = wxPGVariantDataGetClassInfo(v.GetData());
-#endif
-
 	// Prepare some shared variants
     m_vEmptyString = wxString();
     m_vZero = (long) 0;
@@ -238,6 +207,10 @@ wxPGGlobalVarsClass::wxPGGlobalVarsClass()
     m_vFalse = false;
 
     // Prepare cached string constants
+    m_strstring = wxS("string");
+    m_strlong = wxS("long");
+    m_strbool = wxS("bool");
+    m_strlist = wxS("list");
     m_strMin = wxS("Min");
     m_strMax = wxS("Max");
     m_strUnits = wxS("Units");
@@ -2826,7 +2799,7 @@ bool wxPropertyGrid::PerformValidation( wxPGProperty* p, wxVariant& pendingValue
 
     m_validationInfo.m_failureBehavior = m_permanentValidationFailureBehavior;
 
-    if ( !wxPGIsVariantType(pendingValue, list) )
+    if ( pendingValue.GetType() == wxPG_VARIANT_TYPE_LIST )
     {
         if ( !p->ValidateValue(pendingValue, m_validationInfo) )
             return false;
@@ -2873,7 +2846,7 @@ bool wxPropertyGrid::PerformValidation( wxPGProperty* p, wxVariant& pendingValue
     wxVariant value;
     wxPGProperty* evtChangingProperty = changedProperty;
 
-    if ( !wxPGIsVariantType(*pPendingValue, list) )
+    if ( pPendingValue->GetType() != wxPG_VARIANT_TYPE_LIST )
     {
         value = *pPendingValue;
     }
@@ -2928,7 +2901,7 @@ bool wxPropertyGrid::PerformValidation( wxPGProperty* p, wxVariant& pendingValue
 
     // If changedProperty is not property which value was edited,
     // then call wxPGProperty::ValidateValue() for that as well.
-    if ( p != changedProperty && !wxPGIsVariantType(value, list) )
+    if ( p != changedProperty && value.GetType() != wxPG_VARIANT_TYPE_LIST )
     {
         if ( !changedProperty->ValidateValue(value, m_validationInfo) )
             return false;

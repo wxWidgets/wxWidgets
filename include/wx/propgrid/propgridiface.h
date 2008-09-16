@@ -116,10 +116,10 @@ typedef const wxPGPropArgCls& wxPGPropArg;
 
 WXDLLIMPEXP_PROPGRID
 void wxPGTypeOperationFailed( const wxPGProperty* p,
-                              const wxChar* typestr,
-                              const wxChar* op );
+                              const wxString& typestr,
+                              const wxString& op );
 WXDLLIMPEXP_PROPGRID
-void wxPGGetFailed( const wxPGProperty* p, const wxChar* typestr );
+void wxPGGetFailed( const wxPGProperty* p, const wxString& typestr );
 
 // -----------------------------------------------------------------------
 
@@ -550,74 +550,80 @@ public:
 #endif
     bool GetPropertyValueAsBool( wxPGPropArg id ) const;
     double GetPropertyValueAsDouble( wxPGPropArg id ) const;
-    wxObject* GetPropertyValueAsWxObjectPtr( wxPGPropArg id ) const;
     void* GetPropertyValueAsVoidPtr( wxPGPropArg id ) const;
 
 #define wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL(TYPENAME, DEFVAL) \
     wxPG_PROP_ARG_CALL_PROLOG_RETVAL(DEFVAL) \
-    if ( p->m_value.GetType() != TYPENAME ) \
+    wxString typeName(wxS(TYPENAME)); \
+    wxVariant value = p->GetValue(); \
+    if ( value.GetType() != typeName ) \
     { \
-        wxPGGetFailed(p, TYPENAME); \
+        wxPGGetFailed(p, typeName); \
         return DEFVAL; \
     }
 
 #define wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL_WFALLBACK(TYPENAME, DEFVAL) \
     wxPG_PROP_ARG_CALL_PROLOG_RETVAL(DEFVAL) \
-    if ( p->m_value.GetType() != TYPENAME ) \
+    wxVariant value = p->GetValue(); \
+    if ( value.GetType() != wxS(TYPENAME) ) \
         return DEFVAL; \
 
     wxArrayString GetPropertyValueAsArrayString( wxPGPropArg id ) const
     {
-        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL(wxT("arrstring"),
+        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL("arrstring",
                                                    wxArrayString())
-        return p->m_value.GetArrayString();
+        return value.GetArrayString();
     }
 
     wxPoint GetPropertyValueAsPoint( wxPGPropArg id ) const
     {
-        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL(wxT("wxPoint"), wxPoint())
-        return WX_PG_VARIANT_GETVALUEREF(p->GetValue(), wxPoint);
+        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL("wxPoint", wxPoint())
+        wxPoint pt;
+        pt << value;
+        return pt;
     }
 
     wxSize GetPropertyValueAsSize( wxPGPropArg id ) const
     {
-        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL(wxT("wxSize"), wxSize())
-        return WX_PG_VARIANT_GETVALUEREF(p->GetValue(), wxSize);
+        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL("wxSize", wxSize())
+        wxSize sz;
+        sz << value;
+        return sz;
     }
 
     wxLongLong_t GetPropertyValueAsLongLong( wxPGPropArg id ) const
     {
-        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL_WFALLBACK(wxT("wxLongLong"),
+        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL_WFALLBACK("wxLongLong",
                                              (long) GetPropertyValueAsLong(id))
-        return WX_PG_VARIANT_GETVALUEREF(p->GetValue(), wxLongLong).GetValue();
+        wxLongLong ll;
+        ll << value;
+        return ll.GetValue();
     }
 
     wxULongLong_t GetPropertyValueAsULongLong( wxPGPropArg id ) const
     {
-        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL_WFALLBACK(wxT("wxULongLong"),
+        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL_WFALLBACK("wxULongLong",
                                     (unsigned long) GetPropertyValueAsULong(id))
-        return WX_PG_VARIANT_GETVALUEREF(p->GetValue(), wxULongLong).GetValue();
+        wxULongLong ull;
+        ull << value;
+        return ull.GetValue();
     }
 
     wxArrayInt GetPropertyValueAsArrayInt( wxPGPropArg id ) const
     {
-        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL(wxT("wxArrayInt"),
+        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL("wxArrayInt",
                                                    wxArrayInt())
-        wxArrayInt arr = WX_PG_VARIANT_GETVALUEREF(p->GetValue(), wxArrayInt);
+        wxArrayInt arr;
+        arr << value;
         return arr;
     }
 
 #if wxUSE_DATETIME
     wxDateTime GetPropertyValueAsDateTime( wxPGPropArg id ) const
     {
-        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxDateTime())
-
-        if ( wxStrcmp(p->m_value.GetType(), wxT("datetime")) != 0 )
-        {
-            wxPGGetFailed(p, wxT("datetime"));
-            return wxDateTime();
-        }
-        return p->m_value.GetDateTime();
+        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL("datetime",
+                                                   wxDateTime())
+        return value.GetDateTime();
     }
 #endif
 

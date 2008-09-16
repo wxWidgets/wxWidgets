@@ -48,7 +48,7 @@ bool operator == (const wxFontData&, const wxFontData&)
 
 #include <wx/fontdlg.h>
 
-WX_PG_IMPLEMENT_WXOBJECT_VARIANT_DATA(wxPGVariantDataFontData, wxFontData)
+IMPLEMENT_VARIANT_OBJECT_SHALLOWCMP(wxFontData)
 
 WX_PG_IMPLEMENT_PROPERTY_CLASS(wxFontDataProperty,wxFontProperty,
                                wxFontData,const wxFontData&,TextCtrlAndButton)
@@ -56,51 +56,68 @@ WX_PG_IMPLEMENT_PROPERTY_CLASS(wxFontDataProperty,wxFontProperty,
 wxFontDataProperty::wxFontDataProperty( const wxString& label, const wxString& name,
    const wxFontData& value ) : wxFontProperty(label,name,value.GetInitialFont())
 {
-    // Set initial value - should be done in a simpler way like this
-    // (instead of calling SetValue) in derived (wxObject) properties.
-    m_value_wxFontData << value;
-
-    wxFontData& fontData = wxFontDataFromVariant(m_value_wxFontData);
+    wxFontData fontData(value);
 
     // Fix value.
     fontData.SetChosenFont(value.GetInitialFont());
     if ( !fontData.GetColour().Ok() )
         fontData.SetColour(*wxBLACK);
 
-    // Add extra children.
-    AddChild( new wxColourProperty(_("Colour"),wxPG_LABEL,
-                                   fontData.GetColour() ) );
+    // Set initial value - should be done in a simpler way like this
+    // (instead of calling SetValue) in derived (wxObject) properties.
+    m_value_wxFontData << value;
 
+    // Add extra children.
+    AddChild( new wxColourProperty(_("Colour"), wxPG_LABEL,
+                                   fontData.GetColour() ) );
 }
 
 wxFontDataProperty::~wxFontDataProperty () { }
 
 void wxFontDataProperty::OnSetValue()
 {
-    if ( !(&wxFontDataFromVariant(m_value)) )
+    if ( m_value.GetType() != "wxFontData" )
     {
-        wxFont* pFont = &wxFontFromVariant(m_value);
-        if ( pFont )
+        if ( m_value.GetType() == "wxFont" )
         {
+            wxFont font;
+            font << m_value;
             wxFontData fontData;
-            fontData.SetChosenFont(*pFont);
-            m_value = WXVARIANT(fontData);
+            fontData.SetChosenFont(font);
+            if ( !m_value_wxFontData.IsNull() )
+            {
+                wxFontData oldFontData;
+                oldFontData << m_value_wxFontData;
+                fontData.SetColour(oldFontData.GetColour());
+            }
+            else
+            {
+                fontData.SetColour(*wxBLACK);
+            }
+            wxVariant variant;
+            variant << fontData;
+            m_value_wxFontData = variant;
         }
         else
         {
             wxFAIL_MSG(wxT("Value to wxFontDataProperty must be eithe wxFontData or wxFont"));
         }
     }
+    else
+    {
+        // Set m_value to wxFont so that wxFontProperty methods will work
+        // correctly.
+        m_value_wxFontData = m_value;
 
-    // Set m_value to wxFont so that wxFontProperty methods will work
-    // correctly.
-    m_value_wxFontData = m_value;
-    wxFontData& fontData = wxFontDataFromVariant(m_value_wxFontData);
+        wxFontData fontData;
+        fontData << m_value_wxFontData;
 
-    wxFont font = fontData.GetChosenFont();
-    if ( !font.Ok() )
-        font = wxFont(10,wxSWISS,wxNORMAL,wxNORMAL);
-    m_value = WXVARIANT(font);
+        wxFont font = fontData.GetChosenFont();
+        if ( !font.Ok() )
+            font = wxFont(10,wxSWISS,wxNORMAL,wxNORMAL);
+
+        m_value = WXVARIANT(font);
+    }
 }
 
 wxVariant wxFontDataProperty::DoGetValue() const
@@ -117,7 +134,8 @@ bool wxFontDataProperty::OnEvent( wxPropertyGrid* propgrid,
         // Update value from last minute changes
         PrepareValueForDialogEditing(propgrid);
 
-        wxFontData& fontData = wxFontDataFromVariant(m_value_wxFontData);
+        wxFontData fontData;
+        fontData << m_value_wxFontData;
 
         fontData.SetInitialFont(fontData.GetChosenFont());
 
@@ -125,7 +143,9 @@ bool wxFontDataProperty::OnEvent( wxPropertyGrid* propgrid,
 
         if ( dlg.ShowModal() == wxID_OK )
         {
-            SetValueInEvent( wxFontDataToVariant(dlg.GetFontData()) );
+            wxVariant variant;
+            variant << dlg.GetFontData();
+            SetValueInEvent( variant );
             return true;
         }
     }
@@ -135,16 +155,17 @@ bool wxFontDataProperty::OnEvent( wxPropertyGrid* propgrid,
 void wxFontDataProperty::RefreshChildren()
 {
     wxFontProperty::RefreshChildren();
-    if ( GetChildCount() < 6 ) // Number is count of inherit prop's children + 1.
+    if ( GetChildCount() < 6 ) // Number is count of wxFontProperty's children + 1.
         return;
-    wxFontData& fontData = wxFontDataFromVariant(m_value_wxFontData);
+    wxFontData fontData; fontData << m_value_wxFontData;
     wxVariant variant; variant << fontData.GetColour();
     Item(6)->SetValue( variant );
 }
 
 void wxFontDataProperty::ChildChanged( wxVariant& thisValue, int childIndex, wxVariant& childValue ) const
 {
-    wxFontData& fontData = wxFontDataFromVariant(thisValue);
+    wxFontData fontData;
+    fontData << thisValue;
     wxColour col;
     wxVariant variant;
 
@@ -155,11 +176,15 @@ void wxFontDataProperty::ChildChanged( wxVariant& thisValue, int childIndex, wxV
             fontData.SetColour( col );
             break;
         default:
-            // Transfer between subset to superset.
-            variant = WXVARIANT(fontData.GetChosenFont());
+            // Transfer from subset to superset.
+            wxFont font = fontData.GetChosenFont();
+            variant = WXVARIANT(font);
             wxFontProperty::ChildChanged( variant, childIndex, childValue );
-            fontData.SetChosenFont(wxFontFromVariant(variant));
+            font << variant;
+            fontData.SetChosenFont(font);
     }
+
+    thisValue << fontData;
 }
 
 // -----------------------------------------------------------------------
@@ -182,14 +207,14 @@ wxSizeProperty::~wxSizeProperty() { }
 void wxSizeProperty::RefreshChildren()
 {
     if ( !GetChildCount() ) return;
-    const wxSize& size = wxSizeFromVariant(m_value);
+    const wxSize& size = wxSizeRefFromVariant(m_value);
     Item(0)->SetValue( (long)size.x );
     Item(1)->SetValue( (long)size.y );
 }
 
 void wxSizeProperty::ChildChanged( wxVariant& thisValue, int childIndex, wxVariant& childValue ) const
 {
-    wxSize& size = wxSizeFromVariant(thisValue);
+    wxSize& size = wxSizeRefFromVariant(thisValue);
     int val = wxPGVariantToInt(childValue);
     switch ( childIndex )
     {
@@ -218,14 +243,14 @@ wxPointProperty::~wxPointProperty() { }
 void wxPointProperty::RefreshChildren()
 {
     if ( !GetChildCount() ) return;
-    const wxPoint& point = wxPointFromVariant(m_value);
+    const wxPoint& point = wxPointRefFromVariant(m_value);
     Item(0)->SetValue( (long)point.x );
     Item(1)->SetValue( (long)point.y );
 }
 
 void wxPointProperty::ChildChanged( wxVariant& thisValue, int childIndex, wxVariant& childValue ) const
 {
-    wxPoint& point = wxPointFromVariant(thisValue);
+    wxPoint& point = wxPointRefFromVariant(thisValue);
     int val = wxPGVariantToInt(childValue);
     switch ( childIndex )
     {
@@ -452,7 +477,7 @@ bool operator == (const wxArrayDouble& a, const wxArrayDouble& b)
     return TRUE;
 }
 
-WX_PG_IMPLEMENT_VARIANT_DATA(wxPGVariantDataArrayDouble, wxArrayDouble)
+WX_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ(wxArrayDouble)
 
 WX_PG_IMPLEMENT_PROPERTY_CLASS(wxArrayDoubleProperty,
                                wxPGProperty,
@@ -478,7 +503,7 @@ wxArrayDoubleProperty::wxArrayDoubleProperty (const wxString& label,
 
     m_delimiter = use_delimiter;
 
-    SetValue( wxArrayDoubleToVariant(array) );
+    SetValue( WXVARIANT(array) );
 }
 
 wxArrayDoubleProperty::~wxArrayDoubleProperty () { }
@@ -509,7 +534,7 @@ void wxArrayDoubleProperty::GenerateValueAsString( wxString& target, int prec, b
 
     target.Empty();
 
-    const wxArrayDouble& value = wxArrayDoubleFromVariant(m_value);
+    const wxArrayDouble& value = wxArrayDoubleRefFromVariant(m_value);
 
     for ( i=0; i<value.GetCount(); i++ )
     {
@@ -529,7 +554,7 @@ bool wxArrayDoubleProperty::OnEvent( wxPropertyGrid* propgrid,
 {
     if ( propgrid->IsMainButtonEvent(event) )
     {
-        wxArrayDouble& value = wxArrayDoubleFromVariant(m_value);
+        wxArrayDouble& value = wxArrayDoubleRefFromVariant(m_value);
 
         // Update the value in case of last minute changes
         PrepareValueForDialogEditing(propgrid);
@@ -544,7 +569,7 @@ bool wxArrayDoubleProperty::OnEvent( wxPropertyGrid* propgrid,
         int res = dlg.ShowModal();
         if ( res == wxID_OK && dlg.IsModified() )
         {
-            SetValueInEvent( wxArrayDoubleToVariant(dlg.GetArray()) );
+            SetValueInEvent( WXVARIANT(dlg.GetArray()) );
             return true;
         }
         return false;
@@ -591,9 +616,9 @@ bool wxArrayDoubleProperty::StringToValue( wxVariant& variant, const wxString& t
         return false;
     }
 
-    if ( !(wxArrayDoubleFromVariant(m_value) == new_array) )
+    if ( !(wxArrayDoubleRefFromVariant(m_value) == new_array) )
     {
-        variant = wxArrayDoubleToVariant(new_array);
+        variant = WXVARIANT(new_array);
         return true;
     }
 

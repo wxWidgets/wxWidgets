@@ -13,7 +13,7 @@
 #define _WX_SAMPLES_PROPGRID_SAMPLEPROPS_H_
 
 
-WX_PG_DECLARE_WXOBJECT_VARIANT_DATA(wxPGVariantDataFontData, wxFontData, wxEMPTY_PARAMETER_VALUE)
+DECLARE_VARIANT_OBJECT(wxFontData)
 
 
 class wxFontDataProperty : public wxFontProperty
@@ -61,7 +61,7 @@ protected:
     // I stands for internal
     void SetValueI( const wxSize& value )
     {
-        m_value = wxSizeToVariant(value);
+        m_value = WXVARIANT(value);
     }
 };
 
@@ -83,7 +83,7 @@ protected:
     // I stands for internal
     void SetValueI( const wxPoint& value )
     {
-        m_value = wxPointToVariant(value);
+        m_value = WXVARIANT(value);
     }
 };
 
@@ -93,7 +93,7 @@ WX_PG_DECLARE_ARRAYSTRING_PROPERTY_WITH_VALIDATOR_WITH_DECL(wxDirsProperty, clas
 
 // -----------------------------------------------------------------------
 
-WX_PG_DECLARE_VARIANT_DATA(wxPGVariantDataArrayDouble, wxArrayDouble, wxEMPTY_PARAMETER_VALUE)
+WX_PG_DECLARE_VARIANT_DATA(wxArrayDouble)
 
 class wxArrayDoubleProperty : public wxPGProperty
 {

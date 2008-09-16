@@ -62,7 +62,7 @@ inline bool operator == (const wxVector3f& a, const wxVector3f& b)
     return (a.x == b.x && a.y == b.y && a.z == b.z);
 }
 
-WX_PG_DECLARE_VARIANT_DATA(wxVector3fVariantData, wxVector3f, wxEMPTY_PARAMETER_VALUE)
+WX_PG_DECLARE_VARIANT_DATA(wxVector3f)
 
 class wxVectorProperty : public wxPGProperty
 {
@@ -92,7 +92,7 @@ inline bool operator == (const wxTriangle& a, const wxTriangle& b)
     return (a.a == b.a && a.b == b.b && a.c == b.c);
 }
 
-WX_PG_DECLARE_VARIANT_DATA(wxTriangleVariantData, wxTriangle, wxEMPTY_PARAMETER_VALUE)
+WX_PG_DECLARE_VARIANT_DATA(wxTriangle)
 
 class wxTriangleProperty : public wxPGProperty
 {

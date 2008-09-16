@@ -898,7 +898,7 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
         // List variants are reserved a special purpose
         // as intermediate containers for child values
         // of properties with children.
-        if ( wxPGIsVariantType(value, list) )
+        if ( value.GetType() == wxPG_VARIANT_TYPE_LIST )
         {
             //
             // However, situation is different for composed string properties
@@ -919,7 +919,7 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
 
         if ( pList && !pList->IsNull() )
         {
-            wxASSERT( wxPGIsVariantType(*pList, list) );
+            wxASSERT( pList->GetType() == wxPG_VARIANT_TYPE_LIST );
             wxASSERT( GetChildCount() );
             wxASSERT( !IsCategory() );
 
@@ -938,7 +938,7 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
                 if ( child )
                 {
                     //wxLogDebug(wxT("%i: child = %s, childValue.GetType()=%s"),i,child->GetBaseName().c_str(),childValue.GetType().c_str());
-                    if ( wxPGIsVariantType(childValue, list) )
+                    if ( childValue.GetType() == wxPG_VARIANT_TYPE_LIST )
                     {
                         if ( child->HasFlag(wxPG_PROP_AGGREGATE) && !(flags & wxPG_SETVAL_AGGREGATED) )
                         {
@@ -951,7 +951,7 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
                             child->SetValue(oldVal, &childValue, flags|wxPG_SETVAL_FROM_PARENT);
                         }
                     }
-                    else if ( !wxPG_VARIANT_EQ(child->GetValue(), childValue) )
+                    else if ( child->GetValue() != childValue )
                     {
                         // For aggregate properties, we will trust RefreshChildren()
                         // to update child values.
@@ -967,7 +967,7 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
 
         if ( !value.IsNull() )
         {
-            wxPGVariantAssign(m_value, value);
+            m_value = value;
             OnSetValue();
 
             if ( !(flags & wxPG_SETVAL_FROM_PARENT) )
@@ -1053,34 +1053,34 @@ wxVariant wxPGProperty::GetDefaultValue() const
 
     if ( !value.IsNull() )
     {
-        wxPGVariantDataClassInfo classInfo = wxPGVariantDataGetClassInfo(value.GetData());
-        if ( wxPGIsVariantClassInfo(classInfo, long) )
+        wxString valueType(value.GetType());
+
+        if ( valueType == wxPG_VARIANT_TYPE_LONG )
             return wxPGVariant_Zero;
-        if ( wxPGIsVariantClassInfo(classInfo, string) )
+        if ( valueType == wxPG_VARIANT_TYPE_STRING )
             return wxPGVariant_EmptyString;
-        if ( wxPGIsVariantClassInfo(classInfo, bool) )
+        if ( valueType == wxPG_VARIANT_TYPE_BOOL )
             return wxPGVariant_False;
-        if ( wxPGIsVariantClassInfo(classInfo, double) )
+        if ( valueType == wxPG_VARIANT_TYPE_DOUBLE )
             return wxVariant(0.0);
-
-        wxPGVariantData* pgvdata = wxDynamicCastVariantData(m_value.GetData(), wxPGVariantData);
-        if ( pgvdata )
-            return pgvdata->GetDefaultValue();
-
-        if ( wxPGIsVariantClassInfo(classInfo, arrstring) )
+        if ( valueType == wxPG_VARIANT_TYPE_ARRSTRING )
             return wxVariant(wxArrayString());
-        if ( wxPGIsVariantClassInfo(classInfo, wxColour) )
-            return WXVARIANT(*wxRED);
+        if ( valueType == wxS("wxLongLong") )
+            return WXVARIANT(wxLongLong(0));
+        if ( valueType == wxS("wxULongLong") )
+            return WXVARIANT(wxULongLong(0));
+        if ( valueType == wxS("wxColour") )
+            return WXVARIANT(*wxBLACK);
 #if wxUSE_DATETIME
-        if ( wxPGIsVariantClassInfo(classInfo, datetime) )
+        if ( valueType == wxPG_VARIANT_TYPE_DATETIME )
             return wxVariant(wxDateTime::Now());
 #endif
-
-        wxFAIL_MSG(
-            wxString::Format(wxT("Inorder for value to have default value, it must be added to")
-                             wxT("wxPGProperty::GetDefaultValue or it's variantdata must inherit")
-                             wxT("from wxPGVariantData (unrecognized type was '%s')"),m_value.GetType().c_str())
-                  );
+        if ( valueType == wxS("wxFont") )
+            return WXVARIANT(*wxNORMAL_FONT);
+        if ( valueType == wxS("wxPoint") )
+            return WXVARIANT(wxPoint(0, 0));
+        if ( valueType == wxS("wxSize") )
+            return WXVARIANT(wxSize(0, 0));
     }
 
     return wxVariant();
@@ -1672,7 +1672,7 @@ void wxPGProperty::AdaptListToValue( wxVariant& list, wxVariant* value ) const
         {
             //wxLogDebug(wxT("  %s(n=%i), %s"),childValue.GetName().c_str(),n,childValue.GetType().c_str());
 
-            if ( wxPGIsVariantType(childValue, list) )
+            if ( childValue.GetType() == wxPG_VARIANT_TYPE_LIST )
             {
                 wxVariant cv2(child->GetValue());
                 child->AdaptListToValue(childValue, &cv2);
@@ -1916,7 +1916,7 @@ bool wxPGProperty::AreAllChildrenSpecified( wxVariant* pendingList ) const
         {
             const wxVariant* childList = NULL;
 
-            if ( listValue && wxPGIsVariantType(*listValue, list) )
+            if ( listValue && listValue->GetType() == wxPG_VARIANT_TYPE_LIST )
                 childList = listValue;
 
             if ( !child->AreAllChildrenSpecified((wxVariant*)childList) )
