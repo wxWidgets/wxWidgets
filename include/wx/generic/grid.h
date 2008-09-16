@@ -84,6 +84,10 @@ class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 class WXDLLIMPEXP_FWD_CORE wxSpinCtrl;
 #endif
 
+class wxGridOperations;
+class wxGridRowOperations;
+class wxGridColumnOperations;
+
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------
@@ -1264,7 +1268,7 @@ public:
     //  coordinates for mouse events etc.
     //
     void XYToCell( int x, int y, wxGridCellCoords& ) const;
-    int  YToRow( int y ) const;
+    int  YToRow( int y, bool clipToMinMax = false ) const;
     int  XToCol( int x, bool clipToMinMax = false ) const;
 
     int  YToEdgeOfRow( int y ) const;
@@ -1405,6 +1409,12 @@ public:
     bool     GetDefaultCellOverflow() const;
     bool     GetCellOverflow( int row, int col ) const;
     void     GetCellSize( int row, int col, int *num_rows, int *num_cols ) const;
+    wxSize GetCellSize(const wxGridCellCoords& coords)
+    {
+        wxSize s;
+        GetCellSize(coords.GetRow(), coords.GetCol(), &s.x, &s.y);
+        return s;
+    }
 
     void     SetDefaultRowSize( int height, bool resizeExistingRows = false );
     void     SetRowSize( int row, int height );
@@ -1982,8 +1992,13 @@ protected:
     bool    m_canDragColMove;
     bool    m_canDragGridSize;
     bool    m_canDragCell;
+
+    // the last position (horizontal or vertical depending on whether the user
+    // is resizing a column or a row) where a row or column separator line was
+    // dragged by the user or -1 of there is no drag operation in progress
     int     m_dragLastPos;
     int     m_dragRowOrCol;
+
     bool    m_isDragging;
     wxPoint m_startDragPos;
 
@@ -2042,10 +2057,20 @@ protected:
     bool SetModelValues();
 
     friend class WXDLLIMPEXP_FWD_ADV wxGridSelection;
+    friend class wxGridRowOperations;
+    friend class wxGridColumnOperations;
 
 private:
     // implement wxScrolledWindow method to return m_gridWin size
     virtual wxSize GetSizeAvailableForScrollTarget(const wxSize& size);
+
+
+    // common implementations of methods defined for both rows and columns
+    void DeselectLine(int line, const wxGridOperations& oper);
+    void DoEndDragResizeLine(const wxGridOperations& oper);
+    int  PosToLine(int pos, bool clipToMinMax,
+                   const wxGridOperations& oper) const;
+
 
     DECLARE_DYNAMIC_CLASS( wxGrid )
     DECLARE_EVENT_TABLE()

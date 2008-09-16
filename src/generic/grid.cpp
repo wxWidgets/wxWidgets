@@ -9,6 +9,13 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+/*
+    TODO:
+
+    - Replace use of wxINVERT with wxOverlay
+    - Make Begin/EndBatch() the same as the generic Freeze/Thaw()
+ */
+
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
@@ -388,7 +395,7 @@ WX_DEFINE_ARRAY_WITH_DECL_PTR(wxGridDataTypeInfo*, wxGridDataTypeInfoArray,
 class WXDLLIMPEXP_ADV wxGridTypeRegistry
 {
 public:
-  wxGridTypeRegistry() {}
+    wxGridTypeRegistry() {}
     ~wxGridTypeRegistry();
 
     void RegisterDataType(const wxString& typeName,
@@ -413,6 +420,211 @@ public:
 private:
     wxGridDataTypeInfoArray m_typeinfo;
 };
+
+// ----------------------------------------------------------------------------
+// operations classes abstracting the difference between operating on rows and
+// columns
+// ----------------------------------------------------------------------------
+
+// This class allows to write a function only once because by using its methods
+// it will apply to both columns and rows.
+//
+// This is an abstract interface definition, the two concrete implementations
+// below should be used when working with rows and columns respectively.
+class wxGridOperations
+{
+public:
+    // Returns the operations in the other direction, i.e. wxGridRowOperations
+    // if this object is a wxGridColumnOperations and vice versa.
+    virtual wxGridOperations& Dual() const = 0;
+
+    // Return the number of rows or columns.
+    virtual int GetNumberOfLines(const wxGrid *grid) const = 0;
+
+    // Return the selection mode which allows selecting rows or columns.
+    virtual wxGrid::wxGridSelectionModes GetSelectionMode() const = 0;
+
+    // Make a wxGridCellCoords from the given components: thisDir is row or
+    // column and otherDir is column or row
+    virtual wxGridCellCoords MakeCoords(int thisDir, int otherDir) const = 0;
+
+    // Calculate the scrolled position of the given abscissa or ordinate.
+    virtual int CalcScrolledPosition(wxGrid *grid, int pos) const = 0;
+
+    // Selects the horizontal or vertical component from the given object.
+    virtual int Select(const wxPoint& pt) const = 0;
+    virtual int Select(const wxSize& sz) const = 0;
+    virtual int Select(const wxRect& r) const = 0;
+    virtual int& Select(wxRect& r) const = 0;
+
+    // Returns width or height of the rectangle
+    virtual int& SelectSize(wxRect& r) const = 0;
+
+    // Make a wxSize such that Select() applied to it returns first component
+    virtual wxSize MakeSize(int first, int second) const = 0;
+
+
+    // Draws a line parallel to the row or column, i.e. horizontal or vertical:
+    // pos is the vertical or horizontal position of the line and start and end
+    // are the coordinates of the line extremities in the other direction
+    virtual void
+        DrawParallelLine(wxDC& dc, int start, int end, int pos) const = 0;
+
+
+    // Return the row or column at the given pixel coordinate.
+    virtual int PosToLine(wxGrid *grid, int pos, bool clip = false) const = 0;
+
+    // Get the top/left position, in pixels, of the given row or column
+    virtual int GetLineStartPos(const wxGrid *grid, int line) const = 0;
+
+    // Get wxGrid::m_rowBottoms/m_colRights array
+    virtual const wxArrayInt& GetLineEnds(const wxGrid *grid) const = 0;
+
+    // Get default height row height or column width
+    virtual int GetDefaultLineSize(const wxGrid *grid) const = 0;
+
+    // Return the minimal acceptable row height or column width
+    virtual int GetMinimalAcceptableLineSize(const wxGrid *grid) const = 0;
+
+    // Return the minimal row height or column width
+    virtual int GetMinimalLineSize(const wxGrid *grid, int line) const = 0;
+
+    // Set the row height or column width
+    virtual void SetLineSize(wxGrid *grid, int line, int size) const = 0;
+
+
+    // Return the index of the line at the given position
+    //
+    // NB: currently this is always identity for the rows as reordering is only
+    //     implemented for the lines
+    virtual int GetLineAt(const wxGrid *grid, int line) const = 0;
+
+
+    // Get the row or column label window
+    virtual wxWindow *GetHeaderWindow(wxGrid *grid) const = 0;
+
+    // Get the width or height of the row or column label window
+    virtual int GetHeaderWindowSize(wxGrid *grid) const = 0;
+};
+
+class wxGridRowOperations : public wxGridOperations
+{
+public:
+    virtual wxGridOperations& Dual() const;
+
+    virtual int GetNumberOfLines(const wxGrid *grid) const
+        { return grid->GetNumberRows(); }
+
+    virtual wxGrid::wxGridSelectionModes GetSelectionMode() const
+        { return wxGrid::wxGridSelectRows; }
+
+    virtual wxGridCellCoords MakeCoords(int thisDir, int otherDir) const
+        { return wxGridCellCoords(thisDir, otherDir); }
+
+    virtual int CalcScrolledPosition(wxGrid *grid, int pos) const
+        { return grid->CalcScrolledPosition(wxPoint(pos, 0)).x; }
+
+    virtual int Select(const wxPoint& pt) const { return pt.x; }
+    virtual int Select(const wxSize& sz) const { return sz.x; }
+    virtual int Select(const wxRect& r) const { return r.x; }
+    virtual int& Select(wxRect& r) const { return r.x; }
+    virtual int& SelectSize(wxRect& r) const { return r.width; }
+    virtual wxSize MakeSize(int first, int second) const
+        { return wxSize(first, second); }
+
+    virtual void DrawParallelLine(wxDC& dc, int start, int end, int pos) const
+        { dc.DrawLine(start, pos, end, pos); }
+
+    virtual int PosToLine(wxGrid *grid, int pos, bool clip = false) const
+        { return grid->YToRow(pos, clip); }
+    virtual int GetLineStartPos(const wxGrid *grid, int line) const
+        { return grid->GetRowTop(line); }
+    virtual const wxArrayInt& GetLineEnds(const wxGrid *grid) const
+        { return grid->m_rowBottoms; }
+    virtual int GetDefaultLineSize(const wxGrid *grid) const
+        { return grid->GetDefaultRowSize(); }
+    virtual int GetMinimalAcceptableLineSize(const wxGrid *grid) const
+        { return grid->GetRowMinimalAcceptableHeight(); }
+    virtual int GetMinimalLineSize(const wxGrid *grid, int line) const
+        { return grid->GetRowMinimalHeight(line); }
+    virtual void SetLineSize(wxGrid *grid, int line, int size) const
+        { grid->SetRowSize(line, size); }
+
+    virtual int GetLineAt(const wxGrid * WXUNUSED(grid), int line) const
+        { return line; } // TODO: implement row reordering
+
+    virtual wxWindow *GetHeaderWindow(wxGrid *grid) const
+        { return grid->GetGridRowLabelWindow(); }
+    virtual int GetHeaderWindowSize(wxGrid *grid) const
+        { return grid->GetRowLabelSize(); }
+};
+
+class wxGridColumnOperations : public wxGridOperations
+{
+public:
+    virtual wxGridOperations& Dual() const;
+
+    virtual int GetNumberOfLines(const wxGrid *grid) const
+        { return grid->GetNumberCols(); }
+
+    virtual wxGrid::wxGridSelectionModes GetSelectionMode() const
+        { return wxGrid::wxGridSelectColumns; }
+
+    virtual wxGridCellCoords MakeCoords(int thisDir, int otherDir) const
+        { return wxGridCellCoords(otherDir, thisDir); }
+
+    virtual int CalcScrolledPosition(wxGrid *grid, int pos) const
+        { return grid->CalcScrolledPosition(wxPoint(0, pos)).y; }
+
+    virtual int Select(const wxPoint& pt) const { return pt.y; }
+    virtual int Select(const wxSize& sz) const { return sz.y; }
+    virtual int Select(const wxRect& r) const { return r.y; }
+    virtual int& Select(wxRect& r) const { return r.y; }
+    virtual int& SelectSize(wxRect& r) const { return r.height; }
+    virtual wxSize MakeSize(int first, int second) const
+        { return wxSize(second, first); }
+
+    virtual void DrawParallelLine(wxDC& dc, int start, int end, int pos) const
+        { dc.DrawLine(pos, start, pos, end); }
+
+    virtual int PosToLine(wxGrid *grid, int pos, bool clip = false) const
+        { return grid->XToCol(pos, clip); }
+    virtual int GetLineStartPos(const wxGrid *grid, int line) const
+        { return grid->GetColLeft(line); }
+    virtual const wxArrayInt& GetLineEnds(const wxGrid *grid) const
+        { return grid->m_colRights; }
+    virtual int GetDefaultLineSize(const wxGrid *grid) const
+        { return grid->GetDefaultColSize(); }
+    virtual int GetMinimalAcceptableLineSize(const wxGrid *grid) const
+        { return grid->GetColMinimalAcceptableWidth(); }
+    virtual int GetMinimalLineSize(const wxGrid *grid, int line) const
+        { return grid->GetColMinimalWidth(line); }
+    virtual void SetLineSize(wxGrid *grid, int line, int size) const
+        { grid->SetColSize(line, size); }
+
+    virtual int GetLineAt(const wxGrid *grid, int line) const
+        { return grid->GetColAt(line); }
+
+    virtual wxWindow *GetHeaderWindow(wxGrid *grid) const
+        { return grid->GetGridColLabelWindow(); }
+    virtual int GetHeaderWindowSize(wxGrid *grid) const
+        { return grid->GetColLabelSize(); }
+};
+
+wxGridOperations& wxGridRowOperations::Dual() const
+{
+    static wxGridColumnOperations s_colOper;
+
+    return s_colOper;
+}
+
+wxGridOperations& wxGridColumnOperations::Dual() const
+{
+    static wxGridRowOperations s_rowOper;
+
+    return s_rowOper;
+}
+
 
 // ----------------------------------------------------------------------------
 // globals
@@ -4057,23 +4269,8 @@ void wxGridWindow::OnFocus(wxFocusEvent& event)
         event.Skip();
 }
 
-//////////////////////////////////////////////////////////////////////
-
-// Internal Helper function for computing row or column from some
-// (unscrolled) coordinate value, using either
-// m_defaultRowHeight/m_defaultColWidth or binary search on array
-// of m_rowBottoms/m_ColRights to speed up the search!
-
-// Internal helper macros for simpler use of that function
-
-static int CoordToRowOrCol(int coord, int defaultDist, int minDist,
-                           const wxArrayInt& BorderArray, int nMax,
-                           bool clipToMinMax);
-
 #define internalXToCol(x) XToCol(x, true)
-#define internalYToRow(y) CoordToRowOrCol(y, m_defaultRowHeight, \
-                                          m_minAcceptableRowHeight, \
-                                          m_rowBottoms, m_numRows, true)
+#define internalYToRow(y) YToRow(y, true)
 
 /////////////////////////////////////////////////////////////////////
 
@@ -6258,124 +6455,106 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
     }
 }
 
-void wxGrid::DoEndDragResizeRow()
+void wxGrid::DoEndDragResizeLine(const wxGridOperations& oper)
 {
-    if ( m_dragLastPos >= 0 )
+    if ( m_dragLastPos == -1 )
+        return;
+
+    const wxGridOperations& doper = oper.Dual();
+
+    const wxSize size = m_gridWin->GetClientSize();
+
+    const wxPoint ptOrigin = CalcUnscrolledPosition(wxPoint(0, 0));
+
+    // erase the last line we drew
+    wxClientDC dc(m_gridWin);
+    PrepareDC(dc);
+    dc.SetLogicalFunction(wxINVERT);
+
+    const int posLineStart = oper.Select(ptOrigin);
+    const int posLineEnd = oper.Select(ptOrigin) + oper.Select(size);
+
+    oper.DrawParallelLine(dc, posLineStart, posLineEnd, m_dragLastPos);
+
+    // temporarily hide the edit control before resizing
+    HideCellEditControl();
+    SaveEditControlValue();
+
+    // do resize the line
+    const int lineStart = oper.GetLineStartPos(this, m_dragRowOrCol);
+    oper.SetLineSize(this, m_dragRowOrCol,
+                     wxMax(m_dragLastPos - lineStart,
+                           oper.GetMinimalLineSize(this, m_dragRowOrCol)));
+
+    // refresh now if we're not frozen
+    if ( !GetBatchCount() )
     {
-        // erase the last line and resize the row
-        //
-        int cw, ch, left, dummy;
-        m_gridWin->GetClientSize( &cw, &ch );
-        CalcUnscrolledPosition( 0, 0, &left, &dummy );
+        // we need to refresh everything beyond the resized line in the header
+        // window
 
-        wxClientDC dc( m_gridWin );
-        PrepareDC( dc );
-        dc.SetLogicalFunction( wxINVERT );
-        dc.DrawLine( left, m_dragLastPos, left + cw, m_dragLastPos );
-        HideCellEditControl();
-        SaveEditControlValue();
+        // get the position from which to refresh in the other direction
+        wxRect rect(CellToRect(oper.MakeCoords(m_dragRowOrCol, 0)));
+        rect.SetPosition(CalcScrolledPosition(rect.GetPosition()));
 
-        int rowTop = GetRowTop(m_dragRowOrCol);
-        SetRowSize( m_dragRowOrCol,
-                    wxMax( m_dragLastPos - rowTop, m_minAcceptableRowHeight ) );
+        // we only need the ordinate (for rows) or abscissa (for columns) here,
+        // and need to cover the entire window in the other direction
+        oper.Select(rect) = 0;
 
-        if ( !GetBatchCount() )
+        wxRect rectHeader(rect.GetPosition(),
+                          oper.MakeSize
+                               (
+                                    oper.GetHeaderWindowSize(this),
+                                    doper.Select(size) - doper.Select(rect)
+                               ));
+
+        oper.GetHeaderWindow(this)->Refresh(true, &rectHeader);
+
+
+        // also refresh the grid window: extend the rectangle
+        if ( m_table )
         {
-            // Only needed to get the correct rect.y:
-            wxRect rect ( CellToRect( m_dragRowOrCol, 0 ) );
-            rect.x = 0;
-            CalcScrolledPosition(0, rect.y, &dummy, &rect.y);
-            rect.width = m_rowLabelWidth;
-            rect.height = ch - rect.y;
-            m_rowLabelWin->Refresh( true, &rect );
-            rect.width = cw;
+            oper.SelectSize(rect) = oper.Select(size);
 
-            // if there is a multicell block, paint all of it
-            if (m_table)
+            int subtractLines = 0;
+            const int lineStart = oper.PosToLine(this, posLineStart);
+            if ( lineStart >= 0 )
             {
-                int i, cell_rows, cell_cols, subtract_rows = 0;
-                int leftCol = XToCol(left);
-                int rightCol = internalXToCol(left + cw);
-                if (leftCol >= 0)
+                // ensure that if we have a multi-cell block we redraw all of
+                // it by increasing the refresh area to cover it entirely if a
+                // part of it is affected
+                const int lineEnd = oper.PosToLine(this, posLineEnd, true);
+                for ( int line = lineStart; line < lineEnd; line++ )
                 {
-                    for (i=leftCol; i<rightCol; i++)
-                    {
-                        GetCellSize(m_dragRowOrCol, i, &cell_rows, &cell_cols);
-                        if (cell_rows < subtract_rows)
-                            subtract_rows = cell_rows;
-                    }
-                    rect.y = GetRowTop(m_dragRowOrCol + subtract_rows);
-                    CalcScrolledPosition(0, rect.y, &dummy, &rect.y);
-                    rect.height = ch - rect.y;
+                    int cellLines = oper.Select(
+                        GetCellSize(oper.MakeCoords(m_dragRowOrCol, line)));
+                    if ( cellLines < subtractLines )
+                        subtractLines = cellLines;
                 }
             }
-            m_gridWin->Refresh( false, &rect );
-        }
 
-        ShowCellEditControl();
+            int startPos =
+                oper.GetLineStartPos(this, m_dragRowOrCol + subtractLines);
+            startPos = doper.CalcScrolledPosition(this, startPos);
+
+            doper.Select(rect) = startPos;
+            doper.SelectSize(rect) = doper.Select(size) - startPos;
+
+            m_gridWin->Refresh(false, &rect);
+        }
     }
+
+    // show the edit control back again
+    ShowCellEditControl();
 }
 
+void wxGrid::DoEndDragResizeRow()
+{
+    DoEndDragResizeLine(wxGridRowOperations());
+}
 
 void wxGrid::DoEndDragResizeCol()
 {
-    if ( m_dragLastPos >= 0 )
-    {
-        // erase the last line and resize the col
-        //
-        int cw, ch, dummy, top;
-        m_gridWin->GetClientSize( &cw, &ch );
-        CalcUnscrolledPosition( 0, 0, &dummy, &top );
-
-        wxClientDC dc( m_gridWin );
-        PrepareDC( dc );
-        dc.SetLogicalFunction( wxINVERT );
-        dc.DrawLine( m_dragLastPos, top, m_dragLastPos, top + ch );
-        HideCellEditControl();
-        SaveEditControlValue();
-
-        int colLeft = GetColLeft(m_dragRowOrCol);
-        SetColSize( m_dragRowOrCol,
-                    wxMax( m_dragLastPos - colLeft,
-                           GetColMinimalWidth(m_dragRowOrCol) ) );
-
-        if ( !GetBatchCount() )
-        {
-            // Only needed to get the correct rect.x:
-            wxRect rect ( CellToRect( 0, m_dragRowOrCol ) );
-            rect.y = 0;
-            CalcScrolledPosition(rect.x, 0, &rect.x, &dummy);
-            rect.width = cw - rect.x;
-            rect.height = m_colLabelHeight;
-            m_colLabelWin->Refresh( true, &rect );
-            rect.height = ch;
-
-            // if there is a multicell block, paint all of it
-            if (m_table)
-            {
-                int i, cell_rows, cell_cols, subtract_cols = 0;
-                int topRow = YToRow(top);
-                int bottomRow = internalYToRow(top + cw);
-                if (topRow >= 0)
-                {
-                    for (i=topRow; i<bottomRow; i++)
-                    {
-                        GetCellSize(i, m_dragRowOrCol, &cell_rows, &cell_cols);
-                        if (cell_cols < subtract_cols)
-                            subtract_cols = cell_cols;
-                    }
-
-                    rect.x = GetColLeft(m_dragRowOrCol + subtract_cols);
-                    CalcScrolledPosition(rect.x, 0, &rect.x, &dummy);
-                    rect.width = cw - rect.x;
-                }
-            }
-
-            m_gridWin->Refresh( false, &rect );
-        }
-
-        ShowCellEditControl();
-    }
+    DoEndDragResizeLine(wxGridColumnOperations());
 }
 
 void wxGrid::DoEndDragMoveCol()
@@ -8457,137 +8636,101 @@ void wxGrid::XYToCell( int x, int y, wxGridCellCoords& coords ) const
     }
 }
 
-// Internal Helper function for computing row or column from some
-// (unscrolled) coordinate value, using either
-// m_defaultRowHeight/m_defaultColWidth or binary search on array
-// of m_rowBottoms/m_ColRights to speed up the search!
-
-static int CoordToRowOrCol(int coord, int defaultDist, int minDist,
-                           const wxArrayInt& BorderArray, int nMax,
-                           bool clipToMinMax)
+// compute row or column from some (unscrolled) coordinate value, using either
+// m_defaultRowHeight/m_defaultColWidth or binary search on array of
+// m_rowBottoms/m_colRights to do it quickly (linear search shouldn't be used
+// for large grids)
+int
+wxGrid::PosToLine(int coord,
+                  bool clipToMinMax,
+                  const wxGridOperations& oper) const
 {
-    if (coord < 0)
-        return clipToMinMax && (nMax > 0) ? 0 : -1;
+    const int numLines = oper.GetNumberOfLines(this);
 
-    if (!defaultDist)
-        defaultDist = 1;
+    if ( coord < 0 )
+        return clipToMinMax && numLines > 0 ? oper.GetLineAt(this, 0) : -1;
 
-    size_t i_max = coord / defaultDist,
-           i_min = 0;
+    const int defaultLineSize = oper.GetDefaultLineSize(this);
+    wxCHECK_MSG( defaultLineSize, -1, "can't have 0 default line size" );
 
-    if (BorderArray.IsEmpty())
+    int maxPos = coord / defaultLineSize,
+        minPos = 0;
+
+    // check for the simplest case: if we have no explicit line sizes
+    // configured, then we already know the line this position falls in
+    const wxArrayInt& lineEnds = oper.GetLineEnds(this);
+    if ( lineEnds.empty() )
     {
-        if ((int) i_max < nMax)
-            return i_max;
-        return clipToMinMax ? nMax - 1 : -1;
+        if ( maxPos < numLines )
+            return maxPos;
+
+        return clipToMinMax ? numLines - 1 : -1;
     }
 
-    if ( i_max >= BorderArray.GetCount())
+
+    // adjust maxPos before starting the binary search
+    if ( maxPos >= numLines )
     {
-        i_max = BorderArray.GetCount() - 1;
+        maxPos = numLines  - 1;
     }
     else
     {
-        if ( coord >= BorderArray[i_max])
-        {
-            i_min = i_max;
-            if (minDist)
-                i_max = coord / minDist;
-            else
-                i_max =  BorderArray.GetCount() - 1;
-        }
-
-        if ( i_max >= BorderArray.GetCount())
-            i_max = BorderArray.GetCount() - 1;
-    }
-
-    if ( coord >= BorderArray[i_max])
-        return clipToMinMax ? (int)i_max : -1;
-    if ( coord < BorderArray[0] )
-        return 0;
-
-    while ( i_max - i_min > 0 )
-    {
-        wxCHECK_MSG(BorderArray[i_min] <= coord && coord < BorderArray[i_max],
-                    0, _T("wxGrid: internal error in CoordToRowOrCol"));
-        if (coord >=  BorderArray[ i_max - 1])
-            return i_max;
-        else
-            i_max--;
-        int median = i_min + (i_max - i_min + 1) / 2;
-        if (coord < BorderArray[median])
-            i_max = median;
-        else
-            i_min = median;
-    }
-
-    return i_max;
-}
-
-int wxGrid::YToRow( int y ) const
-{
-    return CoordToRowOrCol(y, m_defaultRowHeight,
-                           m_minAcceptableRowHeight, m_rowBottoms, m_numRows, false);
-}
-
-int wxGrid::XToCol( int x, bool clipToMinMax ) const
-{
-    if (x < 0)
-        return clipToMinMax && (m_numCols > 0) ? GetColAt( 0 ) : -1;
-
-    wxASSERT_MSG(m_defaultColWidth > 0, wxT("Default column width can not be zero"));
-
-    int maxPos = x / m_defaultColWidth;
-    int minPos = 0;
-
-    if (m_colRights.IsEmpty())
-    {
-        if(maxPos < m_numCols)
-            return GetColAt( maxPos );
-        return clipToMinMax ? GetColAt( m_numCols - 1 ) : -1;
-    }
-
-    if ( maxPos >= m_numCols)
-        maxPos = m_numCols - 1;
-    else
-    {
-        if ( x >= m_colRights[GetColAt( maxPos )])
+        if ( coord >= lineEnds[oper.GetLineAt(this, maxPos)])
         {
             minPos = maxPos;
-            if (m_minAcceptableColWidth)
-                maxPos = x / m_minAcceptableColWidth;
+            const int minDist = oper.GetMinimalAcceptableLineSize(this);
+            if ( minDist )
+                maxPos = coord / minDist;
             else
-                maxPos =  m_numCols - 1;
+                maxPos = numLines - 1;
         }
-        if ( maxPos >= m_numCols)
-            maxPos = m_numCols - 1;
+
+        if ( maxPos >= numLines )
+            maxPos = numLines  - 1;
     }
 
-    //X is beyond the last column
-    if ( x >= m_colRights[GetColAt( maxPos )])
-        return clipToMinMax ? GetColAt( maxPos ) : -1;
+    // check if the position is beyond the last column
+    const int lineAtMaxPos = oper.GetLineAt(this, maxPos);
+    if ( coord >= lineEnds[lineAtMaxPos] )
+        return clipToMinMax ? lineAtMaxPos : -1;
 
-    //X is before the first column
-    if ( x < m_colRights[GetColAt( 0 )] )
-        return GetColAt( 0 );
+    // or before the first one
+    const int lineAt0 = oper.GetLineAt(this, 0);
+    if ( coord < lineEnds[lineAt0] )
+        return lineAt0;
 
-    //Perform a binary search
-    while ( maxPos - minPos > 0 )
+
+    // finally do perform the binary search
+    while ( minPos < maxPos )
     {
-        wxCHECK_MSG(m_colRights[GetColAt( minPos )] <= x && x < m_colRights[GetColAt( maxPos )],
-                    0, _T("wxGrid: internal error in XToCol"));
+        wxCHECK_MSG( lineEnds[oper.GetLineAt(this, minPos)] <= coord &&
+                        coord < lineEnds[oper.GetLineAt(this, maxPos)],
+                     -1,
+                     "wxGrid: internal error in PosToLine()" );
 
-        if (x >=  m_colRights[GetColAt( maxPos - 1 )])
-            return GetColAt( maxPos );
+        if ( coord >= lineEnds[oper.GetLineAt(this, maxPos - 1)] )
+            return oper.GetLineAt(this, maxPos);
         else
             maxPos--;
-        int median = minPos + (maxPos - minPos + 1) / 2;
-        if (x < m_colRights[GetColAt( median )])
+
+        const int median = minPos + (maxPos - minPos + 1) / 2;
+        if ( coord < lineEnds[oper.GetLineAt(this, median)] )
             maxPos = median;
         else
             minPos = median;
     }
-    return GetColAt( maxPos );
+
+    return oper.GetLineAt(this, maxPos);
+}
+
+int wxGrid::YToRow(int y, bool clipToMinMax) const
+{
+    return PosToLine(y, clipToMinMax, wxGridRowOperations());
+}
+
+int wxGrid::XToCol(int x, bool clipToMinMax) const
+{
+    return PosToLine(x, clipToMinMax, wxGridColumnOperations());
 }
 
 // return the row number that that the y coord is near
@@ -10779,46 +10922,40 @@ void wxGrid::SelectAll()
 // cell, row and col deselection
 // ----------------------------------------------------------------------------
 
-void wxGrid::DeselectRow( int row )
+void wxGrid::DeselectLine(int line, const wxGridOperations& oper)
 {
     if ( !m_selection )
         return;
 
-    if ( m_selection->GetSelectionMode() == wxGrid::wxGridSelectRows )
+    const wxGridSelectionModes mode = m_selection->GetSelectionMode();
+    if ( mode == oper.GetSelectionMode() )
     {
-        if ( m_selection->IsInSelection(row, 0 ) )
-            m_selection->ToggleCellSelection(row, 0);
+        const wxGridCellCoords c(oper.MakeCoords(line, 0));
+        if ( m_selection->IsInSelection(c) )
+            m_selection->ToggleCellSelection(c);
     }
-    else
+    else if ( mode != oper.Dual().GetSelectionMode() )
     {
-        int nCols = GetNumberCols();
-        for ( int i = 0; i < nCols; i++ )
+        const int nOther = oper.Dual().GetNumberOfLines(this);
+        for ( int i = 0; i < nOther; i++ )
         {
-            if ( m_selection->IsInSelection(row, i ) )
-                m_selection->ToggleCellSelection(row, i);
+            const wxGridCellCoords c(oper.MakeCoords(line, i));
+            if ( m_selection->IsInSelection(c) )
+                m_selection->ToggleCellSelection(c);
         }
     }
+    //else: can only select orthogonal lines so no lines in this direction
+    //      could have been selected anyhow
 }
 
-void wxGrid::DeselectCol( int col )
+void wxGrid::DeselectRow(int row)
 {
-    if ( !m_selection )
-        return;
+    DeselectLine(row, wxGridRowOperations());
+}
 
-    if ( m_selection->GetSelectionMode() == wxGrid::wxGridSelectColumns )
-    {
-        if ( m_selection->IsInSelection(0, col ) )
-            m_selection->ToggleCellSelection(0, col);
-    }
-    else
-    {
-        int nRows = GetNumberRows();
-        for ( int i = 0; i < nRows; i++ )
-        {
-            if ( m_selection->IsInSelection(i, col ) )
-                m_selection->ToggleCellSelection(i, col);
-        }
-    }
+void wxGrid::DeselectCol(int col)
+{
+    DeselectLine(col, wxGridColumnOperations());
 }
 
 void wxGrid::DeselectCell( int row, int col )

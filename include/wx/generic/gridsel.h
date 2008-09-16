@@ -21,10 +21,16 @@
 class WXDLLIMPEXP_ADV wxGridSelection
 {
 public:
-    wxGridSelection( wxGrid * grid, wxGrid::wxGridSelectionModes sel =
-                     wxGrid::wxGridSelectCells );
+    wxGridSelection(wxGrid *grid,
+                    wxGrid::wxGridSelectionModes sel = wxGrid::wxGridSelectCells);
+
     bool IsSelection();
-    bool IsInSelection ( int row, int col );
+    bool IsInSelection(int row, int col);
+    bool IsInSelection(const wxGridCellCoords& coords)
+    {
+        return IsInSelection(coords.GetRow(), coords.GetCol());
+    }
+
     void SetSelectionMode(wxGrid::wxGridSelectionModes selmode);
     wxGrid::wxGridSelectionModes GetSelectionMode() { return m_selectionMode; }
     void SelectRow( int row,
@@ -46,6 +52,15 @@ public:
                               bool ControlDown = false,
                               bool ShiftDown = false,
                               bool AltDown = false, bool MetaDown = false );
+    void ToggleCellSelection( const wxGridCellCoords& coords,
+                              bool ControlDown = false,
+                              bool ShiftDown = false,
+                              bool AltDown = false, bool MetaDown = false )
+    {
+        ToggleCellSelection(coords.GetRow(), coords.GetCol(),
+                            ControlDown, ShiftDown, AltDown, MetaDown);
+    }
+
     void ClearSelection();
 
     void UpdateRows( size_t pos, int numRows );
