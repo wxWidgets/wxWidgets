@@ -51,6 +51,10 @@
     #define wxUSE_LIBTIFF 0
 #endif
 
+// no AUI under CE: it's unnecessary and currently doesn't compile
+#undef wxUSE_AUI
+#define wxUSE_AUI 0
+
 // no MDI under CE
 #undef wxUSE_MDI
 #define wxUSE_MDI 0
