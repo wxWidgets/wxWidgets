@@ -32,7 +32,8 @@
 
     <steps>
         <checkout/>
-        <configure options="--with-osx_cocoa"/>
+        <configure options="-
+-with-osx_cocoa"/>
         <compile-all/>
         <run-tests/>
     </steps>
