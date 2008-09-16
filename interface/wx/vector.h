@@ -27,10 +27,37 @@ class wxVector<T>
 {
 public:
     typedef size_t size_type;
+    typedef size_t difference_type;
     typedef T value_type;
+    typedef value_type* pointer;
     typedef value_type* iterator;
     typedef const value_type* const_iterator;
     typedef value_type& reference;
+
+    /**
+        Reverse iterator interface
+    */
+    class reverse_iterator
+    {
+    public:
+        reverse_iterator();
+        explicit reverse_iterator(iterator it);
+        reverse_iterator(const reverse_iterator& it);
+        reference operator*() const;
+        pointer operator->() const;
+        iterator base() const;
+        reverse_iterator& operator++();
+        reverse_iterator operator++(int);
+        reverse_iterator& operator--();
+        reverse_iterator operator--(int);
+        reverse_iterator operator+(difference_type n) const;
+        reverse_iterator& operator+=(difference_type n);
+        reverse_iterator operator-(difference_type n) const;
+        reverse_iterator& operator-=(difference_type n);
+        reference operator[](difference_type n) const;
+        bool operator ==(const reverse_iterator& it) const;
+        bool operator !=(const reverse_iterator& it) const;
+    };
 
     /**
         Constructor.
@@ -76,6 +103,17 @@ public:
         Return iterator to beginning of the vector.
     */
     iterator begin();
+
+    /**
+        Return reverse iterator to end of the vector.
+    */
+    reverse_iterator rbegin();
+    
+    /**
+        Return reverse iterator to beginning of the vector.
+    */
+    reverse_iterator rend();
+
 
     /**
         Returns vector's current capacity, i.e. how much memory is allocated.

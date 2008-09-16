@@ -117,10 +117,54 @@ private:
 
 public:
     typedef size_t size_type;
+    typedef size_t difference_type;
     typedef T value_type;
+    typedef value_type* pointer;
     typedef value_type* iterator;
     typedef const value_type* const_iterator;
     typedef value_type& reference;
+
+    class reverse_iterator
+    {
+    public:
+        reverse_iterator() : m_ptr(NULL) { }
+        wxEXPLICIT reverse_iterator(iterator it) : m_ptr(it) { }
+        reverse_iterator(const reverse_iterator& it) : m_ptr(it.m_ptr) { }
+        
+        reference operator*() const { return *m_ptr; }
+        pointer operator->() const { return m_ptr; }
+        
+        iterator base() const { return m_ptr; }
+        
+        reverse_iterator& operator++() 
+                { --m_ptr; return *this; }
+        reverse_iterator operator++(int)
+                { reverse_iterator tmp = *this; --m_ptr; return tmp; }
+        reverse_iterator& operator--() 
+                { ++m_ptr; return *this; }
+        reverse_iterator operator--(int) 
+                { reverse_iterator tmp = *this; ++m_ptr; return tmp; }
+        
+        reverse_iterator operator+(difference_type n) const
+                { return reverse_iterator(m_ptr - n); }
+        reverse_iterator& operator+=(difference_type n)
+                { return m_ptr -= n; return *this; }
+        reverse_iterator operator-(difference_type n) const
+                { return reverse_iterator(m_ptr + n); }
+        reverse_iterator& operator-=(difference_type n)
+                { return m_ptr += n; return *this; }
+                
+        reference operator[](difference_type n) const
+                { return *(*this + n); }
+        
+        bool operator ==(const reverse_iterator& it) const 
+                { return m_ptr == it.m_ptr; }
+        bool operator !=(const reverse_iterator& it) const
+                { return m_ptr != it.m_ptr; }
+        
+    private:
+        value_type *m_ptr;
+    };
 
     wxVector() : m_size(0), m_capacity(0), m_values(NULL) {}
 
@@ -234,6 +278,9 @@ public:
     iterator begin() { return m_values; }
     const_iterator end() const { return m_values + size(); }
     iterator end() { return m_values + size(); }
+
+    reverse_iterator rbegin() { return reverse_iterator(end() - 1); }
+    reverse_iterator rend() { return reverse_iterator(begin() - 1); }
 
     iterator insert(iterator it, const value_type& v = value_type())
     {
