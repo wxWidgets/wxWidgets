@@ -1386,29 +1386,6 @@ void FormMain::PopulateWithExamples ()
     pg->SetPropertyHelpString( wxT("BoolProperty with CheckBox"),
         wxT("Property attribute wxPG_BOOL_USE_CHECKBOX has been set to true.") );
 
-
-    wxPGProperty* lineThickProp;
-    wxPGProperty* lineThickUnitProp;
-    lineThickProp = new wxFloatProperty(wxT("Line Thickness"));
-    lineThickProp->SetEditor(wxPG_EDITOR(SpinCtrl));
-    lineThickProp->SetAttribute(wxT("Min"), wxVariant(0.01));
-
-     wxPGChoices choices;
-     choices.Add(wxT("millimetres"), 1);
-     choices.Add(wxT("inches"), 2);
-    lineThickUnitProp = new wxEnumProperty(
-             wxT("Unit"), wxPG_LABEL, choices,
-             static_cast<int>(1));
-
-     pg->Append(lineThickProp);
-     pg->AppendIn(lineThickProp, lineThickUnitProp);
-
-     lineThickProp->SetValue(wxVariant());
-     /*if (!pg->HideProperty(lineThickUnitProp, true))
-     {
-             return; 
-     }*/
-
      pid = pg->Append( new wxFloatProperty( wxT("FloatProperty"),
                                        wxPG_LABEL,
                                        1234500.23 ) );
