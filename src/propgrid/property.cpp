@@ -774,21 +774,23 @@ bool wxPGProperty::StringToValue( wxVariant& variant, const wxString& text, int 
 
                     const wxPGProperty* child = Item(curChild);
 
-                    wxVariant variant(child->GetValueRef());
-                    if ( child->StringToValue( variant, token, propagatedFlags ) )
+                    wxVariant oldChildValue = child->GetValue();
+                    wxVariant variant(oldChildValue);
+                    bool stvRes = child->StringToValue( variant, token, propagatedFlags );
+                    if ( stvRes || (variant != oldChildValue) )
                     {
-                        variant.SetName(child->GetBaseName());
-                        list.Append(variant);
-                        changed = true;
+                        if ( stvRes )
+                            changed = true;
                     }
                     else
                     {
                         // Failed, becomes unspecified
-                        wxVariant variant2;
-                        variant2.SetName(child->GetBaseName());
-                        list.Append(variant2);
+                        variant.MakeNull();
                         changed = true;
                     }
+
+                    variant.SetName(child->GetBaseName());
+                    list.Append(variant);
 
                     curChild++;
                     if ( curChild >= iMax )
