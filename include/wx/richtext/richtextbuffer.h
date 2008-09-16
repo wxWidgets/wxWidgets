@@ -80,7 +80,9 @@
 #define wxRICHTEXT_USE_OWN_CARET 0
 
 // Switch off for binary compatibility, on for faster drawing
-#define wxRICHTEXT_USE_OPTIMIZED_LINE_DRAWING 1
+// Note: this seems to be buggy (overzealous use of extents) so
+// don't use for now
+#define wxRICHTEXT_USE_OPTIMIZED_LINE_DRAWING 0
 
 /*!
  * Special characters

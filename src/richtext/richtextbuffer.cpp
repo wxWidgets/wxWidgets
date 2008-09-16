@@ -57,6 +57,7 @@ const wxChar wxRichTextLineBreakChar = (wxChar) 29;
 
 inline void wxCheckSetFont(wxDC& dc, const wxFont& font)
 {
+#if 0
     const wxFont& font1 = dc.GetFont();
     if (font1.IsOk() && font.IsOk())
     {
@@ -68,6 +69,7 @@ inline void wxCheckSetFont(wxDC& dc, const wxFont& font)
             font1.GetFaceName() == font.GetFaceName())
             return;
     }
+#endif
     dc.SetFont(font);
 }
 
@@ -431,7 +433,7 @@ bool wxRichTextCompositeObject::Defragment(const wxRichTextRange& range)
     while (node)
     {
         wxRichTextObject* child = node->GetData();
-        if (!child->GetRange().IsOutside(range))
+        if (range == wxRICHTEXT_ALL || !child->GetRange().IsOutside(range))
         {
             wxRichTextCompositeObject* composite = wxDynamicCast(child, wxRichTextCompositeObject);
             if (composite)
