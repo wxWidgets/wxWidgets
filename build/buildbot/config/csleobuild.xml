@@ -11,7 +11,7 @@
 
 <bot xmlns:xi="http://www.w3.org/2001/XInclude">
 
-<xi:include href="include/csleobuild.xml"/>
+<xi:include href="include/defs.xml"/>
 
 <build>
     <name>OSX 10.5 Intel wxOSX Carbon trunk</name>
