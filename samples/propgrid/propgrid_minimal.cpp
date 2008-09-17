@@ -25,15 +25,6 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-//
-// Called from propgridsample.cpp
-//
-void DisplayMinimalFrame(wxWindow* parent)
-{
-    MyFrame *frame = new MyFrame(parent);
-    frame->Show(true);
-}
-
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_HIGHEST+1, MyFrame::OnAction)
     EVT_PG_CHANGED( -1, MyFrame::OnPropertyGridChange )
@@ -53,39 +44,9 @@ MyFrame::MyFrame(wxWindow* parent)
                         wxPG_BOLD_MODIFIED );
     m_pg = pg;
 
-    for ( int i=0; i< 20; i++ )
-        pg->Append(new wxStringProperty(wxString::Format(wxT("Item %i"),i), wxPG_LABEL));
-
-    wxPGProperty* topId;
-    wxPGProperty* medId;
-    wxPGProperty* botId;
-
-    topId = pg->Append( new wxStringProperty(wxT("Top Item"), wxPG_LABEL, wxT("<composed>")) );
-    pg->LimitPropertyEditing(topId, true);
-    medId = pg->AppendIn( topId, new wxStringProperty(wxT("Medium Level Item A"), wxPG_LABEL, wxT("<composed>")) );
-    pg->LimitPropertyEditing(medId, true);
-    botId = pg->AppendIn( medId, new wxStringProperty(wxT("Position"), wxPG_LABEL, wxT("<composed>")) );
-    pg->LimitPropertyEditing(botId, true);
-    pg->AppendIn( botId, new wxFloatProperty(wxT("x"), wxPG_LABEL, 1.0) );
-    pg->AppendIn( botId, new wxFloatProperty(wxT("y"), wxPG_LABEL, 2.0) );
-    pg->AppendIn( botId, new wxFloatProperty(wxT("z"), wxPG_LABEL, 3.0) );
-    pg->AppendIn( medId, new wxStringProperty(wxT("Name"), wxPG_LABEL, wxT("name")) );
-    medId = pg->AppendIn( topId, new wxStringProperty(wxT("Medium Level Item B"), wxPG_LABEL, wxT("<composed>")) );
-    pg->LimitPropertyEditing(medId, true);
-    botId = pg->AppendIn( medId, new wxStringProperty(wxT("Position"), wxPG_LABEL, wxT("<composed>")) );
-    pg->LimitPropertyEditing(botId, true);
-    pg->AppendIn( botId, new wxFloatProperty(wxT("x"), wxPG_LABEL, 1.0) );
-    pg->AppendIn( botId, new wxFloatProperty(wxT("y"), wxPG_LABEL, 2.0) );
-    pg->AppendIn( botId, new wxFloatProperty(wxT("z"), wxPG_LABEL, 3.0) );
-    pg->AppendIn( medId, new wxStringProperty(wxT("Name"), wxPG_LABEL, wxT("name")) );
-    medId = pg->AppendIn( topId, new wxStringProperty(wxT("Medium Level Item C"), wxPG_LABEL, wxT("<composed>")) );
-    pg->LimitPropertyEditing(medId, true);
-    botId = pg->AppendIn( medId, new wxStringProperty(wxT("Position"), wxPG_LABEL, wxT("<composed>")) );
-    pg->LimitPropertyEditing(botId, true);
-    pg->AppendIn( botId, new wxFloatProperty(wxT("x"), wxPG_LABEL, 1.0) );
-    pg->AppendIn( botId, new wxFloatProperty(wxT("y"), wxPG_LABEL, 2.0) );
-    pg->AppendIn( botId, new wxFloatProperty(wxT("z"), wxPG_LABEL, 3.0) );
-    pg->AppendIn( medId, new wxStringProperty(wxT("Name"), wxPG_LABEL, wxT("name")) );
+    pg->Append( new wxStringProperty("String Property", wxPG_LABEL) );
+    pg->Append( new wxIntProperty("Int Property", wxPG_LABEL) );
+    pg->Append( new wxBoolProperty("Bool Property", wxPG_LABEL) );
 
     SetSize(400, 600);
 }
@@ -94,14 +55,20 @@ void MyFrame::OnPropertyGridChange(wxPropertyGridEvent &event)
 {
     wxPGProperty* p = event.GetProperty();
 
-    wxLogDebug(wxT("OnPropertyGridChange(%s)"), p->GetName().c_str());
-
-    if ( p->GetBaseName() == wxT("x") )
-    {
-        wxLogDebug(wxT("double values=%.2f)"), m_pg->GetPropertyValueAsDouble(p));
-    }
+    if ( p )
+        wxLogDebug("OnPropertyGridChange(%s)", p->GetName().c_str());
+    else
+        wxLogDebug("OnPropertyGridChange(NULL)");
 }
 
 void MyFrame::OnAction(wxCommandEvent &) 
 {
+}
+
+// Called from propgridsample.cpp
+//
+void DisplayMinimalFrame(wxWindow* parent)
+{
+    MyFrame *frame = new MyFrame(parent);
+    frame->Show(true);
 }
