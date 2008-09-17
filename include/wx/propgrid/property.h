@@ -558,8 +558,6 @@ wxPG_PROP_CLASS_SPECIFIC_2          = 0x00100000
 /** @}
 */
 
-#ifndef DOXYGEN
-
 // Redefine attribute macros to use cached strings
 #undef wxPG_ATTR_MIN
 #define wxPG_ATTR_MIN                     wxPGGlobalVars->m_strMin
@@ -569,8 +567,6 @@ wxPG_PROP_CLASS_SPECIFIC_2          = 0x00100000
 #define wxPG_ATTR_UNITS                   wxPGGlobalVars->m_strUnits
 #undef wxPG_ATTR_INLINE_HELP
 #define wxPG_ATTR_INLINE_HELP             wxPGGlobalVars->m_strInlineHelp
-
-#endif  // !DOXYGEN
 
 #endif  // !SWIG
 
