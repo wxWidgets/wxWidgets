@@ -60,6 +60,14 @@
 <nightly-schedulers name="daily"/>
 
 <!--
+    General purpose slave lock.
+-->
+
+<slavelock>
+    <name>slave</name>
+</slavelock>
+
+<!--
     Map SVN user ids to email addresses.
 -->
 
