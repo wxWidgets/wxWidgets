@@ -412,7 +412,7 @@ wxPG_PROP_CLASS_SPECIFIC_2          = 0x00100000
     Identifiers.
 
     wxPGProperty::SetAttribute() and
-    wxPropertyGridInterfaces::SetPropertyAttribute() accept one of these as
+    wxPropertyGridInterface::SetPropertyAttribute() accept one of these as
     attribute name argument.
 
     You can use strings instead of constants. However, some of these

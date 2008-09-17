@@ -39,7 +39,8 @@ struct wxPGChoiceInfo
 
 /** @section propgrid_property_attributes wxPropertyGrid Property Attribute Identifiers
 
-    wxPGProperty::SetAttribute() and wxPropertyGridInterfaces::SetPropertyAttribute()
+    wxPGProperty::SetAttribute() and
+    wxPropertyGridInterface::SetPropertyAttribute()
     accept one of these as attribute name argument .
 
     You can use strings instead of constants. However, some of these
