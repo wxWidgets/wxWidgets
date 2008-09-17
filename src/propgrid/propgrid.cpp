@@ -3524,6 +3524,8 @@ void wxPropertyGrid::FreeEditors()
 // Call with NULL to de-select property
 bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
 {
+    wxPanel* canvas = GetPanel();
+
     /*
     if (p)
         wxLogDebug(wxT("SelectProperty( %s (%s[%i]) )"),p->m_label.c_str(),
@@ -3592,7 +3594,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
                 }
                 else
                 {
-                    wxScrolledWindow::SetFocus();
+                    canvas->SetFocusIgnoringChildren();
                     m_editorFocused = 0;
                 }
             }
@@ -3698,7 +3700,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
 
                 if ( m_wndEditor )
                 {
-                    wxASSERT_MSG( m_wndEditor->GetParent() == m_canvas,
+                    wxASSERT_MSG( m_wndEditor->GetParent() == canvas,
                                   wxT("CreateControls must use result of wxPropertyGrid::GetPanel() as parent of controls.") );
 
                     // Set validator, if any
@@ -3766,7 +3768,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
 
                 if ( m_wndEditor2 )
                 {
-                    wxASSERT_MSG( m_wndEditor2->GetParent() == m_canvas,
+                    wxASSERT_MSG( m_wndEditor2->GetParent() == canvas,
                                   wxT("CreateControls must use result of wxPropertyGrid::GetPanel() as parent of controls.") );
 
                     // Get proper id for wndSecondary
@@ -3812,7 +3814,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
             else
             {
                 // wxGTK atleast seems to need this (wxMSW not)
-                SetFocus();
+                canvas->SetFocusIgnoringChildren();
             }
 
             EditorsValueWasNotModified();
@@ -3831,6 +3833,11 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
             }
 
             DrawItems(p, p);
+        }
+        else
+        {
+            // Make sure focus is in grid
+            canvas->SetFocusIgnoringChildren();
         }
 
         ClearInternalFlag(wxPG_FL_IN_SELECT_PROPERTY);
@@ -4220,7 +4227,7 @@ bool wxPropertyGrid::HandleMouseClick( int x, unsigned int y, wxMouseEvent &even
     // Need to set focus?
     if ( !(m_iFlags & wxPG_FL_FOCUSED) )
     {
-        m_canvas->SetFocus();
+        m_canvas->SetFocusIgnoringChildren();
     }
 
     wxPropertyGridPageState* state = m_pState;
