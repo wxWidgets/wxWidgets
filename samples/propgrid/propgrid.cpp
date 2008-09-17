@@ -45,6 +45,10 @@
     #include "wx/wx.h"
 #endif
 
+#if !wxUSE_PROPGRID
+    #error "Please set wxUSE_PROPGRID to 1 and rebuild the library."
+#endif
+
 #include <wx/numdlg.h>
 
 // -----------------------------------------------------------------------

@@ -16,6 +16,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_PROPGRID
+
 #ifndef WX_PRECOMP
     #include "wx/defs.h"
     #include "wx/object.h"
@@ -1178,4 +1180,6 @@ bool wxPropertyGridInterface::RestoreEditableState( const wxString& src, int res
 
     return res;
 }
+
+#endif  // wxUSE_PROPGRID
 

@@ -12,6 +12,8 @@
 #ifndef __WX_PROPGRID_PROPGRIDIFACE_H__
 #define __WX_PROPGRID_PROPGRIDIFACE_H__
 
+#if wxUSE_PROPGRID
+
 #include "wx/propgrid/property.h"
 #include "wx/propgrid/propgridpagestate.h"
 
@@ -1561,5 +1563,7 @@ private:
     friend class wxPropertyGrid;
     friend class wxPropertyGridManager;
 };
+
+#endif // wxUSE_PROPGRID
 
 #endif // __WX_PROPGRID_PROPGRIDIFACE_H__

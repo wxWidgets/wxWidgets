@@ -16,6 +16,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_PROPGRID
+
 #ifndef WX_PRECOMP
     #include "wx/defs.h"
     #include "wx/object.h"
@@ -1878,3 +1880,5 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item )
 }
 
 // -----------------------------------------------------------------------
+
+#endif  // wxUSE_PROPGRID

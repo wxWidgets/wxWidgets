@@ -16,6 +16,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_PROPGRID
+
 #ifndef WX_PRECOMP
     #include "wx/defs.h"
     #include "wx/object.h"
@@ -1690,3 +1692,5 @@ wxPGVIterator wxPropertyGridManager::GetVIterator( int flags ) const
 {
     return wxPGVIterator( new wxPGVIteratorBase_Manager( (wxPropertyGridManager*)this, flags ) );
 }
+
+#endif  // wxUSE_PROPGRID

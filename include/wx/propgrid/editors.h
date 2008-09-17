@@ -12,6 +12,8 @@
 #ifndef _WX_PROPGRID_EDITORS_H_
 #define _WX_PROPGRID_EDITORS_H_
 
+#if wxUSE_PROPGRID
+
 // -----------------------------------------------------------------------
 // wxPGWindowList contains list of editor windows returned by CreateControls.
 
@@ -647,5 +649,7 @@ protected:
 };
 
 // -----------------------------------------------------------------------
+
+#endif // wxUSE_PROPGRID
 
 #endif // _WX_PROPGRID_EDITORS_H_

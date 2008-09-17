@@ -16,6 +16,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_PROPGRID
+
 #ifndef WX_PRECOMP
     #include "wx/defs.h"
     #include "wx/object.h"
@@ -2011,4 +2013,7 @@ void wxPropertyGridInterface::RegisterAdditionalEditors()
 
 // -----------------------------------------------------------------------
 
-#endif // wxPG_INCLUDE_ADVPROPS
+#endif  // wxPG_INCLUDE_ADVPROPS
+
+#endif  // wxUSE_PROPGRID
+

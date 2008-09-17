@@ -16,6 +16,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_PROPGRID
+
 #ifndef WX_PRECOMP
     #include "wx/defs.h"
     #include "wx/object.h"
@@ -2167,3 +2169,4 @@ void wxPGAttributeStorage::Set( const wxString& name, const wxVariant& value )
     m_map[name] = data;
 }
 
+#endif  // wxUSE_PROPGRID

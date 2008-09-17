@@ -12,6 +12,8 @@
 #ifndef _WX_PROPGRID_MANAGER_H_
 #define _WX_PROPGRID_MANAGER_H_
 
+#if wxUSE_PROPGRID
+
 #include "wx/propgrid/propgrid.h"
 
 #include "wx/dcclient.h"
@@ -786,5 +788,7 @@ inline int wxPropertyGridPage::GetIndex() const
 }
 
 // -----------------------------------------------------------------------
+
+#endif // wxUSE_PROPGRID
 
 #endif // _WX_PROPGRID_MANAGER_H_

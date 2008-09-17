@@ -12,6 +12,8 @@
 #ifndef _WX_PROPGRID_PROPS_H_
 #define _WX_PROPGRID_PROPS_H_
 
+#if wxUSE_PROPGRID
+
 // -----------------------------------------------------------------------
 
 class wxArrayEditorDialog;
@@ -1286,5 +1288,7 @@ private:
 };
 
 // -----------------------------------------------------------------------
+
+#endif // wxUSE_PROPGRID
 
 #endif // _WX_PROPGRID_PROPS_H_

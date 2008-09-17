@@ -12,6 +12,8 @@
 #ifndef _WX_PROPGRID_PROPERTY_H_
 #define _WX_PROPGRID_PROPERTY_H_
 
+#if wxUSE_PROPGRID
+
 #include "wx/propgrid/propgriddefs.h"
 
 // -----------------------------------------------------------------------
@@ -2451,5 +2453,7 @@ inline bool wxPGProperty::SetChoices( const wxArrayString& labels,
 }
 
 // -----------------------------------------------------------------------
+
+#endif // wxUSE_PROPGRID
 
 #endif // _WX_PROPGRID_PROPERTY_H_

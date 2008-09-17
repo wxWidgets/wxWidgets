@@ -12,6 +12,8 @@
 #ifndef _WX_PROPGRID_PROPGRIDDEFS_H_
 #define _WX_PROPGRID_PROPGRIDDEFS_H_
 
+#if wxUSE_PROPGRID
+
 #include "wx/dynarray.h"
 #include "wx/hashmap.h"
 #include "wx/variant.h"
@@ -709,5 +711,7 @@ protected:
 #endif
 
 // -----------------------------------------------------------------------
+
+#endif // wxUSE_PROPGRID
 
 #endif // _WX_PROPGRID_PROPGRIDDEFS_H_

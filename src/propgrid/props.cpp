@@ -16,6 +16,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_PROPGRID
+
 #ifndef WX_PRECOMP
     #include "wx/defs.h"
     #include "wx/object.h"
@@ -2635,3 +2637,4 @@ bool wxPGInDialogValidator::DoValidate( wxPropertyGrid* WXUNUSED(propGrid),
 
 // -----------------------------------------------------------------------
 
+#endif  // wxUSE_PROPGRID

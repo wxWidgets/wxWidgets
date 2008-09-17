@@ -12,6 +12,8 @@
 #ifndef _WX_PROPGRID_PROPGRIDPAGESTATE_H_
 #define _WX_PROPGRID_PROPGRIDPAGESTATE_H_
 
+#if wxUSE_PROPGRID
+
 #include "wx/propgrid/property.h"
 
 // -----------------------------------------------------------------------
@@ -687,6 +689,8 @@ protected:
 #endif // #ifndef SWIG
 
 // -----------------------------------------------------------------------
+
+#endif // wxUSE_PROPGRID
 
 #endif // _WX_PROPGRID_PROPGRIDPAGESTATE_H_
 

@@ -12,6 +12,8 @@
 #ifndef _WX_PROPGRID_ADVPROPS_H_
 #define _WX_PROPGRID_ADVPROPS_H_
 
+#if wxUSE_PROPGRID
+
 #include "wx/propgrid/props.h"
 
 // -----------------------------------------------------------------------
@@ -506,5 +508,7 @@ private:
 #endif // wxUSE_SPINBTN
 
 // -----------------------------------------------------------------------
+
+#endif // wxUSE_PROPGRID
 
 #endif // _WX_PROPGRID_ADVPROPS_H_

@@ -16,6 +16,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_PROPGRID
+
 #ifndef WX_PRECOMP
     #include "wx/defs.h"
     #include "wx/object.h"
@@ -6300,3 +6302,5 @@ void wxPropertyGridPopulator::ProcessError( const wxString& msg )
 }
 
 // -----------------------------------------------------------------------
+
+#endif  // wxUSE_PROPGRID

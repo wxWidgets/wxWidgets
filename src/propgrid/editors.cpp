@@ -16,6 +16,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_PROPGRID
+
 #ifndef WX_PRECOMP
     #include "wx/defs.h"
     #include "wx/object.h"
@@ -2160,3 +2162,5 @@ void wxPGMultiButton::Add( const wxString& label, int id )
 }
 
 // -----------------------------------------------------------------------
+
+#endif  // wxUSE_PROPGRID

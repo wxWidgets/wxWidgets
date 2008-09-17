@@ -12,6 +12,8 @@
 #ifndef _WX_PROPGRID_PROPGRID_H_
 #define _WX_PROPGRID_PROPGRID_H_
 
+#if wxUSE_PROPGRID
+
 #include "wx/dcclient.h"
 #include "wx/scrolwin.h"
 #include "wx/tooltip.h"
@@ -2195,6 +2197,8 @@ protected:
 #endif
 
 // -----------------------------------------------------------------------
+
+#endif
 
 #endif // _WX_PROPGRID_PROPGRID_H_
 
