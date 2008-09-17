@@ -550,11 +550,6 @@ wxPG_PROP_CLASS_SPECIFIC_2          = 0x00100000
 */
 #define wxPG_COLOUR_ALLOW_CUSTOM            wxS("AllowCustom")
 
-/** First attribute id that is guaranteed not to be used built-in
-    properties.
-*/
-//#define wxPG_USER_ATTRIBUTE                 192
-
 /** @}
 */
 
