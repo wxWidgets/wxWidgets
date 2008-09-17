@@ -234,7 +234,7 @@ public:
     /**
         Returns the last item of the list.
     */
-    reference back() const;
+    reference back();
 
     /**
         Returns the last item of the list as a const reference.
@@ -244,7 +244,7 @@ public:
     /**
         Returns an iterator pointing to the beginning of the list.
     */
-    iterator begin() const;
+    iterator begin();
 
     /**
         Returns a const iterator pointing to the beginning of the list.
@@ -326,18 +326,18 @@ public:
     /**
         Adds an item to end of the list.
     */
-    void push_back();
+    void push_back(const_reference v = value_type());
 
     /**
         Adds an item to the front of the list.
     */
-    void push_front();
+    void push_front(const_reference v = value_type());
 
     /**
         Returns a reverse iterator pointing to the beginning of the
         reversed list.
     */
-    reverse_iterator rbegin() const;
+    reverse_iterator rbegin();
 
     /**
         Returns a const reverse iterator pointing to the beginning of the
@@ -354,7 +354,7 @@ public:
         Returns a reverse iterator pointing to the end of the
         reversed list.
     */
-    reverse_iterator rend() const;
+    reverse_iterator rend();
 
     /**
         Returns a const reverse iterator pointing to the end of the
