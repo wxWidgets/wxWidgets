@@ -1819,6 +1819,12 @@ protected:
                     wxVariant* pValue = NULL,
                     unsigned int selFlags = 0 );
 
+    void SetFocusOnCanvas()
+    {
+        m_canvas->SetFocusIgnoringChildren();
+        m_editorFocused = 0;
+    }
+
     bool DoHideProperty( wxPGProperty* p, bool hide, int flags );
 
 private:

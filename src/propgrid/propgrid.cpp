@@ -3594,8 +3594,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
                 }
                 else
                 {
-                    canvas->SetFocusIgnoringChildren();
-                    m_editorFocused = 0;
+                    SetFocusOnCanvas();
                 }
             }
 
@@ -3813,8 +3812,8 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
             }
             else
             {
-                // wxGTK atleast seems to need this (wxMSW not)
-                canvas->SetFocusIgnoringChildren();
+                // Make sure focus is in grid canvas (important for wxGTK, at least)
+                SetFocusOnCanvas();
             }
 
             EditorsValueWasNotModified();
@@ -3836,8 +3835,8 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
         }
         else
         {
-            // Make sure focus is in grid
-            canvas->SetFocusIgnoringChildren();
+            // Make sure focus is in grid canvas
+            SetFocusOnCanvas();
         }
 
         ClearInternalFlag(wxPG_FL_IN_SELECT_PROPERTY);
@@ -3906,7 +3905,7 @@ bool wxPropertyGrid::UnfocusEditor()
     if ( !CommitChangesFromEditor(0) )
         return false;
 
-    m_canvas->SetFocusIgnoringChildren();
+    SetFocusOnCanvas();
     DrawItem(m_selected);
 
     return true;
@@ -4227,7 +4226,7 @@ bool wxPropertyGrid::HandleMouseClick( int x, unsigned int y, wxMouseEvent &even
     // Need to set focus?
     if ( !(m_iFlags & wxPG_FL_FOCUSED) )
     {
-        m_canvas->SetFocusIgnoringChildren();
+        SetFocusOnCanvas();
     }
 
     wxPropertyGridPageState* state = m_pState;
