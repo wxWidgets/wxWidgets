@@ -157,9 +157,19 @@ wxDCImpl* wxNativeDCFactory::CreateMemoryDC( wxMemoryDC *owner )
     return new wxMemoryDCImpl( owner );
 }
 
-wxDCImpl* wxNativeDCFactory::CreateMemoryDC( wxMemoryDC *owner, wxBitmap &bitmap )
+wxDCImpl* wxNativeDCFactory::CreateMemoryDC(wxMemoryDC *owner, wxBitmap& bitmap)
 {
-    return new wxMemoryDCImpl( owner, bitmap );
+    // the bitmap may be modified when it's selected into a memory DC so make
+    // sure changing this bitmap doesn't affect any other shallow copies of it
+    // (see wxMemoryDC::SelectObject())
+    //
+    // notice that we don't provide any ctor equivalent to SelectObjectAsSource
+    // method because this should be rarely needed and easy to work around by
+    // using the default ctor and calling SelectObjectAsSource itself
+    if ( bitmap.IsOk() )
+        bitmap.UnShare();
+
+    return new wxMemoryDCImpl(owner, bitmap);
 }
 
 wxDCImpl* wxNativeDCFactory::CreateMemoryDC( wxMemoryDC *owner, wxDC *dc )
