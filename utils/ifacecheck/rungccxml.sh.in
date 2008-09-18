@@ -44,6 +44,7 @@ headerlist=`$listcmd | grep -v wxshl | grep -v wx_cw | grep -v setup | grep -v x
 cd $current                          # return to the original path
 
 # create the header file to pass to gccxml
+echo "Creating the $allheaders dummy file which #includes all wxWidgets interface header files..."
 if [[ -f $allheaders ]]; then rm $allheaders; fi
 for f in $headerlist; do
     echo "#include <$f>" >> $allheaders
@@ -64,6 +65,10 @@ flags="-I . -I @top_srcdir@/include $flags -D__WXDEBUG__ -D__WX@TOOLKIT@__ -DWXB
 echo "Running gccxml on the $allheaders file... results in $gccxmloutput"
 if [[ -f "$gccxmloutput" ]]; then rm $gccxmloutput; fi
 gccxml $flags -fxml=$gccxmloutput
+if [[ $? != 0 ]]; then
+    echo "Errors running gccxml... aborting."
+    exit
+fi
 
 # now get the list of the #defined values for wx headers, so that the result
 # can be passed to ifacecheck to aid the comparison

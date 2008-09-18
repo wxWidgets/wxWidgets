@@ -17,6 +17,10 @@
 #if wxUSE_AUI
 
 #include "wx/control.h"
+#include "wx/sizer.h"
+#include "wx/pen.h"
+
+//class WXDLLIMPEXP_FWD_CORE wxSizerItem;
 
 enum wxAuiToolBarStyle
 {
@@ -101,7 +105,7 @@ private:
 class WXDLLIMPEXP_AUI wxAuiToolBarItem
 {
     friend class wxAuiToolBar;
-    
+
 public:
 
     wxAuiToolBarItem()
@@ -151,59 +155,59 @@ public:
         sticky = c.sticky;
         user_data = c.user_data;
     }
-    
-    
+
+
     void SetWindow(wxWindow* w) { window = w; }
     wxWindow* GetWindow() { return window; }
-    
+
     void SetId(int new_id) { id = new_id; }
     int GetId() const { return id; }
-    
+
     void SetKind(int new_kind) { kind = new_kind; }
     int GetKind() const { return kind; }
-    
+
     void SetState(int new_state) { state = new_state; }
     int GetState() const { return state; }
-    
+
     void SetSizerItem(wxSizerItem* s) { sizer_item = s; }
     wxSizerItem* GetSizerItem() const { return sizer_item; }
-    
+
     void SetLabel(const wxString& s) { label = s; }
     const wxString& GetLabel() const { return label; }
-    
+
     void SetBitmap(const wxBitmap& bmp) { bitmap = bmp; }
     const wxBitmap& GetBitmap() const { return bitmap; }
-    
+
     void SetDisabledBitmap(const wxBitmap& bmp) { disabled_bitmap = bmp; }
     const wxBitmap& GetDisabledBitmap() const { return disabled_bitmap; }
-    
+
     void SetHoverBitmap(const wxBitmap& bmp) { hover_bitmap = bmp; }
     const wxBitmap& GetHoverBitmap() const { return hover_bitmap; }
-    
+
     void SetShortHelp(const wxString& s) { short_help = s; }
     const wxString& GetShortHelp() const { return short_help; }
-    
+
     void SetLongHelp(const wxString& s) { long_help = s; }
     const wxString& GetLongHelp() const { return long_help; }
-    
+
     void SetMinSize(const wxSize& s) { min_size = s; }
     const wxSize& GetMinSize() const { return min_size; }
-    
+
     void SetSpacerPixels(int s) { spacer_pixels = s; }
     int GetSpacerPixels() const { return spacer_pixels; }
-    
+
     void SetProportion(int p) { proportion = p; }
     int GetProportion() const { return proportion; }
-    
+
     void SetActive(bool b) { active = b; }
     bool IsActive() const { return active; }
-    
+
     void SetHasDropDown(bool b) { dropdown = b; }
     bool HasDropDown() const { return dropdown; }
-    
+
     void SetSticky(bool b) { sticky = b; }
     bool IsSticky() const { return sticky; }
-    
+
     void SetUserData(long l) { user_data = l; }
     long GetUserData() const { return user_data; }
 
