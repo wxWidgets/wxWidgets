@@ -145,11 +145,6 @@ struct wxPGChoiceInfo
 */
 #define wxPG_COLOUR_ALLOW_CUSTOM            wxS("AllowCustom")
 
-/** First attribute id that is guaranteed not to be used built-in
-    properties.
-*/
-//#define wxPG_USER_ATTRIBUTE                 192
-
 /** @}
 */
 
