@@ -59,6 +59,7 @@
     <subproject id="ownerdrw" template="sub"/>
     <subproject id="popup" template="sub"/>
     <subproject id="printing" template="sub"/>
+    <subproject id="propgrid" template="sub"/>
     <subproject id="regtest" template="sub"/>
     <subproject id="render" template="sub"/>
     <subproject id="richtext" template="sub"/>
