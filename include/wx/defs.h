@@ -2666,6 +2666,21 @@ enum wxUpdateUI
     wxUPDATE_UI_FROMIDLE      = 0x0002 /*  Invoked from On(Internal)Idle */
 };
 
+
+/* ---------------------------------------------------------------------------- */
+/* wxList types */
+/* ---------------------------------------------------------------------------- */
+
+/* type of compare function for list sort operation (as in 'qsort'): it should
+   return a negative value, 0 or positive value if the first element is less
+   than, equal or greater than the second */
+
+typedef int (* LINKAGEMODE wxSortCompareFunction)(const void *elem1, const void *elem2);
+
+/* wxList iterator function */
+typedef int (* LINKAGEMODE wxListIterateFunction)(void *current);
+
+
 /*  ---------------------------------------------------------------------------- */
 /*  miscellaneous */
 /*  ---------------------------------------------------------------------------- */
