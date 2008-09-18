@@ -583,6 +583,17 @@ typedef short int WXTYPE;
 #endif
 
 /*
+    explicitly specifying inline allows gcc < 3.4 to
+    handle the deprecation attribute even in the constructor.
+    doesn't seem to work on Apple's gcc 4.0.1 unless using -O0
+*/
+#if defined( __DARWIN__ ) && !defined(__WXDEBUG__)
+    #define  wxDEPRECATED_CONSTRUCTOR(x) x
+#else
+    #define  wxDEPRECATED_CONSTRUCTOR(x) wxDEPRECATED( inline x)
+#endif
+    
+/*
    Macro which marks the function as being deprecated but also defines it
    inline.
 
