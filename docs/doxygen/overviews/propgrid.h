@@ -22,28 +22,28 @@ numbers, flagsets, fonts, and colours. It is possible, for example, to categoriz
 properties, set up a complete tree-hierarchy, add multiple columns, and set
 arbitrary per-property attributes.
 
-@li @ref basics
-@li @ref categories
-@li @ref parentprops
-@li @ref enumandflags
-@li @ref advprops
-@li @ref iterating
-@li @ref operations
-@li @ref events
-@li @ref validating
-@li @ref populating
-@li @ref cellrender
-@li @ref customizing
-@li @ref usage2
-@li @ref subclassing
-@li @ref misc
-@li @ref proplist
-@li @ref userhelp
-@li @ref notes
-@li @ref newprops
-@li @ref neweditors
+@li @ref propgrid_basics
+@li @ref propgrid_categories
+@li @ref propgrid_parentprops
+@li @ref propgrid_enumandflags
+@li @ref propgrid_advprops
+@li @ref propgrid_iterating
+@li @ref propgrid_operations
+@li @ref propgrid_events
+@li @ref propgrid_validating
+@li @ref propgrid_populating
+@li @ref propgrid_cellrender
+@li @ref propgrid_customizing
+@li @ref propgrid_usage2
+@li @ref propgrid_subclassing
+@li @ref propgrid_misc
+@li @ref propgrid_proplist
+@li @ref propgrid_userhelp
+@li @ref propgrid_notes
+@li @ref propgrid_newprops
+@li @ref propgrid_neweditors
 
-@section basics Creating and Populating wxPropertyGrid
+@section propgrid_basics Creating and Populating wxPropertyGrid
 
 As seen here, wxPropertyGrid is constructed in the same way as
 other wxWidgets controls:
@@ -197,7 +197,7 @@ wxPropertyGridInterface and wxPropertyGrid class references for complete list.
 @endcode
 
 
-@section categories Categories
+@section propgrid_categories Categories
 
   wxPropertyGrid has a hierarchial property storage and display model, which
 allows property categories to hold child properties and even other
@@ -237,7 +237,7 @@ properties to specific categories by using wxPropertyGrid::Insert or wxPropertyG
 @endcode
 
 
-@section parentprops Tree-like Property Structure
+@section propgrid_parentprops Tree-like Property Structure
 
   As a new feature in version 1.3.1, basicly any property can have children. There
 are few limitations, however.
@@ -285,7 +285,7 @@ Sample:
 
 @endcode
 
-@section enumandflags wxEnumProperty and wxFlagsProperty
+@section propgrid_enumandflags wxEnumProperty and wxFlagsProperty
 
   wxEnumProperty is used when you want property's (integer or string) value
 to be selected from a popup list of choices.
@@ -426,7 +426,7 @@ for that as well.
 
 If you want to create your enum properties with simple (label,name,value)
 constructor, then you need to create a new property class using one of the
-supplied macro pairs. See @ref newprops for details.
+supplied macro pairs. See @ref pgproperty_creating for details.
 
 <b>wxEditEnumProperty</b> is works exactly like wxEnumProperty, except
 is uses non-readonly combobox as default editor, and value is stored as
@@ -457,7 +457,7 @@ wxFlagsProperty can use wxPGChoices just the same way as wxEnumProperty
 you will need to use SetPropertyChoices - otherwise they will not get updated
 properly.
 
-@section advprops Specialized Properties
+@section propgrid_advprops Specialized Properties
 
   This section describes the use of less often needed property classes.
 To use them, you have to include <wx/propgrid/advprops.h>.
@@ -508,7 +508,7 @@ To use them, you have to include <wx/propgrid/advprops.h>.
 @endcode
 
 
-@section iterating Iterating through a property container
+@section propgrid_iterating Iterating through a property container
 
 You can use somewhat STL'ish iterator classes to iterate through the grid.
 Here is a simple example of forward iterating through all individual
@@ -590,7 +590,7 @@ Note however that this virtual iterater is limited to forward iteration.
 @endcode
 
 
-@section operations More About Operating with Properties
+@section propgrid_operations More About Operating with Properties
 
 Getting value of selected wxSystemColourProperty (which value type is derived
 from wxObject):
@@ -631,9 +631,9 @@ from wxObject):
 
 @endcode
 
-@section populating Populating wxPropertyGrid Automatically
+@section propgrid_populating Populating wxPropertyGrid Automatically
 
-@subsection fromvariants Populating from List of wxVariants
+@subsection propgrid_fromvariants Populating from List of wxVariants
 
 Example of populating an empty wxPropertyGrid from a values stored
 in an arbitrary list of wxVariants.
@@ -661,7 +661,7 @@ in an arbitrary list of wxVariants.
 
 @endcode
 
-@subsection fromfile Loading Population from a Text-based Storage
+@subsection propgrid_fromfile Loading Population from a Text-based Storage
 
 Class wxPropertyGridPopulator may be helpful when writing code that
 loads properties from a text-source. In fact, the supplied xrc handler
@@ -670,7 +670,7 @@ NOTE: src/xh_propgrid.cpp is not included in the library by default,
 to avoid dependency to wxXRC. You will need to add it to your application
 separately.
 
-@subsection editablestate Saving and Restoring User-Editable State
+@subsection propgrid_editablestate Saving and Restoring User-Editable State
 
 You can use wxPGEditableState and wxPGMEditableState classes, and
 wxPropertyGrid::SaveEditableState() and wxPropertyGrid::RestoreEditableState()
@@ -692,7 +692,7 @@ its value in wxString. For instance:
 @endcode
 
 
-@section events Event Handling
+@section propgrid_events Event Handling
 
 Probably the most important event is the Changed event which occurs when
 value of any property is changed by the user. Use EVT_PG_CHANGED(id,func)
@@ -784,7 +784,7 @@ void MyForm::OnPropertyGridChanging( wxPropertyGridEvent& event )
   properties).
 
 
-@section validating Validating Property Values
+@section propgrid_validating Validating Property Values
 
 There are various ways to make sure user enters only correct values. First, you
 can use wxValidators similar to as you would with ordinary controls. Use
@@ -833,7 +833,7 @@ message.
 @endcode
 
 
-@section cellrender Customizing Individual Cell Appearance
+@section propgrid_cellrender Customizing Individual Cell Appearance
 
 You can control text colour, background colour, and attached image of
 each cell in the property grid. Use wxPropertyGridInterface::SetPropertyCell() or
@@ -844,27 +844,27 @@ wxPGChoices list items. See wxPGChoices::Item() and wxPGChoiceEntry class
 reference for more info.
 
 
-@section customizing Customizing Properties (without sub-classing)
+@section propgrid_customizing Customizing Properties (without sub-classing)
 
 In this section are presented miscellaneous ways to have custom appearance
 and behavior for your properties without all the necessary hassle
 of sub-classing a property class etc.
 
-@subsection customimage Setting Value Image
+@subsection propgrid_customimage Setting Value Image
 
 Every property can have a small value image placed in front of the
 actual value text. Built-in example of this can be seen with
 wxColourProperty and wxImageFileProperty, but for others it can
 be set using wxPropertyGrid::SetPropertyImage method.
 
-@subsection customvalidator Setting Validator
+@subsection propgrid_customvalidator Setting Validator
 
 You can set wxValidator for a property using wxPropertyGrid::SetPropertyValidator.
 
 Validator will work just like in wxWidgets (ie. editorControl->SetValidator(validator)
 is called).
 
-@subsection customeditor Setting Property's Editor Control(s)
+@subsection propgrid_customeditor Setting Property's Editor Control(s)
 
 You can set editor control (or controls, in case of a control and button),
 of any property using wxPropertyGrid::SetPropertyEditor. Editors are passed
@@ -889,22 +889,22 @@ colour selection dialog.
 Naturally, creating and setting custom editor classes is a possibility as
 well. For more information, see wxPGEditor class reference.
 
-@subsection editorattrs Property Attributes Recognized by Editors
+@subsection propgrid_editorattrs Property Attributes Recognized by Editors
 
 <b>SpinCtrl</b> editor can make use of property's "Min", "Max", "Step" and "Wrap" attributes.
 
-@subsection multiplebuttons Adding Multiple Buttons Next to an Editor
+@subsection propgrid_multiplebuttons Adding Multiple Buttons Next to an Editor
 
 See wxPGMultiButton class reference.
 
-@subsection customeventhandling Handling Events Passed from Properties
+@subsection propgrid_customeventhandling Handling Events Passed from Properties
 
 <b>wxEVT_COMMAND_BUTTON_CLICKED </b>(corresponds to event table macro EVT_BUTTON):
 Occurs when editor button click is not handled by the property itself
 (as is the case, for example, if you set property's editor to TextCtrlAndButton
 from the original TextCtrl).
 
-@subsection attributes Property Attributes
+@subsection propgrid_attributes Property Attributes
 
 Miscellaneous values, often specific to a property type, can be set
 using wxPropertyGrid::SetPropertyAttribute and wxPropertyGrid::SetPropertyAttributeAll
@@ -917,7 +917,7 @@ for smaller binary size.
 
 For complete list of attributes, see @link attrids Property Attributes@endlink.
 
-@subsection boolcheckbox Setting wxBoolProperties to Use Check Box
+@subsection propgrid_boolcheckbox Setting wxBoolProperties to Use Check Box
 
 To have all wxBoolProperties to use CheckBox editor instead of Choice, use
 following (call after bool properties have been added):
@@ -927,7 +927,7 @@ following (call after bool properties have been added):
 @endcode
 
 
-@section usage2 Using wxPropertyGridManager
+@section propgrid_usage2 Using wxPropertyGridManager
 
 wxPropertyGridManager is an efficient multi-page version of wxPropertyGrid,
 which can optionally have toolbar for mode and page selection, and a help text
@@ -994,7 +994,7 @@ Here's some example code for creating and populating a wxPropertyGridManager:
 
 @endcode
 
-@subsection propgridpage wxPropertyGridPage
+@subsection propgrid_propgridpage wxPropertyGridPage
 
 wxPropertyGridPage is holder of properties for one page in manager. It is derived from
 wxEvtHandler, so you can subclass it to process page-specific property grid events. Hand
@@ -1005,7 +1005,7 @@ Please note that the wxPropertyGridPage itself only sports subset of wxPropertyG
 wxPropertyGridMethods and wxPropertyGridPageState.
 
 
-@section subclassing Subclassing wxPropertyGrid and wxPropertyGridManager
+@section propgrid_subclassing Subclassing wxPropertyGrid and wxPropertyGridManager
 
 Few things to note:
 
@@ -1024,22 +1024,22 @@ Few things to note:
   member function.
 
 
-@section misc Miscellaneous Topics
+@section propgrid_misc Miscellaneous Topics
 
-@subsection namescope Property Name Scope
+@subsection propgrid_namescope Property Name Scope
 
   All properties which parent is category or root can be accessed
 directly by their base name (ie. name given for property in its constructor).
 Other properties can be accessed via "ParentsName.BaseName" notation,
 Naturally, all property names should be unique.
 
-@subsection nonuniquelabels Non-unique Labels
+@subsection propgrid_nonuniquelabels Non-unique Labels
 
   It is possible to have properties with identical label under same parent.
 However, care must be taken to ensure that each property still has
 unique (base) name.
 
-@subsection boolproperty wxBoolProperty
+@subsection propgrid_boolproperty wxBoolProperty
 
   There are few points about wxBoolProperty that require futher discussion:
   - wxBoolProperty can be shown as either normal combobox or as a checkbox.
@@ -1053,7 +1053,7 @@ unique (base) name.
   - Default item names for wxBoolProperty are [wxT("False"),wxT("True")]. This can be
     changed using wxPropertyGrid::SetBoolChoices(trueChoice,falseChoice).
 
-@subsection textctrlupdates Updates from wxTextCtrl Based Editor
+@subsection propgrid_textctrlupdates Updates from wxTextCtrl Based Editor
 
   Changes from wxTextCtrl based property editors are committed (ie.
 wxEVT_PG_CHANGED is sent etc.) *only* when (1) user presser enter, (2)
@@ -1066,7 +1066,7 @@ computations based on property grid values. Note that CommitChangesFromEditor()
 will dispatch wxEVT_PG_CHANGED with ProcessEvent, so any of your event handlers
 will be called immediately.
 
-@subsection splittercentering Centering the Splitter
+@subsection propgrid_splittercentering Centering the Splitter
 
   If you need to center the splitter, but only once when the program starts,
 then do <b>not</b> use the wxPG_SPLITTER_AUTO_CENTER window style, but the
@@ -1074,13 +1074,13 @@ wxPropertyGrid::CenterSplitter() method. <b>However, be sure to call it after
 the sizer setup and SetSize calls!</b> (ie. usually at the end of the
 frame/dialog constructor)
 
-@subsection splittersetting Setting Splitter Position When Creating Property Grid
+@subsection propgrid_splittersetting Setting Splitter Position When Creating Property Grid
 
 Splitter position cannot exceed grid size, and therefore setting it during
 form creation may fail as initial grid size is often smaller than desired
 splitter position, especially when sizers are being used.
 
-@subsection colourproperty wxColourProperty and wxSystemColourProperty
+@subsection propgrid_colourproperty wxColourProperty and wxSystemColourProperty
 
 Through subclassing, these two property classes provide substantial customization
 features. Subclass wxSystemColourProperty if you want to use wxColourPropertyValue
@@ -1096,7 +1096,7 @@ the item that triggers colour picker dialog (default is last).
 Override wxSystemColourProperty::GetColour() to determine which colour matches
 which choice entry.
 
-@section proplist Property Class Descriptions
+@section propgrid_proplist Property Class Descriptions
 
 See @ref pgproperty_properties
 
