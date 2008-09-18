@@ -22,7 +22,6 @@
         <checkout/>
         <configure/>
         <compile-all/>
-        <run-tests/>
     </steps>
 </build>
   <build>
@@ -34,7 +33,6 @@
         <checkout/>
         <configure options="--with-osx_cocoa"/>
         <compile-all/>
-        <run-tests/>
     </steps>
   </build>
 <build>
