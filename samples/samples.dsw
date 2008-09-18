@@ -615,6 +615,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "propgrid"=.\propgrid\propgrid.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "regtest"=.\regtest\regtest.dsp - Package Owner=<4>
 
 Package=<5>
