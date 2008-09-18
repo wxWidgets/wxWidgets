@@ -77,7 +77,7 @@ other wxWidgets controls:
 
 @endcode
 
-  (for complete list of new window styles: @link wndflags Additional Window Styles@endlink)
+  (for complete list of new window styles, see @ref propgrid_window_styles)
 
   wxPropertyGrid is usually populated with lines like this:
 
@@ -547,9 +547,8 @@ As expected there is also a const iterator:
 
 You can give some arguments to GetIterator to determine which properties
 get automatically filtered out. For complete list of options, see
-@link iteratorflags List of Property Iterator Flags@endlink. GetIterator()
-also accepts other arguments. See wxPropertyGridInterface::GetIterator()
-for details.
+@ref propgrid_iterator_flags. GetIterator() also accepts other arguments.
+See wxPropertyGridInterface::GetIterator() for details.
 
 This example reverse-iterates through all visible items:
 
@@ -915,7 +914,7 @@ inorder to store user values. Constant equivalents of all attribute string names
 provided. Some of them are defined as cached strings, so using constants can provide
 for smaller binary size.
 
-For complete list of attributes, see @link attrids Property Attributes@endlink.
+For complete list of attributes, see @ref propgrid_property_attributes.
 
 @subsection propgrid_boolcheckbox Setting wxBoolProperties to Use Check Box
 
