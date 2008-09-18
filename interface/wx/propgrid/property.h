@@ -10,26 +10,6 @@
 #define wxNullProperty  ((wxPGProperty*)NULL)
 
 
-/** wxPGPaintData
-
-    Contains information relayed to property's OnCustomPaint.
-*/
-struct wxPGPaintData
-{
-    /** wxPropertyGrid. */
-    const wxPropertyGrid*   m_parent;
-
-    /** Normally -1, otherwise index to drop-down list item that has to be drawn. */
-    int                     m_choiceItem;
-
-    /** Set to drawn width in OnCustomPaint (optional). */
-    int                     m_drawnWidth;
-
-    /** In a measure item call, set this to the height of item at m_choiceItem index. */
-    int                     m_drawnHeight;   
-};
-
-
 // Structure for relaying choice/list info.
 struct wxPGChoiceInfo
 {
@@ -693,7 +673,23 @@ public:
         Box reserved for custom graphics. Includes surrounding rectangle, if any.
         If x is < 0, then this is a measure item call (see above).
         @param paintdata
-        wxPGPaintData structure with much useful data.
+        wxPGPaintData structure with much useful data about painted item.
+        @code
+        struct wxPGPaintData
+        {
+            // wxPropertyGrid.
+            const wxPropertyGrid*   m_parent;
+
+            // Normally -1, otherwise index to drop-down list item that has to be drawn.
+            int                     m_choiceItem;
+
+            // Set to drawn width in OnCustomPaint (optional).
+            int                     m_drawnWidth;
+
+            // In a measure item call, set this to the height of item at m_choiceItem index
+            int                     m_drawnHeight;   
+        };
+        @endcode
 
         @remarks
             - You can actually exceed rect width, but if you do so then paintdata.m_drawnWidth
