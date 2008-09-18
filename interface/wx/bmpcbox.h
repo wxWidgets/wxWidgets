@@ -139,9 +139,9 @@ public:
         Creates the combobox for two-step construction.
     */
     bool Create(wxWindow* parent, wxWindowID id,
-                const wxString& value = "",
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
+                const wxString& value,
+                const wxPoint& pos,
+                const wxSize& size,
                 int n, const wxString choices[],
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,

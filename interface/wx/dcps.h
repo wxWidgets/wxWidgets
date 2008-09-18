@@ -20,10 +20,10 @@ class wxPostScriptDC : public wxDC
 {
 public:
     /**
-        Constructs a PostScript printer device context from a wxPrintData
-        object.
+        Constructs a PostScript printer device context from a wxPrintData object.
     */
     wxPostScriptDC(const wxPrintData& printData);
+
     /**
         Constructor. @a output is an optional file for printing to, and if
         @a interactive is @true a dialog box will be displayed for adjusting
@@ -38,7 +38,7 @@ public:
         @deprecated This constructor is deprecated.
     */
     wxPostScriptDC(const wxString& output,
-                   bool interactive = true,
+                   bool interactive,
                    wxWindow* parent);
 
     /**

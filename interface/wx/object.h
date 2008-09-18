@@ -200,7 +200,7 @@ public:
 
         Performs dereferencing, for those objects that use reference counting.
     */
-    wxObject();
+    ~wxObject();
 
     /**
         A virtual function that may be redefined by derived classes to allow dumping of
