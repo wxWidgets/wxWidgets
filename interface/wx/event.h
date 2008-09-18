@@ -319,7 +319,7 @@ public:
         wxString object which happens because the wxString field in the
         original @a event object and its copy made internally by this function
         share the same string buffer internally. Use QueueEvent() to avoid
-        this. 
+        this.
 
         A copy of event is made by the function, so the original can be deleted
         as soon as function returns (it is common that the original is created
@@ -3256,7 +3256,7 @@ public:
 /**
     @class wxSetCursorEvent
 
-    A SetCursorEvent is generated when the mouse cursor is about to be set as a
+    A wxSetCursorEvent is generated when the mouse cursor is about to be set as a
     result of mouse motion.
 
     This event gives the application the chance to perform specific mouse cursor

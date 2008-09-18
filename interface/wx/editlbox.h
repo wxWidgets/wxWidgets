@@ -94,6 +94,6 @@ public:
         Returns in the given array the current contents of the control
         (the array will be erased before control's contents are appended).
     */
-    void GetSelections(wxArrayString& strings) const;
+    void GetStrings(wxArrayString& strings) const;
 };
 

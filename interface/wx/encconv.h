@@ -11,7 +11,7 @@
 
     This class is capable of converting strings between two 8-bit encodings/charsets.
     It can also convert from/to Unicode (but only if you compiled wxWidgets
-    with wxUSE_WCHAR_T set to 1).
+    with @c wxUSE_WCHAR_T set to 1).
 
     Only a limited subset of encodings is supported by wxEncodingConverter:
     @c wxFONTENCODING_ISO8859_1..15, @c wxFONTENCODING_CP1250..1257 and
