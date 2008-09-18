@@ -111,8 +111,10 @@ protected:
 // notebook event class and related stuff
 // ----------------------------------------------------------------------------
 
-// wxNotebookEvent is obsolete and defined for compatibility only
-typedef wxBookCtrlEvent wxNotebookEvent;
+// wxNotebookEvent is obsolete and defined for compatibility only (notice that
+// we use #define and not typedef to also keep compatibility with the existing
+// code which forward declares it)
+#define wxNotebookEvent wxBookCtrlEvent
 typedef wxBookCtrlEventFunction wxNotebookEventFunction;
 #define wxNotebookEventHandler(func) wxBookCtrlEventHandler(func)
 

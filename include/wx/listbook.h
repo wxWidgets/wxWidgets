@@ -124,8 +124,10 @@ private:
 // listbook event class and related stuff
 // ----------------------------------------------------------------------------
 
-// wxListbookEvent is obsolete and defined for compatibility only
-typedef wxBookCtrlEvent wxListbookEvent;
+// wxListbookEvent is obsolete and defined for compatibility only (notice that
+// we use #define and not typedef to also keep compatibility with the existing
+// code which forward declares it)
+#define wxListbookEvent wxBookCtrlEvent
 typedef wxBookCtrlEventFunction wxListbookEventFunction;
 #define wxListbookEventHandler(func) wxBookCtrlEventHandler(func)
 
