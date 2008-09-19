@@ -47,13 +47,6 @@ struct wxPGPaintData
 };
 
 
-// Structure for relaying choice/list info.
-struct wxPGChoiceInfo
-{
-    wxPGChoices*    m_choices;
-};
-
-
 #ifndef SWIG
 
 
@@ -567,6 +560,383 @@ wxPG_PROP_CLASS_SPECIFIC_2          = 0x00100000
 
 // -----------------------------------------------------------------------
 
+#ifndef SWIG
+
+/** @class wxPGChoiceEntry
+    Data of a single wxPGChoices choice.
+*/
+class WXDLLIMPEXP_PROPGRID wxPGChoiceEntry : public wxPGCell
+{
+public:
+    wxPGChoiceEntry();
+    wxPGChoiceEntry( const wxPGChoiceEntry& entry );
+    wxPGChoiceEntry( const wxString& label,
+                     int value = wxPG_INVALID_VALUE )
+        : wxPGCell(), m_value(value)
+    {
+        m_text = label;
+    }
+
+    wxPGChoiceEntry( const wxString& label,
+                     int value,
+                     const wxBitmap& bitmap,
+                     const wxColour& fgCol = wxNullColour,
+                     const wxColour& bgCol = wxNullColour )
+        : wxPGCell(label, bitmap, fgCol, bgCol), m_value(value)
+    {
+    }
+
+    virtual ~wxPGChoiceEntry()
+    {
+    }
+
+    void SetValue( int value ) { m_value = value; }
+
+    int GetValue() const { return m_value; }
+
+    bool HasValue() const { return (m_value != wxPG_INVALID_VALUE); }
+
+protected:
+    int m_value;
+};
+
+
+typedef void* wxPGChoicesId;
+
+class WXDLLIMPEXP_PROPGRID wxPGChoicesData
+{
+    friend class wxPGChoices;
+public:
+    // Constructor sets m_refCount to 1.
+    wxPGChoicesData();
+
+    void CopyDataFrom( wxPGChoicesData* data );
+
+    // Takes ownership of 'item'
+    void Insert( int index, wxPGChoiceEntry* item )
+    {
+        wxArrayPtrVoid::iterator it;
+        if ( index == -1 )
+        {
+            it = m_items.end();
+            index = m_items.size();
+        }
+        else
+        {
+            it = m_items.begin() + index;
+        }
+
+        // Need to fix value?
+        if ( item->GetValue() == wxPG_INVALID_VALUE )
+            item->SetValue(index);
+
+        m_items.insert(it, item);
+    }
+
+    // Delete all entries
+    void Clear();
+
+    size_t GetCount() const { return m_items.size(); }
+
+    wxPGChoiceEntry* Item( unsigned int i ) const
+    {
+        wxCHECK_MSG( i < GetCount(), NULL, "invalid index" );
+
+        return (wxPGChoiceEntry*) m_items[i];
+    }
+
+    void DecRef()
+    {
+        m_refCount--;
+        wxASSERT( m_refCount >= 0 );
+        if ( m_refCount == 0 )
+            delete this;
+    }
+
+private:
+    wxArrayPtrVoid  m_items;
+
+    // So that multiple properties can use the same set
+    int             m_refCount;
+
+    virtual ~wxPGChoicesData();
+};
+
+#define wxPGChoicesEmptyData    ((wxPGChoicesData*)NULL)
+
+#endif // SWIG
+
+/** @class wxPGChoices
+
+    Helper class for managing choices of wxPropertyGrid properties.
+    Each entry can have label, value, bitmap, text colour, and background
+    colour.
+
+    @library{wxpropgrid}
+    @category{propgrid}
+*/
+class WXDLLIMPEXP_PROPGRID wxPGChoices
+{
+public:
+    typedef long ValArrItem;
+
+    /** Default constructor. */
+    wxPGChoices()
+    {
+        Init();
+    }
+
+    /** Copy constructor. */
+    wxPGChoices( const wxPGChoices& a )
+    {
+        if ( a.m_data != wxPGChoicesEmptyData )
+        {
+            m_data = a.m_data;
+            m_data->m_refCount++;
+        }
+    }
+
+    /** Constructor. */
+    wxPGChoices( const wxChar** labels, const long* values = NULL )
+    {
+        Init();
+        Set(labels,values);
+    }
+
+    /** Constructor. */
+    wxPGChoices( const wxArrayString& labels,
+                 const wxArrayInt& values = wxArrayInt() )
+    {
+        Init();
+        Set(labels,values);
+    }
+
+    /** Simple interface constructor. */
+    wxPGChoices( wxPGChoicesData* data )
+    {
+        wxASSERT(data);
+        m_data = data;
+        data->m_refCount++;
+    }
+
+    /** Destructor. */
+    ~wxPGChoices()
+    {
+        Free();
+    }
+
+    /**
+        Adds to current.
+
+        If did not have own copies, creates them now. If was empty, identical
+        to set except that creates copies.
+    */
+    void Add( const wxChar** labels, const ValArrItem* values = NULL );
+
+    /** Version that works with wxArrayString. */
+    void Add( const wxArrayString& arr, const ValArrItem* values = NULL );
+
+    /** Version that works with wxArrayString and wxArrayInt. */
+    void Add( const wxArrayString& arr, const wxArrayInt& arrint );
+
+    /** Adds single item. */
+    wxPGChoiceEntry& Add( const wxString& label,
+                          int value = wxPG_INVALID_VALUE );
+
+    /** Adds a single item, with bitmap. */
+    wxPGChoiceEntry& Add( const wxString& label,
+                          const wxBitmap& bitmap,
+                          int value = wxPG_INVALID_VALUE );
+
+    /** Adds a single item with full entry information. */
+    wxPGChoiceEntry& Add( const wxPGChoiceEntry& entry )
+    {
+        return Insert(entry, -1);
+    }
+
+    /** Adds single item. */
+    wxPGChoiceEntry& AddAsSorted( const wxString& label,
+                                  int value = wxPG_INVALID_VALUE );
+
+    void Assign( const wxPGChoices& a )
+    {
+        AssignData(a.m_data);
+    }
+
+    void AssignData( wxPGChoicesData* data );
+
+    /** Delete all choices. */
+    void Clear()
+    {
+        if ( m_data != wxPGChoicesEmptyData )
+            m_data->Clear();
+    }
+
+    void EnsureData()
+    {
+        if ( m_data == wxPGChoicesEmptyData )
+            m_data = new wxPGChoicesData();
+    }
+
+    /** Gets a unsigned number identifying this list. */
+    wxPGChoicesId GetId() const { return (wxPGChoicesId) m_data; };
+
+    const wxString& GetLabel( size_t ind ) const
+    {
+        return Item(ind).GetText();
+    }
+
+    size_t GetCount () const
+    {
+        if ( !m_data )
+            return 0;
+
+        return m_data->GetCount();
+    }
+
+    int GetValue( size_t ind ) const { return Item(ind).GetValue(); }
+
+    /** Returns array of values matching the given strings. Unmatching strings
+        result in wxPG_INVALID_VALUE entry in array.
+    */
+    wxArrayInt GetValuesForStrings( const wxArrayString& strings ) const;
+
+    /** Returns array of indices matching given strings. Unmatching strings
+        are added to 'unmatched', if not NULL.
+    */
+    wxArrayInt GetIndicesForStrings( const wxArrayString& strings,
+                                     wxArrayString* unmatched = NULL ) const;
+
+    /** Returns true if choices in general are likely to have values
+        (depens on that all entries have values or none has)
+    */
+    bool HasValues() const;
+
+    bool HasValue( unsigned int i ) const
+        { return (i < m_data->GetCount()) && m_data->Item(i)->HasValue(); }
+
+    int Index( const wxString& str ) const;
+    int Index( int val ) const;
+
+    /** Inserts single item. */
+    wxPGChoiceEntry& Insert( const wxString& label,
+                             int index,
+                             int value = wxPG_INVALID_VALUE );
+
+    /** Inserts a single item with full entry information. */
+    wxPGChoiceEntry& Insert( const wxPGChoiceEntry& entry, int index );
+
+    /** Returns false if this is a constant empty set of choices,
+        which should not be modified.
+    */
+    bool IsOk() const
+    {
+        return ( m_data != wxPGChoicesEmptyData );
+    }
+
+    const wxPGChoiceEntry& Item( unsigned int i ) const
+    {
+        wxASSERT( IsOk() );
+        return *m_data->Item(i);
+    }
+
+    wxPGChoiceEntry& Item( unsigned int i )
+    {
+        wxASSERT( IsOk() );
+        return *m_data->Item(i);
+    }
+
+    /** Removes count items starting at position nIndex. */
+    void RemoveAt(size_t nIndex, size_t count = 1);
+
+#ifndef SWIG
+    /** Does not create copies for itself. */
+    void Set( const wxChar** labels, const long* values = NULL )
+    {
+        Free();
+        Add(labels,values);
+    }
+
+    /** Version that works with wxArrayString.
+        TODO: Deprecate this.
+    */
+    void Set( wxArrayString& arr, const long* values = (const long*) NULL )
+    {
+        Free();
+        Add(arr,values);
+    }
+#endif // SWIG
+
+    /** Version that works with wxArrayString and wxArrayInt. */
+    void Set( const wxArrayString& labels,
+              const wxArrayInt& values = wxArrayInt() )
+    {
+        Free();
+        if ( &values )
+            Add(labels,values);
+        else
+            Add(labels);
+    }
+
+    // Creates exclusive copy of current choices
+    void SetExclusive()
+    {
+        if ( m_data->m_refCount != 1 )
+        {
+            wxPGChoicesData* data = new wxPGChoicesData();
+            data->CopyDataFrom(m_data);
+            Free();
+            m_data = data;
+        }
+    }
+
+    // Returns data, increases refcount.
+    wxPGChoicesData* GetData()
+    {
+        wxASSERT( m_data->m_refCount != 0xFFFFFFF );
+        m_data->m_refCount++;
+        return m_data;
+    }
+
+    // Returns plain data ptr - no refcounting stuff is done.
+    wxPGChoicesData* GetDataPtr() const { return m_data; }
+
+    // Changes ownership of data to you.
+    wxPGChoicesData* ExtractData()
+    {
+        wxPGChoicesData* data = m_data;
+        m_data = wxPGChoicesEmptyData;
+        return data;
+    }
+
+    wxArrayString GetLabels() const;
+
+#ifndef SWIG
+    void operator= (const wxPGChoices& a)
+    {
+        AssignData(a.m_data);
+    }
+
+    wxPGChoiceEntry& operator[](unsigned int i)
+    {
+        return Item(i);
+    }
+
+    const wxPGChoiceEntry& operator[](unsigned int i) const
+    {
+        return Item(i);
+    }
+
+protected:
+    wxPGChoicesData*    m_data;
+
+    void Init();
+    void Free();
+#endif  // !SWIG
+};
+
+// -----------------------------------------------------------------------
+
 /** @class wxPGProperty
 
     wxPGProperty is base class for all wxPropertyGrid properties.
@@ -854,21 +1224,6 @@ public:
     virtual wxValidator* DoGetValidator () const;
 
     /**
-        Returns current value's index to the choice control.
-
-        May also return, through pointer arguments, strings that should be
-        inserted to that control. Irrelevant to classes which do not employ
-        wxPGEditor_Choice or similar.
-
-        @remarks
-        - If returns NULL in choiceinfo.m_choices, then this class must be
-          derived from wxBaseEnumProperty.
-        - Must be able to cope situation where property's set of choices is
-          uninitialized.
-    */
-    virtual int GetChoiceInfo( wxPGChoiceInfo* choiceinfo );
-
-    /**
         Override to paint an image in front of the property value text or
         drop-down list item (but only if wxPGProperty::OnMeasureImage is
         overridden as well).
@@ -923,6 +1278,14 @@ public:
     */
     virtual wxPGCellRenderer* GetCellRenderer( int column ) const;
 
+    /** Returns which choice is currently selected. Only applies to properties
+        which have choices.
+
+        Needs to reimplemented in derived class if property value does not
+        map directly to a choice. Integer as index, bool, and string usually do.
+    */
+    virtual int GetChoiceSelection() const;
+
     /**
         Refresh values of child properties.
 
@@ -955,17 +1318,6 @@ public:
     */
     virtual wxPGEditorDialogAdapter* GetEditorDialog() const;
 
-    /**
-        Adds entry to property's wxPGChoices and editor control (if it is
-        active).
-
-        Returns index of item added.
-    */
-    int AppendChoice( const wxString& label, int value = wxPG_INVALID_VALUE )
-    {
-        return InsertChoice(label,-1,value);
-    }
-
     /** Returns wxPGCell of given column, NULL if none. If valid
         object is returned, caller will gain its ownership.
     */
@@ -977,6 +1329,13 @@ public:
         wxPGCell* cell = (wxPGCell*) m_cells[column];
         m_cells[column] = NULL;
         return cell;
+    }
+
+    /** Append a new choice to property's list of choices.
+    */
+    int AddChoice( const wxString& label, int value = wxPG_INVALID_VALUE )
+    {
+        return InsertChoice(label, wxNOT_FOUND, value);
     }
 
     /**
@@ -1028,11 +1387,12 @@ public:
      */
     const wxString& GetBaseName() const { return m_name; }
 
-    wxPGChoices& GetChoices();
-
-    const wxPGChoices& GetChoices() const;
-
-    const wxPGChoiceEntry* GetCurrentChoice() const;
+    /** Returns read-only reference to property's list of choices.
+    */
+    const wxPGChoices& GetChoices() const
+    {
+        return m_choices;
+    }
 
     /** Returns coordinate to the top y of the property. Note that the
         position of scrollbars is not taken into account.
@@ -1076,10 +1436,6 @@ public:
 
         return (wxPGCell*) m_cells[column];
     }
-
-    unsigned int GetChoiceCount() const;
-
-    wxString GetChoiceString( unsigned int index );
 
     /** Return number of displayed common values for this property.
     */
@@ -1171,15 +1527,9 @@ public:
     */
     bool HasVisibleChildren() const;
 
-    /**
-        Adds entry to property's wxPGChoices and editor control (if it is
-        active).
-
-        Returns index of item added.
+    /** Inserts a new choice to property's list of choices.
     */
-    int InsertChoice( const wxString& label,
-                      int index,
-                      int value = wxPG_INVALID_VALUE );
+    int InsertChoice( const wxString& label, int index, int value = wxPG_INVALID_VALUE );
 
     /**
         Returns true if this property is actually a wxPropertyCategory.
@@ -1341,10 +1691,6 @@ public:
     */
     void SetCell( int column, wxPGCell* cellObj );
 
-    /** Changes value of a property with choices, but only
-        works if the value type is long or string. */
-    void SetChoiceSelection( int newValue, const wxPGChoiceInfo& choiceInfo );
-
     /** Sets common value selected for this property. -1 for none.
     */
     void SetCommonValue( int commonValue )
@@ -1402,7 +1748,17 @@ public:
     /** If property has choices and they are not yet exclusive, new such copy
         of them will be created.
     */
-    void SetChoicesExclusive();
+    void SetChoicesExclusive()
+    {
+        m_choices.SetExclusive();
+    }
+
+    /** Sets selected choice and changes property value.
+
+        Tries to retain value type, although currently if it is not string,
+        then it is forced to integer.
+    */
+    void SetChoiceSelection( int newValue );
 
     void SetExpanded( bool expanded )
     {
@@ -1501,8 +1857,12 @@ public:
 
     /** Sets new set of choices for property.
     */
-    inline bool SetChoices( const wxArrayString& labels,
-                            const wxArrayInt& values = wxArrayInt() );
+    bool SetChoices( const wxArrayString& labels,
+                     const wxArrayInt& values = wxArrayInt() )
+    {
+        wxPGChoices chs(labels, values);
+        return SetChoices(chs);
+    }
 
     /** Set max length of text in text editor.
     */
@@ -1682,6 +2042,9 @@ protected:
     // Extended cell information
     wxArrayPtrVoid              m_cells;
 
+    // Choices shown in drop-down list of editor control.
+    wxPGChoices                 m_choices;
+
     // Help shown in statusbar or help box.
     wxString                    m_helpString;
 
@@ -1810,390 +2173,6 @@ private:
 };
 
 #endif  // !SWIG
-
-// -----------------------------------------------------------------------
-
-#ifndef SWIG
-
-/** @class wxPGChoiceEntry
-    Data of a single wxPGChoices choice.
-*/
-class WXDLLIMPEXP_PROPGRID wxPGChoiceEntry : public wxPGCell
-{
-public:
-    wxPGChoiceEntry();
-    wxPGChoiceEntry( const wxPGChoiceEntry& entry );
-    wxPGChoiceEntry( const wxString& label,
-                     int value = wxPG_INVALID_VALUE )
-        : wxPGCell(), m_value(value)
-    {
-        m_text = label;
-    }
-
-    wxPGChoiceEntry( const wxString& label,
-                     int value,
-                     const wxBitmap& bitmap,
-                     const wxColour& fgCol = wxNullColour,
-                     const wxColour& bgCol = wxNullColour )
-        : wxPGCell(label, bitmap, fgCol, bgCol), m_value(value)
-    {
-    }
-
-    virtual ~wxPGChoiceEntry()
-    {
-    }
-
-    void SetValue( int value ) { m_value = value; }
-
-    int GetValue() const { return m_value; }
-
-    bool HasValue() const { return (m_value != wxPG_INVALID_VALUE); }
-
-protected:
-    int m_value;
-};
-
-
-typedef void* wxPGChoicesId;
-
-class WXDLLIMPEXP_PROPGRID wxPGChoicesData
-{
-    friend class wxPGChoices;
-public:
-    // Constructor sets m_refCount to 1.
-    wxPGChoicesData();
-
-    void CopyDataFrom( wxPGChoicesData* data );
-
-    // Takes ownership of 'item'
-    void Insert( int index, wxPGChoiceEntry* item )
-    {
-        wxArrayPtrVoid::iterator it;
-        if ( index == -1 )
-        {
-            it = m_items.end();
-            index = m_items.size();
-        }
-        else
-        {
-            it = m_items.begin() + index;
-        }
-
-        // Need to fix value?
-        if ( item->GetValue() == wxPG_INVALID_VALUE )
-            item->SetValue(index);
-
-        m_items.insert(it, item);
-    }
-
-    // Delete all entries
-    void Clear();
-
-    size_t GetCount() const { return m_items.size(); }
-
-    wxPGChoiceEntry* Item( unsigned int i ) const
-    {
-        wxCHECK_MSG( i < GetCount(), NULL, "invalid index" );
-
-        return (wxPGChoiceEntry*) m_items[i];
-    }
-
-    void DecRef()
-    {
-        m_refCount--;
-        wxASSERT( m_refCount >= 0 );
-        if ( m_refCount == 0 )
-            delete this;
-    }
-
-private:
-    wxArrayPtrVoid  m_items;
-
-    // So that multiple properties can use the same set
-    int             m_refCount;
-
-    virtual ~wxPGChoicesData();
-};
-
-#define wxPGChoicesEmptyData    ((wxPGChoicesData*)NULL)
-
-#endif // SWIG
-
-
-/** @class wxPGChoices
-
-    Helper class for managing choices of wxPropertyGrid properties.
-    Each entry can have label, value, bitmap, text colour, and background
-    colour.
-
-    @library{wxpropgrid}
-    @category{propgrid}
-*/
-class WXDLLIMPEXP_PROPGRID wxPGChoices
-{
-public:
-    typedef long ValArrItem;
-
-    /** Default constructor. */
-    wxPGChoices()
-    {
-        Init();
-    }
-
-    /** Copy constructor. */
-    wxPGChoices( const wxPGChoices& a )
-    {
-        if ( a.m_data != wxPGChoicesEmptyData )
-        {
-            m_data = a.m_data;
-            m_data->m_refCount++;
-        }
-    }
-
-    /** Constructor. */
-    wxPGChoices( const wxChar** labels, const long* values = NULL )
-    {
-        Init();
-        Set(labels,values);
-    }
-
-    /** Constructor. */
-    wxPGChoices( const wxArrayString& labels,
-                 const wxArrayInt& values = wxArrayInt() )
-    {
-        Init();
-        Set(labels,values);
-    }
-
-    /** Simple interface constructor. */
-    wxPGChoices( wxPGChoicesData* data )
-    {
-        wxASSERT(data);
-        m_data = data;
-        data->m_refCount++;
-    }
-
-    /** Destructor. */
-    ~wxPGChoices()
-    {
-        Free();
-    }
-
-    /**
-        Adds to current.
-
-        If did not have own copies, creates them now. If was empty, identical
-        to set except that creates copies.
-    */
-    void Add( const wxChar** labels, const ValArrItem* values = NULL );
-
-    /** Version that works with wxArrayString. */
-    void Add( const wxArrayString& arr, const ValArrItem* values = NULL );
-
-    /** Version that works with wxArrayString and wxArrayInt. */
-    void Add( const wxArrayString& arr, const wxArrayInt& arrint );
-
-    /** Adds single item. */
-    wxPGChoiceEntry& Add( const wxString& label,
-                          int value = wxPG_INVALID_VALUE );
-
-    /** Adds a single item, with bitmap. */
-    wxPGChoiceEntry& Add( const wxString& label,
-                          const wxBitmap& bitmap,
-                          int value = wxPG_INVALID_VALUE );
-
-    /** Adds a single item with full entry information. */
-    wxPGChoiceEntry& Add( const wxPGChoiceEntry& entry )
-    {
-        return Insert(entry, -1);
-    }
-
-    /** Adds single item. */
-    wxPGChoiceEntry& AddAsSorted( const wxString& label,
-                                  int value = wxPG_INVALID_VALUE );
-
-    void Assign( const wxPGChoices& a )
-    {
-        AssignData(a.m_data);
-    }
-
-    void AssignData( wxPGChoicesData* data );
-
-    /** Delete all choices. */
-    void Clear()
-    {
-        if ( m_data != wxPGChoicesEmptyData )
-            m_data->Clear();
-    }
-
-    void EnsureData()
-    {
-        if ( m_data == wxPGChoicesEmptyData )
-            m_data = new wxPGChoicesData();
-    }
-
-    /** Gets a unsigned number identifying this list. */
-    wxPGChoicesId GetId() const { return (wxPGChoicesId) m_data; };
-
-    const wxString& GetLabel( size_t ind ) const
-    {
-        return Item(ind).GetText();
-    }
-
-    size_t GetCount () const
-    {
-        wxASSERT_MSG( m_data, "When checking if wxPGChoices is valid, "
-                              "use IsOk() instead of GetCount()" );
-        return m_data->GetCount();
-    }
-
-    int GetValue( size_t ind ) const { return Item(ind).GetValue(); }
-
-    /** Returns array of values matching the given strings. Unmatching strings
-        result in wxPG_INVALID_VALUE entry in array.
-    */
-    wxArrayInt GetValuesForStrings( const wxArrayString& strings ) const;
-
-    /** Returns array of indices matching given strings. Unmatching strings
-        are added to 'unmatched', if not NULL.
-    */
-    wxArrayInt GetIndicesForStrings( const wxArrayString& strings,
-                                     wxArrayString* unmatched = NULL ) const;
-
-    /** Returns true if choices in general are likely to have values
-        (depens on that all entries have values or none has)
-    */
-    bool HasValues() const;
-
-    bool HasValue( unsigned int i ) const
-        { return (i < m_data->GetCount()) && m_data->Item(i)->HasValue(); }
-
-    int Index( const wxString& str ) const;
-    int Index( int val ) const;
-
-    /** Inserts single item. */
-    wxPGChoiceEntry& Insert( const wxString& label,
-                             int index,
-                             int value = wxPG_INVALID_VALUE );
-
-    /** Inserts a single item with full entry information. */
-    wxPGChoiceEntry& Insert( const wxPGChoiceEntry& entry, int index );
-
-    /** Returns false if this is a constant empty set of choices,
-        which should not be modified.
-    */
-    bool IsOk() const
-    {
-        return ( m_data != wxPGChoicesEmptyData );
-    }
-
-    const wxPGChoiceEntry& Item( unsigned int i ) const
-    {
-        wxASSERT( IsOk() );
-        return *m_data->Item(i);
-    }
-
-    wxPGChoiceEntry& Item( unsigned int i )
-    {
-        wxASSERT( IsOk() );
-        return *m_data->Item(i);
-    }
-
-    /** Removes count items starting at position nIndex. */
-    void RemoveAt(size_t nIndex, size_t count = 1);
-
-#ifndef SWIG
-    /** Does not create copies for itself. */
-    void Set( const wxChar** labels, const long* values = NULL )
-    {
-        Free();
-        Add(labels,values);
-    }
-
-    /** Version that works with wxArrayString.
-        TODO: Deprecate this.
-    */
-    void Set( wxArrayString& arr, const long* values = (const long*) NULL )
-    {
-        Free();
-        Add(arr,values);
-    }
-#endif // SWIG
-
-    /** Version that works with wxArrayString and wxArrayInt. */
-    void Set( const wxArrayString& labels,
-              const wxArrayInt& values = wxArrayInt() )
-    {
-        Free();
-        if ( &values )
-            Add(labels,values);
-        else
-            Add(labels);
-    }
-
-    // Creates exclusive copy of current choices
-    void SetExclusive()
-    {
-        if ( m_data->m_refCount != 1 )
-        {
-            wxPGChoicesData* data = new wxPGChoicesData();
-            data->CopyDataFrom(m_data);
-            Free();
-            m_data = data;
-        }
-    }
-
-    // Returns data, increases refcount.
-    wxPGChoicesData* GetData()
-    {
-        wxASSERT( m_data->m_refCount != 0xFFFFFFF );
-        m_data->m_refCount++;
-        return m_data;
-    }
-
-    // Returns plain data ptr - no refcounting stuff is done.
-    wxPGChoicesData* GetDataPtr() const { return m_data; }
-
-    // Changes ownership of data to you.
-    wxPGChoicesData* ExtractData()
-    {
-        wxPGChoicesData* data = m_data;
-        m_data = wxPGChoicesEmptyData;
-        return data;
-    }
-
-    wxArrayString GetLabels() const;
-
-#ifndef SWIG
-    void operator= (const wxPGChoices& a)
-    {
-        AssignData(a.m_data);
-    }
-
-    wxPGChoiceEntry& operator[](unsigned int i)
-    {
-        return Item(i);
-    }
-
-    const wxPGChoiceEntry& operator[](unsigned int i) const
-    {
-        return Item(i);
-    }
-
-protected:
-    wxPGChoicesData*    m_data;
-
-    void Init();
-    void Free();
-#endif  // !SWIG
-};
-
-inline bool wxPGProperty::SetChoices( const wxArrayString& labels,
-                                      const wxArrayInt& values )
-{
-    wxPGChoices chs(labels, values);
-    return SetChoices(chs);
-}
 
 // -----------------------------------------------------------------------
 

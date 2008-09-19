@@ -39,7 +39,6 @@ class wxArrayEditorDialog;
 #define WX_PG_DECLARE_CHOICE_METHODS() \
     virtual bool IntToValue( wxVariant& variant, \
                              int number, int argFlags = 0 ) const; \
-    virtual int GetChoiceInfo( wxPGChoiceInfo* choiceinfo );
 
 #define WX_PG_DECLARE_EVENT_METHODS() \
     virtual bool OnEvent( wxPropertyGrid* propgrid, \
@@ -640,6 +639,11 @@ public:
     // pvalue is never NULL - always set it.
     virtual const wxString* GetEntry( size_t index, int* pvalue ) const = 0;
 
+    // GetChoiceSelection needs to overridden since m_index is
+    // the true index, and various property classes derived from
+    // this take advantage of it.
+    virtual int GetChoiceSelection() const { return m_index; }
+
     int GetValueForIndex( size_t index ) const
     {
         int v;
@@ -718,15 +722,11 @@ public:
 
     virtual ~wxEnumProperty();
 
-    virtual int GetChoiceInfo( wxPGChoiceInfo* choiceinfo );
     virtual int GetIndexForValue( int value ) const;
     virtual const wxString* GetEntry( size_t index, int* pvalue ) const;
 
     size_t GetItemCount() const { return m_choices.GetCount(); }
     const wxPGChoices& GetChoices() const { return m_choices; }
-
-protected:
-    wxPGChoices             m_choices;
 };
 
 // -----------------------------------------------------------------------
@@ -817,8 +817,9 @@ public:
                                wxVariant& childValue ) const;
     virtual void RefreshChildren();
 
-    // this is necessary for conveying m_choices
-    virtual int GetChoiceInfo( wxPGChoiceInfo* choiceinfo );
+    // GetChoiceSelection needs to overridden since m_choices is
+    // used and value is integer, but it is not index.
+    virtual int GetChoiceSelection() const { return wxNOT_FOUND; }
 
     // helpers
     size_t GetItemCount() const { return m_choices.GetCount(); }
@@ -826,8 +827,6 @@ public:
         { return m_choices.GetLabel(ind); }
 
 protected:
-    wxPGChoices             m_choices;
-
     // Used to detect if choices have been changed
     wxPGChoicesData*        m_oldChoicesData;
 

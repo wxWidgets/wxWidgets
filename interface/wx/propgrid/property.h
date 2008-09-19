@@ -10,13 +10,6 @@
 #define wxNullProperty  ((wxPGProperty*)NULL)
 
 
-// Structure for relaying choice/list info.
-struct wxPGChoiceInfo
-{
-    wxPGChoices*    m_choices;
-};
-
-
 /** @section propgrid_property_attributes wxPropertyGrid Property Attribute Identifiers
 
     wxPGProperty::SetAttribute() and
@@ -257,7 +250,8 @@ struct wxPGChoiceInfo
     the flags as a text; a continous sequence of spaces, commas and semicolons
     is considered as a flag id separator.
     <b>Note: </b> When changing "choices" (ie. flag labels) of wxFlagsProperty, you
-    will need to use SetPropertyChoices - otherwise they will not get updated properly.
+    will need to use wxPGProperty::SetChoices() - otherwise they will not get updated
+    properly.
 
     @subsection wxArrayStringProperty
 
@@ -634,17 +628,6 @@ public:
     */
     virtual wxValidator* DoGetValidator () const;
 
-    /** Returns current value's index to the choice control. May also return,
-        through pointer arguments, strings that should be inserted to that control.
-        Irrelevant to classes which do not employ wxPGEditor_Choice or similar.
-        @remarks
-        - If returns NULL in choiceinfo.m_choices, then this class must be
-          derived from wxBaseEnumProperty.
-        - Must be able to cope situation where property's set of choices is
-          uninitialized.
-    */
-    virtual int GetChoiceInfo( wxPGChoiceInfo* choiceinfo );
-
     /** Override to paint an image in front of the property value text or drop-down
         list item (but only if wxPGProperty::OnMeasureImage is overridden as well).
 
@@ -682,7 +665,7 @@ public:
             int                     m_drawnWidth;
 
             // In a measure item call, set this to the height of item at m_choiceItem index
-            int                     m_drawnHeight;   
+            int                     m_drawnHeight;
         };
         @endcode
 
@@ -705,6 +688,14 @@ public:
         Default implementation returns editor's renderer for all columns.
     */
     virtual wxPGCellRenderer* GetCellRenderer( int column ) const;
+
+    /** Returns which choice is currently selected. Only applies to properties
+        which have choices.
+
+        Needs to reimplemented in derived class if property value does not
+        map directly to a choice. Integer as index, bool, and string usually do.
+    */
+    virtual int GetChoiceSelection() const;
 
     /** Refresh values of child properties. Automatically called after value is set.
     */
@@ -735,14 +726,6 @@ public:
     */
     virtual wxPGEditorDialogAdapter* GetEditorDialog() const;
 
-    /** Adds entry to property's wxPGChoices and editor control (if it is active).
-        Returns index of item added.
-    */
-    int AppendChoice( const wxString& label, int value = wxPG_INVALID_VALUE )
-    {
-        return InsertChoice(label,-1,value);
-    }
-
     /** Returns wxPGCell of given column, NULL if none. If valid
         object is returned, caller will gain its ownership.
     */
@@ -755,6 +738,20 @@ public:
         m_cells[column] = NULL;
         return cell;
     }
+
+    /** Append a new choice to property's list of choices.
+
+        @param label
+            Label for added choice.
+
+        @param value
+            Value for new choice. Do not specify if you wish this
+            to equal choice index.
+
+        @return
+            Index to added choice.
+    */
+    int AddChoice( const wxString& label, int value = wxPG_INVALID_VALUE );
 
     /** Returns true if children of this property are component values (for instance,
         points size, face name, and is_underlined are component values of a font).
@@ -796,11 +793,9 @@ public:
     /** Returns property's base name (ie. parent's name is not added in any case) */
     const wxString& GetBaseName() const { return m_name; }
 
-    wxPGChoices& GetChoices();
-
+    /** Returns read-only reference to property's list of choices.
+    */
     const wxPGChoices& GetChoices() const;
-
-    const wxPGChoiceEntry* GetCurrentChoice() const;
 
     /** Returns coordinate to the top y of the property. Note that the
         position of scrollbars is not taken into account.
@@ -842,10 +837,6 @@ public:
 
         return (wxPGCell*) m_cells[column];
     }
-
-    unsigned int GetChoiceCount() const;
-
-    wxString GetChoiceString( unsigned int index );
 
     /** Return number of displayed common values for this property.
     */
@@ -937,8 +928,17 @@ public:
     */
     bool HasVisibleChildren() const;
 
-    /** Adds entry to property's wxPGChoices and editor control (if it is active).
-        Returns index of item added.
+    /** Inserts a new choice to property's list of choices.
+
+        @param label
+            Text for new choice
+
+        @param index
+            Insertion position. Use wxNOT_FOUND to append.
+
+        @param value
+            Value for new choice. Do not specify if you wish this
+            to equal choice index.
     */
     int InsertChoice( const wxString& label, int index, int value = wxPG_INVALID_VALUE );
 
@@ -1086,9 +1086,17 @@ public:
     */
     void SetCell( int column, wxPGCell* cellObj );
 
-    /** Changes value of a property with choices, but only
-        works if the value type is long or string. */
-    void SetChoiceSelection( int newValue, const wxPGChoiceInfo& choiceInfo );
+    /** If property has choices and they are not yet exclusive, new such copy
+        of them will be created.
+    */
+    void SetChoicesExclusive();
+
+    /** Sets selected choice and changes property value.
+
+        Tries to retain value type, although currently if it is not string,
+        then it is forced to integer.
+    */
+    void SetChoiceSelection( int newValue );
 
     /** Sets common value selected for this property. -1 for none.
     */
@@ -1140,11 +1148,6 @@ public:
         by custom cell renderers.
     */
     void SetValueImage( wxBitmap& bmp );
-
-    /** If property has choices and they are not yet exclusive, new such copy
-        of them will be created.
-    */
-    void SetChoicesExclusive();
 
     void SetExpanded( bool expanded )
     {
@@ -1280,7 +1283,7 @@ public:
 
     /** Returns height of children, recursively, and
         by taking expanded/collapsed status into account.
-        
+
         iMax is used when finding property y-positions.
     */
     int GetChildrenHeight( int lh, int iMax = -1 ) const;

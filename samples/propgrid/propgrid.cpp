@@ -326,14 +326,6 @@ void wxAdvImageFileProperty::OnSetValue()
         m_index = -1;
 }
 
-int wxAdvImageFileProperty::GetChoiceInfo( wxPGChoiceInfo* choiceinfo )
-{
-    if ( choiceinfo )
-        choiceinfo->m_choices = &ms_choices;
-
-    return m_index;
-}
-
 bool wxAdvImageFileProperty::IntToValue( wxVariant& variant, int number, int WXUNUSED(argFlags) ) const
 {
     wxASSERT( number >= 0 );
@@ -1488,7 +1480,7 @@ void FormMain::PopulateWithExamples ()
                                    wxPG_LABEL,
                                    soc,
                                   240) );
-    pg->AddPropertyChoice(wxT("EnumProperty 2"),wxT("Testing Extra"),360);
+    pg->GetProperty(wxT("EnumProperty 2"))->AddChoice(wxT("Testing Extra"), 360);
 
     // Add a second time to test that the caching works
     pg->Append( new wxEnumProperty(wxT("EnumProperty 3"),wxPG_LABEL,
@@ -1503,8 +1495,9 @@ void FormMain::PopulateWithExamples ()
 
     pg->Append( new wxEnumProperty(wxT("EnumProperty 5"),wxPG_LABEL,
         soc, 240 ) );
-    pg->SetPropertyChoicesExclusive(wxT("EnumProperty 5"));
-    pg->AddPropertyChoice(wxT("EnumProperty 5"),wxT("5th only"),360);
+    pg->GetProperty(wxT("EnumProperty 5"))->SetChoicesExclusive();
+    pg->GetProperty(wxT("EnumProperty 5"))->AddChoice(wxT("5th only"), 360);
+
     pg->SetPropertyHelpString(wxT("EnumProperty 5"),
         wxT("Should have one extra item when compared to EnumProperty 4"));
 
@@ -2495,8 +2488,7 @@ void FormMain::OnFitColumnsClick( wxCommandEvent& WXUNUSED(event) )
 
 void FormMain::OnChangeFlagsPropItemsClick( wxCommandEvent& WXUNUSED(event) )
 {
-
-    wxPGProperty* id = m_pPropGridManager->GetPropertyByName(wxT("Window Styles"));
+    wxPGProperty* p = m_pPropGridManager->GetPropertyByName(wxT("Window Styles"));
 
     wxPGChoices newChoices;
 
@@ -2505,9 +2497,7 @@ void FormMain::OnChangeFlagsPropItemsClick( wxCommandEvent& WXUNUSED(event) )
     newChoices.Add(wxT("Safe"),0x4);
     newChoices.Add(wxT("Sleek"),0x8);
 
-    m_pPropGridManager->SetPropertyChoices(id,newChoices);
-    //m_pPropGridManager->ReplaceProperty(wxT("Window Styles"),
-    //    wxFlagsProperty(wxT("Window Styles"),wxPG_LABEL,newChoices));
+    p->SetChoices(newChoices);
 }
 
 // -----------------------------------------------------------------------
@@ -2892,14 +2882,14 @@ void FormMain::OnInsertChoice( wxCommandEvent& WXUNUSED(event) )
     wxPropertyGrid* pg = m_pPropGridManager->GetGrid();
 
     wxPGProperty* selected = pg->GetSelection();
-    wxPGChoices& choices = pg->GetPropertyChoices(selected);
+    const wxPGChoices& choices = selected->GetChoices();
 
     // Insert new choice to the center of list
 
     if ( choices.IsOk() )
     {
         int pos = choices.GetCount() / 2;
-        pg->InsertPropertyChoice(selected,wxT("New Choice"),pos);
+        selected->InsertChoice(wxT("New Choice"), pos);
     }
     else
     {
@@ -2914,14 +2904,14 @@ void FormMain::OnDeleteChoice( wxCommandEvent& WXUNUSED(event) )
     wxPropertyGrid* pg = m_pPropGridManager->GetGrid();
 
     wxPGProperty* selected = pg->GetSelection();
-    wxPGChoices& choices = pg->GetPropertyChoices(selected);
+    const wxPGChoices& choices = selected->GetChoices();
 
     // Deletes choice from the center of list
 
     if ( choices.IsOk() )
     {
         int pos = choices.GetCount() / 2;
-        pg->DeletePropertyChoice(selected,pos);
+        selected->DeleteChoice(pos);
     }
     else
     {

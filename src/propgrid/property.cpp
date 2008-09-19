@@ -210,11 +210,16 @@ void wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
     // Use choice cell?
     if ( column == 1 && (flags & Control) )
     {
-        const wxPGCell* ccell = property->GetCurrentChoice();
-        if ( ccell &&
-             ( ccell->GetBitmap().IsOk() || ccell->GetFgCol().IsOk() || ccell->GetBgCol().IsOk() )
-           )
-            cell = ccell;
+        int selectedIndex = property->GetChoiceSelection();
+        if ( selectedIndex != wxNOT_FOUND )
+        {
+            const wxPGChoices& choices = property->GetChoices();
+            const wxPGCell* ccell = &choices[selectedIndex];
+            if ( ccell &&
+                 ( ccell->GetBitmap().IsOk() || ccell->GetFgCol().IsOk() || ccell->GetBgCol().IsOk() )
+               )
+                cell = ccell;
+        }
     }
 
     if ( cell )
@@ -1099,104 +1104,6 @@ void wxPGProperty::SetCell( int column, wxPGCell* cellObj )
     m_cells[column] = cellObj;
 }
 
-void wxPGProperty::SetChoiceSelection( int newValue, const wxPGChoiceInfo& choiceInfo )
-{
-    // Changes value of a property with choices, but only
-    // works if the value type is long or string.
-    wxString ts = GetValue().GetType();
-
-    wxCHECK_RET( choiceInfo.m_choices, wxT("invalid choiceinfo") );
-
-    if ( ts == wxS("long") )
-    {
-        SetValue( (long) newValue );
-    }
-    else if ( ts == wxS("string") )
-    {
-        SetValue( choiceInfo.m_choices->GetLabel(newValue) );
-    }
-}
-
-
-wxString wxPGProperty::GetChoiceString( unsigned int index )
-{
-    wxPGChoiceInfo ci;
-    GetChoiceInfo(&ci);
-    wxASSERT(ci.m_choices);
-    return ci.m_choices->GetLabel(index);
-}
-
-int wxPGProperty::InsertChoice( const wxString& label, int index, int value )
-{
-    wxPropertyGrid* pg = GetGrid();
-
-    wxPGChoiceInfo ci;
-    ci.m_choices = (wxPGChoices*) NULL;
-    int sel = GetChoiceInfo(&ci);
-
-    if ( ci.m_choices )
-    {
-        int newSel = sel;
-
-        if ( index < 0 )
-            index = ci.m_choices->GetCount();
-
-        if ( index <= sel )
-            newSel++;
-
-        ci.m_choices->Insert(label, index, value);
-
-        if ( sel != newSel )
-            SetChoiceSelection(newSel, ci);
-
-        if ( this == pg->GetSelection() )
-            GetEditorClass()->InsertItem(pg->GetEditorControl(),label,index);
-
-        return index;
-    }
-
-    return -1;
-}
-
-
-void wxPGProperty::DeleteChoice( int index )
-{
-    wxPropertyGrid* pg = GetGrid();
-
-    wxPGChoiceInfo ci;
-    ci.m_choices = (wxPGChoices*) NULL;
-    int sel = GetChoiceInfo(&ci);
-
-    if ( ci.m_choices )
-    {
-        int newSel = sel;
-
-        // Adjust current value
-        if ( sel == index )
-        {
-            SetValueToUnspecified();
-            newSel = 0;
-        }
-        else if ( index < sel )
-        {
-            newSel--;
-        }
-
-        ci.m_choices->RemoveAt(index);
-
-        if ( sel != newSel )
-            SetChoiceSelection(newSel, ci);
-
-        if ( this == pg->GetSelection() )
-            GetEditorClass()->DeleteItem(pg->GetEditorControl(), index);
-    }
-}
-
-int wxPGProperty::GetChoiceInfo( wxPGChoiceInfo* WXUNUSED(info) )
-{
-    return -1;
-}
-
 wxPGEditorDialogAdapter* wxPGProperty::GetEditorDialog() const
 {
     return NULL;
@@ -1349,63 +1256,116 @@ wxValidator* wxPGProperty::DoGetValidator() const
     return (wxValidator*) NULL;
 }
 
-wxPGChoices& wxPGProperty::GetChoices()
+int wxPGProperty::InsertChoice( const wxString& label, int index, int value )
 {
-    wxPGChoiceInfo choiceInfo;
-    choiceInfo.m_choices = NULL;
-    GetChoiceInfo(&choiceInfo);
-    return *choiceInfo.m_choices;
+    wxPropertyGrid* pg = GetGrid();
+    int sel = GetChoiceSelection();
+
+    int newSel = sel;
+
+    if ( index == wxNOT_FOUND )
+        index = m_choices.GetCount();
+
+    if ( index <= sel )
+        newSel++;
+
+    m_choices.Insert(label, index, value);
+
+    if ( sel != newSel )
+        SetChoiceSelection(newSel);
+
+    if ( this == pg->GetSelection() )
+        GetEditorClass()->InsertItem(pg->GetEditorControl(),label,index);
+
+    return index;
 }
 
-const wxPGChoices& wxPGProperty::GetChoices() const
+
+void wxPGProperty::DeleteChoice( int index )
 {
-    return (const wxPGChoices&) ((wxPGProperty*)this)->GetChoices();
+    wxPropertyGrid* pg = GetGrid();
+
+    int sel = GetChoiceSelection();
+    int newSel = sel;
+
+    // Adjust current value
+    if ( sel == index )
+    {
+        SetValueToUnspecified();
+        newSel = 0;
+    }
+    else if ( index < sel )
+    {
+        newSel--;
+    }
+
+    m_choices.RemoveAt(index);
+
+    if ( sel != newSel )
+        SetChoiceSelection(newSel);
+
+    if ( this == pg->GetSelection() )
+        GetEditorClass()->DeleteItem(pg->GetEditorControl(), index);
 }
 
-unsigned int wxPGProperty::GetChoiceCount() const
+int wxPGProperty::GetChoiceSelection() const
 {
-    const wxPGChoices& choices = GetChoices();
-    if ( &choices && choices.IsOk() )
-        return choices.GetCount();
-    return 0;
+    wxVariant value = GetValue();
+    wxString valueType = value.GetType();
+    int index = wxNOT_FOUND;
+
+    if ( IsValueUnspecified() || !m_choices.GetCount() )
+        return wxNOT_FOUND;
+
+    if ( valueType == wxPG_VARIANT_TYPE_LONG )
+    {
+        index = value.GetLong();
+    }
+    else if ( valueType == wxPG_VARIANT_TYPE_STRING )
+    {
+        index = m_choices.Index(value.GetString());
+    }
+    else if ( valueType == wxPG_VARIANT_TYPE_BOOL )
+    {
+        index = value.GetBool()? 1 : 0;
+    }
+
+    return index;
 }
 
-const wxPGChoiceEntry* wxPGProperty::GetCurrentChoice() const
+void wxPGProperty::SetChoiceSelection( int newValue )
 {
-    wxPGChoiceInfo ci;
-    ci.m_choices = (wxPGChoices*) NULL;
-    int index = ((wxPGProperty*)this)->GetChoiceInfo(&ci);
-    if ( index == -1 || !ci.m_choices || index >= (int)ci.m_choices->GetCount() )
-        return NULL;
+    // Changes value of a property with choices, but only
+    // works if the value type is long or string.
+    wxString valueType = GetValue().GetType();
 
-    return &(*ci.m_choices)[index];
+    wxCHECK_RET( m_choices.IsOk(), wxT("invalid choiceinfo") );
+
+    if ( valueType == wxPG_VARIANT_TYPE_STRING )
+    {
+        SetValue( m_choices.GetLabel(newValue) );
+    }
+    else  // if ( valueType == wxPG_VARIANT_TYPE_LONG )
+    {
+        SetValue( (long) newValue );
+    }
 }
 
 bool wxPGProperty::SetChoices( wxPGChoices& choices )
 {
-    wxPGChoiceInfo ci;
-    ci.m_choices = (wxPGChoices*) NULL;
+    m_choices.Assign(choices);
 
-    // Unref existing
-    GetChoiceInfo(&ci);
-    if ( ci.m_choices )
     {
-        ci.m_choices->Assign(choices);
+        // This may be needed to trigger some initialization
+        // (but don't do it if property is somewhat uninitialized)
+        wxVariant defVal = GetDefaultValue();
+        if ( defVal.IsNull() )
+            return false;
 
-        //if ( m_parent )
-        {
-            // This may be needed to trigger some initialization
-            // (but don't do it if property is somewhat uninitialized)
-            wxVariant defVal = GetDefaultValue();
-            if ( defVal.IsNull() )
-                return false;
-
-            SetValue(defVal);
-
-            return true;
-        }
+        SetValue(defVal);
     }
-    return false;
+
+    return true;
 }
 
 
@@ -1434,18 +1394,6 @@ const wxPGEditor* wxPGProperty::GetEditorClass() const
     }
 
     return editor;
-}
-
-
-// Privatizes set of choices
-void wxPGProperty::SetChoicesExclusive()
-{
-    wxPGChoiceInfo ci;
-    ci.m_choices = (wxPGChoices*) NULL;
-
-    GetChoiceInfo(&ci);
-    if ( ci.m_choices )
-        ci.m_choices->SetExclusive();
 }
 
 bool wxPGProperty::HasVisibleChildren() const

@@ -748,6 +748,8 @@ const wxPGEditor* wxBoolProperty::DoGetEditorClass() const
 wxBoolProperty::wxBoolProperty( const wxString& label, const wxString& name, bool value ) :
     wxPGProperty(label,name)
 {
+    m_choices.Assign(wxPGGlobalVars->m_boolChoices);
+
     SetValue(wxPGVariant_Bool(value));
 
     m_flags |= wxPG_PROP_USE_DCC;
@@ -793,16 +795,6 @@ wxString wxBoolProperty::GetValueAsString( int argFlags ) const
     else text = wxS("false");
 
     return text;
-}
-
-int wxBoolProperty::GetChoiceInfo( wxPGChoiceInfo* choiceinfo )
-{
-    if ( IsValueUnspecified() )
-        return -1;
-
-    if ( choiceinfo )
-        choiceinfo->m_choices = &wxPGGlobalVars->m_boolChoices;
-    return m_value.GetBool()?1:0;
 }
 
 bool wxBoolProperty::StringToValue( wxVariant& variant, const wxString& text, int WXUNUSED(argFlags) ) const
@@ -1159,17 +1151,6 @@ const wxString* wxEnumProperty::GetEntry( size_t index, int* pvalue ) const
         return &m_choices.GetLabel(index);
     }
     return (const wxString*) NULL;
-}
-
-int wxEnumProperty::GetChoiceInfo( wxPGChoiceInfo* choiceinfo )
-{
-    if ( choiceinfo )
-        choiceinfo->m_choices = &m_choices;
-
-    if ( !m_choices.IsOk() )
-        return -1;
-
-    return GetIndex();
 }
 
 // -----------------------------------------------------------------------
@@ -1547,13 +1528,6 @@ void wxFlagsProperty::ChildChanged( wxVariant& thisValue, int childIndex, wxVari
         thisValue = (long)(oldValue | vi);
     else
         thisValue = (long)(oldValue & ~(vi));
-}
-
-int wxFlagsProperty::GetChoiceInfo( wxPGChoiceInfo* choiceinfo )
-{
-    if ( choiceinfo )
-        choiceinfo->m_choices = &m_choices;
-    return -1;
 }
 
 // -----------------------------------------------------------------------

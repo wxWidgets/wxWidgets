@@ -1023,6 +1023,24 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         }
     }
 
+    {
+        RT_START_TEST(Choice_Manipulation)
+
+        wxPGProperty* enumProp = pgman->GetProperty(wxT("EnumProperty"));
+
+        pgman->SelectPage(2);
+        pgman->SelectProperty(enumProp);
+        wxASSERT(pgman->GetGrid()->GetSelection() == enumProp);
+
+        const wxPGChoices& choices = enumProp->GetChoices();
+        int ind = enumProp->InsertChoice(wxT("New Choice"), choices.GetCount()/2);
+        enumProp->DeleteChoice(ind);
+
+        // Recreate the original grid
+        CreateGrid( -1, -1 );
+        pgman = m_pPropGridManager;
+    }
+
     //if ( !(pgman->GetWindowStyleFlag()&wxPG_HIDE_CATEGORIES) )
     {
         RT_START_TEST(RandomCollapse)

@@ -372,8 +372,6 @@ public:
                                int argFlags = 0) const;
     WX_PG_DECLARE_EVENT_METHODS()
 
-    virtual int GetChoiceInfo( wxPGChoiceInfo* choiceinfo );
-
     wxArrayInt GetValueAsArrayInt() const
     {
         return m_choices.GetValuesForStrings(m_value.GetArrayString());
@@ -387,8 +385,6 @@ protected:
     wxArrayInt GetValueAsIndices() const;
 
     wxArrayString       m_valueAsStrings;  // Value as array of strings
-
-    wxPGChoices         m_choices;
 
     // Cache displayed text since generating it is relatively complicated.
     wxString            m_display;

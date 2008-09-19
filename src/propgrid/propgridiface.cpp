@@ -221,38 +221,7 @@ wxPGProperty* wxPGPropArgCls::GetPtr( wxPropertyGridInterface* iface ) const
 }
 
 // -----------------------------------------------------------------------
-// Choice related methods
-// -----------------------------------------------------------------------
-
-void wxPropertyGridInterface::AddPropertyChoice( wxPGPropArg id,
-                                                 const wxString& label,
-                                                 int value )
-{
-    wxPG_PROP_ARG_CALL_PROLOG()
-
-    p->InsertChoice(label,-1,value);
-}
-
-
-void wxPropertyGridInterface::InsertPropertyChoice( wxPGPropArg id,
-                                                    const wxString& label,
-                                                    int index,
-                                                    int value )
-{
-    wxPG_PROP_ARG_CALL_PROLOG()
-
-    p->InsertChoice(label,index,value);
-}
-
-
-void wxPropertyGridInterface::DeletePropertyChoice( wxPGPropArg id,
-                                                    int index )
-{
-    wxPG_PROP_ARG_CALL_PROLOG()
-
-    p->DeleteChoice(index);
-}
-
+// wxPropertyGridInterface
 // -----------------------------------------------------------------------
 
 void wxPropertyGridInterface::RefreshGrid( wxPropertyGridPageState* state )
@@ -642,25 +611,6 @@ void wxPropertyGridInterface::SetBoolChoices( const wxString& trueChoice,
 {
     wxPGGlobalVars->m_boolChoices[0] = falseChoice;
     wxPGGlobalVars->m_boolChoices[1] = trueChoice;
-}
-
-// -----------------------------------------------------------------------
-
-wxPGChoices gs_emptyChoices;
-
-wxPGChoices& wxPropertyGridInterface::GetPropertyChoices( wxPGPropArg id )
-{
-    wxPG_PROP_ARG_CALL_PROLOG_RETVAL(gs_emptyChoices)
-
-    wxPGChoiceInfo ci;
-    ci.m_choices = (wxPGChoices*) NULL;
-
-    p->GetChoiceInfo(&ci);
-
-    if ( !ci.m_choices )
-        return gs_emptyChoices;
-
-    return *ci.m_choices;
 }
 
 // -----------------------------------------------------------------------

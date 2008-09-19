@@ -296,8 +296,8 @@ You have to provide list of constant labels, and optionally relevant values
 
 @remarks
 
-- Value wxPG_INVALID_VALUE (equals 2147483647 which usually equals INT_MAX) is not
-  allowed as value.
+- Value wxPG_INVALID_VALUE (equals INT_MAX) is not allowed as list
+  item value.
 
 A very simple example:
 
@@ -365,7 +365,6 @@ Here's extended example using values as well:
     long array_diet_ids[] =
     { 40, 45, 50 };
 
-    // Value can be set from string as well
     pg->Append( new wxEnumProperty(wxT("Diet"),
                                    wxPG_LABEL,
                                    array_diet,
@@ -394,45 +393,26 @@ Here's extended example using values as well:
 
     // Note: you can add even whole arrays to wxPGChoices
 
-    pg->Append( new wxEnumProperty(wxT("Diet"),
+    pg->Append( new wxEnumProperty(wxT("Primary Diet"),
                                    wxPG_LABEL,
                                    chs) );
 
     // Add same choices to another property as well - this is efficient due
     // to reference counting
-    pg->Append( new wxEnumProperty(wxT("Diet 2"),
+    pg->Append( new wxEnumProperty(wxT("Secondary Diet"),
                                    wxPG_LABEL,
                                    chs) );
 
- @endcode
-
-If you later need to change choices used by a property, there is function
-for that as well.
-
-@code
-
-    //
-    // Example 1: Add one extra item
-    wxPGChoices& choices = pg->GetPropertyChoices(wxT("Diet"));
-    choices.Add(wxT("Custom"),55);
-
-    //
-    // Example 2: Replace all the choices
-    wxPGChoices chs;
-    chs.Add(wxT("<No valid items yet>"),0);
-    pg->SetPropertyChoices(wxT("Diet"),chs);
-
 @endcode
 
-If you want to create your enum properties with simple (label,name,value)
-constructor, then you need to create a new property class using one of the
-supplied macro pairs. See @ref pgproperty_creating for details.
+You can later change choices of property by using wxPGProperty::InsertChoice(),
+wxPGProperty::DeleteChoice(), and wxPGProperty::SetChoices().
 
 <b>wxEditEnumProperty</b> is works exactly like wxEnumProperty, except
 is uses non-readonly combobox as default editor, and value is stored as
 string when it is not any of the choices.
 
-wxFlagsProperty is similar:
+wxFlagsProperty has similar construction:
 
 @code
 
@@ -454,8 +434,8 @@ wxFlagsProperty is similar:
 wxFlagsProperty can use wxPGChoices just the same way as wxEnumProperty
 (and also custom property classes can be created with similar macro pairs).
 <b>Note: </b> When changing "choices" (ie. flag labels) of wxFlagsProperty,
-you will need to use SetPropertyChoices - otherwise they will not get updated
-properly.
+you will need to use wxPGProperty::SetChoices() to replace all choices
+at once - otherwise they will not get updated properly.
 
 @section propgrid_advprops Specialized Properties
 
@@ -839,7 +819,7 @@ each cell in the property grid. Use wxPropertyGridInterface::SetPropertyCell() o
 wxPGProperty::SetCell() for this purpose.
 
 In addition, it is possible to control these characteristics for
-wxPGChoices list items. See wxPGChoices::Item() and wxPGChoiceEntry class
+wxPGChoices list items. See wxPGChoices class
 reference for more info.
 
 
@@ -1049,8 +1029,8 @@ unique (base) name.
         pg->SetPropertyAttribute(wxT("MyFlagsProperty"),wxPG_BOOL_USE_CHECKBOX,true,wxPG_RECURSE);
     @endcode
 
-  - Default item names for wxBoolProperty are [wxT("False"),wxT("True")]. This can be
-    changed using wxPropertyGrid::SetBoolChoices(trueChoice,falseChoice).
+  - Default item names for wxBoolProperty are ["False", "True"]. This can be
+    changed using wxPropertyGrid::SetBoolChoices(trueChoice, falseChoice).
 
 @subsection propgrid_textctrlupdates Updates from wxTextCtrl Based Editor
 

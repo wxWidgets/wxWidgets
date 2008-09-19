@@ -26,16 +26,6 @@ public:
     /** Destructor */
     virtual ~wxPropertyGridInterface() { }
 
-    /** Adds choice to a property that can accept one.
-        @remarks
-        - If you need to make sure that you modify only the set of choices of
-          a single property (and not also choices of other properties with initially
-          identical set), call wxPropertyGrid::SetPropertyChoicesPrivate.
-        - This usually only works for wxEnumProperty and derivatives (wxFlagsProperty
-          can get accept new items but its items may not get updated).
-    */
-    void AddPropertyChoice( wxPGPropArg id, const wxString& label, int value = wxPG_INVALID_VALUE );
-
     /** Appends property to the list. wxPropertyGrid assumes ownership of the object.
         Becomes child of most recently added category.
         @remarks
@@ -105,14 +95,6 @@ public:
 
     /** Deletes a property by id. If category is deleted, all children are automatically deleted as well. */
     void DeleteProperty( wxPGPropArg id );
-
-    /** Deletes choice from a property.
-
-        If selected item is deleted, then the value is set to unspecified.
-
-        See AddPropertyChoice for more details.
-    */
-    void DeletePropertyChoice( wxPGPropArg id, int index );
 
     /** Disables property. */
     bool DisableProperty( wxPGPropArg id ) { return EnableProperty(id,false); }
@@ -285,12 +267,6 @@ public:
         calling GetPropertyByName("name.subname"), albeit slightly faster.
     */
     wxPGProperty* GetPropertyByName( const wxString& name, const wxString& subname ) const;
-
-    /** Returns writable reference to property's list of choices (and relevant
-        values). If property does not have any choices, will return reference
-        to an invalid set of choices that will return false on IsOk call.
-    */
-    wxPGChoices& GetPropertyChoices( wxPGPropArg id );
 
     /** Returns property's editor. */
     const wxPGEditor* GetPropertyEditor( wxPGPropArg id ) const
@@ -534,12 +510,6 @@ public:
         return p->IsCategory();
     }
 
-    /** Inserts choice to a property that can accept one.
-
-        See AddPropertyChoice for more details.
-    */
-    void InsertPropertyChoice( wxPGPropArg id, const wxString& label, int index, int value = wxPG_INVALID_VALUE );
-
     /** Returns true if property is enabled. */
     bool IsPropertyEnabled( wxPGPropArg id ) const
     {
@@ -705,27 +675,6 @@ public:
     {
         wxPG_PROP_ARG_CALL_PROLOG()
         p->SetCell( column, new wxPGCell(text, bitmap, fgCol, bgCol) );
-    }
-
-    /** Set choices of a property to specified set of labels and values.
-
-        @remarks
-        This operation clears the property value.
-    */
-    void SetPropertyChoices( wxPGPropArg id, wxPGChoices& choices)
-    {
-        wxPG_PROP_ARG_CALL_PROLOG()
-        p->SetChoices(choices);
-    }
-
-
-    /** If property's set of choices is shared, then calling this method converts
-        it to private.
-    */
-    void SetPropertyChoicesExclusive( wxPGPropArg id )
-    {
-        wxPG_PROP_ARG_CALL_PROLOG()
-        p->SetChoicesExclusive();
     }
 
     /** Sets client data (void*) of a property.

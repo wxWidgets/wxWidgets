@@ -794,11 +794,15 @@ void wxPropertyGrid::OnComboItemPaint( wxPGCustomComboControl* pCc,
     wxPGProperty* p = m_selected;
     wxString text;
 
-    const wxPGChoices* pChoices = &p->GetChoices();
+    const wxPGChoices& choices = p->GetChoices();
     const wxPGCommonValue* comVal = NULL;
-    int choiceCount = p->GetChoiceCount();
     int comVals = p->GetDisplayedCommonValueCount();
     int comValIndex = -1;
+
+    int choiceCount = 0;
+    if ( choices.IsOk() )
+        choiceCount = choices.GetCount();
+
     if ( item >= choiceCount && comVals > 0 )
     {
         comValIndex = item - choiceCount;
@@ -826,8 +830,8 @@ void wxPropertyGrid::OnComboItemPaint( wxPGCustomComboControl* pCc,
 
     const wxBitmap* itemBitmap = NULL;
 
-    if ( item >= 0 && pChoices && pChoices->Item(item).GetBitmap().Ok() && comValIndex == -1 )
-        itemBitmap = &pChoices->Item(item).GetBitmap();
+    if ( item >= 0 && choices.IsOk() && choices.Item(item).GetBitmap().Ok() && comValIndex == -1 )
+        itemBitmap = &choices.Item(item).GetBitmap();
 
     //
     // Decide what custom image size to use
@@ -929,9 +933,9 @@ void wxPropertyGrid::OnComboItemPaint( wxPGCustomComboControl* pCc,
             if ( item < 0 && (flags & wxODCB_PAINTING_CONTROL) )
                 item = pCb->GetSelection();
 
-            if ( pChoices && item >= 0 && comValIndex < 0 )
+            if ( choices.IsOk() && item >= 0 && comValIndex < 0 )
             {
-                const wxPGChoiceEntry& cell = pChoices->Item(item);
+                const wxPGChoiceEntry& cell = choices.Item(item);
                 wxPGCellRenderer* renderer = wxPGGlobalVars->m_defaultRenderer;
                 int imageOffset = renderer->PreDrawCell( dc, rect, cell, renderFlags );
                 if ( imageOffset )
@@ -992,19 +996,14 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
                                                 const wxSize& sz,
                                                 long extraStyle ) const
 {
-    wxString        defString;
-
-    // Get choices.
-    int index = property->GetChoiceInfo( NULL );
+    const wxPGChoices& choices = property->GetChoices();
+    wxString defString;
+    int index = property->GetChoiceSelection();
 
     bool isUnspecified = property->IsValueUnspecified();
 
-    if ( isUnspecified )
-        index = -1;
-    else
+    if ( !isUnspecified )
         defString = property->GetDisplayedString();
-
-    const wxPGChoices& choices = property->GetChoices();
 
     wxArrayString labels = choices.GetLabels();
 
@@ -1052,20 +1051,10 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
                labels,
                odcbFlags);
 
-    //int extRight = propGrid->GetClientSize().x - (po.x+si.x);
-    //int extRight =  - (po.x+si.x);
-
     cb->SetButtonPosition(si.y,0,wxRIGHT);
-    //cb->SetPopupExtents( 1, extRight );
     cb->SetTextIndent(wxPG_XBEFORETEXT-1);
 
     wxPGChoiceEditor_SetCustomPaintWidth( propGrid, cb, property->GetCommonValue() );
-    /*if ( property->GetFlags() & wxPG_PROP_CUSTOMIMAGE )
-    {
-        wxSize imageSize = propGrid->GetImageSize(property, index);
-        if ( imageSize.x ) imageSize.x += ODCB_CUST_PAINT_MARGIN;
-        cb->SetCustomPaintWidth( imageSize.x );
-    }*/
 
     if ( index >= 0 && index < (int)cb->GetCount() )
     {
@@ -1091,7 +1080,7 @@ void wxPGChoiceEditor::UpdateControl( wxPGProperty* property, wxWindow* ctrl ) c
     wxASSERT( ctrl );
     wxOwnerDrawnComboBox* cb = (wxOwnerDrawnComboBox*)ctrl;
     wxASSERT( cb->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)));
-    int ind = property->GetChoiceInfo( (wxPGChoiceInfo*)NULL );
+    int ind = property->GetChoiceSelection();
     cb->SetSelection(ind);
 }
 
@@ -1164,7 +1153,7 @@ bool wxPGChoiceEditor::GetValueFromControl( wxVariant& variant, wxPGProperty* pr
 
     int index = cb->GetSelection();
 
-    if ( index != property->GetChoiceInfo( (wxPGChoiceInfo*) NULL ) ||
+    if ( index != property->GetChoiceSelection() ||
         // Changing unspecified always causes event (returning
         // true here should be enough to trigger it).
          property->IsValueUnspecified()
@@ -1610,7 +1599,7 @@ wxPGWindowList wxPGCheckBoxEditor::CreateControls( wxPropertyGrid* propGrid,
             (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction)
             &wxPropertyGrid::OnCustomEditorEvent, NULL, propGrid );
 
-    if ( property->GetChoiceInfo((wxPGChoiceInfo*)NULL) &&
+    if ( property->GetChoiceSelection() > 0 &&
          !property->IsValueUnspecified() )
         cb->m_state = 1;
 
@@ -1669,7 +1658,7 @@ void wxPGCheckBoxEditor::DrawValue( wxDC& dc, const wxRect& rect, wxPGProperty* 
     int state = 0;
     if ( !property->IsValueUnspecified() )
     {
-        state = property->GetChoiceInfo((wxPGChoiceInfo*)NULL);
+        state = property->GetChoiceSelection();
         if ( dc.GetFont().GetWeight() == wxBOLD ) state |= 2;
     }
     DrawSimpleCheckBox(dc,rect,dc.GetCharHeight(),state,dc.GetTextForeground());
@@ -1678,7 +1667,7 @@ void wxPGCheckBoxEditor::DrawValue( wxDC& dc, const wxRect& rect, wxPGProperty* 
 void wxPGCheckBoxEditor::UpdateControl( wxPGProperty* property, wxWindow* ctrl ) const
 {
     wxASSERT( ctrl );
-    ((wxSimpleCheckBox*)ctrl)->m_state = property->GetChoiceInfo((wxPGChoiceInfo*)NULL);
+    ((wxSimpleCheckBox*)ctrl)->m_state = property->GetChoiceSelection();
     ctrl->Refresh();
 }
 
@@ -1700,7 +1689,7 @@ bool wxPGCheckBoxEditor::GetValueFromControl( wxVariant& variant, wxPGProperty* 
 
     int index = cb->m_state;
 
-    if ( index != property->GetChoiceInfo( (wxPGChoiceInfo*) NULL ) ||
+    if ( index != property->GetChoiceSelection() ||
          // Changing unspecified always causes event (returning
          // true here should be enough to trigger it).
          property->IsValueUnspecified()

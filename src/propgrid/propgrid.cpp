@@ -3397,7 +3397,7 @@ wxSize wxPropertyGrid::GetImageSize( wxPGProperty* p, int item ) const
 
     wxSize cis = p->OnMeasureImage(item);
 
-    int choiceCount = p->GetChoiceCount();
+    int choiceCount = p->m_choices.GetCount();
     int comVals = p->GetDisplayedCommonValueCount();
     if ( item >= choiceCount && comVals > 0 )
     {

@@ -1808,13 +1808,6 @@ bool wxMultiChoiceProperty::OnEvent( wxPropertyGrid* propgrid,
     return false;
 }
 
-int wxMultiChoiceProperty::GetChoiceInfo( wxPGChoiceInfo* choiceinfo )
-{
-    if ( choiceinfo )
-        choiceinfo->m_choices = &m_choices;
-    return -1;
-}
-
 bool wxMultiChoiceProperty::StringToValue( wxVariant& variant, const wxString& text, int ) const
 {
     wxArrayString arr;
