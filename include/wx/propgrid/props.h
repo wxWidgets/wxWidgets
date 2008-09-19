@@ -23,42 +23,8 @@ class wxArrayEditorDialog;
 // -----------------------------------------------------------------------
 
 //
-// Additional property class declaration helper macros
-//
-
-//
 // Property class implementation helper macros.
 //
-
-#define WX_PG_DECLARE_BASIC_TYPE_METHODS() \
-    virtual wxString GetValueAsString( int argFlags = 0 ) const; \
-    virtual bool StringToValue( wxVariant& variant, \
-                                const wxString& text, \
-                                int argFlags = 0 ) const;
-
-#define WX_PG_DECLARE_CHOICE_METHODS() \
-    virtual bool IntToValue( wxVariant& variant, \
-                             int number, int argFlags = 0 ) const; \
-
-#define WX_PG_DECLARE_EVENT_METHODS() \
-    virtual bool OnEvent( wxPropertyGrid* propgrid, \
-                          wxWindow* primary, wxEvent& event );
-
-#define WX_PG_DECLARE_PARENTAL_METHODS() \
-    virtual void ChildChanged( wxVariant& thisValue, \
-                               int childIndex, wxVariant& childValue ) const; \
-    virtual void RefreshChildren();
-
-#define WX_PG_DECLARE_CUSTOM_PAINT_METHODS() \
-    virtual wxSize OnMeasureImage( int item ) const; \
-    virtual void OnCustomPaint( wxDC& dc, \
-                                const wxRect& rect, wxPGPaintData& paintdata );
-
-#define WX_PG_DECLARE_ATTRIBUTE_METHODS() \
-    virtual bool DoSetAttribute( const wxString& name, wxVariant& value );
-
-#define WX_PG_DECLARE_VALIDATOR_METHODS() \
-    virtual wxValidator* DoGetValidator() const;
 
 // Adds constructor function as well.
 #define WX_PG_IMPLEMENT_PROPERTY_CLASS2(NAME,CLASSNAME,\
@@ -93,7 +59,7 @@ public: \
           const wxString& value = wxEmptyString); \
     virtual ~NAME(); \
     virtual bool OnButtonClick( wxPropertyGrid* propgrid, wxString& value ); \
-    WX_PG_DECLARE_VALIDATOR_METHODS() \
+    virtual wxValidator* DoGetValidator() const; \
 };
 
 #define WX_PG_DECLARE_STRING_PROPERTY(NAME) \
@@ -378,8 +344,12 @@ public:
                       const wxString& value = wxEmptyString );
     virtual ~wxStringProperty();
 
-    WX_PG_DECLARE_BASIC_TYPE_METHODS()
-    WX_PG_DECLARE_ATTRIBUTE_METHODS()
+    virtual wxString GetValueAsString( int argFlags = 0 ) const;
+    virtual bool StringToValue( wxVariant& variant,
+                                const wxString& text,
+                                int argFlags = 0 ) const;
+
+    virtual bool DoSetAttribute( const wxString& name, wxVariant& value );
 
     /** This is updated so "<composed>" special value can be handled.
     */
@@ -464,7 +434,10 @@ public:
     wxIntProperty( const wxString& label,
                    const wxString& name,
                    const wxLongLong& value );
-    WX_PG_DECLARE_BASIC_TYPE_METHODS()
+    virtual wxString GetValueAsString( int argFlags = 0 ) const;
+    virtual bool StringToValue( wxVariant& variant,
+                                const wxString& text,
+                                int argFlags = 0 ) const;
     virtual bool ValidateValue( wxVariant& value,
                                 wxPGValidationInfo& validationInfo ) const;
     virtual bool IntToValue( wxVariant& variant,
@@ -515,8 +488,11 @@ public:
     wxUIntProperty( const wxString& label,
                     const wxString& name,
                     const wxULongLong& value );
-    WX_PG_DECLARE_BASIC_TYPE_METHODS()
-    WX_PG_DECLARE_ATTRIBUTE_METHODS()
+    virtual wxString GetValueAsString( int argFlags = 0 ) const;
+    virtual bool StringToValue( wxVariant& variant,
+                                const wxString& text,
+                                int argFlags = 0 ) const;
+    virtual bool DoSetAttribute( const wxString& name, wxVariant& value );
     virtual bool ValidateValue( wxVariant& value,
                                 wxPGValidationInfo& validationInfo ) const;
     virtual bool IntToValue( wxVariant& variant,
@@ -549,8 +525,11 @@ public:
                      double value = 0.0 );
     virtual ~wxFloatProperty();
 
-    WX_PG_DECLARE_BASIC_TYPE_METHODS()
-    WX_PG_DECLARE_ATTRIBUTE_METHODS()
+    virtual wxString GetValueAsString( int argFlags = 0 ) const;
+    virtual bool StringToValue( wxVariant& variant,
+                                const wxString& text,
+                                int argFlags = 0 ) const;
+    virtual bool DoSetAttribute( const wxString& name, wxVariant& value );
     virtual bool ValidateValue( wxVariant& value,
                                 wxPGValidationInfo& validationInfo ) const;
 
@@ -589,9 +568,13 @@ public:
                     bool value = false );
     virtual ~wxBoolProperty();
 
-    WX_PG_DECLARE_BASIC_TYPE_METHODS()
-    WX_PG_DECLARE_CHOICE_METHODS()
-    WX_PG_DECLARE_ATTRIBUTE_METHODS()
+    virtual wxString GetValueAsString( int argFlags = 0 ) const;
+    virtual bool StringToValue( wxVariant& variant,
+                                const wxString& text,
+                                int argFlags = 0 ) const;
+    virtual bool IntToValue( wxVariant& variant,
+                             int number, int argFlags = 0 ) const;
+    virtual bool DoSetAttribute( const wxString& name, wxVariant& value );
 };
 
 #endif  // !SWIG
@@ -891,8 +874,7 @@ public:
                                 const wxString& text,
                                 int argFlags = 0 ) const;
     virtual wxPGEditorDialogAdapter* GetEditorDialog() const;
-
-    WX_PG_DECLARE_ATTRIBUTE_METHODS()
+    virtual bool DoSetAttribute( const wxString& name, wxVariant& value );
 
     static wxValidator* GetClassValidator();
     virtual wxValidator* DoGetValidator() const;
@@ -942,8 +924,8 @@ public:
     virtual bool StringToValue( wxVariant& variant,
                                 const wxString& text,
                                 int argFlags = 0 ) const;
-
-    WX_PG_DECLARE_EVENT_METHODS()
+    virtual bool OnEvent( wxPropertyGrid* propgrid,
+                          wxWindow* primary, wxEvent& event );
 
     // Shows string editor dialog. Value to be edited should be read from
     // value, and if dialog is not cancelled, it should be stored back and true
@@ -981,8 +963,8 @@ public:
                    const wxString& value = wxEmptyString );
     virtual ~wxDirProperty();
 
-    WX_PG_DECLARE_ATTRIBUTE_METHODS()
-    WX_PG_DECLARE_VALIDATOR_METHODS()
+    virtual bool DoSetAttribute( const wxString& name, wxVariant& value );
+    virtual wxValidator* DoGetValidator() const;
 
     virtual bool OnButtonClick ( wxPropertyGrid* propGrid, wxString& value );
 
@@ -1017,8 +999,12 @@ public:
     virtual ~wxArrayStringProperty();
 
     virtual void OnSetValue();
-    WX_PG_DECLARE_BASIC_TYPE_METHODS()
-    WX_PG_DECLARE_EVENT_METHODS()
+    virtual wxString GetValueAsString( int argFlags = 0 ) const;
+    virtual bool StringToValue( wxVariant& variant,
+                                const wxString& text,
+                                int argFlags = 0 ) const;
+    virtual bool OnEvent( wxPropertyGrid* propgrid,
+                          wxWindow* primary, wxEvent& event );
 
     virtual void GenerateValueAsString();
 
@@ -1059,7 +1045,7 @@ public: \
     virtual bool OnEvent( wxPropertyGrid* propgrid, \
                           wxWindow* primary, wxEvent& event ); \
     virtual bool OnCustomStringEdit( wxWindow* parent, wxString& value ); \
-    WX_PG_DECLARE_VALIDATOR_METHODS() \
+    virtual wxValidator* DoGetValidator() const; \
 };
 
 #define WX_PG_DECLARE_ARRAYSTRING_PROPERTY_WITH_VALIDATOR(PROPNAM) \

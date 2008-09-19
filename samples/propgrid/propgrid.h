@@ -26,9 +26,11 @@ public:
 
     virtual void OnSetValue();  // Override to allow image loading.
 
-    WX_PG_DECLARE_CHOICE_METHODS()
-    WX_PG_DECLARE_EVENT_METHODS()
-    WX_PG_DECLARE_CUSTOM_PAINT_METHODS()
+    virtual bool IntToValue( wxVariant& variant, int number, int argFlags = 0 ) const;
+    virtual bool OnEvent( wxPropertyGrid* propgrid, wxWindow* primary, wxEvent& event );
+    virtual wxSize OnMeasureImage( int item ) const;
+    virtual void OnCustomPaint( wxDC& dc,
+                                const wxRect& rect, wxPGPaintData& paintdata );
 
     void LoadThumbnails( size_t n );
 
@@ -74,7 +76,9 @@ public:
                       const wxVector3f& value = wxVector3f() );
     virtual ~wxVectorProperty();
 
-    WX_PG_DECLARE_PARENTAL_METHODS()
+    virtual void ChildChanged( wxVariant& thisValue,
+                               int childIndex, wxVariant& childValue ) const;
+    virtual void RefreshChildren();
 
 protected:
 };
@@ -104,7 +108,9 @@ public:
                         const wxTriangle& value = wxTriangle() );
     virtual ~wxTriangleProperty();
 
-    WX_PG_DECLARE_PARENTAL_METHODS()
+    virtual void ChildChanged( wxVariant& thisValue,
+                               int childIndex, wxVariant& childValue ) const;
+    virtual void RefreshChildren();
 
 protected:
 };

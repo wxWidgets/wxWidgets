@@ -176,10 +176,11 @@ public:
     virtual ~wxFontProperty();
     virtual void OnSetValue();
     virtual wxString GetValueAsString( int argFlags = 0 ) const;
-
-    WX_PG_DECLARE_EVENT_METHODS()
-    WX_PG_DECLARE_PARENTAL_METHODS()
-    //WX_PG_DECLARE_CUSTOM_PAINT_METHODS()
+    virtual bool OnEvent( wxPropertyGrid* propgrid,
+                          wxWindow* primary, wxEvent& event );
+    virtual void ChildChanged( wxVariant& thisValue,
+                               int childIndex, wxVariant& childValue ) const;
+    virtual void RefreshChildren();
 
 protected:
 };
@@ -225,13 +226,16 @@ public:
     */
     virtual int GetCustomColourIndex() const;
 
-    WX_PG_DECLARE_BASIC_TYPE_METHODS()
-    WX_PG_DECLARE_EVENT_METHODS()
-    WX_PG_DECLARE_ATTRIBUTE_METHODS()
-
-    WX_PG_DECLARE_CUSTOM_PAINT_METHODS()
-    //virtual wxSize GetImageSize( int item ) const;
-    //virtual wxPGCellRenderer* GetCellRenderer( int column ) const;
+    virtual wxString GetValueAsString( int argFlags = 0 ) const;
+    virtual bool StringToValue( wxVariant& variant,
+                                const wxString& text,
+                                int argFlags = 0 ) const;
+    virtual bool OnEvent( wxPropertyGrid* propgrid,
+                          wxWindow* primary, wxEvent& event );
+    virtual bool DoSetAttribute( const wxString& name, wxVariant& value );
+    virtual wxSize OnMeasureImage( int item ) const;
+    virtual void OnCustomPaint( wxDC& dc,
+                                const wxRect& rect, wxPGPaintData& paintdata );
 
     // Helper function to show the colour dialog
     bool QueryColourFromUser( wxVariant& variant ) const;
@@ -294,9 +298,9 @@ class WXDLLIMPEXP_PROPGRID wxCursorProperty : public wxEnumProperty
                       int value = 0 );
     virtual ~wxCursorProperty();
 
-    WX_PG_DECLARE_CUSTOM_PAINT_METHODS()
-    //virtual wxSize GetImageSize( int item ) const;
-    //virtual wxPGCellRenderer* GetCellRenderer( int column ) const;
+    virtual wxSize OnMeasureImage( int item ) const;
+    virtual void OnCustomPaint( wxDC& dc,
+                                const wxRect& rect, wxPGPaintData& paintdata );
 };
 
 // -----------------------------------------------------------------------
@@ -321,7 +325,9 @@ public:
 
     virtual void OnSetValue();
 
-    WX_PG_DECLARE_CUSTOM_PAINT_METHODS()
+    virtual wxSize OnMeasureImage( int item ) const;
+    virtual void OnCustomPaint( wxDC& dc,
+                                const wxRect& rect, wxPGPaintData& paintdata );
 
 protected:
     wxBitmap*   m_pBitmap; // final thumbnail area
@@ -370,7 +376,8 @@ public:
     virtual bool StringToValue(wxVariant& variant,
                                const wxString& text,
                                int argFlags = 0) const;
-    WX_PG_DECLARE_EVENT_METHODS()
+    virtual bool OnEvent( wxPropertyGrid* propgrid,
+                          wxWindow* primary, wxEvent& event );
 
     wxArrayInt GetValueAsArrayInt() const
     {
@@ -420,7 +427,7 @@ public:
                                const wxString& text,
                                int argFlags = 0) const;
 
-    WX_PG_DECLARE_ATTRIBUTE_METHODS()
+    virtual bool DoSetAttribute( const wxString& name, wxVariant& value );
 
     void SetFormat( const wxString& format )
     {

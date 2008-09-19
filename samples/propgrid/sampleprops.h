@@ -34,8 +34,10 @@ public:
     // in base class to function properly.
     virtual wxVariant DoGetValue() const;
 
-    WX_PG_DECLARE_PARENTAL_METHODS()
-    WX_PG_DECLARE_EVENT_METHODS()
+    virtual void ChildChanged( wxVariant& thisValue,
+                               int childIndex, wxVariant& childValue ) const;
+    virtual void RefreshChildren();
+    virtual bool OnEvent( wxPropertyGrid* propgrid, wxWindow* primary, wxEvent& event );
 
 protected:
     // Value must be stored as variant - otherwise it will be
@@ -54,7 +56,9 @@ public:
                     const wxSize& value = wxSize() );
     virtual ~wxSizeProperty();
 
-    WX_PG_DECLARE_PARENTAL_METHODS()
+    virtual void ChildChanged( wxVariant& thisValue,
+                               int childIndex, wxVariant& childValue ) const;
+    virtual void RefreshChildren();
 
 protected:
 
@@ -76,7 +80,9 @@ public:
                      const wxPoint& value = wxPoint() );
     virtual ~wxPointProperty();
 
-    WX_PG_DECLARE_PARENTAL_METHODS()
+    virtual void ChildChanged( wxVariant& thisValue,
+                               int childIndex, wxVariant& childValue ) const;
+    virtual void RefreshChildren();
 
 protected:
 
@@ -107,9 +113,12 @@ public:
     virtual ~wxArrayDoubleProperty ();
 
     virtual void OnSetValue();
-    WX_PG_DECLARE_BASIC_TYPE_METHODS()
-    WX_PG_DECLARE_EVENT_METHODS()
-    WX_PG_DECLARE_ATTRIBUTE_METHODS()
+    virtual wxString GetValueAsString( int argFlags = 0 ) const;
+    virtual bool StringToValue( wxVariant& variant,
+                                const wxString& text,
+                                int argFlags = 0 ) const;
+    virtual bool OnEvent( wxPropertyGrid* propgrid, wxWindow* primary, wxEvent& event );
+    virtual bool DoSetAttribute( const wxString& name, wxVariant& value );
 
     // Generates cache for displayed text
     virtual void GenerateValueAsString ( wxString& target, int prec, bool removeZeroes ) const;
