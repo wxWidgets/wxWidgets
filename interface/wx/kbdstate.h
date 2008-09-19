@@ -26,11 +26,14 @@ class wxKeyboardState
 {
 public:
     /**
-        Default constructor.
+        Constructor initializes the modifier key settings.
 
         By default, no modifiers are active.
      */
-    wxKeyboardState();
+    wxKeyboardState(bool controlDown,
+                    bool shiftDown,
+                    bool altDown,
+                    bool metaDown);
 
     /**
         Return the bit mask of all pressed modifier keys.

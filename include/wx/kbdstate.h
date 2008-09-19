@@ -20,11 +20,14 @@
 class WXDLLIMPEXP_CORE wxKeyboardState
 {
 public:
-    wxKeyboardState()
-        : m_controlDown(false),
-          m_shiftDown(false),
-          m_altDown(false),
-          m_metaDown(false)
+    wxKeyboardState(bool controlDown = false,
+                    bool shiftDown = false,
+                    bool altDown = false,
+                    bool metaDown = false)
+        : m_controlDown(controlDown),
+          m_shiftDown(shiftDown),
+          m_altDown(altDown),
+          m_metaDown(metaDown)
     {
     }
 
