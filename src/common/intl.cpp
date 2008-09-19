@@ -1263,6 +1263,8 @@ bool wxMsgCatalogFile::Load(const wxString& szDirPrefix, const wxString& szName,
   // read the whole file in memory
   if ( fileMsg.Read(m_data.GetWriteBuf(nSize), nSize) != lenFile )
     return false;
+
+  m_data.UngetWriteBuf(nSize);
 #endif // wxUSE_FILESYSTEM/!wxUSE_FILESYSTEM
 
 
