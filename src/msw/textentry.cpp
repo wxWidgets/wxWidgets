@@ -243,6 +243,11 @@ bool wxTextEntry::CanRedo() const
 
 void wxTextEntry::SetInsertionPoint(long pos)
 {
+    // calling DoSetSelection(-1, -1) would select everything which is not what
+    // we want here
+    if ( pos == -1 )
+        pos = GetLastPosition();
+
     // be careful to call DoSetSelection() which is overridden in wxTextCtrl
     // and not just SetSelection() here
     DoSetSelection(pos, pos);
