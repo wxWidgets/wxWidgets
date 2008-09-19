@@ -92,6 +92,7 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_SELCELLS,  GridFrame::SelectCells )
     EVT_MENU( ID_SELROWS,  GridFrame::SelectRows )
     EVT_MENU( ID_SELCOLS,  GridFrame::SelectCols )
+    EVT_MENU( ID_SELROWSORCOLS,  GridFrame::SelectRowsOrCols )
 
     EVT_MENU( ID_SET_CELL_FG_COLOUR, GridFrame::SetCellFgColour )
     EVT_MENU( ID_SET_CELL_BG_COLOUR, GridFrame::SetCellBgColour )
@@ -223,9 +224,10 @@ GridFrame::GridFrame()
                       selectionMenu,
                       _T("Change selection mode") );
 
-    selectionMenu->Append( ID_SELCELLS, _T("Select &Cells") );
-    selectionMenu->Append( ID_SELROWS, _T("Select &Rows") );
-    selectionMenu->Append( ID_SELCOLS, _T("Select C&ols") );
+    selectionMenu->Append( ID_SELCELLS, _T("Select &cells") );
+    selectionMenu->Append( ID_SELROWS, _T("Select &rows") );
+    selectionMenu->Append( ID_SELCOLS, _T("Select col&umns") );
+    selectionMenu->Append( ID_SELROWSORCOLS, _T("Select rows &or columns") );
 
     wxMenu *autosizeMenu = new wxMenu;
     autosizeMenu->Append( ID_SIZE_ROW, _T("Selected &row data") );
@@ -805,6 +807,11 @@ void GridFrame::SelectRows( wxCommandEvent& WXUNUSED(ev) )
 void GridFrame::SelectCols( wxCommandEvent& WXUNUSED(ev) )
 {
     grid->SetSelectionMode( wxGrid::wxGridSelectColumns );
+}
+
+void GridFrame::SelectRowsOrCols( wxCommandEvent& WXUNUSED(ev) )
+{
+    grid->SetSelectionMode( wxGrid::wxGridSelectRowsOrColumns );
 }
 
 void GridFrame::SetCellFgColour( wxCommandEvent& WXUNUSED(ev) )

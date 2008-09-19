@@ -385,15 +385,30 @@ void wxGridSelection::SelectBlock( int topRow, int leftCol,
                                    bool sendEvent )
 {
     // Fix the coordinates of the block if needed.
-    if ( m_selectionMode == wxGrid::wxGridSelectRows )
+    switch ( m_selectionMode )
     {
-        leftCol = 0;
-        rightCol = m_grid->GetNumberCols() - 1;
-    }
-    else if ( m_selectionMode == wxGrid::wxGridSelectColumns )
-    {
-        topRow = 0;
-        bottomRow = m_grid->GetNumberRows() - 1;
+        default:
+            wxFAIL_MSG( "unknown selection mode" );
+            // fall through
+
+        case wxGrid::wxGridSelectCells:
+            // nothing to do -- in this mode arbitrary blocks can be selected
+            break;
+
+        case wxGrid::wxGridSelectRows:
+            leftCol = 0;
+            rightCol = m_grid->GetNumberCols() - 1;
+            break;
+
+        case wxGrid::wxGridSelectColumns:
+            topRow = 0;
+            bottomRow = m_grid->GetNumberRows() - 1;
+            break;
+
+        case wxGrid::wxGridSelectRowsOrColumns:
+            // block selection doesn't make sense for this mode, we could only
+            // select the entire grid but this wouldn't be useful
+            return;
     }
 
     if ( topRow > bottomRow )

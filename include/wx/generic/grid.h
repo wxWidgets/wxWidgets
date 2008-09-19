@@ -320,7 +320,7 @@ public:
 
     // Show or hide the edit control, use the specified attributes to set
     // colours/fonts for it
-    virtual void Show(bool show, wxGridCellAttr *attr = (wxGridCellAttr *)NULL);
+    virtual void Show(bool show, wxGridCellAttr *attr = NULL);
 
     // Draws the part of the cell not occupied by the control: the base class
     // version just fills it with background colour from the attribute
@@ -1145,6 +1145,10 @@ public:
                    bool takeOwnership = false,
                    wxGridSelectionModes selmode = wxGridSelectCells );
 
+    bool ProcessTableMessage(wxGridTableMessage&);
+
+    wxGridTableBase *GetTable() const { return m_table; }
+
 
     void SetSelectionMode(wxGridSelectionModes selmode);
     wxGridSelectionModes GetSelectionMode() const;
@@ -1162,20 +1166,6 @@ public:
     wxArrayInt CalcColLabelsExposed( const wxRegion& reg ) const;
     wxGridCellCoordsArray CalcCellsExposed( const wxRegion& reg ) const;
 
-
-    // ------ event handlers
-    //
-    void ProcessRowLabelMouseEvent( wxMouseEvent& event );
-    void ProcessColLabelMouseEvent( wxMouseEvent& event );
-    void ProcessCornerLabelMouseEvent( wxMouseEvent& event );
-    void ProcessGridCellMouseEvent( wxMouseEvent& event );
-    bool ProcessTableMessage( wxGridTableMessage& );
-
-    void DoEndDragResizeRow();
-    void DoEndDragResizeCol();
-    void DoEndDragMoveCol();
-
-    wxGridTableBase * GetTable() const { return m_table; }
 
     void ClearGrid();
     bool InsertRows(int pos = 0, int numRows = 1, bool updateLabels = true)
@@ -1261,8 +1251,7 @@ public:
 
     int      GetBatchCount() { return m_batchCount; }
 
-    virtual void Refresh(bool eraseb = true,
-                         const wxRect* rect = (const wxRect *)  NULL);
+    virtual void Refresh(bool eraseb = true, const wxRect* rect = NULL);
 
     // Use this, rather than wxWindow::Refresh(), to force an
     // immediate repainting of the grid. Has no effect if you are
@@ -1297,7 +1286,12 @@ public:
     //  grid cells and labels so you will need to convert from device
     //  coordinates for mouse events etc.
     //
-    void XYToCell( int x, int y, wxGridCellCoords& ) const;
+    wxGridCellCoords XYToCell(int x, int y) const;
+    void XYToCell(int x, int y, wxGridCellCoords& coords) const
+        { coords = XYToCell(x, y); }
+    wxGridCellCoords XYToCell(const wxPoint& pos) const
+        { return XYToCell(pos.x, pos.y); }
+
     int  YToRow( int y, bool clipToMinMax = false ) const;
     int  XToCol( int x, bool clipToMinMax = false ) const;
 
@@ -1324,8 +1318,20 @@ public:
 
     // ------ grid cursor movement functions
     //
-    void SetGridCursor( int row, int col )
-        { SetCurrentCell( wxGridCellCoords(row, col) ); }
+    void SetGridCursor(int row, int col) { SetCurrentCell(row, col); }
+    void SetGridCursor(const wxGridCellCoords& c) { SetCurrentCell(c); }
+
+    void GoToCell(int row, int col)
+    {
+        if ( SetCurrentCell(row, col) )
+            MakeCellVisible(row, col);
+    }
+
+    void GoToCell(const wxGridCellCoords& coords)
+    {
+        if ( SetCurrentCell(coords) )
+            MakeCellVisible(coords);
+    }
 
     bool MoveCursorUp( bool expandSelection );
     bool MoveCursorDown( bool expandSelection );
@@ -1867,10 +1873,22 @@ protected:
 
     wxGridCellCoords m_currentCellCoords;
 
-    wxGridCellCoords m_selectingTopLeft;
-    wxGridCellCoords m_selectingBottomRight;
-    wxGridCellCoords m_selectingKeyboard;
+    // the corners of the block being currently selected or wxGridNoCellCoords
+    wxGridCellCoords m_selectedBlockTopLeft;
+    wxGridCellCoords m_selectedBlockBottomRight;
+
+    // when selecting blocks of cells (either from the keyboard using Shift
+    // with cursor keys, or by dragging the mouse), the selection is anchored
+    // at m_currentCellCoords which defines one of the corners of the rectangle
+    // being selected -- and this variable defines the other corner, i.e. it's
+    // either m_selectedBlockTopLeft or m_selectedBlockBottomRight depending on
+    // which of them is not m_currentCellCoords
+    //
+    // if no block selection is in process, it is set to wxGridNoCellCoords
+    wxGridCellCoords m_selectedBlockCorner;
+
     wxGridSelection  *m_selection;
+
     wxColour    m_selectionBackground;
     wxColour    m_selectionForeground;
 
@@ -2007,11 +2025,21 @@ protected:
     // for this to work, you should always use it and not set m_cursorMode
     // directly!
     void ChangeCursorMode(CursorMode mode,
-                          wxWindow *win = (wxWindow *)NULL,
+                          wxWindow *win = NULL,
                           bool captureMouse = true);
 
     wxWindow *m_winCapture;     // the window which captured the mouse
+
+    // this variable is used not for finding the correct current cursor but
+    // mainly for finding out what is going to happen if the mouse starts being
+    // dragged right now
+    //
+    // by default it is WXGRID_CURSOR_SELECT_CELL meaning that nothing else is
+    // going on, and it is set to one of RESIZE/SELECT/MOVE values while the
+    // corresponding operation will be started if the user starts dragging the
+    // mouse from the current position
     CursorMode m_cursorMode;
+
 
     //Column positions
     wxArrayInt m_colAt;
@@ -2029,7 +2057,16 @@ protected:
     int     m_dragLastPos;
     int     m_dragRowOrCol;
 
+    // true if a drag operation is in progress; when this is true,
+    // m_startDragPos is valid, i.e. not wxDefaultPosition
     bool    m_isDragging;
+
+    // the position (in physical coordinates) where the user started dragging
+    // the mouse or wxDefaultPosition if mouse isn't being dragged
+    //
+    // notice that this can be != wxDefaultPosition while m_isDragging is still
+    // false because we wait until the mouse is moved some distance away before
+    // setting m_isDragging to true
     wxPoint m_startDragPos;
 
     bool    m_waitForSlowClick;
@@ -2053,14 +2090,20 @@ protected:
     bool Redimension( wxGridTableMessage& );
 
 
-    int SendEvent( const wxEventType, int row, int col, wxMouseEvent& );
-    int SendEvent( const wxEventType, int row, int col );
-    int SendEvent( const wxEventType type)
-    {
-        return SendEvent(type,
-                         m_currentCellCoords.GetRow(),
-                         m_currentCellCoords.GetCol());
-    }
+    // generate the appropriate grid event and return -1 if it was vetoed, 1 if
+    // it was processed (but not vetoed) and 0 if it wasn't processed
+    int SendEvent(const wxEventType evtType,
+                  int row, int col,
+                  wxMouseEvent& e);
+    int SendEvent(const wxEventType evtType,
+                  const wxGridCellCoords& coords,
+                  wxMouseEvent& e)
+        { return SendEvent(evtType, coords.GetRow(), coords.GetCol(), e); }
+    int SendEvent(const wxEventType evtType, int row, int col);
+    int SendEvent(const wxEventType evtType, const wxGridCellCoords& coords)
+        { return SendEvent(evtType, coords.GetRow(), coords.GetCol()); }
+    int SendEvent(const wxEventType evtType)
+        { return SendEvent(evtType, m_currentCellCoords); }
 
     void OnPaint( wxPaintEvent& );
     void OnSize( wxSizeEvent& );
@@ -2070,16 +2113,20 @@ protected:
     void OnEraseBackground( wxEraseEvent& );
 
 
-    void SetCurrentCell( const wxGridCellCoords& coords );
-    void SetCurrentCell( int row, int col )
-        { SetCurrentCell( wxGridCellCoords(row, col) ); }
+    bool SetCurrentCell( const wxGridCellCoords& coords );
+    bool SetCurrentCell( int row, int col )
+        { return SetCurrentCell( wxGridCellCoords(row, col) ); }
 
-    void HighlightBlock( int topRow, int leftCol, int bottomRow, int rightCol );
 
-    void HighlightBlock( const wxGridCellCoords& topLeft,
-                         const wxGridCellCoords& bottomRight )
-        { HighlightBlock( topLeft.GetRow(), topLeft.GetCol(),
-                       bottomRight.GetRow(), bottomRight.GetCol() ); }
+    // this function is called to extend the block being currently selected
+    // from mouse and keyboard event handlers
+    void UpdateBlockBeingSelected(int topRow, int leftCol,
+                                  int bottomRow, int rightCol);
+
+    void UpdateBlockBeingSelected(const wxGridCellCoords& topLeft,
+                        const wxGridCellCoords& bottomRight)
+        { UpdateBlockBeingSelected(topLeft.GetRow(), topLeft.GetCol(),
+                         bottomRight.GetRow(), bottomRight.GetCol()); }
 
     // ------ functions to get/send data (see also public functions)
     //
@@ -2090,9 +2137,55 @@ protected:
     friend class wxGridRowOperations;
     friend class wxGridColumnOperations;
 
+    // they call our private Process{{Corner,Col,Row}Label,GridCell}MouseEvent()
+    friend class wxGridCornerLabelWindow;
+    friend class wxGridColLabelWindow;
+    friend class wxGridRowLabelWindow;
+    friend class wxGridWindow;
+
 private:
     // implement wxScrolledWindow method to return m_gridWin size
     virtual wxSize GetSizeAvailableForScrollTarget(const wxSize& size);
+
+    // event handlers and their helpers
+    // --------------------------------
+
+    // process mouse drag event in WXGRID_CURSOR_SELECT_CELL mode
+    void DoGridCellDrag(wxMouseEvent& event,
+                        const wxGridCellCoords& coords,
+                        bool isFirstDrag);
+
+    // process row/column resizing drag event
+    void DoGridLineDrag(wxMouseEvent& event, const wxGridOperations& oper);
+
+    // process mouse drag event in the grid window
+    void DoGridDragEvent(wxMouseEvent& event, const wxGridCellCoords& coords);
+
+    // process different clicks on grid cells
+    void DoGridCellLeftDown(wxMouseEvent& event,
+                            const wxGridCellCoords& coords,
+                            const wxPoint& pos);
+    void DoGridCellLeftDClick(wxMouseEvent& event,
+                             const wxGridCellCoords& coords,
+                             const wxPoint& pos);
+    void DoGridCellLeftUp(wxMouseEvent& event, const wxGridCellCoords& coords);
+
+    // process movement (but not dragging) event in the grid cell area
+    void DoGridMouseMoveEvent(wxMouseEvent& event,
+                              const wxGridCellCoords& coords,
+                              const wxPoint& pos);
+
+    // process mouse events in the grid window
+    void ProcessGridCellMouseEvent(wxMouseEvent& event);
+
+    // process mouse events in the row/column labels/corner windows
+    void ProcessRowLabelMouseEvent(wxMouseEvent& event);
+    void ProcessColLabelMouseEvent(wxMouseEvent& event);
+    void ProcessCornerLabelMouseEvent(wxMouseEvent& event);
+
+    void DoEndDragResizeRow();
+    void DoEndDragResizeCol();
+    void DoEndDragMoveCol();
 
 
     // common implementations of methods defined for both rows and columns

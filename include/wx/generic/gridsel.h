@@ -44,10 +44,23 @@ public:
                       bool ControlDown = false,  bool ShiftDown = false,
                       bool AltDown = false, bool MetaDown = false,
                       bool sendEvent = true );
+    void SelectBlock( const wxGridCellCoords& topLeft,
+                      const wxGridCellCoords& bottomRight,
+                      bool ControlDown = false,  bool ShiftDown = false,
+                      bool AltDown = false, bool MetaDown = false,
+                      bool sendEvent = true )
+    {
+        SelectBlock(topLeft.GetRow(), topLeft.GetCol(),
+                    bottomRight.GetRow(), bottomRight.GetCol(),
+                    ControlDown, ShiftDown, AltDown, MetaDown,
+                    sendEvent);
+    }
+
     void SelectCell( int row, int col,
                      bool ControlDown = false,  bool ShiftDown = false,
                      bool AltDown = false, bool MetaDown = false,
                      bool sendEvent = true );
+
     void ToggleCellSelection( int row, int col,
                               bool ControlDown = false,
                               bool ShiftDown = false,

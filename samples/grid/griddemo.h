@@ -64,6 +64,7 @@ class GridFrame : public wxFrame
     void SelectCells( wxCommandEvent& );
     void SelectRows( wxCommandEvent& );
     void SelectCols( wxCommandEvent& );
+    void SelectRowsOrCols( wxCommandEvent& );
 
     void DeselectCell(wxCommandEvent& event);
     void DeselectCol(wxCommandEvent& event);
@@ -144,6 +145,7 @@ public:
         ID_SELCELLS,
         ID_SELROWS,
         ID_SELCOLS,
+        ID_SELROWSORCOLS,
         ID_SET_CELL_FG_COLOUR,
         ID_SET_CELL_BG_COLOUR,
         ID_VTABLE,
