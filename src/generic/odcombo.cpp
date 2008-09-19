@@ -477,7 +477,7 @@ void wxVListBoxComboPopup::Insert( const wxString& item, int pos )
     }
 
     m_strings.Insert(item,pos);
-    if ( m_clientDatas.size() >= pos )
+    if ( (int)m_clientDatas.size() >= pos )
         m_clientDatas.Insert(NULL, pos);
 
     m_widths.Insert(-1,pos);
