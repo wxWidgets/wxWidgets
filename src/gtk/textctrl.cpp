@@ -1007,9 +1007,6 @@ void wxTextCtrl::DoSetValue( const wxString &value, int flags )
     {
         EnableTextChangedEvents(true);
     }
-
-    // This was added after discussion on the list
-    SetInsertionPoint(0);
 }
 
 void wxTextCtrl::WriteText( const wxString &text )

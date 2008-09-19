@@ -62,6 +62,8 @@ void wxTextEntryBase::DoSetValue(const wxString& value, int flags)
 
     SelectAll();
     WriteText(value);
+
+    SetInsertionPoint(0);
 }
 
 void wxTextEntryBase::Replace(long from, long to, const wxString& value)
