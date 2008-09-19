@@ -49,6 +49,15 @@ private:
     // function parameters
     void AssertSelection(int from, int to, const char *sel);
 
+    // helper of AssertSelection(): check that the text selected in the control
+    // is the given one
+    //
+    // this is necessary to disable testing this in wxComboBox test as it
+    // doesn't provide any way to access the string selection directly, its
+    // GetStringSelection() method returns the currently selected string in the
+    // wxChoice part of the control, not the selected text
+    virtual void CheckStringSelection(const char *sel);
+
     DECLARE_NO_COPY_CLASS(TextEntryTestCase)
 };
 

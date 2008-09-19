@@ -105,6 +105,7 @@
             geometry/size.cpp
             geometry/point.cpp
             config/config.cpp
+            controls/comboboxtest.cpp
             controls/textctrltest.cpp
             controls/textentrytest.cpp
             image/rawbmp.cpp

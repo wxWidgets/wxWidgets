@@ -108,6 +108,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_size.obj \
 	$(OBJS)\test_gui_point.obj \
 	$(OBJS)\test_gui_config.obj \
+	$(OBJS)\test_gui_comboboxtest.obj \
 	$(OBJS)\test_gui_textctrltest.obj \
 	$(OBJS)\test_gui_textentrytest.obj \
 	$(OBJS)\test_gui_rawbmp.obj \
@@ -558,6 +559,9 @@ $(OBJS)\test_gui_point.obj: .\geometry\point.cpp
 
 $(OBJS)\test_gui_config.obj: .\config\config.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\config\config.cpp
+
+$(OBJS)\test_gui_comboboxtest.obj: .\controls\comboboxtest.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\controls\comboboxtest.cpp
 
 $(OBJS)\test_gui_textctrltest.obj: .\controls\textctrltest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\controls\textctrltest.cpp

@@ -96,6 +96,11 @@ void TextEntryTestCase::TextChangeEvents()
     CPPUNIT_ASSERT_EQUAL( 1, handler.GetEvents() );
 }
 
+void TextEntryTestCase::CheckStringSelection(const char *sel)
+{
+    CPPUNIT_ASSERT_EQUAL( sel, GetTestEntry()->GetStringSelection() );
+}
+
 void TextEntryTestCase::AssertSelection(int from, int to, const char *sel)
 {
     wxTextEntry * const entry = GetTestEntry();
@@ -107,9 +112,10 @@ void TextEntryTestCase::AssertSelection(int from, int to, const char *sel)
     entry->GetSelection(&fromReal, &toReal);
     CPPUNIT_ASSERT_EQUAL( from, fromReal );
     CPPUNIT_ASSERT_EQUAL( to, toReal );
-    CPPUNIT_ASSERT_EQUAL( sel, entry->GetStringSelection() );
 
     CPPUNIT_ASSERT_EQUAL( from, entry->GetInsertionPoint() );
+
+    CheckStringSelection(sel);
 }
 
 void TextEntryTestCase::Selection()

@@ -652,6 +652,8 @@
 			<File
 				RelativePath=".\window\clientsize.cpp"/>
 			<File
+				RelativePath=".\controls\comboboxtest.cpp"/>
+			<File
 				RelativePath=".\config\config.cpp"/>
 			<File
 				RelativePath=".\dummy.cpp">
