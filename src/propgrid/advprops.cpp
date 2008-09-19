@@ -1551,9 +1551,7 @@ const wxString& wxPGGetDefaultImageWildcard()
     return wxPGGlobalVars->m_pDefaultImageWildcard;
 }
 
-WX_PG_IMPLEMENT_DERIVED_PROPERTY_CLASS(wxImageFileProperty,
-                                       wxFileProperty,
-                                       const wxString&)
+IMPLEMENT_DYNAMIC_CLASS(wxImageFileProperty, wxFileProperty)
 
 wxImageFileProperty::wxImageFileProperty( const wxString& label, const wxString& name,
     const wxString& value )

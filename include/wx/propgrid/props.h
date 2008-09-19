@@ -36,14 +36,6 @@ WX_PG_IMPLEMENT_PROPERTY_CLASS_PLAIN(NAME,T,EDITOR)
 #define WX_PG_IMPLEMENT_PROPERTY_CLASS(NAME,UPNAME,T,T_AS_ARG,EDITOR) \
 WX_PG_IMPLEMENT_PROPERTY_CLASS2(NAME,NAME,UPNAME,T,T_AS_ARG,EDITOR)
 
-#define WX_PG_DECLARE_DERIVED_PROPERTY_CLASS(CLASSNAME) \
-DECLARE_DYNAMIC_CLASS(CLASSNAME)
-
-// Derived property class is one that inherits from an existing working property
-// class, but assumes same value and editor type.
-#define WX_PG_IMPLEMENT_DERIVED_PROPERTY_CLASS(NAME,UPNAME,T_AS_ARG) \
-IMPLEMENT_DYNAMIC_CLASS(NAME, UPNAME)
-
 // -----------------------------------------------------------------------
 
 #define wxPG_NO_ESCAPE      wxPG_PROP_NO_ESCAPE     // No escape sequences
@@ -52,7 +44,7 @@ IMPLEMENT_DYNAMIC_CLASS(NAME, UPNAME)
 #define WX_PG_DECLARE_STRING_PROPERTY_WITH_DECL(NAME, DECL) \
 DECL NAME : public wxLongStringProperty \
 { \
-    WX_PG_DECLARE_DERIVED_PROPERTY_CLASS(NAME) \
+    DECLARE_DYNAMIC_CLASS(NAME) \
 public: \
     NAME( const wxString& name = wxPG_LABEL, \
           const wxString& label = wxPG_LABEL, \
@@ -66,8 +58,7 @@ public: \
 WX_PG_DECLARE_STRING_PROPERTY_WITH_DECL(NAME, class) \
 
 #define WX_PG_IMPLEMENT_STRING_PROPERTY_WITH_VALIDATOR(NAME, FLAGS) \
-WX_PG_IMPLEMENT_DERIVED_PROPERTY_CLASS(NAME,wxLongStringProperty,\
-                                       const wxString&) \
+IMPLEMENT_DYNAMIC_CLASS(NAME,wxLongStringProperty) \
 NAME::NAME( const wxString& name, \
             const wxString& label, \
             const wxString& value ) \
@@ -160,8 +151,7 @@ WX_PG_DECLARE_CUSTOM_COLOUR_PROPERTY_WITH_DECL(CLASSNAME, class)
 #define WX_PG_IMPLEMENT_CUSTOM_COLOUR_PROPERTY(CLASSNAME,\
                                                LABELS,VALUES,COLOURS) \
 static wxPGChoices gs_##CLASSNAME##_choicesCache; \
-WX_PG_IMPLEMENT_DERIVED_PROPERTY_CLASS(CLASSNAME, wxSystemColourProperty, \
-                                       const wxColourPropertyValue&) \
+IMPLEMENT_DYNAMIC_CLASS(CLASSNAME, wxSystemColourProperty) \
 CLASSNAME::CLASSNAME( const wxString& label, const wxString& name, \
     const wxColourPropertyValue& value ) \
     : wxSystemColourProperty(label, name, LABELS, VALUES, \

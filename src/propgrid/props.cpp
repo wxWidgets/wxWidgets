@@ -1534,7 +1534,7 @@ void wxFlagsProperty::ChildChanged( wxVariant& thisValue, int childIndex, wxVari
 // wxDirProperty
 // -----------------------------------------------------------------------
 
-WX_PG_IMPLEMENT_DERIVED_PROPERTY_CLASS(wxDirProperty,wxLongStringProperty,const wxString&)
+IMPLEMENT_DYNAMIC_CLASS(wxDirProperty, wxLongStringProperty)
 
 wxDirProperty::wxDirProperty( const wxString& name, const wxString& label, const wxString& value )
   : wxLongStringProperty(name,label,value)
