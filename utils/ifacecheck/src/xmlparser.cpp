@@ -83,6 +83,11 @@ void wxType::SetTypeFromString(const wxString& t)
     m_strTypeClean.Replace("&", "");
     m_strTypeClean.Replace("[]", "");
     m_strTypeClean = m_strTypeClean.Strip(wxString::both);
+
+    // to avoid false errors types like wxStandardPaths and wxStandardPathsBase
+    // need to be considered as the same type
+    if (m_strTypeClean.EndsWith("Base"))
+        m_strTypeClean = m_strTypeClean.Left(m_strTypeClean.Len()-4);
 }
 
 bool wxType::IsOk() const
@@ -363,6 +368,8 @@ bool wxClass::CheckConsistency() const
                 LogError("class %s has two methods with the same prototype: '%s'",
                          m_strName, m_methods[i].GetAsString());
                 return false;
+                ((wxClass*)this)->m_methods.RemoveAt(j);
+                j--;
             }
 
     return true;
@@ -376,7 +383,7 @@ const wxMethod* wxClass::FindMethod(const wxMethod& m) const
     return NULL;
 }
 
-wxMethodPtrArray wxClass::FindMethodNamed(const wxString& name) const
+wxMethodPtrArray wxClass::FindMethodsNamed(const wxString& name) const
 {
     wxMethodPtrArray ret;
 
@@ -444,6 +451,7 @@ wxClassPtrArray wxXmlInterface::FindClassesDefinedIn(const wxString& headerfile)
 // wxXmlGccInterface helper declarations
 // ----------------------------------------------------------------------------
 
+// or-able flags for a toResolveTypeItem->attrib:
 #define ATTRIB_CONST        1
 #define ATTRIB_REFERENCE    2
 #define ATTRIB_POINTER      4
@@ -458,7 +466,8 @@ public:
     toResolveTypeItem(unsigned int refID, unsigned int attribint)
         : ref(refID), attribs(attribint) {}
 
-    unsigned long ref, attribs;
+    unsigned long ref,       // the referenced type's ID
+                  attribs;   // the attributes of this reference
 };
 
 #if 1
@@ -592,6 +601,7 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
     wxClassMemberIdHashMap members;
     wxTypeIdHashMap types;
     wxTypeIdHashMap files;
+    wxTypeIdHashMap typedefs;
 
     // prealloc quite a lot of memory!
     m_classes.Alloc(ESTIMATED_NUM_CLASSES);
@@ -650,6 +660,23 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
             // register this class also as possible return/argument type:
             types[id] = cname;
         }
+        else if (n == "Typedef")
+        {
+            unsigned long typeId = 0;
+            if (!getID(&typeId, child->GetAttribute("type"))) {
+                LogError("Invalid type for node %s: %s", n, child->GetAttribute("type"));
+                return false;
+            }
+
+            // this typedef node tell us that every type referenced with the
+            // "typeId" ID should be called with another name:
+            wxString name = child->GetAttribute("name");
+
+            // save this typedef in a separate hashmap...
+            typedefs[typeId] = name;
+
+            types[id] = name;
+        }
         else if (n == "PointerType" || n == "ReferenceType" ||
                  n == "CvQualifiedType" || n == "ArrayType")
         {
@@ -689,11 +716,14 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
             }
 
             if (argstr.Len() > 0)
-                argstr = argstr.Left(argstr.Len()-2);
+                argstr = argstr.Left(argstr.Len()-2);       // remove final comma
 
             // these nodes make reference to other types... we'll resolve them later
             //toResolveTypes[id] = toResolveTypeItem(ret, 0);
-            types[id] = child->GetAttribute("returns") + "(" + argstr + ")";
+            //types[id] = child->GetAttribute("returns") + "(" + argstr + ")";
+
+            types[id] = "TOFIX";   // typically this type will be "fixed" thanks
+                                   // to a typedef later...
         }
         else if (n == "File")
         {
@@ -737,7 +767,7 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
     }
 
     // some nodes with IDs referenced by methods as return/argument types, do reference
-    // in turn o ther nodes (see PointerType, ReferenceType and CvQualifierType above);
+    // in turn other nodes (see PointerType, ReferenceType and CvQualifierType above);
     // thus we need to resolve their name iteratively:
     while (toResolveTypes.size()>0)
     {
@@ -770,7 +800,10 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
                     newtype = newtype + "[]";
 
                 // add the resolved type to the list of "primary" types
-                types[id] = newtype;
+                if (newtype.Contains("TOFIX") && typedefs[id] != "")
+                    types[id] = typedefs[id];       // better use a typedef for this type!
+                else
+                    types[id] = newtype;
 
                 // this one has been resolved; erase it through its iterator!
                 toResolveTypes.erase(i);
@@ -793,7 +826,7 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
                 }
                 else
                 {
-                    LogError("Cannot solve '%s' reference type!", referenced);
+                    LogError("Cannot solve '%d' reference type!", referenced);
                     return false;
                 }
             }

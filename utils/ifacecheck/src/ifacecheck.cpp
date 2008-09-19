@@ -306,11 +306,11 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClassPtrArray& a
         {
             wxMethodPtrArray overloads;
 
-            // try searching for a method with the same name but with
+            // try searching for methods with the same name but with
             // different return type / arguments / qualifiers
             for (unsigned int j=0; j<api.GetCount(); j++)
             {
-                wxMethodPtrArray results = api[j]->FindMethodNamed(m.GetName());
+                wxMethodPtrArray results = api[j]->FindMethodsNamed(m.GetName());
 
                 // append "results" array to "overloads"
                 WX_APPEND_ARRAY(overloads, results);

@@ -277,7 +277,7 @@ public:     // misc
 
     // returns an array of pointers to the overloaded methods with the
     // same given name
-    wxMethodPtrArray FindMethodNamed(const wxString& m) const;
+    wxMethodPtrArray FindMethodsNamed(const wxString& m) const;
 
     // dumps all methods to the given output stream
     void Dump(wxTextOutputStream& stream) const;
