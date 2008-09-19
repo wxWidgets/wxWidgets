@@ -20,6 +20,7 @@
 #if wxUSE_GUI
     #include "wx/gdicmn.h"
     #include "wx/cursor.h"
+    #include "wx/mousestate.h"
 #endif
 
 #include "wx/dynarray.h"
@@ -295,12 +296,6 @@ enum Propagation_state
 
 class WXDLLIMPEXP_BASE wxEvent : public wxObject
 {
-private:
-    wxEvent& operator=(const wxEvent&);
-
-protected:
-    wxEvent(const wxEvent&);                   // for implementing Clone()
-
 public:
     wxEvent(int winid = 0, wxEventType commandType = wxEVT_NULL );
 
@@ -367,9 +362,12 @@ protected:
     // backwards compatibility as it is new
     int               m_propagationLevel;
 
-protected:
     bool              m_skipped;
     bool              m_isCommandEvent;
+
+protected:
+    wxEvent(const wxEvent&);            // for implementing Clone()
+    wxEvent& operator=(const wxEvent&); // for derived classes operator=()
 
 private:
     // it needs to access our m_propagationLevel
@@ -644,12 +642,17 @@ enum
     wxMOUSE_BTN_MAX
 };
 
-class WXDLLIMPEXP_CORE wxMouseEvent : public wxEvent
+class WXDLLIMPEXP_CORE wxMouseEvent : public wxEvent,
+                                      public wxMouseState
 {
 public:
     wxMouseEvent(wxEventType mouseType = wxEVT_NULL);
-    wxMouseEvent(const wxMouseEvent& event) : wxEvent(event)
-        { Assign(event); }
+    wxMouseEvent(const wxMouseEvent& event)
+        : wxEvent(event),
+          wxMouseState(event)
+    {
+        Assign(event);
+    }
 
     // Was it a button event? (*doesn't* mean: is any button *down*?)
     bool IsButton() const { return Button(wxMOUSE_BTN_ANY); }
@@ -671,20 +674,6 @@ public:
 
     // Get the button which is changing state (wxMOUSE_BTN_NONE if none)
     int GetButton() const;
-
-    // Find state of shift/control keys
-    bool ControlDown() const { return m_controlDown; }
-    bool MetaDown() const { return m_metaDown; }
-    bool AltDown() const { return m_altDown; }
-    bool ShiftDown() const { return m_shiftDown; }
-    bool CmdDown() const
-    {
-#if defined(__WXMAC__) || defined(__WXCOCOA__)
-        return MetaDown();
-#else
-        return ControlDown();
-#endif
-    }
 
     // Find which event was just generated
     bool LeftDown() const { return (m_eventType == wxEVT_LEFT_DOWN); }
@@ -792,7 +781,12 @@ public:
 
     virtual wxEvent *Clone() const { return new wxMouseEvent(*this); }
 
-    wxMouseEvent& operator=(const wxMouseEvent& event) { if (&event != this) Assign(event); return *this; }
+    wxMouseEvent& operator=(const wxMouseEvent& event)
+    {
+        if (&event != this)
+            Assign(event);
+        return *this;
+    }
 
 public:
     wxCoord m_x, m_y;
@@ -802,11 +796,6 @@ public:
     bool          m_rightDown;
     bool          m_aux1Down;
     bool          m_aux2Down;
-
-    bool          m_controlDown;
-    bool          m_shiftDown;
-    bool          m_altDown;
-    bool          m_metaDown;
 
     int           m_clickCount;
 
@@ -870,47 +859,12 @@ private:
  wxEVT_HOTKEY
  */
 
-class WXDLLIMPEXP_CORE wxKeyEvent : public wxEvent
+class WXDLLIMPEXP_CORE wxKeyEvent : public wxEvent,
+                                    public wxKeyboardState
 {
 public:
     wxKeyEvent(wxEventType keyType = wxEVT_NULL);
     wxKeyEvent(const wxKeyEvent& evt);
-
-    // can be used check if the key event has exactly the given modifiers:
-    // "GetModifiers() = wxMOD_CONTROL" is easier to write than "ControlDown()
-    // && !MetaDown() && !AltDown() && !ShiftDown()"
-    int GetModifiers() const
-    {
-        return (m_controlDown ? wxMOD_CONTROL : 0) |
-               (m_shiftDown ? wxMOD_SHIFT : 0) |
-               (m_metaDown ? wxMOD_META : 0) |
-               (m_altDown ? wxMOD_ALT : 0);
-    }
-
-    // Find state of shift/control keys
-    bool ControlDown() const { return m_controlDown; }
-    bool ShiftDown() const { return m_shiftDown; }
-    bool MetaDown() const { return m_metaDown; }
-    bool AltDown() const { return m_altDown; }
-
-    // "Cmd" is a pseudo key which is Control for PC and Unix platforms but
-    // Apple ("Command") key under Macs: it makes often sense to use it instead
-    // of, say, ControlDown() because Cmd key is used for the same thing under
-    // Mac as Ctrl elsewhere (but Ctrl still exists, just not used for this
-    // purpose under Mac)
-    bool CmdDown() const
-    {
-#if defined(__WXMAC__) || defined(__WXCOCOA__)
-        return MetaDown();
-#else
-        return ControlDown();
-#endif
-    }
-
-    // exclude MetaDown() from HasModifiers() because NumLock under X is often
-    // configured as mod2 modifier, yet the key events even when it is pressed
-    // should be processed normally, not like Ctrl- or Alt-key
-    bool HasModifiers() const { return ControlDown() || AltDown(); }
 
     // get the key code: an ASCII7 char or an element of wxKeyCode enum
     int GetKeyCode() const { return (int)m_keyCode; }
@@ -956,15 +910,14 @@ public:
     {
         if (&evt != this)
         {
+            wxEvent::operator=(evt);
+            wxKeyboardState::operator=(evt);
+
             m_x = evt.m_x;
             m_y = evt.m_y;
 
             m_keyCode = evt.m_keyCode;
 
-            m_controlDown = evt.m_controlDown;
-            m_shiftDown = evt.m_shiftDown;
-            m_altDown = evt.m_altDown;
-            m_metaDown = evt.m_metaDown;
             m_scanCode = evt.m_scanCode;
             m_rawCode = evt.m_rawCode;
             m_rawFlags = evt.m_rawFlags;
@@ -979,12 +932,6 @@ public:
     wxCoord       m_x, m_y;
 
     long          m_keyCode;
-
-    // TODO: replace those with a single m_modifiers bitmask of wxMOD_XXX?
-    bool          m_controlDown;
-    bool          m_shiftDown;
-    bool          m_altDown;
-    bool          m_metaDown;
 
     // FIXME: what is this for? relation to m_rawXXX?
     bool          m_scanCode;

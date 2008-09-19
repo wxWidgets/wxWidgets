@@ -368,7 +368,7 @@ wxEvent::wxEvent(int theId, wxEventType commandType )
     m_propagationLevel = wxEVENT_PROPAGATE_NONE;
 }
 
-wxEvent::wxEvent(const wxEvent &src)
+wxEvent::wxEvent(const wxEvent& src)
     : wxObject(src)
     , m_eventObject(src.m_eventObject)
     , m_eventType(src.m_eventType)
@@ -379,6 +379,22 @@ wxEvent::wxEvent(const wxEvent &src)
     , m_skipped(src.m_skipped)
     , m_isCommandEvent(src.m_isCommandEvent)
 {
+}
+
+wxEvent& wxEvent::operator=(const wxEvent& src)
+{
+    wxObject::operator=(src);
+
+    m_eventObject = src.m_eventObject;
+    m_eventType = src.m_eventType;
+    m_timeStamp = src.m_timeStamp;
+    m_id = src.m_id;
+    m_callbackUserData = src.m_callbackUserData;
+    m_propagationLevel = src.m_propagationLevel;
+    m_skipped = src.m_skipped;
+    m_isCommandEvent = src.m_isCommandEvent;
+
+    return *this;
 }
 
 #endif // wxUSE_BASE
@@ -534,11 +550,6 @@ wxMouseEvent::wxMouseEvent(wxEventType commandType)
     m_aux1Down = false;
     m_aux2Down = false;
 
-    m_controlDown = false;
-    m_shiftDown = false;
-    m_altDown = false;
-    m_metaDown = false;
-
     m_clickCount = -1;
 
     m_wheelRotation = 0;
@@ -549,7 +560,8 @@ wxMouseEvent::wxMouseEvent(wxEventType commandType)
 
 void wxMouseEvent::Assign(const wxMouseEvent& event)
 {
-    m_eventType = event.m_eventType;
+    wxEvent::operator=(event);
+    wxMouseState::operator=(event);
 
     m_x = event.m_x;
     m_y = event.m_y;
@@ -559,11 +571,6 @@ void wxMouseEvent::Assign(const wxMouseEvent& event)
     m_rightDown = event.m_rightDown;
     m_aux1Down = event.m_aux1Down;
     m_aux2Down = event.m_aux2Down;
-
-    m_controlDown = event.m_controlDown;
-    m_shiftDown = event.m_shiftDown;
-    m_altDown = event.m_altDown;
-    m_metaDown = event.m_metaDown;
 
     m_wheelRotation = event.m_wheelRotation;
     m_wheelDelta = event.m_wheelDelta;
@@ -749,10 +756,6 @@ wxPoint wxMouseEvent::GetLogicalPosition(const wxDC& dc) const
 wxKeyEvent::wxKeyEvent(wxEventType type)
 {
     m_eventType = type;
-    m_shiftDown = false;
-    m_controlDown = false;
-    m_metaDown = false;
-    m_altDown = false;
     m_keyCode = 0;
     m_scanCode = 0;
 #if wxUSE_UNICODE
@@ -761,17 +764,14 @@ wxKeyEvent::wxKeyEvent(wxEventType type)
 }
 
 wxKeyEvent::wxKeyEvent(const wxKeyEvent& evt)
-    : wxEvent(evt)
+          : wxEvent(evt),
+            wxKeyboardState(evt)
 {
     m_x = evt.m_x;
     m_y = evt.m_y;
 
     m_keyCode = evt.m_keyCode;
 
-    m_controlDown = evt.m_controlDown;
-    m_shiftDown = evt.m_shiftDown;
-    m_altDown = evt.m_altDown;
-    m_metaDown = evt.m_metaDown;
     m_scanCode = evt.m_scanCode;
     m_rawCode = evt.m_rawCode;
     m_rawFlags = evt.m_rawFlags;

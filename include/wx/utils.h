@@ -19,8 +19,10 @@
 #include "wx/object.h"
 #include "wx/list.h"
 #include "wx/filefn.h"
+
 #if wxUSE_GUI
     #include "wx/gdicmn.h"
+    #include "wx/mousestate.h"
 #endif
 
 class WXDLLIMPEXP_FWD_BASE wxArrayString;
@@ -207,74 +209,6 @@ WXDLLIMPEXP_CORE bool wxGetKeyState(wxKeyCode key);
 // KeyDown events with autorepeat. On by default and always on
 // in wxMSW.
 WXDLLIMPEXP_CORE bool wxSetDetectableAutoRepeat( bool flag );
-
-
-// wxMouseState is used to hold information about button and modifier state
-// and is what is returned from wxGetMouseState.
-class WXDLLIMPEXP_CORE wxMouseState
-{
-public:
-    wxMouseState()
-        : m_x(0), m_y(0),
-          m_leftDown(false), m_middleDown(false), m_rightDown(false),
-          m_aux1Down(false), m_aux2Down(false),
-          m_controlDown(false), m_shiftDown(false), m_altDown(false),
-          m_metaDown(false)
-    {}
-
-    wxCoord GetX() const { return m_x; }
-    wxCoord GetY() const { return m_y; }
-    wxPoint GetPosition() const { return wxPoint(m_x, m_y); }
-
-    bool LeftDown()    const { return m_leftDown; }
-    bool MiddleDown()  const { return m_middleDown; }
-    bool RightDown()   const { return m_rightDown; }
-    bool Aux1Down()    const { return m_aux1Down; }
-    bool Aux2Down()    const { return m_aux2Down; }
-
-    bool ControlDown() const { return m_controlDown; }
-    bool ShiftDown()   const { return m_shiftDown; }
-    bool AltDown()     const { return m_altDown; }
-    bool MetaDown()    const { return m_metaDown; }
-    bool CmdDown() const
-    {
-#if defined(__WXMAC__) || defined(__WXCOCOA__)
-        return MetaDown();
-#else
-        return ControlDown();
-#endif
-    }
-
-    void SetX(wxCoord x) { m_x = x; }
-    void SetY(wxCoord y) { m_y = y; }
-
-    void SetLeftDown(bool down)   { m_leftDown = down; }
-    void SetMiddleDown(bool down) { m_middleDown = down; }
-    void SetRightDown(bool down)  { m_rightDown = down; }
-    void SetAux1Down(bool down)   { m_aux1Down = down; }
-    void SetAux2Down(bool down)   { m_aux2Down = down; }
-
-    void SetControlDown(bool down) { m_controlDown = down; }
-    void SetShiftDown(bool down)   { m_shiftDown = down; }
-    void SetAltDown(bool down)     { m_altDown = down; }
-    void SetMetaDown(bool down)    { m_metaDown = down; }
-
-private:
-    wxCoord m_x,
-            m_y;
-
-    bool m_leftDown     : 1;
-    bool m_middleDown   : 1;
-    bool m_rightDown    : 1;
-    bool m_aux1Down     : 1;
-    bool m_aux2Down     : 1;
-
-    bool m_controlDown  : 1;
-    bool m_shiftDown    : 1;
-    bool m_altDown      : 1;
-    bool m_metaDown     : 1;
-};
-
 
 // Returns the current state of the mouse position, buttons and modifers
 WXDLLIMPEXP_CORE wxMouseState wxGetMouseState();

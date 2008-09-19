@@ -698,10 +698,13 @@ public:
            Process a wxEVT_CHAR event.
     @endEventTable
 
+    @see wxKeyboardState
+
     @library{wxcore}
     @category{events}
 */
-class wxKeyEvent : public wxEvent
+class wxKeyEvent : public wxEvent,
+                   public wxKeyboardState
 {
 public:
     /**
@@ -709,32 +712,6 @@ public:
         Currently, the only valid event types are @c wxEVT_CHAR and @c wxEVT_CHAR_HOOK.
     */
     wxKeyEvent(wxEventType keyEventType = wxEVT_NULL);
-
-    /**
-        Returns @true if the Alt key was down at the time of the key event.
-
-        Notice that GetModifiers() is easier to use correctly than this function
-        so you should consider using it in new code.
-    */
-    bool AltDown() const;
-
-    /**
-        CMD is a pseudo key which is the same as Control for PC and Unix
-        platforms but the special APPLE (a.k.a as COMMAND) key under Macs:
-        it makes often sense to use it instead of, say, ControlDown() because Cmd
-        key is used for the same thing under Mac as Ctrl elsewhere (but Ctrl still
-        exists, just not used for this purpose under Mac). So for non-Mac platforms
-        this is the same as ControlDown() and under Mac this is the same as MetaDown().
-    */
-    bool CmdDown() const;
-
-    /**
-        Returns @true if the control key was down at the time of the key event.
-
-        Notice that GetModifiers() is easier to use correctly than this function
-        so you should consider using it in new code.
-    */
-    bool ControlDown() const;
 
     /**
         Returns the virtual key code. ASCII events return normal ASCII values,
@@ -746,33 +723,6 @@ public:
         charset. You can obtain the corresponding Unicode character using GetUnicodeKey().
     */
     int GetKeyCode() const;
-
-    /**
-        Return the bitmask of modifier keys which were pressed when this event
-        happened. See @ref page_keymodifiers for the full list of modifiers.
-
-        Notice that this function is easier to use correctly than, for example,
-        ControlDown() because when using the latter you also have to remember to
-        test that none of the other modifiers is pressed:
-
-        @code
-        if ( ControlDown() && !AltDown() && !ShiftDown() && !MetaDown() )
-            ... handle Ctrl-XXX ...
-        @endcode
-
-        and forgetting to do it can result in serious program bugs (e.g. program
-        not working with European keyboard layout where ALTGR key which is seen by
-        the program as combination of CTRL and ALT is used). On the other hand,
-        you can simply write:
-
-        @code
-        if ( GetModifiers() == wxMOD_CONTROL )
-            ... handle Ctrl-XXX ...
-        @endcode
-
-        with this function.
-    */
-    int GetModifiers() const;
 
     //@{
     /**
@@ -817,33 +767,6 @@ public:
         Returns the Y position (in client coordinates) of the event.
     */
     wxCoord GetY() const;
-
-    /**
-        Returns @true if either CTRL or ALT keys was down at the time of the
-        key event.
-
-        Note that this function does not take into account neither SHIFT nor
-        META key states (the reason for ignoring the latter is that it is
-        common for NUMLOCK key to be configured as META under X but the key
-        presses even while NUMLOCK is on should be still processed normally).
-    */
-    bool HasModifiers() const;
-
-    /**
-        Returns @true if the Meta key was down at the time of the key event.
-
-        Notice that GetModifiers() is easier to use correctly than this function
-        so you should consider using it in new code.
-    */
-    bool MetaDown() const;
-
-    /**
-        Returns @true if the shift key was down at the time of the key event.
-
-        Notice that GetModifiers() is easier to use correctly than this function
-        so you should consider using it in new code.
-    */
-    bool ShiftDown() const;
 };
 
 
@@ -1546,9 +1469,10 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see wxKeyEvent::CmdDown
+    @see wxKeyEvent
 */
-class wxMouseEvent : public wxEvent
+class wxMouseEvent : public wxEvent,
+                     public wxMouseState
 {
 public:
     /**
@@ -1575,11 +1499,6 @@ public:
          @li wxEVT_MOUSEWHEEL
     */
     wxMouseEvent(wxEventType mouseEventType = wxEVT_NULL);
-
-    /**
-        Returns @true if the Alt key was down at the time of the event.
-    */
-    bool AltDown() const;
 
     /**
         Returns @true if the event was a first extra button double click.
@@ -1658,18 +1577,6 @@ public:
         was generated (see Button() for the possible values).
     */
     bool ButtonUp(int = wxMOUSE_BTN_ANY) const;
-
-    /**
-        Same as MetaDown() under Mac, same as ControlDown() elsewhere.
-
-        @see wxKeyEvent::CmdDown
-    */
-    bool CmdDown() const;
-
-    /**
-        Returns @true if the control key was down at the time of the event.
-    */
-    bool ControlDown() const;
 
     /**
         Returns @true if this was a dragging event (motion while a button is depressed).
@@ -1865,11 +1772,6 @@ public:
         Returns @true if the right mouse button changed to up.
     */
     bool RightUp() const;
-
-    /**
-        Returns @true if the shift key was down at the time of the event.
-    */
-    bool ShiftDown() const;
 };
 
 

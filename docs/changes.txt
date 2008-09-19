@@ -392,6 +392,7 @@ All (GUI):
 - wxWindow::IsBeingDeleted() now returns true not only if the window itself is
   marked for destruction but also if any of its parent windows are.
 - Improved drawing of the hint during column move in wxGrid.
+- Get/HasModifiers() of wxKeyEvent are now also available in wxMouseEvent.
 
 wxGTK:
 
