@@ -572,6 +572,7 @@ BEGIN_EVENT_TABLE(wxAuiManager, wxEvtHandler)
     EVT_LEFT_UP(wxAuiManager::OnLeftUp)
     EVT_MOTION(wxAuiManager::OnMotion)
     EVT_LEAVE_WINDOW(wxAuiManager::OnLeaveWindow)
+    EVT_MOUSE_CAPTURE_LOST(wxAuiManager::OnCaptureLost)
     EVT_CHILD_FOCUS(wxAuiManager::OnChildFocus)
     EVT_AUI_FIND_MANAGER(wxAuiManager::OnFindManager)
     EVT_TIMER(101, wxAuiManager::OnHintFadeTimer)
@@ -4438,6 +4439,16 @@ void wxAuiManager::OnLeaveWindow(wxMouseEvent& WXUNUSED(event))
     {
         m_hover_button = NULL;
         Repaint();
+    }
+}
+
+void wxAuiManager::OnCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(event))
+{
+    // cancel the operation in progress, if any
+    if ( m_action != actionNone )
+    {
+        m_action = actionNone;
+        HideHint();
     }
 }
 
