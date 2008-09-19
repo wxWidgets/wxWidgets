@@ -314,6 +314,7 @@ TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_point.obj &
 	$(OBJS)\test_gui_config.obj &
 	$(OBJS)\test_gui_textctrltest.obj &
+	$(OBJS)\test_gui_textentrytest.obj &
 	$(OBJS)\test_gui_rawbmp.obj &
 	$(OBJS)\test_gui_selstoretest.obj &
 	$(OBJS)\test_gui_clientsize.obj &
@@ -353,7 +354,7 @@ $(OBJS)\test.exe :  $(TEST_OBJECTS)
 	@%append $(OBJS)\test.lbc option quiet
 	@%append $(OBJS)\test.lbc name $^@
 	@%append $(OBJS)\test.lbc option caseexact
-	@%append $(OBJS)\test.lbc  $(__DEBUGINFO_2)  libpath $(LIBDIRNAME) system nt ref 'main_' $(CPPUNIT_LIBS) $(LDFLAGS)
+	@%append $(OBJS)\test.lbc $(LDFLAGS) $(__DEBUGINFO_2)  libpath $(LIBDIRNAME) system nt ref 'main_' $(CPPUNIT_LIBS)
 	@for %i in ($(TEST_OBJECTS)) do @%append $(OBJS)\test.lbc file %i
 	@for %i in ( $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_XML_p)  $(__WXLIB_MONO_p) wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib) do @%append $(OBJS)\test.lbc library %i
 	@%append $(OBJS)\test.lbc
@@ -366,7 +367,7 @@ $(OBJS)\test_gui.exe :  $(TEST_GUI_OBJECTS) $(OBJS)\test_gui_sample.res
 	@%append $(OBJS)\test_gui.lbc option quiet
 	@%append $(OBJS)\test_gui.lbc name $^@
 	@%append $(OBJS)\test_gui.lbc option caseexact
-	@%append $(OBJS)\test_gui.lbc  $(__DEBUGINFO_2)  libpath $(LIBDIRNAME) $(CPPUNIT_LIBS) system nt ref 'main_' $(LDFLAGS)
+	@%append $(OBJS)\test_gui.lbc $(LDFLAGS) $(__DEBUGINFO_2)  libpath $(LIBDIRNAME) $(CPPUNIT_LIBS) system nt ref 'main_'
 	@for %i in ($(TEST_GUI_OBJECTS)) do @%append $(OBJS)\test_gui.lbc file %i
 	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib) do @%append $(OBJS)\test_gui.lbc library %i
 	@%append $(OBJS)\test_gui.lbc option resource=$(OBJS)\test_gui_sample.res
@@ -387,7 +388,7 @@ $(OBJS)\printfbench.exe :  $(PRINTFBENCH_OBJECTS)
 	@%append $(OBJS)\printfbench.lbc option quiet
 	@%append $(OBJS)\printfbench.lbc name $^@
 	@%append $(OBJS)\printfbench.lbc option caseexact
-	@%append $(OBJS)\printfbench.lbc  $(__DEBUGINFO_2)  libpath $(LIBDIRNAME) system nt ref 'main_' $(CPPUNIT_LIBS) $(LDFLAGS)
+	@%append $(OBJS)\printfbench.lbc $(LDFLAGS) $(__DEBUGINFO_2)  libpath $(LIBDIRNAME) system nt ref 'main_' $(CPPUNIT_LIBS)
 	@for %i in ($(PRINTFBENCH_OBJECTS)) do @%append $(OBJS)\printfbench.lbc file %i
 	@for %i in ( $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib) do @%append $(OBJS)\printfbench.lbc library %i
 	@%append $(OBJS)\printfbench.lbc
@@ -590,6 +591,9 @@ $(OBJS)\test_gui_config.obj :  .AUTODEPEND .\config\config.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_textctrltest.obj :  .AUTODEPEND .\controls\textctrltest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_textentrytest.obj :  .AUTODEPEND .\controls\textentrytest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_rawbmp.obj :  .AUTODEPEND .\image\rawbmp.cpp

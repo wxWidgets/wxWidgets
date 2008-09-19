@@ -1,0 +1,55 @@
+///////////////////////////////////////////////////////////////////////////////
+// Name:        tests/controls/textentrytest.h
+// Purpose:     Base class implementing wxTextEntry unit tests
+// Author:      Vadim Zeitlin
+// Created:     2008-09-19 (extracted from textctrltest.cpp)
+// RCS-ID:      $Id$
+// Copyright:   (c) 2007, 2008 Vadim Zeitlin <vadim@wxwidgets.org>
+///////////////////////////////////////////////////////////////////////////////
+
+#ifndef _WX_TESTS_CONTROLS_TEXTENTRYTEST_H_
+#define _WX_TESTS_CONTROLS_TEXTENTRYTEST_H_
+
+// ----------------------------------------------------------------------------
+// abstract base class testing wxTextEntry methods
+// ----------------------------------------------------------------------------
+
+class TextEntryTestCase : public CppUnit::TestCase
+{
+public:
+    TextEntryTestCase() { }
+
+protected:
+    // this function must be overridden by the derived classes to return the
+    // text entry object we're testing, typically this is done by creating a
+    // control implementing wxTextEntry interface in setUp() virtual method and
+    // just returning it from here
+    virtual wxTextEntry *GetTestEntry() const = 0;
+
+    // and this one must be overridden to return the window which implements
+    // wxTextEntry interface -- usually it will return the same pointer as
+    // GetTestEntry(), just as a different type
+    virtual wxWindow *GetTestWindow() const = 0;
+
+    // this should be inserted in the derived class CPPUNIT_TEST_SUITE
+    // definition to run all wxTextEntry tests as part of it
+    #define wxTEXT_ENTRY_TESTS() \
+        CPPUNIT_TEST( SetValue ); \
+        CPPUNIT_TEST( TextChangeEvents ); \
+        CPPUNIT_TEST( Selection ); \
+        CPPUNIT_TEST( InsertionPoint )
+
+    void SetValue();
+    void TextChangeEvents();
+    void Selection();
+    void InsertionPoint();
+
+private:
+    // Selection() test helper: verify that selection is as described by the
+    // function parameters
+    void AssertSelection(int from, int to, const char *sel);
+
+    DECLARE_NO_COPY_CLASS(TextEntryTestCase)
+};
+
+#endif // _WX_TESTS_CONTROLS_TEXTENTRYTEST_H_

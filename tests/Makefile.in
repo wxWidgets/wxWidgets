@@ -121,6 +121,7 @@ TEST_GUI_OBJECTS =  \
 	test_gui_point.o \
 	test_gui_config.o \
 	test_gui_textctrltest.o \
+	test_gui_textentrytest.o \
 	test_gui_rawbmp.o \
 	test_gui_selstoretest.o \
 	test_gui_clientsize.o \
@@ -180,10 +181,16 @@ COND_MONOLITHIC_0___WXLIB_XML_p = \
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	= test_gui.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@__test_gui_bundle___depname \
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	= test_gui_bundle
-@COND_TOOLKIT_COCOA@____test_gui_BUNDLE_TGT_REF_DEP = \
-@COND_TOOLKIT_COCOA@	$(__test_gui_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_MAC@____test_gui_BUNDLE_TGT_REF_DEP = \
 @COND_TOOLKIT_MAC@	$(__test_gui_app_Contents_PkgInfo___depname)
+@COND_TOOLKIT_OSX_CARBON@____test_gui_BUNDLE_TGT_REF_DEP \
+@COND_TOOLKIT_OSX_CARBON@	= $(__test_gui_app_Contents_PkgInfo___depname)
+@COND_TOOLKIT_OSX_COCOA@____test_gui_BUNDLE_TGT_REF_DEP \
+@COND_TOOLKIT_OSX_COCOA@	= $(__test_gui_app_Contents_PkgInfo___depname)
+@COND_TOOLKIT_OSX_IPHONE@____test_gui_BUNDLE_TGT_REF_DEP \
+@COND_TOOLKIT_OSX_IPHONE@	= $(__test_gui_app_Contents_PkgInfo___depname)
+@COND_TOOLKIT_COCOA@____test_gui_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_COCOA@	$(__test_gui_app_Contents_PkgInfo___depname)
 @COND_GCC_PCH_1@__test_gui_PCH_INC = -I.pch/testprec_test_gui
 @COND_ICC_PCH_1@__test_gui_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	.pch/testprec_test_gui/testprec.h.gch
@@ -513,6 +520,9 @@ test_gui_config.o: $(srcdir)/config/config.cpp $(TEST_GUI_ODEP)
 
 test_gui_textctrltest.o: $(srcdir)/controls/textctrltest.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/textctrltest.cpp
+
+test_gui_textentrytest.o: $(srcdir)/controls/textentrytest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/textentrytest.cpp
 
 test_gui_rawbmp.o: $(srcdir)/image/rawbmp.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/image/rawbmp.cpp

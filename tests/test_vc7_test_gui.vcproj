@@ -720,6 +720,8 @@
 				RelativePath=".\test.cpp"/>
 			<File
 				RelativePath=".\controls\textctrltest.cpp"/>
+			<File
+				RelativePath=".\controls\textentrytest.cpp"/>
 		</Filter>
 		<Filter
 			Name="Resource Files"

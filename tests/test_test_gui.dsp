@@ -283,6 +283,10 @@ SOURCE=.\test.cpp
 
 SOURCE=.\controls\textctrltest.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=.\controls\textentrytest.cpp
+# End Source File
 # End Group
 # End Target
 # End Project
