@@ -72,6 +72,10 @@
     #define ODS_NOFOCUSRECT     0x0200
 #endif
 
+#ifndef DT_HIDEPREFIX
+    #define DT_HIDEPREFIX       0x00100000
+#endif
+
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------
@@ -590,10 +594,14 @@ WXLRESULT wxButton::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 static void DrawButtonText(HDC hdc,
                            RECT *pRect,
                            const wxString& text,
-                           COLORREF col)
+                           COLORREF col,
+                           int flags)
 {
     COLORREF colOld = SetTextColor(hdc, col);
     int modeOld = SetBkMode(hdc, TRANSPARENT);
+
+    // center text horizontally in any case
+    flags |= DT_CENTER;
 
     if ( text.find(_T('\n')) != wxString::npos )
     {
@@ -613,13 +621,14 @@ static void DrawButtonText(HDC hdc,
         rc.top = (pRect->bottom - pRect->top)/2 - h/2;
         rc.bottom = rc.top+h;
 
-        ::DrawText(hdc, text.wx_str(), text.length(), &rc, DT_CENTER);
+        ::DrawText(hdc, text.wx_str(), text.length(), &rc, flags);
     }
     else // single line label
     {
-        // Note: we must have DT_SINGLELINE for DT_VCENTER to work.
+        // centre text vertically too (notice that we must have DT_SINGLELINE
+        // for DT_VCENTER to work)
         ::DrawText(hdc, text.wx_str(), text.length(), pRect,
-                   DT_SINGLELINE | DT_CENTER | DT_VCENTER);
+                   flags | DT_SINGLELINE | DT_VCENTER);
     }
 
     SetBkMode(hdc, modeOld);
@@ -898,11 +907,15 @@ bool wxButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
         }
     }
 
-    COLORREF colFg = wxColourToRGB(GetForegroundColour());
-    if ( state & ODS_DISABLED ) colFg = GetSysColor(COLOR_GRAYTEXT) ;
-    wxString label = GetLabel();
-    if ( state & ODS_NOACCEL ) label = GetLabelText() ;
-    DrawButtonText(hdc, &rectBtn, label, colFg);
+    COLORREF colFg = state & ODS_DISABLED
+                        ? ::GetSysColor(COLOR_GRAYTEXT)
+                        : wxColourToRGB(GetForegroundColour());
+
+    // notice that DT_HIDEPREFIX doesn't work on old (pre-Windows 2000) systems
+    // but by happy coincidence ODS_NOACCEL is not used under them neither so
+    // DT_HIDEPREFIX should never be used there
+    DrawButtonText(hdc, &rectBtn, GetLabel(), colFg,
+                   state & ODS_NOACCEL ? DT_HIDEPREFIX : 0);
 
     return true;
 }
