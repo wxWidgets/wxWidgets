@@ -36,7 +36,9 @@
 
         <!-- FIXME: temporary, until bakefile can reuse existing pch files -->
         <if cond="FORMAT!='autoconf'">
-            <define>NOPCH</define>
+            <if cond="WX_ENABLE_PRECOMP_HEADERS!='1'">
+                <define>NOPCH</define>
+            </if>
         </if>
     </template>
 

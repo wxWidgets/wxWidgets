@@ -43,7 +43,7 @@
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="2"
-				PreprocessorDefinitions="__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
+				PreprocessorDefinitions="__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXUSINGDLL;_CONSOLE"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
@@ -62,7 +62,7 @@
 				Name="VCResourceCompilerTool"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\lib\vc_dll\mswunivu;.\..\include;.;.\..\samples"
-				PreprocessorDefinitions="__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"/>
+				PreprocessorDefinitions="__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXUSINGDLL;_CONSOLE"/>
 			<Tool
 				Name="VCPreLinkEventTool"/>
 			<Tool
@@ -121,7 +121,7 @@
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="3"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
+				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;WXUSINGDLL;_CONSOLE"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
@@ -140,7 +140,7 @@
 				Name="VCResourceCompilerTool"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\lib\vc_dll\mswunivud;.\..\include;.;.\..\samples"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"/>
+				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;WXUSINGDLL;_CONSOLE"/>
 			<Tool
 				Name="VCPreLinkEventTool"/>
 			<Tool
@@ -199,7 +199,7 @@
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="2"
-				PreprocessorDefinitions="__WXMSW__;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
+				PreprocessorDefinitions="__WXMSW__;_UNICODE;WXUSINGDLL;_CONSOLE"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
@@ -218,7 +218,7 @@
 				Name="VCResourceCompilerTool"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\lib\vc_dll\mswu;.\..\include;.;.\..\samples"
-				PreprocessorDefinitions="__WXMSW__;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"/>
+				PreprocessorDefinitions="__WXMSW__;_UNICODE;WXUSINGDLL;_CONSOLE"/>
 			<Tool
 				Name="VCPreLinkEventTool"/>
 			<Tool
@@ -277,7 +277,7 @@
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="3"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
+				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;WXUSINGDLL;_CONSOLE"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
@@ -296,7 +296,7 @@
 				Name="VCResourceCompilerTool"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\lib\vc_dll\mswud;.\..\include;.;.\..\samples"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"/>
+				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;WXUSINGDLL;_CONSOLE"/>
 			<Tool
 				Name="VCPreLinkEventTool"/>
 			<Tool
@@ -355,7 +355,7 @@
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="2"
-				PreprocessorDefinitions="__WXMSW__;__WXUNIVERSAL__;_UNICODE;NOPCH;_CONSOLE"
+				PreprocessorDefinitions="__WXMSW__;__WXUNIVERSAL__;_UNICODE;_CONSOLE"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
@@ -374,7 +374,7 @@
 				Name="VCResourceCompilerTool"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\lib\vc_lib\mswunivu;.\..\include;.;.\..\samples"
-				PreprocessorDefinitions="__WXMSW__;__WXUNIVERSAL__;_UNICODE;NOPCH;_CONSOLE"/>
+				PreprocessorDefinitions="__WXMSW__;__WXUNIVERSAL__;_UNICODE;_CONSOLE"/>
 			<Tool
 				Name="VCPreLinkEventTool"/>
 			<Tool
@@ -433,7 +433,7 @@
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="3"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;NOPCH;_CONSOLE"
+				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;_CONSOLE"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
@@ -452,7 +452,7 @@
 				Name="VCResourceCompilerTool"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\lib\vc_lib\mswunivud;.\..\include;.;.\..\samples"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;NOPCH;_CONSOLE"/>
+				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;_CONSOLE"/>
 			<Tool
 				Name="VCPreLinkEventTool"/>
 			<Tool
@@ -511,7 +511,7 @@
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="2"
-				PreprocessorDefinitions="__WXMSW__;_UNICODE;NOPCH;_CONSOLE"
+				PreprocessorDefinitions="__WXMSW__;_UNICODE;_CONSOLE"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
@@ -530,7 +530,7 @@
 				Name="VCResourceCompilerTool"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\lib\vc_lib\mswu;.\..\include;.;.\..\samples"
-				PreprocessorDefinitions="__WXMSW__;_UNICODE;NOPCH;_CONSOLE"/>
+				PreprocessorDefinitions="__WXMSW__;_UNICODE;_CONSOLE"/>
 			<Tool
 				Name="VCPreLinkEventTool"/>
 			<Tool
@@ -589,7 +589,7 @@
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="3"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;NOPCH;_CONSOLE"
+				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;_CONSOLE"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
@@ -608,7 +608,7 @@
 				Name="VCResourceCompilerTool"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\lib\vc_lib\mswud;.\..\include;.;.\..\samples"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;NOPCH;_CONSOLE"/>
+				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;_CONSOLE"/>
 			<Tool
 				Name="VCPreLinkEventTool"/>
 			<Tool

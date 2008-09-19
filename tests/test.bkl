@@ -2,6 +2,11 @@
 <!-- $Id$ -->
 
 <makefile>
+    <!--
+        The use of PCH is disabled for samples by default but we do want to use
+        them for the test as this dramatically speeds up its compilation.
+     -->
+    <set var="WX_ENABLE_PRECOMP_HEADERS">1</set>
 
     <include file="../build/bakefiles/common_samples.bkl"/>
 

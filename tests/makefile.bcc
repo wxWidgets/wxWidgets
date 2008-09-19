@@ -99,8 +99,8 @@ TEST_GUI_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
 	$(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I.\..\include -I. $(__DLLFLAG_p) \
-	-I.\..\samples -DNOPCH $(CPPUNIT_CFLAGS) -Hu \
-	-H=$(OBJS)\testprec_test_gui.csm $(CPPFLAGS) $(CXXFLAGS)
+	-I.\..\samples $(CPPUNIT_CFLAGS) -Hu -H=$(OBJS)\testprec_test_gui.csm \
+	$(CPPFLAGS) $(CXXFLAGS)
 TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_dummy.obj \
 	$(OBJS)\test_gui_test.obj \
@@ -539,7 +539,7 @@ $(OBJS)\test_xmltest.obj: .\xml\xmltest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\xml\xmltest.cpp
 
 $(OBJS)\test_gui_sample.res: .\..\samples\sample.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) $(__MSLU_DEFINE_p_3) $(__GFXCTX_DEFINE_p_3) -i$(SETUPHDIR) -i.\..\include -i. $(__DLLFLAG_p_3) -i.\..\samples -dNOPCH .\..\samples\sample.rc
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) $(__MSLU_DEFINE_p_3) $(__GFXCTX_DEFINE_p_3) -i$(SETUPHDIR) -i.\..\include -i. $(__DLLFLAG_p_3) -i.\..\samples .\..\samples\sample.rc
 
 $(OBJS)\test_gui_dummy.obj: .\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) -H .\dummy.cpp
