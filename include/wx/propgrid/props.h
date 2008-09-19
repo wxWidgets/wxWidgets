@@ -75,64 +75,6 @@ wxValidator* NAME::DoGetValidator () const \
 
 // -----------------------------------------------------------------------
 
-#define WX_PG_DECLARE_CUSTOM_FLAGS_PROPERTY_WITH_DECL(CLASSNAME,DECL) \
-DECL CLASSNAME : public wxFlagsProperty \
-{ \
-    WX_PG_DECLARE_PROPERTY_CLASS(CLASSNAME) \
-public: \
-    CLASSNAME( const wxString& label = wxPG_LABEL, \
-               const wxString& name = wxPG_LABEL, \
-               long value = -1 ); \
-    virtual ~CLASSNAME(); \
-};
-
-#define WX_PG_DECLARE_CUSTOM_FLAGS_PROPERTY(CLASSNAME) \
-WX_PG_DECLARE_CUSTOM_FLAGS_PROPERTY_WITH_DECL(CLASSNAME, class)
-
-// This will create interface for wxFlagsProperty derived class
-// named CLASSNAME.
-#define WX_PG_IMPLEMENT_CUSTOM_FLAGS_PROPERTY(CLASSNAME,LABELS,VALUES,DEFVAL) \
-WX_PG_IMPLEMENT_PROPERTY_CLASS(CLASSNAME,wxFlagsProperty,long_##CLASSNAME,\
-                               long,TextCtrl) \
-CLASSNAME::CLASSNAME( const wxString& label, \
-                      const wxString& name, \
-                      long value ) \
-    : wxFlagsProperty(label,name,LABELS,VALUES,value!=-1?value:DEFVAL) \
-{ \
-    m_flags |= wxPG_PROP_STATIC_CHOICES; \
-} \
-CLASSNAME::~CLASSNAME() { }
-
-
-// -----------------------------------------------------------------------
-
-#define WX_PG_DECLARE_CUSTOM_ENUM_PROPERTY_WITH_DECL(CLASSNAME, DECL) \
-class CLASSNAME : public wxEnumProperty \
-{ \
-    WX_PG_DECLARE_PROPERTY_CLASS(CLASSNAME) \
-public: \
-    CLASSNAME( const wxString& label = wxPG_LABEL, \
-               const wxString& name = wxPG_LABEL, \
-               int value = -1 ); \
-    virtual ~CLASSNAME(); \
-};
-
-#define WX_PG_DECLARE_CUSTOM_ENUM_PROPERTY(CLASSNAME) \
-WX_PG_DECLARE_CUSTOM_ENUM_PROPERTY_WITH_DECL(CLASSNAME, class)
-
-#define WX_PG_IMPLEMENT_CUSTOM_ENUM_PROPERTY(CLASSNAME,LABELS,VALUES,DEFVAL) \
-WX_PG_IMPLEMENT_PROPERTY_CLASS(CLASSNAME, wxEnumProperty, long_##CLASSNAME, \
-                               int, Choice) \
-CLASSNAME::CLASSNAME( const wxString& label, const wxString& name, int value ) \
-    : wxEnumProperty(label,name,LABELS,VALUES,value!=-1?value:DEFVAL) \
-{ \
-    m_flags |= wxPG_PROP_STATIC_CHOICES; \
-} \
-CLASSNAME::~CLASSNAME() { }
-
-
-// -----------------------------------------------------------------------
-
 #define WX_PG_DECLARE_CUSTOM_COLOUR_PROPERTY_WITH_DECL(CLASSNAME, DECL) \
 DECL CLASSNAME : public wxSystemColourProperty \
 { \

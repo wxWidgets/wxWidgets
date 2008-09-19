@@ -28,15 +28,6 @@
 
 
 // -----------------------------------------------------------------------
-// Declare custom test properties
-// -----------------------------------------------------------------------
-
-WX_PG_DECLARE_CUSTOM_FLAGS_PROPERTY(wxTestCustomFlagsProperty)
-
-WX_PG_DECLARE_CUSTOM_ENUM_PROPERTY(wxTestCustomEnumProperty)
-
-
-// -----------------------------------------------------------------------
 // wxTestCustomFlagsProperty
 // -----------------------------------------------------------------------
 
@@ -72,18 +63,6 @@ static const long _fs_framestyle_values[] = {
     wxFRAME_FLOAT_ON_PARENT,
     wxFRAME_SHAPED
 };
-
-
-WX_PG_IMPLEMENT_CUSTOM_FLAGS_PROPERTY(wxTestCustomFlagsProperty,
-                                      _fs_framestyle_labels,
-                                      _fs_framestyle_values,
-                                      wxDEFAULT_FRAME_STYLE)
-
-WX_PG_IMPLEMENT_CUSTOM_ENUM_PROPERTY(wxTestCustomEnumProperty,
-                                      _fs_framestyle_labels,
-                                      _fs_framestyle_values,
-                                      wxCAPTION)
-
 
 // Colour labels. Last (before NULL, if any) must be Custom.
 static const wxChar* mycolprop_labels[] = {
@@ -243,11 +222,6 @@ public:
 
 void FormMain::AddTestProperties( wxPropertyGridPage* pg )
 {
-    pg->Append( new wxTestCustomFlagsProperty(wxT("Custom FlagsProperty"), wxPG_LABEL ) );
-    pg->SetPropertyEditor( wxT("Custom FlagsProperty"), wxPG_EDITOR(TextCtrlAndButton) );
-
-    pg->Append( new wxTestCustomEnumProperty(wxT("Custom EnumProperty"), wxPG_LABEL ) );
-
     pg->Append( new wxMyColourProperty(wxT("CustomColourProperty1")) );
 
     pg->SetPropertyHelpString(wxT("CustomColourProperty1"),

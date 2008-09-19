@@ -402,11 +402,11 @@ Here's extended example using values as well:
     pg->Append( new wxEnumProperty(wxT("Secondary Diet"),
                                    wxPG_LABEL,
                                    chs) );
-
 @endcode
 
-You can later change choices of property by using wxPGProperty::InsertChoice(),
-wxPGProperty::DeleteChoice(), and wxPGProperty::SetChoices().
+You can later change choices of property by using wxPGProperty::AddChoice(),
+wxPGProperty::InsertChoice(), wxPGProperty::DeleteChoice(), and
+wxPGProperty::SetChoices().
 
 <b>wxEditEnumProperty</b> is works exactly like wxEnumProperty, except
 is uses non-readonly combobox as default editor, and value is stored as

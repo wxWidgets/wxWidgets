@@ -1349,6 +1349,7 @@ void FormMain::PopulateWithExamples ()
     wxPropertyGridManager* pgman = m_pPropGridManager;
     wxPropertyGridPage* pg = pgman->GetPage(wxT("Examples"));
     wxPGProperty* pid;
+    wxPGProperty* prop;
 
     //pg->Append( new wxPropertyCategory(wxT("Examples (low priority)"),wxT("Examples")) );
     //pg->SetPropertyHelpString ( wxT("Examples"), wxT("This category has example of (almost) every built-in property class.") );
@@ -1403,7 +1404,7 @@ void FormMain::PopulateWithExamples ()
 
     // A file selector property. Note that argument between name
     // and initial value is wildcard (format same as in wxFileDialog).
-    wxPGProperty* prop = new wxFileProperty( wxT("FileProperty"), wxT("TextFile") );
+    prop = new wxFileProperty( wxT("FileProperty"), wxT("TextFile") );
     pg->Append( prop );
 
     prop->SetAttribute(wxPG_FILE_WILDCARD,wxT("Text Files (*.txt)|*.txt"));
@@ -1482,10 +1483,13 @@ void FormMain::PopulateWithExamples ()
                                   240) );
     pg->GetProperty(wxT("EnumProperty 2"))->AddChoice(wxT("Testing Extra"), 360);
 
-    // Add a second time to test that the caching works
-    pg->Append( new wxEnumProperty(wxT("EnumProperty 3"),wxPG_LABEL,
-        soc, 360 ) );
-    pg->SetPropertyHelpString(wxT("EnumProperty 3"),
+    // Add a second time to test that the caching works. Also use
+    // short form of constructor list + SetChoices.
+    prop = new wxEnumProperty(wxT("EnumProperty 3"), wxPG_LABEL);
+    pg->Append( prop );
+    prop->SetChoices(soc);
+    prop->SetValue(360);
+    pg->SetPropertyHelpString(prop,
         wxT("Should have same choices as EnumProperty 2"));
 
     pg->Append( new wxEnumProperty(wxT("EnumProperty 4"),wxPG_LABEL,
