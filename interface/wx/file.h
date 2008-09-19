@@ -82,6 +82,12 @@ public:
 
     /**
         Returns the length of the file.
+
+        This method may return wxInvalidOffset if the length couldn't be
+        determined or also 0 even for non-empty files if the file is not
+        seekable. In general, the only way to determine if the file for which
+        this function returns 0 is really empty or not is to try reading from
+        it.
     */
     wxFileOffset Length() const;
 
