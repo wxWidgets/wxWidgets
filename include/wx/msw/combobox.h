@@ -22,10 +22,10 @@
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_CORE wxComboBox : public wxChoice,
-                               public wxTextEntry
+                                    public wxTextEntry
 {
 public:
-    wxComboBox() { }
+    wxComboBox() { Init(); }
 
     wxComboBox(wxWindow *parent, wxWindowID id,
             const wxString& value = wxEmptyString,
@@ -36,8 +36,11 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxComboBoxNameStr)
     {
+        Init();
         Create(parent, id, value, pos, size, n, choices, style, validator, name);
+
     }
+
     wxComboBox(wxWindow *parent, wxWindowID id,
             const wxString& value,
             const wxPoint& pos,
@@ -47,6 +50,8 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxComboBoxNameStr)
     {
+        Init();
+
         Create(parent, id, value, pos, size, choices, style, validator, name);
     }
 
@@ -125,10 +130,24 @@ protected:
     // just testing for IsEditable() and using GetEditHWND() should be enough
     WXHWND GetEditHWNDIfAvailable() const;
 
+    virtual void EnableTextChangedEvents(bool enable)
+    {
+        m_allowTextEvents = enable;
+    }
+
 private:
     // this is the overridden wxTextEntry method which should only be called
     // when we do have an edit control so it asserts if this is not the case
     virtual WXHWND GetEditHWND() const;
+
+    // common part of all ctors
+    void Init()
+    {
+        m_allowTextEvents = true;
+    }
+
+    // normally true, false if text events are currently disabled
+    bool m_allowTextEvents;
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxComboBox)
     DECLARE_EVENT_TABLE()

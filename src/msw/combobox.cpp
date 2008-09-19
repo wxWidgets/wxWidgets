@@ -343,6 +343,7 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD id)
             // logical as the text does change)
 
         case CBN_EDITCHANGE:
+            if ( m_allowTextEvents )
             {
                 wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, GetId());
 
