@@ -86,11 +86,41 @@ public:
     /// Destructor frees the attribute provider if it was created.
     virtual ~wxGridTableBase();
 
-    /// Must be overridden to return the number of rows in the table.
+    /**
+        Must be overridden to return the number of rows in the table.
+
+        For backwards compatibility reasons, this method is not const.
+        Use GetRowsCount() instead of it in const methods of derived table
+        classes.
+     */
     virtual int GetNumberRows() = 0;
 
-    /// Must be overridden to return the number of columns in the table.
+    /**
+        Must be overridden to return the number of columns in the table.
+
+        For backwards compatibility reasons, this method is not const.
+        Use GetColsCount() instead of it in const methods of derived table
+        classes,
+     */
     virtual int GetNumberCols() = 0;
+
+    /**
+        Return the number of rows in the table.
+
+        This method is not virtual and is only provided as a convenience for
+        the derived classes which can't call GetNumberRows() without a @c
+        const_cast from their const methods.
+     */
+    int GetRowsCount() const;
+
+    /**
+        Return the number of columns in the table.
+
+        This method is not virtual and is only provided as a convenience for
+        the derived classes which can't call GetNumberCols() without a @c
+        const_cast from their const methods.
+     */
+    int GetColsCount() const;
 
 
     /**

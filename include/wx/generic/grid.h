@@ -903,8 +903,21 @@ public:
 
     // You must override these functions in a derived table class
     //
+
+    // return the number of rows and columns in this table
     virtual int GetNumberRows() = 0;
     virtual int GetNumberCols() = 0;
+
+    // the methods above are unfortunately non-const even though they should
+    // have been const -- but changing it now is not possible any longer as it
+    // would break the existing code overriding them, so instead we provide
+    // these const synonyms which can be used from const-correct code
+    int GetRowsCount() const
+        { return wx_const_cast(wxGridTableBase *, this)->GetNumberRows(); }
+    int GetColsCount() const
+        { return wx_const_cast(wxGridTableBase *, this)->GetNumberCols(); }
+
+
     virtual bool IsEmptyCell( int row, int col ) = 0;
 
     bool IsEmpty(const wxGridCellCoords& coord)
