@@ -2240,6 +2240,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/carbon/dnd.cpp
     src/osx/carbon/font.cpp
     src/osx/carbon/frame.cpp
+    src/osx/carbon/mdi.cpp
     src/osx/carbon/metafile.cpp
     src/osx/carbon/overlay.cpp
     src/osx/carbon/popupwin.cpp
@@ -2269,7 +2270,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/carbon/gauge.cpp
     src/osx/carbon/listbox.cpp
     src/osx/carbon/listctrl_mac.cpp
-    src/osx/carbon/mdi.cpp
     src/osx/carbon/menu.cpp
     src/osx/carbon/menuitem.cpp
     src/osx/carbon/msgdlg.cpp
@@ -2498,7 +2498,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/cocoa/evtloop.mm
     src/osx/cocoa/filedlg.mm
     src/osx/cocoa/gauge.mm
-    src/osx/cocoa/glcanvas.mm
     src/osx/cocoa/listbox.mm
     src/osx/cocoa/menu.mm
     src/osx/cocoa/menuitem.mm
@@ -2531,7 +2530,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/tabg.cpp
 </set>
 <set var="OSX_COCOA_HDR" hints="files">
-
+    wx/osx/cocoa/chkconf.h
+    wx/osx/cocoa/private.h
+    $(OSX_CARBON_HDR) <!-- FIXME: these headers need moved somewhere shared... -->
+    wx/generic/region.h
 </set>
 
 <!-- ====================================================================== -->
@@ -3140,6 +3142,12 @@ src/osx/iphone/window.mm
 <set var="MEDIA_OSX_CARBON_HDR" hints="files">
 </set>
 
+<set var="MEDIA_OSX_COCOA_SRC" hints="files">
+    <!-- src/osx/cocoa/mediactrl.mm -->
+</set>
+<set var="MEDIA_OSX_COCOA_HDR" hints="files">
+</set>
+
 <set var="MEDIA_COCOA_SRC" hints="files">
     src/cocoa/mediactrl.mm
 </set>
@@ -3382,6 +3390,7 @@ src/osx/iphone/window.mm
 
 <set var="OPENGL_SRC_PLATFORM" hints="files">
     <if cond="TOOLKIT=='OSX_CARBON'">src/osx/carbon/glcanvas.cpp src/osx/glcanvas_osx.cpp</if>
+    <if cond="TOOLKIT=='OSX_COCOA'">src/osx/cocoa/glcanvas.mm src/osx/glcanvas_osx.cpp</if>
     <if cond="TOOLKIT=='COCOA'">src/cocoa/glcanvas.mm</if>
     <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">
         src/gtk/glcanvas.cpp
@@ -3739,6 +3748,7 @@ src/osx/iphone/window.mm
         <if cond="TOOLKIT=='MSW'">$(MEDIA_MSW_SRC) $(MEDIA_MSW_DESKTOP_SRC)</if>
         <if cond="TOOLKIT=='WINCE'">$(MEDIA_MSW_SRC)</if>
         <if cond="TOOLKIT=='OSX_CARBON'">$(MEDIA_OSX_CARBON_SRC)</if>
+        <if cond="TOOLKIT=='OSX_COCOA'">$(MEDIA_OSX_COCOA_SRC)</if>
         <if cond="TOOLKIT=='COCOA'">$(MEDIA_COCOA_SRC)</if>
         <if cond="TOOLKIT=='MOTIF'">$(MEDIA_UNIX_SRC)</if>
         <if cond="TOOLKIT=='GTK'">$(MEDIA_UNIX_SRC) $(MEDIA_GTK_SRC)</if>
