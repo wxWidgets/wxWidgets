@@ -24,9 +24,9 @@ class WXDLLIMPEXP_CORE wxMouseState : public wxKeyboardState
 {
 public:
     wxMouseState()
-        : m_x(0), m_y(0),
-          m_leftDown(false), m_middleDown(false), m_rightDown(false),
-          m_aux1Down(false), m_aux2Down(false)
+        : m_leftDown(false), m_middleDown(false), m_rightDown(false),
+          m_aux1Down(false), m_aux2Down(false),
+          m_x(0), m_y(0)
     {
     }
 
