@@ -2260,35 +2260,44 @@ private:
 // Grid event class and event types
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxGridEvent : public wxNotifyEvent
+class WXDLLIMPEXP_ADV wxGridEvent : public wxNotifyEvent,
+                                    public wxKeyboardState
 {
 public:
     wxGridEvent()
-        : wxNotifyEvent(), m_row(-1), m_col(-1), m_x(-1), m_y(-1),
-        m_selecting(0), m_control(0), m_meta(0), m_shift(0), m_alt(0)
-        {
-        }
+        : wxNotifyEvent()
+    {
+        Init(-1, -1, -1, -1, false);
+    }
 
-    wxGridEvent(int id, wxEventType type, wxObject* obj,
-                int row=-1, int col=-1, int x=-1, int y=-1, bool sel = true,
-                bool control = false, bool shift = false, bool alt = false, bool meta = false);
+    wxGridEvent(int id,
+                wxEventType type,
+                wxObject* obj,
+                int row = -1, int col = -1,
+                int x = -1, int y = -1,
+                bool sel = true,
+                const wxKeyboardState& kbd = wxKeyboardState())
+        : wxNotifyEvent(type, id),
+          wxKeyboardState(kbd)
+    {
+        Init(row, col, x, y, sel);
+        SetEventObject(obj);
+    }
+
+    wxDEPRECATED(
+    wxGridEvent(int id,
+                wxEventType type,
+                wxObject* obj,
+                int row, int col,
+                int x, int y,
+                bool sel,
+                bool control,
+                bool shift = false, bool alt = false, bool meta = false));
 
     virtual int GetRow() { return m_row; }
     virtual int GetCol() { return m_col; }
     wxPoint     GetPosition() { return wxPoint( m_x, m_y ); }
     bool        Selecting() { return m_selecting; }
-    bool        ControlDown() { return m_control; }
-    bool        MetaDown() { return m_meta; }
-    bool        ShiftDown() { return m_shift; }
-    bool        AltDown() { return m_alt; }
-    bool        CmdDown()
-    {
-#if defined(__WXMAC__) || defined(__WXCOCOA__)
-        return MetaDown();
-#else
-        return ControlDown();
-#endif
-    }
 
     virtual wxEvent *Clone() const { return new wxGridEvent(*this); }
 
@@ -2298,41 +2307,57 @@ protected:
     int         m_x;
     int         m_y;
     bool        m_selecting;
-    bool        m_control;
-    bool        m_meta;
-    bool        m_shift;
-    bool        m_alt;
+
+private:
+    void Init(int row, int col, int x, int y, bool sel)
+    {
+        m_row = row;
+        m_col = col;
+        m_x = x;
+        m_y = y;
+        m_selecting = sel;
+    }
 
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxGridEvent)
 };
 
-class WXDLLIMPEXP_ADV wxGridSizeEvent : public wxNotifyEvent
+class WXDLLIMPEXP_ADV wxGridSizeEvent : public wxNotifyEvent,
+                                        public wxKeyboardState
 {
 public:
     wxGridSizeEvent()
-        : wxNotifyEvent(), m_rowOrCol(-1), m_x(-1), m_y(-1),
-        m_control(0), m_meta(0), m_shift(0), m_alt(0)
-        {
-        }
+        : wxNotifyEvent()
+    {
+        Init(-1, -1, -1);
+    }
 
-    wxGridSizeEvent(int id, wxEventType type, wxObject* obj,
-                int rowOrCol=-1, int x=-1, int y=-1,
-                bool control = false, bool shift = false, bool alt = false, bool meta = false);
+    wxGridSizeEvent(int id,
+                    wxEventType type,
+                    wxObject* obj,
+                    int rowOrCol = -1,
+                    int x = -1, int y = -1,
+                    const wxKeyboardState& kbd = wxKeyboardState())
+        : wxNotifyEvent(type, id),
+          wxKeyboardState(kbd)
+    {
+        Init(rowOrCol, x, y);
+
+        SetEventObject(obj);
+    }
+
+    wxDEPRECATED(
+    wxGridSizeEvent(int id,
+                    wxEventType type,
+                    wxObject* obj,
+                    int rowOrCol,
+                    int x, int y,
+                    bool control,
+                    bool shift = false,
+                    bool alt = false,
+                    bool meta = false) );
 
     int         GetRowOrCol() { return m_rowOrCol; }
     wxPoint     GetPosition() { return wxPoint( m_x, m_y ); }
-    bool        ControlDown() { return m_control; }
-    bool        MetaDown() { return m_meta; }
-    bool        ShiftDown() { return m_shift; }
-    bool        AltDown() { return m_alt; }
-    bool        CmdDown()
-    {
-#if defined(__WXMAC__) || defined(__WXCOCOA__)
-        return MetaDown();
-#else
-        return ControlDown();
-#endif
-    }
 
     virtual wxEvent *Clone() const { return new wxGridSizeEvent(*this); }
 
@@ -2340,36 +2365,55 @@ protected:
     int         m_rowOrCol;
     int         m_x;
     int         m_y;
-    bool        m_control;
-    bool        m_meta;
-    bool        m_shift;
-    bool        m_alt;
+
+private:
+    void Init(int rowOrCol, int x, int y)
+    {
+        m_rowOrCol = rowOrCol;
+        m_x = x;
+        m_y = y;
+    }
 
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxGridSizeEvent)
 };
 
 
-class WXDLLIMPEXP_ADV wxGridRangeSelectEvent : public wxNotifyEvent
+class WXDLLIMPEXP_ADV wxGridRangeSelectEvent : public wxNotifyEvent,
+                                               public wxKeyboardState
 {
 public:
     wxGridRangeSelectEvent()
         : wxNotifyEvent()
-        {
-            m_topLeft     = wxGridNoCellCoords;
-            m_bottomRight = wxGridNoCellCoords;
-            m_selecting   = false;
-            m_control     = false;
-            m_meta        = false;
-            m_shift       = false;
-            m_alt         = false;
-        }
+    {
+        Init(wxGridNoCellCoords, wxGridNoCellCoords, false);
+    }
 
-    wxGridRangeSelectEvent(int id, wxEventType type, wxObject* obj,
+    wxGridRangeSelectEvent(int id,
+                           wxEventType type,
+                           wxObject* obj,
                            const wxGridCellCoords& topLeft,
                            const wxGridCellCoords& bottomRight,
                            bool sel = true,
-                           bool control = false, bool shift = false,
-                           bool alt = false, bool meta = false);
+                           const wxKeyboardState& kbd = wxKeyboardState())
+        : wxNotifyEvent(type, id),
+          wxKeyboardState(kbd)
+    {
+        Init(topLeft, bottomRight, sel);
+
+        SetEventObject(obj);
+    }
+
+    wxDEPRECATED(
+    wxGridRangeSelectEvent(int id,
+                           wxEventType type,
+                           wxObject* obj,
+                           const wxGridCellCoords& topLeft,
+                           const wxGridCellCoords& bottomRight,
+                           bool sel,
+                           bool control,
+                           bool shift = false,
+                           bool alt = false,
+                           bool meta = false) );
 
     wxGridCellCoords GetTopLeftCoords() { return m_topLeft; }
     wxGridCellCoords GetBottomRightCoords() { return m_bottomRight; }
@@ -2378,35 +2422,29 @@ public:
     int         GetLeftCol()   { return m_topLeft.GetCol(); }
     int         GetRightCol()  { return m_bottomRight.GetCol(); }
     bool        Selecting() { return m_selecting; }
-    bool        ControlDown()  { return m_control; }
-    bool        MetaDown()     { return m_meta; }
-    bool        ShiftDown()    { return m_shift; }
-    bool        AltDown()      { return m_alt; }
-    bool        CmdDown()
-    {
-#if defined(__WXMAC__) || defined(__WXCOCOA__)
-        return MetaDown();
-#else
-        return ControlDown();
-#endif
-    }
 
     virtual wxEvent *Clone() const { return new wxGridRangeSelectEvent(*this); }
 
 protected:
+    void Init(const wxGridCellCoords& topLeft,
+              const wxGridCellCoords& bottomRight,
+              bool selecting)
+    {
+        m_topLeft = topLeft;
+        m_bottomRight = bottomRight;
+        m_selecting = selecting;
+    }
+
     wxGridCellCoords  m_topLeft;
     wxGridCellCoords  m_bottomRight;
     bool              m_selecting;
-    bool              m_control;
-    bool              m_meta;
-    bool              m_shift;
-    bool              m_alt;
 
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxGridRangeSelectEvent)
 };
 
 
-class WXDLLIMPEXP_ADV wxGridEditorCreatedEvent : public wxCommandEvent {
+class WXDLLIMPEXP_ADV wxGridEditorCreatedEvent : public wxCommandEvent
+{
 public:
     wxGridEditorCreatedEvent()
         : wxCommandEvent()

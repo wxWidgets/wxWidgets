@@ -5621,13 +5621,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
                     if ( (row = YToRow( y )) >= 0 )
                     {
                         if ( m_selection )
-                        {
-                            m_selection->SelectRow( row,
-                                                    event.ControlDown(),
-                                                    event.ShiftDown(),
-                                                    event.AltDown(),
-                                                    event.MetaDown() );
-                        }
+                            m_selection->SelectRow(row, event);
                     }
                 }
                 break;
@@ -5678,22 +5672,16 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
                 {
                     if ( event.ShiftDown() )
                     {
-                        m_selection->SelectBlock( m_currentCellCoords.GetRow(),
-                                                  0,
-                                                  row,
-                                                  GetNumberCols() - 1,
-                                                  event.ControlDown(),
-                                                  event.ShiftDown(),
-                                                  event.AltDown(),
-                                                  event.MetaDown() );
+                        m_selection->SelectBlock
+                                     (
+                                        m_currentCellCoords.GetRow(), 0,
+                                        row, GetNumberCols() - 1,
+                                        event
+                                     );
                     }
                     else
                     {
-                        m_selection->SelectRow( row,
-                                                event.ControlDown(),
-                                                event.ShiftDown(),
-                                                event.AltDown(),
-                                                event.MetaDown() );
+                        m_selection->SelectRow(row, event);
                     }
                 }
 
@@ -5842,13 +5830,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
                     if ( (col = XToCol( x )) >= 0 )
                     {
                         if ( m_selection )
-                        {
-                            m_selection->SelectCol( col,
-                                                    event.ControlDown(),
-                                                    event.ShiftDown(),
-                                                    event.AltDown(),
-                                                    event.MetaDown() );
-                        }
+                            m_selection->SelectCol(col, event);
                     }
                 }
                 break;
@@ -5979,21 +5961,16 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
                     {
                         if ( event.ShiftDown() )
                         {
-                            m_selection->SelectBlock( 0,
-                                                      m_currentCellCoords.GetCol(),
-                                                      GetNumberRows() - 1, col,
-                                                      event.ControlDown(),
-                                                      event.ShiftDown(),
-                                                      event.AltDown(),
-                                                      event.MetaDown() );
+                            m_selection->SelectBlock
+                                         (
+                                            0, m_currentCellCoords.GetCol(),
+                                            GetNumberRows() - 1, col,
+                                            event
+                                         );
                         }
                         else
                         {
-                            m_selection->SelectCol( col,
-                                                    event.ControlDown(),
-                                                    event.ShiftDown(),
-                                                    event.AltDown(),
-                                                    event.MetaDown() );
+                            m_selection->SelectCol(col, event);
                         }
                     }
 
@@ -6373,12 +6350,7 @@ wxGrid::DoGridCellLeftDown(wxMouseEvent& event,
     {
         if ( m_selection )
         {
-            m_selection->SelectBlock( m_currentCellCoords,
-                                      coords,
-                                      event.ControlDown(),
-                                      event.ShiftDown(),
-                                      event.AltDown(),
-                                      event.MetaDown() );
+            m_selection->SelectBlock(m_currentCellCoords, coords, event);
             m_selectedBlockCorner = coords;
         }
     }
@@ -6391,12 +6363,9 @@ wxGrid::DoGridCellLeftDown(wxMouseEvent& event,
         {
             if ( m_selection )
             {
-                m_selection->ToggleCellSelection( coords,
-                                                  event.ControlDown(),
-                                                  event.ShiftDown(),
-                                                  event.AltDown(),
-                                                  event.MetaDown() );
+                m_selection->ToggleCellSelection(coords, event);
             }
+
             m_selectedBlockTopLeft = wxGridNoCellCoords;
             m_selectedBlockBottomRight = wxGridNoCellCoords;
             m_selectedBlockCorner = coords;
@@ -6458,10 +6427,7 @@ wxGrid::DoGridCellLeftUp(wxMouseEvent& event, const wxGridCellCoords& coords)
             {
                 m_selection->SelectBlock( m_selectedBlockTopLeft,
                                           m_selectedBlockBottomRight,
-                                          event.ControlDown(),
-                                          event.ShiftDown(),
-                                          event.AltDown(),
-                                          event.MetaDown() );
+                                          event );
             }
 
             m_selectedBlockTopLeft = wxGridNoCellCoords;
@@ -6927,10 +6893,7 @@ wxGrid::SendEvent(const wxEventType type,
                rowOrCol,
                mouseEv.GetX() + GetRowLabelSize(),
                mouseEv.GetY() + GetColLabelSize(),
-               mouseEv.ControlDown(),
-               mouseEv.ShiftDown(),
-               mouseEv.AltDown(),
-               mouseEv.MetaDown() );
+               mouseEv);
 
        claimed = GetEventHandler()->ProcessEvent(gridEvt);
        vetoed = !gridEvt.IsAllowed();
@@ -6944,10 +6907,7 @@ wxGrid::SendEvent(const wxEventType type,
                m_selectedBlockTopLeft,
                m_selectedBlockBottomRight,
                true,
-               mouseEv.ControlDown(),
-               mouseEv.ShiftDown(),
-               mouseEv.AltDown(),
-               mouseEv.MetaDown() );
+               mouseEv);
 
        claimed = GetEventHandler()->ProcessEvent(gridEvt);
        vetoed = !gridEvt.IsAllowed();
@@ -6971,10 +6931,7 @@ wxGrid::SendEvent(const wxEventType type,
                pos.x,
                pos.y,
                false,
-               mouseEv.ControlDown(),
-               mouseEv.ShiftDown(),
-               mouseEv.AltDown(),
-               mouseEv.MetaDown() );
+               mouseEv);
        claimed = GetEventHandler()->ProcessEvent(gridEvt);
        vetoed = !gridEvt.IsAllowed();
    }
@@ -6987,10 +6944,7 @@ wxGrid::SendEvent(const wxEventType type,
                mouseEv.GetX() + GetRowLabelSize(),
                mouseEv.GetY() + GetColLabelSize(),
                false,
-               mouseEv.ControlDown(),
-               mouseEv.ShiftDown(),
-               mouseEv.AltDown(),
-               mouseEv.MetaDown() );
+               mouseEv);
        claimed = GetEventHandler()->ProcessEvent(gridEvt);
        vetoed = !gridEvt.IsAllowed();
    }
@@ -7328,10 +7282,7 @@ void wxGrid::OnKeyUp( wxKeyEvent& event )
                 m_selection->SelectBlock(
                     m_selectedBlockTopLeft,
                     m_selectedBlockBottomRight,
-                    event.ControlDown(),
-                    true,
-                    event.AltDown(),
-                    event.MetaDown() );
+                    event);
             }
         }
 
@@ -10668,31 +10619,36 @@ void wxGrid::SetCellValue( int row, int col, const wxString& s )
 
 void wxGrid::SelectRow( int row, bool addToSelected )
 {
-    if ( IsSelection() && !addToSelected )
+    if ( !m_selection )
+        return;
+
+    if ( !addToSelected )
         ClearSelection();
 
-    if ( m_selection )
-        m_selection->SelectRow( row, false, addToSelected );
+    m_selection->SelectRow(row);
 }
 
 void wxGrid::SelectCol( int col, bool addToSelected )
 {
-    if ( IsSelection() && !addToSelected )
+    if ( !m_selection )
+        return;
+
+    if ( !addToSelected )
         ClearSelection();
 
-    if ( m_selection )
-        m_selection->SelectCol( col, false, addToSelected );
+    m_selection->SelectCol(col);
 }
 
-void wxGrid::SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol,
-                          bool addToSelected )
+void wxGrid::SelectBlock(int topRow, int leftCol, int bottomRow, int rightCol,
+                         bool addToSelected)
 {
-    if ( IsSelection() && !addToSelected )
+    if ( !m_selection )
+        return;
+
+    if ( !addToSelected )
         ClearSelection();
 
-    if ( m_selection )
-        m_selection->SelectBlock( topRow, leftCol, bottomRow, rightCol,
-                                  false, addToSelected );
+    m_selection->SelectBlock(topRow, leftCol, bottomRow, rightCol);
 }
 
 void wxGrid::SelectAll()
@@ -10988,36 +10944,23 @@ IMPLEMENT_DYNAMIC_CLASS( wxGridEvent, wxNotifyEvent )
 wxGridEvent::wxGridEvent( int id, wxEventType type, wxObject* obj,
                           int row, int col, int x, int y, bool sel,
                           bool control, bool shift, bool alt, bool meta )
-        : wxNotifyEvent( type, id )
+        : wxNotifyEvent( type, id ),
+          wxKeyboardState(control, shift, alt, meta)
 {
-    m_row = row;
-    m_col = col;
-    m_x = x;
-    m_y = y;
-    m_selecting = sel;
-    m_control = control;
-    m_shift = shift;
-    m_alt = alt;
-    m_meta = meta;
+    Init(row, col, x, y, sel);
 
     SetEventObject(obj);
 }
-
 
 IMPLEMENT_DYNAMIC_CLASS( wxGridSizeEvent, wxNotifyEvent )
 
 wxGridSizeEvent::wxGridSizeEvent( int id, wxEventType type, wxObject* obj,
                                   int rowOrCol, int x, int y,
                                   bool control, bool shift, bool alt, bool meta )
-        : wxNotifyEvent( type, id )
+        : wxNotifyEvent( type, id ),
+          wxKeyboardState(control, shift, alt, meta)
 {
-    m_rowOrCol = rowOrCol;
-    m_x = x;
-    m_y = y;
-    m_control = control;
-    m_shift = shift;
-    m_alt = alt;
-    m_meta = meta;
+    Init(rowOrCol, x, y);
 
     SetEventObject(obj);
 }
@@ -11030,15 +10973,10 @@ wxGridRangeSelectEvent::wxGridRangeSelectEvent(int id, wxEventType type, wxObjec
                                                const wxGridCellCoords& bottomRight,
                                                bool sel, bool control,
                                                bool shift, bool alt, bool meta )
-        : wxNotifyEvent( type, id )
+        : wxNotifyEvent( type, id ),
+          wxKeyboardState(control, shift, alt, meta)
 {
-    m_topLeft = topLeft;
-    m_bottomRight = bottomRight;
-    m_selecting = sel;
-    m_control = control;
-    m_shift = shift;
-    m_alt = alt;
-    m_meta = meta;
+    Init(topLeft, bottomRight, sel);
 
     SetEventObject(obj);
 }

@@ -33,45 +33,38 @@ public:
 
     void SetSelectionMode(wxGrid::wxGridSelectionModes selmode);
     wxGrid::wxGridSelectionModes GetSelectionMode() { return m_selectionMode; }
-    void SelectRow( int row,
-                    bool ControlDown = false,  bool ShiftDown = false,
-                    bool AltDown = false, bool MetaDown = false );
-    void SelectCol( int col,
-                    bool ControlDown = false,  bool ShiftDown = false,
-                    bool AltDown = false, bool MetaDown = false );
-    void SelectBlock( int topRow, int leftCol,
-                      int bottomRow, int rightCol,
-                      bool ControlDown = false,  bool ShiftDown = false,
-                      bool AltDown = false, bool MetaDown = false,
-                      bool sendEvent = true );
-    void SelectBlock( const wxGridCellCoords& topLeft,
-                      const wxGridCellCoords& bottomRight,
-                      bool ControlDown = false,  bool ShiftDown = false,
-                      bool AltDown = false, bool MetaDown = false,
-                      bool sendEvent = true )
+    void SelectRow(int row, const wxKeyboardState& kbd = wxKeyboardState());
+    void SelectCol(int col, const wxKeyboardState& kbd = wxKeyboardState());
+    void SelectBlock(int topRow, int leftCol,
+                     int bottomRow, int rightCol,
+                     const wxKeyboardState& kbd = wxKeyboardState(),
+                     bool sendEvent = true );
+    void SelectBlock(const wxGridCellCoords& topLeft,
+                     const wxGridCellCoords& bottomRight,
+                     const wxKeyboardState& kbd = wxKeyboardState(),
+                     bool sendEvent = true )
     {
         SelectBlock(topLeft.GetRow(), topLeft.GetCol(),
                     bottomRight.GetRow(), bottomRight.GetCol(),
-                    ControlDown, ShiftDown, AltDown, MetaDown,
-                    sendEvent);
+                    kbd, sendEvent);
     }
 
-    void SelectCell( int row, int col,
-                     bool ControlDown = false,  bool ShiftDown = false,
-                     bool AltDown = false, bool MetaDown = false,
-                     bool sendEvent = true );
-
-    void ToggleCellSelection( int row, int col,
-                              bool ControlDown = false,
-                              bool ShiftDown = false,
-                              bool AltDown = false, bool MetaDown = false );
-    void ToggleCellSelection( const wxGridCellCoords& coords,
-                              bool ControlDown = false,
-                              bool ShiftDown = false,
-                              bool AltDown = false, bool MetaDown = false )
+    void SelectCell(int row, int col,
+                    const wxKeyboardState& kbd = wxKeyboardState(),
+                    bool sendEvent = true);
+    void SelectCell(const wxGridCellCoords& coords,
+                    const wxKeyboardState& kbd = wxKeyboardState(),
+                    bool sendEvent = true)
     {
-        ToggleCellSelection(coords.GetRow(), coords.GetCol(),
-                            ControlDown, ShiftDown, AltDown, MetaDown);
+        SelectCell(coords.GetRow(), coords.GetCol(), kbd, sendEvent);
+    }
+
+    void ToggleCellSelection(int row, int col,
+                             const wxKeyboardState& kbd = wxKeyboardState());
+    void ToggleCellSelection(const wxGridCellCoords& coords,
+                             const wxKeyboardState& kbd = wxKeyboardState())
+    {
+        ToggleCellSelection(coords.GetRow(), coords.GetCol(), kbd);
     }
 
     void ClearSelection();
@@ -96,6 +89,13 @@ private:
     {
         return ( topRow <= row && row <= bottomRow &&
                  leftCol <= col && col <= rightCol );
+    }
+
+    void SelectBlockNoEvent(int topRow, int leftCol,
+                            int bottomRow, int rightCol)
+    {
+        SelectBlock(topRow, leftCol, bottomRow, rightCol,
+                    wxKeyboardState(), false);
     }
 
     wxGridCellCoordsArray               m_cellSelection;
