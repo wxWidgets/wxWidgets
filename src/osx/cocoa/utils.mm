@@ -163,7 +163,7 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
     NSBitmapImageRep *rep = [[[NSBitmapImageRep alloc] initWithFocusedViewRect: [view bounds]] retain];
     [view unlockFocus];
     
-    CGImageRef cgImageRef = [rep CGImage]; 
+    CGImageRef cgImageRef = (CGImageRef)[rep CGImage]; 
 
     wxBitmap bitmap(CGImageGetWidth(cgImageRef)  , CGImageGetHeight(cgImageRef) );
     CGRect r = CGRectMake( 0 , 0 , CGImageGetWidth(cgImageRef)  , CGImageGetHeight(cgImageRef) );

@@ -50,7 +50,7 @@ static const int IDM_WINDOWTILEVERT = 4005;
 
 void UMAHighlightAndActivateWindow( WindowRef inWindowRef , bool inActivate )
 {
-#if 1 // TODO REMOVE
+#if wxOSX_USE_CARBON // TODO REMOVE
     if ( inWindowRef )
     {
 //        bool isHighlighted = IsWindowHighlited( inWindowRef ) ;
@@ -74,6 +74,8 @@ void UMAHighlightAndActivateWindow( WindowRef inWindowRef , bool inActivate )
         SetPort( port ) ;
 #endif
     }
+#elif defined(wxOSX_USE_COCOA)
+// TODO: implement me!
 #endif
 }
 

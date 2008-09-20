@@ -44,16 +44,6 @@
  * turning off capabilities that don't work under cocoa yet
  */
 
-#if wxUSE_MDI
-#undef wxUSE_MDI
-#define wxUSE_MDI 0
-#endif
-
-#if wxUSE_MDI_ARCHITECTURE
-#undef wxUSE_MDI_ARCHITECTURE
-#define wxUSE_MDI_ARCHITECTURE 0
-#endif
-
 #if wxUSE_DRAG_AND_DROP
 #undef wxUSE_DRAG_AND_DROP
 #define wxUSE_DRAG_AND_DROP 0
@@ -73,12 +63,6 @@
 #undef wxUSE_DATAVIEWCTRL
 #define wxUSE_DATAVIEWCTRL 0
 #endif
-
-#if wxUSE_DOC_VIEW_ARCHITECTURE
-#undef wxUSE_DOC_VIEW_ARCHITECTURE
-#endif
-
-#define wxUSE_DOC_VIEW_ARCHITECTURE 0
 
 #if wxUSE_WXHTML_HELP
 #undef wxUSE_WXHTML_HELP

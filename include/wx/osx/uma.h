@@ -1,5 +1,3 @@
-#ifdef __WXMAC_CLASSIC__
-#include "wx/osx/classic/uma.h"
-#else
+#if __WXOSX_CARBON__
 #include "wx/osx/carbon/uma.h"
 #endif
