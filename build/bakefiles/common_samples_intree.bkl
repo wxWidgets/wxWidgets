@@ -9,6 +9,8 @@
     <!--                    Template for wxWidgets samples:              -->
     <!-- =============================================================== -->
 
+    <set var="WX_ENABLE_PRECOMP_HEADERS">0</set>
+
     <set var="DLLFLAG">
         <if cond="SHARED=='1'">WXUSINGDLL</if>
     </set>
@@ -36,7 +38,7 @@
 
         <!-- FIXME: temporary, until bakefile can reuse existing pch files -->
         <if cond="FORMAT!='autoconf'">
-            <if cond="WX_ENABLE_PRECOMP_HEADERS!='1'">
+            <if cond="WX_ENABLE_PRECOMP_HEADERS=='0'">
                 <define>NOPCH</define>
             </if>
         </if>
