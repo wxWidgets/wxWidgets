@@ -90,6 +90,8 @@ COND_PLATFORM_OS2_1___text___os2_emxbindcmd = $(NM) text$(EXEEXT) | if grep -q \
 @COND_PLATFORM_MACOSX_1@__text_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= text.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__text_bundle___depname = text_bundle
+@COND_TOOLKIT_MAC@____text_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_MAC@	$(__text_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_CARBON@____text_BUNDLE_TGT_REF_DEP \
 @COND_TOOLKIT_OSX_CARBON@	= $(__text_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_COCOA@____text_BUNDLE_TGT_REF_DEP \

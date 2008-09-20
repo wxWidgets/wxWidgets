@@ -99,6 +99,8 @@ COND_PLATFORM_OS2_1___client___os2_emxbindcmd = $(NM) client$(EXEEXT) | if grep 
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@__client_bundle___depname = client_bundle
 @COND_TOOLKIT_COCOA@____client_BUNDLE_TGT_REF_DEP = \
 @COND_TOOLKIT_COCOA@	$(__client_app_Contents_PkgInfo___depname)
+@COND_TOOLKIT_MAC@____client_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_MAC@	$(__client_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_CARBON@____client_BUNDLE_TGT_REF_DEP \
 @COND_TOOLKIT_OSX_CARBON@	= $(__client_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_COCOA@____client_BUNDLE_TGT_REF_DEP \
@@ -118,6 +120,8 @@ COND_PLATFORM_OS2_1___server___os2_emxbindcmd = $(NM) server$(EXEEXT) | if grep 
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@__server_bundle___depname = server_bundle
 @COND_TOOLKIT_COCOA@____server_BUNDLE_TGT_REF_DEP = \
 @COND_TOOLKIT_COCOA@	$(__server_app_Contents_PkgInfo___depname)
+@COND_TOOLKIT_MAC@____server_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_MAC@	$(__server_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_CARBON@____server_BUNDLE_TGT_REF_DEP \
 @COND_TOOLKIT_OSX_CARBON@	= $(__server_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_COCOA@____server_BUNDLE_TGT_REF_DEP \

@@ -90,6 +90,8 @@ COND_PLATFORM_OS2_1___keyboard___os2_emxbindcmd = $(NM) keyboard$(EXEEXT) | if \
 @COND_PLATFORM_MACOSX_1@__keyboard_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= keyboard.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__keyboard_bundle___depname = keyboard_bundle
+@COND_TOOLKIT_MAC@____keyboard_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_MAC@	$(__keyboard_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_CARBON@____keyboard_BUNDLE_TGT_REF_DEP \
 @COND_TOOLKIT_OSX_CARBON@	= $(__keyboard_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_COCOA@____keyboard_BUNDLE_TGT_REF_DEP \

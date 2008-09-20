@@ -91,6 +91,8 @@ COND_PLATFORM_OS2_1___wxedit___os2_emxbindcmd = $(NM) wxedit$(EXEEXT) | if grep 
 @COND_PLATFORM_MACOSX_1@__wxedit_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= wxedit.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__wxedit_bundle___depname = wxedit_bundle
+@COND_TOOLKIT_MAC@____wxedit_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_MAC@	$(__wxedit_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_CARBON@____wxedit_BUNDLE_TGT_REF_DEP \
 @COND_TOOLKIT_OSX_CARBON@	= $(__wxedit_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_COCOA@____wxedit_BUNDLE_TGT_REF_DEP \

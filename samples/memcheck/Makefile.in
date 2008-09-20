@@ -90,6 +90,8 @@ COND_PLATFORM_OS2_1___memcheck___os2_emxbindcmd = $(NM) memcheck$(EXEEXT) | if \
 @COND_PLATFORM_MACOSX_1@__memcheck_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= memcheck.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__memcheck_bundle___depname = memcheck_bundle
+@COND_TOOLKIT_MAC@____memcheck_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_MAC@	$(__memcheck_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_CARBON@____memcheck_BUNDLE_TGT_REF_DEP \
 @COND_TOOLKIT_OSX_CARBON@	= $(__memcheck_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_COCOA@____memcheck_BUNDLE_TGT_REF_DEP \

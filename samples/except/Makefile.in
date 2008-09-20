@@ -91,6 +91,8 @@ COND_PLATFORM_OS2_1___except___os2_emxbindcmd = $(NM) except$(EXEEXT) | if grep 
 @COND_PLATFORM_MACOSX_1@__except_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= except.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__except_bundle___depname = except_bundle
+@COND_TOOLKIT_MAC@____except_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_MAC@	$(__except_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_CARBON@____except_BUNDLE_TGT_REF_DEP \
 @COND_TOOLKIT_OSX_CARBON@	= $(__except_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_COCOA@____except_BUNDLE_TGT_REF_DEP \

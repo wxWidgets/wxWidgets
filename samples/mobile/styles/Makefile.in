@@ -91,6 +91,8 @@ COND_PLATFORM_OS2_1___styles___os2_emxbindcmd = $(NM) styles$(EXEEXT) | if grep 
 @COND_PLATFORM_MACOSX_1@__styles_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= styles.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__styles_bundle___depname = styles_bundle
+@COND_TOOLKIT_MAC@____styles_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_MAC@	$(__styles_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_CARBON@____styles_BUNDLE_TGT_REF_DEP \
 @COND_TOOLKIT_OSX_CARBON@	= $(__styles_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_COCOA@____styles_BUNDLE_TGT_REF_DEP \

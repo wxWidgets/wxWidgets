@@ -92,6 +92,8 @@ COND_PLATFORM_OS2_1___docvwmdi___os2_emxbindcmd = $(NM) docvwmdi$(EXEEXT) | if \
 @COND_PLATFORM_MACOSX_1@__docvwmdi_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= docvwmdi.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__docvwmdi_bundle___depname = docvwmdi_bundle
+@COND_TOOLKIT_MAC@____docvwmdi_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_MAC@	$(__docvwmdi_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_CARBON@____docvwmdi_BUNDLE_TGT_REF_DEP \
 @COND_TOOLKIT_OSX_CARBON@	= $(__docvwmdi_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_COCOA@____docvwmdi_BUNDLE_TGT_REF_DEP \

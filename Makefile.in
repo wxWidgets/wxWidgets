@@ -3033,7 +3033,99 @@ COND_TOOLKIT_OSX_COCOA_GUI_HDR =  \
 	wx/osx/toplevel.h \
 	wx/osx/treectrl.h \
 	wx/osx/uma.h \
-	wx/osx/window.h
+	wx/osx/window.h \
+	wx/osx/cocoa/chkconf.h \
+	wx/osx/cocoa/private.h \
+	wx/osx/core/colour.h \
+	wx/osx/carbon/accel.h \
+	wx/osx/carbon/app.h \
+	wx/osx/carbon/bitmap.h \
+	wx/osx/carbon/bmpbuttn.h \
+	wx/osx/carbon/button.h \
+	wx/osx/carbon/checkbox.h \
+	wx/osx/carbon/checklst.h \
+	wx/osx/carbon/chkconf.h \
+	wx/osx/carbon/choice.h \
+	wx/osx/carbon/clipbrd.h \
+	wx/osx/carbon/colordlg.h \
+	wx/osx/carbon/combobox.h \
+	wx/osx/carbon/control.h \
+	wx/osx/carbon/cursor.h \
+	wx/osx/carbon/dataform.h \
+	wx/osx/carbon/dataobj.h \
+	wx/osx/carbon/dataobj2.h \
+	wx/osx/carbon/dc.h \
+	wx/osx/carbon/dcclient.h \
+	wx/osx/carbon/dcmemory.h \
+	wx/osx/carbon/dcprint.h \
+	wx/osx/carbon/dcscreen.h \
+	wx/osx/carbon/dialog.h \
+	wx/osx/carbon/dirdlg.h \
+	wx/osx/carbon/dnd.h \
+	wx/osx/carbon/evtloop.h \
+	wx/osx/carbon/filedlg.h \
+	wx/osx/carbon/font.h \
+	wx/osx/carbon/fontdlg.h \
+	wx/osx/carbon/frame.h \
+	wx/osx/carbon/gauge.h \
+	wx/osx/carbon/helpxxxx.h \
+	wx/osx/carbon/icon.h \
+	wx/osx/carbon/imaglist.h \
+	wx/osx/carbon/listbox.h \
+	wx/osx/carbon/listctrl.h \
+	wx/osx/carbon/mdi.h \
+	wx/osx/carbon/menu.h \
+	wx/osx/carbon/menuitem.h \
+	wx/osx/carbon/metafile.h \
+	wx/osx/carbon/mimetype.h \
+	wx/osx/carbon/minifram.h \
+	wx/osx/carbon/msgdlg.h \
+	wx/osx/carbon/nonownedwnd.h \
+	wx/osx/carbon/notebook.h \
+	wx/osx/carbon/palette.h \
+	wx/osx/carbon/popupwin.h \
+	wx/osx/carbon/pnghand.h \
+	wx/osx/carbon/pngread.h \
+	wx/osx/carbon/printdlg.h \
+	wx/osx/carbon/printmac.h \
+	wx/osx/carbon/private.h \
+	wx/osx/carbon/private/mactext.h \
+	wx/osx/carbon/private/overlay.h \
+	wx/osx/carbon/private/print.h \
+	wx/osx/carbon/radiobox.h \
+	wx/osx/carbon/radiobut.h \
+	wx/osx/carbon/region.h \
+	wx/osx/carbon/scrolbar.h \
+	wx/osx/carbon/slider.h \
+	wx/osx/carbon/spinbutt.h \
+	wx/osx/carbon/spinctrl.h \
+	wx/osx/carbon/srchctrl.h \
+	wx/osx/carbon/statbmp.h \
+	wx/osx/carbon/statbox.h \
+	wx/osx/carbon/statline.h \
+	wx/osx/carbon/stattext.h \
+	wx/osx/carbon/statusbr.h \
+	wx/osx/carbon/tabctrl.h \
+	wx/osx/carbon/textctrl.h \
+	wx/osx/carbon/tglbtn.h \
+	wx/osx/carbon/toolbar.h \
+	wx/osx/carbon/tooltip.h \
+	wx/osx/carbon/toplevel.h \
+	wx/osx/carbon/treectrl.h \
+	wx/osx/carbon/uma.h \
+	wx/osx/carbon/window.h \
+	wx/generic/caret.h \
+	wx/generic/clrpickerg.h \
+	wx/generic/collpaneg.h \
+	wx/generic/fdrepdlg.h \
+	wx/generic/filepickerg.h \
+	wx/generic/fontdlgg.h \
+	wx/generic/fontpickerg.h \
+	wx/generic/listctrl.h \
+	wx/generic/statusbr.h \
+	wx/generic/tabg.h \
+	wx/html/webkit.h \
+	wx/generic/region.h
 @COND_TOOLKIT_OSX_COCOA@GUI_HDR = $(COND_TOOLKIT_OSX_COCOA_GUI_HDR)
 COND_TOOLKIT_PM_GUI_HDR =  \
 	wx/generic/caret.h \
@@ -4988,7 +5080,6 @@ COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS =  \
 	monodll_gauge.o \
 	monodll_listbox.o \
 	monodll_listctrl_mac.o \
-	monodll_mdi.o \
 	monodll_menu.o \
 	monodll_menuitem.o \
 	monodll_msgdlg.o \
@@ -5032,7 +5123,6 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_evtloop.o \
 	monodll_filedlg.o \
 	monodll_gauge.o \
-	monodll_glcanvas.o \
 	monodll_listbox.o \
 	monodll_menu.o \
 	monodll_menuitem.o \
@@ -5601,6 +5691,7 @@ COND_TOOLKIT_MSW___MEDIA_PLATFORM_SRC_OBJECTS =  \
 	monodll_activex.o
 @COND_TOOLKIT_MSW@__MEDIA_PLATFORM_SRC_OBJECTS = $(COND_TOOLKIT_MSW___MEDIA_PLATFORM_SRC_OBJECTS)
 @COND_TOOLKIT_OSX_CARBON@__MEDIA_PLATFORM_SRC_OBJECTS = monodll_mediactrl.o
+@COND_TOOLKIT_OSX_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS = 
 @COND_TOOLKIT_PM@__MEDIA_PLATFORM_SRC_OBJECTS = 
 COND_TOOLKIT_WINCE___MEDIA_PLATFORM_SRC_OBJECTS =  \
 	monodll_mediactrl_am.o \
@@ -6792,7 +6883,6 @@ COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS_1 =  \
 	monolib_gauge.o \
 	monolib_listbox.o \
 	monolib_listctrl_mac.o \
-	monolib_mdi.o \
 	monolib_menu.o \
 	monolib_menuitem.o \
 	monolib_msgdlg.o \
@@ -6836,7 +6926,6 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_evtloop.o \
 	monolib_filedlg.o \
 	monolib_gauge.o \
-	monolib_glcanvas.o \
 	monolib_listbox.o \
 	monolib_menu.o \
 	monolib_menuitem.o \
@@ -7406,6 +7495,7 @@ COND_TOOLKIT_MSW___MEDIA_PLATFORM_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_MSW@__MEDIA_PLATFORM_SRC_OBJECTS_1 = $(COND_TOOLKIT_MSW___MEDIA_PLATFORM_SRC_OBJECTS_1)
 @COND_TOOLKIT_OSX_CARBON@__MEDIA_PLATFORM_SRC_OBJECTS_1 \
 @COND_TOOLKIT_OSX_CARBON@	= monolib_mediactrl.o
+@COND_TOOLKIT_OSX_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS_1 = 
 @COND_TOOLKIT_PM@__MEDIA_PLATFORM_SRC_OBJECTS_1 = 
 COND_TOOLKIT_WINCE___MEDIA_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_mediactrl_am.o \
@@ -8745,7 +8835,6 @@ COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS_2 =  \
 	coredll_gauge.o \
 	coredll_listbox.o \
 	coredll_listctrl_mac.o \
-	coredll_mdi.o \
 	coredll_menu.o \
 	coredll_menuitem.o \
 	coredll_msgdlg.o \
@@ -8789,7 +8878,6 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_evtloop.o \
 	coredll_filedlg.o \
 	coredll_gauge.o \
-	coredll_glcanvas.o \
 	coredll_listbox.o \
 	coredll_menu.o \
 	coredll_menuitem.o \
@@ -10244,7 +10332,6 @@ COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS_3 =  \
 	corelib_gauge.o \
 	corelib_listbox.o \
 	corelib_listctrl_mac.o \
-	corelib_mdi.o \
 	corelib_menu.o \
 	corelib_menuitem.o \
 	corelib_msgdlg.o \
@@ -10288,7 +10375,6 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_evtloop.o \
 	corelib_filedlg.o \
 	corelib_gauge.o \
-	corelib_glcanvas.o \
 	corelib_listbox.o \
 	corelib_menu.o \
 	corelib_menuitem.o \
@@ -11046,6 +11132,7 @@ COND_TOOLKIT_MSW___MEDIA_PLATFORM_SRC_OBJECTS_2 =  \
 @COND_TOOLKIT_MSW@__MEDIA_PLATFORM_SRC_OBJECTS_2 = $(COND_TOOLKIT_MSW___MEDIA_PLATFORM_SRC_OBJECTS_2)
 @COND_TOOLKIT_OSX_CARBON@__MEDIA_PLATFORM_SRC_OBJECTS_2 \
 @COND_TOOLKIT_OSX_CARBON@	= mediadll_mediactrl.o
+@COND_TOOLKIT_OSX_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS_2 = 
 @COND_TOOLKIT_PM@__MEDIA_PLATFORM_SRC_OBJECTS_2 = 
 COND_TOOLKIT_WINCE___MEDIA_PLATFORM_SRC_OBJECTS_2 =  \
 	mediadll_mediactrl_am.o \
@@ -11077,6 +11164,7 @@ COND_TOOLKIT_MSW___MEDIA_PLATFORM_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_MSW@__MEDIA_PLATFORM_SRC_OBJECTS_3 = $(COND_TOOLKIT_MSW___MEDIA_PLATFORM_SRC_OBJECTS_3)
 @COND_TOOLKIT_OSX_CARBON@__MEDIA_PLATFORM_SRC_OBJECTS_3 \
 @COND_TOOLKIT_OSX_CARBON@	= medialib_mediactrl.o
+@COND_TOOLKIT_OSX_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS_3 = 
 @COND_TOOLKIT_PM@__MEDIA_PLATFORM_SRC_OBJECTS_3 = 
 COND_TOOLKIT_WINCE___MEDIA_PLATFORM_SRC_OBJECTS_3 =  \
 	medialib_mediactrl_am.o \
@@ -11681,6 +11769,8 @@ COND_USE_SOSYMLINKS_1___gldll___so_symlinks_uninst_cmd = rm -f \
 @COND_TOOLKIT_MSW@__OPENGL_SRC_PLATFORM_OBJECTS = gldll_glcanvas.o
 @COND_TOOLKIT_OSX_CARBON@__OPENGL_SRC_PLATFORM_OBJECTS \
 @COND_TOOLKIT_OSX_CARBON@	= gldll_glcanvas.o gldll_glcanvas_osx.o
+@COND_TOOLKIT_OSX_COCOA@__OPENGL_SRC_PLATFORM_OBJECTS \
+@COND_TOOLKIT_OSX_COCOA@	= gldll_glcanvas.o gldll_glcanvas_osx.o
 @COND_TOOLKIT_PM@__OPENGL_SRC_PLATFORM_OBJECTS = gldll_glcanvas.o
 @COND_TOOLKIT_WINCE@__OPENGL_SRC_PLATFORM_OBJECTS = gldll_glcanvas.o
 @COND_TOOLKIT_X11@__OPENGL_SRC_PLATFORM_OBJECTS = \
@@ -11716,6 +11806,8 @@ COND_SHARED_0_USE_GUI_1_USE_OPENGL_1___gllib___depname = \
 @COND_TOOLKIT_MSW@__OPENGL_SRC_PLATFORM_OBJECTS_1 = gllib_glcanvas.o
 @COND_TOOLKIT_OSX_CARBON@__OPENGL_SRC_PLATFORM_OBJECTS_1 \
 @COND_TOOLKIT_OSX_CARBON@	= gllib_glcanvas.o gllib_glcanvas_osx.o
+@COND_TOOLKIT_OSX_COCOA@__OPENGL_SRC_PLATFORM_OBJECTS_1 \
+@COND_TOOLKIT_OSX_COCOA@	= gllib_glcanvas.o gllib_glcanvas_osx.o
 @COND_TOOLKIT_PM@__OPENGL_SRC_PLATFORM_OBJECTS_1 = gllib_glcanvas.o
 @COND_TOOLKIT_WINCE@__OPENGL_SRC_PLATFORM_OBJECTS_1 = gllib_glcanvas.o
 @COND_TOOLKIT_X11@__OPENGL_SRC_PLATFORM_OBJECTS_1 = \
@@ -11757,6 +11849,7 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS =  \
 	monodll_dnd.o \
 	monodll_font.o \
 	monodll_frame.o \
+	monodll_mdi.o \
 	monodll_metafile.o \
 	monodll_overlay.o \
 	monodll_popupwin.o \
@@ -11917,6 +12010,7 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_0 =  \
 	monolib_dnd.o \
 	monolib_font.o \
 	monolib_frame.o \
+	monolib_mdi.o \
 	monolib_metafile.o \
 	monolib_overlay.o \
 	monolib_popupwin.o \
@@ -12077,6 +12171,7 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_8 =  \
 	coredll_dnd.o \
 	coredll_font.o \
 	coredll_frame.o \
+	coredll_mdi.o \
 	coredll_metafile.o \
 	coredll_overlay.o \
 	coredll_popupwin.o \
@@ -12157,6 +12252,7 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_9 =  \
 	corelib_dnd.o \
 	corelib_font.o \
 	corelib_frame.o \
+	corelib_mdi.o \
 	corelib_metafile.o \
 	corelib_overlay.o \
 	corelib_popupwin.o \
@@ -14327,9 +14423,6 @@ monodll_statlmac.o: $(srcdir)/src/osx/carbon/statlmac.cpp $(MONODLL_ODEP)
 
 monodll_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/html/htmlctrl/webkit/webkit.mm
-
-monodll_glcanvas.o: $(srcdir)/src/osx/cocoa/glcanvas.mm $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/cocoa/glcanvas.mm
 
 monodll_NSBox.o: $(srcdir)/src/cocoa/NSBox.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/cocoa/NSBox.mm
@@ -17112,8 +17205,11 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_mdi.o: $(srcdir)/src/msw/mdi.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/mdi.cpp
 
-@COND_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monodll_mdi.o: $(srcdir)/src/osx/carbon/mdi.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/mdi.cpp
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monodll_mdi.o: $(srcdir)/src/osx/carbon/mdi.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/mdi.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monodll_mdi.o: $(srcdir)/src/osx/carbon/mdi.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/mdi.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_mdi.o: $(srcdir)/src/cocoa/mdi.mm $(MONODLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/cocoa/mdi.mm
@@ -18995,9 +19091,6 @@ monolib_statlmac.o: $(srcdir)/src/osx/carbon/statlmac.cpp $(MONOLIB_ODEP)
 
 monolib_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/html/htmlctrl/webkit/webkit.mm
-
-monolib_glcanvas.o: $(srcdir)/src/osx/cocoa/glcanvas.mm $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/cocoa/glcanvas.mm
 
 monolib_NSBox.o: $(srcdir)/src/cocoa/NSBox.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/cocoa/NSBox.mm
@@ -21780,8 +21873,11 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_mdi.o: $(srcdir)/src/msw/mdi.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/mdi.cpp
 
-@COND_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monolib_mdi.o: $(srcdir)/src/osx/carbon/mdi.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/mdi.cpp
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monolib_mdi.o: $(srcdir)/src/osx/carbon/mdi.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/mdi.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monolib_mdi.o: $(srcdir)/src/osx/carbon/mdi.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/mdi.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_mdi.o: $(srcdir)/src/cocoa/mdi.mm $(MONOLIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/cocoa/mdi.mm
@@ -24387,9 +24483,6 @@ coredll_statlmac.o: $(srcdir)/src/osx/carbon/statlmac.cpp $(COREDLL_ODEP)
 coredll_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/html/htmlctrl/webkit/webkit.mm
 
-coredll_glcanvas.o: $(srcdir)/src/osx/cocoa/glcanvas.mm $(COREDLL_ODEP)
-	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/cocoa/glcanvas.mm
-
 coredll_NSBox.o: $(srcdir)/src/cocoa/NSBox.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/cocoa/NSBox.mm
 
@@ -26661,8 +26754,11 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_mdi.o: $(srcdir)/src/msw/mdi.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/mdi.cpp
 
-@COND_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@coredll_mdi.o: $(srcdir)/src/osx/carbon/mdi.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/mdi.cpp
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@coredll_mdi.o: $(srcdir)/src/osx/carbon/mdi.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/mdi.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@coredll_mdi.o: $(srcdir)/src/osx/carbon/mdi.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/mdi.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_mdi.o: $(srcdir)/src/cocoa/mdi.mm $(COREDLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/cocoa/mdi.mm
@@ -27881,9 +27977,6 @@ corelib_statlmac.o: $(srcdir)/src/osx/carbon/statlmac.cpp $(CORELIB_ODEP)
 
 corelib_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/html/htmlctrl/webkit/webkit.mm
-
-corelib_glcanvas.o: $(srcdir)/src/osx/cocoa/glcanvas.mm $(CORELIB_ODEP)
-	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/cocoa/glcanvas.mm
 
 corelib_NSBox.o: $(srcdir)/src/cocoa/NSBox.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/cocoa/NSBox.mm
@@ -30156,8 +30249,11 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_mdi.o: $(srcdir)/src/msw/mdi.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/mdi.cpp
 
-@COND_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@corelib_mdi.o: $(srcdir)/src/osx/carbon/mdi.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/mdi.cpp
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@corelib_mdi.o: $(srcdir)/src/osx/carbon/mdi.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/mdi.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@corelib_mdi.o: $(srcdir)/src/osx/carbon/mdi.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/mdi.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_mdi.o: $(srcdir)/src/cocoa/mdi.mm $(CORELIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/cocoa/mdi.mm
@@ -32688,11 +32784,11 @@ gldll_version_rc.o: $(srcdir)/src/msw/version.rc $(GLDLL_ODEP)
 gldll_glcmn.o: $(srcdir)/src/common/glcmn.cpp $(GLDLL_ODEP)
 	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/common/glcmn.cpp
 
-gldll_glcanvas_osx.o: $(srcdir)/src/osx/glcanvas_osx.cpp $(GLDLL_ODEP)
-	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/osx/glcanvas_osx.cpp
-
 @COND_TOOLKIT_OSX_CARBON@gldll_glcanvas.o: $(srcdir)/src/osx/carbon/glcanvas.cpp $(GLDLL_ODEP)
 @COND_TOOLKIT_OSX_CARBON@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/glcanvas.cpp
+
+@COND_TOOLKIT_OSX_COCOA@gldll_glcanvas.o: $(srcdir)/src/osx/cocoa/glcanvas.mm $(GLDLL_ODEP)
+@COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/osx/cocoa/glcanvas.mm
 
 @COND_TOOLKIT_COCOA@gldll_glcanvas.o: $(srcdir)/src/cocoa/glcanvas.mm $(GLDLL_ODEP)
 @COND_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/cocoa/glcanvas.mm
@@ -32718,6 +32814,12 @@ gldll_glcanvas_osx.o: $(srcdir)/src/osx/glcanvas_osx.cpp $(GLDLL_ODEP)
 @COND_TOOLKIT_PM@gldll_glcanvas.o: $(srcdir)/src/os2/glcanvas.cpp $(GLDLL_ODEP)
 @COND_TOOLKIT_PM@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/os2/glcanvas.cpp
 
+@COND_TOOLKIT_OSX_CARBON@gldll_glcanvas_osx.o: $(srcdir)/src/osx/glcanvas_osx.cpp $(GLDLL_ODEP)
+@COND_TOOLKIT_OSX_CARBON@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/osx/glcanvas_osx.cpp
+
+@COND_TOOLKIT_OSX_COCOA@gldll_glcanvas_osx.o: $(srcdir)/src/osx/glcanvas_osx.cpp $(GLDLL_ODEP)
+@COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/osx/glcanvas_osx.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@gldll_glx11.o: $(srcdir)/src/unix/glx11.cpp $(GLDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/unix/glx11.cpp
 
@@ -32733,11 +32835,11 @@ gldll_glcanvas_osx.o: $(srcdir)/src/osx/glcanvas_osx.cpp $(GLDLL_ODEP)
 gllib_glcmn.o: $(srcdir)/src/common/glcmn.cpp $(GLLIB_ODEP)
 	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/common/glcmn.cpp
 
-gllib_glcanvas_osx.o: $(srcdir)/src/osx/glcanvas_osx.cpp $(GLLIB_ODEP)
-	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/osx/glcanvas_osx.cpp
-
 @COND_TOOLKIT_OSX_CARBON@gllib_glcanvas.o: $(srcdir)/src/osx/carbon/glcanvas.cpp $(GLLIB_ODEP)
 @COND_TOOLKIT_OSX_CARBON@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/glcanvas.cpp
+
+@COND_TOOLKIT_OSX_COCOA@gllib_glcanvas.o: $(srcdir)/src/osx/cocoa/glcanvas.mm $(GLLIB_ODEP)
+@COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/osx/cocoa/glcanvas.mm
 
 @COND_TOOLKIT_COCOA@gllib_glcanvas.o: $(srcdir)/src/cocoa/glcanvas.mm $(GLLIB_ODEP)
 @COND_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/cocoa/glcanvas.mm
@@ -32762,6 +32864,12 @@ gllib_glcanvas_osx.o: $(srcdir)/src/osx/glcanvas_osx.cpp $(GLLIB_ODEP)
 
 @COND_TOOLKIT_PM@gllib_glcanvas.o: $(srcdir)/src/os2/glcanvas.cpp $(GLLIB_ODEP)
 @COND_TOOLKIT_PM@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/os2/glcanvas.cpp
+
+@COND_TOOLKIT_OSX_CARBON@gllib_glcanvas_osx.o: $(srcdir)/src/osx/glcanvas_osx.cpp $(GLLIB_ODEP)
+@COND_TOOLKIT_OSX_CARBON@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/osx/glcanvas_osx.cpp
+
+@COND_TOOLKIT_OSX_COCOA@gllib_glcanvas_osx.o: $(srcdir)/src/osx/glcanvas_osx.cpp $(GLLIB_ODEP)
+@COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/osx/glcanvas_osx.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@gllib_glx11.o: $(srcdir)/src/unix/glx11.cpp $(GLLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/unix/glx11.cpp

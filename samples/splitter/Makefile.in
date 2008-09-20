@@ -90,6 +90,8 @@ COND_PLATFORM_OS2_1___splitter___os2_emxbindcmd = $(NM) splitter$(EXEEXT) | if \
 @COND_PLATFORM_MACOSX_1@__splitter_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= splitter.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__splitter_bundle___depname = splitter_bundle
+@COND_TOOLKIT_MAC@____splitter_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_MAC@	$(__splitter_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_CARBON@____splitter_BUNDLE_TGT_REF_DEP \
 @COND_TOOLKIT_OSX_CARBON@	= $(__splitter_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_COCOA@____splitter_BUNDLE_TGT_REF_DEP \

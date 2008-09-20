@@ -88,10 +88,10 @@ RENDDLL_OBJECTS =  \
 @COND_PLATFORM_UNIX_1@PLUGIN_VERSION0 = $(WX_VERSION)
 @COND_PLATFORM_UNIX_0@PLUGVERDELIM = 
 @COND_PLATFORM_UNIX_1@PLUGVERDELIM = -
-@COND_BUILD_DEBUG_UNICODE_0@PLUGINSUFFIX = d
-@COND_BUILD_DEBUG_UNICODE_1@PLUGINSUFFIX = ud
 @COND_BUILD_RELEASE_UNICODE_0@PLUGINSUFFIX = 
+@COND_BUILD_DEBUG_UNICODE_0@PLUGINSUFFIX = d
 @COND_BUILD_RELEASE_UNICODE_1@PLUGINSUFFIX = u
+@COND_BUILD_DEBUG_UNICODE_1@PLUGINSUFFIX = ud
 @COND_PLATFORM_MAC_0@__render___mac_setfilecmd = @true
 @COND_PLATFORM_MAC_1@__render___mac_setfilecmd = \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -t APPL render$(EXEEXT)
@@ -112,14 +112,16 @@ COND_PLATFORM_OS2_1___render___os2_emxbindcmd = $(NM) render$(EXEEXT) | if grep 
 @COND_PLATFORM_MACOSX_1@__render_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= render.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__render_bundle___depname = render_bundle
-@COND_TOOLKIT_COCOA@____render_BUNDLE_TGT_REF_DEP = \
-@COND_TOOLKIT_COCOA@	$(__render_app_Contents_PkgInfo___depname)
+@COND_TOOLKIT_MAC@____render_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_MAC@	$(__render_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_CARBON@____render_BUNDLE_TGT_REF_DEP \
 @COND_TOOLKIT_OSX_CARBON@	= $(__render_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_COCOA@____render_BUNDLE_TGT_REF_DEP \
 @COND_TOOLKIT_OSX_COCOA@	= $(__render_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_IPHONE@____render_BUNDLE_TGT_REF_DEP \
 @COND_TOOLKIT_OSX_IPHONE@	= $(__render_app_Contents_PkgInfo___depname)
+@COND_TOOLKIT_COCOA@____render_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_COCOA@	$(__render_app_Contents_PkgInfo___depname)
 COND_SHARED_1___renddll___depname = \
 	$(DLLPREFIX_MODULE)renddll_$(PORTNAME)$(WXUNIVNAME)$(PLUGINSUFFIX)$(PLUGVERDELIM)$(PLUGIN_VERSION0)$(WXCOMPILER).$(SO_SUFFIX_MODULE)
 @COND_SHARED_1@__renddll___depname = $(COND_SHARED_1___renddll___depname)

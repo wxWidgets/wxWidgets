@@ -93,7 +93,7 @@ TEST_GUI_CXXFLAGS = /M$(__RUNTIME_LIBS_23)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
 	$(__GFXCTX_DEFINE_p) /I$(SETUPHDIR) /I.\..\include /W4 /I. $(__DLLFLAG_p) \
-	/I.\..\samples $(CPPUNIT_CFLAGS) /D_CONSOLE $(__RTTIFLAG) \
+	/I.\..\samples /DNOPCH $(CPPUNIT_CFLAGS) /D_CONSOLE $(__RTTIFLAG) \
 	$(__EXCEPTIONSFLAG) /Yu"testprec.h" /Fp"$(OBJS)\testprec_test_gui.pch" \
 	$(CPPFLAGS) $(CXXFLAGS)
 TEST_GUI_OBJECTS =  \
@@ -628,7 +628,7 @@ $(OBJS)\test_gui_dummy.obj: .\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) /Yctestprec.h .\dummy.cpp
 
 $(OBJS)\test_gui_sample.res: .\..\samples\sample.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_17_p_1) $(__NO_VC_CRTDBG_p_3)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) $(__MSLU_DEFINE_p_3) $(__GFXCTX_DEFINE_p_3) /i $(SETUPHDIR) /i .\..\include /i . $(__DLLFLAG_p_3) /i .\..\samples /d _CONSOLE .\..\samples\sample.rc
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_17_p_1) $(__NO_VC_CRTDBG_p_3)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) $(__MSLU_DEFINE_p_3) $(__GFXCTX_DEFINE_p_3) /i $(SETUPHDIR) /i .\..\include /i . $(__DLLFLAG_p_3) /i .\..\samples /d NOPCH /d _CONSOLE .\..\samples\sample.rc
 
 $(OBJS)\test_gui_test.obj: .\test.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\test.cpp

@@ -94,6 +94,8 @@ COND_PLATFORM_OS2_1___isosurf___os2_emxbindcmd = $(NM) isosurf$(EXEEXT) | if \
 @COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	= isosurf.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1_USE_OPENGL_1@__isosurf_bundle___depname \
 @COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	= isosurf_bundle
+@COND_TOOLKIT_MAC@____isosurf_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_MAC@	$(__isosurf_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_CARBON@____isosurf_BUNDLE_TGT_REF_DEP \
 @COND_TOOLKIT_OSX_CARBON@	= $(__isosurf_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_COCOA@____isosurf_BUNDLE_TGT_REF_DEP \

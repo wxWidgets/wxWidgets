@@ -130,7 +130,7 @@ distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 wxemulator$(EXEEXT): $(WXEMULATOR_OBJECTS) $(__wxemulator___win32rc)
-	$(CXX) -o $@ $(WXEMULATOR_OBJECTS)    -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
+	$(CXX) -o $@ $(WXEMULATOR_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI)  $(LIBS) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
 	
 	$(__wxemulator___mac_setfilecmd)
 	$(__wxemulator___os2_emxbindcmd)
@@ -164,6 +164,6 @@ monolib_stc.o monodll_stc.o stcdll_stc.o stclib_stc.o: \
 $(srcdir)/include/wx/stc/stc.h
 
 # Include dependency info, if present:
-@IF_GNU_MAKE@-include ./.deps/*.d
+@IF_GNU_MAKE@-include .deps/*.d
 
 .PHONY: all install uninstall clean distclean data

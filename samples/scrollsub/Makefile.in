@@ -90,6 +90,8 @@ COND_PLATFORM_OS2_1___scrollsub___os2_emxbindcmd = $(NM) scrollsub$(EXEEXT) | \
 @COND_PLATFORM_MACOSX_1@__scrollsub_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= scrollsub.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__scrollsub_bundle___depname = scrollsub_bundle
+@COND_TOOLKIT_MAC@____scrollsub_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_MAC@	$(__scrollsub_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_CARBON@____scrollsub_BUNDLE_TGT_REF_DEP \
 @COND_TOOLKIT_OSX_CARBON@	= $(__scrollsub_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_COCOA@____scrollsub_BUNDLE_TGT_REF_DEP \

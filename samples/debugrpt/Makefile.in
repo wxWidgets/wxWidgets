@@ -92,6 +92,8 @@ COND_PLATFORM_OS2_1___debugrpt___os2_emxbindcmd = $(NM) debugrpt$(EXEEXT) | if \
 @COND_PLATFORM_MACOSX_1@__debugrpt_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= debugrpt.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__debugrpt_bundle___depname = debugrpt_bundle
+@COND_TOOLKIT_MAC@____debugrpt_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_MAC@	$(__debugrpt_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_CARBON@____debugrpt_BUNDLE_TGT_REF_DEP \
 @COND_TOOLKIT_OSX_CARBON@	= $(__debugrpt_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_COCOA@____debugrpt_BUNDLE_TGT_REF_DEP \

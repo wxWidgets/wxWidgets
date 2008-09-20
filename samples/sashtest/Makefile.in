@@ -92,6 +92,8 @@ COND_PLATFORM_OS2_1___sashtest___os2_emxbindcmd = $(NM) sashtest$(EXEEXT) | if \
 @COND_PLATFORM_MACOSX_1@__sashtest_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= sashtest.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__sashtest_bundle___depname = sashtest_bundle
+@COND_TOOLKIT_MAC@____sashtest_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_MAC@	$(__sashtest_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_CARBON@____sashtest_BUNDLE_TGT_REF_DEP \
 @COND_TOOLKIT_OSX_CARBON@	= $(__sashtest_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_COCOA@____sashtest_BUNDLE_TGT_REF_DEP \
