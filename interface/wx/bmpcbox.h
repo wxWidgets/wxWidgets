@@ -77,15 +77,15 @@ public:
 
         @see Create(), wxValidator
     */
-    wxBitmapComboBox(wxWindow* parent, wxWindowID id,
-                     const wxString& value = "",
+    wxBitmapComboBox(wxWindow* parent, wxWindowID id = wxID_ANY,
+                     const wxString& value = wxEmptyString,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      int n = 0,
                      const wxString choices[] = NULL,
                      long style = 0,
                      const wxValidator& validator = wxDefaultValidator,
-                     const wxString& name = "comboBox");
+                     const wxString& name = wxBitmapComboBoxNameStr);
 
     /**
         Constructor, creating and showing a combobox.
@@ -106,9 +106,9 @@ public:
                      const wxPoint& pos,
                      const wxSize& size,
                      const wxArrayString& choices,
-                     long style = 0,
+                     long style,
                      const wxValidator& validator = wxDefaultValidator,
-                     const wxString& name = "comboBox");
+                     const wxString& name = wxBitmapComboBoxNameStr);
 
     /**
         Destructor, destroying the combobox.
@@ -145,7 +145,7 @@ public:
                 int n, const wxString choices[],
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = "comboBox");
+                const wxString& name = wxBitmapComboBoxNameStr);
 
     /**
         Creates the combobox for two-step construction.
@@ -157,7 +157,7 @@ public:
                 const wxArrayString& choices,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = "comboBox");
+                const wxString& name = wxBitmapComboBoxNameStr);
 
     /**
         Returns size of bitmaps used in the list.
