@@ -93,8 +93,8 @@ public:
     virtual ~wxTempFileOutputStream();
 
     bool Close() { return Commit(); }
-    WXEXPORT virtual bool Commit() { return m_file->Commit(); }
-    WXEXPORT virtual void Discard() { m_file->Discard(); }
+    WXDLLIMPEXP_INLINE_BASE virtual bool Commit() { return m_file->Commit(); }
+    WXDLLIMPEXP_INLINE_BASE virtual void Discard() { m_file->Discard(); }
 
     wxFileOffset GetLength() const { return m_file->Length(); }
     bool IsSeekable() const { return true; }

@@ -98,12 +98,23 @@
 #ifdef WXMAKINGDLL_BASE
 #    define WXDLLIMPEXP_BASE WXEXPORT
 #    define WXDLLIMPEXP_DATA_BASE(type) WXEXPORT type
+#    if defined(HAVE_VISIBILITY)
+#        define WXDLLIMPEXP_INLINE_BASE WXEXPORT
+#    else
+#        define WXDLLIMPEXP_INLINE_BASE
+#    endif
 #elif defined(WXUSINGDLL)
 #    define WXDLLIMPEXP_BASE WXIMPORT
 #    define WXDLLIMPEXP_DATA_BASE(type) WXIMPORT type
+#    if defined(HAVE_VISIBILITY)
+#        define WXDLLIMPEXP_INLINE_BASE WXIMPORT
+#    else
+#        define WXDLLIMPEXP_INLINE_BASE
+#    endif
 #else /* not making nor using DLL */
 #    define WXDLLIMPEXP_BASE
 #    define WXDLLIMPEXP_DATA_BASE(type) type
+#    define WXDLLIMPEXP_INLINE_BASE
 #endif
 
 #ifdef WXMAKINGDLL_NET
