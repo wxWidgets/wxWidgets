@@ -54,11 +54,6 @@
 #define wxUSE_TASKBARICON 0
 #endif
 
-#if wxUSE_TOOLTIPS
-#undef wxUSE_TOOLTIPS
-#define wxUSE_TOOLTIPS 0
-#endif
-
 #if wxUSE_DATAVIEWCTRL
 #undef wxUSE_DATAVIEWCTRL
 #define wxUSE_DATAVIEWCTRL 0

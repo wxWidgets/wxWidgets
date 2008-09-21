@@ -2249,7 +2249,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/carbon/settings.cpp
     src/osx/carbon/statbrma.cpp
     src/osx/carbon/tabctrl.cpp
-    src/osx/carbon/tooltip.cpp
     <!-- cocoa bridge -->
     src/osx/carbon/utilscocoa.mm
 </if>
@@ -2288,6 +2287,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/carbon/textctrl.cpp
     src/osx/carbon/tglbtn.cpp
     src/osx/carbon/toolbar.cpp
+    src/osx/carbon/tooltip.cpp
     src/osx/carbon/window.cpp
     
     src/html/htmlctrl/webkit/webkit.mm
@@ -2515,6 +2515,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/cocoa/textctrl.mm
     src/osx/cocoa/tglbtn.mm
     src/osx/cocoa/toolbar.mm
+    src/osx/cocoa/tooltip.mm
     src/osx/cocoa/window.mm
     src/generic/caret.cpp
     src/generic/clrpickerg.cpp
