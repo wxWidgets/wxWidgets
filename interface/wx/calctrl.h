@@ -300,7 +300,7 @@ public:
         style bit directly. It enables or disables the special highlighting of
         the holidays.
     */
-    void EnableHolidayDisplay(bool display = true);
+    virtual void EnableHolidayDisplay(bool display = true);
 
     /**
         This function should be used instead of changing
@@ -311,7 +311,7 @@ public:
         @return @true if the value of this option really changed or @false if
                 it was already set to the requested value.
     */
-    bool EnableMonthChange(bool enable = true);
+    virtual bool EnableMonthChange(bool enable = true);
 
     /**
         @deprecated
@@ -320,19 +320,19 @@ public:
         @c wxCAL_NO_YEAR_CHANGE style bit directly. It allows or disallows the
         user to change the year interactively. Only in generic wxCalendarCtrl.
     */
-    void EnableYearChange(bool enable = true);
+    virtual void EnableYearChange(bool enable = true);
 
     /**
         Returns the attribute for the given date (should be in the range
         1...31). The returned pointer may be @NULL. Only in generic
         wxCalendarCtrl.
     */
-    wxCalendarDateAttr* GetAttr(size_t day) const;
+    virtual wxCalendarDateAttr* GetAttr(size_t day) const;
 
     /**
         Gets the currently selected date.
     */
-    const wxDateTime GetDate() const;
+    virtual wxDateTime GetDate() const;
 
     /**
         Gets the background colour of the header part of the calendar window.
@@ -342,7 +342,7 @@ public:
 
         @see SetHeaderColours()
     */
-    const wxColour GetHeaderColourBg() const;
+    virtual const wxColour& GetHeaderColourBg() const;
 
     /**
         Gets the foreground colour of the header part of the calendar window.
@@ -352,7 +352,7 @@ public:
 
         @see SetHeaderColours()
     */
-    const wxColour GetHeaderColourFg() const;
+    virtual const wxColour& GetHeaderColourFg() const;
 
     /**
         Gets the background highlight colour. Only in generic wxCalendarCtrl.
@@ -362,7 +362,7 @@ public:
 
         @see SetHighlightColours()
     */
-    const wxColour GetHighlightColourBg() const;
+    virtual const wxColour& GetHighlightColourBg() const;
 
     /**
         Gets the foreground highlight colour. Only in generic wxCalendarCtrl.
@@ -372,7 +372,7 @@ public:
 
         @see SetHighlightColours()
     */
-    const wxColour GetHighlightColourFg() const;
+    virtual const wxColour& GetHighlightColourFg() const;
 
     /**
         Return the background colour currently used for holiday highlighting.
@@ -383,7 +383,7 @@ public:
 
         @see SetHolidayColours()
     */
-    const wxColour GetHolidayColourBg() const;
+    virtual const wxColour& GetHolidayColourBg() const;
 
     /**
         Return the foreground colour currently used for holiday highlighting.
@@ -394,38 +394,38 @@ public:
 
         @see SetHolidayColours()
     */
-    const wxColour GetHolidayColourFg() const;
+    virtual const wxColour& GetHolidayColourFg() const;
 
     /**
         Returns one of wxCalendarHitTestResult constants and fills either
         @a date or @a wd pointer with the corresponding value depending on the
         hit test code.
-        
+
         Not implemented in wxGTK currently.
     */
-    wxCalendarHitTestResult HitTest(const wxPoint& pos,
-                                    wxDateTime* date = NULL,
-                                    wxDateTime::WeekDay* wd = NULL);
+    virtual wxCalendarHitTestResult HitTest(const wxPoint& pos,
+                                            wxDateTime* date = NULL,
+                                            wxDateTime::WeekDay* wd = NULL);
 
     /**
         Clears any attributes associated with the given day (in the range
         1...31). Only in generic wxCalendarCtrl.
     */
-    void ResetAttr(size_t day);
+    virtual void ResetAttr(size_t day);
 
     /**
         Associates the attribute with the specified date (in the range 1...31).
         If the pointer is @NULL, the items attribute is cleared. Only in
         generic wxCalendarCtrl.
     */
-    void SetAttr(size_t day, wxCalendarDateAttr* attr);
+    virtual void SetAttr(size_t day, wxCalendarDateAttr* attr);
 
     /**
         Sets the current date.
 
         The @a date parameter must be valid.
     */
-    void SetDate(const wxDateTime& date);
+    virtual void SetDate(const wxDateTime& date);
 
     /**
         Set the colours used for painting the weekdays at the top of the
@@ -434,8 +434,8 @@ public:
         This method is currently only implemented in generic wxCalendarCtrl and
         does nothing in the native versions.
     */
-    void SetHeaderColours(const wxColour& colFg,
-                          const wxColour& colBg);
+    virtual void SetHeaderColours(const wxColour& colFg,
+                                  const wxColour& colBg);
 
     /**
         Set the colours to be used for highlighting the currently selected
@@ -444,8 +444,8 @@ public:
         This method is currently only implemented in generic wxCalendarCtrl and
         does nothing in the native versions.
     */
-    void SetHighlightColours(const wxColour& colFg,
-                             const wxColour& colBg);
+    virtual void SetHighlightColours(const wxColour& colFg,
+                                     const wxColour& colBg);
 
     /**
         Marks the specified day as being a holiday in the current month.
@@ -453,25 +453,25 @@ public:
         This method is only implemented in the generic version of the control
         and does nothing in the native ones.
     */
-    void SetHoliday(size_t day);
+    virtual void SetHoliday(size_t day);
 
     /**
         Sets the colours to be used for the holidays highlighting.
-        
+
         This method is only implemented in the generic version of the control
         and does nothing in the native ones. It should also only be called if
         the window style includes @c wxCAL_SHOW_HOLIDAYS flag or
         EnableHolidayDisplay() had been called.
 
     */
-    void SetHolidayColours(const wxColour& colFg,
-                           const wxColour& colBg);
+    virtual void SetHolidayColours(const wxColour& colFg,
+                                   const wxColour& colBg);
 
     /**
         Mark or unmark the day. This day of month will be marked in every
         month. In generic wxCalendarCtrl,
     */
-    void Mark(size_t day, bool mark);
+    virtual void Mark(size_t day, bool mark);
 
     /**
         @name Date Range Functions

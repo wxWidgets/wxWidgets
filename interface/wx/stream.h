@@ -667,25 +667,24 @@ class wxBufferedOutputStream : public wxFilterOutputStream
 {
 public:
     /**
-        Creates a buffered stream using a buffer of a default size of 1024 bytes for
-        cashing the stream @a parent.
+        @todo WRITE DESCRIPTION
     */
-    wxBufferedOutputStream(const wxOutputStream& parent);
-
+    wxBufferedOutputStream(wxOutputStream& stream,
+                           wxStreamBuffer *buffer = NULL);
     /**
         Destructor. Calls Sync() and destroys the internal buffer.
     */
-    ~wxBufferedOutputStream();
+    virtual ~wxBufferedOutputStream();
 
     /**
         Calls Sync() and changes the stream position.
     */
-    off_t SeekO(off_t pos, wxSeekMode mode);
+    virtual wxFileOffset SeekO(wxFileOffset pos, wxSeekMode mode = wxFromStart)
 
     /**
         Flushes the buffer and calls Sync() on the parent stream.
     */
-    void Sync();
+    virtual void Sync();
 };
 
 

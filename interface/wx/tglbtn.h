@@ -37,7 +37,7 @@ public:
       Default constructor.
     */
     wxToggleButton();
-    
+
     /**
         Constructor, creating and showing a toggle button.
 
@@ -68,7 +68,7 @@ public:
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
                    const wxValidator& val = wxDefaultValidator,
-                   const wxString& name = "checkBox");
+                   const wxString& name = wxCheckBoxNameStr);
 
     /**
         Destructor, destroying the toggle button.
@@ -85,7 +85,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& val = wxDefaultValidator,
-                const wxString& name = "checkBox");
+                const wxString& name = wxCheckBoxNameStr);
 
     /**
         Gets the state of the toggle button.
@@ -129,7 +129,7 @@ public:
         Default constructor.
     */
     wxBitmapToggleButton();
-    
+
     /**
         Constructor, creating and showing a toggle button with the bitmap @e label.
         Internally calls Create().
@@ -140,7 +140,7 @@ public:
                          const wxSize& size = wxDefaultSize,
                          long style = 0,
                          const wxValidator& val = wxDefaultValidator,
-                         const wxString& name = "checkBox");
+                         const wxString& name = wxCheckBoxNameStr);
 
     /**
         Create method for two-step construction.
@@ -151,7 +151,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& val = wxDefaultValidator,
-                const wxString& name = "checkBox");
+                const wxString& name = wxCheckBoxNameStr);
 
     /**
         Gets the state of the toggle button.

@@ -78,7 +78,7 @@ public:
     /**
         Constructs a busy cursor object, calling wxBeginBusyCursor().
     */
-    wxBusyCursor(wxCursor* cursor = wxHOURGLASS_CURSOR);
+    wxBusyCursor(const wxCursor* cursor = wxHOURGLASS_CURSOR);
 
     /**
         Destroys the busy cursor object, calling wxEndBusyCursor().

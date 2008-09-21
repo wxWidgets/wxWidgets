@@ -67,6 +67,7 @@ public:
     */
     wxBufferedDC(wxDC* dc, const wxSize& area,
                  int style = wxBUFFER_CLIENT_AREA);
+
     /**
         Creates a buffer for the provided dc. Init() must not be called when
         using this constructor.
@@ -94,7 +95,7 @@ public:
         Copies everything drawn on the DC so far to the underlying DC
         associated with this object, if any.
     */
-    ~wxBufferedDC();
+    virtual ~wxBufferedDC();
 
     //@{
     /**
@@ -185,6 +186,6 @@ public:
         Copies everything drawn on the DC so far to the window associated with
         this object, using a wxPaintDC.
     */
-    ~wxBufferedPaintDC();
+    virtual ~wxBufferedPaintDC();
 };
 

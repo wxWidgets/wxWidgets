@@ -47,7 +47,7 @@ public:
     wxStdDialogButtonSizer();
 
     /**
-        Adds a button to the wxStdDialogButtonSizer. The @a button must have 
+        Adds a button to the wxStdDialogButtonSizer. The @a button must have
         one of the following identifiers:
          wxID_OK
          wxID_YES
@@ -128,7 +128,7 @@ public:
         Calculates the minimum desired size for the item, including any space
         needed by borders.
     */
-    wxSize CalcMin();
+    virtual wxSize CalcMin();
 
     /**
         Destroy the window or the windows in a subsizer, depending on the type
@@ -968,7 +968,7 @@ public:
         This method is abstract and has to be overwritten by any derived class.
         Here, the sizer will do the actual calculation of its children's minimal sizes.
     */
-    wxSize CalcMin();
+    virtual wxSize CalcMin();
 
     /**
         Detaches all children from the sizer. If @a delete_windows is @true then
@@ -1004,10 +1004,10 @@ public:
 
     /**
         Detach the child @a window from the sizer without destroying it.
-        
+
         This method does not cause any layout or resizing to take place, call Layout()
         to update the layout "on screen" after detaching a child from the sizer.
-        
+
         Returns @true if the child item was found and detached, @false otherwise.
 
         @see Remove()
@@ -1016,19 +1016,19 @@ public:
 
     /**
         Detach the child @a sizer from the sizer without destroying it.
-        
+
         This method does not cause any layout or resizing to take place, call Layout()
         to update the layout "on screen" after detaching a child from the sizer.
-        
+
         Returns @true if the child item was found and detached, @false otherwise.
-        
+
         @see Remove()
     */
     bool Detach(wxSizer* sizer);
 
     /**
         Detach a item at position @a index from the sizer without destroying it.
-        
+
         This method does not cause any layout or resizing to take place, call Layout()
         to update the layout "on screen" after detaching a child from the sizer.
         Returns @true if the child item was found and detached, @false otherwise.
@@ -1066,7 +1066,7 @@ public:
         @ref wxSizerItem "wxSizerItem".
     */
     wxSizerItemList& GetChildren();
-    
+
     /**
         Returns the list of the items in this sizer. The elements of type-safe
         wxList @a wxSizerItemList are pointers to objects of type
@@ -1085,13 +1085,13 @@ public:
         Returns pointer to item or @NULL.
     */
     wxSizerItem* GetItem(wxWindow* window, bool recursive = false);
-    
+
     /**
         Finds wxSizerItem which holds the given @a sizer
         Use parameter @a recursive to search in subsizers too.
         Returns pointer to item or @NULL.
     */
-    
+
     wxSizerItem* GetItem(wxSizer* sizer, bool recursive = false);
     /**
         Finds wxSizerItem which is located in the sizer at position
@@ -1135,9 +1135,9 @@ public:
 
     /**
         Hides the child @a window.
-        
+
         To make a sizer item disappear, use Hide() followed by Layout().
-        
+
         Use parameter @a recursive to hide elements found in subsizers.
         Returns @true if the child item was found, @false otherwise.
 
@@ -1147,9 +1147,9 @@ public:
 
     /**
         Hides the child @a sizer.
-        
+
         To make a sizer item disappear, use Hide() followed by Layout().
-        
+
         Use parameter @a recursive to hide elements found in subsizers.
         Returns @true if the child item was found, @false otherwise.
 
@@ -1159,9 +1159,9 @@ public:
 
     /**
         Hides the item at position @a index.
-        
+
         To make a sizer item disappear, use Hide() followed by Layout().
-        
+
         Use parameter @a recursive to hide elements found in subsizers.
         Returns @true if the child item was found, @false otherwise.
 
@@ -1317,7 +1317,7 @@ public:
         Here, the sizer will do the actual calculation of its children's
         positions and sizes.
     */
-    void RecalcSizes();
+    virtual void RecalcSizes();
 
     /**
         Removes a child window from the sizer, but does @b not destroy it
@@ -1372,46 +1372,46 @@ public:
         replaces it with the given @a newwin. The detached
         child window is @b not deleted (because windows are
         owned by their parent window, not the sizer).
-        
+
         Use parameter @a recursive to search the given element recursively in subsizers.
 
         This method does not cause any layout or resizing to take place,
         call Layout() to update the layout "on screen" after replacing a
         child from the sizer.
-        
+
         Returns @true if the child item was found and removed, @false otherwise.
     */
     bool Replace(wxWindow* oldwin, wxWindow* newwin,
                  bool recursive = false);
-                 
+
     /**
         Detaches the given @a oldsz from the sizer and
         replaces it with the given @a newsz. The detached
-        child sizer is deleted. 
-        
+        child sizer is deleted.
+
         Use parameter @a recursive to search the given element recursively in subsizers.
 
         This method does not cause any layout or resizing to take place,
         call Layout() to update the layout "on screen" after replacing a
         child from the sizer.
-        
+
         Returns @true if the child item was found and removed, @false otherwise.
     */
     bool Replace(wxSizer* oldsz, wxSizer* newsz,
                  bool recursive = false);
-                 
+
     /**
         Detaches the given item at position @a index from the sizer and
         replaces it with the given wxSizerItem @a newitem.
-        
+
         The detached child is deleted @b only if it is a sizer or a spacer
         (but not if it is a wxWindow because windows are owned by their
         parent window, not the sizer).
-        
+
         This method does not cause any layout or resizing to take place,
         call Layout() to update the layout "on screen" after replacing a
         child from the sizer.
-        
+
         Returns @true if the child item was found and removed, @false otherwise.
     */
     bool Replace(size_t index, wxSizerItem* newitem);
@@ -1422,7 +1422,7 @@ public:
         rules defined by the parameter in the Add() and Prepend() methods.
     */
     void SetDimension(int x, int y, int width, int height);
-    
+
     /**
         @overload
      */
@@ -1502,9 +1502,9 @@ public:
     /**
         Shows or hides the @a window.
         To make a sizer item disappear or reappear, use Show() followed by Layout().
-        
+
         Use parameter @a recursive to show or hide elements found in subsizers.
-        
+
         Returns @true if the child item was found, @false otherwise.
 
         @see Hide(), IsShown()
@@ -1515,9 +1515,9 @@ public:
     /**
         Shows or hides @a sizer.
         To make a sizer item disappear or reappear, use Show() followed by Layout().
-        
+
         Use parameter @a recursive to show or hide elements found in subsizers.
-        
+
         Returns @true if the child item was found, @false otherwise.
 
         @see Hide(), IsShown()
@@ -1528,7 +1528,7 @@ public:
     /**
         Shows the item at @a index.
         To make a sizer item disappear or reappear, use Show() followed by Layout().
-        
+
         Returns @true if the child item was found, @false otherwise.
 
         @see Hide(), IsShown()
@@ -1621,7 +1621,7 @@ public:
     @library{wxcore}
     @category{winlayout}
 
-    @see wxSizer, wxStaticBox, wxBoxSizer, @ref overview_sizer 
+    @see wxSizer, wxStaticBox, wxBoxSizer, @ref overview_sizer
     "Sizer Overview"
 */
 class wxStaticBoxSizer : public wxBoxSizer
@@ -1655,7 +1655,7 @@ public:
     simple basic geometry, typically in a row or a column or several hierarchies of
     either.
 
-    For more information, please see @ref overview_sizer_box 
+    For more information, please see @ref overview_sizer_box
     "Programming with wxBoxSizer".
 
     @library{wxcore}
@@ -1676,13 +1676,13 @@ public:
         Implements the calculation of a box sizer's minimal. It is used internally
         only and must not be called by the user. Documented for information.
     */
-    wxSize CalcMin();
+    virtual wxSize CalcMin();
 
     /**
         Returns the orientation of the box sizer, either wxVERTICAL
         or wxHORIZONTAL.
     */
-    int GetOrientation();
+    int GetOrientation() const;
 
     /**
         Implements the calculation of a box sizer's dimensions and then sets

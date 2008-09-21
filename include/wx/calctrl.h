@@ -233,7 +233,7 @@ public:
     //
     // NB: we provide implementation for this pure virtual function, derived
     //     classes should call it
-    virtual bool EnableMonthChange(bool enable) = 0;
+    virtual bool EnableMonthChange(bool enable = true) = 0;
 
 
     // an item without custom attributes is drawn with the default colours and
