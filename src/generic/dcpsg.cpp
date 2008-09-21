@@ -1590,7 +1590,6 @@ bool wxPostScriptDC::StartDoc( const wxString& message )
     m_title = message;
 
     PsPrint( "%!PS-Adobe-2.0\n" );
-    PsPrintf( wxT("%%%%Title: %s\n"), m_title.c_str() );
     PsPrint( "%%Creator: wxWidgets PostScript renderer\n" );
     PsPrintf( wxT("%%%%CreationDate: %s\n"), wxNow().c_str() );
     if (m_printData.GetOrientation() == wxLANDSCAPE)
