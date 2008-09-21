@@ -1177,7 +1177,7 @@ bool wxGtkPrinterDCImpl::IsOk() const
 
 void* wxGtkPrinterDCImpl::GetCairoContext() const
 {
-    return (void*) cairo_reference( m_cairo );
+    return (void*) gs_cairo->cairo_reference( m_cairo );
 }
 
 bool wxGtkPrinterDCImpl::DoFloodFill(wxCoord WXUNUSED(x1),
@@ -1746,11 +1746,11 @@ void wxGtkPrinterDCImpl::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoor
 
     // Scale the image
     cairo_filter_t filter = CAIRO_FILTER_BILINEAR;
-    cairo_pattern_t* pattern = cairo_pattern_create_for_surface(surface);
-    cairo_pattern_set_filter(pattern,filter);
+    cairo_pattern_t* pattern = gs_cairo->cairo_pattern_create_for_surface(surface);
+    gs_cairo->cairo_pattern_set_filter(pattern,filter);
     wxDouble scaleX = (wxDouble) XLOG2DEVREL(bw) / (wxDouble) bw;
     wxDouble scaleY = (wxDouble) YLOG2DEVREL(bh) / (wxDouble) bh;
-    cairo_scale(m_cairo, scaleX, scaleY);
+    gs_cairo->cairo_scale(m_cairo, scaleX, scaleY);
 
     gs_cairo->cairo_set_source(m_cairo, pattern);
     // Use the original size here since the context is scaled already.

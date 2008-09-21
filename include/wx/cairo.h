@@ -102,6 +102,8 @@ public:
         (cairo_pattern_t *pattern, cairo_filter_t filter), (pattern, filter) )
     wxDL_VOIDMETHOD_DEFINE( cairo_rectangle,
         (cairo_t *cr, double x, double y, double width, double height), (cr, x, y, width, height) )
+    wxDL_METHOD_DEFINE( cairo_t*, cairo_reference,
+        (cairo_t *cr), (cr), NULL )
     wxDL_VOIDMETHOD_DEFINE( cairo_reset_clip,
         (cairo_t *cr), (cr) )
     wxDL_VOIDMETHOD_DEFINE( cairo_restore,
