@@ -16,6 +16,10 @@
     @remarks
     - In separate wxPropertyGrid component this class was known as wxPropertyContainerMethods.
 
+    - wxPropertyGridInterface's property operation member functions all accept
+      a special wxPGPropArg id argument, using which you can refer to properties
+      either by their pointer (for performance) or by their name (for conveniency).
+
     @library{wxpropgrid}
     @category{propgrid}
 */
@@ -147,15 +151,21 @@ public:
 
     //@{
     /** Returns iterator class instance.
+
         @param flags
-        See @ref propgrid_iterator_flags. Value wxPG_ITERATE_DEFAULT causes
-        iteration over everything except private child properties.
+            See @ref propgrid_iterator_flags. Value wxPG_ITERATE_DEFAULT causes
+            iteration over everything except private child properties.
+
         @param firstProp
-        Property to start iteration from. If NULL, then first child of root is used.
+            Property to start iteration from. If NULL, then first child of root is used.
+
         @param startPos
-        Either wxTOP or wxBOTTOM. wxTOP will indicate that iterations start from
-        the first property from the top, and wxBOTTOM means that the iteration will
-        instead begin from bottommost valid item.
+            Either wxTOP or wxBOTTOM. wxTOP will indicate that iterations start from
+            the first property from the top, and wxBOTTOM means that the iteration will
+            instead begin from bottommost valid item.
+
+        <b>wxPython Note:</b> Instead of ++ operator, use Next() method, and instead of
+        * operator, use GetProperty() method.
     */
     wxPropertyGridIterator GetIterator( int flags = wxPG_ITERATE_DEFAULT, wxPGProperty* firstProp = NULL )
     {
@@ -428,7 +438,10 @@ public:
         containers.
 
         @param flags
-        See @ref propgrid_iterator_flags.
+            See @ref propgrid_iterator_flags.
+
+        <b>wxPython Note:</b> Instead of ++ operator, use Next() method, and instead of
+        * operator, use GetProperty() method.            
     */
     virtual wxPGVIterator GetVIterator( int flags ) const;
 
@@ -913,7 +926,7 @@ public:
     void SetPropertyValueString( wxPGPropArg id, const wxString& value );
 
     /** Sets value (wxVariant&) of a property.
-    
+
         @remarks
         Use wxPropertyGrid::ChangePropertyValue() instead if you need to run through
         validation process and send property change event.
@@ -934,7 +947,7 @@ public:
     wxPGProperty* GetPropertyByNameA( const wxString& name ) const;
 
     static wxPGEditor* GetEditorByName( const wxString& editorName );
-    
+
     virtual void RefreshProperty( wxPGProperty* p ) = 0;
 };
 

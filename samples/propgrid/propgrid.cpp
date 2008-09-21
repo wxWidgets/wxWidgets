@@ -1619,30 +1619,39 @@ void FormMain::PopulateWithExamples ()
     //
     // This snippet is a doc sample test
     //
-    pid = pg->Append( new wxStringProperty(wxT("Car"),wxPG_LABEL,wxT("<composed>")) );
+    wxPGProperty* carProp = pg->Append(new wxStringProperty(wxT("Car"),
+                                         wxPG_LABEL,
+                                         wxT("<composed>")));
 
-    pg->AppendIn( pid, new wxStringProperty(wxT("Model"),
+    pg->AppendIn(carProp, new wxStringProperty(wxT("Model"),
+                                                wxPG_LABEL,
+                                                wxT("Lamborghini Diablo SV")));
+
+    pg->AppendIn(carProp, new wxIntProperty(wxT("Engine Size (cc)"),
                                             wxPG_LABEL,
-                                            wxT("Lamborghini Diablo SV")) );
+                                            5707) );
 
-    pg->AppendIn( pid, new wxIntProperty(wxT("Engine Size (cc)"),
-                                         wxPG_LABEL,
-                                         5707) );
+    wxPGProperty* speedsProp = pg->AppendIn(carProp,
+                                            new wxStringProperty(wxT("Speeds"),
+                                              wxPG_LABEL,
+                                              wxT("<composed>")));
 
-    wxPGProperty* speedId = pg->AppendIn( pid, new wxStringProperty(wxT("Speeds"),wxPG_LABEL,wxT("<composed>")) );
-    pg->AppendIn( speedId, new wxIntProperty(wxT("Max. Speed (mph)"),wxPG_LABEL,290) );
-    pg->AppendIn( speedId, new wxFloatProperty(wxT("0-100 mph (sec)"),wxPG_LABEL,3.9) );
-    pg->AppendIn( speedId, new wxFloatProperty(wxT("1/4 mile (sec)"),wxPG_LABEL,8.6) );
+    pg->AppendIn( speedsProp, new wxIntProperty(wxT("Max. Speed (mph)"),
+                                                wxPG_LABEL,290) );
+    pg->AppendIn( speedsProp, new wxFloatProperty(wxT("0-100 mph (sec)"),
+                                                  wxPG_LABEL,3.9) );
+    pg->AppendIn( speedsProp, new wxFloatProperty(wxT("1/4 mile (sec)"),
+                                                  wxPG_LABEL,8.6) );
 
-    pg->AppendIn( pid, new wxIntProperty(wxT("Price ($)"),
-                                         wxPG_LABEL,
-                                         300000) );
-
-    // Make sure the child properties can be accessed correctly
+    // This is how child property can be referred to by name
     pg->SetPropertyValue( wxT("Car.Speeds.Max. Speed (mph)"), 300 );
 
-    // Displayed value of "Car" property is now:
-    // "Lamborghini Diablo SV; [300; 3.9; 8.6]; 300000"
+    pg->AppendIn(carProp, new wxIntProperty(wxT("Price ($)"),
+                                            wxPG_LABEL,
+                                            300000) );
+
+    // Displayed value of "Car" property is now very close to this:
+    // "Lamborghini Diablo SV; 5707 [300; 3.9; 8.6] 300000"
 
     //
     // Test wxSampleMultiButtonEditor

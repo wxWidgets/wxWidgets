@@ -115,8 +115,69 @@ public:
 /** @class wxPropertyGridManager
 
     wxPropertyGridManager is an efficient multi-page version of wxPropertyGrid,
-    which can optionally have toolbar for mode and page selection, and help text box.
-    Use window flags to select components to include.
+    which can optionally have toolbar for mode and page selection, and a help text
+    box.
+
+    wxPropertyGridManager inherits from wxPropertyGridInterface, and as such
+    it has most property manipulation functions. However, only some of them affect
+    properties on all pages (eg. GetPropertyByName() and ExpandAll()), while some
+    (eg. Append()) only apply to the currently selected page.
+
+    To operate explicitly on properties on specific page, use wxPropertyGridManager::GetPage()
+    to obtain pointer to page's wxPropertyGridPage object.
+
+    Visual methods, such as SetCellBackgroundColour() are only available in
+    wxPropertyGrid. Use wxPropertyGridManager::GetGrid() to obtain pointer to it.
+
+    Non-virtual iterators will not work in wxPropertyGridManager. Instead, you must
+    acquire the internal grid (GetGrid()) or wxPropertyGridPage object (GetPage()).
+
+    wxPropertyGridManager constructor has exact same format as wxPropertyGrid
+    constructor, and basicly accepts same extra window style flags (albeit also
+    has some extra ones).
+
+    Here's some example code for creating and populating a wxPropertyGridManager:
+
+    @code
+
+        wxPropertyGridManager* pgMan = new wxPropertyGridManager(this, PGID,
+            wxDefaultPosition, wxDefaultSize,
+            // These and other similar styles are automatically
+            // passed to the embedded wxPropertyGrid.
+            wxPG_BOLD_MODIFIED|wxPG_SPLITTER_AUTO_CENTER|
+            // Include toolbar.
+            wxPG_TOOLBAR |
+            // Include description box.
+            wxPG_DESCRIPTION |
+            // Include compactor.
+            wxPG_COMPACTOR |
+            // Plus defaults.
+            wxPGMAN_DEFAULT_STYLE
+           );
+
+        wxPropertyGridPage* page;
+
+        // Adding a page sets target page to the one added, so
+        // we don't have to call SetTargetPage if we are filling
+        // it right after adding.
+        pgMan->AddPage(wxT("First Page"));
+        page = pgMan->GetLastPage();
+
+        page->Append( new wxPropertyCategory(wxT("Category A1")) );
+
+        page->Append( new wxIntProperty(wxT("Number"),wxPG_LABEL,1) );
+
+        page->Append( new wxColourProperty(wxT("Colour"),wxPG_LABEL,*wxWHITE) );
+
+        pgMan->AddPage(wxT("Second Page"));
+        page = pgMan->GetLastPage();
+
+        page->Append( wxT("Text"),wxPG_LABEL,wxT("(no text)") );
+
+        page->Append( new wxFontProperty(wxT("Font"),wxPG_LABEL) );
+
+    @endcode
+
 
     @section propgridmanager_window_styles_ Window Styles
 

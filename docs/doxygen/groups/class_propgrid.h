@@ -12,9 +12,9 @@
 @ingroup group_class
 
 wxPropertyGrid is a specialized grid for editing properties (that is,
-name=value pairs).
+name=value pairs). This style of control has also been known as
+property sheet or object grid.
 
 Related Overviews: @ref overview_propgrid
 
 */
-
