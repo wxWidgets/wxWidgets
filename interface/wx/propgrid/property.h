@@ -197,6 +197,15 @@
 
     Like wxStringProperty, but converts text to a signed long integer.
     wxIntProperty seamlessly supports 64-bit integers (ie. wxLongLong).
+    To safely convert variant to integer, use code like this:
+
+    @code
+        wxLongLong ll;
+        ll << property->GetValue();
+
+        // or
+        wxLongLong ll = propertyGrid->GetPropertyValueAsLong(property);
+    @endcode
 
     @subsection wxUIntProperty
 
@@ -205,7 +214,8 @@
     To set the globally used base, manipulate wxPG_UINT_BASE int
     attribute. Regardless of current prefix, understands (hex) values starting
     with both "0x" and "$".
-    wxUIntProperty seamlessly supports 64-bit unsigned integers (ie. wxULongLong).
+    Like wxIntProperty, wxUIntProperty seamlessly supports 64-bit unsigned
+    integers (ie. wxULongLong). Same wxVariant safety rules apply.
 
     @subsection wxFloatProperty
 

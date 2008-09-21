@@ -513,7 +513,9 @@ extern expdecl const char* classname##_VariantType;
 #define WX_PG_IMPLEMENT_VARIANT_DATA(classname) \
     WX_PG_IMPLEMENT_VARIANT_DATA_EXPORTED(classname, wxEMPTY_PARAMETER_VALUE)
 
-#define WX_PG_IMPLEMENT_VARIANT_DATA_EXPORTED_NO_EQ(classname,expdecl) \
+// Add getter (ie. classname << variant) separately to allow
+// custom implementations.
+#define WX_PG_IMPLEMENT_VARIANT_DATA_EXPORTED_NO_EQ_NO_GETTER(classname,expdecl) \
 const char* classname##_VariantType = #classname; \
 class classname##VariantData: public wxVariantData \
 { \
@@ -540,15 +542,6 @@ wxString classname##VariantData::GetType() const\
     return wxS(#classname);\
 }\
 \
-expdecl classname& operator << ( classname &value, const wxVariant &variant )\
-{\
-    wxASSERT( variant.GetType() == #classname );\
-    \
-    classname##VariantData *data = (classname##VariantData*) variant.GetData();\
-    value = data->GetValue();\
-    return value;\
-}\
-\
 expdecl wxVariant& operator << ( wxVariant &variant, const classname &value )\
 {\
     classname##VariantData *data = new classname##VariantData( value );\
@@ -568,11 +561,17 @@ expdecl const classname& classname##RefFromVariant( const wxVariant& variant ) \
     return data->GetValue();\
 }
 
-// implements a wxVariantData-derived class using for the Eq() method the
-// operator== which must have been provided by "classname"
-#define WX_PG_IMPLEMENT_VARIANT_DATA_EXPORTED(classname,expdecl) \
-WX_PG_IMPLEMENT_VARIANT_DATA_EXPORTED_NO_EQ(classname,wxEMPTY_PARAMETER_VALUE expdecl) \
-\
+#define WX_PG_IMPLEMENT_VARIANT_DATA_GETTER(classname, expdecl) \
+expdecl classname& operator << ( classname &value, const wxVariant &variant )\
+{\
+    wxASSERT( variant.GetType() == #classname );\
+    \
+    classname##VariantData *data = (classname##VariantData*) variant.GetData();\
+    value = data->GetValue();\
+    return value;\
+}
+
+#define WX_PG_IMPLEMENT_VARIANT_DATA_EQ(classname, expdecl) \
 bool classname##VariantData::Eq(wxVariantData& data) const \
 {\
     wxASSERT( GetType() == data.GetType() );\
@@ -582,12 +581,20 @@ bool classname##VariantData::Eq(wxVariantData& data) const \
     return otherData.m_value == m_value;\
 }
 
+// implements a wxVariantData-derived class using for the Eq() method the
+// operator== which must have been provided by "classname"
+#define WX_PG_IMPLEMENT_VARIANT_DATA_EXPORTED(classname,expdecl) \
+WX_PG_IMPLEMENT_VARIANT_DATA_EXPORTED_NO_EQ_NO_GETTER(classname,wxEMPTY_PARAMETER_VALUE expdecl) \
+WX_PG_IMPLEMENT_VARIANT_DATA_GETTER(classname,wxEMPTY_PARAMETER_VALUE expdecl) \
+WX_PG_IMPLEMENT_VARIANT_DATA_EQ(classname,wxEMPTY_PARAMETER_VALUE expdecl)
+
 #define WX_PG_IMPLEMENT_VARIANT_DATA(classname) \
 WX_PG_IMPLEMENT_VARIANT_DATA_EXPORTED(classname, wxEMPTY_PARAMETER_VALUE)
 
 // with Eq() implementation that always returns false
 #define WX_PG_IMPLEMENT_VARIANT_DATA_EXPORTED_DUMMY_EQ(classname,expdecl) \
-WX_PG_IMPLEMENT_VARIANT_DATA_EXPORTED_NO_EQ(classname,wxEMPTY_PARAMETER_VALUE expdecl) \
+WX_PG_IMPLEMENT_VARIANT_DATA_EXPORTED_NO_EQ_NO_GETTER(classname,wxEMPTY_PARAMETER_VALUE expdecl) \
+WX_PG_IMPLEMENT_VARIANT_DATA_GETTER(classname,wxEMPTY_PARAMETER_VALUE expdecl) \
 \
 bool classname##VariantData::Eq(wxVariantData& WXUNUSED(data)) const \
 {\
@@ -616,6 +623,27 @@ template<> inline wxVariant WXVARIANT( const wxColour& value )
     variant << value;
     return variant;
 }
+
+#if wxUSE_LONGLONG_NATIVE
+
+template<> inline wxVariant WXVARIANT( const wxLongLong_t& value )
+{
+    wxVariant variant;
+    variant << wxLongLong(value);
+    return variant;
+}
+
+template<> inline wxVariant WXVARIANT( const wxULongLong_t& value )
+{
+    wxVariant variant;
+    variant << wxULongLong(value);
+    return variant;
+}
+
+WXDLLIMPEXP_PROPGRID wxLongLong_t& operator << ( wxLongLong_t &value, const wxVariant &variant );
+WXDLLIMPEXP_PROPGRID wxULongLong_t& operator << ( wxULongLong_t &value, const wxVariant &variant );
+
+#endif  // wxUSE_LONGLONG_NATIVE
 
 // Define constants for common wxVariant type strings
 

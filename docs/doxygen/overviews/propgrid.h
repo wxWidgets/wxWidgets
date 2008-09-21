@@ -455,7 +455,8 @@ supports wxArrayString and nothing else.
 In any case, you will need to take extra care when dealing with
 raw wxVariant values. For instance, wxIntProperty and wxUIntProperty,
 store value internally as wx(U)LongLong when number doesn't fit into
-standard long type.
+standard long type. Using << operator to get wx(U)LongLong from wxVariant
+is customized to work quite safely with various types of variant data.
 
 You may have noticed that properties store, in wxVariant, values of many
 types which are not natively supported by it. Custom wxVariantDatas

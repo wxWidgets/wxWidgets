@@ -68,8 +68,50 @@ const wxChar *wxPGTypeName_wxArrayString = wxT("arrstring");
 WX_PG_IMPLEMENT_VARIANT_DATA_EXPORTED(wxPoint, WXDLLIMPEXP_PROPGRID)
 WX_PG_IMPLEMENT_VARIANT_DATA_EXPORTED(wxSize, WXDLLIMPEXP_PROPGRID)
 WX_PG_IMPLEMENT_VARIANT_DATA_EXPORTED_DUMMY_EQ(wxArrayInt, WXDLLIMPEXP_PROPGRID)
-WX_PG_IMPLEMENT_VARIANT_DATA_EXPORTED(wxLongLong, WXDLLIMPEXP_PROPGRID)
-WX_PG_IMPLEMENT_VARIANT_DATA_EXPORTED(wxULongLong, WXDLLIMPEXP_PROPGRID)
+
+// For wxLongLong and wxULongLong have custom classname << variant
+// implementation for improved flexibility.
+WX_PG_IMPLEMENT_VARIANT_DATA_EXPORTED_NO_EQ_NO_GETTER(wxLongLong, WXDLLIMPEXP_PROPGRID)
+WX_PG_IMPLEMENT_VARIANT_DATA_EQ(wxLongLong, WXDLLIMPEXP_PROPGRID)
+WXDLLIMPEXP_PROPGRID wxLongLong& operator << ( wxLongLong &value, const wxVariant &variant )
+{
+    wxLongLong_t ll;
+    if ( !wxPGVariantToLongLong(variant, &ll) )
+    {
+        wxFAIL_MSG("Cannot convert to wxLongLong");
+    }
+    value = ll;
+    return value;
+}
+WXDLLIMPEXP_PROPGRID wxLongLong_t& operator << ( wxLongLong_t &value, const wxVariant &variant )
+{
+    if ( !wxPGVariantToLongLong(variant, &value) )
+    {
+        wxFAIL_MSG("Cannot convert to wxLongLong");
+    }
+    return value;
+}
+
+WX_PG_IMPLEMENT_VARIANT_DATA_EXPORTED_NO_EQ_NO_GETTER(wxULongLong, WXDLLIMPEXP_PROPGRID)
+WX_PG_IMPLEMENT_VARIANT_DATA_EQ(wxULongLong, WXDLLIMPEXP_PROPGRID)
+WXDLLIMPEXP_PROPGRID wxULongLong& operator << ( wxULongLong &value, const wxVariant &variant )
+{
+    wxULongLong_t ull;
+    if ( !wxPGVariantToULongLong(variant, &ull) )
+    {
+        wxFAIL_MSG("Cannot convert to wxULongLong");
+    }
+    value = ull;
+    return value;
+}
+WXDLLIMPEXP_PROPGRID wxULongLong_t& operator << ( wxULongLong_t &value, const wxVariant &variant )
+{
+    if ( !wxPGVariantToULongLong(variant, &value) )
+    {
+        wxFAIL_MSG("Cannot convert to wxULongLong");
+    }
+    return value;
+}
 
 IMPLEMENT_VARIANT_OBJECT_EXPORTED(wxFont, WXDLLIMPEXP_PROPGRID)
 
@@ -124,9 +166,8 @@ bool wxPGVariantToLongLong( const wxVariant& variant, wxLongLong_t* pResult )
 
     if ( variantType == wxLongLong_VariantType )
     {
-        wxLongLong ll;
-        ll << variant;
-        *pResult = ll.GetValue();
+        // NOTE: << operator uses this functions, so we can't use it here
+        *pResult = wxLongLongRefFromVariant(variant).GetValue();
         return true;
     }
 
@@ -150,9 +191,8 @@ bool wxPGVariantToULongLong( const wxVariant& variant, wxULongLong_t* pResult )
 
     if ( variantType == wxULongLong_VariantType )
     {
-        wxULongLong ull;
-        ull << variant;
-        *pResult = ull.GetValue();
+        // NOTE: << operator uses this functions, so we can't use it here
+        *pResult = wxULongLongRefFromVariant(variant).GetValue();
         return true;
     }
 
