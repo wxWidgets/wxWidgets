@@ -40,7 +40,6 @@
     #include "wx/stattext.h"
     #include "wx/scrolwin.h"
     #include "wx/dirdlg.h"
-    #include "wx/layout.h"
     #include "wx/sizer.h"
     #include "wx/textdlg.h"
     #include "wx/filedlg.h"

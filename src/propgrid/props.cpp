@@ -46,7 +46,6 @@
     #include "wx/sizer.h"
     #include "wx/textdlg.h"
     #include "wx/filedlg.h"
-    #include "wx/statusbr.h"
     #include "wx/intl.h"
 #endif
 

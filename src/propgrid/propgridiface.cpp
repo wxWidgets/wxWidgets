@@ -32,21 +32,9 @@
     #include "wx/button.h"
     #include "wx/pen.h"
     #include "wx/brush.h"
-    #include "wx/cursor.h"
-    #include "wx/dialog.h"
     #include "wx/settings.h"
-    #include "wx/msgdlg.h"
-    #include "wx/choice.h"
-    #include "wx/stattext.h"
-    #include "wx/scrolwin.h"
-    #include "wx/dirdlg.h"
-    #include "wx/layout.h"
     #include "wx/sizer.h"
-    #include "wx/textdlg.h"
-    #include "wx/filedlg.h"
-    #include "wx/statusbr.h"
     #include "wx/intl.h"
-    #include "wx/frame.h"
 #endif
 
 #include <wx/propgrid/property.h>

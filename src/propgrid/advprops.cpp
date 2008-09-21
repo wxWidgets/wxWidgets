@@ -42,11 +42,11 @@
     #include "wx/scrolwin.h"
     #include "wx/dirdlg.h"
     #include "wx/combobox.h"
-    #include "wx/layout.h"
     #include "wx/sizer.h"
     #include "wx/textdlg.h"
     #include "wx/filedlg.h"
     #include "wx/intl.h"
+    #include "wx/wxcrtvararg.h"
 #endif
 
 #define __wxPG_SOURCE_FILE__
