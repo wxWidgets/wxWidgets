@@ -63,7 +63,7 @@ public:
 #endif
 
     // Load a file or resource
-    wxBitmap(const wxString& name, wxBitmapType type = wxBITMAP_TYPE_BMP_RESOURCE);
+    wxBitmap(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE);
 
     // New constructor for generalised creation from data
     wxBitmap(const void* data, wxBitmapType type, int width, int height, int depth = 1);
@@ -120,7 +120,7 @@ public:
     wxBitmap GetSubBitmap( const wxRect& rect ) const;
 
     // NB: This should not be called from user code. It is for wx internal
-    // use only. 
+    // use only.
     wxBitmap GetSubBitmapOfHDC( const wxRect& rect, WXHDC hdc ) const;
 
     // copies the contents and mask of the given (colour) icon to the bitmap
@@ -139,7 +139,7 @@ public:
     virtual bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
     virtual bool Create(int width, int height, const wxDC& dc);
     virtual bool Create(const void* data, wxBitmapType type, int width, int height, int depth = 1);
-    virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_TYPE_BMP_RESOURCE);
+    virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE);
     virtual bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *cmap = NULL) const;
 
     wxBitmapRefData *GetBitmapData() const

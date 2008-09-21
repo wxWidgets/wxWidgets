@@ -48,7 +48,7 @@ public:
     wxBitmap(const char* const* data);
 
     // Load a file or resource
-    wxBitmap(const wxString& name, wxBitmapType type = wxBITMAP_TYPE_BMP_RESOURCE);
+    wxBitmap(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE);
 
     // New constructor for generalised creation from data
     wxBitmap(const void* data, long type, int width, int height, int depth = 1);
@@ -114,7 +114,7 @@ public:
     virtual bool Create(int width, int height, int depth = -1);
     virtual bool Create(int width, int height, const wxDC& dc);
     virtual bool Create(const void* data, long type, int width, int height, int depth = 1);
-    virtual bool LoadFile(const wxString& name, long type = wxBITMAP_TYPE_BMP_RESOURCE);
+    virtual bool LoadFile(const wxString& name, long type = wxBITMAP_DEFAULT_TYPE);
     virtual bool SaveFile(const wxString& name, int type, const wxPalette *cmap = NULL);
 
     wxBitmapRefData *GetBitmapData() const

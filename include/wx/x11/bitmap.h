@@ -76,7 +76,7 @@ public:
         *this = wxBitmap(wx_const_cast(const char* const*, data));
     }
 #endif
-    wxBitmap( const wxString &filename, wxBitmapType type = wxBITMAP_TYPE_XPM );
+    wxBitmap( const wxString &filename, wxBitmapType type = wxBITMAP_DEFAULT_TYPE );
     virtual ~wxBitmap();
 
     static void InitStandardHandlers();
@@ -106,7 +106,7 @@ public:
     wxBitmap GetSubBitmap( const wxRect& rect ) const;
 
     bool SaveFile( const wxString &name, wxBitmapType type, const wxPalette *palette = (wxPalette *) NULL ) const;
-    bool LoadFile( const wxString &name, wxBitmapType type = wxBITMAP_TYPE_XPM );
+    bool LoadFile( const wxString &name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE );
 
     wxPalette *GetPalette() const;
     wxPalette *GetColourMap() const

@@ -14,6 +14,23 @@
 
 #include "wx/iconloc.h"
 
+
+// the wxICON_DEFAULT_TYPE (the wxIcon equivalent of wxBITMAP_DEFAULT_TYPE)
+// constant defines the default argument value for wxIcon ctor and wxIcon::LoadFile()
+// functions.
+#if defined(__WXMSW__)
+  #define wxICON_DEFAULT_TYPE   wxBITMAP_TYPE_ICO_RESOURCE
+#elif defined(__WXMGL__)
+  #define wxICON_DEFAULT_TYPE   wxBITMAP_TYPE_ICO_RESOURCE
+#elif defined(__WXMAC__) && wxOSX_USE_COCOA_OR_CARBON
+  #define wxICON_DEFAULT_TYPE   wxBITMAP_TYPE_ICON_RESOURCE
+#else
+  #define wxICON_DEFAULT_TYPE   wxBITMAP_TYPE_XPM
+#endif
+
+// a more readable way to tell
+#define wxICON_SCREEN_DEPTH     (-1)
+
 #if defined(__WXPALMOS__)
   #include "wx/generic/icon.h"
 #elif defined(__WXMSW__)
@@ -27,7 +44,6 @@
 #elif defined(__WXX11__)
   #include "wx/generic/icon.h"
 #elif defined(__WXMGL__)
-  #define wxICON_DEFAULT_BITMAP_TYPE wxBITMAP_TYPE_ICO_RESOURCE
   #include "wx/generic/icon.h"
 #elif defined(__WXDFB__)
   #include "wx/generic/icon.h"

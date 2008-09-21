@@ -97,7 +97,7 @@ public:
 
     // Load a resource
     wxBitmap( int             nId
-             ,wxBitmapType    lType = wxBITMAP_TYPE_BMP_RESOURCE
+             ,wxBitmapType    lType = wxBITMAP_DEFAULT_TYPE
             );
 
     // For compatiability with other ports, under OS/2 does same as default ctor
@@ -161,10 +161,10 @@ public:
                         ,int   nDepth = 1
                        );
     virtual bool LoadFile( int             nId
-                          ,wxBitmapType    lType = wxBITMAP_TYPE_BMP_RESOURCE
+                          ,wxBitmapType    lType = wxBITMAP_DEFAULT_TYPE
                          );
     virtual bool LoadFile( const wxString& rName
-                          ,wxBitmapType    lType = wxBITMAP_TYPE_XPM
+                          ,wxBitmapType    lType = wxBITMAP_DEFAULT_TYPE
                          );
     virtual bool SaveFile( const wxString&  rName
                           ,wxBitmapType     lType

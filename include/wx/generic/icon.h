@@ -18,10 +18,6 @@
 // wxIcon
 //-----------------------------------------------------------------------------
 
-#ifndef wxICON_DEFAULT_BITMAP_TYPE
-#define wxICON_DEFAULT_BITMAP_TYPE wxBITMAP_TYPE_XPM
-#endif
-
 class WXDLLIMPEXP_CORE wxIcon: public wxBitmap
 {
 public:
@@ -35,7 +31,7 @@ public:
     // For compatibility with wxMSW where desired size is sometimes required to
     // distinguish between multiple icons in a resource.
     wxIcon( const wxString& filename,
-            wxBitmapType type = wxICON_DEFAULT_BITMAP_TYPE,
+            wxBitmapType type = wxICON_DEFAULT_TYPE,
             int WXUNUSED(desiredWidth)=-1, int WXUNUSED(desiredHeight)=-1 ) :
         wxBitmap(filename, type)
     {
@@ -45,6 +41,10 @@ public:
         : wxBitmap(loc.GetFileName(), wxBITMAP_TYPE_ANY)
     {
     }
+
+    bool LoadFile(const wxString& name, wxBitmapType flags = wxICON_DEFAULT_TYPE,
+                  int WXUNUSED(desiredWidth)=-1, int WXUNUSED(desiredHeight)=-1)
+        { return LoadFile(name, flags); }
 
     // create from bitmap (which should have a mask unless it's monochrome):
     // there shouldn't be any implicit bitmap -> icon conversion (i.e. no

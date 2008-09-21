@@ -54,7 +54,7 @@ public:
 #endif
         // from resource/file
     wxIcon(const wxString& name,
-           wxBitmapType type = wxBITMAP_TYPE_ICO_RESOURCE,
+           wxBitmapType type = wxICON_DEFAULT_TYPE,
            int desiredWidth = -1, int desiredHeight = -1);
 
     wxIcon(const wxIconLocation& loc);
@@ -62,7 +62,7 @@ public:
     virtual ~wxIcon();
 
     virtual bool LoadFile(const wxString& name,
-                          wxBitmapType type = wxBITMAP_TYPE_ICO_RESOURCE,
+                          wxBitmapType type = wxICON_DEFAULT_TYPE,
                           int desiredWidth = -1, int desiredHeight = -1);
 
     // implementation only from now on

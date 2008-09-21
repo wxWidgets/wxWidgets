@@ -75,7 +75,7 @@ public:
     // Initialize with XPM data
     wxBitmap(const char* const* bits);
     // Load a file or resource
-    wxBitmap(const wxString& name, wxBitmapType type = wxBITMAP_TYPE_BMP_RESOURCE);
+    wxBitmap(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE);
     // Construct from Cocoa's NSImage
     wxBitmap(NSImage* cocoaNSImage);
     // Construct from Cocoa's NSBitmapImageRep
@@ -104,7 +104,7 @@ public:
     bool Create(NSImage* cocoaNSImage);
     bool Create(NSBitmapImageRep* cocoaNSBitmapImageRep);
     virtual bool Create(const void* data, wxBitmapType type, int width, int height, int depth = 1);
-    virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_TYPE_BMP_RESOURCE);
+    virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE);
     virtual bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *cmap = NULL) const;
 
     // copies the contents and mask of the given (colour) icon to the bitmap

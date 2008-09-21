@@ -156,7 +156,7 @@ public:
 
     This class encapsulates the concept of a platform-dependent bitmap,
     either monochrome or colour or colour with alpha channel support.
-    
+
     If you need direct access the bitmap data instead going through
     drawing to it using wxMemoryDC you need to use the wxPixelData
     class (either wxNativePixelData for RGB bitmaps or wxAlphaPixelData
@@ -279,10 +279,13 @@ public:
         @param type
             May be one of the ::wxBitmapType values and indicates which type of
             bitmap should be loaded. See the note in the class detailed description.
+            Note that the wxBITMAP_DEFAULT_TYPE constant has different value under
+            different wxWidgets ports. See the bitmap.h header for the value it takes
+            for a specific port.
 
         @see LoadFile()
     */
-    wxBitmap(const wxString& name, wxBitmapType type = wxBITMAP_TYPE_XPM);
+    wxBitmap(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE);
 
     /**
         Creates this bitmap object from the given image.
@@ -500,6 +503,9 @@ public:
         @param type
             One of the ::wxBitmapType values; see the note in the class
             detailed description.
+            Note that the wxBITMAP_DEFAULT_TYPE constant has different value under
+            different wxWidgets ports. See the bitmap.h header for the value it takes
+            for a specific port.
 
         @return @true if the operation succeeded, @false otherwise.
 
@@ -510,7 +516,7 @@ public:
 
         @see SaveFile()
     */
-    virtual bool LoadFile(const wxString& name, wxBitmapType type);
+    virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE);
 
     /**
         Finds the handler with the given name, and removes it.

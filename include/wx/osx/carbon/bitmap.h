@@ -96,7 +96,7 @@ public:
     wxBitmap(const char* const* bits);
 
     // Load a file or resource
-    wxBitmap(const wxString& name, wxBitmapType type = wxBITMAP_TYPE_PICT_RESOURCE);
+    wxBitmap(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE);
 
     // Constructor for generalised creation from data
     wxBitmap(const void* data, wxBitmapType type, int width, int height, int depth = 1);
@@ -120,7 +120,7 @@ public:
     virtual bool Create(int width, int height, int depth = -1);
     virtual bool Create(const void* data, wxBitmapType type, int width, int height, int depth = 1);
     // virtual bool Create( WXHICON icon) ;
-    virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_TYPE_BMP_RESOURCE);
+    virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE);
     virtual bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *cmap = NULL) const;
 
     wxBitmapRefData *GetBitmapData() const

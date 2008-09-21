@@ -28,7 +28,7 @@ public:
     wxBitmap(const wxIDirectFBSurfacePtr& surface) { Create(surface); }
     wxBitmap(int width, int height, int depth = -1);
     wxBitmap(const char bits[], int width, int height, int depth = 1);
-    wxBitmap(const wxString &filename, wxBitmapType type = wxBITMAP_TYPE_RESOURCE);
+    wxBitmap(const wxString &filename, wxBitmapType type = wxBITMAP_DEFAULT_TYPE);
     wxBitmap(const char* const* bits);
 #if wxUSE_IMAGE
     wxBitmap(const wxImage& image, int depth = -1);
@@ -52,7 +52,7 @@ public:
 
     virtual bool SaveFile(const wxString &name, wxBitmapType type,
                           const wxPalette *palette = (wxPalette *) NULL) const;
-    virtual bool LoadFile(const wxString &name, wxBitmapType type = wxBITMAP_TYPE_RESOURCE);
+    virtual bool LoadFile(const wxString &name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE);
 
 #if wxUSE_PALETTE
     virtual wxPalette *GetPalette() const;
