@@ -223,6 +223,10 @@ class wxMacMLTEControl : public wxMacControl, public wxTextWidgetImpl
 public :
     wxMacMLTEControl( wxTextCtrl *peer ) ;
     ~wxMacMLTEControl() {}
+    
+    virtual bool        CanFocus() const
+                        { return true; }
+
     virtual wxString GetStringValue() const ;
     virtual void SetStringValue( const wxString &str ) ;
 

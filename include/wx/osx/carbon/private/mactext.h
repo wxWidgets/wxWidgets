@@ -26,6 +26,8 @@ public :
                              const wxSize& size, long style ) ;
     virtual ~wxMacUnicodeTextControl();
 
+    virtual bool CanFocus() const
+                  { return true; }
     virtual void VisibilityChanged(bool shown);
     virtual wxString GetStringValue() const ;
     virtual void SetStringValue( const wxString &str) ;
