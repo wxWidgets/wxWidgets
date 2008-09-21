@@ -523,15 +523,13 @@ public:\
 \
     classname &GetValue() { return m_value; } \
 \
+    const classname &GetValue() const { return m_value; } \
+\
     virtual bool Eq(wxVariantData& data) const; \
 \
     virtual wxString GetType() const; \
 \
     virtual wxVariantData* Clone() const { return new classname##VariantData(m_value); } \
-\
-    classname& GetValueRef() { return m_value; } \
-\
-    const classname& GetValueRef() const { return m_value; } \
 \
 protected:\
     classname m_value; \
@@ -561,13 +559,13 @@ expdecl classname& classname##RefFromVariant( wxVariant& variant ) \
 { \
     wxASSERT( variant.GetType() == #classname );\
     classname##VariantData *data = (classname##VariantData*) variant.GetData();\
-    return data->GetValueRef();\
+    return data->GetValue();\
 } \
 expdecl const classname& classname##RefFromVariant( const wxVariant& variant ) \
 { \
     wxASSERT( variant.GetType() == #classname );\
     classname##VariantData *data = (classname##VariantData*) variant.GetData();\
-    return data->GetValueRef();\
+    return data->GetValue();\
 }
 
 // implements a wxVariantData-derived class using for the Eq() method the
