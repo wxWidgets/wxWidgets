@@ -220,6 +220,8 @@ WX_PG_IMPLEMENT_CUSTOM_COLOUR_PROPERTY_USES_WXCOLOUR2(CLASSNAME, \
 
 #ifndef SWIG
 
+#include "wx/textctrl.h"
+
 /** @class wxPGInDialogValidator
     @ingroup classes
     Creates and manages a temporary wxTextCtrl for validation purposes.
@@ -1047,8 +1049,8 @@ wxValidator* PROPNAME::DoGetValidator () const \
 // wxArrayEditorDialog
 // -----------------------------------------------------------------------
 
-#include "wx/textctrl.h"
 #include "wx/button.h"
+#include "wx/dialog.h"
 #include "wx/listbox.h"
 
 #define wxAEDIALOG_STYLE \

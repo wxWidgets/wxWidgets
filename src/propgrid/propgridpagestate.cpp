@@ -32,6 +32,7 @@
     #include "wx/pen.h"
     #include "wx/brush.h"
     #include "wx/intl.h"
+    #include "wx/stopwatch.h"
 #endif
 
 // This define is necessary to prevent macro clearing
