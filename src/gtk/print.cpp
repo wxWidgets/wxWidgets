@@ -54,8 +54,6 @@ wxFORCE_LINK_THIS_MODULE(gtk_print)
 static const double RAD2DEG  = 180.0 / M_PI;
 static const double DEG2RAD  = M_PI / 180.0;
 
-static wxCairoLibrary* gs_cairo = NULL;
-
 //----------------------------------------------------------------------------
 // wxGtkPrintModule
 // Initialized when starting the app : if it successfully load the gtk-print framework,
@@ -74,7 +72,7 @@ public:
 #endif
     }
     bool OnInit();
-    void OnExit();
+    void OnExit() {}
 
 private:
     DECLARE_DYNAMIC_CLASS(wxGtkPrintModule)
@@ -82,15 +80,9 @@ private:
 
 bool wxGtkPrintModule::OnInit()
 {
-    gs_cairo = wxCairoLibrary::Get();
-    if (gs_cairo && gtk_check_version(2,10,0) == NULL)
+    if (gtk_check_version(2,10,0) == NULL)
         wxPrintFactory::SetPrintFactory( new wxGtkPrintFactory );
     return true;
-}
-
-void wxGtkPrintModule::OnExit()
-{
-    gs_cairo = NULL;
 }
 
 IMPLEMENT_DYNAMIC_CLASS(wxGtkPrintModule, wxModule)
@@ -1141,7 +1133,7 @@ wxGtkPrinterDCImpl::wxGtkPrinterDCImpl(wxPrinterDC *owner, const wxPrintData& da
     m_PS2DEV = 1.0;
     m_DEV2PS = 1.0;
     
-    gs_cairo->cairo_scale( m_cairo, 72.0 / (double)m_resolution, 72.0 / (double)m_resolution );
+    cairo_scale( m_cairo, 72.0 / (double)m_resolution, 72.0 / (double)m_resolution );
 #else
     m_PS2DEV = (double)m_resolution / 72.0;
     m_DEV2PS = 72.0 / (double)m_resolution;
@@ -1161,7 +1153,7 @@ wxGtkPrinterDCImpl::wxGtkPrinterDCImpl(wxPrinterDC *owner, const wxPrintData& da
     gdouble ml, mt;
     ml = gtk_page_setup_get_left_margin (setup, GTK_UNIT_POINTS);
     mt = gtk_page_setup_get_top_margin (setup, GTK_UNIT_POINTS);
-    gs_cairo->cairo_translate(m_cairo, -ml, -mt);
+    cairo_translate(m_cairo, -ml, -mt);
 }
 
 wxGtkPrinterDCImpl::~wxGtkPrinterDCImpl()
@@ -1177,7 +1169,7 @@ bool wxGtkPrinterDCImpl::IsOk() const
 
 void* wxGtkPrinterDCImpl::GetCairoContext() const
 {
-    return (void*) gs_cairo->cairo_reference( m_cairo );
+    return (void*) cairo_reference( m_cairo );
 }
 
 bool wxGtkPrinterDCImpl::DoFloodFill(wxCoord WXUNUSED(x1),
@@ -1222,16 +1214,16 @@ void wxGtkPrinterDCImpl::DoGradientFillConcentric(const wxRect& rect, const wxCo
 
     // Create a pattern with the gradient.
     cairo_pattern_t* gradient;
-    gradient = gs_cairo->cairo_pattern_create_radial (XLOG2DEV(xC+xR), YLOG2DEV(yC+yR), 0, XLOG2DEV(xC+xR), YLOG2DEV(yC+yR), radius * m_DEV2PS );
-    gs_cairo->cairo_pattern_add_color_stop_rgba (gradient, 0.0, redIPS, greenIPS, blueIPS, alphaIPS);
-    gs_cairo->cairo_pattern_add_color_stop_rgba (gradient, 1.0, redDPS, greenDPS, blueDPS, alphaDPS);
+    gradient = cairo_pattern_create_radial (XLOG2DEV(xC+xR), YLOG2DEV(yC+yR), 0, XLOG2DEV(xC+xR), YLOG2DEV(yC+yR), radius * m_DEV2PS );
+    cairo_pattern_add_color_stop_rgba (gradient, 0.0, redIPS, greenIPS, blueIPS, alphaIPS);
+    cairo_pattern_add_color_stop_rgba (gradient, 1.0, redDPS, greenDPS, blueDPS, alphaDPS);
 
     // Fill the rectangle with this pattern.
-    gs_cairo->cairo_set_source(m_cairo, gradient);
-    gs_cairo->cairo_rectangle (m_cairo, XLOG2DEV(xR), YLOG2DEV(yR), XLOG2DEVREL(w), YLOG2DEVREL(h) );
-    gs_cairo->cairo_fill(m_cairo);
+    cairo_set_source(m_cairo, gradient);
+    cairo_rectangle (m_cairo, XLOG2DEV(xR), YLOG2DEV(yR), XLOG2DEVREL(w), YLOG2DEVREL(h) );
+    cairo_fill(m_cairo);
 
-    gs_cairo->cairo_pattern_destroy(gradient);
+    cairo_pattern_destroy(gradient);
 
     CalcBoundingBox(xR, yR);
     CalcBoundingBox(xR+w, yR+h);
@@ -1264,24 +1256,24 @@ void wxGtkPrinterDCImpl::DoGradientFillLinear(const wxRect& rect, const wxColour
 
     // Create a pattern with the gradient.
     cairo_pattern_t* gradient;
-    gradient = gs_cairo->cairo_pattern_create_linear (XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x+w), YLOG2DEV(y));
+    gradient = cairo_pattern_create_linear (XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x+w), YLOG2DEV(y));
 
     if (nDirection == wxWEST)
     {
-        gs_cairo->cairo_pattern_add_color_stop_rgba (gradient, 0.0, redDPS, greenDPS, blueDPS, alphaDPS);
-        gs_cairo->cairo_pattern_add_color_stop_rgba (gradient, 1.0, redIPS, greenIPS, blueIPS, alphaIPS);
+        cairo_pattern_add_color_stop_rgba (gradient, 0.0, redDPS, greenDPS, blueDPS, alphaDPS);
+        cairo_pattern_add_color_stop_rgba (gradient, 1.0, redIPS, greenIPS, blueIPS, alphaIPS);
     }
     else {
-        gs_cairo->cairo_pattern_add_color_stop_rgba (gradient, 0.0, redIPS, greenIPS, blueIPS, alphaIPS);
-        gs_cairo->cairo_pattern_add_color_stop_rgba (gradient, 1.0, redDPS, greenDPS, blueDPS, alphaDPS);
+        cairo_pattern_add_color_stop_rgba (gradient, 0.0, redIPS, greenIPS, blueIPS, alphaIPS);
+        cairo_pattern_add_color_stop_rgba (gradient, 1.0, redDPS, greenDPS, blueDPS, alphaDPS);
     }
 
     // Fill the rectangle with this pattern.
-    gs_cairo->cairo_set_source(m_cairo, gradient);
-    gs_cairo->cairo_rectangle (m_cairo, XLOG2DEV(x), YLOG2DEV(y), XLOG2DEVREL(w), YLOG2DEVREL(h) );
-    gs_cairo->cairo_fill(m_cairo);
+    cairo_set_source(m_cairo, gradient);
+    cairo_rectangle (m_cairo, XLOG2DEV(x), YLOG2DEV(y), XLOG2DEVREL(w), YLOG2DEVREL(h) );
+    cairo_fill(m_cairo);
 
-    gs_cairo->cairo_pattern_destroy(gradient);
+    cairo_pattern_destroy(gradient);
 
     CalcBoundingBox(x, y);
     CalcBoundingBox(x+w, y+h);
@@ -1300,9 +1292,9 @@ void wxGtkPrinterDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord 
     if  (m_pen.GetStyle() == wxPENSTYLE_TRANSPARENT) return;
 
     SetPen( m_pen );
-    gs_cairo->cairo_move_to ( m_cairo, XLOG2DEV(x1), YLOG2DEV(y1) );
-    gs_cairo->cairo_line_to ( m_cairo, XLOG2DEV(x2), YLOG2DEV(y2) );
-    gs_cairo->cairo_stroke ( m_cairo );
+    cairo_move_to ( m_cairo, XLOG2DEV(x1), YLOG2DEV(y1) );
+    cairo_line_to ( m_cairo, XLOG2DEV(x2), YLOG2DEV(y2) );
+    cairo_stroke ( m_cairo );
 
     CalcBoundingBox( x1, y1 );
     CalcBoundingBox( x2, y2 );
@@ -1315,12 +1307,12 @@ void wxGtkPrinterDCImpl::DoCrossHair(wxCoord x, wxCoord y)
 
     SetPen(m_pen);
 
-    gs_cairo->cairo_move_to (m_cairo, XLOG2DEV(x), 0);
-    gs_cairo->cairo_line_to (m_cairo, XLOG2DEV(x), YLOG2DEVREL(h));
-    gs_cairo->cairo_move_to (m_cairo, 0, YLOG2DEV(y));
-    gs_cairo->cairo_line_to (m_cairo, XLOG2DEVREL(w), YLOG2DEV(y));
+    cairo_move_to (m_cairo, XLOG2DEV(x), 0);
+    cairo_line_to (m_cairo, XLOG2DEV(x), YLOG2DEVREL(h));
+    cairo_move_to (m_cairo, 0, YLOG2DEV(y));
+    cairo_line_to (m_cairo, XLOG2DEVREL(w), YLOG2DEV(y));
 
-    gs_cairo->cairo_stroke (m_cairo);
+    cairo_stroke (m_cairo);
     CalcBoundingBox( 0, 0 );
     CalcBoundingBox( w, h );
 }
@@ -1360,17 +1352,17 @@ void wxGtkPrinterDCImpl::DoDrawArc(wxCoord x1,wxCoord y1,wxCoord x2,wxCoord y2,w
     alpha1 *= DEG2RAD;
     alpha2 *= DEG2RAD;
 
-    gs_cairo->cairo_new_path(m_cairo);
+    cairo_new_path(m_cairo);
 
-    gs_cairo->cairo_arc_negative ( m_cairo, XLOG2DEV(xc), YLOG2DEV(yc), XLOG2DEVREL((int)radius), alpha1, alpha2);
-    gs_cairo->cairo_line_to(m_cairo, XLOG2DEV(xc), YLOG2DEV(yc));
-    gs_cairo->cairo_close_path (m_cairo);
+    cairo_arc_negative ( m_cairo, XLOG2DEV(xc), YLOG2DEV(yc), XLOG2DEVREL((int)radius), alpha1, alpha2);
+    cairo_line_to(m_cairo, XLOG2DEV(xc), YLOG2DEV(yc));
+    cairo_close_path (m_cairo);
 
     SetBrush( m_brush );
-    gs_cairo->cairo_fill_preserve( m_cairo );
+    cairo_fill_preserve( m_cairo );
 
     SetPen (m_pen);
-    gs_cairo->cairo_stroke( m_cairo );
+    cairo_stroke( m_cairo );
 
     CalcBoundingBox (x1, y1);
     CalcBoundingBox (xc, yc);
@@ -1379,25 +1371,25 @@ void wxGtkPrinterDCImpl::DoDrawArc(wxCoord x1,wxCoord y1,wxCoord x2,wxCoord y2,w
 
 void wxGtkPrinterDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea)
 {
-    gs_cairo->cairo_save( m_cairo );
+    cairo_save( m_cairo );
 
-    gs_cairo->cairo_new_path(m_cairo);
+    cairo_new_path(m_cairo);
 
-    gs_cairo->cairo_translate( m_cairo, XLOG2DEV((wxCoord) (x + w / 2.)), XLOG2DEV((wxCoord) (y + h / 2.)) );
+    cairo_translate( m_cairo, XLOG2DEV((wxCoord) (x + w / 2.)), XLOG2DEV((wxCoord) (y + h / 2.)) );
     double scale = (double)YLOG2DEVREL(h) / (double) XLOG2DEVREL(w);
-    gs_cairo->cairo_scale( m_cairo, 1.0, scale );
+    cairo_scale( m_cairo, 1.0, scale );
 
-    gs_cairo->cairo_arc_negative ( m_cairo, 0, 0, XLOG2DEVREL(w/2), -sa*DEG2RAD, -ea*DEG2RAD);
+    cairo_arc_negative ( m_cairo, 0, 0, XLOG2DEVREL(w/2), -sa*DEG2RAD, -ea*DEG2RAD);
 
     SetPen (m_pen);
-    gs_cairo->cairo_stroke_preserve( m_cairo );
+    cairo_stroke_preserve( m_cairo );
 
-    gs_cairo->cairo_line_to(m_cairo, 0,0);
+    cairo_line_to(m_cairo, 0,0);
 
     SetBrush( m_brush );
-    gs_cairo->cairo_fill( m_cairo );
+    cairo_fill( m_cairo );
 
-    gs_cairo->cairo_restore( m_cairo );
+    cairo_restore( m_cairo );
 
     CalcBoundingBox( x, y);
     CalcBoundingBox( x+w, y+h );
@@ -1409,9 +1401,9 @@ void wxGtkPrinterDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
 
     SetPen( m_pen );
 
-    gs_cairo->cairo_move_to ( m_cairo, XLOG2DEV(x), YLOG2DEV(y) );
-    gs_cairo->cairo_line_to ( m_cairo, XLOG2DEV(x), YLOG2DEV(y) );
-    gs_cairo->cairo_stroke ( m_cairo );
+    cairo_move_to ( m_cairo, XLOG2DEV(x), YLOG2DEV(y) );
+    cairo_line_to ( m_cairo, XLOG2DEV(x), YLOG2DEV(y) );
+    cairo_stroke ( m_cairo );
 
     CalcBoundingBox( x, y );
 }
@@ -1428,46 +1420,46 @@ void wxGtkPrinterDCImpl::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, w
     for ( i =0; i<n ; i++ )
         CalcBoundingBox( points[i].x+xoffset, points[i].y+yoffset);
 
-    gs_cairo->cairo_move_to ( m_cairo, XLOG2DEV(points[0].x+xoffset), YLOG2DEV(points[0].y+yoffset) );
+    cairo_move_to ( m_cairo, XLOG2DEV(points[0].x+xoffset), YLOG2DEV(points[0].y+yoffset) );
 
     for (i = 1; i < n; i++)
-        gs_cairo->cairo_line_to ( m_cairo, XLOG2DEV(points[i].x+xoffset), YLOG2DEV(points[i].y+yoffset) );
+        cairo_line_to ( m_cairo, XLOG2DEV(points[i].x+xoffset), YLOG2DEV(points[i].y+yoffset) );
 
-    gs_cairo->cairo_stroke ( m_cairo);
+    cairo_stroke ( m_cairo);
 }
 
 void wxGtkPrinterDCImpl::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset, int fillStyle)
 {
     if (n==0) return;
 
-    gs_cairo->cairo_save(m_cairo);
+    cairo_save(m_cairo);
     if (fillStyle == wxWINDING_RULE)
-        gs_cairo->cairo_set_fill_rule( m_cairo, CAIRO_FILL_RULE_WINDING);
+        cairo_set_fill_rule( m_cairo, CAIRO_FILL_RULE_WINDING);
     else
-        gs_cairo->cairo_set_fill_rule( m_cairo, CAIRO_FILL_RULE_EVEN_ODD);
+        cairo_set_fill_rule( m_cairo, CAIRO_FILL_RULE_EVEN_ODD);
 
     int x = points[0].x + xoffset;
     int y = points[0].y + yoffset;
-    gs_cairo->cairo_new_path(m_cairo);
-    gs_cairo->cairo_move_to( m_cairo, XLOG2DEV(x), YLOG2DEV(y) );
+    cairo_new_path(m_cairo);
+    cairo_move_to( m_cairo, XLOG2DEV(x), YLOG2DEV(y) );
     int i;
     for (i = 1; i < n; i++)
     {
         int x = points[i].x + xoffset;
         int y = points[i].y + yoffset;
-        gs_cairo->cairo_line_to( m_cairo, XLOG2DEV(x), YLOG2DEV(y) );
+        cairo_line_to( m_cairo, XLOG2DEV(x), YLOG2DEV(y) );
     }
-    gs_cairo->cairo_close_path(m_cairo);
+    cairo_close_path(m_cairo);
 
     SetBrush( m_brush );
-    gs_cairo->cairo_fill_preserve( m_cairo );
+    cairo_fill_preserve( m_cairo );
 
     SetPen (m_pen);
-    gs_cairo->cairo_stroke( m_cairo );
+    cairo_stroke( m_cairo );
 
     CalcBoundingBox( x, y );
 
-    gs_cairo->cairo_restore(m_cairo);
+    cairo_restore(m_cairo);
 }
 
 void wxGtkPrinterDCImpl::DoDrawPolyPolygon(int n, int count[], wxPoint points[], wxCoord xoffset, wxCoord yoffset, int fillStyle)
@@ -1480,14 +1472,14 @@ void wxGtkPrinterDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wx
     width--;
     height--;
 
-    gs_cairo->cairo_new_path(m_cairo);
-    gs_cairo->cairo_rectangle ( m_cairo, XLOG2DEV(x), YLOG2DEV(y), XLOG2DEVREL(width), YLOG2DEVREL(height));
+    cairo_new_path(m_cairo);
+    cairo_rectangle ( m_cairo, XLOG2DEV(x), YLOG2DEV(y), XLOG2DEVREL(width), YLOG2DEVREL(height));
 
     SetBrush( m_brush );
-    gs_cairo->cairo_fill_preserve( m_cairo );
+    cairo_fill_preserve( m_cairo );
 
     SetPen (m_pen);
-    gs_cairo->cairo_stroke( m_cairo );
+    cairo_stroke( m_cairo );
 
     CalcBoundingBox( x, y );
     CalcBoundingBox( x + width, y + height );
@@ -1507,35 +1499,35 @@ void wxGtkPrinterDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord wi
 
     wxCoord rad = (wxCoord) radius;
 
-    gs_cairo->cairo_new_path(m_cairo);
-    gs_cairo->cairo_move_to(m_cairo,XLOG2DEV(x + rad),YLOG2DEV(y));
-    gs_cairo->cairo_curve_to(m_cairo,
+    cairo_new_path(m_cairo);
+    cairo_move_to(m_cairo,XLOG2DEV(x + rad),YLOG2DEV(y));
+    cairo_curve_to(m_cairo,
                                 XLOG2DEV(x + rad),YLOG2DEV(y),
                                 XLOG2DEV(x),YLOG2DEV(y),
                                 XLOG2DEV(x),YLOG2DEV(y + rad));
-    gs_cairo->cairo_line_to(m_cairo,XLOG2DEV(x),YLOG2DEV(y + height - rad));
-    gs_cairo->cairo_curve_to(m_cairo,
+    cairo_line_to(m_cairo,XLOG2DEV(x),YLOG2DEV(y + height - rad));
+    cairo_curve_to(m_cairo,
                                 XLOG2DEV(x),YLOG2DEV(y + height - rad),
                                 XLOG2DEV(x),YLOG2DEV(y + height),
                                 XLOG2DEV(x + rad),YLOG2DEV(y + height));
-    gs_cairo->cairo_line_to(m_cairo,XLOG2DEV(x + width - rad),YLOG2DEV(y + height));
-    gs_cairo->cairo_curve_to(m_cairo,
+    cairo_line_to(m_cairo,XLOG2DEV(x + width - rad),YLOG2DEV(y + height));
+    cairo_curve_to(m_cairo,
                                 XLOG2DEV(x + width - rad),YLOG2DEV(y + height),
                                 XLOG2DEV(x + width),YLOG2DEV(y + height),
                                 XLOG2DEV(x + width),YLOG2DEV(y + height - rad));
-    gs_cairo->cairo_line_to(m_cairo,XLOG2DEV(x + width),YLOG2DEV(y + rad));
-    gs_cairo->cairo_curve_to(m_cairo,
+    cairo_line_to(m_cairo,XLOG2DEV(x + width),YLOG2DEV(y + rad));
+    cairo_curve_to(m_cairo,
                                 XLOG2DEV(x + width),YLOG2DEV(y + rad),
                                 XLOG2DEV(x + width),YLOG2DEV(y),
                                 XLOG2DEV(x + width - rad),YLOG2DEV(y));
-    gs_cairo->cairo_line_to(m_cairo,XLOG2DEV(x + rad),YLOG2DEV(y));
-    gs_cairo->cairo_close_path(m_cairo);
+    cairo_line_to(m_cairo,XLOG2DEV(x + rad),YLOG2DEV(y));
+    cairo_close_path(m_cairo);
 
     SetBrush(m_brush);
-    gs_cairo->cairo_fill_preserve(m_cairo);
+    cairo_fill_preserve(m_cairo);
 
     SetPen(m_pen);
-    gs_cairo->cairo_stroke(m_cairo);
+    cairo_stroke(m_cairo);
 
     CalcBoundingBox(x,y);
     CalcBoundingBox(x+width,y+height);
@@ -1546,24 +1538,24 @@ void wxGtkPrinterDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCo
     width--;
     height--;
 
-    gs_cairo->cairo_save (m_cairo);
+    cairo_save (m_cairo);
 
-    gs_cairo->cairo_new_path(m_cairo);
+    cairo_new_path(m_cairo);
 
-    gs_cairo->cairo_translate (m_cairo, XLOG2DEV((wxCoord) (x + width / 2.)), YLOG2DEV((wxCoord) (y + height / 2.)));
-    gs_cairo->cairo_scale(m_cairo, 1, (double)YLOG2DEVREL(height)/(double)XLOG2DEVREL(width));
-    gs_cairo->cairo_arc ( m_cairo, 0, 0, XLOG2DEVREL(width/2), 0, 2 * M_PI);
+    cairo_translate (m_cairo, XLOG2DEV((wxCoord) (x + width / 2.)), YLOG2DEV((wxCoord) (y + height / 2.)));
+    cairo_scale(m_cairo, 1, (double)YLOG2DEVREL(height)/(double)XLOG2DEVREL(width));
+    cairo_arc ( m_cairo, 0, 0, XLOG2DEVREL(width/2), 0, 2 * M_PI);
 
     SetBrush( m_brush );
-    gs_cairo->cairo_fill_preserve( m_cairo );
+    cairo_fill_preserve( m_cairo );
 
     SetPen (m_pen);
-    gs_cairo->cairo_stroke( m_cairo );
+    cairo_stroke( m_cairo );
 
     CalcBoundingBox( x, y );
     CalcBoundingBox( x + width, y + height );
 
-    gs_cairo->cairo_restore (m_cairo);
+    cairo_restore (m_cairo);
 }
 
 #if wxUSE_SPLINES
@@ -1588,9 +1580,9 @@ void wxGtkPrinterDCImpl::DoDrawSpline(const wxPointList *points)
     y3 =
          (double)(y1 + d) / 2;
 
-    gs_cairo->cairo_new_path( m_cairo );
-    gs_cairo->cairo_move_to( m_cairo, XLOG2DEV((wxCoord)x1), YLOG2DEV((wxCoord)y1) );
-    gs_cairo->cairo_line_to( m_cairo, XLOG2DEV((wxCoord)x3), YLOG2DEV((wxCoord)y3) );
+    cairo_new_path( m_cairo );
+    cairo_move_to( m_cairo, XLOG2DEV((wxCoord)x1), YLOG2DEV((wxCoord)y1) );
+    cairo_line_to( m_cairo, XLOG2DEV((wxCoord)x3), YLOG2DEV((wxCoord)y3) );
 
     CalcBoundingBox( (wxCoord)x1, (wxCoord)y1 );
     CalcBoundingBox( (wxCoord)x3, (wxCoord)y3 );
@@ -1609,7 +1601,7 @@ void wxGtkPrinterDCImpl::DoDrawSpline(const wxPointList *points)
         x3 = (double)(x2 + c) / 2;
         y3 = (double)(y2 + d) / 2;
 
-        gs_cairo->cairo_curve_to(m_cairo,
+        cairo_curve_to(m_cairo,
             XLOG2DEV((wxCoord)x1), YLOG2DEV((wxCoord)y1),
             XLOG2DEV((wxCoord)x2), YLOG2DEV((wxCoord)y2),
             XLOG2DEV((wxCoord)x3), YLOG2DEV((wxCoord)y3) );
@@ -1620,9 +1612,9 @@ void wxGtkPrinterDCImpl::DoDrawSpline(const wxPointList *points)
         node = node->GetNext();
     }
 
-    gs_cairo->cairo_line_to ( m_cairo, XLOG2DEV((wxCoord)c), YLOG2DEV((wxCoord)d) );
+    cairo_line_to ( m_cairo, XLOG2DEV((wxCoord)c), YLOG2DEV((wxCoord)d) );
 
-    gs_cairo->cairo_stroke( m_cairo );
+    cairo_stroke( m_cairo );
 }
 #endif // wxUSE_SPLINES
 
@@ -1676,7 +1668,7 @@ void wxGtkPrinterDCImpl::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoor
     // then we'll use a different format and iterator than if it doesn't.
     if (bmpSource.HasAlpha() || mask)
     {
-        surface = gs_cairo->cairo_image_surface_create_for_data(
+        surface = cairo_image_surface_create_for_data(
             buffer, CAIRO_FORMAT_ARGB32, bw, bh, bw*4);
         wxAlphaPixelData pixData(bmpSource, wxPoint(0,0), wxSize(bw, bh));
         wxCHECK_RET( pixData, wxT("Failed to gain raw access to bitmap data."));
@@ -1713,7 +1705,7 @@ void wxGtkPrinterDCImpl::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoor
     }
     else  // no alpha
     {
-        surface = gs_cairo->cairo_image_surface_create_for_data(
+        surface = cairo_image_surface_create_for_data(
             buffer, CAIRO_FORMAT_RGB24, bw, bh, bw*4);
         wxNativePixelData pixData(bmpSource, wxPoint(0,0), wxSize(bw, bh));
         wxCHECK_RET( pixData, wxT("Failed to gain raw access to bitmap data."));
@@ -1739,34 +1731,34 @@ void wxGtkPrinterDCImpl::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoor
     }
 
 
-    gs_cairo->cairo_save(m_cairo);
+    cairo_save(m_cairo);
 
     // Prepare to draw the image.
-    gs_cairo->cairo_translate(m_cairo, x, y);
+    cairo_translate(m_cairo, x, y);
 
     // Scale the image
     cairo_filter_t filter = CAIRO_FILTER_BILINEAR;
-    cairo_pattern_t* pattern = gs_cairo->cairo_pattern_create_for_surface(surface);
-    gs_cairo->cairo_pattern_set_filter(pattern,filter);
+    cairo_pattern_t* pattern = cairo_pattern_create_for_surface(surface);
+    cairo_pattern_set_filter(pattern,filter);
     wxDouble scaleX = (wxDouble) XLOG2DEVREL(bw) / (wxDouble) bw;
     wxDouble scaleY = (wxDouble) YLOG2DEVREL(bh) / (wxDouble) bh;
-    gs_cairo->cairo_scale(m_cairo, scaleX, scaleY);
+    cairo_scale(m_cairo, scaleX, scaleY);
 
-    gs_cairo->cairo_set_source(m_cairo, pattern);
+    cairo_set_source(m_cairo, pattern);
     // Use the original size here since the context is scaled already.
-    gs_cairo->cairo_rectangle(m_cairo, 0, 0, bw, bh);
+    cairo_rectangle(m_cairo, 0, 0, bw, bh);
     // Fill the rectangle using the pattern.
-    gs_cairo->cairo_fill(m_cairo);
+    cairo_fill(m_cairo);
 
     // Clean up.
-    gs_cairo->cairo_pattern_destroy(pattern);
-    gs_cairo->cairo_surface_destroy(surface);
+    cairo_pattern_destroy(pattern);
+    cairo_surface_destroy(surface);
     delete [] buffer;
 
     CalcBoundingBox(0,0);
     CalcBoundingBox(bw,bh);
 
-    gs_cairo->cairo_restore(m_cairo);
+    cairo_restore(m_cairo);
 }
 
 void wxGtkPrinterDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y )
@@ -1813,7 +1805,7 @@ void wxGtkPrinterDCImpl::DoDrawRotatedText(const wxString& text, wxCoord x, wxCo
             double greenPS = (double)(green) / 255.0;
             double alphaPS = (double)(alpha) / 255.0;
 
-            gs_cairo->cairo_set_source_rgba( m_cairo, redPS, greenPS, bluePS, alphaPS );
+            cairo_set_source_rgba( m_cairo, redPS, greenPS, bluePS, alphaPS );
 
             m_currentRed = red;
             m_currentBlue = blue;
@@ -1847,27 +1839,27 @@ void wxGtkPrinterDCImpl::DoDrawRotatedText(const wxString& text, wxCoord x, wxCo
             double greenPS = (double)(green) / 255.0;
             double alphaPS = (double)(alpha) / 255.0;
 
-            gs_cairo->cairo_save(m_cairo);
-            gs_cairo->cairo_translate(m_cairo, xx, yy);
-            gs_cairo->cairo_set_source_rgba( m_cairo, redPS, greenPS, bluePS, alphaPS );
-            gs_cairo->cairo_rotate(m_cairo,angle*DEG2RAD);
-            gs_cairo->cairo_rectangle(m_cairo, 0, 0, w, h);   // still in cairo units
-            gs_cairo->cairo_fill(m_cairo);
-            gs_cairo->cairo_restore(m_cairo);
+            cairo_save(m_cairo);
+            cairo_translate(m_cairo, xx, yy);
+            cairo_set_source_rgba( m_cairo, redPS, greenPS, bluePS, alphaPS );
+            cairo_rotate(m_cairo,angle*DEG2RAD);
+            cairo_rectangle(m_cairo, 0, 0, w, h);   // still in cairo units
+            cairo_fill(m_cairo);
+            cairo_restore(m_cairo);
         }
 
     // Draw layout.
-    gs_cairo->cairo_move_to (m_cairo, xx, yy);
+    cairo_move_to (m_cairo, xx, yy);
 
-    gs_cairo->cairo_save( m_cairo );
+    cairo_save( m_cairo );
 
     if (fabs(angle) > 0.00001)
-        gs_cairo->cairo_rotate( m_cairo, angle*DEG2RAD );
+        cairo_rotate( m_cairo, angle*DEG2RAD );
 
-    gs_cairo->pango_cairo_update_layout (m_cairo, m_layout);
-    gs_cairo->pango_cairo_show_layout (m_cairo, m_layout);
+    pango_cairo_update_layout (m_cairo, m_layout);
+    pango_cairo_show_layout (m_cairo, m_layout);
 
-    gs_cairo->cairo_restore( m_cairo );
+    cairo_restore( m_cairo );
 
     if (underlined)
     {
@@ -1891,11 +1883,11 @@ void wxGtkPrinterDCImpl::Clear()
 // Clear does nothing for printing, but keep the code
 // for later reuse 
 /*
-    gs_cairo->cairo_save(m_cairo);
-    gs_cairo->cairo_set_operator (m_cairo, CAIRO_OPERATOR_SOURCE);
+    cairo_save(m_cairo);
+    cairo_set_operator (m_cairo, CAIRO_OPERATOR_SOURCE);
     SetBrush(m_backgroundBrush);
-    gs_cairo->cairo_paint(m_cairo);
-    gs_cairo->cairo_restore(m_cairo);
+    cairo_paint(m_cairo);
+    cairo_restore(m_cairo);
 */
 }
 
@@ -1927,7 +1919,7 @@ void wxGtkPrinterDCImpl::SetPen( const wxPen& pen )
     else
         width = (double) m_pen.GetWidth();
 
-    gs_cairo->cairo_set_line_width( m_cairo, width * m_DEV2PS * m_scaleX );
+    cairo_set_line_width( m_cairo, width * m_DEV2PS * m_scaleX );
     static const double dotted[] = {2.0, 5.0};
     static const double short_dashed[] = {4.0, 4.0};
     static const double long_dashed[] = {4.0, 8.0};
@@ -1935,10 +1927,10 @@ void wxGtkPrinterDCImpl::SetPen( const wxPen& pen )
 
     switch (m_pen.GetStyle())
     {
-        case wxPENSTYLE_DOT:        gs_cairo->cairo_set_dash( m_cairo, dotted, 2, 0 ); break;
-        case wxPENSTYLE_SHORT_DASH: gs_cairo->cairo_set_dash( m_cairo, short_dashed, 2, 0 ); break;
-        case wxPENSTYLE_LONG_DASH:  gs_cairo->cairo_set_dash( m_cairo, long_dashed, 2, 0 ); break;
-        case wxPENSTYLE_DOT_DASH:   gs_cairo->cairo_set_dash( m_cairo, dotted_dashed, 4, 0 );  break;
+        case wxPENSTYLE_DOT:        cairo_set_dash( m_cairo, dotted, 2, 0 ); break;
+        case wxPENSTYLE_SHORT_DASH: cairo_set_dash( m_cairo, short_dashed, 2, 0 ); break;
+        case wxPENSTYLE_LONG_DASH:  cairo_set_dash( m_cairo, long_dashed, 2, 0 ); break;
+        case wxPENSTYLE_DOT_DASH:   cairo_set_dash( m_cairo, dotted_dashed, 4, 0 );  break;
         case wxPENSTYLE_USER_DASH:
         {
             wxDash *wx_dashes;
@@ -1947,29 +1939,29 @@ void wxGtkPrinterDCImpl::SetPen( const wxPen& pen )
             int i;
             for (i = 0; i < num; ++i)
                 g_dashes[i] = (gdouble) wx_dashes[i];
-            gs_cairo->cairo_set_dash( m_cairo, g_dashes, num, 0);
+            cairo_set_dash( m_cairo, g_dashes, num, 0);
             g_free( g_dashes );
         }
         break;
         case wxPENSTYLE_SOLID:
         case wxPENSTYLE_TRANSPARENT:
-        default:              gs_cairo->cairo_set_dash( m_cairo, NULL, 0, 0 );   break;
+        default:              cairo_set_dash( m_cairo, NULL, 0, 0 );   break;
     }
 
     switch (m_pen.GetCap())
     {
-        case wxCAP_PROJECTING:  gs_cairo->cairo_set_line_cap (m_cairo, CAIRO_LINE_CAP_SQUARE); break;
-        case wxCAP_BUTT:        gs_cairo->cairo_set_line_cap (m_cairo, CAIRO_LINE_CAP_BUTT); break;
+        case wxCAP_PROJECTING:  cairo_set_line_cap (m_cairo, CAIRO_LINE_CAP_SQUARE); break;
+        case wxCAP_BUTT:        cairo_set_line_cap (m_cairo, CAIRO_LINE_CAP_BUTT); break;
         case wxCAP_ROUND:
-        default:                gs_cairo->cairo_set_line_cap (m_cairo, CAIRO_LINE_CAP_ROUND); break;
+        default:                cairo_set_line_cap (m_cairo, CAIRO_LINE_CAP_ROUND); break;
     }
 
     switch (m_pen.GetJoin())
     {
-        case wxJOIN_BEVEL:  gs_cairo->cairo_set_line_join (m_cairo, CAIRO_LINE_JOIN_BEVEL); break;
-        case wxJOIN_MITER:  gs_cairo->cairo_set_line_join (m_cairo, CAIRO_LINE_JOIN_MITER); break;
+        case wxJOIN_BEVEL:  cairo_set_line_join (m_cairo, CAIRO_LINE_JOIN_BEVEL); break;
+        case wxJOIN_MITER:  cairo_set_line_join (m_cairo, CAIRO_LINE_JOIN_MITER); break;
         case wxJOIN_ROUND:
-        default:            gs_cairo->cairo_set_line_join (m_cairo, CAIRO_LINE_JOIN_ROUND); break;
+        default:            cairo_set_line_join (m_cairo, CAIRO_LINE_JOIN_ROUND); break;
     }
 
     unsigned char red = m_pen.GetColour().Red();
@@ -1984,7 +1976,7 @@ void wxGtkPrinterDCImpl::SetPen( const wxPen& pen )
         double greenPS = (double)(green) / 255.0;
         double alphaPS = (double)(alpha) / 255.0;
 
-        gs_cairo->cairo_set_source_rgba( m_cairo, redPS, greenPS, bluePS, alphaPS );
+        cairo_set_source_rgba( m_cairo, redPS, greenPS, bluePS, alphaPS );
 
         m_currentRed = red;
         m_currentBlue = blue;
@@ -2001,7 +1993,7 @@ void wxGtkPrinterDCImpl::SetBrush( const wxBrush& brush )
 
     if (m_brush.GetStyle() == wxBRUSHSTYLE_TRANSPARENT)
     {
-        gs_cairo->cairo_set_source_rgba( m_cairo, 0, 0, 0, 0 );
+        cairo_set_source_rgba( m_cairo, 0, 0, 0, 0 );
         m_currentRed = 0;
         m_currentBlue = 0;
         m_currentGreen = 0;
@@ -2022,7 +2014,7 @@ void wxGtkPrinterDCImpl::SetBrush( const wxBrush& brush )
 
     if (!(red == m_currentRed && green == m_currentGreen && blue == m_currentBlue && alpha == m_currentAlpha))
     {
-        gs_cairo->cairo_set_source_rgba( m_cairo, redPS, greenPS, bluePS, alphaPS );
+        cairo_set_source_rgba( m_cairo, redPS, greenPS, bluePS, alphaPS );
 
         m_currentRed = red;
         m_currentBlue = blue;
@@ -2034,85 +2026,85 @@ void wxGtkPrinterDCImpl::SetBrush( const wxBrush& brush )
     {
         cairo_t * cr;
         cairo_surface_t *surface;
-        surface = gs_cairo->cairo_surface_create_similar(gs_cairo->cairo_get_target(m_cairo),CAIRO_CONTENT_COLOR_ALPHA,10,10);
-        cr = gs_cairo->cairo_create(surface);
-        gs_cairo->cairo_set_line_cap(cr, CAIRO_LINE_CAP_SQUARE);
-        gs_cairo->cairo_set_line_width(cr, 1);
-        gs_cairo->cairo_set_line_join(cr,CAIRO_LINE_JOIN_MITER);
+        surface = cairo_surface_create_similar(cairo_get_target(m_cairo),CAIRO_CONTENT_COLOR_ALPHA,10,10);
+        cr = cairo_create(surface);
+        cairo_set_line_cap(cr, CAIRO_LINE_CAP_SQUARE);
+        cairo_set_line_width(cr, 1);
+        cairo_set_line_join(cr,CAIRO_LINE_JOIN_MITER);
 
         switch (m_brush.GetStyle())
         {
             case wxBRUSHSTYLE_CROSS_HATCH:
-                gs_cairo->cairo_move_to(cr, 5, 0);
-                gs_cairo->cairo_line_to(cr, 5, 10);
-                gs_cairo->cairo_move_to(cr, 0, 5);
-                gs_cairo->cairo_line_to(cr, 10, 5);
+                cairo_move_to(cr, 5, 0);
+                cairo_line_to(cr, 5, 10);
+                cairo_move_to(cr, 0, 5);
+                cairo_line_to(cr, 10, 5);
                 break;
             case wxBRUSHSTYLE_BDIAGONAL_HATCH:
-                gs_cairo->cairo_move_to(cr, 0, 10);
-                gs_cairo->cairo_line_to(cr, 10, 0);
+                cairo_move_to(cr, 0, 10);
+                cairo_line_to(cr, 10, 0);
                 break;
             case wxBRUSHSTYLE_FDIAGONAL_HATCH:
-                gs_cairo->cairo_move_to(cr, 0, 0);
-                gs_cairo->cairo_line_to(cr, 10, 10);
+                cairo_move_to(cr, 0, 0);
+                cairo_line_to(cr, 10, 10);
                 break;
             case wxBRUSHSTYLE_CROSSDIAG_HATCH:
-                gs_cairo->cairo_move_to(cr, 0, 0);
-                gs_cairo->cairo_line_to(cr, 10, 10);
-                gs_cairo->cairo_move_to(cr, 10, 0);
-                gs_cairo->cairo_line_to(cr, 0, 10);
+                cairo_move_to(cr, 0, 0);
+                cairo_line_to(cr, 10, 10);
+                cairo_move_to(cr, 10, 0);
+                cairo_line_to(cr, 0, 10);
                 break;
             case wxBRUSHSTYLE_HORIZONTAL_HATCH:
-                gs_cairo->cairo_move_to(cr, 0, 5);
-                gs_cairo->cairo_line_to(cr, 10, 5);
+                cairo_move_to(cr, 0, 5);
+                cairo_line_to(cr, 10, 5);
                 break;
             case wxBRUSHSTYLE_VERTICAL_HATCH:
-                gs_cairo->cairo_move_to(cr, 5, 0);
-                gs_cairo->cairo_line_to(cr, 5, 10);
+                cairo_move_to(cr, 5, 0);
+                cairo_line_to(cr, 5, 10);
                 break;
             default:
                 wxFAIL_MSG(_("Couldn't get hatch style from wxBrush."));
         }
 
-        gs_cairo->cairo_set_source_rgba(cr, redPS, greenPS, bluePS, alphaPS);
-        gs_cairo->cairo_stroke (cr);
+        cairo_set_source_rgba(cr, redPS, greenPS, bluePS, alphaPS);
+        cairo_stroke (cr);
 
-        gs_cairo->cairo_destroy(cr);
-        cairo_pattern_t * pattern = gs_cairo->cairo_pattern_create_for_surface (surface);
-        gs_cairo->cairo_surface_destroy(surface);
-        gs_cairo->cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
-        gs_cairo->cairo_set_source(m_cairo, pattern);
-        gs_cairo->cairo_pattern_destroy(pattern);
+        cairo_destroy(cr);
+        cairo_pattern_t * pattern = cairo_pattern_create_for_surface (surface);
+        cairo_surface_destroy(surface);
+        cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
+        cairo_set_source(m_cairo, pattern);
+        cairo_pattern_destroy(pattern);
     }
 }
 
 void wxGtkPrinterDCImpl::SetLogicalFunction( int function )
 {
     if (function == wxCLEAR)
-        gs_cairo->cairo_set_operator (m_cairo, CAIRO_OPERATOR_CLEAR);
+        cairo_set_operator (m_cairo, CAIRO_OPERATOR_CLEAR);
     else if (function == wxOR)
-        gs_cairo->cairo_set_operator (m_cairo, CAIRO_OPERATOR_OUT);
+        cairo_set_operator (m_cairo, CAIRO_OPERATOR_OUT);
     else if (function == wxNO_OP)
-        gs_cairo->cairo_set_operator (m_cairo, CAIRO_OPERATOR_DEST);
+        cairo_set_operator (m_cairo, CAIRO_OPERATOR_DEST);
     else if (function == wxAND)
-        gs_cairo->cairo_set_operator (m_cairo, CAIRO_OPERATOR_ADD);
+        cairo_set_operator (m_cairo, CAIRO_OPERATOR_ADD);
     else if (function == wxSET)
-        gs_cairo->cairo_set_operator (m_cairo, CAIRO_OPERATOR_SATURATE);
+        cairo_set_operator (m_cairo, CAIRO_OPERATOR_SATURATE);
     else if (function == wxXOR)
-        gs_cairo->cairo_set_operator (m_cairo, CAIRO_OPERATOR_XOR);
+        cairo_set_operator (m_cairo, CAIRO_OPERATOR_XOR);
     else // wxCOPY or anything else.
-        gs_cairo->cairo_set_operator (m_cairo, CAIRO_OPERATOR_SOURCE);
+        cairo_set_operator (m_cairo, CAIRO_OPERATOR_SOURCE);
 }
 
 void wxGtkPrinterDCImpl::SetBackground( const wxBrush& brush )
 {
     m_backgroundBrush = brush;
-    gs_cairo->cairo_save(m_cairo);
-    gs_cairo->cairo_set_operator (m_cairo, CAIRO_OPERATOR_DEST_OVER);
+    cairo_save(m_cairo);
+    cairo_set_operator (m_cairo, CAIRO_OPERATOR_DEST_OVER);
 
     SetBrush(m_backgroundBrush);
-    gs_cairo->cairo_paint(m_cairo);
-    gs_cairo->cairo_restore(m_cairo);
+    cairo_paint(m_cairo);
+    cairo_restore(m_cairo);
 }
 
 void wxGtkPrinterDCImpl::SetBackgroundMode(int mode)
@@ -2125,13 +2117,13 @@ void wxGtkPrinterDCImpl::SetBackgroundMode(int mode)
 
 void wxGtkPrinterDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
-    gs_cairo->cairo_rectangle ( m_cairo, XLOG2DEV(x), YLOG2DEV(y), XLOG2DEVREL(width), YLOG2DEVREL(height));
-    gs_cairo->cairo_clip(m_cairo);
+    cairo_rectangle ( m_cairo, XLOG2DEV(x), YLOG2DEV(y), XLOG2DEVREL(width), YLOG2DEVREL(height));
+    cairo_clip(m_cairo);
 }
 
 void wxGtkPrinterDCImpl::DestroyClippingRegion()
 {
-    gs_cairo->cairo_reset_clip(m_cairo);
+    cairo_reset_clip(m_cairo);
 }
 
 bool wxGtkPrinterDCImpl::StartDoc(const wxString& WXUNUSED(message))
