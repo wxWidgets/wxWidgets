@@ -251,7 +251,7 @@ long style, long extraStyle, const wxString& name )
     else
         m_macWindow = [wxNSWindow alloc];
     
-    CGWindowLevel level = kCGNormalWindowLevelKey;
+    CGWindowLevel level = kCGNormalWindowLevel;
     
     if ( style & wxFRAME_TOOL_WINDOW )
     {
