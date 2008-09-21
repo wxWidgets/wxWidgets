@@ -309,12 +309,6 @@ check_yesno_option unicode chartype unicode ansi
 check_yesno_option debug debugtype debug release
 check_yesno_option static linkage '-static'
 
-# Display error for unknown input parameters
-if [ $input_parameters ]; then
-    decho "Extra unknown input parameters : $input_parameters"
-    exit 1
-fi
-
 # Dump everything we just read in debug mode.
 if [ -n "$WXDEBUG" ]; then
 
