@@ -284,8 +284,10 @@ public:
     void GetPageSizeMM(int *w, int  *h) const { *w = m_pageWidthMM; *h = m_pageHeightMM; }
 
     void SetPPIScreen(int x, int y) { m_PPIScreenX = x; m_PPIScreenY = y; }
+    void SetPPIScreen(const wxSize& ppi) { SetPPIScreen(ppi.x, ppi.y); }
     void GetPPIScreen(int *x, int *y) const { *x = m_PPIScreenX; *y = m_PPIScreenY; }
     void SetPPIPrinter(int x, int y) { m_PPIPrinterX = x; m_PPIPrinterY = y; }
+    void SetPPIPrinter(const wxSize& ppi) { SetPPIPrinter(ppi.x, ppi.y); }
     void GetPPIPrinter(int *x, int *y) const { *x = m_PPIPrinterX; *y = m_PPIPrinterY; }
 
     void SetPaperRectPixels(const wxRect& paperRectPixels) { m_paperRectPixels = paperRectPixels; }

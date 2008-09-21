@@ -926,11 +926,8 @@ void wxGtkPrinter::BeginPrint(wxPrintout *printout, GtkPrintOperation *operation
         }
         return;
     }
-    wxSize ScreenPixels = wxGetDisplaySize();
-    wxSize ScreenMM = wxGetDisplaySizeMM();
 
-    printout->SetPPIScreen( (int) ((ScreenPixels.GetWidth() * 25.4) / ScreenMM.GetWidth()),
-                            (int) ((ScreenPixels.GetHeight() * 25.4) / ScreenMM.GetHeight()) );
+    printout->SetPPIScreen(wxGetDisplayPPI());
     printout->SetPPIPrinter( printDC->GetResolution(),
                              printDC->GetResolution() );
 
@@ -2366,12 +2363,7 @@ void wxGtkPrintPreview::DetermineScaling()
 
     if (paper)
     {
-        wxSize ScreenPixels = wxGetDisplaySize();
-        wxSize ScreenMM = wxGetDisplaySizeMM();
-
-        m_previewPrintout->SetPPIScreen( (int) ((ScreenPixels.GetWidth() * 25.4) / ScreenMM.GetWidth()),
-                                         (int) ((ScreenPixels.GetHeight() * 25.4) / ScreenMM.GetHeight()) );
-
+        m_previewPrintout->SetPPIScreen(wxGetDisplayPPI());
         m_previewPrintout->SetPPIPrinter( m_resolution, m_resolution );
 
         // Get width and height in points (1/72th of an inch)

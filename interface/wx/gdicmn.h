@@ -855,6 +855,18 @@ wxRect wxGetClientDisplayRect();
 /** @ingroup group_funcmacro_gdi */
 //@{
 /**
+    Returns the display resolution in pixels per inch.
+
+    @header{wx/gdicmn.h}
+
+    @since 2.9.0
+*/
+wxSize wxGetDisplayPPI();
+//@}
+
+/** @ingroup group_funcmacro_gdi */
+//@{
+/**
     Returns the display size in pixels.
 
     @header{wx/gdicmn.h}

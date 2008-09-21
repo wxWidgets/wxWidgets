@@ -819,6 +819,7 @@ extern void WXDLLIMPEXP_CORE wxDisplaySize(int *width, int *height);
 extern wxSize WXDLLIMPEXP_CORE wxGetDisplaySize();
 extern void WXDLLIMPEXP_CORE wxDisplaySizeMM(int *width, int *height);
 extern wxSize WXDLLIMPEXP_CORE wxGetDisplaySizeMM();
+extern wxSize WXDLLIMPEXP_CORE wxGetDisplayPPI();
 
 // Get position and size of the display workarea
 extern void WXDLLIMPEXP_CORE wxClientDisplayRect(int *x, int *y, int *width, int *height);

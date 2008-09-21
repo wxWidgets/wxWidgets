@@ -880,6 +880,15 @@ wxSize wxGetDisplaySizeMM()
     return wxSize(x, y);
 }
 
+wxSize wxGetDisplayPPI()
+{
+    const wxSize pixels = wxGetDisplaySize();
+    const wxSize mm = wxGetDisplaySizeMM();
+
+    return wxSize((pixels.x * 25.4) / mm.x,
+                  (pixels.y * 25.4) / mm.y);
+}
+
 wxResourceCache::~wxResourceCache ()
 {
     wxList::compatibility_iterator node = GetFirst ();

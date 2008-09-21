@@ -872,11 +872,7 @@ bool wxGnomePrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
         return false;
     }
 
-    wxSize ScreenPixels = wxGetDisplaySize();
-    wxSize ScreenMM = wxGetDisplaySizeMM();
-
-    printout->SetPPIScreen( (int) ((ScreenPixels.GetWidth() * 25.4) / ScreenMM.GetWidth()),
-                            (int) ((ScreenPixels.GetHeight() * 25.4) / ScreenMM.GetHeight()) );
+    printout->SetPPIScreen(wxGetDisplayPPI());
     printout->SetPPIPrinter( dc->GetResolution(),
                              dc->GetResolution() );
 
@@ -2099,12 +2095,8 @@ void wxGnomePrintPreview::DetermineScaling()
 
     if (paper)
     {
-        wxSize ScreenPixels = wxGetDisplaySize();
-        wxSize ScreenMM = wxGetDisplaySizeMM();
+        m_previewPrintout->SetPPIScreen(wxGetDisplayPPI());
 
-        m_previewPrintout->SetPPIScreen( (int) ((ScreenPixels.GetWidth() * 25.4) / ScreenMM.GetWidth()),
-                                         (int) ((ScreenPixels.GetHeight() * 25.4) / ScreenMM.GetHeight()) );
-                                         
         int resolution = DPI;
         m_previewPrintout->SetPPIPrinter( resolution, resolution );
 
