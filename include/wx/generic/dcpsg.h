@@ -131,7 +131,6 @@ protected:
     void DoGetSizeMM(int *width, int *height) const;
 
     FILE*             m_pstream;    // PostScript output stream
-    wxString          m_title;
     unsigned char     m_currentRed;
     unsigned char     m_currentGreen;
     unsigned char     m_currentBlue;

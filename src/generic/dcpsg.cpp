@@ -1700,7 +1700,7 @@ wxSize wxPostScriptDCImpl::GetPPI(void) const
 }
 
 
-bool wxPostScriptDCImpl::StartDoc( const wxString& message )
+bool wxPostScriptDCImpl::StartDoc( const wxString& WXUNUSED(message) )
 {
     wxCHECK_MSG( m_ok, false, wxT("invalid postscript dc") );
 
@@ -1723,14 +1723,11 @@ bool wxPostScriptDCImpl::StartDoc( const wxString& message )
     }
 
     m_ok = true;
-    m_title = message;
 
     wxString buffer;
 
     PsPrint( "%!PS-Adobe-2.0\n" );
 
-    buffer.Printf( "%%%%Title: %s\n", m_title );
-    PsPrint( buffer );
     PsPrint( "%%Creator: wxWidgets PostScript renderer\n" );
 
     buffer.Printf( "%%%%CreationDate: %s\n", wxNow() );
