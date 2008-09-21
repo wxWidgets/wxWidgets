@@ -29,7 +29,7 @@ public:
     wxIcon(char **data);
 #endif
 
-    wxIcon(const wxString& name, wxBitmapType type = wxBITMAP_TYPE_XPM,
+    wxIcon(const wxString& name, wxBitmapType type = wxICON_DEFAULT_TYPE,
            int desiredWidth = -1, int desiredHeight = -1)
     {
         LoadFile(name, type, desiredWidth, desiredHeight);
@@ -42,15 +42,8 @@ public:
 
     virtual ~wxIcon();
 
-    bool LoadFile(const wxString& name, wxBitmapType type,
-                  int desiredWidth, int desiredHeight = -1);
-
-    // unhide base class LoadFile()
-    virtual bool LoadFile(const wxString& name,
-                          wxBitmapType type = wxBITMAP_TYPE_XPM)
-    {
-        return LoadFile(name, type, -1, -1);
-    }
+    bool LoadFile(const wxString& name, wxBitmapType type = wxICON_DEFAULT_TYPE,
+                  int desiredWidth = -1, int desiredHeight = -1);
 
     // create from bitmap (which should have a mask unless it's monochrome):
     // there shouldn't be any implicit bitmap -> icon conversion (i.e. no

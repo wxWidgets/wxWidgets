@@ -25,18 +25,16 @@ public:
 
     wxIcon(const char* const* data) { CreateFromXpm(data); }
     wxIcon(const char bits[], int width , int height );
-    wxIcon(const wxString& name, int flags = wxBITMAP_TYPE_ICON_RESOURCE,
-        int desiredWidth = -1, int desiredHeight = -1);
+    wxIcon(const wxString& name, int flags = wxICON_DEFAULT_TYPE,
+           int desiredWidth = -1, int desiredHeight = -1);
     wxIcon(const wxIconLocation& loc)
     {
         LoadFile(loc.GetFileName(), wxBITMAP_TYPE_ICON);
     }
     virtual ~wxIcon();
 
-    bool LoadFile(const wxString& name, wxBitmapType flags /* = wxBITMAP_TYPE_ICON_RESOURCE */ ,
-        int desiredWidth /* = -1 */ , int desiredHeight = -1);
-    bool LoadFile(const wxString& name, wxBitmapType flags = wxBITMAP_TYPE_ICON_RESOURCE )
-    {   return LoadFile( name , flags , -1 , -1 ) ; }
+    bool LoadFile(const wxString& name, wxBitmapType flags = wxICON_DEFAULT_TYPE,
+                  int desiredWidth=-1, int desiredHeight=-1);
 
     bool operator==(const wxIcon& icon) const
     {   return m_refData == icon.m_refData; }
