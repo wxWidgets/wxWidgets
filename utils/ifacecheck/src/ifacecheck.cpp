@@ -231,13 +231,20 @@ bool IfaceCheckApp::Compare()
 
         api.Empty();
 
-        // search in the real headers for i-th interface class
-        // for both class cname and cnameBase as in wxWidgets world, most often
+        // search in the real headers for i-th interface class; we search for
+        // both class cname and cnameBase since in wxWidgets world tipically
         // class cname is platform-specific while the real public interface of
         // that class is part of the cnameBase class.
         c = m_gccInterface.FindClass(cname);
         if (c) api.Add(c);
         c = m_gccInterface.FindClass(cname + "Base");
+        if (c) api.Add(c);
+
+        // sometimes the platform-specific class is named "wxGeneric" + cname
+        // or similar:
+        c = m_gccInterface.FindClass("wxGeneric" + cname.Mid(2));
+        if (c) api.Add(c);
+        c = m_gccInterface.FindClass("wxGtk" + cname.Mid(2));
         if (c) api.Add(c);
 
         if (api.GetCount()>0) {

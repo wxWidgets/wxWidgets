@@ -55,7 +55,7 @@ public:
                        const wxSize& size = wxDefaultSize,
                        long style = wxCLRP_DEFAULT_STYLE,
                        const wxValidator& validator = wxDefaultValidator,
-                       const wxString& name = "colourpickerctrl");
+                       const wxString& name = wxColourPickerCtrlNameStr);
 
     /**
         Creates a colour picker with the given arguments.
@@ -86,7 +86,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxCLRP_DEFAULT_STYLE,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = "colourpickerctrl");
+                const wxString& name = wxColourPickerCtrlNameStr);
 
     /**
         Returns the currently selected colour.

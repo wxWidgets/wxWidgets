@@ -81,7 +81,7 @@ public:
     /**
         Hides the caret, same as Show(@false).
     */
-    void Hide();
+    virtual void Hide();
 
     /**
         Returns @true if the caret was created successfully.
@@ -126,6 +126,6 @@ public:
         Shows or hides the caret. Notice that if the caret was hidden N times,
         it must be shown N times as well to reappear on the screen.
     */
-    void Show(bool show = true);
+    virtual void Show(bool show = true);
 };
 

@@ -91,31 +91,29 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = "checkBox");
+               const wxString& name = wxCheckBoxNameStr);
 
     /**
         Destructor, destroying the checkbox.
     */
-    ~wxCheckBox();
+    virtual ~wxCheckBox();
 
     /**
         Creates the checkbox for two-step construction. See wxCheckBox()
         for details.
     */
-    bool Create(wxWindow* parent, wxWindowID id,
-                const wxString& label,
+    bool Create(wxWindow* parent, wxWindowID id, const wxString& label,
                 const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = 0,
+                const wxSize& size = wxDefaultSize, long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = "checkBox");
+                const wxString& = wxCheckBoxNameStr);
 
     /**
         Gets the state of a 2-state checkbox.
 
         @return Returns @true if it is checked, @false otherwise.
     */
-    bool GetValue() const;
+    virtual bool GetValue() const;
 
     /**
         Gets the state of a 3-state checkbox. Asserts when the function is used
@@ -155,7 +153,7 @@ public:
         @param state
             If @true, the check is on, otherwise it is off.
     */
-    void SetValue(bool state);
+    virtual void SetValue(bool state);
 
     /**
         Sets the checkbox to the given state. This does not cause a
@@ -164,6 +162,6 @@ public:
         Asserts when the checkbox is a 2-state checkbox and setting the state
         to wxCHK_UNDETERMINED.
     */
-    void Set3StateValue(const wxCheckBoxState state);
+    virtual void Set3StateValue(const wxCheckBoxState state);
 };
 

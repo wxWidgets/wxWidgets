@@ -109,7 +109,7 @@ public:
         Default constructor.
     */
     wxCollapsiblePane();
-    
+
     /**
         Initializes the object and calls Create() with all the parameters.
     */
@@ -119,7 +119,7 @@ public:
                       const wxSize& size = wxDefaultSize,
                       long style = wxCP_DEFAULT_STYLE,
                       const wxValidator& validator = wxDefaultValidator,
-                      const wxString& name = "collapsiblePane");
+                      const wxString& name = wxCollapsiblePaneNameStr);
 
     /**
         @param parent
@@ -149,7 +149,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxCP_DEFAULT_STYLE,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = "collapsiblePane");
+                const wxString& name = wxCollapsiblePaneNameStr);
 
     /**
         Collapses or expands the pane window.

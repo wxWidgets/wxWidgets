@@ -30,7 +30,7 @@ public:
         Sets the week day carried by the event, normally only used by the
         library internally.
     */
-    void SetWeekDay(wxDateTime::WeekDay day);
+    void SetWeekDay(const wxDateTime::WeekDay day);
 };
 
 
@@ -61,14 +61,9 @@ class wxCalendarDateAttr
 {
 public:
     /**
-        Default constructor.
-    */
-    wxCalendarDateAttr();
-
-    /**
         Constructor for specifying all wxCalendarDateAttr properties.
     */
-    wxCalendarDateAttr(const wxColour& colText,
+    wxCalendarDateAttr(const wxColour& colText = wxNullColour,
                        const wxColour& colBack = wxNullColour,
                        const wxColour& colBorder = wxNullColour,
                        const wxFont& font = wxNullFont,
@@ -83,7 +78,7 @@ public:
     /**
         Returns the background colour set for the calendar date.
     */
-    const wxColour GetBackgroundColour() const;
+    const wxColour& GetBackgroundColour() const;
 
     /**
         Returns the border set for the calendar date.
@@ -93,17 +88,17 @@ public:
     /**
         Returns the border colour set for the calendar date.
     */
-    const wxColour GetBorderColour() const;
+    const wxColour& GetBorderColour() const;
 
     /**
         Returns the font set for the calendar date.
     */
-    const wxFont GetFont() const;
+    const wxFont& GetFont() const;
 
     /**
         Returns the text colour set for the calendar date.
     */
-    const wxColour GetTextColour() const;
+    const wxColour& GetTextColour() const;
 
     /**
         Returns @true if a non-default text background colour is set.
@@ -425,7 +420,7 @@ public:
 
         The @a date parameter must be valid.
     */
-    virtual void SetDate(const wxDateTime& date);
+    virtual bool SetDate(const wxDateTime& date);
 
     /**
         Set the colours used for painting the weekdays at the top of the
