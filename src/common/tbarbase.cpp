@@ -697,7 +697,11 @@ void wxToolBarBase::UpdateWindowUI(long flags)
           node;
           node = node->GetNext() )
     {
-        int id = node->GetData()->GetId();
+        wxToolBarToolBase * const tool = node->GetData();
+        if ( tool->IsSeparator() )
+            continue;
+
+        int id = tool->GetId();
 
         wxUpdateUIEvent event(id);
         event.SetEventObject(this);
