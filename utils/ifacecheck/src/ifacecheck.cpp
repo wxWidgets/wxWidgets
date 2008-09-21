@@ -537,24 +537,34 @@ bool IfaceCheckApp::ParsePreprocessorOutput(const wxString& filename)
 
         // the format of this line should be:
         //    #define DEFNAME DEFVALUE
-        if (!line.StartsWith("#define ") || !defnameval.Contains(" ")) {
-            LogError("unexpected content in '%s' at line %d.", filename, i);
+        if (!line.StartsWith("#define ")) {
+            LogError("unexpected content in '%s' at line %d.", filename, i+1);
             return false;
         }
 
-        // get DEFNAME
-        wxString defname = defnameval.BeforeFirst(' ');
-        if (defname.Contains("("))
-            continue;       // this is a macro, skip it!
+        if (defnameval.Contains(" "))
+        {
+            // get DEFNAME
+            wxString defname = defnameval.BeforeFirst(' ');
+            if (defname.Contains("("))
+                continue;       // this is a macro, skip it!
 
-        // get DEFVAL
-        wxString defval = defnameval.AfterFirst(' ').Strip(wxString::both);
-        if (defval.StartsWith("(") && defval.EndsWith(")"))
-            defval = defval.Mid(1, defval.Len()-2);
+            // get DEFVAL
+            wxString defval = defnameval.AfterFirst(' ').Strip(wxString::both);
+            if (defval.StartsWith("(") && defval.EndsWith(")"))
+                defval = defval.Mid(1, defval.Len()-2);
 
-        // store this pair in the doxygen interface, where it can be useful
-        m_doxyInterface.AddPreprocessorValue(defname, defval);
-        useful++;
+            // store this pair in the doxygen interface, where it can be useful
+            m_doxyInterface.AddPreprocessorValue(defname, defval);
+            useful++;
+        }
+        else
+        {
+            // it looks like the format of this line is:
+            //    #define DEFNAME
+            // we are not interested to symbols #defined to nothing,
+            // so we just ignore this line.
+        }
     }
 
     LogMessage("Parsed %d preprocessor #defines from '%s' which will be used later...",
