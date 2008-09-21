@@ -6016,11 +6016,6 @@ wxEvent* wxPropertyGridEvent::Clone() const
     return new wxPropertyGridEvent( *this );
 }
 
-void wxPropertyGrid::SetPropertyAttributeAll( const wxString& attrName, wxVariant value )
-{
-    DoSetPropertyAttribute(GetRoot(), attrName, value, wxPG_RECURSE);
-}
-
 // -----------------------------------------------------------------------
 // wxPropertyGridPopulator
 // -----------------------------------------------------------------------

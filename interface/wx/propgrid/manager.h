@@ -483,12 +483,6 @@ public:
     /** Sets y coordinate of the description box splitter. */
     void SetDescBoxHeight( int ht, bool refresh = true );
 
-    /** Sets property attribute for all applicapple properties.
-        Be sure to use this method after all properties have been
-        added to the grid.
-    */
-    void SetPropertyAttributeAll( const wxString& name, wxVariant value );
-
     /** Moves splitter as left as possible, while still allowing all
         labels to be shown in full.
         @param subProps

@@ -549,6 +549,24 @@ void wxPropertyGridInterface::DoSetPropertyAttribute( wxPGPropArg id, const wxSt
 
 // -----------------------------------------------------------------------
 
+void wxPropertyGridInterface::SetPropertyAttributeAll( const wxString& attrName,
+                                                       wxVariant value )
+{
+    unsigned int pageIndex = 0;
+
+    for (;;)
+    {
+        wxPropertyGridPageState* page = GetPageState(pageIndex);
+        if ( !page ) break;
+
+        DoSetPropertyAttribute(page->DoGetRoot(), attrName, value, wxPG_RECURSE);
+
+        pageIndex++;
+    }
+}
+
+// -----------------------------------------------------------------------
+
 void wxPropertyGridInterface::GetPropertiesWithFlag( wxArrayPGProperty* targetArr,
                                                      wxPGProperty::FlagType flags,
                                                      bool inverse,
@@ -874,14 +892,17 @@ wxString wxPropertyGridInterface::SaveEditableState( int includedStates ) const
 
     //
     // Save state on page basis
-    size_t pageIndex = 0;
-    wxPropertyGridPageState* pageState = GetPageState(pageIndex);
+    unsigned int pageIndex = 0;
     wxArrayPtrVoid pageStates;
-    while ( pageState )
+
+    for (;;)
     {
-        pageStates.Add(pageState);
-        pageIndex += 1;
-        pageState = GetPageState(pageIndex);
+        wxPropertyGridPageState* page = GetPageState(pageIndex);
+        if ( !page ) break;
+
+        pageStates.Add(page);
+
+        pageIndex++;
     }
 
     for ( pageIndex=0; pageIndex < pageStates.size(); pageIndex++ )

@@ -647,12 +647,6 @@ public:
     /** Sets background colour of margin. */
     void SetMarginColour(const wxColour& col);
 
-    /** Sets property attribute for all applicapple properties.
-        Be sure to use this method only after all properties have been
-        added to the grid.
-    */
-    void SetPropertyAttributeAll( const wxString& attrName, wxVariant value );
-
     /** Sets background colour of property and all its children. Colours of
         captions are not affected. Background brush cache is optimized for often
         set colours to be set last.

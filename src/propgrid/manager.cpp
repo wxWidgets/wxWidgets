@@ -703,19 +703,6 @@ void wxPropertyGridManager::SetColumnCount( int colCount, int page )
 }
 // -----------------------------------------------------------------------
 
-void wxPropertyGridManager::SetPropertyAttributeAll( const wxString& attrName, wxVariant value )
-{
-    size_t i;
-    for ( i=0; i<GetPageCount(); i++ )
-    {
-        wxPropertyGridPage* page = (wxPropertyGridPage*)m_arrPages.Item(i);
-
-        DoSetPropertyAttribute(page->GetStatePtr()->m_properties, attrName, value, wxPG_RECURSE);
-    }
-}
-
-// -----------------------------------------------------------------------
-
 size_t wxPropertyGridManager::GetPageCount() const
 {
 	if ( !(m_iFlags & wxPG_MAN_FL_PAGE_INSERTED) )
