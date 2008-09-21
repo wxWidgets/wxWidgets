@@ -56,8 +56,6 @@
 
 #define wxPG_CUSTOM_IMAGE_WIDTH     20 // for wxColourProperty etc.
 
-#include <typeinfo>
-
 
 // -----------------------------------------------------------------------
 // wxStringProperty

@@ -62,8 +62,6 @@
     #include <wx/msw/dc.h>
 #endif
 
-#include <typeinfo>
-
 // -----------------------------------------------------------------------
 
 #if defined(__WXMSW__)

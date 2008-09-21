@@ -57,8 +57,6 @@
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/editors.h>
 
-#include <typeinfo>
-
 #define wxPG_DEFAULT_SPLITTERX      110
 
 

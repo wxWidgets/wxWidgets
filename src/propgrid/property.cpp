@@ -51,8 +51,6 @@
 
 #include <wx/propgrid/propgrid.h>
 
-#include <typeinfo>
-
 
 #define PWC_CHILD_SUMMARY_LIMIT         16 // Maximum number of children summarized in a parent property's
                                            // value field.
