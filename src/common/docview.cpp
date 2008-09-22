@@ -652,13 +652,10 @@ wxView::~wxView()
     m_viewDocument->RemoveView(this);
 }
 
-// Extend event processing to search the document's event table
-bool wxView::ProcessEvent(wxEvent& event)
+bool wxView::TryValidator(wxEvent& event)
 {
-    if ( !GetDocument() || !GetDocument()->ProcessEvent(event) )
-        return wxEvtHandler::ProcessEvent(event);
-
-    return true;
+    wxDocument * const doc = GetDocument();
+    return doc && doc->ProcessEventHere(event);
 }
 
 void wxView::OnActivateView(bool WXUNUSED(activate), wxView *WXUNUSED(activeView), wxView *WXUNUSED(deactiveView))
@@ -1145,14 +1142,10 @@ wxView *wxDocManager::GetCurrentView() const
     return NULL;
 }
 
-// Extend event processing to search the view's event table
-bool wxDocManager::ProcessEvent(wxEvent& event)
+bool wxDocManager::TryValidator(wxEvent& event)
 {
     wxView * const view = GetCurrentView();
-    if ( view && view->ProcessEvent(event) )
-        return true;
-
-    return wxEvtHandler::ProcessEvent(event);
+    return view && view->ProcessEventHere(event);
 }
 
 namespace
@@ -1782,22 +1775,15 @@ wxDocChildFrame::wxDocChildFrame(wxDocument *doc,
         view->SetFrame(this);
 }
 
-// Extend event processing to search the view's event table
-bool wxDocChildFrame::ProcessEvent(wxEvent& event)
+bool wxDocChildFrame::TryValidator(wxEvent& event)
 {
-    if (m_childView)
-        m_childView->Activate(true);
+    if ( !m_childView )
+        return false;
 
-    if ( !m_childView || ! m_childView->ProcessEvent(event) )
-    {
-        // Only hand up to the parent if it's a menu command
-        if (!event.IsKindOf(CLASSINFO(wxCommandEvent)) || !GetParent() || !GetParent()->ProcessEvent(event))
-            return wxEvtHandler::ProcessEvent(event);
-        else
-            return true;
-    }
-    else
-        return true;
+    // FIXME: why is this needed here?
+    m_childView->Activate(true);
+
+    return m_childView->ProcessEventHere(event);
 }
 
 void wxDocChildFrame::OnActivate(wxActivateEvent& event)
@@ -1912,13 +1898,9 @@ void wxDocParentFrame::OnMRUFile(wxCommandEvent& event)
 }
 
 // Extend event processing to search the view's event table
-bool wxDocParentFrame::ProcessEvent(wxEvent& event)
+bool wxDocParentFrame::TryValidator(wxEvent& event)
 {
-    // Try the document manager, then do default processing
-    if (!m_docManager || !m_docManager->ProcessEvent(event))
-        return wxEvtHandler::ProcessEvent(event);
-    else
-        return true;
+    return m_docManager && m_docManager->ProcessEventHere(event);
 }
 
 // Define the behaviour for the frame closing

@@ -68,14 +68,9 @@ void wxDocMDIParentFrame::OnMRUFile(wxCommandEvent& event)
         (void)m_docManager->CreateDocument(f, wxDOC_SILENT);
 }
 
-// Extend event processing to search the view's event table
-bool wxDocMDIParentFrame::ProcessEvent(wxEvent& event)
+bool wxDocMDIParentFrame::TryValidator(wxEvent& event)
 {
-    // Try the document manager, then do default processing
-    if (!m_docManager || !m_docManager->ProcessEvent(event))
-        return wxEvtHandler::ProcessEvent(event);
-    else
-        return true;
+    return m_docManager && m_docManager->ProcessEventHere(event);
 }
 
 void wxDocMDIParentFrame::OnCloseWindow(wxCloseEvent& event)
@@ -138,31 +133,9 @@ wxDocMDIChildFrame::~wxDocMDIChildFrame(void)
     m_childView = (wxView *) NULL;
 }
 
-// Extend event processing to search the view's event table
-bool wxDocMDIChildFrame::ProcessEvent(wxEvent& event)
+bool wxDocMDIChildFrame::TryValidator(wxEvent& event)
 {
-    static wxEvent *ActiveEvent = NULL;
-
-    // Break recursion loops
-    if (ActiveEvent == &event)
-        return false;
-
-    ActiveEvent = &event;
-
-    bool ret;
-    if ( !m_childView || ! m_childView->ProcessEvent(event) )
-    {
-        // Only hand up to the parent if it's a menu command
-        if (!event.IsKindOf(CLASSINFO(wxCommandEvent)) || !GetParent() || !GetParent()->ProcessEvent(event))
-            ret = wxEvtHandler::ProcessEvent(event);
-        else
-            ret = true;
-    }
-    else
-        ret = true;
-
-    ActiveEvent = NULL;
-    return ret;
+    return m_childView && m_childView->ProcessEventHere(event);
 }
 
 void wxDocMDIChildFrame::OnActivate(wxActivateEvent& event)

@@ -35,9 +35,6 @@ public:
         const wxString& title, const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = wxDEFAULT_FRAME_STYLE, const wxString& name = wxT("frame"));
 
-    // Extend event processing to search the document manager's event table
-    virtual bool ProcessEvent(wxEvent& event);
-
     wxDocManager *GetDocumentManager(void) const { return m_docManager; }
 
     void OnExit(wxCommandEvent& event);
@@ -46,6 +43,9 @@ public:
 
 protected:
     void Init();
+
+    virtual bool TryValidator(wxEvent& event);
+
     wxDocManager *m_docManager;
 
 private:
@@ -77,9 +77,6 @@ public:
                 long type = wxDEFAULT_FRAME_STYLE,
                 const wxString& name = wxFrameNameStr);
 
-    // Extend event processing to search the view's event table
-    virtual bool ProcessEvent(wxEvent& event);
-
     void OnActivate(wxActivateEvent& event);
     void OnCloseWindow(wxCloseEvent& event);
 
@@ -91,6 +88,9 @@ public:
 
 protected:
     void Init();
+
+    virtual bool TryValidator(wxEvent& event);
+
     wxDocument*       m_childDocument;
     wxView*           m_childView;
 

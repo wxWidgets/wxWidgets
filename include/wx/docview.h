@@ -213,9 +213,6 @@ public:
     // Override to do cleanup/veto close
     virtual bool OnClose(bool deleteWindow);
 
-    // Extend event processing to search the document's event table
-    virtual bool ProcessEvent(wxEvent& event);
-
     // A view's window can call this to notify the view it is (in)active.
     // The function then notifies the document manager.
     virtual void Activate(bool activate);
@@ -228,6 +225,9 @@ public:
 #endif
 
 protected:
+    // hook the document into event handlers chain here
+    virtual bool TryValidator(wxEvent& event);
+
     wxDocument*       m_viewDocument;
     wxString          m_viewTypeName;
     wxWindow*         m_viewFrame;
@@ -349,9 +349,6 @@ public:
     void OnUpdateUndo(wxUpdateUIEvent& event);
     void OnUpdateRedo(wxUpdateUIEvent& event);
 
-    // Extend event processing to search the view's event table
-    virtual bool ProcessEvent(wxEvent& event);
-
     // called when file format detection didn't work, can be overridden to do
     // something in this case
     virtual void OnOpenFileFailure() { }
@@ -442,6 +439,9 @@ public:
 #endif // WXWIN_COMPATIBILITY_2_6
 
 protected:
+    // hook the currently active view into event handlers chain here
+    virtual bool TryValidator(wxEvent& event);
+
     int               m_defaultDocumentNameCounter;
     int               m_maxDocsOpen;
     wxList            m_docs;
@@ -481,9 +481,6 @@ public:
                     const wxString& name = wxT("frame"));
     virtual ~wxDocChildFrame(){}
 
-    // Extend event processing to search the view's event table
-    virtual bool ProcessEvent(wxEvent& event);
-
     void OnActivate(wxActivateEvent& event);
     void OnCloseWindow(wxCloseEvent& event);
 
@@ -494,6 +491,9 @@ public:
     bool Destroy() { m_childView = NULL; return wxFrame::Destroy(); }
 
 protected:
+    // hook the child view into event handlers chain here
+    virtual bool TryValidator(wxEvent& event);
+
     wxDocument*       m_childDocument;
     wxView*           m_childView;
 
@@ -529,9 +529,6 @@ public:
                 long style = wxDEFAULT_FRAME_STYLE,
                 const wxString& name = wxFrameNameStr);
 
-    // Extend event processing to search the document manager's event table
-    virtual bool ProcessEvent(wxEvent& event);
-
     wxDocManager *GetDocumentManager() const { return m_docManager; }
 
     void OnExit(wxCommandEvent& event);
@@ -539,6 +536,9 @@ public:
     void OnCloseWindow(wxCloseEvent& event);
 
 protected:
+    // hook the document manager into event handling chain here
+    virtual bool TryValidator(wxEvent& event);
+
     wxDocManager *m_docManager;
 
 private:
