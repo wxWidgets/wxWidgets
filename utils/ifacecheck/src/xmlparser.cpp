@@ -40,6 +40,9 @@ WX_DEFINE_OBJARRAY(wxClassArray)
 // defined in ifacecheck.cpp
 extern bool g_verbose;
 
+// global variable:
+bool g_bLogEnabled = true;
+
 
 
 // ----------------------------------------------------------------------------
@@ -88,6 +91,12 @@ void wxType::SetTypeFromString(const wxString& t)
     // need to be considered as the same type
     if (m_strTypeClean.EndsWith("Base"))
         m_strTypeClean = m_strTypeClean.Left(m_strTypeClean.Len()-4);
+
+    // ADHOC-FIX:
+    // doxygen likes to put wxDateTime:: in front of all wxDateTime enums;
+    // fix this to avoid false positives
+    m_strTypeClean.Replace("wxDateTime::", "");
+    m_strTypeClean.Replace("wxStockGDI::", "");     // same story for some other classes
 }
 
 bool wxType::IsOk() const
@@ -109,6 +118,9 @@ bool wxType::operator==(const wxType& m) const
         IsPointer() == m.IsPointer() &&
         IsReference() == m.IsReference())
         return true;
+
+    if (g_verbose)
+        LogMessage("Type '%s' does not match type '%s'", m_strType, m.m_strType);
 
     return false;
 }
@@ -134,7 +146,13 @@ void wxArgumentType::SetDefaultValue(const wxString& defval, const wxString& def
     else
         m_strDefaultValue.Replace("NULL", "0");
 */
+    // ADHOC-FIX:
+    // doxygen likes to put wxDateTime:: in front of all wxDateTime enums;
+    // fix this to avoid false positives
+    m_strDefaultValueForCmp.Replace("wxDateTime::", "");
+    m_strDefaultValueForCmp.Replace("wxStockGDI::", "");     // same story for some other classes
 
+    // ADHOC-FIX:
     if (m_strDefaultValue.Contains("wxGetTranslation"))
         m_strDefaultValue = "_(TOFIX)";     // TODO: wxGetTranslation gives problems to gccxml
 }
@@ -146,6 +164,13 @@ bool wxArgumentType::operator==(const wxArgumentType& m) const
 
     const wxString& def1 = m_strDefaultValueForCmp.IsEmpty() ? m_strDefaultValue : m_strDefaultValueForCmp;
     const wxString& def2 = m.m_strDefaultValueForCmp.IsEmpty() ? m.m_strDefaultValue : m.m_strDefaultValueForCmp;
+
+    // ADHOC-FIX:
+    // default values for style attributes of wxWindow-derived classes in gccxml appear as raw
+    // numbers; avoid false positives in this case!
+    if (m_strArgName == m.m_strArgName && m_strArgName == "style" &&
+        (def1.IsNumber() || def2.IsNumber()))
+        return true;
 
     if (def1 != def2)
     {
@@ -160,6 +185,9 @@ bool wxArgumentType::operator==(const wxArgumentType& m) const
                 return true;        // the default values match
         }
 
+        if (g_verbose)
+            LogMessage("Argument type '%s = %s' has different default value from '%s = %s'",
+                       m_strType, def1, m.m_strType, def2);
         return false;
     }
 
@@ -222,20 +250,20 @@ bool wxMethod::IsOk() const
     return true;
 }
 
-bool wxMethod::operator==(const wxMethod& m) const
+bool wxMethod::MatchesExceptForAttributes(const wxMethod& m) const
 {
     if (GetReturnType() != m.GetReturnType() ||
-        GetName() != m.GetName() ||
-        IsConst() != m.IsConst() ||
-        IsStatic() != m.IsStatic() ||
-        IsVirtual() != m.IsVirtual() ||
-        IsPureVirtual() != m.IsPureVirtual() ||
-        IsDeprecated() != m.IsDeprecated())
+        GetName() != m.GetName())
         return false;
 
-    if (m_args.GetCount()!=m.m_args.GetCount())
+    if (m_args.GetCount()!=m.m_args.GetCount()) {
+        if (g_verbose)
+            LogMessage("Method '%s' has %d arguments while '%s' has %d arguments",
+                       m_strName, m_args.GetCount(), m_strName, m.m_args.GetCount());
         return false;
+    }
 
+    // compare argument types
     for (unsigned int i=0; i<m_args.GetCount(); i++)
         if (m_args[i] != m.m_args[i])
             return false;
@@ -243,12 +271,31 @@ bool wxMethod::operator==(const wxMethod& m) const
     return true;
 }
 
-wxString wxMethod::GetAsString(bool bWithArgumentNames) const
+bool wxMethod::operator==(const wxMethod& m) const
+{
+    // check attributes
+    if (IsConst() != m.IsConst() ||
+        IsStatic() != m.IsStatic() ||
+        IsVirtual() != m.IsVirtual() ||
+        IsPureVirtual() != m.IsPureVirtual() ||
+        IsDeprecated() != m.IsDeprecated())
+        return false;
+
+    // check everything else
+    return MatchesExceptForAttributes(m);
+}
+
+wxString wxMethod::GetAsString(bool bWithArgumentNames, bool bClean, bool bDeprecated) const
 {
     wxString ret;
 
     if (m_retType!=wxEmptyType)
-        ret += m_retType.GetAsString() + " ";
+    {
+        if (bClean)
+            ret += m_retType.GetAsCleanString() + " ";
+        else
+            ret += m_retType.GetAsString() + " ";
+    }
     //else; this is a ctor or dtor
 
     ret += m_strName + "(";
@@ -261,7 +308,8 @@ wxString wxMethod::GetAsString(bool bWithArgumentNames) const
         if (bWithArgumentNames && !name.IsEmpty())
             ret += " " + name;
 
-        const wxString& def = m_args[i].GetDefaultValue();
+        const wxString& def = bClean ?
+            m_args[i].GetDefaultCleanValue() : m_args[i].GetDefaultValue();
         if (!def.IsEmpty())
             ret += " = " + def;
 
@@ -280,11 +328,9 @@ wxString wxMethod::GetAsString(bool bWithArgumentNames) const
     if (m_bVirtual || m_bPureVirtual)
         ret = "virtual " + ret;
     if (m_bPureVirtual)
-        ret = ret + " = 0";
-
-    // in doxygen headers we don't need wxDEPRECATED:
-    //if (m_bDeprecated)
-    //    ret = "wxDEPRECATED( " + ret + " )";
+        ret += " = 0";
+    if (m_bDeprecated && bDeprecated)
+        ret += " [deprecated]";
 
     return ret;
 }
@@ -967,7 +1013,9 @@ bool wxXmlGccInterface::ParseMethod(const wxXmlNode *p,
                 return false;
             }
 
-            argtypes.Add(wxArgumentType(idx->second, arg->GetAttribute("default")));
+            argtypes.Add(wxArgumentType(idx->second,
+                                        arg->GetAttribute("default"),
+                                        arg->GetAttribute("name")));
         }
 
         arg = arg->GetNext();

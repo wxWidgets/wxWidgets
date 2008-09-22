@@ -17,11 +17,37 @@
 #include <wx/xml/xml.h>
 #include <wx/platinfo.h>
 
+
+/*
+    IMPORTANT
+    =========
+
+    Any fix aimed to reduce "false positives" which involves
+    references to a specific wxWidgets class is marked in
+    ifacecheck sources with the string:
+
+    // ADHOC-FIX:
+
+*/
+
+
+
 // helper macros
-#define LogMessage(fmt, ...)   { wxPrintf(fmt "\n", __VA_ARGS__); fflush(stdout); }
-#define LogWarning(fmt, ...)   { wxPrintf(fmt "\n", __VA_ARGS__); fflush(stdout); }
-#define LogError(fmt, ...)     { wxPrintf("ERROR: " fmt "\n", __VA_ARGS__); fflush(stdout); }
+#define LogMessage(fmt, ...)   { if (g_bLogEnabled) { wxPrintf(fmt "\n", __VA_ARGS__); fflush(stdout); }}
+#define LogWarning(fmt, ...)   { if (g_bLogEnabled) { wxPrintf(fmt "\n", __VA_ARGS__); fflush(stdout); }}
+#define LogError(fmt, ...)     { if (g_bLogEnabled) { wxPrintf("ERROR: " fmt "\n", __VA_ARGS__); fflush(stdout); }}
 #define wxPrint(str)           { wxPrintf(str); fflush(stdout); }
+
+// enable/disable logging
+extern bool g_bLogEnabled;
+
+class LogNull
+{
+public:
+    LogNull() { g_bLogEnabled = false; }
+    ~LogNull() { g_bLogEnabled = true; }
+};
+
 
 
 // ----------------------------------------------------------------------------
@@ -38,6 +64,8 @@ public:
     void SetTypeFromString(const wxString& t);
     wxString GetAsString() const
         { return m_strType; }
+    wxString GetAsCleanString() const
+        { return m_strTypeClean; }
 
     bool IsConst() const
         { return m_strType.Contains("const"); }
@@ -83,6 +111,8 @@ public:
     void SetDefaultValue(const wxString& defval, const wxString& defvalForCmp = wxEmptyString);
     wxString GetDefaultValue() const
         { return m_strDefaultValue; }
+    wxString GetDefaultCleanValue() const
+        { return m_strDefaultValueForCmp.IsEmpty() ? m_strDefaultValue : m_strDefaultValueForCmp; }
 
     bool HasDefaultValue() const
         { return !m_strDefaultValue.IsEmpty(); }
@@ -127,7 +157,12 @@ public:
 
 public:     // getters
 
-    wxString GetAsString(bool bWithArgumentNames = true) const;
+    // bWithArgumentNames = output argument names?
+    // bClean = output type names or type _clean_ names (see wxType::GetAsCleanString)
+    // bDeprecated = output [deprecated] next to deprecated methods?
+    wxString GetAsString(bool bWithArgumentNames = true,
+                         bool bClean = false,
+                         bool bDeprecated = false) const;
 
     // parser of the prototype:
     // all these functions return strings with spaces stripped
@@ -192,6 +227,13 @@ public:     // misc
     bool operator==(const wxMethod&) const;
     bool operator!=(const wxMethod& m) const
         { return !(*this == m); }
+
+    // this function works like operator== but tests everything:
+    // - method name
+    // - return type
+    // - argument types
+    // except for the method attributes (const,static,virtual,pureVirtual,deprecated)
+    bool MatchesExceptForAttributes(const wxMethod& m) const;
 
     void Dump(wxTextOutputStream& stream) const;
 

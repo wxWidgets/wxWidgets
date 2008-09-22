@@ -79,14 +79,5 @@ if [[ $? != 0 ]]; then
     exit
 fi
 
-# FIX for IFACECHECK
-# ==================
-
-# these fixes are needed to avoid false warnings/errors by ifacecheck
-
-if [[ "@TOOLKIT@" == "GTK" ]]; then
-    sed -i -e 's/default="wxBITMAP_TYPE_XPM"/default="wxBITMAP_DEFAULT_TYPE"/g' $gccxmloutput
-fi
-
 # cleanup
 rm $allheaders

@@ -80,7 +80,7 @@ public:
 
     bool Compare();
     int CompareClasses(const wxClass* iface, const wxClassPtrArray& api);
-    void FixMethod(const wxString& header, const wxMethod* iface, const wxMethod* api);
+    bool FixMethod(const wxString& header, const wxMethod* iface, const wxMethod* api);
 
     void ShowProgress();
     void PrintStatistics(long secs);
@@ -135,11 +135,15 @@ int IfaceCheckApp::OnRun()
             // in any case set basic std preprocessor #defines:
             m_doxyInterface.AddPreprocessorValue("NULL", "0");
 
+            g_bLogEnabled = false;
+
             // parse the two XML files which contain the real and the doxygen interfaces
             // for wxWidgets API:
             if (!m_gccInterface.Parse(parser.GetParam(0)) ||
                 !m_doxyInterface.Parse(parser.GetParam(1)))
                 return 1;
+
+            g_bLogEnabled = true;
 
             if (parser.Found(DUMP_SWITCH))
             {
@@ -162,6 +166,7 @@ int IfaceCheckApp::OnRun()
                         len > 2)
                         m_strToMatch = m_strToMatch.Mid(1, len-2);
                 }
+
 
                 ok = Compare();
             }
@@ -311,6 +316,7 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClassPtrArray& a
 
         if (matches == 0)
         {
+            bool exit = false;
             wxMethodPtrArray overloads;
 
             // try searching for methods with the same name but with
@@ -321,7 +327,35 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClassPtrArray& a
 
                 // append "results" array to "overloads"
                 WX_APPEND_ARRAY(overloads, results);
+
+
+#define HACK_TO_AUTO_CORRECT_ONLY_VIRTUAL_AND_CONST_ATTRIBUTES        1
+#if HACK_TO_AUTO_CORRECT_ONLY_VIRTUAL_AND_CONST_ATTRIBUTES
+                for (unsigned int k=0; k<results.GetCount(); k++)
+                    if (results[k]->MatchesExceptForAttributes(m) &&
+                        results[k]->IsPureVirtual() == m.IsPureVirtual())
+                    {
+                        // fix default values of results[k]:
+                        wxMethod tmp(*results[k]);
+                        tmp.SetArgumentTypes(m.GetArgumentTypes());
+
+                        // modify interface header
+                        if (FixMethod(iface->GetHeader(), &m, &tmp))
+                            wxLogMessage("Adjusted attributes of '%s' method", m.GetAsString());
+
+                        exit = true;
+                        break;
+                    }
+
+                if (exit)
+                    break;
+#endif
             }
+
+#if HACK_TO_AUTO_CORRECT_ONLY_VIRTUAL_AND_CONST_ATTRIBUTES
+            if (!exit)
+            {
+#endif
 
             if (overloads.GetCount()==0)
             {
@@ -349,9 +383,10 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClassPtrArray& a
                                                 " but has different signature:\n",
                                                 m.GetName(), searchedclasses);
 
-                warning += "\tdoxy header: " + m.GetAsString();
+                // get a list of the prototypes with _all_ possible attributes:
+                warning += "\tdoxy header: " + m.GetAsString(true, true, true);
                 for (unsigned int j=0; j<overloads.GetCount(); j++)
-                    warning += "\n\treal header: " + overloads[j]->GetAsString();
+                    warning += "\n\treal header: " + overloads[j]->GetAsString(true, true, true);
 
                 wxPrint(warning + "\n");
                 count++;
@@ -378,20 +413,24 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClassPtrArray& a
             }
 
             count++;
+
+#if HACK_TO_AUTO_CORRECT_ONLY_VIRTUAL_AND_CONST_ATTRIBUTES
+            }
+#endif
         }
     }
 
     return count;
 }
 
-void IfaceCheckApp::FixMethod(const wxString& header, const wxMethod* iface, const wxMethod* api)
+bool IfaceCheckApp::FixMethod(const wxString& header, const wxMethod* iface, const wxMethod* api)
 {
     wxASSERT(iface && api);
 
     wxTextFile file;
     if (!file.Open(header)) {
         LogError("\tcan't open the '%s' header file.", header);
-        return;
+        return false;
     }
 
     // GetLocation() returns the line where the last part of the prototype is placed:
@@ -399,37 +438,49 @@ void IfaceCheckApp::FixMethod(const wxString& header, const wxMethod* iface, con
     if (end <= 0 || end >= (int)file.GetLineCount()) {
         LogWarning("\tinvalid location info for method '%s': %d.",
                    iface->GetAsString(), iface->GetLocation());
-        return;
+        return false;
     }
 
     if (!file.GetLine(end).Contains(";")) {
         LogWarning("\tinvalid location info for method '%s': %d.",
                    iface->GetAsString(), iface->GetLocation());
-        return;
+        return false;
     }
 
-    // find the start point of this prototype declaration:
-    int start = end-1;
+    // is this a one-line prototype declaration?
     bool founddecl = false;
-    while (start > 0 &&
-           !file.GetLine(start).Contains(";") &&
-           !file.GetLine(start).Contains("*/"))
+    int start;
+    if (file.GetLine(end).Contains(iface->GetName()))
     {
-        start--;
+        // yes, this prototype is all on this line:
+        start = end;
+        founddecl = true;
+    }
+    else
+    {
+        start = end-1;
 
-        founddecl |= file.GetLine(start).Contains(iface->GetName());
+        // find the start point of this prototype declaration:
+        while (start > 0 &&
+            !file.GetLine(start).Contains(";") &&
+            !file.GetLine(start).Contains("*/"))
+        {
+            start--;
+
+            founddecl |= file.GetLine(start).Contains(iface->GetName());
+        }
+
+        // start-th line contains either the declaration of another prototype
+        // or the closing tag */ of a doxygen comment; start one line below
+        start++;
     }
 
     if (start <= 0 || !founddecl)
     {
-        LogError("\tcan't find the beginning of the declaration of '%s' method in '%s' header",
-                    iface->GetAsString(), header);
-        return;
+        LogError("\tcan't find the beginning of the declaration of '%s' method in '%s' header looking backwards from line %d",
+                    iface->GetAsString(), header, end);
+        return false;
     }
-
-    // start-th line contains either the declaration of another prototype
-    // or the closing tag */ of a doxygen comment; start one line below
-    start++;
 
     // remove the old prototype
     for (int i=start; i<=end; i++)
@@ -500,13 +551,13 @@ void IfaceCheckApp::FixMethod(const wxString& header, const wxMethod* iface, con
     // now save the modification
     if (!file.Write()) {
         LogError("\tcan't save the '%s' header file.", header);
-        return;
+        return false;
     }
 
     // how many lines did we add/remove in total?
     int nOffset = toinsert.GetCount() + deprecationOffset - (end-start+1);
     if (nOffset == 0)
-        return;
+        return false;
 
     if (g_verbose)
         LogMessage("\tthe final row offset for following methods is %d lines.", nOffset);
@@ -526,6 +577,8 @@ void IfaceCheckApp::FixMethod(const wxString& header, const wxMethod* iface, con
             }
         }
     }
+
+    return true;
 }
 
 bool IfaceCheckApp::ParsePreprocessorOutput(const wxString& filename)
