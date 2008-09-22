@@ -1526,11 +1526,53 @@ public:
       { return at(n); }
 #endif // size_t != unsigned int
 
-    // explicit conversion to C string (use this with printf()!)
+
+    /*
+        Overview of wxString conversions, implicit and explicit:
+
+        - wxString has a std::[w]string-like c_str() method, however it does
+          not return a C-style string directly but instead returns wxCStrData
+          helper object which is convertible to either "char *" narrow string
+          or "wchar_t *" wide string. Usually the correct conversion will be
+          applied by the compiler automatically but if this doesn't happen you
+          need to explicitly choose one using wxCStrData::AsChar() or AsWChar()
+          methods or another wxString conversion function.
+
+        - One of the places where the conversion does *NOT* happen correctly is
+          when c_str() is passed to a vararg function such as printf() so you
+          must *NOT* use c_str() with them. Either use wxPrintf() (all wx
+          functions do handle c_str() correctly, even if they appear to be
+          vararg (but they're not, really)) or add an explicit AsChar() or, if
+          compatibility with previous wxWidgets versions is important, add a
+          cast to "const char *".
+
+        - In non-STL mode only, wxString is also implicitly convertible to
+          wxCStrData. The same warning as above applies.
+
+        - c_str() is polymorphic as it can be converted to either narrow or
+          wide string. If you explicitly need one or the other, choose to use
+          mb_str() (for narrow) or wc_str() (for wide) instead. Notice that
+          these functions can return either the pointer to string directly (if
+          this is what the string uses internally) or a temporary buffer
+          containing the string and convertible to it. Again, conversion will
+          usually be done automatically by the compiler but beware of the
+          vararg functions: you need an explicit cast when using them.
+
+        - There are also non-const versions of mb_str() and wc_str() called
+          char_str() and wchar_str(). They are only meant to be used with
+          non-const-correct functions and they always return buffers.
+
+        - Finally wx_str() returns whatever string representation is used by
+          wxString internally. It may be either a narrow or wide string
+          depending on wxWidgets build mode but it will always be a raw pointer
+          (and not a buffer).
+     */
+
+    // explicit conversion to wxCStrData
     wxCStrData c_str() const { return wxCStrData(this); }
     wxCStrData data() const { return c_str(); }
 
-    // implicit conversion to C string
+    // implicit conversion to wxCStrData
     operator wxCStrData() const { return c_str(); }
 
     // the first two operators conflict with operators for conversion to
