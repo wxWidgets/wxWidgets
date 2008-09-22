@@ -341,7 +341,7 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClassPtrArray& a
 
                         // modify interface header
                         if (FixMethod(iface->GetHeader(), &m, &tmp))
-                            wxLogMessage("Adjusted attributes of '%s' method", m.GetAsString());
+                            LogMessage("Adjusted attributes of '%s' method", m.GetAsString());
 
                         exit = true;
                         break;
