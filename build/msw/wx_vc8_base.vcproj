@@ -1569,6 +1569,9 @@
 				RelativePath="..\..\include\wx\dlimpexp.h"
 			/>
 			<File
+				RelativePath="..\..\include\wx\dlist.h"
+			/>
+			<File
 				RelativePath="..\..\include\wx\dynarray.h"
 			/>
 			<File

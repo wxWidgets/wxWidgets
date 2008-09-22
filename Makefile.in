@@ -334,6 +334,7 @@ ALL_BASE_HEADERS =  \
 	wx/defs.h \
 	wx/dir.h \
 	wx/dlimpexp.h \
+	wx/dlist.h \
 	wx/dynarray.h \
 	wx/dynlib.h \
 	wx/dynload.h \
@@ -485,6 +486,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/defs.h \
 	wx/dir.h \
 	wx/dlimpexp.h \
+	wx/dlist.h \
 	wx/dynarray.h \
 	wx/dynlib.h \
 	wx/dynload.h \
@@ -18532,8 +18534,8 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_OSX_CARBON_USE_GUI_1@monodll_taskbar.o: $(srcdir)/src/osx/carbon/taskbar.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/taskbar.cpp
 
-@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_taskbar.o: $(srcdir)/src/osx/carbon/taskbar.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/taskbar.cpp
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_taskbar.o: $(srcdir)/src/osx/cocoa/taskbar.mm $(MONODLL_ODEP)
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/cocoa/taskbar.mm
 
 @COND_TOOLKIT_COCOA_USE_GUI_1@monodll_taskbar.o: $(srcdir)/src/cocoa/taskbar.mm $(MONODLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/cocoa/taskbar.mm
@@ -23200,8 +23202,8 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_OSX_CARBON_USE_GUI_1@monolib_taskbar.o: $(srcdir)/src/osx/carbon/taskbar.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/taskbar.cpp
 
-@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_taskbar.o: $(srcdir)/src/osx/carbon/taskbar.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/taskbar.cpp
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_taskbar.o: $(srcdir)/src/osx/cocoa/taskbar.mm $(MONOLIB_ODEP)
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/cocoa/taskbar.mm
 
 @COND_TOOLKIT_COCOA_USE_GUI_1@monolib_taskbar.o: $(srcdir)/src/cocoa/taskbar.mm $(MONOLIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/cocoa/taskbar.mm
@@ -31579,8 +31581,8 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_OSX_CARBON@advdll_taskbar.o: $(srcdir)/src/osx/carbon/taskbar.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_OSX_CARBON@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/taskbar.cpp
 
-@COND_TOOLKIT_OSX_COCOA@advdll_taskbar.o: $(srcdir)/src/osx/carbon/taskbar.cpp $(ADVDLL_ODEP)
-@COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/taskbar.cpp
+@COND_TOOLKIT_OSX_COCOA@advdll_taskbar.o: $(srcdir)/src/osx/cocoa/taskbar.mm $(ADVDLL_ODEP)
+@COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/osx/cocoa/taskbar.mm
 
 @COND_TOOLKIT_COCOA@advdll_taskbar.o: $(srcdir)/src/cocoa/taskbar.mm $(ADVDLL_ODEP)
 @COND_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/cocoa/taskbar.mm
@@ -31882,8 +31884,8 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_OSX_CARBON@advlib_taskbar.o: $(srcdir)/src/osx/carbon/taskbar.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_OSX_CARBON@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/taskbar.cpp
 
-@COND_TOOLKIT_OSX_COCOA@advlib_taskbar.o: $(srcdir)/src/osx/carbon/taskbar.cpp $(ADVLIB_ODEP)
-@COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/taskbar.cpp
+@COND_TOOLKIT_OSX_COCOA@advlib_taskbar.o: $(srcdir)/src/osx/cocoa/taskbar.mm $(ADVLIB_ODEP)
+@COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/osx/cocoa/taskbar.mm
 
 @COND_TOOLKIT_COCOA@advlib_taskbar.o: $(srcdir)/src/cocoa/taskbar.mm $(ADVLIB_ODEP)
 @COND_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/cocoa/taskbar.mm

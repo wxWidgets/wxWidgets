@@ -163,6 +163,7 @@ wx/debug.h
 wx/defs.h
 wx/dir.h
 wx/dlimpexp.h
+wx/dlist.h
 wx/dynarray.h
 wx/dynlib.h
 wx/dynload.h

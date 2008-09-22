@@ -1143,6 +1143,10 @@ SOURCE=..\..\include\wx\dlimpexp.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\dlist.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\dynarray.h
 # End Source File
 # Begin Source File
