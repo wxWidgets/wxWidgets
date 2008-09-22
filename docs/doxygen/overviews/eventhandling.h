@@ -272,11 +272,12 @@ Now let us describe the semantic differences:
                                NULL,  // unused extra data parameter
                                this); // this indicates the object to connect to
             }
-        @endcode will work exactly as expected. Note that you can get the
-        object which generated the event -- and which is not the same as the
-        frame -- via wxEvent::GetEventObject() method of @c event argument
-        passed to the event handler.
-    <li>
+        @endcode
+        will work exactly as expected. Note that you can get the object which
+        generated the event -- and which is not the same as the frame -- via
+        wxEvent::GetEventObject() method of @c event argument passed to the
+        event handler.
+    </li>
 </ul>
 
 To summarize, using Connect() requires slightly more typing but is much more
@@ -296,7 +297,7 @@ wxEvtHandler::ProcessEvent() on the first event handler object belonging to the
 window generating the event. The normal order of event table searching by
 ProcessEvent() is as follows, with the event processing stopping as soon as a
 handler is found (unless the handler calls wxEvent::Skip() in which case it
-doesn't count as having handled the event):
+doesn't count as having handled the event and the search continues):
 <ol>
     <li value="0">
     Before anything else happens, wxApp::FilterEvent() is called. If it returns
@@ -350,7 +351,7 @@ doesn't count as having handled the event):
     </li>
 </ol>
 
-<em>Please pay close attention to step 6!</em>. People often overlook or get
+<em>Please pay close attention to step 6!</em> People often overlook or get
 confused by this powerful feature of the wxWidgets event processing system. The
 details of event propagation upwards the window hierarchy are described in the
 next section.
