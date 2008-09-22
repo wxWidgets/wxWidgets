@@ -4315,6 +4315,11 @@ bool wxGrid::Create(wxWindow *parent, wxWindowID id,
 
 wxGrid::~wxGrid()
 {
+    // Ensure that the editor control is destroyed before the grid is,
+    // otherwise we crash later when the editor tries to do something with the
+    // half destroyed grid
+    HideCellEditControl();
+
     // Must do this or ~wxScrollHelper will pop the wrong event handler
     SetTargetWindow(this);
     ClearAttrCache();
