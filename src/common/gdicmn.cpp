@@ -31,6 +31,7 @@
     #include "wx/bitmap.h"
     #include "wx/colour.h"
     #include "wx/font.h"
+    #include "wx/math.h"
 #endif
 
 
@@ -885,8 +886,8 @@ wxSize wxGetDisplayPPI()
     const wxSize pixels = wxGetDisplaySize();
     const wxSize mm = wxGetDisplaySizeMM();
 
-    return wxSize((pixels.x * 25.4) / mm.x,
-                  (pixels.y * 25.4) / mm.y);
+    return wxSize((int)((pixels.x * inches2mm) / mm.x),
+                  (int)((pixels.y * inches2mm) / mm.y));
 }
 
 wxResourceCache::~wxResourceCache ()
