@@ -105,7 +105,7 @@ public:
     /**
         Destructor, destroying the list box.
     */
-    ~wxCheckListBox();
+    virtual ~wxCheckListBox();
 
     /**
         Checks the given item. Note that calling this method does not result in
@@ -116,7 +116,7 @@ public:
         @param check
             @true if the item is to be checked, @false otherwise.
     */
-    void Check(int item, bool check = true);
+    void Check(unsigned int item, bool check = true);
 
     /**
         Returns @true if the given item is checked, @false otherwise.

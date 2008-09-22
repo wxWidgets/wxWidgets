@@ -162,6 +162,6 @@ public:
         Asserts when the checkbox is a 2-state checkbox and setting the state
         to wxCHK_UNDETERMINED.
     */
-    virtual void Set3StateValue(const wxCheckBoxState state);
+    void Set3StateValue(wxCheckBoxState state);
 };
 

@@ -251,7 +251,7 @@ public:
         @return @true if the class represented by info is the same class as this
                  one or is derived from it.
     */
-    bool IsKindOf(wxClassInfo* info);
+    bool IsKindOf(const wxClassInfo* info);
 
     /**
         Returns @true if this object has the same data pointer as @a obj.
