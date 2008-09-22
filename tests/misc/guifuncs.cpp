@@ -17,6 +17,10 @@
     #pragma hdrstop
 #endif
 
+#ifndef WX_PRECOMP
+    #include "wx/gdicmn.h"
+#endif // !PCH
+
 #include "wx/defs.h"
 
 // ----------------------------------------------------------------------------
