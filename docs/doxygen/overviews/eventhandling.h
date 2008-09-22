@@ -16,6 +16,8 @@ Classes: wxEvtHandler, wxWindow, wxEvent
 @li @ref overview_eventhandling_eventtables
 @li @ref overview_eventhandling_connect
 @li @ref overview_eventhandling_processing
+@li @ref overview_eventhandling_propagation
+@li @ref overview_eventhandling_virtual
 @li @ref overview_eventhandling_prog
 @li @ref overview_eventhandling_pluggable
 @li @ref overview_eventhandling_winid
@@ -270,11 +272,10 @@ Now let us describe the semantic differences:
                                NULL,  // unused extra data parameter
                                this); // this indicates the object to connect to
             }
-        @endcode
-        will work exactly as expected. Note that you can get the object which
-        generated the event -- and which is not the same as the frame -- via
-        wxEvent::GetEventObject() method of @c event argument passed to the
-        event handler.
+        @endcode will work exactly as expected. Note that you can get the
+        object which generated the event -- and which is not the same as the
+        frame -- via wxEvent::GetEventObject() method of @c event argument
+        passed to the event handler.
     <li>
 </ul>
 
@@ -286,74 +287,98 @@ in simple situations where this extra flexibility is not needed.
 
 @section overview_eventhandling_processing How Events are Processed
 
+The previous sections explain how to define event handlers but don't address
+the question of how exactly does wxWidgets find the handler to call for the
+given event. This section describes the algorithm used to do it in details.
+
 When an event is received from the windowing system, wxWidgets calls
-wxEvtHandler::ProcessEvent on the first
-event handler object belonging to the window generating the event.
-
-It may be noted that wxWidgets' event processing system implements something
-very close to virtual methods in normal C++, i.e. it is possible to alter
-the behaviour of a class by overriding its event handling functions. In
-many cases this works even for changing the behaviour of native controls.
-
-For example it is possible to filter out a number of key events sent by the
-system to a native text control by overriding wxTextCtrl and defining a
-handler for key events using EVT_KEY_DOWN. This would indeed prevent
-any key events from being sent to the native control - which might not be
-what is desired. In this case the event handler function has to call Skip()
-so as to indicate that the search for the event handler should continue.
-
-To summarize, instead of explicitly calling the base class version as you
-would have done with C++ virtual functions (i.e. @e wxTextCtrl::OnChar()),
-you should instead call wxEvent::Skip.
-
-In practice, this would look like this if the derived text control only
-accepts 'a' to 'z' and 'A' to 'Z':
-
-@code
-void MyTextCtrl::OnChar(wxKeyEvent& event)
-{
-    if ( isalpha( event.KeyCode() ) )
-    {
-        // key code is within legal range. we call event.Skip() so the
-        // event can be processed either in the base wxWidgets class
-        // or the native control.
-
-        event.Skip();
-    }
-    else
-    {
-        // illegal key hit. we don't call event.Skip() so the
-        // event is not processed anywhere else.
-
-        wxBell();
-    }
-}
-@endcode
-
-The normal order of event table searching by ProcessEvent is as follows:
+wxEvtHandler::ProcessEvent() on the first event handler object belonging to the
+window generating the event. The normal order of event table searching by
+ProcessEvent() is as follows, with the event processing stopping as soon as a
+handler is found (unless the handler calls wxEvent::Skip() in which case it
+doesn't count as having handled the event):
 <ol>
-<li> If the object is disabled (via a call to wxEvtHandler::SetEvtHandlerEnabled)
-    the function skips to step (6).
-<li> If the object is a wxWindow, @b ProcessEvent is recursively called on the window's
-    wxValidator. If this returns @true, the function exits.
-<li> @b SearchEventTable is called for this event handler. If this fails, the base
-    class table is tried, and so on until no more tables exist or an appropriate
-    function was found, in which case the function exits.
-<li> The search is applied down the entire chain of event handlers (usually the chain has
-    a length of one). If this succeeds, the function exits.
-<li> If the object is a wxWindow and the event is set to set to propagate (in the library only
-    wxCommandEvent based events are set to propagate), @b ProcessEvent is recursively applied
-    to the parent window's event handler. If this returns @true, the function exits.
-<li> Finally, @b ProcessEvent is called on the wxApp object.
+    <li value="0">
+    Before anything else happens, wxApp::FilterEvent() is called. If it returns
+    anything but -1 (default), the event handling stops immediately.
+    </li>
+
+    <li value="1">
+    If this event handler is disabled via a call to
+    wxEvtHandler::SetEvtHandlerEnabled() the next three steps are skipped and
+    the event handler resumes at step (5).
+    </li?
+
+    <li value="2">
+    If the object is a wxWindow and has an associated validator, wxValidator
+    gets a chance to process the event.
+    </li>
+
+    <li value="3">
+    The list of dynamically connected event handlers, i.e. those for which
+    Connect() was called, is consulted. Notice that this is done before
+    checking the static event table entries, so if both a dynamic and a static
+    event handler match the same event, the static one is never going to be
+    used.
+    </li>
+
+    <li value="4">
+    The event table containing all the handlers defined using the event table
+    macros in this class and its base classes is examined. Notice that this
+    means that any event handler defined in a base class will be executed at
+    this step.
+    </li>
+
+    <li value="5">
+    The event is passed to the next event handler, if any, in the event handler
+    chain. This chain can be formed using wxEvtHandler::SetNextHandler() or
+    wxWindow::PushEventHandler() but usually there is no next event handler and
+    chaining event handlers using these functions is much less useful now that
+    Connect() exists so this step will almost never do anything.
+    </li>
+
+    <li value="6">
+    If the object is a wxWindow and the event is set to set to propagate (by
+    default only wxCommandEvent-derived events are set to propagate), then the
+    processing restarts from the step (1) (and excluding the step (7)) for the
+    parent window.
+    </li>
+
+    <li value="7">
+    Finally, i.e. if the event is still not processed, the wxApp object itself
+    gets a last chance to process it.
+    </li>
 </ol>
-<b>Pay close attention to Step 5</b>.  People often overlook or get
-confused by this powerful feature of the wxWidgets event processing
-system.  To put it a different way, events set to propagate
-(see wxEvent::ShouldPropagate)
-(most likely derived either directly or indirectly from wxCommandEvent)
-will travel up the containment hierarchy from child to parent until the
-maximal propagation level is reached or an event handler is found that
-doesn't call @c event.Skip().
+
+<em>Please pay close attention to step 6!</em>. People often overlook or get
+confused by this powerful feature of the wxWidgets event processing system. The
+details of event propagation upwards the window hierarchy are described in the
+next section.
+
+Also please notice that there are additional steps in the event handling for
+the windows making part of wxWidgets document-view framework, i.e.
+wxDocParentFrame, wxDocChildFrame and their MDI equivalents wxDocMDIParentFrame
+and wxDocMDIChildFrame. The parent frame classes modify the step (2) above to
+send the events received by them to wxDocManager object first. This object, in
+turn, sends the event to the current view and the view itself lets its
+associated document to process the event first. The child frame classes send
+the event directly to the associated view which still forwards it to its
+document object. Notice that to avoid remembering the exact order in which the
+events are processed in the document-view frame, the simplest, and recommended,
+solution is to only handle the events at the view classes level, but not in the
+document or document manager classes
+
+
+@section overview_eventhandling_propagation How Events Propagate Upwards
+
+As mentioned in the previous section, the events of the classes deriving from
+wxCommandEvent are propagated by default to the parent window if they are not
+processed in this window itself. But although by default only the command
+events are propagated like this, other events can be propagated as well because
+the event handling code uses wxEvent::ShouldPropagate() to check for whether an
+event should be propagated. It is also possible to propagate the event only a
+limited number of times and not until it is processed (or a top level parent
+window is reached).
 
 Finally, there is another additional complication (which, in fact, simplifies
 life of wxWidgets programmers significantly): when propagating the command
@@ -377,15 +402,10 @@ that have a higher level of meaning and/or are generated by the window
 itself, (button click, menu select, tree expand, etc.) are command
 events and are sent up to the parent to see if it is interested in the event.
 
-Note that your application may wish to override ProcessEvent to redirect processing of
-events. This is done in the document/view framework, for example, to allow event handlers
-to be defined in the document or view. To test for command events (which will probably
-be the only events you wish to redirect), you may use wxEvent::IsCommandEvent for efficiency,
-instead of using the slower run-time type system.
-
-As mentioned above, only command events are recursively applied to the parents event
-handler in the library itself. As this quite often causes confusion for users,
-here is a list of system events which will NOT get sent to the parent's event handler:
+As mentioned above, only command events are recursively applied to the parents
+event handler in the library itself. As this quite often causes confusion for
+users, here is a list of system events which will @em not get sent to the
+parent's event handler:
 
 @li wxEvent: The event base class
 @li wxActivateEvent: A window or application activation event
@@ -411,6 +431,32 @@ of system events in a parent window, for example all key events sent to, but not
 used by, the native controls in a dialog. In this case, a special event handler
 will have to be written that will override ProcessEvent() in order to pass
 all events (or any selection of them) to the parent window.
+
+
+@section overview_eventhandling_virtual Event Handlers vs Virtual Methods
+
+It may be noted that wxWidgets' event processing system implements something
+close to virtual methods in normal C++ in spirit: both of these mechanisms
+allow to alter the behaviour of the base class by defining the event handling
+functions in the derived classes.
+
+There is however an important difference between the two mechanisms when you
+want to invoke the default behaviour, as implemented by the base class, from a
+derived class handler. With the virtual functions, you need to call the base
+class function directly and you can do it either in the beginning of the
+derived class handler function (to post-process the event) or at its end (to
+pre-process the event). With the event handlers, you only have the option of
+pre-processing the events and in order to still let the default behaviour to
+happen you must call wxEvent::Skip() and @em not call the base class event
+handler directly. In fact, the event handler probably doesn't even exist in the
+base class as the default behaviour is often implemented in platform-specific
+code by the underlying toolkit or OS itself. But even if it does exist at
+wxWidgets level, it should never be called directly as the event handler are
+not part of wxWidgets API and should never be called directly.
+
+Finally, please notice that the event handlers themselves shouldn't be virtual.
+They should always be non-virtual and usually private (as there is no need to
+make them public) methods of a wxEvtHandler-derived class.
 
 
 @section overview_eventhandling_prog User Generated Events vs Programmatically Generated Events
