@@ -49,21 +49,10 @@
 #define wxUSE_DRAG_AND_DROP 0
 #endif
 
-#if wxUSE_TASKBARICON
-#undef wxUSE_TASKBARICON
-#define wxUSE_TASKBARICON 0
-#endif
-
 #if wxUSE_DATAVIEWCTRL
 #undef wxUSE_DATAVIEWCTRL
 #define wxUSE_DATAVIEWCTRL 0
 #endif
-
-#if wxUSE_WXHTML_HELP
-#undef wxUSE_WXHTML_HELP
-#endif
-
-#define wxUSE_WXHTML_HELP 0
 
 #endif
     /* _WX_MAC_CHKCONF_H_ */

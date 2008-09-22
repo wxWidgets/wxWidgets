@@ -23,7 +23,9 @@ public:
         enum wxTaskBarIconType
         {
             DOCK
-//    ,   CUSTOM_STATUSITEM
+#if wxOSX_USE_COCOA
+        ,   CUSTOM_STATUSITEM
+#endif
 //    ,   STATUSITEM 
 //    ,   MENUEXTRA 
         ,   DEFAULT_TYPE = DOCK
