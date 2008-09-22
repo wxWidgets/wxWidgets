@@ -1273,6 +1273,13 @@ wxEvtHandler::ProcessEventIfMatches(const wxEventTableEntryBase& entry,
 
 bool wxEvtHandler::TryParent(wxEvent& event)
 {
+    if ( GetNextHandler() )
+    {
+        // the next handler will pass it to wxTheApp if it doesn't process it,
+        // so return from here to avoid doing it again
+        return GetNextHandler()->TryParent(event);
+    }
+
     if ( wxTheApp && (this != wxTheApp) )
     {
         // Special case: don't pass wxEVT_IDLE to wxApp, since it'll always

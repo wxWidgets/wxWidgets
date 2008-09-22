@@ -332,17 +332,21 @@ doesn't count as having handled the event and the search continues):
 
     <li value="5">
     The event is passed to the next event handler, if any, in the event handler
-    chain. This chain can be formed using wxEvtHandler::SetNextHandler() or
-    wxWindow::PushEventHandler() but usually there is no next event handler and
-    chaining event handlers using these functions is much less useful now that
-    Connect() exists so this step will almost never do anything.
+    chain, i.e. the steps (1) to (4) are done for it. This chain can be formed
+    using wxEvtHandler::SetNextHandler() or wxWindow::PushEventHandler() but
+    usually there is no next event handler and chaining event handlers using
+    these functions is much less useful now that Connect() exists so this step
+    will almost never do anything.
     </li>
 
     <li value="6">
-    If the object is a wxWindow and the event is set to set to propagate (by
-    default only wxCommandEvent-derived events are set to propagate), then the
+    If the object is a wxWindow and the event is set to propagate (by default
+    only wxCommandEvent-derived events are set to propagate), then the
     processing restarts from the step (1) (and excluding the step (7)) for the
-    parent window.
+    parent window. If this object is not a window but the next handler exists,
+    the event is passed to its parent if it is a window. This ensures that in a
+    common case of (possibly several) non-window event handlers pushed on top
+    of a window, the event eventually reaches the window parent.
     </li>
 
     <li value="7">
