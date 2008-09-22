@@ -2747,8 +2747,8 @@ bool wxWindowBase::TryValidator(wxEvent& wxVALIDATOR_PARAM(event))
     // is receiving the event
     if ( event.GetEventObject() == this )
     {
-        wxValidator *validator = GetValidator();
-        if ( validator && validator->ProcessEvent(event) )
+        wxValidator * const validator = GetValidator();
+        if ( validator && validator->ProcessEventHere(event) )
         {
             return true;
         }
