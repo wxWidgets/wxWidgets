@@ -41,13 +41,13 @@ public:
 
         The default value is @true.
     */
-    bool GetAllowSymbols();
+    bool GetAllowSymbols() const;
 
     /**
         Gets the font chosen by the user if the user pressed OK
         (wxFontDialog::ShowModal() returned wxID_OK).
     */
-    wxFont GetChosenFont();
+    wxFont GetChosenFont() const;
 
     /**
         Gets the colour associated with the font dialog.
@@ -63,20 +63,20 @@ public:
 
         The default value is @true.
     */
-    bool GetEnableEffects();
+    bool GetEnableEffects() const;
 
     /**
         Gets the font that will be initially used by the font dialog. This
         should have previously been set by the application.
     */
-    wxFont GetInitialFont();
+    wxFont GetInitialFont() const;
 
     /**
         Returns @true if the Help button will be shown (Windows only).
 
         The default value is @false.
     */
-    bool GetShowHelp();
+    bool GetShowHelp() const;
 
     /**
         Under Windows, determines whether symbol fonts can be selected. Has no
@@ -162,7 +162,7 @@ public:
     /**
         Destructor.
     */
-    ~wxPageSetupDialogData();
+    virtual ~wxPageSetupDialogData();
 
     /**
         Enables or disables the "Help" button (Windows only).
@@ -365,7 +365,7 @@ public:
     /**
         Destructor.
     */
-    ~wxColourData();
+    virtual ~wxColourData();
 
     /**
         Under Windows, determines whether the Windows colour dialog will
@@ -383,7 +383,7 @@ public:
 
         The default colour is black.
     */
-    wxColour& GetColour() const;
+    wxColour& GetColour();
 
     /**
         Returns custom colours associated with the colour dialog.
@@ -518,7 +518,7 @@ public:
     /**
         Destructor.
     */
-    ~wxPrintData();
+    virtual ~wxPrintData();
 
     /**
         Returns the current bin (papersource). By default, the system is left
@@ -691,7 +691,7 @@ public:
     /**
         Destructor.
     */
-    ~wxPrintDialogData();
+    virtual ~wxPrintDialogData();
 
     /**
         Enables or disables the "Help" button.

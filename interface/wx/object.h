@@ -251,7 +251,7 @@ public:
         @return @true if the class represented by info is the same class as this
                  one or is derived from it.
     */
-    bool IsKindOf(const wxClassInfo* info);
+    bool IsKindOf(const wxClassInfo* info) const;
 
     /**
         Returns @true if this object has the same data pointer as @a obj.
@@ -263,7 +263,7 @@ public:
 
         @see @ref overview_refcount
     */
-    bool IsSameAs(const wxObject& obj);
+    bool IsSameAs(const wxObject& obj) const;
 
     /**
         Makes this object refer to the data in @a clone.

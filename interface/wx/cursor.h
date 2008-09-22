@@ -191,7 +191,7 @@ public:
         destroyed when the window is destroyed. wxWidgets destroys all cursors
         on application exit, although it is best to clean them up explicitly.
     */
-    ~wxCursor();
+    virtual ~wxCursor();
 
     /**
         Returns @true if cursor data is present.

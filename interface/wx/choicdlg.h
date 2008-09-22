@@ -120,7 +120,7 @@ public:
     /**
         Sets selected items from the array of selected items' indexes.
     */
-    void SetSelections(const wxArrayInt& selections) const;
+    void SetSelections(const wxArrayInt& selections);
 
     /**
         Shows the dialog, returning either wxID_OK or wxID_CANCEL.
@@ -265,7 +265,7 @@ public:
     /**
         Sets the index of the initially selected item.
     */
-    void SetSelection(int selection) const;
+    void SetSelection(int selection);
 
     /**
         Shows the dialog, returning either wxID_OK or wxID_CANCEL.

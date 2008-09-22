@@ -71,12 +71,12 @@ public:
         Returns the alpha value, on platforms where alpha is not yet supported, this
         always returns wxALPHA_OPAQUE.
     */
-    unsigned char Alpha() const;
+    virtual unsigned char Alpha() const;
 
     /**
         Returns the blue intensity.
     */
-    unsigned char Blue() const;
+    virtual unsigned char Blue() const;
 
     /**
         Converts this colour to a wxString using the given flags.
@@ -108,7 +108,7 @@ public:
     /**
         Returns the green intensity.
     */
-    unsigned char Green() const;
+    virtual unsigned char Green() const;
 
     /**
         Returns @true if the colour object is valid (the colour has been initialised
@@ -119,7 +119,7 @@ public:
     /**
         Returns the red intensity.
     */
-    unsigned char Red() const;
+    virtual unsigned char Red() const;
 
     //@{
     /**

@@ -123,7 +123,7 @@ public:
     /**
         Destructor, destroying the choice item.
     */
-    ~wxChoice();
+    virtual ~wxChoice();
 
     //@{
     /**
@@ -150,7 +150,7 @@ public:
         @remarks This is implemented for GTK and Motif only and always 
                  returns 1 for the other platforms.
     */
-    int GetColumns() const;
+    virtual int GetColumns() const;
 
     /**
         Unlike wxControlWithItems::GetSelection() which only returns the
@@ -164,7 +164,7 @@ public:
                In older versions, wxControlWithItems::GetSelection() itself
                behaved like this.
     */
-    int GetCurrentSelection() const;
+    virtual int GetCurrentSelection() const;
 
     /**
         Sets the number of columns in this choice item.
@@ -175,6 +175,6 @@ public:
         @remarks This is implemented for GTK and Motif only and doesn’t do 
                  anything under other platforms.
     */
-    void SetColumns(int n = 1);
+    virtual void SetColumns(int n = 1);
 };
 

@@ -37,7 +37,7 @@ public:
     /**
         Destructor.
     */
-    ~wxColourDialog();
+    virtual ~wxColourDialog();
 
     /**
         Same as wxColourDialog().
@@ -53,7 +53,7 @@ public:
         Shows the dialog, returning wxID_OK if the user pressed OK, and
         wxID_CANCEL otherwise.
     */
-    int ShowModal();
+    virtual int ShowModal();
 };
 
 

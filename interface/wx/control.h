@@ -27,7 +27,7 @@ public:
 
         @see wxCommandEvent
     */
-    void Command(wxCommandEvent& event);
+    virtual void Command(wxCommandEvent& event);
 
     /**
         Returns the control's text.

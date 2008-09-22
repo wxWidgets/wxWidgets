@@ -154,7 +154,7 @@ public:
     /**
         Collapses or expands the pane window.
     */
-    void Collapse(bool collapse = true);
+    virtual void Collapse(bool collapse = true);
 
     /**
         Same as calling Collapse(@false).
@@ -165,12 +165,12 @@ public:
         Returns a pointer to the pane window. Add controls to the returned
         wxWindow to make them collapsible.
     */
-    wxWindow* GetPane() const;
+    virtual wxWindow* GetPane() const;
 
     /**
         Returns @true if the pane window is currently hidden.
     */
-    bool IsCollapsed() const;
+    virtual bool IsCollapsed() const;
 
     /**
         Returns @true if the pane window is currently shown.

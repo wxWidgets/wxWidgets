@@ -150,7 +150,7 @@ public:
     /**
         Destructor, destroying the combobox.
     */
-    ~wxComboBox();
+    virtual ~wxComboBox();
 
     //@{
     /**
@@ -221,7 +221,7 @@ public:
         and returns the item currently selected in the dropdown list if it's
         open or the same thing as wxControlWithItems::GetSelection() otherwise.
     */
-    int GetCurrentSelection() const;
+    virtual int GetCurrentSelection() const;
 
     /**
         Returns the insertion point for the combobox's text field.
@@ -243,7 +243,7 @@ public:
 
         Currently this method is only implemented in wxMSW and wxGTK.
     */
-    void GetSelection(long* from, long* to) const;
+    virtual void GetSelection(long* from, long* to) const;
 
     /**
         Returns the current value in the combobox text field.
@@ -309,7 +309,7 @@ public:
         wxControlWithItems::SetSelection().
         @endWxPythonOnly
     */
-    void SetSelection(long from, long to);
+    virtual void SetSelection(long from, long to);
 
     /**
         Sets the text for the combobox text field.

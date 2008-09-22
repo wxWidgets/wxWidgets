@@ -40,12 +40,12 @@ public:
     /**
         Destructor.
     */
-    ~wxCommand();
+    virtual ~wxCommand();
 
     /**
         Returns @true if the command can be undone, @false otherwise.
     */
-    bool CanUndo();
+    virtual bool CanUndo() const;
 
     /**
         Override this member function to execute the appropriate action when
@@ -61,7 +61,7 @@ public:
     /**
         Returns the command name.
     */
-    wxString GetName();
+    virtual wxString GetName() const;
 
     /**
         Override this member function to un-execute a previous Do.
@@ -118,13 +118,13 @@ public:
     /**
         Destructor.
     */
-    ~wxCommandProcessor();
+    virtual ~wxCommandProcessor();
 
     /**
         Returns @true if the currently-active command can be undone, @false
         otherwise.
     */
-    virtual bool CanUndo();
+    virtual bool CanUndo() const;
 
     /**
         Deletes all commands in the list and sets the current command pointer
@@ -135,7 +135,7 @@ public:
     /**
         Returns the list of commands.
     */
-    wxList& GetCommands() const;
+    wxList& GetCommands();
 
     /**
         Returns the edit menu associated with the command processor.
@@ -180,13 +180,13 @@ public:
         the last save operation. This only works if MarkAsSaved() is called
         whenever the project is saved.
     */
-    virtual bool IsDirty();
+    virtual bool IsDirty() const;
 
     /**
         You must call this method whenever the project is saved if you plan to
         use IsDirty().
     */
-    virtual void MarkAsSaved();
+    void MarkAsSaved();
 
     /**
         Executes (redoes) the current command (the command that has just been
@@ -206,7 +206,7 @@ public:
         Sets the menu labels according to the currently set menu and the
         current command state.
     */
-    void SetMenuStrings();
+    virtual void SetMenuStrings();
 
     /**
         Sets the string that will be appended to the Redo menu item.

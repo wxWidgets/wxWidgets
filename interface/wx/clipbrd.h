@@ -70,7 +70,7 @@ public:
     /**
         Destructor.
     */
-    ~wxClipboard();
+    virtual ~wxClipboard();
 
     /**
         Call this function to add the data object to the clipboard. You may
@@ -82,19 +82,19 @@ public:
 
         @see SetData()
     */
-    bool AddData(wxDataObject* data);
+    virtual bool AddData(wxDataObject* data);
 
     /**
         Clears the global clipboard object and the system's clipboard if
         possible.
     */
-    void Clear();
+    virtual void Clear();
 
     /**
         Call this function to close the clipboard, having opened it with
         Open().
     */
-    void Close();
+    virtual void Close();
 
     /**
         Flushes the clipboard: this means that the data which is currently on
@@ -104,18 +104,18 @@ public:
 
         @return @false if the operation is unsuccessful for any reason.
     */
-    bool Flush();
+    virtual bool Flush();
 
     /**
         Call this function to fill @a data with data on the clipboard, if
         available in the required format. Returns @true on success.
     */
-    bool GetData(wxDataObject& data);
+    virtual bool GetData(wxDataObject& data);
 
     /**
         Returns @true if the clipboard has been opened.
     */
-    bool IsOpened() const;
+    virtual bool IsOpened() const;
 
     /**
         Returns @true if there is data which matches the data format of the
@@ -124,7 +124,7 @@ public:
         @todo The name of this function is misleading. This should be renamed
               to something that more accurately indicates what it does.
     */
-    bool IsSupported(const wxDataFormat& format);
+    virtual bool IsSupported(const wxDataFormat& format);
 
     /**
         Returns @true if we are using the primary selection, @false if
@@ -144,7 +144,7 @@ public:
         @return @true on success. This should be tested (as in the sample
                 shown above).
     */
-    bool Open();
+    virtual bool Open();
 
     /**
         Call this function to set the data object to the clipboard. This
@@ -156,7 +156,7 @@ public:
 
         @see AddData()
     */
-    bool SetData(wxDataObject* data);
+    virtual bool SetData(wxDataObject* data);
 
     /**
         On platforms supporting it (all X11-based ports), wxClipboard uses the

@@ -35,7 +35,7 @@ public:
     /**
         Destructor.
     */
-    ~wxClientDataContainer();
+    virtual ~wxClientDataContainer();
 
     /**
         Get the untyped client data.
@@ -99,7 +99,7 @@ public:
     /**
         Virtual destructor.
     */
-    ~wxClientData();
+    virtual ~wxClientData();
 };
 
 

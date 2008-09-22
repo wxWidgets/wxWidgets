@@ -205,7 +205,7 @@ public:
     /**
         Destroys the context help object.
     */
-    ~wxContextHelp();
+    virtual ~wxContextHelp();
 
     /**
         Puts the application into context-sensitive help mode. @a window is the

@@ -335,7 +335,7 @@ public:
     /**
         Empty but ensures that dtor of all derived classes is virtual.
     */
-    ~wxConfigBase();
+    virtual ~wxConfigBase();
 
 
     /**
