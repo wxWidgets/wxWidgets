@@ -195,8 +195,8 @@ bool wxBMPHandler::SaveDib(wxImage *image,
 
         case wxIMAGE_RESOLUTION_INCHES:
             // convert resolution in inches to resolution in centimeters
-            hres = (wxUint32)(100*mm2inches*hres);
-            vres = (wxUint32)(100*mm2inches*vres);
+            hres = (wxUint32)(10*mm2inches*hres);
+            vres = (wxUint32)(10*mm2inches*vres);
             // fall through to convert it to resolution in meters
 
         case wxIMAGE_RESOLUTION_CM:
