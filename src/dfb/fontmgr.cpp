@@ -17,6 +17,7 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/gdicmn.h"
     #include "wx/utils.h"
     #include "wx/log.h"
 #endif
@@ -46,14 +47,10 @@ wxFontInstance::wxFontInstance(float ptSize, bool aa,
                                const wxString& filename)
     : wxFontInstanceBase(ptSize, aa)
 {
-    int scrSizePx, scrSizeMM;
-    wxDisplaySize(NULL, &scrSizePx);
-    wxDisplaySizeMM(NULL, &scrSizeMM);
-    double dpi = (scrSizePx / (scrSizeMM * mm2inches));
     // NB: DFB's fract_height value is 32bit integer with the last 6 bit
     //     representing fractional value, hence the multiplication by 64;
     //     1pt=1/72inch, hence "/ 72"
-    int pixSize = int(ptSize * dpi * 64 / 72);
+    int pixSize = int(ptSize * wxGetDisplayPPI().y * 64 / 72);
 
     DFBFontDescription desc;
     desc.flags = (DFBFontDescriptionFlags)(
