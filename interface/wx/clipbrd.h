@@ -35,7 +35,7 @@
     // Write some text to the clipboard
     if (wxTheClipboard->Open())
     {
-        // This data objects are held by the clipboard, 
+        // This data objects are held by the clipboard,
         // so do not delete them in the app.
         wxTheClipboard->SetData( new wxTextDataObject("Some text") );
         wxTheClipboard->Close();
@@ -49,7 +49,7 @@
             wxTextDataObject data;
             wxTheClipboard->GetData( data );
             wxMessageBox( data.GetText() );
-        }  
+        }
         wxTheClipboard->Close();
     }
     @endcode
@@ -173,6 +173,6 @@ public:
         normal clipboard contents with the currently selected text on the other
         platforms.
     */
-    void UsePrimarySelection(bool primary = true);
+    virtual void UsePrimarySelection(bool primary = false);
 };
 
