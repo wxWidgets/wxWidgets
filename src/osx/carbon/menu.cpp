@@ -217,7 +217,7 @@ public :
                 MenuRef submenu = pItem->GetSubMenu()->GetHMenu();
                 SetMenuItemHierarchicalMenu(m_osxMenu, index, submenu);
                 // carbon is using the title of the submenu, eg in the menubar
-                SetMenuTitleWithCFString(submenu, wxCFStringRef(wxStripMenuCodes(pItem->GetLabel())));
+                SetMenuTitleWithCFString(submenu, wxCFStringRef(pItem->GetItemLabelText()));
             }
             else
             {
