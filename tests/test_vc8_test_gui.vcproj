@@ -885,6 +885,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\misc\guifuncs.cpp"
+			/>
+			<File
 				RelativePath=".\geometry\point.cpp"
 			/>
 			<File

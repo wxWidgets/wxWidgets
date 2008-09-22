@@ -109,6 +109,7 @@
             controls/textctrltest.cpp
             controls/textentrytest.cpp
             image/rawbmp.cpp
+            misc/guifuncs.cpp
             misc/selstoretest.cpp
             window/clientsize.cpp
             window/setsize.cpp

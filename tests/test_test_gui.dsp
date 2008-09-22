@@ -253,6 +253,10 @@ SOURCE=.\dummy.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\misc\guifuncs.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\geometry\point.cpp
 # End Source File
 # Begin Source File

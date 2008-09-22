@@ -124,6 +124,7 @@ TEST_GUI_OBJECTS =  \
 	test_gui_textctrltest.o \
 	test_gui_textentrytest.o \
 	test_gui_rawbmp.o \
+	test_gui_guifuncs.o \
 	test_gui_selstoretest.o \
 	test_gui_clientsize.o \
 	test_gui_setsize.o
@@ -530,6 +531,9 @@ test_gui_textentrytest.o: $(srcdir)/controls/textentrytest.cpp $(TEST_GUI_ODEP)
 
 test_gui_rawbmp.o: $(srcdir)/image/rawbmp.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/image/rawbmp.cpp
+
+test_gui_guifuncs.o: $(srcdir)/misc/guifuncs.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/misc/guifuncs.cpp
 
 test_gui_selstoretest.o: $(srcdir)/misc/selstoretest.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/misc/selstoretest.cpp
