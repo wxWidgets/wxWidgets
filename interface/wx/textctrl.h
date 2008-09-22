@@ -1435,6 +1435,9 @@ public:
 
         If both parameters are equal to -1 all text in the control is selected.
 
+        Notice that the insertion point will be moved to @a from by this
+        function.
+
         @param from
             The first position.
         @param to

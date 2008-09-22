@@ -193,7 +193,10 @@ void wxTextEntry::SetSelection(long from, long to)
     if ( from == -1 && to == -1 )
         from = 0;
 
-    gtk_editable_select_region(GetEditable(), from, to);
+    // for compatibility with MSW, exchange from and to parameters so that the
+    // insertion point is set to the start of the selection and not its end as
+    // GTK+ does by default
+    gtk_editable_select_region(GetEditable(), to, from);
 }
 
 void wxTextEntry::GetSelection(long *from, long *to) const
