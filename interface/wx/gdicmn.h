@@ -857,6 +857,9 @@ wxRect wxGetClientDisplayRect();
 /**
     Returns the display resolution in pixels per inch.
 
+    The @c x component of the returned wxSize object contains the horizontal
+    resolution and the @c y one -- the vertical resolution.
+
     @header{wx/gdicmn.h}
 
     @since 2.9.0
@@ -869,6 +872,9 @@ wxSize wxGetDisplayPPI();
 /**
     Returns the display size in pixels.
 
+    For the version taking @a width and @a header arguments, either of them
+    can be @NULL if the caller is not interested in the returned value.
+
     @header{wx/gdicmn.h}
 */
 void wxDisplaySize(int* width, int* height);
@@ -879,6 +885,11 @@ wxSize wxGetDisplaySize();
 //@{
 /**
     Returns the display size in millimeters.
+
+    For the version taking @a width and @a header arguments, either of them
+    can be @NULL if the caller is not interested in the returned value.
+
+    @see wxGetDisplayPPI()
 
     @header{wx/gdicmn.h}
 */
