@@ -294,7 +294,7 @@ public :
                              const wxSize& size, long style ) ;
     virtual ~wxMacMLTEHIViewControl() ;
 
-    virtual OSStatus SetFocus( ControlFocusPart focusPart ) ;
+    virtual bool SetFocus() ;
     virtual bool HasFocus() const ;
     virtual void SetBackgroundColour(const wxColour& col ) ;
 
@@ -2252,9 +2252,9 @@ wxMacMLTEHIViewControl::~wxMacMLTEHIViewControl()
 {
 }
 
-OSStatus wxMacMLTEHIViewControl::SetFocus( ControlFocusPart focusPart )
+bool wxMacMLTEHIViewControl::SetFocus()
 {
-    return SetKeyboardFocus( GetControlOwner( m_textView ), m_textView, focusPart ) ;
+    return SetKeyboardFocus( GetControlOwner( m_textView ), m_textView, kControlFocusNextPart ) == noErr ;
 }
 
 bool wxMacMLTEHIViewControl::HasFocus() const
