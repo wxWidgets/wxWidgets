@@ -1304,6 +1304,16 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
         //else: proceed normally
     }
 
+    if ( ProcessEventHere(event) )
+        return true;
+
+    // propagate the event upwards the window chain and/or to the application
+    // object if it wasn't processed at this level 
+    return TryParent(event);
+}
+
+bool wxEvtHandler::ProcessEventHere(wxEvent& event)
+{
     // An event handler can be enabled or disabled
     if ( GetEvtHandlerEnabled() )
     {
@@ -1322,17 +1332,11 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
     }
 
     // Try going down the event handler chain
-    if ( GetNextHandler() )
-    {
-        // notice that we shouldn't let the parent have the event even if the
-        // next handler does not process it because it will have already passed
-        // it to the parent in this case
-        return GetNextHandler()->ProcessEvent(event);
-    }
+    if ( GetNextHandler() && GetNextHandler()->ProcessEventHere(event) )
+        return true;
 
-    // Finally propagate the event upwards the window chain and/or to the
-    // application object as necessary
-    return TryParent(event);
+    // We don't have a handler for this event.
+    return false;
 }
 
 bool wxEvtHandler::SafelyProcessEvent(wxEvent& event)

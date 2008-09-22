@@ -2343,6 +2343,10 @@ public:
     void SetClientData( void *data ) { DoSetClientData(data); }
     void *GetClientData() const { return DoGetClientData(); }
 
+
+    // implementation from now on
+    // --------------------------
+
     // check if the given event table entry matches this event and call the
     // handler if it does
     //
@@ -2352,13 +2356,26 @@ public:
                                       wxEvtHandler *handler,
                                       wxEvent& event);
 
-    // implementation from now on
     virtual bool SearchEventTable(wxEventTable& table, wxEvent& event);
     bool SearchDynamicEventTable( wxEvent& event );
 
     // Avoid problems at exit by cleaning up static hash table gracefully
     void ClearEventHashTable() { GetEventHashTable().Clear(); }
     void OnSinkDestroyed( wxEvtHandler *sink );
+
+
+    // The method processing the event in this event handler (or rather in this
+    // event handler chain as it also tries the next handler and so on), i.e.
+    // it returns true if we processed this event or false if we didn't but
+    // does not call TryParent() in the latter case. It also doesn't call
+    // wxApp::FilterEvent() before processing it, this is supposed to be done
+    // by the public ProcessEvent() only once for every event we handle.
+    //
+    // It is meant to be called from ProcessEvent() only and is not virtual,
+    // additional event handlers can be hooked into the normal event processing
+    // logic using TryValidator() hook.
+    bool ProcessEventHere(wxEvent& event);
+
 
 private:
     static const wxEventTableEntry sm_eventTableEntries[];
