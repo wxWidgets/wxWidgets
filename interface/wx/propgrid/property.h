@@ -780,17 +780,6 @@ public:
     */
     void DeleteChoice( int index );
 
-    /** Call to enable or disable usage of common value (integer value that can be selected for
-        properties instead of their normal values) for this property.
-
-        Common values are disabled by the default for all properties.
-    */
-    void EnableCommonValue( bool enable = true )
-    {
-        if ( enable ) SetFlag( wxPG_PROP_USES_COMMON_VALUE );
-        else ClearFlag( wxPG_PROP_USES_COMMON_VALUE );
-    }
-
     /** Composes text from values of child properties. */
     void GenerateComposedValue( wxString& text, int argFlags = 0 ) const;
 
@@ -831,7 +820,9 @@ public:
         return m_value;
     }
 
-    /** Same as GetValueAsString, except takes common value into account.
+    /** To acquire property's value as string, you should use this
+         function (instead of GetValueAsString()), as it may produce
+         more accurate value in future versions.
     */
     wxString GetValueString( int argFlags = 0 ) const;
 
@@ -848,10 +839,8 @@ public:
         return (wxPGCell*) m_cells[column];
     }
 
-    /** Return number of displayed common values for this property.
-    */
-    int GetDisplayedCommonValueCount() const;
-
+    /** Returns property's displayed text.
+     */
     wxString GetDisplayedString() const
     {
         return GetValueString(0);
@@ -925,13 +914,6 @@ public:
             return GetEditorClass();
 
         return NULL;
-    }
-
-    /** Returns common value selected for this property. -1 for none.
-    */
-    int GetCommonValue() const
-    {
-        return m_commonValue;
     }
 
     /** Returns true if property has even one visible child.
@@ -1107,13 +1089,6 @@ public:
         then it is forced to integer.
     */
     void SetChoiceSelection( int newValue );
-
-    /** Sets common value selected for this property. -1 for none.
-    */
-    void SetCommonValue( int commonValue )
-    {
-        m_commonValue = commonValue;
-    }
 
     /** Sets flags from a '|' delimited string. Note that flag names are not
         prepended with 'wxPG_PROP_'.

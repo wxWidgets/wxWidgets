@@ -1420,7 +1420,9 @@ public:
     }
 #endif
 
-    /** Same as GetValueAsString, except takes common value into account.
+    /** To acquire property's value as string, you should use this
+         function (instead of GetValueAsString()), as it may produce
+         more accurate value in future versions.
     */
     wxString GetValueString( int argFlags = 0 ) const;
 
