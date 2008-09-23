@@ -39,10 +39,6 @@ END_EVENT_TABLE()
 #pragma mark -
 #pragma mark Tool Implementation
 
-#if wxOSX_USE_COCOA
-#define wxOSX_USE_NATIVE_TOOLBAR 1
-#endif
-
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -162,6 +158,7 @@ public:
     
     void UpdateLabel()
     {
+#if wxOSX_USE_NATIVE_TOOLBAR
        if ( m_toolbarItem )
         {
             // strip mnemonics from the label for compatibility with the usual
@@ -174,6 +171,7 @@ public:
             wxCFStringRef sh( GetShortHelp(), GetToolBarFontEncoding() );
             [m_toolbarItem setToolTip:sh.AsNSString()];
         }
+#endif
     }
 
     void Action()
@@ -256,6 +254,8 @@ private:
 #endif
 };
 
+#if wxOSX_USE_NATIVE_TOOLBAR
+
 @interface wxNSToolbarItem : NSToolbarItem
 {
     wxToolBarTool* impl;
@@ -284,6 +284,8 @@ private:
 
 @end
 
+#endif
+
 
 @interface wxNSToolBarButton : NSButton
 {
@@ -297,6 +299,8 @@ private:
 - (BOOL) isFlipped;
 
 @end
+
+#if wxOSX_USE_NATIVE_TOOLBAR
 
 @implementation wxNSToolbarItem
 
@@ -373,6 +377,8 @@ private:
 }
 
 @end
+
+#endif
 
 @implementation wxNSToolBarButton
 
