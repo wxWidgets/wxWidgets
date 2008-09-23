@@ -157,9 +157,6 @@ public:
 
         wxPropertyGridPage* page;
 
-        // Adding a page sets target page to the one added, so
-        // we don't have to call SetTargetPage if we are filling
-        // it right after adding.
         pgMan->AddPage(wxT("First Page"));
         page = pgMan->GetLastPage();
 
@@ -444,10 +441,10 @@ public:
     */
     virtual bool RemovePage( int page );
 
-    /** Select and displays a given page. Also makes it target page for
-        insert operations etc.
+    /** Select and displays a given page.
+
         @param index
-        Index of page being seleced. Can be -1 to select nothing.
+            Index of page being seleced. Can be -1 to select nothing.
     */
     void SelectPage( int index );
 

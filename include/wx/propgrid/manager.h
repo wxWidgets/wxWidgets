@@ -556,10 +556,10 @@ public:
     */
     virtual bool RemovePage( int page );
 
-    /** Select and displays a given page. Also makes it target page for
-        insert operations etc.
+    /** Select and displays a given page.
+
         @param index
-        Index of page being seleced. Can be -1 to select nothing.
+            Index of page being seleced. Can be -1 to select nothing.
     */
     void SelectPage( int index );
 
