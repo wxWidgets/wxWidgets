@@ -1565,7 +1565,9 @@ public:
     /**
         Determines, recursively, if all children are not unspecified.
 
-        Takes values in given list into account.
+        @param pendingList
+            Assumes members in this wxVariant list as pending
+            replacement values.
     */
     bool AreAllChildrenSpecified( wxVariant* pendingList = NULL ) const;
 
@@ -1579,9 +1581,9 @@ public:
 
     /** Returns true if containing grid uses wxPG_EX_AUTO_UNSPECIFIED_VALUES.
     */
-    FlagType UsesAutoUnspecified() const
+    bool UsesAutoUnspecified() const
     {
-        return HasFlag(wxPG_PROP_AUTO_UNSPECIFIED);
+        return HasFlag(wxPG_PROP_AUTO_UNSPECIFIED)?true:false;
     }
 
     wxBitmap* GetValueImage() const
