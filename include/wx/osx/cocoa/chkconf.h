@@ -44,11 +44,6 @@
  * turning off capabilities that don't work under cocoa yet
  */
 
-#if wxUSE_DRAG_AND_DROP
-#undef wxUSE_DRAG_AND_DROP
-#define wxUSE_DRAG_AND_DROP 0
-#endif
-
 #if wxUSE_DATAVIEWCTRL
 #undef wxUSE_DATAVIEWCTRL
 #define wxUSE_DATAVIEWCTRL 0

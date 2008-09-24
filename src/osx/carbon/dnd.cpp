@@ -107,6 +107,7 @@ bool wxDropTarget::CurrentDragHasSupportedFormat()
         }
     }
 
+#if wxOSX_USE_CARBON
     if ( !supported )
     {
         PasteboardRef   pasteboard;
@@ -116,6 +117,7 @@ bool wxDropTarget::CurrentDragHasSupportedFormat()
             supported = m_dataObject->HasDataInPasteboard( pasteboard );
         }
     }
+#endif
 
     return supported;
 }
@@ -164,6 +166,7 @@ bool wxDropTarget::GetData()
         }
     }
 
+#if wxOSX_USE_CARBON
     if ( !transferred )
     {
         PasteboardRef   pasteboard;
@@ -173,6 +176,7 @@ bool wxDropTarget::GetData()
             transferred = m_dataObject->GetFromPasteboard( pasteboard );
         }
     }
+#endif
 
     return transferred;
 }
@@ -231,6 +235,7 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
     if ((m_data == NULL) || (m_data->GetFormatCount() == 0))
         return (wxDragResult)wxDragNone;
 
+#if wxOSX_USE_CARBON
     DragReference theDrag;
     RgnHandle dragRegion;
     OSStatus err = noErr;
@@ -305,6 +310,7 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
     DisposeDrag( theDrag );
     CFRelease( pasteboard );
     gTrackingGlobals.m_currentSource = NULL;
+#endif
 
     return gTrackingGlobals.m_result;
 }
@@ -325,15 +331,18 @@ bool gTrackingGlobalsInstalled = false;
 // passing the globals via refcon is not needed by the CFM and later architectures anymore
 // but I'll leave it in there, just in case...
 
+#if wxOSX_USE_CARBON
 pascal OSErr wxMacWindowDragTrackingHandler(
     DragTrackingMessage theMessage, WindowPtr theWindow,
     void *handlerRefCon, DragReference theDrag );
 pascal OSErr wxMacWindowDragReceiveHandler(
     WindowPtr theWindow, void *handlerRefCon,
     DragReference theDrag );
+#endif
 
 void wxMacEnsureTrackingHandlersInstalled()
 {
+#if wxOSX_USE_CARBON
     if ( !gTrackingGlobalsInstalled )
     {
         OSStatus err;
@@ -346,8 +355,10 @@ void wxMacEnsureTrackingHandlersInstalled()
 
         gTrackingGlobalsInstalled = true;
     }
+#endif
 }
 
+#if wxOSX_USE_CARBON
 pascal OSErr wxMacWindowDragTrackingHandler(
     DragTrackingMessage theMessage, WindowPtr theWindow,
     void *handlerRefCon, DragReference theDrag )
@@ -562,6 +573,7 @@ pascal OSErr wxMacWindowDragReceiveHandler(
 
     return noErr;
 }
+#endif
 
 #endif // wxUSE_DRAG_AND_DROP
 
