@@ -55,7 +55,7 @@ public:
     wxString ToString() const;
     bool FromString(const wxString& str);
 
-public: // TODO: make these fields private
+private:
     wxColour        m_dataColour;
     wxColour        m_custColours[NUM_CUSTOM];
     bool            m_chooseFull;
