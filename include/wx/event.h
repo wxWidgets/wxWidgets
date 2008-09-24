@@ -2419,8 +2419,6 @@ protected:
 
     // Is event handler enabled?
     bool                m_enabled;
-    // Avoid adding events from another thread during dtor
-    bool                m_beingDeleted;
 
 
     // The user data: either an object which will be deleted by the container

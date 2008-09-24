@@ -1032,8 +1032,6 @@ void wxEventHashTable::GrowEventTypeTable()
 
 wxEvtHandler::wxEvtHandler()
 {
-    m_beingDeleted = false;
-    
     m_nextHandler = (wxEvtHandler *) NULL;
     m_previousHandler = (wxEvtHandler *) NULL;
     m_enabled = true;
@@ -1047,8 +1045,6 @@ wxEvtHandler::wxEvtHandler()
 
 wxEvtHandler::~wxEvtHandler()
 {
-    m_beingDeleted = true;
-    
     // Takes itself out of the list of handlers
     if (m_previousHandler)
         m_previousHandler->m_nextHandler = m_nextHandler;
@@ -1066,6 +1062,7 @@ wxEvtHandler::~wxEvtHandler()
             wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)*it;
 
             // Remove ourselves from sink destructor notifications
+            // (this has usually been been done, in wxTrackable destructor)
             wxEvtHandler *eventSink = entry->m_eventSink;
             if ( eventSink )
             {
@@ -1086,17 +1083,8 @@ wxEvtHandler::~wxEvtHandler()
     };
 
     if (m_pendingEvents)
-    {
-        // At this time, we could still be used from other threads. 
-        // Continue to use sync objects.
-        wxENTER_CRIT_SECT( m_pendingEventsLock );
-        
         m_pendingEvents->DeleteContents(true);
-        delete m_pendingEvents;
-        m_pendingEvents = NULL;
-        
-        wxLEAVE_CRIT_SECT( m_pendingEventsLock );
-    }
+    delete m_pendingEvents;
 
     // Remove us from wxPendingEvents if necessary.
     if ( wxPendingEvents )
@@ -1144,9 +1132,6 @@ void wxEvtHandler::QueueEvent(wxEvent *event)
 {
     wxCHECK_RET( event, "NULL event can't be posted" );
 
-    // Catch the situation where destructor is already invoked (in another thread)
-    if( m_beingDeleted ) return;
-
     // 1) Add this event to our list of pending events
     wxENTER_CRIT_SECT( m_pendingEventsLock );
 
@@ -1178,21 +1163,10 @@ void wxEvtHandler::ProcessPendingEvents()
 {
     wxENTER_CRIT_SECT( m_pendingEventsLock );
 
-    // This method is only called by wxApp if this handler does have
-    // pending events, but it happens occasionally when using multi-
-    // threading and we don't want a crash due to that.
-    if( !m_pendingEvents  )
-    {
-        wxLEAVE_CRIT_SECT( m_pendingEventsLock );
-        return;
-    }
-    
-    if( m_pendingEvents->IsEmpty() )
-    {
-        wxPendingEvents->DeleteObject(this);
-        wxLEAVE_CRIT_SECT( m_pendingEventsLock );
-        return;
-    }
+    // this method is only called by wxApp if this handler does have
+    // pending events
+    wxCHECK_RET( m_pendingEvents && !m_pendingEvents->IsEmpty(),
+                 "should have pending events if called" );
 
     wxList::compatibility_iterator node = m_pendingEvents->GetFirst();
     wxEventPtr event(wx_static_cast(wxEvent *, node->GetData()));
