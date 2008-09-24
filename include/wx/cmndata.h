@@ -55,7 +55,9 @@ public:
     wxString ToString() const;
     bool FromString(const wxString& str);
 
-private:
+
+    // public for backwards compatibility only: don't use directly
+public:
     wxColour        m_dataColour;
     wxColour        m_custColours[NUM_CUSTOM];
     bool            m_chooseFull;
