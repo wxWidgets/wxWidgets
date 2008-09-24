@@ -113,7 +113,7 @@ wxCursor::wxCursor( const wxString& WXUNUSED(rsCursorFile),
 } // end of wxCursor::wxCursor
 
 // Cursors by stock number
-wxCursor::wxCursor(int nCursorType)
+wxCursor::wxCursor(wxStockCursor nCursorType)
 {
     wxCursorRefData*                pRefData = new wxCursorRefData;
 

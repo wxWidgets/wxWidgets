@@ -355,7 +355,7 @@ void wxCursor::CreateFromImage(const wxImage & image)
     CGImageRef cgimage = wxMacCreateCGImageFromBitmap(bmp);
     if ( cgimage )
     {
-        M_CURSORDATA->m_hCursor = wxMacCocoaCreateCursorFromCGImage( cgimage, hotSpotX, hotSpotY ); 
+        M_CURSORDATA->m_hCursor = wxMacCocoaCreateCursorFromCGImage( cgimage, hotSpotX, hotSpotY );
         CFRelease( cgimage );
     }
 #elif wxOSX_USE_CARBON
@@ -556,7 +556,7 @@ wxCursor::wxCursor(const wxString& cursor_file, wxBitmapType flags, int hotSpotX
 }
 
 // Cursors by stock number
-wxCursor::wxCursor(int cursor_type)
+wxCursor::wxCursor(wxStockCursor cursor_type)
 {
     m_refData = new wxCursorRefData;
 #if wxOSX_USE_COCOA

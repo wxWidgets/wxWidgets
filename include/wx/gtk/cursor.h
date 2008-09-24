@@ -23,7 +23,7 @@ class WXDLLIMPEXP_CORE wxCursor : public wxGDIObject
 {
 public:
     wxCursor();
-    wxCursor( int cursorId );
+    wxCursor( wxStockCursor cursorId );
 #if wxUSE_IMAGE
     wxCursor( const wxImage & image );
 #endif

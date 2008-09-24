@@ -292,7 +292,7 @@ wxCursor::wxCursor(const wxString& filename,
 }
 
 // Cursors by stock number
-wxCursor::wxCursor(int idCursor)
+wxCursor::wxCursor(wxStockCursor idCursor)
 {
     // all wxWidgets standard cursors
     static const struct StdCursor

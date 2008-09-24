@@ -46,7 +46,7 @@ public:
     wxCursor(const wxString& name, long flags = 0,
              int hotSpotX = 0, int hotSpotY = 0);
 
-    wxCursor(int cursor_type);
+    wxCursor(wxStockCursor cursor_type);
     virtual ~wxCursor();
 
     // FIXME: operator==() is wrong!

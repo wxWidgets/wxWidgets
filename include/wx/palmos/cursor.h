@@ -29,7 +29,7 @@ public:
     wxCursor(const wxString& name,
              long flags = wxBITMAP_TYPE_CUR_RESOURCE,
              int hotSpotX = 0, int hotSpotY = 0);
-    wxCursor(int idCursor);
+    wxCursor(wxStockCursor idCursor);
     virtual ~wxCursor();
 
     // implementation only

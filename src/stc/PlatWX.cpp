@@ -677,7 +677,7 @@ void Window::SetFont(Font &font) {
 }
 
 void Window::SetCursor(Cursor curs) {
-    int cursorId;
+    wxStockCursor cursorId;
 
     switch (curs) {
     case cursorText:
@@ -708,16 +708,13 @@ void Window::SetCursor(Cursor curs) {
         cursorId = wxCURSOR_ARROW;
         break;
     }
-#ifdef __WXMOTIF__
-       wxCursor wc = wxStockCursor(cursorId) ;
-#else
-       wxCursor wc = wxCursor(cursorId) ;
-#endif
-       if(curs != cursorLast)
-       {
-           GETWIN(id)->SetCursor(wc);
-           cursorLast = curs;
-       }
+
+    wxCursor wc = wxCursor(cursorId);
+    if(curs != cursorLast)
+    {
+        GETWIN(id)->SetCursor(wc);
+        cursorLast = curs;
+    }
 }
 
 

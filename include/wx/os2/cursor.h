@@ -46,7 +46,7 @@ public:
              ,int             nHotSpotX = 0
              ,int             nHotSpotY = 0
             );
-    wxCursor(int nCursorType);
+    wxCursor(wxStockCursor nCursorType);
     inline ~wxCursor() { }
 
     inline WXHCURSOR GetHCURSOR(void) const { return (M_CURSORDATA ? M_CURSORDATA->m_hCursor : 0); }

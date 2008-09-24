@@ -24,7 +24,7 @@ class WXDLLIMPEXP_CORE wxCursor : public wxGDIObject
 public:
 
     wxCursor();
-    wxCursor(int cursorId);
+    wxCursor(wxStockCursor cursorId);
     wxCursor(const char bits[], int width, int  height,
               int hotSpotX=-1, int hotSpotY=-1,
               const char maskBits[]=0, wxColour *fg=0, wxColour *bg=0);

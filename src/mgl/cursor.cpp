@@ -65,7 +65,7 @@ wxCursor::wxCursor()
 {
 }
 
-wxCursor::wxCursor(int cursorId)
+wxCursor::wxCursor(wxStockCursor cursorId)
 {
     if ( !gs_cursorsHash )
         gs_cursorsHash = new wxCursorsHash;
