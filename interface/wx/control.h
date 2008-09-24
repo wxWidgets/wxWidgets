@@ -40,7 +40,7 @@ public:
     /**
         Returns the control's label without mnemonics.
     */
-    const wxString GetLabelText();
+    wxString GetLabelText() const;
 
     /**
         Returns the given @a label string without mnemonics.

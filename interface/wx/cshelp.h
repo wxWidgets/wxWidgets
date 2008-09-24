@@ -111,8 +111,8 @@ public:
 
         @since 2.7.0
     */
-    virtual bool ShowHelpAtPoint(wxWindowBase* window, const wxPoint point,
-                                   wxHelpEvent::Origin origin);
+    virtual bool ShowHelpAtPoint(wxWindowBase* window, const wxPoint& point,
+                                 wxHelpEvent::Origin origin);
 };
 
 
@@ -210,11 +210,13 @@ public:
     /**
         Puts the application into context-sensitive help mode. @a window is the
         window which will be used to catch events; if @NULL, the top window
-        will be used.  Returns @true if the application was successfully put
-        into context-sensitive help mode.  This function only returns when the
-        event loop has finished.
+        will be used.
+
+        Returns @true if the application was successfully put into
+        context-sensitive help mode.
+        This function only returns when the event loop has finished.
     */
-    bool BeginContextHelp(wxWindow* window = NULL);
+    bool BeginContextHelp(wxWindow* window);
 
     /**
         Ends context-sensitive help mode. Not normally called by the
@@ -245,9 +247,6 @@ public:
 class wxContextHelpButton : public wxBitmapButton
 {
 public:
-    /// Default constructor.
-    wxContextHelpButton();
-
     /**
         Constructor, creating and showing a context help button.
 

@@ -6,6 +6,20 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+
+
+/**
+    Flags for wxColour -> wxString conversion (see wxColour::GetAsString).
+
+    @{
+*/
+#define wxC2S_NAME              1   //!< Return colour name, when possible.
+#define wxC2S_CSS_SYNTAX        2   //!< Return colour in rgb(r,g,b) syntax.
+#define wxC2S_HTML_SYNTAX       4   //!< Return colour in #rrggbb syntax.
+
+//@}
+
+
 /**
     @class wxColour
 
@@ -81,29 +95,29 @@ public:
     /**
         Converts this colour to a wxString using the given flags.
 
-        The supported flags are wxC2S_NAME, to obtain the colour name (e.g.
-        wxColour(255,0,0) == "red"), wxC2S_CSS_SYNTAX, to obtain the colour in
-        the "rgb(r,g,b)" or "rgba(r,g,b,a)" syntax (e.g.
-        wxColour(255,0,0,85) == "rgba(255,0,0,0.333)"), and wxC2S_HTML_SYNTAX,
-        to obtain the colour as "#" followed by 6 hexadecimal digits (e.g.
-        wxColour(255,0,0) == "#FF0000").
+        The supported flags are @c wxC2S_NAME, to obtain the colour name
+        (e.g. wxColour(255,0,0) == "red"), @c wxC2S_CSS_SYNTAX, to obtain
+        the colour in the "rgb(r,g,b)" or "rgba(r,g,b,a)" syntax
+        (e.g. wxColour(255,0,0,85) == "rgba(255,0,0,0.333)"), and
+        @c wxC2S_HTML_SYNTAX, to obtain the colour as "#" followed by 6
+        hexadecimal digits (e.g. wxColour(255,0,0) == "#FF0000").
 
         This function never fails and always returns a non-empty string but
         asserts if the colour has alpha channel (i.e. is non opaque) but
-        wxC2S_CSS_SYNTAX (which is the only one supporting alpha) is not
+        @c wxC2S_CSS_SYNTAX (which is the only one supporting alpha) is not
         specified in flags.
 
         @since 2.7.0
     */
-    wxString GetAsString(long flags);
+    virtual wxString GetAsString(long flags = wxC2S_NAME | wxC2S_CSS_SYNTAX) const;
 
     /**
-        Returns a pixel value which is platform-dependent. On Windows, a COLORREF is
-        returned.
+        Returns a pixel value which is platform-dependent.
+        On Windows, a COLORREF is returned.
         On X, an allocated pixel value is returned.
-        -1 is returned if the pixel is invalid (on X, unallocated).
+        If the pixel is invalid (on X, unallocated), @c -1 is returned.
     */
-    long GetPixel() const;
+    int GetPixel() const;
 
     /**
         Returns the green intensity.
@@ -148,7 +162,7 @@ public:
         Tests the inequality of two colours by comparing individual red, green, blue
         colours and alpha values.
     */
-    bool operator !=(const wxColour& colour);
+    bool operator !=(const wxColour& colour) const;
 
     //@{
     /**
@@ -164,7 +178,7 @@ public:
         Tests the equality of two colours by comparing individual red, green, blue
         colours and alpha values.
     */
-    bool operator ==(const wxColour& colour);
+    bool operator ==(const wxColour& colour) const;
 };
 
 

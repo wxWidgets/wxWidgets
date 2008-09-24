@@ -47,7 +47,7 @@ public:
     /**
         Returns the colour data associated with the colour dialog.
     */
-    wxColourData GetColourData();
+    wxColourData& GetColourData();
 
     /**
         Shows the dialog, returning wxID_OK if the user pressed OK, and

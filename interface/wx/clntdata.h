@@ -128,7 +128,7 @@ public:
     /**
         Get string client data.
     */
-    const wxString GetData() const;
+    const wxString& GetData() const;
 
     /**
         Set string client data.

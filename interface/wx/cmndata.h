@@ -54,7 +54,7 @@ public:
 
         The default value is black.
     */
-    wxColour& GetColour();
+    const wxColour& GetColour() const;
 
     /**
         Determines whether "effects" are enabled under Windows. This refers to
@@ -122,7 +122,7 @@ public:
     /**
         Assignment operator for the font data.
     */
-    void operator =(const wxFontData& data);
+    wxFontData& operator =(const wxFontData& data);
 };
 
 
@@ -152,12 +152,12 @@ public:
     /**
         Copy constructor.
     */
-    wxPageSetupDialogData(wxPageSetupDialogData& data);
+    wxPageSetupDialogData(const wxPageSetupDialogData& data);
 
     /**
         Construct an object from a print data object.
     */
-    wxPageSetupDialogData(wxPrintData& printData);
+    wxPageSetupDialogData(const wxPrintData& printData);
 
     /**
         Destructor.
@@ -265,7 +265,8 @@ public:
     /**
         Returns a reference to the print data associated with this object.
     */
-    wxPrintData GetPrintData();
+    wxPrintData& GetPrintData();
+    const wxPrintData& GetPrintData() const;
 
     /**
         Returns @true if the print data associated with the dialog data is
@@ -315,7 +316,7 @@ public:
 
         @see wxPrintData::SetPaperId()
     */
-    void SetPaperId(wxPaperSize& id);
+    void SetPaperId(wxPaperSize id);
 
     /**
         Sets the paper size in millimetres. If a corresponding paper id is
@@ -332,12 +333,12 @@ public:
     /**
         Assigns print data to this object.
     */
-    void operator =(const wxPrintData& data);
+    wxPageSetupDialogData& operator =(const wxPrintData& data);
 
     /**
         Assigns page setup data to this object.
     */
-    void operator =(const wxPageSetupDialogData& data);
+    wxPageSetupDialogData& operator =(const wxPageSetupDialogData& data);
 };
 
 
@@ -402,7 +403,7 @@ public:
 
         The default value is @true.
     */
-    void SetChooseFull(const bool flag);
+    void SetChooseFull(bool flag);
 
     /**
         Sets the default colour for the colour dialog.
@@ -423,7 +424,7 @@ public:
     /**
         Assignment operator for the colour data.
     */
-    void operator =(const wxColourData& data);
+    wxColourData& operator =(const wxColourData& data);
 
 
     /** @todo document these */
@@ -570,7 +571,7 @@ public:
         Returns the printer name. If the printer name is the empty string, it
         indicates that the default printer should be used.
     */
-    const wxString GetPrinterName() const;
+    const wxString& GetPrinterName() const;
 
     /**
         Returns the current print quality. This can be a positive integer,
@@ -686,12 +687,12 @@ public:
     /**
         Copy constructor.
     */
-    wxPrintDialogData(wxPrintDialogData& dialogData);
+    wxPrintDialogData(const wxPrintDialogData& dialogData);
 
     /**
         Construct an object from a print dialog data object.
     */
-    wxPrintDialogData(wxPrintData& printData);
+    wxPrintDialogData(const wxPrintData& printData);
 
     /**
         Destructor.

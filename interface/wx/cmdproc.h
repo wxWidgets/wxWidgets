@@ -35,7 +35,7 @@ public:
             Must be supplied for the command processor to display the command
             name in the application's edit menu.
     */
-    wxCommand(bool canUndo = false, const wxString& name = NULL);
+    wxCommand(bool canUndo = false, const wxString& name = wxEmptyString);
 
     /**
         Destructor.
@@ -56,7 +56,7 @@ public:
                 processor that the action is not undoable and should not be
                 added to the command history.
     */
-    bool Do();
+    virtual bool Do();
 
     /**
         Returns the command name.
@@ -68,7 +68,7 @@ public:
 
         How you implement this command is totally application dependent, but
         typical strategies include:
-        
+
         - Perform an inverse operation on the last modified piece of data in
           the document. When redone, a copy of data stored in command is pasted
           back or some operation reapplied. This relies on the fact that you
@@ -85,7 +85,7 @@ public:
                 processor that the action is not redoable and no change should
                 be made to the command history.
     */
-    bool Undo();
+    virtual bool Undo();
 };
 
 

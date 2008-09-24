@@ -337,8 +337,8 @@ public:
 
         @see Create(), wxValidator
     */
-    wxComboCtrl(wxWindow* parent, wxWindowID id,
-                const wxString& value = "",
+    wxComboCtrl(wxWindow* parent, wxWindowID id = wxID_ANY,
+                const wxString& value = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
@@ -373,8 +373,8 @@ public:
         should call or replace this function. See wxComboCtrl() for further
         details.
     */
-    bool Create(wxWindow* parent, wxWindowID id,
-                const wxString& value = "",
+    bool Create(wxWindow* parent, wxWindowID id = wxID_ANY,
+                const wxString& value = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
@@ -430,7 +430,7 @@ public:
 
         @return A reference to the disabled state bitmap.
     */
-    const wxBitmap GetBitmapDisabled() const;
+    const wxBitmap& GetBitmapDisabled() const;
 
     /**
         Returns button mouse hover bitmap that has been set with
@@ -438,7 +438,7 @@ public:
 
         @return A reference to the mouse hover state bitmap.
     */
-    const wxBitmap GetBitmapHover() const;
+    const wxBitmap& GetBitmapHover() const;
 
     /**
         Returns default button bitmap that has been set with
@@ -446,7 +446,7 @@ public:
 
         @return A reference to the normal state bitmap.
     */
-    const wxBitmap GetBitmapNormal() const;
+    const wxBitmap& GetBitmapNormal() const;
 
     /**
         Returns depressed button bitmap that has been set with
@@ -454,7 +454,7 @@ public:
 
         @return A reference to the depressed state bitmap.
     */
-    const wxBitmap GetBitmapPressed() const;
+    const wxBitmap& GetBitmapPressed() const;
 
     /**
         Returns current size of the dropdown button.
@@ -516,7 +516,7 @@ public:
         Returns area covered by the text field (includes everything except
         borders and the dropdown button).
     */
-    const wxRect GetTextRect() const;
+    const wxRect& GetTextRect() const;
 
     /**
         Returns text representation of the current value. For writable combo

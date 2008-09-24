@@ -329,8 +329,7 @@ public:
                  const wxString& vendorName = wxEmptyString,
                  const wxString& localFilename = wxEmptyString,
                  const wxString& globalFilename = wxEmptyString,
-                 long style = 0,
-                 const wxMBConv& conv = wxConvAuto());
+                 long style = 0);
 
     /**
         Empty but ensures that dtor of all derived classes is virtual.
