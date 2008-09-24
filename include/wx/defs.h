@@ -1557,7 +1557,7 @@ enum wxAlignment
 enum wxSizerFlagBits
 {
     /* for compatibility only, default now, don't use explicitly any more */
-#if WXWIN_COMPATIBILITY_2_6
+#if WXWIN_COMPATIBILITY_2_8
     wxADJUST_MINSIZE               = 0,
 #endif
     wxFIXED_MINSIZE                = 0x8000,
