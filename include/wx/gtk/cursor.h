@@ -15,6 +15,8 @@
 class WXDLLIMPEXP_FWD_CORE wxColour;
 class WXDLLIMPEXP_FWD_CORE wxImage;
 
+enum wxStockCursor;
+
 //-----------------------------------------------------------------------------
 // wxCursor
 //-----------------------------------------------------------------------------

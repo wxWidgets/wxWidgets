@@ -126,8 +126,8 @@ int wxColourDialog::ShowModal()
     COLORREF custColours[16];
     for ( i = 0; i < WXSIZEOF(custColours); i++ )
     {
-        if ( m_colourData.m_custColours[i].IsOk() )
-            custColours[i] = wxColourToRGB(m_colourData.m_custColours[i]);
+        if ( m_colourData.GetCustomColour(i).IsOk() )
+            custColours[i] = wxColourToRGB(m_colourData.GetCustomColour(i));
         else
             custColours[i] = RGB(255,255,255);
     }
@@ -135,7 +135,7 @@ int wxColourDialog::ShowModal()
     chooseColorStruct.lStructSize = sizeof(CHOOSECOLOR);
     if ( m_parent )
         chooseColorStruct.hwndOwner = GetHwndOf(m_parent);
-    chooseColorStruct.rgbResult = wxColourToRGB(m_colourData.m_dataColour);
+    chooseColorStruct.rgbResult = wxColourToRGB(m_colourData.GetColour());
     chooseColorStruct.lpCustColors = custColours;
 
     chooseColorStruct.Flags = CC_RGBINIT | CC_ENABLEHOOK;
@@ -161,10 +161,10 @@ int wxColourDialog::ShowModal()
     // transfer the values chosen by user back into m_colourData
     for ( i = 0; i < WXSIZEOF(custColours); i++ )
     {
-      wxRGBToColour(m_colourData.m_custColours[i], custColours[i]);
+      wxRGBToColour(m_colourData.GetCustomColour(i), custColours[i]);
     }
 
-    wxRGBToColour(m_colourData.m_dataColour, chooseColorStruct.rgbResult);
+    wxRGBToColour(m_colourData.GetColour(), chooseColorStruct.rgbResult);
 
     // this doesn't seem to work (contrary to what MSDN implies) on current
     // Windows versions: CC_FULLOPEN is never set on return if it wasn't
