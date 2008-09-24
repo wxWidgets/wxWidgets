@@ -46,10 +46,10 @@ public:
     const wxColour& GetColour() const { return m_dataColour; }
     wxColour& GetColour() { return m_dataColour; }
 
-    // These functions modify colours in an internal array of NUM_CUSTOM custom
-    // colours
+    // SetCustomColour() modifies colours in an internal array of NUM_CUSTOM
+    // custom colours;
     void SetCustomColour(int i, const wxColour& colour);
-    wxColour GetCustomColour(int i);
+    wxColour GetCustomColour(int i) const;
 
     // Serialize the object to a string and restore it from it
     wxString ToString() const;

@@ -393,7 +393,7 @@ public:
             that the user has saved. The default custom colours are invalid
             colours.
     */
-    wxColour& GetCustomColour(int i) const;
+    wxColour GetCustomColour(int i) const;
 
     /**
         Under Windows, tells the Windows colour dialog to display the full
@@ -424,6 +424,11 @@ public:
         Assignment operator for the colour data.
     */
     void operator =(const wxColourData& data);
+
+
+    /** @todo document these */
+    wxString wxColourData::ToString() const;
+    bool wxColourData::FromString(const wxString& str);
 };
 
 
@@ -464,7 +469,7 @@ enum wxPrintBin
     between the print dialogs and the application.
 
     @remarks
-    
+
     The following functions are specific to PostScript printing and have not
     yet been documented:
 
@@ -819,7 +824,7 @@ public:
 
         Determines whether the dialog to be shown will be the Print dialog
         (pass @false) or Print Setup dialog (pass @true).
-        
+
     */
     void SetSetupDialog(bool flag);
 

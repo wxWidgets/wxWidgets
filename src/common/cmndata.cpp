@@ -92,7 +92,7 @@ void wxColourData::SetCustomColour(int i, const wxColour& colour)
     m_custColours[i] = colour;
 }
 
-wxColour wxColourData::GetCustomColour(int i)
+wxColour wxColourData::GetCustomColour(int i) const
 {
     wxCHECK_MSG( i >= 0 && i < NUM_CUSTOM, wxColour(0,0,0),
                  _T("custom colour index out of range") );
