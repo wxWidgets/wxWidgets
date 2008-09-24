@@ -88,6 +88,15 @@ Major new features in 2.8 release
   wxSearchCtrl, wxAboutBox, wxTreebook, tar streams.
 
 
+2.8.10:
+-------
+
+All (Unix):
+
+- Return false from wxSingleInstanceChecker::IsAnotherRunning() if an error
+  occurred while opening or reading the lock file (Lauri Nurmi).
+
+
 2.8.9
 -----
 
