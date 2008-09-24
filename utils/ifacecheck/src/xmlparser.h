@@ -64,6 +64,10 @@ public:
     void SetTypeFromString(const wxString& t);
     wxString GetAsString() const
         { return m_strType; }
+
+    // returns this type _without_ any decoration,
+    // including the & (which indicates this is a reference),
+    // the * (which indicates this is a pointer), etc.
     wxString GetAsCleanString() const
         { return m_strTypeClean; }
 
@@ -108,11 +112,14 @@ public:
     wxString GetArgumentName() const
         { return m_strArgName; }
 
-    void SetDefaultValue(const wxString& defval, const wxString& defvalForCmp = wxEmptyString);
+    void SetDefaultValue(const wxString& defval,
+                         const wxString& defvalForCmp = wxEmptyString);
     wxString GetDefaultValue() const
         { return m_strDefaultValue; }
+
+    // returns the default value used for comparisons
     wxString GetDefaultCleanValue() const
-        { return m_strDefaultValueForCmp.IsEmpty() ? m_strDefaultValue : m_strDefaultValueForCmp; }
+        { return m_strDefaultValueForCmp; }
 
     bool HasDefaultValue() const
         { return !m_strDefaultValue.IsEmpty(); }
@@ -125,12 +132,12 @@ protected:
     wxString m_strDefaultValue;
 
     // this string may differ from m_strDefaultValue if there were
-    // preprocessor substitutions; can be wxEmptyString.
+    // preprocessor substitutions or other "replacements" done to
+    // avoid false errors.
     wxString m_strDefaultValueForCmp;
 
-    wxString m_strArgName;      // this one only makes sense when this wxType is
-                                // used as argument type (and not as return type)
-                                // and can be empty.
+    // the argument name
+    wxString m_strArgName;
 };
 
 extern wxArgumentType wxEmptyArgumentType;

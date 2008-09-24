@@ -132,19 +132,24 @@ bool wxType::operator==(const wxType& m) const
 
 void wxArgumentType::SetDefaultValue(const wxString& defval, const wxString& defvalForCmp)
 {
-    m_strDefaultValue=defval.Strip(wxString::both);
-    m_strDefaultValueForCmp=defvalForCmp.Strip(wxString::both);
+    m_strDefaultValue = defval.Strip(wxString::both);
+    m_strDefaultValueForCmp = defvalForCmp.IsEmpty() ? m_strDefaultValue : defvalForCmp.Strip(wxString::both);
+
+    // adjust aesthetic form of DefaultValue for the modify mode of ifacecheck:
+    // we may need to write it out in an interface header
+    if (m_strDefaultValue == "0u")
+        m_strDefaultValue = "0";
 
     // in order to make valid&simple comparison on argument defaults,
     // we reduce some of the multiple forms in which the same things may appear
     // to a single form:
-    if (m_strDefaultValue == "0u")
-        m_strDefaultValue = "0";
+    if (m_strDefaultValueForCmp == "0u")
+        m_strDefaultValueForCmp = "0";
 /*
     if (IsPointer())
-        m_strDefaultValue.Replace("0", "NULL");
+        m_strDefaultValueForCmp.Replace("0", "NULL");
     else
-        m_strDefaultValue.Replace("NULL", "0");
+        m_strDefaultValueForCmp.Replace("NULL", "0");
 */
     // ADHOC-FIX:
     // doxygen likes to put wxDateTime:: in front of all wxDateTime enums;
@@ -153,8 +158,8 @@ void wxArgumentType::SetDefaultValue(const wxString& defval, const wxString& def
     m_strDefaultValueForCmp.Replace("wxStockGDI::", "");     // same story for some other classes
 
     // ADHOC-FIX:
-    if (m_strDefaultValue.Contains("wxGetTranslation"))
-        m_strDefaultValue = "_(TOFIX)";     // TODO: wxGetTranslation gives problems to gccxml
+    if (m_strDefaultValueForCmp.Contains("wxGetTranslation"))
+        m_strDefaultValueForCmp = "_(TOFIX)";     // TODO: wxGetTranslation gives problems to gccxml
 }
 
 bool wxArgumentType::operator==(const wxArgumentType& m) const
@@ -162,24 +167,21 @@ bool wxArgumentType::operator==(const wxArgumentType& m) const
     if ((const wxType&)(*this) != (const wxType&)m)
         return false;
 
-    const wxString& def1 = m_strDefaultValueForCmp.IsEmpty() ? m_strDefaultValue : m_strDefaultValueForCmp;
-    const wxString& def2 = m.m_strDefaultValueForCmp.IsEmpty() ? m.m_strDefaultValue : m.m_strDefaultValueForCmp;
-
     // ADHOC-FIX:
     // default values for style attributes of wxWindow-derived classes in gccxml appear as raw
     // numbers; avoid false positives in this case!
     if (m_strArgName == m.m_strArgName && m_strArgName == "style" &&
-        (def1.IsNumber() || def2.IsNumber()))
+        (m_strDefaultValueForCmp.IsNumber() || m.m_strDefaultValueForCmp.IsNumber()))
         return true;
 
-    if (def1 != def2)
+    if (m_strDefaultValueForCmp != m.m_strDefaultValueForCmp)
     {
         // maybe the default values are numbers.
         // in this case gccXML gives as default values things like '-0x0000001' instead of just '-1'.
         // To handle these cases, we try to convert the default value strings to numbers:
         long def1val, def2val;
-        if (def1.ToLong(&def1val, 0 /* auto-detect */) &&
-            def2.ToLong(&def2val, 0 /* auto-detect */))
+        if (m_strDefaultValueForCmp.ToLong(&def1val, 0 /* auto-detect */) &&
+            m.m_strDefaultValueForCmp.ToLong(&def2val, 0 /* auto-detect */))
         {
             if (def1val == def2val)
                 return true;        // the default values match
@@ -187,7 +189,7 @@ bool wxArgumentType::operator==(const wxArgumentType& m) const
 
         if (g_verbose)
             LogMessage("Argument type '%s = %s' has different default value from '%s = %s'",
-                       m_strType, def1, m.m_strType, def2);
+                       m_strType, m_strDefaultValueForCmp, m.m_strType, m.m_strDefaultValueForCmp);
         return false;
     }
 
@@ -289,13 +291,11 @@ wxString wxMethod::GetAsString(bool bWithArgumentNames, bool bClean, bool bDepre
 {
     wxString ret;
 
+    // NOTE: for return and argument types, never use wxType::GetAsCleanString
+    //       since in that way we'd miss important decorators like &,*,const etc
+
     if (m_retType!=wxEmptyType)
-    {
-        if (bClean)
-            ret += m_retType.GetAsCleanString() + " ";
-        else
-            ret += m_retType.GetAsString() + " ";
-    }
+        ret += m_retType.GetAsString() + " ";
     //else; this is a ctor or dtor
 
     ret += m_strName + "(";
