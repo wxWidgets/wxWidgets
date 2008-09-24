@@ -375,9 +375,19 @@ bool wxSingleInstanceChecker::IsAnotherRunning() const
 {
     wxCHECK_MSG( m_impl, false, _T("must call Create() first") );
 
+    const pid_t lockerPid = m_impl->GetLockerPID();
+
+    if ( !lockerPid )
+    {
+        // we failed to open the lock file, return false as we're definitely
+        // not sure that another our process is running and so it's better not
+        // to prevent this one from starting up
+        return false;
+    }
+
     // if another instance is running, it must own the lock file - otherwise
     // we have it and the locker PID is ours one
-    return m_impl->GetLockerPID() != getpid();
+    return lockerPid != getpid();
 }
 
 wxSingleInstanceChecker::~wxSingleInstanceChecker()
