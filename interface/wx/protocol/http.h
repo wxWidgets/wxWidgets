@@ -19,6 +19,18 @@
 class wxHTTP : public wxProtocol
 {
 public:
+    //@{
+    /**
+        Connect to the HTTP server.
+
+        By default, connection is made to the port 80 of the specified @a host.
+        You may connect to a non-default port by specifying it explicitly using
+        the second overload.
+     */
+    bool Connect(const wxString& host);
+    bool Connect(const wxString& host, unsigned short port);
+    //@}
+
     /**
         Returns the data attached with a field whose name is specified by @e header.
         If the field doesn't exist, it will return an empty string and not a @NULL string.
