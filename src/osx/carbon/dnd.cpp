@@ -466,7 +466,7 @@ pascal OSErr wxMacWindowDragTrackingHandler(
                 {
                   if ( !trackingGlobals->m_currentSource->MacInstallDefaultCursor( result ) )
                   {
-                      int cursorID = wxCURSOR_NONE;
+                      wxStockCursor cursorID = wxCURSOR_NONE;
 
                       switch (result)
                       {
