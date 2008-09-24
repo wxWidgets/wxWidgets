@@ -328,6 +328,7 @@ public:
         wxDouble *descent, wxDouble *externalLeading ) const;
     virtual void GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const;
     virtual bool ShouldOffset() const;
+    virtual void GetSize( wxDouble* width, wxDouble *height );
 
 private:
     void    Init();
@@ -1388,6 +1389,15 @@ wxGraphicsMatrix wxGDIPlusContext::GetTransform() const
     wxGraphicsMatrix matrix = CreateMatrix();
     m_context->GetTransform((Matrix*) matrix.GetNativeMatrix());
     return matrix;
+}
+
+void wxGDIPlusContext::GetSize( wxDouble* width, wxDouble *height )
+{
+    if ( width )
+        *width = ::GetDeviceCaps(m_context->GetHDC(), HORZRES);
+    if ( height )
+        *height = ::GetDeviceCaps(m_context->GetHDC(), VERTRES);
+
 }
 //-----------------------------------------------------------------------------
 // wxGDIPlusRenderer declaration
