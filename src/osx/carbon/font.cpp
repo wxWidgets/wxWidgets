@@ -466,7 +466,9 @@ void wxFontRefData::MacFindFont()
                     float floatnumber;
                     CFNumberGetValue( number, kCFNumberFloatType, &floatnumber );
                     {
-                        printf( wxString::Format( "font %s expected %d but got %d traits, %f angle \n" , m_faceName.c_str(), traits, received, angle ) );
+                        wxString msg = wxString::Format( "font %s expected %d but got %d traits, %f angle \n" ,
+                                                         m_faceName.c_str(), traits, received, angle );
+                        printf( msg.c_str() );
                     }
                     CFShow( dict );
                     CFRelease( dict );

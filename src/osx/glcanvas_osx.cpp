@@ -167,7 +167,7 @@ bool wxGLCanvasBase::IsExtensionSupported(const char *extension)
     WXGLDestroyPixelFormat(fmt);
     WXGLDestroyContext(ctx);
 
-    return IsExtensionInList(extensions, extension);
+    return IsExtensionInList(extensions.ToAscii(), extension);
 }
 
 // ----------------------------------------------------------------------------
