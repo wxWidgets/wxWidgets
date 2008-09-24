@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Name:       XP_VC9_trunk.xml
+    Purpose:    Buildbot XP_VC9_trunk configuration.
+    Author:     Laurent Humbertclaude
+    RCS-ID:     $Id$
+    Copyright:  (c) 2008 Laurent Humbertclaude
+    Licence:    wxWidgets licence
+-->
+<bot xmlns:xi="http://www.w3.org/2001/XInclude">
+    <xi:include href="include/defs.xml"/>
+    <build>
+        <name>XPSP2 VC9 wxMSW trunk</name>
+        <builddir>XPSP2_VC9_wxMSW_trunk</builddir>
+        <!--<scheduler>trunk_quick</scheduler>-->
+        <sandbox></sandbox>
+        <make>nmake -f makefile.vc SHARED=1
+CPPUNIT_CFLAGS=-Ik:\buildbot\VC9libs\cppunit-1.12.1\include
+CPPUNIT_LIBS=k:\buildbot\VC9libs\cppunit-1.12.1\lib\cppunit.lib</make>
+        <steps>
+            <checkout/>
+            <shellcommand>
+                <description>setting up</description>
+                <descriptionDone>set up</descriptionDone>
+                <haltOnFailure/>
+                <command>XPSP2_VC9_wxMSW_trunk-setup-script.bat</command>
+            </shellcommand>
+            <compile-all/>
+            <run-tests/>
+        </steps>
+    </build>
+</bot>
