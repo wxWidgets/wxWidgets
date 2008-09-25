@@ -9,8 +9,8 @@
 /**
     @class wxTempFileOutputStream
 
-    wxTempFileOutputStream is an output stream based on wxTempFile. It
-    provides a relatively safe way to replace the contents of the
+    wxTempFileOutputStream is an output stream based on wxTempFile.
+    It provides a relatively safe way to replace the contents of the
     existing file.
 
     @library{wxbase}
@@ -23,18 +23,19 @@ class wxTempFileOutputStream : public wxOutputStream
 public:
     /**
         Associates wxTempFileOutputStream with the file to be replaced and opens it.
-        You should use
-        wxStreamBase::IsOk to verify if the constructor succeeded.
-        Call Commit() or wxOutputStream::Close to
-        replace the old file and close this one. Calling Discard()
-        (or allowing the destructor to do it) will discard the changes.
+        You should use wxStreamBase::IsOk() to verify if the constructor succeeded.
+
+        Call Commit() or wxOutputStream::Close() to replace the old file and close
+        this one. Calling Discard() (or allowing the destructor to do it) will
+        discard the changes.
     */
     wxTempFileOutputStream(const wxString& fileName);
 
     /**
         Validate changes: deletes the old file of the given name and renames the new
-        file to the old name. Returns @true if both actions succeeded. If @false is
-        returned it may unfortunately mean two quite different things: either that
+        file to the old name. Returns @true if both actions succeeded.
+
+        If @false is returned it may unfortunately mean two quite different things: either that
         either the old file couldn't be deleted or that the new file couldn't be renamed
         to the old name.
     */
@@ -52,14 +53,12 @@ public:
 /**
     @class wxFFileOutputStream
 
-    This class represents data written to a file. There are actually
-    two such groups of classes: this one is based on wxFFile
-    whereas wxFileInputStream is based in
-    the wxFile class.
+    This class represents data written to a file.
+    There are actually two such groups of classes: this one is based on wxFFile
+    whereas wxFileInputStream is based in the wxFile class.
 
-    Note that wxOutputStream::SeekO
-    can seek beyond the end of the stream (file) and will thus not return
-    @e wxInvalidOffset for that.
+    Note that wxOutputStream::SeekO() can seek beyond the end of the stream
+    (file) and will thus not return ::wxInvalidOffset for that.
 
     @library{wxbase}
     @category{streams}
@@ -69,15 +68,21 @@ public:
 class wxFFileOutputStream : public wxOutputStream
 {
 public:
-    //@{
     /**
         Initializes a file stream in write-only mode using the file descriptor @e fp.
     */
     wxFFileOutputStream(const wxString& filename,
-                        const wxString& mode = "wb");
+                        const wxString& mode = "w+b");
+
+    /**
+        Initializes a file stream in write-only mode using the file I/O object file.
+    */
     wxFFileOutputStream(wxFFile& file);
+
+    /**
+        Initializes a file stream in write-only mode using the file descriptor fp.
+    */
     wxFFileOutputStream(FILE* fp);
-    //@}
 
     /**
         Destructor.
@@ -95,14 +100,12 @@ public:
 /**
     @class wxFileOutputStream
 
-    This class represents data written to a file. There are actually
-    two such groups of classes: this one is based on wxFile
-    whereas wxFFileInputStream is based in
-    the wxFFile class.
+    This class represents data written to a file.
+    There are actually two such groups of classes: this one is based on wxFile
+    whereas wxFFileInputStream is based in the wxFFile class.
 
-    Note that wxOutputStream::SeekO
-    can seek beyond the end of the stream (file) and will thus not return
-    @e wxInvalidOffset for that.
+    Note that wxOutputStream::SeekO() can seek beyond the end of the stream
+    (file) and will thus not return ::wxInvalidOffset for that.
 
     @library{wxbase}
     @category{streams}
@@ -112,14 +115,20 @@ public:
 class wxFileOutputStream : public wxOutputStream
 {
 public:
-    //@{
+    /**
+        Creates a new file with ofilename name and initializes the stream in write-only mode.
+    */
+    wxFileOutputStream(const wxString& ofileName);
+
+    /**
+        Initializes a file stream in write-only mode using the file I/O object file.
+    */
+    wxFileOutputStream(wxFile& file);
+
     /**
         Initializes a file stream in write-only mode using the file descriptor @e fd.
     */
-    wxFileOutputStream(const wxString& ofileName);
-    wxFileOutputStream(wxFile& file);
     wxFileOutputStream(int fd);
-    //@}
 
     /**
         Destructor.
@@ -137,14 +146,12 @@ public:
 /**
     @class wxFileInputStream
 
-    This class represents data read in from a file. There are actually
-    two such groups of classes: this one is based on wxFile
-    whereas wxFFileInputStream is based in
-    the wxFFile class.
+    This class represents data read in from a file.
+    There are actually two such groups of classes: this one is based on wxFile
+    whereas wxFFileInputStream is based in the wxFFile class.
 
-    Note that wxInputStream::SeekI
-    can seek beyond the end of the stream (file) and will thus not return
-    @e wxInvalidOffset for that.
+    Note that wxInputStream::SeekI() can seek beyond the end of the stream (file)
+    and will thus not return ::wxInvalidOffset for that.
 
     @library{wxbase}
     @category{streams}
@@ -154,14 +161,20 @@ public:
 class wxFileInputStream : public wxInputStream
 {
 public:
-    //@{
+    /**
+        Opens the specified file using its ifilename name in read-only mode.
+    */
+    wxFileInputStream(const wxString& ifileName);
+
+    /**
+        Initializes a file stream in read-only mode using the file I/O object file.
+    */
+    wxFileInputStream(wxFile& file);
+
     /**
         Initializes a file stream in read-only mode using the specified file descriptor.
     */
-    wxFileInputStream(const wxString& ifileName);
-    wxFileInputStream(wxFile& file);
     wxFileInputStream(int fd);
-    //@}
 
     /**
         Destructor.
@@ -179,14 +192,12 @@ public:
 /**
     @class wxFFileInputStream
 
-    This class represents data read in from a file. There are actually
-    two such groups of classes: this one is based on wxFFile
-    whereas wxFileInputStream is based in
-    the wxFile class.
+    This class represents data read in from a file.
+    There are actually two such groups of classes: this one is based on wxFFile
+    whereas wxFileInputStream is based in the wxFile class.
 
-    Note that wxInputStream::SeekI
-    can seek beyond the end of the stream (file) and will thus not return
-    @e wxInvalidOffset for that.
+    Note that wxInputStream::SeekI() can seek beyond the end of the stream (file)
+    and will thus not return ::wxInvalidOffset for that.
 
     @library{wxbase}
     @category{streams}
@@ -196,16 +207,21 @@ public:
 class wxFFileInputStream : public wxInputStream
 {
 public:
-    //@{
     /**
-        Initializes a file stream in read-only mode using the specified file pointer @e
-        fp.
+        Opens the specified file using its filename name using the specified mode.
     */
     wxFFileInputStream(const wxString& filename,
                        const wxString& mode = "rb");
+
+    /**
+        Initializes a file stream in read-only mode using the file I/O object file.
+    */
     wxFFileInputStream(wxFFile& file);
+
+    /**
+        Initializes a file stream in read-only mode using the specified file pointer @a fp.
+    */
     wxFFileInputStream(FILE* fp);
-    //@}
 
     /**
         Destructor.
@@ -223,9 +239,10 @@ public:
 /**
     @class wxFFileStream
 
+    @todo describe this class.
 
     @library{wxbase}
-    @category{FIXME}
+    @category{streams}
 
     @see wxStreamBuffer
 */
@@ -234,7 +251,7 @@ class wxFFileStream : public wxFFileOutputStream
 public:
     /**
         Initializes a new file stream in read-write mode using the specified
-        @e iofilename name.
+        @a iofilename name.
     */
     wxFFileStream(const wxString& iofileName, const wxString& mode = "w+b");
 };
@@ -244,9 +261,10 @@ public:
 /**
     @class wxFileStream
 
+    @todo describe this class.
 
     @library{wxbase}
-    @category{FIXME}
+    @category{streams}
 
     @see wxStreamBuffer
 */
@@ -255,7 +273,7 @@ class wxFileStream : public wxFileOutputStream
 public:
     /**
         Initializes a new file stream in read-write mode using the specified
-        @e iofilename name.
+        @a iofilename name.
     */
     wxFileStream(const wxString& iofileName);
 };
