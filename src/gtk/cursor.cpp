@@ -17,6 +17,7 @@
     #include "wx/app.h"
     #include "wx/image.h"
     #include "wx/bitmap.h"
+    #include "wx/log.h"
 #endif // WX_PRECOMP
 
 #include <gtk/gtk.h>
