@@ -35,7 +35,6 @@
 #import <AppKit/NSWindow.h>
 #import <AppKit/NSGraphicsContext.h>
 
-#include "wx/cocoa/NSApplication.h"
 #include "wx/cocoa/autorelease.h"
 
 // A category for methods that are only present in Panther's SDK
@@ -382,25 +381,5 @@ void wxTaskBarIconWindowCustom::OnPaint(wxPaintEvent &event)
     dc.Clear();
     dc.DrawIcon(m_icon,0,0);
 }
-
-// ============================================================================
-// wxTaskBarIconNSApplicationDelegateCategory
-// ============================================================================
-
-// This neatly solves the problem of DLL separation.  If the wxAdvanced
-// library (which this file is part of) is loaded then this category is
-// defined and we get dock menu behavior without app.mm ever having to
-// know we exist.  C++ did sucketh so. :-)
-
-@interface wxNSApplicationDelegate(wxTaskBarIconNSApplicationDelegateCategory)
-- (NSMenu*)applicationDockMenu:(NSApplication *)sender;
-@end
-
-@implementation wxNSApplicationDelegate(wxTaskBarIconNSApplicationDelegateCategory)
-- (NSMenu*)applicationDockMenu:(NSApplication *)sender
-{
-    return wxTaskBarIconDockImpl::CocoaGetDockNSMenu();
-}
-@end
 
 #endif //def wxHAS_TASK_BAR_ICON
