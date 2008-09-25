@@ -947,6 +947,21 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
     }
 
     {
+        RT_START_TEST(Attributes)
+
+        wxPGProperty* prop = pgman->GetProperty(wxT("StringProperty"));
+        prop->SetAttribute(wxT("Dummy Attribute"), (long)15);
+
+        if ( prop->GetAttribute(wxT("Dummy Attribute")).GetLong() != 15 )
+            RT_FAILURE();
+
+        prop->SetAttribute(wxT("Dummy Attribute"), wxVariant());
+
+        if ( !prop->GetAttribute(wxT("Dummy Attribute")).IsNull() )
+            RT_FAILURE();
+    }
+
+    {
         wxPropertyGridPage* page1;
         wxPropertyGridPage* page2;
         wxPropertyGridPage* page3;

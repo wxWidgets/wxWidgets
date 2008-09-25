@@ -1144,6 +1144,9 @@ public:
 
         @param value
             Value of attribute.
+
+        @remarks Setting attribute's value to Null variant will simply remove it
+                from property's set of attributes.
     */
     void SetAttribute( const wxString& name, wxVariant value );
 

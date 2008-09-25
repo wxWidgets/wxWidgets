@@ -2093,12 +2093,23 @@ void wxPGAttributeStorage::Set( const wxString& name, const wxVariant& value )
     // Free old, if any
     wxPGHashMapS2P::iterator it = m_map.find(name);
     if ( it != m_map.end() )
+    {
         ((wxVariantData*)it->second)->DecRef();
 
+        if ( !data )
+        {
+            // If Null variant, just remove from set
+            m_map.erase(it);
+            return;
+        }
+    }
+
     if ( data )
+    {
         data->IncRef();
 
-    m_map[name] = data;
+        m_map[name] = data;
+    }
 }
 
 #endif  // wxUSE_PROPGRID

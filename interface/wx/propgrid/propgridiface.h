@@ -659,6 +659,9 @@ public:
         Value of attribute.
         @param argFlags
         Optional. Use wxPG_RECURSE to set the attribute to child properties recursively.
+
+        @remarks Setting attribute's value to Null variant will simply remove it
+                from property's set of attributes.
     */
     void SetPropertyAttribute( wxPGPropArg id, const wxString& attrName, wxVariant value, long argFlags = 0 )
     {
