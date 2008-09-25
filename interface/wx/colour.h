@@ -14,8 +14,8 @@
     @{
 */
 #define wxC2S_NAME              1   //!< Return colour name, when possible.
-#define wxC2S_CSS_SYNTAX        2   //!< Return colour in rgb(r,g,b) syntax.
-#define wxC2S_HTML_SYNTAX       4   //!< Return colour in #rrggbb syntax.
+#define wxC2S_CSS_SYNTAX        2   //!< Return colour in "rgb(r,g,b)" syntax.
+#define wxC2S_HTML_SYNTAX       4   //!< Return colour in "#rrggbb" syntax.
 
 //@}
 

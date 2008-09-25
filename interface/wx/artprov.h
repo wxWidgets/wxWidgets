@@ -54,7 +54,7 @@
     Every bitmap and icon bundle are known to wxArtProvider under an unique ID that
     is used when requesting a resource from it. The ID is represented by wxArtID type
     and can have one of these predefined values (you can see bitmaps represented by these
-    constants in the @ref page_samples_artprovider):
+    constants in the @ref page_samples_artprov):
 
     <table>
     <tr><td>
@@ -151,7 +151,7 @@
     @library{wxcore}
     @category{misc,data}
 
-    @see the @ref page_samples_artprovider for an example of wxArtProvider usage.
+    @see the @ref page_samples_artprov for an example of wxArtProvider usage.
 */
 class wxArtProvider : public wxObject
 {

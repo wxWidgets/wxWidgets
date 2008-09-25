@@ -60,7 +60,7 @@ enum wxCmdLineEntryType
 };
 
 /**
-    Flags determining ConvertStringToArgs() behaviour.
+    Flags determining wxCmdLineParser::ConvertStringToArgs() behaviour.
  */
 enum wxCmdLineSplitType
 {
