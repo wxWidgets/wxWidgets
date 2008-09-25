@@ -6,6 +6,13 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+
+/*
+    NOTE: to make doxygen happy about <custom-tags> we're forced to
+          escape all < and > symbols which appear inside a doxygen comment
+*/
+
+
 /**
 
 @page xrc_format XRC file format
@@ -34,6 +41,9 @@ This document describes the format of XRC resource files, as used by
 wxXmlResource.
 
 
+<hr>
+
+
 @section xrc_format_overview Overview
 
 XRC file is a XML file with all of its elements in the
@@ -55,9 +65,9 @@ Child objects are not directly accessible via wxXmlResource, they can only
 be accessed using XRCCTRL().
 
 
-@section xrc_format_root Root element: <resource>
+@section xrc_format_root Root element: \<resource\>
 
-The root element is always @c <resource>. It has one optional attribute, @c
+The root element is always @c \<resource\>. It has one optional attribute, @c
 version. If set, it specifies version of the file. In absence of @c version
 attribute, the default is @c "0.0.0.0".
 
@@ -80,7 +90,7 @@ specified to take advantage of the latest capabilities:
 </resource>
 @endcode
 
-@c <resource> may have arbitrary number of
+@c \<resource\> may have arbitrary number of
 @ref xrc_format_objects "object elements" as its children; they are referred
 to as @em toplevel objects in the rest of this document. Unlike objects defined
 deeper in the hierarchy, toplevel objects @em must have their @c name attribute
@@ -90,9 +100,9 @@ set and it must be set to a value unique among root's children.
 
 @section xrc_format_objects Defining objects
 
-@subsection xrc_format_object <object>
+@subsection xrc_format_object \<object\>
 
-The @c <object> element represents a single object (typically a GUI element)
+The @c \<object\> element represents a single object (typically a GUI element)
 and it usually maps directly to a wxWidgets class instance. It has one
 mandatory attribute, @c class, and optional @c name and @c subclass attributes.
 
@@ -120,18 +130,18 @@ The @c subclass attribute optional name of class whose constructor will be
 called instead of the constructor for "class".
 See @ref xrc_format_extending_subclass for more details.
 
-@c <object> element may -- and almost always do -- have children elements.
+@c \<object\> element may -- and almost always do -- have children elements.
 These come in two varieties:
 
  -# Object's properties. A @em property is a value describing part of object's
     behaviour, for example the "label" property on wxButton defines its label.
     In the most common form, property is a single element with text content
-    ("<label>Cancel</label"), but they may use nested subelements too (e.g.
+    ("<label>Cancel</label>"), but they may use nested subelements too (e.g.
     @ref xrc_format_type_font "font property"). A property can only be
     listed once in an object's definition.
  -# Child objects. Window childs, sizers, sizer items or notebook pages
     are all examples of child objects. They are represented using nested
-    @c <object> elements and are can be repeated more than once. The specifics
+    @c \<object\> elements and are can be repeated more than once. The specifics
     of which object classes are allowed as children are class-specific and
     are documented below in @ref xrc_format_controls.
 
@@ -154,12 +164,12 @@ Example:
 
 @subsection xrc_format_object_ref <object_ref>
 
-Anywhere an @c <object> element can be used, @c <object_ref> may be used
-instead. @c <object_ref> is a @em reference to another named (i.e. with the
-@c name attribute) @c <object> element. It has one mandatory attribute,
-@c ref, with value containing the name of a named @c <object> element. When an
-@c <object_ref> is encountered, a copy of the referenced @c <object> element
-is made in place of @c <object_ref> occurrence and processed as usual.
+Anywhere an @c \<object\> element can be used, @c \<object_ref\> may be used
+instead. @c \<object_ref\> is a @em reference to another named (i.e. with the
+@c name attribute) @c \<object\> element. It has one mandatory attribute,
+@c ref, with value containing the name of a named @c \<object\> element. When an
+@c \<object_ref\> is encountered, a copy of the referenced @c \<object\> element
+is made in place of @c \<object_ref\> occurrence and processed as usual.
 
 For example, the following code:
 @code
@@ -179,16 +189,16 @@ is equivalent to
 @endcode
 
 Additionally, it is possible to override some parts of the referenced object
-in the @c <object_ref> pointing to it. This is useful for putting repetitive
+in the @c \<object_ref\> pointing to it. This is useful for putting repetitive
 parts of XRC definitions into a template that can be reused and customized in
 several places. The two parts are merged as follows:
 
  -# The referred object is used as the initial content.
- -# All attributes set on @c <object_ref> are added to it.
- -# All child elements of @c <object_ref> are scanned. If an element with
+ -# All attributes set on @c \<object_ref\> are added to it.
+ -# All child elements of @c \<object_ref\> are scanned. If an element with
     the same name (and, if specified, the @c name attribute too) is found
     in the referred object, they are recursively merged.
- -# Child elements in @c <object_ref> that do not have a match in the referred
+ -# Child elements in @c \<object_ref\> that do not have a match in the referred
     object are appended to the list of children of the resulting element by
     default. Optionally, they may have @c insert_at attribute with two possible
     values, "begin" or "end". When set to "begin", the element is prepended to
@@ -861,11 +871,11 @@ file with bitmap data.
 
 @subsection xrc_format_bitmap wxBitmap
 
-Bitmaps are stored in @c <object> element with class set to @c wxBitmap. Such
+Bitmaps are stored in @c \<object\> element with class set to @c wxBitmap. Such
 bitmaps can then be loaded using wxXmlResource::LoadBitmap(). The content of
 the element is exactly same as in the case of
 @ref xrc_format_type_bitmap "bitmap properties", except that toplevel
-@c <object> is used.
+@c \<object\> is used.
 
 For example, instead of:
 @code
@@ -920,7 +930,7 @@ this section in the order of increasing complexity.
 @subsection xrc_format_extending_subclass Subclassing
 
 The simplest way to add custom controls is to set the @c subclass attribute
-of @c <object> element:
+of @c \<object\> element:
 
 @code
 <object name="my_value" class="wxTextCtrl" subclass="MyTextCtrl">
@@ -994,7 +1004,7 @@ The only requirements on the class are that
  -# the class must derive from wxObject
  -# it must support wxWidget's pseudo-RTTI mechanism
 
-Child elements of @c <object> are handled by the custom handler and there are
+Child elements of @c \<object\> are handled by the custom handler and there are
 no limitations on them imposed by XRC format.
 
 This is the only mechanism that works for toplevel objects -- custom controls
@@ -1014,7 +1024,7 @@ number of XRC files and their dependencies (bitmaps, icons etc.).
 @section xrc_format_oldversions Older format versions
 
 This section describes differences in older revisions of XRC format (i.e.
-files with older values of @c version attribute of @c <resource>).
+files with older values of @c version attribute of @c \<resource\>).
 
 
 @subsection xrc_format_pre_v2530 Versions before 2.5.3.0

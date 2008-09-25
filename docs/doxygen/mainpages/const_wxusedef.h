@@ -33,7 +33,7 @@ using @if_ and not @ifdef_.
 
 <hr>
 
-@section page_wxusedef_multi Most important wxUSE symbols
+@section page_wxusedef_important Most important wxUSE symbols
 
 This table summarizes some of the global build features affecting the entire
 library:

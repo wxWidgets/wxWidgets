@@ -24,6 +24,7 @@ and ports.
 @li @ref page_port_wxos2
 @li @ref page_port_wxmgl
 @li @ref page_port_wxx11
+@li @ref page_port_wxmotif
 @li @ref page_port_wxmsw
 @li @ref page_port_nativedocs
 
@@ -66,7 +67,7 @@ This is the default for many systems.
 GTK+ 1.2 can still be used, albeit discouraged. For that you can
 pass @c --with-gtk=1 to the @c configure script.
 
-For further information, please see the files in docs/gtk
+For further information, please see the files in @c docs/gtk
 in the distribution.
 
 
@@ -89,7 +90,7 @@ both architecture. Unfortunately, wxMac does not support any
 64-bit architecture since Apple decided not to port its Carbon
 API entirely to 64-bit.
 
-For further information, please see the files in docs/mac
+For further information, please see the files in @c docs/mac
 in the distribution.
 
 
@@ -102,11 +103,14 @@ in the distribution.
 @endhtmlonly
 
 wxCocoa is another port of wxWidgets for the Macintosh OS
-platform. But in contrat to wxMac, it uses the Cocoa API.
+platform. But in contrast to wxMac, it uses the Cocoa API.
 Much work has gone into this port and many controls are
 functional, but the port has not reached the maturity
 of the wxMac port yet. It should be possible to use wxCocoa
 on 64-bit architectures.
+
+For further information, please see the files in @c docs/mac
+in the distribution.
 
 
 @section page_port_wxmgl wxMGL
@@ -130,7 +134,7 @@ need to type:
 
 Under DOS, wxMGL uses a dmake based make system.
 
-For further information, please see the files in docs/mgl
+For further information, please see the files in @c docs/mgl
 in the distribution.
 
 
@@ -139,6 +143,9 @@ in the distribution.
 
 wxOS2 is a port of wxWidgets for the IBM OS/2 Warp3 and Warp4 platforms.
 This port is currently under construction and in beta phase.
+
+For further information, please see the files in @c docs/os2
+in the distribution.
 
 
 
@@ -160,10 +167,24 @@ need to type:
 
 @verbatim configure --with-x11 --with-universal @endverbatim
 
-For further information, please see the files in docs/x11
+For further information, please see the files in @c docs/x11
 in the distribution. There is also a page on the use of
 wxWidgets for embedded applications on the wxWidgets web site.
 
+
+
+@section page_port_wxmotif wxMotif
+
+@htmlonly
+<img src="motif_logo.png" alt="Motif logo" title="Motif logo" class="logo">
+@endhtmlonly
+
+wxMotif is a port of wxWidgets for X11 systems using Motif libraries.
+Motif libraries provide a clean and fast user interface at the expense
+of the beauty and candy of newer interfaces like GTK.
+
+For further information, please see the files in @c docs/motif
+in the distribution.
 
 
 

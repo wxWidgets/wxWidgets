@@ -429,7 +429,7 @@ the end of the program if wxWidgets is suitably configured. Depending on the
 operating system and compiler, more or less specific information about the
 problem will be logged.
 
-You should also use @ref group_funcmacro_debugging as part of a "defensive
+You should also use @ref group_funcmacro_debug as part of a "defensive
 programming" strategy, scattering wxASSERT()s liberally to test for problems in
 your code as early as possible. Forward thinking will save a surprising amount
 of time in the long run.
