@@ -45,6 +45,7 @@ private:
     CPPUNIT_TEST_SUITE( URITestCase );
         CPPUNIT_TEST( IPv4 );
         CPPUNIT_TEST( IPv6 );
+        CPPUNIT_TEST( Server );
         CPPUNIT_TEST( Paths );
         CPPUNIT_TEST( NormalResolving );
         CPPUNIT_TEST( ComplexResolving );
@@ -65,6 +66,7 @@ private:
 
     void IPv4();
     void IPv6();
+    void Server();
     void Paths();
     void NormalResolving();
     void ComplexResolving();
@@ -102,6 +104,9 @@ URITestCase::URITestCase()
 
 #define URI_ASSERT_HOSTTYPE_EQUAL(uri, expected) \
     URI_ASSERT_PART_EQUAL((uri), (expected), GetHostType())
+
+#define URI_ASSERT_SERVER_EQUAL(uri, expected) \
+    URI_ASSERT_PART_EQUAL((uri), (expected), GetServer())
 
 #define URI_ASSERT_PATH_EQUAL(uri, expected) \
     URI_ASSERT_PART_EQUAL((uri), (expected), GetPath())
@@ -155,6 +160,18 @@ void URITestCase::IPv6()
         "http://user:password@[aa:aa:aa:aa::aa:aa]:5050/path",
         wxURI_IPV6ADDRESS
     );
+}
+
+void URITestCase::Server()
+{
+    URI_ASSERT_SERVER_EQUAL("http://foo/", "foo");
+    URI_ASSERT_SERVER_EQUAL("http://foo-bar/", "foo-bar");
+    URI_ASSERT_SERVER_EQUAL("http://foo/bar/", "foo");
+    URI_ASSERT_SERVER_EQUAL("http://192.168.1.0/", "192.168.1.0");
+    URI_ASSERT_SERVER_EQUAL("http://192.168.1.17/", "192.168.1.17");
+    URI_ASSERT_SERVER_EQUAL("http://192.168.1.255/", "192.168.1.255");
+    URI_ASSERT_SERVER_EQUAL("http://192.168.1.1/index.html", "192.168.1.1");
+    URI_ASSERT_SERVER_EQUAL("http://[aa:aa:aa:aa::aa:aa]/foo", "aa:aa:aa:aa::aa:aa");
 }
 
 void URITestCase::Paths()

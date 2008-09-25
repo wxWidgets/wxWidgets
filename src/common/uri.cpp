@@ -442,7 +442,7 @@ const char* wxURI::ParseServer(const char* uri)
         {
             m_hostType = wxURI_IPV6ADDRESS;
 
-            m_server.assign(start, uri - start - 1);
+            m_server.assign(start + 1, uri - start - 1);
             ++uri;
         }
         else
@@ -453,7 +453,7 @@ const char* wxURI::ParseServer(const char* uri)
             {
                 m_hostType = wxURI_IPVFUTURE;
 
-                m_server.assign(start, uri - start - 1);
+                m_server.assign(start + 1, uri - start - 1);
                 ++uri;
             }
             else // unrecognized IP literal
@@ -468,7 +468,7 @@ const char* wxURI::ParseServer(const char* uri)
         {
             m_hostType = wxURI_IPV4ADDRESS;
 
-            m_server.assign(start, uri - start - 1);
+            m_server.assign(start, uri - start);
         }
         else
         {
