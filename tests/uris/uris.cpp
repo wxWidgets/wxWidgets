@@ -97,18 +97,24 @@ URITestCase::URITestCase()
 }
 
 // apply the given accessor to the URI, check that the result is as expected
-#define URI_TEST_EQUAL(uri, expected, accessor) \
+#define URI_ASSERT_PART_EQUAL(uri, expected, accessor) \
     CPPUNIT_ASSERT_EQUAL(expected, wxURI(uri).accessor)
+
+#define URI_ASSERT_HOSTTYPE_EQUAL(uri, expected) \
+    URI_ASSERT_PART_EQUAL((uri), (expected), GetHostType())
+
+#define URI_ASSERT_PATH_EQUAL(uri, expected) \
+    URI_ASSERT_PART_EQUAL((uri), (expected), GetPath())
 
 void URITestCase::IPv4()
 {
-    URI_TEST_EQUAL("http://user:password@192.168.1.100:5050/path",
-                   wxURI_IPV4ADDRESS, GetHostType());
+    URI_ASSERT_HOSTTYPE_EQUAL("http://user:password@192.168.1.100:5050/path",
+                            wxURI_IPV4ADDRESS);
 
-    URI_TEST_EQUAL("http://user:password@192.255.1.100:5050/path",
-                   wxURI_IPV4ADDRESS, GetHostType());
+    URI_ASSERT_HOSTTYPE_EQUAL("http://user:password@192.255.1.100:5050/path",
+                            wxURI_IPV4ADDRESS);
 
-    //bogus ipv4
+    // bogus ipv4
     CPPUNIT_ASSERT( wxURI("http://user:password@192.256.1.100:5050/path").
                     GetHostType() != wxURI_IPV4ADDRESS);
 }
@@ -126,35 +132,47 @@ void URITestCase::IPv6()
     //               / [ *6( h16 ":" ) h16 ] "::"
     // ls32          = ( h16 ":" h16 ) / IPv4address
 
-    URI_TEST_EQUAL("http://user:password@[aa:aa:aa:aa:aa:aa:192.168.1.100]:5050/path",
-                   wxURI_IPV6ADDRESS, GetHostType());
+    URI_ASSERT_HOSTTYPE_EQUAL
+    (
+        "http://user:password@[aa:aa:aa:aa:aa:aa:192.168.1.100]:5050/path",
+        wxURI_IPV6ADDRESS
+    );
 
-    URI_TEST_EQUAL("http://user:password@[aa:aa:aa:aa:aa:aa:aa:aa]:5050/path",
-                   wxURI_IPV6ADDRESS, GetHostType());
+    URI_ASSERT_HOSTTYPE_EQUAL
+    (
+        "http://user:password@[aa:aa:aa:aa:aa:aa:aa:aa]:5050/path",
+        wxURI_IPV6ADDRESS
+    );
 
-    URI_TEST_EQUAL("http://user:password@[aa:aa:aa:aa::192.168.1.100]:5050/path",
-                   wxURI_IPV6ADDRESS, GetHostType());
+    URI_ASSERT_HOSTTYPE_EQUAL
+    (
+        "http://user:password@[aa:aa:aa:aa::192.168.1.100]:5050/path",
+        wxURI_IPV6ADDRESS
+    );
 
-    URI_TEST_EQUAL("http://user:password@[aa:aa:aa:aa::aa:aa]:5050/path",
-                   wxURI_IPV6ADDRESS, GetHostType());
+    URI_ASSERT_HOSTTYPE_EQUAL
+    (
+        "http://user:password@[aa:aa:aa:aa::aa:aa]:5050/path",
+        wxURI_IPV6ADDRESS
+    );
 }
 
 void URITestCase::Paths()
 {
-    URI_TEST_EQUAL("http://user:password@192.256.1.100:5050/../path",
-                   "/path", GetPath());
+    URI_ASSERT_PATH_EQUAL("http://user:password@192.256.1.100:5050/../path",
+                          "/path");
 
-    URI_TEST_EQUAL("http://user:password@192.256.1.100:5050/path/../",
-                   "/", GetPath());
+    URI_ASSERT_PATH_EQUAL("http://user:password@192.256.1.100:5050/path/../",
+                          "/");
 
-    URI_TEST_EQUAL("http://user:password@192.256.1.100:5050/path/.",
-                   "/path/", GetPath());
+    URI_ASSERT_PATH_EQUAL("http://user:password@192.256.1.100:5050/path/.",
+                          "/path/");
 
-    URI_TEST_EQUAL("http://user:password@192.256.1.100:5050/path/./",
-                   "/path/", GetPath());
+    URI_ASSERT_PATH_EQUAL("http://user:password@192.256.1.100:5050/path/./",
+                          "/path/");
 
-    URI_TEST_EQUAL("path/john/../../../joe",
-                   "../joe", BuildURI());
+    URI_ASSERT_PART_EQUAL("path/john/../../../joe",
+                          "../joe", BuildURI());
 }
 
 #define URI_TEST_RESOLVE_IMPL(string, eq, strict) \
@@ -300,21 +318,21 @@ void URITestCase::Unescaping()
 
 void URITestCase::FileScheme()
 {
-    //file:// variety (NOT CONFORMANT TO THE RFC)
-    URI_TEST_EQUAL( "file://e:/wxcode/script1.xml",
-                    "e:/wxcode/script1.xml", GetPath() );
+    //file:// variety (NOT CONFORMING TO THE RFC)
+    URI_ASSERT_PATH_EQUAL( "file://e:/wxcode/script1.xml",
+                    "e:/wxcode/script1.xml" );
 
     //file:/// variety
-    URI_TEST_EQUAL( "file:///e:/wxcode/script1.xml",
-                    "/e:/wxcode/script1.xml", GetPath() );
+    URI_ASSERT_PATH_EQUAL( "file:///e:/wxcode/script1.xml",
+                    "/e:/wxcode/script1.xml" );
 
     //file:/ variety
-    URI_TEST_EQUAL( "file:/e:/wxcode/script1.xml",
-                    "/e:/wxcode/script1.xml", GetPath() );
+    URI_ASSERT_PATH_EQUAL( "file:/e:/wxcode/script1.xml",
+                    "/e:/wxcode/script1.xml" );
 
     //file: variety
-    URI_TEST_EQUAL( "file:e:/wxcode/script1.xml",
-                    "e:/wxcode/script1.xml", GetPath() );
+    URI_ASSERT_PATH_EQUAL( "file:e:/wxcode/script1.xml",
+                    "e:/wxcode/script1.xml" );
 }
 
 #if TEST_URL
