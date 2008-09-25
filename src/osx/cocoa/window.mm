@@ -112,6 +112,7 @@ long wxOSXTranslateCocoaKey(unsigned short code, int unichar )
 void SetupKeyEvent( wxKeyEvent &wxevent , NSEvent * nsEvent )
 {
     UInt32 modifiers = [nsEvent modifierFlags] ;
+    int eventType = [nsEvent type];
 
     wxevent.m_shiftDown = modifiers & NSShiftKeyMask;
     wxevent.m_controlDown = modifiers & NSControlKeyMask;
@@ -119,11 +120,14 @@ void SetupKeyEvent( wxKeyEvent &wxevent , NSEvent * nsEvent )
     wxevent.m_metaDown = modifiers & NSCommandKeyMask;
 
     wxString chars;
-    NSString* nschars = [nsEvent characters];
-    if ( nschars )
+    if ( eventType != NSFlagsChanged )
     {
-        wxCFStringRef cfchars((CFStringRef)[nschars retain]);
-        chars = cfchars.AsString();
+        NSString* nschars = [nsEvent characters];
+        if ( nschars )
+        {
+            wxCFStringRef cfchars((CFStringRef)[nschars retain]);
+            chars = cfchars.AsString();
+        }
     }
     
     int unichar = chars.Length() > 0 ? chars[0] : 0;
@@ -136,7 +140,6 @@ void SetupKeyEvent( wxKeyEvent &wxevent , NSEvent * nsEvent )
     wxevent.m_rawFlags = modifiers;
     
     wxevent.SetTimestamp( [nsEvent timestamp] * 1000.0 ) ;
-    int eventType = [nsEvent type];
     switch (eventType)
     {
         case NSKeyDown :
