@@ -14,7 +14,7 @@
     @library{wxcore}
     @category{cmndlg}
 
-    @see Overview(), wxFontData, wxGetFontFromUser()
+    @see overview_cmndlg_font, wxFontData, wxGetFontFromUser()
 */
 class wxFontDialog : public wxDialog
 {
@@ -32,7 +32,7 @@ public:
 
     /**
         Constructor.
-        Pass a parent window, and the @ref overview_wxfontdata "font data" object
+        Pass a parent window, and the @ref wxFontData "font data" object
         to be used to initialize the dialog controls.
     */
     wxFontDialog(wxWindow* parent, const wxFontData& data);
@@ -55,7 +55,7 @@ public:
 
     //@{
     /**
-        Returns the @ref overview_wxfontdata "font data" associated with the
+        Returns the @ref wxFontData "font data" associated with the
         font dialog.
     */
     const wxFontData& GetFontData() const;

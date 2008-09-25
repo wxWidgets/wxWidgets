@@ -30,7 +30,7 @@
     @library{wxcore}
     @category{gdi}
 
-    @see @ref overview_fontencoding, @ref sample_font, wxFont, wxFontMapper
+    @see @ref overview_fontencoding, @ref page_samples_font, wxFont, wxFontMapper
 */
 class wxFontEnumerator
 {

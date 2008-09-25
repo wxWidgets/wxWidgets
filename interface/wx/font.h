@@ -369,7 +369,7 @@ public:
     /**
         Destructor.
 
-        See @ref overview_refcountdestruct "reference-counted object destruction"
+        See @ref overview_refcount_destruct "reference-counted object destruction"
         for more info.
 
         @remarks Although all remaining fonts are deleted when the application
@@ -466,8 +466,9 @@ public:
 
     //@{
     /**
-        These functions take the same parameters as @ref ctor() wxFont
-        constructor and return a new font object allocated on the heap.
+        These functions take the same parameters as
+        @ref wxFont::wxFont "wxFont constructors" and return a new font
+        object allocated on the heap.
 
         Using @c New() is currently the only way to directly create a font with
         the given size in pixels on platforms other than wxMSW.
@@ -610,7 +611,7 @@ public:
     /**
         Inequality operator.
 
-        See @ref overview_refcountequality "reference-counted object comparison" for
+        See @ref overview_refcount_equality "reference-counted object comparison" for
         more info.
     */
     bool operator !=(const wxFont& font);
@@ -618,7 +619,7 @@ public:
     /**
         Equality operator.
 
-        See @ref overview_refcountequality "reference-counted object comparison" for
+        See @ref overview_refcount_equality "reference-counted object comparison" for
         more info.
     */
     bool operator ==(const wxFont& font);

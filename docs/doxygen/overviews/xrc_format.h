@@ -362,7 +362,7 @@ In most cases, specifying @c stock_client is not needed.
 Examples of stock bitmaps usage:
 @code
 <bitmap stock_id="fixed-width"/>        <!-- custom app-specific art -->
-<bitmap stock_id="wxART_FILE_OPEN"/>    <!-- standard art->
+<bitmap stock_id="wxART_FILE_OPEN"/>    <!-- standard art -->
 @endcode
 
 Specifying the bitmap directly and using @c stock_id are mutually exclusive.

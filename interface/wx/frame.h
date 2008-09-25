@@ -24,7 +24,7 @@
              data and subwindows can be cleaned up.
 
 
-    @section wxframe_defaultevent Default event processing
+    @section frame_defaultevent Default event processing
 
     wxFrame processes the following events:
 
@@ -35,6 +35,10 @@
     @li @c wxEVT_MENU_HIGHLIGHT: the default implementation displays the help string
         associated with the selected item in the first pane of the status bar, if there is one.
 
+
+    @section frame_styles
+
+    wxFrame supports the following styles:
 
     @beginStyleTable
     @style{wxDEFAULT_FRAME_STYLE}
@@ -114,7 +118,11 @@
 class wxFrame : public wxTopLevelWindow
 {
 public:
-    //@{
+    /**
+        Default constructor.
+    */
+    wxFrame();
+
     /**
         Constructor, creating the window.
 
@@ -122,39 +130,33 @@ public:
             The window parent. This may be @NULL. If it is non-@NULL, the frame will
             always be displayed on top of the parent window on Windows.
         @param id
-            The window identifier. It may take a value of -1 to indicate a default
-        value.
+            The window identifier. It may take a value of -1 to indicate a default value.
         @param title
             The caption to be displayed on the frame's title bar.
         @param pos
             The window position. The value wxDefaultPosition indicates a default position,
-        chosen by
-            either the windowing system or wxWidgets, depending on platform.
+            chosen by either the windowing system or wxWidgets, depending on platform.
         @param size
             The window size. The value wxDefaultSize indicates a default size, chosen by
             either the windowing system or wxWidgets, depending on platform.
         @param style
-            The window style. See wxFrame.
+            The window style. See wxFrame class description.
         @param name
-            The name of the window. This parameter is used to associate a name with the
-        item,
-            allowing the application user to set Motif resource values for
+            The name of the window. This parameter is used to associate a name with
+            the item, allowing the application user to set Motif resource values for
             individual windows.
 
         @remarks For Motif, MWM (the Motif Window Manager) should be running for
-                 any window styles to work (otherwise all styles take
-                 effect).
+                 any window styles to work (otherwise all styles take effect).
 
         @see Create()
     */
-    wxFrame();
     wxFrame(wxWindow* parent, wxWindowID id,
             const wxString& title,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = wxDEFAULT_FRAME_STYLE,
             const wxString& name = "frame");
-    //@}
 
     /**
         Destructor. Destroys all child windows and menu bar if present.
@@ -170,8 +172,8 @@ public:
     void Centre(int direction = wxBOTH);
 
     /**
-        Used in two-step frame construction. See wxFrame()
-        for further details.
+        Used in two-step frame construction.
+        See wxFrame() for further details.
     */
     bool Create(wxWindow* parent, wxWindowID id,
                 const wxString& title,
@@ -187,16 +189,15 @@ public:
             The number of fields to create. Specify a
             value greater than 1 to create a multi-field status bar.
         @param style
-            The status bar style. See wxStatusBar for a list
-            of valid styles.
+            The status bar style. See wxStatusBar for a list of valid styles.
         @param id
-            The status bar window identifier. If -1, an identifier will be chosen by
-            wxWidgets.
+            The status bar window identifier. If -1, an identifier will be chosen
+            by wxWidgets.
         @param name
             The status bar window name.
 
         @return A pointer to the status bar if it was created successfully, @NULL
-                 otherwise.
+                otherwise.
 
         @remarks The width of the status bar is the whole width of the frame
                  (adjusted automatically when resizing), and the height
@@ -213,32 +214,39 @@ public:
         Creates a toolbar at the top or left of the frame.
 
         @param style
-            The toolbar style. See wxToolBar for a list
-            of valid styles.
+            The toolbar style. See wxToolBar for a list of valid styles.
         @param id
-            The toolbar window identifier. If -1, an identifier will be chosen by
-            wxWidgets.
+            The toolbar window identifier. If -1, an identifier will be chosen
+            by wxWidgets.
         @param name
             The toolbar window name.
 
         @return A pointer to the toolbar if it was created successfully, @NULL
-                 otherwise.
+                otherwise.
 
         @remarks By default, the toolbar is an instance of wxToolBar (which is
                  defined to be a suitable toolbar class on each
                  platform, such as wxToolBar95). To use a different
                  class, override OnCreateToolBar().
+                 When a toolbar has been created with this function, or made
+                 known to the frame with wxFrame::SetToolBar, the frame will
+                 manage the toolbar position and adjust the return value from
+                 wxWindow::GetClientSize to reflect the available space for
+                 application windows.
+                 Under Pocket PC, you should always use this function for creating
+                 the toolbar to be managed by the frame, so that wxWidgets can
+                 use a combined menubar and toolbar.
+                 Where you manage your own toolbars, create a wxToolBar as usual.
 
-        @see CreateStatusBar(), OnCreateToolBar(), SetToolBar(),
-             GetToolBar()
+        @see CreateStatusBar(), OnCreateToolBar(), SetToolBar(), GetToolBar()
     */
     virtual wxToolBar* CreateToolBar(long style = wxBORDER_NONE | wxTB_HORIZONTAL,
                                      wxWindowID id = -1,
                                      const wxString& name = "toolBar");
 
     /**
-        Returns the origin of the frame client area (in client coordinates). It may be
-        different from (0, 0) if the frame has a toolbar.
+        Returns the origin of the frame client area (in client coordinates).
+        It may be different from (0, 0) if the frame has a toolbar.
     */
     wxPoint GetClientAreaOrigin() const;
 
@@ -250,8 +258,8 @@ public:
     wxMenuBar* GetMenuBar() const;
 
     /**
-        Returns a pointer to the status bar currently associated with the frame (if
-        any).
+        Returns a pointer to the status bar currently associated with the frame
+        (if any).
 
         @see CreateStatusBar(), wxStatusBar
     */
@@ -338,6 +346,10 @@ public:
                  destroyed also, so do not delete the menu bar
                  explicitly (except by resetting the frame's menu bar to
                  another frame or @NULL).
+                 Under Windows, a size event is generated, so be sure to
+                 initialize data members properly before calling SetMenuBar().
+                 Note that on some platforms, it is not possible to call this
+                 function twice for the same frame object.
 
         @see GetMenuBar(), wxMenuBar, wxMenu.
     */
@@ -379,14 +391,12 @@ public:
         @param widths
             Must contain an array of n integers, each of which is a status field width
             in pixels. A value of -1 indicates that the field is variable width; at
-        least one
-            field must be -1. You should delete this array after calling
-        SetStatusWidths.
+            least one field must be -1. You should delete this array after calling
+            SetStatusWidths().
 
         @remarks The widths of the variable fields are calculated from the total
                  width of all fields, minus the sum of widths of the
-                 non-variable fields, divided by the number of variable
-                 fields.
+                 non-variable fields, divided by the number of variable fields.
     */
     virtual void SetStatusWidths(int n, int* widths);
 
