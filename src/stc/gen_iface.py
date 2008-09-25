@@ -425,15 +425,15 @@ methodOverrideMap = {
 
      ('Retrieve the contents of a line.',)),
 
-    'SetSel' : ('SetSelection', 0, 0, 0),
+    'SetSel' : (None, 0,0,0), #'SetSelection', 0, 0, 0),
 
     'GetSelText' :
     ('GetSelectedText',
      'wxString %s();',
 
      '''wxString %s() {
-         int   start;
-         int   end;
+         long   start;
+         long   end;
 
          GetSelection(&start, &end);
          int   len  = end - start;

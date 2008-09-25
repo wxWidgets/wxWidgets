@@ -2615,9 +2615,6 @@ public:
     // Is the document different from when it was last saved?
     bool GetModify() const;
 
-    // Select a range of text.
-    void SetSelection(int start, int end);
-
     // Retrieve the selected text.
     wxString GetSelectedText();
 
@@ -3547,13 +3544,6 @@ public:
     void SetMargins(int left, int right);
 
 
-    // Retrieve the start and end positions of the current selection.
-#ifdef SWIG
-    void GetSelection(int* OUTPUT, int* OUTPUT);
-#else
-    void GetSelection(int* startPos, int* endPos);
-#endif
-
     // Retrieve the point in the window where a position is displayed.
     wxPoint PointFromPosition(int pos);
 
@@ -3703,6 +3693,9 @@ public:
         }
     }
 
+#ifdef SWIG
+    void GetSelection(long* OUTPUT, long* OUTPUT) const;
+#else
     virtual void GetSelection(long *from, long *to) const
     {
         if ( from )
@@ -3710,7 +3703,19 @@ public:
         if ( to )
             *to = GetSelectionEnd();
     }
-
+    
+    // kept for compatibility only
+    void GetSelection(int *from, int *to)
+    {
+        long f, t;
+        GetSelection(&f, &t);
+        if ( from )
+            *from = f;
+        if ( to )
+            *to = t;
+    }
+#endif
+    
     virtual bool IsEditable() const { return !GetReadOnly(); }
     virtual void SetEditable(bool editable) { SetReadOnly(!editable); }
 

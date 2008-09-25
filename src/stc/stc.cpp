@@ -1488,16 +1488,10 @@ bool wxStyledTextCtrl::GetModify() const
     return SendMsg(2159, 0, 0) != 0;
 }
 
-// Select a range of text.
-void wxStyledTextCtrl::SetSelection(int start, int end)
-{
-    SendMsg(2160, start, end);
-}
-
 // Retrieve the selected text.
 wxString wxStyledTextCtrl::GetSelectedText() {
-         int   start;
-         int   end;
+         long   start;
+         long   end;
 
          GetSelection(&start, &end);
          int   len  = end - start;
@@ -3486,15 +3480,6 @@ void wxStyledTextCtrl::SetMargins(int left, int right) {
 }
 
 
-// Retrieve the start and end positions of the current selection.
-void wxStyledTextCtrl::GetSelection(int* startPos, int* endPos) {
-    if (startPos != NULL)
-        *startPos = SendMsg(SCI_GETSELECTIONSTART);
-    if (endPos != NULL)
-        *endPos = SendMsg(SCI_GETSELECTIONEND);
-}
-
-
 // Retrieve the point in the window where a position is displayed.
 wxPoint wxStyledTextCtrl::PointFromPosition(int pos) {
     int x = SendMsg(SCI_POINTXFROMPOSITION, 0, pos);
@@ -3647,8 +3632,8 @@ wxCharBuffer wxStyledTextCtrl::GetLineRaw(int line)
 
 wxCharBuffer wxStyledTextCtrl::GetSelectedTextRaw()
 {
-    int   start;
-    int   end;
+    long   start;
+    long   end;
 
     GetSelection(&start, &end);
     int   len  = end - start;
