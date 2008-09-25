@@ -1131,15 +1131,23 @@ bool wxTopLevelWindowMSW::SetTransparent(wxByte alpha)
 {
 #if wxUSE_DYNLIB_CLASS
     typedef DWORD (WINAPI *PSETLAYEREDWINDOWATTR)(HWND, DWORD, BYTE, DWORD);
-    static PSETLAYEREDWINDOWATTR pSetLayeredWindowAttributes = NULL;
+    static PSETLAYEREDWINDOWATTR
+        pSetLayeredWindowAttributes = (PSETLAYEREDWINDOWATTR)-1;
 
-    if ( pSetLayeredWindowAttributes == NULL )
+    if ( pSetLayeredWindowAttributes == (PSETLAYEREDWINDOWATTR)-1 )
     {
         wxDynamicLibrary dllUser32(_T("user32.dll"));
+
+        // use RawGetSymbol() and not GetSymbol() to avoid error messages under
+        // Windows 95: there is nothing the user can do about this anyhow
         pSetLayeredWindowAttributes = (PSETLAYEREDWINDOWATTR)
-            dllUser32.GetSymbol(wxT("SetLayeredWindowAttributes"));
+            dllUser32.RawGetSymbol(wxT("SetLayeredWindowAttributes"));
+
+        // it's ok to destroy dllUser32 here, we link statically to user32.dll
+        // anyhow so it won't be unloaded
     }
-    if ( pSetLayeredWindowAttributes == NULL )
+
+    if ( !pSetLayeredWindowAttributes )
         return false;
 #endif // wxUSE_DYNLIB_CLASS
 
