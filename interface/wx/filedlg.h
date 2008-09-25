@@ -58,7 +58,7 @@
     @library{wxcore}
     @category{cmndlg}
 
-    @see @ref overview_wxfiledialog, ::wxFileSelector()
+    @see @ref overview_cmndlg_file, ::wxFileSelector()
 */
 class wxFileDialog : public wxDialog
 {

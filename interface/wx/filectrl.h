@@ -40,7 +40,7 @@
         The current folder of the file control has been changed
     @endEventTable
 
-    @nativeimpl{gtk}
+    @nativeimpl{wxgtk}
 
     @library{wxbase}
     @category{miscwnd}
