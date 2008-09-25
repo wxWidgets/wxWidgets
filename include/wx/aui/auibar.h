@@ -625,10 +625,8 @@ protected:
     bool m_overflow_visible;
     long m_style;
 
-#ifndef SWIG
     DECLARE_EVENT_TABLE()
     DECLARE_CLASS(wxAuiToolBar)
-#endif
 };
 
 
