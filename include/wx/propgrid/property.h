@@ -1859,15 +1859,6 @@ public:
     */
     bool SetChoices( wxPGChoices& choices );
 
-    /** Sets new set of choices for property.
-    */
-    bool SetChoices( const wxArrayString& labels,
-                     const wxArrayInt& values = wxArrayInt() )
-    {
-        wxPGChoices chs(labels, values);
-        return SetChoices(chs);
-    }
-
     /** Set max length of text in text editor.
     */
     inline bool SetMaxLength( int maxLen );
