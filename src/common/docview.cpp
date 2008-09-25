@@ -582,10 +582,10 @@ bool wxDocument::DoSaveDocument(const wxString& file)
 {
 #if wxUSE_STD_IOSTREAM
     wxSTD ofstream store(file.mb_str(), wxSTD ios::binary);
-    if (store.fail() || store.bad())
+    if ( !store )
 #else
     wxFileOutputStream store(file);
-    if (store.GetLastError() != wxSTREAM_NO_ERROR)
+    if ( store.GetLastError() != wxSTREAM_NO_ERROR )
 #endif
     {
         wxLogError(_("File \"%s\" could not be opened for writing."), file);
@@ -605,7 +605,7 @@ bool wxDocument::DoOpenDocument(const wxString& file)
 {
 #if wxUSE_STD_IOSTREAM
     wxSTD ifstream store(file.mb_str(), wxSTD ios::binary);
-    if ( store.fail() || store.bad() )
+    if ( !store )
 #else
     wxFileInputStream store(file);
     if (store.GetLastError() != wxSTREAM_NO_ERROR)
@@ -617,7 +617,7 @@ bool wxDocument::DoOpenDocument(const wxString& file)
 
 #if wxUSE_STD_IOSTREAM
     LoadObject(store);
-    if ( store.fail() || store.bad() )
+    if ( !store )
 #else
     int res = LoadObject(store).GetLastError();
     if ( res != wxSTREAM_NO_ERROR && res != wxSTREAM_EOF )
