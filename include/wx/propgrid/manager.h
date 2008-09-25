@@ -498,13 +498,10 @@ public:
     int GetSelectedPage() const { return m_selPage; }
 
     /** Shortcut for GetGrid()->GetSelection(). */
-    wxPGProperty* GetSelectedProperty() const
+    wxPGProperty* GetSelection() const
     {
         return m_pPropGrid->GetSelection();
     }
-
-    /** Synonyme for GetSelectedPage. */
-    int GetSelection() const { return m_selPage; }
 
     /** Returns a pointer to the toolbar currently associated with the
         wxPropertyGridManager (if any). */
@@ -618,12 +615,6 @@ public:
         than desired splitter position, especially when sizers are being used.
     */
     void SetSplitterPosition( int pos, int column = 0 );
-
-    /** Synonyme for SelectPage(name). */
-    void SetStringSelection( const wxChar* name )
-    {
-        SelectPage( GetPageByName(name) );
-    }
 
 #ifdef SWIG
     %pythoncode {

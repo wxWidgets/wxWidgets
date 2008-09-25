@@ -1052,7 +1052,7 @@ void FormMain::OnPropertyGridItemDoubleClick( wxPropertyGridEvent& event )
 void FormMain::OnPropertyGridButtonClick ( wxCommandEvent& )
 {
 #if wxUSE_STATUSBAR
-    wxPGProperty* prop = m_pPropGridManager->GetSelectedProperty();
+    wxPGProperty* prop = m_pPropGridManager->GetSelection();
     wxStatusBar* sb = GetStatusBar();
     if ( prop )
     {
@@ -1189,7 +1189,7 @@ void FormMain::OnTestXRC(wxCommandEvent& WXUNUSED(event))
 
 void FormMain::OnEnableCommonValues(wxCommandEvent& WXUNUSED(event))
 {
-    wxPGProperty* prop = m_pPropGridManager->GetSelectedProperty();
+    wxPGProperty* prop = m_pPropGridManager->GetSelection();
     if ( prop )
         prop->EnableCommonValue();
     else
@@ -2604,7 +2604,7 @@ void FormMain::OnRestoreState( wxCommandEvent& WXUNUSED(event) )
 void FormMain::OnSetSpinCtrlEditorClick( wxCommandEvent& WXUNUSED(event) )
 {
 #if wxUSE_SPINBTN
-    wxPGProperty* pgId = m_pPropGridManager->GetSelectedProperty();
+    wxPGProperty* pgId = m_pPropGridManager->GetSelection();
     if ( pgId )
         m_pPropGridManager->SetPropertyEditor( pgId, wxPG_EDITOR(SpinCtrl) );
     else
@@ -2616,7 +2616,7 @@ void FormMain::OnSetSpinCtrlEditorClick( wxCommandEvent& WXUNUSED(event) )
 
 void FormMain::OnTestReplaceClick( wxCommandEvent& WXUNUSED(event) )
 {
-    wxPGProperty* pgId = m_pPropGridManager->GetSelectedProperty();
+    wxPGProperty* pgId = m_pPropGridManager->GetSelection();
     if ( pgId )
     {
         wxPGChoices choices;
@@ -2986,7 +2986,7 @@ void FormMain::OnMisc ( wxCommandEvent& event )
     else if ( id == ID_COLLAPSE )
     {
         // Collapses selected.
-        wxPGProperty* id = m_pPropGridManager->GetSelectedProperty();
+        wxPGProperty* id = m_pPropGridManager->GetSelection();
         if ( id )
         {
             m_pPropGridManager->Collapse(id);
@@ -3004,7 +3004,7 @@ void FormMain::OnMisc ( wxCommandEvent& event )
     }
     else if ( id == ID_UNSPECIFY )
     {
-        wxPGProperty* prop = m_pPropGridManager->GetSelectedProperty();
+        wxPGProperty* prop = m_pPropGridManager->GetSelection();
         if ( prop )
         {
             m_pPropGridManager->SetPropertyValueUnspecified(prop);
@@ -3012,7 +3012,7 @@ void FormMain::OnMisc ( wxCommandEvent& event )
     }
     else if ( id == ID_SETCOLOUR )
     {
-        wxPGProperty* prop = m_pPropGridManager->GetSelectedProperty();
+        wxPGProperty* prop = m_pPropGridManager->GetSelection();
         if ( prop )
         {
             wxColourData data;
