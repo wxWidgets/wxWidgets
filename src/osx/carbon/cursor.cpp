@@ -551,7 +551,7 @@ wxCursor::wxCursor(const wxString& cursor_file, wxBitmapType flags, int hotSpotX
 }
 
 // Cursors by stock number
-wxCursor::InitFromStock(wxStockCursor cursor_type)
+void wxCursor::InitFromStock(wxStockCursor cursor_type)
 {
     m_refData = new wxCursorRefData;
 #if wxOSX_USE_COCOA
