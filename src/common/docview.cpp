@@ -580,12 +580,6 @@ void wxDocument::SetFilename(const wxString& filename, bool notifyViews)
 
 bool wxDocument::DoSaveDocument(const wxString& file)
 {
-    wxString msgTitle;
-    if (!wxTheApp->GetAppDisplayName().empty())
-        msgTitle = wxTheApp->GetAppDisplayName();
-    else
-        msgTitle = wxString(_("File error"));
-
 #if wxUSE_STD_IOSTREAM
     wxSTD ofstream store(file.mb_str(), wxSTD ios::binary);
     if (store.fail() || store.bad())
@@ -594,16 +588,13 @@ bool wxDocument::DoSaveDocument(const wxString& file)
     if (store.GetLastError() != wxSTREAM_NO_ERROR)
 #endif
     {
-        (void)wxMessageBox(_("Sorry, could not open this file for saving."), msgTitle, wxOK | wxICON_EXCLAMATION,
-                           GetDocumentWindow());
-        // Saving error
+        wxLogError(_("File \"%s\" could not be opened for writing."), file);
         return false;
     }
+
     if (!SaveObject(store))
     {
-        (void)wxMessageBox(_("Sorry, could not save this file."), msgTitle, wxOK | wxICON_EXCLAMATION,
-                           GetDocumentWindow());
-        // Saving error
+        wxLogError(_("Failed to save document to the file \"%s\"."), file);
         return false;
     }
 
@@ -614,24 +605,29 @@ bool wxDocument::DoOpenDocument(const wxString& file)
 {
 #if wxUSE_STD_IOSTREAM
     wxSTD ifstream store(file.mb_str(), wxSTD ios::binary);
-    if (!store.fail() && !store.bad())
+    if ( store.fail() || store.bad() )
 #else
     wxFileInputStream store(file);
-    if (store.GetLastError() == wxSTREAM_NO_ERROR)
+    if (store.GetLastError() != wxSTREAM_NO_ERROR)
 #endif
     {
-#if wxUSE_STD_IOSTREAM
-        LoadObject(store);
-        if ( !!store || store.eof() )
-#else
-        int res = LoadObject(store).GetLastError();
-        if ( res == wxSTREAM_NO_ERROR || res == wxSTREAM_EOF )
-#endif
-            return true;
+        wxLogError(_("File \"%s\" could not be opened for reading."), file);
+        return false;
     }
 
-    wxLogError(_("Sorry, could not open this file."));
-    return false;
+#if wxUSE_STD_IOSTREAM
+    LoadObject(store);
+    if ( store.fail() || store.bad() )
+#else
+    int res = LoadObject(store).GetLastError();
+    if ( res != wxSTREAM_NO_ERROR && res != wxSTREAM_EOF )
+#endif
+    {
+        wxLogError(_("Failed to read document from the file \"%s\"."), file);
+        return false;
+    }
+
+    return true;
 }
 
 
