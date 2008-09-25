@@ -95,10 +95,8 @@ private:
     wxRect rect;
     int tool_id;
 
-#ifndef SWIG
 private:
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxAuiToolBarEvent)
-#endif
 };
 
 
