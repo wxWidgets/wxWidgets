@@ -8,19 +8,41 @@
 
 /**
     @class wxMDIClientWindow
+    @wxheader{mdi.h}
 
     An MDI client window is a child of wxMDIParentFrame, and manages zero or
     more wxMDIChildFrame objects.
 
     @library{wxcore}
-    @category{FIXME}
+    @category{managedwnd}
+
+    @remarks
+
+    The client window is the area where MDI child windows exist. It doesn't have to
+    cover the whole parent frame; other windows such as toolbars and a help window
+    might coexist with it. There can be scrollbars on a client window, which are
+    controlled by the parent window style.
+
+    The wxMDIClientWindow class is usually adequate without further derivation, and
+    it is created automatically when the MDI parent frame is created. If the application
+    needs to derive a new class, the function wxMDIParentFrame::OnCreateClient() must
+    be overridden in order to give an opportunity to use a different class of client
+    window.
+
+    Under Windows 95, the client window will automatically have a sunken border style
+    when the active child is not maximized, and no border style when a child is maximized.
 
     @see wxMDIChildFrame, wxMDIParentFrame, wxFrame
 */
 class wxMDIClientWindow : public wxWindow
 {
 public:
-    //@{
+
+    /**
+        Default constructor.
+    */
+    wxMDIClientWindow();
+
     /**
         Constructor, creating the window.
 
@@ -29,14 +51,11 @@ public:
         @param style
             The window style. Currently unused.
 
-        @remarks The second style of constructor is called within
-                 wxMDIParentFrame::OnCreateClient.
+        @remarks This constructor is called within wxMDIParentFrame::OnCreateClient().
 
-        @see wxMDIParentFrame::wxMDIParentFrame, wxMDIParentFrame::OnCreateClient
+        @see wxMDIParentFrame::wxMDIParentFrame(), wxMDIParentFrame::OnCreateClient()
     */
-    wxMDIClientWindow();
     wxMDIClientWindow(wxMDIParentFrame* parent, long style = 0);
-    //@}
 
     /**
         Destructor.
@@ -54,18 +73,39 @@ public:
 
 /**
     @class wxMDIParentFrame
+    @wxheader{mdi.h}
 
     An MDI (Multiple Document Interface) parent frame is a window which can contain
     MDI child frames in its own 'desktop'. It is a convenient way to avoid window
-    clutter,
-    and is used in many popular Windows applications, such as Microsoft Word(TM).
+    clutter, and is used in many popular Windows applications, such as Microsoft Word(TM).
+
+    @remarks
+
+    There may be multiple MDI parent frames in a single application, but this probably
+    only makes sense within programming development environments.
+
+    Child frames may be of class wxMDIChildFrame (contained within the parent frame)
+    or wxFrame (shown as a top-level frame).
+
+    An MDI parent frame always has a wxMDIClientWindow associated with it, which is the
+    parent for MDI child frames. This client window may be resized to accommodate non-MDI
+    windows, as seen in Microsoft Visual C++ (TM) and Microsoft Publisher (TM), where
+    a documentation window is placed to one side of the workspace.
+
+    MDI remains popular despite dire warnings from Microsoft itself that MDI is an obsolete
+    user interface style.
+
+    The implementation is native in Windows, and simulated under Motif. Under Motif, the
+    child window frames will often have a different appearance from other frames because
+    the window decorations are simulated.
+
 
     @beginStyleTable
     @style{wxCAPTION}
            Puts a caption on the frame.
     @style{wxDEFAULT_FRAME_STYLE}
-           Defined as wxMINIMIZE_BOX |  wxMAXIMIZE_BOX |  wxTHICK_FRAME |
-           wxSYSTEM_MENU |  wxCAPTION.
+           Defined as @c wxMINIMIZE_BOX | @c wxMAXIMIZE_BOX | @c wxTHICK_FRAME |
+           @c wxSYSTEM_MENU | @c wxCAPTION.
     @style{wxHSCROLL}
            Displays a horizontal scrollbar in the client window, allowing the
            user to view child frames that are off the current view.
@@ -76,12 +116,12 @@ public:
     @style{wxMAXIMIZE_BOX}
            Displays a maximize box on the frame (Windows and Motif only).
     @style{wxMINIMIZE}
-           Identical to wxICONIZE.
+           Identical to @c wxICONIZE.
     @style{wxMINIMIZE_BOX}
            Displays a minimize box on the frame (Windows and Motif only).
     @style{wxRESIZE_BORDER}
            Displays a resizeable border around the window (Motif only; for
-           Windows, it is implicit in wxTHICK_FRAME).
+           Windows, it is implicit in @c wxTHICK_FRAME).
     @style{wxSTAY_ON_TOP}
            Stay on top of other windows (Windows only).
     @style{wxSYSTEM_MENU}
@@ -104,7 +144,12 @@ public:
 class wxMDIParentFrame : public wxFrame
 {
 public:
-    //@{
+
+    /**
+        Default constructor.
+    */
+    wxMDIParentFrame();
+
     /**
         Constructor, creating the window.
 
@@ -112,39 +157,34 @@ public:
             The window parent. This should be @NULL.
         @param id
             The window identifier. It may take a value of -1 to indicate a default
-        value.
+            value.
         @param title
             The caption to be displayed on the frame's title bar.
         @param pos
-            The window position. The value wxDefaultPosition indicates a default position,
-        chosen by
-            either the windowing system or wxWidgets, depending on platform.
+            The window position. The value @c wxDefaultPosition indicates a default position,
+            chosen by either the windowing system or wxWidgets, depending on platform.
         @param size
-            The window size. The value wxDefaultSize indicates a default size, chosen by
+            The window size. The value @c wxDefaultSize indicates a default size, chosen by
             either the windowing system or wxWidgets, depending on platform.
         @param style
             The window style. See wxMDIParentFrame.
         @param name
-            The name of the window. This parameter is used to associate a name with the
-        item,
-            allowing the application user to set Motif resource values for
-            individual windows.
+            The name of the window. This parameter is used to associate a name
+            with the item, allowing the application user to set Motif resource values
+            for individual windows.
 
         @remarks During the construction of the frame, the client window will be
-                 created. To use a different class from
-                 wxMDIClientWindow, override
+                 created. To use a different class from wxMDIClientWindow, override
                  OnCreateClient().
 
         @see Create(), OnCreateClient()
     */
-    wxMDIParentFrame();
     wxMDIParentFrame(wxWindow* parent, wxWindowID id,
                      const wxString& title,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
                      const wxString& name = "frame");
-    //@}
 
     /**
         Destructor. Destroys all child windows and menu bar if present.
@@ -203,12 +243,37 @@ public:
         @param height
             Receives the client height in pixels.
 
-        @remarks The client area is the area which may be drawn on by the
-                 programmer, excluding title bar, border, status bar,
-                 and toolbar if present.
+        @remarks
 
-        @see GetToolBar(), SetToolBar(),
-             wxMDIClientWindow
+        The client area is the area which may be drawn on by the programmer, excluding
+        title bar, border, status bar, and toolbar if present.
+
+        If you wish to manage your own toolbar (or perhaps you have more than one),
+        provide an @b OnSize event handler. Call GetClientSize() to find how much space
+        there is for your windows and don't forget to set the size and position of
+        the MDI client window as well as your toolbar and other windows (but not the
+        status bar).
+
+        If you have set a toolbar with wxMDIParentFrame::SetToolbar(), the client size
+        returned will have subtracted the toolbar height. However, the available positions
+        for the client window and other windows of the frame do not start at zero - you
+        must add the toolbar height.
+
+        The position and size of the status bar and toolbar (if known to the frame) are
+        always managed by wxMDIParentFrame, regardless of what behaviour is defined in
+        your @b OnSize event handler. However, the client window position and size are always
+        set in @b OnSize, so if you override this event handler, make sure you deal with the
+        client window.
+
+        You do not have to manage the size and position of MDI child windows, since they
+        are managed automatically by the client window.
+
+        @see GetToolBar(), SetToolBar(), wxMDIClientWindow
+
+        @beginWxPythonOnly
+        The wxPython version of this method takes no arguments and returns a tuple containing
+        width and height.
+        @endWxPythonOnly
     */
     virtual void GetClientSize(int* width, int* height) const;
 
@@ -235,15 +300,23 @@ public:
 
     /**
         Override this to return a different kind of client window. If you override this
-        function,
-        you must create your parent frame in two stages, or your function will never be
-        called,
-        due to the way C++ treats virtual functions called from constructors. For
-        example:
+        function, you must create your parent frame in two stages, or your function will
+        never be called, due to the way C++ treats virtual functions called from constructors.
+        For example:
 
-        @remarks You might wish to derive from wxMDIClientWindow in order to
-                 implement different erase behaviour, for example, such
-                 as painting a bitmap on the background.
+        @code
+        frame = new MyParentFrame;
+        frame->Create(parent, myParentFrameId, wxT("My Parent Frame"));
+        @endcode
+
+        @remarks
+
+        You might wish to derive from wxMDIClientWindow in order to implement different
+        erase behaviour, for example, such as painting a bitmap on the background.
+
+        Note that it is probably impossible to have a client window that scrolls
+        as well as painting a bitmap or pattern, since in @b OnScroll, the scrollbar
+        positions always return zero. (Solutions to: julian.smart@btopenworld.com).
 
         @see GetClientWindow(), wxMDIClientWindow
     */
@@ -257,9 +330,23 @@ public:
         @param toolbar
             Toolbar to manage.
 
-        @remarks When the frame is resized, the toolbar is resized to be the
-                 width of the frame client area, and the toolbar height
-                 is kept the same.
+        @remarks
+
+        When the frame is resized, the toolbar is resized to be the width of the frame
+        client area, and the toolbar height is kept the same.
+
+        When the frame is resized, the toolbar is resized to be the width of the frame
+        client area, and the toolbar height is kept the same.
+
+        The parent of the toolbar must be this frame.
+
+        If you wish to manage your own toolbar (or perhaps you have more than one),
+        don't call this function, and instead manage your subwindows and the MDI client
+        window by providing an @b OnSize event handler. Call wxMDIParentFrame::GetClientSize()
+        to find how much space there is for your windows.
+
+        Note that SDI (normal) frames and MDI child windows must always have their toolbars
+        managed by the application.
 
         @see GetToolBar(), GetClientSize()
     */
@@ -267,16 +354,18 @@ public:
 
     /**
         Call this to change the current Window menu. Ownership of the menu object
-        passes to
-        the frame when you call this function.
+        passes to the frame when you call this function.
+
         This call is available under Windows only.
-        To remove the window completely, use the wxFRAME_NO_WINDOW_MENU window style.
+
+        To remove the window completely, use the @c wxFRAME_NO_WINDOW_MENU window style.
     */
     void SetWindowMenu(wxMenu* menu);
 
     /**
         Tiles the MDI child windows either horizontally or vertically depending on
-        whether @a orient is wxHORIZONTAL or wxVERTICAL.
+        whether @a orient is @c wxHORIZONTAL or @c wxVERTICAL.
+
         Currently only implemented for MSW, does nothing under the other platforms.
     */
     void Tile(wxOrientation orient = wxHORIZONTAL);
@@ -286,6 +375,7 @@ public:
 
 /**
     @class wxMDIChildFrame
+    @wxheader{mdi.h}
 
     An MDI child frame is a frame that can only exist on a wxMDIClientWindow,
     which is itself a child of wxMDIParentFrame.
@@ -294,8 +384,8 @@ public:
     @style{wxCAPTION}
            Puts a caption on the frame.
     @style{wxDEFAULT_FRAME_STYLE}
-           Defined as wxMINIMIZE_BOX |  wxMAXIMIZE_BOX |  wxTHICK_FRAME |
-           wxSYSTEM_MENU |  wxCAPTION.
+           Defined as @c wxMINIMIZE_BOX | @c wxMAXIMIZE_BOX | @c wxTHICK_FRAME |
+           @c wxSYSTEM_MENU | @c wxCAPTION.
     @style{wxICONIZE}
            Display the frame iconized (minimized) (Windows only).
     @style{wxMAXIMIZE}
@@ -303,12 +393,12 @@ public:
     @style{wxMAXIMIZE_BOX}
            Displays a maximize box on the frame (Windows and Motif only).
     @style{wxMINIMIZE}
-           Identical to wxICONIZE.
+           Identical to @c wxICONIZE.
     @style{wxMINIMIZE_BOX}
            Displays a minimize box on the frame (Windows and Motif only).
     @style{wxRESIZE_BORDER}
            Displays a resizeable border around the window (Motif only; for
-           Windows, it is implicit in wxTHICK_FRAME).
+           Windows, it is implicit in @c wxTHICK_FRAME).
     @style{wxSTAY_ON_TOP}
            Stay on top of other windows (Windows only).
     @style{wxSYSTEM_MENU}
@@ -325,7 +415,12 @@ public:
 class wxMDIChildFrame : public wxFrame
 {
 public:
-    //@{
+
+    /**
+        Default constructor.
+    */
+    wxMDIChildFrame();
+
     /**
         Constructor, creating the window.
 
@@ -333,36 +428,30 @@ public:
             The window parent. This should not be @NULL.
         @param id
             The window identifier. It may take a value of -1 to indicate a default
-        value.
+            value.
         @param title
             The caption to be displayed on the frame's title bar.
         @param pos
-            The window position. The value wxDefaultPosition indicates a default position,
-        chosen by
-            either the windowing system or wxWidgets, depending on platform.
+            The window position. The value @c wxDefaultPosition indicates a default position,
+            chosen by either the windowing system or wxWidgets, depending on platform.
         @param size
-            The window size. The value wxDefaultSize indicates a default size, chosen by
+            The window size. The value @c wxDefaultSize indicates a default size, chosen by
             either the windowing system or wxWidgets, depending on platform.
         @param style
             The window style. See wxMDIChildFrame.
         @param name
             The name of the window. This parameter is used to associate a name with the
-        item,
-            allowing the application user to set Motif resource values for
-            individual windows.
-
-        @remarks None.
+            item, allowing the application user to set Motif resource values for individual
+            windows.
 
         @see Create()
     */
-    wxMDIChildFrame();
     wxMDIChildFrame(wxMDIParentFrame* parent, wxWindowID id,
                     const wxString& title,
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long style = wxDEFAULT_FRAME_STYLE,
                     const wxString& name = "frame");
-    //@}
 
     /**
         Destructor. Destroys all child windows and menu bar if present.
