@@ -221,10 +221,10 @@ protected:
 
     //FIXME:  This is nasty... find a better way to work around
     //inheritance issues
-#if defined(__WXMAC__)
+#if defined(__WXOSX_CARBON__)
     virtual void MacVisibilityChanged();
 #endif
-#if defined(__WXMAC__) || defined(__WXCOCOA__)
+#if defined(__WXOSX_CARBON__) || defined(__WXCOCOA__)
     friend class wxQTMediaBackend;
 #endif
     class wxMediaBackend* m_imp;

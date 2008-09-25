@@ -469,7 +469,7 @@ void wxMediaCtrl::DoMoveWindow(int x, int y, int w, int h)
 //---------------------------------------------------------------------------
 // wxMediaCtrl::MacVisibilityChanged
 //---------------------------------------------------------------------------
-#ifdef __WXMAC__
+#ifdef __WXOSX_CARBON__
 void wxMediaCtrl::MacVisibilityChanged()
 {
     wxControl::MacVisibilityChanged();
@@ -550,7 +550,7 @@ void wxMediaBackendCommonBase::QueueStopEvent()
 #ifdef __WXMSW__ // MSW has huge backends so we do it seperately
 FORCE_LINK(wxmediabackend_am)
 FORCE_LINK(wxmediabackend_wmp10)
-#else
+#elif !defined(__WXOSX_COCOA__)
 FORCE_LINK(basewxmediabackends)
 #endif
 
