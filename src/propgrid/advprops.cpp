@@ -1470,13 +1470,14 @@ void wxCursorProperty::OnCustomPaint( wxDC& dc,
 
         if ( paintdata.m_choiceItem < NUM_CURSORS )
         {
-            int cursorindex = gs_cp_es_syscursors_values[paintdata.m_choiceItem];
+            wxStockCursor cursorIndex =
+                (wxStockCursor) gs_cp_es_syscursors_values[paintdata.m_choiceItem];
 
             {
-                if ( cursorindex == wxCURSOR_NONE )
-                    cursorindex = wxCURSOR_ARROW;
+                if ( cursorIndex == wxCURSOR_NONE )
+                    cursorIndex = wxCURSOR_ARROW;
 
-                wxCursor cursor( (wxStockCursor)cursorindex );
+                wxCursor cursor( cursorIndex );
 
             #ifdef __WXMSW__
                 HDC hDc = (HDC)((const wxMSWDCImpl *)dc.GetImpl())->GetHDC();
