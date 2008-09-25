@@ -458,6 +458,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/ioswrap.h
     wx/ipc.h
     wx/ipcbase.h
+    wx/kbdstate.h
     wx/link.h
     wx/list.h
     wx/listimpl.cpp
@@ -469,6 +470,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/memtext.h
     wx/mimetype.h
     wx/module.h
+    wx/mousestate.h
     wx/msgout.h
     wx/mstream.h
     wx/object.h
