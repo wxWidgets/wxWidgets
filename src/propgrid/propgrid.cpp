@@ -3279,22 +3279,25 @@ void wxPropertyGrid::OnCustomEditorEvent( wxCommandEvent &event )
         }
     }
 
-    if ( wnd && !buttonWasHandled )
+    if ( !buttonWasHandled )
     {
-        // First call editor class' event handler.
-        const wxPGEditor* editor = selected->GetEditorClass();
-
-        if ( editor->OnEvent( this, selected, wnd, event ) )
+        if ( wnd )
         {
-            // If changes, validate them
-            if ( DoEditorValidate() )
+            // First call editor class' event handler.
+            const wxPGEditor* editor = selected->GetEditorClass();
+
+            if ( editor->OnEvent( this, selected, wnd, event ) )
             {
-                if ( editor->GetValueFromControl( pendingValue, m_selected, wnd ) )
-                    valueIsPending = true;
-            }
-            else
-            {
-                validationFailure = true;
+                // If changes, validate them
+                if ( DoEditorValidate() )
+                {
+                    if ( editor->GetValueFromControl( pendingValue, m_selected, wnd ) )
+                        valueIsPending = true;
+                }
+                else
+                {
+                    validationFailure = true;
+                }
             }
         }
 
