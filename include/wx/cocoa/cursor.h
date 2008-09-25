@@ -39,14 +39,13 @@ class WXDLLIMPEXP_CORE wxCursor: public wxBitmap
 public:
     wxCursor();
 
-    wxCursor(const char bits[], int width, int height,
-             int hotSpotX = -1, int hotSpotY = -1,
-             const char maskBits[] = NULL);
-
-    wxCursor(const wxString& name, long flags = 0,
+    wxCursor(const wxString& name, wxBitmapType type = wxCURSOR_DEFAULT_TYPE,
              int hotSpotX = 0, int hotSpotY = 0);
 
-    wxCursor(wxStockCursor cursor_type);
+    wxCursor(wxStockCursor id) { InitFromStock(id); }
+#if WXWIN_COMPATIBILITY_2_8
+    wxCursor(int id) { InitFromStock((wxStockCursor)id); }
+#endif
     virtual ~wxCursor();
 
     // FIXME: operator==() is wrong!
@@ -55,6 +54,8 @@ public:
 
     WX_NSCursor GetNSCursor() const { return M_CURSORDATA ? M_CURSORDATA->m_hCursor : 0; }
 
+private:
+    void InitFromStock(wxStockCursor);
     DECLARE_DYNAMIC_CLASS(wxCursor)
 };
 

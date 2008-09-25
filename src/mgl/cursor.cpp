@@ -65,7 +65,7 @@ wxCursor::wxCursor()
 {
 }
 
-wxCursor::wxCursor(wxStockCursor cursorId)
+void wxCursor::InitFromStock(wxStockCursor cursorId)
 {
     if ( !gs_cursorsHash )
         gs_cursorsHash = new wxCursorsHash;
@@ -140,21 +140,11 @@ wxCursor::wxCursor(wxStockCursor cursorId)
     }
 }
 
-wxCursor::wxCursor(const char WXUNUSED(bits)[],
-                   int WXUNUSED(width),
-                   int WXUNUSED(height),
-                   int WXUNUSED(hotSpotX), int WXUNUSED(hotSpotY),
-                   const char WXUNUSED(maskBits)[],
-                   wxColour * WXUNUSED(fg), wxColour * WXUNUSED(bg) )
-{
-    //FIXME_MGL
-}
-
 wxCursor::wxCursor(const wxString& cursor_file,
-                   long flags,
+                   wxBitmapType type,
                    int WXUNUSED(hotSpotX), int WXUNUSED(hotSpotY))
 {
-    if ( flags == wxBITMAP_TYPE_CUR || flags == wxBITMAP_TYPE_CUR_RESOURCE )
+    if ( type == wxBITMAP_TYPE_CUR || type == wxBITMAP_TYPE_CUR_RESOURCE )
     {
         m_refData = new wxCursorRefData();
         M_CURSORDATA->m_cursor = new MGLCursor(cursor_file.mb_str());

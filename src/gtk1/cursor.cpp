@@ -61,7 +61,7 @@ wxCursor::wxCursor()
 
 }
 
-wxCursor::wxCursor( wxStockCursor cursorId )
+void wxCursor::InitFromStock( wxStockCursor cursorId )
 {
     m_refData = new wxCursorRefData();
 

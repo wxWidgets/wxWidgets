@@ -13,7 +13,7 @@
     pointer is, with a picture that might indicate the interpretation of a
     mouse click. As with icons, cursors in X and MS Windows are created in a
     different manner. Therefore, separate cursors will be created for the
-    different environments.  Platform-specific methods for creating a wxCursor
+    different environments. Platform-specific methods for creating a wxCursor
     object are catered for, and this is an occasion where conditional
     compilation will probably be required (see wxIcon for an example).
 
@@ -26,8 +26,8 @@
 
     The following is an example of creating a cursor from 32x32 bitmap data
     (down_bits) and a mask (down_mask) where 1 is black and 0 is white for the
-    bits, and 1 is opaque and 0 is transparent for the mask. It works on
-    Windows and GTK+.
+    bits, and 1 is opaque and 0 is transparent for the mask.
+    It works on Windows and GTK+.
 
     @code
     static char down_bits[] = { 255, 255, 255, 255, 31,
@@ -63,7 +63,7 @@
         down_image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_X, 6);
         down_image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y, 14);
         wxCursor down_cursor = wxCursor(down_image);
-    #else
+    #elif defined(__WXGTK__) or defined(__WXMOTIF__)
         wxCursor down_cursor = wxCursor(down_bits, 32, 32, 6, 14,
                                         down_mask, wxWHITE, wxBLACK);
     #endif
@@ -78,8 +78,7 @@
     - ::wxHOURGLASS_CURSOR
     - ::wxCROSS_CURSOR
 
-    @see wxBitmap, wxIcon, wxWindow::SetCursor(), wxSetCursor(),
-         ::wxStockCursor
+    @see wxBitmap, wxIcon, wxWindow::SetCursor(), wxSetCursor(), ::wxStockCursor
 */
 class wxCursor : public wxBitmap
 {
@@ -88,19 +87,18 @@ public:
         Default constructor.
     */
     wxCursor();
+
     /**
-        Constructs a cursor by passing an array of bits (Motif and GTK+ only).
-        @a maskBits is used only under Motif and GTK+. The parameters @a fg and
-        @a bg are only present on GTK+, and force the cursor to use particular
-        background and foreground colours.
+        Constructs a cursor by passing an array of bits (XBM data).
+
+        The parameters @a fg and @a bg have an effect only on GTK+, and force
+        the cursor to use particular background and foreground colours.
 
         If either @a hotSpotX or @a hotSpotY is -1, the hotspot will be the
         centre of the cursor image (Motif only).
 
         @param bits
-            An array of bits.
-        @param maskBits
-            Bits for a mask bitmap.
+            An array of XBM data bits.
         @param width
             Cursor width.
         @param height
@@ -109,14 +107,19 @@ public:
             Hotspot x coordinate.
         @param hotSpotY
             Hotspot y coordinate.
+        @param maskBits
+            Bits for a mask bitmap.
+
+        @onlyfor{wxgtk,wxmotif}
     */
     wxCursor(const char bits[], int width, int height,
              int hotSpotX = -1, int hotSpotY = -1,
-             const char maskBits[] = NULL,
-             wxColour* fg = NULL, wxColour* bg = NULL);
+             const char maskBits[] = NULL);
+
     /**
         Constructs a cursor by passing a string resource name or filename.
 
+        @note
         On MacOS when specifying a string resource name, first the color
         cursors 'crsr' and then the black/white cursors 'CURS' in the resource
         chain are scanned through.
@@ -125,20 +128,24 @@ public:
         loading from an icon file, to specify the cursor hotspot relative to
         the top left of the image.
 
+        @param cursorName
+            The name of the resource or the image file to load.
+
         @param type
-            Icon type to load. Under Motif, type defaults to wxBITMAP_TYPE_XBM.
-            Under Windows, it defaults to wxBITMAP_TYPE_CUR_RESOURCE. Under
-            MacOS, it defaults to wxBITMAP_TYPE_MACCURSOR_RESOURCE.
-            Under X, the permitted cursor types are:
-            <ul>
-            <li>wxBITMAP_TYPE_XBM - Load an X bitmap file.</li>
-            </ul>
+            Icon type to load. It defaults to wxCURSOR_DEFAULT_TYPE,
+            which is a #define associated to different values on different
+            platforms:
+            - under Windows, it defaults to wxBITMAP_TYPE_CUR_RESOURCE.
+            - under MacOS, it defaults to wxBITMAP_TYPE_MACCURSOR_RESOURCE.
+            - under GTK, it defaults to wxBITMAP_TYPE_XPM.
+            - under X11, it defaults to wxBITMAP_TYPE_XPM.
+            - under Motif, type defaults to wxBITMAP_TYPE_XBM.
             Under Windows, the permitted types are:
             - wxBITMAP_TYPE_CUR - Load a cursor from a .cur cursor file (only
                                   if USE_RESOURCE_LOADING_IN_MSW is enabled in
                                   setup.h).
-            - wxBITMAP_TYPE_CUR_RESOURCE - Load a Windows resource (as
-                                           specified in the .rc file).
+            - wxBITMAP_TYPE_CUR_RESOURCE - Load a Windows resource
+                                           (as specified in the .rc file).
             - wxBITMAP_TYPE_ICO - Load a cursor from a .ico icon file (only if
                                   USE_RESOURCE_LOADING_IN_MSW is enabled in
                                   setup.h). Specify @a hotSpotX and @a hotSpotY.
@@ -147,8 +154,10 @@ public:
         @param hotSpotY
             Hotspot y coordinate.
     */
-    wxCursor(const wxString& cursorName, long type,
+    wxCursor(const wxString& cursorName,
+             wxBitmapType type = wxCURSOR_DEFAULT_TYPE,
              int hotSpotX = 0, int hotSpotY = 0);
+
     /**
         Constructs a cursor using a cursor identifier.
 
@@ -156,24 +165,26 @@ public:
             A stock cursor identifier. See ::wxStockCursor.
     */
     wxCursor(wxStockCursor cursorId);
+
     /**
         Constructs a cursor from a wxImage. If cursor are monochrome on the
         current platform, colors with the RGB elements all greater than 127
         will be foreground, colors less than this background. The mask (if any)
         will be used to specify the transparent area.
 
-        In wxMSW the foreground will be white and the background black. If the
-        cursor is larger than 32x32 it is resized.
+        In wxMSW the foreground will be white and the background black.
+        If the cursor is larger than 32x32 it is resized.
 
         In wxGTK, colour cursors and alpha channel are supported (starting from
         GTK+ 2.2). Otherwise the two most frequent colors will be used for
-        foreground and background. In any case, the cursor will be displayed at
-        the size of the image.
+        foreground and background. In any case, the cursor will be displayed
+        at the size of the image.
 
         In wxMac, if the cursor is larger than 16x16 it is resized and
         currently only shown as black/white (mask respected).
     */
     wxCursor(const wxImage& image);
+
     /**
         Copy constructor, uses @ref overview_refcount "reference counting".
 
@@ -201,7 +212,7 @@ public:
     /**
         Assignment operator, using @ref overview_refcount "reference counting".
     */
-    wxCursor operator =(const wxCursor& cursor);
+    wxCursor& operator =(const wxCursor& cursor);
 };
 
 

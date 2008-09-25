@@ -23,13 +23,13 @@ public:
     // constructors
     wxCursor();
     wxCursor(const wxImage& image);
-    wxCursor(const char bits[], int width, int height,
-             int hotSpotX = -1, int hotSpotY = -1,
-             const char maskBits[] = NULL);
     wxCursor(const wxString& name,
-             long flags = wxBITMAP_TYPE_CUR_RESOURCE,
+             wxBitmapType type = wxCURSOR_DEFAULT_TYPE,
              int hotSpotX = 0, int hotSpotY = 0);
-    wxCursor(wxStockCursor idCursor);
+    wxCursor(wxStockCursor id) { InitFromStock(id); }
+#if WXWIN_COMPATIBILITY_2_8
+    wxCursor(int id) { InitFromStock((wxStockCursor)id); }
+#endif
     virtual ~wxCursor();
 
     // implementation only
@@ -37,6 +37,7 @@ public:
     WXHCURSOR GetHCURSOR() const { return (WXHCURSOR)GetHandle(); }
 
 protected:
+    void InitFromStock(wxStockCursor);
     virtual wxGDIImageRefData *CreateData() const;
 
 private:

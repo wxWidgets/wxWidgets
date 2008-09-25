@@ -244,11 +244,14 @@ wxCursor::wxCursor(const char bits[], int width, int height,
     Create(bits, width, height, hotSpotX, hotSpotY, maskBits);
 }
 
-wxCursor::wxCursor(const wxString& name, long flags, int hotSpotX, int hotSpotY)
+wxCursor::wxCursor(const wxString& name, wxBitmapType type, int hotSpotX, int hotSpotY,
+                   const wxColour* WXUNUSED(fg), const wxColour* WXUNUSED(bg))
 {
     // Must be an XBM file
-    if (flags != wxBITMAP_TYPE_XBM)
+    if (type != wxBITMAP_TYPE_XBM) {
+        wxLogError("Invalid cursor bitmap type '%d'", type);
         return;
+    }
 
     m_refData = new wxCursorRefData;
 
@@ -284,7 +287,7 @@ wxCursor::wxCursor(const wxString& name, long flags, int hotSpotX, int hotSpotY)
 }
 
 // Cursors by stock number
-wxCursor::wxCursor(wxStockCursor id)
+void wxCursor::InitFromStock(wxStockCursor id)
 {
     m_refData = new wxCursorRefData;
     M_CURSORDATA->m_cursorId = id;

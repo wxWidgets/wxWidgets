@@ -24,18 +24,20 @@ class WXDLLIMPEXP_CORE wxCursor : public wxGDIObject
 {
 public:
     wxCursor() {}
-    wxCursor(wxStockCursor cursorId);
-    wxCursor(const char bits[], int width, int  height,
-              int hotSpotX=-1, int hotSpotY=-1,
-              const char maskBits[]=0, wxColour *fg=0, wxColour *bg=0);
+    wxCursor(wxStockCursor id) { InitFromStock(id); }
+#if WXWIN_COMPATIBILITY_2_8
+    wxCursor(int id) { InitFromStock((wxStockCursor)id); }
+#endif
     wxCursor(const wxString& name,
-             long flags = wxBITMAP_TYPE_CUR_RESOURCE,
+             wxBitmapType type = wxCURSOR_DEFAULT_TYPE,
              int hotSpotX = 0, int hotSpotY = 0);
 
     // implementation
     wxBitmap GetBitmap() const;
 
 protected:
+    void InitFromStock(wxStockCursor);
+
     // ref counting code
     virtual wxGDIRefData *CreateGDIRefData() const;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;

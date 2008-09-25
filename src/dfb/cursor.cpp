@@ -43,23 +43,13 @@ public:
 
 IMPLEMENT_DYNAMIC_CLASS(wxCursor, wxObject)
 
-wxCursor::wxCursor(wxStockCursor cursorId)
+void wxCursor::InitFromStock(wxStockCursor cursorId)
 {
 #warning "FIXME -- implement the cursor as bitmaps (that's what DFB uses)"
 }
 
-wxCursor::wxCursor(const char WXUNUSED(bits)[],
-                   int WXUNUSED(width),
-                   int WXUNUSED(height),
-                   int WXUNUSED(hotSpotX), int WXUNUSED(hotSpotY),
-                   const char WXUNUSED(maskBits)[],
-                   wxColour * WXUNUSED(fg), wxColour * WXUNUSED(bg) )
-{
-#warning "FIXME"
-}
-
 wxCursor::wxCursor(const wxString& cursor_file,
-                   long flags,
+                   wxBitmapType type,
                    int WXUNUSED(hotSpotX), int WXUNUSED(hotSpotY))
 {
 #warning "FIXME"

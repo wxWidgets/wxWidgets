@@ -56,7 +56,7 @@ wxCursor::wxCursor()
 {
 }
 
-wxCursor::wxCursor( wxStockCursor cursorId )
+void wxCursor::InitFromStock( wxStockCursor cursorId )
 {
     m_refData = new wxCursorRefData();
 
@@ -122,9 +122,49 @@ wxCursor::wxCursor( wxStockCursor cursorId )
     M_CURSORDATA->m_cursor = gdk_cursor_new( gdk_cur );
 }
 
+
+// used in the following two ctors
 extern GtkWidget *wxGetRootWindow();
 
-wxCursor::wxCursor(const char bits[], int width, int  height,
+wxCursor::wxCursor(const wxString& cursor_file,
+                   wxBitmapType type,
+                   int hotSpotX, int hotSpotY)
+{
+    /* TODO: test this code! */
+
+    // Must be an XBM file
+    if (type != wxBITMAP_TYPE_XPM) {
+        wxLogError("Invalid cursor bitmap type '%d'", type);
+        return;
+    }
+
+    // load the XPM
+    GdkBitmap *mask = NULL;
+    GdkBitmap *data = gdk_pixmap_create_from_xpm( wxGetRootWindow()->window,
+                                                  &mask, NULL, cursor_file.mb_str() );
+    if (!data)
+        return;
+
+    // check given hotspot
+    gint w, h;
+    gdk_drawable_get_size( data, &w, &h );
+    if (hotSpotX < 0 || hotSpotX >= w)
+        hotSpotX = 0;
+    if (hotSpotY < 0 || hotSpotY >= h)
+        hotSpotY = 0;
+
+    // create the real cursor
+    m_refData = new wxCursorRefData;
+    M_CURSORDATA->m_cursor =
+        gdk_cursor_new_from_pixmap( data, mask,
+                                    wxBLACK->GetColor(), wxWHITE->GetColor(),
+                                    hotSpotX, hotSpotY );
+
+    g_object_unref (data);
+    g_object_unref (mask);
+}
+
+wxCursor::wxCursor(const char bits[], int width, int height,
                    int hotSpotX, int hotSpotY,
                    const char maskBits[], const wxColour *fg, const wxColour *bg)
 {

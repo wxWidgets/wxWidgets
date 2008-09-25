@@ -219,25 +219,10 @@ wxCursor::wxCursor(const wxImage& image)
 }
 #endif // wxUSE_IMAGE
 
-wxCursor::wxCursor(const char WXUNUSED(bits)[],
-                   int WXUNUSED(width),
-                   int WXUNUSED(height),
-                   int WXUNUSED(hotSpotX), int WXUNUSED(hotSpotY),
-                   const char WXUNUSED(maskBits)[])
-{
-}
-
 // MicroWin doesn't have support needed for the other ctors
 #ifdef __WXMICROWIN__
 
-wxCursor::wxCursor(const wxString& WXUNUSED(filename),
-                   wxBitmapType WXUNUSED(kind),
-                   int WXUNUSED(hotSpotX),
-                   int WXUNUSED(hotSpotY))
-{
-}
-
-wxCursor::wxCursor(int WXUNUSED(cursor_type))
+wxCursor::InitFromStock(wxStockCursor WXUNUSED(cursor_type))
 {
 }
 
@@ -280,7 +265,7 @@ wxCursor::wxCursor(const wxString& filename,
             break;
 
         default:
-            wxFAIL_MSG( _T("unknown cursor resource type") );
+            wxLogError( _T("unknown cursor resource type '%d'"), kind );
 
             hcursor = NULL;
     }
@@ -292,7 +277,7 @@ wxCursor::wxCursor(const wxString& filename,
 }
 
 // Cursors by stock number
-wxCursor::wxCursor(wxStockCursor idCursor)
+void wxCursor::InitFromStock(wxStockCursor idCursor)
 {
     // all wxWidgets standard cursors
     static const struct StdCursor

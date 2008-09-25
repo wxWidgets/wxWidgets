@@ -20,17 +20,16 @@ class WXDLLIMPEXP_CORE wxCursor : public wxGDIObject
 public:
     wxCursor();
 
-    wxCursor(const char bits[], int width, int height,
-             int hotSpotX = -1, int hotSpotY = -1,
-             const char maskBits[] = NULL);
-
     wxCursor(const wxImage & image) ;
     wxCursor(const char* const* bits);
     wxCursor(const wxString& name,
-             wxBitmapType flags = wxBITMAP_TYPE_MACCURSOR_RESOURCE,
+             wxBitmapType type = wxCURSOR_DEFAULT_TYPE,
              int hotSpotX = 0, int hotSpotY = 0);
 
-    wxCursor(wxStockCursor cursor_type);
+    wxCursor(wxStockCursor id) { InitFromStock(id); }
+#if WXWIN_COMPATIBILITY_2_8
+    wxCursor(int id) { InitFromStock((wxStockCursor)id); }
+#endif
     virtual ~wxCursor();
 
     bool CreateFromXpm(const char* const* bits);
@@ -41,6 +40,8 @@ public:
     WXHCURSOR GetHCURSOR() const;
 
 private:
+    void InitFromStock(wxStockCursor);
+
     virtual wxGDIRefData *CreateGDIRefData() const;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 

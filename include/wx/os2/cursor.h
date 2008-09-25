@@ -34,25 +34,22 @@ public:
 
     wxCursor(const wxImage& rImage);
 
-    wxCursor( const char acBits[]
-             ,int        nWidth
-             ,int        nHeight
-             ,int        nHotSpotX = -1
-             ,int        nHotSpotY = -1
-             ,const char zMaskBits[] = NULL
-            );
     wxCursor( const wxString& rsName
-             ,long            lFlags = wxBITMAP_TYPE_CUR_RESOURCE
+             ,wxBitmapType    lType = wxCURSOR_DEFAULT_TYPE
              ,int             nHotSpotX = 0
              ,int             nHotSpotY = 0
             );
-    wxCursor(wxStockCursor nCursorType);
+    wxCursor(wxStockCursor id) { InitFromStock(id); }
+#if WXWIN_COMPATIBILITY_2_8
+    wxCursor(int id) { InitFromStock((wxStockCursor)id); }
+#endif
     inline ~wxCursor() { }
 
     inline WXHCURSOR GetHCURSOR(void) const { return (M_CURSORDATA ? M_CURSORDATA->m_hCursor : 0); }
     inline void      SetHCURSOR(WXHCURSOR hCursor) { SetHandle((WXHANDLE)hCursor); }
 
 protected:
+    void InitFromStock(wxStockCursor);
     inline virtual wxGDIImageRefData* CreateData(void) const { return (new wxCursorRefData); }
 
 private:

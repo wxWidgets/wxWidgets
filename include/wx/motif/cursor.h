@@ -25,16 +25,22 @@ public:
 
     wxCursor(const char bits[], int width, int height,
              int hotSpotX = -1, int hotSpotY = -1,
-             const char maskBits[] = NULL);
+             const char maskBits[] = NULL,
+             const wxColour* fg = NULL, const wxColour* bg = NULL);
 
-    wxCursor(const wxString& name, long flags = wxBITMAP_TYPE_XBM,
-        int hotSpotX = 0, int hotSpotY = 0);
+    wxCursor(const wxString& name,
+             wxBitmapType type = wxCURSOR_DEFAULT_TYPE,
+             int hotSpotX = 0, int hotSpotY = 0);
 
 #if wxUSE_IMAGE
     wxCursor(const wxImage& image);
 #endif
 
-    wxCursor(wxStockCursor id);
+    wxCursor(wxStockCursor id) { InitFromStock(id); }
+#if WXWIN_COMPATIBILITY_2_8
+    wxCursor(int id) { InitFromStock((wxStockCursor)id); }
+#endif
+
     virtual ~wxCursor();
 
     // Motif-specific.
@@ -46,6 +52,8 @@ protected:
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 
 private:
+    void InitFromStock(wxStockCursor);
+
     void Create(const char bits[], int width, int height,
                 int hotSpotX = -1, int hotSpotY = -1,
                 const char maskBits[] = NULL);

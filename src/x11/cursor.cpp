@@ -66,7 +66,7 @@ wxCursor::wxCursor()
 
 }
 
-wxCursor::wxCursor( wxStockCursor cursorId )
+void wxCursor::InitFromStock( wxStockCursor cursorId )
 {
     m_refData = new wxCursorRefData();
 
@@ -124,13 +124,11 @@ wxCursor::wxCursor( wxStockCursor cursorId )
 #endif
 }
 
-wxCursor::wxCursor(const char WXUNUSED(bits)[],
-                   int WXUNUSED(width), int WXUNUSED(height),
-                   int WXUNUSED(hotSpotX), int WXUNUSED(hotSpotY),
-                   const char WXUNUSED(maskBits)[],
-                   wxColour *WXUNUSED(fg), wxColour *WXUNUSED(bg))
+wxCursor::wxCursor(const wxString& name,
+                    wxBitmapType type,
+                    int hotSpotX, int hotSpotY)
 {
-   wxFAIL_MSG( wxT("wxCursor creation from bits not yet implemented") );
+   wxFAIL_MSG( wxT("wxCursor creation from file not yet implemented") );
 }
 
 #if wxUSE_IMAGE

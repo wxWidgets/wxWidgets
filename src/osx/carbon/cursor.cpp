@@ -274,11 +274,6 @@ wxCursor::wxCursor()
 {
 }
 
-wxCursor::wxCursor(const char WXUNUSED(bits)[], int WXUNUSED(width), int WXUNUSED(height),
-    int WXUNUSED(hotSpotX), int WXUNUSED(hotSpotY), const char WXUNUSED(maskBits)[])
-{
-}
-
 wxCursor::wxCursor( const wxImage &image )
 {
 #if wxUSE_IMAGE
@@ -556,7 +551,7 @@ wxCursor::wxCursor(const wxString& cursor_file, wxBitmapType flags, int hotSpotX
 }
 
 // Cursors by stock number
-wxCursor::wxCursor(wxStockCursor cursor_type)
+wxCursor::InitFromStock(wxStockCursor cursor_type)
 {
     m_refData = new wxCursorRefData;
 #if wxOSX_USE_COCOA
