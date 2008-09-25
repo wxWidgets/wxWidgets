@@ -1476,7 +1476,7 @@ void wxCursorProperty::OnCustomPaint( wxDC& dc,
                 if ( cursorindex == wxCURSOR_NONE )
                     cursorindex = wxCURSOR_ARROW;
 
-                wxCursor cursor( cursorindex );
+                wxCursor cursor( (wxStockCursor)cursorindex );
 
             #ifdef __WXMSW__
                 HDC hDc = (HDC)((const wxMSWDCImpl *)dc.GetImpl())->GetHDC();
