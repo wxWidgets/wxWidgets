@@ -2238,7 +2238,7 @@ void FormMain::OnInsertPropClick( wxCommandEvent& WXUNUSED(event) )
 {
     wxString propLabel;
 
-    if ( !m_pPropGridManager->GetChildrenCount() )
+    if ( !m_pPropGridManager->GetGrid()->GetRoot()->GetChildCount() )
     {
         wxMessageBox(wxT("No items to relate - first add some with Append."));
         return;
@@ -2304,7 +2304,7 @@ void FormMain::OnInsertCatClick( wxCommandEvent& WXUNUSED(event) )
 {
     wxString propLabel;
 
-    if ( !m_pPropGridManager->GetChildrenCount() )
+    if ( !m_pPropGridManager->GetGrid()->GetRoot()->GetChildCount() )
     {
         wxMessageBox(wxT("No items to relate - first add some with Append."));
         return;

@@ -348,25 +348,6 @@ public:
     */
     bool EnsureVisible( wxPGPropArg id );
 
-    /** Returns number of children of the root property of the selected page. */
-    size_t GetChildrenCount()
-    {
-        return GetChildrenCount( m_pPropGrid->m_pState->m_properties );
-    }
-
-    /** Returns number of children of the root property of given page. */
-    size_t GetChildrenCount( int pageIndex );
-
-    /** Returns number of children for the property.
-
-        NB: Cannot be in container methods class due to name hiding.
-    */
-    size_t GetChildrenCount( wxPGPropArg id ) const
-    {
-        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(0)
-        return p->GetChildCount();
-    }
-
     /** Returns number of columns on given page. By the default,
         returns number of columns on current page. */
     int GetColumnCount( int page = -1 ) const;

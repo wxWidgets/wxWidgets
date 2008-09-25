@@ -1337,13 +1337,6 @@ bool wxPropertyGridManager::EnsureVisible( wxPGPropArg id )
 
 // -----------------------------------------------------------------------
 
-size_t wxPropertyGridManager::GetChildrenCount( int page_index )
-{
-    return GetChildrenCount( GetPage(page_index)->GetStatePtr()->m_properties );
-}
-
-// -----------------------------------------------------------------------
-
 void wxPropertyGridManager::OnToolbarClick( wxCommandEvent &event )
 {
     int id = event.GetId();
