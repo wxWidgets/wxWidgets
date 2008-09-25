@@ -27,7 +27,7 @@ public:
              int hotSpotX = -1, int hotSpotY = -1,
              const char maskBits[] = NULL);
     wxCursor(const wxString& name,
-             long flags = wxBITMAP_TYPE_CUR_RESOURCE,
+             wxBitmapType flags = wxBITMAP_TYPE_CUR_RESOURCE,
              int hotSpotX = 0, int hotSpotY = 0);
     wxCursor(wxStockCursor idCursor);
     virtual ~wxCursor();

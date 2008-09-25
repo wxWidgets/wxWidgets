@@ -231,7 +231,7 @@ wxCursor::wxCursor(const char WXUNUSED(bits)[],
 #ifdef __WXMICROWIN__
 
 wxCursor::wxCursor(const wxString& WXUNUSED(filename),
-                   long WXUNUSED(kind),
+                   wxBitmapType WXUNUSED(kind),
                    int WXUNUSED(hotSpotX),
                    int WXUNUSED(hotSpotY))
 {
@@ -244,7 +244,7 @@ wxCursor::wxCursor(int WXUNUSED(cursor_type))
 #else // !__WXMICROWIN__
 
 wxCursor::wxCursor(const wxString& filename,
-                   long kind,
+                   wxBitmapType kind,
                    int hotSpotX,
                    int hotSpotY)
 {
