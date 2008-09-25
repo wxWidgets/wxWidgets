@@ -856,15 +856,6 @@ public:
         Free();
         Add(labels,values);
     }
-
-    /** Version that works with wxArrayString.
-        TODO: Deprecate this.
-    */
-    void Set( wxArrayString& arr, const long* values = (const long*) NULL )
-    {
-        Free();
-        Add(arr,values);
-    }
 #endif // SWIG
 
     /** Version that works with wxArrayString and wxArrayInt. */
