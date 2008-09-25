@@ -42,10 +42,6 @@
 
 #include <stdlib.h>
 
-#ifndef __WIN32__
-    #include <print.h>
-#endif
-
 //----------------------------------------------------------------------------
 // wxWindowsPrintNativeData
 //----------------------------------------------------------------------------
@@ -83,9 +79,12 @@ static wxString wxGetPrintDlgError()
     }
     return msg;
 }
-#endif
+#endif // __WXDEBUG__
 
-static HGLOBAL wxCreateDevNames(const wxString& driverName, const wxString& printerName, const wxString& portName)
+static HGLOBAL
+wxCreateDevNames(const wxString& driverName,
+                 const wxString& printerName,
+                 const wxString& portName)
 {
     HGLOBAL hDev = NULL;
     // if (!driverName.empty() && !printerName.empty() && !portName.empty())
@@ -184,12 +183,10 @@ bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
             case DMBIN_CASSETTE       : data.SetBin(wxPRINTBIN_CASSETTE      ); break;
             case DMBIN_FORMSOURCE     : data.SetBin(wxPRINTBIN_FORMSOURCE    ); break;
             default:
-                if (devMode->dmDefaultSource>=DMBIN_USER) {
+                if (devMode->dmDefaultSource >= DMBIN_USER)
                     data.SetBin((wxPrintBin)((devMode->dmDefaultSource)-DMBIN_USER+(int)wxPRINTBIN_USER));
-                } else {
+                else
                     data.SetBin(wxPRINTBIN_DEFAULT);
-                }
-                break;
         }
     } else {
         data.SetBin(wxPRINTBIN_DEFAULT);
@@ -344,23 +341,16 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
         // Use PRINTDLG as a way of creating a DEVMODE object
         PRINTDLG pd;
 
-        // GNU-WIN32 has the wrong size PRINTDLG - can't work out why.
-#ifdef __GNUWIN32__
-        memset(&pd, 0, 66);
-        pd.lStructSize    = 66;
-#else
         memset(&pd, 0, sizeof(PRINTDLG));
 #ifdef __WXWINCE__
         pd.cbStruct    = sizeof(PRINTDLG);
 #else
         pd.lStructSize    = sizeof(PRINTDLG);
 #endif
-#endif
 
-        pd.hwndOwner      = (HWND)NULL;
+        pd.hwndOwner      = NULL;
         pd.hDevMode       = NULL; // Will be created by PrintDlg
         pd.hDevNames      = NULL; // Ditto
-        //pd.hInstance      = (HINSTANCE) wxGetInstance();
 
         pd.Flags          = PD_RETURNDEFAULT;
         pd.nCopies        = 1;
@@ -376,11 +366,11 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
             pd.hDevMode = NULL;
             pd.hDevNames = NULL;
 
-#if defined(__WXDEBUG__) && defined(__WIN32__)
+#ifdef __WXDEBUG__
             wxString str(wxT("Printing error: "));
             str += wxGetPrintDlgError();
             wxLogDebug(str);
-#endif
+#endif // __WXDEBUG__
         }
         else
         {
@@ -648,7 +638,7 @@ wxDC *wxWindowsPrintDialog::GetPrintDC()
         return m_printerDC;
     }
     else
-        return (wxPrinterDC*) NULL;
+        return NULL;
 }
 
 bool wxWindowsPrintDialog::ConvertToNative( wxPrintDialogData &data )
@@ -667,13 +657,8 @@ bool wxWindowsPrintDialog::ConvertToNative( wxPrintDialogData &data )
     memset( pd, 0, sizeof(PRINTDLG) );
     m_printDlg = (void*) pd;
 
-    // GNU-WIN32 has the wrong size PRINTDLG - can't work out why.
-#ifdef __GNUWIN32__
-    pd->lStructSize    = 66;
-#else
     pd->lStructSize    = sizeof(PRINTDLG);
-#endif
-    pd->hwndOwner      = (HWND)NULL;
+    pd->hwndOwner      = NULL;
     pd->hDevMode       = NULL; // Will be created by PrintDlg
     pd->hDevNames      = NULL; // Ditto
 
@@ -700,7 +685,7 @@ bool wxWindowsPrintDialog::ConvertToNative( wxPrintDialogData &data )
     native_data->SetDevNames(NULL);
 
 
-    pd->hDC = (HDC) NULL;
+    pd->hDC = NULL;
     pd->nFromPage = (WORD)data.GetFromPage();
     pd->nToPage = (WORD)data.GetToPage();
     pd->nMinPage = (WORD)data.GetMinPage();
@@ -708,23 +693,17 @@ bool wxWindowsPrintDialog::ConvertToNative( wxPrintDialogData &data )
     pd->nCopies = (WORD)data.GetNoCopies();
 
     pd->Flags = PD_RETURNDC;
-
-#ifdef __GNUWIN32__
-    pd->lStructSize = 66;
-#else
     pd->lStructSize = sizeof( PRINTDLG );
-#endif
 
-    pd->hwndOwner=(HWND)NULL;
-//    pd->hDevNames=(HANDLE)NULL;
-    pd->hInstance=(HINSTANCE)NULL;
-    pd->lCustData = (LPARAM) NULL;
+    pd->hwndOwner = NULL;
+    pd->hInstance = NULL;
+    pd->lCustData = NULL;
     pd->lpfnPrintHook = NULL;
     pd->lpfnSetupHook = NULL;
     pd->lpPrintTemplateName = NULL;
     pd->lpSetupTemplateName = NULL;
-    pd->hPrintTemplate = (HGLOBAL) NULL;
-    pd->hSetupTemplate = (HGLOBAL) NULL;
+    pd->hPrintTemplate = NULL;
+    pd->hSetupTemplate = NULL;
 
     if ( data.GetAllPages() )
         pd->Flags |= PD_ALLPAGES;
@@ -889,7 +868,7 @@ bool wxWindowsPageSetupDialog::ConvertToNative( wxPageSetupDialogData &data )
         pd->hDevMode = NULL;
     }
     pd->hDevMode = (HGLOBAL) native_data->GetDevMode();
-    native_data->SetDevMode( (void*) NULL );
+    native_data->SetDevMode(NULL);
 
     // Shouldn't assert; we should be able to test Ok-ness at a higher level
     //wxASSERT_MSG( (pd->hDevMode), wxT("hDevMode must be non-NULL in ConvertToNative!"));
@@ -904,7 +883,7 @@ bool wxWindowsPageSetupDialog::ConvertToNative( wxPageSetupDialogData &data )
         pd->hDevNames = NULL;
     }
     pd->hDevNames = (HGLOBAL) native_data->GetDevNames();
-    native_data->SetDevNames((void*) NULL);
+    native_data->SetDevNames(NULL);
 
 //        pd->hDevMode = GlobalAlloc(GMEM_MOVEABLE, sizeof(DEVMODE));
 
@@ -929,9 +908,8 @@ bool wxWindowsPageSetupDialog::ConvertToNative( wxPageSetupDialogData &data )
     pd->Flags |= PSD_INHUNDREDTHSOFMILLIMETERS;
 
     pd->lStructSize = sizeof( PAGESETUPDLG );
-    pd->hwndOwner=(HWND)NULL;
-//    pd->hDevNames=(HWND)NULL;
-    pd->hInstance=(HINSTANCE)NULL;
+    pd->hwndOwner = NULL;
+    pd->hInstance = NULL;
     //   PAGESETUPDLG is in hundreds of a mm
     pd->ptPaperSize.x = data.GetPaperSize().x * 100;
     pd->ptPaperSize.y = data.GetPaperSize().y * 100;
