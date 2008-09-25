@@ -171,8 +171,7 @@ public:
 
         wxPropertyGridPage* page;
 
-        pgMan->AddPage(wxT("First Page"));
-        page = pgMan->GetLastPage();
+        page = pgMan->AddPage(wxT("First Page"));
 
         page->Append( new wxPropertyCategory(wxT("Category A1")) );
 
@@ -180,8 +179,7 @@ public:
 
         page->Append( new wxColourProperty(wxT("Colour"),wxPG_LABEL,*wxWHITE) );
 
-        pgMan->AddPage(wxT("Second Page"));
-        page = pgMan->GetLastPage();
+        page = pgMan->AddPage(wxT("Second Page"));
 
         page->Append( wxT("Text"),wxPG_LABEL,wxT("(no text)") );
 
@@ -220,18 +218,15 @@ public:
             wxPropertyGridPage instance. Manager will take ownership of this
             object. NULL indicates that a default page instance should be created.
 
-        @return Returns index to the page created.
+        @return Returns pointer to created property grid page.
 
         @remarks If toolbar is used, it is highly recommended that the pages are
                 added when the toolbar is not turned off using window style flag
                 switching. Otherwise toolbar buttons might not be added properly.
     */
-    int AddPage( const wxString& label = wxEmptyString,
-                 const wxBitmap& bmp = wxPG_NULL_BITMAP,
-                 wxPropertyGridPage* pageObj = (wxPropertyGridPage*) NULL )
-    {
-        return InsertPage(-1,label,bmp,pageObj);
-    }
+    wxPropertyGridPage* AddPage( const wxString& label = wxEmptyString,
+                                 const wxBitmap& bmp = wxPG_NULL_BITMAP,
+                                 wxPropertyGridPage* pageObj = NULL );
 
     void ClearModifiedStatus( wxPGPropArg id );
 
@@ -351,14 +346,6 @@ public:
     wxPropertyGridPage* GetCurrentPage() const;
 
     /**
-        Returns last page.
-    */
-    wxPropertyGridPage* GetLastPage() const
-    {
-        return GetPage(m_arrPages.size()-1);
-    }
-
-    /**
         Returns page object for given page index.
     */
     wxPropertyGridPage* GetPage( unsigned int ind ) const
@@ -429,11 +416,11 @@ public:
             wxPropertyGridPage instance. Manager will take ownership of this
             object. If NULL, default page object is constructed.
 
-        @return Returns index to the page created.
+        @return Returns pointer to created page.
     */
-    virtual int InsertPage( int index, const wxString& label,
-                            const wxBitmap& bmp = wxNullBitmap,
-                            wxPropertyGridPage* pageObj = NULL );
+    virtual wxPropertyGridPage* InsertPage( int index, const wxString& label,
+                                            const wxBitmap& bmp = wxNullBitmap,
+                                            wxPropertyGridPage* pageObj = NULL );
 
     /**
         Returns @true if any property on any page has been modified by the user.

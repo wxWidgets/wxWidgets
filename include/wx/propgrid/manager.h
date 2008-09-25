@@ -277,18 +277,20 @@ public:
         @param pageObj
         wxPropertyGridPage instance. Manager will take ownership of this object.
         NULL indicates that a default page instance should be created.
+
         @return
-        Returns index to the page created.
+        Returns pointer to created page.
+
         @remarks
         If toolbar is used, it is highly recommended that the pages are
         added when the toolbar is not turned off using window style flag
         switching.
     */
-    int AddPage( const wxString& label = wxEmptyString,
-                 const wxBitmap& bmp = wxPG_NULL_BITMAP,
-                 wxPropertyGridPage* pageObj = (wxPropertyGridPage*) NULL )
+    wxPropertyGridPage* AddPage( const wxString& label = wxEmptyString,
+                                 const wxBitmap& bmp = wxPG_NULL_BITMAP,
+                                 wxPropertyGridPage* pageObj = NULL )
     {
-        return InsertPage(-1,label,bmp,pageObj);
+        return InsertPage(-1, label, bmp, pageObj);
     }
 
     void ClearModifiedStatus ( wxPGPropArg id );
@@ -445,13 +447,6 @@ public:
         return GetPage(m_selPage);
     }
 
-    /** Returns last page.
-    */
-    wxPropertyGridPage* GetLastPage() const
-    {
-        return GetPage(m_arrPages.size()-1);
-    }
-
     /** Returns page object for given page index.
     */
     wxPropertyGridPage* GetPage( unsigned int ind ) const
@@ -519,13 +514,14 @@ public:
         @param pageObj
         wxPropertyGridPage instance. Manager will take ownership of this object.
         If NULL, default page object is constructed.
+
         @return
-        Returns index to the page created.
+        Returns pointer to created page.
     */
-    virtual int InsertPage( int index,
-                            const wxString& label,
-                            const wxBitmap& bmp = wxNullBitmap,
-                            wxPropertyGridPage* pageObj = NULL );
+    virtual wxPropertyGridPage* InsertPage( int index,
+                                            const wxString& label,
+                                            const wxBitmap& bmp = wxNullBitmap,
+                                            wxPropertyGridPage* pageObj = NULL );
 
     /**
         Returns true if any property on any page has been modified by the user.

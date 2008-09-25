@@ -705,13 +705,15 @@ size_t wxPropertyGridManager::GetPageCount() const
 
 // -----------------------------------------------------------------------
 
-int wxPropertyGridManager::InsertPage( int index, const wxString& label,
-                                       const wxBitmap& bmp, wxPropertyGridPage* pageObj )
+wxPropertyGridPage* wxPropertyGridManager::InsertPage( int index,
+                                                       const wxString& label,
+                                                       const wxBitmap& bmp,
+                                                       wxPropertyGridPage* pageObj )
 {
     if ( index < 0 )
         index = GetPageCount();
 
-    wxCHECK_MSG( (size_t)index == GetPageCount(), -1,
+    wxCHECK_MSG( (size_t)index == GetPageCount(), NULL,
         wxT("wxPropertyGridManager currently only supports appending pages (due to wxToolBar limitation)."));
 
     bool needInit = true;
@@ -826,7 +828,7 @@ int wxPropertyGridManager::InsertPage( int index, const wxString& label,
 
     wxASSERT( pageObj->GetGrid() );
 
-    return index;
+    return pageObj;
 }
 
 // -----------------------------------------------------------------------
