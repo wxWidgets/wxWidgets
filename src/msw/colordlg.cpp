@@ -161,7 +161,7 @@ int wxColourDialog::ShowModal()
     // transfer the values chosen by user back into m_colourData
     for ( i = 0; i < WXSIZEOF(custColours); i++ )
     {
-      wxRGBToColour(m_colourData.GetCustomColour(i), custColours[i]);
+      wxRGBToColour(m_colourData.m_custColours[i], custColours[i]);
     }
 
     wxRGBToColour(m_colourData.GetColour(), chooseColorStruct.rgbResult);

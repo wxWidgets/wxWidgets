@@ -11,11 +11,10 @@
 #define _WX_GTK_CURSOR_H_
 
 #include "wx/gdiobj.h"
+#include "wx/gdicmn.h"
 
 class WXDLLIMPEXP_FWD_CORE wxColour;
 class WXDLLIMPEXP_FWD_CORE wxImage;
-
-enum wxStockCursor;
 
 //-----------------------------------------------------------------------------
 // wxCursor
@@ -29,10 +28,10 @@ public:
 #if wxUSE_IMAGE
     wxCursor( const wxImage & image );
 #endif
-    wxCursor( const char bits[], int width, int  height,
-              int hotSpotX=-1, int hotSpotY=-1,
+    wxCursor( const char bits[], int width, int height,
+              int hotSpotX = -1, int hotSpotY = -1,
               const char maskBits[] = NULL,
-              const wxColour *fg = NULL, const wxColour *bg = NULL );
+              const wxColour* fg = NULL, const wxColour* bg = NULL);
     virtual ~wxCursor();
 
     // implementation
