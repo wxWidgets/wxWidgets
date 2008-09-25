@@ -943,6 +943,8 @@
 		408A59CA0A8999800014D20E /* xh_treebk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 408A59BC0A8999800014D20E /* xh_treebk.cpp */; };
 		408A5A710A8999A00014D20E /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 408A59CC0A8999A00014D20E /* AppKit.framework */; };
 		408A5A720A8999A00014D20E /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 408A59CC0A8999A00014D20E /* AppKit.framework */; };
+		40988EED0E8BD38B00E6FCD6 /* auibar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40988EEC0E8BD38B00E6FCD6 /* auibar.cpp */; };
+		40988EEE0E8BD38B00E6FCD6 /* auibar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40988EEC0E8BD38B00E6FCD6 /* auibar.cpp */; };
 		409F02700976CA5600D1030F /* xh_grid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 409F026F0976CA5600D1030F /* xh_grid.cpp */; };
 		409F02710976CA5600D1030F /* xh_grid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 409F026F0976CA5600D1030F /* xh_grid.cpp */; };
 		40ADC34A08156AE40009DA36 /* debugrpt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40ADC34908156AE40009DA36 /* debugrpt.cpp */; };
@@ -1254,6 +1256,7 @@
 		408A59BB0A8999800014D20E /* xh_odcombo.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = xh_odcombo.cpp; path = xrc/xh_odcombo.cpp; sourceTree = "<group>"; };
 		408A59BC0A8999800014D20E /* xh_treebk.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = xh_treebk.cpp; path = xrc/xh_treebk.cpp; sourceTree = "<group>"; };
 		408A59CC0A8999A00014D20E /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		40988EEC0E8BD38B00E6FCD6 /* auibar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = auibar.cpp; sourceTree = "<group>"; };
 		409F026F0976CA5600D1030F /* xh_grid.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = xh_grid.cpp; path = xrc/xh_grid.cpp; sourceTree = "<group>"; };
 		40ADC34908156AE40009DA36 /* debugrpt.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = debugrpt.cpp; sourceTree = "<group>"; };
 		40ADC35F08156DC10009DA36 /* xml.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = xml.cpp; path = xml/xml.cpp; sourceTree = "<group>"; };
@@ -2186,6 +2189,7 @@
 		407C6AD60A899E260056252A /* aui */ = {
 			isa = PBXGroup;
 			children = (
+				40988EEC0E8BD38B00E6FCD6 /* auibar.cpp */,
 				407C6AD70A899E260056252A /* auibook.cpp */,
 				407C6AD90A899E260056252A /* dockart.cpp */,
 				407C6ADA0A899E260056252A /* floatpane.cpp */,
@@ -3966,6 +3970,7 @@
 				40827E120CA0FABD00C14F94 /* xh_richtext.cpp in Sources */,
 				40827E130CA0FABD00C14F94 /* xh_propdlg.cpp in Sources */,
 				400AE9BF0DF6656D00D5018A /* glgrab.c in Sources */,
+				40988EED0E8BD38B00E6FCD6 /* auibar.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4513,6 +4518,7 @@
 				40827E140CA0FABD00C14F94 /* xh_richtext.cpp in Sources */,
 				40827E150CA0FABD00C14F94 /* xh_propdlg.cpp in Sources */,
 				400AE9C00DF6656D00D5018A /* glgrab.c in Sources */,
+				40988EEE0E8BD38B00E6FCD6 /* auibar.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
