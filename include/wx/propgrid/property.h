@@ -1605,8 +1605,6 @@ public:
     */
     double GetAttributeAsDouble( const wxString& name, double defVal ) const;
 
-    unsigned int GetArrIndex() const { return m_arrIndex; }
-
     unsigned int GetDepth() const { return (unsigned int)m_depth; }
 
     /** Gets flags as a'|' delimited string. Note that flag names are not

@@ -1226,7 +1226,7 @@ void wxFlagsProperty::Init()
             if ( selected )
             {
                 if ( selected->GetParent() == this )
-                    oldSel = selected->GetArrIndex();
+                    oldSel = selected->GetIndexInParent();
                 else if ( selected == this )
                     oldSel = -2;
             }

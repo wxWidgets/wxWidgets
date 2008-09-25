@@ -290,7 +290,7 @@ wxPGProperty* wxPropertyGridInterface::AppendIn( wxPGPropArg id, wxPGProperty* n
 wxPGProperty* wxPropertyGridInterface::Insert( wxPGPropArg id, wxPGProperty* property )
 {
     wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxNullProperty)
-    wxPGProperty* retp = m_pState->DoInsert(p->GetParent(), p->GetArrIndex(), property);
+    wxPGProperty* retp = m_pState->DoInsert(p->GetParent(), p->GetIndexInParent(), property);
     RefreshGrid();
     return retp;
 }

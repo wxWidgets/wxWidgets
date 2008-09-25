@@ -1953,7 +1953,7 @@ void wxPGProperty::PrepareSubProperties()
 
             depth--;
 
-            i = nparent->GetArrIndex() + 1;
+            i = nparent->GetIndexInParent() + 1;
             nparent = nparent->GetParent();
         }
     }
