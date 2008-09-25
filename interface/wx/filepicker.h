@@ -12,8 +12,7 @@
     This control allows the user to select a file. The generic implementation is
     a button which brings up a wxFileDialog when clicked. Native implementation
     may differ but this is usually a (small) widget which give access to the
-    file-chooser
-    dialog.
+    file-chooser dialog.
     It is only available if @c wxUSE_FILEPICKERCTRL is set to 1 (the default).
 
     @beginStyleTable
@@ -40,6 +39,15 @@
            Change current working directory on each user file selection change.
     @endStyleTable
 
+
+    @beginEventTable{wxFileDirPickerEvent}
+    @event{EVT_FILEPICKER_CHANGED(id, func)}
+        The user changed the file selected in the control either using the
+        button or using text control (see wxFLP_USE_TEXTCTRL; note that in
+        this case the event is fired only if the user's input is valid,
+        e.g. an existing file path if wxFLP_FILE_MUST_EXIST was given).
+    @endEventTable
+
     @library{wxcore}
     @category{pickers}
     <!-- @appearance{filepickerctrl.png} -->
@@ -64,18 +72,20 @@ public:
                      const wxString& name = "filepickerctrl");
 
     /**
+        Creates this widget with the given parameters.
+
         @param parent
             Parent window, must not be non-@NULL.
         @param id
             The identifier for the control.
         @param path
             The initial file shown in the control. Must be a valid path to a file or
-        the empty string.
+            the empty string.
         @param message
             The message shown to the user in the wxFileDialog shown by the control.
         @param wildcard
             A wildcard which defines user-selectable files (use the same syntax as for
-        wxFileDialog's wildcards).
+            wxFileDialog's wildcards).
         @param pos
             Initial position.
         @param size
@@ -88,7 +98,7 @@ public:
             Control name.
 
         @return @true if the control was successfully created or @false if
-                 creation failed.
+                creation failed.
     */
     bool Create(wxWindow* parent, wxWindowID id,
                 const wxString& path = wxEmptyString,
@@ -101,8 +111,8 @@ public:
                 const wxString& name = "filepickerctrl");
 
     /**
-        Similar to GetPath() but returns the path of
-        the currently selected file as a wxFileName object.
+        Similar to GetPath() but returns the path of the currently selected
+        file as a wxFileName object.
     */
     wxFileName GetFileName() const;
 
@@ -112,15 +122,14 @@ public:
     wxString GetPath() const;
 
     /**
-        This method does the same thing as SetPath() but
-        takes a wxFileName object instead of a string.
+        This method does the same thing as SetPath() but takes a wxFileName
+        object instead of a string.
     */
     void SetFileName(const wxFileName& filename);
 
     /**
-        Sets the absolute path of the currently selected file. This must be a valid
-        file if
-        the @c wxFLP_FILE_MUST_EXIST style was given.
+        Sets the absolute path of the currently selected file.
+        This must be a valid file if the @c wxFLP_FILE_MUST_EXIST style was given.
     */
     void SetPath(const wxString& filename);
 };
@@ -131,11 +140,9 @@ public:
     @class wxDirPickerCtrl
 
     This control allows the user to select a directory. The generic implementation
-    is
-    a button which brings up a wxDirDialog when clicked. Native implementation
+    is a button which brings up a wxDirDialog when clicked. Native implementation
     may differ but this is usually a (small) widget which give access to the
-    dir-chooser
-    dialog.
+    dir-chooser dialog.
     It is only available if @c wxUSE_DIRPICKERCTRL is set to 1 (the default).
 
     @beginStyleTable
@@ -153,9 +160,17 @@ public:
            wxGTK control always adds this flag internally as it does not
            support its absence.
     @style{wxDIRP_CHANGE_DIR}
-           Change current working directory on each user directory selection
-           change.
+           Change current working directory on each user directory selection change.
     @endStyleTable
+
+    @beginEventTable{wxFileDirPickerEvent}
+    @event{EVT_DIRPICKER_CHANGED(id, func)}
+        The user changed the directory selected in the control either using the
+        button or using text control (see wxDIRP_USE_TEXTCTRL; note that in this
+        case the event is fired only if the user's input is valid, e.g. an
+        existing directory path).
+    @endEventTable
+
 
     @library{wxcore}
     @category{pickers}
@@ -180,13 +195,15 @@ public:
                     const wxString& name = "dirpickerctrl");
 
     /**
+        Creates the widgets with the given parameters.
+
         @param parent
             Parent window, must not be non-@NULL.
         @param id
             The identifier for the control.
         @param path
             The initial directory shown in the control. Must be a valid path to a
-        directory or the empty string.
+            directory or the empty string.
         @param message
             The message shown to the user in the wxDirDialog shown by the control.
         @param pos
@@ -201,7 +218,7 @@ public:
             Control name.
 
         @return @true if the control was successfully created or @false if
-                 creation failed.
+                creation failed.
     */
     bool Create(wxWindow* parent, wxWindowID id,
                 const wxString& path = wxEmptyString,
@@ -213,9 +230,9 @@ public:
                 const wxString& name = "dirpickerctrl");
 
     /**
-        Returns the absolute path of the currently selected directory as a wxFileName
-        object.
-        This function is equivalent to GetPath()
+        Returns the absolute path of the currently selected directory as a
+        wxFileName object.
+        This function is equivalent to GetPath().
     */
     wxFileName GetDirName() const;
 
@@ -225,15 +242,14 @@ public:
     wxString GetPath() const;
 
     /**
-        Just like SetPath() but this function takes a
-        wxFileName object.
+        Just like SetPath() but this function takes a wxFileName object.
     */
     void SetDirName(const wxFileName& dirname);
 
     /**
         Sets the absolute path of  (the default converter uses current locale's
-        charset)the currently selected directory. This must be a valid directory if
-        @c wxDIRP_DIR_MUST_EXIST style was given.
+        charset)the currently selected directory.
+        This must be a valid directory if @c wxDIRP_DIR_MUST_EXIST style was given.
     */
     void SetPath(const wxString& dirname);
 };
@@ -247,9 +263,9 @@ public:
     wxFilePickerCtrl and by wxDirPickerCtrl.
 
     @library{wxcore}
-    @category{FIXME}
+    @category{events}
 
-    @see wxfilepickerctrl()
+    @see wxFilePickerCtrl, wxDirPickerCtrl
 */
 class wxFileDirPickerEvent : public wxCommandEvent
 {

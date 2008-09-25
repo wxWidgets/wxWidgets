@@ -19,44 +19,58 @@
 class wxFontDialog : public wxDialog
 {
 public:
-    //@{
     /**
-        Constructor. Pass a parent window, and optionally the
-        @ref overview_wxfontdata "font data" object to be used to initialize the dialog
-        controls. If the default constructor is used,
-        Create() must be called before the dialog can be
-        shown.
+        Default ctor.
+        Create() must be called before the dialog can be shown.
     */
     wxFontDialog();
-    wxFontDialog(wxWindow* parent);
-    wxFontDialog(wxWindow* parent, const wxFontData& data);
-    //@}
 
-    //@{
     /**
-        Creates the dialog if it the wxFontDialog object had been initialized using the
-        default constructor. Returns @true on success and @false if an error
-        occurred.
+        Constructor with parent window.
+    */
+    wxFontDialog(wxWindow* parent);
+
+    /**
+        Constructor.
+        Pass a parent window, and the @ref overview_wxfontdata "font data" object
+        to be used to initialize the dialog controls.
+    */
+    wxFontDialog(wxWindow* parent, const wxFontData& data);
+
+    /**
+        Creates the dialog if the wxFontDialog object had been initialized using
+        the default constructor.
+
+        @return @true on success and @false if an error occurred.
     */
     bool Create(wxWindow* parent);
+
+    /**
+        Creates the dialog if the wxFontDialog object had been initialized using
+        the default constructor.
+
+        @return @true on success and @false if an error occurred.
+    */
     bool Create(wxWindow* parent, const wxFontData& data);
-    //@}
 
     //@{
     /**
-        Returns the @ref overview_wxfontdata "font data" associated with the font
-        dialog.
+        Returns the @ref overview_wxfontdata "font data" associated with the
+        font dialog.
     */
-    const wxFontData GetFontData();
-    const wxFontData&  GetFontData();
+    const wxFontData& GetFontData() const;
+    wxFontData& GetFontData();
     //@}
 
     /**
         Shows the dialog, returning @c wxID_OK if the user pressed Ok, and
         @c wxID_CANCEL otherwise.
+
         If the user cancels the dialog (ShowModal returns @c wxID_CANCEL), no font
         will be created. If the user presses OK, a new wxFont will be created and
         stored in the font dialog's wxFontData structure.
+
+        @see GetFontData()
     */
     int ShowModal();
 };

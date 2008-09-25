@@ -24,7 +24,9 @@
     result in only those files matching the pattern being displayed.
     The wildcard may be a specification for multiple types of file with a description
     for each, such as:
+    @code
          "BMP and GIF files (*.bmp;*.gif)|*.bmp;*.gif|PNG files (*.png)|*.png"
+    @endcode
     It must be noted that wildcard support in the native Motif file dialog is quite
     limited: only one alternative is supported, and it is displayed without the
     descriptive test; "BMP files (*.bmp)|*.bmp" is displayed as "*.bmp", and both

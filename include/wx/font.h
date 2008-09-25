@@ -70,7 +70,7 @@ enum wxFontWeight
 };
 
 // the font flag bits for the new font ctor accepting one combined flags word
-enum
+enum wxFontFlag
 {
     // no special flags: font with default weight/slant/anti-aliasing
     wxFONTFLAG_DEFAULT          = 0,
