@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/mac/carbon/textctrl.cpp
 // Purpose:     wxTextCtrl
-// Author:      Stefan Csomor
+// Author:      Stefan Csomor 
 // Modified by: Ryan Norton (MLTE GetLineLength and GetLineText)
 // Created:     1998-01-01
 // RCS-ID:      $Id$
@@ -1956,7 +1956,8 @@ void wxMacMLTEControl::TXNSetAttribute( const wxTextAttr& style , long from , lo
     if ( typeAttrCount > 0 )
     {
         verify_noerr( TXNSetTypeAttributes( m_txn , typeAttrCount, typeAttr, from , to ) );
-        relayout = true;
+        if (from != to)
+            relayout = true;
     }
     
     if ( tabs != NULL )
