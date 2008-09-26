@@ -122,13 +122,26 @@ void wxScrollHelperNative::DoAdjustScrollbar(GtkRange* range,
 void wxScrollHelperNative::AdjustScrollbars()
 {
     int vw, vh;
-    m_targetWindow->GetVirtualSize( &vw, &vh );
+    m_targetWindow->GetVirtualSize(&vw, &vh);
 
-    int w;
+    int w, h;
+    const wxSize availSize = GetSizeAvailableForScrollTarget(
+        m_win->GetSize() - m_win->GetWindowBorderSize());
+    if ( availSize.x >= vw && availSize.y >= vh )
+    {
+        w = availSize.x;
+        h = availSize.y;
+
+        // we know that the scrollbars will be removed
+        DoAdjustHScrollbar(w, vw);
+        DoAdjustVScrollbar(h, vh);
+
+        return;
+    }
+
     m_targetWindow->GetClientSize(&w, NULL);
     DoAdjustHScrollbar(w, vw);
 
-    int h;
     m_targetWindow->GetClientSize(NULL, &h);
     DoAdjustVScrollbar(h, vh);
 
