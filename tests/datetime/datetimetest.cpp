@@ -645,7 +645,7 @@ void DateTimeTestCase::TestTimeFormat()
             const char *result = dt2.ParseFormat(s, fmt);
             if ( !result )
             {
-                // converion failed - should it have?
+                // conversion failed - should it have?
                 CPPUNIT_ASSERT( kind == CompareNone );
             }
             else // conversion succeeded
@@ -685,9 +685,15 @@ void DateTimeTestCase::TestTimeFormat()
         }
     }
 
+    wxDateTime dt;
+
+    // test partially specified dates too
+    wxDateTime dtDef(26, wxDateTime::Sep, 2008);
+    CPPUNIT_ASSERT( dt.ParseFormat("17", "%d") );
+    CPPUNIT_ASSERT_EQUAL( 17, dt.GetDay() );
+
     // test compilation of some calls which should compile (and not result in
     // ambiguity because of char*<->wxCStrData<->wxString conversions)
-    wxDateTime dt;
     wxString s("foo");
     CPPUNIT_ASSERT( !dt.ParseFormat("foo") );
     CPPUNIT_ASSERT( !dt.ParseFormat(wxT("foo")) );

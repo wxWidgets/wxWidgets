@@ -3667,6 +3667,11 @@ wxDateTime::ParseFormat(const wxString& date,
     Tm tm = tmDef;
 
     // set the date
+    if ( haveMon )
+    {
+        tm.mon = mon;
+    }
+
     if ( haveYear )
     {
         tm.year = year;
@@ -3675,16 +3680,15 @@ wxDateTime::ParseFormat(const wxString& date,
     // TODO we don't check here that the values are consistent, if both year
     //      day and month/day were found, we just ignore the year day and we
     //      also always ignore the week day
-    if ( haveMon && haveDay )
+    if ( haveDay )
     {
-        if ( mday > GetNumOfDaysInMonth(tm.year, mon) )
+        if ( mday > GetNumOfDaysInMonth(tm.year, tm.mon) )
         {
             wxLogDebug(_T("bad month day in wxDateTime::ParseFormat"));
 
             return NULL;
         }
 
-        tm.mon = mon;
         tm.mday = mday;
     }
     else if ( haveYDay )
