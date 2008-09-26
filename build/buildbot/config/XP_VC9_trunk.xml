@@ -12,19 +12,25 @@
     <build>
         <name>XPSP2 VC9 wxMSW trunk</name>
         <builddir>XPSP2_VC9_wxMSW_trunk</builddir>
+        <lock>one_per_slave</lock>
         <!--<scheduler>trunk_quick</scheduler>-->
-        <sandbox></sandbox>
-        <make>nmake -f makefile.vc SHARED=1
-CPPUNIT_CFLAGS=-Ik:\buildbot\VC9libs\cppunit-1.12.1\include
-CPPUNIT_LIBS=k:\buildbot\VC9libs\cppunit-1.12.1\lib\cppunit.lib</make>
+        <sandbox>VC9</sandbox>
+        <make>nmake -f makefile.vc SHARED=1 CPPUNIT_CFLAGS=-Ik:/buildbot/VC9libs/cppunit-1.12.1/include CPPUNIT_LIBS=k:/buildbot/VC9libs/cppunit-1.12.1/lib/cppunit.lib</make>
         <steps>
             <checkout/>
-            <shellcommand>
-                <description>setting up</description>
-                <descriptionDone>set up</descriptionDone>
-                <haltOnFailure/>
-                <command>XPSP2_VC9_wxMSW_trunk-setup-script.bat</command>
-            </shellcommand>
+            <compile-all/>
+            <run-tests/>
+        </steps>
+    </build>
+    <build>
+        <name>XPSP2 VC9 wxMSW stable</name>
+        <builddir>XPSP2_VC9_wxMSW_stable</builddir>
+        <lock>one_per_slave</lock>
+        <!--<scheduler>stable_quick</scheduler>-->
+        <sandbox>VC9</sandbox>
+        <make>nmake -f makefile.vc SHARED=1 CPPUNIT_CFLAGS=-Ik:/buildbot/VC9libs/cppunit-1.12.1/include CPPUNIT_LIBS=k:/buildbot/VC9libs/cppunit-1.12.1/lib/cppunit.lib</make>
+        <steps>
+            <checkout branch="{$STABLE_BRANCH}"/>
             <compile-all/>
             <run-tests/>
         </steps>
