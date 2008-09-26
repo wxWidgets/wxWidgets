@@ -1792,8 +1792,8 @@ protected:
 
     void DoSetPropertyName( wxPGProperty* p, const wxString& newname );
 
-    // Setups event handling for child control
-    void SetupEventHandling( wxWindow* wnd, int id );
+    // Sets up basic event handling for child control
+    void SetupChildEventHandling( wxWindow* wnd, int id );
 
     void CustomSetCursor( int type, bool override = false );
 

@@ -1066,6 +1066,15 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
     else
         cb->SetSelection( -1 );
 
+    // Connect event handling
+    wxWindowID id = cb->GetId();
+    propGrid->Connect(id, wxEVT_COMMAND_COMBOBOX_SELECTED,
+        wxCommandEventHandler(wxPropertyGrid::OnCustomEditorEvent));
+    propGrid->Connect(id, wxEVT_COMMAND_TEXT_UPDATED,
+        wxCommandEventHandler(wxPropertyGrid::OnCustomEditorEvent));
+    propGrid->Connect(id, wxEVT_COMMAND_TEXT_ENTER,
+        wxCommandEventHandler(wxPropertyGrid::OnCustomEditorEvent));
+
 #ifdef __WXMSW__
     cb->Show();
 #endif
@@ -1872,6 +1881,7 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
                                                   int extraStyle,
                                                   int maxLen )
 {
+    wxWindowID id = wxPG_SUBID1;
     wxPGProperty* selected = m_selected;
     wxASSERT(selected);
 
@@ -1908,7 +1918,7 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
 #if defined(__WXMSW__)
     wnd->Hide();
 #endif
-    wnd->Create(GetPanel(),wxPG_SUBID1,p,s);
+    wnd->Create(GetPanel(),id,p,s);
 
     // This generates rect of the control inside the clipper window
     if ( !hasSpecialSize )
@@ -1933,7 +1943,7 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
     tc->Hide();
 #endif
     SetupTextCtrlValue(value);
-    tc->Create(ctrlParent,wxPG_SUBID1,value, p, s,tcFlags);
+    tc->Create(ctrlParent,id,value, p, s,tcFlags);
 
 #if wxPG_NAT_TEXTCTRL_BORDER_ANY
     wxWindow* ed = wnd;
@@ -1956,6 +1966,13 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
     if ( maxLen > 0 )
         tc->SetMaxLength( maxLen );
 
+    // Connect event handling
+    id = ed->GetId();
+    this->Connect(id, wxEVT_COMMAND_TEXT_UPDATED,
+        wxCommandEventHandler(wxPropertyGrid::OnCustomEditorEvent));
+    this->Connect(id, wxEVT_COMMAND_TEXT_ENTER,
+        wxCommandEventHandler(wxPropertyGrid::OnCustomEditorEvent));
+
     return (wxWindow*) ed;
 }
 
@@ -1963,6 +1980,7 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
 
 wxWindow* wxPropertyGrid::GenerateEditorButton( const wxPoint& pos, const wxSize& sz )
 {
+    wxWindowID id = wxPG_SUBID2;
     wxPGProperty* selected = m_selected;
     wxASSERT(selected);
 
@@ -1975,7 +1993,7 @@ wxWindow* wxPropertyGrid::GenerateEditorButton( const wxPoint& pos, const wxSize
    wxSize s(25, -1);
 
    wxButton* but = new wxButton();
-   but->Create(GetPanel(),wxPG_SUBID2,wxS("..."),p,s,wxWANTS_CHARS);
+   but->Create(GetPanel(),id,wxS("..."),p,s,wxWANTS_CHARS);
 
    // Now that we know the size, move to the correct position
    p.x = pos.x + sz.x - but->GetSize().x - 2;
@@ -2002,7 +2020,7 @@ wxWindow* wxPropertyGrid::GenerateEditorButton( const wxPoint& pos, const wxSize
   #ifdef __WXMSW__
     but->Hide();
   #endif
-    but->Create(GetPanel(),wxPG_SUBID2,wxS("..."),p,s,wxWANTS_CHARS);
+    but->Create(GetPanel(),id,wxS("..."),p,s,wxWANTS_CHARS);
 
   #ifdef __WXGTK__
     wxFont font = GetFont();
@@ -2015,6 +2033,11 @@ wxWindow* wxPropertyGrid::GenerateEditorButton( const wxPoint& pos, const wxSize
 
     if ( selected->HasFlag(wxPG_PROP_READONLY) )
         but->Disable();
+
+    // Connect event handling
+    id = but->GetId();
+    this->Connect(id, wxEVT_COMMAND_BUTTON_CLICKED,
+        wxCommandEventHandler(wxPropertyGrid::OnCustomEditorEvent));
 
     return but;
 }

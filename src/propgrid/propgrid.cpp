@@ -499,7 +499,6 @@ BEGIN_EVENT_TABLE(wxPropertyGrid, wxScrolledWindow)
   EVT_CHILD_FOCUS(wxPropertyGrid::OnChildFocusEvent)
   EVT_SET_FOCUS(wxPropertyGrid::OnFocusEvent)
   EVT_KILL_FOCUS(wxPropertyGrid::OnFocusEvent)
-  EVT_TEXT_ENTER(wxPG_SUBID1,wxPropertyGrid::OnCustomEditorEvent)
   EVT_SYS_COLOUR_CHANGED(wxPropertyGrid::OnSysColourChanged)
 END_EVENT_TABLE()
 
@@ -3471,33 +3470,38 @@ void wxPropertyGrid::CustomSetCursor( int type, bool override )
 // wxPropertyGrid property selection
 // -----------------------------------------------------------------------
 
-#define CONNECT_CHILD(EVT,FUNCTYPE,FUNC) \
-    wnd->Connect(id, EVT, \
-        (wxObjectEventFunction) (wxEventFunction)  \
-        FUNCTYPE (&wxPropertyGrid::FUNC), \
-        NULL, this );
-
 // Setups event handling for child control
-void wxPropertyGrid::SetupEventHandling( wxWindow* argWnd, int id )
+void wxPropertyGrid::SetupChildEventHandling( wxWindow* argWnd, int id )
 {
     wxWindow* wnd = argWnd;
 
     if ( argWnd == m_wndEditor )
     {
-        CONNECT_CHILD(wxEVT_MOTION,(wxMouseEventFunction),OnMouseMoveChild)
-        CONNECT_CHILD(wxEVT_LEFT_UP,(wxMouseEventFunction),OnMouseUpChild)
-        CONNECT_CHILD(wxEVT_LEFT_DOWN,(wxMouseEventFunction),OnMouseClickChild)
-        CONNECT_CHILD(wxEVT_RIGHT_UP,(wxMouseEventFunction),OnMouseRightClickChild)
-        CONNECT_CHILD(wxEVT_ENTER_WINDOW,(wxMouseEventFunction),OnMouseEntry)
-        CONNECT_CHILD(wxEVT_LEAVE_WINDOW,(wxMouseEventFunction),OnMouseEntry)
+        this->Connect(id, wxEVT_MOTION,
+            wxMouseEventHandler(wxPropertyGrid::OnMouseMoveChild));
+        this->Connect(id, wxEVT_LEFT_UP,
+            wxMouseEventHandler(wxPropertyGrid::OnMouseUpChild));
+        this->Connect(id, wxEVT_LEFT_DOWN,
+            wxMouseEventHandler(wxPropertyGrid::OnMouseClickChild));
+        this->Connect(id, wxEVT_RIGHT_UP,
+            wxMouseEventHandler(wxPropertyGrid::OnMouseRightClickChild));
+        this->Connect(id, wxEVT_ENTER_WINDOW,
+            wxMouseEventHandler(wxPropertyGrid::OnMouseEntry));
+        this->Connect(id, wxEVT_LEAVE_WINDOW,
+            wxMouseEventHandler(wxPropertyGrid::OnMouseEntry));
     }
     else
     {
-        CONNECT_CHILD(wxEVT_NAVIGATION_KEY,(wxNavigationKeyEventFunction),OnNavigationKey)
+        this->Connect(id, wxEVT_NAVIGATION_KEY,
+            wxNavigationKeyEventHandler(wxPropertyGrid::OnNavigationKey));
     }
-    CONNECT_CHILD(wxEVT_KEY_DOWN,(wxCharEventFunction),OnChildKeyDown)
-    CONNECT_CHILD(wxEVT_KEY_UP,(wxCharEventFunction),OnChildKeyUp)
-    CONNECT_CHILD(wxEVT_KILL_FOCUS,(wxFocusEventFunction),OnFocusEvent)
+
+    this->Connect(id, wxEVT_KEY_DOWN,
+        wxKeyEventHandler(wxPropertyGrid::OnChildKeyDown));
+    this->Connect(id, wxEVT_KEY_UP,
+        wxKeyEventHandler(wxPropertyGrid::OnChildKeyUp));
+    this->Connect(id, wxEVT_KILL_FOCUS,
+        wxFocusEventHandler(wxPropertyGrid::OnFocusEvent));
 }
 
 void wxPropertyGrid::FreeEditors()
@@ -3754,7 +3758,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
                 #endif
 
                     wxWindow* primaryCtrl = GetEditorControl();
-                    SetupEventHandling(primaryCtrl, wxPG_SUBID1);
+                    SetupChildEventHandling(primaryCtrl, wxPG_SUBID1);
 
                     // Focus and select all (wxTextCtrl, wxComboBox etc)
                     if ( flags & wxPG_SEL_FOCUS )
@@ -3794,7 +3798,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
                 #endif
                     m_wndEditor2->Show();
 
-                    SetupEventHandling(m_wndEditor2,wxPG_SUBID2);
+                    SetupChildEventHandling(m_wndEditor2,wxPG_SUBID2);
 
                     // If no primary editor, focus to button to allow
                     // it to interprete ENTER etc.
