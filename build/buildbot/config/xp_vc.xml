@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Name:       XP_VC9_trunk.xml
-    Purpose:    Buildbot XP_VC9_trunk configuration.
+    Name:       xp_vc.xml
+    Purpose:    Buildbot xp_vc configuration.
     Author:     Laurent Humbertclaude
     RCS-ID:     $Id$
     Copyright:  (c) 2008 Laurent Humbertclaude
@@ -12,7 +12,7 @@
     <build>
         <name>XPSP2 VC9 wxMSW trunk</name>
         <builddir>XPSP2_VC9_wxMSW_trunk</builddir>
-        <lock>one_per_slave</lock>
+        <lock>slave</lock>
         <!--<scheduler>trunk_quick</scheduler>-->
         <sandbox>VC9</sandbox>
         <make>nmake -f makefile.vc SHARED=1 CPPUNIT_CFLAGS=-Ik:/buildbot/VC9libs/cppunit-1.12.1/include CPPUNIT_LIBS=k:/buildbot/VC9libs/cppunit-1.12.1/lib/cppunit.lib</make>
@@ -25,7 +25,7 @@
     <build>
         <name>XPSP2 VC9 wxMSW stable</name>
         <builddir>XPSP2_VC9_wxMSW_stable</builddir>
-        <lock>one_per_slave</lock>
+        <lock>slave</lock>
         <!--<scheduler>stable_quick</scheduler>-->
         <sandbox>VC9</sandbox>
         <make>nmake -f makefile.vc SHARED=1 CPPUNIT_CFLAGS=-Ik:/buildbot/VC9libs/cppunit-1.12.1/include CPPUNIT_LIBS=k:/buildbot/VC9libs/cppunit-1.12.1/lib/cppunit.lib</make>
