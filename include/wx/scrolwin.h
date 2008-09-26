@@ -219,6 +219,18 @@ protected:
                          int& scrollUnits,
                          int& scrollPosition);
 
+    // this function should be overridden to return the size available for
+    // m_targetWindow inside m_win of the given size
+    //
+    // the default implementation is only good for m_targetWindow == m_win
+    // case, if we're scrolling a subwindow you must override this method
+    virtual wxSize GetSizeAvailableForScrollTarget(const wxSize& size)
+    {
+        wxASSERT_MSG( m_targetWindow == m_win, "must be overridden" );
+
+        return size;
+    }
+
 
     double                m_scaleX;
     double                m_scaleY;
@@ -248,18 +260,6 @@ protected:
 
     wxScrollHelperEvtHandler *m_handler;
 
-private:
-    // this function should be overridden to return the size available for
-    // m_targetWindow inside m_win of the given size
-    //
-    // the default implementation is only good for m_targetWindow == m_win
-    // case, if we're scrolling a subwindow you must override this method
-    virtual wxSize GetSizeAvailableForScrollTarget(const wxSize& size)
-    {
-        wxASSERT_MSG( m_targetWindow == m_win, "must be overridden" );
-
-        return size;
-    }
 
     DECLARE_NO_COPY_CLASS(wxScrollHelper)
 };
