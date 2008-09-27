@@ -1665,10 +1665,8 @@ void FormMain::PopulateWithExamples ()
 
     //
     // Test wxSampleMultiButtonEditor
-    wxPGEditor* pSampleMultiButtonEditor = new wxSampleMultiButtonEditor();
-    wxPropertyGrid::RegisterEditorClass(pSampleMultiButtonEditor);
     pg->Append( new wxLongStringProperty(wxT("MultipleButtons"), wxPG_LABEL) );
-    pg->SetPropertyEditor(wxT("MultipleButtons"), pSampleMultiButtonEditor );
+    pg->SetPropertyEditor(wxT("MultipleButtons"), m_pSampleMultiButtonEditor );
 
     // Test SingleChoiceProperty
     pg->Append( new SingleChoiceProperty(wxT("SingleChoiceProperty")) );
@@ -2092,6 +2090,10 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
 
     // Register all editors (SpinCtrl etc.)
     m_pPropGridManager->RegisterAdditionalEditors();
+
+    // Register our sample custom editors
+    m_pSampleMultiButtonEditor =
+        wxPropertyGrid::RegisterEditorClass(new wxSampleMultiButtonEditor());
 
     //
     // Create menubar

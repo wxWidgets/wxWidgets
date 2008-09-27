@@ -137,6 +137,7 @@ public:
     wxWindow*       m_panel;
     wxBoxSizer*     m_topSizer;
 
+    wxPGEditor*     m_pSampleMultiButtonEditor;
     wxPGChoices     m_combinedFlags;
 
     wxMenuItem*     m_itemCatColours;
