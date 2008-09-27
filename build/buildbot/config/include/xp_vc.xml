@@ -16,12 +16,17 @@
 
 <!--
     build - Override <build> to add a slave lock. This has the effect of
-            serialising all the builds on this machine
+            serialising builds for the same branch on this machine.
 -->
 <xsl:template name="build">
     <xsl:param name="content"/>
+    <xsl:variable name="checkout">
+        <xsl:apply-templates select="get:step('checkout')"/>
+    </xsl:variable>
     <build>
-        <lock>slave</lock>
+        <lock>
+            <xsl:value-of select="exsl:node-set($checkout)/svn/defaultBranch"/>
+        </lock>
         <xsl:copy-of select="$content"/>
     </build>
 </xsl:template>

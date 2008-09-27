@@ -60,11 +60,19 @@
 <nightly-schedulers name="daily"/>
 
 <!--
-    General purpose slave lock.
+    A general purpose slave lock and ones for the trunk and stable branches.
 -->
 
 <slavelock>
     <name>slave</name>
+</slavelock>
+
+<slavelock>
+    <name>trunk</name>
+</slavelock>
+
+<slavelock>
+    <name><STABLE_BRANCH/></name>
 </slavelock>
 
 <!--
