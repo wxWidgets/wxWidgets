@@ -144,6 +144,13 @@ extern wxArgumentType wxEmptyArgumentType;
 WX_DECLARE_OBJARRAY(wxArgumentType, wxArgumentTypeArray);
 
 
+enum wxMethodAccessSpecifier
+{
+    wxMAS_PUBLIC,
+    wxMAS_PROTECTED,
+    wxMAS_PRIVATE
+};
+
 // ----------------------------------------------------------------------------
 // Represents a single prototype of a class' member.
 // ----------------------------------------------------------------------------
@@ -152,7 +159,7 @@ class wxMethod
 public:
     wxMethod()
         { m_bConst=m_bVirtual=m_bPureVirtual=m_bStatic=m_bDeprecated=false;
-          m_nLine=-1; m_nAvailability=wxPORT_UNKNOWN; }
+          m_nLine=-1; m_nAvailability=wxPORT_UNKNOWN; m_access=wxMAS_PUBLIC; }
 
     wxMethod(const wxType& rettype, const wxString& name,
              const wxArgumentTypeArray& arguments,
@@ -165,11 +172,15 @@ public:
 public:     // getters
 
     // bWithArgumentNames = output argument names?
-    // bClean = output type names or type _clean_ names (see wxType::GetAsCleanString)
+    // bCleanDefaultValues = output clean argument default values?
     // bDeprecated = output [deprecated] next to deprecated methods?
+    // bAccessSpec = output [public], [protected] or [private] next to method?
+    //
+    // TODO: convert to readable flags this set of bools
     wxString GetAsString(bool bWithArgumentNames = true,
-                         bool bClean = false,
-                         bool bDeprecated = false) const;
+                         bool bCleanDefaultValues = false,
+                         bool bDeprecated = false,
+                         bool bAccessSpec = false) const;
 
     // parser of the prototype:
     // all these functions return strings with spaces stripped
@@ -183,6 +194,8 @@ public:     // getters
         { return m_nLine; }
     int GetAvailability() const
         { return m_nAvailability; }
+    wxMethodAccessSpecifier GetAccessSpecifier() const
+        { return m_access; }
 
     bool IsConst() const
         { return m_bConst; }
@@ -228,6 +241,8 @@ public:     // setters
         { m_nLine=lineNumber; }
     void SetAvailability(int nAvail)
         { m_nAvailability=nAvail; }
+    void SetAccessSpecifier(wxMethodAccessSpecifier spec)
+        { m_access=spec; }
 
 public:     // misc
 
@@ -264,6 +279,9 @@ protected:
     // NOTE: this is not used for comparing wxMethod objects
     //       (gccXML never gives this kind of info).
     int m_nAvailability;
+
+    // the access specifier for this method
+    wxMethodAccessSpecifier m_access;
 };
 
 WX_DECLARE_OBJARRAY(wxMethod, wxMethodArray);

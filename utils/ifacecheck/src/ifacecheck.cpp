@@ -135,7 +135,7 @@ int IfaceCheckApp::OnRun()
             // in any case set basic std preprocessor #defines:
             m_doxyInterface.AddPreprocessorValue("NULL", "0");
 
-            g_bLogEnabled = false;
+            //g_bLogEnabled = false;
 
             // parse the two XML files which contain the real and the doxygen interfaces
             // for wxWidgets API:
@@ -329,8 +329,8 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClassPtrArray& a
                 WX_APPEND_ARRAY(overloads, results);
 
 
-#define HACK_TO_AUTO_CORRECT_ONLY_VIRTUAL_AND_CONST_ATTRIBUTES        1
-#if HACK_TO_AUTO_CORRECT_ONLY_VIRTUAL_AND_CONST_ATTRIBUTES
+#define HACK_TO_AUTO_CORRECT_ONLY_METHOD_ATTRIBUTES        0
+#if HACK_TO_AUTO_CORRECT_ONLY_METHOD_ATTRIBUTES
                 for (unsigned int k=0; k<results.GetCount(); k++)
                     if (results[k]->MatchesExceptForAttributes(m) &&
                         results[k]->IsPureVirtual() == m.IsPureVirtual())
@@ -352,7 +352,7 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClassPtrArray& a
 #endif
             }
 
-#if HACK_TO_AUTO_CORRECT_ONLY_VIRTUAL_AND_CONST_ATTRIBUTES
+#if HACK_TO_AUTO_CORRECT_ONLY_METHOD_ATTRIBUTES
             if (!exit)
             {
 #endif
@@ -384,9 +384,9 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClassPtrArray& a
                                                 m.GetName(), searchedclasses);
 
                 // get a list of the prototypes with _all_ possible attributes:
-                warning += "\tdoxy header: " + m.GetAsString(true, true, true);
+                warning += "\tdoxy header: " + m.GetAsString(true, true, true, true);
                 for (unsigned int j=0; j<overloads.GetCount(); j++)
-                    warning += "\n\treal header: " + overloads[j]->GetAsString(true, true, true);
+                    warning += "\n\treal header: " + overloads[j]->GetAsString(true, true, true, true);
 
                 wxPrint(warning + "\n");
                 count++;
@@ -414,7 +414,7 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClassPtrArray& a
 
             count++;
 
-#if HACK_TO_AUTO_CORRECT_ONLY_VIRTUAL_AND_CONST_ATTRIBUTES
+#if HACK_TO_AUTO_CORRECT_ONLY_METHOD_ATTRIBUTES
             }
 #endif
         }

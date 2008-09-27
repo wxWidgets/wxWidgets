@@ -145,6 +145,18 @@ void wxArgumentType::SetDefaultValue(const wxString& defval, const wxString& def
     // to a single form:
     if (m_strDefaultValueForCmp == "0u")
         m_strDefaultValueForCmp = "0";
+
+    // fix for unicode strings:
+    m_strDefaultValueForCmp.Replace("\\000\\000\\000", "");
+
+    if (m_strDefaultValueForCmp.StartsWith("wxT(") &&
+        m_strDefaultValueForCmp.EndsWith(")"))
+    {
+        // get rid of the wxT() part
+        unsigned int len = m_strDefaultValueForCmp.Len();
+        m_strDefaultValueForCmp = m_strDefaultValueForCmp.Mid(4,len-5);
+    }
+
 /*
     if (IsPointer())
         m_strDefaultValueForCmp.Replace("0", "NULL");
@@ -280,14 +292,16 @@ bool wxMethod::operator==(const wxMethod& m) const
         IsStatic() != m.IsStatic() ||
         IsVirtual() != m.IsVirtual() ||
         IsPureVirtual() != m.IsPureVirtual() ||
-        IsDeprecated() != m.IsDeprecated())
+        IsDeprecated() != m.IsDeprecated() ||
+        GetAccessSpecifier() != m.GetAccessSpecifier())
         return false;
 
     // check everything else
     return MatchesExceptForAttributes(m);
 }
 
-wxString wxMethod::GetAsString(bool bWithArgumentNames, bool bClean, bool bDeprecated) const
+wxString wxMethod::GetAsString(bool bWithArgumentNames, bool bCleanDefaultValues,
+                               bool bDeprecated, bool bAccessSpec) const
 {
     wxString ret;
 
@@ -308,7 +322,7 @@ wxString wxMethod::GetAsString(bool bWithArgumentNames, bool bClean, bool bDepre
         if (bWithArgumentNames && !name.IsEmpty())
             ret += " " + name;
 
-        const wxString& def = bClean ?
+        const wxString& def = bCleanDefaultValues ?
             m_args[i].GetDefaultCleanValue() : m_args[i].GetDefaultValue();
         if (!def.IsEmpty())
             ret += " = " + def;
@@ -331,6 +345,22 @@ wxString wxMethod::GetAsString(bool bWithArgumentNames, bool bClean, bool bDepre
         ret += " = 0";
     if (m_bDeprecated && bDeprecated)
         ret += " [deprecated]";
+
+    if (bAccessSpec)
+    {
+        switch (m_access)
+        {
+        case wxMAS_PUBLIC:
+            ret += " [public]";
+            break;
+        case wxMAS_PROTECTED:
+            ret += " [protected]";
+            break;
+        case wxMAS_PRIVATE:
+            ret += " [private]";
+            break;
+        }
+    }
 
     return ret;
 }
@@ -903,10 +933,10 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
     child = doc.GetRoot()->GetChildren();
     while (child)
     {
-        wxString n = child->GetName();
+        wxString n = child->GetName(), acc = child->GetAttribute("access");
 
-        // only register public methods
-        if (child->GetAttribute("access") == "public" &&
+        // only register public&protected methods
+        if ((acc == "public" || acc == "protected") &&
             (n == "Method" || n == "Constructor" || n == "Destructor" || n == "OperatorMethod"))
         {
             unsigned long id = 0;
@@ -927,6 +957,8 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
                              child->GetAttribute("demangled"), p->GetName());
                     return false;
                 }
+
+                // do some additional check that we can do only here:
 
                 if (newfunc.IsCtor() && !p->IsValidCtorForThisClass(newfunc)) {
                     LogError("The method '%s' does not seem to be a ctor for '%s'",
@@ -1035,6 +1067,14 @@ bool wxXmlGccInterface::ParseMethod(const wxXmlNode *p,
     m.SetVirtual(p->GetAttribute("virtual") == "1");
     m.SetPureVirtual(p->GetAttribute("pure_virtual") == "1");
     m.SetDeprecated(p->GetAttribute("attributes") == "deprecated");
+
+    // decode access specifier
+    if (p->GetAttribute("access") == "public")
+        m.SetAccessSpecifier(wxMAS_PUBLIC);
+    else if (p->GetAttribute("access") == "protected")
+        m.SetAccessSpecifier(wxMAS_PROTECTED);
+    else if (p->GetAttribute("access") == "private")
+        m.SetAccessSpecifier(wxMAS_PRIVATE);
 
     if (!m.IsOk()) {
         LogError("The prototype '%s' is not valid!", m.GetAsString());
@@ -1249,8 +1289,11 @@ bool wxXmlDoxygenInterface::ParseCompoundDefinition(const wxString& filename)
             wxXmlNode *subchild = child->GetChildren();
             while (subchild)
             {
+                wxString kind = subchild->GetAttribute("kind");
+
+                // parse only public&protected functions:
                 if (subchild->GetName() == "sectiondef" &&
-                    subchild->GetAttribute("kind") == "public-func")
+                    (kind == "public-func" || kind == "protected-func"))
                 {
 
                     wxXmlNode *membernode = subchild->GetChildren();
@@ -1266,6 +1309,13 @@ bool wxXmlDoxygenInterface::ParseCompoundDefinition(const wxString& filename)
                                          m.GetName(), klass.GetName());
                                 return false;
                             }
+
+                            if (kind == "public-func")
+                                m.SetAccessSpecifier(wxMAS_PUBLIC);
+                            else if (kind == "protected-func")
+                                m.SetAccessSpecifier(wxMAS_PROTECTED);
+                            else if (kind == "private-func")
+                                m.SetAccessSpecifier(wxMAS_PRIVATE);
 
                             if (absoluteFile.IsEmpty())
                                 absoluteFile = header;
