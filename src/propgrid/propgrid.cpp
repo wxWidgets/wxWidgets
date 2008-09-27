@@ -5537,6 +5537,14 @@ wxPGEditor* wxPropertyGrid::RegisterEditorClass( wxPGEditor* editorClass,
         RegisterDefaultEditors();
 
     wxString name = editorClass->GetName();
+
+    // Existing editor under this name?
+    wxPGHashMapS2P::iterator vt_it = wxPGGlobalVars->m_mapEditorClasses.find(name);
+
+    wxCHECK_MSG( vt_it == wxPGGlobalVars->m_mapEditorClasses.end(),
+                 (wxPGEditor*) vt_it->second,
+                 "Editor with given name was already registered" );
+
     wxPGGlobalVars->m_mapEditorClasses[name] = (void*)editorClass;
 
     return editorClass;
