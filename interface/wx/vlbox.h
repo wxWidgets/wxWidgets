@@ -286,7 +286,7 @@ public:
 
         This is just a synonym for wxVScrolledWindow::SetRowCount().
     */
-    void SetItemCount(size_t count);
+    virtual void SetItemCount(size_t count);
 
     //@{
     /**

@@ -61,7 +61,7 @@ public:
         The only cases when you would want to override this function is if the page
         bitmap depends dynamically on the user choices, i.e. almost never.
     */
-    wxBitmap GetBitmap() const;
+    virtual wxBitmap GetBitmap() const;
 
     /**
         Get the page which should be shown when the user chooses the @c "Next"
@@ -336,7 +336,7 @@ public:
         run-time, as in this case, the wizard won't be able to get to all pages starting
         from a single one and you should call @e Fit separately for the others.
     */
-    void FitToPage(const wxWizardPage* firstPage);
+    virtual void FitToPage(const wxWizardPage* firstPage);
 
     /**
         Returns the bitmap used for the wizard.
@@ -357,13 +357,13 @@ public:
 
         See also SetBitmapPlacement() for the possible values.
     */
-    int GetBitmapPlacement();
+    int GetBitmapPlacement() const;
 
     /**
         Get the current page while the wizard is running.
         @NULL is returned if RunWizard() is not being executed now.
     */
-    wxWizardPage* GetCurrentPage() const;
+    virtual wxWizardPage* GetCurrentPage() const;
 
     /**
         Returns the minimum width for the bitmap that will be constructed to contain
@@ -404,7 +404,7 @@ public:
     /**
         Returns the size available for the pages.
     */
-    wxSize GetPageSize() const;
+    virtual wxSize GetPageSize() const;
 
     /**
         Return @true if this page is not the last one in the wizard.
@@ -431,7 +431,7 @@ public:
         successfully finished or @false if user cancelled it.
         The @a firstPage can not be @NULL.
     */
-    bool RunWizard(wxWizardPage* firstPage);
+    virtual bool RunWizard(wxWizardPage* firstPage);
 
     /**
         Sets the bitmap used for the wizard.
@@ -475,7 +475,7 @@ public:
         will be added to the control border in order to space page controls ten points
         from the dialog border and non-page controls.
     */
-    void SetBorder(int border);
+    virtual void SetBorder(int border);
 
     /**
         Sets the minimum width for the bitmap that will be constructed to contain the
@@ -499,6 +499,6 @@ public:
         @deprecated
         This method is obsolete, use GetPageAreaSizer() instead.
     */
-    void SetPageSize(const wxSize& sizePage);
+    virtual void SetPageSize(const wxSize& sizePage);
 };
 

@@ -102,12 +102,12 @@ public:
     /**
         Destructor.
     */
-    ~wxFileDialog();
+    virtual ~wxFileDialog();
 
     /**
         Returns the default directory.
     */
-    wxString GetDirectory() const;
+    virtual wxString GetDirectory() const;
 
     /**
         If functions SetExtraControlCreator() and ShowModal() were called,
@@ -118,7 +118,7 @@ public:
     /**
         Returns the default filename.
     */
-    wxString GetFilename() const;
+    virtual wxString GetFilename() const;
 
     /**
         Fills the array @a filenames with the names of the files chosen.
@@ -131,7 +131,7 @@ public:
         of each referenced file by appending the directory containing the shortcuts
         to the filename.
     */
-    void GetFilenames(wxArrayString& filenames) const;
+    virtual void GetFilenames(wxArrayString& filenames) const;
 
     /**
         Returns the index into the list of filters supplied, optionally, in the
@@ -142,17 +142,17 @@ public:
 
         After the dialog is shown, this is the index selected by the user.
     */
-    int GetFilterIndex() const;
+    virtual int GetFilterIndex() const;
 
     /**
         Returns the message that will be displayed on the dialog.
     */
-    wxString GetMessage() const;
+    virtual wxString GetMessage() const;
 
     /**
         Returns the full path (directory and filename) of the selected file.
     */
-    wxString GetPath() const;
+    virtual wxString GetPath() const;
 
     /**
         Fills the array @a paths with the full paths of the files chosen.
@@ -160,17 +160,17 @@ public:
         This function should only be used with the dialogs which have @c wxFD_MULTIPLE style,
         use GetPath() for the others.
     */
-    void GetPaths(wxArrayString& paths) const;
+    virtual void GetPaths(wxArrayString& paths) const;
 
     /**
         Returns the file dialog wildcard.
     */
-    wxString GetWildcard() const;
+    virtual wxString GetWildcard() const;
 
     /**
         Sets the default directory.
     */
-    void SetDirectory(const wxString& directory);
+    virtual void SetDirectory(const wxString& directory);
 
     /**
         Customize file dialog by adding extra window, which is typically placed
@@ -188,23 +188,23 @@ public:
     /**
         Sets the default filename.
     */
-    void SetFilename(const wxString& setfilename);
+    virtual void SetFilename(const wxString& setfilename);
 
     /**
         Sets the default filter index, starting from zero.
     */
-    void SetFilterIndex(int filterIndex);
+    virtual void SetFilterIndex(int filterIndex);
 
     /**
         Sets the message that will be displayed on the dialog.
     */
-    void SetMessage(const wxString& message);
+    virtual void SetMessage(const wxString& message);
 
     /**
         Sets the path (the combined directory and filename that will be returned when
         the dialog is dismissed).
     */
-    void SetPath(const wxString& path);
+    virtual void SetPath(const wxString& path);
 
     /**
         Sets the wildcard, which can contain multiple file types, for example:
@@ -213,13 +213,13 @@ public:
         Note that the native Motif dialog has some limitations with respect to
         wildcards; see the Remarks section above.
     */
-    void SetWildcard(const wxString& wildCard);
+    virtual void SetWildcard(const wxString& wildCard);
 
     /**
         Shows the dialog, returning wxID_OK if the user pressed OK, and wxID_CANCEL
         otherwise.
     */
-    int ShowModal();
+    virtual int ShowModal();
 };
 
 

@@ -79,7 +79,7 @@ public:
     /**
         Destructor, destroying the gauge.
     */
-    ~wxGauge();
+    virtual ~wxGauge();
 
     /**
         Creates the gauge for two-step construction. See wxGauge() for further
@@ -138,7 +138,7 @@ public:
               undefined and thus you need to explicitely call SetValue() if you
               want to restore the determinate mode.
     */
-    void Pulse();
+    virtual void Pulse();
 
     /**
         Sets the 3D bezel face width.

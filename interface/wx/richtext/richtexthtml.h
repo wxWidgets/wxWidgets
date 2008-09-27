@@ -69,7 +69,7 @@ public:
     /**
         Returns the mapping for converting point sizes to HTML font sizes.
     */
-    wxArrayInt GetFontSizeMapping();
+    wxArrayInt GetFontSizeMapping() const;
 
     /**
         Returns the directory used to store temporary image files.
@@ -85,7 +85,7 @@ public:
         Reset the file counter, in case, for example, the same names are required each
         time
     */
-    void SetFileCounter(int counter);
+    static void SetFileCounter(int counter);
 
     /**
         Sets the mapping for converting point sizes to HTML font sizes.

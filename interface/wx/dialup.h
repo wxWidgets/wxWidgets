@@ -43,7 +43,7 @@ public:
     /**
         Destructor.
     */
-    ~wxDialUpManager();
+    virtual ~wxDialUpManager();
 
     /**
         Cancel dialing the number initiated with Dial() with async parameter
@@ -60,7 +60,7 @@ public:
         platform-specific class derived from wxDialUpManager. You should delete
         the pointer when you are done with it.
     */
-    wxDialUpManager* Create();
+    static wxDialUpManager* Create();
 
     /**
         Dial the given ISP, use @a username and @a password to authenticate.

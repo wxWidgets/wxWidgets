@@ -285,6 +285,6 @@ public:
     */
     size_t Traverse(wxDirTraverser& sink,
                     const wxString& filespec = wxEmptyString,
-                    int flags = wxDIR_DEFAULT);
+                    int flags = wxDIR_DEFAULT) const;
 };
 

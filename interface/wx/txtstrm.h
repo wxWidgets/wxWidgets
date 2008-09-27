@@ -240,7 +240,7 @@ public:
 
         Also calls Flush().
     */
-    ~wxTextOutputStream();
+    virtual ~wxTextOutputStream();
 
     /**
         Flushes the stream.

@@ -60,13 +60,13 @@ public:
     /**
         Destructor.
     */
-    ~wxMDIClientWindow();
+    virtual ~wxMDIClientWindow();
 
     /**
         Used in two-step frame construction. See wxMDIClientWindow()
         for further details.
     */
-    bool CreateClient(wxMDIParentFrame* parent, long style = 0);
+    virtual bool CreateClient(wxMDIParentFrame* parent, long style = 0);
 };
 
 
@@ -189,35 +189,35 @@ public:
     /**
         Destructor. Destroys all child windows and menu bar if present.
     */
-    ~wxMDIParentFrame();
+    virtual ~wxMDIParentFrame();
 
     /**
         Activates the MDI child following the currently active one.
 
         @see ActivatePrevious()
     */
-    void ActivateNext();
+    virtual void ActivateNext();
 
     /**
         Activates the MDI child preceding the currently active one.
 
         @see ActivateNext()
     */
-    void ActivatePrevious();
+    virtual void ActivatePrevious();
 
     /**
         Arranges any iconized (minimized) MDI child windows.
 
         @see Cascade(), Tile()
     */
-    void ArrangeIcons();
+    virtual void ArrangeIcons();
 
     /**
         Arranges the MDI child windows in a cascade.
 
         @see Tile(), ArrangeIcons()
     */
-    void Cascade();
+    virtual void Cascade();
 
     /**
         Used in two-step frame construction. See wxMDIParentFrame()
@@ -368,7 +368,7 @@ public:
 
         Currently only implemented for MSW, does nothing under the other platforms.
     */
-    void Tile(wxOrientation orient = wxHORIZONTAL);
+    virtual void Tile(wxOrientation orient = wxHORIZONTAL);
 };
 
 
@@ -456,14 +456,14 @@ public:
     /**
         Destructor. Destroys all child windows and menu bar if present.
     */
-    ~wxMDIChildFrame();
+    virtual ~wxMDIChildFrame();
 
     /**
         Activates this MDI child frame.
 
         @see Maximize(), Restore()
     */
-    void Activate();
+    virtual void Activate();
 
     /**
         Used in two-step frame construction. See wxMDIChildFrame()
@@ -486,6 +486,6 @@ public:
     /**
         Restores this MDI child frame (unmaximizes).
     */
-    void Restore();
+    virtual void Restore();
 };
 

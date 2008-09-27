@@ -41,7 +41,7 @@ public:
     /**
         Destructor.
     */
-    ~wxDocMDIParentFrame();
+    virtual ~wxDocMDIParentFrame();
 
     /**
         Creates the window.
@@ -110,7 +110,7 @@ public:
     /**
         Destructor.
     */
-    ~wxDocMDIChildFrame();
+    virtual ~wxDocMDIChildFrame();
 
     /**
         Returns the document associated with this frame.

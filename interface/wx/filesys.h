@@ -131,7 +131,7 @@ public:
     /**
         Returns the actual path (set by wxFileSystem::ChangePathTo).
     */
-    wxString GetPath();
+    wxString GetPath() const;
 
     /**
         This static function returns @true if there is a registered handler which can
@@ -409,7 +409,7 @@ public:
         GetMimeTypeFromExt("index.htm") == "text/html"
         @endcode
     */
-    wxString GetMimeTypeFromExt(const wxString& location);
+    static wxString GetMimeTypeFromExt(const wxString& location);
 
     /**
         Returns the protocol string extracted from @a location.

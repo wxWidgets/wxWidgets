@@ -65,27 +65,27 @@ public:
     /**
         Destructor.
     */
-    ~wxDirDialog();
+    virtual ~wxDirDialog();
 
     /**
         Returns the message that will be displayed on the dialog.
     */
-    wxString GetMessage() const;
+    virtual wxString GetMessage() const;
 
     /**
         Returns the default or user-selected path.
     */
-    wxString GetPath() const;
+    virtual wxString GetPath() const;
 
     /**
         Sets the message that will be displayed on the dialog.
     */
-    void SetMessage(const wxString& message);
+    virtual void SetMessage(const wxString& message);
 
     /**
         Sets the default path.
     */
-    void SetPath(const wxString& path);
+    virtual void SetPath(const wxString& path);
 
     /**
         Shows the dialog, returning wxID_OK if the user pressed OK, and

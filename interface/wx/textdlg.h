@@ -67,7 +67,7 @@ public:
     /**
         Destructor.
     */
-    ~wxTextEntryDialog();
+    virtual ~wxTextEntryDialog();
 
     /**
         Returns the text that the user has entered if the user has pressed OK, or the

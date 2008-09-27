@@ -33,7 +33,7 @@ public:
     /**
         Destroys the hash table.
     */
-    ~wxHashTable();
+    virtual ~wxHashTable();
 
     /**
         The counterpart of @e Next.  If the application wishes to iterate
@@ -80,7 +80,7 @@ public:
         Makes an integer key out of a string. An application may wish to make a key
         explicitly (for instance when combining two data values to form a key).
     */
-    long MakeKey(const wxString& string);
+    static long MakeKey(const wxString& string);
 
     /**
         If the application wishes to iterate through all the data in the hash

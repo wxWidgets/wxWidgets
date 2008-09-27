@@ -48,7 +48,7 @@ public:
         Destructor, destroying the menu bar and removing it from the parent frame (if
         any).
     */
-    ~wxMenuBar();
+    virtual ~wxMenuBar();
 
     /**
         Adds the item to the end of the menu bar.
@@ -62,7 +62,7 @@ public:
 
         @see Insert()
     */
-    bool Append(wxMenu* menu, const wxString& title);
+    virtual bool Append(wxMenu* menu, const wxString& title);
 
     /**
         Checks or unchecks a menu item.
@@ -239,7 +239,7 @@ public:
 
         @see Append()
     */
-    bool Insert(size_t pos, wxMenu* menu, const wxString& title);
+    virtual bool Insert(size_t pos, wxMenu* menu, const wxString& title);
 
     /**
         Determines whether an item is checked.
@@ -274,7 +274,7 @@ public:
 
         @see Replace()
     */
-    wxMenu* Remove(size_t pos);
+    virtual wxMenu* Remove(size_t pos);
 
     /**
         Replaces the menu at the given position with another one.
@@ -291,7 +291,7 @@ public:
 
         @see Insert(), Remove()
     */
-    wxMenu* Replace(size_t pos, wxMenu* menu, const wxString& title);
+    virtual wxMenu* Replace(size_t pos, wxMenu* menu, const wxString& title);
 
     /**
         Sets the help string associated with a menu item.
@@ -422,7 +422,7 @@ public:
         a different window from last time, which causes an implicit destruction
         and recreation of internal data structures.
     */
-    ~wxMenu();
+    virtual ~wxMenu();
 
     /**
         Adds a menu item. 
@@ -467,8 +467,7 @@ public:
              AppendSubMenu(), Insert(), SetLabel(),
              GetHelpString(), SetHelpString(), wxMenuItem
     */
-    wxMenuItem* Append(int id, const wxString& item,
-                       wxMenu* subMenu,
+    wxMenuItem* Append(int id, const wxString& item, wxMenu* subMenu,
                        const wxString& helpString = wxEmptyString);
                        
     /**
@@ -524,7 +523,7 @@ public:
         Inserts a break in a menu, causing the next appended item to appear in a new
         column.
     */
-    void Break();
+    virtual void Break();
 
     /**
         Checks or unchecks the menu item.
@@ -607,7 +606,7 @@ public:
         @remarks Any special menu codes are stripped out of source and target
                  strings before matching.
     */
-    int FindItem(const wxString& itemString) const;
+    virtual int FindItem(const wxString& itemString) const;
 
     /**
         Finds the menu item object associated with the given menu item identifier and,
@@ -639,7 +638,7 @@ public:
 
         @see SetHelpString(), Append()
     */
-    wxString GetHelpString(int id) const;
+    virtual wxString GetHelpString(int id) const;
 
     /**
         Returns a menu item label.
@@ -832,7 +831,7 @@ public:
 
         @see GetHelpString()
     */
-    void SetHelpString(int id, const wxString& helpString);
+    virtual void SetHelpString(int id, const wxString& helpString);
 
     /**
         Sets the label of a menu item.
@@ -857,7 +856,7 @@ public:
 
         @see GetTitle()
     */
-    void SetTitle(const wxString& title);
+    virtual void SetTitle(const wxString& title);
 
     /**
         Sends events to @a source (or owning window if @NULL) to update the
@@ -865,6 +864,6 @@ public:
         wxWindow::PopupMenu, but
         the application may call it at other times if required.
     */
-    void UpdateUI(wxEvtHandler* source = NULL) const;
+    void UpdateUI(wxEvtHandler* source = NULL);
 };
 

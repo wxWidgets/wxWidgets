@@ -68,18 +68,18 @@ public:
     /**
         Destructor.
     */
-    ~wxMenuItem();
+    virtual ~wxMenuItem();
 
     /**
         Checks or unchecks the menu item.
         Note that this only works when the item is already appended to a menu.
     */
-    void Check(bool check = true);
+    virtual void Check(bool check = true);
 
     /**
         Enables or disables the menu item.
     */
-    void Enable(bool enable = true);
+    virtual void Enable(bool enable = true);
 
     /**
         Returns the background colour associated with the menu item (Windows only).
@@ -112,7 +112,7 @@ public:
 
         @see GetItemLabelText(), GetLabelText()
     */
-    wxString GetItemLabel() const;
+    virtual wxString GetItemLabel() const;
 
     /**
         Returns the text associated with the menu item, without any accelerator
@@ -120,7 +120,7 @@ public:
 
         @see GetItemLabel(), GetLabelText()
     */
-    wxString GetItemLabelText() const;
+    virtual wxString GetItemLabelText() const;
 
     /**
         Returns the item kind, one of @c wxITEM_SEPARATOR, @c wxITEM_NORMAL,
@@ -200,12 +200,12 @@ public:
     /**
         Returns @true if the item is checked.
     */
-    bool IsChecked() const;
+    virtual bool IsChecked() const;
 
     /**
         Returns @true if the item is enabled.
     */
-    bool IsEnabled() const;
+    virtual bool IsEnabled() const;
 
     /**
         Returns @true if the item is a separator.
@@ -226,7 +226,7 @@ public:
         Sets the bitmap for the menu item (Windows and GTK+ only). It is
         equivalent to wxMenuItem::SetBitmaps(bmp, wxNullBitmap).
     */
-    void SetBitmap(const wxBitmap& bmp);
+    virtual void SetBitmap(const wxBitmap& bmp);
 
     /**
         Sets the checked/unchecked bitmaps for the menu item (Windows only). The first
@@ -249,7 +249,7 @@ public:
     /**
         Sets the label associated with the menu item.
     */
-    void SetItemLabel(const wxString& label);
+    virtual void SetItemLabel(const wxString& label);
 
     /**
         Sets the width of the menu item checkmark bitmap (Windows only).
@@ -270,7 +270,7 @@ public:
         Sets the text associated with the menu item.
         @deprecated This function is deprecated in favour of SetItemLabel().
     */
-    void SetText(const wxString& text);
+    virtual void SetText(const wxString& text);
 
     /**
         Sets the text colour associated with the menu item (Windows only).

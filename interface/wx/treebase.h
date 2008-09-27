@@ -83,7 +83,7 @@ public:
     /**
         Virtual destructor.
     */
-    ~wxTreeItemData();
+    virtual ~wxTreeItemData();
 
     /**
         Returns the item associated with this node.

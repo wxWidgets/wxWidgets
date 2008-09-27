@@ -56,7 +56,7 @@ public:
         The other cases are not currently supported and @c wxCONV_FAILED
         (defined as -1) is returned for them.
     */
-    size_t GetMBNulLen() const;
+    virtual size_t GetMBNulLen() const;
 
     /**
         Returns the maximal value which can be returned by GetMBNulLen() for

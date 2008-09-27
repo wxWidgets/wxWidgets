@@ -74,12 +74,12 @@ public:
     /**
         Returns a reference to the exclude list (the list of invalid values).
     */
-    wxArrayString& GetExcludes() const;
+    wxArrayString& GetExcludes();
 
     /**
         Returns a reference to the include list (the list of valid values).
     */
-    wxArrayString& GetIncludes() const;
+    wxArrayString& GetIncludes();
 
     /**
         Returns the validator style.

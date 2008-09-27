@@ -107,18 +107,18 @@ public:
     /**
         The virtual destructor. Deletes attached children and attributes.
     */
-    ~wxXmlNode();
+    virtual ~wxXmlNode();
 
     /**
         Appends a attribute with given @a name and @a value to the list of
         attributes for this node.
     */
-    void AddAttribute(const wxString& name, const wxString& value);
+    virtual void AddAttribute(const wxString& name, const wxString& value);
 
     /**
         Appends given attribute to the list of attributes for this node.
     */
-    void AddAttribute(wxXmlAttribute* attr);
+    virtual void AddAttribute(wxXmlAttribute* attr);
 
     /**
         Adds node @a child as the last child of this node.
@@ -132,13 +132,13 @@ public:
 
         @see InsertChild(), InsertChildAfter()
     */
-    void AddChild(wxXmlNode* child);
+    virtual void AddChild(wxXmlNode* child);
 
     /**
         Removes the first attributes which has the given @a name from the list of
         attributes for this node.
     */
-    bool DeleteAttribute(const wxString& name);
+    virtual bool DeleteAttribute(const wxString& name);
 
     /**
         Returns true if a attribute named attrName could be found.
@@ -254,7 +254,7 @@ public:
 
         @see AddChild(), InsertChildAfter()
     */
-    bool InsertChild(wxXmlNode* child, wxXmlNode* followingNode);
+    virtual bool InsertChild(wxXmlNode* child, wxXmlNode* followingNode);
 
     /**
         Inserts the @a child node immediately after @a precedingNode in the
@@ -272,7 +272,7 @@ public:
 
         @see InsertChild(), AddChild()
     */
-    bool InsertChildAfter(wxXmlNode* child, wxXmlNode* precedingNode);
+    virtual bool InsertChildAfter(wxXmlNode* child, wxXmlNode* precedingNode);
 
     /**
         Returns @true if the content of this node is a string containing only
@@ -292,7 +292,7 @@ public:
         Note that the caller is reponsible for deleting the removed node in order
         to avoid memory leaks.
     */
-    bool RemoveChild(wxXmlNode* child);
+    virtual bool RemoveChild(wxXmlNode* child);
 
     /**
         Sets as first attribute the given wxXmlAttribute object.
@@ -377,7 +377,7 @@ public:
     /**
         The virtual destructor.
     */
-    ~wxXmlAttribute();
+    virtual ~wxXmlAttribute();
 
     /**
         Returns the name of this attribute.
@@ -514,7 +514,7 @@ public:
     /**
         Virtual destructor. Frees the document root node.
     */
-    ~wxXmlDocument();
+    virtual ~wxXmlDocument();
 
     /**
         Detaches the document root node and returns it.

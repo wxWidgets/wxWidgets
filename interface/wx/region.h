@@ -198,12 +198,12 @@ public:
         See @ref overview_refcount_destruct "reference-counted object destruction" for
         more info.
     */
-    ~wxRegion();
+    virtual ~wxRegion();
 
     /**
         Clears the current region.
     */
-    void Clear();
+    virtual void Clear();
 
     /**
         Returns a value indicating whether the given point is contained within the region.
@@ -291,7 +291,7 @@ public:
     /**
         Returns @true if the region is empty, @false otherwise.
     */
-    bool IsEmpty() const;
+    virtual bool IsEmpty() const;
 
     /**
         Returns @true if the region is equal to, i.e. covers the same area as,

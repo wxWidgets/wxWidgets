@@ -100,7 +100,7 @@ public:
     /**
         Destroys the wxProcess object.
     */
-    ~wxProcess();
+    virtual ~wxProcess();
 
     /**
         Closes the output stream (the one connected to the stdin of the child
@@ -214,7 +214,7 @@ public:
         @param status
             The exit code of the process.
     */
-    void OnTerminate(int pid, int status);
+    virtual void OnTerminate(int pid, int status);
 
     /**
         This static method replaces the standard @c popen() function: it launches
@@ -290,6 +290,6 @@ public:
     /**
         Returns the process id.
     */
-    int GetPid() const;
+    int GetPid();
 };
 

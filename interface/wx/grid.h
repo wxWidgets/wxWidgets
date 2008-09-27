@@ -41,7 +41,7 @@ public:
     /**
         Parameters string format is "width[,precision]".
     */
-    void SetParameters(const wxString& params);
+    virtual void SetParameters(const wxString& params);
 
     /**
         Sets the precision.
@@ -492,7 +492,7 @@ public:
     /**
         Final cleanup.
     */
-    void Destroy();
+    virtual void Destroy();
 
     /**
         Complete the editing of the current cell. Returns @true if the value has
@@ -504,7 +504,7 @@ public:
         Some types of controls on some platforms may need some help
         with the Return key.
     */
-    void HandleReturn(wxKeyEvent& event);
+    virtual void HandleReturn(wxKeyEvent& event);
 
     /**
 
@@ -526,26 +526,26 @@ public:
     /**
         Size and position the edit control.
     */
-    void SetSize(const wxRect& rect);
+    virtual void SetSize(const wxRect& rect);
 
     /**
         Show or hide the edit control, use the specified attributes to set
         colours/fonts for it.
     */
-    void Show(bool show, wxGridCellAttr* attr = NULL);
+    virtual void Show(bool show, wxGridCellAttr* attr = NULL);
 
     /**
         If the editor is enabled by clicking on the cell, this method will be
         called.
     */
-    void StartingClick();
+    virtual void StartingClick();
 
     /**
         If the editor is enabled by pressing keys on the grid,
         this will be called to let the editor do something about
         that first key if desired.
     */
-    void StartingKey(wxKeyEvent& event);
+    virtual void StartingKey(wxKeyEvent& event);
 };
 
 
@@ -573,7 +573,7 @@ public:
         The parameters string format is "n" where n is a number representing the
         maximum width.
     */
-    void SetParameters(const wxString& params);
+    virtual void SetParameters(const wxString& params);
 };
 
 
@@ -634,7 +634,7 @@ public:
     /**
         Parameters string format is "item1[,item2[...,itemN]]"
     */
-    void SetParameters(const wxString& params);
+    virtual void SetParameters(const wxString& params);
 };
 
 
@@ -857,7 +857,7 @@ public:
     /**
         Parameters string format is "min,max".
     */
-    void SetParameters(const wxString& params);
+    virtual void SetParameters(const wxString& params);
 };
 
 
@@ -1156,7 +1156,7 @@ public:
     /**
         Column at which the event occurred.
     */
-    int GetCol();
+    virtual int GetCol();
 
     /**
         Position in pixels at which the event occurred.
@@ -1166,7 +1166,7 @@ public:
     /**
         Row at which the event occurred.
     */
-    int GetRow();
+    virtual int GetRow();
 
     /**
         Returns @true if the Meta key was down at the time of the event.
@@ -1212,7 +1212,7 @@ public:
     /**
         Parameters string format is "width,precision"
     */
-    void SetParameters(const wxString& params);
+    virtual void SetParameters(const wxString& params);
 };
 
 
@@ -1655,7 +1655,7 @@ public:
         without (yet) matching calls to EndBatch(). While
         the grid's batch count is greater than zero the display will not be updated.
     */
-    int GetBatchCount() const;
+    int GetBatchCount();
 
     /**
         Sets the arguments to the horizontal and vertical text alignment values
@@ -1737,7 +1737,7 @@ public:
 
         See GetRowGridLinePen() for an example.
     */
-    wxPen GetColGridLinePen(int col);
+    virtual wxPen GetColGridLinePen(int col);
 
     /**
         Sets the arguments to the current column label alignment values.
@@ -1887,7 +1887,7 @@ public:
 
         @see GetColGridLinePen(), GetRowGridLinePen()
     */
-    wxPen GetDefaultGridLinePen();
+    virtual wxPen GetDefaultGridLinePen();
 
     /**
         Returns a pointer to the current default grid cell renderer.
@@ -2006,7 +2006,7 @@ public:
            }
         @endcode
     */
-    wxPen GetRowGridLinePen(int row);
+    virtual wxPen GetRowGridLinePen(int row);
 
     /**
         Returns the alignment used for row labels.

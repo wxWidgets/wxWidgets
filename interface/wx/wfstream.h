@@ -39,13 +39,13 @@ public:
         either the old file couldn't be deleted or that the new file couldn't be renamed
         to the old name.
     */
-    bool Commit();
+    virtual bool Commit();
 
     /**
         Discard changes: the old file contents are not changed, the temporary file is
         deleted.
     */
-    void Discard();
+    virtual void Discard();
 };
 
 
@@ -87,7 +87,7 @@ public:
     /**
         Destructor.
     */
-    ~wxFFileOutputStream();
+    virtual ~wxFFileOutputStream();
 
     /**
         Returns @true if the stream is initialized and ready.
@@ -133,7 +133,7 @@ public:
     /**
         Destructor.
     */
-    ~wxFileOutputStream();
+    virtual ~wxFileOutputStream();
 
     /**
         Returns @true if the stream is initialized and ready.
@@ -179,7 +179,7 @@ public:
     /**
         Destructor.
     */
-    ~wxFileInputStream();
+    virtual ~wxFileInputStream();
 
     /**
         Returns @true if the stream is initialized and ready.
@@ -226,7 +226,7 @@ public:
     /**
         Destructor.
     */
-    ~wxFFileInputStream();
+    virtual ~wxFFileInputStream();
 
     /**
         Returns @true if the stream is initialized and ready.

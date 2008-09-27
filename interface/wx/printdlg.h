@@ -37,7 +37,7 @@ public:
         If GetPrintDC() has not been called, the device context obtained by
         the dialog (if any) will be deleted.
     */
-    ~wxPrintDialog();
+    virtual ~wxPrintDialog();
 
     /**
         Returns the device context created by the print dialog, if any.
@@ -46,7 +46,7 @@ public:
         is transferred to the application, so it must then be deleted
         explicitly.
     */
-    wxDC* GetPrintDC();
+    virtual wxDC* GetPrintDC();
 
     /**
         Returns the @ref overview_printing_printdata "print dialog data" associated
@@ -61,7 +61,7 @@ public:
         After this function is called, a device context may be retrievable using
         GetPrintDC().
     */
-    int ShowModal();
+    virtual int ShowModal();
 };
 
 
@@ -110,7 +110,7 @@ public:
     /**
         Destructor.
     */
-    ~wxPageSetupDialog();
+    virtual ~wxPageSetupDialog();
 
     /**
         Returns the wxPageSetupDialogData object associated with the dialog.

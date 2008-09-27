@@ -201,17 +201,17 @@ public:
     /**
         Returns @true if the given page exists in the printout.
     */
-    bool HasPage(int page);
+    virtual bool HasPage(int page);
 
     /**
         Prepares for printing, laying out the buffer and calculating pagination.
     */
-    void OnPreparePrinting();
+    virtual void OnPreparePrinting();
 
     /**
         Does the actual printing for this page.
     */
-    bool OnPrintPage(int page);
+    virtual bool OnPrintPage(int page);
 
     /**
         Sets the header and footer data associated with the printout.

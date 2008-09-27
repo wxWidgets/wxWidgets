@@ -57,7 +57,7 @@ public:
         Destructor does nothing neither but should be virtual as this class is used as
         a base one.
     */
-    ~wxStackWalker();
+    virtual ~wxStackWalker();
 
     /**
         This function must be overrided to process the given frame.
@@ -71,7 +71,7 @@ public:
         notice that Walk() frame itself is not included if skip = 1).
         Up to @a maxDepth frames are walked from the innermost to the outermost one.
     */
-    void Walk(size_t skip = 1, size_t maxDepth = 200);
+    virtual void Walk(size_t skip = 1, size_t maxDepth = 200);
 
     /**
         Enumerate stack frames from the location of uncaught exception.
@@ -79,7 +79,7 @@ public:
         wxApp::OnFatalException.
         Up to @a maxDepth frames are walked from the innermost to the outermost one.
     */
-    void WalkFromException(size_t maxDepth = 200);
+    virtual void WalkFromException(size_t maxDepth = 200);
 };
 
 
@@ -157,7 +157,7 @@ public:
         can't retrieve the parameters info even although the function does have
         parameters).
     */
-    size_t GetParamCount() const;
+    virtual size_t GetParamCount() const;
 
     /**
         Return @true if we have the file name and line number for this frame.

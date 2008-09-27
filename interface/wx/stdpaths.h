@@ -63,7 +63,7 @@ public:
 
         @see wxFileConfig
     */
-    wxString GetConfigDir() const;
+    virtual wxString GetConfigDir() const;
 
     /**
         Return the location of the applications global, i.e. not user-specific,
@@ -75,7 +75,7 @@ public:
 
         @see GetLocalDataDir()
     */
-    wxString GetDataDir() const;
+    virtual wxString GetDataDir() const;
 
     /**
         Return the directory containing the current user's documents.
@@ -86,7 +86,7 @@ public:
 
         @since 2.7.0
     */
-    wxString GetDocumentsDir() const;
+    virtual wxString GetDocumentsDir() const;
 
     /**
         Return the directory and the filename for the current executable.
@@ -95,7 +95,7 @@ public:
              - Windows: @c C:\\Programs\\AppFolder\\exename.exe
              - Mac: @c /Programs/exename
     */
-    wxString GetExecutablePath() const;
+    virtual wxString GetExecutablePath() const;
 
     /**
         @note This function is only available under Unix.
@@ -113,7 +113,7 @@ public:
         This is the same as GetDataDir() except
         under Unix where it returns @c /etc/appname.
     */
-    wxString GetLocalDataDir() const;
+    virtual wxString GetLocalDataDir() const;
 
     /**
         Return the localized resources directory containing the resource files of the
@@ -137,7 +137,7 @@ public:
 
         @see wxDynamicLibrary
     */
-    wxString GetPluginsDir() const;
+    virtual wxString GetPluginsDir() const;
 
     /**
         Return the directory where the application resource files are located. The
@@ -154,7 +154,7 @@ public:
 
         @see GetLocalizedResourcesDir()
     */
-    wxString GetResourcesDir() const;
+    virtual wxString GetResourcesDir() const;
 
     /**
         Return the directory for storing temporary files. To create unique temporary
@@ -164,7 +164,7 @@ public:
 
         @since 2.7.2
     */
-    wxString GetTempDir() const;
+    virtual wxString GetTempDir() const;
 
     /**
         Return the directory for the user config files:
@@ -175,7 +175,7 @@ public:
         directory, otherwise GetUserDataDir() is
         more appropriate.
     */
-    wxString GetUserConfigDir() const;
+    virtual wxString GetUserConfigDir() const;
 
     /**
         Return the directory for the user-dependent application data files:
@@ -183,7 +183,7 @@ public:
              - Windows: @c C:\\Documents @c and @c Settings\\username\\Application @c Data\\appname
              - Mac: @c ~/Library/Application @c Support/appname
     */
-    wxString GetUserDataDir() const;
+    virtual wxString GetUserDataDir() const;
 
     /**
         Return the directory for user data files which shouldn't be shared with
@@ -191,7 +191,7 @@ public:
         This is the same as GetUserDataDir() for all platforms except Windows where it returns
         @c C:\\Documents @c and @c Settings\\username\\Local @c Settings\\Application @c Data\\appname
     */
-    wxString GetUserLocalDataDir() const;
+    virtual wxString GetUserLocalDataDir() const;
 
     /**
         @note This function is only available under Unix.

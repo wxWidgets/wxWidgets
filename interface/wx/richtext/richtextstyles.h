@@ -124,7 +124,7 @@ public:
     /**
         Destructor.
     */
-    ~wxRichTextStyleDefinition();
+    virtual ~wxRichTextStyleDefinition();
 
     /**
         Returns the style on which this style is based.
@@ -198,7 +198,7 @@ public:
     /**
         Destructor.
     */
-    ~wxRichTextParagraphStyleDefinition();
+    virtual ~wxRichTextParagraphStyleDefinition();
 
     /**
         Returns the style that should normally follow this style.
@@ -242,7 +242,7 @@ public:
     /**
         Destructor.
     */
-    ~wxRichTextStyleListBox();
+    virtual ~wxRichTextStyleListBox();
 
     /**
         Applies the @e ith style to the associated rich text control.
@@ -364,7 +364,7 @@ public:
     /**
         Destructor.
     */
-    ~wxRichTextStyleComboCtrl();
+    virtual ~wxRichTextStyleComboCtrl();
 
     /**
         Returns the wxRichTextCtrl associated with this control.
@@ -414,7 +414,7 @@ public:
     /**
         Destructor.
     */
-    ~wxRichTextCharacterStyleDefinition();
+    virtual ~wxRichTextCharacterStyleDefinition();
 };
 
 
@@ -453,7 +453,7 @@ public:
     /**
         Destructor.
     */
-    ~wxRichTextListStyleDefinition();
+    virtual ~wxRichTextListStyleDefinition();
 
     /**
         This function combines the given paragraph style with the list style's base
@@ -545,7 +545,7 @@ public:
     /**
         Destructor.
     */
-    ~wxRichTextStyleSheet();
+    virtual ~wxRichTextStyleSheet();
 
     /**
         Adds a definition to the character style list.

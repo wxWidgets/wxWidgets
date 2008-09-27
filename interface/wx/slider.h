@@ -90,21 +90,21 @@ public:
     /**
         Destructor, destroying the slider.
     */
-    ~wxSlider();
+    virtual ~wxSlider();
 
     /**
         Clears the selection, for a slider with the @b wxSL_SELRANGE style.
 
         @remarks Windows 95 only.
     */
-    void ClearSel();
+    virtual void ClearSel();
 
     /**
         Clears the ticks.
 
         @remarks Windows 95 only.
     */
-    void ClearTicks();
+    virtual void ClearTicks();
 
     /**
         Used for two-step slider construction. See wxSlider()
@@ -123,28 +123,28 @@ public:
 
         @see SetLineSize()
     */
-    int GetLineSize() const;
+    virtual int GetLineSize() const;
 
     /**
         Gets the maximum slider value.
 
         @see GetMin(), SetRange()
     */
-    int GetMax() const;
+    virtual int GetMax() const;
 
     /**
         Gets the minimum slider value.
 
         @see GetMin(), SetRange()
     */
-    int GetMin() const;
+    virtual int GetMin() const;
 
     /**
         Returns the page size.
 
         @see SetPageSize()
     */
-    int GetPageSize() const;
+    virtual int GetPageSize() const;
 
     /**
         Returns the selection end point.
@@ -153,7 +153,7 @@ public:
 
         @see GetSelStart(), SetSelection()
     */
-    int GetSelEnd() const;
+    virtual int GetSelEnd() const;
 
     /**
         Returns the selection start point.
@@ -162,7 +162,7 @@ public:
 
         @see GetSelEnd(), SetSelection()
     */
-    int GetSelStart() const;
+    virtual int GetSelStart() const;
 
     /**
         Returns the thumb length.
@@ -171,7 +171,7 @@ public:
 
         @see SetThumbLength()
     */
-    int GetThumbLength() const;
+    virtual int GetThumbLength() const;
 
     /**
         Returns the tick frequency.
@@ -180,14 +180,14 @@ public:
 
         @see SetTickFreq()
     */
-    int GetTickFreq() const;
+    virtual int GetTickFreq() const;
 
     /**
         Gets the current slider value.
 
         @see GetMin(), GetMax(), SetValue()
     */
-    int GetValue() const;
+    virtual int GetValue() const;
 
     /**
         Sets the line size for the slider.
@@ -198,7 +198,7 @@ public:
 
         @see GetLineSize()
     */
-    void SetLineSize(int lineSize);
+    virtual void SetLineSize(int lineSize);
 
     /**
         Sets the page size for the slider.
@@ -208,14 +208,14 @@ public:
 
         @see GetPageSize()
     */
-    void SetPageSize(int pageSize);
+    virtual void SetPageSize(int pageSize);
 
     /**
         Sets the minimum and maximum slider values.
 
         @see GetMin(), GetMax()
     */
-    void SetRange(int minValue, int maxValue);
+    virtual void SetRange(int minValue, int maxValue);
 
     /**
         Sets the selection.
@@ -229,7 +229,7 @@ public:
 
         @see GetSelStart(), GetSelEnd()
     */
-    void SetSelection(int startPos, int endPos);
+    virtual void SetSelection(int startPos, int endPos);
 
     /**
         Sets the slider thumb length.
@@ -241,7 +241,7 @@ public:
 
         @see GetThumbLength()
     */
-    void SetThumbLength(int len);
+    virtual void SetThumbLength(int len);
 
     /**
         Sets a tick position.
@@ -253,7 +253,7 @@ public:
 
         @see SetTickFreq()
     */
-    void SetTick(int tickPos);
+    virtual void SetTick(int tickPos);
 
     /**
         Sets the tick mark frequency and position.
@@ -269,7 +269,7 @@ public:
 
         @see GetTickFreq()
     */
-    void SetTickFreq(int n, int pos);
+    virtual void SetTickFreq(int n, int pos);
 
     /**
         Sets the slider position.
@@ -277,6 +277,6 @@ public:
         @param value
             The slider position.
     */
-    void SetValue(int value);
+    virtual void SetValue(int value);
 };
 

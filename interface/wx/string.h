@@ -459,7 +459,7 @@ public:
     /**
        Appends the string literal @e psz with max length @e nLen.
     */
-    wxString& Append(const char* psz, size_t nLen);
+    wxString& Append(const wchar_t* pwz);
 
     /**
        Appends the wide string literal @e psz with max length @e nLen.
@@ -469,7 +469,7 @@ public:
     /**
        Appends the string @e s.
     */
-    wxString &Append(const wxString &s);
+    wxString& Append(const wchar_t* pwz, size_t nLen);
 
     /**
        Appends the character @e ch @e count times.
@@ -1167,14 +1167,14 @@ public:
     wxString& operator<<(const char* psz)
     wxString& operator<<(const wchar_t* pwz)
     wxString& operator<<(const wxCStrData& psz)
-    wxString& operator<<(wxUniChar ch);
+    wxString& operator<<(const char* psz);
     wxString& operator<<(wxUniCharRef ch)
     wxString& operator<<(char ch)
     wxString& operator<<(unsigned char ch)
     wxString& operator<<(wchar_t ch)
     wxString& operator<<(const wxCharBuffer& s)
     wxString& operator<<(const wxWCharBuffer& s)
-    wxString& operator<<(int i);
+    wxString& operator<<(wxUniCharRef ch);
     wxString& operator<<(unsigned int ui);
     wxString& operator<<(long l);
     wxString& operator<<(unsigned long ul);

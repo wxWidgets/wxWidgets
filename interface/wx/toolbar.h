@@ -170,7 +170,7 @@ public:
     /**
         Toolbar destructor.
     */
-    ~wxToolBar();
+    virtual ~wxToolBar();
 
     /**
         Adds a new check (or toggle) tool to the toolbar. The parameters are the
@@ -245,7 +245,7 @@ public:
         @see AddSeparator(), AddCheckTool(), AddRadioTool(),
              InsertTool(), DeleteTool(), Realize(), SetDropdownMenu()
     */
-    wxToolBarToolBase* AddTool(wxToolBarToolBase* tool);
+    virtual wxToolBarToolBase* AddTool(wxToolBarToolBase* tool);
 
     /**
         Adds a tool to the toolbar. This most commonly used version has fewer 
@@ -329,7 +329,7 @@ public:
     /**
         Deletes all the tools in the toolbar.
     */
-    void ClearTools();
+    virtual void ClearTools();
 
     /**
         Removes the specified tool from the toolbar and deletes it. If you don't
@@ -343,13 +343,13 @@ public:
 
         @see DeleteToolByPos()
     */
-    bool DeleteTool(int toolId);
+    virtual bool DeleteTool(int toolId);
 
     /**
         This function behaves like DeleteTool() but it deletes the tool at the
         specified position and not the one with the given id.
     */
-    bool DeleteToolByPos(size_t pos);
+    virtual bool DeleteToolByPos(size_t pos);
 
     /**
         Enables or disables the tool.
@@ -365,19 +365,19 @@ public:
 
         @see GetToolEnabled(), ToggleTool()
     */
-    void EnableTool(int toolId, bool enable);
+    virtual void EnableTool(int toolId, bool enable);
 
     /**
         Returns a pointer to the tool identified by @a id or @NULL if no
         corresponding tool is found.
     */
-    wxToolBarToolBase* FindById(int id);
+    wxToolBarToolBase* FindById(int id) const;
 
     /**
         Returns a pointer to the control identified by @a id or @NULL if no
         corresponding control is found.
     */
-    wxControl* FindControl(int id);
+    virtual wxControl* FindControl(int id);
 
     /**
         Finds a tool for the given mouse position.
@@ -392,7 +392,7 @@ public:
         @remarks Currently not implemented in wxGTK (always returns @NULL
         there).
     */
-    wxToolBarToolBase* FindToolForPosition(wxCoord x, wxCoord y) const;
+    virtual wxToolBarToolBase* FindToolForPosition(wxCoord x, wxCoord y) const;
 
     /**
         Returns the left/right and top/bottom margins, which are also used for
@@ -411,7 +411,7 @@ public:
 
         @see SetToolBitmapSize(), GetToolSize()
     */
-    wxSize GetToolBitmapSize();
+    virtual wxSize GetToolBitmapSize() const;
 
     /**
         Get any client data associated with the tool.
@@ -421,7 +421,7 @@ public:
 
         @return Client data, or @NULL if there is none.
     */
-    wxObject* GetToolClientData(int toolId) const;
+    virtual wxObject* GetToolClientData(int toolId) const;
 
     /**
         Called to determine whether a tool is enabled (responds to user input).
@@ -433,7 +433,7 @@ public:
 
         @see EnableTool()
     */
-    bool GetToolEnabled(int toolId) const;
+    virtual bool GetToolEnabled(int toolId) const;
 
     /**
         Returns the long help for the given tool.
@@ -443,27 +443,27 @@ public:
 
         @see SetToolLongHelp(), SetToolShortHelp()
     */
-    wxString GetToolLongHelp(int toolId) const;
+    virtual wxString GetToolLongHelp(int toolId) const;
 
     /**
         Returns the value used for packing tools.
 
         @see SetToolPacking()
     */
-    int GetToolPacking() const;
+    virtual int GetToolPacking() const;
 
     /**
         Returns the tool position in the toolbar, or @c wxNOT_FOUND if the tool
         is not found.
     */
-    int GetToolPos(int toolId) const;
+    virtual int GetToolPos(int toolId) const;
 
     /**
         Returns the default separator size.
 
         @see SetToolSeparation()
     */
-    int GetToolSeparation() const;
+    virtual int GetToolSeparation() const;
 
     /**
         Returns the short help for the given tool.
@@ -473,7 +473,7 @@ public:
 
         @see GetToolLongHelp(), SetToolShortHelp()
     */
-    wxString GetToolShortHelp(int toolId) const;
+    virtual wxString GetToolShortHelp(int toolId) const;
 
     /**
         Returns the size of a whole button, which is usually larger than a tool
@@ -481,7 +481,7 @@ public:
 
         @see SetToolBitmapSize(), GetToolBitmapSize()
     */
-    wxSize GetToolSize();
+    virtual wxSize GetToolSize() const;
 
     /**
         Gets the on/off state of a toggle tool.
@@ -493,7 +493,7 @@ public:
 
         @see ToggleTool()
     */
-    bool GetToolState(int toolId) const;
+    virtual bool GetToolState(int toolId) const;
 
     /**
         Returns the number of tools in the toolbar.
@@ -514,7 +514,7 @@ public:
 
         @see AddSeparator(), InsertTool()
     */
-    wxToolBarToolBase* InsertSeparator(size_t pos);
+    virtual wxToolBarToolBase* InsertSeparator(size_t pos);
 
     //@{
     /**
@@ -554,7 +554,7 @@ public:
 
         @see OnMouseEnter(), OnRightClick()
     */
-    bool OnLeftClick(int toolId, bool toggleDown);
+    virtual bool OnLeftClick(int toolId, bool toggleDown);
 
     /**
         This is called when the mouse cursor moves into a tool or out of the
@@ -572,7 +572,7 @@ public:
                  out of the toolbar, wxWidgets may not be able to detect it.
                  Therefore this function may not always be called when expected.
     */
-    void OnMouseEnter(int toolId);
+    virtual void OnMouseEnter(int toolId);
 
     /**
         @deprecated This is the old way of detecting tool right clicks;
@@ -598,7 +598,7 @@ public:
     /**
         This function should be called after you have added tools.
     */
-    bool Realize();
+    virtual bool Realize();
 
     /**
         Removes the given tool from the toolbar but doesn't delete it. This
@@ -610,7 +610,7 @@ public:
 
         @see DeleteTool()
     */
-    wxToolBarToolBase* RemoveTool(int id);
+    virtual wxToolBarToolBase* RemoveTool(int id);
 
     /**
         Sets the bitmap resource identifier for specifying tool bitmaps as
@@ -642,7 +642,7 @@ public:
 
         @see GetMargins()
     */
-    void SetMargins(int x, int y);
+    virtual void SetMargins(int x, int y);
 
     /**
         Set the margins for the toolbar.
@@ -670,12 +670,12 @@ public:
 
         @see GetToolBitmapSize(), GetToolSize()
     */
-    void SetToolBitmapSize(const wxSize& size);
+    virtual void SetToolBitmapSize(const wxSize& size);
 
     /**
         Sets the client data associated with the tool.
     */
-    void SetToolClientData(int id, wxObject* clientData);
+    virtual void SetToolClientData(int id, wxObject* clientData);
 
     /**
         Sets the bitmap to be used by the tool with the given ID when the tool
@@ -687,7 +687,7 @@ public:
             have no effect on those platforms.
 
     */
-    void SetToolDisabledBitmap(int id, const wxBitmap& bitmap);
+    virtual void SetToolDisabledBitmap(int id, const wxBitmap& bitmap);
 
     /**
         Sets the long help for the given tool.
@@ -702,13 +702,13 @@ public:
 
         @see GetToolLongHelp(), SetToolShortHelp(),
     */
-    void SetToolLongHelp(int toolId, const wxString& helpString);
+    virtual void SetToolLongHelp(int toolId, const wxString& helpString);
 
     /**
         Sets the bitmap to be used by the tool with the given ID. This can only
         be used on Button tools, not controls.
     */
-    void SetToolNormalBitmap(int id, const wxBitmap& bitmap);
+    virtual void SetToolNormalBitmap(int id, const wxBitmap& bitmap);
 
     /**
         Sets the value used for spacing tools. The default value is 1.
@@ -722,7 +722,7 @@ public:
 
         @see GetToolPacking()
     */
-    void SetToolPacking(int packing);
+    virtual void SetToolPacking(int packing);
 
     /**
         Sets the default separator size. The default value is 5.
@@ -732,7 +732,7 @@ public:
 
         @see AddSeparator()
     */
-    void SetToolSeparation(int separation);
+    virtual void SetToolSeparation(int separation);
 
     /**
         Sets the short help for the given tool.
@@ -748,7 +748,7 @@ public:
 
         @see GetToolShortHelp(), SetToolLongHelp()
     */
-    void SetToolShortHelp(int toolId, const wxString& helpString);
+    virtual void SetToolShortHelp(int toolId, const wxString& helpString);
 
     /**
         Toggles a tool on or off. This does not cause any event to get emitted.
@@ -761,6 +761,6 @@ public:
         @remarks Only applies to a tool that has been specified as a toggle
             tool.
     */
-    void ToggleTool(int toolId, bool toggle);
+    virtual void ToggleTool(int toolId, bool toggle);
 };
 

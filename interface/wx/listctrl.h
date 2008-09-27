@@ -182,7 +182,7 @@ public:
     /**
         Destructor, destroying the list control.
     */
-    ~wxListCtrl();
+    virtual ~wxListCtrl();
 
     /**
         Arranges the items in icon or small icon view. This only has effect on Win32.

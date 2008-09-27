@@ -70,7 +70,7 @@ public:
 
         @see @ref overview_refcount_destruct "reference-counted object destruction"
     */
-    ~wxPalette();
+    virtual ~wxPalette();
 
     /**
         Creates a palette from arrays of size @a n, one for each red, blue or
@@ -96,7 +96,7 @@ public:
     /**
         Returns number of entries in palette.
     */
-    int GetColoursCount() const;
+    virtual int GetColoursCount() const;
 
     /**
         Returns a pixel value (index into the palette) for the given RGB values.

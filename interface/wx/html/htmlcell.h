@@ -170,7 +170,7 @@ public:
         @param param
             Optional parameters
     */
-    virtual const wxHtmlCell* Find(int condition, const void* param);
+    virtual const wxHtmlCell* Find(int condition, const void* param) const;
 
     /**
         Returns descent value of the cell (m_Descent member).
@@ -186,7 +186,7 @@ public:
         finding particular cell in the list, try Find() method
         instead.
     */
-    wxHtmlCell* GetFirstChild();
+    virtual wxHtmlCell* GetFirstChild() const;
 
     /**
         Returns height of the cell (m_Height member).
@@ -216,7 +216,7 @@ public:
         @param window
             interface to the parent HTML window
     */
-    virtual wxCursor GetMouseCursor(wxHtmlWindowInterface* window);
+    virtual wxCursor GetMouseCursor(wxHtmlWindowInterface* window) const;
 
     /**
         Returns pointer to the next cell in list (see htmlcell.h if you're
@@ -306,7 +306,7 @@ public:
     /**
         Sets the cell's position within parent container.
     */
-    void SetPos(int x, int y);
+    virtual void SetPos(int x, int y);
 };
 
 
@@ -703,25 +703,25 @@ public:
         only within wxHtmlWindow::OnLinkClicked,
         @NULL otherwise.
     */
-    const wxMouseEvent* GetEvent();
+    const wxMouseEvent* GetEvent() const;
 
     /**
         Return @e HREF value of the @c A tag.
     */
-    wxString GetHref();
+    wxString GetHref() const;
 
     /**
         Return pointer to the cell that was clicked. Valid
         only within wxHtmlWindow::OnLinkClicked,
         @NULL otherwise.
     */
-    const wxHtmlCell* GetHtmlCell();
+    const wxHtmlCell* GetHtmlCell() const;
 
     /**
         Return @e TARGET value of the @c A tag (this value
         is used to specify in which frame should be the page pointed
         by @ref gethref() Href opened).
     */
-    wxString GetTarget();
+    wxString GetTarget() const;
 };
 

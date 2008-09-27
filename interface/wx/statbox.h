@@ -68,7 +68,7 @@ public:
     /**
         Destructor, destroying the group box.
     */
-    ~wxStaticBox();
+    virtual ~wxStaticBox();
 
     /**
         Creates the static box for two-step construction. See wxStaticBox()

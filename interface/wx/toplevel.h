@@ -139,7 +139,7 @@ public:
         Returns @true if this window is currently active, i.e. if the user is
         currently working with it.
     */
-    bool IsActive() const;
+    virtual bool IsActive();
 
     /**
         Returns @true if this window is expected to be always maximized, either
@@ -203,7 +203,7 @@ public:
         supporting it.
 
     */
-    void RequestUserAttention(int flags = wxUSER_ATTENTION_INFO);
+    virtual void RequestUserAttention(int flags = wxUSER_ATTENTION_INFO);
 
     /**
         Changes the default item for the panel, usually @a win is a button.
@@ -237,7 +237,7 @@ public:
 
         @see wxIconBundle.
     */
-    void SetIcons(const wxIconBundle& icons);
+    virtual void SetIcons(const wxIconBundle& icons);
 
     /**
         Sets action or menu activated by pressing left hardware button on the
@@ -260,12 +260,12 @@ public:
     /**
         A simpler interface for setting the size hints than SetSizeHints().
     */
-    void SetMaxSize(const wxSize& size);
+    virtual void SetMaxSize(const wxSize& size);
 
     /**
         A simpler interface for setting the size hints than SetSizeHints().
     */
-    void SetMinSize(const wxSize& size);
+    virtual void SetMinSize(const wxSize& size);
 
     /**
         Sets action or menu activated by pressing right hardware button on the
@@ -292,7 +292,7 @@ public:
         window to the normal rectangular shape simply call SetShape() again with
         an empty wxRegion. Returns @true if the operation is successful.
     */
-    bool SetShape(const wxRegion& region);
+    virtual bool SetShape(const wxRegion& region);
 
     /**
         Allows specification of minimum and maximum window sizes, and window

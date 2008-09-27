@@ -110,14 +110,15 @@ public:
 
         Please see the remarks in SetYesNoLabels() documentation.
     */
-    bool SetOKCancelLabels(const ButtonLabel& ok, const ButtonLabel& cancel);
+    virtual bool SetOKCancelLabels(const ButtonLabel& ok,
+                                   const ButtonLabel& cancel);
 
     /**
         Overrides the default label of the OK button.
 
         Please see the remarks in SetYesNoLabels() documentation.
     */
-    bool SetOKLabel(const ButtonLabel& ok);
+    virtual bool SetOKLabel(const ButtonLabel& ok);
 
     /**
         Overrides the default labels of the Yes, No and Cancel buttons.
@@ -157,7 +158,7 @@ public:
             dlg.SetMessage(_("Do you really want to quit?"));
         @endcode
     */
-    bool SetYesNoLabels(const ButtonLabel& yes, const ButtonLabel& no);
+    virtual bool SetYesNoLabels(const ButtonLabel& yes, const ButtonLabel& no);
 
     /**
         Shows the dialog, returning one of wxID_OK, wxID_CANCEL, wxID_YES,
@@ -166,7 +167,7 @@ public:
         Notice that this method returns the identifier of the button which was
         clicked unlike wxMessageBox() function.
     */
-    int ShowModal();
+    virtual int ShowModal();
 };
 
 

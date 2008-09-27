@@ -285,7 +285,7 @@ public:
     /**
         Virtual destructor as for any base class.
     */
-    ~wxRendererNative();
+    virtual ~wxRendererNative();
 
     /**
         Draw a check box.

@@ -75,17 +75,17 @@ public:
     /**
         Destructor.
     */
-    ~wxGenericDirCtrl();
+    virtual ~wxGenericDirCtrl();
 
     /**
         Collapse the given @a path.
     */
-    bool CollapsePath(const wxString& path);
+    virtual bool CollapsePath(const wxString& path);
 
     /**
         Collapses the entire tree.
     */
-    void CollapseTree();
+    virtual void CollapseTree();
 
     /**
         Create function for two-step construction. See wxGenericDirCtrl() for
@@ -104,86 +104,86 @@ public:
         Tries to expand as much of the given @a path as possible, so that the
         filename or directory is visible in the tree control.
     */
-    bool ExpandPath(const wxString& path);
+    virtual bool ExpandPath(const wxString& path);
 
     /**
         Gets the default path.
     */
-    wxString GetDefaultPath() const;
+    virtual wxString GetDefaultPath() const;
 
     /**
         Gets selected filename path only (else empty string).
 
         This function doesn't count a directory as a selection.
     */
-    wxString GetFilePath() const;
+    virtual wxString GetFilePath() const;
 
     /**
         Returns the filter string.
     */
-    wxString GetFilter() const;
+    virtual wxString GetFilter() const;
 
     /**
         Returns the current filter index (zero-based).
     */
-    int GetFilterIndex() const;
+    virtual int GetFilterIndex() const;
 
     /**
         Returns a pointer to the filter list control (if present).
     */
-    wxDirFilterListCtrl* GetFilterListCtrl() const;
+    virtual wxDirFilterListCtrl* GetFilterListCtrl() const;
 
     /**
         Gets the currently-selected directory or filename.
     */
-    wxString GetPath() const;
+    virtual wxString GetPath() const;
 
     /**
         Returns the root id for the tree control.
     */
-    wxTreeItemId GetRootId();
+    virtual wxTreeItemId GetRootId();
 
     /**
         Returns a pointer to the tree control.
     */
-    wxTreeCtrl* GetTreeCtrl() const;
+    virtual wxTreeCtrl* GetTreeCtrl() const;
 
     /**
         Initializes variables.
     */
-    void Init();
+    virtual void Init();
 
     /**
         Collapse and expand the tree, thus re-creating it from scratch. May be
         used to update the displayed directory content.
     */
-    void ReCreateTree();
+    virtual void ReCreateTree();
 
     /**
         Sets the default path.
     */
-    void SetDefaultPath(const wxString& path);
+    virtual void SetDefaultPath(const wxString& path);
 
     /**
         Sets the filter string.
     */
-    void SetFilter(const wxString& filter);
+    virtual void SetFilter(const wxString& filter);
 
     /**
         Sets the current filter index (zero-based).
     */
-    void SetFilterIndex(int n);
+    virtual void SetFilterIndex(int n);
 
     /**
         Sets the current path.
     */
-    void SetPath(const wxString& path);
+    virtual void SetPath(const wxString& path);
 
     /**
         @param show
             If @true, hidden folders and files will be displayed by the
             control. If @false, they will not be displayed.
     */
-    void ShowHidden(bool show);
+    virtual void ShowHidden(bool show);
 };
 

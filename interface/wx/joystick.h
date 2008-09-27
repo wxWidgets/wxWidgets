@@ -29,7 +29,7 @@ public:
     /**
         Destroys the wxJoystick object.
     */
-    ~wxJoystick();
+    virtual ~wxJoystick();
 
     //@{
     /**

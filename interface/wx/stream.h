@@ -32,7 +32,7 @@ public:
     /**
         Destructor.
     */
-    ~wxCountingOutputStream();
+    virtual ~wxCountingOutputStream();
 
     /**
         Returns the current size of the stream.
@@ -199,7 +199,7 @@ public:
 
         @see Read()
     */
-    char GetChar();
+    virtual char GetChar();
 
     /**
         Returns the amount of available data in the buffer.
@@ -224,7 +224,7 @@ public:
 
         @see Read()
     */
-    void PutChar(char c);
+    virtual void PutChar(char c);
 
     /**
         Reads a block of the specified size and stores the data in buffer.
@@ -236,7 +236,7 @@ public:
                 different of the specified size, an error has occurred and
                 should be tested using GetLastError().
     */
-    size_t Read(void* buffer, size_t size);
+    virtual size_t Read(void* buffer, size_t size);
 
     /**
         Copies data to @a buffer.
@@ -334,7 +334,7 @@ public:
         Writes a block of the specified size using data of buffer.
         The data are cached in a buffer before being sent in one block to the stream.
     */
-    size_t Write(const void* buffer, size_t size);
+    virtual size_t Write(const void* buffer, size_t size);
 
     /**
         See Read().
@@ -363,7 +363,7 @@ public:
     /**
         Destructor.
     */
-    ~wxOutputStream();
+    virtual ~wxOutputStream();
 
     /**
         Closes the stream, returning @false if an error occurs.
@@ -374,14 +374,14 @@ public:
         as a file, then the underlying resource is closed too if it is owned
         by this stream, or left open otherwise.
     */
-    bool Close();
+    virtual bool Close();
 
     /**
         Returns the number of bytes written during the last Write().
         It may return 0 even if there is no error on the stream if it is
         only temporarily impossible to write to it.
     */
-    size_t LastWrite() const;
+    virtual size_t LastWrite() const;
 
     /**
         Puts the specified character in the output queue and increments the
@@ -708,19 +708,19 @@ public:
     /**
         Destructor.
     */
-    ~wxInputStream();
+    virtual ~wxInputStream();
 
     /**
         Returns @true if some data is available in the stream right now, so that
         calling Read() wouldn't block.
     */
-    bool CanRead() const;
+    virtual bool CanRead() const;
 
     /**
         Returns @true after an attempt has been made to read past the end of the
         stream.
     */
-    bool Eof() const;
+    virtual bool Eof() const;
 
     /**
         Returns the first character in the input queue and removes it,
@@ -731,12 +731,12 @@ public:
     /**
         Returns the last number of bytes read.
     */
-    size_t LastRead() const;
+    virtual size_t LastRead() const;
 
     /**
         Returns the first character in the input queue without removing it.
     */
-    char Peek();
+    virtual char Peek();
 
     /**
         Reads the specified amount of bytes and stores the data in buffer.
@@ -835,7 +835,7 @@ public:
     /**
         Destructor.
     */
-    ~wxStreamBase();
+    virtual ~wxStreamBase();
 
     /**
         This function returns the last error.
@@ -849,7 +849,7 @@ public:
 
         @since 2.5.4
     */
-    wxFileOffset GetLength() const;
+    virtual wxFileOffset GetLength() const;
 
     /**
         This function returns the size of the stream.
@@ -860,7 +860,7 @@ public:
         streams. In that cases, GetSize returns 0 so you should always test its
         return value.
     */
-    size_t GetSize() const;
+    virtual size_t GetSize() const;
 
     /**
         Returns @true if no error occurred on the stream.
@@ -872,7 +872,7 @@ public:
     /**
         Returns @true if the streams supports seeking to arbitrary offsets.
     */
-    bool IsSeekable() const;
+    virtual bool IsSeekable() const;
 
     /**
         Internal function. It is called when the stream wants to read data of the

@@ -189,7 +189,7 @@ public:
     /**
         Destructor.
     */
-    ~wxFindReplaceDialog();
+    virtual ~wxFindReplaceDialog();
 
     /**
         Creates the dialog; use wxWindow::Show to show it on screen.

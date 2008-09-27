@@ -120,7 +120,7 @@ public:
 
         @see SetTargetWindow()
     */
-    wxWindow* GetTargetWindow() const;
+    virtual wxWindow* GetTargetWindow() const;
 
     /**
         Returns the index of the first visible unit based on the scroll
@@ -177,7 +177,7 @@ public:
 
         @see GetTargetWindow()
     */
-    void SetTargetWindow(wxWindow* target);
+    virtual void SetTargetWindow(wxWindow* target);
 
     /**
         Update the thumb size shown by the scrollbar.

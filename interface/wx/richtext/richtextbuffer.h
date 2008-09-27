@@ -30,7 +30,7 @@ public:
     /**
         Destructor.
     */
-    ~wxRichTextBuffer();
+    virtual ~wxRichTextBuffer();
 
     /**
         Adds an event handler to the buffer's list of handlers. A buffer associated with
@@ -47,7 +47,7 @@ public:
     /**
         Adds a file handler.
     */
-    void AddHandler(wxRichTextFileHandler* handler);
+    static void AddHandler(wxRichTextFileHandler* handler);
 
     /**
         Adds a paragraph of text.
@@ -58,7 +58,7 @@ public:
         Returns @true if the buffer is currently collapsing commands into a single
         notional command.
     */
-    bool BatchingUndo() const;
+    virtual bool BatchingUndo() const;
 
     /**
         Begins using alignment.
@@ -72,7 +72,7 @@ public:
         @a cmdName should be the name of the combined command that will appear
         next to Undo and Redo in the edit menu.
     */
-    bool BeginBatchUndo(const wxString& cmdName);
+    virtual bool BeginBatchUndo(const wxString& cmdName);
 
     /**
         Begin applying bold.
@@ -179,7 +179,7 @@ public:
     /**
         Begins using a specified style.
     */
-    bool BeginStyle(const wxTextAttr& style);
+    virtual bool BeginStyle(const wxTextAttr& style);
 
     /**
         Begins suppressing undo/redo commands. The way undo is suppressed may be
@@ -189,7 +189,7 @@ public:
         history
         when the action is submitted to the command processor.
     */
-    bool BeginSuppressUndo();
+    virtual bool BeginSuppressUndo();
 
     /**
         Begins applying a symbol bullet, using a character from the current font. See
@@ -222,12 +222,12 @@ public:
     /**
         Returns @true if content can be pasted from the clipboard.
     */
-    bool CanPasteFromClipboard() const;
+    virtual bool CanPasteFromClipboard() const;
 
     /**
         Cleans up the file handlers.
     */
-    void CleanUpHandlers();
+    static void CleanUpHandlers();
 
     /**
         Clears the buffer.
@@ -251,12 +251,12 @@ public:
     /**
         Clears the style stack.
     */
-    void ClearStyleStack();
+    virtual void ClearStyleStack();
 
     /**
         Clones the object.
     */
-    wxRichTextObject* Clone() const;
+    virtual wxRichTextObject* Clone() const;
 
     /**
         Copies the given buffer.
@@ -266,7 +266,7 @@ public:
     /**
         Copy the given range to the clipboard.
     */
-    bool CopyToClipboard(const wxRichTextRange& range);
+    virtual bool CopyToClipboard(const wxRichTextRange& range);
 
     /**
         Submits a command to delete the given range.
@@ -290,12 +290,12 @@ public:
     /**
         Ends all styles that have been started with a Begin... command.
     */
-    bool EndAllStyles();
+    virtual bool EndAllStyles();
 
     /**
         Ends collapsing undo/redo commands, and submits the combined command.
     */
-    bool EndBatchUndo();
+    virtual bool EndBatchUndo();
 
     /**
         Ends using bold.
@@ -365,12 +365,12 @@ public:
     /**
         Ends the current style.
     */
-    bool EndStyle();
+    virtual bool EndStyle();
 
     /**
         Ends suppressing undo/redo commands.
     */
-    bool EndSuppressUndo();
+    virtual bool EndSuppressUndo();
 
     /**
         Ends using a symbol bullet.
@@ -419,7 +419,7 @@ public:
     /**
         Gets the collapsed command.
     */
-    wxRichTextCommand* GetBatchedCommand() const;
+    virtual wxRichTextCommand* GetBatchedCommand() const;
 
     /**
         Gets the command processor. A text buffer always creates its own command
@@ -499,12 +499,12 @@ public:
     /**
         Returns the current style sheet associated with the buffer, if any.
     */
-    wxRichTextStyleSheet* GetStyleSheet() const;
+    virtual wxRichTextStyleSheet* GetStyleSheet() const;
 
     /**
         Get the size of the style stack, for example to check correct nesting.
     */
-    size_t GetStyleStackSize() const;
+    virtual size_t GetStyleStackSize() const;
 
     /**
         Gets the attributes at the given position.
@@ -538,12 +538,12 @@ public:
         loading/saving handler
         is initialised by default.
     */
-    void InitStandardHandlers();
+    static void InitStandardHandlers();
 
     /**
         Inserts a handler at the front of the list.
     */
-    void InsertHandler(wxRichTextFileHandler* handler);
+    static void InsertHandler(wxRichTextFileHandler* handler);
 
     /**
         Submits a command to insert the given image.
@@ -612,7 +612,7 @@ public:
     /**
         Pastes the clipboard content to the buffer at the given position.
     */
-    bool PasteFromClipboard(long position);
+    virtual bool PasteFromClipboard(long position);
 
     //@{
     /**
@@ -649,12 +649,12 @@ public:
     /**
         Removes a handler.
     */
-    bool RemoveHandler(const wxString& name);
+    static bool RemoveHandler(const wxString& name);
 
     /**
         Clears the buffer, adds a new blank paragraph, and clears the command history.
     */
-    void ResetAndClearCommands();
+    virtual void ResetAndClearCommands();
 
     //@{
     /**
@@ -760,12 +760,12 @@ public:
     /**
         Submit an action immediately, or delay it according to whether collapsing is on.
     */
-    bool SubmitAction(wxRichTextAction* action);
+    virtual bool SubmitAction(wxRichTextAction* action);
 
     /**
         Returns @true if undo suppression is currently on.
     */
-    bool SuppressingUndo() const;
+    virtual bool SuppressingUndo() const;
 };
 
 
@@ -794,17 +794,17 @@ public:
         filename. By default,
         this function checks the extension.
     */
-    bool CanHandle(const wxString& filename) const;
+    virtual bool CanHandle(const wxString& filename) const;
 
     /**
         Override and return @true if this handler can load content.
     */
-    bool CanLoad() const;
+    virtual bool CanLoad() const;
 
     /**
         Override and return @true if this handler can save content.
     */
-    bool CanSave() const;
+    virtual bool CanSave() const;
 
     /**
         Override to load content from @a stream into @e buffer.
@@ -846,7 +846,7 @@ public:
     /**
         Returns @true if this handler should be visible to the user.
     */
-    bool IsVisible() const;
+    virtual bool IsVisible() const;
 
     //@{
     /**
@@ -905,7 +905,7 @@ public:
         load and save
         dialogs).
     */
-    void SetVisible(bool visible);
+    virtual void SetVisible(bool visible);
 };
 
 

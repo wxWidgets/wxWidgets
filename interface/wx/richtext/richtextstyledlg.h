@@ -161,7 +161,7 @@ public:
     /**
         Determines whether tooltips will be shown.
     */
-    void SetShowToolTips(bool show);
+    static void SetShowToolTips(bool show);
 
     /**
         Sets the associated style sheet.

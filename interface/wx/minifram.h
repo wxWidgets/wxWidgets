@@ -95,7 +95,7 @@ public:
     /**
         Destructor. Destroys all child windows and menu bar if present.
     */
-    ~wxMiniFrame();
+    virtual ~wxMiniFrame();
 
     /**
         Used in two-step frame construction. See wxMiniFrame()

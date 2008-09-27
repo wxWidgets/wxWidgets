@@ -34,7 +34,7 @@ public:
         number. @false is returned if the call failed (for example, the port
         number is already in use).
     */
-    bool Create(const wxString& service);
+    virtual bool Create(const wxString& service);
 
     /**
         When a client calls @b MakeConnection, the server receives the
@@ -89,9 +89,9 @@ public:
         the OnMakeConnection() member to return your own
         derived connection object.
     */
-    wxConnectionBase* MakeConnection(const wxString& host,
-                                     const wxString& service,
-                                     const wxString& topic);
+    virtual wxConnectionBase* MakeConnection(const wxString& host,
+                                             const wxString& service,
+                                             const wxString& topic);
 
     /**
         The type of wxTCPConnection returned from a MakeConnection() call can
@@ -103,12 +103,12 @@ public:
         as wxTCPConnection::OnAdvise. You may also want to
         store application-specific data in instances of the new class.
     */
-    wxConnectionBase* OnMakeConnection();
+    virtual wxConnectionBase* OnMakeConnection();
 
     /**
         Returns @true if this is a valid host name, @false otherwise.
     */
-    bool ValidHost(const wxString& host);
+    virtual bool ValidHost(const wxString& host);
 };
 
 
@@ -182,7 +182,7 @@ public:
         side of the connection having called @b Disconnect. Returns @true if
         successful.
     */
-    bool Disconnect();
+    virtual bool Disconnect();
 
     //@{
     /**
@@ -291,13 +291,13 @@ public:
         member to be called. Returns @true if the server okays it, @false
         otherwise.
     */
-    bool StartAdvise(const wxString& item);
+    virtual bool StartAdvise(const wxString& item);
 
     /**
         Called by the client application to ask if an advise loop can be
         stopped. Causes the server connection's OnStopAdvise() member
         to be called. Returns @true if the server okays it, @false otherwise.
     */
-    bool StopAdvise(const wxString& item);
+    virtual bool StopAdvise(const wxString& item);
 };
 

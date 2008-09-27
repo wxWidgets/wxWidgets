@@ -40,7 +40,7 @@ public:
     /**
         Destructor cleans up whatever resources we use.
     */
-    ~wxHtmlListBox();
+    virtual ~wxHtmlListBox();
 
     /**
         Creates the control and optionally sets the initial number of items in it
@@ -211,7 +211,7 @@ public:
     /**
         Frees the array of stored items and relative client data.
     */
-    ~wxSimpleHtmlListBox();
+    virtual ~wxSimpleHtmlListBox();
 
     //@{
     /**

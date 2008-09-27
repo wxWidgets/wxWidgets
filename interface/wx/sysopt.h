@@ -38,7 +38,7 @@ public:
         @see SetOption(), GetOptionInt(),
              HasOption()
     */
-    wxString GetOption(const wxString& name) const;
+    static wxString GetOption(const wxString& name);
 
     /**
         Gets an option as an integer. The function is case-insensitive to @e name.
@@ -47,7 +47,7 @@ public:
         @see SetOption(), GetOption(),
              HasOption()
     */
-    int GetOptionInt(const wxString& name) const;
+    static int GetOptionInt(const wxString& name);
 
     /**
         Returns @true if the given option is present. The function is
@@ -56,7 +56,7 @@ public:
         @see SetOption(), GetOption(),
              GetOptionInt()
     */
-    bool HasOption(const wxString& name) const;
+    static bool HasOption(const wxString& name);
 
     /**
         Returns @true if the option with the given @a name had been set to 0
@@ -64,7 +64,7 @@ public:
         @c GetOptionInt(name) == 0 as this would also be @true if the option
         hadn't been set at all.
     */
-    bool IsFalse(const wxString& name) const;
+    static bool IsFalse(const wxString& name);
 
     //@{
     /**

@@ -269,7 +269,7 @@ public:
         @see @ref overview_windowdeletion "Window Deletion Overview",
              Destroy(), wxCloseEvent
     */
-    ~wxWindow();
+    virtual ~wxWindow();
 
     /**
         This method may be overridden in the derived classes to return @false to
@@ -331,7 +331,7 @@ public:
         SetTransparent() may succeed. If this function returns @false, transparent
         windows are definitely not supported by the current system.
     */
-    bool CanSetTransparent();
+    virtual bool CanSetTransparent();
 
     /**
         Directs all mouse input to this window.
@@ -349,7 +349,7 @@ public:
 
         @see ReleaseMouse(), wxMouseCaptureLostEvent
     */
-    virtual void CaptureMouse();
+    void CaptureMouse();
 
     /**
         A synonym for Centre().
@@ -397,7 +397,7 @@ public:
         Clears the window by filling it with the current background colour. Does not
         cause an erase background event to be generated.
     */
-    void ClearBackground();
+    virtual void ClearBackground();
 
     /**
         Converts to screen coordinates from coordinates relative to this window.
@@ -439,7 +439,7 @@ public:
 
         @see WindowToClientSize()
     */
-    virtual wxSize ClientToWindowSize(const wxSize& size);
+    virtual wxSize ClientToWindowSize(const wxSize& size) const;
 
     /**
         Converts window size @a size to corresponding client area size
@@ -455,7 +455,7 @@ public:
 
         @see ClientToWindowSize()
     */
-    virtual wxSize WindowToClientSize(const wxSize& size);
+    virtual wxSize WindowToClientSize(const wxSize& size) const;
 
     /**
         This function simply generates a wxCloseEvent whose handler usually tries
@@ -753,12 +753,12 @@ public:
 
         @see wxWindowUpdateLocker, Thaw(), IsFrozen()
     */
-    virtual void Freeze();
+    void Freeze();
 
     /**
         Gets the accelerator table for this window. See wxAcceleratorTable.
     */
-    wxAcceleratorTable* GetAcceleratorTable() const;
+    wxAcceleratorTable* GetAcceleratorTable();
 
     /**
         Returns the accessible object for this window, if any.
@@ -915,7 +915,7 @@ public:
 
         @see SetDropTarget(), @ref overview_dnd
     */
-    wxDropTarget* GetDropTarget() const;
+    virtual wxDropTarget* GetDropTarget() const;
 
     /**
         Merges the window's best size into the min size and returns the result.
@@ -957,7 +957,7 @@ public:
         @see SetForegroundColour(), SetBackgroundColour(),
              GetBackgroundColour()
     */
-    wxColour GetForegroundColour();
+    wxColour GetForegroundColour() const;
 
     /**
         Returns the grandparent of a window, or @NULL if there isn't one.
@@ -978,7 +978,7 @@ public:
 
         @see SetHelpText(), GetHelpTextAtPoint(), wxHelpProvider
     */
-    virtual wxString GetHelpText() const;
+    wxString GetHelpText() const;
 
     /**
         Gets the help text to be used as context-sensitive help for this window.
@@ -1026,7 +1026,7 @@ public:
 
         @see GetMaxSize()
     */
-    wxSize GetMaxClientSize() const;
+    virtual wxSize GetMaxClientSize() const;
 
     /**
         Returns the maximum size of the window.
@@ -1036,7 +1036,7 @@ public:
 
         @see GetMaxClientSize()
     */
-    wxSize GetMaxSize() const;
+    virtual wxSize GetMaxSize() const;
 
     /**
         Returns the minimum size of window's client area, an indication to the sizer
@@ -1084,7 +1084,7 @@ public:
     /**
         Returns the parent of the window, or @NULL if there is no parent.
     */
-    virtual wxWindow* GetParent() const;
+    wxWindow* GetParent() const;
 
     /**
         This function shows a popup menu at the given position in this window and
@@ -1180,21 +1180,21 @@ public:
 
         @see See SetScrollbar()
     */
-    virtual int GetScrollPos(int orientation);
+    virtual int GetScrollPos(int orientation) const;
 
     /**
         Returns the built-in scrollbar range.
 
         @see SetScrollbar()
     */
-    virtual int GetScrollRange(int orientation);
+    virtual int GetScrollRange(int orientation) const;
 
     /**
         Returns the built-in scrollbar thumb size.
 
         @see SetScrollbar()
     */
-    virtual int GetScrollThumb(int orientation);
+    virtual int GetScrollThumb(int orientation) const;
 
     /**
         Returns the size of the entire window in pixels, including title bar, border,
@@ -1273,7 +1273,7 @@ public:
         Returns a pointer to the current validator for the window, or @NULL if
         there is none.
     */
-    wxValidator* GetValidator() const;
+    virtual wxValidator* GetValidator();
 
     //@{
     /**
@@ -1294,13 +1294,13 @@ public:
         Returns the size of the left/right and top/bottom borders of this window in x
         and y components of the result respectively.
     */
-    wxSize GetWindowBorderSize() const;
+    virtual wxSize GetWindowBorderSize() const;
 
     /**
         Gets the window style that was passed to the constructor or @b Create
         method. @b GetWindowStyle() is another name for the same function.
     */
-    long GetWindowStyleFlag() const;
+    virtual long GetWindowStyleFlag() const;
 
     /**
         Returns the value previously passed to SetWindowVariant().
@@ -1325,7 +1325,7 @@ public:
         GetEventHandler()->SafelyProcessEvent(event);
         @endcode
     */
-    bool HandleWindowEvent(wxEvent& event);
+    bool HandleWindowEvent(wxEvent& event) const;
 
     /**
         Returns @true if this window has the current mouse capture.
@@ -1371,7 +1371,7 @@ public:
         @param orient
             Orientation to check, either wxHORIZONTAL or wxVERTICAL.
     */
-    virtual bool HasScrollbar(int orient) const;
+    bool HasScrollbar(int orient) const;
 
     /**
         Returns @true if this window background is transparent (as, for example,
@@ -1381,7 +1381,7 @@ public:
         shouldn't have to call it. You may, however, have to override it in your
         wxWindow-derived class to ensure that background is painted correctly.
     */
-    virtual bool HasTransparentBackground() const;
+    virtual bool HasTransparentBackground();
 
     /**
         Equivalent to calling wxWindow::Show(@false).
@@ -1423,13 +1423,13 @@ public:
         just changing the font or colour of their common parent, hence in this case we
         do inherit the parents attributes.
     */
-    void InheritAttributes();
+    virtual void InheritAttributes();
 
     /**
         Sends an @c wxEVT_INIT_DIALOG event, whose handler usually transfers data
         to the dialog via validators.
     */
-    void InitDialog();
+    virtual void InitDialog();
 
     /**
         Resets the cached best size value so it will be recalculated the next time it
@@ -1456,7 +1456,7 @@ public:
 
         @see Enable()
     */
-    virtual bool IsEnabled() const;
+    bool IsEnabled() const;
 
     //@{
     /**
@@ -1475,7 +1475,7 @@ public:
 
         @see Freeze(), Thaw()
     */
-    virtual bool IsFrozen() const;
+    bool IsFrozen() const;
 
     /**
         Returns @true if the window is retained, @false otherwise.
@@ -1492,7 +1492,7 @@ public:
 
         @see AlwaysShowScrollbars()
     */
-    bool IsScrollbarAlwaysShown(int orient);
+    virtual bool IsScrollbarAlwaysShown(int orient) const;
 
     /**
         Returns @true if the window is shown, @false if it has been hidden.
@@ -1522,7 +1522,7 @@ public:
         dialogs are considered to be top-level windows (even if they have a parent
         window).
     */
-    bool IsTopLevel() const;
+    virtual bool IsTopLevel() const;
 
     /**
         Invokes the constraint-based layout algorithm or the sizer-based algorithm
@@ -1540,7 +1540,7 @@ public:
 
         @see Raise()
     */
-    void Lower();
+    virtual void Lower();
 
     /**
         Disables all other windows in the application so that
@@ -1697,7 +1697,7 @@ public:
         @see SetEventHandler(), GetEventHandler(),
              PushEventHandler(), wxEvtHandler::ProcessEvent, wxEvtHandler
     */
-    wxEvtHandler* PopEventHandler(bool deleteHandler = false) const;
+    wxEvtHandler* PopEventHandler(bool deleteHandler = false);
 
     //@{
     /**
@@ -1775,7 +1775,7 @@ public:
 
         @see Lower()
     */
-    void Raise();
+    virtual void Raise();
 
     /**
         Causes this window, and all of its children recursively (except under wxGTK1
@@ -1842,7 +1842,7 @@ public:
         @see CaptureMouse(), HasCapture(), ReleaseMouse(),
              wxMouseCaptureLostEvent, wxMouseCaptureChangedEvent
     */
-    virtual void ReleaseMouse();
+    void ReleaseMouse();
 
     /**
         Removes a child window.
@@ -1962,7 +1962,7 @@ public:
         @param flags
             May include @c wxSEND_EVENT_POST. Default value is 0.
     */
-    void SendSizeEvent(int flags = 0);
+    virtual void SendSizeEvent(int flags = 0);
 
     /**
         Safe wrapper for GetParent()->SendSizeEvent().
@@ -2060,7 +2060,7 @@ public:
     /**
         Sets the caret() associated with the window.
     */
-    void SetCaret(wxCaret* caret) const;
+    void SetCaret(wxCaret* caret);
 
     //@{
     /**
@@ -2127,7 +2127,7 @@ public:
 
         @see GetDropTarget(), @ref overview_dnd
     */
-    void SetDropTarget(wxDropTarget* target);
+    virtual void SetDropTarget(wxDropTarget* target);
 
     /**
         Sets the event handler for this window.
@@ -2155,7 +2155,7 @@ public:
         The currently defined extra style bits are reported in the class
         description.
     */
-    void SetExtraStyle(long exStyle);
+    virtual void SetExtraStyle(long exStyle);
 
     /**
         This sets the window to receive keyboard input.
@@ -2195,7 +2195,7 @@ public:
 
         @see GetFont(), InheritAttributes()
     */
-    bool SetFont(const wxFont& font);
+    virtual bool SetFont(const wxFont& font);
 
     /**
         Sets the foreground colour of the window.
@@ -2222,7 +2222,7 @@ public:
 
         @see GetHelpText(), wxHelpProvider::AddHelp()
     */
-    virtual void SetHelpText(const wxString& helpText);
+    void SetHelpText(const wxString& helpText);
 
     /**
         Sets the identifier of the window.
@@ -2275,7 +2275,7 @@ public:
 
         @see SetMaxSize()
     */
-    void SetMaxClientSize(const wxSize& size);
+    virtual void SetMaxClientSize(const wxSize& size);
 
     /**
         Sets the maximum size of the window, to indicate to the sizer layout mechanism
@@ -2283,7 +2283,7 @@ public:
 
         @see SetMaxClientSize()
     */
-    void SetMaxSize(const wxSize& size);
+    virtual void SetMaxSize(const wxSize& size);
 
     /**
         Sets the minimum client size of the window, to indicate to the sizer
@@ -2299,7 +2299,7 @@ public:
 
         @see SetMinSize()
     */
-    void SetMinClientSize(const wxSize& size);
+    virtual void SetMinClientSize(const wxSize& size);
 
     /**
         Sets the minimum size of the window, to indicate to the sizer layout
@@ -2315,7 +2315,7 @@ public:
 
         @see SetMinClientSize()
     */
-    void SetMinSize(const wxSize& size);
+    virtual void SetMinSize(const wxSize& size);
 
     /**
         Sets the window's name.
@@ -2543,7 +2543,7 @@ public:
         fully transparent window and 255 to the fully opaque one. The constants
         @c wxIMAGE_ALPHA_TRANSPARENT and @c wxIMAGE_ALPHA_OPAQUE can be used.
     */
-    bool SetTransparent(wxByte alpha);
+    virtual bool SetTransparent(wxByte alpha);
 
     /**
         Deletes the current validator (if any) and sets the window validator, having
@@ -2592,7 +2592,7 @@ public:
         The base class version returns @false, but this method is overridden in
         wxControl where it returns @true.
     */
-    virtual bool ShouldInheritColours();
+    virtual bool ShouldInheritColours() const;
 
     /**
         Shows or hides the window. You may need to call Raise()
@@ -2641,7 +2641,7 @@ public:
 
         @see wxWindowUpdateLocker, Freeze(), IsFrozen()
     */
-    virtual void Thaw();
+    void Thaw();
 
     /**
         Turns the given @a flag on if it's currently turned off and vice versa.
@@ -2788,7 +2788,7 @@ public:
         @param y
             The new y position for the cursor.
     */
-    void WarpPointer(int x, int y);
+    virtual void WarpPointer(int x, int y);
 };
 
 

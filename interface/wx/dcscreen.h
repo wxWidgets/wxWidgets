@@ -31,7 +31,7 @@ public:
         This function destroys the temporary window created to implement on-top
         drawing (X only).
     */
-    bool EndDrawingOnTop();
+    static bool EndDrawingOnTop();
 
     /**
         Use this in conjunction with EndDrawingOnTop() to ensure that drawing
@@ -54,7 +54,7 @@ public:
                  that this function allows the screen to be refreshed
                  afterwards, may be useful to some applications.
     */
-    bool StartDrawingOnTop(wxWindow* window);
+    static bool StartDrawingOnTop(wxWindow* window);
     /**
         Use this in conjunction with EndDrawingOnTop() to ensure that drawing
         to the screen occurs on top of existing windows. Without this, some
@@ -77,6 +77,6 @@ public:
                  that this function allows the screen to be refreshed
                  afterwards, may be useful to some applications.
     */
-    bool StartDrawingOnTop(wxRect* rect = NULL);
+    static bool StartDrawingOnTop(wxRect* rect = NULL);
 };
 

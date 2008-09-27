@@ -51,7 +51,7 @@ public:
     /**
         Destructor.
     */
-    ~wxValidator();
+    virtual ~wxValidator();
 
     /**
         All validator classes must implement the Clone() function, which
@@ -75,7 +75,7 @@ public:
         This functions switches on or turns off the error sound produced by the
         validators if an invalid key is pressed.
     */
-    void SetBellOnError(bool doIt = true);
+    static void SetBellOnError(bool doIt = true);
 
     /**
         Associates a window with the validator.

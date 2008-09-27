@@ -612,7 +612,7 @@ public:
         is, wxColour::IsOk() will return @false) if the colour wasn't found in
         the database.
     */
-    wxColour Find(const wxString& colourName);
+    wxColour Find(const wxString& colourName) const;
 
     /**
         Finds a colour name given the colour. Returns an empty string if the

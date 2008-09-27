@@ -92,7 +92,7 @@ public:
 
         @return Returns @true if it is pressed, @false otherwise.
     */
-    bool GetValue() const;
+    virtual bool GetValue() const;
 
     /**
         Sets the toggle button to the given state. This does not cause a
@@ -101,7 +101,7 @@ public:
         @param state
             If @true, the button is pressed.
     */
-    void SetValue(bool state);
+    virtual void SetValue(bool state);
 };
 
 

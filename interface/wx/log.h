@@ -144,7 +144,7 @@ public:
     /**
         Destroys the previous log target.
     */
-    ~wxLogChain();
+    virtual ~wxLogChain();
 
     /**
         Detaches the old log target so it won't be destroyed when the wxLogChain object
@@ -669,7 +669,7 @@ public:
         Disables time stamping of the log messages.
         This function is new since wxWidgets version 2.9
     */
-    void SetTimestamp(const wxString& format);
+    static void SetTimestamp(const wxString& format);
 
     /**
         Called to process the message of the specified severity. @a msg is the text

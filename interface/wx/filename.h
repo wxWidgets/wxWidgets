@@ -580,7 +580,7 @@ public:
         not be read (because e.g. the file is locked by another process) the returned
         value is ::wxInvalidSize.
     */
-    wxULongLong GetSize();
+    wxULongLong GetSize() const;
 
     /**
         Returns the size of the file If the file does not exist or its size could

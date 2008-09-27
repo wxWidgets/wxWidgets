@@ -137,7 +137,7 @@ public:
         The destructor calls Close() to finish
         writing the tar if it has not been called already.
     */
-    ~wxTarOutputStream();
+    virtual ~wxTarOutputStream();
 
     /**
         Finishes writing the tar, returning @true if successful.

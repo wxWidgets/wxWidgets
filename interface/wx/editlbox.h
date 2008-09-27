@@ -71,7 +71,7 @@ public:
     /**
         Destructor, destroying the list box.
     */
-    ~wxEditableListBox();
+    virtual ~wxEditableListBox();
 
     /**
         Creates the editable listbox for two-step construction.

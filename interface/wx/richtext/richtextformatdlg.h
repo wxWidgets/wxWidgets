@@ -32,7 +32,7 @@ public:
     /**
         Destructor.
     */
-    ~wxRichTextFormattingDialogFactory();
+    virtual ~wxRichTextFormattingDialogFactory();
 
     /**
         Creates the main dialog buttons.
@@ -142,7 +142,7 @@ public:
     /**
         Destructor.
     */
-    ~wxRichTextFormattingDialog();
+    virtual ~wxRichTextFormattingDialog();
 
     /**
         Apply attributes to the given range, only changing attributes that need to be
@@ -173,22 +173,22 @@ public:
     /**
         Helper for pages to get the top-level dialog.
     */
-    wxRichTextFormattingDialog* GetDialog(wxWindow* win);
+    static wxRichTextFormattingDialog* GetDialog(wxWindow* win);
 
     /**
         Helper for pages to get the attributes.
     */
-    wxTextAttr* GetDialogAttributes(wxWindow* win);
+    static wxTextAttr* GetDialogAttributes(wxWindow* win);
 
     /**
         Helper for pages to get the style.
     */
-    wxRichTextStyleDefinition* GetDialogStyleDefinition(wxWindow* win);
+    static wxRichTextStyleDefinition* GetDialogStyleDefinition(wxWindow* win);
 
     /**
         Returns the object to be used to customize the dialog and provide pages.
     */
-    wxRichTextFormattingDialogFactory* GetFormattingDialogFactory();
+    static wxRichTextFormattingDialogFactory* GetFormattingDialogFactory();
 
     /**
         Returns the image list associated with the dialog, used for example if showing
@@ -201,17 +201,17 @@ public:
         that do not have common values in the given range
         will be omitted from the style's flags.
     */
-    bool GetStyle(wxRichTextCtrl* ctrl, const wxRichTextRange& range);
+    virtual bool GetStyle(wxRichTextCtrl* ctrl, const wxRichTextRange& range);
 
     /**
         Gets the associated style definition, if any.
     */
-    wxRichTextStyleDefinition* GetStyleDefinition() const;
+    virtual wxRichTextStyleDefinition* GetStyleDefinition() const;
 
     /**
         Gets the associated style sheet, if any.
     */
-    wxRichTextStyleSheet* GetStyleSheet() const;
+    virtual wxRichTextStyleSheet* GetStyleSheet() const;
 
     /**
         Sets the attributes to be edited.
@@ -223,7 +223,7 @@ public:
         creation.
         It deletes the existing factory object.
     */
-    void SetFormattingDialogFactory(wxRichTextFormattingDialogFactory* factory);
+    static void SetFormattingDialogFactory(wxRichTextFormattingDialogFactory* factory);
 
     /**
         Sets the image list associated with the dialog's property sheet.
@@ -233,19 +233,19 @@ public:
     /**
         Sets the attributes and optionally updates the display, if @a update is @true.
     */
-    bool SetStyle(const wxTextAttr& style, bool update = true);
+    virtual bool SetStyle(const wxTextAttr& style, bool update = true);
 
     /**
         Sets the style definition and optionally update the display, if @a update is @c
         @true.
     */
-    bool SetStyleDefinition(const wxRichTextStyleDefinition& styleDef,
-                            wxRichTextStyleSheet* sheet,
-                            bool update = true);
+    virtual bool SetStyleDefinition(const wxRichTextStyleDefinition& styleDef,
+                                    wxRichTextStyleSheet* sheet,
+                                    bool update = true);
 
     /**
         Updates the display.
     */
-    bool UpdateDisplay();
+    virtual bool UpdateDisplay();
 };
 

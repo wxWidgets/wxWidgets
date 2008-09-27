@@ -128,7 +128,7 @@ public:
     /**
         Sets the value of the spin control. Use the variant using double instead.
     */
-    void SetValue(const wxString& text);
+    virtual void SetValue(const wxString& text);
 
     /**
         Sets the value of the spin control.

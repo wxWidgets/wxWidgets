@@ -125,12 +125,12 @@ public:
 
         @since 2.7.0
     */
-    wxChar GetLastDelimiter();
+    wxChar GetLastDelimiter() const;
 
     /**
         Returns the next token or empty string if the end of string was reached.
     */
-    wxString GetNextToken() const;
+    wxString GetNextToken();
 
     /**
         Returns the current position (i.e. one index after the last returned

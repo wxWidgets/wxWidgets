@@ -58,7 +58,7 @@ public:
     /**
         Destroys the splash screen.
     */
-    ~wxSplashScreen();
+    virtual ~wxSplashScreen();
 
     /**
         Returns the splash style (see wxSplashScreen() for

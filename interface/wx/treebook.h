@@ -77,23 +77,21 @@ public:
         Destroys the wxTreebook object. Also deletes all the pages owned by the
         control (inserted previously into it).
     */
-    ~wxTreebook();
+    virtual ~wxTreebook();
 
     /**
         Adds a new page. The page is placed at the topmost level after all other
         pages. @NULL could be specified for page to create an empty page.
     */
-    bool AddPage(wxWindow* page, const wxString& text,
-                 bool bSelect = false,
-                 int imageId = wxNOT_FOUND);
+    virtual bool AddPage(wxWindow* page, const wxString& text,
+                         bool bSelect = false, int imageId = wxNOT_FOUND);
 
     /**
         Adds a new child-page to the last top-level page. @NULL could be
         specified for page to create an empty page.
     */
-    bool AddSubPage(wxWindow* page, const wxString& text,
-                    bool bSelect = false,
-                    int imageId = wxNOT_FOUND);
+    virtual bool AddSubPage(wxWindow* page, const wxString& text,
+                            bool bSelect = false, int imageId = wxNOT_FOUND);
 
     /**
         Sets the image list for the page control and takes ownership of the
@@ -101,7 +99,7 @@ public:
 
         @see wxImageList, SetImageList()
     */
-    void AssignImageList(wxImageList* imageList);
+    virtual void AssignImageList(wxImageList* imageList);
 
     /**
         Changes the selection for the given page, returning the previous
@@ -111,7 +109,7 @@ public:
         This is the only difference with SetSelection(). See
         @ref overview_eventhandling_prog for more info.
     */
-    int ChangeSelection(size_t page);
+    virtual int ChangeSelection(size_t page);
 
     /**
         Shortcut for @ref wxTreebook::ExpandNode() "ExpandNode"( @a pageId,
@@ -132,26 +130,26 @@ public:
     /**
         Deletes all pages inserted into the treebook. No event is generated.
     */
-    bool DeleteAllPages();
+    virtual bool DeleteAllPages();
 
     /**
         Deletes the page at the specified position and all its children. Could
         trigger page selection change in a case when selected page is removed.
         In that case its parent is selected (or the next page if no parent).
     */
-    bool DeletePage(size_t pagePos);
+    virtual bool DeletePage(size_t pagePos);
 
     /**
         Expands (collapses) the @a pageId node. Returns the previous state. May
         generate page changing events (if selected page is under the collapsed
         branch, then its parent is autoselected).
     */
-    bool ExpandNode(size_t pageId, bool expand = true);
+    virtual bool ExpandNode(size_t pageId, bool expand = true);
 
     /**
         Returns the image index for the given page.
     */
-    int GetPageImage(size_t n) const;
+    virtual int GetPageImage(size_t n) const;
 
     /**
         Returns the parent page of the given one or @c wxNOT_FOUND if this is a
@@ -162,7 +160,7 @@ public:
     /**
         Returns the string for the given page.
     */
-    wxString GetPageText(size_t n) const;
+    virtual wxString GetPageText(size_t n) const;
 
     /**
         Returns the currently selected page, or @c wxNOT_FOUND if none was
@@ -173,32 +171,30 @@ public:
             depending on the platform and so wxBookCtrlEvent::GetSelection()
             should be used instead in this case.
     */
-    int GetSelection() const;
+    virtual int GetSelection() const;
 
     /**
         Inserts a new page just before the page indicated by @a pagePos. The new
         page is placed before @a pagePos page and on the same level. @NULL could
         be specified for page to create an empty page.
     */
-    bool InsertPage(size_t pagePos, wxWindow* page,
-                    const wxString& text,
-                    bool bSelect = false,
-                    int imageId = wxNOT_FOUND);
+    virtual bool InsertPage(size_t pagePos, wxWindow* page,
+                            const wxString& text, bool bSelect = false,
+                            int imageId = wxNOT_FOUND);
 
     /**
         Inserts a sub page under the specified page.
 
         @NULL could be specified for page to create an empty page.
     */
-    bool InsertSubPage(size_t pagePos, wxWindow* page,
-                       const wxString& text,
-                       bool bSelect = false,
-                       int imageId = wxNOT_FOUND);
+    virtual bool InsertSubPage(size_t pagePos, wxWindow* page,
+                               const wxString& text, bool bSelect = false,
+                               int imageId = wxNOT_FOUND);
 
     /**
         Returns @true if the page represented by @a pageId is expanded.
     */
-    bool IsNodeExpanded(size_t pageId) const;
+    virtual bool IsNodeExpanded(size_t pageId) const;
 
     /**
         Sets the image list for the page control. It does not take ownership of
@@ -206,18 +202,18 @@ public:
 
         @see wxImageList, AssignImageList()
     */
-    void SetImageList(wxImageList* imageList);
+    virtual void SetImageList(wxImageList* imageList);
 
     /**
         Sets the image index for the given @a page. @a imageId is an index into
         the image list which was set with SetImageList().
     */
-    bool SetPageImage(size_t page, int imageId);
+    virtual bool SetPageImage(size_t page, int imageId);
 
     /**
         Sets the @a text for the given @a page.
     */
-    bool SetPageText(size_t page, const wxString& text);
+    virtual bool SetPageText(size_t page, const wxString& text);
 
     /**
         @deprecated Please use ChangeSelection() instead.
@@ -228,6 +224,6 @@ public:
 
         @see GetSelection(), ChangeSelection()
     */
-    int SetSelection(size_t n);
+    virtual int SetSelection(size_t n);
 };
 

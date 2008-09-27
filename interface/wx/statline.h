@@ -78,7 +78,7 @@ public:
         dimension of the static line, i.e. its height for a horizontal line or its
         width for a vertical one.
     */
-    int GetDefaultSize();
+    static int GetDefaultSize();
 
     /**
         Returns @true if the line is vertical, @false if horizontal.

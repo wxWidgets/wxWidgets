@@ -201,7 +201,7 @@ public:
                  pointer to the pen object is stored in an application
                  data structure, and there is a risk of double deletion.
     */
-    ~wxPen();
+    virtual ~wxPen();
 
     /**
         Returns the pen cap style, which may be one of @c wxCAP_ROUND, @c

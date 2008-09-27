@@ -39,7 +39,7 @@ public:
     /**
         Destroys the wxImageHandler object.
     */
-    ~wxImageHandler();
+    virtual ~wxImageHandler();
 
     /**
         Gets the file extension associated with this handler.
@@ -58,7 +58,7 @@ public:
         @return Number of available images. For most image handlers, this is 1
                  (exceptions are TIFF and ICO formats).
     */
-    int GetImageCount(wxInputStream& stream);
+    virtual int GetImageCount(wxInputStream& stream);
 
     /**
         Gets the MIME type associated with this handler.
@@ -312,7 +312,7 @@ public:
         See @ref overview_refcountdestruct "reference-counted object destruction" for
         more info.
     */
-    ~wxImage();
+    virtual ~wxImage();
 
     /**
         Register an image handler.
@@ -326,7 +326,7 @@ public:
 
         @see BlurHorizontal(), BlurVertical()
     */
-    wxImage Blur(int blurRadius);
+    wxImage Blur(int blurRadius) const;
 
     /**
         Blurs the image in the horizontal direction only. This should not be used
@@ -334,7 +334,7 @@ public:
 
         @see Blur(), BlurVertical()
     */
-    wxImage BlurHorizontal(int blurRadius);
+    wxImage BlurHorizontal(int blurRadius) const;
 
     /**
         Blurs the image in the vertical direction only. This should not be used
@@ -342,12 +342,12 @@ public:
 
         @see Blur(), BlurHorizontal()
     */
-    wxImage BlurVertical(int blurRadius);
+    wxImage BlurVertical(int blurRadius) const;
 
     /**
         Returns @true if the current image handlers can read this file
     */
-    bool CanRead(const wxString& filename);
+    static bool CanRead(const wxString& filename);
 
     /**
         Deletes all image handlers.
@@ -436,10 +436,9 @@ public:
         @return Returns @false if there is no unused colour left, @true on success.
     */
     bool FindFirstUnusedColour(unsigned char* r, unsigned char* g,
-                               unsigned char* b,
-                               unsigned char startR = 1,
+                               unsigned char* b, unsigned char startR = 1,
                                unsigned char startG = 0,
-                               unsigned char startB = 0);
+                               unsigned char startB = 0) const;
 
     //@{
     /**
@@ -853,7 +852,7 @@ public:
     */
     wxImage Rotate(double angle, const wxPoint& rotationCentre,
                    bool interpolating = true,
-                   wxPoint* offsetAfterRotation = NULL);
+                   wxPoint* offsetAfterRotation = NULL) const;
 
     /**
         Returns a copy of the image rotated 90 degrees in the direction

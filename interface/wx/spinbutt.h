@@ -107,7 +107,7 @@ public:
     /**
         Destructor, destroys the spin button control.
     */
-    ~wxSpinButton();
+    virtual ~wxSpinButton();
 
     /**
         Scrollbar creation function called by the spin button constructor.
@@ -124,21 +124,21 @@ public:
 
         @see SetRange()
     */
-    int GetMax() const;
+    virtual int GetMax() const;
 
     /**
         Returns the minimum permissible value.
 
         @see SetRange()
     */
-    int GetMin() const;
+    virtual int GetMin() const;
 
     /**
         Returns the current spin button value.
 
         @see SetValue()
     */
-    int GetValue() const;
+    virtual int GetValue() const;
 
     /**
         Sets the range of the spin button.
@@ -150,7 +150,7 @@ public:
 
         @see GetMin(), GetMax()
     */
-    void SetRange(int min, int max);
+    virtual void SetRange(int min, int max);
 
     /**
         Sets the value of the spin button.
@@ -158,6 +158,6 @@ public:
         @param value
             The value for the spin button.
     */
-    void SetValue(int value);
+    virtual void SetValue(int value);
 };
 

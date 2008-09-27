@@ -72,7 +72,7 @@ public:
     /**
         Destructor.
     */
-    ~wxDocTemplate();
+    virtual ~wxDocTemplate();
 
     /**
         Creates a new instance of the associated document class. If you have
@@ -83,73 +83,74 @@ public:
         This function calls InitDocument() which in turns calls
         wxDocument::OnCreate().
     */
-    wxDocument* CreateDocument(const wxString& path, long flags = 0);
+    virtual wxDocument* CreateDocument(const wxString& path, long flags = 0);
 
     /**
         Creates a new instance of the associated view class. If you have not
         supplied a wxClassInfo parameter to the template constructor, you will
         need to override this function to return an appropriate view instance.
     */
-    wxView* CreateView(wxDocument* doc, long flags = 0);
+    virtual wxView* CreateView(wxDocument* doc, long flags = 0);
 
     /**
         Returns the default file extension for the document data, as passed to
         the document template constructor.
     */
-    wxString GetDefaultExtension();
+    wxString GetDefaultExtension() const;
 
     /**
         Returns the text description of this template, as passed to the
         document template constructor.
     */
-    wxString GetDescription();
+    wxString GetDescription() const;
 
     /**
         Returns the default directory, as passed to the document template
         constructor.
     */
-    wxString GetDirectory();
+    wxString GetDirectory() const;
 
     /**
         Returns a pointer to the document manager instance for which this
         template was created.
     */
-    wxDocManager* GetDocumentManager();
+    wxDocManager* GetDocumentManager() const;
 
     /**
         Returns the document type name, as passed to the document template
         constructor.
     */
-    wxString GetDocumentName();
+    virtual wxString GetDocumentName() const;
 
     /**
         Returns the file filter, as passed to the document template
         constructor.
     */
-    wxString GetFileFilter();
+    wxString GetFileFilter() const;
 
     /**
         Returns the flags, as passed to the document template constructor.
     */
-    long GetFlags();
+    long GetFlags() const;
 
     /**
         Returns the view type name, as passed to the document template
         constructor.
     */
-    wxString GetViewName();
+    virtual wxString GetViewName() const;
 
     /**
         Initialises the document, calling wxDocument::OnCreate(). This is
         called from CreateDocument().
     */
-    bool InitDocument(wxDocument* doc, const wxString& path, long flags = 0);
+    virtual bool InitDocument(wxDocument* doc, const wxString& path,
+                              long flags = 0);
 
     /**
         Returns @true if the document template can be shown in user dialogs,
         @false otherwise.
     */
-    bool IsVisible();
+    bool IsVisible() const;
 
     /**
         Sets the default file extension.
@@ -274,12 +275,12 @@ public:
     /**
         Destructor.
     */
-    ~wxDocManager();
+    virtual ~wxDocManager();
 
     /**
         Sets the current view.
     */
-    void ActivateView(wxView* doc, bool activate = true);
+    virtual void ActivateView(wxView* doc, bool activate = true);
 
     /**
         Adds the document to the list of documents.
@@ -290,7 +291,7 @@ public:
         Adds a file to the file history list, if we have a pointer to an
         appropriate file menu.
     */
-    void AddFileToHistory(const wxString& filename);
+    virtual void AddFileToHistory(const wxString& filename);
 
     /**
         Adds the template to the document manager's template list.
@@ -338,7 +339,7 @@ public:
             file path and type.
         @return a new document object or @NULL on failure.
     */
-    wxDocument *CreateDocument(const wxString& path, long flags = 0);
+    virtual wxDocument* CreateDocument(const wxString& path, long flags = 0);
 
     /**
         Creates a new view for the given document. If more than one view is
@@ -356,24 +357,24 @@ public:
         Appends the files in the history list to all menus managed by the file
         history object.
     */
-    void FileHistoryAddFilesToMenu();
+    virtual void FileHistoryAddFilesToMenu();
     /**
         Appends the files in the history list to the given @a menu only.
     */
-    void FileHistoryAddFilesToMenu(wxMenu* menu);
+    virtual void FileHistoryAddFilesToMenu(wxMenu* menu);
 
     /**
         Loads the file history from a config object.
 
         @see wxConfigBase
     */
-    void FileHistoryLoad(const wxConfigBase& config);
+    virtual void FileHistoryLoad(const wxConfigBase& config);
 
     /**
         Removes the given menu from the list of menus managed by the file
         history object.
     */
-    void FileHistoryRemoveMenu(wxMenu* menu);
+    virtual void FileHistoryRemoveMenu(wxMenu* menu);
 
     /**
         Saves the file history into a config object. This must be called
@@ -381,7 +382,7 @@ public:
 
         @see wxConfigBase
     */
-    void FileHistorySave(wxConfigBase& resourceFile);
+    virtual void FileHistorySave(wxConfigBase& resourceFile);
 
     /**
         Use this menu for appending recently-visited document filenames, for
@@ -391,25 +392,25 @@ public:
         @note You can add multiple menus using this function, to be managed by
               the file history object.
     */
-    void FileHistoryUseMenu(wxMenu* menu);
+    virtual void FileHistoryUseMenu(wxMenu* menu);
 
     /**
         Given a path, try to find template that matches the extension. This is
         only an approximate method of finding a template for creating a
         document.
     */
-    wxDocTemplate* FindTemplateForPath(const wxString& path);
+    virtual wxDocTemplate* FindTemplateForPath(const wxString& path);
 
     /**
         Returns the document associated with the currently active view (if
         any).
     */
-    wxDocument* GetCurrentDocument();
+    wxDocument* GetCurrentDocument() const;
 
     /**
         Returns the currently active view
     */
-    wxView* GetCurrentView();
+    virtual wxView* GetCurrentView() const;
 
     /**
         Returns a reference to the list of documents.
@@ -419,12 +420,12 @@ public:
     /**
         Returns a pointer to file history.
     */
-    wxFileHistory* GetFileHistory();
+    virtual wxFileHistory* GetFileHistory() const;
 
     /**
         Returns the number of files currently stored in the file history.
     */
-    size_t GetHistoryFilesCount();
+    virtual size_t GetHistoryFilesCount() const;
 
     /**
         Returns the directory last selected by the user when opening a file.
@@ -435,7 +436,7 @@ public:
     /**
         Returns the number of documents that can be open simultaneously.
     */
-    int GetMaxDocsOpen();
+    int GetMaxDocsOpen() const;
 
     /**
         Returns a reference to the list of associated templates.
@@ -458,7 +459,7 @@ public:
         The bottom line: if you're not deriving from Initialize(), forget it
         and construct wxDocManager with no arguments.
     */
-    bool Initialize();
+    virtual bool Initialize();
 
     /**
         Return a string containing a suitable default name for a new document.
@@ -466,13 +467,13 @@ public:
         string @b unnamed but can be overridden in the derived classes to do
         something more appropriate.
     */
-    wxString MakeNewDocumentName();
+    virtual wxString MakeNewDocumentName();
 
     /**
         A hook to allow a derived class to create a different type of file
         history. Called from Initialize().
     */
-    wxFileHistory* OnCreateFileHistory();
+    virtual wxFileHistory* OnCreateFileHistory();
 
     /**
         Closes and deletes the currently active document.
@@ -652,7 +653,7 @@ public:
     /**
         Destructor. Removes itself from the document's list of views.
     */
-    ~wxView();
+    virtual ~wxView();
 
     /**
         Call this from your view frame's wxDocChildFrame::OnActivate() member
@@ -691,7 +692,7 @@ public:
         uses notebook pages instead of frames and this is why this method
         returns a wxWindow and not a wxFrame.
     */
-    wxWindow* GetFrame();
+    wxWindow* GetFrame() const;
 
     /**
         Gets the name associated with the view (passed to the wxDocTemplate
@@ -777,7 +778,7 @@ public:
         Associates the given document with the view. Normally called by the
         framework.
     */
-    void SetDocument(wxDocument* doc);
+    virtual void SetDocument(wxDocument* doc);
 
     /**
         Sets the frame associated with this view. The application should call
@@ -847,7 +848,7 @@ public:
     /**
         Destructor.
     */
-    ~wxDocChildFrame();
+    virtual ~wxDocChildFrame();
 
     /**
         Returns the document associated with this frame.
@@ -929,7 +930,7 @@ public:
     /**
         Destructor.
     */
-    ~wxDocParentFrame();
+    virtual ~wxDocParentFrame();
 
     /**
         Used in two-step construction.
@@ -993,7 +994,7 @@ public:
     /**
         Destructor. Removes itself from the document manager.
     */
-    ~wxDocument();
+    virtual ~wxDocument();
 
     /**
         If the view is not already in the list of views, adds the view and
@@ -1023,12 +1024,12 @@ public:
 
         @see wxCommandProcessor
     */
-    wxCommandProcessor* GetCommandProcessor() const;
+    virtual wxCommandProcessor* GetCommandProcessor() const;
 
     /**
         Gets a pointer to the associated document manager.
     */
-    wxDocManager* GetDocumentManager() const;
+    virtual wxDocManager* GetDocumentManager() const;
 
     /**
         Gets the document type name for this document. See the comment for
@@ -1039,14 +1040,14 @@ public:
     /**
         Gets a pointer to the template that created the document.
     */
-    wxDocTemplate* GetDocumentTemplate() const;
+    virtual wxDocTemplate* GetDocumentTemplate() const;
 
     /**
         Intended to return a suitable window for using as a parent for
         document-related dialog boxes. By default, uses the frame associated
         with the first view.
     */
-    wxWindow* GetDocumentWindow() const;
+    virtual wxWindow* GetDocumentWindow() const;
 
     /**
         Gets the filename associated with this document, or "" if none is
@@ -1235,7 +1236,7 @@ public:
         Sets the pointer to the template that created the document. Should only
         be called by the framework.
     */
-    void SetDocumentTemplate(wxDocTemplate* templ);
+    virtual void SetDocumentTemplate(wxDocTemplate* templ);
 
     /**
         Sets the filename for this document. Usually called by the framework.
@@ -1257,7 +1258,7 @@ public:
         view. @a hint represents optional information to allow a view to
         optimize its update.
     */
-    void UpdateAllViews(wxView* sender = NULL, wxObject* hint = NULL);
+    virtual void UpdateAllViews(wxView* sender = NULL, wxObject* hint = NULL);
 
 protected:
     /**
@@ -1356,23 +1357,23 @@ public:
     /**
         Destructor.
     */
-    ~wxFileHistory();
+    virtual ~wxFileHistory();
 
     /**
         Adds a file to the file history list, if the object has a pointer to an
         appropriate file menu.
     */
-    void AddFileToHistory(const wxString& filename);
+    virtual void AddFileToHistory(const wxString& filename);
 
     /**
         Appends the files in the history list, to all menus managed by the file
         history object.
     */
-    void AddFilesToMenu();
+    virtual void AddFilesToMenu();
     /**
         Appends the files in the history list, to the given menu only.
     */
-    void AddFilesToMenu(wxMenu* menu);
+    virtual void AddFilesToMenu(wxMenu* menu);
 
     /**
         Returns the base identifier for the range used for appending items.
@@ -1382,17 +1383,17 @@ public:
     /**
         Returns the number of files currently stored in the file history.
     */
-    size_t GetCount() const;
+    virtual size_t GetCount() const;
 
     /**
         Returns the file at this index (zero-based).
     */
-    wxString GetHistoryFile(size_t index) const;
+    virtual wxString GetHistoryFile(size_t index) const;
 
     /**
         Returns the maximum number of files that can be stored.
     */
-    int GetMaxFiles() const;
+    virtual int GetMaxFiles() const;
 
     /**
         Returns the list of menus that are managed by this file history object.
@@ -1407,17 +1408,17 @@ public:
 
         @see wxConfigBase
     */
-    void Load(const wxConfigBase& config);
+    virtual void Load(const wxConfigBase& config);
 
     /**
         Removes the specified file from the history.
     */
-    void RemoveFileFromHistory(size_t i);
+    virtual void RemoveFileFromHistory(size_t i);
 
     /**
         Removes this menu from the list of those managed by this object.
     */
-    void RemoveMenu(wxMenu* menu);
+    virtual void RemoveMenu(wxMenu* menu);
 
     /**
         Saves the file history into the given config object. This must be
@@ -1425,7 +1426,7 @@ public:
 
         @see wxConfigBase
     */
-    void Save(wxConfigBase& config);
+    virtual void Save(wxConfigBase& config);
 
     /**
         Sets the base identifier for the range used for appending items.
@@ -1438,7 +1439,7 @@ public:
         with filenames that are already in the history when this function is
         called, as this is not done automatically.
     */
-    void UseMenu(wxMenu* menu);
+    virtual void UseMenu(wxMenu* menu);
 
     /**
         A character array of strings corresponding to the most recently opened

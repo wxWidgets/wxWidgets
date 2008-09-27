@@ -39,7 +39,7 @@ public:
     /**
         Destroys the wxSound object.
     */
-    ~wxSound();
+    virtual ~wxSound();
 
     /**
         Constructs a wave object from a file or resource.

@@ -86,7 +86,7 @@ public:
         set locale is restored and so the changes described in
         Init() documentation are rolled back.
     */
-    ~wxLocale();
+    virtual ~wxLocale();
 
     //@{
     /**
@@ -129,7 +129,7 @@ public:
         (in this order).
         This only applies to subsequent invocations of AddCatalog().
     */
-    void AddCatalogLookupPathPrefix(const wxString& prefix);
+    static void AddCatalogLookupPathPrefix(const wxString& prefix);
 
     /**
         Adds custom, user-defined language to the database of known languages. This

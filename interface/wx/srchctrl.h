@@ -85,7 +85,7 @@ public:
     /**
         Destructor, destroying the search control.
     */
-    ~wxSearchCtrl();
+    virtual ~wxSearchCtrl();
 
     /**
         Returns a pointer to the search control's menu object or @NULL if there is no
@@ -100,7 +100,7 @@ public:
         button visibility value.
         This always returns @false in Mac OS X v10.3
     */
-    virtual bool IsSearchButtonVisible();
+    virtual bool IsSearchButtonVisible() const;
 
     /**
         Sets the search control's menu object.  If there is already a menu associated

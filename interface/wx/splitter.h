@@ -87,7 +87,7 @@ public:
     /**
         Destroys the wxSplitterWindow and its children.
     */
-    ~wxSplitterWindow();
+    virtual ~wxSplitterWindow();
 
     /**
         Creation function, for two-step construction. See wxSplitterWindow() for
@@ -111,14 +111,14 @@ public:
 
         @see SetSashGravity()
     */
-    double GetSashGravity();
+    double GetSashGravity() const;
 
     /**
         Returns the current sash position.
 
         @see SetSashPosition()
     */
-    int GetSashPosition();
+    int GetSashPosition() const;
 
     /**
         Gets the split mode.

@@ -161,27 +161,27 @@ public:
         Convert device X coordinate to logical coordinate, using the current
         mapping mode, user scale factor, device origin and axis orientation.
     */
-    virtual wxCoord DeviceToLogicalX(wxCoord x);
+    wxCoord DeviceToLogicalX(wxCoord x) const;
 
     /**
         Convert device X coordinate to relative logical coordinate, using the
         current mapping mode and user scale factor but ignoring the
         axis orientation. Use this for converting a width, for example.
     */
-    virtual wxCoord DeviceToLogicalXRel(wxCoord x);
+    wxCoord DeviceToLogicalXRel(wxCoord x) const;
 
     /**
         Converts device Y coordinate to logical coordinate, using the current
         mapping mode, user scale factor, device origin and axis orientation.
     */
-    virtual wxCoord DeviceToLogicalY(wxCoord y);
+    wxCoord DeviceToLogicalY(wxCoord y) const;
 
     /**
         Convert device Y coordinate to relative logical coordinate, using the
         current mapping mode and user scale factor but ignoring the
         axis orientation. Use this for converting a height, for example.
     */
-    virtual wxCoord DeviceToLogicalYRel(wxCoord y);
+    wxCoord DeviceToLogicalYRel(wxCoord y) const;
 
     /**
         Draws an arc of a circle, centred on (@a xc, @a yc), with starting
@@ -502,12 +502,12 @@ public:
     /**
         Gets the character height of the currently set font.
     */
-    wxCoord GetCharHeight();
+    wxCoord GetCharHeight() const;
 
     /**
         Gets the average character width of the currently set font.
     */
-    wxCoord GetCharWidth();
+    wxCoord GetCharWidth() const;
 
     /**
         Gets the rectangle surrounding the current clipping region.
@@ -549,14 +549,14 @@ public:
 
         @see SetLogicalFunction()
     */
-    int GetLogicalFunction();
+    int GetLogicalFunction() const;
 
     /**
         Gets the mapping mode for the device context.
 
         @see SetMapMode()
     */
-    int GetMapMode();
+    int GetMapMode() const;
 
     /**
         Gets the dimensions of the string using the currently selected font.
@@ -625,7 +625,7 @@ public:
         The wxColour value is returned and is not required as a parameter.
         @endWxPythonOnly
     */
-    bool GetPixel(wxCoord x, wxCoord y, wxColour* colour);
+    bool GetPixel(wxCoord x, wxCoord y, wxColour* colour) const;
 
     /**
         Returns the resolution of the device in pixels per inch.
@@ -766,47 +766,47 @@ public:
         Converts logical X coordinate to device coordinate, using the current
         mapping mode, user scale factor, device origin and axis orientation.
     */
-    virtual wxCoord LogicalToDeviceX(wxCoord x);
+    wxCoord LogicalToDeviceX(wxCoord x) const;
 
     /**
         Converts logical X coordinate to relative device coordinate, using the
         current mapping mode and user scale factor but ignoring the
         axis orientation. Use this for converting a width, for example.
     */
-    virtual wxCoord LogicalToDeviceXRel(wxCoord x);
+    wxCoord LogicalToDeviceXRel(wxCoord x) const;
 
     /**
         Converts logical Y coordinate to device coordinate, using the current
         mapping mode, user scale factor, device origin and axis orientation.
     */
-    virtual wxCoord LogicalToDeviceY(wxCoord y);
+    wxCoord LogicalToDeviceY(wxCoord y) const;
 
     /**
         Converts logical Y coordinate to relative device coordinate, using the
         current mapping mode and user scale factor but ignoring the
         axis orientation. Use this for converting a height, for example.
     */
-    virtual wxCoord LogicalToDeviceYRel(wxCoord y);
+    wxCoord LogicalToDeviceYRel(wxCoord y) const;
 
     /**
         Gets the maximum horizontal extent used in drawing commands so far.
     */
-    wxCoord MaxX();
+    wxCoord MaxX() const;
 
     /**
         Gets the maximum vertical extent used in drawing commands so far.
     */
-    wxCoord MaxY();
+    wxCoord MaxY() const;
 
     /**
         Gets the minimum horizontal extent used in drawing commands so far.
     */
-    wxCoord MinX();
+    wxCoord MinX() const;
 
     /**
         Gets the minimum vertical extent used in drawing commands so far.
     */
-    wxCoord MinY();
+    wxCoord MinY() const;
 
     /**
         Resets the bounding box: after a call to this function, the bounding

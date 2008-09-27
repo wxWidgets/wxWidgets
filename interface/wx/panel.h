@@ -69,7 +69,7 @@ public:
     /**
         Destructor. Deletes any child windows before deleting the physical window.
     */
-    ~wxPanel();
+    virtual ~wxPanel();
 
     /**
         This method is overridden from wxWindow::AcceptsFocus()
@@ -94,7 +94,7 @@ public:
 
         @see wxInitDialogEvent
     */
-    void InitDialog();
+    virtual void InitDialog();
 
     /**
         The default handler for wxEVT_SYS_COLOUR_CHANGED.
@@ -130,6 +130,6 @@ public:
         In contrast to SetFocus() (see above) this will set the focus to the panel
         even if there are child windows in the panel. This is only rarely needed.
     */
-    virtual void SetFocusIgnoringChildren();
+    void SetFocusIgnoringChildren();
 };
 

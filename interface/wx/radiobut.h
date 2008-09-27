@@ -88,7 +88,7 @@ public:
     /**
         Destructor, destroying the radio button item.
     */
-    ~wxRadioButton();
+    virtual ~wxRadioButton();
 
     /**
         Creates the choice for two-step construction. See wxRadioButton() for
@@ -105,7 +105,7 @@ public:
     /**
         Returns @true if the radio button is depressed, @false otherwise.
     */
-    bool GetValue() const;
+    virtual bool GetValue() const;
 
     /**
         Sets the radio button to selected or deselected status. This does not cause a

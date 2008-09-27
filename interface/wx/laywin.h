@@ -102,14 +102,14 @@ public:
     /**
         Destructor.
     */
-    ~wxLayoutAlgorithm();
+    virtual ~wxLayoutAlgorithm();
 
     /**
         Lays out the children of a normal frame. @a mainWindow is set to occupy the
         remaining space.
         This function simply calls LayoutWindow().
     */
-    bool LayoutFrame(wxFrame* frame, wxWindow* mainWindow = NULL) const;
+    bool LayoutFrame(wxFrame* frame, wxWindow* mainWindow = NULL);
 
     /**
         Lays out the children of an MDI parent frame. If @a rect is non-@NULL, the
@@ -117,7 +117,7 @@ public:
         area.
         The MDI client window is set to occupy the remaining space.
     */
-    bool LayoutMDIFrame(wxMDIParentFrame* frame, wxRect* rect = NULL) const;
+    bool LayoutMDIFrame(wxMDIParentFrame* frame, wxRect* rect = NULL);
 
     /**
         Lays out the children of a normal frame or other window.
@@ -129,7 +129,7 @@ public:
         and the window will be set
         to the remaining size).
     */
-    bool LayoutWindow(wxWindow* parent, wxWindow* mainWindow = NULL) const;
+    bool LayoutWindow(wxWindow* parent, wxWindow* mainWindow = NULL);
 };
 
 

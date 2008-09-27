@@ -180,7 +180,7 @@ public:
         @warning
         Do not delete an icon that is selected into a memory device context.
     */
-    ~wxIcon();
+    virtual ~wxIcon();
 
     /**
         Copies @a bmp bitmap to this icon.

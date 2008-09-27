@@ -378,7 +378,7 @@ public:
                  pointer to the font object is stored in an application
                  data structure, and there is a risk of double deletion.
     */
-    ~wxFont();
+    virtual ~wxFont();
 
     /**
         Returns the current application's default encoding.
@@ -393,7 +393,7 @@ public:
 
         @see SetFaceName()
     */
-    wxString GetFaceName() const;
+    virtual wxString GetFaceName() const;
 
     /**
         Gets the font family. See SetFamily() for a list of valid
@@ -423,14 +423,14 @@ public:
 
         @see GetNativeFontInfoDesc()
     */
-    wxString GetNativeFontInfoUserDesc();
+    wxString GetNativeFontInfoUserDesc() const;
 
     /**
         Gets the point size.
 
         @see SetPointSize()
     */
-    int GetPointSize() const;
+    virtual int GetPointSize() const;
 
     /**
         Gets the font style. See wxFontStyle for a list of valid styles.
@@ -444,7 +444,7 @@ public:
 
         @see SetUnderlined()
     */
-    bool GetUnderlined() const;
+    virtual bool GetUnderlined() const;
 
     /**
         Gets the font weight. See wxFontWeight for a list of valid weight identifiers.
@@ -457,7 +457,7 @@ public:
         Returns @true if the font is a fixed width (or monospaced) font,
         @false if it is a proportional one or font is invalid.
     */
-    bool IsFixedWidth() const;
+    virtual bool IsFixedWidth() const;
 
     /**
         Returns @true if this object is a valid font, @false otherwise.
@@ -519,7 +519,7 @@ public:
 
         @see GetFaceName(), SetFamily()
     */
-    bool SetFaceName(const wxString& faceName);
+    virtual bool SetFaceName(const wxString& faceName);
 
     /**
         Sets the font family.
@@ -576,7 +576,7 @@ public:
 
         @see GetPointSize()
     */
-    void SetPointSize(int pointSize);
+    virtual void SetPointSize(int pointSize);
 
     /**
         Sets the font style.

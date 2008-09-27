@@ -172,7 +172,7 @@ public:
         with a brief description for this file type: for example, "text document" for
         the "text/plain" MIME type.
     */
-    bool GetDescription(wxString* desc);
+    bool GetDescription(wxString* desc) const;
 
     /**
         If the function returns @true, the array @a extensions is filled
@@ -199,13 +199,13 @@ public:
         and KDE settings and thus GetIcon's success depends on availability
         of these desktop environments.
     */
-    bool GetIcon(wxIconLocation* iconLoc);
+    bool GetIcon(wxIconLocation* iconLoc) const;
 
     /**
         If the function returns @true, the string pointed to by @a mimeType is filled
         with full MIME type specification for this file type: for example, "text/plain".
     */
-    bool GetMimeType(wxString* mimeType);
+    bool GetMimeType(wxString* mimeType) const;
 
     /**
         Same as GetMimeType() but returns array of MIME

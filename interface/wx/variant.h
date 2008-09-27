@@ -175,7 +175,7 @@ public:
               called. See @ref overview_refcount_destruct
               "reference-counted object destruction" for more info.
     */
-    ~wxVariant();
+    virtual ~wxVariant();
 
 
     /**
@@ -500,7 +500,7 @@ public:
         this function in order for wxVariant::Unshare() to work for your data.
         This function is implemented for all built-in data types.
     */
-    wxVariantData* Clone() const;
+    virtual wxVariantData* Clone() const;
 
     /**
         Decreases reference count. If the count reaches zero, the object is
@@ -525,7 +525,7 @@ public:
         If the data is a wxObject returns a pointer to the objects wxClassInfo
         structure, if the data isn't a wxObject the method returns @NULL.
     */
-    wxClassInfo* GetValueClassInfo() const;
+    virtual wxClassInfo* GetValueClassInfo();
 
     /**
         Increases reference count. Note that initially wxVariantData has
@@ -540,16 +540,16 @@ public:
     /**
         Reads the data from @a string.
     */
-    bool Read(wxString& string);
+    virtual bool Read(wxString& string);
 
     /**
         Writes the data to @a stream.
     */
-    bool Write(ostream& stream) const;
+    virtual bool Write(ostream& stream) const;
     /**
         Writes the data to @a string.
     */
-    bool Write(wxString& string) const;
+    virtual bool Write(wxString& string) const;
 };
 
 

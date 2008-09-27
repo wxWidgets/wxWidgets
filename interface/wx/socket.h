@@ -41,12 +41,12 @@ public:
     /**
         Returns the hostname which matches the IP address.
     */
-    wxString Hostname();
+    virtual wxString Hostname() const;
 
     /**
         Returns a wxString containing the IP address in dot quad (127.0.0.1) format.
     */
-    wxString IPAddress();
+    virtual wxString IPAddress() const;
 
     /**
         Set address to localhost (127.0.0.1).
@@ -108,7 +108,7 @@ public:
     /**
         Destructor (it doesn't close the accepted connections).
     */
-    ~wxSocketServer();
+    virtual ~wxSocketServer();
 
     /**
         Accepts an incoming connection request, and creates a new wxSocketBase object
@@ -283,7 +283,7 @@ public:
     /**
         Destructor. Please see wxSocketBase::Destroy().
     */
-    ~wxSocketClient();
+    virtual ~wxSocketClient();
 
     /**
         Connects to a server using the specified address.
@@ -307,7 +307,7 @@ public:
 
         @see WaitOnConnect(), wxSocketBase::SetNotify(), wxSocketBase::Notify()
     */
-    bool Connect(const wxSockAddress& address, bool wait = true);
+    virtual bool Connect(const wxSockAddress& address, bool wait = true);
 
     /**
         Connects to a server using the specified address.
@@ -397,12 +397,12 @@ public:
     /**
         Default destructor.
     */
-    ~wxSockAddress();
+    virtual ~wxSockAddress();
 
     /**
         Delete all informations about the address.
     */
-    void Clear();
+    virtual void Clear();
 
     /**
         Returns the length of the socket address.
@@ -439,7 +439,7 @@ public:
         Gets the client data of the socket which generated this event, as
         set with wxSocketBase::SetClientData().
     */
-    void* GetClientData();
+    void* GetClientData() const;
 
     /**
         Returns the socket object to which this event refers to. This makes
@@ -1215,7 +1215,7 @@ public:
     /**
         Destructor. Please see wxSocketBase::Destroy().
     */
-    ~wxDatagramSocket();
+    virtual ~wxDatagramSocket();
 
     /**
         This function reads a buffer of @a nbytes bytes from the socket.

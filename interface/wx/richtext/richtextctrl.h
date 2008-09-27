@@ -163,43 +163,43 @@ public:
     /**
         Destructor.
     */
-    ~wxRichTextCtrl();
+    virtual ~wxRichTextCtrl();
 
     /**
         Adds an image to the control's buffer.
     */
-    wxRichTextRange AddImage(const wxImage& image);
+    virtual wxRichTextRange AddImage(const wxImage& image);
 
     /**
         Adds a new paragraph of text to the end of the buffer.
     */
-    wxRichTextRange AddParagraph(const wxString& text);
+    virtual wxRichTextRange AddParagraph(const wxString& text);
 
     /**
         Sets the insertion point to the end of the buffer and writes the text.
     */
-    void AppendText(const wxString& text);
+    virtual void AppendText(const wxString& text);
 
     /**
         Applies the given alignment to the selection (undoable).
         For alignment values, see wxTextAttr.
     */
-    bool ApplyAlignmentToSelection(wxTextAttrAlignment alignment);
+    virtual bool ApplyAlignmentToSelection(wxTextAttrAlignment alignment);
 
     /**
         Apples bold to the selection (undoable).
     */
-    bool ApplyBoldToSelection();
+    virtual bool ApplyBoldToSelection();
 
     /**
         Applies italic to the selection (undoable).
     */
-    bool ApplyItalicToSelection();
+    virtual bool ApplyItalicToSelection();
 
     /**
         Applies the given style to the selection.
     */
-    bool ApplyStyle(wxRichTextStyleDefinition* def);
+    virtual bool ApplyStyle(wxRichTextStyleDefinition* def);
 
     /**
         Applies the style sheet to the buffer, matching paragraph styles in the sheet
@@ -214,12 +214,12 @@ public:
     /**
         Applies underline to the selection (undoable).
     */
-    bool ApplyUnderlineToSelection();
+    virtual bool ApplyUnderlineToSelection();
 
     /**
         Returns @true if undo commands are being batched.
     */
-    bool BatchingUndo() const;
+    virtual bool BatchingUndo() const;
 
     /**
         Begins using alignment
@@ -230,7 +230,7 @@ public:
     /**
         Starts batching undo history for commands.
     */
-    bool BeginBatchUndo(const wxString& cmdName);
+    virtual bool BeginBatchUndo(const wxString& cmdName);
 
     /**
         Begins using bold.
@@ -332,12 +332,12 @@ public:
     /**
         Begins applying a style.
     */
-    bool BeginStyle(const wxTextAttr& style);
+    virtual bool BeginStyle(const wxTextAttr& style);
 
     /**
         Starts suppressing undo history for commands.
     */
-    bool BeginSuppressUndo();
+    virtual bool BeginSuppressUndo();
 
     /**
         Begins applying a symbol bullet, using a character from the current font. See
@@ -370,37 +370,37 @@ public:
     /**
         Returns @true if selected content can be copied to the clipboard.
     */
-    bool CanCopy() const;
+    virtual bool CanCopy() const;
 
     /**
         Returns @true if selected content can be copied to the clipboard and deleted.
     */
-    bool CanCut() const;
+    virtual bool CanCut() const;
 
     /**
         Returns @true if selected content can be deleted.
     */
-    bool CanDeleteSelection() const;
+    virtual bool CanDeleteSelection() const;
 
     /**
         Returns @true if the clipboard content can be pasted to the buffer.
     */
-    bool CanPaste() const;
+    virtual bool CanPaste() const;
 
     /**
         Returns @true if there is a command in the command history that can be redone.
     */
-    bool CanRedo() const;
+    virtual bool CanRedo() const;
 
     /**
         Returns @true if there is a command in the command history that can be undone.
     */
-    bool CanUndo() const;
+    virtual bool CanUndo() const;
 
     /**
         Clears the buffer content, leaving a single empty paragraph. Cannot be undone.
     */
-    void Clear();
+    virtual void Clear();
 
     //@{
     /**
@@ -419,12 +419,12 @@ public:
     /**
         Sends the event to the control.
     */
-    void Command(wxCommandEvent& event);
+    virtual void Command(wxCommandEvent& event);
 
     /**
         Copies the selected content (if any) to the clipboard.
     */
-    void Copy();
+    virtual void Copy();
 
     /**
         Creates the underlying window.
@@ -441,12 +441,12 @@ public:
         Copies the selected content (if any) to the clipboard and deletes the selection.
         This is undoable.
     */
-    void Cut();
+    virtual void Cut();
 
     /**
         Deletes the content within the given range.
     */
-    bool Delete(const wxRichTextRange& range);
+    virtual bool Delete(const wxRichTextRange& range);
 
     /**
         Deletes content if there is a selection, e.g. when pressing a key.
@@ -458,13 +458,13 @@ public:
     /**
         Deletes the content in the selection, if any. This is undoable.
     */
-    void DeleteSelection();
+    virtual void DeleteSelection();
 
     /**
         Sets the buffer's modified status to @false, and clears the buffer's command
         history.
     */
-    void DiscardEdits();
+    virtual void DiscardEdits();
 
     /**
         Currently this simply returns @c wxSize(10, 10).
@@ -479,12 +479,12 @@ public:
     /**
         Ends application of all styles in the current style stack.
     */
-    bool EndAllStyles();
+    virtual bool EndAllStyles();
 
     /**
         Ends batching undo command history.
     */
-    bool EndBatchUndo();
+    virtual bool EndBatchUndo();
 
     /**
         Ends using bold.
@@ -549,12 +549,12 @@ public:
     /**
         Ends the current style.
     */
-    bool EndStyle();
+    virtual bool EndStyle();
 
     /**
         Ends suppressing undo command history.
     */
-    bool EndSuppressUndo();
+    virtual bool EndSuppressUndo();
 
     /**
         Ends applying a symbol bullet.
@@ -588,7 +588,7 @@ public:
         Helper function for finding the caret position for the next word. Direction
         is 1 (forward) or -1 (backwards).
     */
-    long FindNextWordPosition(int direction = 1) const;
+    virtual long FindNextWordPosition(int direction = 1) const;
 
     /**
         Call this function to prevent refresh and allow fast updates, and then Thaw() to
@@ -660,22 +660,22 @@ public:
     /**
         Returns the current insertion point.
     */
-    long GetInsertionPoint() const;
+    virtual long GetInsertionPoint() const;
 
     /**
         Returns the last position in the buffer.
     */
-    wxTextPos GetLastPosition() const;
+    virtual wxTextPos GetLastPosition() const;
 
     /**
         Returns the length of the specified line in characters.
     */
-    int GetLineLength(long lineNo) const;
+    virtual int GetLineLength(long lineNo) const;
 
     /**
         Returns the text for the given line.
     */
-    wxString GetLineText(long lineNo) const;
+    virtual wxString GetLineText(long lineNo) const;
 
     /**
         Transforms physical window position to logical (unscrolled) position.
@@ -685,7 +685,7 @@ public:
     /**
         Returns the number of lines in the buffer.
     */
-    int GetNumberOfLines() const;
+    virtual int GetNumberOfLines() const;
 
     /**
         Transforms logical (unscrolled) position to physical window position.
@@ -697,7 +697,7 @@ public:
         The end point of range is specified as the last character position of the span
         of text, plus one.
     */
-    wxString GetRange(long from, long to) const;
+    virtual wxString GetRange(long from, long to) const;
 
     /**
         Returns the range of the current selection.
@@ -705,7 +705,7 @@ public:
         of text, plus one.
         If the return values @a from and @a to are the same, there is no selection.
     */
-    void GetSelection(long* from, long* to) const;
+    virtual void GetSelection(long* from, long* to) const;
 
     /**
         Returns the selection range in character positions. -1, -1 means no selection.
@@ -715,7 +715,7 @@ public:
     /**
         Returns the text within the current selection range, if any.
     */
-    wxString GetStringSelection() const;
+    virtual wxString GetStringSelection() const;
 
     /**
         Gets the attributes at the given position.
@@ -725,7 +725,7 @@ public:
         the character
         or paragraph style alone, use GetUncombinedStyle().
     */
-    bool GetStyle(long position, wxTextAttr& style);
+    virtual bool GetStyle(long position, wxTextAttr& style);
 
     /**
         Gets the attributes common to the specified range. Attributes that differ in
@@ -753,12 +753,12 @@ public:
         will fetch
         the paragraph attributes. Otherwise, it will return the character attributes.
     */
-    bool GetUncombinedStyle(long position, wxTextAttr& style);
+    virtual bool GetUncombinedStyle(long position, wxTextAttr& style);
 
     /**
         Returns the content of the entire control as a string.
     */
-    wxString GetValue() const;
+    virtual wxString GetValue() const;
 
     /**
         Internal helper function returning the line for the visible caret position. If
@@ -791,7 +791,7 @@ public:
     /**
         Returns @true if there is a selection.
     */
-    bool HasSelection() const;
+    virtual bool HasSelection() const;
 
     //@{
     /**
@@ -830,7 +830,7 @@ public:
     /**
         Returns @true if the control is editable.
     */
-    bool IsEditable() const;
+    virtual bool IsEditable() const;
 
     /**
         Returns @true if Freeze has been called without a Thaw.
@@ -840,7 +840,7 @@ public:
     /**
         Returns @true if the buffer has been modified.
     */
-    bool IsModified() const;
+    virtual bool IsModified() const;
 
     /**
         Returns @true if the control is multiline.
@@ -856,22 +856,22 @@ public:
         Returns @true if all of the selection is aligned according to the specified
         flag.
     */
-    bool IsSelectionAligned(wxTextAttrAlignment alignment) const;
+    virtual bool IsSelectionAligned(wxTextAttrAlignment alignment);
 
     /**
         Returns @true if all of the selection is bold.
     */
-    bool IsSelectionBold() const;
+    virtual bool IsSelectionBold();
 
     /**
         Returns @true if all of the selection is italic.
     */
-    bool IsSelectionItalics() const;
+    virtual bool IsSelectionItalics();
 
     /**
         Returns @true if all of the selection is underlined.
     */
-    bool IsSelectionUnderlined() const;
+    virtual bool IsSelectionUnderlined();
 
     /**
         Returns @true if the control is single-line. Currently wxRichTextCtrl does not
@@ -882,14 +882,14 @@ public:
     /**
         Helper function implementing keyboard navigation.
     */
-    bool KeyboardNavigate(int keyCode, int flags);
+    virtual bool KeyboardNavigate(int keyCode, int flags);
 
     /**
         Lays out the buffer, which must be done before certain operations, such as
         setting the caret position. This function should not normally be required by the
         application.
     */
-    bool LayoutContent(bool onlyVisibleRect = false);
+    virtual bool LayoutContent(bool onlyVisibleRect = false);
 
     /**
         Inserts a line break at the current insertion point. A line break forces
@@ -898,7 +898,7 @@ public:
         wxRichTextLineBreakChar to text content,
         or by typing Shift-Return.
     */
-    bool LineBreak();
+    virtual bool LineBreak();
 
     /**
         Loads content into the control's buffer using the given type. If the specified
@@ -912,12 +912,12 @@ public:
     /**
         Marks the buffer as modified.
     */
-    void MarkDirty();
+    virtual void MarkDirty();
 
     /**
         Move the caret to the given character position.
     */
-    bool MoveCaret(long pos, bool showAtLineStart = false);
+    virtual bool MoveCaret(long pos, bool showAtLineStart = false);
 
     /**
         Move the caret one visual step forward: this may mean setting a flag
@@ -936,57 +936,57 @@ public:
     /**
         Moves the caret down.
     */
-    bool MoveDown(int noLines = 1, int flags = 0);
+    virtual bool MoveDown(int noLines = 1, int flags = 0);
 
     /**
         Moves to the end of the buffer.
     */
-    bool MoveEnd(int flags = 0);
+    virtual bool MoveEnd(int flags = 0);
 
     /**
         Moves to the start of the buffer.
     */
-    bool MoveHome(int flags = 0);
+    virtual bool MoveHome(int flags = 0);
 
     /**
         Moves left.
     */
-    bool MoveLeft(int noPositions = 1, int flags = 0);
+    virtual bool MoveLeft(int noPositions = 1, int flags = 0);
 
     /**
         Moves right.
     */
-    bool MoveRight(int noPositions = 1, int flags = 0);
+    virtual bool MoveRight(int noPositions = 1, int flags = 0);
 
     /**
         Moves to the end of the line.
     */
-    bool MoveToLineEnd(int flags = 0);
+    virtual bool MoveToLineEnd(int flags = 0);
 
     /**
         Moves to the start of the line.
     */
-    bool MoveToLineStart(int flags = 0);
+    virtual bool MoveToLineStart(int flags = 0);
 
     /**
         Moves to the end of the paragraph.
     */
-    bool MoveToParagraphEnd(int flags = 0);
+    virtual bool MoveToParagraphEnd(int flags = 0);
 
     /**
         Moves to the start of the paragraph.
     */
-    bool MoveToParagraphStart(int flags = 0);
+    virtual bool MoveToParagraphStart(int flags = 0);
 
     /**
         Moves up.
     */
-    bool MoveUp(int noLines = 1, int flags = 0);
+    virtual bool MoveUp(int noLines = 1, int flags = 0);
 
     /**
         Inserts a new paragraph at the current insertion point. See also LineBreak().
     */
-    bool Newline();
+    virtual bool Newline();
 
     //@{
     /**
@@ -1098,33 +1098,33 @@ public:
     /**
         Moves one or more pages down.
     */
-    bool PageDown(int noPages = 1, int flags = 0);
+    virtual bool PageDown(int noPages = 1, int flags = 0);
 
     /**
         Moves one or more pages up.
     */
-    bool PageUp(int noPages = 1, int flags = 0);
+    virtual bool PageUp(int noPages = 1, int flags = 0);
 
     /**
         Paints the background.
     */
-    void PaintBackground(wxDC& dc);
+    virtual void PaintBackground(wxDC& dc);
 
     /**
         Pastes content from the clipboard to the buffer.
     */
-    void Paste();
+    virtual void Paste();
 
     /**
         Internal function to position the visible caret according to the current caret
         position.
     */
-    void PositionCaret();
+    virtual void PositionCaret();
 
     /**
         Converts a text position to zero-based column and line numbers.
     */
-    bool PositionToXY(long pos, long* x, long* y) const;
+    virtual bool PositionToXY(long pos, long* x, long* y) const;
 
     //@{
     /**
@@ -1154,18 +1154,18 @@ public:
     /**
         Redoes the current command.
     */
-    void Redo();
+    virtual void Redo();
 
     /**
         Removes the content in the specified range.
     */
-    void Remove(long from, long to);
+    virtual void Remove(long from, long to);
 
     /**
         Replaces the content in the specified range with the string specified by @e
         value.
     */
-    void Replace(long from, long to, const wxString& value);
+    virtual void Replace(long from, long to, const wxString& value);
 
     /**
         Saves the buffer content using the given type. If the specified type
@@ -1178,17 +1178,17 @@ public:
     /**
         Scrolls @a position into view. This function takes a caret position.
     */
-    bool ScrollIntoView(long position, int keyCode);
+    virtual bool ScrollIntoView(long position, int keyCode);
 
     /**
         Selects all the text in the buffer.
     */
-    void SelectAll();
+    virtual void SelectAll();
 
     /**
         Cancels any selection.
     */
-    void SelectNone();
+    virtual void SelectNone();
 
     /**
         Sets @a attr as the default style and tells the control that the UI should
@@ -1204,7 +1204,7 @@ public:
         only affects the style currently being applied (for example, setting the default
         style to bold will cause subsequently inserted text to be bold).
     */
-    void SetBasicStyle(const wxTextAttr& style);
+    virtual void SetBasicStyle(const wxTextAttr& style);
 
     /**
         The caret position is the character position just before the caret.
@@ -1218,7 +1218,7 @@ public:
         inserted
         text is displayed.
     */
-    bool SetDefaultStyle(const wxTextAttr& style);
+    virtual bool SetDefaultStyle(const wxTextAttr& style);
 
     /**
         Sets the default style to the style under the cursor.
@@ -1234,7 +1234,7 @@ public:
     /**
         Makes the control editable, or not.
     */
-    void SetEditable(bool editable);
+    virtual void SetEditable(bool editable);
 
     /**
         Sets the current filename.
@@ -1245,7 +1245,7 @@ public:
         Sets the font, and also the basic and default attributes (see
         wxRichTextCtrl::SetDefaultStyle).
     */
-    bool SetFont(const wxFont& font);
+    virtual bool SetFont(const wxFont& font);
 
     /**
         Sets flags that change the behaviour of loading or saving. See the
@@ -1257,12 +1257,12 @@ public:
     /**
         Sets the insertion point.
     */
-    void SetInsertionPoint(long pos);
+    virtual void SetInsertionPoint(long pos);
 
     /**
         Sets the insertion point to the end of the text control.
     */
-    void SetInsertionPointEnd();
+    virtual void SetInsertionPointEnd();
 
     //@{
     /**
@@ -1297,7 +1297,7 @@ public:
         So, for example, to set the selection for a character at position 5, use the
         range (5,6).
     */
-    void SetSelection(long from, long to);
+    virtual void SetSelection(long from, long to);
 
     /**
         Sets the selection to the given range.
@@ -1371,17 +1371,17 @@ public:
     /**
         A helper function setting up scrollbars, for example after a resize.
     */
-    void SetupScrollbars(bool atTop = false);
+    virtual void SetupScrollbars(bool atTop = false);
 
     /**
         Scrolls the buffer so that the given position is in view.
     */
-    void ShowPosition(long pos);
+    virtual void ShowPosition(long pos);
 
     /**
         Returns @true if undo history suppression is on.
     */
-    bool SuppressingUndo() const;
+    virtual bool SuppressingUndo() const;
 
     /**
         Call this function to end a Freeze and refresh the display.
@@ -1391,17 +1391,17 @@ public:
     /**
         Undoes the command at the top of the command history, if there is one.
     */
-    void Undo();
+    virtual void Undo();
 
     /**
         Moves a number of words to the left.
     */
-    bool WordLeft(int noWords = 1, int flags = 0);
+    virtual bool WordLeft(int noWords = 1, int flags = 0);
 
     /**
         Move a nuber of words to the right.
     */
-    bool WordRight(int noWords = 1, int flags = 0);
+    virtual bool WordRight(int noWords = 1, int flags = 0);
 
     //@{
     /**
@@ -1420,11 +1420,11 @@ public:
     /**
         Writes text at the current position.
     */
-    void WriteText(const wxString& text);
+    virtual void WriteText(const wxString& text);
 
     /**
         Translates from column and line number to position.
     */
-    long XYToPosition(long x, long y) const;
+    virtual long XYToPosition(long x, long y) const;
 };
 

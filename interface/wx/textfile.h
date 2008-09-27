@@ -63,12 +63,12 @@ public:
     /**
         Constructor does not load the file into memory, use Open() to do it.
     */
-    wxTextFile(const wxString& strFile) const;
+    wxTextFile(const wxString& strFile);
 
     /**
         Destructor does nothing.
     */
-    ~wxTextFile() const;
+    virtual ~wxTextFile();
 
     /**
         Adds a line to the end of file.

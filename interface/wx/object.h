@@ -200,7 +200,7 @@ public:
 
         Performs dereferencing, for those objects that use reference counting.
     */
-    ~wxObject();
+    virtual ~wxObject();
 
     /**
         A virtual function that may be redefined by derived classes to allow dumping of
@@ -225,7 +225,7 @@ public:
         This virtual function is redefined for every class that requires run-time
         type information, when using the ::DECLARE_CLASS macro (or similar).
     */
-    wxClassInfo* GetClassInfo();
+    virtual wxClassInfo* GetClassInfo() const;
 
     /**
         Returns the wxObject::m_refData pointer, i.e. the data referenced by this object.

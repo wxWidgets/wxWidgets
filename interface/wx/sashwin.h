@@ -79,27 +79,27 @@ public:
     /**
         Destructor.
     */
-    ~wxSashWindow();
+    virtual ~wxSashWindow();
 
     /**
         Gets the maximum window size in the x direction.
     */
-    int GetMaximumSizeX() const;
+    virtual int GetMaximumSizeX() const;
 
     /**
         Gets the maximum window size in the y direction.
     */
-    int GetMaximumSizeY() const;
+    virtual int GetMaximumSizeY() const;
 
     /**
         Gets the minimum window size in the x direction.
     */
-    int GetMinimumSizeX();
+    virtual int GetMinimumSizeX() const;
 
     /**
         Gets the minimum window size in the y direction.
     */
-    int GetMinimumSizeY() const;
+    virtual int GetMinimumSizeY() const;
 
     /**
         Returns @true if a sash is visible on the given edge, @false otherwise.
@@ -125,22 +125,22 @@ public:
     /**
         Sets the maximum window size in the x direction.
     */
-    void SetMaximumSizeX(int min);
+    virtual void SetMaximumSizeX(int min);
 
     /**
         Sets the maximum window size in the y direction.
     */
-    void SetMaximumSizeY(int min);
+    virtual void SetMaximumSizeY(int min);
 
     /**
         Sets the minimum window size in the x direction.
     */
-    void SetMinimumSizeX(int min);
+    virtual void SetMinimumSizeX(int min);
 
     /**
         Sets the minimum window size in the y direction.
     */
-    void SetMinimumSizeY(int min);
+    virtual void SetMinimumSizeY(int min);
 
     /**
         Call this function to give the sash a border, or remove the border.

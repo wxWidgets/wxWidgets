@@ -138,9 +138,9 @@ public:
             For optimisation - drawing can be faster if the function is told
             that the background is solid.
     */
-    bool Draw(int index, wxDC& dc, int x, int y,
-              int flags = wxIMAGELIST_DRAW_NORMAL,
-              bool solidBackground = false);
+    virtual bool Draw(int index, wxDC& dc, int x, int y,
+                      int flags = wxIMAGELIST_DRAW_NORMAL,
+                      bool solidBackground = false);
 
     /**
         Returns the bitmap corresponding to the given index.
@@ -155,7 +155,7 @@ public:
     /**
         Returns the number of images in the list.
     */
-    int GetImageCount() const;
+    virtual int GetImageCount() const;
 
     /**
         Retrieves the size of the images in the list. Currently, the @a index
@@ -171,7 +171,7 @@ public:
         @return @true if the function succeeded, @false if it failed (for example,
                  if the image list was not yet initialized).
     */
-    bool GetSize(int index, int& width, int& height) const;
+    virtual bool GetSize(int index, int& width, int& height) const;
 
     /**
         Removes the image at the given position.

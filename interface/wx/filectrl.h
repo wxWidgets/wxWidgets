@@ -105,14 +105,14 @@ public:
     /**
         Returns the current directory of the file control (i.e. the directory shown by it).
     */
-    wxString GetDirectory() const;
+    virtual wxString GetDirectory() const;
 
     /**
         Returns the currently selected filename.
 
         For the controls having the @c wxFC_MULTIPLE style, use GetFilenames() instead.
     */
-    wxString GetFilename() const;
+    virtual wxString GetFilename() const;
 
     /**
         Fills the array @a filenames with the filenames only of selected items.
@@ -122,18 +122,18 @@ public:
 
         @remarks filenames is emptied first.
     */
-    void GetFilenames(wxArrayString& filenames) const;
+    virtual void GetFilenames(wxArrayString& filenames) const;
 
     /**
         Returns the zero-based index of the currently selected filter.
     */
-    int GetFilterIndex() const;
+    virtual int GetFilterIndex() const;
 
     /**
         Returns the full path (directory and filename) of the currently selected file.
         For the controls having the @c wxFC_MULTIPLE style, use GetPaths() instead.
     */
-    wxString GetPath() const;
+    virtual wxString GetPath() const;
 
     /**
         Fills the array @a paths with the full paths of the files chosen.
@@ -143,37 +143,37 @@ public:
 
         @remarks paths is emptied first.
     */
-    void GetPaths(wxArrayString& paths) const;
+    virtual void GetPaths(wxArrayString& paths) const;
 
     /**
         Returns the current wildcard.
     */
-    wxString GetWildcard() const;
+    virtual wxString GetWildcard() const;
 
     /**
         Sets(changes) the current directory displayed in the control.
 
         @return Returns @true on success, @false otherwise.
     */
-    bool SetDirectory(const wxString& directory);
+    virtual bool SetDirectory(const wxString& directory);
 
     /**
         Selects a certain file.
 
         @return Returns @true on success, @false otherwise
     */
-    bool SetFilename(const wxString& filename);
+    virtual bool SetFilename(const wxString& filename);
 
     /**
         Sets the current filter index, starting from zero.
     */
-    void SetFilterIndex(int filterIndex);
+    virtual void SetFilterIndex(int filterIndex);
 
     /**
         Sets the wildcard, which can contain multiple file types, for example:
         "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif"
     */
-    void SetWildcard(const wxString& wildCard);
+    virtual void SetWildcard(const wxString& wildCard);
 
     /**
         Sets whether hidden files and folders are shown or not.

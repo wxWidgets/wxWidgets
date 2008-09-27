@@ -26,7 +26,7 @@ public:
     /**
         Destroys the wxTaskBarIcon object, removing the icon if not already removed.
     */
-    ~wxTaskBarIcon();
+    virtual ~wxTaskBarIcon();
 
     /**
         This method is called by the library when the user requests popup menu
@@ -50,23 +50,23 @@ public:
     /**
         Returns @true if SetIcon() was called with no subsequent RemoveIcon().
     */
-    bool IsIconInstalled();
+    bool IsIconInstalled() const;
 
     /**
         Returns @true if the object initialized successfully.
     */
-    bool IsOk();
+    bool IsOk() const;
 
     /**
         Pops up a menu at the current mouse position. The events can be handled by
         a class derived from wxTaskBarIcon.
     */
-    bool PopupMenu(wxMenu* menu);
+    virtual bool PopupMenu(wxMenu* menu);
 
     /**
         Removes the icon previously set with SetIcon().
     */
-    bool RemoveIcon();
+    virtual bool RemoveIcon();
 
     /**
         Sets the icon, and optional tooltip text.

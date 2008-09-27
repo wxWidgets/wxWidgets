@@ -161,7 +161,7 @@ public:
     /**
         Destructor. Destroys all child windows and menu bar if present.
     */
-    ~wxFrame();
+    virtual ~wxFrame();
 
     /**
         Centres the frame on the display.
@@ -248,14 +248,14 @@ public:
         Returns the origin of the frame client area (in client coordinates).
         It may be different from (0, 0) if the frame has a toolbar.
     */
-    wxPoint GetClientAreaOrigin() const;
+    virtual wxPoint GetClientAreaOrigin() const;
 
     /**
         Returns a pointer to the menubar currently associated with the frame (if any).
 
         @see SetMenuBar(), wxMenuBar, wxMenu
     */
-    wxMenuBar* GetMenuBar() const;
+    virtual wxMenuBar* GetMenuBar() const;
 
     /**
         Returns a pointer to the status bar currently associated with the frame
@@ -263,21 +263,21 @@ public:
 
         @see CreateStatusBar(), wxStatusBar
     */
-    wxStatusBar* GetStatusBar() const;
+    virtual wxStatusBar* GetStatusBar() const;
 
     /**
         Returns the status bar pane used to display menu and toolbar help.
 
         @see SetStatusBarPane()
     */
-    int GetStatusBarPane();
+    int GetStatusBarPane() const;
 
     /**
         Returns a pointer to the toolbar currently associated with the frame (if any).
 
         @see CreateToolBar(), wxToolBar, SetToolBar()
     */
-    wxToolBar* GetToolBar() const;
+    virtual wxToolBar* GetToolBar() const;
 
     /**
         Virtual function called when a status bar is requested by CreateStatusBar().
@@ -353,14 +353,14 @@ public:
 
         @see GetMenuBar(), wxMenuBar, wxMenu.
     */
-    void SetMenuBar(wxMenuBar* menuBar);
+    virtual void SetMenuBar(wxMenuBar* menuBar);
 
     /**
         Associates a status bar with the frame.
 
         @see CreateStatusBar(), wxStatusBar, GetStatusBar()
     */
-    void SetStatusBar(wxStatusBar* statusBar);
+    virtual void SetStatusBar(wxStatusBar* statusBar);
 
     /**
         Set the status bar pane used to display menu and toolbar help.
@@ -403,6 +403,6 @@ public:
     /**
         Associates a toolbar with the frame.
     */
-    void SetToolBar(wxToolBar* toolBar);
+    virtual void SetToolBar(wxToolBar* toolBar);
 };
 

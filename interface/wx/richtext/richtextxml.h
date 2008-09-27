@@ -30,12 +30,12 @@ public:
     /**
         Returns @true.
     */
-    bool CanLoad() const;
+    virtual bool CanLoad() const;
 
     /**
         Returns @true.
     */
-    bool CanSave() const;
+    virtual bool CanSave() const;
 
     /**
         Creates XML code for a given character or paragraph style.

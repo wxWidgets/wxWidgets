@@ -39,7 +39,7 @@ public:
         The header is not case-sensitive, i.e. "CONTENT-TYPE" and "content-type"
         represent the same header.
     */
-    wxString GetHeader(const wxString& header);
+    wxString GetHeader(const wxString& header) const;
 
     /**
         Creates a new input stream on the specified path.
@@ -64,14 +64,14 @@ public:
 
         @see wxInputStream
     */
-    wxInputStream* GetInputStream(const wxString& path);
+    virtual wxInputStream* GetInputStream(const wxString& path);
 
     /**
         Returns the HTTP response code returned by the server.
 
         Please refer to RFC 2616 for the list of responses.
     */
-    int GetResponse() const;
+    int GetResponse();
 
     /**
         It sets data of a field to be sent during the next request to the HTTP server.

@@ -103,7 +103,7 @@ public:
     /**
         Destructor, destroying the list box.
     */
-    ~wxListBox();
+    virtual ~wxListBox();
 
     //@{
     /**
@@ -151,7 +151,7 @@ public:
         @see wxControlWithItems::GetSelection, wxControlWithItems::GetStringSelection,
              wxControlWithItems::SetSelection
     */
-    int GetSelections(wxArrayInt& selections) const;
+    virtual int GetSelections(wxArrayInt& selections) const;
 
     /**
         Returns the item located at @e point, or @c wxNOT_FOUND if there
@@ -203,7 +203,7 @@ public:
 
         @return @true if the given item is selected, @false otherwise.
     */
-    bool IsSelected(int n) const;
+    virtual bool IsSelected(int n) const;
 
     /**
         Clears the list box and adds the given strings to it.

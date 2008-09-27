@@ -87,7 +87,7 @@ public:
         Returns a pointer to the wxDataViewColumn from which
         the event was emitted or @NULL.
     */
-    wxDataViewColumn* GetDataViewColumn();
+    wxDataViewColumn* GetDataViewColumn() const;
 
     /**
         Returns the wxDataViewModel associated with the event.
@@ -420,7 +420,7 @@ public:
     /**
         Destructor.
     */
-    ~wxDataViewIndexListModel();
+    virtual ~wxDataViewIndexListModel();
 
     /**
         Compare method that sorts the items by their index.
@@ -727,7 +727,7 @@ public:
     /**
         Destructor.
     */
-    ~wxDataViewCtrl();
+    virtual ~wxDataViewCtrl();
 
     /**
         Appends a wxDataViewColumn to the control. Returns @true on success.
@@ -897,7 +897,7 @@ public:
     /**
         Collapses the item.
     */
-    void Collapse(const wxDataViewItem& item);
+    virtual void Collapse(const wxDataViewItem& item);
 
     /**
         Create the control. Useful for two step creation.
@@ -922,7 +922,7 @@ public:
     /**
         Expands the item.
     */
-    void Expand(const wxDataViewItem& item);
+    virtual void Expand(const wxDataViewItem& item);
 
     /**
         Returns pointer to the column. @a pos refers to the
@@ -961,18 +961,18 @@ public:
         Returns pointer to the data model associated with the
         control (if any).
     */
-    virtual wxDataViewModel* GetModel() const;
+    wxDataViewModel* GetModel();
 
     /**
         Returns first selected item or an invalid item if none is selected.
     */
-    wxDataViewItem GetSelection() const;
+    virtual wxDataViewItem GetSelection() const;
 
     /**
         Fills @a sel with currently selected items and returns
         their number.
     */
-    int GetSelections(wxDataViewItemArray& sel) const;
+    virtual int GetSelections(wxDataViewItemArray& sel) const;
 
     /**
         Returns the wxDataViewColumn currently responsible for sorting
@@ -989,17 +989,17 @@ public:
     /**
         Return @true if the item is selected.
     */
-    bool IsSelected(const wxDataViewItem& item) const;
+    virtual bool IsSelected(const wxDataViewItem& item) const;
 
     /**
         Select the given item.
     */
-    void Select(const wxDataViewItem& item);
+    virtual void Select(const wxDataViewItem& item);
 
     /**
         Select all items.
     */
-    void SelectAll();
+    virtual void SelectAll();
 
     /**
         Set which column shall contain the tree-like expanders.
@@ -1014,18 +1014,18 @@ public:
     /**
         Sets the selection to the array of wxDataViewItems.
     */
-    void SetSelections(const wxDataViewItemArray& sel);
+    virtual void SetSelections(const wxDataViewItemArray& sel);
 
     /**
         Unselect the given item.
     */
-    void Unselect(const wxDataViewItem& item);
+    virtual void Unselect(const wxDataViewItem& item);
 
     /**
         Unselect all item. This method only has effect if multiple
         selections are allowed.
     */
-    void UnselectAll();
+    virtual void UnselectAll();
 };
 
 
@@ -1053,7 +1053,7 @@ public:
     /**
         Destructor.
     */
-    ~wxDataViewModelNotifier();
+    virtual ~wxDataViewModelNotifier();
 
     /**
         Called by owning model.
@@ -1091,7 +1091,7 @@ public:
     /**
         Called by owning model.
     */
-    bool ItemsChanged(const wxDataViewItemArray& items);
+    virtual bool ItemsChanged(const wxDataViewItemArray& items);
 
     /**
         Called by owning model.
@@ -1190,12 +1190,12 @@ public:
     /**
         Returns the cell mode.
     */
-    virtual wxDataViewCellMode GetMode();
+    virtual wxDataViewCellMode GetMode() const;
 
     /**
         Returns pointer to the owning wxDataViewColumn.
     */
-    virtual wxDataViewColumn* GetOwner() const;
+    wxDataViewColumn* GetOwner() const;
 
     /**
         This methods retrieves the value from the renderer in order to
@@ -1208,7 +1208,7 @@ public:
         Returns a string with the type of the wxVariant
         supported by this renderer.
     */
-    virtual wxString GetVariantType();
+    wxString GetVariantType() const;
 
     /**
         Sets the alignment of the renderer's content. The default value
@@ -1223,7 +1223,7 @@ public:
         Sets the owning wxDataViewColumn. This
         is usually called from within wxDataViewColumn.
     */
-    virtual void SetOwner(wxDataViewColumn* owner);
+    void SetOwner(wxDataViewColumn* owner);
 
     /**
         Set the value of the renderer (and thus its cell) to @e value.
@@ -1442,7 +1442,7 @@ public:
     /**
         Destructor.
     */
-    ~wxDataViewCustomRenderer();
+    virtual ~wxDataViewCustomRenderer();
 
     /**
         Override this to react to double clicks or ENTER. This method will
@@ -1582,7 +1582,7 @@ public:
     /**
         Destructor.
     */
-    ~wxDataViewColumn();
+    virtual ~wxDataViewColumn();
 
     /**
         Returns the bitmap in the header of the column, if any.
@@ -1593,7 +1593,7 @@ public:
         Returns the index of the column of the model, which this
         wxDataViewColumn is displaying.
     */
-    unsigned int GetModelColumn();
+    unsigned int GetModelColumn() const;
 
     /**
         Returns the owning wxDataViewCtrl.
@@ -1604,7 +1604,7 @@ public:
         Returns the renderer of this wxDataViewColumn.
         See also wxDataViewRenderer.
     */
-    wxDataViewRenderer* GetRenderer();
+    wxDataViewRenderer* GetRenderer() const;
 
     /**
         Returns @true if the column is reorderable.
@@ -1620,37 +1620,37 @@ public:
     /**
         Returns the width of the column.
     */
-    int GetWidth();
+    virtual int GetWidth() const;
 
     /**
         Returns @true, if the sort order is ascending.
         See also SetSortOrder()
     */
-    bool IsSortOrderAscending();
+    virtual bool IsSortOrderAscending() const;
 
     /**
         Set the alignment of the column header.
     */
-    void SetAlignment(wxAlignment align);
+    virtual void SetAlignment(wxAlignment align);
 
     /**
         Set the bitmap of the column header.
     */
-    void SetBitmap(const wxBitmap& bitmap);
+    virtual void SetBitmap(const wxBitmap& bitmap);
 
     /**
         Indicate wether the column can be reordered by the
         user using the mouse. This is typically implemented
         visually by dragging the header button around.
     */
-    void SetReorderable(bool reorderable);
+    virtual void SetReorderable(bool reorderable);
 
     /**
         Indicate the sort order if the implementation of the
         wxDataViewCtrl supports it, most commonly by showing
         a little arrow.
     */
-    void SetSortOrder(bool ascending);
+    virtual void SetSortOrder(bool ascending);
 
     /**
         Indicate that the column is sortable. This does
@@ -1662,12 +1662,12 @@ public:
         no longer clickable and the sort indicator (little
         arrow) will disappear.
     */
-    void SetSortable(bool sortable);
+    virtual void SetSortable(bool sortable);
 
     /**
         Set the title of the column header to @e title.
     */
-    void SetTitle(const wxString& title);
+    virtual void SetTitle(const wxString& title);
 };
 
 
@@ -1704,7 +1704,7 @@ public:
     /**
         Destructor. Deletes the image list if any.
     */
-    ~wxDataViewTreeCtrl();
+    virtual ~wxDataViewTreeCtrl();
 
     /**
 
@@ -1886,7 +1886,7 @@ public:
     /**
         Destructor.
     */
-    ~wxDataViewTreeStore();
+    virtual ~wxDataViewTreeStore();
 
     /**
         Append a container.

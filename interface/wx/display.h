@@ -122,6 +122,6 @@ public:
         Returns @true if the display is the primary display. The primary
         display is the one whose index is 0.
     */
-    bool IsPrimary();
+    bool IsPrimary() const;
 };
 

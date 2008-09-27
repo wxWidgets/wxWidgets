@@ -70,7 +70,7 @@ public:
     /**
         Destructor. Deletes the dialog and enables all top level windows.
     */
-    ~wxProgressDialog();
+    virtual ~wxProgressDialog();
 
     /**
         Works like Update() but makes the gauge control run in indeterminate mode

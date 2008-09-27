@@ -55,29 +55,29 @@ public:
     /**
         Destructor.
     */
-    ~wxPreviewControlBar();
+    virtual ~wxPreviewControlBar();
 
     /**
         Creates buttons, according to value of the button style flags.
 
         @todo which flags??
     */
-    void CreateButtons();
+    virtual void CreateButtons();
 
     /**
         Gets the print preview object associated with the control bar.
     */
-    wxPrintPreview* GetPrintPreview();
+    virtual wxPrintPreviewBase* GetPrintPreview() const;
 
     /**
         Gets the current zoom setting in percent.
     */
-    int GetZoomControl();
+    virtual int GetZoomControl();
 
     /**
         Sets the zoom control.
     */
-    void SetZoomControl(int percent);
+    virtual void SetZoomControl(int percent);
 
 };
 
@@ -109,7 +109,7 @@ public:
     /**
         Destructor.
     */
-    ~wxPreviewCanvas();
+    virtual ~wxPreviewCanvas();
 
     /**
         Calls wxPrintPreview::PaintPage() to refresh the canvas.
@@ -150,7 +150,7 @@ public:
     /**
         Destructor.
     */
-    ~wxPreviewFrame();
+    virtual ~wxPreviewFrame();
 
     /**
         Creates a wxPreviewCanvas.
@@ -158,7 +158,7 @@ public:
         Override this function to allow a user-defined preview canvas object
         to be created.
     */
-    void CreateCanvas();
+    virtual void CreateCanvas();
 
     /**
         Creates a wxPreviewControlBar.
@@ -166,7 +166,7 @@ public:
         Override this function to allow a user-defined preview control bar object
         to be created.
     */
-    void CreateControlBar();
+    virtual void CreateControlBar();
 
     /**
         Creates the preview canvas and control bar, and calls wxWindow::MakeModal(@true)
@@ -174,7 +174,7 @@ public:
 
         This function should be called by the application prior to showing the frame.
     */
-    void Initialize();
+    virtual void Initialize();
 
     /**
         Enables the other frames in the application, and deletes the print preview
@@ -245,40 +245,40 @@ public:
     /**
         Gets the preview window used for displaying the print preview image.
     */
-    wxPreviewCanvas* GetCanvas();
+    virtual wxPreviewCanvas* GetCanvas() const;
 
     /**
         Gets the page currently being previewed.
     */
-    int GetCurrentPage();
+    virtual int GetCurrentPage() const;
 
     /**
         Gets the frame used for displaying the print preview canvas
         and control bar.
     */
-    wxFrame* GetFrame();
+    virtual wxFrame* GetFrame() const;
 
     /**
         Returns the maximum page number.
     */
-    int GetMaxPage();
+    virtual int GetMaxPage() const;
 
     /**
         Returns the minimum page number.
     */
-    int GetMinPage();
+    virtual int GetMinPage() const;
 
     /**
         Gets the preview printout object associated with the wxPrintPreview object.
     */
-    wxPrintout* GetPrintout();
+    virtual wxPrintout* GetPrintout() const;
 
     /**
         Gets the printout object to be used for printing from within the preview
         interface,
         or @NULL if none exists.
     */
-    wxPrintout* GetPrintoutForPrinting();
+    virtual wxPrintout* GetPrintoutForPrinting() const;
 
     /**
         Returns @true if the wxPrintPreview is valid, @false otherwise.
@@ -286,7 +286,7 @@ public:
         It could return @false if there was a problem initializing the printer
         device context (current printer not set, for example).
     */
-    bool IsOk();
+    virtual bool IsOk() const;
 
     /**
         This refreshes the preview window with the preview image.
@@ -306,17 +306,17 @@ public:
         Returns @false in case of error -- call wxPrinter::GetLastError()
         to get detailed information about the kind of the error.
     */
-    bool Print(bool prompt);
+    virtual bool Print(bool prompt);
 
     /**
         Renders a page into a wxMemoryDC. Used internally by wxPrintPreview.
     */
-    bool RenderPage(int pageNum);
+    virtual bool RenderPage(int pageNum);
 
     /**
         Sets the window to be used for displaying the print preview image.
     */
-    void SetCanvas(wxPreviewCanvas* window);
+    virtual void SetCanvas(wxPreviewCanvas* window);
 
     /**
         Sets the current page to be previewed.
@@ -327,17 +327,17 @@ public:
         Sets the frame to be used for displaying the print preview canvas
         and control bar.
     */
-    void SetFrame(wxFrame* frame);
+    virtual void SetFrame(wxFrame* frame);
 
     /**
         Associates a printout object with the wxPrintPreview object.
     */
-    void SetPrintout(wxPrintout* printout);
+    virtual void SetPrintout(wxPrintout* printout);
 
     /**
         Sets the percentage preview zoom, and refreshes the preview canvas accordingly.
     */
-    void SetZoom(int percent);
+    virtual void SetZoom(int percent);
 };
 
 
@@ -378,7 +378,7 @@ public:
     /**
         Returns @true if the user has aborted the print job.
     */
-    bool GetAbort();
+    bool GetAbort() const;
 
     /**
         Return last error. Valid after calling Print(), PrintDialog() or
@@ -400,7 +400,7 @@ public:
         Returns the @ref overview_printing_printdata "print data" associated with
         the printer object.
     */
-    wxPrintDialogData& GetPrintDialogData();
+    virtual wxPrintDialogData& GetPrintDialogData() const;
 
     /**
         Starts the printing process. Provide a parent window, a user-defined wxPrintout
@@ -424,7 +424,7 @@ public:
         @remarks
         The application must delete this device context to avoid a memory leak.
     */
-    wxDC* PrintDialog(wxWindow* parent);
+    virtual wxDC* PrintDialog(wxWindow* parent);
 
     /**
         Default error-reporting function.
@@ -439,7 +439,7 @@ public:
         The setup dialog is obsolete from Windows 95, though retained
         for backward compatibility.
     */
-    bool Setup(wxWindow* parent);
+    virtual bool Setup(wxWindow* parent);
 };
 
 
@@ -490,7 +490,7 @@ public:
     /**
         Destructor.
     */
-    ~wxPrintout();
+    virtual ~wxPrintout();
 
     /**
         Set the user scale and device origin of the wxDC associated with this wxPrintout
@@ -544,7 +544,7 @@ public:
         This will be a wxPrinterDC if printing under Windows or Mac, a wxPostScriptDC
         if printing on other platforms, and a wxMemoryDC if previewing.
     */
-    wxDC* GetDC();
+    wxDC* GetDC() const;
 
     /**
         Return the rectangle corresponding to the page margins specified by the given
@@ -554,7 +554,7 @@ public:
         The page margins are specified with respect to the edges of the paper on all
         platforms.
     */
-    wxRect GetLogicalPageMarginsRect(const wxPageSetupDialogData& pageSetupData);
+    wxRect GetLogicalPageMarginsRect(const wxPageSetupDialogData& pageSetupData) const;
 
     /**
         Return the rectangle corresponding to the page in the associated wxDC 's
@@ -564,13 +564,13 @@ public:
         On other platforms and PostScript printing, this will be the full paper
         rectangle.
     */
-    wxRect GetLogicalPageRect();
+    wxRect GetLogicalPageRect() const;
 
     /**
         Return the rectangle corresponding to the paper in the associated wxDC 's
         logical coordinates for the current user scale and device origin.
     */
-    wxRect GetLogicalPaperRect();
+    wxRect GetLogicalPaperRect() const;
 
     /**
         Returns the number of pixels per logical inch of the printer device context.
@@ -587,7 +587,7 @@ public:
         This method returns the output-only parameters as a tuple.
         @endWxPythonOnly
     */
-    void GetPPIPrinter(int* w, int* h);
+    void GetPPIPrinter(int* w, int* h) const;
 
     /**
         Returns the number of pixels per logical inch of the screen device context.
@@ -602,7 +602,7 @@ public:
         This method returns the output-only parameters as a tuple.
         @endWxPythonOnly
     */
-    void GetPPIScreen(int* w, int* h);
+    void GetPPIScreen(int* w, int* h) const;
 
     /**
         Called by the framework to obtain information from the application about minimum
@@ -631,7 +631,7 @@ public:
         This method returns the output-only parameters as a tuple.
         @endWxPythonOnly
     */
-    void GetPageSizeMM(int* w, int* h);
+    void GetPageSizeMM(int* w, int* h) const;
 
     /**
         Returns the size of the printer page in pixels, called the page rectangle.
@@ -647,7 +647,7 @@ public:
         This method returns the output-only parameters as a tuple.
         @endWxPythonOnly
     */
-    void GetPageSizePixels(int* w, int* h);
+    void GetPageSizePixels(int* w, int* h) const;
 
     /**
         Returns the rectangle that corresponds to the entire paper in pixels, called the
@@ -668,14 +668,14 @@ public:
         area were printable, so this function will return the same rectangle as the page
         rectangle.
     */
-    wxRect GetPaperRectPixels();
+    wxRect GetPaperRectPixels() const;
 
     /**
         Returns the title of the printout.
 
         @todo the python note here was wrong
     */
-    wxString GetTitle();
+    virtual wxString GetTitle() const;
 
     /**
         Should be overridden to return @true if the document has this page, or @false
@@ -684,12 +684,12 @@ public:
         Returning @false signifies the end of the document. By default,
         HasPage behaves as if the document has only one page.
     */
-    bool HasPage(int pageNum);
+    virtual bool HasPage(int pageNum);
 
     /**
         Returns @true if the printout is currently being used for previewing.
     */
-    bool IsPreview();
+    virtual bool IsPreview() const;
 
     /**
         Set the user scale and device origin of the wxDC associated with this wxPrintout
@@ -757,7 +757,7 @@ public:
          be called by using the method <tt>base_OnBeginDocument(startPage, endPage)</tt>.
         @endWxPythonOnly
     */
-    bool OnBeginDocument(int startPage, int endPage);
+    virtual bool OnBeginDocument(int startPage, int endPage);
 
     /**
         Called by the framework at the start of printing.
@@ -765,7 +765,7 @@ public:
         OnBeginPrinting() is called once for every print job
         (regardless of how many copies are being printed).
     */
-    void OnBeginPrinting();
+    virtual void OnBeginPrinting();
 
     /**
         Called by the framework at the end of document printing.
@@ -776,7 +776,7 @@ public:
         The base OnEndDocument() must be called from within the overridden function,
         since it calls wxDC::EndDoc().
     */
-    void OnEndDocument();
+    virtual void OnEndDocument();
 
     /**
         Called by the framework at the end of printing.
@@ -784,7 +784,7 @@ public:
         OnEndPrinting is called once for every print job
         (regardless of how many copies are being printed).
     */
-    void OnEndPrinting();
+    virtual void OnEndPrinting();
 
     /**
         Called once by the framework before any other demands are made of the
@@ -793,7 +793,7 @@ public:
         This gives the object an opportunity to calculate the number of pages
         in the document, for example.
     */
-    void OnPreparePrinting();
+    virtual void OnPreparePrinting();
 
     /**
         Called by the framework when a page should be printed. Returning @false cancels

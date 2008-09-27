@@ -499,7 +499,7 @@ public:
         The destructor calls Close() to finish writing the zip if it has
         not been called already.
     */
-    ~wxZipOutputStream();
+    virtual ~wxZipOutputStream();
 
     /**
         Finishes writing the zip, returning @true if successful.

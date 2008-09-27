@@ -220,10 +220,11 @@ public:
         @param name
             Window name.
     */
-    wxMediaCtrl( wxWindow* parent, wxWindowID id, const wxString& fileName = wxT(""),
+    wxMediaCtrl(wxWindow* parent, wxWindowID id, const wxString& fileName = wxT(""),
                 const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-                long style = 0, const wxString& szBackend = wxT(""), const wxValidatorvalidator = wxDefaultValidator,
-                const wxString& name = wxPanelNameStr );
+                long style = 0, const wxString& szBackend = wxT(""),
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxPanelNameStr);
 
 
     /**
@@ -254,10 +255,11 @@ public:
         @param name
             Window name.
     */
-    bool Create( wxWindow* parent, wxWindowID id, const wxString& fileName = wxT(""),
+    bool Create(wxWindow* parent, wxWindowID id, const wxString& fileName = wxT(""),
                 const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-                long style = 0, const wxString& szBackend = wxT(""), const wxValidatorvalidator = wxDefaultValidator,
-                const wxString& name = wxPanelNameStr );
+                long style = 0, const wxString& szBackend = wxT(""),
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxPanelNameStr);
 
     /**
         Obtains the best size relative to the original/natural size of the

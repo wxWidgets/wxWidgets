@@ -35,7 +35,7 @@ public:
     /**
         Destructor.
     */
-    ~wxIconBundle();
+    virtual ~wxIconBundle();
 
     //@{
     /**

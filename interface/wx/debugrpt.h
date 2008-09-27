@@ -135,7 +135,7 @@ public:
         constructor with all the files it contains. Call Reset() to prevent
         this from happening.
     */
-    ~wxDebugReport();
+    virtual ~wxDebugReport();
 
     /**
         Adds all available information to the report. Currently this includes a
@@ -148,7 +148,7 @@ public:
         Add an XML file containing the current or exception context and the
         stack trace.
     */
-    bool AddContext(Context ctx);
+    virtual bool AddContext(Context ctx);
 
     /**
         The same as calling AddContext(Context_Current).
@@ -188,7 +188,7 @@ public:
 
         @see GetDirectory(), AddText()
     */
-    void AddFile(const wxString& filename, const wxString& description);
+    virtual void AddFile(const wxString& filename, const wxString& description);
 
     /**
         This is a convenient wrapper around AddFile(). It creates the file with
@@ -250,7 +250,7 @@ public:
         Gets the name used as a base name for various files, by default
         wxApp::GetAppName() is used.
     */
-    wxString GetReportName() const;
+    virtual wxString GetReportName() const;
 
     /**
         Returns @true if the object was successfully initialized. If this

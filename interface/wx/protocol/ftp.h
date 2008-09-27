@@ -97,13 +97,13 @@ public:
     /**
         Destructor will close the connection if connected.
     */
-    ~wxFTP();
+    virtual ~wxFTP();
 
     /**
         Aborts the download currently in process, returns @true if ok, @false
         if an error occurred.
     */
-    bool Abort();
+    virtual bool Abort();
 
     /**
         Change the current FTP working directory.
@@ -192,7 +192,7 @@ public:
         @return Returns @NULL if an error occurred (it could be a network failure
                  or the fact that the file doesn't exist).
     */
-    wxInputStream* GetInputStream(const wxString& path);
+    virtual wxInputStream* GetInputStream(const wxString& path);
 
     /**
         Returns the last command result, i.e. the full server reply for the last command.
@@ -209,7 +209,7 @@ public:
 
         @see wxOutputStream
     */
-    wxOutputStream* GetOutputStream(const wxString& file);
+    virtual wxOutputStream* GetOutputStream(const wxString& file);
 
     /**
         Create the specified directory in the current FTP working directory.
@@ -266,7 +266,7 @@ public:
     /**
         Sets the password to be sent to the FTP server to be allowed to log in.
     */
-    void SetPassword(const wxString& passwd);
+    virtual void SetPassword(const wxString& passwd);
 
     /**
         Sets the transfer mode to the specified one. It will be used for the next
@@ -279,6 +279,6 @@ public:
     /**
         Sets the user name to be sent to the FTP server to be allowed to log in.
     */
-    void SetUser(const wxString& user);
+    virtual void SetUser(const wxString& user);
 };
 

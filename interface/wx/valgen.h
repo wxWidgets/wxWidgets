@@ -95,7 +95,7 @@ public:
     /**
         Destructor.
     */
-    ~wxGenericValidator();
+    virtual ~wxGenericValidator();
 
     /**
         Clones the generic validator using the copy constructor.

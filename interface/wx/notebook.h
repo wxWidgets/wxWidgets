@@ -251,10 +251,9 @@ public:
 
         @see AddPage()
     */
-    bool InsertPage(size_t index, wxNotebookPage* page,
-                    const wxString& text,
-                    bool select = false,
-                    int imageId = -1);
+    virtual bool InsertPage(size_t index, wxNotebookPage* page,
+                            const wxString& text, bool select = false,
+                            int imageId = -1);
 
     /**
         An event handler function, called when the page selection is changed.
@@ -280,7 +279,7 @@ public:
         Sets the amount of space around each page's icon and label, in pixels.
         @note The vertical padding cannot be changed in wxGTK.
     */
-    void SetPadding(const wxSize& padding);
+    virtual void SetPadding(const wxSize& padding);
 
     /**
         Sets the image index for the given page. @a image is an index into

@@ -174,7 +174,7 @@ public:
         @note On PocketPC, this does nothing, since the dialog will be shown full-screen,
               and the layout will be done when the dialog receives a size event.
     */
-    void LayoutDialog(int centreFlags = wxBOTH);
+    virtual void LayoutDialog(int centreFlags = wxBOTH);
 
     /**
         Sets the book control used for the dialog.

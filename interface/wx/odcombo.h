@@ -143,7 +143,7 @@ public:
     /**
         Destructor, destroying the owner-drawn combobox.
     */
-    ~wxOwnerDrawnComboBox();
+    virtual ~wxOwnerDrawnComboBox();
 
     //@{
     /**
@@ -173,12 +173,12 @@ public:
     /**
         Returns index to the widest item in the list.
     */
-    int GetWidestItem() const;
+    virtual int GetWidestItem();
 
     /**
         Returns width of the widest item in the list.
     */
-    int GetWidestItemWidth() const;
+    virtual int GetWidestItemWidth();
 
     /**
         This method is used to draw the items background and, maybe, a border around it.

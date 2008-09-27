@@ -86,7 +86,7 @@ public:
     /**
         Destructor.
     */
-    ~wxModule();
+    virtual ~wxModule();
 
     //@{
     /**

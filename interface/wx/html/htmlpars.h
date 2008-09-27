@@ -263,6 +263,6 @@ public:
         Parse() or any function called
         by it (i.e. from tag handlers).
     */
-    void StopParsing();
+    virtual void StopParsing();
 };
 

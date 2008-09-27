@@ -324,7 +324,7 @@ public:
     /**
         Append a string to the end of the document without changing the selection.
     */
-    void AppendText(const wxString& text);
+    virtual void AppendText(const wxString& text);
 
     /**
         Append a string to the end of the document without changing the selection.
@@ -350,18 +350,18 @@ public:
         Retrieve whether or not autocompletion is hidden automatically when nothing
         matches.
     */
-    bool AutoCompGetAutoHide();
+    bool AutoCompGetAutoHide() const;
 
     /**
         Retrieve whether auto-completion cancelled by backspacing before start.
     */
-    bool AutoCompGetCancelAtStart();
+    bool AutoCompGetCancelAtStart() const;
 
     /**
         Retrieve whether a single item auto-completion list automatically choose the
         item.
     */
-    bool AutoCompGetChooseSingle();
+    bool AutoCompGetChooseSingle() const;
 
     /**
         Get currently selected item position in the auto-completion list
@@ -372,32 +372,32 @@ public:
         Retrieve whether or not autocompletion deletes any word characters
         after the inserted text upon completion.
     */
-    bool AutoCompGetDropRestOfWord();
+    bool AutoCompGetDropRestOfWord() const;
 
     /**
         Retrieve state of ignore case flag.
     */
-    bool AutoCompGetIgnoreCase();
+    bool AutoCompGetIgnoreCase() const;
 
     /**
         Set the maximum height, in rows, of auto-completion and user lists.
     */
-    int AutoCompGetMaxHeight();
+    int AutoCompGetMaxHeight() const;
 
     /**
         Get the maximum width, in characters, of auto-completion and user lists.
     */
-    int AutoCompGetMaxWidth();
+    int AutoCompGetMaxWidth() const;
 
     /**
         Retrieve the auto-completion list separator character.
     */
-    int AutoCompGetSeparator();
+    int AutoCompGetSeparator() const;
 
     /**
         Retrieve the auto-completion list type-separator character.
     */
-    int AutoCompGetTypeSeparator();
+    int AutoCompGetTypeSeparator() const;
 
     /**
         Retrieve the position of the caret when the auto-completion list was displayed.
@@ -558,12 +558,12 @@ public:
     /**
         Are there any redoable actions in the undo history?
     */
-    bool CanRedo();
+    virtual bool CanRedo() const;
 
     /**
         Are there any undoable actions in the undo history?
     */
-    bool CanUndo();
+    virtual bool CanUndo() const;
 
     /**
         Cancel any modes such as call tip or auto-completion list display.
@@ -610,7 +610,7 @@ public:
     /**
         Clear the selection.
     */
-    void Clear();
+    virtual void Clear();
 
     /**
         Delete all text in the document.
@@ -660,7 +660,7 @@ public:
     /**
         Copy the selection to the clipboard.
     */
-    void Copy();
+    virtual void Copy();
 
     /**
         Copy a range of text to the clipboard. Positions are clipped into the document.
@@ -690,7 +690,7 @@ public:
     /**
         Cut the selection to the clipboard.
     */
-    void Cut();
+    virtual void Cut();
 
     /**
         Delete back from the current position to the start of the line.
@@ -819,73 +819,73 @@ public:
     /**
         Returns the position of the opposite end of the selection to the caret.
     */
-    int GetAnchor();
+    int GetAnchor() const;
 
     /**
         Does a backspace pressed when caret is within indentation unindent?
     */
-    bool GetBackSpaceUnIndents();
+    bool GetBackSpaceUnIndents() const;
 
     /**
         Is drawing done first into a buffer or direct to the screen?
     */
-    bool GetBufferedDraw();
+    bool GetBufferedDraw() const;
 
     /**
         Get the foreground colour of the caret.
     */
-    wxColour GetCaretForeground();
+    wxColour GetCaretForeground() const;
 
     /**
         Get the background alpha of the caret line.
     */
-    int GetCaretLineBackAlpha();
+    int GetCaretLineBackAlpha() const;
 
     /**
         Get the colour of the background of the line containing the caret.
     */
-    wxColour GetCaretLineBackground();
+    wxColour GetCaretLineBackground() const;
 
     /**
         Is the background of the line containing the caret in a different colour?
     */
-    bool GetCaretLineVisible();
+    bool GetCaretLineVisible() const;
 
     /**
         Get the time in milliseconds that the caret is on and off.
     */
-    int GetCaretPeriod();
+    int GetCaretPeriod() const;
 
     /**
         Can the caret preferred x position only be changed by explicit movement
         commands?
     */
-    bool GetCaretSticky();
+    bool GetCaretSticky() const;
 
     /**
         Returns the width of the insert mode caret.
     */
-    int GetCaretWidth();
+    int GetCaretWidth() const;
 
     /**
         Returns the character byte at the position.
     */
-    int GetCharAt(int pos);
+    int GetCharAt(int pos) const;
 
     /**
         Get the code page used to interpret the bytes of the document as characters.
     */
-    int GetCodePage();
+    int GetCodePage() const;
 
     /**
         Retrieve the column number of a position, taking tab width into account.
     */
-    int GetColumn(int pos);
+    int GetColumn(int pos) const;
 
     /**
         Get the way control characters are displayed.
     */
-    int GetControlCharSymbol();
+    int GetControlCharSymbol() const;
 
     /**
         
@@ -907,7 +907,7 @@ public:
     /**
         Returns the position of the caret.
     */
-    int GetCurrentPos();
+    int GetCurrentPos() const;
 
     /**
         Retrieve a pointer to the document object.
@@ -917,63 +917,63 @@ public:
     /**
         Retrieve the current end of line mode - one of CRLF, CR, or LF.
     */
-    int GetEOLMode();
+    int GetEOLMode() const;
 
     /**
         Retrieve the colour used in edge indication.
     */
-    wxColour GetEdgeColour();
+    wxColour GetEdgeColour() const;
 
     /**
         Retrieve the column number which text should be kept within.
     */
-    int GetEdgeColumn();
+    int GetEdgeColumn() const;
 
     /**
         Retrieve the edge highlight mode.
     */
-    int GetEdgeMode();
+    int GetEdgeMode() const;
 
     /**
         Retrieve whether the maximum scroll position has the last
         line at the bottom of the view.
     */
-    bool GetEndAtLastLine();
+    bool GetEndAtLastLine() const;
 
     /**
         Retrieve the position of the last correctly styled character.
     */
-    int GetEndStyled();
+    int GetEndStyled() const;
 
     /**
         Retrieve the display line at the top of the display.
     */
-    int GetFirstVisibleLine();
+    int GetFirstVisibleLine() const;
 
     /**
         Is a header line expanded?
     */
-    bool GetFoldExpanded(int line);
+    bool GetFoldExpanded(int line) const;
 
     /**
         Retrieve the fold level of a line.
     */
-    int GetFoldLevel(int line);
+    int GetFoldLevel(int line) const;
 
     /**
         Find the parent line of a child line.
     */
-    int GetFoldParent(int line);
+    int GetFoldParent(int line) const;
 
     /**
         Get the highlighted indentation guide column.
     */
-    int GetHighlightGuide();
+    int GetHighlightGuide() const;
 
     /**
         Retrieve indentation size.
     */
-    int GetIndent();
+    int GetIndent() const;
 
     /**
         Are the indentation guides visible?
@@ -983,7 +983,7 @@ public:
     /**
         Find the last child line of a header line.
     */
-    int GetLastChild(int line, int level);
+    int GetLastChild(int line, int level) const;
 
     /**
         Can be used to prevent the EVT_CHAR handler from adding the char
@@ -993,42 +993,42 @@ public:
     /**
         Retrieve the degree of caching of layout information.
     */
-    int GetLayoutCache();
+    int GetLayoutCache() const;
 
     /**
         Returns the number of characters in the document.
     */
-    int GetLength();
+    int GetLength() const;
 
     /**
         Retrieve the lexing language of the document.
     */
-    int GetLexer();
+    int GetLexer() const;
 
     /**
         Retrieve the contents of a line.
     */
-    wxString GetLine(int line);
+    wxString GetLine(int line) const;
 
     /**
         Returns the number of lines in the document. There is always at least one.
     */
-    int GetLineCount();
+    int GetLineCount() const;
 
     /**
         Get the position after the last visible characters on a line.
     */
-    int GetLineEndPosition(int line);
+    int GetLineEndPosition(int line) const;
 
     /**
         Retrieve the position before the first non indentation character on a line.
     */
-    int GetLineIndentPosition(int line);
+    int GetLineIndentPosition(int line) const;
 
     /**
         Retrieve the number of columns that a line is indented.
     */
-    int GetLineIndentation(int line);
+    int GetLineIndentation(int line) const;
 
     /**
         Retrieve the contents of a line.
@@ -1050,92 +1050,92 @@ public:
     /**
         Retrieve the extra styling information for a line.
     */
-    int GetLineState(int line);
+    int GetLineState(int line) const;
 
     /**
         Is a line visible?
     */
-    bool GetLineVisible(int line);
+    bool GetLineVisible(int line) const;
 
     /**
         Returns the size in pixels of the left margin.
     */
-    int GetMarginLeft();
+    int GetMarginLeft() const;
 
     /**
         Retrieve the marker mask of a margin.
     */
-    int GetMarginMask(int margin);
+    int GetMarginMask(int margin) const;
 
     /**
         Returns the size in pixels of the right margin.
     */
-    int GetMarginRight();
+    int GetMarginRight() const;
 
     /**
         Retrieve the mouse click sensitivity of a margin.
     */
-    bool GetMarginSensitive(int margin);
+    bool GetMarginSensitive(int margin) const;
 
     /**
         Retrieve the type of a margin.
     */
-    int GetMarginType(int margin);
+    int GetMarginType(int margin) const;
 
     /**
         Retrieve the width of a margin in pixels.
     */
-    int GetMarginWidth(int margin);
+    int GetMarginWidth(int margin) const;
 
     /**
         Retrieve the last line number that has line state.
     */
-    int GetMaxLineState();
+    int GetMaxLineState() const;
 
     /**
         Get which document modification events are sent to the container.
     */
-    int GetModEventMask();
+    int GetModEventMask() const;
 
     /**
         Is the document different from when it was last saved?
     */
-    bool GetModify();
+    bool GetModify() const;
 
     /**
         Get whether mouse gets captured.
     */
-    bool GetMouseDownCaptures();
+    bool GetMouseDownCaptures() const;
 
     /**
         Retrieve the time the mouse must sit still to generate a mouse dwell event.
     */
-    int GetMouseDwellTime();
+    int GetMouseDwellTime() const;
 
     /**
         Returns @true if overtype mode is active otherwise @false is returned.
     */
-    bool GetOvertype();
+    bool GetOvertype() const;
 
     /**
         Get convert-on-paste setting
     */
-    bool GetPasteConvertEndings();
+    bool GetPasteConvertEndings() const;
 
     /**
         Returns the print colour mode.
     */
-    int GetPrintColourMode();
+    int GetPrintColourMode() const;
 
     /**
         Returns the print magnification.
     */
-    int GetPrintMagnification();
+    int GetPrintMagnification() const;
 
     /**
         Is printing line wrapped?
     */
-    int GetPrintWrapMode();
+    int GetPrintWrapMode() const;
 
     /**
         Retrieve a 'property' value previously set with SetProperty.
@@ -1152,37 +1152,37 @@ public:
         Retrieve a 'property' value previously set with SetProperty,
         interpreted as an int AFTER any '$()' variable replacement.
     */
-    int GetPropertyInt(const wxString& key);
+    int GetPropertyInt(const wxString& key) const;
 
     /**
         In read-only mode?
     */
-    bool GetReadOnly();
+    bool GetReadOnly() const;
 
     /**
         Get cursor type.
     */
-    int GetSTCCursor();
+    int GetSTCCursor() const;
 
     /**
         Get internal focus flag.
     */
-    bool GetSTCFocus();
+    bool GetSTCFocus() const;
 
     /**
         Retrieve the document width assumed for scrolling.
     */
-    int GetScrollWidth();
+    int GetScrollWidth() const;
 
     /**
         Get the search flags used by SearchInTarget.
     */
-    int GetSearchFlags();
+    int GetSearchFlags() const;
 
     /**
         Get the alpha of the selection.
     */
-    int GetSelAlpha();
+    int GetSelAlpha() const;
 
     /**
         Retrieve the selected text.
@@ -1202,37 +1202,37 @@ public:
     /**
         Returns the position at the end of the selection.
     */
-    int GetSelectionEnd();
+    int GetSelectionEnd() const;
 
     /**
         Get the mode of the current selection.
     */
-    int GetSelectionMode();
+    int GetSelectionMode() const;
 
     /**
         Returns the position at the start of the selection.
     */
-    int GetSelectionStart();
+    int GetSelectionStart() const;
 
     /**
         Get error status.
     */
-    int GetStatus();
+    int GetStatus() const;
 
     /**
         Returns the style byte at the position.
     */
-    int GetStyleAt(int pos);
+    int GetStyleAt(int pos) const;
 
     /**
         Retrieve number of bits in style bytes used to hold the lexical state.
     */
-    int GetStyleBits();
+    int GetStyleBits() const;
 
     /**
         Retrieve the number of bits the current lexer needs for styling.
     */
-    int GetStyleBitsNeeded();
+    int GetStyleBitsNeeded() const;
 
     /**
         Retrieve a buffer of cells.
@@ -1242,32 +1242,32 @@ public:
     /**
         Does a tab pressed when caret is within indentation indent?
     */
-    bool GetTabIndents();
+    bool GetTabIndents() const;
 
     /**
         Retrieve the visible size of a tab.
     */
-    int GetTabWidth();
+    int GetTabWidth() const;
 
     /**
         Get the position that ends the target.
     */
-    int GetTargetEnd();
+    int GetTargetEnd() const;
 
     /**
         Get the position that starts the target.
     */
-    int GetTargetStart();
+    int GetTargetStart() const;
 
     /**
         Retrieve all the text in the document.
     */
-    wxString GetText();
+    wxString GetText() const;
 
     /**
         Retrieve the number of characters in the document.
     */
-    int GetTextLength();
+    int GetTextLength() const;
 
     /**
         Retrieve a range of text.
@@ -1287,12 +1287,12 @@ public:
     /**
         Is drawing done in two phases with backgrounds drawn before foregrounds?
     */
-    bool GetTwoPhaseDraw();
+    bool GetTwoPhaseDraw() const;
 
     /**
         Is undo history being collected?
     */
-    bool GetUndoCollection();
+    bool GetUndoCollection() const;
 
     /**
         Returns the current UseAntiAliasing setting.
@@ -1302,58 +1302,58 @@ public:
     /**
         Is the horizontal scroll bar visible?
     */
-    bool GetUseHorizontalScrollBar();
+    bool GetUseHorizontalScrollBar() const;
 
     /**
         Retrieve whether tabs will be used in indentation.
     */
-    bool GetUseTabs();
+    bool GetUseTabs() const;
 
     /**
         Is the vertical scroll bar visible?
     */
-    bool GetUseVerticalScrollBar();
+    bool GetUseVerticalScrollBar() const;
 
     /**
         Are the end of line characters visible?
     */
-    bool GetViewEOL();
+    bool GetViewEOL() const;
 
     /**
         Are white space characters currently visible?
         Returns one of SCWS_* constants.
     */
-    int GetViewWhiteSpace();
+    int GetViewWhiteSpace() const;
 
     /**
         Retrieve whether text is word wrapped.
     */
-    int GetWrapMode();
+    int GetWrapMode() const;
 
     /**
         Retrive the start indent for wrapped lines.
     */
-    int GetWrapStartIndent();
+    int GetWrapStartIndent() const;
 
     /**
         Retrive the display mode of visual flags for wrapped lines.
     */
-    int GetWrapVisualFlags();
+    int GetWrapVisualFlags() const;
 
     /**
         Retrive the location of visual flags for wrapped lines.
     */
-    int GetWrapVisualFlagsLocation();
+    int GetWrapVisualFlagsLocation() const;
 
     /**
         
     */
-    int GetXOffset();
+    int GetXOffset() const;
 
     /**
         Retrieve the zoom level.
     */
-    int GetZoom();
+    int GetZoom() const;
 
     /**
         Set caret to start of a line and ensure it is visible.
@@ -1420,12 +1420,12 @@ public:
     /**
         Retrieve the foreground colour of an indicator.
     */
-    wxColour IndicatorGetForeground(int indic);
+    wxColour IndicatorGetForeground(int indic) const;
 
     /**
         Retrieve the style of an indicator.
     */
-    int IndicatorGetStyle(int indic);
+    int IndicatorGetStyle(int indic) const;
 
     /**
         Set the foreground colour of an indicator.
@@ -1522,12 +1522,12 @@ public:
     /**
         Retrieve the line containing a position.
     */
-    int LineFromPosition(int pos);
+    int LineFromPosition(int pos) const;
 
     /**
         How many characters are on a line, not including end of line characters?
     */
-    int LineLength(int line);
+    int LineLength(int line) const;
 
     /**
         Scroll horizontally and vertically.
@@ -1572,7 +1572,7 @@ public:
     /**
         Retrieves the number of lines completely visible.
     */
-    int LinesOnScreen();
+    int LinesOnScreen() const;
 
     /**
         Split the lines in the target into lines that are less wide than pixelWidth
@@ -1727,7 +1727,7 @@ public:
     /**
         Paste the contents of the clipboard into the document replacing the selection.
     */
-    void Paste();
+    virtual void Paste();
 
     /**
         Retrieve the point in the window where a position is displayed.
@@ -1749,12 +1749,12 @@ public:
     /**
         Retrieve the position at the start of a line.
     */
-    int PositionFromLine(int line);
+    int PositionFromLine(int line) const;
 
     /**
         Find the position from a point within the window.
     */
-    int PositionFromPoint(wxPoint pt);
+    int PositionFromPoint(wxPoint pt) const;
 
     /**
         Find the position from a point within the window but return
@@ -1765,7 +1765,7 @@ public:
     /**
         Redoes the next action on the undo history.
     */
-    void Redo();
+    virtual void Redo();
 
     /**
         Register an image for use in autocompletion lists.
@@ -1846,7 +1846,7 @@ public:
     /**
         Select all the text in the document.
     */
-    void SelectAll();
+    virtual void SelectAll();
 
     /**
         Duplicate the selection. If selection empty duplicate the line containing the
@@ -1858,7 +1858,7 @@ public:
         Is the selection rectangular? The alternative is the more common stream
         selection.
     */
-    bool SelectionIsRectangle();
+    bool SelectionIsRectangle() const;
 
     /**
         Send a message to Scintilla
@@ -2601,7 +2601,7 @@ public:
     /**
         Undo one action in the undo history.
     */
-    void Undo();
+    virtual void Undo();
 
     /**
         Transform the selection to upper case.

@@ -63,7 +63,7 @@ public:
     /**
         Destructor.
     */
-    ~wxStatusBar();
+    virtual ~wxStatusBar();
 
     /**
         Creates the window, for two-step construction.
@@ -135,7 +135,7 @@ public:
         bigger than the height specified here depending on the size of the font used by
         the status bar.
     */
-    void SetMinHeight(int height);
+    virtual void SetMinHeight(int height);
 
     /**
         Sets the styles of the fields in the status line which can make fields appear

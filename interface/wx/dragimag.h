@@ -192,7 +192,7 @@ public:
         applications to draw their own image instead of using an actual bitmap.
         If you override this function, you must also override GetImageRect().
     */
-    virtual bool DoDrawImage(wxDC& dc, const wxPoint& pos);
+    virtual bool DoDrawImage(wxDC& dc, const wxPoint& pos) const;
 
     /**
         Call this when the drag has finished.
@@ -254,8 +254,8 @@ public:
 
         This function is available in wxGenericDragImage only.
     */
-    bool UpdateBackingFromWindow(wxDC& windowDC, wxMemoryDC& destDC,
-                                 const wxRect& sourceRect,
-                                 const wxRect& destRect) const;
+    virtual bool UpdateBackingFromWindow(wxDC& windowDC, wxMemoryDC& destDC,
+                                         const wxRect& sourceRect,
+                                         const wxRect& destRect) const;
 };
 

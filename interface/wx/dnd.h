@@ -91,7 +91,7 @@ public:
     /**
         Destructor. Deletes the associated data object, if any.
     */
-    ~wxDropTarget();
+    virtual ~wxDropTarget();
 
     /**
         This method may only be called from within OnData(). By default, this
@@ -228,7 +228,7 @@ public:
     /**
         Default constructor.
     */
-    ~wxDropSource();
+    virtual ~wxDropSource();
 
     /**
         Starts the drag-and-drop operation which will terminate when the user

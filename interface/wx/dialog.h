@@ -173,7 +173,7 @@ public:
         Destructor. Deletes any child windows before deleting the physical
         window.
     */
-    ~wxDialog();
+    virtual ~wxDialog();
 
     /**
         Adds an identifier to be regarded as a main button for the
@@ -279,7 +279,7 @@ public:
 
         @see ShowModal(), GetReturnCode(), SetReturnCode()
     */
-    void EndModal(int retCode);
+    virtual void EndModal(int retCode);
 
     /**
         Gets the identifier of the button which works like standard OK button
@@ -296,7 +296,7 @@ public:
         @ref overview_dialog "layout adaptation code" to know that only the
         pages need to be made scrollable.
     */
-    wxWindow* GetContentWindow() const;
+    virtual wxWindow* GetContentWindow() const;
 
     /**
         Gets the identifier of the button to map presses of @c ESC button to.
@@ -321,7 +321,7 @@ public:
 
         @see @ref overview_dialog_autoscrolling (for more on layout adaptation)
     */
-    int GetLayoutAdaptationLevel();
+    int GetLayoutAdaptationLevel() const;
 
     /**
         Gets the adaptation mode, overriding the global adaptation flag.
@@ -353,7 +353,7 @@ public:
 
         @see SetReturnCode(), ShowModal(), EndModal()
     */
-    int GetReturnCode();
+    int GetReturnCode() const;
 
     /**
         On PocketPC, a dialog is automatically provided with an empty toolbar.
@@ -407,7 +407,7 @@ public:
     /**
         Returns @true if the dialog box is modal, @false otherwise.
     */
-    bool IsModal() const;
+    virtual bool IsModal() const;
 
     /**
         The default handler for wxEVT_SYS_COLOUR_CHANGED.
@@ -566,7 +566,7 @@ public:
 
         @see EndModal(), GetReturnCode(), SetReturnCode()
     */
-    int ShowModal();
+    virtual int ShowModal();
 };
 
 

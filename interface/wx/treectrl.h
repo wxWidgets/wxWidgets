@@ -166,7 +166,7 @@ public:
     /**
         Destructor, destroying the tree control.
     */
-    ~wxTreeCtrl();
+    virtual ~wxTreeCtrl();
 
     /**
         Adds the root node to the tree, returning the new item.
@@ -176,9 +176,9 @@ public:
         items, respectively. If @a image -1 and @a selImage is -1, the same
         image is used for both selected and unselected items.
     */
-    wxTreeItemId AddRoot(const wxString& text, int image = -1,
-                         int selImage = -1,
-                         wxTreeItemData* data = NULL);
+    virtual wxTreeItemId AddRoot(const wxString& text, int image = -1,
+                                 int selImage = -1,
+                                 wxTreeItemData* data = NULL);
 
     /**
         Appends an item to the end of the branch identified by @a parent, return
@@ -231,7 +231,7 @@ public:
     /**
         Collapses the given item.
     */
-    void Collapse(const wxTreeItemId& item);
+    virtual void Collapse(const wxTreeItemId& item);
 
     /**
         Collapses the root item.
@@ -250,7 +250,7 @@ public:
     /**
         Collapses the given item and removes all children.
     */
-    void CollapseAndReset(const wxTreeItemId& item);
+    virtual void CollapseAndReset(const wxTreeItemId& item);
 
     /**
         Creates the tree control. See wxTreeCtrl::wxTreeCtrl() for further
@@ -269,14 +269,14 @@ public:
 
         This function may cause a subsequent call to GetNextChild() to fail.
     */
-    void Delete(const wxTreeItemId& item);
+    virtual void Delete(const wxTreeItemId& item);
 
     /**
         Deletes all items in the control. Note that this may not generate
         EVT_TREE_DELETE_ITEM() events under some Windows versions although
         normally such event is generated for each removed item.
     */
-    void DeleteAllItems();
+    virtual void DeleteAllItems();
 
     /**
         Deletes all children of the given item (but not the item itself). Note
@@ -285,7 +285,7 @@ public:
         If you have called SetItemHasChildren(), you may need to call it again
         since DeleteChildren() does not automatically clear the setting.
     */
-    void DeleteChildren(const wxTreeItemId& item);
+    virtual void DeleteChildren(const wxTreeItemId& item);
 
     /**
         Starts editing the label of the given @a item. This function generates a
@@ -314,12 +314,12 @@ public:
     /**
         Scrolls and/or expands items to ensure that the given item is visible.
     */
-    void EnsureVisible(const wxTreeItemId& item);
+    virtual void EnsureVisible(const wxTreeItemId& item);
 
     /**
         Expands the given item.
     */
-    void Expand(const wxTreeItemId& item);
+    virtual void Expand(const wxTreeItemId& item);
 
     /**
         Expands all items in the tree.
@@ -372,7 +372,7 @@ public:
     /**
         Returns the number of items in the control.
     */
-    unsigned int GetCount() const;
+    virtual unsigned int GetCount() const;
 
     /**
         Returns the edit control being currently used to edit a label. Returns
@@ -380,7 +380,7 @@ public:
 
         @note This is currently only implemented for wxMSW.
     */
-    wxTextCtrl* GetEditControl() const;
+    virtual wxTextCtrl* GetEditControl() const;
 
     /**
         Returns the first child; call GetNextChild() for the next child.
@@ -407,7 +407,7 @@ public:
     /**
         Returns the first visible item.
     */
-    wxTreeItemId GetFirstVisibleItem() const;
+    virtual wxTreeItemId GetFirstVisibleItem() const;
 
     /**
         Returns the normal image list.
@@ -422,7 +422,7 @@ public:
     /**
         Returns the background colour of the item.
     */
-    wxColour GetItemBackgroundColour(const wxTreeItemId& item) const;
+    virtual wxColour GetItemBackgroundColour(const wxTreeItemId& item) const;
 
     /**
         Returns the tree item data associated with the item.
@@ -435,12 +435,12 @@ public:
             wxTreeItemData for the given item Id.
         @endWxPythonOnly
     */
-    wxTreeItemData* GetItemData(const wxTreeItemId& item) const;
+    virtual wxTreeItemData* GetItemData(const wxTreeItemId& item) const;
 
     /**
         Returns the font of the item label.
     */
-    wxFont GetItemFont(const wxTreeItemId& item) const;
+    virtual wxFont GetItemFont(const wxTreeItemId& item) const;
 
     /**
         Gets the specified item image. The value of @a which may be:
@@ -460,7 +460,7 @@ public:
     /**
         Returns the item's parent.
     */
-    wxTreeItemId GetItemParent(const wxTreeItemId& item) const;
+    virtual wxTreeItemId GetItemParent(const wxTreeItemId& item) const;
 
     /**
         Gets the selected item image (this function is obsolete, use @ref
@@ -477,12 +477,12 @@ public:
     /**
         Returns the item label.
     */
-    wxString GetItemText(const wxTreeItemId& item) const;
+    virtual wxString GetItemText(const wxTreeItemId& item) const;
 
     /**
         Returns the colour of the item label.
     */
-    wxColour GetItemTextColour(const wxTreeItemId& item) const;
+    virtual wxColour GetItemTextColour(const wxTreeItemId& item) const;
 
     /**
         Returns the last child of the item (or an invalid tree item if this item
@@ -490,7 +490,7 @@ public:
 
         @see GetFirstChild(), GetNextSibling(), GetLastChild()
     */
-    wxTreeItemId GetLastChild(const wxTreeItemId& item) const;
+    virtual wxTreeItemId GetLastChild(const wxTreeItemId& item) const;
 
     /**
         Returns the next child; call GetFirstChild() for the first child. For
@@ -520,7 +520,7 @@ public:
 
         @see GetPrevSibling()
     */
-    wxTreeItemId GetNextSibling(const wxTreeItemId& item) const;
+    virtual wxTreeItemId GetNextSibling(const wxTreeItemId& item) const;
 
     /**
         Returns the next visible item or an invalid item if this item is the
@@ -528,7 +528,7 @@ public:
 
         @note The @a item itself must be visible.
     */
-    wxTreeItemId GetNextVisible(const wxTreeItemId& item) const;
+    virtual wxTreeItemId GetNextVisible(const wxTreeItemId& item) const;
 
     /**
         Returns the previous sibling of the specified item; call
@@ -538,7 +538,7 @@ public:
 
         @see GetNextSibling()
     */
-    wxTreeItemId GetPrevSibling(const wxTreeItemId& item) const;
+    virtual wxTreeItemId GetPrevSibling(const wxTreeItemId& item) const;
 
     /**
         Returns the previous visible item or an invalid item if this item is the
@@ -546,7 +546,7 @@ public:
 
         @note The @a item itself must be visible.
     */
-    wxTreeItemId GetPrevVisible(const wxTreeItemId& item) const;
+    virtual wxTreeItemId GetPrevVisible(const wxTreeItemId& item) const;
 
     /**
         Returns @true if the control will use a quick calculation for the best
@@ -559,14 +559,14 @@ public:
     /**
         Returns the root item for the tree control.
     */
-    wxTreeItemId GetRootItem() const;
+    virtual wxTreeItemId GetRootItem() const;
 
     /**
         Returns the selection, or an invalid item if there is no selection. This
         function only works with the controls without @c wxTR_MULTIPLE style,
         use GetSelections() for the controls which do have this style.
     */
-    wxTreeItemId GetSelection() const;
+    virtual wxTreeItemId GetSelection() const;
 
     /**
         Fills the array of tree items passed in with the currently selected
@@ -656,7 +656,7 @@ public:
 
         @see SetItemBold()
     */
-    bool IsBold(const wxTreeItemId& item) const;
+    virtual bool IsBold(const wxTreeItemId& item) const;
 
     /**
         Returns @true if the control is empty (i.e. has no items, even no root
@@ -668,22 +668,22 @@ public:
         Returns @true if the item is expanded (only makes sense if it has
         children).
     */
-    bool IsExpanded(const wxTreeItemId& item) const;
+    virtual bool IsExpanded(const wxTreeItemId& item) const;
 
     /**
         Returns @true if the item is selected.
     */
-    bool IsSelected(const wxTreeItemId& item) const;
+    virtual bool IsSelected(const wxTreeItemId& item) const;
 
     /**
         Returns @true if the item is visible on the screen.
     */
-    bool IsVisible(const wxTreeItemId& item) const;
+    virtual bool IsVisible(const wxTreeItemId& item) const;
 
     /**
         Returns @true if the item has children.
     */
-    bool ItemHasChildren(const wxTreeItemId& item) const;
+    virtual bool ItemHasChildren(const wxTreeItemId& item) const;
 
     /**
         Override this function in the derived class to change the sort order of
@@ -719,14 +719,14 @@ public:
     /**
         Scrolls the specified item into view.
     */
-    void ScrollTo(const wxTreeItemId& item);
+    virtual void ScrollTo(const wxTreeItemId& item);
 
     /**
         Selects the given item. In multiple selection controls, can be also used
         to deselect a currently selected item if the value of @a select is
         @false.
     */
-    void SelectItem(const wxTreeItemId& item, bool select = true);
+    virtual void SelectItem(const wxTreeItemId& item, bool select = true);
 
     /**
         Sets the buttons image list (from which application-defined button
@@ -751,7 +751,7 @@ public:
 
         @see AssignImageList().
     */
-    void SetImageList(wxImageList* imageList);
+    virtual void SetImageList(wxImageList* imageList);
 
     /**
         Sets the indentation for the tree control.
@@ -770,7 +770,7 @@ public:
 
         @see IsBold()
     */
-    void SetItemBold(const wxTreeItemId& item, bool bold = true);
+    virtual void SetItemBold(const wxTreeItemId& item, bool bold = true);
 
     /**
         Sets the item client data.
@@ -781,7 +781,7 @@ public:
         @endWxPythonOnly
 
     */
-    void SetItemData(const wxTreeItemId& item, wxTreeItemData* data);
+    virtual void SetItemData(const wxTreeItemId& item, wxTreeItemData* data);
 
 
     /**
@@ -800,7 +800,7 @@ public:
 
         @see SetItemBold()
     */
-    void SetItemFont(const wxTreeItemId& item, const wxFont& font);
+    virtual void SetItemFont(const wxTreeItemId& item, const wxFont& font);
 
     /**
         Force appearance of the button next to the item. This is useful to
@@ -837,7 +837,7 @@ public:
     /**
         Sets the item label.
     */
-    void SetItemText(const wxTreeItemId& item, const wxString& text);
+    virtual void SetItemText(const wxTreeItemId& item, const wxString& text);
 
     /**
         Sets the colour of the item's text.
@@ -862,7 +862,7 @@ public:
 
         @see AssignStateImageList().
     */
-    void SetStateImageList(wxImageList* imageList);
+    virtual void SetStateImageList(wxImageList* imageList);
 
     /**
         Sets the mode flags associated with the display of the tree control. The
@@ -879,12 +879,12 @@ public:
 
         @see wxTreeItemData, OnCompareItems()
     */
-    void SortChildren(const wxTreeItemId& item);
+    virtual void SortChildren(const wxTreeItemId& item);
 
     /**
         Toggles the given item between collapsed and expanded states.
     */
-    void Toggle(const wxTreeItemId& item);
+    virtual void Toggle(const wxTreeItemId& item);
 
     /**
         Toggles the given item between selected and unselected states. For
@@ -895,14 +895,14 @@ public:
     /**
         Removes the selection from the currently selected item (if any).
     */
-    void Unselect();
+    virtual void Unselect();
 
     /**
         This function either behaves the same as Unselect() if the control
         doesn't have @c wxTR_MULTIPLE style, or removes the selection from all
         items if it does have this style.
     */
-    void UnselectAll();
+    virtual void UnselectAll();
 
     /**
         Unselects the given item. This works in multiselection controls only.

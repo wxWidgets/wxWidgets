@@ -55,7 +55,7 @@ public:
     /**
         Destroys the URL object.
     */
-    ~wxURL();
+    virtual ~wxURL();
 
     /**
         Returns the last error. This error refers to the URL parsing or to the

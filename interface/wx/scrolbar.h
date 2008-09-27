@@ -67,7 +67,7 @@ public:
     /**
         Destructor, destroying the scrollbar.
     */
-    ~wxScrollBar();
+    virtual ~wxScrollBar();
 
     /**
         Scrollbar creation function called by the scrollbar constructor.
@@ -87,28 +87,28 @@ public:
 
         @see SetScrollbar()
     */
-    int GetPageSize() const;
+    virtual int GetPageSize() const;
 
     /**
         Returns the length of the scrollbar.
 
         @see SetScrollbar()
     */
-    int GetRange() const;
+    virtual int GetRange() const;
 
     /**
         Returns the current position of the scrollbar thumb.
 
         @see SetThumbPosition()
     */
-    int GetThumbPosition() const;
+    virtual int GetThumbPosition() const;
 
     /**
         Returns the thumb or 'view' size.
 
         @see SetScrollbar()
     */
-    int GetThumbSize() const;
+    virtual int GetThumbSize() const;
 
     /**
         Sets the scrollbar properties.
@@ -143,6 +143,6 @@ public:
 
         @see GetThumbPosition()
     */
-    void SetThumbPosition(int viewStart);
+    virtual void SetThumbPosition(int viewStart);
 };
 

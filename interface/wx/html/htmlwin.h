@@ -88,20 +88,20 @@ public:
         If no page is opened or if the displayed page wasn't
         produced by call to LoadPage, empty string is returned.
     */
-    wxString GetOpenedAnchor();
+    wxString GetOpenedAnchor() const;
 
     /**
         Returns full location of the opened page. If no page is opened or if the
         displayed page wasn't
         produced by call to LoadPage, empty string is returned.
     */
-    wxString GetOpenedPage();
+    wxString GetOpenedPage() const;
 
     /**
         Returns title of the opened page or wxEmptyString if current page does not
         contain @c TITLE tag.
     */
-    wxString GetOpenedPageTitle();
+    wxString GetOpenedPageTitle() const;
 
     /**
         Returns the related frame.
@@ -143,7 +143,7 @@ public:
         
         @see LoadPage()
     */
-    virtual bool LoadFile(const wxFileName& filename);
+    bool LoadFile(const wxFileName& filename);
 
     /**
         Unlike SetPage this function first loads HTML page from @a location
@@ -256,8 +256,8 @@ public:
             URL if OnOpeningURL returns wxHTML_REDIRECT.
     */
     virtual wxHtmlOpeningStatus OnOpeningURL(wxHtmlURLType type,
-            const wxString& url,
-            wxString* redirect);
+                                             const wxString& url,
+                                             wxString* redirect) const;
 
     /**
         Called on parsing @c TITLE tag.
@@ -352,7 +352,7 @@ public:
         
         @return @false if an error occurred, @true otherwise.
     */
-    bool SetPage(const wxString& source);
+    virtual bool SetPage(const wxString& source);
 
     /**
         Sets the frame in which page title will be displayed. @a format is format of

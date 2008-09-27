@@ -214,7 +214,7 @@ public:
     /**
         The destructor frees the resources associated with the thread.
     */
-    ~wxThreadHelper();
+    virtual ~wxThreadHelper();
 
     /**
         Creates a new thread. The thread object is created in the suspended state, and
@@ -242,7 +242,7 @@ public:
         This is a public function that returns the wxThread object
         associated with the thread.
     */
-    wxThread* GetThread();
+    wxThread* GetThread() const;
 
     /**
         wxThread * m_thread
@@ -487,7 +487,7 @@ public:
         will not delete the C++ thread object. It is also safe to allocate them on
         stack.
     */
-    ~wxThread();
+    virtual ~wxThread();
 
     /**
         Creates a new thread. The thread object is created in the suspended state,
@@ -639,7 +639,7 @@ public:
         @ref Kill() killed.
         This function should never be called directly.
     */
-    void OnExit();
+    virtual void OnExit();
 
     /**
         Suspends the thread. Under some implementations (Win32), the thread is
@@ -748,7 +748,7 @@ public:
         information.
         See also Sleep().
     */
-    void Yield();
+    static void Yield();
 };
 
 /**

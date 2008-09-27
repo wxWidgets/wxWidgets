@@ -123,19 +123,19 @@ public:
         Returns the colour used to print the label of the hyperlink when the mouse is
         over the control.
     */
-    wxColour GetHoverColour() const;
+    virtual wxColour GetHoverColour() const;
 
     /**
         Returns the colour used to print the label when the link has never been clicked
         before
         (i.e. the link has not been @e visited) and the mouse is not over the control.
     */
-    wxColour GetNormalColour() const;
+    virtual wxColour GetNormalColour() const;
 
     /**
         Returns the URL associated with the hyperlink.
     */
-    wxString GetURL() const;
+    virtual wxString GetURL() const;
 
     /**
         Returns @true if the hyperlink has already been clicked by the user at least
@@ -149,25 +149,25 @@ public:
         and the link has already been clicked before (i.e. the link has been @e
         visited).
     */
-    wxColour GetVisitedColour() const;
+    virtual wxColour GetVisitedColour() const;
 
     /**
         Sets the colour used to print the label of the hyperlink when the mouse is over
         the control.
     */
-    void SetHoverColour(const wxColour& colour);
+    virtual void SetHoverColour(const wxColour& colour);
 
     /**
         Sets the colour used to print the label when the link has never been clicked
         before
         (i.e. the link has not been @e visited) and the mouse is not over the control.
     */
-    void SetNormalColour(const wxColour& colour);
+    virtual void SetNormalColour(const wxColour& colour);
 
     /**
         Sets the URL associated with the hyperlink.
     */
-    void SetURL(const wxString& url);
+    virtual void SetURL(const wxString& url);
 
     /**
         Marks the hyperlink as visited (see wxHyperlinkCtrl::SetVisitedColour).
@@ -179,6 +179,6 @@ public:
         and the link has already been clicked before (i.e. the link has been @e
         visited).
     */
-    void SetVisitedColour(const wxColour& colour);
+    virtual void SetVisitedColour(const wxColour& colour);
 };
 

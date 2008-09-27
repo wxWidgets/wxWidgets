@@ -38,6 +38,7 @@ public:
         Returns beginning position of the text @e between this tag and paired
         ending tag.
         See explanation (returned position is marked with '|'):
+        @deprecated @todo provide deprecation description
     */
     int GetBeginPos() const;
 

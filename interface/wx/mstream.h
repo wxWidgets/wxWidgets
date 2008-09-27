@@ -27,7 +27,7 @@ public:
     /**
         Destructor.
     */
-    ~wxMemoryOutputStream();
+    virtual ~wxMemoryOutputStream();
 
     /**
         CopyTo allowed you to transfer data from the internal buffer of
@@ -74,7 +74,7 @@ public:
     /**
         Destructor.
     */
-    ~wxMemoryInputStream();
+    virtual ~wxMemoryInputStream();
 
     /**
         Returns the pointer to the stream object used as an internal buffer

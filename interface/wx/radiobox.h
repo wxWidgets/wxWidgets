@@ -133,7 +133,7 @@ public:
     /**
         Destructor, destroying the radiobox item.
     */
-    ~wxRadioBox();
+    virtual ~wxRadioBox();
 
     /**
         Creates the radiobox for two-step construction. See wxRadioBox()
@@ -243,7 +243,7 @@ public:
         @param n
             The zero-based button position.
     */
-    bool IsItemEnabled(unsigned int n) const;
+    virtual bool IsItemEnabled(unsigned int n) const;
 
     /**
         Returns @true if the item is currently shown or @false if it was hidden
@@ -258,7 +258,7 @@ public:
         @param n
             The zero-based button position.
     */
-    bool IsItemShown(unsigned int n) const;
+    virtual bool IsItemShown(unsigned int n) const;
 
     /**
         Sets the helptext for an item. Empty string erases any existing helptext.

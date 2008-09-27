@@ -284,7 +284,7 @@ public:
         @param uri
             String with escaped characters to convert.
     */
-    wxString Unescape(const wxString& uri);
+    static wxString Unescape(const wxString& uri);
 
     /**
         Compares this URI to another URI, and returns @true if this URI equals

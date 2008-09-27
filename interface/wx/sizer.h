@@ -122,7 +122,7 @@ public:
     /**
         Deletes the user data and subsizer, if any.
     */
-    ~wxSizerItem();
+    virtual ~wxSizerItem();
 
     /**
         Calculates the minimum desired size for the item, including any space
@@ -134,7 +134,7 @@ public:
         Destroy the window or the windows in a subsizer, depending on the type
         of item.
     */
-    void DeleteWindows();
+    virtual void DeleteWindows();
 
     /**
         Enable deleting the SizerItem without destroying the contained sizer.
@@ -195,12 +195,12 @@ public:
     /**
         Get the rectangle of the item on the parent window, excluding borders.
     */
-    wxRect GetRect();
+    virtual wxRect GetRect();
 
     /**
         Get the current size of the item, as set in the last Layout.
     */
-    wxSize GetSize() const;
+    virtual wxSize GetSize() const;
 
     /**
         If this item is tracking a sizer, return it.  @NULL otherwise.
@@ -260,7 +260,7 @@ public:
         adjust the position and size of the item to be within that space
         taking alignment and borders into account.
     */
-    void SetDimension(const wxPoint& pos, const wxSize& size);
+    virtual void SetDimension(const wxPoint& pos, const wxSize& size);
 
     /**
         Set the flag  item attribute.
@@ -293,6 +293,7 @@ public:
 
     /**
         Set the sizer tracked by this item.
+        @deprecated @todo provide deprecation description
     */
     void SetSizer(wxSizer* sizer);
 
@@ -789,7 +790,7 @@ public:
     /**
         The destructor.
     */
-    ~wxSizer();
+    virtual ~wxSizer();
 
     /**
         Appends a child to the sizer.
@@ -974,7 +975,7 @@ public:
         Detaches all children from the sizer. If @a delete_windows is @true then
         child windows will also be deleted.
     */
-    void Clear(bool delete_windows = false);
+    virtual void Clear(bool delete_windows = false);
 
     /**
         Computes client area size for @a window so that it matches the sizer's
@@ -1012,7 +1013,7 @@ public:
 
         @see Remove()
     */
-    bool Detach(wxWindow* window);
+    virtual bool Detach(wxWindow* window);
 
     /**
         Detach the child @a sizer from the sizer without destroying it.
@@ -1024,7 +1025,7 @@ public:
 
         @see Remove()
     */
-    bool Detach(wxSizer* sizer);
+    virtual bool Detach(wxSizer* sizer);
 
     /**
         Detach a item at position @a index from the sizer without destroying it.
@@ -1126,12 +1127,12 @@ public:
     /**
         Returns the current position of the sizer.
     */
-    wxPoint GetPosition();
+    wxPoint GetPosition() const;
 
     /**
         Returns the current size of the sizer.
     */
-    wxSize GetSize();
+    wxSize GetSize() const;
 
     /**
         Hides the child @a window.
@@ -1257,7 +1258,7 @@ public:
         keeping
         the current dimension.
     */
-    void Layout();
+    virtual void Layout();
 
     /**
         Same as Add(), but prepends the items to the beginning of the
@@ -1349,7 +1350,7 @@ public:
 
         @return @true if the child item was found and removed, @false otherwise.
     */
-    bool Remove(wxSizer* sizer);
+    virtual bool Remove(wxSizer* sizer);
 
     /**
         Removes a child from the sizer and destroys it if it is a sizer or a
@@ -1414,7 +1415,7 @@ public:
 
         Returns @true if the child item was found and removed, @false otherwise.
     */
-    bool Replace(size_t index, wxSizerItem* newitem);
+    virtual bool Replace(size_t index, wxSizerItem* newitem);
 
     /**
         Call this to force the sizer to take the given dimension and thus force
@@ -1496,6 +1497,7 @@ public:
         appropriately.
 
         @see wxScrolled::SetScrollbars()
+        @deprecated @todo provide deprecation description
     */
     void SetVirtualSizeHints(wxWindow* window);
 
@@ -1569,22 +1571,22 @@ public:
     /**
         Returns the number of columns in the sizer.
     */
-    int GetCols();
+    int GetCols() const;
 
     /**
         Returns the horizontal gap (in pixels) between cells in the sizer.
     */
-    int GetHGap();
+    int GetHGap() const;
 
     /**
         Returns the number of rows in the sizer.
     */
-    int GetRows();
+    int GetRows() const;
 
     /**
         Returns the vertical gap (in pixels) between the cells in the sizer.
     */
-    int GetVGap();
+    int GetVGap() const;
 
     /**
         Sets the number of columns in the sizer.

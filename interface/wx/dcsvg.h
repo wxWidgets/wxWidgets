@@ -55,7 +55,7 @@ public:
     /**
         Destructor.
     */
-    ~wxSVGFileDC();
+    virtual ~wxSVGFileDC();
 
     /**
         Copies from a source DC to this DC, specifying the destination

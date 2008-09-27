@@ -921,7 +921,7 @@ public:
     /**
         Destructor, destroying the text control.
     */
-    ~wxTextCtrl();
+    virtual ~wxTextCtrl();
 
     /**
         Appends the text to the end of the text control.
@@ -1058,7 +1058,7 @@ public:
         Resets the internal modified flag as if the current changes had been
         saved.
     */
-    void DiscardEdits();
+    virtual void DiscardEdits();
 
     /**
         This functions inserts into the control the character which would have
@@ -1073,7 +1073,7 @@ public:
             @true if the event resulted in a change to the control, @false
             otherwise.
     */
-    bool EmulateKeyPress(const wxKeyEvent& event);
+    virtual bool EmulateKeyPress(const wxKeyEvent& event);
 
     /**
         Returns the style currently used for the new text.
@@ -1110,7 +1110,7 @@ public:
         @return
             The length of the line, or -1 if @a lineNo was invalid.
     */
-    int GetLineLength(long lineNo) const;
+    virtual int GetLineLength(long lineNo) const;
 
     /**
         Returns the contents of a given line in the text control, not including
@@ -1122,7 +1122,7 @@ public:
         @return
             The contents of the line.
     */
-    wxString GetLineText(long lineNo) const;
+    virtual wxString GetLineText(long lineNo) const;
 
     /**
         Returns the number of lines in the text control buffer.
@@ -1131,7 +1131,7 @@ public:
                  insertion point is), so GetNumberOfLines() never
                  returns 0.
     */
-    int GetNumberOfLines() const;
+    virtual int GetNumberOfLines() const;
 
     /**
         Returns the string containing the text starting in the positions
@@ -1181,7 +1181,7 @@ public:
 
         @see SetStyle(), wxTextAttr
     */
-    bool GetStyle(long position, wxTextAttr& style);
+    virtual bool GetStyle(long position, wxTextAttr& style);
 
     /**
         Gets the contents of the control.
@@ -1189,7 +1189,7 @@ public:
         by (Unix-style) @c \\n characters, even under Windows where they are
         separated by a @c \\r\\n sequence in the native control.
     */
-    wxString GetValue() const;
+    virtual wxString GetValue() const;
 
     /**
         This function finds the character at the specified position expressed
@@ -1214,7 +1214,7 @@ public:
         In other words, this functions returns @true if the control hasn't been
         put in read-only mode by a previous call to SetEditable().
     */
-    bool IsEditable() const;
+    virtual bool IsEditable() const;
 
     /**
         Returns @true if the control is currently empty.
@@ -1224,7 +1224,7 @@ public:
 
         @since 2.7.1
     */
-    bool IsEmpty() const;
+    virtual bool IsEmpty() const;
 
     /**
         Returns @true if the text has been modified by user.
@@ -1233,7 +1233,7 @@ public:
 
         @see MarkDirty()
     */
-    bool IsModified() const;
+    virtual bool IsModified() const;
 
     /**
         Returns @true if this is a multi line edit control and @false
@@ -1270,7 +1270,7 @@ public:
 
         @see IsModified()
     */
-    void MarkDirty();
+    virtual void MarkDirty();
 
     /**
         This event handler function implements default drag and drop behaviour,
@@ -1306,7 +1306,7 @@ public:
 
         @see XYToPosition()
     */
-    bool PositionToXY(long pos, long* x, long* y) const;
+    virtual bool PositionToXY(long pos, long* x, long* y) const;
 
     /**
         If there is a redo facility and the last operation can be redone,
@@ -1375,7 +1375,7 @@ public:
 
         @see GetDefaultStyle()
     */
-    bool SetDefaultStyle(const wxTextAttr& style);
+    virtual bool SetDefaultStyle(const wxTextAttr& style);
 
     /**
         Makes the text item editable or read-only, overriding the
@@ -1473,7 +1473,7 @@ public:
 
         @see GetStyle(), wxTextAttr
     */
-    bool SetStyle(long start, long end, const wxTextAttr& style);
+    virtual bool SetStyle(long start, long end, const wxTextAttr& style);
 
     /**
         Sets the text value and marks the control as not-modified (which means
@@ -1495,7 +1495,7 @@ public:
         @param pos
             The position that should be visible.
     */
-    void ShowPosition(long pos);
+    virtual void ShowPosition(long pos);
 
     /**
         If there is an undo facility and the last operation can be undone,
@@ -1515,7 +1515,7 @@ public:
             allowed, and they will cause appropriate line breaks. See () and
             AppendText() for more convenient ways of writing to the window.
     */
-    void WriteText(const wxString& text);
+    virtual void WriteText(const wxString& text);
 
     /**
         Converts the given zero based column and line number to a position.
@@ -1528,7 +1528,7 @@ public:
         @return
             The position value, or -1 if x or y was invalid.
     */
-    long XYToPosition(long x, long y);
+    virtual long XYToPosition(long x, long y) const;
 
     //@{
     /**

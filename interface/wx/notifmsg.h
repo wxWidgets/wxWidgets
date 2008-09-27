@@ -43,7 +43,7 @@ public:
         some
         systems automatically hidden notifications can't be hidden manually)
     */
-    bool Close();
+    virtual bool Close();
 
     /**
         This parameter can be currently used to specify the icon to show in the
@@ -83,6 +83,6 @@ public:
         and also because the user may be able to close the notification.
         Returns @false if an error occurred.
     */
-    bool Show(int timeout = Timeout_Auto);
+    virtual bool Show(int timeout = Timeout_Auto);
 };
 

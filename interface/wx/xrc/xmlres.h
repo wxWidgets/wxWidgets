@@ -49,7 +49,7 @@ public:
     /**
         Destructor.
     */
-    ~wxXmlResource();
+    virtual ~wxXmlResource();
 
     /**
         Initializes only a specific handler (or custom handler). Convention says
@@ -87,7 +87,7 @@ public:
     /**
         Gets the global resources object or creates one if none exists.
     */
-    wxXmlResource* Get();
+    static wxXmlResource* Get();
 
     /**
         Returns the domain (message catalog) that will be used to load
@@ -99,7 +99,7 @@ public:
         Returns flags, which may be a bitlist of wxXRC_USE_LOCALE and
         wxXRC_NO_SUBCLASSING.
     */
-    int GetFlags();
+    int GetFlags() const;
 
     /**
         Returns version information (a.b.c.d = d+ 256*c + 256@c 2*b + 256@c 3*a).
@@ -206,7 +206,7 @@ public:
         Sets the global resources object and returns a pointer to the previous one (may
         be @NULL).
     */
-    wxXmlResource* Set(wxXmlResource* res);
+    static wxXmlResource* Set(wxXmlResource* res);
 
     /**
         Sets the domain (message catalog) that will be used to load
@@ -253,7 +253,7 @@ public:
     /**
         Destructor.
     */
-    ~wxXmlResourceHandler();
+    virtual ~wxXmlResourceHandler();
 
     /**
         Add a style flag (e.g. wxMB_DOCKABLE) to the list of flags

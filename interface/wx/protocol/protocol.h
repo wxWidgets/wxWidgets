@@ -50,7 +50,7 @@ public:
     /**
         Returns the type of the content of the last opened stream. It is a mime-type.
     */
-    wxString GetContentType();
+    virtual wxString GetContentType();
 
     /**
         Returns the last occurred error.
@@ -87,11 +87,11 @@ public:
     /**
         Sets the authentication password. It is mainly useful when FTP is used.
     */
-    void SetPassword(const wxString& user);
+    virtual void SetPassword(const wxString& user);
 
     /**
         Sets the authentication user. It is mainly useful when FTP is used.
     */
-    void SetUser(const wxString& user);
+    virtual void SetUser(const wxString& user);
 };
 

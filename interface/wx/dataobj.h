@@ -542,7 +542,7 @@ public:
     /**
         Destructor.
     */
-    ~wxDataObject();
+    virtual ~wxDataObject();
 
     /**
         Copy all supported formats in the given direction to the array pointed
@@ -686,7 +686,7 @@ public:
         Adds a file to the file list represented by this data object (Windows
         only).
     */
-    virtual void AddFile(const wxString& file);
+    void AddFile(const wxString& file);
 
     /**
         Returns the array of file names.
