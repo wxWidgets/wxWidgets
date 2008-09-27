@@ -71,7 +71,7 @@ public:
 
         @see GetPrev()
     */
-    wxWizardPage* GetNext() const;
+    virtual wxWizardPage* GetNext() const = 0;
 
     /**
         Get the page which should be shown when the user chooses the @c "Back"
@@ -81,7 +81,7 @@ public:
 
         @see GetNext()
     */
-    wxWizardPage* GetPrev() const;
+    virtual wxWizardPage* GetPrev() const = 0;
 };
 
 
@@ -120,8 +120,8 @@ public:
         It is not normally used by the user code as the objects of this
         type are constructed by wxWizard.
     */
-    wxWizardEvent(wxEventType type = wxEVT_NULL, int id = -1,
-                  bool direction = true);
+    wxWizardEvent(wxEventType type = wxEVT_NULL, int id = wxID_ANY,
+                  bool direction = true, wxWizardPage* page = 0);
 
     /**
         Return the direction in which the page is changing: for
@@ -162,7 +162,7 @@ public:
         Constructor takes the previous and next pages.
         They may be modified later by SetPrev() or SetNext().
     */
-    wxWizardPageSimple(wxWizard* parent = NULL,
+    wxWizardPageSimple(wxWizard* parent,
                        wxWizardPage* prev = NULL,
                        wxWizardPage* next = NULL,
                        const wxBitmap& bitmap = wxNullBitmap);
@@ -280,7 +280,7 @@ public:
         @param parent
             The parent window, may be @NULL.
         @param id
-            The id of the dialog, will usually be just -1.
+            The id of the dialog, will usually be just wxID_ANY.
         @param title
             The title of the dialog.
         @param bitmap
@@ -290,7 +290,7 @@ public:
         @param style
             Window style is passed to wxDialog.
     */
-    wxWizard(wxWindow* parent, int id = -1,
+    wxWizard(wxWindow* parent, int id = wxID_ANY,
              const wxString& title = wxEmptyString,
              const wxBitmap& bitmap = wxNullBitmap,
              const wxPoint& pos = wxDefaultPosition,
@@ -318,11 +318,10 @@ public:
         @param style
             Window style is passed to wxDialog.
     */
-    bool Create(wxWindow* parent, int id = -1,
+    bool Create(wxWindow* parent, int id = wxID_ANY,
                 const wxString& title = wxEmptyString,
                 const wxBitmap& bitmap = wxNullBitmap,
-                const wxPoint& pos = wxDefaultPosition,
-                long style = wxDEFAULT_DIALOG_STYLE);
+                const wxPoint& pos = wxDefaultPosition, long style = 536877056);
 
     /**
         This method is obsolete, use GetPageAreaSizer() instead.

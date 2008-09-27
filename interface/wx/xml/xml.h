@@ -170,7 +170,7 @@ public:
         Be aware that for nodes of type @c wxXML_ELEMENT_NODE (the most used node type)
         the content is an empty string. See GetNodeContent() for more details.
     */
-    wxString GetContent() const;
+    const wxString& GetContent() const;
 
     /**
         Returns the number of nodes which separe this node from @c grandparent.
@@ -191,7 +191,7 @@ public:
         Can be an empty string (e.g. for nodes of type @c wxXML_TEXT_NODE or
         @c wxXML_CDATA_SECTION_NODE).
     */
-    wxString GetName() const;
+    const wxString& GetName() const;
 
     /**
         Returns a pointer to the sibling of this node or @NULL if there are no
@@ -541,7 +541,7 @@ public:
         @note This is the encoding original file was saved in, @b not the
               encoding of in-memory representation!
     */
-    wxString GetFileEncoding() const;
+    const wxString& GetFileEncoding() const;
 
     /**
         Returns the root node of the document.
@@ -555,7 +555,7 @@ public:
         If the version attribute was not explicitely given in the header, this function
         returns an empty string.
     */
-    wxString GetVersion() const;
+    const wxString& GetVersion() const;
 
     /**
         Returns @true if the document has been loaded successfully.

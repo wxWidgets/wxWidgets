@@ -37,8 +37,7 @@ public:
         Both of these flags are on by default.
     */
     wxWrapSizer(int orient = wxHORIZONTAL,
-                int flags = wxEXTEND_LAST_ON_EACH_LINE |
-                            wxREMOVE_LEADING_SPACES);
+                int flags = wxWRAPSIZER_DEFAULT_FLAGS);
 
     /**
         Not used by an application.
@@ -50,8 +49,8 @@ public:
         Returns @true if the information was used (and the sub-item min size was
         updated).
     */
-    bool InformFirstDirection(int direction, int size,
-                              int availableOtherDir);
+    virtual bool InformFirstDirection(int direction, int size,
+                                      int availableOtherDir);
 
 protected:
     /**

@@ -108,7 +108,7 @@ public:
         Returns the domain (message catalog) that will be used to load
         translatable strings in the XRC.
     */
-    wxChar* GetDomain();
+    const wxString& GetDomain() const;
 
     /**
         Returns flags, which may be a bitlist of ::wxXmlResourceFlags
@@ -238,7 +238,7 @@ public:
         Sets the domain (message catalog) that will be used to load
         translatable strings in the XRC.
     */
-    wxChar* SetDomain(const wxChar* domain);
+    void SetDomain(const wxString& domain);
 
     /**
         Sets flags (bitlist of ::wxXmlResourceFlags enumeration values).
@@ -281,15 +281,21 @@ public:
     virtual ~wxXmlResourceHandler();
 
     /**
-        Add a style flag (e.g. @c wxMB_DOCKABLE) to the list of flags
-        understood by this handler.
+        Creates an object (menu, dialog, control, ...) from an XML node.
+        Should check for validity. @a parent is a higher-level object
+        (usually window, dialog or panel) that is often necessary to
+        create the resource.
+
+        If @b instance is non-@NULL it should not create a new instance via
+        'new' but should rather use this one, and call its Create method.
     */
-    void AddStyle(const wxString& name, int value);
+    wxObject* CreateResource(wxXmlNode* node, wxObject* parent,
+                             wxObject* instance);
 
     /**
-        Add styles common to all wxWindow-derived classes.
+        Called from CreateResource after variables were filled.
     */
-    void AddWindowStyles();
+    virtual wxObject* DoCreateResource() = 0;
 
     /**
         Returns @true if it understands this node and can create
@@ -301,7 +307,26 @@ public:
         at the time CanHandle() is called and it is only safe to operate on
         node directly or to call IsOfClass().
     */
-    bool CanHandle(wxXmlNode* node);
+    virtual bool CanHandle(wxXmlNode* node) = 0;
+
+    /**
+        Sets the parent resource.
+    */
+    void SetParentResource(wxXmlResource* res);
+
+
+protected:
+
+    /**
+        Add a style flag (e.g. @c wxMB_DOCKABLE) to the list of flags
+        understood by this handler.
+    */
+    void AddStyle(const wxString& name, int value);
+
+    /**
+        Add styles common to all wxWindow-derived classes.
+    */
+    void AddWindowStyles();
 
     /**
         Creates children.
@@ -321,23 +346,6 @@ public:
                                 wxObject* instance = NULL);
 
     /**
-        Creates an object (menu, dialog, control, ...) from an XML node.
-        Should check for validity. @a parent is a higher-level object
-        (usually window, dialog or panel) that is often necessary to
-        create the resource.
-
-        If @b instance is non-@NULL it should not create a new instance via 'new'
-        but should rather use this one, and call its Create method.
-    */
-    wxObject* CreateResource(wxXmlNode* node, wxObject* parent,
-                             wxObject* instance);
-
-    /**
-        Called from CreateResource after variables were filled.
-    */
-    wxObject* DoCreateResource();
-
-    /**
         Creates an animation (see wxAnimation) from the filename specified in @a param.
     */
     wxAnimation GetAnimation(const wxString& param = wxT("animation"));
@@ -345,7 +353,9 @@ public:
     /**
         Gets a bitmap.
     */
-    wxBitmap GetBitmap(const wxString& param = wxT("bitmap"), wxSize size = wxDefaultSize);
+    wxBitmap GetBitmap(const wxString& param = "bitmap",
+                       const wxArtClient& defaultArtClient = wxART_OTHER,
+                       wxSize size = wxDefaultSize);
 
     /**
         Gets a bool flag (1, t, yes, on, true are @true, everything else is @false).
@@ -361,17 +371,18 @@ public:
     /**
         Returns the current file system.
     */
-    wxFileSystem GetCurFileSystem();
+    wxFileSystem& GetCurFileSystem();
 
     /**
         Gets a dimension (may be in dialog units).
     */
-    wxCoord GetDimension(const wxString& param, wxCoord defaultv = 0);
+    wxCoord GetDimension(const wxString& param, wxCoord defaultv = 0,
+                         wxWindow* windowToUse = 0);
 
     /**
         Gets a font.
     */
-    wxFont GetFont();
+    wxFont GetFont(const wxString& param = "font");
 
     /**
         Returns the XRCID.
@@ -381,7 +392,9 @@ public:
     /**
         Returns an icon.
     */
-    wxIcon GetIcon(const wxString& param = wxT("icon"), wxSize size = wxDefaultSize);
+    wxIcon GetIcon(const wxString& param = "icon",
+                   const wxArtClient& defaultArtClient = wxART_OTHER,
+                   wxSize size = wxDefaultSize);
 
     /**
         Gets the integer value from the parameter.
@@ -416,7 +429,7 @@ public:
     /**
         Gets the size (may be in dialog units).
     */
-    wxSize GetSize(const wxString& param = wxT("size"));
+    wxSize GetSize(const wxString& param = "size", wxWindow* windowToUse = 0);
 
     /**
         Gets style flags from text in form "flag | flag2| flag3 |..."
@@ -431,7 +444,7 @@ public:
           translation because of XML syntax)
         - calls wxGetTranslations (unless disabled in wxXmlResource)
     */
-    wxString GetText(const wxString& param);
+    wxString GetText(const wxString& param, bool translate = true);
 
     /**
         Check to see if a parameter exists.
@@ -444,11 +457,6 @@ public:
         e.g. object class="wxDialog".
     */
     bool IsOfClass(wxXmlNode* node, const wxString& classname);
-
-    /**
-        Sets the parent resource.
-    */
-    void SetParentResource(wxXmlResource* res);
 
     /**
         Sets common window options.

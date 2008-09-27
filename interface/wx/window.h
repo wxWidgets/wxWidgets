@@ -319,7 +319,7 @@ public:
 
         @remarks This function is currently only implemented under Mac/Carbon.
     */
-    void AlwaysShowScrollbars(bool hflag, bool vflag);
+    virtual void AlwaysShowScrollbars(bool = true, bool = true);
 
     /**
         Sets the cached best size value.
@@ -354,12 +354,12 @@ public:
     /**
         A synonym for Centre().
     */
-    void Center(int direction);
+    void Center(int dir = wxBOTH);
 
     /**
         A synonym for CentreOnParent().
     */
-    void CenterOnParent(int direction);
+    void CenterOnParent(int dir = wxBOTH);
 
     /**
         Centres the window.
@@ -545,7 +545,7 @@ public:
     /**
         Destroys all children of a window. Called automatically by the destructor.
     */
-    virtual void DestroyChildren();
+    bool DestroyChildren();
 
     /**
         Returns true if this window is in process of being destroyed.
@@ -568,27 +568,6 @@ public:
                 been already disabled before the call to this function.
     */
     bool Disable();
-
-    /**
-        Gets the size which best suits the window: for a control, it would be
-        the minimal size which doesn't truncate the control, for a panel - the
-        same size as it would have after a call to Fit().
-
-        The default implementation of this function is designed for use in container
-        windows, such as wxPanel, and works something like this:
-        -# If the window has a sizer then it is used to calculate the best size.
-        -# Otherwise if the window has layout constraints then those are used to
-           calculate the best size.
-        -# Otherwise if the window has children then the best size is set to be large
-           enough to show all the children.
-        -# Otherwise if there are no children then the window's minimal size will be
-           used as its best size.
-        -# Otherwise if there is no minimal size set, then the current size is used
-           for the best size.
-
-        @see @ref overview_windowsizing
-    */
-    virtual wxSize DoGetBestSize() const;
 
     /**
         Does the window-specific updating after processing the update event.
@@ -969,7 +948,7 @@ public:
         Cast it to an appropriate handle, such as @b HWND for Windows,
         @b Widget for Motif, @b GtkWidget for GTK or @b WinHandle for PalmOS.
     */
-    void* GetHandle() const;
+    virtual WXWidget GetHandle() const;
 
     /**
         Gets the help text to be used as context-sensitive help for this window.
@@ -1002,7 +981,7 @@ public:
 
         @see SetId(), @ref overview_windowids
     */
-    int GetId() const;
+    wxWindowID GetId() const;
 
     /**
         Generic way of getting a label from any window, for
@@ -1241,14 +1220,11 @@ public:
             Return value for external leading (optional).
         @param font
             Font to use instead of the current window font (optional).
-        @param use16
-            If @true, string contains 16-bit characters. The default is @false.
     */
     virtual void GetTextExtent(const wxString& string, int* w, int* h,
                                int* descent = NULL,
                                int* externalLeading = NULL,
-                               const wxFont* font = NULL,
-                               bool use16 = false) const;
+                               const wxFont* font = NULL) const;
 
     /**
         Gets the dimensions of the string as it would be drawn on the
@@ -1267,7 +1243,7 @@ public:
 
         @see wxRegion, wxRegionIterator
     */
-    virtual wxRegion GetUpdateRegion() const;
+    const wxRegion& GetUpdateRegion() const;
 
     /**
         Returns a pointer to the current validator for the window, or @NULL if
@@ -1398,7 +1374,7 @@ public:
         @since 2.9.0
     */
     virtual bool HideWithEffect(wxShowEffect effect,
-                                unsigned timeout = 0);
+                                unsigned int timeout = 0);
 
     /**
         This function is (or should be, in case of custom controls) called during
@@ -1533,7 +1509,7 @@ public:
 
         @see @ref overview_windowsizing
     */
-    void Layout();
+    virtual bool Layout();
 
     /**
         Lowers the window to the bottom of the window hierarchy (Z-order).
@@ -1551,7 +1527,7 @@ public:
             the user can only interact with this window. If @false, the effect is
             reversed.
     */
-    virtual void MakeModal(bool flag);
+    virtual void MakeModal(bool modal = true);
 
     /**
         Moves the window to the given position.
@@ -1569,7 +1545,7 @@ public:
 
         @see SetSize()
     */
-    void Move(int x, int y);
+    void Move(int x, int y, int flags = 0);
 
     /**
         Moves the window to the given position.
@@ -1585,7 +1561,7 @@ public:
 
         @see SetSize()
     */
-    void Move(const wxPoint& pt);
+    void Move(const wxPoint& pt, int flags = 0);
 
     /**
         Moves this window in the tab navigation order after the specified @e win.
@@ -1628,13 +1604,13 @@ public:
                  control. See also wxNavigationKeyEvent and
                  HandleAsNavigationKey.
     */
-    bool Navigate(int flags = wxNavigationKeyEvent::IsForward);
+    bool Navigate(int flags = IsForward);
 
     /**
         Performs a keyboard navigation action inside this window.
         See Navigate() for more information.
     */
-    bool NavigateIn(int flags = wxNavigationKeyEvent::IsForward);
+    bool NavigateIn(int flags = IsForward);
 
     /**
         Create a new ID or range of IDs that are not currently in use.
@@ -2043,7 +2019,7 @@ public:
         @see SetBackgroundColour(), GetForegroundColour(),
              SetTransparent()
     */
-    virtual void SetBackgroundStyle(wxBackgroundStyle style);
+    virtual bool SetBackgroundStyle(wxBackgroundStyle style);
 
     /**
         This method is only implemented by ports which have support for
@@ -2119,7 +2095,7 @@ public:
 
         @see ::wxSetCursor, wxCursor
     */
-    virtual void SetCursor(const wxCursor& cursor);
+    virtual bool SetCursor(const wxCursor& cursor);
 
     /**
         Associates a drop target with this window.
@@ -2213,7 +2189,7 @@ public:
         @see GetForegroundColour(), SetBackgroundColour(),
              GetBackgroundColour(), ShouldInheritColours()
     */
-    virtual void SetForegroundColour(const wxColour& colour);
+    virtual bool SetForegroundColour(const wxColour& colour);
 
     /**
         Sets the help text to be used as context-sensitive help for this window.
@@ -2234,13 +2210,7 @@ public:
 
         @see GetId(), @ref overview_windowids
     */
-    void SetId(int id);
-
-    /**
-        Sets the initial window size if none is given (i.e. at least one of the
-        components of the size passed to ctor/Create() is wxDefaultCoord).
-    */
-    virtual void SetInitialBestSize(const wxSize& size);
+    void SetId(wxWindowID winid);
 
     /**
         A @e smart SetSize that will fill in default size components with the
@@ -2354,7 +2324,7 @@ public:
     /**
         @deprecated use wxDC::SetPalette instead.
     */
-    virtual void SetPalette(wxPalette* palette);
+    void SetPalette(const wxPalette& pal);
 
     /**
         Sets the position of one of the built-in scrollbars.
@@ -2458,8 +2428,8 @@ public:
 
         @see Move()
     */
-    virtual void SetSize(int x, int y, int width, int height,
-                         int sizeFlags = wxSIZE_AUTO);
+    void SetSize(int x, int y, int width, int height,
+                 int sizeFlags = wxSIZE_AUTO);
 
     //@{
     /**
@@ -2629,7 +2599,7 @@ public:
         @see HideWithEffect()
     */
     virtual bool ShowWithEffect(wxShowEffect effect,
-                                unsigned timeout = 0);
+                                unsigned int timeout = 0);
 
     /**
         Reenables window updating after a previous call to Freeze().
@@ -2789,6 +2759,38 @@ public:
             The new y position for the cursor.
     */
     virtual void WarpPointer(int x, int y);
+
+
+protected:
+
+    /**
+        Gets the size which best suits the window: for a control, it would be
+        the minimal size which doesn't truncate the control, for a panel - the
+        same size as it would have after a call to Fit().
+
+        The default implementation of this function is designed for use in container
+        windows, such as wxPanel, and works something like this:
+        -# If the window has a sizer then it is used to calculate the best size.
+        -# Otherwise if the window has layout constraints then those are used to
+           calculate the best size.
+        -# Otherwise if the window has children then the best size is set to be large
+           enough to show all the children.
+        -# Otherwise if there are no children then the window's minimal size will be
+           used as its best size.
+        -# Otherwise if there is no minimal size set, then the current size is used
+           for the best size.
+
+        @see @ref overview_windowsizing
+    */
+    virtual wxSize DoGetBestSize() const;
+
+
+    /**
+        Sets the initial window size if none is given (i.e. at least one of the
+        components of the size passed to ctor/Create() is wxDefaultCoord).
+        @deprecated @todo provide deprecation description
+    */
+    virtual void SetInitialBestSize(const wxSize& size);
 };
 
 

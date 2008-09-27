@@ -31,7 +31,7 @@ public:
         @param parser
             Pointer to the parser that requested tables filling.
     */
-    virtual void FillHandlersTable(wxHtmlWinParser parser);
+    virtual void FillHandlersTable(wxHtmlWinParser*);
 };
 
 
@@ -113,7 +113,7 @@ public:
     /**
         Returns actual text colour.
     */
-    const wxColour GetActualColor() const;
+    const wxColour& GetActualColor() const;
 
     /**
         Returns default horizontal alignment.
@@ -195,12 +195,12 @@ public:
         if the parser is between @c A and @c /A tags,
         wxEmptyString otherwise.)
     */
-    const wxHtmlLinkInfo GetLink() const;
+    const wxHtmlLinkInfo& GetLink() const;
 
     /**
         Returns the colour of hypertext link text.
     */
-    const wxColour GetLinkColor() const;
+    const wxColour& GetLinkColor() const;
 
     /**
         Returns output encoding, i.e. closest match to document's input encoding
@@ -247,7 +247,7 @@ public:
         HTML are given in pixels -- e.g. image sizes. 300x300 image would be only one
         inch wide on typical printer. With pixel_scale = 3.0 it would be 3 inches.)
     */
-    virtual void SetDC(wxDC dc, double pixel_scale = 1.0);
+    virtual void SetDC(wxDC* dc, double pixel_scale = 1.0e+0);
 
     /**
         Sets bold flag of actualfont. @a x is either @true of @false.
@@ -285,9 +285,8 @@ public:
         Sets fonts. See wxHtmlWindow::SetFonts for
         detailed description.
     */
-    void SetFonts(const wxString& normal_face,
-                  const wxString& fixed_face,
-                  const int sizes = NULL);
+    void SetFonts(const wxString& normal_face, const wxString& fixed_face,
+                  const int* sizes = 0);
 
     /**
         Sets input encoding. The parser uses this information to build conversion
