@@ -25,7 +25,7 @@ public:
     //@{
     /**
         Constructor.
-        
+
         @param flags
             wxXRC_USE_LOCALE: translatable strings will be translated via _().
             wxXRC_NO_SUBCLASSING: subclass property of object nodes will be ignored
@@ -237,7 +237,7 @@ public:
     wxXmlResourceHandler is an abstract base class for resource handlers
     capable of creating a control from an XML node.
 
-    See @ref overview_xrcoverview "XML-based resource system overview" for details.
+    See @ref overview_xrc for details.
 
     @library{wxxrc}
     @category{xrc}
@@ -291,9 +291,9 @@ public:
 
     /**
         Creates an object (menu, dialog, control, ...) from an XML node.
-        Should check for validity. @a parent is a higher-level object (usually window,
-        dialog or panel)
-        that is often necessary to create the resource.
+        Should check for validity. @a parent is a higher-level object
+        (usually window, dialog or panel) that is often necessary to create the resource.
+
         If @b instance is non-@NULL it should not create a new instance via 'new' but
         should rather use this one, and call its Create method.
     */
@@ -319,7 +319,7 @@ public:
     wxBitmap GetBitmap();
 
     /**
-        Gets a bool flag (1, t, yes, on, @true are @true, everything else is @false).
+        Gets a bool flag (1, t, yes, on, true are @true, everything else is @false).
     */
     bool GetBool(const wxString& param, bool defaultv = false);
 
@@ -402,10 +402,10 @@ public:
 
     /**
         Gets text from param and does some conversions:
-         replaces \\n, \\r, \\t by respective characters (according to C syntax)
-         replaces @c $ by @c  and @c $$ by @c $ (needed for @c _File to @c File
-        translation because of XML syntax)
-         calls wxGetTranslations (unless disabled in wxXmlResource)
+        - replaces \\n, \\r, \\t by respective characters (according to C syntax)
+        - replaces @c $ by @c  and @c $$ by @c $ (needed for @c _File to @c File
+          translation because of XML syntax)
+        - calls wxGetTranslations (unless disabled in wxXmlResource)
     */
     wxString GetText(const wxString& param);
 

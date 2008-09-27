@@ -830,7 +830,8 @@ public:
         Creates a directory.
 
         @param perm
-            The permissions for the newly created directory
+            The permissions for the newly created directory.
+            See wxPosixPermissions enumeration for more info.
         @param flags
             If the flags contain @c wxPATH_MKDIR_FULL flag, try to create each
             directory in the path and also don't return an error if the target
@@ -839,24 +840,25 @@ public:
         @return Returns @true if the directory was successfully created, @false
                 otherwise.
     */
-    bool Mkdir(int perm = 0777, int flags = 0);
+    bool Mkdir(int perm = wxS_DIR_DEFAULT, int flags = 0);
 
     /**
         Creates a directory.
 
         @param dir
-            the directory to create
+            The directory to create
         @param parm
-            the permissions for the newly created directory
+            The permissions for the newly created directory.
+            See wxPosixPermissions enumeration for more info.
         @param flags
-            if the flags contain @c wxPATH_MKDIR_FULL flag, try to create each
+            If the flags contain @c wxPATH_MKDIR_FULL flag, try to create each
             directory in the path and also don't return an error if the target
             directory already exists.
 
         @return Returns @true if the directory was successfully created, @false
                 otherwise.
     */
-    static bool Mkdir(const wxString& dir, int perm = 0777,
+    static bool Mkdir(const wxString& dir, int perm = wxS_DIR_DEFAULT,
                       int flags = 0);
 
     /**

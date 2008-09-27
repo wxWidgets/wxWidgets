@@ -9,11 +9,11 @@
 /**
     @class wxWindowUpdateLocker
 
-    This tiny class prevents redrawing of a wxWindow during its
-    lifetime by using wxWindow::Freeze and
-    wxWindow::Thaw methods. It is typically used for creating
-    automatic objects to temporarily suppress window updates before a batch of
-    operations is performed:
+    This tiny class prevents redrawing of a wxWindow during its lifetime by using
+    wxWindow::Freeze() and wxWindow::Thaw() methods.
+
+    It is typically used for creating automatic objects to temporarily suppress
+    window updates before a batch of operations is performed:
 
     @code
     void MyFrame::Foo()
@@ -27,19 +27,18 @@
         }
     @endcode
 
-    Using this class is easier and safer than calling
-    wxWindow::Freeze and wxWindow::Thaw because you
-    don't risk to forget calling the latter.
+    Using this class is easier and safer than calling wxWindow::Freeze() and
+    wxWindow::Thaw() because you don't risk to forget calling the latter.
 
     @library{wxbase}
-    @category{FIXME}
+    @category{misc}
 */
 class wxWindowUpdateLocker
 {
 public:
     /**
-        Creates an object preventing the updates of the specified @e win. The
-        parameter must be non-@NULL and the window must exist for longer than
+        Creates an object preventing the updates of the specified @e win.
+        The parameter must be non-@NULL and the window must exist for longer than
         wxWindowUpdateLocker object itself.
     */
     wxWindowUpdateLocker(wxWindow* win);

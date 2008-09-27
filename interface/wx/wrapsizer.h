@@ -10,9 +10,9 @@
     @class wxWrapSizer
 
     A wrap sizer lays out its items in a single line, like a box sizer -- as long
-    as there is space available in that direction. Once all available space in
-    the primary direction has been used, a new line is added and items are added
-    there.
+    as there is space available in that direction.
+    Once all available space in the primary direction has been used, a new line
+    is added and items are added there.
 
     So a wrap sizer has a primary orientation for adding items, and adds lines
     as needed in the secondary direction.
@@ -20,28 +20,33 @@
     @library{wxcore}
     @category{winlayout}
 
-    @see wxBoxSizer, wxSizer, @ref overview_sizeroverview "Sizer overview"
+    @see wxBoxSizer, wxSizer, @ref overview_sizer
 */
 class wxWrapSizer : public wxBoxSizer
 {
 public:
     /**
-        Constructor for a wxWrapSizer. @a orient determines the primary direction of
-        the sizer (the most common case being @c wxHORIZONTAL). The flags
-        parameter can be a combination of the values @c
-        wxEXTEND_LAST_ON_EACH_LINE which will cause the last item on each line
-        to use any remaining space on that line and @c wxREMOVE_LEADING_SPACES
-        which removes any spacer elements from the beginning of a row. Both of
-        these flags are on by default.
+        Constructor for a wxWrapSizer.
+
+        @a orient determines the primary direction of the sizer (the most common
+        case being @c wxHORIZONTAL). The flags parameter can be a combination of
+        the values @c wxEXTEND_LAST_ON_EACH_LINE which will cause the last item
+        on each line to use any remaining space on that line and @c wxREMOVE_LEADING_SPACES
+        which removes any spacer elements from the beginning of a row.
+
+        Both of these flags are on by default.
     */
     wxWrapSizer(int orient = wxHORIZONTAL,
                 int flags = wxEXTEND_LAST_ON_EACH_LINE |
                             wxREMOVE_LEADING_SPACES);
 
     /**
-        Not used by an application. This is the mechanism by which sizers can inform
-        sub-items of the first determined size component. The sub-item can then better
-        determine its size requirements.
+        Not used by an application.
+
+        This is the mechanism by which sizers can inform sub-items of the first
+        determined size component.
+        The sub-item can then better determine its size requirements.
+
         Returns @true if the information was used (and the sub-item min size was
         updated).
     */

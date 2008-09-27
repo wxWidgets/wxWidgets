@@ -6,33 +6,107 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+
+
+/// Compression Method, only 0 (store) and 8 (deflate) are supported here
+enum wxZipMethod
+{
+    wxZIP_METHOD_STORE,
+    wxZIP_METHOD_SHRINK,
+    wxZIP_METHOD_REDUCE1,
+    wxZIP_METHOD_REDUCE2,
+    wxZIP_METHOD_REDUCE3,
+    wxZIP_METHOD_REDUCE4,
+    wxZIP_METHOD_IMPLODE,
+    wxZIP_METHOD_TOKENIZE,
+    wxZIP_METHOD_DEFLATE,
+    wxZIP_METHOD_DEFLATE64,
+    wxZIP_METHOD_BZIP2 = 12,
+    wxZIP_METHOD_DEFAULT = 0xffff
+};
+
+/// Originating File-System.
+///
+/// These are Pkware's values. Note that Info-zip disagree on some of them,
+/// most notably NTFS.
+enum wxZipSystem
+{
+    wxZIP_SYSTEM_MSDOS,
+    wxZIP_SYSTEM_AMIGA,
+    wxZIP_SYSTEM_OPENVMS,
+    wxZIP_SYSTEM_UNIX,
+    wxZIP_SYSTEM_VM_CMS,
+    wxZIP_SYSTEM_ATARI_ST,
+    wxZIP_SYSTEM_OS2_HPFS,
+    wxZIP_SYSTEM_MACINTOSH,
+    wxZIP_SYSTEM_Z_SYSTEM,
+    wxZIP_SYSTEM_CPM,
+    wxZIP_SYSTEM_WINDOWS_NTFS,
+    wxZIP_SYSTEM_MVS,
+    wxZIP_SYSTEM_VSE,
+    wxZIP_SYSTEM_ACORN_RISC,
+    wxZIP_SYSTEM_VFAT,
+    wxZIP_SYSTEM_ALTERNATE_MVS,
+    wxZIP_SYSTEM_BEOS,
+    wxZIP_SYSTEM_TANDEM,
+    wxZIP_SYSTEM_OS_400
+};
+
+/// Dos/Win file attributes
+enum wxZipAttributes
+{
+    wxZIP_A_RDONLY = 0x01,
+    wxZIP_A_HIDDEN = 0x02,
+    wxZIP_A_SYSTEM = 0x04,
+    wxZIP_A_SUBDIR = 0x10,
+    wxZIP_A_ARCH   = 0x20,
+
+    wxZIP_A_MASK   = 0x37
+};
+
+/// Values for the flags field in the zip headers
+enum wxZipFlags
+{
+    wxZIP_ENCRYPTED         = 0x0001,
+    wxZIP_DEFLATE_NORMAL    = 0x0000,   // normal compression
+    wxZIP_DEFLATE_EXTRA     = 0x0002,   // extra compression
+    wxZIP_DEFLATE_FAST      = 0x0004,   // fast compression
+    wxZIP_DEFLATE_SUPERFAST = 0x0006,   // superfast compression
+    wxZIP_DEFLATE_MASK      = 0x0006,
+    wxZIP_SUMS_FOLLOW       = 0x0008,   // crc and sizes come after the data
+    wxZIP_ENHANCED          = 0x0010,
+    wxZIP_PATCH             = 0x0020,
+    wxZIP_STRONG_ENC        = 0x0040,
+    wxZIP_UNUSED            = 0x0F80,
+    wxZIP_RESERVED          = 0xF000
+};
+
+
 /**
     @class wxZipNotifier
 
-    If you need to know when a wxZipInputStream
-    updates a wxZipEntry,
+    If you need to know when a wxZipInputStream updates a wxZipEntry,
     you can create a notifier by deriving from this abstract base class,
-    overriding wxZipNotifier::OnEntryUpdated.
+    overriding wxZipNotifier::OnEntryUpdated().
+
     An instance of your notifier class can then be assigned to wxZipEntry
-    objects, using wxZipEntry::SetNotifier.
+    objects, using wxZipEntry::SetNotifier().
 
     Setting a notifier is not usually necessary. It is used to handle
     certain cases when modifying an zip in a pipeline (i.e. between
     non-seekable streams).
-    See '@ref overview_wxarcnoseek "Archives on non-seekable streams"'.
+    See @ref overview_archive_noseek.
 
     @library{wxbase}
-    @category{FIXME}
+    @category{archive}
 
-    @see @ref overview_wxarcnoseek "Archives on non-seekable streams", wxZipEntry,
-    wxZipInputStream, wxZipOutputStream
+    @see @ref overview_archive_noseek, wxZipEntry, wxZipInputStream, wxZipOutputStream
 */
 class wxZipNotifier
 {
 public:
     /**
-        Override this to receive notifications when
-        an wxZipEntry object changes.
+        Override this to receive notifications when an wxZipEntry object changes.
     */
     void OnEntryUpdated(wxZipEntry& entry);
 };
@@ -44,22 +118,61 @@ public:
 
     Holds the meta-data for an entry in a zip.
 
-    @library{wxbase}
-    @category{FIXME}
+    @section zipentry_avail Field availability
 
-    @see @ref overview_wxarc "Archive formats such as zip", wxZipInputStream,
-    wxZipOutputStream, wxZipNotifier
+    When reading a zip from a stream that is seekable, wxZipEntry::GetNextEntry()
+    returns a fully populated wxZipEntry object except for wxZipEntry::GetLocalExtra().
+    wxZipEntry::GetLocalExtra() becomes available when the entry is opened, either by
+    calling wxZipInputStream::OpenEntry() or by making an attempt to read the entry's data.
+
+    For zips on non-seekable streams, the following fields are always available
+    when wxZipEntry::GetNextEntry() returns:
+    - wxZipEntry::GetDateTime
+    - wxZipEntry::GetInternalFormat
+    - wxZipEntry::GetInternalName
+    - wxZipEntry::GetFlags
+    - wxZipEntry::GetLocalExtra
+    - wxZipEntry::GetMethod
+    - wxZipEntry::GetName
+    - wxZipEntry::GetOffset
+    - wxZipEntry::IsDir
+
+    The following fields are also usually available when GetNextEntry() returns,
+    however, if the zip was also written to a non-seekable stream the zipper is
+    permitted to store them after the entry's data. In that case they become
+    available when the entry's data has been read to Eof(), or CloseEntry()
+    has been called. (GetFlags() & wxZIP_SUMS_FOLLOW) != 0 indicates that
+    one or more of these come after the data:
+    - wxZipEntry::GetCompressedSize
+    - wxZipEntry::GetCrc
+    - wxZipEntry::GetSize
+
+    The following are stored at the end of the zip, and become available when the
+    end of the zip has been reached, i.e. after GetNextEntry() returns @NULL
+    and Eof() is true:
+    - wxZipEntry::GetComment
+    - wxZipEntry::GetExternalAttributes
+    - wxZipEntry::GetExtra
+    - wxZipEntry::GetMode
+    - wxZipEntry::GetSystemMadeBy
+    - wxZipEntry::IsReadOnly
+    - wxZipEntry::IsMadeByUnix
+    - wxZipEntry::IsText
+
+    @library{wxbase}
+    @category{archive}
+
+    @see @ref overview_archive, wxZipInputStream, wxZipOutputStream, wxZipNotifier
 */
 class wxZipEntry : public wxArchiveEntry
 {
 public:
-    //@{
+    wxZipEntry(const wxString& name = wxEmptyString);
+
     /**
         Copy constructor.
     */
-    wxZipEntry(const wxString& name = wxEmptyString);
     wxZipEntry(const wxZipEntry& entry);
-    //@}
 
     /**
         Make a copy of this entry.
@@ -68,91 +181,95 @@ public:
 
     //@{
     /**
-        A short comment for this entry.
+        Gets and sets the short comment for this entry.
     */
-    wxString GetComment();
-    const void SetComment(const wxString& comment);
+    wxString GetComment() const;
+    void SetComment(const wxString& comment);
     //@}
 
     //@{
     /**
         The low 8 bits are always the DOS/Windows file attributes for this entry.
-        The values of these attributes are given in the
-        enumeration @c wxZipAttributes.
+        The values of these attributes are given in the enumeration ::wxZipAttributes.
+
         The remaining bits can store platform specific permission bits or
-        attributes, and their meaning depends on the value
-        of @ref systemmadeby() SetSystemMadeBy.
-        If IsMadeByUnix() is @true then the
-        high 16 bits are unix mode bits.
+        attributes, and their meaning depends on the value of SetSystemMadeBy().
+        If IsMadeByUnix() is @true then the high 16 bits are unix mode bits.
+
         The following other accessors access these bits:
-        @ref wxArchiveEntry::isreadonly IsReadOnly/SetIsReadOnly
-
-        @ref wxArchiveEntry::isdir IsDir/SetIsDir
-
-        @ref mode() Get/SetMode
+        - IsReadOnly() / SetIsReadOnly()
+        - IsDir() / SetIsDir()
+        - GetMode() / SetMode()
     */
-    wxUint32 GetExternalAttributes();
-    const void SetExternalAttributes(wxUint32 attr);
+    wxUint32 GetExternalAttributes() const;
+    void SetExternalAttributes(wxUint32 attr);
     //@}
 
     //@{
     /**
         The extra field from the entry's central directory record.
+
         The extra field is used to store platform or application specific
         data. See Pkware's document 'appnote.txt' for information on its format.
     */
-    const char* GetExtra();
-    const size_t GetExtraLen();
-    const void SetExtra(const char* extra, size_t len);
+    char* GetExtra() const;
+    size_t GetExtraLen() const;
+    void SetExtra(const char* extra, size_t len);
     //@}
 
     //@{
     /**
         The extra field from the entry's local record.
+
         The extra field is used to store platform or application specific
         data. See Pkware's document 'appnote.txt' for information on its format.
     */
-    const char* GetLocalExtra();
-    const size_t GetLocalExtraLen();
-    const void SetLocalExtra(const char* extra, size_t len);
+    char* GetLocalExtra() const;
+    size_t GetLocalExtraLen() const;
+    void SetLocalExtra(const char* extra, size_t len);
     //@}
 
     //@{
     /**
-        The compression method. The enumeration @c wxZipMethod lists the
-        possible values.
-        The default constructor sets this to wxZIP_METHOD_DEFAULT,
-        which allows wxZipOutputStream to
-        choose the method when writing the entry.
+        The compression method.
+        The enumeration ::wxZipMethod lists the possible values.
+
+        The default constructor sets this to @c wxZIP_METHOD_DEFAULT,
+        which allows wxZipOutputStream to choose the method when writing the entry.
     */
-    int GetMethod();
-    const void SetMethod(int method);
+    int GetMethod() const;
+    void SetMethod(int method);
     //@}
 
     //@{
     /**
-        Sets the DOS attributes
-        in @ref externalattributes() GetExternalAttributes
-        to be consistent with the @c mode given.
-        If IsMadeByUnix() is @true then also
-        stores @c mode in GetExternalAttributes().
-        Note that the default constructor
-        sets @ref systemmadeby() GetSystemMadeBy to
-        wxZIP_SYSTEM_MSDOS by default. So to be able to store unix
+        If IsMadeByUnix() is true then returns the unix permission bits stored
+        in GetExternalAttributes(). Otherwise synthesises them from the DOS attributes.
+    */
+    int GetMode() const;
+
+    /**
+        Sets the DOS attributes in GetExternalAttributes() to be consistent with
+        the @a mode given.
+
+        If IsMadeByUnix() is @true then also stores @a mode in GetExternalAttributes().
+        Note that the default constructor sets GetSystemMadeBy() to
+        @c wxZIP_SYSTEM_MSDOS by default. So to be able to store unix
         permissions when creating zips, call SetSystemMadeBy(wxZIP_SYSTEM_UNIX).
     */
-    int GetMode();
-    const void SetMode(int mode);
+    void SetMode(int mode);
     //@}
 
     //@{
     /**
-        The originating file-system. The default constructor sets this to
-        wxZIP_SYSTEM_MSDOS. Set it to wxZIP_SYSTEM_UNIX in order to be
-        able to store unix permissions using @ref mode() SetMode.
+        The originating file-system.
+
+        The default constructor sets this to @c wxZIP_SYSTEM_MSDOS.
+        Set it to @c wxZIP_SYSTEM_UNIX in order to be able to store unix
+        permissions using SetMode().
     */
-    int GetSystemMadeBy();
-    const void SetSystemMadeBy(int system);
+    int GetSystemMadeBy() const;
+    void SetSystemMadeBy(int system);
     //@}
 
     /**
@@ -177,17 +294,23 @@ public:
         to is set to indicate whether the name looks like a directory name
         (i.e. has a trailing path separator).
 
-        @see @ref overview_wxarcbyname "Looking up an archive entry by name"
+        @see @ref overview_archive_byname
     */
-    wxString GetInternalName();
-    const wxString  GetInternalName(const wxString& name,
-                                    wxPathFormat format = wxPATH_NATIVE,
-                                    bool* pIsDir = NULL);
+    wxString GetInternalName(const wxString& name,
+                            wxPathFormat format = wxPATH_NATIVE,
+                            bool* pIsDir = NULL);
+    /**
+        Returns the entry's filename in the internal format used within the archive.
+        The name can include directory components, i.e. it can be a full path.
+
+        The names of directory entries are returned without any trailing path separator.
+        This gives a canonical name that can be used in comparisons.
+    */
+    wxString GetInternalName() const;
     //@}
 
     /**
-        Returns @true if @ref systemmadeby() GetSystemMadeBy
-        is a flavour of unix.
+        Returns @true if GetSystemMadeBy() is a flavour of unix.
     */
     bool IsMadeByUnix() const;
 
@@ -195,22 +318,21 @@ public:
     /**
         Indicates that this entry's data is text in an 8-bit encoding.
     */
-    bool IsText();
-    const void SetIsText(bool isText = true);
+    bool IsText() const;
+    void SetIsText(bool isText = true);
     //@}
 
     //@{
     /**
-        Sets the notifier() for this entry.
-        Whenever the wxZipInputStream updates
-        this entry, it will then invoke the associated
-        notifier's wxZipNotifier::OnEntryUpdated
-        method.
+        Sets the notifier (see wxZipNotifier) for this entry.
+        Whenever the wxZipInputStream updates this entry, it will then invoke
+        the associated notifier's wxZipNotifier::OnEntryUpdated() method.
+
         Setting a notifier is not usually necessary. It is used to handle
         certain cases when modifying an zip in a pipeline (i.e. between
         non-seekable streams).
 
-        @see @ref overview_wxarcnoseek "Archives on non-seekable streams", wxZipNotifier
+        @see @ref overview_archive_noseek, wxZipNotifier
     */
     void SetNotifier(wxZipNotifier& notifier);
     void UnsetNotifier();
@@ -219,8 +341,12 @@ public:
     /**
         Assignment operator.
     */
-    wxZipEntry& operator operator=(const wxZipEntry& entry);
+    wxZipEntry& operator=(const wxZipEntry& entry);
 };
+
+
+
+---
 
 
 

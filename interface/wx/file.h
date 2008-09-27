@@ -7,25 +7,56 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-//@{
 /**
-    These constants define the file access rights and are used with wxFile::Create and wxFile::Open.
+    We redefine these constants here because S_IREAD &c are _not_ standard
+    however, we do assume that the values correspond to the Unix umask bits.
 */
-#define wxS_IRUSR 00400
-#define wxS_IWUSR 00200
-#define wxS_IXUSR 00100
+enum wxPosixPermissions
+{
+    /// standard Posix names for these permission flags
+    //@{
+    wxS_IRUSR = 00400,
+    wxS_IWUSR = 00200,
+    wxS_IXUSR = 00100,
 
-#define wxS_IRGRP 00040
-#define wxS_IWGRP 00020
-#define wxS_IXGRP 00010
+    wxS_IRGRP = 00040,
+    wxS_IWGRP = 00020,
+    wxS_IXGRP = 00010,
 
-#define wxS_IROTH 00004
-#define wxS_IWOTH 00002
-#define wxS_IXOTH 00001
+    wxS_IROTH = 00004,
+    wxS_IWOTH = 00002,
+    wxS_IXOTH = 00001,
+    //@}
 
-/** Default mode for the new files: corresponds to umask 022 */
-#define wxS_DEFAULT  (wxS_IRUSR | wxS_IWUSR | wxS_IRGRP | wxS_IWGRP | wxS_IROTH | wxS_IWOTH)
-//@}
+    /// longer but more readable synonims for the constants above
+    //@{
+    wxPOSIX_USER_READ = wxS_IRUSR,
+    wxPOSIX_USER_WRITE = wxS_IWUSR,
+    wxPOSIX_USER_EXECUTE = wxS_IXUSR,
+
+    wxPOSIX_GROUP_READ = wxS_IRGRP,
+    wxPOSIX_GROUP_WRITE = wxS_IWGRP,
+    wxPOSIX_GROUP_EXECUTE = wxS_IXGRP,
+
+    wxPOSIX_OTHERS_READ = wxS_IROTH,
+    wxPOSIX_OTHERS_WRITE = wxS_IWOTH,
+    wxPOSIX_OTHERS_EXECUTE = wxS_IXOTH,
+    //@}
+
+    /// Default mode for the new files: allow reading/writing them to everybody but
+    /// the effective file mode will be set after anding this value with umask and
+    /// so won't include wxS_IW{GRP,OTH} for the default 022 umask value
+    wxS_DEFAULT = (wxPOSIX_USER_READ | wxPOSIX_USER_WRITE | \
+                   wxPOSIX_GROUP_READ | wxPOSIX_GROUP_WRITE | \
+                   wxPOSIX_OTHERS_READ | wxPOSIX_OTHERS_WRITE),
+
+    /// Default mode for the new directories (see wxFileName::Mkdir): allow
+    /// reading/writing/executing them to everybody, but just like wxS_DEFAULT
+    /// the effective directory mode will be set after anding this value with umask
+    wxS_DIR_DEFAULT = (wxPOSIX_USER_READ | wxPOSIX_USER_WRITE | wxPOSIX_USER_EXECUTE | \
+                       wxPOSIX_GROUP_READ | wxPOSIX_GROUP_WRITE | wxPOSIX_GROUP_EXECUTE | \
+                       wxPOSIX_OTHERS_READ | wxPOSIX_OTHERS_WRITE | wxPOSIX_OTHERS_EXECUTE)
+};
 
 
 
@@ -274,8 +305,8 @@ public:
         If the file already exists, setting @b overwrite to @true will ensure
         it is overwritten.
 
-        @a access may be an OR combination of the file access values
-        like ::wxS_IRUSR, ::wxS_IWUSR, etc, etc.
+        @a access may be an OR combination of the ::wxPosixPermissions enumeration
+        values.
     */
     bool Create(const wxString& filename,
                 bool overwrite = false,
@@ -343,9 +374,12 @@ public:
             The filename.
         @param mode
             The mode in which to open the file.
+        @param access
+            An OR-combination of wxPosixPermissions enumeration values.
     */
     bool Open(const wxString& filename,
-              wxFile::OpenMode mode = wxFile::read);
+              wxFile::OpenMode mode = wxFile::read,
+              int access = wxS_DEFAULT);
 
     /**
         Reads from the file into a memory buffer.

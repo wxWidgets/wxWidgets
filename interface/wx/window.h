@@ -399,7 +399,6 @@ public:
     */
     void ClearBackground();
 
-    //@{
     /**
         Converts to screen coordinates from coordinates relative to this window.
 
@@ -409,8 +408,6 @@ public:
         @param y
             A pointer to a integer value for the y coordinate. Pass the client
             coordinate in, and a screen coordinate will be passed out.
-        @param pt
-            The client position for the second form of the function.
 
         @beginWxPythonOnly
         In place of a single overloaded method name, wxPython implements the following methods:
@@ -419,8 +416,14 @@ public:
         @endWxPythonOnly
     */
     void ClientToScreen(int* x, int* y) const;
+
+    /**
+        Converts to screen coordinates from coordinates relative to this window.
+
+        @param pt
+            The client position for the second form of the function.
+    */
     wxPoint ClientToScreen(const wxPoint& pt) const;
-    //@}
 
     /**
         Converts client area size @a size to corresponding window size.
@@ -1083,7 +1086,6 @@ public:
     */
     virtual wxWindow* GetParent() const;
 
-    //@{
     /**
         This function shows a popup menu at the given position in this window and
         returns the selected id. It can be more convenient than the general purpose
@@ -1094,19 +1096,19 @@ public:
             The menu to show
         @param pos
             The position at which to show the menu in client coordinates
-        @param x
-            The horizontal position of the menu
-        @param y
-            The vertical position of the menu
 
         @return The selected menu item id or wxID_NONE if none selected or an
                  error occurred.
     */
     int GetPopupMenuSelectionFromUser(wxMenu& menu, const wxPoint& pos);
-    int GetPopupMenuSelectionFromUser(wxMenu& menu, int x, int y);
-    //@}
 
-    //@{
+    /**
+        See the GetPopupMenuSelectionFromUser(wxMenu&, const wxPoint&) overload.
+        This overload differs only because it takes two integers for the
+        menu position instead of a wxPoint.
+    */
+    int GetPopupMenuSelectionFromUser(wxMenu& menu, int x, int y);
+
     /**
         This gets the position of the window in pixels, relative to the parent window
         for the child windows or relative to the display origin for the top level windows.
@@ -1119,8 +1121,14 @@ public:
         @see GetScreenPosition()
     */
     void GetPosition(int* x, int* y) const;
+
+    /**
+        This gets the position of the window in pixels, relative to the parent window
+        for the child windows or relative to the display origin for the top level windows.
+
+        @see GetScreenPosition()
+    */
     wxPoint GetPosition() const;
-    //@}
 
     /**
         Returns the previous window before this one among the parent children or @c
@@ -1139,7 +1147,6 @@ public:
     */
     wxRect GetRect() const;
 
-    //@{
     /**
         Returns the window position in screen coordinates, whether the window is a
         child window or a top level one.
@@ -1152,8 +1159,14 @@ public:
         @see GetPosition()
     */
     void GetScreenPosition(int* x, int* y) const;
+
+    /**
+        Returns the window position in screen coordinates, whether the window is a
+        child window or a top level one.
+
+        @see GetPosition()
+    */
     wxPoint GetScreenPosition() const;
-    //@}
 
     /**
         Returns the position and size of the window on the screen as a wxRect object.
@@ -1183,7 +1196,6 @@ public:
     */
     virtual int GetScrollThumb(int orientation);
 
-    //@{
     /**
         Returns the size of the entire window in pixels, including title bar, border,
         scrollbars, etc.
@@ -1199,8 +1211,11 @@ public:
         @see GetClientSize(), GetVirtualSize()
     */
     void GetSize(int* width, int* height) const;
+
+    /**
+        See the GetSize(int*,int*) overload for more info.
+    */
     wxSize GetSize() const;
-    //@}
 
     /**
         Return the sizer associated with the window by a previous call to
@@ -1208,7 +1223,6 @@ public:
     */
     wxSizer* GetSizer() const;
 
-    //@{
     /**
         Gets the dimensions of the string as it would be drawn on the
         window with the currently selected font.
@@ -1241,7 +1255,6 @@ public:
         window with the currently selected font.
     */
     wxSize  GetTextExtent(const wxString& string) const;
-    //@}
 
     /**
         Get the associated tooltip or @NULL if none.
@@ -2379,31 +2392,29 @@ public:
         @param refresh
             @true to redraw the scrollbar, @false otherwise.
 
-        @remarks Let's say you wish to display 50 lines of text, using the same
-                 font. The window is sized so that you can only see 16
-                 lines at a time.
-                 You would use:
-                 @code
-                 SetScrollbar(wxVERTICAL, 0, 16, 50);
-                 @endcode
-                 Note that with the window at this size, the thumb position can never
-                 go above 50 minus 16, or 34. You can determine how many lines are
-                 currently visible by dividing the current view size by the character
-                 height in pixels.
-                 When defining your own scrollbar behaviour, you will always need
-                 to recalculate the scrollbar settings when the window size changes.
-                 You could therefore put your scrollbar calculations and SetScrollbar
-                 call into a function named AdjustScrollbars, which can be called
-                 initially and also from your wxSizeEvent handler function.
+        @remarks
+            Let's say you wish to display 50 lines of text, using the same font.
+            The window is sized so that you can only see 16 lines at a time.
+            You would use:
+            @code
+            SetScrollbar(wxVERTICAL, 0, 16, 50);
+            @endcode
+            Note that with the window at this size, the thumb position can never
+            go above 50 minus 16, or 34. You can determine how many lines are
+            currently visible by dividing the current view size by the character
+            height in pixels.
+            When defining your own scrollbar behaviour, you will always need
+            to recalculate the scrollbar settings when the window size changes.
+            You could therefore put your scrollbar calculations and SetScrollbar
+            call into a function named AdjustScrollbars, which can be called
+            initially and also from your wxSizeEvent handler function.
 
         @see @ref overview_scrolling, wxScrollBar, wxScrolled, wxScrollWinEvent
     */
     virtual void SetScrollbar(int orientation, int position,
-                              int thumbSize,
-                              int range,
+                              int thumbSize, int range,
                               bool refresh = true);
 
-    //@{
     /**
         Sets the size of the window in pixels.
 
@@ -2419,10 +2430,6 @@ public:
         @param height
             Required height position in pixels, or wxDefaultCoord to indicate that the
             existing value should be used.
-        @param size
-            wxSize object for setting the size.
-        @param rect
-            wxRect object for setting the position and size.
         @param sizeFlags
             Indicates the interpretation of other parameters.
             It is a bit list of the following:
@@ -2444,10 +2451,7 @@ public:
                                later and only implemented for MSW and ignored elsewhere
                                currently).
 
-        @remarks The second form is a convenience for calling the first form with
-                 default x and y parameters, and must be used with
-                 non-default width and height values.
-                 The first form sets the position and optionally size, of the window.
+        @remarks This overload sets the position and optionally size, of the window.
                  Parameters may be wxDefaultCoord to indicate either that a default
                  should be supplied by wxWidgets, or that the current value of the
                  dimension should be used.
@@ -2456,9 +2460,19 @@ public:
     */
     virtual void SetSize(int x, int y, int width, int height,
                          int sizeFlags = wxSIZE_AUTO);
+
+    //@{
+    /**
+        Sets the size of the window in pixels.
+        The size is specified using a wxRect, wxSize or by a couple of @c int objects.
+
+        @remarks This form must be used with non-default width and height values.
+
+        @see Move()
+    */
     virtual void SetSize(const wxRect& rect);
-    virtual void SetSize(int width, int height);
     virtual void SetSize(const wxSize& size);
+    virtual void SetSize(int width, int height);
     //@}
 
     /**
