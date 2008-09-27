@@ -820,7 +820,7 @@ void FormMain::OnMove( wxMoveEvent& event )
 
     id = m_pPropGridManager->GetPropertyByName( wxT("Position") );
     if ( id )
-        m_pPropGridManager->SetPropertyValue( id, wxPoint(x,y) );
+        m_pPropGridManager->SetPropertyValue( id, WXVARIANT(wxPoint(x,y)) );
 
     // Should always call event.Skip() in frame's MoveEvent handler
     event.Skip();
@@ -858,7 +858,7 @@ void FormMain::OnResize( wxSizeEvent& event )
 
     id = m_pPropGridManager->GetPropertyByName ( wxT("Size") );
     if ( id )
-        m_pPropGridManager->SetPropertyValue( id, wxSize(w,h) );
+        m_pPropGridManager->SetPropertyValue( id, WXVARIANT(wxSize(w,h)) );
 
     // Should always call event.Skip() in frame's SizeEvent handler
     event.Skip();
@@ -1567,7 +1567,6 @@ void FormMain::PopulateWithExamples ()
     pg->Append( new wxSizeProperty( wxT("SizeProperty"), wxT("Size"), GetSize() ) );
     pg->Append( new wxPointProperty( wxT("PointProperty"), wxT("Position"), GetPosition() ) );
 
-
     // UInt samples
     pg->Append( new wxUIntProperty( wxT("UIntProperty"), wxPG_LABEL, wxULongLong(wxULL(0xFEEEFEEEFEEE))));
     pg->SetPropertyAttribute( wxT("UIntProperty"), wxPG_UINT_PREFIX, wxPG_PREFIX_NONE );
@@ -2267,8 +2266,8 @@ void FormMain::OnInsertPropClick( wxCommandEvent& WXUNUSED(event) )
     GenerateUniquePropertyLabel( m_pPropGridManager, propLabel );
 
     m_pPropGridManager->Insert( m_pPropGridManager->GetPropertyParent(id),
-                            m_pPropGridManager->GetPropertyIndex(id),
-                            new wxStringProperty(propLabel) );
+                                id->GetIndexInParent(),
+                                new wxStringProperty(propLabel) );
 
 }
 
@@ -2334,9 +2333,8 @@ void FormMain::OnInsertCatClick( wxCommandEvent& WXUNUSED(event) )
     GenerateUniquePropertyLabel( m_pPropGridManager, propLabel );
 
     m_pPropGridManager->Insert( m_pPropGridManager->GetPropertyParent(id),
-                            m_pPropGridManager->GetPropertyIndex(id),
-                            new wxPropertyCategory (propLabel) );
-
+                                id->GetIndexInParent(),
+                                new wxPropertyCategory (propLabel) );
 }
 
 // -----------------------------------------------------------------------

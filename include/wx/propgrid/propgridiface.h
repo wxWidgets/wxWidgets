@@ -462,13 +462,6 @@ public:
         return p->GetValueImage();
     }
 
-    /** Returns property's position under its parent. */
-    unsigned int GetPropertyIndex( wxPGPropArg id )
-    {
-        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(INT_MAX)
-        return p->GetIndexInParent();
-    }
-
     /** Returns label of a property. */
     const wxString& GetPropertyLabel( wxPGPropArg id )
     {
@@ -477,10 +470,9 @@ public:
     }
 
     /** Returns name of a property, by which it is globally accessible. */
-    wxString GetPropertyName( wxPGPropArg id )
+    wxString GetPropertyName( wxPGProperty* property )
     {
-        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(m_emptyString)
-        return p->GetName();
+        return property->GetName();
     }
 
     /** Returns parent item of a property. */
@@ -524,7 +516,6 @@ public:
 #endif
     bool GetPropertyValueAsBool( wxPGPropArg id ) const;
     double GetPropertyValueAsDouble( wxPGPropArg id ) const;
-    void* GetPropertyValueAsVoidPtr( wxPGPropArg id ) const;
 
 #define wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL(TYPENAME, DEFVAL) \
     wxPG_PROP_ARG_CALL_PROLOG_RETVAL(DEFVAL) \
@@ -547,22 +538,6 @@ public:
         wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL("arrstring",
                                                    wxArrayString())
         return value.GetArrayString();
-    }
-
-    wxPoint GetPropertyValueAsPoint( wxPGPropArg id ) const
-    {
-        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL("wxPoint", wxPoint())
-        wxPoint pt;
-        pt << value;
-        return pt;
-    }
-
-    wxSize GetPropertyValueAsSize( wxPGPropArg id ) const
-    {
-        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL("wxSize", wxSize())
-        wxSize sz;
-        sz << value;
-        return sz;
     }
 
     wxLongLong_t GetPropertyValueAsLongLong( wxPGPropArg id ) const
@@ -618,12 +593,6 @@ public:
         return m_pState->DoGetPropertyValues(listname, baseparent, flags);
     }
 #endif
-
-    wxString GetPropertyValueType( wxPGPropArg id )
-    {
-        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(m_emptyString)
-        return p->GetValueType();
-    }
 
     /** Returns currently selected property. */
     wxPGProperty* GetSelection() const
@@ -1147,20 +1116,6 @@ public:
         SetPropVal( id, v );
     }
 
-    /** Sets value (wxPoint&) of a property.
-    */
-    void SetPropertyValue( wxPGPropArg id, const wxPoint& value )
-    {
-        wxVariant v = WXVARIANT(value);
-        SetPropVal( id, v );
-    }
-    /** Sets value (wxSize&) of a property.
-    */
-    void SetPropertyValue( wxPGPropArg id, const wxSize& value )
-    {
-        wxVariant v = WXVARIANT(value);
-        SetPropVal( id, v );
-    }
     /** Sets value (wxLongLong&) of a property.
     */
     void SetPropertyValue( wxPGPropArg id, wxLongLong_t value )

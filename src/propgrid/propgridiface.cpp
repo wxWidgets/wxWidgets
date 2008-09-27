@@ -824,7 +824,6 @@ bool wxPropertyGridInterface::GetPropertyValueAsBool( wxPGPropArg id ) const
 
 IMPLEMENT_GET_VALUE(long,long,Long,0)
 IMPLEMENT_GET_VALUE(double,double,Double,0.0)
-IMPLEMENT_GET_VALUE(void,void*,VoidPtr,NULL)
 
 bool wxPropertyGridInterface::IsPropertyExpanded( wxPGPropArg id ) const
 {

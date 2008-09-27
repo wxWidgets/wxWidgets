@@ -158,7 +158,7 @@ wxPG_EX_HIDE_PAGE_BUTTONS               = 0x01000000
 
 // -----------------------------------------------------------------------
 
-/** wxPropertyGrid Validation Failure Behavior Flags
+/** @section propgrid_vfbflags wxPropertyGrid Validation Failure Behavior Flags
     @{
 */
 

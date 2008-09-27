@@ -759,8 +759,8 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         wxColour emptyCol;
         pgman->SetPropertyValue(wxT("ColourProperty"),emptyCol);
         pgman->SetPropertyValue(wxT("ColourProperty"),(wxObject*)wxBLACK);
-        pgman->SetPropertyValue(wxT("Size"),wxSize(150,150));
-        pgman->SetPropertyValue(wxT("Position"),wxPoint(150,150));
+        pgman->SetPropertyValue(wxT("Size"),WXVARIANT(wxSize(150,150)));
+        pgman->SetPropertyValue(wxT("Position"),WXVARIANT(wxPoint(150,150)));
         pgman->SetPropertyValue(wxT("MultiChoiceProperty"),test_arrint_1);
 #if wxUSE_DATETIME
         pgman->SetPropertyValue(wxT("DateProperty"),dt1);
@@ -785,9 +785,9 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         col << pgman->GetPropertyValue(wxT("ColourProperty"));
         if ( col != *wxBLACK )
             RT_FAILURE();
-        if ( pg->GetPropertyValueAsSize(wxT("Size")) != wxSize(150,150) )
+        if ( wxSizeRefFromVariant(pg->GetPropertyValue(wxT("Size"))) != wxSize(150,150) )
             RT_FAILURE();
-        if ( pg->GetPropertyValueAsPoint(wxT("Position")) != wxPoint(150,150) )
+        if ( wxPointRefFromVariant(pg->GetPropertyValue(wxT("Position"))) != wxPoint(150,150) )
             RT_FAILURE();
         if ( !(pg->GetPropertyValueAsArrayInt(wxT("MultiChoiceProperty")) == test_arrint_1) )
             RT_FAILURE();
@@ -807,8 +807,8 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         pg->SetPropertyValue(wxT("EnumProperty"),80);
         pg->SetPropertyValue(wxT("ArrayStringProperty"),test_arrstr_2);
         pg->SetPropertyValue(wxT("ColourProperty"),(wxObject*)wxWHITE);
-        pg->SetPropertyValue(wxT("Size"),wxSize(300,300));
-        pg->SetPropertyValue(wxT("Position"),wxPoint(300,300));
+        pg->SetPropertyValue(wxT("Size"),WXVARIANT(wxSize(300,300)));
+        pg->SetPropertyValue(wxT("Position"),WXVARIANT(wxPoint(300,300)));
         pg->SetPropertyValue(wxT("MultiChoiceProperty"),test_arrint_2);
 #if wxUSE_DATETIME
         pg->SetPropertyValue(wxT("DateProperty"),dt2);
@@ -833,9 +833,9 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         col << pgman->GetPropertyValue(wxT("ColourProperty"));
         if ( col != *wxWHITE )
             RT_FAILURE();
-        if ( pgman->GetPropertyValueAsSize(wxT("Size")) != wxSize(300,300) )
+        if ( wxSizeRefFromVariant(pgman->GetPropertyValue(wxT("Size"))) != wxSize(300,300) )
             RT_FAILURE();
-        if ( pgman->GetPropertyValueAsPoint(wxT("Position")) != wxPoint(300,300) )
+        if ( wxPointRefFromVariant(pgman->GetPropertyValue(wxT("Position"))) != wxPoint(300,300) )
             RT_FAILURE();
         if ( !(pgman->GetPropertyValueAsArrayInt(wxT("MultiChoiceProperty")) == test_arrint_2) )
             RT_FAILURE();
