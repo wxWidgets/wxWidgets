@@ -18,7 +18,7 @@
 #include "wx/stream.h"
 
 // Compression level
-enum {
+enum wxZlibCompressionLevels {
     wxZ_DEFAULT_COMPRESSION = -1,
     wxZ_NO_COMPRESSION = 0,
     wxZ_BEST_SPEED = 1,
@@ -26,7 +26,7 @@ enum {
 };
 
 // Flags
-enum {
+enum wxZLibFlags {
     wxZLIB_NO_HEADER = 0,    // raw deflate stream, no header or checksum
     wxZLIB_ZLIB = 1,         // zlib header and checksum
     wxZLIB_GZIP = 2,         // gzip header and checksum, requires zlib 1.2.1+
