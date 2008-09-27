@@ -299,11 +299,13 @@ public:
 
     /**
         Set the size of the spacer tracked by this item.
+        @deprecated @todo provide deprecation description
     */
     void SetSpacer(const wxSize& size);
 
     /**
         Set the window to be tracked by this item.
+        @deprecated @todo provide deprecation description
     */
     void SetWindow(wxWindow* window);
 
@@ -1644,7 +1646,7 @@ public:
     /**
         Returns the static box associated with the sizer.
     */
-    wxStaticBox* GetStaticBox();
+    wxStaticBox* GetStaticBox() const;
 };
 
 

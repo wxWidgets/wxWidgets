@@ -209,7 +209,7 @@ public:
     /**
         Returns the current position (counted in bytes) in the stream buffer.
     */
-    off_t GetIntPosition() const;
+    wxFileOffset GetIntPosition() const;
 
     /**
         Returns the amount of bytes read during the last IO call to the parent stream.
@@ -264,7 +264,7 @@ public:
                 measured in bytes from the beginning of the stream.
                 Otherwise, it returns wxInvalidOffset.
     */
-    off_t Seek(off_t pos, wxSeekMode mode);
+    virtual wxFileOffset Seek(wxFileOffset pos, wxSeekMode mode);
 
     /**
         Specifies which pointers to use for stream buffering.
@@ -320,7 +320,7 @@ public:
         @return Returns the current position in the stream if possible,
                 wxInvalidOffset in the other case.
     */
-    off_t Tell() const;
+    virtual wxFileOffset Tell() const;
 
     /**
         Truncates the buffer to the current position.
@@ -399,12 +399,12 @@ public:
 
         @return The new stream position or wxInvalidOffset on error.
     */
-    off_t SeekO(off_t pos, wxSeekMode mode = wxFromStart);
+    virtual wxFileOffset SeekO(wxFileOffset pos, wxSeekMode mode = wxFromStart);
 
     /**
         Returns the current stream position.
     */
-    off_t TellO() const;
+    virtual wxFileOffset TellO() const;
 
     /**
         Writes up to the specified amount of bytes using the data of buffer.
@@ -768,12 +768,12 @@ public:
 
         @return The new stream position or wxInvalidOffset on error.
     */
-    off_t SeekI(off_t pos, wxSeekMode mode = wxFromStart);
+    virtual wxFileOffset SeekI(wxFileOffset pos, wxSeekMode mode = wxFromStart);
 
     /**
         Returns the current stream position.
     */
-    off_t TellI() const;
+    virtual wxFileOffset TellI() const;
 
     /**
         This function is only useful in read mode.
@@ -884,13 +884,13 @@ public:
         Internal function.
         It is called when the stream needs to change the current position.
     */
-    off_t OnSysSeek(off_t pos, wxSeekMode mode);
+    wxFileOffset OnSysSeek(wxFileOffset pos, wxSeekMode mode);
 
     /**
         Internal function.
         It is called when the stream needs to know the real position.
     */
-    off_t OnSysTell() const;
+    wxFileOffset OnSysTell() const;
 
     /**
         See OnSysRead().

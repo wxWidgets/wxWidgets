@@ -108,7 +108,7 @@ public:
     /**
         Override this to receive notifications when an wxZipEntry object changes.
     */
-    void OnEntryUpdated(wxZipEntry& entry);
+    virtual void OnEntryUpdated(wxZipEntry& entry) = 0;
 };
 
 
@@ -167,7 +167,9 @@ public:
 class wxZipEntry : public wxArchiveEntry
 {
 public:
-    wxZipEntry(const wxString& name = wxEmptyString);
+    wxZipEntry(const wxString& name = wxEmptyString,
+               const wxDateTime& dt = Now(),
+               wxFileOffset size = wxInvalidOffset);
 
     /**
         Copy constructor.
@@ -275,7 +277,7 @@ public:
     /**
         The compressed size of this entry in bytes.
     */
-    off_t GetCompressedSize() const;
+    wxFileOffset GetCompressedSize() const;
 
     /**
         CRC32 for this entry's data.
@@ -568,7 +570,7 @@ public:
     */
     bool PutNextEntry(const wxString& name,
                       const wxDateTime& dt = wxDateTime::Now(),
-                      off_t size = wxInvalidOffset);
+                      wxFileOffset size = wxInvalidOffset);
     //@}
 
     /**

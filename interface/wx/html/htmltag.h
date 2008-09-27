@@ -46,6 +46,7 @@ public:
         Returns ending position of the text @e between this tag and paired
         ending tag.
         See explanation (returned position is marked with '|'):
+        @deprecated @todo provide deprecation description
     */
     int GetEndPos1() const;
 
@@ -53,6 +54,7 @@ public:
         Returns ending position 2 of the text @e between this tag and paired
         ending tag.
         See explanation (returned position is marked with '|'):
+        @deprecated @todo provide deprecation description
     */
     int GetEndPos2() const;
 
@@ -66,7 +68,7 @@ public:
     /**
         Returns the value of the parameter. You should check whether the
         parameter exists or not (use wxHtmlTag::HasParam) first.
-        
+
         @param par
             The parameter's name.
         @param with_quotes
@@ -93,7 +95,7 @@ public:
     /**
         Returns @true if this tag is paired with ending tag, @false otherwise.
         See the example of HTML document:
-        
+
         In this example tags HTML and BODY have ending tags, first P and BR
         doesn't have ending tag while the second P has. The third P tag (which
         is ending itself) of course doesn't have ending tag.
@@ -104,7 +106,7 @@ public:
         Returns @true if the tag has a parameter of the given name.
         Example : @c FONT SIZE=+2 COLOR="\#FF00FF" has two parameters named
         "SIZE" and "COLOR".
-        
+
         @param par
             the parameter you're looking for.
     */
@@ -116,7 +118,7 @@ public:
         argument
         and you can only retrieve one value (i.e. you can use only one "%" element
         in @e format).
-        
+
         @param par
             The name of the tag you want to query
         @param format
