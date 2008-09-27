@@ -3473,8 +3473,6 @@ void wxPropertyGrid::CustomSetCursor( int type, bool override )
 // Setups event handling for child control
 void wxPropertyGrid::SetupChildEventHandling( wxWindow* argWnd, int id )
 {
-    wxWindow* wnd = argWnd;
-
     if ( argWnd == m_wndEditor )
     {
         this->Connect(id, wxEVT_MOTION,
