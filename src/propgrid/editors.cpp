@@ -2136,6 +2136,19 @@ wxPGMultiButton::wxPGMultiButton( wxPropertyGrid* pg, const wxSize& sz )
     SetBackgroundColour(pg->GetCellBackgroundColour());
 }
 
+void wxPGMultiButton::Finalize( wxPropertyGrid* propGrid, const wxPoint& pos )
+{
+    Move( pos.x + m_fullEditorSize.x - m_buttonsWidth, pos.y );
+
+    // Connect event handling
+    for ( int i=0; i<GetCount(); i++ )
+    {
+        wxWindowID id = GetButtonId(i);
+        propGrid->Connect(id, wxEVT_COMMAND_BUTTON_CLICKED,
+            wxCommandEventHandler(wxPropertyGrid::OnCustomEditorEvent));
+    }
+}
+
 int wxPGMultiButton::GenId( int id ) const
 {
     if ( id < -1 )

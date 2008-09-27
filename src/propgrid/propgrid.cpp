@@ -5528,18 +5528,18 @@ void wxPropertyGrid::OnCaptureChange( wxMouseCaptureChangedEvent& WXUNUSED(event
 // -----------------------------------------------------------------------
 
 // noDefCheck = true prevents infinite recursion.
-wxPGEditor* wxPropertyGrid::RegisterEditorClass( wxPGEditor* editorclass,
-                                                 const wxString& name,
+wxPGEditor* wxPropertyGrid::RegisterEditorClass( wxPGEditor* editorClass,
                                                  bool noDefCheck )
 {
-    wxASSERT( editorclass );
+    wxASSERT( editorClass );
 
     if ( !noDefCheck && wxPGGlobalVars->m_mapEditorClasses.empty() )
         RegisterDefaultEditors();
 
-    wxPGGlobalVars->m_mapEditorClasses[name] = (void*)editorclass;
+    wxString name = editorClass->GetName();
+    wxPGGlobalVars->m_mapEditorClasses[name] = (void*)editorClass;
 
-    return editorclass;
+    return editorClass;
 }
 
 // Registers all default editor classes

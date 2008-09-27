@@ -417,7 +417,7 @@ public:
     if ( wxPGEditor_##EDITOR == (wxPGEditor*) NULL ) \
     { \
         wxPGEditor_##EDITOR = wxPropertyGrid::RegisterEditorClass( \
-                wxPGConstruct##EDITOR##EditorClass(), wxS(#EDITOR) ); \
+                wxPGConstruct##EDITOR##EditorClass() ); \
     }
 
 // Use this in RegisterDefaultEditors.
@@ -425,7 +425,7 @@ public:
 if ( wxPGEditor_##EDITOR == (wxPGEditor*) NULL ) \
     { \
         wxPGEditor_##EDITOR = wxPropertyGrid::RegisterEditorClass( \
-                wxPGConstruct##EDITOR##EditorClass(), wxS(#EDITOR), true ); \
+                wxPGConstruct##EDITOR##EditorClass(), true ); \
     }
 
 #define wxPG_INIT_REQUIRED_EDITOR(T) \
@@ -493,113 +493,7 @@ private:
     This class can be used to have multiple buttons in a property editor.
     You will need to create a new property editor class, override
     CreateControls, and have it return wxPGMultiButton instance in
-    wxPGWindowList::SetSecondary(). For instance, here we add three buttons to
-    a textctrl editor:
-
-    @code
-
-    #include <wx/propgrid/editors.h>
-
-    class wxMultiButtonTextCtrlEditor : public wxPGTextCtrlEditor
-    {
-        WX_PG_DECLARE_EDITOR_CLASS(wxMultiButtonTextCtrlEditor)
-    public:
-        wxMultiButtonTextCtrlEditor() {}
-        virtual ~wxMultiButtonTextCtrlEditor() {}
-
-        wxPG_DECLARE_CREATECONTROLS
-        virtual bool OnEvent( wxPropertyGrid* propGrid,
-                              wxPGProperty* property,
-                              wxWindow* ctrl,
-                              wxEvent& event ) const;
-
-    };
-
-    WX_PG_IMPLEMENT_EDITOR_CLASS(MultiButtonTextCtrlEditor,
-                                 wxMultiButtonTextCtrlEditor,
-                                 wxPGTextCtrlEditor)
-
-    wxPGWindowList
-    wxMultiButtonTextCtrlEditor::CreateControls( wxPropertyGrid* propGrid,
-                                                 wxPGProperty* property,
-                                                 const wxPoint& pos,
-                                                 const wxSize& sz ) const
-    {
-        // Create and populate buttons-subwindow
-        wxPGMultiButton* buttons = new wxPGMultiButton( propGrid, sz );
-
-        // Add two regular buttons
-        buttons->Add( "..." );
-        buttons->Add( "A" );
-        // Add a bitmap button
-        buttons->Add( wxArtProvider::GetBitmap(wxART_FOLDER) );
-
-        // Create the 'primary' editor control (textctrl in this case)
-        wxPGWindowList wndList = wxPGTextCtrlEditor::CreateControls(
-                                    propGrid,
-                                    property,
-                                    pos,
-                                    buttons->GetPrimarySize()
-                                 );
-
-        // Finally, move buttons-subwindow to correct position and make sure
-        // returned wxPGWindowList contains our custom button list.
-        buttons->FinalizePosition(pos);
-
-        wndList.SetSecondary( buttons );
-        return wndList;
-    }
-
-    bool wxMultiButtonTextCtrlEditor::OnEvent( wxPropertyGrid* propGrid,
-                                               wxPGProperty* property,
-                                               wxWindow* ctrl,
-                                               wxEvent& event ) const
-    {
-        if ( event.GetEventType() == wxEVT_COMMAND_BUTTON_CLICKED )
-        {
-            wxPGMultiButton* buttons = (wxPGMultiButton*)
-                propGrid->GetEditorControlSecondary();
-
-            if ( event.GetId() == buttons->GetButtonId(0) )
-            {
-                // Do something when first button is pressed
-                return true;
-            }
-            if ( event.GetId() == buttons->GetButtonId(1) )
-            {
-                // Do something when first button is pressed
-                return true;
-            }
-            if ( event.GetId() == buttons->GetButtonId(2) )
-            {
-                // Do something when second button is pressed
-                return true;
-            }
-        }
-        return wxPGTextCtrlEditor::OnEvent(propGrid, property, ctrl, event);
-    }
-
-    @endcode
-
-    Further to use this editor, code like this can be used:
-
-    @code
-
-        // Register editor class - needs only to be called once
-        wxPGRegisterEditorClass( MultiButtonTextCtrlEditor );
-
-        // Insert the property that will have multiple buttons
-        propGrid->Append( new wxLongStringProperty("MultipleButtons",
-                                                    wxPG_LABEL) );
-
-        // Change property to use editor created in the previous code segment
-        propGrid->SetPropertyEditor( "MultipleButtons",
-                                     wxPG_EDITOR(MultiButtonTextCtrlEditor) );
-
-    @endcode
-
-    @library{wxpropgrid}
-    @category{propgrid}
+    wxPGWindowList::SetSecondary().
 */
 class WXDLLIMPEXP_PROPGRID wxPGMultiButton : public wxWindow
 {
@@ -628,10 +522,7 @@ public:
         return wxSize(m_fullEditorSize.x - m_buttonsWidth, m_fullEditorSize.y);
     }
 
-    void FinalizePosition( const wxPoint& pos )
-    {
-        Move( pos.x + m_fullEditorSize.x - m_buttonsWidth, pos.y );
-    }
+    void Finalize( wxPropertyGrid* propGrid, const wxPoint& pos );
 
 #ifndef DOXYGEN
 protected:

@@ -80,22 +80,24 @@
 
 class wxSampleMultiButtonEditor : public wxPGTextCtrlEditor
 {
-    WX_PG_DECLARE_EDITOR_CLASS(wxSampleMultiButtonEditor)
+    DECLARE_DYNAMIC_CLASS(wxSampleMultiButtonEditor)
 public:
     wxSampleMultiButtonEditor() {}
     virtual ~wxSampleMultiButtonEditor() {}
 
-    wxPG_DECLARE_CREATECONTROLS
+    virtual wxString GetName() const { return "SampleMultiButtonEditor"; }
+
+    virtual wxPGWindowList CreateControls( wxPropertyGrid* propGrid,
+                                           wxPGProperty* property,
+                                           const wxPoint& pos,
+                                           const wxSize& sz ) const;
     virtual bool OnEvent( wxPropertyGrid* propGrid,
                           wxPGProperty* property,
                           wxWindow* ctrl,
                           wxEvent& event ) const;
-
 };
 
-WX_PG_IMPLEMENT_EDITOR_CLASS(SampleMultiButtonEditor,wxSampleMultiButtonEditor,
-                             wxPGTextCtrlEditor)
-
+IMPLEMENT_DYNAMIC_CLASS(wxSampleMultiButtonEditor, wxPGTextCtrlEditor)
 
 wxPGWindowList wxSampleMultiButtonEditor::CreateControls( wxPropertyGrid* propGrid,
                                                           wxPGProperty* property,
@@ -105,19 +107,20 @@ wxPGWindowList wxSampleMultiButtonEditor::CreateControls( wxPropertyGrid* propGr
     // Create and populate buttons-subwindow
     wxPGMultiButton* buttons = new wxPGMultiButton( propGrid, sz );
 
+    // Add two regular buttons
     buttons->Add( "..." );
     buttons->Add( "A" );
-#if wxUSE_BMPBUTTON
+    // Add a bitmap button
     buttons->Add( wxArtProvider::GetBitmap(wxART_FOLDER) );
-#endif
 
     // Create the 'primary' editor control (textctrl in this case)
     wxPGWindowList wndList = wxPGTextCtrlEditor::CreateControls
-                             ( propGrid, property, pos, buttons->GetPrimarySize() );
+                             ( propGrid, property, pos,
+                               buttons->GetPrimarySize() );
 
     // Finally, move buttons-subwindow to correct position and make sure
     // returned wxPGWindowList contains our custom button list.
-    buttons->FinalizePosition(pos);
+    buttons->Finalize(propGrid, pos);
 
     wndList.SetSecondary( buttons );
     return wndList;
@@ -132,14 +135,22 @@ bool wxSampleMultiButtonEditor::OnEvent( wxPropertyGrid* propGrid,
     {
         wxPGMultiButton* buttons = (wxPGMultiButton*) propGrid->GetEditorControlSecondary();
 
+        if ( event.GetId() == buttons->GetButtonId(0) )
+        {
+            // Do something when first button is pressed
+            wxLogDebug("First button pressed");
+            return true;
+        }
         if ( event.GetId() == buttons->GetButtonId(1) )
         {
-            wxMessageBox(wxT("Second button was pressed"));
+            // Do something when second button is pressed
+            wxLogDebug("Second button pressed");
             return true;
         }
         if ( event.GetId() == buttons->GetButtonId(2) )
         {
-            wxMessageBox(wxT("Third button was pressed"));
+            // Do something when third button is pressed
+            wxLogDebug("Third button pressed");
             return true;
         }
     }
@@ -1655,9 +1666,10 @@ void FormMain::PopulateWithExamples ()
 
     //
     // Test wxSampleMultiButtonEditor
-    wxPGRegisterEditorClass( SampleMultiButtonEditor );
+    wxPGEditor* pSampleMultiButtonEditor = new wxSampleMultiButtonEditor();
+    wxPropertyGrid::RegisterEditorClass(pSampleMultiButtonEditor);
     pg->Append( new wxLongStringProperty(wxT("MultipleButtons"), wxPG_LABEL) );
-    pg->SetPropertyEditor(wxT("MultipleButtons"), wxPG_EDITOR(SampleMultiButtonEditor) );
+    pg->SetPropertyEditor(wxT("MultipleButtons"), pSampleMultiButtonEditor );
 
     // Test SingleChoiceProperty
     pg->Append( new SingleChoiceProperty(wxT("SingleChoiceProperty")) );

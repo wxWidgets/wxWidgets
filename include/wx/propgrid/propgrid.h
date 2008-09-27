@@ -883,7 +883,6 @@ public:
         Pointer to the editor class instance that should be used.
     */
     static wxPGEditor* RegisterEditorClass( wxPGEditor* editor,
-                                            const wxString& name,
                                             bool noDefCheck = false );
 #endif
 
