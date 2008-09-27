@@ -345,69 +345,73 @@ public:
 };
 
 
-
----
-
-
-
 /**
     @class wxZipInputStream
 
     Input stream for reading zip files.
 
-    wxZipInputStream::GetNextEntry returns an
-     wxZipEntry object containing the meta-data
-    for the next entry in the zip (and gives away ownership). Reading from
-    the wxZipInputStream then returns the entry's data. Eof() becomes @true
-    after an attempt has been made to read past the end of the entry's data.
+    wxZipInputStream::GetNextEntry() returns a wxZipEntry object containing the
+    meta-data for the next entry in the zip (and gives away ownership).
+    Reading from the wxZipInputStream then returns the entry's data.
+    Eof() becomes @true after an attempt has been made to read past the end of
+    the entry's data.
     When there are no more entries, GetNextEntry() returns @NULL and sets Eof().
 
     Note that in general zip entries are not seekable, and
-    wxZipInputStream::SeekI() always returns wxInvalidOffset.
+    wxZipInputStream::SeekI() always returns ::wxInvalidOffset.
 
     @library{wxbase}
     @category{streams}
 
-    @see @ref overview_wxarc "Archive formats such as zip", wxZipEntry,
-    wxZipOutputStream
+    @see @ref overview_archive, wxZipEntry, wxZipOutputStream
 */
 class wxZipInputStream : public wxArchiveInputStream
 {
 public:
+
     //@{
     /**
-        Compatibility constructor (requires WXWIN_COMPATIBILITY_2_6).
-        When this constructor is used, an emulation of seeking is
-        switched on for compatibility with previous versions. Note however,
-        that it is deprecated.
+        Constructor. In a Unicode build the second parameter @a conv is used to
+        translate the filename and comment fields into Unicode.
+        It has no effect on the stream's data.
+        If the parent stream is passed as a pointer then the new filter stream
+        takes ownership of it. If it is passed by reference then it does not.
     */
     wxZipInputStream(wxInputStream& stream,
                      wxMBConv& conv = wxConvLocal);
     wxZipInputStream(wxInputStream* stream,
                      wxMBConv& conv = wxConvLocal);
-    wxZipInputStream(const wxString& archive,
-                     const wxString& file);
     //@}
 
     /**
-        Closes the current entry. On a non-seekable stream reads to the end of
-        the current entry first.
+        @deprecated
+        Compatibility constructor (requires WXWIN_COMPATIBILITY_2_6).
+        When this constructor is used, an emulation of seeking is
+        switched on for compatibility with previous versions. Note however,
+        that it is deprecated.
+    */
+    wxZipInputStream(const wxString& archive,
+                     const wxString& file);
+
+    /**
+        Closes the current entry.
+        On a non-seekable stream reads to the end of the current entry first.
     */
     bool CloseEntry();
 
     /**
         Returns the zip comment.
+
         This is stored at the end of the zip, therefore when reading a zip
-        from a non-seekable stream, it returns the empty string until the
-        end of the zip has been reached, i.e. when GetNextEntry() returns
-        @NULL.
+        from a non-seekable stream, it returns the empty string until the end
+        of the zip has been reached, i.e. when GetNextEntry() returns @NULL.
     */
     wxString GetComment();
 
     /**
         Closes the current entry if one is open, then reads the meta-data for
-        the next entry and returns it in a wxZipEntry
-        object, giving away ownership. The stream is then open and can be read.
+        the next entry and returns it in a wxZipEntry object, giving away ownership.
+        The stream is then open and can be read.
     */
     wxZipEntry* GetNextEntry();
 
@@ -421,8 +425,11 @@ public:
     /**
         Closes the current entry if one is open, then opens the entry specified
         by the @a entry object.
+
         @a entry should be from the same zip file, and the zip should
         be on a seekable stream.
+
+        @see overview_archive_byname
     */
     bool OpenEntry(wxZipEntry& entry);
 };
@@ -432,14 +439,15 @@ public:
 /**
     @class wxZipClassFactory
 
-    Class factory for the zip archive format. See the base class
-    for details.
+    Class factory for the zip archive format.
+    See the base class for details.
 
     @library{wxbase}
-    @category{FIXME}
+    @category{archive}
 
-    @see @ref overview_wxarc "Archive formats such as zip", @ref
-    overview_wxarcgeneric "Generic archive programming", wxZipEntry, wxZipInputStream, wxZipOutputStream
+    @see @ref overview_archive,
+         @ref overview_archive_generic,
+         wxZipEntry, wxZipInputStream, wxZipOutputStream
 */
 class wxZipClassFactory : public wxArchiveClassFactory
 {
@@ -454,30 +462,32 @@ public:
 
     Output stream for writing zip files.
 
-    wxZipOutputStream::PutNextEntry is used to create
-    a new entry in the output zip, then the entry's data is written to the
-    wxZipOutputStream.  Another call to PutNextEntry() closes the current
+    wxZipOutputStream::PutNextEntry() is used to create a new entry in the
+    output zip, then the entry's data is written to the wxZipOutputStream.
+    Another call to wxZipOutputStream::PutNextEntry() closes the current
     entry and begins the next.
 
     @library{wxbase}
     @category{streams}
 
-    @see @ref overview_wxarc "Archive formats such as zip", wxZipEntry,
-    wxZipInputStream
+    @see @ref overview_archive, wxZipEntry, wxZipInputStream
 */
 class wxZipOutputStream : public wxArchiveOutputStream
 {
 public:
     //@{
     /**
-        Constructor. @c level is the compression level to use.
+        Constructor.
+
+        @a level is the compression level to use.
         It can be a value between 0 and 9 or -1 to use the default value
         which currently is equivalent to 6.
+
         If the parent stream is passed as a pointer then the new filter stream
         takes ownership of it. If it is passed by reference then it does not.
-        In a Unicode build the third parameter @c conv is used to translate
-        the filename and comment fields to an 8-bit encoding. It has no effect on the
-        stream's data.
+        In a Unicode build the third parameter @a conv is used to translate
+        the filename and comment fields to an 8-bit encoding.
+        It has no effect on the stream's data.
     */
     wxZipOutputStream(wxOutputStream& stream, int level = -1,
                       wxMBConv& conv = wxConvLocal);
@@ -486,8 +496,8 @@ public:
     //@}
 
     /**
-        The destructor calls Close() to finish
-        writing the zip if it has not been called already.
+        The destructor calls Close() to finish writing the zip if it has
+        not been called already.
     */
     ~wxZipOutputStream();
 
@@ -498,10 +508,9 @@ public:
     bool Close();
 
     /**
-        Close the current entry. It is called implicitly whenever another new
-        entry is created with CopyEntry()
-        or PutNextEntry(), or
-        when the zip is closed.
+        Close the current entry.
+        It is called implicitly whenever another new entry is created with CopyEntry()
+        or PutNextEntry(), or when the zip is closed.
     */
     bool CloseEntry();
 
@@ -512,51 +521,59 @@ public:
     bool CopyArchiveMetaData(wxZipInputStream& inputStream);
 
     /**
-        Takes ownership of @c entry and uses it to create a new entry
-        in the zip. @c entry is then opened in @c inputStream and its contents
+        Takes ownership of @a entry and uses it to create a new entry
+        in the zip. @a entry is then opened in @a inputStream and its contents
         copied to this stream.
+
         CopyEntry() is much more efficient than transferring the data using
         Read() and Write() since it will copy them without decompressing and
         recompressing them.
-        For zips on seekable streams, @c entry must be from the same zip file
-        as @c stream. For non-seekable streams, @c entry must also be the
-        last thing read from @c inputStream.
+
+        For zips on seekable streams, @a entry must be from the same zip file
+        as @a inputStream. For non-seekable streams, @a entry must also be the
+        last thing read from @a inputStream.
     */
     bool CopyEntry(wxZipEntry* entry, wxZipInputStream& inputStream);
 
     //@{
     /**
         Set the compression level that will be used the next time an entry is
-        created. It can be a value between 0 and 9 or -1 to use the default value
+        created.
+
+        It can be a value between 0 and 9 or -1 to use the default value
         which currently is equivalent to 6.
     */
-    int GetLevel();
-    const void SetLevel(int level);
+    int GetLevel() const;
+    void SetLevel(int level);
     //@}
 
     /**
-        )
-        Create a new directory entry
-        (see wxArchiveEntry::IsDir)
-        with the given name and timestamp.
-        PutNextEntry() can
-        also be used to create directory entries, by supplying a name with
-        a trailing path separator.
+        Create a new directory entry (see wxArchiveEntry::IsDir) with the given
+        name and timestamp.
+
+        PutNextEntry() can also be used to create directory entries, by supplying
+        a name with a trailing path separator.
     */
-    bool PutNextDirEntry(const wxString& name);
+    bool PutNextDirEntry(const wxString& name,
+                         const wxDateTime& dt = wxDateTime::Now());
 
     //@{
     /**
-        , @b off_t@e size = wxInvalidOffset)
-        Create a new entry with the given name, timestamp and size.
+        Takes ownership of @a entry and uses it to create a new entry in the zip.
     */
     bool PutNextEntry(wxZipEntry* entry);
-    bool PutNextEntry(const wxString& name);
+
+    /**
+        Create a new entry with the given name, timestamp and size.
+    */
+    bool PutNextEntry(const wxString& name,
+                      const wxDateTime& dt = wxDateTime::Now(),
+                      off_t size = wxInvalidOffset);
     //@}
 
     /**
-        Sets a comment for the zip as a whole. It is written at the end of the
-        zip.
+        Sets a comment for the zip as a whole.
+        It is written at the end of the zip.
     */
     void SetComment(const wxString& comment);
 };

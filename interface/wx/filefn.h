@@ -102,6 +102,12 @@ public:
 //@{
 
 /**
+    A special return value of many wxWidgets classes to indicate that
+    an invalid offset was given.
+*/
+const int wxInvalidOffset = -1;
+
+/**
     Under Unix this macro changes the current process umask to the given value,
     unless it is equal to -1 in which case nothing is done, and restores it to
     the original value on scope exit. It works by declaring a variable which
