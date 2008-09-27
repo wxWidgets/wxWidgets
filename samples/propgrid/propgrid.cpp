@@ -2040,11 +2040,9 @@ void FormMain::CreateGrid( int style, int extraStyle )
     /*
     // This would setup event handling without event table entries
     Connect(m_pPropGridManager->GetId(), wxEVT_PG_SELECTED,
-            (wxObjectEventFunction) (wxEventFunction) (wxPropertyGridEventFunction)
-            &FormMain::OnPropertyGridSelect );
+            wxPropertyGridEventHandler(FormMain::OnPropertyGridSelect) );
     Connect(m_pPropGridManager->GetId(), wxEVT_PG_CHANGED,
-            (wxObjectEventFunction) (wxEventFunction) (wxPropertyGridEventFunction)
-            &FormMain::OnPropertyGridChange );
+            wxPropertyGridEventHandler(FormMain::OnPropertyGridChange) );
     */
 
     m_topSizer->Add( m_pPropGridManager, 1, wxEXPAND );
