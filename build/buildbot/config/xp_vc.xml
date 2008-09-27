@@ -8,11 +8,10 @@
     Licence:    wxWidgets licence
 -->
 <bot xmlns:xi="http://www.w3.org/2001/XInclude">
-    <xi:include href="include/defs.xml"/>
+    <xi:include href="include/xp_vc.xml"/>
     <build>
         <name>XPSP2 VC9 wxMSW trunk</name>
         <builddir>XPSP2_VC9_wxMSW_trunk</builddir>
-        <lock>slave</lock>
         <!--<scheduler>trunk_quick</scheduler>-->
         <sandbox>VC9</sandbox>
         <make>nmake -f makefile.vc SHARED=1 CPPUNIT_CFLAGS=-Ik:/buildbot/VC9libs/cppunit-1.12.1/include CPPUNIT_LIBS=k:/buildbot/VC9libs/cppunit-1.12.1/lib/cppunit.lib</make>
@@ -25,7 +24,6 @@
     <build>
         <name>XPSP2 VC9 wxMSW stable</name>
         <builddir>XPSP2_VC9_wxMSW_stable</builddir>
-        <lock>slave</lock>
         <!--<scheduler>stable_quick</scheduler>-->
         <sandbox>VC9</sandbox>
         <make>nmake -f makefile.vc SHARED=1 CPPUNIT_CFLAGS=-Ik:/buildbot/VC9libs/cppunit-1.12.1/include CPPUNIT_LIBS=k:/buildbot/VC9libs/cppunit-1.12.1/lib/cppunit.lib</make>
