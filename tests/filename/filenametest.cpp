@@ -38,7 +38,7 @@ inline std::ostream& operator<<(std::ostream& o, const wxFileName& fn)
 // test data
 // ----------------------------------------------------------------------------
 
-static struct FileNameInfo
+static struct TestFileNameInfo
 {
     const wxChar *fullname;
     const wxChar *volume;
@@ -146,7 +146,7 @@ void FileNameTestCase::TestConstruction()
 {
     for ( size_t n = 0; n < WXSIZEOF(filenames); n++ )
     {
-        const FileNameInfo& fni = filenames[n];
+        const TestFileNameInfo& fni = filenames[n];
 
         wxFileName fn(fni.fullname, fni.format);
 
@@ -238,7 +238,7 @@ void FileNameTestCase::TestSplit()
 {
     for ( size_t n = 0; n < WXSIZEOF(filenames); n++ )
     {
-        const FileNameInfo& fni = filenames[n];
+        const TestFileNameInfo& fni = filenames[n];
         wxString volume, path, name, ext;
         wxFileName::SplitPath(fni.fullname,
                               &volume, &path, &name, &ext, fni.format);
