@@ -540,6 +540,7 @@ public:
         return value.GetArrayString();
     }
 
+#if wxUSE_LONGLONG_NATIVE
     wxLongLong_t GetPropertyValueAsLongLong( wxPGPropArg id ) const
     {
         wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL_WFALLBACK("wxLongLong",
@@ -557,6 +558,7 @@ public:
         ull << value;
         return ull.GetValue();
     }
+#endif
 
     wxArrayInt GetPropertyValueAsArrayInt( wxPGPropArg id ) const
     {
@@ -1116,6 +1118,7 @@ public:
         SetPropVal( id, v );
     }
 
+#if wxUSE_LONGLONG_NATIVE
     /** Sets value (wxLongLong&) of a property.
     */
     void SetPropertyValue( wxPGPropArg id, wxLongLong_t value )
@@ -1130,6 +1133,8 @@ public:
         wxVariant v = WXVARIANT(wxULongLong(value));
         SetPropVal( id, v );
     }
+#endif
+
     /** Sets value (wxArrayInt&) of a property.
     */
     void SetPropertyValue( wxPGPropArg id, const wxArrayInt& value )
