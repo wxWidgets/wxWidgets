@@ -28,6 +28,7 @@
 #include "wx/datetime.h"
 #include "wx/intl.h"
 #include "wx/longlong.h"
+#include "wx/file.h"
 
 #if wxUSE_FILE
 class WXDLLIMPEXP_FWD_BASE wxFile;
@@ -308,8 +309,8 @@ public:
 #endif // wxUSE_FFILE
 
     // directory creation and removal.
-    bool Mkdir( int perm = 0777, int flags = 0);
-    static bool Mkdir( const wxString &dir, int perm = 0777, int flags = 0 );
+    bool Mkdir( int perm = wxS_DIR_DEFAULT, int flags = 0);
+    static bool Mkdir( const wxString &dir, int perm = wxS_DIR_DEFAULT, int flags = 0 );
 
     bool Rmdir();
     static bool Rmdir( const wxString &dir );
