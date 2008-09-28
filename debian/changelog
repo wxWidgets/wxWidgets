@@ -1,11 +1,15 @@
+wxwidgets2.8 (2.8.9.0-0) unstable; urgency=low
+
+  * New upstream stable release. See docs/changes.txt for details.
+
+ -- Robin Dunn <robin@alldunn.com>  Sat, 20 Sep 2008 16:56:20 -0700
+
 wxwidgets2.8 (2.8.8.1-0) unstable; urgency=low
 
   * Fixed bug in wxScrolledWindow when child focus events caused
     unneccessary or incorrect scrolling.
   * Fixed a bug in wxGridBagSizer where hidden items were not ignored in
     part of the layout algorithm.
-
-
 
  -- Robin Dunn <robin@alldunn.com>  Fri, 18 Jul 2008 10:59:05 -0700
 
