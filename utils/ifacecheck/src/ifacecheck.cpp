@@ -188,8 +188,6 @@ int IfaceCheckApp::OnRun()
             // HELP_SWITCH was passed or a syntax error occurred
             return 0;
     }
-
-    return 1;
 }
 
 void IfaceCheckApp::ShowProgress()
