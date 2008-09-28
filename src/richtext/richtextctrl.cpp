@@ -300,7 +300,7 @@ void wxRichTextCtrl::DoThaw()
         LayoutContent();
     else
         SetupScrollbars();
-    
+
     wxWindow::DoThaw();
 }
 
@@ -675,7 +675,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
                 if (event.CmdDown())
                 {
                     long pos = wxRichTextCtrl::FindNextWordPosition(-1);
-                    if (pos != -1 && (pos < newPos))
+                    if (pos < newPos)
                     {
                         GetBuffer().DeleteRangeWithUndo(wxRichTextRange(pos+1, newPos), this);
                         processed = true;
@@ -802,7 +802,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
             if (event.CmdDown())
             {
                 long pos = wxRichTextCtrl::FindNextWordPosition(-1);
-                if (pos != -1 && (pos < newPos))
+                if (pos < newPos)
                 {
                     GetBuffer().DeleteRangeWithUndo(wxRichTextRange(pos+1, newPos), this);
                     processed = true;
