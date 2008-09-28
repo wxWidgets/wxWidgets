@@ -200,39 +200,39 @@ void IfaceCheckApp::ShowProgress()
 
 bool IfaceCheckApp::Compare()
 {
-    const wxClassArray& interface = m_doxyInterface.GetClasses();
+    const wxClassArray& interfaces = m_doxyInterface.GetClasses();
     const wxClass* c;
     wxClassPtrArray api;
     int mcount = 0, ccount = 0;
 
     LogMessage("Comparing the interface API to the real API (%d classes to compare)...",
-               interface.GetCount());
+               interfaces.GetCount());
 
     if (!m_strToMatch.IsEmpty())
         LogMessage("Processing only header files matching '%s' expression.", m_strToMatch);
 
-    for (unsigned int i=0; i<interface.GetCount(); i++)
+    for (unsigned int i=0; i<interfaces.GetCount(); i++)
     {
         // only compare the methods which are available for the port
         // for which the gcc XML was produced
-        if (interface[i].GetAvailability() != wxPORT_UNKNOWN &&
-            (interface[i].GetAvailability() & m_gccInterface.GetInterfacePort()) == 0) {
+        if (interfaces[i].GetAvailability() != wxPORT_UNKNOWN &&
+            (interfaces[i].GetAvailability() & m_gccInterface.GetInterfacePort()) == 0) {
 
             if (g_verbose)
                 LogMessage("skipping class '%s' since it's not available for the %s port.",
-                           interface[i].GetName(), m_gccInterface.GetInterfacePortName());
+                           interfaces[i].GetName(), m_gccInterface.GetInterfacePortName());
 
             continue;       // skip this method
         }
 
         // shorten the name of the header so the log file is more readable
         // and also for calling IsToProcess() against it
-        wxString header = wxFileName(interface[i].GetHeader()).GetFullName();
+        wxString header = wxFileName(interfaces[i].GetHeader()).GetFullName();
 
         if (!IsToProcess(header))
             continue;       // skip this one
 
-        wxString cname = interface[i].GetName();
+        wxString cname = interfaces[i].GetName();
 
         api.Empty();
 
@@ -255,7 +255,7 @@ bool IfaceCheckApp::Compare()
         if (api.GetCount()>0) {
 
             // there is a class with exactly the same name!
-            mcount += CompareClasses(&interface[i], api);
+            mcount += CompareClasses(&interfaces[i], api);
 
         } else {
 
