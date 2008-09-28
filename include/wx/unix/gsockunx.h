@@ -99,27 +99,6 @@ public:
   void *m_gui_dependent;
 };
 
-/* Definition of GAddress */
-struct _GAddress
-{
-  struct sockaddr *m_addr;
-  size_t m_len;
-
-  GAddressType m_family;
-  int m_realfamily;
-
-  GSocketError m_error;
-};
-
-/* GAddress */
-
-GSocketError _GAddress_translate_from(GAddress *address,
-                                      struct sockaddr *addr, int len);
-GSocketError _GAddress_translate_to  (GAddress *address,
-                                      struct sockaddr **addr, int *len);
-GSocketError _GAddress_Init_INET(GAddress *address);
-GSocketError _GAddress_Init_UNIX(GAddress *address);
-
 // A version of GSocketManager which uses FDs for socket IO
 //
 // This class uses GSocket::m_gui_dependent field to store the 2 (for input and

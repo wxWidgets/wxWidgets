@@ -4,7 +4,7 @@
  * Author:      Guilhem Lavaux
  *              Guillermo Rodriguez Garcia <guille@iies.es>
  * Copyright:   (c) Guilhem Lavaux
- *              (c) 2007 Vadim Zeitlin <vadim@wxwidgets.org>
+ *              (c) 2007,2008 Vadim Zeitlin <vadim@wxwidgets.org>
  * Licence:     wxWindows Licence
  * Purpose:     GSocket include file (system independent)
  * CVSID:       $Id$
@@ -23,7 +23,7 @@
 #include <stddef.h>
 
 /*
-   Including sys/types.h under cygwin results in the warnings about "fd_set
+   Including sys/types.h under Cygwin results in the warnings about "fd_set
    having been defined in sys/types.h" when winsock.h is included later and
    doesn't seem to be necessary anyhow. It's not needed under Mac neither.
  */
@@ -34,8 +34,6 @@
 #ifdef __WXWINCE__
 #include <stdlib.h>
 #endif
-
-typedef struct _GAddress GAddress;
 
 enum GAddressType
 {
@@ -87,6 +85,7 @@ enum
 
 typedef int GSocketEventFlags;
 
+struct GAddress;
 class GSocket;
 
 typedef void (*GSocketCallback)(GSocket *socket, GSocketEvent event,
@@ -179,6 +178,19 @@ GSocket *GSocket_new();
 
 /* GAddress */
 
+// Represents a socket endpoint, i.e. -- in spite of its name -- not an address
+// but an (address, port) pair
+struct GAddress
+{
+    struct sockaddr *m_addr;
+    size_t m_len;
+
+    GAddressType m_family;
+    int m_realfamily;
+
+    GSocketError m_error;
+};
+
 GAddress *GAddress_new();
 GAddress *GAddress_copy(GAddress *address);
 void GAddress_destroy(GAddress *address);
@@ -205,6 +217,12 @@ GSocketError GAddress_INET_GetHostName(GAddress *address, char *hostname,
 unsigned long GAddress_INET_GetHostAddress(GAddress *address);
 unsigned short GAddress_INET_GetPort(GAddress *address);
 
+GSocketError _GAddress_translate_from(GAddress *address,
+                                      struct sockaddr *addr, int len);
+GSocketError _GAddress_translate_to  (GAddress *address,
+                                      struct sockaddr **addr, int *len);
+GSocketError _GAddress_Init_INET(GAddress *address);
+
 #if wxUSE_IPV6
 
 GSocketError GAddress_INET6_SetHostName(GAddress *address, const char *hostname);
@@ -222,8 +240,9 @@ unsigned short GAddress_INET6_GetPort(GAddress *address);
 
 #endif // wxUSE_IPV6
 
-/* TODO: Define specific parts (UNIX) */
-
+// these functions are available under all platforms but only implemented under
+// Unix ones, elsewhere they just return GSOCK_INVADDR
+GSocketError _GAddress_Init_UNIX(GAddress *address);
 GSocketError GAddress_UNIX_SetPath(GAddress *address, const char *path);
 GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf);
 
