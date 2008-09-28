@@ -1814,40 +1814,6 @@ void wxGtkPrinterDCImpl::DoDrawRotatedText(const wxString& text, wxCoord x, wxCo
         }
     }
 
-    int w,h;
-
-    // Scale font description.
-    gint oldSize = pango_font_description_get_size( m_fontdesc );
-    double size = oldSize;
-    size = size * m_scaleX;
-    pango_font_description_set_size( m_fontdesc, (gint)size );
-
-    // Actually apply scaled font.
-    pango_layout_set_font_description( m_layout, m_fontdesc );
-
-    pango_layout_get_pixel_size( m_layout, &w, &h );
-
-        if ( m_backgroundMode == wxBRUSHSTYLE_SOLID )
-        {
-            unsigned char red = m_textBackgroundColour.Red();
-            unsigned char blue = m_textBackgroundColour.Blue();
-            unsigned char green = m_textBackgroundColour.Green();
-            unsigned char alpha = m_textBackgroundColour.Alpha();
-
-            double redPS = (double)(red) / 255.0;
-            double bluePS = (double)(blue) / 255.0;
-            double greenPS = (double)(green) / 255.0;
-            double alphaPS = (double)(alpha) / 255.0;
-
-            cairo_save(m_cairo);
-            cairo_translate(m_cairo, xx, yy);
-            cairo_set_source_rgba( m_cairo, redPS, greenPS, bluePS, alphaPS );
-            cairo_rotate(m_cairo,angle*DEG2RAD);
-            cairo_rectangle(m_cairo, 0, 0, w, h);   // still in cairo units
-            cairo_fill(m_cairo);
-            cairo_restore(m_cairo);
-        }
-
     // Draw layout.
     cairo_move_to (m_cairo, xx, yy);
 
@@ -1855,6 +1821,30 @@ void wxGtkPrinterDCImpl::DoDrawRotatedText(const wxString& text, wxCoord x, wxCo
 
     if (fabs(angle) > 0.00001)
         cairo_rotate( m_cairo, angle*DEG2RAD );
+
+    cairo_scale(m_cairo, m_scaleX, m_scaleY);
+
+    int w,h;
+    pango_layout_get_pixel_size( m_layout, &w, &h );
+
+    if ( m_backgroundMode == wxBRUSHSTYLE_SOLID )
+    {
+        unsigned char red = m_textBackgroundColour.Red();
+        unsigned char blue = m_textBackgroundColour.Blue();
+        unsigned char green = m_textBackgroundColour.Green();
+        unsigned char alpha = m_textBackgroundColour.Alpha();
+
+        double redPS = (double)(red) / 255.0;
+        double bluePS = (double)(blue) / 255.0;
+        double greenPS = (double)(green) / 255.0;
+        double alphaPS = (double)(alpha) / 255.0;
+
+        cairo_save(m_cairo);
+        cairo_set_source_rgba( m_cairo, redPS, greenPS, bluePS, alphaPS );
+        cairo_rectangle(m_cairo, 0, 0, w, h);   // still in cairo units
+        cairo_fill(m_cairo);
+        cairo_restore(m_cairo);
+    }
 
     pango_cairo_update_layout (m_cairo, m_layout);
     pango_cairo_show_layout (m_cairo, m_layout);
@@ -1866,12 +1856,6 @@ void wxGtkPrinterDCImpl::DoDrawRotatedText(const wxString& text, wxCoord x, wxCo
         // Undo underline attributes setting
         pango_layout_set_attributes(m_layout, NULL);
     }
-
-    // Reset unscaled size.
-    pango_font_description_set_size( m_fontdesc, oldSize );
-
-    // Actually apply unscaled font.
-    pango_layout_set_font_description( m_layout, m_fontdesc );
 
     // Back to device units:
     CalcBoundingBox (x, y);
@@ -1901,6 +1885,10 @@ void wxGtkPrinterDCImpl::SetFont( const wxFont& font )
             pango_font_description_free( m_fontdesc );
 
         m_fontdesc = pango_font_description_copy( m_font.GetNativeFontInfo()->description );
+
+        float size = pango_font_description_get_size( m_fontdesc );
+        size = size * GetFontPointSizeAdjustment(72.0);
+        pango_font_description_set_size( m_fontdesc, (gint)size );
 
         pango_layout_set_font_description( m_layout, m_fontdesc );
     }
@@ -2185,43 +2173,49 @@ void wxGtkPrinterDCImpl::DoGetTextExtent(const wxString& string, wxCoord *width,
         return;
     }
 
+    cairo_save( m_cairo );
+    cairo_scale(m_cairo, m_scaleX, m_scaleY);
+
     // Set layout's text
     const wxUTF8Buf dataUTF8 = string.utf8_str();
 
-    PangoFontDescription *desc = m_fontdesc;
-    if (theFont) desc = theFont->GetNativeFontInfo()->description;
+    gint oldSize;
+    if ( theFont )
+    {
+        // scale the font and apply it
+        PangoFontDescription *desc = theFont->GetNativeFontInfo()->description;
+        float size = pango_font_description_get_size(desc);
+        size = size * GetFontPointSizeAdjustment(72.0);
+        pango_font_description_set_size(desc, (gint)size);
 
-    gint oldSize = pango_font_description_get_size( desc );
-    double size = oldSize;
-    size = size * m_scaleY;
-    pango_font_description_set_size( desc, (gint)size );
-
-    // apply scaled font
-    pango_layout_set_font_description( m_layout, desc );
+        pango_layout_set_font_description(m_layout, desc);
+    }
 
     pango_layout_set_text( m_layout, dataUTF8, strlen(dataUTF8) );
 
-    int w, h;
-    pango_layout_get_pixel_size( m_layout, &w, &h );
-
-    if (width)
-        *width = wxRound( (double)w / m_scaleX * m_PS2DEV );
-    if (height)
-        *height = wxRound( (double)h / m_scaleY * m_PS2DEV );
+    int h;
+    pango_layout_get_pixel_size( m_layout, width, &h );
+    if ( height )
+        *height = h;
 
     if (descent)
     {
         PangoLayoutIter *iter = pango_layout_get_iter(m_layout);
         int baseline = pango_layout_iter_get_baseline(iter);
         pango_layout_iter_free(iter);
-        *descent = wxRound( (h - PANGO_PIXELS(baseline)) * m_PS2DEV );
+        *descent = h - PANGO_PIXELS(baseline);
     }
 
-    // Reset unscaled size.
-    pango_font_description_set_size( desc, oldSize );
+    if ( theFont )
+    {
+        // restore font and reset font's size back
+        pango_layout_set_font_description(m_layout, m_fontdesc);
 
-    // Reset unscaled font.
-    pango_layout_set_font_description( m_layout, m_fontdesc );
+        PangoFontDescription *desc = theFont->GetNativeFontInfo()->description;
+        pango_font_description_set_size(desc, oldSize);
+    }
+
+    cairo_restore( m_cairo );
 }
 
 void wxGtkPrinterDCImpl::DoGetSize(int* width, int* height) const

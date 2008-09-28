@@ -562,6 +562,10 @@ protected:
                                   double sa, double ea );
 #endif // __WXWINCE__
 
+    // returns adjustment factor for converting wxFont "point size"; in wx
+    // it is point size on screen and needs to be multiplied by this value
+    // for rendering on higher-resolution DCs such as printer ones
+    static float GetFontPointSizeAdjustment(float dpi);
 
     // window on which the DC draws or NULL
     wxWindow   *m_window;

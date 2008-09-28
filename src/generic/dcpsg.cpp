@@ -1121,9 +1121,10 @@ void wxPostScriptDCImpl::SetFont( const wxFont& font )
     PsPrint( " findfont\n" );
 
 
-    double size = (double) m_font.GetPointSize();
+    float size = float(m_font.GetPointSize());
+    size = size * GetFontPointSizeAdjustment(DPI);
     wxString buffer;
-    buffer.Printf( "%f scalefont setfont\n", size * DEV2PS * m_scaleX );
+    buffer.Printf( "%f scalefont setfont\n", size * m_scaleX );
     buffer.Replace( ",", "." );
     PsPrint( buffer );
 }
@@ -1998,7 +1999,8 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
 
     if (!fontToUse) fontToUse = &m_font;
 
-    wxCHECK_RET( fontToUse, wxT("GetTextExtent: no font defined") );
+    const float fontSize =
+        fontToUse->GetPointSize() * GetFontPointSizeAdjustment(72.0);
 
     if (string.empty())
     {
@@ -2022,15 +2024,10 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
      * Produces accurate results for mono-spaced font
      * such as Courier (aka wxMODERN) */
 
-    int height = 12;
-    if (fontToUse)
-    {
-        height = fontToUse->GetPointSize();
-    }
     if ( x )
-        *x = strlen (strbuf) * height * 72 / 120;
+        *x = strlen (strbuf) * fontSize * 72.0 / 120.0;
     if ( y )
-        *y = (wxCoord) (height * 1.32);    /* allow for descender */
+        *y = (wxCoord) (fontSize * 1.32);    /* allow for descender */
     if (descent) *descent = 0;
     if (externalLeading) *externalLeading = 0;
 #else
@@ -2297,9 +2294,9 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
         // VS: dirty, but is there any better solution?
         double *pt;
         pt = (double*) &m_underlinePosition;
-        *pt = YLOG2DEVREL((wxCoord)(UnderlinePosition * fontToUse->GetPointSize())) / 1000.0f;
+        *pt = YLOG2DEVREL((wxCoord)(UnderlinePosition * fontSize)) / 1000.0f;
         pt = (double*) &m_underlineThickness;
-        *pt = YLOG2DEVREL((wxCoord)(UnderlineThickness * fontToUse->GetPointSize())) / 1000.0f;
+        *pt = YLOG2DEVREL((wxCoord)(UnderlineThickness * fontSize)) / 1000.0f;
 
     }
 
@@ -2309,7 +2306,7 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
        /  string. they are given in 1/1000 of the size! */
 
     long sum=0;
-    wxCoord height=Size; /* by default */
+    float height=fontSize; /* by default */
     unsigned char *p;
     for(p=(unsigned char *)wxMBSTRINGCAST strbuf; *p; p++)
     {
@@ -2325,7 +2322,7 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
     }
 
     double widthSum = sum;
-    widthSum *= Size;
+    widthSum *= fontSize;
     widthSum /= 1000.0F;
 
     /* add descender to height (it is usually a negative value) */
@@ -2340,14 +2337,14 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
     if ( x )
         *x = (wxCoord)widthSum;
     if ( y )
-        *y = height;
+        *y = (wxCoord)height;
 
     /* return other parameters */
     if (descent)
     {
         if(lastDescender!=INT_MIN)
         {
-            *descent = (wxCoord)(((-lastDescender)/1000.0F) * Size); /* MATTHEW: forgot scale */
+            *descent = (wxCoord)(((-lastDescender)/1000.0F) * fontSize); /* MATTHEW: forgot scale */
         }
         else
         {
