@@ -100,6 +100,9 @@ All (Unix):
 - Return false from wxSingleInstanceChecker::IsAnotherRunning() if an error
   occurred while opening or reading the lock file (Lauri Nurmi).
 
+wxGTK:
+
+- Fixed printing to use fonts sizes adjustment consistent with wxMSW.
 
 2.8.9
 -----
