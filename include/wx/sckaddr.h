@@ -9,187 +9,209 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_NETWORK_ADDRESS_H
-#define _WX_NETWORK_ADDRESS_H
+#ifndef _WX_SCKADDR_H_
+#define _WX_SCKADDR_H_
 
 #include "wx/defs.h"
 
 #if wxUSE_SOCKETS
 
 #include "wx/string.h"
+
 #include "wx/gsocket.h"
 
-
-class WXDLLIMPEXP_NET wxSockAddress : public wxObject {
-  DECLARE_ABSTRACT_CLASS(wxSockAddress)
+// Any socket address kind
+class WXDLLIMPEXP_NET wxSockAddress : public wxObject
+{
 public:
-  typedef enum { IPV4=1, IPV6=2, UNIX=3 } Addr;
+    enum
+    {
+        IPV4 = 1,
+        IPV6 = 2,
+        UNIX = 3
+    } Addr;
 
-  wxSockAddress();
-  wxSockAddress(const wxSockAddress& other);
-  virtual ~wxSockAddress();
+    wxSockAddress();
+    wxSockAddress(const wxSockAddress& other);
+    virtual ~wxSockAddress();
 
-  wxSockAddress& operator=(const wxSockAddress& other);
+    wxSockAddress& operator=(const wxSockAddress& other);
 
-  virtual void Clear();
-  virtual int Type() = 0;
+    virtual void Clear();
+    virtual int Type() = 0;
 
-  GAddress *GetAddress() const { return m_address; }
-  void SetAddress(GAddress *address);
+    // we need to be able to create copies of the addresses polymorphically
+    // (i.e. without knowing the exact address class)
+    virtual wxSockAddress *Clone() const = 0;
 
-  // we need to be able to create copies of the addresses polymorphically (i.e.
-  // without knowing the exact address class)
-  virtual wxSockAddress *Clone() const = 0;
+
+    // implementation only, don't use
+    GAddress *GetAddress() const { return m_address; }
+    void SetAddress(GAddress *address);
 
 protected:
-  GAddress *m_address;
+    GAddress *m_address;
 
 private:
-  void Init();
+    void Init();
+    DECLARE_ABSTRACT_CLASS(wxSockAddress)
 };
 
-// Interface to an IP address (either IPV4 or IPV6)
-class WXDLLIMPEXP_NET wxIPaddress : public wxSockAddress {
-  DECLARE_ABSTRACT_CLASS(wxIPaddress)
+// An IP address (either IPv4 or IPv6)
+class WXDLLIMPEXP_NET wxIPaddress : public wxSockAddress
+{
 public:
-  wxIPaddress();
-  wxIPaddress(const wxIPaddress& other);
-  virtual ~wxIPaddress();
+    wxIPaddress();
+    wxIPaddress(const wxIPaddress& other);
+    virtual ~wxIPaddress();
 
-  virtual bool Hostname(const wxString& name) = 0;
-  virtual bool Service(const wxString& name) = 0;
-  virtual bool Service(unsigned short port) = 0;
+    virtual bool Hostname(const wxString& name) = 0;
+    virtual bool Service(const wxString& name) = 0;
+    virtual bool Service(unsigned short port) = 0;
 
-  virtual bool LocalHost() = 0;
-  virtual bool IsLocalHost() const = 0;
+    virtual bool LocalHost() = 0;
+    virtual bool IsLocalHost() const = 0;
 
-  virtual bool AnyAddress() = 0;
-  virtual bool BroadcastAddress() = 0;
+    virtual bool AnyAddress() = 0;
+    virtual bool BroadcastAddress() = 0;
 
-  virtual wxString IPAddress() const = 0;
+    virtual wxString IPAddress() const = 0;
 
-  virtual wxString Hostname() const = 0;
-  virtual unsigned short Service() const = 0;
+    virtual wxString Hostname() const = 0;
+    virtual unsigned short Service() const = 0;
+
+    DECLARE_ABSTRACT_CLASS(wxIPaddress)
 };
 
-class WXDLLIMPEXP_NET wxIPV4address : public wxIPaddress {
-  DECLARE_DYNAMIC_CLASS(wxIPV4address)
+// An IPv4 address
+class WXDLLIMPEXP_NET wxIPV4address : public wxIPaddress
+{
 public:
-  wxIPV4address();
-  wxIPV4address(const wxIPV4address& other);
-  virtual ~wxIPV4address();
+    wxIPV4address();
+    wxIPV4address(const wxIPV4address& other);
+    virtual ~wxIPV4address();
 
-  // IPV4 name formats
-  //
-  //                    hostname
-  // dot format         a.b.c.d
-  virtual bool Hostname(const wxString& name);
-  bool Hostname(unsigned long addr);
-  virtual bool Service(const wxString& name);
-  virtual bool Service(unsigned short port);
+    bool operator==(const wxIPV4address& addr) const;
 
-  // localhost (127.0.0.1)
-  virtual bool LocalHost();
-  virtual bool IsLocalHost() const;
+    // implement wxSockAddress pure virtuals:
+    virtual int Type() { return wxSockAddress::IPV4; }
+    virtual wxSockAddress *Clone() const;
 
-  // any (0.0.0.0)
-  virtual bool AnyAddress();
-  // all (255.255.255.255)
-  virtual bool BroadcastAddress();
 
-  virtual wxString Hostname() const;
-  wxString OrigHostname() { return m_origHostname; }
-  virtual unsigned short Service() const;
+    // implement wxIPaddress pure virtuals:
 
-  // a.b.c.d
-  virtual wxString IPAddress() const;
+    // handles the usual dotted quad format too
+    virtual bool Hostname(const wxString& name);
+    virtual bool Service(const wxString& name);
+    virtual bool Service(unsigned short port);
 
-  virtual int Type() { return wxSockAddress::IPV4; }
-  virtual wxSockAddress *Clone() const;
+    // localhost (127.0.0.1)
+    virtual bool LocalHost();
+    virtual bool IsLocalHost() const;
 
-  bool operator==(const wxIPV4address& addr) const;
+    // any (0.0.0.0)
+    virtual bool AnyAddress();
+    // all (255.255.255.255)
+    virtual bool BroadcastAddress();
+
+    // a.b.c.d
+    virtual wxString IPAddress() const;
+
+    virtual wxString Hostname() const;
+    virtual unsigned short Service() const;
+
+
+    // IPv4-specific methods:
+
+    bool Hostname(unsigned long addr);
+    wxString OrigHostname() { return m_origHostname; }
 
 private:
-  wxString m_origHostname;
+    wxString m_origHostname;
+
+    DECLARE_DYNAMIC_CLASS(wxIPV4address)
 };
 
-
-// the IPv6 code probably doesn't work, untested -- set to 1 at your own risk
-#ifndef wxUSE_IPV6
-    #define wxUSE_IPV6 0
-#endif
 
 #if wxUSE_IPV6
 
-class WXDLLIMPEXP_NET wxIPV6address : public wxIPaddress {
-  DECLARE_DYNAMIC_CLASS(wxIPV6address)
-private:
-  wxString m_origHostname;
+// An IPv6 address
+class WXDLLIMPEXP_NET wxIPV6address : public wxIPaddress
+{
 public:
-  wxIPV6address();
-  wxIPV6address(const wxIPV6address& other);
-  virtual ~wxIPV6address();
+    wxIPV6address();
+    wxIPV6address(const wxIPV6address& other);
+    virtual ~wxIPV6address();
 
-  // IPV6 name formats
-  //
-  //                          hostname
-  //                          3ffe:ffff:0100:f101:0210:a4ff:fee3:9566
-  // compact (base85)         Itu&-ZQ82s>J%s99FJXT (depends on platform api)
-  // compressed format        ::1
-  // ipv4 mapped              ::ffff:1.2.3.4
-  virtual bool Hostname(const wxString& name);
+    // implement wxSockAddress pure virtuals:
 
-  bool Hostname(unsigned char addr[16]);
-  virtual bool Service(const wxString& name);
-  virtual bool Service(unsigned short port);
+    virtual int Type() { return wxSockAddress::IPV6; }
+    virtual wxSockAddress *Clone() const { return new wxIPV6address(*this); }
 
-  // localhost (0000:0000:0000:0000:0000:0000:0000:0001 (::1))
-  virtual bool LocalHost();
-  virtual bool IsLocalHost() const;
 
-  // any (0000:0000:0000:0000:0000:0000:0000:0000 (::))
-  virtual bool AnyAddress();
-  // all (?)
-  virtual bool BroadcastAddress();
+    // implement wxIPaddress pure virtuals:
 
-  // 3ffe:ffff:0100:f101:0210:a4ff:fee3:9566
-  virtual wxString IPAddress() const;
+    virtual bool Hostname(const wxString& name);
+    virtual bool Service(const wxString& name);
+    virtual bool Service(unsigned short port);
 
-  virtual wxString Hostname() const;
-  virtual unsigned short Service() const;
+    // localhost (0000:0000:0000:0000:0000:0000:0000:0001 (::1))
+    virtual bool LocalHost();
+    virtual bool IsLocalHost() const;
 
-  virtual int Type() { return wxSockAddress::IPV6; }
-  virtual wxSockAddress *Clone() const { return new wxIPV6address(*this); }
+    // any (0000:0000:0000:0000:0000:0000:0000:0000 (::))
+    virtual bool AnyAddress();
+    // all (?)
+    virtual bool BroadcastAddress();
+
+    // 3ffe:ffff:0100:f101:0210:a4ff:fee3:9566
+    virtual wxString IPAddress() const;
+
+    virtual wxString Hostname() const;
+    virtual unsigned short Service() const;
+
+
+    // IPv6-specific methods:
+
+    bool Hostname(unsigned char addr[16]);
+
+private:
+    wxString m_origHostname;
+
+    DECLARE_DYNAMIC_CLASS(wxIPV6address)
 };
 
 #endif // wxUSE_IPV6
 
-#if defined(__UNIX__) && !defined(__WINE__) && (!defined(__WXMAC__) || defined(__DARWIN__)) && !defined(__WXMSW__)
+#if defined(__UNIX__) && !defined(__WINE__)
+
 #include <sys/socket.h>
 #ifndef __VMS__
-# include <sys/un.h>
+    #include <sys/un.h>
 #endif
 
-class WXDLLIMPEXP_NET wxUNIXaddress : public wxSockAddress {
-  DECLARE_DYNAMIC_CLASS(wxUNIXaddress)
-private:
-  struct sockaddr_un *m_addr;
+// A Unix domain socket address
+class WXDLLIMPEXP_NET wxUNIXaddress : public wxSockAddress
+{
 public:
-  wxUNIXaddress();
-  wxUNIXaddress(const wxUNIXaddress& other);
-  virtual ~wxUNIXaddress();
+    wxUNIXaddress();
+    wxUNIXaddress(const wxUNIXaddress& other);
+    virtual ~wxUNIXaddress();
 
-  void Filename(const wxString& name);
-  wxString Filename();
+    void Filename(const wxString& name);
+    wxString Filename();
 
-  virtual int Type() { return wxSockAddress::UNIX; }
-  virtual wxSockAddress *Clone() const { return new wxUNIXaddress(*this); }
+    virtual int Type() { return wxSockAddress::UNIX; }
+    virtual wxSockAddress *Clone() const { return new wxUNIXaddress(*this); }
+
+private:
+    struct sockaddr_un *m_addr;
+
+    DECLARE_DYNAMIC_CLASS(wxUNIXaddress)
 };
-#endif
-  // __UNIX__
 
-#endif
-  // wxUSE_SOCKETS
+#endif // __UNIX__
 
-#endif
-  // _WX_NETWORK_ADDRESS_H
+#endif // wxUSE_SOCKETS
+
+#endif // _WX_SCKADDR_H_

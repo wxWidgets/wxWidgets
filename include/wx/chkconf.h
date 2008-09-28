@@ -129,6 +129,14 @@
 #   endif
 #endif /* !defined(wxUSE_INTL) */
 
+#ifndef wxUSE_IPV6
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_IPV6 must be defined."
+#   else
+#       define wxUSE_IPV6 0
+#   endif
+#endif /* !defined(wxUSE_IPV6) */
+
 #ifndef wxUSE_LOG
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_LOG must be defined."
