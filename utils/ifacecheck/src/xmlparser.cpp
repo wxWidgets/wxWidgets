@@ -97,6 +97,7 @@ void wxType::SetTypeFromString(const wxString& t)
     // fix this to avoid false positives
     m_strTypeClean.Replace("wxDateTime::", "");
     m_strTypeClean.Replace("wxStockGDI::", "");     // same story for some other classes
+    m_strTypeClean.Replace("wxHelpEvent::", "");
 }
 
 bool wxType::IsOk() const
@@ -168,6 +169,11 @@ void wxArgumentType::SetDefaultValue(const wxString& defval, const wxString& def
     // fix this to avoid false positives
     m_strDefaultValueForCmp.Replace("wxDateTime::", "");
     m_strDefaultValueForCmp.Replace("wxStockGDI::", "");     // same story for some other classes
+    m_strDefaultValueForCmp.Replace("wxHelpEvent::", "");    // same story for some other classes
+
+    m_strDefaultValueForCmp.Replace("wxGet_wxConvLocal()", "wxConvLocal");
+
+    m_strDefaultValueForCmp.Replace("* GetColour(COLOUR_BLACK)", "*wxBLACK");
 
     // ADHOC-FIX:
     if (m_strDefaultValueForCmp.Contains("wxGetTranslation"))
@@ -185,6 +191,21 @@ bool wxArgumentType::operator==(const wxArgumentType& m) const
     if (m_strArgName == m.m_strArgName && m_strArgName == "style" &&
         (m_strDefaultValueForCmp.IsNumber() || m.m_strDefaultValueForCmp.IsNumber()))
         return true;
+
+    // fix for default values which were replaced by gcc-xml with their numeric values
+    // (at this point we know that m_strTypeClean == m.m_strTypeClean):
+    if (m_strTypeClean == "long" || m_strTypeClean == "int")
+    {
+        if ((m_strDefaultValueForCmp.IsNumber() && m.m_strDefaultValueForCmp.StartsWith("wx")) ||
+            (m.m_strDefaultValueForCmp.IsNumber() && m_strDefaultValueForCmp.StartsWith("wx")))
+        {
+            if (g_verbose)
+                LogMessage("Supposing '%s'  default value to be the same of '%s'...",
+                           m_strDefaultValueForCmp, m.m_strDefaultValueForCmp);
+
+            return true;
+        }
+    }
 
     if (m_strDefaultValueForCmp != m.m_strDefaultValueForCmp)
     {
