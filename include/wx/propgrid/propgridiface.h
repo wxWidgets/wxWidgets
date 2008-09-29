@@ -1094,7 +1094,13 @@ public:
         wxVariant v(value);
         SetPropVal( id, v );
     }
-    void SetPropertyValue( wxPGPropArg id, const wxChar* value )
+#if wxUSE_WCHAR_T
+    void SetPropertyValue( wxPGPropArg id, const wchar_t* value )
+    {
+        SetPropertyValueString( id, wxString(value) );
+    }
+#endif
+    void SetPropertyValue( wxPGPropArg id, const char* value )
     {
         SetPropertyValueString( id, wxString(value) );
     }
