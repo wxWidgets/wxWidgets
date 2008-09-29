@@ -119,7 +119,7 @@
                 <configure options="-with-foobar CC=cc CXX=CC"/>
             Omitted for Windows builds.
         -->
-        <configure options="--with-gtk --enable-debug --enable-stl --enable-std_iostreams --enable-std_string --disable-compat28">
+        <configure options="--with-gtk --enable-debug --enable-stl --enable-std_iostreams --enable-std_string --disable-compat28"/>
 
         <!--
             Compile the wxWidgets library, subdirectories and tests.
@@ -165,7 +165,7 @@
             <command>setup-script</command>
         </shellcommand>
 
-        <configure options="--with-gtk --disable-debug --enable-stl --enable-std_iostreams --enable-std_string --disable-compat28">
+        <configure options="--with-gtk --disable-debug --enable-stl --enable-std_iostreams --enable-std_string --disable-compat28"/>
 
         <compile-all/>
 
