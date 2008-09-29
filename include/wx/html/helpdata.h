@@ -100,7 +100,7 @@ WX_DECLARE_USER_EXPORTED_OBJARRAY(wxHtmlHelpDataItem, wxHtmlHelpDataItems,
 
 //------------------------------------------------------------------------------
 // wxHtmlSearchEngine
-//                  This class takes input streams and scans them for occurence
+//                  This class takes input streams and scans them for occurrence
 //                  of keyword(s)
 //------------------------------------------------------------------------------
 

@@ -533,7 +533,7 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
         m_SearchWholeWords = new wxCheckBox(dummy, wxID_ANY, _("Whole words only"));
         m_SearchButton = new wxButton(dummy, wxID_HTML_SEARCHBUTTON, _("Search"));
 #if wxUSE_TOOLTIPS
-        m_SearchButton->SetToolTip(_("Search contents of help book(s) for all occurences of the text you typed above"));
+        m_SearchButton->SetToolTip(_("Search contents of help book(s) for all occurrences of the text you typed above"));
 #endif //wxUSE_TOOLTIPS
         m_SearchList = new wxListBox(dummy, wxID_HTML_SEARCHLIST,
                                      wxDefaultPosition, wxDefaultSize,

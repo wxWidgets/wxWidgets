@@ -2117,16 +2117,16 @@ public:
   wxString Left(size_t nCount) const;
       // get last nCount characters
   wxString Right(size_t nCount) const;
-      // get all characters before the first occurance of ch
+      // get all characters before the first occurrence of ch
       // (returns the whole string if ch not found)
   wxString BeforeFirst(wxUniChar ch) const;
-      // get all characters before the last occurence of ch
+      // get all characters before the last occurrence of ch
       // (returns empty string if ch not found)
   wxString BeforeLast(wxUniChar ch) const;
-      // get all characters after the first occurence of ch
+      // get all characters after the first occurrence of ch
       // (returns empty string if ch not found)
   wxString AfterFirst(wxUniChar ch) const;
-      // get all characters after the last occurence of ch
+      // get all characters after the last occurrence of ch
       // (returns the whole string if ch not found)
   wxString AfterLast(wxUniChar ch) const;
 
@@ -2191,7 +2191,7 @@ public:
   int Find(const wxWCharBuffer& sub) const
     { return Find(sub.data()); }
 
-      // replace first (or all of bReplaceAll) occurences of substring with
+      // replace first (or all of bReplaceAll) occurrences of substring with
       // another string, returns the number of replacements made
   size_t Replace(const wxString& strOld,
                  const wxString& strNew,
@@ -3014,7 +3014,7 @@ public:
   size_t find(const wxCStrData& s, size_t nStart = 0, size_t n = npos) const
     { return find(s.AsWChar(), nStart, n); }
 
-    // find the first occurence of character ch after nStart
+    // find the first occurrence of character ch after nStart
   size_t find(wxUniChar ch, size_t nStart = 0) const
   {
 #if wxUSE_UNICODE_UTF8
@@ -3080,7 +3080,7 @@ public:
   size_t rfind(wchar_t ch, size_t nStart = npos) const
     {  return rfind(wxUniChar(ch), nStart); }
 
-  // find first/last occurence of any character (not) in the set:
+  // find first/last occurrence of any character (not) in the set:
 #if wxUSE_STL_BASED_WXSTRING && !wxUSE_UNICODE_UTF8
   // FIXME-UTF8: this is not entirely correct, because it doesn't work if
   //             sizeof(wchar_t)==2 and surrogates are present in the string;
@@ -3171,7 +3171,7 @@ public:
   size_t find_last_of(wxUniChar c, size_t nStart = npos) const
     { return rfind(c, nStart); }
 
-    // find first/last occurence of any character not in the set
+    // find first/last occurrence of any character not in the set
 
     // as strspn() (starting from nStart), returns npos on failure
   size_t find_first_not_of(const wxString& str, size_t nStart = 0) const

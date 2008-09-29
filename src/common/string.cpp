@@ -1276,7 +1276,7 @@ wxString wxString::Right(size_t nCount) const
   return dest;
 }
 
-// get all characters after the last occurence of ch
+// get all characters after the last occurrence of ch
 // (returns the whole string if ch not found)
 wxString wxString::AfterLast(wxUniChar ch) const
 {
@@ -1303,7 +1303,7 @@ wxString wxString::Left(size_t nCount) const
   return dest;
 }
 
-// get all characters before the first occurence of ch
+// get all characters before the first occurrence of ch
 // (returns the whole string if ch not found)
 wxString wxString::BeforeFirst(wxUniChar ch) const
 {
@@ -1313,7 +1313,7 @@ wxString wxString::BeforeFirst(wxUniChar ch) const
   return wxString(*this, 0, iPos);
 }
 
-/// get all characters before the last occurence of ch
+/// get all characters before the last occurrence of ch
 /// (returns empty string if ch not found)
 wxString wxString::BeforeLast(wxUniChar ch) const
 {
@@ -1325,7 +1325,7 @@ wxString wxString::BeforeLast(wxUniChar ch) const
   return str;
 }
 
-/// get all characters after the first occurence of ch
+/// get all characters after the first occurrence of ch
 /// (returns empty string if ch not found)
 wxString wxString::AfterFirst(wxUniChar ch) const
 {
@@ -1337,7 +1337,7 @@ wxString wxString::AfterFirst(wxUniChar ch) const
   return str;
 }
 
-// replace first (or all) occurences of some substring with another one
+// replace first (or all) occurrences of some substring with another one
 size_t wxString::Replace(const wxString& strOld,
                          const wxString& strNew, bool bReplaceAll)
 {

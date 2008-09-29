@@ -1040,7 +1040,7 @@ static bool DoLaunchDefaultBrowser(const wxString& urlOrig, int flags)
                     // in is -1 (meaning "current") by default, replace it with
                     // 0 which means "new" (see KB article 160957)
                     ok = ddeCmd.Replace(wxT("-1"), wxT("0"),
-                                        false /* only first occurence */) == 1;
+                                        false /* only first occurrence */) == 1;
                 }
 
                 if ( ok )
