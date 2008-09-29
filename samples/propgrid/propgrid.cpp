@@ -2069,6 +2069,13 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
     wxInitAllImageHandlers();
 #endif
 
+    // Register all editors (SpinCtrl etc.)
+    m_pPropGridManager->RegisterAdditionalEditors();
+
+    // Register our sample custom editors
+    m_pSampleMultiButtonEditor =
+        wxPropertyGrid::RegisterEditorClass(new wxSampleMultiButtonEditor());
+
     CreateGrid( // style
                 wxPG_BOLD_MODIFIED |
                 wxPG_SPLITTER_AUTO_CENTER |
@@ -2087,13 +2094,6 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
                 //| wxPG_EX_NATIVE_DOUBLE_BUFFERING
                 //| wxPG_EX_HELP_AS_TOOLTIPS
               );
-
-    // Register all editors (SpinCtrl etc.)
-    m_pPropGridManager->RegisterAdditionalEditors();
-
-    // Register our sample custom editors
-    m_pSampleMultiButtonEditor =
-        wxPropertyGrid::RegisterEditorClass(new wxSampleMultiButtonEditor());
 
     //
     // Create menubar

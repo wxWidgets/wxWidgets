@@ -138,16 +138,7 @@ const wxChar *wxPropertyGridNameStr = wxT("wxPropertyGrid");
 
 // -----------------------------------------------------------------------
 // Statics in one class for easy destruction.
-// NB: We prefer to use wxModule, as it offers more consistent behavior
-//     across platforms. However, for those rare problem situations, we
-//     also need to offer option to use simpler approach.
 // -----------------------------------------------------------------------
-
-#ifndef wxPG_USE_WXMODULE
-    #define wxPG_USE_WXMODULE 1
-#endif
-
-#if wxPG_USE_WXMODULE
 
 #include <wx/module.h>
 
@@ -161,19 +152,6 @@ public:
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxPGGlobalVarsClassManager, wxModule)
-
-#else // !wxPG_USE_WXMODULE
-
-class wxPGGlobalVarsClassManager
-{
-public:
-    wxPGGlobalVarsClassManager() {}
-    ~wxPGGlobalVarsClassManager() { delete wxPGGlobalVars; }
-};
-
-static wxPGGlobalVarsClassManager gs_pgGlobalVarsClassManager;
-
-#endif
 
 
 wxPGGlobalVarsClass* wxPGGlobalVars = (wxPGGlobalVarsClass*) NULL;
@@ -247,6 +225,10 @@ wxPGGlobalVarsClass::~wxPGGlobalVarsClass()
     }
 
     delete wxPGProperty::sm_wxPG_LABEL;
+}
+
+void wxPropertyGridInitGlobalsIfNeeded()
+{
 }
 
 // -----------------------------------------------------------------------
@@ -567,14 +549,9 @@ bool wxPropertyGrid::Create( wxWindow *parent,
 //
 void wxPropertyGrid::Init1()
 {
-#if !wxPG_USE_WXMODULE
-    if ( !wxPGGlobalVars )
-        wxPGGlobalVars = new wxPGGlobalVarsClass();
-#endif
-
     // Register editor classes, if necessary.
     if ( wxPGGlobalVars->m_mapEditorClasses.empty() )
-        RegisterDefaultEditors();
+        wxPropertyGrid::RegisterDefaultEditors();
 
     m_iFlags = 0;
     m_pState = (wxPropertyGridPageState*) NULL;

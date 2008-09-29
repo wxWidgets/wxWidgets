@@ -1993,6 +1993,10 @@ void wxPropertyGridInterface::InitAllTypeHandlers()
 
 void wxPropertyGridInterface::RegisterAdditionalEditors()
 {
+    // Register editor classes, if necessary.
+    if ( wxPGGlobalVars->m_mapEditorClasses.empty() )
+        wxPropertyGrid::RegisterDefaultEditors();
+
 #if wxUSE_SPINBTN
     wxPGRegisterEditorClass(SpinCtrl);
 #endif
