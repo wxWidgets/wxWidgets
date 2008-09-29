@@ -60,6 +60,7 @@ private:
         CPPUNIT_TEST( CStrDataImplicitConversion );
         CPPUNIT_TEST( ExplicitConversion );
         CPPUNIT_TEST( IndexedAccess );
+        CPPUNIT_TEST( BeforeAndAfter );
     CPPUNIT_TEST_SUITE_END();
 
     void String();
@@ -91,6 +92,7 @@ private:
     void CStrDataImplicitConversion();
     void ExplicitConversion();
     void IndexedAccess();
+    void BeforeAndAfter();
 
     DECLARE_NO_COPY_CLASS(StringTestCase)
 };
@@ -839,5 +841,26 @@ void StringTestCase::IndexedAccess()
     // the 3rd character of wxString should remain the same
     s[0] = L'\u00e9';
     CPPUNIT_ASSERT_EQUAL( 'r', s[2] );
+}
+
+void StringTestCase::BeforeAndAfter()
+{
+    const wxString s(L"letter=\u00e9;\u00e7a=l\u00e0");
+
+    CPPUNIT_ASSERT_EQUAL( "letter", s.BeforeFirst('=') );
+    CPPUNIT_ASSERT_EQUAL( s, s.BeforeFirst('!') );
+    CPPUNIT_ASSERT_EQUAL( L"letter=\u00e9", s.BeforeFirst(';') );
+
+    CPPUNIT_ASSERT_EQUAL( L"letter=\u00e9;\u00e7a", s.BeforeLast('=') );
+    CPPUNIT_ASSERT_EQUAL( "", s.BeforeLast('!') );
+    CPPUNIT_ASSERT_EQUAL( L"letter=\u00e9", s.BeforeLast(';') );
+
+    CPPUNIT_ASSERT_EQUAL( L"\u00e9;\u00e7a=l\u00e0", s.AfterFirst('=') );
+    CPPUNIT_ASSERT_EQUAL( "", s.AfterFirst('!') );
+    CPPUNIT_ASSERT_EQUAL( L"\u00e7a=l\u00e0", s.AfterFirst(';') );
+
+    CPPUNIT_ASSERT_EQUAL( L"l\u00e0", s.AfterLast('=') );
+    CPPUNIT_ASSERT_EQUAL( s, s.AfterLast('!') );
+    CPPUNIT_ASSERT_EQUAL( L"\u00e7a=l\u00e0", s.AfterLast(';') );
 }
 

@@ -1285,7 +1285,7 @@ wxString wxString::AfterLast(wxUniChar ch) const
   if ( iPos == wxNOT_FOUND )
     str = *this;
   else
-    str = wx_str() + iPos + 1;
+    str.assign(*this, iPos + 1, npos);
 
   return str;
 }
@@ -1308,7 +1308,8 @@ wxString wxString::Left(size_t nCount) const
 wxString wxString::BeforeFirst(wxUniChar ch) const
 {
   int iPos = Find(ch);
-  if ( iPos == wxNOT_FOUND ) iPos = length();
+  if ( iPos == wxNOT_FOUND )
+      iPos = length();
   return wxString(*this, 0, iPos);
 }
 
@@ -1331,7 +1332,7 @@ wxString wxString::AfterFirst(wxUniChar ch) const
   wxString str;
   int iPos = Find(ch);
   if ( iPos != wxNOT_FOUND )
-    str = wx_str() + iPos + 1;
+      str.assign(*this, iPos + 1, npos);
 
   return str;
 }
