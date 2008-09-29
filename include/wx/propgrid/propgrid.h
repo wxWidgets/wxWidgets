@@ -241,12 +241,6 @@ wxPG_EX_AUTO_UNSPECIFIED_VALUES         = 0x00200000,
 */
 wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES    = 0x00400000,
 
-/**
-    With this style Validators on properties will work same as in
-    wxPropertyGrid 1.2.
-*/
-wxPG_EX_LEGACY_VALIDATORS               = 0x00800000,
-
 /** Hides page selection buttons from toolbar.
 */
 wxPG_EX_HIDE_PAGE_BUTTONS               = 0x01000000

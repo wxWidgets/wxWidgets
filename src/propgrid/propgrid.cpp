@@ -3125,47 +3125,6 @@ bool wxPropertyGrid::ChangePropertyValue( wxPGPropArg id, wxVariant newValue )
 // Runs wxValidator for the selected property
 bool wxPropertyGrid::DoEditorValidate()
 {
-#if wxUSE_VALIDATORS
-    // With traditional validator style, we dont need to more
-    if ( !(GetExtraStyle() & wxPG_EX_LEGACY_VALIDATORS) )
-        return true;
-
-    if ( m_iFlags & wxPG_FL_VALIDATION_FAILED )
-    {
-        return false;
-    }
-
-    wxWindow* wnd = GetEditorControl();
-
-    wxValidator* validator = m_selected->GetValidator();
-    if ( validator && wnd )
-    {
-        // Use TextCtrl of ODComboBox instead
-        if ( wnd->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)) )
-        {
-            wnd = ((wxOwnerDrawnComboBox*)wnd)->GetTextCtrl();
-
-            if ( !wnd )
-                return true;
-        }
-
-        validator->SetWindow(wnd);
-
-        // Instead setting the flag after the failure, we set
-        // it before checking and then clear afterwards if things
-        // went fine. This trick is necessary since focus events
-        // may be triggered while in Validate.
-        m_iFlags |= wxPG_FL_VALIDATION_FAILED;
-        if ( !validator->Validate(this) )
-        {
-            // If you dpm't want to display message multiple times per change,
-            // comment the following line.
-            m_iFlags &= ~(wxPG_FL_VALIDATION_FAILED);
-            return false;
-        }
-        m_iFlags &= ~(wxPG_FL_VALIDATION_FAILED);
-    }
-#endif
     return true;
 }
 
@@ -3683,12 +3642,9 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
 
                     // Set validator, if any
                 #if wxUSE_VALIDATORS
-                    if ( !(GetExtraStyle() & wxPG_EX_LEGACY_VALIDATORS) )
-                    {
-                        wxValidator* validator = p->GetValidator();
-                        if ( validator )
-                            m_wndEditor->SetValidator(*validator);
-                    }
+                    wxValidator* validator = p->GetValidator();
+                    if ( validator )
+                        m_wndEditor->SetValidator(*validator);
                 #endif
 
                     if ( m_wndEditor->GetSize().y > (m_lineHeight+6) )

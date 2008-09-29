@@ -2846,7 +2846,6 @@ void FormMain::OnSelectStyle( wxCommandEvent& WXUNUSED(event) )
         ADD_FLAG(wxPG_EX_NATIVE_DOUBLE_BUFFERING)
         ADD_FLAG(wxPG_EX_AUTO_UNSPECIFIED_VALUES)
         ADD_FLAG(wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES)
-        ADD_FLAG(wxPG_EX_LEGACY_VALIDATORS)
         wxMultiChoiceDialog dlg( this, wxT("Select extra window styles to use"),
                                  wxT("wxPropertyGrid Extra Style"), chs );
         dlg.SetSelections(sel);
