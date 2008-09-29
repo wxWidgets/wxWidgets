@@ -91,7 +91,7 @@ public:
         object by pickling it first.
         @endWxPythonOnly
     */
-    virtual void TakeData(size_t size, const void data);
+    void TakeData(size_t size, void* data);
 };
 
 
@@ -128,7 +128,7 @@ public:
         Adds the @a dataObject to the list of supported objects and it becomes
         the preferred object if @a preferred is @true.
     */
-    void Add(wxDataObjectSimple dataObject, bool preferred = false);
+    void Add(wxDataObjectSimple* dataObject, bool preferred = false);
 
     /**
         Report the format passed to the SetData() method.  This should be the
@@ -202,7 +202,7 @@ public:
         Returns the (one and only one) format supported by this object. It is
         assumed that the format is supported in both directions.
     */
-    const wxDataFormat GetFormat() const;
+    const wxDataFormat& GetFormat() const;
 
     /**
         Copy the data from the buffer, return @true on success. Must be
@@ -352,7 +352,7 @@ public:
     /**
         Returns the platform-specific number identifying the format.
     */
-    NativeFormat GetType() const;
+    wxDataFormatId GetType() const;
 
     /**
         Sets the format to be the custom format identified by the given name.
@@ -363,7 +363,7 @@ public:
         Sets the format to the given value, which should be one of wxDF_XXX
         constants.
     */
-    void SetType(NativeFormat format);
+    void SetType(wxDataFormatId type);
 
     /**
         Returns @true if the formats are different.
@@ -556,25 +556,25 @@ public:
         The method will write the data of the format @a format in the buffer
         @a buf and return @true on success, @false on failure.
     */
-    virtual bool GetDataHere(const wxDataFormat& format, void buf) const;
+    virtual bool GetDataHere(const wxDataFormat& format, void* buf) const = 0;
 
     /**
         Returns the data size of the given format @a format.
     */
-    virtual size_t GetDataSize(const wxDataFormat& format) const;
+    virtual size_t GetDataSize(const wxDataFormat& format) const = 0;
 
     /**
         Returns the number of available formats for rendering or setting the
         data.
     */
-    virtual size_t GetFormatCount(Direction dir = Get) const;
+    virtual size_t GetFormatCount(Direction dir = Get) const = 0;
 
     /**
         Returns the preferred format for either rendering the data (if @a dir
         is @c Get, its default value) or for setting it. Usually this will be
         the native format of the wxDataObject.
     */
-    virtual wxDataFormat GetPreferredFormat(Direction dir = Get) const;
+    virtual wxDataFormat GetPreferredFormat(Direction dir = Get) const = 0;
 
     /**
         Set the data in the format @a format of the length @a len provided in
@@ -691,6 +691,6 @@ public:
     /**
         Returns the array of file names.
     */
-    const wxArrayString GetFilenames() const;
+    const wxArrayString& GetFilenames() const;
 };
 

@@ -34,7 +34,7 @@ public:
 
         @return @true if the call succeeded, @false otherwise.
     */
-    virtual bool Create(wxWindow* parent);
+    virtual bool Create(wxWindow* parent) = 0;
 
     /**
         Utility function that hides the popup.
@@ -60,13 +60,13 @@ public:
         The derived class must implement this to return pointer to the
         associated control created in Create().
     */
-    virtual wxWindow* GetControl();
+    virtual wxWindow* GetControl() = 0;
 
     /**
         The derived class must implement this to return string representation
         of the value.
     */
-    virtual wxString GetStringValue() const;
+    virtual wxString GetStringValue() const = 0;
 
     /**
         The derived class must implement this to initialize its internal
@@ -351,19 +351,6 @@ public:
     virtual ~wxComboCtrl();
 
     /**
-        This member function is not normally called in application code.
-        Instead, it can be implemented in a derived class to create a custom
-        popup animation.
-
-        The parameters are the same as those for DoShowPopup().
-
-        @return @true if animation finishes before the function returns,
-                @false otherwise. In the latter case you need to manually call
-                DoShowPopup() after the animation ends.
-    */
-    virtual bool AnimateShow(const wxRect& rect, int flags);
-
-    /**
         Copies the selected text to the clipboard.
     */
     virtual void Copy();
@@ -385,38 +372,6 @@ public:
         Copies the selected text to the clipboard and removes the selection.
     */
     virtual void Cut();
-
-    /**
-        This member function is not normally called in application code.
-        Instead, it can be implemented in a derived class to return default
-        wxComboPopup, incase @a popup is @NULL.
-
-        @note If you have implemented OnButtonClick() to do something else than
-              show the popup, then DoSetPopupControl() must always set @a popup
-              to @NULL.
-    */
-    void DoSetPopupControl(wxComboPopup* popup);
-
-    /**
-        This member function is not normally called in application code.
-        Instead, it must be called in a derived class to make sure popup is
-        properly shown after a popup animation has finished (but only if
-        AnimateShow() did not finish the animation within its function scope).
-
-        @param rect
-            Position to show the popup window at, in screen coordinates.
-        @param flags
-            Combination of any of the following:
-            @beginTable
-            @row2col{wxComboCtrl::ShowAbove,
-                     Popup is shown above the control instead of below.}
-            @row2col{wxComboCtrl::CanDeferShow,
-                     Showing the popup can be deferred to happen sometime after
-                     ShowPopup() has finished. In this case, AnimateShow() must
-                     return false.}
-            @endTable
-    */
-    virtual void DoShowPopup(const wxRect& rect, int flags);
 
     /**
         Enables or disables popup animation, if any, depending on the value of
@@ -749,5 +704,52 @@ public:
         will appear as if the focus has been lost from it.
     */
     void UseAltPopupWindow(bool enable = true);
+
+protected:
+
+    /**
+        This member function is not normally called in application code.
+        Instead, it can be implemented in a derived class to create a custom
+        popup animation.
+
+        The parameters are the same as those for DoShowPopup().
+
+        @return @true if animation finishes before the function returns,
+                @false otherwise. In the latter case you need to manually call
+                DoShowPopup() after the animation ends.
+    */
+    virtual bool AnimateShow(const wxRect& rect, int flags);
+
+    /**
+        This member function is not normally called in application code.
+        Instead, it can be implemented in a derived class to return default
+        wxComboPopup, incase @a popup is @NULL.
+
+        @note If you have implemented OnButtonClick() to do something else than
+              show the popup, then DoSetPopupControl() must always set @a popup
+              to @NULL.
+    */
+    virtual void DoSetPopupControl(wxComboPopup* popup);
+
+    /**
+        This member function is not normally called in application code.
+        Instead, it must be called in a derived class to make sure popup is
+        properly shown after a popup animation has finished (but only if
+        AnimateShow() did not finish the animation within its function scope).
+
+        @param rect
+            Position to show the popup window at, in screen coordinates.
+        @param flags
+            Combination of any of the following:
+            @beginTable
+            @row2col{wxComboCtrl::ShowAbove,
+                     Popup is shown above the control instead of below.}
+            @row2col{wxComboCtrl::CanDeferShow,
+                     Showing the popup can be deferred to happen sometime after
+                     ShowPopup() has finished. In this case, AnimateShow() must
+                     return false.}
+            @endTable
+    */
+    virtual void DoShowPopup(const wxRect& rect, int flags);
 };
 

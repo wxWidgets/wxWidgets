@@ -34,7 +34,7 @@ public:
         @return @true if the load address and module size were retrieved,
                  @false if this information is not available.
     */
-    bool GetAddress(void** addr, size_t len) const;
+    bool GetAddress(void* addr, size_t* len) const;
 
     /**
         Returns the base name of this module, e.g. @c "kernel32.dll" or
@@ -156,7 +156,7 @@ public:
 
         @see wxDYNLIB_FUNCTION()
     */
-    void* GetSymbol(const wxString& name) const;
+    void* GetSymbol(const wxString& name, bool* success = 0) const;
 
     /**
         This function is available only under Windows as it is only useful when

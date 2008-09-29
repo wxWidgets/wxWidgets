@@ -42,7 +42,7 @@ public:
 
         Return @true to accept the data, or @false to veto the operation.
     */
-    virtual bool OnDropText(wxCoord x, wxCoord y, const wxString& data);
+    virtual bool OnDropText(wxCoord x, wxCoord y, const wxString& data) = 0;
 };
 
 

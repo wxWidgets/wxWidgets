@@ -44,7 +44,7 @@ public:
                  chose to cancel report generation or removed all files from
                  it.
     */
-    virtual bool Show(wxDebugReport& dbgrpt) const;
+    virtual bool Show(wxDebugReport& dbgrpt) const = 0;
 };
 
 
@@ -71,7 +71,7 @@ public:
         Returns the full path of the compressed file (empty if creation
         failed).
     */
-    const wxString GetCompressedFileName() const;
+    const wxString& GetCompressedFileName() const;
 };
 
 
@@ -205,25 +205,25 @@ public:
         This function may be overridden to add arbitrary custom context to the
         XML context file created by AddContext(). By default, it does nothing.
     */
-    void DoAddCustomContext(wxXmlNode* nodeRoot);
+    virtual void DoAddCustomContext(wxXmlNode* nodeRoot);
 
     /**
         This function may be overridden to modify the contents of the exception
         tag in the XML context file.
     */
-    bool DoAddExceptionInfo(wxXmlNode* nodeContext);
+    virtual bool DoAddExceptionInfo(wxXmlNode* nodeContext);
 
     /**
         This function may be overridden to modify the contents of the modules
         tag in the XML context file.
     */
-    bool DoAddLoadedModules(wxXmlNode* nodeModules);
+    virtual bool DoAddLoadedModules(wxXmlNode* nodeModules);
 
     /**
         This function may be overridden to modify the contents of the system
         tag in the XML context file.
     */
-    bool DoAddSystemInfo(wxXmlNode* nodeSystemInfo);
+    virtual bool DoAddSystemInfo(wxXmlNode* nodeSystemInfo);
 
     /**
         This method should be used to construct the full name of the files
@@ -232,7 +232,7 @@ public:
         @return The name of the temporary directory used for the files in this
                  report.
     */
-    const wxString GetDirectory() const;
+    const wxString& GetDirectory() const;
 
     /**
         Retrieves the name (relative to GetDirectory()) and the description of
@@ -341,6 +341,6 @@ public:
         returned. Value returned by this function becomes the return value of
         wxDebugReport::Process().
     */
-    bool OnServerReply(const wxArrayString& reply);
+    virtual bool OnServerReply(const wxArrayString& reply);
 };
 

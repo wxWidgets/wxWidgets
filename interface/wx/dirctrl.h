@@ -91,13 +91,12 @@ public:
         Create function for two-step construction. See wxGenericDirCtrl() for
         details.
     */
-    bool Create(wxWindow* parent, const wxWindowID id = -1,
+    bool Create(wxWindow* parent, const wxWindowID id = wxID_ANY,
                 const wxString& dir = wxDirDialogDefaultFolderStr,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxDIRCTRL_3D_INTERNAL|wxBORDER_SUNKEN,
-                const wxString& filter = wxEmptyString,
-                int defaultFilter = 0,
+                long style = wxDIRCTRL_3D_INTERNAL,
+                const wxString& filter = wxEmptyString, int defaultFilter = 0,
                 const wxString& name = wxTreeCtrlNameStr);
 
     /**

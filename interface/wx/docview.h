@@ -64,10 +64,9 @@ public:
     wxDocTemplate(wxDocManager* manager, const wxString& descr,
                   const wxString& filter, const wxString& dir,
                   const wxString& ext, const wxString& docTypeName,
-                  const wxString& viewTypeName,
-                  wxClassInfo* docClassInfo = NULL,
-                  wxClassInfo* viewClassInfo = NULL,
-                  long flags = wxDEFAULT_TEMPLATE_FLAGS);
+                  const wxString& viewTypeName, wxClassInfo* docClassInfo = 0,
+                  wxClassInfo* viewClassInfo = 0,
+                  long flags = wxTEMPLATE_VISIBLE);
 
     /**
         Destructor.
@@ -346,7 +345,7 @@ public:
         allowed for the document (by virtue of multiple templates mentioning
         the same document type), a choice of view is presented to the user.
     */
-    wxView* CreateView(wxDocument* doc, long flags);
+    virtual wxView* CreateView(wxDocument* doc, long flags = 0);
 
     /**
         Removes the template from the list of templates.
@@ -415,7 +414,7 @@ public:
     /**
         Returns a reference to the list of documents.
     */
-    wxList GetDocuments();
+    wxList& GetDocuments();
 
     /**
         Returns a pointer to file history.
@@ -441,7 +440,7 @@ public:
     /**
         Returns a reference to the list of associated templates.
     */
-    wxList GetTemplates();
+    wxList& GetTemplates();
 
     /**
         Initializes data; currently just calls OnCreateFileHistory().
@@ -528,9 +527,9 @@ public:
 
         This function is used in CreateDocument().
     */
-    wxDocTemplate* SelectDocumentPath(wxDocTemplate** templates,
-                                      int noTemplates, wxString& path,
-                                      long flags, bool save);
+    virtual wxDocTemplate* SelectDocumentPath(wxDocTemplate** templates,
+                                              int noTemplates, wxString& path,
+                                              long flags, bool save = false);
 
     /**
         Returns a document template by asking the user (if there is more than
@@ -758,7 +757,7 @@ public:
     /**
         Override this function to render the view on the given device context.
     */
-    virtual void OnDraw(wxDC* dc);
+    virtual void OnDraw(wxDC* dc) = 0;
 
     /**
         Called when the view should be updated.
@@ -772,7 +771,7 @@ public:
             application-specific information for making updating more
             efficient.
     */
-    virtual void OnUpdate(wxView* sender, wxObject* hint);
+    virtual void OnUpdate(wxView* sender, wxObject* hint = 0);
 
     /**
         Associates the given document with the view. Normally called by the
@@ -865,7 +864,7 @@ public:
         override (but still call) this function in order to set the keyboard
         focus for your subwindow.
     */
-    void OnActivate(wxActivateEvent event);
+    void OnActivate(wxActivateEvent& event);
 
     /**
         Closes and deletes the current view and document.
@@ -935,12 +934,10 @@ public:
     /**
         Used in two-step construction.
     */
-    bool Create(wxDocManager* manager, wxFrame* parent,
-                wxWindowID id, const wxString& title,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = wxDEFAULT_FRAME_STYLE,
-                const wxString& name = "frame");
+    bool Create(wxDocManager* manager, wxFrame* parent, wxWindowID id,
+                const wxString& title, const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize, long style = 541072960,
+                const wxString& name = wxFrameNameStr);
 
     /**
         Returns the associated document manager object.
@@ -989,7 +986,7 @@ public:
         Constructor. Define your own default constructor to initialize
         application-specific data.
     */
-    wxDocument();
+    wxDocument(wxDocument* parent = 0);
 
     /**
         Destructor. Removes itself from the document manager.

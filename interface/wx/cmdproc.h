@@ -56,7 +56,7 @@ public:
                 processor that the action is not undoable and should not be
                 added to the command history.
     */
-    virtual bool Do();
+    virtual bool Do() = 0;
 
     /**
         Returns the command name.
@@ -85,7 +85,7 @@ public:
                 processor that the action is not redoable and no change should
                 be made to the command history.
     */
-    virtual bool Undo();
+    virtual bool Undo() = 0;
 };
 
 

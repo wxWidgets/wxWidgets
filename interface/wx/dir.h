@@ -68,7 +68,7 @@ public:
         This is a pure virtual function and must be implemented in the derived
         class.
     */
-    virtual wxDirTraverseResult OnDir(const wxString& dirname);
+    virtual wxDirTraverseResult OnDir(const wxString& dirname) = 0;
 
     /**
         This function is called for each file. It may return ::wxDIR_STOP to
@@ -78,7 +78,7 @@ public:
         This is a pure virtual function and must be implemented in the derived
         class.
     */
-    virtual wxDirTraverseResult OnFile(const wxString& filename);
+    virtual wxDirTraverseResult OnFile(const wxString& filename) = 0;
 
     /**
         This function is called for each directory which we failed to open for

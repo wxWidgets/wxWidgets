@@ -483,7 +483,7 @@ public:
 
         @see wxDC::SetBackground()
     */
-    const wxBrush GetBackground() const;
+    const wxBrush& GetBackground() const;
 
     /**
         Returns the current background mode: @c wxSOLID or @c wxTRANSPARENT.
@@ -497,7 +497,7 @@ public:
 
         @see wxDC::SetBrush()
     */
-    const wxBrush GetBrush() const;
+    const wxBrush& GetBrush() const;
 
     /**
         Gets the character height of the currently set font.
@@ -532,7 +532,7 @@ public:
         wxNullFont initially and only after calling SetFont() a valid font is
         returned.
     */
-    const wxFont GetFont() const;
+    const wxFont& GetFont() const;
 
     /**
         Gets the current layout direction of the device context. On platforms
@@ -613,7 +613,7 @@ public:
 
         @see SetPen()
     */
-    const wxPen GetPen() const;
+    const wxPen& GetPen() const;
 
     /**
         Gets in @a colour the colour at the specified location. Not available
@@ -673,7 +673,7 @@ public:
 
         @see SetTextBackground()
     */
-    const wxColour GetTextBackground() const;
+    const wxColour& GetTextBackground() const;
 
     //@{
     /**
@@ -714,14 +714,14 @@ public:
 
         @see SetTextForeground()
     */
-    const wxColour GetTextForeground() const;
+    const wxColour& GetTextForeground() const;
 
     /**
         Gets the current user scale factor.
 
         @see SetUserScale()
     */
-    void GetUserScale(double x, double y);
+    void GetUserScale(double* x, double* y) const;
 
     //@{
     /**
@@ -752,10 +752,9 @@ public:
         to use @a initialColour on the left part of the rectangle and
         @a destColour on the right one.
     */
-    void GradientFillLinear(const wxRect& rect,
-                            const wxColour& initialColour,
+    void GradientFillLinear(const wxRect& rect, const wxColour& initialColour,
                             const wxColour& destColour,
-                            wxDirection nDirection = wxEAST);
+                            wxDirection nDirection = wxRIGHT);
 
     /**
         Returns @true if the DC is ok to use.
@@ -1012,7 +1011,7 @@ public:
     /**
         Starts a document page (only relevant when outputting to a printer).
     */
-    bool StartPage();
+    void StartPage();
 
     /**
         Copy from a source DC to this DC, specifying the destination

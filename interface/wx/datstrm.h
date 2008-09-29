@@ -34,7 +34,8 @@ public:
         @param stream
             The output stream.
     */
-    wxDataOutputStream(wxOutputStream& stream);
+    wxDataOutputStream(wxOutputStream& s,
+                       const wxMBConv& conv = wxConvAuto(wxFONTENCODING_DEFAULT));
     /**
         Constructs a datastream object from an output stream. Only write
         methods will be available. This constructor is only available in
@@ -178,7 +179,8 @@ public:
         @param stream
             The input stream.
     */
-    wxDataInputStream(wxInputStream& stream);
+    wxDataInputStream(wxInputStream& s,
+                      const wxMBConv& conv = wxConvAuto(wxFONTENCODING_DEFAULT));
     /**
         Constructs a datastream object from an input stream. Only read methods
         will be available. This constructor is only available in Unicode builds

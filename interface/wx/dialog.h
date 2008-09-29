@@ -207,9 +207,8 @@ public:
     */
     bool Create(wxWindow* parent, wxWindowID id, const wxString& title,
                 const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = wxDEFAULT_DIALOG_STYLE,
-                const wxString& name = "dialogBox");
+                const wxSize& size = wxDefaultSize, long style = 536877056,
+                const wxString& name = wxDialogNameStr);
 
     /**
         Creates a sizer with standard buttons. @a flags is a bit list of the
@@ -343,7 +342,7 @@ public:
 
         @see @ref overview_dialog_autoscrolling (for more on layout adaptation)
     */
-    wxArrayInt GetMainButtonIds();
+    wxArrayInt& GetMainButtonIds();
 
     /**
         Gets the return code for this window.
@@ -549,7 +548,7 @@ public:
             otherwise the box is hidden. If @false and the dialog is modal,
             control is returned to the calling program.
     */
-    bool Show(bool show);
+    virtual bool Show(bool show = 1);
 
     /**
         Shows a modal dialog.
@@ -599,13 +598,13 @@ public:
     /**
         Override this to returns @true if adaptation can and should be done.
     */
-    bool CanDoLayoutAdaptation(wxDialog* dialog);
+    virtual bool CanDoLayoutAdaptation(wxDialog* dialog) = 0;
 
     /**
         Override this to perform layout adaptation, such as making parts of the
         dialog scroll and resizing the dialog to fit the display. Normally this
         function will be called just before the dialog is shown.
     */
-    bool DoLayoutAdaptation(wxDialog* dialog);
+    virtual bool DoLayoutAdaptation(wxDialog* dialog) = 0;
 };
 

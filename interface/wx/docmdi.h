@@ -127,7 +127,7 @@ public:
         to override (but still call) this function in order to set the keyboard
         focus for your subwindow.
     */
-    void OnActivate(wxActivateEvent event);
+    void OnActivate(wxActivateEvent& event);
 
     /**
         Closes and deletes the current view and document.

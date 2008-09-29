@@ -831,7 +831,7 @@ public:
 
         @param perm
             The permissions for the newly created directory.
-            See wxPosixPermissions enumeration for more info.
+            See the ::wxPosixPermissions enumeration for more info.
         @param flags
             If the flags contain @c wxPATH_MKDIR_FULL flag, try to create each
             directory in the path and also don't return an error if the target
@@ -849,7 +849,7 @@ public:
             The directory to create
         @param parm
             The permissions for the newly created directory.
-            See wxPosixPermissions enumeration for more info.
+            See the ::wxPosixPermissions enumeration for more info.
         @param flags
             If the flags contain @c wxPATH_MKDIR_FULL flag, try to create each
             directory in the path and also don't return an error if the target

@@ -32,7 +32,7 @@ public:
     /**
         Gets the icon.
     */
-    const wxIcon GetIcon() const;
+    const wxIcon& GetIcon() const;
 
     /**
         Gets the text.
@@ -102,7 +102,7 @@ public:
     /**
         Returns a reference to a value.
     */
-    const wxVariant GetValue() const;
+    const wxVariant& GetValue() const;
 
     /**
 
@@ -223,7 +223,7 @@ public:
     /**
         Destructor. This should not be called directly. Use DecRef() instead.
     */
-    ~wxDataViewModel();
+    virtual ~wxDataViewModel();
 
     /**
         Adds a wxDataViewModelNotifier
@@ -267,29 +267,28 @@ public:
     /**
         Override this to indicate the number of columns in the model.
     */
-    virtual unsigned int GetColumnCount() const;
+    virtual unsigned int GetColumnCount() const = 0;
 
     /**
         Override this to indicate what type of data is stored in the
         column specified by @e col. This should return a string
         indicating the type of data as reported by wxVariant.
     */
-    virtual wxString GetColumnType(unsigned int col) const;
+    virtual wxString GetColumnType(unsigned int col) const = 0;
 
     /**
         Override this to indicate which wxDataViewItem representing the parent
         of @a item or an invalid wxDataViewItem if the the root item is
         the parent item.
     */
-    virtual wxDataViewItem GetParent(const wxDataViewItem& item) const;
+    virtual wxDataViewItem GetParent(const wxDataViewItem& item) const = 0;
 
     /**
         Override this to indicate the value of @e item
         A wxVariant is used to store the data.
     */
-    virtual void GetValue(wxVariant& variant,
-                          const wxDataViewItem& item,
-                          unsigned int col) const;
+    virtual void GetValue(wxVariant& variant, const wxDataViewItem& item,
+                          unsigned int col) const = 0;
 
     /**
         Override this method to indicate if a container item merely
@@ -314,7 +313,7 @@ public:
         Override this to indicate of @a item is a container, i.e. if
         it can have child items.
     */
-    virtual bool IsContainer(const wxDataViewItem& item) const;
+    virtual bool IsContainer(const wxDataViewItem& item) const = 0;
 
     /**
         Call this to inform the model that an item has been added
@@ -374,9 +373,8 @@ public:
         Afterwards ValueChanged()
         has to be called!
     */
-    virtual bool SetValue(const wxVariant& variant,
-                          const wxDataViewItem& item,
-                          unsigned int col);
+    virtual bool SetValue(const wxVariant& variant, const wxDataViewItem& item,
+                          unsigned int col) = 0;
 
     /**
         Call this to inform this model that a value in the model has
@@ -400,8 +398,8 @@ public:
     wxDataViewItem (which you can obtain from this class).
     This model also provides its own wxDataViewIndexListModel::Compare
     method which sorts the model's data by the index.
-    
-    This model is not a virtual model since the control stores 
+
+    This model is not a virtual model since the control stores
     each wxDataViewItem. Use wxDataViewVirtualListModel if you
     need to display millions of items or have other reason to
     use a virtual control.
@@ -702,7 +700,7 @@ public:
     @event{EVT_DATAVIEW_COLUMN_REORDERED(id, func)}
            Process a wxEVT_COMMAND_DATAVIEW_COLUMN_REORDERED event.
     @endEventTable
-    
+
     @library{wxadv}
     @category{ctrl,dvc}
     <!-- @appearance{dataviewctrl.png} -->
@@ -714,7 +712,7 @@ public:
         Default Constructor.
     */
     wxDataViewCtrl();
-    
+
     /**
         Constructor. Calls Create().
     */
@@ -747,7 +745,7 @@ public:
         Inserts a wxDataViewColumn to the control. Returns @true on success.
     */
     virtual bool InsertColumn(unsigned int pos, wxDataViewColumn* col);
-    
+
     //@{
     /**
         Appends a column for rendering a bitmap. Returns the wxDataViewColumn
@@ -771,7 +769,7 @@ public:
     /**
         Appends a column for rendering a date. Returns the wxDataViewColumn
         created in the function or @NULL on failure.
-        
+
         NB: The @e align parameter is applied to both the column header and
         the column renderer.
     */
@@ -794,7 +792,7 @@ public:
         Appends a column for rendering text with an icon. Returns the wxDataViewColumn
         created in the function or @NULL on failure. This method uses the
         wxDataViewIconTextRenderer class.
-        
+
         NB: The @e align parameter is applied to both the column header and
         the column renderer.
     */
@@ -816,7 +814,7 @@ public:
     /**
         Appends a column for rendering a progress indicator. Returns the
         wxDataViewColumn created in the function or @NULL on failure.
-        
+
         NB: The @e align parameter is applied to both the column header and
         the column renderer.
     */
@@ -838,7 +836,7 @@ public:
     /**
         Appends a column for rendering text. Returns the wxDataViewColumn
         created in the function or @NULL on failure.
-        
+
         NB: The @e align parameter is applied to both the column header and
         the column renderer.
     */
@@ -860,7 +858,7 @@ public:
     /**
         Appends a column for rendering a toggle. Returns the wxDataViewColumn
         created in the function or @NULL on failure.
-        
+
         NB: The @e align parameter is applied to both the column header and
         the column renderer.
     */
@@ -1058,7 +1056,7 @@ public:
     /**
         Called by owning model.
     */
-    bool Cleared();
+    virtual bool Cleared() = 0;
 
     /**
         Get owning wxDataViewModel.
@@ -1074,7 +1072,7 @@ public:
     /**
         Called by owning model.
     */
-    bool ItemChanged(const wxDataViewItem& item);
+    virtual bool ItemChanged(const wxDataViewItem& item) = 0;
 
     /**
         Called by owning model.
@@ -1102,7 +1100,7 @@ public:
     /**
         Called by owning model.
     */
-    void Resort();
+    virtual void Resort() = 0;
 
     /**
         Set owner of this notifier. Used internally.
@@ -1112,7 +1110,7 @@ public:
     /**
         Called by owning model.
     */
-    bool ValueChanged(const wxDataViewItem& item, unsigned int col);
+    virtual bool ValueChanged(const wxDataViewItem& item, unsigned int col) = 0;
 };
 
 
@@ -1176,7 +1174,7 @@ class wxDataViewRenderer : public wxObject
 {
 public:
     /**
-        Constructor. 
+        Constructor.
     */
     wxDataViewRenderer(const wxString& varianttype,
                        wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
@@ -1202,7 +1200,7 @@ public:
         transfer the value back to the data model. Returns @e @false
         on failure.
     */
-    virtual bool GetValue(wxVariant& value);
+    virtual bool GetValue(wxVariant& value) const = 0;
 
     /**
         Returns a string with the type of the wxVariant
@@ -1212,7 +1210,7 @@ public:
 
     /**
         Sets the alignment of the renderer's content. The default value
-        of wxDVR_DEFAULT_ALIGMENT indicates that the content should 
+        of wxDVR_DEFAULT_ALIGMENT indicates that the content should
         have the same alignment as the column header. The method is
         not implemented under OS X and the renderer always aligns its
         contents as the column header on that platform. The other platforms
@@ -1229,7 +1227,7 @@ public:
         Set the value of the renderer (and thus its cell) to @e value.
         The internal code will then render this cell with this data.
     */
-    virtual bool SetValue(const wxVariant& value);
+    virtual bool SetValue(const wxVariant& value) = 0;
 
     /**
         Before data is committed to the data model, it is passed to this
@@ -1437,7 +1435,7 @@ public:
     */
     wxDataViewCustomRenderer(const wxString& varianttype = "string",
                              wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-                             int align = wxDVR_DEFAULT_ALIGNMENT );
+                             int align = -1, bool no_init = false);
 
     /**
         Destructor.
@@ -1471,7 +1469,7 @@ public:
     /**
         Return size required to show content.
     */
-    virtual wxSize GetSize();
+    virtual wxSize GetSize() const = 0;
 
     /**
         Overrride this so that the renderer can get the value
@@ -1501,7 +1499,7 @@ public:
         wxDataViewRenderer::SetValue was called
         so that this instance knows what to render.
     */
-    virtual bool Render(wxRect cell, wxDC* dc, int state);
+    virtual bool Render(wxRect cell, wxDC* dc, int state) = 0;
 
     /**
         This method should be called from within Render()
@@ -1587,7 +1585,7 @@ public:
     /**
         Returns the bitmap in the header of the column, if any.
     */
-    const wxBitmap GetBitmap();
+    const wxBitmap& GetBitmap() const;
 
     /**
         Returns the index of the column of the model, which this
@@ -1766,12 +1764,12 @@ public:
     /**
         Calls the identical method from wxDataViewTreeStore.
     */
-    const wxIcon GetItemExpandedIcon(const wxDataViewItem& item) const;
+    const wxIcon& GetItemExpandedIcon(const wxDataViewItem& item) const;
 
     /**
         Calls the identical method from wxDataViewTreeStore.
     */
-    const wxIcon GetItemIcon(const wxDataViewItem& item) const;
+    const wxIcon& GetItemIcon(const wxDataViewItem& item) const;
 
     /**
         Calls the identical method from wxDataViewTreeStore.
@@ -1933,12 +1931,12 @@ public:
     /**
         Returns the icon to display in expanded containers.
     */
-    const wxIcon GetItemExpandedIcon(const wxDataViewItem& item) const;
+    const wxIcon& GetItemExpandedIcon(const wxDataViewItem& item) const;
 
     /**
         Returns the icon of the item.
     */
-    const wxIcon GetItemIcon(const wxDataViewItem& item) const;
+    const wxIcon& GetItemIcon(const wxDataViewItem& item) const;
 
     /**
         Returns the text of the item.

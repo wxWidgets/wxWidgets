@@ -53,7 +53,7 @@ public:
 
         @see IsDialing()
     */
-    bool CancelDialing();
+    virtual bool CancelDialing() = 0;
 
     /**
         This function should create and return the object of the
@@ -80,16 +80,16 @@ public:
         returns immediately - the result is reported via events (an event is
         sent anyhow, but if dialing failed it will be a DISCONNECTED one).
     */
-    bool Dial(const wxString& nameOfISP = wxEmptyString,
-              const wxString& username = wxEmptyString,
-              const wxString& password = wxEmptyString,
-              bool async = true);
+    virtual bool Dial(const wxString& nameOfISP = wxEmptyString,
+                      const wxString& username = wxEmptyString,
+                      const wxString& password = wxEmptyString,
+                      bool async = true) = 0;
 
     /**
         Disable automatic check for connection status change - notice that the
         @c wxEVT_DIALUP_XXX events won't be sent any more neither.
     */
-    void DisableAutoCheckOnlineStatus();
+    virtual void DisableAutoCheckOnlineStatus() = 0;
 
     /**
         Enable automatic checks for the connection status and sending of
@@ -102,7 +102,7 @@ public:
 
         @return @false if couldn't set up automatic check for online status.
     */
-    bool EnableAutoCheckOnlineStatus(size_t nSeconds = 60);
+    virtual bool EnableAutoCheckOnlineStatus(size_t nSeconds = 60) = 0;
 
     /**
         This function is only implemented under Windows.
@@ -111,12 +111,12 @@ public:
         parameter to Dial() on this machine and returns their number (may be
         0).
     */
-    size_t GetISPNames(wxArrayString& names) const;
+    virtual size_t GetISPNames(wxArrayString& names) const = 0;
 
     /**
         Hang up the currently active dial up connection.
     */
-    bool HangUp();
+    virtual bool HangUp() = 0;
 
     /**
         Returns @true if the computer has a permanent network connection (i.e.
@@ -127,14 +127,14 @@ public:
               guaranteed to be correct, so it is better to ask user for
               confirmation or give him a possibility to override it.
     */
-    bool IsAlwaysOnline() const;
+    virtual bool IsAlwaysOnline() const = 0;
 
     /**
         Returns @true if (async) dialing is in progress.
 
         @see Dial()
     */
-    bool IsDialing() const;
+    virtual bool IsDialing() const = 0;
 
     /**
         Returns @true if the dialup manager was initialized correctly. If this
@@ -142,7 +142,7 @@ public:
         a good idea to call this function and check its result before calling
         any other wxDialUpManager methods.
     */
-    bool IsOk() const;
+    virtual bool IsOk() const = 0;
 
     /**
         Returns @true if the computer is connected to the network: under
@@ -150,7 +150,7 @@ public:
         check that the "well-known host" (as specified by SetWellKnownHost())
         is reachable.
     */
-    bool IsOnline() const;
+    virtual bool IsOnline() const = 0;
 
     /**
         This method is for Unix only.
@@ -168,7 +168,7 @@ public:
 
         @see IsOnline()
     */
-    void SetOnlineStatus(bool isOnline = true);
+    virtual void SetOnlineStatus(bool isOnline = true) = 0;
 
     /**
         This method is for Unix only.
@@ -178,7 +178,8 @@ public:
         function is always safe to call. The default value is
         @c "www.yahoo.com:80".
     */
-    void SetWellKnownHost(const wxString& hostname, int portno = 80);
+    virtual void SetWellKnownHost(const wxString& hostname,
+                                  int portno = 80) = 0;
 };
 
 

@@ -66,7 +66,7 @@ public:
         May be used to set the same help string for all Cancel buttons in
         the application, for example.
     */
-    virtual wxString GetHelp(const wxWindowBase* window);
+    virtual wxString GetHelp(const wxWindowBase* window) = 0;
 
     /**
         Removes the association between the window pointer and the help text.

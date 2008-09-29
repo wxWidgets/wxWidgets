@@ -115,14 +115,14 @@ public:
         @return @false if no range limits are currently set, @true if at least
                  one bound is set.
     */
-    bool GetRange(wxDateTime* dt1, wxDateTime dt2) const;
+    virtual bool GetRange(wxDateTime* dt1, wxDateTime* dt2) const = 0;
 
     /**
         Returns the currently selected. If there is no selection or the
         selection is outside of the current range, an invalid object is
         returned.
     */
-    wxDateTime GetValue() const;
+    virtual wxDateTime GetValue() const = 0;
 
     /**
         Sets the display format for the date in the control. See wxDateTime for
@@ -143,7 +143,7 @@ public:
         @remarks If the current value of the control is outside of the newly
                  set range bounds, the behaviour is undefined.
     */
-    void SetRange(const wxDateTime& dt1, const wxDateTime& dt2);
+    virtual void SetRange(const wxDateTime& dt1, const wxDateTime& dt2) = 0;
 
     /**
         Changes the current value of the control. The date should be valid and
@@ -151,6 +151,6 @@ public:
 
         Calling this method does not result in a date change event.
     */
-    void SetValue(const wxDateTime& dt);
+    virtual void SetValue(const wxDateTime& dt) = 0;
 };
 

@@ -22,7 +22,7 @@ public:
     /**
         Returns the date.
     */
-    const wxDateTime GetDate() const;
+    const wxDateTime& GetDate() const;
 
     /**
         Sets the date carried by the event, normally only used by the library
