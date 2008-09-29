@@ -12,7 +12,7 @@
     <build>
         <name>XPSP2 VC9 wxMSW trunk</name>
         <builddir>XPSP2_VC9_wxMSW_trunk</builddir>
-        <!--<scheduler>trunk_quick</scheduler>-->
+        <scheduler>trunk_quick</scheduler>
         <sandbox>VC9</sandbox>
         <make>nmake -f makefile.vc BUILD=release SHARED=1 CPPUNIT_CFLAGS=-Ik:/buildbot/VC9libs/cppunit-1.12.1/include CPPUNIT_LIBS=k:/buildbot/VC9libs/cppunit-1.12.1/lib/cppunit.lib</make>
         <steps>
@@ -24,7 +24,7 @@
     <build>
         <name>XPSP2 VC9 wxMSW stable</name>
         <builddir>XPSP2_VC9_wxMSW_stable</builddir>
-        <!--<scheduler>stable_quick</scheduler>-->
+        <scheduler>stable_quick</scheduler>
         <sandbox>VC9</sandbox>
         <make>nmake -f makefile.vc BUILD=release SHARED=1 CPPUNIT_CFLAGS=-Ik:/buildbot/VC9libs/cppunit-1.12.1/include CPPUNIT_LIBS=k:/buildbot/VC9libs/cppunit-1.12.1/lib/cppunit.lib</make>
         <steps>
