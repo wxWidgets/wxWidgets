@@ -147,7 +147,11 @@ void wxArgumentType::SetDefaultValue(const wxString& defval, const wxString& def
     if (m_strDefaultValueForCmp == "0u")
         m_strDefaultValueForCmp = "0";
 
+    m_strDefaultValue.Replace("0x000000001", "1");
+    m_strDefaultValueForCmp.Replace("0x000000001", "1");
+
     // fix for unicode strings:
+    m_strDefaultValue.Replace("\\000\\000\\000", "");
     m_strDefaultValueForCmp.Replace("\\000\\000\\000", "");
 
     if (m_strDefaultValueForCmp.StartsWith("wxT(") &&
@@ -480,6 +484,38 @@ const wxMethod* wxClass::FindMethod(const wxMethod& m) const
     return NULL;
 }
 
+const wxMethod* wxClass::RecursiveUpwardFindMethod(const wxMethod& m,
+                                                   const wxXmlInterface* allclasses) const
+{
+    // first, search into *this
+    const wxMethod* ret = FindMethod(m);
+    if (ret)
+        return ret;
+
+    // then, search into its parents
+    for (unsigned int i=0; i<m_parents.GetCount(); i++)
+    {
+        // ignore non-wx-classes parents
+        // AD-HOC FIX: discard wxScrolledT_Helper parent as it always gives errors
+        if (m_parents[i].StartsWith("wx") || m_parents[i] == "wxScrolledT_Helper")
+        {
+            const wxClass *parent = allclasses->FindClass(m_parents[i]);
+            if (!parent) {
+                wxLogError("Could not find parent '%s' of class '%s'...",
+                            m_parents[i], GetName());
+                return false;
+            }
+
+            const wxMethod *parentMethod = parent->RecursiveUpwardFindMethod(m, allclasses);
+            if (parentMethod)
+                return parentMethod;
+        }
+    }
+
+    // could not find anything even in parent classes...
+    return NULL;
+}
+
 wxMethodPtrArray wxClass::FindMethodsNamed(const wxString& name) const
 {
     wxMethodPtrArray ret;
@@ -490,6 +526,37 @@ wxMethodPtrArray wxClass::FindMethodsNamed(const wxString& name) const
 
     return ret;
 }
+
+
+wxMethodPtrArray wxClass::RecursiveUpwardFindMethodsNamed(const wxString& name,
+                                                          const wxXmlInterface* allclasses) const
+{
+    // first, search into *this
+    wxMethodPtrArray ret = FindMethodsNamed(name);
+    if (ret.GetCount()>0)
+        return ret;         // stop here, don't look upward in the parents
+
+    // then, search into parents of this class
+    for (unsigned int i=0; i<m_parents.GetCount(); i++)
+    {
+        // AD-HOC FIX: discard wxScrolledT_Helper parent as it always gives errors
+        if (m_parents[i].StartsWith("wx") || m_parents[i] == "wxScrolledT_Helper")
+        {
+            const wxClass *parent = allclasses->FindClass(m_parents[i]);
+            if (!parent) {
+                wxLogError("Could not find parent '%s' of class '%s'...",
+                            m_parents[i], GetName());
+                return false;
+            }
+
+            wxMethodPtrArray temp = parent->RecursiveUpwardFindMethodsNamed(name, allclasses);
+            WX_APPEND_ARRAY(ret, temp);
+        }
+    }
+
+    return ret;
+}
+
 
 
 // ----------------------------------------------------------------------------
@@ -554,6 +621,10 @@ wxClassPtrArray wxXmlInterface::FindClassesDefinedIn(const wxString& headerfile)
 #define ATTRIB_POINTER      4
 #define ATTRIB_ARRAY        8
 
+// it may sound strange but gccxml, in order to produce shorter ID names
+// uses (after the underscore) characters in range 0-9 and a-z in the ID names;
+// in order to be able to translate such strings into numbers using strtoul()
+// we use as base 10 (possible digits) + 25 (possible characters) = 35
 #define GCCXML_BASE         35
 
 class toResolveTypeItem
@@ -578,6 +649,7 @@ WX_DECLARE_HASH_MAP( unsigned long, toResolveTypeItem,
 WX_DECLARE_HASH_MAP( unsigned long, wxClass*,
                      wxIntegerHash, wxIntegerEqual,
                      wxClassMemberIdHashMap );
+
 #else
 #include <map>
 typedef std::map<unsigned long, toResolveTypeItem> wxToResolveTypeHashMap;
@@ -732,6 +804,21 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
                 // NB: "file" attribute contains an ID value that we'll resolve later
                 m_classes.Add(wxClass(cname, child->GetAttribute("file")));
 
+                // the just-inserted class:
+                wxClass *newClass = &m_classes.Last();
+
+                // now get a list of the base classes:
+                wxXmlNode *baseNode = child->GetChildren();
+                while (baseNode)
+                {
+                    // for now we store as "parents" only the parent IDs...
+                    // later we will resolve them into full class names
+                    if (baseNode->GetName() == "Base")
+                        newClass->AddParent(baseNode->GetAttribute("type"));
+
+                    baseNode = baseNode->GetNext();
+                }
+
                 const wxString& ids = child->GetAttribute("members");
                 if (ids.IsEmpty())
                 {
@@ -746,7 +833,7 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
                 else
                 {
                     // decode the non-empty list of IDs:
-                    if (!getMemberIDs(&members, &m_classes.Last(), ids)) {
+                    if (!getMemberIDs(&members, newClass, ids)) {
                         LogError("Invalid member IDs for '%s' class node: %s",
                                 cname, child->GetAttribute("id"));
                         return false;
@@ -948,6 +1035,30 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
         }
         else
             m_classes[i].SetHeader(idx->second);
+    }
+
+    // resolve parent names
+    for (unsigned int i=0; i<m_classes.GetCount(); i++)
+    {
+        for (unsigned int k=0; k<m_classes[i].GetParentCount(); k++)
+        {
+            unsigned long id;
+
+            if (!getID(&id, m_classes[i].GetParent(k))) {
+                LogError("invalid parent class ID for '%s'", m_classes[i].GetName());
+                return false;
+            }
+
+            wxTypeIdHashMap::const_iterator idx = types.find(id);
+            if (idx == types.end())
+            {
+                // this is an error!
+                LogError("couldn't find parent class ID '%d'", id);
+            }
+            else
+                // replace k-th parent with its true name:
+                m_classes[i].SetParent(k, idx->second);
+        }
     }
 
     // build the list of the wx methods
@@ -1278,6 +1389,7 @@ bool wxXmlDoxygenInterface::Parse(const wxString& filename)
 
 bool wxXmlDoxygenInterface::ParseCompoundDefinition(const wxString& filename)
 {
+    wxClassMemberIdHashMap parents;
     wxXmlDocument doc;
     wxXmlNode *child;
     int nodes = 0;
@@ -1374,6 +1486,11 @@ bool wxXmlDoxygenInterface::ParseCompoundDefinition(const wxString& filename)
                 {
                     // identify <onlyfor> custom XML tags
                     klass.SetAvailability(GetAvailabilityFor(subchild));
+                }
+                else if (subchild->GetName() == "basecompoundref")
+                {
+                    // add the name of this parent to the list of klass' parents
+                    klass.AddParent(subchild->GetNodeContent());
                 }
 
                 subchild = subchild->GetNext();

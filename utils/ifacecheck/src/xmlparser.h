@@ -288,6 +288,14 @@ WX_DECLARE_OBJARRAY(wxMethod, wxMethodArray);
 WX_DEFINE_ARRAY(const wxMethod*, wxMethodPtrArray);
 
 
+// we need wxClassPtrArray to be defined _before_ wxClass itself,
+// since wxClass uses wxClassPtrArray.
+class wxClass;
+WX_DEFINE_ARRAY(const wxClass*, wxClassPtrArray);
+
+class wxXmlInterface;
+
+
 // ----------------------------------------------------------------------------
 // Represents a class of the wx API/interface.
 // ----------------------------------------------------------------------------
@@ -307,7 +315,8 @@ public:     // setters
         { m_strName=name; }
     void SetAvailability(int nAvail)
         { m_nAvailability=nAvail; }
-
+    void SetParent(unsigned int k, const wxString& name)
+        { m_parents[k]=name; }
 
 public:     // getters
 
@@ -333,18 +342,37 @@ public:     // getters
     int GetAvailability() const
         { return m_nAvailability; }
 
+    //const wxClass *GetParent(unsigned int i) const
+    const wxString& GetParent(unsigned int i) const
+        { return m_parents[i]; }
+    unsigned int GetParentCount() const
+        { return m_parents.GetCount(); }
+
 public:     // misc
 
     void AddMethod(const wxMethod& func)
         { m_methods.Add(func); }
 
+    void AddParent(const wxString& parent)//wxClass* parent)
+        { m_parents.Add(parent); }
+
     // returns a single result (the first, which is also the only
     // one if CheckConsistency() return true)
     const wxMethod* FindMethod(const wxMethod& m) const;
 
+    // like FindMethod() but this one searches also recursively in
+    // the parents of this class.
+    const wxMethod* RecursiveUpwardFindMethod(const wxMethod& m,
+                                              const wxXmlInterface* allclasses) const;
+
     // returns an array of pointers to the overloaded methods with the
     // same given name
-    wxMethodPtrArray FindMethodsNamed(const wxString& m) const;
+    wxMethodPtrArray FindMethodsNamed(const wxString& name) const;
+
+    // like FindMethodsNamed() but this one searches also recursively in
+    // the parents of this class.
+    wxMethodPtrArray RecursiveUpwardFindMethodsNamed(const wxString& name,
+                                                     const wxXmlInterface* allclasses) const;
 
     // dumps all methods to the given output stream
     void Dump(wxTextOutputStream& stream) const;
@@ -357,12 +385,17 @@ protected:
     wxString m_strHeader;
     wxMethodArray m_methods;
 
+    // name of the base classes: we store the names and not the pointers
+    // because this makes _much_ easier the parsing process!
+    // (basically because when parsing class X which derives from Y,
+    //  we may have not parsed yet class Y!)
+    wxArrayString m_parents;
+
     // see the wxMethod::m_nAvailability field for more info
     int m_nAvailability;
 };
 
 WX_DECLARE_OBJARRAY(wxClass, wxClassArray);
-WX_DEFINE_ARRAY(const wxClass*, wxClassPtrArray);
 
 
 

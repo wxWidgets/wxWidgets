@@ -79,7 +79,7 @@ public:
     bool ParsePreprocessorOutput(const wxString& filename);
 
     bool Compare();
-    int CompareClasses(const wxClass* iface, const wxClassPtrArray& api);
+    int CompareClasses(const wxClass* iface, const wxClass* api);
     bool FixMethod(const wxString& header, const wxMethod* iface, const wxMethod* api);
 
     void ShowProgress();
@@ -200,7 +200,6 @@ bool IfaceCheckApp::Compare()
 {
     const wxClassArray& interfaces = m_doxyInterface.GetClasses();
     const wxClass* c;
-    wxClassPtrArray api;
     int mcount = 0, ccount = 0;
 
     LogMessage("Comparing the interface API to the real API (%d classes to compare)...",
@@ -232,28 +231,29 @@ bool IfaceCheckApp::Compare()
 
         wxString cname = interfaces[i].GetName();
 
-        api.Empty();
-
         // search in the real headers for i-th interface class; we search for
         // both class cname and cnameBase since in wxWidgets world tipically
         // class cname is platform-specific while the real public interface of
         // that class is part of the cnameBase class.
+        /*c = m_gccInterface.FindClass(cname + "Base");
+        if (c) api.Add(c);*/
+
         c = m_gccInterface.FindClass(cname);
-        if (c) api.Add(c);
-        c = m_gccInterface.FindClass(cname + "Base");
-        if (c) api.Add(c);
+        if (!c)
+        {
+            // sometimes the platform-specific class is named "wxGeneric" + cname
+            // or similar:
+            c = m_gccInterface.FindClass("wxGeneric" + cname.Mid(2));
+            if (!c)
+            {
+                c = m_gccInterface.FindClass("wxGtk" + cname.Mid(2));
+            }
+        }
 
-        // sometimes the platform-specific class is named "wxGeneric" + cname
-        // or similar:
-        c = m_gccInterface.FindClass("wxGeneric" + cname.Mid(2));
-        if (c) api.Add(c);
-        c = m_gccInterface.FindClass("wxGtk" + cname.Mid(2));
-        if (c) api.Add(c);
+        if (c) {
 
-        if (api.GetCount()>0) {
-
-            // there is a class with exactly the same name!
-            mcount += CompareClasses(&interfaces[i], api);
+            // there is a class with the same (logic) name!
+            mcount += CompareClasses(&interfaces[i], c);
 
         } else {
 
@@ -271,18 +271,12 @@ bool IfaceCheckApp::Compare()
     return true;
 }
 
-int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClassPtrArray& api)
+int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClass* api)
 {
-    wxString searchedclasses;
     const wxMethod *real;
     int count = 0;
 
-    wxASSERT(iface && api.GetCount()>0);
-
-    // build a string with the names of the API classes compared to iface
-    for (unsigned int j=0; j<api.GetCount(); j++)
-        searchedclasses += "/" + api[j]->GetName();
-    searchedclasses.Remove(0, 1);
+    wxASSERT(iface && api);
 
     // shorten the name of the header so the log file is more readable
     wxString header = wxFileName(iface->GetHeader()).GetFullName();
@@ -290,7 +284,6 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClassPtrArray& a
     for (unsigned int i=0; i<iface->GetMethodCount(); i++)
     {
         const wxMethod& m = iface->GetMethod(i);
-        int matches = 0;
 
         // only compare the methods which are available for the port
         // for which the gcc XML was produced
@@ -305,67 +298,40 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClassPtrArray& a
         }
 
         // search in the methods of the api classes provided
-        for (unsigned int j=0; j<api.GetCount(); j++)
-        {
-            real = api[j]->FindMethod(m);
-            if (real)
-                matches++;                // there is a real matching prototype! It's ok!
-        }
+        real = api->RecursiveUpwardFindMethod(m, &m_gccInterface);
 
-        if (matches == 0)
+        if (real)
         {
             bool exit = false;
-            wxMethodPtrArray overloads;
-
-            // try searching for methods with the same name but with
-            // different return type / arguments / qualifiers
-            for (unsigned int j=0; j<api.GetCount(); j++)
-            {
-                wxMethodPtrArray results = api[j]->FindMethodsNamed(m.GetName());
-
-                // append "results" array to "overloads"
-                WX_APPEND_ARRAY(overloads, results);
-
+            wxMethodPtrArray overloads =
+                api->RecursiveUpwardFindMethodsNamed(m.GetName(), &m_gccInterface);
 
 #define HACK_TO_AUTO_CORRECT_ONLY_METHOD_ATTRIBUTES        0
 #if HACK_TO_AUTO_CORRECT_ONLY_METHOD_ATTRIBUTES
-                for (unsigned int k=0; k<results.GetCount(); k++)
-                    if (results[k]->MatchesExceptForAttributes(m) &&
-                        results[k]->IsPureVirtual() == m.IsPureVirtual())
-                    {
-                        // fix default values of results[k]:
-                        wxMethod tmp(*results[k]);
-                        tmp.SetArgumentTypes(m.GetArgumentTypes());
+            for (unsigned int k=0; k<overloads.GetCount(); k++)
+                if (overloads[k]->MatchesExceptForAttributes(m) &&
+                    overloads[k]->IsPureVirtual() == m.IsPureVirtual())
+                {
+                    // fix default values of results[k]:
+                    wxMethod tmp(*overloads[k]);
+                    tmp.SetArgumentTypes(m.GetArgumentTypes());
 
-                        // modify interface header
-                        if (FixMethod(iface->GetHeader(), &m, &tmp))
-                            LogMessage("Adjusted attributes of '%s' method", m.GetAsString());
+                    // modify interface header
+                    if (FixMethod(iface->GetHeader(), &m, &tmp))
+                        LogMessage("Adjusted attributes of '%s' method", m.GetAsString());
 
-                        exit = true;
-                        break;
-                    }
-
-                if (exit)
+                    exit = true;
                     break;
-#endif
-            }
+                }
 
-#if HACK_TO_AUTO_CORRECT_ONLY_METHOD_ATTRIBUTES
             if (!exit)
             {
 #endif
 
             if (overloads.GetCount()==0)
             {
-                /*
-                    TODO: sometimes the interface headers re-document a method
-                          inherited from a base class even if the real header does
-                          not actually re-implement it.
-                          To avoid false positives, we'd need to search in the base classes
-                          of api[] classes and search for a matching method.
-                */
-                LogMessage("%s: real '%s' class has no method '%s'",
-                            header, searchedclasses, m.GetAsString());
+                LogMessage("%s: real '%s' class and their parents have no method '%s'",
+                            header, api->GetName(), m.GetAsString());
                 // we've found no overloads
             }
             else
@@ -375,11 +341,11 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClassPtrArray& a
                 if (overloads.GetCount()>1)
                     warning += wxString::Format(": in the real headers there are %d overloads of '%s' for "
                                                 "'%s' all with different signatures:\n",
-                                                overloads.GetCount(), m.GetName(), searchedclasses);
+                                                overloads.GetCount(), m.GetName(), api->GetName());
                 else
                     warning += wxString::Format(": in the real headers there is a method '%s' for '%s'"
                                                 " but has different signature:\n",
-                                                m.GetName(), searchedclasses);
+                                                m.GetName(), api->GetName());
 
                 // get a list of the prototypes with _all_ possible attributes:
                 warning += "\tdoxy header: " + m.GetAsString(true, true, true, true);
