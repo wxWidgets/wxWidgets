@@ -1491,18 +1491,6 @@ void wxPropertyGrid::DoSetPropertyValueUnspecified( wxPGProperty* p )
 // wxPropertyGrid property operations
 // -----------------------------------------------------------------------
 
-void wxPropertyGrid::DoSetPropertyName( wxPGProperty* p, const wxString& newname )
-{
-    wxCHECK_RET( p, wxT("invalid property id") );
-
-    if ( p->GetBaseName().Len() ) m_pState->m_dictName.erase( p->GetBaseName() );
-    if ( newname.Len() ) m_pState->m_dictName[newname] = (void*) p;
-
-    p->DoSetName(newname);
-}
-
-// -----------------------------------------------------------------------
-
 bool wxPropertyGrid::EnsureVisible( wxPGPropArg id )
 {
     wxPG_PROP_ARG_CALL_PROLOG_RETVAL(false)

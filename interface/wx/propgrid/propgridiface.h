@@ -659,6 +659,17 @@ public:
     void SetPropertyModifiedStatus( wxPGPropArg id, bool modified );
 
     /**
+        Sets name of a property.
+
+        @param id
+            Name or pointer of property which name to change.
+
+        @param newName
+            New name for property.
+    */
+    void SetPropertyName( wxPGPropArg id, const wxString& newName );
+
+    /**
         Sets property (and, recursively, its children) to have read-only value.
         In other words, user cannot change the value in the editor, but they can
         still copy it.

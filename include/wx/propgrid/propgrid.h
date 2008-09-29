@@ -1035,18 +1035,6 @@ public:
         virtual width should be disabled. */
     void SetVirtualWidth( int width );
 
-    /** Sets name of a property.
-        @param id
-        Name or pointer of property which name to change.
-        @param newname
-        New name.
-    */
-    void SetPropertyName( wxPGPropArg id, const wxString& newname )
-    {
-        wxPG_PROP_ARG_CALL_PROLOG()
-        DoSetPropertyName( p, newname );
-    }
-
     /**
         Moves splitter as left as possible, while still allowing all
         labels to be shown in full.
@@ -1812,8 +1800,6 @@ protected:
     void SetTextColourIndex( wxPGProperty* p, int index, int flags );
 
     int CacheColour( const wxColour& colour );
-
-    void DoSetPropertyName( wxPGProperty* p, const wxString& newname );
 
     // Sets up basic event handling for child control
     void SetupChildEventHandling( wxWindow* wnd, int id );

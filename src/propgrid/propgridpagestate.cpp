@@ -449,6 +449,19 @@ wxPGProperty* wxPropertyGridPageState::BaseGetPropertyByName( const wxString& na
 }
 
 // -----------------------------------------------------------------------
+
+void wxPropertyGridPageState::DoSetPropertyName( wxPGProperty* p,
+                                                 const wxString& newName )
+{
+    wxCHECK_RET( p, wxT("invalid property id") );
+
+    if ( p->GetBaseName().Len() ) m_dictName.erase( p->GetBaseName() );
+    if ( newName.Len() ) m_dictName[newName] = (void*) p;
+
+    p->DoSetName(newName);
+}
+
+// -----------------------------------------------------------------------
 // wxPropertyGridPageState global operations
 // -----------------------------------------------------------------------
 

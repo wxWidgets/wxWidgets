@@ -502,6 +502,8 @@ public:
 
     wxPGProperty* DoGetRoot() const { return m_properties; }
 
+    void DoSetPropertyName( wxPGProperty* p, const wxString& newName );
+
     // Returns combined width of margin and all the columns
     int GetVirtualWidth() const
     {

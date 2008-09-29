@@ -798,17 +798,6 @@ public:
     void SetSplitterPosition( int newxpos, int col = 0 );
 
     /**
-        Sets name of a property.
-
-        @param id
-            Name or pointer of property which name to change.
-
-        @param newname
-            New name.
-    */
-    void SetPropertyName( wxPGPropArg id, const wxString& newname );
-
-    /**
         Moves splitter as left as possible, while still allowing all
         labels to be shown in full.
 
