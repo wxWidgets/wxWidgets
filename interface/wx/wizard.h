@@ -494,9 +494,6 @@ public:
         using the sizers (even though the wizard is not resizeable) and then use
         wxSizer::CalcMin() in a loop to calculate the maximum of minimal sizes of
         the pages and pass it to SetPageSize().
-
-        @deprecated
-        This method is obsolete, use GetPageAreaSizer() instead.
     */
     virtual void SetPageSize(const wxSize& sizePage);
 };
