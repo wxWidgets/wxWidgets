@@ -961,7 +961,7 @@ public:
 
     /**
         Returns highest level non-category, non-root parent. Useful when you
-        have nested wxCustomProperties/wxParentProperties.
+        have nested properties with children.
 
         @remarks If immediate parent is root or category, this will return the
                 property itself.
