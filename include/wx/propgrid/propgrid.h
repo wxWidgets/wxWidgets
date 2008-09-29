@@ -2006,9 +2006,6 @@ public:
         return *m_validationInfo;
     }
 
-    /** Returns true if event has associated property. */
-    bool HasProperty() const { return ( m_property != (wxPGProperty*) NULL ); }
-
     /** Returns true if you can veto the action that the event is signaling.
     */
     bool CanVeto() const { return m_canVeto; }
