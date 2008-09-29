@@ -389,7 +389,8 @@ public:
     /**
         Set current failure message.
     */
-    void SetFailureMessage(const wxString& message);
+    void SetFailureMessage(const wxString& message)
+        { m_failureMessage = message; }
 
 private:
     /** Value to be validated.
