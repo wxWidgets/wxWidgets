@@ -365,15 +365,30 @@ struct wxPGValidationInfo
     */
     wxPGVFBFlags    m_failureBehavior;
 
-    wxPGVFBFlags GetFailureBehavior() const { return m_failureBehavior; }
+    /**
+        @return Returns failure behavior which is a combination of
+               @ref propgrid_vfbflags.
+    */
+    wxPGVFBFlags GetFailureBehavior();
 
+    /**
+        Returns current failure message.
+    */
+    const wxString& GetFailureMessage() const
+        { return m_failureMessage; }
+
+    /** Set validation failure behavior
+
+        @param failureBehavior
+            Mixture of @ref propgrid_vfbflags.
+    */
     void SetFailureBehavior(wxPGVFBFlags failureBehavior)
         { m_failureBehavior = failureBehavior; }
 
-    const wxString& GetFailureMessage() const { return m_failureMessage; }
-
-    void SetFailureMessage(const wxString& message)
-        { m_failureMessage = message; }
+    /**
+        Set current failure message.
+    */
+    void SetFailureMessage(const wxString& message);
 };
 
 // -----------------------------------------------------------------------
@@ -758,7 +773,9 @@ public:
     /** Returns current cell text colour. */
     wxColour GetCellTextColour() const { return m_colPropFore; }
 
-    /** Returns number of columns on current page. */
+    /**
+        Returns number of columns currently on grid.
+    */
     int GetColumnCount() const
     {
         return m_pState->m_colWidths.size();
@@ -821,7 +838,7 @@ public:
     int GetRowHeight() const { return m_lineHeight; }
 
     /** Returns currently selected property. */
-    wxPGProperty* GetSelectedProperty () const { return GetSelection(); }
+    wxPGProperty* GetSelectedProperty() const { return GetSelection(); }
 
     /** Returns currently selected property. */
     wxPGProperty* GetSelection() const
@@ -1021,22 +1038,20 @@ public:
         DoSetPropertyName( p, newname );
     }
 
-    /** Moves splitter as left as possible, while still allowing all
+    /**
+        Moves splitter as left as possible, while still allowing all
         labels to be shown in full.
-        @param subProps
-        If false, will still allow sub-properties (ie. properties which
-        parent is not root or category) to be cropped.
+
+        @param privateChildrenToo
+            If @false, will still allow private children to be cropped.
     */
-    void SetSplitterLeft( bool subProps = false )
+    void SetSplitterLeft( bool privateChildrenToo = false )
     {
-        m_pState->SetSplitterLeft(subProps);
+        m_pState->SetSplitterLeft(privateChildrenToo);
     }
 
     /** Sets vertical spacing. Can be 1, 2, or 3 - a value relative to font
         height. Value of 2 should be default on most platforms.
-        @remarks
-        On wxMSW, wxComboBox, when used as property editor widget, will spill
-        out with anything less than 3.
     */
     void SetVerticalSpacing( int vspacing )
     {
