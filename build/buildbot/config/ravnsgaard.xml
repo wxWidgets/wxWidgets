@@ -147,7 +147,7 @@
 </build>
 
 <build>
-    <name>Linux i386 wxGTK trunk stl std::string std::iostream release</name>
+    <name>Linux i386 wxGTK trunk STL release</name>
 
     <builddir>ravnsgaard_wxgtk_release</builddir>
 
