@@ -269,7 +269,7 @@ class wxPropertyGridManager;
 class wxPGOwnerDrawnComboBox;
 class wxPGCustomComboControl;
 class wxPGEditorDialogAdapter;
-struct wxPGValidationInfo;
+class wxPGValidationInfo;
 
 
 // -----------------------------------------------------------------------

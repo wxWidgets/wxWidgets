@@ -281,7 +281,9 @@ bool wxIntProperty::DoValidation( const wxPGProperty* property, wxLongLong_t& va
         if ( value < min )
         {
             if ( mode == wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE )
-                pValidationInfo->m_failureMessage = wxString::Format(_("Value must be %lld or higher"),min);
+                pValidationInfo->SetFailureMessage(
+                    wxString::Format(_("Value must be %lld or higher"),min)
+                    );
             else if ( mode == wxPG_PROPERTY_VALIDATION_SATURATE )
                 value = min;
             else
@@ -295,7 +297,9 @@ bool wxIntProperty::DoValidation( const wxPGProperty* property, wxLongLong_t& va
         if ( value > max )
         {
             if ( mode == wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE )
-                pValidationInfo->m_failureMessage = wxString::Format(_("Value must be %lld or higher"),min);
+                pValidationInfo->SetFailureMessage(
+                    wxString::Format(_("Value must be %lld or higher"),min)
+                    );
             else if ( mode == wxPG_PROPERTY_VALIDATION_SATURATE )
                 value = max;
             else
@@ -488,7 +492,9 @@ bool wxUIntProperty::ValidateValue( wxVariant& value, wxPGValidationInfo& valida
             wxPGVariantToULongLong(variant, &min);
             if ( ll < min )
             {
-                validationInfo.m_failureMessage = wxString::Format(_("Value must be %llu or higher"),min);
+                validationInfo.SetFailureMessage(
+                    wxString::Format(_("Value must be %llu or higher"),min)
+                    );
                 return false;
             }
         }
@@ -498,7 +504,9 @@ bool wxUIntProperty::ValidateValue( wxVariant& value, wxPGValidationInfo& valida
             wxPGVariantToULongLong(variant, &max);
             if ( ll > max )
             {
-                validationInfo.m_failureMessage = wxString::Format(_("Value must be %llu or less"),max);
+                validationInfo.SetFailureMessage(
+                    wxString::Format(_("Value must be %llu or less"),max)
+                    );
                 return false;
             }
         }
@@ -672,7 +680,9 @@ bool wxFloatProperty::DoValidation( const wxPGProperty* property, double& value,
         if ( value < min )
         {
             if ( mode == wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE )
-                pValidationInfo->m_failureMessage = wxString::Format(_("Value must be %f or higher"),min);
+                pValidationInfo->SetFailureMessage(
+                    wxString::Format(_("Value must be %f or higher"),min)
+                    );
             else if ( mode == wxPG_PROPERTY_VALIDATION_SATURATE )
                 value = min;
             else
@@ -687,7 +697,9 @@ bool wxFloatProperty::DoValidation( const wxPGProperty* property, double& value,
         if ( value > max )
         {
             if ( mode == wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE )
-                pValidationInfo->m_failureMessage = wxString::Format(_("Value must be %f or less"),max);
+                pValidationInfo->SetFailureMessage(
+                    wxString::Format(_("Value must be %f or less"),max)
+                    );
             else if ( mode == wxPG_PROPERTY_VALIDATION_SATURATE )
                 value = max;
             else

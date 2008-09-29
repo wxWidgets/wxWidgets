@@ -215,6 +215,45 @@ wxPG_VFB_DEFAULT                    = wxPG_VFB_STAY_IN_PROPERTY|wxPG_VFB_BEEP,
 
 typedef wxByte wxPGVFBFlags;
 
+/**
+    wxPGValidationInfo
+
+    Used to convey validation information to and from functions that
+    actually perform validation. Mostly used in custom property
+    classes.
+*/
+class wxPGValidationInfo
+{
+public:
+    /**
+        @return Returns failure behavior which is a combination of
+               @ref propgrid_vfbflags.
+    */
+    wxPGVFBFlags GetFailureBehavior();
+
+    /**
+        Returns current failure message.
+    */
+    const wxString& GetFailureMessage() const;
+
+    /**
+        Returns reference to pending value.
+    */
+    const wxVariant& GetValue() const;
+
+    /** Set validation failure behavior
+
+        @param failureBehavior
+            Mixture of @ref propgrid_vfbflags.
+    */
+    void SetFailureBehavior(wxPGVFBFlags failureBehavior);
+
+    /**
+        Set current failure message.
+    */
+    void SetFailureMessage(const wxString& message);
+};
+
 // -----------------------------------------------------------------------
 
 /**
@@ -877,7 +916,7 @@ public:
         Set override validation failure behavior. Only effective if Veto() was
         also called, and only allowed if event type is wxEVT_PG_CHANGING.
     */
-    void SetValidationFailureBehavior( int flags );
+    void SetValidationFailureBehavior( wxPGVFBFlags flags );
 
     /**
         Sets custom failure message for this time only. Only applies if

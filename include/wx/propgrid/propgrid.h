@@ -346,25 +346,17 @@ wxPG_VFB_UNDEFINED                  = 0x80
 
 typedef wxByte wxPGVFBFlags;
 
-/** @class wxPGValidationInfo
+/**
+    wxPGValidationInfo
 
     Used to convey validation information to and from functions that
-    actually perform validation.
+    actually perform validation. Mostly used in custom property
+    classes.
 */
-struct wxPGValidationInfo
+class wxPGValidationInfo
 {
-    /** Value to be validated.
-    */
-    wxVariant*      m_pValue;
-
-    /** Message displayed on validation failure.
-    */
-    wxString        m_failureMessage;
-
-    /** Validation failure behavior. Use wxPG_VFB_XXX flags.
-    */
-    wxPGVFBFlags    m_failureBehavior;
-
+    friend class wxPropertyGrid;
+public:
     /**
         @return Returns failure behavior which is a combination of
                @ref propgrid_vfbflags.
@@ -376,6 +368,15 @@ struct wxPGValidationInfo
     */
     const wxString& GetFailureMessage() const
         { return m_failureMessage; }
+
+    /**
+        Returns reference to pending value.
+    */
+    const wxVariant& GetValue() const
+    {
+        wxASSERT(m_pValue);
+        return *m_pValue;
+    }
 
     /** Set validation failure behavior
 
@@ -389,6 +390,19 @@ struct wxPGValidationInfo
         Set current failure message.
     */
     void SetFailureMessage(const wxString& message);
+
+private:
+    /** Value to be validated.
+    */
+    wxVariant*      m_pValue;
+
+    /** Message displayed on validation failure.
+    */
+    wxString        m_failureMessage;
+
+    /** Validation failure behavior. Use wxPG_VFB_XXX flags.
+    */
+    wxPGVFBFlags    m_failureBehavior;
 };
 
 // -----------------------------------------------------------------------
@@ -2017,7 +2031,7 @@ public:
         wxASSERT_MSG( m_validationInfo,
                       "Only call GetValue from a handler "
                       "of event type that supports it" );
-        return *m_validationInfo->m_pValue;
+        return m_validationInfo->GetValue();
     }
 
     /**
@@ -2026,10 +2040,10 @@ public:
         Only effective if Veto was also called, and only allowed if event type
         is wxEVT_PG_CHANGING.
     */
-    void SetValidationFailureBehavior( int flags )
+    void SetValidationFailureBehavior( wxPGVFBFlags flags )
     {
         wxASSERT( GetEventType() == wxEVT_PG_CHANGING );
-        m_validationInfo->m_failureBehavior = (wxPGVFBFlags) flags;
+        m_validationInfo->SetFailureBehavior( flags );
     }
 
     /** Sets custom failure message for this time only. Only applies if
@@ -2038,14 +2052,14 @@ public:
     void SetValidationFailureMessage( const wxString& message )
     {
         wxASSERT( GetEventType() == wxEVT_PG_CHANGING );
-        m_validationInfo->m_failureMessage = message;
+        m_validationInfo->SetFailureMessage( message );
     }
 
 #ifndef SWIG
     wxPGVFBFlags GetValidationFailureBehavior() const
     {
         wxASSERT( GetEventType() == wxEVT_PG_CHANGING );
-        return m_validationInfo->m_failureBehavior;
+        return m_validationInfo->GetFailureBehavior();
     }
 
     void SetCanVeto( bool canVeto ) { m_canVeto = canVeto; }
