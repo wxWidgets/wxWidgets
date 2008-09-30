@@ -49,7 +49,7 @@ public:
     wxPGHashMapS2P      m_mapEditorClasses;
 
 #if wxUSE_VALIDATORS
-    wxArrayPtrVoid      m_arrValidators; // These wxValidators need to be freed
+    wxVector<wxValidator*>  m_arrValidators; // These wxValidators need to be freed
 #endif
 
     wxPGHashMapS2P      m_dictPropertyClassInfo; // PropertyName -> ClassInfo
@@ -1408,7 +1408,7 @@ protected:
     wxBitmap            *m_doubleBuffer;
 #endif
 
-    wxArrayPtrVoid      *m_windowsToDelete;
+    wxVector<wxWindow*> m_windowsToDelete;
 
     /** Local time ms when control was created. */
     wxLongLong          m_timeCreated;
@@ -1627,11 +1627,13 @@ protected:
 
     // Array of background colour brushes.
     wxArrayPtrVoid      m_arrBgBrushes;
+
     // Array of foreground colours.
     wxArrayPtrVoid      m_arrFgCols;
 
     // labels when properties use common values
-    wxArrayPtrVoid      m_commonValues;
+    wxVector<wxPGCommonValue*>  m_commonValues;
+
     // Which cv selection really sets value to unspecified?
     int                 m_cvUnspecified;
 

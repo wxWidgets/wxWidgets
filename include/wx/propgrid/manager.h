@@ -432,7 +432,7 @@ public:
     */
     wxPropertyGridPage* GetPage( unsigned int ind ) const
     {
-        return (wxPropertyGridPage*)m_arrPages.Item(ind);
+        return m_arrPages[ind];
     }
 
     /** Returns page object for given page name.
@@ -660,7 +660,7 @@ protected:
 
     wxPropertyGrid* m_pPropGrid;
 
-    wxArrayPtrVoid  m_arrPages;
+    wxVector<wxPropertyGridPage*>   m_arrPages;
 
 #if wxUSE_TOOLBAR
     wxToolBar*      m_pToolbar;

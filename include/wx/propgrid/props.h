@@ -213,7 +213,7 @@ WX_PG_IMPLEMENT_CUSTOM_COLOUR_PROPERTY_USES_WXCOLOUR2(CLASSNAME, \
 // Common function exit
 #define WX_PG_DOGETVALIDATOR_EXIT(VALIDATOR) \
     s_ptr = VALIDATOR; \
-    wxPGGlobalVars->m_arrValidators.Add( (void*) VALIDATOR ); \
+    wxPGGlobalVars->m_arrValidators.push_back( VALIDATOR ); \
     return VALIDATOR;
 
 // -----------------------------------------------------------------------

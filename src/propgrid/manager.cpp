@@ -153,8 +153,6 @@ static const char* gs_xpm_defpage[] = {
 "................"
 };
 
-#define GETPAGESTATE(page) ((wxPropertyGridPage*)m_arrPages.Item(page))->GetStatePtr()
-
 // -----------------------------------------------------------------------
 // wxPropertyGridPage
 // -----------------------------------------------------------------------
@@ -360,7 +358,7 @@ void wxPropertyGridManager::Init2( int style )
     pd->m_manager = this;
     wxPropertyGridPageState* state = pd->GetStatePtr();
     state->m_pPropGrid = m_pPropGrid;
-    m_arrPages.Add( (void*)pd );
+    m_arrPages.push_back( pd );
     m_pPropGrid->m_pState = state;
 
     wxWindowID baseId = GetId();
@@ -422,9 +420,9 @@ wxPropertyGridManager::~wxPropertyGridManager()
     m_pPropGrid->m_pState = NULL;
 
     size_t i;
-    for ( i=0; i<m_arrPages.GetCount(); i++ )
+    for ( i=0; i<m_arrPages.size(); i++ )
     {
-        delete (wxPropertyGridPage*)m_arrPages.Item(i);
+        delete m_arrPages[i];
     }
 
     delete m_emptyPage;
@@ -464,7 +462,7 @@ bool wxPropertyGridManager::SetFont( const wxFont& font )
 
     // TODO: Need to do caption recacalculations for other pages as well.
     unsigned int i;
-    for ( i=0; i<m_arrPages.GetCount(); i++ )
+    for ( i=0; i<m_arrPages.size(); i++ )
     {
         wxPropertyGridPage* page = GetPage(i);
 
@@ -544,7 +542,7 @@ bool wxPropertyGridManager::DoSelectPage( int index )
 
     if ( index >= 0 )
     {
-        nextPage = (wxPropertyGridPage*)m_arrPages.Item(index);
+        nextPage = m_arrPages[index];
 
         nextPage->OnShow();
     }
@@ -595,7 +593,7 @@ int wxPropertyGridManager::GetPageByName( const wxString& name ) const
     size_t i;
     for ( i=0; i<GetPageCount(); i++ )
     {
-        if ( ((wxPropertyGridPage*)m_arrPages.Item(i))->m_label == name )
+        if ( m_arrPages[i]->m_label == name )
             return i;
     }
     return wxNOT_FOUND;
@@ -610,7 +608,7 @@ int wxPropertyGridManager::GetPageByState( const wxPropertyGridPageState* pState
     size_t i;
     for ( i=0; i<GetPageCount(); i++ )
     {
-        if ( pState == ((wxPropertyGridPage*)m_arrPages.Item(i))->GetStatePtr() )
+        if ( pState == m_arrPages[i]->GetStatePtr() )
             return i;
     }
 
@@ -622,7 +620,7 @@ int wxPropertyGridManager::GetPageByState( const wxPropertyGridPageState* pState
 const wxString& wxPropertyGridManager::GetPageName( int index ) const
 {
     wxASSERT( index >= 0 && index < (int)GetPageCount() );
-    return ((wxPropertyGridPage*)m_arrPages.Item(index))->m_label;
+    return m_arrPages[index]->m_label;
 }
 
 // -----------------------------------------------------------------------
@@ -636,7 +634,7 @@ wxPropertyGridPageState* wxPropertyGridManager::GetPageState( int page ) const
 
     if ( page == -1 )
         return m_pState;
-    return GETPAGESTATE(page);
+    return m_arrPages[page];
 }
 
 // -----------------------------------------------------------------------
@@ -664,7 +662,7 @@ void wxPropertyGridManager::ClearPage( int page )
 
     if ( page >= 0 && page < (int)GetPageCount() )
     {
-        wxPropertyGridPageState* state = GETPAGESTATE(page);
+        wxPropertyGridPageState* state = m_arrPages[page];
 
         if ( state == m_pPropGrid->GetState() )
             m_pPropGrid->Clear();
@@ -700,7 +698,7 @@ size_t wxPropertyGridManager::GetPageCount() const
 	if ( !(m_iFlags & wxPG_MAN_FL_PAGE_INSERTED) )
 		return 0;
 
-	return m_arrPages.GetCount();
+	return m_arrPages.size();
 }
 
 // -----------------------------------------------------------------------
@@ -775,7 +773,7 @@ wxPropertyGridPage* wxPropertyGridManager::InsertPage( int index,
     pageObj->m_id = m_nextTbInd;
 
     if ( isPageInserted )
-        m_arrPages.Add( (void*)pageObj );
+        m_arrPages.push_back( pageObj );
 
 #if wxUSE_TOOLBAR
     if ( m_windowStyle & wxPG_TOOLBAR )
@@ -838,7 +836,7 @@ bool wxPropertyGridManager::IsAnyModified() const
     size_t i;
     for ( i=0; i<GetPageCount(); i++ )
     {
-        if ( ((wxPropertyGridPage*)m_arrPages.Item(i))->GetStatePtr()->m_anyModified )
+        if ( m_arrPages[i]->GetStatePtr()->m_anyModified )
             return true;
     }
     return false;
@@ -848,7 +846,7 @@ bool wxPropertyGridManager::IsAnyModified() const
 
 bool wxPropertyGridManager::IsPageModified( size_t index ) const
 {
-    if ( ((wxPropertyGridPage*)m_arrPages.Item(index))->GetStatePtr()->m_anyModified )
+    if ( m_arrPages[index]->GetStatePtr()->m_anyModified )
         return true;
     return false;
 }
@@ -858,9 +856,9 @@ bool wxPropertyGridManager::IsPageModified( size_t index ) const
 wxPGProperty* wxPropertyGridManager::GetPageRoot( int index ) const
 {
     wxASSERT( index >= 0 );
-    wxASSERT( index < (int)m_arrPages.GetCount() );
+    wxASSERT( index < (int)m_arrPages.size() );
 
-    return ((wxPropertyGridPage*)m_arrPages.Item(index))->GetStatePtr()->m_properties;
+    return m_arrPages[index]->GetStatePtr()->m_properties;
 }
 
 // -----------------------------------------------------------------------
@@ -871,9 +869,9 @@ bool wxPropertyGridManager::RemovePage( int page )
                  false,
                  wxT("invalid page index") );
 
-    wxPropertyGridPage* pd = (wxPropertyGridPage*)m_arrPages.Item(page);
+    wxPropertyGridPage* pd = m_arrPages[page];
 
-    if ( m_arrPages.GetCount() == 1 )
+    if ( m_arrPages.size() == 1 )
     {
         // Last page: do not remove page entry
         m_pPropGrid->Clear();
@@ -881,6 +879,7 @@ bool wxPropertyGridManager::RemovePage( int page )
         m_iFlags &= ~wxPG_MAN_FL_PAGE_INSERTED;
         pd->m_label.clear();
     }
+
     // Change selection if current is page
     else if ( page == m_selPage )
     {
@@ -913,9 +912,9 @@ bool wxPropertyGridManager::RemovePage( int page )
     }
 #endif
 
-    if ( m_arrPages.GetCount() > 1 )
+    if ( m_arrPages.size() > 1 )
     {
-        m_arrPages.RemoveAt(page);
+        m_arrPages.erase(m_arrPages.begin() + page);
         delete pd;
     }
 
@@ -1310,7 +1309,7 @@ wxPGProperty* wxPropertyGridManager::DoGetPropertyByName( const wxString& name )
     size_t i;
     for ( i=0; i<GetPageCount(); i++ )
     {
-        wxPropertyGridPageState* pState = ((wxPropertyGridPage*)m_arrPages.Item(i))->GetStatePtr();
+        wxPropertyGridPageState* pState = m_arrPages[i]->GetStatePtr();
         wxPGProperty* p = pState->BaseGetPropertyByName(name);
         if ( p )
         {
@@ -1369,7 +1368,7 @@ void wxPropertyGridManager::OnToolbarClick( wxCommandEvent &event )
             // Find page with given id.
             for ( i=0; i<GetPageCount(); i++ )
             {
-                pdc = (wxPropertyGridPage*)m_arrPages.Item(i);
+                pdc = m_arrPages[i];
                 if ( pdc->m_id == id )
                 {
                     index = i;
@@ -1451,7 +1450,7 @@ void wxPropertyGridManager::SetSplitterLeft( bool subProps, bool allPages )
 
         for ( i=0; i<GetPageCount(); i++ )
         {
-            int maxW = m_pState->GetColumnFitWidth(dc, GETPAGESTATE(i)->m_properties, 0, subProps );
+            int maxW = m_pState->GetColumnFitWidth(dc, m_arrPages[i]->m_properties, 0, subProps );
             maxW += m_pPropGrid->m_marginWidth;
             if ( maxW > highest )
                 highest = maxW;

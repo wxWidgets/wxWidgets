@@ -15,6 +15,7 @@
 #if wxUSE_PROPGRID
 
 #include "wx/dynarray.h"
+#include "wx/vector.h"
 #include "wx/hashmap.h"
 #include "wx/variant.h"
 #include "wx/longlong.h"

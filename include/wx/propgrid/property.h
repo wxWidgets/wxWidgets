@@ -615,7 +615,7 @@ public:
     // Takes ownership of 'item'
     void Insert( int index, wxPGChoiceEntry* item )
     {
-        wxArrayPtrVoid::iterator it;
+        wxVector<wxPGChoiceEntry*>::iterator it;
         if ( index == -1 )
         {
             it = m_items.end();
@@ -642,7 +642,7 @@ public:
     {
         wxCHECK_MSG( i < GetCount(), NULL, "invalid index" );
 
-        return (wxPGChoiceEntry*) m_items[i];
+        return m_items[i];
     }
 
     void DecRef()
@@ -654,7 +654,7 @@ public:
     }
 
 private:
-    wxArrayPtrVoid  m_items;
+    wxVector<wxPGChoiceEntry*>  m_items;
 
     // So that multiple properties can use the same set
     int             m_refCount;
@@ -1888,19 +1888,18 @@ public:
     int GetChildrenHeight( int lh, int iMax = -1 ) const;
 
     /** Returns number of child properties */
-    unsigned int GetChildCount() const { return m_children.GetCount(); }
+    unsigned int GetChildCount() const { return m_children.size(); }
 
     /** Returns sub-property at index i. */
     wxPGProperty* Item( size_t i ) const
-        { return (wxPGProperty*)m_children.Item(i); }
+        { return m_children[i]; }
 
     /** Returns last sub-property.
     */
-    wxPGProperty* Last() const { return (wxPGProperty*)m_children.Last(); }
+    wxPGProperty* Last() const { return m_children.back(); }
 
-    /** Returns index of given sub-property. */
-    int Index( const wxPGProperty* p ) const
-        { return m_children.Index((wxPGProperty*)p); }
+    /** Returns index of given child property. */
+    int Index( const wxPGProperty* p ) const;
 
     /** Deletes all sub-properties. */
     void Empty();
@@ -2021,7 +2020,7 @@ protected:
 
     wxVariant                   m_value;
     wxPGAttributeStorage        m_attributes;
-    wxArrayPtrVoid              m_children;
+    wxArrayPGProperty           m_children;
 
     // Extended cell information
     wxArrayPtrVoid              m_cells;

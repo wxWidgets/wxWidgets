@@ -602,8 +602,6 @@ void wxPropertyGrid::Init1()
     m_doubleBuffer = (wxBitmap*) NULL;
 #endif
 
-    m_windowsToDelete = NULL;
-
 #ifndef wxPG_ICON_WIDTH
 	m_expandbmp = NULL;
 	m_collbmp = NULL;
@@ -760,8 +758,6 @@ wxPropertyGrid::~wxPropertyGrid()
     if ( m_doubleBuffer )
         delete m_doubleBuffer;
 #endif
-
-    delete m_windowsToDelete;
 
     //m_selected = (wxPGProperty*) NULL;
 
@@ -3448,19 +3444,16 @@ void wxPropertyGrid::SetupChildEventHandling( wxWindow* argWnd )
 void wxPropertyGrid::FreeEditors()
 {
     // Do not free editors immediately if processing events
-    if ( !m_windowsToDelete )
-        m_windowsToDelete = new wxArrayPtrVoid;
-
     if ( m_wndEditor2 )
     {
-        m_windowsToDelete->push_back(m_wndEditor2);
+        m_windowsToDelete.push_back(m_wndEditor2);
         m_wndEditor2->Hide();
         m_wndEditor2 = (wxWindow*) NULL;
     }
 
     if ( m_wndEditor )
     {
-        m_windowsToDelete->push_back(m_wndEditor);
+        m_windowsToDelete.push_back(m_wndEditor);
         m_wndEditor->Hide();
         m_wndEditor = (wxWindow*) NULL;
     }
@@ -3488,14 +3481,14 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
 
     //
     // Delete windows pending for deletion
-    if ( m_windowsToDelete && !m_inDoPropertyChanged && m_windowsToDelete->size() )
+    if ( !m_inDoPropertyChanged && m_windowsToDelete.size() )
     {
         unsigned int i;
 
-        for ( i=0; i<m_windowsToDelete->size(); i++ )
-            delete ((wxWindow*)((*m_windowsToDelete)[i]));
+        for ( i=0; i<m_windowsToDelete.size(); i++ )
+            delete m_windowsToDelete[i];
 
-        m_windowsToDelete->clear();
+        m_windowsToDelete.clear();
     }
 
     if ( !m_pState )
@@ -5627,11 +5620,7 @@ void wxPGChoicesData::Clear()
         delete Item(i);
     }
 
-#if wxUSE_STL
-    m_items.resize(0);
-#else
-    m_items.Empty();
-#endif
+    m_items.clear();
 }
 
 void wxPGChoicesData::CopyDataFrom( wxPGChoicesData* data )
@@ -5776,7 +5765,8 @@ void wxPGChoices::RemoveAt(size_t nIndex, size_t count)
     unsigned int i;
     for ( i=nIndex; i<(nIndex+count); i++)
         delete m_data->Item(i);
-    m_data->m_items.RemoveAt(nIndex, count);
+    m_data->m_items.erase(m_data->m_items.begin()+nIndex,
+                          m_data->m_items.begin()+nIndex+count-1);
 }
 
 // -----------------------------------------------------------------------

@@ -439,7 +439,7 @@ wxPGProperty::~wxPGProperty()
     unsigned int i;
 
     for ( i=0; i<m_cells.size(); i++ )
-        delete (wxPGCell*) m_cells[i];
+        delete m_cells[i];
 
     // This makes it easier for us to detect dangling pointers
     m_parent = NULL;
@@ -476,6 +476,15 @@ wxPropertyGrid* wxPGProperty::GetGrid() const
     return m_parentState->GetGrid();
 }
 
+int wxPGProperty::Index( const wxPGProperty* p ) const
+{
+    for ( unsigned int i = 0; i<m_children.size(); i++ )
+    {
+        if ( p == m_children[i] )
+            return i;
+    }
+    return wxNOT_FOUND;
+}
 
 void wxPGProperty::UpdateControl( wxWindow* primary )
 {
@@ -519,7 +528,7 @@ wxString wxPGProperty::GetColumnText( unsigned int col ) const
 void wxPGProperty::GenerateComposedValue( wxString& text, int argFlags ) const
 {
     int i;
-    int iMax = m_children.GetCount();
+    int iMax = m_children.size();
 
     text.clear();
     if ( iMax == 0 )
@@ -534,7 +543,7 @@ void wxPGProperty::GenerateComposedValue( wxString& text, int argFlags ) const
     if ( !IsTextEditable() )
         argFlags |= wxPG_UNEDITABLE_COMPOSITE_FRAGMENT;
 
-    wxPGProperty* curChild = (wxPGProperty*) m_children.Item(0);
+    wxPGProperty* curChild = m_children[0];
 
     for ( i = 0; i < iMax; i++ )
     {
@@ -566,7 +575,7 @@ void wxPGProperty::GenerateComposedValue( wxString& text, int argFlags ) const
                     text += wxS(" ");
             }
 
-            curChild = (wxPGProperty*) m_children.Item(i+1);
+            curChild = m_children[i+1];
         }
     }
 
@@ -575,7 +584,7 @@ void wxPGProperty::GenerateComposedValue( wxString& text, int argFlags ) const
     if ( text.EndsWith(wxS("; "), &rest) )
         text = rest;
 
-    if ( (unsigned int)i < m_children.GetCount() )
+    if ( (unsigned int)i < m_children.size() )
         text += wxS("; ...");
 }
 
@@ -631,7 +640,7 @@ bool wxPGProperty::StringToValue( wxVariant& variant, const wxString& text, int 
 
     unsigned int curChild = 0;
 
-    unsigned int iMax = m_children.GetCount();
+    unsigned int iMax = m_children.size();
 
     if ( iMax > PWC_CHILD_SUMMARY_LIMIT &&
          !(argFlags & wxPG_FULL_VALUE) )
@@ -1542,14 +1551,14 @@ int wxPGProperty::GetY() const
 // This is used by Insert etc.
 void wxPGProperty::AddChild2( wxPGProperty* prop, int index, bool correct_mode )
 {
-    if ( index < 0 || (size_t)index >= m_children.GetCount() )
+    if ( index < 0 || (size_t)index >= m_children.size() )
     {
-        if ( correct_mode ) prop->m_arrIndex = m_children.GetCount();
-        m_children.Add( prop );
+        if ( correct_mode ) prop->m_arrIndex = m_children.size();
+        m_children.push_back( prop );
     }
     else
     {
-        m_children.Insert( prop, index );
+        m_children.insert( m_children.begin()+index, prop);
         if ( correct_mode ) FixIndexesOfChildren( index );
     }
 
@@ -1562,8 +1571,8 @@ void wxPGProperty::AddChild( wxPGProperty* prop )
     wxASSERT_MSG( prop->GetBaseName().length(),
                   "Property's children must have unique, non-empty names within their scope" );
 
-    prop->m_arrIndex = m_children.GetCount();
-    m_children.Add( prop );
+    prop->m_arrIndex = m_children.size();
+    m_children.push_back( prop );
 
     int custImgHeight = prop->OnMeasureImage().y;
     if ( custImgHeight < 0 /*|| custImgHeight > 1*/ )
@@ -1792,12 +1801,11 @@ void wxPGProperty::Empty()
     {
         for ( i=0; i<GetChildCount(); i++ )
         {
-            wxPGProperty* p = (wxPGProperty*) Item(i);
-            delete p;
+            delete m_children[i];
         }
     }
 
-    m_children.Empty();
+    m_children.clear();
 }
 
 void wxPGProperty::ChildChanged( wxVariant& WXUNUSED(thisValue),
@@ -1971,11 +1979,11 @@ void wxPGProperty::SubPropsChanged( int oldSelInd )
     PrepareSubProperties();
 
     wxPGProperty* sel = (wxPGProperty*) NULL;
-    if ( oldSelInd >= (int)m_children.GetCount() )
-        oldSelInd = (int)m_children.GetCount() - 1;
+    if ( oldSelInd >= (int)m_children.size() )
+        oldSelInd = (int)m_children.size() - 1;
 
     if ( oldSelInd >= 0 )
-        sel = (wxPGProperty*) m_children[oldSelInd];
+        sel = m_children[oldSelInd];
     else if ( oldSelInd == -2 )
         sel = this;
 

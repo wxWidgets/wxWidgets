@@ -592,10 +592,10 @@ bool wxPropertyGridPageState::EnableCategories( bool enable )
 
 // -----------------------------------------------------------------------
 
-static int wxPG_SortFunc(void **p1, void **p2)
+static int wxPG_SortFunc(wxPGProperty **p1, wxPGProperty **p2)
 {
-    wxPGProperty *pp1 = *((wxPGProperty**)p1);
-    wxPGProperty *pp2 = *((wxPGProperty**)p2);
+    wxPGProperty *pp1 = *p1;
+    wxPGProperty *pp2 = *p2;
     return pp1->GetLabel().compare( pp2->GetLabel() );
 }
 
