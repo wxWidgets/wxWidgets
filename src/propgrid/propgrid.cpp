@@ -421,11 +421,14 @@ protected:
     }
 
     void OnPaint( wxPaintEvent& event );
-
+    
 private:
     DECLARE_EVENT_TABLE()
+    DECLARE_ABSTRACT_CLASS(wxPGCanvas)
 };
 
+
+IMPLEMENT_ABSTRACT_CLASS(wxPGCanvas,wxPanel)
 
 BEGIN_EVENT_TABLE(wxPGCanvas, wxPanel)
     EVT_MOTION(wxPGCanvas::OnMouseMove)
