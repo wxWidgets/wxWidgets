@@ -1803,7 +1803,7 @@ protected:
     int CacheColour( const wxColour& colour );
 
     // Sets up basic event handling for child control
-    void SetupChildEventHandling( wxWindow* wnd, int id );
+    void SetupChildEventHandling( wxWindow* wnd );
 
     void CustomSetCursor( int type, bool override = false );
 

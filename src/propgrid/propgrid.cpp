@@ -3403,8 +3403,10 @@ void wxPropertyGrid::CustomSetCursor( int type, bool override )
 // -----------------------------------------------------------------------
 
 // Setups event handling for child control
-void wxPropertyGrid::SetupChildEventHandling( wxWindow* argWnd, int id )
+void wxPropertyGrid::SetupChildEventHandling( wxWindow* argWnd )
 {
+    wxWindowID id = argWnd->GetId();
+
     if ( argWnd == m_wndEditor )
     {
         this->Connect(id, wxEVT_MOTION,
@@ -3685,7 +3687,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
                 #endif
 
                     wxWindow* primaryCtrl = GetEditorControl();
-                    SetupChildEventHandling(primaryCtrl, wxPG_SUBID1);
+                    SetupChildEventHandling(primaryCtrl);
 
                     // Focus and select all (wxTextCtrl, wxComboBox etc)
                     if ( flags & wxPG_SEL_FOCUS )
@@ -3725,7 +3727,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
                 #endif
                     m_wndEditor2->Show();
 
-                    SetupChildEventHandling(m_wndEditor2,wxPG_SUBID2);
+                    SetupChildEventHandling(m_wndEditor2);
 
                     // If no primary editor, focus to button to allow
                     // it to interprete ENTER etc.
