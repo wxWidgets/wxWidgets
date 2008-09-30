@@ -3409,31 +3409,40 @@ void wxPropertyGrid::SetupChildEventHandling( wxWindow* argWnd )
 
     if ( argWnd == m_wndEditor )
     {
-        this->Connect(id, wxEVT_MOTION,
-            wxMouseEventHandler(wxPropertyGrid::OnMouseMoveChild));
-        this->Connect(id, wxEVT_LEFT_UP,
-            wxMouseEventHandler(wxPropertyGrid::OnMouseUpChild));
-        this->Connect(id, wxEVT_LEFT_DOWN,
-            wxMouseEventHandler(wxPropertyGrid::OnMouseClickChild));
-        this->Connect(id, wxEVT_RIGHT_UP,
-            wxMouseEventHandler(wxPropertyGrid::OnMouseRightClickChild));
-        this->Connect(id, wxEVT_ENTER_WINDOW,
-            wxMouseEventHandler(wxPropertyGrid::OnMouseEntry));
-        this->Connect(id, wxEVT_LEAVE_WINDOW,
-            wxMouseEventHandler(wxPropertyGrid::OnMouseEntry));
+        argWnd->Connect(id, wxEVT_MOTION,
+            wxMouseEventHandler(wxPropertyGrid::OnMouseMoveChild),
+            NULL, this);
+        argWnd->Connect(id, wxEVT_LEFT_UP,
+            wxMouseEventHandler(wxPropertyGrid::OnMouseUpChild),
+            NULL, this);
+        argWnd->Connect(id, wxEVT_LEFT_DOWN,
+            wxMouseEventHandler(wxPropertyGrid::OnMouseClickChild),
+            NULL, this);
+        argWnd->Connect(id, wxEVT_RIGHT_UP,
+            wxMouseEventHandler(wxPropertyGrid::OnMouseRightClickChild),
+            NULL, this);
+        argWnd->Connect(id, wxEVT_ENTER_WINDOW,
+            wxMouseEventHandler(wxPropertyGrid::OnMouseEntry),
+            NULL, this);
+        argWnd->Connect(id, wxEVT_LEAVE_WINDOW,
+            wxMouseEventHandler(wxPropertyGrid::OnMouseEntry),
+            NULL, this);
     }
     else
     {
-        this->Connect(id, wxEVT_NAVIGATION_KEY,
+        argWnd->Connect(id, wxEVT_NAVIGATION_KEY,
             wxNavigationKeyEventHandler(wxPropertyGrid::OnNavigationKey));
     }
 
-    this->Connect(id, wxEVT_KEY_DOWN,
-        wxKeyEventHandler(wxPropertyGrid::OnChildKeyDown));
-    this->Connect(id, wxEVT_KEY_UP,
-        wxKeyEventHandler(wxPropertyGrid::OnChildKeyUp));
-    this->Connect(id, wxEVT_KILL_FOCUS,
-        wxFocusEventHandler(wxPropertyGrid::OnFocusEvent));
+    argWnd->Connect(id, wxEVT_KEY_DOWN,
+        wxKeyEventHandler(wxPropertyGrid::OnChildKeyDown),
+        NULL, this);
+    argWnd->Connect(id, wxEVT_KEY_UP,
+        wxKeyEventHandler(wxPropertyGrid::OnChildKeyUp),
+        NULL, this);
+    argWnd->Connect(id, wxEVT_KILL_FOCUS,
+        wxFocusEventHandler(wxPropertyGrid::OnFocusEvent),
+        NULL, this);
 }
 
 void wxPropertyGrid::FreeEditors()
