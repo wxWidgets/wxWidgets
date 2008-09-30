@@ -1,3 +1,9 @@
+wxwidgets2.8 (2.8.9.1-0) unstable; urgency=low
+
+  * Fixed Python 2.4 compatibility problem.
+
+ -- Robin Dunn <robin@alldunn.com>  Sat, 28 Sep 2008 16:45:15 -0700
+
 wxwidgets2.8 (2.8.9.0-0) unstable; urgency=low
 
   * New upstream stable release. See docs/changes.txt for details.
