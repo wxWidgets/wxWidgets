@@ -100,6 +100,7 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
                          GetSize(),
                          style,
                          GetName());
+        SetupWindow(toolbar);
 
         wxSize bmpsize = GetSize(wxT("bitmapsize"));
         if (!(bmpsize == wxDefaultSize))
@@ -113,8 +114,6 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
         long separation = GetLong(wxT("separation"), -1);
         if (separation != -1)
             toolbar->SetToolSeparation(separation);
-        if (HasParam(wxT("bg")))
-            toolbar->SetBackgroundColour(GetColour(wxT("bg")));
 
         wxXmlNode *children_node = GetParamNode(wxT("object"));
         if (!children_node)
