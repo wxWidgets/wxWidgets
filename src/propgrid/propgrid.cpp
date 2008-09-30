@@ -422,6 +422,11 @@ protected:
 
     void OnPaint( wxPaintEvent& event );
     
+    // Always be focussable, even with child windows
+    virtual void SetCanFocus(bool WXUNUSED(canFocus))
+    {  wxPanel::SetCanFocus(true); }
+    
+
 private:
     DECLARE_EVENT_TABLE()
     DECLARE_ABSTRACT_CLASS(wxPGCanvas)
