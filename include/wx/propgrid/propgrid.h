@@ -347,7 +347,7 @@ typedef wxByte wxPGVFBFlags;
     actually perform validation. Mostly used in custom property
     classes.
 */
-class wxPGValidationInfo
+class WXDLLIMPEXP_PROPGRID wxPGValidationInfo
 {
     friend class wxPropertyGrid;
 public:
@@ -355,7 +355,8 @@ public:
         @return Returns failure behavior which is a combination of
                @ref propgrid_vfbflags.
     */
-    wxPGVFBFlags GetFailureBehavior();
+    wxPGVFBFlags GetFailureBehavior() const
+        { return m_failureBehavior; }
 
     /**
         Returns current failure message.
