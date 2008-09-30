@@ -78,8 +78,9 @@ public:
             @code
                 // Relays wxEVT_COMMAND_TEXT_UPDATED events of primary editor
                 // control to the OnEvent.
-                propgrid->Connect(control->GetId(), wxEVT_COMMAND_TEXT_UPDATED,
-                                  wxCommandEventHandler(wxPropertyGrid::OnCustomEditorEvent));
+                control->Connect(control->GetId(), wxEVT_COMMAND_TEXT_UPDATED,
+                                 wxCommandEventHandler(wxPropertyGrid::OnCustomEditorEvent),
+                                 NULL, propgrid);
             @endcode
           OnCustomEditorEvent will then forward events, first to
           wxPGEditor::OnEvent() and then to wxPGProperty::OnEvent().
