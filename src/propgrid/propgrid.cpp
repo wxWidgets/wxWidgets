@@ -4113,6 +4113,12 @@ void wxPropertyGrid::SetVirtualWidth( int width )
     m_pState->SetVirtualWidth( width );
 }
 
+void wxPropertyGrid::SetFocusOnCanvas()
+{
+    m_canvas->SetFocusIgnoringChildren();
+    m_editorFocused = 0;
+}
+
 // -----------------------------------------------------------------------
 // wxPropertyGrid mouse event handling
 // -----------------------------------------------------------------------
