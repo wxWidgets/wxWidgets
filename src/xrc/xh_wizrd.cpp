@@ -49,6 +49,7 @@ wxObject *wxWizardXmlHandler::DoCreateResource()
                     GetText(wxT("title")),
                     GetBitmap(),
                     GetPosition());
+        SetupWindow(wiz);
 
         wxWizard *old = m_wizard;
         m_wizard = wiz;
