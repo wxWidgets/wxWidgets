@@ -108,8 +108,8 @@
     #define wxPG_CHECKMARK_HADJ                 (-1)
     #define wxPG_CHECKMARK_DEFLATE              3
 
-    #define wxPG_NAT_TEXTCTRL_BORDER_X      3 // Unremovable border of native textctrl.
-    #define wxPG_NAT_TEXTCTRL_BORDER_Y      3 // Unremovable border of native textctrl.
+    #define wxPG_NAT_TEXTCTRL_BORDER_X      0 // Unremovable border of native textctrl.
+    #define wxPG_NAT_TEXTCTRL_BORDER_Y      0 // Unremovable border of native textctrl.
 
     #define wxPG_NAT_BUTTON_BORDER_ANY      1
     #define wxPG_NAT_BUTTON_BORDER_X        1
