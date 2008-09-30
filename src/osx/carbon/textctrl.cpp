@@ -1062,7 +1062,8 @@ void wxMacMLTEControl::TXNSetAttribute( const wxTextAttr& style , long from , lo
     if ( typeAttrCount > 0 )
     {
         verify_noerr( TXNSetTypeAttributes( m_txn , typeAttrCount, typeAttr, from , to ) );
-        relayout = true;
+        if (from != to)
+            relayout = true;
     }
 
     if ( tabs != NULL )
