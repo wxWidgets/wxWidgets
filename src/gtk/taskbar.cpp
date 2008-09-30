@@ -60,23 +60,17 @@ wxTaskBarIconAreaBase::wxTaskBarIconAreaBase()
 
 bool wxTaskBarIconAreaBase::IsProtocolSupported()
 {
-    static int s_supported = -1;
-    if (s_supported == -1)
-    {
-        Display *display = GDK_DISPLAY();
-        Screen *screen = DefaultScreenOfDisplay(display);
+    Display *display = GDK_DISPLAY();
+    Screen *screen = DefaultScreenOfDisplay(display);
 
-        char name[32];
-        g_snprintf(name, sizeof(name), "_NET_SYSTEM_TRAY_S%d",
-            XScreenNumberOfScreen(screen));
-        Atom atom = XInternAtom(display, name, False);
+    char name[32];
+    g_snprintf(name, sizeof(name), "_NET_SYSTEM_TRAY_S%d",
+        XScreenNumberOfScreen(screen));
+    Atom atom = XInternAtom(display, name, False);
 
-        Window manager = XGetSelectionOwner(display, atom);
+    Window manager = XGetSelectionOwner(display, atom);
 
-        s_supported = (manager != None);
-    }
-
-    return (bool)s_supported;
+    return (manager != None);
 }
 
 //-----------------------------------------------------------------------------
