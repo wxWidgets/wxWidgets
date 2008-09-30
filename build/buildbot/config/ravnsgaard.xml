@@ -11,15 +11,8 @@
         <name>Linux i386 wxGTK trunk STL debug</name>
         <builddir>ravnsgaard_wxgtk_debug</builddir>
         <scheduler>daily_0600</scheduler>
-        <sandbox>debug</sandbox>
         <steps>
             <checkout/>
-            <shellcommand>
-                <description>setting up</description>
-                <descriptionDone>set up</descriptionDone>
-                <haltOnFailure/>
-                <command>setup-script</command>
-            </shellcommand>
             <configure options="--with-gtk --enable-debug --enable-stl --enable-std_iostreams --enable-std_string --disable-compat28"/>
             <compile-all/>
             <run-tests/>
@@ -30,15 +23,8 @@
         <name>Linux i386 wxGTK trunk STL release</name>
         <builddir>ravnsgaard_wxgtk_release</builddir>
         <scheduler>daily_1800</scheduler>
-        <sandbox>release</sandbox>
         <steps>
             <checkout/>
-            <shellcommand>
-                <description>setting up</description>
-                <descriptionDone>set up</descriptionDone>
-                <haltOnFailure/>
-                <command>setup-script</command>
-            </shellcommand>
             <configure options="--with-gtk --disable-debug --enable-stl --enable-std_iostreams --enable-std_string --disable-compat28"/>
             <compile-all/>
             <run-tests/>
