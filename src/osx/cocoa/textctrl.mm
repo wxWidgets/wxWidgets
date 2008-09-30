@@ -141,6 +141,12 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSTextField* v = [[wxNSTextField alloc] initWithFrame:r];
     [sv addSubview:v];
+    
+    if ( style & wxNO_BORDER )
+    {
+        [v setBezeled:NO];
+        [v setBordered:NO];
+    }
 
     //[v setBezeled:NO];
     //[v setEditable:NO];
