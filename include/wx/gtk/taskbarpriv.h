@@ -20,7 +20,7 @@ public:
     wxTaskBarIconAreaBase();
 
     // Returns true if SYSTRAY protocol is supported by the desktop
-    bool IsProtocolSupported();
+    static bool IsProtocolSupported();
 
     wxEvtHandler *m_invokingWindow;
 

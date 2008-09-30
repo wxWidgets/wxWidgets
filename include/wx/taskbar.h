@@ -29,6 +29,12 @@ class WXDLLIMPEXP_ADV wxTaskBarIconBase : public wxEvtHandler
 public:
     wxTaskBarIconBase() { }
 
+#if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__)
+    static bool IsAvailable();
+#else
+    static bool IsAvailable() { return true; };
+#endif
+
     // Operations:
     virtual bool SetIcon(const wxIcon& icon,
                          const wxString& tooltip = wxEmptyString) = 0;

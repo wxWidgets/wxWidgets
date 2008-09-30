@@ -72,5 +72,28 @@ public:
         Sets the icon, and optional tooltip text.
     */
     bool SetIcon(const wxIcon& icon, const wxString& tooltip);
+
+    /**
+        Returns true if system tray is available in the desktop environment the
+        app runs under.
+
+        On Windows and Mac OS X, the tray is always available and this function
+        simply returns true.
+
+        On Unix, X11 environment may or may not provide the tray, depending on
+        user's desktop environment. Most modern desktops support the tray via
+        the System Tray Protocol by freedesktop.org
+        (http://freedesktop.org/wiki/Specifications/systemtray-spec).
+
+        @note Tray availability may change during application's lifetime
+              under X11 and so applications shouldn't cache the result.
+
+        @note wxTaskBarIcon supports older GNOME 1.2 and KDE 1/2 methods of
+              adding icons to tray, but they are unreliable and this method
+              doesn't detect them.
+
+        @since 2.9.0
+    */
+    static bool IsAvailable();
 };
 

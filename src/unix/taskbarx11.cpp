@@ -66,7 +66,7 @@
                       wxDEFAULT_FRAME_STYLE | wxFRAME_NO_TASKBAR |
                       wxSIMPLE_BORDER | wxFRAME_SHAPED) {}
 
-        bool IsProtocolSupported() const { return false; }
+        static bool IsProtocolSupported() const { return false; }
     };
 #endif
 
@@ -248,6 +248,15 @@ void wxTaskBarIconArea::OnMouseEvent(wxMouseEvent& event)
 void wxTaskBarIconArea::OnMenuEvent(wxCommandEvent& event)
 {
     m_icon->ProcessEvent(event);
+}
+
+// ----------------------------------------------------------------------------
+// wxTaskBarIconBase class:
+// ----------------------------------------------------------------------------
+
+bool wxTaskBarIconBase::IsAvailable()
+{
+    return wxTaskBarIconArea::IsProtocolSupported();
 }
 
 // ----------------------------------------------------------------------------

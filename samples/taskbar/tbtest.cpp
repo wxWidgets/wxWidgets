@@ -60,6 +60,16 @@ bool MyApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
+    if ( !wxTaskBarIcon::IsAvailable() )
+    {
+        wxMessageBox
+        (
+            "There appears to be no system tray support in your current environment. This sample may not behave as expected.",
+            "Warning",
+            wxOK | wxICON_EXCLAMATION
+        );
+    }
+
     // Create the main window
     gs_dialog = new MyDialog(wxT("wxTaskBarIcon Test Dialog"));
 
