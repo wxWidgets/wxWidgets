@@ -813,7 +813,7 @@ objects. If sizer child is used, it sets
 @beginTable
 @hdr3col{property, type, description}
 @row3col{range, integer,
-    Maximum value of the gauge (default: wxGAUGE_DEFAULT_RANGE).}
+    Maximum value of the gauge (default: 100).}
 @row3col{value, integer,
     Initial value of the control (default: 0).}
 @row3col{shadow, @ref xrc_format_type_dimension,
@@ -1258,11 +1258,11 @@ HTML markup. Note that the markup has to be escaped:
 @beginTable
 @hdr3col{property, type, description}
 @row3col{value, integer,
-    Initial value of the control (default: wxSL_DEFAULT_VALUE).}
+    Initial value of the control (default: 0).}
 @row3col{min, integer,
-    Minimum allowed value (default: wxSL_DEFAULT_MIN).}
+    Minimum allowed value (default: 0).}
 @row3col{max, integer,
-    Maximum allowed value (default: wxSL_DEFAULT_MAX).}
+    Maximum allowed value (default: 100).}
 @row3col{pagesize, integer,
     Line size; number of steps the slider moves when the user moves
     pages up or down (default: unset).}
@@ -1287,11 +1287,11 @@ HTML markup. Note that the markup has to be escaped:
 @beginTable
 @hdr3col{property, type, description}
 @row3col{value, integer,
-    Initial value of the control (default: wxSP_DEFAULT_VALUE).}
+    Initial value of the control (default: 0).}
 @row3col{min, integer,
-    Minimum allowed value (default: wxSP_DEFAULT_MIN).}
+    Minimum allowed value (default: 0).}
 @row3col{max, integer,
-    Maximum allowed value (default: wxSP_DEFAULT_MAX).}
+    Maximum allowed value (default: 100).}
 @endTable
 
 

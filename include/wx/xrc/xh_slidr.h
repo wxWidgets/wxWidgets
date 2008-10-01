@@ -17,18 +17,12 @@
 
 class WXDLLIMPEXP_XRC wxSliderXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxSliderXmlHandler)
-    enum
-    {
-        wxSL_DEFAULT_VALUE = 0,
-        wxSL_DEFAULT_MIN = 0,
-        wxSL_DEFAULT_MAX = 100
-    };
-
 public:
     wxSliderXmlHandler();
     virtual wxObject *DoCreateResource();
     virtual bool CanHandle(wxXmlNode *node);
+
+    DECLARE_DYNAMIC_CLASS(wxSliderXmlHandler)
 };
 
 #endif // wxUSE_XRC && wxUSE_SLIDER

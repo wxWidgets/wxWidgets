@@ -15,13 +15,17 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XRC 
+#if wxUSE_XRC
 
 #include "wx/xrc/xh_spin.h"
 
 #if wxUSE_SPINBTN
 
 #include "wx/spinbutt.h"
+
+static const long DEFAULT_VALUE = 0;
+static const long DEFAULT_MIN = 0;
+static const long DEFAULT_MAX = 100;
 
 IMPLEMENT_DYNAMIC_CLASS(wxSpinButtonXmlHandler, wxXmlResourceHandler)
 
@@ -45,9 +49,9 @@ wxObject *wxSpinButtonXmlHandler::DoCreateResource()
                     GetStyle(wxT("style"), wxSP_VERTICAL | wxSP_ARROW_KEYS),
                     GetName());
 
-    control->SetValue(GetLong( wxT("value"), wxSP_DEFAULT_VALUE));
-    control->SetRange(GetLong( wxT("min"), wxSP_DEFAULT_MIN),
-                      GetLong(wxT("max"), wxSP_DEFAULT_MAX));
+    control->SetValue(GetLong( wxT("value"), DEFAULT_VALUE));
+    control->SetRange(GetLong( wxT("min"), DEFAULT_MIN),
+                      GetLong(wxT("max"), DEFAULT_MAX));
     SetupWindow(control);
 
     return control;
@@ -84,9 +88,9 @@ wxObject *wxSpinCtrlXmlHandler::DoCreateResource()
                     GetText(wxT("value")),
                     GetPosition(), GetSize(),
                     GetStyle(wxT("style"), wxSP_ARROW_KEYS),
-                    GetLong(wxT("min"), wxSP_DEFAULT_MIN),
-                    GetLong(wxT("max"), wxSP_DEFAULT_MAX),
-                    GetLong(wxT("value"), wxSP_DEFAULT_VALUE),
+                    GetLong(wxT("min"), DEFAULT_MIN),
+                    GetLong(wxT("max"), DEFAULT_MAX),
+                    GetLong(wxT("value"), DEFAULT_VALUE),
                     GetName());
 
     SetupWindow(control);

@@ -17,18 +17,12 @@
 
 class WXDLLIMPEXP_XRC wxScrollBarXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxScrollBarXmlHandler)
-    enum
-    {
-        wxSL_DEFAULT_VALUE = 0,
-        wxSL_DEFAULT_MIN = 0,
-        wxSL_DEFAULT_MAX = 100
-    };
-
 public:
     wxScrollBarXmlHandler();
     virtual wxObject *DoCreateResource();
     virtual bool CanHandle(wxXmlNode *node);
+
+    DECLARE_DYNAMIC_CLASS(wxScrollBarXmlHandler)
 };
 
 #endif // wxUSE_XRC && wxUSE_SCROLLBAR

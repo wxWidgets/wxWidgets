@@ -17,16 +17,12 @@
 
 class WXDLLIMPEXP_XRC wxGaugeXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxGaugeXmlHandler)
-    enum
-    {
-        wxGAUGE_DEFAULT_RANGE = 100
-    };
-
 public:
     wxGaugeXmlHandler();
     virtual wxObject *DoCreateResource();
     virtual bool CanHandle(wxXmlNode *node);
+
+    DECLARE_DYNAMIC_CLASS(wxGaugeXmlHandler)
 };
 
 #endif // wxUSE_XRC && wxUSE_GAUGE

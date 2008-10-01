@@ -23,6 +23,8 @@
     #include "wx/gauge.h"
 #endif
 
+static const long DEFAULT_RANGE = 100;
+
 IMPLEMENT_DYNAMIC_CLASS(wxGaugeXmlHandler, wxXmlResourceHandler)
 
 wxGaugeXmlHandler::wxGaugeXmlHandler()
@@ -43,7 +45,7 @@ wxObject *wxGaugeXmlHandler::DoCreateResource()
 
     control->Create(m_parentAsWindow,
                     GetID(),
-                    GetLong(wxT("range"), wxGAUGE_DEFAULT_RANGE),
+                    GetLong(wxT("range"), DEFAULT_RANGE),
                     GetPosition(), GetSize(),
                     GetStyle(),
                     wxDefaultValidator,
