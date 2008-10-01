@@ -1393,10 +1393,12 @@ wxGraphicsMatrix wxGDIPlusContext::GetTransform() const
 
 void wxGDIPlusContext::GetSize( wxDouble* width, wxDouble *height )
 {
+    HDC hdc = m_context->GetHDC();
     if ( width )
-        *width = ::GetDeviceCaps(m_context->GetHDC(), HORZRES);
+        *width = ::GetDeviceCaps(hdc, HORZRES);
     if ( height )
-        *height = ::GetDeviceCaps(m_context->GetHDC(), VERTRES);
+        *height = ::GetDeviceCaps(hdc, VERTRES);
+    m_context->ReleaseHDC(hdc);
 
 }
 //-----------------------------------------------------------------------------
