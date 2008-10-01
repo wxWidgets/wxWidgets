@@ -1581,6 +1581,20 @@ void wxPGProperty::AddChild( wxPGProperty* prop )
     prop->m_parent = this;
 }
 
+void wxPGProperty::RemoveChild( wxPGProperty* p )
+{
+    wxArrayPGProperty::iterator it;
+    wxArrayPGProperty& children = m_children;
+
+    for ( it=children.begin(); it != children.end(); it++ )
+    {
+        if ( *it == p )
+        {
+            m_children.erase(it);
+            break;
+        }
+    }
+}
 
 void wxPGProperty::AdaptListToValue( wxVariant& list, wxVariant* value ) const
 {

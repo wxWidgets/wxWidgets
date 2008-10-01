@@ -1984,6 +1984,9 @@ protected:
     // Call for after sub-properties added with AddChild
     void PrepareSubProperties();
 
+    // Removes child property with given pointer. Does not delete it.
+    void RemoveChild( wxPGProperty* p );
+
     void SetParentalType( int flag )
     {
         m_flags &= ~(wxPG_PROP_PROPERTY|wxPG_PROP_PARENTAL_FLAGS);

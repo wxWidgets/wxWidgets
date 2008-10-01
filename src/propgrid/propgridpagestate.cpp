@@ -592,12 +592,24 @@ bool wxPropertyGridPageState::EnableCategories( bool enable )
 
 // -----------------------------------------------------------------------
 
+#if wxUSE_STL
+#include <algorithm>
+
+static bool wxPG_SortFunc(wxPGProperty *p1, wxPGProperty *p2)
+{
+    return p1->GetLabel() < p2->GetLabel();
+}
+
+#else
+
 static int wxPG_SortFunc(wxPGProperty **p1, wxPGProperty **p2)
 {
     wxPGProperty *pp1 = *p1;
     wxPGProperty *pp2 = *p2;
     return pp1->GetLabel().compare( pp2->GetLabel() );
 }
+
+#endif
 
 void wxPropertyGridPageState::SortChildren( wxPGProperty* p )
 {
@@ -613,7 +625,11 @@ void wxPropertyGridPageState::SortChildren( wxPGProperty* p )
     if ( pwc->GetChildCount() < 1 )
         return;
 
+#if wxUSE_STL
+    std::sort(pwc->m_children.begin(), pwc->m_children.end(), wxPG_SortFunc);
+#else
     pwc->m_children.Sort( wxPG_SortFunc );
+#endif
 
     // Fix indexes
     pwc->FixIndexesOfChildren();
@@ -1806,7 +1822,7 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item )
                 wxPGProperty * p = pwc->Item( i );
                 wxASSERT( p != NULL );
                 if ( !p->IsCategory() )
-                    m_abcArray->m_children.Remove( p );
+                    m_abcArray->RemoveChild(p);
             }
 
             if ( IsInNonCatMode() )
@@ -1822,14 +1838,13 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item )
         if ( !item->IsCategory() && item->GetParent()->IsCategory() )
         {
             if ( m_abcArray )
-            {
-                m_abcArray->m_children.Remove( item );
-            }
+                m_abcArray->RemoveChild(item);
         }
 
         // categorized mode - categorized array
-        item->m_parent->m_children.RemoveAt(indinparent);
-        item->m_parent->FixIndexesOfChildren(/*indinparent*/);
+        wxArrayPGProperty& parentsChildren = item->m_parent->m_children;
+        parentsChildren.erase( parentsChildren.begin() + indinparent );
+        item->m_parent->FixIndexesOfChildren();
     }
     else
     {
@@ -1854,13 +1869,14 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item )
                 }
             }
         }
-        cat_parent->m_children.RemoveAt(cat_index);
+        cat_parent->m_children.erase(cat_parent->m_children.begin()+cat_index);
 
         // non-categorized mode - non-categorized array
         if ( !item->IsCategory() )
         {
             wxASSERT( item->m_parent == m_abcArray );
-            item->m_parent->m_children.RemoveAt(indinparent);
+            wxArrayPGProperty& parentsChildren = item->m_parent->m_children;
+            parentsChildren.erase(parentsChildren.begin() + indinparent);
             item->m_parent->FixIndexesOfChildren(indinparent);
         }
     }
