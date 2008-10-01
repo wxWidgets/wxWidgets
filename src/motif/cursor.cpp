@@ -239,13 +239,14 @@ void wxCursor::Create(WXPixmap pixmap, WXPixmap mask_pixmap,
 }
 
 wxCursor::wxCursor(const char bits[], int width, int height,
-                   int hotSpotX, int hotSpotY, const char maskBits[])
+                   int hotSpotX, int hotSpotY, const char maskBits[] ,
+                   const wxColour* WXUNUSED(fg), const wxColour* WXUNUSED(bg) )
 {
     Create(bits, width, height, hotSpotX, hotSpotY, maskBits);
 }
 
-wxCursor::wxCursor(const wxString& name, wxBitmapType type, int hotSpotX, int hotSpotY,
-                   const wxColour* WXUNUSED(fg), const wxColour* WXUNUSED(bg))
+wxCursor::wxCursor(const wxString& name, wxBitmapType type, int hotSpotX,
+		   int hotSpotY )
 {
     // Must be an XBM file
     if (type != wxBITMAP_TYPE_XBM) {
