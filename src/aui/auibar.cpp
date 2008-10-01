@@ -887,13 +887,13 @@ wxAuiToolBarArt* wxAuiToolBar::GetArtProvider() const
 
 
 
-void wxAuiToolBar::AddTool(int tool_id,
+wxAuiToolBarItem* wxAuiToolBar::AddTool(int tool_id,
                            const wxString& label,
                            const wxBitmap& bitmap,
                            const wxString& short_help_string,
                            wxItemKind kind)
 {
-    AddTool(tool_id,
+    return AddTool(tool_id,
             label,
             bitmap,
             wxNullBitmap,
@@ -904,7 +904,7 @@ void wxAuiToolBar::AddTool(int tool_id,
 }
 
 
-void wxAuiToolBar::AddTool(int tool_id,
+wxAuiToolBarItem* wxAuiToolBar::AddTool(int tool_id,
                            const wxString& label,
                            const wxBitmap& bitmap,
                            const wxBitmap& disabled_bitmap,
@@ -943,11 +943,11 @@ void wxAuiToolBar::AddTool(int tool_id,
             item.disabled_bitmap = MakeDisabledBitmap(item.bitmap);
         }
     }
-
     m_items.Add(item);
+    return &m_items.Last();
 }
 
-void wxAuiToolBar::AddControl(wxControl* control,
+wxAuiToolBarItem* wxAuiToolBar::AddControl(wxControl* control,
                               const wxString& label)
 {
     wxAuiToolBarItem item;
@@ -968,9 +968,10 @@ void wxAuiToolBar::AddControl(wxControl* control,
     item.sticky = false;
 
     m_items.Add(item);
+    return &m_items.Last();
 }
 
-void wxAuiToolBar::AddLabel(int tool_id,
+wxAuiToolBarItem* wxAuiToolBar::AddLabel(int tool_id,
                             const wxString& label,
                             const int width)
 {
@@ -996,9 +997,10 @@ void wxAuiToolBar::AddLabel(int tool_id,
     item.sticky = false;
 
     m_items.Add(item);
+    return &m_items.Last();
 }
 
-void wxAuiToolBar::AddSeparator()
+wxAuiToolBarItem* wxAuiToolBar::AddSeparator()
 {
     wxAuiToolBarItem item;
     item.window = NULL;
@@ -1017,9 +1019,10 @@ void wxAuiToolBar::AddSeparator()
     item.sticky = false;
 
     m_items.Add(item);
+    return &m_items.Last();
 }
 
-void wxAuiToolBar::AddSpacer(int pixels)
+wxAuiToolBarItem* wxAuiToolBar::AddSpacer(int pixels)
 {
     wxAuiToolBarItem item;
     item.window = NULL;
@@ -1039,9 +1042,10 @@ void wxAuiToolBar::AddSpacer(int pixels)
     item.sticky = false;
 
     m_items.Add(item);
+    return &m_items.Last();
 }
 
-void wxAuiToolBar::AddStretchSpacer(int proportion)
+wxAuiToolBarItem* wxAuiToolBar::AddStretchSpacer(int proportion)
 {
     wxAuiToolBarItem item;
     item.window = NULL;
@@ -1061,6 +1065,7 @@ void wxAuiToolBar::AddStretchSpacer(int proportion)
     item.sticky = false;
 
     m_items.Add(item);
+    return &m_items.Last();
 }
 
 void wxAuiToolBar::Clear()

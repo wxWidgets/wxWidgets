@@ -424,7 +424,7 @@ public:
                  const wxPoint& position = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxAUI_TB_DEFAULT_STYLE);
-    ~wxAuiToolBar();
+    virtual ~wxAuiToolBar();
 
     void SetWindowStyleFlag(long style);
 
@@ -434,13 +434,13 @@ public:
     bool SetFont(const wxFont& font);
 
 
-    void AddTool(int tool_id,
+    wxAuiToolBarItem* AddTool(int tool_id,
                  const wxString& label,
                  const wxBitmap& bitmap,
                  const wxString& short_help_string = wxEmptyString,
                  wxItemKind kind = wxITEM_NORMAL);
 
-    void AddTool(int tool_id,
+    wxAuiToolBarItem* AddTool(int tool_id,
                  const wxString& label,
                  const wxBitmap& bitmap,
                  const wxBitmap& disabled_bitmap,
@@ -449,7 +449,7 @@ public:
                  const wxString& long_help_string,
                  wxObject* client_data);
 
-    void AddTool(int tool_id,
+    wxAuiToolBarItem* AddTool(int tool_id,
                  const wxBitmap& bitmap,
                  const wxBitmap& disabled_bitmap,
                  bool toggle = false,
@@ -457,7 +457,7 @@ public:
                  const wxString& short_help_string = wxEmptyString,
                  const wxString& long_help_string = wxEmptyString)
     {
-        AddTool(tool_id,
+        return AddTool(tool_id,
                 wxEmptyString,
                 bitmap,
                 disabled_bitmap,
@@ -467,14 +467,14 @@ public:
                 client_data);
     }
 
-    void AddLabel(int tool_id,
+    wxAuiToolBarItem* AddLabel(int tool_id,
                   const wxString& label = wxEmptyString,
                   const int width = -1);
-    void AddControl(wxControl* control,
+    wxAuiToolBarItem* AddControl(wxControl* control,
                     const wxString& label = wxEmptyString);
-    void AddSeparator();
-    void AddSpacer(int pixels);
-    void AddStretchSpacer(int proportion = 1);
+    wxAuiToolBarItem* AddSeparator();
+    wxAuiToolBarItem* AddSpacer(int pixels);
+    wxAuiToolBarItem* AddStretchSpacer(int proportion = 1);
 
     bool Realize();
 
