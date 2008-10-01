@@ -93,7 +93,8 @@ Major new features in 2.8 release
 
 All (GUI):
 
-- Fixed wxHTML's pagebreaks computation in tables (D.J.Stauffer)
+- Fixed wxHTML's pagebreaks computation in tables (D.J.Stauffer).
+- Fixed wxRichTextCtrl input that uses Alt on Mac OS X, for example Polish Pro input.
 
 All (Unix):
 
