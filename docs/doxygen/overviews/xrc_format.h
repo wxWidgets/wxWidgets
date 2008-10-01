@@ -1282,7 +1282,7 @@ HTML markup. Note that the markup has to be escaped:
 @endTable
 
 
-@subsubsection xrc_wxspinctrl wxSpinCtrl
+@subsubsection xrc_wxspinbutton wxSpinButton
 
 @beginTable
 @hdr3col{property, type, description}
@@ -1293,6 +1293,11 @@ HTML markup. Note that the markup has to be escaped:
 @row3col{max, integer,
     Maximum allowed value (default: 100).}
 @endTable
+
+
+@subsubsection xrc_wxspinctrl wxSpinCtrl
+
+wxSpinCtrl supports the properties as @ref xrc_wxspinbutton.
 
 
 @subsubsection xrc_wxsplitterwindow wxSplitterWindow
