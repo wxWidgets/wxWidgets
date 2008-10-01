@@ -341,6 +341,14 @@ public:
     virtual wxDocument* CreateDocument(const wxString& path, long flags = 0);
 
     /**
+        Creates an empty new document.
+
+        This is equivalent to calling CreateDocument() with @c wxDOC_NEW flags
+        and without the file name.
+     */
+    wxDocument *CreateNewDocument();
+
+    /**
         Creates a new view for the given document. If more than one view is
         allowed for the document (by virtue of multiple templates mentioning
         the same document type), a choice of view is presented to the user.

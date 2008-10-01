@@ -972,7 +972,7 @@ void wxDocManager::OnFileCloseAll(wxCommandEvent& WXUNUSED(event))
 
 void wxDocManager::OnFileNew(wxCommandEvent& WXUNUSED(event))
 {
-    CreateDocument( wxEmptyString, wxDOC_NEW );
+    CreateNewDocument();
 }
 
 void wxDocManager::OnFileOpen(wxCommandEvent& WXUNUSED(event))

@@ -354,6 +354,11 @@ public:
     virtual void OnOpenFileFailure() { }
 
     virtual wxDocument *CreateDocument(const wxString& path, long flags = 0);
+
+    // wrapper around CreateDocument() with a more clear name
+    wxDocument *CreateNewDocument()
+        { return CreateDocument(wxString(), wxDOC_NEW); }
+
     virtual wxView *CreateView(wxDocument *doc, long flags = 0);
     virtual void DeleteTemplate(wxDocTemplate *temp, long flags = 0);
     virtual bool FlushDoc(wxDocument *doc);
