@@ -1939,15 +1939,22 @@ void wxBoxSizer::RecalcSizes()
 
         // adjust the size in the major direction using the proportion
         wxCoord majorSize = GetSizeInMajorDir(sizeThis);
-        const int propItem = item->GetProportion();
-        if ( propItem )
+
+        // if there is not enough space, don't try to distribute negative space
+        // among the children, this would result in overlapping windows which
+        // we don't want
+        if ( delta > 0 )
         {
-            const int deltaItem = (delta * propItem) / totalProportion;
+            const int propItem = item->GetProportion();
+            if ( propItem )
+            {
+                const int deltaItem = (delta * propItem) / totalProportion;
 
-            majorSize += deltaItem;
+                majorSize += deltaItem;
 
-            delta -= deltaItem;
-            totalProportion -= propItem;
+                delta -= deltaItem;
+                totalProportion -= propItem;
+            }
         }
 
 
