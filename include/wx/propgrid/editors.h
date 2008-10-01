@@ -155,6 +155,12 @@ public:
 
     /** Handles events. Returns true if value in control was modified
         (see wxPGProperty::OnEvent for more information).
+
+        @remarks wxPropertyGrid will automatically unfocus the editor when
+                wxEVT_COMMAND_TEXT_ENTER is received and when it results in
+                property value being modified. This happens regardless of
+                editor type (ie. behavior is same for any wxTextCtrl and
+                wxComboBox based editor).
     */
     virtual bool OnEvent( wxPropertyGrid* propgrid, wxPGProperty* property,
         wxWindow* wnd_primary, wxEvent& event ) const = 0;

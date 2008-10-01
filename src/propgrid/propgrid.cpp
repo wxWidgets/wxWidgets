@@ -3257,6 +3257,14 @@ void wxPropertyGrid::OnCustomEditorEvent( wxCommandEvent &event )
 
         DoPropertyChanged(selected, selFlags);
         EditorsValueWasNotModified();
+
+        //
+        // Regardless of editor type, unfocus editor on
+        // text-editing related enter press.
+        if ( event.GetEventType() == wxEVT_COMMAND_TEXT_ENTER )
+        {
+            SetFocusOnCanvas();
+        }
     }
     else
     {
