@@ -1,7 +1,17 @@
                       XRC resources format specification
                       ==================================
 
-                         !!!!! NOT YET FINISHED !!!!!
+
+  +-------------------------------------------------------------------------+
+  |                                                                         |
+  |                           !!! CAUTION !!!                               |
+  |              This document is incomplete and out of date.               |
+  |                                                                         |
+  |   Please see http://docs.wxwidgets.org/trunk/xrc_format.html for the    |
+  |   authoritative version of XRC format specification.                    |
+  |                                                                         |
+  +-------------------------------------------------------------------------+
+
 
 0. Introduction
 ===============
