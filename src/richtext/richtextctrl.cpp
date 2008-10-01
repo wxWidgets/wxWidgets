@@ -990,7 +990,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
 
             default:
             {
-                if (event.CmdDown() || event.AltDown())
+                if (event.CmdDown())
                 {
                     event.Skip();
                     return;
