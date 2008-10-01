@@ -279,7 +279,7 @@ private :
 class wxGDIPlusContext : public wxGraphicsContext
 {
 public:
-    wxGDIPlusContext( wxGraphicsRenderer* renderer, HDC hdc );
+    wxGDIPlusContext( wxGraphicsRenderer* renderer, HDC hdc , wxDouble width, wxDouble height );
     wxGDIPlusContext( wxGraphicsRenderer* renderer, HWND hwnd );
     wxGDIPlusContext( wxGraphicsRenderer* renderer, Graphics* gr);
     wxGDIPlusContext();
@@ -339,13 +339,16 @@ private:
     GraphicsState m_state1;
     GraphicsState m_state2;
 
+    wxDouble m_width;
+    wxDouble m_height;
+
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxGDIPlusContext)
 };
 
 class WXDLLIMPEXP_CORE wxGDIPlusMeasuringContext : public wxGDIPlusContext
 {
 public:
-    wxGDIPlusMeasuringContext( wxGraphicsRenderer* renderer ) : wxGDIPlusContext( renderer , m_hdc = GetDC(NULL) )
+    wxGDIPlusMeasuringContext( wxGraphicsRenderer* renderer ) : wxGDIPlusContext( renderer , m_hdc = GetDC(NULL), 1000, 1000 )
     {
     }
     wxGDIPlusMeasuringContext()
@@ -1022,11 +1025,13 @@ public :
     bool m_offset;
 } ;
 
-wxGDIPlusContext::wxGDIPlusContext( wxGraphicsRenderer* renderer, HDC hdc  )
+wxGDIPlusContext::wxGDIPlusContext( wxGraphicsRenderer* renderer, HDC hdc, wxDouble width, wxDouble height   )
     : wxGraphicsContext(renderer)
 {
     Init();
     m_context = new Graphics( hdc);
+    m_width = width;
+    m_height = height;
     SetDefaults();
 }
 
@@ -1035,6 +1040,9 @@ wxGDIPlusContext::wxGDIPlusContext( wxGraphicsRenderer* renderer, HWND hwnd  )
 {
     Init();
     m_context = new Graphics( hwnd);
+    RECT rect = wxGetWindowRect(hwnd);
+    m_width = rect.right - rect.left;
+    m_height = rect.bottom - rect.top;
     SetDefaults();
 }
 
@@ -1056,6 +1064,8 @@ void wxGDIPlusContext::Init()
     m_context = NULL;
     m_state1 = 0;
     m_state2= 0;
+    m_height = 0;
+    m_width = 0;
 }
 
 void wxGDIPlusContext::SetDefaults()
@@ -1393,13 +1403,8 @@ wxGraphicsMatrix wxGDIPlusContext::GetTransform() const
 
 void wxGDIPlusContext::GetSize( wxDouble* width, wxDouble *height )
 {
-    HDC hdc = m_context->GetHDC();
-    if ( width )
-        *width = ::GetDeviceCaps(hdc, HORZRES);
-    if ( height )
-        *height = ::GetDeviceCaps(hdc, VERTRES);
-    m_context->ReleaseHDC(hdc);
-
+    *width = m_width;
+    *height = m_height;
 }
 //-----------------------------------------------------------------------------
 // wxGDIPlusRenderer declaration
@@ -1546,21 +1551,24 @@ wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxWindowDC& dc)
 {
     ENSURE_LOADED_OR_RETURN(NULL);
     wxMSWDCImpl *msw = wxDynamicCast( dc.GetImpl() , wxMSWDCImpl );
-    return new wxGDIPlusContext(this,(HDC) msw->GetHDC());
+    wxSize sz = dc.GetSize();
+    return new wxGDIPlusContext(this,(HDC) msw->GetHDC(), sz.x, sz.y);
 }
 
 wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxPrinterDC& dc)
 {
     ENSURE_LOADED_OR_RETURN(NULL);
     wxMSWDCImpl *msw = wxDynamicCast( dc.GetImpl() , wxMSWDCImpl );
-    return new wxGDIPlusContext(this,(HDC) msw->GetHDC());
+    wxSize sz = dc.GetSize();
+    return new wxGDIPlusContext(this,(HDC) msw->GetHDC(), sz.x, sz.y);
 }
 
 wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxMemoryDC& dc)
 {
     ENSURE_LOADED_OR_RETURN(NULL);
     wxMSWDCImpl *msw = wxDynamicCast( dc.GetImpl() , wxMSWDCImpl );
-    return new wxGDIPlusContext(this,(HDC) msw->GetHDC());
+    wxSize sz = dc.GetSize();
+    return new wxGDIPlusContext(this,(HDC) msw->GetHDC(), sz.x, sz.y);
 }
 
 wxGraphicsContext * wxGDIPlusRenderer::CreateMeasuringContext()
