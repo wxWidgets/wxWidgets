@@ -334,6 +334,19 @@ Like @ref xrc_format_type_text, but the text is never translated and
 @c translate attribute cannot be used.
 
 
+@subsection xrc_format_type_string URL
+
+An unformatted string. Unlike with @ref xrc_format_type_text, no escaping
+or translations are done.
+
+
+@subsection xrc_format_type_url URL
+
+Any URL accepted by wxFileSystem (typically relative to XRC file's location,
+but can be absolute too). Unlike with @ref xrc_format_type_text, no escaping
+or translations are done.
+
+
 @subsection xrc_format_type_bitmap Bitmap
 
 Bitmap properties contain specification of a single bitmap or icon. In the most
@@ -455,7 +468,7 @@ from properties lists below.
 
 @beginTable
 @hdr3col{property, type, description}
-@row3col{position, @ref xrc_format_type_pos,
+@row3col{pos, @ref xrc_format_type_pos,
     Initial position of the window (default: wxDefaultPosition).}
 @row3col{size, @ref xrc_format_type_size,
     Initial size of the window (default: wxDefaultSize).}
@@ -489,170 +502,1078 @@ All of these properties are optional.
 
 @subsection xrc_format_controls Supported controls
 
+This section lists all controls supported by default. For each control, its
+control-specific properties are listed. If the control can have child objects,
+it is documented there too; unless said otherwise, XRC elements for these
+controls cannot have children.
+
 @subsubsection xrc_wxanimationctrl wxAnimationCtrl
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{animation, @ref xrc_format_type_url,
+    Animation file to load into the control (required).}
+@endTable
+
 
 @subsubsection xrc_wxbitmapbutton wxBitmapButton
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{default, @ref xrc_format_type_bool,
+     Should this button be the default button in dialog (default: 0)?}
+@row3col{bitmap, @ref xrc_format_type_bitmap,
+     Bitmap to show on the button (required).}
+@row3col{selected, @ref xrc_format_type_bitmap,
+     Bitmap to show when the button is selected (default: none, same as @c bitmap).}
+@row3col{focus, @ref xrc_format_type_bitmap,
+     Bitmap to show when the button has focus (default: none, same as @c bitmap).}
+@row3col{disabled, @ref xrc_format_type_bitmap,
+     Bitmap to show when the button is disabled (default: none, same as @c bitmap).}
+@row3col{hover, @ref xrc_format_type_bitmap,
+     Bitmap to show when mouse cursor hovers above the bitmap (default: none, same as @c bitmap).}
+@endTable
+
 
 @subsubsection xrc_wxbitmapcombobox wxBitmapComboBox
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{selection, integer,
+     Index of the initially selected item or -1 for no selection (default: -1).}
+@row3col{value, @ref xrc_format_type_string,
+     Initial value in the control (doesn't have to be one of @ content values;
+     default: empty).}
+@endTable
+
+If both @c value and @c selection are specified and @c selection is not -1,
+then @c selection takes precedence.
+
+A wxBitmapComboBox can have one or more child objects of the @c ownerdrawnitem
+pseudo-class. @c ownerdrawnitem objects have the following properties:
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{text, @ref xrc_format_type_text,
+     Item's label (required).}
+@row3col{bitmap, @ref xrc_format_type_bitmap,
+     Item's bitmap (default: no bitmap).}
+@endTable
+
+Example:
+@code
+<object class="wxBitmapComboBox">
+    <selection>1</selection>
+    <object class="ownerdrawnitem">
+        <text>Foo</text>
+        <bitmap>foo.png</bitmap>
+    </object>
+    <object class="ownerdrawnitem">
+        <text>Bar</text>
+        <bitmap>bar.png</bitmap>
+    </object>
+</object>
+@endcode
+
 
 @subsubsection xrc_wxbutton wxButton
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{label, @ref xrc_format_type_text,
+     Label to display on the button (required).}
+@row3col{default, @ref xrc_format_type_bool,
+     Should this button be the default button in dialog (default: 0)?}
+@endTable
+
 
 @subsubsection xrc_wxcalendarctrl wxCalendarCtrl
-FIXME
+
+No additional properties.
+
 
 @subsubsection xrc_wxcheckbox wxCheckBox
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{label, @ref xrc_format_type_text,
+     Label to use for the checkbox (required).}
+@row3col{checked, @ref xrc_format_type_bool,
+     Should the checkbox be checked initially (default: 0)?}
+@endTable
+
 
 @subsubsection xrc_wxchecklistbox wxCheckListBox
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{content, ,
+     Content of the control; this property has any number of @c \<item\> XML
+     elements as its children, with the items text as their text values
+     (default: empty).}
+@endTable
+
+The @c \<item\> elements have listbox items' labels as their text values. They
+can also have optional @c checked XML attribute -- if set to "1", the value is
+initially checked.
+
+Example:
+@code
+<object class="wxCheckListBox">
+    <content>
+        <item checked="1">Download library</item>
+        <item checked="1">Compile samples</item>
+        <item checked="1">Skim docs</item>
+        <item checked="1">Finish project</item>
+        <item>Wash car</item>
+    </content>
+</object>
+@endcode
+
 
 @subsubsection xrc_wxchoice wxChoice
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{selection, integer,
+     Index of the initially selected item or -1 for no selection (default: -1).}
+@row3col{content, ,
+     Content of the control; this property has any number of @c \<item\> XML
+     elements as its children, with the items text as their text values
+     (default: empty).}
+@endTable
+
+Example:
+@code
+<object class="wxChoice" name="controls_choice">
+    <content>
+        <item>See</item>
+        <item>Hear</item>
+        <item>Feel</item>
+        <item>Smell</item>
+        <item>Taste</item>
+        <item>The Sixth Sense!</item>
+    </content>
+</object>
+@endcode
+
 
 @subsubsection xrc_wxchoicebook wxChoicebook
-FIXME
+
+No additional properties.
+
+A choicebook can have one or more child objects of the @c choicebookpage
+pseudo-class (similarly to @ref xrc_wxnotebook "wxNotebook" and its
+@c notebookpage). @c choicebookpage objects have the following properties:
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{label, @ref xrc_format_type_text,
+     Sheet page's title (required).}
+@row3col{bitmap, @ref xrc_format_type_bitmap,
+     Bitmap shown alongside the label (default: none).}
+@row3col{selected, @ref xrc_format_type_bool,
+     Is the page selected initially (only one page can be selected; default: 0)?}
+@endTable
+
+Each @c choicebookpage has exactly one non-toplevel window as its child.
+
 
 @subsubsection xrc_wxcollapsiblepane wxCollapsiblePane
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{label, @ref xrc_format_type_text,
+     Label to use for the collapsible section (required).}
+@row3col{collapsed, @ref xrc_format_type_bool,
+     Should the pane be collapsed initially (default: 0)?}
+@endTable
+
+wxCollapsiblePane may contain single optional child object of the @c panewindow
+pseudo-class type. @c panewindow itself must contain exactly one child that
+is a @ref xrc_format_sizers "sizer" or a non-toplevel window
+object.
+
 
 @subsubsection xrc_wxcolourpickerctrl wxColourPickerCtrl
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{value, @ref xrc_format_type_colour,
+    Initial value of the control (default: wxBLACK).}
+@endTable
+
 
 @subsubsection xrc_wxcombobox wxComboBox
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{selection, integer,
+     Index of the initially selected item or -1 for no selection (default: not used).}
+@row3col{content, ,
+     Content of the control; this property has any number of @c \<item\> XML
+     elements as its children, with the items text as their text values
+     (default: empty).}
+@row3col{value, @ref xrc_format_type_string,
+     Initial value in the control (doesn't have to be one of @ content values;
+     default: empty).}
+@endTable
+
+If both @c value and @c selection are specified and @c selection is not -1,
+then @c selection takes precedence.
+
+Example:
+@code
+<object class="wxComboBox" name="controls_combobox">
+    <style>wxCB_DROPDOWN</style>
+    <value>nedit</value>
+    <content>
+        <item>vim</item>
+        <item>emacs</item>
+        <item>notepad.exe</item>
+        <item>bbedit</item>
+    </content>
+</object>
+@endcode
 
 @subsubsection xrc_wxdatepickerctrl wxDatePickerCtrl
-FIXME
+
+No additional properties.
+
 
 @subsubsection xrc_wxdialog wxDialog
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{title, @ref xrc_format_type_text,
+     Dialog's title (default: empty).}
+@row3col{icon, @ref xrc_format_type_bitmap,
+     Dialog's icon (default: not used).}
+@row3col{centered, @ref xrc_format_type_bool,
+     Whether the dialog should be centered on the screen (default: 0).}
+@endTable
+
+wxDialog may have optional children: either exactly one
+@ref xrc_format_sizers "sizer" child or any number of non-toplevel window
+objects. If sizer child is used, it sets
+@ref wxSizer::SetSizeHints() "size hints" too.
 
 @subsubsection xrc_wxdirpickerctrl wxDirPickerCtrl
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{value, @ref xrc_format_type_string,
+    Initial value of the control (default: empty).}
+@row3col{message, @ref xrc_format_type_text,
+    Message shown to the user in wxDirDialog shown by the control (required).}
+@endTable
+
 
 @subsubsection xrc_wxfilepickerctrl wxFilePickerCtrl
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{value, @ref xrc_format_type_string,
+    Initial value of the control (default: empty).}
+@row3col{message, @ref xrc_format_type_text,
+    Message shown to the user in wxDirDialog shown by the control (required).}
+@row3col{wildcard, @ref xrc_format_type_string,
+    Message shown to the user in wxDirDialog shown by the control (required).}
+@endTable
+
 
 @subsubsection xrc_wxfontpickerctrl wxFontPickerCtrl
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{value, @ref xrc_format_type_font,
+    Initial value of the control (default: wxNORMAL_FONT).}
+@endTable
 
 @subsubsection xrc_wxfrane wxFrame
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{title, @ref xrc_format_type_text,
+     Frame's title (default: empty).}
+@row3col{icon, @ref xrc_format_type_bitmap,
+     Frame's icon (default: not used).}
+@row3col{centered, @ref xrc_format_type_bool,
+     Whether the frame should be centered on the screen (default: 0).}
+@endTable
+
+wxFrame may have optional children: either exactly one
+@ref xrc_format_sizers "sizer" child or any number of non-toplevel window
+objects. If sizer child is used, it sets
+@ref wxSizer::SetSizeHints() "size hints" too.
+
 
 @subsubsection xrc_wxgauge wxGauge
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{range, integer,
+    Maximum value of the gauge (default: wxGAUGE_DEFAULT_RANGE).}
+@row3col{value, integer,
+    Initial value of the control (default: 0).}
+@row3col{shadow, @ref xrc_format_type_dimension,
+    Rendered shadow size (default: none; ignored by most platforms).}
+@row3col{bezel, @ref xrc_format_type_dimension,
+    Rendered bezel size (default: none; ignored by most platforms).}
+@endTable
 
 @subsubsection xrc_wxgenericdirctrl wxGenericDirCtrl
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{defaultfolder, @ref xrc_format_type_text,
+    Initial folder (default: empty).}
+@row3col{filter, @ref xrc_format_type_text,
+    Filter string, using the same syntax as used by wxFileDialog, e.g.
+    "All files (*.*)|*.*|JPEG files (*.jpg)|*.jpg" (default: empty).}
+@row3col{defaultfilter, integer,
+    Zero-based index of default filter (default: 0).}
+@endTable
 
 @subsubsection xrc_wxgrid wxGrid
-FIXME
+
+No additional properties.
+
 
 @subsubsection xrc_wxhtmlwindow wxHtmlWindow
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{url, @ref xrc_format_type_url,
+    Page to display in the window.}
+@row3col{htmlcode, @ref xrc_format_type_text,
+    HTML markup to display in the window.}
+@row3col{borders, @ref xrc_format_type_dimension,
+    Border around HTML content (default: 0).}
+@endTable
+
+At most one of @c url and @c htmlcode properties may be specified, they are
+mutually exclusive. If neither is set, the window is initialized to show empty
+page.
+
 
 @subsubsection xrc_wxhyperlinkctrl wxHyperlinkCtrl
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{label, @ref xrc_format_type_text,
+     Label to display on the control (required).}
+@row3col{url, @ref xrc_format_type_url,
+     URL to open when the link is clicked (required).}
+@endTable
+
 
 @subsubsection xrc_wxlistbox wxListBox
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{selection, integer,
+     Index of the initially selected item or -1 for no selection (default: -1).}
+@row3col{content, ,
+     Content of the control; this property has any number of @c \<item\> XML
+     elements as its children, with the items text as their text values
+     (default: empty).}
+@endTable
+
+Example:
+@code
+<object class="wxListBox" name="controls_listbox">
+    <size>250,160</size>
+    <style>wxLB_SINGLE</style>
+    <content>
+        <item>Milk</item>
+        <item>Pizza</item>
+        <item>Bread</item>
+        <item>Orange juice</item>
+        <item>Paper towels</item>
+    </content>
+</object>
+@endcode
+
 
 @subsubsection xrc_wxlistbook wxListbook
-FIXME
+
+No additional properties.
+
+A listbook can have one or more child objects of the @c listbookpage
+pseudo-class (similarly to @ref xrc_wxnotebook "wxNotebook" and its
+@c notebookpage). @c listbookpage objects have the following properties:
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{label, @ref xrc_format_type_text,
+     Sheet page's title (required).}
+@row3col{bitmap, @ref xrc_format_type_bitmap,
+     Bitmap shown alongside the label (default: none).}
+@row3col{selected, @ref xrc_format_type_bool,
+     Is the page selected initially (only one page can be selected; default: 0)?}
+@endTable
+
+Each @c listbookpage has exactly one non-toplevel window as its child.
+
 
 @subsubsection xrc_wxlistctrl wxListCtrl
-FIXME
+
+No additional properties.
+
 
 @subsubsection xrc_wxmdiparentframe wxMDIParentFrame
-FIXME
+
+wxMDIParentFrame supports the same properties that @ref xrc_wxfrane does.
+
+wxMDIParentFrame may have optional children. When used, the child objects
+must be of wxMDIChildFrame type.
+
 
 @subsubsection xrc_wxmdichildframe wxMDIChildFrame
-FIXME
+
+wxMDIChildFrame supports the same properties that @ref xrc_wxfrane and
+@ref xrc_wxmdiparentframe do.
+
+wxMDIChildFrame can only be used as as immediate child of @ref
+xrc_wxmdiparentframe.
+
+wxMDIChildFrame may have optional children: either exactly one
+@ref xrc_format_sizers "sizer" child or any number of non-toplevel window
+objects. If sizer child is used, it sets
+@ref wxSizer::SetSizeHints() "size hints" too.
+
 
 @subsubsection xrc_wxmenu wxMenu
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{label, @ref xrc_format_type_text,
+     Menu's label (default: empty, but required for menus other
+     than popup menus).}
+@row3col{help, @ref xrc_format_type_text,
+     Help shown in statusbar when the menu is selected (only for submenus
+     of another wxMenu, default: none).}
+@row3col{enabled, @ref xrc_format_type_bool,
+     Is the submenu item enabled (only for submenus of another wxMenu,
+     default: 1)?}
+@endTable
+
+Note that unlike most controls, wxMenu does @em not have
+@ref xrc_format_std_props.
+
+A menu object can have one or more child objects of the wxMenuItem or wxMenu
+classes or @c break or @c separator pseudo-classes.
+
+The @c separator pseudo-class is used to insert separators into the menu and
+has neither properties nor children. Likewise, @c break inserts a break (see
+wxMenu::Break()).
+
+wxMenuItem objects support the following properties:
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{label, @ref xrc_format_type_text,
+     Item's label (required).}
+@row3col{accel, @ref xrc_format_type_text_notrans,
+     Item's accelerator (default: none).}
+@row3col{radio, @ref xrc_format_type_bool,
+     Item's kind is wxITEM_RADIO (default: 0)?}
+@row3col{checkable, @ref xrc_format_type_bool,
+     Item's kind is wxITEM_CHECK (default: 0)?}
+@row3col{bitmap, @ref xrc_format_type_bitmap,
+     Bitmap to show with the item (default: none).}
+@row3col{bitmap2, @ref xrc_format_type_bitmap,
+     Bitmap for the checked state (wxMSW, if checkable; default: none).}
+@row3col{help, @ref xrc_format_type_text,
+     Help shown in statusbar when the item is selected (default: none).}
+@row3col{enabled, @ref xrc_format_type_bool,
+     Is the item enabled (default: 1)?}
+@row3col{checked, @ref xrc_format_type_bool,
+     Is the item checked initially (default: 0)?}
+@endTable
+
+Example:
+@code
+<object class="wxMenu" name="menu_edit">
+  <style>wxMENU_TEAROFF</style>
+  <label>_Edit</label>
+  <object class="wxMenuItem" name="wxID_FIND">
+    <label>_Find...</label>
+    <accel>Ctrl-F</accel>
+  </object>
+  <object class="separator"/>
+  <object class="wxMenuItem" name="menu_fuzzy">
+    <label>Translation is _fuzzy</label>
+    <checkable>1</checkable>
+  </object>
+  <object class="wxMenu" name="submenu">
+    <label>A submenu</label>
+    <object class="wxMenuItem" name="foo">...</object>
+    ...
+  </object>
+  <object class="separator" platform="unix"/>
+  <object class="wxMenuItem" name="wxID_PREFERENCES" platform="unix">
+    <label>_Preferences</label>
+  </object>
+</object>
+@endcode
 
 @subsubsection xrc_wxmenubar wxMenuBar
-FIXME
+
+No properties. Note that unlike most controls, wxMenuBar does @em not have
+@ref xrc_format_std_props.
+
+A menubar can have one or more child objects of the @ref xrc_wxmenu "wxMenu"
+class.
+
 
 @subsubsection xrc_wxnotebook wxNotebook
-FIXME
+
+No additional properties.
+
+A notebook can have one or more child objects of the @c notebookpage
+pseudo-class. @c notebookpage objects have the following properties:
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{label, @ref xrc_format_type_text,
+     Page's title (required).}
+@row3col{bitmap, @ref xrc_format_type_bitmap,
+     Bitmap shown alongside the label (default: none).}
+@row3col{selected, @ref xrc_format_type_bool,
+     Is the page selected initially (only one page can be selected; default: 0)?}
+@endTable
+
+Each @c notebookpage has exactly one non-toplevel window as its child.
+
+Example:
+@code
+<object class="wxNotebook">
+    <style>wxBK_BOTTOM</style>
+    <object class="notebookpage">
+        <label>Page 1</label>
+        <object class="wxPanel" name="page_1">
+            ...
+        </object>
+    </object>
+    <object class="notebookpage">
+        <label>Page 2</label>
+        <object class="wxPanel" name="page_2">
+            ...
+        </object>
+    </object>
+</object>
+@endcode
+
 
 @subsubsection xrc_wxownerdrawncombobox wxOwnerDrawnComboBox
-FIXME
+
+wxOwnerDrawnComboBox has the same properties as
+@ref xrc_wxcombobox "wxComboBox", plus the following additional properties:
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{buttonsize, @ref xrc_format_type_size,
+     Size of the dropdown button (default: default).}
+@endTable
+
 
 @subsubsection xrc_wxpanel wxPanel
-FIXME
+
+No additional properties.
+
+wxPanel may have optional children: either exactly one
+@ref xrc_format_sizers "sizer" child or any number of non-toplevel window
+objects.
+
 
 @subsubsection xrc_wxpropertysheetdialog wxPropertySheetDialog
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{title, @ref xrc_format_type_text,
+     Dialog's title (default: empty).}
+@row3col{icon, @ref xrc_format_type_bitmap,
+     Dialog's icon (default: not used).}
+@row3col{centered, @ref xrc_format_type_bool,
+     Whether the dialog should be centered on the screen (default: 0).}
+@row3col{buttons, @ref xrc_format_type_style,
+     Buttons to show, combination of flags accepted by
+     wxPropertySheetDialog::CreateButtons() (default: 0).}
+@endTable
+
+A sheet dialog can have one or more child objects of the @c propertysheetpage
+pseudo-class (similarly to @ref xrc_wxnotebook "wxNotebook" and its
+@c notebookpage). @c propertysheetpage objects have the following properties:
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{label, @ref xrc_format_type_text,
+     Sheet page's title (required).}
+@row3col{bitmap, @ref xrc_format_type_bitmap,
+     Bitmap shown alongside the label (default: none).}
+@row3col{selected, @ref xrc_format_type_bool,
+     Is the page selected initially (only one page can be selected; default: 0)?}
+@endTable
+
+Each @c propertysheetpage has exactly one non-toplevel window as its child.
+
 
 @subsubsection xrc_wxradiobutton wxRadioButton
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{label, @ref xrc_format_type_text,
+     Label shown on the radio button (required).}
+@row3col{value, @ref xrc_format_type_bool,
+    Initial value of the control (default: 0).}
+@endTable
+
 
 @subsubsection xrc_wxradiobox wxRadioBox
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{label, @ref xrc_format_type_text,
+     Label for the whole box (required).}
+@row3col{dimension, integer,
+     Specifies the maximum number of rows (if style contains
+     @c wxRA_SPECIFY_ROWS) or columns (if style contains @c wxRA_SPECIFY_COLS)
+     for a two-dimensional radiobox (default: 1).}
+@row3col{selection, integer,
+     Index of the initially selected item or -1 for no selection (default: -1).}
+@row3col{content, ,
+     Content of the control; this property has any number of @c \<item\> XML
+     elements as its children, with the items text as their text values
+     (see below; default: empty).}
+@endTable
+
+The @c \<item\> elements have radio buttons' labels as their text values. They
+can also have some optional XML @em attributes (not properties!):
+
+@beginTable
+@hdr3col{attribute, type, description}
+@row3col{tooltip, @ref xrc_format_type_string,
+     Tooltip to show over this ratio button (default: none).}
+@row3col{helptext, @ref xrc_format_type_string,
+     Contextual help for this radio button (default: none).}
+@row3col{enabled, @ref xrc_format_type_bool,
+     Is the button enabled (default: 1)?}
+@row3col{hidden, @ref xrc_format_type_bool,
+     Is the button hidden initially (default: 0)?}
+@endTable
+
+Example:
+@code
+<object class="wxRadioBox" name="controls_radiobox">
+    <style>wxRA_SPECIFY_COLS</style>
+    <label>Radio stations</label>
+    <dimension>1</dimension>
+    <selection>0</selection>
+    <content>
+        <item tooltip="Powerful radio station" helptext="This station is for amateurs of hard rock and heavy metal">Power 108</item>
+        <item tooltip="Disabled radio station" enabled="0">Power 0</item>
+        <item tooltip="">WMMS 100.7</item>
+        <item tooltip="E=mc^2">Energy 98.3</item>
+        <item helptext="Favourite chukcha's radio">CHUM FM</item>
+        <item>92FM</item>
+        <item hidden="1">Very quit station</item>
+    </content>
+</object>
+@endcode
+
 
 @subsubsection xrc_wxrichtextctrl wxRichTextCtrl
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{value, @ref xrc_format_type_text,
+    Initial value of the control (default: empty).}
+@row3col{maxlength, integer,
+    Maximum length of the text entered (default: unlimited).}
+@endTable
+
 
 @subsubsection xrc_wxscrollbar wxScrollBar
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{value, integer,
+    Initial position of the scrollbar (default: 0).}
+@row3col{range, integer,
+    Maximum value of the gauge (default: 10).}
+@row3col{thumbsize, integer,
+    Size of the thumb (default: 1).}
+@row3col{pagesize, integer,
+    Page size (default: 1).}
+@endTable
 
 @subsubsection xrc_wxscrolledwindow wxScrolledWindow
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{scrollrate, @ref xrc_format_type_size,
+    Scroll rate in @em x and @em y directions (default: not set;
+    required if the window has a sizer child).}
+@endTable
+
+wxScrolledWindow may have optional children: either exactly one
+@ref xrc_format_sizers "sizer" child or any number of non-toplevel window
+objects. If sizer child is used, wxSizer::FitInside() is used (instead of
+wxSizer::Fit() as usual) and so the children don't determine scrolled window's
+minimal size, they only affect @em virtual size. Usually, both @c scrollrate
+and either @c size or @c minsize on containing sizer item should be used
+in this case.
+
 
 @subsubsection xrc_wxsimplehtmllistbox wxSimpleHtmlListBox
-FIXME
 
-@subsubsection xrc_wxslider wxSliderq
-FIXME
+wxSimpleHtmlListBox has same properties as @ref xrc_wxlistbox "wxListBox".
+The only difference is that the text contained in @c \<item\> elements is
+HTML markup. Note that the markup has to be escaped:
+
+@code
+<object class="wxSimpleHtmlListBox">
+    <content>
+        <item>&lt;b&gt;Bold&lt;/b&gt; Milk</item>
+    </content>
+</object>
+@endcode
+
+(X)HTML markup elements cannot be included directly:
+
+@code
+<object class="wxSimpleHtmlListBox">
+    <content>
+        <!-- This is incorrect, doesn't work! -->
+        <item><b>Bold</b> Milk</item>
+    </content>
+</object>
+@endcode
+
+
+@subsubsection xrc_wxslider wxSlider
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{value, integer,
+    Initial value of the control (default: wxSL_DEFAULT_VALUE).}
+@row3col{min, integer,
+    Minimum allowed value (default: wxSL_DEFAULT_MIN).}
+@row3col{max, integer,
+    Maximum allowed value (default: wxSL_DEFAULT_MAX).}
+@row3col{pagesize, integer,
+    Line size; number of steps the slider moves when the user moves
+    pages up or down (default: unset).}
+@row3col{linesize, integer,
+    Line size; number of steps the slider moves when the user moves it
+    up or down a line (default: unset).}
+@row3col{tickfreq, integer,
+    Tick marks frequency (Windows only; default: unset).}
+@row3col{tick, integer,
+    Tick position (Windows only; default: unset).}
+@row3col{thumb, integer,
+    Thumb length (Windows only; default: unset).}
+@row3col{selmin, integer,
+    Selection start position (Windows only; default: unset).}
+@row3col{selmax, integer,
+    Selection end position (Windows only; default: unset).}
+@endTable
+
 
 @subsubsection xrc_wxspinctrl wxSpinCtrl
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{value, integer,
+    Initial value of the control (default: wxSP_DEFAULT_VALUE).}
+@row3col{min, integer,
+    Minimum allowed value (default: wxSP_DEFAULT_MIN).}
+@row3col{max, integer,
+    Maximum allowed value (default: wxSP_DEFAULT_MAX).}
+@endTable
+
 
 @subsubsection xrc_wxsplitterwindow wxSplitterWindow
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{orientation, @ref xrc_format_type_string,
+    Orientation of the splitter, either "vertical" or "horizontal" (default: horizontal).}
+@row3col{sashpos, integer,
+    Initial position of the sash (default: 0).}
+@row3col{minsize, integer,
+    Minimum child size (default: not set).}
+@row3col{minsize, @ref xrc_format_type_float,
+    Sash gravity, see wxSplitterWindow::SetSashGravity() (default: not set).}
+@endTable
+
+wxSplitterWindow must have one or two children that are non-toplevel window
+objects. If there's only one child, it is used as wxSplitterWindow's only
+visible child. If there are two children, the first one is used for left/top
+child and the second one for right/bottom child window.
+
 
 @subsubsection xrc_wxsearchctrl wxSearchCtrl
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{value, @ref xrc_format_type_text,
+    Initial value of the control (default: empty).}
+@endTable
+
 
 @subsubsection xrc_wxstatusbar wxStatusBar
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{fields, integer,
+    Number of status bar fields (default: 1).}
+@row3col{widths, @ref xrc_format_type_string,
+    Comma-separated list of @em fields integers. Each value specifies width
+    of one field; the values are interpreted using the same convention used
+    by wxStatusBar::SetStatusWidths().}
+@row3col{styles, @ref xrc_format_type_string,
+    Comma-separated list of @em fields flags. Each value specifies status bar
+    fieldd style and can be one of @c  wxSB_NORMAL, @c wxSB_FLAT or
+    @c wxSB_RAISED. See wxStatusBar::SetStatusStyles() for their description.}
+@endTable
+
+
 
 @subsubsection xrc_wxstaticbitmap wxStaticBitmap
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{bitmap, @ref xrc_format_type_bitmap,
+     Bitmap to display (required).}
+@endTable
 
 @subsubsection xrc_wxstaticbox wxStaticBox
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{label, @ref xrc_format_type_text,
+     Static box's label (required).}
+@endTable
+
 
 @subsubsection xrc_wxstaticline wxStaticLine
-FIXME
+
+No additional properties.
+
 
 @subsubsection xrc_wxstatictext wxStaticText
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{label, @ref xrc_format_type_text,
+     Label to display (required).}
+@row3col{wrap, integer,
+     Number of characters per line to wrap the text for, see
+     wxStaticText::Wrap() (default: no wrap).}
+@endTable
 
 @subsubsection xrc_wxtextctrl wxTextCtrl
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{value, @ref xrc_format_type_text,
+    Initial value of the control (default: empty).}
+@row3col{maxlength, integer,
+    Maximum length of the text which can be entered by user (default: unlimited).}
+@endTable
+
 
 @subsubsection xrc_wxtogglebuttton wxToggleButton
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{label, @ref xrc_format_type_text,
+     Label to display on the button (required).}
+@row3col{checked, @ref xrc_format_type_bool,
+     Should the button be checked/pressed initially (default: 0)?}
+@endTable
 
 @subsubsection xrc_wxtoolbar wxToolBar
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{bitmapsize, @ref xrc_format_type_size,
+    Size of toolbar bitmaps (default: not set).}
+@row3col{margins, @ref xrc_format_type_size,
+    Margins (default: platform default).}
+@row3col{packing, integer,
+    Packing, see wxToolBar::SetToolPacking() (default: not set).}
+@row3col{separation, integer,
+    Default separator size, see wxToolBar::SetToolSeparation() (default: not set).}
+@row3col{dontattachtoframe, @ref xrc_format_type_bool,
+    If set to 0 and the toolbar object is child of a wxFrame,
+    wxFrame::SetToolBar() is called; otherwise, you have to add it to a frame
+    manually. The toolbar is attached by default, you have to set this property
+    to 1 to disable this behaviour (default: 0).}
+@endTable
+
+A toolbar can have one or more child objects of any wxControl-derived class or
+one of two pseudo-classes: @c separator or @c tool.
+
+The @c separator pseudo-class is used to insert separators into the toolbar and
+has neither properties nor children.
+
+The @c tool pseudo-class objects specify toolbar buttons and have the following
+properties:
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{bitmap, @ref xrc_format_type_bitmap,
+    Tool's bitmap (required).}
+@row3col{bitmap2, @ref xrc_format_type_bitmap,
+    Bitmap for disabled tool (default: derived from @c bitmap).}
+@row3col{label, @ref xrc_format_type_text,
+    Label to display on the tool (default: no label).}
+@row3col{radio, @ref xrc_format_type_bool,
+     Item's kind is wxITEM_RADIO (default: 0)?}
+@row3col{toggle, @ref xrc_format_type_bool,
+     Item's kind is wxITEM_CHECK (default: 0)?}
+@row3col{tooltip, @ref xrc_format_type_text,
+    Tooltip to use for the tool (default: none).}
+@row3col{longhelp, @ref xrc_format_type_text,
+    Help text shown in statusbar when the mouse is on the tool (default: none).}
+@row3col{disabled, @ref xrc_format_type_bool,
+     Is the tool initially disabled (default: 0)?}
+@endTable
+
+@c radio and @c toggle are mutually exclusive.
+
+Children that are neither @c tool nor @c separator must be instances of classes
+derived from wxControl and are added to the toolbar using
+wxToolBar::AddControl().
+
+Example:
+@code
+<object class="wxToolBar">
+    <style>wxTB_FLAT|wxTB_NODIVIDER</style>
+    <object class="tool" name="foo">
+        <bitmap>foo.png</bitmap>
+        <label>Foo</label>
+    </object>
+    <object class="tool" name="bar">
+        <bitmap>bar.png</bitmap>
+        <label>Bar</label>
+    </object>
+    <object class="separator"/>
+    <object class="wxComboBox">
+        <content>
+            <item>Just</item>
+            <item>a combobox</item>
+            <item>in the toolbar</item>
+        </content>
+    </object>
+</object>
+
+@endcode
+
 
 @subsubsection xrc_wxtreectrl wxTreeCtrl
-FIXME
+
+No additional properties.
+
 
 @subsubsection xrc_wxtreebook wxTreebook
-FIXME
+
+No additional properties.
+
+A treebook can have one or more child objects of the @c treebookpage
+pseudo-class (similarly to @ref xrc_wxnotebook "wxNotebook" and its
+@c notebookpage). @c treebookpage objects have the following properties:
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{depth, integer,
+     Page's depth in the labels tree (required; see below).}
+@row3col{label, @ref xrc_format_type_text,
+     Sheet page's title (required).}
+@row3col{bitmap, @ref xrc_format_type_bitmap,
+     Bitmap shown alongside the label (default: none).}
+@row3col{selected, @ref xrc_format_type_bool,
+     Is the page selected initially (only one page can be selected; default: 0)?}
+@endTable
+
+Each @c treebookpage has exactly one non-toplevel window as its child.
+
+The tree of labels is not described using nested @c treebookpage objects, but
+using the @em depth property. Toplevel pages have depth 0, their child pages
+have depth 1 and so on. A @c treebookpage's label is inserted as child of
+the latest preceding page with depth equal to @em depth-1. For example, this
+XRC markup:
+
+@code
+<object class="wxTreebook">
+  ...
+  <object class="treebookpage">
+    <depth>0</depth>
+    <label>Page 1</label>
+    <object class="wxPanel">...</object>
+  </object>
+  <object class="treebookpage">
+    <depth>1</depth>
+    <label>Subpage 1A</label>
+    <object class="wxPanel">...</object>
+  </object>
+  <object class="treebookpage">
+    <depth>2</depth>
+    <label>Subsubpage 1</label>
+    <object class="wxPanel">...</object>
+  </object>
+  <object class="treebookpage">
+    <depth>1</depth>
+    <label>Subpage 1B</label>
+    <object class="wxPanel">...</object>
+  </object>
+  <object class="treebookpage">
+    <depth>2</depth>
+    <label>Subsubpage 2</label>
+    <object class="wxPanel">...</object>
+  </object>
+  <object class="treebookpage">
+    <depth>0</depth>
+    <label>Page 2</label>
+    <object class="wxPanel">...</object>
+  </object>
+</object>
+@endcode
+
+corresponds to the following tree of labels:
+
+ - Page 1
+   - Subpage 1A
+     - Subsubpage 1
+   - Subpage 1B
+     - Subsubpage 2
+ - Page 2
+
 
 @subsubsection xrc_wxwizard wxWizard
-FIXME
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{bitmap, @ref xrc_format_type_bitmap,
+    Bitmap to display on the left side of the wizard (default: none).}
+@endTable
+
+A wizard object can have one or more child objects of the wxWizardPage or
+wxWizardPageSimple classes. They both support the following properties
+(in addition to @ref xrc_format_std_props):
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{bitmap, @ref xrc_format_type_bitmap,
+    Page-specific bitmap (default: none).}
+@endTable
+
+wxWizardPageSimple pages are automatically chained together; wxWizardPage pages
+transitions must be handled programatically.
 
 
 @section xrc_format_sizers Sizers

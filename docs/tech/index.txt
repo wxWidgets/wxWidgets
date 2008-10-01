@@ -14,7 +14,7 @@ tn0010.htm   Compiling wxWidgets applications in the VC++ IDE
 tn0011.txt   All about version numbers
 tn0012.txt   wxWidgets platform, toolkit and library names
 tn0013.txt   How to make a wxGTK distribution
-tn0014.txt   XRC resources format specification
+tn0014.txt   *** REMOVED *** (included in the manual now)
 tn0015.txt   How to add new bitmaps to wxWidgets UI elements
 tn0016.txt   How to add new files and libraries to wxWidgets build system (Bakefile)
 tn0017.txt   How to write unit tests for wxWidgets classes
