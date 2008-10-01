@@ -3455,15 +3455,15 @@ void wxPropertyGrid::FreeEditors()
     // Do not free editors immediately if processing events
     if ( m_wndEditor2 )
     {
-        m_windowsToDelete.push_back(m_wndEditor2);
         m_wndEditor2->Hide();
+        wxPendingDelete.Append( m_wndEditor2 );
         m_wndEditor2 = (wxWindow*) NULL;
     }
 
     if ( m_wndEditor )
     {
-        m_windowsToDelete.push_back(m_wndEditor);
         m_wndEditor->Hide();
+        wxPendingDelete.Append( m_wndEditor );
         m_wndEditor = (wxWindow*) NULL;
     }
 }
@@ -3487,18 +3487,6 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
     m_inDoSelectProperty = 1;
 
     wxPGProperty* prev = m_selected;
-
-    //
-    // Delete windows pending for deletion
-    if ( !m_inDoPropertyChanged && m_windowsToDelete.size() )
-    {
-        unsigned int i;
-
-        for ( i=0; i<m_windowsToDelete.size(); i++ )
-            delete m_windowsToDelete[i];
-
-        m_windowsToDelete.clear();
-    }
 
     if ( !m_pState )
     {

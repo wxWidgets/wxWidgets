@@ -1408,8 +1408,6 @@ protected:
     wxBitmap            *m_doubleBuffer;
 #endif
 
-    wxVector<wxWindow*> m_windowsToDelete;
-
     /** Local time ms when control was created. */
     wxLongLong          m_timeCreated;
 
