@@ -4977,7 +4977,10 @@ void wxPropertyGrid::HandleKeyEvent(wxKeyEvent &event)
 
     if ( keycode == WXK_TAB )
     {
-        SendNavigationKeyEvent( event.ShiftDown()?0:1 );
+        if ( HasFlag(wxTAB_TRAVERSAL) )
+            SendNavigationKeyEvent( event.ShiftDown()?0:1 );
+        else
+            event.Skip();
         return;
     }
 
