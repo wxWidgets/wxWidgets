@@ -2847,8 +2847,9 @@ bool wxPropertyGrid::PerformValidation( wxPGProperty* p, wxVariant& pendingValue
     {
         if ( changedProperty == m_selected )
         {
-            wxASSERT( m_wndEditor->IsKindOf(CLASSINFO(wxTextCtrl)) );
-            evtChangingValue = ((wxTextCtrl*)m_wndEditor)->GetValue();
+            wxWindow* editor = GetEditorControl();
+            wxASSERT( editor->IsKindOf(CLASSINFO(wxTextCtrl)) );
+            evtChangingValue = wxStaticCast(editor, wxTextCtrl)->GetValue();
         }
         else
         {
@@ -3637,10 +3638,11 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
 
                 m_wndEditor = wndList.m_primary;
                 m_wndEditor2 = wndList.m_secondary;
+                wxWindow* primaryCtrl = GetEditorControl();
 
                 // NOTE: It is allowed for m_wndEditor to be NULL - in this case
                 //       value is drawn as normal, and m_wndEditor2 is assumed
-                //       to be a right-aligned button that triggers a separate editor
+                //       to be a right-aligned button that triggers a separate editorCtrl
                 //       window.
 
                 if ( m_wndEditor )
@@ -3652,7 +3654,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
                 #if wxUSE_VALIDATORS
                     wxValidator* validator = p->GetValidator();
                     if ( validator )
-                        m_wndEditor->SetValidator(*validator);
+                        primaryCtrl->SetValidator(*validator);
                 #endif
 
                     if ( m_wndEditor->GetSize().y > (m_lineHeight+6) )
@@ -3667,10 +3669,10 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
                     // Fix TextCtrl indentation
                 #if defined(__WXMSW__) && !defined(__WXWINCE__)
                     wxTextCtrl* tc = NULL;
-                    if ( m_wndEditor->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)) )
-                        tc = ((wxOwnerDrawnComboBox*)m_wndEditor)->GetTextCtrl();
+                    if ( primaryCtrl->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)) )
+                        tc = ((wxOwnerDrawnComboBox*)primaryCtrl)->GetTextCtrl();
                     else
-                        tc = wxDynamicCast(m_wndEditor, wxTextCtrl);
+                        tc = wxDynamicCast(primaryCtrl, wxTextCtrl);
                     if ( tc )
                         ::SendMessage(GetHwndOf(tc), EM_SETMARGINS, EC_LEFTMARGIN | EC_RIGHTMARGIN, MAKELONG(0, 0));
                 #endif
@@ -3686,6 +3688,8 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
                     }
 
                     m_wndEditor->SetSizeHints(3, 3);
+                    if ( m_wndEditor != primaryCtrl )
+                        primaryCtrl->SetSizeHints(3, 3);
 
                 #if wxPG_CREATE_CONTROLS_HIDDEN
                     m_wndEditor->Show(false);
@@ -3696,7 +3700,6 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
                     m_wndEditor->Move( goodPos );
                 #endif
 
-                    wxWindow* primaryCtrl = GetEditorControl();
                     SetupChildEventHandling(primaryCtrl);
 
                     // Focus and select all (wxTextCtrl, wxComboBox etc)
@@ -4658,13 +4661,13 @@ bool wxPropertyGrid::OnMouseCommon( wxMouseEvent& event, int* px, int* py )
     int ux = event.m_x;
     int uy = event.m_y;
 
-    wxWindow* wnd = m_wndEditor;
+    wxWindow* wnd = GetEditorControl();
 
     // Hide popup on clicks
     if ( event.GetEventType() != wxEVT_MOTION )
         if ( wnd && wnd->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)) )
         {
-            ((wxOwnerDrawnComboBox*)m_wndEditor)->HidePopup();
+            ((wxOwnerDrawnComboBox*)wnd)->HidePopup();
         }
 
     wxRect r;
@@ -5095,7 +5098,7 @@ bool wxPropertyGrid::HandleChildKey( wxKeyEvent& event )
 
             // Update the control as well
             m_selected->GetEditorClass()->SetControlStringValue( m_selected,
-                                                                 m_wndEditor,
+                                                                 GetEditorControl(),
                                                                  m_selected->GetDisplayedString() );
         }
 
