@@ -654,11 +654,6 @@ public:
     void SetPropertyLabel( wxPGPropArg id, const wxString& newproplabel );
 
     /**
-        Set modified status of a property and all its children.
-    */
-    void SetPropertyModifiedStatus( wxPGPropArg id, bool modified );
-
-    /**
         Sets name of a property.
 
         @param id

@@ -228,13 +228,6 @@ public:
                                  const wxBitmap& bmp = wxPG_NULL_BITMAP,
                                  wxPropertyGridPage* pageObj = NULL );
 
-    void ClearModifiedStatus( wxPGPropArg id );
-
-    void ClearModifiedStatus()
-    {
-        m_pPropGrid->ClearModifiedStatus();
-    }
-
     /**
         Deletes all properties and all pages.
     */
