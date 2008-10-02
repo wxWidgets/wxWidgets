@@ -421,6 +421,7 @@ enum wxPG_KEYBOARD_ACTIONS
     wxPG_ACTION_CUT,
     wxPG_ACTION_COPY,
     wxPG_ACTION_PASTE,
+    wxPG_ACTION_PRESS_BUTTON,  // Causes editor button (if any) to be pressed 
     wxPG_ACTION_MAX
 };
 
@@ -933,15 +934,6 @@ public:
         wxPG_PROP_ARG_CALL_PROLOG_RETVAL(false)
         return DoSelectProperty(p,focus?wxPG_SEL_FOCUS:0);
     }
-
-    /** Changes keyboard shortcut to push the editor button.
-        @remarks
-        You can set default with keycode 0. Good value for the platform is
-        guessed, but don't expect it to be very accurate.
-    */
-    void SetButtonShortcut( int keycode,
-                            bool ctrlDown = false,
-                            bool altDown = false );
 
     /** Sets category caption background colour. */
     void SetCaptionBackgroundColour(const wxColour& col);
@@ -1483,9 +1475,6 @@ protected:
 
     int                 m_fontHeight;  // Height of the font.
 
-    // Base keycode for triggering push button.
-    int                 m_pushButKeyCode;
-
     /** m_splitterx when drag began. */
     int                 m_startingSplitterX;
 
@@ -1542,12 +1531,6 @@ protected:
     unsigned char       m_frozen;
 
     unsigned char       m_vspacing;
-
-    // Does triggering push button need Alt down?
-    unsigned char       m_pushButKeyCodeNeedsAlt;
-
-    // Does triggering push button need Ctrl down?
-    unsigned char       m_pushButKeyCodeNeedsCtrl;
 
     // Used to track when Alt/Ctrl+Key was consumed.
     unsigned char       m_keyComboConsumed;
@@ -1829,7 +1812,7 @@ protected:
 
 private:
 
-    bool ButtonTriggerKeyTest( wxKeyEvent &event );
+    bool ButtonTriggerKeyTest( int action, wxKeyEvent& event );
 
 #endif // DOXYGEN_SHOULD_SKIP_THIS
 

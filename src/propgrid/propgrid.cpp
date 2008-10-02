@@ -592,6 +592,7 @@ void wxPropertyGrid::Init1()
     AddActionTrigger( wxPG_ACTION_COPY, WXK_INSERT, wxMOD_CONTROL );
     AddActionTrigger( wxPG_ACTION_PASTE, 'V', wxMOD_CONTROL );
     AddActionTrigger( wxPG_ACTION_PASTE, WXK_INSERT, wxMOD_SHIFT );
+    AddActionTrigger( wxPG_ACTION_PRESS_BUTTON, WXK_DOWN, wxMOD_ALT );
 
     m_coloursCustomized = 0;
     m_frozen = 0;
@@ -619,10 +620,6 @@ void wxPropertyGrid::Init1()
     m_lineHeight = 0;
 
     m_width = m_height = 0;
-
-    SetButtonShortcut(0);
-
-    m_keyComboConsumed = 0;
 
     m_commonValues.push_back(new wxPGCommonValue(_("Unspecified"), wxPGGlobalVars->m_defaultRenderer) );
     m_cvUnspecified = 0;
@@ -2642,24 +2639,6 @@ wxPGProperty* wxPropertyGrid::GetNearestPaintVisible( wxPGProperty* p ) const
     // Itself paint visible
     return p;
 
-}
-
-// -----------------------------------------------------------------------
-
-void wxPropertyGrid::SetButtonShortcut( int keycode, bool ctrlDown, bool altDown )
-{
-    if ( keycode )
-    {
-        m_pushButKeyCode = keycode;
-        m_pushButKeyCodeNeedsCtrl = ctrlDown ? 1 : 0;
-        m_pushButKeyCodeNeedsAlt = altDown ? 1 : 0;
-    }
-    else
-    {
-        m_pushButKeyCode = WXK_DOWN;
-        m_pushButKeyCodeNeedsCtrl = 0;
-        m_pushButKeyCodeNeedsAlt = 1;
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -4999,7 +4978,7 @@ void wxPropertyGrid::HandleKeyEvent(wxKeyEvent &event)
     {
 
         // Show dialog?
-        if ( ButtonTriggerKeyTest(event) )
+        if ( ButtonTriggerKeyTest(action, event) )
             return;
 
         wxPGProperty* p = m_selected;
@@ -5196,8 +5175,6 @@ void wxPropertyGrid::OnKey( wxKeyEvent &event )
 
 void wxPropertyGrid::OnKeyUp(wxKeyEvent &event)
 {
-    m_keyComboConsumed = 0;
-
     event.Skip();
 }
 
@@ -5285,19 +5262,19 @@ void wxPropertyGrid::OnNavigationKey( wxNavigationKeyEvent& event )
 
 // -----------------------------------------------------------------------
 
-bool wxPropertyGrid::ButtonTriggerKeyTest( wxKeyEvent &event )
+bool wxPropertyGrid::ButtonTriggerKeyTest( int action, wxKeyEvent& event )
 {
-    int keycode = event.GetKeyCode();
+    if ( action == -1 )
+    {
+        int secondAction;
+        action = KeyEventToActions(event, &secondAction);
+    }
 
     // Does the keycode trigger button?
-    if ( keycode == m_pushButKeyCode &&
-         m_wndEditor2 &&
-         (!m_pushButKeyCodeNeedsAlt || event.AltDown()) &&
-         (!m_pushButKeyCodeNeedsCtrl || event.ControlDown()) )
+    if ( action == wxPG_ACTION_PRESS_BUTTON &&
+         m_wndEditor2 )
     {
-        m_keyComboConsumed = 1;
-
-        wxCommandEvent evt(wxEVT_COMMAND_BUTTON_CLICKED,m_wndEditor2->GetId());
+        wxCommandEvent evt(wxEVT_COMMAND_BUTTON_CLICKED, m_wndEditor2->GetId());
         GetEventHandler()->AddPendingEvent(evt);
         return true;
     }
@@ -5319,7 +5296,7 @@ void wxPropertyGrid::OnChildKeyDown( wxKeyEvent &event )
         return;
     }
 
-    if ( ButtonTriggerKeyTest(event) )
+    if ( ButtonTriggerKeyTest(-1, event) )
         return;
 
     if ( HandleChildKey(event) == true )
@@ -5330,8 +5307,6 @@ void wxPropertyGrid::OnChildKeyDown( wxKeyEvent &event )
 
 void wxPropertyGrid::OnChildKeyUp( wxKeyEvent &event )
 {
-    m_keyComboConsumed = 0;
-
     GetEventHandler()->AddPendingEvent(event);
 
     event.Skip();
