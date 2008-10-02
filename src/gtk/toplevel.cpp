@@ -296,7 +296,7 @@ gtk_frame_configure_callback( GtkWidget* widget,
 // "realize" from m_widget
 //-----------------------------------------------------------------------------
 
-// we cannot MWM hints and icons before the widget has been realized,
+// we cannot the WM hints and icons before the widget has been realized,
 // so we do this directly after realization
 
 extern "C" {
@@ -304,15 +304,13 @@ static void
 gtk_frame_realized_callback( GtkWidget * WXUNUSED(widget),
                              wxTopLevelWindowGTK *win )
 {
-    // All this is for Motif Window Manager "hints" and is supposed to be
-    // recognized by other WM as well. Not tested.
     gdk_window_set_decorations(win->m_widget->window,
                                (GdkWMDecoration)win->m_gdkDecor);
     gdk_window_set_functions(win->m_widget->window,
                                (GdkWMFunction)win->m_gdkFunc);
 
     // GTK's shrinking/growing policy
-    if ((win->m_gdkFunc & GDK_FUNC_RESIZE) == 0)
+    if ( !(win->m_gdkFunc & GDK_FUNC_RESIZE) )
         gtk_window_set_resizable(GTK_WINDOW(win->m_widget), FALSE);
     else
         gtk_window_set_policy(GTK_WINDOW(win->m_widget), 1, 1, 1);
@@ -436,7 +434,8 @@ void wxTopLevelWindowGTK::Init()
     m_isIconized = false;
     m_fsIsShowing = false;
     m_themeEnabled = true;
-    m_gdkDecor = m_gdkFunc = 0;
+    m_gdkDecor =
+    m_gdkFunc = 0;
     m_grabbed = false;
     m_deferShow = true;
 
@@ -593,42 +592,43 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     g_signal_connect(m_widget, "property_notify_event",
         G_CALLBACK(property_notify_event), this);
 
-    // decorations
-    if ((style & wxSIMPLE_BORDER) || (style & wxNO_BORDER))
+    // translate wx decorations styles into Motif WM hints (they are recognized
+    // by other WMs as well)
+
+    // always enable moving the window as we have no separate flag for enabling
+    // it
+    m_gdkFunc = GDK_FUNC_MOVE;
+
+    if ( style & wxCLOSE_BOX )
+        m_gdkFunc |= GDK_FUNC_CLOSE;
+
+    if ( style & wxMINIMIZE_BOX )
+        m_gdkFunc |= GDK_FUNC_MINIMIZE;
+
+    if ( style & wxMAXIMIZE_BOX )
+        m_gdkFunc |= GDK_FUNC_MAXIMIZE;
+
+    if ( (style & wxSIMPLE_BORDER) || (style & wxNO_BORDER) )
     {
         m_gdkDecor = 0;
-        m_gdkFunc = 0;
     }
-    else
+    else // have border
     {
         m_gdkDecor = GDK_DECOR_BORDER;
-        m_gdkFunc = GDK_FUNC_MOVE;
 
-        // All this is for Motif Window Manager "hints" and is supposed to be
-        // recognized by other WMs as well.
-        if ((style & wxCAPTION) != 0)
-        {
+        if ( style & wxCAPTION )
             m_gdkDecor |= GDK_DECOR_TITLE;
-        }
-        if ((style & wxCLOSE_BOX) != 0)
-        {
-            m_gdkFunc |= GDK_FUNC_CLOSE;
-        }
-        if ((style & wxSYSTEM_MENU) != 0)
-        {
+
+        if ( style & wxSYSTEM_MENU )
             m_gdkDecor |= GDK_DECOR_MENU;
-        }
-        if ((style & wxMINIMIZE_BOX) != 0)
-        {
-            m_gdkFunc |= GDK_FUNC_MINIMIZE;
+
+        if ( style & wxMINIMIZE_BOX )
             m_gdkDecor |= GDK_DECOR_MINIMIZE;
-        }
-        if ((style & wxMAXIMIZE_BOX) != 0)
-        {
-            m_gdkFunc |= GDK_FUNC_MAXIMIZE;
+
+        if ( style & wxMAXIMIZE_BOX )
             m_gdkDecor |= GDK_DECOR_MAXIMIZE;
-        }
-        if ((style & wxRESIZE_BORDER) != 0)
+
+        if ( style & wxRESIZE_BORDER )
         {
            m_gdkFunc |= GDK_FUNC_RESIZE;
            m_gdkDecor |= GDK_DECOR_RESIZEH;
