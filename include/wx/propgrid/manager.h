@@ -293,13 +293,6 @@ public:
         return InsertPage(-1, label, bmp, pageObj);
     }
 
-    void ClearModifiedStatus ( wxPGPropArg id );
-
-    void ClearModifiedStatus ()
-    {
-        m_pPropGrid->ClearModifiedStatus();
-    }
-
     /** Deletes all all properties and all pages.
     */
     virtual void Clear();

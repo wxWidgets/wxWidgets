@@ -476,6 +476,23 @@ void wxPropertyGridInterface::SetPropertyValueUnspecified( wxPGPropArg id )
 }
 
 // -----------------------------------------------------------------------
+
+void wxPropertyGridInterface::ClearModifiedStatus()
+{
+    unsigned int pageIndex = 0;
+
+    for (;;)
+    {
+        wxPropertyGridPageState* page = GetPageState(pageIndex);
+        if ( !page ) break;
+
+        page->DoGetRoot()->SetFlagRecursively(wxPG_PROP_MODIFIED, false);
+
+        pageIndex++;
+    }
+}
+
+// -----------------------------------------------------------------------
 // wxPropertyGridInterface property value setting and getting
 // -----------------------------------------------------------------------
 

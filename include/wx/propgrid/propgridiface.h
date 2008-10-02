@@ -206,11 +206,7 @@ public:
 
     /** Resets modified status of all properties.
     */
-    void ClearModifiedStatus()
-    {
-        SetPropertyModifiedStatus(m_pState->m_properties, false);
-        m_pState->m_anyModified = false;
-    }
+    void ClearModifiedStatus();
 
     /** Collapses given category or property with children.
         Returns true if actually collapses.
