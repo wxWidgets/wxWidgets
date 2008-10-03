@@ -342,8 +342,8 @@ int Server::OnExit()
         delete it->GetData();
     }
 
-    for(EList::compatibility_iterator it = m_eventWorkers.GetFirst(); it ; it->GetNext()) {
-        delete it->GetData();
+    for(EList::compatibility_iterator it2 = m_eventWorkers.GetFirst(); it2 ; it2->GetNext()) {
+        delete it2->GetData();
     }
 
     m_threadWorkers.Clear();
@@ -429,13 +429,13 @@ void  Server::OnWorkerEvent(WorkerEvent& pEvent)
             break;
         }
     }
-    for(EList::compatibility_iterator it = m_eventWorkers.GetFirst(); it ; it = it->GetNext())
+    for(EList::compatibility_iterator it2 = m_eventWorkers.GetFirst(); it2 ; it2 = it2->GetNext())
     {
-        if (it->GetData() == pEvent.m_sender)
+        if (it2->GetData() == pEvent.m_sender)
         {
             wxLogVerbose(wxT("Deleting event worker (%d left)"),m_eventWorkers.GetCount());
-            delete it->GetData();
-            m_eventWorkers.DeleteNode(it);
+            delete it2->GetData();
+            m_eventWorkers.DeleteNode(it2);
             if (!pEvent.m_workerFailed)
                 m_eventWorkersDone++;
             else

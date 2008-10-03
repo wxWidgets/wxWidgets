@@ -254,13 +254,14 @@ Client::OnInit()
 int
 Client::OnRun()
 {
+    int i;
     switch(m_sendType)
     {
         case STRESS_TEST:
             switch(m_workMode)
             {
                 case THREADS:
-                    for (int i = 0; i < m_stressWorkers; i++) {
+                    for (i = 0; i < m_stressWorkers; i++) {
                         if (m_message.empty())
                             StartWorker(THREADS);
                         else
@@ -268,7 +269,7 @@ Client::OnRun()
                     }
                     break;
                 case EVENTS:
-                    for (int i = 0; i < m_stressWorkers; i++) {
+                    for (i = 0; i < m_stressWorkers; i++) {
                         if (m_message.empty())
                             StartWorker(EVENTS);
                         else
@@ -276,7 +277,7 @@ Client::OnRun()
                     }
                     break;
                 default:
-                    for (int i = 0; i < m_stressWorkers; i++) {
+                    for (i = 0; i < m_stressWorkers; i++) {
                         if (m_message.empty())
                             StartWorker(i % 5 == 0 ? THREADS : EVENTS);
                         else
@@ -450,11 +451,11 @@ Client::OnWorkerEvent(WorkerEvent& pEvent) {
                 break;
             }
         }
-        for(EList::compatibility_iterator it = m_eventWorkers.GetFirst(); it ; it = it->GetNext())
+        for(EList::compatibility_iterator it2 = m_eventWorkers.GetFirst(); it2 ; it2 = it2->GetNext())
         {
-            if (it->GetData() == pEvent.m_sender) {
-                delete it->GetData();
-                m_eventWorkers.DeleteNode(it);
+            if (it2->GetData() == pEvent.m_sender) {
+                delete it2->GetData();
+                m_eventWorkers.DeleteNode(it2);
                 break;
             }
         }
