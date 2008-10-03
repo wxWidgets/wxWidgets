@@ -35,7 +35,7 @@ MAKEARGS = LINK_DLL_FLAGS="$(LINK_DLL_FLAGS)" \
 
 ### Targets: ###
 
-all: access animate artprov aui calendar caret collpane config combo console controls dataview dialogs dialup display dnd docview dragimag drawing erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer memcheck menu minimal mobile nativdlg notebook oleauto opengl ownerdrw popup printing propgrid regtest render richtext sashtest scroll scrollsub shaped sockets sound splash splitter statbar stc taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wrapsizer mfc
+all: access animate artprov aui calendar caret collpane config combo console controls dataview dialogs dialup display dnd docview dragimag drawing erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal mobile nativdlg notebook oleauto opengl ownerdrw popup printing propgrid regtest render richtext sashtest scroll scrollsub shaped sockets sound splash splitter statbar stc taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wrapsizer
 
 clean: 
 	-if exist .\*.o del .\*.o
@@ -77,7 +77,6 @@ clean:
 	$(MAKE) -C listctrl -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C mdi -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C mediaplayer -f makefile.gcc $(MAKEARGS) clean
-	$(MAKE) -C memcheck -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C menu -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C minimal -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C mobile -f makefile.gcc $(MAKEARGS) clean
@@ -114,6 +113,7 @@ clean:
 	$(MAKE) -C wizard -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C wrapsizer -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C mfc -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C memcheck -f makefile.gcc $(MAKEARGS) clean
 
 access: 
 	$(MAKE) -C access -f makefile.gcc $(MAKEARGS) all
@@ -226,9 +226,6 @@ mdi:
 mediaplayer: 
 	$(MAKE) -C mediaplayer -f makefile.gcc $(MAKEARGS) all
 
-memcheck: 
-	$(MAKE) -C memcheck -f makefile.gcc $(MAKEARGS) all
-
 menu: 
 	$(MAKE) -C menu -f makefile.gcc $(MAKEARGS) all
 
@@ -337,7 +334,10 @@ wrapsizer:
 mfc: 
 	$(MAKE) -C mfc -f makefile.gcc $(MAKEARGS) all
 
-.PHONY: all clean access animate artprov aui calendar caret collpane config combo console controls dataview dialogs dialup display dnd docview dragimag drawing erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer memcheck menu minimal mobile nativdlg notebook oleauto opengl ownerdrw popup printing propgrid regtest render richtext sashtest scroll scrollsub shaped sockets sound splash splitter statbar stc taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wrapsizer mfc
+memcheck: 
+	$(MAKE) -C memcheck -f makefile.gcc $(MAKEARGS) all
+
+.PHONY: all clean access animate artprov aui calendar caret collpane config combo console controls dataview dialogs dialup display dnd docview dragimag drawing erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal mobile nativdlg notebook oleauto opengl ownerdrw popup printing propgrid regtest render richtext sashtest scroll scrollsub shaped sockets sound splash splitter statbar stc taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wrapsizer mfc memcheck
 
 
 SHELL := $(COMSPEC)

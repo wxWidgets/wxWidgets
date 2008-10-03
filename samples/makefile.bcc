@@ -44,7 +44,7 @@ MAKEARGS = -DCC="$(CC)" -DCXX="$(CXX)" -DCFLAGS="$(CFLAGS)" \
 
 ### Targets: ###
 
-all: access animate artprov aui calendar caret collpane config combo console controls dataview dialogs dialup display dnd docview dragimag drawing erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer memcheck menu minimal mobile nativdlg notebook oleauto opengl ownerdrw popup printing propgrid regtest render richtext sashtest scroll scrollsub shaped sockets sound splash splitter statbar stc taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wrapsizer mfc
+all: access animate artprov aui calendar caret collpane config combo console controls dataview dialogs dialup display dnd docview dragimag drawing erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal mobile nativdlg notebook oleauto opengl ownerdrw popup printing propgrid regtest render richtext sashtest scroll scrollsub shaped sockets sound splash splitter statbar stc taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wrapsizer
 
 clean: 
 	-if exist .\*.obj del .\*.obj
@@ -198,10 +198,6 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>mediaplayer.bat
 	call mediaplayer.bat
 	@del mediaplayer.bat
-	@echo cd memcheck >memcheck.bat
-	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>memcheck.bat
-	call memcheck.bat
-	@del memcheck.bat
 	@echo cd menu >menu.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>menu.bat
 	call menu.bat
@@ -346,6 +342,10 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>mfc.bat
 	call mfc.bat
 	@del mfc.bat
+	@echo cd memcheck >memcheck.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>memcheck.bat
+	call memcheck.bat
+	@del memcheck.bat
 
 access: 
 	@echo cd access >access.bat
@@ -569,12 +569,6 @@ mediaplayer:
 	call mediaplayer.bat
 	@del mediaplayer.bat
 
-memcheck: 
-	@echo cd memcheck >memcheck.bat
-	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>memcheck.bat
-	call memcheck.bat
-	@del memcheck.bat
-
 menu: 
 	@echo cd menu >menu.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>menu.bat
@@ -790,4 +784,10 @@ mfc:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>mfc.bat
 	call mfc.bat
 	@del mfc.bat
+
+memcheck: 
+	@echo cd memcheck >memcheck.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>memcheck.bat
+	call memcheck.bat
+	@del memcheck.bat
 

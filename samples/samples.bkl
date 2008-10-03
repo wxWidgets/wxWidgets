@@ -4,8 +4,11 @@
 
     <include file="../build/bakefiles/config.bkl"/>
 
-    <template id="sub">
+    <template id="optsub">
         <dir>$(id)</dir>
+    </template>
+
+    <template id="sub" template="optsub">
         <dependency-of>all</dependency-of>
     </template>
 
@@ -47,7 +50,6 @@
     <subproject id="listctrl" template="sub"/>
     <subproject id="mdi" template="sub"/>
     <subproject id="mediaplayer" template="sub"/>
-    <subproject id="memcheck" template="sub"/>
     <subproject id="menu" template="sub"/>
     <subproject id="minimal" template="sub"/>
     <subproject id="mobile" template="sub"/>
@@ -83,7 +85,8 @@
     <subproject id="widgets" template="sub"/>
     <subproject id="wizard" template="sub"/>
     <subproject id="wrapsizer" template="sub"/>
-    <!-- Put samples most likely to fail at the end -->
-    <subproject id="mfc" template="sub"/>
+    <!-- These samples don't always build so don't build them by default -->
+    <subproject id="mfc" template="optsub"/>
+    <subproject id="memcheck" template="optsub"/>
 
 </makefile>
