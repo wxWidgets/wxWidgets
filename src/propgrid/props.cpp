@@ -1222,7 +1222,7 @@ void wxFlagsProperty::Init()
     //
     unsigned int i;
 
-    unsigned int prevChildCount = m_children.GetCount();
+    unsigned int prevChildCount = m_children.size();
 
     int oldSel = -1;
     if ( prevChildCount )
@@ -1248,9 +1248,9 @@ void wxFlagsProperty::Init()
 
     // Delete old children
     for ( i=0; i<prevChildCount; i++ )
-        delete ( (wxPGProperty*) m_children[i] );
+        delete m_children[i];
 
-    m_children.Empty();
+    m_children.clear();
 
     if ( m_choices.IsOk() )
     {
