@@ -164,10 +164,6 @@ bool wxXmlResource::IsArchive(const wxString& filename)
 
 bool wxXmlResource::Load(const wxString& filemask)
 {
-    wxString fnd;
-    bool iswild = wxIsWild(filemask);
-    bool rt = true;
-
 #if wxUSE_FILESYSTEM
     wxFileSystem fsys;
 #   define wxXmlFindFirst  fsys.FindFirst(filemask, wxFILE)
@@ -176,10 +172,13 @@ bool wxXmlResource::Load(const wxString& filemask)
 #   define wxXmlFindFirst  wxFindFirstFile(filemask, wxFILE)
 #   define wxXmlFindNext   wxFindNextFile()
 #endif
-    if (iswild)
-        fnd = wxXmlFindFirst;
-    else
-        fnd = filemask;
+    wxString fnd = wxXmlFindFirst;
+    if ( fnd.empty() )
+    {
+        wxLogError(_("Cannot load resources from '%s'."), filemask);
+        return false;
+    }
+
     while (!fnd.empty())
     {
         fnd = ConvertFileNameToURL(fnd);
@@ -187,7 +186,8 @@ bool wxXmlResource::Load(const wxString& filemask)
 #if wxUSE_FILESYSTEM
         if ( IsArchive(fnd) )
         {
-            rt = rt && Load(fnd + wxT("#zip:*.xrc"));
+            if ( !Load(fnd + wxT("#zip:*.xrc")) )
+                return false;
         }
         else // a single resource URL
 #endif // wxUSE_FILESYSTEM
@@ -197,14 +197,12 @@ bool wxXmlResource::Load(const wxString& filemask)
             Data().push_back(drec);
         }
 
-        if (iswild)
-            fnd = wxXmlFindNext;
-        else
-            fnd = wxEmptyString;
+        fnd = wxXmlFindNext;
     }
 #   undef wxXmlFindFirst
 #   undef wxXmlFindNext
-    return rt && UpdateResources();
+
+    return UpdateResources();
 }
 
 bool wxXmlResource::Unload(const wxString& filename)
