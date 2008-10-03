@@ -112,7 +112,7 @@ bool wxStringProperty::StringToValue( wxVariant& variant, const wxString& text, 
     if ( GetChildCount() && HasFlag(wxPG_PROP_COMPOSED_VALUE) )
         return wxPGProperty::StringToValue(variant, text, argFlags);
 
-    if ( m_value.GetString() != text )
+    if ( variant != text )
     {
         variant = text;
         return true;
@@ -230,7 +230,7 @@ bool wxIntProperty::StringToValue( wxVariant& variant, const wxString& text, int
 
         if ( useText.ToLong( &value32, 0 ) )
         {
-            if ( !isPrevLong || m_value.GetLong() != value32 )
+            if ( !isPrevLong || variant != value32 )
             {
                 variant = value32;
                 return true;
@@ -245,7 +245,7 @@ bool wxIntProperty::StringToValue( wxVariant& variant, const wxString& text, int
 
 bool wxIntProperty::IntToValue( wxVariant& variant, int value, int WXUNUSED(argFlags) ) const
 {
-    if ( variant.GetType() != wxPG_VARIANT_TYPE_LONG || variant.GetLong() != value )
+    if ( variant.GetType() != wxPG_VARIANT_TYPE_LONG || variant != (long)value )
     {
         variant = (long)value;
         return true;
@@ -447,7 +447,7 @@ bool wxUIntProperty::StringToValue( wxVariant& variant, const wxString& text, in
         else
         {
             unsigned long value32 = wxLongLong(value64).GetLo();
-            if ( !isPrevLong || m_value.GetLong() != (long)value32 )
+            if ( !isPrevLong || m_value != (long)value32 )
             {
                 variant = (long)value32;
                 return true;
@@ -460,7 +460,7 @@ bool wxUIntProperty::StringToValue( wxVariant& variant, const wxString& text, in
 
 bool wxUIntProperty::IntToValue( wxVariant& variant, int number, int WXUNUSED(argFlags) ) const
 {
-    if ( m_value != (long)number )
+    if ( variant != (long)number )
     {
         variant = (long)number;
         return true;
@@ -640,7 +640,7 @@ bool wxFloatProperty::StringToValue( wxVariant& variant, const wxString& text, i
     bool res = text.ToDouble(&value);
     if ( res )
     {
-        if ( m_value != value )
+        if ( variant != value )
         {
             variant = value;
             return true;
@@ -808,11 +808,11 @@ wxString wxBoolProperty::GetValueAsString( int argFlags ) const
 
 bool wxBoolProperty::StringToValue( wxVariant& variant, const wxString& text, int WXUNUSED(argFlags) ) const
 {
-    int value = 0;
+    bool boolValue = false;
     if ( text.CmpNoCase(wxPGGlobalVars->m_boolChoices[1].GetText()) == 0 ||
          text.CmpNoCase(wxS("true")) == 0 ||
          text.CmpNoCase(m_label) == 0 )
-        value = 1;
+        boolValue = true;
 
     if ( text.length() == 0 )
     {
@@ -820,11 +820,9 @@ bool wxBoolProperty::StringToValue( wxVariant& variant, const wxString& text, in
         return true;
     }
 
-    bool oldValue = m_value.GetBool();
-
-    if ( (oldValue && !value) || (!oldValue && value) )
+    if ( variant != boolValue )
     {
-        variant = wxPGVariant_Bool(value);
+        variant = wxPGVariant_Bool(boolValue);
         return true;
     }
     return false;
@@ -833,9 +831,8 @@ bool wxBoolProperty::StringToValue( wxVariant& variant, const wxString& text, in
 bool wxBoolProperty::IntToValue( wxVariant& variant, int value, int ) const
 {
     bool boolValue = value ? true : false;
-    bool oldValue = m_value.GetBool();
 
-    if ( oldValue != boolValue )
+    if ( variant != boolValue )
     {
         variant = wxPGVariant_Bool(boolValue);
         return true;
@@ -1451,7 +1448,6 @@ bool wxFlagsProperty::StringToValue( wxVariant& variant, const wxString& text, i
         return false;
 
     long newFlags = 0;
-    long oldValue = m_value;
 
     // semicolons are no longer valid delimeters
     WX_PG_TOKENIZER1_BEGIN(text,wxS(','))
@@ -1474,10 +1470,11 @@ bool wxFlagsProperty::StringToValue( wxVariant& variant, const wxString& text, i
 
     WX_PG_TOKENIZER1_END()
 
-    variant = newFlags;
-
-    if ( newFlags != oldValue )
+    if ( variant != (long)newFlags )
+    {
+        variant = (long)newFlags;
         return true;
+    }
 
     return false;
 }
@@ -1974,7 +1971,7 @@ bool wxLongStringProperty::DisplayEditorDialog( wxPGProperty* prop, wxPropertyGr
 
 bool wxLongStringProperty::StringToValue( wxVariant& variant, const wxString& text, int ) const
 {
-    if ( m_value != text )
+    if ( variant != text )
     {
         variant = text;
         return true;
