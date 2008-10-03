@@ -3603,15 +3603,13 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
                                                                 goodPos,
                                                                 grect.GetSize());
 
-                //
-                // Below, bear in mind the difference between primaryCtrl and m_wndEditor:
-                // m_wndEditor is the actual wxWindow on canvas, and primaryCtrl is
-                // the actual editor control. They may different if wxPGClipperWindow is
-                // used for this editor.
-                //
                 m_wndEditor = wndList.m_primary;
                 m_wndEditor2 = wndList.m_secondary;
                 wxWindow* primaryCtrl = GetEditorControl();
+
+                //
+                // Essentially, primaryCtrl == m_wndEditor
+                //
 
                 // NOTE: It is allowed for m_wndEditor to be NULL - in this case
                 //       value is drawn as normal, and m_wndEditor2 is assumed
@@ -3661,8 +3659,6 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
                     }
 
                     m_wndEditor->SetSizeHints(3, 3);
-                    if ( m_wndEditor != primaryCtrl )
-                        primaryCtrl->SetSizeHints(3, 3);
 
                 #if wxPG_CREATE_CONTROLS_HIDDEN
                     m_wndEditor->Show(false);
