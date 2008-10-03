@@ -439,7 +439,7 @@ wxPGProperty::~wxPGProperty()
     unsigned int i;
 
     for ( i=0; i<m_cells.size(); i++ )
-        delete m_cells[i];
+        delete (wxPGCell*) m_cells[i];
 
     // This makes it easier for us to detect dangling pointers
     m_parent = NULL;
