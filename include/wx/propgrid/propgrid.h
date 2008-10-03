@@ -1178,15 +1178,8 @@ public:
                             const wxPGProperty* p2 ) const;
 
     /** Returns pointer to current active primary editor control (NULL if none).
-
-        If editor uses clipper window, pointer is returned to the actual
-        editor, not the clipper.
     */
     wxWindow* GetEditorControl() const;
-
-    /** Adjusts given position if topCtrlWnd is child of clipper window.
-    */
-    bool AdjustPosForClipperWindow( wxWindow* topCtrlWnd, int* x, int* y );
 
     wxWindow* GetPrimaryEditor() const
     {

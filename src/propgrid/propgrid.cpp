@@ -4789,8 +4789,6 @@ bool wxPropertyGrid::OnMouseChildCommon( wxMouseEvent &event, int* px, int *py )
     int x, y;
     event.GetPosition(&x,&y);
 
-    AdjustPosForClipperWindow( topCtrlWnd, &x, &y );
-
     int splitterX = GetSplitterPosition();
 
     wxRect r = topCtrlWnd->GetRect();

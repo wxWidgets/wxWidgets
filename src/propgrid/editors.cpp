@@ -85,9 +85,6 @@
 
 #if defined(__WXMSW__)
     // tested
-    #define wxPG_NAT_TEXTCTRL_BORDER_X          0 // Unremovable border of native textctrl.
-    #define wxPG_NAT_TEXTCTRL_BORDER_Y          0 // Unremovable border of native textctrl.
-
     #define wxPG_NAT_BUTTON_BORDER_ANY          1
     #define wxPG_NAT_BUTTON_BORDER_X            1
     #define wxPG_NAT_BUTTON_BORDER_Y            1
@@ -108,9 +105,6 @@
     #define wxPG_CHECKMARK_HADJ                 (-1)
     #define wxPG_CHECKMARK_DEFLATE              3
 
-    #define wxPG_NAT_TEXTCTRL_BORDER_X      0 // Unremovable border of native textctrl.
-    #define wxPG_NAT_TEXTCTRL_BORDER_Y      0 // Unremovable border of native textctrl.
-
     #define wxPG_NAT_BUTTON_BORDER_ANY      1
     #define wxPG_NAT_BUTTON_BORDER_X        1
     #define wxPG_NAT_BUTTON_BORDER_Y        1
@@ -124,9 +118,6 @@
     #define wxPG_CHECKMARK_WADJ                 0
     #define wxPG_CHECKMARK_HADJ                 0
     #define wxPG_CHECKMARK_DEFLATE              0
-
-    #define wxPG_NAT_TEXTCTRL_BORDER_X      0 // Unremovable border of native textctrl.
-    #define wxPG_NAT_TEXTCTRL_BORDER_Y      0 // Unremovable border of native textctrl.
 
     #define wxPG_NAT_BUTTON_BORDER_ANY      0
     #define wxPG_NAT_BUTTON_BORDER_X        0
@@ -142,9 +133,6 @@
     #define wxPG_CHECKMARK_HADJ                 0
     #define wxPG_CHECKMARK_DEFLATE              0
 
-    #define wxPG_NAT_TEXTCTRL_BORDER_X      0 // Unremovable border of native textctrl.
-    #define wxPG_NAT_TEXTCTRL_BORDER_Y      0 // Unremovable border of native textctrl.
-
     #define wxPG_NAT_BUTTON_BORDER_ANY      0
     #define wxPG_NAT_BUTTON_BORDER_X        0
     #define wxPG_NAT_BUTTON_BORDER_Y        0
@@ -152,13 +140,6 @@
     #define wxPG_TEXTCTRLYADJUST            0
 
 #endif
-
-#if (!wxPG_NAT_TEXTCTRL_BORDER_X && !wxPG_NAT_TEXTCTRL_BORDER_Y)
-    #define wxPG_ENABLE_CLIPPER_WINDOW      0
-#else
-    #define wxPG_ENABLE_CLIPPER_WINDOW      1
-#endif
-
 
 // for odcombo
 #define wxPG_CHOICEXADJUST           0
@@ -225,197 +206,8 @@ bool wxPGEditor::CanContainCustomImage() const
 }
 
 // -----------------------------------------------------------------------
-// wxPGClipperWindow
-// -----------------------------------------------------------------------
-
-
-#if wxPG_ENABLE_CLIPPER_WINDOW
-
-//
-// Clipper window is used to "remove" borders from controls
-// which otherwise insist on having them despite of supplied
-// wxNO_BORDER window style.
-//
-class wxPGClipperWindow : public wxWindow
-{
-    DECLARE_CLASS(wxPGClipperWindow)
-public:
-
-    wxPGClipperWindow()
-        : wxWindow()
-    {
-        wxPGClipperWindow::Init();
-    }
-
-    wxPGClipperWindow(wxWindow* parent,
-                      wxWindowID id,
-                      const wxPoint& pos = wxDefaultPosition,
-                      const wxSize& size = wxDefaultSize)
-    {
-        Init();
-        Create(parent,id,pos,size);
-    }
-
-    void Create(wxWindow* parent,
-                wxWindowID id,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize);
-
-    virtual ~wxPGClipperWindow();
-
-    virtual bool ProcessEvent(wxEvent& event);
-
-    inline wxWindow* GetControl() const { return m_ctrl; }
-
-    // This is called before wxControl is constructed.
-    void GetControlRect( int xadj, int yadj, wxPoint& pt, wxSize& sz );
-
-    // This is caleed after wxControl has been constructed.
-    void SetControl( wxWindow* ctrl );
-
-    virtual void Refresh( bool eraseBackground = true,
-                          const wxRect *rect = (const wxRect *) NULL );
-    virtual void SetFocus();
-
-    virtual bool SetFont(const wxFont& font);
-
-    inline int GetXClip() const { return m_xadj; }
-
-    inline int GetYClip() const { return m_yadj; }
-
-protected:
-    wxWindow*       m_ctrl;
-
-    int             m_xadj; // Horizontal border clip.
-
-    int             m_yadj; // Vertical border clip.
-
-private:
-    void Init ()
-    {
-        m_ctrl = (wxWindow*) NULL;
-    }
-};
-
-
-IMPLEMENT_CLASS(wxPGClipperWindow,wxWindow)
-
-
-// This is called before wxControl is constructed.
-void wxPGClipperWindow::GetControlRect( int xadj, int yadj, wxPoint& pt, wxSize& sz )
-{
-    m_xadj = xadj;
-    m_yadj = yadj;
-    pt.x = -xadj;
-    pt.y = -yadj;
-    wxSize own_size = GetSize();
-    sz.x = own_size.x+(xadj*2);
-    sz.y = own_size.y+(yadj*2);
-}
-
-
-// This is caleed after wxControl has been constructed.
-void wxPGClipperWindow::SetControl( wxWindow* ctrl )
-{
-    m_ctrl = ctrl;
-
-    // GTK requires this.
-    ctrl->SetSizeHints(3,3);
-
-    // Correct size of this window to match the child.
-    wxSize sz = GetSize();
-    wxSize chsz = ctrl->GetSize();
-
-    int hei_adj = chsz.y - (sz.y+(m_yadj*2));
-    if ( hei_adj )
-        SetSize(sz.x,chsz.y-(m_yadj*2));
-
-}
-
-
-void wxPGClipperWindow::Refresh( bool eraseBackground, const wxRect *rect )
-{
-    wxWindow::Refresh(false,rect);
-    if ( m_ctrl )
-        m_ctrl->Refresh(eraseBackground);
-}
-
-
-// Pass focus to control
-void wxPGClipperWindow::SetFocus()
-{
-    if ( m_ctrl )
-        m_ctrl->SetFocus();
-    else
-        wxWindow::SetFocus();
-}
-
-
-bool wxPGClipperWindow::SetFont(const wxFont& font)
-{
-    bool res = wxWindow::SetFont(font);
-    if ( m_ctrl )
-        return m_ctrl->SetFont(font);
-    return res;
-}
-
-
-void wxPGClipperWindow::Create(wxWindow* parent,
-                               wxWindowID id,
-                               const wxPoint& pos,
-                               const wxSize& size )
-{
-    wxWindow::Create(parent,id,pos,size);
-}
-
-
-wxPGClipperWindow::~wxPGClipperWindow()
-{
-}
-
-
-bool wxPGClipperWindow::ProcessEvent(wxEvent& event)
-{
-    if ( event.GetEventType() == wxEVT_SIZE )
-    {
-        if ( m_ctrl )
-        {
-            // Maintain correct size relationship.
-            wxSize sz = GetSize();
-            m_ctrl->SetSize(sz.x+(m_xadj*2),sz.y+(m_yadj*2));
-            event.Skip();
-            return false;
-        }
-    }
-    return wxWindow::ProcessEvent(event);
-}
-
-#endif // wxPG_ENABLE_CLIPPER_WINDOW
-
-/*wxWindow* wxPropertyGrid::GetActualEditorControl( wxWindow* ctrl )
-{
-#if wxPG_ENABLE_CLIPPER_WINDOW
-    // Pass real control instead of clipper window
-    if ( ctrl->IsKindOf(CLASSINFO(wxPGClipperWindow)) )
-    {
-        return ((wxPGClipperWindow*)ctrl)->GetControl();
-    }
-#else
-    return ctrl;
-#endif
-}*/
-
-// -----------------------------------------------------------------------
 // wxPGTextCtrlEditor
 // -----------------------------------------------------------------------
-
-// Clipper window support macro (depending on whether it is used
-// for this editor or not)
-#if wxPG_NAT_TEXTCTRL_BORDER_X || wxPG_NAT_TEXTCTRL_BORDER_Y
-    #define wxPG_NAT_TEXTCTRL_BORDER_ANY    1
-#else
-    #define wxPG_NAT_TEXTCTRL_BORDER_ANY    0
-#endif
 
 WX_PG_IMPLEMENT_EDITOR_CLASS(TextCtrl,wxPGTextCtrlEditor,wxPGEditor)
 
@@ -1017,7 +809,7 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
     si.x -= wxPG_CHOICEXADJUST;
     wxWindow* ctrlParent = propGrid->GetPanel();
 
-    int odcbFlags = extraStyle | wxNO_BORDER | wxTE_PROCESS_ENTER;
+    int odcbFlags = extraStyle | wxBORDER_NONE | wxTE_PROCESS_ENTER;
 
     //
     // If common value specified, use appropriate index
@@ -1432,7 +1224,7 @@ public:
                       wxWindowID id,
                       const wxPoint& pos = wxDefaultPosition,
                       const wxSize& size = wxDefaultSize )
-        : wxControl(parent,id,pos,size,wxNO_BORDER|wxWANTS_CHARS)
+        : wxControl(parent,id,pos,size,wxBORDER_NONE|wxWANTS_CHARS)
     {
         // Due to SetOwnFont stuff necessary for GTK+ 1.2, we need to have this
         SetFont( parent->GetFont() );
@@ -1738,14 +1530,6 @@ wxWindow* wxPropertyGrid::GetEditorControl() const
     if ( !ctrl )
         return ctrl;
 
-    // If it's clipper window, return its child instead
-#if wxPG_ENABLE_CLIPPER_WINDOW
-    if ( ctrl->IsKindOf(CLASSINFO(wxPGClipperWindow)) )
-    {
-        return ((wxPGClipperWindow*)ctrl)->GetControl();
-    }
-#endif
-
     return ctrl;
 }
 
@@ -1823,29 +1607,6 @@ void wxPropertyGrid::CorrectEditorWidgetPosY()
 
 // -----------------------------------------------------------------------
 
-bool wxPropertyGrid::AdjustPosForClipperWindow( wxWindow* topCtrlWnd, int* x, int* y )
-{
-#if wxPG_ENABLE_CLIPPER_WINDOW
-    // Take clipper window into account
-    if (topCtrlWnd->GetPosition().x < 1 &&
-        !topCtrlWnd->IsKindOf(CLASSINFO(wxPGClipperWindow)))
-    {
-        topCtrlWnd = topCtrlWnd->GetParent();
-        wxASSERT( topCtrlWnd->IsKindOf(CLASSINFO(wxPGClipperWindow)) );
-        *x -= ((wxPGClipperWindow*)topCtrlWnd)->GetXClip();
-        *y -= ((wxPGClipperWindow*)topCtrlWnd)->GetYClip();
-        return true;
-    }
-#else
-    wxUnusedVar(topCtrlWnd);
-    wxUnusedVar(x);
-    wxUnusedVar(y);
-#endif
-    return false;
-}
-
-// -----------------------------------------------------------------------
-
 // Fixes position of wxTextCtrl-like control (wxSpinCtrl usually
 // fits into that category as well).
 void wxPropertyGrid::FixPosForTextCtrl( wxWindow* ctrl, const wxPoint& offset )
@@ -1911,46 +1672,20 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
     if ( (sz.y - m_lineHeight) > 5 )
         hasSpecialSize = true;
 
-#if wxPG_NAT_TEXTCTRL_BORDER_ANY
-
-    // Create clipper window
-    wxPGClipperWindow* wnd = new wxPGClipperWindow();
-#if defined(__WXMSW__)
-    wnd->Hide();
-#endif
-    wnd->Create(GetPanel(),id,p,s);
-
-    // This generates rect of the control inside the clipper window
-    if ( !hasSpecialSize )
-        wnd->GetControlRect(wxPG_NAT_TEXTCTRL_BORDER_X, wxPG_NAT_TEXTCTRL_BORDER_Y, p, s);
-    else
-        wnd->GetControlRect(0, 0, p, s);
-
-    wxWindow* ctrlParent = wnd;
-
-#else
-
     wxWindow* ctrlParent = GetPanel();
 
     if ( !hasSpecialSize )
-        tcFlags |= wxNO_BORDER;
-
-#endif
+        tcFlags |= wxBORDER_NONE;
 
     wxTextCtrl* tc = new wxTextCtrl();
 
-#if defined(__WXMSW__) && !wxPG_NAT_TEXTCTRL_BORDER_ANY
+#if defined(__WXMSW__)
     tc->Hide();
 #endif
     SetupTextCtrlValue(value);
     tc->Create(ctrlParent,id,value, p, s,tcFlags);
 
-#if wxPG_NAT_TEXTCTRL_BORDER_ANY
-    wxWindow* ed = wnd;
-    wnd->SetControl(tc);
-#else
     wxWindow* ed = tc;
-#endif
 
     // Center the control vertically
     if ( !hasSpecialSize )
