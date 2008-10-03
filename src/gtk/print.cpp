@@ -2179,7 +2179,7 @@ void wxGtkPrinterDCImpl::DoGetTextExtent(const wxString& string, wxCoord *width,
     // Set layout's text
     const wxUTF8Buf dataUTF8 = string.utf8_str();
 
-    gint oldSize;
+    gint oldSize=0;
     if ( theFont )
     {
         // scale the font and apply it
