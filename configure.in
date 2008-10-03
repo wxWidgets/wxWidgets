@@ -6310,9 +6310,6 @@ fi
 if test "$wxUSE_DOC_VIEW_ARCHITECTURE" = "yes" ; then
     AC_DEFINE(wxUSE_DOC_VIEW_ARCHITECTURE)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS docview"
-    if test "$wxUSE_MDI_ARCHITECTURE" = "yes"; then
-        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS docvwmdi"
-    fi
 fi
 
 if test "$wxUSE_HELP" = "yes"; then
