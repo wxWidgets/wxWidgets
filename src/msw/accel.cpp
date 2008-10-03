@@ -152,13 +152,6 @@ WXHACCEL wxAcceleratorTable::GetHACCEL() const
 
 bool wxAcceleratorTable::Translate(wxWindow *window, WXMSG *wxmsg) const
 {
-#if 0
-    // calling TranslateAccelerator() with child window doesn't do anything so
-    // it's probably a bug
-    wxASSERT_MSG( window->IsTopLevel(),
-                    _T("TranslateAccelerator() needs a top level window") );
-#endif
-
     MSG *msg = (MSG *)wxmsg;
     return Ok() && ::TranslateAccelerator(GetHwndOf(window), GetHaccel(), msg);
 }
