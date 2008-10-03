@@ -892,6 +892,14 @@ bool wxPGProperty::OnEvent( wxPropertyGrid*, wxWindow*, wxEvent& )
 
 void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
 {
+    // If auto unspecified values are not wanted (via window or property style),
+    // then get default value instead of wxNullVariant.
+    if ( value.IsNull() && (flags & wxPG_SETVAL_BY_USER) &&
+         !UsesAutoUnspecified() )
+    {
+        value = GetDefaultValue();
+    }
+
     if ( !value.IsNull() )
     {
         wxVariant tempListVariant;
