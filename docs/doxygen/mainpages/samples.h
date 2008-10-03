@@ -71,7 +71,6 @@ TODO: Organize them in a more human-readable way.
 @li @sample{display}
 @li @sample{dnd}
 @li @sample{docview}
-@li @sample{docvwmdi}
 @li @sample{dragimag}
 @li @sample{drawing}
 @li @sample{editlbox}
@@ -346,15 +345,7 @@ wxDataObject to achieve this.
 
 @sampledir{docview}
 
-@see @sample{docvwmdi}, @sample{mdi}
-
-@section page_samples_docvwmdi Document/View MDI Sample
-
-@sampleabout{@ref overview_docview in MDI}
-
-@see @sample{docview}, @sample{mdi}
-
-@sampledir{docvwmdi}
+@see @sample{mdi}
 
 @section page_samples_dragimag Drag Image Sample
 
@@ -564,7 +555,7 @@ The sample also provides some timings for adding/deleting/sorting a lot of
 
 @sampleabout{MDI}
 
-@see @sample{docview}, @sample{docvwmdi}
+@see @sample{docview}
 
 @sampledir{mdi}
 

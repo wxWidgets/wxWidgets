@@ -1,26 +1,32 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        doc.cpp
+// Name:        samples/docview/doc.cpp
 // Purpose:     Implements document functionality
 // Author:      Julian Smart
-// Modified by:
+// Modified by: Vadim Zeitlin: merge with the MDI version and general cleanup
 // Created:     04/01/98
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart
+// Copyright:   (c) 1998 Julian Smart
+//              (c) 2008 Vadim Zeitlin
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
 
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
+#endif
+
+#if !wxUSE_DOC_VIEW_ARCHITECTURE
+    #error You must set wxUSE_DOC_VIEW_ARCHITECTURE to 1 in setup.h!
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
-#endif
-#ifdef __WXMAC__
-#include "wx/filename.h"
+    #include "wx/wx.h"
 #endif
 
 #if wxUSE_STD_IOSTREAM
@@ -29,302 +35,132 @@
     #include "wx/txtstrm.h"
 #endif
 
-#if !wxUSE_DOC_VIEW_ARCHITECTURE
-#error You must set wxUSE_DOC_VIEW_ARCHITECTURE to 1 in setup.h!
-#endif
-
 #include "doc.h"
 #include "view.h"
+
+// ----------------------------------------------------------------------------
+// DrawingDocument implementation
+// ----------------------------------------------------------------------------
+
 IMPLEMENT_DYNAMIC_CLASS(DrawingDocument, wxDocument)
 
-DrawingDocument::~DrawingDocument(void)
-{
-    WX_CLEAR_LIST(wxList, m_doodleSegments)
-}
-
-#if wxUSE_STD_IOSTREAM
-wxSTD ostream& DrawingDocument::SaveObject(wxSTD ostream& stream)
+DocumentOstream& DrawingDocument::SaveObject(DocumentOstream& stream)
 {
     wxDocument::SaveObject(stream);
 
-    wxInt32 n = m_doodleSegments.GetCount();
-    stream << n << '\n';
+    const wxInt32 count = m_doodleSegments.size();
+    stream << count << '\n';
 
-    wxList::compatibility_iterator node = m_doodleSegments.GetFirst();
-    while (node)
+    for ( int n = 0; n < count; n++ )
     {
-        DoodleSegment *segment = (DoodleSegment *)node->GetData();
-        segment->SaveObject(stream);
+        m_doodleSegments[n].SaveObject(stream);
         stream << '\n';
-
-        node = node->GetNext();
     }
 
     return stream;
 }
-#else
-wxOutputStream& DrawingDocument::SaveObject(wxOutputStream& stream)
-{
-    wxDocument::SaveObject(stream);
 
-    wxTextOutputStream text_stream( stream );
-
-    wxInt32 n = m_doodleSegments.GetCount();
-    text_stream << n << '\n';
-
-    wxList::compatibility_iterator node = m_doodleSegments.GetFirst();
-    while (node)
-    {
-        DoodleSegment *segment = (DoodleSegment *)node->GetData();
-        segment->SaveObject(stream);
-        text_stream << '\n';
-
-        node = node->GetNext();
-    }
-
-    return stream;
-}
-#endif
-
-#if wxUSE_STD_IOSTREAM
-wxSTD istream& DrawingDocument::LoadObject(wxSTD istream& stream)
+DocumentIstream& DrawingDocument::LoadObject(DocumentIstream& stream)
 {
     wxDocument::LoadObject(stream);
 
-    wxInt32 n = 0;
-    stream >> n;
+    wxInt32 count = 0;
+    stream >> count;
 
-    for (int i = 0; i < n; i++)
+    for ( int n = 0; n < count; n++ )
     {
-        DoodleSegment *segment = new DoodleSegment;
-        segment->LoadObject(stream);
-        m_doodleSegments.Append(segment);
+        DoodleSegment segment;
+        segment.LoadObject(stream);
+        m_doodleSegments.push_back(segment);
     }
 
     return stream;
 }
-#else
-wxInputStream& DrawingDocument::LoadObject(wxInputStream& stream)
+
+void DrawingDocument::DoUpdate()
 {
-    wxDocument::LoadObject(stream);
-
-    wxTextInputStream text_stream( stream );
-
-    wxInt32 n = 0;
-    text_stream >> n;
-
-    for (int i = 0; i < n; i++)
-    {
-        DoodleSegment *segment = new DoodleSegment;
-        segment->LoadObject(stream);
-        m_doodleSegments.Append(segment);
-    }
-
-    return stream;
-}
-#endif
-
-DoodleSegment::DoodleSegment(const DoodleSegment& seg):wxObject()
-{
-    wxList::compatibility_iterator node = seg.m_lines.GetFirst();
-    while (node)
-    {
-        DoodleLine *line = (DoodleLine *)node->GetData();
-        DoodleLine *newLine = new DoodleLine;
-        newLine->x1 = line->x1;
-        newLine->y1 = line->y1;
-        newLine->x2 = line->x2;
-        newLine->y2 = line->y2;
-
-        m_lines.Append(newLine);
-
-        node = node->GetNext();
-    }
+    Modify(true);
+    UpdateAllViews();
 }
 
-DoodleSegment::~DoodleSegment(void)
+void DrawingDocument::AddDoodleSegment(const DoodleSegment& segment)
 {
-    WX_CLEAR_LIST(wxList, m_lines)
+    m_doodleSegments.push_back(segment);
+
+    DoUpdate();
 }
 
-#if wxUSE_STD_IOSTREAM
-wxSTD ostream& DoodleSegment::SaveObject(wxSTD ostream& stream)
+bool DrawingDocument::PopLastSegment(DoodleSegment *segment)
 {
-    wxInt32 n = m_lines.GetCount();
-    stream << n << '\n';
+    if ( m_doodleSegments.empty() )
+        return false;
 
-    wxList::compatibility_iterator node = m_lines.GetFirst();
-    while (node)
-    {
-        DoodleLine *line = (DoodleLine *)node->GetData();
-        stream << line->x1 << " " <<
-            line->y1 << " " <<
-            line->x2 << " " <<
-            line->y2 << "\n";
-        node = node->GetNext();
-    }
+    if ( segment )
+        *segment = m_doodleSegments.back();
 
-    return stream;
-}
-#else
-wxOutputStream &DoodleSegment::SaveObject(wxOutputStream& stream)
-{
-    wxTextOutputStream text_stream( stream );
+    m_doodleSegments.pop_back();
 
-    wxInt32 n = m_lines.GetCount();
-    text_stream << n << wxT("\n");
+    DoUpdate();
 
-    wxList::compatibility_iterator node = m_lines.GetFirst();
-    while (node)
-    {
-        DoodleLine* line = (DoodleLine*)node->GetData();
-        text_stream << line->x1 << wxT(" ") <<
-            line->y1 << wxT(" ") <<
-            line->x2 << wxT(" ") <<
-            line->y2 << wxT("\n");
-        node = node->GetNext();
-    }
-
-    return stream;
-}
-#endif
-
-#if wxUSE_STD_IOSTREAM
-wxSTD istream& DoodleSegment::LoadObject(wxSTD istream& stream)
-{
-    wxInt32 n = 0;
-    stream >> n;
-
-    for (int i = 0; i < n; i++)
-    {
-        DoodleLine *line = new DoodleLine;
-        stream >> line->x1 >>
-            line->y1 >>
-            line->x2 >>
-            line->y2;
-        m_lines.Append(line);
-    }
-
-    return stream;
-}
-#else
-wxInputStream &DoodleSegment::LoadObject(wxInputStream& stream)
-{
-    wxTextInputStream text_stream( stream );
-
-    wxInt32 n = 0;
-    text_stream >> n;
-
-    for (int i = 0; i < n; i++)
-    {
-        DoodleLine *line = new DoodleLine;
-        text_stream >> line->x1 >>
-            line->y1 >>
-            line->x2 >>
-            line->y2;
-        m_lines.Append(line);
-    }
-
-    return stream;
-}
-#endif
-
-void DoodleSegment::Draw(wxDC *dc)
-{
-    wxList::compatibility_iterator node = m_lines.GetFirst();
-    while (node)
-    {
-        DoodleLine *line = (DoodleLine *)node->GetData();
-        dc->DrawLine(line->x1, line->y1, line->x2, line->y2);
-        node = node->GetNext();
-    }
-}
-
-/*
-* Implementation of drawing command
-*/
-
-DrawingCommand::DrawingCommand(const wxString& name, int command, DrawingDocument* doc, DoodleSegment* seg) :
-    wxCommand(true, name)
-{
-    m_doc = doc;
-    m_segment = seg;
-    m_cmd = command;
-}
-
-DrawingCommand::~DrawingCommand(void)
-{
-    if (m_segment)
-        delete m_segment;
-}
-
-bool DrawingCommand::Do(void)
-{
-    switch (m_cmd)
-    {
-    case DOODLE_CUT:
-        {
-            // Cut the last segment
-            if (m_doc->GetDoodleSegments().GetCount() > 0)
-            {
-                wxList::compatibility_iterator node = m_doc->GetDoodleSegments().GetLast();
-                if (m_segment)
-                    delete m_segment;
-
-                m_segment = (DoodleSegment*)node->GetData();
-                m_doc->GetDoodleSegments().Erase(node);
-
-                m_doc->Modify(true);
-                m_doc->UpdateAllViews();
-            }
-            break;
-        }
-    case DOODLE_ADD:
-        {
-            m_doc->GetDoodleSegments().Append(new DoodleSegment(*m_segment));
-            m_doc->Modify(true);
-            m_doc->UpdateAllViews();
-            break;
-        }
-    }
     return true;
 }
 
-bool DrawingCommand::Undo(void)
-{
-    switch (m_cmd)
-    {
-    case DOODLE_CUT:
-        {
-            // Paste the segment
-            if (m_segment)
-            {
-                m_doc->GetDoodleSegments().Append(m_segment);
-                m_doc->Modify(true);
-                m_doc->UpdateAllViews();
-                m_segment = NULL;
-            }
-            m_doc->Modify(true);
-            m_doc->UpdateAllViews();
-            break;
-        }
-    case DOODLE_ADD:
-        {
-            // Cut the last segment
-            if (m_doc->GetDoodleSegments().GetCount() > 0)
-            {
-                wxList::compatibility_iterator node = m_doc->GetDoodleSegments().GetLast();
-                DoodleSegment* seg = (DoodleSegment*)node->GetData();
-                delete seg;
-                m_doc->GetDoodleSegments().Erase(node);
+// ----------------------------------------------------------------------------
+// DoodleSegment implementation
+// ----------------------------------------------------------------------------
 
-                m_doc->Modify(true);
-                m_doc->UpdateAllViews();
-            }
-        }
+DocumentOstream& DoodleSegment::SaveObject(DocumentOstream& ostream)
+{
+#if wxUSE_STD_IOSTREAM
+    DocumentOstream& stream = ostream;
+#else
+    wxTextOutputStream stream(ostream);
+#endif
+
+    const wxInt32 count = m_lines.size();
+    stream << count << '\n';
+
+    for ( int n = 0; n < count; n++ )
+    {
+        const DoodleLine& line = m_lines[n];
+        stream
+            << line.x1 << ' '
+            << line.y1 << ' '
+            << line.x2 << ' '
+            << line.y2 << '\n';
     }
-    return true;
+
+    return stream;
 }
+
+DocumentIstream& DoodleSegment::LoadObject(DocumentIstream& istream)
+{
+#if wxUSE_STD_IOSTREAM
+    DocumentIstream& stream = istream;
+#else
+    wxTextInputStream stream(istream);
+#endif
+
+    wxInt32 count = 0;
+    stream >> count;
+
+    for ( int n = 0; n < count; n++ )
+    {
+        DoodleLine line;
+        stream
+            >> line.x1
+            >> line.y1
+            >> line.x2
+            >> line.y2;
+        m_lines.push_back(line);
+    }
+
+    return stream;
+}
+
+// ----------------------------------------------------------------------------
+// TextEditDocument implementation
+// ----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(TextEditDocument, wxDocument)
 
@@ -332,42 +168,33 @@ IMPLEMENT_DYNAMIC_CLASS(TextEditDocument, wxDocument)
 // we override DoSave/OpenDocument instead of Save/LoadObject
 bool TextEditDocument::DoSaveDocument(const wxString& filename)
 {
-    TextEditView* view = GetFirstView();
-
-    if (!view->m_textsw->SaveFile(filename))
-        return false;
-
-    return true;
+    return GetFirstView()->GetText()->SaveFile(filename);
 }
 
 bool TextEditDocument::DoOpenDocument(const wxString& filename)
 {
-    TextEditView* view = GetFirstView();
-    if (!view->m_textsw->LoadFile(filename))
-        return false;
-
-    return true;
+    return GetFirstView()->GetText()->LoadFile(filename);
 }
 
-bool TextEditDocument::IsModified(void) const
+bool TextEditDocument::IsModified() const
 {
     TextEditView* view = GetFirstView();
-    return (wxDocument::IsModified() || (view && view->m_textsw->IsModified()));
+    return wxDocument::IsModified() || (view && view->GetText()->IsModified());
 }
 
-void TextEditDocument::Modify(bool mod)
+void TextEditDocument::Modify(bool modified)
 {
     TextEditView* view = GetFirstView();
 
-    wxDocument::Modify(mod);
+    wxDocument::Modify(modified);
 
-    if (!mod && view && view->m_textsw)
-        view->m_textsw->DiscardEdits();
+    if ( !modified && view && view->GetText() )
+        view->GetText()->DiscardEdits();
 }
 
 TextEditView* TextEditDocument::GetFirstView() const
 {
-   wxView* view = wxDocument::GetFirstView();
-   return view ? wxStaticCast(view, TextEditView) : NULL;
+    wxView* view = wxDocument::GetFirstView();
+    return view ? wxStaticCast(view, TextEditView) : NULL;
 }
 

@@ -159,18 +159,6 @@ Package=<4>
 
 ###############################################################################
 
-Project: "docvwmdi"=.\docvwmdi\docvwmdi.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
 Project: "dragimag"=.\dragimag\dragimag.dsp - Package Owner=<4>
 
 Package=<5>

@@ -27,7 +27,6 @@
     <subproject id="display" template="sub"/>
     <subproject id="dnd" template="sub"/>
     <subproject id="docview" template="sub"/>
-    <subproject id="docvwmdi" template="sub"/>
     <subproject id="dragimag" template="sub"/>
     <subproject id="drawing" template="sub"/>
     <subproject id="erase" template="sub"/>

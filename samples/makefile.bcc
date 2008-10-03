@@ -44,7 +44,7 @@ MAKEARGS = -DCC="$(CC)" -DCXX="$(CXX)" -DCFLAGS="$(CFLAGS)" \
 
 ### Targets: ###
 
-all: access animate artprov aui calendar caret collpane config combo console controls dataview dialogs dialup display dnd docview docvwmdi dragimag drawing erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer memcheck menu minimal mobile nativdlg notebook oleauto opengl ownerdrw popup printing propgrid regtest render richtext sashtest scroll scrollsub shaped sockets sound splash splitter statbar stc taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wrapsizer mfc
+all: access animate artprov aui calendar caret collpane config combo console controls dataview dialogs dialup display dnd docview dragimag drawing erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer memcheck menu minimal mobile nativdlg notebook oleauto opengl ownerdrw popup printing propgrid regtest render richtext sashtest scroll scrollsub shaped sockets sound splash splitter statbar stc taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wrapsizer mfc
 
 clean: 
 	-if exist .\*.obj del .\*.obj
@@ -118,10 +118,6 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>docview.bat
 	call docview.bat
 	@del docview.bat
-	@echo cd docvwmdi >docvwmdi.bat
-	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>docvwmdi.bat
-	call docvwmdi.bat
-	@del docvwmdi.bat
 	@echo cd dragimag >dragimag.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>dragimag.bat
 	call dragimag.bat
@@ -452,12 +448,6 @@ docview:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>docview.bat
 	call docview.bat
 	@del docview.bat
-
-docvwmdi: 
-	@echo cd docvwmdi >docvwmdi.bat
-	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>docvwmdi.bat
-	call docvwmdi.bat
-	@del docvwmdi.bat
 
 dragimag: 
 	@echo cd dragimag >dragimag.bat
