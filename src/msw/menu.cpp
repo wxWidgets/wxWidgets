@@ -1347,7 +1347,7 @@ void wxMenuBar::RebuildAccelTable()
             nAccelCount += (*it)->CopyAccels(&accelEntries[nAccelCount]);
         }
 
-        m_accelTable = wxAcceleratorTable(nAccelCount, accelEntries);
+        SetAcceleratorTable(wxAcceleratorTable(nAccelCount, accelEntries));
 
         delete [] accelEntries;
     }

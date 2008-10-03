@@ -183,9 +183,6 @@ public:
 #endif
 
 #if wxUSE_ACCEL
-    // get the accel table for all the menus
-    const wxAcceleratorTable& GetAccelTable() const { return m_accelTable; }
-
     // update the accel table (must be called after adding/deleting a menu)
     void RebuildAccelTable();
 #endif // wxUSE_ACCEL
@@ -213,10 +210,6 @@ protected:
     // Return the MSW position for a wxMenu which is sometimes different from
     // the wxWidgets position.
     int MSWPositionForWxMenu(wxMenu *menu, int wxpos);
-#if wxUSE_ACCEL
-    // the accelerator table for all accelerators in all our menus
-    wxAcceleratorTable m_accelTable;
-#endif // wxUSE_ACCEL
 
 #if defined(__WXWINCE__) && wxUSE_TOOLBAR
     wxToolBar*  m_toolBar;
