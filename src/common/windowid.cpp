@@ -202,7 +202,7 @@ wxWindowID wxIdManager::ReserveId(int count)
                     while(count--)
                         ReserveIdRefCount(id--);
 
-                    return id;
+                    return id + 1;
                 }
             }
             else
