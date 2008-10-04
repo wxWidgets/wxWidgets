@@ -520,11 +520,19 @@ public:
         PageState        = 0x08,
         /** Include splitter position. Stored for each page. */
         SplitterPosState = 0x10,
+        /** Include description box size.
+            Only applies to wxPropertyGridManager. */
+        DescBoxState     = 0x20,
 
-        /** Include all supported user editable state information. This is
-            usually the default value. */
-        AllStates        = SelectionState | ExpandedState | ScrollPosState |
-                           PageState | SplitterPosState
+        /**
+            Include all supported user editable state information.
+            This is usually the default value. */
+        AllStates        = SelectionState |
+                           ExpandedState |
+                           ScrollPosState |
+                           PageState |
+                           SplitterPosState |
+                           DescBoxState
     };
 
     /**

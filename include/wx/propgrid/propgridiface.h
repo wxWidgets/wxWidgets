@@ -794,6 +794,9 @@ public:
         PageState        = 0x08,
         /** Include splitter position. Stored for each page. */
         SplitterPosState = 0x10,
+        /** Include description box size.
+            Only applies to wxPropertyGridManager. */
+        DescBoxState     = 0x20,
 
         /**
             Include all supported user editable state information.
@@ -802,7 +805,8 @@ public:
                            ExpandedState |
                            ScrollPosState |
                            PageState |
-                           SplitterPosState
+                           SplitterPosState |
+                           DescBoxState
     };
 
     /**
@@ -1434,6 +1438,27 @@ public:
     virtual void RefreshProperty( wxPGProperty* p ) = 0;
 
 protected:
+
+    /**
+        In derived class, implement to set editable state component with
+        given name to given value.
+    */
+    virtual bool SetEditableStateItem( const wxString& name, wxVariant value )
+    {
+        wxUnusedVar(name);
+        wxUnusedVar(value);
+        return false;
+    }
+
+    /**
+        In derived class, implement to return editable state component with
+        given name.
+    */
+    virtual wxVariant GetEditableStateItem( const wxString& name ) const
+    {
+        wxUnusedVar(name);
+        return wxNullVariant;
+    }
 
     // Returns page state data for given (sub) page (-1 means current page).
     virtual wxPropertyGridPageState* GetPageState( int pageIndex ) const

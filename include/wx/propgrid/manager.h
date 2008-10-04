@@ -725,6 +725,10 @@ protected:
 
     void SetDescribedProperty( wxPGProperty* p );
 
+    // Reimplement these to handle "descboxheight" state item
+    virtual bool SetEditableStateItem( const wxString& name, wxVariant value );
+    virtual wxVariant GetEditableStateItem( const wxString& name ) const;
+
     virtual bool ProcessEvent( wxEvent& event );
 
 private:

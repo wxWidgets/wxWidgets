@@ -1396,6 +1396,29 @@ void wxPropertyGridManager::OnToolbarClick( wxCommandEvent &event )
 
 // -----------------------------------------------------------------------
 
+bool wxPropertyGridManager::SetEditableStateItem( const wxString& name, wxVariant value )
+{
+    if ( name == wxS("descboxheight") )
+    {
+        SetDescBoxHeight(value.GetLong(), true);
+        return true;
+    }
+    return false;
+}
+
+// -----------------------------------------------------------------------
+
+wxVariant wxPropertyGridManager::GetEditableStateItem( const wxString& name ) const
+{
+    if ( name == wxS("descboxheight") )
+    {
+        return (long) GetDescBoxHeight();
+    }
+    return wxNullVariant;
+}
+
+// -----------------------------------------------------------------------
+
 void wxPropertyGridManager::SetDescription( const wxString& label, const wxString& content )
 {
     if ( m_pTxtHelpCaption )

@@ -1012,6 +1012,11 @@ wxString wxPropertyGridInterface::SaveEditableState( int includedStates ) const
             else
                 result += wxS("0;");
         }
+        if ( includedStates & DescBoxState )
+        {
+            wxVariant v = GetEditableStateItem(wxS("descboxheight"));
+            result += wxString::Format(wxS("descboxheight=%i;"), (int)v.GetLong());
+        }
         result.RemoveLast();  // Remove last semicolon
         result += wxS("|");
     }
@@ -1142,6 +1147,21 @@ bool wxPropertyGridInterface::RestoreEditableState( const wxString& src, int res
                         {
                             if ( pageSelStatus )
                                 selectedPage = pageIndex;
+                        }
+                        else
+                        {
+                            res = false;
+                        }
+                    }
+                }
+                else if ( key == wxS("descboxheight") )
+                {
+                    if ( restoreStates & DescBoxState )
+                    {
+                        long descBoxHeight;
+                        if ( values.size() == 1 && values[0].ToLong(&descBoxHeight) )
+                        {
+                            SetEditableStateItem(wxS("descboxheight"), descBoxHeight);
                         }
                         else
                         {
