@@ -1372,13 +1372,7 @@ public:
     int      GetColLabelTextOrientation() const;
     wxString GetRowLabelValue( int row ) const;
     wxString GetColLabelValue( int col ) const;
-    wxColour GetGridLineColour() const { return m_gridLineColour; }
 
-    // these methods may be overridden to customize individual grid lines
-    // appearance
-    virtual wxPen GetDefaultGridLinePen();
-    virtual wxPen GetRowGridLinePen(int row);
-    virtual wxPen GetColGridLinePen(int col);
     wxColour GetCellHighlightColour() const { return m_cellHighlightColour; }
     int      GetCellHighlightPenWidth() const { return m_cellHighlightPenWidth; }
     int      GetCellHighlightROPenWidth() const { return m_cellHighlightROPenWidth; }
@@ -1396,7 +1390,6 @@ public:
     void     SetColLabelTextOrientation( int textOrientation );
     void     SetRowLabelValue( int row, const wxString& );
     void     SetColLabelValue( int col, const wxString& );
-    void     SetGridLineColour( const wxColour& );
     void     SetCellHighlightColour( const wxColour& );
     void     SetCellHighlightPenWidth(int width);
     void     SetCellHighlightROPenWidth(int width);
@@ -1418,6 +1411,36 @@ public:
     void     DisableDragCell() { EnableDragCell( false ); }
     bool     CanDragCell() const { return m_canDragCell; }
 
+
+    // grid lines
+    // ----------
+
+    // enable or disable drawing of the lines
+    void EnableGridLines(bool enable = true);
+    bool GridLinesEnabled() const { return m_gridLinesEnabled; }
+
+    // by default grid lines stop at last column/row, but this may be changed
+    void ClipHorzGridLines(bool clip)
+        { DoClipGridLines(m_gridLinesClipHorz, clip); }
+    void ClipVertGridLines(bool clip)
+        { DoClipGridLines(m_gridLinesClipVert, clip); }
+    bool AreHorzGridLinesClipped() const { return m_gridLinesClipHorz; }
+    bool AreVertGridLinesClipped() const { return m_gridLinesClipVert; }
+
+    // this can be used to change the global grid lines colour
+    void SetGridLineColour(const wxColour& col);
+    wxColour GetGridLineColour() const { return m_gridLineColour; }
+
+    // these methods may be overridden to customize individual grid lines
+    // appearance
+    virtual wxPen GetDefaultGridLinePen();
+    virtual wxPen GetRowGridLinePen(int row);
+    virtual wxPen GetColGridLinePen(int col);
+
+
+    // attributes
+    // ----------
+
     // this sets the specified attribute for this cell or in this row/col
     void     SetAttr(int row, int col, wxGridCellAttr *attr);
     void     SetRowAttr(int row, wxGridCellAttr *attr);
@@ -1437,9 +1460,6 @@ public:
     void     SetColFormatNumber(int col);
     void     SetColFormatFloat(int col, int width = -1, int precision = -1);
     void     SetColFormatCustom(int col, const wxString& typeName);
-
-    void     EnableGridLines( bool enable = true );
-    bool     GridLinesEnabled() const { return m_gridLinesEnabled; }
 
     // ------ row and col formatting
     //
@@ -1961,6 +1981,8 @@ protected:
 
     wxColour   m_gridLineColour;
     bool       m_gridLinesEnabled;
+    bool       m_gridLinesClipHorz,
+               m_gridLinesClipVert;
     wxColour   m_cellHighlightColour;
     int        m_cellHighlightPenWidth;
     int        m_cellHighlightROPenWidth;
@@ -2159,6 +2181,13 @@ protected:
 private:
     // implement wxScrolledWindow method to return m_gridWin size
     virtual wxSize GetSizeAvailableForScrollTarget(const wxSize& size);
+
+    // redraw the grid lines, should be called after changing their attributes
+    void RedrawGridLines();
+
+    // common part of Clip{Horz,Vert}GridLines
+    void DoClipGridLines(bool& var, bool clip);
+
 
     // event handlers and their helpers
     // --------------------------------

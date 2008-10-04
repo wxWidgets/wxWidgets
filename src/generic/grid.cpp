@@ -4349,9 +4349,10 @@ void wxGridWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     wxGridCellCoordsArray dirtyCells = m_owner->CalcCellsExposed( reg );
     m_owner->DrawGridCellArea( dc, dirtyCells );
 
+    m_owner->DrawGridSpace( dc );
+
     m_owner->DrawAllGridLines( dc, reg );
 
-    m_owner->DrawGridSpace( dc );
     m_owner->DrawHighlight( dc, dirtyCells );
 }
 
@@ -4819,6 +4820,8 @@ void wxGrid::Init()
 
     m_gridLineColour = wxColour( 192,192,192 );
     m_gridLinesEnabled = true;
+    m_gridLinesClipHorz =
+    m_gridLinesClipVert = true;
     m_cellHighlightColour = *wxBLACK;
     m_cellHighlightPenWidth = 2;
     m_cellHighlightROPenWidth = 1;
@@ -7910,7 +7913,7 @@ void wxGrid::DrawHighlight(wxDC& dc, const wxGridCellCoordsArray& cells)
 //
 void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & WXUNUSED(reg) )
 {
-    if ( !m_gridLinesEnabled || !m_numRows || !m_numCols )
+    if ( !m_gridLinesEnabled )
          return;
 
     int top, bottom, left, right;
@@ -7921,9 +7924,25 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & WXUNUSED(reg) )
     CalcUnscrolledPosition( cw, ch, &right, &bottom );
 
     // avoid drawing grid lines past the last row and col
-    //
-    right = wxMin( right, GetColRight(GetColAt( m_numCols - 1 )) );
-    bottom = wxMin( bottom, GetRowBottom(m_numRows - 1) );
+    if ( m_gridLinesClipHorz )
+    {
+        if ( !m_numCols )
+            return;
+
+        const int lastColRight = GetColRight(GetColAt(m_numCols - 1));
+        if ( right > lastColRight )
+            right = lastColRight;
+    }
+
+    if ( m_gridLinesClipVert )
+    {
+        if ( !m_numRows )
+            return;
+
+        const int lastRowBottom = GetRowBottom(m_numRows - 1);
+        if ( bottom > lastRowBottom )
+            bottom = lastRowBottom;
+    }
 
     // no gridlines inside multicells, clip them out
     int leftCol = GetColPos( internalXToCol(left) );
@@ -9413,9 +9432,8 @@ void wxGrid::SetGridLineColour( const wxColour& colour )
     {
         m_gridLineColour = colour;
 
-        wxClientDC dc( m_gridWin );
-        PrepareDC( dc );
-        DrawAllGridLines( dc, wxRegion() );
+        if ( GridLinesEnabled() )
+            RedrawGridLines();
     }
 }
 
@@ -9470,25 +9488,42 @@ void wxGrid::SetCellHighlightROPenWidth(int width)
     }
 }
 
+void wxGrid::RedrawGridLines()
+{
+    // the lines will be redrawn when the window is thawn
+    if ( GetBatchCount() )
+        return;
+
+    if ( GridLinesEnabled() )
+    {
+        wxClientDC dc( m_gridWin );
+        PrepareDC( dc );
+        DrawAllGridLines( dc, wxRegion() );
+    }
+    else // remove the grid lines
+    {
+        m_gridWin->Refresh();
+    }
+}
+
 void wxGrid::EnableGridLines( bool enable )
 {
     if ( enable != m_gridLinesEnabled )
     {
         m_gridLinesEnabled = enable;
 
-        if ( !GetBatchCount() )
-        {
-            if ( enable )
-            {
-                wxClientDC dc( m_gridWin );
-                PrepareDC( dc );
-                DrawAllGridLines( dc, wxRegion() );
-            }
-            else
-            {
-                m_gridWin->Refresh();
-            }
-        }
+        RedrawGridLines();
+    }
+}
+
+void wxGrid::DoClipGridLines(bool& var, bool clip)
+{
+    if ( clip != var )
+    {
+        var = clip;
+
+        if ( GridLinesEnabled() )
+            RedrawGridLines();
     }
 }
 

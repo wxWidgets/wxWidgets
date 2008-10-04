@@ -1359,6 +1359,26 @@ public:
     bool AppendRows(int numRows = 1, bool updateLabels = true);
 
     /**
+        Return @true if the horizontal grid lines stop at the last column
+        boundary or @false if they continue to the end of the window.
+
+        The default is to clip grid lines.
+
+        @see ClipHorzGridLines(), AreVertGridLinesClipped()
+     */
+    bool AreHorzGridLinesClipped() const;
+
+    /**
+        Return @true if the vertical grid lines stop at the last row
+        boundary or @false if they continue to the end of the window.
+
+        The default is to clip grid lines.
+
+        @see ClipVertGridLines(), AreHorzGridLinesClipped()
+     */
+    bool AreVertGridLinesClipped() const;
+
+    /**
         Automatically sets the height and width of all rows and columns to fit their
         contents.
     */
@@ -1503,6 +1523,30 @@ public:
         Deselects all cells that are currently selected.
     */
     void ClearSelection();
+
+    /**
+        Change whether the horizontal grid lines are clipped by the end of the
+        last column.
+
+        By default the grid lines are not drawn beyond the end of the last
+        column but after calling this function with @a clip set to @false they
+        will be drawn across the entire grid window.
+
+        @see AreHorzGridLinesClipped(), ClipVertGridLines()
+     */
+    void ClipHorzGridLines(bool clip);
+
+    /**
+        Change whether the vertical grid lines are clipped by the end of the
+        last row.
+
+        By default the grid lines are not drawn beyond the end of the last
+        row but after calling this function with @a clip set to @false they
+        will be drawn across the entire grid window.
+
+        @see AreVertzGridLinesClipped(), ClipHorzGridLines()
+     */
+    void ClipVertzGridLines(bool clip);
 
     /**
         Creates a grid with the specified initial number of rows and columns.
