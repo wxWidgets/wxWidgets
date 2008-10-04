@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        tglbtn.h
-// Purpose:     interface of wxBitmapToggleButton
+// Purpose:     interface of wxBitmapToggleButton, wxToggleButton
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -10,14 +10,12 @@
 /**
     @class wxToggleButton
 
-    wxToggleButton is a button that stays pressed when clicked by the user. In
-    other words, it is similar to wxCheckBox in
-    functionality but looks like a wxButton.
+    wxToggleButton is a button that stays pressed when clicked by the user.
+    In other words, it is similar to wxCheckBox in functionality but looks like a wxButton.
 
     Since wxWidgets version 2.9.0 this control emits an update UI event.
 
-    You can see wxToggleButton in action in the sixth page of the
-    controls() sample.
+    You can see wxToggleButton in action in @ref page_samples_controls.
 
     @beginEventTable{wxCommandEvent}
     @event{EVT_TOGGLEBUTTON(id, func)}
@@ -48,11 +46,11 @@ public:
         @param label
             Text to be displayed next to the toggle button.
         @param pos
-            Toggle button position. If wxDefaultPosition is specified then a
-        default position is chosen.
+            Toggle button position.
+            If wxDefaultPosition is specified then a default position is chosen.
         @param size
-            Toggle button size. If wxDefaultSize is specified then a
-        default size is chosen.
+            Toggle button size.
+            If wxDefaultSize is specified then a default size is chosen.
         @param style
             Window style. See wxToggleButton.
         @param validator
@@ -76,8 +74,8 @@ public:
     virtual ~wxToggleButton();
 
     /**
-        Creates the toggle button for two-step construction. See wxToggleButton()
-        for details.
+        Creates the toggle button for two-step construction.
+        See wxToggleButton() for details.
     */
     bool Create(wxWindow* parent, wxWindowID id,
                 const wxString& label,
@@ -95,8 +93,8 @@ public:
     virtual bool GetValue() const;
 
     /**
-        Sets the toggle button to the given state. This does not cause a
-        @c EVT_TOGGLEBUTTON event to be emitted.
+        Sets the toggle button to the given state.
+        This does not cause a @c EVT_TOGGLEBUTTON event to be emitted.
 
         @param state
             If @true, the button is pressed.
@@ -161,8 +159,8 @@ public:
     virtual bool GetValue() const;
 
     /**
-        Sets the toggle button to the given state. This does not cause a
-        @c EVT_TOGGLEBUTTON event to be emitted.
+        Sets the toggle button to the given state.
+        This does not cause a @c EVT_TOGGLEBUTTON event to be emitted.
 
         @param state
             If @true, the button is pressed.

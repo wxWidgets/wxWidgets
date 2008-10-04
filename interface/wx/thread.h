@@ -1,33 +1,104 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        thread.h
-// Purpose:     interface of wxCondition
+// Purpose:     interface of all thread-related wxWidgets classes
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+
+/** See wxCondition. */
+enum wxCondError
+{
+    wxCOND_NO_ERROR = 0,
+    wxCOND_INVALID,
+    wxCOND_TIMEOUT,         //!< WaitTimeout() has timed out
+    wxCOND_MISC_ERROR
+};
+
+
 /**
     @class wxCondition
 
-    wxCondition variables correspond to pthread conditions or to Win32 event
-    objects. They may be used in a multithreaded application to wait until the
-    given condition becomes @true which happens when the condition becomes signaled.
+    wxCondition variables correspond to pthread conditions or to Win32 event objects.
+    They may be used in a multithreaded application to wait until the given condition
+    becomes @true which happens when the condition becomes signaled.
 
     For example, if a worker thread is doing some long task and another thread has
     to wait until it is finished, the latter thread will wait on the condition
     object and the worker thread will signal it on exit (this example is not
     perfect because in this particular case it would be much better to just
-    wxThread::Wait for the worker thread, but if there are several
-    worker threads it already makes much more sense).
+    wxThread::Wait for the worker thread, but if there are several worker threads
+    it already makes much more sense).
 
-    Note that a call to wxCondition::Signal may happen before the
-    other thread calls wxCondition::Wait and, just as with the
-    pthread conditions, the signal is then lost and so if you want to be sure that
-    you don't miss it you must keep the mutex associated with the condition
-    initially locked and lock it again before calling
-    wxCondition::Signal. Of course, this means that this call is
-    going to block until wxCondition::Wait is called by another
-    thread.
+    Note that a call to wxCondition::Signal may happen before the other thread calls
+    wxCondition::Wait and, just as with the pthread conditions, the signal is then
+    lost and so if you want to be sure that you don't miss it you must keep the
+    mutex associated with the condition initially locked and lock it again before calling
+    wxCondition::Signal. Of course, this means that this call is going to block
+    until wxCondition::Wait is called by another thread.
+
+    @section condition_example Example
+
+    This example shows how a main thread may launch a worker thread which starts
+    running and then waits until the main thread signals it to continue:
+
+    @code
+    class MySignallingThread : public wxThread
+    {
+    public:
+        MySignallingThread(wxMutex *mutex, wxCondition *condition)
+        {
+            m_mutex = mutex;
+            m_condition = condition;
+
+            Create();
+        }
+
+        virtual ExitCode Entry()
+        {
+            ... do our job ...
+
+            // tell the other(s) thread(s) that we're about to terminate: we must
+            // lock the mutex first or we might signal the condition before the
+            // waiting threads start waiting on it!
+            wxMutexLocker lock(*m_mutex);
+            m_condition->Broadcast(); // same as Signal() here -- one waiter only
+
+            return 0;
+        }
+
+    private:
+        wxCondition *m_condition;
+        wxMutex *m_mutex;
+    };
+
+    int main()
+    {
+        wxMutex mutex;
+        wxCondition condition(mutex);
+
+        // the mutex should be initially locked
+        mutex.Lock();
+
+        // create and run the thread but notice that it won't be able to
+        // exit (and signal its exit) before we unlock the mutex below
+        MySignallingThread *thread = new MySignallingThread(&mutex, &condition);
+
+        thread->Run();
+
+        // wait for the thread termination: Wait() atomically unlocks the mutex
+        // which allows the thread to continue and starts waiting
+        condition.Wait();
+
+        // now we can exit
+        return 0;
+    }
+    @endcode
+
+    Of course, here it would be much better to simply use a joinable thread and
+    call wxThread::Wait on it, but this example does illustrate the importance of
+    properly locking the mutex when using wxCondition.
 
     @library{wxbase}
     @category{threading}
@@ -38,23 +109,24 @@ class wxCondition
 {
 public:
     /**
-        Default and only constructor. The @a mutex must be locked by the caller
-        before calling Wait() function.
-        Use IsOk() to check if the object was successfully
-        initialized.
+        Default and only constructor.
+        The @a mutex must be locked by the caller before calling Wait() function.
+        Use IsOk() to check if the object was successfully initialized.
     */
     wxCondition(wxMutex& mutex);
 
     /**
-        Destroys the wxCondition object. The destructor is not virtual so this class
-        should not be used polymorphically.
+        Destroys the wxCondition object.
+
+        The destructor is not virtual so this class should not be used polymorphically.
     */
     ~wxCondition();
 
     /**
-        Broadcasts to all waiting threads, waking all of them up. Note that this method
-        may be called whether the mutex associated with this condition is locked or
-        not.
+        Broadcasts to all waiting threads, waking all of them up.
+
+        Note that this method may be called whether the mutex associated with
+        this condition is locked or not.
 
         @see Signal()
     */
@@ -67,10 +139,13 @@ public:
     bool IsOk() const;
 
     /**
-        Signals the object waking up at most one thread. If several threads are waiting
-        on the same condition, the exact thread which is woken up is undefined. If no
-        threads are waiting, the signal is lost and the condition would have to be
-        signalled again to wake up any thread which may start waiting on it later.
+        Signals the object waking up at most one thread.
+
+        If several threads are waiting on the same condition, the exact thread
+        which is woken up is undefined. If no threads are waiting, the signal is
+        lost and the condition would have to be signalled again to wake up any
+        thread which may start waiting on it later.
+
         Note that this method may be called whether the mutex associated with this
         condition is locked or not.
 
@@ -80,18 +155,18 @@ public:
 
     /**
         Waits until the condition is signalled.
-        This method atomically releases the lock on the mutex associated with this
-        condition (this is why it must be locked prior to calling Wait) and puts the
-        thread to sleep until Signal() or
-        Broadcast() is called. It then locks the mutex
-        again and returns.
-        Note that even if Signal() had been called before
-        Wait without waking up any thread, the thread would still wait for another one
-        and so it is important to ensure that the condition will be signalled after
-        Wait or the thread may sleep forever.
 
-        @return Returns wxCOND_NO_ERROR on success, another value if an error
-                 occurred.
+        This method atomically releases the lock on the mutex associated with this
+        condition (this is why it must be locked prior to calling Wait()) and puts the
+        thread to sleep until Signal() or  Broadcast() is called.
+        It then locks the mutex again and returns.
+
+        Note that even if Signal() had been called before Wait() without waking
+        up any thread, the thread would still wait for another one and so it is
+        important to ensure that the condition will be signalled after
+        Wait() or the thread may sleep forever.
+
+        @return Returns wxCOND_NO_ERROR on success, another value if an error occurred.
 
         @see WaitTimeout()
     */
@@ -99,26 +174,47 @@ public:
 
     /**
         Waits until the condition is signalled or the timeout has elapsed.
-        This method is identical to Wait() except that it
-        returns, with the return code of @c wxCOND_TIMEOUT as soon as the given
-        timeout expires.
+
+        This method is identical to Wait() except that it returns, with the
+        return code of @c wxCOND_TIMEOUT as soon as the given timeout expires.
 
         @param milliseconds
             Timeout in milliseconds
+
+        @return Returns wxCOND_NO_ERROR if the condition was signalled,
+                wxCOND_TIMEOUT if the timeout elapsed before this happened or
+                another error code from wxCondError enum.
     */
     wxCondError WaitTimeout(unsigned long milliseconds);
 };
 
+// There are 2 types of mutexes: normal mutexes and recursive ones. The attempt
+// to lock a normal mutex by a thread which already owns it results in
+// undefined behaviour (it always works under Windows, it will almost always
+// result in a deadlock under Unix). Locking a recursive mutex in such
+// situation always succeeds and it must be unlocked as many times as it has
+// been locked.
+//
+// However recursive mutexes have several important drawbacks: first, in the
+// POSIX implementation, they're less efficient. Second, and more importantly,
+// they CAN NOT BE USED WITH CONDITION VARIABLES under Unix! Using them with
+// wxCondition will work under Windows and some Unices (notably Linux) but will
+// deadlock under other Unix versions (e.g. Solaris). As it might be difficult
+// to ensure that a recursive mutex is not used with wxCondition, it is a good
+// idea to avoid using recursive mutexes at all. Also, the last problem with
+// them is that some (older) Unix versions don't support this at all -- which
+// results in a configure warning when building and a deadlock when using them.
 
 
 /**
     @class wxCriticalSectionLocker
 
-    This is a small helper class to be used with wxCriticalSection
-    objects. A wxCriticalSectionLocker enters the critical section in the
-    constructor and leaves it in the destructor making it much more difficult to
-    forget to leave a critical section (which, in general, will lead to serious
-    and difficult to debug problems).
+    This is a small helper class to be used with wxCriticalSection objects.
+
+    A wxCriticalSectionLocker enters the critical section in the constructor and
+    leaves it in the destructor making it much more difficult to forget to leave
+    a critical section (which, in general, will lead to serious and difficult
+    to debug problems).
 
     Example of using it:
 
@@ -173,28 +269,26 @@ public:
     @class wxThreadHelper
 
     The wxThreadHelper class is a mix-in class that manages a single background
-    thread.  By deriving from wxThreadHelper, a class can implement the thread
-    code in its own wxThreadHelper::Entry method
-    and easily share data and synchronization objects between the main thread
-    and the worker thread.  Doing this prevents the awkward passing of pointers
-    that is needed when the original object in the main thread needs to
-    synchronize with its worker thread in its own wxThread derived object.
+    thread. By deriving from wxThreadHelper, a class can implement the thread
+    code in its own wxThreadHelper::Entry() method and easily share data and
+    synchronization objects between the main thread and the worker thread.
 
-    For example, wxFrame may need to make some calculations
-    in a background thread and then display the results of those calculations in
-    the main window.
+    Doing this prevents the awkward passing of pointers that is needed when the
+    original object in the main thread needs to synchronize with its worker thread
+    in its own wxThread derived object.
 
-    Ordinarily, a wxThread derived object would be created
-    with the calculation code implemented in
-    wxThread::Entry.  To access the inputs to the
-    calculation, the frame object would often to pass a pointer to itself to the
-    thread object.  Similarly, the frame object would hold a pointer to the
-    thread object.  Shared data and synchronization objects could be stored in
-    either object though the object without the data would have to access the
-    data through a pointer.
+    For example, wxFrame may need to make some calculations in a background thread
+    and then display the results of those calculations in the main window.
 
+    Ordinarily, a wxThread derived object would be created with the calculation
+    code implemented in wxThread::Entry. To access the inputs to the calculation,
+    the frame object would often to pass a pointer to itself to the thread object.
+    Similarly, the frame object would hold a pointer to the thread object.
+    Shared data and synchronization objects could be stored in either object
+    though the object without the data would have to access the data through
+    a pointer.
     However, with wxThreadHelper, the frame object and the thread object are
-    treated as the same object.  Shared data and synchronization variables are
+    treated as the same object. Shared data and synchronization variables are
     stored in the single object, eliminating a layer of indirection and the
     associated pointers.
 
@@ -217,22 +311,27 @@ public:
     virtual ~wxThreadHelper();
 
     /**
-        Creates a new thread. The thread object is created in the suspended state, and
-        you
-        should call @ref wxThread::Run GetThread()-Run to start running
-        it.  You may optionally specify the stack size to be allocated to it (Ignored on
-        platforms that don't support setting it explicitly, eg. Unix).
+        Creates a new thread.
 
-        @return One of:
+        The thread object is created in the suspended state, and you
+        should call @ref wxThread::Run GetThread()-Run to start running it.
+
+        You may optionally specify the stack size to be allocated to it (ignored
+        on platforms that don't support setting it explicitly, eg. Unix).
+
+        @return One of the ::wxThreadError enum values.
     */
     wxThreadError Create(unsigned int stackSize = 0);
 
     /**
-        This is the entry point of the thread. This function is pure virtual and must
-        be implemented by any derived class. The thread execution will start here.
+        This is the entry point of the thread.
+
+        This function is pure virtual and must be implemented by any derived class.
+        The thread execution will start here.
+
         The returned value is the thread exit code which is only useful for
-        joinable threads and is the value returned by
-        @ref wxThread::Wait GetThread()-Wait.
+        joinable threads and is the value returned by @c "GetThread()->Wait()".
+
         This function is called by wxWidgets itself and should never be called
         directly.
     */
@@ -243,11 +342,6 @@ public:
         associated with the thread.
     */
     wxThread* GetThread() const;
-
-    /**
-        wxThread * m_thread
-        the actual wxThread object.
-    */
 };
 
 /**
@@ -259,20 +353,20 @@ enum wxCriticalSectionType
     wxCRITSEC_DEFAULT,
       /** Recursive critical section under both Windows and Unix */
 
-    wxCRITSEC_NON_RECURSIVE  
+    wxCRITSEC_NON_RECURSIVE
       /** Non-recursive critical section under Unix, recursive under Windows */
 };
 
 /**
     @class wxCriticalSection
 
-    A critical section object is used for exactly the same purpose as
-    a wxMutex. The only difference is that under Windows platform
-    critical sections are only visible inside one process, while mutexes may be
-    shared among processes, so using critical sections is slightly more
-    efficient. The terminology is also slightly different: mutex may be locked
-    (or acquired) and unlocked (or released) while critical section is entered
-    and left by the program.
+    A critical section object is used for exactly the same purpose as a wxMutex.
+    The only difference is that under Windows platform critical sections are only
+    visible inside one process, while mutexes may be shared among processes,
+    so using critical sections is slightly more efficient.
+
+    The terminology is also slightly different: mutex may be locked (or acquired)
+    and unlocked (or released) while critical section is entered and left by the program.
 
     Finally, you should try to use wxCriticalSectionLocker class whenever
     possible instead of directly using wxCriticalSection for the same reasons
@@ -287,8 +381,8 @@ class wxCriticalSection
 {
 public:
     /**
-        Default constructor initializes critical section object. By default
-        critical sections are recursive under Unix and Windows.
+        Default constructor initializes critical section object.
+        By default critical sections are recursive under Unix and Windows.
     */
     wxCriticalSection( wxCriticalSectionType critSecType = wxCRITSEC_DEFAULT );
 
@@ -298,15 +392,17 @@ public:
     ~wxCriticalSection();
 
     /**
-        Enter the critical section (same as locking a mutex). There is no error return
-        for this function. After entering the critical section protecting some global
+        Enter the critical section (same as locking a mutex).
+
+        There is no error return for this function.
+        After entering the critical section protecting some global
         data the thread running in critical section may safely use/modify it.
     */
     void Enter();
 
     /**
-        Leave the critical section allowing other threads use the global data protected
-        by it. There is no error return for this function.
+        Leave the critical section allowing other threads use the global data
+        protected by it. There is no error return for this function.
     */
     void Leave();
 };
@@ -317,10 +413,10 @@ public:
 enum wxThreadKind
 {
     /** Detached thread */
-    wxTHREAD_DETACHED,  
-    
+    wxTHREAD_DETACHED,
+
     /** Joinable thread */
-    wxTHREAD_JOINABLE   
+    wxTHREAD_JOINABLE
 };
 
 /**
@@ -329,22 +425,22 @@ enum wxThreadKind
 enum wxThreadError
 {
     /** No error */
-    wxTHREAD_NO_ERROR = 0,      
-    
+    wxTHREAD_NO_ERROR = 0,
+
     /** No resource left to create a new thread. */
-    wxTHREAD_NO_RESOURCE,       
-    
+    wxTHREAD_NO_RESOURCE,
+
     /** The thread is already running. */
-    wxTHREAD_RUNNING,          
-    
-    /** The thread isn't running. */ 
-    wxTHREAD_NOT_RUNNING,       
-    
+    wxTHREAD_RUNNING,
+
+    /** The thread isn't running. */
+    wxTHREAD_NOT_RUNNING,
+
     /** Thread we waited for had to be killed. */
-    wxTHREAD_KILLED,            
-    
+    wxTHREAD_KILLED,
+
     /** Some other error */
-    wxTHREAD_MISC_ERROR         
+    wxTHREAD_MISC_ERROR
 };
 
 /**
@@ -361,106 +457,113 @@ enum
 /**
     @class wxThread
 
-    A thread is basically a path of execution through a program. Threads are
-    sometimes called @e light-weight processes, but the fundamental difference
+    A thread is basically a path of execution through a program.
+    Threads are sometimes called @e light-weight processes, but the fundamental difference
     between threads and processes is that memory spaces of different processes are
     separated while all threads share the same address space.
 
     While it makes it much easier to share common data between several threads, it
     also makes it much easier to shoot oneself in the foot, so careful use of
-    synchronization objects such as mutexes() or @ref wxCriticalSection
-    "critical sections" is recommended. In addition, don't create global thread
-    objects because they allocate memory in their constructor, which will cause
-    problems for the memory checking system.
+    synchronization objects such as mutexes() or critical sections (see wxCriticalSection)
+    is recommended. In addition, don't create global thread objects because they
+    allocate memory in their constructor, which will cause problems for the memory
+    checking system.
 
-    @section overview_typeswxthread Types of wxThreads
-        There are two types of threads in wxWidgets: @e detached and @e joinable,
-        modeled after the the POSIX thread API. This is different from the Win32 API
-        where all threads are joinable.
-        
-        By default wxThreads in wxWidgets use the detached behavior. Detached threads
-        delete themselves once they have completed, either by themselves when they
-        complete processing or through a call to Delete(), and thus
-        must be created on the heap (through the new operator, for example).
-        Conversely, joinable threads do not delete themselves when they are done 
-        processing and as such are safe to create on the stack. Joinable threads
-        also provide the ability for one to get value it returned from Entry()
-        through Wait().
-        
-        You shouldn't hurry to create all the threads joinable, however, because this
-        has a disadvantage as well: you @b must Wait() for a joinable thread or the
-        system resources used by it will never be freed, and you also must delete the
-        corresponding wxThread object yourself if you did not create it on the stack.
-        In contrast, detached threads are of the "fire-and-forget" kind: you only have to
-        start a detached thread and it will terminate and destroy itself.
-        
-    @section overview_deletionwxthread wxThread Deletion
-        Regardless of whether it has terminated or not, you should call
-        Wait() on a joinable thread to release its memory, as outlined in 
-        @ref overview_typeswxthread "Types of wxThreads". If you created
-        a joinable thread on the heap, remember to delete it manually with the delete
-        operator or similar means as only detached threads handle this type of memory
-        management.
-        
-        Since detached threads delete themselves when they are finished processing,
-        you should take care when calling a routine on one. If you are certain the
-        thread is still running and would like to end it, you may call Delete() 
-        to gracefully end it (which implies that the thread will be deleted after 
-        that call to Delete()). It should be implied that you should never attempt
-        to delete a detached thread with the delete operator or similar means.
-        As mentioned, Wait() or Delete() attempts to gracefully terminate a 
-        joinable and detached thread, respectively. It does this by waiting until
-        the thread in question calls TestDestroy() or ends processing (returns 
-        from wxThread::Entry).
-        
-        Obviously, if the thread does call TestDestroy() and does not end the calling
-        thread will come to halt. This is why it is important to call TestDestroy() in
-        the Entry() routine of your threads as often as possible.
-        As a last resort you can end the thread immediately through Kill(). It is
-        strongly recommended that you do not do this, however, as it does not free
-        the resources associated with the object (although the wxThread object of
-        detached threads will still be deleted) and could leave the C runtime 
-        library in an undefined state.
-        
-    @section overview_secondarythreads wxWidgets Calls in Secondary Threads
-        All threads other than the "main application thread" (the one
-        wxApp::OnInit or your main function runs in, for example) are considered
-        "secondary threads". These include all threads created by Create() or the
-        corresponding constructors.
-        
-        GUI calls, such as those to a wxWindow or wxBitmap are explicitly not safe
-        at all in secondary threads and could end your application prematurely.
-        This is due to several reasons, including the underlying native API and 
-        the fact that wxThread does not run a GUI event loop similar to other APIs
-        as MFC.
-        
-        A workaround for some wxWidgets ports is calling wxMutexGUIEnter()
-        before any GUI calls and then calling wxMutexGUILeave() afterwords. However,
-        the recommended way is to simply process the GUI calls in the main thread
-        through an event that is posted by either wxQueueEvent().
-        This does not imply that calls to these classes are thread-safe, however,
-        as most wxWidgets classes are not thread-safe, including wxString.
-        
-    @section overview_pollwxThread Don't Poll a wxThread
-        A common problem users experience with wxThread is that in their main thread
-        they will check the thread every now and then to see if it has ended through
-        IsRunning(), only to find that their application has run into problems 
-        because the thread is using the default behavior and has already deleted 
-        itself. Naturally, they instead attempt to use joinable threads in place 
-        of the previous behavior. However, polling a wxThread for when it has ended
-        is in general a bad idea - in fact calling a routine on any running wxThread 
-        should be avoided if possible. Instead, find a way to notify yourself when
-        the thread has ended.
-        
-        Usually you only need to notify the main thread, in which case you can
-        post an event to it via wxPostEvent() or wxEvtHandler::AddPendingEvent.
-        In the case of secondary threads you can call a routine of another class
-        when the thread is about to complete processing and/or set the value of 
-        a variable, possibly using mutexes() and/or other synchronization means
-        if necessary.
+    @section thread_types Types of wxThreads
+
+    There are two types of threads in wxWidgets: @e detached and @e joinable,
+    modeled after the the POSIX thread API. This is different from the Win32 API
+    where all threads are joinable.
+
+    By default wxThreads in wxWidgets use the detached behavior. Detached threads
+    delete themselves once they have completed, either by themselves when they
+    complete processing or through a call to Delete(), and thus
+    must be created on the heap (through the new operator, for example).
+    Conversely, joinable threads do not delete themselves when they are done
+    processing and as such are safe to create on the stack. Joinable threads
+    also provide the ability for one to get value it returned from Entry()
+    through Wait().
+
+    You shouldn't hurry to create all the threads joinable, however, because this
+    has a disadvantage as well: you @b must Wait() for a joinable thread or the
+    system resources used by it will never be freed, and you also must delete the
+    corresponding wxThread object yourself if you did not create it on the stack.
+    In contrast, detached threads are of the "fire-and-forget" kind: you only have to
+    start a detached thread and it will terminate and destroy itself.
+
+
+    @section thread_deletion wxThread Deletion
+
+    Regardless of whether it has terminated or not, you should call Wait() on a
+    joinable thread to release its memory, as outlined in @ref thread_types.
+    If you created a joinable thread on the heap, remember to delete it manually
+    with the @c delete operator or similar means as only detached threads handle
+    this type of memory management.
+
+    Since detached threads delete themselves when they are finished processing,
+    you should take care when calling a routine on one. If you are certain the
+    thread is still running and would like to end it, you may call Delete()
+    to gracefully end it (which implies that the thread will be deleted after
+    that call to Delete()). It should be implied that you should never attempt
+    to delete a detached thread with the delete operator or similar means.
+    As mentioned, Wait() or Delete() attempts to gracefully terminate a
+    joinable and detached thread, respectively. It does this by waiting until
+    the thread in question calls TestDestroy() or ends processing (returns
+    from wxThread::Entry).
+
+    Obviously, if the thread does call TestDestroy() and does not end the calling
+    thread will come to halt. This is why it is important to call TestDestroy() in
+    the Entry() routine of your threads as often as possible.
+    As a last resort you can end the thread immediately through Kill(). It is
+    strongly recommended that you do not do this, however, as it does not free
+    the resources associated with the object (although the wxThread object of
+    detached threads will still be deleted) and could leave the C runtime
+    library in an undefined state.
+
+
+    @section thread_secondary wxWidgets Calls in Secondary Threads
+
+    All threads other than the "main application thread" (the one
+    wxApp::OnInit() or your main function runs in, for example) are considered
+    "secondary threads". These include all threads created by Create() or the
+    corresponding constructors.
+
+    GUI calls, such as those to a wxWindow or wxBitmap are explicitly not safe
+    at all in secondary threads and could end your application prematurely.
+    This is due to several reasons, including the underlying native API and
+    the fact that wxThread does not run a GUI event loop similar to other APIs
+    as MFC.
+
+    A workaround for some wxWidgets ports is calling wxMutexGUIEnter()
+    before any GUI calls and then calling wxMutexGUILeave() afterwords. However,
+    the recommended way is to simply process the GUI calls in the main thread
+    through an event that is posted by either wxQueueEvent().
+    This does not imply that calls to these classes are thread-safe, however,
+    as most wxWidgets classes are not thread-safe, including wxString.
+
+
+    @section thread_poll Don't Poll a wxThread
+
+    A common problem users experience with wxThread is that in their main thread
+    they will check the thread every now and then to see if it has ended through
+    IsRunning(), only to find that their application has run into problems
+    because the thread is using the default behavior and has already deleted
+    itself. Naturally, they instead attempt to use joinable threads in place
+    of the previous behavior. However, polling a wxThread for when it has ended
+    is in general a bad idea - in fact calling a routine on any running wxThread
+    should be avoided if possible. Instead, find a way to notify yourself when
+    the thread has ended.
+
+    Usually you only need to notify the main thread, in which case you can
+    post an event to it via wxPostEvent() or wxEvtHandler::AddPendingEvent().
+    In the case of secondary threads you can call a routine of another class
+    when the thread is about to complete processing and/or set the value of
+    a variable, possibly using mutexes (see wxMutex) and/or other synchronization
+    means if necessary.
 
     @library{wxbase}
     @category{threading}
+
     @see wxMutex, wxCondition, wxCriticalSection
 */
 class wxThread
@@ -468,9 +571,9 @@ class wxThread
 public:
     /**
         This constructor creates a new detached (default) or joinable C++
-        thread object. It does not create or start execution of the real thread --
+        thread object. It does not create or start execution of the real thread -
         for this you should use the Create() and Run() methods.
-        
+
         The possible values for @a kind parameters are:
           - @b wxTHREAD_DETACHED - Creates a detached thread.
           - @b wxTHREAD_JOINABLE - Creates a joinable thread.
@@ -478,35 +581,38 @@ public:
     wxThread(wxThreadKind kind = wxTHREAD_DETACHED);
 
     /**
-        The destructor frees the resources associated with the thread. Notice that you
-        should never delete a detached thread -- you may only call
-        Delete() on it or wait until it terminates (and auto
-        destructs) itself. Because the detached threads delete themselves, they can
-        only be allocated on the heap.
+        The destructor frees the resources associated with the thread.
+        Notice that you should never delete a detached thread -- you may only call
+        Delete() on it or wait until it terminates (and auto destructs) itself.
+
+        Because the detached threads delete themselves, they can only be allocated on the heap.
         Joinable threads should be deleted explicitly. The Delete() and Kill() functions
-        will not delete the C++ thread object. It is also safe to allocate them on
-        stack.
+        will not delete the C++ thread object. It is also safe to allocate them on stack.
     */
     virtual ~wxThread();
 
     /**
-        Creates a new thread. The thread object is created in the suspended state,
-        and you should call Run() to start running it.  You may optionally
-        specify the stack size to be allocated to it (Ignored on platforms that don't
-        support setting it explicitly, eg. Unix system without
-        @c pthread_attr_setstacksize). If you do not specify the stack size,
-        the system's default value is used.
-        @b Warning: It is a good idea to explicitly specify a value as systems'
-        default values vary from just a couple of KB on some systems (BSD and
-        OS/2 systems) to one or several MB (Windows, Solaris, Linux). So, if you
-        have a thread that requires more than just a few KB of memory, you will
-        have mysterious problems on some platforms but not on the common ones. On the
-        other hand, just indicating a large stack size by default will give you
-        performance issues on those systems with small default stack since those
-        typically use fully committed memory for the stack. On the contrary, if
-        use a lot of threads (say several hundred), virtual adress space can get tight
-        unless you explicitly specify a smaller amount of thread stack space for each
-        thread.
+        Creates a new thread.
+
+        The thread object is created in the suspended state, and you should call Run()
+        to start running it. You may optionally specify the stack size to be allocated
+        to it (Ignored on platforms that don't support setting it explicitly,
+        eg. Unix system without @c pthread_attr_setstacksize).
+
+        If you do not specify the stack size,the system's default value is used.
+
+        @warning
+            It is a good idea to explicitly specify a value as systems'
+            default values vary from just a couple of KB on some systems (BSD and
+            OS/2 systems) to one or several MB (Windows, Solaris, Linux).
+            So, if you have a thread that requires more than just a few KB of memory, you
+            will have mysterious problems on some platforms but not on the common ones.
+            On the other hand, just indicating a large stack size by default will give you
+            performance issues on those systems with small default stack since those
+            typically use fully committed memory for the stack.
+            On the contrary, if you use a lot of threads (say several hundred),
+            virtual adress space can get tight unless you explicitly specify a
+            smaller amount of thread stack space for each thread.
 
         @return One of:
           - @b wxTHREAD_NO_ERROR - No error.
@@ -516,20 +622,24 @@ public:
     wxThreadError Create(unsigned int stackSize = 0);
 
     /**
-        Calling Delete() gracefully terminates a
-        detached thread, either when the thread calls TestDestroy() or finished
-        processing.
-        (Note that while this could work on a joinable thread you simply should not
-        call this routine on one as afterwards you may not be able to call
-        Wait() to free the memory of that thread).
-        See @ref overview_deletionwxthread "wxThread deletion" for a broader
-        explanation of this routine.
+        Calling Delete() gracefully terminates a detached thread, either when
+        the thread calls TestDestroy() or finished processing.
+
+        @note
+            While this could work on a joinable thread you simply should not
+            call this routine on one as afterwards you may not be able to call
+            Wait() to free the memory of that thread).
+
+        See @ref thread_deletion for a broader explanation of this routine.
     */
     wxThreadError Delete();
 
     /**
-        This is the entry point of the thread. This function is pure virtual and must
-        be implemented by any derived class. The thread execution will start here.
+        This is the entry point of the thread.
+
+        This function is pure virtual and must be implemented by any derived class.
+        The thread execution will start here.
+
         The returned value is the thread exit code which is only useful for
         joinable threads and is the value returned by Wait().
         This function is called by wxWidgets itself and should never be called
@@ -541,6 +651,7 @@ public:
         This is a protected function of the wxThread class and thus can only be called
         from a derived class. It also can only be called in the context of this
         thread, i.e. a thread can only exit from itself, not from another thread.
+
         This function will terminate the OS thread (i.e. stop the associated path of
         execution) and also delete the associated C++ object for detached threads.
         OnExit() will be called just before exiting.
@@ -555,23 +666,21 @@ public:
     static int GetCPUCount();
 
     /**
-        Returns the platform specific thread ID of the current thread as a
-        long.  This can be used to uniquely identify threads, even if they are
-        not wxThreads.
+        Returns the platform specific thread ID of the current thread as a long.
+        This can be used to uniquely identify threads, even if they are not wxThreads.
     */
     static unsigned long GetCurrentId();
 
     /**
         Gets the thread identifier: this is a platform dependent number that uniquely
-        identifies the
-        thread throughout the system during its existence (i.e. the thread identifiers
-        may be reused).
+        identifies the thread throughout the system during its existence
+        (i.e. the thread identifiers may be reused).
     */
     unsigned long GetId() const;
 
     /**
         Gets the priority of the thread, between zero and 100.
-        
+
         The following priorities are defined:
           - @b WXTHREAD_MIN_PRIORITY: 0
           - @b WXTHREAD_DEFAULT_PRIORITY: 50
@@ -581,6 +690,7 @@ public:
 
     /**
         Returns @true if the thread is alive (i.e. started and not terminating).
+
         Note that this function can only safely be used with joinable threads, not
         detached ones as the latter delete themselves and so when the real thread is
         no longer alive, it is not possible to call this function because
@@ -590,8 +700,7 @@ public:
 
     /**
         Returns @true if the thread is of the detached kind, @false if it is a
-        joinable
-        one.
+        joinable one.
     */
     bool IsDetached() const;
 
@@ -607,25 +716,30 @@ public:
 
     /**
         Returns @true if the thread is running.
+
         This method may only be safely used for joinable threads, see the remark in
         IsAlive().
     */
     bool IsRunning() const;
 
     /**
-        Immediately terminates the target thread. @b This function is dangerous and
-        should
-        be used with extreme care (and not used at all whenever possible)! The resources
-        allocated to the thread will not be freed and the state of the C runtime library
-        may become inconsistent. Use Delete() for detached
-        threads or Wait() for joinable threads instead.
+        Immediately terminates the target thread.
+
+        @b "This function is dangerous and should be used with extreme care"
+        (and not used at all whenever possible)! The resources allocated to the
+        thread will not be freed and the state of the C runtime library may become
+        inconsistent. Use Delete() for detached threads or Wait() for joinable
+        threads instead.
+
         For detached threads Kill() will also delete the associated C++ object.
         However this will not happen for joinable threads and this means that you will
         still have to delete the wxThread object yourself to avoid memory leaks.
-        In neither case OnExit() of the dying thread will be
-        called, so no thread-specific cleanup will be performed.
+
+        In neither case OnExit() of the dying thread will be called, so no
+        thread-specific cleanup will be performed.
         This function can only be called from another thread context, i.e. a thread
         cannot kill itself.
+
         It is also an error to call this function for a thread which is not running or
         paused (in the latter case, the thread will be resumed first) -- if you do it,
         a @b wxTHREAD_NOT_RUNNING error will be returned.
@@ -633,25 +747,31 @@ public:
     wxThreadError Kill();
 
     /**
-        Called when the thread exits. This function is called in the context of the
-        thread associated with the wxThread object, not in the context of the main
-        thread. This function will not be called if the thread was
-        @ref Kill() killed.
+        Called when the thread exits.
+
+        This function is called in the context of the thread associated with the
+        wxThread object, not in the context of the main thread.
+        This function will not be called if the thread was @ref Kill() killed.
+
         This function should never be called directly.
     */
     virtual void OnExit();
 
     /**
-        Suspends the thread. Under some implementations (Win32), the thread is
-        suspended immediately, under others it will only be suspended when it calls
-        TestDestroy() for the next time (hence, if the
-        thread doesn't call it at all, it won't be suspended).
+        Suspends the thread.
+
+        Under some implementations (Win32), the thread is suspended immediately,
+        under others it will only be suspended when it calls TestDestroy() for
+        the next time (hence, if the thread doesn't call it at all, it won't be
+        suspended).
+
         This function can only be called from another thread context.
     */
     wxThreadError Pause();
 
     /**
         Resumes a thread suspended by the call to Pause().
+
         This function can only be called from another thread context.
     */
     wxThreadError Resume();
@@ -659,23 +779,26 @@ public:
     /**
         Starts the thread execution. Should be called after
         Create().
+
         This function can only be called from another thread context.
     */
     wxThreadError Run();
 
     /**
-        Sets the thread concurrency level for this process. This is, roughly, the
-        number of threads that the system tries to schedule to run in parallel.
+        Sets the thread concurrency level for this process.
+
+        This is, roughly, the number of threads that the system tries to schedule
+        to run in parallel.
         The value of 0 for @a level may be used to set the default one.
-        Returns @true on success or @false otherwise (for example, if this function is
-        not implemented for this platform -- currently everything except Solaris).
+
+        @return @true on success or @false otherwise (for example, if this function is
+                not implemented for this platform -- currently everything except Solaris).
     */
     static bool SetConcurrency(size_t level);
 
     /**
-        Sets the priority of the thread, between 0 and 100. It can only be set
-        after calling Create() but before calling
-        Run().
+        Sets the priority of the thread, between 0 and 100.
+        It can only be set after calling Create() but before calling Run().
 
         The following priorities are defined:
           - @b WXTHREAD_MIN_PRIORITY: 0
@@ -693,19 +816,22 @@ public:
 
     /**
         This function should be called periodically by the thread to ensure that
-        calls to Pause() and Delete() will work. If it returns @true, the thread
-        should exit as soon as possible. Notice that under some platforms (POSIX),
-        implementation of Pause() also relies on this function being called, so
-        not calling it would prevent both stopping and suspending thread from working.
+        calls to Pause() and Delete() will work.
+
+        If it returns @true, the thread should exit as soon as possible.
+        Notice that under some platforms (POSIX), implementation of Pause() also
+        relies on this function being called, so not calling it would prevent
+        both stopping and suspending thread from working.
     */
     virtual bool TestDestroy();
 
     /**
-        Return the thread object for the calling thread. @NULL is returned if
-        the calling thread is the main (GUI) thread, but IsMain() should be used
-        to test whether the thread is really the main one because @NULL may also
-        be returned for the thread not created with wxThread class. Generally
-        speaking, the return value for such a thread is undefined.
+        Return the thread object for the calling thread.
+
+        @NULL is returned if the calling thread is the main (GUI) thread, but
+        IsMain() should be used to test whether the thread is really the main one
+        because @NULL may also be returned for the thread not created with wxThread
+        class. Generally speaking, the return value for such a thread is undefined.
     */
     static wxThread* This();
 
@@ -714,41 +840,61 @@ public:
         returned from Entry() or @c (ExitCode)-1 on error. Notice that, unlike
         Delete() doesn't cancel the thread in any way so the caller waits for as
         long as it takes to the thread to exit.
+
         You can only Wait() for joinable (not detached) threads.
         This function can only be called from another thread context.
-        See @ref overview_deletionwxthread "wxThread deletion" for a broader
-        explanation of this routine.
+
+        See @ref thread_deletion for a broader explanation of this routine.
     */
     ExitCode Wait() const;
 
     /**
         Give the rest of the thread time slice to the system allowing the other
         threads to run.
+
         Note that using this function is @b strongly discouraged, since in
-        many cases it indicates a design weakness of your threading model (as
-        does using Sleep functions).
+        many cases it indicates a design weakness of your threading model
+        (as does using Sleep() functions).
+
         Threads should use the CPU in an efficient manner, i.e. they should
         do their current work efficiently, then as soon as the work is done block
-        on a wakeup event (wxCondition, wxMutex, select(), poll(), ...)
-        which will get signalled e.g. by other threads or a user device once further
-        thread work is available. Using Yield or Sleep
-        indicates polling-type behaviour, since we're fuzzily giving up our timeslice
-        and wait until sometime later we'll get reactivated, at which time we
-        realize that there isn't really much to do and Yield again...
-        The most critical characteristic of Yield is that it's operating system
+        on a wakeup event (wxCondition, wxMutex, select(), poll(), ...) which will
+        get signalled e.g. by other threads or a user device once further thread
+        work is available.
+        Using Yield() or Sleep() indicates polling-type behaviour, since we're
+        fuzzily giving up our timeslice and wait until sometime later we'll get
+        reactivated, at which time we realize that there isn't really much to do
+        and Yield() again...
+
+        The most critical characteristic of Yield() is that it's operating system
         specific: there may be scheduler changes which cause your thread to not
         wake up relatively soon again, but instead many seconds later,
-        causing huge performance issues for your application. @b with a
-        well-behaving, CPU-efficient thread the operating system is likely to properly
-        care for its reactivation the moment it needs it, whereas with
+        causing huge performance issues for your application.
+
+        <strong>
+        With a well-behaving, CPU-efficient thread the operating system is likely
+        to properly care for its reactivation the moment it needs it, whereas with
         non-deterministic, Yield-using threads all bets are off and the system
-        scheduler is free to penalize drastically, and this effect gets worse
+        scheduler is free to penalize drastically</strong>, and this effect gets worse
         with increasing system load due to less free CPU resources available.
-        You may refer to various Linux kernel sched_yield discussions for more
+        You may refer to various Linux kernel @c sched_yield discussions for more
         information.
+
         See also Sleep().
     */
     static void Yield();
+};
+
+
+/** See wxSemaphore. */
+enum wxSemaError
+{
+    wxSEMA_NO_ERROR = 0,
+    wxSEMA_INVALID,         //!< semaphore hasn't been initialized successfully
+    wxSEMA_BUSY,            //!< returned by TryWait() if Wait() would block
+    wxSEMA_TIMEOUT,         //!< returned by WaitTimeout()
+    wxSEMA_OVERFLOW,        //!< Post() would increase counter past the max
+    wxSEMA_MISC_ERROR
 };
 
 /**
@@ -757,19 +903,17 @@ public:
     wxSemaphore is a counter limiting the number of threads concurrently accessing
     a shared resource. This counter is always between 0 and the maximum value
     specified during the semaphore creation. When the counter is strictly greater
-    than 0, a call to wxSemaphore::Wait returns immediately and
-    decrements the counter. As soon as it reaches 0, any subsequent calls to
-    wxSemaphore::Wait block and only return when the semaphore
-    counter becomes strictly positive again as the result of calling
-    wxSemaphore::Post which increments the counter.
+    than 0, a call to wxSemaphore::Wait() returns immediately and decrements the
+    counter. As soon as it reaches 0, any subsequent calls to wxSemaphore::Wait
+    block and only return when the semaphore counter becomes strictly positive
+    again as the result of calling wxSemaphore::Post which increments the counter.
 
     In general, semaphores are useful to restrict access to a shared resource
-    which can only be accessed by some fixed number of clients at the same time. For
-    example, when modeling a hotel reservation system a semaphore with the counter
+    which can only be accessed by some fixed number of clients at the same time.
+    For example, when modeling a hotel reservation system a semaphore with the counter
     equal to the total number of available rooms could be created. Each time a room
-    is reserved, the semaphore should be acquired by calling
-    wxSemaphore::Wait and each time a room is freed it should be
-    released by calling wxSemaphore::Post.
+    is reserved, the semaphore should be acquired by calling wxSemaphore::Wait
+    and each time a room is freed it should be released by calling wxSemaphore::Post.
 
     @library{wxbase}
     @category{threading}
@@ -779,9 +923,10 @@ class wxSemaphore
 public:
     /**
         Specifying a @a maxcount of 0 actually makes wxSemaphore behave as if
-        there is no upper limit. If maxcount is 1, the semaphore behaves almost as a
+        there is no upper limit. If @a maxcount is 1, the semaphore behaves almost as a
         mutex (but unlike a mutex it can be released by a thread different from the one
         which acquired it).
+
         @a initialcount is the initial value of the semaphore which must be between
         0 and @a maxcount (if it is not set to 0).
     */
@@ -794,10 +939,14 @@ public:
 
     /**
         Increments the semaphore count and signals one of the waiting
-        threads in an atomic way. Returns wxSEMA_OVERFLOW if the count
+        threads in an atomic way. Returns @e wxSEMA_OVERFLOW if the count
         would increase the counter past the maximum.
 
         @return One of:
+            - wxSEMA_NO_ERROR: There was no error.
+            - wxSEMA_INVALID : Semaphore hasn't been initialized successfully.
+            - wxSEMA_OVERFLOW: Post() would increase counter past the max.
+            - wxSEMA_MISC_ERROR: Miscellaneous error.
     */
     wxSemaError Post();
 
@@ -805,6 +954,10 @@ public:
         Same as Wait(), but returns immediately.
 
         @return One of:
+            - wxSEMA_NO_ERROR: There was no error.
+            - wxSEMA_INVALID: Semaphore hasn't been initialized successfully.
+            - wxSEMA_BUSY: Returned by TryWait() if Wait() would block, i.e. the count is zero.
+            - wxSEMA_MISC_ERROR: Miscellaneous error.
     */
     wxSemaError TryWait();
 
@@ -813,8 +966,22 @@ public:
         and then decrement it and return.
 
         @return One of:
+            - wxSEMA_NO_ERROR: There was no error.
+            - wxSEMA_INVALID: Semaphore hasn't been initialized successfully.
+            - wxSEMA_MISC_ERROR: Miscellaneous error.
     */
     wxSemaError Wait();
+
+    /**
+        Same as Wait(), but with a timeout limit.
+
+        @return One of:
+            - wxSEMA_NO_ERROR: There was no error.
+            - wxSEMA_INVALID: Semaphore hasn't been initialized successfully.
+            - wxSEMA_TIMEOUT: Timeout occurred without receiving semaphore.
+            - wxSEMA_MISC_ERROR: Miscellaneous error.
+    */
+    wxSemaError WaitTimeout(unsigned longtimeout_millis);
 };
 
 
@@ -822,12 +989,12 @@ public:
 /**
     @class wxMutexLocker
 
-    This is a small helper class to be used with wxMutex
-    objects. A wxMutexLocker acquires a mutex lock in the constructor and releases
+    This is a small helper class to be used with wxMutex objects.
+
+    A wxMutexLocker acquires a mutex lock in the constructor and releases
     (or unlocks) the mutex in the destructor making it much more difficult to
     forget to release a mutex (which, in general, will promptly lead to serious
-    problems). See wxMutex for an example of wxMutexLocker
-    usage.
+    problems). See wxMutex for an example of wxMutexLocker usage.
 
     @library{wxbase}
     @category{threading}
@@ -861,10 +1028,10 @@ public:
 enum wxMutexType
 {
     /** Normal non-recursive mutex: try to always use this one. */
-    wxMUTEX_DEFAULT,   
+    wxMUTEX_DEFAULT,
 
     /** Recursive mutex: don't use these ones with wxCondition. */
-    wxMUTEX_RECURSIVE  
+    wxMUTEX_RECURSIVE
 };
 
 
@@ -874,27 +1041,26 @@ enum wxMutexType
 enum wxMutexError
 {
     /** The operation completed successfully. */
-    wxMUTEX_NO_ERROR = 0,   
-    
-    /** The mutex hasn't been initialized. */
-    wxMUTEX_INVALID,       
-    
-     /** The mutex is already locked by the calling thread. */ 
-    wxMUTEX_DEAD_LOCK,     
-    
-    /** The mutex is already locked by another thread. */
-    wxMUTEX_BUSY,           
-    
-    /** An attempt to unlock a mutex which is not locked. */
-    wxMUTEX_UNLOCKED,       
-    
-    /** wxMutex::LockTimeout() has timed out. */
-    wxMUTEX_TIMEOUT,        
-    
-    /** Any other error */
-    wxMUTEX_MISC_ERROR      
-};
+    wxMUTEX_NO_ERROR = 0,
 
+    /** The mutex hasn't been initialized. */
+    wxMUTEX_INVALID,
+
+     /** The mutex is already locked by the calling thread. */
+    wxMUTEX_DEAD_LOCK,
+
+    /** The mutex is already locked by another thread. */
+    wxMUTEX_BUSY,
+
+    /** An attempt to unlock a mutex which is not locked. */
+    wxMUTEX_UNLOCKED,
+
+    /** wxMutex::LockTimeout() has timed out. */
+    wxMUTEX_TIMEOUT,
+
+    /** Any other error */
+    wxMUTEX_MISC_ERROR
+};
 
 
 /**
@@ -980,8 +1146,8 @@ public:
     ~wxMutex();
 
     /**
-        Locks the mutex object. This is equivalent to
-        LockTimeout() with infinite timeout.
+        Locks the mutex object.
+        This is equivalent to LockTimeout() with infinite timeout.
 
         @return One of: @c wxMUTEX_NO_ERROR, @c wxMUTEX_DEAD_LOCK.
     */

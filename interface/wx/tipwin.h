@@ -9,10 +9,10 @@
 /**
     @class wxTipWindow
 
-    Shows simple text in a popup tip window on creation. This is used by
-    wxSimpleHelpProvider to show popup help. The
-    window automatically destroys itself when the user clicks on it or it loses the
-    focus.
+    Shows simple text in a popup tip window on creation.
+    This is used by wxSimpleHelpProvider to show popup help.
+    The window automatically destroys itself when the user clicks on it or it
+    loses the focus.
 
     You may also use this class to emulate the tooltips when you need finer
     control over them than what the standard tooltips provide.
@@ -34,12 +34,10 @@ public:
             The length of each line, in pixels. Set to a very large
             value to avoid wrapping lines
         @param windowPtr
-            Simply passed to
-            SetTipWindowPtr below, please see its
+            Simply passed to SetTipWindowPtr() below, please see its
             documentation for the description of this parameter
         @param rectBounds
-            If non-@NULL, passed to
-            SetBoundingRect below, please see its
+            If non-@NULL, passed to SetBoundingRect() below, please see its
             documentation for the description of this parameter
     */
     wxTipWindow(wxWindow* parent, const wxString& text,
@@ -51,6 +49,7 @@ public:
         By default, the tip window disappears when the user clicks the mouse or presses
         a keyboard key or if it loses focus in any other way - for example because the
         user switched to another application window.
+
         Additionally, if a non-empty @a rectBound is provided, the tip window will
         also automatically close if the mouse leaves this area. This is useful to
         dismiss the tip mouse when the mouse leaves the object it is associated with.
@@ -63,7 +62,7 @@ public:
     /**
         When the tip window closes itself (which may happen at any moment and
         unexpectedly to the caller) it may @NULL out the pointer pointed to by
-        @e it windowPtr. This is helpful to avoid dereferencing the tip window which
+        @a windowPtr. This is helpful to avoid dereferencing the tip window which
         had been already closed and deleted.
     */
     void SetTipWindowPtr(wxTipWindow** windowPtr);
