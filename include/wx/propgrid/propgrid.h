@@ -483,8 +483,6 @@ enum wxPG_KEYBOARD_ACTIONS
 #define wxPG_FL_IN_MANAGER                  0x00020000
 // Set after wxPropertyGrid is shown in its initial good size
 #define wxPG_FL_GOOD_SIZE_SET               0x00040000
-// Next navigation key event will get ignored
-#define wxPG_FL_IGNORE_NEXT_NAVKEY          0x00080000
 // Set when in SelectProperty.
 #define wxPG_FL_IN_SELECT_PROPERTY          0x00100000
 // Set when help string is shown in status bar
@@ -1225,9 +1223,6 @@ public:
     void OnComboItemPaint( wxPGCustomComboControl* pCb,int item,wxDC& dc,
                            wxRect& rect,int flags );
 
-    // Used by simple check box for keyboard navigation
-    void SendNavigationKeyEvent( int dir );
-
     /** Standardized double-to-string conversion.
     */
     static void DoubleToString( wxString& target,
@@ -1633,7 +1628,6 @@ protected:
     void OnMouseUp( wxMouseEvent &event );
     void OnKey( wxKeyEvent &event );
     void OnKeyUp( wxKeyEvent &event );
-    void OnNavigationKey( wxNavigationKeyEvent& event );
     void OnResize( wxSizeEvent &event );
 
     // event handlers

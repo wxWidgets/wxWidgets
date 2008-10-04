@@ -414,12 +414,6 @@ protected:
         pg->OnKeyUp( event );
     }
 
-    void OnNavigationKey( wxNavigationKeyEvent& event )
-    {
-        wxPropertyGrid* pg = wxStaticCast(GetParent(), wxPropertyGrid);
-        pg->OnNavigationKey( event );
-    }
-
     void OnPaint( wxPaintEvent& event );
     
     // Always be focussable, even with child windows
@@ -445,7 +439,6 @@ BEGIN_EVENT_TABLE(wxPGCanvas, wxPanel)
     EVT_KEY_DOWN(wxPGCanvas::OnKey)
     EVT_KEY_UP(wxPGCanvas::OnKeyUp)
     EVT_CHAR(wxPGCanvas::OnKey)
-    EVT_NAVIGATION_KEY(wxPGCanvas::OnNavigationKey)
 END_EVENT_TABLE()
 
 
@@ -3128,7 +3121,6 @@ void wxPropertyGrid::OnCustomEditorEvent( wxCommandEvent &event )
 {
     wxPGProperty* selected = m_selected;
 
-    //
     // Somehow, event is handled after property has been deselected.
     // Possibly, but very rare.
     if ( !selected )
@@ -3227,7 +3219,7 @@ void wxPropertyGrid::OnCustomEditorEvent( wxCommandEvent &event )
         if ( !PerformValidation(m_selected, pendingValue) )
             validationFailure = true;
 
-    if ( validationFailure )
+    if ( validationFailure)
     {
         OnValidationFailure(selected, pendingValue);
     }
@@ -3238,7 +3230,6 @@ void wxPropertyGrid::OnCustomEditorEvent( wxCommandEvent &event )
         DoPropertyChanged(selected, selFlags);
         EditorsValueWasNotModified();
 
-        //
         // Regardless of editor type, unfocus editor on
         // text-editing related enter press.
         if ( event.GetEventType() == wxEVT_COMMAND_TEXT_ENTER )
@@ -3249,6 +3240,13 @@ void wxPropertyGrid::OnCustomEditorEvent( wxCommandEvent &event )
     else
     {
         // No value after all
+        
+        // Regardless of editor type, unfocus editor on
+        // text-editing related enter press.
+        if ( event.GetEventType() == wxEVT_COMMAND_TEXT_ENTER )
+        {
+            SetFocusOnCanvas();
+        }
 
         // Let unhandled button click events go to the parent
         if ( !buttonWasHandled && event.GetEventType() == wxEVT_COMMAND_BUTTON_CLICKED )
@@ -3411,22 +3409,10 @@ void wxPropertyGrid::SetupChildEventHandling( wxWindow* argWnd )
         argWnd->Connect(id, wxEVT_LEAVE_WINDOW,
             wxMouseEventHandler(wxPropertyGrid::OnMouseEntry),
             NULL, this);
+        argWnd->Connect(id, wxEVT_KEY_DOWN,
+            wxCharEventHandler(wxPropertyGrid::OnChildKeyDown),
+            NULL, this);
     }
-    else
-    {
-        argWnd->Connect(id, wxEVT_NAVIGATION_KEY,
-            wxNavigationKeyEventHandler(wxPropertyGrid::OnNavigationKey));
-    }
-
-    argWnd->Connect(id, wxEVT_KEY_DOWN,
-        wxKeyEventHandler(wxPropertyGrid::OnChildKeyDown),
-        NULL, this);
-    argWnd->Connect(id, wxEVT_KEY_UP,
-        wxKeyEventHandler(wxPropertyGrid::OnChildKeyUp),
-        NULL, this);
-    argWnd->Connect(id, wxEVT_KILL_FOCUS,
-        wxFocusEventHandler(wxPropertyGrid::OnFocusEvent),
-        NULL, this);
 }
 
 void wxPropertyGrid::FreeEditors()
@@ -3473,7 +3459,18 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
         return false;
     }
 
-    //
+/*
+    if (m_selected)
+        wxPrintf( "Selected %s\n", m_selected->GetClassInfo()->GetClassName() );
+    else
+        wxPrintf( "None selected\n" );
+    
+    if (p)
+        wxPrintf( "P =  %s\n", p->GetClassInfo()->GetClassName() );
+    else
+        wxPrintf( "P = NULL\n" );
+*/
+  
     // If we are frozen, then just set the values.
     if ( m_frozen )
     {
@@ -4853,17 +4850,6 @@ void wxPropertyGrid::OnMouseUpChild( wxMouseEvent &event )
 // wxPropertyGrid keyboard event handling
 // -----------------------------------------------------------------------
 
-void wxPropertyGrid::SendNavigationKeyEvent( int dir )
-{
-    wxNavigationKeyEvent evt;
-    evt.SetFlags(wxNavigationKeyEvent::FromTab|
-                 (dir?wxNavigationKeyEvent::IsForward:
-                      wxNavigationKeyEvent::IsBackward));
-    evt.SetEventObject(this);
-    m_canvas->GetEventHandler()->AddPendingEvent(evt);
-}
-
-
 int wxPropertyGrid::KeyEventToActions(wxKeyEvent &event, int* pSecond) const
 {
     // Translates wxKeyEvent to wxPG_ACTION_XXX
@@ -4950,10 +4936,8 @@ void wxPropertyGrid::HandleKeyEvent(wxKeyEvent &event)
 
     if ( keycode == WXK_TAB )
     {
-        if ( HasFlag(wxTAB_TRAVERSAL) )
-            SendNavigationKeyEvent( event.ShiftDown()?0:1 );
-        else
-            event.Skip();
+        if (m_selected)
+            DoSelectProperty( m_selected, wxPG_SEL_FOCUS );
         return;
     }
 
@@ -5075,7 +5059,6 @@ bool wxPropertyGrid::HandleChildKey( wxKeyEvent& event )
         OnValidationFailureReset(m_selected);
 
         res = false;
-
         UnfocusEditor();
     }
     else if ( action == wxPG_ACTION_COPY )
@@ -5144,25 +5127,7 @@ bool wxPropertyGrid::HandleChildKey( wxKeyEvent& event )
 
 void wxPropertyGrid::OnKey( wxKeyEvent &event )
 {
-
-    //
-    // Events to editor controls should get relayed here.
-    //
-    wxWindow* focused = wxWindow::FindFocus();
-
-    wxWindow* primaryCtrl = GetEditorControl();
-
-    if ( primaryCtrl &&
-         (focused==primaryCtrl
-          || m_editorFocused) )
-    {
-        // Child key must be processed here, since it can
-        // destroy the control which is referred by its own
-        // event handling.
-        HandleChildKey( event );
-    }
-    else
-        HandleKeyEvent( event );
+    HandleKeyEvent( event );
 }
 
 // -----------------------------------------------------------------------
@@ -5170,88 +5135,6 @@ void wxPropertyGrid::OnKey( wxKeyEvent &event )
 void wxPropertyGrid::OnKeyUp(wxKeyEvent &event)
 {
     event.Skip();
-}
-
-// -----------------------------------------------------------------------
-
-void wxPropertyGrid::OnNavigationKey( wxNavigationKeyEvent& event )
-{
-    // Ignore events that occur very close to focus set
-    if ( m_iFlags & wxPG_FL_IGNORE_NEXT_NAVKEY )
-    {
-        m_iFlags &= ~(wxPG_FL_IGNORE_NEXT_NAVKEY);
-        event.Skip();
-        return;
-    }
-
-    wxPGProperty* next = (wxPGProperty*) NULL;
-
-    int dir = event.GetDirection()?1:-1;
-
-    if ( m_selected )
-    {
-        if ( dir == 1 && (m_wndEditor || m_wndEditor2) )
-        {
-            wxWindow* focused = wxWindow::FindFocus();
-
-            wxWindow* wndToCheck = GetEditorControl();
-
-            // ODComboBox focus goes to its text ctrl, so we need to use it instead
-            if ( wndToCheck && wndToCheck->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)) )
-            {
-                wxTextCtrl* comboTextCtrl = ((wxOwnerDrawnComboBox*)wndToCheck)->GetTextCtrl();
-                if ( comboTextCtrl )
-                    wndToCheck = comboTextCtrl;
-            }
-
-            /*
-            // Because of problems navigating from wxButton, do not go to it.
-            if ( !wndToCheck )
-            {
-                // No primary, use secondary
-                wndToCheck = m_wndEditor2;
-            }
-            // If it has editor button, focus to it after the primary editor.
-            // NB: Doesn't work since wxButton on wxMSW doesn't seem to propagate
-            //     key events (yes, I'm using wxWANTS_CHARS with it, and yes I
-            //     have somewhat debugged in window.cpp itself).
-            else if ( focused == wndToCheck &&
-                      m_wndEditor2 &&
-                      !(GetExtraStyle() & wxPG_EX_NO_TAB_TO_BUTTON) )
-            {
-                wndToCheck = m_wndEditor2;
-                wxLogDebug(wxT("Exp1"));
-            }
-            */
-
-            if ( focused != wndToCheck &&
-                 wndToCheck )
-            {
-                wndToCheck->SetFocus();
-
-                // Select all text in wxTextCtrl etc.
-                if ( m_wndEditor && wndToCheck == m_wndEditor )
-                    m_selected->GetEditorClass()->OnFocus(m_selected,wndToCheck);
-
-                m_editorFocused = 1;
-                next = m_selected;
-            }
-        }
-
-        if ( !next )
-        {
-            next = wxPropertyGridIterator::OneStep(m_pState, wxPG_ITERATE_VISIBLE, m_selected, dir);
-
-            if ( next )
-            {
-                // This allows preventing NavigateOut to occur
-                DoSelectProperty( next, wxPG_SEL_FOCUS );
-            }
-        }
-    }
-
-    if ( !next )
-        event.Skip();
 }
 
 // -----------------------------------------------------------------------
@@ -5347,13 +5230,8 @@ void wxPropertyGrid::HandleFocusChange( wxWindow* newFocused )
     if ( (m_iFlags & wxPG_FL_FOCUSED) !=
          (oldFlags & wxPG_FL_FOCUSED) )
     {
-        // On each focus kill, mark the next nav key event
-        // to be ignored (can't do on set focus since the
-        // event would occur before it).
         if ( !(m_iFlags & wxPG_FL_FOCUSED) )
         {
-            m_iFlags |= wxPG_FL_IGNORE_NEXT_NAVKEY;
-
             // Need to store changed value
             CommitChangesFromEditor();
         }
@@ -5386,8 +5264,6 @@ void wxPropertyGrid::HandleFocusChange( wxWindow* newFocused )
 
             }
             */
-
-            m_iFlags &= ~(wxPG_FL_IGNORE_NEXT_NAVKEY);
         }
 
         // Redraw selected

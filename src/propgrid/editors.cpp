@@ -1283,14 +1283,6 @@ bool wxSimpleCheckBox::ProcessEvent(wxEvent& event)
     wxPropertyGrid* propGrid = (wxPropertyGrid*) GetParent()->GetParent();
     wxASSERT( propGrid->IsKindOf(CLASSINFO(wxPropertyGrid)) );
 
-    if ( event.GetEventType() == wxEVT_NAVIGATION_KEY )
-    {
-        //wxLogDebug(wxT("wxEVT_NAVIGATION_KEY"));
-        //SetFocusFromKbd();
-        //event.Skip();
-        //return wxControl::ProcessEvent(event);
-    }
-    else
     if ( ( (event.GetEventType() == wxEVT_LEFT_DOWN || event.GetEventType() == wxEVT_LEFT_DCLICK)
           && ((wxMouseEvent&)event).m_x > (wxPG_XBEFORETEXT-2)
           && ((wxMouseEvent&)event).m_x <= (wxPG_XBEFORETEXT-2+m_boxHeight) )
@@ -1361,12 +1353,6 @@ bool wxSimpleCheckBox::ProcessEvent(wxEvent& event)
     {
         wxKeyEvent& keyEv = (wxKeyEvent&) event;
 
-        if ( keyEv.GetKeyCode() == WXK_TAB )
-        {
-            propGrid->SendNavigationKeyEvent( keyEv.ShiftDown()?0:1 );
-            return true;
-        }
-        else
         if ( keyEv.GetKeyCode() == WXK_SPACE )
         {
             SetValue(2);
