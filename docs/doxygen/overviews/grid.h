@@ -24,8 +24,11 @@ Classes: wxGrid
 
 @section overview_grid_intro Introduction
 
-wxGrid and its related classes are used for displaying and editing tabular data.
-
+wxGrid and its related classes are used for displaying and editing tabular
+data. wxGrid supports custom attributes for the table cells, allowing to
+completely customize its appearance and uses a separate grid table 
+(wxGridTableBase-derived) class for the data management meaning that it
+can be used to display arbitrary amounts of data.
 
 @section overview_grid_simpleexample Getting started: a simple example
 
@@ -70,6 +73,45 @@ dialog constructor and illustrates some of the formatting functions.
     grid->SetCellValue(0, 6, "3.1415");
 @endcode
 
+Here is a list of classes related to wxGrid:
+
+@li wxGrid: The main grid control class itself.
+@li wxGridTableBase: The base class for grid data provider.
+@li wxGridStringTable: Simple wxGridTableBase implementation supporting only
+    string data items and storing them all in memory (hence suitable for not
+    too large grids only).
+@li wxGridCellAttr: A cell attribute, allowing to customize its appearance as
+    well as the renderer and editor used for displaying and editing it.
+@li wxGridCellAttrProvider: The object responsible for storing and retrieving
+    the cell attributes.
+@li wxGridColLabelWindow: The window showing the grid columns labels.
+@li wxGridRowLabelWindow: The window showing the grid rows labels.
+@li wxGridCornerLabelWindow: The window used in the upper left grid corner.
+@li wxGridWindow: The window representing the main part of the grid.
+@li wxGridCellRenderer: Base class for objects used to display a cell value.
+@li wxGridCellStringRenderer: Renderer showing the cell as a text string.
+@li wxGridCellNumberRenderer: Renderer showing the cell as an integer number.
+@li wxGridCellFloatRenderer: Renderer showing the cell as a floating point
+    number.
+@li wxGridCellBoolRenderer: Renderer showing the cell as checked or unchecked
+    box.
+@li wxGridCellEditor: Base class for objects used to edit the cell value.
+@li wxGridCellStringEditor: Editor for cells containing text strings.
+@li wxGridCellNumberEditor: Editor for cells containing integer numbers.
+@li wxGridCellFloatEditor: Editor for cells containing floating point numbers.
+@li wxGridCellBoolEditor: Editor for boolean-valued cells.
+@li wxGridCellChoiceEditor: Editor allowing to choose one of the predefined
+    strings (and possibly enter new one).
+@li wxGridEvent: The event sent by most of wxGrid actions.
+@li wxGridSizeEvent: The special event sent when a grid column or row is
+    resized.
+@li wxGridRangeSelectEvent: The special event sent when a range of cells is
+    selected in the grid.
+@li wxGridEditorCreatedEvent: The special event sent when a cell editor is
+    created.
+@li wxGridSelection: The object efficiently representing the grid selection.
+@li wxGridTypeRegistry: Contains information about the data types supported by
+    the grid.
 
 @section overview_grid_complexexample A more complex example
 

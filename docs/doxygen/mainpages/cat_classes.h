@@ -20,31 +20,28 @@ This page contains a summarized listing of classes, please see the
 @li @ref page_class_cat_managedwnd
 @li @ref page_class_cat_menus
 @li @ref page_class_cat_ctrl
+@li @ref page_class_cat_validator
 @li @ref page_class_cat_pickers
 @li @ref page_class_cat_aui
 @li @ref page_class_cat_cmndlg
 @li @ref page_class_cat_html
-@li @ref page_class_cat_richtext
-@li @ref page_class_cat_grid
 @li @ref page_class_cat_miscwnd
-@li @ref page_class_cat_propgrid
 </td><td>
 @li @ref page_class_cat_dc
 @li @ref page_class_cat_gdi
 @li @ref page_class_cat_gc
 @li @ref page_class_cat_image
 @li @ref page_class_cat_events
-@li @ref page_class_cat_validator
 @li @ref page_class_cat_appmanagement
 @li @ref page_class_cat_printing
 @li @ref page_class_cat_dvf
 @li @ref page_class_cat_dnd
 @li @ref page_class_cat_vfs
+@li @ref page_class_cat_threading
 </td><td>
 @li @ref page_class_cat_rtti
 @li @ref page_class_cat_debugging
 @li @ref page_class_cat_logging
-@li @ref page_class_cat_threading
 @li @ref page_class_cat_data
 @li @ref page_class_cat_conv
 @li @ref page_class_cat_containers
@@ -52,8 +49,8 @@ This page contains a summarized listing of classes, please see the
 @li @ref page_class_cat_file
 @li @ref page_class_cat_streams
 @li @ref page_class_cat_xml
-</td><td>
 @li @ref page_class_cat_xrc
+</td><td>
 @li @ref page_class_cat_net
 @li @ref page_class_cat_archive
 @li @ref page_class_cat_ipc
@@ -161,6 +158,7 @@ Controls that are not static can have wxValidator associated with them.
 @li wxEditableListBox: A listbox with editable items.
 @li wxGauge: A control to represent a varying quantity, such as time remaining
 @li wxGenericDirCtrl: A control for displaying a directory tree
+@li wxGrid: A control to display spread-sheet like data in tabular form
 @li wxHtmlListBox: An abstract class for creating listboxes showing HTML
     content
 @li wxSimpleHtmlListBox: A listbox showing HTML content
@@ -172,6 +170,7 @@ Controls that are not static can have wxValidator associated with them.
     mode
 @li wxNotebook: A notebook class
 @li wxOwnerDrawnComboBox: A combobox with owner-drawn list items
+@li wxPropertyGrid: A complex control to display hierachical, editable information
 @li wxRichTextCtrl: Generic rich text editing control
 @li wxTextCtrl: Single or multiline text editing control
 @li wxToggleButton: A button which stays pressed when clicked by user.
@@ -192,6 +191,18 @@ Controls that are not static can have wxValidator associated with them.
     editing component for plain text editing.
 @li wxSlider: A slider that can be dragged by the user
 @li wxVListBox: A listbox supporting variable height rows
+
+
+
+@section page_class_cat_validator Validators
+
+These are the window validators, used for filtering and validating user input.
+
+Related Overviews: @ref overview_validator
+
+@li wxValidator: Base validator class
+@li wxTextValidator: Text control validator class
+@li wxGenericValidator: Generic control validator class
 
 
 
@@ -297,86 +308,6 @@ classes include a help system based on the HTML widget.
 @li wxHtmlTagHandler: HTML tag handler, pluginable into wxHtmlParser
 @li wxHtmlWinParser: HTML parser class for wxHtmlWindow
 @li wxHtmlWinTagHandler: HTML tag handler, pluginable into wxHtmlWinParser
-
-
-
-@section page_class_cat_richtext Rich Text
-
-wxWidgets provides a set of generic classes to edit and print simple rich text
-with character and paragraph formatting.
-
-@li wxTextAttr: Attributes specifying text styling.
-@li wxRichTextCtrl: A rich text control.
-@li wxRichTextBuffer: The content of a rich text control.
-@li wxRichTextCharacterStyleDefinition: Definition of character styling.
-@li wxRichTextParagraphStyleDefinition: Definition of paragraph styling.
-@li wxRichTextListStyleDefinition: Definition of list styling.
-@li wxRichTextStyleSheet: A set of style definitions.
-@li wxRichTextStyleComboCtrl: A drop-down control for applying styles.
-@li wxRichTextStyleListBox: A listbox for applying styles.
-@li wxRichTextStyleOrganiserDialog: A dialog that can be used for managing or
-    browsing styles.
-@li wxRichTextEvent: A rich text event.
-@li wxRichTextRange: Specification for ranges in a rich text control or buffer.
-@li wxRichTextFileHandler: File handler base class.
-@li wxRichTextHTMLHandler: A handler for converting rich text to HTML.
-@li wxRichTextXMLHandler: A handler for loading and saving rich text XML.
-@li wxRichTextFormattingDialog: A dialog for rich text formatting.
-@li wxRichTextPrinting: A class for easy printing of rich text buffers.
-@li wxRichTextPrintout: A class used by wxRichTextPrinting.
-@li wxRichTextHeaderFooterData: Header and footer data specification.
-
-
-@section page_class_cat_grid Grid
-
-wxGrid represents a two-dimensional table of data. It supports custom
-attributes for the table cells, allowing to completely customize its
-appearance and uses a separate grid table (wxGridTableBase-derived) class for
-the data management meaning that it can be used to display arbitrary amounts of
-data.
-
-@li wxGrid: The main grid control class itself.
-@li wxGridTableBase: The base class for grid data provider.
-@li wxGridStringTable: Simple wxGridTableBase implementation supporting only
-    string data items and storing them all in memory (hence suitable for not
-    too large grids only).
-@li wxGridCellAttr: A cell attribute, allowing to customize its appearance as
-    well as the renderer and editor used for displaying and editing it.
-@li wxGridCellAttrProvider: The object responsible for storing and retrieving
-    the cell attributes.
-@li wxGridColLabelWindow: The window showing the grid columns labels.
-@li wxGridRowLabelWindow: The window showing the grid rows labels.
-@li wxGridCornerLabelWindow: The window used in the upper left grid corner.
-@li wxGridWindow: The window representing the main part of the grid.
-@li wxGridCellRenderer: Base class for objects used to display a cell value.
-@li wxGridCellStringRenderer: Renderer showing the cell as a text string.
-@li wxGridCellNumberRenderer: Renderer showing the cell as an integer number.
-@li wxGridCellFloatRenderer: Renderer showing the cell as a floating point
-    number.
-@li wxGridCellBoolRenderer: Renderer showing the cell as checked or unchecked
-    box.
-@li wxGridCellEditor: Base class for objects used to edit the cell value.
-@li wxGridCellStringEditor: Editor for cells containing text strings.
-@li wxGridCellNumberEditor: Editor for cells containing integer numbers.
-@li wxGridCellFloatEditor: Editor for cells containing floating point numbers.
-@li wxGridCellBoolEditor: Editor for boolean-valued cells.
-@li wxGridCellChoiceEditor: Editor allowing to choose one of the predefined
-    strings (and possibly enter new one).
-@li wxGridEvent: The event sent by most of wxGrid actions.
-@li wxGridSizeEvent: The special event sent when a grid column or row is
-    resized.
-@li wxGridRangeSelectEvent: The special event sent when a range of cells is
-    selected in the grid.
-@li wxGridEditorCreatedEvent: The special event sent when a cell editor is
-    created.
-@li wxGridSelection: The object efficiently representing the grid selection.
-@li wxGridTypeRegistry: Contains information about the data types supported by
-    the grid.
-
-@section page_class_cat_propgrid Property Grid
-
-wxPropertyGrid is a property sheet control, which API consists of
-various classes listed here.
 
 
 @section page_class_cat_dc Device Contexts
@@ -524,18 +455,6 @@ Related Overviews: @ref overview_eventhandling
 
 
 
-@section page_class_cat_validator Validators
-
-These are the window validators, used for filtering and validating user input.
-
-Related Overviews: @ref overview_validator
-
-@li wxValidator: Base validator class
-@li wxTextValidator: Text control validator class
-@li wxGenericValidator: Generic control validator class
-
-
-
 @section page_class_cat_appmanagement Application and Process Management
 
 @li wxApp: Application class
@@ -619,6 +538,24 @@ system, used internally by the HTML classes.
 
 
 
+@section page_class_cat_threading Threading
+
+wxWidgets provides a set of classes to make use of the native thread
+capabilities of the various platforms.
+
+Related Overviews: @ref overview_thread
+
+@li wxThread: Thread class
+@li wxThreadHelper: Manages background threads easily
+@li wxMutex: Mutex class
+@li wxMutexLocker: Mutex locker utility class
+@li wxCriticalSection: Critical section class
+@li wxCriticalSectionLocker: Critical section locker utility class
+@li wxCondition: Condition class
+@li wxSemaphore: Semaphore class
+
+
+
 @section page_class_cat_rtti Runtime Type Information (RTTI)
 
 wxWidgets supports runtime manipulation of class information, and dynamic
@@ -672,24 +609,6 @@ Related Overviews: @ref overview_log
 @li wxLogInterposer: Allows to filter the log messages
 @li wxLogInterposerTemp: Allows to filter the log messages
 @li wxStreamToTextRedirector: Allows to redirect output sent to @c cout to a wxTextCtrl
-
-
-
-@section page_class_cat_threading Threading
-
-wxWidgets provides a set of classes to make use of the native thread
-capabilities of the various platforms.
-
-Related Overviews: @ref overview_thread
-
-@li wxThread: Thread class
-@li wxThreadHelper: Manages background threads easily
-@li wxMutex: Mutex class
-@li wxMutexLocker: Mutex locker utility class
-@li wxCriticalSection: Critical section class
-@li wxCriticalSectionLocker: Critical section locker utility class
-@li wxCondition: Condition class
-@li wxSemaphore: Semaphore class
 
 
 

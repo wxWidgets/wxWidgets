@@ -1228,7 +1228,7 @@ public:
     will set up default instances of the other classes and manage them for you.
     For more complex applications you can derive your own classes for custom
     grid views, grid data tables, cell editors and renderers. The @ref
-    overview_gridoverview has examples of simple and more complex applications,
+    overview_grid "wxGrid overview" has examples of simple and more complex applications,
     explains the relationship between the various grid classes and has a
     summary of the keyboard shortcuts and mouse functions provided by wxGrid.
 
@@ -1261,7 +1261,7 @@ public:
     @library{wxadv}
     @category{grid}
 
-    @see @ref overview_gridoverview "wxGrid overview"
+    @see @ref overview_grid "wxGrid overview"
 */
 class wxGrid : public wxScrolledWindow
 {
@@ -1616,7 +1616,7 @@ public:
 
         For more information about controlling grid cell attributes see the
         wxGridCellAttr cell attribute class and the
-        @ref overview_gridoverview.
+        @ref overview_grid "wxGrid overview".
     */
     void EnableEditing(bool edit);
 
@@ -1677,8 +1677,8 @@ public:
     /**
         Returns a pointer to the editor for the cell at the specified location.
 
-        See wxGridCellEditor and the @ref overview_gridoverview "wxGrid
-        overview" for more information about cell editors and renderers.
+        See wxGridCellEditor and the @ref overview_grid "wxGrid overview" 
+        for more information about cell editors and renderers.
 
         The caller must call DecRef() on the returned pointer.
     */
@@ -1693,8 +1693,8 @@ public:
         Returns a pointer to the renderer for the grid cell at the specified
         location.
 
-        See wxGridCellRenderer and the @ref overview_gridoverview "wxGrid
-        overview" for more information about cell editors and renderers.
+        See wxGridCellRenderer and the @ref overview_grid "wxGrid overview"
+        for more information about cell editors and renderers.
 
         The caller must call DecRef() on the returned pointer.
     */
@@ -1716,8 +1716,8 @@ public:
         data types (e.g. numeric, boolean or user-defined custom types) then
         you only use this function for those cells that contain string values.
 
-        See wxGridTableBase::CanGetValueAs and the @ref overview_gridoverview
-        "wxGrid overview" for more information.
+        See wxGridTableBase::CanGetValueAs and the @ref overview_grid "wxGrid overview"
+        for more information.
     */
     wxString GetCellValue(int row, int col) const;
     const wxString  GetCellValue(const wxGridCellCoords& coords) const;
@@ -1842,8 +1842,8 @@ public:
     /**
         Returns a pointer to the current default grid cell editor.
 
-        See wxGridCellEditor and the @ref overview_gridoverview "wxGrid
-        overview" for more information about cell editors and renderers.
+        See wxGridCellEditor and the @ref overview_grid "wxGrid overview"
+        for more information about cell editors and renderers.
     */
     wxGridCellEditor* GetDefaultEditor() const;
 
@@ -1892,8 +1892,8 @@ public:
     /**
         Returns a pointer to the current default grid cell renderer.
 
-        See wxGridCellRenderer and the @ref overview_gridoverview "wxGrid
-        overview" for more information about cell editors and renderers.
+        See wxGridCellRenderer and the @ref overview_grid "wxGrid overview"
+        for more information about cell editors and renderers.
 
         The caller must call DecRef() on the returned pointer.
     */
@@ -2511,8 +2511,8 @@ public:
 
         The grid will take ownership of the pointer.
 
-        See wxGridCellEditor and the @ref overview_gridoverview "wxGrid
-        overview" for more information about cell editors and renderers.
+        See wxGridCellEditor and the @ref overview_grid "wxGrid overview"
+        for more information about cell editors and renderers.
     */
     void SetCellEditor(int row, int col, wxGridCellEditor* editor);
 
@@ -2526,8 +2526,8 @@ public:
 
         The grid will take ownership of the pointer.
 
-        See wxGridCellRenderer and the @ref overview_gridoverview "wxGrid
-        overview" for more information about cell editors and renderers.
+        See wxGridCellRenderer and the @ref overview_grid "wxGrid overview"
+        for more information about cell editors and renderers.
     */
     void SetCellRenderer(int row, int col, wxGridCellRenderer* renderer);
 
@@ -2552,7 +2552,7 @@ public:
         you only use this function for those cells that contain string values.
         The last form is for backward compatibility only.
 
-        See wxGridTableBase::CanSetValueAs and the @ref overview_gridoverview
+        See wxGridTableBase::CanSetValueAs and the @ref overview_grid
         "wxGrid overview" for more information.
     */
     void SetCellValue(int row, int col, const wxString& s);
@@ -2564,7 +2564,7 @@ public:
         Sets the cell attributes for all cells in the specified column.
 
         For more information about controlling grid cell attributes see the
-        wxGridCellAttr cell attribute class and the @ref overview_gridoverview.
+        wxGridCellAttr cell attribute class and the @ref overview_grid "wxGrid overview".
     */
     void SetColAttr(int col, wxGridCellAttr* attr);
 
@@ -2584,7 +2584,7 @@ public:
         cells in this column, it does associate the renderer and editor used
         for the cells of the specified type with them.
 
-        See the @ref overview_gridoverview "wxGrid overview" for more
+        See the @ref overview_grid "wxGrid overview" for more
         information on working with custom data types.
     */
     void SetColFormatCustom(int col, const wxString& typeName);
@@ -2710,8 +2710,8 @@ public:
 
         The grid will take ownership of the pointer.
 
-        See wxGridCellEditor and the @ref overview_gridoverview "wxGrid
-        overview" for more information about cell editors and renderers.
+        See wxGridCellEditor and the @ref overview_grid "wxGrid overview"
+        for more information about cell editors and renderers.
     */
     void SetDefaultEditor(wxGridCellEditor* editor);
 
@@ -2720,8 +2720,8 @@ public:
 
         The grid will take ownership of the pointer.
 
-        See wxGridCellRenderer and the @ref overview_gridoverview "wxGrid
-        overview" for more information about cell editors and renderers.
+        See wxGridCellRenderer and the @ref overview_grid "wxGrid overview" 
+        for more information about cell editors and renderers.
     */
     void SetDefaultRenderer(wxGridCellRenderer* renderer);
 
