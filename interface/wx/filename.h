@@ -53,10 +53,12 @@ wxULongLong wxInvalidSize;
 /**
     @class wxFileName
 
-    wxFileName encapsulates a file name. This class serves two purposes: first, it
-    provides the functions to split the file names into components and to recombine
-    these components in the full file name which can then be passed to the OS file
-    functions (and @ref overview_filefunctions "wxWidgets functions" wrapping them).
+    wxFileName encapsulates a file name.
+
+    This class serves two purposes: first, it provides the functions to split the
+    file names into components and to recombine these components in the full file
+    name which can then be passed to the OS file functions
+    (and @ref group_funcmacro_file "wxWidgets functions" wrapping them).
     Second, it includes the functions for working with the files itself. Note that
     to change the file data you should use wxFile class instead.
     wxFileName provides functions for working with the file attributes.
@@ -812,7 +814,7 @@ public:
         In other words, it returns the file name which should be used to access
         this file if the current directory were pathBase.
 
-        @param pathBase.
+        @param pathBase
             The directory to use as root, current directory is used by default
         @param format
             The file name format, native by default
@@ -847,7 +849,7 @@ public:
 
         @param dir
             The directory to create
-        @param parm
+        @param perm
             The permissions for the newly created directory.
             See the ::wxPosixPermissions enumeration for more info.
         @param flags

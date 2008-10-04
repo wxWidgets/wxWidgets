@@ -96,7 +96,7 @@ public:
                  const wxString& wildcard = ".",
                  long style = wxFD_DEFAULT_STYLE,
                  const wxPoint& pos = wxDefaultPosition,
-                 const wxSize& sz = wxDefaultSize,
+                 const wxSize& size = wxDefaultSize,
                  const wxString& name = "filedlg");
 
     /**

@@ -22,9 +22,8 @@
 #define wxASSERT( condition )
 
 /**
-    This macro results in a
-    @ref overview_wxcompiletimeassert "compile time assertion failure" if the
-    size of the given @c type is less than @c size bits.
+    This macro results in a @ref wxCOMPILE_TIME_ASSERT "compile time assertion failure"
+    if the size of the given @c type is less than @c size bits.
 
     You may use it like this, for example:
 
@@ -41,8 +40,8 @@
 #define wxASSERT_MIN_BITSIZE( type, size )
 
 /**
-    Assert macro with message. An error message will be generated if the
-    condition is @false.
+    Assert macro with message.
+    An error message will be generated if the condition is @false.
 
     @see wxASSERT(), wxCOMPILE_TIME_ASSERT()
 
@@ -52,8 +51,7 @@
 
 /**
     Checks that the condition is @true, returns with the given return value if
-    not (stops execution in debug mode). This check is done even in release
-    mode.
+    not (stops execution in debug mode). This check is done even in release mode.
 
     @header{wx/debug.h}
 */
@@ -61,8 +59,7 @@
 
 /**
     Checks that the condition is @true, returns with the given return value if
-    not (stops execution in debug mode). This check is done even in release
-    mode.
+    not (stops execution in debug mode). This check is done even in release mode.
 
     This macro may be only used in non-void functions, see also wxCHECK_RET().
 

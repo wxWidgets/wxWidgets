@@ -224,10 +224,14 @@ public:
             not be empty in this case).
         @param anchor
             Anchor. See GetAnchor() for details.
+        @param modif
+            Modification date and time for this file.
     */
-    wxFSFile(wxInputStream stream, const wxString& loc,
+    wxFSFile(wxInputStream stream,
+             const wxString& location,
              const wxString& mimetype,
-             const wxString& anchor, wxDateTime modif);
+             const wxString& anchor,
+             wxDateTime modif);
 
     /**
         Detaches the stream from the wxFSFile object. That is, the

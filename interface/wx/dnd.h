@@ -205,12 +205,17 @@ public:
                  const wxIconOrCursor& iconCopy = wxNullIconOrCursor,
                  const wxIconOrCursor& iconMove = wxNullIconOrCursor,
                  const wxIconOrCursor& iconNone = wxNullIconOrCursor);
+
     /**
+        The constructor for wxDataObject.
+
         Note that the exact type of @a iconCopy and subsequent parameters
         differs between wxMSW and wxGTK: these are cursors under Windows but
         icons for GTK. You should use the macro wxDROP_ICON() in portable
         programs instead of directly using either of these types.
 
+        @param data
+            The data associated with the drop source.
         @param win
             The window which initiates the drag and drop operation.
         @param iconCopy
@@ -260,8 +265,6 @@ public:
         @param effect
             The effect to implement. One of ::wxDragCopy, ::wxDragMove,
             ::wxDragLink and ::wxDragNone.
-        @param scrolling
-            @true if the window is scrolling. MSW only.
 
         @return @false if you want default feedback, or @true if you implement
                 your own feedback. The return value is ignored under GTK.

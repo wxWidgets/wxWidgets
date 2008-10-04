@@ -130,10 +130,9 @@ public:
 
         @param cursorName
             The name of the resource or the image file to load.
-
         @param type
             Icon type to load. It defaults to wxCURSOR_DEFAULT_TYPE,
-            which is a #define associated to different values on different
+            which is a @#define associated to different values on different
             platforms:
             - under Windows, it defaults to wxBITMAP_TYPE_CUR_RESOURCE.
             - under MacOS, it defaults to wxBITMAP_TYPE_MACCURSOR_RESOURCE.

@@ -219,13 +219,16 @@ public:
     void SetUndoAccelerator(const wxString& accel);
 
     /**
-        Submits a new command to the command processor. The command processor
-        calls wxCommand::Do() to execute the command; if it succeeds, the
-        command is stored in the history list, and the associated edit menu (if
-        any) updated appropriately. If it fails, the command is deleted
-        immediately. Once Submit() has been called, the passed command should
-        not be deleted directly by the application.
+        Submits a new command to the command processor.
 
+        The command processor calls wxCommand::Do() to execute the command;
+        if it succeeds, the command is stored in the history list, and the
+        associated edit menu (if any) updated appropriately.
+        If it fails, the command is deleted immediately. Once Submit() has been
+        called, the passed command should not be deleted directly by the application.
+
+        @param command
+            The command to submit
         @param storeIt
             Indicates whether the successful command should be stored in the
             history list.

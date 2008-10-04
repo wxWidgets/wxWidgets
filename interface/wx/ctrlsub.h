@@ -73,7 +73,7 @@ public:
         @param string
             The label to set.
     */
-    virtual void SetString(unsigned int n, const wxString& s);
+    virtual void SetString(unsigned int n, const wxString& string);
 
     /**
         Finds an item whose label matches the given string.
@@ -86,7 +86,7 @@ public:
         @return The zero-based position of the item, or wxNOT_FOUND if the
                 string was not found.
     */
-    virtual int FindString(const wxString& s, bool bCase = false) const;
+    virtual int FindString(const wxString& string, bool caseSensitive = false) const;
 
     //@}
 

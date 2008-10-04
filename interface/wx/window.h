@@ -319,7 +319,7 @@ public:
 
         @remarks This function is currently only implemented under Mac/Carbon.
     */
-    virtual void AlwaysShowScrollbars(bool = true, bool = true);
+    virtual void AlwaysShowScrollbars(bool hflag = true, bool vflag = true);
 
     /**
         Sets the cached best size value.
@@ -839,15 +839,11 @@ public:
     //@{
     /**
         Returns the size of the window 'client area' in pixels.
+
         The client area is the area which may be drawn on by the programmer,
         excluding title bar, border, scrollbars, etc.
         Note that if this window is a top-level one and it is currently minimized, the
         return size is empty (both width and height are 0).
-
-        @param width
-            Receives the client width in pixels.
-        @param height
-            Receives the client height in pixels.
 
         @see GetSize(), GetVirtualSize()
     */
@@ -1255,7 +1251,12 @@ public:
     /**
         This gets the virtual size of the window in pixels.
         By default it returns the client size of the window, but after a call to
-        SetVirtualSize() it will return that size.
+        SetVirtualSize() it will return the size set with that method.
+    */
+    wxSize GetVirtualSize() const;
+
+    /**
+        Like the other GetVirtualSize() overload but uses pointers instead.
 
         @param width
             Receives the window virtual width.
@@ -1263,7 +1264,6 @@ public:
             Receives the window virtual height.
     */
     void GetVirtualSize(int* width, int* height) const;
-    wxSize GetVirtualSize() const;
     //@}
 
     /**
@@ -1688,14 +1688,10 @@ public:
         processed as usually. If the coordinates are not specified, current mouse
         cursor position is used.
 
-        @param menu
-            Menu to pop up.
-        @param pos
-            The position where the menu will appear.
-        @param x
-            Required x position for the menu to appear.
-        @param y
-            Required y position for the menu to appear.
+        @a menu is the menu to pop up.
+
+        The position where the menu will appear can be specified either as a
+        wxPoint @a pos or by two integers (@a x and @a y).
 
         @remarks Just before the menu is popped up, wxMenu::UpdateUI is called to
                  ensure that the menu items are in the correct state.
@@ -1863,7 +1859,6 @@ public:
     */
     virtual bool Reparent(wxWindow* newParent);
 
-    //@{
     /**
         Converts from screen to client window coordinates.
 
@@ -1871,12 +1866,16 @@ public:
             Stores the screen x coordinate and receives the client x coordinate.
         @param y
             Stores the screen x coordinate and receives the client x coordinate.
-        @param pt
-            The screen position for the second form of the function.
     */
     virtual void ScreenToClient(int* x, int* y) const;
+
+    /**
+        Converts from screen to client window coordinates.
+
+        @param pt
+            The screen position.
+    */
     virtual wxPoint ScreenToClient(const wxPoint& pt) const;
-    //@}
 
     /**
         Scrolls the window by the given number of lines down (if @a lines is
@@ -2050,13 +2049,6 @@ public:
         than SetSize(), since the application need not worry about what dimensions
         the border or title bar have when trying to fit the window around panel
         items, for example.
-
-        @param width
-            The required client area width.
-        @param height
-            The required client area height.
-        @param size
-            The required client size.
     */
     virtual void SetClientSize(int width, int height);
     virtual void SetClientSize(const wxSize& size);

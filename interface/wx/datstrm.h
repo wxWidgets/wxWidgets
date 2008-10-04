@@ -28,14 +28,14 @@ class wxDataOutputStream
 {
 public:
     /**
-        Constructs a datastream object from an output stream. Only write
-        methods will be available.
+        Constructs a datastream object from an output stream.
+        Only write methods will be available.
 
         @param stream
             The output stream.
     */
-    wxDataOutputStream(wxOutputStream& s,
-                       const wxMBConv& conv = wxConvAuto(wxFONTENCODING_DEFAULT));
+    wxDataOutputStream(wxOutputStream& stream);
+
     /**
         Constructs a datastream object from an output stream. Only write
         methods will be available. This constructor is only available in
@@ -173,14 +173,14 @@ class wxDataInputStream
 {
 public:
     /**
-        Constructs a datastream object from an input stream. Only read methods
-        will be available.
+        Constructs a datastream object from an input stream.
+        Only read methods will be available.
 
         @param stream
             The input stream.
     */
-    wxDataInputStream(wxInputStream& s,
-                      const wxMBConv& conv = wxConvAuto(wxFONTENCODING_DEFAULT));
+    wxDataInputStream(wxInputStream& stream);
+
     /**
         Constructs a datastream object from an input stream. Only read methods
         will be available. This constructor is only available in Unicode builds

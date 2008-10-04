@@ -9,8 +9,8 @@
 /**
     @class wxSlider
 
-    A slider is a control with a handle which can be pulled
-    back and forth to change the value.
+    A slider is a control with a handle which can be pulled back and forth to
+    change the value.
 
     On Windows, the track bar control is used.
 
@@ -40,6 +40,71 @@
            compatible with wxSL_SELRANGE.
     @endStyleTable
 
+    @beginEventTable{wxScrollEvent}
+    You can use EVT_COMMAND_SCROLL... macros with window IDs for when intercepting
+    scroll events from controls, or EVT_SCROLL... macros without window IDs for
+    intercepting scroll events from the receiving window -- except for this,
+    the macros behave exactly the same.
+    @event{EVT_SCROLL(func)}
+        Process all scroll events.
+    @event{EVT_SCROLL_TOP(func)}
+        Process wxEVT_SCROLL_TOP scroll-to-top events (minimum position).
+    @event{EVT_SCROLL_BOTTOM(func)}
+        Process wxEVT_SCROLL_BOTTOM scroll-to-bottom events (maximum position).
+    @event{EVT_SCROLL_LINEUP(func)}
+        Process wxEVT_SCROLL_LINEUP line up events.
+    @event{EVT_SCROLL_LINEDOWN(func)}
+        Process wxEVT_SCROLL_LINEDOWN line down events.
+    @event{EVT_SCROLL_PAGEUP(func)}
+        Process wxEVT_SCROLL_PAGEUP page up events.
+    @event{EVT_SCROLL_PAGEDOWN(func)}
+        Process wxEVT_SCROLL_PAGEDOWN page down events.
+    @event{EVT_SCROLL_THUMBTRACK(func)}
+        Process wxEVT_SCROLL_THUMBTRACK thumbtrack events
+        (frequent events sent as the user drags the thumbtrack).
+    @event{EVT_SCROLL_THUMBRELEASE(func)}
+        Process wxEVT_SCROLL_THUMBRELEASE thumb release events.
+    @event{EVT_SCROLL_CHANGED(func)}
+        Process wxEVT_SCROLL_CHANGED end of scrolling events (MSW only).
+    @event{EVT_COMMAND_SCROLL(id, func)}
+        Process all scroll events.
+    @event{EVT_COMMAND_SCROLL_TOP(id, func)}
+        Process wxEVT_SCROLL_TOP scroll-to-top events (minimum position).
+    @event{EVT_COMMAND_SCROLL_BOTTOM(id, func)}
+        Process wxEVT_SCROLL_BOTTOM scroll-to-bottom events (maximum position).
+    @event{EVT_COMMAND_SCROLL_LINEUP(id, func)}
+        Process wxEVT_SCROLL_LINEUP line up events.
+    @event{EVT_COMMAND_SCROLL_LINEDOWN(id, func)}
+        Process wxEVT_SCROLL_LINEDOWN line down events.
+    @event{EVT_COMMAND_SCROLL_PAGEUP(id, func)}
+        Process wxEVT_SCROLL_PAGEUP page up events.
+    @event{EVT_COMMAND_SCROLL_PAGEDOWN(id, func)}
+        Process wxEVT_SCROLL_PAGEDOWN page down events.
+    @event{EVT_COMMAND_SCROLL_THUMBTRACK(id, func)}
+        Process wxEVT_SCROLL_THUMBTRACK thumbtrack events
+        (frequent events sent as the user drags the thumbtrack).
+    @event{EVT_COMMAND_SCROLL_THUMBRELEASE(func)}
+        Process wxEVT_SCROLL_THUMBRELEASE thumb release events.
+    @event{EVT_COMMAND_SCROLL_CHANGED(func)}
+        Process wxEVT_SCROLL_CHANGED end of scrolling events (MSW only).
+    @endEventTable
+
+    @section slider_diff The difference between EVT_SCROLL_THUMBRELEASE and EVT_SCROLL_CHANGED
+
+    The EVT_SCROLL_THUMBRELEASE event is only emitted when actually dragging the
+    thumb using the mouse and releasing it (This EVT_SCROLL_THUMBRELEASE event
+    is also followed by an EVT_SCROLL_CHANGED event).
+
+    The EVT_SCROLL_CHANGED event also occurs when using the keyboard to change
+    the thumb position, and when clicking next to the thumb
+    (In all these cases the EVT_SCROLL_THUMBRELEASE event does not happen).
+    In short, the EVT_SCROLL_CHANGED event is triggered when scrolling/ moving
+    has finished independently of the way it had started.
+    Please see the widgets sample ("Slider" page) to see the difference between
+    EVT_SCROLL_THUMBRELEASE and EVT_SCROLL_CHANGED in action.
+
+    @todo are all strings "Windows 95 only" really up2date?
+
     @library{wxcore}
     @category{ctrl}
     <!-- @appearance{slider.png} -->
@@ -68,8 +133,7 @@ public:
         @param maxValue
             Maximum slider position.
         @param size
-            Window size. If wxDefaultSize is specified then a default size
-        is chosen.
+            Window size. If wxDefaultSize is specified then a default size is chosen.
         @param style
             Window style. See wxSlider.
         @param validator
@@ -107,8 +171,8 @@ public:
     virtual void ClearTicks();
 
     /**
-        Used for two-step slider construction. See wxSlider()
-        for further details.
+        Used for two-step slider construction.
+        See wxSlider() for further details.
     */
     bool Create(wxWindow* parent, wxWindowID id, int value,
                 int minValue, int maxValue,
@@ -193,8 +257,8 @@ public:
         Sets the line size for the slider.
 
         @param lineSize
-            The number of steps the slider moves when the user moves it up or down a
-        line.
+            The number of steps the slider moves when the user moves it up
+            or down a line.
 
         @see GetLineSize()
     */
@@ -260,10 +324,9 @@ public:
 
         @param n
             Frequency. For example, if the frequency is set to two, a tick mark is
-        displayed for
-            every other increment in the slider's range.
+            displayed for every other increment in the slider's range.
         @param pos
-            Position. Must be greater than zero. TODO: what is this for?
+            Position. Must be greater than zero. @todo: what is this for?
 
         @remarks Windows 95 only.
 

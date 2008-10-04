@@ -39,7 +39,6 @@ enum wxXmlResourceFlags
 class wxXmlResource : public wxObject
 {
 public:
-    //@{
     /**
         Constructor.
 
@@ -56,9 +55,19 @@ public:
     wxXmlResource(const wxString& filemask,
                   int flags = wxXRC_USE_LOCALE,
                   const wxString domain = wxEmptyString);
+
+    /**
+        Constructor.
+
+        @param flags
+            One or more value of the ::wxXmlResourceFlags enumeration.
+        @param domain
+            The name of the gettext catalog to search for translatable strings.
+            By default all loaded catalogs will be searched.
+            This provides a way to allow the strings to only come from a specific catalog.
+    */
     wxXmlResource(int flags = wxXRC_USE_LOCALE,
                   const wxString domain = wxEmptyString);
-    //@}
 
     /**
         Destructor.

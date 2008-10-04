@@ -224,10 +224,12 @@ public:
         Default constructor.
     */
     wxArray();
+
     /**
         Default constructor initializes an empty array object.
     */
     wxObjArray();
+
     /**
         There is no default constructor for wxSortedArray classes - you must
         initialize it with a function to use for item comparison. It is a
@@ -243,11 +245,13 @@ public:
         even if the source array contains the items of pointer type).
     */
     wxArray(const wxArray& array);
+
     /**
         Performs a shallow array copy (i.e. doesn't copy the objects pointed to
         even if the source array contains the items of pointer type).
     */
     wxSortedArray(const wxSortedArray& array);
+
     /**
         Performs a deep copy (i.e. the array element are copied too).
     */
@@ -258,11 +262,13 @@ public:
         even if the source array contains the items of pointer type).
     */
     wxArray& operator=(const wxArray& array);
+
     /**
         Performs a shallow array copy (i.e. doesn't copy the objects pointed to
         even if the source array contains the items of pointer type).
     */
     wxSortedArray& operator=(const wxSortedArray& array);
+
     /**
         Performs a deep copy (i.e. the array element are copied too).
     */
@@ -273,11 +279,13 @@ public:
         may use the WX_CLEAR_ARRAY() macro for this.
     */
     ~wxArray();
+
     /**
         This destructor does not delete all the items owned by the array, you
         may use the WX_CLEAR_ARRAY() macro for this.
     */
     ~wxSortedArray();
+
     /**
         This destructor deletes all the items owned by the array.
     */
@@ -384,6 +392,7 @@ public:
         a lot of items.
     */
     void Add(T item, size_t copies = 1);
+
     /**
         Appends the @a item to the array consisting of the elements of type
         @c T.
@@ -392,6 +401,7 @@ public:
         @a item is stored.
     */
     size_t Add(T item);
+
     /**
         Appends the @a item to the array consisting of the elements of type
         @c T.
@@ -407,6 +417,7 @@ public:
         a lot of items.
     */
     void Add(T* item);
+
     /**
         Appends the given number of @a copies of the @a item to the array
         consisting of the elements of type @c T.
@@ -445,6 +456,7 @@ public:
         overloaded versions of this function.
     */
     void Insert(T item, size_t n, size_t copies = 1);
+
     /**
         Insert the @a item into the array before the existing item @a n - thus,
         @e Insert(something, 0u) will insert an item in such way that it will
@@ -457,6 +469,7 @@ public:
         overloaded versions of this function.
     */
     void Insert(T* item, size_t n);
+
     /**
         Insert the given number of @a copies of the @a item into the array
         before the existing item @a n - thus, @e Insert(something, 0u) will

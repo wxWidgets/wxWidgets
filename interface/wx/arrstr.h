@@ -96,13 +96,10 @@ public:
     size_t Add(const wxString& str, size_t copies = 1);
 
     /**
-        Preallocates enough memory to store @a nCount items. This function may be
-        used to improve array class performance before adding a known number of items
-        consecutively.
+        Preallocates enough memory to store @a nCount items.
 
-        @todo FIX THIS LINK
-
-        @see @ref wxArray::memorymanagement "Dynamic array memory management"
+        This function may be used to improve array class performance before
+        adding a known number of items consecutively.
     */
     void Alloc(size_t nCount);
 
@@ -186,13 +183,10 @@ public:
     void RemoveAt(size_t nIndex, size_t count = 1);
 
     /**
-        Releases the extra memory allocated by the array. This function is useful to
-        minimize the array memory consumption.
+        Releases the extra memory allocated by the array.
+        This function is useful to minimize the array memory consumption.
 
-        @todo FIX THIS LINK
-
-        @see Alloc(), @ref wxArray::memorymanagement "Dynamic array memory
-        management"
+        @see Alloc()
     */
     void Shrink();
 

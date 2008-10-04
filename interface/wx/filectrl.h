@@ -60,12 +60,12 @@ public:
         @param id
             The identifier for the control.
         @param defaultDirectory
-            The initial directory shown in the control. Must be
-            a valid path to a directory or the empty string.
+            The initial directory shown in the control.
+            Must be a valid path to a directory or the empty string.
             In case it is the empty string, the current working directory is used.
         @param defaultFilename
             The default filename, or the empty string.
-        @param wildcard
+        @param wildCard
             A wildcard specifying which files can be selected,
             such as "*.*" or "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif".
         @param style

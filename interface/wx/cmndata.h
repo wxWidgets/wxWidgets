@@ -418,6 +418,8 @@ public:
         @param i
             An integer between 0 and 15 for whatever custom colour you want to
             set. The default custom colours are invalid colours.
+        @param colour
+            The colour to set
     */
     void SetCustomColour(int i, const wxColour& colour);
 

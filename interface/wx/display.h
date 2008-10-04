@@ -27,7 +27,7 @@ public:
             The index of the display to use. This must be non-negative and
             lower than the value returned by GetCount().
     */
-    wxDisplay(unsigned int n = 0);
+    wxDisplay(unsigned int index = 0);
 
     /**
         Destructor.
