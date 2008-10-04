@@ -5619,7 +5619,7 @@ void wxPGChoices::RemoveAt(size_t nIndex, size_t count)
     for ( i=nIndex; i<(nIndex+count); i++)
         delete m_data->Item(i);
     m_data->m_items.erase(m_data->m_items.begin()+nIndex,
-                          m_data->m_items.begin()+nIndex+count-1);
+                          m_data->m_items.begin()+nIndex+count);
 }
 
 // -----------------------------------------------------------------------
