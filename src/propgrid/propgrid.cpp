@@ -586,6 +586,7 @@ void wxPropertyGrid::Init1()
     AddActionTrigger( wxPG_ACTION_PASTE, 'V', wxMOD_CONTROL );
     AddActionTrigger( wxPG_ACTION_PASTE, WXK_INSERT, wxMOD_SHIFT );
     AddActionTrigger( wxPG_ACTION_PRESS_BUTTON, WXK_DOWN, wxMOD_ALT );
+    AddActionTrigger( wxPG_ACTION_PRESS_BUTTON, WXK_F4 );
 
     m_coloursCustomized = 0;
     m_frozen = 0;
