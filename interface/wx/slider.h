@@ -44,7 +44,7 @@
     @category{ctrl}
     <!-- @appearance{slider.png} -->
 
-    @see @ref overview_eventhandlingoverview, wxScrollBar
+    @see @ref overview_eventhandling, wxScrollBar
 */
 class wxSlider : public wxControl
 {
@@ -53,7 +53,7 @@ public:
        Default constructor
     */
     wxSlider();
-    
+
     /**
         Constructor, creating and showing a slider.
 

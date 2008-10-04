@@ -14,7 +14,7 @@
     and it does not support seeking.
 
     @library{wxnet}
-    @category{streams}
+    @category{net,streams}
 
     @see wxSocketBase
 */
@@ -38,7 +38,7 @@ public:
     and it does not support seeking.
 
     @library{wxnet}
-    @category{streams}
+    @category{net,streams}
 
     @see wxSocketBase
 */

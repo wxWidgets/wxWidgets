@@ -10,33 +10,28 @@
     @class wxStdDialogButtonSizer
 
     This class creates button layouts which conform to the standard button spacing
-    and ordering defined by the platform
-    or toolkit's user interface guidelines (if such things exist). By using this
-    class, you can ensure that all your
+    and ordering defined by the platform or toolkit's user interface guidelines
+    (if such things exist). By using this class, you can ensure that all your
     standard dialogs look correct on all major platforms. Currently it conforms to
-    the Windows, GTK+ and Mac OS X
-    human interface guidelines.
+    the Windows, GTK+ and Mac OS X human interface guidelines.
 
     When there aren't interface guidelines defined for a particular platform or
-    toolkit, wxStdDialogButtonSizer reverts
-    to the Windows implementation.
+    toolkit, wxStdDialogButtonSizer reverts to the Windows implementation.
 
-    To use this class, first add buttons to the sizer by calling AddButton (or
-    SetAffirmativeButton, SetNegativeButton,
-    or SetCancelButton) and then call Realize in order to create the actual button
-    layout used. Other than these special
-    operations, this sizer works like any other sizer.
+    To use this class, first add buttons to the sizer by calling
+    wxStdDialogButtonSizer::AddButton (or wxStdDialogButtonSizer::SetAffirmativeButton,
+    wxStdDialogButtonSizer::SetNegativeButton or wxStdDialogButtonSizer::SetCancelButton)
+    and then call Realize in order to create the actual button layout used.
+    Other than these special operations, this sizer works like any other sizer.
 
     If you add a button with wxID_SAVE, on Mac OS X the button will be renamed to
-    "Save" and
-    the wxID_NO button will be renamed to "Don't Save" in accordance with the Mac
-    OS X Human Interface Guidelines.
+    "Save" and the wxID_NO button will be renamed to "Don't Save" in accordance
+    with the Mac OS X Human Interface Guidelines.
 
     @library{wxcore}
     @category{winlayout}
 
-    @see wxSizer, @ref overview_sizer "Sizer Overview",
-    wxDialog::CreateButtonSizer
+    @see wxSizer, @ref overview_sizer, wxDialog::CreateButtonSizer
 */
 class wxStdDialogButtonSizer : public wxBoxSizer
 {
@@ -49,39 +44,45 @@ public:
     /**
         Adds a button to the wxStdDialogButtonSizer. The @a button must have
         one of the following identifiers:
-         wxID_OK
-         wxID_YES
-         wxID_SAVE
-         wxID_APPLY
-         wxID_CLOSE
-         wxID_NO
-         wxID_CANCEL
-         wxID_HELP
-         wxID_CONTEXT_HELP
+         - wxID_OK
+         - wxID_YES
+         - wxID_SAVE
+         - wxID_APPLY
+         - wxID_CLOSE
+         - wxID_NO
+         - wxID_CANCEL
+         - wxID_HELP
+         - wxID_CONTEXT_HELP
     */
     void AddButton(wxButton* button);
 
     /**
-        Rearranges the buttons and applies proper spacing between buttons to make them
-        match the platform or toolkit's interface guidelines.
+        Rearranges the buttons and applies proper spacing between buttons to make
+        them match the platform or toolkit's interface guidelines.
     */
     void Realize();
 
     /**
-        Sets the affirmative button for the sizer. This allows you to use identifiers
-        other than the standard identifiers outlined above.
+        Sets the affirmative button for the sizer.
+
+        This allows you to use identifiers other than the standard identifiers
+        outlined above.
     */
     void SetAffirmativeButton(wxButton* button);
 
     /**
-        Sets the cancel button for the sizer. This allows you to use identifiers other
-        than the standard identifiers outlined above.
+        Sets the cancel button for the sizer.
+
+        This allows you to use identifiers other than the standard identifiers
+        outlined above.
     */
     void SetCancelButton(wxButton* button);
 
     /**
-        Sets the negative button for the sizer. This allows you to use identifiers
-        other than the standard identifiers outlined above.
+        Sets the negative button for the sizer.
+
+        This allows you to use identifiers other than the standard identifiers
+        outlined above.
     */
     void SetNegativeButton(wxButton* button);
 };
@@ -92,10 +93,11 @@ public:
     @class wxSizerItem
 
     The wxSizerItem class is used to track the position, size and other
-    attributes of each item managed by a wxSizer. It is not usually necessary
-    to use this class because the sizer elements can also be identified by
-    their positions or window or sizer pointers but sometimes it may be more
-    convenient to use it directly.
+    attributes of each item managed by a wxSizer.
+
+    It is not usually necessary to use this class because the sizer elements can
+    also be identified by their positions or window or sizer pointers but sometimes
+    it may be more convenient to use it directly.
 
     @library{wxcore}
     @category{winlayout}

@@ -15,7 +15,7 @@
 
     @section taskbaricon_xnote X Window System Note
     Under X Window System, the window manager must support either the
-    @link http://freedesktop.org/wiki/Specifications/systemtray-spec "System Tray Protocol"
+    "System Tray Protocol" (see http://freedesktop.org/wiki/Specifications/systemtray-spec)
     by freedesktop.org (WMs used by modern desktop environments such as GNOME >= 2,
     KDE >= 3 and XFCE >= 4 all do) or the older methods used in GNOME 1.2 and KDE 1 and 2.
 

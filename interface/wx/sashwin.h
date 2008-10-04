@@ -6,15 +6,38 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+
+/**
+    See wxSashWindow.
+*/
+enum wxSashEdgePosition
+{
+    wxSASH_TOP = 0,
+    wxSASH_RIGHT,
+    wxSASH_BOTTOM,
+    wxSASH_LEFT,
+    wxSASH_NONE = 100
+};
+
+/**
+    See wxSashEvent.
+*/
+enum wxSashDragStatus
+{
+    wxSASH_STATUS_OK,
+    wxSASH_STATUS_OUT_OF_RANGE
+};
+
+
 /**
     @class wxSashWindow
 
     wxSashWindow allows any of its edges to have a sash which can be dragged
     to resize the window. The actual content window will be created by the
-    application
-    as a child of wxSashWindow. The window (or an ancestor) will be notified of a
-    drag
-    via a wxSashEvent notification.
+    application as a child of wxSashWindow.
+
+    The window (or an ancestor) will be notified of a drag via a
+    wxSashEvent notification.
 
     @beginStyleTable
     @style{wxSW_3D}
@@ -45,7 +68,11 @@
 class wxSashWindow : public wxWindow
 {
 public:
-    //@{
+    /**
+        Default ctor.
+    */
+    wxSashWindow();
+
     /**
         Constructs a sash window, which can be a child of a frame, dialog or any other
         non-control window.
@@ -56,10 +83,8 @@ public:
             Window identifier. If -1, will automatically create an identifier.
         @param pos
             Window position. wxDefaultPosition is (-1, -1) which indicates that
-        wxSashWindows
-            should generate a default position for the window. If using the
-        wxSashWindow class directly, supply
-            an actual position.
+            wxSashWindows should generate a default position for the window.
+            If using the wxSashWindow class directly, supply an actual position.
         @param size
             Window size. wxDefaultSize is (-1, -1) which indicates that wxSashWindows
             should generate a default size for the window.
@@ -68,13 +93,11 @@ public:
         @param name
             Window name.
     */
-    wxSashWindow();
     wxSashWindow(wxWindow* parent, wxWindowID id,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxCLIP_CHILDREN | wxSW_3D,
                  const wxString& name = "sashWindow");
-    //@}
 
     /**
         Destructor.
@@ -174,10 +197,32 @@ public:
     A sash event is sent when the sash of a wxSashWindow has been
     dragged by the user.
 
-    @library{wxadv}
-    @category{FIXME}
+    @remarks
+    When a sash belonging to a sash window is dragged by the user, and then released,
+    this event is sent to the window, where it may be processed by an event table
+    entry in a derived class, a plug-in event handler or an ancestor class.
+    Note that the wxSashWindow doesn't change the window's size itself.
+    It relies on the application's event handler to do that.
+    This is because the application may have to handle other consequences of the resize,
+    or it may wish to veto it altogether. The event handler should look at the drag
+    rectangle: see wxSashEvent::GetDragRect to see what the new size of the window
+    would be if the resize were to be applied.
+    It should also call wxSashEvent::GetDragStatus to see whether the drag was
+    OK or out of the current allowed range.
 
-    @see wxSashWindow, @ref overview_eventhandlingoverview
+    @beginEventTable{wxSashEvent}
+    @event{EVT_SASH_DRAGGED(id, func)}
+        Process a wxEVT_SASH_DRAGGED event, when the user has finished dragging a sash.
+    @event{EVT_SASH_DRAGGED_RANGE(id1, id2, func)}
+        Process a wxEVT_SASH_DRAGGED_RANGE event, when the user has finished
+        dragging a sash. The event handler is called when windows with ids in
+        the given range have their sashes dragged.
+    @endEventTable
+
+    @library{wxadv}
+    @category{events}
+
+    @see wxSashWindow, @ref overview_eventhandling
 */
 class wxSashEvent : public wxCommandEvent
 {
@@ -189,22 +234,22 @@ public:
 
     /**
         Returns the rectangle representing the new size the window would be if the
-        resize was applied. It is
-        up to the application to set the window size if required.
+        resize was applied. It is up to the application to set the window size if required.
     */
     wxRect GetDragRect() const;
 
     /**
-        Returns the status of the sash: one of wxSASH_STATUS_OK,
-        wxSASH_STATUS_OUT_OF_RANGE.
+        Returns the status of the sash: one of wxSASH_STATUS_OK, wxSASH_STATUS_OUT_OF_RANGE.
+
         If the drag caused the notional bounding box of the window to flip over, for
         example, the drag will be out of rage.
     */
     wxSashDragStatus GetDragStatus() const;
 
     /**
-        Returns the dragged edge. The return value is one of wxSASH_TOP, wxSASH_RIGHT,
-        wxSASH_BOTTOM, wxSASH_LEFT.
+        Returns the dragged edge.
+
+        The return value is one of wxSASH_TOP, wxSASH_RIGHT, wxSASH_BOTTOM, wxSASH_LEFT.
     */
     wxSashEdgePosition GetEdge() const;
 };

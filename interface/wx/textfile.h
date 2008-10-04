@@ -11,9 +11,9 @@
 enum wxTextFileType
 {
     wxTextFileType_None,  //!< incomplete (the last line of the file only)
-    wxTextFileType_Unix,  //!< line is terminated with 'LF' = 0xA = 10 = '\n'
+    wxTextFileType_Unix,  //!< line is terminated with 'LF' = 0xA = 10 = '\\n'
     wxTextFileType_Dos,   //!< line is terminated with 'CR' 'LF'
-    wxTextFileType_Mac,   //!< line is terminated with 'CR' = 0xD = 13 = '\r'
+    wxTextFileType_Mac,   //!< line is terminated with 'CR' = 0xD = 13 = '\\r'
     wxTextFileType_Os2    //!< line is terminated with 'CR' 'LF'
 };
 
@@ -101,7 +101,7 @@ public:
     //@{
     /**
         Creates the file with the given name or the name which was given in the
-        @ref ctor() constructor. The array of file lines is initially empty.
+        @ref wxTextFile() constructor. The array of file lines is initially empty.
 
         It will fail if the file already exists, Open() should be used in this case.
     */
@@ -238,7 +238,7 @@ public:
     //@{
     /**
         Open() opens the file with the given name or the name which was given in the
-        @ref ctor() constructor and also loads file in memory on success.
+        @ref wxTextFile() constructor and also loads file in memory on success.
 
         It will fail if the file does not exist, Create() should be used in this case.
 
@@ -262,7 +262,7 @@ public:
         for example, DOS files to Unix.
 
         The @a conv argument is only meaningful in Unicode build of wxWidgets when
-        it is used to convert all lines to multibyte representation before writing them
+        it is used to convert all lines to multibyte representation before writing
         them to physical file.
 
         @return
