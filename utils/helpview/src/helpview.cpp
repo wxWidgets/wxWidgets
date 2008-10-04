@@ -57,7 +57,7 @@ bool hvApp::OnInit()
 
     wxArtProvider::Push(new AlternateArtProvider);
 
-#ifdef __WXMAC__
+#if defined( __WXOSX_MAC__ ) && wxOSX_USE_CARBON
     wxApp::s_macAboutMenuItemId = wxID_ABOUT;
     wxFileName::MacRegisterDefaultTypeAndCreator( wxT("htb") , 'HTBD' , 'HTBA' ) ;
 #endif
