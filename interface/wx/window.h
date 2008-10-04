@@ -1522,7 +1522,7 @@ public:
         Disables all other windows in the application so that
         the user can only interact with this window.
 
-        @param flag
+        @param modal
             If @true, this call disables all other windows in the application so that
             the user can only interact with this window. If @false, the effect is
             reversed.
@@ -1536,6 +1536,8 @@ public:
             Required x position.
         @param y
             Required y position.
+        @param flags
+            See SetSize() for more info about this parameter.
 
         @remarks Implementations of SetSize can also implicitly implement the
                  Move() function, which is defined in the base wxWindow class as the call:
@@ -1545,13 +1547,15 @@ public:
 
         @see SetSize()
     */
-    void Move(int x, int y, int flags = 0);
+    void Move(int x, int y, int flags = wxSIZE_USE_EXISTING);
 
     /**
         Moves the window to the given position.
 
         @param pt
             wxPoint object representing the position.
+        @param flags
+            See SetSize() for more info about this parameter.
 
         @remarks Implementations of SetSize() can also implicitly implement the
                  Move() function, which is defined in the base wxWindow class as the call:
@@ -1561,7 +1565,7 @@ public:
 
         @see SetSize()
     */
-    void Move(const wxPoint& pt, int flags = 0);
+    void Move(const wxPoint& pt, int flags = wxSIZE_USE_EXISTING);
 
     /**
         Moves this window in the tab navigation order after the specified @e win.
@@ -1921,7 +1925,7 @@ public:
                               const wxRect* rect = NULL);
 
     /**
-        This function sends a dummy @ref overview_wxsizeevent "size event" to
+        This function sends a dummy @ref wxSizeEvent "size event" to
         the window allowing it to re-layout its children positions.
 
         It is sometimes useful to call this function after adding or deleting a

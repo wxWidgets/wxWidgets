@@ -275,7 +275,7 @@ public:
             Identifier for this button.
         @param label
             Text to be displayed on the screen area dedicated to this hardware
-            button. 
+            button.
         @param subMenu
             The menu to be opened after pressing this hardware button.
 
@@ -299,6 +299,14 @@ public:
         size increments. If a pair of values is not set (or set to -1), no
         constraints will be used.
 
+        @param minW
+            The minimum width.
+        @param minH
+            The minimum height.
+        @param maxW
+            The maximum width.
+        @param maxH
+            The maximum height.
         @param incW
             Specifies the increment for sizing the width (GTK/Motif/Xt only).
         @param incH
@@ -310,16 +318,19 @@ public:
                  wxWindow::SetSize().
 
     */
-    virtual void SetSizeHints(int minW, int minH, int maxW = -1,
-                              int maxH = -1,
-                              int incW = -1,
-                              int incH = -1);
+    virtual void SetSizeHints(int minW, int minH,
+                              int maxW = -1, int maxH = -1,
+                              int incW = -1, int incH = -1);
 
     /**
         Allows specification of minimum and maximum window sizes, and window
         size increments. If a pair of values is not set (or set to -1), no
         constraints will be used.
 
+        @param minSize
+            The minimum size of the window.
+        @param maxSize
+            The maximum size of the window.
         @param incSize
             Increment size (only taken into account under X11-based ports such
             as wxGTK/wxMotif/wxX11).
@@ -417,7 +428,7 @@ public:
         decorations are used by default and so it may make sense to call this
         method with default argument if the application can't use custom
         decorations at all for some reason.
-        
+
         @see UseNativeDecorations()
     */
     void UseNativeDecorationsByDefault(bool native = true);

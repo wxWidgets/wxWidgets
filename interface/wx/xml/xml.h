@@ -263,6 +263,8 @@ public:
         @return @true if @a precedingNode has been found and the @a child
                 node has been inserted.
 
+        @param child
+            The child to insert.
         @param precedingNode
             The node to insert @a child after. As a special case, this can be
             @NULL if this node has no children yet -- in that case, @a child

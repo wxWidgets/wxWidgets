@@ -53,7 +53,7 @@ public:
             If wxDefaultSize is specified then a default size is chosen.
         @param style
             Window style. See wxToggleButton.
-        @param validator
+        @param val
             Window validator.
         @param name
             Window name.

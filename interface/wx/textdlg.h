@@ -70,6 +70,8 @@ public:
             Parent window.
         @param message
             Message to show on the dialog.
+        @param caption
+            The caption of the the dialog.
         @param defaultValue
             The default value, which may be the empty string.
         @param style

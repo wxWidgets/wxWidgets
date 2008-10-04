@@ -768,6 +768,8 @@ long wxExecute(wchar_t** argv, int flags = wxEXEC_ASYNC,
     @param command
         The command to execute and any parameters to pass to it as a single
         string.
+    @param output
+        The string array where the stdout of the executed process is saved.
     @param flags
         Must include either wxEXEC_ASYNC or wxEXEC_SYNC and can also include
         wxEXEC_NOHIDE, wxEXEC_MAKE_GROUP_LEADER (in either case) or
@@ -776,8 +778,7 @@ long wxExecute(wchar_t** argv, int flags = wxEXEC_ASYNC,
 
     @header{wx/utils.h}
 */
-long wxExecute(const wxString& command, wxArrayString& output,
-                int flags = 0);
+long wxExecute(const wxString& command, wxArrayString& output, int flags = 0);
 
 /**
     This is an overloaded version of wxExecute(const wxString&,int,wxProcess*),
@@ -789,6 +790,10 @@ long wxExecute(const wxString& command, wxArrayString& output,
     @param command
         The command to execute and any parameters to pass to it as a single
         string.
+    @param output
+        The string array where the stdout of the executed process is saved.
+    @param errors
+        The string array where the stderr of the executed process is saved.
     @param flags
         Must include either wxEXEC_ASYNC or wxEXEC_SYNC and can also include
         wxEXEC_NOHIDE, wxEXEC_MAKE_GROUP_LEADER (in either case) or

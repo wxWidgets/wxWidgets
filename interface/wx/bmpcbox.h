@@ -70,10 +70,20 @@ public:
             Window identifier. The value wxID_ANY indicates a default value.
         @param value
             Initial selection string. An empty string indicates no selection.
+        @param pos
+            Initial position.
+        @param size
+            Initial size.
         @param n
             Number of strings with which to initialise the control.
         @param choices
             An array of strings with which to initialise the control.
+        @param style
+            The window style, see wxCB_* flags.
+        @param validator
+            Validator which can be used for additional data checks.
+        @param name
+            Control name.
 
         @see Create(), wxValidator
     */
@@ -96,8 +106,18 @@ public:
             Window identifier. The value wxID_ANY indicates a default value.
         @param value
             Initial selection string. An empty string indicates no selection.
+        @param pos
+            Initial position.
+        @param size
+            Initial size.
         @param choices
             An wxArrayString with which to initialise the control.
+        @param style
+            The window style, see wxCB_* flags.
+        @param validator
+            Validator which can be used for additional data checks.
+        @param name
+            Control name.
 
         @see Create(), wxValidator
     */

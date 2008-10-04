@@ -279,14 +279,13 @@ public:
 
     /**
         Draws a spline between all given control points, using the current pen.
-        The programmer is responsible for deleting the list of points. The
-        spline is drawn using a series of lines, using an algorithm taken from
+        The programmer is responsible for deleting the list of points.
+        The spline is drawn using a series of lines, using an algorithm taken from
         the X drawing program "XFIG".
     */
     void DrawSpline(wxList* points);
+
     /**
-        @param string
-            The text string to measure.
         Draws a three-point spline using the current pen.
     */
     void DrawSpline(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2,
@@ -417,7 +416,7 @@ public:
         @see SetTextBackground()
     */
     wxColour GetTextBackground() const;
-    const wxColour GetTextBackground() const;
+    const wxColour& GetTextBackground() const;
     //@}
 
     /**
@@ -435,10 +434,10 @@ public:
         @param externalLeading
             Any extra vertical space added to the font by the font designer
             (usually is zero).
-
-        The optional parameter @a font specifies an alternative to the
-        currently selected font: but note that this does not yet work under
-        Windows, so you need to set a font for the device context first.
+        @param font
+            Specifies an alternative to the currently selected font: but note
+            that this does not yet work under Windows, so you need to set a
+            font for the device context first.
 
         @see wxFont, SetFont()
     */
