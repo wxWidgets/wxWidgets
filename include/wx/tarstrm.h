@@ -22,7 +22,8 @@
 // Constants
 
 // TypeFlag values
-enum {
+enum wxTarType
+{
     wxTAR_REGTYPE   = '0',      // regular file
     wxTAR_LNKTYPE   = '1',      // hard link
     wxTAR_SYMTYPE   = '2',      // symbolic link

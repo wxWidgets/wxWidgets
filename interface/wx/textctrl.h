@@ -6,6 +6,163 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+
+
+/**
+    The following values can be passed to wxTextAttr::SetAlignment to determine paragraph alignment.
+*/
+enum wxTextAttrAlignment
+{
+    wxTEXT_ALIGNMENT_DEFAULT,
+    wxTEXT_ALIGNMENT_LEFT,
+    wxTEXT_ALIGNMENT_CENTRE,
+    wxTEXT_ALIGNMENT_CENTER = wxTEXT_ALIGNMENT_CENTRE,
+    wxTEXT_ALIGNMENT_RIGHT,
+
+    /** wxTEXT_ALIGNMENT_JUSTIFIED is unimplemented.
+        In future justification may be supported when printing or previewing, only. */
+    wxTEXT_ALIGNMENT_JUSTIFIED
+};
+
+/**
+    The following values are passed in a bitlist to wxTextAttr::SetFlags() to
+    determine what attributes will be considered when setting the attributes for a text control.
+*/
+enum wxTextAttrFlags
+{
+    wxTEXT_ATTR_TEXT_COLOUR          = 0x00000001,
+    wxTEXT_ATTR_BACKGROUND_COLOUR    = 0x00000002,
+    wxTEXT_ATTR_FONT_FACE            = 0x00000004,
+    wxTEXT_ATTR_FONT_SIZE            = 0x00000008,
+    wxTEXT_ATTR_FONT_WEIGHT          = 0x00000010,
+    wxTEXT_ATTR_FONT_ITALIC          = 0x00000020,
+    wxTEXT_ATTR_FONT_UNDERLINE       = 0x00000040,
+    wxTEXT_ATTR_FONT_ENCODING        = 0x02000000,
+    wxTEXT_ATTR_FONT = \
+        ( wxTEXT_ATTR_FONT_FACE | wxTEXT_ATTR_FONT_SIZE | wxTEXT_ATTR_FONT_WEIGHT | \
+            wxTEXT_ATTR_FONT_ITALIC | wxTEXT_ATTR_FONT_UNDERLINE | wxTEXT_ATTR_FONT_ENCODING ),
+
+    wxTEXT_ATTR_ALIGNMENT            = 0x00000080,
+    wxTEXT_ATTR_LEFT_INDENT          = 0x00000100,
+    wxTEXT_ATTR_RIGHT_INDENT         = 0x00000200,
+    wxTEXT_ATTR_TABS                 = 0x00000400,
+
+    wxTEXT_ATTR_PARA_SPACING_AFTER   = 0x00000800,
+    wxTEXT_ATTR_PARA_SPACING_BEFORE  = 0x00001000,
+    wxTEXT_ATTR_LINE_SPACING         = 0x00002000,
+    wxTEXT_ATTR_CHARACTER_STYLE_NAME = 0x00004000,
+    wxTEXT_ATTR_PARAGRAPH_STYLE_NAME = 0x00008000,
+    wxTEXT_ATTR_LIST_STYLE_NAME      = 0x00010000,
+    wxTEXT_ATTR_BULLET_STYLE         = 0x00020000,
+    wxTEXT_ATTR_BULLET_NUMBER        = 0x00040000,
+    wxTEXT_ATTR_BULLET_TEXT          = 0x00080000,
+    wxTEXT_ATTR_BULLET_NAME          = 0x00100000,
+    wxTEXT_ATTR_URL                  = 0x00200000,
+    wxTEXT_ATTR_PAGE_BREAK           = 0x00400000,
+    wxTEXT_ATTR_EFFECTS              = 0x00800000,
+    wxTEXT_ATTR_OUTLINE_LEVEL        = 0x01000000,
+
+    /**
+        Character and paragraph combined styles
+    */
+
+    wxTEXT_ATTR_CHARACTER = \
+        (wxTEXT_ATTR_FONT|wxTEXT_ATTR_FONT_ENCODING|wxTEXT_ATTR_EFFECTS| \
+            wxTEXT_ATTR_BACKGROUND_COLOUR|wxTEXT_ATTR_TEXT_COLOUR|wxTEXT_ATTR_CHARACTER_STYLE_NAME|wxTEXT_ATTR_URL),
+
+    wxTEXT_ATTR_PARAGRAPH = \
+        (wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_TABS|\
+            wxTEXT_ATTR_PARA_SPACING_BEFORE|wxTEXT_ATTR_PARA_SPACING_AFTER|wxTEXT_ATTR_LINE_SPACING|\
+            wxTEXT_ATTR_BULLET_STYLE|wxTEXT_ATTR_BULLET_NUMBER|wxTEXT_ATTR_BULLET_TEXT|wxTEXT_ATTR_BULLET_NAME|\
+            wxTEXT_ATTR_PARAGRAPH_STYLE_NAME|wxTEXT_ATTR_LIST_STYLE_NAME|wxTEXT_ATTR_OUTLINE_LEVEL),
+
+    wxTEXT_ATTR_ALL = (wxTEXT_ATTR_CHARACTER|wxTEXT_ATTR_PARAGRAPH)
+};
+
+/**
+    Styles for wxTextAttr::SetBulletStyle
+*/
+enum wxTextAttrBulletStyle
+{
+    wxTEXT_ATTR_BULLET_STYLE_NONE            = 0x00000000,
+    wxTEXT_ATTR_BULLET_STYLE_ARABIC          = 0x00000001,
+    wxTEXT_ATTR_BULLET_STYLE_LETTERS_UPPER   = 0x00000002,
+    wxTEXT_ATTR_BULLET_STYLE_LETTERS_LOWER   = 0x00000004,
+    wxTEXT_ATTR_BULLET_STYLE_ROMAN_UPPER     = 0x00000008,
+    wxTEXT_ATTR_BULLET_STYLE_ROMAN_LOWER     = 0x00000010,
+    wxTEXT_ATTR_BULLET_STYLE_SYMBOL          = 0x00000020,
+
+    /** wxTEXT_ATTR_BULLET_STYLE_BITMAP is unimplemented. */
+    wxTEXT_ATTR_BULLET_STYLE_BITMAP          = 0x00000040,
+    wxTEXT_ATTR_BULLET_STYLE_PARENTHESES     = 0x00000080,
+    wxTEXT_ATTR_BULLET_STYLE_PERIOD          = 0x00000100,
+    wxTEXT_ATTR_BULLET_STYLE_STANDARD        = 0x00000200,
+    wxTEXT_ATTR_BULLET_STYLE_RIGHT_PARENTHESIS = 0x00000400,
+    wxTEXT_ATTR_BULLET_STYLE_OUTLINE         = 0x00000800,
+
+    wxTEXT_ATTR_BULLET_STYLE_ALIGN_LEFT      = 0x00000000,
+    wxTEXT_ATTR_BULLET_STYLE_ALIGN_RIGHT     = 0x00001000,
+    wxTEXT_ATTR_BULLET_STYLE_ALIGN_CENTRE    = 0x00002000
+};
+
+/**
+    Styles for wxTextAttr::SetTextEffects().
+
+    Of these, only wxTEXT_ATTR_EFFECT_CAPITALS and wxTEXT_ATTR_EFFECT_STRIKETHROUGH are implemented.
+*/
+enum wxTextAttrEffects
+{
+    wxTEXT_ATTR_EFFECT_NONE                  = 0x00000000,
+    wxTEXT_ATTR_EFFECT_CAPITALS              = 0x00000001,
+    wxTEXT_ATTR_EFFECT_SMALL_CAPITALS        = 0x00000002,
+    wxTEXT_ATTR_EFFECT_STRIKETHROUGH         = 0x00000004,
+    wxTEXT_ATTR_EFFECT_DOUBLE_STRIKETHROUGH  = 0x00000008,
+    wxTEXT_ATTR_EFFECT_SHADOW                = 0x00000010,
+    wxTEXT_ATTR_EFFECT_EMBOSS                = 0x00000020,
+    wxTEXT_ATTR_EFFECT_OUTLINE               = 0x00000040,
+    wxTEXT_ATTR_EFFECT_ENGRAVE               = 0x00000080,
+    wxTEXT_ATTR_EFFECT_SUPERSCRIPT           = 0x00000100,
+    wxTEXT_ATTR_EFFECT_SUBSCRIPT             = 0x00000200
+};
+
+/**
+    Line spacing values; see wxTextAttr::SetLineSpacing().
+*/
+enum wxTextAttrLineSpacing
+{
+    wxTEXT_ATTR_LINE_SPACING_NORMAL         = 10,
+    wxTEXT_ATTR_LINE_SPACING_HALF           = 15,
+    wxTEXT_ATTR_LINE_SPACING_TWICE          = 20
+};
+
+
+/**
+    Describes the possible return values of wxTextCtrl::HitTest().
+
+    The element names correspond to the relationship between the point asked
+    for and the character returned, e.g. @c wxTE_HT_BEFORE means that the point
+    is before (leftward or upward) it and so on.
+ */
+enum wxTextCtrlHitTestResult
+{
+    /// Indicates that wxTextCtrl::HitTest() is not implemented on this
+    /// platform.
+    wxTE_HT_UNKNOWN = -2,
+
+    /// The point is before the character returned.
+    wxTE_HT_BEFORE,
+
+    /// The point is directly on the character returned.
+    wxTE_HT_ON_TEXT,
+
+    /// The point is below the last line of the control.
+    wxTE_HT_BELOW,
+
+    /// The point is beyond the end of line containing the character returned.
+    wxTE_HT_BEYOND
+};
+
+
 /**
     @class wxTextAttr
 
@@ -13,8 +170,8 @@
     for a range of text in a wxTextCtrl or wxRichTextCtrl.
 
     When setting up a wxTextAttr object, pass a bitlist mask to
-    wxTextAttr::SetFlags to indicate which style elements should be changed. As
-    a convenience, when you call a setter such as SetFont, the relevant bit
+    wxTextAttr::SetFlags() to indicate which style elements should be changed.
+    As a convenience, when you call a setter such as SetFont, the relevant bit
     will be set.
 
     @library{wxcore}
@@ -51,37 +208,38 @@ public:
 
     /**
         Returns the alignment flags.
-        See SetAlignment() for a list of available styles.
+        See ::wxTextAttrAlignment for a list of available styles.
     */
     wxTextAttrAlignment GetAlignment() const;
 
     /**
         Returns the background colour.
     */
-    const wxColour GetBackgroundColour() const;
+    const wxColour& GetBackgroundColour() const;
 
     /**
-        Returns a string containing the name of the font associated with the bullet
-        symbol.
+        Returns a string containing the name of the font associated with the bullet symbol.
         Only valid for attributes with wxTEXT_ATTR_BULLET_SYMBOL.
     */
-    const wxString GetBulletFont() const;
+    const wxString& GetBulletFont() const;
 
     /**
         Returns the standard bullet name, applicable if the bullet style is
         wxTEXT_ATTR_BULLET_STYLE_STANDARD.
+
         Currently the following standard bullet names are supported:
-         @c standard/circle
-         @c standard/square
-         @c standard/diamond
-         @c standard/triangle
+         - @c standard/circle
+         - @c standard/square
+         - @c standard/diamond
+         - @c standard/triangle
+
+        @note
         For wxRichTextCtrl users only: if you wish your rich text controls to support
-        further bullet graphics, you can derive a
-        class from wxRichTextRenderer or wxRichTextStdRenderer, override @c
-        DrawStandardBullet and @c EnumerateStandardBulletNames, and
-        set an instance of the class using wxRichTextBuffer::SetRenderer.
+        further bullet graphics, you can derive a class from wxRichTextRenderer or
+        wxRichTextStdRenderer, override @c DrawStandardBullet and @c EnumerateStandardBulletNames,
+        and set an instance of the class using wxRichTextBuffer::SetRenderer.
     */
-    const wxString GetBulletName() const;
+    const wxString& GetBulletName() const;
 
     /**
         Returns the bullet number.
@@ -90,7 +248,7 @@ public:
 
     /**
         Returns the bullet style.
-        See SetBulletStyle() for a list of available styles.
+        See ::wxTextAttrBulletStyle for a list of available styles.
     */
     int GetBulletStyle() const;
 
@@ -113,10 +271,10 @@ public:
 
     /**
         Creates and returns a font specified by the font attributes in the wxTextAttr
-        object. Note that
-        wxTextAttr does not store a wxFont object, so this is only a temporary font.
-        For greater
-        efficiency, access the font attributes directly.
+        object. Note that wxTextAttr does not store a wxFont object, so this is only
+        a temporary font.
+
+        For greater efficiency, access the font attributes directly.
     */
     wxFont GetFont() const;
 
@@ -168,8 +326,7 @@ public:
     long GetLeftSubIndent() const;
 
     /**
-        Returns the line spacing value, one of wxTEXT_ATTR_LINE_SPACING_NORMAL,
-        wxTEXT_ATTR_LINE_SPACING_HALF, and wxTEXT_ATTR_LINE_SPACING_TWICE.
+        Returns the line spacing value, one of ::wxTextAttrLineSpacing values.
     */
     int GetLineSpacing() const;
 
@@ -204,10 +361,10 @@ public:
     long GetRightIndent() const;
 
     /**
-        Returns an array of tab stops, each expressed in tenths of a millimeter. Each
-        stop
-        is measured from the left margin and therefore each value must be larger than
-        the last.
+        Returns an array of tab stops, each expressed in tenths of a millimeter.
+
+        Each stop is measured from the left margin and therefore each value must
+        be larger than the last.
     */
     const wxArrayInt GetTabs() const;
 
@@ -217,22 +374,23 @@ public:
     const wxColour GetTextColour() const;
 
     /**
-        Returns the text effect bits of interest. See SetFlags() for further
-        information.
+        Returns the text effect bits of interest.
+        See SetFlags() for further information.
     */
     int GetTextEffectFlags() const;
 
     /**
-        Returns the text effects, a bit list of styles. See SetTextEffects() for
-        details.
+        Returns the text effects, a bit list of styles.
+        See SetTextEffects() for details.
     */
     int GetTextEffects() const;
 
     /**
-        Returns the URL for the content. Content with wxTEXT_ATTR_URL style
-        causes wxRichTextCtrl to show a hand cursor over it, and wxRichTextCtrl
-        generates
-        a wxTextUrlEvent when the content is clicked.
+        Returns the URL for the content.
+
+        Content with @a wxTEXT_ATTR_URL style causes wxRichTextCtrl to show a
+        hand cursor over it, and wxRichTextCtrl generates a wxTextUrlEvent
+        when the content is clicked.
     */
     const wxString GetURL() const;
 
@@ -399,24 +557,25 @@ public:
     */
     bool IsParagraphStyle() const;
 
-    //@{
     /**
-        Creates a new @c wxTextAttr which is a merge of @a base and
-        @a overlay. Properties defined in @a overlay take precedence over those
-        in @a base. Properties undefined/invalid in both are undefined in the
-        result.
+        Copies all defined/valid properties from overlay to current object.
     */
     void Merge(const wxTextAttr& overlay);
-    static wxTextAttr Merge(const wxTextAttr& base,
-                            const wxTextAttr& overlay);
-    //@}
 
     /**
-        Sets the paragraph alignment. These are the possible values for @a alignment:
+        Creates a new @c wxTextAttr which is a merge of @a base and @a overlay.
 
-        Of these, wxTEXT_ALIGNMENT_JUSTIFIED is unimplemented. In future justification
-        may be supported
-        when printing or previewing, only.
+        Properties defined in @a overlay take precedence over those in @a base.
+        Properties undefined/invalid in both are undefined in the result.
+    */
+    static wxTextAttr Merge(const wxTextAttr& base,
+                            const wxTextAttr& overlay);
+
+    /**
+        Sets the paragraph alignment. See ::wxTextAttrAlignment enumeration values.
+
+        Of these, wxTEXT_ALIGNMENT_JUSTIFIED is unimplemented.
+        In future justification may be supported when printing or previewing, only.
     */
     void SetAlignment(wxTextAttrAlignment alignment);
 
@@ -434,8 +593,9 @@ public:
     /**
         Sets the standard bullet name, applicable if the bullet style is
         wxTEXT_ATTR_BULLET_STYLE_STANDARD.
-        See GetBulletName() for a list
-        of supported names, and how to expand the range of supported types.
+
+        See GetBulletName() for a list of supported names, and how
+        to expand the range of supported types.
     */
     void SetBulletName(const wxString& name);
 
@@ -445,15 +605,16 @@ public:
     void SetBulletNumber(int n);
 
     /**
-        Sets the bullet style. The following styles can be passed:
+        Sets the bullet style.
 
-        Currently wxTEXT_ATTR_BULLET_STYLE_BITMAP is not supported.
+        The ::wxTextAttrBulletStyle enumeration values are all supported,
+        except for wxTEXT_ATTR_BULLET_STYLE_BITMAP.
     */
     void SetBulletStyle(int style);
 
     /**
-        Sets the bullet text, which could be a symbol, or (for example) cached outline
-        text.
+        Sets the bullet text, which could be a symbol, or (for example) cached
+        outline text.
     */
     void SetBulletText(const wxString text);
 
@@ -463,14 +624,14 @@ public:
     void SetCharacterStyleName(const wxString& name);
 
     /**
-        Sets the flags determining which styles are being specified. The following
-        flags can be passed in a bitlist:
+        Sets the flags determining which styles are being specified.
+        The ::wxTextAttrFlags values can be passed in a bitlist.
     */
     void SetFlags(long flags);
 
     /**
-        Sets the attributes for the given font. Note that wxTextAttr does not store an
-        actual wxFont object.
+        Sets the attributes for the given font.
+        Note that wxTextAttr does not store an actual wxFont object.
     */
     void SetFont(const wxFont& font);
 
@@ -507,26 +668,25 @@ public:
     /**
         Sets the left indent and left subindent in tenths of a millimetre.
         The sub-indent is an offset from the left of the paragraph, and is used for all
-        but the
-        first line in a paragraph. A positive value will cause the first line to appear
-        to the left
+        but the first line in a paragraph.
+
+        A positive value will cause the first line to appear to the left
         of the subsequent lines, and a negative value will cause the first line to be
-        indented
-        relative to the subsequent lines.
-        wxRichTextBuffer uses indentation to render a bulleted item. The left indent is
-        the distance between
-        the margin and the bullet. The content of the paragraph, including the first
-        line, starts
-        at leftMargin + leftSubIndent. So the distance between the left edge of the
-        bullet and the
+        indented relative to the subsequent lines.
+
+        wxRichTextBuffer uses indentation to render a bulleted item.
+        The left indent is the distance between the margin and the bullet.
+        The content of the paragraph, including the first line, starts
+        at leftMargin + leftSubIndent.
+        So the distance between the left edge of the bullet and the
         left of the actual paragraph is leftSubIndent.
     */
     void SetLeftIndent(int indent, int subIndent = 0);
 
     /**
         Sets the line spacing. @a spacing is a multiple, where 10 means single-spacing,
-        15 means 1.5 spacing, and 20 means double spacing. The following constants are
-        defined for convenience:
+        15 means 1.5 spacing, and 20 means double spacing.
+        The ::wxTextAttrLineSpacing values are defined for convenience.
     */
     void SetLineSpacing(int spacing);
 
@@ -536,11 +696,10 @@ public:
     void SetListStyleName(const wxString& name);
 
     /**
-        Specifies the outline level. Zero represents normal text. At present, the
-        outline level is
-        not used, but may be used in future for determining list levels and for
-        applications
-        that need to store document structure information.
+        Specifies the outline level. Zero represents normal text.
+        At present, the outline level is not used, but may be used in future for
+        determining list levels and for applications that need to store document
+        structure information.
     */
     void SetOutlineLevel(int level);
 
@@ -582,33 +741,34 @@ public:
     void SetTextColour(const wxColour& colText);
 
     /**
-        Sets the text effect bits of interest. You should also pass wxTEXT_ATTR_EFFECTS
-        to SetFlags().
+        Sets the text effect bits of interest.
+
+        You should also pass wxTEXT_ATTR_EFFECTS to SetFlags().
         See SetFlags() for further information.
     */
     void SetTextEffectFlags(int flags);
 
     /**
         Sets the text effects, a bit list of styles.
-        The following styles can be passed:
+        The ::wxTextAttrEffects enumeration values can be used.
 
         Of these, only wxTEXT_ATTR_EFFECT_CAPITALS and wxTEXT_ATTR_EFFECT_STRIKETHROUGH
         are implemented.
+
         wxTEXT_ATTR_EFFECT_CAPITALS capitalises text when displayed (leaving the case
-        of the actual buffer
-        text unchanged), and wxTEXT_ATTR_EFFECT_STRIKETHROUGH draws a line through text.
+        of the actual buffer text unchanged), and wxTEXT_ATTR_EFFECT_STRIKETHROUGH draws
+        a line through text.
+
         To set effects, you should also pass wxTEXT_ATTR_EFFECTS to SetFlags(), and call
-        SetTextEffectFlags() with the styles (taken from the
-        above set) that you are interested in setting.
+        SetTextEffectFlags() with the styles (taken from the above set) that you
+        are interested in setting.
     */
     void SetTextEffects(int effects);
 
     /**
         Sets the URL for the content. Sets the wxTEXT_ATTR_URL style; content with this
-        style
-        causes wxRichTextCtrl to show a hand cursor over it, and wxRichTextCtrl
-        generates
-        a wxTextUrlEvent when the content is clicked.
+        style causes wxRichTextCtrl to show a hand cursor over it, and wxRichTextCtrl
+        generates a wxTextUrlEvent when the content is clicked.
     */
     void SetURL(const wxString& url);
 
@@ -616,32 +776,6 @@ public:
         Assignment from a wxTextAttr object.
     */
     void operator operator=(const wxTextAttr& attr);
-};
-
-/**
-    Describes the possible return values of wxTextCtrl::HitTest().
-
-    The element names correspond to the relationship between the point asked
-    for and the character returned, e.g. @c wxTE_HT_BEFORE means that the point
-    is before (leftward or upward) it and so on.
- */
-enum wxTextCtrlHitTestResult
-{
-    /// Indicates that wxTextCtrl::HitTest() is not implemented on this
-    /// platform.
-    wxTE_HT_UNKNOWN = -2,
-
-    /// The point is before the character returned.
-    wxTE_HT_BEFORE,
-
-    /// The point is directly on the character returned.
-    wxTE_HT_ON_TEXT,
-
-    /// The point is below the last line of the control.
-    wxTE_HT_BELOW,
-
-    /// The point is beyond the end of line containing the character returned.
-    wxTE_HT_BEYOND
 };
 
 
@@ -715,6 +849,11 @@ enum wxTextCtrlHitTestResult
            On PocketPC and Smartphone, causes the first letter to be
            capitalized.
     @endStyleTable
+
+    Note that alignment styles (wxTE_LEFT, wxTE_CENTRE and wxTE_RIGHT) can be
+    changed dynamically after control creation on wxMSW and wxGTK. wxTE_READONLY,
+    wxTE_PASSWORD and wrapping styles can be dynamically changed under wxGTK but
+    not wxMSW. The other styles can be only set during control creation.
 
 
     @section textctrl_text_format wxTextCtrl Text Format
@@ -840,17 +979,14 @@ enum wxTextCtrlHitTestResult
     wxID_REDO. The associated UI update events are also processed
     automatically, when the control has the focus.
 
-    To process input from a text control, use these event handler macros to
-    direct input to member functions that take a wxCommandEvent argument.
-
     @beginEventTable{wxCommandEvent}
     @event{EVT_TEXT(id, func)}
         Respond to a wxEVT_COMMAND_TEXT_UPDATED event, generated when the text
         changes. Notice that this event will be sent when the text controls
         contents changes -- whether this is due to user input or comes from the
-        program itself (for example, if SetValue() is called); see
-        ChangeValue() for a function which does not send this event. This
-        event is however not sent during the control creation.
+        program itself (for example, if wxTextCtrl::SetValue() is called); see
+        wxTextCtrl::ChangeValue() for a function which does not send this event.
+        This event is however not sent during the control creation.
     @event{EVT_TEXT_ENTER(id, func)}
         Respond to a wxEVT_COMMAND_TEXT_ENTER event, generated when enter is
         pressed in a text control which must have wxTE_PROCESS_ENTER style for
@@ -860,7 +996,7 @@ enum wxTextCtrlHitTestResult
         wxGTK2 only currently).
     @event{EVT_TEXT_MAXLEN(id, func)}
         This event is generated when the user tries to enter more text into the
-        control than the limit set by SetMaxLength(), see its description.
+        control than the limit set by wxTextCtrl::SetMaxLength(), see its description.
     @endEventTable
 
     @library{wxcore}
@@ -872,12 +1008,10 @@ enum wxTextCtrlHitTestResult
 class wxTextCtrl : public wxControl
 {
 public:
-    //@{
     /**
-       Constructor, creating and showing a text control.
-       @see Create()
+        Default ctor.
     */
-         wxTextCtrl();
+    wxTextCtrl();
 
     /**
         Constructor, creating and showing a text control.
@@ -899,13 +1033,13 @@ public:
         @param name
             Window name.
 
-        @remarks The horizontal scrollbar (wxHSCROLL style flag) will only be
+        @remarks
+            The horizontal scrollbar (wxHSCROLL style flag) will only be
             created for multi-line text controls. Without a horizontal
             scrollbar, text lines that don't fit in the control's size will be
-            wrapped (but no newline character is inserted). Single line
-            controls don't have a horizontal scrollbar, the text is
-            automatically scrolled so that the insertion point is always
-            visible.
+            wrapped (but no newline character is inserted).
+            Single line controls don't have a horizontal scrollbar, the text is
+            automatically scrolled so that the insertion point is always visible.
 
         @see Create(), wxValidator
     */
@@ -916,7 +1050,6 @@ public:
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
                const wxString& name = wxTextCtrlNameStr);
-    //@}
 
     /**
         Destructor, destroying the text control.
@@ -929,9 +1062,10 @@ public:
         @param text
             Text to write to the text control.
 
-        @remarks After the text is appended, the insertion point will be at the
+        @remarks
+            After the text is appended, the insertion point will be at the
             end of the text control. If this behaviour is not desired, the
-            programmer should use GetInsertionPoint and SetInsertionPoint.
+            programmer should use GetInsertionPoint() and SetInsertionPoint().
 
         @see WriteText()
     */
@@ -1006,12 +1140,11 @@ public:
 
     /**
         Sets the text value and marks the control as not-modified (which means
-        that IsModified() would return @false immediately after the call to
-        SetValue).
+        that IsModified() would return @false immediately after the call to SetValue()).
 
         This functions does not generate the @c wxEVT_COMMAND_TEXT_UPDATED
         event but otherwise is identical to SetValue().
-        See @ref overview_progevent "this topic" for more information.
+        See @ref overview_eventhandling_prog for more information.
 
         @since 2.7.1
 
@@ -1064,14 +1197,12 @@ public:
         This functions inserts into the control the character which would have
         been inserted if the given key event had occurred in the text control.
 
-        The @a event object should be the same as the one passed to @c
-        EVT_KEY_DOWN handler previously by wxWidgets. Please note that this
-        function doesn't currently work correctly for all keys under any
-        platform but MSW.
+        The @a event object should be the same as the one passed to @c EVT_KEY_DOWN
+        handler previously by wxWidgets. Please note that this function doesn't
+        currently work correctly for all keys under any platform but MSW.
 
         @return
-            @true if the event resulted in a change to the control, @false
-            otherwise.
+            @true if the event resulted in a change to the control, @false otherwise.
     */
     virtual bool EmulateKeyPress(const wxKeyEvent& event);
 
@@ -1088,9 +1219,20 @@ public:
         This is defined as the zero based index of the character position to
         the right of the insertion point. For example, if the insertion point
         is at the end of the single-line text control, it is equal to both
-        GetLastPosition() and GetValue().length() (but notice that the latter
+        GetLastPosition() and @c "GetValue().Length()" (but notice that the latter
         equality is not necessarily true for multiline edit controls which may
         use multiple new line characters).
+
+        The following code snippet safely returns the character at the insertion
+        point or the zero character if the point is at the end of the control.
+
+        @code
+        char GetCurrentChar(wxTextCtrl *tc) {
+            if (tc->GetInsertionPoint() == tc->GetLastPosition())
+            return '\0';
+            return tc->GetValue[tc->GetInsertionPoint()];
+        }
+        @endcode
     */
     virtual long GetInsertionPoint() const;
 
@@ -1127,9 +1269,19 @@ public:
     /**
         Returns the number of lines in the text control buffer.
 
-        @remarks Note that even empty text controls have one line (where the
-                 insertion point is), so GetNumberOfLines() never
-                 returns 0.
+        @remarks
+            Note that even empty text controls have one line (where the
+            insertion point is), so GetNumberOfLines() never returns 0.
+            For wxGTK using GTK+ 1.2.x and earlier, the number of lines in a
+            multi-line text control is calculated by actually counting newline
+            characters in the buffer, i.e. this function returns the number of
+            logical lines and doesn't depend on whether any of them are wrapped.
+            For all the other platforms, the number of physical lines in the
+            control is returned.
+            Also note that you may wish to avoid using functions that work with
+            line numbers if you are working with controls that contain large
+            amounts of text as this function has O(N) complexity for N being
+            the number of lines.
     */
     virtual int GetNumberOfLines() const;
 
@@ -1185,6 +1337,7 @@ public:
 
     /**
         Gets the contents of the control.
+
         Notice that for a multiline text control, the lines will be separated
         by (Unix-style) @c \\n characters, even under Windows where they are
         separated by a @c \\r\\n sequence in the native control.
@@ -1197,8 +1350,8 @@ public:
 
         If the return code is not @c wxTE_HT_UNKNOWN the row and column of the
         character closest to this position are returned in the @a col and @a
-        row parameters (unless the pointers are @NULL which is allowed). Please
-        note that this function is currently only implemented in wxUniv, wxMSW
+        row parameters (unless the pointers are @NULL which is allowed).
+        Please note that this function is currently only implemented in wxUniv, wxMSW
         and wxGTK2 ports.
 
         @see PositionToXY(), XYToPosition()
@@ -1236,18 +1389,16 @@ public:
     virtual bool IsModified() const;
 
     /**
-        Returns @true if this is a multi line edit control and @false
-        otherwise.
+        Returns @true if this is a multi line edit control and @false otherwise.
 
         @see IsSingleLine()
     */
     bool IsMultiLine() const;
 
     /**
-        Returns @true if this is a single line edit control and @false
-        otherwise.
+        Returns @true if this is a single line edit control and @false otherwise.
 
-        @see @ref IsSingleLine() IsMultiLine
+        @see IsSingleLine(), IsMultiLine()
     */
     bool IsSingleLine() const;
 
@@ -1317,8 +1468,8 @@ public:
     virtual void Redo();
 
     /**
-        Removes the text starting at the first given position up to (but not
-        including) the character at the last position.
+        Removes the text starting at the first given position up to
+        (but not including) the character at the last position.
 
         @param from
             The first position.
@@ -1328,8 +1479,8 @@ public:
     virtual void Remove(long from, long to);
 
     /**
-        Replaces the text starting at the first position up to (but not
-        including) the character at the last position with the given text.
+        Replaces the text starting at the first position up to
+        (but not including) the character at the last position with the given text.
 
         @param from
             The first position.
@@ -1361,8 +1512,9 @@ public:
         If either of the font, foreground, or background colour is not set in
         @a style, the values of the previous default style are used for them.
         If the previous default style didn't set them neither, the global font
-        or colours of the text control itself are used as fall back. However if
-        the @a style parameter is the default wxTextAttr, then the default
+        or colours of the text control itself are used as fall back.
+
+        However if the @a style parameter is the default wxTextAttr, then the default
         style is just reset (instead of being combined with the new style which
         wouldn't change it at all).
 
@@ -1410,15 +1562,17 @@ public:
         into the control.
 
         In other words, it allows to limit the text value length to @a len not
-        counting the terminating @c NUL character. If @a len is 0, the
-        previously set max length limit, if any, is discarded and the user may
-        enter as much text as the underlying native text control widget
-        supports (typically at least 32Kb). If the user tries to enter more
-        characters into the text control when it already is filled up to the
-        maximal length, a @c wxEVT_COMMAND_TEXT_MAXLEN event is sent to notify
-        the program about it (giving it the possibility to show an explanatory
-        message, for example) and the extra input is discarded. Note that in
-        wxGTK this function may only be used with single line text controls.
+        counting the terminating @c NUL character.
+
+        If @a len is 0, the previously set max length limit, if any, is discarded
+        and the user may enter as much text as the underlying native text control widget
+        supports (typically at least 32Kb).
+        If the user tries to enter more characters into the text control when it
+        already is filled up to the maximal length, a @c wxEVT_COMMAND_TEXT_MAXLEN
+        event is sent to notify the program about it (giving it the possibility
+        to show an explanatory message, for example) and the extra input is discarded.
+
+        Note that in wxGTK this function may only be used with single line text controls.
     */
     virtual void SetMaxLength(unsigned long len);
 
@@ -1477,8 +1631,7 @@ public:
 
     /**
         Sets the text value and marks the control as not-modified (which means
-        that IsModified() would return @false immediately after the call to
-        SetValue).
+        that IsModified() would return @false immediately after the call to SetValue()).
 
         Note that this function generates a @c wxEVT_COMMAND_TEXT_UPDATED
         event, to avoid this you can use ChangeValue() instead.
@@ -1511,9 +1664,15 @@ public:
         @param text
             Text to write to the text control.
 
-        @remarks Newlines in the text string are the only control characters
-            allowed, and they will cause appropriate line breaks. See () and
-            AppendText() for more convenient ways of writing to the window.
+        @remarks
+            Newlines in the text string are the only control characters
+            allowed, and they will cause appropriate line breaks.
+            See operator<<() and AppendText() for more convenient ways of
+            writing to the window.
+            After the write operation, the insertion point will be at the end
+            of the inserted text, so subsequent write operations will be appended.
+            To append text after the user may have interacted with the control,
+            call wxTextCtrl::SetInsertionPointEnd() before writing.
     */
     virtual void WriteText(const wxString& text);
 
@@ -1561,11 +1720,13 @@ public:
     This class can be used to (temporarily) redirect all output sent to a C++
     ostream object to a wxTextCtrl instead.
 
-    @note Some compilers and/or build configurations don't support multiply
-    inheriting wxTextCtrl from @c std::streambuf in which
-    case this class is not compiled in. You also must have @c wxUSE_STD_IOSTREAM
-    option on (i.e. set to 1) in your setup.h to be able to use it. Under Unix,
-    specify @c --enable-std_iostreams switch when running configure for this.
+    @note
+        Some compilers and/or build configurations don't support multiply
+        inheriting wxTextCtrl from @c std::streambuf in which case this class is
+        not compiled in.
+        You also must have @c wxUSE_STD_IOSTREAM option on (i.e. set to 1) in your
+        @c setup.h to be able to use it. Under Unix, specify @c --enable-std_iostreams
+        switch when running configure for this.
 
     Example of usage:
 

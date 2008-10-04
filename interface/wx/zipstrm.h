@@ -98,7 +98,7 @@ enum wxZipFlags
     See @ref overview_archive_noseek.
 
     @library{wxbase}
-    @category{archive}
+    @category{archive,streams}
 
     @see @ref overview_archive_noseek, wxZipEntry, wxZipInputStream, wxZipOutputStream
 */
@@ -160,7 +160,7 @@ public:
     - wxZipEntry::IsText
 
     @library{wxbase}
-    @category{archive}
+    @category{archive,streams}
 
     @see @ref overview_archive, wxZipInputStream, wxZipOutputStream, wxZipNotifier
 */
@@ -363,7 +363,7 @@ public:
     wxZipInputStream::SeekI() always returns ::wxInvalidOffset.
 
     @library{wxbase}
-    @category{streams}
+    @category{archive,streams}
 
     @see @ref overview_archive, wxZipEntry, wxZipOutputStream
 */
@@ -445,7 +445,7 @@ public:
     See the base class for details.
 
     @library{wxbase}
-    @category{archive}
+    @category{archive,streams}
 
     @see @ref overview_archive,
          @ref overview_archive_generic,
@@ -470,7 +470,7 @@ public:
     entry and begins the next.
 
     @library{wxbase}
-    @category{streams}
+    @category{archive,streams}
 
     @see @ref overview_archive, wxZipEntry, wxZipInputStream
 */

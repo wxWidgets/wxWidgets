@@ -22,7 +22,7 @@
     When there are no more entries, GetNextEntry() returns @NULL and sets Eof().
 
     @library{wxbase}
-    @category{archive}
+    @category{archive,streams}
 
     @see @ref overview_archive, wxArchiveEntry, wxArchiveOutputStream
 */
@@ -65,7 +65,7 @@ public:
     Another call to PutNextEntry() closes the current entry and begins the next.
 
     @library{wxbase}
-    @category{archive}
+    @category{archive,streams}
 
     @see @ref overview_archive, wxArchiveEntry, wxArchiveInputStream
 */
@@ -178,7 +178,7 @@ public:
         been reached, i.e. after GetNextEntry() returns NULL and Eof() is true.
 
     @library{wxbase}
-    @category{archive}
+    @category{archive,streams}
 
     @see @ref overview_archive, @ref overview_archive_generic,
          wxArchiveInputStream, wxArchiveOutputStream, wxArchiveNotifier
@@ -332,7 +332,7 @@ enum wxStreamProtocolType
     wxArchiveClassFactory::GetFirst() and wxArchiveClassFactory::GetNext().
 
     @library{wxbase}
-    @category{archive}
+    @category{archive,streams}
 
     @see @ref overview_archive, @ref overview_archive_generic, wxArchiveEntry,
          wxArchiveInputStream, wxArchiveOutputStream, wxFilterClassFactory
@@ -488,7 +488,7 @@ public:
     See @ref overview_archive_noseek.
 
     @library{wxbase}
-    @category{archive}
+    @category{archive,streams}
 
     @see @ref overview_archive_noseek, wxArchiveEntry, wxArchiveInputStream,
          wxArchiveOutputStream
@@ -597,7 +597,7 @@ public:
     @endcode
 
     @library{wxbase}
-    @category{archive}
+    @category{archive,streams}
 
     @see wxArchiveEntry, wxArchiveInputStream, wxArchiveOutputStream
 */
