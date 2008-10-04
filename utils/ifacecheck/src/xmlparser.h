@@ -27,7 +27,7 @@
     ifacecheck sources with the string:
 
     // ADHOC-FIX:
-
+    // ...fix description...
 */
 
 

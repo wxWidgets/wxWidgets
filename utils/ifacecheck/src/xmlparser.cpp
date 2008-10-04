@@ -497,12 +497,12 @@ const wxMethod* wxClass::RecursiveUpwardFindMethod(const wxMethod& m,
     {
         // ignore non-wx-classes parents
         // AD-HOC FIX: discard wxScrolledT_Helper parent as it always gives errors
-        if (m_parents[i].StartsWith("wx") || m_parents[i] == "wxScrolledT_Helper")
+        if (m_parents[i].StartsWith("wx") && m_parents[i] != "wxScrolledT_Helper")
         {
             const wxClass *parent = allclasses->FindClass(m_parents[i]);
             if (!parent) {
-                wxLogError("Could not find parent '%s' of class '%s'...",
-                            m_parents[i], GetName());
+                LogError("Could not find parent '%s' of class '%s'...",
+                         m_parents[i], GetName());
                 return false;
             }
 
@@ -540,12 +540,12 @@ wxMethodPtrArray wxClass::RecursiveUpwardFindMethodsNamed(const wxString& name,
     for (unsigned int i=0; i<m_parents.GetCount(); i++)
     {
         // AD-HOC FIX: discard wxScrolledT_Helper parent as it always gives errors
-        if (m_parents[i].StartsWith("wx") || m_parents[i] == "wxScrolledT_Helper")
+        if (m_parents[i].StartsWith("wx") && m_parents[i] != "wxScrolledT_Helper")
         {
             const wxClass *parent = allclasses->FindClass(m_parents[i]);
             if (!parent) {
-                wxLogError("Could not find parent '%s' of class '%s'...",
-                            m_parents[i], GetName());
+                LogError("Could not find parent '%s' of class '%s'...",
+                         m_parents[i], GetName());
                 return false;
             }
 
