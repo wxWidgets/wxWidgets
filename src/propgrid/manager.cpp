@@ -505,9 +505,18 @@ void wxPropertyGridManager::Thaw()
 
 void wxPropertyGridManager::SetWindowStyleFlag( long style )
 {
+    int oldWindowStyle = GetWindowStyleFlag();
+
     wxWindow::SetWindowStyleFlag( style );
     m_pPropGrid->SetWindowStyleFlag( (m_pPropGrid->GetWindowStyleFlag()&~(wxPG_MAN_PASS_FLAGS_MASK)) |
                                    (style&wxPG_MAN_PASS_FLAGS_MASK) );
+
+    // Need to re-position windows?
+    if ( (oldWindowStyle & (wxPG_TOOLBAR|wxPG_DESCRIPTION)) != 
+         (style & (wxPG_TOOLBAR|wxPG_DESCRIPTION)) )
+    {
+        RecreateControls();
+    }
 }
 
 // -----------------------------------------------------------------------
