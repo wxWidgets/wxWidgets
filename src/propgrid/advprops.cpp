@@ -142,21 +142,23 @@ wxPGWindowList wxPGSpinCtrlEditor::CreateControls( wxPropertyGrid* propgrid, wxP
     wnd2->SetRange( INT_MIN, INT_MAX );
     wnd2->SetValue( 0 );
 
-    propgrid->Connect( wxPG_SUBID2, wxEVT_SCROLL_LINEUP,
-                       (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction)
-                       &wxPropertyGrid::OnCustomEditorEvent, NULL, propgrid );
-    propgrid->Connect( wxPG_SUBID2, wxEVT_SCROLL_LINEDOWN,
-                       (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction)
-                       &wxPropertyGrid::OnCustomEditorEvent, NULL, propgrid );
-    propgrid->Connect( wxPG_SUBID1, wxEVT_KEY_DOWN,
-                       (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction)
-                       &wxPropertyGrid::OnCustomEditorEvent, NULL, propgrid );
+    wxWindowID id = wnd2->GetId();
+    wnd2->Connect( id, wxEVT_SCROLL_LINEUP,
+                   wxCommandEventHandler(wxPropertyGrid::OnCustomEditorEvent),
+                   NULL, propgrid );
+    wnd2->Connect( id, wxEVT_SCROLL_LINEDOWN,
+                   wxCommandEventHandler(wxPropertyGrid::OnCustomEditorEvent),
+                   NULL, propgrid );
 
     // Let's add validator to make sure only numbers can be entered
     wxTextValidator validator(wxFILTER_NUMERIC, &m_tempString);
 
     wxTextCtrl* wnd1 = (wxTextCtrl*) wxPGTextCtrlEditor::CreateControls( propgrid, property, pos, tcSz ).m_primary;
     wnd1->SetValidator(validator);
+
+    wnd1->Connect( wnd1->GetId(), wxEVT_KEY_DOWN,
+                   wxCommandEventHandler(wxPropertyGrid::OnCustomEditorEvent),
+                   NULL, propgrid );
 
     return wxPGWindowList(wnd1, wnd2);
 }
@@ -335,9 +337,9 @@ wxPGWindowList wxPGDatePickerCtrlEditor::CreateControls( wxPropertyGrid* propgri
     // Connect all required events to grid's OnCustomEditorEvent
     // (all relevenat wxTextCtrl, wxComboBox and wxButton events are
     // already connected)
-    propgrid->Connect( wxPG_SUBID1, wxEVT_DATE_CHANGED,
-                       (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction)
-                       &wxPropertyGrid::OnCustomEditorEvent );
+    ctrl->Connect( wxPG_SUBID1, wxEVT_DATE_CHANGED,
+                   wxCommandEventHandler(wxPropertyGrid::OnCustomEditorEvent),
+                   NULL, propgrid );
 
 #ifdef __WXMSW__
     ctrl->Show();
