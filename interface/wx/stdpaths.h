@@ -81,7 +81,7 @@ public:
         Return the directory containing the current user's documents.
         Example return values:
              - Unix: @c ~ (the home directory)
-             - Windows: @c C:\\Documents @c and @c Settings\\username\\Documents
+             - Windows: @c C:\\Documents @c and @c Settings\\username\\My Documents
              - Mac: @c ~/Documents
 
         @since 2.7.0

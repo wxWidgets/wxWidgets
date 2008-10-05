@@ -127,7 +127,7 @@ public:
 
     // return the "Documents" directory for the current user
     //
-    // C:\Documents and Settings\username\Documents under Windows,
+    // C:\Documents and Settings\username\My Documents under Windows,
     // $HOME under Unix and ~/Documents under Mac
     virtual wxString GetDocumentsDir() const;
 
