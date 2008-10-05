@@ -1135,9 +1135,12 @@ void wxPropertyGridManager::SetDescBoxHeight( int ht, bool refresh )
 {
     if ( m_windowStyle & wxPG_DESCRIPTION )
     {
-        m_nextDescBoxSize = ht;
-        if ( refresh )
-            RecalculatePositions(m_width, m_height);
+        if ( ht != GetDescBoxHeight() )
+        {
+            m_nextDescBoxSize = ht;
+            if ( refresh )
+                RecalculatePositions(m_width, m_height);
+        }
     }
 }
 
@@ -1145,7 +1148,7 @@ void wxPropertyGridManager::SetDescBoxHeight( int ht, bool refresh )
 
 int wxPropertyGridManager::GetDescBoxHeight() const
 {
-    return GetClientSize().y - m_splitterY;
+    return GetClientSize().y - m_splitterY - m_splitterHeight;
 }
 
 // -----------------------------------------------------------------------
