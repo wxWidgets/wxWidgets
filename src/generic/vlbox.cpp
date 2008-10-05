@@ -51,6 +51,8 @@ BEGIN_EVENT_TABLE(wxVListBox, wxVScrolledWindow)
 
     EVT_SET_FOCUS(wxVListBox::OnSetOrKillFocus)
     EVT_KILL_FOCUS(wxVListBox::OnSetOrKillFocus)
+
+    EVT_SIZE(wxVListBox::OnSize)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -494,6 +496,11 @@ void wxVListBox::OnSetOrKillFocus(wxFocusEvent& WXUNUSED(event))
     RefreshSelected();
 }
 
+void wxVListBox::OnSize(wxSizeEvent& event)
+{
+    UpdateScrollbar();
+    event.Skip();
+}
 
 // ============================================================================
 // wxVListBox keyboard/mouse handling

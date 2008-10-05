@@ -243,6 +243,7 @@ protected:
     void OnLeftDown(wxMouseEvent& event);
     void OnLeftDClick(wxMouseEvent& event);
     void OnSetOrKillFocus(wxFocusEvent& event);
+    void OnSize(wxSizeEvent& event);
 
     // common part of all ctors
     void Init();
