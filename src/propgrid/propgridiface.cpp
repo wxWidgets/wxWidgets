@@ -1015,7 +1015,8 @@ wxString wxPropertyGridInterface::SaveEditableState( int includedStates ) const
         if ( includedStates & DescBoxState )
         {
             wxVariant v = GetEditableStateItem(wxS("descboxheight"));
-            result += wxString::Format(wxS("descboxheight=%i;"), (int)v.GetLong());
+            if ( !v.IsNull() )
+                result += wxString::Format(wxS("descboxheight=%i;"), (int)v.GetLong());
         }
         result.RemoveLast();  // Remove last semicolon
         result += wxS("|");
