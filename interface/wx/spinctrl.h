@@ -9,8 +9,7 @@
 /**
     @class wxSpinCtrl
 
-    wxSpinCtrl combines wxTextCtrl and
-    wxSpinButton in one control.
+    wxSpinCtrl combines wxTextCtrl and wxSpinButton in one control.
 
     @beginStyleTable
     @style{wxSP_ARROW_KEYS}
@@ -23,6 +22,20 @@
         for dialog navigation (e.g. activating the default button in the
         dialog) under MSW.
     @endStyleTable
+
+
+    @beginEventTable{wxSpinEvent}
+    @event{EVT_SPINCTRL(id, func)}
+        Generated whenever the numeric value of the spinctrl is updated
+    @endEventTable
+
+    You may also use the wxSpinButton event macros, however the corresponding events
+    will not be generated under all platforms. Finally, if the user modifies the
+    text in the edit part of the spin control directly, the EVT_TEXT is generated,
+    like for the wxTextCtrl. When the use enters text into the text area, the text
+    is not validated until the control loses focus (e.g. by using the TAB key).
+    The value is then adjusted to the range and a wxSpinEvent sent then if the value
+    is different from the last value sent.
 
     @library{wxcore}
     @category{ctrl}
@@ -37,7 +50,7 @@ public:
        Default constructor.
     */
     wxSpinCtrl();
-    
+
     /**
         Constructor, creating and showing a spin control.
 
@@ -48,11 +61,11 @@ public:
         @param id
             Window identifier. The value wxID_ANY indicates a default value.
         @param pos
-            Window position. If wxDefaultPosition is specified then a default
-        position is chosen.
+            Window position.
+            If wxDefaultPosition is specified then a default position is chosen.
         @param size
-            Window size. If wxDefaultSize is specified then a default size
-        is chosen.
+            Window size.
+            If wxDefaultSize is specified then a default size is chosen.
         @param style
             Window style. See wxSpinButton.
         @param min
@@ -108,10 +121,11 @@ public:
 
     /**
         Select the text in the text part of the control between  positions
-        @a from (inclusive) and @a to (exclusive). This is similar to
-        wxTextCtrl::SetSelection.
+        @a from (inclusive) and @a to (exclusive).
+        This is similar to wxTextCtrl::SetSelection().
+
         @note this is currently only implemented for Windows and generic versions
-        of the control.
+              of the control.
     */
     void SetSelection(long from, long to);
 

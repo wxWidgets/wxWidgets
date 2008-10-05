@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        socket.h
-// Purpose:     interface of wxIPV4address
+// Purpose:     interface of wxIP*address, wxSocket* classes
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -31,10 +31,10 @@ public:
 
     /**
         Set the address to hostname, which can be a host name or an IP-style address
-        in dot notation(<tt>a.b.c.d</tt>)
+        in dot notation(<tt>a.b.c.d</tt>).
 
-        @return @true on success, @false if something goes wrong (invalid hostname or
-        invalid IP address).
+        @return @true on success, @false if something goes wrong (invalid
+                hostname or invalid IP address).
     */
     bool Hostname(const wxString& hostname);
 
@@ -55,7 +55,6 @@ public:
         correctly handle multi-homed hosts and avoid other small problems.
 
         @return @true on success, @false if something went wrong.
-
     */
     bool LocalHost();
 
@@ -63,7 +62,6 @@ public:
         Set the port to that corresponding to the specified @a service.
 
         @return @true on success, @false if something goes wrong (invalid @a service).
-
     */
     bool Service(const wxString& service);
 
@@ -85,6 +83,8 @@ public:
 /**
     @class wxSocketServer
 
+    @todo describe me.
+
     @library{wxnet}
     @category{net}
 */
@@ -100,7 +100,7 @@ public:
         @param address
             Specifies the local address for the server (e.g. port number).
         @param flags
-            Socket flags (See wxSocketBase::SetFlags())
+            Socket flags (See wxSocketBase::SetFlags()).
     */
     wxSocketServer(const wxSockAddress& address,
                    wxSocketFlags flags = wxSOCKET_NONE);
@@ -111,12 +111,14 @@ public:
     virtual ~wxSocketServer();
 
     /**
-        Accepts an incoming connection request, and creates a new wxSocketBase object
-        which represents the server-side of the connection.
+        Accepts an incoming connection request, and creates a new wxSocketBase
+        object which represents the server-side of the connection.
 
         If @a wait is @true and there are no pending connections to be
         accepted, it will wait for the next incoming connection to
-        arrive. @b Warning: This will block the GUI.
+        arrive.
+
+        @warning: This method will block the GUI.
 
         If @a wait is @false, it will try to accept a pending connection
         if there is one, but it will always return immediately without blocking
@@ -139,10 +141,12 @@ public:
 
         @param socket
             Socket to be initialized
+        @param wait
+            See Accept() for more info.
 
-        @return Returns @true on success, or @false if an error occurred or if the
-                 wait parameter was @false and there were no pending
-                 connections.
+        @return Returns @true on success, or @false if an error occurred or
+                if the wait parameter was @false and there were no pending
+                connections.
 
         @see WaitForAccept(), wxSocketBase::SetNotify(),
              wxSocketBase::Notify(), Accept()
@@ -150,10 +154,10 @@ public:
     bool AcceptWith(wxSocketBase& socket, bool wait = true);
 
     /**
-        This function waits for an incoming connection. Use it if you want to call
-        Accept() or AcceptWith()
-        with @e wait set to @false, to detect when an incoming connection is waiting
-        to be accepted.
+        This function waits for an incoming connection.
+
+        Use it if you want to call Accept() or AcceptWith() with @e wait set
+        to @false, to detect when an incoming connection is waiting to be accepted.
 
         @param seconds
             Number of seconds to wait. If -1, it will wait for the default
@@ -216,7 +220,7 @@ public:
     /**
         Returns the hostname which matches the IP address.
     */
-    virtual wxString  Hostname();
+    virtual wxString Hostname();
 
     /**
         Returns a wxString containing the IP address.
@@ -266,6 +270,8 @@ public:
 /**
     @class wxSocketClient
 
+    @todo describe me.
+
     @library{wxnet}
     @category{net}
 */
@@ -289,7 +295,9 @@ public:
         Connects to a server using the specified address.
 
         If @a wait is @true, Connect() will wait until the connection
-        completes. @b Warning: This will block the GUI.
+        completes.
+
+        @warning: This method will block the GUI.
 
         If @a wait is @false, Connect() will try to establish the connection
         and return immediately, without blocking the GUI. When used this way,
@@ -304,6 +312,12 @@ public:
             If @true, waits for the connection to complete.
 
         @return @true if the connection is established and no error occurs.
+                If @a wait was true, and Connect() returns @false, an error
+                occurred and the connection failed.
+                If @a wait was @false, and Connect() returns @false, you should
+                still be prepared to handle the completion of this connection request,
+                either with WaitOnConnect() or by watching wxSOCKET_CONNECTION
+                and wxSOCKET_LOST events.
 
         @see WaitOnConnect(), wxSocketBase::SetNotify(), wxSocketBase::Notify()
     */
@@ -332,6 +346,12 @@ public:
             If @true, waits for the connection to complete.
 
         @return @true if the connection is established and no error occurs.
+                If @a wait was true, and Connect() returns @false, an error
+                occurred and the connection failed.
+                If @a wait was @false, and Connect() returns @false, you should
+                still be prepared to handle the completion of this connection request,
+                either with WaitOnConnect() or by watching wxSOCKET_CONNECTION
+                and wxSOCKET_LOST events.
 
         @see WaitOnConnect(), wxSocketBase::SetNotify(), wxSocketBase::Notify()
     */
@@ -340,36 +360,36 @@ public:
 
     /**
         Wait until a connection request completes, or until the specified timeout
-        elapses. Use this function after issuing a call
-        to Connect() with @e wait set to @false.
+        elapses. Use this function after issuing a call to Connect() with
+        @e wait set to @false.
 
         @param seconds
             Number of seconds to wait.
-            If -1, it will wait for the default timeout,
-            as set with wxSocketBase::SetTimeout().
-        @param millisecond
+            If -1, it will wait for the default timeout, as set with wxSocketBase::SetTimeout().
+        @param milliseconds
             Number of milliseconds to wait.
 
-        @return WaitOnConnect() returns @true if the connection request completes.
-                This does not necessarily mean that the connection was
-                successfully established; it might also happen that the
-                connection was refused by the peer. Use wxSocketBase::IsConnected()
-                to distinguish between these two situations.
-                @n @n If the timeout elapses, WaitOnConnect() returns @false.
-                @n @n These semantics allow code like this:
-                @code
-                // Issue the connection request
-                client->Connect(addr, false);
+        @return
+            WaitOnConnect() returns @true if the connection request completes.
+            This does not necessarily mean that the connection was
+            successfully established; it might also happen that the
+            connection was refused by the peer. Use wxSocketBase::IsConnected()
+            to distinguish between these two situations.
+            @n @n If the timeout elapses, WaitOnConnect() returns @false.
+            @n @n These semantics allow code like this:
+            @code
+            // Issue the connection request
+            client->Connect(addr, false);
 
-                // Wait until the request completes or until we decide to give up
-                bool waitmore = true;
-                while ( !client->WaitOnConnect(seconds, millis) && waitmore )
-                {
-                    // possibly give some feedback to the user,
-                    // and update waitmore as needed.
-                }
-                bool success = client->IsConnected();
-                @endcode
+            // Wait until the request completes or until we decide to give up
+            bool waitmore = true;
+            while ( !client->WaitOnConnect(seconds, millis) && waitmore )
+            {
+                // possibly give some feedback to the user,
+                // and update waitmore as needed.
+            }
+            bool success = client->IsConnected();
+            @endcode
     */
     bool WaitOnConnect(long seconds = -1, long milliseconds = 0);
 };
@@ -442,8 +462,8 @@ public:
     void* GetClientData() const;
 
     /**
-        Returns the socket object to which this event refers to. This makes
-        it possible to use the same event handler for different sockets.
+        Returns the socket object to which this event refers to.
+        This makes it possible to use the same event handler for different sockets.
     */
     wxSocketBase* GetSocket() const;
 
@@ -473,6 +493,8 @@ enum wxSocketError
 
 
 /**
+    @anchor wxSocketEventFlags
+
     wxSocket Event Flags.
 
     A brief note on how to use these events:
@@ -566,15 +588,15 @@ enum wxSocketEventFlags
     wxIPaddress::BroadcastAddress().
 
     So:
-    @b wxSOCKET_NONE will try to read at least SOME data, no matter how much.
-    @b wxSOCKET_NOWAIT will always return immediately, even if it cannot
-    read or write ANY data.
-    @b wxSOCKET_WAITALL will only return when it has read or written ALL
-    the data.
-    @b wxSOCKET_BLOCK has nothing to do with the previous flags and
-    it controls whether the GUI blocks.
-    @b wxSOCKET_REUSEADDR controls special platform-specific behavior for
-    reusing local addresses/ports.
+    - @b wxSOCKET_NONE will try to read at least SOME data, no matter how much.
+    - @b wxSOCKET_NOWAIT will always return immediately, even if it cannot
+      read or write ANY data.
+    - @b wxSOCKET_WAITALL will only return when it has read or written ALL
+      the data.
+    - @b wxSOCKET_BLOCK has nothing to do with the previous flags and
+      it controls whether the GUI blocks.
+    - @b wxSOCKET_REUSEADDR controls special platform-specific behavior for
+      reusing local addresses/ports.
 */
 enum
 {
@@ -593,38 +615,25 @@ enum
 /**
     @class wxSocketBase
 
-
     wxSocketBase is the base class for all socket-related objects, and it
     defines all basic IO functionality.
 
-    @b Note: (Workaround for implementation limitation for wxWidgets up to 2.5.x)
+    @note
+    (Workaround for implementation limitation for wxWidgets up to 2.5.x)
     If you want to use sockets or derived classes such as wxFTP in a secondary
-    thread,
-    call @b wxSocketBase::Initialize() (undocumented) from the main thread before
-    creating any sockets - in wxApp::OnInit() for example.
+    thread, call @b wxSocketBase::Initialize() (undocumented) from the main
+    thread before creating any sockets - in wxApp::OnInit() for example.
     See http://wiki.wxwidgets.org/wiki.pl?WxSocket or
     http://www.litwindow.com/knowhow/knowhow.html for more details.
-
-    @library{wxnet}
-    @category{net}
-
-    <b>wxSocket events:</b>
-    @beginFlagTable
-    @flag{wxSOCKET_INPUT}
-        There is data available for reading.
-    @flag{wxSOCKET_OUTPUT}
-        The socket is ready to be written to.
-    @flag{wxSOCKET_CONNECTION}
-        Incoming connection request (server), or successful connection
-        establishment (client).
-    @flag{wxSOCKET_LOST}
-        The connection has been closed.
-    @endFlagTable
 
     @beginEventTable{wxSocketEvent}
     @event{EVT_SOCKET(id, func)}
         Process a @c wxEVT_SOCKET event.
+        See @ref wxSocketEventFlags and @ref wxSocketFlags for more info.
     @endEventTable
+
+    @library{wxnet}
+    @category{net}
 
     @see wxSocketEvent, wxSocketClient, wxSocketServer, @sample{sockets},
          @ref wxSocketFlags, ::wxSocketEventFlags, ::wxSocketError
@@ -728,14 +737,10 @@ public:
         cases.
 
         @remarks
-
         For wxSocketClient, IsOk() won't return @true unless the client is connected to a server.
-
         For wxSocketServer, IsOk() will return @true if the server could bind to the specified address
         and is already listening for new connections.
-
         IsOk() does not check for IO errors; use Error() instead for that purpose.
-
     */
     bool IsOk() const;
 
@@ -752,7 +757,6 @@ public:
         Returns the last wxSocket error. See @ref wxSocketError .
 
         @note
-
         This function merely returns the last error code,
         but it should not be used to determine if an error has occurred (this
         is because successful operations do not change the LastError value).
@@ -772,11 +776,9 @@ public:
     void RestoreState();
 
     /**
-        This function saves the current state of the socket in a stack. Socket
-        state includes flags, as set with SetFlags(),
-        event mask, as set with SetNotify() and
-        Notify(), user data, as set with
-        SetClientData().
+        This function saves the current state of the socket in a stack.
+        Socket state includes flags, as set with SetFlags(), event mask, as set
+        with SetNotify() and Notify(), user data, as set with SetClientData().
         Calls to SaveState and RestoreState can be nested.
 
         @see RestoreState()
@@ -803,7 +805,6 @@ public:
         the socket, typically to notify the peer that you are closing the connection.
 
         @remarks
-
         Although Close() immediately disables events for the socket, it is possible
         that event messages may be waiting in the application's event queue.
         The application must therefore be prepared to handle socket event messages even
@@ -837,7 +838,7 @@ public:
         socket destruction), so you don't need to use it in these cases.
 
         @see  Wait(), WaitForLost(), WaitForRead(), WaitForWrite(),
-        wxSocketServer::WaitForAccept(), wxSocketClient::WaitOnConnect()
+              wxSocketServer::WaitForAccept(), wxSocketClient::WaitOnConnect()
     */
     void InterruptWait();
 
@@ -858,9 +859,8 @@ public:
         @return Returns a reference to the current object.
 
         @remarks
-
-        The exact behaviour of Peek() depends on the combination of flags being used.
-        For a detailed explanation, see SetFlags()
+            The exact behaviour of Peek() depends on the combination of flags being used.
+            For a detailed explanation, see SetFlags()
 
         @see Error(), LastError(), LastCount(), SetFlags()
     */
@@ -879,9 +879,8 @@ public:
         @return Returns a reference to the current object.
 
         @remarks
-
-        The exact behaviour of Read() depends on the combination of flags being used.
-        For a detailed explanation, see SetFlags()
+            The exact behaviour of Read() depends on the combination of flags being used.
+            For a detailed explanation, see SetFlags()
 
         @see Error(), LastError(), LastCount(),
              SetFlags()
@@ -906,11 +905,10 @@ public:
         @return Returns a reference to the current object.
 
         @remarks
-
-        ReadMsg() will behave as if the @b wxSOCKET_WAITALL flag was always set
-        and it will always ignore the @b wxSOCKET_NOWAIT flag. The exact behaviour
-        of ReadMsg() depends on the @b wxSOCKET_BLOCK flag.
-        For a detailed explanation, see SetFlags().
+            ReadMsg() will behave as if the @b wxSOCKET_WAITALL flag was always set
+            and it will always ignore the @b wxSOCKET_NOWAIT flag.
+            The exact behaviour of ReadMsg() depends on the @b wxSOCKET_BLOCK flag.
+            For a detailed explanation, see SetFlags().
 
         @see Error(), LastError(), LastCount(), SetFlags(), WriteMsg()
     */
@@ -998,7 +996,7 @@ public:
             Number of milliseconds to wait.
 
         @return Returns @true when any of the above conditions is satisfied,
-                 @false if the timeout was reached.
+                @false if the timeout was reached.
 
         @see InterruptWait(), wxSocketServer::WaitForAccept(),
              WaitForLost(), WaitForRead(),
@@ -1018,7 +1016,7 @@ public:
             Number of milliseconds to wait.
 
         @return Returns @true if the connection was lost, @false if the timeout
-                 was reached.
+                was reached.
 
         @see InterruptWait(), Wait()
     */
@@ -1231,7 +1229,7 @@ public:
             Number of bytes.
 
         @return Returns a reference to the current object, and the address of
-                 the peer that sent the data on address param.
+                the peer that sent the data on address param.
 
         @see wxSocketBase::LastError(), wxSocketBase::SetFlags()
     */

@@ -39,8 +39,19 @@
            capitalized.
     @endStyleTable
 
+    @beginEventTable{wxCommandEvent}
+    To retrieve actual search queries, use EVT_TEXT and EVT_TEXT_ENTER events,
+    just as you would with wxTextCtrl.
+    @event{EVT_SEARCHCTRL_SEARCH_BTN(id, func)}
+        Respond to a wxEVT_SEARCHCTRL_SEARCH_BTN event, generated when the
+        search button is clicked. Note that this does not initiate a search.
+    @event{EVT_SEARCHCTRL_CANCEL_BTN(id, func)}
+        Respond to a wxEVT_SEARCHCTRL_CANCEL_BTN event, generated when the
+        cancel button is clicked.
+    @endEventTable
+
     @library{wxcore}
-    @category{FIXME}
+    @category{ctrl}
 
     @see wxTextCtrl::Create, wxValidator
 */
@@ -51,7 +62,7 @@ public:
       Default constructor
     */
     wxSearchCtrl();
-    
+
     /**
         Constructor, creating and showing a text control.
 
@@ -96,16 +107,15 @@ public:
     /**
         Returns the search button visibility value.
         If there is a menu attached, the search button will be visible regardless of
-        the search
-        button visibility value.
+        the search button visibility value.
+
         This always returns @false in Mac OS X v10.3
     */
     virtual bool IsSearchButtonVisible() const;
 
     /**
-        Sets the search control's menu object.  If there is already a menu associated
-        with
-        the search control it is deleted.
+        Sets the search control's menu object.
+        If there is already a menu associated with the search control it is deleted.
 
         @param menu
             Menu to attach to the search control.
@@ -120,8 +130,8 @@ public:
     /**
         Sets the search button visibility value on the search control.
         If there is a menu attached, the search button will be visible regardless of
-        the search
-        button visibility value.
+        the search button visibility value.
+
         This has no effect in Mac OS X v10.3
     */
     virtual void ShowSearchButton(bool show);

@@ -10,15 +10,15 @@
     @class wxSplashScreen
 
     wxSplashScreen shows a window with a thin border, displaying a bitmap
-    describing your
-    application. Show it in application initialisation, and then either explicitly
-    destroy
+    describing your application.
+
+    Show it in application initialisation, and then either explicitly destroy
     it or let it time-out.
 
     Example usage:
 
     @code
-    wxBitmap bitmap;
+      wxBitmap bitmap;
       if (bitmap.LoadFile("splash16.png", wxBITMAP_TYPE_PNG))
       {
           wxSplashScreen* splash = new wxSplashScreen(bitmap,
@@ -37,14 +37,15 @@ class wxSplashScreen : public wxFrame
 public:
     /**
         Construct the splash screen passing a bitmap, a style, a timeout, a window id,
-        optional position
-        and size, and a window style.
+        optional position and size, and a window style.
+
         @a splashStyle is a bitlist of some of the following:
-         wxSPLASH_CENTRE_ON_PARENT
-         wxSPLASH_CENTRE_ON_SCREEN
-         wxSPLASH_NO_CENTRE
-         wxSPLASH_TIMEOUT
-         wxSPLASH_NO_TIMEOUT
+        - wxSPLASH_CENTRE_ON_PARENT
+        - wxSPLASH_CENTRE_ON_SCREEN
+        - wxSPLASH_NO_CENTRE
+        - wxSPLASH_TIMEOUT
+        - wxSPLASH_NO_TIMEOUT
+
         @a milliseconds is the timeout in milliseconds.
     */
     wxSplashScreen(const wxBitmap& bitmap, long splashStyle,
@@ -61,8 +62,7 @@ public:
     virtual ~wxSplashScreen();
 
     /**
-        Returns the splash style (see wxSplashScreen() for
-        details).
+        Returns the splash style (see wxSplashScreen() for details).
     */
     long GetSplashStyle() const;
 

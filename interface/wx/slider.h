@@ -132,6 +132,8 @@ public:
             Minimum slider position.
         @param maxValue
             Maximum slider position.
+        @param pos
+            Window position. If wxDefaultPosition is specified then a default position is chosen.
         @param size
             Window size. If wxDefaultSize is specified then a default size is chosen.
         @param style
@@ -145,7 +147,7 @@ public:
     */
     wxSlider(wxWindow* parent, wxWindowID id, int value,
              int minValue, int maxValue,
-             const wxPoint& point = wxDefaultPosition,
+             const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
              long style = wxSL_HORIZONTAL,
              const wxValidator& validator = wxDefaultValidator,

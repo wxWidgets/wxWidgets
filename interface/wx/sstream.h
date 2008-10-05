@@ -9,8 +9,8 @@
 /**
     @class wxStringInputStream
 
-    This class implements an input stream which reads data from a string. It
-    supports seeking.
+    This class implements an input stream which reads data from a string.
+    It supports seeking.
 
     @library{wxbase}
     @category{streams}
@@ -19,9 +19,11 @@ class wxStringInputStream : public wxInputStream
 {
 public:
     /**
-        Creates a new read-only stream using the specified string. Note that the string
-        is copied by the stream so if the original string is modified after using this
-        constructor, changes to it are not reflected when reading from stream.
+        Creates a new read-only stream using the specified string.
+
+        Note that the string is copied by the stream so if the original string is
+        modified after using this constructor, changes to it are not reflected
+        when reading from stream.
     */
     wxStringInputStream(const wxString& s);
 };
@@ -32,8 +34,10 @@ public:
     @class wxStringOutputStream
 
     This class implements an output stream which writes data either to a
-    user-provided or internally allocated string. Note that currently this stream
-    does not support seeking but can tell its current position.
+    user-provided or internally allocated string.
+
+    Note that currently this stream does not support seeking but can tell
+    its current position.
 
     @library{wxbase}
     @category{streams}
@@ -50,15 +54,14 @@ public:
 
         If @a str is used, data written to the stream is appended to the current
         contents of it, i.e. the string is not cleared here. However if it is not
-        empty, the positions returned by wxOutputStream::TellO will be
-        offset by the initial string length, i.e. initial stream position will be the
+        empty, the positions returned by wxOutputStream::TellO will be offset by
+        the initial string length, i.e. initial stream position will be the
         initial length of the string and not 0.
 
         Notice that the life time of @a conv must be greater than the life time
         of this object itself as it stores a reference to it. Also notice that
         with default value of this argument the data written to the stream must
-        be valid UTF-8, pass @c wxConvISO8859_1 to deal with arbitrary 8 bit
-        data.
+        be valid UTF-8, pass @c wxConvISO8859_1 to deal with arbitrary 8 bit data.
     */
     wxStringOutputStream(wxString str = NULL, wxMBConv& conv = wxConvUTF8);
 
