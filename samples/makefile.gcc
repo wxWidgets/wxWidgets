@@ -35,7 +35,7 @@ MAKEARGS = LINK_DLL_FLAGS="$(LINK_DLL_FLAGS)" \
 
 ### Targets: ###
 
-all: access animate artprov aui calendar caret checklst collpane config combo console controls dataview db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi mediaplayer memcheck menu minifram minimal mobile multimon nativdlg notebook oleauto opengl ownerdrw png popup printing propsize regtest render richtext rotate sashtest scroll scrollsub shaped sockets sound splash splitter statbar taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard mfc
+all: access animate artprov aui calendar caret checklst collpane config combo console controls dataview db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi mediaplayer menu minifram minimal mobile multimon nativdlg notebook oleauto opengl ownerdrw png popup printing propsize regtest render richtext rotate sashtest scroll scrollsub shaped sockets sound splash splitter statbar taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard
 
 clean: 
 	-if exist .\*.o del .\*.o
@@ -82,7 +82,6 @@ clean:
 	$(MAKE) -C listctrl -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C mdi -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C mediaplayer -f makefile.gcc $(MAKEARGS) clean
-	$(MAKE) -C memcheck -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C menu -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C minifram -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C minimal -f makefile.gcc $(MAKEARGS) clean
@@ -121,6 +120,7 @@ clean:
 	$(MAKE) -C widgets -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C wizard -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C mfc -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C memcheck -f makefile.gcc $(MAKEARGS) clean
 
 access: 
 	$(MAKE) -C access -f makefile.gcc $(MAKEARGS) all
@@ -248,9 +248,6 @@ mdi:
 mediaplayer: 
 	$(MAKE) -C mediaplayer -f makefile.gcc $(MAKEARGS) all
 
-memcheck: 
-	$(MAKE) -C memcheck -f makefile.gcc $(MAKEARGS) all
-
 menu: 
 	$(MAKE) -C menu -f makefile.gcc $(MAKEARGS) all
 
@@ -365,7 +362,10 @@ wizard:
 mfc: 
 	$(MAKE) -C mfc -f makefile.gcc $(MAKEARGS) all
 
-.PHONY: all clean access animate artprov aui calendar caret checklst collpane config combo console controls dataview db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi mediaplayer memcheck menu minifram minimal mobile multimon nativdlg notebook oleauto opengl ownerdrw png popup printing propsize regtest render richtext rotate sashtest scroll scrollsub shaped sockets sound splash splitter statbar taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard mfc
+memcheck: 
+	$(MAKE) -C memcheck -f makefile.gcc $(MAKEARGS) all
+
+.PHONY: all clean access animate artprov aui calendar caret checklst collpane config combo console controls dataview db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi mediaplayer menu minifram minimal mobile multimon nativdlg notebook oleauto opengl ownerdrw png popup printing propsize regtest render richtext rotate sashtest scroll scrollsub shaped sockets sound splash splitter statbar taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard mfc memcheck
 
 
 SHELL := $(COMSPEC)
