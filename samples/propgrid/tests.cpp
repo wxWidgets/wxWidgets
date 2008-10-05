@@ -238,7 +238,7 @@ void FormMain::AddTestProperties( wxPropertyGridPage* pg )
 
     pg->Append( new MyColourProperty3(wxT("CustomColourProperty3"), wxPG_LABEL, *wxGREEN) );
     pg->GetProperty(wxT("CustomColourProperty3"))->SetFlag(wxPG_PROP_AUTO_UNSPECIFIED);
-    pg->SetPropertyEditor( wxT("CustomColourProperty3"), wxPG_EDITOR(ComboBox) );
+    pg->SetPropertyEditor( wxT("CustomColourProperty3"), wxPGEditor_ComboBox );
 
     pg->SetPropertyHelpString(wxT("CustomColourProperty3"),
         wxT("This is a MyColourProperty3 from the sample app. ")

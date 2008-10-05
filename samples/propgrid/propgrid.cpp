@@ -609,7 +609,7 @@ public:
     // Set editor to have button
     virtual const wxPGEditor* DoGetEditorClass() const
     {
-        return wxPG_EDITOR(TextCtrlAndButton);
+        return wxPGEditor_TextCtrlAndButton;
     }
 
     // Set what happens on button click
@@ -1368,7 +1368,7 @@ void FormMain::PopulateWithExamples ()
 #if wxUSE_SPINBTN
     pg->Append( new wxIntProperty ( wxT("SpinCtrl"), wxPG_LABEL, 0 ) );
 
-    pg->SetPropertyEditor( wxT("SpinCtrl"), wxPG_EDITOR(SpinCtrl) );
+    pg->SetPropertyEditor( wxT("SpinCtrl"), wxPGEditor_SpinCtrl );
     pg->SetPropertyAttribute( wxT("SpinCtrl"), wxPG_ATTR_MIN, (long)-10 );  // Use constants instead of string
     pg->SetPropertyAttribute( wxT("SpinCtrl"), wxPG_ATTR_MAX, (long)10 );   // for reduced binary size.
     pg->SetPropertyAttribute( wxT("SpinCtrl"), wxT("Step"), (long)2 );
@@ -1376,7 +1376,7 @@ void FormMain::PopulateWithExamples ()
 
     pg->SetPropertyHelpString( wxT("SpinCtrl"),
         wxT("This is regular wxIntProperty, which editor has been ")
-        wxT("changed to wxPG_EDITOR(SpinCtrl). Note however that ")
+        wxT("changed to wxPGEditor_SpinCtrl. Note however that ")
         wxT("static wxPropertyGrid::RegisterAdditionalEditors() ")
         wxT("needs to be called prior to using it."));
 
@@ -1437,11 +1437,11 @@ void FormMain::PopulateWithExamples ()
 
     pid = pg->Append( new wxColourProperty(wxT("ColourProperty"),wxPG_LABEL,*wxRED) );
     //pg->SetPropertyAttribute(pid,wxPG_COLOUR_ALLOW_CUSTOM,false);
-    pg->SetPropertyEditor( wxT("ColourProperty"), wxPG_EDITOR(ComboBox) );
+    pg->SetPropertyEditor( wxT("ColourProperty"), wxPGEditor_ComboBox );
     pg->GetProperty(wxT("ColourProperty"))->SetFlag(wxPG_PROP_AUTO_UNSPECIFIED);
     pg->SetPropertyHelpString( wxT("ColourProperty"),
         wxT("wxPropertyGrid::SetPropertyEditor method has been used to change ")
-        wxT("editor of this property to wxPG_EDITOR(ComboBox)"));
+        wxT("editor of this property to wxPGEditor_ComboBox)"));
 
     //
     // This demonstrates using alternative editor for colour property
@@ -2616,7 +2616,7 @@ void FormMain::OnSetSpinCtrlEditorClick( wxCommandEvent& WXUNUSED(event) )
 #if wxUSE_SPINBTN
     wxPGProperty* pgId = m_pPropGridManager->GetSelection();
     if ( pgId )
-        m_pPropGridManager->SetPropertyEditor( pgId, wxPG_EDITOR(SpinCtrl) );
+        m_pPropGridManager->SetPropertyEditor( pgId, wxPGEditor_SpinCtrl );
     else
         wxMessageBox(wxT("First select a property"));
 #endif
