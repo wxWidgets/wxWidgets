@@ -118,7 +118,8 @@ bool wxAnimation::Load(wxInputStream &stream, wxAnimationType type)
 
     if (!loader)
     {
-        wxLogDebug(wxT("Could not create the loader for '%s' animation type"), anim_type);
+        wxLogDebug(wxT("Could not create the loader for '%s' animation type: %s"),
+                   anim_type, error->message);
         return false;
     }
 
@@ -135,7 +136,7 @@ bool wxAnimation::Load(wxInputStream &stream, wxAnimationType type)
         if (!gdk_pixbuf_loader_write(loader, buf, stream.LastRead(), &error))
         {
             gdk_pixbuf_loader_close(loader, &error);
-            wxLogDebug(wxT("Could not write to the loader"));
+            wxLogDebug(wxT("Could not write to the loader: %s"), error->message);
             return false;
         }
     }
@@ -143,7 +144,7 @@ bool wxAnimation::Load(wxInputStream &stream, wxAnimationType type)
     // load complete
     if (!gdk_pixbuf_loader_close(loader, &error))
     {
-        wxLogDebug(wxT("Could not close the loader"));
+        wxLogDebug(wxT("Could not close the loader: %s"), error->message);
         return false;
     }
 
