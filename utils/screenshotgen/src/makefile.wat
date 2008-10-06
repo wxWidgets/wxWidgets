@@ -290,7 +290,7 @@ $(OBJS)\screenshotgen.exe :  $(SCREENSHOTGEN_OBJECTS) $(OBJS)\screenshotgen_scre
 
 data : .SYMBOLIC 
 	if not exist $(OBJS) mkdir $(OBJS)
-	for %f in (richtext.xml bitmaps/wxwin32x32.png bitmaps/bell.png bitmaps/info.png bitmaps/sound.png bitmaps/dropbuth.png bitmaps/dropbutn.png bitmaps/dropbutp.png bitmaps/throbber.gif) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+	for %f in (richtext.xml bitmaps/wxwin32x32.png bitmaps/bell.png bitmaps/sound.png bitmaps/dropbuth.png bitmaps/dropbutn.png bitmaps/dropbutp.png bitmaps/throbber.gif) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\screenshotgen_screenshot_app.obj :  .AUTODEPEND .\screenshot_app.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(SCREENSHOTGEN_CXXFLAGS) $<

@@ -219,7 +219,7 @@ uninstall_screenshotgen:
 
 data: 
 	@mkdir -p .
-	@for f in richtext.xml bitmaps/wxwin32x32.png bitmaps/bell.png bitmaps/info.png bitmaps/sound.png bitmaps/dropbuth.png bitmaps/dropbutn.png bitmaps/dropbutp.png bitmaps/throbber.gif; do \
+	@for f in richtext.xml bitmaps/wxwin32x32.png bitmaps/bell.png bitmaps/sound.png bitmaps/dropbuth.png bitmaps/dropbutn.png bitmaps/dropbutp.png bitmaps/throbber.gif; do \
 	if test ! -f ./$$f -a ! -d ./$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \

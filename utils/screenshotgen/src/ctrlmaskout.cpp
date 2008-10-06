@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        ctrlmaskout.cpp
-// Purpose:     Implement wxCtrlMaskOut class
+// Purpose:     Implement CtrlMaskOut class
 // Author:      Utensil Candel (UtensilCandel@@gmail.com)
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -31,7 +31,7 @@
 
 // It's copied from src/aui/framemanager.cpp and modified, a failed attempt to
 // visualize the process of taking the screenshot when wxTopLevelWindow::CanSetTransparent
-// returns false. see wxCtrlMaskOut::CreateMask for more info
+// returns false. see CtrlMaskOut::CreateMask for more info
 // now it shows nothing and does nothing
 /////////////////////////////////////////////////////////////////////////////
 
@@ -103,10 +103,10 @@ END_EVENT_TABLE()
 
 
 // ----------------------------------------------------------------------------
-// wxCtrlMaskOut
+// CtrlMaskOut
 // ----------------------------------------------------------------------------
 
-wxCtrlMaskOut::wxCtrlMaskOut()
+CtrlMaskOut::CtrlMaskOut()
       : m_defaultDir(_T("screenshots")),
         m_controlName(_T("")),
         m_currentRect(0, 0, 0, 0),
@@ -116,7 +116,7 @@ wxCtrlMaskOut::wxCtrlMaskOut()
 {
 }
 
-wxCtrlMaskOut::~wxCtrlMaskOut()
+CtrlMaskOut::~CtrlMaskOut()
 {
     if (m_mask != NULL)
     {
@@ -125,7 +125,7 @@ wxCtrlMaskOut::~wxCtrlMaskOut()
     }
 }
 
-void wxCtrlMaskOut::OnLeftButtonDown(wxMouseEvent& event)
+void CtrlMaskOut::OnLeftButtonDown(wxMouseEvent& event)
 {
     if (m_isTiming) event.Skip();
 
@@ -138,7 +138,7 @@ void wxCtrlMaskOut::OnLeftButtonDown(wxMouseEvent& event)
     CreateMask(thePanel);
 }
 
-void wxCtrlMaskOut::OnMouseMoving(wxMouseEvent& event)
+void CtrlMaskOut::OnMouseMoving(wxMouseEvent& event)
 {
     if (!event.Dragging())
     {
@@ -159,7 +159,7 @@ void wxCtrlMaskOut::OnMouseMoving(wxMouseEvent& event)
     m_mask->SetSize(m_currentRect);
 }
 
-void wxCtrlMaskOut::OnLeftButtonUp(wxMouseEvent& event)
+void CtrlMaskOut::OnLeftButtonUp(wxMouseEvent& event)
 {
     if (m_mask == NULL)// Which means it's not after specifying a rect region
     {
@@ -177,7 +177,7 @@ void wxCtrlMaskOut::OnLeftButtonUp(wxMouseEvent& event)
     {
         m_isTiming = true;
         (new wxTimer(this))->Start(3000, wxTIMER_ONE_SHOT);
-        this->Connect(wxEVT_TIMER, wxTimerEventHandler( wxCtrlMaskOut::OnTimingFinished ), NULL, this);
+        this->Connect(wxEVT_TIMER, wxTimerEventHandler( CtrlMaskOut::OnTimingFinished ), NULL, this);
     }
     else
     {
@@ -188,7 +188,7 @@ void wxCtrlMaskOut::OnLeftButtonUp(wxMouseEvent& event)
     }
 }
 
-void wxCtrlMaskOut::OnTimingFinished(wxTimerEvent& event)
+void CtrlMaskOut::OnTimingFinished(wxTimerEvent& event)
 {
     // The final rect region is determined.
     DetermineCtrlNameAndRect();
@@ -196,10 +196,10 @@ void wxCtrlMaskOut::OnTimingFinished(wxTimerEvent& event)
     Capture(m_currentRect, m_controlName);
 
     m_isTiming = false;
-    this->Disconnect(wxEVT_TIMER, wxTimerEventHandler( wxCtrlMaskOut::OnTimingFinished ), NULL, this);
+    this->Disconnect(wxEVT_TIMER, wxTimerEventHandler( CtrlMaskOut::OnTimingFinished ), NULL, this);
 }
 
-void wxCtrlMaskOut::Capture(int x, int y, int width, int height, wxString fileName)
+void CtrlMaskOut::Capture(int x, int y, int width, int height, wxString fileName)
 {
     // Somehow wxScreenDC.Blit() doesn't work under Mac for now. Here is a trick.
 #ifdef __WXMAC__
@@ -259,13 +259,13 @@ void wxCtrlMaskOut::Capture(int x, int y, int width, int height, wxString fileNa
     fileName + _T(".png"), wxBITMAP_TYPE_PNG);
 }
 
-void wxCtrlMaskOut::Capture(wxRect rect, wxString fileName)
+void CtrlMaskOut::Capture(wxRect rect, wxString fileName)
 {
     wxPoint origin = rect.GetPosition();
     Capture(origin.x, origin.y, rect.GetWidth(), rect.GetHeight(), fileName);
 }
 
-void wxCtrlMaskOut::DetermineCtrlNameAndRect()
+void CtrlMaskOut::DetermineCtrlNameAndRect()
 {
     // Detect windows using (n-1)*(n-1) points
     const int n = 5;
@@ -357,7 +357,7 @@ void wxCtrlMaskOut::DetermineCtrlNameAndRect()
     m_currentRect.Inflate(m_inflateBorder);
 }
 
-void wxCtrlMaskOut::CreateMask(wxWindow* parent)
+void CtrlMaskOut::CreateMask(wxWindow* parent)
 {
     if (m_mask != NULL)
         m_mask->Destroy();
@@ -392,9 +392,9 @@ void wxCtrlMaskOut::CreateMask(wxWindow* parent)
     p->SetBackgroundColour(*wxBLUE);
 
     // So that even if the cursor run into the mask, the events are still correctly processed.
-    p->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( wxCtrlMaskOut::OnLeftButtonDown ), NULL, this);
-    p->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( wxCtrlMaskOut::OnLeftButtonUp ), NULL, this);
-    p->Connect( wxEVT_MOTION, wxMouseEventHandler( wxCtrlMaskOut::OnMouseMoving ), NULL, this);
+    p->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( CtrlMaskOut::OnLeftButtonDown ), NULL, this);
+    p->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( CtrlMaskOut::OnLeftButtonUp ), NULL, this);
+    p->Connect( wxEVT_MOTION, wxMouseEventHandler( CtrlMaskOut::OnMouseMoving ), NULL, this);
 #endif
 
     // If the platform doesn't support SetTransparent()
@@ -420,16 +420,16 @@ void wxCtrlMaskOut::CreateMask(wxWindow* parent)
     m_mask->Show(true);
 
     // So that even if the cursor run into the mask, the events are still correctly processed.
-    m_mask->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( wxCtrlMaskOut::OnLeftButtonDown ), NULL, this);
-    m_mask->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( wxCtrlMaskOut::OnLeftButtonUp ), NULL, this);
-    m_mask->Connect( wxEVT_MOTION, wxMouseEventHandler( wxCtrlMaskOut::OnMouseMoving ), NULL, this);
+    m_mask->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( CtrlMaskOut::OnLeftButtonDown ), NULL, this);
+    m_mask->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( CtrlMaskOut::OnLeftButtonUp ), NULL, this);
+    m_mask->Connect( wxEVT_MOTION, wxMouseEventHandler( CtrlMaskOut::OnMouseMoving ), NULL, this);
 }
 
-void wxCtrlMaskOut::DestroyMask()
+void CtrlMaskOut::DestroyMask()
 {
-    m_mask->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( wxCtrlMaskOut::OnLeftButtonDown ), NULL, this);
-    m_mask->Disconnect( wxEVT_LEFT_UP, wxMouseEventHandler( wxCtrlMaskOut::OnLeftButtonUp ), NULL, this);
-    m_mask->Disconnect( wxEVT_MOTION, wxMouseEventHandler( wxCtrlMaskOut::OnMouseMoving ), NULL, this);
+    m_mask->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( CtrlMaskOut::OnLeftButtonDown ), NULL, this);
+    m_mask->Disconnect( wxEVT_LEFT_UP, wxMouseEventHandler( CtrlMaskOut::OnLeftButtonUp ), NULL, this);
+    m_mask->Disconnect( wxEVT_MOTION, wxMouseEventHandler( CtrlMaskOut::OnMouseMoving ), NULL, this);
     wxWindow * parent = m_mask->GetParent();
 //    m_mask->Destroy();
     delete m_mask;

@@ -24,11 +24,13 @@
 #endif
 
 #include <wx/dir.h>
+#include <wx/aboutdlg.h>
+
 #include "screenshot_main.h"
 #include "ctrlmaskout.h"
 #include "autocapture.h"
 
-
+/*
 // Global helper functions
 enum wxBuildInfoFormat
 {
@@ -58,14 +60,14 @@ wxString wxbuildinfo(wxBuildInfoFormat format)
     }
 
     return wxbuild;
-}
+}*/
 
 
 // ----------------------------------------------------------------------------
-// wxScreenshotFrame
+// ScreenshotFrame
 // ----------------------------------------------------------------------------
 
-wxScreenshotFrame::wxScreenshotFrame(wxFrame *frame)
+ScreenshotFrame::ScreenshotFrame(wxFrame *frame)
 #if SCREENSHOTGEN_USE_AUI
 : AuiGUIFrame(frame)
 #else
@@ -78,7 +80,7 @@ wxScreenshotFrame::wxScreenshotFrame(wxFrame *frame)
 #endif
 
     // We will hold one during the whole life time of the main frame
-    m_maskout = new wxCtrlMaskOut();
+    m_maskout = new CtrlMaskOut();
 
     // At the begining, we are not specifying the rect region
     capturingRect = false;
@@ -92,7 +94,7 @@ wxScreenshotFrame::wxScreenshotFrame(wxFrame *frame)
 #endif
 }
 
-wxScreenshotFrame::~wxScreenshotFrame()
+ScreenshotFrame::~ScreenshotFrame()
 {
     delete m_maskout;
 }
@@ -106,7 +108,7 @@ wxScreenshotFrame::~wxScreenshotFrame()
 
     Those customizations will be done here.
 */
-void wxScreenshotFrame::InitFBControls()
+void ScreenshotFrame::InitFBControls()
 {
     // Do the default selection for wxComboBox
     m_comboBox1->Select(0);
@@ -141,20 +143,20 @@ void wxScreenshotFrame::InitFBControls()
 
 
 // ----------------------------------------------------------------------------
-// wxScreenshotFrame - event handlers
+// ScreenshotFrame - event handlers
 // ----------------------------------------------------------------------------
 
-void wxScreenshotFrame::OnClose(wxCloseEvent& WXUNUSED(event))
+void ScreenshotFrame::OnClose(wxCloseEvent& WXUNUSED(event))
 {
     Destroy();
 }
 
-void wxScreenshotFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
+void ScreenshotFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
     Destroy();
 }
 
-void wxScreenshotFrame::OnSeeScreenshots(wxCommandEvent& WXUNUSED(event))
+void ScreenshotFrame::OnSeeScreenshots(wxCommandEvent& WXUNUSED(event))
 {
     wxString defaultDir = m_maskout->GetDefaultDirectory();
 
@@ -176,13 +178,18 @@ void wxScreenshotFrame::OnSeeScreenshots(wxCommandEvent& WXUNUSED(event))
     #endif
 }
 
-void wxScreenshotFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
+void ScreenshotFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxString msg = wxbuildinfo(long_f);
-    wxMessageBox(msg, _("Welcome to..."));
+    wxAboutDialogInfo info;
+    info.SetName(_("Automatic Screenshot Generator"));
+    info.SetVersion(_("1.0"));
+    info.SetDescription(_("This utility automatically creates screenshots of wxWidgets controls for ues in wxWidgets documentation."));
+    info.SetCopyright(_T("(C) 2008 Utensil Candel"));
+
+    wxAboutBox(info);
 }
 
-void wxScreenshotFrame::OnCaptureFullScreen(wxCommandEvent& WXUNUSED(event))
+void ScreenshotFrame::OnCaptureFullScreen(wxCommandEvent& WXUNUSED(event))
 {
     // Create a DC for the whole screen area
     wxScreenDC dcScreen;
@@ -194,7 +201,7 @@ void wxScreenshotFrame::OnCaptureFullScreen(wxCommandEvent& WXUNUSED(event))
     m_maskout->Capture(0, 0, screenWidth, screenHeight, _T("fullscreen"));
 }
 
-void wxScreenshotFrame::OnCaptureRect(wxCommandEvent& WXUNUSED(event))
+void ScreenshotFrame::OnCaptureRect(wxCommandEvent& WXUNUSED(event))
 {
     capturingRect = true;
     wxMenuBar * menubar = this->GetMenuBar();
@@ -203,12 +210,12 @@ void wxScreenshotFrame::OnCaptureRect(wxCommandEvent& WXUNUSED(event))
 
     wxWindow * thePage = m_notebook1->GetPage(m_notebook1->GetSelection());
 
-    thePage->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( wxCtrlMaskOut::OnLeftButtonDown ), NULL, m_maskout);
-    thePage->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( wxCtrlMaskOut::OnLeftButtonUp ), NULL, m_maskout);
-    thePage->Connect( wxEVT_MOTION, wxMouseEventHandler( wxCtrlMaskOut::OnMouseMoving ), NULL, m_maskout);
+    thePage->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( CtrlMaskOut::OnLeftButtonDown ), NULL, m_maskout);
+    thePage->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( CtrlMaskOut::OnLeftButtonUp ), NULL, m_maskout);
+    thePage->Connect( wxEVT_MOTION, wxMouseEventHandler( CtrlMaskOut::OnMouseMoving ), NULL, m_maskout);
 }
 
-void wxScreenshotFrame::OnEndCaptureRect(wxCommandEvent& WXUNUSED(event))
+void ScreenshotFrame::OnEndCaptureRect(wxCommandEvent& WXUNUSED(event))
 {
     capturingRect = false;
     wxMenuBar * menubar = this->GetMenuBar();
@@ -217,12 +224,12 @@ void wxScreenshotFrame::OnEndCaptureRect(wxCommandEvent& WXUNUSED(event))
 
     wxWindow * thePage = m_notebook1->GetPage(m_notebook1->GetSelection());
 
-    thePage->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( wxCtrlMaskOut::OnLeftButtonDown ), NULL, m_maskout);
-    thePage->Disconnect( wxEVT_LEFT_UP, wxMouseEventHandler( wxCtrlMaskOut::OnLeftButtonUp ), NULL, m_maskout);
-    thePage->Disconnect( wxEVT_MOTION, wxMouseEventHandler( wxCtrlMaskOut::OnMouseMoving ), NULL, m_maskout);
+    thePage->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( CtrlMaskOut::OnLeftButtonDown ), NULL, m_maskout);
+    thePage->Disconnect( wxEVT_LEFT_UP, wxMouseEventHandler( CtrlMaskOut::OnLeftButtonUp ), NULL, m_maskout);
+    thePage->Disconnect( wxEVT_MOTION, wxMouseEventHandler( CtrlMaskOut::OnMouseMoving ), NULL, m_maskout);
 }
 
-void wxScreenshotFrame::OnNotebookPageChanging(
+void ScreenshotFrame::OnNotebookPageChanging(
 #if SCREENSHOTGEN_USE_AUI
 wxAuiNotebookEvent& event
 #else
@@ -238,14 +245,14 @@ wxNotebookEvent& event
 
     wxWindow * thePage = m_notebook1->GetPage(event.GetOldSelection());
 
-    thePage->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( wxCtrlMaskOut::OnLeftButtonDown ), NULL, m_maskout);
-    thePage->Disconnect( wxEVT_LEFT_UP, wxMouseEventHandler( wxCtrlMaskOut::OnLeftButtonUp ), NULL, m_maskout);
-    thePage->Disconnect( wxEVT_MOTION, wxMouseEventHandler( wxCtrlMaskOut::OnMouseMoving ), NULL, m_maskout);
+    thePage->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( CtrlMaskOut::OnLeftButtonDown ), NULL, m_maskout);
+    thePage->Disconnect( wxEVT_LEFT_UP, wxMouseEventHandler( CtrlMaskOut::OnLeftButtonUp ), NULL, m_maskout);
+    thePage->Disconnect( wxEVT_MOTION, wxMouseEventHandler( CtrlMaskOut::OnMouseMoving ), NULL, m_maskout);
 
     event.Skip();
 }
 
-void wxScreenshotFrame::OnNotebookPageChanged(
+void ScreenshotFrame::OnNotebookPageChanged(
 #if SCREENSHOTGEN_USE_AUI
 wxAuiNotebookEvent& event
 #else
@@ -261,14 +268,14 @@ wxNotebookEvent& event
 
     wxWindow *thePage = m_notebook1->GetPage(event.GetSelection());
 
-    thePage->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( wxCtrlMaskOut::OnLeftButtonDown ), NULL, m_maskout);
-    thePage->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( wxCtrlMaskOut::OnLeftButtonUp ), NULL, m_maskout);
-    thePage->Connect( wxEVT_MOTION, wxMouseEventHandler( wxCtrlMaskOut::OnMouseMoving ), NULL, m_maskout);
+    thePage->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( CtrlMaskOut::OnLeftButtonDown ), NULL, m_maskout);
+    thePage->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( CtrlMaskOut::OnLeftButtonUp ), NULL, m_maskout);
+    thePage->Connect( wxEVT_MOTION, wxMouseEventHandler( CtrlMaskOut::OnMouseMoving ), NULL, m_maskout);
 
     event.Skip();
 }
 
-void wxScreenshotFrame::OnCaptureAllControls(wxCommandEvent& WXUNUSED(event))
+void ScreenshotFrame::OnCaptureAllControls(wxCommandEvent& WXUNUSED(event))
 {
     wxString dir = wxT("screenshots");
 

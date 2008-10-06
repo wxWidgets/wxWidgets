@@ -11,7 +11,7 @@
 
 #include <wx/app.h>
 
-class wxScreenshotApp : public wxApp
+class ScreenshotApp : public wxApp
 {
 public:
     virtual bool OnInit();

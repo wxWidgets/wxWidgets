@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 17 2008)
+// C++ code generated with wxFormBuilder (version Apr 21 2008)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -64,22 +64,19 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class GUIFrame
 ///////////////////////////////////////////////////////////////////////////////
-class GUIFrame : public wxFrame
+class GUIFrame : public wxFrame 
 {
 	private:
-
+	
 	protected:
 		enum
 		{
-			idMenuOpen = 1000,
-			idMenuQuit,
-			idMenuCapFullScreen,
+			idMenuCapFullScreen = 1000,
 			idMenuCapRect,
 			idMenuEndCapRect,
 			idMenuCapAll,
-			idMenuAbout,
 		};
-
+		
 		wxMenuBar* mbar;
 		wxMenu* fileMenu;
 		wxMenu* captureMenu;
@@ -94,6 +91,8 @@ class GUIFrame : public wxFrame
 		wxRadioButton* m_radioBtn2;
 		wxBitmapButton* m_bpButton1;
 		wxStaticBitmap* m_bitmap1;
+		wxBitmapButton* m_bpButton12;
+		wxBitmapButton* m_bpButton11;
 		wxGauge* m_gauge1;
 		wxSlider* m_slider1;
 		wxToggleButton* m_toggleBtn1;
@@ -114,14 +113,14 @@ class GUIFrame : public wxFrame
 		wxCollapsiblePane *m_collPane2;
 		wxPanel* m_panel3;
 		wxTextCtrl* m_textCtrl1;
-
+		
 		wxTextCtrl* m_textCtrl2;
 		wxRichTextCtrl* m_richText1;
 		wxPanel* m_panel4;
 		wxColourPickerCtrl* m_colourPicker1;
 		wxFontPickerCtrl* m_fontPicker1;
 		wxFilePickerCtrl* m_filePicker1;
-
+		
 		wxCalendarCtrl* m_calendar1;
 		wxDatePickerCtrl* m_datePicker1;
 		wxGenericDirCtrl* m_genericDirCtrl1;
@@ -129,16 +128,16 @@ class GUIFrame : public wxFrame
 		wxPanel* m_panel5;
 		wxChoice* m_choice1;
 		wxComboBox* m_comboBox1;
-
-
+		
+		
 		wxBitmapComboBox * m_bmpComboBox1;
-		wxPenStyleComboBox * m_ownerDrawnComboBox1;
-
-
+		PenStyleComboBox * m_ownerDrawnComboBox1;
+		
+		
 		wxComboCtrl * m_comboCtrl1;
 		wxComboCtrl * m_comboCtrl2;
 		wxStatusBar* statusBar;
-
+		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnClose( wxCloseEvent& event ){ event.Skip(); }
 		virtual void OnSeeScreenshots( wxCommandEvent& event ){ event.Skip(); }
@@ -150,12 +149,12 @@ class GUIFrame : public wxFrame
 		virtual void OnAbout( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnNotebookPageChanged( wxNotebookEvent& event ){ event.Skip(); }
 		virtual void OnNotebookPageChanging( wxNotebookEvent& event ){ event.Skip(); }
-
-
+		
+	
 	public:
 		GUIFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("wxWidgets Control Screenshot Generator"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 		~GUIFrame();
-
+	
 };
 
 #endif //__guiframe__

@@ -10,13 +10,13 @@
 #define WX_CUSTOM_COMBO_H
 
 // ----------------------------------------------------------------------------
-// class wxPenStyleComboBox
+// class PenStyleComboBox
 // This class is a modified version of the one from samples/combo.cpp
 // ----------------------------------------------------------------------------
 
 #include <wx/odcombo.h>
 
-class wxPenStyleComboBox : public wxOwnerDrawnComboBox
+class PenStyleComboBox : public wxOwnerDrawnComboBox
 {
 public:
     virtual void OnDrawItem( wxDC& dc,
@@ -32,7 +32,7 @@ public:
 
     virtual wxCoord OnMeasureItemWidth( size_t WXUNUSED(item) ) const;
 
-    static wxPenStyleComboBox* CreateSample(wxWindow* parent);
+    static PenStyleComboBox* CreateSample(wxWindow* parent);
 };
 
 

@@ -44,10 +44,10 @@ END_EVENT_TABLE()
 
 
 // ----------------------------------------------------------------------------
-// wxPenStyleComboBox
+// PenStyleComboBox
 // ----------------------------------------------------------------------------
 
-void wxPenStyleComboBox::OnDrawItem( wxDC& dc,
+void PenStyleComboBox::OnDrawItem( wxDC& dc,
                                     const wxRect& rect,
                                     int item,
                                     int flags ) const
@@ -103,7 +103,7 @@ void wxPenStyleComboBox::OnDrawItem( wxDC& dc,
     }
 }
 
-void wxPenStyleComboBox::OnDrawBackground( wxDC& dc, const wxRect& rect,
+void PenStyleComboBox::OnDrawBackground( wxDC& dc, const wxRect& rect,
                                    int item, int flags ) const
 {
     // If item is selected or even, or we are painting the
@@ -122,7 +122,7 @@ void wxPenStyleComboBox::OnDrawBackground( wxDC& dc, const wxRect& rect,
     dc.DrawRectangle(rect);
 }
 
-inline wxCoord wxPenStyleComboBox::OnMeasureItem( size_t item ) const
+inline wxCoord PenStyleComboBox::OnMeasureItem( size_t item ) const
 {
     // Simply demonstrate the ability to have variable-height items
     if ( item & 1 )
@@ -131,14 +131,14 @@ inline wxCoord wxPenStyleComboBox::OnMeasureItem( size_t item ) const
         return 24;
 }
 
-inline wxCoord wxPenStyleComboBox::OnMeasureItemWidth( size_t WXUNUSED(item) ) const
+inline wxCoord PenStyleComboBox::OnMeasureItemWidth( size_t WXUNUSED(item) ) const
 {
     return -1; // default - will be measured from text width
 }
 
-wxPenStyleComboBox * wxPenStyleComboBox::CreateSample(wxWindow* parent)
+PenStyleComboBox * PenStyleComboBox::CreateSample(wxWindow* parent)
 {
-    wxPenStyleComboBox* odc;
+    PenStyleComboBox* odc;
 
     // Common list of items for all dialogs.
     wxArrayString   arrItems;
@@ -161,7 +161,7 @@ wxPenStyleComboBox * wxPenStyleComboBox::CreateSample(wxWindow* parent)
     // When defining derivative class for callbacks, we need
     // to use two-stage creation (or redefine the common wx
     // constructor).
-    odc = new wxPenStyleComboBox();
+    odc = new PenStyleComboBox();
     odc->Create(parent,wxID_ANY,wxEmptyString,
                 wxDefaultPosition, wxDefaultSize,
                 arrItems,
@@ -172,9 +172,9 @@ wxPenStyleComboBox * wxPenStyleComboBox::CreateSample(wxWindow* parent)
     odc->SetSelection(0);
 
     // Load images from disk
-    wxImage imgNormal(wxT("dropbutn.png"));
-    wxImage imgPressed(wxT("dropbutp.png"));
-    wxImage imgHover(wxT("dropbuth.png"));
+    wxImage imgNormal(wxT("bitmaps/dropbutn.png"));
+    wxImage imgPressed(wxT("bitmaps/dropbutp.png"));
+    wxImage imgHover(wxT("bitmaps/dropbuth.png"));
 
     if ( imgNormal.IsOk() && imgPressed.IsOk() && imgHover.IsOk() )
     {

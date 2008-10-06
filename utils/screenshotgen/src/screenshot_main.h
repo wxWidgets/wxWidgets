@@ -15,10 +15,10 @@
 #define SCREENSHOTGEN_USE_AUI       0
 
 
-class wxCtrlMaskOut;
+class CtrlMaskOut;
 
 
-class wxScreenshotFrame
+class ScreenshotFrame
 #if SCREENSHOTGEN_USE_AUI
 : public AuiGUIFrame
 #else
@@ -26,8 +26,8 @@ class wxScreenshotFrame
 #endif
 {
 public:
-    wxScreenshotFrame(wxFrame *frame);
-    ~wxScreenshotFrame();
+    ScreenshotFrame(wxFrame *frame);
+    ~ScreenshotFrame();
 
 protected:      // event handlers
 
@@ -55,7 +55,7 @@ private:
 
     // Data members
     bool capturingRect;
-    wxCtrlMaskOut * m_maskout;
+    CtrlMaskOut * m_maskout;
 };
 
 #endif // WXSCREENSHOTMAIN_H

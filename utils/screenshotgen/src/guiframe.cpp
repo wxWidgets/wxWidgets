@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 17 2008)
+// C++ code generated with wxFormBuilder (version Apr 21 2008)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -16,11 +16,14 @@
 #pragma hdrstop
 #endif
 
-// for all others, include the necessary headers (this file is usually all you
-// need because it includes almost all "standard" wxWidgets headers)
+// for all others, include the necessary headers wxWidgets headers)
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #endif
+
+#include "bitmaps/play.xpm"
+#include "bitmaps/stop.xpm"
+
 
 #include "guiframe.h"
 
@@ -33,11 +36,13 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	mbar = new wxMenuBar( 0 );
 	fileMenu = new wxMenu();
 	wxMenuItem* m_menuSeeScr;
-	m_menuSeeScr = new wxMenuItem( fileMenu, idMenuOpen, wxString( _("See Screenshots") ) + wxT('\t') + wxT("Ctrl+O"), _("Open the directory where the screenshots generated."), wxITEM_NORMAL );
+	m_menuSeeScr = new wxMenuItem( fileMenu, wxID_ZOOM_IN, wxString( _("&View screenshots...") ) + wxT('\t') + wxT("Ctrl+O"), _("Open the directory where the screenshots generated."), wxITEM_NORMAL );
 	fileMenu->Append( m_menuSeeScr );
 	
+	fileMenu->AppendSeparator();
+	
 	wxMenuItem* m_menuFileQuit;
-	m_menuFileQuit = new wxMenuItem( fileMenu, idMenuQuit, wxString( _("&Quit") ) + wxT('\t') + wxT("Alt+F4"), _("Quit the application"), wxITEM_NORMAL );
+	m_menuFileQuit = new wxMenuItem( fileMenu, wxID_EXIT, wxString( _("&Quit") ) + wxT('\t') + wxT("Alt+F4"), _("Quit the application"), wxITEM_NORMAL );
 	fileMenu->Append( m_menuFileQuit );
 	
 	mbar->Append( fileMenu, _("&File") );
@@ -49,10 +54,20 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	
 	wxMenuItem* m_menuCapRect;
 	m_menuCapRect = new wxMenuItem( captureMenu, idMenuCapRect, wxString( _("Regions<Begin>") ) + wxT('\t') + wxT("Ctrl+Alt+R"), _("Manually specify rectangular regions"), wxITEM_NORMAL );
+	#ifdef __WXMSW__
+	m_menuCapRect->SetBitmaps( wxICON( play ) );
+	#elif defined( __WXGTK__ )
+	m_menuCapRect->SetBitmap( wxICON( play ) );
+	#endif
 	captureMenu->Append( m_menuCapRect );
 	
 	wxMenuItem* m_menuEndCapRect;
 	m_menuEndCapRect = new wxMenuItem( captureMenu, idMenuEndCapRect, wxString( _("Regions<End>") ) + wxT('\t') + wxT("Ctrl+Alt+E"), _("Stop generating screenshots..."), wxITEM_NORMAL );
+	#ifdef __WXMSW__
+	m_menuEndCapRect->SetBitmaps( wxICON( stop ) );
+	#elif defined( __WXGTK__ )
+	m_menuEndCapRect->SetBitmap( wxICON( stop ) );
+	#endif
 	captureMenu->Append( m_menuEndCapRect );
 	m_menuEndCapRect->Enable( false );
 	
@@ -64,7 +79,7 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	
 	helpMenu = new wxMenu();
 	wxMenuItem* m_menuHelpAbout;
-	m_menuHelpAbout = new wxMenuItem( helpMenu, idMenuAbout, wxString( _("&About") ) + wxT('\t') + wxT("F1"), _("Show info about this application"), wxITEM_NORMAL );
+	m_menuHelpAbout = new wxMenuItem( helpMenu, wxID_ABOUT, wxString( _("&About...") ) + wxT('\t') + wxT("F1"), _("Show info about this application"), wxITEM_NORMAL );
 	helpMenu->Append( m_menuHelpAbout );
 	
 	mbar->Append( helpMenu, _("&Help") );
@@ -112,17 +127,31 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	
 	fgSizer1->Add( m_radioBtn2, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 20 );
 	
-	m_bpButton1 = new wxBitmapButton( m_panel1, wxID_ANY, wxBitmap( wxT("wxwin32x32.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	m_bpButton1 = new wxBitmapButton( m_panel1, wxID_ANY, wxBitmap( wxT("bitmaps/wxwin32x32.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	m_bpButton1->SetToolTip( _("wxBitmapButton") );
 	
 	m_bpButton1->SetToolTip( _("wxBitmapButton") );
 	
 	fgSizer1->Add( m_bpButton1, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 20 );
 	
-	m_bitmap1 = new wxStaticBitmap( m_panel1, wxID_ANY, wxBitmap( wxT("wxwin32x32.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, 0 );
+	m_bitmap1 = new wxStaticBitmap( m_panel1, wxID_ANY, wxBitmap( wxT("bitmaps/wxwin32x32.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, 0 );
 	m_bitmap1->SetToolTip( _("wxStaticBitmap") );
 	
 	fgSizer1->Add( m_bitmap1, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 20 );
+	
+	m_bpButton12 = new wxBitmapButton( m_panel1, wxID_ANY, wxBitmap( wxT("bitmaps/wxwin32x32.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	m_bpButton12->SetToolTip( _("wxBitmapButton") );
+	
+	m_bpButton12->SetToolTip( _("wxBitmapButton") );
+	
+	fgSizer1->Add( m_bpButton12, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_bpButton11 = new wxBitmapButton( m_panel1, wxID_ANY, wxBitmap( wxT("bitmaps/wxwin32x32.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	m_bpButton11->SetToolTip( _("wxBitmapButton") );
+	
+	m_bpButton11->SetToolTip( _("wxBitmapButton") );
+	
+	fgSizer1->Add( m_bpButton11, 0, wxALIGN_CENTER|wxALL, 5 );
 	
 	m_gauge1 = new wxGauge( m_panel1, wxID_ANY, 100, wxDefaultPosition, wxDefaultSize, wxGA_HORIZONTAL, wxDefaultValidator, wxT("_Gauge") );
 	m_gauge1->SetValue( 50 ); 
@@ -146,7 +175,7 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	
 	fgSizer1->Add( m_toggleBtn2, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 20 );
 	
-	m_hyperlink1 = new wxHyperlinkCtrl( m_panel1, wxID_ANY, _("www.wxWidgets.org"), wxT("http://www.wxWidgets.org"), wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE );
+	m_hyperlink1 = new wxHyperlinkCtrl( m_panel1, wxID_ANY, _("www.wxwidgets.org"), wxT("http://www.wxwidgets.org"), wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE );
 	m_hyperlink1->SetToolTip( _("wxHyperlinkCtrl") );
 	
 	fgSizer1->Add( m_hyperlink1, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 20 );
@@ -169,7 +198,7 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_panel1->SetSizer( fgSizer1 );
 	m_panel1->Layout();
 	fgSizer1->Fit( m_panel1 );
-	m_notebook1->AddPage( m_panel1, _("Tiny Controls"), true );
+	m_notebook1->AddPage( m_panel1, _("Tiny Controls"), false );
 	m_panel2 = new wxPanel( m_notebook1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxFlexGridSizer* fgSizer2;
 	fgSizer2 = new wxFlexGridSizer( 5, 2, 0, 0 );
@@ -208,7 +237,7 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	
 	m_animationCtrl1 = new wxAnimationCtrl(m_panel2, wxID_ANY);
 	m_animationCtrl1->SetToolTip(_("wxAnimationCtrl"));
-	if (m_animationCtrl1->LoadFile(wxT("throbber.gif")))
+	if (m_animationCtrl1->LoadFile(wxT("bitmaps/throbber.gif")))
 	m_animationCtrl1->Play();
 	fgSizer2->Add( m_animationCtrl1, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 20 );
 	
@@ -245,7 +274,7 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_panel2->SetSizer( fgSizer2 );
 	m_panel2->Layout();
 	fgSizer2->Fit( m_panel2 );
-	m_notebook1->AddPage( m_panel2, _("Choosing Controls"), false );
+	m_notebook1->AddPage( m_panel2, _("Choosing Controls"), true );
 	m_panel3 = new wxPanel( m_notebook1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer2;
 	bSizer2 = new wxBoxSizer( wxVERTICAL );
@@ -352,14 +381,14 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	fgSizer4->Add( 0, 120, 1, wxEXPAND, 5 );
 	
 	m_bmpComboBox1 = new wxBitmapComboBox(m_panel5, wxID_ANY,_("Item1"));
-	m_bmpComboBox1->Append(_("Item1"), wxBitmap(_T("bell.png"),wxBITMAP_TYPE_PNG));
-	m_bmpComboBox1->Append(_("Item2"), wxBitmap(_T("sound.png"),wxBITMAP_TYPE_PNG));
-	m_bmpComboBox1->Append(_("Item3"), wxBitmap(_T("bell.png"),wxBITMAP_TYPE_PNG));
-	m_bmpComboBox1->Append(_("Item4"), wxBitmap(_T("sound.png"),wxBITMAP_TYPE_PNG));
+	m_bmpComboBox1->Append(_("Item1"), wxBitmap(_T("bitmaps/bell.png"),wxBITMAP_TYPE_PNG));
+	m_bmpComboBox1->Append(_("Item2"), wxBitmap(_T("bitmaps/sound.png"),wxBITMAP_TYPE_PNG));
+	m_bmpComboBox1->Append(_("Item3"), wxBitmap(_T("bitmaps/bell.png"),wxBITMAP_TYPE_PNG));
+	m_bmpComboBox1->Append(_("Item4"), wxBitmap(_T("bitmaps/sound.png"),wxBITMAP_TYPE_PNG));
 	m_bmpComboBox1->SetToolTip(_("wxBitmapComboBox"));
 	fgSizer4->Add( m_bmpComboBox1, 1, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 20 );
 	
-	m_ownerDrawnComboBox1 = wxPenStyleComboBox::CreateSample(m_panel5);
+	m_ownerDrawnComboBox1 = PenStyleComboBox::CreateSample(m_panel5);
 	    m_ownerDrawnComboBox1->SetToolTip(_("wxOwnerDrawnComboBox"));
 	fgSizer4->Add( m_ownerDrawnComboBox1, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 20 );
 	
@@ -370,12 +399,13 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	fgSizer4->Add( 0, 90, 1, wxEXPAND, 5 );
 	
 	m_comboCtrl1 = new wxComboCtrl(m_panel5,wxID_ANY,wxEmptyString);
-	m_comboCtrl1->SetText(wxT("wxComboCtrl"));
-	m_comboCtrl1->SetToolTip(_("wxComboCtrl"));
-	
+	// first of all, set the popup control!
 	ListViewComboPopup* popupList = new ListViewComboPopup();
 	m_comboCtrl1->SetPopupControl(popupList);
 	m_comboCtrl1->SetPopupMaxHeight(80);
+	
+	m_comboCtrl1->SetText(wxT("wxComboCtrl"));
+	m_comboCtrl1->SetToolTip(_("wxComboCtrl"));
 	
 	// Populate using wxListView methods
 	popupList->InsertItem(popupList->GetItemCount(),wxT("wxComboCtrl"));
@@ -390,13 +420,13 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	fgSizer4->Add( m_comboCtrl1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 20 );
 	
 	m_comboCtrl2 = new wxComboCtrl(m_panel5,wxID_ANY,wxEmptyString);
-	m_comboCtrl2->SetText(wxT("wxComboCtrl"));
-	m_comboCtrl2->SetToolTip(_("wxComboCtrl"));
-	
+	// first of all, set the popup control!
 	TreeCtrlComboPopup* popupTree = new TreeCtrlComboPopup();
-	
 	m_comboCtrl2->SetPopupControl(popupTree);
 	m_comboCtrl2->SetPopupMaxHeight(80);
+	
+	m_comboCtrl2->SetText(wxT("wxComboCtrl"));
+	m_comboCtrl2->SetToolTip(_("wxComboCtrl"));
 	
 	//Add a root and some nodes using wxTreeCtrl methods
 	wxTreeItemId root = popupTree->AddRoot(_("wxComboCtrl"));

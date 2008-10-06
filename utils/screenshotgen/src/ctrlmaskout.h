@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        ctrlmaskout.h
-// Purpose:     Defines the wxCtrlMaskOut class
+// Purpose:     Defines the CtrlMaskOut class
 // Author:      Utensil Candel (UtensilCandel@@gmail.com)
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -13,14 +13,14 @@
 
 
 // ----------------------------------------------------------------------------
-// class wxCtrlMaskOut
+// class CtrlMaskOut
 // ----------------------------------------------------------------------------
 
-class wxCtrlMaskOut : public wxEvtHandler
+class CtrlMaskOut : public wxEvtHandler
 {
 public:
-    wxCtrlMaskOut();
-    ~wxCtrlMaskOut();
+    CtrlMaskOut();
+    ~CtrlMaskOut();
 
 public:
     void OnLeftButtonDown(wxMouseEvent& event);

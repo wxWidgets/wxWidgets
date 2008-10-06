@@ -14,7 +14,7 @@
         <property name="name">MyProject</property>
         <property name="namespace"></property>
         <property name="path">.</property>
-        <property name="precompiled_header">// ----------------------------------------------------------------------------&#x0A;// headers&#x0A;// ----------------------------------------------------------------------------&#x0A;&#x0A;// For compilers that support precompilation, includes &quot;wx/wx.h&quot;.&#x0A;#include &quot;wx/wxprec.h&quot;&#x0A;&#x0A;#ifdef __BORLANDC__&#x0A;    #pragma hdrstop&#x0A;#endif&#x0A;&#x0A;// for all others, include the necessary headers (this file is usually all you&#x0A;// need because it includes almost all &quot;standard&quot; wxWidgets headers)&#x0A;#ifndef WX_PRECOMP&#x0A;    #include &quot;wx/wx.h&quot;&#x0A;#endif</property>
+        <property name="precompiled_header">// ----------------------------------------------------------------------------&#x0A;// headers&#x0A;// ----------------------------------------------------------------------------&#x0A;&#x0A;// For compilers that support precompilation, includes &quot;wx/wx.h&quot;.&#x0A;#include &quot;wx/wxprec.h&quot;&#x0A;&#x0A;#ifdef __BORLANDC__&#x0A;    #pragma hdrstop&#x0A;#endif&#x0A;&#x0A;// for all others, include the necessary headers wxWidgets headers)&#x0A;#ifndef WX_PRECOMP&#x0A;    #include &quot;wx/wx.h&quot;&#x0A;#endif&#x0A;&#x0A;#include &quot;bitmaps/play.xpm&quot;&#x0A;#include &quot;bitmaps/stop.xpm&quot;&#x0A;</property>
         <property name="relative_path">1</property>
         <property name="use_enum">1</property>
         <property name="use_microsoft_bom">0</property>
@@ -70,7 +70,7 @@
             <event name="OnSetFocus"></event>
             <event name="OnSize"></event>
             <event name="OnUpdateUI"></event>
-            <object class="wxMenuBar" expanded="0">
+            <object class="wxMenuBar" expanded="1">
                 <property name="bg"></property>
                 <property name="context_help"></property>
                 <property name="enabled">1</property>
@@ -123,9 +123,9 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help">Open the directory where the screenshots generated.</property>
-                        <property name="id">idMenuOpen</property>
+                        <property name="id">wxID_ZOOM_IN</property>
                         <property name="kind">wxITEM_NORMAL</property>
-                        <property name="label">See Screenshots</property>
+                        <property name="label">&amp;View screenshots...</property>
                         <property name="name">m_menuSeeScr</property>
                         <property name="permission">none</property>
                         <property name="shortcut">Ctrl+O</property>
@@ -133,12 +133,15 @@
                         <event name="OnMenuSelection">OnSeeScreenshots</event>
                         <event name="OnUpdateUI"></event>
                     </object>
+                    <object class="separator" expanded="1">
+                        <property name="permission">none</property>
+                    </object>
                     <object class="wxMenuItem" expanded="1">
                         <property name="bitmap"></property>
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help">Quit the application</property>
-                        <property name="id">idMenuQuit</property>
+                        <property name="id">wxID_EXIT</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">&amp;Quit</property>
                         <property name="name">m_menuFileQuit</property>
@@ -169,7 +172,7 @@
                         <event name="OnUpdateUI"></event>
                     </object>
                     <object class="wxMenuItem" expanded="1">
-                        <property name="bitmap"></property>
+                        <property name="bitmap">play; Load From Icon Resource [-1; -1]</property>
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help">Manually specify rectangular regions</property>
@@ -184,7 +187,7 @@
                         <event name="OnUpdateUI"></event>
                     </object>
                     <object class="wxMenuItem" expanded="1">
-                        <property name="bitmap"></property>
+                        <property name="bitmap">stop; Load From Icon Resource [-1; -1]</property>
                         <property name="checked">0</property>
                         <property name="enabled">0</property>
                         <property name="help">Stop generating screenshots...</property>
@@ -199,7 +202,7 @@
                         <event name="OnUpdateUI"></event>
                     </object>
                     <object class="wxMenuItem" expanded="1">
-                        <property name="bitmap"></property>
+                        <property name="bitmap">; Load From Resource</property>
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help">Take screenshot for all controls autoly.</property>
@@ -214,7 +217,7 @@
                         <event name="OnUpdateUI"></event>
                     </object>
                 </object>
-                <object class="wxMenu" expanded="0">
+                <object class="wxMenu" expanded="1">
                     <property name="label">&amp;Help</property>
                     <property name="name">helpMenu</property>
                     <property name="permission">protected</property>
@@ -223,9 +226,9 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help">Show info about this application</property>
-                        <property name="id">idMenuAbout</property>
+                        <property name="id">wxID_ABOUT</property>
                         <property name="kind">wxITEM_NORMAL</property>
-                        <property name="label">&amp;About</property>
+                        <property name="label">&amp;About...</property>
                         <property name="name">m_menuHelpAbout</property>
                         <property name="permission">none</property>
                         <property name="shortcut">F1</property>
@@ -293,8 +296,8 @@
                         <object class="notebookpage" expanded="1">
                             <property name="bitmap"></property>
                             <property name="label">Tiny Controls</property>
-                            <property name="select">1</property>
-                            <object class="wxPanel" expanded="0">
+                            <property name="select">0</property>
+                            <object class="wxPanel" expanded="1">
                                 <property name="bg"></property>
                                 <property name="context_help"></property>
                                 <property name="enabled">1</property>
@@ -336,7 +339,7 @@
                                 <event name="OnSetFocus"></event>
                                 <event name="OnSize"></event>
                                 <event name="OnUpdateUI"></event>
-                                <object class="wxFlexGridSizer" expanded="0">
+                                <object class="wxFlexGridSizer" expanded="1">
                                     <property name="cols">2</property>
                                     <property name="flexible_direction">wxBOTH</property>
                                     <property name="growablecols"></property>
@@ -665,7 +668,7 @@
                                         <property name="proportion">0</property>
                                         <object class="wxBitmapButton" expanded="1">
                                             <property name="bg"></property>
-                                            <property name="bitmap">wxwin32x32.png; Load From File</property>
+                                            <property name="bitmap">bitmaps/wxwin32x32.png; Load From File</property>
                                             <property name="context_help"></property>
                                             <property name="default">0</property>
                                             <property name="disabled"></property>
@@ -722,7 +725,7 @@
                                         <property name="proportion">0</property>
                                         <object class="wxStaticBitmap" expanded="1">
                                             <property name="bg"></property>
-                                            <property name="bitmap">wxwin32x32.png; Load From File</property>
+                                            <property name="bitmap">bitmaps/wxwin32x32.png; Load From File</property>
                                             <property name="context_help"></property>
                                             <property name="enabled">1</property>
                                             <property name="fg"></property>
@@ -740,6 +743,120 @@
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
                                             <property name="window_style"></property>
+                                            <event name="OnChar"></event>
+                                            <event name="OnEnterWindow"></event>
+                                            <event name="OnEraseBackground"></event>
+                                            <event name="OnKeyDown"></event>
+                                            <event name="OnKeyUp"></event>
+                                            <event name="OnKillFocus"></event>
+                                            <event name="OnLeaveWindow"></event>
+                                            <event name="OnLeftDClick"></event>
+                                            <event name="OnLeftDown"></event>
+                                            <event name="OnLeftUp"></event>
+                                            <event name="OnMiddleDClick"></event>
+                                            <event name="OnMiddleDown"></event>
+                                            <event name="OnMiddleUp"></event>
+                                            <event name="OnMotion"></event>
+                                            <event name="OnMouseEvents"></event>
+                                            <event name="OnMouseWheel"></event>
+                                            <event name="OnPaint"></event>
+                                            <event name="OnRightDClick"></event>
+                                            <event name="OnRightDown"></event>
+                                            <event name="OnRightUp"></event>
+                                            <event name="OnSetFocus"></event>
+                                            <event name="OnSize"></event>
+                                            <event name="OnUpdateUI"></event>
+                                        </object>
+                                    </object>
+                                    <object class="sizeritem" expanded="1">
+                                        <property name="border">5</property>
+                                        <property name="flag">wxALIGN_CENTER|wxALL</property>
+                                        <property name="proportion">0</property>
+                                        <object class="wxBitmapButton" expanded="1">
+                                            <property name="bg"></property>
+                                            <property name="bitmap">bitmaps/wxwin32x32.png; Load From File</property>
+                                            <property name="context_help"></property>
+                                            <property name="default">0</property>
+                                            <property name="disabled"></property>
+                                            <property name="enabled">1</property>
+                                            <property name="fg"></property>
+                                            <property name="focus"></property>
+                                            <property name="font"></property>
+                                            <property name="hidden">0</property>
+                                            <property name="hover"></property>
+                                            <property name="id">wxID_ANY</property>
+                                            <property name="label">wxBitmapButton</property>
+                                            <property name="maximum_size"></property>
+                                            <property name="minimum_size"></property>
+                                            <property name="name">m_bpButton12</property>
+                                            <property name="permission">protected</property>
+                                            <property name="pos"></property>
+                                            <property name="selected"></property>
+                                            <property name="size"></property>
+                                            <property name="style">wxBU_AUTODRAW</property>
+                                            <property name="subclass"></property>
+                                            <property name="tooltip">wxBitmapButton</property>
+                                            <property name="window_extra_style"></property>
+                                            <property name="window_name"></property>
+                                            <property name="window_style"></property>
+                                            <event name="OnButtonClick"></event>
+                                            <event name="OnChar"></event>
+                                            <event name="OnEnterWindow"></event>
+                                            <event name="OnEraseBackground"></event>
+                                            <event name="OnKeyDown"></event>
+                                            <event name="OnKeyUp"></event>
+                                            <event name="OnKillFocus"></event>
+                                            <event name="OnLeaveWindow"></event>
+                                            <event name="OnLeftDClick"></event>
+                                            <event name="OnLeftDown"></event>
+                                            <event name="OnLeftUp"></event>
+                                            <event name="OnMiddleDClick"></event>
+                                            <event name="OnMiddleDown"></event>
+                                            <event name="OnMiddleUp"></event>
+                                            <event name="OnMotion"></event>
+                                            <event name="OnMouseEvents"></event>
+                                            <event name="OnMouseWheel"></event>
+                                            <event name="OnPaint"></event>
+                                            <event name="OnRightDClick"></event>
+                                            <event name="OnRightDown"></event>
+                                            <event name="OnRightUp"></event>
+                                            <event name="OnSetFocus"></event>
+                                            <event name="OnSize"></event>
+                                            <event name="OnUpdateUI"></event>
+                                        </object>
+                                    </object>
+                                    <object class="sizeritem" expanded="1">
+                                        <property name="border">5</property>
+                                        <property name="flag">wxALIGN_CENTER|wxALL</property>
+                                        <property name="proportion">0</property>
+                                        <object class="wxBitmapButton" expanded="1">
+                                            <property name="bg"></property>
+                                            <property name="bitmap">bitmaps/wxwin32x32.png; Load From File</property>
+                                            <property name="context_help"></property>
+                                            <property name="default">0</property>
+                                            <property name="disabled"></property>
+                                            <property name="enabled">1</property>
+                                            <property name="fg"></property>
+                                            <property name="focus"></property>
+                                            <property name="font"></property>
+                                            <property name="hidden">0</property>
+                                            <property name="hover"></property>
+                                            <property name="id">wxID_ANY</property>
+                                            <property name="label">wxBitmapButton</property>
+                                            <property name="maximum_size"></property>
+                                            <property name="minimum_size"></property>
+                                            <property name="name">m_bpButton11</property>
+                                            <property name="permission">protected</property>
+                                            <property name="pos"></property>
+                                            <property name="selected"></property>
+                                            <property name="size"></property>
+                                            <property name="style">wxBU_AUTODRAW</property>
+                                            <property name="subclass"></property>
+                                            <property name="tooltip">wxBitmapButton</property>
+                                            <property name="window_extra_style"></property>
+                                            <property name="window_name"></property>
+                                            <property name="window_style"></property>
+                                            <event name="OnButtonClick"></event>
                                             <event name="OnChar"></event>
                                             <event name="OnEnterWindow"></event>
                                             <event name="OnEraseBackground"></event>
@@ -1003,7 +1120,7 @@
                                             <property name="hidden">0</property>
                                             <property name="hover_color"></property>
                                             <property name="id">wxID_ANY</property>
-                                            <property name="label">www.wxWidgets.org</property>
+                                            <property name="label">www.wxwidgets.org</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
                                             <property name="name">m_hyperlink1</property>
@@ -1014,7 +1131,7 @@
                                             <property name="style">wxHL_DEFAULT_STYLE</property>
                                             <property name="subclass"></property>
                                             <property name="tooltip">wxHyperlinkCtrl</property>
-                                            <property name="url">http://www.wxWidgets.org</property>
+                                            <property name="url">http://www.wxwidgets.org</property>
                                             <property name="visited_color"></property>
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
@@ -1231,8 +1348,8 @@
                         <object class="notebookpage" expanded="1">
                             <property name="bitmap"></property>
                             <property name="label">Choosing Controls</property>
-                            <property name="select">0</property>
-                            <object class="wxPanel" expanded="0">
+                            <property name="select">1</property>
+                            <object class="wxPanel" expanded="1">
                                 <property name="bg"></property>
                                 <property name="context_help"></property>
                                 <property name="enabled">1</property>
@@ -1658,7 +1775,7 @@
                                             <property name="name">m_animationCtrl1</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
-                                            <property name="settings">    m_animationCtrl1-&gt;SetToolTip(_(&quot;wxAnimationCtrl&quot;));&#x0A;    if (m_animationCtrl1-&gt;LoadFile(wxT(&quot;throbber.gif&quot;)))&#x0A;        m_animationCtrl1-&gt;Play();</property>
+                                            <property name="settings">    m_animationCtrl1-&gt;SetToolTip(_(&quot;wxAnimationCtrl&quot;));&#x0A;    if (m_animationCtrl1-&gt;LoadFile(wxT(&quot;bitmaps/throbber.gif&quot;)))&#x0A;        m_animationCtrl1-&gt;Play();</property>
                                             <property name="size"></property>
                                             <property name="subclass"></property>
                                             <property name="tooltip"></property>
@@ -1803,7 +1920,7 @@
                             <property name="bitmap"></property>
                             <property name="label">Text Richtext</property>
                             <property name="select">0</property>
-                            <object class="wxPanel" expanded="0">
+                            <object class="wxPanel" expanded="1">
                                 <property name="bg"></property>
                                 <property name="context_help"></property>
                                 <property name="enabled">1</property>
@@ -2039,7 +2156,7 @@
                             <property name="bitmap"></property>
                             <property name="label">Picker Controls</property>
                             <property name="select">0</property>
-                            <object class="wxPanel" expanded="0">
+                            <object class="wxPanel" expanded="1">
                                 <property name="bg"></property>
                                 <property name="context_help"></property>
                                 <property name="enabled">1</property>
@@ -2081,7 +2198,7 @@
                                 <event name="OnSetFocus"></event>
                                 <event name="OnSize"></event>
                                 <event name="OnUpdateUI"></event>
-                                <object class="wxFlexGridSizer" expanded="0">
+                                <object class="wxFlexGridSizer" expanded="1">
                                     <property name="cols">2</property>
                                     <property name="flexible_direction">wxBOTH</property>
                                     <property name="growablecols"></property>
@@ -2693,7 +2810,7 @@
                                             <property name="name">m_bmpComboBox1</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
-                                            <property name="settings">m_bmpComboBox1-&gt;Append(_(&quot;Item1&quot;), wxBitmap(_T(&quot;bell.png&quot;),wxBITMAP_TYPE_PNG));&#x0A;m_bmpComboBox1-&gt;Append(_(&quot;Item2&quot;), wxBitmap(_T(&quot;sound.png&quot;),wxBITMAP_TYPE_PNG));&#x0A;m_bmpComboBox1-&gt;Append(_(&quot;Item3&quot;), wxBitmap(_T(&quot;bell.png&quot;),wxBITMAP_TYPE_PNG));&#x0A;m_bmpComboBox1-&gt;Append(_(&quot;Item4&quot;), wxBitmap(_T(&quot;sound.png&quot;),wxBITMAP_TYPE_PNG));&#x0A;m_bmpComboBox1-&gt;SetToolTip(_(&quot;wxBitmapComboBox&quot;));</property>
+                                            <property name="settings">m_bmpComboBox1-&gt;Append(_(&quot;Item1&quot;), wxBitmap(_T(&quot;bitmaps/bell.png&quot;),wxBITMAP_TYPE_PNG));&#x0A;m_bmpComboBox1-&gt;Append(_(&quot;Item2&quot;), wxBitmap(_T(&quot;bitmaps/sound.png&quot;),wxBITMAP_TYPE_PNG));&#x0A;m_bmpComboBox1-&gt;Append(_(&quot;Item3&quot;), wxBitmap(_T(&quot;bitmaps/bell.png&quot;),wxBITMAP_TYPE_PNG));&#x0A;m_bmpComboBox1-&gt;Append(_(&quot;Item4&quot;), wxBitmap(_T(&quot;bitmaps/sound.png&quot;),wxBITMAP_TYPE_PNG));&#x0A;m_bmpComboBox1-&gt;SetToolTip(_(&quot;wxBitmapComboBox&quot;));</property>
                                             <property name="size"></property>
                                             <property name="subclass"></property>
                                             <property name="tooltip"></property>
@@ -2731,16 +2848,16 @@
                                         <property name="proportion">1</property>
                                         <object class="CustomControl" expanded="1">
                                             <property name="bg"></property>
-                                            <property name="class">wxPenStyleComboBox</property>
-                                            <property name="construction">m_ownerDrawnComboBox1 = wxPenStyleComboBox::CreateSample(m_panel5);</property>
+                                            <property name="class">PenStyleComboBox</property>
+                                            <property name="construction">m_ownerDrawnComboBox1 = PenStyleComboBox::CreateSample(m_panel5);</property>
                                             <property name="context_help"></property>
-                                            <property name="declaration">wxPenStyleComboBox * m_ownerDrawnComboBox1;</property>
+                                            <property name="declaration">PenStyleComboBox * m_ownerDrawnComboBox1;</property>
                                             <property name="enabled">1</property>
                                             <property name="fg"></property>
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
                                             <property name="id">wxID_ANY</property>
-                                            <property name="include">#include &quot;custom_combo.h&quot;</property>
+                                            <property name="include">#include &quot;customcombo.h&quot;</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
                                             <property name="name">m_ownerDrawnComboBox1</property>
@@ -2813,13 +2930,13 @@
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
                                             <property name="id">wxID_ANY</property>
-                                            <property name="include">#include &quot;custom_combo.h&quot;</property>
+                                            <property name="include">#include &quot;customcombo.h&quot;</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
                                             <property name="name">m_comboCtrl1</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
-                                            <property name="settings">&#x09;m_comboCtrl1-&gt;SetText(wxT(&quot;wxComboCtrl&quot;));&#x0A;    m_comboCtrl1-&gt;SetToolTip(_(&quot;wxComboCtrl&quot;));&#x0A;&#x0A;&#x09;ListViewComboPopup* popupList = new ListViewComboPopup();&#x0A;&#x09;m_comboCtrl1-&gt;SetPopupControl(popupList);&#x0A;&#x09;m_comboCtrl1-&gt;SetPopupMaxHeight(80);&#x0A;&#x0A;&#x09;// Populate using wxListView methods&#x0A;&#x09;popupList-&gt;InsertItem(popupList-&gt;GetItemCount(),wxT(&quot;wxComboCtrl&quot;));&#x0A;&#x09;popupList-&gt;InsertItem(popupList-&gt;GetItemCount(),wxT(&quot;with&quot;));&#x0A;&#x09;popupList-&gt;InsertItem(popupList-&gt;GetItemCount(),wxT(&quot;wxListView&quot;));&#x0A;&#x09;popupList-&gt;InsertItem(popupList-&gt;GetItemCount(),wxT(&quot;popup&quot;));&#x0A;&#x09;popupList-&gt;InsertItem(popupList-&gt;GetItemCount(),wxT(&quot;Item1&quot;));&#x0A;&#x09;popupList-&gt;InsertItem(popupList-&gt;GetItemCount(),wxT(&quot;Item2&quot;));&#x0A;&#x09;popupList-&gt;InsertItem(popupList-&gt;GetItemCount(),wxT(&quot;Item3&quot;));&#x0A;&#x0A;&#x09;popupList-&gt;Select(0, true);</property>
+                                            <property name="settings">        // first of all, set the popup control!&#x0A;&#x09;ListViewComboPopup* popupList = new ListViewComboPopup();&#x0A;&#x09;m_comboCtrl1-&gt;SetPopupControl(popupList);&#x0A;&#x09;m_comboCtrl1-&gt;SetPopupMaxHeight(80);&#x0A;&#x0A;    m_comboCtrl1-&gt;SetText(wxT(&quot;wxComboCtrl&quot;));&#x0A;    m_comboCtrl1-&gt;SetToolTip(_(&quot;wxComboCtrl&quot;));&#x0A;&#x0A;&#x09;// Populate using wxListView methods&#x0A;&#x09;popupList-&gt;InsertItem(popupList-&gt;GetItemCount(),wxT(&quot;wxComboCtrl&quot;));&#x0A;&#x09;popupList-&gt;InsertItem(popupList-&gt;GetItemCount(),wxT(&quot;with&quot;));&#x0A;&#x09;popupList-&gt;InsertItem(popupList-&gt;GetItemCount(),wxT(&quot;wxListView&quot;));&#x0A;&#x09;popupList-&gt;InsertItem(popupList-&gt;GetItemCount(),wxT(&quot;popup&quot;));&#x0A;&#x09;popupList-&gt;InsertItem(popupList-&gt;GetItemCount(),wxT(&quot;Item1&quot;));&#x0A;&#x09;popupList-&gt;InsertItem(popupList-&gt;GetItemCount(),wxT(&quot;Item2&quot;));&#x0A;&#x09;popupList-&gt;InsertItem(popupList-&gt;GetItemCount(),wxT(&quot;Item3&quot;));&#x0A;&#x0A;&#x09;popupList-&gt;Select(0, true);</property>
                                             <property name="size"></property>
                                             <property name="subclass"></property>
                                             <property name="tooltip"></property>
@@ -2866,13 +2983,13 @@
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
                                             <property name="id">wxID_ANY</property>
-                                            <property name="include">#include &quot;custom_combo.h&quot;</property>
+                                            <property name="include">#include &quot;customcombo.h&quot;</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
                                             <property name="name">m_comboCtrl2</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
-                                            <property name="settings">&#x09;m_comboCtrl2-&gt;SetText(wxT(&quot;wxComboCtrl&quot;));&#x0A;&#x09;m_comboCtrl2-&gt;SetToolTip(_(&quot;wxComboCtrl&quot;));&#x0A;&#x0A;&#x09;TreeCtrlComboPopup* popupTree = new TreeCtrlComboPopup();&#x0A;&#x0A;&#x09;m_comboCtrl2-&gt;SetPopupControl(popupTree);&#x0A;&#x09;m_comboCtrl2-&gt;SetPopupMaxHeight(80);&#x0A;&#x0A;&#x09;//Add a root and some nodes using wxTreeCtrl methods&#x0A;&#x09;wxTreeItemId root = popupTree-&gt;AddRoot(_(&quot;wxComboCtrl&quot;));&#x0A;&#x0A;&#x09;popupTree-&gt;AppendItem(root, _(&quot;with&quot;));&#x0A;&#x09;popupTree-&gt;AppendItem(root, _(&quot;wxTreeCtrl&quot;));&#x0A;&#x0A;&#x09;wxTreeItemId node2 = popupTree-&gt;AppendItem(root, _(&quot;popout&quot;));&#x0A;&#x09;popupTree-&gt;AppendItem(node2, _(&quot;Node1&quot;));&#x0A;&#x09;popupTree-&gt;AppendItem(node2, _(&quot;Node2&quot;));&#x0A;&#x0A;&#x09;popupTree-&gt;ExpandAll();</property>
+                                            <property name="settings">        // first of all, set the popup control!&#x0A;&#x09;TreeCtrlComboPopup* popupTree = new TreeCtrlComboPopup();&#x0A;&#x09;m_comboCtrl2-&gt;SetPopupControl(popupTree);&#x0A;&#x09;m_comboCtrl2-&gt;SetPopupMaxHeight(80);&#x0A;&#x0A;&#x09;m_comboCtrl2-&gt;SetText(wxT(&quot;wxComboCtrl&quot;));&#x0A;&#x09;m_comboCtrl2-&gt;SetToolTip(_(&quot;wxComboCtrl&quot;));&#x0A;&#x0A;&#x09;//Add a root and some nodes using wxTreeCtrl methods&#x0A;&#x09;wxTreeItemId root = popupTree-&gt;AddRoot(_(&quot;wxComboCtrl&quot;));&#x0A;&#x0A;&#x09;popupTree-&gt;AppendItem(root, _(&quot;with&quot;));&#x0A;&#x09;popupTree-&gt;AppendItem(root, _(&quot;wxTreeCtrl&quot;));&#x0A;&#x0A;&#x09;wxTreeItemId node2 = popupTree-&gt;AppendItem(root, _(&quot;popout&quot;));&#x0A;&#x09;popupTree-&gt;AppendItem(node2, _(&quot;Node1&quot;));&#x0A;&#x09;popupTree-&gt;AppendItem(node2, _(&quot;Node2&quot;));&#x0A;&#x0A;&#x09;popupTree-&gt;ExpandAll();</property>
                                             <property name="size"></property>
                                             <property name="subclass"></property>
                                             <property name="tooltip"></property>
