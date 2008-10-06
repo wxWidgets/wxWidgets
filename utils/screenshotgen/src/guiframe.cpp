@@ -36,24 +36,24 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	mbar = new wxMenuBar( 0 );
 	fileMenu = new wxMenu();
 	wxMenuItem* m_menuSeeScr;
-	m_menuSeeScr = new wxMenuItem( fileMenu, wxID_ZOOM_IN, wxString( _("&View screenshots...") ) + wxT('\t') + wxT("Ctrl+O"), _("Open the directory where the screenshots generated."), wxITEM_NORMAL );
+	m_menuSeeScr = new wxMenuItem( fileMenu, wxID_ZOOM_IN, wxString( _("&Open screenshots folder...") ) + wxT('\t') + wxT("Ctrl+O"), _("Opens the directory where the screenshots are saved."), wxITEM_NORMAL );
 	fileMenu->Append( m_menuSeeScr );
 	
 	fileMenu->AppendSeparator();
 	
 	wxMenuItem* m_menuFileQuit;
-	m_menuFileQuit = new wxMenuItem( fileMenu, wxID_EXIT, wxString( _("&Quit") ) + wxT('\t') + wxT("Alt+F4"), _("Quit the application"), wxITEM_NORMAL );
+	m_menuFileQuit = new wxMenuItem( fileMenu, wxID_EXIT, wxString( _("&Quit") ) + wxT('\t') + wxT("Alt+F4"), _("Quits the application."), wxITEM_NORMAL );
 	fileMenu->Append( m_menuFileQuit );
 	
 	mbar->Append( fileMenu, _("&File") );
 	
 	captureMenu = new wxMenu();
 	wxMenuItem* m_menuCapFullScreen;
-	m_menuCapFullScreen = new wxMenuItem( captureMenu, idMenuCapFullScreen, wxString( _("&Full Screen") ) + wxT('\t') + wxT("Ctrl+Alt+F"), _("Can screenshot be taken properly?"), wxITEM_NORMAL );
+	m_menuCapFullScreen = new wxMenuItem( captureMenu, idMenuCapFullScreen, wxString( _("&Full Screen") ) + wxT('\t') + wxT("Ctrl+Alt+F"), _("Takes a screenshot of the entire screen."), wxITEM_NORMAL );
 	captureMenu->Append( m_menuCapFullScreen );
 	
 	wxMenuItem* m_menuCapRect;
-	m_menuCapRect = new wxMenuItem( captureMenu, idMenuCapRect, wxString( _("Regions<Begin>") ) + wxT('\t') + wxT("Ctrl+Alt+R"), _("Manually specify rectangular regions"), wxITEM_NORMAL );
+	m_menuCapRect = new wxMenuItem( captureMenu, idMenuCapRect, wxString( _("Regions<Begin>") ) + wxT('\t') + wxT("Ctrl+Alt+R"), _("Manually specify rectangular regions for the screenshots."), wxITEM_NORMAL );
 	#ifdef __WXMSW__
 	m_menuCapRect->SetBitmaps( wxICON( play ) );
 	#elif defined( __WXGTK__ )
@@ -62,7 +62,7 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	captureMenu->Append( m_menuCapRect );
 	
 	wxMenuItem* m_menuEndCapRect;
-	m_menuEndCapRect = new wxMenuItem( captureMenu, idMenuEndCapRect, wxString( _("Regions<End>") ) + wxT('\t') + wxT("Ctrl+Alt+E"), _("Stop generating screenshots..."), wxITEM_NORMAL );
+	m_menuEndCapRect = new wxMenuItem( captureMenu, idMenuEndCapRect, wxString( _("Regions<End>") ) + wxT('\t') + wxT("Ctrl+Alt+E"), _("Stop manually generating screenshots."), wxITEM_NORMAL );
 	#ifdef __WXMSW__
 	m_menuEndCapRect->SetBitmaps( wxICON( stop ) );
 	#elif defined( __WXGTK__ )
@@ -72,14 +72,14 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_menuEndCapRect->Enable( false );
 	
 	wxMenuItem* m_menuCapAll;
-	m_menuCapAll = new wxMenuItem( captureMenu, idMenuCapAll, wxString( _("Capture All") ) + wxT('\t') + wxT("Ctrl+Alt+A"), _("Take screenshot for all controls autoly."), wxITEM_NORMAL );
+	m_menuCapAll = new wxMenuItem( captureMenu, idMenuCapAll, wxString( _("Capture All") ) + wxT('\t') + wxT("Ctrl+Alt+A"), _("Takes screenshots for all controls automatically."), wxITEM_NORMAL );
 	captureMenu->Append( m_menuCapAll );
 	
 	mbar->Append( captureMenu, _("&Capture") );
 	
 	helpMenu = new wxMenu();
 	wxMenuItem* m_menuHelpAbout;
-	m_menuHelpAbout = new wxMenuItem( helpMenu, wxID_ABOUT, wxString( _("&About...") ) + wxT('\t') + wxT("F1"), _("Show info about this application"), wxITEM_NORMAL );
+	m_menuHelpAbout = new wxMenuItem( helpMenu, wxID_ABOUT, wxString( _("&About...") ) + wxT('\t') + wxT("F1"), _("Shows info about this application."), wxITEM_NORMAL );
 	helpMenu->Append( m_menuHelpAbout );
 	
 	mbar->Append( helpMenu, _("&Help") );
@@ -110,19 +110,19 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	
 	fgSizer1->Add( m_checkBox1, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 20 );
 	
-	m_checkBox2 = new wxCheckBox( m_panel1, wxID_ANY, _("Not checked"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBox2 = new wxCheckBox( m_panel1, wxID_ANY, _("Unchecked"), wxDefaultPosition, wxDefaultSize, 0 );
 	
 	m_checkBox2->SetToolTip( _("wxCheckBox") );
 	
 	fgSizer1->Add( m_checkBox2, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 20 );
 	
-	m_radioBtn1 = new wxRadioButton( m_panel1, wxID_ANY, _("Chosen"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_radioBtn1 = new wxRadioButton( m_panel1, wxID_ANY, _("Checked"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_radioBtn1->SetValue( true ); 
 	m_radioBtn1->SetToolTip( _("wxRadioButton") );
 	
 	fgSizer1->Add( m_radioBtn1, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 20 );
 	
-	m_radioBtn2 = new wxRadioButton( m_panel1, wxID_ANY, _("Not chosen"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_radioBtn2 = new wxRadioButton( m_panel1, wxID_ANY, _("Unchecked"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_radioBtn2->SetToolTip( _("wxRadioButton") );
 	
 	fgSizer1->Add( m_radioBtn2, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 20 );
@@ -164,7 +164,7 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	
 	fgSizer1->Add( m_slider1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 20 );
 	
-	m_toggleBtn1 = new wxToggleButton( m_panel1, wxID_ANY, _("Not Toggled"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_toggleBtn1 = new wxToggleButton( m_panel1, wxID_ANY, _("Untoggled"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_toggleBtn1->SetToolTip( _("wxToggleButton") );
 	
 	fgSizer1->Add( m_toggleBtn1, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 20 );
@@ -274,7 +274,7 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_panel2->SetSizer( fgSizer2 );
 	m_panel2->Layout();
 	fgSizer2->Fit( m_panel2 );
-	m_notebook1->AddPage( m_panel2, _("Choosing Controls"), true );
+	m_notebook1->AddPage( m_panel2, _("Multiple choice Controls"), false );
 	m_panel3 = new wxPanel( m_notebook1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer2;
 	bSizer2 = new wxBoxSizer( wxVERTICAL );
@@ -301,7 +301,7 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_panel3->SetSizer( bSizer2 );
 	m_panel3->Layout();
 	bSizer2->Fit( m_panel3 );
-	m_notebook1->AddPage( m_panel3, _("Text Richtext"), false );
+	m_notebook1->AddPage( m_panel3, _("[Rich]Text Controls"), false );
 	m_panel4 = new wxPanel( m_notebook1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxFlexGridSizer* fgSizer5;
 	fgSizer5 = new wxFlexGridSizer( 2, 2, 10, 10 );
@@ -317,12 +317,12 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_fontPicker1->SetMaxPointSize( 100 ); 
 	m_fontPicker1->SetToolTip( _("wxFontPickerCtrl") );
 	
-	fgSizer5->Add( m_fontPicker1, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 20 );
+	fgSizer5->Add( m_fontPicker1, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 20 );
 	
 	m_filePicker1 = new wxFilePickerCtrl( m_panel4, wxID_ANY, wxEmptyString, _("Select a file"), wxT("*.*"), wxDefaultPosition, wxDefaultSize, wxFLP_DEFAULT_STYLE, wxDefaultValidator, wxT("_FilePickerCtrl") );
 	m_filePicker1->SetToolTip( _("wxFilePickerCtrl") );
 	
-	fgSizer5->Add( m_filePicker1, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 20 );
+	fgSizer5->Add( m_filePicker1, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 20 );
 	
 	
 	fgSizer5->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -353,7 +353,7 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_panel4->SetSizer( fgSizer5 );
 	m_panel4->Layout();
 	fgSizer5->Fit( m_panel4 );
-	m_notebook1->AddPage( m_panel4, _("Picker Controls"), false );
+	m_notebook1->AddPage( m_panel4, _("Picker Controls"), true );
 	m_panel5 = new wxPanel( m_notebook1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxFlexGridSizer* fgSizer4;
 	fgSizer4 = new wxFlexGridSizer( 2, 2, 0, 0 );
@@ -444,7 +444,7 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_panel5->SetSizer( fgSizer4 );
 	m_panel5->Layout();
 	fgSizer4->Fit( m_panel5 );
-	m_notebook1->AddPage( m_panel5, _("Drop Down Controls"), false );
+	m_notebook1->AddPage( m_panel5, _("Drop-down Controls"), false );
 	
 	bSizer0->Add( m_notebook1, 1, wxEXPAND | wxALL, 0 );
 	

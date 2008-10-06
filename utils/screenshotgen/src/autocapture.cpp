@@ -89,6 +89,35 @@ wxBitmap Capture(wxRect rect)
 // AutoCaptureMechanism
 // ----------------------------------------------------------------------------
 
+void AutoCaptureMechanism::CaptureAll()
+{
+    m_notebook->SetSelection(0);
+    wxYield();
+
+    for(ControlList::iterator it = m_controlList.begin();
+        it != m_controlList.end();
+        ++it)
+    {
+        Control & ctrl = *it;
+
+        if(ctrl.flag == AJ_TurnPage) // Turn to next page
+        {
+            m_notebook->SetSelection(m_notebook->GetSelection() + 1);
+            wxYield();
+            continue;
+        }
+
+        wxBitmap screenshot = Capture(ctrl);
+
+        if(ctrl.flag & AJ_Union)
+        {
+            screenshot = Union(screenshot, Capture(*(++it)));
+        }
+
+        Save(screenshot, ctrl.name);
+    }
+}
+
 wxBitmap AutoCaptureMechanism::Capture(Control & ctrl)
 {
     if(ctrl.name == wxT("")) //no mannual specification for the control name

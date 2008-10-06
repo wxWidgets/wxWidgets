@@ -70,7 +70,7 @@
             <event name="OnSetFocus"></event>
             <event name="OnSize"></event>
             <event name="OnUpdateUI"></event>
-            <object class="wxMenuBar" expanded="1">
+            <object class="wxMenuBar" expanded="0">
                 <property name="bg"></property>
                 <property name="context_help"></property>
                 <property name="enabled">1</property>
@@ -122,10 +122,10 @@
                         <property name="bitmap"></property>
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
-                        <property name="help">Open the directory where the screenshots generated.</property>
+                        <property name="help">Opens the directory where the screenshots are saved.</property>
                         <property name="id">wxID_ZOOM_IN</property>
                         <property name="kind">wxITEM_NORMAL</property>
-                        <property name="label">&amp;View screenshots...</property>
+                        <property name="label">&amp;Open screenshots folder...</property>
                         <property name="name">m_menuSeeScr</property>
                         <property name="permission">none</property>
                         <property name="shortcut">Ctrl+O</property>
@@ -140,7 +140,7 @@
                         <property name="bitmap"></property>
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
-                        <property name="help">Quit the application</property>
+                        <property name="help">Quits the application.</property>
                         <property name="id">wxID_EXIT</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">&amp;Quit</property>
@@ -160,7 +160,7 @@
                         <property name="bitmap"></property>
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
-                        <property name="help">Can screenshot be taken properly?</property>
+                        <property name="help">Takes a screenshot of the entire screen.</property>
                         <property name="id">idMenuCapFullScreen</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">&amp;Full Screen</property>
@@ -175,7 +175,7 @@
                         <property name="bitmap">play; Load From Icon Resource [-1; -1]</property>
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
-                        <property name="help">Manually specify rectangular regions</property>
+                        <property name="help">Manually specify rectangular regions for the screenshots.</property>
                         <property name="id">idMenuCapRect</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Regions&lt;Begin&gt;</property>
@@ -190,7 +190,7 @@
                         <property name="bitmap">stop; Load From Icon Resource [-1; -1]</property>
                         <property name="checked">0</property>
                         <property name="enabled">0</property>
-                        <property name="help">Stop generating screenshots...</property>
+                        <property name="help">Stop manually generating screenshots.</property>
                         <property name="id">idMenuEndCapRect</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Regions&lt;End&gt;</property>
@@ -205,7 +205,7 @@
                         <property name="bitmap">; Load From Resource</property>
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
-                        <property name="help">Take screenshot for all controls autoly.</property>
+                        <property name="help">Takes screenshots for all controls automatically.</property>
                         <property name="id">idMenuCapAll</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Capture All</property>
@@ -225,7 +225,7 @@
                         <property name="bitmap"></property>
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
-                        <property name="help">Show info about this application</property>
+                        <property name="help">Shows info about this application.</property>
                         <property name="id">wxID_ABOUT</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">&amp;About...</property>
@@ -238,7 +238,7 @@
                     </object>
                 </object>
             </object>
-            <object class="wxBoxSizer" expanded="1">
+            <object class="wxBoxSizer" expanded="0">
                 <property name="minimum_size"></property>
                 <property name="name">bSizer0</property>
                 <property name="orient">wxVERTICAL</property>
@@ -519,7 +519,7 @@
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
                                             <property name="id">wxID_ANY</property>
-                                            <property name="label">Not checked</property>
+                                            <property name="label">Unchecked</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
                                             <property name="name">m_checkBox2</property>
@@ -570,7 +570,7 @@
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
                                             <property name="id">wxID_ANY</property>
-                                            <property name="label">Chosen</property>
+                                            <property name="label">Checked</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
                                             <property name="name">m_radioBtn1</property>
@@ -622,7 +622,7 @@
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
                                             <property name="id">wxID_ANY</property>
-                                            <property name="label">Not chosen</property>
+                                            <property name="label">Unchecked</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
                                             <property name="name">m_radioBtn2</property>
@@ -1017,7 +1017,7 @@
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
                                             <property name="id">wxID_ANY</property>
-                                            <property name="label">Not Toggled</property>
+                                            <property name="label">Untoggled</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
                                             <property name="name">m_toggleBtn1</property>
@@ -1347,8 +1347,8 @@
                         </object>
                         <object class="notebookpage" expanded="1">
                             <property name="bitmap"></property>
-                            <property name="label">Choosing Controls</property>
-                            <property name="select">1</property>
+                            <property name="label">Multiple choice Controls</property>
+                            <property name="select">0</property>
                             <object class="wxPanel" expanded="1">
                                 <property name="bg"></property>
                                 <property name="context_help"></property>
@@ -1918,7 +1918,7 @@
                         </object>
                         <object class="notebookpage" expanded="1">
                             <property name="bitmap"></property>
-                            <property name="label">Text Richtext</property>
+                            <property name="label">[Rich]Text Controls</property>
                             <property name="select">0</property>
                             <object class="wxPanel" expanded="1">
                                 <property name="bg"></property>
@@ -2155,7 +2155,7 @@
                         <object class="notebookpage" expanded="1">
                             <property name="bitmap"></property>
                             <property name="label">Picker Controls</property>
-                            <property name="select">0</property>
+                            <property name="select">1</property>
                             <object class="wxPanel" expanded="1">
                                 <property name="bg"></property>
                                 <property name="context_help"></property>
@@ -2263,7 +2263,7 @@
                                     </object>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">20</property>
-                                        <property name="flag">wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</property>
+                                        <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
                                         <property name="proportion">0</property>
                                         <object class="wxFontPickerCtrl" expanded="1">
                                             <property name="bg"></property>
@@ -2315,7 +2315,7 @@
                                     </object>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">20</property>
-                                        <property name="flag">wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</property>
+                                        <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL</property>
                                         <property name="proportion">0</property>
                                         <object class="wxFilePickerCtrl" expanded="1">
                                             <property name="bg"></property>
@@ -2608,7 +2608,7 @@
                         </object>
                         <object class="notebookpage" expanded="1">
                             <property name="bitmap"></property>
-                            <property name="label">Drop Down Controls</property>
+                            <property name="label">Drop-down Controls</property>
                             <property name="select">0</property>
                             <object class="wxPanel" expanded="1">
                                 <property name="bg"></property>

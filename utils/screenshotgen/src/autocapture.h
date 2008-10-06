@@ -40,6 +40,7 @@ public:
                          wxString directory = wxT("screenshots"),
                          int border = 5)
         : m_notebook(notebook), m_dir(directory), m_border(border) {}
+
     ~AutoCaptureMechanism(){}
 
     /*
@@ -62,34 +63,7 @@ public:
         m_controlList.push_back(Control(0, wxT(""), AJ_TurnPage));
     }
 
-    void CaptureAll()
-    {
-        m_notebook->SetSelection(0);
-        wxYield();
-
-        for(ControlList::iterator it = m_controlList.begin();
-            it != m_controlList.end();
-            ++it)
-        {
-            Control & ctrl = *it;
-
-            if(ctrl.flag == AJ_TurnPage) // Turn to next page
-            {
-                m_notebook->SetSelection(m_notebook->GetSelection() + 1);
-                wxYield();
-                continue;
-            }
-
-            wxBitmap screenshot = Capture(ctrl);
-
-            if(ctrl.flag & AJ_Union)
-            {
-                screenshot = Union(screenshot, Capture(*(++it)));
-            }
-
-            Save(screenshot, ctrl.name);
-        }
-    }
+    void CaptureAll();
 
 protected:      // internal utils
     struct Control

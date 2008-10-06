@@ -30,7 +30,14 @@ public:
     void Capture(wxRect rect, wxString fileName);
     void Capture(int x, int y, int width, int height, wxString fileName);
 
-    wxString GetDefaultDirectory(){return m_defaultDir;}
+    wxString GetDefaultDirectory() const
+        { return m_defaultDir; }
+    wxString GetDefaultDirectoryAbsPath() const
+        {
+            wxFileName output = wxFileName::DirName(GetDefaultDirectory());
+            output.MakeAbsolute();
+            return output.GetFullPath();
+        }
 
 private:
     // Helper functions

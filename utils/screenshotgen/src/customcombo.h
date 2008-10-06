@@ -60,7 +60,8 @@ public:
                                   wxLC_LIST|wxLC_VRULES|wxBORDER_THEME);
     }
 
-    virtual wxWindow *GetControl() { return this; }
+    virtual wxWindow *GetControl()
+        { return this; }
 
     virtual void SetStringValue( const wxString& s )
     {
@@ -113,8 +114,8 @@ public:
     }
 
 protected:
-    int             m_value; // current item index
-    int             m_itemHere; // hot item in popup
+    int             m_value;        // current item index
+    int             m_itemHere;     // hot item in popup
 
 private:
     DECLARE_EVENT_TABLE()
@@ -158,7 +159,8 @@ public:
         return wxSize(minWidth, wxMin(80, maxHeight));
     }
 
-    virtual wxWindow *GetControl() { return this; }
+    virtual wxWindow *GetControl()
+        { return this; }
 
     // Needed by SetStringValue
     wxTreeItemId FindItemByText( wxTreeItemId parent, const wxString& text )
@@ -236,9 +238,8 @@ public:
     }
 
 protected:
-
-    wxTreeItemId        m_value; // current item index
-    wxTreeItemId        m_itemHere; // hot item in popup
+    wxTreeItemId        m_value;        // current item index
+    wxTreeItemId        m_itemHere;     // hot item in popup
 
 private:
     DECLARE_EVENT_TABLE()
