@@ -1,0 +1,59 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<makefile>
+
+    <include file="../../../build/bakefiles/common_samples.bkl"/>
+
+    <exe id="screenshotgen" template="wx_util" template_append="wx_append">
+        <if cond="FORMAT=='autoconf'">
+            <wx-mac-app-bundle/>
+            <ldflags>$(SAMPLES_RPATH_FLAG)</ldflags>
+            <postlink-command>$(SAMPLES_RPATH_POSTLINK)</postlink-command>
+        </if>
+
+        <sources>
+            screenshot_app.cpp
+            screenshot_main.cpp
+            guiframe.cpp
+            ctrlmaskout.cpp
+            customcombo.cpp
+            autocapture.cpp
+        </sources>
+
+        <headers>
+            screenshot_app.h
+            screenshot_main.h
+            guiframe.h
+            ctrlmaskout.h
+            customcombo.h
+            autocapture.h
+        </headers>
+
+        <wx-lib>aui</wx-lib>
+        <wx-lib>adv</wx-lib>
+        <wx-lib>richtext</wx-lib>
+        <wx-lib>html</wx-lib>
+        <wx-lib>xml</wx-lib>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+
+        <win32-res>screenshotgen.rc</win32-res>
+        <install-to>$(BINDIR)</install-to>
+    </exe>
+
+    <wx-data id="data">
+        <files>
+            richtext.xml
+            bitmaps/wxwin32x32.png
+            bitmaps/bell.png
+            bitmaps/info.png
+            bitmaps/sound.png
+            bitmaps/dropbuth.png
+            bitmaps/dropbutn.png
+            bitmaps/dropbutp.png
+            bitmaps/throbber.gif
+        </files>
+    </wx-data>
+
+</makefile>
