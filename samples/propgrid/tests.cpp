@@ -439,28 +439,6 @@ wxArrayPGProperty GetPropertiesInRandomOrder( wxPropertyGridInterface* props, in
     return arr;
 }
 
-static void PropertiesToNames( wxPropertyGridInterface* WXUNUSED(iface),
-                               wxArrayString* names,
-                               const wxArrayPGProperty& properties )
-{
-    unsigned int i;
-    for ( i=0; i<properties.size(); i++ )
-        names->Add( properties[i]->GetName() );
-}
-
-static void NamesToProperties( wxPropertyGridInterface* iface,
-                               wxArrayPGProperty* properties,
-                               const wxArrayString& names )
-{
-    unsigned int i;
-    for ( i=0; i<names.size(); i++ )
-    {
-        wxPGProperty* p = iface->GetPropertyByName(names[i]);
-        if ( p )
-            properties->push_back(p);
-    }
-}
-
 bool FormMain::RunTests( bool fullTest, bool interactive )
 {
     wxString t;
@@ -592,50 +570,6 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
                 Update();
             }
         }
-    }
-
-    {
-        RT_START_TEST(GetPropertiesWithFlag)
-
-        //
-        // Get list of expanded properties
-        wxArrayPGProperty array = pgman->GetExpandedProperties();
-
-        // Make sure list only has items with children
-        for ( i=0; i<array.size(); i++ )
-        {
-            wxPGProperty* p = array[i];
-            if ( !p->IsKindOf(CLASSINFO(wxPGProperty)) )
-                RT_FAILURE_MSG(wxString::Format(wxT("'%s' was returned by GetExpandedProperties(), but was not a parent"),p->GetName().c_str()).c_str());
-        }
-
-        wxArrayString names;
-        PropertiesToNames( pgman, &names, array );
-
-        //
-        // ... and then collapse them
-        wxArrayPGProperty array2;
-        NamesToProperties( pgman, &array2, names );
-
-        for ( i=0; i<array2.size(); i++ )
-        {
-            wxPGProperty* p = array[i];
-            p->SetExpanded(false);
-        }
-
-        // Make sure everything is collapsed
-        wxPGVIterator it;
-
-        for ( it = pgman->GetVIterator(wxPG_ITERATE_ALL);
-              !it.AtEnd();
-              it.Next() )
-        {
-            wxPGProperty* p = it.GetProperty();
-            if ( p->IsExpanded() )
-                RT_FAILURE_MSG(wxString::Format(wxT("'%s.%s' was expanded"),p->GetParent()->GetName().c_str(),p->GetName().c_str()).c_str());
-        }
-
-        pgman->Refresh();
     }
 
     {

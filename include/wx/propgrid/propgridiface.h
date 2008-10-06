@@ -266,16 +266,6 @@ public:
     */
     bool ExpandAll( bool expand = true );
 
-    /** Returns list of expanded properties.
-    */
-    wxArrayPGProperty GetExpandedProperties() const
-    {
-        wxArrayPGProperty array;
-        GetPropertiesWithFlag(&array, wxPG_PROP_COLLAPSED, true,
-            wxPG_ITERATE_ALL_PARENTS_RECURSIVELY|wxPG_ITERATE_HIDDEN);
-        return array;
-    }
-
     /** Returns id of first child of given property.
         @remarks
         Does not return sub-properties!

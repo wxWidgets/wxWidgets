@@ -158,11 +158,6 @@ public:
     bool ExpandAll( bool expand = true );
 
     /**
-        Returns list of expanded properties.
-    */
-    wxArrayPGProperty GetExpandedProperties() const;
-
-    /**
         Returns id of first child of given property.
 
         @remarks Does not return private children!
