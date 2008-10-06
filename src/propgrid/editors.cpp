@@ -58,12 +58,12 @@
 // This define is necessary to prevent macro clearing
 #define __wxPG_SOURCE_FILE__
 
-#include <wx/propgrid/propgrid.h>
-#include <wx/propgrid/editors.h>
-#include <wx/propgrid/props.h>
+#include "wx/propgrid/propgrid.h"
+#include "wx/propgrid/editors.h"
+#include "wx/propgrid/props.h"
 
 #if wxPG_USE_RENDERER_NATIVE
-    #include <wx/renderer.h>
+    #include "wx/renderer.h"
 #endif
 
 // How many pixels between textctrl and button
@@ -75,10 +75,10 @@
 
 #define wxPG_BUTTON_SIZEDEC                         0
 
-#include <wx/odcombo.h>
+#include "wx/odcombo.h"
 
 #ifdef __WXMSW__
-    #include <wx/msw/private.h>
+    #include "wx/msw/private.h"
 #endif
 
 // -----------------------------------------------------------------------

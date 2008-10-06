@@ -52,22 +52,22 @@
 // This define is necessary to prevent macro clearing
 #define __wxPG_SOURCE_FILE__
 
-#include <wx/propgrid/propgrid.h>
-#include <wx/propgrid/editors.h>
+#include "wx/propgrid/propgrid.h"
+#include "wx/propgrid/editors.h"
 
 #if wxPG_USE_RENDERER_NATIVE
-    #include <wx/renderer.h>
+    #include "wx/renderer.h"
 #endif
 
-#include <wx/odcombo.h>
+#include "wx/odcombo.h"
 
 #include "wx/timer.h"
 #include "wx/dcbuffer.h"
-#include <wx/clipbrd.h>
-#include <wx/dataobj.h>
+#include "wx/clipbrd.h"
+#include "wx/dataobj.h"
 
 #ifdef __WXMSW__
-    #include <wx/msw/private.h>
+    #include "wx/msw/private.h"
 #endif
 
 // Two pics for the expand / collapse buttons.
@@ -140,7 +140,7 @@ const wxChar *wxPropertyGridNameStr = wxT("wxPropertyGrid");
 // Statics in one class for easy destruction.
 // -----------------------------------------------------------------------
 
-#include <wx/module.h>
+#include "wx/module.h"
 
 class wxPGGlobalVarsClassManager : public wxModule
 {
@@ -1174,7 +1174,8 @@ bool wxPropertyGrid::SetFont( const wxFont& font )
     // TODO: Following code is disabled with wxMac because
     //   it is reported to fail. I (JMS) cannot debug it
     //   personally right now.
-#if !defined(__WXMAC__)
+    // CS: should be fixed now, leaving old code in just in case, TODO: REMOVE
+#if 1 // !defined(__WXMAC__)
     bool res = wxScrolledWindow::SetFont( font );
     if ( res )
     {

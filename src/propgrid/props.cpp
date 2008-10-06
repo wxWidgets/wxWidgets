@@ -49,9 +49,9 @@
     #include "wx/intl.h"
 #endif
 
-#include <wx/filename.h>
+#include "wx/filename.h"
 
-#include <wx/propgrid/propgrid.h>
+#include "wx/propgrid/propgrid.h"
 
 #define wxPG_CUSTOM_IMAGE_WIDTH     20 // for wxColourProperty etc.
 
@@ -1997,7 +1997,7 @@ END_EVENT_TABLE()
 
 IMPLEMENT_ABSTRACT_CLASS(wxArrayEditorDialog, wxDialog)
 
-#include <wx/statline.h>
+#include "wx/statline.h"
 
 // -----------------------------------------------------------------------
 

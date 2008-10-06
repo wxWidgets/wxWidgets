@@ -38,9 +38,9 @@
 // This define is necessary to prevent macro clearing
 #define __wxPG_SOURCE_FILE__
 
-#include <wx/propgrid/propgridpagestate.h>
-#include <wx/propgrid/propgrid.h>
-#include <wx/propgrid/editors.h>
+#include "wx/propgrid/propgridpagestate.h"
+#include "wx/propgrid/propgrid.h"
+#include "wx/propgrid/editors.h"
 
 #define wxPG_DEFAULT_SPLITTERX      110
 

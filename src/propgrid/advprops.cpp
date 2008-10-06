@@ -51,15 +51,15 @@
 
 #define __wxPG_SOURCE_FILE__
 
-#include <wx/propgrid/propgrid.h>
+#include "wx/propgrid/propgrid.h"
 
 #if wxPG_INCLUDE_ADVPROPS
 
-#include <wx/propgrid/advprops.h>
+#include "wx/propgrid/advprops.h"
 
 #ifdef __WXMSW__
-    #include <wx/msw/private.h>
-    #include <wx/msw/dc.h>
+    #include "wx/msw/private.h"
+    #include "wx/msw/dc.h"
 #endif
 
 // -----------------------------------------------------------------------
@@ -281,8 +281,8 @@ bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* proper
 #if wxUSE_DATEPICKCTRL
 
 
-#include <wx/datectrl.h>
-#include <wx/dateevt.h>
+#include "wx/datectrl.h"
+#include "wx/dateevt.h"
 
 class wxPGDatePickerCtrlEditor : public wxPGEditor
 {
@@ -395,8 +395,8 @@ void wxPGDatePickerCtrlEditor::SetValueToUnspecified( wxPGProperty* WXUNUSED(pro
 // wxFontProperty
 // -----------------------------------------------------------------------
 
-#include <wx/fontdlg.h>
-#include <wx/fontenum.h>
+#include "wx/fontdlg.h"
+#include "wx/fontenum.h"
 
 static const wxChar* gs_fp_es_family_labels[] = {
     wxT("Default"), wxT("Decorative"),
@@ -665,7 +665,7 @@ void wxFontProperty::OnCustomPaint(wxDC& dc,
 // wxEnumProperty based classes cannot use wxPG_PROP_CLASS_SPECIFIC_1
 #define wxPG_PROP_HIDE_CUSTOM_COLOUR        wxPG_PROP_CLASS_SPECIFIC_2
 
-#include <wx/colordlg.h>
+#include "wx/colordlg.h"
 
 //#define wx_cp_es_syscolours_len 25
 static const wxChar* gs_cp_es_syscolour_labels[] = {
@@ -1635,7 +1635,7 @@ void wxImageFileProperty::OnCustomPaint( wxDC& dc,
 
 #if wxUSE_CHOICEDLG
 
-#include <wx/choicdlg.h>
+#include "wx/choicdlg.h"
 
 WX_PG_IMPLEMENT_PROPERTY_CLASS(wxMultiChoiceProperty,wxPGProperty,
                                wxArrayInt,const wxArrayInt&,TextCtrlAndButton)

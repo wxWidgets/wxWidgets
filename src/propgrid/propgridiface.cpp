@@ -37,8 +37,8 @@
     #include "wx/intl.h"
 #endif
 
-#include <wx/propgrid/property.h>
-#include <wx/propgrid/propgrid.h>
+#include "wx/propgrid/property.h"
+#include "wx/propgrid/propgrid.h"
 
 
 const wxChar *wxPGTypeName_long = wxT("long");
