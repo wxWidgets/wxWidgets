@@ -15,6 +15,8 @@
 
 #include "wx/filesys.h"
 
+class wxMemoryFSHash;
+
 #if wxUSE_GUI
     #include "wx/bitmap.h"
 #endif // wxUSE_GUI
@@ -51,7 +53,7 @@ public:
 
 protected:
     static bool CheckHash(const wxString& filename);
-    static wxHashTable *m_Hash;
+    static wxMemoryFSHash *m_Hash;
 };
 
 // ----------------------------------------------------------------------------

@@ -20,7 +20,7 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
-    #include "wx/hash.h"
+    #include "wx/hashmap.h"
     #include "wx/wxcrtvararg.h"
     #if wxUSE_GUI
         #include "wx/image.h"
@@ -29,7 +29,7 @@
 
 #include "wx/mstream.h"
 
-class MemFSHashObj : public wxObject
+class MemFSHashObj
 {
 public:
     MemFSHashObj(const void *data, size_t len, const wxString& mime)
@@ -73,6 +73,8 @@ private:
     }
 };
 
+WX_DECLARE_STRING_HASH_MAP(MemFSHashObj *, wxMemoryFSHash);
+
 #if wxUSE_BASE
 
 
@@ -81,7 +83,7 @@ private:
 //--------------------------------------------------------------------------------
 
 
-wxHashTable *wxMemoryFSHandlerBase::m_Hash = NULL;
+wxMemoryFSHash *wxMemoryFSHandlerBase::m_Hash = NULL;
 
 
 wxMemoryFSHandlerBase::wxMemoryFSHandlerBase() : wxFileSystemHandler()
@@ -96,7 +98,7 @@ wxMemoryFSHandlerBase::~wxMemoryFSHandlerBase()
 
     if (m_Hash)
     {
-        WX_CLEAR_HASH_TABLE(*m_Hash);
+        WX_CLEAR_HASH_MAP(wxMemoryFSHash, *m_Hash);
         delete m_Hash;
         m_Hash = NULL;
     }
@@ -113,18 +115,22 @@ wxFSFile * wxMemoryFSHandlerBase::OpenFile(wxFileSystem& WXUNUSED(fs),
     if ( !m_Hash )
         return NULL;
 
-    MemFSHashObj *obj = (MemFSHashObj*) m_Hash->Get(GetRightLocation(location));
-    if ( !obj )
+    wxMemoryFSHash::const_iterator i = m_Hash->find(GetRightLocation(location));
+    if ( i == m_Hash->end() )
         return NULL;
 
-    else return new wxFSFile(new wxMemoryInputStream(obj->m_Data, obj->m_Len),
-                        location,
-                        obj->m_MimeType,
-                        GetAnchor(location)
+    const MemFSHashObj * const obj = i->second;
+
+    return new wxFSFile
+               (
+                    new wxMemoryInputStream(obj->m_Data, obj->m_Len),
+                    location,
+                    obj->m_MimeType,
+                    GetAnchor(location)
 #if wxUSE_DATETIME
-                        , obj->m_Time
+                    , obj->m_Time
 #endif // wxUSE_DATETIME
-                        );
+               );
 }
 
 wxString wxMemoryFSHandlerBase::FindFirst(const wxString& WXUNUSED(spec),
@@ -145,11 +151,9 @@ wxString wxMemoryFSHandlerBase::FindNext()
 bool wxMemoryFSHandlerBase::CheckHash(const wxString& filename)
 {
     if ( !m_Hash )
-    {
-        m_Hash = new wxHashTable(wxKEY_STRING);
-    }
+        m_Hash = new wxMemoryFSHash;
 
-    if ( m_Hash->Get(filename) )
+    if ( m_Hash->count(filename) )
     {
         wxLogError(_("Memory VFS already contains file '%s'!"), filename);
         return false;
@@ -178,7 +182,7 @@ void wxMemoryFSHandlerBase::AddFileWithMimeType(const wxString& filename,
     if ( !CheckHash(filename) )
         return;
 
-    m_Hash->Put(filename, new MemFSHashObj(binarydata, size, mimetype));
+    (*m_Hash)[filename] = new MemFSHashObj(binarydata, size, mimetype);
 }
 
 /*static*/
@@ -200,16 +204,19 @@ void wxMemoryFSHandlerBase::AddFile(const wxString& filename,
 
 /*static*/ void wxMemoryFSHandlerBase::RemoveFile(const wxString& filename)
 {
-    if ( !m_Hash || !m_Hash->Get(filename) )
+    if ( m_Hash )
     {
-        wxLogError(_("Trying to remove file '%s' from memory VFS, "
-                     "but it is not loaded!"),
-                   filename);
+        wxMemoryFSHash::iterator i = m_Hash->find(filename);
+        if ( i != m_Hash->end() )
+        {
+            delete i->second;
+            m_Hash->erase(i);
+        }
     }
-    else
-    {
-        delete m_Hash->Delete(filename);
-    }
+
+    wxLogError(_("Trying to remove file '%s' from memory VFS, "
+                 "but it is not loaded!"),
+               filename);
 }
 
 #endif // wxUSE_BASE
@@ -226,17 +233,13 @@ wxMemoryFSHandler::AddFile(const wxString& filename,
         return;
 
     wxMemoryOutputStream mems;
-    if (image.Ok() && image.SaveFile(mems, type))
+    if ( image.Ok() && image.SaveFile(mems, type) )
     {
-        m_Hash->Put
-                (
-                    filename,
-                    new MemFSHashObj
-                        (
-                            mems,
-                            wxImage::FindHandler(type)->GetMimeType()
-                        )
-                );
+        (*m_Hash)[filename] = new MemFSHashObj
+                                  (
+                                    mems,
+                                    wxImage::FindHandler(type)->GetMimeType()
+                                  );
     }
     else
     {
