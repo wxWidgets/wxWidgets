@@ -61,6 +61,8 @@
 #include "wx/dnd.h"
 #endif
 
+#include "wx/graphics.h"
+
 #if wxOSX_USE_CARBON
 #include "wx/osx/uma.h"
 #else
@@ -292,7 +294,8 @@ void wxWindowMac::MacPostControlCreate(const wxPoint& WXUNUSED(pos), const wxSiz
 
     m_peer->SetLabel( wxStripMenuCodes(m_label, wxStrip_Mnemonics), GetFont().GetEncoding() ) ;
 
-    if (!m_macIsUserPane)
+    // for controls we want to use best size for wxDefaultSize params )
+    if ( !m_macIsUserPane )
         SetInitialSize(size);
 
     SetCursor( *wxSTANDARD_CURSOR ) ;
@@ -384,8 +387,8 @@ void wxWindowMac::DoSetWindowVariant( wxWindowVariant variant )
 
 void wxWindowMac::MacUpdateControlFont()
 {
-
-    m_peer->SetFont( GetFont() , GetForegroundColour() , GetWindowStyle() ) ;
+    if ( m_peer )
+        m_peer->SetFont( GetFont() , GetForegroundColour() , GetWindowStyle() ) ;
 
     // do not trigger refreshes upon invisible and possible partly created objects
     if ( IsShownOnScreen() )
@@ -483,9 +486,8 @@ bool wxWindowMac::MacGetBoundsForControl(
     x = (int)pos.x;
     y = (int)pos.y;
 
-    // TODO: the default calls may be used as soon as PostCreateControl Is moved here
-    w = wxMax(size.x, 0) ; // WidthDefault( size.x );
-    h = wxMax(size.y, 0) ; // HeightDefault( size.y ) ;
+    w = WidthDefault( size.x ); 
+    h = HeightDefault( size.y ); 
 
     x += MacGetLeftBorderSize() ;
     y += MacGetTopBorderSize() ;
@@ -1134,19 +1136,21 @@ bool wxWindowMac::MacIsReallyHilited()
 
 int wxWindowMac::GetCharHeight() const
 {
-    wxClientDC dc( (wxWindow*)this ) ;
+    wxCoord height;
+    GetTextExtent( wxT("g") , NULL , &height , NULL , NULL , NULL );
 
-    return dc.GetCharHeight() ;
+    return height;
 }
 
 int wxWindowMac::GetCharWidth() const
 {
-    wxClientDC dc( (wxWindow*)this ) ;
+    wxCoord width;
+    GetTextExtent( wxT("g") , &width , NULL , NULL , NULL , NULL );
 
-    return dc.GetCharWidth() ;
+    return width;
 }
 
-void wxWindowMac::GetTextExtent(const wxString& string, int *x, int *y,
+void wxWindowMac::GetTextExtent(const wxString& str, int *x, int *y,
                            int *descent, int *externalLeading, const wxFont *theFont ) const
 {
     const wxFont *fontToUse = theFont;
@@ -1157,17 +1161,22 @@ void wxWindowMac::GetTextExtent(const wxString& string, int *x, int *y,
         fontToUse = &tempFont;
     }
 
-    wxClientDC dc( (wxWindow*) this ) ;
-    wxCoord lx,ly,ld,le ;
-    dc.GetTextExtent( string , &lx , &ly , &ld, &le, (wxFont *)fontToUse ) ;
+    wxGraphicsContext* ctx = wxGraphicsContext::Create();
+    ctx->SetFont( *fontToUse, *wxBLACK );
+
+    wxDouble h , d , e , w;
+    ctx->GetTextExtent( str, &w, &h, &d, &e );
+    
+    delete ctx;
+    
     if ( externalLeading )
-        *externalLeading = le ;
+        *externalLeading = (wxCoord)(e+0.5);
     if ( descent )
-        *descent = ld ;
+        *descent = (wxCoord)(d+0.5);
     if ( x )
-        *x = lx ;
+        *x = (wxCoord)(w+0.5);
     if ( y )
-        *y = ly ;
+        *y = (wxCoord)(h+0.5);
 }
 
 /*
@@ -1861,9 +1870,9 @@ bool wxWindowMac::MacDoRedraw( void* updatergnr , long time )
             // the grow-box area of a scrolled window (scroll sample)
             wxDC* dc = new wxWindowDC(this);
             if ( IsTopLevel() )
-                dc->SetClippingRegion(wxRegion(HIShapeCreateWithQDRgn(updatergn)));
+                dc->SetDeviceClippingRegion(wxRegion(HIShapeCreateWithQDRgn(updatergn)));
             else
-                dc->SetClippingRegion(wxRegion(HIShapeCreateWithQDRgn(newupdate)));
+                dc->SetDeviceClippingRegion(wxRegion(HIShapeCreateWithQDRgn(newupdate)));
 
             wxEraseEvent eevent( GetId(), dc );
             eevent.SetEventObject( this );
@@ -2324,6 +2333,58 @@ bool wxWindowMac::IsShownOnScreen() const
 //
 // wxWidgetImpl 
 //
+
+WX_DECLARE_HASH_MAP(WXWidget, wxWidgetImpl*, wxPointerHash, wxPointerEqual, MacControlMap);
+
+static MacControlMap wxWinMacControlList;
+
+wxWindowMac *wxFindWindowFromWXWidget(WXWidget inControl )
+{
+    wxWidgetImpl* impl = wxWidgetImpl::FindFromWXWidget( inControl );
+    if ( impl )
+        return impl->GetWXPeer();
+    
+    return NULL;
+}
+
+wxWidgetImpl *wxWidgetImpl::FindFromWXWidget(WXWidget inControl )
+{
+    MacControlMap::iterator node = wxWinMacControlList.find(inControl);
+
+    return (node == wxWinMacControlList.end()) ? NULL : node->second;
+}
+
+void wxWidgetImpl::Associate(WXWidget inControl, wxWidgetImpl *impl)
+{
+    // adding NULL ControlRef is (first) surely a result of an error and
+    // (secondly) breaks native event processing
+    wxCHECK_RET( inControl != (WXWidget) NULL, wxT("attempt to add a NULL WXWidget to control map") );
+
+    wxWinMacControlList[inControl] = impl;
+}
+
+void wxWidgetImpl::RemoveAssociations(wxWidgetImpl* impl)
+{
+   // iterate over all the elements in the class
+    // is the iterator stable ? as we might have two associations pointing to the same wxWindow
+    // we should go on...
+
+    bool found = true ;
+    while ( found )
+    {
+        found = false ;
+        MacControlMap::iterator it;
+        for ( it = wxWinMacControlList.begin(); it != wxWinMacControlList.end(); ++it )
+        {
+            if ( it->second == impl )
+            {
+                wxWinMacControlList.erase(it);
+                found = true ;
+                break;
+            }
+        }
+    }
+}
 
 IMPLEMENT_ABSTRACT_CLASS( wxWidgetImpl , wxObject )
 

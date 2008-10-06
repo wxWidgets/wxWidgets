@@ -79,50 +79,6 @@
 #define wxMAC_DEBUG_REDRAW 0
 #endif
 
-
-WX_DECLARE_HASH_MAP(WXWidget, wxWindow*, wxPointerHash, wxPointerEqual, MacControlMap);
-
-static MacControlMap wxWinMacControlList;
-
-wxWindowMac *wxFindWindowFromWXWidget(WXWidget inControl )
-{
-    MacControlMap::iterator node = wxWinMacControlList.find(inControl);
-
-    return (node == wxWinMacControlList.end()) ? NULL : node->second;
-}
-
-void wxAssociateWindowWithWXWidget(WXWidget inControl, wxWindow *control)
-{
-    // adding NULL ControlRef is (first) surely a result of an error and
-    // (secondly) breaks native event processing
-    wxCHECK_RET( inControl != (WXWidget) NULL, wxT("attempt to add a NULL WindowRef to window list") );
-
-    wxWinMacControlList[inControl] = control;
-}
-
-void wxRemoveWXWidgetAssociation(wxWindow *control)
-{
-   // iterate over all the elements in the class
-    // is the iterator stable ? as we might have two associations pointing to the same wxWindow
-    // we should go on...
-
-    bool found = true ;
-    while ( found )
-    {
-        found = false ;
-        MacControlMap::iterator it;
-        for ( it = wxWinMacControlList.begin(); it != wxWinMacControlList.end(); ++it )
-        {
-            if ( it->second == control )
-            {
-                wxWinMacControlList.erase(it);
-                found = true ;
-                break;
-            }
-        }
-    }
-}
-
 // ---------------------------------------------------------------------------
 // Carbon Events
 // ---------------------------------------------------------------------------
@@ -842,11 +798,11 @@ wxWidgetImplType* wxWidgetImpl::CreateUserPane( wxWindowMac* wxpeer, wxWindowMac
 }
 
 
-void wxMacControl::MacInstallEventHandler( ControlRef control, wxWindowMac* wxPeer )
+void wxMacControl::InstallEventHandler( WXWidget control )
 {
-    wxAssociateWindowWithWXWidget( (WXWidget) control , wxPeer ) ;
-    ::InstallControlEventHandler( control , GetwxMacWindowEventHandlerUPP(),
-        GetEventTypeCount(eventList), eventList, wxPeer, NULL);
+    wxWidgetImpl::Associate( control ? control : (WXWidget) m_controlRef , this ) ;
+    ::InstallControlEventHandler( control ? (ControlRef) control : m_controlRef , GetwxMacWindowEventHandlerUPP(),
+        GetEventTypeCount(eventList), eventList, GetWXPeer(), NULL);
 }
 
 IMPLEMENT_DYNAMIC_CLASS( wxMacControl , wxWidgetImpl )
@@ -869,7 +825,7 @@ wxMacControl::~wxMacControl()
         wxASSERT_MSG( m_controlRef != NULL , wxT("Control Handle already NULL, Dispose called twice ?") );
         wxASSERT_MSG( IsValidControlHandle(m_controlRef) , wxT("Invalid Control Handle (maybe already released) in Dispose") );
 
-        wxRemoveWXWidgetAssociation( m_wxPeer) ;
+        wxWidgetImpl::RemoveAssociations( this ) ;
         // we cannot check the ref count here anymore, as autorelease objects might delete their refs later
         // we can have situations when being embedded, where the control gets deleted behind our back, so only
         // CFRelease if we are safe

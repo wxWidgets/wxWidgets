@@ -236,6 +236,15 @@ public :
     // state changing logic is required from the outside
     virtual bool        ButtonClickDidStateChange() = 0;
 
+    // static methods for associating native controls and their implementations
+
+    static wxWidgetImpl* 
+                        FindFromWXWidget(WXWidget control);
+    
+    static void         RemoveAssociations( wxWidgetImpl* impl);
+    
+    static void         Associate( WXWidget control, wxWidgetImpl *impl );
+    
     // static creation methods, must be implemented by all toolkits
     
     static wxWidgetImplType*    CreateUserPane( wxWindowMac* wxpeer, 

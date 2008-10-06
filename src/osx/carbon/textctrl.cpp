@@ -2227,7 +2227,7 @@ wxMacMLTEHIViewControl::wxMacMLTEHIViewControl( wxTextCtrl *wxPeer,
     {
         HIViewAddSubview( m_scrollView , m_textView ) ;
         m_controlRef = m_scrollView ;
-        wxMacControl::MacInstallEventHandler( m_textView, wxPeer ) ;
+        InstallEventHandler( (WXWidget) m_textView ) ;
     }
     else
     {
