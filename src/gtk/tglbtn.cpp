@@ -247,11 +247,11 @@ void wxToggleButton::SetValue(bool state)
     if (state == GetValue())
         return;
 
-    GTKEnableEvents();
+    GTKDisableEvents();
 
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_widget), state);
 
-    GTKDisableEvents();
+    GTKEnableEvents();
 }
 
 // bool GetValue() const
