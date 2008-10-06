@@ -16,6 +16,7 @@
 
 #include "wx/osx/private.h"
 #include "wx/graphics.h"
+#include "wx/osx/private/glgrab.h"
 
 IMPLEMENT_ABSTRACT_CLASS(wxScreenDCImpl, wxWindowDCImpl)
 
@@ -56,4 +57,38 @@ wxScreenDCImpl::~wxScreenDCImpl()
 #else
     DisposeWindow((WindowRef) m_overlayWindow );
 #endif
+}
+
+wxBitmap wxScreenDCImpl::DoGetAsBitmap(const wxRect *subrect) const
+{
+    CGRect srcRect = CGRectMake(0, 0, m_width, m_height);
+    if (subrect)
+    {
+        srcRect.origin.x = subrect->GetX();
+        srcRect.origin.y = subrect->GetY();
+        srcRect.size.width = subrect->GetWidth();
+        srcRect.size.height = subrect->GetHeight();
+    }
+    
+    wxBitmap bmp = wxBitmap(srcRect.size.width, srcRect.size.height, 32);
+    
+    CGContextRef context = (CGContextRef)bmp.GetHBITMAP();
+    
+    CGContextSaveGState(context);
+    
+    CGContextTranslateCTM( context, 0,  m_height );
+    CGContextScaleCTM( context, 1, -1 );
+    
+    if ( subrect )
+        srcRect = CGRectOffset( srcRect, -subrect->x, -subrect->y ) ;
+    
+    CGImageRef image = grabViaOpenGL(kCGNullDirectDisplay, srcRect);
+    
+    wxASSERT_MSG(image, wxT("wxScreenDC::GetAsBitmap - unable to get screenshot."));
+    
+    CGContextDrawImage(context, srcRect, image);
+    
+    CGContextRestoreGState(context);
+
+    return bmp;
 }

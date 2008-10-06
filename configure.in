@@ -7355,7 +7355,7 @@ if test "$wxUSE_MAC" = 1 ; then
         fi
     fi
     if test "$USE_DARWIN" = 1; then
-        LDFLAGS="$LDFLAGS -framework IOKit -framework Carbon -framework Cocoa -framework AudioToolbox -framework System"
+        LDFLAGS="$LDFLAGS -framework IOKit -framework Carbon -framework Cocoa -framework AudioToolbox -framework System -framework OpenGL"
     fi
 fi
 if test "$wxUSE_COCOA" = 1 ; then
