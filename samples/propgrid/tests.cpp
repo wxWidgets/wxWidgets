@@ -667,8 +667,8 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
 
     {
         //
-        // Clear property value
-        RT_START_TEST(ClearPropertyValue)
+        // Test property default values
+        RT_START_TEST(Default_Values)
 
         wxPGVIterator it;
 
@@ -676,8 +676,8 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
               !it.AtEnd();
               it.Next() )
         {
-            RT_MSG(wxString::Format(wxT("Clearing value of '%s'"),it.GetProperty()->GetLabel().c_str()));
-            pgman->ClearPropertyValue(it.GetProperty());
+            wxPGProperty* p = it.GetProperty();
+            pgman->SetPropertyValue(p, p->GetDefaultValue());
         }
 
         // Recreate grid
@@ -1124,28 +1124,6 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         evt.SetId(ID_COLOURSCHEME4);
         OnCatColours(evt);
         OnColourScheme(evt);
-    }
-
-    {
-        // Test ClearPropertyValue
-        RT_START_TEST(ClearPropertyValue)
-
-        for ( i=0; i<3; i++ )
-        {
-            wxPropertyGridPage* page = pgman->GetPage(i);
-
-            // Iterate over all properties.
-            wxPropertyGridIterator it;
-
-            for ( it = page->GetIterator();
-                  !it.AtEnd();
-                  it++ )
-            {
-                wxLogDebug((*it)->GetLabel());
-                pgman->ClearPropertyValue( *it );
-            }
-        }
-
     }
 
     {

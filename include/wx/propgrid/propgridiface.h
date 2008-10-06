@@ -230,15 +230,6 @@ public:
     */
     bool ChangePropertyValue( wxPGPropArg id, wxVariant newValue );
 
-    /** Resets value of a property to its default. */
-    bool ClearPropertyValue( wxPGPropArg id )
-    {
-        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(false)
-        p->SetValue(p->GetDefaultValue());
-        RefreshProperty(p);
-        return true;
-    }
-
     /**
         Deletes a property by id. If category is deleted, all children are
         automatically deleted as well.

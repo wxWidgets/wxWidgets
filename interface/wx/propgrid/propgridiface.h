@@ -111,11 +111,6 @@ public:
     bool ChangePropertyValue( wxPGPropArg id, wxVariant newValue );
 
     /**
-        Resets value of a property to its default.
-    */
-    bool ClearPropertyValue( wxPGPropArg id );
-
-    /**
         Deletes a property.
     */
     void DeleteProperty( wxPGPropArg id );

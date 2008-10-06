@@ -655,7 +655,6 @@ enum
     ID_CATCOLOURS,
     ID_SETCOLOUR,
     ID_STATICLAYOUT,
-    ID_CLEAR,
     ID_POPULATE1,
     ID_POPULATE2,
     ID_COLLAPSE,
@@ -753,7 +752,6 @@ BEGIN_EVENT_TABLE(FormMain, wxFrame)
     EVT_MENU( ID_SELECTSTYLE, FormMain::OnSelectStyle )
 
     EVT_MENU( ID_STATICLAYOUT, FormMain::OnMisc )
-    EVT_MENU( ID_CLEAR, FormMain::OnMisc )
     EVT_MENU( ID_COLLAPSE, FormMain::OnMisc )
     EVT_MENU( ID_COLLAPSEALL, FormMain::OnMisc )
 
@@ -2117,7 +2115,6 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
     menuTools1->AppendSeparator();
     menuTools1->Append(ID_SETCOLOUR, wxT("Set Bg Colour") );
     menuTools1->Append(ID_UNSPECIFY, wxT("Set to Unspecified") );
-    menuTools1->Append(ID_CLEAR, wxT("Set Value to Default") );
     menuTools1->AppendSeparator();
     m_itemEnable = menuTools1->Append(ID_ENABLE, wxT("Enable"),
         wxT("Toggles item's enabled state.") );
@@ -2953,10 +2950,6 @@ void FormMain::OnMisc ( wxCommandEvent& event )
         long wsf = m_pPropGridManager->GetWindowStyleFlag();
         if ( event.IsChecked() ) m_pPropGridManager->SetWindowStyleFlag( wsf|wxPG_STATIC_LAYOUT );
         else m_pPropGridManager->SetWindowStyleFlag( wsf&~(wxPG_STATIC_LAYOUT) );
-    }
-    else if ( id == ID_CLEAR )
-    {
-        m_pPropGridManager->ClearPropertyValue(m_pPropGridManager->GetGrid()->GetSelection());
     }
     else if ( id == ID_COLLAPSEALL )
     {
