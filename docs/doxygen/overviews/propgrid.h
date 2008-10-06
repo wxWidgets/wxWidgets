@@ -2,7 +2,7 @@
 // Name:        propgrid.h
 // Purpose:     topic overview
 // Author:      wxWidgets team
-// RCS-ID:      $Id:
+// RCS-ID:      $Id$
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 

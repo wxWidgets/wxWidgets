@@ -2,7 +2,7 @@
 // Name:        propgrid.h
 // Purpose:     interface of wxPropertyGrid
 // Author:      wxWidgets team
-// RCS-ID:      $Id:
+// RCS-ID:      $Id$
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
