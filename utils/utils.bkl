@@ -17,8 +17,18 @@
         <installable>no</installable>
     </subproject>
 
+    <subproject id="hhp2cached" template="sub">
+        <dir>hhp2cached</dir>
+        <installable>no</installable>
+    </subproject>
+
     <subproject id="ifacecheck" template="sub">
         <dir>ifacecheck/src</dir>
+        <installable>yes</installable>
+    </subproject>
+
+    <subproject id="screenshotgen" template="sub">
+        <dir>screenshotgen/src</dir>
         <installable>yes</installable>
     </subproject>
 
