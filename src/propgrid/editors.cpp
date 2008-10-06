@@ -162,6 +162,11 @@ wxPGEditor::~wxPGEditor()
 {
 }
 
+wxString wxPGEditor::GetName() const
+{
+    return GetClassInfo()->GetClassName();
+}
+
 void wxPGEditor::DrawValue( wxDC& dc, const wxRect& rect, wxPGProperty* property, const wxString& text ) const
 {
     if ( !property->IsValueUnspecified() )

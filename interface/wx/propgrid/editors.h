@@ -51,9 +51,11 @@ public:
 
     /**
         Returns pointer to the name of the editor. For example,
-        wxPGEditor_TextCtrl has name "TextCtrl".
+        wxPGEditor_TextCtrl has name "TextCtrl". If you dont' need to access
+        your custom editor by string name, then you do not need to implement
+        this function.
     */
-    virtual wxString GetName() const = 0;
+    virtual wxString GetName() const;
 
     /**
         Instantiates editor controls.

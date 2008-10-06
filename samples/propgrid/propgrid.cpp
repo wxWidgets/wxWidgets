@@ -85,8 +85,6 @@ public:
     wxSampleMultiButtonEditor() {}
     virtual ~wxSampleMultiButtonEditor() {}
 
-    virtual wxString GetName() const { return "SampleMultiButtonEditor"; }
-
     virtual wxPGWindowList CreateControls( wxPropertyGrid* propGrid,
                                            wxPGProperty* property,
                                            const wxPoint& pos,
