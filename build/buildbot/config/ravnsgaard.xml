@@ -6,7 +6,7 @@
     Licence:    wxWidgets licence
 -->
 <bot xmlns:xi="http://www.w3.org/2001/XInclude">
-    <xi:include href="include/defs.xml"/>
+    <xi:include href="include/ravnsgaard.xml"/>
     <build>
         <name>Linux i386 wxGTK trunk STL debug</name>
         <builddir>ravnsgaard_wxgtk_debug</builddir>
