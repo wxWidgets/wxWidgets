@@ -811,19 +811,13 @@ struct wxGtkIMData
 
 extern "C" {
 static gboolean
-gtk_window_key_press_callback( GtkWidget *widget,
+gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
                                GdkEventKey *gdk_event,
                                wxWindow *win )
 {
     if (!win->m_hasVMT)
         return FALSE;
     if (g_blockEventsOnDrag)
-        return FALSE;
-
-    // GTK+ sends keypress events to the focus widget and then
-    // to all its parent and grandparent widget. We only want
-    // the key events from the focus widget.
-    if (!GTK_WIDGET_HAS_FOCUS(widget))
         return FALSE;
 
     wxKeyEvent event( wxEVT_KEY_DOWN );
