@@ -1169,6 +1169,6 @@ float wxDCBase::GetFontPointSizeAdjustment(float dpi)
     // ports need to emulate this bug too:
     const wxSize screenPixels = wxGetDisplaySize();
     const wxSize screenMM = wxGetDisplaySizeMM();
-    const int screenPPI_y = (screenPixels.y * 25.4) / screenMM.y;
-    return float(screenPPI_y) / dpi;
+    const float screenPPI_y = (screenPixels.y * 25.4) / screenMM.y;
+    return screenPPI_y / dpi;
 }
