@@ -122,19 +122,47 @@ wxFSFile * wxMemoryFSHandlerBase::OpenFile(wxFileSystem& WXUNUSED(fs),
                );
 }
 
-wxString wxMemoryFSHandlerBase::FindFirst(const wxString& WXUNUSED(spec),
-                                      int WXUNUSED(flags))
+wxString wxMemoryFSHandlerBase::FindFirst(const wxString& spec, int flags)
 {
-    wxFAIL_MSG(wxT("wxMemoryFSHandlerBase::FindFirst not implemented"));
+    if ( (flags & wxDIR) && !(flags & wxFILE) )
+    {
+        // we only store files, not directories, so we don't risk finding
+        // anything
+        return wxString();
+    }
 
-    return wxEmptyString;
+    if ( spec.find_first_of("?*") == wxString::npos )
+    {
+        // simple case: there are no wildcard characters so we can return
+        // either 0 or 1 results and we can find the potential match quickly
+        return m_Hash.count(spec) ? spec : wxString();
+    }
+    //else: deal with wildcards in FindNext()
+
+    m_findArgument = spec;
+    m_findIter = m_Hash.begin();
+
+    return FindNext();
 }
 
 wxString wxMemoryFSHandlerBase::FindNext()
 {
-    wxFAIL_MSG(wxT("wxMemoryFSHandlerBase::FindNext not implemented"));
+    // m_findArgument is used to indicate that search is in progress, we reset
+    // it to empty string after iterating over all elements
+    while ( !m_findArgument.empty() )
+    {
+        // advance m_findIter before checking the value at the current position
+        // as we need to do it anyhow, whether it matches or not
+        const wxMemoryFSHash::const_iterator current = m_findIter;
 
-    return wxEmptyString;
+        if ( ++m_findIter == m_Hash.end() )
+            m_findArgument.clear();
+
+        if ( current->first.Matches(m_findArgument) )
+            return current->first;
+    }
+
+    return wxString();
 }
 
 bool wxMemoryFSHandlerBase::CheckDoesntExist(const wxString& filename)
