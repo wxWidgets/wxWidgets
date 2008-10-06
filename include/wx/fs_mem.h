@@ -15,7 +15,10 @@
 
 #include "wx/filesys.h"
 
-class wxMemoryFSHash;
+#include "wx/hashmap.h"
+
+class wxMemoryFSFile;
+WX_DECLARE_STRING_HASH_MAP(wxMemoryFSFile *, wxMemoryFSHash);
 
 #if wxUSE_GUI
     #include "wx/bitmap.h"
@@ -52,8 +55,12 @@ public:
     virtual wxString FindNext();
 
 protected:
-    static bool CheckHash(const wxString& filename);
-    static wxMemoryFSHash *m_Hash;
+    // check that the given file is not already present in m_Hash; logs an
+    // error and returns false if it does exist
+    static bool CheckDoesntExist(const wxString& filename);
+
+    // the hash map indexed by the names of the files stored in the memory FS
+    static wxMemoryFSHash m_Hash;
 };
 
 // ----------------------------------------------------------------------------
