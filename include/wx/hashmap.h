@@ -679,7 +679,6 @@ public: \
     size_type erase( const key_type& k ) \
         { return CLASSNAME##_wxImplementation_HashTable::erase( k ); } \
     void erase( const iterator& it ) { erase( it->first ); } \
-    void erase( const const_iterator& it ) { erase( it->first ); } \
  \
     /* count() == 0 | 1 */ \
     size_type count( const const_key_type& key ) \
