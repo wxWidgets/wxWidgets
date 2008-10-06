@@ -5351,6 +5351,14 @@ wxPGEditor* wxPropertyGrid::RegisterEditorClass( wxPGEditor* editorClass,
     return editorClass;
 }
 
+// Use this in RegisterDefaultEditors.
+#define wxPGRegisterDefaultEditorClass(EDITOR) \
+    if ( wxPGEditor_##EDITOR == (wxPGEditor*) NULL ) \
+    { \
+        wxPGEditor_##EDITOR = wxPropertyGrid::RegisterEditorClass( \
+            new wxPG##EDITOR##Editor, true ); \
+    }
+
 // Registers all default editor classes
 void wxPropertyGrid::RegisterDefaultEditors()
 {

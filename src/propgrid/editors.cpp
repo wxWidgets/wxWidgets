@@ -214,7 +214,7 @@ bool wxPGEditor::CanContainCustomImage() const
 // wxPGTextCtrlEditor
 // -----------------------------------------------------------------------
 
-WX_PG_IMPLEMENT_EDITOR_CLASS(TextCtrl,wxPGTextCtrlEditor,wxPGEditor)
+WX_PG_IMPLEMENT_INTERNAL_EDITOR_CLASS(TextCtrl,wxPGTextCtrlEditor,wxPGEditor)
 
 
 wxPGWindowList wxPGTextCtrlEditor::CreateControls( wxPropertyGrid* propGrid,
@@ -391,7 +391,7 @@ wxPGTextCtrlEditor::~wxPGTextCtrlEditor() { }
 // -----------------------------------------------------------------------
 
 
-WX_PG_IMPLEMENT_EDITOR_CLASS(Choice,wxPGChoiceEditor,wxPGEditor)
+WX_PG_IMPLEMENT_INTERNAL_EDITOR_CLASS(Choice,wxPGChoiceEditor,wxPGEditor)
 
 
 // This is a special enhanced double-click processor class.
@@ -1007,7 +1007,9 @@ wxPGChoiceEditor::~wxPGChoiceEditor() { }
 // -----------------------------------------------------------------------
 
 
-WX_PG_IMPLEMENT_EDITOR_CLASS(ComboBox,wxPGComboBoxEditor,wxPGChoiceEditor)
+WX_PG_IMPLEMENT_INTERNAL_EDITOR_CLASS(ComboBox,
+                                      wxPGComboBoxEditor,
+                                      wxPGChoiceEditor)
 
 
 void wxPGComboBoxEditor::UpdateControl( wxPGProperty* property, wxWindow* ctrl ) const
@@ -1086,8 +1088,9 @@ wxPGComboBoxEditor::~wxPGComboBoxEditor() { }
 // -----------------------------------------------------------------------
 
 
-// This simpler implement_editor macro doesn't define class body.
-WX_PG_IMPLEMENT_EDITOR_CLASS(ChoiceAndButton,wxPGChoiceAndButtonEditor,wxPGChoiceEditor)
+WX_PG_IMPLEMENT_INTERNAL_EDITOR_CLASS(ChoiceAndButton,
+                                      wxPGChoiceAndButtonEditor,
+                                      wxPGChoiceEditor)
 
 
 wxPGWindowList wxPGChoiceAndButtonEditor::CreateControls( wxPropertyGrid* propGrid,
@@ -1136,9 +1139,9 @@ wxPGChoiceAndButtonEditor::~wxPGChoiceAndButtonEditor() { }
 // wxPGTextCtrlAndButtonEditor
 // -----------------------------------------------------------------------
 
-
-// This simpler implement_editor macro doesn't define class body.
-WX_PG_IMPLEMENT_EDITOR_CLASS(TextCtrlAndButton,wxPGTextCtrlAndButtonEditor,wxPGTextCtrlEditor)
+WX_PG_IMPLEMENT_INTERNAL_EDITOR_CLASS(TextCtrlAndButton,
+                                      wxPGTextCtrlAndButtonEditor,
+                                      wxPGTextCtrlEditor)
 
 
 wxPGWindowList wxPGTextCtrlAndButtonEditor::CreateControls( wxPropertyGrid* propGrid,
@@ -1163,7 +1166,9 @@ wxPGTextCtrlAndButtonEditor::~wxPGTextCtrlAndButtonEditor() { }
 
 #if wxPG_INCLUDE_CHECKBOX
 
-WX_PG_IMPLEMENT_EDITOR_CLASS(CheckBox,wxPGCheckBoxEditor,wxPGEditor)
+WX_PG_IMPLEMENT_INTERNAL_EDITOR_CLASS(CheckBox,
+                                      wxPGCheckBoxEditor,
+                                      wxPGEditor)
 
 
 // state argument: 0x01 = set if checked

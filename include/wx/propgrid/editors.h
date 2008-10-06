@@ -130,10 +130,6 @@ public:
                                           wxPGProperty* property,
                                           const wxPoint& pos,
                                           const wxSize& size) const = 0;
-    #define wxPG_DECLARE_CREATECONTROLS \
-        virtual wxPGWindowList \
-            CreateControls( wxPropertyGrid* propgrid, wxPGProperty* property, \
-        const wxPoint& pos, const wxSize& sz ) const;
 
     /** Loads value from property to the control. */
     virtual void UpdateControl( wxPGProperty* property,
@@ -219,41 +215,13 @@ public:
 };
 
 
-//
-// Note that we don't use this macro in this file because
-// otherwise doxygen gets confused.
-//
-#define WX_PG_DECLARE_EDITOR_CLASS(CLASSNAME) \
-    DECLARE_DYNAMIC_CLASS(CLASSNAME) \
-public: \
-    virtual wxString GetName() const; \
-private:
-
-
-#define WX_PG_IMPLEMENT_EDITOR_CLASS(EDITOR,CLASSNAME,BASECLASS) \
+#define WX_PG_IMPLEMENT_INTERNAL_EDITOR_CLASS(EDITOR,CLASSNAME,BASECLASS) \
 IMPLEMENT_DYNAMIC_CLASS(CLASSNAME, BASECLASS) \
 wxString CLASSNAME::GetName() const \
 { \
     return wxS(#EDITOR); \
 } \
-wxPGEditor* wxPGEditor_##EDITOR = (wxPGEditor*) NULL; \
-wxPGEditor* wxPGConstruct##EDITOR##EditorClass() \
-{ \
-    wxASSERT( !wxPGEditor_##EDITOR ); \
-    return new CLASSNAME(); \
-}
-
-
-#define WX_PG_IMPLEMENT_EDITOR_CLASS_STD_METHODS() \
-wxPG_DECLARE_CREATECONTROLS \
-virtual void UpdateControl( wxPGProperty* property, wxWindow* ctrl ) const; \
-virtual bool OnEvent( wxPropertyGrid* propgrid, wxPGProperty* property, \
-    wxWindow* primary, wxEvent& event ) const; \
-virtual bool GetValueFromControl( wxVariant& variant, \
-                                  wxPGProperty* property, \
-                                  wxWindow* ctrl ) const; \
-virtual void SetValueToUnspecified( wxPGProperty* property, \
-                                    wxWindow* ctrl ) const;
+wxPGEditor* wxPGEditor_##EDITOR = (wxPGEditor*) NULL;
 
 
 //
@@ -269,7 +237,22 @@ public:
     wxPGTextCtrlEditor() {}
     virtual ~wxPGTextCtrlEditor();
 
-    WX_PG_IMPLEMENT_EDITOR_CLASS_STD_METHODS()
+    virtual wxPGWindowList CreateControls(wxPropertyGrid* propgrid,
+                                          wxPGProperty* property,
+                                          const wxPoint& pos,
+                                          const wxSize& size) const;
+    virtual void UpdateControl( wxPGProperty* property,
+                                wxWindow* ctrl ) const;
+    virtual bool OnEvent( wxPropertyGrid* propgrid,
+                          wxPGProperty* property,
+                          wxWindow* primaryCtrl,
+                          wxEvent& event ) const;
+    virtual bool GetValueFromControl( wxVariant& variant,
+                                      wxPGProperty* property,
+                                      wxWindow* ctrl ) const;
+    virtual void SetValueToUnspecified( wxPGProperty* property,
+                                        wxWindow* ctrl ) const;
+
     virtual wxString GetName() const;
 
     //virtual wxPGCellRenderer* GetCellRenderer() const;
@@ -301,7 +284,21 @@ public:
     wxPGChoiceEditor() {}
     virtual ~wxPGChoiceEditor();
 
-    WX_PG_IMPLEMENT_EDITOR_CLASS_STD_METHODS()
+    virtual wxPGWindowList CreateControls(wxPropertyGrid* propgrid,
+                                          wxPGProperty* property,
+                                          const wxPoint& pos,
+                                          const wxSize& size) const;
+    virtual void UpdateControl( wxPGProperty* property,
+                                wxWindow* ctrl ) const;
+    virtual bool OnEvent( wxPropertyGrid* propgrid,
+                          wxPGProperty* property,
+                          wxWindow* primaryCtrl,
+                          wxEvent& event ) const;
+    virtual bool GetValueFromControl( wxVariant& variant,
+                                      wxPGProperty* property,
+                                      wxWindow* ctrl ) const;
+    virtual void SetValueToUnspecified( wxPGProperty* property,
+                                        wxWindow* ctrl ) const;
     virtual wxString GetName() const;
 
     virtual void SetControlIntValue( wxPGProperty* property,
@@ -336,8 +333,10 @@ public:
     wxPGComboBoxEditor() {}
     virtual ~wxPGComboBoxEditor();
 
-    // Macro is used for convenience due to different signature with wxPython
-    wxPG_DECLARE_CREATECONTROLS
+    virtual wxPGWindowList CreateControls(wxPropertyGrid* propgrid,
+                                          wxPGProperty* property,
+                                          const wxPoint& pos,
+                                          const wxSize& size) const;
 
     virtual wxString GetName() const;
 
@@ -365,8 +364,10 @@ public:
     virtual ~wxPGChoiceAndButtonEditor();
     virtual wxString GetName() const;
 
-    // Macro is used for convenience due to different signature with wxPython
-    wxPG_DECLARE_CREATECONTROLS
+    virtual wxPGWindowList CreateControls(wxPropertyGrid* propgrid,
+                                          wxPGProperty* property,
+                                          const wxPoint& pos,
+                                          const wxSize& size) const;
 
     DECLARE_DYNAMIC_CLASS(wxPGChoiceAndButtonEditor)
 };
@@ -378,7 +379,11 @@ public:
     wxPGTextCtrlAndButtonEditor() {}
     virtual ~wxPGTextCtrlAndButtonEditor();
     virtual wxString GetName() const;
-    wxPG_DECLARE_CREATECONTROLS
+
+    virtual wxPGWindowList CreateControls(wxPropertyGrid* propgrid,
+                                          wxPGProperty* property,
+                                          const wxPoint& pos,
+                                          const wxSize& size) const;
 
     DECLARE_DYNAMIC_CLASS(wxPGTextCtrlAndButtonEditor)
 };
@@ -402,7 +407,21 @@ public:
     virtual ~wxPGCheckBoxEditor();
 
     virtual wxString GetName() const;
-    WX_PG_IMPLEMENT_EDITOR_CLASS_STD_METHODS()
+    virtual wxPGWindowList CreateControls(wxPropertyGrid* propgrid,
+                                          wxPGProperty* property,
+                                          const wxPoint& pos,
+                                          const wxSize& size) const;
+    virtual void UpdateControl( wxPGProperty* property,
+                                wxWindow* ctrl ) const;
+    virtual bool OnEvent( wxPropertyGrid* propgrid,
+                          wxPGProperty* property,
+                          wxWindow* primaryCtrl,
+                          wxEvent& event ) const;
+    virtual bool GetValueFromControl( wxVariant& variant,
+                                      wxPGProperty* property,
+                                      wxWindow* ctrl ) const;
+    virtual void SetValueToUnspecified( wxPGProperty* property,
+                                        wxWindow* ctrl ) const;
 
     virtual void DrawValue( wxDC& dc,
                             const wxRect& rect,
@@ -419,26 +438,14 @@ public:
 
 
 // -----------------------------------------------------------------------
-// Editor class registeration macros
+// Editor class registeration macro (mostly for internal use)
 
 #define wxPGRegisterEditorClass(EDITOR) \
     if ( wxPGEditor_##EDITOR == (wxPGEditor*) NULL ) \
     { \
         wxPGEditor_##EDITOR = wxPropertyGrid::RegisterEditorClass( \
-                wxPGConstruct##EDITOR##EditorClass() ); \
+                new wxPG##EDITOR##Editor ); \
     }
-
-// Use this in RegisterDefaultEditors.
-#define wxPGRegisterDefaultEditorClass(EDITOR) \
-if ( wxPGEditor_##EDITOR == (wxPGEditor*) NULL ) \
-    { \
-        wxPGEditor_##EDITOR = wxPropertyGrid::RegisterEditorClass( \
-                wxPGConstruct##EDITOR##EditorClass(), true ); \
-    }
-
-#define wxPG_INIT_REQUIRED_EDITOR(T) \
-    wxPGRegisterEditorClass(T)
-
 
 // -----------------------------------------------------------------------
 

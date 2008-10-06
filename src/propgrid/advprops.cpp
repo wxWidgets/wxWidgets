@@ -113,9 +113,9 @@ bool operator == (const wxArrayInt& array1, const wxArrayInt& array2)
 #if wxUSE_SPINBTN
 
 
-// This macro also defines global wxPGEditor_SpinCtrl for storing
-// the singleton class instance.
-WX_PG_IMPLEMENT_EDITOR_CLASS(SpinCtrl,wxPGSpinCtrlEditor,wxPGEditor)
+WX_PG_IMPLEMENT_INTERNAL_EDITOR_CLASS(SpinCtrl,
+                                      wxPGSpinCtrlEditor,
+                                      wxPGEditor)
 
 
 // Trivial destructor.
@@ -286,12 +286,15 @@ bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* proper
 
 class wxPGDatePickerCtrlEditor : public wxPGEditor
 {
-    WX_PG_DECLARE_EDITOR_CLASS(wxPGDatePickerCtrlEditor)
+    DECLARE_DYNAMIC_CLASS(wxPGDatePickerCtrlEditor)
 public:
     virtual ~wxPGDatePickerCtrlEditor();
 
-    wxPG_DECLARE_CREATECONTROLS
-
+    wxString GetName() const;
+    virtual wxPGWindowList CreateControls(wxPropertyGrid* propgrid,
+                                          wxPGProperty* property,
+                                          const wxPoint& pos,
+                                          const wxSize& size) const;
     virtual void UpdateControl( wxPGProperty* property, wxWindow* wnd ) const;
     virtual bool OnEvent( wxPropertyGrid* propgrid, wxPGProperty* property,
         wxWindow* wnd, wxEvent& event ) const;
@@ -300,7 +303,9 @@ public:
 };
 
 
-WX_PG_IMPLEMENT_EDITOR_CLASS(DatePickerCtrl,wxPGDatePickerCtrlEditor,wxPGEditor)
+WX_PG_IMPLEMENT_INTERNAL_EDITOR_CLASS(DatePickerCtrl,
+                                      wxPGDatePickerCtrlEditor,
+                                      wxPGEditor)
 
 
 wxPGDatePickerCtrlEditor::~wxPGDatePickerCtrlEditor()

@@ -499,13 +499,15 @@ protected:
 //   used for event handling here.
 class WXDLLIMPEXP_PROPGRID wxPGSpinCtrlEditor : public wxPGTextCtrlEditor
 {
-    WX_PG_DECLARE_EDITOR_CLASS(wxPGSpinCtrlEditor)
+    DECLARE_DYNAMIC_CLASS(wxPGSpinCtrlEditor)
 public:
     virtual ~wxPGSpinCtrlEditor();
 
-    // See below for short explanations of what these are suppposed to do.
-    wxPG_DECLARE_CREATECONTROLS
-
+    wxString GetName() const;
+    virtual wxPGWindowList CreateControls(wxPropertyGrid* propgrid,
+                                          wxPGProperty* property,
+                                          const wxPoint& pos,
+                                          const wxSize& size) const;
     virtual bool OnEvent( wxPropertyGrid* propgrid, wxPGProperty* property,
         wxWindow* wnd, wxEvent& event ) const;
 
