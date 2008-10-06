@@ -169,9 +169,9 @@ void CLASSNAME::Init( wxColour colour ) \
 wxString CLASSNAME::GetValueAsString( int argFlags ) const \
 { \
     const wxPGEditor* editor = GetEditorClass(); \
-    if ( editor != wxPG_EDITOR(Choice) && \
-         editor != wxPG_EDITOR(ChoiceAndButton) && \
-         editor != wxPG_EDITOR(ComboBox) ) \
+    if ( editor != wxPGEditor_Choice && \
+         editor != wxPGEditor_ChoiceAndButton && \
+         editor != wxPGEditor_ComboBox ) \
         argFlags |= wxPG_PROPERTY_SPECIFIC; \
     return wxSystemColourProperty::GetValueAsString(argFlags); \
 } \

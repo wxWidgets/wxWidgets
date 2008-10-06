@@ -427,7 +427,7 @@ enum wxPG_SETVALUE_FLAGS
 
 #ifndef SWIG
 
-// Editor accessor.
+// Editor accessor (for backwards compatiblity use only).
 #define wxPG_EDITOR(T)          wxPGEditor_##T
 
 // Declare editor class, with optional part.

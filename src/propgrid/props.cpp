@@ -747,10 +747,10 @@ const wxPGEditor* wxBoolProperty::DoGetEditorClass() const
     // Select correct editor control.
 #if wxPG_INCLUDE_CHECKBOX
     if ( !(m_flags & wxPG_PROP_USE_CHECKBOX) )
-        return wxPG_EDITOR(Choice);
-    return wxPG_EDITOR(CheckBox);
+        return wxPGEditor_Choice;
+    return wxPGEditor_CheckBox;
 #else
-    return wxPG_EDITOR(Choice);
+    return wxPGEditor_Choice;
 #endif
 }
 

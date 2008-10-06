@@ -880,7 +880,7 @@ void wxPGProperty::OnCustomPaint( wxDC& dc,
 
 const wxPGEditor* wxPGProperty::DoGetEditorClass() const
 {
-    return wxPG_EDITOR(TextCtrl);
+    return wxPGEditor_TextCtrl;
 }
 
 // Default extra property event handling - that is, none at all.
@@ -1387,11 +1387,11 @@ const wxPGEditor* wxPGProperty::GetEditorClass() const
     {
         // TextCtrlAndButton -> ComboBoxAndButton
         if ( editor->IsKindOf(CLASSINFO(wxPGTextCtrlAndButtonEditor)) )
-            editor = wxPG_EDITOR(ChoiceAndButton);
+            editor = wxPGEditor_ChoiceAndButton;
 
         // TextCtrl -> ComboBox
         else if ( editor->IsKindOf(CLASSINFO(wxPGTextCtrlEditor)) )
-            editor = wxPG_EDITOR(ComboBox);
+            editor = wxPGEditor_ComboBox;
     }
 
     return editor;
