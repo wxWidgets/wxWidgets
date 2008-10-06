@@ -19,16 +19,20 @@
 #endif
 
 #include <wx/filename.h>
-
 #include "autocapture.h"
 
 
-wxBitmap Capture(int x, int y, int width, int height)
-{
-    //Somehow wxScreenDC.Blit() doesn't work under Mac for now. Here is a trick.
-    #ifdef __WXMAC__
+// ----------------------------------------------------------------------------
+// AutoCaptureMechanism
+// ----------------------------------------------------------------------------
 
-    //wxExecute(_T("screencapture -x ") + tempfile, wxEXEC_SYNC);
+/* static */
+wxBitmap AutoCaptureMechanism::Capture(int x, int y, int width, int height)
+{
+    // Somehow wxScreenDC.Blit() doesn't work under Mac for now. Here is a trick.
+#ifdef __WXMAC__
+
+    // wxExecute(_T("screencapture -x ") + tempfile, wxEXEC_SYNC);
 
     system("screencapture -x /tmp/wx_screen_capture.png");
 
@@ -42,119 +46,114 @@ wxBitmap Capture(int x, int y, int width, int height)
 
     wxBitmap screenshot = fullscreen.GetSubBitmap(wxRect(x,y,width,height));
 
-    #else //Under other paltforms, take a real screenshot
+#else // Under other paltforms, take a real screenshot
 
-    //Create a DC for the whole screen area
+    // Create a DC for the whole screen area
     wxScreenDC dcScreen;
 
-    //Create a Bitmap that will later on hold the screenshot image
-    //Note that the Bitmap must have a size big enough to hold the screenshot
-    //-1 means using the current default colour depth
+    // Create a Bitmap that will later on hold the screenshot image
+    // Note that the Bitmap must have a size big enough to hold the screenshot
+    // -1 means using the current default colour depth
     wxBitmap screenshot(width, height, -1);
 
-    //Create a memory DC that will be used for actually taking the screenshot
+    // Create a memory DC that will be used for actually taking the screenshot
     wxMemoryDC memDC;
-    //Tell the memory DC to use our Bitmap
-    //all drawing action on the memory DC will go to the Bitmap now
-    memDC.SelectObject(screenshot);
-    //Blit (in this case copy) the actual screen on the memory DC
-    //and thus the Bitmap
-    memDC.Blit( 0, //Copy to this X coordinate
-                0, //Copy to this Y coordinate
-                width, //Copy this width
-                height, //Copy this height
-                &dcScreen, //From where do we copy?
-                x, //What's the X offset in the original DC?
-                y  //What's the Y offset in the original DC?
-                    );
-    //Select the Bitmap out of the memory DC by selecting a new
-    //uninitialized Bitmap
-    memDC.SelectObject(wxNullBitmap);
-    #endif //#ifdef __WXMAC__
 
-//    wxMessageBox(_(""),_(""));
+    // Tell the memory DC to use our Bitmap
+    // all drawing action on the memory DC will go to the Bitmap now
+    memDC.SelectObject(screenshot);
+
+    // Blit (in this case copy) the actual screen on the memory DC
+    // and thus the Bitmap
+    memDC.Blit( 0, // Copy to this X coordinate
+                0, // Copy to this Y coordinate
+                width, // Copy this width
+                height, // Copy this height
+                &dcScreen, // From where do we copy?
+                x, // What's the X offset in the original DC?
+                y  // What's the Y offset in the original DC?
+              );
+
+    // Select the Bitmap out of the memory DC by selecting a new
+    // uninitialized Bitmap
+    memDC.SelectObject(wxNullBitmap);
+#endif // #ifdef __WXMAC__
 
     return screenshot;
-
 }
 
-wxBitmap Capture(wxRect rect)
+/* static */
+wxBitmap AutoCaptureMechanism::Capture(wxRect rect)
 {
     wxPoint origin = rect.GetPosition();
     return Capture(origin.x, origin.y, rect.GetWidth(), rect.GetHeight());
 }
 
-
-// ----------------------------------------------------------------------------
-// AutoCaptureMechanism
-// ----------------------------------------------------------------------------
-
 void AutoCaptureMechanism::CaptureAll()
 {
+    // start from the first page
     m_notebook->SetSelection(0);
     wxYield();
 
-    for(ControlList::iterator it = m_controlList.begin();
-        it != m_controlList.end();
-        ++it)
+    for (ControlList::iterator it = m_controlList.begin();
+         it != m_controlList.end();
+         ++it)
     {
-        Control & ctrl = *it;
+        Control &ctrl = *it;
 
-        if(ctrl.flag == AJ_TurnPage) // Turn to next page
+        if (ctrl.flag == AJ_TurnPage)    // Turn to next page
         {
             m_notebook->SetSelection(m_notebook->GetSelection() + 1);
             wxYield();
             continue;
         }
 
+        // create the screenshot
         wxBitmap screenshot = Capture(ctrl);
-
-        if(ctrl.flag & AJ_Union)
-        {
+        if (ctrl.flag & AJ_Union)
             screenshot = Union(screenshot, Capture(*(++it)));
-        }
 
+        // and save it
         Save(screenshot, ctrl.name);
     }
 }
 
-wxBitmap AutoCaptureMechanism::Capture(Control & ctrl)
+wxBitmap AutoCaptureMechanism::Capture(Control& ctrl)
 {
-    if(ctrl.name == wxT("")) //no mannual specification for the control name
+    if (ctrl.name == wxT(""))  // no manual specification for the control name
     {
-        //Get name from wxRTTI
+        // Get its name from wxRTTI
         ctrl.name = ctrl.ctrl->GetClassInfo()->GetClassName();
     }
 
     int choice = wxNO;
 
-    if(ctrl.flag & AJ_Dropdown)
+    // for drop-down controls we need the help of the user
+    if (ctrl.flag & AJ_Dropdown)
     {
-        wxString caption = _("Do you wish to capture the dropdown list of ") + ctrl.name + _("?");
-        wxString notice = _("Click YES to capture it.\nAnd you MUST drop down the ") + ctrl.name + _(" in 3 seconds after close me.\n");
-        notice += _("Click NO otherwise.");
+        wxString caption = _("Drop-down screenshot...");
+        wxString msg =
+            wxString::Format(_("Do you wish to capture the drop-down list of '%s' ?\n\nIf you click YES you must drop-down the list of '%s' in 3 seconds after closing this message box.\nIf you click NO the screenshot for this control won't contain its drop-down list."),
+                             ctrl.name, ctrl.name);
 
-        choice = wxMessageBox(notice, caption, wxYES_NO, m_notebook);
-
-        if(choice == wxYES)
+        choice = wxMessageBox(msg, caption, wxYES_NO, m_notebook);
+        if (choice == wxYES)
         {
-            //Wait for 3 seconds
             using std::clock;
             using std::clock_t;
 
+            // Wait for 3 seconds
             clock_t start = clock();
-            while(clock() - start < CLOCKS_PER_SEC * 3)
-            {
+            while (clock() - start < CLOCKS_PER_SEC * 3)
                 wxYieldIfNeeded();
-            }
         }
     }
 
     wxRect rect = GetRect(ctrl.ctrl, ctrl.flag);
 
-    //Do some rect adjust so it can include the dropdown list
-    //Currently it only works well under MSW, not adjusted for Linux and Mac OS
-    if(ctrl.flag & AJ_Dropdown && choice == wxYES)
+    // Do some rect adjust so it can include the dropdown list;
+    // currently this only works well under MSW; not adjusted for Linux and Mac OS
+    if (ctrl.flag & AJ_Dropdown && choice == wxYES)
     {
 //          #ifdef __WXMSW__
         int h = rect.GetHeight();
@@ -162,26 +161,19 @@ wxBitmap AutoCaptureMechanism::Capture(Control & ctrl)
 //          #endif
     }
 
-    //cut off "wx" and change them into lowercase.
+    // cut off "wx" and change the name into lowercase.
     // e.g. wxButton will have a name of "button" at the end
     ctrl.name.StartsWith(_T("wx"), &(ctrl.name));
     ctrl.name.MakeLower();
 
-    wxBitmap screenshot = ::Capture(rect);
+    // take the screenshot
+    wxBitmap screenshot = Capture(rect);
 
-    if(ctrl.flag & AJ_RegionAdjust)
-    {
+    if (ctrl.flag & AJ_RegionAdjust)
         PutBack(ctrl.ctrl);
-    }
 
     return screenshot;
 }
-
-//if AJ_RegionAdjust is specified, the following line will use the label trick to adjust
-//the region position and size
-wxRect GetRect(wxWindow* ctrl, int flag);
-//put the control back after the label trick(Using reparent/resizer approach)
-void PutBack(wxWindow * ctrl);
 
 wxBitmap AutoCaptureMechanism::Union(wxBitmap pic1, wxBitmap pic2)
 {
@@ -226,28 +218,28 @@ wxBitmap AutoCaptureMechanism::Union(wxBitmap pic1, wxBitmap pic2)
 
 void AutoCaptureMechanism::Save(wxBitmap screenshot, wxString fileName)
 {
-    //Check if m_defaultDir already existed
-    if(!wxDirExists(m_dir))
+    // make sure m_dir exists
+    if (!wxDirExists(m_dir))
         wxMkdir(m_dir);
 
-    wxString fullFileName = m_dir + wxFileName::GetPathSeparator() + fileName;
+    wxFileName fullFileName(m_dir, fileName + ".png");
 
-    //to prvent overwritten
-    while(wxFileName::FileExists(fullFileName + _T(".png"))) fullFileName += _T("_");
+    // do not overwrite already existing files with this name
+    while (fullFileName.FileExists())
+        fullFileName.SetName(fullFileName.GetName() + "_");
 
-    //Our Bitmap now has the screenshot, so let's save it as an png
-    //The filename itself is without extension.
-    screenshot.SaveFile(fullFileName + _T(".png"), wxBITMAP_TYPE_PNG);
+    // save the screenshot as a PNG
+    screenshot.SaveFile(fullFileName.GetFullPath(), wxBITMAP_TYPE_PNG);
 }
 
 wxRect AutoCaptureMechanism::GetRect(wxWindow* ctrl, int flag)
 {
-    if(flag & AJ_RegionAdjust)
+    if (flag & AJ_RegionAdjust)
     {
         wxWindow * parent = ctrl->GetParent();
         wxSizer * sizer = parent->GetSizer();
 
-        if(sizer)
+        if (sizer)
         {
             sizer->Detach(ctrl);
 
@@ -265,7 +257,7 @@ wxRect AutoCaptureMechanism::GetRect(wxWindow* ctrl, int flag)
 
             wxStaticText* l[4];
 
-            for(int i = 0; i < 4; ++i)
+            for (int i = 0; i < 4; ++i)
                 l[i] = new wxStaticText(parent, wxID_ANY, wxT(" "));
 
             m_grid->Add(l[0]);
@@ -289,7 +281,7 @@ wxRect AutoCaptureMechanism::GetRect(wxWindow* ctrl, int flag)
                     l[3]->GetScreenRect().GetTopLeft());
 
         }
-        else  //Actually it won't get here working with the current guiframe.h/guiframe.cpp
+        else  // Actually it won't get here working with the current guiframe.h/guiframe.cpp
         {
             return ctrl->GetScreenRect().Inflate(m_border);
         }
@@ -306,10 +298,10 @@ void AutoCaptureMechanism::PutBack(wxWindow * ctrl)
 
     wxSizerItemList children = m_grid->GetChildren();
 
-    for(wxSizerItemList::iterator it = children.begin(); it != children.end(); ++it)
+    for (wxSizerItemList::iterator it = children.begin(); it != children.end(); ++it)
     {
         wxSizerItem* item = *it;
-        if(item->IsWindow()) delete (*it)->GetWindow();
+        if (item->IsWindow()) delete (*it)->GetWindow();
     }
 
     wxSizer * sizer = ctrl->GetParent()->GetSizer();

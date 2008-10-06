@@ -80,6 +80,9 @@ ScreenshotFrame::~ScreenshotFrame()
 */
 void ScreenshotFrame::InitFBControls()
 {
+    // For some reason, wxFormBuilder does not set the scrollbar range
+    m_scrollBar1->SetScrollbar(50, 1, 100, 1);
+
     // Do the default selection for wxComboBox
     m_comboBox1->Select(0);
 
@@ -250,7 +253,7 @@ void ScreenshotFrame::OnCaptureAllControls(wxCommandEvent& WXUNUSED(event))
     // check if there are other screenshots taken before
     if (wxFileName::DirExists(dir))
     {
-        int choice = wxMessageBox(_("It seems that you have already generated some screenshots.\nClick YES to delete them all (recommended) or NO to preserve them.\nClick CANCEL to cancel this auto-capture operation."),
+        int choice = wxMessageBox(_("It seems that you have already generated some screenshots.\n\nClick YES to delete them all (recommended) or NO to preserve them.\nClick CANCEL to cancel this auto-capture operation."),
                             _("Delete existing screenshots?"),
                             wxYES_NO|wxCANCEL|wxICON_QUESTION, this);
         switch(choice)

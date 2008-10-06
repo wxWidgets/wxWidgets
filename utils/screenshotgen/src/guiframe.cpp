@@ -227,10 +227,10 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	
 	fgSizer2->Add( m_staticBox1, 1, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 20 );
 	
-	m_treeCtrl1 = new wxTreeCtrl( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE );
+	m_treeCtrl1 = new wxTreeCtrl( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE|wxSUNKEN_BORDER );
 	fgSizer2->Add( m_treeCtrl1, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 20 );
 	
-	m_listCtrl1 = new wxListCtrl( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_listCtrl1 = new wxListCtrl( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0|wxSUNKEN_BORDER );
 	m_listCtrl1->SetToolTip( _("wxListCtrl") );
 	
 	fgSizer2->Add( m_listCtrl1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 20 );
@@ -274,7 +274,7 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_panel2->SetSizer( fgSizer2 );
 	m_panel2->Layout();
 	fgSizer2->Fit( m_panel2 );
-	m_notebook1->AddPage( m_panel2, _("Multiple choice Controls"), false );
+	m_notebook1->AddPage( m_panel2, _("Multiple choice Controls"), true );
 	m_panel3 = new wxPanel( m_notebook1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer2;
 	bSizer2 = new wxBoxSizer( wxVERTICAL );
@@ -353,7 +353,7 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_panel4->SetSizer( fgSizer5 );
 	m_panel4->Layout();
 	fgSizer5->Fit( m_panel4 );
-	m_notebook1->AddPage( m_panel4, _("Picker Controls"), true );
+	m_notebook1->AddPage( m_panel4, _("Picker Controls"), false );
 	m_panel5 = new wxPanel( m_notebook1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxFlexGridSizer* fgSizer4;
 	fgSizer4 = new wxFlexGridSizer( 2, 2, 0, 0 );

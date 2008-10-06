@@ -14,10 +14,8 @@
 #include <vector>
 #include <ctime>
 
-// Global helper functions. to take screenshot for a rect region
-wxBitmap Capture(wxRect rect);
-wxBitmap Capture(int x, int y, int width, int height);
 
+// TODO: document what these flags mean
 enum AdjustFlags
 {
     AJ_Normal = 0,
@@ -36,7 +34,7 @@ enum AdjustFlags
 class AutoCaptureMechanism
 {
 public:
-    AutoCaptureMechanism(wxNotebook * notebook,
+    AutoCaptureMechanism(wxNotebook *notebook,
                          wxString directory = wxT("screenshots"),
                          int border = 5)
         : m_notebook(notebook), m_dir(directory), m_border(border) {}
@@ -63,7 +61,13 @@ public:
         m_controlList.push_back(Control(0, wxT(""), AJ_TurnPage));
     }
 
+    // capture all controls of the associated notebook
     void CaptureAll();
+
+    // take a screenshot only of the given rect
+    static wxBitmap Capture(wxRect rect);
+    static wxBitmap Capture(int x, int y, int width, int height);
+
 
 protected:      // internal utils
     struct Control
@@ -80,11 +84,11 @@ protected:      // internal utils
 
     wxBitmap Capture(Control & ctrl);
 
-    //if AJ_RegionAdjust is specified, the following line will use the label trick to adjust
-    //the region position and size
+    // if AJ_RegionAdjust is specified, the following line will use the label
+    // trick to adjust the region position and size
     wxRect GetRect(wxWindow* ctrl, int flag);
 
-    //put the control back after the label trick(Using reparent/resizer approach)
+    // put the control back after the label trick(Using reparent/resizer approach)
     void PutBack(wxWindow * ctrl);
 
     wxBitmap Union(wxBitmap pic1, wxBitmap pic2);
