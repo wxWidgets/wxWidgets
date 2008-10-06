@@ -45,13 +45,13 @@
     <wx-data id="data">
         <files>
             richtext.xml
-            bitmaps/wxwin32x32.png
-            bitmaps/bell.png
-            bitmaps/sound.png
-            bitmaps/dropbuth.png
-            bitmaps/dropbutn.png
-            bitmaps/dropbutp.png
-            bitmaps/throbber.gif
+            bitmaps$(DIRSEP)wxwin32x32.png
+            bitmaps$(DIRSEP)bell.png
+            bitmaps$(DIRSEP)sound.png
+            bitmaps$(DIRSEP)dropbuth.png
+            bitmaps$(DIRSEP)dropbutn.png
+            bitmaps$(DIRSEP)dropbutp.png
+            bitmaps$(DIRSEP)throbber.gif
         </files>
     </wx-data>
 
