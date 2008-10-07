@@ -1139,11 +1139,17 @@ public:
     virtual bool CanUndo();
 
     /**
-        Sets the text value and marks the control as not-modified (which means
-        that IsModified() would return @false immediately after the call to SetValue()).
+        Sets the new text control value.
+
+        It also marks the control as not-modified which means that IsModified()
+        would return @false immediately after the call to SetValue().
+
+        The insertion point is set to the start of the control (i.e. position
+        0) by this function.
 
         This functions does not generate the @c wxEVT_COMMAND_TEXT_UPDATED
         event but otherwise is identical to SetValue().
+
         See @ref overview_eventhandling_prog for more information.
 
         @since 2.7.1
@@ -1545,7 +1551,7 @@ public:
         Sets the insertion point at the given position.
 
         @param pos
-            Position to set.
+            Position to set, in the range from 0 to GetLastPosition() inclusive.
     */
     virtual void SetInsertionPoint(long pos);
 
@@ -1630,11 +1636,17 @@ public:
     virtual bool SetStyle(long start, long end, const wxTextAttr& style);
 
     /**
-        Sets the text value and marks the control as not-modified (which means
-        that IsModified() would return @false immediately after the call to SetValue()).
+        Sets the new text control value.
+       
+        It also marks the control as not-modified which means that IsModified()
+        would return @false immediately after the call to SetValue().
 
-        Note that this function generates a @c wxEVT_COMMAND_TEXT_UPDATED
-        event, to avoid this you can use ChangeValue() instead.
+        The insertion point is set to the start of the control (i.e. position
+        0) by this function.
+
+        Note that, unlike most other functions changing the controls values,
+        this function generates a @c wxEVT_COMMAND_TEXT_UPDATED event. To avoid
+        this you can use ChangeValue() instead.
 
         @param value
             The new value to set. It may contain newline characters if the text
