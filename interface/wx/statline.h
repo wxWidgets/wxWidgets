@@ -25,7 +25,7 @@
     @endStyleTable
 
     @library{wxcore}
-    @category{FIXME}
+    @category{ctrl}
 
     @see wxStaticBox
 */
@@ -36,7 +36,7 @@ public:
       Default constructor
     */
     wxStaticLine();
-    
+
     /**
         Constructor, creating and showing a static line.
 
@@ -45,8 +45,8 @@ public:
         @param id
             Window identifier. The value wxID_ANY indicates a default value.
         @param pos
-            Window position. If wxDefaultPosition is specified then a default
-        position is chosen.
+            Window position.
+            If wxDefaultPosition is specified then a default position is chosen.
         @param size
             Size. Note that either the height or the width (depending on
             whether the line if horizontal or vertical) is ignored.
@@ -64,8 +64,8 @@ public:
                  const wxString& name = "staticLine");
 
     /**
-        Creates the static line for two-step construction. See wxStaticLine()
-        for further details.
+        Creates the static line for two-step construction.
+        See wxStaticLine() for further details.
     */
     bool Create(wxWindow* parent, wxWindowID id = wxID_ANY,
                 const wxPoint& pos = wxDefaultPosition,

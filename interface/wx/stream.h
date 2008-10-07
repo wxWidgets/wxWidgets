@@ -115,6 +115,7 @@ public:
     /**
         Constructor; creates a new empty stream buffer which won't flush any data
         to a stream. mode specifies the type of the buffer (read, write, read_write).
+
         This stream buffer has the advantage to be stream independent and to work
         only on memory buffers but it is still compatible with the rest of the
         wxStream classes. You can write, read to this special stream and it will
@@ -129,7 +130,9 @@ public:
     wxStreamBuffer(BufMode mode);
 
     /**
-        Constructor. It initializes the stream buffer with the data of the specified
+        Constructor.
+
+        This method initializes the stream buffer with the data of the specified
         stream buffer. The new stream buffer has the same attributes, size, position
         and they share the same buffer. This will cause problems if the stream to
         which the stream buffer belong is destroyed and the newly cloned stream
@@ -450,7 +453,7 @@ enum wxStreamProtocolType
     handle it and create a stream to decompress it:
 
     @code
-    factory = wxFilterClassFactory::Find(filename, wxSTREAM_FILEEXT);
+        factory = wxFilterClassFactory::Find(filename, wxSTREAM_FILEEXT);
         if (factory)
             stream = factory-NewStream(new wxFFileInputStream(filename));
     @endcode

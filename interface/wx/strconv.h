@@ -30,7 +30,7 @@
     @library{wxbase}
     @category{conv}
 
-    @see wxCSConv, wxEncodingConverter, @ref overview_mbconv "wxMBConv classes overview"
+    @see wxCSConv, wxEncodingConverter, @ref overview_mbconv
 */
 class wxMBConv
 {
@@ -116,10 +116,11 @@ public:
             @a dst is non-@NULL, unused otherwise.
         @param src
             Point to the source string, must not be @NULL.
-        @param
-            The number of characters of the source string to convert or @c
-            wxNO_LEN (default parameter) to convert everything up to and
+        @param srcLen
+            The number of characters of the source string to convert or
+            @c wxNO_LEN (default parameter) to convert everything up to and
             including the terminating @c NUL character(s).
+
         @return
             The number of character written (or which would have been written
             if it were non-@NULL) to @a dst or @c wxCONV_FAILED on error.
@@ -143,10 +144,11 @@ public:
             @a dst is non-@NULL, unused otherwise.
         @param src
             Point to the source string, must not be @NULL.
-        @param
-            The number of characters of the source string to convert or @c
-            wxNO_LEN (default parameter) to convert everything up to and
+        @param srcLen
+            The number of characters of the source string to convert or
+            @c wxNO_LEN (default parameter) to convert everything up to and
             including the terminating @c NUL character.
+
         @return
             The number of character written (or which would have been written
             if it were non-@NULL) to @a dst or @c wxCONV_FAILED on error.
@@ -301,7 +303,7 @@ public:
     @library{wxbase}
     @category{conv}
 
-    @see wxMBConvUTF8, @ref overview_mbconv "wxMBConv classes overview"
+    @see wxMBConvUTF8, @ref overview_mbconv
 */
 class wxMBConvUTF7 : public wxMBConv
 {
@@ -318,7 +320,7 @@ class wxMBConvUTF7 : public wxMBConv
     @library{wxbase}
     @category{conv}
 
-    @see wxMBConvUTF7, @ref overview_mbconv "wxMBConv classes overview"
+    @see wxMBConvUTF7, @ref overview_mbconv
 */
 class wxMBConvUTF8 : public wxMBConv
 {
@@ -341,7 +343,7 @@ class wxMBConvUTF8 : public wxMBConv
     @library{wxbase}
     @category{conv}
 
-    @see wxMBConvUTF8, wxMBConvUTF32, @ref overview_mbconv "wxMBConv classes overview"
+    @see wxMBConvUTF8, wxMBConvUTF32, @ref overview_mbconv
 */
 class wxMBConvUTF16 : public wxMBConv
 {
@@ -362,7 +364,7 @@ class wxMBConvUTF16 : public wxMBConv
     @library{wxbase}
     @category{conv}
 
-    @see wxMBConvUTF8, wxMBConvUTF16, @ref overview_mbconv "wxMBConv classes overview"
+    @see wxMBConvUTF8, wxMBConvUTF16, @ref overview_mbconv
 */
 class wxMBConvUTF32 : public wxMBConv
 {
@@ -389,7 +391,7 @@ class wxMBConvUTF32 : public wxMBConv
     @library{wxbase}
     @category{conv}
 
-    @see wxMBConv, wxEncodingConverter, @ref overview_mbconv "wxMBConv classes overview"
+    @see wxMBConv, wxEncodingConverter, @ref overview_mbconv
 */
 class wxCSConv : public wxMBConv
 {
@@ -466,7 +468,7 @@ public:
     @library{wxbase}
     @category{conv}
 
-    @see @ref overview_mbconv "wxMBConv classes overview"
+    @see @ref overview_mbconv
 */
 class wxMBConvFile : public wxMBConv
 {

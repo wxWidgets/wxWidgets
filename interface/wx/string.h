@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        string.h
-// Purpose:     interface of wxStringBuffer
+// Purpose:     interface of wxStringBuffer, wxString
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -9,21 +9,19 @@
 /**
     @class wxStringBuffer
 
-    This tiny class allows you to conveniently access the wxString
-    internal buffer as a writable pointer without any risk of forgetting to restore
-    the string to the usable state later.
+    This tiny class allows you to conveniently access the wxString internal buffer
+    as a writable pointer without any risk of forgetting to restore the string
+    to the usable state later.
 
     For example, assuming you have a low-level OS function called
-    @c GetMeaningOfLifeAsString(char *) returning the value in the provided
+    @c "GetMeaningOfLifeAsString(char *)" returning the value in the provided
     buffer (which must be writable, of course) you might call it like this:
 
     @code
-    wxString theAnswer;
+        wxString theAnswer;
         GetMeaningOfLifeAsString(wxStringBuffer(theAnswer, 1024));
         if ( theAnswer != "42" )
-        {
             wxLogError("Something is very wrong!");
-        }
     @endcode
 
     Note that the exact usage of this depends on whether or not wxUSE_STL is
@@ -41,15 +39,15 @@ class wxStringBuffer
 public:
     /**
         Constructs a writable string buffer object associated with the given string
-        and containing enough space for at least @a len characters. Basically, this
-        is equivalent to calling wxString::GetWriteBuf and
+        and containing enough space for at least @a len characters.
+        Basically, this is equivalent to calling wxString::GetWriteBuf() and
         saving the result.
     */
     wxStringBuffer(const wxString& str, size_t len);
 
     /**
         Restores the string passed to the constructor to the usable state by calling
-        wxString::UngetWriteBuf on it.
+        wxString::UngetWriteBuf() on it.
     */
     ~wxStringBuffer();
 
@@ -83,7 +81,7 @@ public:
     over a UTF-16 string under Windows, the user code has to take care
     of surrogate pair handling whereas Windows itself has built-in
     support pairs in UTF-16, such as for drawing strings on screen.
-    
+
     Much work has been done to make existing code using ANSI string literals
     work as before. If you nonetheless need to have a wxString that uses wchar_t
     on Unix and Linux, too, you can specify this on the command line with the
@@ -97,7 +95,7 @@ public:
     was also possible and encouraged by wxString using the access operator[]()
     wxString implements caching of the last used index so that iterating over
     a string is a linear operation even in UTF-8 mode.
-    
+
     It is nonetheless recommended to use iterators (instead of index based
     access) like this:
 
@@ -111,15 +109,14 @@ public:
     }
     @endcode
 
-    Please see the
-    @ref overview_string "wxString overview" and the
-    @ref overview_unicode "Unicode overview" for more information
-    about it.
+    Please see the @ref overview_string and the @ref overview_unicode for more
+    information about it.
 
     wxString uses the current locale encoding to convert any C string
     literal to Unicode. The same is done for converting to and from
-    @c std::string and for the return value of c_str(). For this
-    conversion, the @a wxConvLibc class instance is used. See wxCSConv and wxMBConv.
+    @c std::string and for the return value of c_str().
+    For this conversion, the @a wxConvLibc class instance is used.
+    See wxCSConv and wxMBConv.
 
     wxString implements most of the methods of the @c std::string class.
     These standard functions are only listed here, but they are not
@@ -132,172 +129,214 @@ public:
     all return the string length. In all cases of such duplication the
     @c std::string compatible method should be used.
 
+
+    @section string_construct Constructors and assignment operators
+
+    A string may be constructed either from a C string, (some number of copies of)
+    a single character or a wide (Unicode) string. For all constructors (except the
+    default which creates an empty string) there is also a corresponding assignment
+    operator.
+
+    @li wxString()
+    @li operator=()
+    @li ~wxString()
+    @li assign()
+
+
+    @section string_len String length
+
+    These functions return the string length and check whether the string
+    is empty or they empty it.
+
+    @li length()
+    @li size()
+    @li Len()
+    @li IsEmpty()
+    @li operator!()
+    @li Empty()
+    @li Clear()
+
+
+    @section string_access Character access
+
+    Many functions below take a character index in the string. As with C
+    strings and arrays, the indices start from 0, so the first character of a
+    string is string[0]. An attempt to access a character beyond the end of the
+    string (which may even be 0 if the string is empty) will provoke an assert
+    failure in @ref overview_debugging "debug builds", but no checks are
+    done in release builds.
+
+    This section also contains both implicit and explicit conversions to C style
+    strings. Although implicit conversion is quite convenient, you are advised
+    to use wc_str() for the sake of clarity.
+
+    @li GetChar()
+    @li GetWritableChar()
+    @li SetChar()
+    @li Last()
+    @li operator[]()
+    @li wc_str()
+    @li utf8_str()
+    @li c_str()
+    @li wx_str()
+    @li mb_str()
+    @li fn_str()
+
+
+    @section string_concat Concatenation
+
     Anything may be concatenated (appended to) with a string. However, you can't
     append something to a C string (including literal constants), so to do this it
     should be converted to a wxString first.
 
-        @li insert()
-        @li append()
-        @li operator<<()
-        @li operator+=()
-        @li operator+()
-        @li Append()
-        @li Prepend()
+    @li insert()
+    @li append()
+    @li operator<<()
+    @li operator+=()
+    @li operator+()
+    @li Append()
+    @li Prepend()
 
-        A string may be constructed either from a C string, (some number of copies of)
-        a single character or a wide (Unicode) string. For all constructors (except the
-        default which creates an empty string) there is also a corresponding assignment
-        operator.
 
-        @li wxString()
-        @li operator=()
-        @li ~wxString()
-        @li assign()
+    @section string_comp Comparison
 
-        The MakeXXX() variants modify the string in place, while the other functions
-        return a new string which contains the original text converted to the upper or
-        lower case and leave the original string unchanged.
+    The default comparison function Cmp() is case-sensitive and so is the default
+    version of IsSameAs(). For case insensitive comparisons you should use CmpNoCase()
+    or give a second parameter to IsSameAs(). This last function is maybe more
+    convenient if only equality of the strings matters because it returns a boolean
+    @true value if the strings are the same and not 0 (which is usually @false
+    in C) as Cmp() does.
 
-        @li MakeUpper()
-        @li Upper()
-        @li MakeLower()
-        @li Lower()
-        @li MakeCapitalized()
-        @li Capitalize()
+    Matches() is a poor man's regular expression matcher: it only understands
+    '*' and '?' metacharacters in the sense of DOS command line interpreter.
 
-        Many functions below take a character index in the string. As with C
-        strings and arrays, the indices start from 0, so the first character of a
-        string is string[0]. An attempt to access a character beyond the end of the
-        string (which may even be 0 if the string is empty) will provoke an assert
-        failure in @ref overview_debugging "debug build", but no checks are
-        done in release builds.
-        This section also contains both implicit and explicit conversions to C style
-        strings. Although implicit conversion is quite convenient, you are advised
-        to use wc_str() for the sake of clarity.
+    StartsWith() is helpful when parsing a line of text which should start
+    with some predefined prefix and is more efficient than doing direct string
+    comparison as you would also have to precalculate the length of the prefix.
 
-        @li GetChar()
-        @li GetWritableChar()
-        @li SetChar()
-        @li Last()
-        @li operator[]()
-        @li wc_str()
-        @li utf8_str()
-        @li c_str()
-        @li wx_str()
-        @li mb_str()
-        @li fn_str()
+    @li compare()
+    @li Cmp()
+    @li CmpNoCase()
+    @li IsSameAs()
+    @li Matches()
+    @li StartsWith()
+    @li EndsWith()
 
-        The default comparison function Cmp() is case-sensitive and so is the default
-        version of IsSameAs(). For case insensitive comparisons you should use CmpNoCase()
-        or give a second parameter to IsSameAs(). This last function is maybe more
-        convenient if only equality of the strings matters because it returns a boolean
-        @true value if the strings are the same and not 0 (which is usually @false
-        in C) as Cmp() does.
-        Matches() is a poor man's regular expression matcher: it only understands
-        '*' and '?' metacharacters in the sense of DOS command line interpreter.
-        StartsWith() is helpful when parsing a line of text which should start
-        with some predefined prefix and is more efficient than doing direct string
-        comparison as you would also have to precalculate the length of the prefix.
 
-        @li compare()
-        @li Cmp()
-        @li CmpNoCase()
-        @li IsSameAs()
-        @li Matches()
-        @li StartsWith()
-        @li EndsWith()
+    @section string_substring Substring extraction
 
-        The string provides functions for conversion to signed and unsigned integer and
-        floating point numbers. All functions take a pointer to the variable to
-        put the numeric value in and return @true if the @b entire string could be
-        converted to a number.
+    These functions allow you to extract a substring from the string. The
+    original string is not modified and the function returns the extracted
+    substring.
 
-        @li ToLong()
-        @li ToLongLong()
-        @li ToULong()
-        @li ToULongLong()
-        @li ToDouble()
+    @li substr()
+    @li Mid()
+    @li operator()()
+    @li Left()
+    @li Right()
+    @li BeforeFirst()
+    @li BeforeLast()
+    @li AfterFirst()
+    @li AfterLast()
+    @li StartsWith()
+    @li EndsWith()
 
-        The following are "advanced" functions and they will be needed rarely.
-        Alloc() and Shrink() are only interesting for optimization purposes.
-        wxStringBuffer and wxStringBufferLength classes may be very useful
-        when working with some external API which requires the caller to provide
-        a writable buffer.
 
-        @li reserve()
-        @li resize()
-        @li Alloc()
-        @li Shrink()
-        @li wxStringBuffer
-        @li wxStringBufferLength
+    @section string_case Case conversion
 
-        Miscellaneous other string functions.
+    The MakeXXX() variants modify the string in place, while the other functions
+    return a new string which contains the original text converted to the upper or
+    lower case and leave the original string unchanged.
 
-        @li Trim()
-        @li Truncate()
-        @li Pad()
+    @li MakeUpper()
+    @li Upper()
+    @li MakeLower()
+    @li Lower()
+    @li MakeCapitalized()
+    @li Capitalize()
 
-        These functions return the string length and check whether the string
-        is empty or they empty it.
 
-        @li length()
-        @li size()
-        @li Len()
-        @li IsEmpty()
-        @li operator!()
-        @li Empty()
-        @li Clear()
+    @section string_search Searching and replacing
 
-        These functions allow you to extract a substring from the string. The
-        original string is not modified and the function returns the extracted
-        substring.
+    These functions replace the standard @e strchr() and @e strstr()
+    functions.
 
-        @li substr()
-        @li Mid()
-        @li operator()()
-        @li Left()
-        @li Right()
-        @li BeforeFirst()
-        @li BeforeLast()
-        @li AfterFirst()
-        @li AfterLast()
-        @li StartsWith()
-        @li EndsWith()
+    @li find()
+    @li rfind()
+    @li replace()
+    @li Find()
+    @li Replace()
 
-        These functions replace the standard @e strchr() and @e strstr()
-        functions.
 
-        @li find()
-        @li rfind()
-        @li replace()
-        @li Find()
-        @li Replace()
+    @section string_conv Conversion to numbers
 
-        Both formatted versions (Printf/() and stream-like insertion operators
-        exist (for basic types only). Additionally, the Format() function allows
-        you to simply append a formatted value to a string:
+    The string provides functions for conversion to signed and unsigned integer and
+    floating point numbers. All functions take a pointer to the variable to
+    put the numeric value in and return @true if the @b entire string could be
+    converted to a number.
 
-        @li Format()
-        @li FormatV()
-        @li Printf()
-        @li PrintfV()
-        @li operator>>()
+    @li ToLong()
+    @li ToLongLong()
+    @li ToULong()
+    @li ToULongLong()
+    @li ToDouble()
 
-        The following functions are deprecated. Please consider using new wxWidgets 2.0
-        functions instead (or, even better, @c std::string compatible variants).
 
-        Contains(), First(), Freq(), IsAscii(), IsNull(),
-        IsNumber(), IsWord(), Last(), Length(), LowerCase(), Remove(), Strip(),
-        SubString(), UpperCase()
+    @section string_fmt Writing values into the string
+
+    Both formatted versions (Printf/() and stream-like insertion operators
+    exist (for basic types only). Additionally, the Format() function allows
+    you to simply append a formatted value to a string:
+
+    @li Format()
+    @li FormatV()
+    @li Printf()
+    @li PrintfV()
+    @li operator>>()
+
+
+    @section string_mem Memory management
+
+    The following are "advanced" functions and they will be needed rarely.
+    Alloc() and Shrink() are only interesting for optimization purposes.
+    wxStringBuffer and wxStringBufferLength classes may be very useful
+    when working with some external API which requires the caller to provide
+    a writable buffer.
+
+    @li reserve()
+    @li resize()
+    @li Alloc()
+    @li Shrink()
+    @li wxStringBuffer
+    @li wxStringBufferLength
+
+
+    @section string_misc Miscellaneous
+
+    Miscellaneous other string functions.
+
+    @li Trim()
+    @li Truncate()
+    @li Pad()
+
+
+    @section string_misc wxWidgets 1.xx compatibility functions
+
+    The following functions are deprecated.
+    Please consider using @c std::string compatible variants.
+
+    Contains(), First(), Freq(), IsAscii(), IsNull(),
+    IsNumber(), IsWord(), Last(), Length(), LowerCase(), Remove(), Strip(),
+    SubString(), UpperCase()
+
 
     @library{wxbase}
     @category{data}
 
     @stdobjects
-    ::Objects, ::wxEmptyString,
+    ::wxEmptyString
 
-    @see @ref overview_string "wxString overview", @ref overview_unicode
-    "Unicode overview", wxUString
+    @see @ref overview_string, @ref overview_unicode, wxUString
 */
 class wxString
 {
@@ -326,8 +365,8 @@ public:
     wxString();
 
     /**
-       Creates a string from another string. Just increases the ref
-       count by 1.
+       Creates a string from another string.
+        Just increases the ref count by 1.
     */
     wxString(const wxString& stringSrc);
 
@@ -367,8 +406,8 @@ public:
     wxString(const wchar_t *pwz, size_t nLength);
 
     /**
-       Constructs a string from @e buf using the using
-       the current locale encoding to convert it to Unicode.
+       Constructs a string from @e buf using the using the current locale
+        encoding to convert it to Unicode.
     */
     wxString(const wxCharBuffer& buf);
 
@@ -390,8 +429,9 @@ public:
 
 
     /**
-        String destructor. Note that this is not virtual, so wxString must not be
-        inherited from.
+        String destructor.
+
+        Note that this is not virtual, so wxString must not be inherited from.
     */
     ~wxString();
 
@@ -487,7 +527,6 @@ public:
         Returns the empty string if @a ch is not found.
     */
     wxString BeforeLast(wxUniChar ch) const;
-
 
     /**
         Return the copy of the string with the first string character in the
@@ -1014,12 +1053,13 @@ public:
         Returns @true on success in which case the number is stored in the
         location pointed to by @a val or @false if the string does not
         represent a valid number in the given base (the value of @a val is not
-        modified in this case). Please notice that this function
-        behaves in the same way as the standard @c strtoul() and so it simply
-        converts negative numbers to unsigned representation instead of rejecting them
-        (e.g. -1 is returned as @c ULONG_MAX).
-        See ToLong() for the more detailed
-        description of the @a base parameter.
+        modified in this case).
+
+        Please notice that this function  behaves in the same way as the standard
+        @c strtoul() and so it simply converts negative numbers to unsigned
+        representation instead of rejecting them (e.g. -1 is returned as @c ULONG_MAX).
+
+        See ToLong() for the more detailed description of the @a base parameter.
 
         @see ToDouble(), ToLong()
     */
@@ -1054,16 +1094,16 @@ public:
     //@{
     /**
         Puts the string back into a reasonable state (in which it can be used
-        normally), after
-        GetWriteBuf() was called.
+        normally), after GetWriteBuf() was called.
+
         The version of the function without the @a len parameter will calculate the
         new string length itself assuming that the string is terminated by the first
         @c NUL character in it while the second one will use the specified length
         and thus is the only version which should be used with the strings with
         embedded @c NULs (it is also slightly more efficient as @c strlen()
         doesn't have to be called).
-        This method is deprecated, please use
-        wxStringBuffer or
+
+        This method is deprecated, please use wxStringBuffer or
         wxStringBufferLength instead.
     */
     void UngetWriteBuf();
@@ -1078,7 +1118,8 @@ public:
     wxString Upper() const;
 
     /**
-        The same as MakeUpper.
+        The same as MakeUpper().
+
         This is a wxWidgets 1.xx compatibility function; you should not use it in new
         code.
     */
@@ -1090,8 +1131,7 @@ public:
         Given this ambiguity it is mostly better to use wc_str(), mb_str() or
         utf8_str() instead.
 
-        Please see the @ref overview_unicode "Unicode overview" for more
-        information about it.
+        Please see the @ref overview_unicode for more information about it.
 
         Note that the returned value is not convertible to @c char* or
         @c wchar_t*, use char_str() or wchar_str() if you need to pass
@@ -1125,7 +1165,9 @@ public:
         buffer will contain the conversion of the string to the encoding of the
         current locale (and so can fail).
 
-        @param len If non-@NULL, filled with the length of the returned buffer.
+        @param len
+            If non-@NULL, filled with the length of the returned buffer.
+
         @return
             buffer containing the string contents in the specified type,
             notice that it may be @NULL if the conversion failed (e.g. Unicode
@@ -1184,7 +1226,7 @@ public:
     wxString& operator<<(double d);
 
     /**
-        Same as Mid (substring extraction).
+        Same as Mid() (substring extraction).
     */
     wxString operator ()(size_t start, size_t len);
 
@@ -1389,15 +1431,9 @@ public:
 
 };
 
-
 /**
-    FIXME
-*/
-wxString Objects:
-;
-
-/**
-    FIXME
+    The global wxString instance of an empty string.
+    Used extensively in the entire wxWidgets API.
 */
 wxString wxEmptyString;
 
@@ -1407,26 +1443,26 @@ wxString wxEmptyString;
 /**
     @class wxStringBufferLength
 
-    This tiny class allows you to conveniently access the wxString
-    internal buffer as a writable pointer without any risk of forgetting to restore
-    the string to the usable state later, and allows the user to set the internal
-    length of the string.
+    This tiny class allows you to conveniently access the wxString internal buffer
+    as a writable pointer without any risk of forgetting to restore the string to
+    the usable state later, and allows the user to set the internal length of the string.
 
     For example, assuming you have a low-level OS function called
-    @c int GetMeaningOfLifeAsString(char *) copying the value in the provided
+    @c "int GetMeaningOfLifeAsString(char *)" copying the value in the provided
     buffer (which must be writable, of course), and returning the actual length
     of the string, you might call it like this:
 
     @code
-    wxString theAnswer;
+        wxString theAnswer;
         wxStringBuffer theAnswerBuffer(theAnswer, 1024);
         int nLength = GetMeaningOfLifeAsString(theAnswerBuffer);
         theAnswerBuffer.SetLength(nLength);
         if ( theAnswer != "42" )
-        {
             wxLogError("Something is very wrong!");
-        }
     @endcode
+
+    @todo
+        the example above does not make use of wxStringBufferLength??
 
     Note that the exact usage of this depends on whether or not wxUSE_STL is
     enabled. If wxUSE_STL is enabled, wxStringBuffer creates a separate empty
@@ -1435,7 +1471,8 @@ wxString wxEmptyString;
     relying on wxStringBuffer containing the old wxString data is not a good
     idea if you want to build your program both with and without wxUSE_STL.
 
-    Note that SetLength @c must be called before wxStringBufferLength destructs.
+    Note that wxStringBuffer::SetLength @b must be called before
+    wxStringBufferLength destructs.
 
     @library{wxbase}
     @category{data}
@@ -1445,8 +1482,9 @@ class wxStringBufferLength
 public:
     /**
         Constructs a writable string buffer object associated with the given string
-        and containing enough space for at least @a len characters. Basically, this
-        is equivalent to calling wxString::GetWriteBuf and
+        and containing enough space for at least @a len characters.
+
+        Basically, this is equivalent to calling wxString::GetWriteBuf and
         saving the result.
     */
     wxStringBufferLength(const wxString& str, size_t len);
@@ -1460,6 +1498,7 @@ public:
     /**
         Sets the internal length of the string referred to by wxStringBufferLength to
         @a nLength characters.
+
         Must be called before wxStringBufferLength destructs.
     */
     void SetLength(size_t nLength);

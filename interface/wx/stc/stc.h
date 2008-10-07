@@ -11,239 +11,234 @@
 
     The type of events sent from wxStyledTextCtrl.
 
-    TODO
+    @todo list styled text ctrl events.
 
     @library{wxbase}
-    @category{FIXME}
+    @category{events}
 */
 class wxStyledTextEvent : public wxCommandEvent
 {
 public:
     //@{
     /**
-        
+        Ctors; used internally by wxWidgets.
     */
     wxStyledTextEvent(wxEventType commandType = 0, int id = 0);
     wxStyledTextEvent(const wxStyledTextEvent& event);
     //@}
 
     /**
-        
-    */
-    wxEvent* Clone() const;
 
-    /**
-        
     */
     bool GetAlt() const;
 
     /**
-        
+
     */
     bool GetControl() const;
 
     /**
-        
+
     */
     bool GetDragAllowMove();
 
     /**
-        
+
     */
     wxDragResult GetDragResult();
 
     /**
-        
+
     */
     wxString GetDragText();
 
     /**
-        
+
     */
     int GetFoldLevelNow() const;
 
     /**
-        
+
     */
     int GetFoldLevelPrev() const;
 
     /**
-        
+
     */
     int GetKey() const;
 
     /**
-        
+
     */
     int GetLParam() const;
 
     /**
-        
+
     */
     int GetLength() const;
 
     /**
-        
+
     */
     int GetLine() const;
 
     /**
-        
+
     */
     int GetLinesAdded() const;
 
     /**
-        
+
     */
     int GetListType() const;
 
     /**
-        
+
     */
     int GetMargin() const;
 
     /**
-        
+
     */
     int GetMessage() const;
 
     /**
-        
+
     */
     int GetModificationType() const;
 
     /**
-        
+
     */
     int GetModifiers() const;
 
     /**
-        
+
     */
     int GetPosition() const;
 
     /**
-        
+
     */
     bool GetShift() const;
 
     /**
-        
+
     */
     wxString GetText() const;
 
     /**
-        
+
     */
     int GetWParam() const;
 
     /**
-        
+
     */
     int GetX() const;
 
     /**
-        
+
     */
     int GetY() const;
 
     /**
-        
+
     */
     void SetDragAllowMove(bool val);
 
     /**
-        
+
     */
     void SetDragResult(wxDragResult val);
 
     /**
-        
+
     */
     void SetDragText(const wxString& val);
 
     /**
-        
+
     */
     void SetFoldLevelNow(int val);
 
     /**
-        
+
     */
     void SetFoldLevelPrev(int val);
 
     /**
-        
+
     */
     void SetKey(int k);
 
     /**
-        
+
     */
     void SetLParam(int val);
 
     /**
-        
+
     */
     void SetLength(int len);
 
     /**
-        
+
     */
     void SetLine(int val);
 
     /**
-        
+
     */
     void SetLinesAdded(int num);
 
     /**
-        
+
     */
     void SetListType(int val);
 
     /**
-        
+
     */
     void SetMargin(int val);
 
     /**
-        
+
     */
     void SetMessage(int val);
 
     /**
-        
+
     */
     void SetModificationType(int t);
 
     /**
-        
+
     */
     void SetModifiers(int m);
 
     /**
-        
+
     */
     void SetPosition(int pos);
 
     /**
-        
+
     */
     void SetText(const wxString& t);
 
     /**
-        
+
     */
     void SetWParam(int val);
 
     /**
-        
+
     */
     void SetX(int val);
 
     /**
-        
+
     */
     void SetY(int val);
 };
@@ -256,19 +251,72 @@ public:
     A wxWidgets implementation of the Scintilla source code editing component.
 
     As well as features found in standard text editing components, Scintilla
-    includes
-    features especially useful when editing and debugging source code. These
-    include
-    support for syntax styling, error indicators, code completion and call tips.
-    The
-    selection margin can contain markers like those used in debuggers to indicate
+    includes features especially useful when editing and debugging source code.
+    These include support for syntax styling, error indicators, code completion
+    and call tips.
+
+    The selection margin can contain markers like those used in debuggers to indicate
     breakpoints and the current line. Styling choices are more open than with many
     editors, allowing the use of proportional fonts, bold and italics, multiple
     foreground and background colours and multiple fonts.
 
     wxStyledTextCtrl is a 1 to 1 mapping of "raw" scintilla interface, whose
-    documentation
-    can be found in the Scintilla website.
+    documentation can be found in the Scintilla website (http://www.scintilla.org/).
+
+    @beginEventTable{wxStyledTextEvent}
+    @event{EVT_STC_CHANGE(id, fn)}
+        TOWRITE
+    @event{EVT_STC_STYLENEEDED(id, fn)}
+        TOWRITE
+    @event{EVT_STC_CHARADDED(id, fn)}
+        TOWRITE
+    @event{EVT_STC_SAVEPOINTREACHED(id, fn)}
+        TOWRITE
+    @event{EVT_STC_SAVEPOINTLEFT(id, fn)}
+        TOWRITE
+    @event{EVT_STC_ROMODIFYATTEMPT(id, fn)}
+        TOWRITE
+    @event{EVT_STC_KEY(id, fn)}
+        TOWRITE
+    @event{EVT_STC_DOUBLECLICK(id, fn)}
+        TOWRITE
+    @event{EVT_STC_UPDATEUI(id, fn)}
+        TOWRITE
+    @event{EVT_STC_MODIFIED(id, fn)}
+        TOWRITE
+    @event{EVT_STC_MACRORECORD(id, fn)}
+        TOWRITE
+    @event{EVT_STC_MARGINCLICK(id, fn)}
+        TOWRITE
+    @event{EVT_STC_NEEDSHOWN(id, fn)}
+        TOWRITE
+    @event{EVT_STC_PAINTED(id, fn)}
+        TOWRITE
+    @event{EVT_STC_USERLISTSELECTION(id, fn)}
+        TOWRITE
+    @event{EVT_STC_URIDROPPED(id, fn)}
+        TOWRITE
+    @event{EVT_STC_DWELLSTART(id, fn)}
+        TOWRITE
+    @event{EVT_STC_DWELLEND(id, fn)}
+        TOWRITE
+    @event{EVT_STC_START_DRAG(id, fn)}
+        TOWRITE
+    @event{EVT_STC_DRAG_OVER(id, fn)}
+        TOWRITE
+    @event{EVT_STC_DO_DROP(id, fn)}
+        TOWRITE
+    @event{EVT_STC_ZOOM(id, fn)}
+        TOWRITE
+    @event{EVT_STC_HOTSPOT_CLICK(id, fn)}
+        TOWRITE
+    @event{EVT_STC_HOTSPOT_DCLICK(id, fn)}
+        TOWRITE
+    @event{EVT_STC_CALLTIP_CLICK(id, fn)}
+        TOWRITE
+    @event{EVT_STC_AUTOCOMP_SELECTION(id, fn)}
+        TOWRITE
+    @endEventTable
 
     @library{wxbase}
     @category{stc}
@@ -299,9 +347,6 @@ public:
     void AddStyledText(const wxMemoryBuffer& data);
 
     /**
-        BEGIN generated section.  The following code is automatically generated
-        by gen_iface.py.  Do not edit this file.  Edit stc.h.in instead
-        and regenerate
         Add text to the document at current position.
     */
     void AddText(const wxString& text);
@@ -461,8 +506,7 @@ public:
     void AutoCompSetSeparator(int separatorCharacter);
 
     /**
-        Change the type-separator character in the string setting up an auto-completion
-        list.
+        Change the type-separator character in the string setting up an auto-completion list.
         Default is '?' but can be changed if items contain '?'.
     */
     void AutoCompSetTypeSeparator(int separatorCharacter);
@@ -673,7 +717,7 @@ public:
     void CopyText(int length, const wxString& text);
 
     /**
-        
+
     */
     bool Create(wxWindow* parent, wxWindowID id = wxID_ANY,
                 const wxPoint& pos = wxDefaultPosition,
@@ -888,12 +932,12 @@ public:
     int GetControlCharSymbol() const;
 
     /**
-        
+
     */
     wxString GetCurLine(int* OUTPUT);
 
     /**
-        
+
     */
     wxCharBuffer GetCurLineRaw(int* OUTPUT);
 
@@ -1195,7 +1239,7 @@ public:
     wxCharBuffer GetSelectedTextRaw();
 
     /**
-        
+
     */
     void GetSelection(int* OUTPUT, int* OUTPUT);
 
@@ -1346,7 +1390,7 @@ public:
     int GetWrapVisualFlagsLocation() const;
 
     /**
-        
+
     */
     int GetXOffset() const;
 
@@ -1407,13 +1451,12 @@ public:
         except they behave differently when word-wrap is enabled:
         They go first to the start / end of the display line, like (Home|LineEnd)Display
         The difference is that, the cursor is already at the point, it goes on to the
-        start
-        or end of the document line, as appropriate for (Home|LineEnd|VCHome)(Extend)?.
+        start or end of the document line, as appropriate for (Home|LineEnd|VCHome)(Extend)?.
     */
     void HomeWrap();
 
     /**
-        
+
     */
     void HomeWrapExtend();
 
@@ -1510,12 +1553,12 @@ public:
     void LineEndRectExtend();
 
     /**
-        
+
     */
     void LineEndWrap();
 
     /**
-        
+
     */
     void LineEndWrapExtend();
 
@@ -1710,17 +1753,17 @@ public:
     void ParaDown();
 
     /**
-        
+
     */
     void ParaDownExtend();
 
     /**
-        
+
     */
     void ParaUp();
 
     /**
-        
+
     */
     void ParaUpExtend();
 
@@ -1790,17 +1833,14 @@ public:
     int ReplaceTarget(const wxString& text);
 
     /**
-        Replace the target text with the argument text after
-        d processing.
+        Replace the target text with the argument text after d processing.
         Text is counted so it can contain NULs.
-        Looks for
-        d where d is between 1 and 9 and replaces these with the strings
-        matched in the last search operation which were surrounded by
-        ( and
-        ).
+
+        Looks for d where d is between 1 and 9 and replaces these with the strings
+        matched in the last search operation which were surrounded by ( and ).
+
         Returns the length of the replacement text including any change
-        caused by processing the
-        d patterns.
+        caused by processing the d patterns.
     */
     int ReplaceTargetRE(const wxString& text);
 
@@ -1995,7 +2035,7 @@ public:
     void SetFoldMarginColour(bool useSetting, const wxColour& back);
 
     /**
-        
+
     */
     void SetFoldMarginHiColour(bool useSetting, const wxColour& fore);
 
@@ -2048,7 +2088,7 @@ public:
     void SetKeyWords(int keywordSet, const wxString& keyWords);
 
     /**
-        
+
     */
     void SetLastKeydownProcessed(bool val);
 
@@ -2638,12 +2678,12 @@ public:
     void VCHomeRectExtend();
 
     /**
-        
+
     */
     void VCHomeWrap();
 
     /**
-        
+
     */
     void VCHomeWrapExtend();
 

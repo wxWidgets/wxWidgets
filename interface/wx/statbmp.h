@@ -9,12 +9,13 @@
 /**
     @class wxStaticBitmap
 
-    A static bitmap control displays a bitmap. Native implementations on some 
-    platforms are only meant for display of the small icons in the dialog 
+    A static bitmap control displays a bitmap. Native implementations on some
+    platforms are only meant for display of the small icons in the dialog
     boxes. In particular, under Windows 9x the size of bitmap is limited
     to 64*64 pixels.
-    If you want to display larger images portably, you may use generic 
-    implementation wxGenericStaticBitmap declared in <wx/generic/statbmpg.h>.
+
+    If you want to display larger images portably, you may use generic
+    implementation wxGenericStaticBitmap declared in \<wx/generic/statbmpg.h\>.
 
     @library{wxcore}
     @category{ctrl}
@@ -29,7 +30,7 @@ public:
       Default constructor
     */
     wxStaticBitmap();
-    
+
     /**
         Constructor, creating and showing a static bitmap control.
 
@@ -68,18 +69,18 @@ public:
                 const wxString& name = "staticBitmap");
 
     /**
-        Returns the bitmap currently used in the control. Notice that this method can
-        be called even if SetIcon() had been used.
+        Returns the bitmap currently used in the control.
+        Notice that this method can be called even if SetIcon() had been used.
 
         @see SetBitmap()
     */
     virtual wxBitmap GetBitmap() const;
 
     /**
-        Returns the icon currently used in the control. Notice that this method can
-        only be called if SetIcon() had been used: an icon
-        can't be retrieved from the control if a bitmap had been set (using
-        wxStaticBitmap::SetBitmap).
+        Returns the icon currently used in the control.
+        Notice that this method can only be called if SetIcon() had been used: an icon
+        can't be retrieved from the control if a bitmap had been set
+        (using wxStaticBitmap::SetBitmap).
 
         @see SetIcon()
     */

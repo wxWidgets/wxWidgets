@@ -50,7 +50,7 @@ public:
         Default constructor.
     */
     wxStaticText();
-    
+
     /**
         Constructor, creating and showing a text control.
 
@@ -90,32 +90,33 @@ public:
 
     /**
         Returns the contents of the control.
-        Note that the returned string contains both the mnemonics (@c  characters),
+
+        Note that the returned string contains both the mnemonics (@& characters),
         if any, and markup tags, if any.
-        Use GetLabelText() if only the
-        label text is needed.
+        Use GetLabelText() if only the label text is needed.
     */
     wxString GetLabel() const;
 
-    //@{
     /**
-        The first form returns the control's label without the mnemonics characters (if
-        any)
-        and without the markup (if the control has @c wxST_MARKUP style).
-        The second (static) version returns the given @a label string without the
-        mnemonics
-        characters (if any) and without the markup.
+        This method returns the control's label without the mnemonics characters
+        (if any) and without the markup (if the control has @c wxST_MARKUP style).
     */
-    wxString GetLabelText();
-    const static wxString  GetLabelText(const wxString& label);
-    //@}
+    wxString GetLabelText() const;
+
+    /**
+        This overload returns the given @a label string without the
+        mnemonics characters (if any) and without the markup.
+    */
+    static wxString GetLabelText(const wxString& label);
 
     /**
         Sets the static text label and updates the controls size to exactly fit the
         label unless the control has wxST_NO_AUTORESIZE flag.
+
         This function allows to set decorated static label text on platforms which
         support it (currently only GTK+ 2). For the other platforms, the markup is
         ignored.
+
         The supported tags are:
         <TABLE>
             <TR>
@@ -156,14 +157,16 @@ public:
             </TR>
             <TR>
                 <TD>&lt;span&gt;</TD>
-                <TD>generic formatter tag; see Pango Markup for more information.</TD>
+                <TD>generic formatter tag; see Pango Markup
+                    (http://library.gnome.org/devel/pango/unstable/PangoMarkupFormat.html)
+                    for more information.</TD>
             </TR>
         </TABLE>
 
         Note that the string must be well-formed (e.g. all tags must be correctly
-        closed)
-        otherwise it can be not shown correctly or at all.
+        closed) otherwise it can be not shown correctly or at all.
         Also note that you need to escape the following special characters:
+
         <TABLE>
             <TR>
                 <TD>@b Special character</TD>
@@ -190,23 +193,24 @@ public:
                 <TD>@c &amp;gt;</TD>
             </TR>
         </TABLE>
-        
+
         The non-escaped ampersand @c &amp; characters are interpreted as
         mnemonics; see wxControl::SetLabel.
 
         Example:
 
         @param label
-            The new label to set. It may contain newline characters and the markup tags
-        described above.
+            The new label to set.
+            It may contain newline characters and the markup tags described above.
     */
     virtual void SetLabel(const wxString& label);
 
     /**
         This functions wraps the controls label so that each of its lines becomes at
         most @a width pixels wide if possible (the lines are broken at words
-        boundaries so it might not be the case if words are too long). If @e width
-        is negative, no wrapping is done. Note that this width is not
+        boundaries so it might not be the case if words are too long).
+
+        If @a width is negative, no wrapping is done. Note that this width is not
         necessarily the total width of the control, since a few pixels for the
         border (depending on the controls border style) may be added.
 

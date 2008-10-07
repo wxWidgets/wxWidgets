@@ -10,55 +10,53 @@
     @class wxStatusBar
 
     A status bar is a narrow window that can be placed along the bottom of a frame
-    to give
-    small amounts of status information. It can contain one or more fields, one or
-    more of which can
-    be variable length according to the size of the window.
-
-    wxWindow
-
-    wxEvtHandler
-
-    wxObject
+    to give small amounts of status information. It can contain one or more fields,
+    one or more of which can be variable length according to the size of the window.
 
     @beginStyleTable
     @style{wxST_SIZEGRIP}
-           On Windows 95, displays a gripper at right-hand side of the status
-           bar.
+        On Windows 95, displays a gripper at right-hand side of the status bar.
     @endStyleTable
+
+    @todo reference to win95 may be old and wrong
+
+    @remarks
+    It is possible to create controls and other windows on the status bar.
+    Position these windows from an OnSize event handler.
 
     @library{wxcore}
     @category{miscwnd}
 
-    @see wxFrame, @ref overview_samplestatbar "Status bar sample"
+    @see wxFrame, @ref page_samples_statbar
 */
 class wxStatusBar : public wxWindow
 {
 public:
-    //@{
+    /**
+        Default ctor.
+    */
+    wxStatusBar();
+
     /**
         Constructor, creating the window.
 
         @param parent
             The window parent, usually a frame.
         @param id
-            The window identifier. It may take a value of -1 to indicate a default
-        value.
+            The window identifier.
+            It may take a value of -1 to indicate a default value.
         @param style
             The window style. See wxStatusBar.
         @param name
             The name of the window. This parameter is used to associate a name with the
-        item,
-            allowing the application user to set Motif resource values for
+            item, allowing the application user to set Motif resource values for
             individual windows.
 
         @see Create()
     */
-    wxStatusBar();
     wxStatusBar(wxWindow* parent, wxWindowID id = wxID_ANY,
                 long style = wxST_SIZEGRIP,
                 const wxString& name = "statusBar");
-    //@}
 
     /**
         Destructor.
@@ -99,7 +97,7 @@ public:
             The number of the status field to retrieve, starting from zero.
 
         @return The status field string if the field is valid, otherwise the
-                 empty string.
+                empty string.
 
         @see SetStatusText()
     */
@@ -126,64 +124,31 @@ public:
             The number of fields.
         @param widths
             An array of n integers interpreted in the same way as
-            in SetStatusWidths
+            in SetStatusWidths().
     */
     virtual void SetFieldsCount(int number = 1, int* widths = NULL);
 
     /**
-        Sets the minimal possible height for the status bar. The real height may be
-        bigger than the height specified here depending on the size of the font used by
-        the status bar.
+        Sets the minimal possible height for the status bar.
+
+        The real height may be bigger than the height specified here depending
+        on the size of the font used by the status bar.
     */
     virtual void SetMinHeight(int height);
 
     /**
         Sets the styles of the fields in the status line which can make fields appear
-        flat
-        or raised instead of the standard sunken 3D border.
+        flat or raised instead of the standard sunken 3D border.
 
         @param n
             The number of fields in the status bar. Must be equal to the
-            number passed to SetFieldsCount the last
-            time it was called.
+            number passed to SetFieldsCount() the last time it was called.
         @param styles
             Contains an array of n integers with the styles for each field. There
             are three possible styles:
-
-
-
-
-
-
-
-            wxSB_NORMAL
-
-
-
-
-            (default) The field appears sunken with a standard 3D border.
-
-
-
-
-
-            wxSB_FLAT
-
-
-
-
-            No border is painted around the field so that it appears flat.
-
-
-
-
-
-            wxSB_RAISED
-
-
-
-
-            A raised 3D border is painted around the field.
+            - wxSB_NORMAL (default): The field appears sunken with a standard 3D border.
+            - wxSB_FLAT: No border is painted around the field so that it appears flat.
+            - wxSB_RAISED: A raised 3D border is painted around the field.
     */
     virtual void SetStatusStyles(int n, int* styles);
 
@@ -207,25 +172,24 @@ public:
         the space left for all variable width fields is divided between them according
         to the absolute value of this number. A variable width field with width of -2
         gets twice as much of it as a field with width -1 and so on.
+
         For example, to create one fixed width field of width 100 in the right part of
         the status bar and two more fields which get 66% and 33% of the remaining
         space correspondingly, you should use an array containing -2, -1 and 100.
 
         @param n
             The number of fields in the status bar. Must be equal to the
-            number passed to SetFieldsCount the last
-            time it was called.
+            number passed to SetFieldsCount() the last time it was called.
         @param widths
-            Contains an array of n integers, each of which is
-            either an absolute status field width in pixels if positive or indicates a
+            Contains an array of n integers, each of which is either an
+            absolute status field width in pixels if positive or indicates a
             variable width field if negative.
 
         @remarks The widths of the variable fields are calculated from the total
                  width of all fields, minus the sum of widths of the
-                 non-variable fields, divided by the number of variable
-                 fields.
+                 non-variable fields, divided by the number of variable fields.
 
-        @see SetFieldsCount(), wxFrame::SetStatusWidths
+        @see SetFieldsCount(), wxFrame::SetStatusWidths()
     */
     virtual void SetStatusWidths(int n, int* widths);
 };

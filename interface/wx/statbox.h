@@ -35,7 +35,7 @@ public:
       Default constructor
     */
     wxStaticBox();
-    
+
     /**
         Constructor, creating and showing a static box.
 
@@ -46,11 +46,11 @@ public:
         @param label
             Text to be displayed in the static box, the empty string for no label.
         @param pos
-            Window position. If wxDefaultPosition is specified then a default
-        position is chosen.
+            Window position.
+            If wxDefaultPosition is specified then a default position is chosen.
         @param size
-            Checkbox size. If the size (-1, -1) is specified then a default size is
-        chosen.
+            Checkbox size.
+            If wxDefaultSize is specified then a default size is chosen.
         @param style
             Window style. See wxStaticBox.
         @param name
@@ -71,8 +71,8 @@ public:
     virtual ~wxStaticBox();
 
     /**
-        Creates the static box for two-step construction. See wxStaticBox()
-        for further details.
+        Creates the static box for two-step construction.
+        See wxStaticBox() for further details.
     */
     bool Create(wxWindow* parent, wxWindowID id,
                 const wxString& label,

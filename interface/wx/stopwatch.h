@@ -9,11 +9,12 @@
 /**
     @class wxStopWatch
 
-    The wxStopWatch class allow you to measure time intervals. For example, you may
-    use it to measure the time elapsed by some function:
+    The wxStopWatch class allow you to measure time intervals.
+
+    For example, you may use it to measure the time elapsed by some function:
 
     @code
-    wxStopWatch sw;
+        wxStopWatch sw;
         CallLongRunningFunction();
         wxLogMessage("The long running function took %ldms to execute",
                      sw.Time());
@@ -38,8 +39,8 @@ public:
     wxStopWatch();
 
     /**
-        Pauses the stop watch. Call Resume() to resume
-        time measuring again.
+        Pauses the stop watch. Call Resume() to resume time measuring again.
+
         If this method is called several times, @c Resume() must be called the same
         number of times to really resume the stop watch. You may, however, call
         Start() to resume it unconditionally.
@@ -47,8 +48,7 @@ public:
     void Pause();
 
     /**
-        Resumes the stop watch which had been paused with
-        Pause().
+        Resumes the stop watch which had been paused with Pause().
     */
     void Resume();
 
@@ -58,9 +58,8 @@ public:
     void Start(long milliseconds = 0);
 
     /**
-        Returns the time in milliseconds since the start (or restart) or the last call
-        of
-        Pause().
+        Returns the time in milliseconds since the start (or restart) or the last
+        call of Pause().
     */
     long Time() const;
 };
