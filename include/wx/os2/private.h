@@ -412,8 +412,7 @@ WXDLLIMPEXP_CORE extern wxBitmap wxDisableBitmap( const wxBitmap& rBmp
                                             ,long            lColor
                                            );
 #if wxUSE_GUI
-#include "wx/colour.h"
-
+class wxColour;
 WXDLLIMPEXP_CORE extern COLORREF wxColourToRGB(const wxColour& rColor);
 #endif
 

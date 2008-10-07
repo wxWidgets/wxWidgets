@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MSW_TLS_H_
-#define _WX_MSW_TLS_H_
+#ifndef _WX_OS2_TLS_H_
+#define _WX_OS2_TLS_H_
 
 #include "wx/os2/private.h"
 
@@ -57,5 +57,5 @@ private:
     DECLARE_NO_COPY_CLASS(wxTlsKey)
 };
 
-#endif // _WX_MSW_TLS_H_
+#endif // _WX_OS2_TLS_H_
 
