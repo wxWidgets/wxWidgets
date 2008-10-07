@@ -282,13 +282,28 @@ protected:
 
 // -----------------------------------------------------------------------
 
-WX_PG_DECLARE_CUSTOM_COLOUR_PROPERTY_USES_WXCOLOUR_WITH_DECL(
-    wxColourProperty, class WXDLLIMPEXP_PROPGRID)
+class WXDLLIMPEXP_PROPGRID wxColourProperty : public wxSystemColourProperty
+{
+    WX_PG_DECLARE_PROPERTY_CLASS(wxColourProperty)
+public:
+    wxColourProperty( const wxString& label = wxPG_LABEL,
+                      const wxString& name = wxPG_LABEL,
+                      const wxColour& value = *wxWHITE );
+    virtual ~wxColourProperty();
+
+protected:
+    virtual wxString GetValueAsString( int argFlags ) const;
+    virtual wxColour GetColour( int index ) const;
+    virtual wxVariant DoTranslateVal( wxColourPropertyValue& v ) const;
+
+private:
+    void Init( wxColour colour );
+};
+
+// -----------------------------------------------------------------------
 
 // Exclude classes from wxPython bindings
 #ifndef SWIG
-
-// -----------------------------------------------------------------------
 
 /** @class wxCursorProperty
     @ingroup classes

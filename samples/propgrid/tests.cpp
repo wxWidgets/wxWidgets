@@ -81,23 +81,6 @@ static unsigned long mycolprop_colours[] = {
     wxPG_COLOUR(0,0,0)
 };
 
-// Implement property class. Third argument is optional values array,
-// but in this example we are only interested in creating a shortcut
-// for user to access the colour values. Last arg is itemcount, but
-// it will be deprecated in the future.
-WX_PG_DECLARE_CUSTOM_COLOUR_PROPERTY_USES_WXCOLOUR(wxMyColourProperty)
-WX_PG_IMPLEMENT_CUSTOM_COLOUR_PROPERTY_USES_WXCOLOUR(wxMyColourProperty,
-                                                     mycolprop_labels,
-                                                     (long*)NULL,
-                                                     mycolprop_colours)
-
-
-WX_PG_DECLARE_CUSTOM_COLOUR_PROPERTY(wxMyColour2Property)
-WX_PG_IMPLEMENT_CUSTOM_COLOUR_PROPERTY(wxMyColour2Property,
-                                       mycolprop_labels,
-                                       (long*)NULL,
-                                       mycolprop_colours)
-
 // -----------------------------------------------------------------------
 
 //
@@ -106,10 +89,10 @@ WX_PG_IMPLEMENT_CUSTOM_COLOUR_PROPERTY(wxMyColour2Property,
 // * Includes custom colour entry.
 // * Includes extra custom entry.
 //
-class MyColourProperty3 : public wxColourProperty
+class MyColourProperty : public wxColourProperty
 {
 public:
-    MyColourProperty3( const wxString& label = wxPG_LABEL,
+    MyColourProperty( const wxString& label = wxPG_LABEL,
                        const wxString& name = wxPG_LABEL,
                        const wxColour& value = *wxWHITE )
         : wxColourProperty(label, name, value)
@@ -129,7 +112,7 @@ public:
         SetValue(variant);
     }
 
-    virtual ~MyColourProperty3()
+    virtual ~MyColourProperty()
     {
     }
 
@@ -174,26 +157,12 @@ public:
 
 void FormMain::AddTestProperties( wxPropertyGridPage* pg )
 {
-    pg->Append( new wxMyColourProperty(wxT("CustomColourProperty1")) );
+    pg->Append( new MyColourProperty(wxT("CustomColourProperty"), wxPG_LABEL, *wxGREEN) );
+    pg->GetProperty(wxT("CustomColourProperty"))->SetFlag(wxPG_PROP_AUTO_UNSPECIFIED);
+    pg->SetPropertyEditor( wxT("CustomColourProperty"), wxPGEditor_ComboBox );
 
-    pg->SetPropertyHelpString(wxT("CustomColourProperty1"),
-        wxT("This is a wxMyColourProperty from the sample app. ")
-        wxT("It is built with WX_PG_IMPLEMENT_CUSTOM_COLOUR_PROPERTY_USES_WXCOLOUR macro ")
-        wxT("and has wxColour as its data type"));
-
-    pg->Append( new wxMyColour2Property(wxT("CustomColourProperty2")) );
-
-    pg->SetPropertyHelpString(wxT("CustomColourProperty2"),
-        wxT("This is a wxMyColour2Property from the sample app. ")
-        wxT("It is built with WX_PG_IMPLEMENT_CUSTOM_COLOUR_PROPERTY macro ")
-        wxT("and has wxColourPropertyValue as its data type"));
-
-    pg->Append( new MyColourProperty3(wxT("CustomColourProperty3"), wxPG_LABEL, *wxGREEN) );
-    pg->GetProperty(wxT("CustomColourProperty3"))->SetFlag(wxPG_PROP_AUTO_UNSPECIFIED);
-    pg->SetPropertyEditor( wxT("CustomColourProperty3"), wxPGEditor_ComboBox );
-
-    pg->SetPropertyHelpString(wxT("CustomColourProperty3"),
-        wxT("This is a MyColourProperty3 from the sample app. ")
+    pg->SetPropertyHelpString(wxT("CustomColourProperty"),
+        wxT("This is a MyColourProperty from the sample app. ")
         wxT("It is built by subclassing wxColourProperty."));
 }
 

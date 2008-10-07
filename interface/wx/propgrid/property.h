@@ -329,6 +329,8 @@
     <b>Useful alternate editor:</b> Choice.
 
     Represents wxColour. wxButton is used to trigger a colour picker dialog.
+    There are various sub-classing opportunities with this class. See
+    below in wxSystemColourProperty section for details.
 
     @subsection wxFontProperty
 
@@ -339,7 +341,9 @@
 
     Represents wxColour and a system colour index. wxChoice is used to edit
     the value. Drop-down list has color images. Note that value type
-    is wxColourPropertyValue instead of wxColour.
+    is wxColourPropertyValue instead of wxColour (which wxColourProperty
+    uses).
+
     @code
         class wxColourPropertyValue : public wxObject
         {
@@ -355,6 +359,27 @@
             // Resulting colour. Should be correct regardless of type.
             wxColour    m_colour;
         };
+    @endcode
+    
+    in wxSystemColourProperty, and its derived class wxColourProperty, there
+    are various sub-classing features. To set basic list list of colour
+    names, call wxPGProperty::SetChoices().
+
+    @code
+        // Override in derived class to customize how colours are translated
+        // to strings.
+        virtual wxString ColourToString( const wxColour& col, int index ) const;
+
+        // Returns index of entry that triggers colour picker dialog
+        // (default is last).
+        virtual int GetCustomColourIndex() const;
+
+        // Helper function to show the colour dialog
+        bool QueryColourFromUser( wxVariant& variant ) const;
+
+        // Returns colour for given choice.
+        // Default function returns wxSystemSettings::GetColour(index).
+        virtual wxColour GetColour( int index ) const;
     @endcode
 
     @subsection wxCursorProperty

@@ -1356,11 +1356,67 @@ static unsigned long gs_cp_es_normcolour_colours[] = {
     wxPG_COLOUR(0,0,0)
 };
 
-WX_PG_IMPLEMENT_CUSTOM_COLOUR_PROPERTY_USES_WXCOLOUR2(wxColourProperty,
-                                                     gs_cp_es_normcolour_labels,
-                                                     (const long*)NULL,
-                                                     gs_cp_es_normcolour_colours,
-                                                     TextCtrlAndButton)
+WX_PG_IMPLEMENT_PROPERTY_CLASS(wxColourProperty, wxSystemColourProperty,
+                               wxColour, const wxColour&, TextCtrlAndButton)
+
+static wxPGChoices gs_wxColourProperty_choicesCache;
+
+wxColourProperty::wxColourProperty( const wxString& label,
+                      const wxString& name,
+                      const wxColour& value )
+    : wxSystemColourProperty(label, name, gs_cp_es_normcolour_labels,
+                             NULL,
+                             &gs_wxColourProperty_choicesCache, value )
+{
+    Init( value );
+
+    m_flags |= wxPG_PROP_TRANSLATE_CUSTOM;
+}
+
+wxColourProperty::~wxColourProperty()
+{
+}
+
+void wxColourProperty::Init( wxColour colour )
+{
+    if ( !colour.Ok() )
+        colour = *wxWHITE;
+    wxVariant variant;
+    variant << colour;
+    m_value = variant;
+    int ind = ColToInd(colour);
+    if ( ind < 0 )
+        ind = m_choices.GetCount() - 1;
+    SetIndex( ind );
+}
+
+wxString wxColourProperty::GetValueAsString( int argFlags ) const
+{
+    const wxPGEditor* editor = GetEditorClass();
+    if ( editor != wxPGEditor_Choice &&
+         editor != wxPGEditor_ChoiceAndButton &&
+         editor != wxPGEditor_ComboBox )
+        argFlags |= wxPG_PROPERTY_SPECIFIC;
+
+    return wxSystemColourProperty::GetValueAsString(argFlags);
+}
+
+wxColour wxColourProperty::GetColour( int index ) const
+{
+    if ( !m_choices.HasValue(index) )
+    {
+        wxASSERT( index < (int)GetItemCount() );
+        return gs_cp_es_normcolour_colours[index];
+    }
+    return gs_cp_es_normcolour_colours[m_choices.GetValue(index)];
+}
+
+wxVariant wxColourProperty::DoTranslateVal( wxColourPropertyValue& v ) const
+{
+    wxVariant variant;
+    variant << v.m_colour;
+    return variant;
+}
 
 // -----------------------------------------------------------------------
 // wxCursorProperty
