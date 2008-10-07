@@ -833,16 +833,6 @@ public:
     static void SetBoolChoices( const wxString& trueChoice,
                                 const wxString& falseChoice );
 
-    /** Sets or clears flag(s) of all properties in given array.
-        @param flags
-        Property flags to set or clear.
-        @param inverse
-        Set to true if you want to clear flag instead of setting them.
-    */
-    void SetPropertiesFlag( const wxArrayPGProperty& srcArr,
-                            wxPGProperty::FlagType flags,
-                            bool inverse = false );
-
     /** Sets an attribute for this property.
         @param name
             Text identifier of attribute. See @ref propgrid_property_attributes.

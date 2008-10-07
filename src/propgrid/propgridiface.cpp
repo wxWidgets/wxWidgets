@@ -639,34 +639,6 @@ void wxPropertyGridInterface::GetPropertiesWithFlag( wxArrayPGProperty* targetAr
 
 // -----------------------------------------------------------------------
 
-void wxPropertyGridInterface::SetPropertiesFlag( const wxArrayPGProperty& srcArr,
-                                                 wxPGProperty::FlagType flags,
-                                                 bool inverse )
-{
-    unsigned int i;
-
-    for ( i=0; i<srcArr.size(); i++ )
-    {
-        wxPGProperty* property = srcArr[i];
-
-        if ( !inverse )
-            property->SetFlag(flags);
-        else
-            property->ClearFlag(flags);
-    }
-
-    // If collapsed flag or hidden was manipulated, we need to update virtual
-    // size.
-    wxPropertyGrid* pg = GetPropertyGrid();
-    if ( flags & (wxPG_PROP_COLLAPSED|wxPG_PROP_HIDDEN) )
-    {
-        GetState()->VirtualHeightChanged();
-        pg->RecalculateVirtualSize();
-    }
-}
-
-// -----------------------------------------------------------------------
-
 void wxPropertyGridInterface::SetBoolChoices( const wxString& trueChoice,
                                                  const wxString& falseChoice )
 {
