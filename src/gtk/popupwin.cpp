@@ -114,7 +114,8 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
     g_object_ref( m_widget );
 
     gtk_widget_set_name( m_widget, "wxPopupWindow" );
-    gtk_window_set_type_hint( GTK_WINDOW(m_widget), GDK_WINDOW_TYPE_HINT_COMBO );
+    // wxPopupWindow is used for different windows as well
+    // gtk_window_set_type_hint( GTK_WINDOW(m_widget), GDK_WINDOW_TYPE_HINT_COMBO );
 
     GtkWidget *toplevel = gtk_widget_get_toplevel( parent->m_widget );
     if (GTK_IS_WINDOW (toplevel))
