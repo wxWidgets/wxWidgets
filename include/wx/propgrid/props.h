@@ -38,43 +38,6 @@ WX_PG_IMPLEMENT_PROPERTY_CLASS2(NAME,NAME,UPNAME,T,T_AS_ARG,EDITOR)
 
 // -----------------------------------------------------------------------
 
-#define wxPG_NO_ESCAPE      wxPG_PROP_NO_ESCAPE     // No escape sequences
-#define wxPG_ESCAPE         0                       // Escape sequences
-
-#define WX_PG_DECLARE_STRING_PROPERTY_WITH_DECL(NAME, DECL) \
-DECL NAME : public wxLongStringProperty \
-{ \
-    DECLARE_DYNAMIC_CLASS(NAME) \
-public: \
-    NAME( const wxString& name = wxPG_LABEL, \
-          const wxString& label = wxPG_LABEL, \
-          const wxString& value = wxEmptyString); \
-    virtual ~NAME(); \
-    virtual bool OnButtonClick( wxPropertyGrid* propgrid, wxString& value ); \
-    virtual wxValidator* DoGetValidator() const; \
-};
-
-#define WX_PG_DECLARE_STRING_PROPERTY(NAME) \
-WX_PG_DECLARE_STRING_PROPERTY_WITH_DECL(NAME, class) \
-
-#define WX_PG_IMPLEMENT_STRING_PROPERTY_WITH_VALIDATOR(NAME, FLAGS) \
-IMPLEMENT_DYNAMIC_CLASS(NAME,wxLongStringProperty) \
-NAME::NAME( const wxString& name, \
-            const wxString& label, \
-            const wxString& value ) \
-  : wxLongStringProperty(name,label,value) \
-{ \
-    m_flags |= FLAGS; \
-} \
-NAME::~NAME() { }
-
-#define WX_PG_IMPLEMENT_STRING_PROPERTY(NAME, FLAGS) \
-WX_PG_IMPLEMENT_STRING_PROPERTY_WITH_VALIDATOR(NAME,FLAGS) \
-wxValidator* NAME::DoGetValidator () const \
-{ return (wxValidator*) NULL; }
-
-// -----------------------------------------------------------------------
-
 #define WX_PG_DECLARE_CUSTOM_COLOUR_PROPERTY_WITH_DECL(CLASSNAME, DECL) \
 DECL CLASSNAME : public wxSystemColourProperty \
 { \

@@ -1545,8 +1545,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxDirProperty, wxLongStringProperty)
 wxDirProperty::wxDirProperty( const wxString& name, const wxString& label, const wxString& value )
   : wxLongStringProperty(name,label,value)
 {
-    m_flags |= wxPG_NO_ESCAPE;
+    m_flags |= wxPG_PROP_NO_ESCAPE;
 }
+
 wxDirProperty::~wxDirProperty() { }
 
 wxValidator* wxDirProperty::DoGetValidator() const
@@ -1556,6 +1557,9 @@ wxValidator* wxDirProperty::DoGetValidator() const
 
 bool wxDirProperty::OnButtonClick( wxPropertyGrid* propGrid, wxString& value )
 {
+    // Update property value from editor, if necessary
+    PrepareValueForDialogEditing(propGrid);
+
     wxSize dlg_sz(300,400);
 
     wxDirDialog dlg( propGrid,

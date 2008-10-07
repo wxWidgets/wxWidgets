@@ -234,6 +234,40 @@
     dialog. Note that in long string values, tabs are represented by "\t" and
     line break by "\n".
 
+    To display custom dialog on button press, you can subclass
+    wxLongStringProperty and implement OnButtonClick, like this:
+
+    @code
+        virtual bool OnButtonClick( wxPropertyGrid* propGrid, wxString& value )
+        {
+            // Update property value from editor, if necessary
+            PrepareValueForDialogEditing(propGrid);
+
+            wxSize dialogSize(...size of your dialog...);
+
+            wxPoint dlgPos = propGrid->GetGoodEditorDialogPosition(this,
+                                                                   dialogSize)
+
+            // Create dialog dlg at dlgPos. Use value as initial string
+            // value.
+            ...
+
+            if ( dlg.ShowModal() == wxID_OK )
+            {
+                value = dlg.GetStringValue);
+                return true;
+            }
+            return false;
+        }
+    @endcode
+
+    Also, if you wish not to have line breaks and tabs translated to
+    escape sequences, then do following in constructor of your subclass:
+
+    @code
+        m_flags |= wxPG_PROP_NO_ESCAPE;
+    @endcode
+
     @subsection wxDirProperty
 
     Like wxLongStringProperty, but the button triggers dir selector instead.

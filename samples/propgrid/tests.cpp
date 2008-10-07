@@ -98,54 +98,6 @@ WX_PG_IMPLEMENT_CUSTOM_COLOUR_PROPERTY(wxMyColour2Property,
                                        (long*)NULL,
                                        mycolprop_colours)
 
-
-
-// Just testing the macros
-WX_PG_DECLARE_STRING_PROPERTY(wxTestStringProperty)
-WX_PG_IMPLEMENT_STRING_PROPERTY(wxTestStringProperty,wxPG_NO_ESCAPE)
-bool wxTestStringProperty::OnButtonClick( wxPropertyGrid*,
-                                          wxString& )
-{
-    ::wxMessageBox(wxT("Button Clicked"));
-    return true;
-}
-
-WX_PG_DECLARE_STRING_PROPERTY(wxTextStringPropertyWithValidator)
-WX_PG_IMPLEMENT_STRING_PROPERTY_WITH_VALIDATOR(wxTextStringPropertyWithValidator,
-                                               wxPG_NO_ESCAPE)
-
-bool wxTextStringPropertyWithValidator::OnButtonClick( wxPropertyGrid* WXUNUSED(propgrid),
-                                                       wxString& WXUNUSED(value) )
-{
-    ::wxMessageBox(wxT("Button Clicked"));
-    return true;
-}
-
-wxValidator* wxTextStringPropertyWithValidator::DoGetValidator() const
-{
-#if wxUSE_VALIDATORS
-    WX_PG_DOGETVALIDATOR_ENTRY()
-    wxTextValidator* validator = new
-        wxTextValidator(wxFILTER_INCLUDE_CHAR_LIST);
-    wxArrayString oValid;
-    oValid.Add(wxT("0"));
-    oValid.Add(wxT("1"));
-    oValid.Add(wxT("2"));
-    oValid.Add(wxT("3"));
-    oValid.Add(wxT("4"));
-    oValid.Add(wxT("5"));
-    oValid.Add(wxT("6"));
-    oValid.Add(wxT("7"));
-    oValid.Add(wxT("8"));
-    oValid.Add(wxT("9"));
-    oValid.Add(wxT("$"));
-    validator->SetIncludes(oValid);
-    WX_PG_DOGETVALIDATOR_EXIT(validator)
-#else
-    return NULL;
-#endif
-}
-
 // -----------------------------------------------------------------------
 
 //
@@ -243,8 +195,6 @@ void FormMain::AddTestProperties( wxPropertyGridPage* pg )
     pg->SetPropertyHelpString(wxT("CustomColourProperty3"),
         wxT("This is a MyColourProperty3 from the sample app. ")
         wxT("It is built by subclassing wxColourProperty."));
-
-    pg->Append( new wxTextStringPropertyWithValidator(wxT("TestProp1"), wxPG_LABEL) );
 }
 
 // -----------------------------------------------------------------------
