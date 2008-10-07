@@ -87,7 +87,7 @@
 
         <data-files>
             <srcdir>$(SRCDIR)/build/bakefiles/wxpresets/presets</srcdir>
-            <files>wx.bkl wx_unix.bkl wx_win32.bkl</files>
+            <files>wx.bkl wx_unix.bkl wx_win32.bkl wx_xrc.bkl</files>
             <install-to>$(DATADIR)/bakefile/presets</install-to>
         </data-files>
 
@@ -147,7 +147,7 @@
             <linguas>it</linguas>
             <install-to>$(LOCALEDIR)</install-to>
         </gettext-catalogs>
-                
+
 
         <!-- Mac OS X resources: -->
         <set var="MACOS_R">lib/libwx_$(TOOLCHAIN_NAME).$(WXSOVERSION[0]).r</set>
