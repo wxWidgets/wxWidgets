@@ -296,7 +296,7 @@
                         <object class="notebookpage" expanded="1">
                             <property name="bitmap"></property>
                             <property name="label">Tiny Controls</property>
-                            <property name="select">0</property>
+                            <property name="select">1</property>
                             <object class="wxPanel" expanded="1">
                                 <property name="bg"></property>
                                 <property name="context_help"></property>
@@ -743,120 +743,6 @@
                                             <property name="window_extra_style"></property>
                                             <property name="window_name"></property>
                                             <property name="window_style"></property>
-                                            <event name="OnChar"></event>
-                                            <event name="OnEnterWindow"></event>
-                                            <event name="OnEraseBackground"></event>
-                                            <event name="OnKeyDown"></event>
-                                            <event name="OnKeyUp"></event>
-                                            <event name="OnKillFocus"></event>
-                                            <event name="OnLeaveWindow"></event>
-                                            <event name="OnLeftDClick"></event>
-                                            <event name="OnLeftDown"></event>
-                                            <event name="OnLeftUp"></event>
-                                            <event name="OnMiddleDClick"></event>
-                                            <event name="OnMiddleDown"></event>
-                                            <event name="OnMiddleUp"></event>
-                                            <event name="OnMotion"></event>
-                                            <event name="OnMouseEvents"></event>
-                                            <event name="OnMouseWheel"></event>
-                                            <event name="OnPaint"></event>
-                                            <event name="OnRightDClick"></event>
-                                            <event name="OnRightDown"></event>
-                                            <event name="OnRightUp"></event>
-                                            <event name="OnSetFocus"></event>
-                                            <event name="OnSize"></event>
-                                            <event name="OnUpdateUI"></event>
-                                        </object>
-                                    </object>
-                                    <object class="sizeritem" expanded="1">
-                                        <property name="border">5</property>
-                                        <property name="flag">wxALIGN_CENTER|wxALL</property>
-                                        <property name="proportion">0</property>
-                                        <object class="wxBitmapButton" expanded="1">
-                                            <property name="bg"></property>
-                                            <property name="bitmap">bitmaps/wxwin32x32.png; Load From File</property>
-                                            <property name="context_help"></property>
-                                            <property name="default">0</property>
-                                            <property name="disabled"></property>
-                                            <property name="enabled">1</property>
-                                            <property name="fg"></property>
-                                            <property name="focus"></property>
-                                            <property name="font"></property>
-                                            <property name="hidden">0</property>
-                                            <property name="hover"></property>
-                                            <property name="id">wxID_ANY</property>
-                                            <property name="label">wxBitmapButton</property>
-                                            <property name="maximum_size"></property>
-                                            <property name="minimum_size"></property>
-                                            <property name="name">m_bpButton12</property>
-                                            <property name="permission">protected</property>
-                                            <property name="pos"></property>
-                                            <property name="selected"></property>
-                                            <property name="size"></property>
-                                            <property name="style">wxBU_AUTODRAW</property>
-                                            <property name="subclass"></property>
-                                            <property name="tooltip">wxBitmapButton</property>
-                                            <property name="window_extra_style"></property>
-                                            <property name="window_name"></property>
-                                            <property name="window_style"></property>
-                                            <event name="OnButtonClick"></event>
-                                            <event name="OnChar"></event>
-                                            <event name="OnEnterWindow"></event>
-                                            <event name="OnEraseBackground"></event>
-                                            <event name="OnKeyDown"></event>
-                                            <event name="OnKeyUp"></event>
-                                            <event name="OnKillFocus"></event>
-                                            <event name="OnLeaveWindow"></event>
-                                            <event name="OnLeftDClick"></event>
-                                            <event name="OnLeftDown"></event>
-                                            <event name="OnLeftUp"></event>
-                                            <event name="OnMiddleDClick"></event>
-                                            <event name="OnMiddleDown"></event>
-                                            <event name="OnMiddleUp"></event>
-                                            <event name="OnMotion"></event>
-                                            <event name="OnMouseEvents"></event>
-                                            <event name="OnMouseWheel"></event>
-                                            <event name="OnPaint"></event>
-                                            <event name="OnRightDClick"></event>
-                                            <event name="OnRightDown"></event>
-                                            <event name="OnRightUp"></event>
-                                            <event name="OnSetFocus"></event>
-                                            <event name="OnSize"></event>
-                                            <event name="OnUpdateUI"></event>
-                                        </object>
-                                    </object>
-                                    <object class="sizeritem" expanded="1">
-                                        <property name="border">5</property>
-                                        <property name="flag">wxALIGN_CENTER|wxALL</property>
-                                        <property name="proportion">0</property>
-                                        <object class="wxBitmapButton" expanded="1">
-                                            <property name="bg"></property>
-                                            <property name="bitmap">bitmaps/wxwin32x32.png; Load From File</property>
-                                            <property name="context_help"></property>
-                                            <property name="default">0</property>
-                                            <property name="disabled"></property>
-                                            <property name="enabled">1</property>
-                                            <property name="fg"></property>
-                                            <property name="focus"></property>
-                                            <property name="font"></property>
-                                            <property name="hidden">0</property>
-                                            <property name="hover"></property>
-                                            <property name="id">wxID_ANY</property>
-                                            <property name="label">wxBitmapButton</property>
-                                            <property name="maximum_size"></property>
-                                            <property name="minimum_size"></property>
-                                            <property name="name">m_bpButton11</property>
-                                            <property name="permission">protected</property>
-                                            <property name="pos"></property>
-                                            <property name="selected"></property>
-                                            <property name="size"></property>
-                                            <property name="style">wxBU_AUTODRAW</property>
-                                            <property name="subclass"></property>
-                                            <property name="tooltip">wxBitmapButton</property>
-                                            <property name="window_extra_style"></property>
-                                            <property name="window_name"></property>
-                                            <property name="window_style"></property>
-                                            <event name="OnButtonClick"></event>
                                             <event name="OnChar"></event>
                                             <event name="OnEnterWindow"></event>
                                             <event name="OnEraseBackground"></event>
@@ -1348,7 +1234,7 @@
                         <object class="notebookpage" expanded="1">
                             <property name="bitmap"></property>
                             <property name="label">Multiple choice Controls</property>
-                            <property name="select">1</property>
+                            <property name="select">0</property>
                             <object class="wxPanel" expanded="1">
                                 <property name="bg"></property>
                                 <property name="context_help"></property>

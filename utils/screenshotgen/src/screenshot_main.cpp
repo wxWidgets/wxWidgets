@@ -80,6 +80,9 @@ ScreenshotFrame::~ScreenshotFrame()
 */
 void ScreenshotFrame::InitFBControls()
 {
+    // explicitely uncheck radio button:
+    m_radioBtn2->SetValue(false);
+
     // For some reason, wxFormBuilder does not set the scrollbar range
     m_scrollBar1->SetScrollbar(50, 1, 100, 1);
 

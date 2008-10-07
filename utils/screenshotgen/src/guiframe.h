@@ -91,8 +91,6 @@ class GUIFrame : public wxFrame
 		wxRadioButton* m_radioBtn2;
 		wxBitmapButton* m_bpButton1;
 		wxStaticBitmap* m_bitmap1;
-		wxBitmapButton* m_bpButton12;
-		wxBitmapButton* m_bpButton11;
 		wxGauge* m_gauge1;
 		wxSlider* m_slider1;
 		wxToggleButton* m_toggleBtn1;

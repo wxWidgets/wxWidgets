@@ -139,20 +139,6 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	
 	fgSizer1->Add( m_bitmap1, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 20 );
 	
-	m_bpButton12 = new wxBitmapButton( m_panel1, wxID_ANY, wxBitmap( wxT("bitmaps/wxwin32x32.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_bpButton12->SetToolTip( _("wxBitmapButton") );
-	
-	m_bpButton12->SetToolTip( _("wxBitmapButton") );
-	
-	fgSizer1->Add( m_bpButton12, 0, wxALIGN_CENTER|wxALL, 5 );
-	
-	m_bpButton11 = new wxBitmapButton( m_panel1, wxID_ANY, wxBitmap( wxT("bitmaps/wxwin32x32.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_bpButton11->SetToolTip( _("wxBitmapButton") );
-	
-	m_bpButton11->SetToolTip( _("wxBitmapButton") );
-	
-	fgSizer1->Add( m_bpButton11, 0, wxALIGN_CENTER|wxALL, 5 );
-	
 	m_gauge1 = new wxGauge( m_panel1, wxID_ANY, 100, wxDefaultPosition, wxDefaultSize, wxGA_HORIZONTAL, wxDefaultValidator, wxT("_Gauge") );
 	m_gauge1->SetValue( 50 ); 
 	m_gauge1->SetToolTip( _("wxGauge") );
@@ -198,7 +184,7 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_panel1->SetSizer( fgSizer1 );
 	m_panel1->Layout();
 	fgSizer1->Fit( m_panel1 );
-	m_notebook1->AddPage( m_panel1, _("Tiny Controls"), false );
+	m_notebook1->AddPage( m_panel1, _("Tiny Controls"), true );
 	m_panel2 = new wxPanel( m_notebook1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxFlexGridSizer* fgSizer2;
 	fgSizer2 = new wxFlexGridSizer( 5, 2, 0, 0 );
@@ -274,7 +260,7 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_panel2->SetSizer( fgSizer2 );
 	m_panel2->Layout();
 	fgSizer2->Fit( m_panel2 );
-	m_notebook1->AddPage( m_panel2, _("Multiple choice Controls"), true );
+	m_notebook1->AddPage( m_panel2, _("Multiple choice Controls"), false );
 	m_panel3 = new wxPanel( m_notebook1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer2;
 	bSizer2 = new wxBoxSizer( wxVERTICAL );
