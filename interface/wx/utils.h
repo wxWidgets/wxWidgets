@@ -349,9 +349,11 @@ void wxRegisterId(long id);
 
     Returns @true if the application was successfully launched.
 
+    @see wxLaunchDefaultBrowser(), wxExecute()
+
     @header{wx/utils.h}
 */
-bool wxLaunchDefaultApplication(const wxString& document, int flags = 0)
+bool wxLaunchDefaultApplication(const wxString& document, int flags = 0);
 
 /**
     Opens the @a url in user's default browser.
@@ -374,6 +376,8 @@ bool wxLaunchDefaultApplication(const wxString& document, int flags = 0)
           launched to open the given URL may be URL-dependent (e.g. a browser
           may be used for local URLs while another one may be used for remote
           URLs).
+
+    @see wxLaunchDefaultApplication(), wxExecute()
 
     @header{wx/utils.h}
 */
@@ -710,7 +714,8 @@ bool wxIsPlatformLittleEndian();
     @param callback
         An optional pointer to wxProcess.
 
-    @see wxShell(), wxProcess, @ref page_samples_exec
+    @see wxShell(), wxProcess, @ref page_samples_exec,
+         wxLaunchDefaultApplication(), wxLaunchDefaultBrowser()
 
     @header{wx/utils.h}
 
@@ -746,6 +751,9 @@ long wxExecute(const wxString& command, int flags = wxEXEC_ASYNC,
     @param callback
         An optional pointer to wxProcess.
 
+    @see wxShell(), wxProcess, @ref page_samples_exec,
+         wxLaunchDefaultApplication(), wxLaunchDefaultBrowser()
+
     @header{wx/utils.h}
 */
 long wxExecute(char** argv, int flags = wxEXEC_ASYNC,
@@ -776,6 +784,9 @@ long wxExecute(wchar_t** argv, int flags = wxEXEC_ASYNC,
         wxEXEC_NODISABLE and wxEXEC_NOEVENTS or wxEXEC_BLOCK, which is equal to
         their combination, in wxEXEC_SYNC case.
 
+    @see wxShell(), wxProcess, @ref page_samples_exec,
+         wxLaunchDefaultApplication(), wxLaunchDefaultBrowser()
+
     @header{wx/utils.h}
 */
 long wxExecute(const wxString& command, wxArrayString& output, int flags = 0);
@@ -799,6 +810,9 @@ long wxExecute(const wxString& command, wxArrayString& output, int flags = 0);
         wxEXEC_NOHIDE, wxEXEC_MAKE_GROUP_LEADER (in either case) or
         wxEXEC_NODISABLE and wxEXEC_NOEVENTS or wxEXEC_BLOCK, which is equal to
         their combination, in wxEXEC_SYNC case.
+
+    @see wxShell(), wxProcess, @ref page_samples_exec,
+         wxLaunchDefaultApplication(), wxLaunchDefaultBrowser()
 
     @header{wx/utils.h}
 */
