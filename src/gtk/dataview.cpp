@@ -3984,6 +3984,7 @@ void wxDataViewCtrl::SetSelections( const wxDataViewItemArray & sel )
     for (i = 0; i < sel.GetCount(); i++)
     {
         GtkTreeIter iter;
+        iter.stamp = m_internal->GetGtkModel()->stamp;
         iter.user_data = (gpointer) sel[i].GetID();
         gtk_tree_selection_select_iter( selection, &iter );
     }
@@ -3998,6 +3999,7 @@ void wxDataViewCtrl::Select( const wxDataViewItem & item )
     GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
 
     GtkTreeIter iter;
+    iter.stamp = m_internal->GetGtkModel()->stamp;
     iter.user_data = (gpointer) item.GetID();
     gtk_tree_selection_select_iter( selection, &iter );
 
@@ -4011,6 +4013,7 @@ void wxDataViewCtrl::Unselect( const wxDataViewItem & item )
     GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
 
     GtkTreeIter iter;
+    iter.stamp = m_internal->GetGtkModel()->stamp;
     iter.user_data = (gpointer) item.GetID();
     gtk_tree_selection_unselect_iter( selection, &iter );
 
@@ -4022,6 +4025,7 @@ bool wxDataViewCtrl::IsSelected( const wxDataViewItem & item ) const
     GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
 
     GtkTreeIter iter;
+    iter.stamp = m_internal->GetGtkModel()->stamp;
     iter.user_data = (gpointer) item.GetID();
 
     return gtk_tree_selection_iter_is_selected( selection, &iter );
