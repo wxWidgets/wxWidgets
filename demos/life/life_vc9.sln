@@ -1,0 +1,38 @@
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "life", "life_vc9.vcproj", "{C4315F89-A0DC-50CA-A5CB-B0F32AB2EF4B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		DLL Universal Release|Win32 = DLL Universal Release|Win32
+		DLL Universal Debug|Win32 = DLL Universal Debug|Win32
+		DLL Release|Win32 = DLL Release|Win32
+		DLL Debug|Win32 = DLL Debug|Win32
+		Universal Release|Win32 = Universal Release|Win32
+		Universal Debug|Win32 = Universal Debug|Win32
+		Release|Win32 = Release|Win32
+		Debug|Win32 = Debug|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C4315F89-A0DC-50CA-A5CB-B0F32AB2EF4B}.DLL Universal Release|Win32.ActiveCfg = DLL Universal Release|Win32
+		{C4315F89-A0DC-50CA-A5CB-B0F32AB2EF4B}.DLL Universal Release|Win32.Build.0 = DLL Universal Release|Win32
+		{C4315F89-A0DC-50CA-A5CB-B0F32AB2EF4B}.DLL Universal Debug|Win32.ActiveCfg = DLL Universal Debug|Win32
+		{C4315F89-A0DC-50CA-A5CB-B0F32AB2EF4B}.DLL Universal Debug|Win32.Build.0 = DLL Universal Debug|Win32
+		{C4315F89-A0DC-50CA-A5CB-B0F32AB2EF4B}.DLL Release|Win32.ActiveCfg = DLL Release|Win32
+		{C4315F89-A0DC-50CA-A5CB-B0F32AB2EF4B}.DLL Release|Win32.Build.0 = DLL Release|Win32
+		{C4315F89-A0DC-50CA-A5CB-B0F32AB2EF4B}.DLL Debug|Win32.ActiveCfg = DLL Debug|Win32
+		{C4315F89-A0DC-50CA-A5CB-B0F32AB2EF4B}.DLL Debug|Win32.Build.0 = DLL Debug|Win32
+		{C4315F89-A0DC-50CA-A5CB-B0F32AB2EF4B}.Universal Release|Win32.ActiveCfg = Universal Release|Win32
+		{C4315F89-A0DC-50CA-A5CB-B0F32AB2EF4B}.Universal Release|Win32.Build.0 = Universal Release|Win32
+		{C4315F89-A0DC-50CA-A5CB-B0F32AB2EF4B}.Universal Debug|Win32.ActiveCfg = Universal Debug|Win32
+		{C4315F89-A0DC-50CA-A5CB-B0F32AB2EF4B}.Universal Debug|Win32.Build.0 = Universal Debug|Win32
+		{C4315F89-A0DC-50CA-A5CB-B0F32AB2EF4B}.Release|Win32.ActiveCfg = Release|Win32
+		{C4315F89-A0DC-50CA-A5CB-B0F32AB2EF4B}.Release|Win32.Build.0 = Release|Win32
+		{C4315F89-A0DC-50CA-A5CB-B0F32AB2EF4B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C4315F89-A0DC-50CA-A5CB-B0F32AB2EF4B}.Debug|Win32.Build.0 = Debug|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
+

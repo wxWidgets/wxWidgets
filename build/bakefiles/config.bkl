@@ -4,7 +4,7 @@
 <makefile>
 
     <set var="IS_MSVC_PRJ">
-        $(FORMAT in ['msvc6prj','msevc4prj','msvs2003prj','msvs2005prj'])
+        $(FORMAT in ['msvc6prj','msevc4prj','msvs2003prj','msvs2005prj','msvs2008prj'])
     </set>
 
     <set var="BUILDING_LIB" overwrite="0">0</set>
@@ -247,8 +247,8 @@ Acts according to BUILD by default.
 
     <!-- currently only VC++ can compile wxDebugReport which is in QA lib -->
     <set var="USE_QA_DEFAULT">
-        <if cond="FORMAT in ['msvc','msvc6prj','msvs2003prj','msvs2005prj']">1</if>
-        <if cond="FORMAT not in ['msvc','msvc6prj','msvs2003prj','msvs2005prj']">0</if>
+        <if cond="FORMAT in ['msvc','msvc6prj','msvs2003prj','msvs2005prj','msvs2008prj']">1</if>
+        <if cond="FORMAT not in ['msvc','msvc6prj','msvs2003prj','msvs2005prj','msvs2008prj']">0</if>
     </set>
     <option name="USE_QA">
         <values>0,1</values>
@@ -397,8 +397,10 @@ it if SHARED=1 unless you know what you are doing.
         <set var="TOOLKIT" overwrite="0">
             <if cond="FORMAT=='msevc4prj'">WINCE</if>
             <if cond="FORMAT=='msvs2005prj' and MSVS_PLATFORMS=='pocketpc2003'">WINCE</if>
+            <if cond="FORMAT=='msvs2008prj' and MSVS_PLATFORMS=='pocketpc2003'">WINCE</if>
             <if cond="FORMAT=='msvs2005prj' and MSVS_PLATFORMS=='win32'">MSW</if>
-            <if cond="FORMAT not in ['msevc4prj','msvs2005prj'] and PLATFORM_WIN32=='1'">MSW</if>
+            <if cond="FORMAT=='msvs2008prj' and MSVS_PLATFORMS=='win32'">MSW</if>
+            <if cond="FORMAT not in ['msevc4prj','msvs2005prj','msvs2008prj'] and PLATFORM_WIN32=='1'">MSW</if>
             <if cond="PLATFORM_MSDOS=='1'">MGL</if>
             <if cond="PLATFORM_OS2=='1'">PM</if>
         </set>
@@ -486,7 +488,7 @@ Set the version of your Mingw installation here.
     </if>
 
     <!-- No need for wxUniv on embedded devices (yet): -->
-    <if cond="FORMAT=='msevc4prj' or (FORMAT=='msvs2005prj' and MSVS_PLATFORMS=='pocketpc2003')">
+    <if cond="FORMAT=='msevc4prj' or (FORMAT=='msvs2005prj' and MSVS_PLATFORMS=='pocketpc2003') or (FORMAT=='msvs2008prj' and MSVS_PLATFORMS=='pocketpc2003')">
         <set var="WXUNIV">0</set>
         <!-- Uploading debug reports from PDAs seems impractical -->
         <set var="USE_QA">0</set>
