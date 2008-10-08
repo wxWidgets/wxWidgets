@@ -240,9 +240,6 @@
     @code
         virtual bool OnButtonClick( wxPropertyGrid* propGrid, wxString& value )
         {
-            // Update property value from editor, if necessary
-            PrepareValueForDialogEditing(propGrid);
-
             wxSize dialogSize(...size of your dialog...);
 
             wxPoint dlgPos = propGrid->GetGoodEditorDialogPosition(this,
@@ -1198,24 +1195,6 @@ public:
         Returns child property at index i.
     */
     wxPGProperty* Item( size_t i ) const;
-
-    /**
-        Updates property value in case there were last minute
-        changes. If value was unspecified, it will be set to default.
-        Use only for properties that have TextCtrl-based editor.
-
-        @remarks If you have code similar to
-                @code
-                // Update the value in case of last minute changes
-                if ( primary && propgrid->IsEditorsValueModified() )
-                     GetEditorClass()->CopyValueFromControl( this, primary );
-                @endcode
-                in wxPGProperty::OnEvent wxEVT_COMMAND_BUTTON_CLICKED handler,
-                then replace it with call to this method.
-
-        @return Returns @true if value changed.
-    */
-    bool PrepareValueForDialogEditing( wxPropertyGrid* propgrid );
 
     /**
         If property's editor is active, then update it's value.

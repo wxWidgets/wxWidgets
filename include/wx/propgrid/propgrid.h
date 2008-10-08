@@ -832,6 +832,14 @@ public:
     /** Returns background colour of margin. */
     wxColour GetMarginColour() const { return m_colMargin; }
 
+    /**
+        Returns most up-to-date value of selected property. This will return
+        value different from GetSelectedProperty()->GetValue() only when text
+        editor is activate and string edited by user represents valid,
+        uncommitted property value.
+    */
+    wxVariant GetPendingEditedValue();
+
     /** Returns cell background colour of a property. */
     wxColour GetPropertyBackgroundColour( wxPGPropArg id ) const;
 
@@ -1257,12 +1265,6 @@ public:
     virtual bool DoPropertyChanged( wxPGProperty* p,
                                     unsigned int selFlags = 0 );
 
-    /**
-        Runs all validation functionality (includes sending wxEVT_PG_CHANGING).
-        Returns true if all tests passed.
-    */
-    virtual bool PerformValidation( wxPGProperty* p, wxVariant& pendingValue );
-
     /** Called when validation for given property fails.
         @param invalidValue
             Value which failed in validation.
@@ -1339,6 +1341,21 @@ protected:
         this - instead, set custom wxPropertyGridPage classes.
     */
     virtual wxPropertyGridPageState* CreateState() const;
+
+    enum PerformValidationFlags
+    {
+        SendEvtChanging         = 0x0001,
+        IsStandaloneValidation  = 0x0002   // Not called in response to event
+    };
+
+    /**
+        Runs all validation functionality (includes sending wxEVT_PG_CHANGING).
+        Returns true if all tests passed. Implement in derived class to
+        add additional validation behavior.
+    */
+    virtual bool PerformValidation( wxPGProperty* p,
+                                    wxVariant& pendingValue,
+                                    int flags = SendEvtChanging );
 
 #ifndef DOXYGEN
 public:

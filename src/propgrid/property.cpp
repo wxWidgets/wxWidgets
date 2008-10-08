@@ -1412,12 +1412,6 @@ bool wxPGProperty::HasVisibleChildren() const
     return false;
 }
 
-bool wxPGProperty::PrepareValueForDialogEditing( wxPropertyGrid* propGrid )
-{
-    return propGrid->CommitChangesFromEditor();
-}
-
-
 bool wxPGProperty::RecreateEditor()
 {
     wxPropertyGrid* pg = GetGrid();

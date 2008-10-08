@@ -2731,7 +2731,8 @@ bool wxPropertyGrid::CommitChangesFromEditor( wxUint32 flags )
 
 // -----------------------------------------------------------------------
 
-bool wxPropertyGrid::PerformValidation( wxPGProperty* p, wxVariant& pendingValue )
+bool wxPropertyGrid::PerformValidation( wxPGProperty* p, wxVariant& pendingValue,
+                                        int flags )
 {
     //
     // Runs all validation functionality.
@@ -2800,34 +2801,37 @@ bool wxPropertyGrid::PerformValidation( wxPGProperty* p, wxVariant& pendingValue
 
     wxVariant evtChangingValue = value;
 
-    // FIXME: After proper ValueToString()s added, remove
-    // this. It is just a temporary fix, as evt_changing
-    // will simply not work for wxPG_PROP_COMPOSED_VALUE
-    // (unless it is selected, and textctrl editor is open).
-    if ( changedProperty->HasFlag(wxPG_PROP_COMPOSED_VALUE) )
+    if ( flags & SendEvtChanging )
     {
-        evtChangingProperty = baseChangedProperty;
-        if ( evtChangingProperty != p )
+        // FIXME: After proper ValueToString()s added, remove
+        // this. It is just a temporary fix, as evt_changing
+        // will simply not work for wxPG_PROP_COMPOSED_VALUE
+        // (unless it is selected, and textctrl editor is open).
+        if ( changedProperty->HasFlag(wxPG_PROP_COMPOSED_VALUE) )
         {
-            evtChangingProperty->AdaptListToValue( bcpPendingList, &evtChangingValue );
+            evtChangingProperty = baseChangedProperty;
+            if ( evtChangingProperty != p )
+            {
+                evtChangingProperty->AdaptListToValue( bcpPendingList, &evtChangingValue );
+            }
+            else
+            {
+                evtChangingValue = pendingValue;
+            }
         }
-        else
-        {
-            evtChangingValue = pendingValue;
-        }
-    }
 
-    if ( evtChangingProperty->HasFlag(wxPG_PROP_COMPOSED_VALUE) )
-    {
-        if ( changedProperty == m_selected )
+        if ( evtChangingProperty->HasFlag(wxPG_PROP_COMPOSED_VALUE) )
         {
-            wxWindow* editor = GetEditorControl();
-            wxASSERT( editor->IsKindOf(CLASSINFO(wxTextCtrl)) );
-            evtChangingValue = wxStaticCast(editor, wxTextCtrl)->GetValue();
-        }
-        else
-        {
-            wxLogDebug(wxT("WARNING: wxEVT_PG_CHANGING is about to happen with old value."));
+            if ( changedProperty == m_selected )
+            {
+                wxWindow* editor = GetEditorControl();
+                wxASSERT( editor->IsKindOf(CLASSINFO(wxTextCtrl)) );
+                evtChangingValue = wxStaticCast(editor, wxTextCtrl)->GetValue();
+            }
+            else
+            {
+                wxLogDebug(wxT("WARNING: wxEVT_PG_CHANGING is about to happen with old value."));
+            }
         }
     }
 
@@ -2849,9 +2853,20 @@ bool wxPropertyGrid::PerformValidation( wxPGProperty* p, wxVariant& pendingValue
             return false;
     }
 
-    // SendEvent returns true if event was vetoed
-    if ( SendEvent( wxEVT_PG_CHANGING, evtChangingProperty, &evtChangingValue, 0 ) )
-        return false;
+    if ( flags & SendEvtChanging )
+    {
+        // SendEvent returns true if event was vetoed
+        if ( SendEvent( wxEVT_PG_CHANGING, evtChangingProperty, &evtChangingValue, 0 ) )
+            return false;
+    }
+
+    if ( flags & IsStandaloneValidation )
+    {
+        // If called in 'generic' context, we need to reset
+        // m_chgInfo_changedProperty and write back translated value.
+        m_chgInfo_changedProperty = NULL;
+        pendingValue = value;
+    }
 
     return true;
 }
@@ -3085,6 +3100,30 @@ bool wxPropertyGrid::ChangePropertyValue( wxPGPropArg id, wxVariant newValue )
     }
 
     return false;
+}
+
+// -----------------------------------------------------------------------
+
+wxVariant wxPropertyGrid::GetPendingEditedValue()
+{
+    wxPGProperty* prop = GetSelectedProperty();
+
+    if ( !prop )
+        return wxNullVariant;
+
+    wxTextCtrl* tc = GetEditorTextCtrl();
+    wxVariant value = prop->GetValue();
+
+    if ( !tc || !IsEditorsValueModified() )
+        return value;
+
+    if ( !prop->StringToValue(value, tc->GetValue()) )
+        return value;
+
+    if ( !PerformValidation(prop, value, IsStandaloneValidation) )
+        return prop->GetValue();
+
+    return value;
 }
 
 // -----------------------------------------------------------------------

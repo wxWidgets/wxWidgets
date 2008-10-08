@@ -1558,8 +1558,6 @@ wxValidator* wxDirProperty::DoGetValidator() const
 bool wxDirProperty::OnButtonClick( wxPropertyGrid* propGrid, wxString& value )
 {
     // Update property value from editor, if necessary
-    PrepareValueForDialogEditing(propGrid);
-
     wxSize dlg_sz(300,400);
 
     wxDirDialog dlg( propGrid,
@@ -1887,9 +1885,9 @@ bool wxLongStringProperty::OnEvent( wxPropertyGrid* propGrid, wxWindow* WXUNUSED
     if ( propGrid->IsMainButtonEvent(event) )
     {
         // Update the value
-        PrepareValueForDialogEditing(propGrid);
+        wxVariant useValue = propGrid->GetPendingEditedValue();
 
-        wxString val1 = GetValueAsString(0);
+        wxString val1 = useValue.GetString();
         wxString val_orig = val1;
 
         wxString value;
@@ -2489,7 +2487,7 @@ bool wxArrayStringProperty::OnButtonClick( wxPropertyGrid* propGrid,
                                            const wxChar* cbt )
 {
     // Update the value
-    PrepareValueForDialogEditing(propGrid);
+    wxVariant useValue = propGrid->GetPendingEditedValue();
 
     if ( !propGrid->EditorValidate() )
         return false;
@@ -2506,7 +2504,7 @@ bool wxArrayStringProperty::OnButtonClick( wxPropertyGrid* propGrid,
     if ( strEdDlg )
         strEdDlg->SetCustomButton(cbt, this);
 
-    dlg->SetDialogValue( wxVariant(m_value) );
+    dlg->SetDialogValue( useValue );
     dlg->Create(propGrid, wxEmptyString, m_label);
 
 #if !wxPG_SMALL_SCREEN

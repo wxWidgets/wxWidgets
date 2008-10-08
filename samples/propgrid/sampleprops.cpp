@@ -131,11 +131,10 @@ bool wxFontDataProperty::OnEvent( wxPropertyGrid* propgrid,
 {
     if ( propgrid->IsMainButtonEvent(event) )
     {
-        // Update value from last minute changes
-        PrepareValueForDialogEditing(propgrid);
+        wxVariant useValue = propgrid->GetPendingEditedValue();
 
         wxFontData fontData;
-        fontData << m_value_wxFontData;
+        fontData << useValue;
 
         fontData.SetInitialFont(fontData.GetChosenFont());
 
@@ -554,10 +553,10 @@ bool wxArrayDoubleProperty::OnEvent( wxPropertyGrid* propgrid,
 {
     if ( propgrid->IsMainButtonEvent(event) )
     {
-        wxArrayDouble& value = wxArrayDoubleRefFromVariant(m_value);
-
         // Update the value in case of last minute changes
-        PrepareValueForDialogEditing(propgrid);
+        wxVariant useValue = propgrid->GetPendingEditedValue();
+
+        wxArrayDouble& value = wxArrayDoubleRefFromVariant(useValue);
 
         // Create editor dialog.
         wxArrayDoubleEditorDialog dlg;

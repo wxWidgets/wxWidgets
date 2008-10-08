@@ -531,11 +531,11 @@ bool wxFontProperty::OnEvent( wxPropertyGrid* propgrid, wxWindow* WXUNUSED(prima
     if ( propgrid->IsMainButtonEvent(event) )
     {
         // Update value from last minute changes
-        PrepareValueForDialogEditing(propgrid);
+        wxVariant useValue = propgrid->GetPendingEditedValue();
 
         wxFontData data;
         wxFont font;
-        font << m_value;
+        font << useValue;
         data.SetInitialFont( font );
         data.SetColour(*wxBLACK);
 
@@ -1803,7 +1803,7 @@ bool wxMultiChoiceProperty::OnEvent( wxPropertyGrid* propgrid,
     if ( propgrid->IsMainButtonEvent(event) )
     {
         // Update the value
-        PrepareValueForDialogEditing(propgrid);
+        wxVariant useValue = propgrid->GetPendingEditedValue();
 
         wxArrayString labels = m_choices.GetLabels();
         unsigned int choiceCount;
@@ -1823,7 +1823,7 @@ bool wxMultiChoiceProperty::OnEvent( wxPropertyGrid* propgrid,
 
         dlg.Move( propgrid->GetGoodEditorDialogPosition(this,dlg.GetSize()) );
 
-        wxArrayString strings = m_value.GetArrayString();
+        wxArrayString strings = useValue.GetArrayString();
         wxArrayString extraStrings;
 
         dlg.SetSelections(m_choices.GetIndicesForStrings(strings, &extraStrings));

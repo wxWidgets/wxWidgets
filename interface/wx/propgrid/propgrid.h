@@ -587,6 +587,14 @@ public:
     wxColour GetMarginColour() const;
 
     /**
+        Returns most up-to-date value of selected property. This will return
+        value different from GetSelectedProperty()->GetValue() only when text
+        editor is activate and string edited by user represents valid,
+        uncommitted property value.
+    */
+    wxVariant GetPendingEditedValue();
+
+    /**
         Returns cell background colour of a property.
     */
     wxColour GetPropertyBackgroundColour( wxPGPropArg id ) const;
