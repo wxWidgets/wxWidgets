@@ -1121,8 +1121,12 @@ public:
     wxDEPRECATED( void GetLogicalOrigin(long *x, long *y) const );
     wxDEPRECATED( void GetDeviceOrigin(long *x, long *y) const );
     wxDEPRECATED( void GetClippingBox(long *x, long *y, long *w, long *h) const );
+
 #endif  // WXWIN_COMPATIBILITY_2_8
 
+#ifdef __WXMSW__
+    WXHDC GetHDC() const;
+#endif // __WXMSW__
 
 protected:
     // ctor takes ownership of the pointer

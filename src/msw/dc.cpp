@@ -399,6 +399,16 @@ wxBrushAttrsSetter::wxBrushAttrsSetter(wxMSWDCImpl& dc)
     }
 }
 
+// ----------------------------------------------------------------------------
+// wxDC MSW-specific methods
+// ----------------------------------------------------------------------------
+
+WXHDC wxDC::GetHDC() const
+{
+    wxMSWDCImpl * const impl = wxDynamicCast(GetImpl(), wxMSWDCImpl);
+    return impl ? impl->GetHDC() : 0;
+}
+
 // ---------------------------------------------------------------------------
 // wxMSWDCImpl
 // ---------------------------------------------------------------------------
