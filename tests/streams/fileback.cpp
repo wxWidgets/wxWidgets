@@ -19,14 +19,14 @@
 #endif
 
 
-#ifdef __VISUALC6__
+#ifdef __VISUALC__
 // need this to be able to use CPPUNIT_ASSERT_EQUAL with wxFileOffset objects
 static std::ostream& operator<<(std::ostream& ostr, const wxFileOffset& fo)
 {
     ostr << fo;
     return ostr;
 }
-#endif // VC++ 6
+#endif // __VISUALC__
 
 #include "wx/mstream.h"
 #include "wx/private/fileback.h"
