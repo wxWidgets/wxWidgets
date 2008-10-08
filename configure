@@ -806,6 +806,7 @@ BK_DEPS
 WINDRES
 REZ
 SETFILE
+OBJCXXFLAGS
 GCC_PCH
 ICC_PCH
 BK_MAKE_PCH
@@ -47946,7 +47947,7 @@ echo "${ECHO_T}$bakefile_cv_prog_makeisgnu" >&6; }
                 PLATFORM_BEOS=1
             ;;
             * )
-	                                    ;;
+                                            ;;
         esac
     fi
 
@@ -49010,10 +49011,8 @@ cat <<EOF >bk-deps
 # Permission is given to use this file in any way.
 
 DEPSMODE=${DEPSMODE}
-DEPSDIR=.deps
 DEPSFLAG="${DEPSFLAG}"
-
-mkdir -p ${D}DEPSDIR
+DEPSDIRBASE=.deps
 
 if test ${D}DEPSMODE = gcc ; then
     ${D}* ${D}{DEPSFLAG}
@@ -49034,8 +49033,12 @@ if test ${D}DEPSMODE = gcc ; then
         esac
         shift
     done
+    objfilebase=\`basename ${D}objfile\`
+    builddir=\`dirname ${D}objfile\`
     depfile=\`basename ${D}srcfile | sed -e 's/\\..*${D}/.d/g'\`
     depobjname=\`echo ${D}depfile |sed -e 's/\\.d/.o/g'\`
+    depsdir=${D}builddir/${D}DEPSDIRBASE
+    mkdir -p ${D}depsdir
 
     # if the compiler failed, we're done:
     if test ${D}{status} != 0 ; then
@@ -49045,21 +49048,22 @@ if test ${D}DEPSMODE = gcc ; then
 
     # move created file to the location we want it in:
     if test -f ${D}depfile ; then
-        sed -e "s,${D}depobjname:,${D}objfile:,g" ${D}depfile >${D}{DEPSDIR}/${D}{objfile}.d
+        sed -e "s,${D}depobjname:,${D}objfile:,g" ${D}depfile >${D}{depsdir}/${D}{objfilebase}.d
         rm -f ${D}depfile
     else
         # "g++ -MMD -o fooobj.o foosrc.cpp" produces fooobj.d
-        depfile=\`basename ${D}objfile | sed -e 's/\\..*${D}/.d/g'\`
+        depfile=\`echo "${D}objfile" | sed -e 's/\\..*${D}/.d/g'\`
         if test ! -f ${D}depfile ; then
             # "cxx -MD -o fooobj.o foosrc.cpp" creates fooobj.o.d (Compaq C++)
             depfile="${D}objfile.d"
         fi
         if test -f ${D}depfile ; then
-            sed -e "/^${D}objfile/!s,${D}depobjname:,${D}objfile:,g" ${D}depfile >${D}{DEPSDIR}/${D}{objfile}.d
+            sed -e "\\,^${D}objfile,!s,${D}depobjname:,${D}objfile:,g" ${D}depfile >${D}{depsdir}/${D}{objfilebase}.d
             rm -f ${D}depfile
         fi
     fi
     exit 0
+
 elif test ${D}DEPSMODE = mwcc ; then
     ${D}* || exit ${D}?
     # Run mwcc again with -MM and redirect into the dep file we want
@@ -49079,8 +49083,15 @@ elif test ${D}DEPSMODE = mwcc ; then
         fi
         prevarg="${D}arg"
     done
-    ${D}* ${D}DEPSFLAG >${D}{DEPSDIR}/${D}{objfile}.d
+
+    objfilebase=\`basename ${D}objfile\`
+    builddir=\`dirname ${D}objfile\`
+    depsdir=${D}builddir/${D}DEPSDIRBASE
+    mkdir -p ${D}depsdir
+
+    ${D}* ${D}DEPSFLAG >${D}{depsdir}/${D}{objfilebase}.d
     exit 0
+
 elif test ${D}DEPSMODE = unixcc; then
     ${D}* || exit ${D}?
     # Run compiler again with deps flag and redirect into the dep file.
@@ -49101,8 +49112,15 @@ elif test ${D}DEPSMODE = unixcc; then
         esac
         shift
     done
-    eval "${D}cmd ${D}DEPSFLAG" | sed "s|.*:|${D}objfile:|" >${D}{DEPSDIR}/${D}{objfile}.d
+
+    objfilebase=\`basename ${D}objfile\`
+    builddir=\`dirname ${D}objfile\`
+    depsdir=${D}builddir/${D}DEPSDIRBASE
+    mkdir -p ${D}depsdir
+
+    eval "${D}cmd ${D}DEPSFLAG" | sed "s|.*:|${D}objfile:|" >${D}{DEPSDIR}/${D}{objfilebase}.d
     exit 0
+
 else
     ${D}*
     exit ${D}?
@@ -49303,7 +49321,10 @@ fi
 
 
 
-    BAKEFILE_BAKEFILE_M4_VERSION="0.2.3"
+
+
+
+    BAKEFILE_BAKEFILE_M4_VERSION="0.2.4"
 
 
 BAKEFILE_AUTOCONF_INC_M4_VERSION="0.2.4"
@@ -49460,6 +49481,8 @@ header="${D}{2}"
 shift
 shift
 
+builddir=\`echo ${D}outfile | sed -e 's,/\\.pch/.*${D},,g'\`
+
 compiler=""
 headerfile=""
 
@@ -49491,8 +49514,8 @@ else
     else
         mkdir -p \`dirname ${D}{outfile}\`
     fi
-    depsfile=".deps/\`echo ${D}{outfile} | tr '/.' '__'\`.d"
-    mkdir -p .deps
+    depsfile="${D}{builddir}/.deps/\`echo ${D}{outfile} | tr '/.' '__'\`.d"
+    mkdir -p ${D}{builddir}/.deps
     if test "x${GCC_PCH}" = "x1" ; then
         # can do this because gcc is >= 3.4:
         ${D}{compiler} -o ${D}{outfile} -MMD -MF "${D}{depsfile}" "${D}{headerfile}"
@@ -51801,10 +51824,10 @@ BK_DEPS!$BK_DEPS$ac_delim
 WINDRES!$WINDRES$ac_delim
 REZ!$REZ$ac_delim
 SETFILE!$SETFILE$ac_delim
+OBJCXXFLAGS!$OBJCXXFLAGS$ac_delim
 GCC_PCH!$GCC_PCH$ac_delim
 ICC_PCH!$ICC_PCH$ac_delim
 BK_MAKE_PCH!$BK_MAKE_PCH$ac_delim
-COND_BUILD_DEBUG!$COND_BUILD_DEBUG$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -51846,6 +51869,7 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+COND_BUILD_DEBUG!$COND_BUILD_DEBUG$ac_delim
 COND_BUILD_DEBUG_DEBUG_FLAG_DEFAULT!$COND_BUILD_DEBUG_DEBUG_FLAG_DEFAULT$ac_delim
 COND_BUILD_DEBUG_DEBUG_INFO_DEFAULT!$COND_BUILD_DEBUG_DEBUG_INFO_DEFAULT$ac_delim
 COND_BUILD_DEBUG_UNICODE_0!$COND_BUILD_DEBUG_UNICODE_0$ac_delim
@@ -51942,7 +51966,6 @@ COND_SHARED_0_USE_GUI_1_wxUSE_LIBTIFF_builtin!$COND_SHARED_0_USE_GUI_1_wxUSE_LIB
 COND_SHARED_0_USE_STC_1!$COND_SHARED_0_USE_STC_1$ac_delim
 COND_SHARED_0_wxUSE_EXPAT_builtin!$COND_SHARED_0_wxUSE_EXPAT_builtin$ac_delim
 COND_SHARED_0_wxUSE_REGEX_builtin!$COND_SHARED_0_wxUSE_REGEX_builtin$ac_delim
-COND_SHARED_0_wxUSE_ZLIB_builtin!$COND_SHARED_0_wxUSE_ZLIB_builtin$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -51984,6 +52007,7 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+COND_SHARED_0_wxUSE_ZLIB_builtin!$COND_SHARED_0_wxUSE_ZLIB_builtin$ac_delim
 COND_SHARED_1!$COND_SHARED_1$ac_delim
 COND_SHARED_1_USE_GUI_1_USE_OPENGL_1!$COND_SHARED_1_USE_GUI_1_USE_OPENGL_1$ac_delim
 COND_TOOLKIT_!$COND_TOOLKIT_$ac_delim
@@ -52080,7 +52104,6 @@ WIN32INSTALL!$WIN32INSTALL$ac_delim
 TOOLKIT!$TOOLKIT$ac_delim
 TOOLKIT_DIR!$TOOLKIT_DIR$ac_delim
 TOOLCHAIN_NAME!$TOOLCHAIN_NAME$ac_delim
-TOOLCHAIN_FULLNAME!$TOOLCHAIN_FULLNAME$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -52122,6 +52145,7 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+TOOLCHAIN_FULLNAME!$TOOLCHAIN_FULLNAME$ac_delim
 cross_compiling!$cross_compiling$ac_delim
 WIDGET_SET!$WIDGET_SET$ac_delim
 WX_RELEASE!$WX_RELEASE$ac_delim
@@ -52158,7 +52182,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 34; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 35; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
