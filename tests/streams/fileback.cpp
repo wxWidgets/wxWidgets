@@ -18,6 +18,15 @@
     #include "wx/wx.h"
 #endif
 
+
+// need this to be able to use CPPUNIT_ASSERT_EQUAL with wxFileOffset objects
+static std::ostream& operator<<(std::ostream& ostr, const wxFileOffset& fo)
+{
+    ostr << fo;
+    return ostr;
+}
+
+
 #include "wx/mstream.h"
 #include "wx/private/fileback.h"
 #include "bstream.h"

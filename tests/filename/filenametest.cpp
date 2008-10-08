@@ -290,7 +290,7 @@ void FileNameTestCase::TestNormalize()
     {
         const wxChar *original;
         int flags;
-        wxString expected;
+        const wxChar * expected;
     } tests[] =
     {
         // test wxPATH_NORM_ENV_VARS
@@ -335,7 +335,7 @@ void FileNameTestCase::TestNormalize()
         );
 
         // compare result with expected string
-        CPPUNIT_ASSERT_EQUAL( tests[i].expected, fn.GetFullPath(wxPATH_UNIX) );
+        CPPUNIT_ASSERT_EQUAL( wxString(tests[i].expected), fn.GetFullPath(wxPATH_UNIX) );
     }
 }
 
