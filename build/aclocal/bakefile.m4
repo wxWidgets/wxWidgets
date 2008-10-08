@@ -126,7 +126,7 @@ AC_DEFUN([AC_BAKEFILE_PLATFORM],
                 PLATFORM_BEOS=1
             ;;
             * )
-	        dnl wxWidgets-specific: allow unknown Unix systems
+                dnl wxWidgets-specific: allow unknown Unix systems
                 dnl AC_MSG_ERROR([Unknown platform: $BAKEFILE_FORCE_PLATFORM])
             ;;
         esac
@@ -828,7 +828,11 @@ AC_DEFUN([AC_BAKEFILE],
     AC_BAKEFILE_DEPS
     AC_BAKEFILE_RES_COMPILERS
 
-    BAKEFILE_BAKEFILE_M4_VERSION="0.2.3"
+    dnl OBJCFLAGS is set by Autoconf, but OBJCXXFLAGS is not:
+    AC_SUBST(OBJCXXFLAGS)
+
+
+    BAKEFILE_BAKEFILE_M4_VERSION="0.2.4"
 
     dnl includes autoconf_inc.m4:
     $1
@@ -862,10 +866,8 @@ cat <<EOF >bk-deps
 # Permission is given to use this file in any way.
 
 DEPSMODE=${DEPSMODE}
-DEPSDIR=.deps
 DEPSFLAG="${DEPSFLAG}"
-
-mkdir -p ${D}DEPSDIR
+DEPSDIRBASE=.deps
 
 if test ${D}DEPSMODE = gcc ; then
     ${D}* ${D}{DEPSFLAG}
@@ -886,9 +888,13 @@ if test ${D}DEPSMODE = gcc ; then
         esac
         shift
     done
+    objfilebase=\`basename ${D}objfile\`
+    builddir=\`dirname ${D}objfile\`
     depfile=\`basename ${D}srcfile | sed -e 's/\\..*${D}/.d/g'\`
     depobjname=\`echo ${D}depfile |sed -e 's/\\.d/.o/g'\`
-    
+    depsdir=${D}builddir/${D}DEPSDIRBASE
+    mkdir -p ${D}depsdir
+
     # if the compiler failed, we're done:
     if test ${D}{status} != 0 ; then
         rm -f ${D}depfile
@@ -897,21 +903,22 @@ if test ${D}DEPSMODE = gcc ; then
 
     # move created file to the location we want it in:
     if test -f ${D}depfile ; then
-        sed -e "s,${D}depobjname:,${D}objfile:,g" ${D}depfile >${D}{DEPSDIR}/${D}{objfile}.d
+        sed -e "s,${D}depobjname:,${D}objfile:,g" ${D}depfile >${D}{depsdir}/${D}{objfilebase}.d
         rm -f ${D}depfile
     else
         # "g++ -MMD -o fooobj.o foosrc.cpp" produces fooobj.d
-        depfile=\`basename ${D}objfile | sed -e 's/\\..*${D}/.d/g'\`
+        depfile=\`echo "${D}objfile" | sed -e 's/\\..*${D}/.d/g'\`
         if test ! -f ${D}depfile ; then
             # "cxx -MD -o fooobj.o foosrc.cpp" creates fooobj.o.d (Compaq C++)
             depfile="${D}objfile.d"
         fi
         if test -f ${D}depfile ; then
-            sed -e "/^${D}objfile/!s,${D}depobjname:,${D}objfile:,g" ${D}depfile >${D}{DEPSDIR}/${D}{objfile}.d
+            sed -e "\\,^${D}objfile,!s,${D}depobjname:,${D}objfile:,g" ${D}depfile >${D}{depsdir}/${D}{objfilebase}.d
             rm -f ${D}depfile
         fi
     fi
     exit 0
+
 elif test ${D}DEPSMODE = mwcc ; then
     ${D}* || exit ${D}?
     # Run mwcc again with -MM and redirect into the dep file we want
@@ -931,8 +938,15 @@ elif test ${D}DEPSMODE = mwcc ; then
         fi
         prevarg="${D}arg"
     done
-    ${D}* ${D}DEPSFLAG >${D}{DEPSDIR}/${D}{objfile}.d
+    
+    objfilebase=\`basename ${D}objfile\`
+    builddir=\`dirname ${D}objfile\`
+    depsdir=${D}builddir/${D}DEPSDIRBASE
+    mkdir -p ${D}depsdir
+
+    ${D}* ${D}DEPSFLAG >${D}{depsdir}/${D}{objfilebase}.d
     exit 0
+
 elif test ${D}DEPSMODE = unixcc; then
     ${D}* || exit ${D}?
     # Run compiler again with deps flag and redirect into the dep file.
@@ -953,8 +967,15 @@ elif test ${D}DEPSMODE = unixcc; then
         esac
         shift
     done
-    eval "${D}cmd ${D}DEPSFLAG" | sed "s|.*:|${D}objfile:|" >${D}{DEPSDIR}/${D}{objfile}.d
+    
+    objfilebase=\`basename ${D}objfile\`
+    builddir=\`dirname ${D}objfile\`
+    depsdir=${D}builddir/${D}DEPSDIRBASE
+    mkdir -p ${D}depsdir
+    
+    eval "${D}cmd ${D}DEPSFLAG" | sed "s|.*:|${D}objfile:|" >${D}{DEPSDIR}/${D}{objfilebase}.d
     exit 0
+
 else
     ${D}*
     exit ${D}?
@@ -1093,6 +1114,8 @@ header="${D}{2}"
 shift
 shift
 
+builddir=\`echo ${D}outfile | sed -e 's,/\\.pch/.*${D},,g'\`
+
 compiler=""
 headerfile=""
 
@@ -1124,8 +1147,8 @@ else
     else
         mkdir -p \`dirname ${D}{outfile}\`
     fi
-    depsfile=".deps/\`echo ${D}{outfile} | tr '/.' '__'\`.d"
-    mkdir -p .deps
+    depsfile="${D}{builddir}/.deps/\`echo ${D}{outfile} | tr '/.' '__'\`.d"
+    mkdir -p ${D}{builddir}/.deps
     if test "x${GCC_PCH}" = "x1" ; then
         # can do this because gcc is >= 3.4:
         ${D}{compiler} -o ${D}{outfile} -MMD -MF "${D}{depsfile}" "${D}{headerfile}"
