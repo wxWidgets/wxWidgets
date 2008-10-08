@@ -856,15 +856,6 @@ public:
     */
     void SetPropertyAttributeAll( const wxString& attrName, wxVariant value );
 
-    /** Sets attributes from a wxPGAttributeStorage.
-    */
-    void SetPropertyAttributes( wxPGPropArg id,
-                                const wxPGAttributeStorage& attributes )
-    {
-        wxPG_PROP_ARG_CALL_PROLOG()
-        p->SetAttributes(attributes);
-    }
-
     /** Sets text, bitmap, and colours for given column's cell.
 
         @remarks
