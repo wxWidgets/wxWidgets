@@ -614,8 +614,6 @@ protected:
 
 public:
 
-#ifndef DOXYGEN
-
     //
     // Overridden functions - no documentation required.
     //
@@ -734,7 +732,6 @@ protected:
 private:
     DECLARE_EVENT_TABLE()
 #endif // #ifndef SWIG
-#endif // #ifndef DOXYGEN
 };
 
 // -----------------------------------------------------------------------

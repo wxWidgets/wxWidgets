@@ -391,7 +391,7 @@ public:
 #endif  // !SWIG
 
 
-#if wxPG_INCLUDE_CHECKBOX || defined(DOXYGEN)
+#if wxPG_INCLUDE_CHECKBOX
 
 //
 // Use custom check box code instead of native control
@@ -539,7 +539,6 @@ public:
 
     void Finalize( wxPropertyGrid* propGrid, const wxPoint& pos );
 
-#ifndef DOXYGEN
 protected:
 
     int GenId( int id ) const;
@@ -547,7 +546,6 @@ protected:
     wxArrayPtrVoid  m_buttons;
     wxSize          m_fullEditorSize;
     int             m_buttonsWidth;
-#endif // !DOXYGEN
 };
 
 // -----------------------------------------------------------------------

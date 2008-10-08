@@ -1357,7 +1357,6 @@ protected:
                                     wxVariant& pendingValue,
                                     int flags = SendEvtChanging );
 
-#ifndef DOXYGEN
 public:
 
     // Control font changer helper.
@@ -1818,9 +1817,6 @@ private:
 
     bool ButtonTriggerKeyTest( int action, wxKeyEvent& event );
 
-#endif // DOXYGEN_SHOULD_SKIP_THIS
-
-private:
     DECLARE_EVENT_TABLE()
 #endif // #ifndef SWIG
 };
@@ -2178,12 +2174,6 @@ protected:
     #undef wxPG_USE_RENDERER_NATIVE
 // Following are needed by the manager headers
 //    #undef const wxString&
-#endif
-
-// Doxygen special
-#ifdef DOXYGEN
-    #include "wx/propgrid/editor.h"
-    #include "wx/propgrid/manager.h"
 #endif
 
 // -----------------------------------------------------------------------
