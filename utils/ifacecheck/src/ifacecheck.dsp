@@ -242,6 +242,14 @@ SOURCE=.\ifacecheck.cpp
 SOURCE=.\xmlparser.cpp
 # End Source File
 # End Group
+# Begin Group "Header Files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\xmlparser.h
+# End Source File
+# End Group
 # End Target
 # End Project
 
