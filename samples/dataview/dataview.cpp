@@ -161,8 +161,9 @@ public:
             wxT("Take a bow"), wxT("Madonna"), 1994 ) );
         m_classical = new MyMusicModelNode( m_root, wxT("Classical music") );
         m_root->Append( m_classical );
-        m_classical->Append( new MyMusicModelNode( m_classical,
-            wxT("Ninth symphony"), wxT("Ludwig van Beethoven"), 1824 ) );
+        m_ninth = new MyMusicModelNode( m_classical,
+            wxT("Ninth symphony"), wxT("Ludwig van Beethoven"), 1824 );
+        m_classical->Append( m_ninth );
         m_classical->Append( new MyMusicModelNode( m_classical,
             wxT("German Requiem"), wxT("Johannes Brahms"), 1868 ) );
         m_classicalMusicIsKnownToControl = false;
@@ -404,11 +405,17 @@ public:
             memcpy( dest, buffer, strlen(buffer)+1 );
             return true;
         }
+    
+    wxDataViewItem GetNinthItem()
+    {
+       return wxDataViewItem( m_ninth );
+    }
 
 private:
     MyMusicModelNode*   m_root;
     MyMusicModelNode*   m_pop;
     MyMusicModelNode*   m_classical;
+    MyMusicModelNode*   m_ninth;
     bool                m_classicalMusicIsKnownToControl;
 };
 
@@ -662,6 +669,7 @@ public:
     void OnAddMozart(wxCommandEvent& event);
     void OnDeleteMusic(wxCommandEvent& event);
     void OnDeleteYear(wxCommandEvent& event);
+    void OnSelectNinth(wxCommandEvent& event);
 
     void OnPrependList(wxCommandEvent& event);
     void OnDeleteList(wxCommandEvent& event);
@@ -745,6 +753,7 @@ enum
     ID_ADD_MOZART       = 100,
     ID_DELETE_MUSIC     = 101,
     ID_DELETE_YEAR      = 102,
+    ID_SELECT_NINTH     = 103,
 
     ID_PREPEND_LIST     = 200,
     ID_DELETE_LIST      = 201,
@@ -758,6 +767,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON( ID_ADD_MOZART, MyFrame::OnAddMozart )
     EVT_BUTTON( ID_DELETE_MUSIC, MyFrame::OnDeleteMusic )
     EVT_BUTTON( ID_DELETE_YEAR, MyFrame::OnDeleteYear )
+    EVT_BUTTON( ID_SELECT_NINTH, MyFrame::OnSelectNinth )
     EVT_BUTTON( ID_PREPEND_LIST, MyFrame::OnPrependList )
     EVT_BUTTON( ID_DELETE_LIST, MyFrame::OnDeleteList )
     EVT_BUTTON( ID_GOTO, MyFrame::OnGoto)
@@ -879,6 +889,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     button_sizer->Add( new wxButton( this, ID_ADD_MOZART,  _("Add Mozart")),             0, wxALL, 10 );
     button_sizer->Add( new wxButton( this, ID_DELETE_MUSIC,_("Delete selected")),        0, wxALL, 10 );
     button_sizer->Add( new wxButton( this, ID_DELETE_YEAR, _("Delete \"Year\" column")), 0, wxALL, 10 );
+    button_sizer->Add( new wxButton( this, ID_SELECT_NINTH, _("Select Ninth")), 0, wxALL, 10 );
     button_sizer->Add( 10, 10, 1 );
     wxFlexGridSizer *grid_sizer = new wxFlexGridSizer( 2, 2 );
     grid_sizer->Add( new wxButton( this, ID_PREPEND_LIST,_("Prepend")),         0, wxALL, 2 );
@@ -965,6 +976,11 @@ void MyFrame::OnDeleteYear( wxCommandEvent& WXUNUSED(event) )
 {
     m_musicCtrl->DeleteColumn( m_musicCtrl->GetColumn( 2 ) );
     FindWindow( ID_DELETE_YEAR )->Disable();
+}
+
+void MyFrame::OnSelectNinth( wxCommandEvent& WXUNUSED(event) )
+{
+    m_musicCtrl->Select( m_music_model->GetNinthItem() );
 }
 
 void MyFrame::OnPrependList( wxCommandEvent& WXUNUSED(event) )
