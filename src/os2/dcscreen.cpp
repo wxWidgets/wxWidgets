@@ -12,11 +12,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#define INCL_DEV
-#define INCL_GPI
-#define INCL_PM
-#include<os2.h>
-
 #include "wx/os2/dcscreen.h"
 
 #ifndef WX_PRECOMP
