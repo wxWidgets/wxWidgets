@@ -171,6 +171,7 @@ wx/iosfwrap.h
 wx/ioswrap.h
 wx/ipc.h
 wx/ipcbase.h
+wx/kbdstate.h
 wx/link.h
 wx/list.h
 wx/listimpl.cpp
@@ -182,6 +183,7 @@ wx/memory.h
 wx/memtext.h
 wx/mimetype.h
 wx/module.h
+wx/mousestate.h
 wx/msgout.h
 wx/mstream.h
 wx/object.h

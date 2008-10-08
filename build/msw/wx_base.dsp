@@ -1275,6 +1275,10 @@ SOURCE=..\..\include\wx\ipcbase.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\kbdstate.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\link.h
 # End Source File
 # Begin Source File
@@ -1312,6 +1316,10 @@ SOURCE=..\..\include\wx\mimetype.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\module.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\mousestate.h
 # End Source File
 # Begin Source File
 

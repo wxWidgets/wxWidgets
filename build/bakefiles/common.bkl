@@ -357,20 +357,6 @@ InputPath=..\..\include\wx\%s
 $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
         </if>
     </set>
-    <!-- this should be removed after new bakefile release -->
-    <if cond="FORMAT in ['msvs2005prj','msvs2003prj']">
-        <if cond="BAKEFILE_VERSION!='0.2.3'">
-            <warning>FIXME: THIS OBSOLETE CODE ISN'T NEEDED ANYMORE</warning>
-        </if>
-        <set var="msvc_copy_setup_h_script">
-Creating $(SETUPHDIR)\wx\setup.h
-InputPath=..\..\include\wx\%s
-
-"$(SETUPHDIR)\wx\setup.h" : "$(DOLLAR)(INTDIR)" "$(DOLLAR)(OUTDIR)"
-$(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
-        </set>
-    </if>
-    <!-- end of what should be removed after new bakefile release -->
 
     <define-tag name="msvc-headers-setup-h" rules="dll,lib">
         <if cond="IS_MSVC_PRJ">
@@ -429,19 +415,6 @@ InputPath=..\..\include\wx\msw\genrcdefs.h
 "$(SETUPHDIR)\wx\msw\rcdefs.h" : "$(DOLLAR)(SOURCE)" "$(SETUPHDIR)\wx\msw"
 $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
             </set>
-            <!-- this should be removed after new bakefile release -->
-            <if cond="FORMAT in ['msvs2005prj','msvs2003prj']">
-                <if cond="BAKEFILE_VERSION!='0.2.3'">
-                    <warning>FIXME: THIS OBSOLETE CODE ISN'T NEEDED ANYMORE</warning>
-                </if>
-                <set var="_custom_build_include_wx_msw_genrcdefs_h">
-Creating $(SETUPHDIR)\wx\msw\rcdefs.h
-InputPath=..\..\include\wx\msw\genrcdefs.h
-
-"$(SETUPHDIR)\wx\msw\rcdefs.h" : "$(SETUPHDIR)\wx\msw"
-$(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
-                </set>
-            </if>
         </if>
     </define-tag>
 
