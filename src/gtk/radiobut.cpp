@@ -87,8 +87,8 @@ bool wxRadioButton::Create( wxWindow *parent,
 
     SetLabel(label);
 
-    g_signal_connect (m_widget, "clicked",
-                      G_CALLBACK (gtk_radiobutton_clicked_callback), this);
+    g_signal_connect_after (m_widget, "clicked",
+                            G_CALLBACK (gtk_radiobutton_clicked_callback), this);
 
     m_parent->DoAddChild( this );
 
