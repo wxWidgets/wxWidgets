@@ -22,6 +22,7 @@
 #else // !wxUSE_STL
 
 #include "wx/utils.h"
+#include "wx/scopeguard.h"
 #include "wx/meta/movable.h"
 #include "wx/meta/if.h"
 
@@ -291,39 +292,28 @@ public:
 
         reserve(size() + 1);
 
+        // the place where the new element is going to be inserted
+        value_type * const place = m_values + idx;
+
         // unless we're inserting at the end, move following elements out of
         // the way:
         if ( after > 0 )
-        {
-            Ops::MemmoveForward(m_values + idx + 1, m_values + idx, after);
-        }
+            Ops::MemmoveForward(place + 1, place, after);
 
-#if wxUSE_EXCEPTIONS
-        try
-        {
-#endif
-            // use placement new to initialize new object in preallocated place
-            // in m_values and store 'v' in it:
-            void* const place = m_values + idx;
-            new(place) value_type(v);
-#if wxUSE_EXCEPTIONS
-        }
-        catch ( ... )
-        {
-            // if the ctor threw an exception, we need to move all the elements
-            // back to their original positions in m_values
-            if ( after > 0 )
-            {
-                Ops::MemmoveBackward(m_values + idx, m_values + idx + 1, after);
-            }
+        // if the ctor called below throws an exception, we need to move all
+        // the elements back to their original positions in m_values
+        wxScopeGuard moveBack = wxMakeGuard(
+                Ops::MemmoveBackward, place, place + 1, after);
+        if ( !after )
+            moveBack.Dismiss();
 
-            throw; // rethrow the exception
-        }
-#endif // wxUSE_EXCEPTIONS
+        // use placement new to initialize new object in preallocated place in
+        // m_values and store 'v' in it:
+        new(place) value_type(v);
 
-        // increment m_size only if ctor didn't throw -- if it did, we'll be
-        // left with m_values larger than necessary, but number of elements will
-        // be the same
+        // now that we did successfully add the new element, increment the size
+        // and disable moving the items back
+        moveBack.Dismiss();
         m_size++;
 
         return begin() + idx;
