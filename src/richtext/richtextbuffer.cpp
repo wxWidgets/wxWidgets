@@ -7588,7 +7588,10 @@ bool wxRichTextImageBlock::ReadHex(wxInputStream& stream, int length, wxBitmapTy
     if (m_data)
         delete[] m_data;
 
-    wxChar str[2];
+    // create a null terminated temporary string:
+    char str[3];
+    str[2] = '\0';
+
     m_data = new unsigned char[dataSize];
     int i;
     for (i = 0; i < dataSize; i ++)
