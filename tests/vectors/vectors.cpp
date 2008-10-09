@@ -47,7 +47,7 @@ private:
 int CountedObject::ms_count = 0;
 
 // ----------------------------------------------------------------------------
-// simple class capable of checking it's this pointer validity
+// simple class capable of checking its "this" pointer validity
 // ----------------------------------------------------------------------------
 
 class SelfPointingObject
@@ -56,6 +56,10 @@ public:
     SelfPointingObject() { m_self = this; }
     SelfPointingObject(const SelfPointingObject&) { m_self = this; }
     ~SelfPointingObject() { CPPUNIT_ASSERT( this == m_self ); }
+
+    // the assignment operator should not modify our "this" pointer so
+    // implement it just to prevent the default version from doing it
+    SelfPointingObject& operator=(const SelfPointingObject&) { return *this; }
 
 private:
     SelfPointingObject *m_self;
