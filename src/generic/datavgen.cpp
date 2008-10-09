@@ -4151,6 +4151,15 @@ WXLRESULT wxDataViewCtrl::MSWWindowProc(WXUINT nMsg,
 }
 #endif
 
+wxSize wxDataViewCtrl::GetSizeAvailableForScrollTarget(const wxSize& size)
+{
+    wxSize newsize = size;
+    if (!HasFlag(wxDV_NO_HEADER))
+       newsize.y -= m_headerArea->GetSize().y;
+    
+    return newsize;
+}
+
 void wxDataViewCtrl::OnSize( wxSizeEvent &WXUNUSED(event) )
 {
     // We need to override OnSize so that our scrolled

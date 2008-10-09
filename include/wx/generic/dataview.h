@@ -490,6 +490,7 @@ private:
 
 private:
     void OnSize( wxSizeEvent &event );
+    virtual wxSize GetSizeAvailableForScrollTarget(const wxSize& size);
 
     // we need to return a special WM_GETDLGCODE value to process just the
     // arrows but let the other navigation characters through
