@@ -10,10 +10,21 @@
     @class wxRichTextXMLHandler
 
     A handler for loading and saving content in an XML format specific
-    to wxRichTextBuffer. You can either add the handler to the buffer
-    and load and save through the buffer or control API, or you can
-    create an instance of the handler on the stack and call its
-    functions directly.
+    to wxRichTextBuffer.
+
+    You can either add the handler to the buffer and load and save through
+    the buffer or control API, or you can create an instance of the handler
+    on the stack and call its functions directly.
+
+
+    @section richtextxmlhandler_flags Handler flags
+
+    The following flags can be used with this handler, via the handler's SetFlags()
+    function or the buffer or control's SetHandlerFlags() function:
+
+    - wxRICHTEXT_HANDLER_INCLUDE_STYLESHEET
+      Include the style sheet in loading and saving operations.
+
 
     @library{wxrichtext}
     @category{richtext}
@@ -22,10 +33,11 @@ class wxRichTextXMLHandler : public wxRichTextFileHandler
 {
 public:
     /**
-        ,  wxString&@e ext = wxT("xml"), @b int@e type = wxRICHTEXT_TYPE_XML)
         Constructor.
     */
-    wxRichTextXMLHandler() const;
+    wxRichTextXMLHandler(const wxString& name = wxT("XML"),
+                         const wxString& ext = wxT("xml"),
+                         int type = wxRICHTEXT_TYPE_XML) const;
 
     /**
         Returns @true.

@@ -9,19 +9,21 @@
 /**
     @class wxRichTextStyleListCtrl
 
-    This class incorporates a wxRichTextStyleListBox and
-    a choice control that allows the user to select the category of style to view.
+    This class incorporates a wxRichTextStyleListBox and a choice control that
+    allows the user to select the category of style to view.
+
     It is demonstrated in the wxRichTextCtrl sample in @c samples/richtext.
 
     To use wxRichTextStyleListCtrl, add the control to your window hierarchy and
-    call wxRichTextStyleListCtrl::SetStyleType with
-    one of wxRichTextStyleListBox::wxRICHTEXT_STYLE_ALL,
+    call wxRichTextStyleListCtrl::SetStyleType with one of
+    wxRichTextStyleListBox::wxRICHTEXT_STYLE_ALL,
     wxRichTextStyleListBox::wxRICHTEXT_STYLE_PARAGRAPH,
     wxRichTextStyleListBox::wxRICHTEXT_STYLE_CHARACTER and
     wxRichTextStyleListBox::wxRICHTEXT_STYLE_LIST to set the current view.
+
     Associate the control with a style sheet and rich text control with
-    SetStyleSheet and SetRichTextCtrl,
-    so that when a style is double-clicked, it is applied to the selection.
+    SetStyleSheet and SetRichTextCtrl, so that when a style is double-clicked,
+    it is applied to the selection.
 
     @beginStyleTable
     @style{wxRICHTEXTSTYLELIST_HIDE_TYPE_SELECTOR}
@@ -29,7 +31,7 @@
     @endStyleTable
 
     @library{wxrichtext}
-    @category{FIXME}
+    @category{richtext}
 */
 class wxRichTextStyleListCtrl : public wxControl
 {
@@ -90,10 +92,13 @@ public:
     void SetStyleSheet(wxRichTextStyleSheet* styleSheet);
 
     /**
-        Sets the style type to display. One of
-        wxRichTextStyleListBox::wxRICHTEXT_STYLE_ALL, wxRichTextStyleListBox::wxRICHTEXT_STYLE_PARAGRAPH,
-        wxRichTextStyleListBox::wxRICHTEXT_STYLE_CHARACTER and
-        wxRichTextStyleListBox::wxRICHTEXT_STYLE_LIST.
+        Sets the style type to display.
+
+        One of
+        - wxRichTextStyleListBox::wxRICHTEXT_STYLE_ALL,
+        - wxRichTextStyleListBox::wxRICHTEXT_STYLE_PARAGRAPH,
+        - wxRichTextStyleListBox::wxRICHTEXT_STYLE_CHARACTER
+        - wxRichTextStyleListBox::wxRICHTEXT_STYLE_LIST.
     */
     void SetStyleType(wxRichTextStyleListBox::wxRichTextStyleType styleType);
 
@@ -111,7 +116,7 @@ public:
     This is a base class for paragraph and character styles.
 
     @library{wxrichtext}
-    @category{FIXME}
+    @category{richtext}
 */
 class wxRichTextStyleDefinition : public wxObject
 {
@@ -224,8 +229,7 @@ public:
     @library{wxrichtext}
     @category{richtext}
 
-    @see wxRichTextStyleComboCtrl, @ref overview_wxrichtextctrloverview
-    "wxRichTextCtrl overview"
+    @see wxRichTextStyleComboCtrl, @ref overview_richtextctrl
 */
 class wxRichTextStyleListBox : public wxHtmlListBox
 {
@@ -261,8 +265,7 @@ public:
 
     /**
         If the return value is @true, clicking on a style name in the list will
-        immediately
-        apply the style to the associated rich text control.
+        immediately apply the style to the associated rich text control.
     */
     bool GetApplyOnSelection() const;
 
@@ -304,8 +307,7 @@ public:
 
     /**
         If @a applyOnSelection is @true, clicking on a style name in the list will
-        immediately
-        apply the style to the associated rich text control.
+        immediately apply the style to the associated rich text control.
     */
     void SetApplyOnSelection(bool applyOnSelection);
 
@@ -321,9 +323,10 @@ public:
 
     /**
         Sets the style type to display. One of
-        wxRichTextStyleListBox::wxRICHTEXT_STYLE_ALL, wxRichTextStyleListBox::wxRICHTEXT_STYLE_PARAGRAPH,
-        wxRichTextStyleListBox::wxRICHTEXT_STYLE_CHARACTER and
-        wxRichTextStyleListBox::wxRICHTEXT_STYLE_LIST.
+        - wxRichTextStyleListBox::wxRICHTEXT_STYLE_ALL,
+        - wxRichTextStyleListBox::wxRICHTEXT_STYLE_PARAGRAPH,
+        - wxRichTextStyleListBox::wxRICHTEXT_STYLE_CHARACTER
+        - wxRichTextStyleListBox::wxRICHTEXT_STYLE_LIST.
     */
     void SetStyleType(wxRichTextStyleListBox::wxRichTextStyleType styleType);
 
@@ -346,8 +349,7 @@ public:
     @library{wxrichtext}
     @category{richtext}
 
-    @see wxRichTextStyleListBox, @ref overview_wxrichtextctrloverview
-    "wxRichTextCtrl overview"
+    @see wxRichTextStyleListBox, @ref overview_richtextctrl
 */
 class wxRichTextStyleComboCtrl : public wxComboCtrl
 {
@@ -425,18 +427,16 @@ public:
     This class represents a list style definition, usually added to a
     wxRichTextStyleSheet.
 
-    The class inherits paragraph attributes from
-    wxRichTextStyleParagraphDefinition, and adds 10 further attribute objects, one for each level of a list.
+    The class inherits paragraph attributes from wxRichTextStyleParagraphDefinition,
+    and adds 10 further attribute objects, one for each level of a list.
     When applying a list style to a paragraph, the list style's base and
-    appropriate level attributes are merged with the
-    paragraph's existing attributes.
+    appropriate level attributes are merged with the paragraph's existing attributes.
 
-    You can apply a list style to one or more paragraphs using
-    wxRichTextCtrl::SetListStyle. You
-    can also use the functions wxRichTextCtrl::NumberList,
-    wxRichTextCtrl::PromoteList and
-    wxRichTextCtrl::ClearListStyle. As usual, there are wxRichTextBuffer versions
-    of these functions
+    You can apply a list style to one or more paragraphs using wxRichTextCtrl::SetListStyle.
+    You can also use the functions wxRichTextCtrl::NumberList, wxRichTextCtrl::PromoteList and
+    wxRichTextCtrl::ClearListStyle.
+
+    As usual, there are wxRichTextBuffer versions of these functions
     so that you can apply them directly to a buffer without requiring a control.
 
     @library{wxrichtext}
@@ -458,6 +458,7 @@ public:
     /**
         This function combines the given paragraph style with the list style's base
         attributes and level style matching the given indent, returning the combined attributes.
+
         If @a styleSheet is specified, the base style for this definition will also be
         included in the result.
     */
@@ -474,6 +475,7 @@ public:
     /**
         This function combines the list style's base attributes and the level style
         matching the given indent, returning the combined attributes.
+
         If @a styleSheet is specified, the base style for this definition will also be
         included in the result.
     */
@@ -483,6 +485,7 @@ public:
     /**
         This function combines the list style's base attributes and the style for the
         specified level, returning the combined attributes.
+
         If @a styleSheet is specified, the base style for this definition will also be
         included in the result.
     */
@@ -527,9 +530,8 @@ public:
     A style sheet contains named paragraph and character styles that make it
     easy for a user to apply combinations of attributes to a wxRichTextCtrl.
 
-    You can use a wxRichTextStyleListBox in your
-    user interface to show available styles to the user, and allow application
-    of styles to the control.
+    You can use a wxRichTextStyleListBox in your user interface to show available
+    styles to the user, and allow application of styles to the control.
 
     @library{wxrichtext}
     @category{richtext}

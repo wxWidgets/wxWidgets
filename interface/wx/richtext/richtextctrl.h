@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        richtext/richtextctrl.h
-// Purpose:     interface of wxRichTextEvent
+// Purpose:     interface of wxRichTextCtrl and wxRichTextEvent
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -11,8 +11,49 @@
 
     This is the event class for wxRichTextCtrl notifications.
 
+    @beginEventTable{wxRichTextEvent}
+    @event{EVT_RICHTEXT_CHARACTER(id, func)}
+        Process a wxEVT_COMMAND_RICHTEXT_CHARACTER event, generated when the user
+        presses a character key. Valid event functions: GetFlags, GetPosition, GetCharacter.
+    @event{EVT_RICHTEXT_DELETE(id, func)}
+        Process a wxEVT_COMMAND_RICHTEXT_DELETE event, generated when the user
+        presses the backspace or delete key. Valid event functions: GetFlags, GetPosition.
+    @event{EVT_RICHTEXT_RETURN(id, func)}
+        Process a wxEVT_COMMAND_RICHTEXT_RETURN event, generated when the user
+        presses the return key. Valid event functions: GetFlags, GetPosition.
+    @event{EVT_RICHTEXT_STYLE_CHANGED(id, func)}
+        Process a wxEVT_COMMAND_RICHTEXT_STYLE_CHANGED event, generated when
+        styling has been applied to the control. Valid event functions: GetPosition, GetRange.
+    @event{EVT_RICHTEXT_STYLESHEET_CHANGED(id, func)}
+        Process a wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGING event, generated
+        when the control's stylesheet has changed, for example the user added,
+        edited or deleted a style. Valid event functions: GetRange, GetPosition.
+    @event{EVT_RICHTEXT_STYLESHEET_REPLACING(id, func)}
+        Process a wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACING event, generated
+        when the control's stylesheet is about to be replaced, for example when
+        a file is loaded into the control.
+        Valid event functions: Veto, GetOldStyleSheet, GetNewStyleSheet.
+    @event{EVT_RICHTEXT_STYLESHEET_REPLACED(id, func)}
+        Process a wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACED event, generated
+        when the control's stylesheet has been replaced, for example when a file
+        is loaded into the control.
+        Valid event functions: GetOldStyleSheet, GetNewStyleSheet.
+    @event{EVT_RICHTEXT_CONTENT_INSERTED(id, func)}
+        Process a wxEVT_COMMAND_RICHTEXT_CONTENT_INSERTED event, generated when
+        content has been inserted into the control.
+        Valid event functions: GetPosition, GetRange.
+    @event{EVT_RICHTEXT_CONTENT_DELETED(id, func)}
+        Process a wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED event, generated when
+        content has been deleted from the control.
+        Valid event functions: GetPosition, GetRange.
+    @event{EVT_RICHTEXT_BUFFER_RESET(id, func)}
+        Process a wxEVT_COMMAND_RICHTEXT_BUFFER_RESET event, generated when the
+        buffer has been reset by deleting all content.
+        You can use this to set a default style for the first new paragraph.
+    @endEventTable
+
     @library{wxrichtext}
-    @category{richtext}
+    @category{events,richtext}
 */
 class wxRichTextEvent : public wxNotifyEvent
 {
@@ -25,6 +66,8 @@ public:
     /**
         Constructor.
 
+        @param commandType
+            The type of the event.
         @param id
             Window identifier. The value @c wxID_ANY indicates a default value.
     */
@@ -41,22 +84,24 @@ public:
     wxChar GetCharacter() const;
 
     /**
-        Returns flags indicating modifier keys pressed. Possible values are
-        wxRICHTEXT_CTRL_DOWN,
-        wxRICHTEXT_SHIFT_DOWN, and wxRICHTEXT_ALT_DOWN.
+        Returns flags indicating modifier keys pressed.
+
+        Possible values are wxRICHTEXT_CTRL_DOWN, wxRICHTEXT_SHIFT_DOWN, and wxRICHTEXT_ALT_DOWN.
     */
     int GetFlags() const;
 
     /**
-        Returns the new style sheet. Can be used in a
-        wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGING or
+        Returns the new style sheet.
+
+        Can be used in a wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGING or
         wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGED event handler.
     */
     wxRichTextStyleSheet* GetNewStyleSheet() const;
 
     /**
-        Returns the old style sheet. Can be used in a
-        wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGING or
+        Returns the old style sheet.
+
+        Can be used in a wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGING or
         wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGED event handler.
     */
     wxRichTextStyleSheet* GetOldStyleSheet() const;
@@ -77,9 +122,9 @@ public:
     void SetCharacter(wxChar ch);
 
     /**
-        Sets flags indicating modifier keys pressed. Possible values are
-        wxRICHTEXT_CTRL_DOWN,
-        wxRICHTEXT_SHIFT_DOWN, and wxRICHTEXT_ALT_DOWN.
+        Sets flags indicating modifier keys pressed.
+
+        Possible values are wxRICHTEXT_CTRL_DOWN, wxRICHTEXT_SHIFT_DOWN, and wxRICHTEXT_ALT_DOWN.
     */
     void SetFlags(int flags);
 
@@ -113,9 +158,9 @@ public:
     capable of showing multiple styles and images.
 
     wxRichTextCtrl sends notification events: see wxRichTextEvent.
+
     It also sends the standard wxTextCtrl events wxEVT_COMMAND_TEXT_ENTER and
-    wxEVT_COMMAND_TEXT_UPDATED,
-    and wxTextUrlEvent when URL content is clicked.
+    wxEVT_COMMAND_TEXT_UPDATED, and wxTextUrlEvent when URL content is clicked.
 
     For more information, see the @ref overview_richtextctrl.
 
@@ -203,10 +248,10 @@ public:
 
     /**
         Applies the style sheet to the buffer, matching paragraph styles in the sheet
-        against named styles
-        in the buffer. This might be useful if the styles have changed. If @a sheet is
-        @NULL, the
-        sheet set with SetStyleSheet is used.
+        against named styles in the buffer.
+
+        This might be useful if the styles have changed.
+        If @a sheet is @NULL, the sheet set with SetStyleSheet() is used.
         Currently this applies paragraph styles only.
     */
     bool ApplyStyleSheet(wxRichTextStyleSheet* sheet = NULL);
@@ -222,7 +267,7 @@ public:
     virtual bool BatchingUndo() const;
 
     /**
-        Begins using alignment
+        Begins using alignment.
         For alignment values, see wxTextAttr.
     */
     bool BeginAlignment(wxTextAttrAlignment alignment);
@@ -259,8 +304,8 @@ public:
 
     /**
         Begins applying a left indent and subindent in tenths of a millimetre.
-        The subindent is an offset from the left edge of the paragraph, and is 
-        used for all but the first line in a paragraph. A positive value will 
+        The subindent is an offset from the left edge of the paragraph, and is
+        used for all but the first line in a paragraph. A positive value will
         cause the first line to appear to the left of the subsequent lines, and
         a negative value will cause the first line to be indented to the right
         of the subsequent lines.
@@ -279,33 +324,34 @@ public:
 
     /**
         Begins appling line spacing. @e spacing is a multiple, where 10 means
-        single-spacing,
-        15 means 1.5 spacing, and 20 means double spacing. The following constants are
-        defined for convenience:
+        single-spacing, 15 means 1.5 spacing, and 20 means double spacing.
+
+        The ::wxTextAttrLineSpacing constants are defined for convenience.
     */
     bool BeginLineSpacing(int lineSpacing);
 
     /**
-        Begins using a specified list style. Optionally, you can also pass a level and
-        a number.
+        Begins using a specified list style.
+        Optionally, you can also pass a level and a number.
     */
     bool BeginListStyle(const wxString& listStyle, int level = 1,
                         int number = 1);
 
     /**
-        Begins a numbered bullet. This call will be needed for each item in the list,
-        and the
+        Begins a numbered bullet.
+
+        This call will be needed for each item in the list, and the
         application should take care of incrementing the numbering.
+
         @a bulletNumber is a number, usually starting with 1.
         @a leftIndent and @a leftSubIndent are values in tenths of a millimetre.
-        @a bulletStyle is a bitlist of the following values:
-        
-        wxRichTextBuffer uses indentation to render a bulleted item. The left indent is
-        the distance between
-        the margin and the bullet. The content of the paragraph, including the first
-        line, starts
-        at leftMargin + leftSubIndent. So the distance between the left edge of the
-        bullet and the
+        @a bulletStyle is a bitlist of the  ::wxTextAttrBulletStyle values.
+
+        wxRichTextBuffer uses indentation to render a bulleted item.
+        The left indent is the distance between the margin and the bullet.
+        The content of the paragraph, including the first line, starts
+        at leftMargin + leftSubIndent.
+        So the distance between the left edge of the bullet and the
         left of the actual paragraph is leftSubIndent.
     */
     bool BeginNumberedBullet(int bulletNumber, int leftIndent,
@@ -314,8 +360,7 @@ public:
 
     /**
         Begins paragraph spacing; pass the before-paragraph and after-paragraph spacing
-        in tenths of
-        a millimetre.
+        in tenths of a millimetre.
     */
     bool BeginParagraphSpacing(int before, int after);
 
@@ -340,9 +385,9 @@ public:
     virtual bool BeginSuppressUndo();
 
     /**
-        Begins applying a symbol bullet, using a character from the current font. See
-        BeginNumberedBullet() for
-        an explanation of how indentation is used to render the bulleted paragraph.
+        Begins applying a symbol bullet, using a character from the current font.
+        See BeginNumberedBullet() for an explanation of how indentation is used
+        to render the bulleted paragraph.
     */
     bool BeginSymbolBullet(wxChar symbol, int leftIndent,
                            int leftSubIndent,
@@ -354,10 +399,10 @@ public:
     bool BeginTextColour(const wxColour& colour);
 
     /**
-        Begins applying wxTEXT_ATTR_URL to the content. Pass a URL and optionally, a
-        character style to apply,
-        since it is common to mark a URL with a familiar style such as blue text with
-        underlining.
+        Begins applying wxTEXT_ATTR_URL to the content.
+
+        Pass a URL and optionally, a character style to apply, since it is common
+        to mark a URL with a familiar style such as blue text with underlining.
     */
     bool BeginURL(const wxString& url,
                   const wxString& characterStyle = wxEmptyString);
@@ -406,9 +451,11 @@ public:
     /**
         Clears the list style from the given range, clearing list-related attributes
         and applying any named paragraph style associated with each paragraph.
+
         @a flags is a bit list of the following:
-         wxRICHTEXT_SETSTYLE_WITH_UNDO: specifies that this command will be undoable.
-        See also SetListStyle(), PromoteList(), NumberList().
+        - wxRICHTEXT_SETSTYLE_WITH_UNDO: specifies that this command will be undoable.
+
+        @see SetListStyle(), PromoteList(), NumberList().
     */
     bool ClearListStyle(const wxRichTextRange& range,
                         int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
@@ -578,15 +625,14 @@ public:
 
     /**
         Helper function for extending the selection, returning @true if the selection
-        was
-        changed. Selections are in caret positions.
+        was changed. Selections are in caret positions.
     */
     bool ExtendSelection(long oldPosition, long newPosition,
                          int flags);
 
     /**
-        Helper function for finding the caret position for the next word. Direction
-        is 1 (forward) or -1 (backwards).
+        Helper function for finding the caret position for the next word.
+        Direction is 1 (forward) or -1 (backwards).
     */
     virtual long FindNextWordPosition(int direction = 1) const;
 
@@ -597,10 +643,12 @@ public:
     void Freeze();
 
     /**
-        Gets the basic (overall) style. This is the style of the whole
-        buffer before further styles are applied, unlike the default style, which
-        only affects the style currently being applied (for example, setting the default
-        style to bold will cause subsequently inserted text to be bold).
+        Gets the basic (overall) style.
+
+        This is the style of the whole buffer before further styles are applied,
+        unlike the default style, which only affects the style currently being
+        applied (for example, setting the default style to bold will cause
+        subsequently inserted text to be bold).
     */
     const wxTextAttr GetBasicStyle() const;
 
@@ -618,7 +666,7 @@ public:
     long GetCaretPosition() const;
 
     /**
-        Returns the caret height and position for the given character position
+        Returns the caret height and position for the given character position.
     */
     bool GetCaretPositionForIndex(long position, wxRect& rect);
 
@@ -629,8 +677,7 @@ public:
 
     /**
         Returns the current default style, which can be used to change how subsequently
-        inserted
-        text is displayed.
+        inserted text is displayed.
     */
     const wxTextAttr GetDefaultStyle() const;
 
@@ -651,9 +698,9 @@ public:
     long GetFirstVisiblePosition() const;
 
     /**
-        Returns flags that change the behaviour of loading or saving. See the
-        documentation for each
-        handler class to see what flags are relevant for each handler.
+        Returns flags that change the behaviour of loading or saving.
+        See the documentation for each handler class to see what flags are
+        relevant for each handler.
     */
     int GetHandlerFlags() const;
 
@@ -694,8 +741,8 @@ public:
 
     /**
         Gets the text for the given range.
-        The end point of range is specified as the last character position of the span
-        of text, plus one.
+        The end point of range is specified as the last character position of
+        the span of text, plus one.
     */
     virtual wxString GetRange(long from, long to) const;
 
@@ -720,38 +767,37 @@ public:
     /**
         Gets the attributes at the given position.
         This function gets the combined style - that is, the style you see on the
-        screen as a result
-        of combining base style, paragraph style and character style attributes. To get
-        the character
-        or paragraph style alone, use GetUncombinedStyle().
+        screen as a result of combining base style, paragraph style and character
+        style attributes.
+
+        To get the character or paragraph style alone, use GetUncombinedStyle().
     */
     virtual bool GetStyle(long position, wxTextAttr& style);
 
     /**
-        Gets the attributes common to the specified range. Attributes that differ in
-        value within the range will
-        not be included in @e style's flags.
+        Gets the attributes common to the specified range.
+        Attributes that differ in value within the range will not be included
+        in @a style flags.
     */
     bool GetStyleForRange(const wxRichTextRange& range,
                           wxTextAttr& style);
 
     /**
-        Returns the style sheet associated with the control, if any. A style sheet
-        allows named
-        character and paragraph styles to be applied.
+        Returns the style sheet associated with the control, if any.
+        A style sheet allows named character and paragraph styles to be applied.
     */
     wxRichTextStyleSheet* GetStyleSheet() const;
 
     /**
         Gets the attributes at the given position.
         This function gets the @e uncombined style - that is, the attributes associated
-        with the
-        paragraph or character content, and not necessarily the combined attributes you
-        see on the
-        screen. To get the combined attributes, use GetStyle().
+        with the paragraph or character content, and not necessarily the combined
+        attributes you see on the screen.
+        To get the combined attributes, use GetStyle().
+
         If you specify (any) paragraph attribute in @e style's flags, this function
-        will fetch
-        the paragraph attributes. Otherwise, it will return the character attributes.
+        will fetch the paragraph attributes.
+        Otherwise, it will return the character attributes.
     */
     virtual bool GetUncombinedStyle(long position, wxTextAttr& style);
 
@@ -761,29 +807,28 @@ public:
     virtual wxString GetValue() const;
 
     /**
-        Internal helper function returning the line for the visible caret position. If
-        the caret is
-        shown at the very end of the line, it means the next character is actually
-        on the following line. So this function gets the line we're expecting to find
-        if this is the case.
+        Internal helper function returning the line for the visible caret position.
+        If the caret is shown at the very end of the line, it means the next character
+        is actually on the following line.
+        So this function gets the line we're expecting to find if this is the case.
     */
     wxRichTextLine* GetVisibleLineForCaretPosition(long caretPosition) const;
 
     /**
-        Test if this whole range has character attributes of the specified kind. If any
-        of the attributes are different within the range, the test fails. You
-        can use this to implement, for example, bold button updating. @a style must have
-        flags indicating which attributes are of interest.
+        Test if this whole range has character attributes of the specified kind.
+        If any of the attributes are different within the range, the test fails.
+
+        You can use this to implement, for example, bold button updating.
+        @a style must have flags indicating which attributes are of interest.
     */
     bool HasCharacterAttributes(const wxRichTextRange& range,
                                 const wxTextAttr& style) const;
 
     /**
-        Test if this whole range has paragraph attributes of the specified kind. If any
-        of the attributes are different within the range, the test fails. You
-        can use this to implement, for example, centering button updating. @a style
-        must have
-        flags indicating which attributes are of interest.
+        Test if this whole range has paragraph attributes of the specified kind.
+        If any of the attributes are different within the range, the test fails.
+        You can use this to implement, for example, centering button updating.
+        @a style must have flags indicating which attributes are of interest.
     */
     bool HasParagraphAttributes(const wxRichTextRange& range,
                                 const wxTextAttr& style) const;
@@ -817,13 +862,13 @@ public:
 
     /**
         Returns @true if the user has recently set the default style without moving
-        the caret,
-        and therefore the UI needs to reflect the default style and not the style at
-        the caret.
+        the caret, and therefore the UI needs to reflect the default style and not
+        the style at the caret.
+
         Below is an example of code that uses this function to determine whether the UI
         should show that the current style is bold.
-        
-        See also SetAndShowDefaultStyle().
+
+        @see SetAndShowDefaultStyle().
     */
     bool IsDefaultStyleShowing() const;
 
@@ -853,8 +898,7 @@ public:
     bool IsPositionVisible(long pos) const;
 
     /**
-        Returns @true if all of the selection is aligned according to the specified
-        flag.
+        Returns @true if all of the selection is aligned according to the specified flag.
     */
     virtual bool IsSelectionAligned(wxTextAttrAlignment alignment);
 
@@ -874,8 +918,8 @@ public:
     virtual bool IsSelectionUnderlined();
 
     /**
-        Returns @true if the control is single-line. Currently wxRichTextCtrl does not
-        support single-line editing.
+        Returns @true if the control is single-line.
+        Currently wxRichTextCtrl does not support single-line editing.
     */
     bool IsSingleLine() const;
 
@@ -886,24 +930,26 @@ public:
 
     /**
         Lays out the buffer, which must be done before certain operations, such as
-        setting the caret position. This function should not normally be required by the
-        application.
+        setting the caret position.
+        This function should not normally be required by the application.
     */
     virtual bool LayoutContent(bool onlyVisibleRect = false);
 
     /**
-        Inserts a line break at the current insertion point. A line break forces
-        wrapping within a paragraph, and
-        can be introduced by using this function, by appending the wxChar value @b
-        wxRichTextLineBreakChar to text content,
-        or by typing Shift-Return.
+        Inserts a line break at the current insertion point.
+
+        A line break forces wrapping within a paragraph, and can be introduced by
+        using this function, by appending the wxChar value @b  wxRichTextLineBreakChar
+        to text content, or by typing Shift-Return.
     */
     virtual bool LineBreak();
 
     /**
-        Loads content into the control's buffer using the given type. If the specified
-        type
-        is wxRICHTEXT_TYPE_ANY, the type is deduced from the filename extension.
+        Loads content into the control's buffer using the given type.
+
+        If the specified type is wxRICHTEXT_TYPE_ANY, the type is deduced from
+        the filename extension.
+
         This function looks for a suitable wxRichTextFileHandler object.
     */
     bool LoadFile(const wxString& file,
@@ -984,23 +1030,26 @@ public:
     virtual bool MoveUp(int noLines = 1, int flags = 0);
 
     /**
-        Inserts a new paragraph at the current insertion point. See also LineBreak().
+        Inserts a new paragraph at the current insertion point. @see LineBreak().
     */
     virtual bool Newline();
 
     //@{
     /**
-        Numbers the paragraphs in the given range. Pass flags to determine how the
-        attributes are set.
+        Numbers the paragraphs in the given range.
+        Pass flags to determine how the attributes are set.
+
         Either the style definition or the name of the style definition (in the current
         sheet) can be passed.
+
         @a flags is a bit list of the following:
-         wxRICHTEXT_SETSTYLE_WITH_UNDO: specifies that this command will be undoable.
-         wxRICHTEXT_SETSTYLE_RENUMBER: specifies that numbering should start from @e
-        startFrom, otherwise existing attributes are used.
-         wxRICHTEXT_SETSTYLE_SPECIFY_LEVEL: specifies that @a listLevel should be used
-        as the level for all paragraphs, otherwise the current indentation will be used.
-        See also SetListStyle(), PromoteList(), ClearListStyle().
+        - wxRICHTEXT_SETSTYLE_WITH_UNDO: specifies that this command will be undoable.
+        - wxRICHTEXT_SETSTYLE_RENUMBER: specifies that numbering should start from
+          @a startFrom, otherwise existing attributes are used.
+        - wxRICHTEXT_SETSTYLE_SPECIFY_LEVEL: specifies that @a listLevel should be used
+          as the level for all paragraphs, otherwise the current indentation will be used.
+
+        @see SetListStyle(), PromoteList(), ClearListStyle().
     */
     bool NumberList(const wxRichTextRange& range,
                     const wxRichTextListStyleDefinition* style,
@@ -1128,18 +1177,20 @@ public:
 
     //@{
     /**
-        Promotes or demotes the paragraphs in the given range. A positive @a promoteBy
-        produces a smaller indent, and a negative number
+        Promotes or demotes the paragraphs in the given range.
+        A positive @a promoteBy produces a smaller indent, and a negative number
         produces a larger indent. Pass flags to determine how the attributes are set.
         Either the style definition or the name of the style definition (in the current
         sheet) can be passed.
+
         @a flags is a bit list of the following:
-         wxRICHTEXT_SETSTYLE_WITH_UNDO: specifies that this command will be undoable.
-         wxRICHTEXT_SETSTYLE_RENUMBER: specifies that numbering should start from @e
-        startFrom, otherwise existing attributes are used.
-         wxRICHTEXT_SETSTYLE_SPECIFY_LEVEL: specifies that @a listLevel should be used
+        - wxRICHTEXT_SETSTYLE_WITH_UNDO: specifies that this command will be undoable.
+        - wxRICHTEXT_SETSTYLE_RENUMBER: specifies that numbering should start from
+          @a startFrom, otherwise existing attributes are used.
+        - wxRICHTEXT_SETSTYLE_SPECIFY_LEVEL: specifies that @a listLevel should be used
         as the level for all paragraphs, otherwise the current indentation will be used.
-        See also SetListStyle(), See also SetListStyle(), ClearListStyle().
+
+        @see SetListStyle(), @see SetListStyle(), ClearListStyle().
     */
     bool PromoteList(int promoteBy, const wxRichTextRange& range,
                      const wxRichTextListStyleDefinition* style,
@@ -1162,14 +1213,17 @@ public:
     virtual void Remove(long from, long to);
 
     /**
-        Replaces the content in the specified range with the string specified by @e
-        value.
+        Replaces the content in the specified range with the string specified by
+        @a value.
     */
     virtual void Replace(long from, long to, const wxString& value);
 
     /**
-        Saves the buffer content using the given type. If the specified type
-        is wxRICHTEXT_TYPE_ANY, the type is deduced from the filename extension.
+        Saves the buffer content using the given type.
+
+        If the specified type is wxRICHTEXT_TYPE_ANY, the type is deduced from
+        the filename extension.
+
         This function looks for a suitable wxRichTextFileHandler object.
     */
     bool SaveFile(const wxString& file = wxEmptyString,
@@ -1192,17 +1246,19 @@ public:
 
     /**
         Sets @a attr as the default style and tells the control that the UI should
-        reflect
-        this attribute until the user moves the caret.
-        See also IsDefaultStyleShowing().
+        reflect this attribute until the user moves the caret.
+
+        @see IsDefaultStyleShowing().
     */
     void SetAndShowDefaultStyle(const wxTextAttr& attr);
 
     /**
-        Sets the basic (overall) style. This is the style of the whole
-        buffer before further styles are applied, unlike the default style, which
-        only affects the style currently being applied (for example, setting the default
-        style to bold will cause subsequently inserted text to be bold).
+        Sets the basic (overall) style.
+
+        This is the style of the whole buffer before further styles are applied,
+        unlike the default style, which only affects the style currently being
+        applied (for example, setting the default style to bold will cause
+        subsequently inserted text to be bold).
     */
     virtual void SetBasicStyle(const wxTextAttr& style);
 
@@ -1215,8 +1271,7 @@ public:
 
     /**
         Sets the current default style, which can be used to change how subsequently
-        inserted
-        text is displayed.
+        inserted text is displayed.
     */
     virtual bool SetDefaultStyle(const wxTextAttr& style);
 
@@ -1242,15 +1297,16 @@ public:
     void SetFilename(const wxString& filename);
 
     /**
-        Sets the font, and also the basic and default attributes (see
-        wxRichTextCtrl::SetDefaultStyle).
+        Sets the font, and also the basic and default attributes
+        (see wxRichTextCtrl::SetDefaultStyle).
     */
     virtual bool SetFont(const wxFont& font);
 
     /**
-        Sets flags that change the behaviour of loading or saving. See the
-        documentation for each
-        handler class to see what flags are relevant for each handler.
+        Sets flags that change the behaviour of loading or saving.
+
+        See the documentation for each handler class to see what flags are
+        relevant for each handler.
     */
     void SetHandlerFlags(int flags);
 
@@ -1268,15 +1324,17 @@ public:
     /**
         Sets the list attributes for the given range, passing flags to determine how
         the attributes are set.
+
         Either the style definition or the name of the style definition (in the current
         sheet) can be passed.
         @a flags is a bit list of the following:
-         wxRICHTEXT_SETSTYLE_WITH_UNDO: specifies that this command will be undoable.
-         wxRICHTEXT_SETSTYLE_RENUMBER: specifies that numbering should start from @e
-        startFrom, otherwise existing attributes are used.
-         wxRICHTEXT_SETSTYLE_SPECIFY_LEVEL: specifies that @a listLevel should be used
-        as the level for all paragraphs, otherwise the current indentation will be used.
-        See also NumberList(), PromoteList(), ClearListStyle().
+        - wxRICHTEXT_SETSTYLE_WITH_UNDO: specifies that this command will be undoable.
+        - wxRICHTEXT_SETSTYLE_RENUMBER: specifies that numbering should start from
+          @a startFrom, otherwise existing attributes are used.
+        - wxRICHTEXT_SETSTYLE_SPECIFY_LEVEL: specifies that @a listLevel should be used
+          as the level for all paragraphs, otherwise the current indentation will be used.
+
+        @see NumberList(), PromoteList(), ClearListStyle().
     */
     bool SetListStyle(const wxRichTextRange& range,
                       const wxRichTextListStyleDefinition* style,
@@ -1294,6 +1352,7 @@ public:
         Sets the selection to the given range.
         The end point of range is specified as the last character position of the span
         of text, plus one.
+
         So, for example, to set the selection for a character at position 5, use the
         range (5,6).
     */
@@ -1303,6 +1362,7 @@ public:
         Sets the selection to the given range.
         The end point of range is specified as the last character position of the span
         of text, plus one.
+
         So, for example, to set the selection for a character at position 5, use the
         range (5,6).
     */
@@ -1313,6 +1373,7 @@ public:
         Sets the attributes for the given range.
         The end point of range is specified as the last character position of the span
         of text, plus one.
+
         So, for example, to set the style for a character at position 5, use the range
         (5,6).
     */
@@ -1325,29 +1386,29 @@ public:
     /**
         Sets the attributes for the given range, passing flags to determine how the
         attributes are set.
+
         The end point of range is specified as the last character position of the span
-        of text, plus one.
-        So, for example, to set the style for a character at position 5, use the range
-        (5,6).
+        of text, plus one. So, for example, to set the style for a character at
+        position 5, use the range (5,6).
+
         @a flags may contain a bit list of the following values:
-         wxRICHTEXT_SETSTYLE_NONE: no style flag.
-         wxRICHTEXT_SETSTYLE_WITH_UNDO: specifies that this operation should be
-        undoable.
-         wxRICHTEXT_SETSTYLE_OPTIMIZE: specifies that the style should not be applied
-        if the
-        combined style at this point is already the style in question.
-         wxRICHTEXT_SETSTYLE_PARAGRAPHS_ONLY: specifies that the style should only be
-        applied to paragraphs,
-        and not the content. This allows content styling to be preserved independently
-        from that of e.g. a named paragraph style.
-         wxRICHTEXT_SETSTYLE_CHARACTERS_ONLY: specifies that the style should only be
-        applied to characters,
-        and not the paragraph. This allows content styling to be preserved
-        independently from that of e.g. a named paragraph style.
-         wxRICHTEXT_SETSTYLE_RESET: resets (clears) the existing style before applying
-        the new style.
-         wxRICHTEXT_SETSTYLE_REMOVE: removes the specified style. Only the style flags
-        are used in this operation.
+        - wxRICHTEXT_SETSTYLE_NONE: no style flag.
+        - wxRICHTEXT_SETSTYLE_WITH_UNDO: specifies that this operation should be
+          undoable.
+        - wxRICHTEXT_SETSTYLE_OPTIMIZE: specifies that the style should not be applied
+          if the combined style at this point is already the style in question.
+        - wxRICHTEXT_SETSTYLE_PARAGRAPHS_ONLY: specifies that the style should only be
+          applied to paragraphs, and not the content.
+          This allows content styling to be preserved independently from that
+          of e.g. a named paragraph style.
+        - wxRICHTEXT_SETSTYLE_CHARACTERS_ONLY: specifies that the style should only be
+          applied to characters, and not the paragraph.
+          This allows content styling to be preserved independently from that
+          of e.g. a named paragraph style.
+        - wxRICHTEXT_SETSTYLE_RESET: resets (clears) the existing style before applying
+          the new style.
+        - wxRICHTEXT_SETSTYLE_REMOVE: removes the specified style. Only the style flags
+          are used in this operation.
     */
     bool SetStyleEx(const wxRichTextRange& range,
                     const wxTextAttr& style,
@@ -1358,8 +1419,8 @@ public:
     //@}
 
     /**
-        Sets the style sheet associated with the control. A style sheet allows named
-        character and paragraph styles to be applied.
+        Sets the style sheet associated with the control.
+        A style sheet allows named character and paragraph styles to be applied.
     */
     void SetStyleSheet(wxRichTextStyleSheet* styleSheet);
 
@@ -1403,14 +1464,21 @@ public:
     */
     virtual bool WordRight(int noWords = 1, int flags = 0);
 
-    //@{
     /**
-        Write a bitmap or image at the current insertion point. Supply an optional type
-        to use
-        for internal and file storage of the raw data.
+        Loads an image from a file and writes it at the current insertion point.
     */
     bool WriteImage(const wxString& filename, int bitmapType);
+
+    /**
+        Writes an image block at the current insertion point.
+    */
     bool WriteImage(const wxRichTextImageBlock& imageBlock);
+
+    //@{
+    /**
+        Write a bitmap or image at the current insertion point.
+        Supply an optional type to use for internal and file storage of the raw data.
+    */
     bool WriteImage(const wxBitmap& bitmap,
                     int bitmapType = wxBITMAP_TYPE_PNG);
     bool WriteImage(const wxImage& image,

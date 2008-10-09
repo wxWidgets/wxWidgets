@@ -17,30 +17,29 @@
     is generic and can be used in other contexts.
 
     To use the dialog, pass a default symbol specified as a string, an initial font
-    name,
-    and a current font name. The difference between the initial font and
+    name, and a current font name. The difference between the initial font and
     current font is that the initial font determines what the font control will be
-    set to when the dialog shows - an empty string will show the selection @e
-    normal text.
+    set to when the dialog shows - an empty string will show the selection
+    @e normal text.
     The current font, on the other hand, is used by the dialog to determine what
-    font
-    to display the characters in, even when no initial font is selected.
+    font to display the characters in, even when no initial font is selected.
     This allows the user (and application) to distinguish between inserting a
     symbol in the current font, and inserting it with a specified font.
 
     When the dialog is dismissed, the application can get the selected symbol
-    with GetSymbol and test whether a font was specified with UseNormalFont,
-    fetching the specified font with GetFontName.
+    with wxSymbolPickerDialog::GetSymbol and test whether a font was specified
+    with wxSymbolPickerDialog::UseNormalFont,fetching the specified font with
+    wxSymbolPickerDialog::GetFontName.
 
     Here's a realistic example, inserting the supplied symbol into a
     rich text control in either the current font or specified font.
 
     @code
-    wxRichTextCtrl* ctrl = (wxRichTextCtrl*) FindWindow(ID_RICHTEXT_CTRL);
+        wxRichTextCtrl* ctrl = (wxRichTextCtrl*) FindWindow(ID_RICHTEXT_CTRL);
 
         wxTextAttr attr;
         attr.SetFlags(wxTEXT_ATTR_FONT);
-        ctrl-GetStyle(ctrl-GetInsertionPoint(), attr);
+        ctrl-GetStyle(ctrl->GetInsertionPoint(), attr);
 
         wxString currentFontName;
         if (attr.HasFont() && attr.GetFont().Ok())
@@ -58,7 +57,7 @@
             {
                 long insertionPoint = ctrl-GetInsertionPoint();
 
-                ctrl-WriteText(dlg.GetSymbol());
+                ctrl->WriteText(dlg.GetSymbol());
 
                 if (!dlg.UseNormalFont())
                 {
@@ -77,19 +76,23 @@
 class wxSymbolPickerDialog : public wxDialog
 {
 public:
-    //@{
     /**
-        Constructors.
-        
+        Default ctor.
+    */
+    wxSymbolPickerDialog();
+
+    /**
+        Constructor.
+
         @param symbol
-            The initial symbol to show. Specify a single character in a string, or an
-        empty string.
+            The initial symbol to show.
+            Specify a single character in a string, or an empty string.
         @param initialFont
-            The initial font to be displayed in the font list. If empty, the item
-        normal text will be selected.
+            The initial font to be displayed in the font list.
+            If empty, the item normal text will be selected.
         @param normalTextFont
-            The font the dialog will use to display the symbols if the initial font is
-        empty.
+            The font the dialog will use to display the symbols if the
+            initial font is empty.
         @param parent
             The dialog's parent.
         @param id
@@ -107,21 +110,25 @@ public:
                          const wxString& initialFont,
                          const wxString& normalTextFont,
                          wxWindow* parent,
-                         wxWindowID id = wxID_ANY);
-    const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxCLOSE_BOX)
-    wxSymbolPickerDialog();
-    //@}
+                         wxWindowID id = wxID_ANY,
+                         const wxString& title = _("Symbols"),
+                         const wxPoint& pos = wxDefaultPosition,
+                         const wxSize& size = wxDefaultSize,
+                         long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxCLOSE_BOX);
 
     /**
-        ,  wxPoint&@e pos = wxDefaultPosition,  wxSize&@e size = wxDefaultSize, @b
-        long@e style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxCLOSE_BOX)
-        Creation: see @ref wxsymbolpickerdialog() "the constructor" for details about
+        Creation: see @ref wxSymbolPickerDialog() "the constructor" for details about
         the parameters.
     */
-    bool Create(const wxString& symbol, const wxString& initialFont,
+    bool Create(const wxString& symbol,
+                const wxString& initialFont,
                 const wxString& normalTextFont,
                 wxWindow* parent,
-                wxWindowID id = wxID_ANY) const;
+                wxWindowID id = wxID_ANY,
+                const wxString& title = _("Symbols"),
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxCLOSE_BOX);
 
     /**
         Returns the font name (the font reflected in the font list).
@@ -134,8 +141,7 @@ public:
     bool GetFromUnicode() const;
 
     /**
-        Gets the font name used for displaying symbols in the absence of a selected
-        font.
+        Gets the font name used for displaying symbols in the absence of a selected font.
     */
     wxString GetNormalTextFontName() const;
 
@@ -181,8 +187,7 @@ public:
     void SetUnicodeMode(bool unicodeMode);
 
     /**
-        Returns @true if the has specified normal text - that is, there is no selected
-        font.
+        Returns @true if the has specified normal text - that is, there is no selected font.
     */
     bool UseNormalFont() const;
 };

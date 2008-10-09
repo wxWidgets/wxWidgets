@@ -6,28 +6,51 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+
+/**
+    These are the header and footer page identifiers, passed to functions such
+    as wxRichTextHeaderFooterData::SetFooterText to specify the odd or even page
+    for the text.
+*/
+enum wxRichTextOddEvenPage {
+    wxRICHTEXT_PAGE_ODD,
+    wxRICHTEXT_PAGE_EVEN,
+    wxRICHTEXT_PAGE_ALL,
+};
+
+
+/**
+    These are the location identifiers for passing to functions such as
+    wxRichTextHeaderFooterData::SetFooterText(), to specify whether the text
+    is on the left, centre or right of the page.
+*/
+enum wxRichTextPageLocation {
+    wxRICHTEXT_PAGE_LEFT,
+    wxRICHTEXT_PAGE_CENTRE,
+    wxRICHTEXT_PAGE_RIGHT
+};
+
+
 /**
     @class wxRichTextHeaderFooterData
 
 
     This class represents header and footer data to be passed to the
-    wxRichTextPrinting and
-    wxRichTextPrintout classes.
+    wxRichTextPrinting and wxRichTextPrintout classes.
 
     Headers and footers can be specified independently for odd, even or both page
-    sides. Different text can be specified
-    for left, centre and right locations on the page, and the font and text colour
-    can also
-    be specified. You can specify the following keywords in header and footer text,
-    which will
+    sides. Different text can be specified for left, centre and right locations
+    on the page, and the font and text colour can also be specified.
+
+    You can specify the following keywords in header and footer text, which will
     be substituted for the actual values during printing and preview.
 
-     @@DATE@: the current date.
-     @@PAGESCNT@: the total number of pages.
-     @@PAGENUM@: the current page number.
-     @@TIME@: the current time.
-     @@TITLE@: the title of the document, as passed to the wxRichTextPrinting or
-    wxRichTextLayout constructor.
+    - @@DATE@: the current date.
+    - @@PAGESCNT@: the total number of pages.
+    - @@PAGENUM@: the current page number.
+    - @@TIME@: the current time.
+    - @@TITLE@: the title of the document, as passed to the wxRichTextPrinting or
+      wxRichTextLayout constructor.
 
     @library{wxrichtext}
     @category{richtext}
@@ -56,7 +79,7 @@ public:
     /**
         Returns the font specified for printing the header and footer.
     */
-    const wxFont GetFont() const;
+    const wxFont& GetFont() const;
 
     /**
         Returns the margin between the text and the footer.
@@ -159,9 +182,8 @@ public:
 /**
     @class wxRichTextPrintout
 
-    This class implements print layout for wxRichTextBuffer. Instead of using it
-    directly, you
-    should normally use the wxRichTextPrinting class.
+    This class implements print layout for wxRichTextBuffer.
+    Instead of using it directly, you should normally use the wxRichTextPrinting class.
 
     @library{wxrichtext}
     @category{richtext}
@@ -170,10 +192,9 @@ class wxRichTextPrintout : public wxPrintout
 {
 public:
     /**
-        )
         Constructor.
     */
-    wxRichTextPrintout();
+    wxRichTextPrintout(const wxString& title = wxT("Printout"));
 
     /**
         Calculates scaling and text, header and footer rectangles.
@@ -225,9 +246,8 @@ public:
                     int right = 252);
 
     /**
-        Sets the buffer to print. wxRichTextPrintout does not manage this pointer; it
-        should
-        be managed by the calling code, such as wxRichTextPrinting.
+        Sets the buffer to print. wxRichTextPrintout does not manage this pointer;
+        it should be managed by the calling code, such as wxRichTextPrinting.
     */
     void SetRichTextBuffer(wxRichTextBuffer* buffer);
 };
@@ -247,16 +267,17 @@ class wxRichTextPrinting : public wxObject
 {
 public:
     /**
-        , @b wxWindow*@e parentWindow = @NULL)
-        Constructor. Optionally pass a title to be used in the preview frame and
-        printing wait dialog, and
-        also a parent window for these windows.
+        Constructor.
+
+        Optionally pass a title to be used in the preview frame and printing wait
+        dialog, and also a parent window for these windows.
     */
-    wxRichTextPrinting();
+    wxRichTextPrinting(const wxString& name = wxT("Printing"),
+                       wxWindow* parentWindow = NULL);
 
     /**
-        A convenience function to get the footer text. See wxRichTextHeaderFooterData
-        for details.
+        A convenience function to get the footer text.
+        See wxRichTextHeaderFooterData for details.
     */
     wxString GetFooterText(wxRichTextOddEvenPage page = wxRICHTEXT_PAGE_EVEN,
                            wxRichTextPageLocation location = wxRICHTEXT_PAGE_CENTRE) const;
@@ -267,8 +288,8 @@ public:
     const wxRichTextHeaderFooterData GetHeaderFooterData() const;
 
     /**
-        A convenience function to get the header text. See wxRichTextHeaderFooterData
-        for details.
+        A convenience function to get the header text.
+        See wxRichTextHeaderFooterData for details.
     */
     wxString GetHeaderText(wxRichTextOddEvenPage page = wxRICHTEXT_PAGE_EVEN,
                            wxRichTextPageLocation location = wxRICHTEXT_PAGE_CENTRE) const;
@@ -279,8 +300,8 @@ public:
     wxPageSetupDialogData* GetPageSetupData();
 
     /**
-        Returns the parent window to be used for the preview window and printing wait
-        dialog.
+        Returns the parent window to be used for the preview window and printing
+        wait dialog.
     */
     wxWindow* GetParentWindow() const;
 
@@ -305,33 +326,33 @@ public:
     void PageSetup();
 
     /**
-        Shows a preview window for the given buffer. The function takes its own copy of
-        @e buffer.
+        Shows a preview window for the given buffer.
+        The function takes its own copy of @a buffer.
     */
     bool PreviewBuffer(const wxRichTextBuffer& buffer);
 
     /**
-        Shows a preview window for the given file. @a richTextFile can be a text file
-        or XML file, or other file
+        Shows a preview window for the given file.
+
+        @a richTextFile can be a text file or XML file, or other file
         depending on the available file handlers.
     */
     bool PreviewFile(const wxString& richTextFile);
 
     /**
-        Prints the given buffer. The function takes its own copy of @e buffer.
+        Prints the given buffer. The function takes its own copy of @a buffer.
     */
     bool PrintBuffer(const wxRichTextBuffer& buffer);
 
     /**
-        Prints the given file. @a richTextFile can be a text file or XML file, or other
-        file
-        depending on the available file handlers.
+        Prints the given file. @a richTextFile can be a text file or XML file,
+        or other file depending on the available file handlers.
     */
     bool PrintFile(const wxString& richTextFile);
 
     /**
-        A convenience function to set the footer text. See wxRichTextHeaderFooterData
-        for details.
+        A convenience function to set the footer text.
+        See wxRichTextHeaderFooterData for details.
     */
     void SetFooterText(const wxString& text,
                        wxRichTextOddEvenPage page = wxRICHTEXT_PAGE_ALL,
@@ -353,8 +374,8 @@ public:
     void SetHeaderFooterTextColour(const wxColour& colour);
 
     /**
-        A convenience function to set the header text. See wxRichTextHeaderFooterData
-        for details.
+        A convenience function to set the header text.
+        See wxRichTextHeaderFooterData for details.
     */
     void SetHeaderText(const wxString& text,
                        wxRichTextOddEvenPage page = wxRICHTEXT_PAGE_ALL,
@@ -366,8 +387,8 @@ public:
     void SetPageSetupData(const wxPageSetupData& pageSetupData);
 
     /**
-        Sets the parent window to be used for the preview window and printing wait
-        dialog.
+        Sets the parent window to be used for the preview window and printing
+        wait dialog.
     */
     void SetParentWindow(wxWindow* parent);
 

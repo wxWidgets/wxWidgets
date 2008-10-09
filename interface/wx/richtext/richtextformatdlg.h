@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        richtext/richtextformatdlg.h
-// Purpose:     interface of wxRichTextFormattingDialogFactory
+// Purpose:     interface of wxRichTextFormattingDialog*
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -11,15 +11,15 @@
 
     This class provides pages for wxRichTextFormattingDialog, and allows other
     customization of the dialog.
-    A default instance of this class is provided automatically. If you wish to
-    change the behaviour of the
-    formatting dialog (for example add or replace a page), you may derive from this
-    class,
-    override one or more functions, and call the static function
+
+    A default instance of this class is provided automatically.
+    If you wish to change the behaviour of the formatting dialog (for example add
+    or replace a page), you may derive from this class, override one or more
+    functions, and call the static function
     wxRichTextFormattingDialog::SetFormattingDialogFactory.
 
     @library{wxrichtext}
-    @category{FIXME}
+    @category{richtext}
 */
 class wxRichTextFormattingDialogFactory : public wxObject
 {
@@ -46,7 +46,7 @@ public:
                                 wxRichTextFormattingDialog* dialog);
 
     /**
-        Creates all pages under the dialog's book control, also calling AddPage.
+        Creates all pages under the dialog's book control, also calling AddPage().
     */
     virtual bool CreatePages(long pages,
                              wxRichTextFormattingDialog* dialog);
@@ -81,24 +81,32 @@ public:
 
 
 
+#define wxRICHTEXT_FORMAT_STYLE_EDITOR      0x0001
+#define wxRICHTEXT_FORMAT_FONT              0x0002
+#define wxRICHTEXT_FORMAT_TABS              0x0004
+#define wxRICHTEXT_FORMAT_BULLETS           0x0008
+#define wxRICHTEXT_FORMAT_INDENTS_SPACING   0x0010
+
 /**
     @class wxRichTextFormattingDialog
 
     This dialog allows the user to edit a character and/or paragraph style.
 
-    In the constructor, specify the pages that will be created. Use GetStyle
-    to retrieve the common style for a given range, and then use ApplyStyle
-    to apply the user-selected formatting to a control. For example:
+    In the constructor, specify the pages that will be created.
+    Use wxRichTextFormattingDialog::GetStyle() to retrieve the common style
+    for a given range, and then use wxRichTextFormattingDialog::ApplyStyle()
+    to apply the user-selected formatting to a control.
 
+    For example:
     @code
-    wxRichTextRange range;
+        wxRichTextRange range;
         if (m_richTextCtrl-HasSelection())
             range = m_richTextCtrl-GetSelectionRange();
         else
             range = wxRichTextRange(0, m_richTextCtrl-GetLastPosition()+1);
 
-        int pages =
-    wxRICHTEXT_FORMAT_FONT|wxRICHTEXT_FORMAT_INDENTS_SPACING|wxRICHTEXT_FORMAT_TABS|wxRICHTEXT_FORMAT_BULLETS;
+        int pages = wxRICHTEXT_FORMAT_FONT|wxRICHTEXT_FORMAT_INDENTS_SPACING| \
+                    wxRICHTEXT_FORMAT_TABS|wxRICHTEXT_FORMAT_BULLETS;
 
         wxRichTextFormattingDialog formatDlg(pages, this);
         formatDlg.GetStyle(m_richTextCtrl, range);
@@ -115,29 +123,29 @@ public:
 class wxRichTextFormattingDialog : public wxPropertySheetDialog
 {
 public:
-    //@{
+    /**
+        Default ctor.
+    */
+    wxRichTextFormattingDialog();
+
     /**
         Constructors.
-        
+
         @param flags
             The pages to show.
         @param parent
             The dialog's parent.
-        @param id
-            The dialog's identifier.
-        @param title
-            The dialog's caption.
         @param pos
             The dialog's position.
-        @param size
+        @param sz
             The dialog's size.
         @param style
             The dialog's window style.
     */
-    wxRichTextFormattingDialog(long flags, wxWindow* parent);
-    const wxPoint& pos = wxDefaultPosition, const wxSize& sz = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE)
-    wxRichTextFormattingDialog();
-    //@}
+    wxRichTextFormattingDialog(long flags, wxWindow* parent,
+                               const wxPoint& pos = wxDefaultPosition,
+                               const wxSize& sz = wxDefaultSize,
+                               long style = wxDEFAULT_DIALOG_STYLE);
 
     /**
         Destructor.
@@ -145,29 +153,27 @@ public:
     virtual ~wxRichTextFormattingDialog();
 
     /**
-        Apply attributes to the given range, only changing attributes that need to be
-        changed.
+        Apply attributes to the given range, only changing attributes that
+        need to be changed.
     */
     bool ApplyStyle(wxRichTextCtrl* ctrl,
                     const wxRichTextRange& range,
                     int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_OPTIMIZE);
 
     /**
-        Creation: see @ref overview_wxrichtextformattingdialog "the constructor" for
+        Creation: see wxRichTextFormattingDialog() "the constructor" for
         details about the parameters.
     */
     bool Create(long flags, wxWindow* parent, const wxString& title,
-                wxWindowID id,
-                const wxPoint& pos = wxDefaultPosition,
-                                     const wxSize& sz = wxDefaultSize,
-                                                        long style = wxDEFAULT_DIALOG_STYLE);
+                wxWindowID id, const wxPoint& pos = wxDefaultPosition,
+                const wxSize& sz = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE);
 
     //@{
     /**
         Gets the attributes being edited.
     */
-    const wxTextAttr GetAttributes();
-    const wxTextAttr&  GetAttributes();
+    const wxTextAttr& GetAttributes() const;
+    wxTextAttr& GetAttributes();
     //@}
 
     /**
@@ -197,8 +203,8 @@ public:
     wxImageList* GetImageList() const;
 
     /**
-        Gets common attributes from the given range and calls SetAttributes. Attributes
-        that do not have common values in the given range
+        Gets common attributes from the given range and calls SetAttributes().
+        Attributes that do not have common values in the given range
         will be omitted from the style's flags.
     */
     virtual bool GetStyle(wxRichTextCtrl* ctrl, const wxRichTextRange& range);
@@ -221,6 +227,7 @@ public:
     /**
         Sets the formatting factory object to be used for customization and page
         creation.
+
         It deletes the existing factory object.
     */
     static void SetFormattingDialogFactory(wxRichTextFormattingDialogFactory* factory);
@@ -236,8 +243,8 @@ public:
     virtual bool SetStyle(const wxTextAttr& style, bool update = true);
 
     /**
-        Sets the style definition and optionally update the display, if @a update is @c
-        @true.
+        Sets the style definition and optionally update the display,
+        if @a update is @true.
     */
     virtual bool SetStyleDefinition(const wxRichTextStyleDefinition& styleDef,
                                     wxRichTextStyleSheet* sheet,
