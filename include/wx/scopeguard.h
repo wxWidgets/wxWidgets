@@ -366,7 +366,7 @@ public:
     static wxObjScopeGuardImpl3<Obj, MemFun, P1, P2, P3>
         MakeObjGuard(Obj& obj, MemFun memFun, P1 p1, P2 p2, P3 p3)
     {
-        return wxObjScopeGuardImpl3<Obj, MemFun, P1, P3>(obj, memFun, p1, p2, p3);
+        return wxObjScopeGuardImpl3<Obj, MemFun, P1, P2, P3>(obj, memFun, p1, p2, p3);
     }
 
     ~wxObjScopeGuardImpl3() { wxPrivateOnScopeExit(*this); }
