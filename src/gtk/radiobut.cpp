@@ -66,7 +66,7 @@ bool wxRadioButton::Create( wxWindow *parent,
     }
 
     GSList* radioButtonGroup = NULL;
-    if (!HasFlag(wxRB_GROUP))
+    if (!HasFlag(wxRB_GROUP) && !HasFlag(wxRB_SINGLE))
     {
         // search backward for last group start
         wxWindowList::compatibility_iterator node = parent->GetChildren().GetLast();
