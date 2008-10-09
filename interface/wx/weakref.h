@@ -8,7 +8,7 @@
 
 
 /**
-    @class wxWeakRefDynamic<T>
+    @class wxWeakRefDynamic
 
     wxWeakRefDynamic<T> is a template class for weak references that is used in
     the same way as wxWeakRef<T>. The only difference is that wxWeakRefDynamic
@@ -28,6 +28,9 @@
 
     For API documentation, see: wxWeakRef<T>.
 
+    @tparam T
+        @todo docme
+
     @nolibrary
     @category{misc}
 */
@@ -41,7 +44,7 @@ public:
 
 
 /**
-    @class wxWeakRef<T>
+    @class wxWeakRef
 
     wxWeakRef<T> is a template class for weak references to wxWidgets objects,
     such as wxEvtHandler, wxWindow and wxObject.
@@ -90,6 +93,9 @@ public:
     typedef wxWeakRef<wxEvtHandler>  wxEvtHandlerRef;
     typedef wxWeakRef<wxWindow>      wxWindowRef;
     @endcode
+
+    @tparam T
+        @todo docme
 
     @nolibrary
     @category{misc}

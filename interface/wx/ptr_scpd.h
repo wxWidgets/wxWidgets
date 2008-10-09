@@ -275,8 +275,8 @@ public:
     wxScopedTiedPtr(T** ppTie, T* ptr);
 
     /**
-        Destructor frees the pointer help by this object and restores the value stored
-        at the tied location (as specified in the @ref ctor() constructor)
+        Destructor frees the pointer help by this object and restores the value
+        stored at the tied location (as specified in the @ref wxScopedTiedPtr() constructor)
         to the old value.
 
         @warning
@@ -290,8 +290,8 @@ public:
 
 /**
 
-    A scoped pointer template class. It is the template version of
-    the old-style @ref classwx_scoped_ptr "scoped pointer macros".
+    A scoped pointer template class.
+    It is the template version of the old-style @ref wxScopedPtr "scoped pointer macros".
 
     @library{wxbase}
     @category{smartpointers}
