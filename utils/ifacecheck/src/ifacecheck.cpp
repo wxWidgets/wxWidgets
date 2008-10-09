@@ -18,6 +18,7 @@
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/crt.h"
 #endif
 
 #include "wx/cmdline.h"
