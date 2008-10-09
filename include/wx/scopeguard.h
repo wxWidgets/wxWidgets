@@ -226,6 +226,41 @@ inline wxScopeGuardImpl2<F, P1, P2> wxMakeGuard(F fun, P1 p1, P2 p2)
     return wxScopeGuardImpl2<F, P1, P2>::MakeGuard(fun, p1, p2);
 }
 
+// ----------------------------------------------------------------------------
+// wxScopeGuardImpl3: scope guard for actions with 3 parameters
+// ----------------------------------------------------------------------------
+
+template <class F, class P1, class P2, class P3>
+class wxScopeGuardImpl3 : public wxScopeGuardImplBase
+{
+public:
+    static wxScopeGuardImpl3<F, P1, P2, P3> MakeGuard(F fun, P1 p1, P2 p2, P3 p3)
+    {
+        return wxScopeGuardImpl3<F, P1, P2, P3>(fun, p1, p2, p3);
+    }
+
+    ~wxScopeGuardImpl3() { wxPrivateOnScopeExit(*this); }
+
+    void Execute() { m_fun(m_p1, m_p2, m_p3); }
+
+protected:
+    wxScopeGuardImpl3(F fun, P1 p1, P2 p2, P3 p3)
+        : m_fun(fun), m_p1(p1), m_p2(p2), m_p3(p3) { }
+
+    F m_fun;
+    const P1 m_p1;
+    const P2 m_p2;
+    const P3 m_p3;
+
+    wxScopeGuardImpl3& operator=(const wxScopeGuardImpl3&);
+};
+
+template <class F, class P1, class P2, class P3>
+inline wxScopeGuardImpl3<F, P1, P2, P3> wxMakeGuard(F fun, P1 p1, P2 p2, P3 p3)
+{
+    return wxScopeGuardImpl3<F, P1, P2, P3>::MakeGuard(fun, p1, p2, p3);
+}
+
 // ============================================================================
 // wxScopeGuards for object methods
 // ============================================================================
@@ -322,6 +357,39 @@ wxMakeObjGuard(Obj& obj, MemFun memFun, P1 p1, P2 p2)
 {
     return wxObjScopeGuardImpl2<Obj, MemFun, P1, P2>::
                                             MakeObjGuard(obj, memFun, p1, p2);
+}
+
+template <class Obj, class MemFun, class P1, class P2, class P3>
+class wxObjScopeGuardImpl3 : public wxScopeGuardImplBase
+{
+public:
+    static wxObjScopeGuardImpl3<Obj, MemFun, P1, P2, P3>
+        MakeObjGuard(Obj& obj, MemFun memFun, P1 p1, P2 p2, P3 p3)
+    {
+        return wxObjScopeGuardImpl3<Obj, MemFun, P1, P3>(obj, memFun, p1, p2, p3);
+    }
+
+    ~wxObjScopeGuardImpl3() { wxPrivateOnScopeExit(*this); }
+
+    void Execute() { (m_obj.*m_memfun)(m_p1, m_p2, m_p3); }
+
+protected:
+    wxObjScopeGuardImpl3(Obj& obj, MemFun memFun, P1 p1, P2 p2, P3 p3)
+        : m_obj(obj), m_memfun(memFun), m_p1(p1), m_p2(p2), m_p3(p3) { }
+
+    Obj& m_obj;
+    MemFun m_memfun;
+    const P1 m_p1;
+    const P2 m_p2;
+    const P3 m_p3;
+};
+
+template <class Obj, class MemFun, class P1, class P2, class P3>
+inline wxObjScopeGuardImpl3<Obj, MemFun, P1, P2, P3>
+wxMakeObjGuard(Obj& obj, MemFun memFun, P1 p1, P2 p2, P3 p3)
+{
+    return wxObjScopeGuardImpl3<Obj, MemFun, P1, P2, P3>::
+                                        MakeObjGuard(obj, memFun, p1, p2, p3);
 }
 
 // ----------------------------------------------------------------------------
@@ -463,6 +531,22 @@ wxPrivate::VariableNullerImpl<T> wxMakeVarNuller(T& var)
 
 #define wxON_BLOCK_EXIT_THIS2(m, p1, p2) \
     wxON_BLOCK_EXIT_OBJ2(*this, m, p1, p2)
+
+
+#define wxON_BLOCK_EXIT3_IMPL(n, f, p1, p2, p3) \
+    wxScopeGuard n = wxMakeGuard(f, p1, p2, p3); \
+    wxPrivateUse(n)
+#define wxON_BLOCK_EXIT3(f, p1, p2, p3) \
+    wxON_BLOCK_EXIT3_IMPL(wxGuardName, f, p1, p2, p3)
+
+#define wxON_BLOCK_EXIT_OBJ3_IMPL(n, o, m, p1, p2, p3) \
+    wxScopeGuard n = wxMakeObjGuard(o, m, p1, p2, p3); \
+    wxPrivateUse(n)
+#define wxON_BLOCK_EXIT_OBJ3(o, m, p1, p2, p3) \
+    wxON_BLOCK_EXIT_OBJ3_IMPL(wxGuardName, o, &m, p1, p2, p3)
+
+#define wxON_BLOCK_EXIT_THIS3(m, p1, p2, p3) \
+    wxON_BLOCK_EXIT_OBJ3(*this, m, p1, p2, p3)
 
 
 #define wxSetterName wxMAKE_UNIQUE_NAME(wxVarSetter)
