@@ -7,9 +7,14 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    @class wxScopeGuard
+
     Scope guard is an object which allows executing an action on scope exit.
 
     The objects of this class must be constructed using wxMakeGuard() function.
+
+    @nolibrary
+    @category{misc}
  */
 class wxScopeGuard
 {
