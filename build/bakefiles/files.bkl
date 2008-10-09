@@ -2239,6 +2239,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/carbon/dcclient.cpp
     src/osx/carbon/dcprint.cpp
     src/osx/carbon/dcscreen.cpp
+    src/osx/core/glgrab.cpp
     src/osx/carbon/graphics.cpp
     src/osx/carbon/dnd.cpp
     src/osx/carbon/font.cpp
