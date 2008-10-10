@@ -185,6 +185,7 @@ void XmlTestCase::LoadSave()
     wxStringOutputStream sos8;
     doc.SetFileEncoding("UTF-8");
     CPPUNIT_ASSERT( doc.Save(sos8) );
-    CPPUNIT_ASSERT_EQUAL( utf8xmlText, sos8.GetString().ToUTF8() );
+    CPPUNIT_ASSERT_EQUAL( wxString(utf8xmlText),
+                          wxString(sos8.GetString().ToUTF8()) );
 }
 
