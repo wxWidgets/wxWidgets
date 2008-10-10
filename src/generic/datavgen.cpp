@@ -4154,7 +4154,7 @@ WXLRESULT wxDataViewCtrl::MSWWindowProc(WXUINT nMsg,
 wxSize wxDataViewCtrl::GetSizeAvailableForScrollTarget(const wxSize& size)
 {
     wxSize newsize = size;
-    if (!HasFlag(wxDV_NO_HEADER))
+    if (!HasFlag(wxDV_NO_HEADER) && (m_headerArea))
        newsize.y -= m_headerArea->GetSize().y;
     
     return newsize;
