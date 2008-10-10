@@ -659,19 +659,20 @@ typedef std::map<unsigned long, toResolveTypeItem> wxToResolveTypeHashMap;
 // utility to parse gccXML ID values;
 // this function is equivalent to wxString(str).Mid(1).ToULong(&id, GCCXML_BASE)
 // but is a little bit faster
-bool getID(unsigned long *id, const wxStringCharType* str)
+bool getID(unsigned long *id, const wxString& str)
 {
+    const wxStringCharType * const start = str.wx_str();
     wxStringCharType *end;
 #if wxUSE_UNICODE_WCHAR
-    unsigned long val = wcstoul(str+1, &end, GCCXML_BASE);
+    unsigned long val = wcstoul(start, &end, GCCXML_BASE);
 #else
-    unsigned long val = strtoul(str+1, &end, GCCXML_BASE);
+    unsigned long val = strtoul(start, &end, GCCXML_BASE);
 #endif
 
     // return true only if scan was stopped by the terminating NUL and
     // if the string was not empty to start with and no under/overflow
     // occurred:
-    if ( *end != '\0' || end == str+1 || errno == ERANGE || errno == EINVAL )
+    if ( *end != '\0' || end == start || errno == ERANGE || errno == EINVAL )
         return false;
 
     *id = val;
@@ -680,19 +681,20 @@ bool getID(unsigned long *id, const wxStringCharType* str)
 
 // utility specialized to parse efficiently the gccXML list of IDs which occur
 // in nodes like <Class> ones... i.e. numeric values separed by " _" token
-bool getMemberIDs(wxClassMemberIdHashMap* map, wxClass* p, const wxStringCharType* str)
+bool getMemberIDs(wxClassMemberIdHashMap* map, wxClass* p, const wxString& str)
 {
+    const wxStringCharType * const start = str.wx_str();
 #if wxUSE_UNICODE_WCHAR
-    size_t len = wcslen(str);
+    size_t len = wcslen(start);
 #else
-    size_t len = strlen(str);
+    size_t len = strlen(start);
 #endif
 
-    if (len == 0 || str[0] != '_')
+    if (len == 0 || start[0] != '_')
         return false;
 
-    const wxStringCharType *curpos = str,
-                           *end = str + len;
+    const wxStringCharType *curpos = start,
+                           *end = start + len;
     wxStringCharType *nexttoken;
 
     while (curpos < end)
