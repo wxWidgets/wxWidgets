@@ -266,7 +266,7 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\screenshotgen.exe data
+all : .SYMBOLIC $(OBJS)\screenshotgen.exe bitmaps xml
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -288,9 +288,13 @@ $(OBJS)\screenshotgen.exe :  $(SCREENSHOTGEN_OBJECTS) $(OBJS)\screenshotgen_scre
 	@for %i in () do @%append $(OBJS)\screenshotgen.lbc option stack=%i
 	wlink @$(OBJS)\screenshotgen.lbc
 
-data : .SYMBOLIC 
+bitmaps : .SYMBOLIC 
+	if not exist $(OBJS)\bitmaps mkdir $(OBJS)\bitmaps
+	for %f in (wxwin32x32.png bell.png sound.png dropbuth.png dropbutn.png dropbutp.png throbber.gif) do if not exist $(OBJS)\bitmaps\%f copy .\bitmaps\%f $(OBJS)\bitmaps
+
+xml : .SYMBOLIC 
 	if not exist $(OBJS) mkdir $(OBJS)
-	for %f in (richtext.xml bitmaps\wxwin32x32.png bitmaps\bell.png bitmaps\sound.png bitmaps\dropbuth.png bitmaps\dropbutn.png bitmaps\dropbutp.png bitmaps\throbber.gif) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+	for %f in (richtext.xml) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\screenshotgen_screenshot_app.obj :  .AUTODEPEND .\screenshot_app.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(SCREENSHOTGEN_CXXFLAGS) $<

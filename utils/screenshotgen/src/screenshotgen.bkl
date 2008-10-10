@@ -42,16 +42,23 @@
         <install-to>$(BINDIR)</install-to>
     </exe>
 
-    <wx-data id="data">
+    <wx-data id="bitmaps">
+        <dstdir>$(BUILDDIR)/bitmaps</dstdir>
+        <srcdir>$(SRCDIR)/bitmaps</srcdir>
+        <files>
+            wxwin32x32.png
+            bell.png
+            sound.png
+            dropbuth.png
+            dropbutn.png
+            dropbutp.png
+            throbber.gif
+        </files>
+    </wx-data>
+
+    <wx-data id="xml">
         <files>
             richtext.xml
-            bitmaps$(DIRSEP)wxwin32x32.png
-            bitmaps$(DIRSEP)bell.png
-            bitmaps$(DIRSEP)sound.png
-            bitmaps$(DIRSEP)dropbuth.png
-            bitmaps$(DIRSEP)dropbutn.png
-            bitmaps$(DIRSEP)dropbutp.png
-            bitmaps$(DIRSEP)throbber.gif
         </files>
     </wx-data>
 

@@ -163,7 +163,7 @@ COND_wxUSE_REGEX_builtin___LIB_REGEX_p = \
 
 ### Targets: ###
 
-all: screenshotgen$(EXEEXT) $(__screenshotgen_bundle___depname) data
+all: screenshotgen$(EXEEXT) $(__screenshotgen_bundle___depname) bitmaps xml
 
 install: install_screenshotgen
 
@@ -217,9 +217,21 @@ install_screenshotgen: screenshotgen$(EXEEXT)
 uninstall_screenshotgen: 
 	rm -f $(DESTDIR)$(bindir)/screenshotgen$(EXEEXT)
 
-data: 
+bitmaps: 
+	@mkdir -p ./bitmaps
+	@for f in wxwin32x32.png bell.png sound.png dropbuth.png dropbutn.png dropbutp.png throbber.gif; do \
+	if test ! -f ./bitmaps/$$f -a ! -d ./bitmaps/$$f ; \
+	then x=yep ; \
+	else x=`find $(srcdir)/bitmaps/$$f -newer ./bitmaps/$$f -print` ; \
+	fi; \
+	case "$$x" in ?*) \
+	cp -pRf $(srcdir)/bitmaps/$$f ./bitmaps ;; \
+	esac; \
+	done
+
+xml: 
 	@mkdir -p .
-	@for f in richtext.xml bitmaps/wxwin32x32.png bitmaps/bell.png bitmaps/sound.png bitmaps/dropbuth.png bitmaps/dropbutn.png bitmaps/dropbutp.png bitmaps/throbber.gif; do \
+	@for f in richtext.xml; do \
 	if test ! -f ./$$f -a ! -d ./$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \
@@ -264,4 +276,4 @@ $(srcdir)/include/wx/stc/stc.h
 @IF_GNU_MAKE@-include ./.deps/*.d
 
 .PHONY: all install uninstall clean distclean screenshotgen_bundle \
-	install_screenshotgen uninstall_screenshotgen data
+	install_screenshotgen uninstall_screenshotgen bitmaps xml
