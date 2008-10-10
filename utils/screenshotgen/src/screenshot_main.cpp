@@ -77,12 +77,14 @@ ScreenshotFrame::~ScreenshotFrame()
     e.g. you cannot load a richtext file in a wxRichtextCtrl during initialization.
 
     Those customizations will be done here.
+
+
+    NB: under wxGTK for the radio button "unchecked" to be unchecked, it's
+        important to put the wxRB_GROUP style on the first wxRadioButton
+        (the one "checked") and no flags on the second one.
 */
 void ScreenshotFrame::InitFBControls()
 {
-    // explicitely uncheck radio button:
-    m_radioBtn2->SetValue(false);
-
     // For some reason, wxFormBuilder does not set the scrollbar range
     m_scrollBar1->SetScrollbar(50, 1, 100, 1);
 
