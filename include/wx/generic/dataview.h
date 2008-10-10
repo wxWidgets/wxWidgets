@@ -389,8 +389,6 @@ class WXDLLIMPEXP_ADV wxDataViewCtrl: public wxDataViewCtrlBase,
 public:
     wxDataViewCtrl() : wxScrollHelperNative(this)
     {
-        //No sorting column at start, I think
-        m_sortingColumn = NULL;
         Init();
     }
 
@@ -400,7 +398,6 @@ public:
            const wxValidator& validator = wxDefaultValidator )
              : wxScrollHelperNative(this)
     {
-        m_sortingColumn = NULL;
         Create(parent, id, pos, size, style, validator );
     }
 

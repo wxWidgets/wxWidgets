@@ -4093,6 +4093,10 @@ void wxDataViewCtrl::Init()
 {
     m_cols.DeleteContents(true);
     m_notifier = NULL;
+    
+    // No sorting column at start
+    m_sortingColumn = NULL;
+    m_headerArea = NULL;
 }
 
 bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
@@ -4102,13 +4106,13 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
     if ( (style & wxBORDER_MASK) == 0)
         style |= wxBORDER_SUNKEN;
 
+    Init();
+
     if (!wxControl::Create( parent, id, pos, size,
                             style | wxScrolledWindowStyle, validator))
         return false;
 
     SetInitialSize(size);
-
-    Init();
 
 #ifdef __WXMAC__
     MacSetClipChildren( true );
