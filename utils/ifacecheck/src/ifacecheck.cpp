@@ -301,7 +301,7 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClass* api)
         // search in the methods of the api classes provided
         real = api->RecursiveUpwardFindMethod(m, &m_gccInterface);
 
-        if (real)
+        if (!real)
         {
             bool exit = false;
             wxMethodPtrArray overloads =
@@ -343,10 +343,11 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClass* api)
                     warning += wxString::Format(": in the real headers there are %d overloads of '%s' for "
                                                 "'%s' all with different signatures:\n",
                                                 overloads.GetCount(), m.GetName(), api->GetName());
-                else
+                else {
                     warning += wxString::Format(": in the real headers there is a method '%s' for '%s'"
                                                 " but has different signature:\n",
                                                 m.GetName(), api->GetName());
+                }
 
                 // get a list of the prototypes with _all_ possible attributes:
                 warning += "\tdoxy header: " + m.GetAsString(true, true, true, true);

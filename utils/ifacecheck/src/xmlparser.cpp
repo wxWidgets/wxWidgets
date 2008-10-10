@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 // Name:        xmlparser.cpp
 // Purpose:     Parser of the API/interface XML files
 // Author:      Francesco Montorsi
@@ -121,7 +121,13 @@ bool wxType::operator==(const wxType& m) const
         return true;
 
     if (g_verbose)
+    {
         LogMessage("Type '%s' does not match type '%s'", m_strType, m.m_strType);
+        LogMessage(" => TypeClean %s / %s;  IsConst %d / %d; IsStatic %d / %d; IsPointer %d / %d; IsReference %d / %d",
+                   m_strTypeClean, m.m_strTypeClean, IsConst(), m.IsConst(),
+                   IsStatic(), m.IsStatic(), IsPointer(), m.IsPointer(),
+                   IsReference(), m.IsReference());
+    }
 
     return false;
 }
@@ -293,7 +299,11 @@ bool wxMethod::MatchesExceptForAttributes(const wxMethod& m) const
 {
     if (GetReturnType() != m.GetReturnType() ||
         GetName() != m.GetName())
+    {
+        if (g_verbose)
+            LogMessage("The method '%s' does not match method '%s'; different names/rettype", GetName(), m.GetName());
         return false;
+    }
 
     if (m_args.GetCount()!=m.m_args.GetCount()) {
         if (g_verbose)
@@ -319,7 +329,12 @@ bool wxMethod::operator==(const wxMethod& m) const
         IsPureVirtual() != m.IsPureVirtual() ||
         IsDeprecated() != m.IsDeprecated() ||
         GetAccessSpecifier() != m.GetAccessSpecifier())
+    {
+        if (g_verbose)
+            LogMessage("The method '%s' does not match method '%s'; different attributes", GetName(), m.GetName());
+
         return false;
+    }
 
     // check everything else
     return MatchesExceptForAttributes(m);
@@ -469,8 +484,10 @@ bool wxClass::CheckConsistency() const
                 LogError("class %s has two methods with the same prototype: '%s'",
                          m_strName, m_methods[i].GetAsString());
                 return false;
-                ((wxClass*)this)->m_methods.RemoveAt(j);
-                j--;
+
+                // fix the problem?
+                //((wxClass*)this)->m_methods.RemoveAt(j);
+                //j--;
             }
 
     return true;
@@ -661,7 +678,7 @@ typedef std::map<unsigned long, toResolveTypeItem> wxToResolveTypeHashMap;
 // but is a little bit faster
 bool getID(unsigned long *id, const wxString& str)
 {
-    const wxStringCharType * const start = str.wx_str();
+    const wxStringCharType * const start = str.wx_str()+1;
     wxStringCharType *end;
 #if wxUSE_UNICODE_WCHAR
     unsigned long val = wcstoul(start, &end, GCCXML_BASE);
