@@ -91,7 +91,7 @@
 extern WXDLLIMPEXP_RICHTEXT const wxChar wxRichTextLineBreakChar;
 
 /*!
- * File types
+ * File types in wxRichText context.
  */
 enum wxRichTextFileType
 {
@@ -145,17 +145,23 @@ class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextBuffer;
 /*!
  * Flags returned from hit-testing
  */
+enum wxRichTextHitTestFlags
+{
+    // The point was not on this object
+    wxRICHTEXT_HITTEST_NONE =    0x01,
 
-// The point was not on this object
-#define wxRICHTEXT_HITTEST_NONE     0x01
-// The point was before the position returned from HitTest
-#define wxRICHTEXT_HITTEST_BEFORE   0x02
-// The point was after the position returned from HitTest
-#define wxRICHTEXT_HITTEST_AFTER    0x04
-// The point was on the position returned from HitTest
-#define wxRICHTEXT_HITTEST_ON       0x08
-// The point was on space outside content
-#define wxRICHTEXT_HITTEST_OUTSIDE  0x10
+    // The point was before the position returned from HitTest
+    wxRICHTEXT_HITTEST_BEFORE =  0x02,
+
+    // The point was after the position returned from HitTest
+    wxRICHTEXT_HITTEST_AFTER =   0x04,
+
+    // The point was on the position returned from HitTest
+    wxRICHTEXT_HITTEST_ON =      0x08,
+
+    // The point was on space outside content
+    wxRICHTEXT_HITTEST_OUTSIDE = 0x10
+};
 
 /*!
  * Flags for GetRangeSize
