@@ -22,6 +22,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/xml/xml.h"
+#include "wx/sstream.h"
 
 #include <stdarg.h>
 
@@ -73,10 +74,12 @@ private:
     CPPUNIT_TEST_SUITE( XmlTestCase );
         CPPUNIT_TEST( InsertChild );
         CPPUNIT_TEST( InsertChildAfter );
+        CPPUNIT_TEST( LoadSave );
     CPPUNIT_TEST_SUITE_END();
 
     void InsertChild();
     void InsertChildAfter();
+    void LoadSave();
 
     DECLARE_NO_COPY_CLASS(XmlTestCase)
 };
@@ -130,3 +133,35 @@ void XmlTestCase::InsertChildAfter()
     root->InsertChildAfter(new wxXmlNode(wxXML_ELEMENT_NODE, "C"), three);
     CheckXml(root, "1", "A", "2", "B", "3", "C", NULL);
 }
+
+void XmlTestCase::LoadSave()
+{
+    // NB: this is not real XRC but rather some XRC-like XML fragment which
+    //     exercises different XML constructs to check that they're saved back
+    //     correctly
+    //
+    // Also note that there should be no blank lines here as they disappear
+    // after saving.
+    const char *xmlText =
+"<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
+"<resource xmlns=\"http://www.wxwidgets.org/wxxrc\" version=\"2.3.0.1\">\n"
+"  <object class=\"wxDialog\" name=\"my_dialog\">\n"
+"    <children>\n"
+"      <grandchild id=\"1\"/>\n"
+"    </children>\n"
+"    <subobject/>\n"
+"  </object>\n"
+"</resource>\n"
+    ;
+
+    wxStringInputStream sis(xmlText);
+
+    wxXmlDocument doc;
+    CPPUNIT_ASSERT( doc.Load(sis) );
+
+    wxStringOutputStream sos;
+    CPPUNIT_ASSERT( doc.Save(sos) );
+
+    CPPUNIT_ASSERT_EQUAL( xmlText, sos.GetString() );
+}
+
