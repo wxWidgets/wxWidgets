@@ -168,7 +168,13 @@ static wxStrCacheStatsDumper s_showCacheStats;
 wxSTD ostream& operator<<(wxSTD ostream& os, const wxCStrData& str)
 {
 #if wxUSE_UNICODE && !wxUSE_UNICODE_UTF8
-    return os << (const char *)str.AsCharBuf();
+    const wxCharBuffer buf(str.AsCharBuf());
+    if ( !buf )
+        os.clear(wxSTD ios_base::failbit);
+    else
+        os << buf.data();
+
+    return os;
 #else
     return os << str.AsInternal();
 #endif
