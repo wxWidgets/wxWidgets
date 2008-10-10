@@ -41,6 +41,9 @@ public:
 
     /**
         Copy constructor, uses @ref overview_refcount.
+
+        @param palette
+            A reference to the palette to copy.
     */
     wxPalette(const wxPalette& palette);
 
@@ -48,8 +51,6 @@ public:
         Creates a palette from arrays of size @a n, one for each red, blue or
         green component.
 
-        @param palette
-            A pointer or reference to the palette to copy.
         @param n
             The number of indices in the palette.
         @param red
