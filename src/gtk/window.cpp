@@ -321,10 +321,8 @@ expose_event_border(GtkWidget* widget, GdkEventExpose* gdk_event, wxWindow* win)
     int h = win->m_wxwindow->allocation.height;
     if (win->HasFlag(wxBORDER_SIMPLE))
     {
-        GdkGC* gc = gdk_gc_new(gdk_event->window);
-        gdk_gc_set_foreground(gc, &widget->style->black);
-        gdk_draw_rectangle(gdk_event->window, gc, false, x, y, w - 1, h - 1);
-        g_object_unref(gc);
+        gdk_draw_rectangle(gdk_event->window,
+            widget->style->black_gc, false, x, y, w - 1, h - 1);
     }
     else
     {
@@ -341,10 +339,9 @@ expose_event_border(GtkWidget* widget, GdkEventExpose* gdk_event, wxWindow* win)
             // for scrollable ones
             detail = "viewport";
 
-        GtkWidget* styleWidget = wxGTKPrivate::GetEntryWidget();
         gtk_paint_shadow(
-           styleWidget->style, gdk_event->window, GTK_STATE_NORMAL,
-           shadow, NULL, styleWidget, detail, x, y, w, h);
+           win->m_wxwindow->style, gdk_event->window, GTK_STATE_NORMAL,
+           shadow, NULL, wxGTKPrivate::GetEntryWidget(), detail, x, y, w, h);
     }
 
     // no further painting is needed for border-only GdkWindow
