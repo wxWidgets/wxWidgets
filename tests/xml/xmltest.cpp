@@ -163,5 +163,28 @@ void XmlTestCase::LoadSave()
     CPPUNIT_ASSERT( doc.Save(sos) );
 
     CPPUNIT_ASSERT_EQUAL( xmlText, sos.GetString() );
+
+
+    const char *utf8xmlText =
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+"<word>\n"
+"  <lang name=\"fr\">\xc3\xa9t\xc3\xa9</lang>\n"
+"  <lang name=\"ru\">\xd0\xbb\xd0\xb5\xd1\x82\xd0\xbe</lang>\n"
+"</word>\n"
+    ;
+
+    wxStringInputStream sis8(wxString::FromUTF8(utf8xmlText));
+    CPPUNIT_ASSERT( doc.Load(sis8) );
+
+    // this contents can't be represented in Latin-1 as it contains Cyrillic
+    // letters
+    doc.SetFileEncoding("ISO-8859-1");
+    CPPUNIT_ASSERT( !doc.Save(sos) );
+
+    // but it should work in UTF-8
+    wxStringOutputStream sos8;
+    doc.SetFileEncoding("UTF-8");
+    CPPUNIT_ASSERT( doc.Save(sos8) );
+    CPPUNIT_ASSERT_EQUAL( utf8xmlText, sos8.GetString().ToUTF8() );
 }
 
