@@ -131,7 +131,7 @@ bool wxFontDataProperty::OnEvent( wxPropertyGrid* propgrid,
 {
     if ( propgrid->IsMainButtonEvent(event) )
     {
-        wxVariant useValue = propgrid->GetPendingEditedValue();
+        wxVariant useValue = propgrid->GetUncommittedPropertyValue();
 
         wxFontData fontData;
         fontData << useValue;
@@ -554,7 +554,7 @@ bool wxArrayDoubleProperty::OnEvent( wxPropertyGrid* propgrid,
     if ( propgrid->IsMainButtonEvent(event) )
     {
         // Update the value in case of last minute changes
-        wxVariant useValue = propgrid->GetPendingEditedValue();
+        wxVariant useValue = propgrid->GetUncommittedPropertyValue();
 
         wxArrayDouble& value = wxArrayDoubleRefFromVariant(useValue);
 

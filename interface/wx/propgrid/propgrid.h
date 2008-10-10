@@ -592,7 +592,7 @@ public:
         editor is activate and string edited by user represents valid,
         uncommitted property value.
     */
-    wxVariant GetPendingEditedValue();
+    wxVariant GetUncommittedPropertyValue();
 
     /**
         Returns cell background colour of a property.

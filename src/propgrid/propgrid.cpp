@@ -3104,7 +3104,7 @@ bool wxPropertyGrid::ChangePropertyValue( wxPGPropArg id, wxVariant newValue )
 
 // -----------------------------------------------------------------------
 
-wxVariant wxPropertyGrid::GetPendingEditedValue()
+wxVariant wxPropertyGrid::GetUncommittedPropertyValue()
 {
     wxPGProperty* prop = GetSelectedProperty();
 

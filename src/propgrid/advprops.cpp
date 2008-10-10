@@ -531,7 +531,7 @@ bool wxFontProperty::OnEvent( wxPropertyGrid* propgrid, wxWindow* WXUNUSED(prima
     if ( propgrid->IsMainButtonEvent(event) )
     {
         // Update value from last minute changes
-        wxVariant useValue = propgrid->GetPendingEditedValue();
+        wxVariant useValue = propgrid->GetUncommittedPropertyValue();
 
         wxFontData data;
         wxFont font;
@@ -1803,7 +1803,7 @@ bool wxMultiChoiceProperty::OnEvent( wxPropertyGrid* propgrid,
     if ( propgrid->IsMainButtonEvent(event) )
     {
         // Update the value
-        wxVariant useValue = propgrid->GetPendingEditedValue();
+        wxVariant useValue = propgrid->GetUncommittedPropertyValue();
 
         wxArrayString labels = m_choices.GetLabels();
         unsigned int choiceCount;

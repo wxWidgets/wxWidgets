@@ -1885,7 +1885,7 @@ bool wxLongStringProperty::OnEvent( wxPropertyGrid* propGrid, wxWindow* WXUNUSED
     if ( propGrid->IsMainButtonEvent(event) )
     {
         // Update the value
-        wxVariant useValue = propGrid->GetPendingEditedValue();
+        wxVariant useValue = propGrid->GetUncommittedPropertyValue();
 
         wxString val1 = useValue.GetString();
         wxString val_orig = val1;
@@ -2487,7 +2487,7 @@ bool wxArrayStringProperty::OnButtonClick( wxPropertyGrid* propGrid,
                                            const wxChar* cbt )
 {
     // Update the value
-    wxVariant useValue = propGrid->GetPendingEditedValue();
+    wxVariant useValue = propGrid->GetUncommittedPropertyValue();
 
     if ( !propGrid->EditorValidate() )
         return false;
