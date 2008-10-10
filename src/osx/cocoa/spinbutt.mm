@@ -77,8 +77,6 @@ wxWidgetImplType* wxWidgetImpl::CreateSpinButton( wxWindowMac* wxpeer,
                                     long style, 
                                     long extraStyle)
 {
-    NSView* sv = (wxpeer->GetParent()->GetHandle() );
-    
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSStepper* v = [[wxNSStepper alloc] initWithFrame:r];
 
@@ -89,7 +87,6 @@ wxWidgetImplType* wxWidgetImpl::CreateSpinButton( wxWindowMac* wxpeer,
     if ( style & wxSP_WRAP )
         [v setValueWraps:YES];
     
-    [sv addSubview:v];
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
     [v setImplementation:c];
     return c;

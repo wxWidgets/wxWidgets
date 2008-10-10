@@ -246,8 +246,6 @@ wxWidgetImplType* wxWidgetImpl::CreateTabView( wxWindowMac* wxpeer,
     if ( !controller )
         controller =[[wxTabViewController alloc] init];
 
-    NSView* sv = (wxpeer->GetParent()->GetHandle() );
-    
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     
     NSTabViewType tabstyle = NSTopTabsBezelBorder;
@@ -259,7 +257,6 @@ wxWidgetImplType* wxWidgetImpl::CreateTabView( wxWindowMac* wxpeer,
         tabstyle = NSBottomTabsBezelBorder;
     
     wxNSTabView* v = [[wxNSTabView alloc] initWithFrame:r];
-    [sv addSubview:v];
     [v setTabViewType:tabstyle];
     wxWidgetCocoaImpl* c = new wxCocoaTabView( wxpeer, v );
     [v setImplementation:c];

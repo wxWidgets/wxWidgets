@@ -473,8 +473,6 @@ wxWidgetImplType* wxWidgetImpl::CreateListBox( wxWindowMac* wxpeer,
                                     long style, 
                                     long extraStyle)
 {
-    NSView* superv = (wxpeer->GetParent()->GetHandle() );
-    
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     NSScrollView* scrollview = [[NSScrollView alloc] initWithFrame:r];
     
@@ -503,7 +501,6 @@ wxWidgetImplType* wxWidgetImpl::CreateListBox( wxWindowMac* wxpeer,
     [tableview setColumnAutoresizingStyle:NSTableViewLastColumnOnlyAutoresizingStyle];
     wxNSTableDataSource* ds = [[ wxNSTableDataSource alloc] init];
     [tableview setDataSource:ds];
-    [superv addSubview:scrollview];
     wxListWidgetCocoaImpl* c = new wxListWidgetCocoaImpl( wxpeer, scrollview, tableview, ds );
     [tableview setImplementation:c];
     [ds setImplementation:c];

@@ -841,22 +841,15 @@ void wxMacControl::Init()
     m_macControlEventHandler = NULL;
 }
 
-void wxMacControl::SetReference( URefCon data )
-{
-    SetControlReference( m_controlRef , data );
-}
-
 void wxMacControl::RemoveFromParent()
 {
     // nothing to do here for carbon
+    HIViewRemoveFromSuperview(m_controlRef);
 }
 
 void wxMacControl::Embed( wxWidgetImpl *parent )
 {
-    // copied from MacPostControlCreate
-    ControlRef container = (ControlRef) parent->GetWXWidget() ;
-    wxASSERT_MSG( container != NULL , wxT("No valid mac container control") ) ;
-    ::EmbedControl( m_controlRef , container ) ;
+    HIViewAddSubview(parent->GetWXWidget(), m_controlRef);
 }
 
 void wxMacControl::SetNeedsDisplay( const wxRect* rect )
@@ -1386,6 +1379,13 @@ void wxMacControl::SetBitmap( const wxBitmap& WXUNUSED(bmp) )
 void wxMacControl::SetScrollThumb( wxInt32 WXUNUSED(pos), wxInt32 WXUNUSED(viewsize) )
 {
     // implemented in respective subclass
+}
+
+void wxMacControl::AddSubWidget( wxWidgetImpl* widget )
+{
+    ControlRef container = (ControlRef) GetWXWidget() ;
+    wxASSERT_MSG( container != NULL , wxT("No valid mac container control") ) ;
+    ::EmbedControl( (ControlRef) widget->GetWXWidget() , container ) ;
 }
 
 //

@@ -160,6 +160,7 @@ public :
 
     void                SetFont( const wxFont & font , const wxColour& foreground , long windowStyle, bool ignoreBlack = true );
 
+    void                InstallEventHandler( WXWidget control = NULL );
 protected:
     WXWidget m_osxView;
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetCocoaImpl)

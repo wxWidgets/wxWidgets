@@ -101,11 +101,8 @@ wxWidgetImplType* wxWidgetImpl::CreateStaticText( wxWindowMac* wxpeer,
                                     long style, 
                                     long extraStyle) 
 {
-    NSView* sv = (wxpeer->GetParent()->GetHandle() );
-    
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSTextField* v = [[wxNSTextField alloc] initWithFrame:r];
-    [sv addSubview:v];
 
     [v setBezeled:NO];
     [v setEditable:NO];

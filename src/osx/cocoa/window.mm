@@ -718,6 +718,10 @@ void wxWidgetCocoaImpl::SetFont(wxFont const&, wxColour const&, long, bool)
     // TODO
 }
 
+void wxWidgetCocoaImpl::InstallEventHandler( WXWidget control )
+{
+}
+
 //
 // Factory methods
 //

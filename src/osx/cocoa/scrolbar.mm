@@ -111,12 +111,9 @@ wxWidgetImplType* wxWidgetImpl::CreateScrollBar( wxWindowMac* wxpeer,
                                     long style, 
                                     long extraStyle)
 {
-    NSView* sv = (wxpeer->GetParent()->GetHandle() );
-    
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSScroller* v = [[wxNSScroller alloc] initWithFrame:r];
 
-    [sv addSubview:v];
     wxWidgetCocoaImpl* c = new wxOSXScrollBarCocoaImpl( wxpeer, v );
     [v setImplementation:c];
     return c;

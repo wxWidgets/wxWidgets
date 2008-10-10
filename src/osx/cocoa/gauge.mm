@@ -105,8 +105,6 @@ wxWidgetImplType* wxWidgetImpl::CreateGauge( wxWindowMac* wxpeer,
                                     long style, 
                                     long extraStyle)
 {
-    NSView* sv = (wxpeer->GetParent()->GetHandle() );
-    
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSProgressIndicator* v = [[wxNSProgressIndicator alloc] initWithFrame:r];
 
@@ -114,7 +112,6 @@ wxWidgetImplType* wxWidgetImpl::CreateGauge( wxWindowMac* wxpeer,
     [v setMaxValue: maximum];
     [v setIndeterminate:FALSE];
     [v setDoubleValue: (double) value];
-    [sv addSubview:v];
     wxWidgetCocoaImpl* c = new wxOSXGaugeCocoaImpl( wxpeer, v );
     [v setImplementation:c];
     return c;

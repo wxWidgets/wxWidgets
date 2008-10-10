@@ -25,8 +25,6 @@ wxWidgetImplType* wxWidgetImpl::CreateCheckBox( wxWindowMac* wxpeer,
                                     long style, 
                                     long extraStyle) 
 {
-    NSView* sv = (wxpeer->GetParent()->GetHandle() );
-    
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
 
@@ -34,7 +32,6 @@ wxWidgetImplType* wxWidgetImpl::CreateCheckBox( wxWindowMac* wxpeer,
     if (style & wxCHK_3STATE)
         [v setAllowsMixedState:YES];
         
-    [sv addSubview:v];
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
     [v setImplementation:c];
     return c;

@@ -31,15 +31,12 @@ wxWidgetImplType* wxWidgetImpl::CreateBitmapButton( wxWindowMac* wxpeer,
                                     long style, 
                                     long extraStyle) 
 {
-    NSView* sv = static_cast<NSView*>(wxpeer->GetParent()->GetHandle() );
-    
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
     
     [v setBezelStyle:NSRegularSquareBezelStyle];
     [v setImage:bitmap.GetNSImage() ];
     [v setButtonType:NSMomentaryPushInButton];
-    [sv addSubview:v];
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
     [v setImplementation:c];
     return c;

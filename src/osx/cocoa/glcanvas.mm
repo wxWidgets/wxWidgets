@@ -291,11 +291,8 @@ bool wxGLCanvas::Create(wxWindow *parent,
         return false;
 
 /*
-    NSView* sv = (parent->GetHandle() );
-    
     NSRect r = wxOSXGetFrameForControl( this, pos , size ) ;
     wxNSCustomOpenGLView* v = [[wxNSCustomOpenGLView alloc] initWithFrame:r];
-    [sv addSubview:v];
     m_peer = new wxWidgetCocoaImpl( this, v );
     [v setImplementation:m_peer];
 

@@ -77,8 +77,6 @@ wxWidgetImplType* wxWidgetImpl::CreateSlider( wxWindowMac* wxpeer,
                                     long style, 
                                     long extraStyle)
 {
-    NSView* sv = (wxpeer->GetParent()->GetHandle() );
-    
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSSlider* v = [[wxNSSlider alloc] initWithFrame:r];
 
@@ -99,7 +97,6 @@ wxWidgetImplType* wxWidgetImpl::CreateSlider( wxWindowMac* wxpeer,
     [v setMinValue: minimum];
     [v setMaxValue: maximum];
     [v setFloatValue: (double) value];
-    [sv addSubview:v];
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
     [v setImplementation:c];
     return c;

@@ -235,6 +235,8 @@ public :
     // is the clicked event sent AFTER the state already changed, so no additional
     // state changing logic is required from the outside
     virtual bool        ButtonClickDidStateChange() = 0;
+    
+    virtual void        InstallEventHandler( WXWidget control = NULL ) = 0;
 
     // static methods for associating native controls and their implementations
 

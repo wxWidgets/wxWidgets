@@ -1907,6 +1907,7 @@ wxMacMLTEClassicControl::wxMacMLTEClassicControl( wxTextCtrl *wxPeer,
         MAC_WXHWND(wxPeer->GetParent()->MacGetTopLevelWindowRef()),
         &bounds, featureSet, &m_controlRef );
     verify_noerr( err );
+    SetControlReference( m_controlRef , (URefCon) wxPeer );
 
     DoCreate();
 

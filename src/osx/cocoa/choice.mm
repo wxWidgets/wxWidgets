@@ -91,11 +91,8 @@ wxWidgetImplType* wxWidgetImpl::CreateChoice( wxWindowMac* wxpeer,
                                     long style, 
                                     long extraStylew)
 {
-    NSView* sv = (wxpeer->GetParent()->GetHandle() );
-    
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSPopUpButton* v = [[wxNSPopUpButton alloc] initWithFrame:r pullsDown:NO];
-    [sv addSubview:v];
     [v setMenu: menu->GetHMenu()];
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
     [v setImplementation:c];

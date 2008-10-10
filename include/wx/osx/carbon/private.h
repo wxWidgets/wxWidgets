@@ -299,8 +299,6 @@ public :
 
     virtual WXWidget GetWXWidget() const { return (WXWidget) m_controlRef; }
 
-    virtual void SetReference( URefCon data );
-    
     virtual bool        IsVisible() const;
 
     virtual void        Raise();

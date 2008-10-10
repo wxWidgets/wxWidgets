@@ -274,19 +274,11 @@ void wxWindowMac::MacPostControlCreate(const wxPoint& WXUNUSED(pos), const wxSiz
 {
     wxASSERT_MSG( m_peer != NULL && m_peer->IsOk() , wxT("No valid mac control") ) ;
 
-#if wxOSX_USE_CARBON
-    m_peer->SetReference( (URefCon) this ) ;
-#endif
-
     GetParent()->AddChild( this );
 
-#if wxOSX_USE_CARBON
     m_peer->InstallEventHandler();
+    m_peer->Embed(GetParent()->GetPeer());
 
-    ControlRef container = (ControlRef) GetParent()->GetHandle() ;
-    wxASSERT_MSG( container != NULL , wxT("No valid mac container control") ) ;
-    ::EmbedControl( m_peer->GetControlRef() , container ) ;
-#endif
     GetParent()->MacChildAdded() ;
 
     // adjust font, controlsize etc
