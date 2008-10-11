@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 21 2008)
+// C++ code generated with wxFormBuilder (version Apr 16 2008)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -52,22 +52,10 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_menuCapFullScreen = new wxMenuItem( captureMenu, idMenuCapFullScreen, wxString( _("&Full Screen") ) + wxT('\t') + wxT("Ctrl+Alt+F"), _("Takes a screenshot of the entire screen."), wxITEM_NORMAL );
 	captureMenu->Append( m_menuCapFullScreen );
 	
-	wxMenuItem* m_menuCapRect;
 	m_menuCapRect = new wxMenuItem( captureMenu, idMenuCapRect, wxString( _("Regions<Begin>") ) + wxT('\t') + wxT("Ctrl+Alt+R"), _("Manually specify rectangular regions for the screenshots."), wxITEM_NORMAL );
-	#ifdef __WXMSW__
-	m_menuCapRect->SetBitmaps( wxICON( play ) );
-	#elif defined( __WXGTK__ )
-	m_menuCapRect->SetBitmap( wxICON( play ) );
-	#endif
 	captureMenu->Append( m_menuCapRect );
 	
-	wxMenuItem* m_menuEndCapRect;
 	m_menuEndCapRect = new wxMenuItem( captureMenu, idMenuEndCapRect, wxString( _("Regions<End>") ) + wxT('\t') + wxT("Ctrl+Alt+E"), _("Stop manually generating screenshots."), wxITEM_NORMAL );
-	#ifdef __WXMSW__
-	m_menuEndCapRect->SetBitmaps( wxICON( stop ) );
-	#elif defined( __WXGTK__ )
-	m_menuEndCapRect->SetBitmap( wxICON( stop ) );
-	#endif
 	captureMenu->Append( m_menuEndCapRect );
 	m_menuEndCapRect->Enable( false );
 	
@@ -216,7 +204,7 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_treeCtrl1 = new wxTreeCtrl( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE|wxSUNKEN_BORDER );
 	fgSizer2->Add( m_treeCtrl1, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 20 );
 	
-	m_listCtrl1 = new wxListCtrl( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0|wxSUNKEN_BORDER );
+	m_listCtrl1 = new wxListCtrl( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT|wxSUNKEN_BORDER );
 	m_listCtrl1->SetToolTip( _("wxListCtrl") );
 	
 	fgSizer2->Add( m_listCtrl1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 20 );

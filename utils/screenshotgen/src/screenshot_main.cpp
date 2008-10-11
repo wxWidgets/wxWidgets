@@ -34,6 +34,9 @@
 #include "ctrlmaskout.h"
 #include "autocapture.h"
 
+#include "bitmaps/play.xpm"
+#include "bitmaps/stop.xpm"
+
 
 // ----------------------------------------------------------------------------
 // ScreenshotFrame
@@ -104,8 +107,12 @@ void ScreenshotFrame::InitFBControls()
     m_treeCtrl1->ExpandAll();
 
     // Add items into wxListCtrl
-    for(long index = 0; index < 5; index++)
-        m_listCtrl1->InsertItem( index, wxString::Format(_("Item\n(0,%d)"),index));
+	m_listCtrl1->InsertColumn(0, "Names");
+	m_listCtrl1->InsertColumn(1, "Values");
+	for(long index = 0; index < 5; index++) {
+        m_listCtrl1->InsertItem( index, wxString::Format(_("Item%d"),index));
+		m_listCtrl1->SetItem(index, 1, wxString::Format("%d", index));
+	}
 
     // Check the first item in wxCheckListBox
     m_checkList1->Check(0);
@@ -119,6 +126,10 @@ void ScreenshotFrame::InitFBControls()
 
     // set minimum size hints
     GetSizer()->SetSizeHints(this);
+
+	// add bitmaps to the menus
+	m_menuCapRect->SetBitmaps( wxIcon(play_xpm) );
+	m_menuEndCapRect->SetBitmaps( wxIcon(stop_xpm) );
 }
 
 

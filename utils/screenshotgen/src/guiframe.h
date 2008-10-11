@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 21 2008)
+// C++ code generated with wxFormBuilder (version Apr 16 2008)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -80,6 +80,8 @@ class GUIFrame : public wxFrame
 		wxMenuBar* mbar;
 		wxMenu* fileMenu;
 		wxMenu* captureMenu;
+		wxMenuItem* m_menuCapRect;
+		wxMenuItem* m_menuEndCapRect;
 		wxMenu* helpMenu;
 		wxNotebook* m_notebook1;
 		wxPanel* m_panel1;

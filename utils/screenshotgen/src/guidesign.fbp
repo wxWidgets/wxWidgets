@@ -70,7 +70,7 @@
             <event name="OnSetFocus"></event>
             <event name="OnSize"></event>
             <event name="OnUpdateUI"></event>
-            <object class="wxMenuBar" expanded="0">
+            <object class="wxMenuBar" expanded="1">
                 <property name="bg"></property>
                 <property name="context_help"></property>
                 <property name="enabled">1</property>
@@ -172,7 +172,7 @@
                         <event name="OnUpdateUI"></event>
                     </object>
                     <object class="wxMenuItem" expanded="1">
-                        <property name="bitmap">play; Load From Icon Resource [-1; -1]</property>
+                        <property name="bitmap">; Load From File</property>
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help">Manually specify rectangular regions for the screenshots.</property>
@@ -180,14 +180,14 @@
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Regions&lt;Begin&gt;</property>
                         <property name="name">m_menuCapRect</property>
-                        <property name="permission">none</property>
+                        <property name="permission">protected</property>
                         <property name="shortcut">Ctrl+Alt+R</property>
                         <property name="unchecked_bitmap"></property>
                         <event name="OnMenuSelection">OnCaptureRect</event>
                         <event name="OnUpdateUI"></event>
                     </object>
                     <object class="wxMenuItem" expanded="1">
-                        <property name="bitmap">stop; Load From Icon Resource [-1; -1]</property>
+                        <property name="bitmap">; Load From Icon Resource [-1; -1]</property>
                         <property name="checked">0</property>
                         <property name="enabled">0</property>
                         <property name="help">Stop manually generating screenshots.</property>
@@ -195,7 +195,7 @@
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Regions&lt;End&gt;</property>
                         <property name="name">m_menuEndCapRect</property>
-                        <property name="permission">none</property>
+                        <property name="permission">protected</property>
                         <property name="shortcut">Ctrl+Alt+E</property>
                         <property name="unchecked_bitmap"></property>
                         <event name="OnMenuSelection">OnEndCaptureRect</event>
@@ -1589,7 +1589,7 @@
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size"></property>
-                                            <property name="style"></property>
+                                            <property name="style">wxLC_REPORT</property>
                                             <property name="subclass"></property>
                                             <property name="tooltip">wxListCtrl</property>
                                             <property name="window_extra_style"></property>
