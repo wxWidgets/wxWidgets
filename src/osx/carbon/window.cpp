@@ -1381,13 +1381,6 @@ void wxMacControl::SetScrollThumb( wxInt32 WXUNUSED(pos), wxInt32 WXUNUSED(views
     // implemented in respective subclass
 }
 
-void wxMacControl::AddSubWidget( wxWidgetImpl* widget )
-{
-    ControlRef container = (ControlRef) GetWXWidget() ;
-    wxASSERT_MSG( container != NULL , wxT("No valid mac container control") ) ;
-    ::EmbedControl( (ControlRef) widget->GetWXWidget() , container ) ;
-}
-
 //
 // Tab Control
 //
