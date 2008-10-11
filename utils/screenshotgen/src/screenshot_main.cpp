@@ -114,6 +114,18 @@ void ScreenshotFrame::InitFBControls()
 		m_listCtrl1->SetItem(index, 1, wxString::Format("%d", index));
 	}
 
+	// Init file and dir pickers
+	wxString file, dir;
+#if defined(__WXMSW__)
+	file = "C:\\Windows\\explorer.exe";
+	dir = "C:\\Windows";
+#else
+	file = "/bin/bash";
+	dir = "/home";
+#endif
+	m_filePicker1->SetPath(file);
+	m_dirPicker1->SetPath(dir);
+
     // Check the first item in wxCheckListBox
     m_checkList1->Check(0);
 
