@@ -9,6 +9,7 @@
 /**
     @class wxMemoryOutputStream
 
+    @todo describe me.
 
     @library{wxbase}
     @category{streams}
@@ -21,6 +22,9 @@ public:
     /**
         If @a data is @NULL, then it will initialize a new empty buffer which will
         grow if required.
+
+        @warning
+        If the buffer is created, it will be destroyed at the destruction of the stream.
     */
     wxMemoryOutputStream(char* data = NULL, size_t length = 0);
 
@@ -30,9 +34,8 @@ public:
     virtual ~wxMemoryOutputStream();
 
     /**
-        CopyTo allowed you to transfer data from the internal buffer of
-        wxMemoryOutputStream to an external buffer. @a len specifies the size of
-        the buffer.
+        Allows you to transfer data from the internal buffer of wxMemoryOutputStream
+        to an external buffer. @a len specifies the size of the buffer.
     */
     size_t CopyTo(char* buffer, size_t len) const;
 
@@ -48,6 +51,7 @@ public:
 /**
     @class wxMemoryInputStream
 
+    @todo describe me.
 
     @library{wxbase}
     @category{streams}
@@ -57,19 +61,29 @@ public:
 class wxMemoryInputStream : public wxInputStream
 {
 public:
-    //@{
     /**
-        Creates a new read-only memory stream, initializing it with the
-        data from the given input stream @e stream.
-        The @a len argument specifies the amount of data to read from
-        the @e stream. Setting it to @e wxInvalidOffset means that
-        the @a stream is to be read entirely (i.e. till the EOF is reached).
+        Initializes a new read-only memory stream which will use the specified
+        buffer data of length len. The stream does not take ownership of the buffer,
+        i.e. the buffer will not be deleted in its destructor.
     */
     wxMemoryInputStream(const char* data, size_t len);
+
+    /**
+        Creates a new read-only memory stream, initializing it with the data from
+        the given output stream @a stream.
+    */
     wxMemoryInputStream(const wxMemoryOutputStream& stream);
+
+    /**
+        Creates a new read-only memory stream, initializing it with the
+        data from the given input stream @a stream.
+
+        The @a len argument specifies the amount of data to read from the
+        @a stream. Setting it to @e wxInvalidOffset means that the @a stream
+        is to be read entirely (i.e. till the EOF is reached).
+    */
     wxMemoryInputStream(wxInputStream& stream,
                         wxFileOffset len = wxInvalidOffset);
-    //@}
 
     /**
         Destructor.

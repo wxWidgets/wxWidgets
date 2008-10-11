@@ -65,19 +65,15 @@ public:
 /**
     @class wxMediaCtrl
 
-    wxMediaCtrl is a class for displaying types of
-    media, such as videos, audio files, natively through native codecs.
+    wxMediaCtrl is a class for displaying types of media, such as videos, audio
+    files, natively through native codecs.
 
     wxMediaCtrl uses native backends to render media, for example on Windows
     there is a ActiveMovie/DirectShow backend, and on Macintosh there is a
     QuickTime backend.
 
-    @library{wxmedia}
-    @category{media}
 
-    @see wxMediaEvent
-
-    @section class_mediactrl_rendering_media Rendering media
+    @section mediactrl_rendering_media Rendering media
 
     Depending upon the backend, wxMediaCtrl can render and display pretty much any
     kind of media that the native system can - such as an image, mpeg video, or mp3
@@ -93,7 +89,7 @@ public:
     of the backend. For example, QuickTime cannot set the playback rate of certain
     streaming media - while DirectShow is slightly more flexible in that regard.
 
-    @section class_mediactrl_operation Operation
+    @section mediactrl_operation Operation
 
     When wxMediaCtrl plays a file, it plays until the stop position is reached
     (currently the end of the file/stream). Right before it hits the end of the stream,
@@ -120,85 +116,120 @@ public:
     }
     @endcode
 
-    When wxMediaCtrl stops, either by the @c EVT_MEDIA_STOP not being vetoed, or by manually
-    calling Stop(), where it actually stops is not at the beginning, rather, but at the beginning
-    of the stream. That is, when it stops and play is called, playback is gauranteed to start at
-    the beginning of the media. This is because some streams are not seekable, and when stop is
-    called on them they return to the beginning, thus wxMediaCtrl tries to keep consistant for all types
-    of media.
+    When wxMediaCtrl stops, either by the @c EVT_MEDIA_STOP not being vetoed, or
+    by manually calling Stop(), where it actually stops is not at the beginning,
+    rather, but at the beginning of the stream. That is, when it stops and play
+    is called, playback is gauranteed to start at the beginning of the media.
+    This is because some streams are not seekable, and when stop is called on
+    them they return to the beginning, thus wxMediaCtrl tries to keep consistant
+    for all types of media.
 
-    Note that when changing the state of the media through Play() and other methods, the media may not
-    actually be in the @c wxMEDIASTATE_PLAYING, for example. If you are relying on the media being in
-    certain state catch the event relevant to the state. See wxMediaEvent for the kinds of events that
-    you can catch.
+    Note that when changing the state of the media through Play() and other methods,
+    the media may not actually be in the @c wxMEDIASTATE_PLAYING, for example.
+    If you are relying on the media being in certain state catch the event relevant
+    to the state. See wxMediaEvent for the kinds of events that you can catch.
 
-    @section class_mediactrl_video_size Video size
 
-    By default, wxMediaCtrl will scale the size of the video to the requested amount passed to either
-    its constructor or Create(). After calling Load or performing an equivilant operation, you can
-    subsequently obtain the "real" size of the video (if there is any) by calling GetBestSize().
-    Note that the actual result on the display will be slightly different when ShowPlayerControls is
-    activated and the actual video size will be less then specified due to the extra controls provided
-    by the native toolkit. In addition, the backend may modify GetBestSize() to include the size of
-    the extra controls - so if you want the real size of the video just disable ShowPlayerControls().
+    @section mediactrl_video_size Video size
 
-    The idea with setting GetBestSize() to the size of the video is that GetBestSize() is a wxWindow-derived
-    function that is called when sizers on a window recalculate. What this means is that if you use sizers
-    by default the video will show in its original size without any extra assistance needed from the user.
+    By default, wxMediaCtrl will scale the size of the video to the requested
+    amount passed to either its constructor or Create().
+    After calling wxMediaCtrl::Load or performing an equivilant operation,
+    you can subsequently obtain the "real" size of the video (if there is any)
+    by calling wxMediaCtrl::GetBestSize(). Note that the actual result on the
+    display will be slightly different when wxMediaCtrl::ShowPlayerControls is
+    activated and the actual video size will be less then specified due to the
+    extra controls provided by the native toolkit.
+    In addition, the backend may modify wxMediaCtrl::GetBestSize() to include
+    the size of the extra controls - so if you want the real size of the video
+    just disable wxMediaCtrl::ShowPlayerControls().
 
-    @section class_mediactrl_player_controls Player controls
+    The idea with setting wxMediaCtrl::GetBestSize() to the size of the video is
+    that GetBestSize() is a wxWindow-derived function that is called when sizers
+    on a window recalculate.
+    What this means is that if you use sizers by default the video will show in
+    its original size without any extra assistance needed from the user.
 
-    Normally, when you use wxMediaCtrl it is just a window for the video to play in. However, some toolkits
-    have their own media player interface. For example, QuickTime generally has a bar below the video with
-    a slider. A special feature available to wxMediaCtrl, you can use the toolkits interface instead of making
-    your own by using the ShowPlayerControls() function. There are several options for the flags parameter,
-    with the two general flags being @c wxMEDIACTRLPLAYERCONTROLS_NONE which turns off the native interface,
-    and @c wxMEDIACTRLPLAYERCONTROLS_DEFAULT which lets wxMediaCtrl decide what native controls on the interface.
-    Be sure to review the caveats outlined in Video size before doing so.
 
-    @section class_mediactrl_choosing_backend Choosing a backend
+    @section mediactrl_player_controls Player controls
 
-    Generally, you should almost certainly leave this part up to wxMediaCtrl - but if you need a certain backend
-    for a particular reason, such as QuickTime for playing .mov files, all you need to do to choose a specific
-    backend is to pass the name of the backend class to Create().
+    Normally, when you use wxMediaCtrl it is just a window for the video to play in.
+    However, some toolkits have their own media player interface.
+    For example, QuickTime generally has a bar below the video with a slider.
+    A special feature available to wxMediaCtrl, you can use the toolkits interface
+    instead of making your own by using the ShowPlayerControls() function.
+    There are several options for the flags parameter, with the two general flags
+    being @c wxMEDIACTRLPLAYERCONTROLS_NONE which turns off the native interface,
+    and @c wxMEDIACTRLPLAYERCONTROLS_DEFAULT which lets wxMediaCtrl decide what
+    native controls on the interface.
+    Be sure to review the caveats outlined in @ref mediactrl_video_size before doing so.
+
+
+    @section mediactrl_choosing_backend Choosing a backend
+
+    Generally, you should almost certainly leave this part up to wxMediaCtrl -
+    but if you need a certain backend for a particular reason, such as QuickTime
+    for playing .mov files, all you need to do to choose a specific backend is
+    to pass the name of the backend class to wxMediaCtrl::Create().
 
     The following are valid backend identifiers:
 
-    @beginTable
-    @row2col{@b wxMEDIABACKEND_DIRECTSHOW, Use ActiveMovie/DirectShow. Uses the native ActiveMovie (I.E. DirectShow) control. Default backend on Windows and supported by nearly all Windows versions, even some Windows CE versions. May display a windows media player logo while inactive.}
-    @row2col{@b wxMEDIABACKEND_QUICKTIME, Use QuickTime. Mac Only. WARNING: May not working correctly embedded in a wxNotebook.}
-    @row2col{@b wxMEDIABACKEND_GSTREAMER, Use GStreamer. Unix Only. Requires GStreamer 0.8 along with at the very least the xvimagesink, xoverlay, and gst-play modules of gstreamer to function. You need the correct modules to play the relavant files, for example the mad module to play mp3s, etc.}
-    @row2col{@b wxMEDIABACKEND_WMP10, Uses Windows Media Player 10 (Windows only) - works on mobile machines with Windows Media Player 10 and desktop machines with either Windows Media Player 9 or 10}
-    @endTable
+    - @b wxMEDIABACKEND_DIRECTSHOW: Use ActiveMovie/DirectShow.
+      Uses the native ActiveMovie (I.E. DirectShow) control.
+      Default backend on Windows and supported by nearly all Windows versions,
+      even some Windows CE versions.
+      May display a windows media player logo while inactive.
+    - @b wxMEDIABACKEND_QUICKTIME: Use QuickTime. Mac Only.
+      WARNING: May not working correctly embedded in a wxNotebook.
+    - @b wxMEDIABACKEND_GSTREAMER, Use GStreamer. Unix Only.
+      Requires GStreamer 0.8 along with at the very least the xvimagesink, xoverlay,
+      and gst-play modules of gstreamer to function.
+      You need the correct modules to play the relavant files, for example the
+      mad module to play mp3s, etc.
+    - @b wxMEDIABACKEND_WMP10, Uses Windows Media Player 10 (Windows only) -
+      works on mobile machines with Windows Media Player 10 and desktop machines
+      with either Windows Media Player 9 or 10.
 
-    Note that other backends such as wxMEDIABACKEND_MCI can now be found at wxCode(http://wxcode.sourceforge.net/).
+    Note that other backends such as wxMEDIABACKEND_MCI can now be found at
+    wxCode (http://wxcode.sourceforge.net/).
 
-    @section class_mediactrl_creating_backend Creating a backend
 
-    Creating a backend for wxMediaCtrl is a rather simple process. Simply derive from wxMediaBackendCommonBase
-    and implement the methods you want. The methods in wxMediaBackend correspond to those in wxMediaCtrl except
-    for CreateControl which does the actual creation of the control, in cases where a custom control is not
-    needed you may simply call wxControl::Create().
+    @section mediactrl_creating_backend Creating a backend
+
+    Creating a backend for wxMediaCtrl is a rather simple process.
+    Simply derive from wxMediaBackendCommonBase and implement the methods you want.
+    The methods in wxMediaBackend correspond to those in wxMediaCtrl except for
+    wxMediaCtrl::CreateControl which does the actual creation of the control,
+    in cases where a custom control is not needed you may simply call wxControl::Create().
 
     You need to make sure to use the @c DECLARE_CLASS and @c IMPLEMENT_CLASS macros.
 
-    The only real tricky part is that you need to make sure the file in compiled in, which if there are
-    just backends in there will not happen and you may need to use a force link hack
-    (see http://www.wxwidgets.org/wiki/index.php/RTTI).
+    The only real tricky part is that you need to make sure the file in compiled in,
+    which if there are just backends in there will not happen and you may need to
+    use a force link hack (see http://www.wxwidgets.org/wiki/index.php/RTTI).
 
-    This is a rather simple example of how to create a backend in the wxActiveXContainer documentation.
+    This is a rather simple example of how to create a backend in the
+    wxActiveXContainer documentation.
+
+
+    @library{wxmedia}
+    @category{media}
+
+    @see wxMediaEvent
 */
 class wxMediaCtrl : public wxControl
 {
 public:
     /**
-        Default constructor - you MUST call Create before calling any other methods of wxMediaCtrl.
+        Default constructor - you MUST call Create() before calling any
+        other methods of wxMediaCtrl.
     */
     wxMediaCtrl();
 
     /**
-        Constructor that calls Create().  You may prefer to call Create() directly to check
-        to see if wxMediaCtrl is available on the system.
+        Constructor that calls Create().
+        You may prefer to call Create() directly to check to see if
+        wxMediaCtrl is available on the system.
 
         @param parent
             parent of this control.  Must not be @NULL.
@@ -213,8 +244,7 @@ public:
         @param style
             Optional styles.
         @param szBackend
-            Name of backend you want to use, leave blank to make
-            wxMediaCtrl figure it out.
+            Name of backend you want to use, leave blank to make wxMediaCtrl figure it out.
         @param validator
             validator to use.
         @param name
@@ -226,14 +256,14 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxPanelNameStr);
 
-
     /**
-        Creates this control.  Returns @false if it can't load the movie located at @a fileName
+        Creates this control.
+        Returns @false if it can't load the movie located at @a fileName
         or it cannot load one of its native backends.
 
-        If you specify a file to open via @a fileName and you don't specify a backend to
-        use, wxMediaCtrl tries each of its backends until one that can render the path referred to
-        by @a fileName can be found.
+        If you specify a file to open via @a fileName and you don't specify a
+        backend to use, wxMediaCtrl tries each of its backends until one that
+        can render the path referred to by @a fileName can be found.
 
         @param parent
             parent of this control.  Must not be @NULL.
@@ -248,8 +278,7 @@ public:
         @param style
             Optional styles.
         @param szBackend
-            Name of backend you want to use, leave blank to make
-            wxMediaCtrl figure it out.
+            Name of backend you want to use, leave blank to make wxMediaCtrl figure it out.
         @param validator
             validator to use.
         @param name
@@ -263,7 +292,8 @@ public:
 
     /**
         Obtains the best size relative to the original/natural size of the
-        video, if there is any. See @ref class_mediactrl_video_size for more information.
+        video, if there is any.
+        See @ref mediactrl_video_size for more information.
     */
     wxSize GetBestSize();
 
@@ -290,8 +320,8 @@ public:
     /**
         Gets the volume of the media from a 0.0 to 1.0 range.
 
-        @note Due to rounding and other errors the value returned may not be the exact value
-              sent to SetVolume().
+        @note Due to rounding and other errors the value returned may not be the
+              exact value sent to SetVolume().
     */
     double GetVolume();
 
@@ -306,8 +336,9 @@ public:
     bool Load(const wxString& fileName);
 
     /**
-        Loads the location that uri refers to. Note that this is very implementation-dependant,
-        although HTTP URI/URLs are generally supported, for example. Returns @false if loading fails.
+        Loads the location that uri refers to. Note that this is very
+        implementation-dependant, although HTTP URI/URLs are generally
+        supported, for example. Returns @false if loading fails.
     */
     bool Load(const wxURI& uri);
 
@@ -324,7 +355,8 @@ public:
     bool LoadURI(const wxURI& uri);
 
     /**
-        Same as Load(const wxURI& uri, const wxURI& proxy). Kept for wxPython compatibility.
+        Same as Load(const wxURI& uri, const wxURI& proxy).
+        Kept for wxPython compatibility.
     */
     bool LoadURIWithProxy(const wxURI& uri, const wxURI& proxy);
 
@@ -375,7 +407,7 @@ public:
         default controls provided by the toolkit. The function takes a
         wxMediaCtrlPlayerControls enumeration, please see available show modes there.
 
-        For more see @ref class_mediactrl_player_controls.
+        For more see @ref mediactrl_player_controls.
 
         Currently only implemented on the QuickTime and DirectShow backends.
         The function returns @true on success.
@@ -385,7 +417,7 @@ public:
     /**
         Stops the media.
 
-        See @ref class_mediactrl_operation for an overview of how stopping works.
+        See @ref mediactrl_operation for an overview of how stopping works.
     */
     bool Stop();
 

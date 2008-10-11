@@ -8,13 +8,9 @@
 
 /**
     @class wxMDIClientWindow
-    @wxheader{mdi.h}
 
     An MDI client window is a child of wxMDIParentFrame, and manages zero or
     more wxMDIChildFrame objects.
-
-    @library{wxcore}
-    @category{managedwnd}
 
     @remarks
 
@@ -31,6 +27,9 @@
 
     Under Windows 95, the client window will automatically have a sunken border style
     when the active child is not maximized, and no border style when a child is maximized.
+
+    @library{wxcore}
+    @category{managedwnd}
 
     @see wxMDIChildFrame, wxMDIParentFrame, wxFrame
 */
@@ -73,7 +72,6 @@ public:
 
 /**
     @class wxMDIParentFrame
-    @wxheader{mdi.h}
 
     An MDI (Multiple Document Interface) parent frame is a window which can contain
     MDI child frames in its own 'desktop'. It is a convenient way to avoid window
@@ -176,6 +174,9 @@ public:
         @remarks During the construction of the frame, the client window will be
                  created. To use a different class from wxMDIClientWindow, override
                  OnCreateClient().
+                 Under Windows 95, the client window will automatically have a
+                 sunken border style when the active child is not maximized,
+                 and no border style when a child is maximized.
 
         @see Create(), OnCreateClient()
     */
@@ -220,8 +221,8 @@ public:
     virtual void Cascade();
 
     /**
-        Used in two-step frame construction. See wxMDIParentFrame()
-        for further details.
+        Used in two-step frame construction.
+        See wxMDIParentFrame() for further details.
     */
     bool Create(wxWindow* parent, wxWindowID id,
                 const wxString& title,
@@ -316,7 +317,7 @@ public:
 
         Note that it is probably impossible to have a client window that scrolls
         as well as painting a bitmap or pattern, since in @b OnScroll, the scrollbar
-        positions always return zero. (Solutions to: julian.smart@btopenworld.com).
+        positions always return zero.
 
         @see GetClientWindow(), wxMDIClientWindow
     */
@@ -353,8 +354,8 @@ public:
     virtual void SetToolBar(wxWindow* toolbar);
 
     /**
-        Call this to change the current Window menu. Ownership of the menu object
-        passes to the frame when you call this function.
+        Call this to change the current Window menu.
+        Ownership of the menu object passes to the frame when you call this function.
 
         This call is available under Windows only.
 
@@ -375,7 +376,6 @@ public:
 
 /**
     @class wxMDIChildFrame
-    @wxheader{mdi.h}
 
     An MDI child frame is a frame that can only exist on a wxMDIClientWindow,
     which is itself a child of wxMDIParentFrame.
@@ -406,6 +406,19 @@ public:
     @style{wxTHICK_FRAME}
            Displays a thick frame around the window (Windows and Motif only).
     @endStyleTable
+
+    @remarks
+    Although internally an MDI child frame is a child of the MDI client window,
+    in wxWidgets you create it as a child of wxMDIParentFrame.
+    You can usually forget that the client window exists.
+    MDI child frames are clipped to the area of the MDI client window, and may
+    be iconized on the client window.
+    You can associate a menubar with a child frame as usual, although an MDI
+    child doesn't display its menubar under its own title bar.
+    The MDI parent frame's menubar will be changed to reflect the currently
+    active child frame.
+    If there are currently no children, the parent frame's own menubar will
+    be displayed.
 
     @library{wxcore}
     @category{managedwnd}
@@ -466,8 +479,8 @@ public:
     virtual void Activate();
 
     /**
-        Used in two-step frame construction. See wxMDIChildFrame()
-        for further details.
+        Used in two-step frame construction.
+        See wxMDIChildFrame() for further details.
     */
     bool Create(wxWindow* parent, wxWindowID id,
                 const wxString& title,

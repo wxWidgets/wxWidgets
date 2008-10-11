@@ -14,19 +14,19 @@
     automatically called on wxWidgets startup and exit.
 
     To define a new kind of module, derive a class from wxModule, override the
-    wxModule::OnInit and wxModule::OnExit
-    functions, and add the DECLARE_DYNAMIC_CLASS and IMPLEMENT_DYNAMIC_CLASS to
-    header and implementation files (which can be the same file). On
-    initialization, wxWidgets will find all classes derived from wxModule, create
-    an instance of each, and call each OnInit function. On exit, wxWidgets will
-    call the OnExit function for each module instance.
+    wxModule::OnInit and wxModule::OnExit functions, and add the
+    DECLARE_DYNAMIC_CLASS and IMPLEMENT_DYNAMIC_CLASS to header and implementation
+    files (which can be the same file).
+    On initialization, wxWidgets will find all classes derived from wxModule, create
+    an instance of each, and call each wxModule::OnInit function. On exit, wxWidgets
+    will call the wxModule::OnExit function for each module instance.
 
     Note that your module class does not have to be in a header file.
 
     For example:
 
     @code
-    // A module to allow DDE initialization/cleanup
+        // A module to allow DDE initialization/cleanup
       // without calling these functions from app.cpp or from
       // the user's application.
       class wxDDEModule: public wxModule
@@ -73,7 +73,7 @@
     @endcode
 
     @library{wxbase}
-    @category{FIXME}
+    @category{misc}
 */
 class wxModule : public wxObject
 {
@@ -88,27 +88,32 @@ public:
     */
     virtual ~wxModule();
 
-    //@{
     /**
-        Call this function from the constructor of the derived class. @a dep must be
-        the CLASSINFO() of a wxModule-derived class and the
-        corresponding module will be loaded before and unloaded after
-        this module.
-        The second version of this function allows a dependency to be added by
-        name without access to the class info.  This is useful when a module is
-        declared entirely in a source file and there is no header for the declaration
-        of the module needed by CLASSINFO(), however errors are
-        not detected until run-time, instead of compile-time, then.
-        Note that circular dependencies are detected and result in a fatal error.
+        Call this function from the constructor of the derived class.
+
+        @a dep must be the CLASSINFO() of a wxModule-derived class and the
+        corresponding module will be loaded before and unloaded after this module.
 
         @param dep
             The class information object for the dependent module.
+    */
+    void AddDependency(wxClassInfo* dep);
+
+    /**
+        Call this function from the constructor of the derived class.
+
+        This overload allows a dependency to be added by name without access to
+        the class info.
+
+        This is useful when a module is  declared entirely in a source file and
+        there is no header for the declaration of the module needed by CLASSINFO(),
+        however errors are not detected until run-time, instead of compile-time, then.
+        Note that circular dependencies are detected and result in a fatal error.
+
         @param classname
             The class name of the dependent module.
     */
-    void AddDependency(wxClassInfo* dep);
     void AddDependency(const char* classname);
-    //@}
 
     /**
         Provide this function with appropriate cleanup for your module.
@@ -116,9 +121,8 @@ public:
     virtual void OnExit();
 
     /**
-        Provide this function with appropriate initialization for your module. If the
-        function
-        returns @false, wxWidgets will exit immediately.
+        Provide this function with appropriate initialization for your module.
+        If the function returns @false, wxWidgets will exit immediately.
     */
     virtual bool OnInit();
 };

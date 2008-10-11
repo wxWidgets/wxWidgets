@@ -21,6 +21,7 @@
     This class is implemented entirely inline in @<wx/mousestate.h@> and thus
     has no linking requirements.
 
+    @nolibrary
     @category{misc}
 
     @see wxGetMouseState(), wxMouseEvent
@@ -37,10 +38,12 @@ public:
         Returns X coordinate of the physical mouse event position.
     */
     wxCoord GetX() const;
+
     /**
         Returns Y coordinate of the physical mouse event position.
     */
     wxCoord GetY() const;
+
     /**
         Returns the physical mouse position.
     */
@@ -50,18 +53,22 @@ public:
         Returns @true if the left mouse button changed to down.
     */
     bool LeftDown() const;
+
     /**
         Returns @true if the middle mouse button changed to down.
     */
     bool MiddleDown() const;
+
     /**
         Returns @true if the right mouse button changed to down.
     */
     bool RightDown() const;
+
     /**
         Returns @true if the first extra button mouse button changed to down.
     */
     bool Aux1Down() const;
+
     /**
         Returns @true if the second extra button mouse button changed to down.
     */

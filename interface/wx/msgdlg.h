@@ -15,14 +15,13 @@
     @library{wxcore}
     @category{cmndlg}
 
-    @see @ref overview_wxmessagedialogoverview "wxMessageDialog overview"
+    @see @ref overview_cmndlg_msg
 */
 class wxMessageDialog : public wxDialog
 {
 public:
     /**
         Constructor specifying the message box properties.
-
         Use ShowModal() to show the dialog.
 
         @a style may be a bit list of the following identifiers:
@@ -56,8 +55,7 @@ public:
             wxICON_ERROR.
         @style{wxICON_QUESTION}
             Displays a question mark symbol. This icon is automatically used
-            with @c wxYES_NO so it's usually unnecessary to specify it
-            explicitly.
+            with @c wxYES_NO so it's usually unnecessary to specify it explicitly.
         @style{wxICON_INFORMATION}
             Displays an information symbol. This icon is used by default if @c
             wxYES_NO is not given so it is usually unnecessary to specify it
@@ -67,8 +65,8 @@ public:
             implemented only under MSW).
         @endStyleTable
 
-        Notice that not all styles are compatible: only one of @c wxOK and @c
-        wxYES_NO may be specified (and one of them must be specified) and at
+        Notice that not all styles are compatible: only one of @c wxOK and
+        @c wxYES_NO may be specified (and one of them must be specified) and at
         most one default button style can be used and it is only valid if the
         corresponding button is shown in the message box.
 
@@ -161,8 +159,7 @@ public:
     virtual bool SetYesNoLabels(const ButtonLabel& yes, const ButtonLabel& no);
 
     /**
-        Shows the dialog, returning one of wxID_OK, wxID_CANCEL, wxID_YES,
-        wxID_NO.
+        Shows the dialog, returning one of wxID_OK, wxID_CANCEL, wxID_YES, wxID_NO.
 
         Notice that this method returns the identifier of the button which was
         clicked unlike wxMessageBox() function.

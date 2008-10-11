@@ -11,22 +11,36 @@
 
     A menu bar is a series of menus accessible from the top of a frame.
 
+    @remarks
+    To respond to a menu selection, provide a handler for EVT_MENU, in the frame
+    that contains the menu bar.
+
+    If you have a toolbar which uses the same identifiers as your EVT_MENU entries,
+    events from the toolbar will also be processed by your EVT_MENU event handlers.
+
+    Tip: under Windows, if you discover that menu shortcuts (for example, Alt-F
+    to show the file menu) are not working, check any EVT_CHAR events you are
+    handling in child windows.
+    If you are not calling event.Skip() for events that you don't process in
+    these event handlers, menu shortcuts may cease to work.
+
+
     @library{wxcore}
     @category{menus}
 
-    @see wxMenu, @ref overview_eventhandling "Event Handling Overview"
+    @see wxMenu, @ref overview_eventhandling
 */
 class wxMenuBar : public wxWindow
 {
 public:
     /**
-        Construct an empty menu barM
+        Construct an empty menu bar.
 
         @param style
             If wxMB_DOCKABLE the menu bar can be detached (wxGTK only).
     */
     wxMenuBar(long style = 0);
-    
+
     /**
         Construct a menu bar from arrays of menus and titles.
 
@@ -45,8 +59,8 @@ public:
               long style = 0);
 
     /**
-        Destructor, destroying the menu bar and removing it from the parent frame (if
-        any).
+        Destructor, destroying the menu bar and removing it from the parent
+        frame (if any).
     */
     virtual ~wxMenuBar();
 
@@ -54,7 +68,7 @@ public:
         Adds the item to the end of the menu bar.
 
         @param menu
-            The menu to add. Do not deallocate this menu after calling Append.
+            The menu to add. Do not deallocate this menu after calling Append().
         @param title
             The title of the menu.
 
@@ -116,8 +130,10 @@ public:
 
     /**
         Returns the index of the menu with the given @a title or @c wxNOT_FOUND if no
-        such menu exists in this menubar. The @a title parameter may specify either
-        the menu title (with accelerator characters, i.e. @c "File") or just the
+        such menu exists in this menubar.
+
+        The @a title parameter may specify either the menu title
+        (with accelerator characters, i.e. @c "&File") or just the
         menu label (@c "File") indifferently.
     */
     int FindMenu(const wxString& title) const;
@@ -176,6 +192,9 @@ public:
 
         @remarks Use only after the menubar has been associated with a frame.
 
+        @deprecated
+        This function is deprecated in favour of GetMenuLabel() and GetMenuLabelText().
+
         @see SetLabelTop()
     */
     wxString GetLabelTop(int pos) const;
@@ -225,8 +244,7 @@ public:
     /**
         Inserts the menu at the given position into the menu bar. Inserting menu at
         position 0 will insert it in the very beginning of it, inserting at position
-        GetMenuCount() is the same as calling
-        Append().
+        GetMenuCount() is the same as calling Append().
 
         @param pos
             The position of the new menu in the menu bar
@@ -267,10 +285,9 @@ public:
     void Refresh();
 
     /**
-        Removes the menu from the menu bar and returns the menu object - the caller is
-        responsible for deleting it. This function may be used together with
-        Insert() to change the menubar
-        dynamically.
+        Removes the menu from the menu bar and returns the menu object - the caller
+        is responsible for deleting it. This function may be used together with
+        Insert() to change the menubar dynamically.
 
         @see Replace()
     */
@@ -286,8 +303,8 @@ public:
         @param title
             The title of the menu.
 
-        @return The menu which was previously at position pos. The caller is
-                responsible for deleting it.
+        @return The menu which was previously at position pos.
+                The caller is responsible for deleting it.
 
         @see Insert(), Remove()
     */
@@ -329,6 +346,9 @@ public:
 
         @remarks Use only after the menubar has been associated with a frame.
 
+        @deprecated
+        This function has been deprecated in favour of SetMenuLabel().
+
         @see GetLabelTop()
     */
     void SetLabelTop(int pos, const wxString& label);
@@ -360,20 +380,20 @@ public:
     with a special identifier -1 is a separator item and doesn't have an
     associated command but just makes a separator line appear in the menu.
 
-    @note Please note that @e wxID_ABOUT and @e wxID_EXIT are
-    predefined by wxWidgets and have a special meaning since entries
-    using these IDs will be taken out of the normal menus under MacOS X
-    and will be inserted into the system menu (following the appropriate
-    MacOS X interface guideline). On PalmOS @e wxID_EXIT is disabled according
-    to Palm OS Companion guidelines.
+    @note
+    Please note that @e wxID_ABOUT and @e wxID_EXIT are predefined by wxWidgets
+    and have a special meaning since entries using these IDs will be taken out
+    of the normal menus under MacOS X and will be inserted into the system menu
+    (following the appropriate MacOS X interface guideline).
+    On PalmOS @e wxID_EXIT is disabled according to Palm OS Companion guidelines.
 
-    Menu items may be either normal items, check items or radio items. Normal items
-    don't have any special properties while the check items have a boolean flag
-    associated to them and they show a checkmark in the menu when the flag is set.
+    Menu items may be either normal items, check items or radio items.
+    Normal items don't have any special properties while the check items have a
+    boolean flag associated to them and they show a checkmark in the menu when
+    the flag is set.
     wxWidgets automatically toggles the flag value when the item is clicked and its
-    value may be retrieved using either wxMenu::IsChecked method
-    of wxMenu or wxMenuBar itself or by using
-    wxEvent::IsChecked when you get the menu
+    value may be retrieved using either wxMenu::IsChecked method of wxMenu or
+    wxMenuBar itself or by using wxEvent::IsChecked when you get the menu
     notification for the item in question.
 
     The radio items are similar to the check items except that all the other items
@@ -385,12 +405,32 @@ public:
     the radio items risks to not work correctly. Finally note that radio items
     are not supported under Motif.
 
+
+    @section menu_allocation Allocation strategy
+
+    All menus except the popup ones must be created on the heap.
+    All menus attached to a menubar or to another menu will be deleted by their
+    parent when it is deleted.
+    As the frame menubar is deleted by the frame itself, it means that normally
+    all menus used are deleted automatically.
+
+
+    @section menu_eventhandling Event handling
+
+    If the menu is part of a menubar, then wxMenuBar event processing is used.
+    With a popup menu, there is a variety of ways to handle a menu selection event
+    (wxEVT_COMMAND_MENU_SELECTED).
+    Derive a new class from wxMenu and define event table entries using the EVT_MENU macro.
+    Set a new event handler for wxMenu, using an object whose class has EVT_MENU entries.
+    Provide EVT_MENU handlers in the window which pops up the menu, or in an
+    ancestor of this window.
+
+
     @library{wxcore}
     @category{menus}
 
-    @see wxMenuBar, wxWindow::PopupMenu,
-    @ref overview_eventhandling "Event Handling Overview",
-    @ref wxFileHistory "wxFileHistory (most recently used files menu)"
+    @see wxMenuBar, wxWindow::PopupMenu, @ref overview_eventhandling,
+         @ref wxFileHistory "wxFileHistory (most recently used files menu)"
 */
 class wxMenu : public wxEvtHandler
 {
@@ -404,7 +444,7 @@ public:
     wxMenu(long style);
 
     /**
-        Constructs a wxMenu object with a title
+        Constructs a wxMenu object with a title.
 
         @param title
             Title at the top of the menu (not always supported).
@@ -412,20 +452,22 @@ public:
             If set to wxMENU_TEAROFF, the menu will be detachable (wxGTK only).
     */
     wxMenu(const wxString& title = "", long style = 0);
-    
+
     /**
         Destructor, destroying the menu.
-        Note: under Motif, a popup menu must have a valid parent (the window
-        it was last popped up on) when being destroyed. Therefore, make sure
-        you delete or re-use the popup menu @e before destroying the
-        parent window. Re-use in this context means popping up the menu on
-        a different window from last time, which causes an implicit destruction
-        and recreation of internal data structures.
+
+        @note
+            Under Motif, a popup menu must have a valid parent (the window
+            it was last popped up on) when being destroyed. Therefore, make sure
+            you delete or re-use the popup menu @e before destroying the parent
+            window. Re-use in this context means popping up the menu on a different
+            window from last time, which causes an implicit destruction and
+            recreation of internal data structures.
     */
     virtual ~wxMenu();
 
     /**
-        Adds a menu item. 
+        Adds a menu item.
 
         @param id
             The menu command identifier.
@@ -436,17 +478,48 @@ public:
             By default, the handler for the wxEVT_MENU_HIGHLIGHT event displays
             this string in the status line.
         @param kind
-            May be wxITEM_SEPARATOR, wxITEM_NORMAL,
-            wxITEM_CHECK or wxITEM_RADIO
+            May be wxITEM_SEPARATOR, wxITEM_NORMAL, wxITEM_CHECK or wxITEM_RADIO
+
+        @remarks
+        This command can be used after the menu has been shown, as well as on
+        initial creation of a menu or menubar.
+
+        The item string for the normal menu items (not submenus or separators)
+        may include the accelerator which can be used to activate the menu item
+        from keyboard.
+        The accelerator string follows the item label and is separated from it
+        by a TAB character ('\\t').
+
+        Its general syntax is any combination of "CTRL", "ALT" and "SHIFT" strings
+        (case doesn't matter) separated by either '-' or '+' characters and followed
+        by the accelerator itself.
+        The accelerator may be any alphanumeric character, any function key
+        (from F1 to F12) or one of the special characters listed in the table
+        below (again, case doesn't matter):
+
+        - DEL or DELETE: Delete key
+        - INS or INSERT: Insert key
+        - ENTER or RETURN: Enter key
+        - PGUP: PageUp key
+        - PGDN: PageDown key
+        - LEFT: Left cursor arrow key
+        - RIGHT: Right cursor arrow key
+        - UP: Up cursor arrow key
+        - DOWN: Down cursor arrow key
+        - HOME: Home key
+        - END: End key
+        - SPACE: Space
+        - TAB: Tab key
+        - ESC: or ESCAPE Escape key (Windows only)
 
         @see AppendSeparator(), AppendCheckItem(), AppendRadioItem(),
-             AppendSubMenu(), Insert(), SetLabel(),
-             GetHelpString(), SetHelpString(), wxMenuItem
+             AppendSubMenu(), Insert(), SetLabel(), GetHelpString(),
+             SetHelpString(), wxMenuItem
     */
     wxMenuItem* Append(int id, const wxString& item = wxEmptyString,
                        const wxString& helpString = wxEmptyString,
                        wxItemKind kind = wxITEM_NORMAL);
-                       
+
     /**
         Adds a submenu.
 
@@ -464,25 +537,30 @@ public:
             this string in the status line.
 
         @see AppendSeparator(), AppendCheckItem(), AppendRadioItem(),
-             AppendSubMenu(), Insert(), SetLabel(),
-             GetHelpString(), SetHelpString(), wxMenuItem
+             AppendSubMenu(), Insert(), SetLabel(), GetHelpString(),
+             SetHelpString(), wxMenuItem
     */
     wxMenuItem* Append(int id, const wxString& item, wxMenu* subMenu,
                        const wxString& helpString = wxEmptyString);
-                       
+
     /**
-        Adds a menu item object. This is the most generic variant of Append() method
-        because it may be used for both items (including separators) and submenus and
-        because you can also specify various extra properties of a menu item this way,
+        Adds a menu item object.
+
+        This is the most generic variant of Append() method because it may be
+        used for both items (including separators) and submenus and because
+        you can also specify various extra properties of a menu item this way,
         such as bitmaps and fonts.
 
         @param menuItem
-            A menuitem object. It will be owned by the wxMenu object after this function
-            is called, so do not delete it yourself.
+            A menuitem object. It will be owned by the wxMenu object after this
+            function is called, so do not delete it yourself.
+
+        @remarks
+            See the remarks for the other Append() overloads.
 
         @see AppendSeparator(), AppendCheckItem(), AppendRadioItem(),
-             AppendSubMenu(), Insert(), SetLabel(),
-             GetHelpString(), SetHelpString(), wxMenuItem
+             AppendSubMenu(), Insert(), SetLabel(), GetHelpString(),
+             SetHelpString(), wxMenuItem
     */
     wxMenuItem* Append(wxMenuItem* menuItem);
 
@@ -495,9 +573,9 @@ public:
                                 const wxString& helpString = "");
 
     /**
-        Adds a radio item to the end of the menu. All consequent radio items form a
-        group and when an item in the group is checked, all the others are
-        automatically unchecked.
+        Adds a radio item to the end of the menu.
+        All consequent radio items form a group and when an item in the group is
+        checked, all the others are automatically unchecked.
 
         @see Append(), InsertRadioItem()
     */
@@ -520,8 +598,8 @@ public:
                               const wxString& help = wxEmptyString);
 
     /**
-        Inserts a break in a menu, causing the next appended item to appear in a new
-        column.
+        Inserts a break in a menu, causing the next appended item to appear in
+        a new column.
     */
     virtual void Break();
 
@@ -620,7 +698,7 @@ public:
 
         @return Menu item object or NULL if none is found.
     */
-    const wxMenuItem *  FindItem(int id, wxMenu** menu = NULL) const;
+    const wxMenuItem* FindItem(int id, wxMenu** menu = NULL) const;
 
     /**
         Returns the wxMenuItem given a position in the menu.
@@ -671,8 +749,10 @@ public:
     size_t GetMenuItemCount() const;
 
     /**
-        Returns the list of items in the menu. wxMenuItemList is a pseudo-template
-        list class containing wxMenuItem pointers, see wxList.
+        Returns the list of items in the menu.
+
+        wxMenuItemList is a pseudo-template list class containing wxMenuItem
+        pointers, see wxList.
     */
     wxMenuItemList GetMenuItems() const;
 
@@ -687,17 +767,19 @@ public:
     wxString GetTitle() const;
 
     /**
-        Inserts the given @a item before the position @e pos. Inserting the item
-        at position GetMenuItemCount() is the same
+        Inserts the given @a item before the position @a pos.
+
+        Inserting the item at position GetMenuItemCount() is the same
         as appending it.
 
         @see Append(), Prepend()
     */
     wxMenuItem* Insert(size_t pos, wxMenuItem* item);
-    
+
     /**
-        Inserts the given @a item before the position @e pos. Inserting the item
-        at position GetMenuItemCount() is the same
+        Inserts the given @a item before the position @a pos.
+
+        Inserting the item at position GetMenuItemCount() is the same
         as appending it.
 
         @see Append(), Prepend()
@@ -799,8 +881,8 @@ public:
 
     /**
         Removes the menu item from the menu but doesn't delete the associated C++
-        object. This allows you to reuse the same item later by adding it back to the menu
-        (especially useful with submenus).
+        object. This allows you to reuse the same item later by adding it back to
+        the menu (especially useful with submenus).
 
         @param id
             The identifier of the menu item to remove.
@@ -808,11 +890,11 @@ public:
         @return A pointer to the item which was detached from the menu.
     */
     wxMenuItem* Remove(int id);
-    
+
     /**
         Removes the menu item from the menu but doesn't delete the associated C++
-        object. This allows you to reuse the same item later by adding it back to the menu
-        (especially useful with submenus).
+        object. This allows you to reuse the same item later by adding it back to
+        the menu (especially useful with submenus).
 
         @param item
             The menu item to remove.
@@ -860,9 +942,10 @@ public:
 
     /**
         Sends events to @a source (or owning window if @NULL) to update the
-        menu UI. This is called just before the menu is popped up with
-        wxWindow::PopupMenu, but
-        the application may call it at other times if required.
+        menu UI.
+
+        This is called just before the menu is popped up with wxWindow::PopupMenu,
+        but the application may call it at other times if required.
     */
     void UpdateUI(wxEvtHandler* source = NULL);
 };

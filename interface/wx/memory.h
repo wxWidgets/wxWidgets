@@ -1,49 +1,26 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        memory.h
-// Purpose:     interface of wxDebugStreamBuf
+// Purpose:     interface of wxDebugContext
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/**
-    @class wxDebugStreamBuf
-
-    This class allows you to treat debugging output in a similar
-    (stream-based) fashion on different platforms. Under
-    Windows, an ostream constructed with this buffer outputs
-    to the debugger, or other program that intercepts debugging
-    output. On other platforms, the output goes to standard error (cerr).
-
-    This is soon to be obsolete, replaced by wxLog functionality.
-
-    @library{wxbase}
-    @category{FIXME}
-
-    @see Overview()
-*/
-class wxDebugStreamBuf
-{
-public:
-
-};
-
-
 
 /**
     @class wxDebugContext
 
-    A class for performing various debugging and memory tracing
-    operations. Full functionality (such as printing out objects
-    currently allocated) is only present in a debugging build of wxWidgets,
-    i.e. if the __WXDEBUG__ symbol is defined. wxDebugContext
-    and related functions and macros can be compiled out by setting
-    wxUSE_DEBUG_CONTEXT to 0 is setup.h
+    A class for performing various debugging and memory tracing operations.
+
+    Full functionality (such as printing out objects currently allocated) is
+    only present in a debugging build of wxWidgets, i.e. if the __WXDEBUG__
+    symbol is defined. wxDebugContext and related functions and macros can be
+    compiled out by setting wxUSE_DEBUG_CONTEXT to 0 is setup.h
 
     @library{wxbase}
     @category{debugging}
 
-    @see Overview()
+    @see @ref overview_debugging
 */
 class wxDebugContext
 {
@@ -53,8 +30,8 @@ public:
         checkpoint.
 
         @return Returns the number of errors, so a value of zero represents
-                 success. Returns -1 if an error was detected that
-                 prevents further checking.
+                success. Returns -1 if an error was detected that prevents
+                further checking.
     */
     int Check();
 
@@ -70,6 +47,7 @@ public:
     /**
         Returns @true if the memory allocator checks all previous memory blocks for
         errors.
+
         By default, this is @false since it slows down execution considerably.
 
         @see SetCheckPrevious()
@@ -77,22 +55,25 @@ public:
     bool GetCheckPrevious();
 
     /**
-        Returns @true if debug mode is on. If debug mode is on, the wxObject new and
-        delete
-        operators store or use information about memory allocation. Otherwise,
-        a straight malloc and free will be performed by these operators.
+        Returns @true if debug mode is on.
+
+        If debug mode is on, the wxObject new and delete operators store or use
+        information about memory allocation. Otherwise, a straight malloc and
+        free will be performed by these operators.
 
         @see SetDebugMode()
     */
     bool GetDebugMode();
 
     /**
-        Gets the debug level (default 1). The debug level is used by the wxTraceLevel
-        function and
-        the WXTRACELEVEL macro to specify how detailed the trace information is; setting
-        a different level will only have an effect if trace statements in the
-        application
-        specify a value other than one.
+        Gets the debug level (default 1).
+
+        The debug level is used by the wxTraceLevel function and the WXTRACELEVEL
+        macro to specify how detailed the trace information is; setting a
+        different level will only have an effect if trace statements in the
+        application specify a value other than one.
+
+        @deprecated
         This is obsolete, replaced by wxLog functionality.
 
         @see SetLevel()
@@ -101,6 +82,8 @@ public:
 
     /**
         Returns the output stream associated with the debug context.
+
+        @deprecated
         This is obsolete, replaced by wxLog functionality.
 
         @see SetStream()
@@ -111,6 +94,8 @@ public:
         Returns a pointer to the output stream buffer associated with the debug context.
         There may not necessarily be a stream buffer if the stream has been set
         by the user.
+
+        @deprecated
         This is obsolete, replaced by wxLog functionality.
     */
     streambuf* GetStreamBuf();
@@ -118,6 +103,8 @@ public:
     /**
         Returns @true if there is a stream currently associated
         with the debug context.
+
+        @deprecated
         This is obsolete, replaced by wxLog functionality.
 
         @see SetStream(), GetStream()
@@ -138,9 +125,8 @@ public:
         allocations is printed, together with the total size.
 
         @param detailed
-            If @true, the function will also print how many
-            objects of each class have been allocated, and the space taken by
-            these class instances.
+            If @true, the function will also print how many objects of each class
+            have been allocated, and the space taken by these class instances.
 
         @see PrintStatistics()
     */
@@ -160,39 +146,45 @@ public:
         that have been performed up to this point.
 
         @param all
-            If @true, the checkpoint is reset to include all
-            memory allocations since the program started.
+            If @true, the checkpoint is reset to include all memory allocations
+            since the program started.
     */
     void SetCheckpoint(bool all = false);
 
     /**
-        Sets the debug mode on or off. If debug mode is on, the wxObject new and delete
-        operators store or use information about memory allocation. Otherwise,
-        a straight malloc and free will be performed by these operators.
+        Sets the debug mode on or off.
+
+        If debug mode is on, the wxObject new and delete operators store or use
+        information about memory allocation. Otherwise, a straight malloc and free
+        will be performed by these operators.
+
         By default, debug mode is on if __WXDEBUG__ is defined. If the application
         uses this function, it should make sure that all object memory allocated
-        is deallocated with the same value of debug mode. Otherwise, the
-        delete operator might try to look for memory information that does not
-        exist.
+        is deallocated with the same value of debug mode. Otherwise, the delete
+        operator might try to look for memory information that does not exist.
 
         @see GetDebugMode()
     */
     void SetDebugMode(bool debug);
 
     /**
-        Sets the current debug file and creates a stream. This will delete any existing
-        stream and stream buffer. By default, the debug context stream
-        outputs to the debugger (Windows) or standard error (other platforms).
+        Sets the current debug file and creates a stream.
+        This will delete any existing stream and stream buffer.
+
+        By default, the debug context stream outputs to the debugger (Windows)
+        or standard error (other platforms).
     */
     bool SetFile(const wxString& filename);
 
     /**
-        Sets the debug level (default 1). The debug level is used by the wxTraceLevel
-        function and
-        the WXTRACELEVEL macro to specify how detailed the trace information is; setting
+        Sets the debug level (default 1).
+
+        The debug level is used by the wxTraceLevel function and the WXTRACELEVEL
+        macro to specify how detailed the trace information is; setting
         a different level will only have an effect if trace statements in the
-        application
-        specify a value other than one.
+        application specify a value other than one.
+
+        @deprecated
         This is obsolete, replaced by wxLog functionality.
 
         @see GetLevel()
@@ -200,10 +192,10 @@ public:
     void SetLevel(int level);
 
     /**
-        Installs a function to be called at the end of wxWidgets shutdown. It will be
-        called after
-        all files with global instances of wxDebugContextDumpDelayCounter have run
-        their destructors.
+        Installs a function to be called at the end of wxWidgets shutdown.
+        It will be called after all files with global instances of
+        wxDebugContextDumpDelayCounter have run their destructors.
+
         The shutdown function must be take no parameters and return nothing.
     */
     void SetShutdownNotifyFunction(wxShutdownNotifyFunction func);
@@ -211,15 +203,19 @@ public:
     /**
         Sets the debugging stream to be the debugger (Windows) or standard error (other
         platforms).
+
         This is the default setting. The existing stream will be flushed and deleted.
+
+        @deprecated
         This is obsolete, replaced by wxLog functionality.
     */
     bool SetStandardError();
 
     /**
         Sets the stream and optionally, stream buffer associated with the debug context.
-        This operation flushes and deletes the existing stream (and stream buffer if
-        any).
+        This operation flushes and deletes the existing stream (and stream buffer if any).
+
+        @deprecated
         This is obsolete, replaced by wxLog functionality.
 
         @param stream
