@@ -849,7 +849,7 @@ void wxMacControl::RemoveFromParent()
 
 void wxMacControl::Embed( wxWidgetImpl *parent )
 {
-    HIViewAddSubview(parent->GetWXWidget(), m_controlRef);
+    HIViewAddSubview((ControlRef)parent->GetWXWidget(), m_controlRef);
 }
 
 void wxMacControl::SetNeedsDisplay( const wxRect* rect )
