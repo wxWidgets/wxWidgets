@@ -303,12 +303,12 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClass* api)
 
         if (!real)
         {
-            bool exit = false;
             wxMethodPtrArray overloads =
                 api->RecursiveUpwardFindMethodsNamed(m.GetName(), &m_gccInterface);
 
 #define HACK_TO_AUTO_CORRECT_ONLY_METHOD_ATTRIBUTES        0
 #if HACK_TO_AUTO_CORRECT_ONLY_METHOD_ATTRIBUTES
+            bool exit = false;
             for (unsigned int k=0; k<overloads.GetCount(); k++)
                 if (overloads[k]->MatchesExceptForAttributes(m) &&
                     overloads[k]->IsPureVirtual() == m.IsPureVirtual())
@@ -327,7 +327,7 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClass* api)
 
             if (!exit)
             {
-#endif
+#endif // HACK_TO_AUTO_CORRECT_ONLY_METHOD_ATTRIBUTES
 
             if (overloads.GetCount()==0)
             {
