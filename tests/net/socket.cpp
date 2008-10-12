@@ -26,6 +26,7 @@
 #if wxUSE_SOCKETS
 
 #include "wx/socket.h"
+#include "wx/evtloop.h"
 #include <memory>
 
 typedef std::auto_ptr<wxSockAddress> wxSockAddressPtr;
@@ -43,6 +44,7 @@ private:
         CPPUNIT_TEST( BlockingConnect );
         CPPUNIT_TEST( NonblockingConnect );
         CPPUNIT_TEST( ReadNormal );
+        CPPUNIT_TEST( ReadBlock );
         CPPUNIT_TEST( ReadNowait );
         CPPUNIT_TEST( ReadWaitall );
     CPPUNIT_TEST_SUITE_END();
@@ -58,6 +60,7 @@ private:
     void BlockingConnect();
     void NonblockingConnect();
     void ReadNormal();
+    void ReadBlock();
     void ReadNowait();
     void ReadWaitall();
 
@@ -121,6 +124,8 @@ void SocketTestCase::NonblockingConnect()
     if ( !addr.get() )
         return;
 
+    wxEventLoopGuarantor loop;
+
     wxSocketClient sock;
     sock.Connect(*addr, false);
     sock.WaitOnConnect(10);
@@ -130,7 +135,29 @@ void SocketTestCase::NonblockingConnect()
 
 void SocketTestCase::ReadNormal()
 {
+    wxEventLoopGuarantor loop;
+
     wxSocketClientPtr sock(GetHTTPSocket());
+    if ( !sock.get() )
+        return;
+
+    char bufSmall[128];
+    sock->Read(bufSmall, WXSIZEOF(bufSmall));
+
+    CPPUNIT_ASSERT_EQUAL( wxSOCKET_NOERROR, sock->LastError() );
+    CPPUNIT_ASSERT_EQUAL( WXSIZEOF(bufSmall), sock->LastCount() );
+
+
+    char bufBig[102400];
+    sock->Read(bufBig, WXSIZEOF(bufBig));
+
+    CPPUNIT_ASSERT_EQUAL( wxSOCKET_NOERROR, sock->LastError() );
+    CPPUNIT_ASSERT( WXSIZEOF(bufBig) >= sock->LastCount() );
+}
+
+void SocketTestCase::ReadBlock()
+{
+    wxSocketClientPtr sock(GetHTTPSocket(wxSOCKET_BLOCK));
     if ( !sock.get() )
         return;
 
@@ -164,6 +191,8 @@ void SocketTestCase::ReadNowait()
 
 void SocketTestCase::ReadWaitall()
 {
+    wxEventLoopGuarantor loop;
+
     wxSocketClientPtr sock(GetHTTPSocket(wxSOCKET_WAITALL));
     if ( !sock.get() )
         return;
