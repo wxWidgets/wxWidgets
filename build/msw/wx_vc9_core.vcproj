@@ -2685,6 +2685,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\generic\stattextg.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\generic\statusbr.cpp"
 				>
 				<FileConfiguration
@@ -4394,6 +4398,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\generic\statbmpg.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\generic\stattextg.h"
 				>
 			</File>
 			<File

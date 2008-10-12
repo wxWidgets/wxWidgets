@@ -733,6 +733,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/splitter.cpp
     src/generic/srchctlg.cpp
     src/generic/statbmpg.cpp
+    src/generic/stattextg.cpp
     src/generic/textdlgg.cpp
     src/generic/tipwin.cpp
     src/generic/toolbkg.cpp
@@ -795,6 +796,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/splitter.h
     wx/generic/srchctlg.h
     wx/generic/statbmpg.h
+    wx/generic/stattextg.h
     wx/generic/textdlgg.h
     wx/generic/treectlg.h
     wx/graphics.h

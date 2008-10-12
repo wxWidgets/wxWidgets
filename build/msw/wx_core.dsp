@@ -3012,6 +3012,10 @@ SOURCE=..\..\src\generic\statbmpg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\generic\stattextg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\generic\statusbr.cpp
 
 !IF  "$(CFG)" == "core - Win32 DLL Universal Release"
@@ -5364,6 +5368,10 @@ SOURCE=..\..\include\wx\generic\srchctlg.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\generic\statbmpg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\stattextg.h
 # End Source File
 # Begin Source File
 

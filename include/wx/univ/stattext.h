@@ -12,7 +12,9 @@
 #ifndef _WX_UNIV_STATTEXT_H_
 #define _WX_UNIV_STATTEXT_H_
 
-class WXDLLIMPEXP_CORE wxStaticText : public wxStaticTextBase
+#include "wx/generic/stattextg.h"
+
+class WXDLLIMPEXP_CORE wxStaticText : public wxGenericStaticText
 {
 public:
     wxStaticText() { }
@@ -54,9 +56,6 @@ public:
     virtual bool IsFocused() const { return false; }
 
 protected:
-    // calculate the optimal size for the label
-    virtual wxSize DoGetBestClientSize() const;
-
     // draw the control
     virtual void DoDraw(wxControlRenderer *renderer);
 

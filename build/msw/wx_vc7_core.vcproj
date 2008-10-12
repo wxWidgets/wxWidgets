@@ -1989,6 +1989,9 @@
 				RelativePath="..\..\src\generic\statbmpg.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\generic\stattextg.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\generic\statusbr.cpp">
 				<FileConfiguration
 					Name="DLL Universal Release|Win32"
@@ -3282,6 +3285,9 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\generic\statbmpg.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\generic\stattextg.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\generic\statusbr.h">

@@ -73,6 +73,11 @@ public:
     // removes the mnemonics characters
     static wxString RemoveMnemonics(const wxString& str);
 
+    // return the accel index in the string or -1 if none and puts the modified
+    // string into second parameter if non NULL
+    static int FindAccelIndex(const wxString& label,
+                              wxString *labelOnly = NULL);
+
 
     // controls by default inherit the colours of their parents, if a
     // particular control class doesn't want to do it, it can override

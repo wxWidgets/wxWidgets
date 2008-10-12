@@ -40,6 +40,7 @@
 #include "wx/sizer.h"
 
 #include "wx/statline.h"
+#include "wx/generic/stattextg.h"
 
 #include "widgets.h"
 #include "icons/statbox.xpm"
@@ -81,64 +82,6 @@ enum
     StaticEllipsize_End
 };
 
-// ----------------------------------------------------------------------------
-// MyStaticText and MyStaticBox
-// ----------------------------------------------------------------------------
-
-// these 2 classes simply show that the static controls can get the mouse
-// clicks too -- this used to be broken under MSW but works now
-
-class MyStaticText : public wxStaticText
-{
-public:
-    MyStaticText(wxWindow* parent,
-                      wxWindowID id,
-                      const wxString& label,
-                      const wxPoint& pos = wxDefaultPosition,
-                      const wxSize& size = wxDefaultSize,
-                      long style = 0)
-        : wxStaticText(parent, id, label, pos, size, style)
-    {
-    }
-
-protected:
-    void OnMouseEvent(wxMouseEvent& WXUNUSED(event))
-    {
-        wxLogMessage(wxT("Clicked on static text"));
-    }
-
-    DECLARE_EVENT_TABLE()
-};
-
-class MyStaticBox : public wxStaticBox
-{
-public:
-    MyStaticBox(wxWindow* parent,
-                wxWindowID id,
-                const wxString& label,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = 0)
-        : wxStaticBox(parent, id, label, pos, size, style)
-    {
-    }
-
-protected:
-    void OnMouseEvent(wxMouseEvent& WXUNUSED(event))
-    {
-        wxLogMessage(wxT("Clicked on static box"));
-    }
-
-    DECLARE_EVENT_TABLE()
-};
-
-BEGIN_EVENT_TABLE(MyStaticText, wxStaticText)
-    EVT_LEFT_UP(MyStaticText::OnMouseEvent)
-END_EVENT_TABLE()
-
-BEGIN_EVENT_TABLE(MyStaticBox, wxStaticBox)
-    EVT_LEFT_UP(MyStaticBox::OnMouseEvent)
-END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
 // StaticWidgetsPage
@@ -164,6 +107,7 @@ protected:
     void OnButtonBoxText(wxCommandEvent& event);
     void OnButtonLabelText(wxCommandEvent& event);
     void OnButtonLabelWithMarkupText(wxCommandEvent& event);
+    void OnMouseEvent(wxMouseEvent& event);
 
     // reset all parameters
     void Reset();
@@ -176,19 +120,20 @@ protected:
 
     // the check/radio boxes for styles
     wxCheckBox *m_chkVert,
+               *m_chkGeneric,
                *m_chkAutoResize,
                *m_chkEllipsize,
-               *m_chkMarkup;
+               *m_chkMarkup,
+               *m_chkGreen;
 
     wxRadioBox *m_radioHAlign,
                *m_radioVAlign,
                *m_radioEllipsize;
 
     // the controls and the sizer containing them
-    wxStaticBox *m_staticBox;
     wxStaticBoxSizer *m_sizerStatBox;
-    wxStaticText *m_statText,
-                 *m_statTextWithMarkup;
+    wxStaticTextBase *m_statText,
+                     *m_statMarkup;
 #if wxUSE_STATLINE
     wxStaticLine *m_statLine;
 #endif // wxUSE_STATLINE
@@ -233,6 +178,8 @@ StaticWidgetsPage::StaticWidgetsPage(WidgetsBookCtrl *book,
     // init everything
     m_chkVert =
     m_chkAutoResize = (wxCheckBox *)NULL;
+    m_chkGeneric = NULL;
+    m_chkGreen = NULL;
 
     m_radioHAlign =
     m_radioVAlign = (wxRadioBox *)NULL;
@@ -240,9 +187,8 @@ StaticWidgetsPage::StaticWidgetsPage(WidgetsBookCtrl *book,
 #if wxUSE_STATLINE
     m_statLine = (wxStaticLine *)NULL;
 #endif // wxUSE_STATLINE
-    m_statText = m_statTextWithMarkup = (wxStaticText *)NULL;
+    m_statText = m_statMarkup = NULL;
 
-    m_staticBox = (wxStaticBox *)NULL;
     m_sizerStatBox = (wxStaticBoxSizer *)NULL;
     m_sizerStatic = (wxSizer *)NULL;
 
@@ -254,13 +200,13 @@ void StaticWidgetsPage::CreateContent()
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
     // left pane
-    wxStaticBox *box = new wxStaticBox(this, wxID_ANY, _T("&Set style"));
+    wxSizer *sizerLeft = new wxStaticBoxSizer(wxVERTICAL, this, "&Set style");
 
-    wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
-
-    m_chkMarkup = CreateCheckBoxAndAddToSizer(sizerLeft, _T("Support &markup"));
-    m_chkVert = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Vertical line"));
-    m_chkAutoResize = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Fit to text"));
+    m_chkGeneric = CreateCheckBoxAndAddToSizer(sizerLeft,
+                                               "&Generic wxStaticText");
+    m_chkMarkup = CreateCheckBoxAndAddToSizer(sizerLeft, "Support &markup");
+    m_chkVert = CreateCheckBoxAndAddToSizer(sizerLeft, "&Vertical line");
+    m_chkAutoResize = CreateCheckBoxAndAddToSizer(sizerLeft, "&Fit to text");
     sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
 
     static const wxString halign[] =
@@ -279,10 +225,10 @@ void StaticWidgetsPage::CreateContent()
 
     m_radioHAlign = new wxRadioBox(this, wxID_ANY, _T("&Horz alignment"),
                                    wxDefaultPosition, wxDefaultSize,
-                                   WXSIZEOF(halign), halign);
+                                   WXSIZEOF(halign), halign, 3);
     m_radioVAlign = new wxRadioBox(this, wxID_ANY, _T("&Vert alignment"),
                                    wxDefaultPosition, wxDefaultSize,
-                                   WXSIZEOF(valign), valign);
+                                   WXSIZEOF(valign), valign, 3);
 
     sizerLeft->Add(m_radioHAlign, 0, wxGROW | wxALL, 5);
     sizerLeft->Add(m_radioVAlign, 0, wxGROW | wxALL, 5);
@@ -301,7 +247,8 @@ void StaticWidgetsPage::CreateContent()
 
     m_radioEllipsize = new wxRadioBox(this, wxID_ANY, _T("&Ellipsize mode"),
                                       wxDefaultPosition, wxDefaultSize,
-                                      WXSIZEOF(ellipsizeMode), ellipsizeMode);
+                                      WXSIZEOF(ellipsizeMode), ellipsizeMode,
+                                      3);
 
     sizerLeft->Add(m_radioEllipsize, 0, wxGROW | wxALL, 5);
 
@@ -309,26 +256,41 @@ void StaticWidgetsPage::CreateContent()
     sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
 
     // middle pane
-    wxStaticBox *box2 = new wxStaticBox(this, wxID_ANY, _T("&Change labels"));
-    wxSizer *sizerMiddle = new wxStaticBoxSizer(box2, wxVERTICAL);
+    wxSizer *sizerMiddle = new wxStaticBoxSizer(wxVERTICAL, this,
+                                                "&Change labels");
 
-    wxSizer *sizerRow;
+    m_textBox = new wxTextCtrl(this, wxID_ANY, wxEmptyString);
+    wxButton *b1 = new wxButton(this, wxID_ANY, "Change &box label");
+    b1->Connect(wxEVT_COMMAND_BUTTON_CLICKED,
+                wxCommandEventHandler(StaticWidgetsPage::OnButtonBoxText),
+                NULL, this);
+    sizerMiddle->Add(m_textBox, 0, wxEXPAND|wxALL, 5);
+    sizerMiddle->Add(b1, 0, wxLEFT|wxBOTTOM, 5);
 
-    sizerRow = CreateSizerWithTextAndButton(StaticPage_BoxText,
-                                            _T("Change &box label"),
-                                            wxID_ANY, &m_textBox);
-    sizerMiddle->Add(sizerRow, 0, wxGROW | wxALL, 5);
+    m_textLabel = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
+                                 wxDefaultPosition, wxDefaultSize,
+                                 wxTE_MULTILINE|wxHSCROLL);
+    wxButton *b2 = new wxButton(this, wxID_ANY, "Change &text label");
+    b2->Connect(wxEVT_COMMAND_BUTTON_CLICKED,
+                wxCommandEventHandler(StaticWidgetsPage::OnButtonLabelText),
+                NULL, this);
+    sizerMiddle->Add(m_textLabel, 0, wxEXPAND|wxALL, 5);
+    sizerMiddle->Add(b2, 0, wxLEFT|wxBOTTOM, 5);
 
-    sizerRow = CreateSizerWithTextAndButton(StaticPage_LabelText,
-                                            _T("Change &text label"),
-                                            wxID_ANY, &m_textLabel);
-    sizerMiddle->Add(sizerRow, 0, wxGROW | wxALL, 5);
+    m_textLabelWithMarkup = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
+                                           wxDefaultPosition, wxDefaultSize,
+                                           wxTE_MULTILINE|wxHSCROLL);
 
-    sizerRow = CreateSizerWithTextAndButton(StaticPage_LabelTextWithMarkup,
-                                            _T("Change decorated text label"),
-                                            wxID_ANY, &m_textLabelWithMarkup);
-    sizerMiddle->Add(sizerRow, 0, wxGROW | wxALL, 5);
+    wxButton *b3 = new wxButton(this, wxID_ANY, "Change decorated text label");
+    b3->Connect(wxEVT_COMMAND_BUTTON_CLICKED,
+                wxCommandEventHandler(StaticWidgetsPage::OnButtonLabelWithMarkupText),
+                NULL, this);
+    sizerMiddle->Add(m_textLabelWithMarkup, 0, wxEXPAND|wxALL, 5);
+    sizerMiddle->Add(b3, 0, wxLEFT|wxBOTTOM, 5);
 
+    m_chkGreen = CreateCheckBoxAndAddToSizer(sizerLeft,
+                                             "Decorated label on g&reen");
+    sizerMiddle->Add(m_chkGreen, 0, wxALL, 5);
 
     // final initializations
     // NB: must be done _before_ calling CreateStatic()
@@ -363,6 +325,7 @@ void StaticWidgetsPage::CreateContent()
 
 void StaticWidgetsPage::Reset()
 {
+    m_chkGeneric->SetValue(false);
     m_chkVert->SetValue(false);
     m_chkAutoResize->SetValue(true);
     m_chkEllipsize->SetValue(true);
@@ -378,11 +341,10 @@ void StaticWidgetsPage::CreateStatic()
 
     if ( m_sizerStatBox )
     {
-        delete m_staticBox;
         // delete m_sizerStatBox; -- deleted by Remove()
         m_sizerStatic->Remove(m_sizerStatBox);
         delete m_statText;
-        delete m_statTextWithMarkup;
+        delete m_statMarkup;
 #if wxUSE_STATLINE
         delete m_statLine;
 #endif // wxUSE_STATLINE
@@ -469,20 +431,37 @@ void StaticWidgetsPage::CreateStatic()
     flagsText |= align;
     flagsBox |= align;
 
-    m_staticBox = new MyStaticBox(this, wxID_ANY, m_textBox->GetValue(),
-                                  wxDefaultPosition, wxDefaultSize,
-                                  flagsBox);
-    m_sizerStatBox = new wxStaticBoxSizer(m_staticBox, isVert ? wxHORIZONTAL
-                                                              : wxVERTICAL);
+    wxStaticBox *staticBox = new wxStaticBox(this, wxID_ANY,
+                                             m_textBox->GetValue(),
+                                             wxDefaultPosition, wxDefaultSize,
+                                             flagsBox);
+    m_sizerStatBox = new wxStaticBoxSizer(staticBox, isVert ? wxHORIZONTAL
+                                                            : wxVERTICAL);
 
-    m_statText = new MyStaticText(this, wxID_ANY, m_textLabel->GetValue(),
-                                  wxDefaultPosition, wxDefaultSize,
-                                            flagsDummyText);
-    m_statTextWithMarkup = new wxStaticText(this, wxID_ANY, 
-                                            m_textLabelWithMarkup->GetValue(),
-                                            wxDefaultPosition, wxDefaultSize,
-                                            flagsText);
-
+    if ( m_chkGeneric->GetValue() )
+    {
+        m_statText = new wxGenericStaticText(this, wxID_ANY,
+                                             m_textLabel->GetValue(),
+                                             wxDefaultPosition, wxDefaultSize,
+                                             flagsDummyText);
+        m_statMarkup = new wxGenericStaticText(this, wxID_ANY,
+                                             m_textLabelWithMarkup->GetValue(),
+                                             wxDefaultPosition, wxDefaultSize,
+                                             flagsText);
+    }
+    else // use native versions
+    {
+        m_statText = new wxStaticText(this, wxID_ANY,
+                                      m_textLabel->GetValue(),
+                                      wxDefaultPosition, wxDefaultSize,
+                                      flagsDummyText);
+        m_statMarkup = new wxStaticText(this, wxID_ANY,
+                                        m_textLabelWithMarkup->GetValue(),
+                                        wxDefaultPosition, wxDefaultSize,
+                                        flagsText);
+    }
+    if ( m_chkGreen->GetValue() )
+        m_statMarkup->SetBackgroundColour(*wxGREEN);
 #if wxUSE_STATLINE
     m_statLine = new wxStaticLine(this, wxID_ANY,
                                   wxDefaultPosition, wxDefaultSize,
@@ -493,11 +472,18 @@ void StaticWidgetsPage::CreateStatic()
 #if wxUSE_STATLINE
     m_sizerStatBox->Add(m_statLine, 0, wxGROW | wxALL, 5);
 #endif // wxUSE_STATLINE
-    m_sizerStatBox->Add(m_statTextWithMarkup, 1, wxGROW | wxALL, 5);
+    m_sizerStatBox->Add(m_statMarkup, 1, wxGROW | wxALL, 5);
 
     m_sizerStatic->Add(m_sizerStatBox, 1, wxGROW);
 
     m_sizerStatic->Layout();
+
+    m_statText->Connect(wxEVT_LEFT_UP,
+                        wxMouseEventHandler(StaticWidgetsPage::OnMouseEvent),
+                        NULL, this);
+    staticBox->Connect(wxEVT_LEFT_UP,
+                       wxMouseEventHandler(StaticWidgetsPage::OnMouseEvent),
+                       NULL, this);
 }
 
 // ----------------------------------------------------------------------------
@@ -526,19 +512,6 @@ void StaticWidgetsPage::OnButtonBoxText(wxCommandEvent& WXUNUSED(event))
     m_sizerStatBox->GetStaticBox()->SetLabel(m_textBox->GetValue());
 }
 
-void StaticWidgetsPage::OnButtonLabelWithMarkupText(wxCommandEvent& WXUNUSED(event))
-{
-    m_statTextWithMarkup->SetLabel(m_textLabelWithMarkup->GetValue());
-
-    // test GetLabel() and GetLabelText(); the first should return the
-    // label as it is written in the relative text control; the second should
-    // return the label as it's shown in the wxStaticText
-    wxLogMessage(wxT("The original label should be '%s'"),
-                 m_statTextWithMarkup->GetLabel().c_str());
-    wxLogMessage(wxT("The label text is '%s'"),
-                 m_statTextWithMarkup->GetLabelText().c_str());
-}
-
 void StaticWidgetsPage::OnButtonLabelText(wxCommandEvent& WXUNUSED(event))
 {
     m_statText->SetLabel(m_textLabel->GetValue());
@@ -547,8 +520,29 @@ void StaticWidgetsPage::OnButtonLabelText(wxCommandEvent& WXUNUSED(event))
     // label as it is written in the relative text control; the second should
     // return the label as it's shown in the wxStaticText
     wxLogMessage(wxT("The original label should be '%s'"),
-                 m_statText->GetLabel().c_str());
+                 m_statText->GetLabel());
     wxLogMessage(wxT("The label text is '%s'"),
-                 m_statText->GetLabelText().c_str());
+                 m_statText->GetLabelText());
+}
+
+void StaticWidgetsPage::OnButtonLabelWithMarkupText(wxCommandEvent& WXUNUSED(event))
+{
+    m_statMarkup->SetLabel(m_textLabelWithMarkup->GetValue());
+
+    // test GetLabel() and GetLabelText(); the first should return the
+    // label as it is written in the relative text control; the second should
+    // return the label as it's shown in the wxStaticText
+    wxLogMessage(wxT("The original label should be '%s'"),
+                 m_statMarkup->GetLabel());
+    wxLogMessage(wxT("The label text is '%s'"),
+                 m_statMarkup->GetLabelText());
+}
+
+void StaticWidgetsPage::OnMouseEvent(wxMouseEvent& event)
+{
+    if ( event.GetEventObject() == m_statText )
+        wxLogMessage("Clicked on static text");
+    else
+        wxLogMessage("Clicked on static box");
 }
 

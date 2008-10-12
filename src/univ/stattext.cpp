@@ -39,7 +39,7 @@
 // implementation
 // ============================================================================
 
-IMPLEMENT_ABSTRACT_CLASS(wxStaticText, wxControl)
+IMPLEMENT_ABSTRACT_CLASS(wxStaticText, wxGenericStaticText)
 
 // ----------------------------------------------------------------------------
 // creation
@@ -60,21 +60,6 @@ bool wxStaticText::Create(wxWindow *parent,
     SetInitialSize(size);
 
     return true;
-}
-
-// ----------------------------------------------------------------------------
-// size management
-// ----------------------------------------------------------------------------
-
-wxSize wxStaticText::DoGetBestClientSize() const
-{
-    wxStaticText *self = wxConstCast(this, wxStaticText);
-    wxClientDC dc(self);
-    dc.SetFont(GetFont());
-    wxCoord width, height;
-    dc.GetMultiLineTextExtent(GetLabel(), &width, &height);
-
-    return wxSize(width, height);
 }
 
 // ----------------------------------------------------------------------------

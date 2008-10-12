@@ -1931,6 +1931,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_splitter.obj \
 	$(OBJS)\monodll_srchctlg.obj \
 	$(OBJS)\monodll_statbmpg.obj \
+	$(OBJS)\monodll_stattextg.obj \
 	$(OBJS)\monodll_textdlgg.obj \
 	$(OBJS)\monodll_tipwin.obj \
 	$(OBJS)\monodll_toolbkg.obj \
@@ -2164,6 +2165,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_splitter.obj \
 	$(OBJS)\monodll_srchctlg.obj \
 	$(OBJS)\monodll_statbmpg.obj \
+	$(OBJS)\monodll_stattextg.obj \
 	$(OBJS)\monodll_textdlgg.obj \
 	$(OBJS)\monodll_tipwin.obj \
 	$(OBJS)\monodll_toolbkg.obj \
@@ -2602,6 +2604,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_splitter.obj \
 	$(OBJS)\monolib_srchctlg.obj \
 	$(OBJS)\monolib_statbmpg.obj \
+	$(OBJS)\monolib_stattextg.obj \
 	$(OBJS)\monolib_textdlgg.obj \
 	$(OBJS)\monolib_tipwin.obj \
 	$(OBJS)\monolib_toolbkg.obj \
@@ -2835,6 +2838,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_splitter.obj \
 	$(OBJS)\monolib_srchctlg.obj \
 	$(OBJS)\monolib_statbmpg.obj \
+	$(OBJS)\monolib_stattextg.obj \
 	$(OBJS)\monolib_textdlgg.obj \
 	$(OBJS)\monolib_tipwin.obj \
 	$(OBJS)\monolib_toolbkg.obj \
@@ -3202,6 +3206,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_splitter.obj \
 	$(OBJS)\coredll_srchctlg.obj \
 	$(OBJS)\coredll_statbmpg.obj \
+	$(OBJS)\coredll_stattextg.obj \
 	$(OBJS)\coredll_textdlgg.obj \
 	$(OBJS)\coredll_tipwin.obj \
 	$(OBJS)\coredll_toolbkg.obj \
@@ -3435,6 +3440,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_splitter.obj \
 	$(OBJS)\coredll_srchctlg.obj \
 	$(OBJS)\coredll_statbmpg.obj \
+	$(OBJS)\coredll_stattextg.obj \
 	$(OBJS)\coredll_textdlgg.obj \
 	$(OBJS)\coredll_tipwin.obj \
 	$(OBJS)\coredll_toolbkg.obj \
@@ -3677,6 +3683,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_splitter.obj \
 	$(OBJS)\corelib_srchctlg.obj \
 	$(OBJS)\corelib_statbmpg.obj \
+	$(OBJS)\corelib_stattextg.obj \
 	$(OBJS)\corelib_textdlgg.obj \
 	$(OBJS)\corelib_tipwin.obj \
 	$(OBJS)\corelib_toolbkg.obj \
@@ -3910,6 +3917,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_splitter.obj \
 	$(OBJS)\corelib_srchctlg.obj \
 	$(OBJS)\corelib_statbmpg.obj \
+	$(OBJS)\corelib_stattextg.obj \
 	$(OBJS)\corelib_textdlgg.obj \
 	$(OBJS)\corelib_tipwin.obj \
 	$(OBJS)\corelib_toolbkg.obj \
@@ -7662,6 +7670,11 @@ $(OBJS)\monodll_statbmpg.obj: ..\..\src\generic\statbmpg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_stattextg.obj: ..\..\src\generic\stattextg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\stattextg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_textdlgg.obj: ..\..\src\generic\textdlgg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\textdlgg.cpp
 !endif
@@ -9842,6 +9855,11 @@ $(OBJS)\monolib_srchctlg.obj: ..\..\src\generic\srchctlg.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_statbmpg.obj: ..\..\src\generic\statbmpg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\statbmpg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_stattextg.obj: ..\..\src\generic\stattextg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\stattextg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -12052,6 +12070,11 @@ $(OBJS)\coredll_statbmpg.obj: ..\..\src\generic\statbmpg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_stattextg.obj: ..\..\src\generic\stattextg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\stattextg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_textdlgg.obj: ..\..\src\generic\textdlgg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\textdlgg.cpp
 !endif
@@ -13385,6 +13408,11 @@ $(OBJS)\corelib_srchctlg.obj: ..\..\src\generic\srchctlg.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_statbmpg.obj: ..\..\src\generic\statbmpg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\statbmpg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_stattextg.obj: ..\..\src\generic\stattextg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\stattextg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
