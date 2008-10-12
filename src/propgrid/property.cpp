@@ -1561,7 +1561,7 @@ void wxPGProperty::AddChild2( wxPGProperty* prop, int index, bool correct_mode )
     else
     {
         m_children.insert( m_children.begin()+index, prop);
-        if ( correct_mode ) FixIndexesOfChildren( index );
+        if ( correct_mode ) FixIndecesOfChildren( index );
     }
 
     prop->m_parent = this;
@@ -1651,7 +1651,7 @@ void wxPGProperty::AdaptListToValue( wxVariant& list, wxVariant* value ) const
 }
 
 
-void wxPGProperty::FixIndexesOfChildren( size_t starthere )
+void wxPGProperty::FixIndecesOfChildren( unsigned int starthere )
 {
     size_t i;
     for ( i=starthere;i<GetChildCount();i++)

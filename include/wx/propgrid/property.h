@@ -1914,7 +1914,7 @@ public:
     void Empty();
 
     // Puts correct indexes to children
-    void FixIndexesOfChildren( unsigned int starthere = 0 );
+    void FixIndecesOfChildren( unsigned int starthere = 0 );
 
 #ifndef SWIG
     // Returns wxPropertyGridPageState in which this property resides.

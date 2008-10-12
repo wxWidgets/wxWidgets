@@ -632,7 +632,7 @@ void wxPropertyGridPageState::SortChildren( wxPGProperty* p )
 #endif
 
     // Fix indexes
-    pwc->FixIndexesOfChildren();
+    pwc->FixIndecesOfChildren();
 
 }
 
@@ -1826,7 +1826,7 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item )
             }
 
             if ( IsInNonCatMode() )
-                m_abcArray->FixIndexesOfChildren();
+                m_abcArray->FixIndecesOfChildren();
         }
     }
 
@@ -1844,7 +1844,7 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item )
         // categorized mode - categorized array
         wxArrayPGProperty& parentsChildren = item->m_parent->m_children;
         parentsChildren.erase( parentsChildren.begin() + indinparent );
-        item->m_parent->FixIndexesOfChildren();
+        item->m_parent->FixIndecesOfChildren();
     }
     else
     {
@@ -1877,7 +1877,7 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item )
             wxASSERT( item->m_parent == m_abcArray );
             wxArrayPGProperty& parentsChildren = item->m_parent->m_children;
             parentsChildren.erase(parentsChildren.begin() + indinparent);
-            item->m_parent->FixIndexesOfChildren(indinparent);
+            item->m_parent->FixIndecesOfChildren(indinparent);
         }
     }
 
