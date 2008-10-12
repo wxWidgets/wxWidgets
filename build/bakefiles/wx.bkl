@@ -118,10 +118,8 @@
             </install-to>
         </data-files-tree>
 
-        <!-- FIXME: make this use <headers> once it supports prefix removal -->
-        <if cond="BAKEFILE_VERSION!='0.2.3'">
-            <warning>is it time to use per-target &lt;headers&gt; now?</warning>
-        </if>
+        <!-- FIXME: make this use per-target <headers> once it supports
+                    prefix removal -->
         <data-files-tree>
             <srcdir>$(SRCDIR)/include</srcdir>
             <files>$(ALL_HEADERS)</files>
