@@ -99,7 +99,7 @@ wxSocketClientPtr SocketTestCase::GetHTTPSocket(int flags) const
         "Host: " + gs_serverHost + "\r\n"
         "\r\n";
 
-    sock->Write(httpGetRoot, httpGetRoot.length());
+    sock->Write(httpGetRoot.ToAscii(), httpGetRoot.length());
 
     ptr.reset(sock);
     return ptr;
