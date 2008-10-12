@@ -1287,6 +1287,8 @@ void wxPropertyGridManager::RecreateControls()
                 wxEmptyString,wxDefaultPosition,wxDefaultSize,wxALIGN_LEFT|wxST_NO_AUTORESIZE);
             m_pTxtHelpContent->SetCursor ( *wxSTANDARD_CURSOR );
         }
+
+        SetDescribedProperty(GetSelection());
     }
     else
     {
