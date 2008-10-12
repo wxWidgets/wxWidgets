@@ -80,6 +80,7 @@ private:
         CPPUNIT_TEST( DeleteLastGroup );
         CPPUNIT_TEST( DeleteAndRecreateGroup );
         CPPUNIT_TEST( AddToExistingRoot );
+        CPPUNIT_TEST( ReadNonExistent );
     CPPUNIT_TEST_SUITE_END();
 
     void Path();
@@ -101,6 +102,7 @@ private:
     void DeleteLastGroup();
     void DeleteAndRecreateGroup();
     void AddToExistingRoot();
+    void ReadNonExistent();
 
 
     static wxString ChangePath(wxFileConfig& fc, const wxChar *path)
@@ -626,6 +628,25 @@ void FileConfigTestCase::AddToExistingRoot()
         _T("value1=foo\n"),
         fc
     );
+}
+
+void FileConfigTestCase::ReadNonExistent()
+{
+    static const char *confTest =
+        "community=censored\n"
+        "[City1]\n"
+        "URL=www.fake1.na\n"
+        "[City1/A1]\n"
+        "[City1/A1/1]\n"
+        "IP=192.168.1.66\n"
+        "URL=www.fake2.na\n"
+    ;
+
+    wxStringInputStream sis(confTest);
+    wxFileConfig fc(sis);
+
+    wxString url;
+    CPPUNIT_ASSERT( !fc.Read("URL", &url) );
 }
 
 #endif // wxUSE_FILECONFIG
