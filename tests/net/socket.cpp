@@ -141,7 +141,7 @@ void SocketTestCase::ReadNormal()
     CPPUNIT_ASSERT_EQUAL( WXSIZEOF(bufSmall), sock->LastCount() );
 
 
-    char bufBig[1024*1024];
+    char bufBig[102400];
     sock->Read(bufBig, WXSIZEOF(bufBig));
 
     CPPUNIT_ASSERT_EQUAL( wxSOCKET_NOERROR, sock->LastError() );
