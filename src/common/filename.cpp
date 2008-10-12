@@ -1896,19 +1896,21 @@ wxString wxFileName::GetLongPath() const
     size_t count = dirs.GetCount();
     for ( size_t i = 0; i < count; i++ )
     {
+        const wxString& dir = dirs[i];
+
         // We're using pathOut to collect the long-name path, but using a
         // temporary for appending the last path component which may be
         // short-name
-        tmpPath = pathOut + dirs[i];
+        tmpPath = pathOut + dir;
 
-        if ( tmpPath.empty() )
-            continue;
-
-        // can't see this being necessary? MF
-        if ( tmpPath.Last() == GetVolumeSeparator(wxPATH_DOS) )
+        // We must not process "." or ".." here as they would be (unexpectedly)
+        // replaced by the corresponding directory names so just leave them
+        // alone
+        //
+        // And we can't pass a drive and root dir to FindFirstFile (VZ: why?)
+        if ( tmpPath.empty() || dir == '.' || dir == ".." ||
+                tmpPath.Last() == GetVolumeSeparator(wxPATH_DOS) )
         {
-            // Can't pass a drive and root dir to FindFirstFile,
-            // so continue to next dir
             tmpPath += wxFILE_SEP_PATH;
             pathOut = tmpPath;
             continue;

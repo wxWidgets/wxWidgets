@@ -72,11 +72,13 @@ static struct TestFileNameInfo
     { _T("c:\\foo.bar"), _T("c"), _T("\\"), _T("foo"), _T("bar"), true, wxPATH_DOS },
     { _T("c:\\Windows\\command.com"), _T("c"), _T("\\Windows"), _T("command"), _T("com"), true, wxPATH_DOS },
 
+#if 0
     // NB: when using the wxFileName::GetLongPath() function on these two
     //     strings, the program will hang for several seconds blocking inside
     //     Win32 GetLongPathName() function
     { _T("\\\\server\\foo.bar"), _T("server"), _T("\\"), _T("foo"), _T("bar"), true, wxPATH_DOS },
     { _T("\\\\server\\dir\\foo.bar"), _T("server"), _T("\\dir"), _T("foo"), _T("bar"), true, wxPATH_DOS },
+#endif
 
     // consecutive [back]slashes should be treated as single occurrences of
     // them and not interpreted as share names if there is a volume name
@@ -94,10 +96,12 @@ static struct TestFileNameInfo
     { _T("File.Ext"), _T(""), _T(""), _T("File"), _T(".Ext"), false, wxPATH_MAC },
 #endif // 0
 
+#if 0
     // VMS file names
     // NB: on Windows they have the same effect of the \\server\\ strings
     //     (see the note above)
     { _T("device:[dir1.dir2.dir3]file.txt"), _T("device"), _T("dir1.dir2.dir3"), _T("file"), _T("txt"), true, wxPATH_VMS },
+#endif
     { _T("file.txt"), _T(""), _T(""), _T("file"), _T("txt"), false, wxPATH_VMS },
 };
 
@@ -328,7 +332,20 @@ void FileNameTestCase::TestNormalize()
         // test giving no flags at all to Normalize()
         { "a/b/", 0, "a/b/", wxPATH_UNIX },
         { "a/b/c.ext", 0, "a/b/c.ext", wxPATH_UNIX },
-        { "/a", 0, "/a", wxPATH_UNIX }
+        { "/a", 0, "/a", wxPATH_UNIX },
+
+        // test handling dots without wxPATH_NORM_DOTS and wxPATH_NORM_ABSOLUTE
+        // for both existing and non-existent files (this is important under
+        // MSW where GetLongPathName() works only for the former)
+        { "./foo", wxPATH_NORM_LONG, "./foo", wxPATH_UNIX },
+        { "../foo", wxPATH_NORM_LONG, "../foo", wxPATH_UNIX },
+        { ".\\test.bkl", wxPATH_NORM_LONG, ".\\test.bkl", wxPATH_DOS },
+        { ".\\foo", wxPATH_NORM_LONG, ".\\foo", wxPATH_DOS },
+        { "..\\Makefile.in", wxPATH_NORM_LONG, "..\\Makefile.in", wxPATH_DOS },
+        { "..\\foo", wxPATH_NORM_LONG, "..\\foo", wxPATH_DOS },
+#ifdef __WXMSW__
+        { "..\\MKINST~1", wxPATH_NORM_LONG, "..\\mkinstalldirs", wxPATH_DOS },
+#endif
     };
 
     // set the env var ABCDEF
