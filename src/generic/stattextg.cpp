@@ -3,7 +3,7 @@
 // Purpose:     wxGenericStaticText
 // Author:      Marcin Wojdyr
 // Created:     2008-06-26
-// RCS-ID:      $Id:$
+// RCS-ID:      $Id$
 // Copyright:   Marcin Wojdyr
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -17,7 +17,8 @@
 #if wxUSE_STATTEXT
 
 #ifndef WX_PRECOMP
-    #include "wx/dc.h"
+    #include "wx/dcclient.h"
+    #include "wx/settings.h"
     #include "wx/validate.h"
 #endif
 
