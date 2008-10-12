@@ -152,6 +152,7 @@ ALIASES += itemdef{8}="<tr><td><span class='itemdef'>\1</span></td> <td>\2,\3,\4
 ALIASES += itemdef{9}="<tr><td><span class='itemdef'>\1</span></td> <td>\2,\3,\4,\5,\6,\7,\8,\9</td></tr>"
 ALIASES += itemdef{10}="<tr><td><span class='itemdef'>\1</span></td> <td>\2,\3,\4,\5,\6,\7,\8,\9,\10</td></tr>"
 ALIASES += endDefList="</table>"
+ALIASES += stock{3}="<tr><td><span class='itemdef'>\1</span></td> <td> @image html gtk-\2.png\n</td><td>\3</td></tr>"
 
 # See ENABLED_SECTIONS configuration key for more info about these:
 ALIASES += beginWxPerlOnly="\if WXPERL_MANUAL <b>wxPerl Note:</b> "
