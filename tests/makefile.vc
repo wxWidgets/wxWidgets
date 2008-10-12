@@ -52,6 +52,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_mbconvtest.obj \
 	$(OBJS)\test_misctests.obj \
 	$(OBJS)\test_ipc.obj \
+	$(OBJS)\test_socket.obj \
 	$(OBJS)\test_regextest.obj \
 	$(OBJS)\test_wxregextest.obj \
 	$(OBJS)\test_scopeguardtest.obj \
@@ -519,6 +520,9 @@ $(OBJS)\test_misctests.obj: .\misc\misctests.cpp
 
 $(OBJS)\test_ipc.obj: .\net\ipc.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\net\ipc.cpp
+
+$(OBJS)\test_socket.obj: .\net\socket.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\net\socket.cpp
 
 $(OBJS)\test_regextest.obj: .\regex\regextest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\regex\regextest.cpp

@@ -72,6 +72,7 @@ TEST_OBJECTS =  \
 	test_mbconvtest.o \
 	test_misctests.o \
 	test_ipc.o \
+	test_socket.o \
 	test_regextest.o \
 	test_wxregextest.o \
 	test_scopeguardtest.o \
@@ -397,6 +398,9 @@ test_misctests.o: $(srcdir)/misc/misctests.cpp $(TEST_ODEP)
 
 test_ipc.o: $(srcdir)/net/ipc.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/net/ipc.cpp
+
+test_socket.o: $(srcdir)/net/socket.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/net/socket.cpp
 
 test_regextest.o: $(srcdir)/regex/regextest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/regex/regextest.cpp

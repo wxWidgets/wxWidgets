@@ -377,6 +377,10 @@ SOURCE=.\scopeguard\scopeguardtest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\net\socket.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\streams\socketstream.cpp
 # End Source File
 # Begin Source File

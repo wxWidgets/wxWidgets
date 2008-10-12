@@ -264,6 +264,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_mbconvtest.obj &
 	$(OBJS)\test_misctests.obj &
 	$(OBJS)\test_ipc.obj &
+	$(OBJS)\test_socket.obj &
 	$(OBJS)\test_regextest.obj &
 	$(OBJS)\test_wxregextest.obj &
 	$(OBJS)\test_scopeguardtest.obj &
@@ -464,6 +465,9 @@ $(OBJS)\test_misctests.obj :  .AUTODEPEND .\misc\misctests.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_ipc.obj :  .AUTODEPEND .\net\ipc.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_socket.obj :  .AUTODEPEND .\net\socket.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_regextest.obj :  .AUTODEPEND .\regex\regextest.cpp

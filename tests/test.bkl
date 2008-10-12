@@ -50,6 +50,7 @@
             mbconv/mbconvtest.cpp
             misc/misctests.cpp
             net/ipc.cpp
+            net/socket.cpp
             regex/regextest.cpp
             regex/wxregextest.cpp
             scopeguard/scopeguardtest.cpp

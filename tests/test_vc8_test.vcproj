@@ -1016,6 +1016,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\net\socket.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\streams\socketstream.cpp"
 				>
 			</File>
