@@ -80,6 +80,7 @@ private:
         CPPUNIT_TEST( IconvTests );
         CPPUNIT_TEST( Latin1Tests );
         CPPUNIT_TEST( FontmapTests );
+        CPPUNIT_TEST( BufSize );
 #ifdef HAVE_WCHAR_H
         CPPUNIT_TEST( UTF8_41 );
         CPPUNIT_TEST( UTF8_7f );
@@ -113,6 +114,7 @@ private:
     void CP1252Tests();
     void LibcTests();
     void FontmapTests();
+    void BufSize();
     void IconvTests();
     void Latin1Tests();
 
@@ -805,6 +807,49 @@ void MBConvTestCase::FontmapTests()
         );
     delete converter;
 #endif
+}
+
+void MBConvTestCase::BufSize()
+{
+    wxCSConv conv1251(_T("CP1251"));
+    CPPUNIT_ASSERT( conv1251.IsOk() );
+    const char *cp1251text =
+        "\313\301\326\305\324\323\321 \325\304\301\336\316\331\315";
+    const size_t cp1251textLen = strlen(cp1251text);
+
+    const size_t lenW = conv1251.MB2WC(NULL, cp1251text, cp1251textLen);
+    CPPUNIT_ASSERT( lenW != wxCONV_FAILED );
+    wxWCharBuffer wbuf(lenW);
+
+    // lenW-1 is not enough
+    CPPUNIT_ASSERT_EQUAL(
+        wxCONV_FAILED, conv1251.MB2WC(wbuf.data(), cp1251text, lenW - 1) );
+
+    // lenW is just fine
+    CPPUNIT_ASSERT(
+        conv1251.MB2WC(wbuf.data(), cp1251text, lenW) != wxCONV_FAILED );
+
+    // of course, greater values work too
+    CPPUNIT_ASSERT(
+        conv1251.MB2WC(wbuf.data(), cp1251text, lenW + 1) != wxCONV_FAILED );
+
+
+    // test in the other direction too, using an encoding with multibyte NUL
+    wxCSConv convUTF16(_T("UTF-16"));
+    CPPUNIT_ASSERT( convUTF16.IsOk() );
+    const wchar_t *utf16text = L"Hello";
+    const size_t utf16textLen = wcslen(utf16text);
+
+    const size_t lenMB = convUTF16.WC2MB(NULL, utf16text, utf16textLen);
+    CPPUNIT_ASSERT( lenMB != wxCONV_FAILED );
+    wxCharBuffer buf(lenMB + 1); // it only adds 1 for NUL on its own, we need 2
+
+    CPPUNIT_ASSERT_EQUAL(
+        wxCONV_FAILED, convUTF16.WC2MB(buf.data(), utf16text, lenMB - 1) );
+    CPPUNIT_ASSERT(
+        convUTF16.WC2MB(buf.data(), utf16text, lenMB) != wxCONV_FAILED );
+    CPPUNIT_ASSERT(
+        convUTF16.WC2MB(buf.data(), utf16text, lenMB + 1) != wxCONV_FAILED );
 }
 
 

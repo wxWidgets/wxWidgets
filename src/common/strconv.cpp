@@ -355,7 +355,9 @@ wxMBConv::FromWChar(char *dst, size_t dstLen,
 
 size_t wxMBConv::MB2WC(wchar_t *outBuff, const char *inBuff, size_t outLen) const
 {
-    size_t rc = ToWChar(outBuff, outLen, inBuff);
+    // add 1 to available buffer length because MB2WC() parameter counts the
+    // number of non-NUL characters while ToWChar() counts everything
+    size_t rc = ToWChar(outBuff, outLen + 1, inBuff);
     if ( rc != wxCONV_FAILED )
     {
         // ToWChar() returns the buffer length, i.e. including the trailing
@@ -368,10 +370,12 @@ size_t wxMBConv::MB2WC(wchar_t *outBuff, const char *inBuff, size_t outLen) cons
 
 size_t wxMBConv::WC2MB(char *outBuff, const wchar_t *inBuff, size_t outLen) const
 {
-    size_t rc = FromWChar(outBuff, outLen, inBuff);
+    const size_t nulLen = GetMBNulLen();
+
+    size_t rc = FromWChar(outBuff, outLen + nulLen, inBuff);
     if ( rc != wxCONV_FAILED )
     {
-        rc -= GetMBNulLen();
+        rc -= nulLen;
     }
 
     return rc;
