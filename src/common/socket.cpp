@@ -72,15 +72,15 @@ IMPLEMENT_DYNAMIC_CLASS(wxSocketEvent, wxEvent)
 class wxSocketState : public wxObject
 {
 public:
-  wxSocketFlags            m_flags;
-  wxSocketEventFlags       m_eventmask;
-  bool                     m_notify;
-  void                    *m_clientData;
+    wxSocketFlags            m_flags;
+    wxSocketEventFlags       m_eventmask;
+    bool                     m_notify;
+    void                    *m_clientData;
 
 public:
-  wxSocketState() : wxObject() {}
+    wxSocketState() : wxObject() {}
 
-  DECLARE_NO_COPY_CLASS(wxSocketState)
+    DECLARE_NO_COPY_CLASS(wxSocketState)
 };
 
 // ============================================================================
@@ -175,102 +175,102 @@ void wxSocketBase::Shutdown()
 
 void wxSocketBase::Init()
 {
-  m_socket       = NULL;
-  m_type         = wxSOCKET_UNINIT;
+    m_socket       = NULL;
+    m_type         = wxSOCKET_UNINIT;
 
-  // state
-  m_flags        = 0;
-  m_connected    =
-  m_establishing =
-  m_reading      =
-  m_writing      =
-  m_error        =
-  m_closed       = false;
-  m_lcount       = 0;
-  m_timeout      = 600;
-  m_beingDeleted = false;
+    // state
+    m_flags        = 0;
+    m_connected    =
+    m_establishing =
+    m_reading      =
+    m_writing      =
+    m_error        =
+    m_closed       = false;
+    m_lcount       = 0;
+    m_timeout      = 600;
+    m_beingDeleted = false;
 
-  // pushback buffer
-  m_unread       = NULL;
-  m_unrd_size    = 0;
-  m_unrd_cur     = 0;
+    // pushback buffer
+    m_unread       = NULL;
+    m_unrd_size    = 0;
+    m_unrd_cur     = 0;
 
-  // events
-  m_id           = wxID_ANY;
-  m_handler      = NULL;
-  m_clientData   = NULL;
-  m_notify       = false;
-  m_eventmask    = 0;
+    // events
+    m_id           = wxID_ANY;
+    m_handler      = NULL;
+    m_clientData   = NULL;
+    m_notify       = false;
+    m_eventmask    = 0;
 
-  if ( !IsInitialized() )
-  {
-      // this Initialize() will be undone by wxSocketModule::OnExit(), all the
-      // other calls to it should be matched by a call to Shutdown()
-      Initialize();
-  }
+    if ( !IsInitialized() )
+    {
+        // this Initialize() will be undone by wxSocketModule::OnExit(), all
+        // the other calls to it should be matched by a call to Shutdown()
+        Initialize();
+    }
 }
 
 wxSocketBase::wxSocketBase()
 {
-  Init();
+    Init();
 }
 
 wxSocketBase::wxSocketBase(wxSocketFlags flags, wxSocketType type)
 {
-  Init();
+    Init();
 
-  m_flags = flags;
-  m_type  = type;
+    m_flags = flags;
+    m_type  = type;
 }
 
 wxSocketBase::~wxSocketBase()
 {
-  // Just in case the app called Destroy() *and* then deleted
-  // the socket immediately: don't leave dangling pointers.
-  wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
-  if ( traits )
-      traits->RemoveFromPendingDelete(this);
+    // Just in case the app called Destroy() *and* then deleted the socket
+    // immediately: don't leave dangling pointers.
+    wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
+    if ( traits )
+        traits->RemoveFromPendingDelete(this);
 
-  // Shutdown and close the socket
-  if (!m_beingDeleted)
-    Close();
+    // Shutdown and close the socket
+    if (!m_beingDeleted)
+        Close();
 
-  // Destroy the GSocket object
-  if (m_socket)
-    delete m_socket;
+    // Destroy the GSocket object
+    if (m_socket)
+        delete m_socket;
 
-  // Free the pushback buffer
-  if (m_unread)
-    free(m_unread);
+    // Free the pushback buffer
+    if (m_unread)
+        free(m_unread);
 }
 
 bool wxSocketBase::Destroy()
 {
-  // Delayed destruction: the socket will be deleted during the next
-  // idle loop iteration. This ensures that all pending events have
-  // been processed.
-  m_beingDeleted = true;
+    // Delayed destruction: the socket will be deleted during the next idle
+    // loop iteration. This ensures that all pending events have been
+    // processed.
+    m_beingDeleted = true;
 
-  // Shutdown and close the socket
-  Close();
+    // Shutdown and close the socket
+    Close();
 
-  // Supress events from now on
-  Notify(false);
+    // Supress events from now on
+    Notify(false);
 
-  // schedule this object for deletion
-  wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
-  if ( traits )
-  {
-      // let the traits object decide what to do with us
-      traits->ScheduleForDestroy(this);
-  }
-  else // no app or no traits
-  {
-      // in wxBase we might have no app object at all, don't leak memory
-      delete this;
-  }
+    // schedule this object for deletion
+    wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
+    if ( traits )
+    {
+        // let the traits object decide what to do with us
+        traits->ScheduleForDestroy(this);
+    }
+    else // no app or no traits
+    {
+        // in wxBase we might have no app object at all, don't leak memory
+        delete this;
+    }
 
-  return true;
+    return true;
 }
 
 // --------------------------------------------------------------------------
@@ -284,416 +284,424 @@ bool wxSocketBase::Destroy()
 
 bool wxSocketBase::Close()
 {
-  // Interrupt pending waits
-  InterruptWait();
+    // Interrupt pending waits
+    InterruptWait();
 
-  if (m_socket)
-  {
-    // Disable callbacks
-    m_socket->UnsetCallback(GSOCK_INPUT_FLAG | GSOCK_OUTPUT_FLAG |
-                                    GSOCK_LOST_FLAG | GSOCK_CONNECTION_FLAG);
+    if (m_socket)
+    {
+        // Disable callbacks
+        m_socket->UnsetCallback(
+            GSOCK_INPUT_FLAG |
+            GSOCK_OUTPUT_FLAG |
+            GSOCK_LOST_FLAG |
+            GSOCK_CONNECTION_FLAG
+        );
 
-    // Shutdown the connection
-    m_socket->Shutdown();
-  }
+        // Shutdown the connection
+        m_socket->Shutdown();
+    }
 
-  m_connected = false;
-  m_establishing = false;
-  return true;
+    m_connected = false;
+    m_establishing = false;
+    return true;
 }
 
 wxSocketBase& wxSocketBase::Read(void* buffer, wxUint32 nbytes)
 {
-  // Mask read events
-  m_reading = true;
+    // Mask read events
+    m_reading = true;
 
-  m_lcount = _Read(buffer, nbytes);
+    m_lcount = _Read(buffer, nbytes);
 
-  // If in wxSOCKET_WAITALL mode, all bytes should have been read.
-  if (m_flags & wxSOCKET_WAITALL)
-    m_error = (m_lcount != nbytes);
-  else
-    m_error = (m_lcount == 0);
+    // If in wxSOCKET_WAITALL mode, all bytes should have been read.
+    if (m_flags & wxSOCKET_WAITALL)
+        m_error = (m_lcount != nbytes);
+    else
+        m_error = (m_lcount == 0);
 
-  // Allow read events from now on
-  m_reading = false;
+    // Allow read events from now on
+    m_reading = false;
 
-  return *this;
+    return *this;
 }
 
 wxUint32 wxSocketBase::_Read(void* buffer_, wxUint32 nbytes)
 {
-  char *buffer = (char *)buffer_;
+    char *buffer = (char *)buffer_;
 
-  int total;
+    int total;
 
-  // Try the pushback buffer first
-  total = GetPushback(buffer, nbytes, false);
-  nbytes -= total;
-  buffer  = (char *)buffer + total;
+    // Try the pushback buffer first
+    total = GetPushback(buffer, nbytes, false);
+    nbytes -= total;
+    buffer  = (char *)buffer + total;
 
-  // Return now in one of the following cases:
-  // - the socket is invalid,
-  // - we got all the data
-  if ( !m_socket ||
-       !nbytes )
-    return total;
+    // Return now in one of the following cases:
+    // - the socket is invalid,
+    // - we got all the data
+    if ( !m_socket ||
+            !nbytes )
+        return total;
 
-  // Possible combinations (they are checked in this order)
-  // wxSOCKET_NOWAIT
-  // wxSOCKET_WAITALL (with or without wxSOCKET_BLOCK)
-  // wxSOCKET_BLOCK
-  // wxSOCKET_NONE
-  //
-  int ret;
-  if (m_flags & wxSOCKET_NOWAIT)
-  {
-    m_socket->SetNonBlocking(1);
-    ret = m_socket->Read(buffer, nbytes);
-    m_socket->SetNonBlocking(0);
-
-    if ( ret < 0 )
-        return 0;
-
-    total += ret;
-  }
-  else // blocking socket
-  {
-    for ( ;; )
+    // Possible combinations (they are checked in this order)
+    // wxSOCKET_NOWAIT
+    // wxSOCKET_WAITALL (with or without wxSOCKET_BLOCK)
+    // wxSOCKET_BLOCK
+    // wxSOCKET_NONE
+    //
+    int ret;
+    if (m_flags & wxSOCKET_NOWAIT)
     {
-      // dispatch events unless disabled
-      if ( !(m_flags & wxSOCKET_BLOCK) && !WaitForRead() )
-        break;
+        m_socket->SetNonBlocking(1);
+        ret = m_socket->Read(buffer, nbytes);
+        m_socket->SetNonBlocking(0);
 
-      ret = m_socket->Read(buffer, nbytes);
-      if ( ret == 0 )
-      {
-          // for connection-oriented (e.g. TCP) sockets we can only read 0
-          // bytes if the other end has been closed, and for connectionless
-          // ones (UDP) this flag doesn't make sense anyhow so we can set it to
-          // true too without doing any harm
-          m_closed = true;
-          break;
-      }
+        if ( ret < 0 )
+            return 0;
 
-      if ( ret < 0 )
-      {
-          // this will be always interpreted as error by Read()
-          return 0;
-      }
-
-      total += ret;
-
-      // if wxSOCKET_WAITALL is not set, we can leave now as we did read
-      // something
-      if ( !(m_flags & wxSOCKET_WAITALL) )
-          break;
-
-      // otherwise check if read the maximal requested amount of data
-      nbytes -= ret;
-      if ( !nbytes )
-          break;
-
-      // we didn't, so continue reading
-      buffer  = (char *)buffer + ret;
+        total += ret;
     }
-  }
+    else // blocking socket
+    {
+        for ( ;; )
+        {
+            // dispatch events unless disabled
+            if ( !(m_flags & wxSOCKET_BLOCK) && !WaitForRead() )
+                break;
 
-  return total;
+            ret = m_socket->Read(buffer, nbytes);
+            if ( ret == 0 )
+            {
+                // for connection-oriented (e.g. TCP) sockets we can only read
+                // 0 bytes if the other end has been closed, and for
+                // connectionless ones (UDP) this flag doesn't make sense
+                // anyhow so we can set it to true too without doing any harm
+                m_closed = true;
+                break;
+            }
+
+            if ( ret < 0 )
+            {
+                // this will be always interpreted as error by Read()
+                return 0;
+            }
+
+            total += ret;
+
+            // if wxSOCKET_WAITALL is not set, we can leave now as we did read
+            // something
+            if ( !(m_flags & wxSOCKET_WAITALL) )
+                break;
+
+            // otherwise check if read the maximal requested amount of data
+            nbytes -= ret;
+            if ( !nbytes )
+                break;
+
+            // we didn't, so continue reading
+            buffer  = (char *)buffer + ret;
+        }
+    }
+
+    return total;
 }
 
 wxSocketBase& wxSocketBase::ReadMsg(void* buffer, wxUint32 nbytes)
 {
-  wxUint32 len, len2, sig, total;
-  bool error;
-  int old_flags;
-  struct
-  {
-    unsigned char sig[4];
-    unsigned char len[4];
-  } msg;
-
-  // Mask read events
-  m_reading = true;
-
-  total = 0;
-  error = true;
-  old_flags = m_flags;
-  SetFlags((m_flags & wxSOCKET_BLOCK) | wxSOCKET_WAITALL);
-
-  if (_Read(&msg, sizeof(msg)) != sizeof(msg))
-    goto exit;
-
-  sig = (wxUint32)msg.sig[0];
-  sig |= (wxUint32)(msg.sig[1] << 8);
-  sig |= (wxUint32)(msg.sig[2] << 16);
-  sig |= (wxUint32)(msg.sig[3] << 24);
-
-  if (sig != 0xfeeddead)
-  {
-    wxLogWarning(_("wxSocket: invalid signature in ReadMsg."));
-    goto exit;
-  }
-
-  len = (wxUint32)msg.len[0];
-  len |= (wxUint32)(msg.len[1] << 8);
-  len |= (wxUint32)(msg.len[2] << 16);
-  len |= (wxUint32)(msg.len[3] << 24);
-
-  if (len > nbytes)
-  {
-    len2 = len - nbytes;
-    len = nbytes;
-  }
-  else
-    len2 = 0;
-
-  // Don't attemp to read if the msg was zero bytes long.
-  if (len)
-  {
-    total = _Read(buffer, len);
-
-    if (total != len)
-      goto exit;
-  }
-  if (len2)
-  {
-    char *discard_buffer = new char[MAX_DISCARD_SIZE];
-    long discard_len;
-
-    // NOTE: discarded bytes don't add to m_lcount.
-    do
+    wxUint32 len, len2, sig, total;
+    bool error;
+    int old_flags;
+    struct
     {
-      discard_len = ((len2 > MAX_DISCARD_SIZE)? MAX_DISCARD_SIZE : len2);
-      discard_len = _Read(discard_buffer, (wxUint32)discard_len);
-      len2 -= (wxUint32)discard_len;
+        unsigned char sig[4];
+        unsigned char len[4];
+    } msg;
+
+    // Mask read events
+    m_reading = true;
+
+    total = 0;
+    error = true;
+    old_flags = m_flags;
+    SetFlags((m_flags & wxSOCKET_BLOCK) | wxSOCKET_WAITALL);
+
+    if (_Read(&msg, sizeof(msg)) != sizeof(msg))
+        goto exit;
+
+    sig = (wxUint32)msg.sig[0];
+    sig |= (wxUint32)(msg.sig[1] << 8);
+    sig |= (wxUint32)(msg.sig[2] << 16);
+    sig |= (wxUint32)(msg.sig[3] << 24);
+
+    if (sig != 0xfeeddead)
+    {
+        wxLogWarning(_("wxSocket: invalid signature in ReadMsg."));
+        goto exit;
     }
-    while ((discard_len > 0) && len2);
 
-    delete [] discard_buffer;
+    len = (wxUint32)msg.len[0];
+    len |= (wxUint32)(msg.len[1] << 8);
+    len |= (wxUint32)(msg.len[2] << 16);
+    len |= (wxUint32)(msg.len[3] << 24);
 
-    if (len2 != 0)
-      goto exit;
-  }
-  if (_Read(&msg, sizeof(msg)) != sizeof(msg))
-    goto exit;
+    if (len > nbytes)
+    {
+        len2 = len - nbytes;
+        len = nbytes;
+    }
+    else
+        len2 = 0;
 
-  sig = (wxUint32)msg.sig[0];
-  sig |= (wxUint32)(msg.sig[1] << 8);
-  sig |= (wxUint32)(msg.sig[2] << 16);
-  sig |= (wxUint32)(msg.sig[3] << 24);
+    // Don't attempt to read if the msg was zero bytes long.
+    if (len)
+    {
+        total = _Read(buffer, len);
 
-  if (sig != 0xdeadfeed)
-  {
-    wxLogWarning(_("wxSocket: invalid signature in ReadMsg."));
-    goto exit;
-  }
+        if (total != len)
+            goto exit;
+    }
 
-  // everything was OK
-  error = false;
+    if (len2)
+    {
+        char *discard_buffer = new char[MAX_DISCARD_SIZE];
+        long discard_len;
+
+        // NOTE: discarded bytes don't add to m_lcount.
+        do
+        {
+            discard_len = ((len2 > MAX_DISCARD_SIZE)? MAX_DISCARD_SIZE : len2);
+            discard_len = _Read(discard_buffer, (wxUint32)discard_len);
+            len2 -= (wxUint32)discard_len;
+        }
+        while ((discard_len > 0) && len2);
+
+        delete [] discard_buffer;
+
+        if (len2 != 0)
+            goto exit;
+    }
+    if (_Read(&msg, sizeof(msg)) != sizeof(msg))
+        goto exit;
+
+    sig = (wxUint32)msg.sig[0];
+    sig |= (wxUint32)(msg.sig[1] << 8);
+    sig |= (wxUint32)(msg.sig[2] << 16);
+    sig |= (wxUint32)(msg.sig[3] << 24);
+
+    if (sig != 0xdeadfeed)
+    {
+        wxLogWarning(_("wxSocket: invalid signature in ReadMsg."));
+        goto exit;
+    }
+
+    // everything was OK
+    error = false;
 
 exit:
-  m_error = error;
-  m_lcount = total;
-  m_reading = false;
-  SetFlags(old_flags);
+    m_error = error;
+    m_lcount = total;
+    m_reading = false;
+    SetFlags(old_flags);
 
-  return *this;
+    return *this;
 }
 
 wxSocketBase& wxSocketBase::Peek(void* buffer, wxUint32 nbytes)
 {
-  // Mask read events
-  m_reading = true;
+    // Mask read events
+    m_reading = true;
 
-  m_lcount = _Read(buffer, nbytes);
-  Pushback(buffer, m_lcount);
+    m_lcount = _Read(buffer, nbytes);
+    Pushback(buffer, m_lcount);
 
-  // If in wxSOCKET_WAITALL mode, all bytes should have been read.
-  if (m_flags & wxSOCKET_WAITALL)
-    m_error = (m_lcount != nbytes);
-  else
-    m_error = (m_lcount == 0);
+    // If in wxSOCKET_WAITALL mode, all bytes should have been read.
+    if (m_flags & wxSOCKET_WAITALL)
+        m_error = (m_lcount != nbytes);
+    else
+        m_error = (m_lcount == 0);
 
-  // Allow read events again
-  m_reading = false;
+    // Allow read events again
+    m_reading = false;
 
-  return *this;
+    return *this;
 }
 
 wxSocketBase& wxSocketBase::Write(const void *buffer, wxUint32 nbytes)
 {
-  // Mask write events
-  m_writing = true;
+    // Mask write events
+    m_writing = true;
 
-  m_lcount = _Write(buffer, nbytes);
+    m_lcount = _Write(buffer, nbytes);
 
-  // If in wxSOCKET_WAITALL mode, all bytes should have been written.
-  if (m_flags & wxSOCKET_WAITALL)
-    m_error = (m_lcount != nbytes);
-  else
-    m_error = (m_lcount == 0);
+    // If in wxSOCKET_WAITALL mode, all bytes should have been written.
+    if (m_flags & wxSOCKET_WAITALL)
+        m_error = (m_lcount != nbytes);
+    else
+        m_error = (m_lcount == 0);
 
-  // Allow write events again
-  m_writing = false;
+    // Allow write events again
+    m_writing = false;
 
-  return *this;
+    return *this;
 }
 
 wxUint32 wxSocketBase::_Write(const void *buffer_, wxUint32 nbytes)
 {
-  const char *buffer = (const char *)buffer_;
+    const char *buffer = (const char *)buffer_;
 
-  wxUint32 total = 0;
+    wxUint32 total = 0;
 
-  // If the socket is invalid or parameters are ill, return immediately
-  if (!m_socket || !buffer || !nbytes)
-    return 0;
+    // If the socket is invalid or parameters are ill, return immediately
+    if (!m_socket || !buffer || !nbytes)
+        return 0;
 
-  // Possible combinations (they are checked in this order)
-  // wxSOCKET_NOWAIT
-  // wxSOCKET_WAITALL (with or without wxSOCKET_BLOCK)
-  // wxSOCKET_BLOCK
-  // wxSOCKET_NONE
-  //
-  int ret;
-  if (m_flags & wxSOCKET_NOWAIT)
-  {
-    m_socket->SetNonBlocking(1);
-    ret = m_socket->Write(buffer, nbytes);
-    m_socket->SetNonBlocking(0);
-
-    if (ret > 0)
-      total = ret;
-  }
-  else // blocking socket
-  {
-    for ( ;; )
+    // Possible combinations (they are checked in this order)
+    // wxSOCKET_NOWAIT
+    // wxSOCKET_WAITALL (with or without wxSOCKET_BLOCK)
+    // wxSOCKET_BLOCK
+    // wxSOCKET_NONE
+    //
+    int ret;
+    if (m_flags & wxSOCKET_NOWAIT)
     {
-      if ( !(m_flags & wxSOCKET_BLOCK) && !WaitForWrite() )
-        break;
+        m_socket->SetNonBlocking(1);
+        ret = m_socket->Write(buffer, nbytes);
+        m_socket->SetNonBlocking(0);
 
-      ret = m_socket->Write(buffer, nbytes);
-
-      // see comments for similar logic for ret handling in _Read()
-      if ( ret == 0 )
-      {
-          m_closed = true;
-          break;
-      }
-
-      if ( ret < 0 )
-      {
-          return 0;
-      }
-
-      total += ret;
-      if ( !(m_flags & wxSOCKET_WAITALL) )
-          break;
-
-      nbytes -= ret;
-      if ( !nbytes )
-          break;
-
-      buffer = (const char *)buffer + ret;
+        if (ret > 0)
+            total = ret;
     }
-  }
+    else // blocking socket
+    {
+        for ( ;; )
+        {
+            if ( !(m_flags & wxSOCKET_BLOCK) && !WaitForWrite() )
+                break;
 
-  return total;
+            ret = m_socket->Write(buffer, nbytes);
+
+            // see comments for similar logic for ret handling in _Read()
+            if ( ret == 0 )
+            {
+                m_closed = true;
+                break;
+            }
+
+            if ( ret < 0 )
+            {
+                return 0;
+            }
+
+            total += ret;
+            if ( !(m_flags & wxSOCKET_WAITALL) )
+                break;
+
+            nbytes -= ret;
+            if ( !nbytes )
+                break;
+
+            buffer = (const char *)buffer + ret;
+        }
+    }
+
+    return total;
 }
 
 wxSocketBase& wxSocketBase::WriteMsg(const void *buffer, wxUint32 nbytes)
 {
-  wxUint32 total;
-  bool error;
-  struct
-  {
-    unsigned char sig[4];
-    unsigned char len[4];
-  } msg;
+    wxUint32 total;
+    bool error;
+    struct
+    {
+        unsigned char sig[4];
+        unsigned char len[4];
+    } msg;
 
-  // Mask write events
-  m_writing = true;
+    // Mask write events
+    m_writing = true;
 
-  error = true;
-  total = 0;
-  SetFlags((m_flags & wxSOCKET_BLOCK) | wxSOCKET_WAITALL);
+    error = true;
+    total = 0;
+    SetFlags((m_flags & wxSOCKET_BLOCK) | wxSOCKET_WAITALL);
 
-  msg.sig[0] = (unsigned char) 0xad;
-  msg.sig[1] = (unsigned char) 0xde;
-  msg.sig[2] = (unsigned char) 0xed;
-  msg.sig[3] = (unsigned char) 0xfe;
+    msg.sig[0] = (unsigned char) 0xad;
+    msg.sig[1] = (unsigned char) 0xde;
+    msg.sig[2] = (unsigned char) 0xed;
+    msg.sig[3] = (unsigned char) 0xfe;
 
-  msg.len[0] = (unsigned char) (nbytes & 0xff);
-  msg.len[1] = (unsigned char) ((nbytes >> 8) & 0xff);
-  msg.len[2] = (unsigned char) ((nbytes >> 16) & 0xff);
-  msg.len[3] = (unsigned char) ((nbytes >> 24) & 0xff);
+    msg.len[0] = (unsigned char) (nbytes & 0xff);
+    msg.len[1] = (unsigned char) ((nbytes >> 8) & 0xff);
+    msg.len[2] = (unsigned char) ((nbytes >> 16) & 0xff);
+    msg.len[3] = (unsigned char) ((nbytes >> 24) & 0xff);
 
-  if (_Write(&msg, sizeof(msg)) < sizeof(msg))
-    goto exit;
+    if (_Write(&msg, sizeof(msg)) < sizeof(msg))
+        goto exit;
 
-  total = _Write(buffer, nbytes);
+    total = _Write(buffer, nbytes);
 
-  if (total < nbytes)
-    goto exit;
+    if (total < nbytes)
+        goto exit;
 
-  msg.sig[0] = (unsigned char) 0xed;
-  msg.sig[1] = (unsigned char) 0xfe;
-  msg.sig[2] = (unsigned char) 0xad;
-  msg.sig[3] = (unsigned char) 0xde;
-  msg.len[0] = msg.len[1] = msg.len[2] = msg.len[3] = (char) 0;
+    msg.sig[0] = (unsigned char) 0xed;
+    msg.sig[1] = (unsigned char) 0xfe;
+    msg.sig[2] = (unsigned char) 0xad;
+    msg.sig[3] = (unsigned char) 0xde;
+    msg.len[0] =
+    msg.len[1] =
+    msg.len[2] =
+    msg.len[3] = (char) 0;
 
-  if ((_Write(&msg, sizeof(msg))) < sizeof(msg))
-    goto exit;
+    if ((_Write(&msg, sizeof(msg))) < sizeof(msg))
+        goto exit;
 
-  // everything was OK
-  error = false;
+    // everything was OK
+    error = false;
 
 exit:
-  m_error = error;
-  m_lcount = total;
-  m_writing = false;
+    m_error = error;
+    m_lcount = total;
+    m_writing = false;
 
-  return *this;
+    return *this;
 }
 
 wxSocketBase& wxSocketBase::Unread(const void *buffer, wxUint32 nbytes)
 {
-  if (nbytes != 0)
-    Pushback(buffer, nbytes);
+    if (nbytes != 0)
+        Pushback(buffer, nbytes);
 
-  m_error = false;
-  m_lcount = nbytes;
+    m_error = false;
+    m_lcount = nbytes;
 
-  return *this;
+    return *this;
 }
 
 wxSocketBase& wxSocketBase::Discard()
 {
-  char *buffer = new char[MAX_DISCARD_SIZE];
-  wxUint32 ret;
-  wxUint32 total = 0;
+    char *buffer = new char[MAX_DISCARD_SIZE];
+    wxUint32 ret;
+    wxUint32 total = 0;
 
-  // Mask read events
-  m_reading = true;
+    // Mask read events
+    m_reading = true;
 
-  SetFlags(wxSOCKET_NOWAIT);
+    SetFlags(wxSOCKET_NOWAIT);
 
-  do
-  {
-    ret = _Read(buffer, MAX_DISCARD_SIZE);
-    total += ret;
-  }
-  while (ret == MAX_DISCARD_SIZE);
+    do
+    {
+        ret = _Read(buffer, MAX_DISCARD_SIZE);
+        total += ret;
+    }
+    while (ret == MAX_DISCARD_SIZE);
 
-  delete[] buffer;
-  m_lcount = total;
-  m_error  = false;
+    delete[] buffer;
+    m_lcount = total;
+    m_error  = false;
 
-  // Allow read events again
-  m_reading = false;
+    // Allow read events again
+    m_reading = false;
 
-  return *this;
+    return *this;
 }
 
 // --------------------------------------------------------------------------
@@ -710,122 +718,123 @@ bool wxSocketBase::_Wait(long seconds,
                          long milliseconds,
                          wxSocketEventFlags flags)
 {
-  GSocketEventFlags result;
-  long timeout; // in ms
+    GSocketEventFlags result;
+    long timeout; // in ms
 
-  // Set this to true to interrupt ongoing waits
-  m_interrupt = false;
+    // Set this to true to interrupt ongoing waits
+    m_interrupt = false;
 
-  // Check for valid socket
-  if (!m_socket)
-    return false;
+    // Check for valid socket
+    if (!m_socket)
+        return false;
 
-  // Check for valid timeout value.
-  if (seconds != -1)
-    timeout = seconds * 1000 + milliseconds;
-  else
-    timeout = m_timeout * 1000;
+    // Check for valid timeout value.
+    if (seconds != -1)
+        timeout = seconds * 1000 + milliseconds;
+    else
+        timeout = m_timeout * 1000;
 
-  // Get the active event loop
-  wxEventLoopBase * const eventLoop = wxEventLoop::GetActive();
+    // Get the active event loop
+    wxEventLoopBase * const eventLoop = wxEventLoop::GetActive();
 
 #ifdef __WXMSW__
-  wxASSERT_MSG( !wxIsMainThread() || eventLoop,
-                "Sockets won't work without a running event loop" );
+    wxASSERT_MSG( !wxIsMainThread() || eventLoop,
+            "Sockets won't work without a running event loop" );
 #endif // __WXMSW__
 
-  // Wait in an active polling loop.
-  //
-  // NOTE: We duplicate some of the code in OnRequest, but this doesn't
-  //   hurt. It has to be here because the (GSocket) event might arrive
-  //   a bit delayed, and it has to be in OnRequest as well because we
-  //   don't know whether the Wait functions are being used.
-  //
-  // Do this at least once (important if timeout == 0, when
-  // we are just polling). Also, if just polling, do not yield.
+    // Wait in an active polling loop.
+    //
+    // NOTE: We duplicate some of the code in OnRequest, but this doesn't
+    //   hurt. It has to be here because the (GSocket) event might arrive
+    //   a bit delayed, and it has to be in OnRequest as well because we
+    //   don't know whether the Wait functions are being used.
+    //
+    // Do this at least once (important if timeout == 0, when
+    // we are just polling). Also, if just polling, do not yield.
 
-  const wxMilliClock_t time_limit = wxGetLocalTimeMillis() + timeout;
-  bool done = false;
-  bool valid_result = false;
+    const wxMilliClock_t time_limit = wxGetLocalTimeMillis() + timeout;
+    bool done = false;
+    bool valid_result = false;
 
-  if (!eventLoop)
-  {
-    // This is used to avoid a busy loop on wxBase - having a select
-    // timeout of 50 ms per iteration should be enough.
-    if (timeout > 50)
-      m_socket->SetTimeout(50);
-    else
-      m_socket->SetTimeout(timeout);
-  }
-
-  while (!done)
-  {
-    result = m_socket->Select(flags | GSOCK_LOST_FLAG);
-
-    // Incoming connection (server) or connection established (client)
-    if (result & GSOCK_CONNECTION_FLAG)
+    if (!eventLoop)
     {
-      m_connected = true;
-      m_establishing = false;
-      valid_result = true;
-      break;
-    }
-
-    // Data available or output buffer ready
-    if ((result & GSOCK_INPUT_FLAG) || (result & GSOCK_OUTPUT_FLAG))
-    {
-      valid_result = true;
-      break;
-    }
-
-    // Connection lost
-    if (result & GSOCK_LOST_FLAG)
-    {
-      m_connected = false;
-      m_establishing = false;
-      valid_result = ((flags & GSOCK_LOST_FLAG) != 0);
-      break;
-    }
-
-    // Wait more?
-    long time_left = wxMilliClockToLong(time_limit - wxGetLocalTimeMillis());
-    if ((!timeout) || (time_left <= 0) || (m_interrupt))
-      done = true;
-    else
-    {
-      if (eventLoop)
-      {
-        // from the main thread itself we have to run the event loop to let the
-        // events (including the GUI events and the low-level (not wxWidgets)
-        // events from GSocket) be processed but from another thread it is
-        // enough to just call wxThread::Yield() which will give away the rest
-        // of our time slice: the explanation is that the events will be
-        // processed by the main thread anyhow, but we don't want to eat the
-        // CPU time uselessly while sitting in the loop waiting for the data
-        if ( wxIsMainThread() )
-        {
-          if ( eventLoop->Pending() )
-              eventLoop->Dispatch();
-        }
-#if wxUSE_THREADS
+        // This is used to avoid a busy loop on wxBase - having a select
+        // timeout of 50 ms per iteration should be enough.
+        if (timeout > 50)
+            m_socket->SetTimeout(50);
         else
-          wxThread::Yield();
-#endif // wxUSE_THREADS
-      }
-      else
-      {
-        // If there's less than 50 ms left, just call select with that timeout.
-        if (time_left < 50)
-          m_socket->SetTimeout(time_left);
-      }
+            m_socket->SetTimeout(timeout);
     }
-  }
 
-  // Set timeout back to original value (we overwrote it for polling)
-  if (!eventLoop)
-    m_socket->SetTimeout(m_timeout*1000);
+    while (!done)
+    {
+        result = m_socket->Select(flags | GSOCK_LOST_FLAG);
 
-  return valid_result;
+        // Incoming connection (server) or connection established (client)
+        if (result & GSOCK_CONNECTION_FLAG)
+        {
+            m_connected = true;
+            m_establishing = false;
+            valid_result = true;
+            break;
+        }
+
+        // Data available or output buffer ready
+        if ((result & GSOCK_INPUT_FLAG) || (result & GSOCK_OUTPUT_FLAG))
+        {
+            valid_result = true;
+            break;
+        }
+
+        // Connection lost
+        if (result & GSOCK_LOST_FLAG)
+        {
+            m_connected = false;
+            m_establishing = false;
+            valid_result = ((flags & GSOCK_LOST_FLAG) != 0);
+            break;
+        }
+
+        // Wait more?
+        long time_left = wxMilliClockToLong(time_limit - wxGetLocalTimeMillis());
+        if ((!timeout) || (time_left <= 0) || (m_interrupt))
+            done = true;
+        else
+        {
+            if (eventLoop)
+            {
+                // from the main thread itself we have to run the event loop to
+                // let the events (including the GUI events and the low-level
+                // (not wxWidgets) events from GSocket) be processed but from
+                // another thread it is enough to just call wxThread::Yield()
+                // which will give away the rest of our time slice: the
+                // explanation is that the events will be processed by the main
+                // thread anyhow, but we don't want to eat the CPU time
+                // uselessly while sitting in the loop waiting for the data
+                if ( wxIsMainThread() )
+                {
+                    if ( eventLoop->Pending() )
+                        eventLoop->Dispatch();
+                }
+#if wxUSE_THREADS
+                else
+                    wxThread::Yield();
+#endif // wxUSE_THREADS
+            }
+            else
+            {
+                // If there's less than 50 ms left, just call select with that timeout.
+                if (time_left < 50)
+                    m_socket->SetTimeout(time_left);
+            }
+        }
+    }
+
+    // Set timeout back to original value (we overwrote it for polling)
+    if (!eventLoop)
+        m_socket->SetTimeout(m_timeout*1000);
+
+    return valid_result;
 }
 
 bool wxSocketBase::Wait(long seconds, long milliseconds)
@@ -838,17 +847,16 @@ bool wxSocketBase::Wait(long seconds, long milliseconds)
 
 bool wxSocketBase::WaitForRead(long seconds, long milliseconds)
 {
-  // Check pushback buffer before entering _Wait
-  if (m_unread)
-    return true;
+    // Check pushback buffer before entering _Wait
+    if (m_unread)
+        return true;
 
-  // Note that GSOCK_INPUT_LOST has to be explicitly passed to
-  // _Wait because of the semantics of WaitForRead: a return
-  // value of true means that a GSocket_Read call will return
-  // immediately, not that there is actually data to read.
+    // Note that GSOCK_INPUT_LOST has to be explicitly passed to
+    // _Wait because of the semantics of WaitForRead: a return
+    // value of true means that a GSocket_Read call will return
+    // immediately, not that there is actually data to read.
 
-  return _Wait(seconds, milliseconds, GSOCK_INPUT_FLAG |
-                                      GSOCK_LOST_FLAG);
+    return _Wait(seconds, milliseconds, GSOCK_INPUT_FLAG | GSOCK_LOST_FLAG);
 }
 
 
@@ -872,22 +880,22 @@ bool wxSocketBase::WaitForLost(long seconds, long milliseconds)
 
 bool wxSocketBase::GetPeer(wxSockAddress& addr_man) const
 {
-  GAddress *peer;
+    GAddress *peer;
 
-  if (!m_socket)
-    return false;
+    if (!m_socket)
+        return false;
 
-  peer = m_socket->GetPeer();
+    peer = m_socket->GetPeer();
 
     // copying a null address would just trigger an assert anyway
 
-  if (!peer)
-    return false;
+    if (!peer)
+        return false;
 
-  addr_man.SetAddress(peer);
-  GAddress_destroy(peer);
+    addr_man.SetAddress(peer);
+    GAddress_destroy(peer);
 
-  return true;
+    return true;
 }
 
 bool wxSocketBase::GetLocal(wxSockAddress& addr_man) const
@@ -994,68 +1002,65 @@ void LINKAGEMODE wx_socket_callback(GSocket * WXUNUSED(socket),
 
 void wxSocketBase::OnRequest(wxSocketNotify notification)
 {
-  // NOTE: We duplicate some of the code in _Wait, but this doesn't
-  //   hurt. It has to be here because the (GSocket) event might arrive
-  //   a bit delayed, and it has to be in _Wait as well because we don't
-  //   know whether the Wait functions are being used.
+    // NOTE: We duplicate some of the code in _Wait, but this doesn't
+    //   hurt. It has to be here because the (GSocket) event might arrive
+    //   a bit delayed, and it has to be in _Wait as well because we don't
+    //   know whether the Wait functions are being used.
 
-  switch(notification)
-  {
-    case wxSOCKET_CONNECTION:
-      m_establishing = false;
-      m_connected = true;
-      break;
-
-    // If we are in the middle of a R/W operation, do not
-    // propagate events to users. Also, filter 'late' events
-    // which are no longer valid.
-
-    case wxSOCKET_INPUT:
-      if (m_reading || !m_socket->Select(GSOCK_INPUT_FLAG))
-        return;
-      break;
-
-    case wxSOCKET_OUTPUT:
-      if (m_writing || !m_socket->Select(GSOCK_OUTPUT_FLAG))
-        return;
-      break;
-
-    case wxSOCKET_LOST:
-      m_connected = false;
-      m_establishing = false;
-      break;
-
-    default:
-      break;
-  }
-
-  // Schedule the event
-
-  wxSocketEventFlags flag = 0;
-  wxUnusedVar(flag);
-  switch (notification)
-  {
-    case GSOCK_INPUT:      flag = GSOCK_INPUT_FLAG; break;
-    case GSOCK_OUTPUT:     flag = GSOCK_OUTPUT_FLAG; break;
-    case GSOCK_CONNECTION: flag = GSOCK_CONNECTION_FLAG; break;
-    case GSOCK_LOST:       flag = GSOCK_LOST_FLAG; break;
-    default:
-      wxLogWarning(_("wxSocket: unknown event!."));
-      return;
-  }
-
-  if (((m_eventmask & flag) == flag) && m_notify)
-  {
-    if (m_handler)
+    switch(notification)
     {
-      wxSocketEvent event(m_id);
-      event.m_event      = notification;
-      event.m_clientData = m_clientData;
-      event.SetEventObject(this);
+        case wxSOCKET_CONNECTION:
+            m_establishing = false;
+            m_connected = true;
+            break;
 
-      m_handler->AddPendingEvent(event);
+            // If we are in the middle of a R/W operation, do not
+            // propagate events to users. Also, filter 'late' events
+            // which are no longer valid.
+
+        case wxSOCKET_INPUT:
+            if (m_reading || !m_socket->Select(GSOCK_INPUT_FLAG))
+                return;
+            break;
+
+        case wxSOCKET_OUTPUT:
+            if (m_writing || !m_socket->Select(GSOCK_OUTPUT_FLAG))
+                return;
+            break;
+
+        case wxSOCKET_LOST:
+            m_connected = false;
+            m_establishing = false;
+            break;
     }
-  }
+
+    // Schedule the event
+
+    wxSocketEventFlags flag = 0;
+    wxUnusedVar(flag);
+    switch (notification)
+    {
+        case GSOCK_INPUT:      flag = GSOCK_INPUT_FLAG; break;
+        case GSOCK_OUTPUT:     flag = GSOCK_OUTPUT_FLAG; break;
+        case GSOCK_CONNECTION: flag = GSOCK_CONNECTION_FLAG; break;
+        case GSOCK_LOST:       flag = GSOCK_LOST_FLAG; break;
+        default:
+                               wxLogWarning(_("wxSocket: unknown event!."));
+                               return;
+    }
+
+    if (((m_eventmask & flag) == flag) && m_notify)
+    {
+        if (m_handler)
+        {
+            wxSocketEvent event(m_id);
+            event.m_event      = notification;
+            event.m_clientData = m_clientData;
+            event.SetEventObject(this);
+
+            m_handler->AddPendingEvent(event);
+        }
+    }
 }
 
 void wxSocketBase::Notify(bool notify)
@@ -1082,49 +1087,49 @@ void wxSocketBase::SetEventHandler(wxEvtHandler& handler, int id)
 
 void wxSocketBase::Pushback(const void *buffer, wxUint32 size)
 {
-  if (!size) return;
+    if (!size) return;
 
-  if (m_unread == NULL)
-    m_unread = malloc(size);
-  else
-  {
-    void *tmp;
+    if (m_unread == NULL)
+        m_unread = malloc(size);
+    else
+    {
+        void *tmp;
 
-    tmp = malloc(m_unrd_size + size);
-    memcpy((char *)tmp + size, m_unread, m_unrd_size);
-    free(m_unread);
+        tmp = malloc(m_unrd_size + size);
+        memcpy((char *)tmp + size, m_unread, m_unrd_size);
+        free(m_unread);
 
-    m_unread = tmp;
-  }
+        m_unread = tmp;
+    }
 
-  m_unrd_size += size;
+    m_unrd_size += size;
 
-  memcpy(m_unread, buffer, size);
+    memcpy(m_unread, buffer, size);
 }
 
 wxUint32 wxSocketBase::GetPushback(void *buffer, wxUint32 size, bool peek)
 {
-  if (!m_unrd_size)
-    return 0;
+    if (!m_unrd_size)
+        return 0;
 
-  if (size > (m_unrd_size-m_unrd_cur))
-    size = m_unrd_size-m_unrd_cur;
+    if (size > (m_unrd_size-m_unrd_cur))
+        size = m_unrd_size-m_unrd_cur;
 
-  memcpy(buffer, (char *)m_unread + m_unrd_cur, size);
+    memcpy(buffer, (char *)m_unread + m_unrd_cur, size);
 
-  if (!peek)
-  {
-    m_unrd_cur += size;
-    if (m_unrd_size == m_unrd_cur)
+    if (!peek)
     {
-      free(m_unread);
-      m_unread = NULL;
-      m_unrd_size = 0;
-      m_unrd_cur  = 0;
+        m_unrd_cur += size;
+        if (m_unrd_size == m_unrd_cur)
+        {
+            free(m_unread);
+            m_unread = NULL;
+            m_unrd_size = 0;
+            m_unrd_cur  = 0;
+        }
     }
-  }
 
-  return size;
+    return size;
 }
 
 
@@ -1187,51 +1192,51 @@ wxSocketServer::wxSocketServer(const wxSockAddress& addr_man,
 
 bool wxSocketServer::AcceptWith(wxSocketBase& sock, bool wait)
 {
-  GSocket *child_socket;
+    GSocket *child_socket;
 
-  if (!m_socket)
-    return false;
+    if (!m_socket)
+        return false;
 
-  // If wait == false, then the call should be nonblocking.
-  // When we are finished, we put the socket to blocking mode
-  // again.
+    // If wait == false, then the call should be nonblocking.
+    // When we are finished, we put the socket to blocking mode
+    // again.
 
-  if (!wait)
-    m_socket->SetNonBlocking(1);
+    if (!wait)
+        m_socket->SetNonBlocking(1);
 
-  child_socket = m_socket->WaitConnection();
+    child_socket = m_socket->WaitConnection();
 
-  if (!wait)
-    m_socket->SetNonBlocking(0);
+    if (!wait)
+        m_socket->SetNonBlocking(0);
 
-  if (!child_socket)
-    return false;
+    if (!child_socket)
+        return false;
 
-  sock.m_type = wxSOCKET_BASE;
-  sock.m_socket = child_socket;
-  sock.m_connected = true;
+    sock.m_type = wxSOCKET_BASE;
+    sock.m_socket = child_socket;
+    sock.m_connected = true;
 
-  sock.m_socket->SetTimeout(sock.m_timeout * 1000);
-  sock.m_socket->SetCallback(GSOCK_INPUT_FLAG | GSOCK_OUTPUT_FLAG |
-                                     GSOCK_LOST_FLAG | GSOCK_CONNECTION_FLAG,
-                                     wx_socket_callback, (char *)&sock);
+    sock.m_socket->SetTimeout(sock.m_timeout * 1000);
+    sock.m_socket->SetCallback(GSOCK_INPUT_FLAG | GSOCK_OUTPUT_FLAG |
+            GSOCK_LOST_FLAG | GSOCK_CONNECTION_FLAG,
+            wx_socket_callback, (char *)&sock);
 
-  return true;
+    return true;
 }
 
 wxSocketBase *wxSocketServer::Accept(bool wait)
 {
-  wxSocketBase* sock = new wxSocketBase();
+    wxSocketBase* sock = new wxSocketBase();
 
-  sock->SetFlags(m_flags);
+    sock->SetFlags(m_flags);
 
-  if (!AcceptWith(*sock, wait))
-  {
-    sock->Destroy();
-    sock = NULL;
-  }
+    if (!AcceptWith(*sock, wait))
+    {
+        sock->Destroy();
+        sock = NULL;
+    }
 
-  return sock;
+    return sock;
 }
 
 bool wxSocketServer::WaitForAccept(long seconds, long milliseconds)
@@ -1266,17 +1271,17 @@ bool wxSocketBase::SetOption(int level, int optname, const void *optval,
 
 bool wxSocketBase::SetLocal(const wxIPV4address& local)
 {
-  GAddress* la = local.GetAddress();
+    GAddress* la = local.GetAddress();
 
-  // If the address is valid, save it for use when we call Connect
-  if (la && la->m_addr)
-  {
-    m_localAddress = local;
+    // If the address is valid, save it for use when we call Connect
+    if (la && la->m_addr)
+    {
+        m_localAddress = local;
 
-    return true;
-  }
+        return true;
+    }
 
-  return false;
+    return false;
 }
 
 // ==========================================================================
@@ -1306,86 +1311,90 @@ bool wxSocketClient::DoConnect(const wxSockAddress& addr_man,
                                const wxSockAddress* local,
                                bool wait)
 {
-  GSocketError err;
+    GSocketError err;
 
-  if (m_socket)
-  {
-    // Shutdown and destroy the socket
-    Close();
-    delete m_socket;
-  }
+    if (m_socket)
+    {
+        // Shutdown and destroy the socket
+        Close();
+        delete m_socket;
+    }
 
-  m_socket = GSocket_new();
-  m_connected = false;
-  m_establishing = false;
+    m_socket = GSocket_new();
+    m_connected = false;
+    m_establishing = false;
 
-  if (!m_socket)
-    return false;
+    if (!m_socket)
+        return false;
 
-  m_socket->SetTimeout(m_timeout * 1000);
-  m_socket->SetCallback(GSOCK_INPUT_FLAG | GSOCK_OUTPUT_FLAG |
-                                GSOCK_LOST_FLAG | GSOCK_CONNECTION_FLAG,
-                                wx_socket_callback, (char *)this);
+    m_socket->SetTimeout(m_timeout * 1000);
+    m_socket->SetCallback(
+        GSOCK_INPUT_FLAG |
+        GSOCK_OUTPUT_FLAG |
+        GSOCK_LOST_FLAG |
+        GSOCK_CONNECTION_FLAG,
+        wx_socket_callback,
+        (char *)this
+    );
 
-  // If wait == false, then the call should be nonblocking.
-  // When we are finished, we put the socket to blocking mode
-  // again.
+    // If wait == false, then the call should be nonblocking. When we are
+    // finished, we put the socket to blocking mode again.
 
-  if (!wait)
-    m_socket->SetNonBlocking(1);
+    if (!wait)
+        m_socket->SetNonBlocking(1);
 
-  // Reuse makes sense for clients too, if we are trying to rebind to the same port
-  if (GetFlags() & wxSOCKET_REUSEADDR)
-  {
-    m_socket->SetReusable();
-  }
-  if (GetFlags() & wxSOCKET_BROADCAST)
-  {
-    m_socket->SetBroadcast();
-  }
-  if (GetFlags() & wxSOCKET_NOBIND)
-  {
-    m_socket->DontDoBind();
-  }
+    // Reuse makes sense for clients too, if we are trying to rebind to the same port
+    if (GetFlags() & wxSOCKET_REUSEADDR)
+    {
+        m_socket->SetReusable();
+    }
+    if (GetFlags() & wxSOCKET_BROADCAST)
+    {
+        m_socket->SetBroadcast();
+    }
+    if (GetFlags() & wxSOCKET_NOBIND)
+    {
+        m_socket->DontDoBind();
+    }
 
-  // If no local address was passed and one has been set, use the one that was Set
-  if (!local && m_localAddress.GetAddress())
-  {
-    local = &m_localAddress;
-  }
+    // If no local address was passed and one has been set, use the one that was Set
+    if (!local && m_localAddress.GetAddress())
+    {
+        local = &m_localAddress;
+    }
 
-  // Bind to the local IP address and port, when provided
-  if (local)
-  {
-    GAddress* la = local->GetAddress();
+    // Bind to the local IP address and port, when provided
+    if (local)
+    {
+        GAddress* la = local->GetAddress();
 
-    if (la && la->m_addr)
-      m_socket->SetLocal(la);
-  }
+        if (la && la->m_addr)
+            m_socket->SetLocal(la);
+    }
 
 #if defined(__WXMSW__) || defined(__WXGTK__)
-  m_socket->SetInitialSocketBuffers(m_initialRecvBufferSize, m_initialSendBufferSize);
+    m_socket->SetInitialSocketBuffers(m_initialRecvBufferSize, m_initialSendBufferSize);
 #endif
 
-  m_socket->SetPeer(addr_man.GetAddress());
-  err = m_socket->Connect(GSOCK_STREAMED);
+    m_socket->SetPeer(addr_man.GetAddress());
+    err = m_socket->Connect(GSOCK_STREAMED);
 
-  //this will register for callbacks - must be called after m_socket->m_fd was initialized
-  m_socket->Notify(m_notify);
+    //this will register for callbacks - must be called after m_socket->m_fd was initialized
+    m_socket->Notify(m_notify);
 
-  if (!wait)
-    m_socket->SetNonBlocking(0);
+    if (!wait)
+        m_socket->SetNonBlocking(0);
 
-  if (err != GSOCK_NOERROR)
-  {
-    if (err == GSOCK_WOULDBLOCK)
-      m_establishing = true;
+    if (err != GSOCK_NOERROR)
+    {
+        if (err == GSOCK_WOULDBLOCK)
+            m_establishing = true;
 
-    return false;
-  }
+        return false;
+    }
 
-  m_connected = true;
-  return true;
+    m_connected = true;
+    return true;
 }
 
 bool wxSocketClient::Connect(const wxSockAddress& addr_man, bool wait)
@@ -1506,5 +1515,4 @@ private:
 
 IMPLEMENT_DYNAMIC_CLASS(wxSocketModule, wxModule)
 
-#endif
-  // wxUSE_SOCKETS
+#endif // wxUSE_SOCKETS
