@@ -463,7 +463,7 @@ public:
 
     unsigned int GetColumnCount() const
     {
-        return m_colWidths.size();
+        return (unsigned int) m_colWidths.size();
     }
 
     wxPGProperty* GetSelection() const

@@ -525,7 +525,7 @@ public:
     /**
         Returns number of columns currently on grid.
     */
-    int GetColumnCount() const;
+    unsigned int GetColumnCount() const;
 
     /**
         Returns colour of empty space below properties.

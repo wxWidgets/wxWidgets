@@ -215,7 +215,7 @@ public:
     ~wxPGAttributeStorage();
 
     void Set( const wxString& name, const wxVariant& value );
-    size_t GetCount() const { return m_map.size(); }
+    unsigned int GetCount() const { return (unsigned int) m_map.size(); }
     wxVariant FindValue( const wxString& name ) const
     {
         wxPGHashMapS2P::const_iterator it = m_map.find(name);
@@ -619,7 +619,7 @@ public:
         if ( index == -1 )
         {
             it = m_items.end();
-            index = m_items.size();
+            index = (int) m_items.size();
         }
         else
         {
@@ -636,7 +636,10 @@ public:
     // Delete all entries
     void Clear();
 
-    size_t GetCount() const { return m_items.size(); }
+    unsigned int GetCount() const
+    {
+        return (unsigned int) m_items.size();
+    }
 
     wxPGChoiceEntry* Item( unsigned int i ) const
     {
@@ -781,12 +784,12 @@ public:
     /** Gets a unsigned number identifying this list. */
     wxPGChoicesId GetId() const { return (wxPGChoicesId) m_data; };
 
-    const wxString& GetLabel( size_t ind ) const
+    const wxString& GetLabel( unsigned int ind ) const
     {
         return Item(ind).GetText();
     }
 
-    size_t GetCount () const
+    unsigned int GetCount () const
     {
         if ( !m_data )
             return 0;
@@ -794,7 +797,7 @@ public:
         return m_data->GetCount();
     }
 
-    int GetValue( size_t ind ) const { return Item(ind).GetValue(); }
+    int GetValue( unsigned int ind ) const { return Item(ind).GetValue(); }
 
     /** Returns array of values matching the given strings. Unmatching strings
         result in wxPG_INVALID_VALUE entry in array.
@@ -1891,10 +1894,13 @@ public:
     int GetChildrenHeight( int lh, int iMax = -1 ) const;
 
     /** Returns number of child properties */
-    unsigned int GetChildCount() const { return m_children.size(); }
+    unsigned int GetChildCount() const
+    {
+        return (unsigned int) m_children.size();
+    }
 
     /** Returns sub-property at index i. */
-    wxPGProperty* Item( size_t i ) const
+    wxPGProperty* Item( unsigned int i ) const
         { return m_children[i]; }
 
     /** Returns last sub-property.
@@ -1908,7 +1914,7 @@ public:
     void Empty();
 
     // Puts correct indexes to children
-    void FixIndexesOfChildren( size_t starthere = 0 );
+    void FixIndexesOfChildren( unsigned int starthere = 0 );
 
 #ifndef SWIG
     // Returns wxPropertyGridPageState in which this property resides.

@@ -322,7 +322,7 @@ public:
     /**
         Returns number of buttons.
     */
-    int GetCount();
+    unsigned int GetCount();
 
     /**
         Returns size of primary editor control, as appropriately

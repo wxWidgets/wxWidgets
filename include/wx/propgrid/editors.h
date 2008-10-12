@@ -525,7 +525,7 @@ public:
 
     /** Returns number of buttons.
     */
-    int GetCount() const { return m_buttons.Count(); }
+    unsigned int GetCount() const { return (unsigned int) m_buttons.size(); }
 
     void Add( const wxString& label, int id = -2 );
 #if wxUSE_BMPBUTTON

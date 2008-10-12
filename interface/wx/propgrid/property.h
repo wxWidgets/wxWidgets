@@ -1194,7 +1194,7 @@ public:
     /**
         Returns child property at index i.
     */
-    wxPGProperty* Item( size_t i ) const;
+    wxPGProperty* Item( unsigned int i ) const;
 
     /**
         If property's editor is active, then update it's value.
@@ -1448,17 +1448,17 @@ public:
     /**
         Returns labe of item.
     */
-    const wxString& GetLabel( size_t ind ) const;
+    const wxString& GetLabel( unsigned int ind ) const;
 
     /**
         Returns number of items.
     */
-    size_t GetCount () const;
+    unsigned int GetCount() const;
 
     /**
         Returns value of item;
     */
-    int GetValue( size_t ind ) const;
+    int GetValue( unsigned int ind ) const;
 
     /**
         Returns array of values matching the given strings. Unmatching strings

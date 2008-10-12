@@ -785,9 +785,9 @@ public:
     /**
         Returns number of columns currently on grid.
     */
-    int GetColumnCount() const
+    unsigned int GetColumnCount() const
     {
-        return m_pState->m_colWidths.size();
+        return (unsigned int) m_pState->m_colWidths.size();
     }
 
     /** Returns colour of empty space below properties. */
@@ -1088,7 +1088,7 @@ public:
     */
     unsigned int GetCommonValueCount() const
     {
-        return m_commonValues.size();
+        return (unsigned int) m_commonValues.size();
     }
 
     /** Returns label of given common value.
@@ -1844,7 +1844,7 @@ inline int wxPGProperty::GetDisplayedCommonValueCount() const
     {
         wxPropertyGrid* pg = GetGrid();
         if ( pg )
-            return pg->GetCommonValueCount();
+            return (int) pg->GetCommonValueCount();
     }
     return 0;
 }
