@@ -53,25 +53,6 @@ WX_CHECK_BUILD_OPTIONS("wxNet")
 // discard buffer
 #define MAX_DISCARD_SIZE (10 * 1024)
 
-// what to do within waits: we have 2 cases: from the main thread itself we
-// have to call wxYield() to let the events (including the GUI events and the
-// low-level (not wxWidgets) events from GSocket) be processed. From another
-// thread it is enough to just call wxThread::Yield() which will give away the
-// rest of our time slice: the explanation is that the events will be processed
-// by the main thread anyhow, without calling wxYield(), but we don't want to
-// eat the CPU time uselessly while sitting in the loop waiting for the data
-#if wxUSE_THREADS
-    #define PROCESS_EVENTS()        \
-    {                               \
-        if ( wxThread::IsMain() )   \
-            wxYield();              \
-        else                        \
-            wxThread::Yield();      \
-    }
-#else // !wxUSE_THREADS
-    #define PROCESS_EVENTS() wxYield()
-#endif // wxUSE_THREADS/!wxUSE_THREADS
-
 #define wxTRACE_Socket _T("wxSocket")
 
 // --------------------------------------------------------------------------
@@ -722,7 +703,7 @@ wxSocketBase& wxSocketBase::Discard()
 // All Wait functions poll the socket using GSocket_Select() to
 // check for the specified combination of conditions, until one
 // of these conditions become true, an error occurs, or the
-// timeout elapses. The polling loop calls PROCESS_EVENTS(), so
+// timeout elapses. The polling loop runs the event loop so that
 // this won't block the GUI.
 
 bool wxSocketBase::_Wait(long seconds,
@@ -745,9 +726,13 @@ bool wxSocketBase::_Wait(long seconds,
   else
     timeout = m_timeout * 1000;
 
-  // check if we are using event loop or not: normally we do in GUI but not in
-  // console applications but this can be overridden
-  const bool has_event_loop = wxEventLoop::GetActive() != NULL;
+  // Get the active event loop
+  wxEventLoopBase * const eventLoop = wxEventLoop::GetActive();
+
+#ifdef __WXMSW__
+  wxASSERT_MSG( !wxIsMainThread() || eventLoop,
+                "Sockets won't work without a running event loop" );
+#endif // __WXMSW__
 
   // Wait in an active polling loop.
   //
@@ -763,7 +748,7 @@ bool wxSocketBase::_Wait(long seconds,
   bool done = false;
   bool valid_result = false;
 
-  if (!has_event_loop)
+  if (!eventLoop)
   {
     // This is used to avoid a busy loop on wxBase - having a select
     // timeout of 50 ms per iteration should be enough.
@@ -808,9 +793,24 @@ bool wxSocketBase::_Wait(long seconds,
       done = true;
     else
     {
-      if (has_event_loop)
+      if (eventLoop)
       {
-          PROCESS_EVENTS();
+        // from the main thread itself we have to run the event loop to let the
+        // events (including the GUI events and the low-level (not wxWidgets)
+        // events from GSocket) be processed but from another thread it is
+        // enough to just call wxThread::Yield() which will give away the rest
+        // of our time slice: the explanation is that the events will be
+        // processed by the main thread anyhow, but we don't want to eat the
+        // CPU time uselessly while sitting in the loop waiting for the data
+        if ( wxIsMainThread() )
+        {
+          if ( eventLoop->Pending() )
+              eventLoop->Dispatch();
+        }
+#if wxUSE_THREADS
+        else
+          wxThread::Yield();
+#endif // wxUSE_THREADS
       }
       else
       {
@@ -822,7 +822,7 @@ bool wxSocketBase::_Wait(long seconds,
   }
 
   // Set timeout back to original value (we overwrote it for polling)
-  if (!has_event_loop)
+  if (!eventLoop)
     m_socket->SetTimeout(m_timeout*1000);
 
   return valid_result;
