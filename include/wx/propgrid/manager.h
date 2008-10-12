@@ -466,6 +466,12 @@ public:
     /** Returns index to currently selected page. */
     int GetSelectedPage() const { return m_selPage; }
 
+    /** Alias for GetSelection(). */
+    wxPGProperty* GetSelectedProperty() const
+    {
+        return GetSelection();
+    }
+
     /** Shortcut for GetGrid()->GetSelection(). */
     wxPGProperty* GetSelection() const
     {
