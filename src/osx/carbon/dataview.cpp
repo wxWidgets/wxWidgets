@@ -547,7 +547,6 @@ wxDataViewCustomRenderer::wxDataViewCustomRenderer(wxString const& varianttype, 
 
 wxDataViewCustomRenderer::~wxDataViewCustomRenderer()
 {
-  if (this->m_DCPtr != NULL)
     delete this->m_DCPtr;
 } /* wxDataViewCustomRenderer::~wxDataViewCustomRenderer() */
 

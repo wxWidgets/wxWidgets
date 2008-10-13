@@ -448,8 +448,7 @@ void wxWindowMac::DoReleaseMouse()
 
 void wxWindowMac::SetDropTarget(wxDropTarget *pDropTarget)
 {
-    if ( m_dropTarget != NULL )
-        delete m_dropTarget;
+    delete m_dropTarget;
 
     m_dropTarget = pDropTarget;
     if ( m_dropTarget != NULL )

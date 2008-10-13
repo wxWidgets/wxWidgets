@@ -174,8 +174,7 @@ wxJoystick::~wxJoystick()
     if (m_thread)
         m_thread->Delete();  // It's detached so it will delete itself
 
-    if (m_hid)
-        delete m_hid;
+    delete m_hid;
 }
 
 //---------------------------------------------------------------------------

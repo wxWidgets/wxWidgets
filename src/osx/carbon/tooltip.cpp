@@ -190,8 +190,7 @@ void wxMacToolTip::Setup( WindowRef win  , const wxString& text , const wxPoint&
     s_ToolTipWindowRef = m_window ;
     m_backpict = NULL ;
 #if wxUSE_TIMER 
-    if ( m_timer )
-        delete m_timer ;
+    delete m_timer ;
 
     m_timer = new wxMacToolTipTimer( this , s_ToolTipDelay ) ;
 #endif // wxUSE_TIMER

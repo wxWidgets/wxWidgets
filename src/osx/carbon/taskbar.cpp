@@ -347,8 +347,7 @@ wxMenu * wxDockTaskBarIcon::DoCreatePopupMenu()
 
     if (theNewMenu)
     {
-        if (m_pMenu)
-            delete m_pMenu;
+        delete m_pMenu;
         m_pMenu = theNewMenu;
         m_pMenu->SetInvokingWindow(m_menuEventWindow);
     }
@@ -442,8 +441,7 @@ bool wxDockTaskBarIcon::PopupMenu(wxMenu *menu)
 {
     wxASSERT(menu != NULL);
 
-    if (m_pMenu)
-        delete m_pMenu;
+    delete m_pMenu;
 
     // start copy of menu
     m_pMenu = wxDeepCopyMenu(menu);

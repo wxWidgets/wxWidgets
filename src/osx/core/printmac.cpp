@@ -411,8 +411,7 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
     // May have pressed cancel.
     if (!dc || !dc->IsOk())
     {
-        if (dc)
-            delete dc;
+        delete dc;
         return false;
     }
 
