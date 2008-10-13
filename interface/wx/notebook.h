@@ -42,10 +42,9 @@
     @library{wxcore}
     @category{miscwnd}
 
-    @see wxBookCtrl, wxBookCtrlEvent, wxImageList,
-        @ref page_samples_notebook "Notebook Sample"
+    @see wxBookCtrl, wxBookCtrlEvent, wxImageList, @ref page_samples_notebook
 */
-class wxNotebook : public wxBookCtrl overview
+class wxNotebook : public wxBookCtrl
 {
 public:
 
@@ -70,7 +69,7 @@ public:
         @param style
             The window style. See wxNotebook.
         @param name
-            The name of the control (used only under Motif).
+            The name of the control.
     */
     wxNotebook(wxWindow* parent, wxWindowID id,
                const wxPoint& pos = wxDefaultPosition,
@@ -113,8 +112,7 @@ public:
     void AdvanceSelection(bool forward = true);
 
     /**
-        Sets the image list for the page control and takes ownership of
-        the list.
+        Sets the image list for the page control and takes ownership of the list.
 
         @see wxImageList, SetImageList()
     */
@@ -122,16 +120,16 @@ public:
 
     /**
         Changes the selection for the given page, returning the previous selection.
-        The call to this function does not generate the page changing events.
-        This is the only difference with SetSelection(). See
-        @ref overview_eventhandling_prog "User Generated Events"
-        for more infomation.
+
+        The call to this function does NOT generate the page changing events.
+        This is the only difference with SetSelection().
+        See @ref overview_eventhandling_prog for more infomation.
     */
     virtual int ChangeSelection(size_t page);
 
     /**
-        Creates a notebook control. See wxNotebook() for a description
-        of the parameters.
+        Creates a notebook control.
+        See wxNotebook() for a description of the parameters.
     */
     bool Create(wxWindow* parent, wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
@@ -189,6 +187,7 @@ public:
 
     /**
         Returns the currently selected page, or -1 if none was selected.
+
         Note that this method may return either the previously or newly
         selected page when called from the @c EVT_NOTEBOOK_PAGE_CHANGED handler
         depending on the platform and so wxBookCtrlEvent::GetSelection should be
@@ -198,10 +197,10 @@ public:
 
     /**
         If running under Windows and themes are enabled for the application, this
-        function
-        returns a suitable colour for painting the background of a notebook page, and
-        can be passed
-        to @c SetBackgroundColour. Otherwise, an uninitialised colour will be returned.
+        function returns a suitable colour for painting the background of a notebook
+        page, and can be passed to SetBackgroundColour().
+
+        Otherwise, an uninitialised colour will be returned.
     */
     virtual wxColour GetThemeBackgroundColour() const;
 
@@ -226,8 +225,9 @@ public:
             <TD>The point was over a currently selected page, not over any tab.
             Note that this flag is present only if wxNOT_FOUND is returned.</TD></TR>
             </TABLE>
-@return Returns the zero-based tab index or wxNOT_FOUND if there is no
-                 tab at the specified position.
+
+        @return Returns the zero-based tab index or @c wxNOT_FOUND if there is no
+                tab at the specified position.
     */
     virtual int HitTest(const wxPoint& pt, long* flags = NULL) const;
 
@@ -268,8 +268,8 @@ public:
     bool RemovePage(size_t page);
 
     /**
-        Sets the image list for the page control. It does not take
-        ownership of the image list, you must delete it yourself.
+        Sets the image list for the page control.
+        It does not take ownership of the image list, you must delete it yourself.
 
         @see wxImageList, AssignImageList()
     */
@@ -277,6 +277,7 @@ public:
 
     /**
         Sets the amount of space around each page's icon and label, in pixels.
+
         @note The vertical padding cannot be changed in wxGTK.
     */
     virtual void SetPadding(const wxSize& padding);
@@ -289,6 +290,7 @@ public:
 
     /**
         Sets the width and height of the pages.
+
         @note This method is currently not implemented for wxGTK.
     */
     virtual void SetPageSize(const wxSize& size);
@@ -301,8 +303,10 @@ public:
     /**
         Sets the selection for the given page, returning the previous selection.
         The call to this function generates the page changing events.
-        This function is deprecated and should not be used in new code. Please use the
-        ChangeSelection() function instead.
+
+        @deprecated
+        This function is deprecated and should not be used in new code.
+        Please use the ChangeSelection() function instead.
 
         @see GetSelection()
     */
