@@ -475,7 +475,6 @@ SPAN.literal {
 	text-decoration: none;
 	font-weight: bold;
 	font-family: monospace, fixed;
-	color: #008800;
 }
 
 /* we make all the following <span> tags render the text just like
