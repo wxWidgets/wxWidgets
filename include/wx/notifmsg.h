@@ -37,7 +37,7 @@ public:
     // create a notification object with the given title and message (the
     // latter may be empty in which case only the title will be shown)
     wxNotificationMessageBase(const wxString& title,
-                              const wxString& message = wxString(),
+                              const wxString& message = wxEmptyString,
                               wxWindow *parent = NULL,
                               int flags = wxICON_INFORMATION)
         : m_title(title),
@@ -144,7 +144,7 @@ private:
     public:
         wxNotificationMessage() { }
         wxNotificationMessage(const wxString& title,
-                              const wxString& message = wxString(),
+                              const wxString& message = wxEmptyString,
                               wxWindow *parent = NULL,
                               int flags = wxICON_INFORMATION)
             : wxGenericNotificationMessage(title, message, parent, flags)
