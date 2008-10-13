@@ -65,11 +65,14 @@ public:
     void CaptureAll();
 
     // take a screenshot only of the given rect
-    static wxBitmap Capture(wxRect rect);
-    static wxBitmap Capture(int x, int y, int width, int height);
+    // delay is only useful for Mac, for fixing a delay bug
+    static wxBitmap Capture(wxRect rect, int delay = 0);
+    static wxBitmap Capture(int x, int y, int width, int height, int delay = 0);
+
+    static void Delay(int seconds);
 
 
-protected:      // internal utils
+private:      // internal utils
     struct Control
     {
         Control() {}
@@ -95,7 +98,6 @@ protected:      // internal utils
 
     void Save(wxBitmap screenshot, wxString fileName);
 
-private:
     typedef std::vector<Control> ControlList;
     ControlList m_controlList;
 

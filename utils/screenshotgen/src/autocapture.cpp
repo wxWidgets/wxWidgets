@@ -21,22 +21,44 @@
 #include <wx/filename.h>
 #include "autocapture.h"
 
+#ifdef __WXMAC__
+#include <cstring>
+#endif
+
 
 // ----------------------------------------------------------------------------
 // AutoCaptureMechanism
 // ----------------------------------------------------------------------------
 
 /* static */
-wxBitmap AutoCaptureMechanism::Capture(int x, int y, int width, int height)
+void AutoCaptureMechanism::Delay(int seconds)
+{
+    using std::clock;
+    using std::clock_t;
+
+    // Wait for 3 seconds
+    clock_t start = clock();
+    while (clock() - start < CLOCKS_PER_SEC * seconds)
+        wxYieldIfNeeded();
+}
+
+/* static */
+wxBitmap AutoCaptureMechanism::Capture(int x, int y, int width, int height, int delay)
 {
     // Somehow wxScreenDC.Blit() doesn't work under Mac for now. Here is a trick.
 #ifdef __WXMAC__
 
     // wxExecute(_T("screencapture -x ") + tempfile, wxEXEC_SYNC);
 
-    system("screencapture -x /tmp/wx_screen_capture.png");
+    char captureCommand[80] =""; // a reasonable max size is 80
+
+    sprintf(captureCommand, "sleep %d;%s", delay, "screencapture -x /tmp/wx_screen_capture.png");
+
+    system(captureCommand);
 
     wxBitmap fullscreen;
+
+    if(delay) Delay(delay);
 
     do
     {
@@ -45,6 +67,9 @@ wxBitmap AutoCaptureMechanism::Capture(int x, int y, int width, int height)
     while(!fullscreen.IsOk());
 
     wxBitmap screenshot = fullscreen.GetSubBitmap(wxRect(x,y,width,height));
+
+    // to prevent loading the old screenshot next time
+    system("rm /tmp/wx_screen_capture.png");
 
 #else // Under other paltforms, take a real screenshot
 
@@ -83,10 +108,10 @@ wxBitmap AutoCaptureMechanism::Capture(int x, int y, int width, int height)
 }
 
 /* static */
-wxBitmap AutoCaptureMechanism::Capture(wxRect rect)
+wxBitmap AutoCaptureMechanism::Capture(wxRect rect, int delay)
 {
     wxPoint origin = rect.GetPosition();
-    return Capture(origin.x, origin.y, rect.GetWidth(), rect.GetHeight());
+    return Capture(origin.x, origin.y, rect.GetWidth(), rect.GetHeight(), delay);
 }
 
 void AutoCaptureMechanism::CaptureAll()
@@ -137,16 +162,10 @@ wxBitmap AutoCaptureMechanism::Capture(Control& ctrl)
                              ctrl.name, ctrl.name);
 
         choice = wxMessageBox(msg, caption, wxYES_NO, m_notebook);
-        if (choice == wxYES)
-        {
-            using std::clock;
-            using std::clock_t;
 
-            // Wait for 3 seconds
-            clock_t start = clock();
-            while (clock() - start < CLOCKS_PER_SEC * 3)
-                wxYieldIfNeeded();
-        }
+        #ifndef __WXMAC__  //not __WXMAC__
+        if (choice == wxYES)  Delay(3);
+        #endif
     }
 
     wxRect rect = GetRect(ctrl.ctrl, ctrl.flag);
