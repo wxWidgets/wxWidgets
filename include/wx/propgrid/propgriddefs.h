@@ -84,7 +84,7 @@
     // comment to use bitmap buttons
     #define wxPG_ICON_WIDTH             9
     // 1 if wxRendererNative should be employed
-    #define wxPG_USE_RENDERER_NATIVE    0
+    #define wxPG_USE_RENDERER_NATIVE    1
 
     // 1 to use double-buffer that guarantees flicker-free painting
     #define wxPG_DOUBLE_BUFFER          1
