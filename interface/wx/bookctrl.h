@@ -336,6 +336,13 @@ public:
 */
 };
 
+/**
+    wxBookCtrl is defined to one of the 'real' book controls.
+
+    See @ref overview_bookctrl for more info.
+*/
+#define wxBookCtrl      TheBestBookCtrlForTheCurrentPlatform
+
 
 /**
     @class wxBookCtrlEvent

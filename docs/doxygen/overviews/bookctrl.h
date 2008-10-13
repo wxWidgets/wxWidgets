@@ -43,25 +43,24 @@ See the @ref page_samples_notebook for an example of wxBookCtrl usage.
 
 @section overview_bookctrl_bestbookctrl Best Book
 
-wxBookCtrl is mapped to the class best suited for a given platform. Currently
+::wxBookCtrl is mapped to the class best suited for a given platform. Currently
 it provides wxChoicebook for smartphones equipped with WinCE, and wxNotebook
 for all other platforms. The mapping consists of:
 
 @beginTable
-@row2col{ wxBookCtrl, wxChoicebook or wxNotebook }
-@row2col{ wxBookCtrlEvent, wxChoicebookEvent or wxNotebookEvent }
-@row2col{ wxEVT_COMMAND_BOOKCTRL_PAGE_CHANGED,
-    wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED or
-    wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED }
-@row2col{ wxEVT_COMMAND_BOOKCTRL_PAGE_CHANGING,
-    wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING or
-    wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING }
-@row2col{ EVT_BOOKCTRL_PAGE_CHANGED(id\, fn),
-    EVT_CHOICEBOOK_PAGE_CHANGED(id, fn) or
-    EVT_NOTEBOOK_PAGE_CHANGED(id, fn) }
-@row2col{ EVT_BOOKCTRL_PAGE_CHANGING(id\, fn),
-    EVT_CHOICEBOOK_PAGE_CHANGING(id, fn) or
-    EVT_NOTEBOOK_PAGE_CHANGING(id, fn) }
+@row2col{ ::wxBookCtrl, wxChoicebook or wxNotebook }
+@row2col{ @c wxEVT_COMMAND_BOOKCTRL_PAGE_CHANGED,
+          @c wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED or
+          @c wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED }
+@row2col{ @c wxEVT_COMMAND_BOOKCTRL_PAGE_CHANGING,
+          @c wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING or
+          @c wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING }
+@row2col{ @c EVT_BOOKCTRL_PAGE_CHANGED(id\, fn),
+          @c EVT_CHOICEBOOK_PAGE_CHANGED(id, fn) or
+          @c EVT_NOTEBOOK_PAGE_CHANGED(id, fn) }
+@row2col{ @c EVT_BOOKCTRL_PAGE_CHANGING(id\, fn),
+          @c EVT_CHOICEBOOK_PAGE_CHANGING(id, fn) or
+          @c EVT_NOTEBOOK_PAGE_CHANGING(id, fn) }
 @endTable
 
 For orientation of the book controller, use following flags in style:
