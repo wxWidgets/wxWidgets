@@ -177,7 +177,7 @@ void ScreenshotFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     wxAboutDialogInfo info;
     info.SetName(_("Automatic Screenshot Generator"));
     info.SetVersion(_("1.0"));
-    info.SetDescription(_("This utility automatically creates screenshots of wxWidgets controls for ues in wxWidgets documentation."));
+    info.SetDescription(_("This utility automatically creates screenshots of wxWidgets controls for use in wxWidgets documentation."));
     info.SetCopyright(_T("(C) 2008 Utensil Candel"));
 
     wxAboutBox(info);
