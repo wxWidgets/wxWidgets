@@ -139,9 +139,9 @@ void ScreenshotFrame::InitFBControls()
     // set minimum size hints
     GetSizer()->SetSizeHints(this);
 
-	// add bitmaps to the menus
-	m_menuCapRect->SetBitmaps( wxIcon(play_xpm) );
-	m_menuEndCapRect->SetBitmaps( wxIcon(stop_xpm) );
+    // add bitmaps to the menus
+    m_menuCapRect->SetBitmap( wxIcon(play_xpm) );
+    m_menuEndCapRect->SetBitmap( wxIcon(stop_xpm) );
 }
 
 
