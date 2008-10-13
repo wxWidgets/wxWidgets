@@ -714,160 +714,140 @@ wxSocketBase& wxSocketBase::Discard()
 // timeout elapses. The polling loop runs the event loop so that
 // this won't block the GUI.
 
-bool wxSocketBase::_Wait(long seconds,
-                         long milliseconds,
-                         wxSocketEventFlags flags)
+bool
+wxSocketBase::DoWait(long seconds, long milliseconds, wxSocketEventFlags flags)
 {
-    GSocketEventFlags result;
-    long timeout; // in ms
+    wxCHECK_MSG( m_socket, false, "can't wait on invalid socket" );
 
-    // Set this to true to interrupt ongoing waits
+    // This can be set to true from Interrupt() to exit this function a.s.a.p.
     m_interrupt = false;
 
-    // Check for valid socket
-    if (!m_socket)
-        return false;
 
-    // Check for valid timeout value.
-    if (seconds != -1)
-        timeout = seconds * 1000 + milliseconds;
-    else
-        timeout = m_timeout * 1000;
+    // Use either the provided timeout or the default timeout value associated
+    // with this socket.
+    //
+    // TODO: allow waiting forever, see #9443
+    const long timeout = seconds == -1 ? m_timeout * 1000
+                                       : seconds * 1000 + milliseconds;
+    const wxMilliClock_t timeEnd = wxGetLocalTimeMillis() + timeout;
 
-    // Get the active event loop
-    wxEventLoopBase * const eventLoop = wxEventLoop::GetActive();
+    // Get the active event loop which we'll use for the message dispatching
+    // when running in the main thread
+    wxEventLoopBase *eventLoop;
+    if ( wxIsMainThread() )
+    {
+        eventLoop = wxEventLoop::GetActive();
 
 #ifdef __WXMSW__
-    wxASSERT_MSG( !wxIsMainThread() || eventLoop,
-            "Sockets won't work without a running event loop" );
+        wxASSERT_MSG( eventLoop,
+                      "Sockets won't work without a running event loop" );
 #endif // __WXMSW__
-
-    // Wait in an active polling loop.
-    //
-    // NOTE: We duplicate some of the code in OnRequest, but this doesn't
-    //   hurt. It has to be here because the (GSocket) event might arrive
-    //   a bit delayed, and it has to be in OnRequest as well because we
-    //   don't know whether the Wait functions are being used.
-    //
-    // Do this at least once (important if timeout == 0, when
-    // we are just polling). Also, if just polling, do not yield.
-
-    const wxMilliClock_t time_limit = wxGetLocalTimeMillis() + timeout;
-    bool done = false;
-    bool valid_result = false;
-
-    if (!eventLoop)
+    }
+    else // in worker thread
     {
-        // This is used to avoid a busy loop on wxBase - having a select
-        // timeout of 50 ms per iteration should be enough.
-        if (timeout > 50)
-            m_socket->SetTimeout(50);
-        else
-            m_socket->SetTimeout(timeout);
+        // We never dispatch messages from threads other than the main one.
+        eventLoop = NULL;
     }
 
-    while (!done)
+    // Wait in an active polling loop: notice that the loop is executed at
+    // least once, even if timeout is 0 (i.e. polling).
+    bool gotEvent = false;
+    for ( ;; )
     {
-        result = m_socket->Select(flags | GSOCK_LOST_FLAG);
+        // We always stop waiting when the connection is lost as it doesn't
+        // make sense to continue further, even if GSOCK_LOST_FLAG is not
+        // specified in flags to wait for.
+        const GSocketEventFlags
+            result = m_socket->Select(flags | GSOCK_LOST_FLAG);
 
-        // Incoming connection (server) or connection established (client)
-        if (result & GSOCK_CONNECTION_FLAG)
+        // Incoming connection (server) or connection established (client)?
+        if ( result & GSOCK_CONNECTION_FLAG )
         {
             m_connected = true;
             m_establishing = false;
-            valid_result = true;
+            gotEvent = true;
             break;
         }
 
-        // Data available or output buffer ready
-        if ((result & GSOCK_INPUT_FLAG) || (result & GSOCK_OUTPUT_FLAG))
+        // Data available or output buffer ready?
+        if ( (result & GSOCK_INPUT_FLAG) || (result & GSOCK_OUTPUT_FLAG) )
         {
-            valid_result = true;
+            gotEvent = true;
             break;
         }
 
         // Connection lost
-        if (result & GSOCK_LOST_FLAG)
+        if ( result & GSOCK_LOST_FLAG )
         {
             m_connected = false;
             m_establishing = false;
-            valid_result = ((flags & GSOCK_LOST_FLAG) != 0);
+            if ( flags & GSOCK_LOST_FLAG )
+                gotEvent = true;
             break;
         }
 
+        if ( m_interrupt )
+            break;
+
         // Wait more?
-        long time_left = wxMilliClockToLong(time_limit - wxGetLocalTimeMillis());
-        if ((!timeout) || (time_left <= 0) || (m_interrupt))
-            done = true;
-        else
+        const wxMilliClock_t timeNow = wxGetLocalTimeMillis();
+        if ( timeNow >= timeEnd )
+            break;
+
+        if ( eventLoop )
         {
-            if (eventLoop)
-            {
-                // from the main thread itself we have to run the event loop to
-                // let the events (including the GUI events and the low-level
-                // (not wxWidgets) events from GSocket) be processed but from
-                // another thread it is enough to just call wxThread::Yield()
-                // which will give away the rest of our time slice: the
-                // explanation is that the events will be processed by the main
-                // thread anyhow, but we don't want to eat the CPU time
-                // uselessly while sitting in the loop waiting for the data
-                if ( wxIsMainThread() )
-                {
-                    if ( eventLoop->Pending() )
-                        eventLoop->Dispatch();
-                }
-#if wxUSE_THREADS
-                else
-                    wxThread::Yield();
-#endif // wxUSE_THREADS
-            }
-            else
-            {
-                // If there's less than 50 ms left, just call select with that timeout.
-                if (time_left < 50)
-                    m_socket->SetTimeout(time_left);
-            }
+            // Dispatch the events when we run in the main thread and have an
+            // active event loop: without this sockets don't work at all under
+            // MSW as socket flags are only updated when socket messages are
+            // processed.
+            if ( eventLoop->Pending() )
+                eventLoop->Dispatch();
         }
+#if wxUSE_THREADS
+        else // no event loop or waiting in another thread
+        {
+            // We're busy waiting but at least give up the rest of our current
+            // time slice.
+            wxThread::Yield();
+        }
+#endif // wxUSE_THREADS
     }
 
-    // Set timeout back to original value (we overwrote it for polling)
-    if (!eventLoop)
-        m_socket->SetTimeout(m_timeout*1000);
-
-    return valid_result;
+    return gotEvent;
 }
 
 bool wxSocketBase::Wait(long seconds, long milliseconds)
 {
-    return _Wait(seconds, milliseconds, GSOCK_INPUT_FLAG |
-                                        GSOCK_OUTPUT_FLAG |
-                                        GSOCK_CONNECTION_FLAG |
-                                        GSOCK_LOST_FLAG);
+    return DoWait(seconds, milliseconds,
+            GSOCK_INPUT_FLAG |
+            GSOCK_OUTPUT_FLAG |
+            GSOCK_CONNECTION_FLAG |
+            GSOCK_LOST_FLAG
+        );
 }
 
 bool wxSocketBase::WaitForRead(long seconds, long milliseconds)
 {
-    // Check pushback buffer before entering _Wait
-    if (m_unread)
+    // Check pushback buffer before entering DoWait
+    if ( m_unread )
         return true;
 
-    // Note that GSOCK_INPUT_LOST has to be explicitly passed to
-    // _Wait because of the semantics of WaitForRead: a return
-    // value of true means that a GSocket_Read call will return
-    // immediately, not that there is actually data to read.
-
-    return _Wait(seconds, milliseconds, GSOCK_INPUT_FLAG | GSOCK_LOST_FLAG);
+    // Note that GSOCK_INPUT_LOST has to be explicitly passed to DoWait
+    // because of the semantics of WaitForRead: a return value of true means
+    // that a GSocket_Read call will return immediately, not that there is
+    // actually data to read.
+    return DoWait(seconds, milliseconds, GSOCK_INPUT_FLAG | GSOCK_LOST_FLAG);
 }
 
 
 bool wxSocketBase::WaitForWrite(long seconds, long milliseconds)
 {
-    return _Wait(seconds, milliseconds, GSOCK_OUTPUT_FLAG);
+    return DoWait(seconds, milliseconds, GSOCK_OUTPUT_FLAG | GSOCK_LOST_FLAG);
 }
 
 bool wxSocketBase::WaitForLost(long seconds, long milliseconds)
 {
-    return _Wait(seconds, milliseconds, GSOCK_LOST_FLAG);
+    return DoWait(seconds, milliseconds, GSOCK_LOST_FLAG);
 }
 
 // --------------------------------------------------------------------------
@@ -1002,11 +982,6 @@ void LINKAGEMODE wx_socket_callback(GSocket * WXUNUSED(socket),
 
 void wxSocketBase::OnRequest(wxSocketNotify notification)
 {
-    // NOTE: We duplicate some of the code in _Wait, but this doesn't
-    //   hurt. It has to be here because the (GSocket) event might arrive
-    //   a bit delayed, and it has to be in _Wait as well because we don't
-    //   know whether the Wait functions are being used.
-
     switch(notification)
     {
         case wxSOCKET_CONNECTION:
@@ -1241,7 +1216,7 @@ wxSocketBase *wxSocketServer::Accept(bool wait)
 
 bool wxSocketServer::WaitForAccept(long seconds, long milliseconds)
 {
-    return _Wait(seconds, milliseconds, GSOCK_CONNECTION_FLAG);
+    return DoWait(seconds, milliseconds, GSOCK_CONNECTION_FLAG);
 }
 
 bool wxSocketBase::GetOption(int level, int optname, void *optval, int *optlen)
@@ -1411,14 +1386,22 @@ bool wxSocketClient::Connect(const wxSockAddress& addr_man,
 
 bool wxSocketClient::WaitOnConnect(long seconds, long milliseconds)
 {
-    if (m_connected)                      // Already connected
+    if ( m_connected )
+    {
+        // this happens if the initial attempt to connect succeeded without
+        // blocking
         return true;
+    }
 
-    if (!m_establishing || !m_socket)     // No connection in progress
-        return false;
+    wxCHECK_MSG( m_establishing && m_socket, false,
+                 "No connection establishment attempt in progress" );
 
-    return _Wait(seconds, milliseconds, GSOCK_CONNECTION_FLAG |
-                                        GSOCK_LOST_FLAG);
+    // we must specify GSOCK_LOST_FLAG here explicitly because we must return
+    // true if the connection establishment process is finished, whether it is
+    // over because we successfully connected or because we were not able to
+    // connect
+    return DoWait(seconds, milliseconds,
+        GSOCK_CONNECTION_FLAG | GSOCK_LOST_FLAG);
 }
 
 // ==========================================================================

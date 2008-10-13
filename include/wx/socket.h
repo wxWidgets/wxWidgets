@@ -137,11 +137,25 @@ public:
   wxSocketBase& Write(const void *buffer, wxUint32 nbytes);
   wxSocketBase& WriteMsg(const void *buffer, wxUint32 nbytes);
 
-  void InterruptWait() { m_interrupt = true; }
+  // all Wait() functions wait until their condition is satisfied or the
+  // timeout expires; if seconds == -1 (default) then m_timeout value is used
+  //
+  // it is also possible to call InterruptWait() to cancel any current Wait()
+
+  // wait for anything at all to happen with this socket
   bool Wait(long seconds = -1, long milliseconds = 0);
+
+  // wait until we can read from or write to the socket without blocking
+  // (notice that this does not mean that the operation will succeed but only
+  // that it will return immediately)
   bool WaitForRead(long seconds = -1, long milliseconds = 0);
   bool WaitForWrite(long seconds = -1, long milliseconds = 0);
+
+  // wait until the connection is terminated
   bool WaitForLost(long seconds = -1, long milliseconds = 0);
+
+  void InterruptWait() { m_interrupt = true; }
+
 
   wxSocketFlags GetFlags() const { return m_flags; }
   void SetFlags(wxSocketFlags flags);
@@ -182,7 +196,17 @@ private:
   // low level IO
   wxUint32 _Read(void* buffer, wxUint32 nbytes);
   wxUint32 _Write(const void *buffer, wxUint32 nbytes);
-  bool     _Wait(long seconds, long milliseconds, wxSocketEventFlags flags);
+
+  // wait until the given flags are set for this socket or the given timeout
+  // (or m_timeout) expires
+  //
+  // notice that GSOCK_LOST_FLAG is always taken into account but the return
+  // value depends on whether it is included in flags or not: if it is, and the
+  // connection is indeed lost, true is returned, but if it isn't then the
+  // function returns false in this case
+  //
+  // false is always returned if we returned because of the timeout expiration
+  bool DoWait(long seconds, long milliseconds, wxSocketEventFlags flags);
 
   // pushback buffer
   void     Pushback(const void *buffer, wxUint32 size);
@@ -203,7 +227,7 @@ private:
   bool          m_closed;           // was the other end closed?
                                     // (notice that m_error is also set then)
   wxUint32      m_lcount;           // last IO transaction size
-  unsigned long m_timeout;          // IO timeout value
+  unsigned long m_timeout;          // IO timeout value in seconds
   wxList        m_states;           // stack of states
   bool          m_interrupt;        // interrupt ongoing wait operations?
   bool          m_beingDeleted;     // marked for delayed deletion?
