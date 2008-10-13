@@ -125,7 +125,7 @@ protected:
         It's declared @c protected so that wxObjectRefData instances
         will never be destroyed directly but only as result of a DecRef() call.
     */
-    ~wxObjectRefData();
+    virtual ~wxObjectRefData();
 
 public:
     /**

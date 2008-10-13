@@ -385,7 +385,7 @@ public:
         @remarks Always returns @false under Windows since dialogs cannot be
                  iconized.
     */
-    bool IsIconized() const;
+    virtual bool IsIconized() const;
 
     /**
         A static function returning @true if layout adaptation is enabled for

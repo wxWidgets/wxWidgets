@@ -219,7 +219,7 @@ public:
         The default implementation returns text height, as if this control was
         a normal combobox.
     */
-    wxCoord OnMeasureItem(size_t item) const;
+    virtual wxCoord OnMeasureItem(size_t item) const;
 
     /**
         The derived class may implement this method to return the width of the
@@ -228,6 +228,6 @@ public:
 
         The default implementation returns -1.
     */
-    wxCoord OnMeasureItemWidth(size_t item) const;
+    virtual wxCoord OnMeasureItemWidth(size_t item) const;
 };
 

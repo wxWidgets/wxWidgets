@@ -165,7 +165,7 @@ public:
         constructor has been used (for example, the brush is a member of a class, or
         @NULL has been assigned to it).
     */
-    bool IsOk() const;
+    virtual bool IsOk() const;
 
     //@{
     /**

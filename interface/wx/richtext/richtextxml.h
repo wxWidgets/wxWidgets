@@ -37,7 +37,7 @@ public:
     */
     wxRichTextXMLHandler(const wxString& name = wxT("XML"),
                          const wxString& ext = wxT("xml"),
-                         int type = wxRICHTEXT_TYPE_XML) const;
+                         int type = wxRICHTEXT_TYPE_XML);
 
     /**
         Returns @true.
@@ -57,12 +57,12 @@ public:
     /**
         Loads buffer context from the given stream.
     */
-    bool DoLoadFile(wxRichTextBuffer* buffer, wxInputStream& stream);
+    virtual bool DoLoadFile(wxRichTextBuffer* buffer, wxInputStream& stream);
 
     /**
         Saves buffer context to the given stream.
     */
-    bool DoSaveFile(wxRichTextBuffer* buffer, wxOutputStream& stream);
+    virtual bool DoSaveFile(wxRichTextBuffer* buffer, wxOutputStream& stream);
 
     /**
         Recursively exports an object to the stream.

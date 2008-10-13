@@ -1069,7 +1069,7 @@ public:
 
         @see WriteText()
     */
-    void AppendText(const wxString& text);
+    virtual void AppendText(const wxString& text);
 
     /**
         Call this function to enable auto-completion of the text typed in a
@@ -1087,7 +1087,7 @@ public:
 
         @see AutoCompleteFileNames()
     */
-    bool AutoComplete(const wxArrayString& choices);
+    virtual bool AutoComplete(const wxArrayString& choices);
 
     /**
         Call this function to enable auto-completion of the text typed in a
@@ -1105,17 +1105,17 @@ public:
 
         @see AutoComplete()
     */
-    bool AutoCompleteFileNames();
+    virtual bool AutoCompleteFileNames();
 
     /**
         Returns @true if the selection can be copied to the clipboard.
     */
-    virtual bool CanCopy();
+    virtual bool CanCopy() const;
 
     /**
         Returns @true if the selection can be cut to the clipboard.
     */
-    virtual bool CanCut();
+    virtual bool CanCut() const;
 
     /**
         Returns @true if the contents of the clipboard can be pasted into the
@@ -1124,19 +1124,19 @@ public:
         On some platforms (Motif, GTK) this is an approximation and returns
         @true if the control is editable, @false otherwise.
     */
-    virtual bool CanPaste();
+    virtual bool CanPaste() const;
 
     /**
         Returns @true if there is a redo facility available and the last
         operation can be redone.
     */
-    virtual bool CanRedo();
+    virtual bool CanRedo() const;
 
     /**
         Returns @true if there is an undo facility available and the last
         operation can be undone.
     */
-    virtual bool CanUndo();
+    virtual bool CanUndo() const;
 
     /**
         Sets the new text control value.
@@ -1326,7 +1326,7 @@ public:
 
         If there is no selection, the returned string is empty.
     */
-    virtual wxString GetStringSelection();
+    virtual wxString GetStringSelection() const;
 
     /**
         Returns the style at this position in the text control.

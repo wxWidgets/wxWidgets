@@ -358,7 +358,7 @@ public:
     /**
         Clears the buffer.
     */
-    void Clear();
+    virtual void Clear();
 
     //@{
     /**
@@ -534,7 +534,7 @@ public:
     /**
         Finds a handler by name.
     */
-    wxRichTextFileHandler* FindHandler(const wxString& name);
+    static wxRichTextFileHandler* FindHandler(const wxString& name);
 
     /**
         Finds a handler by filename or, if supplied, type.
@@ -598,7 +598,7 @@ public:
         style attributes. To get the character or paragraph style alone,
         use GetUncombinedStyle().
     */
-    bool GetStyle(long position, wxTextAttr& style);
+    virtual bool GetStyle(long position, wxTextAttr& style);
 
     /**
         This function gets a style representing the common, combined attributes in the
@@ -646,7 +646,7 @@ public:
         will fetch the paragraph attributes.
         Otherwise, it will return the character attributes.
     */
-    bool GetUncombinedStyle(long position, wxTextAttr& style);
+    virtual bool GetUncombinedStyle(long position, wxTextAttr& style);
 
     /**
         Finds the text position for the given position, putting the position in
@@ -655,7 +655,7 @@ public:
 
         @return One of the ::wxRichTextHitTestFlags values.
     */
-    int HitTest(wxDC& dc, const wxPoint& pt, long& textPosition);
+    virtual int HitTest(wxDC& dc, const wxPoint& pt, long& textPosition);
 
     /**
         Initialisation.
@@ -810,7 +810,7 @@ public:
         only affects the style currently being applied (for example, setting the default
         style to bold will cause subsequently inserted text to be bold).
     */
-    void SetBasicStyle(const wxTextAttr& style);
+    virtual void SetBasicStyle(const wxTextAttr& style);
 
     /**
         Sets the default style, affecting the style currently being applied
@@ -888,9 +888,8 @@ public:
         - wxRICHTEXT_SETSTYLE_REMOVE: removes the specified style.
           Only the style flags are used in this operation.
     */
-    bool SetStyle(const wxRichTextRange& range,
-                  const wxTextAttr& style,
-                  int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
+    virtual bool SetStyle(const wxRichTextRange& range, const wxTextAttr& style,
+                          int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
 
     /**
         Sets the current style sheet, if any.

@@ -1867,7 +1867,7 @@ public:
         @param y
             Stores the screen x coordinate and receives the client x coordinate.
     */
-    virtual void ScreenToClient(int* x, int* y) const;
+    void ScreenToClient(int* x, int* y) const;
 
     /**
         Converts from screen to client window coordinates.
@@ -1875,7 +1875,7 @@ public:
         @param pt
             The screen position.
     */
-    virtual wxPoint ScreenToClient(const wxPoint& pt) const;
+    wxPoint ScreenToClient(const wxPoint& pt) const;
 
     /**
         Scrolls the window by the given number of lines down (if @a lines is

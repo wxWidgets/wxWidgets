@@ -213,7 +213,7 @@ public:
     /**
         Returns @true if icon data is present.
     */
-    bool IsOk() const;
+    virtual bool IsOk() const;
 
     /**
         Loads an icon from a file or resource.

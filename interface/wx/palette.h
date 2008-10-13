@@ -139,7 +139,7 @@ public:
     /**
         Returns @true if palette data is present.
     */
-    bool IsOk() const;
+    virtual bool IsOk() const;
 
     /**
         Assignment operator, using @ref overview_refcount.

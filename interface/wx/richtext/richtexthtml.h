@@ -85,7 +85,7 @@ public:
     /**
         Saves the buffer content to the HTML stream.
     */
-    bool DoSaveFile(wxRichTextBuffer* buffer, wxOutputStream& stream);
+    virtual bool DoSaveFile(wxRichTextBuffer* buffer, wxOutputStream& stream);
 
     /**
         Returns the mapping for converting point sizes to HTML font sizes.

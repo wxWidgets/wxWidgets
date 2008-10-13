@@ -391,7 +391,7 @@ public:
 
         @note the anchor is NOT part of the left location.
     */
-    wxString GetAnchor(const wxString& location) const;
+    static wxString GetAnchor(const wxString& location);
 
     /**
         Returns the left location string extracted from @e location.
@@ -401,7 +401,7 @@ public:
         GetLeftLocation("file:myzipfile.zip#zip:index.htm") == "file:myzipfile.zip"
         @endcode
     */
-    wxString GetLeftLocation(const wxString& location) const;
+    static wxString GetLeftLocation(const wxString& location);
 
     /**
         Returns the MIME type based on @b extension of @a location.
@@ -423,7 +423,7 @@ public:
         GetProtocol("file:myzipfile.zip#zip:index.htm") == "zip"
         @endcode
     */
-    wxString GetProtocol(const wxString& location) const;
+    static wxString GetProtocol(const wxString& location);
 
     /**
         Returns the right location string extracted from @a location.
@@ -433,7 +433,7 @@ public:
         GetRightLocation("file:myzipfile.zip#zip:index.htm") == "index.htm"
         @endcode
     */
-    wxString GetRightLocation(const wxString& location) const;
+    static wxString GetRightLocation(const wxString& location);
 
     /**
         Opens the file and returns wxFSFile pointer or @NULL if failed.

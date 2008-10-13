@@ -470,7 +470,7 @@ public:
     /**
         The dtor is private because only DecRef() can delete us.
     */
-    ~wxGridCellEditor();
+    virtual ~wxGridCellEditor();
 
     /**
         Fetch the value from the table and prepare the edit control
@@ -723,12 +723,12 @@ public:
     /**
         Returns @true if the Alt key was down at the time of the event.
     */
-    bool AltDown();
+    bool AltDown() const;
 
     /**
         Returns @true if the Control key was down at the time of the event.
     */
-    bool ControlDown();
+    bool ControlDown() const;
 
     /**
         Top left corner of the rectangular area that was (de)selected.
@@ -763,7 +763,7 @@ public:
     /**
         Returns @true if the Meta key was down at the time of the event.
     */
-    bool MetaDown();
+    bool MetaDown() const;
 
     /**
         Returns @true if the area was selected, @false otherwise.
@@ -773,7 +773,7 @@ public:
     /**
         Returns @true if the Shift key was down at the time of the event.
     */
-    bool ShiftDown();
+    bool ShiftDown() const;
 };
 
 
@@ -891,12 +891,12 @@ public:
     /**
         Returns @true if the Alt key was down at the time of the event.
     */
-    bool AltDown();
+    bool AltDown() const;
 
     /**
         Returns @true if the Control key was down at the time of the event.
     */
-    bool ControlDown();
+    bool ControlDown() const;
 
     /**
         Position in pixels at which the event occurred.
@@ -911,12 +911,12 @@ public:
     /**
         Returns @true if the Meta key was down at the time of the event.
     */
-    bool MetaDown();
+    bool MetaDown() const;
 
     /**
         Returns @true if the Shift key was down at the time of the event.
     */
-    bool ShiftDown();
+    bool ShiftDown() const;
 };
 
 
@@ -1146,12 +1146,12 @@ public:
     /**
         Returns @true if the Alt key was down at the time of the event.
     */
-    bool AltDown();
+    bool AltDown() const;
 
     /**
         Returns @true if the Control key was down at the time of the event.
     */
-    bool ControlDown();
+    bool ControlDown() const;
 
     /**
         Column at which the event occurred.
@@ -1171,7 +1171,7 @@ public:
     /**
         Returns @true if the Meta key was down at the time of the event.
     */
-    bool MetaDown();
+    bool MetaDown() const;
 
     /**
         Returns @true if the user is selecting grid cells, @false -- if
@@ -1182,7 +1182,7 @@ public:
     /**
         Returns @true if the Shift key was down at the time of the event.
     */
-    bool ShiftDown();
+    bool ShiftDown() const;
 };
 
 

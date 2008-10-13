@@ -884,20 +884,23 @@ public:
     size_t OnSysRead(void* buffer, size_t bufsize);
 
     /**
+        See OnSysRead().
+    */
+    size_t OnSysWrite(const void* buffer, size_t bufsize);
+
+
+protected:
+
+    /**
         Internal function.
         It is called when the stream needs to change the current position.
     */
-    wxFileOffset OnSysSeek(wxFileOffset pos, wxSeekMode mode);
+    virtual wxFileOffset OnSysSeek(wxFileOffset pos, wxSeekMode mode);
 
     /**
         Internal function.
         It is called when the stream needs to know the real position.
     */
-    wxFileOffset OnSysTell() const;
-
-    /**
-        See OnSysRead().
-    */
-    size_t OnSysWrite(const void* buffer, size_t bufsize);
+    virtual wxFileOffset OnSysTell() const;
 };
 

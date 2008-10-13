@@ -79,7 +79,7 @@ public:
 
         @see GetSelectedTextColour()
     */
-    wxColour GetSelectedTextBgColour(const wxColour& colBg) const;
+    virtual wxColour GetSelectedTextBgColour(const wxColour& colBg) const;
 
     /**
         This virtual function may be overridden to customize the appearance of the
@@ -91,7 +91,7 @@ public:
         @see GetSelectedTextBgColour(),
              wxVListBox::SetSelectionBackground, wxSystemSettings::GetColour
     */
-    wxColour GetSelectedTextColour(const wxColour& colFg) const;
+    virtual wxColour GetSelectedTextColour(const wxColour& colFg) const;
 
     /**
         This method must be implemented in the derived class and should return
@@ -111,7 +111,7 @@ public:
         This function may be overridden to decorate HTML returned by
         OnGetItem().
     */
-    wxString OnGetItemMarkup(size_t n) const;
+    virtual wxString OnGetItemMarkup(size_t n) const;
 
     /**
         Called when the user clicks on hypertext link. Does nothing by default.

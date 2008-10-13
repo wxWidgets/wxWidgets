@@ -128,7 +128,7 @@ public:
         Returns @true if the colour object is valid (the colour has been initialised
         with RGB values).
     */
-    bool IsOk() const;
+    virtual bool IsOk() const;
 
     /**
         Returns the red intensity.

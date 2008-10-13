@@ -265,7 +265,7 @@ public:
     /**
         Returns @true if the pen is initialised.
     */
-    bool IsOk() const;
+    virtual bool IsOk() const;
 
     /**
         Sets the pen cap style, which may be one of @c wxCAP_ROUND, @c wxCAP_PROJECTING

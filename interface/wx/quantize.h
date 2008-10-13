@@ -44,22 +44,22 @@ public:
         Specify an optional palette pointer to receive the resulting palette.
         This palette may be passed to ConvertImageToBitmap, for example.
     */
-    bool Quantize(const wxImage& src, wxImage& dest,
-                  wxPalette** pPalette, int desiredNoColours = 236,
-                  unsigned char** eightBitData = 0,
-                  int flags = wxQUANTIZE_INCLUDE_WINDOWS_COLOURS
-                             |wxQUANTIZE_FILL_DESTINATION_IMAGE
-                             |wxQUANTIZE_RETURN_8BIT_DATA);
+    static bool Quantize(const wxImage& src, wxImage& dest,
+                         wxPalette** pPalette, int desiredNoColours = 236,
+                         unsigned char** eightBitData = 0,
+                         int flags = wxQUANTIZE_INCLUDE_WINDOWS_COLOURS|
+                                     wxQUANTIZE_FILL_DESTINATION_IMAGE|
+                                     wxQUANTIZE_RETURN_8BIT_DATA);
 
     /**
         This version sets a palette in the destination image so you don't
         have to manage it yourself.
     */
-    bool Quantize(const wxImage& src, wxImage& dest,
-                  int desiredNoColours = 236,
-                  unsigned char** eightBitData = 0,
-                  int flags = wxQUANTIZE_INCLUDE_WINDOWS_COLOURS
-                             |wxQUANTIZE_FILL_DESTINATION_IMAGE
-                             |wxQUANTIZE_RETURN_8BIT_DATA);
+    static bool Quantize(const wxImage& src, wxImage& dest,
+                         int desiredNoColours = 236,
+                         unsigned char** eightBitData = 0,
+                         int flags = wxQUANTIZE_INCLUDE_WINDOWS_COLOURS|
+                                     wxQUANTIZE_FILL_DESTINATION_IMAGE|
+                                     wxQUANTIZE_RETURN_8BIT_DATA);
 };
 

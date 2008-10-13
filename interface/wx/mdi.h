@@ -276,7 +276,7 @@ public:
         width and height.
         @endWxPythonOnly
     */
-    virtual void GetClientSize(int* width, int* height) const;
+    void GetClientSize(int* width, int* height) const;
 
     /**
         Returns a pointer to the client window.

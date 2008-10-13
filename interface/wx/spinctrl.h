@@ -127,7 +127,7 @@ public:
         @note this is currently only implemented for Windows and generic versions
               of the control.
     */
-    void SetSelection(long from, long to);
+    virtual void SetSelection(long from, long to);
 
     /**
         Sets the value of the spin control. Use the variant using int instead.

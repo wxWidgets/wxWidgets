@@ -492,7 +492,7 @@ public:
     /**
         Returns @true if bitmap data is present.
     */
-    bool IsOk() const;
+    virtual bool IsOk() const;
 
     /**
         Loads a bitmap from a file or resource.

@@ -201,7 +201,7 @@ public:
 
         @todo Change this function signature to non-const.
     */
-    void OnDrawBackground(wxDC& dc, const wxRect& rect, size_t n) const;
+    virtual void OnDrawBackground(wxDC& dc, const wxRect& rect, size_t n) const;
 
     /**
         The derived class must implement this function to actually draw the

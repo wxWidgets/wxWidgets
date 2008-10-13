@@ -84,7 +84,7 @@ public:
         (including GTK+) where the window manager may not support this operation
         and there is no way to find out.
     */
-    bool EnableCloseButton(bool enable = true);
+    virtual bool EnableCloseButton(bool enable = true);
 
     /**
         Returns a pointer to the button which is the default for this window, or
@@ -115,7 +115,7 @@ public:
 
         @see SetTitle()
     */
-    wxString GetTitle() const;
+    virtual wxString GetTitle() const;
 
     /**
         Unique to the wxWinCE port. Responds to showing/hiding SIP (soft input
@@ -153,17 +153,17 @@ public:
 
         @see ShowFullScreen()
     */
-    bool IsFullScreen();
+    virtual bool IsFullScreen() const;
 
     /**
         Returns @true if the window is iconized.
     */
-    bool IsIconized() const;
+    virtual bool IsIconized() const;
 
     /**
         Returns @true if the window is maximized.
     */
-    bool IsMaximized() const;
+    virtual bool IsMaximized() const;
 
     /**
         This method is specific to wxUniversal port.
@@ -394,7 +394,7 @@ public:
 
         @see IsFullScreen()
     */
-    bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
+    virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
 
     /**
         This method is specific to wxUniversal port.

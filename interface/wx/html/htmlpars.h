@@ -106,7 +106,7 @@ public:
         First it finds a handler capable of handling this tag and then it calls
         handler's HandleTag method.
     */
-    void AddTag(const wxHtmlTag& tag);
+    virtual void AddTag(const wxHtmlTag& tag);
 
     /**
         Adds handler to the internal list ( hash table) of handlers. This

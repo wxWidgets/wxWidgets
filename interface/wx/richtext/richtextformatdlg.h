@@ -156,9 +156,8 @@ public:
         Apply attributes to the given range, only changing attributes that
         need to be changed.
     */
-    bool ApplyStyle(wxRichTextCtrl* ctrl,
-                    const wxRichTextRange& range,
-                    int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_OPTIMIZE);
+    virtual bool ApplyStyle(wxRichTextCtrl* ctrl, const wxRichTextRange& range,
+                            int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_OPTIMIZE);
 
     /**
         Creation: see wxRichTextFormattingDialog() "the constructor" for

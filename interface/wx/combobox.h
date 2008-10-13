@@ -179,42 +179,42 @@ public:
         Returns @true if the combobox is editable and there is a text selection
         to copy to the clipboard. Only available on Windows.
     */
-    bool CanCopy() const;
+    virtual bool CanCopy() const;
 
     /**
         Returns @true if the combobox is editable and there is a text selection
         to copy to the clipboard. Only available on Windows.
     */
-    bool CanCut() const;
+    virtual bool CanCut() const;
 
     /**
         Returns @true if the combobox is editable and there is text on the
         clipboard that can be pasted into the text field. Only available on
         Windows.
     */
-    bool CanPaste() const;
+    virtual bool CanPaste() const;
 
     /**
         Returns @true if the combobox is editable and the last undo can be
         redone. Only available on Windows.
     */
-    bool CanRedo() const;
+    virtual bool CanRedo() const;
 
     /**
         Returns @true if the combobox is editable and the last edit can be
         undone. Only available on Windows.
     */
-    bool CanUndo() const;
+    virtual bool CanUndo() const;
 
     /**
         Copies the selected text to the clipboard.
     */
-    void Copy();
+    virtual void Copy();
 
     /**
         Copies the selected text to the clipboard and removes the selection.
     */
-    void Cut();
+    virtual void Cut();
 
     /**
         This function does the same things as wxChoice::GetCurrentSelection()
@@ -229,7 +229,7 @@ public:
         @note Under wxMSW, this function always returns 0 if the combobox
               doesn't have the focus.
     */
-    long GetInsertionPoint() const;
+    virtual long GetInsertionPoint() const;
 
     /**
         Returns the last position in the combobox text field.
@@ -248,17 +248,17 @@ public:
     /**
         Returns the current value in the combobox text field.
     */
-    wxString GetValue() const;
+    virtual wxString GetValue() const;
 
     /**
         Pastes text from the clipboard to the text field.
     */
-    void Paste();
+    virtual void Paste();
 
     /**
         Redoes the last undo in the text field. Windows only.
     */
-    void Redo();
+    virtual void Redo();
 
     /**
         Removes the text between the two positions in the combobox text field.
@@ -268,7 +268,7 @@ public:
         @param to
             The last position.
     */
-    void Remove(long from, long to);
+    virtual void Remove(long from, long to);
 
     /**
         Replaces the text between two positions with the given text, in the
@@ -281,7 +281,7 @@ public:
         @param text
             The text to insert.
     */
-    void Replace(long from, long to, const wxString& text);
+    virtual void Replace(long from, long to, const wxString& text);
 
     /**
         Sets the insertion point in the combobox text field.
@@ -289,12 +289,12 @@ public:
         @param pos
             The new insertion point.
     */
-    void SetInsertionPoint(long pos);
+    virtual void SetInsertionPoint(long pos);
 
     /**
         Sets the insertion point at the end of the combobox text field.
     */
-    void SetInsertionPointEnd();
+    virtual void SetInsertionPointEnd();
 
     /**
         Selects the text between the two positions, in the combobox text field.
@@ -321,11 +321,11 @@ public:
         @param text
             The text to set.
     */
-    void SetValue(const wxString& text);
+    virtual void SetValue(const wxString& text);
 
     /**
         Undoes the last edit in the text field. Windows only.
     */
-    void Undo();
+    virtual void Undo();
 };
 

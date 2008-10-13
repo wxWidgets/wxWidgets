@@ -149,7 +149,7 @@ public:
 
         @note On PocketPC, no buttons are created.
     */
-    void CreateButtons(int flags = wxOK|wxCANCEL);
+    virtual void CreateButtons(int flags = wxOK|wxCANCEL);
 
     /**
         Returns the book control that will contain your settings pages.

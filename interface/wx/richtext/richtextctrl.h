@@ -516,7 +516,7 @@ public:
     /**
         Currently this simply returns @c wxSize(10, 10).
     */
-    wxSize DoGetBestSize() const;
+    virtual wxSize DoGetBestSize() const;
 
     /**
         Ends alignment.
@@ -1427,7 +1427,7 @@ public:
     /**
         Replaces existing content with the given text.
     */
-    void SetValue(const wxString& value);
+    virtual void SetValue(const wxString& value);
 
     /**
         A helper function setting up scrollbars, for example after a resize.
@@ -1472,7 +1472,7 @@ public:
     /**
         Writes an image block at the current insertion point.
     */
-    bool WriteImage(const wxRichTextImageBlock& imageBlock);
+    virtual bool WriteImage(const wxRichTextImageBlock& imageBlock);
 
     //@{
     /**

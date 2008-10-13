@@ -90,13 +90,13 @@ public:
     /**
         Delete all lines from the file, set current line number to 0.
     */
-    void Clear() const;
+    void Clear();
 
     /**
         Closes the file and frees memory, @b "losing all changes".
         Use Write() if you want to save them.
     */
-    bool Close() const;
+    bool Close();
 
     //@{
     /**
@@ -213,7 +213,7 @@ public:
         Changes the value returned by GetCurrentLine() and used by GetFirstLine()
         and GetNextLine().
     */
-    void GoToLine(size_t n) const;
+    void GoToLine(size_t n);
 
     /**
         Guess the type of file (which is supposed to be opened).
@@ -252,7 +252,7 @@ public:
     /**
         Delete line number @a n from the file.
     */
-    void RemoveLine(size_t n) const;
+    void RemoveLine(size_t n);
 
     /**
         Change the file on disk.

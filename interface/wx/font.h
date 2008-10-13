@@ -462,7 +462,7 @@ public:
     /**
         Returns @true if this object is a valid font, @false otherwise.
     */
-    bool IsOk() const;
+    virtual bool IsOk() const;
 
     //@{
     /**

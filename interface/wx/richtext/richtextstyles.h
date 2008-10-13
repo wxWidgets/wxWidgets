@@ -292,7 +292,7 @@ public:
     /**
         Returns the HTML for this item.
     */
-    wxString OnGetItem(size_t n) const;
+    virtual wxString OnGetItem(size_t n) const;
 
     /**
         Implements left click behaviour, applying the clicked style to the

@@ -96,27 +96,27 @@ public:
         Convert device X coordinate to logical coordinate, using the current
         mapping mode.
     */
-    wxCoord DeviceToLogicalX(wxCoord x);
+    wxCoord DeviceToLogicalX(wxCoord x) const;
 
     /**
         Convert device X coordinate to relative logical coordinate, using the
         current mapping mode but ignoring the x axis orientation. Use this
         function for converting a width, for example.
     */
-    wxCoord DeviceToLogicalXRel(wxCoord x);
+    wxCoord DeviceToLogicalXRel(wxCoord x) const;
 
     /**
         Converts device Y coordinate to logical coordinate, using the current
         mapping mode.
     */
-    wxCoord DeviceToLogicalY(wxCoord y);
+    wxCoord DeviceToLogicalY(wxCoord y) const;
 
     /**
         Convert device Y coordinate to relative logical coordinate, using the
         current mapping mode but ignoring the y axis orientation. Use this
         function for converting a height, for example.
     */
-    wxCoord DeviceToLogicalYRel(wxCoord y);
+    wxCoord DeviceToLogicalYRel(wxCoord y) const;
 
     /**
         Draws an arc of a circle, centred on (@a xc, @a yc), with starting
@@ -352,12 +352,12 @@ public:
     /**
         Gets the character height of the currently set font.
     */
-    wxCoord GetCharHeight();
+    wxCoord GetCharHeight() const;
 
     /**
         Gets the average character width of the currently set font.
     */
-    wxCoord GetCharWidth();
+    wxCoord GetCharWidth() const;
 
     /**
         Not implemented.
@@ -379,14 +379,14 @@ public:
 
         @see SetLogicalFunction()
     */
-    int GetLogicalFunction();
+    int GetLogicalFunction() const;
 
     /**
         Gets the mapping mode for the device context.
 
         @see SetMapMode()
     */
-    int GetMapMode();
+    int GetMapMode() const;
 
     //@{
     /**
@@ -401,7 +401,7 @@ public:
     /**
         Not implemented.
     */
-    bool GetPixel(wxCoord x, wxCoord y, wxColour* colour);
+    bool GetPixel(wxCoord x, wxCoord y, wxColour* colour) const;
 
     /**
         For a Windows printer device context, this gets the horizontal and
@@ -467,47 +467,47 @@ public:
         Converts logical X coordinate to device coordinate, using the current
         mapping mode.
     */
-    wxCoord LogicalToDeviceX(wxCoord x);
+    wxCoord LogicalToDeviceX(wxCoord x) const;
 
     /**
         Converts logical X coordinate to relative device coordinate, using the
         current mapping mode but ignoring the x axis orientation. Use this for
         converting a width, for example.
     */
-    wxCoord LogicalToDeviceXRel(wxCoord x);
+    wxCoord LogicalToDeviceXRel(wxCoord x) const;
 
     /**
         Converts logical Y coordinate to device coordinate, using the current
         mapping mode.
     */
-    wxCoord LogicalToDeviceY(wxCoord y);
+    wxCoord LogicalToDeviceY(wxCoord y) const;
 
     /**
         Converts logical Y coordinate to relative device coordinate, using the
         current mapping mode but ignoring the y axis orientation. Use this for
         converting a height, for example.
     */
-    wxCoord LogicalToDeviceYRel(wxCoord y);
+    wxCoord LogicalToDeviceYRel(wxCoord y) const;
 
     /**
         Gets the maximum horizontal extent used in drawing commands so far.
     */
-    wxCoord MaxX();
+    wxCoord MaxX() const;
 
     /**
         Gets the maximum vertical extent used in drawing commands so far.
     */
-    wxCoord MaxY();
+    wxCoord MaxY() const;
 
     /**
         Gets the minimum horizontal extent used in drawing commands so far.
     */
-    wxCoord MinX();
+    wxCoord MinX() const;
 
     /**
         Gets the minimum vertical extent used in drawing commands so far.
     */
-    wxCoord MinY();
+    wxCoord MinY() const;
 
     /**
         Returns @true if the DC is ok to use. @false values arise from being

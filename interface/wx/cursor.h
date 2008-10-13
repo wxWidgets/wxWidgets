@@ -206,7 +206,7 @@ public:
     /**
         Returns @true if cursor data is present.
     */
-    bool IsOk() const;
+    virtual bool IsOk() const;
 
     /**
         Assignment operator, using @ref overview_refcount "reference counting".
