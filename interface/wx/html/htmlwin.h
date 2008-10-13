@@ -44,7 +44,7 @@ public:
     /**
         Constructor. The parameters are the same as wxScrolled::wxScrolled()
         constructor.
-        
+
         @param style
             Window style. See wxHtmlWindow.
     */
@@ -67,10 +67,10 @@ public:
 
     /**
         Appends HTML fragment to currently displayed text and refreshes the window.
-        
+
         @param source
             HTML code fragment
-        
+
         @return @false if an error occurred, @true otherwise.
     */
     bool AppendToPage(const wxString& source);
@@ -138,9 +138,9 @@ public:
 
     /**
         Loads HTML page from file and displays it.
-        
+
         @return @false if an error occurred, @true otherwise
-        
+
         @see LoadPage()
     */
     bool LoadFile(const wxFileName& filename);
@@ -148,51 +148,16 @@ public:
     /**
         Unlike SetPage this function first loads HTML page from @a location
         and then displays it. See example:
-        
+
         @param location
             The address of document. See wxFileSystem for details on address format and
         behaviour of "opener".
-        
+
         @return @false if an error occurred, @true otherwise
-        
+
         @see LoadFile()
     */
     virtual bool LoadPage(const wxString& location);
-
-    /**
-        This method is called when a mouse button is clicked inside wxHtmlWindow.
-        The default behaviour is to emit a wxHtmlCellEvent
-        and, if the event was not processed or skipped, call
-        OnLinkClicked() if the cell contains an
-        hypertext link.
-        Overloading this method is deprecated; intercept the event instead.
-        
-        @param cell
-            The cell inside which the mouse was clicked, always a simple
-            (i.e. non-container) cell
-        @param x, y
-            The logical coordinates of the click point
-        @param event
-            The mouse event containing other information about the click
-        
-        @return @true if a link was clicked, @false otherwise.
-    */
-    virtual bool OnCellClicked(wxHtmlCell cell, wxCoord x, wxCoord y,
-                               const wxMouseEvent& event);
-
-    /**
-        This method is called when a mouse moves over an HTML cell.
-        Default behaviour is to emit a wxHtmlCellEvent.
-        Overloading this method is deprecated; intercept the event instead.
-        
-        @param cell
-            The cell inside which the mouse is currently, always a simple
-            (i.e. non-container) cell
-        @param x, y
-            The logical coordinates of the click point
-    */
-    virtual void OnCellMouseHover(wxHtmlCell cell, wxCoord x,
-                                  wxCoord y);
 
     /**
         Called when user clicks on hypertext link. Default behaviour is to emit a
@@ -211,42 +176,42 @@ public:
         You can override OnOpeningURL to selectively block some
         URLs (e.g. for security reasons) or to redirect them elsewhere. Default
         behaviour is to always return @c wxHTML_OPEN.
-        
+
         @param type
             Indicates type of the resource. Is one of
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
             wxHTML_URL_PAGE
-        
-        
-        
-        
+
+
+
+
             Opening a HTML page.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxHTML_URL_IMAGE
-        
-        
-        
-        
+
+
+
+
             Opening an image.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxHTML_URL_OTHER
-        
-        
-        
-        
+
+
+
+
             Opening a resource that doesn't fall into
             any other category.
         @param url
@@ -269,7 +234,7 @@ public:
         if given, otherwise it saves info into currently selected path.
         The values are stored in sub-path @c wxHtmlWindow
         Read values: all things set by SetFonts, SetBorders.
-        
+
         @param cfg
             wxConfig from which you want to read the configuration.
         @param path
@@ -280,7 +245,7 @@ public:
 
     /**
         Selects all text in the window.
-        
+
         @see SelectLine(), SelectWord()
     */
     void SelectAll();
@@ -290,7 +255,7 @@ public:
         is relative to the top of displayed page, not to window's origin, use
         wxScrolled::CalcUnscrolledPosition()
         to convert physical coordinate.
-        
+
         @see SelectAll(), SelectWord()
     */
     void SelectLine(const wxPoint& pos);
@@ -300,7 +265,7 @@ public:
         is relative to the top of displayed page, not to window's origin, use
         wxScrolled::CalcUnscrolledPosition()
         to convert physical coordinate.
-        
+
         @see SelectAll(), SelectLine()
     */
     void SelectWord(const wxPoint& pos);
@@ -314,7 +279,7 @@ public:
     /**
         This function sets the space between border of window and HTML contents. See
         image:
-        
+
         @param b
             indentation from borders in pixels
     */
@@ -322,7 +287,7 @@ public:
 
     /**
         This function sets font sizes and faces.
-        
+
         @param normal_face
             This is face name for normal (i.e. non-fixed) font.
             It can be either empty string (then the default face is chosen) or
@@ -343,13 +308,13 @@ public:
     /**
         Sets HTML page and display it. This won't @b load the page!!
         It will display the @e source. See example:
-        
+
         If you want to load a document from some location use
         LoadPage() instead.
-        
+
         @param source
             The HTML document source to be displayed.
-        
+
         @return @false if an error occurred, @true otherwise.
     */
     virtual bool SetPage(const wxString& source);
@@ -396,7 +361,7 @@ public:
         Regardless of whether the path is given or not, the function creates sub-path
         @c wxHtmlWindow.
         Saved values: all things set by SetFonts, SetBorders.
-        
+
         @param cfg
             wxConfig to which you want to save the configuration.
         @param path
@@ -404,6 +369,42 @@ public:
     */
     virtual void WriteCustomization(wxConfigBase cfg,
                                     wxString path = wxEmptyString);
+
+protected:
+
+    /**
+        This method is called when a mouse button is clicked inside wxHtmlWindow.
+        The default behaviour is to emit a wxHtmlCellEvent
+        and, if the event was not processed or skipped, call
+        OnLinkClicked() if the cell contains an
+        hypertext link.
+        Overloading this method is deprecated; intercept the event instead.
+
+        @param cell
+            The cell inside which the mouse was clicked, always a simple
+            (i.e. non-container) cell
+        @param x, y
+            The logical coordinates of the click point
+        @param event
+            The mouse event containing other information about the click
+
+        @return @true if a link was clicked, @false otherwise.
+    */
+    virtual bool OnCellClicked(wxHtmlCell cell, wxCoord x, wxCoord y,
+                               const wxMouseEvent& event);
+
+    /**
+        This method is called when a mouse moves over an HTML cell.
+        Default behaviour is to emit a wxHtmlCellEvent.
+        Overloading this method is deprecated; intercept the event instead.
+
+        @param cell
+            The cell inside which the mouse is currently, always a simple
+            (i.e. non-container) cell
+        @param x, y
+            The logical coordinates of the click point
+    */
+    virtual void OnCellMouseHover(wxHtmlCell cell, wxCoord x, wxCoord y);
 };
 
 

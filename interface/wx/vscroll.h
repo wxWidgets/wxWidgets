@@ -142,12 +142,6 @@ public:
     bool IsVisible(size_t unit) const;
 
     /**
-        This function must be overridden in the derived class, and should
-        return the size of the given unit in pixels.
-    */
-    virtual wxCoord OnGetUnitSize(size_t unit) const;
-
-    /**
         This function doesn't have to be overridden but it may be useful to do
         so if calculating the units' sizes is a relatively expensive operation
         as it gives your code a chance to calculate several of them at once and
@@ -190,6 +184,15 @@ public:
         last item).
     */
     int VirtualHitTest(wxCoord coord) const;
+
+
+protected:
+
+    /**
+        This function must be overridden in the derived class, and should
+        return the size of the given unit in pixels.
+    */
+    virtual wxCoord OnGetUnitSize(size_t unit) const;
 };
 
 
@@ -258,12 +261,6 @@ public:
     bool IsRowVisible(size_t row) const;
 
     /**
-        This function must be overridden in the derived class, and should
-        return the height of the given row in pixels.
-    */
-    virtual wxCoord OnGetRowHeight(size_t row) const;
-
-    /**
         This function doesn't have to be overridden but it may be useful to do
         so if calculating the rows' sizes is a relatively expensive operation
         as it gives your code a chance to calculate several of them at once and
@@ -324,6 +321,14 @@ public:
         @see GetRowCount()
     */
     void SetRowCount(size_t rowCount);
+
+protected:
+
+    /**
+        This function must be overridden in the derived class, and should
+        return the height of the given row in pixels.
+    */
+    virtual wxCoord OnGetRowHeight(size_t row) const;
 };
 
 
@@ -393,12 +398,6 @@ public:
     bool IsColumnVisible(size_t column) const;
 
     /**
-        This function must be overridden in the derived class, and should
-        return the width of the given column in pixels.
-    */
-    virtual wxCoord OnGetColumnWidth(size_t column) const;
-
-    /**
         This function doesn't have to be overridden but it may be useful to do
         so if calculating the columns' sizes is a relatively expensive
         operation as it gives your code a chance to calculate several of them
@@ -460,6 +459,14 @@ public:
         @see GetColumnCount()
     */
     void SetColumnCount(size_t columnCount);
+
+protected:
+
+    /**
+        This function must be overridden in the derived class, and should
+        return the width of the given column in pixels.
+    */
+    virtual wxCoord OnGetColumnWidth(size_t column) const;
 };
 
 

@@ -950,16 +950,6 @@ public:
     virtual bool CanSave() const;
 
     /**
-        Override to load content from @a stream into @a buffer.
-    */
-    bool DoLoadFile(wxRichTextBuffer* buffer, wxInputStream& stream);
-
-    /**
-        Override to save content to @a stream from @a buffer.
-    */
-    bool DoSaveFile(wxRichTextBuffer* buffer, wxOutputStream& stream);
-
-    /**
         Returns the encoding associated with the handler (if any).
     */
     const wxString GetEncoding() const;
@@ -1048,6 +1038,17 @@ public:
         load and save dialogs).
     */
     virtual void SetVisible(bool visible);
+
+protected:
+    /**
+        Override to load content from @a stream into @a buffer.
+    */
+    bool DoLoadFile(wxRichTextBuffer* buffer, wxInputStream& stream);
+
+    /**
+        Override to save content to @a stream from @a buffer.
+    */
+    bool DoSaveFile(wxRichTextBuffer* buffer, wxOutputStream& stream);
 };
 
 

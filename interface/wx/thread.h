@@ -311,19 +311,6 @@ public:
     virtual ~wxThreadHelper();
 
     /**
-        Creates a new thread.
-
-        The thread object is created in the suspended state, and you
-        should call @ref wxThread::Run GetThread()-Run to start running it.
-
-        You may optionally specify the stack size to be allocated to it (ignored
-        on platforms that don't support setting it explicitly, eg. Unix).
-
-        @return One of the ::wxThreadError enum values.
-    */
-    wxThreadError Create(unsigned int stackSize = 0);
-
-    /**
         This is the entry point of the thread.
 
         This function is pure virtual and must be implemented by any derived class.
@@ -336,6 +323,19 @@ public:
         directly.
     */
     virtual ExitCode Entry();
+
+    /**
+        Creates a new thread.
+
+        The thread object is created in the suspended state, and you
+        should call @ref wxThread::Run GetThread()-Run to start running it.
+
+        You may optionally specify the stack size to be allocated to it (ignored
+        on platforms that don't support setting it explicitly, eg. Unix).
+
+        @return One of the ::wxThreadError enum values.
+    */
+    wxThreadError Create(unsigned int stackSize = 0);
 
     /**
         This is a public function that returns the wxThread object
@@ -635,30 +635,6 @@ public:
     wxThreadError Delete();
 
     /**
-        This is the entry point of the thread.
-
-        This function is pure virtual and must be implemented by any derived class.
-        The thread execution will start here.
-
-        The returned value is the thread exit code which is only useful for
-        joinable threads and is the value returned by Wait().
-        This function is called by wxWidgets itself and should never be called
-        directly.
-    */
-    virtual ExitCode Entry();
-
-    /**
-        This is a protected function of the wxThread class and thus can only be called
-        from a derived class. It also can only be called in the context of this
-        thread, i.e. a thread can only exit from itself, not from another thread.
-
-        This function will terminate the OS thread (i.e. stop the associated path of
-        execution) and also delete the associated C++ object for detached threads.
-        OnExit() will be called just before exiting.
-    */
-    void Exit(ExitCode exitcode = 0);
-
-    /**
         Returns the number of system CPUs or -1 if the value is unknown.
 
         @see SetConcurrency()
@@ -883,6 +859,32 @@ public:
         See also Sleep().
     */
     static void Yield();
+
+protected:
+
+    /**
+        This is the entry point of the thread.
+
+        This function is pure virtual and must be implemented by any derived class.
+        The thread execution will start here.
+
+        The returned value is the thread exit code which is only useful for
+        joinable threads and is the value returned by Wait().
+        This function is called by wxWidgets itself and should never be called
+        directly.
+    */
+    virtual ExitCode Entry();
+
+    /**
+        This is a protected function of the wxThread class and thus can only be called
+        from a derived class. It also can only be called in the context of this
+        thread, i.e. a thread can only exit from itself, not from another thread.
+
+        This function will terminate the OS thread (i.e. stop the associated path of
+        execution) and also delete the associated C++ object for detached threads.
+        OnExit() will be called just before exiting.
+    */
+    void Exit(ExitCode exitcode = 0);
 };
 
 

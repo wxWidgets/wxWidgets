@@ -56,11 +56,6 @@ public:
     virtual ~wxStackWalker();
 
     /**
-        This function must be overrided to process the given frame.
-    */
-    void OnStackFrame(const wxStackFrame& frame);
-
-    /**
         Enumerate stack frames from the current location, skipping the initial
         number of them (this can be useful when Walk() is called from some known
         location and you don't want to see the first few frames anyhow; also
@@ -77,6 +72,12 @@ public:
         Up to @a maxDepth frames are walked from the innermost to the outermost one.
     */
     virtual void WalkFromException(size_t maxDepth = 200);
+
+protected:
+    /**
+        This function must be overrided to process the given frame.
+    */
+    void OnStackFrame(const wxStackFrame& frame);
 };
 
 

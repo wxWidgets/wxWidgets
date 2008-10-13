@@ -13,11 +13,11 @@
     It is used by @ref overview_handlers "tag handlers".
 
     @library{wxhtml}
-    @category{FIXME}
+    @category{html}
 */
 class wxHtmlTag
 {
-public:
+protected:
     /**
         Constructor. You will probably never have to construct a wxHtmlTag object
         yourself. Feel free to ignore the constructor parameters.
@@ -27,6 +27,7 @@ public:
               int end_pos, wxHtmlTagsCache* cache,
               wxHtmlEntitiesParser* entParser);
 
+public:
     /**
         Returns a string containing all parameters.
         Example : tag contains @c FONT SIZE=+2 COLOR="#000000". Call to

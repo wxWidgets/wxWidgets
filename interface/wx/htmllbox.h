@@ -94,20 +94,6 @@ public:
     virtual wxColour GetSelectedTextColour(const wxColour& colFg) const;
 
     /**
-        This method must be implemented in the derived class and should return
-        the body (i.e. without @c html nor @c body tags) of the HTML fragment
-        for the given item.
-        Note that this function should always return a text fragment for the @a n item
-        which renders with the same height both when it is selected and when it's not:
-        i.e. if you call, inside your OnGetItem() implementation, @c IsSelected(n) to
-        make the items appear differently when they are selected, then you should make
-        sure
-        that the returned HTML fragment will render with the same height or else you'll
-        see some artifacts when the user selects an item.
-    */
-    wxString OnGetItem(size_t n) const;
-
-    /**
         This function may be overridden to decorate HTML returned by
         OnGetItem().
     */
@@ -125,6 +111,21 @@ public:
         @see See also wxHtmlLinkInfo.
     */
     virtual void OnLinkClicked(size_t n, const wxHtmlLinkInfo& link);
+
+protected:
+    /**
+        This method must be implemented in the derived class and should return
+        the body (i.e. without @c html nor @c body tags) of the HTML fragment
+        for the given item.
+        Note that this function should always return a text fragment for the @a n item
+        which renders with the same height both when it is selected and when it's not:
+        i.e. if you call, inside your OnGetItem() implementation, @c IsSelected(n) to
+        make the items appear differently when they are selected, then you should make
+        sure
+        that the returned HTML fragment will render with the same height or else you'll
+        see some artifacts when the user selects an item.
+    */
+    wxString OnGetItem(size_t n) const;
 };
 
 

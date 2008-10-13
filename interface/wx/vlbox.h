@@ -204,22 +204,6 @@ public:
     virtual void OnDrawBackground(wxDC& dc, const wxRect& rect, size_t n) const;
 
     /**
-        The derived class must implement this function to actually draw the
-        item with the given index on the provided DC.
-
-        @param dc
-            The device context to use for drawing.
-        @param rect
-            The bounding rectangle for the item being drawn (DC clipping
-            region is set to this rectangle before calling this function).
-        @param n
-            The index of the item to be drawn.
-
-        @todo Change this function signature to non-const.
-    */
-    virtual void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const;
-
-    /**
         This method may be used to draw separators between the lines. The
         rectangle passed to it may be modified, typically to deflate it a bit
         before passing to OnDrawItem().
@@ -236,12 +220,6 @@ public:
         @todo Change this function signature to non-const.
     */
     virtual void OnDrawSeparator(wxDC& dc, wxRect& rect, size_t n) const;
-
-    /**
-        The derived class must implement this method to return the height of
-        the specified item (in pixels).
-    */
-    virtual wxCoord OnMeasureItem(size_t n) const;
 
     /**
         Selects or deselects the specified item which must be valid (i.e. not
@@ -332,5 +310,29 @@ public:
         @see Select()
     */
     void Toggle(size_t item);
+
+protected:
+
+    /**
+        The derived class must implement this function to actually draw the
+        item with the given index on the provided DC.
+
+        @param dc
+            The device context to use for drawing.
+        @param rect
+            The bounding rectangle for the item being drawn (DC clipping
+            region is set to this rectangle before calling this function).
+        @param n
+            The index of the item to be drawn.
+
+        @todo Change this function signature to non-const.
+    */
+    virtual void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const;
+
+    /**
+        The derived class must implement this method to return the height of
+        the specified item (in pixels).
+    */
+    virtual wxCoord OnMeasureItem(size_t n) const;
 };
 
