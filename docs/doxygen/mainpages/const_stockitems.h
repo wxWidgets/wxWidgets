@@ -90,7 +90,7 @@ Window IDs for which stock buttons and menu items are created
 @stock{wxID_ZOOM_OUT,zoom-out,Zoom &Out}
 @endDefList
 
-Note that some of the IDs listed above have also a stock accelerator
-and an help string associated.
+Note that some of the IDs listed above also have a stock accelerator
+and an associated help string.
 
 */
