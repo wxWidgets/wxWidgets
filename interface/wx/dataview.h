@@ -14,7 +14,7 @@
     for data transfer. This class can be converted to a from
     a wxVariant.
 
-    @library{wxbase}
+    @library{wxadv}
     @category{dvc}
 */
 class wxDataViewIconText : public wxObject
@@ -404,7 +404,7 @@ public:
     need to display millions of items or have other reason to
     use a virtual control.
 
-    @library{wxbase}
+    @library{wxadv}
     @category{dvc}
 */
 class wxDataViewIndexListModel : public wxDataViewModel
@@ -520,7 +520,7 @@ public:
 
     @see wxDataViewIndexListModel for the API.
 
-    @library{wxbase}
+    @library{wxadv}
     @category{dvc}
 */
 class wxDataViewVirtualListModel : public wxDataViewModel
@@ -1037,7 +1037,7 @@ public:
     the documentation of that class for further
     information.
 
-    @library{wxbase}
+    @library{wxadv}
     @category{dvc}
 */
 class wxDataViewModelNotifier
@@ -1322,7 +1322,7 @@ public:
     supports modifying the values in-place by using a wxSpinCtrl.
     The renderer only support variants of type @e long.
 
-    @library{wxbase}
+    @library{wxadv}
     @category{dvc}
 */
 class wxDataViewSpinRenderer : public wxDataViewCustomRenderer
@@ -1680,7 +1680,7 @@ public:
     like a wxTreeCtrl to make a transition from it
     to the wxDataViewCtrl class simpler.
 
-    @library{wxbase}
+    @library{wxadv}
     @category{ctrl,dvc}
     @appearance{dataviewtreectrl.png}
 */
