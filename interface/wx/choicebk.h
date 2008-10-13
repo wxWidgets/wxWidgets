@@ -47,6 +47,7 @@
 
     @library{wxcore}
     @category{miscwnd}
+    @appearance{choicebook.png}
 
     @see @ref overview_bookctrl, wxNotebook, @ref page_samples_notebook
 */

@@ -46,8 +46,9 @@
 
     @library{wxcore}
     @category{miscwnd}
+    @appearance{listbook.png}
 
-    @see wxBookCtrl(), wxNotebook, @ref page_samples_notebook
+    @see wxBookCtrl, wxNotebook, @ref page_samples_notebook
 */
 class wxListbook : public wxBookCtrlBase
 {

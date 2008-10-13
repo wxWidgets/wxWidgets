@@ -86,6 +86,7 @@
 
     @library{wxcore}
     @category{miscwnd}
+    @appearance{notebook.png}
 
     @see wxBookCtrl, wxBookCtrlEvent, wxImageList, @ref page_samples_notebook
 */
