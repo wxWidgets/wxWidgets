@@ -48,7 +48,11 @@ const wxString& GetTestAsciiString()
     static wxString testString;
     if ( testString.empty() )
     {
-        for ( long n = 0; n < Bench::GetNumericParameter(); n++ )
+        long num = Bench::GetNumericParameter();
+        if ( !num )
+            num = 1;
+
+        for ( long n = 0; n < num; n++ )
             testString += wxString::FromAscii(asciistr);
     }
 
@@ -318,7 +322,11 @@ BENCHMARK_FUNC(ParseHTML)
 
         // this is going to make for some invalid HTML, of course, but it
         // doesn't really matter
-        for ( long n = 0; n < Bench::GetNumericParameter(); n++ )
+        long num = Bench::GetNumericParameter();
+        if ( !num )
+            num = 1;
+
+        for ( long n = 0; n < num; n++ )
             html += html1;
     }
 

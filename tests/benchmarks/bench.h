@@ -71,6 +71,14 @@ private:
  */
 long GetNumericParameter();
 
+/**
+    Get the string parameter.
+
+    Tests may use this parameter in whatever way they see fit, by default it is
+    empty but can be set to a different value by user from the command line.
+ */
+wxString GetStringParameter();
+
 } // namespace Bench
 
 /**

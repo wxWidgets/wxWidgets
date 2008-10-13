@@ -31,6 +31,7 @@ static const char OPTION_LIST = 'l';
 static const char OPTION_AVG_COUNT = 'a';
 static const char OPTION_NUM_RUNS = 'n';
 static const char OPTION_NUMERIC_PARAM = 'p';
+static const char OPTION_STRING_PARAM = 's';
 
 // ----------------------------------------------------------------------------
 // BenchApp declaration
@@ -54,8 +55,9 @@ public:
     virtual int  OnRun();
     virtual int  OnExit();
 
-    // accessor
+    // accessors
     int GetNumericParameter() const { return m_numParam; }
+    const wxString& GetStringParameter() const { return m_strParam; }
 
 private:
     // list all registered benchmarks
@@ -66,6 +68,7 @@ private:
     long m_numRuns,
          m_avgCount,
          m_numParam;
+    wxString m_strParam;
 };
 
 IMPLEMENT_APP_CONSOLE(BenchApp)
@@ -81,6 +84,11 @@ long Bench::GetNumericParameter()
     return wxGetApp().GetNumericParameter();
 }
 
+wxString Bench::GetStringParameter()
+{
+    return wxGetApp().GetStringParameter();
+}
+
 // ============================================================================
 // BenchApp implementation
 // ============================================================================
@@ -89,7 +97,7 @@ BenchApp::BenchApp()
 {
     m_avgCount = 10;
     m_numRuns = 10000; // just some default (TODO: switch to time-based one)
-    m_numParam = 1;
+    m_numParam = 0;
 }
 
 bool BenchApp::OnInit()
@@ -135,9 +143,18 @@ void BenchApp::OnInitCmdLine(wxCmdLineParser& parser)
                      wxCMD_LINE_VAL_NUMBER);
     parser.AddOption(OPTION_NUMERIC_PARAM,
                      "num-param",
-                     "numeric parameter used by some benchmark functions "
-                     "(default: 1)",
+                     wxString::Format
+                     (
+                         "numeric parameter used by some benchmark functions "
+                         "(default: %ld)",
+                         m_numParam
+                     ),
                      wxCMD_LINE_VAL_NUMBER);
+    parser.AddOption(OPTION_STRING_PARAM,
+                     "str-param",
+                     "string parameter used by some benchmark functions "
+                     "(default: empty)",
+                     wxCMD_LINE_VAL_STRING);
 
     parser.AddParam("benchmark name",
                     wxCMD_LINE_VAL_STRING,
@@ -166,6 +183,7 @@ bool BenchApp::OnCmdLineParsed(wxCmdLineParser& parser)
     parser.Found(OPTION_AVG_COUNT, &m_avgCount);
     parser.Found(OPTION_NUM_RUNS, &m_numRuns);
     parser.Found(OPTION_NUMERIC_PARAM, &m_numParam);
+    parser.Found(OPTION_STRING_PARAM, &m_strParam);
 
     // construct sorted array for quick verification of benchmark names
     wxSortedArrayString benchmarks;
@@ -201,7 +219,17 @@ int BenchApp::OnRun()
         if ( m_toRun.Index(func->GetName()) == wxNOT_FOUND )
             continue;
 
-        wxPrintf("Benchmarking %s(%ld): ", func->GetName(), m_numParam);
+        wxString params;
+        if ( m_numParam )
+            params += wxString::Format(" with N=%ld", m_numParam);
+        if ( !m_strParam.empty() )
+        {
+            if ( !params.empty() )
+                params += " and";
+            params += wxString::Format(" with s=\"%s\"", m_strParam);
+        }
+
+        wxPrintf("Benchmarking %s%s: ", func->GetName(), params);
 
         long timeMin = LONG_MAX,
              timeMax = 0,
