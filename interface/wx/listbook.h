@@ -9,18 +9,15 @@
 /**
     @class wxListbook
 
-    wxListbook is a class similar to wxNotebook but which
-    uses a wxListCtrl to show the labels instead of the
-    tabs.
+    wxListbook is a class similar to wxNotebook but which uses a wxListCtrl
+    to show the labels instead of the tabs.
 
     The underlying wxListCtrl displays page labels in a one-column report view
-    by default.  Calling wxListbook::SetImageList will implicitly switch the
+    by default. Calling wxBookCtrl::SetImageList will implicitly switch the
     control to use an icon view.
 
-    There is no documentation for this class yet but its usage is
-    identical to wxNotebook (except for the features clearly related to tabs
-    only), so please refer to that class documentation for now. You can also
-    use the @ref overview_samplenotebook "notebook sample" to see wxListbook in
+    For usage documentation of this class, please refer to the base abstract class
+    wxBookCtrl. You can also use the @ref page_samples_notebook to see wxListbook in
     action.
 
     @beginStyleTable
@@ -37,24 +34,41 @@
            Place labels below the page area.
     @endStyleTable
 
+    @beginEventTable{wxListbookEvent}
+    @event{EVT_LISTBOOK_PAGE_CHANGED(id, func)}
+        The page selection was changed.
+        Processes a @c wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED event.
+    @event{EVT_LISTBOOK_PAGE_CHANGING(id, func)}
+        The page selection is about to be changed.
+        Processes a @c wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING event.
+        This event can be vetoed.
+    @endEventTable
+
     @library{wxcore}
     @category{miscwnd}
 
-    @see wxBookCtrl(), wxNotebook, @ref overview_samplenotebook "notebook sample"
+    @see wxBookCtrl(), wxNotebook, @ref page_samples_notebook
 */
-class wxListbook : public wxBookCtrl overview
+class wxListbook : public wxBookCtrlBase
 {
 public:
-    //@{
+    /**
+        Default ctor.
+    */
+    wxListbook();
+
     /**
         Constructs a listbook control.
     */
-    wxListbook();
     wxListbook(wxWindow* parent, wxWindowID id,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = 0,
                const wxString& name = wxEmptyStr);
-    //@}
+
+    /**
+        Returns the wxListView associated with the control.
+    */
+    wxListView* GetListView() const;
 };
 

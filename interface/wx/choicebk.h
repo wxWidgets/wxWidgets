@@ -12,10 +12,9 @@
     wxChoicebook is a class similar to wxNotebook, but uses a wxChoice control
     to show the labels instead of the tabs.
 
-    There is no documentation for this class yet but its usage is identical to
-    wxNotebook (except for the features clearly related to tabs only), so
-    please refer to that class documentation for now. You can also use the
-    @ref page_samples_notebook to see wxChoicebook in action.
+    For usage documentation of this class, please refer to the base abstract class
+    wxBookCtrl. You can also use the @ref page_samples_notebook to see wxChoicebook in
+    action.
 
     wxChoicebook allows the use of wxBookCtrlBase::GetControlSizer(), allowing
     a program to add other controls next to the choice control. This is
@@ -38,21 +37,18 @@
 
     @beginEventTable{wxBookCtrlEvent}
     @event{EVT_CHOICEBOOK_PAGE_CHANGED(id, func)}
-           The page selection was changed. Processes a
-           wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED event.
+        The page selection was changed.
+        Processes a @c wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED event.
     @event{EVT_CHOICEBOOK_PAGE_CHANGING(id, func)}
-           The page selection is about to be changed. Processes a
-           wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING event. This event can be
-           vetoed (using wxNotifyEvent::Veto()).
+        The page selection is about to be changed.
+        Processes a @c wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING event.
+        This event can be vetoed (using wxNotifyEvent::Veto()).
     @endEventTable
 
     @library{wxcore}
     @category{miscwnd}
 
     @see @ref overview_bookctrl, wxNotebook, @ref page_samples_notebook
-
-    @todo Write up wxBookCtrlBase documentation, where most of this class'
-          functionality comes from.
 */
 class wxChoicebook : public wxBookCtrlBase
 {

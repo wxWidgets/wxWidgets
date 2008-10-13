@@ -13,8 +13,8 @@
     associated tabs.
 
     To use the class, create a wxNotebook object and call wxNotebook::AddPage
-    or wxNotebook::InsertPage, passing a window to be used as the page. Do not
-    explicitly delete the window for a page that is currently managed by
+    or wxNotebook::InsertPage, passing a window to be used as the page.
+    Do not explicitly delete the window for a page that is currently managed by
     wxNotebook.
 
     @b wxNotebookPage is a typedef for wxWindow.
@@ -39,12 +39,57 @@
            (Windows CE only) Show tabs in a flat style.
     @endStyleTable
 
+    The styles wxNB_LEFT, RIGHT and BOTTOM are not supported under
+    Microsoft Windows XP when using visual themes.
+
+    @beginEventTable{wxBookCtrlEvent}
+    @event{EVT_NOTEBOOK_PAGE_CHANGED(id, func)}
+        The page selection was changed.
+        Processes a @c wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED event.
+    @event{EVT_NOTEBOOK_PAGE_CHANGING(id, func)}
+        The page selection is about to be changed.
+        Processes a @c wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING event.
+        This event can be vetoed.
+    @endEventTable
+
+
+    @section notebook_bg Page backgrounds
+
+    On Windows XP, the default theme paints a gradient on the notebook's pages.
+    If you wish to suppress this theme, for aesthetic or performance reasons,
+    there are three ways of doing it.
+    You can use @c wxNB_NOPAGETHEME to disable themed drawing for a particular
+    notebook, you can call wxSystemOptions::SetOption to disable it for the
+    whole application, or you can disable it for individual pages by using
+    SetBackgroundColour().
+
+    To disable themed pages globally:
+    @code
+    wxSystemOptions::SetOption(wxT("msw.notebook.themed-background"), 0);
+    @endcode
+
+    Set the value to 1 to enable it again.
+    To give a single page a solid background that more or less fits in with the
+    overall theme, use:
+    @code
+    wxColour col = notebook->GetThemeBackgroundColour();
+    if (col.Ok())
+    {
+        page->SetBackgroundColour(col);
+    }
+    @endcode
+
+    On platforms other than Windows, or if the application is not using Windows
+    themes, GetThemeBackgroundColour() will return an uninitialised colour object,
+    and the above code will therefore work on all platforms.
+
+
     @library{wxcore}
     @category{miscwnd}
 
     @see wxBookCtrl, wxBookCtrlEvent, wxImageList, @ref page_samples_notebook
 */
-class wxNotebook : public wxBookCtrl
+class wxNotebook : public wxBookCtrlBase
 {
 public:
 
@@ -83,51 +128,6 @@ public:
     virtual ~wxNotebook();
 
     /**
-        Adds a new page.
-        The call to this function may generate the page changing events.
-
-        @param page
-            Specifies the new page.
-        @param text
-            Specifies the text for the new page.
-        @param select
-            Specifies whether the page should be selected.
-        @param imageId
-            Specifies the optional image index for the new page.
-
-        @return @true if successful, @false otherwise.
-
-        @remarks Do not delete the page, it will be deleted by the notebook.
-
-        @see InsertPage()
-    */
-    bool AddPage(wxNotebookPage* page, const wxString& text,
-                 bool select = false,
-                 int imageId = -1);
-
-    /**
-        Cycles through the tabs.
-        The call to this function generates the page changing events.
-    */
-    void AdvanceSelection(bool forward = true);
-
-    /**
-        Sets the image list for the page control and takes ownership of the list.
-
-        @see wxImageList, SetImageList()
-    */
-    void AssignImageList(wxImageList* imageList);
-
-    /**
-        Changes the selection for the given page, returning the previous selection.
-
-        The call to this function does NOT generate the page changing events.
-        This is the only difference with SetSelection().
-        See @ref overview_eventhandling_prog for more infomation.
-    */
-    virtual int ChangeSelection(size_t page);
-
-    /**
         Creates a notebook control.
         See wxNotebook() for a description of the parameters.
     */
@@ -137,63 +137,11 @@ public:
                 long style = 0,
                 const wxString& name = wxNotebookNameStr);
 
-    /**
-        Deletes all pages.
-    */
-    virtual bool DeleteAllPages();
-
-    /**
-        Deletes the specified page, and the associated window.
-        The call to this function generates the page changing events.
-    */
-    bool DeletePage(size_t page);
-
-    /**
-        Returns the currently selected notebook page or @NULL.
-    */
-    wxWindow* GetCurrentPage() const;
-
-    /**
-        Returns the associated image list.
-
-        @see wxImageList, SetImageList()
-    */
-    wxImageList* GetImageList() const;
-
-    /**
-        Returns the window at the given page position.
-    */
-    wxNotebookPage* GetPage(size_t page);
-
-    /**
-        Returns the number of pages in the notebook control.
-    */
-    size_t GetPageCount() const;
-
-    /**
-        Returns the image index for the given page.
-    */
-    virtual int GetPageImage(size_t nPage) const;
-
-    /**
-        Returns the string for the given page.
-    */
-    virtual wxString GetPageText(size_t nPage) const;
 
     /**
         Returns the number of rows in the notebook control.
     */
     virtual int GetRowCount() const;
-
-    /**
-        Returns the currently selected page, or -1 if none was selected.
-
-        Note that this method may return either the previously or newly
-        selected page when called from the @c EVT_NOTEBOOK_PAGE_CHANGED handler
-        depending on the platform and so wxBookCtrlEvent::GetSelection should be
-        used instead in this case.
-    */
-    virtual int GetSelection() const;
 
     /**
         If running under Windows and themes are enabled for the application, this
@@ -205,57 +153,6 @@ public:
     virtual wxColour GetThemeBackgroundColour() const;
 
     /**
-        Returns the index of the tab at the specified position or @c wxNOT_FOUND
-        if none. If @a flags parameter is non-@NULL, the position of the point
-        inside the tab is returned as well.
-
-        @param pt
-            Specifies the point for the hit test.
-        @param flags
-            Return value for detailed information. One of the following values:
-            <TABLE><TR><TD>wxBK_HITTEST_NOWHERE</TD>
-            <TD>There was no tab under this point.</TD></TR>
-            <TR><TD>wxBK_HITTEST_ONICON</TD>
-            <TD>The point was over an icon (currently wxMSW only).</TD></TR>
-            <TR><TD>wxBK_HITTEST_ONLABEL</TD>
-            <TD>The point was over a label (currently wxMSW only).</TD></TR>
-            <TR><TD>wxBK_HITTEST_ONITEM</TD>
-            <TD>The point was over an item, but not on the label or icon.</TD></TR>
-            <TR><TD>wxBK_HITTEST_ONPAGE</TD>
-            <TD>The point was over a currently selected page, not over any tab.
-            Note that this flag is present only if wxNOT_FOUND is returned.</TD></TR>
-            </TABLE>
-
-        @return Returns the zero-based tab index or @c wxNOT_FOUND if there is no
-                tab at the specified position.
-    */
-    virtual int HitTest(const wxPoint& pt, long* flags = NULL) const;
-
-    /**
-        Inserts a new page at the specified position.
-
-        @param index
-            Specifies the position for the new page.
-        @param page
-            Specifies the new page.
-        @param text
-            Specifies the text for the new page.
-        @param select
-            Specifies whether the page should be selected.
-        @param imageId
-            Specifies the optional image index for the new page.
-
-        @return @true if successful, @false otherwise.
-
-        @remarks Do not delete the page, it will be deleted by the notebook.
-
-        @see AddPage()
-    */
-    virtual bool InsertPage(size_t index, wxNotebookPage* page,
-                            const wxString& text, bool select = false,
-                            int imageId = -1);
-
-    /**
         An event handler function, called when the page selection is changed.
 
         @see wxBookCtrlEvent
@@ -263,53 +160,10 @@ public:
     void OnSelChange(wxBookCtrlEvent& event);
 
     /**
-        Deletes the specified page, without deleting the associated window.
-    */
-    bool RemovePage(size_t page);
-
-    /**
-        Sets the image list for the page control.
-        It does not take ownership of the image list, you must delete it yourself.
-
-        @see wxImageList, AssignImageList()
-    */
-    void SetImageList(wxImageList* imageList);
-
-    /**
         Sets the amount of space around each page's icon and label, in pixels.
 
         @note The vertical padding cannot be changed in wxGTK.
     */
     virtual void SetPadding(const wxSize& padding);
-
-    /**
-        Sets the image index for the given page. @a image is an index into
-        the image list which was set with SetImageList().
-    */
-    virtual bool SetPageImage(size_t page, int image);
-
-    /**
-        Sets the width and height of the pages.
-
-        @note This method is currently not implemented for wxGTK.
-    */
-    virtual void SetPageSize(const wxSize& size);
-
-    /**
-        Sets the text for the given page.
-    */
-    virtual bool SetPageText(size_t page, const wxString& text);
-
-    /**
-        Sets the selection for the given page, returning the previous selection.
-        The call to this function generates the page changing events.
-
-        @deprecated
-        This function is deprecated and should not be used in new code.
-        Please use the ChangeSelection() function instead.
-
-        @see GetSelection()
-    */
-    virtual int SetSelection(size_t page);
 };
 
