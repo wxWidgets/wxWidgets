@@ -799,7 +799,7 @@ public:
         Called by the framework when a page should be printed. Returning @false cancels
         the print job.
     */
-    bool OnPrintPage(int pageNum);
+    virtual bool OnPrintPage(int pageNum) = 0;
 
     /**
         Set the device origin of the associated wxDC so that the current logical point

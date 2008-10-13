@@ -48,7 +48,7 @@ public:
         Return the text of the current tip and pass to the next one.
         This function is pure virtual, it should be implemented in the derived classes.
     */
-    wxString GetTip();
+    virtual wxString GetTip() = 0;
 
     /**
         Returns a modified tip.

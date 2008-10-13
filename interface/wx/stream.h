@@ -537,7 +537,7 @@ public:
             list << *p << _T("\n");
         @endcode
     */
-    const wxChar* const* GetProtocols(wxStreamProtocolType type = wxSTREAM_PROTOCOL) const;
+    virtual const wxChar * const* GetProtocols(wxStreamProtocolType type = wxSTREAM_PROTOCOL) const = 0;
 
     //@{
     /**

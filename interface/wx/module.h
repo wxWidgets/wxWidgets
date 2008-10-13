@@ -118,12 +118,12 @@ public:
     /**
         Provide this function with appropriate cleanup for your module.
     */
-    virtual void OnExit();
+    virtual void OnExit() = 0;
 
     /**
         Provide this function with appropriate initialization for your module.
         If the function returns @false, wxWidgets will exit immediately.
     */
-    virtual bool OnInit();
+    virtual bool OnInit() = 0;
 };
 

@@ -96,13 +96,13 @@ public:
 
         @see GetOrientationTargetSize()
     */
-    virtual int GetNonOrientationTargetSize() const;
+    virtual int GetNonOrientationTargetSize() const = 0;
 
     /**
         This function need to be overridden to return the orientation that this
         helper is working with, either @c wxHORIZONTAL or @c wxVERTICAL.
     */
-    virtual wxOrientation GetOrientation() const;
+    virtual wxOrientation GetOrientation() const = 0;
 
     /**
         This function needs to be overridden in the in the derived class to
@@ -112,7 +112,7 @@ public:
 
         @see GetNonOrientationTargetSize()
     */
-    virtual int GetOrientationTargetSize() const;
+    virtual int GetOrientationTargetSize() const = 0;
 
     /**
         This function will return the target window this helper class is
@@ -192,7 +192,7 @@ protected:
         This function must be overridden in the derived class, and should
         return the size of the given unit in pixels.
     */
-    virtual wxCoord OnGetUnitSize(size_t unit) const;
+    virtual wxCoord OnGetUnitSize(size_t unit) const = 0;
 };
 
 
@@ -328,7 +328,7 @@ protected:
         This function must be overridden in the derived class, and should
         return the height of the given row in pixels.
     */
-    virtual wxCoord OnGetRowHeight(size_t row) const;
+    virtual wxCoord OnGetRowHeight(size_t row) const = 0;
 };
 
 
@@ -466,7 +466,7 @@ protected:
         This function must be overridden in the derived class, and should
         return the width of the given column in pixels.
     */
-    virtual wxCoord OnGetColumnWidth(size_t column) const;
+    virtual wxCoord OnGetColumnWidth(size_t column) const = 0;
 };
 
 

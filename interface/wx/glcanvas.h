@@ -264,6 +264,6 @@ public:
         so that the output of the previous OpenGL commands is displayed on the window.
         Returns @false if an error occurred.
     */
-    bool SwapBuffers();
+    virtual bool SwapBuffers();
 };
 

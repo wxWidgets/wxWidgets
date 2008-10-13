@@ -27,7 +27,7 @@ public:
         Returns list of supported tags. The list is in uppercase and tags
         are delimited by ','. Example : @c "I,B,FONT,P"
     */
-    virtual wxString GetSupportedTags();
+    virtual wxString GetSupportedTags() = 0;
 
     /**
         This is the core method of each handler. It is called each time
@@ -36,7 +36,7 @@ public:
         
         @return @true if ParseInner was called, @false otherwise.
     */
-    virtual bool HandleTag(const wxHtmlTag& tag);
+    virtual bool HandleTag(const wxHtmlTag& tag) = 0;
 
     /**
         This method calls parser's wxHtmlParser::DoParsing method
@@ -155,7 +155,7 @@ public:
         representation in derived parser (but it must be derived from wxObject!).
         See wxHtmlWinParser for details.
     */
-    virtual wxObject* GetProduct();
+    virtual wxObject* GetProduct() = 0;
 
     /**
         Returns pointer to the source being parsed.

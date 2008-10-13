@@ -1011,7 +1011,7 @@ public:
         This method is abstract and has to be overwritten by any derived class.
         Here, the sizer will do the actual calculation of its children's minimal sizes.
     */
-    virtual wxSize CalcMin();
+    virtual wxSize CalcMin() = 0;
 
     /**
         Detaches all children from the sizer.
@@ -1355,7 +1355,7 @@ public:
         Here, the sizer will do the actual calculation of its children's
         positions and sizes.
     */
-    virtual void RecalcSizes();
+    virtual void RecalcSizes() = 0;
 
     /**
         Removes a child window from the sizer, but does @b not destroy it

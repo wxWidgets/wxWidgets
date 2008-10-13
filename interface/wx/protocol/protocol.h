@@ -45,7 +45,7 @@ public:
 
         @return Returns @true, if successful, else @false.
     */
-    bool Abort();
+    virtual bool Abort() = 0;
 
     /**
         Returns the type of the content of the last opened stream. It is a mime-type.
@@ -57,7 +57,7 @@ public:
 
         @see wxProtocolError
     */
-    wxProtocolError GetError();
+    virtual wxProtocolError GetError() = 0;
 
     /**
         Creates a new input stream on the specified path.
@@ -74,7 +74,7 @@ public:
 
         @see wxInputStream
     */
-    wxInputStream* GetInputStream(const wxString& path);
+    virtual wxInputStream* GetInputStream(const wxString& path) = 0;
 
     /**
         Tries to reestablish a previous opened connection (close and renegotiate

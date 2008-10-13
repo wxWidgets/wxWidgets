@@ -327,12 +327,12 @@ protected:
 
         @todo Change this function signature to non-const.
     */
-    virtual void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const;
+    virtual void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const = 0;
 
     /**
         The derived class must implement this method to return the height of
         the specified item (in pixels).
     */
-    virtual wxCoord OnMeasureItem(size_t n) const;
+    virtual wxCoord OnMeasureItem(size_t n) const = 0;
 };
 

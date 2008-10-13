@@ -167,7 +167,7 @@ public:
         (@c dbghlp32.dll can be installed under older systems to make minidumps
         available).
     */
-    bool AddDump(Context ctx);
+    virtual bool AddDump(Context ctx);
 
     /**
         The same as calling AddContext(Context_Exception).

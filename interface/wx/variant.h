@@ -97,75 +97,75 @@ public:
         Default constructor.
     */
     wxVariant();
-    
+
     /**
         Constructs a variant directly with a wxVariantData object. wxVariant
         will take ownership of the wxVariantData and will not increase its
         reference count.
     */
-    wxVariant(wxVariantData* data, const wxString& name = "");
-    
+    wxVariant(wxVariantData* data, const wxString& name = wxEmptyString);
+
     /**
         Constructs a variant from another variant by increasing the reference
         count.
     */
     wxVariant(const wxVariant& variant);
-    
+
     /**
         Constructs a variant from a wide string literal.
     */
-    wxVariant(const wxChar* value, const wxString& name = "");
-    
+    wxVariant(const wxChar* value, const wxString& name = wxEmptyString);
+
     /**
         Constructs a variant from a string.
     */
-    wxVariant(const wxString& value, const wxString& name = "");
-    
+    wxVariant(const wxString& value, const wxString& name = wxEmptyString);
+
     /**
         Constructs a variant from a wide char.
     */
-    wxVariant(wxChar value, const wxString& name = "");
-    
+    wxVariant(wxChar value, const wxString& name = wxEmptyString);
+
     /**
         Constructs a variant from a long.
     */
-    wxVariant(long value, const wxString& name = "");
-    
+    wxVariant(long value, const wxString& name = wxEmptyString);
+
     /**
         Constructs a variant from a bool.
     */
-    wxVariant(bool value, const wxString& name = "");
-    
+    wxVariant(bool value, const wxString& name = wxEmptyString);
+
     /**
         Constructs a variant from a double.
     */
-    wxVariant(double value, const wxString& name = "");
-    
+    wxVariant(double value, const wxString& name = wxEmptyString);
+
     /**
         Constructs a variant from a list of variants
     */
-    wxVariant(const wxVariantList& value, const wxString& name = "");
-    
+    wxVariant(const wxVariantList& value, const wxString& name = wxEmptyString);
+
     /**
         Constructs a variant from a void pointer.
     */
-    wxVariant(void* value, const wxString& name = "");
-    
+    wxVariant(void* value, const wxString& name = wxEmptyString);
+
     /**
         Constructs a variant from a pointer to an wxObject
         derived class.
     */
-    wxVariant(wxObject* value, const wxString& name = "");
-    
+    wxVariant(wxObject* value, const wxString& name = wxEmptyString);
+
     /**
         Constructs a variant from a wxDateTime.
     */
-    wxVariant(wxDateTime& val, const wxString& name = "");
-    
+    wxVariant(wxDateTime& val, const wxString& name = wxEmptyString);
+
     /**
         Constructs a variant from a wxArrayString.
     */
-    wxVariant(wxArrayString& val, const wxString& name = "");
+    wxVariant(wxArrayString& val, const wxString& name = wxEmptyString);
 
     /**
         Destructor.
@@ -514,12 +514,12 @@ public:
     /**
         Returns @true if this object is equal to @a data.
     */
-    bool Eq(wxVariantData& data) const;
+    virtual bool Eq(wxVariantData& data) const = 0;
 
     /**
         Returns the string type of the data.
     */
-    wxString GetType() const;
+    virtual wxString GetType() const = 0;
 
     /**
         If the data is a wxObject returns a pointer to the objects wxClassInfo

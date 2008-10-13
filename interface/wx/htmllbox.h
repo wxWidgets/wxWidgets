@@ -125,7 +125,7 @@ protected:
         that the returned HTML fragment will render with the same height or else you'll
         see some artifacts when the user selects an item.
     */
-    wxString OnGetItem(size_t n) const;
+    virtual wxString OnGetItem(size_t n) const = 0;
 };
 
 

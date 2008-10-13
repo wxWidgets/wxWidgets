@@ -476,12 +476,12 @@ public:
         Fetch the value from the table and prepare the edit control
         to begin editing. Set the focus to the edit control.
     */
-    void BeginEdit(int row, int col, wxGrid* grid);
+    virtual void BeginEdit(int row, int col, wxGrid* grid) = 0;
 
     /**
         Create a new object which is the copy of this one.
     */
-    wxGridCellEditor* Clone() const;
+    virtual wxGridCellEditor* Clone() const = 0;
 
     /**
         Creates the actual edit control.
@@ -498,7 +498,7 @@ public:
         Complete the editing of the current cell. Returns @true if the value has
         changed. If necessary, the control may be destroyed.
     */
-    bool EndEdit(int row, int col, wxGrid* grid);
+    virtual bool EndEdit(int row, int col, wxGrid* grid) = 0;
 
     /**
         Some types of controls on some platforms may need some help
@@ -521,7 +521,7 @@ public:
     /**
         Reset the value in the control back to its starting value.
     */
-    void Reset();
+    virtual void Reset() = 0;
 
     /**
         Size and position the edit control.
@@ -800,7 +800,7 @@ public:
     /**
 
     */
-    wxGridCellRenderer* Clone() const;
+    virtual wxGridCellRenderer* Clone() const = 0;
 
     /**
         Draw the given cell on the provided DC inside the given rectangle
@@ -810,9 +810,9 @@ public:
         prepare the DC using the given attribute: it will draw the rectangle
         with the background colour from attr and set the text colour and font.
     */
-    void Draw(wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
-              const wxRect& rect, int row, int col,
-              bool isSelected);
+    virtual void Draw(wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
+                      const wxRect& rect, int row, int col,
+                      bool isSelected) = 0;
 
     /**
         Get the preferred size of the cell for its contents.

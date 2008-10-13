@@ -37,14 +37,13 @@ public:
         Appends a an arc to two tangents connecting (current) to (x1,y1) and (x1,y1) to
         (x2,y2), also a straight line from (current) to (x1,y1).
     */
-    void AddArcToPoint(wxDouble x1, wxDouble y1, wxDouble x2,
-                       wxDouble y2,
-                       wxDouble r);
+    virtual void AddArcToPoint(wxDouble x1, wxDouble y1, wxDouble x2,
+                               wxDouble y2, wxDouble r);
 
     /**
         Appends a circle around (x,y) with radius r as a new closed subpath.
     */
-    void AddCircle(wxDouble x, wxDouble y, wxDouble r);
+    virtual void AddCircle(wxDouble x, wxDouble y, wxDouble r);
 
     //@{
     /**
@@ -62,7 +61,7 @@ public:
     /**
         Appends an ellipse fitting into the passed in rectangle.
     */
-    void AddEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h);
+    virtual void AddEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h);
 
     //@{
     /**
@@ -75,7 +74,7 @@ public:
     /**
         Adds another path.
     */
-    void AddPath(const wxGraphicsPath& path);
+    virtual void AddPath(const wxGraphicsPath& path);
 
     /**
         Adds a quadratic Bezier curve from the current point, using a control point and
@@ -87,19 +86,18 @@ public:
     /**
         Appends a rectangle as a new closed subpath.
     */
-    void AddRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h);
+    virtual void AddRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h);
 
     /**
         Appends a rounded rectangle as a new closed subpath.
     */
-    void AddRoundedRectangle(wxDouble x, wxDouble y, wxDouble w,
-                             wxDouble h,
-                             wxDouble radius);
+    virtual void AddRoundedRectangle(wxDouble x, wxDouble y, wxDouble w,
+                                     wxDouble h, wxDouble radius);
 
     /**
         Closes the current sub-path.
     */
-    void CloseSubpath();
+    virtual void CloseSubpath();
 
     //@{
     /**
@@ -132,7 +130,7 @@ public:
         Returns the native path (CGPathRef for Core Graphics, Path pointer for GDIPlus
         and a cairo_path_t pointer for cairo).
     */
-    void* GetNativePath() const;
+    virtual void* GetNativePath() const;
 
     //@{
     /**
@@ -145,14 +143,14 @@ public:
     /**
         Transforms each point of this path by the matrix.
     */
-    void Transform(const wxGraphicsMatrix& matrix);
+    virtual void Transform(const wxGraphicsMatrix& matrix);
 
     /**
         Gives back the native path returned by GetNativePath() because there might be
         some deallocations necessary (eg on cairo the native path returned by
         GetNativePath is newly allocated each time).
     */
-    void UnGetNativePath(void* p) const;
+    virtual void UnGetNativePath(void* p) const;
 };
 
 
@@ -264,23 +262,23 @@ public:
     /**
         Clips drawings to the region
     */
-    void Clip(const wxRegion& region);
+    virtual void Clip(const wxRegion& region) = 0;
 
     /**
         Clips drawings to the rectangle.
     */
-    void Clip(wxDouble x, wxDouble y, wxDouble w, wxDouble h);
+    virtual void Clip(wxDouble x, wxDouble y, wxDouble w, wxDouble h) = 0;
 
     /**
         Concatenates the passed in transform with the current transform of this context
     */
-    void ConcatTransform(const wxGraphicsMatrix& matrix);
+    virtual void ConcatTransform(const wxGraphicsMatrix& matrix) = 0;
 
 
     /**
         Creates a native brush from a wxBrush.
     */
-    wxGraphicsBrush CreateBrush(const wxBrush& brush) const;
+    virtual wxGraphicsBrush CreateBrush(const wxBrush& brush) const;
 
     /**
         Creates a native graphics font from a wxFont and a text colour.
@@ -295,14 +293,14 @@ public:
 
         @see wxGraphicsRenderer:: CreateContextFromNativeContext
     */
-    wxGraphicsContext* CreateFromNative(void* context);
+    static wxGraphicsContext* CreateFromNative(void* context);
 
     /**
         Creates a wxGraphicsContext from a native window.
 
         @see wxGraphicsRenderer:: CreateContextFromNativeWindow
     */
-    wxGraphicsContext* CreateFromNativeWindow(void* window);
+    static wxGraphicsContext* CreateFromNativeWindow(void* window);
 
     /**
         Creates a native brush, having a linear gradient, starting at (x1,y1) with
@@ -333,19 +331,17 @@ public:
     /**
         Creates a native pen from a wxPen.
     */
-    wxGraphicsPen CreatePen(const wxPen& pen) const;
+    virtual wxGraphicsPen CreatePen(const wxPen& pen) const;
 
     /**
         Creates a native brush, having a radial gradient originating at (xo,yc) with
         color oColour and ends on a circle around (xc,yc) with radius r and color cColour
     */
-    wxGraphicsBrush CreateRadialGradientBrush(wxDouble xo,
-            wxDouble yo,
-            wxDouble xc,
-            wxDouble yc,
-            wxDouble radius,
-            const wxColour& oColor,
-            const wxColour& cColor) const;
+    virtual wxGraphicsBrush CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
+                                                      wxDouble xc, wxDouble yc,
+                                                      wxDouble radius,
+                                                      const wxColour& oColor,
+                                                      const wxColour& cColor) const;
 
     /**
         Draws the bitmap. In case of a mono bitmap, this is treated as a mask and the
@@ -357,7 +353,7 @@ public:
     /**
         Draws an ellipse.
     */
-    void DrawEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h);
+    virtual void DrawEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h);
 
     /**
         Draws the icon.
@@ -386,9 +382,8 @@ public:
     /**
         Draws a rounded rectangle.
     */
-    void DrawRoundedRectangle(wxDouble x, wxDouble y, wxDouble w,
-                              wxDouble h,
-                              wxDouble radius);
+    virtual void DrawRoundedRectangle(wxDouble x, wxDouble y, wxDouble w,
+                                      wxDouble h, wxDouble radius);
 
     //@{
     /**
@@ -409,7 +404,7 @@ public:
         Returns the native context (CGContextRef for Core Graphics, Graphics pointer
         for GDIPlus and cairo_t pointer for cairo).
     */
-    void* GetNativeContext();
+    virtual void* GetNativeContext() = 0;
 
     /**
         Fills the @a widths array with the widths from the beginning of
@@ -426,30 +421,29 @@ public:
         descender, and @a externalLeading is any extra vertical space added
         to the font by the font designer (usually is zero).
     */
-    void GetTextExtent(const wxString& text, wxDouble* width,
-                       wxDouble* height,
-                       wxDouble* descent,
-                       wxDouble* externalLeading) const;
+    virtual void GetTextExtent(const wxString& text, wxDouble* width,
+                               wxDouble* height, wxDouble* descent,
+                               wxDouble* externalLeading) const = 0;
 
     /**
         Gets the current transformation matrix of this context.
     */
-    wxGraphicsMatrix GetTransform() const;
+    virtual wxGraphicsMatrix GetTransform() const = 0;
 
     /**
         Resets the clipping to original shape.
     */
-    void ResetClip();
+    virtual void ResetClip() = 0;
 
     /**
         Rotates the current transformation matrix (radians),
     */
-    void Rotate(wxDouble angle);
+    virtual void Rotate(wxDouble angle) = 0;
 
     /**
         Scales the current transformation matrix.
     */
-    void Scale(wxDouble xScale, wxDouble yScale);
+    virtual void Scale(wxDouble xScale, wxDouble yScale) = 0;
 
     //@{
     /**
@@ -478,7 +472,7 @@ public:
     /**
         Sets the current transformation matrix of this context
     */
-    void SetTransform(const wxGraphicsMatrix& matrix);
+    virtual void SetTransform(const wxGraphicsMatrix& matrix) = 0;
 
     /**
         Strokes a single line.
@@ -499,12 +493,12 @@ public:
     /**
         Strokes along a path with the current pen.
     */
-    void StrokePath(const wxGraphicsPath& path);
+    virtual void StrokePath(const wxGraphicsPath& path) = 0;
 
     /**
         Translates the current transformation matrix.
     */
-    void Translate(wxDouble dx, wxDouble dy);
+    virtual void Translate(wxDouble dx, wxDouble dy) = 0;
 };
 
 
@@ -555,7 +549,7 @@ public:
     /**
         Creates a native brush from a wxBrush.
     */
-    wxGraphicsBrush CreateBrush(const wxBrush& brush);
+    virtual wxGraphicsBrush CreateBrush(const wxBrush& brush) = 0;
 
 
     /**
@@ -563,12 +557,12 @@ public:
         eg a CGContextRef for Core Graphics, a Graphics pointer for GDIPlus or a cairo_t
         pointer for cairo.
     */
-    wxGraphicsContext* CreateContextFromNativeContext(void* context);
+    virtual wxGraphicsContext* CreateContextFromNativeContext(void* context) = 0;
 
     /**
         Creates a wxGraphicsContext from a native window.
     */
-    wxGraphicsContext* CreateContextFromNativeWindow(void* window);
+    virtual wxGraphicsContext* CreateContextFromNativeWindow(void* window) = 0;
 
     /**
         Creates a native graphics font from a wxFont and a text colour.
@@ -600,24 +594,22 @@ public:
     /**
         Creates a native graphics path which is initially empty.
     */
-    wxGraphicsPath CreatePath();
+    virtual wxGraphicsPath CreatePath() = 0;
 
     /**
         Creates a native pen from a wxPen.
     */
-    wxGraphicsPen CreatePen(const wxPen& pen);
+    virtual wxGraphicsPen CreatePen(const wxPen& pen) = 0;
 
     /**
         Creates a native brush, having a radial gradient originating at (xo,yc) with
         color oColour and ends on a circle around (xc,yc) with radius r and color cColour
     */
-    wxGraphicsBrush CreateRadialGradientBrush(wxDouble xo,
-            wxDouble yo,
-            wxDouble xc,
-            wxDouble yc,
-            wxDouble radius,
-            const wxColour& oColour,
-            const wxColour& cColour);
+    virtual wxGraphicsBrush CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
+                                                      wxDouble xc, wxDouble yc,
+                                                      wxDouble radius,
+                                                      const wxColour& oColour,
+                                                      const wxColour& cColour) = 0;
 
     /**
         Returns the default renderer on this platform. On OS X this is the Core
@@ -710,20 +702,20 @@ public:
     /**
         Returns the component values of the matrix via the argument pointers.
     */
-    void Get(wxDouble* a = NULL, wxDouble* b = NULL, wxDouble* c = NULL,
-             wxDouble* d = NULL, wxDouble* tx = NULL,
-             wxDouble* ty = NULL) const;
+    virtual void Get(wxDouble* a = NULL, wxDouble* b = NULL, wxDouble* c = NULL,
+                     wxDouble* d = NULL, wxDouble* tx = NULL,
+                     wxDouble* ty = NULL) const;
 
     /**
         Returns the native representation of the matrix. For CoreGraphics this is a
         CFAffineMatrix pointer. For GDIPlus a Matrix Pointer and for Cairo a cairo_matrix_t pointer.
     */
-    void* GetNativeMatrix() const;
+    virtual void* GetNativeMatrix() const;
 
     /**
         Inverts the matrix.
     */
-    void Invert();
+    virtual void Invert();
 
     /**
         Returns @true if the elements of the transformation matrix are equal.
@@ -733,17 +725,17 @@ public:
     /**
         Return @true if this is the identity matrix.
     */
-    bool IsIdentity() const;
+    virtual bool IsIdentity() const;
 
     /**
         Rotates this matrix (radians).
     */
-    void Rotate(wxDouble angle);
+    virtual void Rotate(wxDouble angle);
 
     /**
         Scales this matrix.
     */
-    void Scale(wxDouble xScale, wxDouble yScale);
+    virtual void Scale(wxDouble xScale, wxDouble yScale);
 
     /**
         Sets the matrix to the respective values (default values are the identity
@@ -757,16 +749,16 @@ public:
         Applies this matrix to a distance (ie. performs all transforms except
         translations)
     */
-    void TransformDistance(wxDouble* dx, wxDouble* dy) const;
+    virtual void TransformDistance(wxDouble* dx, wxDouble* dy) const;
 
     /**
         Applies this matrix to a point.
     */
-    void TransformPoint(wxDouble* x, wxDouble* y) const;
+    virtual void TransformPoint(wxDouble* x, wxDouble* y) const;
 
     /**
         Translates this matrix.
     */
-    void Translate(wxDouble dx, wxDouble dy);
+    virtual void Translate(wxDouble dx, wxDouble dy);
 };
 

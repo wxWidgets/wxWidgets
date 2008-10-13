@@ -42,7 +42,7 @@ public:
 
         @return @true if the function succeeded, @false otherwise.
     */
-    bool Dump();
+    static bool Dump();
 
     /**
         Returns @true if the memory allocator checks all previous memory blocks for
@@ -52,7 +52,7 @@ public:
 
         @see SetCheckPrevious()
     */
-    bool GetCheckPrevious();
+    static bool GetCheckPrevious();
 
     /**
         Returns @true if debug mode is on.
@@ -63,7 +63,7 @@ public:
 
         @see SetDebugMode()
     */
-    bool GetDebugMode();
+    static bool GetDebugMode();
 
     /**
         Gets the debug level (default 1).
@@ -78,7 +78,7 @@ public:
 
         @see SetLevel()
     */
-    int GetLevel();
+    static int GetLevel();
 
     /**
         Returns the output stream associated with the debug context.
@@ -117,7 +117,7 @@ public:
 
         @see PrintStatistics()
     */
-    bool PrintClasses();
+    static bool PrintClasses();
 
     /**
         Performs a statistics analysis from the currently set checkpoint, writing
@@ -130,7 +130,7 @@ public:
 
         @see PrintStatistics()
     */
-    bool PrintStatistics(bool detailed = true);
+    static bool PrintStatistics(bool detailed = true);
 
     /**
         Tells the memory allocator to check all previous memory blocks for errors.
@@ -138,7 +138,7 @@ public:
 
         @see GetCheckPrevious()
     */
-    void SetCheckPrevious(bool check);
+    static void SetCheckPrevious(bool check);
 
     /**
         Sets the current checkpoint: Dump and PrintStatistics operations will
@@ -149,7 +149,7 @@ public:
             If @true, the checkpoint is reset to include all memory allocations
             since the program started.
     */
-    void SetCheckpoint(bool all = false);
+    static void SetCheckpoint(bool all = false);
 
     /**
         Sets the debug mode on or off.
@@ -165,7 +165,7 @@ public:
 
         @see GetDebugMode()
     */
-    void SetDebugMode(bool debug);
+    static void SetDebugMode(bool debug);
 
     /**
         Sets the current debug file and creates a stream.
@@ -189,7 +189,7 @@ public:
 
         @see GetLevel()
     */
-    void SetLevel(int level);
+    static void SetLevel(int level);
 
     /**
         Installs a function to be called at the end of wxWidgets shutdown.
@@ -198,7 +198,7 @@ public:
 
         The shutdown function must be take no parameters and return nothing.
     */
-    void SetShutdownNotifyFunction(wxShutdownNotifyFunction func);
+    static void SetShutdownNotifyFunction(wxShutdownNotifyFunction func);
 
     /**
         Sets the debugging stream to be the debugger (Windows) or standard error (other

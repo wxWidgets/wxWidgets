@@ -358,7 +358,7 @@ public:
 
         Must be overridden in derived handlers.
     */
-    virtual bool CanOpen(const wxString& location);
+    virtual bool CanOpen(const wxString& location) = 0;
 
     /**
         Works like ::wxFindFirstFile().

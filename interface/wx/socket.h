@@ -197,7 +197,7 @@ public:
 
         @return @true on success, @false if something went wrong.
     */
-    virtual bool AnyAddress();
+    virtual bool AnyAddress() = 0;
 
     /**
         Internally, this is the same as setting the IP address to @b INADDR_BROADCAST.
@@ -206,7 +206,7 @@ public:
 
         @return @true on success, @false if something went wrong.
     */
-    virtual bool BroadcastAddress();
+    virtual bool BroadcastAddress() = 0;
 
     /**
         Set the address to hostname, which can be a host name or an IP-style address
@@ -215,24 +215,24 @@ public:
         @return @true on success, @false if something goes wrong (invalid
                 hostname or invalid IP address).
     */
-    virtual bool Hostname(const wxString& hostname);
+    virtual bool Hostname(const wxString& hostname) = 0;
 
     /**
         Returns the hostname which matches the IP address.
     */
-    virtual wxString Hostname();
+    virtual wxString Hostname() const = 0;
 
     /**
         Returns a wxString containing the IP address.
     */
-    virtual wxString IPAddress();
+    virtual wxString IPAddress() const = 0;
 
     /**
         Determines if current address is set to localhost.
 
         @return @true if address is localhost, @false if internet address.
     */
-    virtual bool IsLocalHost();
+    virtual bool IsLocalHost() const = 0;
 
     /**
         Set address to localhost.
@@ -243,14 +243,14 @@ public:
 
         @return @true on success, @false if something went wrong.
     */
-    virtual bool LocalHost();
+    virtual bool LocalHost() = 0;
 
     /**
         Set the port to that corresponding to the specified service.
 
         @return @true on success, @false if something goes wrong (invalid @a service).
     */
-    virtual bool Service(const wxString& service);
+    virtual bool Service(const wxString& service) = 0;
 
     /**
         Set the port to that corresponding to the specified service.

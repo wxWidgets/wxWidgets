@@ -965,7 +965,7 @@ public:
         @param origin
             Help event origin, see also wxHelpEvent::GetOrigin.
     */
-    virtual wxString GetHelpTextAtPoint(const wxPoint point,
+    virtual wxString GetHelpTextAtPoint(const wxPoint& point,
                                         wxHelpEvent::Origin origin) const;
 
     /**
@@ -2662,7 +2662,7 @@ public:
 
         @see RegisterHotKey()
     */
-    bool UnregisterHotKey(int hotkeyId);
+    virtual bool UnregisterHotKey(int hotkeyId);
 
     /**
         Unreserve an ID or range of IDs that was reserved by NewControlId().

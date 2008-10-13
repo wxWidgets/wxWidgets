@@ -340,10 +340,9 @@ public:
         The optimal width to contain the the unabreviated label text or
         bitmap, the sort arrow if present, and internal margins.
     */
-    virtual int DrawHeaderButton(wxWindow* win, wxDC& dc,
-                                 const wxRect& rect, int flags = 0,
-                                 wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
-                                 wxHeaderButtonParams* params = NULL);
+    virtual int DrawHeaderButton(wxWindow* win, wxDC& dc, const wxRect& rect,
+                                 int flags = 0,
+                                 wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE, wxHeaderButtonParams* params = NULL) = 0;
 
     /**
         Draw the contents of a header control button (label, sort arrows,
@@ -356,10 +355,9 @@ public:
         The optimal width to contain the the unabreviated label text or
         bitmap, the sort arrow if present, and internal margins.
     */
-    virtual int DrawHeaderButtonContents(wxWindow *win, wxDC& dc,
+    virtual int DrawHeaderButtonContents(wxWindow* win, wxDC& dc,
                                          const wxRect& rect, int flags = 0,
-                                         wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
-                                         wxHeaderButtonParams* params = NULL);
+                                         wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE, wxHeaderButtonParams* params = NULL) = 0;
 
     /**
         Draw a selection rectangle underneath the text as used e.g. in a
@@ -396,9 +394,9 @@ public:
         Draw a sash. The @a orient parameter defines whether the sash should be
         vertical or horizontal and how the @a position should be interpreted.
     */
-    virtual void DrawSplitterSash(wxWindow* win, wxDC& dc,
-                                  const wxSize& size, wxCoord position,
-                                  wxOrientation orient, int flags = 0);
+    virtual void DrawSplitterSash(wxWindow* win, wxDC& dc, const wxSize& size,
+                                  wxCoord position, wxOrientation orient,
+                                  int flags = 0) = 0;
 
     /**
         Draw the expanded/collapsed icon for a tree control item.
@@ -432,20 +430,20 @@ public:
     /**
         Returns the size of a check box.
     */
-    virtual wxSize GetCheckBoxSize(wxWindow *win);
+    virtual wxSize GetCheckBoxSize(wxWindow* win) = 0;
 
     /**
         Returns the height of a header button, either a fixed platform height if
         available, or a
         generic height based on the window's font.
     */
-    virtual int GetHeaderButtonHeight(wxWindow* win);
+    virtual int GetHeaderButtonHeight(wxWindow* win) = 0;
 
     /**
         Get the splitter parameters, see
         wxSplitterRenderParams.
     */
-    virtual wxSplitterRenderParams GetSplitterParams(const wxWindow* win);
+    virtual wxSplitterRenderParams GetSplitterParams(const wxWindow* win) = 0;
 
     /**
         This function is used for version checking: Load()
@@ -458,7 +456,7 @@ public:
         but it has to be in the derived, not base, class, to detect mismatches between
         the renderers versions and so you have to implement it anew in all renderers.
     */
-    virtual wxRendererVersion GetVersion() const;
+    virtual wxRendererVersion GetVersion() const = 0;
 
     /**
         Load the renderer from the specified DLL, the returned pointer must be

@@ -77,7 +77,7 @@ protected:
     /**
         This function must be overrided to process the given frame.
     */
-    void OnStackFrame(const wxStackFrame& frame);
+    virtual void OnStackFrame(const wxStackFrame& frame) = 0;
 };
 
 

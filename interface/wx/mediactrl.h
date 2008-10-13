@@ -295,7 +295,7 @@ public:
         video, if there is any.
         See @ref mediactrl_video_size for more information.
     */
-    wxSize GetBestSize();
+    wxSize GetBestSize() const;
 
     /**
         Obtains the playback rate, or speed of the media. @c 1.0 represents normal

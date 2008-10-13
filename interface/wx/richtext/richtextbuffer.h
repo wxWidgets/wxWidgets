@@ -1043,12 +1043,14 @@ protected:
     /**
         Override to load content from @a stream into @a buffer.
     */
-    bool DoLoadFile(wxRichTextBuffer* buffer, wxInputStream& stream);
+    virtual bool DoLoadFile(wxRichTextBuffer* buffer,
+                            wxInputStream& stream) = 0;
 
     /**
         Override to save content to @a stream from @a buffer.
     */
-    bool DoSaveFile(wxRichTextBuffer* buffer, wxOutputStream& stream);
+    virtual bool DoSaveFile(wxRichTextBuffer* buffer,
+                            wxOutputStream& stream) = 0;
 };
 
 
