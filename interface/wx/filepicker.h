@@ -50,7 +50,7 @@
 
     @library{wxcore}
     @category{pickers}
-    <!-- @appearance{filepickerctrl.png} -->
+    @appearance{filepickerctrl.png}
 
     @see wxFileDialog, wxFileDirPickerEvent
 */
@@ -174,7 +174,7 @@ public:
 
     @library{wxcore}
     @category{pickers}
-    <!-- @appearance{dirpickerctrl.png} -->
+    @appearance{dirpickerctrl.png}
 
     @see wxDirDialog, wxFileDirPickerEvent
 */

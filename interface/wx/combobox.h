@@ -53,7 +53,7 @@
 
     @library{wxcore}
     @category{ctrl}
-    <!-- @appearance{combobox.png} -->
+    @appearance{combobox.png}
 
     @see wxListBox, wxTextCtrl, wxChoice, wxCommandEvent
 */

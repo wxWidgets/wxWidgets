@@ -17,7 +17,7 @@
 
     @library{wxhtml}
     @category{ctrl}
-    <!-- @appearance{htmllistbox.png} -->
+    @appearance{htmllistbox.png}
 
     @see wxSimpleHtmlListBox
 */
@@ -175,7 +175,7 @@ public:
 
     @library{wxhtml}
     @category{ctrl}
-    <!-- @appearance{simplehtmllistbox.png} -->
+    @appearance{simplehtmllistbox.png}
 
     @see wxSimpleHtmlListBox::Create
 */

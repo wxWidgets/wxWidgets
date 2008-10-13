@@ -39,7 +39,7 @@
 
     @library{wxcore}
     @category{ctrl}
-    <!-- @appearance{spinctrl.png} -->
+    @appearance{spinctrl.png}
 
     @see wxSpinButton, wxSpinCtrlDouble, wxControl
 */

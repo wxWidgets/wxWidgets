@@ -37,7 +37,7 @@
 
     @library{wxcore}
     @category{ctrl}
-    <!-- @appearance{gauge.png} -->
+    @appearance{gauge.png}
 
     @see wxSlider, wxScrollBar
 */

@@ -249,7 +249,7 @@ enum wxCalendarHitTestResult
 
     @library{wxadv}
     @category{ctrl}
-    <!-- @appearance{calendarctrl.png} -->
+    @appearance{calendarctrl.png}
 
     @nativeimpl{wxgtk,wxmsw}
 

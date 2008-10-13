@@ -53,7 +53,7 @@
 
     @library{wxcore}
     @category{ctrl}
-    <!-- @appearance{listbox.png} -->
+    @appearance{listbox.png}
 
     @see wxEditableListBox, wxChoice, wxComboBox, wxListCtrl, wxCommandEvent
 */

@@ -92,7 +92,7 @@ public:
 
     @library{wxcore}
     @category{ctrl}
-    <!-- @appearance{spinbutton.png} -->
+    @appearance{spinbutton.png}
 
     @see wxSpinCtrl
 */

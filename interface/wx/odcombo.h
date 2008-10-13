@@ -56,7 +56,7 @@ enum wxOwnerDrawnComboBoxPaintingFlags
 
     @library{wxadv}
     @category{ctrl}
-    <!-- @appearance{ownerdrawncombobox.png} -->
+    @appearance{ownerdrawncombobox.png}
 
     @see wxComboCtrl, wxComboBox, wxVListBox, wxCommandEvent
 */

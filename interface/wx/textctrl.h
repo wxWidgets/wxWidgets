@@ -1001,7 +1001,7 @@ public:
 
     @library{wxcore}
     @category{ctrl}
-    <!-- @appearance{textctrl.png} -->
+    @appearance{textctrl.png}
 
     @see wxTextCtrl::Create, wxValidator
 */

@@ -49,7 +49,7 @@
 
     @library{wxadv}
     @category{ctrl}
-    <!-- @appearance{bitmapcombobox.png} -->
+    @appearance{bitmapcombobox.png}
 
     @see wxComboBox, wxChoice, wxOwnerDrawnComboBox, wxCommandEvent
 */

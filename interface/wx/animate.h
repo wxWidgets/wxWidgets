@@ -49,7 +49,7 @@ enum wxAnimationType
 
     @nativeimpl{wxgtk,wxmsw}
 
-    <!-- @appearance{animationctrl.png} -->
+    @appearance{animationctrl.png}
 
     @see wxAnimation, @sample{animate}
 */

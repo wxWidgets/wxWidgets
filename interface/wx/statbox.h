@@ -24,7 +24,7 @@
 
     @library{wxcore}
     @category{ctrl}
-    <!-- @appearance{staticbox.png} -->
+    @appearance{staticbox.png}
 
     @see wxStaticText
 */

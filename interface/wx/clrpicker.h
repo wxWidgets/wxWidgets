@@ -39,7 +39,7 @@
 
     @library{wxcore}
     @category{pickers}
-    <!-- @appearance{colourpickerctrl.png} -->
+    @appearance{colourpickerctrl.png}
 
     @see wxColourDialog, wxColourPickerEvent
 */

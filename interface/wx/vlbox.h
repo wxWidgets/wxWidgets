@@ -30,7 +30,7 @@
 
     @library{wxcore}
     @category{ctrl}
-    <!-- @appearance{vlistbox.png} -->
+    @appearance{vlistbox.png}
 
     @see wxSimpleHtmlListBox, wxHtmlListBox
 */

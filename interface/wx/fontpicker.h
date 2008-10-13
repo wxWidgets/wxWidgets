@@ -42,7 +42,7 @@
 
     @library{wxcore}
     @category{pickers}
-    <!-- @appearance{fontpickerctrl.png} -->
+    @appearance{fontpickerctrl.png}
 
     @see wxFontDialog, wxFontPickerEvent
 */

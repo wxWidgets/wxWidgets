@@ -98,7 +98,7 @@ public:
 
     @library{wxcore}
     @category{ctrl}
-    <!-- @appearance{collapsiblepane.png} -->
+    @appearance{collapsiblepane.png}
 
     @see wxPanel, wxCollapsiblePaneEvent
 */

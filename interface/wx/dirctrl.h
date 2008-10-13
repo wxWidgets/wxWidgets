@@ -29,7 +29,7 @@
 
     @library{wxbase}
     @category{ctrl}
-    <!-- @appearance{genericdirctrl.png} -->
+    @appearance{genericdirctrl.png}
 */
 class wxGenericDirCtrl : public wxControl
 {

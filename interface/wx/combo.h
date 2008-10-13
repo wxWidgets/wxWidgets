@@ -301,7 +301,7 @@ struct wxComboCtrlFeatures
 
     @library{wxbase}
     @category{ctrl}
-    <!-- @appearance{comboctrl.png} -->
+    @appearance{comboctrl.png}
 
     @see wxComboBox, wxChoice, wxOwnerDrawnComboBox, wxComboPopup,
          wxCommandEvent

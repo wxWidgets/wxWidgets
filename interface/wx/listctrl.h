@@ -138,7 +138,7 @@
 
     @library{wxcore}
     @category{ctrl}
-    <!-- @appearance{listctrl.png} -->
+    @appearance{listctrl.png}
 
     @see @ref overview_listctrl "wxListCtrl Overview", wxListView,
     wxListBox, wxTreeCtrl, wxImageList, wxListEvent, wxListItem, wxEditableListBox
@@ -1083,7 +1083,7 @@ public:
 
     @library{wxcore}
     @category{ctrl}
-    <!-- @appearance{listview.png} -->
+    @appearance{listview.png}
 
     @see wxListView::SetColumnImage
 */

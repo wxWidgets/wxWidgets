@@ -703,7 +703,7 @@ public:
 
     @library{wxadv}
     @category{ctrl,dvc}
-    <!-- @appearance{dataviewctrl.png} -->
+    @appearance{dataviewctrl.png}
 */
 class wxDataViewCtrl : public wxControl
 {
@@ -1682,7 +1682,7 @@ public:
 
     @library{wxbase}
     @category{ctrl,dvc}
-    <!-- @appearance{dataviewtreectrl.png} -->
+    @appearance{dataviewtreectrl.png}
 */
 class wxDataViewTreeCtrl : public wxDataViewCtrl
 {

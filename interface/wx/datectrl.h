@@ -48,7 +48,7 @@
 
     @library{wxadv}
     @category{pickers}
-    <!-- @appearance{datepickerctrl.png} -->
+    @appearance{datepickerctrl.png}
 
     @see wxCalendarCtrl, wxDateEvent
 */

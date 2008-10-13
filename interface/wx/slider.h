@@ -107,7 +107,7 @@
 
     @library{wxcore}
     @category{ctrl}
-    <!-- @appearance{slider.png} -->
+    @appearance{slider.png}
 
     @see @ref overview_eventhandling, wxScrollBar
 */
