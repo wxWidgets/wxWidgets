@@ -1208,7 +1208,8 @@ public:
         @param flags
             Socket flags (See wxSocketBase::SetFlags())
     */
-    wxDatagramSocket(wxSocketFlags flags = wxSOCKET_NONE);
+    wxDatagramSocket(const wxSockAddress& addr,
+                     wxSocketFlags flags = wxSOCKET_NONE);
 
     /**
         Destructor. Please see wxSocketBase::Destroy().

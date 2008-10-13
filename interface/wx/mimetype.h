@@ -234,12 +234,18 @@ wxMimeTypesManager* wxTheMimeTypesManager;
 */
 class wxFileType
 {
-public:
+private:
     /**
         The default constructor is private because you should never create objects of
         this type: they are only returned by wxMimeTypesManager methods.
     */
     wxFileType();
+
+public:
+    /**
+        Copy ctor.
+    */
+    wxFileType(const wxFileTypeInfo& ftInfo);
 
     /**
         The destructor of this class is not virtual, so it should not be derived from.

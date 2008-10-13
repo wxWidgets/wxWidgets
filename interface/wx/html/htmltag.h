@@ -23,9 +23,9 @@ protected:
         yourself. Feel free to ignore the constructor parameters.
         Have a look at src/html/htmlpars.cpp if you're interested in creating it.
     */
-    wxHtmlTag(wxHtmlTag* parent, const wxString& source, int pos,
-              int end_pos, wxHtmlTagsCache* cache,
-              wxHtmlEntitiesParser* entParser);
+    wxHtmlTag(wxHtmlTag* parent, const wxString* source,
+              const const_iterator& pos, const const_iterator& end_pos,
+              wxHtmlTagsCache* cache, wxHtmlEntitiesParser* entParser);
 
 public:
     /**

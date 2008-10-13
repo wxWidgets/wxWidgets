@@ -43,7 +43,7 @@ public:
             Dialog position.
     */
     wxPasswordEntryDialog(wxWindow* parent, const wxString& message,
-                          const wxString& caption = "Enter password",
+                          const wxString& caption = wxGetPasswordFromUserPromptStr,
                           const wxString& defaultValue = wxEmptyString,
                           long style = wxOK | wxCANCEL | wxCENTRE,
                           const wxPoint& pos = wxDefaultPosition);
@@ -84,8 +84,8 @@ public:
             Dialog position.
     */
     wxTextEntryDialog(wxWindow* parent, const wxString& message,
-                      const wxString& caption = "Please enter text",
-                      const wxString& defaultValue = "",
+                      const wxString& caption = wxGetTextFromUserPromptStr,
+                      const wxString& value = wxEmptyString,
                       long style = wxOK | wxCANCEL | wxCENTRE,
                       const wxPoint& pos = wxDefaultPosition);
 

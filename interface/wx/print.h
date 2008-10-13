@@ -140,10 +140,10 @@ public:
         Pass a print preview object plus other normal frame arguments.
         The print preview object will be destroyed by the frame when it closes.
     */
-    wxPreviewFrame(wxPrintPreview* preview, wxWindow* parent,
-                   const wxString& title,
+    wxPreviewFrame(wxPrintPreviewBase* preview, wxWindow* parent,
+                   const wxString& title = "Print Preview",
                    const wxPoint& pos = wxDefaultPosition,
-                   const wxSize& size size = wxDefaultSize,
+                   const wxSize& size = wxDefaultSize,
                    long style = wxDEFAULT_FRAME_STYLE,
                    const wxString& name = "frame");
 

@@ -227,10 +227,8 @@ public:
         @param modif
             Modification date and time for this file.
     */
-    wxFSFile(wxInputStream stream,
-             const wxString& location,
-             const wxString& mimetype,
-             const wxString& anchor,
+    wxFSFile(wxInputStream* stream, const wxString& location,
+             const wxString& mimetype, const wxString& anchor,
              wxDateTime modif);
 
     /**

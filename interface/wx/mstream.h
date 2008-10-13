@@ -26,7 +26,7 @@ public:
         @warning
         If the buffer is created, it will be destroyed at the destruction of the stream.
     */
-    wxMemoryOutputStream(char* data = NULL, size_t length = 0);
+    wxMemoryOutputStream(void* data = NULL, size_t length = 0);
 
     /**
         Destructor.

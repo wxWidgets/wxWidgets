@@ -12,43 +12,43 @@
     This cell changes the colour of either the background or the foreground.
 
     @library{wxhtml}
-    @category{FIXME}
+    @category{html}
 */
 class wxHtmlColourCell : public wxHtmlCell
 {
 public:
     /**
         Constructor.
-        
+
         @param clr
             The color
         @param flags
             Can be one of following:
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
             wxHTML_CLR_FOREGROUND
-        
-        
-        
-        
+
+
+
+
             change color of text
-        
-        
-        
-        
-        
+
+
+
+
+
             wxHTML_CLR_BACKGROUND
-        
-        
-        
-        
+
+
+
+
             change background color
     */
-    wxHtmlColourCell(wxColour clr, int flags = wxHTML_CLR_FOREGROUND);
+    wxHtmlColourCell(const wxColour& clr, int flags = wxHTML_CLR_FOREGROUND);
 };
 
 
@@ -71,7 +71,7 @@ class wxHtmlWidgetCell : public wxHtmlCell
 public:
     /**
         Constructor.
-        
+
         @param wnd
             Connected window. It is parent window must be the wxHtmlWindow object within
             which it is displayed!
@@ -124,7 +124,7 @@ public:
 
     /**
         Renders the cell.
-        
+
         @param dc
             Device context to which the cell is to be drawn
         @param x,y
@@ -146,7 +146,7 @@ public:
         cell is certainly out of the screen (and thus invisible). This is not
         nonsense - some tags (like wxHtmlColourCell
         or font setter) must be drawn even if they are invisible!
-        
+
         @param dc
             Device context to which the cell is to be drawn
         @param x,y
@@ -164,7 +164,7 @@ public:
         It is recommended way how to obtain pointer to particular cell or
         to cell of some type (e.g. wxHtmlAnchorCell reacts on
         wxHTML_COND_ISANCHOR condition)
-        
+
         @param condition
             Unique integer identifier of condition
         @param param
@@ -202,7 +202,7 @@ public:
         Returns hypertext link if associated with this cell or @NULL otherwise.
         See wxHtmlLinkInfo.
         (Note: this makes sense only for visible tags).
-        
+
         @param x,y
             Coordinates of position where the user pressed mouse button.
             These coordinates are used e.g. by COLORMAP. Values are relative to the
@@ -212,7 +212,7 @@ public:
 
     /**
         Returns cursor to show when mouse pointer is over the cell.
-        
+
         @param window
             interface to the parent HTML window
     */
@@ -266,14 +266,14 @@ public:
         over a cell within wxHtmlWindow this method of that
         cell is called. Default behavior is to call
         wxHtmlWindow::LoadPage.
-        
+
         @param window
             interface to the parent HTML window
         @param pos
             coordinates of mouse click (this is relative to cell's origin
         @param event
             mouse event that triggered the call
-        
+
         @return @true if a link was clicked, @false otherwise.
     */
     virtual bool ProcessMouseClick(wxHtmlWindowInterface* window,
@@ -328,7 +328,7 @@ public:
     /**
         Constructor. @a parent is pointer to parent container or @NULL.
     */
-    wxHtmlContainerCell(wxHtmlContainerCell parent);
+    wxHtmlContainerCell(wxHtmlContainerCell* parent);
 
     /**
         Returns container's horizontal alignment.
@@ -378,95 +378,95 @@ public:
     /**
         Sets the container's @e horizontal alignment. During wxHtmlCell::Layout
         each line is aligned according to @a al value.
-        
+
         @param al
             new horizontal alignment. May be one of these values:
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
             wxHTML_ALIGN_LEFT
-        
-        
-        
-        
+
+
+
+
             lines are left-aligned (default)
-        
-        
-        
-        
-        
+
+
+
+
+
             wxHTML_ALIGN_JUSTIFY
-        
-        
-        
-        
+
+
+
+
             lines are justified
-        
-        
-        
-        
-        
+
+
+
+
+
             wxHTML_ALIGN_CENTER
-        
-        
-        
-        
+
+
+
+
             lines are centered
-        
-        
-        
-        
-        
+
+
+
+
+
             wxHTML_ALIGN_RIGHT
-        
-        
-        
-        
+
+
+
+
             lines are right-aligned
     */
     void SetAlignHor(int al);
 
     /**
         Sets the container's @e vertical alignment. This is per-line alignment!
-        
+
         @param al
             new vertical alignment. May be one of these values:
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
             wxHTML_ALIGN_BOTTOM
-        
-        
-        
-        
+
+
+
+
             cells are over the line (default)
-        
-        
-        
-        
-        
+
+
+
+
+
             wxHTML_ALIGN_CENTER
-        
-        
-        
-        
+
+
+
+
             cells are centered on line
-        
-        
-        
-        
-        
+
+
+
+
+
             wxHTML_ALIGN_TOP
-        
-        
-        
-        
+
+
+
+
             cells are under the line
     */
     void SetAlignVer(int al);
@@ -478,7 +478,7 @@ public:
 
     /**
         Sets the border (frame) colours. A border is a rectangle around the container.
-        
+
         @param clr1
             Colour of top and left lines
         @param clr2
@@ -488,114 +488,114 @@ public:
 
     /**
         Sets the indentation (free space between borders of container and subcells).
-        
+
         @param i
             Indentation value.
         @param what
             Determines which of the four borders we're setting. It is OR
             combination of following constants:
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
             wxHTML_INDENT_TOP
-        
-        
-        
-        
+
+
+
+
             top border
-        
-        
-        
-        
-        
+
+
+
+
+
             wxHTML_INDENT_BOTTOM
-        
-        
-        
-        
+
+
+
+
             bottom
-        
-        
-        
-        
-        
+
+
+
+
+
             wxHTML_INDENT_LEFT
-        
-        
-        
-        
+
+
+
+
             left
-        
-        
-        
-        
-        
+
+
+
+
+
             wxHTML_INDENT_RIGHT
-        
-        
-        
-        
+
+
+
+
             right
-        
-        
-        
-        
-        
+
+
+
+
+
             wxHTML_INDENT_HORIZONTAL
-        
-        
-        
-        
+
+
+
+
             left and right
-        
-        
-        
-        
-        
+
+
+
+
+
             wxHTML_INDENT_VERTICAL
-        
-        
-        
-        
+
+
+
+
             top and bottom
-        
-        
-        
-        
-        
+
+
+
+
+
             wxHTML_INDENT_ALL
-        
-        
-        
-        
+
+
+
+
             all 4 borders
         @param units
             Units of i. This parameter affects interpretation of  value.
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
             wxHTML_UNITS_PIXELS
-        
-        
-        
-        
+
+
+
+
             i is number of pixels
-        
-        
-        
-        
-        
+
+
+
+
+
             wxHTML_UNITS_PERCENT
-        
-        
-        
-        
+
+
+
+
             i is interpreted as percents of width
             of parent container
     */
@@ -608,7 +608,7 @@ public:
         by layed-out subcells. Calling this method guarantees you that the height
         of container is never smaller than @a h - even if the subcells cover
         much smaller area.
-        
+
         @param h
             The minimal height.
         @param align
@@ -629,7 +629,7 @@ public:
         parent container (and thus you can have only one sub-container per line).
         You can change this by setting FWA.
         @a pixel_scale is number of real pixels that equals to 1 HTML pixel.
-        
+
         @param w
             Width of the container. If the value is negative it means
             complement to full width of parent container (e.g.
@@ -638,28 +638,28 @@ public:
             creating tables - you can call SetWidthFloat(50) and SetWidthFloat(-50))
         @param units
             Units of w This parameter affects the interpretation of  value.
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
             wxHTML_UNITS_PIXELS
-        
-        
-        
-        
+
+
+
+
             w is number of pixels
-        
-        
-        
-        
-        
+
+
+
+
+
             wxHTML_UNITS_PERCENT
-        
-        
-        
-        
+
+
+
+
             w is interpreted as percents of width
             of parent container
         @param tag
