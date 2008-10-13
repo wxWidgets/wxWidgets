@@ -83,6 +83,31 @@ public:
     DECLARE_NO_COPY_CLASS(wxSocketState)
 };
 
+// Conditionally make the socket non-blocking for the lifetime of this object.
+class wxSocketUnblocker
+{
+public:
+    wxSocketUnblocker(GSocket *socket, bool unblock = true)
+        : m_socket(socket),
+          m_unblock(unblock)
+    {
+        if ( m_unblock )
+            m_socket->SetNonBlocking(true);
+    }
+
+    ~wxSocketUnblocker()
+    {
+        if ( m_unblock )
+            m_socket->SetNonBlocking(false);
+    }
+
+private:
+    GSocket * const m_socket;
+    bool m_unblock;
+
+    DECLARE_NO_COPY_CLASS(wxSocketUnblocker)
+};
+
 // ============================================================================
 // GSocketManager
 // ============================================================================
@@ -219,8 +244,9 @@ wxSocketBase::wxSocketBase(wxSocketFlags flags, wxSocketType type)
 {
     Init();
 
-    m_flags = flags;
-    m_type  = type;
+    SetFlags(flags);
+
+    m_type = type;
 }
 
 wxSocketBase::~wxSocketBase()
@@ -311,7 +337,7 @@ wxSocketBase& wxSocketBase::Read(void* buffer, wxUint32 nbytes)
     // Mask read events
     m_reading = true;
 
-    m_lcount = _Read(buffer, nbytes);
+    m_lcount = DoRead(buffer, nbytes);
 
     // If in wxSOCKET_WAITALL mode, all bytes should have been read.
     if (m_flags & wxSOCKET_WAITALL)
@@ -325,37 +351,31 @@ wxSocketBase& wxSocketBase::Read(void* buffer, wxUint32 nbytes)
     return *this;
 }
 
-wxUint32 wxSocketBase::_Read(void* buffer_, wxUint32 nbytes)
+wxUint32 wxSocketBase::DoRead(void* buffer_, wxUint32 nbytes)
 {
-    char *buffer = (char *)buffer_;
+    // We use pointer arithmetic here which doesn't work with void pointers.
+    char *buffer = static_cast<char *>(buffer_);
 
-    int total;
-
-    // Try the pushback buffer first
-    total = GetPushback(buffer, nbytes, false);
+    // Try the push back buffer first, even before checking whether the socket
+    // is valid to allow reading previously pushed back data from an already
+    // closed socket.
+    wxUint32 total = GetPushback(buffer, nbytes, false);
     nbytes -= total;
-    buffer  = (char *)buffer + total;
+    buffer += total;
 
-    // Return now in one of the following cases:
-    // - the socket is invalid,
-    // - we got all the data
-    if ( !m_socket ||
-            !nbytes )
+    // If it's indeed closed or if read everything, there is nothing more to do.
+    if ( !m_socket || !nbytes )
         return total;
 
-    // Possible combinations (they are checked in this order)
-    // wxSOCKET_NOWAIT
-    // wxSOCKET_WAITALL (with or without wxSOCKET_BLOCK)
-    // wxSOCKET_BLOCK
-    // wxSOCKET_NONE
-    //
-    int ret;
-    if (m_flags & wxSOCKET_NOWAIT)
-    {
-        m_socket->SetNonBlocking(1);
-        ret = m_socket->Read(buffer, nbytes);
-        m_socket->SetNonBlocking(0);
+    wxCHECK_MSG( buffer, 0, "NULL buffer" );
 
+
+    // wxSOCKET_NOWAIT overrides all the other flags and means that we are
+    // polling the socket and don't block at all.
+    if ( m_flags & wxSOCKET_NOWAIT )
+    {
+        wxSocketUnblocker unblock(m_socket);
+        int ret = m_socket->Read(buffer, nbytes);
         if ( ret < 0 )
             return 0;
 
@@ -365,11 +385,13 @@ wxUint32 wxSocketBase::_Read(void* buffer_, wxUint32 nbytes)
     {
         for ( ;; )
         {
-            // dispatch events unless disabled
+            // Wait until socket becomes ready for reading dispatching the GUI
+            // events in the meanwhile unless wxSOCKET_BLOCK was explicitly
+            // specified to disable this.
             if ( !(m_flags & wxSOCKET_BLOCK) && !WaitForRead() )
                 break;
 
-            ret = m_socket->Read(buffer, nbytes);
+            const int ret = m_socket->Read(buffer, nbytes);
             if ( ret == 0 )
             {
                 // for connection-oriented (e.g. TCP) sockets we can only read
@@ -388,18 +410,18 @@ wxUint32 wxSocketBase::_Read(void* buffer_, wxUint32 nbytes)
 
             total += ret;
 
-            // if wxSOCKET_WAITALL is not set, we can leave now as we did read
-            // something
+            // If wxSOCKET_WAITALL is not set, we can leave now as we did read
+            // something and we don't need to wait for all nbytes bytes to be
+            // read.
             if ( !(m_flags & wxSOCKET_WAITALL) )
                 break;
 
-            // otherwise check if read the maximal requested amount of data
+            // Otherwise continue reading until we do read everything.
             nbytes -= ret;
             if ( !nbytes )
                 break;
 
-            // we didn't, so continue reading
-            buffer  = (char *)buffer + ret;
+            buffer += ret;
         }
     }
 
@@ -425,7 +447,7 @@ wxSocketBase& wxSocketBase::ReadMsg(void* buffer, wxUint32 nbytes)
     old_flags = m_flags;
     SetFlags((m_flags & wxSOCKET_BLOCK) | wxSOCKET_WAITALL);
 
-    if (_Read(&msg, sizeof(msg)) != sizeof(msg))
+    if (DoRead(&msg, sizeof(msg)) != sizeof(msg))
         goto exit;
 
     sig = (wxUint32)msg.sig[0];
@@ -455,7 +477,7 @@ wxSocketBase& wxSocketBase::ReadMsg(void* buffer, wxUint32 nbytes)
     // Don't attempt to read if the msg was zero bytes long.
     if (len)
     {
-        total = _Read(buffer, len);
+        total = DoRead(buffer, len);
 
         if (total != len)
             goto exit;
@@ -470,7 +492,7 @@ wxSocketBase& wxSocketBase::ReadMsg(void* buffer, wxUint32 nbytes)
         do
         {
             discard_len = ((len2 > MAX_DISCARD_SIZE)? MAX_DISCARD_SIZE : len2);
-            discard_len = _Read(discard_buffer, (wxUint32)discard_len);
+            discard_len = DoRead(discard_buffer, (wxUint32)discard_len);
             len2 -= (wxUint32)discard_len;
         }
         while ((discard_len > 0) && len2);
@@ -480,7 +502,7 @@ wxSocketBase& wxSocketBase::ReadMsg(void* buffer, wxUint32 nbytes)
         if (len2 != 0)
             goto exit;
     }
-    if (_Read(&msg, sizeof(msg)) != sizeof(msg))
+    if (DoRead(&msg, sizeof(msg)) != sizeof(msg))
         goto exit;
 
     sig = (wxUint32)msg.sig[0];
@@ -511,7 +533,7 @@ wxSocketBase& wxSocketBase::Peek(void* buffer, wxUint32 nbytes)
     // Mask read events
     m_reading = true;
 
-    m_lcount = _Read(buffer, nbytes);
+    m_lcount = DoRead(buffer, nbytes);
     Pushback(buffer, m_lcount);
 
     // If in wxSOCKET_WAITALL mode, all bytes should have been read.
@@ -531,7 +553,7 @@ wxSocketBase& wxSocketBase::Write(const void *buffer, wxUint32 nbytes)
     // Mask write events
     m_writing = true;
 
-    m_lcount = _Write(buffer, nbytes);
+    m_lcount = DoWrite(buffer, nbytes);
 
     // If in wxSOCKET_WAITALL mode, all bytes should have been written.
     if (m_flags & wxSOCKET_WAITALL)
@@ -545,31 +567,25 @@ wxSocketBase& wxSocketBase::Write(const void *buffer, wxUint32 nbytes)
     return *this;
 }
 
-wxUint32 wxSocketBase::_Write(const void *buffer_, wxUint32 nbytes)
+// This function is a mirror image of DoRead() except that it doesn't use the
+// push back buffer, please see comments there
+wxUint32 wxSocketBase::DoWrite(const void *buffer_, wxUint32 nbytes)
 {
-    const char *buffer = (const char *)buffer_;
+    const char *buffer = static_cast<const char *>(buffer_);
 
-    wxUint32 total = 0;
-
-    // If the socket is invalid or parameters are ill, return immediately
-    if (!m_socket || !buffer || !nbytes)
+    // Return if there is nothing to read or the socket is (already?) closed.
+    if ( !m_socket || !nbytes )
         return 0;
 
-    // Possible combinations (they are checked in this order)
-    // wxSOCKET_NOWAIT
-    // wxSOCKET_WAITALL (with or without wxSOCKET_BLOCK)
-    // wxSOCKET_BLOCK
-    // wxSOCKET_NONE
-    //
-    int ret;
-    if (m_flags & wxSOCKET_NOWAIT)
-    {
-        m_socket->SetNonBlocking(1);
-        ret = m_socket->Write(buffer, nbytes);
-        m_socket->SetNonBlocking(0);
+    wxCHECK_MSG( buffer, 0, "NULL buffer" );
 
-        if (ret > 0)
-            total = ret;
+    wxUint32 total = 0;
+    if ( m_flags & wxSOCKET_NOWAIT )
+    {
+        wxSocketUnblocker unblock(m_socket);
+        const int ret = m_socket->Write(buffer, nbytes);
+        if ( ret > 0 )
+            total += ret;
     }
     else // blocking socket
     {
@@ -578,9 +594,7 @@ wxUint32 wxSocketBase::_Write(const void *buffer_, wxUint32 nbytes)
             if ( !(m_flags & wxSOCKET_BLOCK) && !WaitForWrite() )
                 break;
 
-            ret = m_socket->Write(buffer, nbytes);
-
-            // see comments for similar logic for ret handling in _Read()
+            const int ret = m_socket->Write(buffer, nbytes);
             if ( ret == 0 )
             {
                 m_closed = true;
@@ -588,9 +602,7 @@ wxUint32 wxSocketBase::_Write(const void *buffer_, wxUint32 nbytes)
             }
 
             if ( ret < 0 )
-            {
                 return 0;
-            }
 
             total += ret;
             if ( !(m_flags & wxSOCKET_WAITALL) )
@@ -600,7 +612,7 @@ wxUint32 wxSocketBase::_Write(const void *buffer_, wxUint32 nbytes)
             if ( !nbytes )
                 break;
 
-            buffer = (const char *)buffer + ret;
+            buffer += ret;
         }
     }
 
@@ -634,10 +646,10 @@ wxSocketBase& wxSocketBase::WriteMsg(const void *buffer, wxUint32 nbytes)
     msg.len[2] = (unsigned char) ((nbytes >> 16) & 0xff);
     msg.len[3] = (unsigned char) ((nbytes >> 24) & 0xff);
 
-    if (_Write(&msg, sizeof(msg)) < sizeof(msg))
+    if (DoWrite(&msg, sizeof(msg)) < sizeof(msg))
         goto exit;
 
-    total = _Write(buffer, nbytes);
+    total = DoWrite(buffer, nbytes);
 
     if (total < nbytes)
         goto exit;
@@ -651,7 +663,7 @@ wxSocketBase& wxSocketBase::WriteMsg(const void *buffer, wxUint32 nbytes)
     msg.len[2] =
     msg.len[3] = (char) 0;
 
-    if ((_Write(&msg, sizeof(msg))) < sizeof(msg))
+    if ((DoWrite(&msg, sizeof(msg))) < sizeof(msg))
         goto exit;
 
     // everything was OK
@@ -689,7 +701,7 @@ wxSocketBase& wxSocketBase::Discard()
 
     do
     {
-        ret = _Read(buffer, MAX_DISCARD_SIZE);
+        ret = DoRead(buffer, MAX_DISCARD_SIZE);
         total += ret;
     }
     while (ret == MAX_DISCARD_SIZE);
@@ -944,6 +956,13 @@ void wxSocketBase::SetTimeout(long seconds)
 
 void wxSocketBase::SetFlags(wxSocketFlags flags)
 {
+    // Do some sanity checking on the flags used: not all values can be used
+    // together.
+    wxASSERT_MSG( !(flags & wxSOCKET_NOWAIT) ||
+                  !(flags & (wxSOCKET_WAITALL | wxSOCKET_BLOCK)),
+                  "Using wxSOCKET_WAITALL or wxSOCKET_BLOCK with "
+                  "wxSOCKET_NOWAIT doesn't make sense" );
+
     m_flags = flags;
 }
 
@@ -1084,6 +1103,8 @@ void wxSocketBase::Pushback(const void *buffer, wxUint32 size)
 
 wxUint32 wxSocketBase::GetPushback(void *buffer, wxUint32 size, bool peek)
 {
+    wxCHECK_MSG( buffer, 0, "NULL buffer" );
+
     if (!m_unrd_size)
         return 0;
 
@@ -1167,22 +1188,14 @@ wxSocketServer::wxSocketServer(const wxSockAddress& addr_man,
 
 bool wxSocketServer::AcceptWith(wxSocketBase& sock, bool wait)
 {
-    GSocket *child_socket;
-
     if (!m_socket)
         return false;
 
     // If wait == false, then the call should be nonblocking.
     // When we are finished, we put the socket to blocking mode
     // again.
-
-    if (!wait)
-        m_socket->SetNonBlocking(1);
-
-    child_socket = m_socket->WaitConnection();
-
-    if (!wait)
-        m_socket->SetNonBlocking(0);
+    wxSocketUnblocker unblock(m_socket, !wait);
+    GSocket * const child_socket = m_socket->WaitConnection();
 
     if (!child_socket)
         return false;
@@ -1286,8 +1299,6 @@ bool wxSocketClient::DoConnect(const wxSockAddress& addr_man,
                                const wxSockAddress* local,
                                bool wait)
 {
-    GSocketError err;
-
     if (m_socket)
     {
         // Shutdown and destroy the socket
@@ -1314,9 +1325,7 @@ bool wxSocketClient::DoConnect(const wxSockAddress& addr_man,
 
     // If wait == false, then the call should be nonblocking. When we are
     // finished, we put the socket to blocking mode again.
-
-    if (!wait)
-        m_socket->SetNonBlocking(1);
+    wxSocketUnblocker unblock(m_socket, !wait);
 
     // Reuse makes sense for clients too, if we are trying to rebind to the same port
     if (GetFlags() & wxSOCKET_REUSEADDR)
@@ -1352,13 +1361,10 @@ bool wxSocketClient::DoConnect(const wxSockAddress& addr_man,
 #endif
 
     m_socket->SetPeer(addr_man.GetAddress());
-    err = m_socket->Connect(GSOCK_STREAMED);
+    const GSocketError err = m_socket->Connect(GSOCK_STREAMED);
 
     //this will register for callbacks - must be called after m_socket->m_fd was initialized
     m_socket->Notify(m_notify);
-
-    if (!wait)
-        m_socket->SetNonBlocking(0);
 
     if (err != GSOCK_NOERROR)
     {

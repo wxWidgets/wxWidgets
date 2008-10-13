@@ -194,8 +194,8 @@ private:
   friend class wxDatagramSocket;
 
   // low level IO
-  wxUint32 _Read(void* buffer, wxUint32 nbytes);
-  wxUint32 _Write(const void *buffer, wxUint32 nbytes);
+  wxUint32 DoRead(void* buffer, wxUint32 nbytes);
+  wxUint32 DoWrite(const void *buffer, wxUint32 nbytes);
 
   // wait until the given flags are set for this socket or the given timeout
   // (or m_timeout) expires
