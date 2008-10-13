@@ -185,10 +185,6 @@ wxBitmap AutoCaptureMechanism::Capture(Control& ctrl)
     ctrl.name.StartsWith(_T("wx"), &(ctrl.name));
     ctrl.name.MakeLower();
 
-	// AD-HOC FIX for wxHyperlink
-	if (ctrl.name == "generichyperlinkctrl")
-		ctrl.name = "hyperlinkctrl";
-
     // take the screenshot
     wxBitmap screenshot = Capture(rect);
 

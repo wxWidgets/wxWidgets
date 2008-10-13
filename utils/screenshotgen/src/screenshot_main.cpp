@@ -321,7 +321,7 @@ void ScreenshotFrame::OnCaptureAllControls(wxCommandEvent& WXUNUSED(event))
     auto_cap.RegisterControl(m_slider1);
     auto_cap.RegisterControl(m_toggleBtn1, AJ_Union);
     auto_cap.RegisterControl(m_toggleBtn2, AJ_UnionEnd);
-    auto_cap.RegisterControl(m_hyperlink1);
+    auto_cap.RegisterControl(m_hyperlink1, wxT("wxHyperlinkCtrl"));
     auto_cap.RegisterControl(m_spinCtrl1, AJ_RegionAdjust);
     auto_cap.RegisterControl(m_spinBtn1);
     auto_cap.RegisterControl(m_scrollBar1);
