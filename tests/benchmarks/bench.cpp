@@ -27,6 +27,7 @@
 // ----------------------------------------------------------------------------
 
 static const char OPTION_LIST = 'l';
+static const char OPTION_SINGLE = '1';
 
 static const char OPTION_AVG_COUNT = 'a';
 static const char OPTION_NUM_RUNS = 'n';
@@ -124,6 +125,10 @@ void BenchApp::OnInitCmdLine(wxCmdLineParser& parser)
                      "list",
                      "list all the existing benchmarks");
 
+    parser.AddSwitch(OPTION_SINGLE,
+                     "single",
+                     "run the benchmark once only");
+
     parser.AddOption(OPTION_AVG_COUNT,
                      "avg-count",
                      wxString::Format
@@ -180,10 +185,25 @@ bool BenchApp::OnCmdLineParsed(wxCmdLineParser& parser)
         return false;
     }
 
-    parser.Found(OPTION_AVG_COUNT, &m_avgCount);
-    parser.Found(OPTION_NUM_RUNS, &m_numRuns);
+    bool numRunsSpecified = false;
+    if ( parser.Found(OPTION_AVG_COUNT, &m_avgCount) )
+        numRunsSpecified = true;
+    if ( parser.Found(OPTION_NUM_RUNS, &m_numRuns) )
+        numRunsSpecified = true;
     parser.Found(OPTION_NUMERIC_PARAM, &m_numParam);
     parser.Found(OPTION_STRING_PARAM, &m_strParam);
+    if ( parser.Found(OPTION_SINGLE) )
+    {
+        if ( numRunsSpecified )
+        {
+            wxFprintf(stderr, "Incompatible options specified.\n");
+
+            return false;
+        }
+
+        m_avgCount =
+        m_numRuns = 1;
+    }
 
     // construct sorted array for quick verification of benchmark names
     wxSortedArrayString benchmarks;
