@@ -1007,7 +1007,10 @@ private:
         }                                                                   \
         iterator insert(const iterator& it, const_reference v)              \
         {                                                                   \
-            Insert(it.m_node, (const_base_reference)v);                     \
+            if ( it == end() )                                              \
+                Append((const_base_reference)v);                            \
+            else                                                            \
+                Insert(it.m_node, (const_base_reference)v);                 \
             iterator itprev(it);                                            \
             return itprev--;                                                \
         }                                                                   \
@@ -1017,7 +1020,7 @@ private:
                 Insert(it.m_node, (const_base_reference)v);                 \
         }                                                                   \
         void insert(const iterator& it,                                     \
-                    const const_iterator& first, const const_iterator& last)\
+                    const_iterator first, const const_iterator& last)       \
         {                                                                   \
             for(; first != last; ++first)                                   \
                 Insert(it.m_node, (const_base_reference)*first);            \
