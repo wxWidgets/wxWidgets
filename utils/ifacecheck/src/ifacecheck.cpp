@@ -617,6 +617,22 @@ void IfaceCheckApp::PrintStatistics(long secs)
                m_gccInterface.GetClassesCount(), m_gccInterface.GetMethodCount());
     LogMessage("wx interface headers contains declaration of %d classes (%d methods)",
                m_doxyInterface.GetClassesCount(), m_doxyInterface.GetMethodCount());
+
+    // build a list of the undocumented wx classes
+    wxString list;
+    int undoc = 0;
+    const wxClassArray& arr = m_gccInterface.GetClasses();
+    for (unsigned int i=0; i<arr.GetCount(); i++) {
+        if (m_doxyInterface.FindClass(arr[i].GetName()) == NULL) {
+            list += arr[i].GetName() + ", ";
+            undoc++;
+        }
+    }
+
+    list.RemoveLast();
+    list.RemoveLast();
+
+    LogMessage("the list of the %d undocumented wx classes is: %s", undoc, list);
     LogMessage("total processing took %d seconds.", secs);
 }
 
