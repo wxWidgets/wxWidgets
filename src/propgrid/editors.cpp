@@ -142,8 +142,13 @@
 #endif
 
 // for odcombo
+#ifdef __WXMAC__
+#define wxPG_CHOICEXADJUST           0
+#define wxPG_CHOICEYADJUST           -3
+#else
 #define wxPG_CHOICEXADJUST           0
 #define wxPG_CHOICEYADJUST           0
+#endif
 
 #define ODCB_CUST_PAINT_MARGIN               6  // Number added to image width for SetCustomPaintWidth
 
