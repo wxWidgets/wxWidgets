@@ -336,7 +336,8 @@ public:
         Constructs a data format object for one of the standard data formats or
         an empty data object (use SetType() or SetId() later in this case).
     */
-    wxDataFormat(NativeFormat format = wxDF_INVALID);
+    wxDataFormat(wxDataFormatId format = wxDF_INVALID);
+
     /**
         Constructs a data format object for a custom format identified by its
         name @a format.
@@ -583,7 +584,7 @@ public:
         @return @true on success, @false on failure.
     */
     virtual bool SetData(const wxDataFormat& format, size_t len,
-                           const void buf);
+                         const void* buf);
 };
 
 

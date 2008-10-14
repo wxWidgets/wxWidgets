@@ -34,8 +34,7 @@ public:
         @param stream
             The output stream.
     */
-    wxDataOutputStream(wxOutputStream& stream,
-                       const wxMBConv& conv = wxConvAuto());
+    wxDataOutputStream(wxOutputStream& stream);
 
     /**
         Constructs a datastream object from an output stream. Only write
@@ -180,8 +179,7 @@ public:
         @param stream
             The input stream.
     */
-    wxDataInputStream(wxInputStream& stream,
-                      const wxMBConv& conv = wxConvAuto());
+    wxDataInputStream(wxInputStream& stream);
 
     /**
         Constructs a datastream object from an input stream. Only read methods

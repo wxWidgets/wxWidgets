@@ -69,7 +69,7 @@ public:
 
         @see wxConfigBase::Flush
     */
-    bool Save(wxOutputStream& os, const wxMBConv& conv = wxConvAuto());
+    virtual bool Save(wxOutputStream& os, const wxMBConv& conv = wxConvAuto());
 
     /**
         Allows to set the mode to be used for the config file creation. For example, to
