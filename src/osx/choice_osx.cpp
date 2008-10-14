@@ -169,7 +169,7 @@ void wxChoice::DoClear()
 // ----------------------------------------------------------------------------
 int wxChoice::GetSelection() const
 {
-    return m_peer->GetValue() ;
+    return m_peer->GetValue() -1;
 }
 
 void wxChoice::SetSelection( int n )
@@ -241,7 +241,7 @@ bool wxChoice::HandleClicked( double timestampsec )
         event.SetInt( n );
         event.SetString( GetStringSelection() );
         event.SetEventObject( this );
-
+        
         if ( HasClientObjectData() )
             event.SetClientObject( GetClientObject( n ) );
         else if ( HasClientUntypedData() )
