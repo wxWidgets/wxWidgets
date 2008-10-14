@@ -156,13 +156,13 @@
 
 
 
-#define wxUSE_DEBUG_CONTEXT 0
+#define wxUSE_DEBUG_CONTEXT 1
 
-#define wxUSE_MEMORY_TRACING 0
+#define wxUSE_MEMORY_TRACING 1
 
-#define wxUSE_GLOBAL_MEMORY_OPERATORS 0
+#define wxUSE_GLOBAL_MEMORY_OPERATORS 1
 
-#define wxUSE_DEBUG_NEW_ALWAYS 0
+#define wxUSE_DEBUG_NEW_ALWAYS 1
 
 #define wxUSE_ON_FATAL_EXCEPTION 1
 
@@ -182,7 +182,7 @@
 
 #define wxUSE_EXTENDED_RTTI 0
 
-#define wxUSE_STL 0
+#define wxUSE_STL 1
 
 #define wxUSE_LOG 1
 
@@ -221,7 +221,7 @@
 #define wxUSE_FILE 1
 #define wxUSE_FFILE 1
 
-#define wxUSE_FSVOLUME      0
+#define wxUSE_FSVOLUME      1
 
 #define wxUSE_STDPATHS 1
 
@@ -251,7 +251,7 @@
 
 #define wxUSE_SOCKETS 1
 
-#define wxUSE_IPV6          0
+#define wxUSE_IPV6          1
 
 #define wxUSE_FILESYSTEM 1
 
@@ -297,9 +297,9 @@
 
 #define wxUSE_SOUND 1
 
-#define wxUSE_MEDIACTRL     0
+#define wxUSE_MEDIACTRL     1
 
-#define wxUSE_GSTREAMER    0
+#define wxUSE_GSTREAMER    1
 
 #define wxUSE_XRC 1
 
@@ -310,9 +310,7 @@
 #define wxUSE_STC 1
 
 
-#ifndef wxUSE_GRAPHICS_CONTEXT
-#define wxUSE_GRAPHICS_CONTEXT 0
-#endif
+#define wxUSE_GRAPHICS_CONTEXT 1
 
 
 #define wxUSE_CONTROLS 1
@@ -391,7 +389,7 @@
 
 #define wxUSE_ACCEL 1
 
-#define wxUSE_HOTKEY 0
+#define wxUSE_HOTKEY 1
 
 #define wxUSE_CARET 1
 
@@ -454,8 +452,8 @@
 #define wxUSE_ABOUTDLG 1
 
 
-#define wxUSE_METAFILE              0
-#define wxUSE_ENH_METAFILE          0
+#define wxUSE_METAFILE              1
+#define wxUSE_ENH_METAFILE          1
 #define wxUSE_WIN_METAFILES_ALWAYS  0
 
 
@@ -469,7 +467,7 @@
 
 #define wxUSE_HTML 1
 
-#define wxUSE_GLCANVAS       0
+#define wxUSE_GLCANVAS       1
 
 #define wxUSE_RICHTEXT 1
 
@@ -480,7 +478,11 @@
 
 #define wxUSE_DRAG_AND_DROP 1
 
-#define wxUSE_ACCESSIBILITY 0
+#define wxUSE_ACCESSIBILITY 1
+#if !defined( __WXMSW__ )
+    // little hack to make gccxml happy about wxAccessible:
+    #define wxAccessible wxAccessibleBase
+#endif
 
 
 #define wxUSE_SNGLINST_CHECKER 1
@@ -492,7 +494,7 @@
 #define wxUSE_HELP 1
 
 
-#define wxUSE_MS_HTML_HELP 0
+#define wxUSE_MS_HTML_HELP 1
 
 
 #define wxUSE_WXHTML_HELP 1
@@ -570,17 +572,17 @@
     #define wxUSE_UNICODE_MSLU 0
 #endif
 
-#define wxUSE_MFC           0
+#define wxUSE_MFC           1
 
-#define wxUSE_OLE           0
+#define wxUSE_OLE           1
 
-#define wxUSE_OLE_AUTOMATION 0
+#define wxUSE_OLE_AUTOMATION 1
 
-#define wxUSE_ACTIVEX 0
+#define wxUSE_ACTIVEX 1
 
 #define wxUSE_DC_CACHEING 0
 
-#define wxUSE_WXDIB 0
+#define wxUSE_WXDIB 1
 
 #define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 0
 
@@ -604,7 +606,7 @@
 #define wxUSE_DATEPICKCTRL_GENERIC 0
 
 
-#define wxUSE_CRASHREPORT 0
+#define wxUSE_CRASHREPORT 1
 /* --- end MSW options --- */
 
 /*
