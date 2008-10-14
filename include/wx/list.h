@@ -1005,18 +1005,19 @@ private:
             for(size_type i = 0; i < n; ++i)                                \
                 Append((const_base_reference)v);                            \
         }                                                                   \
-        iterator insert(const iterator& it, const_reference v = value_type())\
+        iterator insert(const iterator& it, const_reference v)              \
         {                                                                   \
             Insert(it.m_node, (const_base_reference)v);                     \
             iterator itprev(it);                                            \
             return itprev--;                                                \
         }                                                                   \
-        void insert(const iterator& it, size_type n, const_reference v = value_type())\
+        void insert(const iterator& it, size_type n, const_reference v)     \
         {                                                                   \
             for(size_type i = 0; i < n; ++i)                                \
                 Insert(it.m_node, (const_base_reference)v);                 \
         }                                                                   \
-        void insert(const iterator& it, const_iterator first, const const_iterator& last)\
+        void insert(const iterator& it,                                     \
+                    const const_iterator& first, const const_iterator& last)\
         {                                                                   \
             for(; first != last; ++first)                                   \
                 Insert(it.m_node, (const_base_reference)*first);            \
