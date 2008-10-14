@@ -476,6 +476,7 @@ wxVectorProperty::wxVectorProperty( const wxString& label,
     : wxPGProperty(label,name)
 {
     SetValue( WXVARIANT(value) );
+    SetParentalType(wxPG_PROP_AGGREGATE);
     AddChild( new wxFloatProperty(wxT("X"),wxPG_LABEL,value.x) );
     AddChild( new wxFloatProperty(wxT("Y"),wxPG_LABEL,value.y) );
     AddChild( new wxFloatProperty(wxT("Z"),wxPG_LABEL,value.z) );
@@ -524,6 +525,7 @@ wxTriangleProperty::wxTriangleProperty( const wxString& label,
     : wxPGProperty(label,name)
 {
     SetValue( WXVARIANT(value) );
+    SetParentalType(wxPG_PROP_AGGREGATE);
     AddChild( new wxVectorProperty(wxT("A"),wxPG_LABEL,value.a) );
     AddChild( new wxVectorProperty(wxT("B"),wxPG_LABEL,value.b) );
     AddChild( new wxVectorProperty(wxT("C"),wxPG_LABEL,value.c) );
@@ -1683,11 +1685,21 @@ void FormMain::PopulateWithExamples ()
 
     //
     // Test how non-editable composite strings appear
-    pid = pg->Append( new wxStringProperty(wxT("wxWidgets Traits"), wxPG_LABEL, wxT("<composed>")) );
+    pid = new wxStringProperty(wxT("wxWidgets Traits"), wxPG_LABEL, wxT("<composed>"));
     pg->SetPropertyReadOnly(pid);
 
-    pg->AppendIn(pid, new wxStringProperty(wxT("Latest Release"), wxPG_LABEL, wxT("2.8.8")) );
-    pg->AppendIn(pid, new wxBoolProperty(wxT("Win API"), wxPG_LABEL, true) );
+    //
+    // For testing purposes, combine two methods of adding children
+    //
+
+    // AddChild() requires that we call this
+    pid->SetParentalType(wxPG_PROP_MISC_PARENT);
+
+    pid->AddChild( new wxStringProperty(wxT("Latest Release"), wxPG_LABEL, wxT("2.8.8")));
+    pid->AddChild( new wxBoolProperty(wxT("Win API"), wxPG_LABEL, true) );
+
+    pg->Append( pid );
+
     pg->AppendIn(pid, new wxBoolProperty(wxT("QT"), wxPG_LABEL, false) );
     pg->AppendIn(pid, new wxBoolProperty(wxT("Cocoa"), wxPG_LABEL, true) );
     pg->AppendIn(pid, new wxBoolProperty(wxT("BeOS"), wxPG_LABEL, false) );

@@ -1476,7 +1476,8 @@ void wxPropertyGrid::DoSetPropertyValueUnspecified( wxPGProperty* p )
     DrawItemAndChildren(p);
 
     wxPGProperty* parent = p->GetParent();
-    while ( (parent->GetFlags() & wxPG_PROP_PARENTAL_FLAGS) == wxPG_PROP_MISC_PARENT )
+    while ( parent &&
+            (parent->GetFlags() & wxPG_PROP_PARENTAL_FLAGS) == wxPG_PROP_MISC_PARENT )
     {
         DrawItem(parent);
         parent = parent->GetParent();

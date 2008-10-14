@@ -67,6 +67,8 @@ wxFontDataProperty::wxFontDataProperty( const wxString& label, const wxString& n
     // (instead of calling SetValue) in derived (wxObject) properties.
     m_value_wxFontData << value;
 
+    SetParentalType(wxPG_PROP_AGGREGATE);
+
     // Add extra children.
     AddChild( new wxColourProperty(_("Colour"), wxPG_LABEL,
                                    fontData.GetColour() ) );
@@ -197,6 +199,7 @@ wxSizeProperty::wxSizeProperty( const wxString& label, const wxString& name,
     const wxSize& value) : wxPGProperty(label,name)
 {
     SetValueI(value);
+    SetParentalType(wxPG_PROP_AGGREGATE);
     AddChild( new wxIntProperty(wxT("Width"),wxPG_LABEL,value.x) );
     AddChild( new wxIntProperty(wxT("Height"),wxPG_LABEL,value.y) );
 }
@@ -233,6 +236,7 @@ wxPointProperty::wxPointProperty( const wxString& label, const wxString& name,
     const wxPoint& value) : wxPGProperty(label,name)
 {
     SetValueI(value);
+    SetParentalType(wxPG_PROP_AGGREGATE);
     AddChild( new wxIntProperty(wxT("X"),wxPG_LABEL,value.x) );
     AddChild( new wxIntProperty(wxT("Y"),wxPG_LABEL,value.y) );
 }

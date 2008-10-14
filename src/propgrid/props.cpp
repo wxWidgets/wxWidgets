@@ -1209,8 +1209,7 @@ WX_PG_IMPLEMENT_PROPERTY_CLASS_PLAIN(wxFlagsProperty,long,TextCtrl)
 
 void wxFlagsProperty::Init()
 {
-    SetFlag(wxPG_PROP_AGGREGATE);  // This is must be done here to support flag props
-                                   // with inital zero children.
+    SetParentalType(wxPG_PROP_AGGREGATE);
 
     long value = m_value;
 

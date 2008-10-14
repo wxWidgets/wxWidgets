@@ -636,7 +636,7 @@ protected:
     */
     int HitTestH( int x, int* pSplitterHit, int* pSplitterHitOffset ) const;
 
-    int PrepareToAddItem ( wxPGProperty* property,
+    bool PrepareToAddItem( wxPGProperty* property,
                            wxPGProperty* scheduledParent );
 
     /** If visible, then this is pointer to wxPropertyGrid.

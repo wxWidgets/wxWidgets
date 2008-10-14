@@ -1508,8 +1508,8 @@ void wxPropertyGridPageState::DoSetPropertyValues( const wxVariantList& list, wx
 // wxPropertyGridPageState property adding and removal
 // -----------------------------------------------------------------------
 
-int wxPropertyGridPageState::PrepareToAddItem( wxPGProperty* property,
-                                           wxPGProperty* scheduledParent )
+bool wxPropertyGridPageState::PrepareToAddItem( wxPGProperty* property,
+                                                wxPGProperty* scheduledParent )
 {
     wxPropertyGrid* propGrid = m_pPropGrid;
 
@@ -1545,7 +1545,7 @@ int wxPropertyGridPageState::PrepareToAddItem( wxPGProperty* property,
             {
                 delete property;
                 m_currentCategory = pwc;
-                return 2; // Tells the caller what we did.
+                return false;
             }
         }
     }
@@ -1566,119 +1566,30 @@ int wxPropertyGridPageState::PrepareToAddItem( wxPGProperty* property,
     {
         bool selRes = propGrid->ClearSelection();
         wxPG_CHECK_MSG_DBG( selRes,
-                            -1,
+                            true,
                             wxT("failed to deselect a property (editor probably had invalid value)") );
     }
 
-    if ( scheduledParent )
+    // NULL parent == root parent
+    if ( !scheduledParent )
+        scheduledParent = DoGetRoot();
+
+    property->m_parent = scheduledParent;
+
+    property->InitAfterAdded(this, propGrid);
+
+    if ( property->IsCategory() )
     {
-        // Use parent's colours.
-        property->m_bgColIndex = scheduledParent->m_bgColIndex;
-        property->m_fgColIndex = scheduledParent->m_fgColIndex;
+        wxPropertyCategory* pc = wxStaticCast(property, wxPropertyCategory);
 
-        // Fix no parent does not yet have parenting flag yet, set one now
-        if ( !scheduledParent->HasFlag(wxPG_PROP_PARENTAL_FLAGS) )
-            scheduledParent->SetParentalType(wxPG_PROP_MISC_PARENT);
-            //scheduledParent->SetFlag(wxPG_PROP_MISC_PARENT);
-    }
+        m_currentCategory = pc;
 
-    // If in hideable adding mode, or if assigned parent is hideable, then
-    // make this one hideable.
-    if (
-         ( scheduledParent && (scheduledParent->m_flags & wxPG_PROP_HIDDEN) ) ||
-         ( propGrid && (propGrid->m_iFlags & wxPG_FL_ADDING_HIDEABLES) )
-       )
-        property->SetFlag( wxPG_PROP_HIDDEN );
-
-    // Set custom image flag.
-    int custImgHeight = property->OnMeasureImage().y;
-    if ( custImgHeight < 0 /*|| custImgHeight > 1*/ )
-    {
-        property->m_flags |= wxPG_PROP_CUSTOMIMAGE;
-    }
-
-    if ( propGrid && (propGrid->GetWindowStyleFlag() & wxPG_LIMITED_EDITING) )
-        property->m_flags |= wxPG_PROP_NOEDITOR;
-
-    if ( !property->IsCategory() )
-    {
-        // This is not a category.
-
-        //wxASSERT_MSG( property->GetEditorClass(), wxT("Editor class not initialized!") );
-
-        // Depth.
-        //
-        unsigned char depth = 1;
-        if ( scheduledParent )
-        {
-            depth = scheduledParent->m_depth;
-            if ( !scheduledParent->IsCategory() )
-                depth++;
-        }
-        property->m_depth = depth;
-        unsigned char greyDepth = depth;
-
-        if ( scheduledParent )
-        {
-            wxPropertyCategory* pc;
-
-            if ( scheduledParent->IsCategory() || scheduledParent->IsRoot() )
-                pc = (wxPropertyCategory*)scheduledParent;
-            else
-                // This conditional compile is necessary to
-                // bypass some compiler bug.
-                pc = GetPropertyCategory(scheduledParent);
-
-            if ( pc )
-                greyDepth = pc->GetDepth();
-            else
-                greyDepth = scheduledParent->m_depthBgCol;
-        }
-
-        property->m_depthBgCol = greyDepth;
-
-        // Prepare children pre-added children
-        if ( property->GetChildCount() )
-        {
-            property->SetParentalType(wxPG_PROP_AGGREGATE);
-
-            property->SetExpanded(false); // Properties with children are not expanded by default.
-            if ( propGrid && propGrid->GetWindowStyleFlag() & wxPG_HIDE_MARGIN )
-                property->SetExpanded(true); // ...unless it cannot be expanded.
-
-            property->PrepareSubProperties();
-
-            return -1;
-        }
-
-        if ( propGrid && (propGrid->GetExtraStyle() & wxPG_EX_AUTO_UNSPECIFIED_VALUES) )
-            property->SetFlagRecursively(wxPG_PROP_AUTO_UNSPECIFIED, true);
-
-        return 0;
-    }
-    else
-    {
-        // This is a category.
-
-        // depth
-        unsigned char depth = 1;
-        if ( scheduledParent )
-        {
-            depth = scheduledParent->m_depth + 1;
-        }
-        property->m_depth = depth;
-        property->m_depthBgCol = depth;
-
-        m_currentCategory = (wxPropertyCategory*)property;
-
-        wxPropertyCategory* pc = (wxPropertyCategory*)property;
-
-        // Calculate text extent for caption item.
+        // Calculate text extent for category caption
         if ( propGrid )
             pc->CalculateTextExtent(propGrid, propGrid->GetCaptionFont());
-
-        return 1;
     }
+
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -1703,11 +1614,11 @@ wxPGProperty* wxPropertyGridPageState::DoInsert( wxPGProperty* parent, int index
                  wxNullProperty,
                  wxT("when adding properties to fixed parents, use BeginAddChildren and EndAddChildren.") );
 
-    int parenting = PrepareToAddItem( property, (wxPropertyCategory*)parent );
+    bool res = PrepareToAddItem( property, (wxPropertyCategory*)parent );
 
-    // This type of invalid parenting value indicates we should exit now, returning
-    // id of most recent category.
-    if ( parenting > 1 )
+    // PrepareToAddItem() may just decide to use use current category
+    // instead of adding new one.
+    if ( !res )
         return m_currentCategory;
 
     // Note that item must be added into current mode later.
@@ -1736,7 +1647,7 @@ wxPGProperty* wxPropertyGridPageState::DoInsert( wxPGProperty* parent, int index
             // Categorized mode
 
             // Only add non-categories to m_abcArray.
-            if ( m_abcArray && parenting <= 0 )
+            if ( m_abcArray && !property->IsCategory() )
                 m_abcArray->AddChild2( property, -1, false );
 
             // Add to current mode.
@@ -1755,7 +1666,7 @@ wxPGProperty* wxPropertyGridPageState::DoInsert( wxPGProperty* parent, int index
                 m_regularArray.AddChild2( property, -1, false );
 
             // Add to current mode (no categories).
-            if ( parenting <= 0 )
+            if ( !property->IsCategory() )
                 m_abcArray->AddChild2( property, index );
         }
     }

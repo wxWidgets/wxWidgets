@@ -411,6 +411,132 @@ void wxPGProperty::Init( const wxString& label, const wxString& name )
     Init();
 }
 
+void wxPGProperty::InitAfterAdded( wxPropertyGridPageState* pageState,
+                                   wxPropertyGrid* propgrid )
+{
+    //
+    // Called after property has been added to grid or page
+    // (so propgrid can be NULL, too).
+
+    wxPGProperty* parent = m_parent;
+    bool parentIsRoot = parent->IsKindOf(CLASSINFO(wxPGRootProperty));
+
+    m_parentState = pageState;
+
+    if ( !parentIsRoot )
+    {
+        m_bgColIndex = parent->m_bgColIndex;
+        m_fgColIndex = parent->m_fgColIndex;
+    }
+
+    // If in hideable adding mode, or if assigned parent is hideable, then
+    // make this one hideable.
+    if (
+         ( !parentIsRoot && parent->HasFlag(wxPG_PROP_HIDDEN) ) ||
+         ( propgrid && (propgrid->HasInternalFlag(wxPG_FL_ADDING_HIDEABLES)) )
+       )
+        SetFlag( wxPG_PROP_HIDDEN );
+
+    // Set custom image flag.
+    int custImgHeight = OnMeasureImage().y;
+    if ( custImgHeight < 0 )
+    {
+        SetFlag(wxPG_PROP_CUSTOMIMAGE);
+    }
+
+    if ( propgrid && (propgrid->HasFlag(wxPG_LIMITED_EDITING)) )
+        SetFlag(wxPG_PROP_NOEDITOR);
+
+    // Make sure parent has some parental flags
+    if ( !parent->HasFlag(wxPG_PROP_PARENTAL_FLAGS) )
+        parent->SetParentalType(wxPG_PROP_MISC_PARENT);
+
+    if ( !IsCategory() )
+    {
+        // This is not a category.
+
+        // Depth.
+        //
+        unsigned char depth = 1;
+        if ( !parentIsRoot )
+        {
+            depth = parent->m_depth;
+            if ( !parent->IsCategory() )
+                depth++;
+        }
+        m_depth = depth;
+        unsigned char greyDepth = depth;
+
+        if ( !parentIsRoot )
+        {
+            wxPropertyCategory* pc;
+
+            if ( parent->IsCategory() )
+                pc = (wxPropertyCategory* ) parent;
+            else
+                // This conditional compile is necessary to
+                // bypass some compiler bug.
+                pc = pageState->GetPropertyCategory(parent);
+
+            if ( pc )
+                greyDepth = pc->GetDepth();
+            else
+                greyDepth = parent->m_depthBgCol;
+        }
+
+        m_depthBgCol = greyDepth;
+    }
+    else
+    {
+        // This is a category.
+
+        // depth
+        unsigned char depth = 1;
+        if ( !parentIsRoot )
+        {
+            depth = parent->m_depth + 1;
+        }
+        m_depth = depth;
+        m_depthBgCol = depth;
+    }
+
+    //
+    // Has initial children
+    if ( GetChildCount() )
+    {
+        FlagType parentalFlags = m_flags & wxPG_PROP_PARENTAL_FLAGS;
+
+        // Check parental flags
+        wxASSERT_MSG( parentalFlags,
+                      "Call SetFlag(wxPG_PROP_MISC_PARENT) or"
+                      "SetFlag(wxPG_PROP_AGGREGATE) before calling"
+                      "wxPGProperty::AddChild()." );
+
+        if ( HasFlag(wxPG_PROP_AGGREGATE) )
+        {
+            // Properties with private children are not expanded by default.
+            SetExpanded(false);
+        }
+        else if ( propgrid && propgrid->HasFlag(wxPG_HIDE_MARGIN) )
+        {
+            // ...unless it cannot be expanded by user and therefore must
+            // remain visible at all times
+            SetExpanded(true);
+        }
+
+        //
+        // Prepare children recursively
+        for ( unsigned int i=0; i<GetChildCount(); i++ )
+        {
+            wxPGProperty* child = Item(i);
+            child->InitAfterAdded(pageState, pageState->GetGrid());
+        }
+
+        if ( propgrid && (propgrid->GetExtraStyle() & wxPG_EX_AUTO_UNSPECIFIED_VALUES) )
+            SetFlagRecursively(wxPG_PROP_AUTO_UNSPECIFIED, true);
+    }
+}
+
 wxPGProperty::wxPGProperty()
     : wxObject()
 {
@@ -1915,74 +2041,6 @@ bool wxPGProperty::IsTextEditable() const
     return true;
 }
 
-// Call for after sub-properties added with AddChild
-void wxPGProperty::PrepareSubProperties()
-{
-    wxPropertyGridPageState* state = GetParentState();
-
-    wxASSERT(state);
-
-    if ( !GetChildCount() )
-        return;
-
-    wxByte depth = m_depth + 1;
-    wxByte depthBgCol = m_depthBgCol;
-
-    FlagType inheritFlags = m_flags & wxPG_INHERITED_PROPFLAGS;
-
-    wxByte bgColIndex = m_bgColIndex;
-    wxByte fgColIndex = m_fgColIndex;
-
-    //
-    // Set some values to the children
-    //
-    size_t i = 0;
-    wxPGProperty* nparent = this;
-
-    while ( i < nparent->GetChildCount() )
-    {
-        wxPGProperty* np = nparent->Item(i);
-
-        np->m_parentState = state;
-        np->m_flags |= inheritFlags; // Hideable also if parent.
-        np->m_depth = depth;
-        np->m_depthBgCol = depthBgCol;
-        np->m_bgColIndex = bgColIndex;
-        np->m_fgColIndex = fgColIndex;
-
-        // Also handle children of children
-        if ( np->GetChildCount() > 0 )
-        {
-            nparent = np;
-            i = 0;
-
-            // Init
-            nparent->SetParentalType(wxPG_PROP_AGGREGATE);
-            nparent->SetExpanded(false);
-            depth++;
-        }
-        else
-        {
-            // Next sibling
-            i++;
-        }
-
-        // After reaching last sibling, go back to processing
-        // siblings of the parent
-        while ( i >= nparent->GetChildCount() )
-        {
-            // Exit the loop when top parent hit
-            if ( nparent == this )
-                break;
-
-            depth--;
-
-            i = nparent->GetIndexInParent() + 1;
-            nparent = nparent->GetParent();
-        }
-    }
-}
-
 // Call after fixed sub-properties added/removed after creation.
 // if oldSelInd >= 0 and < new max items, then selection is
 // moved to it. Note: oldSelInd -2 indicates that this property
@@ -1992,7 +2050,13 @@ void wxPGProperty::SubPropsChanged( int oldSelInd )
     wxPropertyGridPageState* state = GetParentState();
     wxPropertyGrid* grid = state->GetGrid();
 
-    PrepareSubProperties();
+    //
+    // Re-repare children (recursively)
+    for ( unsigned int i=0; i<GetChildCount(); i++ )
+    {
+        wxPGProperty* child = Item(i);
+        child->InitAfterAdded(state, grid);
+    }
 
     wxPGProperty* sel = (wxPGProperty*) NULL;
     if ( oldSelInd >= (int)m_children.size() )

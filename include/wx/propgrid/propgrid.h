@@ -1223,6 +1223,8 @@ public:
     void OnCustomEditorEvent( wxCommandEvent &event );
 
     long GetInternalFlags() const { return m_iFlags; }
+    bool HasInternalFlag( long flag ) const
+        { return (m_iFlags & flag) ? true : false; }
     void SetInternalFlag( long flag ) { m_iFlags |= flag; }
     void ClearInternalFlag( long flag ) { m_iFlags &= ~(flag); }
     void IncFrozen() { m_frozen++; }

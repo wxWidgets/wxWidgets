@@ -477,6 +477,8 @@ wxFontProperty::wxFontProperty( const wxString& label, const wxString& name,
     wxFont font;
     font << m_value;
 
+    SetParentalType(wxPG_PROP_AGGREGATE);
+
     AddChild( new wxIntProperty( _("Point Size"), wxS("Point Size"),(long)font.GetPointSize() ) );
 
     AddChild( new wxEnumProperty(_("Family"), wxS("PointSize"),
