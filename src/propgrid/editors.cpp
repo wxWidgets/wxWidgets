@@ -123,7 +123,7 @@
     #define wxPG_NAT_BUTTON_BORDER_X        0
     #define wxPG_NAT_BUTTON_BORDER_Y        0
 
-    #define wxPG_TEXTCTRLYADJUST            3
+    #define wxPG_TEXTCTRLYADJUST            0
 
 #else
     // defaults
@@ -1652,7 +1652,7 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
 
    // Need to reduce width of text control on Mac
 #if defined(__WXMAC__)
-   s.x -= 8;
+    s.x -= 8;
 #endif
 
      // Take button into acccount
@@ -1680,7 +1680,7 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
 #endif
     SetupTextCtrlValue(value);
     tc->Create(ctrlParent,id,value, p, s,tcFlags);
-
+    
     wxWindow* ed = tc;
 
     // Center the control vertically

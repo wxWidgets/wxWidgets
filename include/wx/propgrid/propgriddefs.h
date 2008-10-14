@@ -120,7 +120,7 @@
     #define wxPG_XBEFOREWIDGET          1
 
     // x position adjustment for wxTextCtrl (and like)
-    #define wxPG_TEXTCTRLXADJUST        3
+    #define wxPG_TEXTCTRLXADJUST        0
 
     // comment to use bitmap buttons
     #define wxPG_ICON_WIDTH             11
