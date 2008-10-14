@@ -109,6 +109,20 @@ public:
     int CompareVersion(int major, int minor, int release, int revision) const;
 
     /**
+        Returns a string ID corresponding to the given numeric ID.
+
+        The string returned is such that calling GetXRCID() with it as
+        parameter yields @a numId. If there is no string identifier
+        corresponding to the given numeric one, an empty string is returned.
+
+        Notice that, unlike GetXRCID(), this function is slow as it checks all
+        of the identifiers used in XRC.
+
+        @since 2.9.0
+     */
+    static wxString wxXmlResource::FindXRCIDById(int numId);
+
+    /**
         Gets the global resources object or creates one if none exists.
     */
     static wxXmlResource* Get();

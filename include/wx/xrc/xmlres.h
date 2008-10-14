@@ -209,6 +209,15 @@ public:
     // version for internal use only
     static int DoGetXRCID(const char *str_id, int value_if_not_found = wxID_NONE);
 
+
+    // Find the string ID with the given numeric value, returns an empty string
+    // if no such ID is found.
+    //
+    // Notice that unlike GetXRCID(), which is fast, this operation is slow as
+    // it checks all the IDs used in XRC.
+    static wxString FindXRCIDById(int numId);
+
+
     // Returns version information (a.b.c.d = d+ 256*c + 256^2*b + 256^3*a).
     long GetVersion() const { return m_version; }
 

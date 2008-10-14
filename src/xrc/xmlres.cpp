@@ -1625,6 +1625,20 @@ int wxXmlResource::DoGetXRCID(const char *str_id, int value_if_not_found)
     return XRCID_Lookup(str_id, value_if_not_found);
 }
 
+/* static */
+wxString wxXmlResource::FindXRCIDById(int numId)
+{
+    for ( int i = 0; i < XRCID_TABLE_SIZE; i++ )
+    {
+        for ( XRCID_record *rec = XRCID_Records[i]; rec; rec = rec->next )
+        {
+            if ( rec->id == numId )
+                return wxString(rec->key);
+        }
+    }
+
+    return wxString();
+}
 
 static void CleanXRCID_Record(XRCID_record *rec)
 {
