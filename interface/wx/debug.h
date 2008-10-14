@@ -12,8 +12,12 @@
 /**
     Assert macro. An error message will be generated if the condition is @false in
     debug mode, but nothing will be done in the release build.
+
     Please note that the condition in wxASSERT() should have no side effects
     because it will not be executed in release mode at all.
+
+    This macro should be used to catch (in debug builds) logical errors done
+    by the programmer.
 
     @see wxASSERT_MSG(), wxCOMPILE_TIME_ASSERT()
 
@@ -24,6 +28,9 @@
 /**
     This macro results in a @ref wxCOMPILE_TIME_ASSERT "compile time assertion failure"
     if the size of the given @c type is less than @c size bits.
+
+    This macro should be used to catch (in debug builds) logical errors done
+    by the programmer.
 
     You may use it like this, for example:
 
@@ -43,6 +50,9 @@
     Assert macro with message.
     An error message will be generated if the condition is @false.
 
+    This macro should be used to catch (in debug builds) logical errors done
+    by the programmer.
+
     @see wxASSERT(), wxCOMPILE_TIME_ASSERT()
 
     @header{wx/debug.h}
@@ -53,6 +63,9 @@
     Checks that the condition is @true, returns with the given return value if
     not (stops execution in debug mode). This check is done even in release mode.
 
+    This macro should be used to catch (both in debug and release builds) logical
+    errors done by the programmer.
+
     @header{wx/debug.h}
 */
 #define wxCHECK( condition, retValue )
@@ -62,6 +75,9 @@
     not (stops execution in debug mode). This check is done even in release mode.
 
     This macro may be only used in non-void functions, see also wxCHECK_RET().
+
+    This macro should be used to catch (both in debug and release builds) logical
+    errors done by the programmer.
 
     @header{wx/debug.h}
 */
@@ -74,6 +90,9 @@
 
     This macro should be used in void functions instead of wxCHECK_MSG().
 
+    This macro should be used to catch (both in debug and release builds) logical
+    errors done by the programmer.
+
     @header{wx/debug.h}
 */
 #define wxCHECK_RET( condition, message )
@@ -85,6 +104,9 @@
     function must be done when the @c condition is @false. This check is done
     even in release mode.
 
+    This macro should be used to catch (both in debug and release builds) logical
+    errors done by the programmer.
+
     @header{wx/debug.h}
 */
 #define wxCHECK2(condition, operation)
@@ -92,6 +114,9 @@
 /**
     This is the same as wxCHECK2(), but wxFAIL_MSG() with the specified
     @c message is called instead of wxFAIL() if the @c condition is @false.
+
+    This macro should be used to catch (both in debug and release builds) logical
+    errors done by the programmer.
 
     @header{wx/debug.h}
 */
@@ -118,6 +143,8 @@
     (@c /ZI) option, so you shouldn't use it ('Program Database' (@c /Zi) is ok
     though) for the code making use of this macro.
 
+    This macro should be used to catch misconfigurations at compile-time.
+
     @see wxASSERT_MSG(), wxASSERT_MIN_BITSIZE()
 
     @header{wx/debug.h}
@@ -130,19 +157,31 @@
     macro to avoid getting the compilation errors described for
     wxCOMPILE_TIME_ASSERT().
 
+    This macro should be used to catch misconfigurations at compile-time.
+
     @header{wx/debug.h}
 */
 #define wxCOMPILE_TIME_ASSERT2(condition, message, name)
 
 /**
-    Will always generate an assert error if this code is reached (in debug
-    mode).
+    Will always generate an assert error if this code is reached (in debug mode).
+    Note that you don't have to (and cannot) use brackets when invoking this
+    macro:
+
+    @code
+        if (...some condition...) {
+            wxFAIL;
+        }
+    @endcode
+
+    This macro should be used to catch (in debug builds) logical errors done
+    by the programmer.
 
     @see wxFAIL_MSG()
 
     @header{wx/debug.h}
 */
-#define wxFAIL()
+#define wxFAIL
 
 /**
     Will always generate an assert error with specified message if this code is
@@ -151,6 +190,9 @@
     This macro is useful for marking unreachable" code areas, for example it
     may be used in the "default:" branch of a switch statement if all possible
     cases are processed above.
+
+    This macro should be used to catch (in debug builds) logical errors done
+    by the programmer.
 
     @see wxFAIL()
 
