@@ -122,7 +122,7 @@ wxFSFile * wxMemoryFSHandlerBase::OpenFile(wxFileSystem& WXUNUSED(fs),
                );
 }
 
-wxString wxMemoryFSHandlerBase::FindFirst(const wxString& spec, int flags)
+wxString wxMemoryFSHandlerBase::FindFirst(const wxString& url, int flags)
 {
     if ( (flags & wxDIR) && !(flags & wxFILE) )
     {
@@ -131,11 +131,12 @@ wxString wxMemoryFSHandlerBase::FindFirst(const wxString& spec, int flags)
         return wxString();
     }
 
+    const wxString spec = GetRightLocation(url);
     if ( spec.find_first_of("?*") == wxString::npos )
     {
         // simple case: there are no wildcard characters so we can return
         // either 0 or 1 results and we can find the potential match quickly
-        return m_Hash.count(spec) ? spec : wxString();
+        return m_Hash.count(spec) ? url : wxString();
     }
     //else: deal with wildcards in FindNext()
 
@@ -151,15 +152,18 @@ wxString wxMemoryFSHandlerBase::FindNext()
     // it to empty string after iterating over all elements
     while ( !m_findArgument.empty() )
     {
-        // advance m_findIter before checking the value at the current position
-        // as we need to do it anyhow, whether it matches or not
+        // test for the match before (possibly) clearing m_findArgument below
+        const bool found = m_findIter->first.Matches(m_findArgument);
+
+        // advance m_findIter first as we need to do it anyhow, whether it
+        // matches or not
         const wxMemoryFSHash::const_iterator current = m_findIter;
 
         if ( ++m_findIter == m_Hash.end() )
             m_findArgument.clear();
 
-        if ( current->first.Matches(m_findArgument) )
-            return current->first;
+        if ( found )
+            return "memory:" + current->first;
     }
 
     return wxString();
