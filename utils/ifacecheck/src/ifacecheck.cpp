@@ -301,17 +301,26 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClass* api)
         // search in the methods of the api classes provided
         real = api->RecursiveUpwardFindMethod(m, &m_gccInterface);
 
+        //
+        if (!real && m.ActsAsDefaultCtor())
+        {
+            // build an artifical default ctor for this class:
+            wxMethod temp(m);
+            temp.GetArgumentTypes().Clear();
+
+            real = api->RecursiveUpwardFindMethod(temp, &m_gccInterface);
+        }
+
         if (!real)
         {
             wxMethodPtrArray overloads =
                 api->RecursiveUpwardFindMethodsNamed(m.GetName(), &m_gccInterface);
 
-#define HACK_TO_AUTO_CORRECT_ONLY_METHOD_ATTRIBUTES        0
+#define HACK_TO_AUTO_CORRECT_ONLY_METHOD_ATTRIBUTES        1
 #if HACK_TO_AUTO_CORRECT_ONLY_METHOD_ATTRIBUTES
             bool exit = false;
             for (unsigned int k=0; k<overloads.GetCount(); k++)
-                if (overloads[k]->MatchesExceptForAttributes(m) &&
-                    overloads[k]->IsPureVirtual() == m.IsPureVirtual())
+                if (overloads[k]->MatchesExceptForAttributes(m))
                 {
                     // fix default values of results[k]:
                     wxMethod tmp(*overloads[k]);
@@ -368,7 +377,7 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClass* api)
                 {
                     wxASSERT(overloads.GetCount() == 1);
 
-                    if (m_modify)
+                    if (m_modify || m.IsCtor())
                     {
                         wxPrint("\tfixing it...\n");
 
@@ -601,6 +610,9 @@ bool IfaceCheckApp::ParsePreprocessorOutput(const wxString& filename)
 
 void IfaceCheckApp::PrintStatistics(long secs)
 {
+    // these stats, for what regards the gcc XML, are all referred to the wxWidgets
+    // classes only!
+
     LogMessage("wx real headers contains declaration of %d classes (%d methods)",
                m_gccInterface.GetClassesCount(), m_gccInterface.GetMethodCount());
     LogMessage("wx interface headers contains declaration of %d classes (%d methods)",

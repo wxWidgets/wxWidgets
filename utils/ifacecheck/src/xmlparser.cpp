@@ -59,11 +59,15 @@ void wxType::SetTypeFromString(const wxString& t)
               which works at char-level and does everything in a single pass
     */
 
+    // clean the type string
+    // ---------------------
+
     m_strType = t;
 
     // [] is the same as * for gccxml
     m_strType.Replace("[]", "*");
     m_strType.Replace("long int", "long");      // in wx typically we never write "long int", just "long"
+    m_strType.Replace("long unsigned int", "unsigned long");
 
     // make sure the * and & operator always use the same spacing rules
     // (to make sure GetAsString() output is always consistent)
@@ -79,8 +83,12 @@ void wxType::SetTypeFromString(const wxString& t)
 
     m_strType = m_strType.Strip(wxString::both);
 
-    // now set the clean version
-    m_strTypeClean = m_strType;
+
+
+    // clean the type string (this time for the comparison)
+    // ----------------------------------------------------
+
+    m_strTypeClean = m_strType;     // begin with the already-cleaned string
     m_strTypeClean.Replace("const", "");
     m_strTypeClean.Replace("static", "");
     m_strTypeClean.Replace("*", "");
@@ -141,25 +149,36 @@ bool wxType::operator==(const wxType& m) const
 void wxArgumentType::SetDefaultValue(const wxString& defval, const wxString& defvalForCmp)
 {
     m_strDefaultValue = defval.Strip(wxString::both);
-    m_strDefaultValueForCmp = defvalForCmp.IsEmpty() ? m_strDefaultValue : defvalForCmp.Strip(wxString::both);
+    m_strDefaultValueForCmp = defvalForCmp.IsEmpty() ?
+                m_strDefaultValue : defvalForCmp.Strip(wxString::both);
 
-    // adjust aesthetic form of DefaultValue for the modify mode of ifacecheck:
-    // we may need to write it out in an interface header
-    if (m_strDefaultValue == "0u")
-        m_strDefaultValue = "0";
 
-    // in order to make valid&simple comparison on argument defaults,
-    // we reduce some of the multiple forms in which the same things may appear
-    // to a single form:
-    if (m_strDefaultValueForCmp == "0u")
-        m_strDefaultValueForCmp = "0";
+    // clean the default argument strings
+    // ----------------------------------
 
-    m_strDefaultValue.Replace("0x000000001", "1");
-    m_strDefaultValueForCmp.Replace("0x000000001", "1");
+    // Note: we adjust the aesthetic form of the m_strDefaultValue string for the "modify mode"
+    //       of ifacecheck: we may need to write it out in an interface header
 
-    // fix for unicode strings:
-    m_strDefaultValue.Replace("\\000\\000\\000", "");
-    m_strDefaultValueForCmp.Replace("\\000\\000\\000", "");
+    wxString *p;
+    for (int i=0; i<2; i++)     // to avoid copying&pasting the code!
+    {
+        if (i == 0) p = &m_strDefaultValue;
+        if (i == 1) p = &m_strDefaultValueForCmp;
+
+        if (*p == "0u") *p = "0";
+
+        p->Replace("0x000000001", "1");
+        p->Replace("\\000\\000\\000", "");    // fix for unicode strings:
+
+        // ADHOC-FIX: for wxConv* default values
+        p->Replace("wxConvAuto(wxFONTENCODING_DEFAULT)", "wxConvAuto()");
+        p->Replace("wxGet_wxConvUTF8()", "wxConvUTF8");
+        p->Replace("wxGet_wxConvLocal()", "wxConvLocal");
+    }
+
+
+    // clean ONLY the default argument string specific for comparison
+    // --------------------------------------------------------------
 
     if (m_strDefaultValueForCmp.StartsWith("wxT(") &&
         m_strDefaultValueForCmp.EndsWith(")"))
@@ -169,21 +188,12 @@ void wxArgumentType::SetDefaultValue(const wxString& defval, const wxString& def
         m_strDefaultValueForCmp = m_strDefaultValueForCmp.Mid(4,len-5);
     }
 
-/*
-    if (IsPointer())
-        m_strDefaultValueForCmp.Replace("0", "NULL");
-    else
-        m_strDefaultValueForCmp.Replace("NULL", "0");
-*/
     // ADHOC-FIX:
     // doxygen likes to put wxDateTime:: in front of all wxDateTime enums;
     // fix this to avoid false positives
     m_strDefaultValueForCmp.Replace("wxDateTime::", "");
     m_strDefaultValueForCmp.Replace("wxStockGDI::", "");     // same story for some other classes
     m_strDefaultValueForCmp.Replace("wxHelpEvent::", "");    // same story for some other classes
-
-    m_strDefaultValueForCmp.Replace("wxGet_wxConvLocal()", "wxConvLocal");
-
     m_strDefaultValueForCmp.Replace("* GetColour(COLOUR_BLACK)", "*wxBLACK");
 
     // ADHOC-FIX:
@@ -316,6 +326,18 @@ bool wxMethod::MatchesExceptForAttributes(const wxMethod& m) const
     // compare argument types
     for (unsigned int i=0; i<m_args.GetCount(); i++)
         if (m_args[i] != m.m_args[i])
+            return false;
+
+    return true;
+}
+
+bool wxMethod::ActsAsDefaultCtor() const
+{
+    if (!IsCtor())
+        return false;
+
+    for (unsigned int i=0; i<m_args.GetCount(); i++)
+        if (!m_args[i].HasDefaultValue())
             return false;
 
     return true;

@@ -188,7 +188,9 @@ public:     // getters
         { return m_retType; }
     wxString GetName() const
         { return m_strName; }
-    wxArgumentTypeArray GetArgumentTypes() const
+    const wxArgumentTypeArray& GetArgumentTypes() const
+        { return m_args; }
+    wxArgumentTypeArray& GetArgumentTypes()
         { return m_args; }
     int GetLocation() const
         { return m_nLine; }
@@ -256,6 +258,10 @@ public:     // misc
     // - argument types
     // except for the method attributes (const,static,virtual,pureVirtual,deprecated)
     bool MatchesExceptForAttributes(const wxMethod& m) const;
+
+    // returns true if this is a ctor which has default values for all its
+    // argument, thus is able to act also as default ctor
+    bool ActsAsDefaultCtor() const;
 
     void Dump(wxTextOutputStream& stream) const;
 
