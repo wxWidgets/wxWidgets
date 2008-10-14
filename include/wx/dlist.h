@@ -789,13 +789,16 @@ public:
         for(size_type i = 0; i < n; ++i)
             Append(v);
     }
-    iterator insert(const iterator& it, const_reference v = value_type())
+    iterator insert(const iterator& it, const_reference v)
     {
-        Insert(it.m_node,v);
+        if (it == end())
+            Append( v );
+        else
+            Insert(it.m_node,v);
         iterator itprev(it);
         return itprev--;
     }
-    void insert(const iterator& it, size_type n, const_reference v = value_type())
+    void insert(const iterator& it, size_type n, const_reference v)
     {
         for(size_type i = 0; i < n; ++i)
             Insert(it.m_node, v);
