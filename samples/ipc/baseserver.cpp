@@ -42,21 +42,6 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-// Define a new application
-class MyServer;
-
-class MyApp : public wxApp
-{
-public:
-    virtual bool OnInit();
-    virtual int OnExit();
-
-protected:
-    MyServer       *m_server;
-};
-
-DECLARE_APP(MyApp)
-
 class MyConnection : public MyConnectionBase, public wxTimer
 {
 public:
@@ -70,26 +55,38 @@ public:
     virtual bool OnDisconnect();
     virtual void Notify();
 
+private:
     wxString        m_sAdvise;
 
-protected:
     wxString        m_sRequestDate;
     char            m_achRequestBytes[3];
 };
 
-class MyServer: public wxServer
+class MyServer : public wxServer
 {
 public:
     MyServer();
     virtual ~MyServer();
     void Disconnect();
     bool IsConnected() { return m_connection != NULL; };
-    MyConnection *GetConnection() { return m_connection; };
-    wxConnectionBase *OnAcceptConnection(const wxString& topic);
+
+    virtual wxConnectionBase *OnAcceptConnection(const wxString& topic);
+
+private:
+    wxConnection *m_connection;
+};
+
+// Define a new application
+class MyApp : public wxApp
+{
+public:
+    virtual bool OnInit();
 
 protected:
-    MyConnection     *m_connection;
+    MyServer m_server;
 };
+
+DECLARE_APP(MyApp)
 
 // ============================================================================
 // implementation
@@ -108,29 +105,23 @@ bool MyApp::OnInit()
 
     delete wxLog::SetActiveTarget(new wxLogStderr);
 
-    // Create a new server
-    m_server = new MyServer;
-    if (m_server->Create("4242"))
-    {
-        wxLogMessage(_T("Server 4242 started"));
+    const char * const kind =
 #if wxUSE_DDE_FOR_IPC
-        wxLogMessage(_T("Server uses DDE"));
-#else // !wxUSE_DDE_FOR_IPC
-        wxLogMessage(_T("Server uses TCP"));
-#endif // wxUSE_DDE_FOR_IPC/!wxUSE_DDE_FOR_IPC
-        return true;
-    }
-    else
+                 "DDE"
+#else
+                 "TCP"
+#endif
+                 ;
+
+    // Create a new server
+    if ( !m_server.Create(IPC_SERVICE) )
     {
-        wxLogMessage(_T("Server 4242 failed to start"));
-        delete m_server;
+        wxLogMessage("%s server failed to start on %s", kind, IPC_SERVICE);
         return false;
     }
-}
 
-int MyApp::OnExit()
-{
-    return 0;
+    wxLogMessage("%s server started on %s", kind, IPC_SERVICE);
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -149,14 +140,15 @@ MyServer::~MyServer()
 
 wxConnectionBase *MyServer::OnAcceptConnection(const wxString& topic)
 {
-    wxLogMessage(_T("OnAcceptConnection(\"%s\")"), topic.c_str());
+    wxLogMessage("OnAcceptConnection(\"%s\")", topic.c_str());
 
     if ( topic == IPC_TOPIC )
     {
         m_connection = new MyConnection;
-        wxLogMessage(_T("Connection accepted"));
+        wxLogMessage("Connection accepted");
         return m_connection;
     }
+
     // unknown topic
     return NULL;
 }
@@ -168,7 +160,7 @@ void MyServer::Disconnect()
         m_connection->Disconnect();
         delete m_connection;
         m_connection = NULL;
-        wxLogMessage(_T("Disconnected client"));
+        wxLogMessage("Disconnected client");
     }
 }
 
@@ -176,37 +168,47 @@ void MyServer::Disconnect()
 // MyConnection
 // ----------------------------------------------------------------------------
 
-bool MyConnection::OnExecute(const wxString& topic,
-    const void *data, size_t size, wxIPCFormat format)
+bool
+MyConnection::OnExecute(const wxString& topic,
+                        const void *data,
+                        size_t size,
+                        wxIPCFormat format)
 {
-    Log(_T("OnExecute"), topic, _T(""), data, size, format);
+    Log("OnExecute", topic, "", data, size, format);
     return true;
 }
 
-bool MyConnection::OnPoke(const wxString& topic,
-    const wxString& item, const void *data, size_t size, wxIPCFormat format)
+bool
+MyConnection::OnPoke(const wxString& topic,
+                     const wxString& item,
+                     const void *data,
+                     size_t size,
+                     wxIPCFormat format)
 {
-    Log(_T("OnPoke"), topic, item, data, size, format);
+    Log("OnPoke", topic, item, data, size, format);
     return wxConnection::OnPoke(topic, item, data, size, format);
 }
 
-const void *MyConnection::OnRequest(const wxString& topic,
-    const wxString& item, size_t *size, wxIPCFormat format)
+const void *
+MyConnection::OnRequest(const wxString& topic,
+                        const wxString& item,
+                        size_t *size,
+                        wxIPCFormat format)
 {
     const void *data;
-    if (item == _T("Date"))
+    if (item == "Date")
     {
         m_sRequestDate = wxDateTime::Now().Format();
         data = m_sRequestDate.c_str();
         *size = wxNO_LEN;
     }
-    else if (item == _T("Date+len"))
+    else if (item == "Date+len")
     {
-        m_sRequestDate = wxDateTime::Now().FormatTime() + _T(" ") + wxDateTime::Now().FormatDate();
+        m_sRequestDate = wxDateTime::Now().FormatTime() + " " + wxDateTime::Now().FormatDate();
         data = m_sRequestDate.c_str();
         *size = m_sRequestDate.Length() + 1;
     }
-    else if (item == _T("bytes[3]"))
+    else if (item == "bytes[3]")
     {
         data = m_achRequestBytes;
         m_achRequestBytes[0] = '1'; m_achRequestBytes[1] = '2'; m_achRequestBytes[2] = '3';
@@ -217,42 +219,44 @@ const void *MyConnection::OnRequest(const wxString& topic,
         data = NULL;
         *size = 0;
     }
-    Log(_T("OnRequest"), topic, item, data, *size, format);
+    Log("OnRequest", topic, item, data, *size, format);
     return data;
 }
 
-bool MyConnection::OnStartAdvise(const wxString& topic,
-                                 const wxString& item)
+bool MyConnection::OnStartAdvise(const wxString& topic, const wxString& item)
 {
-    wxLogMessage(_T("OnStartAdvise(\"%s\",\"%s\")"), topic.c_str(), item.c_str());
-    wxLogMessage(_T("Returning true"));
+    wxLogMessage("OnStartAdvise(\"%s\",\"%s\")", topic.c_str(), item.c_str());
+    wxLogMessage("Returning true");
     m_sAdvise = item;
-    Start(3000, false);
+    Start(3000); // schedule our Notify() to be called in 3 seconds
     return true;
 }
 
-bool MyConnection::OnStopAdvise(const wxString& topic,
-                                 const wxString& item)
+bool MyConnection::OnStopAdvise(const wxString& topic, const wxString& item)
 {
-    wxLogMessage(_T("OnStopAdvise(\"%s\",\"%s\")"), topic.c_str(), item.c_str());
-    wxLogMessage(_T("Returning true"));
-    m_sAdvise.Empty();
+    wxLogMessage("OnStopAdvise(\"%s\",\"%s\")", topic.c_str(), item.c_str());
+    wxLogMessage("Returning true");
+    m_sAdvise.clear();
     Stop();
     return true;
 }
 
 void MyConnection::Notify()
 {
-    if (!m_sAdvise.IsEmpty())
+    if (!m_sAdvise.empty())
     {
         wxString s = wxDateTime::Now().Format();
         Advise(m_sAdvise, s);
-        s = wxDateTime::Now().FormatTime() + _T(" ") + wxDateTime::Now().FormatDate();
-        Advise(m_sAdvise, (const char *)s.c_str(), s.Length() + 1);
+        s = wxDateTime::Now().FormatTime() + " " + wxDateTime::Now().FormatDate();
+        Advise(m_sAdvise, s.mb_str(), s.length() + 1);
 
 #if wxUSE_DDE_FOR_IPC
-        wxLogMessage(_T("DDE Advise type argument cannot be wxIPC_PRIVATE. The client will receive it as wxIPC_TEXT, and receive the correct no of bytes, but not print a correct log entry."));
-#endif
+        wxLogMessage("DDE Advise type argument cannot be wxIPC_PRIVATE. "
+                     "The client will receive it as wxIPC_TEXT, "
+                     "and receive the correct no of bytes, "
+                     "but not print a correct log entry.");
+#endif // DDE
+
         char bytes[3];
         bytes[0] = '1'; bytes[1] = '2'; bytes[2] = '3';
         Advise(m_sAdvise, bytes, 3, wxIPC_PRIVATE);
@@ -263,12 +267,12 @@ void MyConnection::Notify()
 
 bool MyConnection::DoAdvise(const wxString& item, const void *data, size_t size, wxIPCFormat format)
 {
-    Log(_T("Advise"), _T(""), item, data, size, format);
+    Log("Advise", "", item, data, size, format);
     return wxConnection::DoAdvise(item, data, size, format);
 }
 
 bool MyConnection::OnDisconnect()
 {
-    wxLogMessage(_T("OnDisconnect()"));
+    wxLogMessage("OnDisconnect()");
     return true;
 }
