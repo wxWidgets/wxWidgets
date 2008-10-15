@@ -1987,6 +1987,11 @@ void wxWindowMSW::DoMoveWindow(int x, int y, int width, int height)
 #if USE_DEFERRED_SIZING
         m_pendingPosition = wxPoint(x, y);
         m_pendingSize = wxSize(width, height);
+    }
+    else // window was moved immediately, without deferring it
+    {
+        m_pendingPosition = wxDefaultPosition;
+        m_pendingSize = wxDefaultSize;
 #endif // USE_DEFERRED_SIZING
     }
 }
