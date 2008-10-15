@@ -153,5 +153,10 @@ Finally, a few structure fields, notable @c wxCmdLineEntryDesc::shortName,
 - wxTE_AUTO_SCROLL style is deprecated as it's always on by default anyhow in
   the ports which support it so you should simply remove any mentions of it
   from your code.
+
+- If you use wxScrolled<T>::SetTargetWindow() you must override
+  wxScrolled<T>::GetSizeAvailableForScrollTarget() method to compute the size
+  available for the scroll target as function of the main window size, please
+  see the documentation of this method for more details.
 */
 

@@ -387,10 +387,36 @@ public:
                        bool noRefresh = false);
 
     /**
-        Call this function to tell wxScrolled to perform the actual
-        scrolling on a different window (and not on itself).
+        Call this function to tell wxScrolled to perform the actual scrolling
+        on a different window (and not on itself).
+
+        This method is useful when only a part of the window should be
+        scrolled. A typical example is a control consisting of a fixed header
+        and the scrollable contents window: the scrollbars are attached to the
+        main window itself, hence it, and not the contents window must be
+        derived from wxScrolled, but only the contents window scrolls when the
+        scrollbars are used. To implement such setup, you need to call this
+        method with the contents window as argument.
+
+        Notice that if this method is used, GetSizeAvailableForScrollTarget()
+        method must be overridden.
     */
-    void SetTargetWindow(wxWindow* window);
+    void SetTargetWindow(wxWindow *window);
+
+protected:
+    /**
+        Function which must be overridden to implement the size available for
+        the scroll target for the given size of the main window.
+
+        This method must be overridden if SetTargetWindow() is used (it is
+        never called otherwise). The implementation should decrease the @a size
+        to account for the size of the non-scrollable parts of the main window
+        and return only the size available for the scrollable window itself.
+        E.g. in the example given in SetTargetWindow() documentation the
+        function would subtract the height of the header window from the
+        vertical component of @a size.
+     */
+    virtual wxSize GetSizeAvailableForScrollTarget(const wxSize& size);
 };
 
 

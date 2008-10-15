@@ -104,6 +104,11 @@ Changes in behaviour not resulting in compilation errors, please read this!
 
 - wxDocument::OnNewDocument() doesn't call OnCloseDocument() any more.
 
+- If you use wxScrolledWindow::SetTargetWindow() you must implement its
+  GetSizeAvailableForScrollTarget() method, please see its documentation for
+  more details.
+
+
 Changes in behaviour which may result in compilation errors
 -----------------------------------------------------------
 
