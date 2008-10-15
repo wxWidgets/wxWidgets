@@ -1914,7 +1914,7 @@ wxDataViewCustomRenderer::~wxDataViewCustomRenderer()
         delete m_dc;
 
     if (m_text_renderer)
-        gtk_object_sink( GTK_OBJECT(m_text_renderer) );
+        g_object_ref_sink(m_text_renderer);
 }
 
 wxDC *wxDataViewCustomRenderer::GetDC()

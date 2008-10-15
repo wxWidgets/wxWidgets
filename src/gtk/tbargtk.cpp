@@ -378,7 +378,7 @@ bool wxToolBar::Create( wxWindow *parent,
     m_toolbar = GTK_TOOLBAR( gtk_toolbar_new() );
     m_tooltips = gtk_tooltips_new();
     g_object_ref(m_tooltips);
-    gtk_object_sink(GTK_OBJECT(m_tooltips));
+    g_object_ref_sink(m_tooltips);
     GtkSetStyle();
 
     if (style & wxTB_DOCKABLE)

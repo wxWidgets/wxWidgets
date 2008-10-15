@@ -28,11 +28,7 @@
     #include "wx/module.h"
 #endif
 
-#include <gtk/gtkversion.h>
-#if GTK_CHECK_VERSION(2, 9, 0)
-    // gtk_object_sink
-    #undef GTK_DISABLE_DEPRECATED
-#endif
+
 #include <gtk/gtk.h>
 
 // compatibility with older GTK+ versions:
@@ -210,7 +206,7 @@ static GdkPixbuf *CreateStockIcon(const char *stockid, GtkIconSize size)
         gs_gtkStyle = gtk_rc_get_style(widget);
         wxASSERT( gs_gtkStyle != NULL );
         g_object_ref(gs_gtkStyle);
-        gtk_object_sink((GtkObject*)widget);
+        g_object_ref_sink(widget);
     }
 
     GtkIconSet *iconset = gtk_style_lookup_icon_set(gs_gtkStyle, stockid);
