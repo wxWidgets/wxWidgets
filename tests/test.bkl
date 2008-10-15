@@ -110,11 +110,13 @@
             controls/textctrltest.cpp
             controls/textentrytest.cpp
             image/rawbmp.cpp
+            html/htmlwindow.cpp
             misc/guifuncs.cpp
             misc/selstoretest.cpp
             window/clientsize.cpp
             window/setsize.cpp
         </sources>
+        <wx-lib>html</wx-lib>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
     </exe>
