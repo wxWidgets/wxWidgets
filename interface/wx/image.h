@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        image.h
-// Purpose:     interface of wxImageHandler
+// Purpose:     interface of wxImageHandler and wxImage
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -17,21 +17,34 @@
     wxImageHandler and add the handler using wxImage::AddHandler in your
     application initialisation.
 
+    Note that all wxImageHandlers provided by wxWidgets are part of
+    the @ref page_libs_wxcore library.
+    For details about the default handlers, please see the section
+    @ref image_handlers in the wxImage class documentation.
+
+
+    @section imagehandler_note Note (Legal Issue)
+
+    This software is based in part on the work of the Independent JPEG Group.
+    (Applies when wxWidgets is linked with JPEG support.
+    wxJPEGHandler uses libjpeg created by IJG.)
+
+
     @stdobjects
     ::wxNullImage
 
     @library{wxcore}
-    @category{FIXME}
+    @category{misc}
 
     @see wxImage, wxInitAllImageHandlers()
-
-    @todo Document all image handler types, indicating their library.
 */
 class wxImageHandler : public wxObject
 {
 public:
     /**
-        Default constructor. In your own default constructor, initialise the members
+        Default constructor.
+
+        In your own default constructor, initialise the members
         m_name, m_extension and m_type.
     */
     wxImageHandler();
@@ -44,7 +57,7 @@ public:
     /**
         Gets the file extension associated with this handler.
     */
-    const wxString GetExtension() const;
+    const wxString& GetExtension() const;
 
     /**
         If the image file contains more than one image and the image handler is capable
@@ -52,23 +65,23 @@ public:
         available images.
 
         @param stream
-            Opened input stream for reading image data. Currently, the stream must
-        support seeking.
+            Opened input stream for reading image data.
+            Currently, the stream must support seeking.
 
         @return Number of available images. For most image handlers, this is 1
-                 (exceptions are TIFF and ICO formats).
+                (exceptions are TIFF and ICO formats).
     */
     virtual int GetImageCount(wxInputStream& stream);
 
     /**
         Gets the MIME type associated with this handler.
     */
-    const wxString GetMimeType() const;
+    const wxString& GetMimeType() const;
 
     /**
         Gets the name of this handler.
     */
-    const wxString GetName() const;
+    const wxString& GetName() const;
 
     /**
         Gets the image type associated with this handler.
@@ -76,11 +89,11 @@ public:
     wxBitmapType GetType() const;
 
     /**
-        Loads a image from a stream, putting the resulting data into @e image. If the
-        image file contains
-        more than one image and the image handler is capable of retrieving these
-        individually, @e index
-        indicates which image to read from the stream.
+        Loads a image from a stream, putting the resulting data into @a image.
+
+        If the image file contains more than one image and the image handler is
+        capable of retrieving these individually, @a index indicates which image
+        to read from the stream.
 
         @param image
             The image object which is to be affected by this operation.
@@ -88,7 +101,7 @@ public:
             Opened input stream for reading image data.
         @param verbose
             If set to @true, errors reported by the image handler will produce
-        wxLogMessages.
+            wxLogMessages.
         @param index
             The index of the image in the file (starting from zero).
 
@@ -124,7 +137,7 @@ public:
     /**
         Sets the handler MIME type.
 
-        @param mimename
+        @param mimetype
             Handler MIME type.
     */
     void SetMimeType(const wxString& mimetype);
@@ -139,23 +152,84 @@ public:
 };
 
 
+/**
+    Constant used to indicate the alpha value conventionally defined as
+    the complete transparency.
+*/
+const unsigned char wxIMAGE_ALPHA_TRANSPARENT = 0;
+
+/**
+    Constant used to indicate the alpha value conventionally defined as
+    the complete opacity.
+*/
+const unsigned char wxIMAGE_ALPHA_OPAQUE = 0xff;
 
 /**
     @class wxImage
 
-    This class encapsulates a platform-independent image. An image can be
-    created from data, or using wxBitmap::ConvertToImage. An image can be
-    loaded from a file in a variety of formats, and is extensible to new
-    formats via image format handlers. Functions are available to set and
+    This class encapsulates a platform-independent image.
+
+    An image can be created from data, or using wxBitmap::ConvertToImage.
+    An image can be loaded from a file in a variety of formats, and is extensible
+    to new formats via image format handlers. Functions are available to set and
     get image bits, so it can be used for basic image manipulation.
 
-    A wxImage cannot (currently) be drawn directly to a wxDC. Instead,
-    a platform-specific wxBitmap object must be created from it using
+    A wxImage cannot (currently) be drawn directly to a wxDC.
+    Instead, a platform-specific wxBitmap object must be created from it using
     the wxBitmap::wxBitmap(wxImage,int depth) constructor.
     This bitmap can then be drawn in a device context, using wxDC::DrawBitmap.
 
     One colour value of the image may be used as a mask colour which will lead to
     the automatic creation of a wxMask object associated to the bitmap object.
+
+
+    @section image_alpha Alpha channel support
+
+    Starting from wxWidgets 2.5.0 wxImage supports alpha channel data, that is
+    in addition to a byte for the red, green and blue colour components for each
+    pixel it also stores a byte representing the pixel opacity.
+
+    An alpha value of 0 corresponds to a transparent pixel (null opacity) while
+    a value of 255 means that the pixel is 100% opaque.
+    The constants ::wxIMAGE_ALPHA_TRANSPARENT and ::wxIMAGE_ALPHA_OPAQUE can be
+    used to indicate those values in a more readable form.
+
+    Unlike RGB data, not all images have an alpha channel and before using
+    wxImage::GetAlpha you should check if this image contains an alpha channel
+    with wxImage::HasAlpha. Note that currently only the PNG format has full
+    alpha channel support so only the images loaded from PNG files can have
+    alpha and, if you initialize the image alpha channel yourself using
+    wxImage::SetAlpha, you should save it in PNG format to avoid losing it.
+
+
+    @section image_handlers Available image handlers
+
+    The following image handlers are available.
+    wxBMPHandler is always installed by default.
+    To use other image formats, install the appropriate handler with
+    wxImage::AddHandler or call ::wxInitAllImageHandlers().
+
+    - wxBMPHandler: For loading and saving, always installed.
+    - wxPNGHandler: For loading (including alpha support) and saving.
+    - wxJPEGHandler: For loading and saving.
+    - wxGIFHandler: Only for loading, due to legal issues.
+    - wxPCXHandler: For loading and saving (see below).
+    - wxPNMHandler: For loading and saving (see below).
+    - wxTIFFHandler: For loading and saving.
+    - wxTGAHandler: For loading only.
+    - wxIFFHandler: For loading only.
+    - wxXPMHandler: For loading and saving.
+    - wxICOHandler: For loading and saving.
+    - wxCURHandler: For loading and saving.
+    - wxANIHandler: For loading only.
+
+    When saving in PCX format, wxPCXHandler will count the number of different
+    colours in the image; if there are 256 or less colours, it will save as 8 bit,
+    else it will save as 24 bit.
+
+    Loading PNMs only works for ASCII or raw RGB images.
+    When saving in PNM format, wxPNMHandler will always save as raw RGB.
+
 
     @library{wxcore}
     @category{gdi}
@@ -168,9 +242,34 @@ public:
 class wxImage : public wxObject
 {
 public:
+    class RGBValue
+    {
+    public:
+        /**
+            Constructor for RGBValue, an object that contains values for red, green
+            and blue which represent the value of a color.
+
+            It is used by wxImage::HSVtoRGB and wxImage::RGBtoHSV, which converts
+            between HSV color space and RGB color space.
+        */
+        RGBValue(unsigned char r=0, unsigned char g=0, unsigned char b=0);
+    };
+
+    class HSVValue
+    {
+    public:
+        /**
+            Constructor for HSVValue, an object that contains values for hue, saturation
+            and value which represent the value of a color.
+
+            It is used by wxImage::HSVtoRGB() and wxImage::RGBtoHSV(), which converts
+            between HSV color space and RGB color space.
+        */
+        HSVValue(double h=0.0, double s=0.0, double v=0.0);
+    };
 
     /**
-         Creates an empty wxImage object without an alpha channel.
+        Creates an empty wxImage object without an alpha channel.
     */
     wxImage();
 
@@ -189,7 +288,7 @@ public:
     wxImage(int width, int height, bool clear = true);
 
     /**
-        Creates an image from data in memory. If static_data is false
+        Creates an image from data in memory. If @a static_data is @false
         then the wxImage will take ownership of the data and free it
         afterwards. For this, it has to be allocated with @e malloc.
 
@@ -206,7 +305,7 @@ public:
     wxImage(int width, int height, unsigned char* data,  bool static_data = false);
 
     /**
-        Creates an image from data in memory. If static_data is false
+        Creates an image from data in memory. If @a static_data is @false
         then the wxImage will take ownership of the data and free it
         afterwards. For this, it has to be allocated with @e malloc.
 
@@ -222,7 +321,8 @@ public:
             Indicates if the data should be free'd after use
 
     */
-    wxImage(int width, int height, unsigned char* data, unsigned char* alpha, bool static_data = false );
+    wxImage(int width, int height, unsigned char* data, unsigned char* alpha,
+            bool static_data = false );
 
     /**
         Creates an image from XPM data.
@@ -259,8 +359,17 @@ public:
             interpreted as the first image (index=0) by the GIF and TIFF handler
             and as the largest and most colourful one by the ICO handler.
 
-        @remarks Depending on how wxWidgets has been configured, not all formats
-                 may be available.
+        @remarks Depending on how wxWidgets has been configured and by which
+                 handlers have been loaded, not all formats may be available.
+                 Any handler other than BMP must be previously initialized with
+                wxImage::AddHandler or wxInitAllImageHandlers.
+
+        @note
+            You can use GetOptionInt() to get the hotspot when loading cursor files:
+            @code
+            int hotspot_x = image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X);
+            int hotspot_y = image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y);
+            @endcode
 
         @see LoadFile()
     */
@@ -271,12 +380,10 @@ public:
 
         @param name
             Name of the file from which to load the image.
-        @param type
-            See above
         @param mimetype
             MIME type string (for example 'image/jpeg')
         @param index
-            See above
+            See description in wxImage(const wxString&, wxBitmapType, int) overload.
     */
     wxImage(const wxString& name, const wxString& mimetype, int index = -1);
 
@@ -287,9 +394,9 @@ public:
             Opened input stream from which to load the image. Currently,
             the stream must support seeking.
         @param type
-            See above
+            See description in wxImage(const wxString&, wxBitmapType, int) overload.
         @param index
-            See above.
+            See description in wxImage(const wxString&, wxBitmapType, int) overload.
     */
     wxImage(wxInputStream& stream, wxBitmapType type = wxBITMAP_TYPE_ANY, int index = -1);
 
@@ -302,15 +409,16 @@ public:
         @param mimetype
             MIME type string (for example 'image/jpeg')
         @param index
-            See above.
+            See description in wxImage(const wxString&, wxBitmapType, int) overload.
     */
     wxImage(wxInputStream& stream, const wxString& mimetype, int index = -1);
 
 
     /**
         Destructor.
-        See @ref overview_refcountdestruct "reference-counted object destruction" for
-        more info.
+
+        See @ref overview_refcount_destruct "reference-counted object destruction"
+        for more info.
     */
     virtual ~wxImage();
 
@@ -321,7 +429,7 @@ public:
 
     /**
         Blurs the image in both horizontal and vertical directions by the
-        specified pixel @e blurRadius. This should not be used when using
+        specified pixel @a blurRadius. This should not be used when using
         a single mask colour for transparency.
 
         @see BlurHorizontal(), BlurVertical()
@@ -360,44 +468,62 @@ public:
         wxImageHistogram object. wxImageHistogram is a specialization of
         wxHashMap "template" and is defined as follows:
 
+        @code
+        class WXDLLEXPORT wxImageHistogramEntry
+        {
+        public:
+            wxImageHistogramEntry() : index(0), value(0) {}
+            unsigned long index;
+            unsigned long value;
+        };
+
+        WX_DECLARE_EXPORTED_HASH_MAP(unsigned long, wxImageHistogramEntry,
+                                    wxIntegerHash, wxIntegerEqual,
+                                    wxImageHistogram);
+        @endcode
+
         @return Returns number of colours in the histogram.
     */
     unsigned long ComputeHistogram(wxImageHistogram& histogram) const;
 
     /**
-        If the image has alpha channel, this method converts it to mask. All pixels
-        with alpha value less than @a threshold are replaced with mask colour
-        and the alpha channel is removed. Mask colour is chosen automatically using
-        FindFirstUnusedColour().
-        If the image image doesn't have alpha channel,
-        ConvertAlphaToMask does nothing.
+        If the image has alpha channel, this method converts it to mask.
+
+        All pixels with alpha value less than @a threshold are replaced with mask
+        colour and the alpha channel is removed. Mask colour is chosen automatically
+        using FindFirstUnusedColour().
+
+        If the image image doesn't have alpha channel, ConvertAlphaToMask() does nothing.
 
         @return @false if FindFirstUnusedColour returns @false, @true otherwise.
     */
     bool ConvertAlphaToMask(unsigned char threshold = 128);
 
     /**
-        Deprecated, use equivalent @ref wxBitmap::ctor "wxBitmap constructor"
+        @deprecated
+        Use the equivalent @ref wxBitmap::wxBitmap "wxBitmap constructor"
         (which takes wxImage and depth as its arguments) instead.
     */
     wxBitmap ConvertToBitmap() const;
 
     /**
-        Returns a greyscale version of the image. The returned image uses the luminance
-        component of the original to calculate the greyscale. Defaults to using
-        ITU-T BT.601 when converting to YUV, where every pixel equals
-        (R * @e lr) + (G * @e lg) + (B * @e lb).
+        Returns a greyscale version of the image.
+
+        The returned image uses the luminance component of the original to
+        calculate the greyscale. Defaults to using the standard ITU-T BT.601
+        when converting to YUV, where every pixel equals
+        (R * @a lr) + (G * @a lg) + (B * @a lb).
     */
     wxImage ConvertToGreyscale(double lr = 0.299, double lg = 0.587,
                                double lb = 0.114) const;
 
     /**
-        Returns monochromatic version of the image. The returned image has white
-        colour where the original has @e (r,g,b) colour and black colour
-        everywhere else.
+        Returns monochromatic version of the image.
+
+        The returned image has white colour where the original has @e (r,g,b)
+        colour and black colour everywhere else.
     */
-    wxImage ConvertToMono(unsigned char r, unsigned char g,
-                          unsigned char b) const;
+    wxImage ConvertToMono(unsigned char r, unsigned char g, unsigned char b) const;
 
     /**
         Returns an identical copy of the image.
@@ -427,29 +553,70 @@ public:
     void Destroy();
 
     /**
-        @param r,g,b
-            Pointers to variables to save the colour.
-        @param startR,startG,startB
-            Initial values of the colour. Returned colour
-            will have RGB values equal to or greater than these.
+        Finds the first colour that is never used in the image.
+        The search begins at given initial colour and continues by increasing
+        R, G and B components (in this order) by 1 until an unused colour is
+        found or the colour space exhausted.
+
+        The parameters @a r, @a g, @a b are pointers to variables to save the colour.
+
+        The parameters @a startR, @a startG, @a startB define the initial values
+        of the colour.
+        The returned colour will have RGB values equal to or greater than these.
 
         @return Returns @false if there is no unused colour left, @true on success.
+
+        @note
+            This method involves computing the histogram, which is a
+            computationally intensive operation.
     */
     bool FindFirstUnusedColour(unsigned char* r, unsigned char* g,
                                unsigned char* b, unsigned char startR = 1,
                                unsigned char startG = 0,
                                unsigned char startB = 0) const;
 
-    //@{
     /**
-        Finds the handler associated with the given MIME type.
+        Finds the handler with the given name.
 
         @param name
             The handler name.
+
+        @return A pointer to the handler if found, @NULL otherwise.
+
+        @see wxImageHandler
+    */
+    static wxImageHandler* FindHandler(const wxString& name);
+
+    /**
+        Finds the handler associated with the given extension and type.
+
         @param extension
             The file extension, such as "bmp".
         @param imageType
-            The image type, such as wxBITMAP_TYPE_BMP.
+            The image type; one of the ::wxBitmapType values.
+
+        @return A pointer to the handler if found, @NULL otherwise.
+
+        @see wxImageHandler
+    */
+    static wxImageHandler* FindHandler(const wxString& extension,
+                                       wxBitmapType imageType);
+
+    /**
+        Finds the handler associated with the given image type.
+
+        @param imageType
+            The image type; one of the ::wxBitmapType values.
+
+        @return A pointer to the handler if found, @NULL otherwise.
+
+        @see wxImageHandler
+    */
+    static wxImageHandler* FindHandler(wxBitmapType imageType);
+
+    /**
+        Finds the handler associated with the given MIME type.
+
         @param mimetype
             MIME type.
 
@@ -457,12 +624,7 @@ public:
 
         @see wxImageHandler
     */
-    static wxImageHandler* FindHandler(const wxString& name);
-    static wxImageHandler* FindHandler(const wxString& extension,
-                                       wxBitmapType imageType);
-    static wxImageHandler* FindHandler(wxBitmapType imageType);
     static wxImageHandler* FindHandlerMime(const wxString& mimetype);
-    //@}
 
     /**
         Return alpha value at given pixel location.
@@ -470,8 +632,9 @@ public:
     unsigned char GetAlpha(int x, int y) const;
 
     /**
-        Returns pointer to the array storing the alpha values for this image. This
-        pointer is @NULL for the images without the alpha channel. If the image
+        Returns pointer to the array storing the alpha values for this image.
+
+        This pointer is @NULL for the images without the alpha channel. If the image
         does have it, this pointer may be used to directly manipulate the alpha values
         which are stored as the RGB ones.
     */
@@ -483,15 +646,16 @@ public:
     unsigned char GetBlue(int x, int y) const;
 
     /**
-        Returns the image data as an array. This is most often used when doing
-        direct image manipulation. The return value points to an array of
-        characters in RGBRGBRGB... format in the top-to-bottom, left-to-right
-        order, that is the first RGB triplet corresponds to the pixel first pixel of
-        the first row, the second one --- to the second pixel of the first row and so
-        on until the end of the first row, with second row following after it and so
-        on.
-        You should not delete the returned pointer nor pass it to
-        SetData().
+        Returns the image data as an array.
+
+        This is most often used when doing direct image manipulation.
+        The return value points to an array of characters in RGBRGBRGB... format
+        in the top-to-bottom, left-to-right order, that is the first RGB triplet
+        corresponds to the pixel first pixel of the first row, the second one ---
+        to the second pixel of the first row and so on until the end of the first
+        row, with second row following after it and so on.
+
+        You should not delete the returned pointer nor pass it to SetData().
     */
     unsigned char* GetData() const;
 
@@ -514,33 +678,32 @@ public:
 
     //@{
     /**
-        If the image file contains more than one image and the image handler is capable
-        of retrieving these individually, this function will return the number of
-        available images.
+        If the image file contains more than one image and the image handler is
+        capable of retrieving these individually, this function will return the
+        number of available images.
 
-        @param name
-            Name of the file to query.
-        @param stream
-            Opened input stream with image data. Currently, the stream must
-            support seeking.
-        @param type
-            May be one of the following:
-            @li wxBITMAP_TYPE_BMP: Load a Windows bitmap file.
-            @li wxBITMAP_TYPE_GIF: Load a GIF bitmap file.
-            @li wxBITMAP_TYPE_JPEG: Load a JPEG bitmap file.
-            @li wxBITMAP_TYPE_PNG: Load a PNG bitmap file.
-            @li wxBITMAP_TYPE_PCX: Load a PCX bitmap file.
-            @li wxBITMAP_TYPE_PNM: Load a PNM bitmap file.
-            @li wxBITMAP_TYPE_TIF: Load a TIFF bitmap file.
-            @li wxBITMAP_TYPE_TGA: Load a TGA bitmap file.
-            @li wxBITMAP_TYPE_XPM: Load a XPM bitmap file.
-            @li wxBITMAP_TYPE_ICO: Load a Windows icon file (ICO).
-            @li wxBITMAP_TYPE_CUR: Load a Windows cursor file (CUR).
-            @li wxBITMAP_TYPE_ANI: Load a Windows animated cursor file (ANI).
-            @li wxBITMAP_TYPE_ANY: Will try to autodetect the format.
+        For the overload taking the parameter @a filename, that's the name
+        of the file to query.
+        For the overload taking the parameter @a stream, that's the ppened input
+        stream with image data. Currently, the stream must support seeking.
+
+        The parameter @a type may be one of the following values:
+        @li wxBITMAP_TYPE_BMP: Load a Windows bitmap file.
+        @li wxBITMAP_TYPE_GIF: Load a GIF bitmap file.
+        @li wxBITMAP_TYPE_JPEG: Load a JPEG bitmap file.
+        @li wxBITMAP_TYPE_PNG: Load a PNG bitmap file.
+        @li wxBITMAP_TYPE_PCX: Load a PCX bitmap file.
+        @li wxBITMAP_TYPE_PNM: Load a PNM bitmap file.
+        @li wxBITMAP_TYPE_TIF: Load a TIFF bitmap file.
+        @li wxBITMAP_TYPE_TGA: Load a TGA bitmap file.
+        @li wxBITMAP_TYPE_XPM: Load a XPM bitmap file.
+        @li wxBITMAP_TYPE_ICO: Load a Windows icon file (ICO).
+        @li wxBITMAP_TYPE_CUR: Load a Windows cursor file (CUR).
+        @li wxBITMAP_TYPE_ANI: Load a Windows animated cursor file (ANI).
+        @li wxBITMAP_TYPE_ANY: Will try to autodetect the format.
 
         @return Number of available images. For most image handlers, this is 1
-                 (exceptions are TIFF and ICO formats).
+                (exceptions are TIFF and ICO formats).
     */
     static int GetImageCount(const wxString& filename,
                              wxBitmapType type = wxBITMAP_TYPE_ANY);
@@ -550,11 +713,17 @@ public:
 
     /**
         Iterates all registered wxImageHandler objects, and returns a string containing
-        file extension masks
-        suitable for passing to file open/save dialog boxes.
+        file extension masks suitable for passing to file open/save dialog boxes.
 
-        @return The format of the returned string is
-                 "(*.ext1;*.ext2)|*.ext1;*.ext2".
+        @return The format of the returned string is @c "(*.ext1;*.ext2)|*.ext1;*.ext2".
+                It is usually a good idea to prepend a description before passing
+                the result to the dialog.
+                Example:
+                @code
+                wxFileDialog FileDlg( this, "Choose Image", ::wxGetCwd(), "",
+                                      _("Image Files ") + wxImage::GetImageExtWildcard(),
+                                      wxFD_OPEN );
+                @endcode
 
         @see wxImageHandler
     */
@@ -576,7 +745,8 @@ public:
     unsigned char GetMaskRed() const;
 
     /**
-        Gets a user-defined option. The function is case-insensitive to @e name.
+        Gets a user-defined option. The function is case-insensitive to @a name.
+
         For example, when saving as a JPEG file, the option @b quality is
         used, which is a number between 0 and 100 (0 is terrible, 100 is very good).
 
@@ -585,10 +755,12 @@ public:
     wxString GetOption(const wxString& name) const;
 
     /**
-        Gets a user-defined option as an integer. The function is case-insensitive
-        to @e name. If the given option is not present, the function returns 0.
+        Gets a user-defined option as an integer.
+        The function is case-insensitive to @a name.
+        If the given option is not present, the function returns 0.
         Use HasOption() is 0 is a possibly valid value for the option.
-        Options for wxPNGHandler
+
+        Options for wxPNGHandler:
         @li wxIMAGE_OPTION_PNG_FORMAT: Format for saving a PNG file.
         @li wxIMAGE_OPTION_PNG_BITDEPTH: Bit depth for every channel (R/G/B/A).
 
@@ -609,12 +781,14 @@ public:
                              unsigned char b) const;
 
     /**
-        Returns the palette associated with the image. Currently the palette is only
-        used when converting to wxBitmap under Windows. Some of the wxImage handlers
-        have been modified to set the palette if one exists in the image file (usually
-        256 or less colour images in GIF or PNG format).
+        Returns the palette associated with the image.
+        Currently the palette is only used when converting to wxBitmap under Windows.
+
+        Some of the wxImage handlers have been modified to set the palette if
+        one exists in the image file (usually 256 or less colour images in
+        GIF or PNG format).
     */
-    const wxPalette GetPalette() const;
+    const wxPalette& GetPalette() const;
 
     /**
         Returns the red intensity at the given coordinate.
@@ -622,13 +796,14 @@ public:
     unsigned char GetRed(int x, int y) const;
 
     /**
-        Returns a sub image of the current one as long as the rect belongs entirely to
-        the image.
+        Returns a sub image of the current one as long as the rect belongs entirely
+        to the image.
     */
     wxImage GetSubImage(const wxRect& rect) const;
 
     /**
-        Gets the type of image found by LoadFile or specified with SaveFile
+        Gets the type of image found by LoadFile() or specified with SaveFile().
+
         @since 2.9.0
     */
     wxBitmapType GetType() const;
@@ -641,18 +816,9 @@ public:
     int GetWidth() const;
 
     /**
-        Constructor for HSVValue, an object that contains values for hue, saturation
-        and value which
-        represent the value of a color. It is used by HSVtoRGB()
-        and RGBtoHSV(), which
-        converts between HSV color space and RGB color space.
-    */
-    HSVValue(double h = 0.0, double s = 0.0, double v = 0.0);
-
-    /**
         Converts a color in HSV color space to RGB color space.
     */
-#define wxImage::RGBValue HSVtoRGB(const HSVValue& hsv)     /* implementation is private */
+    wxImage::RGBValue HSVtoRGB(const wxImage::HSVValue & hsv);
 
     /**
         Returns @true if this image has alpha channel, @false otherwise.
@@ -667,24 +833,27 @@ public:
     bool HasMask() const;
 
     /**
-        Returns @true if the given option is present. The function is case-insensitive
-        to @e name.
+        Returns @true if the given option is present.
+        The function is case-insensitive to @a name.
 
         @see SetOption(), GetOption(), GetOptionInt()
     */
     bool HasOption(const wxString& name) const;
 
     /**
-        Initializes the image alpha channel data. It is an error to call it
-        if the image already has alpha data. If it doesn't, alpha data will be
-        by default initialized to all pixels being fully opaque. But if the image has a
-        a mask colour, all mask pixels will be completely transparent.
+        Initializes the image alpha channel data.
+
+        It is an error to call it if the image already has alpha data.
+        If it doesn't, alpha data will be by default initialized to all pixels
+        being fully opaque. But if the image has a mask colour, all mask pixels
+        will be completely transparent.
     */
     void InitAlpha();
 
     /**
-        Internal use only. Adds standard image format handlers. It only install BMP
-        for the time being, which is used by wxBitmap.
+        Internal use only. Adds standard image format handlers.
+        It only install wxBMPHandler for the time being, which is used by wxBitmap.
+
         This function is called by wxWidgets on startup, and shouldn't be called by
         the user.
 
@@ -711,19 +880,16 @@ public:
     /**
         Returns @true if the given pixel is transparent, i.e. either has the mask
         colour if this image has a mask or if this image has alpha channel and alpha
-        value of this pixel is strictly less than @e threshold.
+        value of this pixel is strictly less than @a threshold.
     */
     bool IsTransparent(int x, int y, unsigned char threshold = 128) const;
 
-    //@{
     /**
         Loads an image from an input stream.
 
-        @param name
-            Name of the file from which to load the image.
         @param stream
-            Opened input stream from which to load the image. Currently, the
-            stream must support seeking.
+            Opened input stream from which to load the image.
+            Currently, the stream must support seeking.
         @param type
             May be one of the following:
             @li wxBITMAP_TYPE_BMP: Load a Windows bitmap file.
@@ -739,8 +905,6 @@ public:
             @li wxBITMAP_TYPE_CUR: Load a Windows cursor file (CUR).
             @li wxBITMAP_TYPE_ANI: Load a Windows animated cursor file (ANI).
             @li wxBITMAP_TYPE_ANY: Will try to autodetect the format.
-        @param mimetype
-            MIME type string (for example 'image/jpeg')
         @param index
             Index of the image to load in the case that the image file contains
             multiple images. This is only used by GIF, ICO and TIFF handlers.
@@ -748,30 +912,72 @@ public:
             interpreted as the first image (index=0) by the GIF and TIFF handler
             and as the largest and most colourful one by the ICO handler.
 
-        @return @true if the operation succeeded, @false otherwise. If the
-                 optional index parameter is out of range, @false is
-                 returned and a call to wxLogError() takes place.
+        @return @true if the operation succeeded, @false otherwise.
+                If the optional index parameter is out of range, @false is
+                returned and a call to wxLogError() takes place.
 
         @remarks Depending on how wxWidgets has been configured, not all formats
                  may be available.
 
+        @note
+            You can use GetOptionInt() to get the hotspot when loading cursor files:
+            @code
+            int hotspot_x = image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X);
+            int hotspot_y = image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y);
+            @endcode
+
         @see SaveFile()
+    */
+    bool LoadFile(wxInputStream& stream, wxBitmapType type, int index = -1);
+
+    /**
+        Loads an image from a file.
+        If no handler type is provided, the library will try to autodetect the format.
+
+        @param name
+            Name of the file from which to load the image.
+        @param type
+            See the description in the LoadFile(wxInputStream&, wxBitmapType, int) overload.
+        @param index
+            See the description in the LoadFile(wxInputStream&, wxBitmapType, int) overload.
     */
     bool LoadFile(const wxString& name,
                   wxBitmapType type = wxBITMAP_TYPE_ANY,
                   int index = -1);
+
+    /**
+        Loads an image from a file.
+        If no handler type is provided, the library will try to autodetect the format.
+
+        @param name
+            Name of the file from which to load the image.
+        @param mimetype
+            MIME type string (for example 'image/jpeg')
+        @param index
+            See the description in the LoadFile(wxInputStream&, wxBitmapType, int) overload.
+    */
     bool LoadFile(const wxString& name, const wxString& mimetype,
                   int index = -1);
-    bool LoadFile(wxInputStream& stream, wxBitmapType type,
-                  int index = -1);
+
+
+    /**
+        Loads an image from an input stream.
+
+        @param stream
+            Opened input stream from which to load the image.
+            Currently, the stream must support seeking.
+        @param mimetype
+            MIME type string (for example 'image/jpeg')
+        @param index
+            See the description in the LoadFile(wxInputStream&, wxBitmapType, int) overload.
+    */
     bool LoadFile(wxInputStream& stream,
                   const wxString& mimetype,
                   int index = -1);
-    //@}
 
     /**
-        Returns a mirrored copy of the image. The parameter @e horizontally
-        indicates the orientation.
+        Returns a mirrored copy of the image.
+        The parameter @a horizontally indicates the orientation.
     */
     wxImage Mirror(bool horizontally = true) const;
 
@@ -781,23 +987,13 @@ public:
     void Paste(const wxImage& image, int x, int y);
 
     /**
-        Constructor for RGBValue, an object that contains values for red, green and
-        blue which
-        represent the value of a color. It is used by HSVtoRGB()
-        and RGBtoHSV(), which
-        converts between HSV color space and RGB color space.
-    */
-    RGBValue(unsigned char r = 0, unsigned char g = 0,
-             unsigned char b = 0);
-
-    /**
         Converts a color in RGB color space to HSV color space.
     */
-#define wxImage::HSVValue RGBtoHSV(const RGBValue& rgb)     /* implementation is private */
+    wxImage::HSVValue RGBtoHSV(const wxImage::RGBValue& rgb);
 
     /**
-        Finds the handler with the given name, and removes it. The handler
-        is not deleted.
+        Finds the handler with the given name, and removes it.
+        The handler is not deleted.
 
         @param name
             The handler name.
@@ -817,8 +1013,8 @@ public:
 
     /**
         Changes the size of the image in-place by scaling it: after a call to this
-        function,
-        the image will have the given width and height.
+        function,the image will have the given width and height.
+
         For a description of the @a quality parameter, see the Scale() function.
         Returns the (modified) image itself.
 
@@ -829,25 +1025,31 @@ public:
 
     /**
         Changes the size of the image in-place without scaling it by adding either a
-        border
-        with the given colour or cropping as necessary. The image is pasted into a new
-        image with the given @a size and background colour at the position @e pos
-        relative to the upper left of the new image. If @a red = green = blue = -1
-        then use either the  current mask colour if set or find, use, and set a
-        suitable mask colour for any newly exposed areas.
-        Returns the (modified) image itself.
+        border with the given colour or cropping as necessary.
+
+        The image is pasted into a new image with the given @a size and background
+        colour at the position @a pos relative to the upper left of the new image.
+
+        If @a red = green = blue = -1 then use either the  current mask colour
+        if set or find, use, and set a suitable mask colour for any newly exposed
+        areas.
+
+        @return The (modified) image itself.
 
         @see Size()
     */
-    wxImage Resize(const wxSize& size, const wxPoint pos,
+    wxImage Resize(const wxSize& size, const wxPoint& pos,
                    int red = -1, int green = -1,
                    int blue = -1);
 
     /**
-        Rotates the image about the given point, by @a angle radians. Passing @true
-        to @a interpolating results in better image quality, but is slower. If the
-        image has a mask, then the mask colour is used for the uncovered pixels in the
-        rotated image background. Else, black (rgb 0, 0, 0) will be used.
+        Rotates the image about the given point, by @a angle radians.
+
+        Passing @true to @a interpolating results in better image quality, but is slower.
+
+        If the image has a mask, then the mask colour is used for the uncovered
+        pixels in the rotated image background. Else, black (rgb 0, 0, 0) will be used.
+
         Returns the rotated image, leaving this image intact.
     */
     wxImage Rotate(double angle, const wxPoint& rotationCentre,
@@ -856,40 +1058,22 @@ public:
 
     /**
         Returns a copy of the image rotated 90 degrees in the direction
-        indicated by @e clockwise.
+        indicated by @a clockwise.
     */
     wxImage Rotate90(bool clockwise = true) const;
 
     /**
         Rotates the hue of each pixel in the image by @e angle, which is a double in
         the range of -1.0 to +1.0, where -1.0 corresponds to -360 degrees and +1.0
-        corresponds
-        to +360 degrees.
+        corresponds to +360 degrees.
     */
     void RotateHue(double angle);
 
-    //@{
     /**
         Saves an image in the given stream.
 
-        @param name
-            Name of the file to save the image to.
         @param stream
             Opened output stream to save the image to.
-        @param type
-            Currently these types can be used:
-            @li wxBITMAP_TYPE_BMP: Save a BMP image file.
-            @li wxBITMAP_TYPE_JPEG: Save a JPEG image file.
-            @li wxBITMAP_TYPE_PNG: Save a PNG image file.
-            @li wxBITMAP_TYPE_PCX: Save a PCX image file (tries to save as 8-bit if possible,
-                falls back to 24-bit otherwise).
-            @li wxBITMAP_TYPE_PNM: Save a PNM image file (as raw RGB always).
-            @li wxBITMAP_TYPE_TIFF: Save a TIFF image file.
-            @li wxBITMAP_TYPE_XPM: Save a XPM image file.
-            @li wxBITMAP_TYPE_ICO: Save a Windows icon file (ICO) (the size may
-                be up to 255 wide by 127 high. A single image is saved in 8 colors
-                at the size supplied).
-            @li wxBITMAP_TYPE_CUR: Save a Windows cursor file (CUR).
         @param mimetype
             MIME type.
 
@@ -898,44 +1082,116 @@ public:
         @remarks Depending on how wxWidgets has been configured, not all formats
                  may be available.
 
+        @note
+            You can use SetOption() to set the hotspot when saving an image
+            into a cursor file (default hotspot is in the centre of the image):
+            @code
+            image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_X, hotspotX);
+            image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y, hotspotY);
+            @endcode
+
         @see LoadFile()
     */
-    bool SaveFile(const wxString& name, int type) const;
-    const bool SaveFile(const wxString& name,
-                        const wxString& mimetype) const;
-    const bool SaveFile(const wxString& name) const;
-    const bool SaveFile(wxOutputStream& stream, int type) const;
-    const bool SaveFile(wxOutputStream& stream,
-                        const wxString& mimetype) const;
-    //@}
+    bool SaveFile(wxOutputStream& stream,
+                  const wxString& mimetype) const;
 
     /**
-        Returns a scaled version of the image. This is also useful for
-        scaling bitmaps in general as the only other way to scale bitmaps
-        is to blit a wxMemoryDC into another wxMemoryDC.
-        It should be noted that although using wxIMAGE_QUALITY_HIGH produces much nicer
-        looking results it is a slower method.  Downsampling will use the box averaging
-        method
-        which seems to operate very fast.  If you are upsampling larger images using
+        Saves an image in the named file.
+
+        @param name
+            Name of the file to save the image to.
+        @param type
+            Currently these types can be used:
+            @li wxBITMAP_TYPE_BMP: Save a BMP image file.
+            @li wxBITMAP_TYPE_JPEG: Save a JPEG image file.
+            @li wxBITMAP_TYPE_PNG: Save a PNG image file.
+            @li wxBITMAP_TYPE_PCX: Save a PCX image file
+                (tries to save as 8-bit if possible, falls back to 24-bit otherwise).
+            @li wxBITMAP_TYPE_PNM: Save a PNM image file (as raw RGB always).
+            @li wxBITMAP_TYPE_TIFF: Save a TIFF image file.
+            @li wxBITMAP_TYPE_XPM: Save a XPM image file.
+            @li wxBITMAP_TYPE_ICO: Save a Windows icon file (ICO).
+                The size may be up to 255 wide by 127 high. A single image is saved
+                in 8 colors at the size supplied.
+            @li wxBITMAP_TYPE_CUR: Save a Windows cursor file (CUR).
+    */
+    bool SaveFile(const wxString& name, wxBitmapType type) const;
+
+    /**
+        Saves an image in the named file.
+
+        @param name
+            Name of the file to save the image to.
+        @param mimetype
+            MIME type.
+    */
+    bool SaveFile(const wxString& name,
+                  const wxString& mimetype) const;
+
+    /**
+        Saves an image in the named file.
+
+        File type is determined from the extension of the file name.
+        Note that this function may fail if the extension is not recognized!
+        You can use one of the forms above to save images to files with
+        non-standard extensions.
+
+        @param name
+            Name of the file to save the image to.
+    */
+    bool SaveFile(const wxString& name) const;
+
+    /**
+        Saves an image in the given stream.
+
+        @param stream
+            Opened output stream to save the image to.
+        @param type
+            MIME type.
+    */
+    bool SaveFile(wxOutputStream& stream, wxBitmapType type) const;
+
+    /**
+        Returns a scaled version of the image.
+
+        This is also useful for scaling bitmaps in general as the only other way
+        to scale bitmaps is to blit a wxMemoryDC into another wxMemoryDC.
+
+        The parameter @a quality determines what method to use for resampling the image.
+        Can be one of the following:
+        - wxIMAGE_QUALITY_NORMAL: Uses the normal default scaling method of pixel
+                                  replication
+        - wxIMAGE_QUALITY_HIGH: Uses bicubic and box averaging resampling methods
+                                for upsampling and downsampling respectively
+
+        It should be noted that although using @c wxIMAGE_QUALITY_HIGH produces much nicer
+        looking results it is a slower method. Downsampling will use the box averaging
+        method which seems to operate very fast. If you are upsampling larger images using
         this method you will most likely notice that it is a bit slower and in extreme
-        cases
-        it will be quite substantially slower as the bicubic algorithm has to process a
-        lot of
-        data.
+        cases it will be quite substantially slower as the bicubic algorithm has to process a
+        lot of data.
+
         It should also be noted that the high quality scaling may not work as expected
         when using a single mask colour for transparency, as the scaling will blur the
         image and will therefore remove the mask partially. Using the alpha channel
         will work.
+
         Example:
+        @code
+        // get the bitmap from somewhere
+        wxBitmap bmp = ...;
 
-        @param quality
-            Determines what method to use for resampling the image.
+        // rescale it to have size of 32*32
+        if ( bmp.GetWidth() != 32 || bmp.GetHeight() != 32 )
+        {
+            wxImage image = bmp.ConvertToImage();
+            bmp = wxBitmap(image.Scale(32, 32));
 
-            Can be one of the following:
-            @li wxIMAGE_QUALITY_NORMAL: Uses the normal default scaling method of
-                pixel replication
-            @li wxIMAGE_QUALITY_HIGH: Uses bicubic and box averaging resampling
-                methods for upsampling and downsampling respectively
+            // another possibility:
+            image.Rescale(32, 32);
+            bmp = image;
+        }
+        @endcode
 
         @see Rescale()
     */
@@ -943,36 +1199,47 @@ public:
                   int quality = wxIMAGE_QUALITY_NORMAL) const;
 
     /**
-       Assigns new data as alpha channel to the image.
-       If @e static_data is false the data will be
-       free()'d after use.
+       This function is similar to SetData() and has similar restrictions.
+
+        The pointer passed to it may however be @NULL in which case the function
+        will allocate the alpha array internally -- this is useful to add alpha
+        channel data to an image which doesn't have any.
+
+        If the pointer is not @NULL, it must have one byte for each image pixel
+        and be allocated with malloc().
+        wxImage takes ownership of the pointer and will free it unless @a static_data
+        parameter is set to @true -- in this case the caller should do it.
     */
     void SetAlpha(unsigned char* alpha = NULL,
                   bool static_data = false);
 
     /**
-        Sets the alpha value for the given pixel. This function should only be
-        called if the image has alpha channel data, use HasAlpha() to
-        check for this.
+        Sets the alpha value for the given pixel.
+        This function should only be called if the image has alpha channel data,
+        use HasAlpha() to check for this.
     */
     void SetAlpha(int x, int y, unsigned char alpha);
 
     /**
-        Sets the image data without performing checks. The data given must have
-        the size (width*height*3) or results will be unexpected. Don't use this
-        method if you aren't sure you know what you are doing.
+        Sets the image data without performing checks.
+
+        The data given must have the size (width*height*3) or results will be
+        unexpected. Don't use this method if you aren't sure you know what you
+        are doing.
+
         The data must have been allocated with @c malloc(), @b NOT with
         @c operator new.
+
         After this call the pointer to the data is owned by the wxImage object,
         that will be responsible for deleting it.
-        Do not pass to this function a pointer obtained through
-        GetData().
+        Do not pass to this function a pointer obtained through GetData().
     */
     void SetData(unsigned char* data);
 
     /**
-        Specifies whether there is a mask or not. The area of the mask is determined by
-        the current mask colour.
+        Specifies whether there is a mask or not.
+
+        The area of the mask is determined by the current mask colour.
     */
     void SetMask(bool hasMask = true);
 
@@ -983,15 +1250,26 @@ public:
                        unsigned char blue);
 
     /**
-        @param mask
-            The mask image to extract mask shape from. Must have same dimensions as the
-        image.
-        @param mr,mg,mb
-            RGB value of pixels in mask that will be used to create the mask.
+        Sets image's mask so that the pixels that have RGB value of mr,mg,mb in
+        mask will be masked in the image.
+
+        This is done by first finding an unused colour in the image, setting
+        this colour as the mask colour and then using this colour to draw all
+        pixels in the image who corresponding pixel in mask has given RGB value.
+
+        The parameter @a mask is the mask image to extract mask shape from.
+        It must have the same dimensions as the image.
+
+        The parameters @a mr, @a mg, @a mb are the RGB values of the pixels in
+        mask that will be used to create the mask.
 
         @return Returns @false if mask does not have same dimensions as the image
-                 or if there is no unused colour left. Returns @true if
-                 the mask was successfully applied.
+                or if there is no unused colour left. Returns @true if the mask
+                was successfully applied.
+
+        @note
+            Note that this method involves computing the histogram, which is a
+            computationally intensive operation.
     */
     bool SetMaskFromImage(const wxImage& mask, unsigned char mr,
                           unsigned char mg,
@@ -999,7 +1277,8 @@ public:
 
     //@{
     /**
-        Sets a user-defined option. The function is case-insensitive to @e name.
+        Sets a user-defined option. The function is case-insensitive to @a name.
+
         For example, when saving as a JPEG file, the option @b quality is
         used, which is a number between 0 and 100 (0 is terrible, 100 is very good).
 
@@ -1010,17 +1289,18 @@ public:
     //@}
 
     /**
-        Associates a palette with the image. The palette may be used when converting
-        wxImage to wxBitmap (MSW only at present) or in file save operations (none as
-        yet).
+        Associates a palette with the image.
+
+        The palette may be used when converting wxImage to wxBitmap (MSW only at present)
+        or in file save operations (none as yet).
     */
     void SetPalette(const wxPalette& palette);
 
     /**
-        Sets the colour of the pixels within the given rectangle. This routine performs
-        bounds-checks for the coordinate so it can be considered a safe way to
-        manipulate the
-        data.
+        Sets the colour of the pixels within the given rectangle.
+
+        This routine performs bounds-checks for the coordinate so it can be considered
+        a safe way to manipulate the data.
     */
     void SetRGB(wxRect& rect, unsigned char red,
                 unsigned char green,
@@ -1047,22 +1327,24 @@ public:
 
     /**
         Returns a resized version of this image without scaling it by adding either a
-        border
-        with the given colour or cropping as necessary. The image is pasted into a new
-        image with the given @a size and background colour at the position @e pos
-        relative to the upper left of the new image. If @a red = green = blue = -1
-        then the areas of the larger image not covered by this image are made
-        transparent by filling them with the image mask colour (which will be allocated
-        automatically if it isn't currently set). Otherwise, the areas will be filled
-        with the colour with the specified RGB components.
+        border with the given colour or cropping as necessary.
+
+        The image is pasted into a new image with the given @a size and background
+        colour at the position @a pos relative to the upper left of the new image.
+
+        If @a red = green = blue = -1 then the areas of the larger image not covered
+        by this image are made transparent by filling them with the image mask colour
+        (which will be allocated automatically if it isn't currently set).
+
+        Otherwise, the areas will be filled with the colour with the specified RGB components.
 
         @see Resize()
     */
-    wxImage Size(const wxSize& size, const wxPoint pos, int red = -1,
+    wxImage Size(const wxSize& size, const wxPoint& pos, int red = -1,
                  int green = -1, int blue = -1) const;
 
     /**
-        Assignment operator, using @ref overview_trefcount "reference counting".
+        Assignment operator, using @ref overview_refcount "reference counting".
 
         @param image
             Image to assign.

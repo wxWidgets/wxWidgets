@@ -23,6 +23,11 @@
     wxBitmapHandler and add the handler using wxBitmap::AddHandler() in your
     application initialisation.
 
+    Note that all wxBitmapHandlers provided by wxWidgets are part of the
+    @ref page_libs_wxcore library.
+    For details about the default handlers, please see the note in the
+    wxBitmap class documentation.
+
     @library{wxcore}
     @category{misc}
 

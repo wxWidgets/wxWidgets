@@ -22,7 +22,7 @@
     a wxIcon from it.
 
     @library{wxbase}
-    @category{FIXME}
+    @category{gdi}
 
     @see wxIcon, wxFileType::GetIcon
 */
