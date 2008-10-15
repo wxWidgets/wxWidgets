@@ -890,21 +890,27 @@ wxString wxHtmlWindow::DoSelectionToText(wxHtmlSelection *sel)
         return wxEmptyString;
 
     wxClientDC dc(this);
-
-    const wxHtmlCell *end = sel->GetToCell();
     wxString text;
-    wxHtmlTerminalCellsInterator i(sel->GetFromCell(), end);
-    if ( i )
-    {
-        text << i->ConvertToText(sel);
-        ++i;
-    }
-    const wxHtmlCell *prev = *i;
+
+    wxHtmlTerminalCellsInterator i(sel->GetFromCell(), sel->GetToCell());
+    const wxHtmlCell *prev = NULL;
+
     while ( i )
     {
-        if ( prev->GetParent() != i->GetParent() )
-            text << _T('\n');
-        text << i->ConvertToText(*i == end ? sel : NULL);
+        // When converting HTML content to plain text, the entire paragraph
+        // (container in wxHTML) goes on single line. A new paragraph (that
+        // should go on its own line) has its own container. Therefore, the
+        // simplest way of detecting where to insert newlines in plain text
+        // is to check if the parent container changed -- if it did, we moved
+        // to a new paragraph.
+        if ( prev && prev->GetParent() != i->GetParent() )
+            text << '\n';
+
+        // NB: we don't need to pass the selection to ConvertToText() in the
+        //     middle of the selected text; it's only useful when only part of
+        //     a cell is selected
+        text << i->ConvertToText(sel);
+
         prev = *i;
         ++i;
     }
