@@ -548,6 +548,7 @@ bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
             if ( name == stdIcons[nIcon].name )
             {
                 hicon = ::LoadIcon((HINSTANCE)NULL, stdIcons[nIcon].id);
+                break;
             }
         }
     }
