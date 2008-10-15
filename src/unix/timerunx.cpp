@@ -172,7 +172,11 @@ void wxTimerScheduler::NotifyExpired()
         }
         else // reschedule the next timer expiration
         {
-            s->m_expiration += timer->GetInterval()*1000;
+            // always keep the expiration time in the future, i.e. base it on
+            // the current time instead of just offsetting it from the current
+            // expiration time because it could happen that we're late and the
+            // current expiration time is (far) in the past
+            s->m_expiration = now + timer->GetInterval()*1000;
             DoAddTimer(s);
         }
 
