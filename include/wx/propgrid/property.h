@@ -389,9 +389,6 @@ wxPG_PROP_CLASS_SPECIFIC_2          = 0x00100000
 /** @}
 */
 
-// Amalgam of flags that should be inherited by sub-properties
-#define wxPG_INHERITED_PROPFLAGS        (wxPG_PROP_HIDDEN|wxPG_PROP_NOEDITOR)
-
 // Combination of flags that can be stored by GetFlagsAsString
 #define wxPG_STRING_STORED_FLAGS \
     (wxPG_PROP_DISABLED|wxPG_PROP_HIDDEN|wxPG_PROP_NOEDITOR|wxPG_PROP_COLLAPSED)
