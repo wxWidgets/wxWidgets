@@ -1,5 +1,5 @@
 /* XPM */
-static char *chart[] = {
+static char *chrt_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "32 32 11 1",
 "  c black",

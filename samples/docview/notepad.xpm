@@ -1,5 +1,5 @@
 /* XPM */
-static char *notepad[] = {
+static char *notepad_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "32 32 5 1",
 "  c black",
