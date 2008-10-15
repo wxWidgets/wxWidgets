@@ -36,11 +36,15 @@ class MyApp;
 class MyScrolledWindow: public wxScrolledWindow
 {
 public:
-    MyScrolledWindow(){};
+    MyScrolledWindow() {}
     MyScrolledWindow( wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size );
-    ~MyScrolledWindow(){};
+
     void OnPaint( wxPaintEvent &event );
     void OnSize( wxSizeEvent &event );
+
+protected:
+    virtual wxSize GetSizeAvailableForScrollTarget(const wxSize& size);
+
 private:
     MyCanvas    *m_canvas;
 
@@ -175,6 +179,16 @@ MyScrolledWindow::MyScrolledWindow( wxWindow *parent, wxWindowID id,
     mainsizer->Add( middlesizer, 1, wxEXPAND );
 
     SetSizer( mainsizer );
+}
+
+wxSize MyScrolledWindow::GetSizeAvailableForScrollTarget(const wxSize& size)
+{
+    // decrease the total size by the size of the non-scrollable parts above/to
+    // the left of the canvas
+    wxSize sizeCanvas(size);
+    sizeCanvas.x -= 60;
+    sizeCanvas.y -= 25;
+    return sizeCanvas;
 }
 
 void MyScrolledWindow::OnSize( wxSizeEvent &WXUNUSED(event) )
