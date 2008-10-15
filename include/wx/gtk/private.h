@@ -105,6 +105,12 @@ void gtk_window_set_policy (GtkWindow *window,
 } // extern "C"
 
 
+// some newer functions not available in older versions of GTK+:
+#if !GTK_CHECK_VERSION(2,9,0)
+#define g_object_ref_sink(x) gtk_object_sink(GTK_OBJECT(x))
+#endif
+
+
 // ----------------------------------------------------------------------------
 // various private helper functions
 // ----------------------------------------------------------------------------

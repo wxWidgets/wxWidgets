@@ -23,6 +23,7 @@
 #if !defined(__WXUNIVERSAL__)
 
 #include "wx/artprov.h"
+#include "wx/gtk/private.h"
 
 #ifndef WX_PRECOMP
     #include "wx/module.h"
