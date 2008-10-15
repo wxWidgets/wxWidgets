@@ -822,7 +822,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     // MyMusic
 
     m_musicCtrl = new wxDataViewCtrl( this, ID_MUSIC_CTRL, wxDefaultPosition,
-                                    wxDefaultSize, wxDV_MULTIPLE|wxDV_VARIABLE_LINE_HEIGHT );
+                                    wxSize(400,200), wxDV_MULTIPLE|wxDV_VARIABLE_LINE_HEIGHT );
 
     m_music_model = new MyMusicModel;
     m_musicCtrl->AssociateModel( m_music_model.get() );
@@ -838,10 +838,11 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 #endif
 
     tr = new wxDataViewTextRenderer( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
-    wxDataViewColumn *column1 = new wxDataViewColumn( wxT("artist"), tr, 1, 150, wxALIGN_RIGHT,
+    wxDataViewColumn *column1 = new wxDataViewColumn( wxT("artist"), tr, 1, 150, wxALIGN_LEFT,
         wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE );
     m_musicCtrl->AppendColumn( column1 );
 
+#if 1
     wxDataViewSpinRenderer *sr = new wxDataViewSpinRenderer( 0, 2010, wxDATAVIEW_CELL_EDITABLE, wxALIGN_RIGHT );
     wxDataViewColumn *column2 = new wxDataViewColumn( wxT("year"), sr, 2, 80, wxALIGN_LEFT,
         wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE );
@@ -853,15 +854,14 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     wxDataViewColumn *column3 = new wxDataViewColumn( wxT("custom"), cr, 4, -1, wxALIGN_LEFT,
         wxDATAVIEW_COL_RESIZABLE );
     m_musicCtrl->AppendColumn( column3 );
+#endif
 
     data_sizer->Add( m_musicCtrl, 3, wxGROW );
-
-#if 1
 
     // MyList
 
     m_listCtrl = new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition,
-                                     wxDefaultSize, wxDV_MULTIPLE | wxDV_ROW_LINES);
+                                     wxSize(400,200), wxDV_MULTIPLE | wxDV_ROW_LINES);
 
     m_list_model = new MyListModel;
     m_listCtrl->AssociateModel( m_list_model.get() );
@@ -879,8 +879,6 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     m_listCtrl->AppendColumn( column4 );
 
     data_sizer->Add( m_listCtrl, 2, wxGROW );
-
-#endif
 
     main_sizer->Add( data_sizer, 2, wxGROW );
 
@@ -908,6 +906,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 
     bottom_sizer->Add( m_log, 1, wxGROW );
 
+#if 1
     // wxDataViewTreeStore
 
     wxDataViewCtrl *treectrl = new wxDataViewCtrl( this, -1,
@@ -940,6 +939,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     child = treectrl2->AppendItem( parent,wxT("Child 3, very long, long, long, long"), 0 );
 
     bottom_sizer->Add( treectrl2, 1 );
+#endif
 
     // main sizer
 
