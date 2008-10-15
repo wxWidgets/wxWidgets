@@ -579,12 +579,6 @@ void wxPropertyGrid::Init1()
     AddActionTrigger( wxPG_ACTION_EXPAND_PROPERTY, WXK_RIGHT);
     AddActionTrigger( wxPG_ACTION_COLLAPSE_PROPERTY, WXK_LEFT);
     AddActionTrigger( wxPG_ACTION_CANCEL_EDIT, WXK_ESCAPE );
-    AddActionTrigger( wxPG_ACTION_CUT, 'X', wxMOD_CONTROL );
-    AddActionTrigger( wxPG_ACTION_CUT, WXK_DELETE, wxMOD_SHIFT );
-    AddActionTrigger( wxPG_ACTION_COPY, 'C', wxMOD_CONTROL);
-    AddActionTrigger( wxPG_ACTION_COPY, WXK_INSERT, wxMOD_CONTROL );
-    AddActionTrigger( wxPG_ACTION_PASTE, 'V', wxMOD_CONTROL );
-    AddActionTrigger( wxPG_ACTION_PASTE, WXK_INSERT, wxMOD_SHIFT );
     AddActionTrigger( wxPG_ACTION_PRESS_BUTTON, WXK_DOWN, wxMOD_ALT );
     AddActionTrigger( wxPG_ACTION_PRESS_BUTTON, WXK_F4 );
 
@@ -4971,17 +4965,6 @@ void wxPropertyGrid::ClearActionTriggers( int action )
     }
 }
 
-static void CopyTextToClipboard( const wxString& text )
-{
-    if ( wxTheClipboard->Open() )
-    {
-        // This data objects are held by the clipboard, 
-        // so do not delete them in the app.
-        wxTheClipboard->SetData( new wxTextDataObject(text) );
-        wxTheClipboard->Close();
-    }
-}
-
 void wxPropertyGrid::HandleKeyEvent(wxKeyEvent &event)
 {
     //
@@ -5022,54 +5005,47 @@ void wxPropertyGrid::HandleKeyEvent(wxKeyEvent &event)
 
         wxPGProperty* p = m_selected;
 
-        if ( action == wxPG_ACTION_COPY )
+        // Travel and expand/collapse
+        int selectDir = -2;
+
+        if ( p->GetChildCount() &&
+             !(p->m_flags & wxPG_PROP_DISABLED)
+           )
         {
-            CopyTextToClipboard(p->GetDisplayedString());
+            if ( action == wxPG_ACTION_COLLAPSE_PROPERTY || secondAction == wxPG_ACTION_COLLAPSE_PROPERTY )
+            {
+                if ( (m_windowStyle & wxPG_HIDE_MARGIN) || Collapse(p) )
+                    keycode = 0;
+            }
+            else if ( action == wxPG_ACTION_EXPAND_PROPERTY || secondAction == wxPG_ACTION_EXPAND_PROPERTY )
+            {
+                if ( (m_windowStyle & wxPG_HIDE_MARGIN) || Expand(p) )
+                    keycode = 0;
+            }
         }
-        else
+
+        if ( keycode )
         {
-            // Travel and expand/collapse
-            int selectDir = -2;
-
-            if ( p->GetChildCount() &&
-                 !(p->m_flags & wxPG_PROP_DISABLED)
-               )
+            if ( action == wxPG_ACTION_PREV_PROPERTY || secondAction == wxPG_ACTION_PREV_PROPERTY )
             {
-                if ( action == wxPG_ACTION_COLLAPSE_PROPERTY || secondAction == wxPG_ACTION_COLLAPSE_PROPERTY )
-                {
-                    if ( (m_windowStyle & wxPG_HIDE_MARGIN) || Collapse(p) )
-                        keycode = 0;
-                }
-                else if ( action == wxPG_ACTION_EXPAND_PROPERTY || secondAction == wxPG_ACTION_EXPAND_PROPERTY )
-                {
-                    if ( (m_windowStyle & wxPG_HIDE_MARGIN) || Expand(p) )
-                        keycode = 0;
-                }
+                selectDir = -1;
+            }
+            else if ( action == wxPG_ACTION_NEXT_PROPERTY || secondAction == wxPG_ACTION_NEXT_PROPERTY )
+            {
+                selectDir = 1;
+            }
+            else
+            {
+                event.Skip();
             }
 
-            if ( keycode )
-            {
-                if ( action == wxPG_ACTION_PREV_PROPERTY || secondAction == wxPG_ACTION_PREV_PROPERTY )
-                {
-                    selectDir = -1;
-                }
-                else if ( action == wxPG_ACTION_NEXT_PROPERTY || secondAction == wxPG_ACTION_NEXT_PROPERTY )
-                {
-                    selectDir = 1;
-                }
-                else
-                {
-                    event.Skip();
-                }
+        }
 
-            }
-
-            if ( selectDir >= -1 )
-            {
-                p = wxPropertyGridIterator::OneStep( m_pState, wxPG_ITERATE_VISIBLE, p, selectDir );
-                if ( p )
-                    DoSelectProperty(p);
-            }
+        if ( selectDir >= -1 )
+        {
+            p = wxPropertyGridIterator::OneStep( m_pState, wxPG_ITERATE_VISIBLE, p, selectDir );
+            if ( p )
+                DoSelectProperty(p);
         }
     }
     else
@@ -5121,64 +5097,6 @@ bool wxPropertyGrid::HandleChildKey( wxKeyEvent& event )
 
         res = false;
         UnfocusEditor();
-    }
-    else if ( action == wxPG_ACTION_COPY )
-    {
-        // NB: There is some problem with getting native cut-copy-paste keys to go through
-        //     for embedded editor wxTextCtrl. This is why we emulate.
-        //
-        wxTextCtrl* tc = GetEditorTextCtrl();
-        if ( tc )
-        {
-            wxString sel = tc->GetStringSelection();
-            if ( sel.length() )
-                CopyTextToClipboard(sel);
-        }
-        else
-        {
-            CopyTextToClipboard(m_selected->GetDisplayedString());
-        }
-    }
-    else if ( action == wxPG_ACTION_CUT )
-    {
-        wxTextCtrl* tc = GetEditorTextCtrl();
-        if ( tc )
-        {
-            long from, to;
-            tc->GetSelection(&from, &to);
-            if ( from < to )
-            {
-                CopyTextToClipboard(tc->GetStringSelection());
-                tc->Remove(from, to);
-            }
-        }
-    }
-    else if ( action == wxPG_ACTION_PASTE )
-    {
-        wxTextCtrl* tc = GetEditorTextCtrl();
-        if ( tc )
-        {
-            if (wxTheClipboard->Open())
-            {
-                if (wxTheClipboard->IsSupported( wxDF_TEXT ))
-                {
-                    wxTextDataObject data;
-                    wxTheClipboard->GetData( data );
-                    long from, to;
-                    tc->GetSelection(&from, &to);
-                    if ( from < to )
-                    {
-                        tc->Remove(from, to);
-                        tc->WriteText(data.GetText());
-                    }
-                    else
-                    {
-                        tc->WriteText(data.GetText());
-                    }
-                }  
-                wxTheClipboard->Close();
-            }
-        }
     }
 
     return res;

@@ -418,13 +418,10 @@ enum wxPG_KEYBOARD_ACTIONS
     wxPG_ACTION_EXPAND_PROPERTY,
     wxPG_ACTION_COLLAPSE_PROPERTY,
     wxPG_ACTION_CANCEL_EDIT,
-    wxPG_ACTION_CUT,
-    wxPG_ACTION_COPY,
-    wxPG_ACTION_PASTE,
     wxPG_ACTION_PRESS_BUTTON,  // Causes editor button (if any) to be pressed 
     wxPG_ACTION_MAX
 };
-
+ 
 /** @}
 */
 
