@@ -44,25 +44,37 @@
 
 IMPLEMENT_DYNAMIC_CLASS(DrawingDocument, wxDocument)
 
-DocumentOstream& DrawingDocument::SaveObject(DocumentOstream& stream)
+DocumentOstream& DrawingDocument::SaveObject(DocumentOstream& ostream)
 {
-    wxDocument::SaveObject(stream);
+#if wxUSE_STD_IOSTREAM
+    DocumentOstream& stream = ostream;
+#else
+    wxTextOutputStream stream(ostream);
+#endif
+
+    wxDocument::SaveObject(ostream);
 
     const wxInt32 count = m_doodleSegments.size();
     stream << count << '\n';
 
     for ( int n = 0; n < count; n++ )
     {
-        m_doodleSegments[n].SaveObject(stream);
+        m_doodleSegments[n].SaveObject(ostream);
         stream << '\n';
     }
 
-    return stream;
+    return ostream;
 }
 
-DocumentIstream& DrawingDocument::LoadObject(DocumentIstream& stream)
+DocumentIstream& DrawingDocument::LoadObject(DocumentIstream& istream)
 {
-    wxDocument::LoadObject(stream);
+#if wxUSE_STD_IOSTREAM
+    DocumentIstream& stream = istream;
+#else
+    wxTextInputStream stream(istream);
+#endif
+
+    wxDocument::LoadObject(istream);
 
     wxInt32 count = 0;
     stream >> count;
@@ -70,11 +82,11 @@ DocumentIstream& DrawingDocument::LoadObject(DocumentIstream& stream)
     for ( int n = 0; n < count; n++ )
     {
         DoodleSegment segment;
-        segment.LoadObject(stream);
+        segment.LoadObject(istream);
         m_doodleSegments.push_back(segment);
     }
 
-    return stream;
+    return istream;
 }
 
 void DrawingDocument::DoUpdate()
@@ -130,7 +142,7 @@ DocumentOstream& DoodleSegment::SaveObject(DocumentOstream& ostream)
             << line.y2 << '\n';
     }
 
-    return stream;
+    return ostream;
 }
 
 DocumentIstream& DoodleSegment::LoadObject(DocumentIstream& istream)
@@ -155,7 +167,7 @@ DocumentIstream& DoodleSegment::LoadObject(DocumentIstream& istream)
         m_lines.push_back(line);
     }
 
-    return stream;
+    return istream;
 }
 
 // ----------------------------------------------------------------------------
