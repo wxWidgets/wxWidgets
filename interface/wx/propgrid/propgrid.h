@@ -334,6 +334,8 @@ enum wxPG_KEYBOARD_ACTIONS
 
     @library{wxpropgrid}
     @category{propgrid}
+    @appearance{propertygrid.png}
+    
 */
 class wxPropertyGrid : public wxScrolledWindow, public wxPropertyGridInterface
 {
