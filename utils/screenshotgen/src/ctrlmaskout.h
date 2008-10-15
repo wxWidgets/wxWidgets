@@ -6,10 +6,10 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef WX_CTRL_MASK_OUT
-#define WX_CTRL_MASK_OUT
+#ifndef _CTRLMASKOUT_H_
+#define _CTRLMASKOUT_H_
 
-#include <wx/frame.h>
+#include "wx/filename.h"
 
 
 // ----------------------------------------------------------------------------
@@ -60,6 +60,6 @@ private:
     bool m_isTiming;
 };
 
-#endif // WX_CTRL_MASK_OUT
+#endif // _CTRLMASKOUT_H_
 
 

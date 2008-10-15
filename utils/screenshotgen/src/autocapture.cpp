@@ -10,15 +10,16 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-    #pragma hdrstop
+#pragma hdrstop
 #endif
 
-// for all others, include the necessary headers
+// for all others, include the necessary headers wxWidgets headers)
 #ifndef WX_PRECOMP
-    #include "wx/wx.h"
+#include "wx/wx.h"
 #endif
 
-#include <wx/filename.h>
+#include "wx/filename.h"
+
 #include "autocapture.h"
 
 #ifdef __WXMAC__
@@ -33,8 +34,7 @@
 /* static */
 void AutoCaptureMechanism::Delay(int seconds)
 {
-    using std::clock;
-    using std::clock_t;
+	// TODO: Switch this to use wxTimer.
 
     // Wait for 3 seconds
     clock_t start = clock();

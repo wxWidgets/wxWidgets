@@ -10,23 +10,24 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-    #pragma hdrstop
+#pragma hdrstop
 #endif
 
-// for all others, include the necessary headers
+// for all others, include the necessary headers wxWidgets headers)
 #ifndef WX_PRECOMP
-    #include "wx/wx.h"
+#include "wx/wx.h"
 #endif
-
-#ifdef __WXMAC__ // See CreateMask()
-    #include <wx/minifram.h>
-    #include <cstdlib>
-#endif
-
-#include <wx/filename.h>
-#include <wx/hashset.h>
 
 #include "ctrlmaskout.h"
+
+#ifdef __WXMAC__ // See CreateMask()
+#include <wx/minifram.h>
+#include <cstdlib>
+#endif
+
+// use a set to make sure the same control won't be inserted twice
+#include "wx/hashset.h"
+WX_DECLARE_HASH_SET(wxWindow*, wxPointerHash, wxPointerEqual, CtrlSet);
 
 
 // It's copied from src/aui/framemanager.cpp and modified, a failed attempt to
@@ -75,11 +76,11 @@ public:
 //            return;
 //        }
 //
-// 		Show(false);
+//         Show(false);
 //
-// 		GetParent()->Update();
+//         GetParent()->Update();
 //
-// 		Show(true);
+//         Show(true);
 //
 //
 //        m_lastWidth = event.GetSize().GetWidth();
@@ -279,9 +280,6 @@ void CtrlMaskOut::DetermineCtrlNameAndRect()
     wxWindow * ctrl;
     wxString ctrlName;
     wxRect ctrlSize;
-
-    // use a set to make sure the same control won't be inserted twice
-    WX_DECLARE_HASH_SET(wxWindow*, wxPointerHash, wxPointerEqual, CtrlSet);
 
     CtrlSet ctrls;
 

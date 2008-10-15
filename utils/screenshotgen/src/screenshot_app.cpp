@@ -10,15 +10,15 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-    #pragma hdrstop
+#pragma hdrstop
 #endif
 
-// for all others, include the necessary headers
+// for all others, include the necessary headers wxWidgets headers)
 #ifndef WX_PRECOMP
-    #include "wx/wx.h"
+#include "wx/wx.h"
 #endif
 
-#include <wx/richtext/richtextxml.h>
+#include "wx/richtext/richtextxml.h"
 
 #include "screenshot_app.h"
 #include "screenshot_main.h"

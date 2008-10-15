@@ -6,13 +6,13 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef AUTOCAP_H
-#define AUTOCAP_H
+#ifndef _AUTOCAPTURE_H_
+#define _AUTOCAPTURE_H_
 
-#include <wx/notebook.h>
-#include <wx/settings.h>
 #include <vector>
 #include <ctime>
+
+#include <wx/notebook.h>
 
 
 // TODO: document what these flags mean
@@ -112,6 +112,6 @@ private:      // internal utils
     int m_border;
 };
 
-#endif // AUTOCAP_H
+#endif // _AUTOCAPTURE_H_
 
 

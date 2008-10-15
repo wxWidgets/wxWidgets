@@ -6,8 +6,8 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef WXSCREENSHOTMAIN_H
-#define WXSCREENSHOTMAIN_H
+#ifndef _SCREENSHOT_MAIN_H_
+#define _SCREENSHOT_MAIN_H_
 
 #include "guiframe.h"
 
@@ -20,9 +20,9 @@ class CtrlMaskOut;
 
 class ScreenshotFrame
 #if SCREENSHOTGEN_USE_AUI
-: public AuiGUIFrame
+    : public AuiGUIFrame
 #else
-: public GUIFrame
+    : public GUIFrame
 #endif
 {
 public:
@@ -58,4 +58,4 @@ private:
     CtrlMaskOut * m_maskout;
 };
 
-#endif // WXSCREENSHOTMAIN_H
+#endif // _SCREENSHOT_MAIN_H_

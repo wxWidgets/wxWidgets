@@ -6,10 +6,10 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef WXSCREENSHOTAPP_H
-#define WXSCREENSHOTAPP_H
+#ifndef _SCREENSHOT_APP_H_
+#define _SCREENSHOT_APP_H_
 
-#include <wx/app.h>
+#include "wx/app.h"
 
 class ScreenshotApp : public wxApp
 {
@@ -17,4 +17,4 @@ public:
     virtual bool OnInit();
 };
 
-#endif // WXSCREENSHOTAPP_H
+#endif // _SCREENSHOT_APP_H_
