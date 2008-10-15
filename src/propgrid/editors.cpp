@@ -68,7 +68,7 @@
 
 // How many pixels between textctrl and button
 #ifdef __WXMAC__
-    #define wxPG_TEXTCTRL_AND_BUTTON_SPACING        8
+    #define wxPG_TEXTCTRL_AND_BUTTON_SPACING        4
 #else
     #define wxPG_TEXTCTRL_AND_BUTTON_SPACING        2
 #endif 
@@ -143,8 +143,8 @@
 
 // for odcombo
 #ifdef __WXMAC__
-#define wxPG_CHOICEXADJUST           0
-#define wxPG_CHOICEYADJUST           -3
+#define wxPG_CHOICEXADJUST           -3 // required because wxComboCtrl reserves 3pixels for wxTextCtrl's focus ring
+#define wxPG_CHOICEYADJUST           -3 
 #else
 #define wxPG_CHOICEXADJUST           0
 #define wxPG_CHOICEYADJUST           0
