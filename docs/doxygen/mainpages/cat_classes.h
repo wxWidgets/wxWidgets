@@ -153,8 +153,8 @@ Controls that are not static can have wxValidator associated with them.
 @li wxCollapsiblePane: A panel which can be shown/hidden by the user
 @li wxComboBox: A choice with an editable area
 @li wxComboCtrl: A combobox with application defined popup
-@li wxDataViewCtrl: A control to tabular or tree like data
-@li wxDataViewTreeCtrl: A specialized wxDataViewCtrl with wxTreeCtrl-like API
+@li wxDataViewCtrl: A control to display tabular or tree like data
+@li wxDataViewTreeCtrl: A specialized wxDataViewCtrl with a wxTreeCtrl-like API
 @li wxEditableListBox: A listbox with editable items.
 @li wxGauge: A control to represent a varying quantity, such as time remaining
 @li wxGenericDirCtrl: A control for displaying a directory tree
@@ -176,6 +176,7 @@ Controls that are not static can have wxValidator associated with them.
 @li wxToggleButton: A button which stays pressed when clicked by user.
 @li wxTreeCtrl: Tree (hierarchy) control
 @li wxScrollBar: Scrollbar control
+@li wxSearchCtrl: A text input control used to initiate a search
 @li wxSpinButton: A spin or `up-down' control
 @li wxSpinCtrl: A spin control - i.e. spin button and text control displaying
     an integer
