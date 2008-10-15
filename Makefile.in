@@ -33705,9 +33705,17 @@ UTILS_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/utils
 	$(CP_P) $(UTILSDIR)/Makefile.in $(DISTDIR)/utils
 
+	mkdir $(DISTDIR)/utils/screenshotgen
+	mkdir $(DISTDIR)/utils/screenshotgen/src
+	mkdir $(DISTDIR)/utils/screenshotgen/src/bitmaps
+	$(CP_P) $(UTILSDIR)/screenshotgen/README.txt $(DISTDIR)/utils/screenshotgen
+	$(CP_P) $(UTILSDIR)/screenshotgen/*.in $(DISTDIR)/utils/screenshotgen
+	$(CP_P) $(UTILSDIR)/screenshotgen/src/*.* $(DISTDIR)/utils/screenshotgen/src
+	$(CP_P) $(UTILSDIR)/screenshotgen/src/bitmaps/*.* $(DISTDIR)/utils/screenshotgen/src/bitmaps
+
 	mkdir $(DISTDIR)/utils/ifacecheck
 	mkdir $(DISTDIR)/utils/ifacecheck/src
-	$(CP_P) $(UTILSDIR)/ifacecheck/README $(DISTDIR)/utils/ifacecheck
+	$(CP_P) $(UTILSDIR)/ifacecheck/README.txt $(DISTDIR)/utils/ifacecheck
 	$(CP_P) $(UTILSDIR)/ifacecheck/*.dtd $(DISTDIR)/utils/ifacecheck
 	$(CP_P) $(UTILSDIR)/ifacecheck/*.xsl $(DISTDIR)/utils/ifacecheck
 	$(CP_P) $(UTILSDIR)/ifacecheck/*.in $(DISTDIR)/utils/ifacecheck
@@ -33767,6 +33775,7 @@ MANUAL_DIST:
 	mkdir $(DISTDIR)/docs/doxygen
 	mkdir $(DISTDIR)/docs/doxygen/groups
 	mkdir $(DISTDIR)/docs/doxygen/images
+	mkdir $(DISTDIR)/docs/doxygen/images/stock
 	mkdir $(DISTDIR)/docs/doxygen/images/wxgtk
 	mkdir $(DISTDIR)/docs/doxygen/images/wxmac
 	mkdir $(DISTDIR)/docs/doxygen/images/wxmsw
@@ -33777,9 +33786,10 @@ MANUAL_DIST:
 	$(CP_P) $(DOCDIR)/doxygen/mainpages/*.h $(DISTDIR)/docs/doxygen/mainpages
 	$(CP_P) $(DOCDIR)/doxygen/overviews/*.h $(DISTDIR)/docs/doxygen/overviews
 	$(CP_P) $(DOCDIR)/doxygen/images/*.??? $(DISTDIR)/docs/doxygen/images
+	$(CP_P) $(DOCDIR)/doxygen/images/wxgtk/*.??? $(DISTDIR)/docs/doxygen/images/stock
 	$(CP_P) $(DOCDIR)/doxygen/images/wxgtk/*.??? $(DISTDIR)/docs/doxygen/images/wxgtk
-#	$(CP_P) $(DOCDIR)/doxygen/images/wxmac/*.??? $(DISTDIR)/docs/doxygen/images/wxmac
-#	$(CP_P) $(DOCDIR)/doxygen/images/wxmsw/*.??? $(DISTDIR)/docs/doxygen/images/wxmsw
+	$(CP_P) $(DOCDIR)/doxygen/images/wxmac/*.??? $(DISTDIR)/docs/doxygen/images/wxmac
+	$(CP_P) $(DOCDIR)/doxygen/images/wxmsw/*.??? $(DISTDIR)/docs/doxygen/images/wxmsw
 	mkdir $(DISTDIR)/interface
 	mkdir $(DISTDIR)/interface/wx
 	mkdir $(DISTDIR)/interface/wx/aui
