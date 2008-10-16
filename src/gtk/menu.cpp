@@ -706,7 +706,7 @@ void wxMenu::Init()
     // NB: keep reference to the menu so that it is not destroyed behind
     //     our back by GTK+ e.g. when it is removed from menubar:
     g_object_ref(m_menu);
-    g_object_ref_sink(m_menu);
+    gtk_object_sink(GTK_OBJECT(m_menu));
 
     m_owner = (GtkWidget*) NULL;
 
