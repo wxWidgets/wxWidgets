@@ -302,6 +302,9 @@ All:
 - Added wxString::Capitalize() and MakeCapitalized().
 - Added wxArray::swap().
 - Added wxSHUTDOWN_LOGOFF and wxSHUTDOWN_FORCE wxShutdown() flags (troelsk).
+- Added wxArtProvider::GetNativeSizeHint(); GetSizeHint() as well as
+  GetNativeSizeHint() now return more sensible values in wxMSW and wxMac and
+  no longer return bogus values.
 
 All (Unix):
 

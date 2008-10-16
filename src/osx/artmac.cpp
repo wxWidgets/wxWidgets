@@ -19,14 +19,13 @@
     #pragma hdrstop
 #endif
 
+#include "wx/artprov.h"
+
 #ifndef WX_PRECOMP
     #include "wx/image.h"
 #endif
 
-#if !defined(__WXUNIVERSAL__) && wxOSX_USE_CARBON
-
-#include "wx/artprov.h"
-#include "wx/image.h"
+#if wxOSX_USE_CARBON
 
 // ----------------------------------------------------------------------------
 // wxMacArtProvider
@@ -109,6 +108,22 @@ wxBitmap wxMacArtProvider::CreateBitmap(const wxArtID& id,
     return wxNullBitmap;
 }
 
-#endif // !defined(__WXUNIVERSAL__)
 
+// ----------------------------------------------------------------------------
+// wxArtProvider::GetNativeSizeHint()
+// ----------------------------------------------------------------------------
 
+/*static*/
+wxSize wxArtProvider::GetNativeSizeHint(const wxArtClient& client)
+{
+    if ( client == wxART_TOOLBAR )
+    {
+        // See http://developer.apple.com/documentation/UserExperience/Conceptual/AppleHIGuidelines/XHIGIcons/chapter_15_section_9.html:
+        // "32 x 32 pixels is the recommended size"
+        return wxSize(32, 32);
+    }
+
+    return wxDefaultSize;
+}
+
+#endif // wxOSX_USE_CARBON

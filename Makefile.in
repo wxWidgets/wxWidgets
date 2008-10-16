@@ -5085,6 +5085,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_generic_statusbr.o \
 	monodll_prntdlgg.o \
 	monodll_msw_accel.o \
+	monodll_artmsw.o \
 	monodll_msw_bmpbuttn.o \
 	monodll_msw_button.o \
 	monodll_msw_checkbox.o \
@@ -5135,6 +5136,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 @COND_TOOLKIT_MSW@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_MSW___GUI_SRC_OBJECTS)
 COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS =  \
 	$(__OSX_CARBON_COCOA_SRC_OBJECTS) \
+	monodll_artmac.o \
 	monodll_carbon_bmpbuttn.o \
 	monodll_carbon_button.o \
 	monodll_carbon_checkbox.o \
@@ -5318,6 +5320,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS =  \
 	monodll_generic_statusbr.o \
 	monodll_prntdlgg.o \
 	monodll_msw_accel.o \
+	monodll_artmsw.o \
 	monodll_msw_bmpbuttn.o \
 	monodll_msw_button.o \
 	monodll_msw_checkbox.o \
@@ -6895,6 +6898,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_generic_statusbr.o \
 	monolib_prntdlgg.o \
 	monolib_msw_accel.o \
+	monolib_artmsw.o \
 	monolib_msw_bmpbuttn.o \
 	monolib_msw_button.o \
 	monolib_msw_checkbox.o \
@@ -6945,6 +6949,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_MSW@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS_1 =  \
 	$(__OSX_CARBON_COCOA_SRC_OBJECTS_0) \
+	monolib_artmac.o \
 	monolib_carbon_bmpbuttn.o \
 	monolib_carbon_button.o \
 	monolib_carbon_checkbox.o \
@@ -7128,6 +7133,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1 =  \
 	monolib_generic_statusbr.o \
 	monolib_prntdlgg.o \
 	monolib_msw_accel.o \
+	monolib_artmsw.o \
 	monolib_msw_bmpbuttn.o \
 	monolib_msw_button.o \
 	monolib_msw_checkbox.o \
@@ -8856,6 +8862,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_generic_statusbr.o \
 	coredll_prntdlgg.o \
 	coredll_msw_accel.o \
+	coredll_artmsw.o \
 	coredll_msw_bmpbuttn.o \
 	coredll_msw_button.o \
 	coredll_msw_checkbox.o \
@@ -8906,6 +8913,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 @COND_TOOLKIT_MSW@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS_2 =  \
 	$(__OSX_CARBON_COCOA_SRC_OBJECTS_8) \
+	coredll_artmac.o \
 	coredll_carbon_bmpbuttn.o \
 	coredll_carbon_button.o \
 	coredll_carbon_checkbox.o \
@@ -9089,6 +9097,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_2 =  \
 	coredll_generic_statusbr.o \
 	coredll_prntdlgg.o \
 	coredll_msw_accel.o \
+	coredll_artmsw.o \
 	coredll_msw_bmpbuttn.o \
 	coredll_msw_button.o \
 	coredll_msw_checkbox.o \
@@ -10357,6 +10366,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_generic_statusbr.o \
 	corelib_prntdlgg.o \
 	corelib_msw_accel.o \
+	corelib_artmsw.o \
 	corelib_msw_bmpbuttn.o \
 	corelib_msw_button.o \
 	corelib_msw_checkbox.o \
@@ -10407,6 +10417,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_MSW@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS_3 =  \
 	$(__OSX_CARBON_COCOA_SRC_OBJECTS_9) \
+	corelib_artmac.o \
 	corelib_carbon_bmpbuttn.o \
 	corelib_carbon_button.o \
 	corelib_carbon_checkbox.o \
@@ -10590,6 +10601,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_3 =  \
 	corelib_generic_statusbr.o \
 	corelib_prntdlgg.o \
 	corelib_msw_accel.o \
+	corelib_artmsw.o \
 	corelib_msw_bmpbuttn.o \
 	corelib_msw_button.o \
 	corelib_msw_checkbox.o \
@@ -11974,7 +11986,6 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS =  \
 @COND_PLATFORM_MACOSX_1@__OSX_CARBON_COCOA_SRC_OBJECTS = $(COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS)
 COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS =  \
 	monodll_osx_accel.o \
-	monodll_artmac.o \
 	monodll_bmpbuttn_osx.o \
 	monodll_osx_brush.o \
 	monodll_button_osx.o \
@@ -12136,7 +12147,6 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_0 =  \
 @COND_PLATFORM_MACOSX_1@__OSX_CARBON_COCOA_SRC_OBJECTS_0 = $(COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_0)
 COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_17 =  \
 	monolib_osx_accel.o \
-	monolib_artmac.o \
 	monolib_bmpbuttn_osx.o \
 	monolib_osx_brush.o \
 	monolib_button_osx.o \
@@ -12298,7 +12308,6 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_8 =  \
 @COND_PLATFORM_MACOSX_1@__OSX_CARBON_COCOA_SRC_OBJECTS_8 = $(COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_8)
 COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_1_1 =  \
 	coredll_osx_accel.o \
-	coredll_artmac.o \
 	coredll_bmpbuttn_osx.o \
 	coredll_osx_brush.o \
 	coredll_button_osx.o \
@@ -12379,7 +12388,6 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_9 =  \
 @COND_PLATFORM_MACOSX_1@__OSX_CARBON_COCOA_SRC_OBJECTS_9 = $(COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_9)
 COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_1_4 =  \
 	corelib_osx_accel.o \
-	corelib_artmac.o \
 	corelib_bmpbuttn_osx.o \
 	corelib_osx_brush.o \
 	corelib_button_osx.o \
@@ -14974,6 +14982,9 @@ monodll_tbarwce.o: $(srcdir)/src/msw/wince/tbarwce.cpp $(MONODLL_ODEP)
 monodll_textctrlce.o: $(srcdir)/src/msw/wince/textctrlce.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/wince/textctrlce.cpp
 
+monodll_artmac.o: $(srcdir)/src/osx/artmac.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/artmac.cpp
+
 monodll_carbon_bmpbuttn.o: $(srcdir)/src/osx/carbon/bmpbuttn.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/bmpbuttn.cpp
 
@@ -16825,12 +16836,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_osx_accel.o: $(srcdir)/src/osx/accel.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/accel.cpp
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@monodll_artmac.o: $(srcdir)/src/osx/artmac.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/artmac.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_artmac.o: $(srcdir)/src/osx/artmac.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/artmac.cpp
-
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@monodll_bmpbuttn_osx.o: $(srcdir)/src/osx/bmpbuttn_osx.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/bmpbuttn_osx.cpp
 
@@ -17655,6 +17660,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_msw_accel.o: $(srcdir)/src/msw/accel.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/accel.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_artmsw.o: $(srcdir)/src/msw/artmsw.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/artmsw.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_artmsw.o: $(srcdir)/src/msw/artmsw.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/artmsw.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_msw_bmpbuttn.o: $(srcdir)/src/msw/bmpbuttn.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/bmpbuttn.cpp
@@ -19651,6 +19662,9 @@ monolib_tbarwce.o: $(srcdir)/src/msw/wince/tbarwce.cpp $(MONOLIB_ODEP)
 monolib_textctrlce.o: $(srcdir)/src/msw/wince/textctrlce.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/wince/textctrlce.cpp
 
+monolib_artmac.o: $(srcdir)/src/osx/artmac.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/artmac.cpp
+
 monolib_carbon_bmpbuttn.o: $(srcdir)/src/osx/carbon/bmpbuttn.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/bmpbuttn.cpp
 
@@ -21502,12 +21516,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_osx_accel.o: $(srcdir)/src/osx/accel.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/accel.cpp
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@monolib_artmac.o: $(srcdir)/src/osx/artmac.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/artmac.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_artmac.o: $(srcdir)/src/osx/artmac.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/artmac.cpp
-
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@monolib_bmpbuttn_osx.o: $(srcdir)/src/osx/bmpbuttn_osx.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/bmpbuttn_osx.cpp
 
@@ -22332,6 +22340,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_msw_accel.o: $(srcdir)/src/msw/accel.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/accel.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_artmsw.o: $(srcdir)/src/msw/artmsw.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/artmsw.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_artmsw.o: $(srcdir)/src/msw/artmsw.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/artmsw.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_msw_bmpbuttn.o: $(srcdir)/src/msw/bmpbuttn.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/bmpbuttn.cpp
@@ -24991,6 +25005,9 @@ coredll_tbarwce.o: $(srcdir)/src/msw/wince/tbarwce.cpp $(COREDLL_ODEP)
 coredll_textctrlce.o: $(srcdir)/src/msw/wince/textctrlce.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/wince/textctrlce.cpp
 
+coredll_artmac.o: $(srcdir)/src/osx/artmac.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/artmac.cpp
+
 coredll_carbon_bmpbuttn.o: $(srcdir)/src/osx/carbon/bmpbuttn.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/bmpbuttn.cpp
 
@@ -26368,12 +26385,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@coredll_osx_accel.o: $(srcdir)/src/osx/accel.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/accel.cpp
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@coredll_artmac.o: $(srcdir)/src/osx/artmac.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/artmac.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@coredll_artmac.o: $(srcdir)/src/osx/artmac.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/artmac.cpp
-
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@coredll_bmpbuttn_osx.o: $(srcdir)/src/osx/bmpbuttn_osx.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/bmpbuttn_osx.cpp
 
@@ -27198,6 +27209,12 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_msw_accel.o: $(srcdir)/src/msw/accel.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/accel.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_artmsw.o: $(srcdir)/src/msw/artmsw.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/artmsw.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_artmsw.o: $(srcdir)/src/msw/artmsw.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/artmsw.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_msw_bmpbuttn.o: $(srcdir)/src/msw/bmpbuttn.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/bmpbuttn.cpp
@@ -28494,6 +28511,9 @@ corelib_tbarwce.o: $(srcdir)/src/msw/wince/tbarwce.cpp $(CORELIB_ODEP)
 
 corelib_textctrlce.o: $(srcdir)/src/msw/wince/textctrlce.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/wince/textctrlce.cpp
+
+corelib_artmac.o: $(srcdir)/src/osx/artmac.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/artmac.cpp
 
 corelib_carbon_bmpbuttn.o: $(srcdir)/src/osx/carbon/bmpbuttn.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/bmpbuttn.cpp
@@ -29872,12 +29892,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@corelib_osx_accel.o: $(srcdir)/src/osx/accel.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/accel.cpp
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@corelib_artmac.o: $(srcdir)/src/osx/artmac.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/artmac.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@corelib_artmac.o: $(srcdir)/src/osx/artmac.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/artmac.cpp
-
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@corelib_bmpbuttn_osx.o: $(srcdir)/src/osx/bmpbuttn_osx.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/bmpbuttn_osx.cpp
 
@@ -30702,6 +30716,12 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_msw_accel.o: $(srcdir)/src/msw/accel.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/accel.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_artmsw.o: $(srcdir)/src/msw/artmsw.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/artmsw.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_artmsw.o: $(srcdir)/src/msw/artmsw.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/artmsw.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_msw_bmpbuttn.o: $(srcdir)/src/msw/bmpbuttn.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/bmpbuttn.cpp

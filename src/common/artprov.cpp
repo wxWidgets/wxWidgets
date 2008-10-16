@@ -333,11 +333,6 @@ wxIcon wxArtProvider::GetMessageBoxIcon(int flags)
     return icon;
 }
 
-#if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
-    #include <gtk/gtk.h>
-    extern GtkIconSize wxArtClientToIconSize(const wxArtClient& client);
-#endif // defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
-
 /*static*/ wxSize wxArtProvider::GetSizeHint(const wxArtClient& client,
                                          bool platform_dependent)
 {
@@ -348,35 +343,24 @@ wxIcon wxArtProvider::GetMessageBoxIcon(int flags)
             return node->GetData()->DoGetSizeHint(client);
     }
 
-        // else return platform dependent size
-
-#if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
-    // Gtk has specific sizes for each client, see artgtk.cpp
-    GtkIconSize gtk_size = wxArtClientToIconSize(client);
-    // no size hints for this client
-    if (gtk_size == GTK_ICON_SIZE_INVALID)
-        return wxDefaultSize;
-    gint width, height;
-    gtk_icon_size_lookup( gtk_size, &width, &height);
-    return wxSize(width, height);
-#else // !GTK+ 2
-    // NB: These size hints may have to be adjusted per platform
-    if (client == wxART_TOOLBAR)
-        return wxSize(16, 15);
-    else if (client == wxART_MENU)
-        return wxSize(16, 15);
-    else if (client == wxART_FRAME_ICON)
-        return wxSize(16, 15);
-    else if (client == wxART_CMN_DIALOG || client == wxART_MESSAGE_BOX)
-        return wxSize(32, 32);
-    else if (client == wxART_HELP_BROWSER)
-        return wxSize(16, 15);
-    else if (client == wxART_BUTTON)
-        return wxSize(16, 15);
-    else // wxART_OTHER or perhaps a user's client, no specified size
-        return wxDefaultSize;
-#endif // GTK+ 2/else
+    return GetNativeSizeHint(client);
 }
+
+#ifndef wxHAS_NATIVE_ART_PROVIDER_IMPL
+/*static*/
+wxSize wxArtProvider::GetNativeSizeHint(const wxArtClient& client)
+{
+    // rather than returning some arbitrary value that doesn't make much
+    // sense (as 2.8 used to do), tell the caller that we don't have a clue:
+    return wxDefaultSize;
+}
+
+/*static*/
+void wxArtProvider::InitNativeProvider()
+{
+}
+#endif // !wxHAS_NATIVE_ART_PROVIDER_IMPL
+
 
 /* static */
 bool wxArtProvider::HasNativeProvider()

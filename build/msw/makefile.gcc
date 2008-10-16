@@ -1602,6 +1602,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_statusbr.o \
 	$(OBJS)\monodll_prntdlgg.o \
 	$(OBJS)\monodll_accel.o \
+	$(OBJS)\monodll_artmsw.o \
 	$(OBJS)\monodll_bmpbuttn.o \
 	$(OBJS)\monodll_button.o \
 	$(OBJS)\monodll_checkbox.o \
@@ -2275,6 +2276,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_statusbr.o \
 	$(OBJS)\monolib_prntdlgg.o \
 	$(OBJS)\monolib_accel.o \
+	$(OBJS)\monolib_artmsw.o \
 	$(OBJS)\monolib_bmpbuttn.o \
 	$(OBJS)\monolib_button.o \
 	$(OBJS)\monolib_checkbox.o \
@@ -2863,6 +2865,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_statusbr.o \
 	$(OBJS)\coredll_prntdlgg.o \
 	$(OBJS)\coredll_accel.o \
+	$(OBJS)\coredll_artmsw.o \
 	$(OBJS)\coredll_bmpbuttn.o \
 	$(OBJS)\coredll_button.o \
 	$(OBJS)\coredll_checkbox.o \
@@ -3342,6 +3345,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_statusbr.o \
 	$(OBJS)\corelib_prntdlgg.o \
 	$(OBJS)\corelib_accel.o \
+	$(OBJS)\corelib_artmsw.o \
 	$(OBJS)\corelib_bmpbuttn.o \
 	$(OBJS)\corelib_button.o \
 	$(OBJS)\corelib_checkbox.o \
@@ -5838,6 +5842,9 @@ $(OBJS)\monodll_gsockmsw.o: ../../src/msw/gsockmsw.cpp
 $(OBJS)\monodll_urlmsw.o: ../../src/msw/urlmsw.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monodll_artmsw.o: ../../src/msw/artmsw.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monodll_colordlg.o: ../../src/msw/colordlg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -8138,6 +8145,9 @@ $(OBJS)\monolib_gsockmsw.o: ../../src/msw/gsockmsw.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_urlmsw.o: ../../src/msw/urlmsw.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_artmsw.o: ../../src/msw/artmsw.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_colordlg.o: ../../src/msw/colordlg.cpp
@@ -10829,6 +10839,9 @@ $(OBJS)\coredll_mslu.o: ../../src/msw/mslu.cpp
 $(OBJS)\coredll_volume.o: ../../src/msw/volume.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\coredll_artmsw.o: ../../src/msw/artmsw.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\coredll_colordlg.o: ../../src/msw/colordlg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -12280,6 +12293,9 @@ $(OBJS)\corelib_mslu.o: ../../src/msw/mslu.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_volume.o: ../../src/msw/volume.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\corelib_artmsw.o: ../../src/msw/artmsw.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_colordlg.o: ../../src/msw/colordlg.cpp

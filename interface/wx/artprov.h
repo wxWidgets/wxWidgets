@@ -193,11 +193,29 @@ public:
                           const wxSize& size = wxDefaultSize);
 
     /**
-        Returns a suitable size hint for the given @e wxArtClient. If
-        @a platform_default is @true, return a size based on the current platform,
-        otherwise return the size from the topmost wxArtProvider. @e wxDefaultSize may
-        be returned if the client doesn't have a specified size, like wxART_OTHER for
-        example.
+        Returns native icon size for use specified by @a client hint.
+
+        If the platform has no commonly used default for this use or if
+        @a client is not recognized, returns wxDefaultSize.
+
+        @note In some cases, a platform may have @em several appropriate
+              native sizes (for example, wxART_FRAME_ICON for frame icons).
+              In that case, this method returns only one of them, picked
+              reasonably.
+
+        @since 2.9.0
+     */
+    static wxSize GetNativeSizeHint(const wxArtClient& client);
+
+    /**
+        Returns a suitable size hint for the given @e wxArtClient.
+
+        If @a platform_default is @true, return a size based on the current
+        platform using GetNativeSizeHint(), otherwise return the size from the
+        topmost wxArtProvider. @e wxDefaultSize may be returned if the client
+        doesn't have a specified size, like wxART_OTHER for example.
+
+        @see GetNativeSizeHint()
     */
     static wxSize GetSizeHint(const wxArtClient& client,
                               bool platform_default = false);

@@ -1634,6 +1634,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/statusbr.cpp
     src/generic/prntdlgg.cpp
     src/msw/accel.cpp
+    src/msw/artmsw.cpp
     src/msw/bmpbuttn.cpp
     src/msw/button.cpp
     src/msw/checkbox.cpp
@@ -2159,7 +2160,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- Shared wxMac and wxCocoa files -->
     <if cond="PLATFORM_MACOSX=='1'">
     src/osx/accel.cpp
-    src/osx/artmac.cpp
     src/osx/bmpbuttn_osx.cpp
     src/osx/brush.cpp
     src/osx/button_osx.cpp
@@ -2263,6 +2263,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="OSX_CARBON_SRC" hints="files">
     <!-- carbon files -->
     $(OSX_CARBON_COCOA_SRC)
+    src/osx/artmac.cpp
     src/osx/carbon/bmpbuttn.cpp
     src/osx/carbon/button.cpp
     src/osx/carbon/checkbox.cpp

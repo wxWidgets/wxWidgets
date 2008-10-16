@@ -1764,6 +1764,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_statusbr.obj \
 	$(OBJS)\monodll_prntdlgg.obj \
 	$(OBJS)\monodll_accel.obj \
+	$(OBJS)\monodll_artmsw.obj \
 	$(OBJS)\monodll_bmpbuttn.obj \
 	$(OBJS)\monodll_button.obj \
 	$(OBJS)\monodll_checkbox.obj \
@@ -2437,6 +2438,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_statusbr.obj \
 	$(OBJS)\monolib_prntdlgg.obj \
 	$(OBJS)\monolib_accel.obj \
+	$(OBJS)\monolib_artmsw.obj \
 	$(OBJS)\monolib_bmpbuttn.obj \
 	$(OBJS)\monolib_button.obj \
 	$(OBJS)\monolib_checkbox.obj \
@@ -3039,6 +3041,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_statusbr.obj \
 	$(OBJS)\coredll_prntdlgg.obj \
 	$(OBJS)\coredll_accel.obj \
+	$(OBJS)\coredll_artmsw.obj \
 	$(OBJS)\coredll_bmpbuttn.obj \
 	$(OBJS)\coredll_button.obj \
 	$(OBJS)\coredll_checkbox.obj \
@@ -3516,6 +3519,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_statusbr.obj \
 	$(OBJS)\corelib_prntdlgg.obj \
 	$(OBJS)\corelib_accel.obj \
+	$(OBJS)\corelib_artmsw.obj \
 	$(OBJS)\corelib_bmpbuttn.obj \
 	$(OBJS)\corelib_button.obj \
 	$(OBJS)\corelib_checkbox.obj \
@@ -6032,6 +6036,9 @@ $(OBJS)\monodll_gsockmsw.obj: ..\..\src\msw\gsockmsw.cpp
 $(OBJS)\monodll_urlmsw.obj: ..\..\src\msw\urlmsw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\urlmsw.cpp
 
+$(OBJS)\monodll_artmsw.obj: ..\..\src\msw\artmsw.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\artmsw.cpp
+
 $(OBJS)\monodll_colordlg.obj: ..\..\src\msw\colordlg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\colordlg.cpp
 
@@ -8219,6 +8226,9 @@ $(OBJS)\monolib_gsockmsw.obj: ..\..\src\msw\gsockmsw.cpp
 
 $(OBJS)\monolib_urlmsw.obj: ..\..\src\msw\urlmsw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\urlmsw.cpp
+
+$(OBJS)\monolib_artmsw.obj: ..\..\src\msw\artmsw.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\artmsw.cpp
 
 $(OBJS)\monolib_colordlg.obj: ..\..\src\msw\colordlg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\colordlg.cpp
@@ -10795,6 +10805,9 @@ $(OBJS)\coredll_mslu.obj: ..\..\src\msw\mslu.cpp
 $(OBJS)\coredll_volume.obj: ..\..\src\msw\volume.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\volume.cpp
 
+$(OBJS)\coredll_artmsw.obj: ..\..\src\msw\artmsw.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\artmsw.cpp
+
 $(OBJS)\coredll_colordlg.obj: ..\..\src\msw\colordlg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\colordlg.cpp
 
@@ -12135,6 +12148,9 @@ $(OBJS)\corelib_mslu.obj: ..\..\src\msw\mslu.cpp
 
 $(OBJS)\corelib_volume.obj: ..\..\src\msw\volume.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\volume.cpp
+
+$(OBJS)\corelib_artmsw.obj: ..\..\src\msw\artmsw.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\artmsw.cpp
 
 $(OBJS)\corelib_colordlg.obj: ..\..\src\msw\colordlg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\colordlg.cpp

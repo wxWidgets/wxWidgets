@@ -275,6 +275,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_statusbr.obj &
 	$(OBJS)\monodll_prntdlgg.obj &
 	$(OBJS)\monodll_accel.obj &
+	$(OBJS)\monodll_artmsw.obj &
 	$(OBJS)\monodll_bmpbuttn.obj &
 	$(OBJS)\monodll_button.obj &
 	$(OBJS)\monodll_checkbox.obj &
@@ -953,6 +954,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_statusbr.obj &
 	$(OBJS)\monolib_prntdlgg.obj &
 	$(OBJS)\monolib_accel.obj &
+	$(OBJS)\monolib_artmsw.obj &
 	$(OBJS)\monolib_bmpbuttn.obj &
 	$(OBJS)\monolib_button.obj &
 	$(OBJS)\monolib_checkbox.obj &
@@ -1552,6 +1554,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_statusbr.obj &
 	$(OBJS)\coredll_prntdlgg.obj &
 	$(OBJS)\coredll_accel.obj &
+	$(OBJS)\coredll_artmsw.obj &
 	$(OBJS)\coredll_bmpbuttn.obj &
 	$(OBJS)\coredll_button.obj &
 	$(OBJS)\coredll_checkbox.obj &
@@ -2033,6 +2036,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_statusbr.obj &
 	$(OBJS)\corelib_prntdlgg.obj &
 	$(OBJS)\corelib_accel.obj &
+	$(OBJS)\corelib_artmsw.obj &
 	$(OBJS)\corelib_bmpbuttn.obj &
 	$(OBJS)\corelib_button.obj &
 	$(OBJS)\corelib_checkbox.obj &
@@ -6083,6 +6087,9 @@ $(OBJS)\monodll_gsockmsw.obj :  .AUTODEPEND ..\..\src\msw\gsockmsw.cpp
 $(OBJS)\monodll_urlmsw.obj :  .AUTODEPEND ..\..\src\msw\urlmsw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_artmsw.obj :  .AUTODEPEND ..\..\src\msw\artmsw.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_colordlg.obj :  .AUTODEPEND ..\..\src\msw\colordlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -8383,6 +8390,9 @@ $(OBJS)\monolib_gsockmsw.obj :  .AUTODEPEND ..\..\src\msw\gsockmsw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_urlmsw.obj :  .AUTODEPEND ..\..\src\msw\urlmsw.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_artmsw.obj :  .AUTODEPEND ..\..\src\msw\artmsw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_colordlg.obj :  .AUTODEPEND ..\..\src\msw\colordlg.cpp
@@ -11074,6 +11084,9 @@ $(OBJS)\coredll_mslu.obj :  .AUTODEPEND ..\..\src\msw\mslu.cpp
 $(OBJS)\coredll_volume.obj :  .AUTODEPEND ..\..\src\msw\volume.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
+$(OBJS)\coredll_artmsw.obj :  .AUTODEPEND ..\..\src\msw\artmsw.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
 $(OBJS)\coredll_colordlg.obj :  .AUTODEPEND ..\..\src\msw\colordlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
@@ -12525,6 +12538,9 @@ $(OBJS)\corelib_mslu.obj :  .AUTODEPEND ..\..\src\msw\mslu.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_volume.obj :  .AUTODEPEND ..\..\src\msw\volume.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_artmsw.obj :  .AUTODEPEND ..\..\src\msw\artmsw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_colordlg.obj :  .AUTODEPEND ..\..\src\msw\colordlg.cpp

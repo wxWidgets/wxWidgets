@@ -736,6 +736,41 @@ SOURCE=..\..\src\msw\app.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\msw\artmsw.cpp
+
+!IF  "$(CFG)" == "core - Win32 DLL Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+
+!ENDIF
+
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\msw\ole\automtn.cpp
 # End Source File
 # Begin Source File

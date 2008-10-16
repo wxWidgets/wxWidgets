@@ -20,8 +20,6 @@
     #pragma hdrstop
 #endif
 
-#if !defined(__WXUNIVERSAL__)
-
 #include "wx/artprov.h"
 #include "wx/gtk/private.h"
 
@@ -54,7 +52,10 @@ protected:
 // CreateBitmap routine
 // ----------------------------------------------------------------------------
 
-static const char *wxArtIDToStock(const wxArtID& id)
+namespace
+{
+
+const char *wxArtIDToStock(const wxArtID& id)
 {
     #define ART(wxid, gtkid) \
            if (id == wxid) return gtkid;
@@ -120,7 +121,7 @@ static const char *wxArtIDToStock(const wxArtID& id)
     #undef ART
 }
 
-GtkIconSize wxArtClientToIconSize(const wxArtClient& client)
+GtkIconSize ArtClientToIconSize(const wxArtClient& client)
 {
     if (client == wxART_TOOLBAR)
         return GTK_ICON_SIZE_LARGE_TOOLBAR;
@@ -134,7 +135,7 @@ GtkIconSize wxArtClientToIconSize(const wxArtClient& client)
         return GTK_ICON_SIZE_INVALID; // this is arbitrary
 }
 
-static GtkIconSize FindClosestIconSize(const wxSize& size)
+GtkIconSize FindClosestIconSize(const wxSize& size)
 {
     #define NUM_SIZES 6
     static struct
@@ -181,7 +182,7 @@ static GtkIconSize FindClosestIconSize(const wxSize& size)
     return best;
 }
 
-static GdkPixbuf *CreateStockIcon(const char *stockid, GtkIconSize size)
+GdkPixbuf *CreateStockIcon(const char *stockid, GtkIconSize size)
 {
     // FIXME: This code is not 100% correct, because stock pixmap are
     //        context-dependent and may be affected by theme engine, the
@@ -202,7 +203,7 @@ static GdkPixbuf *CreateStockIcon(const char *stockid, GtkIconSize size)
                                     GTK_STATE_NORMAL, size, NULL, NULL);
 }
 
-static GdkPixbuf *CreateThemeIcon(const char *iconname,
+GdkPixbuf *CreateThemeIcon(const char *iconname,
                                   GtkIconSize iconsize, const wxSize& sz)
 {
     wxSize size(sz);
@@ -218,13 +219,15 @@ static GdkPixbuf *CreateThemeIcon(const char *iconname,
                     (GtkIconLookupFlags)0, NULL);
 }
 
+} // anonymous namespace
+
 wxBitmap wxGTK2ArtProvider::CreateBitmap(const wxArtID& id,
                                          const wxArtClient& client,
                                          const wxSize& size)
 {
     wxCharBuffer stockid = wxArtIDToStock(id);
     GtkIconSize stocksize = (size == wxDefaultSize) ?
-                                wxArtClientToIconSize(client) :
+                                ArtClientToIconSize(client) :
                                 FindClosestIconSize(size);
 
     // we must have some size, this is arbitrary
@@ -259,4 +262,19 @@ wxBitmap wxGTK2ArtProvider::CreateBitmap(const wxArtID& id,
     return bmp;
 }
 
-#endif // !defined(__WXUNIVERSAL__)
+// ----------------------------------------------------------------------------
+// wxArtProvider::GetNativeSizeHint()
+// ----------------------------------------------------------------------------
+
+/*static*/
+wxSize wxArtProvider::GetNativeSizeHint(const wxArtClient& client)
+{
+    // Gtk has specific sizes for each client, see artgtk.cpp
+    GtkIconSize gtk_size = ArtClientToIconSize(client);
+    // no size hints for this client
+    if (gtk_size == GTK_ICON_SIZE_INVALID)
+        return wxDefaultSize;
+    gint width, height;
+    gtk_icon_size_lookup( gtk_size, &width, &height);
+    return wxSize(width, height);
+}

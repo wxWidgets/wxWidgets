@@ -165,6 +165,10 @@ public:
     static wxIconBundle GetIconBundle(const wxArtID& id,
                                       const wxArtClient& client = wxART_OTHER);
 
+    // Gets native size for given 'client' or wxDefaultSize if it doesn't
+    // have native equivalent
+    static wxSize GetNativeSizeHint(const wxArtClient& client);
+
     // Get the size hint of an icon from a specific wxArtClient, queries
     // the topmost provider if platform_dependent = false
     static wxSize GetSizeHint(const wxArtClient& client, bool platform_dependent = false);
@@ -221,5 +225,13 @@ private:
     DECLARE_ABSTRACT_CLASS(wxArtProvider)
 };
 
+
+#if !defined(__WXUNIVERSAL__) && \
+    (defined(__WXGTK__) || defined(__WXMSW__) || \
+     (defined(__WXMAC__) && wxOSX_USE_CARBON))
+  // *some* (partial) native implementation of wxArtProvider exists; this is
+  // not the same as wxArtProvider::HasNativeProvider()!
+  #define wxHAS_NATIVE_ART_PROVIDER_IMPL
+#endif
 
 #endif // _WX_ARTPROV_H_
