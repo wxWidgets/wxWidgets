@@ -32,7 +32,7 @@ public:
     virtual bool RegisterFD(int fd, wxFDIOHandler* handler, int flags = wxFDIO_ALL);
     virtual bool ModifyFD(int fd, wxFDIOHandler* handler, int flags = wxFDIO_ALL);
     virtual bool UnregisterFD(int fd);
-    virtual void Dispatch(int timeout = TIMEOUT_INFINITE);
+    virtual bool Dispatch(int timeout = TIMEOUT_INFINITE);
 
 private:
     // ctor is private, use Create()
