@@ -15,14 +15,19 @@
 #include "wx/ipc.h"
 
 // the default service name
-#define IPC_SERVICE _T("4242")
+#define IPC_SERVICE "4242"
 //#define IPC_SERVICE _T("/tmp/wxsrv424")
 
 // the hostname
-#define IPC_HOST _T("localhost")
+#define IPC_HOST "localhost"
 
 // the IPC topic
-#define IPC_TOPIC _T("IPC TEST")
+#define IPC_TOPIC "IPC TEST"
 
 // the name of the item we're being advised about
-#define IPC_ADVISE_NAME _T("Item")
+#define IPC_ADVISE_NAME "Item"
+
+
+// the values used by tests/benchmarks/ipcclient.cpp
+#define IPC_BENCHMARK_TOPIC "wxIPC BENCH"
+#define IPC_BENCHMARK_ITEM "Benchmark"

@@ -39,19 +39,33 @@
 #include "wx/datetime.h"
 
 // ----------------------------------------------------------------------------
-// wxWin macros
+// local classes
 // ----------------------------------------------------------------------------
 
+// a simple connection class testing and logging various operations
 class MyConnection : public MyConnectionBase, public wxTimer
 {
 public:
     virtual bool Disconnect() { return wxConnection::Disconnect(); }
-    virtual bool OnExecute(const wxString& topic, const void *data, size_t size, wxIPCFormat format);
-    virtual const void *OnRequest(const wxString& topic, const wxString& item, size_t *size, wxIPCFormat format);
-    virtual bool OnPoke(const wxString& topic, const wxString& item, const void *data, size_t size, wxIPCFormat format);
+    virtual bool OnExecute(const wxString& topic,
+                           const void *data,
+                           size_t size,
+                           wxIPCFormat format);
+    virtual const void *OnRequest(const wxString& topic,
+                                  const wxString& item,
+                                  size_t *size,
+                                  wxIPCFormat format);
+    virtual bool OnPoke(const wxString& topic,
+                        const wxString& item,
+                        const void *data,
+                        size_t size,
+                        wxIPCFormat format);
     virtual bool OnStartAdvise(const wxString& topic, const wxString& item);
     virtual bool OnStopAdvise(const wxString& topic, const wxString& item);
-    virtual bool DoAdvise(const wxString& item, const void *data, size_t size, wxIPCFormat format);
+    virtual bool DoAdvise(const wxString& item,
+                          const void *data,
+                          size_t size,
+                          wxIPCFormat format);
     virtual bool OnDisconnect();
     virtual void Notify();
 
@@ -62,6 +76,38 @@ private:
     char            m_achRequestBytes[3];
 };
 
+// a connection used for benchmarking some IPC operations by
+// tests/benchmarks/ipcclient.cpp
+class BenchConnection : public wxConnection
+{
+public:
+    BenchConnection() { m_advise = false; }
+
+    virtual bool OnPoke(const wxString& topic,
+                        const wxString& item,
+                        const void *data,
+                        size_t size,
+                        wxIPCFormat format);
+    virtual bool OnStartAdvise(const wxString& topic, const wxString& item);
+    virtual bool OnStopAdvise(const wxString& topic, const wxString& item);
+
+private:
+    // return true if this is the supported topic+item combination, log an
+    // error message otherwise
+    bool IsSupportedTopicAndItem(const wxString& operation,
+                                 const wxString& topic,
+                                 const wxString& item) const;
+
+    // the item which can be manipulated by the client via Poke() calls
+    wxString m_item;
+
+    // should we notify the client about changes to m_item?
+    bool m_advise;
+
+    DECLARE_NO_COPY_CLASS(BenchConnection)
+};
+
+// a simple server accepting connections to IPC_TOPIC and IPC_BENCHMARK_TOPIC
 class MyServer : public wxServer
 {
 public:
@@ -140,22 +186,29 @@ MyServer::~MyServer()
 
 wxConnectionBase *MyServer::OnAcceptConnection(const wxString& topic)
 {
-    wxLogMessage("OnAcceptConnection(\"%s\")", topic.c_str());
+    wxLogMessage("OnAcceptConnection(\"%s\")", topic);
 
     if ( topic == IPC_TOPIC )
     {
         m_connection = new MyConnection;
-        wxLogMessage("Connection accepted");
-        return m_connection;
+    }
+    else if ( topic == IPC_BENCHMARK_TOPIC )
+    {
+        m_connection = new BenchConnection;
+    }
+    else // unknown topic
+    {
+        wxLogMessage("Unknown topic");
+        return NULL;
     }
 
-    // unknown topic
-    return NULL;
+    wxLogMessage("Connection accepted");
+    return m_connection;
 }
 
 void MyServer::Disconnect()
 {
-    if (m_connection)
+    if ( m_connection )
     {
         m_connection->Disconnect();
         delete m_connection;
@@ -204,14 +257,17 @@ MyConnection::OnRequest(const wxString& topic,
     }
     else if (item == "Date+len")
     {
-        m_sRequestDate = wxDateTime::Now().FormatTime() + " " + wxDateTime::Now().FormatDate();
+        m_sRequestDate = wxDateTime::Now().FormatTime() +
+                            " " + wxDateTime::Now().FormatDate();
         data = m_sRequestDate.c_str();
         *size = m_sRequestDate.Length() + 1;
     }
     else if (item == "bytes[3]")
     {
         data = m_achRequestBytes;
-        m_achRequestBytes[0] = '1'; m_achRequestBytes[1] = '2'; m_achRequestBytes[2] = '3';
+        m_achRequestBytes[0] = '1';
+        m_achRequestBytes[1] = '2';
+        m_achRequestBytes[2] = '3';
         *size = 3;
     }
     else
@@ -225,7 +281,7 @@ MyConnection::OnRequest(const wxString& topic,
 
 bool MyConnection::OnStartAdvise(const wxString& topic, const wxString& item)
 {
-    wxLogMessage("OnStartAdvise(\"%s\",\"%s\")", topic.c_str(), item.c_str());
+    wxLogMessage("OnStartAdvise(\"%s\",\"%s\")", topic, item);
     wxLogMessage("Returning true");
     m_sAdvise = item;
     Start(3000); // schedule our Notify() to be called in 3 seconds
@@ -234,7 +290,7 @@ bool MyConnection::OnStartAdvise(const wxString& topic, const wxString& item)
 
 bool MyConnection::OnStopAdvise(const wxString& topic, const wxString& item)
 {
-    wxLogMessage("OnStopAdvise(\"%s\",\"%s\")", topic.c_str(), item.c_str());
+    wxLogMessage("OnStopAdvise(\"%s\",\"%s\")", topic, item);
     wxLogMessage("Returning true");
     m_sAdvise.clear();
     Stop();
@@ -247,7 +303,8 @@ void MyConnection::Notify()
     {
         wxString s = wxDateTime::Now().Format();
         Advise(m_sAdvise, s);
-        s = wxDateTime::Now().FormatTime() + " " + wxDateTime::Now().FormatDate();
+        s = wxDateTime::Now().FormatTime() + " "
+                + wxDateTime::Now().FormatDate();
         Advise(m_sAdvise, s.mb_str(), s.length() + 1);
 
 #if wxUSE_DDE_FOR_IPC
@@ -265,7 +322,10 @@ void MyConnection::Notify()
     }
 }
 
-bool MyConnection::DoAdvise(const wxString& item, const void *data, size_t size, wxIPCFormat format)
+bool MyConnection::DoAdvise(const wxString& item,
+                            const void *data,
+                            size_t size,
+                            wxIPCFormat format)
 {
     Log("Advise", "", item, data, size, format);
     return wxConnection::DoAdvise(item, data, size, format);
@@ -276,3 +336,69 @@ bool MyConnection::OnDisconnect()
     wxLogMessage("OnDisconnect()");
     return true;
 }
+
+// ----------------------------------------------------------------------------
+// BenchConnection
+// ----------------------------------------------------------------------------
+
+bool BenchConnection::IsSupportedTopicAndItem(const wxString& operation,
+                                              const wxString& topic,
+                                              const wxString& item) const
+{
+    if ( topic != IPC_BENCHMARK_TOPIC ||
+            item != IPC_BENCHMARK_ITEM )
+    {
+        wxLogMessage("Unexpected %s(\"%s\", \"%s\") call.",
+                     operation, topic, item);
+        return false;
+    }
+
+    return true;
+}
+
+bool BenchConnection::OnPoke(const wxString& topic,
+                             const wxString& item,
+                             const void *data,
+                             size_t size,
+                             wxIPCFormat format)
+{
+    if ( !IsSupportedTopicAndItem("OnPoke", topic, item) )
+        return false;
+
+    if ( !IsTextFormat(format) )
+    {
+        wxLogMessage("Unexpected format %d in OnPoke().", format);
+        return false;
+    }
+
+    m_item = GetTextFromData(data, size, format);
+
+    if ( m_advise )
+    {
+        if ( !Advise(item, m_item) )
+            wxLogMessage("Failed to advise client about the change.");
+    }
+
+    return true;
+}
+
+bool BenchConnection::OnStartAdvise(const wxString& topic, const wxString& item)
+{
+    if ( !IsSupportedTopicAndItem("OnStartAdvise", topic, item) )
+        return false;
+
+    m_advise = true;
+
+    return true;
+}
+
+bool BenchConnection::OnStopAdvise(const wxString& topic, const wxString& item)
+{
+    if ( !IsSupportedTopicAndItem("OnStopAdvise", topic, item) )
+        return false;
+
+    m_advise = false;
+
+    return true;
+}
+

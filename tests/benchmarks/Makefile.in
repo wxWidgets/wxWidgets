@@ -46,6 +46,7 @@ BENCH_OBJECTS =  \
 	bench_bench.o \
 	bench_htmlpars.o \
 	bench_htmltag.o \
+	bench_ipcclient.o \
 	bench_strings.o \
 	bench_tls.o
 
@@ -73,6 +74,9 @@ BENCH_OBJECTS =  \
 COND_MONOLITHIC_0___WXLIB_BASE_p = \
 	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = $(COND_MONOLITHIC_0___WXLIB_BASE_p)
+COND_MONOLITHIC_0___WXLIB_NET_p = \
+	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net-$(WX_RELEASE)$(HOST_SUFFIX)
+@COND_MONOLITHIC_0@__WXLIB_NET_p = $(COND_MONOLITHIC_0___WXLIB_NET_p)
 COND_MONOLITHIC_1___WXLIB_MONO_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = $(COND_MONOLITHIC_1___WXLIB_MONO_p)
@@ -103,7 +107,7 @@ distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 bench$(EXEEXT): $(BENCH_OBJECTS)
-	$(CXX) -o $@ $(BENCH_OBJECTS)    -L$(LIBDIRNAME)  $(SAMPLES_RPATH_FLAG) $(LDFLAGS)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
+	$(CXX) -o $@ $(BENCH_OBJECTS)    -L$(LIBDIRNAME)  $(SAMPLES_RPATH_FLAG) $(LDFLAGS)  $(__WXLIB_BASE_p)  $(__WXLIB_NET_p)  $(__WXLIB_MONO_p) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
 	
 	$(__bench___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
@@ -128,6 +132,9 @@ bench_htmlpars.o: $(srcdir)/htmlparser/htmlpars.cpp
 
 bench_htmltag.o: $(srcdir)/htmlparser/htmltag.cpp
 	$(CXXC) -c -o $@ $(BENCH_CXXFLAGS) $(srcdir)/htmlparser/htmltag.cpp
+
+bench_ipcclient.o: $(srcdir)/ipcclient.cpp
+	$(CXXC) -c -o $@ $(BENCH_CXXFLAGS) $(srcdir)/ipcclient.cpp
 
 bench_strings.o: $(srcdir)/strings.cpp
 	$(CXXC) -c -o $@ $(BENCH_CXXFLAGS) $(srcdir)/strings.cpp

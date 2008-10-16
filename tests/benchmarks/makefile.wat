@@ -183,6 +183,11 @@ __WXLIB_BASE_p =
 __WXLIB_BASE_p = &
 	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
 !endif
+__WXLIB_NET_p =
+!ifeq MONOLITHIC 0
+__WXLIB_NET_p = &
+	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net.lib
+!endif
 __WXLIB_MONO_p =
 !ifeq MONOLITHIC 1
 __WXLIB_MONO_p = &
@@ -212,6 +217,7 @@ BENCH_OBJECTS =  &
 	$(OBJS)\bench_bench.obj &
 	$(OBJS)\bench_htmlpars.obj &
 	$(OBJS)\bench_htmltag.obj &
+	$(OBJS)\bench_ipcclient.obj &
 	$(OBJS)\bench_strings.obj &
 	$(OBJS)\bench_tls.obj
 
@@ -239,7 +245,7 @@ $(OBJS)\bench.exe :  $(BENCH_OBJECTS)
 	@%append $(OBJS)\bench.lbc option caseexact
 	@%append $(OBJS)\bench.lbc  $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt ref 'main_' $(LDFLAGS)
 	@for %i in ($(BENCH_OBJECTS)) do @%append $(OBJS)\bench.lbc file %i
-	@for %i in ( $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib) do @%append $(OBJS)\bench.lbc library %i
+	@for %i in ( $(__WXLIB_BASE_p)  $(__WXLIB_NET_p)  $(__WXLIB_MONO_p) wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib) do @%append $(OBJS)\bench.lbc library %i
 	@%append $(OBJS)\bench.lbc
 	@for %i in () do @%append $(OBJS)\bench.lbc option stack=%i
 	wlink @$(OBJS)\bench.lbc
@@ -255,6 +261,9 @@ $(OBJS)\bench_htmlpars.obj :  .AUTODEPEND .\htmlparser\htmlpars.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BENCH_CXXFLAGS) $<
 
 $(OBJS)\bench_htmltag.obj :  .AUTODEPEND .\htmlparser\htmltag.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BENCH_CXXFLAGS) $<
+
+$(OBJS)\bench_ipcclient.obj :  .AUTODEPEND .\ipcclient.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BENCH_CXXFLAGS) $<
 
 $(OBJS)\bench_strings.obj :  .AUTODEPEND .\strings.cpp

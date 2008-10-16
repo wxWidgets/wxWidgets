@@ -13,10 +13,12 @@
             bench.cpp
             htmlparser/htmlpars.cpp
             htmlparser/htmltag.cpp
+            ipcclient.cpp
             strings.cpp
             tls.cpp
         </sources>
         <wx-lib>base</wx-lib>
+        <wx-lib>net</wx-lib>
     </exe>
 
     <wx-data id="data">

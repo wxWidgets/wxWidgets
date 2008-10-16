@@ -31,6 +31,7 @@ BENCH_OBJECTS =  \
 	$(OBJS)\bench_bench.o \
 	$(OBJS)\bench_htmlpars.o \
 	$(OBJS)\bench_htmltag.o \
+	$(OBJS)\bench_ipcclient.o \
 	$(OBJS)\bench_strings.o \
 	$(OBJS)\bench_tls.o
 
@@ -131,6 +132,10 @@ ifeq ($(MONOLITHIC),0)
 __WXLIB_BASE_p = \
 	-lwxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)
 endif
+ifeq ($(MONOLITHIC),0)
+__WXLIB_NET_p = \
+	-lwxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net
+endif
 ifeq ($(MONOLITHIC),1)
 __WXLIB_MONO_p = \
 	-lwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)
@@ -179,7 +184,7 @@ clean:
 	-if exist $(OBJS)\bench.exe del $(OBJS)\bench.exe
 
 $(OBJS)\bench.exe: $(BENCH_OBJECTS)
-	$(CXX) -o $@ $(BENCH_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)  $(LDFLAGS)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32
+	$(CXX) -o $@ $(BENCH_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)  $(LDFLAGS)  $(__WXLIB_BASE_p)  $(__WXLIB_NET_p)  $(__WXLIB_MONO_p) -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32
 
 data: 
 	if not exist $(OBJS) mkdir $(OBJS)
@@ -192,6 +197,9 @@ $(OBJS)\bench_htmlpars.o: ./htmlparser/htmlpars.cpp
 	$(CXX) -c -o $@ $(BENCH_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\bench_htmltag.o: ./htmlparser/htmltag.cpp
+	$(CXX) -c -o $@ $(BENCH_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\bench_ipcclient.o: ./ipcclient.cpp
 	$(CXX) -c -o $@ $(BENCH_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\bench_strings.o: ./strings.cpp
