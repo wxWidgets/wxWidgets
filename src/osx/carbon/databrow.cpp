@@ -1046,7 +1046,7 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserDrawItemProc(DataBrowse
   wxDC *dc = dataViewCustomRendererPtr->GetDC();
   
   wxRect cellrect( static_cast<int>(rectangle->left),
-                   static_cast<int>(rectangle->top+2),
+                   static_cast<int>(rectangle->top),
                    static_cast<int>(1+rectangle->right-rectangle->left),
                    static_cast<int>(rectangle->bottom-rectangle->top) );
                    
