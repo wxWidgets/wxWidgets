@@ -19,17 +19,13 @@
 //
 // * Currently there is no example of a custom property editor. However,
 //   SpinCtrl editor sample is well-commented. It can be found in
-//   contrib/src/propgrid/advprops.cpp.
+//   src/propgrid/advprops.cpp.
 //
 // * To find code that populates the grid with properties, search for
 //   string "::Populate".
 //
 // * To find code that handles property grid changes, search for string
 //   "::OnPropertyGridChange".
-//
-// * At the end of file there is example code for using the owner-drawn combo
-//   box independently outside the wxPropertyGrid.
-//
 //
 
 // For compilers that support precompilation, includes "wx/wx.h".
