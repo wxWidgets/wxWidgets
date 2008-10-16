@@ -67,8 +67,10 @@ public:
     // unregister descriptor previously registered with RegisterFD()
     virtual bool UnregisterFD(int fd) = 0;
 
-    // wait for an event for at most timeout milliseconds and process it
-    virtual void Dispatch(int timeout = TIMEOUT_INFINITE) = 0;
+    // wait for an event for at most timeout milliseconds and process it;
+    // return true if we processed any events or false if timeout expired
+    // without anything happening
+    virtual bool Dispatch(int timeout = TIMEOUT_INFINITE) = 0;
 
     virtual ~wxFDIODispatcher() { }
 };

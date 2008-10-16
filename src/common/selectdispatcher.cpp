@@ -190,8 +190,9 @@ bool wxSelectDispatcher::UnregisterFD(int fd)
     return true;
 }
 
-void wxSelectDispatcher::ProcessSets(const wxSelectSets& sets)
+bool wxSelectDispatcher::ProcessSets(const wxSelectSets& sets)
 {
+    bool gotEvent = false;
     for ( int fd = 0; fd <= m_maxFD; fd++ )
     {
         if ( !sets.HasFD(fd) )
@@ -204,11 +205,15 @@ void wxSelectDispatcher::ProcessSets(const wxSelectSets& sets)
             continue;
         }
 
+        gotEvent = true;
+
         sets.Handle(fd, *handler);
     }
+
+    return gotEvent;
 }
 
-void wxSelectDispatcher::Dispatch(int timeout)
+bool wxSelectDispatcher::Dispatch(int timeout)
 {
     struct timeval tv,
                   *ptv;
@@ -240,8 +245,12 @@ void wxSelectDispatcher::Dispatch(int timeout)
             break;
 
         default:
-            ProcessSets(sets);
+            if ( ProcessSets(sets) )
+                return true;
     }
+
+    // nothing happened
+    return false;
 }
 
 #endif // wxUSE_SELECT_DISPATCHER

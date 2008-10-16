@@ -158,7 +158,7 @@ bool wxEpollDispatcher::UnregisterFD(int fd)
     return true;
 }
 
-void wxEpollDispatcher::Dispatch(int timeout)
+bool wxEpollDispatcher::Dispatch(int timeout)
 {
     epoll_event events[16];
 
@@ -176,10 +176,11 @@ void wxEpollDispatcher::Dispatch(int timeout)
         {
             wxLogSysError(_("Waiting for IO on epoll descriptor %d failed"),
                           m_epollDescriptor);
-            return;
+            return false;
         }
     }
 
+    bool gotEvents = false;
     for ( epoll_event *p = events; p < events + e_num; p++ )
     {
         wxFDIOHandler * const handler = (wxFDIOHandler *)(p->data.ptr);
@@ -199,7 +200,13 @@ void wxEpollDispatcher::Dispatch(int timeout)
             handler->OnWriteWaiting();
         else if ( p->events & EPOLLERR )
             handler->OnExceptionWaiting();
+        else
+            continue;
+
+        gotEvents = true;
     }
+
+    return gotEvents;
 }
 
 #endif // wxUSE_EPOLL_DISPATCHER
