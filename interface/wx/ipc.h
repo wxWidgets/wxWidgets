@@ -205,6 +205,32 @@ public:
         otherwise.
     */
     bool StopAdvise(const wxString& item);
+
+
+    /**
+        Returns true if the format is one of the text formats.
+
+        The text formats are wxIPC_TEXT, wxIPC_UNICODETEXT and wxIPC_UTF8TEXT.
+     */
+    static bool IsTextFormat(wxIPCFormat format);
+
+    /**
+        Returns the data in any of the text formats as string.
+
+        @param data
+            The raw data pointer as used with any of the other methods of this
+            class.
+        @param size
+            The size of the data buffer pointed to by @a data.
+        @param format
+            The format of the data. It must be a text one, i.e. such that
+            IsTextFormat() returns @true for it.
+        @return
+            The string representation of the data. If the format is not text,
+            an assertion failure is triggered and empty string is returned.
+     */
+    static wxString
+    GetTextFromData(const void *data, size_t size, wxIPCFormat format);
 };
 
 

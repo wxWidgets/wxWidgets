@@ -180,10 +180,21 @@ public:
   virtual bool OnDisconnect() { delete this; return true; }
 
 
+  // return true if this is one of the formats used for textual data
+  // transmission
+  static bool IsTextFormat(wxIPCFormat format)
+  {
+      return format == wxIPC_TEXT ||
+             format == wxIPC_UTF8TEXT ||
+             format == wxIPC_UTF16TEXT ||
+             format == wxIPC_UTF32TEXT;
+  }
+
   // converts from the data and format into a wxString automatically
   //
   // this function accepts data in all of wxIPC_TEXT, wxIPC_UNICODETEXT, and
-  // wxIPC_UTF8TEXT formats but asserts if the format is anything else
+  // wxIPC_UTF8TEXT formats but asserts if the format is anything else (i.e.
+  // such that IsTextFormat(format) doesn't return true)
   //
   // notice that the size parameter here contains the total size of the data,
   // including the terminating '\0' or L'\0'
