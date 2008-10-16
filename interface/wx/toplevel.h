@@ -222,7 +222,9 @@ public:
                  reference counting, the copy is very quick. It is safe to
                  delete @a icon after calling this function.
 
-        @see wxIcon
+        @note In wxMSW, @a icon must be either 16x16 or 32x32 icon.
+
+        @see wxIcon, SetIcons()
     */
     void SetIcon(const wxIcon& icon);
 
@@ -235,7 +237,10 @@ public:
         @param icons
             The icons to associate with this window.
 
-        @see wxIconBundle.
+        @note In wxMSW, @a icons must contain a 16x16 or 32x32 icon,
+              preferably both.
+
+        @see wxIconBundle
     */
     virtual void SetIcons(const wxIconBundle& icons);
 

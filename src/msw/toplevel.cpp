@@ -972,7 +972,7 @@ wxString wxTopLevelWindowMSW::GetTitle() const
     return GetLabel();
 }
 
-void wxTopLevelWindowMSW::DoSelectAndSetIcon(const wxIconBundle& icons,
+bool wxTopLevelWindowMSW::DoSelectAndSetIcon(const wxIconBundle& icons,
                                              int smX,
                                              int smY,
                                              int i)
@@ -983,15 +983,21 @@ void wxTopLevelWindowMSW::DoSelectAndSetIcon(const wxIconBundle& icons,
     if ( icon.Ok() )
     {
         ::SendMessage(GetHwnd(), WM_SETICON, i, (LPARAM)GetHiconOf(icon));
+        return true;
     }
+
+    return false;
 }
 
 void wxTopLevelWindowMSW::SetIcons(const wxIconBundle& icons)
 {
     wxTopLevelWindowBase::SetIcons(icons);
 
-    DoSelectAndSetIcon(icons, SM_CXSMICON, SM_CYSMICON, ICON_SMALL);
-    DoSelectAndSetIcon(icons, SM_CXICON, SM_CYICON, ICON_BIG);
+    bool ok = DoSelectAndSetIcon(icons, SM_CXSMICON, SM_CYSMICON, ICON_SMALL);
+    if ( DoSelectAndSetIcon(icons, SM_CXICON, SM_CYICON, ICON_BIG) )
+        ok = true;
+
+    wxASSERT_MSG( ok, "icon bundle doesn't contain any suitable icon" );
 }
 
 bool wxTopLevelWindowMSW::EnableCloseButton(bool enable)
