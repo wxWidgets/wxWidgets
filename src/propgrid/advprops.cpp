@@ -1731,7 +1731,7 @@ wxMultiChoiceProperty::~wxMultiChoiceProperty()
 
 void wxMultiChoiceProperty::OnSetValue()
 {
-    GenerateValueAsString(&m_display);
+    GenerateValueAsString(m_value, &m_display);
 }
 
 wxString wxMultiChoiceProperty::ValueToString( wxVariant& value,
@@ -1742,16 +1742,17 @@ wxString wxMultiChoiceProperty::ValueToString( wxVariant& value,
         return m_display;
 
     wxString s;
-    GenerateValueAsString(&s);
+    GenerateValueAsString(value, &s);
     return s;
 }
 
-void wxMultiChoiceProperty::GenerateValueAsString( wxString* target ) const
+void wxMultiChoiceProperty::GenerateValueAsString( wxVariant& value,
+                                                   wxString* target ) const
 {
     wxArrayString strings;
 
-    if ( m_value.GetType() == wxPG_VARIANT_TYPE_ARRSTRING )
-        strings = m_value.GetArrayString();
+    if ( value.GetType() == wxPG_VARIANT_TYPE_ARRSTRING )
+        strings = value.GetArrayString();
 
     wxString& tempStr = *target;
     unsigned int i;

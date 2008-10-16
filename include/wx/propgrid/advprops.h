@@ -406,7 +406,7 @@ public:
 
 protected:
 
-    void GenerateValueAsString( wxString* target ) const;
+    void GenerateValueAsString( wxVariant& value, wxString* target ) const;
 
     // Returns translation of values into string indices.
     wxArrayInt GetValueAsIndices() const;
