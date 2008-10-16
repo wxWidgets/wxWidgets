@@ -98,7 +98,8 @@ All:
 All (GUI):
 
 - Fixed wxHTML's pagebreaks computation in tables (D.J.Stauffer).
-- Fixed wxRichTextCtrl input that uses Alt on Mac OS X, for example Polish Pro input.
+- Fixed wxRichTextCtrl input that uses Alt on Mac OS X, for example
+  Polish Pro input.
 - Fixed wxHtmlWindow::SelectionToText() to correctly insert newlines after
   single-cell paragraphs.
 
@@ -110,6 +111,7 @@ All (Unix):
 wxMSW:
 
 - Restored generation of events for accelerators when there is no menu bar.
+- Fixed wxArtProvider::GetSizeHint() to return 16x16 for wxART_FRAME_ICON.
 
 wxGTK:
 

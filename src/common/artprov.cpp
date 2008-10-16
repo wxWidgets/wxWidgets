@@ -30,6 +30,10 @@
     #include "wx/module.h"
 #endif
 
+#ifdef __WXMSW__
+    #include "wx/msw/wrapwin.h"
+#endif
+
 // ===========================================================================
 // implementation
 // ===========================================================================
@@ -272,7 +276,14 @@ wxArtProvider::~wxArtProvider()
     else if (client == wxART_MENU)
         return wxSize(16, 15);
     else if (client == wxART_FRAME_ICON)
-        return wxSize(16, 15);
+    {
+#ifdef __WXMSW__
+        return wxSize(::GetSystemMetrics(SM_CXSMICON),
+                      ::GetSystemMetrics(SM_CYSMICON));
+#else
+        return wxSize(16, 16);
+#endif // __WXMSW__/!__WXMSW__
+    }
     else if (client == wxART_CMN_DIALOG || client == wxART_MESSAGE_BOX)
         return wxSize(32, 32);
     else if (client == wxART_HELP_BROWSER)
