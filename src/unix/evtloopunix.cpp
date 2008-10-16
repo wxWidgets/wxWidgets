@@ -149,6 +149,7 @@ bool wxConsoleEventLoop::Pending() const
 
 bool wxConsoleEventLoop::Dispatch()
 {
+    m_dispatcher->Dispatch();
     wxTheApp->ProcessPendingEvents();
     return true;
 }
