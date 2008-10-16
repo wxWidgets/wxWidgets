@@ -1032,6 +1032,10 @@ void MyFrame::OnSelectionChanged( wxDataViewEvent &event )
 
 #ifdef ENABLE_LOGGING
     wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, First selected Item: %s"), title );
+#else
+    wxString text;
+    text.Printf( wxT("wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, Item: %s\n"), title );
+    m_log->WriteText( text );
 #endif
 }
 
@@ -1043,6 +1047,10 @@ void MyFrame::OnExpanding( wxDataViewEvent &event )
     wxString title = m_music_model->GetTitle( event.GetItem() );
 #ifdef ENABLE_LOGGING
     wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING, Item: %s"), title );
+#else
+    wxString text;
+    text.Printf( wxT("wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING, Item: %s\n"), title );
+    m_log->WriteText( text );
 #endif
 }
 
@@ -1077,6 +1085,10 @@ void MyFrame::OnExpanded( wxDataViewEvent &event )
     wxString title = m_music_model->GetTitle( event.GetItem() );
 #ifdef ENABLE_LOGGING
     wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDED, Item: %s"), title );
+#else
+    wxString text;
+    text.Printf( wxT("wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDED, Item: %s\n"), title );
+    m_log->WriteText( text );
 #endif
 }
 
@@ -1088,6 +1100,10 @@ void MyFrame::OnCollapsing( wxDataViewEvent &event )
     wxString title = m_music_model->GetTitle( event.GetItem() );
 #ifdef ENABLE_LOGGING
     wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING, Item: %s"), title );
+#else
+    wxString text;
+    text.Printf( wxT("wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING, Item: %s\n"), title );
+    m_log->WriteText( text );
 #endif
 }
 
@@ -1099,6 +1115,10 @@ void MyFrame::OnCollapsed( wxDataViewEvent &event )
     wxString title = m_music_model->GetTitle( event.GetItem() );
 #ifdef ENABLE_LOGGING
     wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSED, Item: %s"),title);
+#else
+    wxString text;
+    text.Printf( wxT("wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSED, Item: %s\n"), title );
+    m_log->WriteText( text );
 #endif
 }
 
