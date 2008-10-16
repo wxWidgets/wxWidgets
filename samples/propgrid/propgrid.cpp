@@ -287,6 +287,7 @@ void wxAdvImageFileProperty::OnSetValue()
 
     if ( imagename.length() )
     {
+        wxFileName filename = GetFileName();
         size_t prevCount = g_myImageArray.GetCount();
         int index = ms_choices.Index(imagename);
 
@@ -294,7 +295,7 @@ void wxAdvImageFileProperty::OnSetValue()
         if ( index == wxNOT_FOUND )
         {
             ms_choices.Add( imagename );
-            g_myImageArray.Add( new wxMyImageInfo( m_filename.GetFullPath() ) );
+            g_myImageArray.Add( new wxMyImageInfo( filename.GetFullPath() ) );
 
             index = g_myImageArray.GetCount() - 1;
         }
@@ -303,8 +304,8 @@ void wxAdvImageFileProperty::OnSetValue()
         if ( !g_myImageArray[index].m_pThumbnail2 )
         {
             // Load if file exists.
-            if ( m_filename.FileExists() )
-                m_pImage = new wxImage( m_filename.GetFullPath() );
+            if ( filename.FileExists() )
+                m_pImage = new wxImage( filename.GetFullPath() );
         }
 
         m_index = index;
@@ -365,9 +366,10 @@ void wxAdvImageFileProperty::LoadThumbnails( size_t index )
 
     if ( !mii.m_pThumbnail2 )
     {
+        wxFileName filename = GetFileName();
 
         if ( !m_pImage || !m_pImage->Ok() ||
-             m_filename != mii.m_path
+             filename != mii.m_path
            )
         {
             if ( m_pImage )

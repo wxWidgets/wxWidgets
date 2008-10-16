@@ -229,6 +229,12 @@
 // (for tree buttons)
 //#undef wxPG_ICON_WIDTH
 
+#if WXWIN_COMPATIBILITY_2_6 || WXWIN_COMPATIBILITY_2_8
+    #define wxPG_COMPATIBILITY_1_4      1
+#else
+    #define wxPG_COMPATIBILITY_1_4      0
+#endif
+
 // Need to force disable tooltips?
 #if !wxUSE_TOOLTIPS
     #undef wxPG_SUPPORT_TOOLTIPS
@@ -332,7 +338,10 @@ WX_DECLARE_STRING_HASH_MAP_WITH_DECL(void*,
                                      wxPGHashMapS2P,
                                      class WXDLLIMPEXP_PROPGRID);
 
-
+WX_DECLARE_STRING_HASH_MAP_WITH_DECL(wxString,
+                                     wxPGHashMapS2S,
+                                     class WXDLLIMPEXP_PROPGRID);
+ 
 WX_DECLARE_VOIDPTR_HASH_MAP_WITH_DECL(void*,
                                       wxPGHashMapP2P,
                                       class WXDLLIMPEXP_PROPGRID);
@@ -392,7 +401,11 @@ enum wxPG_MISC_ARG_FLAGS
 
     // Means property for which final string value is for can not really be
     // edited.
-    wxPG_UNEDITABLE_COMPOSITE_FRAGMENT  = 0x00000020
+    wxPG_UNEDITABLE_COMPOSITE_FRAGMENT  = 0x00000020,
+
+    // ValueToString() called from GetValueAsString()
+    // (guarantees that input wxVariant value is current own value)
+    wxPG_VALUE_IS_CURRENT               = 0x00000040
 };
 
 // -----------------------------------------------------------------------

@@ -513,16 +513,29 @@ wxArrayDoubleProperty::~wxArrayDoubleProperty () { }
 
 void wxArrayDoubleProperty::OnSetValue()
 {
+    // Generate cached display string, to optimize grid drawing
     GenerateValueAsString( m_display, m_precision, true );
 }
 
-wxString wxArrayDoubleProperty::GetValueAsString( int arg_flags ) const
+wxString wxArrayDoubleProperty::ValueToString( wxVariant& value,
+                                               int argFlags ) const
 {
-    if ( !(arg_flags & wxPG_FULL_VALUE ))
-        return m_display;
-
     wxString s;
-    GenerateValueAsString(s,-1,false);
+
+    if ( argFlags & wxPG_FULL_VALUE )
+    {
+        GenerateValueAsString(s,-1,false);
+    }
+    else
+    {
+        //
+        // Display cached string only if value truly matches m_value
+        if ( value.GetData() == m_value.GetData() )
+            return m_display;
+        else
+            GenerateValueAsString( s, m_precision, true );
+    }
+
     return s;
 }
 

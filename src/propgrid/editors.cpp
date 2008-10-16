@@ -236,7 +236,8 @@ wxPGWindowList wxPGTextCtrlEditor::CreateControls( wxPropertyGrid* propGrid,
         return (wxWindow*) NULL;
 
     if ( !property->IsValueUnspecified() )
-        text = property->GetValueString(property->HasFlag(wxPG_PROP_READONLY)?0:wxPG_EDITABLE_VALUE);
+        text = property->GetValueAsString(property->HasFlag(wxPG_PROP_READONLY) ?
+                                            0 : wxPG_EDITABLE_VALUE);
 
     int flags = 0;
     if ( (property->GetFlags() & wxPG_PROP_PASSWORD) &&
@@ -620,7 +621,7 @@ void wxPropertyGrid::OnComboItemPaint( wxPGCustomComboControl* pCc,
         else
         {
             if ( !p->IsValueUnspecified() )
-                text = p->GetValueString(0);
+                text = p->GetValueAsString(0);
         }
     }
 
@@ -1020,7 +1021,7 @@ WX_PG_IMPLEMENT_INTERNAL_EDITOR_CLASS(ComboBox,
 void wxPGComboBoxEditor::UpdateControl( wxPGProperty* property, wxWindow* ctrl ) const
 {
     wxOwnerDrawnComboBox* cb = (wxOwnerDrawnComboBox*)ctrl;
-    cb->SetValue(property->GetValueString(wxPG_EDITABLE_VALUE));
+    cb->SetValue(property->GetValueAsString(wxPG_EDITABLE_VALUE));
 
     // TODO: If string matches any selection, then select that.
 }
@@ -1801,7 +1802,7 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrlAndButton( const wxPoint& pos,
     wxString text;
 
     if ( !property->IsValueUnspecified() )
-        text = property->GetValueString(property->HasFlag(wxPG_PROP_READONLY)?0:wxPG_EDITABLE_VALUE);
+        text = property->GetValueAsString(property->HasFlag(wxPG_PROP_READONLY)?0:wxPG_EDITABLE_VALUE);
 
     return GenerateEditorTextCtrl(pos,sz,text,but,property->m_maxLen);
 }

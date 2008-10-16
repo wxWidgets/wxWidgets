@@ -43,6 +43,12 @@
 
 #define PWC_CHILD_SUMMARY_CHAR_LIMIT    64 // Character limit of summary field when not editing
 
+#if wxPG_COMPATIBILITY_1_4
+
+// Used to establish backwards compatiblity
+const char* g_invalidStringContent = "@__TOTALLY_INVALID_STRING__@";
+
+#endif
 
 // -----------------------------------------------------------------------
 
@@ -220,7 +226,7 @@ void wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
             if ( column == 0 )
                 text = property->GetLabel();
             else if ( column == 1 )
-                text = property->GetValueString();
+                text = property->GetValueAsString();
             else
                 text = wxEmptyString;
         }
@@ -274,7 +280,7 @@ void wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
                 imageOffset = paintdata.m_drawnWidth;
             }
 
-            text = property->GetValueString();
+            text = property->GetValueAsString();
 
             // Add units string?
             if ( propertyGrid->GetColumnCount() <= 2 )
@@ -422,6 +428,13 @@ void wxPGProperty::InitAfterAdded( wxPropertyGridPageState* pageState,
     bool parentIsRoot = parent->IsKindOf(CLASSINFO(wxPGRootProperty));
 
     m_parentState = pageState;
+
+#if wxPG_COMPATIBILITY_1_4
+    // Make sure deprecated virtual functions are not implemented
+    wxString s = GetValueAsString( 0xFFFF );
+    wxASSERT_MSG( s == g_invalidStringContent,
+                  "Implement ValueToString() instead of GetValueAsString()" );
+#endif
 
     if ( !parentIsRoot )
     {
@@ -651,7 +664,10 @@ wxString wxPGProperty::GetColumnText( unsigned int col ) const
     return wxEmptyString;
 }
 
-void wxPGProperty::GenerateComposedValue( wxString& text, int argFlags ) const
+void wxPGProperty::GenerateComposedValue( wxString& text,
+                                          int argFlags,
+                                          const wxVariantList* valueOverrides,
+                                          wxPGHashMapS2S* childResults ) const
 {
     int i;
     int iMax = m_children.size();
@@ -671,11 +687,64 @@ void wxPGProperty::GenerateComposedValue( wxString& text, int argFlags ) const
 
     wxPGProperty* curChild = m_children[0];
 
+    bool overridesLeft = false;
+    wxVariant overrideValue;
+    wxVariantList::const_iterator node;
+
+    if ( valueOverrides )
+    {
+        node = valueOverrides->begin();
+        if ( node != valueOverrides->end() )
+        {
+            overrideValue = *node;
+            overridesLeft = true;
+        }
+    }
+
     for ( i = 0; i < iMax; i++ )
     {
+        wxVariant childValue;
+
+        wxString childLabel = curChild->GetLabel();
+
+        // Check for value override
+        if ( overridesLeft && overrideValue.GetName() == childLabel )
+        {
+            if ( !overrideValue.IsNull() )
+                childValue = overrideValue;
+            else
+                childValue = curChild->GetValue();
+            node++;
+            if ( node != valueOverrides->end() )
+                overrideValue = *node;
+            else
+                overridesLeft = false;
+        }
+        else
+        {
+            childValue = curChild->GetValue();
+        }
+
         wxString s;
-        if ( !curChild->IsValueUnspecified() )
-            s = curChild->GetValueString(argFlags|wxPG_COMPOSITE_FRAGMENT);
+        if ( !childValue.IsNull() )
+        {
+            if ( overridesLeft &&
+                 curChild->HasFlag(wxPG_PROP_COMPOSED_VALUE) &&
+                 childValue.GetType() == wxPG_VARIANT_TYPE_LIST )
+            {
+                wxVariantList& childList = childValue.GetList();
+                GenerateComposedValue(s, argFlags|wxPG_COMPOSITE_FRAGMENT,
+                                      &childList, childResults);
+            }
+            else
+            {
+                s = curChild->ValueToString(childValue,
+                                            argFlags|wxPG_COMPOSITE_FRAGMENT);
+            }
+        }
+ 
+        if ( childResults && curChild->GetChildCount() )
+            (*childResults)[curChild->GetName()] = s;
 
         bool skip = false;
         if ( (argFlags & wxPG_UNEDITABLE_COMPOSITE_FRAGMENT) && !s.length() )
@@ -714,24 +783,45 @@ void wxPGProperty::GenerateComposedValue( wxString& text, int argFlags ) const
         text += wxS("; ...");
 }
 
-wxString wxPGProperty::GetValueAsString( int argFlags ) const
+wxString wxPGProperty::ValueToString( wxVariant& WXUNUSED(value),
+                                      int argFlags ) const
 {
     wxCHECK_MSG( GetChildCount() > 0,
                  wxString(),
-                 wxT("If user property does not have any children, it must override GetValueAsString") );
+                 "If user property does not have any children, it must "
+                 "override GetValueAsString" );
+
+    // FIXME: Currently code below only works if value is actually m_value
+    wxASSERT_MSG( argFlags & wxPG_VALUE_IS_CURRENT,
+                  "Sorry, currently default wxPGProperty::ValueToString() "
+                  "implementation only works if value is m_value." );
 
     wxString text;
     GenerateComposedValue(text, argFlags);
     return text;
 }
 
-wxString wxPGProperty::GetValueString( int argFlags ) const
+wxString wxPGProperty::GetValueAsString( int argFlags ) const
 {
+#if wxPG_COMPATIBILITY_1_4
+    // This is backwards compatibility test
+    // That is, to make sure this function is not overridden
+    // (instead, ValueToString() should be).
+    if ( argFlags == 0xFFFF )
+    {
+        // Do not override! (for backwards compliancy)
+        return g_invalidStringContent;
+    }
+#endif
+
     if ( IsValueUnspecified() )
         return wxEmptyString;
 
     if ( m_commonValue == -1 )
-        return GetValueAsString(argFlags);
+    {
+        wxVariant value(GetValue());
+        return ValueToString(value, argFlags|wxPG_VALUE_IS_CURRENT);
+    }
 
     //
     // Return common value's string representation
@@ -750,6 +840,11 @@ wxString wxPGProperty::GetValueString( int argFlags ) const
     {
         return cv->GetLabel();
     }
+}
+
+wxString wxPGProperty::GetValueString( int argFlags ) const
+{
+    return GetValueAsString(argFlags);
 }
 
 bool wxPGProperty::IntToValue( wxVariant& variant, int number, int WXUNUSED(argFlags) ) const
@@ -2020,7 +2115,7 @@ wxPGProperty* wxPGProperty::UpdateParentValues()
          !parent->IsCategory() && !parent->IsRoot() )
     {
         wxString s;
-        parent->GenerateComposedValue(s, 0);
+        parent->GenerateComposedValue(s);
         parent->m_value = s;
         return parent->UpdateParentValues();
     }
@@ -2134,7 +2229,8 @@ wxPropertyCategory::~wxPropertyCategory()
 }
 
 
-wxString wxPropertyCategory::GetValueAsString( int ) const
+wxString wxPropertyCategory::ValueToString( wxVariant& WXUNUSED(value),
+                                            int WXUNUSED(argFlags) ) const
 {
     return wxEmptyString;
 }

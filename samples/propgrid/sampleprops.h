@@ -113,7 +113,7 @@ public:
     virtual ~wxArrayDoubleProperty ();
 
     virtual void OnSetValue();
-    virtual wxString GetValueAsString( int argFlags = 0 ) const;
+    virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
     virtual bool StringToValue( wxVariant& variant,
                                 const wxString& text,
                                 int argFlags = 0 ) const;

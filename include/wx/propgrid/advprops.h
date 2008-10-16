@@ -180,7 +180,7 @@ public:
                    const wxFont& value = wxFont());
     virtual ~wxFontProperty();
     virtual void OnSetValue();
-    virtual wxString GetValueAsString( int argFlags = 0 ) const;
+    virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
     virtual bool OnEvent( wxPropertyGrid* propgrid,
                           wxWindow* primary, wxEvent& event );
     virtual void ChildChanged( wxVariant& thisValue,
@@ -231,7 +231,7 @@ public:
     */
     virtual int GetCustomColourIndex() const;
 
-    virtual wxString GetValueAsString( int argFlags = 0 ) const;
+    virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
     virtual bool StringToValue( wxVariant& variant,
                                 const wxString& text,
                                 int argFlags = 0 ) const;
@@ -292,7 +292,7 @@ public:
     virtual ~wxColourProperty();
 
 protected:
-    virtual wxString GetValueAsString( int argFlags ) const;
+    virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
     virtual wxColour GetColour( int index ) const;
     virtual wxVariant DoTranslateVal( wxColourPropertyValue& v ) const;
 
@@ -392,7 +392,7 @@ public:
     virtual ~wxMultiChoiceProperty();
 
     virtual void OnSetValue();
-    virtual wxString GetValueAsString( int flags = 0 ) const;
+    virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
     virtual bool StringToValue(wxVariant& variant,
                                const wxString& text,
                                int argFlags = 0) const;
@@ -406,7 +406,7 @@ public:
 
 protected:
 
-    void GenerateValueAsString();
+    void GenerateValueAsString( wxString* target ) const;
 
     // Returns translation of values into string indices.
     wxArrayInt GetValueAsIndices() const;
@@ -442,7 +442,7 @@ public:
                     const wxDateTime& value = wxDateTime() );
     virtual ~wxDateProperty();
 
-    virtual wxString GetValueAsString( int flags = 0 ) const;
+    virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
     virtual bool StringToValue(wxVariant& variant,
                                const wxString& text,
                                int argFlags = 0) const;

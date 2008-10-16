@@ -522,9 +522,10 @@ void wxFontProperty::OnSetValue()
     }
 }
 
-wxString wxFontProperty::GetValueAsString( int argFlags ) const
+wxString wxFontProperty::ValueToString( wxVariant& value,
+                                        int argFlags ) const
 {
-    return wxPGProperty::GetValueAsString(argFlags);
+    return wxPGProperty::ValueToString(value, argFlags);
 }
 
 bool wxFontProperty::OnEvent( wxPropertyGrid* propgrid, wxWindow* WXUNUSED(primary),
@@ -999,24 +1000,12 @@ wxString wxSystemColourProperty::ColourToString( const wxColour& col, int index 
         return m_choices.GetLabel(index);
 }
 
-wxString wxSystemColourProperty::GetValueAsString( int argFlags ) const
+wxString wxSystemColourProperty::ValueToString( wxVariant& value,
+                                                int WXUNUSED(argFlags) ) const
 {
-    wxColourPropertyValue val = GetVal();
+    wxColourPropertyValue val = GetVal(&value);
 
-    int ind = GetIndex();
-
-    // Always show custom colour for textctrl-editor
-    if ( val.m_type == wxPG_COLOUR_CUSTOM ||
-         ind == GetCustomColourIndex() ||
-         (argFlags & wxPG_PROPERTY_SPECIFIC) )
-    {
-        return ColourToString(val.m_colour, wxNOT_FOUND);
-    }
-
-    if ( ind == -1 )
-        return wxEmptyString;
-
-    return ColourToString(val.m_colour, ind);
+    return ColourToString(val.m_colour, m_choices.Index(val.m_type));
 }
 
 
@@ -1392,7 +1381,8 @@ void wxColourProperty::Init( wxColour colour )
     SetIndex( ind );
 }
 
-wxString wxColourProperty::GetValueAsString( int argFlags ) const
+wxString wxColourProperty::ValueToString( wxVariant& value,
+                                          int argFlags ) const
 {
     const wxPGEditor* editor = GetEditorClass();
     if ( editor != wxPGEditor_Choice &&
@@ -1400,7 +1390,7 @@ wxString wxColourProperty::GetValueAsString( int argFlags ) const
          editor != wxPGEditor_ComboBox )
         argFlags |= wxPG_PROPERTY_SPECIFIC;
 
-    return wxSystemColourProperty::GetValueAsString(argFlags);
+    return wxSystemColourProperty::ValueToString(value, argFlags);
 }
 
 wxColour wxColourProperty::GetColour( int index ) const
@@ -1651,10 +1641,12 @@ void wxImageFileProperty::OnSetValue()
         m_pBitmap = NULL;
     }
 
+    wxFileName filename = GetFileName();
+
     // Create the image thumbnail
-    if ( m_filename.FileExists() )
+    if ( filename.FileExists() )
     {
-        m_pImage = new wxImage( m_filename.GetFullPath() );
+        m_pImage = new wxImage( filename.GetFullPath() );
     }
 }
 
@@ -1739,22 +1731,29 @@ wxMultiChoiceProperty::~wxMultiChoiceProperty()
 
 void wxMultiChoiceProperty::OnSetValue()
 {
-    GenerateValueAsString();
+    GenerateValueAsString(&m_display);
 }
 
-wxString wxMultiChoiceProperty::GetValueAsString( int ) const
+wxString wxMultiChoiceProperty::ValueToString( wxVariant& value,
+                                               int argFlags ) const
 {
-    return m_display;
+    // If possible, use cached string
+    if ( argFlags & wxPG_VALUE_IS_CURRENT )
+        return m_display;
+
+    wxString s;
+    GenerateValueAsString(&s);
+    return s;
 }
 
-void wxMultiChoiceProperty::GenerateValueAsString()
+void wxMultiChoiceProperty::GenerateValueAsString( wxString* target ) const
 {
     wxArrayString strings;
 
     if ( m_value.GetType() == wxPG_VARIANT_TYPE_ARRSTRING )
         strings = m_value.GetArrayString();
 
-    wxString& tempStr = m_display;
+    wxString& tempStr = *target;
     unsigned int i;
     unsigned int itemCount = strings.size();
 
@@ -1951,11 +1950,12 @@ bool wxDateProperty::StringToValue( wxVariant& variant, const wxString& text,
     return false;
 }
 
-wxString wxDateProperty::GetValueAsString( int argFlags ) const
+wxString wxDateProperty::ValueToString( wxVariant& value,
+                                        int argFlags ) const
 {
     const wxChar* format = (const wxChar*) NULL;
 
-    wxDateTime dateTime = m_value.GetDateTime();
+    wxDateTime dateTime = value.GetDateTime();
 
     if ( !dateTime.IsValid() )
         return wxT("Invalid");

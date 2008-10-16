@@ -79,22 +79,30 @@ void wxStringProperty::OnSetValue()
     if ( HasFlag(wxPG_PROP_COMPOSED_VALUE) )
     {
         wxString s;
-        GenerateComposedValue(s, 0);
+        GenerateComposedValue(s);
         m_value = s;
     }
 }
 
 wxStringProperty::~wxStringProperty() { }
 
-wxString wxStringProperty::GetValueAsString( int argFlags ) const
+wxString wxStringProperty::ValueToString( wxVariant& value,
+                                          int argFlags ) const
 {
-    wxString s = m_value.GetString();
+    wxString s = value.GetString();
 
     if ( GetChildCount() && HasFlag(wxPG_PROP_COMPOSED_VALUE) )
     {
         // Value stored in m_value is non-editable, non-full value
         if ( (argFlags & wxPG_FULL_VALUE) || (argFlags & wxPG_EDITABLE_VALUE) )
+        {
+            // Calling this under incorrect conditions will fail
+            wxASSERT_MSG( argFlags & wxPG_VALUE_IS_CURRENT,
+                          "Sorry, currently default wxPGProperty::ValueToString() "
+                          "implementation only works if value is m_value." );
+
             GenerateComposedValue(s, argFlags);
+        }
 
         return s;
     }
@@ -154,16 +162,17 @@ wxIntProperty::wxIntProperty( const wxString& label, const wxString& name,
 
 wxIntProperty::~wxIntProperty() { }
 
-wxString wxIntProperty::GetValueAsString( int ) const
+wxString wxIntProperty::ValueToString( wxVariant& value,
+                                       int WXUNUSED(argFlags) ) const
 {
-    if ( m_value.GetType() == wxPG_VARIANT_TYPE_LONG )
+    if ( value.GetType() == wxPG_VARIANT_TYPE_LONG )
     {
-        return wxString::Format(wxS("%li"),m_value.GetLong());
+        return wxString::Format(wxS("%li"),value.GetLong());
     }
-    else if ( m_value.GetType() == wxLongLong_VariantType )
+    else if ( value.GetType() == wxLongLong_VariantType )
     {
 	    wxLongLong ll;
-        ll << m_value;
+        ll << value;
 	    return ll.ToString();
     }
 
@@ -388,19 +397,20 @@ wxUIntProperty::wxUIntProperty( const wxString& label, const wxString& name,
 
 wxUIntProperty::~wxUIntProperty() { }
 
-wxString wxUIntProperty::GetValueAsString( int ) const
+wxString wxUIntProperty::ValueToString( wxVariant& value,
+                                        int WXUNUSED(argFlags) ) const
 {
     size_t index = m_base + m_prefix;
     if ( index >= wxPG_UINT_TEMPLATE_MAX )
         index = wxPG_BASE_DEC;
 
-    if ( m_value.GetType() == wxPG_VARIANT_TYPE_LONG )
+    if ( value.GetType() == wxPG_VARIANT_TYPE_LONG )
     {
-        return wxString::Format(gs_uintTemplates32[index], (unsigned long)m_value.GetLong());
+        return wxString::Format(gs_uintTemplates32[index], (unsigned long)value.GetLong());
     }
 
     wxULongLong ull;
-    ull << m_value;
+    ull << value;
 
     return wxString::Format(gs_uintTemplates64[index], ull.GetValue());
 }
@@ -612,13 +622,14 @@ void wxPropertyGrid::DoubleToString(wxString& target,
     }
 }
 
-wxString wxFloatProperty::GetValueAsString( int argFlags ) const
+wxString wxFloatProperty::ValueToString( wxVariant& value,
+                                         int argFlags ) const
 {
     wxString text;
-    if ( !m_value.IsNull() )
+    if ( !value.IsNull() )
     {
         wxPropertyGrid::DoubleToString(text,
-                                       m_value,
+                                       value,
                                        m_precision,
                                        !(argFlags & wxPG_FULL_VALUE),
                                        (wxString*) NULL);
@@ -766,15 +777,16 @@ wxBoolProperty::wxBoolProperty( const wxString& label, const wxString& name, boo
 
 wxBoolProperty::~wxBoolProperty() { }
 
-wxString wxBoolProperty::GetValueAsString( int argFlags ) const
+wxString wxBoolProperty::ValueToString( wxVariant& value,
+                                        int argFlags ) const
 {
-    bool value = m_value.GetBool();
+    bool boolValue = value.GetBool();
 
     // As a fragment of composite string value,
     // make it a little more readable.
     if ( argFlags & wxPG_COMPOSITE_FRAGMENT )
     {
-        if ( value )
+        if ( boolValue )
         {
             return m_label;
         }
@@ -795,12 +807,12 @@ wxString wxBoolProperty::GetValueAsString( int argFlags ) const
 
     if ( !(argFlags & wxPG_FULL_VALUE) )
     {
-        return wxPGGlobalVars->m_boolChoices[value?1:0].GetText();
+        return wxPGGlobalVars->m_boolChoices[boolValue?1:0].GetText();
     }
 
     wxString text;
 
-    if (value) text = wxS("true");
+    if ( boolValue ) text = wxS("true");
     else text = wxS("false");
 
     return text;
@@ -915,20 +927,17 @@ bool wxBaseEnumProperty::ValidateValue( wxVariant& value, wxPGValidationInfo& WX
     return true;
 }
 
-wxString wxBaseEnumProperty::GetValueAsString( int ) const
+wxString wxBaseEnumProperty::ValueToString( wxVariant& value,
+                                            int WXUNUSED(argFlags) ) const
 {
-    if ( m_value.GetType() == wxPG_VARIANT_TYPE_STRING )
-        return m_value.GetString();
+    if ( value.GetType() == wxPG_VARIANT_TYPE_STRING )
+        return value.GetString();
 
-    if ( m_index >= 0 )
-    {
-        int unusedVal;
-        const wxString* pstr = GetEntry( m_index, &unusedVal );
+    int index = m_choices.Index(value.GetLong());
+    if ( index < 0 )
+        return wxEmptyString;
 
-        if ( pstr )
-            return *pstr;
-    }
-    return wxEmptyString;
+    return m_choices.GetLabel(index);
 }
 
 bool wxBaseEnumProperty::StringToValue( wxVariant& variant, const wxString& text, int argFlags ) const
@@ -1407,14 +1416,15 @@ void wxFlagsProperty::OnSetValue()
     }
 }
 
-wxString wxFlagsProperty::GetValueAsString( int ) const
+wxString wxFlagsProperty::ValueToString( wxVariant& value,
+                                         int WXUNUSED(argFlags) ) const
 {
     wxString text;
 
     if ( !m_choices.IsOk() )
         return text;
 
-    long flags = m_value;
+    long flags = value;
     unsigned int i;
     const wxPGChoices& choices = m_choices;
 
@@ -1602,7 +1612,8 @@ bool wxPGFileDialogAdapter::DoShowDialog( wxPropertyGrid* propGrid, wxPGProperty
     if ( property->IsKindOf(CLASSINFO(wxFileProperty)) )
     {
         fileProp = ((wxFileProperty*)property);
-        path = fileProp->m_filename.GetPath();
+        wxFileName filename = fileProp->GetValue().GetString();
+        path = filename.GetPath();
         indFilter = fileProp->m_indFilter;
 
         if ( !path.length() && fileProp->m_basePath.length() )
@@ -1688,18 +1699,17 @@ void wxFileProperty::OnSetValue()
 {
     const wxString& fnstr = m_value.GetString();
 
-    m_filename = fnstr;
+    wxFileName filename = fnstr;
 
-    if ( !m_filename.HasName() )
+    if ( !filename.HasName() )
     {
         m_value = wxPGVariant_EmptyString;
-        m_filename.Clear();
     }
 
     // Find index for extension.
     if ( m_indFilter < 0 && fnstr.length() )
     {
-        wxString ext = m_filename.GetExt();
+        wxString ext = filename.GetExt();
         int curind = 0;
         size_t pos = 0;
         size_t len = m_wildcard.length();
@@ -1736,29 +1746,44 @@ void wxFileProperty::OnSetValue()
     }
 }
 
-wxString wxFileProperty::GetValueAsString( int argFlags ) const
+wxFileName wxFileProperty::GetFileName() const
 {
-    // Always return empty string when name component is empty
-    wxString fullName = m_filename.GetFullName();
+    wxFileName filename;
+
+    if ( !m_value.IsNull() )
+        filename = m_value.GetString();
+
+    return filename;
+}
+
+wxString wxFileProperty::ValueToString( wxVariant& value,
+                                        int argFlags ) const
+{
+    wxFileName filename = value.GetString();
+
+    if ( !filename.HasName() )
+        return wxEmptyString;
+
+    wxString fullName = filename.GetFullName();
     if ( !fullName.length() )
-        return fullName;
+        return wxEmptyString;
 
     if ( argFlags & wxPG_FULL_VALUE )
     {
-        return m_filename.GetFullPath();
+        return filename.GetFullPath();
     }
     else if ( m_flags & wxPG_PROP_SHOW_FULL_FILENAME )
     {
         if ( m_basePath.Length() )
         {
-            wxFileName fn2(m_filename);
+            wxFileName fn2(filename);
             fn2.MakeRelativeTo(m_basePath);
             return fn2.GetFullPath();
         }
-        return m_filename.GetFullPath();
+        return filename.GetFullPath();
     }
 
-    return m_filename.GetFullName();
+    return filename.GetFullName();
 }
 
 wxPGEditorDialogAdapter* wxFileProperty::GetEditorDialog() const
@@ -1768,9 +1793,11 @@ wxPGEditorDialogAdapter* wxFileProperty::GetEditorDialog() const
 
 bool wxFileProperty::StringToValue( wxVariant& variant, const wxString& text, int argFlags ) const
 {
+    wxFileName filename = variant.GetString();
+
     if ( (m_flags & wxPG_PROP_SHOW_FULL_FILENAME) || (argFlags & wxPG_FULL_VALUE) )
     {
-        if ( m_filename != text )
+        if ( filename != text )
         {
             variant = text;
             return true;
@@ -1778,9 +1805,9 @@ bool wxFileProperty::StringToValue( wxVariant& variant, const wxString& text, in
     }
     else
     {
-        if ( m_filename.GetFullName() != text )
+        if ( filename.GetFullName() != text )
         {
-            wxFileName fn = m_filename;
+            wxFileName fn = filename;
             fn.SetFullName(text);
             variant = fn.GetFullPath();
             return true;
@@ -1873,9 +1900,10 @@ wxLongStringProperty::wxLongStringProperty( const wxString& label, const wxStrin
 
 wxLongStringProperty::~wxLongStringProperty() {}
 
-wxString wxLongStringProperty::GetValueAsString( int ) const
+wxString wxLongStringProperty::ValueToString( wxVariant& value,
+                                              int WXUNUSED(argFlags) ) const
 {
-    return m_value;
+    return value;
 }
 
 bool wxLongStringProperty::OnEvent( wxPropertyGrid* propGrid, wxWindow* WXUNUSED(primary),
@@ -2396,9 +2424,23 @@ void wxArrayStringProperty::OnSetValue()
     GenerateValueAsString();
 }
 
-wxString wxArrayStringProperty::GetValueAsString( int WXUNUSED(argFlags) ) const
+#define ARRSTRPROP_ARRAY_TO_STRING(STRING,ARRAY) \
+    wxPropertyGrid::ArrayStringToString(STRING,ARRAY,wxS('"'),wxS('"'),1)
+
+wxString wxArrayStringProperty::ValueToString( wxVariant& WXUNUSED(value),
+                                               int argFlags ) const
 {
-    return m_display;
+    //
+    // If this is called from GetValueAsString(), return cached string
+    if ( argFlags & wxPG_VALUE_IS_CURRENT )
+    {
+        return m_display;
+    }
+
+    wxArrayString arr = m_value.GetArrayString();
+    wxString s;
+    ARRSTRPROP_ARRAY_TO_STRING(s, arr);
+    return s;
 }
 
 // Converts wxArrayString to a string separated by delimeters and spaces.
@@ -2461,13 +2503,10 @@ void wxPropertyGrid::ArrayStringToString( wxString& dst, const wxArrayString& sr
     }
 }
 
-#define ARRSTRPROP_ARRAY_TO_STRING(STRING,ARRAY) \
-    wxPropertyGrid::ArrayStringToString(STRING,ARRAY,wxS('"'),wxS('"'),1);
-
 void wxArrayStringProperty::GenerateValueAsString()
 {
     wxArrayString arr = m_value.GetArrayString();
-    ARRSTRPROP_ARRAY_TO_STRING(m_display, arr)
+    ARRSTRPROP_ARRAY_TO_STRING(m_display, arr);
 }
 
 // Default implementation doesn't do anything.
@@ -2525,7 +2564,7 @@ bool wxArrayStringProperty::OnButtonClick( wxPropertyGrid* propGrid,
             {
                 wxArrayString actualValue = value.GetArrayString();
                 wxString tempStr;
-                ARRSTRPROP_ARRAY_TO_STRING(tempStr, actualValue)
+                ARRSTRPROP_ARRAY_TO_STRING(tempStr, actualValue);
             #if wxUSE_VALIDATORS
                 if ( dialogValidator.DoValidate( propGrid, validator, tempStr ) )
             #endif

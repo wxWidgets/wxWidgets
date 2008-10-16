@@ -106,7 +106,7 @@ public:
                       const wxString& value = wxEmptyString );
     virtual ~wxStringProperty();
 
-    virtual wxString GetValueAsString( int argFlags = 0 ) const;
+    virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
     virtual bool StringToValue( wxVariant& variant,
                                 const wxString& text,
                                 int argFlags = 0 ) const;
@@ -196,7 +196,7 @@ public:
     wxIntProperty( const wxString& label,
                    const wxString& name,
                    const wxLongLong& value );
-    virtual wxString GetValueAsString( int argFlags = 0 ) const;
+    virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
     virtual bool StringToValue( wxVariant& variant,
                                 const wxString& text,
                                 int argFlags = 0 ) const;
@@ -250,7 +250,7 @@ public:
     wxUIntProperty( const wxString& label,
                     const wxString& name,
                     const wxULongLong& value );
-    virtual wxString GetValueAsString( int argFlags = 0 ) const;
+    virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
     virtual bool StringToValue( wxVariant& variant,
                                 const wxString& text,
                                 int argFlags = 0 ) const;
@@ -287,7 +287,7 @@ public:
                      double value = 0.0 );
     virtual ~wxFloatProperty();
 
-    virtual wxString GetValueAsString( int argFlags = 0 ) const;
+    virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
     virtual bool StringToValue( wxVariant& variant,
                                 const wxString& text,
                                 int argFlags = 0 ) const;
@@ -330,7 +330,7 @@ public:
                     bool value = false );
     virtual ~wxBoolProperty();
 
-    virtual wxString GetValueAsString( int argFlags = 0 ) const;
+    virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
     virtual bool StringToValue( wxVariant& variant,
                                 const wxString& text,
                                 int argFlags = 0 ) const;
@@ -360,7 +360,7 @@ public:
                         const wxString& name = wxPG_LABEL );
 
     virtual void OnSetValue();
-    virtual wxString GetValueAsString( int argFlags ) const;
+    virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
     virtual bool StringToValue( wxVariant& variant,
                                 const wxString& text,
                                 int argFlags = 0 ) const;
@@ -553,7 +553,7 @@ public:
     virtual ~wxFlagsProperty ();
 
     virtual void OnSetValue();
-    virtual wxString GetValueAsString( int argFlags ) const;
+    virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
     virtual bool StringToValue( wxVariant& variant,
                                 const wxString& text,
                                 int flags ) const;
@@ -631,7 +631,7 @@ public:
     virtual ~wxFileProperty ();
 
     virtual void OnSetValue();
-    virtual wxString GetValueAsString( int argFlags ) const;
+    virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
     virtual bool StringToValue( wxVariant& variant,
                                 const wxString& text,
                                 int argFlags = 0 ) const;
@@ -641,12 +641,16 @@ public:
     static wxValidator* GetClassValidator();
     virtual wxValidator* DoGetValidator() const;
 
+    /**
+        Returns filename to file represented by current value.
+    */
+    wxFileName GetFileName() const;
+
 protected:
     wxString    m_wildcard;
     wxString    m_basePath; // If set, then show path relative to it
     wxString    m_initialPath; // If set, start the file dialog here
     wxString    m_dlgTitle; // If set, used as title for file dialog
-    wxFileName  m_filename; // used as primary storage
     int         m_indFilter; // index to the selected filter
 };
 
@@ -682,7 +686,7 @@ public:
                           const wxString& value = wxEmptyString );
     virtual ~wxLongStringProperty();
 
-    virtual wxString GetValueAsString( int argFlags = 0 ) const;
+    virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
     virtual bool StringToValue( wxVariant& variant,
                                 const wxString& text,
                                 int argFlags = 0 ) const;
@@ -761,7 +765,7 @@ public:
     virtual ~wxArrayStringProperty();
 
     virtual void OnSetValue();
-    virtual wxString GetValueAsString( int argFlags = 0 ) const;
+    virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
     virtual bool StringToValue( wxVariant& variant,
                                 const wxString& text,
                                 int argFlags = 0 ) const;
