@@ -720,6 +720,8 @@ bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect la
 
 void wxDataViewRendererBase::CancelEditing()
 {
+    if (!m_editorCtrl) return;
+    
     GetOwner()->GetOwner()->GetMainWindow()->SetFocus();
 
     m_editorCtrl->Hide();
@@ -728,6 +730,8 @@ void wxDataViewRendererBase::CancelEditing()
 
 bool wxDataViewRendererBase::FinishEditing()
 {
+    if (!m_editorCtrl) return true;
+
     wxVariant value;
     GetValueFromEditorCtrl( m_editorCtrl, value );
 
