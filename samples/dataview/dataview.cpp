@@ -1031,7 +1031,7 @@ void MyFrame::OnExpanding( wxDataViewEvent &event )
         return;
 
     wxString title = m_music_model->GetTitle( event.GetItem() );
-    wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING, Item: %s"), title.GetData() );
+    wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING, Item: %s"), title );
 }
 
 
@@ -1041,7 +1041,7 @@ void MyFrame::OnEditingStarted( wxDataViewEvent &event )
         return;
 
     wxString title = m_music_model->GetTitle( event.GetItem() );
-    wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED, Item: %s"), title.GetData() );
+    wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED, Item: %s"), title );
 }
 
 void MyFrame::OnEditingDone( wxDataViewEvent &event )
@@ -1050,7 +1050,7 @@ void MyFrame::OnEditingDone( wxDataViewEvent &event )
         return;
 
     wxString title = m_music_model->GetTitle( event.GetItem() );
-    wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE, Item: %s"), title.GetData() );
+    wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE, Item: %s"), title );
 }
 
 void MyFrame::OnExpanded( wxDataViewEvent &event )
@@ -1059,7 +1059,7 @@ void MyFrame::OnExpanded( wxDataViewEvent &event )
         return;
 
     wxString title = m_music_model->GetTitle( event.GetItem() );
-    wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDED, Item: %s"), title.GetData() );
+    wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDED, Item: %s"), title );
 }
 
 void MyFrame::OnCollapsing( wxDataViewEvent &event )
@@ -1068,7 +1068,7 @@ void MyFrame::OnCollapsing( wxDataViewEvent &event )
         return;
 
     wxString title = m_music_model->GetTitle( event.GetItem() );
-    wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING, Item: %s"), title.GetData() );
+    wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING, Item: %s"), title );
 }
 
 void MyFrame::OnCollapsed( wxDataViewEvent &event )
@@ -1077,7 +1077,7 @@ void MyFrame::OnCollapsed( wxDataViewEvent &event )
         return;
 
     wxString title = m_music_model->GetTitle( event.GetItem() );
-    wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSED, Item: %s"),title.GetData());
+    wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSED, Item: %s"),title);
 }
 
 void MyFrame::OnContextMenu( wxDataViewEvent &event )
@@ -1086,7 +1086,7 @@ void MyFrame::OnContextMenu( wxDataViewEvent &event )
         return;
 
     wxString title = m_music_model->GetTitle( event.GetItem() );
-    wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, Item: %s"),title.GetData());
+    wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, Item: %s"),title );
 
     wxMenu menu;
     menu.Append( 1, wxT("entry 1") );
