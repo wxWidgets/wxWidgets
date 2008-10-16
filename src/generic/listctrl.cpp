@@ -5046,7 +5046,7 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
     m_headerHeight = 0;
 
     // just like in other ports, an assert will fail if the user doesn't give any type style:
-    wxASSERT_MSG( !(style & wxLC_MASK_TYPE),
+    wxASSERT_MSG( (style & wxLC_MASK_TYPE),
                   _T("wxListCtrl style should have exactly one mode bit set") );
 
     if ( !wxControl::Create( parent, id, pos, size, style, validator, name ) )
