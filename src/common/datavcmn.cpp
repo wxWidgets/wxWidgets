@@ -765,6 +765,7 @@ BEGIN_EVENT_TABLE(wxDataViewEditorCtrlEvtHandler, wxEvtHandler)
     EVT_CHAR           (wxDataViewEditorCtrlEvtHandler::OnChar)
     EVT_KILL_FOCUS     (wxDataViewEditorCtrlEvtHandler::OnKillFocus)
     EVT_IDLE           (wxDataViewEditorCtrlEvtHandler::OnIdle)
+    EVT_TEXT_ENTER     (-1, wxDataViewEditorCtrlEvtHandler::OnTextEnter)
 END_EVENT_TABLE()
 
 wxDataViewEditorCtrlEvtHandler::wxDataViewEditorCtrlEvtHandler(
@@ -789,6 +790,12 @@ void wxDataViewEditorCtrlEvtHandler::OnIdle( wxIdleEvent &event )
     event.Skip();
 }
 
+void wxDataViewEditorCtrlEvtHandler::OnTextEnter( wxCommandEvent &WXUNUSED(event) )
+{
+    m_finished = true;
+    m_owner->FinishEditing();
+}
+
 void wxDataViewEditorCtrlEvtHandler::OnChar( wxKeyEvent &event )
 {
     switch ( event.m_keyCode )
@@ -799,10 +806,11 @@ void wxDataViewEditorCtrlEvtHandler::OnChar( wxKeyEvent &event )
             break;
 
         case WXK_ESCAPE:
+        {
             m_finished = true;
             m_owner->CancelEditing();
             break;
-
+        }
         default:
             event.Skip();
     }
@@ -1265,7 +1273,7 @@ wxControl* wxDataViewSpinRenderer::CreateEditorCtrl( wxWindow *parent, wxRect la
     wxString str;
     str.Printf( wxT("%d"), (int) l );
     wxSpinCtrl *sc = new wxSpinCtrl( parent, wxID_ANY, str,
-               labelRect.GetTopLeft(), size, wxSP_ARROW_KEYS, m_min, m_max, l );
+               labelRect.GetTopLeft(), size, wxSP_ARROW_KEYS|wxTE_PROCESS_ENTER, m_min, m_max, l );
 #ifdef __WXMAC__
     size = sc->GetSize();
     wxPoint pt = sc->GetPosition();

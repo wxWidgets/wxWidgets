@@ -41,8 +41,8 @@ static const wxCoord MARGIN = 3;
 class wxSpinCtrlText : public wxTextCtrl
 {
 public:
-    wxSpinCtrlText(wxSpinCtrl *spin, const wxString& value)
-        : wxTextCtrl(spin , wxID_ANY, value, wxDefaultPosition, wxSize(40, wxDefaultCoord))
+    wxSpinCtrlText(wxSpinCtrl *spin, const wxString& value, int style)
+        : wxTextCtrl(spin , wxID_ANY, value, wxDefaultPosition, wxSize(40, wxDefaultCoord), style )
     {
         m_spin = spin;
 
@@ -60,6 +60,13 @@ public:
     }
 
 protected:
+     void OnSetFocus(wxFocusEvent& event)
+     {
+         // delegate to parent control
+         event.SetEventObject( GetParent() );
+         GetParent()->HandleWindowEvent(event);
+     }
+     
      void OnKillFocus(wxFocusEvent& event)
      {
          long l;
@@ -96,6 +103,7 @@ protected:
              m_spin->m_oldValue = l;
          }
          
+         // delegate to parent control
          event.SetEventObject( GetParent() );
          GetParent()->HandleWindowEvent(event);
     }
@@ -136,7 +144,8 @@ private:
 
 BEGIN_EVENT_TABLE(wxSpinCtrlText, wxTextCtrl)
     EVT_TEXT(wxID_ANY, wxSpinCtrlText::OnTextChange)
-    EVT_KILL_FOCUS( wxSpinCtrlText::OnKillFocus)
+    EVT_SET_FOCUS(wxSpinCtrlText::OnSetFocus)
+    EVT_KILL_FOCUS(wxSpinCtrlText::OnKillFocus)
 END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
@@ -241,7 +250,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     }
 
     wxSize csize = size ;
-    m_text = new wxSpinCtrlText(this, value);
+    m_text = new wxSpinCtrlText(this, value, style & wxTE_PROCESS_ENTER ? wxTE_PROCESS_ENTER : 0 );
     m_btn = new wxSpinCtrlButton(this, style);
 
     m_btn->SetRange(min, max);

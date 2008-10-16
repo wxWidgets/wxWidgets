@@ -367,6 +367,7 @@ public:
 
 protected:
     void OnChar( wxKeyEvent &event );
+    void OnTextEnter( wxCommandEvent &event );
     void OnKillFocus( wxFocusEvent &event );
     void OnIdle( wxIdleEvent &event );
 
