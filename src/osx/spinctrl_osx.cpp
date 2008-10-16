@@ -60,7 +60,7 @@ public:
     }
 
 protected:
-     void OnKillFocus(wxFocusEvent& WXUNUSED(event))
+     void OnKillFocus(wxFocusEvent& event)
      {
          long l;
          if ( !GetValue().ToLong(&l) )
@@ -88,13 +88,16 @@ protected:
              m_spin->m_btn->SetValue( l );
 
              // if not
-             wxCommandEvent event(wxEVT_COMMAND_SPINCTRL_UPDATED, m_spin->GetId());
-             event.SetEventObject(m_spin);
-             event.SetInt(l);
-             m_spin->HandleWindowEvent(event);
+             wxCommandEvent cevent(wxEVT_COMMAND_SPINCTRL_UPDATED, m_spin->GetId());
+             cevent.SetEventObject(m_spin);
+             cevent.SetInt(l);
+             m_spin->HandleWindowEvent(cevent);
 
              m_spin->m_oldValue = l;
          }
+         
+         event.SetEventObject( GetParent() );
+         GetParent()->HandleWindowEvent(event);
     }
 
     void OnTextChange(wxCommandEvent& event)
