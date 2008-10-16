@@ -1949,13 +1949,7 @@ void FormMain::FinalizePanel( bool wasCreated )
     panelSizer->SetSizeHints( this );
 
     if ( wasCreated )
-    {
-        SetSize(
-            (wxSystemSettings::GetMetric(wxSYS_SCREEN_X)/10)*4,
-            (wxSystemSettings::GetMetric(wxSYS_SCREEN_Y)/10)*8
-            );
-        Centre();
-    }
+        FinalizeFramePosition();
 }
 
 void FormMain::PopulateGrid()
@@ -2209,15 +2203,19 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
     SetStatusText(wxEmptyString);
 #endif // wxUSE_STATUSBAR
 
+    FinalizeFramePosition();
+}
 
-    //
-    // Finalize
-    //
+void FormMain::FinalizeFramePosition()
+{
+    wxSize frameSize((wxSystemSettings::GetMetric(wxSYS_SCREEN_X)/10)*4,
+                     (wxSystemSettings::GetMetric(wxSYS_SCREEN_Y)/10)*8);
 
-    SetSize(
-        (wxSystemSettings::GetMetric(wxSYS_SCREEN_X)/10)*4,
-        (wxSystemSettings::GetMetric(wxSYS_SCREEN_Y)/10)*8
-        );
+    if ( frameSize.x > 500 )
+        frameSize.x = 500;
+
+    SetSize(frameSize);
+
     Centre();
 }
 
@@ -2867,11 +2865,7 @@ void FormMain::OnSelectStyle( wxCommandEvent& WXUNUSED(event) )
 
     CreateGrid( style, extraStyle );
 
-    SetSize(
-        (wxSystemSettings::GetMetric(wxSYS_SCREEN_X)/10)*4,
-        (wxSystemSettings::GetMetric(wxSYS_SCREEN_Y)/10)*8
-        );
-    Centre();
+    FinalizeFramePosition();
 }
 
 // -----------------------------------------------------------------------
