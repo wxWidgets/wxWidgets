@@ -58,7 +58,7 @@ wxFDIODispatcher *wxFDIODispatcher::Get()
 #endif // wxUSE_SELECT_DISPATCHER
     }
 
-    wxASSERT_MSG( gs_dispatcher, _T("failed to create any IO dispatchers") );
+    wxASSERT_MSG( gs_dispatcher, "failed to create any IO dispatchers" );
 
     return gs_dispatcher;
 }
@@ -82,11 +82,10 @@ wxFDIOHandler *wxMappedFDIODispatcher::FindHandler(int fd) const
 }
 
 
-bool wxMappedFDIODispatcher::RegisterFD(int fd, wxFDIOHandler *handler, int flags)
+bool
+wxMappedFDIODispatcher::RegisterFD(int fd, wxFDIOHandler *handler, int flags)
 {
-    wxUnusedVar(flags);
-
-    wxCHECK_MSG( handler, false, _T("handler can't be NULL") );
+    wxCHECK_MSG( handler, false, "handler can't be NULL" );
 
     // notice that it's not an error to register a handler for the same fd
     // twice as it can be done with different flags -- but it is an error to
@@ -95,9 +94,9 @@ bool wxMappedFDIODispatcher::RegisterFD(int fd, wxFDIOHandler *handler, int flag
     if ( i != m_handlers.end() )
     {
         wxASSERT_MSG( i->second.handler == handler,
-                        _T("registering different handler for the same fd?") );
+                        "registering different handler for the same fd?" );
         wxASSERT_MSG( i->second.flags != flags,
-                        _T("reregistering with the same flags?") );
+                        "reregistering with the same flags?" );
     }
 
     m_handlers[fd] = wxFDIOHandlerEntry(handler, flags);
@@ -105,15 +104,14 @@ bool wxMappedFDIODispatcher::RegisterFD(int fd, wxFDIOHandler *handler, int flag
     return true;
 }
 
-bool wxMappedFDIODispatcher::ModifyFD(int fd, wxFDIOHandler *handler, int flags)
+bool
+wxMappedFDIODispatcher::ModifyFD(int fd, wxFDIOHandler *handler, int flags)
 {
-    wxUnusedVar(flags);
-
-    wxCHECK_MSG( handler, false, _T("handler can't be NULL") );
+    wxCHECK_MSG( handler, false, "handler can't be NULL" );
 
     wxFDIOHandlerMap::iterator i = m_handlers.find(fd);
     wxCHECK_MSG( i != m_handlers.end(), false,
-                    _T("modifying unregistered handler?") );
+                    "modifying unregistered handler?" );
 
     i->second = wxFDIOHandlerEntry(handler, flags);
 
