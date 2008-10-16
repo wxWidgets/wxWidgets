@@ -25,13 +25,6 @@
 #include "wx/artprov.h"
 #include "wx/gtk/private.h"
 
-#ifndef WX_PRECOMP
-    #include "wx/module.h"
-#endif
-
-
-#include <gtk/gtk.h>
-
 // compatibility with older GTK+ versions:
 #ifndef GTK_STOCK_FILE
     #define GTK_STOCK_FILE "gtk-file"
@@ -188,9 +181,6 @@ static GtkIconSize FindClosestIconSize(const wxSize& size)
     return best;
 }
 
-
-static GtkStyle *gs_gtkStyle = NULL;
-
 static GdkPixbuf *CreateStockIcon(const char *stockid, GtkIconSize size)
 {
     // FIXME: This code is not 100% correct, because stock pixmap are
@@ -201,21 +191,13 @@ static GdkPixbuf *CreateStockIcon(const char *stockid, GtkIconSize size)
     //        with "stock-id" representation (in addition to pixmap and pixbuf
     //        ones) and would convert it to pixbuf when rendered.
 
-    if (gs_gtkStyle == NULL)
-    {
-        GtkWidget *widget = gtk_button_new();
-        gs_gtkStyle = gtk_rc_get_style(widget);
-        wxASSERT( gs_gtkStyle != NULL );
-        g_object_ref(gs_gtkStyle);
-        g_object_ref_sink(widget);
-    }
-
-    GtkIconSet *iconset = gtk_style_lookup_icon_set(gs_gtkStyle, stockid);
+    GtkStyle* style = wxGTKPrivate::GetButtonWidget()->style;
+    GtkIconSet* iconset = gtk_style_lookup_icon_set(style, stockid);
 
     if (!iconset)
         return NULL;
 
-    return gtk_icon_set_render_icon(iconset, gs_gtkStyle,
+    return gtk_icon_set_render_icon(iconset, style,
                                     gtk_widget_get_default_direction(),
                                     GTK_STATE_NORMAL, size, NULL, NULL);
 }
@@ -276,27 +258,5 @@ wxBitmap wxGTK2ArtProvider::CreateBitmap(const wxArtID& id,
 
     return bmp;
 }
-
-// ----------------------------------------------------------------------------
-// Cleanup
-// ----------------------------------------------------------------------------
-
-class wxArtGtkModule: public wxModule
-{
-public:
-    bool OnInit() { return true; }
-    void OnExit()
-    {
-        if (gs_gtkStyle)
-        {
-            g_object_unref(gs_gtkStyle);
-            gs_gtkStyle = NULL;
-        }
-    }
-
-    DECLARE_DYNAMIC_CLASS(wxArtGtkModule)
-};
-
-IMPLEMENT_DYNAMIC_CLASS(wxArtGtkModule, wxModule)
 
 #endif // !defined(__WXUNIVERSAL__)
