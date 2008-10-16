@@ -996,12 +996,18 @@ void MyFrame::OnDeleteList( wxCommandEvent& WXUNUSED(event) )
         m_list_model->DeleteItems( items );
 }
 
+#ifndef __WXMAC__
+#define ENABLE_LOGGING
+#endif
+
 void MyFrame::OnValueChanged( wxDataViewEvent &event )
 {
     if (!m_log)
         return;
 
+#ifdef ENABLE_LOGGING
     wxLogMessage( wxT("EVT_DATAVIEW_ITEM_VALUE_CHANGED, Item Id: %d;  Column: %d"), event.GetItem().GetID(), event.GetColumn() );
+#endif
 }
 
 void MyFrame::OnActivated( wxDataViewEvent &event )
@@ -1010,7 +1016,9 @@ void MyFrame::OnActivated( wxDataViewEvent &event )
         return;
 
     wxString title = m_music_model->GetTitle( event.GetItem() );
-    wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, Item: %s"), title.GetData());
+#ifdef ENABLE_LOGGING
+    wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, Item: %s"), title );
+#endif
 }
 
 void MyFrame::OnSelectionChanged( wxDataViewEvent &event )
@@ -1022,7 +1030,9 @@ void MyFrame::OnSelectionChanged( wxDataViewEvent &event )
     if (title.empty())
         title = wxT("None");
 
-    wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, First selected Item: %s"), title.GetData() );
+#ifdef ENABLE_LOGGING
+    wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, First selected Item: %s"), title );
+#endif
 }
 
 void MyFrame::OnExpanding( wxDataViewEvent &event )
@@ -1031,7 +1041,9 @@ void MyFrame::OnExpanding( wxDataViewEvent &event )
         return;
 
     wxString title = m_music_model->GetTitle( event.GetItem() );
+#ifdef ENABLE_LOGGING
     wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING, Item: %s"), title );
+#endif
 }
 
 
@@ -1041,7 +1053,9 @@ void MyFrame::OnEditingStarted( wxDataViewEvent &event )
         return;
 
     wxString title = m_music_model->GetTitle( event.GetItem() );
+#ifdef ENABLE_LOGGING
     wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED, Item: %s"), title );
+#endif
 }
 
 void MyFrame::OnEditingDone( wxDataViewEvent &event )
@@ -1050,7 +1064,9 @@ void MyFrame::OnEditingDone( wxDataViewEvent &event )
         return;
 
     wxString title = m_music_model->GetTitle( event.GetItem() );
+#ifdef ENABLE_LOGGING
     wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE, Item: %s"), title );
+#endif
 }
 
 void MyFrame::OnExpanded( wxDataViewEvent &event )
@@ -1059,7 +1075,9 @@ void MyFrame::OnExpanded( wxDataViewEvent &event )
         return;
 
     wxString title = m_music_model->GetTitle( event.GetItem() );
+#ifdef ENABLE_LOGGING
     wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDED, Item: %s"), title );
+#endif
 }
 
 void MyFrame::OnCollapsing( wxDataViewEvent &event )
@@ -1068,7 +1086,9 @@ void MyFrame::OnCollapsing( wxDataViewEvent &event )
         return;
 
     wxString title = m_music_model->GetTitle( event.GetItem() );
+#ifdef ENABLE_LOGGING
     wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING, Item: %s"), title );
+#endif
 }
 
 void MyFrame::OnCollapsed( wxDataViewEvent &event )
@@ -1077,7 +1097,9 @@ void MyFrame::OnCollapsed( wxDataViewEvent &event )
         return;
 
     wxString title = m_music_model->GetTitle( event.GetItem() );
+#ifdef ENABLE_LOGGING
     wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSED, Item: %s"),title);
+#endif
 }
 
 void MyFrame::OnContextMenu( wxDataViewEvent &event )
@@ -1086,7 +1108,9 @@ void MyFrame::OnContextMenu( wxDataViewEvent &event )
         return;
 
     wxString title = m_music_model->GetTitle( event.GetItem() );
+#ifdef ENABLE_LOGGING
     wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, Item: %s"),title );
+#endif
 
     wxMenu menu;
     menu.Append( 1, wxT("entry 1") );
@@ -1105,7 +1129,9 @@ void MyFrame::OnHeaderClick( wxDataViewEvent &event )
 
     int pos = m_musicCtrl->GetColumnPosition( event.GetDataViewColumn() );
 
+#ifdef ENABLE_LOGGING
     wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK, Column position: %d"), pos );
+#endif
 }
 
 void MyFrame::OnHeaderRightClick( wxDataViewEvent &event )
@@ -1115,7 +1141,9 @@ void MyFrame::OnHeaderRightClick( wxDataViewEvent &event )
 
     int pos = m_musicCtrl->GetColumnPosition( event.GetDataViewColumn() );
 
+#ifdef ENABLE_LOGGING
     wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, Column position: %d"), pos );
+#endif
 }
 
 void MyFrame::OnSorted( wxDataViewEvent &event )
@@ -1125,7 +1153,9 @@ void MyFrame::OnSorted( wxDataViewEvent &event )
 
     int pos = m_musicCtrl->GetColumnPosition( event.GetDataViewColumn() );
 
+#ifdef ENABLE_LOGGING
     wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED, Column position: %d"), pos );
+#endif
 }
 
 void MyFrame::OnRightClick( wxMouseEvent &event )
@@ -1133,7 +1163,9 @@ void MyFrame::OnRightClick( wxMouseEvent &event )
     if(!m_log)
         return;
 
+#ifdef ENABLE_LOGGING
     wxLogMessage(wxT("wxEVT_MOUSE_RIGHT_UP, Click Point is X: %d, Y: %d"), event.GetX(), event.GetY());
+#endif
 }
 
 void MyFrame::OnGoto(wxCommandEvent& WXUNUSED(event))
