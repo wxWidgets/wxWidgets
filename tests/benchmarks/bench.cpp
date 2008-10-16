@@ -254,8 +254,8 @@ int BenchApp::OnRun()
         long timeMin = LONG_MAX,
              timeMax = 0,
              timeTotal = 0;
-        bool ok = true;
-        for ( long a = 0; a < m_avgCount; a++ )
+        bool ok = func->Init();
+        for ( long a = 0; ok && a < m_avgCount; a++ )
         {
             wxStopWatch sw;
             for ( long n = 0; n < m_numRuns && ok; n++ )
@@ -265,9 +265,6 @@ int BenchApp::OnRun()
 
             sw.Pause();
 
-            if ( !ok )
-                break;
-
             const long t = sw.Time();
             if ( t < timeMin )
                 timeMin = t;
@@ -275,6 +272,8 @@ int BenchApp::OnRun()
                 timeMax = t;
             timeTotal += t;
         }
+
+        func->Done();
 
         if ( !ok )
         {

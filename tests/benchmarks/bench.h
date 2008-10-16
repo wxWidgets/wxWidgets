@@ -25,12 +25,19 @@ namespace Bench
 class Function
 {
 public:
-    typedef bool (*Type)();
+    typedef bool (*InitType)();
+    typedef bool (*FuncType)();
+    typedef void (*DoneType)();
 
     /// Ctor is used implicitly by BENCHMARK_FUNC().
-    Function(const char *name, Type func)
+    Function(const char *name,
+             FuncType func,
+             InitType init = NULL,
+             DoneType done = NULL)
         : m_name(name),
           m_func(func),
+          m_init(init),
+          m_done(done),
           m_next(ms_head)
     {
         ms_head = this;
@@ -39,9 +46,14 @@ public:
     /// Get the name of this function
     const char *GetName() const { return m_name; }
 
+    /// Perform once-only initialization prior to Run().
+    bool Init() { return m_init ? (*m_init)() : true; }
+
     /// Run the function, return its return value.
     bool Run() { return (*m_func)(); }
 
+    /// Clean up after performing the benchmark.
+    void Done() { if ( m_done ) (*m_done)(); }
 
     /// Get the head of the linked list of benchmark objects
     static Function *GetFirst() { return ms_head; }
@@ -55,7 +67,9 @@ private:
 
     // name of and pointer to the function, as passed to the ctor
     const char * const m_name;
-    const Type m_func;
+    const FuncType m_func;
+    const InitType m_init;
+    const DoneType m_done;
 
     // pointer to the next object in the linked list or NULL
     Function * const m_next;
@@ -96,6 +110,17 @@ wxString GetStringParameter();
 #define BENCHMARK_FUNC(name)                                                  \
     static bool name();                                                       \
     static Bench::Function wxMAKE_UNIQUE_NAME(name)(#name, name);             \
+    bool name()
+
+/**
+    Define a benchmark function requiring initialization and shutdown.
+
+    This macro is similar to BENCHMARK_FUNC() but ensures that @a init is
+    called before the benchmark is ran and @a done afterwards.
+ */
+#define BENCHMARK_FUNC_WITH_INIT(name, init, done)                            \
+    static bool name();                                                       \
+    static Bench::Function wxMAKE_UNIQUE_NAME(name)(#name, name, init, done); \
     bool name()
 
 #endif // _WX_TESTS_BENCHMARKS_BENCH_H_
