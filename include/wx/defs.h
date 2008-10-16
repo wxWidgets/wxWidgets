@@ -76,7 +76,12 @@
 #   pragma warning(disable:4355)    /* 'this' used in base member initializer list */
 #   pragma warning(disable:4511)    /*  copy ctor couldn't be generated */
 #   pragma warning(disable:4512)    /*  operator=() couldn't be generated */
+#   pragma warning(disable:4514)   /*  unreferenced inline func has been removed */
 #   pragma warning(disable:4710)    /*  function not inlined */
+
+    // TODO: this warning should really be enabled as it can be genuinely
+    //       useful, check where does it occur in wxWidgets
+    #pragma warning(disable: 4127) /*  conditional expression is constant */
 
     /* There are too many false positivies for this one, particularly when
        using templates like wxVector<T> */
@@ -84,17 +89,33 @@
        class 'bar'" */
 #   pragma warning(disable:4251)
 
+#   ifdef __VISUALC5__
     /* For VC++ 5.0 for release mode, the warning 'C4702: unreachable code */
     /* is buggy, and occurs for code that does actually get executed */
-#   if !defined __WXDEBUG__ && __VISUALC__ <= 1100
+#   ifndef __WXDEBUG__
 #       pragma warning(disable:4702)    /* unreachable code */
 #   endif
+
     /* The VC++ 5.0 warning 'C4003: not enough actual parameters for macro'
      * is incompatible with the wxWidgets headers since it is given when
      * parameters are empty but not missing. */
-#   if __VISUALC__ <= 1100
 #       pragma warning(disable:4003)    /* not enough actual parameters for macro */
 #   endif
+
+    /*
+       VC6 insists on complaining about 
+
+        return type for 'wxVector<T>::reverse_iterator::operator ->' is 'T **'
+        (ie; not a UDT or reference to a UDT.  Will produce errors if applied
+        using infix notation)
+
+       which is perfectly fine because template classes do routinely define
+       operators which don't make sense for all template parameter values
+       (besides this warning was removed in subsequent versions).
+     */
+    #ifdef __VISUALC6__
+        #pragma warning(disable: 4284)
+    #endif // VC6
 
     /*
        When compiling with VC++ 7 /Wp64 option we get thousands of warnings for
@@ -785,18 +806,6 @@ typedef short int WXTYPE;
 /*  ---------------------------------------------------------------------------- */
 /*  compiler specific settings */
 /*  ---------------------------------------------------------------------------- */
-
-/*  to allow compiling with warning level 4 under Microsoft Visual C++ some */
-/*  warnings just must be disabled */
-#ifdef  __VISUALC__
-  #pragma warning(disable: 4514) /*  unreferenced inline func has been removed */
-/*
-  you might be tempted to disable this one also: triggered by CHECK and FAIL
-  macros in debug.h, but it's, overall, a rather useful one, so I leave it and
-  will try to find some way to disable this warning just for CHECK/FAIL. Anyone?
-*/
-  #pragma warning(disable: 4127) /*  conditional expression is constant */
-#endif  /*  VC++ */
 
 #if defined(__MWERKS__)
     #undef try
