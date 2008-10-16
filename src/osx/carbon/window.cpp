@@ -289,8 +289,6 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
 
                     wxLogTrace(_T("Focus"), _T("focus lost(%p)"), wx_static_cast(void*, thisWindow));
                     
-                    wxPrintf( "Focus lost %s\n", thisWindow->GetClassInfo()->GetClassName() );
-
                     // remove this as soon as posting the synthesized event works properly
                     static bool inKillFocusEvent = false ;
 
