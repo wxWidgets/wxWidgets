@@ -293,7 +293,7 @@ gdk_window_warp_pointer (GdkWindow      *window,
 // Note: can't be static, needed by textctrl.cpp.
 wxWindow *wxFindFocusedChild(wxWindowGTK *win)
 {
-    wxWindow *winFocus = g_focusWindow;
+    wxWindowGTK* winFocus = g_focusWindow;
     if ( !winFocus )
         return (wxWindow *)NULL;
 
