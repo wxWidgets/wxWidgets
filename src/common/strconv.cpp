@@ -2300,7 +2300,7 @@ wxMBConv_iconv::ToWChar(wchar_t *dst, size_t dstLen,
     else // no destination buffer
     {
         // convert using temp buffer to calculate the size of the buffer needed
-        wchar_t tbuf[8];
+        wchar_t tbuf[256];
         res = 0;
 
         do
@@ -2367,7 +2367,7 @@ size_t wxMBConv_iconv::FromWChar(char *dst, size_t dstLen,
     else // no destination buffer
     {
         // convert using temp buffer to calculate the size of the buffer needed
-        char tbuf[16];
+        char tbuf[256];
         res = 0;
         do
         {
