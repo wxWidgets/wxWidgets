@@ -79,7 +79,7 @@ void wxStringProperty::OnSetValue()
     if ( HasFlag(wxPG_PROP_COMPOSED_VALUE) )
     {
         wxString s;
-        GenerateComposedValue(s);
+        DoGenerateComposedValue(s);
         m_value = s;
     }
 }
@@ -101,7 +101,7 @@ wxString wxStringProperty::ValueToString( wxVariant& value,
                           "Sorry, currently default wxPGProperty::ValueToString() "
                           "implementation only works if value is m_value." );
 
-            GenerateComposedValue(s, argFlags);
+            DoGenerateComposedValue(s, argFlags);
         }
 
         return s;

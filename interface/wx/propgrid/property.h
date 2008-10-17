@@ -929,10 +929,9 @@ public:
     void Empty();
 
     /**
-        Composes text from values of child properties. You usually do not have
-        to care about arguments other than 'text'.
+        Composes text from values of child properties.
     */
-    void GenerateComposedValue( wxString& text, int argFlags = 0 ) const;
+    wxString GenerateComposedValue() const;
 
     /**
         Returns property attribute value, null variant if not found.

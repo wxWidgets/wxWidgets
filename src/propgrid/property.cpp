@@ -664,10 +664,10 @@ wxString wxPGProperty::GetColumnText( unsigned int col ) const
     return wxEmptyString;
 }
 
-void wxPGProperty::GenerateComposedValue( wxString& text,
-                                          int argFlags,
-                                          const wxVariantList* valueOverrides,
-                                          wxPGHashMapS2S* childResults ) const
+void wxPGProperty::DoGenerateComposedValue( wxString& text,
+                                            int argFlags,
+                                            const wxVariantList* valueOverrides,
+                                            wxPGHashMapS2S* childResults ) const
 {
     int i;
     int iMax = m_children.size();
@@ -733,8 +733,8 @@ void wxPGProperty::GenerateComposedValue( wxString& text,
                  childValue.GetType() == wxPG_VARIANT_TYPE_LIST )
             {
                 wxVariantList& childList = childValue.GetList();
-                GenerateComposedValue(s, argFlags|wxPG_COMPOSITE_FRAGMENT,
-                                      &childList, childResults);
+                DoGenerateComposedValue(s, argFlags|wxPG_COMPOSITE_FRAGMENT,
+                                        &childList, childResults);
             }
             else
             {
@@ -797,7 +797,7 @@ wxString wxPGProperty::ValueToString( wxVariant& WXUNUSED(value),
                   "implementation only works if value is m_value." );
 
     wxString text;
-    GenerateComposedValue(text, argFlags);
+    DoGenerateComposedValue(text, argFlags);
     return text;
 }
 
@@ -2115,7 +2115,7 @@ wxPGProperty* wxPGProperty::UpdateParentValues()
          !parent->IsCategory() && !parent->IsRoot() )
     {
         wxString s;
-        parent->GenerateComposedValue(s);
+        parent->DoGenerateComposedValue(s);
         parent->m_value = s;
         return parent->UpdateParentValues();
     }

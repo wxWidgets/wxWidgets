@@ -1390,13 +1390,14 @@ public:
     }
 
     /**
-        Composes text from values of child properties. You usually do not have
-        to care about arguments other than 'text'.
+        Composes text from values of child properties.
     */
-    void GenerateComposedValue( wxString& text,
-                                int argFlags = wxPG_VALUE_IS_CURRENT,
-                                const wxVariantList* valueOverrides = NULL,
-                                wxPGHashMapS2S* childResults = NULL ) const;
+    wxString GenerateComposedValue() const
+    {
+        wxString s;
+        DoGenerateComposedValue(s);
+        return s;
+    }
 
     /** Returns property's label. */
     const wxString& GetLabel() const { return m_label; }
@@ -2053,6 +2054,11 @@ protected:
     void AddChild2( wxPGProperty* prop,
                     int index = -1,
                     bool correct_mode = true );
+
+    void DoGenerateComposedValue( wxString& text,
+                                  int argFlags = wxPG_VALUE_IS_CURRENT,
+                                  const wxVariantList* valueOverrides = NULL,
+                                  wxPGHashMapS2S* childResults = NULL ) const;
 
     void DoSetName(const wxString& str) { m_name = str; }
 
