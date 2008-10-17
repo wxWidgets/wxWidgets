@@ -255,6 +255,20 @@ public:
         out buffer, the @a outLen parameter should be one more to allow to
         properly @c NUL-terminate the string.
 
+        So to properly use this function you need to write:
+        @code
+            size_t lenConv = conv.MB2WC(NULL, in, 0);
+            if ( lenConv == wxCONV_FAILED )
+                ... handle error ...
+            // allocate 1 more character for the trailing NUL and also pass
+            // the size of the buffer to the function now
+            wchar_t *out = new wchar_t[lenConv + 1];
+            if ( conv.MB2WC(out, in, lenConv + 1) == wxCONV_FAILED )
+                ... handle error ...
+        @endcode
+        For this and other reasons, ToWChar() is strongly recommended as a
+        replacement.
+
         @param out
             The output buffer, may be @NULL if the caller is only
             interested in the length of the resulting string
@@ -277,7 +291,7 @@ public:
         called with a non-@NULL buffer, the @a n parameter should be the size
         of the buffer and so it should take into account the trailing @c NUL,
         which might take two or four bytes for some encodings (UTF-16 and
-        UTF-32) and not one.
+        UTF-32) and not one, i.e. GetMBNulLen().
     */
     virtual size_t WC2MB(char* buf, const wchar_t* psz, size_t n) const;
 };

@@ -990,15 +990,10 @@ wxTextCtrl::StreamIn(const wxString& value,
     if (len == wxCONV_FAILED)
         return false;
 
-#if wxUSE_WCHAR_T
-    wxWCharBuffer wchBuf(len);
+    wxWCharBuffer wchBuf(len); // allocates one extra character
     wchar_t *wpc = wchBuf.data();
-#else
-    wchar_t *wchBuf = (wchar_t *)malloc((len + 1)*sizeof(wchar_t));
-    wchar_t *wpc = wchBuf;
-#endif
 
-    conv.MB2WC(wpc, value.mb_str(), value.length());
+    conv.MB2WC(wpc, value.mb_str(), len + 1);
 #endif // wxUSE_UNICODE_MSLU
 
     // finally, stream it in the control

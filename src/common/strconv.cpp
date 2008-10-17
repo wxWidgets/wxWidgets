@@ -355,9 +355,7 @@ wxMBConv::FromWChar(char *dst, size_t dstLen,
 
 size_t wxMBConv::MB2WC(wchar_t *outBuff, const char *inBuff, size_t outLen) const
 {
-    // add 1 to available buffer length because MB2WC() parameter counts the
-    // number of non-NUL characters while ToWChar() counts everything
-    size_t rc = ToWChar(outBuff, outLen + 1, inBuff);
+    size_t rc = ToWChar(outBuff, outLen, inBuff);
     if ( rc != wxCONV_FAILED )
     {
         // ToWChar() returns the buffer length, i.e. including the trailing
@@ -370,12 +368,10 @@ size_t wxMBConv::MB2WC(wchar_t *outBuff, const char *inBuff, size_t outLen) cons
 
 size_t wxMBConv::WC2MB(char *outBuff, const wchar_t *inBuff, size_t outLen) const
 {
-    const size_t nulLen = GetMBNulLen();
-
-    size_t rc = FromWChar(outBuff, outLen + nulLen, inBuff);
+    size_t rc = FromWChar(outBuff, outLen, inBuff);
     if ( rc != wxCONV_FAILED )
     {
-        rc -= nulLen;
+        rc -= GetMBNulLen();
     }
 
     return rc;
@@ -2351,13 +2347,12 @@ size_t wxMBConv_iconv::FromWChar(char *dst, size_t dstLen,
     if (ms_wcNeedsSwap)
     {
         // need to copy to temp buffer to switch endianness
-        // (doing WC_BSWAP twice on the original buffer won't help, as it
+        // (doing WC_BSWAP twice on the original buffer won't work, as it
         //  could be in read-only memory, or be accessed in some other thread)
-        tmpbuf = (wchar_t *)malloc(inbuflen + SIZEOF_WCHAR_T);
+        tmpbuf = (wchar_t *)malloc(inbuflen);
         for ( size_t i = 0; i < srcLen; i++ )
             tmpbuf[i] = WC_BSWAP(src[i]);
 
-        tmpbuf[srcLen] = L'\0';
         src = tmpbuf;
     }
 
@@ -2377,11 +2372,11 @@ size_t wxMBConv_iconv::FromWChar(char *dst, size_t dstLen,
         do
         {
             dst = tbuf;
-            outbuflen = 16;
+            outbuflen = WXSIZEOF(tbuf);
 
             cres = iconv(w2m, ICONV_CHAR_CAST(&inbuf), &inbuflen, &dst, &outbuflen);
 
-            res += 16 - outbuflen;
+            res += WXSIZEOF(tbuf) - outbuflen;
         }
         while ((cres == (size_t)-1) && (errno == E2BIG));
     }
