@@ -7604,9 +7604,17 @@ AC_SUBST(UNICODE)
 AC_SUBST(BUILD)
 AC_SUBST(DEBUG_INFO)
 AC_SUBST(DEBUG_FLAG)
+TOOLKIT_LOWERCASE=xxx
 if test "$TOOLKIT" = "MAC"; then
     TOOLKIT_LOWERCASE=osx
-else
+fi
+if test "$TOOLKIT" = "OSX_CARBON"; then
+    TOOLKIT_LOWERCASE=osx
+fi
+if test "$TOOLKIT" = "OSX_COCOA"; then
+    TOOLKIT_LOWERCASE=osx
+fi
+if test "$TOOLKIT_LOWERCASE" = "xxx"; then
     TOOLKIT_LOWERCASE=`echo $TOOLKIT | tr '[[A-Z]]' '[[a-z]]'`
 fi
 AC_SUBST(TOOLKIT_LOWERCASE)

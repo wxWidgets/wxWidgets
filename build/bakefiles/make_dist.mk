@@ -387,7 +387,7 @@ MOTIF_DIST: ALL_GUI_DIST
 		$(X11INC)/bitmap.h $(X11INC)/glcanvas.h $(X11INC)/private.h $(X11INC)/region.h \
 		$(DISTDIR)/include/wx/x11
 
-MACX_DIST: ALL_GUI_DIST
+OSX_CARBON_DIST: ALL_GUI_DIST
 	$(CP_P) $(INCDIR)/*.* $(DISTDIR)/include
 	mkdir $(DISTDIR)/include/wx/osx/carbon
 	mkdir $(DISTDIR)/include/wx/osx/carbon/private
