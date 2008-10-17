@@ -3,7 +3,7 @@
 // Purpose:     wxGenericStaticText header
 // Author:      Marcin Wojdyr
 // Created:     2008-06-26
-// Id:          $Id:$
+// Id:          $Id$
 // Copyright:   Marcin Wojdyr
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -11,7 +11,13 @@
 #ifndef _WX_GENERIC_STATTEXTG_H_
 #define _WX_GENERIC_STATTEXTG_H_
 
+// prevent it from including the platform-specific wxStaticText declaration as
+// this is not going to compile if it derives from wxGenericStaticText defined
+// below (currently this is only the case in wxUniv but it could also happen
+// with other ports)
+#define wxNO_PORT_STATTEXT_INCLUDE
 #include "wx/stattext.h"
+#undef wxNO_PORT_STATTEXT_INCLUDE
 
 class WXDLLIMPEXP_CORE wxGenericStaticText : public wxStaticTextBase
 {

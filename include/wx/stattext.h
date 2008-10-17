@@ -100,6 +100,9 @@ private:
     DECLARE_NO_COPY_CLASS(wxStaticTextBase)
 };
 
+// see wx/generic/stattextg.h for the explanation
+#ifndef wxNO_PORT_STATTEXT_INCLUDE
+
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/stattext.h"
 #elif defined(__WXMSW__)
@@ -120,7 +123,8 @@ private:
     #include "wx/palmos/stattext.h"
 #endif
 
+#endif // !wxNO_PORT_STATTEXT_INCLUDE
+
 #endif // wxUSE_STATTEXT
 
-#endif
-    // _WX_STATTEXT_H_BASE_
+#endif // _WX_STATTEXT_H_BASE_
