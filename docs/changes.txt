@@ -91,10 +91,6 @@ Major new features in 2.8 release
 2.8.10:
 -------
 
-All:
-
-- Fixed off by one bug in wxMBConv::MB2WC/WC2MB() functions.
-
 All (GUI):
 
 - Fixed wxHTML's pagebreaks computation in tables (D.J.Stauffer).
@@ -110,6 +106,7 @@ All (Unix):
 
 wxMSW:
 
+- Fixed bug with using non default encoding in wxTextCtrl in ANSI build.
 - Restored generation of events for accelerators when there is no menu bar.
 - Fixed wxArtProvider::GetSizeHint() to return 16x16 for wxART_FRAME_ICON.
 

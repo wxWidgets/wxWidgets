@@ -807,41 +807,48 @@ void MBConvTestCase::BufSize()
     CPPUNIT_ASSERT( conv1251.IsOk() );
     const char *cp1251text =
         "\313\301\326\305\324\323\321 \325\304\301\336\316\331\315";
-    const size_t cp1251textLen = strlen(cp1251text);
 
-    const size_t lenW = conv1251.MB2WC(NULL, cp1251text, cp1251textLen);
-    CPPUNIT_ASSERT( lenW != wxCONV_FAILED );
-    wxWCharBuffer wbuf(lenW);
+    const size_t lenW = conv1251.MB2WC(NULL, cp1251text, 0);
+    CPPUNIT_ASSERT_EQUAL( strlen(cp1251text), lenW );
+    wxWCharBuffer wbuf(lenW + 1); // allocates lenW + 2 characters
+    wbuf.data()[lenW + 1] = L'!';
 
-    // lenW-1 is not enough
+    // lenW is not enough because it's the length and we need the size
     CPPUNIT_ASSERT_EQUAL(
-        wxCONV_FAILED, conv1251.MB2WC(wbuf.data(), cp1251text, lenW - 1) );
+        wxCONV_FAILED, conv1251.MB2WC(wbuf.data(), cp1251text, lenW) );
 
-    // lenW is just fine
-    CPPUNIT_ASSERT(
-        conv1251.MB2WC(wbuf.data(), cp1251text, lenW) != wxCONV_FAILED );
-
-    // of course, greater values work too
+    // lenW+1 is just fine
     CPPUNIT_ASSERT(
         conv1251.MB2WC(wbuf.data(), cp1251text, lenW + 1) != wxCONV_FAILED );
 
+    // of course, greater values work too
+    CPPUNIT_ASSERT(
+        conv1251.MB2WC(wbuf.data(), cp1251text, lenW + 2) != wxCONV_FAILED );
+
+    // but they shouldn't write more stuff to the buffer
+    CPPUNIT_ASSERT_EQUAL( L'!', wbuf[lenW + 1] );
+
 
     // test in the other direction too, using an encoding with multibyte NUL
-    wxCSConv convUTF16(_T("UTF-16"));
+    wxCSConv convUTF16(_T("UTF-16LE"));
     CPPUNIT_ASSERT( convUTF16.IsOk() );
     const wchar_t *utf16text = L"Hello";
-    const size_t utf16textLen = wcslen(utf16text);
 
-    const size_t lenMB = convUTF16.WC2MB(NULL, utf16text, utf16textLen);
-    CPPUNIT_ASSERT( lenMB != wxCONV_FAILED );
-    wxCharBuffer buf(lenMB + 1); // it only adds 1 for NUL on its own, we need 2
+    const size_t lenMB = convUTF16.WC2MB(NULL, utf16text, 0);
+    CPPUNIT_ASSERT_EQUAL( wcslen(utf16text)*2, lenMB );
+    wxCharBuffer buf(lenMB + 2); // it only adds 1 for NUL on its own, we need 2
+                                 // for NUL and an extra one for the guard byte
+    buf.data()[lenMB + 2] = '?';
 
     CPPUNIT_ASSERT_EQUAL(
-        wxCONV_FAILED, convUTF16.WC2MB(buf.data(), utf16text, lenMB - 1) );
+        wxCONV_FAILED, convUTF16.WC2MB(buf.data(), utf16text, lenMB) );
+    CPPUNIT_ASSERT_EQUAL(
+        wxCONV_FAILED, convUTF16.WC2MB(buf.data(), utf16text, lenMB + 1) );
     CPPUNIT_ASSERT(
-        convUTF16.WC2MB(buf.data(), utf16text, lenMB) != wxCONV_FAILED );
+        convUTF16.WC2MB(buf.data(), utf16text, lenMB + 2) != wxCONV_FAILED );
     CPPUNIT_ASSERT(
-        convUTF16.WC2MB(buf.data(), utf16text, lenMB + 1) != wxCONV_FAILED );
+        convUTF16.WC2MB(buf.data(), utf16text, lenMB + 3) != wxCONV_FAILED );
+    CPPUNIT_ASSERT_EQUAL( '?', buf[lenMB + 2] );
 }
 
 WXDLLIMPEXP_BASE wxMBConv* new_wxMBConv_iconv( const wxChar* name );
