@@ -291,18 +291,20 @@ selection_handler( GtkWidget *WXUNUSED(widget),
                wxString::FromAscii(wxGtkString(gdk_atom_name(selection_data->selection))).c_str(),
                GPOINTER_TO_UINT( signal_data )
                );
-#endif
+#endif // __WXDEBUG__
 
-    if (!data->IsSupportedFormat( format )) return;
+    if ( !data->IsSupportedFormat( format ) )
+        return;
 
     int size = data->GetDataSize( format );
+    if ( !size )
+        return;
 
-    if (size == 0) return;
-
-    wxCharBuffer buf(size);
+    wxCharBuffer buf(size - 1); // it adds 1 internally (for NUL)
 
     // text data must be returned in UTF8 if format is wxDF_UNICODETEXT
-    data->GetDataHere( format, buf.data() );
+    if ( !data->GetDataHere(format, buf.data()) )
+        return;
 
     // use UTF8_STRING format if requested in Unicode build but just plain
     // STRING one in ANSI or if explicitly asked in Unicode
@@ -315,7 +317,7 @@ selection_handler( GtkWidget *WXUNUSED(widget),
             size );
     }
     else
-#endif
+#endif // wxUSE_UNICODE
     {
         gtk_selection_data_set(
             selection_data,
