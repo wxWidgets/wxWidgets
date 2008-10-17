@@ -341,7 +341,7 @@ struct WXDLLIMPEXP_BASE wxLanguageInfo
     @library{wxbase}
     @category{misc}
 
-    @see @ref overview_internationalization, @ref page_samples_internat, wxXLocale
+    @see @ref overview_i18n, @ref page_samples_internat, wxXLocale
 */
 class wxLocale
 {
@@ -611,6 +611,16 @@ public:
               iso8859-2 and windows-1250. See @ref overview_nonenglish for
               detailed description of this behaviour.
               Note that this flag is meaningless in Unicode build.
+
+        @return @true on success or @false if the given locale couldn't be set.
+    */
+    bool Init(int language = wxLANGUAGE_DEFAULT,
+              int flags = wxLOCALE_LOAD_DEFAULT | wxLOCALE_CONV_ENCODING);
+
+    /**
+        @deprecated
+        This form is deprecated, use the other one unless you know what you are doing.
+
         @param name
             The name of the locale. Only used in diagnostic messages.
         @param short
@@ -629,15 +639,6 @@ public:
             between well-known pair like iso8859-1 and windows-1252 or iso8859-2
             and windows-1250.
             See @ref overview_nonenglish for detailed description of this behaviour.
-
-        @return @true on success or @false if the given locale couldn't be set.
-    */
-    bool Init(int language = wxLANGUAGE_DEFAULT,
-              int flags = wxLOCALE_LOAD_DEFAULT | wxLOCALE_CONV_ENCODING);
-
-    /**
-        @deprecated
-        This form is deprecated, use the other one unless you know what you are doing.
     */
     bool Init(const wxString& name,
               const wxString& short = wxEmptyString,

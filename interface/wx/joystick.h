@@ -12,7 +12,7 @@
     wxJoystick allows an application to control one or more joysticks.
 
     @library{wxadv}
-    @category{FIXME}
+    @category{misc}
 
     @see wxJoystickEvent
 */
@@ -20,8 +20,9 @@ class wxJoystick : public wxObject
 {
 public:
     /**
-        Constructor. @a joystick may be one of wxJOYSTICK1, wxJOYSTICK2, indicating the
-        joystick
+        Constructor.
+
+        @a joystick may be one of wxJOYSTICK1, wxJOYSTICK2, indicating the joystick
         controller of interest.
     */
     wxJoystick(int joystick = wxJOYSTICK1);
@@ -31,16 +32,23 @@ public:
     */
     virtual ~wxJoystick();
 
-    //@{
+    /**
+        Returns the state of the joystick buttons.
+        Every button is mapped to a single bit in the returned integer, with the
+        first button being mapped to the least significant bit, and so on.
+
+        A bitlist of wxJOY_BUTTONn identifiers, where n is 1, 2, 3 or 4 is available
+        for historical reasons.
+    */
+    int GetButtonState() const;
+
     /**
         Returns the state of the specified joystick button.
 
         @param id
             The button id to report, from 0 to GetNumberButtons() - 1
     */
-    int GetButtonState() const;
-    const bool GetButtonState(unsigned id) const;
-    //@}
+    bool GetButtonState(unsigned id) const;
 
     /**
         Returns the manufacturer id.
@@ -72,14 +80,15 @@ public:
     /**
         Returns the point-of-view position, expressed in continuous, one-hundredth of a
         degree units.
+
         Returns -1 on error.
     */
     int GetPOVCTSPosition() const;
 
     /**
         Returns the point-of-view position, expressed in continuous, one-hundredth of a
-        degree units,
-        but limited to return 0, 9000, 18000 or 27000.
+        degree units, but limited to return 0, 9000, 18000 or 27000.
+
         Returns -1 on error.
     */
     int GetPOVPosition() const;
@@ -94,16 +103,18 @@ public:
     */
     int GetPollingMin() const;
 
-    //@{
+    /**
+        Returns the x, y position of the joystick.
+    */
+    wxPoint GetPosition() const;
+
     /**
         Returns the position of the specified joystick axis.
 
         @param axis
             The joystick axis to report, from 0 to GetNumberAxes() - 1.
     */
-    wxPoint GetPosition() const;
-    const int GetPosition(unsigned axis) const;
-    //@}
+    int GetPosition(unsigned axis) const;
 
     /**
         Returns the product id for the joystick.
@@ -201,15 +212,15 @@ public:
     bool HasPOV() const;
 
     /**
-        Returns @true if the joystick point-of-view supports discrete values (centered,
-        forward, backward, left, and right).
+        Returns @true if the joystick point-of-view supports discrete values
+        (centered, forward, backward, left, and right).
     */
     bool HasPOV4Dir() const;
 
     /**
         Returns @true if the joystick point-of-view supports continuous degree bearings.
     */
-#define bool HasPOVCTS() const     /* implementation is private */
+    bool HasPOVCTS() const;
 
     /**
         Returns @true if there is a rudder attached to the computer.
@@ -246,14 +257,13 @@ public:
     bool ReleaseCapture();
 
     /**
-        Sets the capture to direct joystick events to @e win.
+        Sets the capture to direct joystick events to @a win.
 
         @param win
             The window that will receive joystick events.
         @param pollingFreq
-            If zero, movement events are sent when above the
-            threshold. If greater than zero, events are received every pollingFreq
-        milliseconds.
+            If zero, movement events are sent when above the threshold.
+            If greater than zero, events are received every @a pollingFreq milliseconds.
 
         @return @true if the capture succeeded.
 
@@ -263,8 +273,7 @@ public:
 
     /**
         Sets the movement threshold, the number of steps outside which the joystick is
-        deemed to have
-        moved.
+        deemed to have moved.
     */
     void SetMovementThreshold(int threshold);
 };

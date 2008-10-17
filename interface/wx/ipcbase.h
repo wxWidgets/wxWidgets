@@ -6,6 +6,9 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+/**
+    An enumeration for formats .
+*/
 enum wxIPCFormat
 {
     wxIPC_INVALID =     0,
