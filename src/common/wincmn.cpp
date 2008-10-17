@@ -624,9 +624,10 @@ wxSize wxWindowBase::DoGetBestSize() const
 // helper of GetWindowBorderSize(): as many ports don't implement support for
 // wxSYS_BORDER/EDGE_X/Y metrics in their wxSystemSettings, use hard coded
 // fallbacks in this case
-static int wxGetMetricOrDefault(wxSystemMetric what)
+static int wxGetMetricOrDefault(wxSystemMetric what, const wxWindowBase* win)
 {
-    int rc = wxSystemSettings::GetMetric(what);
+    int rc = wxSystemSettings::GetMetric(
+        what, static_cast<wxWindow*>(const_cast<wxWindowBase*>(win)));
     if ( rc == -1 )
     {
         switch ( what )
@@ -664,23 +665,23 @@ wxSize wxWindowBase::GetWindowBorderSize() const
 
         case wxBORDER_SIMPLE:
         case wxBORDER_STATIC:
-            size.x = wxGetMetricOrDefault(wxSYS_BORDER_X);
-            size.y = wxGetMetricOrDefault(wxSYS_BORDER_Y);
+            size.x = wxGetMetricOrDefault(wxSYS_BORDER_X, this);
+            size.y = wxGetMetricOrDefault(wxSYS_BORDER_Y, this);
             break;
 
         case wxBORDER_SUNKEN:
         case wxBORDER_RAISED:
-            size.x = wxMax(wxGetMetricOrDefault(wxSYS_EDGE_X),
-                           wxGetMetricOrDefault(wxSYS_BORDER_X));
-            size.y = wxMax(wxGetMetricOrDefault(wxSYS_EDGE_Y),
-                           wxGetMetricOrDefault(wxSYS_BORDER_Y));
+            size.x = wxMax(wxGetMetricOrDefault(wxSYS_EDGE_X, this),
+                           wxGetMetricOrDefault(wxSYS_BORDER_X, this));
+            size.y = wxMax(wxGetMetricOrDefault(wxSYS_EDGE_Y, this),
+                           wxGetMetricOrDefault(wxSYS_BORDER_Y, this));
             break;
 
         case wxBORDER_DOUBLE:
-            size.x = wxGetMetricOrDefault(wxSYS_EDGE_X) +
-                        wxGetMetricOrDefault(wxSYS_BORDER_X);
-            size.y = wxGetMetricOrDefault(wxSYS_EDGE_Y) +
-                        wxGetMetricOrDefault(wxSYS_BORDER_Y);
+            size.x = wxGetMetricOrDefault(wxSYS_EDGE_X, this) +
+                        wxGetMetricOrDefault(wxSYS_BORDER_X, this);
+            size.y = wxGetMetricOrDefault(wxSYS_EDGE_Y, this) +
+                        wxGetMetricOrDefault(wxSYS_BORDER_Y, this);
             break;
 
         default:
