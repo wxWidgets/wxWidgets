@@ -142,10 +142,10 @@ Controls that are not static can have wxValidator associated with them.
 
 @li wxAnimationCtrl: A control to display an animation
 @li wxControl: The base class for controls
-@li wxButton: Push button control, displaying text
 @li wxBitmapButton: Push button control, displaying a bitmap
 @li wxBitmapComboBox: A combobox with bitmaps next to text items
 @li wxBitmapToggleButton: A toggle button with bitmaps.
+@li wxButton: Push button control, displaying text
 @li wxCalendarCtrl: Control showing an entire calendar month
 @li wxCheckBox: Checkbox control
 @li wxCheckListBox: A listbox with a checkbox to the left of each item
@@ -161,8 +161,7 @@ Controls that are not static can have wxValidator associated with them.
 @li wxGrid: A control to display spread-sheet like data in tabular form
 @li wxHtmlListBox: An abstract class for creating listboxes showing HTML
     content
-@li wxSimpleHtmlListBox: A listbox showing HTML content
-@li wxStaticBox: A static, or group box for visually grouping related controls
+@li wxHyperlinkCtrl: A static text which opens an URL when clicked
 @li wxListBox: A list of strings for single or multiple selection
 @li wxListCtrl: A control for displaying lists of strings and/or icons, plus a
     multicolumn report view
@@ -171,10 +170,12 @@ Controls that are not static can have wxValidator associated with them.
 @li wxNotebook: A notebook class
 @li wxOwnerDrawnComboBox: A combobox with owner-drawn list items
 @li wxPropertyGrid: A complex control to display hierachical, editable information
+@li wxRadioBox: A group of radio buttons
+@li wxRadioButton: A round button to be used with others in a mutually
+    exclusive way
 @li wxRichTextCtrl: Generic rich text editing control
-@li wxTextCtrl: Single or multiline text editing control
-@li wxToggleButton: A button which stays pressed when clicked by user.
-@li wxTreeCtrl: Tree (hierarchy) control
+@li wxSimpleHtmlListBox: A listbox showing HTML content
+@li wxStaticBox: A static, or group box for visually grouping related controls
 @li wxScrollBar: Scrollbar control
 @li wxSearchCtrl: A text input control used to initiate a search
 @li wxSpinButton: A spin or `up-down' control
@@ -183,11 +184,10 @@ Controls that are not static can have wxValidator associated with them.
 @li wxSpinCtrlDouble: A spin control - i.e. spin button and text control displaying
     a real number
 @li wxStaticText: One or more lines of non-editable text
-@li wxHyperlinkCtrl: A static text which opens an URL when clicked
+@li wxTextCtrl: Single or multiline text editing control
+@li wxToggleButton: A button which stays pressed when clicked by user.
+@li wxTreeCtrl: Tree (hierarchy) control
 @li wxStaticBitmap: A control to display a bitmap
-@li wxRadioBox: A group of radio buttons
-@li wxRadioButton: A round button to be used with others in a mutually
-    exclusive way
 @li wxStyledTextCtrl: A wxWidgets implementation of the Scintilla source code
     editing component for plain text editing.
 @li wxSlider: A slider that can be dragged by the user
