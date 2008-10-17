@@ -50,6 +50,9 @@
 #include "state4.xpm"
 #include "state5.xpm"
 
+#include "unchecked.xpm"
+#include "checked.xpm"
+
 #ifndef __WXMSW__
     #include "../sample.xpm"
 #endif
@@ -925,35 +928,18 @@ void MyTreeCtrl::CreateStateImageList(bool del)
     }
     else
     {
-        wxRendererNative& renderer = wxRendererNative::Get();
+        wxIcon icons[2];
+        icons[0] = wxIcon(unchecked_xpm);
+        icons[1] = wxIcon(checked_xpm);
+        
+        int width  = icons[0].GetWidth(),
+            height = icons[0].GetHeight();
+            
+        // Make an state image list containing small icons
+        states = new wxImageList(width, height, true);
 
-        wxSize size(renderer.GetCheckBoxSize(this));
-
-        // make an state checkbox image list
-        states = new wxImageList(size.GetWidth(), size.GetHeight(), true);
-
-        wxBitmap checkBmp(size.GetWidth(), size.GetHeight());
-        wxRect rect(size);
-
-        // create no checked image
-        {
-            // first create bitmap in a memory DC
-            wxMemoryDC memDC(checkBmp);
-            memDC.Clear();
-            // then draw a check mark into it
-            renderer.DrawCheckBox(this, memDC, rect, 0);
-        } // select checkBmp out of memDC
-
-        states->Add(checkBmp);
-
-        // create checked image
-        {
-            wxMemoryDC memDC(checkBmp);
-            memDC.Clear();
-            renderer.DrawCheckBox(this, memDC, rect, wxCONTROL_CHECKED);
-        }
-
-        states->Add(checkBmp);
+        for ( size_t i = 0; i < WXSIZEOF(icons); i++ )
+            states->Add(icons[i]);
     }
 
     AssignStateImageList(states);
