@@ -21,6 +21,7 @@
 #include "wx/fontutil.h"
 
 #include <gtk/gtk.h>
+#include "wx/gtk/private/win_gtk.h"
 
 bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* bottom);
 
@@ -269,6 +270,26 @@ static GtkSettings *GetSettingsForWindowScreen(GdkWindow *window)
                   : gtk_settings_get_default();
 }
 
+static int GetBorderWidth(wxSystemMetric index, wxWindow* win)
+{
+    if (win->m_wxwindow)
+    {
+        wxPizza* pizza = WX_PIZZA(win->m_wxwindow);
+        int x, y;
+        pizza->get_border_widths(x, y);
+        switch (index)
+        {
+            case wxSYS_BORDER_X:
+            case wxSYS_EDGE_X:
+            case wxSYS_FRAMESIZE_X:
+                return x;
+            default:
+                return y;
+        }
+    }
+    return -1;
+}
+
 int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
 {
     GdkWindow *window = NULL;
@@ -283,14 +304,12 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
         case wxSYS_EDGE_Y:
         case wxSYS_FRAMESIZE_X:
         case wxSYS_FRAMESIZE_Y:
-            // If a window is specified/realized, and it is a toplevel window, we can query from wm.
-            // The returned border thickness is outside the client area in that case.
-            if (window)
+            if (win)
             {
                 wxTopLevelWindow *tlw = wxDynamicCast(win, wxTopLevelWindow);
                 if (!tlw)
-                    return -1; // not a tlw, not sure how to approach
-                else
+                    return GetBorderWidth(index, win);
+                else if (window)
                 {
                     // Get the frame extents from the windowmanager.
                     // In most cases the top extent is the titlebar, so we use the bottom extent
