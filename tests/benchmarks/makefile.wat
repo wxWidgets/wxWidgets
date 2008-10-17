@@ -218,6 +218,7 @@ BENCH_OBJECTS =  &
 	$(OBJS)\bench_htmlpars.obj &
 	$(OBJS)\bench_htmltag.obj &
 	$(OBJS)\bench_ipcclient.obj &
+	$(OBJS)\bench_mbconv.obj &
 	$(OBJS)\bench_strings.obj &
 	$(OBJS)\bench_tls.obj
 
@@ -264,6 +265,9 @@ $(OBJS)\bench_htmltag.obj :  .AUTODEPEND .\htmlparser\htmltag.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BENCH_CXXFLAGS) $<
 
 $(OBJS)\bench_ipcclient.obj :  .AUTODEPEND .\ipcclient.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BENCH_CXXFLAGS) $<
+
+$(OBJS)\bench_mbconv.obj :  .AUTODEPEND .\mbconv.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BENCH_CXXFLAGS) $<
 
 $(OBJS)\bench_strings.obj :  .AUTODEPEND .\strings.cpp

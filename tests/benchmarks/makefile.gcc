@@ -32,6 +32,7 @@ BENCH_OBJECTS =  \
 	$(OBJS)\bench_htmlpars.o \
 	$(OBJS)\bench_htmltag.o \
 	$(OBJS)\bench_ipcclient.o \
+	$(OBJS)\bench_mbconv.o \
 	$(OBJS)\bench_strings.o \
 	$(OBJS)\bench_tls.o
 
@@ -200,6 +201,9 @@ $(OBJS)\bench_htmltag.o: ./htmlparser/htmltag.cpp
 	$(CXX) -c -o $@ $(BENCH_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\bench_ipcclient.o: ./ipcclient.cpp
+	$(CXX) -c -o $@ $(BENCH_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\bench_mbconv.o: ./mbconv.cpp
 	$(CXX) -c -o $@ $(BENCH_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\bench_strings.o: ./strings.cpp

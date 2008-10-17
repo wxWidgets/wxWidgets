@@ -538,6 +538,9 @@
 				RelativePath=".\ipcclient.cpp">
 			</File>
 			<File
+				RelativePath=".\mbconv.cpp">
+			</File>
+			<File
 				RelativePath=".\strings.cpp">
 			</File>
 			<File
