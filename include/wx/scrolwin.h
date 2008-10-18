@@ -226,7 +226,11 @@ protected:
     // case, if we're scrolling a subwindow you must override this method
     virtual wxSize GetSizeAvailableForScrollTarget(const wxSize& size)
     {
-        wxASSERT_MSG( m_targetWindow == m_win, "must be overridden" );
+        // returning just size from here is wrong but it was decided that it is
+        // not wrong enough to break the existing code (which doesn't override
+        // this recently added function at all) by adding this assert
+        //
+        // wxASSERT_MSG( m_targetWindow == m_win, "must be overridden" );
 
         return size;
     }
