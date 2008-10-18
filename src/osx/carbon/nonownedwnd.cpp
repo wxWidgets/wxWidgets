@@ -1535,7 +1535,7 @@ bool wxNonOwnedWindowCarbonImpl::ShowFullScreen(bool show, long style)
 
         wxRect client = wxGetClientDisplayRect() ;
 
-        int left , top , right , bottom ;
+        int left, top, width, height ;
         int x, y, w, h ;
 
         x = client.x ;
@@ -1543,19 +1543,23 @@ bool wxNonOwnedWindowCarbonImpl::ShowFullScreen(bool show, long style)
         w = client.width ;
         h = client.height ;
 
-        GetContentArea( left , top , right , bottom ) ;
+        GetContentArea( left, top, width, height ) ;
+        int outerwidth, outerheight;
+        GetSize( outerwidth, outerheight );
 
         if ( style & wxFULLSCREEN_NOCAPTION )
         {
             y -= top ;
             h += top ;
+            // avoid adding the caption twice to the height
+            outerheight -= top; 
         }
 
         if ( style & wxFULLSCREEN_NOBORDER )
         {
             x -= left ;
-            w += left + right ;
-            h += bottom ;
+            w += outerwidth - width;
+            h += outerheight - height;
         }
 
         if ( style & wxFULLSCREEN_NOTOOLBAR )
