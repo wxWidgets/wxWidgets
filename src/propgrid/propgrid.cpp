@@ -5013,11 +5013,14 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
         return;
     }
 
-    event.Skip();
-
     // Except for TAB and ESC, handle child control events in child control
     if ( fromChild )
+    {
+        event.Skip();
         return;
+    }
+
+    bool wasHandled = false;
 
     if ( m_selected )
     {
@@ -5037,16 +5040,16 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
             if ( action == wxPG_ACTION_COLLAPSE_PROPERTY || secondAction == wxPG_ACTION_COLLAPSE_PROPERTY )
             {
                 if ( (m_windowStyle & wxPG_HIDE_MARGIN) || Collapse(p) )
-                    keycode = 0;
+                    wasHandled = true;
             }
             else if ( action == wxPG_ACTION_EXPAND_PROPERTY || secondAction == wxPG_ACTION_EXPAND_PROPERTY )
             {
                 if ( (m_windowStyle & wxPG_HIDE_MARGIN) || Expand(p) )
-                    keycode = 0;
+                    wasHandled = true;
             }
         }
 
-        if ( keycode )
+        if ( !wasHandled )
         {
             if ( action == wxPG_ACTION_PREV_PROPERTY || secondAction == wxPG_ACTION_PREV_PROPERTY )
             {
@@ -5063,6 +5066,7 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
             p = wxPropertyGridIterator::OneStep( m_pState, wxPG_ITERATE_VISIBLE, p, selectDir );
             if ( p )
                 DoSelectProperty(p);
+            wasHandled = true;
         }
     }
     else
@@ -5073,8 +5077,12 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
         {
             wxPGProperty* p = wxPropertyGridInterface::GetFirst();
             if ( p ) DoSelectProperty(p);
+            wasHandled = true;
         }
     }
+
+    if ( !wasHandled )
+        event.Skip();
 }
 
 // -----------------------------------------------------------------------
