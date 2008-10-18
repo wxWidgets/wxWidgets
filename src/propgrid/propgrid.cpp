@@ -5013,6 +5013,8 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
         return;
     }
 
+    event.Skip();
+
     // Except for TAB and ESC, handle child control events in child control
     if ( fromChild )
         return;
