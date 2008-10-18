@@ -3428,10 +3428,11 @@ void wxPropertyGrid::SetupChildEventHandling( wxWindow* argWnd )
         argWnd->Connect(id, wxEVT_LEAVE_WINDOW,
             wxMouseEventHandler(wxPropertyGrid::OnMouseEntry),
             NULL, this);
-        argWnd->Connect(id, wxEVT_KEY_DOWN,
-            wxCharEventHandler(wxPropertyGrid::OnChildKeyDown),
-            NULL, this);
     }
+
+    argWnd->Connect(id, wxEVT_KEY_DOWN,
+        wxCharEventHandler(wxPropertyGrid::OnChildKeyDown),
+        NULL, this);
 }
 
 void wxPropertyGrid::FreeEditors()
