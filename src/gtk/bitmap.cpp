@@ -280,21 +280,26 @@ bool wxBitmap::Create( int width, int height, int depth )
         return false;
     }
 
+    const GdkVisual* visual = wxTheApp->GetGdkVisual();
+    
     if (depth == 32)
     {
         SetPixbuf(gdk_pixbuf_new(GDK_COLORSPACE_RGB, true, 8, width, height), 32);
+    } else
+    if (depth == 24)
+    {
+        if (visual->depth == depth)
+            SetPixmap(gdk_pixmap_new(wxGetRootWindow()->window, width, height, depth));
+        else
+            SetPixbuf(gdk_pixbuf_new(GDK_COLORSPACE_RGB, false, 8, width, height), 24);
     }
     else
     {
         if (depth != 1)
         {
-            const GdkVisual* visual = wxTheApp->GetGdkVisual();
             if (depth == -1)
                 depth = visual->depth;
-
-            wxCHECK_MSG(depth == visual->depth, false, wxT("invalid bitmap depth"));
         }
-
         SetPixmap(gdk_pixmap_new(wxGetRootWindow()->window, width, height, depth));
     }
 
@@ -807,6 +812,7 @@ GdkPixbuf *wxBitmap::GetPixbuf() const
 
     if (M_BMPDATA->m_pixbuf == NULL)
     {
+     
         int width = GetWidth();
         int height = GetHeight();
 
@@ -816,7 +822,6 @@ GdkPixbuf *wxBitmap::GetPixbuf() const
         M_BMPDATA->m_pixbuf = pixbuf;
         gdk_pixbuf_get_from_drawable(pixbuf, M_BMPDATA->m_pixmap, NULL,
                                      0, 0, 0, 0, width, height);
-
         // apply the mask to created pixbuf:
         if (M_BMPDATA->m_pixbuf && M_BMPDATA->m_mask)
         {
@@ -896,6 +901,7 @@ void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
     void* bits = NULL;
     GdkPixbuf *pixbuf = GetPixbuf();
     const bool hasAlpha = HasAlpha();
+    
     // allow access if bpp is valid and matches existence of alpha
     if ( pixbuf && ((bpp == 24 && !hasAlpha) || (bpp == 32 && hasAlpha)) )
     {
