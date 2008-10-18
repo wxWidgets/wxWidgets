@@ -32,58 +32,6 @@
 // -----------------------------------------------------------------------
 
 //
-// Constant definitions required by wxFlagsProperty examples.
-//
-
-static const wxChar* _fs_framestyle_labels[] = {
-    wxT("wxCAPTION"),
-    wxT("wxMINIMIZE"),
-    wxT("wxMAXIMIZE"),
-    wxT("wxCLOSE_BOX"),
-    wxT("wxSTAY_ON_TOP"),
-    wxT("wxSYSTEM_MENU"),
-    wxT("wxRESIZE_BORDER"),
-    wxT("wxFRAME_TOOL_WINDOW"),
-    wxT("wxFRAME_NO_TASKBAR"),
-    wxT("wxFRAME_FLOAT_ON_PARENT"),
-    wxT("wxFRAME_SHAPED"),
-    (const wxChar*) NULL
-};
-
-static const long _fs_framestyle_values[] = {
-    wxCAPTION,
-    wxMINIMIZE,
-    wxMAXIMIZE,
-    wxCLOSE_BOX,
-    wxSTAY_ON_TOP,
-    wxSYSTEM_MENU,
-    wxRESIZE_BORDER,
-    wxFRAME_TOOL_WINDOW,
-    wxFRAME_NO_TASKBAR,
-    wxFRAME_FLOAT_ON_PARENT,
-    wxFRAME_SHAPED
-};
-
-// Colour labels. Last (before NULL, if any) must be Custom.
-static const wxChar* mycolprop_labels[] = {
-    wxT("Black"),
-    wxT("Blue"),
-    wxT("Brown"),
-    wxT("Custom"),
-    (const wxChar*) NULL
-};
-
-// Relevant colour values as unsigned longs.
-static unsigned long mycolprop_colours[] = {
-    wxPG_COLOUR(0,0,0),
-    wxPG_COLOUR(0,0,255),
-    wxPG_COLOUR(166,124,81),
-    wxPG_COLOUR(0,0,0)
-};
-
-// -----------------------------------------------------------------------
-
-//
 // Test customizing wxColourProperty via subclassing
 //
 // * Includes custom colour entry.
