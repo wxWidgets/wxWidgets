@@ -408,12 +408,6 @@ protected:
         pg->OnKey( event );
     }
 
-    void OnKeyUp( wxKeyEvent& event )
-    {
-        wxPropertyGrid* pg = wxStaticCast(GetParent(), wxPropertyGrid);
-        pg->OnKeyUp( event );
-    }
-
     void OnPaint( wxPaintEvent& event );
     
     // Always be focussable, even with child windows
@@ -437,8 +431,6 @@ BEGIN_EVENT_TABLE(wxPGCanvas, wxPanel)
     EVT_RIGHT_UP(wxPGCanvas::OnMouseRightClick)
     EVT_LEFT_DCLICK(wxPGCanvas::OnMouseDoubleClick)
     EVT_KEY_DOWN(wxPGCanvas::OnKey)
-    EVT_KEY_UP(wxPGCanvas::OnKeyUp)
-    EVT_CHAR(wxPGCanvas::OnKey)
 END_EVENT_TABLE()
 
 
@@ -523,18 +515,9 @@ bool wxPropertyGrid::Create( wxWindow *parent,
 
     style |= wxVSCROLL;
 
-#ifdef __WXMSW__
-    // This prevents crash under Win2K, but still
-    // enables keyboard navigation
-    if ( style & wxTAB_TRAVERSAL )
-    {
-        style &= ~(wxTAB_TRAVERSAL);
-        style |= wxWANTS_CHARS;
-    }
-#else
-    if ( style & wxTAB_TRAVERSAL )
-        style |= wxWANTS_CHARS;
-#endif
+    // Filter out wxTAB_TRAVERSAL - we will handle TABs manually
+    style &= ~(wxTAB_TRAVERSAL);
+    style |= wxWANTS_CHARS;
 
     wxScrolledWindow::Create(parent,id,pos,size,style,name);
 
@@ -702,7 +685,7 @@ void wxPropertyGrid::Init2()
 
     m_canvas = new wxPGCanvas();
     m_canvas->Create(this, 1, wxPoint(0, 0), GetClientSize(),
-                     (GetWindowStyle() & wxTAB_TRAVERSAL) | wxWANTS_CHARS | wxCLIP_CHILDREN);
+                     wxWANTS_CHARS | wxCLIP_CHILDREN);
     m_canvas->SetBackgroundStyle( wxBG_STYLE_CUSTOM );
 
     m_iFlags |= wxPG_FL_INITIALIZED;
@@ -4965,7 +4948,7 @@ void wxPropertyGrid::ClearActionTriggers( int action )
     }
 }
 
-void wxPropertyGrid::HandleKeyEvent(wxKeyEvent &event)
+void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
 {
     //
     // Handles key event when editor control is not focused.
@@ -4977,11 +4960,25 @@ void wxPropertyGrid::HandleKeyEvent(wxKeyEvent &event)
 
     // Travelsal between items, collapsing/expanding, etc.
     int keycode = event.GetKeyCode();
+    bool editorFocused = IsEditorFocused();
 
     if ( keycode == WXK_TAB )
     {
-        if (m_selected)
-            DoSelectProperty( m_selected, wxPG_SEL_FOCUS );
+        if ( !event.ShiftDown() )
+        {
+            if ( !editorFocused && m_wndEditor )
+                DoSelectProperty( m_selected, wxPG_SEL_FOCUS );
+            else
+                Navigate(wxNavigationKeyEvent::IsForward);
+        }
+        else
+        {
+            if ( editorFocused )
+                UnfocusEditor();
+            else
+                Navigate(wxNavigationKeyEvent::IsBackward);
+        }
+
         return;
     }
 
@@ -4996,9 +4993,32 @@ void wxPropertyGrid::HandleKeyEvent(wxKeyEvent &event)
     int secondAction;
     int action = KeyEventToActions(event, &secondAction);
 
+    if ( editorFocused && action == wxPG_ACTION_CANCEL_EDIT )
+    {
+        //
+        // Esc cancels any changes
+        if ( IsEditorsValueModified() )
+        {
+            EditorsValueWasNotModified();
+
+            // Update the control as well
+            m_selected->GetEditorClass()->SetControlStringValue( m_selected,
+                                                                 GetEditorControl(),
+                                                                 m_selected->GetDisplayedString() );
+        }
+
+        OnValidationFailureReset(m_selected);
+
+        UnfocusEditor();
+        return;
+    }
+
+    // Except for TAB and ESC, handle child control events in child control
+    if ( fromChild )
+        return;
+
     if ( m_selected )
     {
-
         // Show dialog?
         if ( ButtonTriggerKeyTest(action, event) )
             return;
@@ -5034,11 +5054,6 @@ void wxPropertyGrid::HandleKeyEvent(wxKeyEvent &event)
             {
                 selectDir = 1;
             }
-            else
-            {
-                event.Skip();
-            }
-
         }
 
         if ( selectDir >= -1 )
@@ -5062,58 +5077,9 @@ void wxPropertyGrid::HandleKeyEvent(wxKeyEvent &event)
 
 // -----------------------------------------------------------------------
 
-// Potentially handles a keyboard event for editor controls.
-// Returns false if event should *not* be skipped (on true it can
-// be optionally skipped).
-// Basicly, false means that SelectProperty was called (or was about
-// to be called, if canDestroy was false).
-bool wxPropertyGrid::HandleChildKey( wxKeyEvent& event )
-{
-    bool res = true;
-
-    if ( !m_selected || !m_wndEditor )
-    {
-        return true;
-    }
-
-    int action = KeyEventToAction(event);
-
-    // Unfocus?
-    if ( action == wxPG_ACTION_CANCEL_EDIT )
-    {
-        //
-        // Esc cancels any changes
-        if ( IsEditorsValueModified() )
-        {
-            EditorsValueWasNotModified();
-
-            // Update the control as well
-            m_selected->GetEditorClass()->SetControlStringValue( m_selected,
-                                                                 GetEditorControl(),
-                                                                 m_selected->GetDisplayedString() );
-        }
-
-        OnValidationFailureReset(m_selected);
-
-        res = false;
-        UnfocusEditor();
-    }
-
-    return res;
-}
-
-// -----------------------------------------------------------------------
-
 void wxPropertyGrid::OnKey( wxKeyEvent &event )
 {
-    HandleKeyEvent( event );
-}
-
-// -----------------------------------------------------------------------
-
-void wxPropertyGrid::OnKeyUp(wxKeyEvent &event)
-{
-    event.Skip();
+    HandleKeyEvent(event, false);
 }
 
 // -----------------------------------------------------------------------
@@ -5142,30 +5108,7 @@ bool wxPropertyGrid::ButtonTriggerKeyTest( int action, wxKeyEvent& event )
 
 void wxPropertyGrid::OnChildKeyDown( wxKeyEvent &event )
 {
-    int keycode = event.GetKeyCode();
-
-    // Ignore Alt and Control when they are down alone
-    if ( keycode == WXK_ALT ||
-         keycode == WXK_CONTROL )
-    {
-        event.Skip();
-        return;
-    }
-
-    if ( ButtonTriggerKeyTest(-1, event) )
-        return;
-
-    if ( HandleChildKey(event) == true )
-        event.Skip();
-
-    GetEventHandler()->AddPendingEvent(event);
-}
-
-void wxPropertyGrid::OnChildKeyUp( wxKeyEvent &event )
-{
-    GetEventHandler()->AddPendingEvent(event);
-
-    event.Skip();
+    HandleKeyEvent(event, true);
 }
 
 // -----------------------------------------------------------------------
@@ -5180,6 +5123,17 @@ void wxPropertyGrid::OnIdle( wxIdleEvent& WXUNUSED(event) )
 
     if ( newFocused != m_curFocused )
         HandleFocusChange( newFocused );
+}
+
+bool wxPropertyGrid::IsEditorFocused() const
+{
+    wxWindow* focus = wxWindow::FindFocus();
+
+    if ( focus == m_wndEditor || focus == m_wndEditor2 ||
+         focus == GetEditorControl() )
+         return true;
+
+    return false;
 }
 
 // Called by focus event handlers. newFocused is the window that becomes focused.

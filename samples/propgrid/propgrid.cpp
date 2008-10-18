@@ -1929,7 +1929,9 @@ void FormMain::InitPanel()
     if ( m_panel )
         m_panel->Destroy();
 
-    wxWindow* panel = new wxPanel(this,-1,wxPoint(0,0),wxSize(400,400));
+    wxWindow* panel = new wxPanel(this, wxID_ANY,
+                                  wxPoint(0, 0), wxSize(400, 400),
+                                  wxTAB_TRAVERSAL);
     m_panel = panel;
 
     // Column
@@ -1940,11 +1942,17 @@ void FormMain::InitPanel()
 
 void FormMain::FinalizePanel( bool wasCreated )
 {
+    // Button for tab traversal testing
+    m_topSizer->Add( new wxButton(m_panel, wxID_ANY,
+                     wxS("Should be able to move here with Tab")),
+                     0, wxEXPAND );
+
     m_panel->SetSizer( m_topSizer );
     m_topSizer->SetSizeHints( m_panel );
 
     wxBoxSizer* panelSizer = new wxBoxSizer( wxHORIZONTAL );
     panelSizer->Add( m_panel, 1, wxEXPAND|wxFIXED_MINSIZE );
+
     SetSizer( panelSizer );
     panelSizer->SetSizeHints( this );
 
@@ -1988,7 +1996,6 @@ void FormMain::CreateGrid( int style, int extraStyle )
                 //wxPG_TOOLTIPS |
                 //wxPG_HIDE_CATEGORIES |
                 //wxPG_LIMITED_EDITING |
-                wxTAB_TRAVERSAL |
                 wxPG_TOOLBAR |
                 wxPG_DESCRIPTION;
 
@@ -2084,7 +2091,6 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
                 //wxPG_TOOLTIPS |
                 //wxPG_HIDE_CATEGORIES |
                 //wxPG_LIMITED_EDITING |
-                wxTAB_TRAVERSAL |
                 wxPG_TOOLBAR |
                 wxPG_DESCRIPTION,
                 // extra style

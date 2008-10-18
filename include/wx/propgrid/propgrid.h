@@ -1642,7 +1642,6 @@ protected:
     void OnMouseDoubleClick( wxMouseEvent &event );
     void OnMouseUp( wxMouseEvent &event );
     void OnKey( wxKeyEvent &event );
-    void OnKeyUp( wxKeyEvent &event );
     void OnResize( wxSizeEvent &event );
 
     // event handlers
@@ -1651,9 +1650,7 @@ protected:
     bool HandleMouseRightClick( int x, unsigned int y, wxMouseEvent &event );
     bool HandleMouseDoubleClick( int x, unsigned int y, wxMouseEvent &event );
     bool HandleMouseUp( int x, unsigned int y, wxMouseEvent &event );
-    void HandleKeyEvent( wxKeyEvent &event );
-    // Handle TAB and ESCAPE in control
-    bool HandleChildKey( wxKeyEvent& event );
+    void HandleKeyEvent( wxKeyEvent &event, bool fromChild );
 
     void OnMouseEntry( wxMouseEvent &event );
 
@@ -1670,7 +1667,6 @@ protected:
     void OnMouseMoveChild( wxMouseEvent &event );
     void OnMouseUpChild( wxMouseEvent &event );
     void OnChildKeyDown( wxKeyEvent &event );
-    void OnChildKeyUp( wxKeyEvent &event );
 
     void OnCaptureChange( wxMouseCaptureChangedEvent &event );
 
@@ -1749,6 +1745,9 @@ protected:
     }
 
     void ImprovedClientToScreen( int* px, int* py );
+
+    // Returns True if editor control has focus
+    bool IsEditorFocused() const;
 
     // Called by focus event handlers. newFocused is the window that becomes
     // focused.
