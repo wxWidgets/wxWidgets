@@ -629,7 +629,7 @@ public:
     shifted so the first visible row always appears at the point (0, 0) in
     physical as well as logical coordinates.
 
-    @section wxWidgets 2.8 Compatibility Functions
+    @section vscrolledwindow_compat wxWidgets 2.8 Compatibility Functions
 
     The following functions provide backwards compatibility for applications
     originally built using wxVScrolledWindow in 2.6 or 2.8. Originally,

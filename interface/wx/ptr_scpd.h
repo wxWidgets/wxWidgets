@@ -56,7 +56,7 @@
     theCharObj[0] = "!";
     @endcode
 
-    @section wxscopedptr_newpointers Declaring new smart pointer types
+    @section scopedptr_newpointers Declaring new smart pointer types
 
     To declare the smart pointer class @c CLASSNAME containing pointes to
     a (possibly incomplete) type @c TYPE you should use

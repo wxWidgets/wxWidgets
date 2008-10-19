@@ -82,7 +82,7 @@ enum wxAuiManagerOption
     @endcode
 
 
-    @section wxauimanager_layers Layers, Rows and Directions, Positions
+    @section auimanager_layers Layers, Rows and Directions, Positions
 
     Inside wxAUI, the docking layout is figured out by checking several pane
     parameters. Four of these are important for determining where a pane will end up:

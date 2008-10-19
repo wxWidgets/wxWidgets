@@ -2433,7 +2433,7 @@ public:
     events and use the event table macros mentioned below only for the scrollbar-like
     controls.
 
-    @section wxscrollevent_diff The difference between EVT_SCROLL_THUMBRELEASE and EVT_SCROLL_CHANGED
+    @section scrollevent_diff The difference between EVT_SCROLL_THUMBRELEASE and EVT_SCROLL_CHANGED
 
     The EVT_SCROLL_THUMBRELEASE event is only emitted when actually dragging the thumb
     using the mouse and releasing it (This EVT_SCROLL_THUMBRELEASE event is also followed

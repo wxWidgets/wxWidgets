@@ -10,7 +10,7 @@ documentation in the form of C++ comments and output in HTML, and XML
 (Doxygen itself can also output Latex, manpages, RTF, PDF etc).
 See http://www.doxygen.org for more info about Doxygen.
 
-If you want to add documentation of a new class/function to the 
+If you want to add documentation of a new class/function to the
 existing manual in docs/doxygen, you need to create a new .h file,
 e.g. myclass.h, under the interface folder, which contains the public
 interface of the new class/function in C++ syntax.
@@ -136,7 +136,6 @@ Start off with:
 
 /**
     @class wxMyClass
-    @wxheader{myclass.h}
 
     ...here goes the description...
 
@@ -173,8 +172,38 @@ Start off with:
          manual pages using the @ref command
 */
 
-Note that everything *except* the @class, @wxheader, @library and @category
+Note that everything *except* the @class, @library and @category
 commands are optionals.
+
+Also note that if you use @section and @subsection in the class description
+(at the beginning), you should use as the section's anchor name "xxxx_yyyy"
+where "xxxx" is the the class name without the initial "wx" in lowercase
+and "yyyy" is a lowercase word which uniquely identifies that section.
+E.g.:
+
+/**
+    @class wxMyClass
+
+    This class does not exist really and is only used as an example
+    of best documentation practices.
+
+    @section myclass_special Special functions of this class
+
+    This section describes the functions whose usage is reserved for
+    wxWidgets internal mechanisms... etc etc...
+
+
+    @section myclass_custom Customizing wxMyClass
+
+    What if you want to customize this powerful class?
+    First you should do this and that, etc etc...
+
+
+    @library{wxbase}
+    @category{misc}
+
+    @see wxMyOtherClass
+*/
 
 
 
@@ -204,7 +233,7 @@ Start off with:
 
 Note that the @return, @note, @remarks, @see commands are optional.
 
-The @param command has an optional attribute specifying the direction of 
+The @param command has an optional attribute specifying the direction of
 the attribute. Possible values are "in" and "out". E.g.
 
 /**
@@ -250,7 +279,7 @@ and are completely placed inside a single comment block in the form of:
 */
 
 Note that there is a convention in the anchor link names.
-Doxygen in fact requires that for each @page, @section, @subsection, etc tag, 
+Doxygen in fact requires that for each @page, @section, @subsection, etc tag,
 there is a corresponding link anchor.
 
 The following conventions are used in wxWidgets doxygen comments:

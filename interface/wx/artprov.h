@@ -49,7 +49,7 @@
     (@note this is not yet really possible as of wxWidgets 2.3.3, the set of wxArtProvider
      bitmaps is too small).
 
-    @section wxartprovider_identify Identifying art resources
+    @section artprovider_identify Identifying art resources
 
     Every bitmap and icon bundle are known to wxArtProvider under an unique ID that
     is used when requesting a resource from it. The ID is represented by wxArtID type
@@ -126,7 +126,7 @@
     The default theme is typically installed in @c /usr/share/icons/hicolor.
 
 
-    @section wxartprovider_clients Clients
+    @section artprovider_clients Clients
 
     Client is the entity that calls wxArtProvider's GetBitmap or GetIcon function.
     It is represented by wxClientID type and can have one of these values:

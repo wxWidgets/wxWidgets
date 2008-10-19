@@ -18,9 +18,9 @@
     additional bitmaps for the selected state, unpressed focused state, and greyed-out
     state may be supplied.
 
-    @section wxbitmapbutton_states Button states
-    This class supports bitmaps for several different states:
+    @section bitmapbutton_states Button states
 
+    This class supports bitmaps for several different states:
     @li @b normal: this is the bitmap shown in the default state, it must be always
         valid while all the other bitmaps are optional and don't have to be set.
     @li @b disabled: bitmap shown when the button is disabled.
