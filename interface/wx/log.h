@@ -51,6 +51,7 @@ public:
         Called if the user closes the window interactively, will not be
         called if it is destroyed for another reason (such as when program
         exits).
+
         Return @true from here to allow the frame to close, @false to
         prevent this from happening.
 
@@ -81,16 +82,13 @@ public:
 /**
     @class wxLogInterposerTemp
 
-    A special version of wxLogChain which uses itself as the
-    new log target. It forwards log messages to the previously installed one in
-    addition to
-    processing them itself. Unlike wxLogInterposer, it doesn't
-    delete the old target which means it can be used to temporarily redirect log
-    output.
+    A special version of wxLogChain which uses itself as the new log target.
+    It forwards log messages to the previously installed one in addition to
+    processing them itself. Unlike wxLogInterposer, it doesn't delete the old
+    target which means it can be used to temporarily redirect log output.
 
     As per wxLogInterposer, this class must be derived from to implement
-    wxLog::DoLog
-    and/or wxLog::DoLogString methods.
+    wxLog::DoLog and/or wxLog::DoLogString methods.
 
     @library{wxbase}
     @category{logging}
@@ -101,6 +99,7 @@ public:
     /**
         The default constructor installs this object as the current active log target.
     */
+    wxLogInterposerTemp();
 };
 
 
@@ -159,8 +158,7 @@ public:
 
     /**
         Returns @true if the messages are passed to the previously active log
-        target (default) or @false if PassMessages()
-        had been called.
+        target (default) or @false if PassMessages() had been called.
     */
     bool IsPassingMessages() const;
 
@@ -173,9 +171,10 @@ public:
     void PassMessages(bool passMessages);
 
     /**
-        Sets another log target to use (may be @NULL). The log target specified
-        in the wxLogChain(wxLog*) constructor or in a previous call to
-        this function is deleted.
+        Sets another log target to use (may be @NULL).
+
+        The log target specified in the wxLogChain(wxLog*) constructor or in a
+        previous call to this function is deleted.
         This doesn't change the old log target value (the one the messages are
         forwarded to) which still remains the same as was active when wxLogChain
         object was created.
@@ -436,8 +435,7 @@ public:
     by the new lines.
 
     All the messages collected so far can be shown to the user (and the current
-    buffer cleared) by calling the overloaded wxLogBuffer::Flush
-    method.
+    buffer cleared) by calling the overloaded wxLogBuffer::Flush method.
 
     @library{wxbase}
     @category{logging}
@@ -455,8 +453,8 @@ public:
     /**
         Returns the current buffer contains. Messages from different log function calls
         are separated with the new lines in the buffer.
-        The buffer can be cleared by Flush() which will
-        also show the current contents to the user.
+        The buffer can be cleared by Flush() which will also show the current
+        contents to the user.
     */
     const wxString GetBuffer();
 };
@@ -466,17 +464,15 @@ public:
 /**
     @class wxLogInterposer
 
-    A special version of wxLogChain which uses itself as the
-    new log target. It forwards log messages to the previously installed one in
-    addition to
+    A special version of wxLogChain which uses itself as the new log target.
+    It forwards log messages to the previously installed one in addition to
     processing them itself.
 
-    Unlike wxLogChain which is usually used directly as is,
-    this class must be derived from to implement wxLog::DoLog
-    and/or wxLog::DoLogString methods.
+    Unlike wxLogChain which is usually used directly as is, this class must be
+    derived from to implement wxLog::DoLog and/or wxLog::DoLogString methods.
 
-    wxLogInterposer destroys the previous log target in its destructor. If you
-    don't want this to happen, use wxLogInterposerTemp instead.
+    wxLogInterposer destroys the previous log target in its destructor.
+    If you don't want this to happen, use wxLogInterposerTemp instead.
 
     @library{wxbase}
     @category{logging}
@@ -487,6 +483,7 @@ public:
     /**
         The default constructor installs this object as the current active log target.
     */
+    wxLogInterposer();
 };
 
 
@@ -530,116 +527,132 @@ public:
     Otherwise, it is completely hidden behind the @e wxLogXXX() functions and
     you may not even know about its existence.
 
-     @section overview_wxLog_deriving Deriving your own log target
 
-        There are two functions which must be implemented by any derived class to
-        actually process the log messages: DoLog() and
-        DoLogString(). The second function receives a string
-        which just has to be output in some way and the easiest way to write a new log
-        target is to override just this function in the derived class. If more control
-        over the output format is needed, then the first function must be overridden
-        which allows to construct custom messages depending on the log level or even
-        do completely different things depending on the message severity (for example,
-        throw away all messages except warnings and errors, show warnings on the
-        screen and forward the error messages to the user's (or programmer's) cell
-        phone - maybe depending on whether the timestamp tells us if it is day or
-        night in the current time zone).
-        There also functions to support message buffering. Why are they needed?
-        Some of wxLog implementations, most notably the standard wxLogGui class,
-        buffer the messages (for example, to avoid showing the user a zillion of modal
-        message boxes one after another -- which would be really annoying).
-        Flush() shows them all and clears the buffer contents.
-        This function doesn't do anything if the buffer is already empty.
-        See also:
-        @li Flush()
-        @li FlushActive()
+    @section log_derivingyours Deriving your own log target
 
-     @section overview_wxLog_Trace_Masks Using trace masks
+    There are two functions which must be implemented by any derived class to
+    actually process the log messages: DoLog() and DoLogString().
+    The second function receives a string which just has to be output in some way
+    and the easiest way to write a new log target is to override just this function
+    in the derived class.
 
-        The functions below allow some limited customization of wxLog behaviour
-        without writing a new log target class (which, aside from being a matter of
-        several minutes, allows you to do anything you want).
-        The verbose messages are the trace messages which are not disabled in the
-        release mode and are generated by wxLogVerbose(). They
-        are not normally shown to the user because they present little interest, but
-        may be activated, for example, in order to help the user find some program
-        problem.
-        As for the (real) trace messages, their handling depends on the settings of
-        the (application global) @e trace mask which can either be specified using
-        SetTraceMask(), GetTraceMask() and wxLogTrace() which takes an integer mask
-        or using AddTraceMask() for string trace masks.
-        The difference between bit-wise and string trace masks is that a message using
-        integer trace mask will only be logged if all bits of the mask are set in the
-        current mask while a message using string mask will be logged simply if the
-        mask had been added before to the list of allowed ones.
-        For example,
+    If more control over the output format is needed, then the first function must
+    be overridden which allows to construct custom messages depending on the log level
+    or even do completely different things depending on the message severity
+    (for example, throw away all messages except warnings and errors, show warnings
+    on the screen and forward the error messages to the user's (or programmer's) cell
+    phone - maybe depending on whether the timestamp tells us if it is day or
+    night in the current time zone).
 
-        @code
-        wxLogTrace( wxTraceRefCount|wxTraceOleCalls, "Active object ref count: %d", nRef );
-        @endcode
+    There also functions to support message buffering. Why are they needed?
+    Some of wxLog implementations, most notably the standard wxLogGui class,
+    buffer the messages (for example, to avoid showing the user a zillion of modal
+    message boxes one after another -- which would be really annoying).
 
-        will do something only if the current trace mask contains both
-        @c wxTraceRefCount and @c wxTraceOle, but
+    Flush() shows them all and clears the buffer contents.
+    This function doesn't do anything if the buffer is already empty.
 
-        @code
-        wxLogTrace( wxTRACE_OleCalls, "IFoo::Bar() called" );
-        @endcode
+    See also:
+    @li Flush()
+    @li FlushActive()
 
-        will log the message if it was preceded by
 
-        @code
-        wxLog::AddTraceMask( wxTRACE_OleCalls);
-        @endcode
+    @section log_tracemasks Using trace masks
 
-        Using string masks is simpler and allows you to easily add custom ones, so this is
-        the preferred way of working with trace messages. The integer trace mask is
-        kept for compatibility and for additional (but very rarely needed) flexibility
-        only.
-        The standard trace masks are given in wxLogTrace() documentation.
-        Finally, the @e wxLog::DoLog() function automatically prepends a time stamp
-        to all the messages. The format of the time stamp may be changed: it can be
-        any string with % specifications fully described in the documentation of the
-        standard @e strftime() function. For example, the default format is
-        "[%d/%b/%y %H:%M:%S] " which gives something like "[17/Sep/98 22:10:16] "
-        (without quotes) for the current date. Setting an empty string as the time
-        format disables timestamping of the messages completely.
-        See also
-        @li AddTraceMask()
-        @li RemoveTraceMask()
-        @li ClearTraceMasks()
-        @li GetTraceMasks()
-        @li IsAllowedTraceMask()
-        @li SetVerbose()
-        @li GetVerbose()
-        @li SetTimestamp()
-        @li GetTimestamp()
-        @li SetTraceMask()
-        @li GetTraceMask()
-        @li SetRepetitionCounting()
-        @li GetRepetitionCounting()
+    The functions below allow some limited customization of wxLog behaviour
+    without writing a new log target class (which, aside from being a matter of
+    several minutes, allows you to do anything you want).
+    The verbose messages are the trace messages which are not disabled in the
+    release mode and are generated by wxLogVerbose().
+    They are not normally shown to the user because they present little interest,
+    but may be activated, for example, in order to help the user find some program
+    problem.
 
-        @note Timestamping is disabled for Visual C++ users in debug builds by
-        default because otherwise it would be impossible to directly go to the line
-        from which the log message was generated by simply clicking in the debugger
-        window on the corresponding error message. If you wish to enable it, please
-        use SetTimestamp() explicitly.
+    As for the (real) trace messages, their handling depends on the settings of
+    the (application global) @e trace mask which can either be specified using
+    SetTraceMask(), GetTraceMask() and wxLogTrace() which takes an integer mask
+    or using AddTraceMask() for string trace masks.
 
-     @section overview_wxLog_Target Manipulating the log target
+    The difference between bit-wise and string trace masks is that a message using
+    integer trace mask will only be logged if all bits of the mask are set in the
+    current mask while a message using string mask will be logged simply if the
+    mask had been added before to the list of allowed ones.
+    For example,
 
-        The functions in this section work with and manipulate the active log
-        target. The OnLog() is called by the @e wxLogXXX() functions
-        and invokes the DoLog() of the active log target if any.
-        Get/Set methods are used to install/query the current active target and,
-        finally, DontCreateOnDemand() disables the automatic creation of a standard
-        log target if none actually exists. It is only useful when the application
-        is terminating and shouldn't be used in other situations because it may
-        easily lead to a loss of messages. See also
-        @li OnLog()
-        @li GetActiveTarget()
-        @li SetActiveTarget()
-        @li DontCreateOnDemand()
-        @li Suspend()
-        @li Resume()
+    @code
+    wxLogTrace( wxTraceRefCount|wxTraceOleCalls, "Active object ref count: %d", nRef );
+    @endcode
+
+    will do something only if the current trace mask contains both @c wxTraceRefCount
+    and @c wxTraceOle, but:
+
+    @code
+    wxLogTrace( wxTRACE_OleCalls, "IFoo::Bar() called" );
+    @endcode
+
+    will log the message if it was preceded by:
+
+    @code
+    wxLog::AddTraceMask( wxTRACE_OleCalls);
+    @endcode
+
+    Using string masks is simpler and allows you to easily add custom ones, so this
+    is the preferred way of working with trace messages. The integer trace mask is
+    kept for compatibility and for additional (but very rarely needed) flexibility
+    only.
+
+    The standard trace masks are given in wxLogTrace() documentation.
+
+    Finally, the @e wxLog::DoLog() function automatically prepends a time stamp
+    to all the messages. The format of the time stamp may be changed: it can be
+    any string with % specifications fully described in the documentation of the
+    standard @e strftime() function. For example, the default format is
+    "[%d/%b/%y %H:%M:%S] " which gives something like "[17/Sep/98 22:10:16] "
+    (without quotes) for the current date. Setting an empty string as the time
+    format disables timestamping of the messages completely.
+
+    See also
+    @li AddTraceMask()
+    @li RemoveTraceMask()
+    @li ClearTraceMasks()
+    @li GetTraceMasks()
+    @li IsAllowedTraceMask()
+    @li SetVerbose()
+    @li GetVerbose()
+    @li SetTimestamp()
+    @li GetTimestamp()
+    @li SetTraceMask()
+    @li GetTraceMask()
+    @li SetRepetitionCounting()
+    @li GetRepetitionCounting()
+
+    @note Timestamping is disabled for Visual C++ users in debug builds by
+    default because otherwise it would be impossible to directly go to the line
+    from which the log message was generated by simply clicking in the debugger
+    window on the corresponding error message. If you wish to enable it, please
+    use SetTimestamp() explicitly.
+
+
+    @section log_target Manipulating the log target
+
+    The functions in this section work with and manipulate the active log
+    target. The OnLog() is called by the @e wxLogXXX() functions
+    and invokes the DoLog() of the active log target if any.
+
+    Get/Set methods are used to install/query the current active target and,
+    finally, DontCreateOnDemand() disables the automatic creation of a standard
+    log target if none actually exists. It is only useful when the application
+    is terminating and shouldn't be used in other situations because it may
+    easily lead to a loss of messages.
+
+    See also:
+    @li OnLog()
+    @li GetActiveTarget()
+    @li SetActiveTarget()
+    @li DontCreateOnDemand()
+    @li Suspend()
+    @li Resume()
+
 
     @library{wxcore}
     @category{logging}
@@ -650,16 +663,14 @@ class wxLog
 {
 public:
     /**
-        Add the @a mask to the list of allowed masks for
-        wxLogTrace().
+        Add the @a mask to the list of allowed masks for wxLogTrace().
 
         @see RemoveTraceMask(), GetTraceMasks()
     */
     static void AddTraceMask(const wxString& mask);
 
     /**
-        Removes all trace masks previously set with
-        AddTraceMask().
+        Removes all trace masks previously set with AddTraceMask().
 
         @see RemoveTraceMask()
     */
@@ -667,7 +678,8 @@ public:
 
     /**
         Disables time stamping of the log messages.
-        This function is new since wxWidgets version 2.9
+
+        @since 2.9.0
     */
     static void SetTimestamp(const wxString& format);
 
@@ -675,6 +687,7 @@ public:
         Called to process the message of the specified severity. @a msg is the text
         of the message as specified in the call of @e wxLogXXX() function which
         generated it and @a timestamp is the moment when the message was generated.
+
         The base class version prepends the timestamp to the message, adds a prefix
         corresponding to the log level and then calls
         DoLogString() with the resulting string.
@@ -685,6 +698,7 @@ public:
     /**
         Called to log the specified string. The timestamp is already included in the
         string but still passed to this function.
+
         A simple implementation may just send the string to @c stdout or, better,
         @c stderr.
     */
@@ -694,14 +708,14 @@ public:
         Instructs wxLog to not create new log targets on the fly if there is none
         currently. (Almost) for internal use only: it is supposed to be called by the
         application shutdown code.
-        Note that this function also calls
-        ClearTraceMasks().
+
+        Note that this function also calls ClearTraceMasks().
     */
     static void DontCreateOnDemand();
 
     /**
-        Shows all the messages currently in buffer and clears it. If the buffer
-        is already empty, nothing happens.
+        Shows all the messages currently in buffer and clears it.
+        If the buffer is already empty, nothing happens.
     */
     virtual void Flush();
 
@@ -733,8 +747,7 @@ public:
     static const wxString GetTimestamp();
 
     /**
-        Returns the current trace mask, see Customization() section
-        for details.
+        Returns the current trace mask, see Customization() section for details.
     */
     static wxTraceMask GetTraceMask();
 
@@ -751,37 +764,11 @@ public:
     static bool GetVerbose();
 
     /**
-        Returns @true if the @a mask is one of allowed masks for
-        wxLogTrace().
+        Returns @true if the @a mask is one of allowed masks for wxLogTrace().
 
         See also: AddTraceMask(), RemoveTraceMask()
     */
     static bool IsAllowedTraceMask(const wxString& mask);
-
-    /**
-        There are two functions which must be implemented by any derived class to
-        actually process the log messages: DoLog() and
-        DoLogString(). The second function receives a string
-        which just has to be output in some way and the easiest way to write a new log
-        target is to override just this function in the derived class. If more control
-        over the output format is needed, then the first function must be overridden
-        which allows you to construct custom messages depending on the log level or even
-        do completely different things depending on the message severity (for example,
-        throw away all messages except warnings and errors, show warnings on the
-        screen and forward the error messages to the user's (or programmer's) cell
-        phone - maybe depending on whether the timestamp tells us if it is day or
-        night in the current time zone).
-        There also functions to support message buffering. Why are they needed?
-        Some of wxLog implementations, most notably the standard wxLogGui class,
-        buffer the messages (for example, to avoid showing the user a zillion of modal
-        message boxes one after another -- which would be really annoying).
-        Flush() shows them all and clears the buffer contents.
-        This function doesn't do anything if the buffer is already empty.
-        Flush()
-
-        FlushActive()
-    */
-
 
     /**
         Forwards the message at specified level to the @e DoLog() function of the
@@ -792,7 +779,8 @@ public:
     /**
         Remove the @a mask from the list of allowed masks for
         wxLogTrace().
-        See also: AddTraceMask()
+
+        @see AddTraceMask()
     */
     static void RemoveTraceMask(const wxString& mask);
 
@@ -834,8 +822,7 @@ public:
     static void SetTimestamp(const wxString& format);
 
     /**
-        Sets the trace mask, see Customization()
-        section for details.
+        Sets the trace mask, see @ref log_derivingyours section for details.
     */
     static void SetTraceMask(wxTraceMask mask);
 
@@ -846,14 +833,16 @@ public:
     static void SetVerbose(bool verbose = true);
 
     /**
-        Suspends the logging until Resume() is called. Note that
-        the latter must be called the same number of times as the former to undo it,
-        i.e. if you call Suspend() twice you must call Resume() twice as well.
+        Suspends the logging until Resume() is called.
+
+        Note that the latter must be called the same number of times as the former
+        to undo it, i.e. if you call Suspend() twice you must call Resume() twice as well.
+
         Note that suspending the logging means that the log sink won't be be flushed
         periodically, it doesn't have any effect if the current log target does the
-        logging immediately without waiting for Flush() to be
-        called (the standard GUI log target only shows the log dialog when it is
-        flushed, so Suspend() works as expected with it).
+        logging immediately without waiting for Flush() to be called (the standard
+        GUI log target only shows the log dialog when it is flushed, so Suspend()
+        works as expected with it).
 
         @see Resume(), wxLogNull
     */
@@ -876,7 +865,7 @@ public:
     For instance, the example of the overview:
 
     @code
-    wxFile file;
+      wxFile file;
 
       // wxFile.Open() normally complains if file can't be opened, we don't want it
       {
@@ -891,7 +880,7 @@ public:
     would be better written as:
 
     @code
-    wxFile file;
+      wxFile file;
 
       // don't try to open file if it doesn't exist, we are prepared to deal with
       // this ourselves - but all other errors are not expected
@@ -921,6 +910,7 @@ public:
     /**
         Resumes logging.
     */
+    ~wxLogNull();
 };
 
 

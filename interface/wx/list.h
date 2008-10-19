@@ -7,26 +7,28 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    @class wxList
 
-    The wxList<T> class provides linked list functionality. It has been rewritten
-    to be type safe and to provide the full API of the STL std::list container and
-    should be used like it. The exception is that wxList<T> actually stores
-    pointers and therefore its iterators return pointers and not references
-    to the actual objets in the list (see example below) and @e value_type
-    is defined as @e T*. wxList<T> destroys an object after removing it only
-    if wxList::DeleteContents has been called.
+    The wxList<T> class provides linked list functionality.
+
+    This class has been rewritten to be type safe and to provide the full API of
+    the STL std::list container and should be used like it.
+    The exception is that wxList<T> actually stores pointers and therefore its
+    iterators return pointers and not references to the actual objets in the list
+    (see example below) and @e value_type is defined as @e T*.
+    wxList<T> destroys an object after removing it only if wxList::DeleteContents
+    has been called.
 
     wxList<T> is not a real template and it requires that you declare and define
     each wxListT class in your program. This is done with @e WX_DECLARE_LIST
-    and @e WX_DEFINE_LIST macros (see example). We hope that we'll be able
-    to provide a proper template class providing both the STL std::list
-    and the old wxList API in the future.
+    and @e WX_DEFINE_LIST macros (see example). We hope that we'll be able to
+    provide a proper template class providing both the STL std::list and the old
+    wxList API in the future.
 
-    Please refer to the STL std::list documentation for further
-    information on how to use the class. Below we documented both
-    the supported STL and the legacy API that originated from the
-    old wxList class and which can still be used alternatively for
-    the the same class.
+    Please refer to the STL std::list documentation for further information on how
+    to use the class. Below we documented both the supported STL and the legacy API
+    that originated from the old wxList class and which can still be used alternatively
+    for the the same class.
 
     Note that if you compile wxWidgets in STL mode (wxUSE_STL defined as 1)
     then wxList<T> will actually derive from std::list and just add a legacy
@@ -78,6 +80,11 @@
     }
     @endcode
 
+    For compatibility with previous versions wxList and wxStringList classes are
+    still defined, but their usage is deprecated and they will disappear in the
+    future versions completely.
+    The use of the latter is especially discouraged as it is not only unsafe but
+    is also much less efficient than wxArrayString class.
 
     @library{wxbase}
     @category{data}
@@ -199,17 +206,17 @@ public:
     wxList<T>::compatibility_iterator Item(size_t index) const;
 
     /**
-        @note This function is deprecated, use Find() instead.
+        @deprecated This function is deprecated, use Find() instead.
     */
     wxList<T>::compatibility_iterator Member(T* object) const;
 
     /**
-        @note This function is deprecated, use Item() instead.
+        @deprecated This function is deprecated, use Item() instead.
     */
     wxList<T>::compatibility_iterator Nth(int n) const;
 
     /**
-        @note This function is deprecated, use wxList::GetCount instead.
+        @deprecated This function is deprecated, use wxList::GetCount instead.
         Returns the number of elements in the list.
     */
     int Number() const;
@@ -351,20 +358,18 @@ public:
     void remove(const_reference v);
 
     /**
-        Returns a reverse iterator pointing to the end of the
-        reversed list.
+        Returns a reverse iterator pointing to the end of the reversed list.
     */
     reverse_iterator rend();
 
     /**
-        Returns a const reverse iterator pointing to the end of the
-        reversed list.
+        Returns a const reverse iterator pointing to the end of the reversed list.
     */
     const_reverse_iterator rend() const;
 
     /**
-        Resizes the list. If the the list is enlarges items with
-        the value @e v are appended to the list.
+        Resizes the list.
+        If the the list is enlarges items with the value @e v are appended to the list.
     */
     void resize(size_type n);
 
@@ -384,13 +389,14 @@ public:
 /**
     @class wxNode
 
-    wxNodeBase is the node structure used in linked lists (see
-    wxList) and derived classes. You should never use wxNodeBase
-    class directly, however, because it works with untyped (@c void *) data and
-    this is unsafe. Use wxNodeBase-derived classes which are automatically defined
-    by WX_DECLARE_LIST and WX_DEFINE_LIST macros instead as described in
-    wxList documentation (see example there). Also note that
-    although there is a class called wxNode, it is defined for backwards
+    wxNodeBase is the node structure used in linked lists (see wxList) and derived
+    classes. You should never use wxNodeBase class directly, however, because it
+    works with untyped (@c void *) data and this is unsafe.
+    Use wxNodeBase-derived classes which are automatically defined by WX_DECLARE_LIST
+    and WX_DEFINE_LIST macros instead as described in wxList documentation
+    (see example there).
+
+    Also note that although there is a class called wxNode, it is defined for backwards
     compatibility only and usage of this class is strongly deprecated.
 
     In the documentation below, the type @c T should be thought of as a
@@ -400,7 +406,7 @@ public:
     helps to think of it as if it were.
 
     @library{wxbase}
-    @category{FIXME}
+    @category{data}
 
     @see wxList<T>, wxHashTable
 */

@@ -29,10 +29,9 @@
     If a native (i.e. supported directly by the compiler) 64 bit integer type was
     found to exist, @e wxLongLong_t macro will be defined to correspond to it.
     Also, in this case only, two additional macros will be defined:
-    wxLongLongFmtSpec() for printing 64 bit integers
-    using the standard @c printf() function (but see also
-    wxLongLong::ToString for a more portable solution) and
-    wxLL() for defining 64 bit integer compile-time constants.
+    - wxLongLongFmtSpec() for printing 64 bit integers using the standard @c printf()
+      function (but see also wxLongLong::ToString for a more portable solution);
+    - wxLL() for defining 64 bit integer compile-time constants.
 
     @library{wxbase}
     @category{data}
@@ -40,6 +39,16 @@
 class wxLongLong
 {
 public:
+    /**
+        Default constructor initializes the object to 0.
+    */
+    wxLongLong();
+
+    /**
+        Constructor from native long long (only for compilers supporting it).
+    */
+    wxLongLong(wxLongLong_t ll);
+
     /**
         Constructor from 2 longs: the high and low part are combined into one
         wxLongLong.
@@ -49,16 +58,17 @@ public:
     //@{
     /**
         Returns an absolute value of wxLongLong - either making a copy (const version)
-        or modifying it in place (the second one).  Not in wxULongLong.
+        or modifying it in place (the second one). Not in wxULongLong.
     */
-    wxLongLong Abs();
-    const wxLongLong&  Abs();
+    wxLongLong Abs() const;
+    wxLongLong& Abs();
     //@}
 
     /**
-        This allows to convert a double value to wxLongLong type. Such conversion is
-        not always possible in which case the result will be silently truncated in a
-        platform-dependent way.  Not in wxULongLong.
+        This allows to convert a double value to wxLongLong type.
+
+        Such conversion is not always possible in which case the result will be
+        silently truncated in a platform-dependent way. Not in wxULongLong.
     */
     wxLongLong Assign(double d);
 
@@ -73,7 +83,7 @@ public:
     unsigned long GetLo() const;
 
     /**
-        Convert to native long long (only for compilers supporting it)
+        Convert to native long long (only for compilers supporting it).
     */
     wxLongLong_t GetValue() const;
 
@@ -94,48 +104,83 @@ public:
     */
     wxString ToString() const;
 
+
     /**
         Adds 2 wxLongLongs together and returns the result.
     */
     wxLongLong operator+(const wxLongLong& ll) const;
 
-    //@{
-    /**
-        Pre/post increment operator.
-    */
-    wxLongLong operator++();
-    wxLongLong operator++(int );
-    //@}
-
     /**
         Add another wxLongLong to this one.
     */
-    wxLongLong operator+(const wxLongLong& ll);
+    wxLongLong& operator+(const wxLongLong& ll);
+
 
     /**
         Subtracts 2 wxLongLongs and returns the result.
     */
     wxLongLong operator-(const wxLongLong& ll) const;
 
+    /**
+        Subtracts another wxLongLong from this one.
+    */
+    wxLongLong& operator-(const wxLongLong& ll);
+
+
+    //@{
+    /**
+        Pre/post increment operator.
+    */
+    wxLongLong operator++();
+    wxLongLong operator++(int);
+    //@}
+
     //@{
     /**
         Pre/post decrement operator.
     */
     wxLongLong operator--();
-    wxLongLong operator--(int );
+    wxLongLong operator--(int);
     //@}
 
     /**
-        Subtracts another wxLongLong from this one.
+        Returns the value of this wxLongLong with opposite sign. Not in wxULongLong.
     */
-    wxLongLong operator-(const wxLongLong& ll);
+    wxLongLong operator-() const;
 
     /**
         Assignment operator from unsigned long long. The sign bit will be copied too.
 
         @since 2.7.0
     */
-    wxLongLong& operator operator=(const wxULongLong& ll);
+    wxLongLong& operator=(const wxULongLong& ll);
+
+    /**
+        Assignment operator from native long long (only for compilers supporting it).
+    */
+    wxLongLong& operator=(wxLongLong_t ll);
+
+    /**
+        Assignment operator from native unsigned long long (only for compilers supporting it).
+
+        @since 2.7.0
+    */
+    wxLongLong& operator=(wxULongLong_t ll);
+
+    /**
+        Assignment operator from long.
+
+        @since 2.7.0
+    */
+    wxLongLong& operator=(long l);
+
+    /**
+        Assignment operator from unsigned long.
+
+        @since 2.7.0
+    */
+    wxLongLong& operator=(unsigned long l);
+
 };
 
 
