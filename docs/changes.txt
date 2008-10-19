@@ -250,12 +250,14 @@ Major new features in this release
 - New propgrid library containing wxPropertyGrid and related classes, many
   enhancements to wxDataViewCtrl.
 
-- Events loops, timers and sockets can now be used in wxBase, without GUI.
+- Event loops, timers and sockets can now be used in wxBase, without GUI.
 
-- Documentation sources for wxWidgets have been converted from LaTex to Doxygen-styled
-  headers; this allowed many improvements on the documentation (screenshots,
-  better linking, function signature checks, etc).
-  Any report about inaccuracies in documentation is welcome.
+- Documentation for wxWidgets has been converted from LaTex to C++ headers
+  with Doxygen comments and significantly improved in the process (screenshots
+  of various controls were added, more identifiers are now linked to their
+  definition &c). Any reports about inaccuracies in the documentation are
+  welcome (and due to using the simple Doxygen syntax it is now easier than
+  ever to submit patches correcting them! :-)
 
 
 2.9.0
