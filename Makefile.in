@@ -33212,13 +33212,17 @@ ALL_DIST: distrib_clean
 	# copy wxpresets
 	mkdir $(DISTDIR)/build
 	mkdir $(DISTDIR)/build/bakefiles
+	$(CP_P) $(WXDIR)/build/bakefiles/README $(DISTDIR)/build/bakefiles
+	$(CP_P) $(WXDIR)/build/bakefiles/*.* $(DISTDIR)/build/bakefiles
 	mkdir $(DISTDIR)/build/bakefiles/wxpresets
 	mkdir $(DISTDIR)/build/bakefiles/wxpresets/presets
-	mkdir $(DISTDIR)/build/bakefiles/wxpresets/sample
+	$(CP_P) $(WXDIR)/build/bakefiles/wxpresets/*.txt $(DISTDIR)/build/bakefiles/wxpresets
 	$(CP_P) $(WXDIR)/build/bakefiles/wxpresets/presets/*.bkl $(DISTDIR)/build/bakefiles/wxpresets/presets
+	mkdir $(DISTDIR)/build/bakefiles/wxpresets/sample
 	$(CP_P) $(WXDIR)/build/bakefiles/wxpresets/sample/minimal* $(DISTDIR)/build/bakefiles/wxpresets/sample
 	$(CP_P) $(WXDIR)/build/bakefiles/wxpresets/sample/config* $(DISTDIR)/build/bakefiles/wxpresets/sample
-	$(CP_P) $(WXDIR)/build/bakefiles/wxpresets/*.txt $(DISTDIR)/build/bakefiles/wxpresets
+	mkdir $(DISTDIR)/build/bakefiles/wxpresets/libsample
+	$(CP_P) $(WXDIR)/build/bakefiles/wxpresets/libsample/*.* $(DISTDIR)/build/bakefiles/wxpresets/libsample
 	mkdir $(DISTDIR)/build/aclocal
 	$(CP_P) $(WXDIR)/build/aclocal/*.m4 $(DISTDIR)/build/aclocal
 
