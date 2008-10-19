@@ -1196,6 +1196,8 @@ public:
 /**
     @class wxDatagramSocket
 
+    @todo docme
+
     @library{wxnet}
     @category{net}
 */
@@ -1205,8 +1207,10 @@ public:
     /**
         Constructor.
 
+        @param addr
+            The socket address.
         @param flags
-            Socket flags (See wxSocketBase::SetFlags())
+            Socket flags (See wxSocketBase::SetFlags()).
     */
     wxDatagramSocket(const wxSockAddress& addr,
                      wxSocketFlags flags = wxSOCKET_NONE);

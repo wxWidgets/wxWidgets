@@ -74,7 +74,7 @@ public:
             Message to show on the dialog.
         @param caption
             The caption of the the dialog.
-        @param defaultValue
+        @param value
             The default value, which may be the empty string.
         @param style
             A dialog style, specifying the buttons (wxOK, wxCANCEL)

@@ -320,14 +320,13 @@ public:
     @li Pad()
 
 
-    @section string_misc wxWidgets 1.xx compatibility functions
+    @section string_compat wxWidgets 1.xx compatibility functions
 
     The following functions are deprecated.
     Please consider using @c std::string compatible variants.
 
-    Contains(), First(), Freq(), IsAscii(), IsNull(),
-    IsNumber(), IsWord(), Last(), Length(), LowerCase(), Remove(), Strip(),
-    SubString(), UpperCase()
+    Contains(), First(), Freq(), IsAscii(), IsNull(), IsNumber(), IsWord(),
+    Last(), Length(), LowerCase(), Remove(), Strip(), SubString(), UpperCase()
 
 
     @library{wxbase}

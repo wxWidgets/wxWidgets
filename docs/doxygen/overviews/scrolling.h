@@ -10,10 +10,7 @@
 
 @page overview_scrolling Scrolled Windows
 
-Classes:
-@li wxWindow
-@li ::wxScrolledWindow
-@li wxScrollBar
+Classes: wxWindow, wxScrolledWindow, wxScrollBar
 
 @li @ref overview_scrolling_model
 @li @ref overview_scrolling_example

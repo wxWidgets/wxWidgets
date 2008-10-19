@@ -79,6 +79,7 @@ The following is a basic categorization of them:
 
 @li @subpage overview_sizer
 @li @subpage overview_xrc
+@li @subpage overview_xrcformat
 @li @subpage overview_windowsizing
 @li @subpage overview_scrolling
 @li @subpage overview_dialog

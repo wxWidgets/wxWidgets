@@ -43,7 +43,8 @@ XRC was written by Vaclav Slavik.
 @li @ref overview_xrc_sample
 @li @ref overview_xrc_cppheader
 @li @ref overview_xrc_newresourcehandlers
-@li @ref xrc_format
+
+See also the separate @ref overview_xrcformat page for details about the XRC file format.
 
 <hr>
 
