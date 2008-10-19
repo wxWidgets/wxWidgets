@@ -33548,6 +33548,7 @@ MSW_ZIP_TEXT_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/src/msw/ole
 	mkdir $(DISTDIR)/src/msw/wince
 	$(CP_P) $(MSWDIR)/*.cpp $(DISTDIR)/src/msw
+	$(CP_P) $(MSWDIR)/*.rc $(DISTDIR)/src/msw
 	$(CP_P) $(MSWDIR)/*.c $(DISTDIR)/src/msw
 	$(CP_P) $(MSWDIR)/ole/*.cpp $(DISTDIR)/src/msw/ole
 	$(CP_P) $(MSWDIR)/wince/*.* $(DISTDIR)/src/msw/wince
