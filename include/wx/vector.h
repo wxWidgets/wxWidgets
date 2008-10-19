@@ -131,38 +131,38 @@ public:
         reverse_iterator() : m_ptr(NULL) { }
         wxEXPLICIT reverse_iterator(iterator it) : m_ptr(it) { }
         reverse_iterator(const reverse_iterator& it) : m_ptr(it.m_ptr) { }
-        
+
         reference operator*() const { return *m_ptr; }
         pointer operator->() const { return m_ptr; }
-        
+
         iterator base() const { return m_ptr; }
-        
-        reverse_iterator& operator++() 
-                { --m_ptr; return *this; }
+
+        reverse_iterator& operator++()
+            { --m_ptr; return *this; }
         reverse_iterator operator++(int)
-                { reverse_iterator tmp = *this; --m_ptr; return tmp; }
-        reverse_iterator& operator--() 
-                { ++m_ptr; return *this; }
-        reverse_iterator operator--(int) 
-                { reverse_iterator tmp = *this; ++m_ptr; return tmp; }
-        
+            { reverse_iterator tmp = *this; --m_ptr; return tmp; }
+        reverse_iterator& operator--()
+            { ++m_ptr; return *this; }
+        reverse_iterator operator--(int)
+            { reverse_iterator tmp = *this; ++m_ptr; return tmp; }
+
         reverse_iterator operator+(difference_type n) const
-                { return reverse_iterator(m_ptr - n); }
+            { return reverse_iterator(m_ptr - n); }
         reverse_iterator& operator+=(difference_type n)
-                { return m_ptr -= n; return *this; }
+            { m_ptr -= n; return *this; }
         reverse_iterator operator-(difference_type n) const
-                { return reverse_iterator(m_ptr + n); }
+            { return reverse_iterator(m_ptr + n); }
         reverse_iterator& operator-=(difference_type n)
-                { return m_ptr += n; return *this; }
-                
+            { m_ptr += n; return *this; }
+
         reference operator[](difference_type n) const
-                { return *(*this + n); }
-        
-        bool operator ==(const reverse_iterator& it) const 
-                { return m_ptr == it.m_ptr; }
+            { return *(*this + n); }
+
+        bool operator ==(const reverse_iterator& it) const
+            { return m_ptr == it.m_ptr; }
         bool operator !=(const reverse_iterator& it) const
-                { return m_ptr != it.m_ptr; }
-        
+            { return m_ptr != it.m_ptr; }
+
     private:
         value_type *m_ptr;
     };
