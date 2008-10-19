@@ -69,7 +69,7 @@ protected:
     int                             m_nWidth;
     int                             m_nHeight;
 
-    wxSize wxGauge::DoGetBestSize(void) const;
+    wxSize DoGetBestSize(void) const;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxGauge)
