@@ -1001,11 +1001,29 @@ wxString wxSystemColourProperty::ColourToString( const wxColour& col, int index 
 }
 
 wxString wxSystemColourProperty::ValueToString( wxVariant& value,
-                                                int WXUNUSED(argFlags) ) const
+                                                int argFlags ) const
 {
     wxColourPropertyValue val = GetVal(&value);
 
-    return ColourToString(val.m_colour, m_choices.Index(val.m_type));
+    int index;
+
+    if ( argFlags & wxPG_VALUE_IS_CURRENT )
+    {
+        // GetIndex() only works reliably if wxPG_VALUE_IS_CURRENT flag is set,
+        // but we should use it whenever possible.
+        index = GetIndex();
+
+        // If custom colour was selected, use invalid index, so that
+        // ColourToString() will return properly formatted colour text.
+        if ( index == GetCustomColourIndex() )
+            index = wxNOT_FOUND;
+    }
+    else
+    {
+        index = m_choices.Index(val.m_type);
+    }
+
+    return ColourToString(val.m_colour, index);
 }
 
 
