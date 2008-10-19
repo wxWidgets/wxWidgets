@@ -9,25 +9,26 @@
 /**
     @class wxListBox
 
-    A listbox is used to select one or more of a list of strings. The
-    strings are displayed in a scrolling box, with the selected string(s)
-    marked in reverse video. A listbox can be single selection (if an item
-    is selected, the previous selection is removed) or multiple selection
+    A listbox is used to select one or more of a list of strings.
+
+    The strings are displayed in a scrolling box, with the selected string(s)
+    marked in reverse video. A listbox can be single selection (if an item is
+    selected, the previous selection is removed) or multiple selection
     (clicking an item toggles the item on or off independently of other
     selections).
 
-    List box elements are numbered from zero. Their number may be limited
-    under some platforms.
+    List box elements are numbered from zero.
+    Their number may be limited under some platforms.
 
-    A listbox callback gets an event wxEVT_COMMAND_LISTBOX_SELECTED for
-    single clicks, and wxEVT_COMMAND_LISTBOX_DOUBLECLICKED for double clicks.
+    A listbox callback gets an event @c wxEVT_COMMAND_LISTBOX_SELECTED for
+    single clicks, and @c wxEVT_COMMAND_LISTBOX_DOUBLECLICKED for double clicks.
 
     @beginStyleTable
     @style{wxLB_SINGLE}
            Single-selection list.
     @style{wxLB_MULTIPLE}
-           Multiple-selection list: the user can toggle multiple items on and
-           off. This is the same as wxLB_EXTENDED in wxGTK2 port.
+           Multiple-selection list: the user can toggle multiple items on and off.
+           This is the same as wxLB_EXTENDED in wxGTK2 port.
     @style{wxLB_EXTENDED}
            Extended-selection list: the user can extend the selection by using
            @c SHIFT or @c CTRL keys together with the cursor movement keys or
@@ -42,13 +43,17 @@
            The listbox contents are sorted in alphabetical order.
     @endStyleTable
 
+    Note that @c wxLB_SINGLE, @c wxLB_MULTIPLE and @c wxLB_EXTENDED styles are
+    mutually exclusive and you can specify at most one of them (single selection
+    is the default). See also @ref overview_windowstyles.
+
     @beginEventTable{wxCommandEvent}
     @event{EVT_LISTBOX(id, func)}
            Process a wxEVT_COMMAND_LISTBOX_SELECTED event, when an item on the
            list is selected or the selection changes.
     @event{EVT_LISTBOX_DCLICK(id, func)}
-           Process a wxEVT_COMMAND_LISTBOXDOUBLECLICKED event, when the
-           listbox is double-clicked.
+           Process a wxEVT_COMMAND_LISTBOXDOUBLECLICKED event, when the listbox
+           is double-clicked.
     @endEventTable
 
     @library{wxcore}
@@ -64,16 +69,31 @@ public:
         Default constructor.
     */
     wxListBox();
-    
-    /**
-        Constructor 
 
+    /**
+        Constructor, creating and showing a list box.
+
+        @param parent
+            The parent window.
+        @param id
+            The ID of this control. A value of @c wxID_ANY indicates a default value.
+        @param pos
+            The initial position.
+        @param size
+            The initial size.
+            If wxDefaultSize is specified then the window is sized appropriately.
         @param n
             Number of strings with which to initialise the control.
+        @param choices
+            The strings to use to initialize the control.
         @param style
             Window style. See wxListBox.
+        @param validator
+            The validator for this control.
+        @param name
+            The name of this class.
     */
-    
+
     wxListBox(wxWindow* parent, wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
@@ -81,24 +101,23 @@ public:
               const wxString choices[] = NULL,
               long style = 0,
               const wxValidator& validator = wxDefaultValidator,
-              const wxString& name = "listBox");
-              
-    /**
-        Constructor 
+              const wxString& name = wxListBoxNameStr);
 
-        @param choices
-            An array of strings with which to initialise the control.
-        @param style
-            Window style. See wxListBox.
+    /**
+        Constructor, creating and showing a list box.
+
+        See the other wxListBox() constructor; the only difference is that
+        this overload takes a wxArrayString instead of a pointer to an array
+        of wxString.
     */
-    
+
     wxListBox(wxWindow* parent, wxWindowID id,
               const wxPoint& pos,
               const wxSize& size,
               const wxArrayString& choices,
               long style = 0,
               const wxValidator& validator = wxDefaultValidator,
-              const wxString& name = "listBox");
+              const wxString& name = wxListBoxNameStr);
 
     /**
         Destructor, destroying the list box.
@@ -107,8 +126,8 @@ public:
 
     //@{
     /**
-        Creates the listbox for two-step construction. See wxListBox()
-        for further details.
+        Creates the listbox for two-step construction.
+        See wxListBox() for further details.
     */
     bool Create(wxWindow* parent, wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
@@ -142,7 +161,7 @@ public:
 
         @param selections
             A reference to an wxArrayInt instance that is used to store the result of
-        the query.
+            the query.
 
         @return The number of selections.
 
@@ -154,8 +173,8 @@ public:
     virtual int GetSelections(wxArrayInt& selections) const;
 
     /**
-        Returns the item located at @e point, or @c wxNOT_FOUND if there
-        is no item located at @e point.
+        Returns the item located at @a point, or @c wxNOT_FOUND if there
+        is no item located at @a point.
 
         It is currently implemented for wxMSW, wxMac and wxGTK2 ports.
 
@@ -163,11 +182,11 @@ public:
             Point of item (in client coordinates) to obtain
 
         @return Item located at point, or wxNOT_FOUND if unimplemented or the
-                 item does not exist.
+                item does not exist.
 
         @since 2.7.0
     */
-    int HitTest(const wxPoint point) const;
+    int HitTest(const wxPoint& point) const;
 
     /**
         Insert the given number of strings before the specified position.
@@ -189,7 +208,7 @@ public:
         @param items
             Labels of items to be inserted
         @param pos
-            Position before which to insert the items: if pos is 0 the
+            Position before which to insert the items: if pos is @c 0 the
             items will be inserted in the beginning of the listbox
     */
     void InsertItems(const wxArrayString& items,
@@ -218,8 +237,8 @@ public:
     void Set(int n, const wxString* choices, void **clientData = NULL);
 
     /**
-        Clears the list box and adds the given strings to it. You may
-        free the array from the calling program after this method
+        Clears the list box and adds the given strings to it.
+        You may free the array from the calling program after this method
         has been called.
 
         @param choices
@@ -227,8 +246,7 @@ public:
         @param clientData
             Options array of client data pointers
     */
-    void Set(const wxArrayString& choices,
-             void **clientData = NULL);
+    void Set(const wxArrayString& choices, void **clientData = NULL);
 
     /**
         Set the specified item to be the first visible item.

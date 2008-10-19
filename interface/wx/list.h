@@ -73,14 +73,14 @@
         MyListElement *current = node->GetData();
 
         ...process the current element...
-        
+
         node = node->GetNext();
     }
     @endcode
 
 
     @library{wxbase}
-    @category{FIXME}
+    @category{data}
 
     @see wxArray<T>, wxVector<T>
 */
@@ -91,7 +91,7 @@ public:
         Default constructor.
     */
     wxList<T>();
-    
+
     /**
         Constructor which initialized the list with an array of @a count elements.
     */
@@ -109,7 +109,7 @@ public:
     wxList<T>::compatibility_iterator Append(T* object);
 
     /**
-        Clears the list. 
+        Clears the list.
         Deletes the actual objects if DeleteContents( @true ) was called previously.
     */
     void Clear();
@@ -124,22 +124,22 @@ public:
     /**
         Deletes the given element refered to by @a iter from the list
         if @a iter is a valid iterator. Returns @true if successful.
-        
+
         Deletes the actual object if DeleteContents( @true ) was called previously.
     */
     bool DeleteNode(const compatibility_iterator& iter);
 
     /**
         Finds the given @a object and removes it from the list, returning
-        @true if successful. 
-        
+        @true if successful.
+
         Deletes @a object if DeleteContents( @true ) was called previously.
     */
     bool DeleteObject(T* object);
 
     /**
         Removes element refered to be @a iter.
-        
+
         Deletes the actualy object if DeleteContents( @true ) was called previously.
     */
     void Erase(const compatibility_iterator& iter);
