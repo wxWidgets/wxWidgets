@@ -3125,7 +3125,7 @@ bool wxPropertyGrid::ProcessEvent(wxEvent& event)
              (parent == m_canvas ||
               parent->GetParent() == m_canvas) )
         {
-            OnCustomEditorEvent((wxCommandEvent&)event);
+            OnCustomEditorEvent(event);
             return true;
         }
     }
@@ -3134,9 +3134,7 @@ bool wxPropertyGrid::ProcessEvent(wxEvent& event)
 
 // -----------------------------------------------------------------------
 
-// NB: It may really not be wxCommandEvent - must check if necessary
-//     (usually not).
-void wxPropertyGrid::OnCustomEditorEvent( wxCommandEvent &event )
+void wxPropertyGrid::OnCustomEditorEvent( wxEvent &event )
 {
     wxPGProperty* selected = m_selected;
 

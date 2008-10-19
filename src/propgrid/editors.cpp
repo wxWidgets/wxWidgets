@@ -872,11 +872,11 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
     // Connect event handling
     wxWindowID id = cb->GetId();
     propGrid->Connect(id, wxEVT_COMMAND_COMBOBOX_SELECTED,
-        wxCommandEventHandler(wxPropertyGrid::OnCustomEditorEvent));
+        wxEventHandler(wxPropertyGrid::OnCustomEditorEvent));
     propGrid->Connect(id, wxEVT_COMMAND_TEXT_UPDATED,
-        wxCommandEventHandler(wxPropertyGrid::OnCustomEditorEvent));
+        wxEventHandler(wxPropertyGrid::OnCustomEditorEvent));
     propGrid->Connect(id, wxEVT_COMMAND_TEXT_ENTER,
-        wxCommandEventHandler(wxPropertyGrid::OnCustomEditorEvent));
+        wxEventHandler(wxPropertyGrid::OnCustomEditorEvent));
 
 #ifdef __WXMSW__
     cb->Show();
@@ -1706,9 +1706,9 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
     // Connect event handling
     id = ed->GetId();
     this->Connect(id, wxEVT_COMMAND_TEXT_UPDATED,
-        wxCommandEventHandler(wxPropertyGrid::OnCustomEditorEvent));
+        wxEventHandler(wxPropertyGrid::OnCustomEditorEvent));
     this->Connect(id, wxEVT_COMMAND_TEXT_ENTER,
-        wxCommandEventHandler(wxPropertyGrid::OnCustomEditorEvent));
+        wxEventHandler(wxPropertyGrid::OnCustomEditorEvent));
 
     return (wxWindow*) ed;
 }
@@ -1774,7 +1774,7 @@ wxWindow* wxPropertyGrid::GenerateEditorButton( const wxPoint& pos, const wxSize
     // Connect event handling
     id = but->GetId();
     this->Connect(id, wxEVT_COMMAND_BUTTON_CLICKED,
-        wxCommandEventHandler(wxPropertyGrid::OnCustomEditorEvent));
+        wxEventHandler(wxPropertyGrid::OnCustomEditorEvent));
 
     return but;
 }
@@ -1882,7 +1882,7 @@ void wxPGMultiButton::Finalize( wxPropertyGrid* propGrid, const wxPoint& pos )
     {
         wxWindowID id = GetButtonId(i);
         propGrid->Connect(id, wxEVT_COMMAND_BUTTON_CLICKED,
-            wxCommandEventHandler(wxPropertyGrid::OnCustomEditorEvent));
+            wxEventHandler(wxPropertyGrid::OnCustomEditorEvent));
     }
 }
 

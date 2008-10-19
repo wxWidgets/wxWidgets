@@ -144,10 +144,10 @@ wxPGWindowList wxPGSpinCtrlEditor::CreateControls( wxPropertyGrid* propgrid, wxP
 
     wxWindowID id = wnd2->GetId();
     wnd2->Connect( id, wxEVT_SCROLL_LINEUP,
-                   wxCommandEventHandler(wxPropertyGrid::OnCustomEditorEvent),
+                   wxEventHandler(wxPropertyGrid::OnCustomEditorEvent),
                    NULL, propgrid );
     wnd2->Connect( id, wxEVT_SCROLL_LINEDOWN,
-                   wxCommandEventHandler(wxPropertyGrid::OnCustomEditorEvent),
+                   wxEventHandler(wxPropertyGrid::OnCustomEditorEvent),
                    NULL, propgrid );
 
     // Let's add validator to make sure only numbers can be entered
@@ -157,7 +157,7 @@ wxPGWindowList wxPGSpinCtrlEditor::CreateControls( wxPropertyGrid* propgrid, wxP
     wnd1->SetValidator(validator);
 
     wnd1->Connect( wnd1->GetId(), wxEVT_KEY_DOWN,
-                   wxCommandEventHandler(wxPropertyGrid::OnCustomEditorEvent),
+                   wxEventHandler(wxPropertyGrid::OnCustomEditorEvent),
                    NULL, propgrid );
 
     return wxPGWindowList(wnd1, wnd2);
@@ -343,7 +343,7 @@ wxPGWindowList wxPGDatePickerCtrlEditor::CreateControls( wxPropertyGrid* propgri
     // (all relevenat wxTextCtrl, wxComboBox and wxButton events are
     // already connected)
     ctrl->Connect( wxPG_SUBID1, wxEVT_DATE_CHANGED,
-                   wxCommandEventHandler(wxPropertyGrid::OnCustomEditorEvent),
+                   wxEventHandler(wxPropertyGrid::OnCustomEditorEvent),
                    NULL, propgrid );
 
 #ifdef __WXMSW__

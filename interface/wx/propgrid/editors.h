@@ -76,16 +76,16 @@ public:
         - Primary control shall use id wxPG_SUBID1, and secondary (button) control
           shall use wxPG_SUBID2.
         - Implementation shoud connect all necessary events to the
-          wxPropertyGrid::OnCustomEditorEvent. For Example:
+          wxPropertyGrid::OnCustomEditorEvent(). For example:
             @code
-                // Relays wxEVT_COMMAND_TEXT_UPDATED events of primary editor
-                // control to the OnEvent.
                 control->Connect(control->GetId(), wxEVT_COMMAND_TEXT_UPDATED,
-                                 wxCommandEventHandler(wxPropertyGrid::OnCustomEditorEvent),
+                                 wxEventHandler(wxPropertyGrid::OnCustomEditorEvent),
                                  NULL, propgrid);
             @endcode
           OnCustomEditorEvent will then forward events, first to
           wxPGEditor::OnEvent() and then to wxPGProperty::OnEvent().
+
+        @see wxPropertyGrid::OnCustomEditorEvent(), wxEvtHandler::Connect()
     */
     virtual wxPGWindowList CreateControls( wxPropertyGrid* propgrid,
                                            wxPGProperty* property,
