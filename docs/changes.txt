@@ -252,6 +252,11 @@ Major new features in this release
 
 - Events loops, timers and sockets can now be used in wxBase, without GUI.
 
+- Documentation sources for wxWidgets have been converted from LaTex to Doxygen-styled
+  headers; this allowed many improvements on the documentation (screenshots,
+  better linking, function signature checks, etc).
+  Any report about inaccuracies in documentation is welcome.
+
 
 2.9.0
 -----
