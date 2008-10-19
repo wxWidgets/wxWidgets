@@ -488,8 +488,8 @@ enum wxPG_KEYBOARD_ACTIONS
 #define wxPG_FL_SPLITTER_PRE_SET            0x00400000
 // Validation failed. Clear on modify event.
 #define wxPG_FL_VALIDATION_FAILED           0x00800000
-// Set if selected is fully painted (ie. both image and text)
-//#define wxPG_FL_SELECTED_IS_FULL_PAINT      0x01000000
+// Auto sort is enabled (for categorized mode)
+#define wxPG_FL_CATMODE_AUTO_SORT           0x01000000
 // Set after page has been inserted to manager
 #define wxPG_MAN_FL_PAGE_INSERTED           0x02000000
 // Active editor control is abnormally large

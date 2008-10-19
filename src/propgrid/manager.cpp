@@ -1363,13 +1363,25 @@ void wxPropertyGridManager::OnToolbarClick( wxCommandEvent &event )
         {
             // Categorized mode.
             if ( m_pPropGrid->m_windowStyle & wxPG_HIDE_CATEGORIES )
+            {
+                if ( !m_pPropGrid->HasInternalFlag(wxPG_FL_CATMODE_AUTO_SORT) )
+                    m_pPropGrid->m_windowStyle &= ~wxPG_AUTO_SORT;
                 m_pPropGrid->EnableCategories( true );
+            }
         }
         else if ( id == ( baseId + ID_ADVTBITEMSBASE_OFFSET + 1 ) )
         {
             // Alphabetic mode.
             if ( !(m_pPropGrid->m_windowStyle & wxPG_HIDE_CATEGORIES) )
+            {
+                if ( m_pPropGrid->HasFlag(wxPG_AUTO_SORT) )
+                    m_pPropGrid->SetInternalFlag(wxPG_FL_CATMODE_AUTO_SORT);
+                else
+                    m_pPropGrid->ClearInternalFlag(wxPG_FL_CATMODE_AUTO_SORT);
+
+                m_pPropGrid->m_windowStyle |= wxPG_AUTO_SORT;
                 m_pPropGrid->EnableCategories( false );
+            }
         }
         else
         {
