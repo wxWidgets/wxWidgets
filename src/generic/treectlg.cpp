@@ -2535,9 +2535,6 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
         x=0;
         GetVirtualSize(&w, &h);
         wxRect rect( x, item->GetY()+offset, w, total_h-offset);
-#if !defined(__WXGTK20__) && !defined(__WXMAC__)
-        dc.DrawRectangle(rect);
-#else
         if (!item->IsSelected())
         {
             dc.DrawRectangle(rect);
@@ -2557,9 +2554,8 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
             wxRendererNative::Get().
                 DrawItemSelectionRect(this, dc, rect, flags);
         }
-#endif
     }
-    else
+    else // no full row highlight
     {
         if ( item->IsSelected() &&
                 (state != wxTREE_ITEMSTATE_NONE || image != NO_IMAGE) )
@@ -2593,14 +2589,11 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
         {
             wxRect rect( item->GetX()-2, item->GetY()+offset,
                          item->GetWidth()+2, total_h-offset );
-#if !defined(__WXGTK20__) && !defined(__WXMAC__)
-            dc.DrawRectangle( rect );
-#else
             if ( hasBgColour )
             {
                 dc.DrawRectangle( rect );
             }
-            else
+            else // no specific background colour
             {
                 rect.x -= 1;
                 rect.width += 2;
@@ -2613,7 +2606,6 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
                 wxRendererNative::Get().
                     DrawItemSelectionRect(this, dc, rect, flags);
             }
-#endif
         }
     }
 
