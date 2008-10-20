@@ -1569,17 +1569,21 @@ bool wxDirProperty::OnButtonClick( wxPropertyGrid* propGrid, wxString& value )
     // Update property value from editor, if necessary
     wxSize dlg_sz(300,400);
 
+    wxString dlgMessage(m_dlgMessage);
+    if ( dlgMessage.empty() )
+        dlgMessage = _("Choose a directory:");
     wxDirDialog dlg( propGrid,
-                     m_dlgMessage.length() ? m_dlgMessage : wxString(_("Choose a directory:")),
+                     dlgMessage,
                      value,
                      0,
 #if !wxPG_SMALL_SCREEN
                      propGrid->GetGoodEditorDialogPosition(this,dlg_sz),
-                     dlg_sz );
+                     dlg_sz
 #else
                      wxDefaultPosition,
-                     wxDefaultSize );
+                     wxDefaultSize
 #endif
+                    );
 
     if ( dlg.ShowModal() == wxID_OK )
     {
