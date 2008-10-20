@@ -217,6 +217,8 @@ private:
     DECLARE_DYNAMIC_CLASS(wxFrame)
 };
 
+MRESULT EXPENTRY wxFrameWndProc(HWND  hWnd,ULONG ulMsg, MPARAM wParam, MPARAM lParam);
+MRESULT EXPENTRY wxFrameMainWndProc(HWND  hWnd,ULONG ulMsg, MPARAM wParam, MPARAM lParam);
 #endif
     // _WX_FRAME_H_
 
