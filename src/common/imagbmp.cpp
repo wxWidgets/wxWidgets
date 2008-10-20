@@ -484,7 +484,7 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
 {
     wxInt32         aDword, rmask = 0, gmask = 0, bmask = 0, amask = 0;
     int             rshift = 0, gshift = 0, bshift = 0, ashift = 0;
-    int             rbits = 0, gbits = 0, bbits = 0, abits = 0;
+    int             rbits = 0, gbits = 0, bbits = 0;
     wxInt32         dbuf[4];
     wxInt8          bbuf[4];
     wxUint8         aByte;
@@ -631,7 +631,6 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
             rshift = 16;
             gshift = 8;
             bshift = 0;
-            abits = 8;
             rbits = 8;
             gbits = 8;
             bbits = 8;
