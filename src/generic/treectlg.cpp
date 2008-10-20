@@ -2461,6 +2461,7 @@ int wxGenericTreeCtrl::GetLineHeight(wxGenericTreeItem *item) const
 void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
 {
     item->SetFont(this, dc);
+    item->CalculateSize(this, dc);
 
     wxCoord text_h = item->GetTextHeight();
 
