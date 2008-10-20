@@ -1027,7 +1027,8 @@ static bool DoLaunchDefaultBrowser(const wxString& urlOrig, int flags)
                 static const wxChar *TOPIC_OPEN_URL = wxT("WWW_OpenURL");
                 wxString ddeCmd;
                 wxRegKey keyTopic(keyDDE, wxT("topic"));
-                bool ok = keyTopic.Exists() && keyTopic == TOPIC_OPEN_URL;
+                bool ok = keyTopic.Exists() &&
+                            keyTopic.QueryDefaultValue() == TOPIC_OPEN_URL;
                 if ( ok )
                 {
                     ddeCmd = keyDDE.QueryDefaultValue();
