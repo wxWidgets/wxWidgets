@@ -784,7 +784,7 @@ bool OutputString(wxOutputStream& stream,
 #if wxUSE_UNICODE
     wxUnusedVar(convMem);
 
-    const wxWX2MBbuf buf(str.mb_str(convFile ? *convFile : wxConvUTF8));
+    const wxWX2MBbuf buf(str.mb_str(*(convFile ? convFile : &wxConvUTF8)));
     if ( !buf )
         return false;
 

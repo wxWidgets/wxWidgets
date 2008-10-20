@@ -908,10 +908,13 @@ public:
     // example)
     wxKeyEvent& operator=(const wxKeyEvent& evt)
     {
-        if (&evt != this)
+        if ( &evt != this )
         {
             wxEvent::operator=(evt);
-            wxKeyboardState::operator=(evt);
+
+            // Borland C++ 5.82 doesn't compile an explicit call to an
+            // implicitly defined operator=() so need to do it this way:
+            *static_cast<wxKeyboardState *>(this) = evt;
 
             m_x = evt.m_x;
             m_y = evt.m_y;
