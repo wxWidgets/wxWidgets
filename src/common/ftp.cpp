@@ -107,7 +107,7 @@ wxFTP::~wxFTP()
 // wxFTP connect and login methods
 // ----------------------------------------------------------------------------
 
-bool wxFTP::Connect(wxSockAddress& addr, bool WXUNUSED(wait))
+bool wxFTP::Connect(const wxSockAddress& addr, bool WXUNUSED(wait))
 {
     if ( !wxProtocol::Connect(addr) )
     {

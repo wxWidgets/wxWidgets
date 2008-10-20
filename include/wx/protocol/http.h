@@ -29,7 +29,7 @@ public:
 
   virtual bool Connect(const wxString& host, unsigned short port);
   virtual bool Connect(const wxString& host) { return Connect(host, 0); }
-  virtual bool Connect(wxSockAddress& addr, bool wait);
+  virtual bool Connect(const wxSockAddress& addr, bool wait);
   bool Abort();
   wxInputStream *GetInputStream(const wxString& path);
   inline wxProtocolError GetError() { return m_perr; }

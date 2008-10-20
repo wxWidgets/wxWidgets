@@ -219,7 +219,7 @@ bool wxHTTP::Connect(const wxString& host, unsigned short port)
     return true;
 }
 
-bool wxHTTP::Connect(wxSockAddress& addr, bool WXUNUSED(wait))
+bool wxHTTP::Connect(const wxSockAddress& addr, bool WXUNUSED(wait))
 {
     if (m_addr) {
         delete m_addr;

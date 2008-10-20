@@ -38,7 +38,7 @@ public:
     void SetUser(const wxString& user) { m_user = user; }
     void SetPassword(const wxString& passwd) { m_passwd = passwd; }
 
-    bool Connect(wxSockAddress& addr, bool wait = true);
+    bool Connect(const wxSockAddress& addr, bool wait = true);
     bool Connect(const wxString& host);
 
     // disconnect

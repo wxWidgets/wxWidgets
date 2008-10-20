@@ -59,7 +59,8 @@ public:
 #if wxUSE_SOCKETS
     bool Reconnect();
     virtual bool Connect( const wxString& WXUNUSED(host) ) { return FALSE; }
-    virtual bool Connect( wxSockAddress& addr, bool WXUNUSED(wait) = TRUE) { return wxSocketClient::Connect(addr); }
+    virtual bool Connect( const wxSockAddress& addr, bool WXUNUSED(wait) = TRUE)
+        { return wxSocketClient::Connect(addr); }
 
     // read a '\r\n' terminated line from the given socket and put it in
     // result (without the terminators)
