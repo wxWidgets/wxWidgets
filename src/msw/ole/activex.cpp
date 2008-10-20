@@ -831,6 +831,15 @@ wxActiveXContainer::~wxActiveXContainer()
     }
 }
 
+// VZ: we might want to really report an error instead of just asserting here
+#ifdef __WXDEBUG__
+    #define CHECK_HR(hr) \
+        wxASSERT_MSG( SUCCEEDED(hr), \
+            wxString::Format("HRESULT = %X", (unsigned)(hr)) )
+#else
+    #define CHECK_HR(hr) wxUnusedVar(hr)
+#endif
+
 //---------------------------------------------------------------------------
 // wxActiveXContainer::CreateActiveX
 //
@@ -843,20 +852,21 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
 {
     HRESULT hret;
     hret = m_ActiveX.QueryInterface(iid, pUnk);
-    wxASSERT(SUCCEEDED(hret));
+    CHECK_HR(hret);
 
     // FrameSite
     FrameSite *frame = new FrameSite(m_realparent, this);
     // oleClientSite
     hret = m_clientSite.QueryInterface(
         IID_IOleClientSite, (IDispatch *) frame);
-    wxASSERT(SUCCEEDED(hret));
+    CHECK_HR(hret);
     // adviseSink
     wxAutoIAdviseSink adviseSink(IID_IAdviseSink, (IDispatch *) frame);
     wxASSERT(adviseSink.Ok());
 
     // Get Dispatch interface
     hret = m_Dispatch.QueryInterface(IID_IDispatch, m_ActiveX);
+    CHECK_HR(hret);
 
     //
     // SETUP TYPEINFO AND ACTIVEX EVENTS
@@ -869,12 +879,13 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
     // type info
     wxAutoITypeInfo typeInfo;
     hret = classInfo->GetClassInfo(typeInfo.GetRef());
+    CHECK_HR(hret);
     wxASSERT(typeInfo.Ok());
 
     // TYPEATTR
     TYPEATTR *ta = NULL;
     hret = typeInfo->GetTypeAttr(&ta);
-    wxASSERT(ta);
+    CHECK_HR(hret);
 
     // this should be a TKIND_COCLASS
     wxASSERT(ta->typekind == TKIND_COCLASS);
@@ -894,6 +905,8 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
         hret = typeInfo->GetRefTypeInfo(rt, ti.GetRef());
         if (! ti.Ok())
             continue;
+
+        CHECK_HR(hret);
 
         // check if default event sink
         bool defEventSink = false;
@@ -920,7 +933,7 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
         // TYPEATTR
         TYPEATTR *ta = NULL;
         hret = ti->GetTypeAttr(&ta);
-        wxASSERT(ta);
+        CHECK_HR(hret);
 
         if (ta->typekind == TKIND_DISPATCH)
         {
@@ -935,21 +948,13 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
 
                 HRESULT hret =
                     cpContainer->FindConnectionPoint(ta->guid, cp.GetRef());
-                if ( !SUCCEEDED(hret) )
-                {
-                    wxFAIL_MSG( wxString::Format("FindConnectionPoint(): %X",
-                                                 (unsigned)hret) );
-                }
+                CHECK_HR(hret);
 
                 IDispatch* disp;
                 frame->QueryInterface(IID_IDispatch, (void**)&disp);
                 hret = cp->Advise(new wxActiveXEvents(this, ta->guid),
                                   &adviseCookie);
-                if ( !SUCCEEDED(hret) )
-                {
-                    wxFAIL_MSG( wxString::Format("Advise(): %X",
-                                                 (unsigned)hret) );
-                }
+                CHECK_HR(hret);
             }
         }
 
@@ -965,15 +970,17 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
 
     // Get IOleObject interface
     hret = m_oleObject.QueryInterface(IID_IOleObject, m_ActiveX);
-    wxASSERT(SUCCEEDED(hret));
+    CHECK_HR(hret);
 
     // get IViewObject Interface
     hret = m_viewObject.QueryInterface(IID_IViewObject, m_ActiveX);
-    wxASSERT(SUCCEEDED(hret));
+    CHECK_HR(hret);
 
     // document advise
     m_docAdviseCookie = 0;
     hret = m_oleObject->Advise(adviseSink, &m_docAdviseCookie);
+    CHECK_HR(hret);
+
     // TODO:Needed?
 //    hret = m_viewObject->SetAdvise(DVASPECT_CONTENT, 0, adviseSink);
     m_oleObject->SetHostNames(L"wxActiveXContainer", NULL);
@@ -984,12 +991,12 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
     // Get IOleInPlaceObject interface
     hret = m_oleInPlaceObject.QueryInterface(
         IID_IOleInPlaceObject, m_ActiveX);
-    wxASSERT(SUCCEEDED(hret));
+    CHECK_HR(hret);
 
     // status
     DWORD dwMiscStatus;
     m_oleObject->GetMiscStatus(DVASPECT_CONTENT, &dwMiscStatus);
-    wxASSERT(SUCCEEDED(hret));
+    CHECK_HR(hret);
 
     // set client site first ?
     if (dwMiscStatus & OLEMISC_SETCLIENTSITEFIRST)
@@ -1003,6 +1010,7 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
     if (pPersistStreamInit.Ok())
     {
         hret = pPersistStreamInit->InitNew();
+        CHECK_HR(hret);
     }
 
     if (! (dwMiscStatus & OLEMISC_SETCLIENTSITEFIRST))
@@ -1030,13 +1038,17 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
 
         hret = m_oleObject->DoVerb(OLEIVERB_INPLACEACTIVATE, NULL,
             m_clientSite, 0, (HWND)m_realparent->GetHWND(), &posRect);
+        CHECK_HR(hret);
+
         hret = m_oleObject->DoVerb(OLEIVERB_SHOW, 0, m_clientSite, 0,
             (HWND)m_realparent->GetHWND(), &posRect);
+        CHECK_HR(hret);
     }
 
     if (! m_oleObjectHWND && m_oleInPlaceObject.Ok())
     {
         hret = m_oleInPlaceObject->GetWindow(&m_oleObjectHWND);
+        CHECK_HR(hret);
     }
 
     if (m_oleObjectHWND)
