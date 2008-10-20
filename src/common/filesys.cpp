@@ -81,12 +81,9 @@ wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
 
     // Don't use mime types manager if the application doesn't need it and it would be
     // cause an unacceptable delay, especially on startup.
-    bool useMimeTypesManager = true;
 #if wxUSE_SYSTEM_OPTIONS
-    useMimeTypesManager = (wxSystemOptions::GetOptionInt(wxT("filesys.no-mimetypesmanager")) == 0);
+    if ( !wxSystemOptions::GetOptionInt(wxT("filesys.no-mimetypesmanager")) )
 #endif
-
-    if (useMimeTypesManager)
     {
         if (!s_MinimalMimeEnsured)
         {
