@@ -1107,7 +1107,7 @@ public:
         @return
         true if value was changed.
     */
-    bool SetValueFromString( const wxString& text, int flags = 0 );
+    bool SetValueFromString( const wxString& text, int flags = wxPG_PROGRAMMATIC_VALUE );
 
     /** Converts integer to a value, and if succesful, calls SetValue() on it.
         Default behavior is to do nothing.

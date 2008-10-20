@@ -5855,7 +5855,8 @@ wxPGProperty* wxPropertyGridPopulator::Add( const wxString& propClass,
     m_state->DoInsert(parent, -1, property);
 
     if ( propValue )
-        property->SetValueFromString( *propValue, wxPG_FULL_VALUE );
+        property->SetValueFromString( *propValue, wxPG_FULL_VALUE|
+                                                  wxPG_PROGRAMMATIC_VALUE );
 
     return property;
 }

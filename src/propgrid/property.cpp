@@ -881,7 +881,7 @@ bool wxPGProperty::StringToValue( wxVariant& variant, const wxString& text, int 
     wxVariantList temp_list;
     wxVariant list(temp_list);
 
-    int propagatedFlags = argFlags & wxPG_REPORT_ERROR;
+    int propagatedFlags = argFlags & (wxPG_REPORT_ERROR|wxPG_PROGRAMMATIC_VALUE);
 
 #ifdef __WXDEBUG__
     bool debug_print = false;
@@ -914,40 +914,44 @@ bool wxPGProperty::StringToValue( wxVariant& variant, const wxString& text, int 
                 if ( !addOnlyIfNotEmpty || len > 0 )
                 {
                     const wxPGProperty* child = Item(curChild);
+                    wxVariant variant(child->GetValue());
+                    variant.SetName(child->GetBaseName());
+
                 #ifdef __WXDEBUG__
                     if ( debug_print )
                         wxLogDebug(wxT("token = '%s', child = %s"),token.c_str(),child->GetLabel().c_str());
                 #endif
 
-                    if ( len > 0 )
+                    // Add only if editable or setting programmatically
+                    if ( (argFlags & wxPG_PROGRAMMATIC_VALUE) ||
+                         !child->HasFlag(wxPG_PROP_DISABLED|wxPG_PROP_READONLY) )
                     {
-                        bool wasUnspecified = child->IsValueUnspecified();
-
-                        wxVariant variant(child->GetValueRef());
-                        if ( child->StringToValue(variant, token, propagatedFlags|wxPG_COMPOSITE_FRAGMENT) )
+                        if ( len > 0 )
                         {
-                            variant.SetName(child->GetBaseName());
+                            bool wasUnspecified = child->IsValueUnspecified();
 
-                            // Clear unspecified flag only if OnSetValue() didn't
-                            // affect it.
-                            if ( child->IsValueUnspecified() &&
-                                 (wasUnspecified || !UsesAutoUnspecified()) )
+                            if ( child->StringToValue(variant, token, propagatedFlags|wxPG_COMPOSITE_FRAGMENT) )
                             {
-                                variant = child->GetDefaultValue();
+                                // Clear unspecified flag only if OnSetValue() didn't
+                                // affect it.
+                                if ( child->IsValueUnspecified() &&
+                                     (wasUnspecified || !UsesAutoUnspecified()) )
+                                {
+                                    variant = child->GetDefaultValue();
+                                }
+
+                                list.Append(variant);
+
+                                changed = true;
                             }
-
+                        }
+                        else
+                        {
+                            // Empty, becomes unspecified
+                            variant.MakeNull();
                             list.Append(variant);
-
                             changed = true;
                         }
-                    }
-                    else
-                    {
-                        // Empty, becomes unspecified
-                        wxVariant variant2;
-                        variant2.SetName(child->GetBaseName());
-                        list.Append(variant2);
-                        changed = true;
                     }
 
                     curChild++;
@@ -997,17 +1001,22 @@ bool wxPGProperty::StringToValue( wxVariant& variant, const wxString& text, int 
 
                     wxVariant oldChildValue = child->GetValue();
                     wxVariant variant(oldChildValue);
-                    bool stvRes = child->StringToValue( variant, token, propagatedFlags );
-                    if ( stvRes || (variant != oldChildValue) )
+
+                    if ( (argFlags & wxPG_PROGRAMMATIC_VALUE) ||
+                         !child->HasFlag(wxPG_PROP_DISABLED|wxPG_PROP_READONLY) )
                     {
-                        if ( stvRes )
+                        bool stvRes = child->StringToValue( variant, token, propagatedFlags );
+                        if ( stvRes || (variant != oldChildValue) )
+                        {
+                            if ( stvRes )
+                                changed = true;
+                        }
+                        else
+                        {
+                            // Failed, becomes unspecified
+                            variant.MakeNull();
                             changed = true;
-                    }
-                    else
-                    {
-                        // Failed, becomes unspecified
-                        variant.MakeNull();
-                        changed = true;
+                        }
                     }
 
                     variant.SetName(child->GetBaseName());

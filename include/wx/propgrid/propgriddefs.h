@@ -405,7 +405,10 @@ enum wxPG_MISC_ARG_FLAGS
 
     // ValueToString() called from GetValueAsString()
     // (guarantees that input wxVariant value is current own value)
-    wxPG_VALUE_IS_CURRENT               = 0x00000040
+    wxPG_VALUE_IS_CURRENT               = 0x00000040,
+
+    // Value is being set programmatically (ie. not by user)
+    wxPG_PROGRAMMATIC_VALUE             = 0x00000080
 };
 
 // -----------------------------------------------------------------------

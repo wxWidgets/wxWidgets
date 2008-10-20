@@ -1100,7 +1100,7 @@ bool wxPropertyGridPageState::DoSetPropertyValueString( wxPGProperty* p, const w
 {
     if ( p )
     {
-        int flags = wxPG_REPORT_ERROR|wxPG_FULL_VALUE;
+        int flags = wxPG_REPORT_ERROR|wxPG_FULL_VALUE|wxPG_PROGRAMMATIC_VALUE;
 
         wxVariant variant = p->GetValueRef();
         bool res;
