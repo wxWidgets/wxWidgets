@@ -846,9 +846,10 @@ wxChar wxHtmlEntitiesParser::GetEntityChar(const wxString& entity) const
             while (substitutions[substitutions_cnt].code != 0)
                 substitutions_cnt++;
 
-        wxHtmlEntityInfo *info = NULL;
+        wxHtmlEntityInfo *info;
 #ifdef __WXWINCE__
         // bsearch crashes under WinCE for some reason
+        info = NULL;
         size_t i;
         for (i = 0; i < substitutions_cnt; i++)
         {

@@ -200,8 +200,10 @@ void wxHtmlPrintout::OnPreparePrinting()
 
     int ppiPrinterX, ppiPrinterY;
     GetPPIPrinter(&ppiPrinterX, &ppiPrinterY);
+    wxUnusedVar(ppiPrinterX);
     int ppiScreenX, ppiScreenY;
     GetPPIScreen(&ppiScreenX, &ppiScreenY);
+    wxUnusedVar(ppiScreenX);
 
     wxDisplaySize(&scr_w, &scr_h);
     GetDC()->GetSize(&dc_w, &dc_h);

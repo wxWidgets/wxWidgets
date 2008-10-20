@@ -965,32 +965,19 @@ bool wxGridCellEditor::IsAcceptedKey(wxKeyEvent& event)
     if ((ctrl || alt) && !(ctrl && alt))
         return false;
 
-    int key = 0;
-    bool keyOk = true;
-
-#ifdef __WXGTK20__
-    // If it's a F-Key or other special key then it shouldn't start the
-    // editor.
-    if (event.GetKeyCode() >= WXK_START)
-        return false;
-#endif
 #if wxUSE_UNICODE
     // if the unicode key code is not really a unicode character (it may
     // be a function key or etc., the platforms appear to always give us a
     // small value in this case) then fallback to the ASCII key code but
     // don't do anything for function keys or etc.
-    key = event.GetUnicodeKey();
-    if (key <= 127)
-    {
-        key = event.GetKeyCode();
-        keyOk = (key <= 127);
-    }
+    if ( event.GetUnicodeKey() > 127 && event.GetKeyCode() > 127 )
+        return false;
 #else
-    key = event.GetKeyCode();
-    keyOk = (key <= 255);
+    if ( event.GetKeyCode() > 255 )
+        return false;
 #endif
 
-    return keyOk;
+    return true;
 }
 
 void wxGridCellEditor::StartingKey(wxKeyEvent& event)
@@ -4903,10 +4890,9 @@ void wxGrid::InitColWidths()
 
     m_colWidths.Add( m_defaultColWidth, m_numCols );
 
-    int colRight = 0;
     for ( int i = 0; i < m_numCols; i++ )
     {
-        colRight = ( GetColPos( i ) + 1 ) * m_defaultColWidth;
+        int colRight = ( GetColPos( i ) + 1 ) * m_defaultColWidth;
         m_colRights.Add( colRight );
     }
 }

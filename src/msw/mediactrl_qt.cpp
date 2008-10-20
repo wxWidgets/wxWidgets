@@ -695,15 +695,13 @@ bool wxQTMediaBackend::Load(const wxString& fileName)
     if (m_movie)
         Cleanup();
 
-    bool result = true;
-    OSErr err = noErr;
     short movieResFile = 0; //= 0 because of annoying VC6 warning
     FSSpec sfFile;
 
-    err = m_lib.NativePathNameToFSSpec(
+    OSErr err = m_lib.NativePathNameToFSSpec(
         (char*) (const char*) fileName.mb_str(),
         &sfFile, 0);
-    result = (err == noErr);
+    bool result = (err == noErr);
 
     if (result)
     {

@@ -254,7 +254,11 @@ bool wxPrintfConvSpec<CharType>::Parse(const CharType *format)
                 break;
 
             case wxT('.'):
-                CHECK_PREC
+                // don't use CHECK_PREC here to avoid warning about the value
+                // assigned to prec_dot inside it being never used (because
+                // overwritten just below) from Borland in release build
+                if (in_prec && !prec_dot)
+                    m_szFlags[flagofs++] = '.';
                 in_prec = true;
                 prec_dot = false;
                 m_nMaxWidth = 0;

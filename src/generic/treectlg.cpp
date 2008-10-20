@@ -877,10 +877,6 @@ wxGenericTreeItem::DoCalculateSize(wxGenericTreeCtrl* control,
             else
                 state_w += MARGIN_BETWEEN_IMAGE_AND_TEXT;
         }
-        else
-        {
-            state = wxTREE_ITEMSTATE_NONE;
-        }
     }
 
     m_height = (image_h > text_h) ? image_h : text_h;

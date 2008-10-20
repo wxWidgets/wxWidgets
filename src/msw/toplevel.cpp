@@ -993,11 +993,11 @@ void wxTopLevelWindowMSW::SetIcons(const wxIconBundle& icons)
 {
     wxTopLevelWindowBase::SetIcons(icons);
 
-    bool ok = DoSelectAndSetIcon(icons, SM_CXSMICON, SM_CYSMICON, ICON_SMALL);
-    if ( DoSelectAndSetIcon(icons, SM_CXICON, SM_CYICON, ICON_BIG) )
-        ok = true;
-
-    wxASSERT_MSG( ok, "icon bundle doesn't contain any suitable icon" );
+    if ( !DoSelectAndSetIcon(icons, SM_CXSMICON, SM_CYSMICON, ICON_SMALL) &&
+            !DoSelectAndSetIcon(icons, SM_CXICON, SM_CYICON, ICON_BIG) )
+    {
+        wxFAIL_MSG( "icon bundle doesn't contain any suitable icon" );
+    }
 }
 
 bool wxTopLevelWindowMSW::EnableCloseButton(bool enable)

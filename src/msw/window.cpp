@@ -3423,12 +3423,12 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                     rc.result = MSWDefWindowProc(message, wParam, lParam);
                     processed = true;
 
-                    // now alter the client size making room for drawing a themed border
-                    NCCALCSIZE_PARAMS *csparam = NULL;
+                    // now alter the client size making room for drawing a
+                    // themed border
                     RECT *rect;
                     if ( wParam )
                     {
-                        csparam = (NCCALCSIZE_PARAMS *)lParam;
+                        NCCALCSIZE_PARAMS *csparam = (NCCALCSIZE_PARAMS *)lParam;
                         rect = &csparam->rgrc[0];
                     }
                     else

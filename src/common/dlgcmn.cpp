@@ -174,8 +174,6 @@ wxSizer *wxDialogBase::CreateTextSizer(const wxString& message)
 
 wxSizer *wxDialogBase::CreateButtonSizer(long flags)
 {
-    wxSizer *sizer = NULL;
-
 #ifdef __SMARTPHONE__
     wxDialog* dialog = (wxDialog*) this;
     if ( flags & wxOK )
@@ -189,6 +187,8 @@ wxSizer *wxDialogBase::CreateButtonSizer(long flags)
 
     if ( flags & wxNO )
         dialog->SetRightMenu(wxID_NO);
+
+    return NULL;
 #else // !__SMARTPHONE__
 
 #if wxUSE_BUTTON
@@ -202,15 +202,19 @@ wxSizer *wxDialogBase::CreateButtonSizer(long flags)
             wxSystemOptions::GetOptionInt(wxT("wince.dialog.real-ok-cancel")) )
 #endif // __POCKETPC__
     {
-        sizer = CreateStdDialogButtonSizer(flags);
+        return CreateStdDialogButtonSizer(flags);
     }
+#ifdef __POCKETPC__
+    return NULL;
+#endif // __POCKETPC__
+
 #else // !wxUSE_BUTTON
     wxUnusedVar(flags);
+
+    return NULL;
 #endif // wxUSE_BUTTON/!wxUSE_BUTTON
 
 #endif // __SMARTPHONE__/!__SMARTPHONE__
-
-    return sizer;
 }
 
 wxSizer *wxDialogBase::CreateSeparatedButtonSizer(long flags)

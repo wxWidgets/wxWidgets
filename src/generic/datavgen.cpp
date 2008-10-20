@@ -2093,7 +2093,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     // compute which columns needs to be redrawn
     unsigned int cols = GetOwner()->GetColumnCount();
     unsigned int col_start = 0;
-    unsigned int x_start = 0;
+    unsigned int x_start;
     for (x_start = 0; col_start < cols; col_start++)
     {
         wxDataViewColumn *col = GetOwner()->GetColumn(col_start);
@@ -2651,7 +2651,7 @@ void wxDataViewMainWindow::ScrollTo( int rows, int column )
     {
         wxRect rect = GetClientRect();
         int colnum = 0;
-        int x_start = 0, x_end = 0, w = 0;
+        int x_start = 0, w = 0;
         int xx, yy, xe;
         m_owner->CalcUnscrolledPosition( rect.x, rect.y, &xx, &yy );
         for (x_start = 0; colnum < column; colnum++)
@@ -2664,7 +2664,7 @@ void wxDataViewMainWindow::ScrollTo( int rows, int column )
             x_start += w;
         }
 
-        x_end = x_start + w;
+        int x_end = x_start + w;
         xe = xx + rect.width;
         if( x_end > xe )
         {
@@ -3318,7 +3318,7 @@ void wxDataViewMainWindow::OnCollapsing(unsigned int row)
 {
     if (IsVirtualList())
        return;
-       
+
     wxDataViewTreeNode * node = GetTreeNodeByRow(row);
     if( node != NULL )
     {
@@ -3414,10 +3414,9 @@ void wxDataViewMainWindow::HitTest( const wxPoint & point, wxDataViewItem & item
     wxDataViewColumn *col = NULL;
     unsigned int cols = GetOwner()->GetColumnCount();
     unsigned int colnum = 0;
-    unsigned int x_start = 0;
     int x, y;
     m_owner->CalcUnscrolledPosition( point.x, point.y, &x, &y );
-    for (x_start = 0; colnum < cols; colnum++)
+    for (unsigned x_start = 0; colnum < cols; colnum++)
     {
         col = GetOwner()->GetColumn(colnum);
         if (col->IsHidden())
@@ -3536,7 +3535,7 @@ int wxDataViewMainWindow::GetRowByItem(const wxDataViewItem & item) const
 
         //Compose the a parent-chain of the finding item
         ItemList list;
-        wxDataViewItem * pItem = NULL;
+        wxDataViewItem * pItem;
         list.DeleteContents( true );
         wxDataViewItem it( item );
         while( it.IsOk() )
@@ -4093,7 +4092,7 @@ void wxDataViewCtrl::Init()
 {
     m_cols.DeleteContents(true);
     m_notifier = NULL;
-    
+
     // No sorting column at start
     m_sortingColumn = NULL;
     m_headerArea = NULL;
@@ -4160,7 +4159,7 @@ wxSize wxDataViewCtrl::GetSizeAvailableForScrollTarget(const wxSize& size)
     wxSize newsize = size;
     if (!HasFlag(wxDV_NO_HEADER) && (m_headerArea))
        newsize.y -= m_headerArea->GetSize().y;
-    
+
     return newsize;
 }
 

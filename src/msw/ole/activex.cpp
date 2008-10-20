@@ -935,15 +935,21 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
 
                 HRESULT hret =
                     cpContainer->FindConnectionPoint(ta->guid, cp.GetRef());
-                wxASSERT ( SUCCEEDED(hret));
+                if ( !SUCCEEDED(hret) )
+                {
+                    wxFAIL_MSG( wxString::Format("FindConnectionPoint(): %X",
+                                                 (unsigned)hret) );
+                }
 
                 IDispatch* disp;
                 frame->QueryInterface(IID_IDispatch, (void**)&disp);
                 hret = cp->Advise(new wxActiveXEvents(this, ta->guid),
                                   &adviseCookie);
-                wxASSERT_MSG( SUCCEEDED(hret),
-                    wxString::Format(wxT("Cannot connect!\nHRESULT:%X"), (unsigned int)hret)
-                            );
+                if ( !SUCCEEDED(hret) )
+                {
+                    wxFAIL_MSG( wxString::Format("Advise(): %X",
+                                                 (unsigned)hret) );
+                }
             }
         }
 

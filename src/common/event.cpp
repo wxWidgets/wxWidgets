@@ -1398,7 +1398,7 @@ void wxEvtHandler::Connect( int id, int lastId,
         if ( evtConnRef )
             evtConnRef->IncRef( );
         else
-            evtConnRef = new wxEventConnectionRef(this, eventSink);
+            new wxEventConnectionRef(this, eventSink);
     }
 }
 
