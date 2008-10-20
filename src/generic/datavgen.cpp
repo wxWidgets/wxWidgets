@@ -2651,7 +2651,7 @@ void wxDataViewMainWindow::ScrollTo( int rows, int column )
     {
         wxRect rect = GetClientRect();
         int colnum = 0;
-        int x_start = 0, w = 0;
+        int x_start, w = 0;
         int xx, yy, xe;
         m_owner->CalcUnscrolledPosition( rect.x, rect.y, &xx, &yy );
         for (x_start = 0; colnum < column; colnum++)
