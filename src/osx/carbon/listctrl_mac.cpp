@@ -3107,11 +3107,12 @@ Boolean wxMacDataBrowserListCtrlControl::CompareItems(DataBrowserItemID itemOneI
             wxMacListCtrlItem* otherItem = (wxMacListCtrlItem*)itemTwoID;
 
             itemOrder = item->GetOrder();
-            otherItemOrder = item->GetOrder();
+            otherItemOrder = otherItem->GetOrder();
 
             wxListCtrlCompare func = list->GetCompareFunc();
             if (func != NULL)
             {
+
                 long item1 = -1;
                 long item2 = -1;
                 if (item && item->HasColumnInfo(0))
