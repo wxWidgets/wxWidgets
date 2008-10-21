@@ -153,6 +153,8 @@ public:
     virtual void ScrollWindow(int dx, int dy, const wxRect *rect = NULL);
 
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+    
+    virtual bool AcceptsFocusFromKeyboard() const { return false; }
 
 protected:
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
@@ -3630,7 +3632,7 @@ void wxDataViewMainWindow::DestroyTree()
 
 void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
 {
-    if ( HandleAsNavigationKey(event) )
+    if ( GetParent()->HandleAsNavigationKey(event) )
         return;
 
     // no item -> nothing to do
@@ -4175,6 +4177,12 @@ void wxDataViewCtrl::OnSize( wxSizeEvent &WXUNUSED(event) )
     Layout();
 
     AdjustScrollbars();
+}
+
+void wxDataViewCtrl::SetFocus()
+{
+    if (m_clientArea)
+        m_clientArea->SetFocus();
 }
 
 bool wxDataViewCtrl::AssociateModel( wxDataViewModel *model )

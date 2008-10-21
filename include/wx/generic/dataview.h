@@ -444,6 +444,8 @@ public:
 
     virtual void Expand( const wxDataViewItem & item );
     virtual void Collapse( const wxDataViewItem & item );
+    
+    virtual void SetFocus();
 
 protected:
     virtual int GetSelections( wxArrayInt & sel ) const; 
