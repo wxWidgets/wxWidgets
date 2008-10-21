@@ -591,8 +591,6 @@ public:
 
     int GetValue() const { return m_value; }
 
-    bool HasValue() const { return (m_value != wxPG_INVALID_VALUE); }
-
 protected:
     int m_value;
 };
@@ -672,6 +670,8 @@ private:
     Each entry can have label, value, bitmap, text colour, and background
     colour.
 
+    @remarks If you do not specify value for entry, index is used.
+
     @library{wxpropgrid}
     @category{propgrid}
 */
@@ -696,14 +696,30 @@ public:
         }
     }
 
-    /** Constructor. */
+    /**
+        Constructor.
+
+        @param labels
+            Labels for choices
+
+        @param values
+            Values for choices. If NULL, indexes are used.
+    */
     wxPGChoices( const wxChar** labels, const long* values = NULL )
     {
         Init();
         Set(labels,values);
     }
 
-    /** Constructor. */
+    /**
+        Constructor.
+
+        @param labels
+            Labels for choices
+
+        @param values
+            Values for choices. If empty, indexes are used.
+    */
     wxPGChoices( const wxArrayString& labels,
                  const wxArrayInt& values = wxArrayInt() )
     {
@@ -730,6 +746,12 @@ public:
 
         If did not have own copies, creates them now. If was empty, identical
         to set except that creates copies.
+
+        @param labels
+            Labels for added choices.
+
+        @param values
+            Values for added choices. If empty, relevant entry indexes are used.
     */
     void Add( const wxChar** labels, const ValArrItem* values = NULL );
 
@@ -739,7 +761,15 @@ public:
     /** Version that works with wxArrayString and wxArrayInt. */
     void Add( const wxArrayString& arr, const wxArrayInt& arrint );
 
-    /** Adds single item. */
+    /**
+        Adds a single choice.
+
+        @param label
+            Label for added choice.
+
+        @param value
+            Value for added choice. If unspecified, index is used.
+    */
     wxPGChoiceEntry& Add( const wxString& label,
                           int value = wxPG_INVALID_VALUE );
 
@@ -806,14 +836,6 @@ public:
     */
     wxArrayInt GetIndicesForStrings( const wxArrayString& strings,
                                      wxArrayString* unmatched = NULL ) const;
-
-    /** Returns true if choices in general are likely to have values
-        (depens on that all entries have values or none has)
-    */
-    bool HasValues() const;
-
-    bool HasValue( unsigned int i ) const
-        { return (i < m_data->GetCount()) && m_data->Item(i)->HasValue(); }
 
     int Index( const wxString& str ) const;
     int Index( int val ) const;

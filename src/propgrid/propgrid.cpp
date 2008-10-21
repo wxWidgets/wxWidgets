@@ -5659,13 +5659,6 @@ wxArrayString wxPGChoices::GetLabels() const
 
 // -----------------------------------------------------------------------
 
-bool wxPGChoices::HasValues() const
-{
-    return true;
-}
-
-// -----------------------------------------------------------------------
-
 wxArrayInt wxPGChoices::GetValuesForStrings( const wxArrayString& strings ) const
 {
     wxArrayInt arr;

@@ -951,10 +951,7 @@ void wxSystemColourProperty::OnSetValue()
 
         if ( cpv.m_type < wxPG_COLOUR_WEB_BASE )
         {
-            if ( m_choices.HasValues() )
-                ind = GetIndexForValue(cpv.m_type);
-            else
-                ind = ColToInd(col);
+            ind = GetIndexForValue(cpv.m_type);
         }
         else
         {
@@ -1086,13 +1083,8 @@ bool wxSystemColourProperty::IntToValue( wxVariant& variant, int number, int WXU
 {
     int index = number;
     int type = GetValueForIndex(index);
-    bool hasValue = m_choices[index].HasValue();
 
-    if ( ( hasValue && type == wxPG_COLOUR_CUSTOM ) ||
-         ( !hasValue && (index == (int)GetCustomColourIndex() &&
-                                      !(m_flags & wxPG_PROP_HIDE_CUSTOM_COLOUR))
-         )
-       )
+    if ( type == wxPG_COLOUR_CUSTOM )
     {
         QueryColourFromUser(variant);
     }
@@ -1250,7 +1242,7 @@ bool wxSystemColourProperty::StringToValue( wxVariant& value, const wxString& te
             if ( res && GetIndex() >= 0 )
             {
                 val.m_type = GetIndex();
-                if ( val.m_type >= 0 && val.m_type < m_choices.GetCount() && m_choices[val.m_type].HasValue() )
+                if ( val.m_type >= 0 && val.m_type < m_choices.GetCount() )
                     val.m_type = m_choices[val.m_type].GetValue();
 
                 // Get proper colour for type.
@@ -1413,11 +1405,6 @@ wxString wxColourProperty::ValueToString( wxVariant& value,
 
 wxColour wxColourProperty::GetColour( int index ) const
 {
-    if ( !m_choices.HasValue(index) )
-    {
-        wxASSERT( index < (int)GetItemCount() );
-        return gs_cp_es_normcolour_colours[index];
-    }
     return gs_cp_es_normcolour_colours[m_choices.GetValue(index)];
 }
 
