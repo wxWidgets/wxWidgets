@@ -814,6 +814,8 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 
     SetMenuBar(menu_bar);
     CreateStatusBar();
+    
+    wxPanel *panel = new wxPanel( this, -1 );
 
     wxBoxSizer *main_sizer = new wxBoxSizer( wxVERTICAL );
 
@@ -821,7 +823,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 
     // MyMusic
 
-    m_musicCtrl = new wxDataViewCtrl( this, ID_MUSIC_CTRL, wxDefaultPosition,
+    m_musicCtrl = new wxDataViewCtrl( panel, ID_MUSIC_CTRL, wxDefaultPosition,
                                     wxSize(400,200), wxDV_MULTIPLE|wxDV_VARIABLE_LINE_HEIGHT );
 
     m_music_model = new MyMusicModel;
@@ -860,7 +862,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 
     // MyList
 
-    m_listCtrl = new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition,
+    m_listCtrl = new wxDataViewCtrl( panel, wxID_ANY, wxDefaultPosition,
                                      wxSize(400,200), wxDV_MULTIPLE | wxDV_ROW_LINES);
 
     m_list_model = new MyListModel;
@@ -884,23 +886,23 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 
     wxBoxSizer *button_sizer = new wxBoxSizer( wxHORIZONTAL );
 
-    button_sizer->Add( new wxButton( this, ID_ADD_MOZART,  _("Add Mozart")),             0, wxALL, 10 );
-    button_sizer->Add( new wxButton( this, ID_DELETE_MUSIC,_("Delete selected")),        0, wxALL, 10 );
-    button_sizer->Add( new wxButton( this, ID_DELETE_YEAR, _("Delete \"Year\" column")), 0, wxALL, 10 );
-    button_sizer->Add( new wxButton( this, ID_SELECT_NINTH, _("Select Ninth")), 0, wxALL, 10 );
+    button_sizer->Add( new wxButton( panel, ID_ADD_MOZART,  _("Add Mozart")),             0, wxALL, 10 );
+    button_sizer->Add( new wxButton( panel, ID_DELETE_MUSIC,_("Delete selected")),        0, wxALL, 10 );
+    button_sizer->Add( new wxButton( panel, ID_DELETE_YEAR, _("Delete \"Year\" column")), 0, wxALL, 10 );
+    button_sizer->Add( new wxButton( panel, ID_SELECT_NINTH, _("Select Ninth")), 0, wxALL, 10 );
     button_sizer->Add( 10, 10, 1 );
     wxFlexGridSizer *grid_sizer = new wxFlexGridSizer( 2, 2 );
-    grid_sizer->Add( new wxButton( this, ID_PREPEND_LIST,_("Prepend")),         0, wxALL, 2 );
-    grid_sizer->Add( new wxButton( this, ID_DELETE_LIST, _("Delete selected")), 0, wxALL, 2 );
-    grid_sizer->Add( new wxButton( this, ID_GOTO,        _("Goto 50")),         0, wxALL, 2 );
-    grid_sizer->Add( new wxButton( this, ID_ADD_MANY,    _("Add 1000")),        0, wxALL, 2 );
+    grid_sizer->Add( new wxButton( panel, ID_PREPEND_LIST,_("Prepend")),         0, wxALL, 2 );
+    grid_sizer->Add( new wxButton( panel, ID_DELETE_LIST, _("Delete selected")), 0, wxALL, 2 );
+    grid_sizer->Add( new wxButton( panel, ID_GOTO,        _("Goto 50")),         0, wxALL, 2 );
+    grid_sizer->Add( new wxButton( panel, ID_ADD_MANY,    _("Add 1000")),        0, wxALL, 2 );
     button_sizer->Add( grid_sizer, 0, wxALL, 10 );
 
     main_sizer->Add( button_sizer, 0, wxGROW, 0 );
 
     wxBoxSizer *bottom_sizer = new wxBoxSizer( wxHORIZONTAL );
 
-    m_log = new wxTextCtrl( this, -1, wxString(), wxDefaultPosition, wxSize(100,200), wxTE_MULTILINE );
+    m_log = new wxTextCtrl( panel, -1, wxString(), wxDefaultPosition, wxSize(100,200), wxTE_MULTILINE );
     m_logOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_log));
     wxLogMessage(_("This is the log window"));
 
@@ -909,7 +911,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 #if 1
     // wxDataViewTreeStore
 
-    wxDataViewCtrl *treectrl = new wxDataViewCtrl( this, -1,
+    wxDataViewCtrl *treectrl = new wxDataViewCtrl( panel, -1,
         wxDefaultPosition, wxSize(100,200), wxDV_NO_HEADER );
 
     wxDataViewTreeStore *store = new wxDataViewTreeStore;
@@ -927,7 +929,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 
     // wxDataViewTreeCtrl
 
-    wxDataViewTreeCtrl *treectrl2 = new wxDataViewTreeCtrl( this, -1, wxDefaultPosition, wxSize(100,200) );
+    wxDataViewTreeCtrl *treectrl2 = new wxDataViewTreeCtrl( panel, -1, wxDefaultPosition, wxSize(100,200) );
 
     wxImageList *ilist = new wxImageList( 16, 16 );
     ilist->Add( wxIcon(small1_xpm) );
@@ -945,7 +947,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 
     main_sizer->Add( bottom_sizer, 0, wxGROW );
 
-    SetSizer( main_sizer );
+    panel->SetSizer( main_sizer );
 }
 
 MyFrame::~MyFrame()
@@ -996,18 +998,12 @@ void MyFrame::OnDeleteList( wxCommandEvent& WXUNUSED(event) )
         m_list_model->DeleteItems( items );
 }
 
-#ifndef __WXMAC__
-#define ENABLE_LOGGING
-#endif
-
 void MyFrame::OnValueChanged( wxDataViewEvent &event )
 {
     if (!m_log)
         return;
 
-#ifdef ENABLE_LOGGING
     wxLogMessage( wxT("EVT_DATAVIEW_ITEM_VALUE_CHANGED, Item Id: %d;  Column: %d"), event.GetItem().GetID(), event.GetColumn() );
-#endif
 }
 
 void MyFrame::OnActivated( wxDataViewEvent &event )
@@ -1016,9 +1012,7 @@ void MyFrame::OnActivated( wxDataViewEvent &event )
         return;
 
     wxString title = m_music_model->GetTitle( event.GetItem() );
-#ifdef ENABLE_LOGGING
     wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, Item: %s"), title );
-#endif
 }
 
 void MyFrame::OnSelectionChanged( wxDataViewEvent &event )
@@ -1030,13 +1024,7 @@ void MyFrame::OnSelectionChanged( wxDataViewEvent &event )
     if (title.empty())
         title = wxT("None");
 
-#ifdef ENABLE_LOGGING
     wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, First selected Item: %s"), title );
-#else
-    wxString text;
-    text.Printf( wxT("wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, Item: %s\n"), title );
-    m_log->WriteText( text );
-#endif
 }
 
 void MyFrame::OnExpanding( wxDataViewEvent &event )
@@ -1045,13 +1033,7 @@ void MyFrame::OnExpanding( wxDataViewEvent &event )
         return;
 
     wxString title = m_music_model->GetTitle( event.GetItem() );
-#ifdef ENABLE_LOGGING
     wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING, Item: %s"), title );
-#else
-    wxString text;
-    text.Printf( wxT("wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING, Item: %s\n"), title );
-    m_log->WriteText( text );
-#endif
 }
 
 
@@ -1061,9 +1043,7 @@ void MyFrame::OnEditingStarted( wxDataViewEvent &event )
         return;
 
     wxString title = m_music_model->GetTitle( event.GetItem() );
-#ifdef ENABLE_LOGGING
     wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED, Item: %s"), title );
-#endif
 }
 
 void MyFrame::OnEditingDone( wxDataViewEvent &event )
@@ -1072,9 +1052,7 @@ void MyFrame::OnEditingDone( wxDataViewEvent &event )
         return;
 
     wxString title = m_music_model->GetTitle( event.GetItem() );
-#ifdef ENABLE_LOGGING
     wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE, Item: %s"), title );
-#endif
 }
 
 void MyFrame::OnExpanded( wxDataViewEvent &event )
@@ -1083,13 +1061,7 @@ void MyFrame::OnExpanded( wxDataViewEvent &event )
         return;
 
     wxString title = m_music_model->GetTitle( event.GetItem() );
-#ifdef ENABLE_LOGGING
     wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDED, Item: %s"), title );
-#else
-    wxString text;
-    text.Printf( wxT("wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDED, Item: %s\n"), title );
-    m_log->WriteText( text );
-#endif
 }
 
 void MyFrame::OnCollapsing( wxDataViewEvent &event )
@@ -1098,13 +1070,7 @@ void MyFrame::OnCollapsing( wxDataViewEvent &event )
         return;
 
     wxString title = m_music_model->GetTitle( event.GetItem() );
-#ifdef ENABLE_LOGGING
     wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING, Item: %s"), title );
-#else
-    wxString text;
-    text.Printf( wxT("wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING, Item: %s\n"), title );
-    m_log->WriteText( text );
-#endif
 }
 
 void MyFrame::OnCollapsed( wxDataViewEvent &event )
@@ -1113,13 +1079,7 @@ void MyFrame::OnCollapsed( wxDataViewEvent &event )
         return;
 
     wxString title = m_music_model->GetTitle( event.GetItem() );
-#ifdef ENABLE_LOGGING
     wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSED, Item: %s"),title);
-#else
-    wxString text;
-    text.Printf( wxT("wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSED, Item: %s\n"), title );
-    m_log->WriteText( text );
-#endif
 }
 
 void MyFrame::OnContextMenu( wxDataViewEvent &event )
@@ -1128,9 +1088,7 @@ void MyFrame::OnContextMenu( wxDataViewEvent &event )
         return;
 
     wxString title = m_music_model->GetTitle( event.GetItem() );
-#ifdef ENABLE_LOGGING
     wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, Item: %s"),title );
-#endif
 
     wxMenu menu;
     menu.Append( 1, wxT("entry 1") );
@@ -1149,9 +1107,7 @@ void MyFrame::OnHeaderClick( wxDataViewEvent &event )
 
     int pos = m_musicCtrl->GetColumnPosition( event.GetDataViewColumn() );
 
-#ifdef ENABLE_LOGGING
     wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK, Column position: %d"), pos );
-#endif
 }
 
 void MyFrame::OnHeaderRightClick( wxDataViewEvent &event )
@@ -1161,9 +1117,7 @@ void MyFrame::OnHeaderRightClick( wxDataViewEvent &event )
 
     int pos = m_musicCtrl->GetColumnPosition( event.GetDataViewColumn() );
 
-#ifdef ENABLE_LOGGING
     wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, Column position: %d"), pos );
-#endif
 }
 
 void MyFrame::OnSorted( wxDataViewEvent &event )
@@ -1173,9 +1127,7 @@ void MyFrame::OnSorted( wxDataViewEvent &event )
 
     int pos = m_musicCtrl->GetColumnPosition( event.GetDataViewColumn() );
 
-#ifdef ENABLE_LOGGING
     wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED, Column position: %d"), pos );
-#endif
 }
 
 void MyFrame::OnRightClick( wxMouseEvent &event )
@@ -1183,9 +1135,7 @@ void MyFrame::OnRightClick( wxMouseEvent &event )
     if(!m_log)
         return;
 
-#ifdef ENABLE_LOGGING
     wxLogMessage(wxT("wxEVT_MOUSE_RIGHT_UP, Click Point is X: %d, Y: %d"), event.GetX(), event.GetY());
-#endif
 }
 
 void MyFrame::OnGoto(wxCommandEvent& WXUNUSED(event))
