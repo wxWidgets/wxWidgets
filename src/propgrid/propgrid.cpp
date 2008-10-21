@@ -4963,19 +4963,51 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
 
     if ( keycode == WXK_TAB )
     {
+        wxWindow* mainControl;
+
+        if ( HasInternalFlag(wxPG_FL_IN_MANAGER) )
+            mainControl = GetParent();
+        else
+            mainControl = this;
+
         if ( !event.ShiftDown() )
         {
             if ( !editorFocused && m_wndEditor )
+            {
                 DoSelectProperty( m_selected, wxPG_SEL_FOCUS );
+            }
             else
+            {
+                // Tab traversal workaround for platforms on which
+                // wxWindow::Navigate() may navigate into first child
+                // instead of next sibling. Does not work perfectly
+                // in every scenario (for instance, when property grid
+                // is either first or last control).
+            #if defined(__WXGTK__)
+                wxWindow* sibling = mainControl->GetNextSibling();
+                if ( sibling )
+                    sibling->SetFocusFromKbd();
+            #else
                 Navigate(wxNavigationKeyEvent::IsForward);
+            #endif
+            }
         }
         else
         {
             if ( editorFocused )
+            {
                 UnfocusEditor();
+            }
             else
+            {
+            #if defined(__WXGTK__)
+                wxWindow* sibling = mainControl->GetPrevSibling();
+                if ( sibling )
+                    sibling->SetFocusFromKbd();
+            #else
                 Navigate(wxNavigationKeyEvent::IsBackward);
+            #endif
+            }
         }
 
         return;
