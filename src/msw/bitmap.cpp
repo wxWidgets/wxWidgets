@@ -842,14 +842,16 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, WXHDC hdc)
         return false;
 
     const bool hasAlpha = image.HasAlpha();
+    
+    if (depth == -1)
+      depth = dib.GetDepth();
 
     // store the bitmap parameters
     wxBitmapRefData * const refData = new wxBitmapRefData;
     refData->m_width = w;
     refData->m_height = h;
     refData->m_hasAlpha = hasAlpha;
-    refData->m_depth = depth == -1 ? (hasAlpha ? 32 : 24)
-                                   : depth;
+    refData->m_depth = depth;
 
     m_refData = refData;
 
