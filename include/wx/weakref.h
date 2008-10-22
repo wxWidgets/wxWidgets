@@ -225,7 +225,7 @@ public:
     template <class TDerived>
     wxWeakRef<T>& operator=(TDerived* pobj)
     {
-        Assign(pobj);
+        this->Assign(pobj);
         return *this;
     }
 
