@@ -48,7 +48,8 @@ SUBGROUPING            = YES
 # us to keep the headers readable and "implement" wxWidgets-specific commands.
 
 # event aliases
-ALIASES = beginEventTable{1}="\n<span class='events'>Events:</span><p>The following event handler macros redirect the events to member function handlers '<b>func</b>' with prototypes like: <div class='eventHandler'><span>void&nbsp;handlerFuncName(\1&&nbsp;event)</span></div></p><br>Event macros:<div>"
+ALIASES = beginEventTable{1}="\n<span class='events'>Events:</span><p>The following event handler macros redirect the events to member function handlers '<b>func</b>' with prototypes like: <div class='eventHandler'><span>void&nbsp;handlerFuncName(\1&&nbsp;event)</span></div></p>Event macros:<div>"
+ALIASES += beginEventTable{2}="\n<span class='events'>Events:</span><p>The following event handler macros redirect the events to member function handlers '<b>func</b>' with prototypes like: <div class='eventHandler'><span>void&nbsp;handlerFuncName(\1&&nbsp;event)</span> or <span>void&nbsp;handlerFuncName(\2&&nbsp;event)</span></div></p>Event macros:<div>"
 ALIASES += event{1}="</div>\li <span class='event'>\1</span>:<div class='eventDesc'>"
 ALIASES += event{2}="</div>\li <span class='event'>\1, \2</span>:<div class='eventDesc'>"
 ALIASES += event{3}="</div>\li <span class='event'>\1, \2, \3</span>:<div class='eventDesc'>"
