@@ -878,26 +878,93 @@ bool wxBoolProperty::DoSetAttribute( const wxString& name, wxVariant& value )
 }
 
 // -----------------------------------------------------------------------
-// wxBaseEnumProperty
+// wxEnumProperty
 // -----------------------------------------------------------------------
 
-int wxBaseEnumProperty::ms_nextIndex = -2;
+IMPLEMENT_DYNAMIC_CLASS(wxEnumProperty, wxPGProperty)
 
-wxBaseEnumProperty::wxBaseEnumProperty( const wxString& label, const wxString& name )
-    : wxPGProperty(label,name)
+WX_PG_IMPLEMENT_PROPERTY_CLASS_PLAIN(wxEnumProperty,long,Choice)
+
+wxEnumProperty::wxEnumProperty( const wxString& label, const wxString& name, const wxChar** labels,
+    const long* values, int value ) : wxPGProperty(label,name)
 {
-    m_value = wxPGVariant_Zero;
+    SetIndex(0);
+
+    if ( labels )
+    {
+        m_choices.Add(labels,values);
+
+        if ( GetItemCount() )
+            SetValue( (long)value );
+    }
 }
 
-/** If has values array, then returns number at index with value -
-    otherwise just returns the value.
-*/
-int wxBaseEnumProperty::GetIndexForValue( int value ) const
+wxEnumProperty::wxEnumProperty( const wxString& label, const wxString& name, const wxChar** labels,
+    const long* values, wxPGChoices* choicesCache, int value )
+    : wxPGProperty(label,name)
 {
+    SetIndex(0);
+
+    wxASSERT( choicesCache );
+
+    if ( choicesCache->IsOk() )
+    {
+        m_choices.Assign( *choicesCache );
+        m_value = wxPGVariant_Zero;
+    }
+    else if ( labels )
+    {
+        m_choices.Add(labels,values);
+
+        if ( GetItemCount() )
+            SetValue( (long)value );
+    }
+}
+
+wxEnumProperty::wxEnumProperty( const wxString& label, const wxString& name,
+    const wxArrayString& labels, const wxArrayInt& values, int value )
+    : wxPGProperty(label,name)
+{
+    SetIndex(0);
+
+    if ( &labels && labels.size() )
+    {
+        m_choices.Set(labels, values);
+
+        if ( GetItemCount() )
+            SetValue( (long)value );
+    }
+}
+
+wxEnumProperty::wxEnumProperty( const wxString& label, const wxString& name,
+    wxPGChoices& choices, int value )
+    : wxPGProperty(label,name)
+{
+    m_choices.Assign( choices );
+
+    if ( GetItemCount() )
+        SetValue( (long)value );
+}
+
+int wxEnumProperty::GetIndexForValue( int value ) const
+{
+    if ( !m_choices.IsOk() )
+        return -1;
+
+    int intVal = m_choices.Index(value);
+    if ( intVal >= 0 )
+        return intVal;
+
     return value;
 }
 
-void wxBaseEnumProperty::OnSetValue()
+wxEnumProperty::~wxEnumProperty ()
+{
+}
+
+int wxEnumProperty::ms_nextIndex = -2;
+
+void wxEnumProperty::OnSetValue()
 {
     wxString variantType = m_value.GetType();
 
@@ -915,7 +982,7 @@ void wxBaseEnumProperty::OnSetValue()
     }
 }
 
-bool wxBaseEnumProperty::ValidateValue( wxVariant& value, wxPGValidationInfo& WXUNUSED(validationInfo) ) const
+bool wxEnumProperty::ValidateValue( wxVariant& value, wxPGValidationInfo& WXUNUSED(validationInfo) ) const
 {
     // Make sure string value is in the list,
     // unless property has string as preferred value type
@@ -927,7 +994,7 @@ bool wxBaseEnumProperty::ValidateValue( wxVariant& value, wxPGValidationInfo& WX
     return true;
 }
 
-wxString wxBaseEnumProperty::ValueToString( wxVariant& value,
+wxString wxEnumProperty::ValueToString( wxVariant& value,
                                             int WXUNUSED(argFlags) ) const
 {
     if ( value.GetType() == wxPG_VARIANT_TYPE_STRING )
@@ -940,36 +1007,30 @@ wxString wxBaseEnumProperty::ValueToString( wxVariant& value,
     return m_choices.GetLabel(index);
 }
 
-bool wxBaseEnumProperty::StringToValue( wxVariant& variant, const wxString& text, int argFlags ) const
+bool wxEnumProperty::StringToValue( wxVariant& variant, const wxString& text, int argFlags ) const
 {
     return ValueFromString_( variant, text, argFlags );
 }
 
-bool wxBaseEnumProperty::IntToValue( wxVariant& variant, int intVal, int argFlags ) const
+bool wxEnumProperty::IntToValue( wxVariant& variant, int intVal, int argFlags ) const
 {
     return ValueFromInt_( variant, intVal, argFlags );
 }
 
-bool wxBaseEnumProperty::ValueFromString_( wxVariant& value, const wxString& text, int argFlags ) const
+bool wxEnumProperty::ValueFromString_( wxVariant& value, const wxString& text, int argFlags ) const
 {
-    size_t i = 0;
-    const wxString* entryLabel;
-    int entryValue;
     int useIndex = -1;
     long useValue = 0;
 
-    entryLabel = GetEntry(i, &entryValue);
-    while ( entryLabel )
+    for ( unsigned int i=0; i<m_choices.GetCount(); i++ )
     {
-        if ( text.CmpNoCase(*entryLabel) == 0 )
+        const wxString& entryLabel = m_choices.GetLabel(i);
+        if ( text.CmpNoCase(entryLabel) == 0 )
         {
             useIndex = (int)i;
-            useValue = (long)entryValue;
+            useValue = m_choices.GetValue(i);
             break;
         }
-
-        i++;
-        entryLabel = GetEntry(i, &entryValue);
     }
 
     bool asText = false;
@@ -1021,7 +1082,7 @@ bool wxBaseEnumProperty::ValueFromString_( wxVariant& value, const wxString& tex
     return false;
 }
 
-bool wxBaseEnumProperty::ValueFromInt_( wxVariant& variant, int intVal, int argFlags ) const
+bool wxEnumProperty::ValueFromInt_( wxVariant& variant, int intVal, int argFlags ) const
 {
     // If wxPG_FULL_VALUE is *not* in argFlags, then intVal is index from combo box.
     //
@@ -1042,7 +1103,7 @@ bool wxBaseEnumProperty::ValueFromInt_( wxVariant& variant, int intVal, int argF
     if ( ms_nextIndex != -2 )
     {
         if ( !(argFlags & wxPG_FULL_VALUE) )
-            GetEntry(intVal, &intVal);
+            intVal = m_choices.GetValue(intVal);
 
         variant = (long)intVal;
 
@@ -1052,115 +1113,17 @@ bool wxBaseEnumProperty::ValueFromInt_( wxVariant& variant, int intVal, int argF
     return false;
 }
 
-void wxBaseEnumProperty::SetIndex( int index )
+void wxEnumProperty::SetIndex( int index )
 {
     ms_nextIndex = -2;
     m_index = index;
 }
 
-int wxBaseEnumProperty::GetIndex() const
+int wxEnumProperty::GetIndex() const
 {
     if ( ms_nextIndex != -2 )
         return ms_nextIndex;
     return m_index;
-}
-
-// -----------------------------------------------------------------------
-// wxEnumProperty
-// -----------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxEnumProperty, wxPGProperty)
-
-WX_PG_IMPLEMENT_PROPERTY_CLASS_PLAIN(wxEnumProperty,long,Choice)
-
-wxEnumProperty::wxEnumProperty( const wxString& label, const wxString& name, const wxChar** labels,
-    const long* values, int value ) : wxBaseEnumProperty(label,name)
-{
-    SetIndex(0);
-
-    if ( labels )
-    {
-        m_choices.Add(labels,values);
-
-        if ( GetItemCount() )
-            SetValue( (long)value );
-    }
-}
-
-wxEnumProperty::wxEnumProperty( const wxString& label, const wxString& name, const wxChar** labels,
-    const long* values, wxPGChoices* choicesCache, int value )
-    : wxBaseEnumProperty(label,name)
-{
-    SetIndex(0);
-
-    wxASSERT( choicesCache );
-
-    if ( choicesCache->IsOk() )
-    {
-        m_choices.Assign( *choicesCache );
-        m_value = wxPGVariant_Zero;
-    }
-    else if ( labels )
-    {
-        m_choices.Add(labels,values);
-
-        if ( GetItemCount() )
-            SetValue( (long)value );
-    }
-}
-
-wxEnumProperty::wxEnumProperty( const wxString& label, const wxString& name,
-    const wxArrayString& labels, const wxArrayInt& values, int value ) : wxBaseEnumProperty(label,name)
-{
-    SetIndex(0);
-
-    if ( &labels && labels.size() )
-    {
-        m_choices.Set(labels, values);
-
-        if ( GetItemCount() )
-            SetValue( (long)value );
-    }
-}
-
-wxEnumProperty::wxEnumProperty( const wxString& label, const wxString& name,
-    wxPGChoices& choices, int value )
-    : wxBaseEnumProperty(label,name)
-{
-    m_choices.Assign( choices );
-
-    if ( GetItemCount() )
-        SetValue( (long)value );
-}
-
-int wxEnumProperty::GetIndexForValue( int value ) const
-{
-    if ( !m_choices.IsOk() )
-        return -1;
-
-    int intVal = m_choices.Index(value);
-    if ( intVal >= 0 )
-        return intVal;
-
-    return value;
-}
-
-wxEnumProperty::~wxEnumProperty ()
-{
-}
-
-const wxString* wxEnumProperty::GetEntry( size_t index, int* pvalue ) const
-{
-    if ( m_choices.IsOk() && index < m_choices.GetCount() )
-    {
-        int value = m_choices.GetValue(index);
-
-        if ( pvalue )
-            *pvalue = value;
-
-        return &m_choices.GetLabel(index);
-    }
-    return (const wxString*) NULL;
 }
 
 // -----------------------------------------------------------------------

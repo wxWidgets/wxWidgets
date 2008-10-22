@@ -343,82 +343,6 @@ public:
 
 // -----------------------------------------------------------------------
 
-/** @class wxBaseEnumProperty
-    @ingroup classes
-    Derive dynamic custom properties with choices from this class.
-
-    @remarks
-    - Updating private index is important. You can do this either by calling
-    SetIndex() in IntToValue, and then letting wxBaseEnumProperty::OnSetValue
-    be called (by not implementing it, or by calling super class function in
-    it) -OR- you can just call SetIndex in OnSetValue.
-*/
-class WXDLLIMPEXP_PROPGRID wxBaseEnumProperty : public wxPGProperty
-{
-public:
-    wxBaseEnumProperty( const wxString& label = wxPG_LABEL,
-                        const wxString& name = wxPG_LABEL );
-
-    virtual void OnSetValue();
-    virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
-    virtual bool StringToValue( wxVariant& variant,
-                                const wxString& text,
-                                int argFlags = 0 ) const;
-    virtual bool ValidateValue( wxVariant& value,
-                                wxPGValidationInfo& validationInfo ) const;
-
-    // If wxPG_FULL_VALUE is not set in flags, then the value is interpreted
-    // as index to choices list. Otherwise, it is actual value.
-    virtual bool IntToValue( wxVariant& variant,
-                             int number,
-                             int argFlags = 0 ) const;
-
-    //
-    // Additional virtuals
-
-    // This must be overridden to have non-index based value
-    virtual int GetIndexForValue( int value ) const;
-
-    // This returns string and value for index
-    // Returns NULL if beyond last item
-    // pvalue is never NULL - always set it.
-    virtual const wxString* GetEntry( size_t index, int* pvalue ) const = 0;
-
-    // GetChoiceSelection needs to overridden since m_index is
-    // the true index, and various property classes derived from
-    // this take advantage of it.
-    virtual int GetChoiceSelection() const { return m_index; }
-
-    int GetValueForIndex( size_t index ) const
-    {
-        int v;
-        GetEntry( index, &v );
-        return v;
-    }
-
-protected:
-
-    int GetIndex() const;
-    void SetIndex( int index );
-
-    bool ValueFromString_( wxVariant& value,
-                           const wxString& text,
-                           int argFlags ) const;
-    bool ValueFromInt_( wxVariant& value, int intVal, int argFlags ) const;
-
-    static void ResetNextIndex() { ms_nextIndex = -2; }
-
-private:
-    // This is private so that classes are guaranteed to use GetIndex
-    // for up-to-date index value.
-    int                     m_index;
-
-    // Relies on ValidateValue being called always before OnSetValue
-    static int              ms_nextIndex;
-};
-
-// -----------------------------------------------------------------------
-
 // If set, then selection of choices is static and should not be
 // changed (i.e. returns NULL in GetPropertyChoices).
 #define wxPG_PROP_STATIC_CHOICES    wxPG_PROP_CLASS_SPECIFIC_1
@@ -427,8 +351,14 @@ private:
     @ingroup classes
     You can derive custom properties with choices from this class. See
     wxBaseEnumProperty for remarks.
+
+    @remarks
+    - Updating private index is important. You can do this either by calling
+    SetIndex() in IntToValue, and then letting wxBaseEnumProperty::OnSetValue
+    be called (by not implementing it, or by calling super class function in
+    it) -OR- you can just call SetIndex in OnSetValue.
 */
-class WXDLLIMPEXP_PROPGRID wxEnumProperty : public wxBaseEnumProperty
+class WXDLLIMPEXP_PROPGRID wxEnumProperty : public wxPGProperty
 {
     WX_PG_DECLARE_PROPERTY_CLASS(wxEnumProperty)
 public:
@@ -467,11 +397,52 @@ public:
 
     virtual ~wxEnumProperty();
 
-    virtual int GetIndexForValue( int value ) const;
-    virtual const wxString* GetEntry( size_t index, int* pvalue ) const;
-
     size_t GetItemCount() const { return m_choices.GetCount(); }
-    const wxPGChoices& GetChoices() const { return m_choices; }
+
+    virtual void OnSetValue();
+    virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
+    virtual bool StringToValue( wxVariant& variant,
+                                const wxString& text,
+                                int argFlags = 0 ) const;
+    virtual bool ValidateValue( wxVariant& value,
+                                wxPGValidationInfo& validationInfo ) const;
+
+    // If wxPG_FULL_VALUE is not set in flags, then the value is interpreted
+    // as index to choices list. Otherwise, it is actual value.
+    virtual bool IntToValue( wxVariant& variant,
+                             int number,
+                             int argFlags = 0 ) const;
+
+    //
+    // Additional virtuals
+
+    // This must be overridden to have non-index based value
+    virtual int GetIndexForValue( int value ) const;
+
+    // GetChoiceSelection needs to overridden since m_index is
+    // the true index, and various property classes derived from
+    // this take advantage of it.
+    virtual int GetChoiceSelection() const { return m_index; }
+
+protected:
+
+    int GetIndex() const;
+    void SetIndex( int index );
+
+    bool ValueFromString_( wxVariant& value,
+                           const wxString& text,
+                           int argFlags ) const;
+    bool ValueFromInt_( wxVariant& value, int intVal, int argFlags ) const;
+
+    static void ResetNextIndex() { ms_nextIndex = -2; }
+
+private:
+    // This is private so that classes are guaranteed to use GetIndex
+    // for up-to-date index value.
+    int                     m_index;
+
+    // Relies on ValidateValue being called always before OnSetValue
+    static int              ms_nextIndex;
 };
 
 // -----------------------------------------------------------------------
