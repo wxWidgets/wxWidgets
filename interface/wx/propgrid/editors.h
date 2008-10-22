@@ -6,7 +6,6 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-// -----------------------------------------------------------------------
 
 /**
     @class wxPGEditor
@@ -40,11 +39,7 @@ class wxPGEditor : public wxObject
 public:
 
     /** Constructor. */
-    wxPGEditor()
-        : wxObject()
-    {
-        m_clientData = NULL;
-    }
+    wxPGEditor();
 
     /** Destructor. */
     virtual ~wxPGEditor();
@@ -106,10 +101,10 @@ public:
         (see wxPGProperty::OnEvent() for more information).
 
         @remarks wxPropertyGrid will automatically unfocus the editor when
-                wxEVT_COMMAND_TEXT_ENTER is received and when it results in
-                property value being modified. This happens regardless of
-                editor type (ie. behavior is same for any wxTextCtrl and
-                wxComboBox based editor).
+                 wxEVT_COMMAND_TEXT_ENTER is received and when it results in
+                 property value being modified. This happens regardless of
+                 editor type (ie. behavior is same for any wxTextCtrl and
+                 wxComboBox based editor).
     */
     virtual bool OnEvent( wxPropertyGrid* propgrid, wxPGProperty* property,
         wxWindow* wnd_primary, wxEvent& event ) const = 0;
@@ -120,26 +115,25 @@ public:
         Returns @true if value was different.
     */
     virtual bool GetValueFromControl( wxVariant& variant, wxPGProperty* property,
-        wxWindow* ctrl ) const;
+                                      wxWindow* ctrl ) const;
 
     /** Sets value in control to unspecified. */
     virtual void SetValueToUnspecified( wxPGProperty* property,
-        wxWindow* ctrl ) const = 0;
+                                        wxWindow* ctrl ) const = 0;
 
     /** Sets control's value specifically from string. */
     virtual void SetControlStringValue( wxPGProperty* property,
-        wxWindow* ctrl, const wxString& txt ) const;
+                                        wxWindow* ctrl, const wxString& txt ) const;
 
     /** Sets control's value specifically from int (applies to choice etc.). */
     virtual void SetControlIntValue( wxPGProperty* property,
-        wxWindow* ctrl, int value ) const;
+                                     wxWindow* ctrl, int value ) const;
 
     /**
         Inserts item to existing control. Index -1 means end of list.
         Default implementation does nothing. Returns index of item added.
     */
-    virtual int InsertItem( wxWindow* ctrl, const wxString& label,
-        int index ) const;
+    virtual int InsertItem( wxWindow* ctrl, const wxString& label, int index ) const;
 
     /**
         Deletes item from existing control.
@@ -148,19 +142,19 @@ public:
     virtual void DeleteItem( wxWindow* ctrl, int index ) const;
 
     /**
-        Extra processing when control gains focus. For example, wxTextCtrl
-        based controls should select all text.
+        Extra processing when control gains focus.
+        For example, wxTextCtrl based controls should select all text.
     */
     virtual void OnFocus( wxPGProperty* property, wxWindow* wnd ) const;
 
     /**
-        Returns @true if control itself can contain the custom image. Default
-        implementation returns @false.
+        Returns @true if control itself can contain the custom image.
+        Default implementation returns @false.
     */
     virtual bool CanContainCustomImage() const;
 };
 
-// -----------------------------------------------------------------------
+
 
 /**
     @class wxPGMultiButton
@@ -172,7 +166,6 @@ public:
     For instance, here we add three buttons to a TextCtrl editor:
 
     @code
-
     #include <wx/propgrid/editors.h>
 
     class wxSampleMultiButtonEditor : public wxPGTextCtrlEditor
@@ -250,13 +243,11 @@ public:
         }
         return wxPGTextCtrlEditor::OnEvent(propGrid, property, ctrl, event);
     }
-
     @endcode
 
     Further to use this editor, code like this can be used:
 
     @code
-
         // Register editor class - needs only to be called once
         wxPGEditor* multiButtonEditor = new wxSampleMultiButtonEditor();
         wxPropertyGrid::RegisterEditorClass( multiButtonEditor );
@@ -266,7 +257,6 @@ public:
 
         // Change property to use editor created in the previous code segment
         propGrid->SetPropertyEditor( "MultipleButtons", multiButtonEditor );
-
     @endcode
 
     @library{wxpropgrid}
@@ -275,7 +265,6 @@ public:
 class WXDLLIMPEXP_PROPGRID wxPGMultiButton : public wxWindow
 {
 public:
-
     /**
         Constructor.
     */
@@ -314,8 +303,8 @@ public:
     wxWindow* GetButton( unsigned int i );
 
     /**
-        Returns Id of one of the buttons. This is utility function to be
-        used in event handlers.
+        Returns Id of one of the buttons.
+        This is utility function to be used in event handlers.
     */
     int GetButtonId( unsigned int i ) const;
 
@@ -331,4 +320,3 @@ public:
     wxSize GetPrimarySize() const;
 };
 
-// -----------------------------------------------------------------------

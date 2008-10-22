@@ -6,18 +6,19 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/** @class wxPropertyGridPage
+/**
+    @class wxPropertyGridPage
 
     Holder of property grid page information. You can subclass this and
     give instance in wxPropertyGridManager::AddPage. It inherits from
     wxEvtHandler and can be used to process events specific to this
     page (id of events will still be same as manager's). If you don't
     want to use it to process all events of the page, you need to
-    return false in the derived wxPropertyGridPage::IsHandlingAllEvents.
+    return @false in the derived wxPropertyGridPage::IsHandlingAllEvents.
 
     Please note that wxPropertyGridPage lacks many non-const property
-    manipulation functions found in wxPropertyGridManager. Please use
-    parent manager (m_manager member variable) when needed.
+    manipulation functions found in wxPropertyGridManager.
+    Please use parent manager (m_manager member variable) when needed.
 
     Please note that most member functions are inherited and as such not
     documented on this page. This means you will probably also want to read
@@ -40,8 +41,8 @@ class WXDLLIMPEXP_PROPGRID wxPropertyGridPage : public wxEvtHandler,
                                                 public wxPropertyGridInterface
 {
     friend class wxPropertyGridManager;
-public:
 
+public:
     wxPropertyGridPage();
     virtual ~wxPropertyGridPage();
 
@@ -84,10 +85,7 @@ public:
         Returns id of the tool bar item that represents this page on
         wxPropertyGridManager's wxToolBar.
     */
-    int GetToolId() const
-    {
-        return m_id;
-    }
+    int GetToolId() const;
 
     /**
         Do any member initialization in this method.
@@ -95,13 +93,13 @@ public:
         @remarks - Called every time the page is added into a manager.
                 - You can add properties to the page here.
     */
-    virtual void Init() {}
+    virtual void Init();
 
     /**
         Return false here to indicate unhandled events should be
         propagated to manager's parent, as normal.
     */
-    virtual bool IsHandlingAllEvents() const { return true; }
+    virtual bool IsHandlingAllEvents() const;
 
     /**
         Called every time page is about to be shown.
@@ -114,7 +112,9 @@ public:
     */
     virtual void RefreshProperty( wxPGProperty* p );
 
-    /** Sets splitter position on page.
+    /**
+        Sets splitter position on page.
+
         @remarks
         Splitter position cannot exceed grid size, and therefore setting it
         during form creation may fail as initial grid size is often smaller than
@@ -123,9 +123,9 @@ public:
     void SetSplitterPosition( int splitterPos, int col = 0 );
 };
 
-// -----------------------------------------------------------------------
 
-/** @class wxPropertyGridManager
+/**
+    @class wxPropertyGridManager
 
     wxPropertyGridManager is an efficient multi-page version of wxPropertyGrid,
     which can optionally have toolbar for mode and page selection, and a help text
@@ -153,7 +153,6 @@ public:
     Here's some example code for creating and populating a wxPropertyGridManager:
 
     @code
-
         wxPropertyGridManager* pgMan = new wxPropertyGridManager(this, PGID,
             wxDefaultPosition, wxDefaultSize,
             // These and other similar styles are automatically
@@ -184,9 +183,7 @@ public:
         page->Append( wxT("Text"),wxPG_LABEL,wxT("(no text)") );
 
         page->Append( new wxFontProperty(wxT("Font"),wxPG_LABEL) );
-
     @endcode
-
 
     @section propgridmanager_window_styles_ Window Styles
 
@@ -243,10 +240,7 @@ public:
 
         @return Returns @true if value was actually updated.
     */
-    bool CommitChangesFromEditor( wxUint32 flags = 0 )
-    {
-        return m_pPropGrid->CommitChangesFromEditor(flags);
-    }
+    bool CommitChangesFromEditor( wxUint32 flags = 0 );
 
     /**
         Two step creation. Whenever the control is created without any parameters,
@@ -267,13 +261,7 @@ public:
         @remarks
             Calling his may not properly update toolbar buttons.
     */
-    bool EnableCategories( bool enable )
-    {
-        long fl = m_windowStyle | wxPG_HIDE_CATEGORIES;
-        if ( enable ) fl = m_windowStyle & ~(wxPG_HIDE_CATEGORIES);
-        SetWindowStyleFlag(fl);
-        return true;
-    }
+    bool EnableCategories( bool enable );
 
     /**
         Selects page, scrolls and/or expands items to ensure that the
@@ -317,18 +305,12 @@ public:
     /**
         Returns page object for given page index.
     */
-    wxPropertyGridPage* GetPage( unsigned int ind ) const
-    {
-        return (wxPropertyGridPage*)m_arrPages.Item(ind);
-    }
+    wxPropertyGridPage* GetPage( unsigned int ind ) const;
 
     /**
         Returns page object for given page name.
     */
-    wxPropertyGridPage* GetPage( const wxString& name ) const
-    {
-        return GetPage(GetPageByName(name));
-    }
+    wxPropertyGridPage* GetPage( const wxString& name ) const;
 
     /**
         Returns index for a page name. If no match is found, wxNOT_FOUND is
@@ -341,7 +323,9 @@ public:
     */
     size_t GetPageCount() const;
 
-    /** Returns name of given page. */
+    /**
+        Returns name of given page.
+    */
     const wxString& GetPageName( int index ) const;
 
     /**
@@ -351,24 +335,22 @@ public:
     wxPGProperty* GetPageRoot( int index ) const;
 
     /** Returns index to currently selected page. */
-    int GetSelectedPage() const { return m_selPage; }
+    int GetSelectedPage() const;
 
     /** Shortcut for GetGrid()->GetSelection(). */
-    wxPGProperty* GetSelectedProperty() const
-    {
-        return m_pPropGrid->GetSelection();
-    }
+    wxPGProperty* GetSelectedProperty() const;
 
     /** Synonyme for GetSelectedPage. */
-    int GetSelection() const { return m_selPage; }
+    int GetSelection() const;
 
     /**
         Returns a pointer to the toolbar currently associated with the
         wxPropertyGridManager (if any).
     */
-    wxToolBar* GetToolBar() const { return m_pToolbar; }
+    wxToolBar* GetToolBar() const;
 
-    /** Creates new property page. Note that the first page is not created
+    /**
+        Creates new property page. Note that the first page is not created
         automatically.
 
         @param index
@@ -397,8 +379,7 @@ public:
     bool IsAnyModified() const;
 
     /**
-        Returns @true if updating is frozen (ie. Freeze() called but not yet
-        Thaw() ).
+        Returns @true if updating is frozen (ie. Freeze() called but not yet Thaw() ).
     */
     bool IsFrozen() const;
 
@@ -407,13 +388,15 @@ public:
     */
     bool IsPageModified( size_t index ) const;
 
-    /** Removes a page.
+    /**
+        Removes a page.
 
         @return Returns @false if it was not possible to remove page in question.
     */
     virtual bool RemovePage( int page );
 
-    /** Select and displays a given page.
+    /**
+        Select and displays a given page.
 
         @param index
             Index of page being seleced. Can be -1 to select nothing.
@@ -436,14 +419,16 @@ public:
     */
     void SetColumnCount( int colCount, int page = -1 );
 
-    /** Sets label and text in description box.
+    /**
+        Sets label and text in description box.
     */
     void SetDescription( const wxString& label, const wxString& content );
 
     /** Sets y coordinate of the description box splitter. */
     void SetDescBoxHeight( int ht, bool refresh = true );
 
-    /** Moves splitter as left as possible, while still allowing all
+    /**
+        Moves splitter as left as possible, while still allowing all
         labels to be shown in full.
 
         @param subProps
@@ -456,10 +441,7 @@ public:
     void SetSplitterLeft( bool subProps = false, bool allPages = true );
 
     /** Sets splitter position on individual page. */
-    void SetPageSplitterPosition( int page, int pos, int column = 0 )
-    {
-        GetPage(page)->DoSetSplitterPosition( pos, column );
-    }
+    void SetPageSplitterPosition( int page, int pos, int column = 0 );
 
     /**
         Sets splitter position for all pages.
@@ -472,10 +454,7 @@ public:
     void SetSplitterPosition( int pos, int column = 0 );
 
     /** Synonyme for SelectPage(name). */
-    void SetStringSelection( const wxChar* name )
-    {
-        SelectPage( GetPageByName(name) );
-    }
+    void SetStringSelection( const wxChar* name );
 
 protected:
 
@@ -484,10 +463,8 @@ protected:
     //
 
     /**
-        Creates property grid for the manager. Override to use subclassed
-        wxPropertyGrid.
+        Creates property grid for the manager.
+        Override to use subclassed wxPropertyGrid.
     */
     virtual wxPropertyGrid* CreatePropertyGrid() const;
 };
-
-// -----------------------------------------------------------------------

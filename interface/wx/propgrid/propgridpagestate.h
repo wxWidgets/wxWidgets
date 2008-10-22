@@ -7,7 +7,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-/** @section propgrid_hittestresult wxPropertyGridHitTestResult
+/**
+    @section propgrid_hittestresult wxPropertyGridHitTestResult
 
     A return value from wxPropertyGrid::HitTest(),
     contains all you need to know about an arbitrary location on the grid.
@@ -99,7 +100,8 @@ wxPG_ITERATE_DEFAULT                = wxPG_ITERATE_NORMAL
 */
 
 
-/** @section propgrid_iterator_class wxPropertyGridIterator
+/**
+    @section propgrid_iterator_class wxPropertyGridIterator
 
     Preferable way to iterate through contents of wxPropertyGrid,
     wxPropertyGridManager, and wxPropertyGridPage.
@@ -117,15 +119,18 @@ public:
 
     bool AtEnd() const { return m_property == NULL; }
 
-    /** Get current property.
+    /**
+        Get current property.
     */
     wxPGProperty* GetProperty() const { return m_property; }
 
-    /** Iterate to the next property.
+    /**
+        Iterate to the next property.
     */
     void Next( bool iterateChildren = true );
 
-    /** Iterate to the previous property.
+    /**
+        Iterate to the previous property.
     */
     void Prev();
 
@@ -134,7 +139,8 @@ protected:
 
 // -----------------------------------------------------------------------
 
-/** @section propgrid_viterator_class wxPGVIterator
+/**
+    @section propgrid_viterator_class wxPGVIterator
 
     Abstract implementation of a simple iterator. Can only be used
     to iterate in forward order, and only through the entire container.

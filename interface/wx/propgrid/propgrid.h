@@ -32,7 +32,7 @@ wxPG_AUTO_SORT                      = 0x00000010,
 */
 wxPG_HIDE_CATEGORIES                = 0x00000020,
 
-/*
+/**
     This style combines non-categoric mode and automatic sorting.
 */
 wxPG_ALPHABETIC_MODE                = (wxPG_HIDE_CATEGORIES|wxPG_AUTO_SORT),
@@ -213,15 +213,14 @@ typedef wxByte wxPGVFBFlags;
     wxPGValidationInfo
 
     Used to convey validation information to and from functions that
-    actually perform validation. Mostly used in custom property
-    classes.
+    actually perform validation. Mostly used in custom property classes.
 */
 class wxPGValidationInfo
 {
 public:
     /**
         @return Returns failure behavior which is a combination of
-               @ref propgrid_vfbflags.
+            @ref propgrid_vfbflags.
     */
     wxPGVFBFlags GetFailureBehavior();
 
@@ -252,6 +251,7 @@ public:
 
 /**
     @section propgrid_keyboard_actions wxPropertyGrid Action Identifiers
+
     These are used with wxPropertyGrid::AddActionTrigger() and
     wxPropertyGrid::ClearActionTriggers().
     @{
@@ -273,9 +273,10 @@ enum wxPG_KEYBOARD_ACTIONS
 
 // -----------------------------------------------------------------------
 
-/** @class wxPropertyGrid
+/**
+    @class wxPropertyGrid
 
-      wxPropertyGrid is a specialized grid for editing properties - in other
+    wxPropertyGrid is a specialized grid for editing properties - in other
     words name = value pairs. List of ready-to-use property classes include
     strings, numbers, flag sets, fonts, colours and many others. It is possible,
     for example, to categorize properties, set up a complete tree-hierarchy,
@@ -324,37 +325,34 @@ enum wxPG_KEYBOARD_ACTIONS
     @endEventTable
 
     @remarks
-
-    - Use Freeze() and Thaw() respectively to disable and enable drawing. This
-      will also delay sorting etc. miscellaneous calculations to the last
-      possible moment.
+    Use Freeze() and Thaw() respectively to disable and enable drawing.
+    This will also delay sorting etc. miscellaneous calculations to the last
+    possible moment.
 
     @library{wxpropgrid}
     @category{propgrid}
     @appearance{propertygrid.png}
-    
 */
 class wxPropertyGrid : public wxScrolledWindow, public wxPropertyGridInterface
 {
 public:
-
-	/**
-        Two step constructor. Call Create when this constructor is called to
-        build up the wxPropertyGrid
-	*/
+    /**
+        Two step constructor.
+        Call Create() when this constructor is called to build up the wxPropertyGrid
+    */
     wxPropertyGrid();
 
     /**
-        Constructor. The styles to be used are styles valid for
-        the wxWindow and wxScrolledWindow.
+        Constructor.
+        The styles to be used are styles valid for the wxWindow and wxScrolledWindow.
 
         @see @ref propgrid_window_styles.
     */
     wxPropertyGrid( wxWindow *parent, wxWindowID id = wxID_ANY,
-               	    const wxPoint& pos = wxDefaultPosition,
-               	    const wxSize& size = wxDefaultSize,
-               	    long style = wxPG_DEFAULT_STYLE,
-               	    const wxChar* name = wxPropertyGridNameStr );
+                    const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& size = wxDefaultSize,
+                    long style = wxPG_DEFAULT_STYLE,
+                    const wxChar* name = wxPropertyGridNameStr );
 
     /** Destructor */
     virtual ~wxPropertyGrid();
@@ -364,10 +362,8 @@ public:
 
         @param action
             Which action to trigger. See @ref propgrid_keyboard_actions.
-
         @param keycode
             Which keycode triggers the action.
-
         @param modifiers
             Which key event modifiers, in addition to keycode, are needed to
             trigger the action.
@@ -429,10 +425,10 @@ public:
         @see @ref propgrid_window_styles.
     */
     bool Create( wxWindow *parent, wxWindowID id = wxID_ANY,
-                 const wxPoint& pos = wxDefaultPosition,
-                 const wxSize& size = wxDefaultSize,
-                 long style = wxPG_DEFAULT_STYLE,
-                 const wxChar* name = wxPropertyGridNameStr );
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxPG_DEFAULT_STYLE,
+                const wxChar* name = wxPropertyGridNameStr );
 
     /**
         Call when editor widget's contents is modified. For example, this is
@@ -443,17 +439,14 @@ public:
 
         @see wxPGProperty::OnEvent()
     */
-    void EditorsValueWasModified() { m_iFlags |= wxPG_FL_VALUE_MODIFIED; }
+    void EditorsValueWasModified();
 
     /**
         Reverse of EditorsValueWasModified().
 
         @remarks This function should only be called by custom properties.
     */
-    void EditorsValueWasNotModified()
-    {
-        m_iFlags &= ~(wxPG_FL_VALUE_MODIFIED);
-    }
+    void EditorsValueWasNotModified();
 
     /**
         Enables or disables (shows/hides) categories according to parameter
@@ -648,7 +641,7 @@ public:
     /**
         Returns current vertical spacing.
     */
-    int GetVerticalSpacing() const { return (int)m_vspacing; }
+    int GetVerticalSpacing() const;
 
     /**
         Returns true if editor's value was marked modified.
@@ -677,8 +670,8 @@ public:
 
         @code
             control->Connect(control->GetId(), wxEVT_COMMAND_TEXT_UPDATED,
-                             wxEventHandler(wxPropertyGrid::OnCustomEditorEvent),
-                             NULL, propgrid);
+                            wxEventHandler(wxPropertyGrid::OnCustomEditorEvent),
+                            NULL, propgrid);
         @endcode
 
         @remarks You should never need to call this function directly!
@@ -803,15 +796,19 @@ public:
     void SetPropertyTextColour( wxPGPropArg id, const wxColour& col,
                                 bool recursively = true );
 
-    /** Sets selection background colour - applies to selected property name
-        background. */
+    /**
+        Sets selection background colour - applies to selected property name
+        background.
+    */
     void SetSelectionBackgroundColour(const wxColour& col);
 
-    /** Sets selection foreground colour - applies to selected property name
-        text. */
+    /**
+        Sets selection foreground colour - applies to selected property name text.
+    */
     void SetSelectionTextColour(const wxColour& col);
 
-    /** Sets x coordinate of the splitter.
+    /**
+        Sets x coordinate of the splitter.
 
         @remarks Splitter position cannot exceed grid size, and therefore setting
                 it during form creation may fail as initial grid size is often
@@ -827,10 +824,7 @@ public:
         @param privateChildrenToo
             If @false, will still allow private children to be cropped.
     */
-    void SetSplitterLeft( bool privateChildrenToo = false )
-    {
-        m_pState->SetSplitterLeft(subProps);
-    }
+    void SetSplitterLeft( bool privateChildrenToo = false );
 
     /**
         Sets vertical spacing. Can be 1, 2, or 3 - a value relative to font
@@ -880,7 +874,7 @@ public:
     /**
         Returns true if you can veto the action that the event is signaling.
     */
-    bool CanVeto() const { return m_canVeto; }
+    bool CanVeto() const;
 
     /** Copyer. */
     virtual wxEvent* Clone() const;
@@ -914,7 +908,7 @@ public:
         Set if event can be vetoed.
     */
     void SetCanVeto( bool canVeto );
-    
+
     /** Changes the property associated with this event. */
     void SetProperty( wxPGProperty* p );
 

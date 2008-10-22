@@ -62,8 +62,8 @@ public:
 
     /**
         In order to add new items into a property with private children (for
-        instance, wxFlagsProperty), you need to call this method. After
-        populating has been finished, you need to call EndAddChildren().
+        instance, wxFlagsProperty), you need to call this method.
+        After populating has been finished, you need to call EndAddChildren().
 
         @see EndAddChildren()
     */
@@ -121,8 +121,8 @@ public:
     bool DisableProperty( wxPGPropArg id );
 
     /**
-        Returns true if all property grid data changes have been committed. Usually
-        only returns false if value in active editor has been invalidated by a
+        Returns @true if all property grid data changes have been committed. Usually
+        only returns @false if value in active editor has been invalidated by a
         wxValidator.
     */
     bool EditorValidate();
@@ -132,7 +132,6 @@ public:
 
         @param id
             Name or pointer to a property.
-
         @param enable
             If @false, property is disabled instead.
     */
@@ -165,28 +164,44 @@ public:
     wxPGProperty* GetFirstChild( wxPGPropArg id );
 
     //@{
-    /** Returns iterator class instance.
+    /**
+        Returns iterator class instance.
 
         @param flags
             See @ref propgrid_iterator_flags. Value wxPG_ITERATE_DEFAULT causes
             iteration over everything except private child properties.
-
         @param firstProp
-            Property to start iteration from. If NULL, then first child of root
+            Property to start iteration from. If @NULL, then first child of root
             is used.
 
-        @param startPos
-            Either wxTOP or wxBOTTOM. wxTOP will indicate that iterations start
-            from the first property from the top, and wxBOTTOM means that the
-            iteration will instead begin from bottommost valid item.
-
+        @beginWxPythonOnly
         <b>wxPython Note:</b> Instead of ++ operator, use Next() method, and
         instead of * operator, use GetProperty() method.
+        @endWxPythonOnly
     */
     wxPropertyGridIterator GetIterator( int flags = wxPG_ITERATE_DEFAULT,
                                         wxPGProperty* firstProp = NULL );
     wxPropertyGridConstIterator GetIterator( int flags = wxPG_ITERATE_DEFAULT,
                                              wxPGProperty* firstProp = NULL ) const;
+    //@}
+
+    //@{
+    /**
+        Returns iterator class instance.
+
+        @param flags
+            See @ref propgrid_iterator_flags. Value wxPG_ITERATE_DEFAULT causes
+            iteration over everything except private child properties.
+        @param startPos
+            Either wxTOP or wxBOTTOM. wxTOP will indicate that iterations start
+            from the first property from the top, and wxBOTTOM means that the
+            iteration will instead begin from bottommost valid item.
+
+        @beginWxPythonOnly
+        <b>wxPython Note:</b> Instead of ++ operator, use Next() method, and
+        instead of * operator, use GetProperty() method.
+        @endWxPythonOnly
+    */
     wxPropertyGridIterator GetIterator( int flags, int startPos );
     wxPropertyGridConstIterator GetIterator( int flags, int startPos ) const;
     //@}
@@ -202,19 +217,19 @@ public:
     /**
         Returns id of property with given name (case-sensitive).
     */
-    wxPGProperty* GetProperty( const wxString& name ) const
-    {
-        return GetPropertyByName(name);
-    }
+    wxPGProperty* GetProperty( const wxString& name ) const;
 
     /**
-        Adds to 'targetArr' pointers to properties that have given
-        flags 'flags' set. However, if 'inverse' is set to true, then
-        only properties without given flags are stored.
+        Adds to 'targetArr' pointers to properties that have given flags 'flags' set.
+        However, if @a 'inverse' is set to @true, then only properties without
+        given flags are stored.
 
+        @param targetArr
+            @todo docme
         @param flags
             Property flags to use.
-
+        @param inverse
+            @todo docme
         @param iterFlags
             Iterator flags to use. Default is everything expect private children.
             See @ref propgrid_iterator_flags.
@@ -231,7 +246,7 @@ public:
 
     /**
         Returns pointer of property's nearest parent category. If no category
-        found, returns NULL.
+        found, returns @NULL.
     */
     wxPropertyCategory* GetPropertyCategory( wxPGPropArg id ) const;
 
@@ -239,14 +254,14 @@ public:
     void* GetPropertyClientData( wxPGPropArg id ) const;
 
     /**
-        Returns first property which label matches given string. NULL if none
+        Returns first property which label matches given string. @NULL if none
         found. Note that this operation is very slow when compared to
         GetPropertyByName().
     */
     wxPGProperty* GetPropertyByLabel( const wxString& label ) const;
 
     /**
-        Returns property with given name. NULL if none found.
+        Returns property with given name. @NULL if none found.
     */
     wxPGProperty* GetPropertyByName( const wxString& name ) const;
 
@@ -268,7 +283,7 @@ public:
     wxString GetPropertyHelpString( wxPGPropArg id ) const;
 
     /**
-        Returns property's custom value image (NULL of none).
+        Returns property's custom value image (@NULL of none).
     */
     wxBitmap* GetPropertyImage( wxPGPropArg id ) const;
 
@@ -332,6 +347,10 @@ public:
         Returns a wxVariant list containing wxVariant versions of all
         property values. Order is not guaranteed.
 
+        @param listname
+            @todo docme
+        @param baseparent
+            @todo docme
         @param flags
             Use wxPG_KEEP_STRUCTURE to retain category structure; each sub
             category will be its own wxVariantList of wxVariant.
@@ -341,7 +360,7 @@ public:
             "@@<propname>@@attr."
     */
     wxVariant GetPropertyValues( const wxString& listname = wxEmptyString,
-        wxPGProperty* baseparent = NULL, long flags = 0 ) const;
+                                 wxPGProperty* baseparent = NULL, long flags = 0 ) const;
 
     /** Returns currently selected property. */
     wxPGProperty* GetSelection() const;
@@ -362,9 +381,10 @@ public:
     /**
         Hides or reveals a property.
 
+        @param id
+            @todo docme
         @param hide
             If @true, hides property, otherwise reveals it.
-
         @param flags
             By default changes are applied recursively. Set this parameter
             wxPG_DONT_RECURSE to prevent this.
@@ -378,28 +398,17 @@ public:
     */
     static void InitAllTypeHandlers();
 
-    //@{
-    /** Inserts property to the property container.
+    /**
+        Inserts property to the property container.
 
         @param priorThis
             New property is inserted just prior to this. Available only
             in the first variant. There are two versions of this function
             to allow this parameter to be either an id or name to
             a property.
-
         @param newProperty
             Pointer to the inserted property. wxPropertyGrid will take
             ownership of this object.
-
-        @param parent
-            New property is inserted under this category. Available only
-            in the second variant. There are two versions of this function
-            to allow this parameter to be either an id or name to
-            a property.
-
-        @param index
-            Index under category. Available only in the second variant.
-            If index is < 0, property is appended in category.
 
         @return Returns newProperty.
 
@@ -428,11 +437,28 @@ public:
             wxPGProperty* my_item_id_2 = propertygrid->Insert( my_item_id, new wxStringProperty("My String 2") );
 
         @endcode
-
     */
     wxPGProperty* Insert( wxPGPropArg priorThis, wxPGProperty* newProperty );
+
+    /**
+        Inserts property to the property container.
+        See the other overload for more details.
+
+        @param parent
+            New property is inserted under this category. Available only
+            in the second variant. There are two versions of this function
+            to allow this parameter to be either an id or name to
+            a property.
+        @param index
+            Index under category. Available only in the second variant.
+            If index is < 0, property is appended in category.
+        @param newProperty
+            Pointer to the inserted property. wxPropertyGrid will take
+            ownership of this object.
+
+        @return Returns newProperty.
+    */
     wxPGProperty* Insert( wxPGPropArg parent, int index, wxPGProperty* newProperty );
-    //@}
 
     /** Returns @true if property is a category. */
     bool IsPropertyCategory( wxPGPropArg id ) const;
@@ -441,7 +467,7 @@ public:
     bool IsPropertyEnabled( wxPGPropArg id ) const;
 
     /**
-        Returns true if given property is expanded. Naturally, always returns
+        Returns @true if given property is expanded. Naturally, always returns
         @false for properties that cannot be expanded.
     */
     bool IsPropertyExpanded( wxPGPropArg id ) const;
@@ -453,13 +479,13 @@ public:
     bool IsPropertyModified( wxPGPropArg id ) const;
 
     /**
-        Returns true if property is shown (ie. HideProperty() with @true not
+        Returns @true if property is shown (ie. HideProperty() with @true not
         called for it).
     */
     bool IsPropertyShown( wxPGPropArg id ) const;
 
     /**
-        Returns true if property value is set to unspecified.
+        Returns @true if property value is set to unspecified.
     */
     bool IsPropertyValueUnspecified( wxPGPropArg id ) const;
 
@@ -567,18 +593,18 @@ public:
     /**
         Sets an attribute for this property.
 
-        @param name
+        @param id
+            @todo docme
+        @param attrName
             Text identifier of attribute. See @ref propgrid_property_attributes.
-
         @param value
             Value of attribute.
-
         @param argFlags
-            Optional. Use wxPG_RECURSE to set the attribute to child properties
-            recursively.
+            Optional.
+            Use wxPG_RECURSE to set the attribute to child properties recursively.
 
         @remarks Setting attribute's value to Null variant will simply remove it
-                from property's set of attributes.
+                 from property's set of attributes.
     */
     void SetPropertyAttribute( wxPGPropArg id, const wxString& attrName,
                                wxVariant value, long argFlags = 0 );
@@ -615,6 +641,8 @@ public:
     /**
         Sets editor for a property.
 
+        @param id
+            @todo docme
         @param editor
             For builtin editors, use wxPGEditor_X, where X is builtin editor's
             name (TextCtrl, Choice, etc. see wxPGEditor documentation for full
