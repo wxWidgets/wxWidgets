@@ -177,10 +177,10 @@ void XLocaleTestCase::TestCtypeFunctions()
 
     TestCtypeFunctionsWith(locFR);
 
-    CPPUNIT_ASSERT( wxIsalpha_l('é', locFR) );
-    CPPUNIT_ASSERT( wxIslower_l('é', locFR) );
-    CPPUNIT_ASSERT( !wxIslower_l('É', locFR) );
-    CPPUNIT_ASSERT( wxIsupper_l('É', locFR) );
+    CPPUNIT_ASSERT( wxIsalpha_l('\xe9', locFR) );
+    CPPUNIT_ASSERT( wxIslower_l('\xe9', locFR) );
+    CPPUNIT_ASSERT( !wxIslower_l('\xc9', locFR) );
+    CPPUNIT_ASSERT( wxIsupper_l('\xc9', locFR) );
 #endif
 }
 
