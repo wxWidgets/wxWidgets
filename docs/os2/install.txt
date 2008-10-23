@@ -24,21 +24,11 @@ unzip the subdirectories as well.  You will need:
 - samples;
 - documentation in HTML Help format;
 - makefiles for VisualAge V3.0 (possibly for EMX and Watcom C++);
-- HTML library source;
-- JPEG library source;
-- TIFF library source;
-- PNG library source;
-- ZLIB library source;
+- JPEG, TIFF, PNG, ZLIB, wxSTC, REGEX, EXPAT library sources.
 
 All but the documentation is included in wxOS2-2.8.0.zip, documentation
 must be downloaded separately from the wxWidgets Web site.
 
-Other add-on packages are available from the wxWidgets Web site, such as:
-
-- mmedia.zip. Audio, CD, video access for Windows and Linux.
-- ogl3.zip. Object Graphics Library: build network diagrams, CASE tools etc.
-- tex2rtf3.zip. Tex2RTF: create Windows Help, HTML, and Word RTF files from
-  the same document source.
 
 General installation notes
 --------------------------
@@ -231,4 +221,4 @@ ports are --with-gtk (wxGTK), --with-motif (wxMotif), --with-x11 (wxX11),
 and --disable-gui (wxBase). Note that contrary to the native, PM based
 OS/2 port, all of those ports work slightly better with POSIX/2's cExt
 library. If include and library path include the suitable paths, -lcExt
-is automatically appended to the linker flags by the configure script. 
+is automatically appended to the linker flags by the configure script.

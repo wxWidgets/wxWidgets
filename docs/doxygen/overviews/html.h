@@ -59,10 +59,6 @@ passed @b string. See the example:
                     "/body/hmtl");
 @endcode
 
-@subsection overview_html_quickstart_disphelp Displaying Help
-
-See wxHtmlHelpController.
-
 @subsection overview_html_quickstart_settingup Setting up wxHtmlWindow
 
 Because wxHtmlWindow is derived from ::wxScrolledWindow and not from
@@ -122,17 +118,15 @@ printing into two columns.)
 
 @section overview_html_helpformats Help Files Format
 
-wxHTML library uses a reduced version of MS HTML Workshop format.
-Tex2RTF can produce these files when generating HTML, if you set
-@b htmlWorkshopFiles to @true in your tex2rtf.ini file.
-(See wxHtmlHelpController for help controller description.)
+wxHTML library can be used to show an help manual to the user; in fact, it supports
+natively (through wxHtmlHelpController) a reduced version of MS HTML Workshop format.
 
 A @b book consists of three files: the header file, the contents file
 and the index file.
 
 You can make a regular zip archive of these files, plus the HTML and any
-image files, for wxHTML (or helpview) to read; and the @c .zip file can
-optionally be renamed to @c .htb.
+image files, for wxHTML (or helpview) to read; and the @c ".zip" file can
+optionally be renamed to @c ".htb".
 
 @subsection overview_html_helpformats_hhp Header file (.hhp)
 
@@ -147,9 +141,9 @@ Default topic=default page to be displayed.htm
 @endcode
 
 All filenames (including the Default topic) are relative to the
-location of the @c .hhp file.
+location of the @c ".hhp" file.
 
-@note For localization, in addition the @c .hhp file may contain the line
+@note For localization, in addition the @c ".hhp" file may contain the line
     @code
         Charset=rfc_charset
     @endcode
@@ -182,7 +176,7 @@ It contains exactly one list (@c &lt;ul&gt;....@c &lt;/ul&gt; statement):
 
 You can modify value attributes of param tags.
 The <em>topic name</em> is name of chapter/topic as is displayed in
-contents, <em>filename.htm</em> is the HTML page name (relative to the @c .hhp file)
+contents, <em>filename.htm</em> is the HTML page name (relative to the @c ".hhp" file)
 and <em>numeric_id</em> is optional - it is used only when you use wxHtmlHelpController::Display(int).
 
 Items in the list may be nested - one @c &lt;li&gt; statement may contain a @c &lt;ul&gt; sub-statement:
@@ -213,7 +207,7 @@ Items in the list may be nested - one @c &lt;li&gt; statement may contain a @c &
 
 @subsection overview_html_helpformats_hhk Index file (.hhk)
 
-Index files have same format as contents file except that ID params are ignored
+Index files have same format as contents files except that ID params are ignored
 and sublists are @b not allowed.
 
 

@@ -117,9 +117,6 @@ here are some of the benefits:
 @li Network support via a family of socket and protocol classes.
 @li Support for platform independent image processing.
 @li Built-in support for many file formats (BMP, PNG, JPEG, GIF, XPM, PNM, PCX).
-@li Includes Tex2RTF, to allow you to produce your own documentation
-    in Windows Help, HTML and Word RTF formats.
-
 
 
 @section page_introduction_requirements wxWidgets requirements

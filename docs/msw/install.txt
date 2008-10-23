@@ -36,11 +36,9 @@ The setup program contains the following:
 - All common, generic and MSW-specific wxWidgets source;
 - samples and demos;
 - documentation in MS HTML Help format;
-- makefiles for most Windows compilers, plus CodeWarrior,
-  BC++ and VC++ IDE files;
-- JPEG library source;
-- TIFF library source;
-- Object Graphics Library, Tex2RTF, wxSTC, etc.
+- makefiles for most Windows compilers, plus CodeWarrior
+  and VC++ IDE files;
+- JPEG, TIFF, PNG, ZLIB, wxSTC, REGEX, EXPAT library sources.
 
 Alternatively, you may unarchive the .zip form by hand:
 wxMSW-x.y.z.zip where x.y.z is the version number.
