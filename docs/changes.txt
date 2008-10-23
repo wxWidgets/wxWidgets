@@ -91,6 +91,10 @@ Major new features in 2.8 release
 2.8.10:
 -------
 
+All:
+
+- Added Vietnamese translation (Tran Ngoc Quan).
+
 All (GUI):
 
 - Fixed wxHTML's pagebreaks computation in tables (D.J.Stauffer).
