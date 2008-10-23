@@ -306,12 +306,12 @@ void FileNameTestCase::TestNormalize()
         // test wxPATH_NORM_TILDE
         // NB: do the tilde expansion also under Windows to test if it works there too
         { wxT("/a/b/~"), wxPATH_NORM_TILDE, wxT("/a/b/~") },
-        { wxT("/~/a/b"), wxPATH_NORM_TILDE, home + wxT("a/b") },
-        { wxT("~/a/b"), wxPATH_NORM_TILDE, home + wxT("a/b") },
+        { wxT("/~/a/b"), wxPATH_NORM_TILDE, wxT("HOME/a/b") },
+        { wxT("~/a/b"), wxPATH_NORM_TILDE, wxT("HOME/a/b") },
 
         // test wxPATH_NORM_ABSOLUTE
-        { wxT("a/b/"), wxPATH_NORM_ABSOLUTE, cwd + wxT("a/b/") },
-        { wxT("a/b/c.ext"), wxPATH_NORM_ABSOLUTE, cwd + wxT("a/b/c.ext") },
+        { wxT("a/b/"), wxPATH_NORM_ABSOLUTE, wxT("CWD/a/b/") },
+        { wxT("a/b/c.ext"), wxPATH_NORM_ABSOLUTE, wxT("CWD/a/b/c.ext") },
         { wxT("/a"), wxPATH_NORM_ABSOLUTE, wxT("/a") },
 
         // test giving no flags at all to Normalize()
@@ -335,7 +335,16 @@ void FileNameTestCase::TestNormalize()
         );
 
         // compare result with expected string
-        CPPUNIT_ASSERT_EQUAL( wxString(tests[i].expected), fn.GetFullPath(wxPATH_UNIX) );
+        wxString expected(tests[i].expected);
+        expected.Replace(_T("HOME/"), home);
+        expected.Replace(_T("CWD/"), cwd);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
+        (
+            (const char *)
+            wxString::Format(_T("Test #%lu (\"%s\") failed"),
+                             (unsigned long)i, tests[i].original).mb_str(),
+            expected, fn.GetFullPath(wxPATH_UNIX)
+        );
     }
 }
 
