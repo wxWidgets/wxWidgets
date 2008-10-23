@@ -9,13 +9,14 @@
 /**
     @class wxHtmlHelpData
 
-    This class is used by wxHtmlHelpController
-    and wxHtmlHelpFrame to access HTML help items.
+    This class is used by wxHtmlHelpController and wxHtmlHelpFrame to access HTML
+    help items.
+
     It is internal class and should not be used directly - except for the case
     you're writing your own HTML help controller.
 
     @library{wxhtml}
-    @category{FIXME}
+    @category{help,html}
 */
 class wxHtmlHelpData : public wxObject
 {
@@ -26,9 +27,12 @@ public:
     wxHtmlHelpData();
 
     /**
-        Adds new book. @e book is URL (not filename!) of HTML help project (hhp)
-        or ZIP file that contains arbitrary number of .hhp projects (this zip
-        file can have either .zip or .htb extension, htb stands for "html book").
+        Adds new book.
+
+        @a book_url is URL (not filename!) of HTML help project (hhp) or ZIP file
+        that contains arbitrary number of .hhp projects (this zip file can have
+        either .zip or .htb extension, htb stands for "html book").
+
         Returns success.
     */
     bool AddBook(const wxString& book_url);
@@ -59,7 +63,7 @@ public:
     const wxHtmlHelpDataItems GetIndexArray();
 
     /**
-        Sets temporary directory where binary cached versions of MS HTML Workshop
+        Sets the temporary directory where binary cached versions of MS HTML Workshop
         files will be stored. (This is turned off by default and you can enable
         this feature by setting non-empty temp dir.)
     */
