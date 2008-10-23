@@ -414,7 +414,7 @@ private:
  *                 be local file accesible via fopen, fread functions!
  * @param filename The Name of the file to be extracted from archive
  * @param simulate if true than class should simulate .HHP-File based on #SYSTEM
- *                 if false than class does nothing if it doesnt find .hhp
+ *                 if false than class does nothing if it doesn't find .hhp
  */
 wxChmInputStream::wxChmInputStream(const wxString& archive,
                                    const wxString& filename, bool simulate)
@@ -541,7 +541,7 @@ wxFileOffset wxChmInputStream::OnSysSeek(wxFileOffset seek, wxSeekMode mode)
 /**
  * Help Browser tries to read the contents of the
  * file by interpreting a .hhp file in the Archiv.
- * For .chm doesnt include such a file, we need
+ * For .chm doesn't include such a file, we need
  * to rebuild the information based on stored
  * system-files.
  */
@@ -561,7 +561,7 @@ wxChmInputStream::CreateHHPStream()
     if ( ! m_chm->Contains(_T("/#SYSTEM")) )
     {
 #ifdef DEBUG
-        wxLogDebug(_("Archive doesnt contain #SYSTEM file"));
+        wxLogDebug("Archive doesn't contain #SYSTEM file");
 #endif
         return;
     }

@@ -429,7 +429,7 @@ struct wxRuntimeDepersister::wxRuntimeDepersisterInternal
             return NULL ;
         if ( m_objects.find(objectID) == m_objects.end() )
         {
-            wxLogError( _("Passing an unkown object to GetObject") ) ;
+            wxLogError( _("Passing an unknown object to GetObject") ) ;
             return NULL ;
         }
 
