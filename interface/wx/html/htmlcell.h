@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        html/htmlcell.h
-// Purpose:     interface of wxHtmlColourCell
+// Purpose:     interface of wxHtml*Cell
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -24,29 +24,8 @@ public:
             The color
         @param flags
             Can be one of following:
-
-
-
-
-
-
-            wxHTML_CLR_FOREGROUND
-
-
-
-
-            change color of text
-
-
-
-
-
-            wxHTML_CLR_BACKGROUND
-
-
-
-
-            change background color
+            - wxHTML_CLR_FOREGROUND: change color of text
+            - wxHTML_CLR_BACKGROUND: change background color
     */
     wxHtmlColourCell(const wxColour& clr, int flags = wxHTML_CLR_FOREGROUND);
 };
@@ -57,14 +36,13 @@ public:
     @class wxHtmlWidgetCell
 
     wxHtmlWidgetCell is a class that provides a connection between HTML cells and
-    widgets (an object derived
-    from wxWindow). You can use it to display things like forms, input boxes etc.
-    in an HTML window.
+    widgets (an object derived from wxWindow).
+    You can use it to display things like forms, input boxes etc. in an HTML window.
 
     wxHtmlWidgetCell takes care of resizing and moving window.
 
     @library{wxhtml}
-    @category{FIXME}
+    @category{html}
 */
 class wxHtmlWidgetCell : public wxHtmlCell
 {
@@ -73,13 +51,12 @@ public:
         Constructor.
 
         @param wnd
-            Connected window. It is parent window must be the wxHtmlWindow object within
-            which it is displayed!
+            Connected window. It is parent window @b must be the wxHtmlWindow object
+            within which it is displayed!
         @param w
             Floating width. If non-zero width of wnd window is adjusted so that it is
             always w percents of parent container's width. (For example w = 100 means
-        that the window
-            will always have same width as parent container)
+            that the window will always have same width as parent container).
     */
     wxHtmlWidgetCell(wxWindow* wnd, int w = 0);
 };
@@ -89,19 +66,18 @@ public:
 /**
     @class wxHtmlCell
 
-    Internal data structure. It represents fragments of parsed HTML
-    page, the so-called @b cell - a word, picture, table, horizontal line and so on.
-    It is used by wxHtmlWindow and
-    wxHtmlWinParser to represent HTML page in memory.
+    Internal data structure. It represents fragments of parsed HTML page, the
+    so-called @b cell - a word, picture, table, horizontal line and so on.
+    It is used by wxHtmlWindow and wxHtmlWinParser to represent HTML page in memory.
 
     You can divide cells into two groups : @e visible cells with non-zero width and
-    height and @e helper cells (usually with zero width and height) that
-    perform special actions such as color or font change.
+    height and @e helper cells (usually with zero width and height) that perform
+    special actions such as color or font change.
 
     @library{wxhtml}
-    @category{FIXME}
+    @category{html}
 
-    @see @ref overview_cells "Cells Overview", wxHtmlContainerCell
+    @see @ref overview_html_cells, wxHtmlContainerCell
 */
 class wxHtmlCell : public wxObject
 {
@@ -112,13 +88,17 @@ public:
     wxHtmlCell();
 
     /**
-        This method is used to adjust pagebreak position. The parameter is
-        variable that contains y-coordinate of page break (= horizontal line that
-        should not be crossed by words, images etc.). If this cell cannot be divided
-        into two pieces (each one on another page) then it moves the pagebreak
-        few pixels up.
-        Returns @true if pagebreak was modified, @false otherwise
+        This method is used to adjust pagebreak position.
+        The parameter is variable that contains y-coordinate of page break
+        (= horizontal line that should not be crossed by words, images etc.).
+        If this cell cannot be divided into two pieces (each one on another page)
+        then it moves the pagebreak few pixels up.
+        Returns @true if pagebreak was modified, @false otherwise.
+
         Usage:
+        @code
+        while (container->AdjustPagebreak(&p)) {}
+        @endcode
     */
     virtual bool AdjustPagebreak(int* pagebreak);
 
@@ -130,40 +110,45 @@ public:
         @param x,y
             Coordinates of parent's upper left corner (origin). You must
             add this to m_PosX,m_PosY when passing coordinates to dc's methods
-            Example : dc - DrawText("hello", x + m_PosX, y + m_PosY)
+            Example:
+            @code
+                dc->DrawText("hello", x + m_PosX, y + m_PosY)
+            @endcode
         @param view_y1
-            y-coord of the first line visible in window. This is
-            used to optimize rendering speed
+            y-coord of the first line visible in window.
+            This is used to optimize rendering speed
         @param view_y2
-            y-coord of the last line visible in window. This is
-            used to optimize rendering speed
+            y-coord of the last line visible in window.
+            This is used to optimize rendering speed
     */
-    virtual void Draw(wxDC& dc, int x, int y, int view_y1,
-                      int view_y2);
+    virtual void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2);
 
     /**
-        This method is called instead of Draw() when the
-        cell is certainly out of the screen (and thus invisible). This is not
-        nonsense - some tags (like wxHtmlColourCell
-        or font setter) must be drawn even if they are invisible!
+        This method is called instead of Draw() when the cell is certainly out of
+        the screen (and thus invisible). This is not nonsense - some tags (like
+        wxHtmlColourCell or font setter) must be drawn even if they are invisible!
 
         @param dc
-            Device context to which the cell is to be drawn
+            Device context to which the cell is to be drawn.
         @param x,y
             Coordinates of parent's upper left corner. You must
             add this to m_PosX,m_PosY when passing coordinates to dc's methods
-            Example : dc - DrawText("hello", x + m_PosX, y + m_PosY)
+            Example:
+            @code
+                dc->DrawText("hello", x + m_PosX, y + m_PosY)
+            @endcode
     */
     virtual void DrawInvisible(wxDC& dc, int x, int y);
 
     /**
-        Returns pointer to itself if this cell matches condition (or if any of the cells
-        following in the list matches), @NULL otherwise.
-        (In other words if you call top-level container's Find it will
+        Returns pointer to itself if this cell matches condition (or if any of the
+        cells following in the list matches), @NULL otherwise.
+        (In other words if you call top-level container's Find() it will
         return pointer to the first cell that matches the condition)
+
         It is recommended way how to obtain pointer to particular cell or
-        to cell of some type (e.g. wxHtmlAnchorCell reacts on
-        wxHTML_COND_ISANCHOR condition)
+        to cell of some type (e.g. wxHtmlAnchorCell reacts on wxHTML_COND_ISANCHOR
+        condition).
 
         @param condition
             Unique integer identifier of condition
@@ -175,16 +160,17 @@ public:
     /**
         Returns descent value of the cell (m_Descent member).
         See explanation:
+        @image html descent.png
     */
     int GetDescent() const;
 
     /**
         Returns pointer to the first cell in the list.
-        You can then use child's GetNext()
-        method to obtain pointer to the next cell in list.
+        You can then use child's GetNext() method to obtain pointer to the next
+        cell in list.
+
         @note This shouldn't be used by the end user. If you need some way of
-        finding particular cell in the list, try Find() method
-        instead.
+              finding particular cell in the list, try Find() method instead.
     */
     virtual wxHtmlCell* GetFirstChild() const;
 
@@ -194,14 +180,13 @@ public:
     int GetHeight() const;
 
     /**
-        Returns unique cell identifier if there is any, empty string otherwise.
+        Returns unique cell identifier if there is any, the empty string otherwise.
     */
     virtual wxString GetId() const;
 
     /**
         Returns hypertext link if associated with this cell or @NULL otherwise.
-        See wxHtmlLinkInfo.
-        (Note: this makes sense only for visible tags).
+        See wxHtmlLinkInfo. (Note: this makes sense only for visible tags).
 
         @param x,y
             Coordinates of position where the user pressed mouse button.
@@ -250,22 +235,21 @@ public:
 
     /**
         This method performs two actions:
-         adjusts the cell's width according to the fact that maximal possible width is
-        @e w.
-        (this has sense when working with horizontal lines, tables etc.)
-         prepares layout (=fill-in m_PosX, m_PosY (and sometimes m_Height) members)
-        based on actual width @e w
-        It must be called before displaying cells structure because
-        m_PosX and m_PosY are undefined (or invalid)
-        before calling Layout.
+        -# adjusts the cell's width according to the fact that maximal possible
+           width is @e w. (this has sense when working with horizontal lines, tables etc.)
+        -# prepares layout (=fill-in m_PosX, m_PosY (and sometimes m_Height) members)
+           based on actual width @e w
+
+        It must be called before displaying cells structure because m_PosX and
+        m_PosY are undefined (or invalid) before calling Layout().
     */
     virtual void Layout(int w);
 
     /**
-        This function is simple event handler. Each time the user clicks mouse button
-        over a cell within wxHtmlWindow this method of that
-        cell is called. Default behavior is to call
-        wxHtmlWindow::LoadPage.
+        This function is simple event handler.
+        Each time the user clicks mouse button over a cell within wxHtmlWindow
+        this method of that cell is called.
+        Default behavior is to call wxHtmlWindow::LoadPage.
 
         @param window
             interface to the parent HTML window
@@ -275,6 +259,11 @@ public:
             mouse event that triggered the call
 
         @return @true if a link was clicked, @false otherwise.
+
+        @since 2.7.0 (before OnMouseClick() method served a similar purpose).
+
+        @note
+        If you need more "advanced" event handling you should use wxHtmlBinderCell instead.
     */
     virtual bool ProcessMouseClick(wxHtmlWindowInterface* window,
                                    const wxPoint& pos,
@@ -286,8 +275,8 @@ public:
     void SetId(const wxString& id);
 
     /**
-        Sets the hypertext link associated with this cell. (Default value
-        is wxHtmlLinkInfo("", "") (no link))
+        Sets the hypertext link associated with this cell.
+        (Default value is wxHtmlLinkInfo("", "") (no link))
     */
     void SetLink(const wxHtmlLinkInfo& link);
 
@@ -298,8 +287,8 @@ public:
     void SetNext(wxHtmlCell cell);
 
     /**
-        Sets parent container of this cell. This is called from
-        wxHtmlContainerCell::InsertCell.
+        Sets parent container of this cell.
+        This is called from wxHtmlContainerCell::InsertCell.
     */
     void SetParent(wxHtmlContainerCell p);
 
@@ -318,9 +307,9 @@ public:
     contain more cells in it. It is heavily used in the wxHTML layout algorithm.
 
     @library{wxhtml}
-    @category{FIXME}
+    @category{html}
 
-    @see @ref overview_cells "Cells Overview"
+    @see @ref overview_html_cells
 */
 class wxHtmlContainerCell : public wxHtmlCell
 {
@@ -342,17 +331,16 @@ public:
 
     /**
         Returns the background colour of the container or @c wxNullColour if no
-        background
-        colour is set.
+        background colour is set.
     */
     wxColour GetBackgroundColour();
 
     /**
         Returns the indentation. @a ind is one of the @b wxHTML_INDENT_* constants.
-        @note You must call GetIndentUnits()
-        with same @a ind parameter in order to correctly interpret the returned integer
-        value.
-        It is NOT always in pixels!
+
+        @note You must call GetIndentUnits() with same @a ind parameter in order
+              to correctly interpret the returned integer value.
+              It is NOT always in pixels!
     */
     int GetIndent(int ind) const;
 
@@ -363,69 +351,27 @@ public:
     int GetIndentUnits(int ind) const;
 
     /**
-        Inserts new cell into the container.
+        Inserts a new cell into the container.
     */
     void InsertCell(wxHtmlCell cell);
 
     /**
         Sets the container's alignment (both horizontal and vertical) according to
-        the values stored in @e tag. (Tags @c ALIGN parameter is extracted.) In fact
-        it is only a front-end to SetAlignHor()
-        and SetAlignVer().
+        the values stored in @e tag. (Tags @c ALIGN parameter is extracted.)
+        In fact it is only a front-end to SetAlignHor() and SetAlignVer().
     */
     void SetAlign(const wxHtmlTag& tag);
 
     /**
-        Sets the container's @e horizontal alignment. During wxHtmlCell::Layout
-        each line is aligned according to @a al value.
+        Sets the container's @e horizontal alignment.
+        During wxHtmlCell::Layout each line is aligned according to @a al value.
 
         @param al
             new horizontal alignment. May be one of these values:
-
-
-
-
-
-
-            wxHTML_ALIGN_LEFT
-
-
-
-
-            lines are left-aligned (default)
-
-
-
-
-
-            wxHTML_ALIGN_JUSTIFY
-
-
-
-
-            lines are justified
-
-
-
-
-
-            wxHTML_ALIGN_CENTER
-
-
-
-
-            lines are centered
-
-
-
-
-
-            wxHTML_ALIGN_RIGHT
-
-
-
-
-            lines are right-aligned
+            - wxHTML_ALIGN_LEFT: lines are left-aligned (default)
+            - wxHTML_ALIGN_JUSTIFY: lines are justified
+            - wxHTML_ALIGN_CENTER: lines are centered
+            - wxHTML_ALIGN_RIGHT: lines are right-aligned
     */
     void SetAlignHor(int al);
 
@@ -434,40 +380,11 @@ public:
 
         @param al
             new vertical alignment. May be one of these values:
+            - wxHTML_ALIGN_BOTTOM: cells are over the line (default)
+            - wxHTML_ALIGN_CENTER: cells are centered on line
+            - wxHTML_ALIGN_TOP: cells are under the line
 
-
-
-
-
-
-            wxHTML_ALIGN_BOTTOM
-
-
-
-
-            cells are over the line (default)
-
-
-
-
-
-            wxHTML_ALIGN_CENTER
-
-
-
-
-            cells are centered on line
-
-
-
-
-
-            wxHTML_ALIGN_TOP
-
-
-
-
-            cells are under the line
+        @image html alignv.png
     */
     void SetAlignVer(int al);
 
@@ -489,187 +406,82 @@ public:
     /**
         Sets the indentation (free space between borders of container and subcells).
 
+        @image html indent.png
+
         @param i
             Indentation value.
         @param what
             Determines which of the four borders we're setting. It is OR
             combination of following constants:
-
-
-
-
-
-
-            wxHTML_INDENT_TOP
-
-
-
-
-            top border
-
-
-
-
-
-            wxHTML_INDENT_BOTTOM
-
-
-
-
-            bottom
-
-
-
-
-
-            wxHTML_INDENT_LEFT
-
-
-
-
-            left
-
-
-
-
-
-            wxHTML_INDENT_RIGHT
-
-
-
-
-            right
-
-
-
-
-
-            wxHTML_INDENT_HORIZONTAL
-
-
-
-
-            left and right
-
-
-
-
-
-            wxHTML_INDENT_VERTICAL
-
-
-
-
-            top and bottom
-
-
-
-
-
-            wxHTML_INDENT_ALL
-
-
-
-
-            all 4 borders
+            - wxHTML_INDENT_TOP: top border
+            - wxHTML_INDENT_BOTTOM: bottom
+            - wxHTML_INDENT_LEFT: left
+            - wxHTML_INDENT_RIGHT: right
+            - wxHTML_INDENT_HORIZONTAL: left and right
+            - wxHTML_INDENT_VERTICAL: top and bottom
+            - wxHTML_INDENT_ALL: all 4 borders
         @param units
-            Units of i. This parameter affects interpretation of  value.
-
-
-
-
-
-
-            wxHTML_UNITS_PIXELS
-
-
-
-
-            i is number of pixels
-
-
-
-
-
-            wxHTML_UNITS_PERCENT
-
-
-
-
-            i is interpreted as percents of width
-            of parent container
+            Units of i. This parameter affects interpretation of value.
+            - wxHTML_UNITS_PIXELS: @a i is number of pixels
+            - wxHTML_UNITS_PERCENT: @a i is interpreted as percents of width
+                                    of parent container
     */
     void SetIndent(int i, int what, int units = wxHTML_UNITS_PIXELS);
 
     /**
         Sets minimal height of the container.
-        When container's wxHtmlCell::Layout is called, m_Height
-        is set depending on layout of subcells to the height of area covered
-        by layed-out subcells. Calling this method guarantees you that the height
-        of container is never smaller than @a h - even if the subcells cover
-        much smaller area.
+        When container's wxHtmlCell::Layout is called, m_Height is set depending
+        on layout of subcells to the height of area covered by layed-out subcells.
+        Calling this method guarantees you that the height of container is never
+        smaller than @a h - even if the subcells cover much smaller area.
 
         @param h
             The minimal height.
         @param align
             If height of the container is lower than the minimum height, empty space
-        must be inserted
-            somewhere in order to ensure minimal height. This parameter is one of
-        wxHTML_ALIGN_TOP,
-            wxHTML_ALIGN_BOTTOM, wxHTML_ALIGN_CENTER. It refers to the contents, not to
-        the
+            must be inserted somewhere in order to ensure minimal height.
+            This parameter is one of @c wxHTML_ALIGN_TOP, @c wxHTML_ALIGN_BOTTOM,
+            @c wxHTML_ALIGN_CENTER. It refers to the contents, not to the
             empty place.
     */
     void SetMinHeight(int h, int align = wxHTML_ALIGN_TOP);
 
-    //@{
     /**
         Sets floating width adjustment.
+
         The normal behaviour of container is that its width is the same as the width of
         parent container (and thus you can have only one sub-container per line).
-        You can change this by setting FWA.
-        @a pixel_scale is number of real pixels that equals to 1 HTML pixel.
+        You can change this by setting the floating width adjustment.
 
         @param w
             Width of the container. If the value is negative it means
-            complement to full width of parent container (e.g.
-            SetWidthFloat(-50, wxHTML_UNITS_PIXELS) sets the width
-            of container to parent's width minus 50 pixels. This is useful when
-            creating tables - you can call SetWidthFloat(50) and SetWidthFloat(-50))
+            complement to full width of parent container.
+            E.g. @code SetWidthFloat(-50, wxHTML_UNITS_PIXELS) @endcode sets the
+            width of container to parent's width minus 50 pixels. This is useful when
+            creating tables - you can call SetWidthFloat(50) and SetWidthFloat(-50).
         @param units
             Units of w This parameter affects the interpretation of  value.
-
-
-
-
-
-
-            wxHTML_UNITS_PIXELS
-
-
-
-
-            w is number of pixels
-
-
-
-
-
-            wxHTML_UNITS_PERCENT
-
-
-
-
-            w is interpreted as percents of width
-            of parent container
-        @param tag
-            In the second version of method, w and units
-            info is extracted from tag's WIDTH parameter.
+            - wxHTML_UNITS_PIXELS: @a w is number of pixels
+            - wxHTML_UNITS_PERCENT: @a w is interpreted as percents of width
+                                    of parent container
     */
     void SetWidthFloat(int w, int units);
+
+    /**
+        Sets floating width adjustment.
+
+        The normal behaviour of container is that its width is the same as the width of
+        parent container (and thus you can have only one sub-container per line).
+        You can change this by setting the floating width adjustment.
+
+        @param tag
+            In the second version of method, @a w and @a units info is extracted
+            from tag's WIDTH parameter.
+        @param pixel_scale
+            This is number of real pixels that equals to 1 HTML pixel.
+    */
     void SetWidthFloat(const wxHtmlTag& tag,
                        double pixel_scale = 1.0);
-    //@}
 };
 
 
@@ -677,50 +489,49 @@ public:
 /**
     @class wxHtmlLinkInfo
 
-    This class stores all necessary information about hypertext
-    links (as represented by @c A tag in HTML documents). In
-    current implementation it stores URL and target frame name.
-    @e Note that frames are not currently supported by wxHTML!
+    This class stores all necessary information about hypertext links
+    (as represented by \<A\> tag in HTML documents).
+    In current implementation it stores URL and target frame name.
+
+    @note Frames are not currently supported by wxHTML!
 
     @library{wxhtml}
-    @category{FIXME}
+    @category{html}
 */
 class wxHtmlLinkInfo : public wxObject
 {
 public:
-    //@{
     /**
-        Construct hypertext link from HREF (aka URL) and TARGET (name of target
-        frame).
+        Default ctor.
     */
     wxHtmlLinkInfo();
-    wxHtmlLinkInfo(const wxString& href,
-                   const wxString& target = wxEmptyString);
-    //@}
 
     /**
-        Return pointer to event that generated OnLinkClicked event. Valid
-        only within wxHtmlWindow::OnLinkClicked,
-        @NULL otherwise.
+        Construct hypertext link from HREF (aka URL) and TARGET (name of target frame).
+    */
+    wxHtmlLinkInfo(const wxString& href,
+                   const wxString& target = wxEmptyString);
+
+    /**
+        Return pointer to event that generated OnLinkClicked() event.
+        Valid only within wxHtmlWindow::OnLinkClicked, @NULL otherwise.
     */
     const wxMouseEvent* GetEvent() const;
 
     /**
-        Return @e HREF value of the @c A tag.
+        Return @e HREF value of the \<A\> tag.
     */
     wxString GetHref() const;
 
     /**
-        Return pointer to the cell that was clicked. Valid
-        only within wxHtmlWindow::OnLinkClicked,
-        @NULL otherwise.
+        Return pointer to the cell that was clicked.
+        Valid only within wxHtmlWindow::OnLinkClicked, @NULL otherwise.
     */
     const wxHtmlCell* GetHtmlCell() const;
 
     /**
-        Return @e TARGET value of the @c A tag (this value
-        is used to specify in which frame should be the page pointed
-        by @ref gethref() Href opened).
+        Return @e TARGET value of the \<A\> tag (this value is used to specify
+        in which frame should be the page pointed by @ref GetHref() Href opened).
     */
     wxString GetTarget() const;
 };
