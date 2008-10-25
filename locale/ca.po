@@ -4099,8 +4099,8 @@ msgid ""
 "MS HTML Help functions are unavailable because the MS HTML Help library is "
 "not installed on this machine. Please install it."
 msgstr ""
-"Les funcion d'ajuda MS HTML no están disponibles perque la llibreria d'Ajuda "
-"MS HTML no està instal·lada en aquest maquinari.L'heu d'instal·lar.."
+"Les funcions d'ajuda MS HTML no están disponibles perque la llibreria d'Ajuda "
+"MS HTML no està instal·lada en aquest maquinari. L'heu d'instal·lar.."
 
 #: ../src/univ/themes/win32.cpp:3740
 msgid "Ma&ximize"
@@ -4263,7 +4263,7 @@ msgstr ""
 "No s'ha trobat ha cap tipus de lletra per a mostrar text en codifiació '%"
 "s'.\n"
 "però hi ha la codificació '%s' alternativa.\n"
-"Voleu fer servir aquesta codificació (sino haureu de triar una altre)?"
+"Voleu fer servir aquesta codificació (sino haureu de triar-ne una altra)?"
 
 #: ../src/common/fontmap.cpp:424
 #, c-format
@@ -4275,7 +4275,7 @@ msgstr ""
 "No s'ha trobat ha cap tipus de lletra per a mostrar text en codifiació '%"
 "s'.\n"
 "Voleu triar un tipus de lletra per aquesta codificació\n"
-"(sino el text en aquesta codificació no es mostrarà correctamet)?"
+"(sino el text en aquesta codificació no es mostrarà correctament)?"
 
 #: ../src/xrc/xmlres.cpp:739
 #, c-format
@@ -6711,14 +6711,13 @@ msgid "error in data format"
 msgstr "IFF: error en format d'imatge IFF."
 
 #: ../src/msdos/utilsdos.cpp:410
-#, fuzzy, c-format
+#, c-format
 msgid "error opening '%s'"
-msgstr "Llegeix error en el fitxer '%s'"
+msgstr "Error en llegir '%s'"
 
 #: ../src/html/chm.cpp:332
-#, fuzzy
 msgid "error opening file"
-msgstr "Llegeix error en el fitxer '%s'"
+msgstr "Error en llegir el fitxer '%s'"
 
 #: ../src/common/zipstrm.cpp:1575
 #, fuzzy
