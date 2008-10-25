@@ -757,11 +757,11 @@ MyFrame::MyFrame(wxWindow* parent,
     wxAuiToolBarItemArray prepend_items;
     wxAuiToolBarItemArray append_items;
     wxAuiToolBarItem item;
-    item.kind = wxITEM_SEPARATOR;
+    item.SetKind(wxITEM_SEPARATOR);
     append_items.Add(item);
-    item.kind = wxITEM_NORMAL;
-    item.id = ID_CustomizeToolbar;
-    item.label = _("Customize...");
+    item.SetKind(wxITEM_NORMAL);
+    item.SetId(ID_CustomizeToolbar);
+    item.SetLabel(_("Customize..."));
     append_items.Add(item);
 
 

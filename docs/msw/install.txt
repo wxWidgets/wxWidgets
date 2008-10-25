@@ -101,7 +101,7 @@ Their Unicode debug counterparts in wxUniversal build would be
   wxmswuniv28ud_adv.lib
 
 These directories also contain subdirectory with wx/setup.h header. This
-subdirectory is named after port, Unicode, wxUniv and debug settings and 
+subdirectory is named after port, Unicode, wxUniv and debug settings and
 you must add it to include paths when compiling your application. Some
 examples:
 
@@ -292,7 +292,7 @@ Compiling using the makefiles:
    This produces a couple of libraries in the lib\bcc_lib directory.
 
 2. Change directory to a sample or demo such as samples\minimal, and type
-  'make -f makefile.bcc'. This produces a windows exe file - by default 
+  'make -f makefile.bcc'. This produces a windows exe file - by default
    in the bcc_mswd subdirectory.
 
 Note (1): the wxWidgets makefiles assume dword structure alignment. Please
@@ -308,10 +308,10 @@ recompile wxWidgets. The same applies if compiling using the IDE.
 Note (3): If you wish debug messages to be sent to the console in
 debug mode, edit makefile.bcc and change /aa to /Tpe in link commands.
 
-Cmpilation succeeds with CBuilderX personal edition and CBuilder6, but 
+Cmpilation succeeds with CBuilderX personal edition and CBuilder6, but
 you may have to copy make.exe from the 5.5 download to the new bin directory.
-Compiling using the IDE files for Borland C++ 5.0 and using CBuilder IDE 
-(v1-v6): not supported 
+Compiling using the IDE files for Borland C++ 5.0 and using CBuilder IDE
+(v1-v6): not supported
 
 
 ** REMEMBER **
@@ -470,23 +470,23 @@ NOTE: The makefile.gcc makefiles are for compilation under MinGW using
       other environments (such as UNIX or Unix-like, e.g. MSYS where you have
       to use configure instead, see the section below)
 
-Here are the steps required using the provided makefiles:
+First, if you are using gcc-2.95, edit build\msw\config.gcc and set the
+GCC_VERSION variable to "2.95".
 
-- If you are using gcc-2.95, edit build\msw\config.gcc and set the GCC_VERSION
-  variable to "2.95".
-
-- Use the makefile.gcc files for compiling wxWidgets and samples,
-  e.g. to compile a debugging version of wxWidgets:
+Use the makefile.gcc files for compiling wxWidgets and samples,
+e.g. to compile a debugging version of wxWidgets:
   > cd c:\wx\build\msw
-  > make -f makefile.gcc BUILD=debug
+  > mingw32-make -f makefile.gcc BUILD=debug
   > cd c:\wx\samples\minimal
-  > make -f makefile.gcc BUILD=debug
+  > mingw32-make -f makefile.gcc BUILD=debug
   (See below for more options.)
 
-  Ignore the warning about the default entry point.
+Notice that Windows command interpreter (cmd.exe) and mingw32-make must be
+used, using Bash (sh.exe) and make.exe from MSYS will only work when using
+configure-based build procedure described below!
 
-- Use the 'strip' command to reduce executable/dll size (note that
-  stripping an executable/dll will remove debug information!).
+You can also Use the 'strip' command to reduce executable/dll size (note that
+stripping an executable/dll will remove debug information!).
 
 All targets have 'clean' targets to allow removal of object files
 and other intermediate compiler files.
@@ -594,7 +594,7 @@ Symantec & DigitalMars C++ compilation
 
 The DigitalMars compiler is a free succssor to the Symantec compiler
 and can be downloaded from http://www.digitalmars.com/
-   
+
 1. You need to download and unzip in turn (later packages will overwrite
    older files)
       Digital Mars C/C++ Compiler Version 8.40 or later
@@ -681,9 +681,9 @@ Basic options
 ----------------------------------------------------------------
 
 BUILD=release
-  Builds release version of the library. It differs from default 'debug' 
+  Builds release version of the library. It differs from default 'debug'
   in lack of appended 'd' in name of library, does not define __WXDEBUG__
-  and not include debug information compiled into object files and the 
+  and not include debug information compiled into object files and the
   executable.
 
 SHARED=1
@@ -706,7 +706,7 @@ Advanced options
 ----------------------------------------------------------------
 
 MONOLITHIC=1
-  Starting with version 2.5.1, wxWidgets has the ability to be built as 
+  Starting with version 2.5.1, wxWidgets has the ability to be built as
   several smaller libraries instead of single big one as used to be the case
   in 2.4 and older versions. This is called "multilib build" and is the
   default behaviour of makefiles. You can still build single library
@@ -786,7 +786,7 @@ Compiler specific options
 * MinGW
 
 If you are using gcc-2.95 instead of gcc3, you must set GCC_VERSION to
-2.95. In build\msw\config.gcc, change 
+2.95. In build\msw\config.gcc, change
 > GCC_VERSION = 3
 to
 > GCC_VERSION = 2.95
@@ -822,7 +822,7 @@ compiler name. Examples of directory names:
   build\msw\bcc_mswunivd       SHARED=0, WXUNIV=1, BUILD=debug
   build\msw\vc_mswunivd        ditto, with Visual C++
 
-Libraries and DLLs are copied into subdirectory of lib directory with 
+Libraries and DLLs are copied into subdirectory of lib directory with
 name derived from compiler and static/DLL setting and setup.h into directory
 with name that contains other settings:
 
@@ -843,7 +843,7 @@ to setup.h, you should do them in this file, _not_ in include\wx\msw\setup.h.
 
 If you set CFG to something, the value is appended to directory names. E.g.
 for CFG=MyBuild, you'll have object files in
-  
+
   build\msw\bcc_mswMyBuild
   build\msw\bcc_mswdllMyBuild
   etc.
@@ -855,7 +855,7 @@ and libraries in
   etc.
 
 By now it is clear what CFG is for: builds with different CFG settings don't
-share any files and they use different setup.h files. This allows you to e.g. 
+share any files and they use different setup.h files. This allows you to e.g.
 have two static debug builds, one with wxUSE_SOCKETS=0 and one with sockets
 enabled (without CFG, both of them would be put into same directory and there
 would be conflicts between the files).

@@ -23,19 +23,30 @@
 # released with the generic branch version due to the final wildcard below,
 # and once released its version cannot be changed.
 
+# public symbols added in 2.8.10 (please keep in alphabetical order):
+@WX_VERSION_TAG@.10 {
+        *wxDCBase*GetFontPointSizeAdjustment*;
+};
+
+# public symbols added in 2.8.9 (please keep in alphabetical order):
+@WX_VERSION_TAG@.9 {
+        *wxAuiTabCtrl*OnCaptureLost*;
+        *wxAuiToolBar*;
+        *wxWindow*UnsetToolTip*;
+};
 
 # public symbols added in 2.8.8 (please keep in alphabetical order):
 @WX_VERSION_TAG@.8 {
     global:
-        *wxApp*MacHideApp*;
         *TimeZone*Make*;
+        *wxApp*MacHideApp*;
         *wxBitmapButton*OnFocusChange*;
         *wxDocManager*MakeNewDocumentName*;
         *wxEventLoopGuarantor*;
         *wxGridBagSizer*AdjustForOverflow*;
         *wxRemotelyScrolledTreeCtrl*DoCalcScrolledPosition*;
         *wxRemotelyScrolledTreeCtrl*SetScrollbar*;
-	*wxRenderer_Draw*;
+        *wxRenderer_Draw*;
         *wxRichTextAction*CalculateRefreshOptimizations*;
         *wxRichTextCtrl*GetTextCursor*;
         *wxRichTextCtrl*GetURLCursor*;
@@ -46,7 +57,7 @@
         *wxSizer*ComputeFittingWindowSize*;
         *wxSizerFlags*ReserveSpaceEvenIfHidden*;
         *wxSizerItem*ShouldAccountFor*;
-	*wxWebKitNewWindowEvent*;
+        *wxWebKitNewWindowEvent*;
         *wxWindowBase*ClientToWindowSize*;
         *wxWindowBase*Get*Sibling*;
         *wxWindowBase*WindowToClientSize*;

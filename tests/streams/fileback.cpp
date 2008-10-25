@@ -18,6 +18,17 @@
     #include "wx/wx.h"
 #endif
 
+
+#ifdef __VISUALC6__
+// there is no support for int64 output in VC6 stream classes so output it as
+// long which should work as long as we don't use >2GB files in this test...
+static std::ostream& operator<<(std::ostream& ostr, const wxFileOffset& fo)
+{
+    ostr << (long)fo;
+    return ostr;
+}
+#endif // __VISUALC6__
+
 #include "wx/mstream.h"
 #include "wx/private/fileback.h"
 #include "bstream.h"

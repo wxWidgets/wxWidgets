@@ -188,8 +188,10 @@ wxString wxFileSystemHandler::GetAnchor(const wxString& location) const
 
     for (int i = l-1; i >= 0; i--) {
         c = location[i];
-        if (c == wxT('#')) return location.Right(l-i-1);
-        else if ((c == wxT('.')) || (c == wxT('/')) || (c == wxT('\\')) || (c == wxT(':'))) return wxEmptyString;
+        if (c == wxT('#'))
+            return location.Right(l-i-1);
+        else if ((c == wxT('/')) || (c == wxT('\\')) || (c == wxT(':')))
+            return wxEmptyString;
     }
     return wxEmptyString;
 }

@@ -572,6 +572,9 @@ wxChar wxHtmlEntitiesParser::GetEntityChar(const wxString& entity)
 {
     unsigned code = 0;
 
+    if (entity.empty())
+      return 0; // invalid entity reference
+
     if (entity[0] == wxT('#'))
     {
         const wxChar *ent_s = entity.c_str();

@@ -277,12 +277,15 @@ bool wxRegExImpl::Compile(const wxString& expr, int flags)
     // translate our flags to regcomp() ones
     int flagsRE = 0;
     if ( !(flags & wxRE_BASIC) )
+    {
 #ifndef WX_NO_REGEX_ADVANCED
         if (flags & wxRE_ADVANCED)
             flagsRE |= REG_ADVANCED;
         else
 #endif
             flagsRE |= REG_EXTENDED;
+    }
+
     if ( flags & wxRE_ICASE )
         flagsRE |= REG_ICASE;
     if ( flags & wxRE_NOSUB )

@@ -151,6 +151,17 @@ protected:
         if (! m_cb->GetEventHandler()->ProcessEvent(event))
             event.Skip();
     }
+    
+    void OnFocus( wxFocusEvent& event )
+    {
+        // in case the textcontrol gets the focus we propagate
+        // it to the parent's handlers.
+        wxFocusEvent evt2(event.GetEventType(),m_cb->GetId());
+        evt2.SetEventObject(m_cb);
+        m_cb->GetEventHandler()->ProcessEvent(evt2);
+
+        event.Skip();
+    }
 
 private:
     wxComboBox *m_cb;
@@ -162,6 +173,8 @@ BEGIN_EVENT_TABLE(wxComboBoxText, wxTextCtrl)
     EVT_KEY_DOWN(wxComboBoxText::OnKeyDown)
     EVT_CHAR(wxComboBoxText::OnChar)
     EVT_KEY_UP(wxComboBoxText::OnKeyUp)
+    EVT_SET_FOCUS(wxComboBoxText::OnFocus)
+    EVT_KILL_FOCUS(wxComboBoxText::OnFocus)
     EVT_TEXT(wxID_ANY, wxComboBoxText::OnText)
 END_EVENT_TABLE()
 

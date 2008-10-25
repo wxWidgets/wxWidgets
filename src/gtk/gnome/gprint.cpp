@@ -1507,8 +1507,8 @@ void wxGnomePrintDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y )
 
 void wxGnomePrintDC::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y, double angle)
 {
-    x = XLOG2DEV(x);
-    y = YLOG2DEV(y);
+    double xx = XLOG2DEV(x);
+    double yy = YLOG2DEV(y);
 
     bool underlined = m_font.Ok() && m_font.GetUnderlined();
 
@@ -1555,76 +1555,31 @@ void wxGnomePrintDC::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord 
         }
     }
 
+#if 0
+        if ( m_backgroundMode == wxSOLID )
+        {
+            gdk_gc_set_foreground(m_textGC, m_textBackgroundColour.GetColor());
+            gdk_draw_rectangle(m_window, m_textGC, TRUE, xx, yy, w, h);
+            gdk_gc_set_foreground(m_textGC, m_textForegroundColour.GetColor());
+        }
+#endif
+
+    // Draw layout.
+    gs_lgp->gnome_print_moveto (m_gpc, xx, yy);
+
+    gs_lgp->gnome_print_gsave( m_gpc );
+
+    gs_lgp->gnome_print_scale( m_gpc, m_scaleX, m_scaleY );
+
+    if (fabs(angle) > 0.00001)
+        gs_lgp->gnome_print_rotate( m_gpc, angle );
+
+    gs_lgp->gnome_print_pango_layout( m_gpc, m_layout );
+
     int w,h;
+    pango_layout_get_pixel_size( m_layout, &w, &h );
 
-    if (fabs(m_scaleY - 1.0) > 0.00001)
-    {
-        // If there is a user or actually any scale applied to
-        // the device context, scale the font.
-
-        // scale font description
-        gint oldSize = pango_font_description_get_size( m_fontdesc );
-        double size = oldSize;
-        size = size * m_scaleY;
-        pango_font_description_set_size( m_fontdesc, (gint)size );
-
-        // actually apply scaled font
-        pango_layout_set_font_description( m_layout, m_fontdesc );
-
-        pango_layout_get_pixel_size( m_layout, &w, &h );
-#if 0
-        if ( m_backgroundMode == wxSOLID )
-        {
-            gdk_gc_set_foreground(m_textGC, m_textBackgroundColour.GetColor());
-            gdk_draw_rectangle(m_window, m_textGC, TRUE, x, y, w, h);
-            gdk_gc_set_foreground(m_textGC, m_textForegroundColour.GetColor());
-        }
-#endif
-        // Draw layout.
-        gs_lgp->gnome_print_moveto (m_gpc, x, y);
-        if (fabs(angle) > 0.00001)
-        {
-            gs_lgp->gnome_print_gsave( m_gpc );
-            gs_lgp->gnome_print_rotate( m_gpc, angle );
-            gs_lgp->gnome_print_pango_layout( m_gpc, m_layout );
-            gs_lgp->gnome_print_grestore( m_gpc );
-        }
-        else
-        {
-            gs_lgp->gnome_print_pango_layout( m_gpc, m_layout );
-        }
-
-        // reset unscaled size
-        pango_font_description_set_size( m_fontdesc, oldSize );
-
-        // actually apply unscaled font
-        pango_layout_set_font_description( m_layout, m_fontdesc );
-    }
-    else
-    {
-        pango_layout_get_pixel_size( m_layout, &w, &h );
-#if 0
-        if ( m_backgroundMode == wxSOLID )
-        {
-            gdk_gc_set_foreground(m_textGC, m_textBackgroundColour.GetColor());
-            gdk_draw_rectangle(m_window, m_textGC, TRUE, x, y, w, h);
-            gdk_gc_set_foreground(m_textGC, m_textForegroundColour.GetColor());
-        }
-#endif
-        // Draw layout.
-        gs_lgp->gnome_print_moveto (m_gpc, x, y);
-        if (fabs(angle) > 0.00001)
-        {
-            gs_lgp->gnome_print_gsave( m_gpc );
-            gs_lgp->gnome_print_rotate( m_gpc, angle );
-            gs_lgp->gnome_print_pango_layout( m_gpc, m_layout );
-            gs_lgp->gnome_print_grestore( m_gpc );
-        }
-        else
-        {
-            gs_lgp->gnome_print_pango_layout( m_gpc, m_layout );
-        }
-    }
+    gs_lgp->gnome_print_grestore( m_gpc );
 
     if (underlined)
     {
@@ -1632,7 +1587,8 @@ void wxGnomePrintDC::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord 
         pango_layout_set_attributes(m_layout, NULL);
     }
 
-    CalcBoundingBox (x + w, y + h);
+    CalcBoundingBox(x, y);
+    CalcBoundingBox(x + w, y + h);
 }
 
 void wxGnomePrintDC::Clear()
@@ -1649,6 +1605,10 @@ void wxGnomePrintDC::SetFont( const wxFont& font )
             pango_font_description_free( m_fontdesc );
 
         m_fontdesc = pango_font_description_copy( m_font.GetNativeFontInfo()->description );
+
+        float size = pango_font_description_get_size( m_fontdesc );
+        size = size * GetFontPointSizeAdjustment(72.0);
+        pango_font_description_set_size( m_fontdesc, (gint)size );
 
         pango_layout_set_font_description( m_layout, m_fontdesc );
     }
@@ -1871,26 +1831,24 @@ void wxGnomePrintDC::DoGetTextExtent(const wxString& string, wxCoord *width, wxC
         return;
     }
 
-    PangoFontDescription *desc = (theFont) ? theFont->GetNativeFontInfo()->description : m_fontdesc;
+    gint oldSize;
+    if ( theFont )
+    {
+        // scale the font and apply it
+        PangoFontDescription *desc = theFont->GetNativeFontInfo()->description;
+        float size = pango_font_description_get_size(desc);
+        size = size * GetFontPointSizeAdjustment(72.0);
+        pango_font_description_set_size(desc, (gint)size);
 
-    gint oldSize = pango_font_description_get_size( desc );
-    double size = oldSize;
-    size = size * m_scaleY;
-    pango_font_description_set_size( desc, (gint)size );
-
-    // apply scaled font
-    pango_layout_set_font_description( m_layout, desc );
+        pango_layout_set_font_description(m_layout, desc);
+    }
 
     pango_layout_set_text( m_layout, dataUTF8, strlen(dataUTF8) );
 
-    int w, h;
-    pango_layout_get_pixel_size( m_layout, &w, &h );
-
-
-    if (width)
-        *width = (wxCoord)(w / m_scaleX);
-    if (height)
-        *height = (wxCoord)(h / m_scaleY);
+    int h;
+    pango_layout_get_pixel_size( m_layout, width, &h );
+    if ( height )
+        *height = h;
 
     if (descent)
     {
@@ -1900,11 +1858,14 @@ void wxGnomePrintDC::DoGetTextExtent(const wxString& string, wxCoord *width, wxC
         *descent = h - PANGO_PIXELS(baseline);
     }
 
-    // reset unscaled size
-    pango_font_description_set_size( desc, oldSize );
+    if ( theFont )
+    {
+        // restore font and reset font's size back
+        pango_layout_set_font_description(m_layout, m_fontdesc);
 
-    // reset unscaled font
-    pango_layout_set_font_description( m_layout, m_fontdesc );
+        PangoFontDescription *desc = theFont->GetNativeFontInfo()->description;
+        pango_font_description_set_size(desc, oldSize);
+    }
 }
 
 void wxGnomePrintDC::DoGetSize(int* width, int* height) const

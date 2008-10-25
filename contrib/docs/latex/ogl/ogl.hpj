@@ -1,5 +1,5 @@
 [OPTIONS]
-BMROOT=c:\wx2dev\wxwind~1\contrib\docs\latex\ogl
+BMROOT=c:\wx\wxw28b\contrib\docs\latex\ogl ; Assume that bitmaps are where the source is
 TITLE=OGL Manual
 CONTENTS=Contents
 COMPRESS=HIGH

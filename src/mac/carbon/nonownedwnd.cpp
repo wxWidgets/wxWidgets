@@ -500,8 +500,14 @@ wxMacTopLevelMouseEventHandler(EventHandlerCallRef WXUNUSED(handler),
 
         if ( currentMouseWindow->GetEventHandler()->ProcessEvent( wxevent ) )
         {
-            if ((currentMouseWindowParent != NULL) &&
-                (currentMouseWindowParent->GetChildren().Find(currentMouseWindow) == NULL))
+/* 
+            // this code is dangerous in case the delete in the mouse down occured further up in the chain, trying alternative 
+             
+            if ((currentMouseWindowParent != NULL) && 
+                (currentMouseWindowParent->GetChildren().Find(currentMouseWindow) == NULL)) 
+            */ 
+            // deleted in the meantime 
+            if ( g_MacLastWindow == NULL ) 
                 currentMouseWindow = NULL;
 
             result = noErr;

@@ -259,8 +259,14 @@ selection_handler( GtkWidget *WXUNUSED(widget),
     {
         const wchar_t *wstr = (const wchar_t *)d;
         size_t len = wxConvCurrent->WC2MB(NULL, wstr, 0);
+        if ( len == wxCONV_FAILED )
+        {
+            free(d);
+            return;
+        }
+
         char *str = malloc(len + 1);
-        wxConvCurrent->WC2MB(str, wstr, len);
+        wxConvCurrent->WC2MB(str, wstr, len + 1);
         str[len] = '\0';
 
         free(d);

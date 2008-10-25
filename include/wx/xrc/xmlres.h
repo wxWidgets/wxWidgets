@@ -128,8 +128,6 @@ public:
     // Destructor.
     virtual ~wxXmlResource();
 
-    wxXmlNode *GetFirstRoot();
-    
     // Loads resources from XML files that match given filemask.
     // This method understands VFS (see filesys.h).
     bool Load(const wxString& filemask);

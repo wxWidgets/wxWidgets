@@ -88,6 +88,36 @@ Major new features in 2.8 release
   wxSearchCtrl, wxAboutBox, wxTreebook, tar streams.
 
 
+2.8.10:
+-------
+
+All:
+
+- Added Vietnamese translation (Tran Ngoc Quan).
+
+All (GUI):
+
+- Fixed wxHTML's pagebreaks computation in tables (D.J.Stauffer).
+- Fixed wxRichTextCtrl input that uses Alt on Mac OS X, for example
+  Polish Pro input.
+- Fixed wxHtmlWindow::SelectionToText() to correctly insert newlines after
+  single-cell paragraphs.
+
+All (Unix):
+
+- Return false from wxSingleInstanceChecker::IsAnotherRunning() if an error
+  occurred while opening or reading the lock file (Lauri Nurmi).
+
+wxMSW:
+
+- Fixed bug with using non default encoding in wxTextCtrl in ANSI build.
+- Restored generation of events for accelerators when there is no menu bar.
+- Fixed wxArtProvider::GetSizeHint() to return 16x16 for wxART_FRAME_ICON.
+
+wxGTK:
+
+- Fixed printing to use fonts sizes adjustment consistent with wxMSW.
+
 2.8.9
 -----
 
@@ -113,11 +143,22 @@ All (GUI):
 - Fix changing size of merged cells in wxGrid (Laurent Humbertclaude).
 - Fixed wrapping bug in wxRichTextCtrl when there were images present;
   now sets the cursor to the next line after pressing Shift+Enter.
+- Fixed Cmd+Back, Cmd+Del word deletion behaviour in wxRichTextCtrl.
 - Fix crash when reading malformed PCX images.
 - Fix bug with wrong transparency in GIF animations (troelsk).
 - Store palette information for XPM images in wxImage (troelsk).
 - Fixed selection bugs and auto list numbering in wxRichTextCtrl.
 - Significantly optimize wxGrid::BlockToDeviceRect() for large grids (kjones).
+- Introduced new wxAuiToolBar class for better integration and look-and-feel.
+- Fix a crash in wxAuiFrameManager when Update() was called in between mouse-up
+  and mouse-down events
+- wxAUI: added various NULL-ptr asserts.
+- Fixed problem with Floatable(false) not working in wxAuiFrameManager.
+- Fixed maximize bug in wxAUI.
+- Allow period in link anchors in wxHTML.
+- Fixed memory corruption in wxHTML when parsing "&;" in the markup.
+- Fixed event type in EVT_GRID_CMD_COL_MOVE and EVT_GRID_COL_MOVE.
+- wxGrid doesn't steal focus when hiding editor any more (Tom Eckert).
 
 All (Unix):
 
@@ -146,6 +187,7 @@ wxMSW:
   was invalid.
 - Fix hang in keyboard navigation code with radio buttons under Windows 2000.
 - Implement wxWinINetInputStream::GetSize() (spicerno).
+- Always copy "has alpha" flag when copying bitmaps (SQLAware Corporation).
 
 wxGTK:
 

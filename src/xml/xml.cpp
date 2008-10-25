@@ -759,6 +759,8 @@ inline static void OutputString(wxOutputStream& stream, const wxString& str,
     wxUnusedVar(convMem);
 
     const wxWX2MBbuf buf(str.mb_str(*(convFile ? convFile : &wxConvUTF8)));
+    if ( !buf )
+        return;
     stream.Write((const char*)buf, strlen((const char*)buf));
 #else // !wxUSE_UNICODE
     if ( convFile && convMem )

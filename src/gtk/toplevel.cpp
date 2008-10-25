@@ -1245,6 +1245,12 @@ void wxTopLevelWindowGTK::SetIcons( const wxIconBundle &icons )
 
     wxTopLevelWindowBase::SetIcons( icons );
 
+    // Setting icons before window is realized can cause a GTK assertion if
+    // another TLW is realized before this one, and it has this one as it's
+    // transient parent. The life demo exibits this problem.
+    if (!GTK_WIDGET_REALIZED(m_widget))
+        return;
+
     GList *list = NULL;
     size_t max = icons.m_icons.GetCount();
 

@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/mac/carbon/textctrl.cpp
 // Purpose:     wxTextCtrl
-// Author:      Stefan Csomor
+// Author:      Stefan Csomor 
 // Modified by: Ryan Norton (MLTE GetLineLength and GetLineText)
 // Created:     1998-01-01
 // RCS-ID:      $Id$
@@ -1956,7 +1956,8 @@ void wxMacMLTEControl::TXNSetAttribute( const wxTextAttr& style , long from , lo
     if ( typeAttrCount > 0 )
     {
         verify_noerr( TXNSetTypeAttributes( m_txn , typeAttrCount, typeAttr, from , to ) );
-        relayout = true;
+        if (from != to)
+            relayout = true;
     }
     
     if ( tabs != NULL )
@@ -2251,8 +2252,10 @@ void wxMacMLTEControl::SetTXNData( const wxString& st, TXNOffset start, TXNOffse
 #else
     wxMBConvUTF16 converter ;
     ByteCount byteBufferLen = converter.WC2MB( NULL, st.wc_str(), 0 ) ;
-    UniChar *unibuf = (UniChar*)malloc( byteBufferLen ) ;
-    converter.WC2MB( (char*)unibuf, st.wc_str(), byteBufferLen ) ;
+    wxASSERT_MSG( byteBufferLen != wxCONV_FAILED,
+                  _T("Conversion to UTF-16 unexpectedly failed") );
+    UniChar *unibuf = (UniChar*)malloc( byteBufferLen + 2 ) ; // 2 for NUL in UTF-16
+    converter.WC2MB( (char*)unibuf, st.wc_str(), byteBufferLen + 2 ) ;
     TXNSetData( m_txn, kTXNUnicodeTextData, (void*)unibuf, byteBufferLen, start, end ) ;
     free( unibuf ) ;
 #endif

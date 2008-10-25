@@ -115,6 +115,8 @@ bool wxDirData::Read(wxString *filename)
         err = wxMacPathToFSRef( m_dirname , &dirRef ) ;
         if ( err == noErr )
         {
+            Boolean isFolder, wasAliased;
+            FSResolveAliasFile( &dirRef, TRUE, &isFolder, &wasAliased );
             err = FSOpenIterator(&dirRef, kFSIterateFlat, &m_iterator);
         }
         if ( err )
@@ -155,6 +157,13 @@ bool wxDirData::Read(wxString *filename)
         if ( ( name[0U] == '.' ) && !(m_flags & wxDIR_HIDDEN ) )
             continue ;
 
+        Boolean isFolder, wasAliased;
+        FSResolveAliasFile( &fileRef, TRUE, &isFolder, &wasAliased );
+        if ( wasAliased )
+        {
+            FSGetCatalogInfo( &fileRef, kFSCatInfoNodeFlags | kFSCatInfoFinderInfo, &catalogInfo, NULL, NULL, NULL );
+        }
+    
         if ( (((FileInfo*)&catalogInfo.finderInfo)->finderFlags & kIsInvisible ) && !(m_flags & wxDIR_HIDDEN ) )
             continue ;
 

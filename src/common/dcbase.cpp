@@ -1157,3 +1157,18 @@ void wxDCBase::CalculateEllipticPoints( wxList* points,
 } // CalculateEllipticPoints
 
 #endif
+
+
+float wxDCBase::GetFontPointSizeAdjustment(float dpi)
+{
+    // wxMSW has long-standing bug where wxFont point size is interpreted as
+    // "pixel size corresponding to given point size *on screen*". In other
+    // words, on a typical 600dpi printer and a typical 96dpi screen, fonts
+    // are ~6 times smaller when printing. Unfortunately, this bug is so severe
+    // that *all* printing code has to account for it and consequently, other
+    // ports need to emulate this bug too:
+    const wxSize screenPixels = wxGetDisplaySize();
+    const wxSize screenMM = wxGetDisplaySizeMM();
+    const float screenPPI_y = (screenPixels.y * 25.4) / screenMM.y;
+    return screenPPI_y / dpi;
+}

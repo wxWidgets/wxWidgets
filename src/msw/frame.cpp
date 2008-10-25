@@ -954,34 +954,20 @@ bool wxFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
             return win->MSWCommand(cmd, id);
     }
 
-    // handle here commands from menus and accelerators
-    if ( cmd == 0 || cmd == 1 )
+    // handle here commands from menus and accelerators for our menu bar items,
+    // all the rest is handled by wxWindow itself
+    if ( !control && (cmd == 0 /* menu */ || cmd == 1 /* accel */) )
     {
 #if wxUSE_MENUS_NATIVE
-        if ( wxCurrentPopupMenu )
-        {
-            wxMenu *popupMenu = wxCurrentPopupMenu;
-            wxCurrentPopupMenu = NULL;
-
-            return popupMenu->MSWCommand(cmd, id);
-        }
+        if ( !wxCurrentPopupMenu )
 #endif // wxUSE_MENUS_NATIVE
-
-#if defined(__SMARTPHONE__) && defined(__WXWINCE__)
-        // handle here commands from Smartphone menu bar
-        if ( wxTopLevelWindow::HandleCommand(id, cmd, control ) )
         {
-            return true;
-        }
-#endif // __SMARTPHONE__ && __WXWINCE__
-
-        if ( ProcessCommand(id) )
-        {
-            return true;
+            if ( GetMenuBar() && ProcessCommand(id) )
+                return true;
         }
     }
 
-    return false;
+    return wxFrameBase::HandleCommand(id, cmd, control);
 }
 
 bool wxFrame::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)

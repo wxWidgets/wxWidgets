@@ -4,21 +4,21 @@
 // Author:      Benjamin I. Williams
 // Modified by:
 // Created:     2008-08-04
-// RCS-ID:      $Id: framemanager.h 53135 2008-04-12 02:31:04Z VZ $
+// RCS-ID:      $Id$
 // Copyright:   (C) Copyright 2005, Kirix Corporation, All Rights Reserved.
 // Licence:     wxWindows Library Licence, Version 3.1
 ///////////////////////////////////////////////////////////////////////////////
 
-
-
 #ifndef _WX_AUIBAR_H_
 #define _WX_AUIBAR_H_
-
 
 #include "wx/defs.h"
 
 #if wxUSE_AUI
 
+#if wxABI_VERSION >= 20809
+
+#include "wx/control.h"
 
 enum wxAuiToolBarStyle
 {
@@ -28,7 +28,8 @@ enum wxAuiToolBarStyle
     wxAUI_TB_GRIPPER       = 1 << 3,
     wxAUI_TB_OVERFLOW      = 1 << 4,
     wxAUI_TB_VERTICAL      = 1 << 5,
-    wxAUI_TB_HORZ_TEXT     = ((1 << 6) | wxAUI_TB_TEXT),
+    wxAUI_TB_HORZ_LAYOUT   = 1 << 6,
+    wxAUI_TB_HORZ_TEXT     = (wxAUI_TB_HORZ_LAYOUT | wxAUI_TB_TEXT),
     wxAUI_TB_DEFAULT_STYLE = 0
 };
 
@@ -75,22 +76,23 @@ public:
 
     bool IsDropDownClicked() const  { return is_dropdown_clicked; }
     void SetDropDownClicked(bool c) { is_dropdown_clicked = c;    }
-    
+
     wxPoint GetClickPoint() const        { return click_pt; }
     void SetClickPoint(const wxPoint& p) { click_pt = p;    }
-    
+
     wxRect GetItemRect() const        { return rect; }
     void SetItemRect(const wxRect& r) { rect = r;    }
-    
+
     int GetToolId() const  { return tool_id; }
     void SetToolId(int id) { tool_id = id;   }
-    
-public:
+
+private:
+
     bool is_dropdown_clicked;
     wxPoint click_pt;
     wxRect rect;
     int tool_id;
-    
+
 #ifndef SWIG
 private:
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxAuiToolBarEvent)
@@ -100,13 +102,15 @@ private:
 
 class WXDLLIMPEXP_AUI wxAuiToolBarItem
 {
+    friend class wxAuiToolBar;
+    
 public:
 
     wxAuiToolBarItem()
     {
         window = NULL;
         sizer_item = NULL;
-        space_pixels = 0;
+        spacer_pixels = 0;
         id = 0;
         kind = wxITEM_NORMAL;
         state = 0;  // normal, enabled
@@ -116,18 +120,18 @@ public:
         sticky = true;
         user_data = 0;
     }
-    
+
     wxAuiToolBarItem(const wxAuiToolBarItem& c)
     {
         Assign(c);
     }
-    
+
     wxAuiToolBarItem& operator=(const wxAuiToolBarItem& c)
     {
         Assign(c);
         return *this;
     }
-    
+
     void Assign(const wxAuiToolBarItem& c)
     {
         window = c.window;
@@ -139,7 +143,7 @@ public:
         long_help = c.long_help;
         sizer_item = c.sizer_item;
         min_size = c.min_size;
-        space_pixels = c.space_pixels;
+        spacer_pixels = c.spacer_pixels;
         id = c.id;
         kind = c.kind;
         state = c.state;
@@ -150,8 +154,63 @@ public:
         user_data = c.user_data;
     }
     
-public:
     
+    void SetWindow(wxWindow* w) { window = w; }
+    wxWindow* GetWindow() { return window; }
+    
+    void SetId(int new_id) { id = new_id; }
+    int GetId() const { return id; }
+    
+    void SetKind(int new_kind) { kind = new_kind; }
+    int GetKind() const { return kind; }
+    
+    void SetState(int new_state) { state = new_state; }
+    int GetState() const { return state; }
+    
+    void SetSizerItem(wxSizerItem* s) { sizer_item = s; }
+    wxSizerItem* GetSizerItem() const { return sizer_item; }
+    
+    void SetLabel(const wxString& s) { label = s; }
+    const wxString& GetLabel() const { return label; }
+    
+    void SetBitmap(const wxBitmap& bmp) { bitmap = bmp; }
+    const wxBitmap& GetBitmap() const { return bitmap; }
+    
+    void SetDisabledBitmap(const wxBitmap& bmp) { disabled_bitmap = bmp; }
+    const wxBitmap& GetDisabledBitmap() const { return disabled_bitmap; }
+    
+    void SetHoverBitmap(const wxBitmap& bmp) { hover_bitmap = bmp; }
+    const wxBitmap& GetHoverBitmap() const { return hover_bitmap; }
+    
+    void SetShortHelp(const wxString& s) { short_help = s; }
+    const wxString& GetShortHelp() const { return short_help; }
+    
+    void SetLongHelp(const wxString& s) { long_help = s; }
+    const wxString& GetLongHelp() const { return long_help; }
+    
+    void SetMinSize(const wxSize& s) { min_size = s; }
+    const wxSize& GetMinSize() const { return min_size; }
+    
+    void SetSpacerPixels(int s) { spacer_pixels = s; }
+    int GetSpacerPixels() const { return spacer_pixels; }
+    
+    void SetProportion(int p) { proportion = p; }
+    int GetProportion() const { return proportion; }
+    
+    void SetActive(bool b) { active = b; }
+    bool IsActive() const { return active; }
+    
+    void SetHasDropDown(bool b) { dropdown = b; }
+    bool HasDropDown() const { return dropdown; }
+    
+    void SetSticky(bool b) { sticky = b; }
+    bool IsSticky() const { return sticky; }
+    
+    void SetUserData(long l) { user_data = l; }
+    long GetUserData() const { return user_data; }
+
+private:
+
     wxWindow* window;          // item's associated window
     wxString label;            // label displayed on the item
     wxBitmap bitmap;           // item's bitmap
@@ -161,7 +220,7 @@ public:
     wxString long_help;        // long help (for status bar)
     wxSizerItem* sizer_item;   // sizer item
     wxSize min_size;           // item's minimum size
-    int space_pixels;          // size of a spacer
+    int spacer_pixels;         // size of a spacer
     int id;                    // item's id
     int kind;                  // item's kind
     int state;                 // state
@@ -187,46 +246,46 @@ public:
 
     wxAuiToolBarArt() { }
     virtual ~wxAuiToolBarArt() { }
-    
+
     virtual wxAuiToolBarArt* Clone() = 0;
-    virtual void SetFlags(unsigned int flags) = 0;  
+    virtual void SetFlags(unsigned int flags) = 0;
     virtual void SetFont(const wxFont& font) = 0;
     virtual void SetTextOrientation(int orientation) = 0;
 
     virtual void DrawBackground(
                          wxDC& dc,
                          wxWindow* wnd,
-                         const wxRect& rect) = 0;  
-                         
+                         const wxRect& rect) = 0;
+
     virtual void DrawLabel(
                          wxDC& dc,
                          wxWindow* wnd,
                          const wxAuiToolBarItem& item,
                          const wxRect& rect) = 0;
-                         
+
     virtual void DrawButton(
                          wxDC& dc,
                          wxWindow* wnd,
                          const wxAuiToolBarItem& item,
                          const wxRect& rect) = 0;
-                         
+
     virtual void DrawDropDownButton(
                          wxDC& dc,
                          wxWindow* wnd,
                          const wxAuiToolBarItem& item,
                          const wxRect& rect) = 0;
-                         
+
     virtual void DrawControlLabel(
                          wxDC& dc,
                          wxWindow* wnd,
                          const wxAuiToolBarItem& item,
                          const wxRect& rect) = 0;
-                         
+
     virtual void DrawSeparator(
                          wxDC& dc,
                          wxWindow* wnd,
                          const wxRect& rect) = 0;
-                         
+
     virtual void DrawGripper(
                          wxDC& dc,
                          wxWindow* wnd,
@@ -237,20 +296,20 @@ public:
                          wxWindow* wnd,
                          const wxRect& rect,
                          int state) = 0;
-                         
+
     virtual wxSize GetLabelSize(
                          wxDC& dc,
                          wxWindow* wnd,
                          const wxAuiToolBarItem& item) = 0;
-                         
+
     virtual wxSize GetToolSize(
                          wxDC& dc,
                          wxWindow* wnd,
                          const wxAuiToolBarItem& item) = 0;
-                         
+
     virtual int GetElementSize(int element_id) = 0;
     virtual void SetElementSize(int element_id, int size) = 0;
-    
+
     virtual int ShowDropDown(
                          wxWindow* wnd,
                          const wxAuiToolBarItemArray& items) = 0;
@@ -265,7 +324,7 @@ public:
 
     wxAuiDefaultToolBarArt();
     virtual ~wxAuiDefaultToolBarArt();
-    
+
     virtual wxAuiToolBarArt* Clone();
     virtual void SetFlags(unsigned int flags);
     virtual void SetFont(const wxFont& font);
@@ -274,58 +333,58 @@ public:
     virtual void DrawBackground(
                 wxDC& dc,
                 wxWindow* wnd,
-                const wxRect& rect); 
-                
+                const wxRect& rect);
+
     virtual void DrawLabel(
                 wxDC& dc,
                 wxWindow* wnd,
                 const wxAuiToolBarItem& item,
                 const wxRect& rect);
-                
+
     virtual void DrawButton(
                 wxDC& dc,
                 wxWindow* wnd,
                 const wxAuiToolBarItem& item,
                 const wxRect& rect);
-                
+
     virtual void DrawDropDownButton(
                 wxDC& dc,
                 wxWindow* wnd,
                 const wxAuiToolBarItem& item,
                 const wxRect& rect);
-                
+
     virtual void DrawControlLabel(
                 wxDC& dc,
                 wxWindow* wnd,
                 const wxAuiToolBarItem& item,
                 const wxRect& rect);
-                
+
     virtual void DrawSeparator(
                 wxDC& dc,
                 wxWindow* wnd,
                 const wxRect& rect);
-                
+
     virtual void DrawGripper(
                 wxDC& dc,
                 wxWindow* wnd,
                 const wxRect& rect);
-                
+
     virtual void DrawOverflowButton(
                 wxDC& dc,
                 wxWindow* wnd,
                 const wxRect& rect,
                 int state);
-                
+
     virtual wxSize GetLabelSize(
                 wxDC& dc,
                 wxWindow* wnd,
                 const wxAuiToolBarItem& item);
-                
+
     virtual wxSize GetToolSize(
                 wxDC& dc,
                 wxWindow* wnd,
                 const wxAuiToolBarItem& item);
-                
+
     virtual int GetElementSize(int element);
     virtual void SetElementSize(int element_id, int size);
 
@@ -343,11 +402,11 @@ protected:
     wxFont m_font;
     unsigned int m_flags;
     int m_text_orientation;
-    
+
     wxPen m_gripper_pen1;
     wxPen m_gripper_pen2;
     wxPen m_gripper_pen3;
-    
+
     int m_separator_size;
     int m_gripper_size;
     int m_overflow_size;
@@ -366,21 +425,21 @@ public:
                  const wxSize& size = wxDefaultSize,
                  long style = wxAUI_TB_DEFAULT_STYLE);
     ~wxAuiToolBar();
-    
+
     void SetWindowStyleFlag(long style);
-    
+
     void SetArtProvider(wxAuiToolBarArt* art);
     wxAuiToolBarArt* GetArtProvider() const;
 
     bool SetFont(const wxFont& font);
-    
+
 
     void AddTool(int tool_id,
                  const wxString& label,
                  const wxBitmap& bitmap,
                  const wxString& short_help_string = wxEmptyString,
                  wxItemKind kind = wxITEM_NORMAL);
-    
+
     void AddTool(int tool_id,
                  const wxString& label,
                  const wxBitmap& bitmap,
@@ -389,7 +448,7 @@ public:
                  const wxString& short_help_string,
                  const wxString& long_help_string,
                  wxObject* client_data);
-    
+
     void AddTool(int tool_id,
                  const wxBitmap& bitmap,
                  const wxBitmap& disabled_bitmap,
@@ -407,7 +466,7 @@ public:
                 long_help_string,
                 client_data);
     }
-    
+
     void AddLabel(int tool_id,
                   const wxString& label = wxEmptyString,
                   const int width = -1);
@@ -416,82 +475,82 @@ public:
     void AddSeparator();
     void AddSpacer(int pixels);
     void AddStretchSpacer(int proportion = 1);
-    
+
     bool Realize();
 
     wxControl* FindControl(int window_id);
     wxAuiToolBarItem* FindToolByPosition(wxCoord x, wxCoord y) const;
     wxAuiToolBarItem* FindToolByIndex(int idx) const;
     wxAuiToolBarItem* FindTool(int tool_id) const;
-    
+
     void ClearTools() { Clear() ; }
     void Clear();
     bool DeleteTool(int tool_id);
     bool DeleteByIndex(int tool_id);
-    
+
     size_t GetToolCount() const;
     int GetToolPos(int tool_id) const { return GetToolIndex(tool_id); }
     int GetToolIndex(int tool_id) const;
     bool GetToolFits(int tool_id) const;
     wxRect GetToolRect(int tool_id) const;
-    bool GetToolFitsByIndex(int tool_id) const;    
+    bool GetToolFitsByIndex(int tool_id) const;
     bool GetToolBarFits() const;
-    
+
     void SetMargins(const wxSize& size) { SetMargins(size.x, size.x, size.y, size.y); }
     void SetMargins(int x, int y) { SetMargins(x, x, y, y); }
     void SetMargins(int left, int right, int top, int bottom);
-    
+
     void SetToolBitmapSize(const wxSize& size);
     wxSize GetToolBitmapSize() const;
 
     bool GetOverflowVisible() const;
     void SetOverflowVisible(bool visible);
-    
+
     bool GetGripperVisible() const;
     void SetGripperVisible(bool visible);
-    
+
     void ToggleTool(int tool_id, bool state);
     bool GetToolToggled(int tool_id) const;
-    
+
     void EnableTool(int tool_id, bool state);
     bool GetToolEnabled(int tool_id) const;
-    
+
     void SetToolDropDown(int tool_id, bool dropdown);
     bool GetToolDropDown(int tool_id) const;
 
     void SetToolBorderPadding(int padding);
     int  GetToolBorderPadding() const;
-    
+
     void SetToolTextOrientation(int orientation);
     int  GetToolTextOrientation() const;
-    
+
     void SetToolPacking(int packing);
     int  GetToolPacking() const;
-    
+
     void SetToolProportion(int tool_id, int proportion);
     int  GetToolProportion(int tool_id) const;
-    
+
     void SetToolSeparation(int separation);
     int GetToolSeparation() const;
-        
+
     void SetToolSticky(int tool_id, bool sticky);
     bool GetToolSticky(int tool_id) const;
-    
+
     wxString GetToolLabel(int tool_id) const;
     void SetToolLabel(int tool_id, const wxString& label);
-    
+
     wxBitmap GetToolBitmap(int tool_id) const;
     void SetToolBitmap(int tool_id, const wxBitmap& bitmap);
-    
+
     wxString GetToolShortHelp(int tool_id) const;
     void SetToolShortHelp(int tool_id, const wxString& help_string);
-    
+
     wxString GetToolLongHelp(int tool_id) const;
     void SetToolLongHelp(int tool_id, const wxString& help_string);
-    
+
     void SetCustomOverflowItems(const wxAuiToolBarItemArray& prepend,
                                 const wxAuiToolBarItemArray& append);
-                                
+
 protected:
 
     virtual void OnCustomRender(wxDC& WXUNUSED(dc),
@@ -505,7 +564,7 @@ protected:
     void SetHoverItem(wxAuiToolBarItem* item);
     void SetPressedItem(wxAuiToolBarItem* item);
     void RefreshOverflowState();
-    
+
     int GetOverflowState() const;
     wxRect GetOverflowRect() const;
     wxSize GetLabelSize(const wxString& label);
@@ -516,7 +575,7 @@ protected:
                    int width,
                    int height,
                    int sizeFlags = wxSIZE_AUTO);
-                   
+
 protected: // handlers
 
     void OnSize(wxSizeEvent& evt);
@@ -532,7 +591,7 @@ protected: // handlers
     void OnMotion(wxMouseEvent& evt);
     void OnLeaveWindow(wxMouseEvent& evt);
     void OnSetCursor(wxSetCursorEvent& evt);
-    
+
 protected:
 
     wxAuiToolBarItemArray m_items;      // array of toolbar items
@@ -547,7 +606,7 @@ protected:
     wxPoint m_action_pos;               // position of left-mouse down
     wxAuiToolBarItemArray m_custom_overflow_prepend;
     wxAuiToolBarItemArray m_custom_overflow_append;
-    
+
     int m_button_width;
     int m_button_height;
     int m_sizer_element_count;
@@ -563,7 +622,7 @@ protected:
     bool m_gripper_visible;
     bool m_overflow_visible;
     long m_style;
-    
+
     DECLARE_EVENT_TABLE()
     DECLARE_CLASS(wxAuiToolBar)
 };
@@ -587,7 +646,7 @@ typedef void (wxEvtHandler::*wxAuiToolBarEventFunction)(wxAuiToolBarEvent&);
 
 #define wxAuiToolBarEventHandler(func) \
     (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxAuiToolBarEventFunction, &func)
-    
+
 #define EVT_AUITOOLBAR_TOOL_DROPDOWN(winid, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_AUITOOLBAR_TOOL_DROPDOWN, winid, wxAuiToolBarEventHandler(fn))
 #define EVT_AUITOOLBAR_OVERFLOW_CLICK(winid, fn) \
@@ -617,6 +676,8 @@ typedef void (wxEvtHandler::*wxAuiToolBarEventFunction)(wxAuiToolBarEvent&);
 }
 #endif  // SWIG
 
-#endif  // wxUSE_AUI
-#endif  // _WX_AUIBAR_H_
+#endif  // wxABI_VERSION >= 20809
 
+#endif  // wxUSE_AUI
+
+#endif  // _WX_AUIBAR_H_

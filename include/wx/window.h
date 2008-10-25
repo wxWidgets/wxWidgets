@@ -1004,14 +1004,21 @@ public:
     void SetToolTip( const wxString &tip );
         // attach a tooltip to the window
     void SetToolTip( wxToolTip *tip ) { DoSetToolTip(tip); }
+#if wxABI_VERSION >= 20809
+        // more readable synonym for SetToolTip(NULL)
+    void UnsetToolTip() { SetToolTip(NULL); }
+#endif // wxABI_VERSION >= 2.8.9
         // get the associated tooltip or NULL if none
     wxToolTip* GetToolTip() const { return m_tooltip; }
     wxString GetToolTipText() const ;
-#else
+#else // !wxUSE_TOOLTIPS
         // make it much easier to compile apps in an environment
         // that doesn't support tooltips, such as PocketPC
-    inline void SetToolTip( const wxString & WXUNUSED(tip) ) {}
-#endif // wxUSE_TOOLTIPS
+    void SetToolTip( const wxString & WXUNUSED(tip) ) {}
+#if wxABI_VERSION >= 20809
+    void UnsetToolTip() { }
+#endif // wxABI_VERSION >= 2.8.9
+#endif // wxUSE_TOOLTIPS/!wxUSE_TOOLTIPS
 
     // drag and drop
     // -------------

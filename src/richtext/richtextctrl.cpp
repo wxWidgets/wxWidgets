@@ -140,6 +140,7 @@ BEGIN_EVENT_TABLE( wxRichTextCtrl, wxControl )
     EVT_MIDDLE_DOWN(wxRichTextCtrl::OnMiddleClick)
     EVT_LEFT_DCLICK(wxRichTextCtrl::OnLeftDClick)
     EVT_CHAR(wxRichTextCtrl::OnChar)
+    EVT_KEY_DOWN(wxRichTextCtrl::OnChar)
     EVT_SIZE(wxRichTextCtrl::OnSize)
     EVT_SET_FOCUS(wxRichTextCtrl::OnSetFocus)
     EVT_KILL_FOCUS(wxRichTextCtrl::OnKillFocus)
@@ -648,25 +649,164 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
     if (event.AltDown())
         flags |= wxRICHTEXT_ALT_DOWN;
 
-    if (event.GetKeyCode() == WXK_LEFT ||
-        event.GetKeyCode() == WXK_RIGHT ||
-        event.GetKeyCode() == WXK_UP ||
-        event.GetKeyCode() == WXK_DOWN ||
-        event.GetKeyCode() == WXK_HOME ||
-        event.GetKeyCode() == WXK_PAGEUP ||
-        event.GetKeyCode() == WXK_PAGEDOWN ||
-        event.GetKeyCode() == WXK_END ||
-
-        event.GetKeyCode() == WXK_NUMPAD_LEFT ||
-        event.GetKeyCode() == WXK_NUMPAD_RIGHT ||
-        event.GetKeyCode() == WXK_NUMPAD_UP ||
-        event.GetKeyCode() == WXK_NUMPAD_DOWN ||
-        event.GetKeyCode() == WXK_NUMPAD_HOME ||
-        event.GetKeyCode() == WXK_NUMPAD_PAGEUP ||
-        event.GetKeyCode() == WXK_NUMPAD_PAGEDOWN ||
-        event.GetKeyCode() == WXK_NUMPAD_END)
+    if (event.GetEventType() == wxEVT_KEY_DOWN)
     {
-        KeyboardNavigate(event.GetKeyCode(), flags);
+        if (event.GetKeyCode() == WXK_LEFT ||
+            event.GetKeyCode() == WXK_RIGHT ||
+            event.GetKeyCode() == WXK_UP ||
+            event.GetKeyCode() == WXK_DOWN ||
+            event.GetKeyCode() == WXK_HOME ||
+            event.GetKeyCode() == WXK_PAGEUP ||
+            event.GetKeyCode() == WXK_PAGEDOWN ||
+            event.GetKeyCode() == WXK_END ||
+
+            event.GetKeyCode() == WXK_NUMPAD_LEFT ||
+            event.GetKeyCode() == WXK_NUMPAD_RIGHT ||
+            event.GetKeyCode() == WXK_NUMPAD_UP ||
+            event.GetKeyCode() == WXK_NUMPAD_DOWN ||
+            event.GetKeyCode() == WXK_NUMPAD_HOME ||
+            event.GetKeyCode() == WXK_NUMPAD_PAGEUP ||
+            event.GetKeyCode() == WXK_NUMPAD_PAGEDOWN ||
+            event.GetKeyCode() == WXK_NUMPAD_END)
+        {
+            KeyboardNavigate(event.GetKeyCode(), flags);
+            return;
+        }
+
+        long keycode = event.GetKeyCode();
+        switch ( keycode )
+        {
+            case WXK_ESCAPE:
+            case WXK_START:
+            case WXK_LBUTTON:
+            case WXK_RBUTTON:
+            case WXK_CANCEL:
+            case WXK_MBUTTON:
+            case WXK_CLEAR:
+            case WXK_SHIFT:
+            case WXK_ALT:
+            case WXK_CONTROL:
+            case WXK_MENU:
+            case WXK_PAUSE:
+            case WXK_CAPITAL:
+            case WXK_END:
+            case WXK_HOME:
+            case WXK_LEFT:
+            case WXK_UP:
+            case WXK_RIGHT:
+            case WXK_DOWN:
+            case WXK_SELECT:
+            case WXK_PRINT:
+            case WXK_EXECUTE:
+            case WXK_SNAPSHOT:
+            case WXK_INSERT:
+            case WXK_HELP:
+            case WXK_F1:
+            case WXK_F2:
+            case WXK_F3:
+            case WXK_F4:
+            case WXK_F5:
+            case WXK_F6:
+            case WXK_F7:
+            case WXK_F8:
+            case WXK_F9:
+            case WXK_F10:
+            case WXK_F11:
+            case WXK_F12:
+            case WXK_F13:
+            case WXK_F14:
+            case WXK_F15:
+            case WXK_F16:
+            case WXK_F17:
+            case WXK_F18:
+            case WXK_F19:
+            case WXK_F20:
+            case WXK_F21:
+            case WXK_F22:
+            case WXK_F23:
+            case WXK_F24:
+            case WXK_NUMLOCK:
+            case WXK_SCROLL:
+            case WXK_PAGEUP:
+            case WXK_PAGEDOWN:
+            case WXK_NUMPAD_F1:
+            case WXK_NUMPAD_F2:
+            case WXK_NUMPAD_F3:
+            case WXK_NUMPAD_F4:
+            case WXK_NUMPAD_HOME:
+            case WXK_NUMPAD_LEFT:
+            case WXK_NUMPAD_UP:
+            case WXK_NUMPAD_RIGHT:
+            case WXK_NUMPAD_DOWN:
+            case WXK_NUMPAD_PAGEUP:
+            case WXK_NUMPAD_PAGEDOWN:
+            case WXK_NUMPAD_END:
+            case WXK_NUMPAD_BEGIN:
+            case WXK_NUMPAD_INSERT:
+            case WXK_NUMPAD_DELETE:
+            case WXK_WINDOWS_LEFT:
+            {
+                return;
+            }
+            default:
+            {
+            }
+        }
+
+        // Must process this before translation, otherwise it's translated into a WXK_DELETE event.
+        if (event.CmdDown() && event.GetKeyCode() == WXK_BACK)
+        {
+            BeginBatchUndo(_("Delete Text"));
+
+            long newPos = m_caretPosition;
+
+            DeleteSelectedContent(& newPos);
+
+            // Submit range in character positions, which are greater than caret positions,
+            // so subtract 1 for deleted character and add 1 for conversion to character position.
+            if (newPos > -1)
+            {
+                bool processed = false;
+                if (event.CmdDown())
+                {
+                    long pos = wxRichTextCtrl::FindNextWordPosition(-1);
+                    if (pos < newPos)
+                    {
+                        GetBuffer().DeleteRangeWithUndo(wxRichTextRange(pos+1, newPos), this);
+                        processed = true;
+                    }
+                }
+
+                if (!processed)
+                    GetBuffer().DeleteRangeWithUndo(wxRichTextRange(newPos, newPos), this);
+            }
+
+            EndBatchUndo();
+
+            if (GetLastPosition() == -1)
+            {
+                GetBuffer().Reset();
+
+                m_caretPosition = -1;
+                PositionCaret();
+                SetDefaultStyleToCursorStyle();
+            }
+
+            ScrollIntoView(m_caretPosition, WXK_LEFT);
+
+            wxRichTextEvent cmdEvent(
+                wxEVT_COMMAND_RICHTEXT_DELETE,
+                GetId());
+            cmdEvent.SetEventObject(this);
+            cmdEvent.SetFlags(flags);
+            cmdEvent.SetPosition(m_caretPosition+1);
+            GetEventHandler()->ProcessEvent(cmdEvent);
+
+            Update();
+        }
+        else
+            event.Skip();
+
         return;
     }
 
@@ -723,14 +863,28 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
     {
         BeginBatchUndo(_("Delete Text"));
 
+        long newPos = m_caretPosition;
+
+        DeleteSelectedContent(& newPos);
+
         // Submit range in character positions, which are greater than caret positions,
         // so subtract 1 for deleted character and add 1 for conversion to character position.
-        if (m_caretPosition > -1 && !HasSelection())
+        if (newPos > -1)
         {
-            GetBuffer().DeleteRangeWithUndo(wxRichTextRange(m_caretPosition, m_caretPosition), this);
+            bool processed = false;
+            if (event.CmdDown())
+            {
+                long pos = wxRichTextCtrl::FindNextWordPosition(-1);
+                if (pos < newPos)
+                {
+                    GetBuffer().DeleteRangeWithUndo(wxRichTextRange(pos+1, newPos), this);
+                    processed = true;
+                }
+            }
+
+            if (!processed)
+                GetBuffer().DeleteRangeWithUndo(wxRichTextRange(newPos, newPos), this);
         }
-        else
-            DeleteSelectedContent();
 
         EndBatchUndo();
 
@@ -759,25 +913,27 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
     {
         BeginBatchUndo(_("Delete Text"));
 
+        long newPos = m_caretPosition;
+
+        DeleteSelectedContent(& newPos);
+
         // Submit range in character positions, which are greater than caret positions,
-        if (m_caretPosition < GetBuffer().GetRange().GetEnd()+1 && !HasSelection())
+        if (newPos < GetBuffer().GetRange().GetEnd()+1)
         {
             bool processed = false;
             if (event.CmdDown())
             {
-                long pos = wxRichTextCtrl::FindNextWordPosition(-1);
-                if (pos != -1 && (pos < m_caretPosition))
+                long pos = wxRichTextCtrl::FindNextWordPosition(1);
+                if (pos != -1 && (pos > newPos))
                 {
-                    GetBuffer().DeleteRangeWithUndo(wxRichTextRange(pos+1, m_caretPosition), this);
+                    GetBuffer().DeleteRangeWithUndo(wxRichTextRange(newPos+1, pos), this);
                     processed = true;
                 }
             }
 
             if (!processed)
-                GetBuffer().DeleteRangeWithUndo(wxRichTextRange(m_caretPosition+1, m_caretPosition+1), this);
+                GetBuffer().DeleteRangeWithUndo(wxRichTextRange(newPos+1, newPos+1), this);
         }
-        else
-            DeleteSelectedContent();
 
         EndBatchUndo();
 
@@ -806,100 +962,6 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
         switch ( keycode )
         {
             case WXK_ESCAPE:
-            case WXK_DELETE:
-            case WXK_START:
-            case WXK_LBUTTON:
-            case WXK_RBUTTON:
-            case WXK_CANCEL:
-            case WXK_MBUTTON:
-            case WXK_CLEAR:
-            case WXK_SHIFT:
-            case WXK_ALT:
-            case WXK_CONTROL:
-            case WXK_MENU:
-            case WXK_PAUSE:
-            case WXK_CAPITAL:
-            case WXK_END:
-            case WXK_HOME:
-            case WXK_LEFT:
-            case WXK_UP:
-            case WXK_RIGHT:
-            case WXK_DOWN:
-            case WXK_SELECT:
-            case WXK_PRINT:
-            case WXK_EXECUTE:
-            case WXK_SNAPSHOT:
-            case WXK_INSERT:
-            case WXK_HELP:
-            case WXK_NUMPAD0:
-            case WXK_NUMPAD1:
-            case WXK_NUMPAD2:
-            case WXK_NUMPAD3:
-            case WXK_NUMPAD4:
-            case WXK_NUMPAD5:
-            case WXK_NUMPAD6:
-            case WXK_NUMPAD7:
-            case WXK_NUMPAD8:
-            case WXK_NUMPAD9:
-            case WXK_MULTIPLY:
-            case WXK_ADD:
-            case WXK_SEPARATOR:
-            case WXK_SUBTRACT:
-            case WXK_DECIMAL:
-            case WXK_DIVIDE:
-            case WXK_F1:
-            case WXK_F2:
-            case WXK_F3:
-            case WXK_F4:
-            case WXK_F5:
-            case WXK_F6:
-            case WXK_F7:
-            case WXK_F8:
-            case WXK_F9:
-            case WXK_F10:
-            case WXK_F11:
-            case WXK_F12:
-            case WXK_F13:
-            case WXK_F14:
-            case WXK_F15:
-            case WXK_F16:
-            case WXK_F17:
-            case WXK_F18:
-            case WXK_F19:
-            case WXK_F20:
-            case WXK_F21:
-            case WXK_F22:
-            case WXK_F23:
-            case WXK_F24:
-            case WXK_NUMLOCK:
-            case WXK_SCROLL:
-            case WXK_PAGEUP:
-            case WXK_PAGEDOWN:
-            case WXK_NUMPAD_SPACE:
-            case WXK_NUMPAD_TAB:
-            case WXK_NUMPAD_ENTER:
-            case WXK_NUMPAD_F1:
-            case WXK_NUMPAD_F2:
-            case WXK_NUMPAD_F3:
-            case WXK_NUMPAD_F4:
-            case WXK_NUMPAD_HOME:
-            case WXK_NUMPAD_LEFT:
-            case WXK_NUMPAD_UP:
-            case WXK_NUMPAD_RIGHT:
-            case WXK_NUMPAD_DOWN:
-            case WXK_NUMPAD_PAGEUP:
-            case WXK_NUMPAD_PAGEDOWN:
-            case WXK_NUMPAD_END:
-            case WXK_NUMPAD_BEGIN:
-            case WXK_NUMPAD_INSERT:
-            case WXK_NUMPAD_DELETE:
-            case WXK_NUMPAD_EQUAL:
-            case WXK_NUMPAD_MULTIPLY:
-            case WXK_NUMPAD_ADD:
-            case WXK_NUMPAD_SEPARATOR:
-            case WXK_NUMPAD_SUBTRACT:
-            case WXK_NUMPAD_DECIMAL:
-            case WXK_WINDOWS_LEFT:
             {
                 event.Skip();
                 return;
@@ -907,7 +969,11 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
 
             default:
             {
+#ifdef __WXMAC__
+                if (event.CmdDown())
+#else
                 if (event.CmdDown() || event.AltDown())
+#endif
                 {
                     event.Skip();
                     return;

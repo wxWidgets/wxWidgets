@@ -273,9 +273,11 @@ void wxButton::DoApplyWidgetStyle(GtkRcStyle *style)
     if (GTK_IS_ALIGNMENT (child)) {
         GtkWidget *box = GTK_BIN(child)->child;
         if (GTK_IS_BOX (box)) {
-            GList *items = gtk_container_get_children(GTK_CONTAINER(box));
-            for (GList *item = items; item; item = item->next)
-                gtk_widget_modify_style(GTK_WIDGET(item->data), style);
+            for (GList* item = GTK_BOX(box)->children; item; item = item->next)
+            {
+                GtkBoxChild* boxChild = wx_static_cast(GtkBoxChild*, item->data);
+                gtk_widget_modify_style(boxChild->widget, style);
+            }
         }
     }
 }

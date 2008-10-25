@@ -1,4 +1,4 @@
-wxWidgets 2.8.8
+wxWidgets 2.8.9
 ---------------------------------------------------------
 
 Welcome to wxWidgets, a sophisticated cross-platform C++

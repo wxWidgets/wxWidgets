@@ -466,7 +466,6 @@ public:
     bool GetPartialTextExtents(const wxString& text, wxArrayInt& widths) const
         { return DoGetPartialTextExtents(text, widths); }
 
-
     // size and resolution
     // -------------------
 
@@ -791,6 +790,13 @@ protected:
 
 #if wxUSE_SPLINES
     virtual void DoDrawSpline(wxList *points);
+#endif
+
+#if wxABI_VERSION >= 20810
+    // returns adjustment factor for converting wxFont "point size"; in wx
+    // it is point size on screen and needs to be multiplied by this value
+    // for rendering on higher-resolution DCs such as printer ones
+    static float GetFontPointSizeAdjustment(float dpi);
 #endif
 
 protected:

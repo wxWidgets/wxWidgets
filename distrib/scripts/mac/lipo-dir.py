@@ -24,6 +24,8 @@ def lipo_walker(data, dirname, names):
                 print "Successfully created %s" % outputfile
         else:
             if os.path.islink(fullpath):
+                if os.path.exists(outputfile):
+                    os.remove(outputfile)
                 linkto = os.readlink(fullpath)
                 
                 if linkto.startswith(ppc_basedir):
