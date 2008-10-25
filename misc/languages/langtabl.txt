@@ -220,7 +220,7 @@ wxLANGUAGE_URDU_PAKISTAN               ur_PK  LANG_URDU        SUBLANG_URDU_PAKI
 wxLANGUAGE_UZBEK                       uz     LANG_UZBEK       SUBLANG_DEFAULT                     LTR    "Uzbek"
 wxLANGUAGE_UZBEK_CYRILLIC              uz     LANG_UZBEK       SUBLANG_UZBEK_CYRILLIC              LTR    "Uzbek (Cyrillic)"
 wxLANGUAGE_UZBEK_LATIN                 uz     LANG_UZBEK       SUBLANG_UZBEK_LATIN                 LTR    "Uzbek (Latin)"
-wxLANGUAGE_VALENCIAN                   ca_ES@valencia -        -                                   LTR    "Valencian"
+wxLANGUAGE_VALENCIAN                   ca_ES@valencia -        -                                   LTR    "Valencian (Southern Catalan)"
 wxLANGUAGE_VIETNAMESE                  vi_VN  LANG_VIETNAMESE  SUBLANG_DEFAULT                     LTR    "Vietnamese"
 wxLANGUAGE_VOLAPUK                     vo     -                -                                   LTR    "Volapuk"
 wxLANGUAGE_WELSH                       cy     -                -                                   LTR    "Welsh"
