@@ -480,7 +480,7 @@ public:
         included in the result.
     */
     wxTextAttr GetCombinedStyle(int indent,
-                                wxRichTextStyleSheet* styleSheet = NULL) const;
+                                wxRichTextStyleSheet* styleSheet = NULL);
 
     /**
         This function combines the list style's base attributes and the style for the

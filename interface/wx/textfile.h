@@ -269,7 +269,7 @@ public:
             @true if operation succeeded, @false if it failed.
     */
     bool Write(wxTextFileType typeNew = wxTextFileType_None,
-               const wxMBConv& conv = wxConvAuto()) const;
+               const wxMBConv& conv = wxConvAuto());
 
     /**
         The same as GetLine().

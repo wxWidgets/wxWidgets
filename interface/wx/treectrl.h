@@ -350,8 +350,8 @@ public:
         None.
         @endWxPythonOnly
     */
-    bool GetBoundingRect(const wxTreeItemId& item, wxRect& rect,
-                         bool textOnly = false) const;
+    virtual bool GetBoundingRect(const wxTreeItemId& item, wxRect& rect,
+                                 bool textOnly = false) const;
 
     /**
         Returns the buttons image list (from which application-defined button
@@ -401,8 +401,8 @@ public:
 
         @see GetNextChild(), GetNextSibling()
     */
-    wxTreeItemId GetFirstChild(const wxTreeItemId& item,
-                               wxTreeItemIdValue& cookie) const;
+    virtual wxTreeItemId GetFirstChild(const wxTreeItemId& item,
+                                       wxTreeItemIdValue& cookie) const;
 
     /**
         Returns the first visible item.
@@ -454,8 +454,8 @@ public:
         - ::wxTreeItemIcon_SelectedExpanded: to get the selected expanded image
             (which is shown when an expanded item is currently selected).
     */
-    int GetItemImage(const wxTreeItemId& item,
-                     wxTreeItemIcon which = wxTreeItemIcon_Normal) const;
+    virtual int GetItemImage(const wxTreeItemId& item,
+                             wxTreeItemIcon which = wxTreeItemIcon_Normal) const;
 
     /**
         Returns the item's parent.
@@ -509,8 +509,8 @@ public:
 
         @see GetFirstChild()
     */
-    wxTreeItemId GetNextChild(const wxTreeItemId& item,
-                              wxTreeItemIdValue& cookie) const;
+    virtual wxTreeItemId GetNextChild(const wxTreeItemId& item,
+                                      wxTreeItemIdValue& cookie) const;
 
     /**
         Returns the next sibling of the specified item; call GetPrevSibling()
@@ -699,8 +699,8 @@ public:
 
         @see SortChildren()
     */
-    int OnCompareItems(const wxTreeItemId& item1,
-                       const wxTreeItemId& item2);
+    virtual int OnCompareItems(const wxTreeItemId& item1,
+                               const wxTreeItemId& item2);
 
     /**
         Appends an item as the first child of @a parent, return a new item id.
@@ -761,8 +761,8 @@ public:
     /**
         Sets the colour of the item's background.
     */
-    void SetItemBackgroundColour(const wxTreeItemId& item,
-                                 const wxColour& col);
+    virtual void SetItemBackgroundColour(const wxTreeItemId& item,
+                                         const wxColour& col);
 
     /**
         Makes item appear in bold font if @a bold parameter is @true or resets
@@ -790,8 +790,8 @@ public:
         (as opposed to a DnD operation within the tree control, which already
         is implemented internally).
     */
-    void SetItemDropHighlight(const wxTreeItemId& item,
-                              bool highlight = true);
+    virtual void SetItemDropHighlight(const wxTreeItemId& item,
+                                      bool highlight = true);
 
     /**
         Sets the item's font. All items in the tree should have the same height
@@ -808,15 +808,15 @@ public:
         but instead adding them only when needed, thus minimizing memory
         usage and loading time.
     */
-    void SetItemHasChildren(const wxTreeItemId& item,
-                            bool hasChildren = true);
+    virtual void SetItemHasChildren(const wxTreeItemId& item,
+                                    bool hasChildren = true);
 
     /**
         Sets the specified item's image. See GetItemImage() for the description
         of the @a which parameter.
     */
-    void SetItemImage(const wxTreeItemId& item, int image,
-                      wxTreeItemIcon which = wxTreeItemIcon_Normal);
+    virtual void SetItemImage(const wxTreeItemId& item, int image,
+                              wxTreeItemIcon which = wxTreeItemIcon_Normal);
 
     /**
         Sets the selected item image (this function is obsolete, use @ref
@@ -842,8 +842,8 @@ public:
     /**
         Sets the colour of the item's text.
     */
-    void SetItemTextColour(const wxTreeItemId& item,
-                           const wxColour& col);
+    virtual void SetItemTextColour(const wxTreeItemId& item,
+                                   const wxColour& col);
 
     /**
         If @true is passed, specifies that the control will use a quick

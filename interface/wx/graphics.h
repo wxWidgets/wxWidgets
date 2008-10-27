@@ -80,8 +80,8 @@ public:
         Adds a quadratic Bezier curve from the current point, using a control point and
         an end point.
     */
-    void AddQuadCurveToPoint(wxDouble cx, wxDouble cy, wxDouble x,
-                             wxDouble y);
+    virtual void AddQuadCurveToPoint(wxDouble cx, wxDouble cy, wxDouble x,
+                                     wxDouble y);
 
     /**
         Appends a rectangle as a new closed subpath.
@@ -347,8 +347,8 @@ public:
         Draws the bitmap. In case of a mono bitmap, this is treated as a mask and the
         current brushed is used for filling.
     */
-    void DrawBitmap(const wxBitmap& bmp, wxDouble x, wxDouble y,
-                    wxDouble w, wxDouble h);
+    virtual void DrawBitmap(const wxBitmap& bmp, wxDouble x, wxDouble y,
+                            wxDouble w, wxDouble h) = 0;
 
     /**
         Draws an ellipse.
@@ -358,26 +358,25 @@ public:
     /**
         Draws the icon.
     */
-    void DrawIcon(const wxIcon& icon, wxDouble x, wxDouble y,
-                  wxDouble w, wxDouble h);
+    virtual void DrawIcon(const wxIcon& icon, wxDouble x, wxDouble y,
+                          wxDouble w, wxDouble h) = 0;
 
     /**
         Draws a polygon.
     */
-    void DrawLines(size_t n, const wxPoint2DDouble* points,
-                   int fillStyle = wxODDEVEN_RULE);
+    virtual void DrawLines(size_t n, const wxPoint2DDouble* points,
+                           int fillStyle = wxODDEVEN_RULE);
 
     /**
         Draws the path by first filling and then stroking.
     */
-    void DrawPath(const wxGraphicsPath& path,
-                  int fillStyle = wxODDEVEN_RULE);
+    virtual void DrawPath(const wxGraphicsPath& path,
+                          int fillStyle = wxODDEVEN_RULE);
 
     /**
         Draws a rectangle.
     */
-    void DrawRectangle(wxDouble x, wxDouble y, wxDouble w,
-                       wxDouble h);
+    virtual void DrawRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h);
 
     /**
         Draws a rounded rectangle.
@@ -397,8 +396,8 @@ public:
     /**
         Fills the path with the current brush.
     */
-    void FillPath(const wxGraphicsPath& path,
-                  int fillStyle = wxODDEVEN_RULE);
+    virtual void FillPath(const wxGraphicsPath& path,
+                          int fillStyle = wxODDEVEN_RULE) = 0;
 
     /**
         Returns the native context (CGContextRef for Core Graphics, Graphics pointer
@@ -410,8 +409,8 @@ public:
         Fills the @a widths array with the widths from the beginning of
         @a text to the corresponding character of @e text.
     */
-    void GetPartialTextExtents(const wxString& text,
-                               wxArrayDouble& widths) const;
+    virtual void GetPartialTextExtents(const wxString& text,
+                                       wxArrayDouble& widths) const = 0;
 
     /**
         Gets the dimensions of the string using the currently selected font.
@@ -477,8 +476,7 @@ public:
     /**
         Strokes a single line.
     */
-    void StrokeLine(wxDouble x1, wxDouble y1, wxDouble x2,
-                    wxDouble y2);
+    virtual void StrokeLine(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2);
 
     //@{
     /**

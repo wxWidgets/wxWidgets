@@ -627,8 +627,7 @@ public:
         Helper function for extending the selection, returning @true if the selection
         was changed. Selections are in caret positions.
     */
-    bool ExtendSelection(long oldPosition, long newPosition,
-                         int flags);
+    virtual bool ExtendSelection(long oldPosition, long newPosition, int flags);
 
     /**
         Helper function for finding the caret position for the next word.
@@ -779,8 +778,8 @@ public:
         Attributes that differ in value within the range will not be included
         in @a style flags.
     */
-    bool GetStyleForRange(const wxRichTextRange& range,
-                          wxTextAttr& style);
+    virtual bool GetStyleForRange(const wxRichTextRange& range,
+                                  wxTextAttr& style);
 
     /**
         Returns the style sheet associated with the control, if any.
@@ -821,8 +820,8 @@ public:
         You can use this to implement, for example, bold button updating.
         @a style must have flags indicating which attributes are of interest.
     */
-    bool HasCharacterAttributes(const wxRichTextRange& range,
-                                const wxTextAttr& style) const;
+    virtual bool HasCharacterAttributes(const wxRichTextRange& range,
+                                        const wxTextAttr& style) const;
 
     /**
         Test if this whole range has paragraph attributes of the specified kind.
@@ -830,8 +829,8 @@ public:
         You can use this to implement, for example, centering button updating.
         @a style must have flags indicating which attributes are of interest.
     */
-    bool HasParagraphAttributes(const wxRichTextRange& range,
-                                const wxTextAttr& style) const;
+    virtual bool HasParagraphAttributes(const wxRichTextRange& range,
+                                        const wxTextAttr& style) const;
 
     /**
         Returns @true if there is a selection.

@@ -211,8 +211,8 @@ public:
     /**
         Gets the page information.
     */
-    void GetPageInfo(int* minPage, int* maxPage, int* selPageFrom,
-                     int* selPageTo);
+    virtual void GetPageInfo(int* minPage, int* maxPage, int* selPageFrom,
+                             int* selPageTo);
 
     /**
         Returns a pointer to the buffer being rendered.

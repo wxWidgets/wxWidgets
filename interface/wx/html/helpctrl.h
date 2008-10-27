@@ -174,8 +174,8 @@ public:
             KeywordSearch() searches only pages listed in @c ".hhc" file(s).
             You should list all pages in the contents file.
     */
-    bool KeywordSearch(const wxString& keyword,
-                       wxHelpSearchMode mode = wxHELP_SEARCH_ALL);
+    virtual bool KeywordSearch(const wxString& keyword,
+                               wxHelpSearchMode mode = wxHELP_SEARCH_ALL);
 
     /**
         Reads the controller's setting (position of window, etc.)

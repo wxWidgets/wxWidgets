@@ -144,8 +144,8 @@ public:
         Return @true if at least some values could be retrieved.
         This function currently is only implemented under Win32 and requires a PDB file.
     */
-    bool GetParam(size_t n, wxString* type, wxString* name,
-                  wxString* value) const;
+    virtual bool GetParam(size_t n, wxString* type, wxString* name,
+                          wxString* value) const;
 
     /**
         Return the number of parameters of this function (may return 0 if we

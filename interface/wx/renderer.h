@@ -328,7 +328,7 @@ public:
         see @ref wxCONTROL_FLAGS.
     */
     virtual void DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect,
-                       int flags = 0);
+                               int flags = 0) = 0;
 
     /**
         Draw the header control button (used, for example, by wxListCtrl).
@@ -372,7 +372,7 @@ public:
         the @a win.
     */
     virtual void DrawItemSelectionRect(wxWindow* win, wxDC& dc,
-                                       const wxRect& rect, int flags = 0);
+                                       const wxRect& rect, int flags = 0) = 0;
 
     /**
         Draw a blank push button that looks very similar to wxButton.
@@ -387,8 +387,8 @@ public:
         Draw the border for sash window: this border must be such that the sash
         drawn by DrawSplitterSash() blends into it well.
     */
-    virtual void DrawSplitterBorder(wxWindow* win, wxDC& dc,
-                                    const wxRect& rect, int flags = 0);
+    virtual void DrawSplitterBorder(wxWindow* win, wxDC& dc, const wxRect& rect,
+                                    int flags = 0) = 0;
 
     /**
         Draw a sash. The @a orient parameter defines whether the sash should be
@@ -404,8 +404,8 @@ public:
         To draw an expanded button the @a flags parameter must contain @c wxCONTROL_EXPANDED bit,
         see @ref wxCONTROL_FLAGS.
     */
-    virtual void DrawTreeItemButton(wxWindow* win, wxDC& dc,
-                                    const wxRect& rect, int flags = 0);
+    virtual void DrawTreeItemButton(wxWindow* win, wxDC& dc, const wxRect& rect,
+                                    int flags = 0) = 0;
 
     /**
         Return the currently used renderer.

@@ -576,8 +576,8 @@ public:
         to each filter. This can be used to determine the type to pass to LoadFile()
         given a selected filter.
     */
-    wxString GetExtWildcard(bool combine = false, bool save = false,
-                            wxArrayInt* types = NULL);
+    static wxString GetExtWildcard(bool combine = false, bool save = false,
+                                   wxArrayInt* types = NULL);
 
     /**
         Returns the list of file handlers.
@@ -623,8 +623,8 @@ public:
         changed to bold because this is already specified by the paragraph.
         However the text colour attributes @e will be changed to show red.
     */
-    bool GetStyleForRange(const wxRichTextRange& range,
-                          wxTextAttr& style);
+    virtual bool GetStyleForRange(const wxRichTextRange& range,
+                                  wxTextAttr& style);
 
     /**
         Returns the current style sheet associated with the buffer, if any.

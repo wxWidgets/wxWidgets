@@ -302,7 +302,7 @@ public:
         the @a bCase and @a bFromEnd parameters.
     */
     int Index(const wxString& sz, bool bCase = true,
-              bool bFromEnd = false);
+              bool bFromEnd = false) const;
 
     /**
         @warning this function should not be used with sorted arrays because it

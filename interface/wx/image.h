@@ -956,8 +956,8 @@ public:
         @param index
             See the description in the LoadFile(wxInputStream&, wxBitmapType, int) overload.
     */
-    bool LoadFile(const wxString& name, const wxString& mimetype,
-                  int index = -1);
+    virtual bool LoadFile(const wxString& name, const wxString& mimetype,
+                          int index = -1);
 
 
     /**
@@ -1091,8 +1091,8 @@ public:
 
         @see LoadFile()
     */
-    bool SaveFile(wxOutputStream& stream,
-                  const wxString& mimetype) const;
+    virtual bool SaveFile(wxOutputStream& stream,
+                          const wxString& mimetype) const;
 
     /**
         Saves an image in the named file.
@@ -1124,8 +1124,7 @@ public:
         @param mimetype
             MIME type.
     */
-    bool SaveFile(const wxString& name,
-                  const wxString& mimetype) const;
+    virtual bool SaveFile(const wxString& name, const wxString& mimetype) const;
 
     /**
         Saves an image in the named file.

@@ -1227,7 +1227,7 @@ public:
     /**
         Same as Mid() (substring extraction).
     */
-    wxString operator ()(size_t start, size_t len);
+    wxString operator()(size_t start, size_t len) const;
 
     //@{
     /**

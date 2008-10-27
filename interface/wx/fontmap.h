@@ -85,8 +85,8 @@ public:
         idea to call this function from the event handlers for repeatedly generated
         events such as @c EVT_PAINT.
     */
-    wxFontEncoding CharsetToEncoding(const wxString& charset,
-                                     bool interactive = true);
+    virtual wxFontEncoding CharsetToEncoding(const wxString& charset,
+                                             bool interactive = true);
 
     /**
         Get the current font mapper object. If there is no current object, creates one.
@@ -167,8 +167,8 @@ public:
         Check whether given encoding is available in given face or not.
         If no facename is given, find @e any font in this encoding.
     */
-    bool IsEncodingAvailable(wxFontEncoding encoding,
-                             const wxString& facename = wxEmptyString);
+    virtual bool IsEncodingAvailable(wxFontEncoding encoding,
+                                     const wxString& facename = wxEmptyString);
 
     /**
         Set the current font mapper object and return previous one (may be @NULL).

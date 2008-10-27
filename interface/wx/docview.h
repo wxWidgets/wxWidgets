@@ -554,8 +554,9 @@ public:
             will have to choose from is sorted or not when shown the choice box
             dialog. Default is @false.
     */
-    wxDocTemplate* SelectDocumentType(wxDocTemplate** templates,
-                                      int noTemplates, bool sort = false);
+    virtual wxDocTemplate* SelectDocumentType(wxDocTemplate** templates,
+                                              int noTemplates,
+                                              bool sort = false);
 
     /**
         Returns a document template by asking the user (if there is more than
@@ -575,8 +576,8 @@ public:
             will have to choose from is sorted or not when shown the choice box
             dialog. Default is @false.
     */
-    wxDocTemplate* SelectViewType(wxDocTemplate** templates,
-                                  int noTemplates, bool sort = false);
+    virtual wxDocTemplate* SelectViewType(wxDocTemplate** templates,
+                                          int noTemplates, bool sort = false);
 
     /**
         Sets the directory to be displayed to the user when opening a file.

@@ -330,8 +330,8 @@ public:
 
         @see SplitVertically(), IsSplit(), Unsplit()
     */
-    bool SplitHorizontally(wxWindow* window1, wxWindow* window2,
-                           int sashPosition = 0);
+    virtual bool SplitHorizontally(wxWindow* window1, wxWindow* window2,
+                                   int sashPosition = 0);
 
     /**
         Initializes the left and right panes of the splitter window.
@@ -357,8 +357,8 @@ public:
 
         @see SplitHorizontally(), IsSplit(), Unsplit().
     */
-    bool SplitVertically(wxWindow* window1, wxWindow* window2,
-                         int sashPosition = 0);
+    virtual bool SplitVertically(wxWindow* window1, wxWindow* window2,
+                                 int sashPosition = 0);
 
     /**
         Unsplits the window.

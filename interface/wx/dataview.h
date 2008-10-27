@@ -237,15 +237,15 @@ public:
 
         @see wxDataViewItemAttr.
     */
-    bool GetAttr(const wxDataViewItem& item, unsigned int col,
-                 wxDataViewItemAttr& attr);
+    virtual bool GetAttr(const wxDataViewItem& item, unsigned int col,
+                         wxDataViewItemAttr& attr);
 
     /**
         Override this so the control can query the child items of an item.
         Returns the number of items.
     */
     virtual unsigned int GetChildren(const wxDataViewItem& item,
-                                     wxDataViewItemArray& children) const;
+                                     wxDataViewItemArray& children) const = 0;
 
     /**
         Override this to indicate the number of columns in the model.
@@ -415,8 +415,8 @@ public:
 
         @see wxDataViewItemAttr.
     */
-    bool GetAttr(unsigned int row, unsigned int col,
-                 wxDataViewItemAttr& attr);
+    virtual bool GetAttr(unsigned int row, unsigned int col,
+                         wxDataViewItemAttr& attr);
 
     /**
         Returns the wxDataViewItem at the given @e row.
@@ -431,8 +431,8 @@ public:
     /**
         Override this to allow getting values from the model.
     */
-    void GetValue(wxVariant& variant, unsigned int row,
-                  unsigned int col) const;
+    virtual void GetValue(wxVariant& variant, unsigned int row,
+                          unsigned int col) const = 0;
 
     /**
         Call this after if the data has to be read again from the model.
@@ -481,8 +481,8 @@ public:
     /**
         Called in order to set a value in the model.
     */
-    bool SetValue(const wxVariant& variant, unsigned int row,
-                  unsigned int col);
+    virtual bool SetValue(const wxVariant& variant, unsigned int row,
+                          unsigned int col) = 0;
 };
 
 
@@ -882,8 +882,8 @@ public:
     /**
         Call this to ensure that the given item is visible.
     */
-    void EnsureVisible(const wxDataViewItem& item,
-                       const wxDataViewColumn* column = NULL);
+    virtual void EnsureVisible(const wxDataViewItem& item,
+                               const wxDataViewColumn* column = NULL);
 
     /**
         Expands the item.
@@ -919,8 +919,8 @@ public:
     /**
         Returns item rect.
     */
-    wxRect GetItemRect(const wxDataViewItem& item,
-                       const wxDataViewColumn* col = NULL) const;
+    virtual wxRect GetItemRect(const wxDataViewItem& item,
+                               const wxDataViewColumn* col = NULL) const;
 
     /**
         Returns pointer to the data model associated with the control (if any).
@@ -946,8 +946,8 @@ public:
     /**
         Hittest.
     */
-    void HitTest(const wxPoint& point, wxDataViewItem& item,
-                 wxDataViewColumn*& col) const;
+    virtual void HitTest(const wxPoint& point, wxDataViewItem& item,
+                         wxDataViewColumn*& col) const;
 
     /**
         Return @true if the item is selected.
@@ -1029,8 +1029,8 @@ public:
     /**
         Called by owning model.
     */
-    bool ItemAdded(const wxDataViewItem& parent,
-                   const wxDataViewItem& item);
+    virtual bool ItemAdded(const wxDataViewItem& parent,
+                           const wxDataViewItem& item) = 0;
 
     /**
         Called by owning model.
@@ -1040,14 +1040,14 @@ public:
     /**
         Called by owning model.
     */
-    bool ItemDeleted(const wxDataViewItem& parent,
-                     const wxDataViewItem& item);
+    virtual bool ItemDeleted(const wxDataViewItem& parent,
+                             const wxDataViewItem& item) = 0;
 
     /**
         Called by owning model.
     */
-    bool ItemsAdded(const wxDataViewItem& parent,
-                    const wxDataViewItemArray& items);
+    virtual bool ItemsAdded(const wxDataViewItem& parent,
+                            const wxDataViewItemArray& items);
 
     /**
         Called by owning model.
@@ -1057,8 +1057,8 @@ public:
     /**
         Called by owning model.
     */
-    bool ItemsDeleted(const wxDataViewItem& parent,
-                      const wxDataViewItemArray& items);
+    virtual bool ItemsDeleted(const wxDataViewItem& parent,
+                              const wxDataViewItemArray& items);
 
     /**
         Called by owning model.

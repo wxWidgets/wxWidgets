@@ -334,7 +334,7 @@ public:
         See @ref overview_refcount_equality "reference-counted object comparison" for
         more info.
     */
-    bool operator !=(const wxPen& pen);
+    bool operator!=(const wxPen& pen) const;
 
     /**
         Assignment operator, using @ref overview_refcount.
@@ -347,7 +347,7 @@ public:
         See @ref overview_refcount_equality "reference-counted object comparison" for
         more info.
     */
-    bool operator ==(const wxPen& pen);
+    bool operator==(const wxPen& pen) const;
 };
 
 /**

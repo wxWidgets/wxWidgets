@@ -79,8 +79,8 @@ public:
         This is a static function that can be used to delete the saved locations
         from an earlier operation, for example after the user has viewed the HTML file.
     */
-    bool DeleteTemporaryImages(int flags,
-                               const wxArrayString& imageLocations);
+    static bool DeleteTemporaryImages(int flags,
+                                      const wxArrayString& imageLocations);
 
     /**
         Saves the buffer content to the HTML stream.

@@ -614,7 +614,7 @@ public:
         See @ref overview_refcount_equality "reference-counted object comparison" for
         more info.
     */
-    bool operator !=(const wxFont& font);
+    bool operator!=(const wxFont& font) const;
 
     /**
         Equality operator.
@@ -622,7 +622,7 @@ public:
         See @ref overview_refcount_equality "reference-counted object comparison" for
         more info.
     */
-    bool operator ==(const wxFont& font);
+    bool operator==(const wxFont& font) const;
 
     /**
         Assignment operator, using @ref overview_refcount "reference counting".

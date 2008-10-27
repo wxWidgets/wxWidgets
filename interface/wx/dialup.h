@@ -157,8 +157,8 @@ public:
 
         Sets the commands to start up the network and to hang up again.
     */
-    void SetConnectCommand(const wxString& commandDial = "/usr/bin/pon",
-                           const wxString& commandHangup = "/usr/bin/poff") const;
+    virtual void SetConnectCommand(const wxString& commandDial = "/usr/bin/pon",
+                                   const wxString& commandHangup = "/usr/bin/poff") = 0;
 
     /**
         Sometimes the built-in logic for determining the online status may

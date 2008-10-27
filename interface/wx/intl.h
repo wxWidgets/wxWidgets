@@ -520,8 +520,8 @@ public:
         @remarks Domains are searched in the last to first order, i.e. catalogs
                  added later override those added before.
     */
-    const wxString& GetString(const wxString& origString,
-                              const wxString& domain = wxEmptyString) const;
+    virtual const wxString& GetString(const wxString& origString,
+                                      const wxString& domain = wxEmptyString) const;
 
     /**
         Retrieves the translation for a string in all loaded domains unless the @a domain

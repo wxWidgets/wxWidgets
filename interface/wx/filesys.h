@@ -443,7 +443,6 @@ public:
         @param location
             The absolute location of file.
     */
-    virtual wxFSFile* OpenFile(wxFileSystem& fs,
-                               const wxString& location);
+    virtual wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location) = 0;
 };
 

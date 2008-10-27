@@ -217,8 +217,7 @@ public:
         Returned wxFSFile object is not guaranteed to point to url, it might have
         been redirected!
     */
-    virtual wxFSFile* OpenURL(wxHtmlURLType type,
-                              const wxString& url);
+    virtual wxFSFile* OpenURL(wxHtmlURLType type, const wxString& url) const;
 
     /**
         Proceeds parsing of the document. This is end-user method. You can simply

@@ -151,8 +151,8 @@ public:
         @remarks Any special menu codes are stripped out of source and target
                  strings before matching.
     */
-    int FindMenuItem(const wxString& menuString,
-                     const wxString& itemString) const;
+    virtual int FindMenuItem(const wxString& menuString,
+                             const wxString& itemString) const;
 
     /**
         Gets the help string associated with the menu item identifier.

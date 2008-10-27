@@ -189,8 +189,8 @@ public:
 
         @remarks flags has the same meaning as with OnDrawItem().
     */
-    void OnDrawBackground(wxDC& dc, const wxRect& rect, int item,
-                          int flags) const;
+    virtual void OnDrawBackground(wxDC& dc, const wxRect& rect, int item,
+                                  int flags) const;
 
     /**
         The derived class may implement this function to actually draw the item
@@ -209,8 +209,8 @@ public:
         @param flags
             A combination of the ::wxOwnerDrawnComboBoxPaintingFlags enumeration values.
     */
-    void OnDrawItem(wxDC& dc, const wxRect& rect, int item,
-                    int flags) const;
+    virtual void OnDrawItem(wxDC& dc, const wxRect& rect, int item,
+                            int flags) const;
 
     /**
         The derived class may implement this method to return the height of the

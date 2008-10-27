@@ -486,8 +486,8 @@ public:
     /**
         Creates the actual edit control.
     */
-    void Create(wxWindow* parent, wxWindowID id,
-                wxEvtHandler* evtHandler);
+    virtual void Create(wxWindow* parent, wxWindowID id,
+                        wxEvtHandler* evtHandler) = 0;
 
     /**
         Final cleanup.
@@ -515,8 +515,7 @@ public:
         Draws the part of the cell not occupied by the control: the base class
         version just fills it with background colour from the attribute.
     */
-    void PaintBackground(const wxRect& rectCell,
-                         wxGridCellAttr* attr);
+    virtual void PaintBackground(const wxRect& rectCell, wxGridCellAttr* attr);
 
     /**
         Reset the value in the control back to its starting value.
@@ -817,8 +816,8 @@ public:
     /**
         Get the preferred size of the cell for its contents.
     */
-    wxSize GetBestSize(wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
-                       int row, int col);
+    virtual wxSize GetBestSize(wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
+                               int row, int col) = 0;
 };
 
 

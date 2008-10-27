@@ -1809,8 +1809,8 @@ public:
 
         @see UnregisterHotKey()
     */
-    bool RegisterHotKey(int hotkeyId, int modifiers,
-                        int virtualKeyCode);
+    virtual bool RegisterHotKey(int hotkeyId, int modifiers,
+                                int virtualKeyCode);
 
     /**
         Releases mouse input captured with CaptureMouse().

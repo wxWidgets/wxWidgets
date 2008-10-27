@@ -411,8 +411,8 @@ public:
         context (current printer not set, for example) or the user cancelled printing.
         Call GetLastError() to get detailed information about the kind of the error.
     */
-    bool Print(wxWindow* parent, wxPrintout* printout,
-               bool prompt = true);
+    virtual bool Print(wxWindow* parent, wxPrintout* printout,
+                       bool prompt = true);
 
     /**
         Invokes the print dialog.
@@ -429,8 +429,8 @@ public:
     /**
         Default error-reporting function.
     */
-    void ReportError(wxWindow* parent, wxPrintout* printout,
-                     const wxString& message);
+    virtual void ReportError(wxWindow* parent, wxPrintout* printout,
+                             const wxString& message);
 
     /**
         Invokes the print setup dialog.
@@ -621,8 +621,8 @@ public:
         four integers.
         @endWxPythonOnly
     */
-    void GetPageInfo(int* minPage, int* maxPage, int* pageFrom,
-                     int* pageTo);
+    virtual void GetPageInfo(int* minPage, int* maxPage, int* pageFrom,
+                             int* pageTo);
 
     /**
         Returns the size of the printer page in millimetres.

@@ -38,7 +38,7 @@ public:
             logging them in the log frame (default), @false to only log them in the
             log frame.
     */
-    wxLogWindow(wxFrame parent, const wxChar title, bool show = true,
+    wxLogWindow(wxWindow* pParent, const wxString& szTitle, bool show = true,
                 bool passToOld = true);
 
     /**
@@ -692,8 +692,7 @@ public:
         corresponding to the log level and then calls
         DoLogString() with the resulting string.
     */
-    virtual void DoLog(wxLogLevel level, const wxString& msg,
-                       time_t timestamp);
+    virtual void DoLog(wxLogLevel level, const wxString& msg, time_t timestamp);
 
     /**
         Called to log the specified string. The timestamp is already included in the

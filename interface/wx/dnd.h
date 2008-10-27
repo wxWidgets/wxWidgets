@@ -328,7 +328,7 @@ public:
         Return @true to accept the data, or @false to veto the operation.
     */
     virtual bool OnDropFiles(wxCoord x, wxCoord y,
-                             const wxArrayString& filenames);
+                             const wxArrayString& filenames) = 0;
 };
 
 

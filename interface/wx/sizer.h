@@ -1418,8 +1418,8 @@ public:
 
         Returns @true if the child item was found and removed, @false otherwise.
     */
-    bool Replace(wxWindow* oldwin, wxWindow* newwin,
-                 bool recursive = false);
+    virtual bool Replace(wxWindow* oldwin, wxWindow* newwin,
+                         bool recursive = false);
 
     /**
         Detaches the given @a oldsz from the sizer and replaces it with the
@@ -1433,8 +1433,8 @@ public:
 
         Returns @true if the child item was found and removed, @false otherwise.
     */
-    bool Replace(wxSizer* oldsz, wxSizer* newsz,
-                 bool recursive = false);
+    virtual bool Replace(wxSizer* oldsz, wxSizer* newsz,
+                         bool recursive = false);
 
     /**
         Detaches the given item at position @a index from the sizer and

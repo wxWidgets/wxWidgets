@@ -123,8 +123,9 @@ public:
 
         Please see the remarks in SetYesNoLabels() documentation.
     */
-    bool SetYesNoCancelLabels(const ButtonLabel& yes, const ButtonLabel& no,
-                              const ButtonLabel& cancel);
+    virtual bool SetYesNoCancelLabels(const ButtonLabel& yes,
+                                      const ButtonLabel& no,
+                                      const ButtonLabel& cancel);
 
     /**
         Overrides the default labels of the Yes and No buttons.
