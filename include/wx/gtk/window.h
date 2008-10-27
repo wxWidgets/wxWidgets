@@ -256,6 +256,9 @@ public:
 
     // this widget will be queried for GTK's focus events
     GtkWidget           *m_focusWidget;
+    
+    void GTKDisableFocusOutEvent();
+    void GTKEnableFocusOutEvent();
 
     wxGtkIMData         *m_imData;
 

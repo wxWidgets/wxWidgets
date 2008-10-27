@@ -2858,6 +2858,17 @@ void wxWindowGTK::GetTextExtent( const wxString& string,
     g_object_unref (layout);
 }
 
+void wxWindowGTK::GTKDisableFocusOutEvent()
+{
+    g_signal_handlers_block_by_func( m_focusWidget,
+                                (gpointer) gtk_window_focus_out_callback, this);
+}
+
+void wxWindowGTK::GTKEnableFocusOutEvent()
+{
+    g_signal_handlers_unblock_by_func( m_focusWidget,
+                                (gpointer) gtk_window_focus_out_callback, this);
+}
 
 bool wxWindowGTK::GTKHandleFocusIn()
 {
