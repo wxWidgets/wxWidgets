@@ -149,18 +149,6 @@ bool wxConsoleEventLoop::Pending() const
 
 bool wxConsoleEventLoop::Dispatch()
 {
-    m_dispatcher->Dispatch();
-    wxTheApp->ProcessPendingEvents();
-    return true;
-}
-
-void wxConsoleEventLoop::WakeUp()
-{
-    m_wakeupPipe.WakeUp();
-}
-
-void wxConsoleEventLoop::OnNextIteration()
-{
     // calculate the timeout until the next timer expiration
     int timeout;
 
@@ -183,6 +171,17 @@ void wxConsoleEventLoop::OnNextIteration()
     wxTimerScheduler::Get().NotifyExpired();
 #endif
 
+    wxTheApp->ProcessPendingEvents();
+    return true;
+}
+
+void wxConsoleEventLoop::WakeUp()
+{
+    m_wakeupPipe.WakeUp();
+}
+
+void wxConsoleEventLoop::OnNextIteration()
+{
     // call the signal handlers for any signals we caught recently
     wxTheApp->CheckSignal();
 }

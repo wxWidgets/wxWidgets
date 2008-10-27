@@ -60,6 +60,7 @@ TEST_OBJECTS =  \
 	test_cmdlinetest.o \
 	test_fileconf.o \
 	test_datetimetest.o \
+	test_timertest.o \
 	test_filekind.o \
 	test_filenametest.o \
 	test_filesystest.o \
@@ -364,6 +365,9 @@ test_fileconf.o: $(srcdir)/config/fileconf.cpp $(TEST_ODEP)
 
 test_datetimetest.o: $(srcdir)/datetime/datetimetest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/datetime/datetimetest.cpp
+
+test_timertest.o: $(srcdir)/events/timertest.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/events/timertest.cpp
 
 test_filekind.o: $(srcdir)/filekind/filekind.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/filekind/filekind.cpp

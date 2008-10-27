@@ -37,6 +37,7 @@
             cmdline/cmdlinetest.cpp
             config/fileconf.cpp
             datetime/datetimetest.cpp
+            events/timertest.cpp
             filekind/filekind.cpp
             filename/filenametest.cpp
             filesys/filesystest.cpp

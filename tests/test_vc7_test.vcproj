@@ -733,6 +733,9 @@
 				RelativePath=".\streams\textstreamtest.cpp">
 			</File>
 			<File
+				RelativePath=".\events\timertest.cpp">
+			</File>
+			<File
 				RelativePath=".\thread\tls.cpp">
 			</File>
 			<File
