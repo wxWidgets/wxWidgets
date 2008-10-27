@@ -122,26 +122,27 @@ wxCondError wxConditionInternal::Wait()
 
     m_mutex.Unlock();
 
-    // a potential race condition can occur here
-    //
-    // after a thread increments m_numWaiters, and unlocks the mutex and before
-    // the semaphore.Wait() is called, if another thread can cause a signal to
-    // be generated
-    //
-    // this race condition is handled by using a semaphore and incrementing the
-    // semaphore only if m_numWaiters is greater that zero since the semaphore,
-    // can 'remember' signals the race condition will not occur
+    // after unlocking the mutex other threads may Signal() us, but it is ok
+    // now as we had already incremented m_numWaiters so Signal() will post the
+    // semaphore and decrement m_numWaiters back even if it is called before we
+    // start to Wait()
+    const wxSemaError err = m_semaphore.Wait();
 
-    // wait ( if necessary ) and decrement semaphore
-    wxSemaError err = m_semaphore.Wait();
     m_mutex.Lock();
 
     if ( err == wxSEMA_NO_ERROR )
+    {
+        // m_numWaiters was decremented by Signal()
         return wxCOND_NO_ERROR;
-    else if ( err == wxSEMA_TIMEOUT )
-        return wxCOND_TIMEOUT;
-    else
-        return wxCOND_MISC_ERROR;
+    }
+
+    // but in case of an error we need to do it manually
+    {
+        wxCriticalSectionLocker lock(m_csWaiters);
+        m_numWaiters--;
+    }
+
+    return err == wxSEMA_TIMEOUT ? wxCOND_TIMEOUT : wxCOND_MISC_ERROR;
 }
 
 wxCondError wxConditionInternal::WaitTimeout(unsigned long milliseconds)
@@ -153,41 +154,42 @@ wxCondError wxConditionInternal::WaitTimeout(unsigned long milliseconds)
 
     m_mutex.Unlock();
 
-    // a race condition can occur at this point in the code
-    //
-    // please see the comments in Wait(), for details
-
     wxSemaError err = m_semaphore.WaitTimeout(milliseconds);
-
-    if ( err == wxSEMA_TIMEOUT )
-    {
-        // another potential race condition exists here it is caused when a
-        // 'waiting' thread times out, and returns from WaitForSingleObject,
-        // but has not yet decremented m_numWaiters
-        //
-        // at this point if another thread calls signal() then the semaphore
-        // will be incremented, but the waiting thread will miss it.
-        //
-        // to handle this particular case, the waiting thread calls
-        // WaitForSingleObject again with a timeout of 0, after locking
-        // m_csWaiters. This call does not block because of the zero
-        // timeout, but will allow the waiting thread to catch the missed
-        // signals.
-        wxCriticalSectionLocker lock(m_csWaiters);
-
-        wxSemaError err2 = m_semaphore.WaitTimeout(0);
-
-        if ( err2 != wxSEMA_NO_ERROR )
-        {
-            m_numWaiters--;
-        }
-    }
 
     m_mutex.Lock();
 
-    return err == wxSEMA_NO_ERROR ? wxCOND_NO_ERROR
-                                  : err == wxSEMA_TIMEOUT ? wxCOND_TIMEOUT
-                                                          : wxCOND_MISC_ERROR;
+    if ( err == wxSEMA_NO_ERROR )
+        return wxCOND_NO_ERROR;
+
+    if ( err == wxSEMA_TIMEOUT )
+    {
+        // a potential race condition exists here: it happens when a waiting
+        // thread times out but doesn't have time to decrement m_numWaiters yet
+        // before Signal() is called in another thread
+        //
+        // to handle this particular case, check the semaphore again after
+        // acquiring m_csWaiters lock -- this will catch the signals missed
+        // during this window
+        wxCriticalSectionLocker lock(m_csWaiters);
+
+        err = m_semaphore.WaitTimeout(0);
+        if ( err == wxSEMA_NO_ERROR )
+            return wxCOND_NO_ERROR;
+
+        // we need to decrement m_numWaiters ourselves as it wasn't done by
+        // Signal()
+        m_numWaiters--;
+
+        return err == wxSEMA_TIMEOUT ? wxCOND_TIMEOUT : wxCOND_MISC_ERROR;
+    }
+
+    // undo m_numWaiters++ above in case of an error
+    {
+        wxCriticalSectionLocker lock(m_csWaiters);
+        m_numWaiters--;
+    }
+
+    return wxCOND_MISC_ERROR;
 }
 
 wxCondError wxConditionInternal::Signal()
