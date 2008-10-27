@@ -312,6 +312,18 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD id)
 
     switch ( param )
     {
+        case CBN_DROPDOWN:
+            // remember the last selection, just as wxChoice does
+            m_lastAcceptedSelection = GetCurrentSelection();
+            if ( m_lastAcceptedSelection == -1 )
+            {
+                // but unlike with wxChoice we may have no selection but still
+                // have some text and we should avoid erasing it if the drop
+                // down is cancelled (see #8474)
+                m_lastAcceptedSelection = wxID_NONE;
+            }
+            break;
+
         case CBN_SELENDOK:
 #ifndef __SMARTPHONE__
             // we need to reset this to prevent the selection from being undone
@@ -365,7 +377,7 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD id)
     }
 
     // skip wxChoice version as it would generate its own events for
-    // CBN_SELENDOK
+    // CBN_SELENDOK and also interfere with our handling of CBN_DROPDOWN
     return true;
 }
 
