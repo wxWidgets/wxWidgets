@@ -378,17 +378,17 @@ public:
     /**
         Returns the name of the first base class (@NULL if none).
     */
-    wxChar* GetBaseClassName1() const;
+    const wxChar* GetBaseClassName1() const;
 
     /**
         Returns the name of the second base class (@NULL if none).
     */
-    wxChar* GetBaseClassName2() const;
+    const wxChar* GetBaseClassName2() const;
 
     /**
         Returns the string form of the class name.
     */
-    wxChar* GetClassName() const;
+    const wxChar* GetClassName() const;
 
     /**
         Returns the size of the class.
@@ -409,7 +409,7 @@ public:
     /**
         Returns @true if this class is a kind of (inherits from) the given class.
     */
-    bool IsKindOf(wxClassInfo* info);
+    bool IsKindOf(const wxClassInfo* info);
 };
 
 

@@ -409,8 +409,7 @@ public:
     wxFileDataObject();
 
     /**
-        Adds a file to the file list represented by this data object (Windows
-        only).
+        Adds a file to the file list represented by this data object (Windows only).
     */
     void AddFile(const wxString& file);
 
@@ -489,7 +488,7 @@ public:
         Constructs a data format object for a custom format identified by its
         name @a format.
     */
-    wxDataFormat(const wxChar format);
+    wxDataFormat(const wxString& format);
 
     /**
         Returns the name of a custom format (this function will fail for a
@@ -505,7 +504,7 @@ public:
     /**
         Sets the format to be the custom format identified by the given name.
     */
-    void SetId(const wxChar format);
+    void SetId(const wxString& format);
 
     /**
         Sets the format to the given value, which should be one of wxDF_XXX
@@ -516,12 +515,12 @@ public:
     /**
         Returns @true if the formats are different.
     */
-    bool operator !=(const wxDataFormat& format) const;
+    bool operator !=(wxDataFormatId format) const;
 
     /**
         Returns @true if the formats are equal.
     */
-    bool operator ==(const wxDataFormat& format) const;
+    bool operator ==(wxDataFormatId format) const;
 };
 
 
@@ -657,8 +656,7 @@ public:
         to by @a formats. There is enough space for GetFormatCount(dir) formats
         in it.
     */
-    virtual void GetAllFormats(wxDataFormat* formats,
-                                 Direction dir = Get) const;
+    virtual void GetAllFormats(wxDataFormat* formats, Direction dir = Get) const;
 
     /**
         The method will write the data of the format @a format in the buffer
@@ -690,7 +688,6 @@ public:
 
         @return @true on success, @false on failure.
     */
-    virtual bool SetData(const wxDataFormat& format, size_t len,
-                         const void* buf);
+    virtual bool SetData(const wxDataFormat& format, size_t len, const void* buf);
 };
 

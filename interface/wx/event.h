@@ -2908,11 +2908,6 @@ public:
     void SetCanVeto(bool canVeto);
 
     /**
-        Sets the 'force' flag.
-    */
-    void SetForce(bool force) const;
-
-    /**
         Sets the 'logging off' flag.
     */
     void SetLoggingOff(bool loggingOff);

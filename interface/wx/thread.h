@@ -130,7 +130,7 @@ public:
 
         @see Signal()
     */
-    void Broadcast();
+    wxCondError Broadcast();
 
     /**
         Returns @true if the object had been initialized successfully, @false

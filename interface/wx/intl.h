@@ -550,10 +550,9 @@ public:
         @remarks Domains are searched in the last to first order, i.e. catalogs
                  added later override those added before.
     */
-    const wxString& GetString(const wxString& origString,
-                              const wxString& origString2,
-                              size_t n,
-                              const wxString& domain = wxEmptyString) const;
+    virtual const wxString& GetString(const wxString& origString,
+                                      const wxString& origString2, size_t n,
+                                      const wxString& domain = wxEmptyString) const;
 
     /**
         Returns current platform-specific locale name as passed to setlocale().
@@ -640,10 +639,8 @@ public:
             and windows-1250.
             See @ref overview_nonenglish for detailed description of this behaviour.
     */
-    bool Init(const wxString& name,
-              const wxString& short = wxEmptyString,
-              const wxString& locale = wxEmptyString,
-              bool bLoadDefault = true,
+    bool Init(const wxString& name, const wxString& short = wxEmptyString,
+              const wxString& locale = wxEmptyString, bool bLoadDefault = true,
               bool bConvertEncoding = false);
 
     /**

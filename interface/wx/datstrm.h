@@ -31,15 +31,7 @@ public:
         Constructs a datastream object from an output stream.
         Only write methods will be available.
 
-        @param stream
-            The output stream.
-    */
-    wxDataOutputStream(wxOutputStream& stream);
-
-    /**
-        Constructs a datastream object from an output stream. Only write
-        methods will be available. This constructor is only available in
-        Unicode builds of wxWidgets.
+        Note that the @a conv parameter is only available in Unicode builds of wxWidgets.
 
         @param stream
             The output stream.
@@ -176,15 +168,7 @@ public:
         Constructs a datastream object from an input stream.
         Only read methods will be available.
 
-        @param stream
-            The input stream.
-    */
-    wxDataInputStream(wxInputStream& stream);
-
-    /**
-        Constructs a datastream object from an input stream. Only read methods
-        will be available. This constructor is only available in Unicode builds
-        of wxWidgets.
+        Note that the @a conv parameter is only available in Unicode builds of wxWidgets.
 
         @param stream
             The input stream.

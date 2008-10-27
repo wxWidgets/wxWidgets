@@ -1221,27 +1221,6 @@ public:
     virtual ~wxDatagramSocket();
 
     /**
-        This function reads a buffer of @a nbytes bytes from the socket.
-        Use wxSocketBase::LastCount() to verify the number of bytes actually read.
-        Use wxSocketBase::Error() to determine if the operation succeeded.
-
-        @param address
-            Any address - will be overwritten with the address of the peer that sent
-            that data.
-        @param buffer
-            Buffer where to put read data.
-        @param nbytes
-            Number of bytes.
-
-        @return Returns a reference to the current object, and the address of
-                the peer that sent the data on address param.
-
-        @see wxSocketBase::LastError(), wxSocketBase::SetFlags()
-    */
-    wxDatagramSocket ReceiveFrom(wxSockAddress& address,
-                                 void* buffer, wxUint32 nbytes);
-
-    /**
         This function writes a buffer of @a nbytes bytes to the socket.
         Use wxSocketBase::LastCount() to verify the number of bytes actually wrote.
         Use wxSocketBase::Error() to determine if the operation succeeded.
@@ -1257,7 +1236,7 @@ public:
 
         @see wxSocketBase::LastError(), wxSocketBase::SetFlags()
     */
-    wxDatagramSocket SendTo(const wxSockAddress& address,
-                            const void* buffer, wxUint32 nbytes);
+    wxDatagramSocket& SendTo(const wxSockAddress& address,
+                             const void* buffer, wxUint32 nbytes);
 };
 

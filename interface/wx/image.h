@@ -941,9 +941,9 @@ public:
         @param index
             See the description in the LoadFile(wxInputStream&, wxBitmapType, int) overload.
     */
-    bool LoadFile(const wxString& name,
-                  wxBitmapType type = wxBITMAP_TYPE_ANY,
-                  int index = -1);
+    virtual bool LoadFile(const wxString& name,
+                          wxBitmapType type = wxBITMAP_TYPE_ANY,
+                          int index = -1);
 
     /**
         Loads an image from a file.
@@ -971,9 +971,8 @@ public:
         @param index
             See the description in the LoadFile(wxInputStream&, wxBitmapType, int) overload.
     */
-    bool LoadFile(wxInputStream& stream,
-                  const wxString& mimetype,
-                  int index = -1);
+    virtual bool LoadFile(wxInputStream& stream, const wxString& mimetype,
+                          int index = -1);
 
     /**
         Returns a mirrored copy of the image.
@@ -1115,7 +1114,7 @@ public:
                 in 8 colors at the size supplied.
             @li wxBITMAP_TYPE_CUR: Save a Windows cursor file (CUR).
     */
-    bool SaveFile(const wxString& name, wxBitmapType type) const;
+    virtual bool SaveFile(const wxString& name, wxBitmapType type) const;
 
     /**
         Saves an image in the named file.
@@ -1139,7 +1138,7 @@ public:
         @param name
             Name of the file to save the image to.
     */
-    bool SaveFile(const wxString& name) const;
+    virtual bool SaveFile(const wxString& name) const;
 
     /**
         Saves an image in the given stream.
@@ -1149,7 +1148,7 @@ public:
         @param type
             MIME type.
     */
-    bool SaveFile(wxOutputStream& stream, wxBitmapType type) const;
+    virtual bool SaveFile(wxOutputStream& stream, wxBitmapType type) const;
 
     /**
         Returns a scaled version of the image.
