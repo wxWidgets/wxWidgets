@@ -289,6 +289,14 @@ public:
                             const wxPGProperty,
                             const wxPropertyGridPageState)
 
+    /**
+        Additional copy constructor.
+    */
+    wxPropertyGridConstIterator( const wxPropertyGridIterator& other )
+    {
+        Assign(other);
+    }
+
 protected:
 };
 
