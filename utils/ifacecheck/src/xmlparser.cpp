@@ -81,6 +81,9 @@ void wxType::SetTypeFromString(const wxString& t)
 
     m_strType.Replace(" ,", ",");
 
+    // ADHOC-FIX
+    m_strType.Replace("_wxArraywxArrayStringBase", "const wxString&");
+
     m_strType = m_strType.Strip(wxString::both);
 
 
@@ -107,6 +110,7 @@ void wxType::SetTypeFromString(const wxString& t)
     m_strTypeClean.Replace("wxDateTime::", "");
     m_strTypeClean.Replace("wxStockGDI::", "");     // same story for some other classes
     m_strTypeClean.Replace("wxHelpEvent::", "");
+    m_strTypeClean.Replace("wxWindowID", "int");
 }
 
 bool wxType::IsOk() const

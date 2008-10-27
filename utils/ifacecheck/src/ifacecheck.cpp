@@ -82,6 +82,7 @@ public:
     bool Compare();
     int CompareClasses(const wxClass* iface, const wxClass* api);
     bool FixMethod(const wxString& header, const wxMethod* iface, const wxMethod* api);
+    bool StringContainsMethodName(const wxString& str, const wxMethod* m);
 
     void ShowProgress();
     void PrintStatistics(long secs);
@@ -398,6 +399,12 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClass* api)
     return count;
 }
 
+bool IfaceCheckApp::StringContainsMethodName(const wxString& str, const wxMethod* m)
+{
+    return str.Contains(m->GetName()) ||
+           (m->IsOperator() && str.Contains("operator"));
+}
+
 bool IfaceCheckApp::FixMethod(const wxString& header, const wxMethod* iface, const wxMethod* api)
 {
     wxASSERT(iface && api);
@@ -408,7 +415,8 @@ bool IfaceCheckApp::FixMethod(const wxString& header, const wxMethod* iface, con
         return false;
     }
 
-    // GetLocation() returns the line where the last part of the prototype is placed:
+    // GetLocation() returns the line where the last part of the prototype is placed;
+    // i.e. the line containing the semicolon at the end of the declaration.
     int end = iface->GetLocation()-1;
     if (end <= 0 || end >= (int)file.GetLineCount()) {
         LogWarning("\tinvalid location info for method '%s': %d.",
@@ -425,7 +433,7 @@ bool IfaceCheckApp::FixMethod(const wxString& header, const wxMethod* iface, con
     // is this a one-line prototype declaration?
     bool founddecl = false;
     int start;
-    if (file.GetLine(end).Contains(iface->GetName()))
+    if (StringContainsMethodName(file.GetLine(end), iface))
     {
         // yes, this prototype is all on this line:
         start = end;
@@ -433,27 +441,27 @@ bool IfaceCheckApp::FixMethod(const wxString& header, const wxMethod* iface, con
     }
     else
     {
-        start = end-1;
+        start = end;    // will be decremented inside the while{} loop below
 
-        // find the start point of this prototype declaration:
-        while (start > 0 &&
-            !file.GetLine(start).Contains(";") &&
-            !file.GetLine(start).Contains("*/"))
+        // find the start point of this prototype declaration; i.e. the line
+        // containing the function name, which is also the line following
+        // the marker '*/' for the closure of the doxygen comment
+        do
         {
-            start--;
+            start--;        // go up one line
 
-            founddecl |= file.GetLine(start).Contains(iface->GetName());
+            if (StringContainsMethodName(file.GetLine(start), iface))
+                founddecl = true;
         }
-
-        // start-th line contains either the declaration of another prototype
-        // or the closing tag */ of a doxygen comment; start one line below
-        start++;
+        while (start > 0 && !founddecl &&
+               !file.GetLine(start).Contains(";") &&
+               !file.GetLine(start).Contains("*/"));
     }
 
     if (start <= 0 || !founddecl)
     {
-        LogError("\tcan't find the beginning of the declaration of '%s' method in '%s' header looking backwards from line %d",
-                    iface->GetAsString(), header, end);
+        LogError("\tcan't find the beginning of the declaration of '%s' method in '%s' header looking backwards from line %d; I arrived at %d and gave up",
+                 iface->GetAsString(), header, end+1 /* zero-based => 1-based */, start);
         return false;
     }
 
@@ -479,14 +487,22 @@ bool IfaceCheckApp::FixMethod(const wxString& header, const wxMethod* iface, con
 
     wxMethod tmp(*api);
 
-    // discard API argument names and replace them with those parsed from doxygen XML:
+    // discard gcc XML argument names and replace them with those parsed from doxygen XML;
+    // in this way we should avoid introducing doxygen warnings about cases where the argument
+    // 'xx' of the prototype is called 'yy' in the function's docs.
     const wxArgumentTypeArray& doxygenargs = iface->GetArgumentTypes();
     const wxArgumentTypeArray& realargs = api->GetArgumentTypes();
     if (realargs.GetCount() == doxygenargs.GetCount())
     {
         for (unsigned int j=0; j<doxygenargs.GetCount(); j++)
             if (doxygenargs[j]==realargs[j])
+            {
                 realargs[j].SetArgumentName(doxygenargs[j].GetArgumentName());
+
+                if (realargs[j].GetDefaultValue().IsNumber() &&
+                    doxygenargs[j].GetDefaultValue().StartsWith("wx"))
+                    realargs[j].SetDefaultValue(doxygenargs[j].GetDefaultValue());
+            }
 
         tmp.SetArgumentTypes(realargs);
     }

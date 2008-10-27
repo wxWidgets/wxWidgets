@@ -213,9 +213,12 @@ public:     // getters
         { return m_retType==wxEmptyType && !m_strName.StartsWith("~"); }
     bool IsDtor() const
         { return m_retType==wxEmptyType && m_strName.StartsWith("~"); }
+    bool IsOperator() const
+        { return m_strName.StartsWith("operator"); }
 
     bool IsDeprecated() const
         { return m_bDeprecated; }
+
 
 
 public:     // setters
@@ -263,6 +266,7 @@ public:     // misc
     // argument, thus is able to act also as default ctor
     bool ActsAsDefaultCtor() const;
 
+    // dumps the contents of this class in the given stream
     void Dump(wxTextOutputStream& stream) const;
 
 protected:
