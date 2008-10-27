@@ -297,6 +297,15 @@ public:
         Assign(other);
     }
 
+    /**
+        Additional assignment operator.
+    */
+    const wxPropertyGridConstIterator& operator=( const wxPropertyGridIterator& it )
+    {
+        Assign(it);
+        return *this;
+    }
+
 protected:
 };
 
