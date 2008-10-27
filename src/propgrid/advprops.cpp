@@ -80,11 +80,6 @@
 // -----------------------------------------------------------------------
 
 
-bool operator == (const wxFont&, const wxFont&)
-{
-    return false;
-}
-
 // Implement dynamic class for type value.
 IMPLEMENT_DYNAMIC_CLASS(wxColourPropertyValue, wxObject)
 

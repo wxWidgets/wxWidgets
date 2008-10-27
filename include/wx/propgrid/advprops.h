@@ -23,8 +23,6 @@
 // Additional Value Type Handlers
 //
 #ifndef SWIG
-bool WXDLLIMPEXP_PROPGRID operator==(const wxFont&, const wxFont&);
-
 bool WXDLLIMPEXP_PROPGRID
 operator==(const wxArrayInt& array1, const wxArrayInt& array2);
 #endif
