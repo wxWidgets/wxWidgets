@@ -706,7 +706,7 @@ void wxGDIPlusPathData::GetCurrentPoint( wxDouble* x, wxDouble* y) const
 void wxGDIPlusPathData::AddArc( wxDouble x, wxDouble y, wxDouble r, double startAngle, double endAngle, bool clockwise )
 {
     double sweepAngle = endAngle - startAngle ;
-    if( abs(sweepAngle) >= 2*M_PI)
+    if( fabs(sweepAngle) >= 2*M_PI)
     {
         sweepAngle = 2 * M_PI;
     }
