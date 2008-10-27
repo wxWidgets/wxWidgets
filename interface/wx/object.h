@@ -409,7 +409,7 @@ public:
     /**
         Returns @true if this class is a kind of (inherits from) the given class.
     */
-    bool IsKindOf(const wxClassInfo* info);
+    bool IsKindOf(const wxClassInfo* info) const;
 };
 
 

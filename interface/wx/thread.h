@@ -151,7 +151,7 @@ public:
 
         @see Broadcast()
     */
-    void Signal();
+    wxCondError Signal();
 
     /**
         Waits until the condition is signalled.

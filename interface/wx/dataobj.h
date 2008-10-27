@@ -80,7 +80,7 @@ public:
         object by pickling it first.
         @endWxPythonOnly
     */
-    virtual void SetData(size_t size, const void data);
+    virtual void SetData(size_t size, const void* data);
 
     /**
         Like SetData(), but doesn't copy the data - instead the object takes
@@ -190,7 +190,7 @@ public:
         required and the data should be returned from the method as a string.
         @endWxPythonOnly
     */
-    virtual bool GetDataHere(void buf) const;
+    virtual bool GetDataHere(void* buf) const;
 
     /**
         Gets the size of our data. Must be implemented in the derived class if
@@ -214,7 +214,7 @@ public:
         string parameter rather than the two shown here.
         @endWxPythonOnly
     */
-    virtual bool SetData(size_t len, const void buf);
+    virtual bool SetData(size_t len, const void* buf);
 
     /**
         Sets the supported format.
@@ -656,7 +656,8 @@ public:
         to by @a formats. There is enough space for GetFormatCount(dir) formats
         in it.
     */
-    virtual void GetAllFormats(wxDataFormat* formats, Direction dir = Get) const;
+    virtual void GetAllFormats(wxDataFormat* formats,
+                               Direction dir = Get) const = 0;
 
     /**
         The method will write the data of the format @a format in the buffer

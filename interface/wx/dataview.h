@@ -877,7 +877,7 @@ public:
     /**
         Deletes given column.
     */
-    virtual bool DeleteColumn(const wxDataViewColumn* column);
+    virtual bool DeleteColumn(wxDataViewColumn* column);
 
     /**
         Call this to ensure that the given item is visible.
@@ -1320,7 +1320,8 @@ public:
         The ctor.
     */
     wxDataViewToggleRenderer(const wxString& varianttype = "bool",
-                             wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT);
+                             wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                             int align = wxDVR_DEFAULT_ALIGNMENT);
 };
 
 
@@ -1340,7 +1341,8 @@ public:
         The ctor.
     */
     wxDataViewDateRenderer(const wxString& varianttype = "datetime",
-                           wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE);
+                           wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE,
+                           int align = wxDVR_DEFAULT_ALIGNMENT);
 };
 
 
@@ -1484,7 +1486,7 @@ public:
         This will ensure that the correct colour, font and vertical alignment will
         be chosen so the text will look the same as text drawn by native renderers.
     */
-    bool RenderText(const wxString& text, int xoffset, wxRect cell,
+    void RenderText(const wxString& text, int xoffset, wxRect cell,
                     wxDC* dc, int state);
 
     /**
@@ -1621,7 +1623,7 @@ public:
 
     /**
         Set the bitmap of the column header.
-    */e
+    */
     virtual void SetBitmap(const wxBitmap& bitmap);
 
     /**

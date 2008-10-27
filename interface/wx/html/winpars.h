@@ -78,16 +78,14 @@ protected:
 class wxHtmlWinParser : public wxHtmlParser
 {
 public:
-    wxHtmlWinParser(wxHtmlWindowInterface* wndIface = 0);
-
     /**
         Constructor.
 
-        Don't use the default one, use constructor with @a wndIface parameter
+        Don't use the default one, use the constructor with @a wndIface parameter
         (@a wndIface is a pointer to interface object for the associated wxHtmlWindow
         or other HTML rendering window such as wxHtmlListBox).
     */
-    wxHtmlWinParser(wxHtmlWindowInterface* wndIface = 0);
+    wxHtmlWinParser(wxHtmlWindowInterface* wndIface = NULL);
 
     /**
         Adds module() to the list of wxHtmlWinParser tag handler.
