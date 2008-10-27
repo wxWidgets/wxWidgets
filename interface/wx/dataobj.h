@@ -276,6 +276,153 @@ public:
 
 
 /**
+    @class wxURLDataObject
+
+    wxURLDataObject is a wxDataObject containing an URL and can be used e.g.
+    when you need to put an URL on or retrieve it from the clipboard:
+
+    @code
+    wxTheClipboard->SetData(new wxURLDataObject(url));
+    @endcode
+
+    @note This class is derived from wxDataObjectComposite on Windows rather
+          than wxTextDataObject on all other platforms.
+
+    @library{wxcore}
+    @category{dnd}
+
+    @see @ref overview_dnd, wxDataObject
+*/
+class wxURLDataObject: public wxTextDataObject
+{
+public:
+    /**
+        Constructor, may be used to initialize the URL. If @a url is empty,
+        SetURL() can be used later.
+    */
+    wxURLDataObject(const wxString& url = wxEmptyString);
+
+    /**
+        Returns the URL stored by this object, as a string.
+    */
+    wxString GetURL() const;
+
+    /**
+        Sets the URL stored by this object.
+    */
+    void SetURL(const wxString& url);
+};
+
+
+/**
+    @class wxTextDataObject
+
+    wxTextDataObject is a specialization of wxDataObject for text data. It can
+    be used without change to paste data into the wxClipboard or a
+    wxDropSource. A user may wish to derive a new class from this class for
+    providing text on-demand in order to minimize memory consumption when
+    offering data in several formats, such as plain text and RTF because by
+    default the text is stored in a string in this class, but it might as well
+    be generated when requested. For this, GetTextLength() and GetText() will
+    have to be overridden.
+
+    Note that if you already have the text inside a string, you will not
+    achieve any efficiency gain by overriding these functions because copying
+    wxStrings is already a very efficient operation (data is not actually
+    copied because wxStrings are reference counted).
+
+    @beginWxPythonOnly
+    If you wish to create a derived wxTextDataObject class in wxPython you
+    should derive the class from wxPyTextDataObject in order to get
+    Python-aware capabilities for the various virtual methods.
+    @endWxPythonOnly
+
+    @library{wxcore}
+    @category{dnd}
+
+    @see @ref overview_dnd, wxDataObject, wxDataObjectSimple, wxFileDataObject,
+         wxBitmapDataObject
+*/
+class wxTextDataObject : public wxDataObjectSimple
+{
+public:
+    /**
+        Constructor, may be used to initialise the text (otherwise SetText()
+        should be used later).
+    */
+    wxTextDataObject(const wxString& text = wxEmptyString);
+
+    /**
+        Returns the text associated with the data object. You may wish to
+        override this method when offering data on-demand, but this is not
+        required by wxWidgets' internals. Use this method to get data in text
+        form from the wxClipboard.
+    */
+    virtual wxString GetText() const;
+
+    /**
+        Returns the data size. By default, returns the size of the text data
+        set in the constructor or using SetText(). This can be overridden to
+        provide text size data on-demand. It is recommended to return the text
+        length plus 1 for a trailing zero, but this is not strictly required.
+    */
+    virtual size_t GetTextLength() const;
+
+    /**
+        Sets the text associated with the data object. This method is called
+        when the data object receives the data and, by default, copies the text
+        into the member variable. If you want to process the text on the fly
+        you may wish to override this function.
+    */
+    virtual void SetText(const wxString& strText);
+};
+
+
+
+/**
+    @class wxFileDataObject
+
+    wxFileDataObject is a specialization of wxDataObject for file names. The
+    program works with it just as if it were a list of absolute file names, but
+    internally it uses the same format as Explorer and other compatible
+    programs under Windows or GNOME/KDE filemanager under Unix which makes it
+    possible to receive files from them using this class.
+
+    @warning Under all non-Windows platforms this class is currently
+             "input-only", i.e. you can receive the files from another
+             application, but copying (or dragging) file(s) from a wxWidgets
+             application is not currently supported. PS: GTK2 should work as
+             well.
+
+    @library{wxcore}
+    @category{dnd}
+
+    @see wxDataObject, wxDataObjectSimple, wxTextDataObject,
+         wxBitmapDataObject, wxDataObject
+*/
+class wxFileDataObject : public wxDataObjectSimple
+{
+public:
+    /**
+        Constructor.
+    */
+    wxFileDataObject();
+
+    /**
+        Adds a file to the file list represented by this data object (Windows
+        only).
+    */
+    void AddFile(const wxString& file);
+
+    /**
+        Returns the array of file names.
+    */
+    const wxArrayString& GetFilenames() const;
+};
+
+
+
+/**
     @class wxDataFormat
 
     A wxDataFormat is an encapsulation of a platform-specific format handle
@@ -375,46 +522,6 @@ public:
         Returns @true if the formats are equal.
     */
     bool operator ==(const wxDataFormat& format) const;
-};
-
-
-
-/**
-    @class wxURLDataObject
-
-    wxURLDataObject is a wxDataObject containing an URL and can be used e.g.
-    when you need to put an URL on or retrieve it from the clipboard:
-
-    @code
-    wxTheClipboard->SetData(new wxURLDataObject(url));
-    @endcode
-
-    @note This class is derived from wxDataObjectComposite on Windows rather
-          than wxTextDataObject on all other platforms.
-
-    @library{wxcore}
-    @category{dnd}
-
-    @see @ref overview_dnd, wxDataObject
-*/
-class wxURLDataObject: public wxTextDataObject
-{
-public:
-    /**
-        Constructor, may be used to initialize the URL. If @a url is empty,
-        SetURL() can be used later.
-    */
-    wxURLDataObject(const wxString& url = wxEmptyString);
-
-    /**
-        Returns the URL stored by this object, as a string.
-    */
-    wxString GetURL() const;
-
-    /**
-        Sets the URL stored by this object.
-    */
-    void SetURL(const wxString& url);
 };
 
 
@@ -585,113 +692,5 @@ public:
     */
     virtual bool SetData(const wxDataFormat& format, size_t len,
                          const void* buf);
-};
-
-
-
-/**
-    @class wxTextDataObject
-
-    wxTextDataObject is a specialization of wxDataObject for text data. It can
-    be used without change to paste data into the wxClipboard or a
-    wxDropSource. A user may wish to derive a new class from this class for
-    providing text on-demand in order to minimize memory consumption when
-    offering data in several formats, such as plain text and RTF because by
-    default the text is stored in a string in this class, but it might as well
-    be generated when requested. For this, GetTextLength() and GetText() will
-    have to be overridden.
-
-    Note that if you already have the text inside a string, you will not
-    achieve any efficiency gain by overriding these functions because copying
-    wxStrings is already a very efficient operation (data is not actually
-    copied because wxStrings are reference counted).
-
-    @beginWxPythonOnly
-    If you wish to create a derived wxTextDataObject class in wxPython you
-    should derive the class from wxPyTextDataObject in order to get
-    Python-aware capabilities for the various virtual methods.
-    @endWxPythonOnly
-
-    @library{wxcore}
-    @category{dnd}
-
-    @see @ref overview_dnd, wxDataObject, wxDataObjectSimple, wxFileDataObject,
-         wxBitmapDataObject
-*/
-class wxTextDataObject : public wxDataObjectSimple
-{
-public:
-    /**
-        Constructor, may be used to initialise the text (otherwise SetText()
-        should be used later).
-    */
-    wxTextDataObject(const wxString& text = wxEmptyString);
-
-    /**
-        Returns the text associated with the data object. You may wish to
-        override this method when offering data on-demand, but this is not
-        required by wxWidgets' internals. Use this method to get data in text
-        form from the wxClipboard.
-    */
-    virtual wxString GetText() const;
-
-    /**
-        Returns the data size. By default, returns the size of the text data
-        set in the constructor or using SetText(). This can be overridden to
-        provide text size data on-demand. It is recommended to return the text
-        length plus 1 for a trailing zero, but this is not strictly required.
-    */
-    virtual size_t GetTextLength() const;
-
-    /**
-        Sets the text associated with the data object. This method is called
-        when the data object receives the data and, by default, copies the text
-        into the member variable. If you want to process the text on the fly
-        you may wish to override this function.
-    */
-    virtual void SetText(const wxString& strText);
-};
-
-
-
-/**
-    @class wxFileDataObject
-
-    wxFileDataObject is a specialization of wxDataObject for file names. The
-    program works with it just as if it were a list of absolute file names, but
-    internally it uses the same format as Explorer and other compatible
-    programs under Windows or GNOME/KDE filemanager under Unix which makes it
-    possible to receive files from them using this class.
-
-    @warning Under all non-Windows platforms this class is currently
-             "input-only", i.e. you can receive the files from another
-             application, but copying (or dragging) file(s) from a wxWidgets
-             application is not currently supported. PS: GTK2 should work as
-             well.
-
-    @library{wxcore}
-    @category{dnd}
-
-    @see wxDataObject, wxDataObjectSimple, wxTextDataObject,
-         wxBitmapDataObject, wxDataObject
-*/
-class wxFileDataObject : public wxDataObjectSimple
-{
-public:
-    /**
-        Constructor.
-    */
-    wxFileDataObject();
-
-    /**
-        Adds a file to the file list represented by this data object (Windows
-        only).
-    */
-    void AddFile(const wxString& file);
-
-    /**
-        Returns the array of file names.
-    */
-    const wxArrayString& GetFilenames() const;
 };
 
