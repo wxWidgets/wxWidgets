@@ -494,6 +494,27 @@ au_delete_range_callback(GtkTextBuffer * WXUNUSED(buffer),
 }
 }
 
+//-----------------------------------------------------------------------------
+//  "populate_popup" from text control and "unmap" from its poup menu
+//-----------------------------------------------------------------------------
+
+extern "C" {
+static void
+gtk_textctrl_popup_unmap( GtkMenu *WXUNUSED(menu), wxTextCtrl* win )
+{
+    win->GTKEnableFocusOutEvent();
+}
+}
+
+extern "C" {
+static void
+gtk_textctrl_populate_popup( GtkEntry *WXUNUSED(entry), GtkMenu *menu, wxTextCtrl *win )
+{
+    win->GTKDisableFocusOutEvent();
+
+    g_signal_connect (menu, "unmap", G_CALLBACK (gtk_textctrl_popup_unmap), win );
+}
+}
 
 //-----------------------------------------------------------------------------
 //  "changed"
@@ -501,7 +522,7 @@ au_delete_range_callback(GtkTextBuffer * WXUNUSED(buffer),
 
 extern "C" {
 static void
-gtk_text_changed_callback( GtkWidget * WXUNUSED(widget), wxTextCtrl *win )
+gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
 {
     if ( win->IgnoreTextUpdate() )
         return;
@@ -711,6 +732,11 @@ bool wxTextCtrl::Create( wxWindow *parent,
         g_signal_connect (m_text, "changed",
                           G_CALLBACK (gtk_text_changed_callback), this);
     }
+
+    // Catch to disable focus out handling
+    g_signal_connect (m_text, "populate_popup",
+                      G_CALLBACK (gtk_textctrl_populate_popup),
+                      this);
 
     if (!value.empty())
     {
