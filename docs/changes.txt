@@ -102,6 +102,7 @@ All (GUI):
   Polish Pro input.
 - Fixed wxHtmlWindow::SelectionToText() to correctly insert newlines after
   single-cell paragraphs.
+- Fixed wxHTML's line breaks handling in <pre> blocks broken in 2.8.8 (#10120)
 
 All (Unix):
 
