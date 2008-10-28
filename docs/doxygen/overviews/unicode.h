@@ -116,9 +116,9 @@ char character buffer. Of course, the latter only works if the string contains
 data representable in the current locale encoding. This will always be the case
 if the string had been initially constructed from a narrow string or if it
 contains only 7-bit ASCII data but otherwise this conversion is not guaranteed
-to succeed. And as with @c FromUTF8() example above, you can always use @c
-ToUTF8() to retrieve the string contents in UTF-8 encoding -- this, unlike
-converting to @c char* using the current locale, never fails
+to succeed. And as with wxString::FromUTF8() example above, you can always use
+wxString::ToUTF8() to retrieve the string contents in UTF-8 encoding -- this,
+unlike converting to @c char* using the current locale, never fails.
 
 To summarize, Unicode support in wxWidgets is mostly transparent for the
 application and if you use wxString objects for storing all the character data
@@ -156,8 +156,8 @@ n:
    string iterators instead if possible or replace this expression with
    @code s.c_str() + n @endcode otherwise.
 
-Another class of problems is related to the fact that the value returned by @c
-c_str() itself is also not just a pointer to a buffer but a value of helper
+Another class of problems is related to the fact that the value returned by
+@c c_str() itself is also not just a pointer to a buffer but a value of helper
 class wxCStrData which is implicitly convertible to both narrow and wide
 strings. Again, this mostly will be unnoticeable but can result in some
 problems:
@@ -211,11 +211,11 @@ results if the string contents isn't convertible to the current locale.
 To be precise, the conversion will always succeed if the string was created
 from a narrow string initially. It will also succeed if the current encoding is
 UTF-8 as all Unicode strings are representable in this encoding. However
-initializing the string using FromUTF8() method and then accessing it as a char
-string via its c_str() method is a recipe for disaster as the program may work
-perfectly well during testing on Unix systems using UTF-8 locale but completely
-fail under Windows where UTF-8 locales are never used because c_str() would
-return an empty string.
+initializing the string using wxString::FromUTF8() method and then accessing it
+as a char string via its wxString::c_str() method is a recipe for disaster as the
+program may work perfectly well during testing on Unix systems using UTF-8 locale
+but completely fail under Windows where UTF-8 locales are never used because
+wxString::c_str() would return an empty string.
 
 The simplest way to ensure that this doesn't happen is to avoid conversions to
 @c char* completely by using wxString throughout your program. However if the
@@ -244,7 +244,7 @@ wxString s("hello");
 for ( size_t i = 0; i < s.length(); i++ )
 {
     wchar_t ch = s[i];
-    
+
     // do something with it
 }
 @endcode
@@ -254,7 +254,7 @@ wxString s("hello");
 for ( wxString::const_iterator i = s.begin(); i != s.end(); ++i )
 {
     wchar_t ch = *i
-    
+
     // do something with it
 }
 @endcode
@@ -281,24 +281,25 @@ data loss problems due to conversion as discussed in the previous section.
 Even though wxWidgets always uses Unicode internally, not all the other
 libraries and programs do and even those that do use Unicode may use a
 different encoding of it. So you need to be able to convert the data to various
-representations and the wxString methods ToAscii(), ToUTF8() (or its synonym
-utf8_str()), mb_str(), c_str() and wc_str() can be used for this. The first of
-them should be only used for the string containing 7-bit ASCII characters only,
-anything else will be replaced by some substitution character. mb_str()
-converts the string to the encoding used by the current locale and so can
-return an empty string if the string contains characters not representable in
-it as explained in @ref overview_unicode_data_loss. The same applies to c_str()
-if its result is used as a narrow string. Finally, ToUTF8() and wc_str()
+representations and the wxString methods wxString::ToAscii(), wxString::ToUTF8()
+(or its synonym wxString::utf8_str()), wxString::mb_str(), wxString::c_str() and
+wxString::wc_str() can be used for this.
+The first of them should be only used for the string containing 7-bit ASCII characters
+only, anything else will be replaced by some substitution character.
+wxString::mb_str() converts the string to the encoding used by the current locale
+and so can return an empty string if the string contains characters not representable in
+it as explained in @ref overview_unicode_data_loss. The same applies to wxString::c_str()
+if its result is used as a narrow string. Finally, wxString::ToUTF8() and wxString::wc_str()
 functions never fail and always return a pointer to char string containing the
 UTF-8 representation of the string or wchar_t string.
 
-wxString also provides two convenience functions: From8BitData() and
-To8BitData(). They can be used to create wxString from arbitrary binary data
-without supposing that it is in current locale encoding, and then get it back,
+wxString also provides two convenience functions: wxString::From8BitData() and
+wxString::To8BitData(). They can be used to create a wxString from arbitrary binary
+data without supposing that it is in current locale encoding, and then get it back,
 again, without any conversion or, rather, undoing the conversion used by
-From8BitData(). Because of this you should only use From8BitData() for the
-strings created using To8BitData(). Also notice that in spite of the
-availability of these functions, wxString is not the ideal class for storing
+wxString::From8BitData(). Because of this you should only use wxString::From8BitData()
+for the strings created using wxString::To8BitData(). Also notice that in spite
+of the availability of these functions, wxString is not the ideal class for storing
 arbitrary binary data as they can take up to 4 times more space than needed
 (when using @c wchar_t internal representation on the systems where size of
 wide characters is 4 bytes) and you should consider using wxMemoryBuffer
@@ -307,28 +308,28 @@ instead.
 Final word of caution: most of these functions may return either directly the
 pointer to internal string buffer or a temporary wxCharBuffer or wxWCharBuffer
 object. Such objects are implicitly convertible to char and wchar_t pointers,
-respectively, and so the result of, for example, ToUTF8() can always be passed
-directly to a function taking @c const @c char*. However code such as
+respectively, and so the result of, for example, wxString::ToUTF8() can always be
+passed directly to a function taking @c const @c char*. However code such as
 @code
 const char *p = s.ToUTF8();
 ...
 puts(p); // or call any other function taking const char *
 @endcode
-does @b not work because the temporary buffer returned by ToUTF8() is destroyed
-and @c p is left pointing nowhere. To correct this you may use
+does @b not work because the temporary buffer returned by wxString::ToUTF8() is
+destroyed and @c p is left pointing nowhere. To correct this you may use
 @code
 wxCharBuffer p(s.ToUTF8());
 puts(p);
 @endcode
 which does work but results in an unnecessary copy of string data in the build
-configurations when ToUTF8() returns the pointer to internal string buffer. If
-this inefficiency is important you may write
+configurations when wxString::ToUTF8() returns the pointer to internal string buffer.
+If this inefficiency is important you may write
 @code
 const wxUTF8Buf p(s.ToUTF8());
 puts(p);
 @endcode
-where @c wxUTF8Buf is the type corresponding to the real return type of
-ToUTF8(). Similarly, wxWX2WCbuf can be used for the return type of wc_str().
+where @c wxUTF8Buf is the type corresponding to the real return type of wxString::ToUTF8().
+Similarly, wxWX2WCbuf can be used for the return type of wxString::wc_str().
 But, once again, none of these cryptic types is really needed if you just pass
 the return value of any of the functions mentioned in this section to another
 function directly.
