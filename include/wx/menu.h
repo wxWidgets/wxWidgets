@@ -248,7 +248,7 @@ public:
 
     // the title
     virtual void SetTitle(const wxString& title) { m_title = title; }
-    const wxString GetTitle() const { return m_title; }
+    const wxString& GetTitle() const { return m_title; }
 
     // event handler
     void SetEventHandler(wxEvtHandler *handler) { m_eventHandler = handler; }
