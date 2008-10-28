@@ -99,7 +99,7 @@ public:
 
         @see GetIcons()
     */
-    const wxIcon GetIcon() const;
+    wxIcon GetIcon() const;
 
     /**
         Returns all icons associated with the window, there will be none of them
@@ -108,7 +108,7 @@ public:
 
         @see wxIconBundle
     */
-    const wxIconBundle GetIcons() const;
+    const wxIconBundle& GetIcons() const;
 
     /**
         Gets a string containing the window title.
@@ -133,7 +133,7 @@ public:
 
         @see IsIconized(), Maximize(), wxIconizeEvent.
     */
-    void Iconize(bool iconize);
+    virtual void Iconize(bool iconize = true);
 
     /**
         Returns @true if this window is currently active, i.e. if the user is
@@ -184,7 +184,7 @@ public:
 
         @see Iconize()
     */
-    void Maximize(bool maximize);
+    virtual void Maximize(bool maximize = true);
 
     /**
         Use a system-dependent way to attract users attention to the window when
@@ -210,7 +210,7 @@ public:
 
         @see GetDefaultItem()
     */
-    void SetDefaultItem(wxWindow* win);
+    wxWindow* SetDefaultItem(wxWindow* win);
 
     /**
         Sets the icon for this window.
@@ -368,7 +368,7 @@ public:
             fully transparent, and a value of 255 sets the window to be fully
             opaque.
     */
-    virtual bool SetTransparent(int alpha);
+    virtual bool SetTransparent(wxByte alpha);
 
     /**
         This virtual function is not meant to be called directly but can be

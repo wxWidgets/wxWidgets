@@ -155,12 +155,12 @@ public:
 
         @see Create(), wxValidator
     */
-    wxTreeCtrl(wxWindow* parent, wxWindowID id,
+    wxTreeCtrl(wxWindow* parent, wxWindowID id = wxID_ANY,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
-               long style = wxTR_HAS_BUTTONS,
+               long style = wxTR_DEFAULT_STYLE,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = "treeCtrl");
+               const wxString& name = wxTreeCtrlNameStr);
 
 
     /**
@@ -253,15 +253,15 @@ public:
     virtual void CollapseAndReset(const wxTreeItemId& item);
 
     /**
-        Creates the tree control. See wxTreeCtrl::wxTreeCtrl() for further
-        details.
+        Creates the tree control.
+        See wxTreeCtrl::wxTreeCtrl() for further details.
     */
-    bool Create(wxWindow* parent, wxWindowID id,
+    bool Create(wxWindow* parent, wxWindowID id = wxID_ANY,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxTR_HAS_BUTTONS,
+                long style = wxTR_DEFAULT_STYLE,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = "treeCtrl");
+                const wxString& name = wxTreeCtrlNameStr);
 
     /**
         Deletes the specified item. A EVT_TREE_DELETE_ITEM() event will be
@@ -298,7 +298,8 @@ public:
 
         @see EndEditLabel(), wxTreeEvent
     */
-    void EditLabel(const wxTreeItemId& item);
+    virtual wxTextCtrl *EditLabel(const wxTreeItemId& item,
+                                  wxClassInfo* textCtrlClass = CLASSINFO(wxTextCtrl));
 
     /**
         Ends label editing. If @a cancelEdit is @true, the edit will be
@@ -309,7 +310,7 @@ public:
 
         @see EditLabel()
     */
-    void EndEditLabel(bool cancelEdit);
+    virtual void EndEditLabel(const wxTreeItemId& item, bool discardChanges = false);
 
     /**
         Scrolls and/or expands items to ensure that the given item is visible.
@@ -366,8 +367,8 @@ public:
         returns the total number of descendants, otherwise only one level of
         children is counted.
     */
-    unsigned int GetChildrenCount(const wxTreeItemId& item,
-                                  bool recursively = true) const;
+    virtual size_t GetChildrenCount(const wxTreeItemId& item,
+                                    bool recursively = true) const;
 
     /**
         Returns the number of items in the control.
@@ -417,7 +418,7 @@ public:
     /**
         Returns the current tree control indentation.
     */
-    int GetIndent() const;
+    virtual unsigned int GetIndent() const;
 
     /**
         Returns the background colour of the item.
@@ -461,13 +462,6 @@ public:
         Returns the item's parent.
     */
     virtual wxTreeItemId GetItemParent(const wxTreeItemId& item) const;
-
-    /**
-        Gets the selected item image (this function is obsolete, use @ref
-        GetItemImage() "GetItemImage"( @a item, ::wxTreeItemIcon_Selected)
-        instead).
-    */
-    int GetItemSelectedImage(const wxTreeItemId& item) const;
 
     /**
         Gets the specified item state.
@@ -580,7 +574,7 @@ public:
         Python list of @ref wxTreeItemId "wxTreeItemId"s.
         @endWxPythonOnly
     */
-    unsigned int GetSelections(wxArrayTreeItemIds& selection) const;
+    virtual size_t GetSelections(wxArrayTreeItemIds& selection) const;
 
     /**
         Returns the state image list (from which application-defined state
@@ -756,7 +750,7 @@ public:
     /**
         Sets the indentation for the tree control.
     */
-    void SetIndent(int indent);
+    virtual void SetIndent(unsigned int indent);
 
     /**
         Sets the colour of the item's background.
@@ -817,13 +811,6 @@ public:
     */
     virtual void SetItemImage(const wxTreeItemId& item, int image,
                               wxTreeItemIcon which = wxTreeItemIcon_Normal);
-
-    /**
-        Sets the selected item image (this function is obsolete, use @ref
-        SetItemImage() "SetItemImage"( @a item, ::wxTreeItemIcon_Selected )
-        instead).
-    */
-    void SetItemSelectedImage(const wxTreeItemId& item, int selImage);
 
     /**
         Sets the specified item state. The value of @a state may be:
@@ -980,7 +967,8 @@ public:
     /**
         Constructor, used by wxWidgets itself only.
     */
-    wxTreeEvent(wxEventType commandType, wxTreeCtrl* tree);
+    wxTreeEvent(wxEventType commandType, wxTreeCtrl* tree,
+                const wxTreeItemId& item = wxTreeItemId());
 
     /**
         Returns the item (valid for all events).
@@ -996,12 +984,12 @@ public:
     /**
         Returns the key event for EVT_TREE_KEY_DOWN() events.
     */
-    const wxKeyEvent GetKeyEvent() const;
+    const wxKeyEvent& GetKeyEvent() const;
 
     /**
         Returns the label if the event is a begin or end edit label event.
     */
-    const wxString GetLabel() const;
+    const wxString& GetLabel() const;
 
     /**
         Returns the old item index (valid for EVT_TREE_ITEM_CHANGING() and

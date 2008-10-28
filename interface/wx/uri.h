@@ -67,13 +67,15 @@ public:
         Creates an empty URI.
     */
     wxURI();
+
     /**
         Constructor for quick creation.
 
         @param uri
             URI (Uniform Resource Identifier) to initialize with.
     */
-    wxURI(const wxChar* uri);
+    wxURI(const wxString& uri);
+
     /**
         Copies this URI from another URI.
 
@@ -104,13 +106,12 @@ public:
     /**
         Creates this URI from the @a uri string.
 
-        Returns the position at which parsing stopped (there is no such thing
-        as an "invalid" wxURI).
+        Returns @true if this instance was correctly initialized.
 
         @param uri
             String to initialize from.
     */
-    const wxChar* Create(const wxString uri);
+    bool Create(const wxString& uri);
 
     /**
         Obtains the fragment of this URI.
@@ -125,7 +126,7 @@ public:
     /**
         Obtains the host type of this URI, which is one of wxURIHostType.
     */
-    const wxURIHostType& GetHostType() const;
+    wxURIHostType GetHostType() const;
 
     /**
         Returns the password part of the userinfo component of this URI. Note
@@ -134,7 +135,7 @@ public:
 
         @c "http://<user>:<password>@mysite.com/mypath"
     */
-    const wxString& GetPassword() const;
+    wxString GetPassword() const;
 
     /**
         Returns the (normalized) path of the URI.
@@ -199,7 +200,7 @@ public:
 
         @c "http://<user>:<password>@mysite.com/mypath"
     */
-    const wxString& GetUser() const;
+    wxString GetUser() const;
 
     /**
         Returns the UserInfo component of the URI.
@@ -293,6 +294,6 @@ public:
         @param uricomp
             URI to compare to.
     */
-    void operator ==(const wxURI& uricomp);
+    bool operator==(const wxURI& uricomp) const;
 };
 

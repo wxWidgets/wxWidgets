@@ -746,12 +746,6 @@ public:
     wxAccessible* GetAccessible();
 
     /**
-        @deprecated
-        This method is deprecated, use GetEffectiveMinSize() instead.
-    */
-    wxSize GetAdjustedBestSize() const;
-
-    /**
         Returns the background colour of the window.
 
         @see SetBackgroundColour(), SetForegroundColour(), GetForegroundColour()

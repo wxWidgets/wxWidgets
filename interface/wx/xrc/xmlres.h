@@ -54,7 +54,7 @@ public:
     */
     wxXmlResource(const wxString& filemask,
                   int flags = wxXRC_USE_LOCALE,
-                  const wxString domain = wxEmptyString);
+                  const wxString& domain = wxEmptyString);
 
     /**
         Constructor.
@@ -67,7 +67,7 @@ public:
             This provides a way to allow the strings to only come from a specific catalog.
     */
     wxXmlResource(int flags = wxXRC_USE_LOCALE,
-                  const wxString domain = wxEmptyString);
+                  const wxString& domain = wxEmptyString);
 
     /**
         Destructor.

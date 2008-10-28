@@ -17,20 +17,20 @@
     as a squence of simple 8-bit charactesr and also different from
     @c std::wstring which stores the string differently depending on
     the definition of wchar_t.
-    
+
     The main purpose of wxUString is a to give users a Unicode string
-    class that has O(1) access to its content, to be identical on all 
+    class that has O(1) access to its content, to be identical on all
     platforms and to be easily convertable to wxString as well as other
     ways to store strings (C string literals, wide character
     string literals, character buffer, etc) by providing several overloads
     and built-in conversions to and from the various string formats.
-    
+
     wxUString derives from @c std::basic_string<wxChar32> and therefore
     offers the complete API of @c std::string.
-    
+
     @library{wxbase}
     @category{data}
-    
+
     @see wxString, @ref overview_string "wxString overview", @ref overview_unicode
     "Unicode overview"
 */
@@ -38,7 +38,7 @@
 
 class WXDLLIMPEXP_BASE wxUString: public std::basic_string<wxChar32>
 {
-public: 
+public:
     /**
         Default constructor.
     */
@@ -50,11 +50,11 @@ public:
     /**
         Constructs a string from a 32-bit string literal.
     */
-    wxUString( const wxChar32 *str );                            
+    wxUString( const wxChar32 *str );
     /**
         Constructs a string from 32-bit string buffer.
     */
-    wxUString( const wxU32CharBuffer &buf );                   
+    wxUString( const wxU32CharBuffer &buf );
     /**
         Constructs a string from C string literal using wxConvLibc to convert it to Unicode.
     */
@@ -106,28 +106,28 @@ public:
     /**
         Constructs a string from @a n characters @a ch.
     */
-    wxUString( size_type n, char ch );
+    wxUString( size_t n, char ch );
     /**
         Constructs a string from @a n characters @a ch.
     */
-    wxUString( size_type n, wxChar16 ch );
+    wxUString( size_t n, wxChar16 ch );
     /**
         Constructs a string from @a n characters @a ch.
     */
-    wxUString( size_type n, wxChar32 ch );
+    wxUString( size_t n, wxChar32 ch );
     /**
         Constructs a string from @a n characters @a ch.
     */
-    wxUString( size_type n, wxUniChar ch );
+    wxUString( size_t n, wxUniChar ch );
     /**
         Constructs a string from @a n characters @a ch.
     */
-    wxUString( size_type n, wxUniCharRef ch );
-    
+    wxUString( size_t n, wxUniCharRef ch );
+
     /**
         Static construction of a wxUString from a 7-bit ASCII string
     */
-    static wxUString FromAscii( const char *str, size_type n );
+    static wxUString FromAscii( const char *str, size_t n );
     /**
         Static construction of a wxUString from a 7-bit ASCII string
     */
@@ -135,7 +135,7 @@ public:
     /**
         Static construction of a wxUString from a UTF-8 encoded string
     */
-    static wxUString FromUTF8( const char *str, size_type n );
+    static wxUString FromUTF8( const char *str, size_t n );
     /**
         Static construction of a wxUString from a UTF-8 encoded string
     */
@@ -143,46 +143,46 @@ public:
     /**
         Static construction of a wxUString from a UTF-16 encoded string
     */
-    static wxUString FromUTF16( const wxChar16 *str, size_type n );
+    static wxUString FromUTF16( const wxChar16 *str, size_t n );
     /**
         Static construction of a wxUString from a UTF-16 encoded string
     */
     static wxUString FromUTF16( const wxChar16 *str );
-    
+
 
     /**
        Assigment from a 7-bit ASCII string literal
-    */    
+    */
     wxUString &assignFromAscii( const char *str );
     /**
        Assigment from a 7-bit ASCII string literal
-    */    
-    wxUString &assignFromAscii( const char *str, size_type n );
+    */
+    wxUString &assignFromAscii( const char *str, size_t n );
     /**
        Assigment from a UTF-8 string literal
-    */    
+    */
     wxUString &assignFromUTF8( const char *str );
     /**
        Assigment from a UTF-8 string literal
-    */    
-    wxUString &assignFromUTF8( const char *str, size_type n );
+    */
+    wxUString &assignFromUTF8( const char *str, size_t n );
     /**
        Assigment from a UTF-16 string literal
-    */    
+    */
     wxUString &assignFromUTF16( const wxChar16* str );
     /**
        Assigment from a UTF-16 string literal
-    */    
-    wxUString &assignFromUTF16( const wxChar16* str, size_type n );
+    */
+    wxUString &assignFromUTF16( const wxChar16* str, size_t n );
     /**
        Assigment from a C string literal using wxConvLibc
-    */    
+    */
     wxUString &assignFromCString( const char* str );
     /**
        Assigment from a C string literal using @a conv
-    */    
+    */
     wxUString &assignFromCString( const char* str, const wxMBConv &conv );
- 
+
     /**
         Conversion to a UTF-8 string
     */
@@ -191,7 +191,7 @@ public:
         Conversion to a UTF-16 string
     */
     wxU16CharBuffer utf16_str() const;
-    
+
     /**
         Conversion to a wide character string (either UTF-16
         or UCS-4, depending on the size of wchar_t).
@@ -209,20 +209,20 @@ public:
        single and repeated characters etc.
     */
     wxUString &assign( const wxUString &str );
-     
+
     /**
        Appending. wxUString additionally provides overloads for
        wxString, C string, UTF-16 strings, 32-bit strings, char buffers,
        single and repeated characters etc.
     */
     wxUString &append( const wxUString &s );
-    
+
     /**
        Insertion. wxUString additionally provides overloads for
        wxString, C string, UTF-16 strings, 32-bit strings, char buffers,
        single characters etc.
     */
-    wxUString &insert( size_type pos, const wxUString &s );
+    wxUString &insert( size_t pos, const wxUString &s );
 
     /**
        Assignment operator. wxUString additionally provides overloads for
@@ -230,14 +230,14 @@ public:
        single characters etc.
     */
     inline wxUString& operator=(const wxUString& s);
-    
+
     /**
        Concatenation operator. wxUString additionally provides overloads for
        wxString, C string, UTF-16 strings, 32-bit strings, char buffers,
        single characters etc.
     */
     inline wxUString& operator+=(const wxUString& s);
-    
+
 };
 
     /**

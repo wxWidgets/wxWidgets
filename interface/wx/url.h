@@ -94,7 +94,7 @@ public:
     /**
         Returns a reference to the protocol which will be used to get the URL.
     */
-    wxProtocol GetProtocol();
+    wxProtocol& GetProtocol();
 
     /**
         Returns @true if this object is correctly initialized, i.e. if

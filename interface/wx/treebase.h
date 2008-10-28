@@ -88,7 +88,7 @@ public:
     /**
         Returns the item associated with this node.
     */
-    const wxTreeItemId GetId();
+    const wxTreeItemId& GetId() const;
 
     /**
         Sets the item associated with this node.
@@ -98,7 +98,7 @@ public:
 
 /**
     Indicates which type to associate an image with a wxTreeCtrl item.
-    
+
     @see wxTreeCtrl::GetItemImage(), wxTreeCtrl::SetItemImage()
 */
 enum wxTreeItemIcon

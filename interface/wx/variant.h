@@ -160,12 +160,12 @@ public:
     /**
         Constructs a variant from a wxDateTime.
     */
-    wxVariant(wxDateTime& val, const wxString& name = wxEmptyString);
+    wxVariant(const wxDateTime& val, const wxString& name = wxEmptyString);
 
     /**
         Constructs a variant from a wxArrayString.
     */
-    wxVariant(wxArrayString& val, const wxString& name = wxEmptyString);
+    wxVariant(const wxArrayString& val, const wxString& name = wxEmptyString);
 
     /**
         Destructor.
@@ -266,7 +266,7 @@ public:
     /**
         Returns the character value.
     */
-    wxChar GetChar() const;
+    wxUniChar GetChar() const;
 
     /**
         Returns a pointer to the internal variant data. To take ownership of
@@ -293,7 +293,7 @@ public:
     /**
         Returns a constant reference to the variant name.
     */
-    const wxString GetName() const;
+    const wxString& GetName() const;
 
     /**
         Gets the string value.
@@ -536,7 +536,8 @@ public:
     /**
         Reads the data from @a stream.
     */
-    bool Read(ostream& stream);
+    virtual bool Read(istream& stream);
+
     /**
         Reads the data from @a string.
     */
