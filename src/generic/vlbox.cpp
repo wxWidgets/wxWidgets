@@ -60,6 +60,7 @@ END_EVENT_TABLE()
 // ============================================================================
 
 IMPLEMENT_ABSTRACT_CLASS(wxVListBox, wxVScrolledWindow)
+const char wxVListBoxNameStr[] = "wxVListBox";
 
 // ----------------------------------------------------------------------------
 // wxVListBox creation
