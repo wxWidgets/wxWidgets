@@ -97,9 +97,9 @@ const bool wxFalse = false;
 // E.g. is wxWindow a kind of wxObject?
 // Go from this class to superclass, taking into account
 // two possible base classes.
-bool wxObject::IsKindOf(wxClassInfo *info) const
+bool wxObject::IsKindOf(const wxClassInfo *info) const
 {
-    wxClassInfo *thisInfo = GetClassInfo();
+    const wxClassInfo *thisInfo = GetClassInfo();
     return (thisInfo) ? thisInfo->IsKindOf(info) : false ;
 }
 

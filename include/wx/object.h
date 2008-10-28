@@ -534,7 +534,7 @@ public:
         return *this;
     }
 
-    bool IsKindOf(wxClassInfo *info) const;
+    bool IsKindOf(const wxClassInfo *info) const;
 
 
     // Turn on the correct set of new and delete operators
