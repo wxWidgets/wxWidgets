@@ -934,12 +934,12 @@ public:
     /**
 
     */
-    wxString GetCurLine(int* OUTPUT);
+    wxString GetCurLine(int* linePos = NULL);
 
     /**
 
     */
-    wxCharBuffer GetCurLineRaw(int* OUTPUT);
+    wxCharBuffer GetCurLineRaw(int* linePos = NULL);
 
     /**
         END of generated section
@@ -1022,7 +1022,7 @@ public:
     /**
         Are the indentation guides visible?
     */
-    bool GetIndentationGuides();
+    int GetIndentationGuides() const;
 
     /**
         Find the last child line of a header line.
@@ -1626,7 +1626,7 @@ public:
     /**
         Load the contents of filename into the editor
     */
-    bool LoadFile(const wxString& filename);
+    bool LoadFile(const wxString& file, int fileType = wxTEXT_TYPE_ANY);
 
     /**
         Transform the selection to lower case.
@@ -1847,7 +1847,7 @@ public:
     /**
         Write the contents of the editor to filename
     */
-    bool SaveFile(const wxString& filename);
+    bool SaveFile(const wxString& file = wxEmptyString, int fileType = wxTEXT_TYPE_ANY);
 
     /**
         Scroll enough to make the given column visible
@@ -1903,7 +1903,7 @@ public:
     /**
         Send a message to Scintilla
     */
-    long SendMsg(int msg, long wp = 0, long lp = 0);
+    wxIntPtr SendMsg(int msg, wxUIntPtr wp = 0, wxIntPtr lp = 0) const;
 
     /**
         Set the selection anchor to a position. The anchor is the opposite
@@ -2080,7 +2080,7 @@ public:
     /**
         Show or hide indentation guides.
     */
-    void SetIndentationGuides(bool show);
+    void SetIndentationGuides(int indentView);
 
     /**
         Set up the key words used by the lexer.
@@ -2246,7 +2246,7 @@ public:
     /**
         Select a range of text.
     */
-    void SetSelection(int start, int end);
+    virtual void SetSelection(long from, long to);
 
     /**
         Sets the position that ends the selection - this becomes the currentPosition.

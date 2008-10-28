@@ -94,13 +94,11 @@ public:
         Creates the choice for two-step construction. See wxRadioButton() for
         further details.
     */
-    bool Create(wxWindow* parent, wxWindowID id,
-                const wxString& label,
+    bool Create(wxWindow* parent, wxWindowID id, const wxString& label,
                 const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = 0,
+                const wxSize& size = wxDefaultSize, long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = "radioButton");
+                const wxString& name = wxRadioButtonNameStr);
 
     /**
         Returns @true if the radio button is depressed, @false otherwise.
@@ -114,6 +112,6 @@ public:
         @param value
             @true to select, @false to deselect.
     */
-    void SetValue(const bool value);
+    virtual void SetValue(bool value);
 };
 

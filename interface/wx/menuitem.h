@@ -109,7 +109,7 @@ public:
     /**
         Returns the checked or unchecked bitmap (Windows only).
     */
-    wxBitmap GetBitmap(bool checked = true) const;
+    virtual const wxBitmap& GetBitmap() const;
 
     /**
         Returns the font associated with the menu item (Windows only).
@@ -119,7 +119,7 @@ public:
     /**
         Returns the help string associated with the menu item.
     */
-    wxString GetHelp() const;
+    const wxString& GetHelp() const;
 
     /**
         Returns the menu item identifier.
@@ -212,7 +212,7 @@ public:
 
         @see GetLabel(), GetLabelFromText()
     */
-    wxString GetText() const;
+    const wxString& GetText() const;
 
     /**
         Returns the text colour associated with the menu item (Windows only).
@@ -285,12 +285,12 @@ public:
     /**
         Sets the parent menu which will contain this menu item.
     */
-    void SetMenu(const wxMenu* menu);
+    void SetMenu(wxMenu* menu);
 
     /**
         Sets the submenu of this menu item.
     */
-    void SetSubMenu(const wxMenu* menu);
+    void SetSubMenu(wxMenu* menu);
 
     /**
         Sets the text associated with the menu item.

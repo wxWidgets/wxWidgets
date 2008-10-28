@@ -427,7 +427,7 @@ public:
     /**
         Assignment operator, using @ref overview_refcount.
     */
-    void operator =(const wxRegion& region);
+    wxRegion& operator=(const wxRegion& region);
 };
 
 /**

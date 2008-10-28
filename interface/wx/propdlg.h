@@ -127,12 +127,11 @@ public:
     /**
         Call this from your own Create function, before adding buttons and pages.
     */
-    bool Create(wxWindow* parent, wxWindowID id,
-                const wxString& title,
+    bool Create(wxWindow* parent, wxWindowID id, const wxString& title,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_DIALOG_STYLE,
-                const wxString& name = "dialogBox");
+                const wxString& name = wxDialogNameStr);
 
     /**
         Override this if you wish to create a different kind of book control; by

@@ -271,7 +271,7 @@ public:
         @param icon
             Icon to assign.
     */
-    wxIcon operator =(const wxIcon& icon);
+    wxIcon& operator=(const wxIcon& icon);
 };
 
 /**

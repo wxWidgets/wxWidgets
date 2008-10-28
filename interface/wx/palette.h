@@ -132,9 +132,8 @@ public:
 
         @see GetPixel()
     */
-    bool GetRGB(int pixel, const unsigned char* red,
-                const unsigned char* green,
-                const unsigned char* blue) const;
+    bool GetRGB(int pixel, unsigned char* red, unsigned char* green,
+                unsigned char* blue) const;
 
     /**
         Returns @true if palette data is present.

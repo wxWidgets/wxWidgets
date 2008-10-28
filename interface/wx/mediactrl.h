@@ -315,7 +315,7 @@ public:
         @row2col{wxMEDIASTATE_PLAYING, The movie is currently playing.}
         @endTable
     */
-    wxMediaCtrlState GetState();
+    wxMediaState GetState();
 
     /**
         Gets the volume of the media from a 0.0 to 1.0 range.
@@ -352,13 +352,13 @@ public:
     /**
         Same as Load(const wxURI& uri). Kept for wxPython compatibility.
     */
-    bool LoadURI(const wxURI& uri);
+    bool LoadURI(const wxString& fileName);
 
     /**
         Same as Load(const wxURI& uri, const wxURI& proxy).
         Kept for wxPython compatibility.
     */
-    bool LoadURIWithProxy(const wxURI& uri, const wxURI& proxy);
+    bool LoadURIWithProxy(const wxString& fileName, const wxString& proxy);
 
     /**
         Pauses playback of the movie.
@@ -376,7 +376,7 @@ public:
         @todo Document the wxSeekMode parameter @a mode, and perhaps also the
               wxFileOffset and wxSeekMode themselves.
     */
-    wxFileOffset Seek(wxFileOffset where, wxSeekMode mode);
+    wxFileOffset Seek(wxFileOffset where, wxSeekMode mode = wxFromStart);
 
     /**
         Sets the playback rate, or speed of the media, to that referred by @a dRate.

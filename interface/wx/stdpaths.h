@@ -126,8 +126,8 @@ public:
 
         @since 2.7.0
     */
-    wxString GetLocalizedResourcesDir(const wxString& lang,
-                                      ResourceCat category = ResourceCat_None) const;
+    virtual wxString GetLocalizedResourcesDir(const wxString& lang,
+                                              ResourceCat category) const;
 
     /**
         Return the directory where the loadable modules (plugins) live.

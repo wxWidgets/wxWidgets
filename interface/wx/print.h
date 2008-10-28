@@ -295,7 +295,7 @@ public:
         The implementation simply blits the preview bitmap onto
         the canvas, creating a new preview bitmap if none exists.
     */
-    bool PaintPage(wxPreviewCanvas* canvas, wxDC dc);
+    virtual bool PaintPage(wxPreviewCanvas* canvas, wxDC& dc);
 
     /**
         Invokes the print process using the second wxPrintout object
@@ -321,7 +321,7 @@ public:
     /**
         Sets the current page to be previewed.
     */
-    void SetCurrentPage(int pageNum);
+    virtual bool SetCurrentPage(int pageNum);
 
     /**
         Sets the frame to be used for displaying the print preview canvas
@@ -373,7 +373,7 @@ public:
     /**
         Creates the default printing abort window, with a cancel button.
     */
-    void CreateAbortWindow(wxWindow* parent, wxPrintout* printout);
+    virtual wxWindow* CreateAbortWindow(wxWindow* parent, wxPrintout* printout);
 
     /**
         Returns @true if the user has aborted the print job.

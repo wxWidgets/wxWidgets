@@ -69,7 +69,7 @@ public:
     */
     bool Create(wxWindow* parent, wxWindowID id = wxID_ANY,
                 long style = wxST_SIZEGRIP,
-                const wxString& name = "statusBar");
+                const wxString& name = wxStatusBarNameStr);
 
     /**
         Returns the size and position of a field's internal bounding rectangle.
@@ -126,7 +126,7 @@ public:
             An array of n integers interpreted in the same way as
             in SetStatusWidths().
     */
-    virtual void SetFieldsCount(int number = 1, int* widths = NULL);
+    virtual void SetFieldsCount(int number = 1, const int* widths = NULL);
 
     /**
         Sets the minimal possible height for the status bar.
@@ -150,7 +150,7 @@ public:
             - wxSB_FLAT: No border is painted around the field so that it appears flat.
             - wxSB_RAISED: A raised 3D border is painted around the field.
     */
-    virtual void SetStatusStyles(int n, int* styles);
+    virtual void SetStatusStyles(int n, const int* styles);
 
     /**
         Sets the text for one field.
@@ -191,6 +191,6 @@ public:
 
         @see SetFieldsCount(), wxFrame::SetStatusWidths()
     */
-    virtual void SetStatusWidths(int n, int* widths);
+    virtual void SetStatusWidths(int n, const int* widths_field);
 };
 

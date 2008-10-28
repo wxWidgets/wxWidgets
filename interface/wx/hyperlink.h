@@ -111,13 +111,11 @@ public:
         @param name
             Window name.
     */
-    bool Create(wxWindow* parent, wxWindowID id,
-                const wxString& label,
-                const wxString& url,
-                const wxPoint& pos = wxDefaultPosition,
+    bool Create(wxWindow* parent, wxWindowID id, const wxString& label,
+                const wxString& url, const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxHL_DEFAULT_STYLE,
-                const wxString& name = "hyperlink");
+                const wxString& name = wxHyperlinkCtrlNameStr);
 
     /**
         Returns the colour used to print the label of the hyperlink when the mouse is

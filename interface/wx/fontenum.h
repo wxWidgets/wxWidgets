@@ -39,7 +39,7 @@ public:
         Call OnFontEncoding() for each encoding supported by the given font -
         or for each encoding supported by at least some font if @a font is not specified.
     */
-    virtual bool EnumerateEncodings(const wxString& font = "");
+    virtual bool EnumerateEncodings(const wxString& font = wxEmptyString);
 
     /**
         Call OnFacename() for each font which supports given encoding (only if

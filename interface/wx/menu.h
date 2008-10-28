@@ -89,7 +89,7 @@ public:
         @remarks Only use this when the menu bar has been associated with a
                  frame; otherwise, use the wxMenu equivalent call.
     */
-    void Check(int id, const bool check);
+    void Check(int id, bool check);
 
     /**
         Enables or disables (greys out) a menu item.
@@ -114,7 +114,7 @@ public:
 
         @remarks Only use this when the menu bar has been associated with a frame.
     */
-    void EnableTop(int pos, const bool enable);
+    virtual void EnableTop(size_t pos, bool enable);
 
     /**
         Finds the menu item object associated with the given menu item identifier.
@@ -126,7 +126,7 @@ public:
 
         @return The found menu item object, or @NULL if one was not found.
     */
-    wxMenuItem* FindItem(int id, wxMenu menu = NULL) const;
+    virtual wxMenuItem* FindItem(int id, wxMenu* menu = NULL) const;
 
     /**
         Returns the index of the menu with the given @a title or @c wxNOT_FOUND if no
@@ -197,12 +197,12 @@ public:
 
         @see SetLabelTop()
     */
-    wxString GetLabelTop(int pos) const;
+    wxString GetLabelTop(size_t pos) const;
 
     /**
         Returns the menu at @a menuIndex (zero-based).
     */
-    wxMenu* GetMenu(int menuIndex) const;
+    wxMenu* GetMenu(size_t menuIndex) const;
 
     /**
         Returns the number of menus in this menubar.
@@ -223,7 +223,7 @@ public:
 
         @see GetMenuLabelText(), SetMenuLabel()
     */
-    wxString GetMenuLabel(int pos) const;
+    virtual wxString GetMenuLabel(size_t pos) const;
 
     /**
         Returns the label of a top-level menu. Note that the returned string does not
@@ -239,7 +239,7 @@ public:
 
         @see GetMenuLabel(), SetMenuLabel()
     */
-    wxString GetMenuLabelText(int pos) const;
+    virtual wxString GetMenuLabelText(size_t pos) const;
 
     /**
         Inserts the menu at the given position into the menu bar. Inserting menu at
@@ -282,7 +282,7 @@ public:
     /**
         Redraw the menu bar
     */
-    void Refresh();
+    virtual void Refresh(bool eraseBackground = true, const wxRect* rect = NULL);
 
     /**
         Removes the menu from the menu bar and returns the menu object - the caller
@@ -351,7 +351,7 @@ public:
 
         @see GetLabelTop()
     */
-    void SetLabelTop(int pos, const wxString& label);
+    void SetLabelTop(size_t pos, const wxString& label);
 
     /**
         Sets the label of a top-level menu.
@@ -363,7 +363,7 @@ public:
 
         @remarks Use only after the menubar has been associated with a frame.
     */
-    void SetMenuLabel(int pos, const wxString& label);
+    virtual void SetMenuLabel(size_t pos, const wxString& label);
 };
 
 
@@ -570,7 +570,7 @@ public:
         @see Append(), InsertCheckItem()
     */
     wxMenuItem* AppendCheckItem(int id, const wxString& item,
-                                const wxString& helpString = "");
+                                const wxString& help = wxEmptyString);
 
     /**
         Adds a radio item to the end of the menu.
@@ -580,7 +580,7 @@ public:
         @see Append(), InsertRadioItem()
     */
     wxMenuItem* AppendRadioItem(int id, const wxString& item,
-                                const wxString& helpString = "");
+                                const wxString& help = wxEmptyString);
 
     /**
         Adds a separator to the end of the menu.
@@ -613,7 +613,7 @@ public:
 
         @see IsChecked()
     */
-    void Check(int id, const bool check);
+    void Check(int id, bool check);
 
     /**
         Deletes the menu item from the menu. If the item is a submenu, it will
@@ -671,7 +671,7 @@ public:
 
         @see IsEnabled()
     */
-    void Enable(int id, const bool enable);
+    void Enable(int id, bool enable);
 
     /**
         Finds the menu id for a menu item string.
@@ -764,7 +764,7 @@ public:
 
         @see SetTitle()
     */
-    wxString GetTitle() const;
+    const wxString& GetTitle() const;
 
     /**
         Inserts the given @a item before the position @a pos.
@@ -794,18 +794,16 @@ public:
 
         @see Insert(), AppendCheckItem()
     */
-    wxMenuItem* InsertCheckItem(size_t pos, int id,
-                                const wxString& item,
-                                const wxString& helpString = "");
+    wxMenuItem* InsertCheckItem(size_t pos, int id, const wxString& item,
+                                const wxString& helpString = wxEmptyString);
 
     /**
         Inserts a radio item at the given position.
 
         @see Insert(), AppendRadioItem()
     */
-    wxMenuItem* InsertRadioItem(size_t pos, int id,
-                                const wxString& item,
-                                const wxString& helpString = "");
+    wxMenuItem* InsertRadioItem(size_t pos, int id, const wxString& item,
+                                const wxString& helpString = wxEmptyString);
 
     /**
         Inserts a separator at the given position.
@@ -862,7 +860,7 @@ public:
         @see Prepend(), AppendCheckItem()
     */
     wxMenuItem* PrependCheckItem(int id, const wxString& item,
-                                 const wxString& helpString = "");
+                                 const wxString& helpString = wxEmptyString);
 
     /**
         Inserts a radio item at position 0.
@@ -870,7 +868,7 @@ public:
         @see Prepend(), AppendRadioItem()
     */
     wxMenuItem* PrependRadioItem(int id, const wxString& item,
-                                 const wxString& helpString = "");
+                                 const wxString& helpString = wxEmptyString);
 
     /**
         Inserts a separator at position 0.

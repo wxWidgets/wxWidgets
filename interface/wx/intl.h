@@ -666,7 +666,7 @@ public:
 
         @see AddCatalog()
     */
-    bool IsLoaded(const char* domain) const;
+    bool IsLoaded(const wxString& domain) const;
 
     /**
         Returns @true if the locale could be set successfully.

@@ -103,11 +103,10 @@ public:
         Used in two-step frame construction.
         See wxMiniFrame() for further details.
     */
-    bool Create(wxWindow* parent, wxWindowID id,
-                const wxString& title,
+    bool Create(wxWindow* parent, wxWindowID id, const wxString& title,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxCAPTION | wxRESIZE_BORDER,
-                const wxString& name = "frame");
+                const wxString& name = wxFrameNameStr);
 };
 

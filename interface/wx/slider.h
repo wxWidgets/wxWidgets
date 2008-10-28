@@ -176,13 +176,11 @@ public:
         Used for two-step slider construction.
         See wxSlider() for further details.
     */
-    bool Create(wxWindow* parent, wxWindowID id, int value,
-                int minValue, int maxValue,
-                const wxPoint& point = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = wxSL_HORIZONTAL,
+    bool Create(wxWindow* parent, wxWindowID id, int value, int minValue,
+                int maxValue, const wxPoint& point = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize, long style = wxSL_HORIZONTAL,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = "slider");
+                const wxString& name = wxSliderNameStr);
 
     /**
         Returns the line size.

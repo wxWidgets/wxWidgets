@@ -124,7 +124,7 @@ public:
     /**
         Get the string to find.
     */
-    const wxString GetFindString();
+    const wxString& GetFindString();
 
     /**
         Get the combination of @c wxFindReplaceFlags values.
@@ -134,7 +134,7 @@ public:
     /**
         Get the replacement string.
     */
-    const wxString GetReplaceString();
+    const wxString& GetReplaceString();
 
     /**
         Set the string to find (used as initial value by the dialog).

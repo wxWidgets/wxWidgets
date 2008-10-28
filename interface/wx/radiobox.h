@@ -194,7 +194,7 @@ public:
         @param string
             The string to find.
     */
-    int FindString(const wxString& string) const;
+    virtual int FindString(const wxString& s, bool bCase = false) const;
 
     /**
         Returns the number of columns in the radiobox.
@@ -208,7 +208,7 @@ public:
         @param pt
             Point in client coordinates.
     */
-    int GetItemFromPoint(const wxPoint pt) const;
+    virtual int GetItemFromPoint(const wxPoint& pt) const;
 
     /**
         Returns the helptext associated with the specified @a item if any or @c

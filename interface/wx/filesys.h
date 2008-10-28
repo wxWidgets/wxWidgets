@@ -107,7 +107,7 @@ public:
         @param file
             the name of the file to look for
     */
-    bool FindFileInPath(wxString str, const wxString& path,
+    bool FindFileInPath(wxString* pStr, const wxString& path,
                         const wxString& file);
 
     /**
@@ -238,7 +238,7 @@ public:
 
         You will have to delete the stream yourself.
     */
-    void DetachStream();
+    wxInputStream* DetachStream();
 
     /**
         Returns anchor (if present). The term of @b anchor can be easily

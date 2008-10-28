@@ -52,7 +52,7 @@ public:
         Returns the @ref overview_printing_printdata "print dialog data" associated
         with the print dialog.
     */
-    wxPrintDialogData GetPrintDialogData();
+    virtual wxPrintDialogData& GetPrintDialogData();
 
     /**
         Shows the dialog, returning @c wxID_OK if the user pressed OK, and @c

@@ -293,8 +293,8 @@ public:
         @a flags may have the @c wxCONTROL_CHECKED, @c wxCONTROL_CURRENT or
         @c wxCONTROL_UNDETERMINED bit set, see @ref wxCONTROL_FLAGS.
     */
-    virtual void DrawCheckBox(wxWindow* win, wxDC& dc,
-                              const wxRect& rect, int flags);
+    virtual void DrawCheckBox(wxWindow* win, wxDC& dc, const wxRect& rect,
+                              int flags = 0) = 0;
 
     /**
         Draw a button like the one used by wxComboBox to show a
@@ -304,8 +304,7 @@ public:
         see @ref wxCONTROL_FLAGS.
     */
     virtual void DrawComboBoxDropButton(wxWindow* win, wxDC& dc,
-                                const wxRect& rect,
-                                int flags);
+                                        const wxRect& rect, int flags = 0) = 0;
 
     /**
         Draw a drop down arrow that is suitable for use outside a combo box. Arrow will
@@ -318,7 +317,7 @@ public:
         see @ref wxCONTROL_FLAGS.
     */
     virtual void DrawDropArrow(wxWindow* win, wxDC& dc, const wxRect& rect,
-                       int flags);
+                               int flags = 0) = 0;
 
     /**
         Draw a focus rectangle using the specified rectangle.
@@ -380,8 +379,8 @@ public:
         @a flags may have the @c wxCONTROL_PRESSED, @c wxCONTROL_CURRENT or
         @c wxCONTROL_ISDEFAULT bit set, see @ref wxCONTROL_FLAGS.
     */
-    virtual void DrawPushButton(wxWindow* win, wxDC& dc,
-                                const wxRect& rect, int flags);
+    virtual void DrawPushButton(wxWindow* win, wxDC& dc, const wxRect& rect,
+                                int flags = 0) = 0;
 
     /**
         Draw the border for sash window: this border must be such that the sash

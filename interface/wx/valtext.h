@@ -69,7 +69,7 @@ public:
     /**
         Clones the text validator using the copy constructor.
     */
-    virtual wxValidator* Clone() const;
+    virtual wxObject* Clone() const;
 
     /**
         Returns a reference to the exclude list (the list of invalid values).

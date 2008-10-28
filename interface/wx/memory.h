@@ -33,7 +33,7 @@ public:
                 success. Returns -1 if an error was detected that prevents
                 further checking.
     */
-    int Check();
+    static int Check(bool checkAll = false);
 
     /**
         Performs a memory dump from the currently set checkpoint, writing to the

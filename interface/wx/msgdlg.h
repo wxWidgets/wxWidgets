@@ -96,12 +96,12 @@ public:
         which don't support extended messages, it is simply appended to the
         normal message with a new line separating them.
     */
-    void SetExtendedMessage(const wxString extendedMessage);
+    virtual void SetExtendedMessage(const wxString& extendedMessage);
 
     /**
         Sets the message shown by the dialog.
     */
-    void SetMessage(const wxString msg);
+    virtual void SetMessage(const wxString& message);
 
     /**
         Overrides the default labels of the OK and Cancel buttons.

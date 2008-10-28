@@ -77,12 +77,11 @@ public:
         Creates the editable listbox for two-step construction.
         See wxEditableListBox() for further details.
     */
-    bool Create(wxWindow* parent, wxWindowID id,
-                const wxString& label,
+    bool Create(wxWindow* parent, wxWindowID id, const wxString& label,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxEL_DEFAULT_STYLE,
-                const wxString& name = "editableListBox");
+                const wxString& name = wxEditableListBoxNameStr);
 
     /**
         Replaces current contents with given strings.

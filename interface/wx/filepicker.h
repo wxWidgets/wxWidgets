@@ -102,13 +102,13 @@ public:
     */
     bool Create(wxWindow* parent, wxWindowID id,
                 const wxString& path = wxEmptyString,
-                const wxString& message = "Select a file",
-                const wxString& wildcard = ".",
+                const wxString& message = wxFileSelectorPromptStr,
+                const wxString& wildcard = wxFileSelectorDefaultWildcardStr,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxFLP_DEFAULT_STYLE,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = "filepickerctrl");
+                const wxString& name = wxFilePickerCtrlNameStr);
 
     /**
         Similar to GetPath() but returns the path of the currently selected
@@ -222,12 +222,12 @@ public:
     */
     bool Create(wxWindow* parent, wxWindowID id,
                 const wxString& path = wxEmptyString,
-                const wxString& message = "Select a folder",
+                const wxString& message = wxDirSelectorPromptStr,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDIRP_DEFAULT_STYLE,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = "dirpickerctrl");
+                const wxString& name = wxDirPickerCtrlNameStr);
 
     /**
         Returns the absolute path of the currently selected directory as a

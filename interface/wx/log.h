@@ -57,19 +57,19 @@ public:
 
         @see OnFrameDelete()
     */
-    virtual bool OnFrameClose(wxFrame frame);
+    virtual bool OnFrameClose(wxFrame* frame);
 
     /**
         Called immediately after the log frame creation allowing for
         any extra initializations.
     */
-    virtual void OnFrameCreate(wxFrame frame);
+    virtual void OnFrameCreate(wxFrame* frame);
 
     /**
         Called right before the log frame is going to be deleted: will
         always be called unlike OnFrameClose().
     */
-    virtual void OnFrameDelete(wxFrame frame);
+    virtual void OnFrameDelete(wxFrame* frame);
 
     /**
         Shows or hides the frame.
@@ -456,7 +456,7 @@ public:
         The buffer can be cleared by Flush() which will also show the current
         contents to the user.
     */
-    const wxString GetBuffer();
+    const wxString& GetBuffer() const;
 };
 
 

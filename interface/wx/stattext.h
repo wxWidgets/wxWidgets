@@ -81,12 +81,10 @@ public:
     /**
         Creation function, for two-step construction. For details see wxStaticText().
     */
-    bool Create(wxWindow* parent, wxWindowID id,
-                const wxString& label,
+    bool Create(wxWindow* parent, wxWindowID id, const wxString& label,
                 const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = 0,
-                const wxString& name = "staticText");
+                const wxSize& size = wxDefaultSize, long style = 0,
+                const wxString& name = wxStaticTextNameStr);
 
     /**
         Returns the contents of the control.

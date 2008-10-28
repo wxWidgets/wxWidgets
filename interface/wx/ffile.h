@@ -90,7 +90,7 @@ public:
 
         The descriptor should be already opened and it will be closed by wxFFile object.
     */
-    void Attach(FILE* fp);
+    void Attach(FILE* fp, const wxString& name = wxEmptyString);
 
     /**
         Closes the file and returns @true on success.

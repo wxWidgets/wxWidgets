@@ -175,12 +175,11 @@ public:
         Used in two-step frame construction.
         See wxFrame() for further details.
     */
-    bool Create(wxWindow* parent, wxWindowID id,
-                const wxString& title,
+    bool Create(wxWindow* parent, wxWindowID id, const wxString& title,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
-                const wxString& name = "frame");
+                const wxString& name = wxFrameNameStr);
 
     /**
         Creates a status bar at the bottom of the frame.
@@ -205,10 +204,9 @@ public:
 
         @see SetStatusText(), OnCreateStatusBar(), GetStatusBar()
     */
-    virtual wxStatusBar* CreateStatusBar(int number = 1,
-                                         long style = 0,
-                                         wxWindowID id = -1,
-                                         const wxString& name = "statusBar");
+    virtual wxStatusBar* CreateStatusBar(int number = 1, long style = wxST_SIZEGRIP|wxFULL_REPAINT_ON_RESIZE,
+                                         wxWindowID id = 0,
+                                         const wxString& name = wxStatusLineNameStr);
 
     /**
         Creates a toolbar at the top or left of the frame.
@@ -241,8 +239,8 @@ public:
         @see CreateStatusBar(), OnCreateToolBar(), SetToolBar(), GetToolBar()
     */
     virtual wxToolBar* CreateToolBar(long style = wxBORDER_NONE | wxTB_HORIZONTAL,
-                                     wxWindowID id = -1,
-                                     const wxString& name = "toolBar");
+                                     wxWindowID id = wxID_ANY,
+                                     const wxString& name = wxToolBarNameStr);
 
     /**
         Returns the origin of the frame client area (in client coordinates).
@@ -398,7 +396,7 @@ public:
                  width of all fields, minus the sum of widths of the
                  non-variable fields, divided by the number of variable fields.
     */
-    virtual void SetStatusWidths(int n, int* widths);
+    virtual void SetStatusWidths(int n, const int* widths_field);
 
     /**
         Associates a toolbar with the frame.

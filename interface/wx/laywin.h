@@ -225,7 +225,7 @@ public:
         @param name
             Window name.
     */
-    bool Create(wxSashLayoutWindow* parent, wxWindowID id,
+    bool Create(wxWindow* parent, wxWindowID id = wxID_ANY,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxCLIP_CHILDREN | wxSW_3D,
@@ -316,7 +316,7 @@ public:
         client area the window sticks to).
         One of wxLAYOUT_TOP, wxLAYOUT_LEFT, wxLAYOUT_RIGHT, wxLAYOUT_BOTTOM.
     */
-    void GetAlignment() const;
+    wxLayoutAlignment GetAlignment() const;
 
     /**
         Returns the flags associated with this event. Not currently used.

@@ -295,7 +295,7 @@ public:
 
         @see GetDashes()
     */
-    virtual void SetDashes(int n, wxDash* dashes);
+    virtual void SetDashes(int n, const wxDash* dash);
 
     /**
         Sets the pen join style, which may be one of @c wxJOIN_BEVEL, @c wxJOIN_ROUND
@@ -312,7 +312,7 @@ public:
 
         @see GetStipple()
     */
-    virtual void SetStipple(wxBitmap* stipple);
+    virtual void SetStipple(const wxBitmap& stipple);
 
     /**
         Set the pen style.
@@ -339,7 +339,7 @@ public:
     /**
         Assignment operator, using @ref overview_refcount.
     */
-    wxPen operator =(const wxPen& pen);
+    wxPen& operator=(const wxPen& pen);
 
     /**
         Equality operator.

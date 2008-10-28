@@ -178,12 +178,11 @@ public:
 
         @see AddTool()
     */
-    wxToolBarToolBase* AddCheckTool(int toolId,
-                                    const wxString& label,
+    wxToolBarToolBase* AddCheckTool(int toolId, const wxString& label,
                                     const wxBitmap& bitmap1,
-                                    const wxBitmap& bitmap2,
-                                    const wxString& shortHelpString = "",
-                                    const wxString& longHelpString = "",
+                                    const wxBitmap& bmpDisabled = wxNullBitmap,
+                                    const wxString& shortHelp = wxEmptyString,
+                                    const wxString& longHelp = wxEmptyString,
                                     wxObject* clientData = NULL);
 
     /**
@@ -202,7 +201,8 @@ public:
             wxMac: labels are only displayed if wxWidgets is built with @c
             wxMAC_USE_NATIVE_TOOLBAR set to 1
     */
-    bool AddControl(wxControl* control, const wxString label = "");
+    virtual wxToolBarToolBase* AddControl(wxControl* control,
+                                          const wxString& label = wxEmptyString);
 
     /**
         Adds a new radio tool to the toolbar. Consecutive radio tools form a
@@ -218,12 +218,11 @@ public:
 
         @see AddTool()
     */
-    wxToolBarToolBase* AddRadioTool(int toolId,
-                                    const wxString& label,
+    wxToolBarToolBase* AddRadioTool(int toolId, const wxString& label,
                                     const wxBitmap& bitmap1,
-                                    const wxBitmap& bitmap2,
-                                    const wxString& shortHelpString = "",
-                                    const wxString& longHelpString = "",
+                                    const wxBitmap& bmpDisabled = wxNullBitmap,
+                                    const wxString& shortHelp = wxEmptyString,
+                                    const wxString& longHelp = wxEmptyString,
                                     wxObject* clientData = NULL);
 
     /**
@@ -231,7 +230,7 @@ public:
 
         @see AddTool(), SetToolSeparation()
     */
-    void AddSeparator();
+    virtual wxToolBarToolBase* AddSeparator();
 
     /**
         Adds a tool to the toolbar.
@@ -498,7 +497,7 @@ public:
     /**
         Returns the number of tools in the toolbar.
     */
-    int GetToolsCount() const;
+    size_t GetToolsCount() const;
 
     /**
         Inserts the control into the toolbar at the given position. You must
@@ -506,7 +505,8 @@ public:
 
         @see AddControl(), InsertTool()
     */
-    wxToolBarToolBase* InsertControl(size_t pos, wxControl* control);
+    virtual wxToolBarToolBase* InsertControl(size_t pos, wxControl* control,
+                                             const wxString& label = wxEmptyString);
 
     /**
         Inserts the separator into the toolbar at the given position. You must
@@ -593,7 +593,7 @@ public:
 
         @see OnMouseEnter(), OnLeftClick()
     */
-    void OnRightClick(int toolId, float x, float y);
+    virtual void OnRightClick(int toolId, long x, long y);
 
     /**
         This function should be called after you have added tools.

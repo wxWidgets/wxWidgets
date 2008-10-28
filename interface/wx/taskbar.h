@@ -116,7 +116,8 @@ public:
     /**
         Sets the icon, and optional tooltip text.
     */
-    bool SetIcon(const wxIcon& icon, const wxString& tooltip);
+    virtual bool SetIcon(const wxIcon& icon,
+                         const wxString& tooltip = wxEmptyString);
 
     /**
         Returns true if system tray is available in the desktop environment the

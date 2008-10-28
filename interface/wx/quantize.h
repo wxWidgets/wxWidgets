@@ -33,9 +33,9 @@ public:
         Fills @a out_rows with indexes into palette (which is also stored into @a palette
         variable).
     */
-    void DoQuantize(unsigned w, unsigned h, unsigned char** in_rows,
-                    unsigned char** out_rows, unsigned char* palette,
-                    int desiredNoColours);
+    static void DoQuantize(unsigned int w, unsigned int h,
+                           unsigned char** in_rows, unsigned char** out_rows,
+                           unsigned char* palette, int desiredNoColours);
 
     /**
         Reduce the colours in the source image and put the result into the destination image.

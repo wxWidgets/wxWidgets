@@ -115,7 +115,7 @@ public:
         GetNextToken() is called and when it reaches 0, HasMoreTokens()
         returns @false.
     */
-    int CountTokens() const;
+    size_t CountTokens() const;
 
     /**
         Returns the delimiter which ended scan for the last token returned by

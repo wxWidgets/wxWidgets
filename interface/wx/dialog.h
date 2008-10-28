@@ -377,7 +377,7 @@ public:
                  Iconize(@false) will bring the window to the front, as does
                  Show(@true).
     */
-    void Iconize(bool iconize);
+    virtual void Iconize(bool iconize = true);
 
     /**
         Returns @true if the dialog box is iconized. Windows only.

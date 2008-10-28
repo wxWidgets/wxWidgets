@@ -256,12 +256,12 @@ public:
         Returns the bullet text, which could be a symbol, or (for example) cached
         outline text.
     */
-    const wxString GetBulletText() const;
+    const wxString& GetBulletText() const;
 
     /**
         Returns the name of the character style.
     */
-    const wxString GetCharacterStyleName() const;
+    const wxString& GetCharacterStyleName() const;
 
     /**
         Returns flags indicating which attributes are applicable.
@@ -293,7 +293,7 @@ public:
     /**
         Returns the font face name.
     */
-    const wxString GetFontFaceName() const;
+    const wxString& GetFontFaceName() const;
 
     /**
         Returns the font size in points.
@@ -333,12 +333,12 @@ public:
     /**
         Returns the name of the list style.
     */
-    const wxString GetListStyleName() const;
+    const wxString& GetListStyleName() const;
 
     /**
         Returns the outline level.
     */
-    bool GetOutlineLevel() const;
+    int GetOutlineLevel() const;
 
     /**
         Returns the space in tenths of a millimeter after the paragraph.
@@ -353,7 +353,7 @@ public:
     /**
         Returns the name of the paragraph style.
     */
-    const wxString GetParagraphStyleName() const;
+    const wxString& GetParagraphStyleName() const;
 
     /**
         Returns the right indent in tenths of a millimeter.
@@ -366,12 +366,12 @@ public:
         Each stop is measured from the left margin and therefore each value must
         be larger than the last.
     */
-    const wxArrayInt GetTabs() const;
+    const wxArrayInt& GetTabs() const;
 
     /**
         Returns the text foreground colour.
     */
-    const wxColour GetTextColour() const;
+    const wxColour& GetTextColour() const;
 
     /**
         Returns the text effect bits of interest.
@@ -392,7 +392,7 @@ public:
         hand cursor over it, and wxRichTextCtrl generates a wxTextUrlEvent
         when the content is clicked.
     */
-    const wxString GetURL() const;
+    const wxString& GetURL() const;
 
     /**
         Returns @true if the attribute object specifies alignment.
@@ -616,7 +616,7 @@ public:
         Sets the bullet text, which could be a symbol, or (for example) cached
         outline text.
     */
-    void SetBulletText(const wxString text);
+    void SetBulletText(const wxString& text);
 
     /**
         Sets the character style name.
@@ -633,7 +633,7 @@ public:
         Sets the attributes for the given font.
         Note that wxTextAttr does not store an actual wxFont object.
     */
-    void SetFont(const wxFont& font);
+    void SetFont(const wxFont& font, int flags = wxTEXT_ATTR_FONT);
 
     /**
         Sets the font encoding.
@@ -1181,10 +1181,9 @@ public:
         non-default constructor.
     */
     bool Create(wxWindow* parent, wxWindowID id,
-                const wxString& value = "",
+                const wxString& value = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = 0,
+                const wxSize& size = wxDefaultSize, long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxTextCtrlNameStr);
 
@@ -1217,7 +1216,7 @@ public:
 
         @see SetDefaultStyle()
     */
-    const wxTextAttr GetDefaultStyle() const;
+    virtual const wxTextAttr& GetDefaultStyle() const;
 
     /**
         Returns the insertion point, or cursor, position.
@@ -1508,7 +1507,7 @@ public:
         @return
             @true if the operation was successful, @false otherwise.
     */
-    bool SaveFile(const wxString& filename,
+    bool SaveFile(const wxString& filename = wxEmptyString,
                   int fileType = wxTEXT_TYPE_ANY);
 
     /**
@@ -1545,7 +1544,7 @@ public:
 
         @see IsEditable()
     */
-    virtual void SetEditable(const bool editable);
+    virtual void SetEditable(bool editable);
 
     /**
         Sets the insertion point at the given position.

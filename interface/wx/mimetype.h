@@ -324,7 +324,7 @@ public:
         This happens when one file extension is mapped to different MIME types
         by KDE, mailcap and mime.types.
     */
-    bool GetMimeType(wxArrayString& mimeTypes);
+    bool GetMimeTypes(wxArrayString& mimeTypes) const;
 
     //@{
     /**
@@ -351,6 +351,7 @@ public:
 
         The name of the file is retrieved from the MessageParameters class.
     */
-    bool GetPrintCommand(wxString* command, MessageParameters& params);
+    bool GetPrintCommand(wxString* command,
+                         const MessageParameters& params) const;
 };
 

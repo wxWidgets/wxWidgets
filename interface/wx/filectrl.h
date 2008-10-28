@@ -96,11 +96,10 @@ public:
     bool Create(wxWindow* parent, wxWindowID id,
                 const wxString& defaultDirectory = wxEmptyString,
                 const wxString& defaultFilename = wxEmptyString,
-                const wxPoint& wildCard = wxFileSelectorDefaultWildcardStr,
-                long style = wxFC_DEFAULT_STYLE,
-                const wxPoint& pos = wxDefaultPosition,
+                const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
+                long style = wxFC_DEFAULT_STYLE, const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                const wxString& name = "filectrl");
+                const wxString& name = wxFileCtrlNameStr);
 
     /**
         Returns the current directory of the file control (i.e. the directory shown by it).
@@ -178,7 +177,7 @@ public:
     /**
         Sets whether hidden files and folders are shown or not.
     */
-    void ShowHidden(const bool show);
+    virtual void ShowHidden(bool show);
 };
 
 
@@ -233,7 +232,7 @@ public:
     /**
         Sets the files changed by this event.
     */
-    void SetFiles(const wxArrayString files);
+    void SetFiles(const wxArrayString& files);
 
 
     /**

@@ -153,7 +153,7 @@ public:
         @see GetFilesList()
     */
     bool GetDirList(wxArrayString& files,
-                    const wxString& wildcard = "");
+                    const wxString& wildcard = wxEmptyString);
 
     /**
         Returns the file size in bytes or -1 if the file doesn't exist or the size
@@ -177,7 +177,7 @@ public:
         @see GetDirList()
     */
     bool GetFilesList(wxArrayString& files,
-                      const wxString& wildcard = "");
+                      const wxString& wildcard = wxEmptyString);
 
     /**
         Creates a new input stream on the specified path.
@@ -197,7 +197,7 @@ public:
     /**
         Returns the last command result, i.e. the full server reply for the last command.
     */
-    const wxString GetLastResult();
+    const wxString& GetLastResult();
 
     /**
         Initializes an output stream to the specified @e file.

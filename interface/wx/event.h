@@ -2399,7 +2399,7 @@ public:
 
         @see SetOrigin()
     */
-    wxHelpEventOrigin GetOrigin() const;
+    wxHelpEvent::Origin GetOrigin() const;
 
     /**
         Returns the left-click position of the mouse, in screen coordinates.
@@ -2412,7 +2412,7 @@ public:
 
         @see GetOrigin()
     */
-    void SetOrigin(wxHelpEventOrigin);
+    void SetOrigin(wxHelpEvent::Origin origin);
 
     /**
         Sets the left-click position of the mouse, in screen coordinates.

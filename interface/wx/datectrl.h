@@ -133,7 +133,7 @@ public:
 
         @remarks If the format parameter is invalid, the behaviour is undefined.
     */
-    void SetFormat(const wxChar* format);
+    bool SetFormat(const wxString& format);
 
     /**
         Sets the valid range for the date selection. If @a dt1 is valid, it

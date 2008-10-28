@@ -85,7 +85,7 @@ public:
         Adds a line to the end of file.
     */
     void AddLine(const wxString& str,
-                 wxTextFileType type = typeDefault) const;
+                 wxTextFileType type = wxTextBuffer::typeDefault);
 
     /**
         Delete all lines from the file, set current line number to 0.
@@ -154,7 +154,7 @@ public:
         // do something with the last line in str
         @endcode
     */
-    wxString GetFirstLine() const;
+    wxString& GetFirstLine();
 
     /**
         Gets the last line of the file.
@@ -174,7 +174,7 @@ public:
         // do something with the first line in str
         @endcode
     */
-    wxString GetLastLine();
+    wxString& GetLastLine();
 
     /**
         Retrieves the line number @a n from the file.
@@ -182,7 +182,7 @@ public:
         The returned line may be modified but you shouldn't add line terminator
         at the end - this will be done by wxTextFile.
     */
-    wxString GetLine(size_t n) const;
+    wxString& GetLine(size_t n) const;
 
     /**
         Get the number of lines in the file.
@@ -197,17 +197,17 @@ public:
     /**
         Get the name of the file.
     */
-    const char* GetName() const;
+    const wxString& GetName() const;
 
     /**
         Gets the next line (see GetFirstLine() for the example).
     */
-    wxString GetNextLine();
+    wxString& GetNextLine();
 
     /**
         Gets the previous line in the file.
     */
-    wxString GetPrevLine();
+    wxString& GetPrevLine();
 
     /**
         Changes the value returned by GetCurrentLine() and used by GetFirstLine()
@@ -228,7 +228,7 @@ public:
         Insert a line before the line number @a n.
     */
     void InsertLine(const wxString& str, size_t n,
-                    wxTextFileType type = typeDefault) const;
+                    wxTextFileType type = wxTextBuffer::typeDefault);
 
     /**
         Returns @true if the file is currently opened.
@@ -274,6 +274,6 @@ public:
     /**
         The same as GetLine().
     */
-    wxString operator[](size_t n) const;
+    wxString& operator[](size_t n) const;
 };
 

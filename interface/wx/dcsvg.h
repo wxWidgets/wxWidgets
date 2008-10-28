@@ -461,7 +461,7 @@ public:
 
         @see SetUserScale()
     */
-    void GetUserScale(double x, double y);
+    void GetUserScale(double* x, double* y) const;
 
     /**
         Converts logical X coordinate to device coordinate, using the current

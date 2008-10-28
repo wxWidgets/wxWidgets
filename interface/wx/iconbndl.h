@@ -91,7 +91,7 @@ public:
     /**
         Assignment operator, using @ref overview_refcount "reference counting".
     */
-    wxIconBundle operator =(const wxIconBundle& ic);
+    wxIconBundle& operator=(const wxIconBundle& ic);
 
     /**
         Equality operator. This returns @true if two icon bundles are equal.

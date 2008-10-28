@@ -86,7 +86,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxTAB_TRAVERSAL,
-                const wxString& name = "panel");
+                const wxString& name = wxPanelNameStr);
 
     /**
         Sends a wxInitDialogEvent, which in turn transfers data to the dialog via

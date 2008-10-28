@@ -234,7 +234,7 @@ public:
     /**
         Returns the last position in the combobox text field.
     */
-    virtual wxTextPos GetLastPosition() const;
+    virtual long GetLastPosition() const;
 
     /**
         This is the same as wxTextCtrl::GetSelection() for the text control

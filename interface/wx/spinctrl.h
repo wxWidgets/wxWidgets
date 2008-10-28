@@ -91,13 +91,12 @@ public:
         Creation function called by the spin control constructor.
         See wxSpinCtrl() for details.
     */
-    bool Create(wxWindow* parent, wxWindowID id = -1,
+    bool Create(wxWindow* parent, wxWindowID id = wxID_ANY,
                 const wxString& value = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxSP_ARROW_KEYS,
-                int min = 0, int max = 100,
-                int initial = 0, const wxString& name = _T("wxSpinCtrl"));
+                long style = wxSP_ARROW_KEYS, int min = 0, int max = 100,
+                int initial = 0, const wxString& name = "wxSpinCtrl");
 
     /**
         Gets maximal allowable value.

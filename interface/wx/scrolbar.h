@@ -157,10 +157,9 @@ public:
     */
     bool Create(wxWindow* parent, wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = wxSB_HORIZONTAL,
+                const wxSize& size = wxDefaultSize, long style = wxSB_HORIZONTAL,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = "scrollBar");
+                const wxString& name = wxScrollBarNameStr);
 
     /**
         Returns the page size of the scrollbar.

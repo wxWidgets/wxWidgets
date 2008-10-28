@@ -78,8 +78,7 @@ public:
         (if present) to "Unknown" or to @a newmsg (if it's non-empty); moves the progress
         bar a bit to indicate that some progress was done.
     */
-    virtual bool Pulse(const wxString& newmsg = "",
-                       bool* skip = NULL);
+    virtual bool Pulse(const wxString& newmsg = wxEmptyString, bool* skip = NULL);
 
     /**
         Can be used to continue with the dialog, after the user had clicked the "Abort" button.
