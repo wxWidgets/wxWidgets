@@ -78,7 +78,7 @@ public:
     //
     // CAUTION! Render() changes DC's user scale and does NOT restore it!
     int Render(int x, int y, wxArrayInt& known_pagebreaks, int from = 0,
-               int dont_render = FALSE, int to = INT_MAX);
+               int dont_render = false, int to = INT_MAX);
 
     // returns total height of the html document
     // (compare Render's return value with this)
