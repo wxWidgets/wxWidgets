@@ -2013,23 +2013,21 @@ void wxFileHistory::AddFileToHistory(const wxString& file)
     {
         RemoveFileFromHistory(--numFiles);
     }
-    else // add a new menu item to all file menus (will be updated below)
+
+    // add a new menu item to all file menus (they will be updated below)
+    for ( wxList::compatibility_iterator node = m_fileMenus.GetFirst();
+        node;
+        node = node->GetNext() )
     {
-        for ( wxList::compatibility_iterator node = m_fileMenus.GetFirst();
-              node;
-              node = node->GetNext() )
-        {
-            wxMenu * const menu = (wxMenu *)node->GetData();
+        wxMenu * const menu = (wxMenu *)node->GetData();
 
-            if ( !numFiles && menu->GetMenuItemCount() )
-                menu->AppendSeparator();
+        if ( !numFiles && menu->GetMenuItemCount() )
+            menu->AppendSeparator();
 
-            // label doesn't matter, it will be set below anyhow, but it can't
-            // be empty (this is supposed to indicate a stock item)
-            menu->Append(m_idBase + numFiles, " ");
-        }
+        // label doesn't matter, it will be set below anyhow, but it can't
+        // be empty (this is supposed to indicate a stock item)
+        menu->Append(m_idBase + numFiles, " ");
     }
-
 
     // insert the new file in the beginning of the file history
     m_fileHistory.insert(m_fileHistory.begin(), file);
