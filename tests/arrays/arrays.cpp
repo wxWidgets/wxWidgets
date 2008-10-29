@@ -474,26 +474,26 @@ void ArraysTestCase::wxObjArrayTest()
         ArrayBars bars;
         Bar bar(_T("first bar in general, second bar in array (two copies!)"));
 
-        CPPUNIT_ASSERT( bars.GetCount() == 0 );
-        CPPUNIT_ASSERT( Bar::GetNumber() == 1 );
+        CPPUNIT_ASSERT_EQUAL( 0, bars.GetCount() );
+        CPPUNIT_ASSERT_EQUAL( 1, Bar::GetNumber() );
 
         bars.Add(new Bar(_T("first bar in array")));
         bars.Add(bar,2);
 
-        CPPUNIT_ASSERT( bars.GetCount() == 3 );
-        CPPUNIT_ASSERT( Bar::GetNumber() == 4 );
+        CPPUNIT_ASSERT_EQUAL( 3, bars.GetCount() );
+        CPPUNIT_ASSERT_EQUAL( 4, Bar::GetNumber() );
 
         bars.RemoveAt(1, bars.GetCount() - 1);
 
-        CPPUNIT_ASSERT( bars.GetCount() == 1 );
-        CPPUNIT_ASSERT( Bar::GetNumber() == 2 );
+        CPPUNIT_ASSERT_EQUAL( 1, bars.GetCount() );
+        CPPUNIT_ASSERT_EQUAL( 2, Bar::GetNumber() );
 
         bars.Empty();
 
-        CPPUNIT_ASSERT( bars.GetCount() == 0 );
-        CPPUNIT_ASSERT( Bar::GetNumber() == 1 );
+        CPPUNIT_ASSERT_EQUAL( 0, bars.GetCount() );
+        CPPUNIT_ASSERT_EQUAL( 1, Bar::GetNumber() );
     }
-    CPPUNIT_ASSERT( Bar::GetNumber() == 0 );
+    CPPUNIT_ASSERT_EQUAL( 0, Bar::GetNumber() );
 }
 
 #define TestArrayOf(name)                                                     \
