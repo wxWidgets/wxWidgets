@@ -52,6 +52,8 @@
 class WXDLLIMPEXP_FWD_NET wxTCPServer;
 class WXDLLIMPEXP_FWD_NET wxTCPClient;
 
+class wxIPCSocketStreams;
+
 class WXDLLIMPEXP_NET wxTCPConnection : public wxConnectionBase
 {
 public:
@@ -85,11 +87,19 @@ protected:
                           wxIPCFormat format);
 
 
-    wxSocketBase       *m_sock;
-    wxSocketStream     *m_sockstrm;
-    wxDataInputStream  *m_codeci;
-    wxDataOutputStream *m_codeco;
-    wxString            m_topic;
+    // notice that all the members below are only initialized once the
+    // connection is made, i.e. in MakeConnection() for the client objects and
+    // after OnAcceptConnection() in the server ones
+
+    // the underlying socket (wxSocketClient for IPC client and wxSocketServer
+    // for IPC server)
+    wxSocketBase *m_sock;
+
+    // various streams that we use
+    wxIPCSocketStreams *m_streams;
+
+    // the topic of this connection
+    wxString m_topic;
 
 private:
     // common part of both ctors

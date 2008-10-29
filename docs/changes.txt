@@ -316,6 +316,7 @@ All:
 All (Unix):
 
 - Added wx-config --optional-libs command line option (John Labenski).
+- Noticeably (by a factor of ~150) improve wxIPC classes performance.
 
 All (GUI):
 
