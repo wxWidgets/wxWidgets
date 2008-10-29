@@ -170,6 +170,7 @@ private:
         CPPUNIT_TEST( wxArrayCharTest );
         CPPUNIT_TEST( TestSTL );
         CPPUNIT_TEST( Alloc );
+        CPPUNIT_TEST( Clear );
         CPPUNIT_TEST( Swap );
     CPPUNIT_TEST_SUITE_END();
 
@@ -183,6 +184,7 @@ private:
     void wxArrayCharTest();
     void TestSTL();
     void Alloc();
+    void Clear();
     void Swap();
 
     DECLARE_NO_COPY_CLASS(ArraysTestCase)
@@ -478,7 +480,7 @@ void ArraysTestCase::wxObjArrayTest()
         CPPUNIT_ASSERT_EQUAL( 1, Bar::GetNumber() );
 
         bars.Add(new Bar(_T("first bar in array")));
-        bars.Add(bar,2);
+        bars.Add(bar, 2);
 
         CPPUNIT_ASSERT_EQUAL( 3, bars.GetCount() );
         CPPUNIT_ASSERT_EQUAL( 4, Bar::GetNumber() );
@@ -555,6 +557,21 @@ void ArraysTestCase::Alloc()
     CPPUNIT_ASSERT_EQUAL( size_t(2), a.GetCount() );
     CPPUNIT_ASSERT_EQUAL( 17, a[0] );
     CPPUNIT_ASSERT_EQUAL( 9, a[1] );
+}
+
+void ArraysTestCase::Clear()
+{
+    ItemPtrArray items;
+
+    WX_CLEAR_ARRAY(items);
+    CPPUNIT_ASSERT_EQUAL( 0, items.size() );
+
+    items.push_back(new Item(17));
+    items.push_back(new Item(71));
+    CPPUNIT_ASSERT_EQUAL( 2, items.size() );
+
+    WX_CLEAR_ARRAY(items);
+    CPPUNIT_ASSERT_EQUAL( 0, items.size() );
 }
 
 namespace
