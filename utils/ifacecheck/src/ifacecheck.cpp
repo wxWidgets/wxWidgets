@@ -265,10 +265,10 @@ bool IfaceCheckApp::Compare()
         }
     }
 
-    LogMessage("%d methods (%.1f%%) of the interface headers do not exist in the real headers",
-               mcount, (float)(100.0 * mcount/m_doxyInterface.GetMethodCount()));
-    LogMessage("%d classes (%.1f%%) of the interface headers do not exist in the real headers",
-               ccount, (float)(100.0 * ccount/m_doxyInterface.GetClassesCount()));
+    LogMessage("%d on a total of %d methods (%.1f%%) of the interface headers do not exist in the real headers",
+               mcount, m_doxyInterface.GetMethodCount(), (float)(100.0 * mcount/m_doxyInterface.GetMethodCount()));
+    LogMessage("%d on a total of %d classes (%.1f%%) of the interface headers do not exist in the real headers",
+               ccount, m_doxyInterface.GetClassesCount(), (float)(100.0 * ccount/m_doxyInterface.GetClassesCount()));
 
     return true;
 }
@@ -302,24 +302,44 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClass* api)
         // search in the methods of the api classes provided
         real = api->RecursiveUpwardFindMethod(m, &m_gccInterface);
 
-        //
+        // avoid some false positives:
         if (!real && m.ActsAsDefaultCtor())
         {
-            // build an artifical default ctor for this class:
+            // build an artificial default ctor for this class:
             wxMethod temp(m);
             temp.GetArgumentTypes().Clear();
 
+            // repeat search:
             real = api->RecursiveUpwardFindMethod(temp, &m_gccInterface);
         }
 
+        // no matches?
         if (!real)
         {
+            bool proceed = true;
             wxMethodPtrArray overloads =
                 api->RecursiveUpwardFindMethodsNamed(m.GetName(), &m_gccInterface);
 
-#define HACK_TO_AUTO_CORRECT_ONLY_METHOD_ATTRIBUTES        1
+            // avoid false positives:
+            for (unsigned int k=0; k<overloads.GetCount(); k++)
+                if (overloads[k]->MatchesExceptForAttributes(m) &&
+                    m.IsDeprecated() && !overloads[k]->IsDeprecated())
+                {
+                    // maybe the iface method is marked as deprecated but the
+                    // real method is not?
+                    wxMethod tmp(*overloads[k]);
+                    tmp.SetDeprecated(true);
+
+                    if (tmp == m)
+                    {
+                        // in this case, we can disregard this warning... the real
+                        // method probably is included in WXWIN_COMPAT sections!
+                        proceed = false;    // skip this method
+                    }
+                }
+
+#define HACK_TO_AUTO_CORRECT_ONLY_METHOD_ATTRIBUTES        0
 #if HACK_TO_AUTO_CORRECT_ONLY_METHOD_ATTRIBUTES
-            bool exit = false;
             for (unsigned int k=0; k<overloads.GetCount(); k++)
                 if (overloads[k]->MatchesExceptForAttributes(m))
                 {
@@ -331,68 +351,64 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClass* api)
                     if (FixMethod(iface->GetHeader(), &m, &tmp))
                         LogMessage("Adjusted attributes of '%s' method", m.GetAsString());
 
-                    exit = true;
+                    proceed = false;
                     break;
                 }
-
-            if (!exit)
-            {
 #endif // HACK_TO_AUTO_CORRECT_ONLY_METHOD_ATTRIBUTES
 
-            if (overloads.GetCount()==0)
+            if (proceed)
             {
-                LogMessage("%s: real '%s' class and their parents have no method '%s'",
-                            header, api->GetName(), m.GetAsString());
-                // we've found no overloads
-            }
-            else
-            {
-                // first, output a warning
-                wxString warning = header;
-                if (overloads.GetCount()>1)
-                    warning += wxString::Format(": in the real headers there are %d overloads of '%s' for "
-                                                "'%s' all with different signatures:\n",
-                                                overloads.GetCount(), m.GetName(), api->GetName());
-                else {
-                    warning += wxString::Format(": in the real headers there is a method '%s' for '%s'"
-                                                " but has different signature:\n",
-                                                m.GetName(), api->GetName());
-                }
-
-                // get a list of the prototypes with _all_ possible attributes:
-                warning += "\tdoxy header: " + m.GetAsString(true, true, true, true);
-                for (unsigned int j=0; j<overloads.GetCount(); j++)
-                    warning += "\n\treal header: " + overloads[j]->GetAsString(true, true, true, true);
-
-                wxPrint(warning + "\n");
-                count++;
-
-                if (overloads.GetCount()>1)
+                if (overloads.GetCount()==0)
                 {
-                    // TODO: decide which of these overloads is the most "similar" to m
-                    //       and eventually modify it
-                    if (m_modify)
-                        wxPrint("\tmanual fix is required\n");
+                    LogMessage("%s: real '%s' class and their parents have no method '%s'",
+                                header, api->GetName(), m.GetAsString());
+                    // we've found no overloads
                 }
                 else
                 {
-                    wxASSERT(overloads.GetCount() == 1);
+                    // first, output a warning
+                    wxString warning = header;
+                    if (overloads.GetCount()>1)
+                        warning += wxString::Format(": in the real headers there are %d overloads of '%s' for "
+                                                    "'%s' all with different signatures:\n",
+                                                    overloads.GetCount(), m.GetName(), api->GetName());
+                    else {
+                        warning += wxString::Format(": in the real headers there is a method '%s' for '%s'"
+                                                    " but has different signature:\n",
+                                                    m.GetName(), api->GetName());
+                    }
 
-                    if (m_modify || m.IsCtor())
+                    // get a list of the prototypes with _all_ possible attributes:
+                    warning += "\tdoxy header: " + m.GetAsString(true, true, true, true);
+                    for (unsigned int j=0; j<overloads.GetCount(); j++)
+                        warning += "\n\treal header: " + overloads[j]->GetAsString(true, true, true, true);
+
+                    wxPrint(warning + "\n");
+                    count++;
+
+                    if (overloads.GetCount()>1)
                     {
-                        wxPrint("\tfixing it...\n");
+                        // TODO: decide which of these overloads is the most "similar" to m
+                        //       and eventually modify it
+                        if (m_modify)
+                            wxPrint("\tmanual fix is required\n");
+                    }
+                    else
+                    {
+                        wxASSERT(overloads.GetCount() == 1);
 
-                        // try to modify it!
-                        FixMethod(iface->GetHeader(), &m, overloads[0]);
+                        if (m_modify || m.IsCtor())
+                        {
+                            wxPrint("\tfixing it...\n");
+
+                            // try to modify it!
+                            FixMethod(iface->GetHeader(), &m, overloads[0]);
+                        }
                     }
                 }
-            }
 
-            count++;
-
-#if HACK_TO_AUTO_CORRECT_ONLY_METHOD_ATTRIBUTES
-            }
-#endif
+                count++;
+            }       // if (proceed)
         }
     }
 

@@ -173,6 +173,7 @@ void wxArgumentType::SetDefaultValue(const wxString& defval, const wxString& def
 
         p->Replace("0x000000001", "1");
         p->Replace("\\000\\000\\000", "");    // fix for unicode strings:
+        p->Replace("\\011", "\\t");
 
         // ADHOC-FIX: for wxConv* default values
         p->Replace("wxConvAuto(wxFONTENCODING_DEFAULT)", "wxConvAuto()");
