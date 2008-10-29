@@ -261,7 +261,7 @@ public:
     /**
         Writes a character to the stream.
     */
-    void PutChar(wxChar c);
+    wxTextOutputStream& PutChar(wxChar c);
 
     /**
         Set the end-of-line mode. One of ::wxEOL_NATIVE, ::wxEOL_DOS,

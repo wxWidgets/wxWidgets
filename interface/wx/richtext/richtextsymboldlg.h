@@ -120,15 +120,10 @@ public:
         Creation: see @ref wxSymbolPickerDialog() "the constructor" for details about
         the parameters.
     */
-    bool Create(const wxString& symbol,
-                const wxString& initialFont,
-                const wxString& normalTextFont,
-                wxWindow* parent,
+    bool Create(const wxString& symbol, const wxString& initialFont,
+                const wxString& normalTextFont, wxWindow* parent,
                 wxWindowID id = wxID_ANY,
-                const wxString& title = _("Symbols"),
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxCLOSE_BOX);
+                const wxString& caption = wxGetTranslation("Symbols"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize(400, 300), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxCLOSE_BOX);
 
     /**
         Returns the font name (the font reflected in the font list).
@@ -163,7 +158,7 @@ public:
     /**
         Sets the initial/selected font name.
     */
-    void SetFontName(const wxString& value);
+    void SetFontName(wxString value);
 
     /**
         Sets the internal flag indicating that the full Unicode range should be
@@ -174,12 +169,12 @@ public:
     /**
         Sets the name of the font to be used in the absence of a selected font.
     */
-    void SetNormalTextFontName(const wxString& value);
+    void SetNormalTextFontName(wxString value);
 
     /**
         Sets the symbol as a one or zero character string.
     */
-    void SetSymbol(const wxString& value);
+    void SetSymbol(wxString value);
 
     /**
         Sets Unicode display mode.

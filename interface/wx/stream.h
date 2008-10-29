@@ -212,7 +212,7 @@ public:
     /**
         Returns the current position (counted in bytes) in the stream buffer.
     */
-    wxFileOffset GetIntPosition() const;
+    size_t GetIntPosition() const;
 
     /**
         Returns the amount of bytes read during the last IO call to the parent stream.
@@ -729,7 +729,7 @@ public:
         Returns the first character in the input queue and removes it,
         blocking until it appears if necessary.
     */
-    char GetC();
+    int GetC();
 
     /**
         Returns the last number of bytes read.

@@ -54,7 +54,8 @@ public:
         - SetHtmlText()
         <b>Render() changes the DC's user scale and does NOT restore it.</b>
     */
-    int Render(int x, int y, int from = 0, int dont_render = false);
+    int Render(int x, int y, wxArrayInt& known_pagebreaks, int from = 0,
+               int dont_render = 0, int to = INT_MAX);
 
     /**
         Assign DC instance to the renderer.
@@ -72,9 +73,8 @@ public:
 
         @see SetSize()
     */
-    void SetFonts(const wxString& normal_face,
-                  const wxString& fixed_face,
-                  const int sizes = NULL);
+    void SetFonts(const wxString& normal_face, const wxString& fixed_face,
+                  const int* sizes = NULL);
 
     /**
         Assign text to the renderer. Render() then draws the text onto DC.
@@ -202,9 +202,8 @@ public:
     /**
         Sets fonts. See wxHtmlWindow::SetFonts for detailed description.
     */
-    void SetFonts(const wxString& normal_face,
-                  const wxString& fixed_face,
-                  const int sizes = NULL);
+    void SetFonts(const wxString& normal_face, const wxString& fixed_face,
+                  const int* sizes = NULL);
 
     /**
         Set page footer. The following macros can be used inside it:
@@ -269,9 +268,8 @@ public:
     /**
         Sets fonts. See wxHtmlWindow::SetFonts for detailed description.
     */
-    void SetFonts(const wxString& normal_face,
-                  const wxString& fixed_face,
-                  const int sizes = NULL);
+    void SetFonts(const wxString& normal_face, const wxString& fixed_face,
+                  const int* sizes = NULL);
 
     /**
         Set page footer. The following macros can be used inside it:

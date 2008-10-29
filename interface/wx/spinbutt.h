@@ -139,11 +139,10 @@ public:
         Scrollbar creation function called by the spin button constructor.
         See wxSpinButton() for details.
     */
-    bool Create(wxWindow* parent, wxWindowID id,
+    bool Create(wxWindow* parent, wxWindowID id = -1,
                 const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = wxSP_HORIZONTAL,
-                const wxString& name = "spinButton");
+                const wxSize& size = wxDefaultSize, long style = wxSP_HORIZONTAL,
+                const wxString& name = "wxSpinButton");
 
     /**
         Returns the maximum permissible value.

@@ -239,7 +239,7 @@ public:
     /**
         If this item is tracking a spacer, return its size.
     */
-    const wxSize GetSpacer() const;
+    wxSize GetSpacer() const;
 
     /**
         Get the userData item attribute.
@@ -406,7 +406,7 @@ public:
 
         @see Top(), Left(), Right(), Bottom(), Centre()
     */
-    wxSizerFlags& Align(int align = 0);
+    wxSizerFlags& Align(int alignment);
 
     /**
         Sets the wxSizerFlags to have a border of a number of pixels specified
@@ -493,7 +493,7 @@ public:
     /**
         Sets the proportion of this wxSizerFlags to @e proportion
     */
-    wxSizerFlags& Proportion(int proportion = 0);
+    wxSizerFlags& Proportion(int proportion);
 
     /**
         Aligns the object to the right, similar for @c Align(wxALIGN_RIGHT).
@@ -655,7 +655,7 @@ public:
 
         @see SetFlexibleDirection(), SetNonFlexibleGrowMode()
     */
-    int GetNonFlexibleGrowMode() const;
+    wxFlexSizerGrowMode GetNonFlexibleGrowMode() const;
 
     /**
         Returns @true if column @a idx is growable.

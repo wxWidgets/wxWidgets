@@ -67,7 +67,7 @@ public:
         RC.SetCurrent(win); and @e win.SetCurrent(RC); are equivalent,
         see wxGLCanvas::SetCurrent.
     */
-    void SetCurrent(const wxGLCanvas& win);
+    virtual bool SetCurrent(const wxGLCanvas& win) const;
 };
 
 /**
@@ -244,7 +244,7 @@ public:
         Sets the current colour for this window (using @c glcolor3f()), using the
         wxWidgets colour database to find a named colour.
     */
-    void SetColour(const wxString& colour);
+    bool SetColour(const wxString& colour);
 
     /**
         Makes the OpenGL state that is represented by the OpenGL rendering context

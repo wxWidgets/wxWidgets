@@ -50,17 +50,17 @@ public:
     /**
         Returns array with help books info.
     */
-    const wxHtmlBookRecArray GetBookRecArray();
+    const wxHtmlBookRecArray& GetBookRecArray() const;
 
     /**
         Returns reference to array with contents entries.
     */
-    const wxHtmlHelpDataItems GetContentsArray();
+    const wxHtmlHelpDataItems& GetContentsArray() const;
 
     /**
         Returns reference to array with index entries.
     */
-    const wxHtmlHelpDataItems GetIndexArray();
+    const wxHtmlHelpDataItems& GetIndexArray() const;
 
     /**
         Sets the temporary directory where binary cached versions of MS HTML Workshop

@@ -100,7 +100,8 @@ public:
         while (container->AdjustPagebreak(&p)) {}
         @endcode
     */
-    virtual bool AdjustPagebreak(int* pagebreak);
+    virtual bool AdjustPagebreak(int* pagebreak,
+                                 wxArrayInt& known_pagebreaks) const;
 
     /**
         Renders the cell.
@@ -121,7 +122,7 @@ public:
             y-coord of the last line visible in window.
             This is used to optimize rendering speed
     */
-    virtual void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2);
+    virtual void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2, wxHtmlRenderingInfo& info);
 
     /**
         This method is called instead of Draw() when the cell is certainly out of
@@ -138,7 +139,7 @@ public:
                 dc->DrawText("hello", x + m_PosX, y + m_PosY)
             @endcode
     */
-    virtual void DrawInvisible(wxDC& dc, int x, int y);
+    virtual void DrawInvisible(wxDC& cd, int x , int y, wxHtmlRenderingInfo& info);
 
     /**
         Returns pointer to itself if this cell matches condition (or if any of the
@@ -182,7 +183,7 @@ public:
     /**
         Returns unique cell identifier if there is any, the empty string otherwise.
     */
-    virtual wxString GetId() const;
+    const wxString& GetId() const;
 
     /**
         Returns hypertext link if associated with this cell or @NULL otherwise.
@@ -284,13 +285,13 @@ public:
         Sets the next cell in the list. This shouldn't be called by user - it is
         to be used only by wxHtmlContainerCell::InsertCell.
     */
-    void SetNext(wxHtmlCell cell);
+    void SetNext(wxHtmlCell* cell);
 
     /**
         Sets parent container of this cell.
         This is called from wxHtmlContainerCell::InsertCell.
     */
-    void SetParent(wxHtmlContainerCell p);
+    void SetParent(wxHtmlContainerCell* p);
 
     /**
         Sets the cell's position within parent container.
@@ -353,7 +354,7 @@ public:
     /**
         Inserts a new cell into the container.
     */
-    void InsertCell(wxHtmlCell cell);
+    void InsertCell(wxHtmlCell* cell);
 
     /**
         Sets the container's alignment (both horizontal and vertical) according to

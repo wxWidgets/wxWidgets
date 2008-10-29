@@ -114,7 +114,7 @@ public:
     /**
         Gets the range for the current operation.
     */
-    wxRichTextRange GetRange() const;
+    const wxRichTextRange& GetRange() const;
 
     /**
         Sets the character variable.
@@ -389,7 +389,7 @@ public:
         See BeginNumberedBullet() for an explanation of how indentation is used
         to render the bulleted paragraph.
     */
-    bool BeginSymbolBullet(wxChar symbol, int leftIndent,
+    bool BeginSymbolBullet(const wxString& symbol, int leftIndent,
                            int leftSubIndent,
                            int bulletStyle = wxTEXT_ATTR_BULLET_STYLE_SYMBOL);
 
@@ -649,7 +649,7 @@ public:
         applied (for example, setting the default style to bold will cause
         subsequently inserted text to be bold).
     */
-    const wxTextAttr GetBasicStyle() const;
+    virtual const wxTextAttr& GetBasicStyle() const;
 
     //@{
     /**
@@ -678,7 +678,7 @@ public:
         Returns the current default style, which can be used to change how subsequently
         inserted text is displayed.
     */
-    const wxTextAttr GetDefaultStyle() const;
+    virtual const wxTextAttr& GetDefaultStyle() const;
 
     /**
         Gets the size of the buffer beyond which layout is delayed during resizing.
@@ -756,7 +756,7 @@ public:
     /**
         Returns the selection range in character positions. -1, -1 means no selection.
     */
-    const wxRichTextRange GetSelectionRange() const;
+    wxRichTextRange GetSelectionRange() const;
 
     /**
         Returns the text within the current selection range, if any.

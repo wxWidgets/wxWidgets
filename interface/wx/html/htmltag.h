@@ -33,7 +33,7 @@ public:
         Example: tag contains \<FONT SIZE=+2 COLOR="#000000"\>.
         Call to tag.GetAllParams() would return @c 'SIZE=+2 COLOR="#000000"'.
     */
-    const wxString GetAllParams() const;
+    wxString GetAllParams() const;
 
     /**
         Returns beginning position of the text @e between this tag and paired

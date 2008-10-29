@@ -297,7 +297,7 @@ public:
     /**
         Closes the file.
     */
-    void Close();
+    bool Close();
 
     /**
         Creates a file for writing.
@@ -378,7 +378,7 @@ public:
             An OR-combination of wxPosixPermissions enumeration values.
     */
     bool Open(const wxString& filename,
-              wxFile::OpenMode mode = wxFile::read,
+    bool Open(const wxString& filename, wxFile::OpenMode mode = wxFile::read,
               int access = wxS_DEFAULT);
 
     /**
@@ -391,7 +391,7 @@ public:
 
         @return The number of bytes read, or the symbol wxInvalidOffset.
     */
-    size_t Read(void* buffer, size_t count);
+    ssize_t Read(void* buffer, size_t count);
 
     /**
         Seeks to the specified position.

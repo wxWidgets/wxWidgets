@@ -157,12 +157,12 @@ public:
     /**
         Displays help window and focuses contents panel.
     */
-    void DisplayContents();
+    virtual bool DisplayContents();
 
     /**
         Displays help window and focuses index panel.
     */
-    void DisplayIndex();
+    bool DisplayIndex();
 
     /**
         Displays the help window, focuses search panel and starts searching.
@@ -180,8 +180,8 @@ public:
     /**
         Reads the controller's setting (position of window, etc.)
     */
-    void ReadCustomization(wxConfigBase* cfg,
-                           wxString path = wxEmptyString);
+    virtual void ReadCustomization(wxConfigBase* cfg,
+                                   const wxString& path = wxEmptyString);
 
     /**
         Sets the path for storing temporary files - cached binary versions of index and
@@ -220,8 +220,8 @@ public:
     /**
         Stores controllers setting (position of window etc.)
     */
-    void WriteCustomization(wxConfigBase* cfg,
-                            wxString path = wxEmptyString);
+    virtual void WriteCustomization(wxConfigBase* cfg,
+                                    const wxString& path = wxEmptyString);
 };
 
 

@@ -134,17 +134,17 @@ public:
     /**
         Returns the style on which this style is based.
     */
-    const wxString GetBaseStyle() const;
+    const wxString& GetBaseStyle() const;
 
     /**
         Returns the style's description.
     */
-    const wxString GetDescription() const;
+    const wxString& GetDescription() const;
 
     /**
         Returns the style name.
     */
-    const wxString GetName() const;
+    const wxString& GetName() const;
 
     //@{
     /**
@@ -158,7 +158,7 @@ public:
         Returns the style attributes combined with the attributes of the specified base
         style, if any. This function works recursively.
     */
-    wxTextAttr GetStyleMergedWithBase(wxRichTextStyleSheet* sheet) const;
+    virtual wxTextAttr GetStyleMergedWithBase(const wxRichTextStyleSheet* sheet) const;
 
     /**
         Sets the name of the style that this style is based on.
@@ -208,7 +208,7 @@ public:
     /**
         Returns the style that should normally follow this style.
     */
-    const wxString GetNextStyle() const;
+    const wxString& GetNextStyle() const;
 
     /**
         Sets the style that should normally follow this style.
@@ -506,7 +506,7 @@ public:
     /**
         Returns @true if the given level has numbered list attributes.
     */
-    int IsNumbered(int level) const;
+    bool IsNumbered(int level) const;
 
     //@{
     /**
@@ -577,17 +577,20 @@ public:
     /**
         Finds a character definition by name.
     */
-    wxRichTextCharacterStyleDefinition* FindCharacterStyle(const wxString& name) const;
+    wxRichTextCharacterStyleDefinition* FindCharacterStyle(const wxString& name,
+                                                           bool recurse = true) const;
 
     /**
         Finds a list definition by name.
     */
-    wxRichTextListStyleDefinition* FindListStyle(const wxString& name) const;
+    wxRichTextListStyleDefinition* FindListStyle(const wxString& name,
+                                                 bool recurse = true) const;
 
     /**
         Finds a paragraph definition by name.
     */
-    wxRichTextParagraphStyleDefinition* FindParagraphStyle(const wxString& name) const;
+    wxRichTextParagraphStyleDefinition* FindParagraphStyle(const wxString& name,
+                                                           bool recurse = true) const;
 
     /**
         Finds a style definition by name.
@@ -607,7 +610,7 @@ public:
     /**
         Returns the style sheet's description.
     */
-    const wxString GetDescription() const;
+    const wxString& GetDescription() const;
 
     /**
         Returns the @e nth list style.
@@ -622,7 +625,7 @@ public:
     /**
         Returns the style sheet's name.
     */
-    const wxString GetName() const;
+    const wxString& GetName() const;
 
     /**
         Returns the @e nth paragraph style.

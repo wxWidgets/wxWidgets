@@ -283,8 +283,8 @@ public:
     /**
         Creates a native graphics font from a wxFont and a text colour.
     */
-    wxGraphicsFont CreateFont(const wxFont& font,
-                              const wxColour& col = wxBLACK) const;
+    virtual wxGraphicsFont CreateFont(const wxFont& font,
+                                      const wxColour& col = *wxBLACK) const;
 
     /**
         Creates a wxGraphicsContext from a native context. This native context must be
@@ -317,9 +317,8 @@ public:
         Creates a native affine transformation matrix from the passed in values. The
         defaults result in an identity matrix.
     */
-    wxGraphicsMatrix CreateMatrix(wxDouble a = 1.0, wxDouble b = 0.0,
-                                  wxDouble c = 0.0,
-                                  wxDouble d = 1.0,
+    virtual wxGraphicsMatrix CreateMatrix(wxDouble a = 1.0, wxDouble b = 0.0,
+                                          wxDouble c = 0.0, wxDouble d = 1.0,
                                   wxDouble tx = 0.0,
                                   wxDouble ty = 0.0) const;
 
@@ -565,8 +564,8 @@ public:
     /**
         Creates a native graphics font from a wxFont and a text colour.
     */
-    wxGraphicsFont CreateFont(const wxFont& font,
-                              const wxColour& col = wxBLACK);
+    virtual wxGraphicsFont CreateFont(const wxFont& font,
+                                      const wxColour& col = *wxBLACK) = 0;
 
     /**
         Creates a native brush, having a linear gradient, starting at (x1,y1) with
@@ -583,11 +582,10 @@ public:
         Creates a native affine transformation matrix from the passed in values. The
         defaults result in an identity matrix.
     */
-    wxGraphicsMatrix CreateMatrix(wxDouble a = 1.0, wxDouble b = 0.0,
-                                  wxDouble c = 0.0,
-                                  wxDouble d = 1.0,
+    virtual wxGraphicsMatrix CreateMatrix(wxDouble a = 1.0, wxDouble b = 0.0,
+                                          wxDouble c = 0.0, wxDouble d = 1.0,
                                   wxDouble tx = 0.0,
-                                  wxDouble ty = 0.0);
+                                          wxDouble ty = 0.0) = 0;
 
     /**
         Creates a native graphics path which is initially empty.
@@ -739,9 +737,8 @@ public:
         Sets the matrix to the respective values (default values are the identity
         matrix)
     */
-    void Set(wxDouble a = 1.0, wxDouble b = 0.0, wxDouble c = 0.0,
-             wxDouble d = 1.0, wxDouble tx = 0.0,
-             wxDouble ty = 0.0);
+    virtual void Set(wxDouble a = 1.0, wxDouble b = 0.0, wxDouble c = 0.0,
+                     wxDouble d = 1.0, wxDouble tx = 0.0, wxDouble ty = 0.0);
 
     /**
         Applies this matrix to a distance (ie. performs all transforms except

@@ -229,7 +229,7 @@ public:
         @param path
             Optional path in config tree. If not given current path is used.
     */
-    virtual void ReadCustomization(wxConfigBase cfg,
+    virtual void ReadCustomization(wxConfigBase* cfg,
                                    wxString path = wxEmptyString);
 
     /**
@@ -294,9 +294,8 @@ public:
         wxHTML_FONT_SIZE_2, ..., wxHTML_FONT_SIZE_7.
         Note that they differ among platforms. Default face names are empty strings.
     */
-    void SetFonts(const wxString& normal_face,
-                  const wxString& fixed_face,
-                  const int sizes = NULL);
+    void SetFonts(const wxString& normal_face, const wxString& fixed_face,
+                  const int* sizes = NULL);
 
     /**
         Sets HTML page and display it. This won't @b load the page!!
@@ -364,7 +363,7 @@ public:
         @param path
             Optional path in config tree. If not given, the current path is used.
     */
-    virtual void WriteCustomization(wxConfigBase cfg,
+    virtual void WriteCustomization(wxConfigBase* cfg,
                                     wxString path = wxEmptyString);
 
 protected:
@@ -389,7 +388,7 @@ protected:
 
         @return @true if a link was clicked, @false otherwise.
     */
-    virtual bool OnCellClicked(wxHtmlCell cell, wxCoord x, wxCoord y,
+    virtual bool OnCellClicked(wxHtmlCell* cell, wxCoord x, wxCoord y,
                                const wxMouseEvent& event);
 
     /**
@@ -406,7 +405,7 @@ protected:
         @param y
             The logical y coordinate of the click point
     */
-    virtual void OnCellMouseHover(wxHtmlCell cell, wxCoord x, wxCoord y);
+    virtual void OnCellMouseHover(wxHtmlCell* cell, wxCoord x, wxCoord y);
 };
 
 
@@ -490,6 +489,6 @@ public:
         With this function the event handler can return info to the wxHtmlWindow
         which sent the event.
     */
-    bool SetLinkClicked(bool linkclicked);
+    void SetLinkClicked(bool linkclicked);
 };
 

@@ -224,12 +224,10 @@ public:
         Used in two-step frame construction.
         See wxMDIParentFrame() for further details.
     */
-    bool Create(wxWindow* parent, wxWindowID id,
-                const wxString& title,
+    bool Create(wxWindow* parent, wxWindowID id, const wxString& title,
                 const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
-                const wxString& name = "frame");
+                const wxSize& size = wxDefaultSize, long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
+                const wxString& name = wxFrameNameStr);
 
     /**
         Returns a pointer to the active MDI child, if there is one.
@@ -290,7 +288,7 @@ public:
 
         @see SetToolBar()
     */
-    virtual wxWindow* GetToolBar() const;
+    virtual wxToolBar* GetToolBar() const;
 
     /**
         Returns the current Window menu (added by wxWidgets to the menubar). This
@@ -351,7 +349,7 @@ public:
 
         @see GetToolBar(), GetClientSize()
     */
-    virtual void SetToolBar(wxWindow* toolbar);
+    virtual void SetToolBar(wxToolBar* toolbar);
 
     /**
         Call this to change the current Window menu.
@@ -482,19 +480,18 @@ public:
         Used in two-step frame construction.
         See wxMDIChildFrame() for further details.
     */
-    bool Create(wxWindow* parent, wxWindowID id,
-                const wxString& title,
+    bool Create(wxMDIParentFrame* parent, wxWindowID id, const wxString& title,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
-                const wxString& name = "frame");
+                const wxString& name = wxFrameNameStr);
 
     /**
         Maximizes this MDI child frame.
 
         @see Activate(), Restore()
     */
-    void Maximize(bool maximize);
+    virtual void Maximize(bool maximize = true);
 
     /**
         Restores this MDI child frame (unmaximizes).

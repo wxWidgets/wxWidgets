@@ -74,7 +74,7 @@ public:
         If non-@NULL this is the event handler which will receive the
         timer events (see wxTimerEvent) when the timer is running.
     */
-    wxEvtHandler GetOwner() const;
+    wxEvtHandler* GetOwner() const;
 
     /**
         Returns @true if the timer is one shot, i.e. if it will stop after firing
@@ -178,6 +178,6 @@ public:
     /**
         Returns the timer object which generated this event.
     */
-    wxTimer GetTimer() const;
+    wxTimer& GetTimer() const;
 };
 

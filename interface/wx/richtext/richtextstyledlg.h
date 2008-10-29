@@ -83,15 +83,9 @@ public:
     /**
         Creates the dialog. See the ctor.
     */
-    bool Create(int flags,
-                wxRichTextStyleSheet* sheet,
-                wxRichTextCtrl* ctrl,
-                wxWindow* parent,
-                wxWindowID id = wxID_ANY,
-                const wxString& caption = _("Style Organiser"),
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX);
+    bool Create(int flags, wxRichTextStyleSheet* sheet, wxRichTextCtrl* ctrl,
+                wxWindow* parent, wxWindowID id = wxID_ANY,
+                const wxString& caption = wxGetTranslation("Style Organiser"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize(400, 300), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX);
 
     /**
         Returns @true if the user has opted to restart numbering.

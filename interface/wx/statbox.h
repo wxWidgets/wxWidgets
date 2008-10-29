@@ -74,11 +74,9 @@ public:
         Creates the static box for two-step construction.
         See wxStaticBox() for further details.
     */
-    bool Create(wxWindow* parent, wxWindowID id,
-                const wxString& label,
+    bool Create(wxWindow* parent, wxWindowID id, const wxString& label,
                 const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = 0,
-                const wxString& name = "staticBox");
+                const wxSize& size = wxDefaultSize, long style = 0,
+                const wxString& name = wxStaticBoxNameStr);
 };
 

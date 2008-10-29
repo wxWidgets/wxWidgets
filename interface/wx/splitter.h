@@ -110,11 +110,10 @@ public:
         Creation function, for two-step construction.
         See wxSplitterWindow() for details.
     */
-    bool Create(wxWindow* parent, wxWindowID id,
+    bool Create(wxWindow* parent, wxWindowID id = wxID_ANY,
                 const wxPoint& point = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = wxSP_3D,
-                const wxString& name = "splitterWindow");
+                const wxSize& size = wxDefaultSize, long style = wxSP_3D,
+                const wxString& name = "splitter");
 
     /**
         Returns the current minimum pane size (defaults to zero).
@@ -142,7 +141,7 @@ public:
 
         @see SetSplitMode(), SplitVertically(), SplitHorizontally().
     */
-    int GetSplitMode() const;
+    wxSplitMode GetSplitMode() const;
 
     /**
         Returns the left/top or only pane.
@@ -284,7 +283,7 @@ public:
 
         @see GetSashPosition()
     */
-    void SetSashPosition(int position, const bool redraw = true);
+    void SetSashPosition(int position, bool redraw = true);
 
     /**
         Sets the sash size. Normally, the sash size is determined according to the

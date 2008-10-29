@@ -67,7 +67,7 @@ public:
         This method can be used to allocate the buffer with enough space for the
         trailing @c NUL characters for any encoding.
     */
-    const size_t GetMaxMBNulLen();
+    static size_t GetMaxMBNulLen();
 
     /**
         Convert multibyte string to a wide character one.
@@ -125,8 +125,7 @@ public:
             The number of character written (or which would have been written
             if it were non-@NULL) to @a dst or @c wxCONV_FAILED on error.
     */
-    virtual size_t ToWChar(wchar_t* dst, size_t dstLen,
-                           const char* src,
+    virtual size_t ToWChar(wchar_t* dst, size_t dstLen, const char* src,
                            size_t srcLen = wxNO_LEN) const;
 
     /**
@@ -153,8 +152,7 @@ public:
             The number of character written (or which would have been written
             if it were non-@NULL) to @a dst or @c wxCONV_FAILED on error.
     */
-    virtual size_t FromWChar(char* dst, size_t dstLen,
-                             const wchar_t* src,
+    virtual size_t FromWChar(char* dst, size_t dstLen, const wchar_t* src,
                              size_t srcLen = wxNO_LEN) const;
 
     /**

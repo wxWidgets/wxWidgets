@@ -252,7 +252,8 @@ public:
         the text control without changes, a @c EVT_LIST_END_LABEL_EDIT event
         will be sent which can be vetoed as well.
     */
-    void EditLabel(long item);
+    wxTextCtrl* EditLabel(long item,
+                          wxClassInfo* textControlClass = CLASSINFO(wxTextCtrl));
 
     /**
         Ensures this item is visible.
@@ -360,7 +361,7 @@ public:
     /**
         Gets the application-defined data associated with this item.
     */
-    long GetItemData(long item) const;
+    wxUIntPtr GetItemData(long item) const;
 
     /**
         Returns the item's font.
@@ -523,7 +524,7 @@ public:
         To compile this feature into wxWidgets library you need to have access to
         commctrl.h of version 4.70 that is provided by Microsoft.
     */
-    long HitTest(const wxPoint& point, int& flags, long* ptrSubItem) const;
+    long HitTest(const wxPoint& point, int& flags, long* ptrSubItem = NULL) const;
 
     /**
         For report view mode (only), inserts a column. For more details, see SetItem().
@@ -664,7 +665,7 @@ public:
         Note that the wxWindow::GetBackgroundColour() function of wxWindow base
         class can be used to retrieve the current background colour.
     */
-    void SetBackgroundColour(const wxColour& col);
+    virtual bool SetBackgroundColour(const wxColour& col);
 
     /**
         Sets information about this column.
@@ -770,7 +771,7 @@ public:
         Sets the unselected and selected images associated with the item.
         The images are indices into the image list associated with the list control.
     */
-    bool SetItemImage(long item, int image);
+    bool SetItemImage(long item, int image, int selImage = -1);
 
     /**
         Sets the unselected and selected images associated with the item.
@@ -780,7 +781,7 @@ public:
         This form is deprecated: @a selImage is not used; use the other
         SetItemImage() overload.
     */
-    bool SetItemImage(long item, int image, int selImage);
+    bool SetItemImage(long item, int image, int selImage = -1);
 
     /**
         Sets the position of the item, in icon or small icon view. Windows only.
@@ -961,7 +962,7 @@ public:
     /**
         An item object, used by some events. See also wxListCtrl::SetItem.
     */
-    const wxListItem GetItem() const;
+    const wxListItem& GetItem() const;
 
     /**
         Key code if the event is a keypress event.
@@ -971,7 +972,7 @@ public:
     /**
         The (new) item label for @c EVT_LIST_END_LABEL_EDIT event.
     */
-    const wxString GetLabel() const;
+    const wxString& GetLabel() const;
 
     /**
         The mask.
@@ -986,7 +987,7 @@ public:
     /**
         The text.
     */
-    const wxString GetText() const;
+    const wxString& GetText() const;
 
     /**
         This method only makes sense for @c EVT_LIST_END_LABEL_EDIT message and
@@ -1255,7 +1256,7 @@ public:
         Returns client data associated with the control.
         Please note that client data is associated with the item and not with subitems.
     */
-    long GetData() const;
+    wxUIntPtr GetData() const;
 
     /**
         Returns the font used to display the item.

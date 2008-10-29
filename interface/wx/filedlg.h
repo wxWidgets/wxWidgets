@@ -183,7 +183,7 @@ public:
 
         Supported platforms: wxGTK, wxUniv.
     */
-    bool SetExtraControlCreator(t_extraControlCreator creator);
+    bool SetExtraControlCreator(ExtraControlCreatorFunction);
 
     /**
         Sets the default filename.

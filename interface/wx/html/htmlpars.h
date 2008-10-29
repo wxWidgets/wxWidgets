@@ -71,7 +71,7 @@ public:
         Assigns @a parser to this handler. Each @b instance of handler
         is guaranteed to be called only from the parser.
     */
-    virtual void SetParser(wxHtmlParser parser);
+    virtual void SetParser(wxHtmlParser* parser);
 
 protected:
     /**
@@ -135,7 +135,7 @@ public:
 
         All handlers are deleted on object deletion.
     */
-    virtual void AddTagHandler(wxHtmlTagHandler handler);
+    virtual void AddTagHandler(wxHtmlTagHandler* handler);
 
     /**
         Must be overwritten in derived class.
@@ -184,7 +184,7 @@ public:
     /**
         Returns pointer to the source being parsed.
     */
-    wxString* GetSource();
+    const wxString* GetSource();
 
     /**
         Setups the parser for parsing the @a source string.
@@ -291,7 +291,7 @@ public:
         Sets the virtual file system that will be used to request additional files.
         (For example @c IMG tag handler requests wxFSFile with the image data.)
     */
-    void SetFS(wxFileSystem fs);
+    void SetFS(wxFileSystem* fs);
 
     /**
         Call this function to interrupt parsing from a tag handler.

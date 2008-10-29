@@ -328,7 +328,7 @@ public:
         Returns a character string (actually a pointer to the connection's buffer) if
         successful, @NULL otherwise.
     */
-    const void* Request(const wxString& item, size_t* size,
+    virtual const void* Request(const wxString& item, size_t* size = 0,
                         wxIPCFormat format = wxIPC_TEXT);
 
     /**

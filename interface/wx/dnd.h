@@ -28,7 +28,7 @@ public:
         See wxDropTarget::OnDrop(). This function is implemented appropriately
         for text, and calls OnDropText().
     */
-    virtual bool OnDrop(long x, long y, const void data, size_t size);
+    virtual bool OnDrop(wxCoord x, wxCoord y);
 
     /**
         Override this function to receive dropped text.
@@ -99,7 +99,7 @@ public:
         associated with this drop target, calling its wxDataObject::SetData()
         method.
     */
-    virtual void GetData();
+    virtual bool GetData();
 
     /**
         Called after OnDrop() returns @true. By default this will usually
@@ -313,7 +313,7 @@ public:
         See wxDropTarget::OnDrop(). This function is implemented appropriately
         for files, and calls OnDropFiles().
     */
-    virtual bool OnDrop(long x, long y, const void data, size_t size);
+    virtual bool OnDrop(wxCoord x, wxCoord y);
 
     /**
         Override this function to receive dropped files.

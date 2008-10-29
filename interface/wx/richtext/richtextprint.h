@@ -120,7 +120,7 @@ public:
     /**
         Returns the text colour for drawing the header and footer.
     */
-    const wxColour GetTextColour() const;
+    const wxColour& GetTextColour() const;
 
     /**
         Initialises the object.
@@ -206,7 +206,7 @@ public:
     /**
         Returns the header and footer data associated with the printout.
     */
-    const wxRichTextHeaderFooterData GetHeaderFooterData() const;
+    const wxRichTextHeaderFooterData& GetHeaderFooterData() const;
 
     /**
         Gets the page information.
@@ -242,8 +242,8 @@ public:
     /**
         Sets margins in 10ths of millimetre. Defaults to 1 inch for margins.
     */
-    void SetMargins(int top = 252, int bottom = 252, int left = 252,
-                    int right = 252);
+    void SetMargins(int top = 254, int bottom = 254, int left = 254,
+                    int right = 254);
 
     /**
         Sets the buffer to print. wxRichTextPrintout does not manage this pointer;
@@ -285,7 +285,7 @@ public:
     /**
         Returns the internal wxRichTextHeaderFooterData object.
     */
-    const wxRichTextHeaderFooterData GetHeaderFooterData() const;
+    const wxRichTextHeaderFooterData& GetHeaderFooterData() const;
 
     /**
         A convenience function to get the header text.
@@ -308,7 +308,7 @@ public:
     /**
         Returns the dimensions to be used for the preview window.
     */
-    const wxRect GetPreviewRect() const;
+    const wxRect& GetPreviewRect() const;
 
     /**
         Returns a pointer to the internal print data.
@@ -318,7 +318,7 @@ public:
     /**
         Returns the title of the preview window or printing wait caption.
     */
-    const wxString GetTitle() const;
+    const wxString& GetTitle() const;
 
     /**
         Shows the page setup dialog.
@@ -384,7 +384,7 @@ public:
     /**
         Sets the page setup data.
     */
-    void SetPageSetupData(const wxPageSetupData& pageSetupData);
+    void SetPageSetupData(const wxPageSetupDialogData& pageSetupData);
 
     /**
         Sets the parent window to be used for the preview window and printing

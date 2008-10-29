@@ -95,12 +95,12 @@ public:
     /**
         Returns the directory used to store temporary image files.
     */
-    const wxString GetTempDir() const;
+    const wxString& GetTempDir() const;
 
     /**
         Returns the image locations for the last operation.
     */
-    const wxArrayString GetTemporaryImageLocations() const;
+    const wxArrayString& GetTemporaryImageLocations() const;
 
     /**
         Reset the file counter, in case, for example, the same names are required each

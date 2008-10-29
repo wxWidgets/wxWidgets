@@ -76,19 +76,18 @@ public:
         Creation function called by the spin control constructor.
         See wxSpinCtrlDouble() for details.
     */
-    bool Create(wxWindow* parent, wxWindowID id = -1,
+    bool Create(wxWindow* parent, wxWindowID id = wxID_ANY,
                 const wxString& value = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxSP_ARROW_KEYS,
-                double min = 0, double max = 100,
+                long style = wxSP_ARROW_KEYS, double min = 0, double max = 100,
                 double initial = 0, double inc = 1,
-                const wxString& name = _T("wxSpinCtrlDouble"));
+                const wxString& name = "wxSpinCtrlDouble");
 
     /**
         Gets the number of digits in the display.
     */
-    unsigned GetDigits() const;
+    unsigned int GetDigits() const;
 
     /**
         Gets the increment value.
@@ -113,7 +112,7 @@ public:
     /**
         Sets the number of digits in the display.
     */
-    void SetDigits(unsigned digits);
+    void SetDigits(unsigned int digits);
 
     /**
         Sets the increment value.

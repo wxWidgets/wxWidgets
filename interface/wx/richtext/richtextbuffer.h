@@ -179,7 +179,8 @@ public:
     /**
         Adds a paragraph of text.
     */
-    wxRichTextRange AddParagraph(const wxString& text);
+    virtual wxRichTextRange AddParagraph(const wxString& text,
+                                         wxTextAttr* paraStyle = 0);
 
     /**
         Returns @true if the buffer is currently collapsing commands into a single
@@ -322,7 +323,7 @@ public:
         See BeginNumberedBullet() for an explanation of how indentation is used
         to render the bulleted paragraph.
     */
-    bool BeginSymbolBullet(wxChar symbol, int leftIndent,
+    bool BeginSymbolBullet(const wxString& symbol, int leftIndent,
                            int leftSubIndent,
                            int bulletStyle = wxTEXT_ATTR_BULLET_STYLE_SYMBOL);
 
@@ -539,8 +540,7 @@ public:
     /**
         Finds a handler by filename or, if supplied, type.
     */
-    wxRichTextFileHandler* FindHandlerFilenameOrType(const wxString& filename,
-                                                     int imageType);
+    static wxRichTextFileHandler* FindHandlerFilenameOrType(const wxString& filename, wxRichTextFileType imageType);
 
     /**
         Gets the basic (overall) style.
@@ -550,7 +550,7 @@ public:
         applied (for example, setting the default style to bold will cause
         subsequently inserted text to be bold).
     */
-    const wxTextAttr GetBasicStyle() const;
+    virtual const wxTextAttr& GetBasicStyle() const;
 
     /**
         Gets the collapsed command.
@@ -568,7 +568,7 @@ public:
         (for example, setting the default style to bold will cause subsequently
         inserted text to be bold).
     */
-    const wxTextAttr GetDefaultStyle() const;
+    virtual const wxTextAttr& GetDefaultStyle() const;
 
     /**
         Gets a wildcard incorporating all visible handlers.
@@ -582,7 +582,7 @@ public:
     /**
         Returns the list of file handlers.
     */
-    wxList GetHandlers();
+    static wxList& GetHandlers();
 
     /**
         Returns the object to be used to render certain aspects of the content, such as
@@ -676,20 +676,19 @@ public:
     /**
         Submits a command to insert the given image.
     */
-    bool InsertImageWithUndo(long pos,
-                             const wxRichTextImageBlock& imageBlock,
-                             wxRichTextCtrl* ctrl);
+    bool InsertImageWithUndo(long pos, const wxRichTextImageBlock& imageBlock,
+                             wxRichTextCtrl* ctrl, int flags = 0);
 
     /**
         Submits a command to insert a newline.
     */
-    bool InsertNewlineWithUndo(long pos, wxRichTextCtrl* ctrl);
+    bool InsertNewlineWithUndo(long pos, wxRichTextCtrl* ctrl, int flags = 0);
 
     /**
         Submits a command to insert the given text.
     */
     bool InsertTextWithUndo(long pos, const wxString& text,
-                            wxRichTextCtrl* ctrl);
+                            wxRichTextCtrl* ctrl, int flags = 0);
 
     /**
         Returns @true if the buffer has been modified.
@@ -820,7 +819,7 @@ public:
         This is not cumulative - setting the default style will replace the previous
         default style.
     */
-    void SetDefaultStyle(const wxTextAttr& style);
+    virtual bool SetDefaultStyle(const wxTextAttr& style);
 
     //@{
     /**
@@ -952,7 +951,7 @@ public:
     /**
         Returns the encoding associated with the handler (if any).
     */
-    const wxString GetEncoding() const;
+    const wxString& GetEncoding() const;
 
     /**
         Returns the extension associated with the handler.

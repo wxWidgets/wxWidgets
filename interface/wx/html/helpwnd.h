@@ -67,10 +67,8 @@ public:
     */
     bool Create(wxWindow* parent, wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
-                const wxSize& pos = wxDefaultSize,
-                int style = wxTAB_TRAVERSAL|wxBORDER_NONE,
-                int helpStyle = wxHF_DEFAULT_STYLE,
-                wxHtmlHelpData* data = NULL);
+                const wxSize& size = wxDefaultSize, int style = wxTAB_TRAVERSAL|wxBORDER_NONE,
+                int helpStyle = wxHF_DEFAULT_STYLE);
 
     /**
         Creates search panel.

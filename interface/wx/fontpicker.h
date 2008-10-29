@@ -91,7 +91,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxFNTP_DEFAULT_STYLE,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = "fontpickerctrl");
+                const wxString& name = wxFontPickerCtrlNameStr);
 
     /**
         Returns the maximum point size value allowed for the user-chosen font.
@@ -113,7 +113,7 @@ public:
         (see wxFNTP_USE_TEXTCTRL), it's a good idea to put a limit to the maximum
         font size when huge fonts do not make much sense.
     */
-    void GetMaxPointSize(unsigned int max);
+    unsigned int GetMaxPointSize() const;
 
     /**
         Sets the currently selected font.

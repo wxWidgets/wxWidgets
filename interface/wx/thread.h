@@ -322,7 +322,7 @@ public:
         This function is called by wxWidgets itself and should never be called
         directly.
     */
-    virtual ExitCode Entry();
+    virtual ExitCode Entry() = 0;
 
     /**
         Creates a new thread.
@@ -632,7 +632,7 @@ public:
 
         See @ref thread_deletion for a broader explanation of this routine.
     */
-    wxThreadError Delete();
+    wxThreadError Delete(void** rc = NULL);
 
     /**
         Returns the number of system CPUs or -1 if the value is unknown.
@@ -652,7 +652,7 @@ public:
         identifies the thread throughout the system during its existence
         (i.e. the thread identifiers may be reused).
     */
-    unsigned long GetId() const;
+    wxThreadIdType GetId() const;
 
     /**
         Gets the priority of the thread, between zero and 100.
@@ -662,7 +662,7 @@ public:
           - @b WXTHREAD_DEFAULT_PRIORITY: 50
           - @b WXTHREAD_MAX_PRIORITY: 100
     */
-    int GetPriority() const;
+    unsigned int GetPriority() const;
 
     /**
         Returns @true if the thread is alive (i.e. started and not terminating).
@@ -781,7 +781,7 @@ public:
           - @b WXTHREAD_DEFAULT_PRIORITY: 50
           - @b WXTHREAD_MAX_PRIORITY: 100
     */
-    void SetPriority(int priority);
+    void SetPriority(unsigned int priority);
 
     /**
         Pauses the thread execution for the given amount of time.
@@ -822,7 +822,7 @@ public:
 
         See @ref thread_deletion for a broader explanation of this routine.
     */
-    ExitCode Wait() const;
+    ExitCode Wait();
 
     /**
         Give the rest of the thread time slice to the system allowing the other
@@ -873,7 +873,7 @@ protected:
         This function is called by wxWidgets itself and should never be called
         directly.
     */
-    virtual ExitCode Entry();
+    virtual ExitCode Entry() = 0;
 
     /**
         This is a protected function of the wxThread class and thus can only be called
@@ -983,7 +983,7 @@ public:
             - wxSEMA_TIMEOUT: Timeout occurred without receiving semaphore.
             - wxSEMA_MISC_ERROR: Miscellaneous error.
     */
-    wxSemaError WaitTimeout(unsigned longtimeout_millis);
+    wxSemaError WaitTimeout(unsigned long timeout_millis);
 };
 
 

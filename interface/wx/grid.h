@@ -984,27 +984,27 @@ public:
     /**
 
     */
-    const wxColour GetBackgroundColour() const;
+    const wxColour& GetBackgroundColour() const;
 
     /**
 
     */
-    wxGridCellEditor* GetEditor(wxGrid* grid, int row, int col) const;
+    wxGridCellEditor* GetEditor(const wxGrid* grid, int row, int col) const;
 
     /**
 
     */
-    const wxFont GetFont() const;
+    const wxFont& GetFont() const;
 
     /**
 
     */
-    wxGridCellRenderer* GetRenderer(wxGrid* grid, int row, int col) const;
+    wxGridCellRenderer* GetRenderer(const wxGrid* grid, int row, int col) const;
 
     /**
 
     */
-    const wxColour GetTextColour() const;
+    const wxColour& GetTextColour() const;
 
     /**
 
@@ -3013,7 +3013,7 @@ public:
 
         Returns @c wxNOT_FOUND if there is no row at the y position.
     */
-    int YToRow(int y) const;
+    int YToRow(int y, bool clipToMinMax = false) const;
 };
 
 

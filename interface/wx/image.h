@@ -109,8 +109,8 @@ public:
 
         @see wxImage::LoadFile, wxImage::SaveFile, SaveFile()
     */
-    bool LoadFile(wxImage* image, wxInputStream& stream,
-                  bool verbose = true, int index = 0);
+    virtual bool LoadFile(wxImage* image, wxInputStream& stream,
+                          bool verbose = true, int index = -1);
 
     /**
         Saves a image in the output stream.
@@ -124,7 +124,8 @@ public:
 
         @see wxImage::LoadFile, wxImage::SaveFile, LoadFile()
     */
-    bool SaveFile(wxImage* image, wxOutputStream& stream);
+    virtual bool SaveFile(wxImage* image, wxOutputStream& stream,
+                          bool verbose = true);
 
     /**
         Sets the handler extension.
@@ -497,7 +498,7 @@ public:
 
         @return @false if FindFirstUnusedColour returns @false, @true otherwise.
     */
-    bool ConvertAlphaToMask(unsigned char threshold = 128);
+    bool ConvertAlphaToMask(unsigned char threshold = wxIMAGE_ALPHA_THRESHOLD);
 
     /**
         @deprecated
@@ -514,8 +515,7 @@ public:
         when converting to YUV, where every pixel equals
         (R * @a lr) + (G * @a lg) + (B * @a lb).
     */
-    wxImage ConvertToGreyscale(double lr = 0.299, double lg = 0.587,
-                               double lb = 0.114) const;
+    wxImage ConvertToGreyscale(double lr = 0.299, double lg = 0.587, double lb = 1.114) const;
 
     /**
         Returns monochromatic version of the image.
@@ -777,8 +777,8 @@ public:
         Get the current mask colour or find a suitable unused colour that could be
         used as a mask colour. Returns @true if the image currently has a mask.
     */
-    bool GetOrFindMaskColour(unsigned char r, unsigned char g,
-                             unsigned char b) const;
+    bool GetOrFindMaskColour(unsigned char* r, unsigned char* g,
+                             unsigned char* b) const;
 
     /**
         Returns the palette associated with the image.
@@ -818,7 +818,7 @@ public:
     /**
         Converts a color in HSV color space to RGB color space.
     */
-    wxImage::RGBValue HSVtoRGB(const wxImage::HSVValue & hsv);
+    static wxImage::RGBValue HSVtoRGB(const wxImage::HSVValue& hsv);
 
     /**
         Returns @true if this image has alpha channel, @false otherwise.
@@ -882,7 +882,8 @@ public:
         colour if this image has a mask or if this image has alpha channel and alpha
         value of this pixel is strictly less than @a threshold.
     */
-    bool IsTransparent(int x, int y, unsigned char threshold = 128) const;
+    bool IsTransparent(int x, int y,
+                       unsigned char threshold = wxIMAGE_ALPHA_THRESHOLD) const;
 
     /**
         Loads an image from an input stream.
@@ -988,7 +989,7 @@ public:
     /**
         Converts a color in RGB color space to HSV color space.
     */
-    wxImage::HSVValue RGBtoHSV(const wxImage::RGBValue& rgb);
+    static wxImage::HSVValue RGBtoHSV(const wxImage::RGBValue& rgb);
 
     /**
         Finds the handler with the given name, and removes it.
@@ -1019,7 +1020,7 @@ public:
 
         @see Scale()
     */
-    wxImage Rescale(int width, int height,
+    wxImage& Rescale(int width, int height,
                     int quality = wxIMAGE_QUALITY_NORMAL);
 
     /**
@@ -1037,9 +1038,8 @@ public:
 
         @see Size()
     */
-    wxImage Resize(const wxSize& size, const wxPoint& pos,
-                   int red = -1, int green = -1,
-                   int blue = -1);
+    wxImage& Resize(const wxSize& size, const wxPoint& pos, int red = -1,
+                    int green = -1, int blue = -1);
 
     /**
         Rotates the image about the given point, by @a angle radians.
@@ -1349,7 +1349,7 @@ public:
 
         @return Returns 'this' object.
     */
-    wxImage operator =(const wxImage& image);
+    wxImage& operator=(const wxImage& image);
 };
 
 // ============================================================================

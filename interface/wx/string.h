@@ -741,7 +741,7 @@ public:
     /**
         wxWidgets compatibility conversion. Same as c_str().
     */
-    const wxCStrData* GetData() const;
+    const wxCStrData GetData() const;
 
     /**
         Returns a reference to the character at position @e n.
@@ -880,15 +880,14 @@ public:
         Returns a substring starting at @e first, with length @e count, or the rest of
         the string if @a count is the default value.
     */
-    wxString Mid(size_t first, size_t count = wxSTRING_MAXLEN) const;
+    wxString Mid(size_t first, size_t nCount = wxString::npos) const;
 
 
     /**
         Adds @a count copies of @a pad to the beginning, or to the end of the
         string (the default).  Removes spaces from the left or from the right (default).
     */
-    wxString& Pad(size_t count, wxUniChar pad = ' ',
-                 bool fromRight = true);
+    wxString& Pad(size_t count, wxUniChar chPad = ' ', bool fromRight = true);
 
     /**
         Prepends @a str to this string, returning a reference to this string.
@@ -906,14 +905,14 @@ public:
         size. Unfortunately, this function is not available on all platforms and the
         dangerous @e vsprintf() will be used then which may lead to buffer overflows.
     */
-    int Printf(const wxChar* pszFormat, ...);
+    int Printf(const wxString& pszFormat, ...);
 
     /**
         Similar to vprintf. Returns the number of characters written, or an integer
         less than zero
         on error.
     */
-    int PrintfV(const wxChar* pszFormat, va_list argPtr);
+    int PrintfV(const wxString& pszFormat, va_list argPtr);
 
     //@{
     /**
@@ -928,7 +927,7 @@ public:
     /**
         Removes the last character.
     */
-    wxString RemoveLast();
+    wxString& RemoveLast(size_t n = 1);
 
     /**
         Replace first (or all) occurrences of substring with another one.
@@ -952,7 +951,7 @@ public:
         Minimizes the string's memory. This can be useful after a call to
         Alloc() if too much memory were preallocated.
     */
-    void Shrink();
+    bool Shrink();
 
     /**
         This function can be used to test if the string starts with the specified
@@ -1016,7 +1015,7 @@ public:
 
         @see ToLong(), ToULong()
     */
-    bool ToDouble(double val) const;
+    bool ToDouble(double* val) const;
 
     /**
         Attempts to convert the string to a signed integer in base @e base. Returns
@@ -1034,7 +1033,7 @@ public:
 
         @see ToDouble(), ToULong()
     */
-    bool ToLong(long val, int base = 10) const;
+    bool ToLong(long* val, int base = 10) const;
 
     /**
         This is exactly the same as ToLong() but works with 64
@@ -1045,7 +1044,7 @@ public:
 
         @see ToLong(), ToULongLong()
     */
-    bool ToLongLong(wxLongLong_t val, int base = 10) const;
+    bool ToLongLong(wxLongLong_t* val, int base = 10) const;
 
     /**
         Attempts to convert the string to an unsigned integer in base @e base.
@@ -1062,14 +1061,14 @@ public:
 
         @see ToDouble(), ToLong()
     */
-    bool ToULong(unsigned long val, int base = 10) const;
+    bool ToULong(unsigned long* val, int base = 10) const;
 
     /**
         This is exactly the same as ToULong() but works with 64
         bit integer numbers.
         Please see ToLongLong() for additional remarks.
     */
-    bool ToULongLong(wxULongLong_t val, int base = 10) const;
+    bool ToULongLong(wxULongLong_t* val, int base = 10) const;
 
     //@{
     /**
@@ -1138,7 +1137,7 @@ public:
 
         @see wc_str(), utf8_str(), c_str(), mb_str(), fn_str()
     */
-    const wxCStrData c_str() const;
+    wxCStrData c_str() const;
 
     /**
         Returns an object with string data that is implicitly convertible to

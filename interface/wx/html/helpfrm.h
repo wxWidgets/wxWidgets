@@ -45,8 +45,9 @@ public:
         for a description of the parameters.
     */
     bool Create(wxWindow* parent, wxWindowID id,
-                const wxString& title = wxEmptyString,
-                int style = wxHF_DEFAULT_STYLE);
+                const wxString& title = wxEmptyString, int style = wxHF_DEFAULT_STYLE,
+                wxConfigBase* config = NULL,
+                const wxString& rootpath = wxEmptyString);
 
     /**
         Returns the help controller associated with the frame.

@@ -37,7 +37,7 @@ public:
         Allows you to transfer data from the internal buffer of wxMemoryOutputStream
         to an external buffer. @a len specifies the size of the buffer.
     */
-    size_t CopyTo(char* buffer, size_t len) const;
+    size_t CopyTo(void* buffer, size_t len) const;
 
     /**
         Returns the pointer to the stream object used as an internal buffer

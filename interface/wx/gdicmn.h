@@ -402,7 +402,7 @@ public:
     /**
         Assignment operator.
     */
-    void operator =(const wxRect& rect);
+    wxRect& operator=(const wxRect& rect);
 
     /**
         Equality operator.
@@ -462,7 +462,7 @@ public:
     /**
         Assignment operator.
     */
-    void operator =(const wxPoint& pt);
+    wxPoint& operator=(const wxPoint& pt);
 
     bool operator ==(const wxPoint& p1, const wxPoint& p2);
     bool operator !=(const wxPoint& p1, const wxPoint& p2);
@@ -757,7 +757,7 @@ public:
     /**
         Assignment operator.
     */
-    void operator =(const wxSize& sz);
+    wxSize& operator=(const wxSize& sz);
 
     bool operator ==(const wxSize& s1, const wxSize& s2);
     bool operator !=(const wxSize& s1, const wxSize& s2);
