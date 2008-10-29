@@ -684,26 +684,6 @@ public:
     static void SetTimestamp(const wxString& format);
 
     /**
-        Called to process the message of the specified severity. @a msg is the text
-        of the message as specified in the call of @e wxLogXXX() function which
-        generated it and @a timestamp is the moment when the message was generated.
-
-        The base class version prepends the timestamp to the message, adds a prefix
-        corresponding to the log level and then calls
-        DoLogString() with the resulting string.
-    */
-    virtual void DoLog(wxLogLevel level, const wxString& msg, time_t timestamp);
-
-    /**
-        Called to log the specified string. The timestamp is already included in the
-        string but still passed to this function.
-
-        A simple implementation may just send the string to @c stdout or, better,
-        @c stderr.
-    */
-    virtual void DoLogString(const wxString& msg, time_t timestamp);
-
-    /**
         Instructs wxLog to not create new log targets on the fly if there is none
         currently. (Almost) for internal use only: it is supposed to be called by the
         application shutdown code.
@@ -846,6 +826,28 @@ public:
         @see Resume(), wxLogNull
     */
     static void Suspend();
+
+protected:
+
+    /**
+        Called to process the message of the specified severity. @a msg is the text
+        of the message as specified in the call of @e wxLogXXX() function which
+        generated it and @a timestamp is the moment when the message was generated.
+
+        The base class version prepends the timestamp to the message, adds a prefix
+        corresponding to the log level and then calls
+        DoLogString() with the resulting string.
+    */
+    virtual void DoLog(wxLogLevel level, const wxString& msg, time_t timestamp);
+
+    /**
+        Called to log the specified string. The timestamp is already included in the
+        string but still passed to this function.
+
+        A simple implementation may just send the string to @c stdout or, better,
+        @c stderr.
+    */
+    virtual void DoLogString(const wxString& msg, time_t timestamp);
 };
 
 

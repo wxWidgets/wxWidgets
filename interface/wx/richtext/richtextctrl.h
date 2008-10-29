@@ -514,11 +514,6 @@ public:
     virtual void DiscardEdits();
 
     /**
-        Currently this simply returns @c wxSize(10, 10).
-    */
-    virtual wxSize DoGetBestSize() const;
-
-    /**
         Ends alignment.
     */
     bool EndAlignment();
@@ -853,11 +848,6 @@ public:
         Initialises the members of the control.
     */
     void Init();
-
-    /**
-        Initialises the command event.
-    */
-    void InitCommandEvent(wxCommandEvent& event) const;
 
     /**
         Returns @true if the user has recently set the default style without moving
@@ -1493,5 +1483,17 @@ public:
         Translates from column and line number to position.
     */
     virtual long XYToPosition(long x, long y) const;
+
+protected:
+
+    /**
+        Currently this simply returns @c wxSize(10, 10).
+    */
+    virtual wxSize DoGetBestSize() const;
+
+    /**
+        Initialises the command event.
+    */
+    void InitCommandEvent(wxCommandEvent& event) const;
 };
 

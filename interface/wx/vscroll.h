@@ -75,21 +75,6 @@ public:
     void EnablePhysicalScrolling(bool scrolling = true);
 
     /**
-        When the number of scroll units change, we try to estimate the total
-        size of all units when the full window size is needed (i.e. to
-        calculate the scrollbar thumb size). This is a rather expensive
-        operation in terms of unit access, so if the user code may estimate the
-        average size better or faster than we do, it should override this
-        function to implement its own logic. This function should return the
-        best guess for the total virtual window size.
-
-        @note Although returning a totally wrong value would still work, it
-              risks resulting in very strange scrollbar behaviour so this
-              function should really try to make the best guess possible.
-    */
-    virtual wxCoord EstimateTotalSize() const;
-
-    /**
         This function needs to be overridden in the in the derived class to
         return the window size with respect to the opposing orientation. If
         this is a vertical scrolled window, it should return the height.
@@ -142,23 +127,6 @@ public:
     bool IsVisible(size_t unit) const;
 
     /**
-        This function doesn't have to be overridden but it may be useful to do
-        so if calculating the units' sizes is a relatively expensive operation
-        as it gives your code a chance to calculate several of them at once and
-        cache the result if necessary.
-
-        OnGetUnitsSizeHint() is normally called just before OnGetUnitSize() but
-        you shouldn't rely on the latter being called for all units in the
-        interval specified here. It is also possible that OnGetUnitSize() will
-        be called for units outside of this interval, so this is really just a
-        hint, not a promise.
-
-        Finally, note that @a unitMin is inclusive, while @a unitMax is
-        exclusive.
-    */
-    virtual void OnGetUnitsSizeHint(size_t unitMin, size_t unitMax) const;
-
-    /**
         Recalculate all parameters and repaint all units.
     */
     virtual void RefreshAll();
@@ -187,6 +155,38 @@ public:
 
 
 protected:
+
+    /**
+        This function doesn't have to be overridden but it may be useful to do
+        so if calculating the units' sizes is a relatively expensive operation
+        as it gives your code a chance to calculate several of them at once and
+        cache the result if necessary.
+
+        OnGetUnitsSizeHint() is normally called just before OnGetUnitSize() but
+        you shouldn't rely on the latter being called for all units in the
+        interval specified here. It is also possible that OnGetUnitSize() will
+        be called for units outside of this interval, so this is really just a
+        hint, not a promise.
+
+        Finally, note that @a unitMin is inclusive, while @a unitMax is
+        exclusive.
+    */
+    virtual void OnGetUnitsSizeHint(size_t unitMin, size_t unitMax) const;
+
+    /**
+        When the number of scroll units change, we try to estimate the total
+        size of all units when the full window size is needed (i.e. to
+        calculate the scrollbar thumb size). This is a rather expensive
+        operation in terms of unit access, so if the user code may estimate the
+        average size better or faster than we do, it should override this
+        function to implement its own logic. This function should return the
+        best guess for the total virtual window size.
+
+        @note Although returning a totally wrong value would still work, it
+              risks resulting in very strange scrollbar behaviour so this
+              function should really try to make the best guess possible.
+    */
+    virtual wxCoord EstimateTotalSize() const;
 
     /**
         This function must be overridden in the derived class, and should
@@ -225,17 +225,6 @@ public:
     wxVarVScrollHelper(wxWindow* winToScroll);
 
     /**
-        This class forwards calls from EstimateTotalSize() to this function so
-        derived classes can override either just the height or the width
-        estimation, or just estimate both differently if desired in any
-        wxHVScrolledWindow derived class.
-
-        @note This function will not be called if EstimateTotalSize() is
-              overridden in your derived class.
-    */
-    virtual wxCoord EstimateTotalHeight() const;
-
-    /**
         Returns the number of rows the target window contains.
 
         @see SetRowCount()
@@ -259,23 +248,6 @@ public:
         partially visible) or @false otherwise.
     */
     bool IsRowVisible(size_t row) const;
-
-    /**
-        This function doesn't have to be overridden but it may be useful to do
-        so if calculating the rows' sizes is a relatively expensive operation
-        as it gives your code a chance to calculate several of them at once and
-        cache the result if necessary.
-
-        OnGetRowsHeightHint() is normally called just before OnGetRowHeight()
-        but you shouldn't rely on the latter being called for all rows in the
-        interval specified here. It is also possible that OnGetRowHeight() will
-        be called for units outside of this interval, so this is really just a
-        hint, not a promise.
-
-        Finally, note that @a rowMin is inclusive, while @a rowMax is
-        exclusive.
-    */
-    virtual void OnGetRowsHeightHint(size_t rowMin, size_t rowMax) const;
 
     /**
         Triggers a refresh for just the given row's area of the window if it's
@@ -325,6 +297,34 @@ public:
 protected:
 
     /**
+        This function doesn't have to be overridden but it may be useful to do
+        so if calculating the rows' sizes is a relatively expensive operation
+        as it gives your code a chance to calculate several of them at once and
+        cache the result if necessary.
+
+        OnGetRowsHeightHint() is normally called just before OnGetRowHeight()
+        but you shouldn't rely on the latter being called for all rows in the
+        interval specified here. It is also possible that OnGetRowHeight() will
+        be called for units outside of this interval, so this is really just a
+        hint, not a promise.
+
+        Finally, note that @a rowMin is inclusive, while @a rowMax is
+        exclusive.
+    */
+    virtual void OnGetRowsHeightHint(size_t rowMin, size_t rowMax) const;
+
+    /**
+        This class forwards calls from EstimateTotalSize() to this function so
+        derived classes can override either just the height or the width
+        estimation, or just estimate both differently if desired in any
+        wxHVScrolledWindow derived class.
+
+        @note This function will not be called if EstimateTotalSize() is
+              overridden in your derived class.
+    */
+    virtual wxCoord EstimateTotalHeight() const;
+
+    /**
         This function must be overridden in the derived class, and should
         return the height of the given row in pixels.
     */
@@ -361,17 +361,6 @@ public:
     wxVarHScrollHelper(wxWindow* winToScroll);
 
     /**
-        This class forwards calls from EstimateTotalSize() to this function so
-        derived classes can override either just the height or the width
-        estimation, or just estimate both differently if desired in any
-        wxHVScrolledWindow derived class.
-
-        @note This function will not be called if EstimateTotalSize() is
-              overridden in your derived class.
-    */
-    virtual wxCoord EstimateTotalWidth() const;
-
-    /**
         Returns the number of columns the target window contains.
 
         @see SetColumnCount()
@@ -396,24 +385,6 @@ public:
         partially visible) or @false otherwise.
     */
     bool IsColumnVisible(size_t column) const;
-
-    /**
-        This function doesn't have to be overridden but it may be useful to do
-        so if calculating the columns' sizes is a relatively expensive
-        operation as it gives your code a chance to calculate several of them
-        at once and cache the result if necessary.
-
-        OnGetColumnsWidthHint() is normally called just before
-        OnGetColumnWidth() but you shouldn't rely on the latter being called
-        for all columns in the interval specified here. It is also possible
-        that OnGetColumnWidth() will be called for units outside of this
-        interval, so this is really just a hint, not a promise.
-
-        Finally, note that @a columnMin is inclusive, while @a columnMax is
-        exclusive.
-    */
-    virtual void OnGetColumnsWidthHint(size_t columnMin,
-                                       size_t columnMax) const;
 
     /**
         Triggers a refresh for just the given column's area of the window if
@@ -461,6 +432,35 @@ public:
     void SetColumnCount(size_t columnCount);
 
 protected:
+
+    /**
+        This class forwards calls from EstimateTotalSize() to this function so
+        derived classes can override either just the height or the width
+        estimation, or just estimate both differently if desired in any
+        wxHVScrolledWindow derived class.
+
+        @note This function will not be called if EstimateTotalSize() is
+              overridden in your derived class.
+    */
+    virtual wxCoord EstimateTotalWidth() const;
+
+    /**
+        This function doesn't have to be overridden but it may be useful to do
+        so if calculating the columns' sizes is a relatively expensive
+        operation as it gives your code a chance to calculate several of them
+        at once and cache the result if necessary.
+
+        OnGetColumnsWidthHint() is normally called just before
+        OnGetColumnWidth() but you shouldn't rely on the latter being called
+        for all columns in the interval specified here. It is also possible
+        that OnGetColumnWidth() will be called for units outside of this
+        interval, so this is really just a hint, not a promise.
+
+        Finally, note that @a columnMin is inclusive, while @a columnMax is
+        exclusive.
+    */
+    virtual void OnGetColumnsWidthHint(size_t columnMin,
+                                       size_t columnMax) const;
 
     /**
         This function must be overridden in the derived class, and should

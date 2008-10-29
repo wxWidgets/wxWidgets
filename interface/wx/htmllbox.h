@@ -68,6 +68,21 @@ public:
     const wxFileSystem GetFileSystem() const;
     //@}
 
+protected:
+
+    /**
+        Called when the user clicks on hypertext link. Does nothing by default.
+        Overloading this method is deprecated; intercept the event instead.
+
+        @param n
+            Index of the item containing the link.
+        @param link
+            Description of the link.
+
+        @see See also wxHtmlLinkInfo.
+    */
+    virtual void OnLinkClicked(size_t n, const wxHtmlLinkInfo& link);
+
     /**
         This virtual function may be overridden to change the appearance of the
         background of the selected cells in the same way as
@@ -94,25 +109,10 @@ public:
     virtual wxColour GetSelectedTextColour(const wxColour& colFg) const;
 
     /**
-        This function may be overridden to decorate HTML returned by
-        OnGetItem().
+        This function may be overridden to decorate HTML returned by OnGetItem().
     */
     virtual wxString OnGetItemMarkup(size_t n) const;
 
-    /**
-        Called when the user clicks on hypertext link. Does nothing by default.
-        Overloading this method is deprecated; intercept the event instead.
-
-        @param n
-            Index of the item containing the link.
-        @param link
-            Description of the link.
-
-        @see See also wxHtmlLinkInfo.
-    */
-    virtual void OnLinkClicked(size_t n, const wxHtmlLinkInfo& link);
-
-protected:
     /**
         This method must be implemented in the derived class and should return
         the body (i.e. without @c html nor @c body tags) of the HTML fragment

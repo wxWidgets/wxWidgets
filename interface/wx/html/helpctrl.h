@@ -118,18 +118,6 @@ public:
     bool AddBook(const wxString& bookUrl, bool showWaitMsg);
 
     /**
-        This protected virtual method may be overridden so that when specifying the
-        @c wxHF_DIALOG style, the controller uses a different dialog.
-    */
-    virtual wxHtmlHelpDialog* CreateHelpDialog(wxHtmlHelpData* data);
-
-    /**
-        This protected virtual method may be overridden so that the controller
-        uses a different frame.
-    */
-    virtual wxHtmlHelpFrame* CreateHelpFrame(wxHtmlHelpData* data);
-
-    /**
         Displays page @a x.
         This is THE important function - it is used to display the help in application.
         You can specify the page in many ways:
@@ -222,6 +210,20 @@ public:
     */
     virtual void WriteCustomization(wxConfigBase* cfg,
                                     const wxString& path = wxEmptyString);
+
+protected:
+
+    /**
+        This protected virtual method may be overridden so that when specifying the
+        @c wxHF_DIALOG style, the controller uses a different dialog.
+    */
+    virtual wxHtmlHelpDialog* CreateHelpDialog(wxHtmlHelpData* data);
+
+    /**
+        This protected virtual method may be overridden so that the controller
+        uses a different frame.
+    */
+    virtual wxHtmlHelpFrame* CreateHelpFrame(wxHtmlHelpData* data);
 };
 
 

@@ -202,30 +202,6 @@ public:
                  const wxString& description);
 
     /**
-        This function may be overridden to add arbitrary custom context to the
-        XML context file created by AddContext(). By default, it does nothing.
-    */
-    virtual void DoAddCustomContext(wxXmlNode* nodeRoot);
-
-    /**
-        This function may be overridden to modify the contents of the exception
-        tag in the XML context file.
-    */
-    virtual bool DoAddExceptionInfo(wxXmlNode* nodeContext);
-
-    /**
-        This function may be overridden to modify the contents of the modules
-        tag in the XML context file.
-    */
-    virtual bool DoAddLoadedModules(wxXmlNode* nodeModules);
-
-    /**
-        This function may be overridden to modify the contents of the system
-        tag in the XML context file.
-    */
-    virtual bool DoAddSystemInfo(wxXmlNode* nodeSystemInfo);
-
-    /**
         This method should be used to construct the full name of the files
         which you wish to add to the report using AddFile().
 
@@ -277,6 +253,32 @@ public:
         after this as it becomes uninitialized and invalid.
     */
     void Reset();
+
+protected:
+
+    /**
+        This function may be overridden to add arbitrary custom context to the
+        XML context file created by AddContext(). By default, it does nothing.
+    */
+    virtual void DoAddCustomContext(wxXmlNode* nodeRoot);
+
+    /**
+        This function may be overridden to modify the contents of the exception
+        tag in the XML context file.
+    */
+    virtual bool DoAddExceptionInfo(wxXmlNode* nodeContext);
+
+    /**
+        This function may be overridden to modify the contents of the modules
+        tag in the XML context file.
+    */
+    virtual bool DoAddLoadedModules(wxXmlNode* nodeModules);
+
+    /**
+        This function may be overridden to modify the contents of the system
+        tag in the XML context file.
+    */
+    virtual bool DoAddSystemInfo(wxXmlNode* nodeSystemInfo);
 };
 
 
@@ -335,6 +337,7 @@ public:
                         const wxString& action,
                         const wxString& curl = "curl");
 
+protected:
     /**
         This function may be overridden in a derived class to show the output
         from curl: this may be an HTML page or anything else that the server

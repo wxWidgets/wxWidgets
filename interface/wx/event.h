@@ -213,7 +213,7 @@ public:
         Note that the @a win window @b must remain alive until the
         wxEventBlocker object destruction.
     */
-    wxEventBlocker(wxWindow* win, wxEventType type = wxEVT_ANY);
+    wxEventBlocker(wxWindow* win, wxEventType type = -1);
 
     /**
         Destructor. The blocker will remove itself from the chain of event handlers for

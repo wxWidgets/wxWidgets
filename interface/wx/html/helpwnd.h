@@ -52,16 +52,6 @@ public:
                      wxHtmlHelpData* data = NULL);
 
     /**
-        You may override this virtual method to add more buttons to the help window's
-        toolbar. @a toolBar is a pointer to the toolbar and @a style is the style
-        flag as passed to the Create() method.
-
-        wxToolBar::Realize is called immediately after returning from this function.
-        See @c samples/html/helpview for an example.
-    */
-    virtual void AddToolbarButtons(wxToolBar* toolBar, int style);
-
-    /**
         Creates the help window. See @ref wxHtmlHelpWindow() "the constructor"
         for a description of the parameters.
     */
@@ -69,11 +59,6 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize, int style = wxTAB_TRAVERSAL|wxBORDER_NONE,
                 int helpStyle = wxHF_DEFAULT_STYLE);
-
-    /**
-        Creates search panel.
-    */
-    void CreateSearch();
 
     /**
         Displays page x.
@@ -147,7 +132,27 @@ public:
     void WriteCustomization(wxConfigBase* cfg,
                             const wxString& path = wxEmptyString);
 
+    /**
+        Refresh all panels. This is necessary if a new book was added.
+    */
+    void RefreshLists();
+
 protected:
+
+    /**
+        Creates search panel.
+    */
+    void CreateSearch();
+
+    /**
+        You may override this virtual method to add more buttons to the help window's
+        toolbar. @a toolBar is a pointer to the toolbar and @a style is the style
+        flag as passed to the Create() method.
+
+        wxToolBar::Realize is called immediately after returning from this function.
+        See @c samples/html/helpview for an example.
+    */
+    virtual void AddToolbarButtons(wxToolBar* toolBar, int style);
 
     /**
         Creates contents panel. (May take some time.)
@@ -158,10 +163,5 @@ protected:
         Creates index panel. (May take some time.)
     */
     void CreateIndex();
-
-    /**
-        Refresh all panels. This is necessary if a new book was added.
-    */
-    void RefreshLists();
 };
 

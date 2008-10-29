@@ -204,11 +204,6 @@ public:
     wxDataViewModel();
 
     /**
-        Destructor. This should not be called directly. Use DecRef() instead.
-    */
-    virtual ~wxDataViewModel();
-
-    /**
         Adds a wxDataViewModelNotifier to the model.
     */
     void AddNotifier(wxDataViewModelNotifier* notifier);
@@ -369,6 +364,13 @@ public:
     */
     virtual bool ValueChanged(const wxDataViewItem& item,
                               unsigned int col);
+
+protected:
+
+    /**
+        Destructor. This should not be called directly. Use DecRef() instead.
+    */
+    virtual ~wxDataViewModel();
 };
 
 

@@ -89,6 +89,19 @@ public:
     virtual ~wxModule();
 
     /**
+        Provide this function with appropriate cleanup for your module.
+    */
+    virtual void OnExit() = 0;
+
+    /**
+        Provide this function with appropriate initialization for your module.
+        If the function returns @false, wxWidgets will exit immediately.
+    */
+    virtual bool OnInit() = 0;
+
+protected:
+
+    /**
         Call this function from the constructor of the derived class.
 
         @a dep must be the CLASSINFO() of a wxModule-derived class and the
@@ -114,16 +127,5 @@ public:
             The class name of the dependent module.
     */
     void AddDependency(const char* classname);
-
-    /**
-        Provide this function with appropriate cleanup for your module.
-    */
-    virtual void OnExit() = 0;
-
-    /**
-        Provide this function with appropriate initialization for your module.
-        If the function returns @false, wxWidgets will exit immediately.
-    */
-    virtual bool OnInit() = 0;
 };
 

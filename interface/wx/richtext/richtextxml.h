@@ -55,16 +55,6 @@ public:
     wxString CreateStyle(const wxTextAttr& attr, bool isPara = false);
 
     /**
-        Loads buffer context from the given stream.
-    */
-    virtual bool DoLoadFile(wxRichTextBuffer* buffer, wxInputStream& stream);
-
-    /**
-        Saves buffer context to the given stream.
-    */
-    virtual bool DoSaveFile(wxRichTextBuffer* buffer, wxOutputStream& stream);
-
-    /**
         Recursively exports an object to the stream.
     */
     bool ExportXML(wxOutputStream& stream, wxMBConv* convMem,
@@ -109,5 +99,17 @@ public:
         Recursively imports an object.
     */
     bool ImportXML(wxRichTextBuffer* buffer, wxXmlNode* node);
+
+protected:
+
+    /**
+        Loads buffer context from the given stream.
+    */
+    virtual bool DoLoadFile(wxRichTextBuffer* buffer, wxInputStream& stream);
+
+    /**
+        Saves buffer context to the given stream.
+    */
+    virtual bool DoSaveFile(wxRichTextBuffer* buffer, wxOutputStream& stream);
 };
 

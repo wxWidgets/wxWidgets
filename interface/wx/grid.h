@@ -391,15 +391,6 @@ public:
     wxGridCellAttrProvider *GetAttrProvider() const { return m_attrProvider; }
 
     /**
-        Returns true if this table supports attributes or false otherwise.
-
-        By default, the table automatically creates a wxGridCellAttrProvider
-        when this function is called if it had no attribute provider before and
-        returns @true.
-     */
-    virtual bool CanHaveAttributes();
-
-    /**
         Return the attribute for the given cell.
 
         By default this function is simply forwarded to
@@ -440,6 +431,15 @@ public:
     virtual void SetColAttr(wxGridCellAttr *attr, int col);
 
     //@}
+
+    /**
+        Returns true if this table supports attributes or false otherwise.
+
+        By default, the table automatically creates a wxGridCellAttrProvider
+        when this function is called if it had no attribute provider before and
+        returns @true.
+     */
+    virtual bool CanHaveAttributes();
 };
 
 
@@ -466,11 +466,6 @@ public:
 
     */
     wxGridCellEditor();
-
-    /**
-        The dtor is private because only DecRef() can delete us.
-    */
-    virtual ~wxGridCellEditor();
 
     /**
         Fetch the value from the table and prepare the edit control
@@ -545,6 +540,13 @@ public:
         that first key if desired.
     */
     virtual void StartingKey(wxKeyEvent& event);
+
+protected:
+
+    /**
+        The dtor is private because only DecRef() can delete us.
+    */
+    virtual ~wxGridCellEditor();
 };
 
 
@@ -842,10 +844,13 @@ public:
     */
     wxGridCellNumberEditor(int min = -1, int max = -1);
 
+
     /**
-        String representation of the value.
+        Parameters string format is "min,max".
     */
-    wxString GetString() const;
+    virtual void SetParameters(const wxString& params);
+
+protected:
 
     /**
         If the return value is @true, the editor uses a wxSpinCtrl to get user input,
@@ -854,9 +859,9 @@ public:
     bool HasRange() const;
 
     /**
-        Parameters string format is "min,max".
+        String representation of the value.
     */
-    virtual void SetParameters(const wxString& params);
+    wxString GetString() const;
 };
 
 
@@ -1488,15 +1493,6 @@ public:
     */
     bool CanEnableCellControl() const;
 
-    /**
-        Returns @true if this grid has support for cell attributes.
-
-        The grid supports attributes if it has the associated table which, in
-        turn, has attributes support, i.e. wxGridTableBase::CanHaveAttributes()
-        returns @true.
-    */
-    bool CanHaveAttributes() const;
-
     //@{
     /**
         Return the rectangle corresponding to the grid cell's size and position
@@ -1720,7 +1716,7 @@ public:
     /**
         Returns a pointer to the editor for the cell at the specified location.
 
-        See wxGridCellEditor and the @ref overview_grid "wxGrid overview" 
+        See wxGridCellEditor and the @ref overview_grid "wxGrid overview"
         for more information about cell editors and renderers.
 
         The caller must call DecRef() on the returned pointer.
@@ -1808,11 +1804,6 @@ public:
     wxString GetColLabelValue(int col) const;
 
     /**
-        Returns the coordinate of the left border specified column.
-    */
-    int GetColLeft(int col) const;
-
-    /**
         Returns the minimal width to which a column may be resized.
 
         Use SetColMinimalAcceptableWidth() to change this value globally or
@@ -1821,23 +1812,9 @@ public:
     int GetColMinimalAcceptableWidth() const;
 
     /**
-        Get the minimal width of the given column/row.
-
-        The value returned by this function may be different than that returned
-        by GetColMinimalAcceptableWidth() if SetColMinimalWidth() had been
-        called for this column.
-    */
-    int GetColMinimalWidth(int col) const;
-
-    /**
         Returns the position of the specified column.
     */
     int GetColPos(int colID) const;
-
-    /**
-        Returns the coordinate of the right border specified column.
-    */
-    int GetColRight(int col) const;
 
     /**
         Returns the width of the specified column.
@@ -2085,15 +2062,6 @@ public:
         @see GetColMinimalAcceptableWidth()
     */
     int GetRowMinimalAcceptableHeight() const;
-
-    /**
-        Returns the minimal size for the given column.
-
-        The value returned by this function may be different than that returned
-        by GetRowMinimalAcceptableHeight() if SetRowMinimalHeight() had been
-        called for this row.
-    */
-    int GetRowMinimalHeight(int col) const;
 
     /**
         Returns the height of the specified row.
@@ -2763,7 +2731,7 @@ public:
 
         The grid will take ownership of the pointer.
 
-        See wxGridCellRenderer and the @ref overview_grid "wxGrid overview" 
+        See wxGridCellRenderer and the @ref overview_grid "wxGrid overview"
         for more information about cell editors and renderers.
     */
     void SetDefaultRenderer(wxGridCellRenderer* renderer);
@@ -3014,6 +2982,44 @@ public:
         Returns @c wxNOT_FOUND if there is no row at the y position.
     */
     int YToRow(int y, bool clipToMinMax = false) const;
+
+protected:
+    /**
+        Returns @true if this grid has support for cell attributes.
+
+        The grid supports attributes if it has the associated table which, in
+        turn, has attributes support, i.e. wxGridTableBase::CanHaveAttributes()
+        returns @true.
+    */
+    bool CanHaveAttributes() const;
+
+    /**
+        Get the minimal width of the given column/row.
+
+        The value returned by this function may be different than that returned
+        by GetColMinimalAcceptableWidth() if SetColMinimalWidth() had been
+        called for this column.
+    */
+    int GetColMinimalWidth(int col) const;
+
+    /**
+        Returns the coordinate of the right border specified column.
+    */
+    int GetColRight(int col) const;
+
+    /**
+        Returns the coordinate of the left border specified column.
+    */
+    int GetColLeft(int col) const;
+
+    /**
+        Returns the minimal size for the given column.
+
+        The value returned by this function may be different than that returned
+        by GetRowMinimalAcceptableHeight() if SetRowMinimalHeight() had been
+        called for this row.
+    */
+    int GetRowMinimalHeight(int col) const;
 };
 
 

@@ -580,57 +580,6 @@ public:
                     int imageIndex);
 
     /**
-        This function may be overloaded in the derived class for a control with
-        @c wxLC_VIRTUAL style. It should return the attribute for the specified
-        @c item or @NULL to use the default appearance parameters.
-
-        wxListCtrl will not delete the pointer or keep a reference of it.
-        You can return the same wxListItemAttr pointer for every OnGetItemAttr() call.
-
-        The base class version always returns @NULL.
-
-        @see OnGetItemImage(), OnGetItemColumnImage(), OnGetItemText()
-    */
-    virtual wxListItemAttr* OnGetItemAttr(long item) const;
-
-    /**
-        Overload this function in the derived class for a control with
-        @c wxLC_VIRTUAL and @c wxLC_REPORT styles in order to specify the image
-        index for the given line and column.
-
-        The base class version always calls OnGetItemImage() for the first column, else
-        it returns -1.
-
-        @see OnGetItemText(), OnGetItemImage(), OnGetItemAttr()
-    */
-    virtual int OnGetItemColumnImage(long item, long column) const;
-
-    /**
-        This function must be overloaded in the derived class for a control with
-        @c wxLC_VIRTUAL style having an @ref SetImageList() "image list"
-        (if the control doesn't have an image list, it is not necessary to overload it).
-        It should return the index of the items image in the controls image list
-        or -1 for no image.
-
-        In a control with @c wxLC_REPORT style, OnGetItemImage() only gets called for
-        the first column of each line.
-
-        The base class version always returns -1.
-
-        @see OnGetItemText(), OnGetItemColumnImage(), OnGetItemAttr()
-    */
-    virtual int OnGetItemImage(long item) const;
-
-    /**
-        This function @b must be overloaded in the derived class for a control with
-        @c wxLC_VIRTUAL style. It should return the string containing the text of
-        the given @a column for the specified @c item.
-
-        @see SetItemCount(), OnGetItemImage(), OnGetItemColumnImage(), OnGetItemAttr()
-    */
-    virtual wxString OnGetItemText(long item, long column) const;
-
-    /**
         Redraws the given @e item.
 
         This is only useful for the virtual list controls as without calling this
@@ -856,6 +805,59 @@ public:
         Please see the @ref page_samples_listctrl for an example of using this function.
     */
     bool SortItems(wxListCtrlCompare fnSortCallBack, long data);
+
+protected:
+
+    /**
+        This function may be overloaded in the derived class for a control with
+        @c wxLC_VIRTUAL style. It should return the attribute for the specified
+        @c item or @NULL to use the default appearance parameters.
+
+        wxListCtrl will not delete the pointer or keep a reference of it.
+        You can return the same wxListItemAttr pointer for every OnGetItemAttr() call.
+
+        The base class version always returns @NULL.
+
+        @see OnGetItemImage(), OnGetItemColumnImage(), OnGetItemText()
+    */
+    virtual wxListItemAttr* OnGetItemAttr(long item) const;
+
+    /**
+        Overload this function in the derived class for a control with
+        @c wxLC_VIRTUAL and @c wxLC_REPORT styles in order to specify the image
+        index for the given line and column.
+
+        The base class version always calls OnGetItemImage() for the first column, else
+        it returns -1.
+
+        @see OnGetItemText(), OnGetItemImage(), OnGetItemAttr()
+    */
+    virtual int OnGetItemColumnImage(long item, long column) const;
+
+    /**
+        This function must be overloaded in the derived class for a control with
+        @c wxLC_VIRTUAL style having an @ref SetImageList() "image list"
+        (if the control doesn't have an image list, it is not necessary to overload it).
+        It should return the index of the items image in the controls image list
+        or -1 for no image.
+
+        In a control with @c wxLC_REPORT style, OnGetItemImage() only gets called for
+        the first column of each line.
+
+        The base class version always returns -1.
+
+        @see OnGetItemText(), OnGetItemColumnImage(), OnGetItemAttr()
+    */
+    virtual int OnGetItemImage(long item) const;
+
+    /**
+        This function @b must be overloaded in the derived class for a control with
+        @c wxLC_VIRTUAL style. It should return the string containing the text of
+        the given @a column for the specified @c item.
+
+        @see SetItemCount(), OnGetItemImage(), OnGetItemColumnImage(), OnGetItemAttr()
+    */
+    virtual wxString OnGetItemText(long item, long column) const;
 };
 
 

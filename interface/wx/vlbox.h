@@ -191,37 +191,6 @@ public:
     bool IsSelected(size_t item) const;
 
     /**
-        This method is used to draw the items background and, maybe, a border
-        around it.
-
-        The base class version implements a reasonable default behaviour which
-        consists in drawing the selected item with the standard background
-        colour and drawing a border around the item if it is either selected or
-        current.
-
-        @todo Change this function signature to non-const.
-    */
-    virtual void OnDrawBackground(wxDC& dc, const wxRect& rect, size_t n) const;
-
-    /**
-        This method may be used to draw separators between the lines. The
-        rectangle passed to it may be modified, typically to deflate it a bit
-        before passing to OnDrawItem().
-
-        The base class version of this method doesn't do anything.
-
-        @param dc
-            The device context to use for drawing.
-        @param rect
-            The bounding rectangle for the item.
-        @param n
-            The index of the item.
-
-        @todo Change this function signature to non-const.
-    */
-    virtual void OnDrawSeparator(wxDC& dc, wxRect& rect, size_t n) const;
-
-    /**
         Selects or deselects the specified item which must be valid (i.e. not
         equal to @c wxNOT_FOUND).
 
@@ -328,6 +297,37 @@ protected:
         @todo Change this function signature to non-const.
     */
     virtual void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const = 0;
+
+    /**
+        This method is used to draw the items background and, maybe, a border
+        around it.
+
+        The base class version implements a reasonable default behaviour which
+        consists in drawing the selected item with the standard background
+        colour and drawing a border around the item if it is either selected or
+        current.
+
+        @todo Change this function signature to non-const.
+    */
+    virtual void OnDrawBackground(wxDC& dc, const wxRect& rect, size_t n) const;
+
+    /**
+        This method may be used to draw separators between the lines. The
+        rectangle passed to it may be modified, typically to deflate it a bit
+        before passing to OnDrawItem().
+
+        The base class version of this method doesn't do anything.
+
+        @param dc
+            The device context to use for drawing.
+        @param rect
+            The bounding rectangle for the item.
+        @param n
+            The index of the item.
+
+        @todo Change this function signature to non-const.
+    */
+    virtual void OnDrawSeparator(wxDC& dc, wxRect& rect, size_t n) const;
 
     /**
         The derived class must implement this method to return the height of

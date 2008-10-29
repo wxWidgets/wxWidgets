@@ -290,11 +290,6 @@ public:
     wxRichTextStyleListBox::wxRichTextStyleType GetStyleType() const;
 
     /**
-        Returns the HTML for this item.
-    */
-    virtual wxString OnGetItem(size_t n) const;
-
-    /**
         Implements left click behaviour, applying the clicked style to the
         wxRichTextCtrl.
     */
@@ -334,6 +329,13 @@ public:
         Updates the list from the associated style sheet.
     */
     void UpdateStyles();
+
+protected:
+
+    /**
+        Returns the HTML for this item.
+    */
+    virtual wxString OnGetItem(size_t n) const;
 };
 
 

@@ -67,19 +67,6 @@ public:
     virtual ~wxTaskBarIcon();
 
     /**
-        This method is called by the library when the user requests popup menu
-        (on Windows and Unix platforms, this is when the user right-clicks the icon).
-
-        Override this function in order to provide popup menu associated with the icon.
-        If CreatePopupMenu() returns @NULL (this happens by default), no menu is shown,
-        otherwise the menu is displayed and then deleted by the library as soon as the
-        user dismisses it.
-
-        The events can be handled by a class derived from wxTaskBarIcon.
-    */
-    virtual wxMenu* CreatePopupMenu();
-
-    /**
         This method is similar to wxWindow::Destroy and can be used to schedule
         the task bar icon object for the delayed destruction: it will be deleted
         during the next event loop iteration, which allows the task bar
@@ -141,5 +128,20 @@ public:
         @since 2.9.0
     */
     static bool IsAvailable();
+
+protected:
+
+    /**
+        This method is called by the library when the user requests popup menu
+        (on Windows and Unix platforms, this is when the user right-clicks the icon).
+
+        Override this function in order to provide popup menu associated with the icon.
+        If CreatePopupMenu() returns @NULL (this happens by default), no menu is shown,
+        otherwise the menu is displayed and then deleted by the library as soon as the
+        user dismisses it.
+
+        The events can be handled by a class derived from wxTaskBarIcon.
+    */
+    virtual wxMenu* CreatePopupMenu();
 };
 

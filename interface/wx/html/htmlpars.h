@@ -56,6 +56,14 @@ public:
     virtual bool HandleTag(const wxHtmlTag& tag) = 0;
 
     /**
+        Assigns @a parser to this handler. Each @b instance of handler
+        is guaranteed to be called only from the parser.
+    */
+    virtual void SetParser(wxHtmlParser* parser);
+
+protected:
+
+    /**
         This method calls parser's wxHtmlParser::DoParsing method
         for the string between this tag and the paired ending tag:
         @code
@@ -67,13 +75,6 @@ public:
     */
     void ParseInner(const wxHtmlTag& tag);
 
-    /**
-        Assigns @a parser to this handler. Each @b instance of handler
-        is guaranteed to be called only from the parser.
-    */
-    virtual void SetParser(wxHtmlParser* parser);
-
-protected:
     /**
         This attribute is used to access parent parser. It is protected so that
         it can't be accessed by user but can be accessed from derived classes.
@@ -112,17 +113,6 @@ public:
         Constructor.
     */
     wxHtmlParser();
-
-    /**
-        This may (and may not) be overwritten in derived class.
-
-        This method is called each time new tag is about to be added.
-        @a tag contains information about the tag. (See wxHtmlTag for details.)
-
-        Default (wxHtmlParser) behaviour is this: first it finds a handler capable
-        of handling this tag and then it calls handler's HandleTag() method.
-    */
-    virtual void AddTag(const wxHtmlTag& tag);
 
     /**
         Adds handler to the internal list ( hash table) of handlers.
@@ -299,5 +289,18 @@ public:
         from Parse() or any function called by it (i.e. from tag handlers).
     */
     virtual void StopParsing();
+
+protected:
+
+    /**
+        This may (and may not) be overwritten in derived class.
+
+        This method is called each time new tag is about to be added.
+        @a tag contains information about the tag. (See wxHtmlTag for details.)
+
+        Default (wxHtmlParser) behaviour is this: first it finds a handler capable
+        of handling this tag and then it calls handler's HandleTag() method.
+    */
+    virtual void AddTag(const wxHtmlTag& tag);
 };
 

@@ -180,6 +180,8 @@ public:
     */
     virtual int GetWidestItemWidth();
 
+protected:
+
     /**
         This method is used to draw the items background and, maybe, a border around it.
 
