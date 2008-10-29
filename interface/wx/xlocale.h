@@ -71,19 +71,19 @@ public:
     /**
         Creates an uninitialized locale object, IsOk() method will return @false.
     */
-    wxLocale();
+    wxXLocale();
 
     /**
         Creates the locale object corresponding to the specified language.
     */
-    wxLocale(wxLanguage lang);
+    wxXLocale(wxLanguage lang);
 
     /**
         Creates the locale object corresponding to the specified locale string.
         The locale string is system-dependent, use constructor taking wxLanguage
         for better portability.
     */
-    wxLocale(const char* loc);
+    wxXLocale(const char* loc);
 
     /**
         Returns the global object representing the "C" locale.

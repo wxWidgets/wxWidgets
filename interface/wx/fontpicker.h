@@ -113,7 +113,7 @@ public:
         (see wxFNTP_USE_TEXTCTRL), it's a good idea to put a limit to the maximum
         font size when huge fonts do not make much sense.
     */
-    unsigned int GetMaxPointSize() const;
+    void SetMaxPointSize(unsigned int) const;
 
     /**
         Sets the currently selected font.
