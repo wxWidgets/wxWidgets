@@ -60,11 +60,33 @@ class wxBufferedInputStream : public wxFilterInputStream
 {
 public:
     /**
-        Constructor.
-        If a non @NULL buffer is given to the stream, it will be deleted by it.
+        Constructor using the provided buffer or default.
+
+        @param stream
+            The associated low-level stream.
+        @param buffer
+            The buffer to use if non-@NULL. Notice that the ownership of this
+            buffer is taken by the stream, i.e. it will delete it. If this
+            parameter is @NULL a default 1KB buffer is used.
     */
     wxBufferedInputStream(wxInputStream& stream,
                           wxStreamBuffer *buffer = NULL);
+
+    /**
+        Constructor allowing to specify the size of the buffer.
+
+        This is just a more convenient alternative to creating a wxStreamBuffer
+        of the given size and using the other overloaded constructor of this
+        class.
+
+        @param stream
+            The associated low-level stream.
+        @param bufsize
+            The size of the buffer, in bytes.
+
+        @since 2.9.0
+     */
+    wxBufferedInputStream(wxInputStream& stream, size_t bufsize);
 
     /**
         Destructor.
@@ -113,6 +135,26 @@ public:
     wxStreamBuffer(wxStreamBase& stream, BufMode mode);
 
     /**
+        Constructor for an input buffer of the specified size.
+
+        Using it is equivalent to using the constructor above with read mode
+        and calling SetBufferIO() but is more convenient.
+
+        @since 2.9.0
+     */
+    wxStreamBuffer(wxInputStream& stream, size_t bufsize);
+
+    /**
+        Constructor for an output buffer of the specified size.
+
+        Using it is equivalent to using the constructor above with write mode
+        and calling SetBufferIO() but is more convenient.
+
+        @since 2.9.0
+     */
+    wxStreamBuffer(wxOutputStream& stream, size_t bufsize);
+
+    /**
         Constructor; creates a new empty stream buffer which won't flush any data
         to a stream. mode specifies the type of the buffer (read, write, read_write).
 
@@ -130,7 +172,7 @@ public:
     wxStreamBuffer(BufMode mode);
 
     /**
-        Constructor.
+        Copy constructor.
 
         This method initializes the stream buffer with the data of the specified
         stream buffer. The new stream buffer has the same attributes, size, position
@@ -670,10 +712,34 @@ class wxBufferedOutputStream : public wxFilterOutputStream
 {
 public:
     /**
-        @todo WRITE DESCRIPTION
+        Constructor using the provided buffer or default.
+
+        @param stream
+            The associated low-level stream.
+        @param buffer
+            The buffer to use if non-@NULL. Notice that the ownership of this
+            buffer is taken by the stream, i.e. it will delete it. If this
+            parameter is @NULL a default 1KB buffer is used.
     */
     wxBufferedOutputStream(wxOutputStream& stream,
                            wxStreamBuffer *buffer = NULL);
+
+    /**
+        Constructor allowing to specify the size of the buffer.
+
+        This is just a more convenient alternative to creating a wxStreamBuffer
+        of the given size and using the other overloaded constructor of this
+        class.
+
+        @param stream
+            The associated low-level stream.
+        @param bufsize
+            The size of the buffer, in bytes.
+
+        @since 2.9.0
+     */
+    wxBufferedOutputStream(wxOutputStream& stream, size_t bufsize);
+
     /**
         Destructor. Calls Sync() and destroys the internal buffer.
     */

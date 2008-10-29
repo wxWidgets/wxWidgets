@@ -75,6 +75,16 @@ void wxStreamBuffer::Init()
     m_fixed = true;
 }
 
+void wxStreamBuffer::InitWithStream(wxStreamBase& stream, BufMode mode)
+{
+    Init();
+
+    m_stream = &stream;
+    m_mode = mode;
+
+    m_flushable = true;
+}
+
 wxStreamBuffer::wxStreamBuffer(BufMode mode)
 {
     Init();
@@ -83,16 +93,6 @@ wxStreamBuffer::wxStreamBuffer(BufMode mode)
     m_mode = mode;
 
     m_flushable = false;
-}
-
-wxStreamBuffer::wxStreamBuffer(wxStreamBase& stream, BufMode mode)
-{
-    Init();
-
-    m_stream = &stream;
-    m_mode = mode;
-
-    m_flushable = true;
 }
 
 wxStreamBuffer::wxStreamBuffer(const wxStreamBuffer& buffer)
@@ -1204,21 +1204,33 @@ void wxFilterClassFactory::Remove()
 // wxBufferedInputStream
 // ----------------------------------------------------------------------------
 
-wxBufferedInputStream::wxBufferedInputStream(wxInputStream& s,
-                                             wxStreamBuffer *buffer)
-                     : wxFilterInputStream(s)
+namespace
 {
-    if ( buffer )
-    {
-        // use the buffer provided by the user
-        m_i_streambuf = buffer;
-    }
-    else // create a default buffer
-    {
-        m_i_streambuf = new wxStreamBuffer(*this, wxStreamBuffer::read);
 
-        m_i_streambuf->SetBufferIO(1024);
-    }
+// helper function used for initializing the buffer used by
+// wxBufferedInput/OutputStream: it simply returns the provided buffer if it's
+// not NULL or creates a buffer of the given size otherwise
+template <typename T>
+wxStreamBuffer *
+CreateBufferIfNeeded(T& stream, wxStreamBuffer *buffer, size_t bufsize = 1024)
+{
+    return buffer ? buffer : new wxStreamBuffer(stream, bufsize);
+}
+
+} // anonymous namespace
+
+wxBufferedInputStream::wxBufferedInputStream(wxInputStream& stream,
+                                             wxStreamBuffer *buffer)
+                     : wxFilterInputStream(stream)
+{
+    m_i_streambuf = CreateBufferIfNeeded(*this, buffer);
+}
+
+wxBufferedInputStream::wxBufferedInputStream(wxInputStream& stream,
+                                             size_t bufsize)
+                     : wxFilterInputStream(stream)
+{
+    m_i_streambuf = CreateBufferIfNeeded(*this, NULL, bufsize);
 }
 
 wxBufferedInputStream::~wxBufferedInputStream()
@@ -1320,20 +1332,18 @@ void wxBufferedInputStream::SetInputStreamBuffer(wxStreamBuffer *buffer)
 // wxBufferedOutputStream
 // ----------------------------------------------------------------------------
 
-wxBufferedOutputStream::wxBufferedOutputStream(wxOutputStream& s,
+wxBufferedOutputStream::wxBufferedOutputStream(wxOutputStream& stream,
                                                wxStreamBuffer *buffer)
-                      : wxFilterOutputStream(s)
+                      : wxFilterOutputStream(stream)
 {
-    if ( buffer )
-    {
-        m_o_streambuf = buffer;
-    }
-    else // create a default one
-    {
-        m_o_streambuf = new wxStreamBuffer(*this, wxStreamBuffer::write);
+    m_o_streambuf = CreateBufferIfNeeded(*this, buffer);
+}
 
-        m_o_streambuf->SetBufferIO(1024);
-    }
+wxBufferedOutputStream::wxBufferedOutputStream(wxOutputStream& stream,
+                                               size_t bufsize)
+                      : wxFilterOutputStream(stream)
+{
+    m_o_streambuf = CreateBufferIfNeeded(*this, NULL, bufsize);
 }
 
 wxBufferedOutputStream::~wxBufferedOutputStream()

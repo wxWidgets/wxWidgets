@@ -416,7 +416,23 @@ public:
         read_write
     };
 
-    wxStreamBuffer(wxStreamBase& stream, BufMode mode);
+    wxStreamBuffer(wxStreamBase& stream, BufMode mode)
+    {
+        InitWithStream(stream, mode);
+    }
+
+    wxStreamBuffer(wxInputStream& stream, size_t bufsize)
+    {
+        InitWithStream(stream, read);
+        SetBufferIO(bufsize);
+    }
+
+    wxStreamBuffer(wxOutputStream& stream, size_t bufsize)
+    {
+        InitWithStream(stream, write);
+        SetBufferIO(bufsize);
+    }
+
     wxStreamBuffer(const wxStreamBuffer& buf);
     virtual ~wxStreamBuffer();
 
@@ -487,6 +503,9 @@ protected:
     // common part of several ctors
     void Init();
 
+    // common part of ctors taking wxStreamBase parameter
+    void InitWithStream(wxStreamBase& stream, BufMode mode);
+
     // init buffer variables to be empty
     void InitBuffer();
 
@@ -510,13 +529,8 @@ protected:
          m_fixed,
          m_flushable;
 
-private:
-// Cannot use
-//  DECLARE_NO_COPY_CLASS(wxStreamBuffer)
-// because copy constructor is explicitly declared above;
-// but no copy assignment operator is defined, so declare
-// it private to prevent the compiler from defining it:
-    wxStreamBuffer& operator=(const wxStreamBuffer&);
+
+    DECLARE_NO_ASSIGN_CLASS(wxStreamBuffer)
 };
 
 // ---------------------------------------------------------------------------
@@ -526,9 +540,19 @@ private:
 class WXDLLIMPEXP_BASE wxBufferedInputStream : public wxFilterInputStream
 {
 public:
-    // if a non NULL buffer is given to the stream, it will be deleted by it
+    // create a buffered stream on top of the specified low-level stream
+    //
+    // if a non NULL buffer is given to the stream, it will be deleted by it,
+    // otherwise a default 1KB buffer will be used
     wxBufferedInputStream(wxInputStream& stream,
                           wxStreamBuffer *buffer = NULL);
+
+    // ctor allowing to specify the buffer size, it's just a more convenient
+    // alternative to creating wxStreamBuffer, calling its SetBufferIO(bufsize)
+    // and using the ctor above
+    wxBufferedInputStream(wxInputStream& stream, size_t bufsize);
+
+
     virtual ~wxBufferedInputStream();
 
     char Peek();
@@ -565,9 +589,18 @@ protected:
 class WXDLLIMPEXP_BASE wxBufferedOutputStream : public wxFilterOutputStream
 {
 public:
-    // if a non NULL buffer is given to the stream, it will be deleted by it
+    // create a buffered stream on top of the specified low-level stream
+    //
+    // if a non NULL buffer is given to the stream, it will be deleted by it,
+    // otherwise a default 1KB buffer will be used
     wxBufferedOutputStream(wxOutputStream& stream,
                            wxStreamBuffer *buffer = NULL);
+
+    // ctor allowing to specify the buffer size, it's just a more convenient
+    // alternative to creating wxStreamBuffer, calling its SetBufferIO(bufsize)
+    // and using the ctor above
+    wxBufferedOutputStream(wxOutputStream& stream, size_t bufsize);
+
     virtual ~wxBufferedOutputStream();
 
     wxOutputStream& Write(const void *buffer, size_t size);
