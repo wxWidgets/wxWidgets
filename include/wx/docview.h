@@ -78,6 +78,11 @@ public:
     bool GetDocumentSaved() const { return m_savedYet; }
     void SetDocumentSaved(bool saved = true) { m_savedYet = saved; }
 
+    // return true if the document hasn't been modified since the last time it
+    // was saved (implying that it returns false if it was never saved, even if
+    // the document is not modified)
+    bool AlreadySaved() const { return !IsModified() && GetDocumentSaved(); }
+
     virtual bool Close();
     virtual bool Save();
     virtual bool SaveAs();

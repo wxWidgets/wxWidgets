@@ -259,7 +259,7 @@ bool wxDocument::OnNewDocument()
 
 bool wxDocument::Save()
 {
-    if (!IsModified() && m_savedYet)
+    if ( AlreadySaved() )
         return true;
 
     if ( m_documentFile.empty() || !m_savedYet )
@@ -1094,8 +1094,8 @@ void wxDocManager::OnUpdateFileNew(wxUpdateUIEvent& event)
 
 void wxDocManager::OnUpdateFileSave(wxUpdateUIEvent& event)
 {
-    wxDocument *doc = GetCurrentDocument();
-    event.Enable( doc && doc->IsModified() );
+    wxDocument * const doc = GetCurrentDocument();
+    event.Enable( doc && !doc->AlreadySaved() );
 }
 
 void wxDocManager::OnUpdateUndo(wxUpdateUIEvent& event)

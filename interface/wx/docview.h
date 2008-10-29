@@ -1009,6 +1009,22 @@ public:
     virtual bool AddView(wxView* view);
 
     /**
+        Returns true if the document hasn't been modified since the last time
+        it had been saved.
+
+        Notice that this function returns @false if the document had been never
+        saved at all, so it may be also used to test whether it makes sense to
+        save the document: if it returns @true, there is nothing to save but if
+        @false is returned, it can be saved, even if it might be not modified
+        (this can be used to create an empty document file by the user).
+
+        @see IsModified(), GetDocumentSaved()
+
+        @since 2.9.0
+     */
+    bool AlreadySaved() const;
+
+    /**
         Closes the document, by calling OnSaveModified() and then (if this
         returned @true) OnCloseDocument(). This does not normally delete the
         document object, use DeleteAllViews() to do this implicitly.
