@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 21 May 2008                                                         *
+# Date : 29 October 2008                                                     *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -636,6 +636,7 @@ srchcmn.obj : srchcmn.cpp
 textentrycmn.obj : textentrycmn.cpp
 filectrlcmn.obj : filectrlcmn.cpp
 cairo.obj : cairo.cpp
+	cxx$(CXXFLAGS)$(CXX_DEFINE)/obj=cairo.obj cairo.cpp
 overlaycmn.obj : overlaycmn.cpp
 windowid.obj : windowid.cpp
 calctrlcmn.obj : calctrlcmn.cpp
