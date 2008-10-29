@@ -73,6 +73,8 @@ public:
     void SetDocumentName(const wxString& name) { m_documentTypeName = name; }
     wxString GetDocumentName() const { return m_documentTypeName; }
 
+    // access the flag indicating whether this document had been already saved,
+    // SetDocumentSaved() is only used internally, don't call it
     bool GetDocumentSaved() const { return m_savedYet; }
     void SetDocumentSaved(bool saved = true) { m_savedYet = saved; }
 

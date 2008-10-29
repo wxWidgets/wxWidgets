@@ -1044,6 +1044,13 @@ public:
     wxString GetDocumentName() const;
 
     /**
+        Return true if this document had been already saved.
+
+        @see IsModified()
+     */
+    bool GetDocumentSaved() const;
+
+    /**
         Gets a pointer to the template that created the document.
     */
     virtual wxDocTemplate* GetDocumentTemplate() const;
