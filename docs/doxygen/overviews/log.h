@@ -28,6 +28,8 @@ Classes:
 @li @ref overview_log_targets
 @li @ref overview_log_customize
 
+<hr>
+
 
 @section overview_log_introduction Introduction
 

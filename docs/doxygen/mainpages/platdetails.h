@@ -640,6 +640,6 @@ necessary to use the underlying toolkit API directly:
 @li wxMSW port uses win32 API: see MSDN docs at http://msdn2.microsoft.com/en-us/library/ms649779.aspx
 @li wxGTK port uses GTK+: see GTK+ 2.x docs at http://developer.gnome.org/doc/API/2.0/gtk/index.html
 @li wxMac port uses the Carbon API: see Carbon docs at http://developer.apple.com/carbon
-@li wxCocoa port uses the Cocoa API: see Cocoa docs at http://developer.apple.com/carbon
+@li wxCocoa port uses the Cocoa API: see Cocoa docs at http://developer.apple.com/cocoa
 
 */
