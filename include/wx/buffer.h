@@ -27,7 +27,7 @@ class WXDLLIMPEXP_FWD_BASE wxCStrData;
 // ----------------------------------------------------------------------------
 
 template <typename T>
-class WXDLLIMPEXP_BASE wxCharTypeBuffer
+class wxCharTypeBuffer
 {
 public:
     typedef T CharType;
@@ -37,7 +37,7 @@ public:
         if ( str )
             m_data = new Data(wxStrdup(str));
         else
-            m_data = &NullData;
+            m_data = GetNullData();
     }
 
     wxCharTypeBuffer(size_t len)
@@ -64,7 +64,7 @@ public:
     //     that ref-counting is used, it's not really needed.
     CharType *release() const
     {
-        if ( m_data == &NullData )
+        if ( m_data == GetNullData() )
             return NULL;
 
         wxASSERT_MSG( m_data->m_owned, _T("can't release non-owned buffer") );
@@ -121,7 +121,7 @@ public:
         if ( !str )
             return false;
 
-        if ( m_data == &NullData )
+        if ( m_data == GetNullData() )
         {
             m_data = new Data(str);
         }
@@ -167,30 +167,27 @@ private:
     };
 
     // placeholder for NULL string, to simplify this code
-    // NB: this is defined in string.cpp, not (non-existent) buffer.cpp
-#ifdef __MINGW32__
-    // MinGW requires explicit WXDLLIMPEXP_DATA_BASE to avoid compilation
-    // errors
-    static WXDLLIMPEXP_DATA_BASE(Data) NullData;
-#else
-    // but Visual C++ doesn't like it
-    static Data NullData;
-#endif
+    static Data *GetNullData()
+    {
+        static Data s_nullData(NULL);
+
+        return &s_nullData;
+    }
 
     void IncRef()
     {
-        if ( m_data == &NullData ) // exception, not ref-counted
+        if ( m_data == GetNullData() ) // exception, not ref-counted
             return;
         m_data->m_ref++;
     }
 
     void DecRef()
     {
-        if ( m_data == &NullData ) // exception, not ref-counted
+        if ( m_data == GetNullData() ) // exception, not ref-counted
             return;
         if ( --m_data->m_ref == 0 )
             delete m_data;
-        m_data = &NullData;
+        m_data = GetNullData();
     }
 
 private:
@@ -199,7 +196,7 @@ private:
 
 WXDLLIMPEXP_TEMPLATE_INSTANCE_BASE( wxCharTypeBuffer<char> )
 
-class WXDLLIMPEXP_BASE wxCharBuffer : public wxCharTypeBuffer<char>
+class wxCharBuffer : public wxCharTypeBuffer<char>
 {
 public:
     typedef wxCharTypeBuffer<char> wxCharTypeBufferBase;
@@ -216,7 +213,7 @@ public:
 #if wxUSE_WCHAR_T
 WXDLLIMPEXP_TEMPLATE_INSTANCE_BASE( wxCharTypeBuffer<wchar_t> )
 
-class WXDLLIMPEXP_BASE wxWCharBuffer : public wxCharTypeBuffer<wchar_t>
+class wxWCharBuffer : public wxCharTypeBuffer<wchar_t>
 {
 public:
     typedef wxCharTypeBuffer<wchar_t> wxCharTypeBufferBase;
@@ -342,7 +339,7 @@ private:
 };
 
 
-class WXDLLIMPEXP_BASE wxMemoryBuffer
+class wxMemoryBuffer
 {
 public:
     // ctor and dtor

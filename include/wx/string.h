@@ -3605,7 +3605,7 @@ private:
 #endif // !wxUSE_STL_BASED_WXSTRING
 
 template<typename T>
-class WXDLLIMPEXP_BASE wxStringTypeBufferBase
+class wxStringTypeBufferBase
 {
 public:
     typedef T CharType;
@@ -3645,8 +3645,7 @@ protected:
 };
 
 template<typename T>
-class WXDLLIMPEXP_BASE wxStringTypeBufferLengthBase
-    : public wxStringTypeBufferBase<T>
+class wxStringTypeBufferLengthBase : public wxStringTypeBufferBase<T>
 {
 public:
     wxStringTypeBufferLengthBase(wxString& str, size_t lenWanted = 1024)
@@ -3750,25 +3749,57 @@ typedef wxStringInternalBufferLength          wxUTF8StringBufferLength;
 
 WXDLLIMPEXP_TEMPLATE_INSTANCE_BASE( wxStringTypeBufferBase<char> )
 
-class WXDLLIMPEXP_BASE wxUTF8StringBuffer : public wxStringTypeBufferBase<char>
+// Note about inlined dtors in the classes below: this is done not for
+// performance reasons but just to avoid linking errors in the MSVC DLL build
+// under Windows: if a class has non-inline methods it must be declared as
+// being DLL-exported but, due to an extremely interesting feature of MSVC 7
+// and later, any template class which is used as a base of a DLL-exported
+// class is implicitly made DLL-exported too, as explained at the bottom of
+// http://msdn.microsoft.com/en-us/library/twa2aw10.aspx (just to confirm: yes,
+// _inheriting_ from a class can change whether it is being exported from DLL)
+//
+// But this results in link errors because the base template class is not DLL-
+// exported, whether it is declared with WXDLLIMPEXP_BASE or not, because it
+// does have only inline functions. So the simplest fix is to just make all the
+// functions of these classes inline too.
+
+class wxUTF8StringBuffer : public wxStringTypeBufferBase<char>
 {
 public:
     wxUTF8StringBuffer(wxString& str, size_t lenWanted = 1024)
         : wxStringTypeBufferBase<char>(str, lenWanted) {}
-    ~wxUTF8StringBuffer();
+    ~wxUTF8StringBuffer()
+    {
+        wxMBConvStrictUTF8 conv;
+        size_t wlen = conv.ToWChar(NULL, 0, m_buf);
+        wxCHECK_RET( wlen != wxCONV_FAILED, "invalid UTF-8 data in string buffer?" );
+
+        wxStringInternalBuffer wbuf(m_str, wlen);
+        conv.ToWChar(wbuf, wlen, m_buf);
+    }
 
     DECLARE_NO_COPY_CLASS(wxUTF8StringBuffer)
 };
 
 WXDLLIMPEXP_TEMPLATE_INSTANCE_BASE( wxStringTypeBufferLengthBase<char> )
 
-class WXDLLIMPEXP_BASE wxUTF8StringBufferLength
-    : public wxStringTypeBufferLengthBase<char>
+class wxUTF8StringBufferLength : public wxStringTypeBufferLengthBase<char>
 {
 public:
     wxUTF8StringBufferLength(wxString& str, size_t lenWanted = 1024)
         : wxStringTypeBufferLengthBase<char>(str, lenWanted) {}
-    ~wxUTF8StringBufferLength();
+    ~wxUTF8StringBufferLength()
+    {
+        wxCHECK_RET(m_lenSet, "length not set");
+
+        wxMBConvStrictUTF8 conv;
+        size_t wlen = conv.ToWChar(NULL, 0, m_buf, m_len);
+        wxCHECK_RET( wlen != wxCONV_FAILED, "invalid UTF-8 data in string buffer?" );
+
+        wxStringInternalBufferLength wbuf(m_str, wlen);
+        conv.ToWChar(wbuf, wlen, m_buf, m_len);
+        wbuf.SetLength(wlen);
+    }
 
     DECLARE_NO_COPY_CLASS(wxUTF8StringBufferLength)
 };

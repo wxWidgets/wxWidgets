@@ -542,16 +542,3 @@ wxU16CharBuffer wxUString::utf16_str() const
     
     return result;    
 }
-
-
-#if SIZEOF_WCHAR_T != 2
-template<>
-wxCharTypeBuffer<wxChar16>::Data
-wxCharTypeBuffer<wxChar16>::NullData(NULL);
-#endif
-
-#if SIZEOF_WCHAR_T != 4
-template<>
-wxCharTypeBuffer<wxChar32>::Data
-wxCharTypeBuffer<wxChar32>::NullData(NULL);
-#endif
