@@ -94,7 +94,7 @@ public:
         Create pixel data object representing the area of the image defined by
         @a pt and @a sz.
     */
-    wxPixelData(Image& i, const wxPoint& pt, const wxSize& sz)
+    wxPixelData(Image& i, const wxPoint& pt, const wxSize& sz);
 
     /**
         Return @true of if we could get access to bitmap data successfully.

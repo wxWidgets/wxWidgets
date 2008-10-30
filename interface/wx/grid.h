@@ -388,7 +388,7 @@ public:
         neither associated with this table by SetAttrProvider() nor created on
         demand by any other methods.
      */
-    wxGridCellAttrProvider *GetAttrProvider() const { return m_attrProvider; }
+    wxGridCellAttrProvider *GetAttrProvider() const;
 
     /**
         Return the attribute for the given cell.

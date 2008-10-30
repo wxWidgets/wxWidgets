@@ -236,7 +236,7 @@ public:
     /**
        Clears the list and adds @a n items with value @a v to it.
     */
-    void assign(size_type n, const_reference v = value_type())          \
+    void assign(size_type n, const_reference v = value_type());
 
     /**
         Returns the last item of the list.

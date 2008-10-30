@@ -493,7 +493,7 @@ public:
     /**
        Appends the wide string literal @e pwz.
     */
-    wxString& Append(const wchar_t* pwz)
+    wxString& Append(const wchar_t* pwz);
 
     /**
        Appends the string literal @e psz with max length @e nLen.
@@ -503,7 +503,7 @@ public:
     /**
        Appends the wide string literal @e psz with max length @e nLen.
     */
-    wxString& Append(const wchar_t* pwz, size_t nLen)
+    wxString& Append(const wchar_t* pwz, size_t nLen);
 
     /**
        Appends the string @e s.
@@ -1198,22 +1198,23 @@ public:
     */
     friend istream operator>>(istream& is, wxString& str);
 
+    //@{
     /**
         These functions work as C++ stream insertion operators. They insert the
         given value into the string. Precision and format cannot be set using them.
         Use Printf() instead.
     */
     wxString& operator<<(const wxString& s);
-    wxString& operator<<(const char* psz)
-    wxString& operator<<(const wchar_t* pwz)
-    wxString& operator<<(const wxCStrData& psz)
     wxString& operator<<(const char* psz);
-    wxString& operator<<(wxUniCharRef ch)
-    wxString& operator<<(char ch)
-    wxString& operator<<(unsigned char ch)
-    wxString& operator<<(wchar_t ch)
-    wxString& operator<<(const wxCharBuffer& s)
-    wxString& operator<<(const wxWCharBuffer& s)
+    wxString& operator<<(const wchar_t* pwz);
+    wxString& operator<<(const wxCStrData& psz);
+    wxString& operator<<(const char* psz);
+    wxString& operator<<(wxUniCharRef ch);
+    wxString& operator<<(char ch);
+    wxString& operator<<(unsigned char ch);
+    wxString& operator<<(wchar_t ch);
+    wxString& operator<<(const wxCharBuffer& s);
+    wxString& operator<<(const wxWCharBuffer& s);
     wxString& operator<<(wxUniCharRef ch);
     wxString& operator<<(unsigned int ui);
     wxString& operator<<(long l);
@@ -1222,6 +1223,7 @@ public:
     wxString& operator<<(wxULongLong_t ul);
     wxString& operator<<(float f);
     wxString& operator<<(double d);
+    //@}
 
     /**
         Same as Mid() (substring extraction).

@@ -27,9 +27,6 @@ public:
     */
     wxVideoMode(int width = 0, int height = 0, int depth = 0, int freq = 0);
 
-    bool operator==(const wxVideoMode& m) const
-    bool operator!=(const wxVideoMode& mode) const
-
     /**
         Returns true if this mode matches the other one in the sense that all
         non zero fields of the other mode have the same value in this one
@@ -57,6 +54,12 @@ public:
         Returns true if the object has been initialized
     */
     bool IsOk() const;
+
+
+    bool operator==(const wxVideoMode& m) const;
+    bool operator!=(const wxVideoMode& mode) const;
+
+
 
     /**
         The screen width in pixels (e.g. 640), 0 means unspecified.

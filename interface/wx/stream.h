@@ -748,7 +748,7 @@ public:
     /**
         Calls Sync() and changes the stream position.
     */
-    virtual wxFileOffset SeekO(wxFileOffset pos, wxSeekMode mode = wxFromStart)
+    virtual wxFileOffset SeekO(wxFileOffset pos, wxSeekMode mode = wxFromStart);
 
     /**
         Flushes the buffer and calls Sync() on the parent stream.

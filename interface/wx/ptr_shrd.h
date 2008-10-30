@@ -79,7 +79,7 @@ public:
         Releases any previously held pointer and creates a reference to the
         same object as @a topcopy.
     */
-    wxSharedPtr<T>& operator=(const wxSharedPtr<T>& tocopy)
+    wxSharedPtr<T>& operator=(const wxSharedPtr<T>& tocopy);
 
     /**
         Reset pointer to @a ptr.
