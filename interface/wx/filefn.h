@@ -116,7 +116,7 @@ const int wxInvalidOffset = -1;
 
     @header{wx/filefn.h}
 */
-#define wxCHANGE_UMASK(int mask)
+#define wxCHANGE_UMASK(mask)
 
 /**
     This function returns the total number of bytes and number of free bytes on

@@ -190,10 +190,10 @@ enum wxPaperSize
 
     @header{wx/defs.h}
 */
-#define wxINT32_SWAP_ALWAYS( wxInt32 value )
-#define wxUINT32_SWAP_ALWAYS( wxUint32 value )
-#define wxINT16_SWAP_ALWAYS( wxInt16 value )
-#define wxUINT16_SWAP_ALWAYS( wxUint16 value )
+#define wxINT32_SWAP_ALWAYS( wxInt32_value )
+#define wxUINT32_SWAP_ALWAYS( wxUint32_value )
+#define wxINT16_SWAP_ALWAYS( wxInt16_value )
+#define wxUINT16_SWAP_ALWAYS( wxUint16_value )
 
 //@}
 
@@ -211,10 +211,10 @@ enum wxPaperSize
 
     @header{wx/defs.h}
 */
-#define wxINT32_SWAP_ON_BE( wxInt32 value )
-#define wxUINT32_SWAP_ON_BE( wxUint32 value )
-#define wxINT16_SWAP_ON_BE( wxInt16 value )
-#define wxUINT16_SWAP_ON_BE( wxUint16 value )
+#define wxINT32_SWAP_ON_BE( wxInt32_value )
+#define wxUINT32_SWAP_ON_BE( wxUint32_value )
+#define wxINT16_SWAP_ON_BE( wxInt16_value )
+#define wxUINT16_SWAP_ON_BE( wxUint16_value )
 
 //@}
 
@@ -232,10 +232,10 @@ enum wxPaperSize
 
     @header{wx/defs.h}
 */
-#define wxINT32_SWAP_ON_LE( wxInt32 value )
-#define wxUINT32_SWAP_ON_LE( wxUint32 value )
-#define wxINT16_SWAP_ON_LE( wxInt16 value )
-#define wxUINT16_SWAP_ON_LE( wxUint16 value )
+#define wxINT32_SWAP_ON_LE( wxInt32_value )
+#define wxUINT32_SWAP_ON_LE( wxUint32_value )
+#define wxINT16_SWAP_ON_LE( wxInt16_value )
+#define wxUINT16_SWAP_ON_LE( wxUint16_value )
 
 //@}
 
