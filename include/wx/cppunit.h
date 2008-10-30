@@ -106,14 +106,23 @@ assertEquals(const wchar_t *expected,
 }
 
 // and another to be able to specify (usually literal) ints as expected values
-// for functions returning size_t
+// for functions returning any of unsigned {int,long} or size_t
 inline void
 assertEquals(int expected,
-             size_t actual,
+             unsigned actual,
              CppUnit::SourceLine sourceLine,
              const std::string& message)
 {
-    assertEquals(size_t(expected), actual, sourceLine, message);
+    assertEquals(unsigned(expected), actual, sourceLine, message);
+}
+
+inline void
+assertEquals(int expected,
+             unsigned long actual,
+             CppUnit::SourceLine sourceLine,
+             const std::string& message)
+{
+    assertEquals(unsigned long(expected), actual, sourceLine, message);
 }
 
 CPPUNIT_NS_END
