@@ -467,7 +467,7 @@ void ArraysTestCase::wxStringArraySplitJoinTest()
 
     CPPUNIT_ASSERT( wxSplit(string, _T(';')).empty() );
 
-    CPPUNIT_ASSERT_EQUAL( (size_t)2, wxSplit(_T(";"), _T(';')).size() );
+    CPPUNIT_ASSERT_EQUAL( 2, wxSplit(_T(";"), _T(';')).size() );
 }
 
 void ArraysTestCase::wxObjArrayTest()
@@ -550,11 +550,11 @@ void ArraysTestCase::Alloc()
     wxArrayInt a;
     a.Add(17);
     a.Add(9);
-    CPPUNIT_ASSERT_EQUAL( size_t(2), a.GetCount() );
+    CPPUNIT_ASSERT_EQUAL( 2, a.GetCount() );
 
     a.Alloc(1000);
 
-    CPPUNIT_ASSERT_EQUAL( size_t(2), a.GetCount() );
+    CPPUNIT_ASSERT_EQUAL( 2, a.GetCount() );
     CPPUNIT_ASSERT_EQUAL( 17, a[0] );
     CPPUNIT_ASSERT_EQUAL( 9, a[1] );
 }
@@ -624,7 +624,7 @@ void ArraysTestCase::TestSTL()
         list1.push_back(i);
 
     CPPUNIT_ASSERT( list1.capacity() >= (size_t)COUNT );
-    CPPUNIT_ASSERT_EQUAL( (size_t)COUNT, list1.size() );
+    CPPUNIT_ASSERT_EQUAL( COUNT, list1.size() );
 
     for ( it = list1.begin(), en = list1.end(), i = 0;
           it != en; ++it, ++i )
