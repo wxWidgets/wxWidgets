@@ -166,6 +166,8 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
     text_output << str << _T("\n");
     std_file_output << str.ToAscii() << "\n";
 
+    std_file_output.close();
+
     textCtrl.WriteText( _T("\nReading from ifstream:\n") );
 
     wxSTD ifstream std_file_input( "test_std.dat" );
