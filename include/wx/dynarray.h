@@ -84,7 +84,7 @@ typedef int (wxCMPFUNC_CONV *CMPFUNC)(const void* pItem1, const void* pItem2);
 #if wxUSE_STL
 
 template<class T>
-class WXDLLIMPEXP_BASE wxArray_SortFunction
+class wxArray_SortFunction
 {
 public:
     typedef int (wxCMPFUNC_CONV *CMPFUNC)(T* pItem1, T* pItem2);
@@ -97,7 +97,7 @@ private:
 };
 
 template<class T, typename F>
-class WXDLLIMPEXP_BASE wxSortedArray_SortFunction
+class wxSortedArray_SortFunction
 {
 public:
     typedef F CMPFUNC;
