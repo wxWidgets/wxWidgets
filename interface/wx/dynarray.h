@@ -632,17 +632,17 @@ public:
 
 
 /**
-    This macro may be used to append all elements of the @a other array to the
-    @a array. The two arrays must be of the same type.
+    This macro may be used to append all elements of the @a wxArray_arrayToBeAppended
+    array to the @a wxArray_arrayToModify. The two arrays must be of the same type.
 */
-#define WX_APPEND_ARRAY(wxArray& array, wxArray& other)
+#define WX_APPEND_ARRAY(wxArray_arrayToModify, wxArray_arrayToBeAppended)
 
 /**
     This macro may be used to delete all elements of the array before emptying
     it. It can not be used with wxObjArrays - but they will delete their
     elements anyway when you call Empty().
 */
-#define WX_CLEAR_ARRAY(wxArray& array)
+#define WX_CLEAR_ARRAY(wxArray_arrayToBeCleared)
 
 //@{
 /**
@@ -777,8 +777,8 @@ public:
 //@}
 
 /**
-    This macro may be used to prepend all elements of the @a other array to the
-    @a array. The two arrays must be of the same type.
+    This macro may be used to prepend all elements of the @a wxArray_arrayToBePrepended
+    array to the @a wxArray_arrayToModify. The two arrays must be of the same type.
 */
-#define WX_PREPEND_ARRAY(wxArray& array, wxArray& other)
+#define WX_PREPEND_ARRAY(wxArray_arrayToModify, wxArray_arrayToBePrepended)
 
