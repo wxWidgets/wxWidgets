@@ -102,7 +102,8 @@ All (GUI):
   Polish Pro input.
 - Fixed wxHtmlWindow::SelectionToText() to correctly insert newlines after
   single-cell paragraphs.
-- Fixed wxHTML's line breaks handling in <pre> blocks broken in 2.8.8 (#10120)
+- Fixed wxHTML's line breaks handling in <pre> blocks broken in 2.8.8 (#10120).
+- wxHTML: don't include extra whitespace in table cells.
 
 All (Unix):
 
