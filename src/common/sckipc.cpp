@@ -680,7 +680,8 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
     const wxString topic = connection->m_topic;
     wxString item;
 
-    switch ( const int msg = streams->Read8() )
+    const int msg = streams->Read8();
+    switch ( msg )
     {
         case IPC_EXECUTE:
             {
