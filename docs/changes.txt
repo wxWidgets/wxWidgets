@@ -115,6 +115,8 @@ wxMSW:
 - Fixed bug with using non default encoding in wxTextCtrl in ANSI build.
 - Restored generation of events for accelerators when there is no menu bar.
 - Fixed wxArtProvider::GetSizeHint() to return 16x16 for wxART_FRAME_ICON.
+- Fixed toolbar buttons so that they don't disappear temporarily when clicked
+  if the event handler causes window update.
 
 wxGTK:
 
