@@ -993,6 +993,14 @@ void wxTopLevelWindowMSW::SetIcons(const wxIconBundle& icons)
 {
     wxTopLevelWindowBase::SetIcons(icons);
 
+    if ( icons.IsEmpty() )
+    {
+        // FIXME: SetIcons(wxNullIconBundle) should unset existing icons,
+        //        but we currently don't do that
+        wxASSERT_MSG( m_icons.IsEmpty(), "unsetting icons doesn't work" );
+        return;
+    }
+
     if ( !DoSelectAndSetIcon(icons, SM_CXSMICON, SM_CYSMICON, ICON_SMALL) &&
             !DoSelectAndSetIcon(icons, SM_CXICON, SM_CYICON, ICON_BIG) )
     {
