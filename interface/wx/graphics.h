@@ -9,67 +9,74 @@
 /**
     @class wxGraphicsPath
 
-    A wxGraphicsPath is a native representation of an geometric path. The contents
-    are specific an private to the respective renderer. Instances are ref counted and can
-    therefore be assigned as usual. The only way to get a valid instance is via
-    wxGraphicsContext::CreatePath or wxGraphicsRenderer::CreatePath.
+    A wxGraphicsPath is a native representation of a geometric path. The
+    contents are specific an private to the respective renderer. Instances are
+    reference counted and can therefore be assigned as usual. The only way to
+    get a valid instance is by using wxGraphicsContext::CreatePath() or
+    wxGraphicsRenderer::CreatePath().
 
     @library{wxcore}
-    @category{FIXME}
+    @category{gdi}
 */
 class wxGraphicsPath : public wxGraphicsObject
 {
 public:
-    //@{
     /**
-
+        Adds an arc of a circle centering at (@a x,@a y) with radius (@a r)
+        from @a startAngle to @a endAngle.
     */
-    void AddArc(wxDouble x, wxDouble y, wxDouble r,
-                wxDouble startAngle,
-                wxDouble endAngle, bool clockwise);
+    virtual void AddArc(wxDouble x, wxDouble y, wxDouble r,
+                        wxDouble startAngle, wxDouble endAngle,
+                        bool clockwise);
+    /**
+        Adds an arc of a circle centering at @a c with radius (@a r)
+        from @a startAngle to @a endAngle.
+    */
     void AddArc(const wxPoint2DDouble& c, wxDouble r,
-                wxDouble startAngle,
-                wxDouble endAngle,
-                bool clockwise);
-    //@}
+                wxDouble startAngle, wxDouble endAngle, bool clockwise);
 
     /**
-        Appends a an arc to two tangents connecting (current) to (x1,y1) and (x1,y1) to
-        (x2,y2), also a straight line from (current) to (x1,y1).
+        Appends a an arc to two tangents connecting (current) to (@a x1,@a y1)
+        and (@a x1,@a y1) to (@a x2,@a y2), also a straight line from (current)
+        to (@a x1,@a y1).
     */
     virtual void AddArcToPoint(wxDouble x1, wxDouble y1, wxDouble x2,
                                wxDouble y2, wxDouble r);
 
     /**
-        Appends a circle around (x,y) with radius r as a new closed subpath.
+        Appends a circle around (@a x,@a y) with radius @a r as a new closed
+        subpath.
     */
     virtual void AddCircle(wxDouble x, wxDouble y, wxDouble r);
 
-    //@{
     /**
-
+        Adds a cubic bezier curve from the current point, using two control
+        points and an end point.
     */
-    void AddCurveToPoint(wxDouble cx1, wxDouble cy1, wxDouble cx2,
-                         wxDouble cy2,
-                         wxDouble x,
-                         wxDouble y);
+    void AddCurveToPoint(wxDouble cx1, wxDouble cy1,
+                         wxDouble cx2, wxDouble cy2,
+                         wxDouble x, wxDouble y);
+    /**
+        Adds a cubic bezier curve from the current point, using two control
+        points and an end point.
+    */
     void AddCurveToPoint(const wxPoint2DDouble& c1,
                          const wxPoint2DDouble& c2,
                          const wxPoint2DDouble& e);
-    //@}
 
     /**
         Appends an ellipse fitting into the passed in rectangle.
     */
     virtual void AddEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h);
 
-    //@{
     /**
-
+        Adds a straight line from the current point to (@a x,@a y).
     */
-    void AddLineToPoint(wxDouble x, wxDouble y);
+    virtual void AddLineToPoint(wxDouble x, wxDouble y);
+    /**
+        Adds a straight line from the current point to @a p.
+    */
     void AddLineToPoint(const wxPoint2DDouble& p);
-    //@}
 
     /**
         Adds another path.
@@ -77,11 +84,11 @@ public:
     virtual void AddPath(const wxGraphicsPath& path);
 
     /**
-        Adds a quadratic Bezier curve from the current point, using a control point and
-        an end point.
+        Adds a quadratic bezier curve from the current point, using a control
+        point and an end point.
     */
-    virtual void AddQuadCurveToPoint(wxDouble cx, wxDouble cy, wxDouble x,
-                                     wxDouble y);
+    virtual void AddQuadCurveToPoint(wxDouble cx, wxDouble cy,
+                                     wxDouble x, wxDouble y);
 
     /**
         Appends a rectangle as a new closed subpath.
@@ -99,46 +106,52 @@ public:
     */
     virtual void CloseSubpath();
 
-    //@{
     /**
-        Returns @true if the point is within the path.
+        @return @true if the point is within the path.
     */
     bool Contains(const wxPoint2DDouble& c,
                   int fillStyle = wxODDEVEN_RULE) const;
-    const bool Contains(wxDouble x, wxDouble y,
-                        int fillStyle = wxODDEVEN_RULE) const;
-    //@}
-
-    //@{
     /**
-        Gets the bounding box enclosing all points (possibly including control points).
+        @return @true if the point is within the path.
+    */
+    virtual bool Contains(wxDouble x, wxDouble y,
+                          int fillStyle = wxODDEVEN_RULE) const;
+
+    /**
+        Gets the bounding box enclosing all points (possibly including control
+        points).
     */
     wxRect2DDouble GetBox() const;
-    const void GetBox(wxDouble* x, wxDouble* y, wxDouble* w,
-                      wxDouble* h) const;
-    //@}
+    /**
+        Gets the bounding box enclosing all points (possibly including control
+        points).
+    */
+    virtual void GetBox(wxDouble* x, wxDouble* y,
+                        wxDouble* w, wxDouble* h) const;
 
-    //@{
     /**
         Gets the last point of the current path, (0,0) if not yet set.
     */
-    void GetCurrentPoint(wxDouble* x, wxDouble* y) const;
-    const wxPoint2DDouble GetCurrentPoint() const;
-    //@}
+    virtual void GetCurrentPoint(wxDouble* x, wxDouble* y) const;
+    /**
+        Gets the last point of the current path, (0,0) if not yet set.
+    */
+    wxPoint2DDouble GetCurrentPoint() const;
 
     /**
-        Returns the native path (CGPathRef for Core Graphics, Path pointer for GDIPlus
-        and a cairo_path_t pointer for cairo).
+        Returns the native path (CGPathRef for Core Graphics, Path pointer for
+        GDIPlus and a cairo_path_t pointer for cairo).
     */
     virtual void* GetNativePath() const;
 
-    //@{
     /**
-        Begins a new subpath at (x,y)
+        Begins a new subpath at (@a x,@a y).
     */
-    void MoveToPoint(wxDouble x, wxDouble y);
+    virtual void MoveToPoint(wxDouble x, wxDouble y);
+    /**
+        Begins a new subpath at @a p.
+    */
     void MoveToPoint(const wxPoint2DDouble& p);
-    //@}
 
     /**
         Transforms each point of this path by the matrix.
@@ -146,9 +159,9 @@ public:
     virtual void Transform(const wxGraphicsMatrix& matrix);
 
     /**
-        Gives back the native path returned by GetNativePath() because there might be
-        some deallocations necessary (eg on cairo the native path returned by
-        GetNativePath is newly allocated each time).
+        Gives back the native path returned by GetNativePath() because there
+        might be some deallocations necessary (e.g. on cairo the native path
+        returned by GetNativePath() is newly allocated each time).
     */
     virtual void UnGetNativePath(void* p) const;
 };
@@ -162,7 +175,7 @@ public:
     allows reference counting. Not instantiated by user code.
 
     @library{wxcore}
-    @category{FIXME}
+    @category{gdi}
 
     @see wxGraphicsBrush, wxGraphicsPen, wxGraphicsMatrix, wxGraphicsPath
 */
@@ -170,13 +183,13 @@ class wxGraphicsObject : public wxObject
 {
 public:
     /**
-        Returns the renderer that was used to create this instance, or @NULL if it has
-        not been initialized yet
+        Returns the renderer that was used to create this instance, or @NULL
+        if it has not been initialized yet.
     */
     wxGraphicsRenderer* GetRenderer() const;
 
     /**
-        Is this object valid (@false) or still empty (@true)?
+        @return @false if this object is valid, otherwise returns @true.
     */
     bool IsNull() const;
 };
@@ -196,10 +209,10 @@ public:
     {
         // Create paint DC
         wxPaintDC dc(this);
-        
+
         // Create graphics context from it
         wxGraphicsContext *gc = wxGraphicsContext::Create( dc );
-    
+
         if (gc)
         {
             // make a path that contains a circle and some lines
@@ -212,9 +225,9 @@ public:
             path.AddLineToPoint(50.0, 100.0 );
             path.CloseSubpath();
             path.AddRectangle(25.0, 25.0, 50.0, 50.0);
-        
+
             gc->StrokePath(path);
-        
+
             delete gc;
         }
     }
@@ -222,7 +235,7 @@ public:
 
 
     @library{wxcore}
-    @category{FIXME}
+    @category{gdi,dc}
 
     @see wxGraphicsRenderer::CreateContext(), wxGCDC, wxDC
 */
@@ -235,21 +248,21 @@ public:
         @see wxGraphicsRenderer::CreateContext()
     */
     static wxGraphicsContext* Create( wxWindow* window ) ;
-    
+
     /**
         Creates a wxGraphicsContext from a wxWindowDC
 
         @see wxGraphicsRenderer::CreateContext()
     */
     static wxGraphicsContext* Create( const wxWindowDC& dc) ;
-    
+
     /**
         Creates a wxGraphicsContext from a wxMemoryDC
 
         @see wxGraphicsRenderer::CreateContext()
     */
     static wxGraphicsContext * Create( const wxMemoryDC& dc) ;
-    
+
     /**
         Creates a wxGraphicsContext from a wxPrinterDC. Under
         GTK+, this will only work when using the GtkPrint
@@ -527,17 +540,17 @@ public:
         Creates a wxGraphicsContext from a wxWindow.
     */
     virtual wxGraphicsContext* CreateContext(wxWindow* window) = 0;
-    
+
     /**
         Creates a wxGraphicsContext from a wxWindowDC
     */
     virtual wxGraphicsContext * CreateContext( const wxWindowDC& dc) = 0 ;
-    
+
     /**
         Creates a wxGraphicsContext from a wxMemoryDC
     */
     virtual wxGraphicsContext * CreateContext( const wxMemoryDC& dc) = 0 ;
-    
+
     /**
         Creates a wxGraphicsContext from a wxPrinterDC
     */
@@ -756,4 +769,3 @@ public:
     */
     virtual void Translate(wxDouble dx, wxDouble dy);
 };
-
