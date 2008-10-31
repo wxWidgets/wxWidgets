@@ -695,6 +695,16 @@ static void menu_hide(GtkWidget*, wxMenu* menu)
 }
 }
 
+// "can_activate_accel" from menu item
+extern "C" {
+static gboolean can_activate_accel(GtkWidget*, guint, wxMenu* menu)
+{
+    menu->UpdateUI();
+    // always allow our "activate" handler to be called
+    return true;
+}
+}
+
 IMPLEMENT_DYNAMIC_CLASS(wxMenu,wxEvtHandler)
 
 void wxMenu::Init()
@@ -832,6 +842,8 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
         }
         else
         {
+            g_signal_connect(menuItem, "can_activate_accel",
+                G_CALLBACK(can_activate_accel), this);
             g_signal_connect (menuItem, "activate",
                               G_CALLBACK(menuitem_activate),
                               mitem);
