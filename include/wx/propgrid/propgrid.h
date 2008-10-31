@@ -987,11 +987,22 @@ public:
     /** Sets background colour of margin. */
     void SetMarginColour(const wxColour& col);
 
-    /** Sets background colour of property and all its children. Colours of
-        captions are not affected. Background brush cache is optimized for often
-        set colours to be set last.
+    /**
+        Sets background colour of property.
+
+        @param id
+            Property name or pointer.
+
+        @param colour
+            New background colour.
+
+        @param recursively
+            If True, child properties are affected recursively. Property
+            categories are skipped if this flag is used.
     */
-    void SetPropertyBackgroundColour( wxPGPropArg id, const wxColour& col );
+    void SetPropertyBackgroundColour( wxPGPropArg id,
+                                      const wxColour& colour,
+                                      bool recursively = false);
 
     /** Resets text and background colours of given property.
     */
@@ -1373,6 +1384,16 @@ public:
     // Control font changer helper.
     void SetCurControlBoldFont();
 
+    wxPGCell& GetPropertyDefaultCell()
+    {
+        return m_propertyDefaultCell;
+    }
+
+    wxPGCell& GetCategoryDefaultCell()
+    {
+        return m_categoryDefaultCell;
+    }
+
     //
     // Public methods for semi-public use
     // (not protected for optimization)
@@ -1619,13 +1640,16 @@ protected:
     // background colour for empty space below the grid
     wxColour            m_colEmptySpace;
 
+    // Default property colours
+    wxPGCell            m_propertyDefaultCell;
+
+    // Default property category
+    wxPGCell            m_categoryDefaultCell;
+
+    // Backup of selected property's cells
+    wxVector<wxPGCell>  m_propCellsBackup;
+
     // NB: These *cannot* be moved to globals.
-
-    // Array of background colour brushes.
-    wxArrayPtrVoid      m_arrBgBrushes;
-
-    // Array of foreground colours.
-    wxArrayPtrVoid      m_arrFgCols;
 
     // labels when properties use common values
     wxVector<wxPGCommonValue*>  m_commonValues;
@@ -1789,14 +1813,6 @@ protected:
     wxPGProperty* GetNearestPaintVisible( wxPGProperty* p ) const;
 
     static void RegisterDefaultEditors();
-
-    // Sets m_bgColIndex to this property and all its children.
-    void SetBackgroundColourIndex( wxPGProperty* p, int index );
-
-    // Sets m_fgColIndex to this property and all its children.
-    void SetTextColourIndex( wxPGProperty* p, int index, int flags );
-
-    int CacheColour( const wxColour& colour );
 
     // Sets up basic event handling for child control
     void SetupChildEventHandling( wxWindow* wnd );

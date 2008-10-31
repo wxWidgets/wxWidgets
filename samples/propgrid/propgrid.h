@@ -179,6 +179,7 @@ public:
 
     void OnEnableDisable( wxCommandEvent& event );
     void OnHideShow( wxCommandEvent& event );
+    void OnSetBackgroundColour( wxCommandEvent& event );
     void OnClearModifyStatusClick( wxCommandEvent& event );
     void OnFreezeClick( wxCommandEvent& event );
     void OnDumpList( wxCommandEvent& event );

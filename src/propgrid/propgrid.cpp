@@ -232,90 +232,6 @@ void wxPropertyGridInitGlobalsIfNeeded()
 }
 
 // -----------------------------------------------------------------------
-// wxPGBrush
-// -----------------------------------------------------------------------
-
-//
-// This class is a wxBrush derivative used in the background colour
-// brush cache. It adds wxPG-type colour-in-long to the class.
-// JMS: Yes I know wxBrush doesn't actually hold the value (refcounted
-//   object does), but this is simpler implementation and equally
-//   effective.
-//
-
-class wxPGBrush : public wxBrush
-{
-public:
-    wxPGBrush( const wxColour& colour );
-    wxPGBrush();
-    virtual ~wxPGBrush() { }
-    void SetColour2( const wxColour& colour );
-    inline long GetColourAsLong() const { return m_colAsLong; }
-private:
-    long    m_colAsLong;
-};
-
-
-void wxPGBrush::SetColour2( const wxColour& colour )
-{
-    wxBrush::SetColour(colour);
-    m_colAsLong = wxPG_COLOUR(colour.Red(),colour.Green(),colour.Blue());
-}
-
-
-wxPGBrush::wxPGBrush() : wxBrush()
-{
-    m_colAsLong = 0;
-}
-
-
-wxPGBrush::wxPGBrush( const wxColour& colour ) : wxBrush(colour)
-{
-    m_colAsLong = wxPG_COLOUR(colour.Red(),colour.Green(),colour.Blue());
-}
-
-
-// -----------------------------------------------------------------------
-// wxPGColour
-// -----------------------------------------------------------------------
-
-//
-// Same as wxPGBrush, but for wxColour instead.
-//
-
-class wxPGColour : public wxColour
-{
-public:
-    wxPGColour( const wxColour& colour );
-    wxPGColour();
-    virtual ~wxPGColour() { }
-    void SetColour2( const wxColour& colour );
-    inline long GetColourAsLong() const { return m_colAsLong; }
-private:
-    long    m_colAsLong;
-};
-
-
-void wxPGColour::SetColour2( const wxColour& colour )
-{
-    *this = colour;
-    m_colAsLong = wxPG_COLOUR(colour.Red(),colour.Green(),colour.Blue());
-}
-
-
-wxPGColour::wxPGColour() : wxColour()
-{
-    m_colAsLong = 0;
-}
-
-
-wxPGColour::wxPGColour( const wxColour& colour ) : wxColour(colour)
-{
-    m_colAsLong = wxPG_COLOUR(colour.Red(),colour.Green(),colour.Blue());
-}
-
-
-// -----------------------------------------------------------------------
 // wxPGTLWHandler
 //   Intercepts Close-events sent to wxPropertyGrid's top-level parent,
 //   and tries to commit property value.
@@ -656,15 +572,14 @@ void wxPropertyGrid::Init2()
         wxScrolledWindow::SetOwnFont( useFont );
     }
     else
+    {
         // This should be otherwise called by SetOwnFont
 	    CalculateFontAndBitmapStuff( wxPG_DEFAULT_VSPACING );
+    }
 
-    // Add base brush item
-    m_arrBgBrushes.Add((void*)new wxPGBrush());
-
-    // Add base colour items
-    m_arrFgCols.Add((void*)new wxPGColour());
-    m_arrFgCols.Add((void*)new wxPGColour());
+    // Allocate cell datas indirectly by calling setter
+    m_propertyDefaultCell.SetBgCol(*wxBLACK);
+    m_categoryDefaultCell.SetBgCol(*wxBLACK);
 
     RegainColours();
 
@@ -738,18 +653,6 @@ wxPropertyGrid::~wxPropertyGrid()
 	delete m_expandbmp;
 	delete m_collbmp;
 #endif
-
-    // Delete cached text colours.
-    for ( i=0; i<m_arrFgCols.size(); i++ )
-    {
-        delete (wxPGColour*)m_arrFgCols.Item(i);
-    }
-
-    // Delete cached brushes.
-    for ( i=0; i<m_arrBgBrushes.size(); i++ )
-    {
-        delete (wxPGBrush*)m_arrBgBrushes.Item(i);
-    }
 
     // Delete common value records
     for ( i=0; i<m_commonValues.size(); i++ )
@@ -1072,6 +975,7 @@ void wxPropertyGrid::RegainColours()
             m_colCapBack = wxPGAdjustColour(col,-colDec);
         else
             m_colCapBack = col;
+        m_categoryDefaultCell.GetData()->SetBgCol(m_colCapBack);
     }
 
     if ( !(m_coloursCustomized & 0x0001) )
@@ -1086,27 +990,21 @@ void wxPropertyGrid::RegainColours()
     #endif
         wxColour capForeCol = wxPGAdjustColour(m_colCapBack,colDec,5000,5000,true);
         m_colCapFore = capForeCol;
-
-        // Set the cached colour as well.
-        ((wxPGColour*)m_arrFgCols.Item(1))->SetColour2(capForeCol);
+        m_categoryDefaultCell.GetData()->SetFgCol(capForeCol);
     }
 
     if ( !(m_coloursCustomized & 0x0008) )
     {
         wxColour bgCol = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
         m_colPropBack = bgCol;
-
-        // Set the cached brush as well.
-        ((wxPGBrush*)m_arrBgBrushes.Item(0))->SetColour2(bgCol);
+        m_propertyDefaultCell.GetData()->SetBgCol(bgCol);
     }
 
     if ( !(m_coloursCustomized & 0x0010) )
     {
         wxColour fgCol = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
         m_colPropFore = fgCol;
-
-        // Set the cached colour as well.
-        ((wxPGColour*)m_arrFgCols.Item(0))->SetColour2(fgCol);
+        m_propertyDefaultCell.GetData()->SetFgCol(fgCol);
     }
 
     if ( !(m_coloursCustomized & 0x0020) )
@@ -1201,8 +1099,7 @@ void wxPropertyGrid::SetCellBackgroundColour( const wxColour& col )
     m_colPropBack = col;
     m_coloursCustomized |= 0x08;
 
-    // Set the cached brush as well.
-    ((wxPGBrush*)m_arrBgBrushes.Item(0))->SetColour2(col);
+    m_propertyDefaultCell.GetData()->SetBgCol(col);
 
     Refresh();
 }
@@ -1214,8 +1111,7 @@ void wxPropertyGrid::SetCellTextColour( const wxColour& col )
     m_colPropFore = col;
     m_coloursCustomized |= 0x10;
 
-    // Set the cached colour as well.
-    ((wxPGColour*)m_arrFgCols.Item(0))->SetColour2(col);
+    m_propertyDefaultCell.GetData()->SetFgCol(col);
 
     Refresh();
 }
@@ -1262,6 +1158,9 @@ void wxPropertyGrid::SetCaptionBackgroundColour( const wxColour& col )
 {
     m_colCapBack = col;
     m_coloursCustomized |= 0x02;
+
+    m_categoryDefaultCell.GetData()->SetBgCol(col);
+
     Refresh();
 }
 
@@ -1272,59 +1171,20 @@ void wxPropertyGrid::SetCaptionTextColour( const wxColour& col )
     m_colCapFore = col;
     m_coloursCustomized |= 0x04;
 
-    // Set the cached colour as well.
-    ((wxPGColour*)m_arrFgCols.Item(1))->SetColour2(col);
+    m_categoryDefaultCell.GetData()->SetFgCol(col);
 
     Refresh();
 }
 
 // -----------------------------------------------------------------------
 
-void wxPropertyGrid::SetBackgroundColourIndex( wxPGProperty* p, int index )
-{
-    unsigned char ind = index;
-
-    p->m_bgColIndex = ind;
-
-    unsigned int i;
-    for ( i=0; i<p->GetChildCount(); i++ )
-        SetBackgroundColourIndex(p->Item(i),index);
-}
-
-// -----------------------------------------------------------------------
-
-void wxPropertyGrid::SetPropertyBackgroundColour( wxPGPropArg id, const wxColour& colour )
+void wxPropertyGrid::SetPropertyBackgroundColour( wxPGPropArg id,
+                                                  const wxColour& colour,
+                                                  bool recursively )
 {
     wxPG_PROP_ARG_CALL_PROLOG()
-
-    size_t i;
-    int colInd = -1;
-
-    long colAsLong = wxPG_COLOUR(colour.Red(),colour.Green(),colour.Blue());
-
-    // As it is most likely that the previous colour is used, start comparison
-    // from the end.
-    for ( i=(m_arrBgBrushes.size()-1); i>0; i-- )
-    {
-        if ( ((wxPGBrush*)m_arrBgBrushes.Item(i))->GetColourAsLong() == colAsLong )
-        {
-            colInd = i;
-            break;
-        }
-    }
-
-    if ( colInd < 0 )
-    {
-        colInd = m_arrBgBrushes.size();
-        wxCHECK_RET( colInd < 256, wxT("wxPropertyGrid: Warning - Only 255 different property background colours allowed.") );
-        m_arrBgBrushes.Add( (void*)new wxPGBrush(colour) );
-    }
-
-    // Set indexes
-    SetBackgroundColourIndex(p,colInd);
-
-    // If this was on a visible grid, then draw it.
-    DrawItemAndChildren(p);
+    p->SetBackgroundColour( colour, recursively );
+    DrawItemAndChildren( p );
 }
 
 // -----------------------------------------------------------------------
@@ -1333,53 +1193,7 @@ wxColour wxPropertyGrid::GetPropertyBackgroundColour( wxPGPropArg id ) const
 {
     wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxColour())
 
-    return ((wxPGBrush*)m_arrBgBrushes.Item(p->m_bgColIndex))->GetColour();
-}
-
-// -----------------------------------------------------------------------
-
-void wxPropertyGrid::SetTextColourIndex( wxPGProperty* p, int index, int flags )
-{
-    unsigned char ind = index;
-
-    p->m_fgColIndex = ind;
-
-    if ( p->GetChildCount() && (flags & wxPG_RECURSE) )
-    {
-        unsigned int i;
-        for ( i=0; i<p->GetChildCount(); i++ )
-            SetTextColourIndex( p->Item(i), index, flags );
-    }
-}
-
-// -----------------------------------------------------------------------
-
-int wxPropertyGrid::CacheColour( const wxColour& colour )
-{
-    unsigned int i;
-    int colInd = -1;
-
-    long colAsLong = wxPG_COLOUR(colour.Red(),colour.Green(),colour.Blue());
-
-    // As it is most likely that the previous colour is used, start comparison
-    // from the end.
-    for ( i=(m_arrFgCols.size()-1); i>0; i-- )
-    {
-        if ( ((wxPGColour*)m_arrFgCols.Item(i))->GetColourAsLong() == colAsLong )
-        {
-            colInd = i;
-            break;
-        }
-    }
-
-    if ( colInd < 0 )
-    {
-        colInd = m_arrFgCols.size();
-        wxCHECK_MSG( colInd < 256, 0, wxT("wxPropertyGrid: Warning - Only 255 different property foreground colours allowed.") );
-        m_arrFgCols.Add( (void*)new wxPGColour(colour) );
-    }
-
-    return colInd;
+    return p->GetCell(0).GetBgCol();
 }
 
 // -----------------------------------------------------------------------
@@ -1388,20 +1202,8 @@ void wxPropertyGrid::SetPropertyTextColour( wxPGPropArg id, const wxColour& colo
                                             bool recursively )
 {
     wxPG_PROP_ARG_CALL_PROLOG()
-
-    if ( p->IsCategory() )
-    {
-        wxPropertyCategory* cat = (wxPropertyCategory*) p;
-        cat->SetTextColIndex(CacheColour(colour));
-    }
-
-    // Set indexes
-    int flags = 0;
-    if ( recursively )
-        flags |= wxPG_RECURSE;
-    SetTextColourIndex(p, CacheColour(colour), flags);
-
-    DrawItemAndChildren(p);
+    p->SetTextColour( colour, recursively );
+    DrawItemAndChildren( p );
 }
 
 // -----------------------------------------------------------------------
@@ -1410,21 +1212,16 @@ wxColour wxPropertyGrid::GetPropertyTextColour( wxPGPropArg id ) const
 {
     wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxColour())
 
-    return wxColour(*((wxPGColour*)m_arrFgCols.Item(p->m_fgColIndex)));
+    return p->GetCell(0).GetFgCol();
 }
+
+// -----------------------------------------------------------------------
 
 void wxPropertyGrid::SetPropertyColoursToDefault( wxPGPropArg id )
 {
     wxPG_PROP_ARG_CALL_PROLOG()
 
-    SetBackgroundColourIndex( p, 0 );
-    SetTextColourIndex( p, 0, wxPG_RECURSE );
-
-    if ( p->IsCategory() )
-    {
-        wxPropertyCategory* cat = (wxPropertyCategory*) p;
-        cat->SetTextColIndex(1);
-    }
+    p->m_cells.clear();
 }
 
 // -----------------------------------------------------------------------
@@ -2035,7 +1832,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
         int rowHeight = m_fontHeight+(m_spacingy*2)+1;
         int textMarginHere = x;
-        int renderFlags = wxPGCellRenderer::Control;
+        int renderFlags = 0;
 
         int greyDepth = m_marginWidth;
         if ( !(windowStyle & wxPG_HIDE_CATEGORIES) )
@@ -2079,58 +1876,80 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
         dc.DrawLine( greyDepthX, y2-1, gridWidth-xRelMod, y2-1 );
 
-        if ( p == selected )
-        {
-            renderFlags |= wxPGCellRenderer::Selected;
-#if wxPG_REFRESH_CONTROLS_AFTER_REPAINT
-            wasSelectedPainted = true;
-#endif
-        }
-
-        wxColour rowBgCol;
+        //
+        // Need to override row colours?
         wxColour rowFgCol;
-        wxBrush rowBgBrush;
+        wxColour rowBgCol;
 
-        if ( p->IsCategory() )
-        {
-            if ( p->m_fgColIndex == 0 )
-                rowFgCol = m_colCapFore;
-            else
-                rowFgCol = *(wxPGColour*)m_arrFgCols[p->m_fgColIndex];
-            rowBgBrush = wxBrush(m_colCapBack);
-        }
-        else if ( p != selected )
+        if ( p != selected )
         {
             // Disabled may get different colour.
             if ( !p->IsEnabled() )
+            {
+                renderFlags |= wxPGCellRenderer::Disabled |
+                               wxPGCellRenderer::DontUseCellFgCol;
                 rowFgCol = m_colDisPropFore;
-            else
-                rowFgCol = *(wxPGColour*)m_arrFgCols[p->m_fgColIndex];
-
-            rowBgBrush = *(wxPGBrush*)m_arrBgBrushes[p->m_bgColIndex];
+            }
         }
         else
         {
-            // Selected gets different colour.
-            if ( reallyFocused )
-            {
-                rowFgCol = m_colSelFore;
-                rowBgBrush = wxBrush(m_colSelBack);
+             renderFlags |= wxPGCellRenderer::Selected;
+
+             if ( !p->IsCategory() )
+             {
+                renderFlags |= wxPGCellRenderer::DontUseCellFgCol |
+                               wxPGCellRenderer::DontUseCellBgCol;
+
+#if wxPG_REFRESH_CONTROLS_AFTER_REPAINT
+                wasSelectedPainted = true;
+#endif
+
+                // Selected gets different colour.
+                if ( reallyFocused )
+                {
+                    rowFgCol = m_colSelFore;
+                    rowBgCol = m_colSelBack;
+                }
+                else if ( isEnabled )
+                {
+                    rowFgCol = m_colPropFore;
+                    rowBgCol = m_colMargin;
+                }
+                else
+                {
+                    rowFgCol = m_colDisPropFore;
+                    rowBgCol = m_colSelBack;
+                }
             }
-            else if ( isEnabled )
+        }
+
+        wxBrush rowBgBrush;
+
+        if ( rowBgCol.IsOk() )
+            rowBgBrush = wxBrush(rowBgCol);
+
+        if ( HasInternalFlag(wxPG_FL_CELL_OVERRIDES_SEL) )
+            renderFlags = renderFlags & ~wxPGCellRenderer::DontUseCellColours;
+
+        //
+        // Fill additional margin area with background colour of first cell
+        if ( greyDepthX < textMarginHere )
+        {
+            if ( !(renderFlags & wxPGCellRenderer::DontUseCellBgCol) )
             {
-                rowFgCol = *(wxPGColour*)m_arrFgCols[p->m_fgColIndex];
-                rowBgBrush = marginBrush;
+                wxPGCell& cell = p->GetCell(0);
+                rowBgCol = cell.GetBgCol();
+                rowBgBrush = wxBrush(rowBgCol);
             }
-            else
-            {
-                rowFgCol = m_colDisPropFore;
-                rowBgBrush = wxBrush(m_colSelBack);
-            }
+            dc.SetBrush(rowBgBrush);
+            dc.SetPen(rowBgCol);
+            dc.DrawRectangle(greyDepthX+1, y,
+                             textMarginHere-greyDepthX, lh-1);
         }
 
         bool fontChanged = false;
 
+        // Expander button rectangle
         wxRect butRect( ((p->m_depth - 1) * m_subgroup_extramargin) - xRelMod,
                         y,
                         m_marginWidth,
@@ -2138,18 +1957,22 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
         if ( p->IsCategory() )
         {
-            // Captions are all cells merged as one
+            // Captions have their cell areas merged as one
             dc.SetFont(m_captionFont);
             fontChanged = true;
             wxRect cellRect(greyDepthX, y, gridWidth - greyDepth + 2, rowHeight-1 );
 
-            dc.SetBrush(rowBgBrush);
-            dc.SetPen(rowBgBrush.GetColour());
-            dc.SetTextForeground(rowFgCol);
+            if ( renderFlags & wxPGCellRenderer::DontUseCellBgCol )
+            {
+                dc.SetBrush(rowBgBrush);
+                dc.SetPen(rowBgCol);
+            }
 
-            dc.DrawRectangle(cellRect);
+            if ( renderFlags & wxPGCellRenderer::DontUseCellFgCol )
+            {
+                dc.SetTextForeground(rowFgCol);
+            }
 
-            // Foreground
             wxPGCellRenderer* renderer = p->GetCellRenderer(0);
             renderer->Render( dc, cellRect, this, p, 0, -1, renderFlags );
 
@@ -2176,6 +1999,11 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
                 cellRect.width = nextCellWidth - 1;
 
                 bool ctrlCell = false;
+                int cellRenderFlags = renderFlags;
+
+                // Tree Item Button
+                if ( ci == 0 && !HasFlag(wxPG_HIDE_MARGIN) && p->HasVisibleChildren() )
+                    DrawExpanderButton( dc, butRect, p );
 
                 // Background
                 if ( p == selected && m_wndEditor && ci == 1 )
@@ -2184,22 +2012,24 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
                     dc.SetBrush(editorBgCol);
                     dc.SetPen(editorBgCol);
                     dc.SetTextForeground(m_colPropFore);
+                    dc.DrawRectangle(cellRect);
 
                     if ( m_dragStatus == 0 && !(m_iFlags & wxPG_FL_CUR_USES_CUSTOM_IMAGE) )
                         ctrlCell = true;
                 }
                 else
                 {
-                    dc.SetBrush(rowBgBrush);
-                    dc.SetPen(rowBgBrush.GetColour());
-                    dc.SetTextForeground(rowFgCol);
+                    if ( renderFlags & wxPGCellRenderer::DontUseCellBgCol )
+                    {
+                        dc.SetBrush(rowBgBrush);
+                        dc.SetPen(rowBgCol);
+                    }
+
+                    if ( renderFlags & wxPGCellRenderer::DontUseCellFgCol )
+                    {
+                        dc.SetTextForeground(rowFgCol);
+                    }
                 }
-
-                dc.DrawRectangle(cellRect);
-
-                // Tree Item Button
-                if ( ci == 0 && !HasFlag(wxPG_HIDE_MARGIN) && p->HasVisibleChildren() )
-                    DrawExpanderButton( dc, butRect, p );
 
                 dc.SetClippingRegion(cellRect);
 
@@ -2214,12 +2044,14 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
                     if ( cmnVal == -1 || ci != 1 )
                     {
                         renderer = p->GetCellRenderer(ci);
-                        renderer->Render( dc, cellRect, this, p, ci, -1, renderFlags );
+                        renderer->Render( dc, cellRect, this, p, ci, -1,
+                                          cellRenderFlags );
                     }
                     else
                     {
                         renderer = GetCommonValue(cmnVal)->GetRenderer();
-                        renderer->Render( dc, cellRect, this, p, ci, -1, renderFlags );
+                        renderer->Render( dc, cellRect, this, p, ci, -1,
+                                          cellRenderFlags );
                     }
                 }
 
@@ -2891,28 +2723,34 @@ bool wxPropertyGrid::DoOnValidationFailure( wxPGProperty* property, wxVariant& W
     if ( (vfb & wxPG_VFB_MARK_CELL) &&
          !property->HasFlag(wxPG_PROP_INVALID_VALUE) )
     {
-        wxASSERT_MSG( !property->GetCell(0) && !property->GetCell(1),
-                      wxT("Currently wxPG_VFB_MARK_CELL only works with properties with standard first two cells") );
+        unsigned int colCount = m_pState->GetColumnCount();
 
-        if ( !property->GetCell(0) && !property->GetCell(1) )
+        // We need backup marked property's cells
+        m_propCellsBackup = property->m_cells;
+
+        wxColour vfbFg = *wxWHITE;
+        wxColour vfbBg = *wxRED;
+
+        property->EnsureCells(colCount);
+
+        for ( unsigned int i=0; i<colCount; i++ )
         {
-            wxColour vfbFg = *wxWHITE;
-            wxColour vfbBg = *wxRED;
-            property->SetCell(0, new wxPGCell(property->GetLabel(), wxNullBitmap, vfbFg, vfbBg));
-            property->SetCell(1, new wxPGCell(property->GetDisplayedString(), wxNullBitmap, vfbFg, vfbBg));
+            wxPGCell& cell = property->m_cells[i];
+            cell.SetFgCol(vfbFg);
+            cell.SetBgCol(vfbBg);
+        }
 
-            DrawItemAndChildren(property);
+        DrawItemAndChildren(property);
 
-            if ( property == m_selected )
+        if ( property == m_selected )
+        {
+            SetInternalFlag(wxPG_FL_CELL_OVERRIDES_SEL);
+
+            wxWindow* editor = GetEditorControl();
+            if ( editor )
             {
-                SetInternalFlag(wxPG_FL_CELL_OVERRIDES_SEL);
-
-                wxWindow* editor = GetEditorControl();
-                if ( editor )
-                {
-                    editor->SetForegroundColour(vfbFg);
-                    editor->SetBackgroundColour(vfbBg);
-                }
+                editor->SetForegroundColour(vfbFg);
+                editor->SetBackgroundColour(vfbBg);
             }
         }
     }
@@ -2938,8 +2776,8 @@ void wxPropertyGrid::DoOnValidationFailureReset( wxPGProperty* property )
 
     if ( vfb & wxPG_VFB_MARK_CELL )
     {
-        property->SetCell(0, NULL);
-        property->SetCell(1, NULL);
+        // Revert cells
+        property->m_cells = m_propCellsBackup;
 
         ClearInternalFlag(wxPG_FL_CELL_OVERRIDES_SEL);
 
@@ -5433,12 +5271,6 @@ wxPGChoiceEntry::wxPGChoiceEntry()
 {
 }
 
-wxPGChoiceEntry::wxPGChoiceEntry( const wxPGChoiceEntry& entry )
-    : wxPGCell( entry.GetText(), entry.GetBitmap(),
-        entry.GetFgCol(), entry.GetBgCol() ), m_value(entry.GetValue())
-{
-}
-
 // -----------------------------------------------------------------------
 // wxPGChoicesData
 // -----------------------------------------------------------------------
@@ -5455,13 +5287,6 @@ wxPGChoicesData::~wxPGChoicesData()
 
 void wxPGChoicesData::Clear()
 {
-    unsigned int i;
-
-    for ( i=0; i<m_items.size(); i++ )
-    {
-        delete Item(i);
-    }
-
     m_items.clear();
 }
 
@@ -5469,10 +5294,32 @@ void wxPGChoicesData::CopyDataFrom( wxPGChoicesData* data )
 {
     wxASSERT( m_items.size() == 0 );
 
-    unsigned int i;
+    m_items = data->m_items;
+}
 
-    for ( i=0; i<data->GetCount(); i++ )
-        m_items.push_back( new wxPGChoiceEntry(*data->Item(i)) );
+wxPGChoiceEntry& wxPGChoicesData::Insert( int index,
+                                          const wxPGChoiceEntry& item )
+{
+    wxVector<wxPGChoiceEntry>::iterator it;
+    if ( index == -1 )
+    {
+        it = m_items.end();
+        index = (int) m_items.size();
+    }
+    else
+    {
+        it = m_items.begin() + index;
+    }
+
+    m_items.insert(it, item);
+
+    wxPGChoiceEntry& ownEntry = m_items[index];
+
+    // Need to fix value?
+    if ( ownEntry.GetValue() == wxPG_INVALID_VALUE )
+        ownEntry.SetValue(index);
+
+    return ownEntry;
 }
 
 // -----------------------------------------------------------------------
@@ -5483,9 +5330,8 @@ wxPGChoiceEntry& wxPGChoices::Add( const wxString& label, int value )
 {
     EnsureData();
 
-    wxPGChoiceEntry* p = new wxPGChoiceEntry(label, value);
-    m_data->Insert( -1, p );
-    return *p;
+    wxPGChoiceEntry entry(label, value);
+    return m_data->Insert( -1, entry );
 }
 
 // -----------------------------------------------------------------------
@@ -5494,10 +5340,9 @@ wxPGChoiceEntry& wxPGChoices::Add( const wxString& label, const wxBitmap& bitmap
 {
     EnsureData();
 
-    wxPGChoiceEntry* p = new wxPGChoiceEntry(label, value);
-    p->SetBitmap(bitmap);
-    m_data->Insert( -1, p );
-    return *p;
+    wxPGChoiceEntry entry(label, value);
+    entry.SetBitmap(bitmap);
+    return m_data->Insert( -1, entry );
 }
 
 // -----------------------------------------------------------------------
@@ -5505,10 +5350,7 @@ wxPGChoiceEntry& wxPGChoices::Add( const wxString& label, const wxBitmap& bitmap
 wxPGChoiceEntry& wxPGChoices::Insert( const wxPGChoiceEntry& entry, int index )
 {
     EnsureData();
-
-    wxPGChoiceEntry* p = new wxPGChoiceEntry(entry);
-    m_data->Insert(index, p);
-    return *p;
+    return m_data->Insert( index, entry );
 }
 
 // -----------------------------------------------------------------------
@@ -5517,9 +5359,8 @@ wxPGChoiceEntry& wxPGChoices::Insert( const wxString& label, int index, int valu
 {
     EnsureData();
 
-    wxPGChoiceEntry* p = new wxPGChoiceEntry(label, value);
-    m_data->Insert( index, p );
-    return *p;
+    wxPGChoiceEntry entry(label, value);
+    return m_data->Insert( index, entry );
 }
 
 // -----------------------------------------------------------------------
@@ -5538,9 +5379,8 @@ wxPGChoiceEntry& wxPGChoices::AddAsSorted( const wxString& label, int value )
         index++;
     }
 
-    wxPGChoiceEntry* p = new wxPGChoiceEntry(label, value);
-    m_data->Insert( index, p );
-    return *p;
+    wxPGChoiceEntry entry(label, value);
+    return m_data->Insert( index, entry );
 }
 
 // -----------------------------------------------------------------------
@@ -5556,28 +5396,11 @@ void wxPGChoices::Add( const wxChar** labels, const ValArrItem* values )
     unsigned int i;
     for ( i = 0; i < itemcount; i++ )
     {
-        int value = wxPG_INVALID_VALUE;
+        int value = i;
         if ( values )
             value = values[i];
-        m_data->Insert( -1, new wxPGChoiceEntry(labels[i], value) );
-    }
-}
-
-// -----------------------------------------------------------------------
-
-void wxPGChoices::Add( const wxArrayString& arr, const ValArrItem* values )
-{
-    EnsureData();
-
-    unsigned int i;
-    unsigned int itemcount = arr.size();
-
-    for ( i = 0; i < itemcount; i++ )
-    {
-        int value = wxPG_INVALID_VALUE;
-        if ( values )
-            value = values[i];
-        m_data->Insert( -1, new wxPGChoiceEntry(arr[i], value) );
+        wxPGChoiceEntry entry(labels[i], value);
+        m_data->Insert( i, entry );
     }
 }
 
@@ -5592,10 +5415,11 @@ void wxPGChoices::Add( const wxArrayString& arr, const wxArrayInt& arrint )
 
     for ( i = 0; i < itemcount; i++ )
     {
-        int value = wxPG_INVALID_VALUE;
+        int value = i;
         if ( &arrint && arrint.size() )
             value = arrint[i];
-        m_data->Insert( -1, new wxPGChoiceEntry(arr[i], value) );
+        wxPGChoiceEntry entry(arr[i], value);
+        m_data->Insert( i, entry );
     }
 }
 
@@ -5604,9 +5428,6 @@ void wxPGChoices::Add( const wxArrayString& arr, const wxArrayInt& arrint )
 void wxPGChoices::RemoveAt(size_t nIndex, size_t count)
 {
     wxASSERT( m_data->m_refCount != 0xFFFFFFF );
-    unsigned int i;
-    for ( i=nIndex; i<(nIndex+count); i++)
-        delete m_data->Item(i);
     m_data->m_items.erase(m_data->m_items.begin()+nIndex,
                           m_data->m_items.begin()+nIndex+count);
 }
@@ -5620,7 +5441,8 @@ int wxPGChoices::Index( const wxString& str ) const
         unsigned int i;
         for ( i=0; i< m_data->GetCount(); i++ )
         {
-            if ( m_data->Item(i)->GetText() == str )
+            const wxPGChoiceEntry& entry = m_data->Item(i);
+            if ( entry.HasText() && entry.GetText() == str )
                 return i;
         }
     }
@@ -5636,7 +5458,8 @@ int wxPGChoices::Index( int val ) const
         unsigned int i;
         for ( i=0; i< m_data->GetCount(); i++ )
         {
-            if ( m_data->Item(i)->GetValue() == val )
+            const wxPGChoiceEntry& entry = m_data->Item(i);
+            if ( entry.GetValue() == val )
                 return i;
         }
     }

@@ -651,7 +651,8 @@ enum
     ID_COLOURSCHEME2,
     ID_COLOURSCHEME3,
     ID_CATCOLOURS,
-    ID_SETCOLOUR,
+    ID_SETBGCOLOUR,
+    ID_SETBGCOLOURRECUR,
     ID_STATICLAYOUT,
     ID_POPULATE1,
     ID_POPULATE2,
@@ -726,11 +727,13 @@ BEGIN_EVENT_TABLE(FormMain, wxFrame)
     EVT_MENU( ID_DELETEALL, FormMain::OnClearClick )
     EVT_MENU( ID_ENABLE, FormMain::OnEnableDisable )
     EVT_MENU( ID_HIDE, FormMain::OnHideShow )
+
     EVT_MENU( ID_ITERATE1, FormMain::OnIterate1Click )
     EVT_MENU( ID_ITERATE2, FormMain::OnIterate2Click )
     EVT_MENU( ID_ITERATE3, FormMain::OnIterate3Click )
     EVT_MENU( ID_ITERATE4, FormMain::OnIterate4Click )
-    EVT_MENU( ID_SETCOLOUR, FormMain::OnMisc )
+    EVT_MENU( ID_SETBGCOLOUR, FormMain::OnSetBackgroundColour )
+    EVT_MENU( ID_SETBGCOLOURRECUR, FormMain::OnSetBackgroundColour )
     EVT_MENU( ID_CLEARMODIF, FormMain::OnClearModifyStatusClick )
     EVT_MENU( ID_FREEZE, FormMain::OnFreezeClick )
     EVT_MENU( ID_DUMPLIST, FormMain::OnDumpList )
@@ -2121,7 +2124,8 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
     menuTools1->Append(ID_DELETER, wxT("Delete Random") );
     menuTools1->Append(ID_DELETEALL, wxT("Delete All") );
     menuTools1->AppendSeparator();
-    menuTools1->Append(ID_SETCOLOUR, wxT("Set Bg Colour") );
+    menuTools1->Append(ID_SETBGCOLOUR, wxT("Set Bg Colour") );
+    menuTools1->Append(ID_SETBGCOLOURRECUR, wxT("Set Bg Colour (Recursively)") );
     menuTools1->Append(ID_UNSPECIFY, wxT("Set to Unspecified") );
     menuTools1->AppendSeparator();
     m_itemEnable = menuTools1->Append(ID_ENABLE, wxT("Enable"),
@@ -2591,6 +2595,30 @@ void FormMain::OnHideShow( wxCommandEvent& WXUNUSED(event) )
 
 // -----------------------------------------------------------------------
 
+#include "wx/colordlg.h"
+
+void
+FormMain::OnSetBackgroundColour( wxCommandEvent& event )
+{
+    wxPropertyGrid* pg = m_pPropGridManager->GetGrid();
+    wxPGProperty* prop = pg->GetSelection();
+    if ( !prop )
+    {
+        wxMessageBox(wxT("First select a property."));
+        return;
+    }
+
+    wxColour col = ::wxGetColourFromUser(this, *wxWHITE, "Choose colour");
+
+    if ( col.IsOk() )
+    {
+        bool recursively = (event.GetId()==ID_SETBGCOLOURRECUR) ? true : false;
+        pg->SetPropertyBackgroundColour(prop, col, recursively);
+    }
+}
+
+// -----------------------------------------------------------------------
+
 void FormMain::OnInsertPage( wxCommandEvent& WXUNUSED(event) )
 {
     m_pPropGridManager->AddPage(wxT("New Page"));
@@ -3018,28 +3046,6 @@ void FormMain::OnMisc ( wxCommandEvent& event )
         if ( prop )
         {
             m_pPropGridManager->SetPropertyValueUnspecified(prop);
-        }
-    }
-    else if ( id == ID_SETCOLOUR )
-    {
-        wxPGProperty* prop = m_pPropGridManager->GetSelection();
-        if ( prop )
-        {
-            wxColourData data;
-            data.SetChooseFull(true);
-            int i;
-            for ( i = 0; i < 16; i++)
-            {
-                wxColour colour(i*16, i*16, i*16);
-                data.SetCustomColour(i, colour);
-            }
-
-            wxColourDialog dialog(this, &data);
-            if ( dialog.ShowModal() == wxID_OK )
-            {
-                wxColourData retData = dialog.GetColourData();
-                m_pPropGridManager->GetGrid()->SetPropertyBackgroundColour(prop,retData.GetColour());
-            }
         }
     }
 }

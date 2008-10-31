@@ -680,7 +680,7 @@ void wxPropertyGrid::OnComboItemPaint( wxPGCustomComboControl* pCc,
         wxPoint pt(rect.x + wxPG_CONTROL_MARGIN - wxPG_CHOICEXADJUST - 1,
                    rect.y + 1);
 
-        int renderFlags = 0;
+        int renderFlags = wxPGCellRenderer::DontUseCellColours;
 
         if ( flags & wxODCB_PAINTING_CONTROL )
             renderFlags |= wxPGCellRenderer::Control;

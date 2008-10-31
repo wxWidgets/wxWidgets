@@ -137,26 +137,25 @@ int wxPGCellRenderer::PreDrawCell( wxDC& dc, const wxRect& rect, const wxPGCell&
 {
     int imageOffset = 0;
 
-    if ( !(flags & Selected) )
+    // If possible, use cell colours
+    if ( !(flags & DontUseCellBgCol) )
     {
-        // Draw using wxPGCell information, if available
-        wxColour fgCol = cell.GetFgCol();
-        if ( fgCol.Ok() )
-            dc.SetTextForeground(fgCol);
-
-        wxColour bgCol = cell.GetBgCol();
-        if ( bgCol.Ok() )
-        {
-            dc.SetPen(bgCol);
-            dc.SetBrush(bgCol);
-            dc.DrawRectangle(rect);
-        }
+        dc.SetPen(cell.GetBgCol());
+        dc.SetBrush(cell.GetBgCol());
     }
+
+    if ( !(flags & DontUseCellFgCol) )
+    {
+        dc.SetTextForeground(cell.GetFgCol());
+    }
+
+    // Draw Background
+    dc.DrawRectangle(rect);
 
     const wxBitmap& bmp = cell.GetBitmap();
     if ( bmp.Ok() &&
-        // In control, do not draw oversized bitmap
-         (!(flags & Control) || bmp.GetHeight() < rect.height )
+        // Do not draw oversized bitmap outside choice popup
+         ((flags & ChoicePopup) || bmp.GetHeight() < rect.height )
         )
     {
         dc.DrawBitmap( bmp,
@@ -192,51 +191,17 @@ void wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
     }
 
     const wxPGEditor* editor = NULL;
-    const wxPGCell* cell = property->GetCell(column);
+    const wxPGCell* cell = NULL;
 
     wxString text;
     int imageOffset = 0;
+    int preDrawFlags = flags;
 
-    // Use choice cell?
-    if ( column == 1 && (flags & Control) )
-    {
-        int selectedIndex = property->GetChoiceSelection();
-        if ( selectedIndex != wxNOT_FOUND )
-        {
-            const wxPGChoices& choices = property->GetChoices();
-            const wxPGCell* ccell = &choices[selectedIndex];
-            if ( ccell &&
-                 ( ccell->GetBitmap().IsOk() || ccell->GetFgCol().IsOk() || ccell->GetBgCol().IsOk() )
-               )
-                cell = ccell;
-        }
-    }
+    property->GetDisplayInfo(column, item, flags, &text, &cell);
 
-    if ( cell )
-    {
-        int preDrawFlags = flags;
+    imageOffset = PreDrawCell( dc, rect, *cell, preDrawFlags );
 
-        if ( propertyGrid->GetInternalFlags() & wxPG_FL_CELL_OVERRIDES_SEL )
-            preDrawFlags = preDrawFlags & ~(Selected);
-
-        imageOffset = PreDrawCell( dc, rect, *cell, preDrawFlags );
-        text = cell->GetText();
-        if ( text == wxS("@!") )
-        {
-            if ( column == 0 )
-                text = property->GetLabel();
-            else if ( column == 1 )
-                text = property->GetValueAsString();
-            else
-                text = wxEmptyString;
-        }
-    }
-    else if ( column == 0 )
-    {
-        // Caption
-        DrawText( dc, rect, 0, property->GetLabel() );
-    }
-    else if ( column == 1 )
+    if ( column == 1 )
     {
         if ( !isUnspecified )
         {
@@ -256,11 +221,6 @@ void wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
                                  rect.y+wxPG_CUSTOM_IMAGE_SPACINGY,
                                  wxPG_CUSTOM_IMAGE_WIDTH,
                                  rect.height-(wxPG_CUSTOM_IMAGE_SPACINGY*2));
-
-                /*if ( imageSize.x == wxPG_FULL_CUSTOM_PAINT_WIDTH )
-                {
-                    imageRect.width = m_width - imageRect.x;
-                }*/
 
                 dc.SetPen( wxPen(propertyGrid->GetCellTextColour(), 1, wxSOLID) );
 
@@ -302,12 +262,6 @@ void wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
             }
         }
     }
-    else if ( column == 2 )
-    {
-        // Add units string?
-        if ( !text.length() )
-            text = property->GetAttribute(wxPGGlobalVars->m_strUnits, wxEmptyString);
-    }
 
     DrawEditorValue( dc, rect, imageOffset, text, property, editor );
 
@@ -348,10 +302,21 @@ wxSize wxPGDefaultRenderer::GetImageSize( const wxPGProperty* property,
 }
 
 // -----------------------------------------------------------------------
+// wxPGCellData
+// -----------------------------------------------------------------------
+
+wxPGCellData::wxPGCellData()
+    : wxObjectRefData()
+{
+    m_hasValidText = false;
+}
+
+// -----------------------------------------------------------------------
 // wxPGCell
 // -----------------------------------------------------------------------
 
 wxPGCell::wxPGCell()
+    : wxObject()
 {
 }
 
@@ -359,9 +324,74 @@ wxPGCell::wxPGCell( const wxString& text,
                     const wxBitmap& bitmap,
                     const wxColour& fgCol,
                     const wxColour& bgCol )
-    : m_bitmap(bitmap), m_fgCol(fgCol), m_bgCol(bgCol)
+    : wxObject()
 {
-    m_text = text;
+    wxPGCellData* data = new wxPGCellData();
+    m_refData = data;
+    data->m_text = text;
+    data->m_bitmap = bitmap;
+    data->m_fgCol = fgCol;
+    data->m_bgCol = bgCol;
+    data->m_hasValidText = true;
+}
+
+wxObjectRefData *wxPGCell::CloneRefData( const wxObjectRefData *data ) const
+{
+    wxPGCellData* c = new wxPGCellData();
+    const wxPGCellData* o = (const wxPGCellData*) data;
+    c->m_text = o->m_text;
+    c->m_bitmap = o->m_bitmap;
+    c->m_fgCol = o->m_fgCol;
+    c->m_bgCol = o->m_bgCol;
+    c->m_hasValidText = o->m_hasValidText;
+    return c;
+}
+
+void wxPGCell::SetText( const wxString& text )
+{
+    AllocExclusive();
+
+    GetData()->SetText(text);
+}
+
+void wxPGCell::SetBitmap( const wxBitmap& bitmap )
+{
+    AllocExclusive();
+
+    GetData()->SetBitmap(bitmap);
+}
+
+void wxPGCell::SetFgCol( const wxColour& col )
+{
+    AllocExclusive();
+
+    GetData()->SetFgCol(col);
+}
+
+void wxPGCell::SetBgCol( const wxColour& col )
+{
+    AllocExclusive();
+
+    GetData()->SetBgCol(col);
+}
+
+void wxPGCell::MergeFrom( const wxPGCell& srcCell )
+{
+    AllocExclusive();
+
+    wxPGCellData* data = GetData();
+
+    if ( srcCell.HasText() )
+        data->SetText(srcCell.GetText());
+
+    if ( srcCell.GetFgCol().IsOk() )
+        data->SetFgCol(srcCell.GetFgCol());
+
+    if ( srcCell.GetBgCol().IsOk() )
+        data->SetBgCol(srcCell.GetBgCol());
+
+    if ( srcCell.GetBitmap().IsOk() )
+        data->SetBitmap(srcCell.GetBitmap());
 }
 
 // -----------------------------------------------------------------------
@@ -394,8 +424,6 @@ void wxPGProperty::Init()
     m_flags = wxPG_PROP_PROPERTY;
 
     m_depth = 1;
-    m_bgColIndex = 0;
-    m_fgColIndex = 0;
 
     SetExpanded(true);
 }
@@ -436,10 +464,9 @@ void wxPGProperty::InitAfterAdded( wxPropertyGridPageState* pageState,
                   "Implement ValueToString() instead of GetValueAsString()" );
 #endif
 
-    if ( !parentIsRoot )
+    if ( !parentIsRoot && !parent->IsCategory() )
     {
-        m_bgColIndex = parent->m_bgColIndex;
-        m_fgColIndex = parent->m_fgColIndex;
+        m_cells = parent->m_cells;
     }
 
     // If in hideable adding mode, or if assigned parent is hideable, then
@@ -575,11 +602,6 @@ wxPGProperty::~wxPGProperty()
     delete m_validator;
 #endif
 
-    unsigned int i;
-
-    for ( i=0; i<m_cells.size(); i++ )
-        delete (wxPGCell*) m_cells[i];
-
     // This makes it easier for us to detect dangling pointers
     m_parent = NULL;
 }
@@ -644,25 +666,87 @@ void wxPGProperty::RefreshChildren ()
 {
 }
 
-wxString wxPGProperty::GetColumnText( unsigned int col ) const
+void wxPGProperty::GetDisplayInfo( unsigned int column,
+                                   int choiceIndex,
+                                   int flags,
+                                   wxString* pString,
+                                   const wxPGCell** pCell )
 {
-    wxPGCell* cell = GetCell(col);
-    if ( cell )
+    const wxPGCell* cell = NULL;
+
+    if ( !(flags & wxPGCellRenderer::ChoicePopup) )
     {
-        return cell->GetText();
+        // Not painting listi of choice popups, so get text from property
+        cell = &GetCell(column);
+        if ( cell->HasText() )
+        {
+            *pString = cell->GetText();
+        }
+        else
+        {
+            if ( column == 0 )
+                *pString = GetLabel();
+            else if ( column == 1 )
+                *pString = GetDisplayedString();
+            else if ( column == 2 )
+                *pString = GetAttribute(wxPGGlobalVars->m_strUnits, wxEmptyString);
+        }
     }
     else
     {
-        if ( col == 0 )
-            return GetLabel();
-        else if ( col == 1 )
-            return GetDisplayedString();
-        else if ( col == 2 )
-            return GetAttribute(wxPGGlobalVars->m_strUnits, wxEmptyString);
+        wxASSERT( column == 1 );
+
+        if ( choiceIndex != wxNOT_FOUND )
+        {
+            const wxPGChoiceEntry& entry = m_choices[choiceIndex];
+            if ( entry.GetBitmap().IsOk() ||
+                 entry.GetFgCol().IsOk() ||
+                 entry.GetBgCol().IsOk() )
+                cell = &entry;
+            *pString = m_choices.GetLabel(choiceIndex);
+        }
+    }
+
+    if ( !cell )
+        cell = &GetCell(column);
+
+    wxASSERT_MSG( cell->GetData(),
+                  wxString::Format("Invalid cell for property %s",
+                                   GetName().c_str()) );
+
+    *pCell = cell;
+}
+
+/*
+wxString wxPGProperty::GetColumnText( unsigned int col, int choiceIndex ) const
+{
+    
+    if ( col != 1 || choiceIndex == wxNOT_FOUND )
+    {
+        const wxPGCell& cell = GetCell(col);
+        if ( cell->HasText() )
+        {
+            return cell->GetText();
+        }
+        else
+        {
+            if ( col == 0 )
+                return GetLabel();
+            else if ( col == 1 )
+                return GetDisplayedString();
+            else if ( col == 2 )
+                return GetAttribute(wxPGGlobalVars->m_strUnits, wxEmptyString);
+        }
+    }
+    else
+    {
+        // Use choice
+        return m_choices.GetLabel(choiceIndex);
     }
 
     return wxEmptyString;
 }
+*/
 
 void wxPGProperty::DoGenerateComposedValue( wxString& text,
                                             int argFlags,
@@ -1326,13 +1410,169 @@ wxVariant wxPGProperty::GetDefaultValue() const
     return wxVariant();
 }
 
-void wxPGProperty::SetCell( int column, wxPGCell* cellObj )
+void wxPGProperty::EnsureCells( unsigned int column )
 {
-    if ( column >= (int)m_cells.size() )
-        m_cells.SetCount(column+1, NULL);
+    if ( column >= m_cells.size() )
+    {
+        // Fill empty slots with default cells
+        wxPropertyGrid* pg = GetGrid();
+        wxPGCell defaultCell;
 
-    delete (wxPGCell*) m_cells[column];
-    m_cells[column] = cellObj;
+        if ( !HasFlag(wxPG_PROP_CATEGORY) )
+            defaultCell = pg->GetPropertyDefaultCell();
+        else
+            defaultCell = pg->GetCategoryDefaultCell();
+
+        // TODO: Replace with resize() call
+        unsigned int cellCountMax = column+1;
+
+        for ( unsigned int i=m_cells.size(); i<cellCountMax; i++ )
+            m_cells.push_back(defaultCell);
+    }
+}
+
+void wxPGProperty::SetCell( int column,
+                            const wxPGCell& cell )
+{
+    EnsureCells(column);
+
+    m_cells[column] = cell;
+}
+
+void wxPGProperty::AdaptiveSetCell( unsigned int firstCol,
+                                    unsigned int lastCol,
+                                    const wxPGCell& cell,
+                                    const wxPGCell& srcData,
+                                    wxPGCellData* unmodCellData,
+                                    FlagType ignoreWithFlags,
+                                    bool recursively )
+{
+    //
+    // Sets cell in memory optimizing fashion. That is, if
+    // current cell data matches unmodCellData, we will
+    // simply get reference to data from cell. Otherwise,
+    // cell information from srcData is merged into current.
+    //
+
+    if ( !(m_flags & ignoreWithFlags) && !IsRoot() )
+    {
+        EnsureCells(lastCol);
+
+        for ( unsigned int col=firstCol; col<=lastCol; col++ )
+        {
+            if ( m_cells[col].GetData() == unmodCellData )
+            {
+                // Data matches... use cell directly
+                m_cells[col] = cell;
+            }
+            else
+            {
+                // Data did not match... merge valid information
+                m_cells[col].MergeFrom(srcData);
+            }
+        }
+    }
+
+    if ( recursively )
+    {
+        for ( unsigned int i=0; i<GetChildCount(); i++ )
+            Item(i)->AdaptiveSetCell( firstCol,
+                                      lastCol,
+                                      cell,
+                                      srcData,
+                                      unmodCellData,
+                                      ignoreWithFlags,
+                                      recursively );
+    }
+}
+
+const wxPGCell& wxPGProperty::GetCell( unsigned int column ) const
+{
+    if ( m_cells.size() > column )
+        return m_cells[column];
+
+    wxPropertyGrid* pg = GetGrid();
+
+    if ( IsCategory() )
+        return pg->GetCategoryDefaultCell();
+
+    return pg->GetPropertyDefaultCell();
+}
+
+wxPGCell& wxPGProperty::GetCell( unsigned int column )
+{
+    EnsureCells(column);
+    return m_cells[column];
+}
+
+void wxPGProperty::SetBackgroundColour( const wxColour& colour,
+                                        bool recursively )
+{
+    wxPGProperty* firstProp = this;
+
+    //
+    // If category is tried to set recursively, skip it and only
+    // affect the children.
+    if ( recursively )
+    {
+        while ( firstProp->IsCategory() )
+        {
+            if ( !firstProp->GetChildCount() )
+                return;
+            firstProp = firstProp->Item(0);
+        }
+    }
+
+    wxPGCell& firstCell = firstProp->GetCell(0);
+    wxPGCellData* firstCellData = firstCell.GetData();
+
+    wxPGCell newCell(firstCell);
+    newCell.SetBgCol(colour);
+    wxPGCell srcCell;
+    srcCell.SetBgCol(colour);
+
+    AdaptiveSetCell( 0,
+                     GetParentState()->GetColumnCount()-1,
+                     newCell,
+                     srcCell,
+                     firstCellData,
+                     recursively ? wxPG_PROP_CATEGORY : 0,
+                     recursively );
+}
+
+void wxPGProperty::SetTextColour( const wxColour& colour,
+                                  bool recursively )
+{
+    wxPGProperty* firstProp = this;
+
+    //
+    // If category is tried to set recursively, skip it and only
+    // affect the children.
+    if ( recursively )
+    {
+        while ( firstProp->IsCategory() )
+        {
+            if ( !firstProp->GetChildCount() )
+                return;
+            firstProp = firstProp->Item(0);
+        }
+    }
+
+    wxPGCell& firstCell = firstProp->GetCell(0);
+    wxPGCellData* firstCellData = firstCell.GetData();
+
+    wxPGCell newCell(firstCell);
+    newCell.SetFgCol(colour);
+    wxPGCell srcCell;
+    srcCell.SetFgCol(colour);
+
+    AdaptiveSetCell( 0,
+                     GetParentState()->GetColumnCount()-1,
+                     newCell,
+                     srcCell,
+                     firstCellData,
+                     recursively ? wxPG_PROP_CATEGORY : 0,
+                     recursively );
 }
 
 wxPGEditorDialogAdapter* wxPGProperty::GetEditorDialog() const

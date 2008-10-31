@@ -75,8 +75,27 @@ public:
     // Render flags
     enum
     {
+        // We are painting selected item
         Selected        = 0x00010000,
-        Control         = 0x00020000
+
+        // We are painting item in choice popup
+        ChoicePopup     = 0x00020000,
+
+        // We are rendering wxOwnerDrawnComboBox control
+        // (or other owner drawn control, but that is only
+        // officially supported one ATM).
+        Control         = 0x00040000,
+
+        // We are painting a disable property
+        Disabled        = 0x00080000,
+
+        // We are painting selected, disabled, or similar
+        // item that dictates fore- and background colours,
+        // overriding any cell values.
+        DontUseCellFgCol    = 0x00100000,
+        DontUseCellBgCol    = 0x00200000,
+        DontUseCellColours  = DontUseCellFgCol |
+                              DontUseCellBgCol
     };
 
     virtual void Render( wxDC& dc,
@@ -145,14 +164,48 @@ private:
 };
 
 
+class WXDLLIMPEXP_PROPGRID wxPGCellData : public wxObjectRefData
+{
+    friend class wxPGCell;
+public:
+    wxPGCellData();
+
+    void SetText( const wxString& text )
+    {
+        m_text = text;
+        m_hasValidText = true;
+    }
+    void SetBitmap( const wxBitmap& bitmap ) { m_bitmap = bitmap; }
+    void SetFgCol( const wxColour& col ) { m_fgCol = col; }
+    void SetBgCol( const wxColour& col ) { m_bgCol = col; }
+
+protected:
+    virtual ~wxPGCellData() { }
+
+    wxString    m_text;
+    wxBitmap    m_bitmap;
+    wxColour    m_fgCol;
+    wxColour    m_bgCol;
+
+    // True if m_text is valid and specified
+    bool        m_hasValidText;
+};
+
 /** @class wxPGCell
 
     Base class for simple wxPropertyGrid cell information.
 */
-class WXDLLIMPEXP_PROPGRID wxPGCell
+class WXDLLIMPEXP_PROPGRID wxPGCell : public wxObject
 {
 public:
     wxPGCell();
+    wxPGCell( const wxPGCell& other )
+    {
+         m_refData = other.m_refData;
+         if ( m_refData )
+             m_refData->IncRef();
+    }
+
     wxPGCell( const wxString& text,
               const wxBitmap& bitmap = wxNullBitmap,
               const wxColour& fgCol = wxNullColour,
@@ -160,21 +213,50 @@ public:
 
     virtual ~wxPGCell() { }
 
-    void SetText( const wxString& text ) { m_text = text; }
-    void SetBitmap( const wxBitmap& bitmap ) { m_bitmap = bitmap; }
-    void SetFgCol( const wxColour& col ) { m_fgCol = col; }
-    void SetBgCol( const wxColour& col ) { m_bgCol = col; }
+    wxPGCellData* GetData()
+    {
+        return (wxPGCellData*) m_refData;
+    }
 
-    const wxString& GetText() const { return m_text; }
-    const wxBitmap& GetBitmap() const { return m_bitmap; }
-    const wxColour& GetFgCol() const { return m_fgCol; }
-    const wxColour& GetBgCol() const { return m_bgCol; }
+    const wxPGCellData* GetData() const
+    {
+        return (const wxPGCellData*) m_refData;
+    }
+
+    bool HasText() const
+    {
+        return (m_refData && GetData()->m_hasValidText);
+    }
+
+    /**
+        Merges valid data from srcCell into this.
+    */
+    void MergeFrom( const wxPGCell& srcCell );
+
+    void SetText( const wxString& text );
+    void SetBitmap( const wxBitmap& bitmap );
+    void SetFgCol( const wxColour& col );
+    void SetBgCol( const wxColour& col );
+
+    const wxString& GetText() const { return GetData()->m_text; }
+    const wxBitmap& GetBitmap() const { return GetData()->m_bitmap; }
+    const wxColour& GetFgCol() const { return GetData()->m_fgCol; }
+    const wxColour& GetBgCol() const { return GetData()->m_bgCol; }
+
+    wxPGCell& operator=( const wxPGCell& other )
+    {
+        if ( this != &other )
+        {
+            Ref(other);
+        }
+        return *this;
+    }
 
 protected:
-    wxString    m_text;
-    wxBitmap    m_bitmap;
-    wxColour    m_fgCol;
-    wxColour    m_bgCol;
+    virtual wxObjectRefData *CreateRefData() const
+        { return new wxPGCellData(); }
+
+    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
 };
 
 
@@ -566,30 +648,34 @@ class WXDLLIMPEXP_PROPGRID wxPGChoiceEntry : public wxPGCell
 {
 public:
     wxPGChoiceEntry();
-    wxPGChoiceEntry( const wxPGChoiceEntry& entry );
+    wxPGChoiceEntry(const wxPGChoiceEntry& other)
+    {
+         m_refData = other.m_refData;
+         if ( m_refData )
+             m_refData->IncRef();
+        m_value = other.m_value;
+    }
     wxPGChoiceEntry( const wxString& label,
                      int value = wxPG_INVALID_VALUE )
         : wxPGCell(), m_value(value)
     {
-        m_text = label;
+        SetText(label);
     }
 
-    wxPGChoiceEntry( const wxString& label,
-                     int value,
-                     const wxBitmap& bitmap,
-                     const wxColour& fgCol = wxNullColour,
-                     const wxColour& bgCol = wxNullColour )
-        : wxPGCell(label, bitmap, fgCol, bgCol), m_value(value)
-    {
-    }
-
-    virtual ~wxPGChoiceEntry()
-    {
-    }
+    virtual ~wxPGChoiceEntry() { }
 
     void SetValue( int value ) { m_value = value; }
-
     int GetValue() const { return m_value; }
+
+    wxPGChoiceEntry& operator=( const wxPGChoiceEntry& other )
+    {
+        if ( this != &other )
+        {
+            Ref(other);
+        }
+        m_value = other.m_value;
+        return *this;
+    }
 
 protected:
     int m_value;
@@ -607,26 +693,7 @@ public:
 
     void CopyDataFrom( wxPGChoicesData* data );
 
-    // Takes ownership of 'item'
-    void Insert( int index, wxPGChoiceEntry* item )
-    {
-        wxVector<wxPGChoiceEntry*>::iterator it;
-        if ( index == -1 )
-        {
-            it = m_items.end();
-            index = (int) m_items.size();
-        }
-        else
-        {
-            it = m_items.begin() + index;
-        }
-
-        // Need to fix value?
-        if ( item->GetValue() == wxPG_INVALID_VALUE )
-            item->SetValue(index);
-
-        m_items.insert(it, item);
-    }
+    wxPGChoiceEntry& Insert( int index, const wxPGChoiceEntry& item );
 
     // Delete all entries
     void Clear();
@@ -636,10 +703,15 @@ public:
         return (unsigned int) m_items.size();
     }
 
-    wxPGChoiceEntry* Item( unsigned int i ) const
+    const wxPGChoiceEntry& Item( unsigned int i ) const
     {
-        wxCHECK_MSG( i < GetCount(), NULL, "invalid index" );
+        wxASSERT_MSG( i < GetCount(), "invalid index" );
+        return m_items[i];
+    }
 
+    wxPGChoiceEntry& Item( unsigned int i )
+    {
+        wxASSERT_MSG( i < GetCount(), "invalid index" );
         return m_items[i];
     }
 
@@ -652,7 +724,7 @@ public:
     }
 
 private:
-    wxVector<wxPGChoiceEntry*>  m_items;
+    wxVector<wxPGChoiceEntry>   m_items;
 
     // So that multiple properties can use the same set
     int             m_refCount;
@@ -755,11 +827,8 @@ public:
     */
     void Add( const wxChar** labels, const ValArrItem* values = NULL );
 
-    /** Version that works with wxArrayString. */
-    void Add( const wxArrayString& arr, const ValArrItem* values = NULL );
-
     /** Version that works with wxArrayString and wxArrayInt. */
-    void Add( const wxArrayString& arr, const wxArrayInt& arrint );
+    void Add( const wxArrayString& arr, const wxArrayInt& arrint = wxArrayInt() );
 
     /**
         Adds a single choice.
@@ -859,13 +928,13 @@ public:
     const wxPGChoiceEntry& Item( unsigned int i ) const
     {
         wxASSERT( IsOk() );
-        return *m_data->Item(i);
+        return m_data->Item(i);
     }
 
     wxPGChoiceEntry& Item( unsigned int i )
     {
         wxASSERT( IsOk() );
-        return *m_data->Item(i);
+        return m_data->Item(i);
     }
 
     /** Removes count items starting at position nIndex. */
@@ -1357,19 +1426,6 @@ public:
     */
     virtual wxPGEditorDialogAdapter* GetEditorDialog() const;
 
-    /** Returns wxPGCell of given column, NULL if none. If valid
-        object is returned, caller will gain its ownership.
-    */
-    wxPGCell* AcquireCell( unsigned int column )
-    {
-        if ( column >= m_cells.size() )
-            return NULL;
-
-        wxPGCell* cell = (wxPGCell*) m_cells[column];
-        m_cells[column] = NULL;
-        return cell;
-    }
-
     /** Append a new choice to property's list of choices.
     */
     int AddChoice( const wxString& label, int value = wxPG_INVALID_VALUE )
@@ -1494,16 +1550,12 @@ public:
 
     void UpdateControl( wxWindow* primary );
 
-    /** Returns wxPGCell of given column, NULL if none. wxPGProperty
-        will retain ownership of the cell object.
+    /**
+        Returns wxPGCell of given column.
     */
-    wxPGCell* GetCell( unsigned int column ) const
-    {
-        if ( column >= m_cells.size() )
-            return NULL;
+    const wxPGCell& GetCell( unsigned int column ) const;
 
-        return (wxPGCell*) m_cells[column];
-    }
+    wxPGCell& GetCell( unsigned int column );
 
     /** Return number of displayed common values for this property.
     */
@@ -1732,6 +1784,32 @@ public:
 
     void SetAttributes( const wxPGAttributeStorage& attributes );
 
+    /**
+        Sets property's background colour.
+
+        @param colour
+            Background colour to use.
+
+        @param recursively
+            If @true, children are affected recursively, and any categories
+            are not.
+    */
+    void SetBackgroundColour( const wxColour& colour,
+                              bool recursively = false );
+
+    /**
+        Sets property's text colour.
+
+        @param colour
+            Text colour to use.
+
+        @param recursively
+            If @true, children are affected recursively, and any categories
+            are not.
+    */
+    void SetTextColour( const wxColour& colour,
+                        bool recursively = false );
+
 #ifndef SWIG
     /** Sets editor for a property.
 
@@ -1753,11 +1831,10 @@ public:
     */
     inline void SetEditor( const wxString& editorName );
 
-    /** Sets cell information for given column.
-
-        Note that the property takes ownership of given wxPGCell instance.
+    /**
+        Sets cell information for given column.
     */
-    void SetCell( int column, wxPGCell* cellObj );
+    void SetCell( int column, const wxPGCell& cell );
 
     /** Sets common value selected for this property. -1 for none.
     */
@@ -2048,6 +2125,13 @@ public:
 
 #ifndef SWIG
 
+    // Returns various display-related information for given column
+    void GetDisplayInfo( unsigned int column,
+                         int choiceIndex,
+                         int flags,
+                         wxString* pString,
+                         const wxPGCell** pCell );
+
     static wxString*            sm_wxPG_LABEL;
 
     /** This member is public so scripting language bindings
@@ -2056,9 +2140,49 @@ public:
     void*                       m_clientData;
 
 protected:
-    /** Returns text for given column.
+
+    /**
+        Sets property cell in fashion that reduces number of exclusive
+        copies of cell data. Used when setting, for instance, same
+        background colour for a number of properties.
+
+        @param firstCol
+            First column to affect.
+
+        @param lastCol
+            Last column to affect.
+
+        @param preparedCell
+            Pre-prepared cell that is used for those which cell data
+            before this matched unmodCellData.
+
+        @param srcData
+            If unmodCellData did not match, valid cell data from this
+            is merged into cell (usually generating new exclusive copy
+            of cell's data).
+
+        @param unmodCellData
+            If cell's cell data matches this, its cell is now set to
+            preparedCell.
+
+        @param ignoreWithFlags
+            Properties with any one of these flags are skipped.
+
+        @param recursively
+            If @true, apply this operation recursively in child properties.
     */
-    wxString GetColumnText( unsigned int col ) const;
+    void AdaptiveSetCell( unsigned int firstCol,
+                          unsigned int lastCol,
+                          const wxPGCell& preparedCell,
+                          const wxPGCell& srcData,
+                          wxPGCellData* unmodCellData,
+                          FlagType ignoreWithFlags,
+                          bool recursively );
+
+    /**
+        Makes sure m_cells has size of column+1 (or more).
+    */
+    void EnsureCells( unsigned int column );
 
     /** Returns (direct) child property with given name (or NULL if not found),
         with hint index.
@@ -2103,7 +2227,7 @@ protected:
     wxString                    m_label;
     wxString                    m_name;
     wxPGProperty*               m_parent;
-    wxPropertyGridPageState*        m_parentState;
+    wxPropertyGridPageState*    m_parentState;
 
     wxClientData*               m_clientObject;
 
@@ -2123,7 +2247,7 @@ protected:
     wxArrayPGProperty           m_children;
 
     // Extended cell information
-    wxArrayPtrVoid              m_cells;
+    wxVector<wxPGCell>          m_cells;
 
     // Choices shown in drop-down list of editor control.
     wxPGChoices                 m_choices;
@@ -2151,9 +2275,6 @@ protected:
     // m_depthBgCol indicates width of background colour between margin and item
     // (essentially this is category's depth, if none then equals m_depth).
     unsigned char               m_depthBgCol;
-
-    unsigned char               m_bgColIndex; // Background brush index.
-    unsigned char               m_fgColIndex; // Foreground colour index.
 
 private:
     // Called in constructors.

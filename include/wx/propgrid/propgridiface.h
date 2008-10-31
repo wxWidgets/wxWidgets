@@ -867,11 +867,7 @@ public:
                           const wxString& text = wxEmptyString,
                           const wxBitmap& bitmap = wxNullBitmap,
                           const wxColour& fgCol = wxNullColour,
-                          const wxColour& bgCol = wxNullColour )
-    {
-        wxPG_PROP_ARG_CALL_PROLOG()
-        p->SetCell( column, new wxPGCell(text, bitmap, fgCol, bgCol) );
-    }
+                          const wxColour& bgCol = wxNullColour );
 
 #ifndef SWIG
     /** Sets client data (void*) of a property.

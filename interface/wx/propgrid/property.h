@@ -848,12 +848,6 @@ public:
     virtual wxPGEditorDialogAdapter* GetEditorDialog() const;
 
     /**
-        Returns wxPGCell of given column, @NULL if none. If valid
-        object is returned, caller will gain its ownership.
-    */
-    wxPGCell* AcquireCell( unsigned int column );
-
-    /**
         Append a new choice to property's list of choices.
 
         @param label
@@ -954,10 +948,9 @@ public:
     const wxString& GetBaseName() const;
 
     /**
-        Returns wxPGCell of given column, @NULL if none. wxPGProperty
-        will retain ownership of the cell object.
+        Returns wxPGCell of given column.
     */
-    wxPGCell* GetCell( unsigned int column ) const;
+    const wxPGCell& GetCell( unsigned int column ) const;
 
     /**
         Returns number of child properties.
@@ -1219,6 +1212,19 @@ public:
     void SetAttribute( const wxString& name, wxVariant value );
 
     /**
+        Sets property's background colour.
+
+        @param colour
+            Background colour to use.
+
+        @param recursively
+            If @true, children are affected recursively, and any categories
+            are not.
+    */
+    void SetBackgroundColour( const wxColour& colour,
+                              bool recursively = false );
+
+    /**
         Sets editor for a property.
 
         @param editor
@@ -1236,10 +1242,8 @@ public:
 
     /**
         Sets cell information for given column.
-
-        Note that the property takes ownership of given wxPGCell instance.
     */
-    void SetCell( int column, wxPGCell* cellObj );
+    void SetCell( int column, const wxPGCell& cell );
 
     /**
         Sets new set of choices for property.
@@ -1318,6 +1322,19 @@ public:
                  property to use wxPG_PROP_MISC_PARENT style.
     */
     void SetParentalType( int flag );
+
+    /**
+        Sets property's text colour.
+
+        @param colour
+            Text colour to use.
+
+        @param recursively
+            If @true, children are affected recursively, and any categories
+            are not.
+    */
+    void SetTextColour( const wxColour& colour,
+                        bool recursively = false );
 
     /** Sets wxValidator for a property */
     void SetValidator( const wxValidator& validator );

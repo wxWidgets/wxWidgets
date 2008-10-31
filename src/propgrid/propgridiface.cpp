@@ -773,6 +773,28 @@ bool wxPropertyGridInterface::SetPropertyMaxLength( wxPGPropArg id, int maxLen )
 }
 
 // -----------------------------------------------------------------------
+
+void wxPropertyGridInterface::SetPropertyCell( wxPGPropArg id,
+                                               int column,
+                                               const wxString& text,
+                                               const wxBitmap& bitmap,
+                                               const wxColour& fgCol,
+                                               const wxColour& bgCol )
+{
+    wxPG_PROP_ARG_CALL_PROLOG()
+
+    wxPGCell& cell = p->GetCell(column);
+    if ( text.length() && text != wxPG_LABEL )
+        cell.SetText(text);
+    if ( bitmap.IsOk() )
+        cell.SetBitmap(bitmap);
+    if ( fgCol != wxNullColour )
+        cell.SetFgCol(fgCol);
+    if ( bgCol != wxNullColour )
+        cell.SetBgCol(bgCol);
+}
+
+// -----------------------------------------------------------------------
 // GetPropertyValueAsXXX methods
 
 #define IMPLEMENT_GET_VALUE(T,TRET,BIGNAME,DEFRETVAL) \
