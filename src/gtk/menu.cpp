@@ -1040,6 +1040,18 @@ wxString wxMenuItem::GetItemLabel() const
 // wxMenu
 //-----------------------------------------------------------------------------
 
+#if GTK_CHECK_VERSION(2,4,0)
+// "can_activate_accel" from menu item
+extern "C" {
+static gboolean can_activate_accel(GtkWidget*, guint, wxMenu* menu)
+{
+    menu->UpdateUI();
+    // always allow our "activate" handler to be called
+    return true;
+}
+}
+#endif
+
 IMPLEMENT_DYNAMIC_CLASS(wxMenu,wxEvtHandler)
 
 void wxMenu::Init()
@@ -1265,6 +1277,13 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
         }
         else
         {
+#if GTK_CHECK_VERSION(2,4,0)
+            if (gtk_check_version(2,4,0) == NULL)
+            {
+                g_signal_connect(menuItem, "can_activate_accel",
+                    G_CALLBACK(can_activate_accel), this);
+            }
+#endif
             g_signal_connect (menuItem, "activate",
                               G_CALLBACK (gtk_menu_clicked_callback),
                               this);
