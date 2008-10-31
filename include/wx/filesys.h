@@ -12,6 +12,8 @@
 
 #include "wx/defs.h"
 
+#if wxUSE_FILESYSTEM
+
 #if !wxUSE_STREAMS
 #error You cannot compile virtual file systems without wxUSE_STREAMS
 #endif
@@ -19,8 +21,6 @@
 #if wxUSE_HTML && !wxUSE_FILESYSTEM
 #error You cannot compile wxHTML without virtual file systems
 #endif
-
-#if wxUSE_FILESYSTEM
 
 #include "wx/stream.h"
 #include "wx/datetime.h"
