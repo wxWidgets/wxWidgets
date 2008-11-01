@@ -614,7 +614,7 @@ void ArraysTestCase::Swap()
     DoTestSwap(1, 10, 100, (wxArrayInt *)NULL);
 #endif
 
-    DoTestSwap(6, 28, 496, (wxArrayLong *)NULL);
+    DoTestSwap(6L, 28L, 496L, (wxArrayLong *)NULL);
 }
 
 void ArraysTestCase::TestSTL()
