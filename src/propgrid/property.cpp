@@ -544,10 +544,8 @@ void wxPGProperty::InitAfterAdded( wxPropertyGridPageState* pageState,
     // Has initial children
     if ( GetChildCount() )
     {
-        FlagType parentalFlags = m_flags & wxPG_PROP_PARENTAL_FLAGS;
-
         // Check parental flags
-        wxASSERT_MSG( parentalFlags,
+        wxASSERT_MSG( (m_flags & wxPG_PROP_PARENTAL_FLAGS),
                       "Call SetFlag(wxPG_PROP_MISC_PARENT) or"
                       "SetFlag(wxPG_PROP_AGGREGATE) before calling"
                       "wxPGProperty::AddChild()." );

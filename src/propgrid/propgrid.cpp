@@ -3311,8 +3311,6 @@ void wxPropertyGrid::FreeEditors()
 // Call with NULL to de-select property
 bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
 {
-    wxPanel* canvas = GetPanel();
-
     /*
     if (p)
         wxLogDebug(wxT("SelectProperty( %s (%s[%i]) )"),p->m_label.c_str(),
@@ -3490,7 +3488,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
 
                 if ( m_wndEditor )
                 {
-                    wxASSERT_MSG( m_wndEditor->GetParent() == canvas,
+                    wxASSERT_MSG( m_wndEditor->GetParent() == GetPanel(),
                                   wxT("CreateControls must use result of wxPropertyGrid::GetPanel() as parent of controls.") );
 
                     // Set validator, if any
@@ -3554,7 +3552,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
 
                 if ( m_wndEditor2 )
                 {
-                    wxASSERT_MSG( m_wndEditor2->GetParent() == canvas,
+                    wxASSERT_MSG( m_wndEditor2->GetParent() == GetPanel(),
                                   wxT("CreateControls must use result of wxPropertyGrid::GetPanel() as parent of controls.") );
 
                     // Get proper id for wndSecondary

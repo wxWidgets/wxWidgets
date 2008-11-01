@@ -929,7 +929,7 @@ void wxSystemColourProperty::OnSetValue()
         m_value = TranslateVal(val);
     }
 
-    int ind;
+    int ind = wxNOT_FOUND;
 
     if ( m_value.GetType() == wxS("wxColourPropertyValue") )
     {

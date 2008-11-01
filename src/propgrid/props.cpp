@@ -2054,6 +2054,7 @@ bool wxArrayEditorDialog::Create( wxWindow *parent,
     // On wxMAC the dialog shows incorrectly if style is not exactly wxCAPTION
     // FIXME: This should be only a temporary fix.
 #ifdef __WXMAC__
+    wxUnusedVar(style);
     int useStyle = wxCAPTION;
 #else
     int useStyle = style;
