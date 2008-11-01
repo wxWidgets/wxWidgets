@@ -1010,18 +1010,8 @@ bool wxPGProperty::StringToValue( wxVariant& variant, const wxString& text, int 
                     {
                         if ( len > 0 )
                         {
-                            bool wasUnspecified = child->IsValueUnspecified();
-
                             if ( child->StringToValue(variant, token, propagatedFlags|wxPG_COMPOSITE_FRAGMENT) )
                             {
-                                // Clear unspecified flag only if OnSetValue() didn't
-                                // affect it.
-                                if ( child->IsValueUnspecified() &&
-                                     (wasUnspecified || !UsesAutoUnspecified()) )
-                                {
-                                    variant = child->GetDefaultValue();
-                                }
-
                                 list.Append(variant);
 
                                 changed = true;
