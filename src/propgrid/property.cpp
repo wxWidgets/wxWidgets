@@ -856,13 +856,13 @@ void wxPGProperty::DoGenerateComposedValue( wxString& text,
         }
     }
 
-    // Remove superfluous semicolon and space
-    wxString rest;
-    if ( text.EndsWith(wxS("; "), &rest) )
-        text = rest;
-
     if ( (unsigned int)i < m_children.size() )
-        text += wxS("; ...");
+    {
+        if ( !text.EndsWith(wxS("; ")) )
+            text += wxS("; ...");
+        else
+            text += wxS("...");
+    }
 }
 
 wxString wxPGProperty::ValueToString( wxVariant& WXUNUSED(value),
