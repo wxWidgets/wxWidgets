@@ -185,7 +185,7 @@ void backStream::Seek(wxInputStream& in)
     CPPUNIT_ASSERT(in.Eof());
 
     for (size_t i = TESTSIZE; i > 0; i--) {
-        CPPUNIT_ASSERT_EQUAL(i - 1, size_t(in.SeekI(i)));
+        CPPUNIT_ASSERT_EQUAL(i - 1, size_t(in.SeekI(i - 1)));
         CPPUNIT_ASSERT_EQUAL(i - 1, size_t(in.TellI()));
         CPPUNIT_ASSERT_EQUAL(int(i - 1), in.GetC());
         CPPUNIT_ASSERT_EQUAL(size_t(1), size_t(in.LastRead()));
