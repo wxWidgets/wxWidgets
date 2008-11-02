@@ -403,7 +403,7 @@ public:
     const wxString& GetLabel() const { return m_item.m_text; }
     const wxString& GetText() const { return m_item.m_text; }
     int GetImage() const { return m_item.m_image; }
-    long GetData() const { return wx_static_cast(long, m_item.m_data); }
+    long GetData() const { return static_cast<long>(m_item.m_data); }
     long GetMask() const { return m_item.m_mask; }
     const wxListItem& GetItem() const { return m_item; }
 

@@ -1605,7 +1605,7 @@ bool wxDataViewTextRenderer::GetValue( wxVariant &value ) const
     GValue gvalue = { 0, };
     g_value_init( &gvalue, G_TYPE_STRING );
     g_object_get_property( G_OBJECT(m_renderer), "text", &gvalue );
-    wxString tmp = wxGTK_CONV_BACK_FONT( g_value_get_string( &gvalue ), wx_const_cast(wxDataViewTextRenderer*, this)->GetOwner()->GetOwner()->GetFont() );
+    wxString tmp = wxGTK_CONV_BACK_FONT( g_value_get_string( &gvalue ), const_cast<wxDataViewTextRenderer*>(this)->GetOwner()->GetOwner()->GetFont() );
     g_value_unset( &gvalue );
 
     value = tmp;

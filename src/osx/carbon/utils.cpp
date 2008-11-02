@@ -679,11 +679,10 @@ bool wxMacDataItem::IsLessThan(wxMacDataItemBrowserControl *WXUNUSED(owner) ,
     const wxMacDataItem* rhs,
     DataBrowserPropertyID sortProperty) const
 {
-    const wxMacDataItem* otherItem = wx_const_cast(wxMacDataItem*,rhs);
     bool retval = false;
 
     if ( sortProperty == kNumericOrderColumnId )
-        retval = m_order < otherItem->m_order;
+        retval = m_order < rhs->m_order;
 
     return retval;
 }

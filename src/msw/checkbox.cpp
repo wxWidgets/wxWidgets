@@ -200,7 +200,7 @@ wxSize wxCheckBox::DoGetBestSize() const
     int wCheckbox, hCheckbox;
     if ( !str.empty() )
     {
-        wxClientDC dc(wx_const_cast(wxCheckBox *, this));
+        wxClientDC dc(const_cast<wxCheckBox *>(this));
         dc.SetFont(GetFont());
         dc.GetMultiLineTextExtent(GetLabelText(str), &wCheckbox, &hCheckbox);
         wCheckbox += s_checkSize + GetCharWidth();

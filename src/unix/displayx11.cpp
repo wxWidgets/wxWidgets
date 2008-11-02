@@ -71,7 +71,7 @@ public:
 
     operator const XineramaScreenInfo *() const { return m_screens; }
 
-    unsigned GetCount() const { return wx_static_cast(unsigned, m_num); }
+    unsigned GetCount() const { return static_cast<unsigned>(m_num); }
 
 private:
     XineramaScreenInfo *m_screens;

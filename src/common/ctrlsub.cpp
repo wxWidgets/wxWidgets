@@ -168,7 +168,7 @@ void wxItemContainer::SetClientObject(unsigned int n, wxClientData *data)
     if ( HasClientObjectData() )
     {
         wxClientData * clientDataOld
-            = wx_static_cast(wxClientData *, DoGetItemClientData(n));
+            = static_cast<wxClientData *>(DoGetItemClientData(n));
         if ( clientDataOld )
             delete clientDataOld;
     }
@@ -188,7 +188,7 @@ wxClientData *wxItemContainer::GetClientObject(unsigned int n) const
     wxCHECK_MSG( HasClientObjectData(), NULL,
                   wxT("this window doesn't have object client data") );
 
-    return wx_static_cast(wxClientData *, DoGetItemClientData(n));
+    return static_cast<wxClientData *>(DoGetItemClientData(n));
 }
 
 void wxItemContainer::SetClientData(unsigned int n, void *data)
@@ -224,7 +224,7 @@ void wxItemContainer::AssignNewItemClientData(unsigned int pos,
             SetClientObject
             (
                 pos,
-                (wx_reinterpret_cast(wxClientData **, clientData))[n]
+                (reinterpret_cast<wxClientData **>(clientData))[n]
             );
             break;
 

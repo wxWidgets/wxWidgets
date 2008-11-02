@@ -65,7 +65,7 @@ wxBitmap wxRegionBase::ConvertToBitmap() const
     dc.SelectObject(bmp);
     dc.SetBackground(*wxBLACK_BRUSH);
     dc.Clear();
-    dc.SetDeviceClippingRegion(*wx_static_cast(const wxRegion *, this));
+    dc.SetDeviceClippingRegion(*static_cast<const wxRegion *>(this));
     dc.SetBackground(*wxWHITE_BRUSH);
     dc.Clear();
     dc.SelectObject(wxNullBitmap);

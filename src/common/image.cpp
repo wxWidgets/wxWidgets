@@ -123,7 +123,7 @@ wxImage wxNullImage;
 
 //-----------------------------------------------------------------------------
 
-#define M_IMGDATA wx_static_cast(wxImageRefData*, m_refData)
+#define M_IMGDATA static_cast<wxImageRefData*>(m_refData)
 
 IMPLEMENT_DYNAMIC_CLASS(wxImage, wxObject)
 
@@ -252,7 +252,7 @@ wxObjectRefData* wxImage::CreateRefData() const
 
 wxObjectRefData* wxImage::CloneRefData(const wxObjectRefData* that) const
 {
-    const wxImageRefData* refData = wx_static_cast(const wxImageRefData*, that);
+    const wxImageRefData* refData = static_cast<const wxImageRefData*>(that);
     wxCHECK_MSG(refData->m_ok, NULL, wxT("invalid image") );
 
     wxImageRefData* refData_new = new wxImageRefData;
@@ -1390,7 +1390,7 @@ wxImage wxImage::ConvertToGreyscale( double lr, double lg, double lb ) const
         {
             // calculate the luma
             double luma = (src[0] * lr + src[1] * lg + src[2] * lb) + 0.5;
-            dest[0] = dest[1] = dest[2] = wx_static_cast(unsigned char, luma);
+            dest[0] = dest[1] = dest[2] = static_cast<unsigned char>(luma);
         }
     }
 
@@ -2288,7 +2288,7 @@ bool wxImage::LoadFile( wxInputStream& stream, const wxString& mimetype, int ind
 
 bool wxImage::DoSave(wxImageHandler& handler, wxOutputStream& stream) const
 {
-    wxImage * const self = wx_const_cast(wxImage *, this);
+    wxImage * const self = const_cast<wxImage *>(this);
     if ( !handler.SaveFile(self, stream) )
         return false;
 

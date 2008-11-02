@@ -156,8 +156,8 @@ void wxMetafileRefData::UpdateDocumentFromData()
     {
         CGPDFPageRef page = CGPDFDocumentGetPage( m_pdfDoc, 1 );
         CGRect rect = CGPDFPageGetBoxRect ( page, kCGPDFMediaBox);
-        m_width = wx_static_cast(int, rect.size.width);
-        m_height = wx_static_cast(int, rect.size.height);
+        m_width = static_cast<int>(rect.size.width);
+        m_height = static_cast<int>(rect.size.height);
     }
 }
 
@@ -177,7 +177,7 @@ wxGDIRefData *wxMetaFile::CreateGDIRefData() const
 
 wxGDIRefData *wxMetaFile::CloneGDIRefData(const wxGDIRefData *data) const
 {
-    return new wxMetafileRefData(*wx_static_cast(const wxMetafileRefData *, data));
+    return new wxMetafileRefData(*static_cast<const wxMetafileRefData *>(data));
 }
 
 WXHMETAFILE wxMetaFile::GetHMETAFILE() const
@@ -227,8 +227,8 @@ void wxMetafile::SetPICT(void* pictHandle)
     wxCFRef<CGDataProviderRef> provider(wxMacCGDataProviderCreateWithCFData(data));
     QDPictRef pictRef = QDPictCreateWithProvider(provider);
     CGRect rect = QDPictGetBounds(pictRef);
-    m_refData = new wxMetafileRefData(wx_static_cast(int, rect.size.width),
-                                      wx_static_cast(int, rect.size.height));
+    m_refData = new wxMetafileRefData(static_cast<int>(rect.size.width),
+                                      static_cast<int>(rect.size.height));
     QDPictDrawToCGContext( ((wxMetafileRefData*) m_refData)->GetContext(), rect, pictRef );
     CFRelease( data );
     QDPictRelease( pictRef );

@@ -258,7 +258,7 @@ bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
     aglSetInteger(m_glContext, AGL_BUFFER_NAME, &bufnummer);
     //win.SetLastContext(m_glContext);
     
-    wx_const_cast(wxGLCanvas&, win).SetViewport();
+    const_cast<wxGLCanvas&>(win).SetViewport();
 
     if ( !aglSetDrawable(m_glContext, drawable) )
     {

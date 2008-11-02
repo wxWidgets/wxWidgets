@@ -1151,7 +1151,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
 #endif // wxUSE_LOG
 
     wxEventLoop * const
-        loop = wx_static_cast(wxEventLoop *, wxEventLoop::GetActive());
+        loop = static_cast<wxEventLoop *>(wxEventLoop::GetActive());
     if ( loop )
     {
         // process all pending events:

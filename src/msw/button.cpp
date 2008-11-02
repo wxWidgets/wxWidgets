@@ -305,7 +305,7 @@ void wxButton::SetLabel(const wxString& label)
 
 wxSize wxButton::DoGetBestSize() const
 {
-    return wxMSWButton::ComputeBestSize(wx_const_cast(wxButton *, this));
+    return wxMSWButton::ComputeBestSize(const_cast<wxButton *>(this));
 }
 
 /* static */

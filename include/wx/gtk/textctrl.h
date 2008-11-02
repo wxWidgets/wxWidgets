@@ -195,8 +195,8 @@ private:
     // both
     void *GetTextObject() const
     {
-        return IsMultiLine() ? wx_static_cast(void *, m_buffer)
-                             : wx_static_cast(void *, m_text);
+        return IsMultiLine() ? static_cast<void *>(m_buffer)
+                             : static_cast<void *>(m_text);
     }
 
 

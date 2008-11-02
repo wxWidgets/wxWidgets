@@ -378,7 +378,7 @@ static int ReSearch(const regex_t *preg,
                     re_registers *matches,
                     int eflags)
 {
-    regex_t *pattern = wx_const_cast(regex_t*, preg);
+    regex_t *pattern = const_cast<regex_t*>(preg);
 
     pattern->not_bol = (eflags & REG_NOTBOL) != 0;
     pattern->not_eol = (eflags & REG_NOTEOL) != 0;

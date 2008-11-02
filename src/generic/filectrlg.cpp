@@ -1176,7 +1176,7 @@ void wxGenericFileCtrl::DoSetFilterIndex( int filterindex )
     if ( !pcd )
         return;
 
-    const wxString& str = ((wx_static_cast(wxStringClientData *, pcd))->GetData());
+    const wxString& str = ((static_cast<wxStringClientData *>(pcd))->GetData());
     m_list->SetWild( str );
     m_filterIndex = filterindex;
     if ( str.Left( 2 ) == wxT( "*." ) )

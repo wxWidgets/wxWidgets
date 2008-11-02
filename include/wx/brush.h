@@ -108,7 +108,7 @@ extern WXDLLIMPEXP_DATA_CORE(wxBrushList*)   wxTheBrushList;
 
 inline bool operator==(wxBrushStyle s, wxDeprecatedGUIConstants t)
 {
-    return wx_static_cast(int, s) == wx_static_cast(int, t);
+    return static_cast<int>(s) == static_cast<int>(t);
 }
 
 inline bool operator!=(wxBrushStyle s, wxDeprecatedGUIConstants t)

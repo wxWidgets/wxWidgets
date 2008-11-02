@@ -124,7 +124,7 @@ WXDWORD wxDatePickerCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
 
 wxSize wxDatePickerCtrl::DoGetBestSize() const
 {
-    wxClientDC dc(wx_const_cast(wxDatePickerCtrl *, this));
+    wxClientDC dc(const_cast<wxDatePickerCtrl *>(this));
 
     // we can't use FormatDate() here as the CRT doesn't always use the same
     // format as the date picker control

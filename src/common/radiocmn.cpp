@@ -277,7 +277,7 @@ wxString wxRadioBoxBase::DoGetHelpTextAtPoint(const wxWindow *derived,
 
     if ( item != wxNOT_FOUND )
     {
-        wxString text = GetItemHelpText(wx_static_cast(unsigned int, item));
+        wxString text = GetItemHelpText(static_cast<unsigned int>(item));
         if( !text.empty() )
             return text;
     }

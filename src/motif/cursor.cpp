@@ -305,7 +305,7 @@ wxGDIRefData *wxCursor::CreateGDIRefData() const
 
 wxGDIRefData *wxCursor::CloneGDIRefData(const wxGDIRefData *data) const
 {
-    return new wxCursorRefData(*wx_static_cast(const wxCursorRefData *, data));
+    return new wxCursorRefData(*static_cast<const wxCursorRefData *>(data));
 }
 
 // Motif-specific: create/get a cursor for the current display

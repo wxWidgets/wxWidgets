@@ -341,7 +341,7 @@ public:
     {
         if ( m_ok == -1 )
         {
-            wxConsoleStderr * const self = wx_const_cast(wxConsoleStderr *, this);
+            wxConsoleStderr * const self = const_cast<wxConsoleStderr *>(this);
             self->m_ok = self->DoInit();
 
             // no need to call IsHistoryUnchanged() as we just initialized

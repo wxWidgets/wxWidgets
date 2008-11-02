@@ -71,7 +71,7 @@ wxXLocale& wxXLocale::GetCLocale()
 {
     if ( !gs_cLocale )
     {
-        gs_cLocale = new wxXLocale(wx_static_cast(wxXLocaleCTag *, NULL));
+        gs_cLocale = new wxXLocale(static_cast<wxXLocaleCTag *>(NULL));
     }
 
     return *gs_cLocale;

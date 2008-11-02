@@ -100,7 +100,7 @@ wxIcon::~wxIcon()
 wxObjectRefData *wxIcon::CloneRefData(const wxObjectRefData *dataOrig) const
 {
     const wxIconRefData *
-        data = wx_static_cast(const wxIconRefData *, dataOrig);
+        data = static_cast<const wxIconRefData *>(dataOrig);
     if ( !data )
         return NULL;
 

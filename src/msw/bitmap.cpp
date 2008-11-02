@@ -254,7 +254,7 @@ wxGDIImageRefData *wxBitmap::CreateData() const
 wxGDIRefData *wxBitmap::CloneGDIRefData(const wxGDIRefData *dataOrig) const
 {
     const wxBitmapRefData *
-        data = wx_static_cast(const wxBitmapRefData *, dataOrig);
+        data = static_cast<const wxBitmapRefData *>(dataOrig);
     if ( !data )
         return NULL;
 
@@ -262,7 +262,7 @@ wxGDIRefData *wxBitmap::CloneGDIRefData(const wxGDIRefData *dataOrig) const
     //        wxBitmapRefData using its copy ctor but instead it modifies this
     //        bitmap itself and then returns its m_refData -- which works, of
     //        course (except in !wxUSE_WXDIB), but is completely illogical
-    wxBitmap *self = wx_const_cast(wxBitmap *, this);
+    wxBitmap *self = const_cast<wxBitmap *>(this);
 
     wxBitmapRefData *selfdata;
 #if wxUSE_WXDIB
@@ -272,7 +272,7 @@ wxGDIRefData *wxBitmap::CloneGDIRefData(const wxGDIRefData *dataOrig) const
         wxDIB dib((HBITMAP)(data->m_hBitmap));
         self->CopyFromDIB(dib);
 
-        selfdata = wx_static_cast(wxBitmapRefData *, m_refData);
+        selfdata = static_cast<wxBitmapRefData *>(m_refData);
         selfdata->m_hasAlpha = data->m_hasAlpha;
     }
     else

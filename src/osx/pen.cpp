@@ -151,7 +151,7 @@ wxGDIRefData *wxPen::CreateGDIRefData() const
 
 wxGDIRefData *wxPen::CloneGDIRefData(const wxGDIRefData *data) const
 {
-    return new wxPenRefData(*wx_static_cast(const wxPenRefData *, data));
+    return new wxPenRefData(*static_cast<const wxPenRefData *>(data));
 }
 
 bool wxPen::operator==(const wxPen& pen) const

@@ -2617,7 +2617,7 @@ bool wxWindowBase::ms_winCaptureChanging = false;
 
 void wxWindowBase::CaptureMouse()
 {
-    wxLogTrace(_T("mousecapture"), _T("CaptureMouse(%p)"), wx_static_cast(void*, this));
+    wxLogTrace(_T("mousecapture"), _T("CaptureMouse(%p)"), static_cast<void*>(this));
 
     wxASSERT_MSG( !ms_winCaptureChanging, _T("recursive CaptureMouse call?") );
 
@@ -2644,7 +2644,7 @@ void wxWindowBase::CaptureMouse()
 
 void wxWindowBase::ReleaseMouse()
 {
-    wxLogTrace(_T("mousecapture"), _T("ReleaseMouse(%p)"), wx_static_cast(void*, this));
+    wxLogTrace(_T("mousecapture"), _T("ReleaseMouse(%p)"), static_cast<void*>(this));
 
     wxASSERT_MSG( !ms_winCaptureChanging, _T("recursive ReleaseMouse call?") );
 
@@ -2673,7 +2673,7 @@ void wxWindowBase::ReleaseMouse()
 
     wxLogTrace(_T("mousecapture"),
         (const wxChar *) _T("After ReleaseMouse() mouse is captured by %p"),
-        wx_static_cast(void*, GetCapture()));
+        static_cast<void*>(GetCapture()));
 }
 
 static void DoNotifyWindowAboutCaptureLost(wxWindow *win)

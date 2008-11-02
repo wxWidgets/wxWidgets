@@ -156,7 +156,7 @@ public:
 
 #if !wxUSE_UNICODE_WCHAR
     operator const char*() const
-        { return wx_const_cast(wxFormatString*, this)->AsChar(); }
+        { return const_cast<wxFormatString*>(this)->AsChar(); }
 private:
     // InputAsChar() returns the value converted passed to ctor, only converted
     // to char, while AsChar() takes the the string returned by InputAsChar()
@@ -170,7 +170,7 @@ private:
 #if wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY
 public:
     operator const wchar_t*() const
-        { return wx_const_cast(wxFormatString*, this)->AsWChar(); }
+        { return const_cast<wxFormatString*>(this)->AsWChar(); }
 private:
     const wchar_t* InputAsWChar();
     const wchar_t* AsWChar();

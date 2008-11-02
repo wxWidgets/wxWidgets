@@ -80,7 +80,7 @@ wxString wxConnectionBase::GetTextFromData(const void* data,
             if ( size )
                 size--;
 
-            s = wxString(wx_static_cast(const char *, data), size);
+            s = wxString(static_cast<const char *>(data), size);
             break;
 
 #if wxUSE_UNICODE
@@ -94,14 +94,14 @@ wxString wxConnectionBase::GetTextFromData(const void* data,
                 size--;
             }
 
-            s = wxString(wx_static_cast(const wchar_t *, data), size);
+            s = wxString(static_cast<const wchar_t *>(data), size);
             break;
 
         case wxIPC_UTF8TEXT:
             if ( size )
                 size--;
 
-            s = wxString::FromUTF8(wx_static_cast(const char *, data), size);
+            s = wxString::FromUTF8(static_cast<const char *>(data), size);
             break;
 #endif // wxUSE_UNICODE
 

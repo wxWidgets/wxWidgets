@@ -133,7 +133,7 @@ wxGDIRefData *wxPalette::CreateGDIRefData() const
 
 wxGDIRefData *wxPalette::CloneGDIRefData(const wxGDIRefData *data) const
 {
-    return new wxPaletteRefData(*wx_static_cast(const wxPaletteRefData *, data));
+    return new wxPaletteRefData(*static_cast<const wxPaletteRefData *>(data));
 }
 
 int wxPalette::GetColoursCount() const

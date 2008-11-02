@@ -1501,7 +1501,7 @@ void wxToolBar::DoSetToggle(wxToolBarToolBase *WXUNUSED(tool), bool WXUNUSED(tog
 
 void wxToolBar::SetToolNormalBitmap( int id, const wxBitmap& bitmap )
 {
-    wxToolBarTool* tool = wx_static_cast(wxToolBarTool*, FindById(id));
+    wxToolBarTool* tool = static_cast<wxToolBarTool*>(FindById(id));
     if ( tool )
     {
         wxCHECK_RET( tool->IsButton(), wxT("Can only set bitmap on button tools."));
@@ -1513,7 +1513,7 @@ void wxToolBar::SetToolNormalBitmap( int id, const wxBitmap& bitmap )
 
 void wxToolBar::SetToolDisabledBitmap( int id, const wxBitmap& bitmap )
 {
-    wxToolBarTool* tool = wx_static_cast(wxToolBarTool*, FindById(id));
+    wxToolBarTool* tool = static_cast<wxToolBarTool*>(FindById(id));
     if ( tool )
     {
         wxCHECK_RET( tool->IsButton(), wxT("Can only set bitmap on button tools."));

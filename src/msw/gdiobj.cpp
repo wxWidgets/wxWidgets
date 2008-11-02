@@ -27,7 +27,7 @@
 
 #include "wx/msw/private.h"
 
-#define M_GDIDATA wx_static_cast(wxGDIRefData*, m_refData)
+#define M_GDIDATA static_cast<wxGDIRefData*>(m_refData)
 
 /*
 void wxGDIObject::IncrementResourceUsage(void)

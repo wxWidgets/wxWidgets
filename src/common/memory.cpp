@@ -594,7 +594,7 @@ bool wxDebugContext::Dump(void)
     {
         appNameStr = wxTheApp->GetAppName();
         appName = appNameStr.c_str();
-        OutputDumpLine(wxT("----- Memory dump of %s at %s -----"), appName, wx_static_cast(const wxChar *, wxNow().c_str()));
+        OutputDumpLine(wxT("----- Memory dump of %s at %s -----"), appName, static_cast<const wxChar *>(wxNow().c_str()));
     }
     else
     {
@@ -650,7 +650,7 @@ bool wxDebugContext::PrintStatistics(bool detailed)
     {
         appNameStr = wxTheApp->GetAppName();
         appName = appNameStr.c_str();
-        OutputDumpLine(wxT("----- Memory statistics of %s at %s -----"), appName, wx_static_cast(const wxChar *, wxNow().c_str()));
+        OutputDumpLine(wxT("----- Memory statistics of %s at %s -----"), appName, static_cast<const wxChar *>(wxNow().c_str()));
     }
     else
     {

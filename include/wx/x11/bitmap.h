@@ -73,7 +73,7 @@ public:
     // needed for old GCC
     wxBitmap(char** data)
     {
-        *this = wxBitmap(wx_const_cast(const char* const*, data));
+        *this = wxBitmap(const_cast<const char* const*>(data));
     }
 #endif
     wxBitmap( const wxString &filename, wxBitmapType type = wxBITMAP_DEFAULT_TYPE );

@@ -633,7 +633,7 @@ protected:
 //
 // the cast is safe as in GUI build we only use wxApp, not wxAppConsole, and in
 // console mode it does nothing at all
-#define wxTheApp wx_static_cast(wxApp*, wxApp::GetInstance())
+#define wxTheApp static_cast<wxApp*>(wxApp::GetInstance())
 
 // ----------------------------------------------------------------------------
 // global functions
@@ -710,7 +710,7 @@ public:
     wxAppInitializer                                                        \
         wxTheAppInitializer((wxAppInitializerFunction) wxCreateApp);        \
     DECLARE_APP(appname)                                                    \
-    appname& wxGetApp() { return *wx_static_cast(appname*, wxApp::GetInstance()); }
+    appname& wxGetApp() { return *static_cast<appname*>(wxApp::GetInstance()); }
 
 // Same as IMPLEMENT_APP() normally but doesn't include themes support in
 // wxUniversal builds

@@ -133,7 +133,7 @@ private:
         wxASSERT_MSG( GetClientDataType() != wxClientData_Void,
                       _T("can't mix different types of client data") );
 
-        return AppendItems(items, wx_reinterpret_cast(void **, clientData),
+        return AppendItems(items, reinterpret_cast<void **>(clientData),
                            wxClientData_Object);
     }
 
@@ -180,7 +180,7 @@ private:
                       _T("can't mix different types of client data") );
 
         return InsertItems(items, pos,
-                           wx_reinterpret_cast(void **, clientData),
+                           reinterpret_cast<void **>(clientData),
                            wxClientData_Object);
     }
 

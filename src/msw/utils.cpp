@@ -1093,7 +1093,7 @@ int wxIsWindowsServer()
     wxZeroMemory(info);
 
     info.dwOSVersionInfoSize = sizeof(info);
-    if ( ::GetVersionEx(wx_reinterpret_cast(OSVERSIONINFO *, &info)) )
+    if ( ::GetVersionEx(reinterpret_cast<OSVERSIONINFO *>(&info)) )
     {
         switch ( info.wProductType )
         {

@@ -264,7 +264,7 @@ void wxChoice::DoDeleteOneItem(unsigned int n)
 
     void ** const data = &itemsData[0];
     if ( HasClientObjectData() )
-        Append(items, wx_reinterpret_cast(wxClientData **, data));
+        Append(items, reinterpret_cast<wxClientData **>(data));
     else
         Append(items, data);
 }

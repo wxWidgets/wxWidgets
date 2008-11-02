@@ -671,7 +671,7 @@ wxDataViewRendererBase::~wxDataViewRendererBase()
 
 const wxDataViewCtrl* wxDataViewRendererBase::GetView() const
 {
-    return wx_const_cast(wxDataViewRendererBase*, this)->GetOwner()->GetOwner();
+    return const_cast<wxDataViewRendererBase*>(this)->GetOwner()->GetOwner();
 }
 
 class wxKillRef: public wxWindowRef

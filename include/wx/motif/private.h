@@ -44,7 +44,7 @@ class WXDLLIMPEXP_FWD_CORE wxColour;
 // (non const) "char *" but many Motif functions take "char *" parameters which
 // are really "const char *" so use this macro to suppress the warnings when we
 // know it's ok
-#define wxMOTIF_STR(x) wx_const_cast(char *, x)
+#define wxMOTIF_STR(x) const_cast<char *>(x)
 
 // ----------------------------------------------------------------------------
 // Miscellaneous functions

@@ -439,8 +439,8 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect& rect) const
     NSRect imageRect = {{0,0}, [nsimage size]};
     imageRect.origin.x = imageRect.size.width * rect.x / GetWidth();
     imageRect.origin.y = imageRect.size.height * rect.y / GetHeight();
-    imageRect.size.width *= wx_static_cast(CGFloat, rect.width) / GetWidth();
-    imageRect.size.height *= wx_static_cast(CGFloat, rect.height) / GetHeight();
+    imageRect.size.width *= static_cast<CGFloat>(rect.width) / GetWidth();
+    imageRect.size.height *= static_cast<CGFloat>(rect.height) / GetHeight();
 
     NSBitmapImageRep *newBitmapRep = [[NSBitmapImageRep alloc] initWithFocusedViewRect:imageRect];
     [nsimage unlockFocus];

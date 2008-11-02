@@ -930,7 +930,7 @@ extern WXDLLIMPEXP_CORE wxWindow* wxFindWinFromHandle(HWND hwnd);
 // without STRICT WXHWND is the same as HWND anyhow
 inline wxWindow* wxFindWinFromHandle(WXHWND hWnd)
 {
-    return wxFindWinFromHandle(wx_static_cast(HWND, hWnd));
+    return wxFindWinFromHandle(static_cast<HWND>(hWnd));
 }
 
 // find the window for HWND which is part of some wxWindow, i.e. unlike

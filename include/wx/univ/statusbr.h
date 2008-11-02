@@ -60,7 +60,7 @@ public:
 
     // wxInputConsumer pure virtual
     virtual wxWindow *GetInputWindow() const
-        { return wx_const_cast(wxStatusBar*, this); }
+        { return const_cast<wxStatusBar*>(this); }
 
 protected:
     // recalculate the field widths

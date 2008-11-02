@@ -404,7 +404,7 @@ void wxMDIChildFrame::SetTitle( const wxString &title )
 
 void wxMDIClientWindow::AddChildGTK(wxWindowGTK* child)
 {
-    wxMDIChildFrame* child_frame = wx_static_cast(wxMDIChildFrame*, child);
+    wxMDIChildFrame* child_frame = static_cast<wxMDIChildFrame*>(child);
     wxString s = child_frame->GetTitle();
     if (s.IsNull()) s = _("MDI child");
 
@@ -417,7 +417,7 @@ void wxMDIClientWindow::AddChildGTK(wxWindowGTK* child)
 
     child_frame->m_page = (GtkNotebookPage*) (g_list_last(notebook->children)->data);
 
-    wxMDIParentFrame* parent_frame = wx_static_cast(wxMDIParentFrame*, GetParent());
+    wxMDIParentFrame* parent_frame = static_cast<wxMDIParentFrame*>(GetParent());
     parent_frame->m_justInserted = true;
 }
 

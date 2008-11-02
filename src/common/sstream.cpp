@@ -86,7 +86,7 @@ wxFileOffset wxStringInputStream::OnSysSeek(wxFileOffset ofs, wxSeekMode mode)
             return wxInvalidOffset;
     }
 
-    if ( ofs < 0 || ofs > wx_static_cast(wxFileOffset, m_len) )
+    if ( ofs < 0 || ofs > static_cast<wxFileOffset>(m_len) )
         return wxInvalidOffset;
 
     // FIXME: this can't be right
@@ -97,7 +97,7 @@ wxFileOffset wxStringInputStream::OnSysSeek(wxFileOffset ofs, wxSeekMode mode)
 
 wxFileOffset wxStringInputStream::OnSysTell() const
 {
-    return wx_static_cast(wxFileOffset, m_pos);
+    return static_cast<wxFileOffset>(m_pos);
 }
 
 // ----------------------------------------------------------------------------
@@ -135,7 +135,7 @@ size_t wxStringInputStream::OnSysRead(void *buffer, size_t size)
 
 wxFileOffset wxStringOutputStream::OnSysTell() const
 {
-    return wx_static_cast(wxFileOffset, m_pos);
+    return static_cast<wxFileOffset>(m_pos);
 }
 
 // ----------------------------------------------------------------------------
@@ -144,7 +144,7 @@ wxFileOffset wxStringOutputStream::OnSysTell() const
 
 size_t wxStringOutputStream::OnSysWrite(const void *buffer, size_t size)
 {
-    const char *p = wx_static_cast(const char *, buffer);
+    const char *p = static_cast<const char *>(buffer);
 
 #if wxUSE_UNICODE_WCHAR
     // the part of the string we have here may be incomplete, i.e. it can stop

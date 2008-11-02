@@ -38,7 +38,7 @@ public:
     wxImage ReadData(const char* const* xpm_data);
 #ifdef __BORLANDC__
     // needed for Borland 5.5
-    wxImage ReadData(char** xpm_data) { return ReadData(wx_const_cast(const char* const*, xpm_data)); }
+    wxImage ReadData(char** xpm_data) { return ReadData(const_cast<const char* const*>(xpm_data)); }
 #endif
 };
 

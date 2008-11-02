@@ -190,7 +190,7 @@ wxCalendarCtrl::HitTest(const wxPoint& pos,
         case MCHT_CALENDARDAY:
             if ( wd )
             {
-                *wd = wx_static_cast(wxDateTime::WeekDay, hti.st.wDayOfWeek);
+                *wd = static_cast<wxDateTime::WeekDay>(hti.st.wDayOfWeek);
             }
             return wxCAL_HITTEST_HEADER;
 

@@ -325,7 +325,7 @@ bool wxNotebook::Create(wxWindow *parent,
             if ( ::GetClassInfo(NULL, WC_TABCONTROL, &wc) )
             {
                 gs_wndprocNotebook =
-                    wx_reinterpret_cast(WXFARPROC, wc.lpfnWndProc);
+                    reinterpret_cast<WXFARPROC>(wc.lpfnWndProc);
                 wc.lpszClassName = wxT("_wx_SysTabCtl32");
                 wc.style &= ~(CS_HREDRAW | CS_VREDRAW);
                 wc.hInstance = wxGetInstance();

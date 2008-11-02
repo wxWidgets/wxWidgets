@@ -3162,7 +3162,7 @@ void wxMacDataBrowserListCtrlControl::MacSetColumnInfo( unsigned int row, unsign
     wxASSERT_MSG( dataItem, _T("could not obtain wxMacDataItem for row in MacSetColumnInfo. Is row a valid wxListCtrl row?") );
     if (item)
     {
-        wxMacListCtrlItem* listItem = wx_static_cast(wxMacListCtrlItem*,dataItem);
+        wxMacListCtrlItem* listItem = static_cast<wxMacListCtrlItem *>(dataItem);
         bool hasInfo = listItem->HasColumnInfo( column );
         listItem->SetColumnInfo( column, item );
         listItem->SetOrder(row);
@@ -3205,7 +3205,7 @@ void wxMacDataBrowserListCtrlControl::MacGetColumnInfo( unsigned int row, unsign
     // CS should this guard against dataItem = 0 ? , as item is not a pointer if (item) is not appropriate
     //if (item)
     {
-        wxMacListCtrlItem* listItem =wx_static_cast(wxMacListCtrlItem*,dataItem);
+        wxMacListCtrlItem* listItem = static_cast<wxMacListCtrlItem *>(dataItem);
 
         if (!listItem->HasColumnInfo( column ))
             return;

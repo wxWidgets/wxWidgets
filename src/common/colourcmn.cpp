@@ -110,7 +110,7 @@ wxString wxColourBase::GetAsString(long flags) const
     if ( (flags & wxC2S_NAME) && isOpaque )
     {
         colName = wxTheColourDatabase->FindName(
-                    wx_static_cast(const wxColour &, *this)).MakeLower();
+                    static_cast<const wxColour &>(*this)).MakeLower();
     }
 
     if ( colName.empty() )

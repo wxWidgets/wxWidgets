@@ -161,7 +161,7 @@ public: \
     public: \
         Node( const value_type& value ) \
             : m_value( value ) {} \
-        Node* next() { return wx_static_cast(Node*, m_next); } \
+        Node* next() { return static_cast<Node*>(m_next); } \
  \
         value_type m_value; \
     }; \
@@ -169,7 +169,7 @@ public: \
 protected: \
     static void DeleteNode( _wxHashTable_NodeBase* node ) \
     { \
-        delete wx_static_cast(Node*, node); \
+        delete static_cast<Node*>(node); \
     } \
 public: \
     /*                  */ \
@@ -183,7 +183,7 @@ public: \
  \
         Iterator() : m_node(NULL), m_ht(NULL) {} \
         Iterator( Node* node, const Self* ht ) \
-            : m_node(node), m_ht(wx_const_cast(Self*, ht)) {} \
+            : m_node(node), m_ht(const_cast<Self*>(ht)) {} \
         bool operator ==( const Iterator& it ) const \
             { return m_node == it.m_node; } \
         bool operator !=( const Iterator& it ) const \
@@ -195,7 +195,7 @@ public: \
             for( size_type i = bucket + 1; i < m_ht->m_tableBuckets; ++i ) \
             { \
                 if( m_ht->m_table[i] ) \
-                    return wx_static_cast(Node*, m_ht->m_table[i]); \
+                    return static_cast<Node*>(m_ht->m_table[i]); \
             } \
             return NULL; \
         } \
@@ -226,7 +226,7 @@ public: \
         const_iterator() : Iterator() {} \
         const_iterator(iterator i) : Iterator(i) {} \
         const_iterator( Node* node, const Self* ht ) \
-            : Iterator(node, wx_const_cast(Self*, ht)) {} \
+            : Iterator(node, const_cast<Self*>(ht)) {} \
         const_iterator& operator++() { PlusPlus();return *this; } \
         const_iterator operator++(int) { const_iterator it=*this;PlusPlus();return it; } \
         const_reference operator *() const { return m_node->m_value; } \
@@ -295,9 +295,9 @@ public: \
     const_iterator end() const { return const_iterator(NULL, this); } \
     iterator end() { return iterator(NULL, this); } \
     const_iterator begin() const \
-        { return const_iterator(wx_static_cast(Node*, GetFirstNode(m_tableBuckets, m_table)), this); } \
+        { return const_iterator(static_cast<Node*>(GetFirstNode(m_tableBuckets, m_table)), this); } \
     iterator begin() \
-        { return iterator(wx_static_cast(Node*, GetFirstNode(m_tableBuckets, m_table)), this); } \
+        { return iterator(static_cast<Node*>(GetFirstNode(m_tableBuckets, m_table)), this); } \
  \
     size_type erase( const const_key_type& key ) \
     { \
@@ -308,7 +308,7 @@ public: \
  \
         --m_items; \
         _wxHashTable_NodeBase* temp = (*node)->m_next; \
-        delete wx_static_cast(Node*, *node); \
+        delete static_cast<Node*>(*node); \
         (*node) = temp; \
         if( SHOULD_SHRINK( m_tableBuckets, m_items ) ) \
             ResizeTable( GetPreviousPrime( (unsigned long) m_tableBuckets ) - 1 ); \
@@ -327,7 +327,7 @@ protected: \
     { \
         const const_key_type& key = m_getKey( value ); \
         size_t bucket = m_hasher( key ) % m_tableBuckets; \
-        Node* node = wx_static_cast(Node*, m_table[bucket]); \
+        Node* node = static_cast<Node*>(m_table[bucket]); \
  \
         while( node ) \
         { \
@@ -367,7 +367,7 @@ protected: \
  \
         while( *node ) \
         { \
-            if (m_equals(m_getKey(wx_static_cast(Node*, *node)->m_value), key)) \
+            if (m_equals(m_getKey(static_cast<Node*>(*node)->m_value), key)) \
                 return node; \
             node = &(*node)->m_next; \
         } \
@@ -380,7 +380,7 @@ protected: \
     Node* GetNode( const const_key_type& key ) const \
     { \
         size_t bucket = m_hasher( key ) % m_tableBuckets; \
-        Node* node = wx_static_cast(Node*, m_table[bucket]); \
+        Node* node = static_cast<Node*>(m_table[bucket]); \
  \
         while( node ) \
         { \
@@ -433,7 +433,7 @@ public: \
     typedef const VALUE_T const_t2; \
  \
     CLASSNAME(const const_t1& f, const const_t2& s) \
-        : first(wx_const_cast(t1&, f)), second(wx_const_cast(t2&, s)) {} \
+        : first(const_cast<t1&>(f)), second(const_cast<t2&>(s)) {} \
  \
     t1 first; \
     t2 second; \
@@ -536,7 +536,7 @@ public:
     unsigned long operator()( short x ) const { return (unsigned long)x; }
     unsigned long operator()( unsigned short x ) const { return x; }
 #if defined wxLongLong_t && !defined wxLongLongIsLong
-    wxULongLong_t operator()( wxLongLong_t x ) const { return wx_static_cast(wxULongLong_t, x); }
+    wxULongLong_t operator()( wxLongLong_t x ) const { return static_cast<wxULongLong_t>(x); }
     wxULongLong_t operator()( wxULongLong_t x ) const { return x; }
 #endif
 

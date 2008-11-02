@@ -50,7 +50,7 @@ public:
         // from XPM data
     wxIcon(const char* const* data) { CreateIconFromXpm(data); }
 #ifdef wxNEEDS_CHARPP
-    wxIcon(char **data) { CreateIconFromXpm(wx_const_cast(const char* const*, data)); }
+    wxIcon(char **data) { CreateIconFromXpm(const_cast<const char* const*>(data)); }
 #endif
         // from resource/file
     wxIcon(const wxString& name,

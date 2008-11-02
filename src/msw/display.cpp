@@ -852,7 +852,7 @@ wxDisplayFactoryDirectDraw::DDEnumExCallback(GUID *pGuid,
     if ( pGuid )
     {
         wxDisplayFactoryDirectDraw * self =
-            wx_static_cast(wxDisplayFactoryDirectDraw *, lpContext);
+            static_cast<wxDisplayFactoryDirectDraw *>(lpContext);
         self->AddDisplay(*pGuid, hmon, driverName);
     }
     //else: we're called for the primary monitor, skip it
@@ -881,7 +881,7 @@ wxDisplayImpl *wxDisplayFactoryDirectDraw::CreateDisplay(unsigned n)
     wxCHECK_MSG( n < m_displays.size(), NULL, _T("invalid display index") );
 
     wxDisplayInfoDirectDraw *
-        info = wx_static_cast(wxDisplayInfoDirectDraw *, m_displays[n]);
+        info = static_cast<wxDisplayInfoDirectDraw *>(m_displays[n]);
 
     if ( !info->m_pDD2 )
     {
@@ -955,7 +955,7 @@ HRESULT WINAPI wxDDEnumModesCallback(LPDDSURFACEDESC lpDDSurfaceDesc,
     if ( (lpDDSurfaceDesc->dwFlags & FLAGS_REQUIRED) == FLAGS_REQUIRED )
     {
         wxDDVideoModesAdder * const vmodes =
-            wx_static_cast(wxDDVideoModesAdder *, lpContext);
+            static_cast<wxDDVideoModesAdder *>(lpContext);
 
         vmodes->Add(wxVideoMode(lpDDSurfaceDesc->dwWidth,
                                 lpDDSurfaceDesc->dwHeight,

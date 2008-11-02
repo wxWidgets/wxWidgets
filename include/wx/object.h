@@ -319,8 +319,8 @@ name##PluginSentinel  m_pluginsentinel;
 // be replaced by it as long as there are any compilers not supporting it
 #define wxDynamicCast(obj, className) \
     ((className *) wxCheckDynamicCast( \
-        wx_const_cast(wxObject *, wx_static_cast(const wxObject *, \
-          wx_const_cast(className *, wx_static_cast(const className *, obj)))), \
+        const_cast<wxObject *>(static_cast<const wxObject *>(\
+          const_cast<className *>(static_cast<const className *>(obj)))), \
         &className::ms_classInfo))
 
 // The 'this' pointer is always true, so use this version
@@ -339,7 +339,7 @@ inline void* wxCheckCast(void *ptr)
 
 #else  // !__WXDEBUG__
 #define wxStaticCast(obj, className) \
-    wx_const_cast(className *, wx_static_cast(const className *, obj))
+    const_cast<className *>(static_cast<const className *>(obj))
 
 #endif  // __WXDEBUG__
 
@@ -626,8 +626,8 @@ public:
 #ifdef _MSC_VER
         return (wxClassInfo*) m_classInfo;
 #else
-        wxDynamicClassInfo *nonconst = wx_const_cast(wxDynamicClassInfo *, m_classInfo);
-        return wx_static_cast(wxClassInfo *, nonconst);
+        wxDynamicClassInfo *nonconst = const_cast<wxDynamicClassInfo *>(m_classInfo);
+        return static_cast<wxClassInfo *>(nonconst);
 #endif
     }
 

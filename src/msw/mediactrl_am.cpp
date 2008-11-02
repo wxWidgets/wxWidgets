@@ -1983,7 +1983,7 @@ double wxAMMediaBackend::GetVolume()
 bool wxAMMediaBackend::SetVolume(double dVolume)
 {
     // inverse the transformation above
-    long lVolume = wx_static_cast(long, 2000*log10(dVolume + (1 - dVolume)*0.00001));
+    long lVolume = static_cast<long>(2000*log10(dVolume + (1 - dVolume)*0.00001));
 
     HRESULT hr = GetAM()->put_Volume(lVolume);
     if(FAILED(hr))

@@ -46,7 +46,7 @@ public:
           );
     wxIcon(const char* const* ppData) { CreateIconFromXpm(ppData); }
 #ifdef wxNEEDS_CHARPP
-    wxIcon(char** ppData) { CreateIconFromXpm(wx_const_cast(const char* const*, ppData)); }
+    wxIcon(char** ppData) { CreateIconFromXpm(const_cast<const char* const*>(ppData)); }
 #endif
     wxIcon( const wxString& rName
            ,wxBitmapType    lFlags = wxICON_DEFAULT_TYPE

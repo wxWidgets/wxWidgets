@@ -74,14 +74,14 @@ public:
     // accessors and setters
     // ---------------------
 
-    wxColour& GetColour() const { return wx_const_cast(wxColour&, m_colour); }
+    wxColour& GetColour() const { return const_cast<wxColour&>(m_colour); }
     int GetWidth() const { return m_width; }
     wxPenStyle GetStyle() const { return m_style; }
     wxPenJoin GetJoin() const { return m_join; }
     wxPenCap GetCap() const { return m_cap; }
     wxDash* GetDash() const { return m_dash; }
     int GetDashCount() const { return m_nbDash; }
-    wxBitmap* GetStipple() const { return wx_const_cast(wxBitmap *, &m_stipple); }
+    wxBitmap* GetStipple() const { return const_cast<wxBitmap *>(&m_stipple); }
 
     void SetColour(const wxColour& col) { Free(); m_colour = col; }
     void SetWidth(int width) { Free(); m_width = width; }
@@ -99,7 +99,7 @@ public:
         Free();
 
         m_nbDash = nb_dashes;
-        m_dash = wx_const_cast(wxDash *, dash);
+        m_dash = const_cast<wxDash *>(dash);
     }
 
     void SetJoin(wxPenJoin join) { Free(); m_join = join; }
@@ -419,7 +419,7 @@ bool wxPenRefData::Free()
 WXHPEN wxPenRefData::GetHPEN() const
 {
     if ( !m_hPen )
-        wx_const_cast(wxPenRefData *, this)->Alloc();
+        const_cast<wxPenRefData *>(this)->Alloc();
 
     return (WXHPEN)m_hPen;
 }
@@ -450,7 +450,7 @@ wxPen::wxPen(const wxBitmap& stipple, int width)
 bool wxPen::operator==(const wxPen& pen) const
 {
     const wxPenRefData *
-        penData = wx_static_cast(const wxPenRefData *, pen.m_refData);
+        penData = static_cast<const wxPenRefData *>(pen.m_refData);
 
     // an invalid pen is only equal to another invalid pen
     return m_refData ? penData && *M_PENDATA == *penData : !penData;
@@ -483,7 +483,7 @@ wxGDIRefData* wxPen::CreateGDIRefData() const
 
 wxGDIRefData* wxPen::CloneGDIRefData(const wxGDIRefData* data) const
 {
-    return new wxPenRefData(*wx_static_cast(const wxPenRefData*, data));
+    return new wxPenRefData(*static_cast<const wxPenRefData*>(data));
 }
 
 void wxPen::SetColour(const wxColour& col)

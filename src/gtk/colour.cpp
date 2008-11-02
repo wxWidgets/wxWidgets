@@ -83,7 +83,7 @@ void wxColourRefData::AllocColour( GdkColormap *cmap )
 
 //-----------------------------------------------------------------------------
 
-#define M_COLDATA wx_static_cast(wxColourRefData*, m_refData)
+#define M_COLDATA static_cast<wxColourRefData*>(m_refData)
 
 // GDK's values are in 0..65535 range, ours are in 0..255
 #define SHIFT  8
@@ -108,7 +108,7 @@ bool wxColour::operator == ( const wxColour& col ) const
         return false;
 
     wxColourRefData* refData = M_COLDATA;
-    wxColourRefData* that_refData = wx_static_cast(wxColourRefData*, col.m_refData);
+    wxColourRefData* that_refData = static_cast<wxColourRefData*>(col.m_refData);
     return refData->m_red == that_refData->m_red &&
            refData->m_green == that_refData->m_green &&
            refData->m_blue == that_refData->m_blue &&

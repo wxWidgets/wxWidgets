@@ -153,7 +153,7 @@ public:
 
     virtual wxSize GetMinSize() const;
 
-    virtual wxWindow *GetInputWindow() const { return wx_const_cast(wxTopLevelWindow*, this); }
+    virtual wxWindow *GetInputWindow() const { return const_cast<wxTopLevelWindow*>(this); }
 
 protected:
     virtual void DoGetClientSize(int *width, int *height) const;

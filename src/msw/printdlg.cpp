@@ -129,10 +129,10 @@ wxWindowsPrintNativeData::wxWindowsPrintNativeData()
 wxWindowsPrintNativeData::~wxWindowsPrintNativeData()
 {
     if ( m_devMode )
-        ::GlobalFree(wx_static_cast(HGLOBAL, m_devMode));
+        ::GlobalFree(static_cast<HGLOBAL>(m_devMode));
 
     if ( m_devNames )
-        ::GlobalFree(wx_static_cast(HGLOBAL, m_devNames));
+        ::GlobalFree(static_cast<HGLOBAL>(m_devNames));
 }
 
 bool wxWindowsPrintNativeData::IsOk() const
@@ -147,7 +147,7 @@ bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
 
     GlobalPtrLock lockDevMode(m_devMode);
 
-    LPDEVMODE devMode = wx_static_cast(LPDEVMODE, lockDevMode.Get());
+    LPDEVMODE devMode = static_cast<LPDEVMODE>(lockDevMode.Get());
 
     //// Orientation
     if (devMode->dmFields & DM_ORIENTATION)
@@ -312,7 +312,7 @@ bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
     if ( m_devNames )
     {
         GlobalPtrLock lockDevNames(m_devNames);
-        LPDEVNAMES lpDevNames = wx_static_cast(LPDEVNAMES, lockDevNames.Get());
+        LPDEVNAMES lpDevNames = static_cast<LPDEVNAMES>(lockDevNames.Get());
 
         // TODO: Unicode-ification
 
@@ -335,7 +335,7 @@ bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
 
 bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
 {
-    HGLOBAL hDevMode = wx_static_cast(HGLOBAL, m_devMode);
+    HGLOBAL hDevMode = static_cast<HGLOBAL>(m_devMode);
     if ( !m_devMode )
     {
         // Use PRINTDLG as a way of creating a DEVMODE object
@@ -393,7 +393,7 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
     if ( hDevMode )
     {
         GlobalPtrLock lockDevMode(hDevMode);
-        DEVMODE * const devMode = wx_static_cast(DEVMODE *, lockDevMode.Get());
+        DEVMODE * const devMode = static_cast<DEVMODE *>(lockDevMode.Get());
 
         //// Orientation
         devMode->dmOrientation = (short)data.GetOrientation();
@@ -412,7 +412,7 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
         {
             // NB: the cast is needed in the ANSI build, strangely enough
             //     dmDeviceName is BYTE[] and not char[] there
-            wxStrncpy(wx_reinterpret_cast(wxChar *, devMode->dmDeviceName),
+            wxStrncpy(reinterpret_cast<wxChar *>(devMode->dmDeviceName),
                       name.wx_str(),
                       WXSIZEOF(devMode->dmDeviceName) - 1);
             devMode->dmDeviceName[WXSIZEOF(devMode->dmDeviceName) - 1] = wxT('\0');
@@ -544,7 +544,7 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
 
     if ( m_devNames )
     {
-        ::GlobalFree(wx_static_cast(HGLOBAL, m_devNames));
+        ::GlobalFree(static_cast<HGLOBAL>(m_devNames));
     }
 
     // TODO: I hope it's OK to pass some empty strings to DEVNAMES.
@@ -675,13 +675,13 @@ bool wxWindowsPrintDialog::ConvertToNative( wxPrintDialogData &data )
     if (pd->hDevNames)
         GlobalFree(pd->hDevNames);
 
-    pd->hDevMode = wx_static_cast(HGLOBAL, native_data->GetDevMode());
+    pd->hDevMode = static_cast<HGLOBAL>(native_data->GetDevMode());
     native_data->SetDevMode(NULL);
 
     // Shouldn't assert; we should be able to test Ok-ness at a higher level
     //wxASSERT_MSG( (pd->hDevMode), wxT("hDevMode must be non-NULL in ConvertToNative!"));
 
-    pd->hDevNames = wx_static_cast(HGLOBAL, native_data->GetDevNames());
+    pd->hDevNames = static_cast<HGLOBAL>(native_data->GetDevNames());
     native_data->SetDevNames(NULL);
 
 
@@ -741,7 +741,7 @@ bool wxWindowsPrintDialog::ConvertFromNative( wxPrintDialogData &data )
     {
         if (native_data->GetDevMode())
         {
-            ::GlobalFree(wx_static_cast(HGLOBAL, native_data->GetDevMode()));
+            ::GlobalFree(static_cast<HGLOBAL>(native_data->GetDevMode()));
         }
         native_data->SetDevMode(pd->hDevMode);
         pd->hDevMode = NULL;
@@ -752,7 +752,7 @@ bool wxWindowsPrintDialog::ConvertFromNative( wxPrintDialogData &data )
     {
         if (native_data->GetDevNames())
         {
-            ::GlobalFree(wx_static_cast(HGLOBAL, native_data->GetDevNames()));
+            ::GlobalFree(static_cast<HGLOBAL>(native_data->GetDevNames()));
         }
         native_data->SetDevNames(pd->hDevNames);
         pd->hDevNames = NULL;

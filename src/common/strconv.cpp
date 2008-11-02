@@ -142,7 +142,7 @@ static wxUint32 wxDecodeSurrogate(const wxDecodeSurrogate_t **pSrc)
 {
     wxUint32 out;
     const size_t
-        n = decode_utf16(wx_reinterpret_cast(const wxUint16 *, *pSrc), out);
+        n = decode_utf16(reinterpret_cast<const wxUint16 *>(*pSrc), out);
     if ( n == wxCONV_FAILED )
         *pSrc = NULL;
     else
@@ -584,7 +584,7 @@ size_t wxMBConvUTF7::ToWChar(wchar_t *dst, size_t dstLen,
     }
     else // when working with partial strings we do use the shift state
     {
-        statePtr = wx_const_cast(DecoderState *, &m_stateDecoder);
+        statePtr = const_cast<DecoderState *>(&m_stateDecoder);
 
         // also save the old state to be able to rollback to it on error
         stateOrig = m_stateDecoder;
@@ -771,7 +771,7 @@ size_t wxMBConvUTF7::FromWChar(char *dst, size_t dstLen,
     else // do use the mode we left the output in previously
     {
         stateOrig = m_stateEncoder;
-        statePtr = wx_const_cast(EncoderState *, &m_stateEncoder);
+        statePtr = const_cast<EncoderState *>(&m_stateEncoder);
     }
 
     EncoderState& state = *statePtr;
@@ -1407,7 +1407,7 @@ size_t wxMBConvUTF16Base::GetLength(const char *src, size_t srcLen)
     if ( srcLen == wxNO_LEN )
     {
         // count the number of bytes in input, including the trailing NULs
-        const wxUint16 *inBuff = wx_reinterpret_cast(const wxUint16 *, src);
+        const wxUint16 *inBuff = reinterpret_cast<const wxUint16 *>(src);
         for ( srcLen = 1; *inBuff++; srcLen++ )
             ;
 
@@ -1491,7 +1491,7 @@ wxMBConvUTF16swap::ToWChar(wchar_t *dst, size_t dstLen,
         if ( dstLen < srcLen )
             return wxCONV_FAILED;
 
-        const wxUint16 *inBuff = wx_reinterpret_cast(const wxUint16 *, src);
+        const wxUint16 *inBuff = reinterpret_cast<const wxUint16 *>(src);
         for ( size_t n = 0; n < srcLen; n++, inBuff++ )
         {
             *dst++ = wxUINT16_SWAP_ALWAYS(*inBuff);
@@ -1515,7 +1515,7 @@ wxMBConvUTF16swap::FromWChar(char *dst, size_t dstLen,
         if ( dstLen < srcLen )
             return wxCONV_FAILED;
 
-        wxUint16 *outBuff = wx_reinterpret_cast(wxUint16 *, dst);
+        wxUint16 *outBuff = reinterpret_cast<wxUint16 *>(dst);
         for ( size_t n = 0; n < srcLen; n += BYTES_PER_CHAR, src++ )
         {
             *outBuff++ = wxUINT16_SWAP_ALWAYS(*src);
@@ -1549,7 +1549,7 @@ wxMBConvUTF16straight::ToWChar(wchar_t *dst, size_t dstLen,
     }
 
     size_t outLen = 0;
-    const wxUint16 *inBuff = wx_reinterpret_cast(const wxUint16 *, src);
+    const wxUint16 *inBuff = reinterpret_cast<const wxUint16 *>(src);
     for ( const wxUint16 * const inEnd = inBuff + inLen; inBuff < inEnd; )
     {
         const wxUint32 ch = wxDecodeSurrogate(&inBuff);
@@ -1574,7 +1574,7 @@ wxMBConvUTF16straight::FromWChar(char *dst, size_t dstLen,
         srcLen = wxWcslen(src) + 1;
 
     size_t outLen = 0;
-    wxUint16 *outBuff = wx_reinterpret_cast(wxUint16 *, dst);
+    wxUint16 *outBuff = reinterpret_cast<wxUint16 *>(dst);
     for ( size_t n = 0; n < srcLen; n++ )
     {
         wxUint16 cc[2];
@@ -1622,7 +1622,7 @@ wxMBConvUTF16swap::ToWChar(wchar_t *dst, size_t dstLen,
     }
 
     size_t outLen = 0;
-    const wxUint16 *inBuff = wx_reinterpret_cast(const wxUint16 *, src);
+    const wxUint16 *inBuff = reinterpret_cast<const wxUint16 *>(src);
     for ( const wxUint16 * const inEnd = inBuff + inLen; inBuff < inEnd; )
     {
         wxUint32 ch;
@@ -1657,7 +1657,7 @@ wxMBConvUTF16swap::FromWChar(char *dst, size_t dstLen,
         srcLen = wxWcslen(src) + 1;
 
     size_t outLen = 0;
-    wxUint16 *outBuff = wx_reinterpret_cast(wxUint16 *, dst);
+    wxUint16 *outBuff = reinterpret_cast<wxUint16 *>(dst);
     for ( const wchar_t *srcEnd = src + srcLen; src < srcEnd; src++ )
     {
         wxUint16 cc[2];
@@ -1708,7 +1708,7 @@ size_t wxMBConvUTF32Base::GetLength(const char *src, size_t srcLen)
     if ( srcLen == wxNO_LEN )
     {
         // count the number of bytes in input, including the trailing NULs
-        const wxUint32 *inBuff = wx_reinterpret_cast(const wxUint32 *, src);
+        const wxUint32 *inBuff = reinterpret_cast<const wxUint32 *>(src);
         for ( srcLen = 1; *inBuff++; srcLen++ )
             ;
 
@@ -1739,7 +1739,7 @@ wxMBConvUTF32straight::ToWChar(wchar_t *dst, size_t dstLen,
     if ( srcLen == wxNO_LEN )
         return wxCONV_FAILED;
 
-    const wxUint32 *inBuff = wx_reinterpret_cast(const wxUint32 *, src);
+    const wxUint32 *inBuff = reinterpret_cast<const wxUint32 *>(src);
     const size_t inLen = srcLen / BYTES_PER_CHAR;
     size_t outLen = 0;
     for ( size_t n = 0; n < inLen; n++ )
@@ -1786,7 +1786,7 @@ wxMBConvUTF32straight::FromWChar(char *dst, size_t dstLen,
         return srcLen * BYTES_PER_CHAR;
     }
 
-    wxUint32 *outBuff = wx_reinterpret_cast(wxUint32 *, dst);
+    wxUint32 *outBuff = reinterpret_cast<wxUint32 *>(dst);
     size_t outLen = 0;
     for ( const wchar_t * const srcEnd = src + srcLen; src < srcEnd; )
     {
@@ -1817,7 +1817,7 @@ wxMBConvUTF32swap::ToWChar(wchar_t *dst, size_t dstLen,
     if ( srcLen == wxNO_LEN )
         return wxCONV_FAILED;
 
-    const wxUint32 *inBuff = wx_reinterpret_cast(const wxUint32 *, src);
+    const wxUint32 *inBuff = reinterpret_cast<const wxUint32 *>(src);
     const size_t inLen = srcLen / BYTES_PER_CHAR;
     size_t outLen = 0;
     for ( size_t n = 0; n < inLen; n++, inBuff++ )
@@ -1864,7 +1864,7 @@ wxMBConvUTF32swap::FromWChar(char *dst, size_t dstLen,
         return srcLen*BYTES_PER_CHAR;
     }
 
-    wxUint32 *outBuff = wx_reinterpret_cast(wxUint32 *, dst);
+    wxUint32 *outBuff = reinterpret_cast<wxUint32 *>(dst);
     size_t outLen = 0;
     for ( const wchar_t * const srcEnd = src + srcLen; src < srcEnd; )
     {
@@ -1949,7 +1949,7 @@ wxMBConvUTF32swap::ToWChar(wchar_t *dst, size_t dstLen,
         if ( dstLen < srcLen )
             return wxCONV_FAILED;
 
-        const wxUint32 *inBuff = wx_reinterpret_cast(const wxUint32 *, src);
+        const wxUint32 *inBuff = reinterpret_cast<const wxUint32 *>(src);
         for ( size_t n = 0; n < srcLen; n++, inBuff++ )
         {
             *dst++ = wxUINT32_SWAP_ALWAYS(*inBuff);
@@ -1973,7 +1973,7 @@ wxMBConvUTF32swap::FromWChar(char *dst, size_t dstLen,
         if ( dstLen < srcLen )
             return wxCONV_FAILED;
 
-        wxUint32 *outBuff = wx_reinterpret_cast(wxUint32 *, dst);
+        wxUint32 *outBuff = reinterpret_cast<wxUint32 *>(dst);
         for ( size_t n = 0; n < srcLen; n += BYTES_PER_CHAR, src++ )
         {
             *outBuff++ = wxUINT32_SWAP_ALWAYS(*src);

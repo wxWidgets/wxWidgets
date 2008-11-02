@@ -827,7 +827,7 @@ bool wxFileConfig::HasGroup(const wxString& strName) const
 
     const wxString pathOld = GetPath();
 
-    wxFileConfig *self = wx_const_cast(wxFileConfig *, this);
+    wxFileConfig *self = const_cast<wxFileConfig *>(this);
     const bool
         rc = self->DoSetPath(strName, false /* don't create missing components */);
 
@@ -850,7 +850,7 @@ bool wxFileConfig::HasEntry(const wxString& entry) const
     // change to the path of the entry if necessary and remember the old path
     // to restore it later
     wxString pathOld;
-    wxFileConfig * const self = wx_const_cast(wxFileConfig *, this);
+    wxFileConfig * const self = const_cast<wxFileConfig *>(this);
     if ( !path.empty() )
     {
         pathOld = GetPath();
@@ -1678,9 +1678,9 @@ bool wxFileConfigGroup::DeleteSubgroup(wxFileConfigGroup *pGroup)
 
     wxLogTrace( FILECONF_TRACE_MASK,
                 _T("  (m_pLine) = prev: %p, this %p, next %p"),
-                m_pLine ? wx_static_cast(void*, m_pLine->Prev()) : 0,
-                wx_static_cast(void*, m_pLine),
-                m_pLine ? wx_static_cast(void*, m_pLine->Next()) : 0 );
+                m_pLine ? static_cast<void*>(m_pLine->Prev()) : 0,
+                static_cast<void*>(m_pLine),
+                m_pLine ? static_cast<void*>(m_pLine->Next()) : 0 );
     wxLogTrace( FILECONF_TRACE_MASK,
                 _T("  text: '%s'"),
                 m_pLine ? (const wxChar*)m_pLine->Text().c_str()

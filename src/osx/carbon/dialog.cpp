@@ -48,7 +48,7 @@ void wxDialog::DoShowModal()
     BeginAppModalStateForWindow(windowRef) ;
 
     wxEventLoop * const
-        loop = wx_static_cast(wxEventLoop *, wxEventLoop::GetActive());
+        loop = static_cast<wxEventLoop *>(wxEventLoop::GetActive());
         
     
     wxASSERT_MSG( loop , wxT("No Event Loop in place") );

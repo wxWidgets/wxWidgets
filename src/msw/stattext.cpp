@@ -135,7 +135,7 @@ WXDWORD wxStaticText::MSWGetStyle(long style, WXDWORD *exstyle) const
 
 wxSize wxStaticText::DoGetBestSize() const
 {
-    wxClientDC dc(wx_const_cast(wxStaticText *, this));
+    wxClientDC dc(const_cast<wxStaticText *>(this));
     wxFont font(GetFont());
     if (!font.Ok())
         font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);

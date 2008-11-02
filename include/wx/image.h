@@ -233,8 +233,8 @@ public:
     bool Create( const char* const* xpmData );
 #ifdef __BORLANDC__
     // needed for Borland 5.5
-    wxImage( char** xpmData ) { Create(wx_const_cast(const char* const*, xpmData)); }
-    bool Create( char** xpmData ) { return Create(wx_const_cast(const char* const*, xpmData)); }
+    wxImage( char** xpmData ) { Create(const_cast<const char* const*>(xpmData)); }
+    bool Create( char** xpmData ) { return Create(const_cast<const char* const*>(xpmData)); }
 #endif
     void Destroy();
 

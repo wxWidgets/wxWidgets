@@ -73,7 +73,7 @@ wxGDIRefData *wxIconBundle::CreateGDIRefData() const
 
 wxGDIRefData *wxIconBundle::CloneGDIRefData(const wxGDIRefData *data) const
 {
-    return new wxIconBundleRefData(*wx_static_cast(const wxIconBundleRefData *, data));
+    return new wxIconBundleRefData(*static_cast<const wxIconBundleRefData *>(data));
 }
 
 void wxIconBundle::DeleteIcons()

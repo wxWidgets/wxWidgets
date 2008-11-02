@@ -1447,7 +1447,7 @@ void wxToolBar::MacSuperChangedPosition()
 
 void wxToolBar::SetToolNormalBitmap( int id, const wxBitmap& bitmap )
 {
-    wxToolBarTool* tool = wx_static_cast(wxToolBarTool*, FindById(id));
+    wxToolBarTool* tool = static_cast<wxToolBarTool*>(FindById(id));
     if ( tool )
     {
         wxCHECK_RET( tool->IsButton(), wxT("Can only set bitmap on button tools."));
@@ -1461,7 +1461,7 @@ void wxToolBar::SetToolNormalBitmap( int id, const wxBitmap& bitmap )
 
 void wxToolBar::SetToolDisabledBitmap( int id, const wxBitmap& bitmap )
 {
-    wxToolBarTool* tool = wx_static_cast(wxToolBarTool*, FindById(id));
+    wxToolBarTool* tool = static_cast<wxToolBarTool*>(FindById(id));
     if ( tool )
     {
         wxCHECK_RET( tool->IsButton(), wxT("Can only set bitmap on button tools."));
@@ -1513,7 +1513,7 @@ void wxToolBar::DoToggleTool(wxToolBarToolBase *t, bool toggle)
 
 bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
 {
-    wxToolBarTool *tool = wx_static_cast( wxToolBarTool*, toolBase );
+    wxToolBarTool *tool = static_cast< wxToolBarTool*>(toolBase );
     if (tool == NULL)
         return false;
 
@@ -1697,7 +1697,7 @@ void wxToolBar::DoSetToggle(wxToolBarToolBase *WXUNUSED(tool), bool WXUNUSED(tog
 
 bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolbase)
 {
-    wxToolBarTool* tool = wx_static_cast( wxToolBarTool*, toolbase );
+    wxToolBarTool* tool = static_cast< wxToolBarTool*>(toolbase );
     wxToolBarToolsList::compatibility_iterator node;
     for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
     {

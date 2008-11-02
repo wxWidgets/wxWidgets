@@ -72,14 +72,14 @@ wxString wxArgNormalizedString::GetString() const
         return wxEmptyString;
 
 #if wxUSE_UTF8_LOCALE_ONLY
-    return wxString(wx_reinterpret_cast(const char*, m_ptr));
+    return wxString(reinterpret_cast<const char*>(m_ptr));
 #else
     #if wxUSE_UNICODE_UTF8
         if ( wxLocaleIsUtf8 )
-            return wxString(wx_reinterpret_cast(const char*, m_ptr));
+            return wxString(reinterpret_cast<const char*>(m_ptr));
         else
     #endif
-        return wxString(wx_reinterpret_cast(const wxChar*, m_ptr));
+        return wxString(reinterpret_cast<const wxChar*>(m_ptr));
 #endif // !wxUSE_UTF8_LOCALE_ONLY
 }
 

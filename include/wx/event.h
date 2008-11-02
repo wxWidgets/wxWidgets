@@ -69,7 +69,7 @@ typedef int wxEventType;
 
 // this is used to make the event table entry type safe, so that for an event
 // handler only a function with proper parameter list can be given.
-#define wxStaticCastEvent(type, val) wx_static_cast(type, val)
+#define wxStaticCastEvent(type, val) static_cast<type>(val)
 
 #define DECLARE_EVENT_TABLE_ENTRY(type, winid, idLast, fn, obj) \
     wxEventTableEntry(type, winid, idLast, fn, obj)

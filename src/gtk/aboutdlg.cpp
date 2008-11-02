@@ -71,7 +71,7 @@ public:
     {
 #if !wxUSE_UNICODE_UTF8
         for ( size_t n = 0; n < m_count; n++ )
-            free(wx_const_cast(gchar *, m_strings[n]));
+            free(const_cast<gchar *>(m_strings[n]));
 #endif
 
         delete [] m_strings;

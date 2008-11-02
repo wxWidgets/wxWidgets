@@ -40,7 +40,7 @@ public:
     {
         // the cast here is safe because the derived classes always create
         // wxGDIRefData objects
-        return m_refData && wx_static_cast(wxGDIRefData *, m_refData)->IsOk();
+        return m_refData && static_cast<wxGDIRefData *>(m_refData)->IsOk();
     }
 
     // don't use in the new code, use IsOk() instead
@@ -74,7 +74,7 @@ protected:
 
     virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const
     {
-        return CloneGDIRefData(wx_static_cast(const wxGDIRefData *, data));
+        return CloneGDIRefData(static_cast<const wxGDIRefData *>(data));
     }
 
     virtual wxGDIRefData *CreateGDIRefData() const = 0;

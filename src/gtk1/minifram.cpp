@@ -105,7 +105,7 @@ static void gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *g
         gdk_gc_unref( gc );
 
         // Hack alert
-        wx_static_cast(wxClientDCImpl *, dc.GetImpl())->m_window = pizza->bin_window;
+        static_cast<wxClientDCImpl *>(dc.GetImpl())->m_window = pizza->bin_window;
         dc.SetTextForeground( *wxWHITE );
         dc.DrawText( win->GetTitle(), 6, 3 );
     }
@@ -151,7 +151,7 @@ static void gtk_window_own_draw_callback( GtkWidget *widget, GdkRectangle *WXUNU
         gdk_gc_unref( gc );
 
         // Hack alert
-        wx_static_cast(wxClientDCImpl *, dc.GetImpl())->m_window = pizza->bin_window;
+        static_cast<wxClientDCImpl *>(dc.GetImpl())->m_window = pizza->bin_window;
         dc.SetTextForeground( *wxWHITE );
         dc.DrawText( win->GetTitle(), 6, 3 );
     }

@@ -59,7 +59,7 @@ bool wxGLCanvasBase::SetCurrent(const wxGLContext& context) const
     // that SetCurrent() can only be called for a shown window, so check for it
     wxASSERT_MSG( IsShownOnScreen(), _T("can't make hidden GL canvas current") );
 
-    return context.SetCurrent(*wx_static_cast(const wxGLCanvas *, this));
+    return context.SetCurrent(*static_cast<const wxGLCanvas *>(this));
 }
 
 bool wxGLCanvasBase::SetColour(const wxString& colour)

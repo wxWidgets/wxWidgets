@@ -149,7 +149,7 @@ static void GetTooltipColors()
     gs_objects.m_colTooltip = wxColor(c.red >> SHIFT, c.green >> SHIFT, c.blue >> SHIFT);
     c = tooltips->tip_window->style->fg[GTK_STATE_NORMAL];
     gs_objects.m_colTooltipText = wxColor(c.red >> SHIFT, c.green >> SHIFT, c.blue >> SHIFT);
-    gtk_object_sink(wx_reinterpret_cast(GtkObject*, tooltips));
+    gtk_object_sink(reinterpret_cast<GtkObject*>(tooltips));
 }
 
 wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )

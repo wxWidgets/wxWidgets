@@ -42,7 +42,7 @@ wxAnimationDecoderList wxAnimation::sm_handlers;
 // ----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxAnimation, wxAnimationBase)
-#define M_ANIMDATA      wx_static_cast(wxAnimationDecoder*, m_refData)
+#define M_ANIMDATA      static_cast<wxAnimationDecoder*>(m_refData)
 
 wxSize wxAnimation::GetSize() const
 {

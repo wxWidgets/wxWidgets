@@ -97,7 +97,7 @@ void wxBitmapRefData::Free()
 
 wxGDIRefData* wxBitmap::CloneGDIRefData(const wxGDIRefData* data) const
 {
-    return new wxBitmapRefData(*wx_static_cast(const wxBitmapRefData *, data));
+    return new wxBitmapRefData(*static_cast<const wxBitmapRefData *>(data));
 }
 
 // this function should be called from all wxBitmap ctors

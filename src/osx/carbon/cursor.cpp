@@ -69,7 +69,7 @@ protected:
     DECLARE_NO_ASSIGN_CLASS(wxCursorRefData)
 };
 
-#define M_CURSORDATA wx_static_cast(wxCursorRefData*, m_refData)
+#define M_CURSORDATA static_cast<wxCursorRefData*>(m_refData)
 
 #if wxOSX_USE_COCOA_OR_CARBON
 
@@ -293,7 +293,7 @@ wxGDIRefData *wxCursor::CreateGDIRefData() const
 
 wxGDIRefData *wxCursor::CloneGDIRefData(const wxGDIRefData *data) const
 {
-    return new wxCursorRefData(*wx_static_cast(const wxCursorRefData *, data));
+    return new wxCursorRefData(*static_cast<const wxCursorRefData *>(data));
 }
 
 bool wxCursor::CreateFromXpm(const char* const* bits)

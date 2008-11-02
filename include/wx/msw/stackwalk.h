@@ -29,7 +29,7 @@ class WXDLLIMPEXP_BASE wxStackFrame : public wxStackFrameBase
 {
 private:
     wxStackFrame *ConstCast() const
-        { return wx_const_cast(wxStackFrame *, this); }
+        { return const_cast<wxStackFrame *>(this); }
 
     size_t DoGetParamCount() const { return m_paramTypes.GetCount(); }
 
@@ -65,7 +65,7 @@ protected:
     // helper for debug API: it wants to have addresses as DWORDs
     size_t GetSymAddr() const
     {
-        return wx_reinterpret_cast(size_t, m_address);
+        return reinterpret_cast<size_t>(m_address);
     }
 
 private:

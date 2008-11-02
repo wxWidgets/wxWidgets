@@ -1034,7 +1034,7 @@ bool wxVariantDataWxObjectPtr::Write(wxSTD ostream& str) const
 
 bool wxVariantDataWxObjectPtr::Write(wxString& str) const
 {
-    str.Printf(wxT("%s(%p)"), GetType().c_str(), wx_static_cast(void*, m_value));
+    str.Printf(wxT("%s(%p)"), GetType().c_str(), static_cast<void*>(m_value));
     return true;
 }
 

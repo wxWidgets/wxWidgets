@@ -1197,7 +1197,7 @@ FormatAsHex(const void *data,
 
     // write all the rest as comma-separated bytes
     value.reserve(3*size + 10);
-    const char * const p = wx_static_cast(const char *, data);
+    const char * const p = static_cast<const char *>(data);
     for ( size_t n = 0; n < size; n++ )
     {
         // TODO: line wrapping: although not required by regedit, this makes
@@ -1364,7 +1364,7 @@ bool wxRegKey::DoExport(wxOutputStream& ostr) const
     // dump all our values
     long dummy;
     wxString name;
-    wxRegKey& self = wx_const_cast(wxRegKey&, *this);
+    wxRegKey& self = const_cast<wxRegKey&>(*this);
     bool cont = self.GetFirstValue(name, dummy);
     while ( cont )
     {

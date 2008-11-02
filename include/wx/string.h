@@ -987,7 +987,7 @@ public:
       iterator(wxString *str, underlying_iterator ptr)
           : m_cur(ptr), m_node(str, &m_cur) {}
 
-      wxString* str() const { return wx_const_cast(wxString*, m_node.m_str); }
+      wxString* str() const { return const_cast<wxString*>(m_node.m_str); }
 
       wxStringIteratorNode m_node;
 
@@ -3955,7 +3955,7 @@ inline wxCStrData::wxCStrData(const wxCStrData& data)
 inline wxCStrData::~wxCStrData()
 {
     if ( m_owned )
-        delete wx_const_cast(wxString*, m_str); // cast to silence warnings
+        delete const_cast<wxString*>(m_str); // cast to silence warnings
 }
 
 // simple cases for AsChar() and AsWChar(), the complicated ones are
@@ -4078,7 +4078,7 @@ void wxStringIteratorNode::DoSet(const wxString *str,
     if ( str )
     {
         m_next = str->m_iterators.ptr;
-        wx_const_cast(wxString*, m_str)->m_iterators.ptr = this;
+        const_cast<wxString*>(m_str)->m_iterators.ptr = this;
         if ( m_next )
             m_next->m_prev = this;
     }
@@ -4095,7 +4095,7 @@ void wxStringIteratorNode::clear()
     if ( m_prev )
         m_prev->m_next = m_next;
     else if ( m_str ) // first in the list
-        wx_const_cast(wxString*, m_str)->m_iterators.ptr = m_next;
+        const_cast<wxString*>(m_str)->m_iterators.ptr = m_next;
 
     m_next = m_prev = NULL;
     m_citer = NULL;

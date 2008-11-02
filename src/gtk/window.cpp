@@ -1893,7 +1893,7 @@ wxWindow *wxWindowBase::DoFindFocus()
 {
     wxWindowGTK *focus = gs_pendingFocus ? gs_pendingFocus : gs_currentFocus;
     // the cast is necessary when we compile in wxUniversal mode
-    return wx_static_cast(wxWindow*, focus);
+    return static_cast<wxWindow*>(focus);
 }
 
 void wxWindowGTK::AddChildGTK(wxWindowGTK* child)
@@ -2633,8 +2633,8 @@ void wxWindowGTK::DoGetPosition( int *x, int *y ) const
             if (m_parent)
                 m_parent->ScreenToClient(&org_x, &org_y);
 
-            wx_const_cast(wxWindowGTK*, this)->m_x = org_x;
-            wx_const_cast(wxWindowGTK*, this)->m_y = org_y;
+            const_cast<wxWindowGTK*>(this)->m_x = org_x;
+            const_cast<wxWindowGTK*>(this)->m_y = org_y;
         }
     }
 

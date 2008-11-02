@@ -216,7 +216,7 @@ void GTK_EndProcessDetector(gpointer data, gint source,
                             GdkInputCondition WXUNUSED(condition))
 {
     wxEndProcessData * const
-        proc_data = wx_static_cast(wxEndProcessData *, data);
+        proc_data = static_cast<wxEndProcessData *>(data);
 
     // child exited, end waiting
     close(source);

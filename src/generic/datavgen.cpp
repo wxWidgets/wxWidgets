@@ -2693,7 +2693,7 @@ int wxDataViewMainWindow::GetEndOfLastCol() const
     for (i = 0; i < GetOwner()->GetColumnCount(); i++)
     {
         const wxDataViewColumn *c =
-            wx_const_cast(wxDataViewCtrl*, GetOwner())->GetColumn( i );
+            const_cast<wxDataViewCtrl*>(GetOwner())->GetColumn( i );
 
         if (!c->IsHidden())
             width += c->GetWidth();

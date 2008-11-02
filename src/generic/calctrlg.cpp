@@ -785,7 +785,7 @@ size_t wxGenericCalendarCtrl::GetWeek(const wxDateTime& date) const
 wxSize wxGenericCalendarCtrl::DoGetBestSize() const
 {
     // calc the size of the calendar
-    wx_const_cast(wxGenericCalendarCtrl *, this)->RecalcGeometry();
+    const_cast<wxGenericCalendarCtrl *>(this)->RecalcGeometry();
 
     wxCoord width = 7*m_widthCol,
             height = 7*m_heightRow + m_rowOffset;

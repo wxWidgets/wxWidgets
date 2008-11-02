@@ -950,7 +950,7 @@ void wxMacMLTEControl::SetBackgroundColour(const wxColour& col )
 
 static inline int wxConvertToTXN(int x)
 {
-    return wx_static_cast(int, x / 254.0 * 72 + 0.5);
+    return static_cast<int>(x / 254.0 * 72 + 0.5);
 }
 
 void wxMacMLTEControl::TXNSetAttribute( const wxTextAttr& style , long from , long to )

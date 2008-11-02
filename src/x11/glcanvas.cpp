@@ -84,7 +84,7 @@ Window wxGLCanvas::GetXWindow() const
 
 int wxGLCanvas::GetColourIndex(const wxColour& col_)
 {
-    wxColour& col = wx_const_cast(wxColour&, col_);
+    wxColour& col = const_cast<wxColour&>(col_);
 
 #ifdef __WXMOTIF__
     col.AllocColour(GetXDisplay());

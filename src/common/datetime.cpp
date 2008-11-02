@@ -4602,7 +4602,7 @@ WXDLLIMPEXP_BASE void wxPrevWDay(wxDateTime::WeekDay& wd)
 wxDateTime& wxDateTime::SetFromMSWSysTime(const SYSTEMTIME& st)
 {
     return Set(st.wDay,
-            wx_static_cast(wxDateTime::Month, wxDateTime::Jan + st.wMonth - 1),
+            static_cast<wxDateTime::Month>(wxDateTime::Jan + st.wMonth - 1),
             st.wYear,
             0, 0, 0);
 }

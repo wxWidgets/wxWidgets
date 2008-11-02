@@ -321,7 +321,7 @@ wxEnhMetaFileDC::wxEnhMetaFileDC(const wxString& filename,
 wxEnhMetaFile *wxEnhMetaFileDC::Close()
 {
     wxEnhMetaFileDCImpl * const
-        impl = wx_static_cast(wxEnhMetaFileDCImpl *, GetImpl());
+        impl = static_cast<wxEnhMetaFileDCImpl *>(GetImpl());
     wxCHECK_MSG( impl, NULL, _T("no wxEnhMetaFileDC implementation") );
 
     return impl->Close();

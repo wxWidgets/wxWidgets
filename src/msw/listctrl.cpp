@@ -802,7 +802,7 @@ wxTextCtrl* wxListCtrl::GetEditControl() const
         HWND hwndEdit = ListView_GetEditControl(GetHwnd());
         if ( hwndEdit )
         {
-            wxListCtrl * const self = wx_const_cast(wxListCtrl *, this);
+            wxListCtrl * const self = const_cast<wxListCtrl *>(this);
 
             if ( !m_textCtrl )
                 self->m_textCtrl = new wxTextCtrl;

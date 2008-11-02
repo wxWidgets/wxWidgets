@@ -214,7 +214,7 @@ public:
     WXHFONT GetHFONT(const wxFont *font) const
     {
         if ( !m_hFont )
-            wx_const_cast(wxFontRefData *, this)->Alloc(font);
+            const_cast<wxFontRefData *>(this)->Alloc(font);
 
         return (WXHFONT)m_hFont;
     }
@@ -902,7 +902,7 @@ wxGDIRefData *wxFont::CreateGDIRefData() const
 
 wxGDIRefData *wxFont::CloneGDIRefData(const wxGDIRefData *data) const
 {
-    return new wxFontRefData(*wx_static_cast(const wxFontRefData *, data));
+    return new wxFontRefData(*static_cast<const wxFontRefData *>(data));
 }
 
 bool wxFont::RealizeResource()

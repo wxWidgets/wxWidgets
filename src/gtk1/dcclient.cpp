@@ -1147,7 +1147,7 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest,
     wxCHECK_MSG( srcDC, false, "source must be a window DC" );
 
     // FIXME: this cast is not always valid, see the code using m_isMemDC
-    wxMemoryDCImpl *memDC = wx_static_cast(wxMemoryDCImpl *, srcDC);
+    wxMemoryDCImpl *memDC = static_cast<wxMemoryDCImpl *>(srcDC);
 
     bool use_bitmap_method = false;
     bool is_mono = false;

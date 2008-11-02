@@ -337,7 +337,7 @@ WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData& printDataConst)
                     NULL,               // no driver name as we use device name
                     deviceName.wx_str(),
                     NULL,               // unused
-                    wx_static_cast(DEVMODE *, lockDevMode.Get())
+                    static_cast<DEVMODE *>(lockDevMode.Get())
                 );
     if ( !hDC )
         wxLogLastError(_T("CreateDC(printer)"));

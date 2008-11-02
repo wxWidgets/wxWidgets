@@ -123,7 +123,7 @@ bool wxTopLevelWindowBase::Destroy()
           i != end;
           ++i )
     {
-        wxTopLevelWindow * const win = wx_static_cast(wxTopLevelWindow *, *i);
+        wxTopLevelWindow * const win = static_cast<wxTopLevelWindow *>(*i);
         if ( win != this && win->IsShown() )
         {
             // there remains at least one other visible TLW, we can hide this
@@ -150,7 +150,7 @@ bool wxTopLevelWindowBase::IsLastBeforeExit() const
     // then decide whether we should exit at all
     for ( i = wxTopLevelWindows.begin(); i != end; ++i )
     {
-        wxTopLevelWindow * const win = wx_static_cast(wxTopLevelWindow *, *i);
+        wxTopLevelWindow * const win = static_cast<wxTopLevelWindow *>(*i);
         if ( win->ShouldPreventAppExit() )
         {
             // there remains at least one important TLW, don't exit
@@ -162,7 +162,7 @@ bool wxTopLevelWindowBase::IsLastBeforeExit() const
     for ( i = wxTopLevelWindows.begin(); i != end; ++i )
     {
         // don't close twice the windows which are already marked for deletion
-        wxTopLevelWindow * const win = wx_static_cast(wxTopLevelWindow *, *i);
+        wxTopLevelWindow * const win = static_cast<wxTopLevelWindow *>(*i);
         if ( !wxPendingDelete.Member(win) && !win->Close() )
         {
             // one of the windows refused to close, don't exit

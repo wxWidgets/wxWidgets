@@ -99,7 +99,7 @@ void wxColourDialog::ColourDataToDialog()
 
 #if wxUSE_LIBHILDON
     HildonColorSelector * const sel = HILDON_COLOR_SELECTOR(m_widget);
-    hildon_color_selector_set_color(sel, wx_const_cast(GdkColor *, col));
+    hildon_color_selector_set_color(sel, const_cast<GdkColor *>(col));
 #else // !wxUSE_LIBHILDON
     GtkColorSelection *sel =
         GTK_COLOR_SELECTION(GTK_COLOR_SELECTION_DIALOG(m_widget)->colorsel);

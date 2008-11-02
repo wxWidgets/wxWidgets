@@ -194,7 +194,7 @@ wxConvAuto::ToWChar(wchar_t *dst, size_t dstLen,
     // during this initial call but also during the first call with non-NULL
     // dst as typically we're first called with NULL dst to calculate the
     // needed buffer size
-    wxConvAuto *self = wx_const_cast(wxConvAuto *, this);
+    wxConvAuto *self = const_cast<wxConvAuto *>(this);
     if ( !m_conv )
     {
         self->InitFromInput(&src, &srcLen);
@@ -238,7 +238,7 @@ wxConvAuto::FromWChar(char *dst, size_t dstLen,
     if ( !m_conv )
     {
         // default to UTF-8 for the multibyte output
-        wx_const_cast(wxConvAuto *, this)->InitWithUTF8();
+        const_cast<wxConvAuto *>(this)->InitWithUTF8();
     }
 
     return m_conv->FromWChar(dst, dstLen, src, srcLen);

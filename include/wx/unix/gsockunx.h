@@ -114,7 +114,7 @@ public:
     virtual bool Init_Socket(GSocket *socket)
     {
         socket->m_gui_dependent = malloc(sizeof(int)*2);
-        int * const fds = wx_static_cast(int *, socket->m_gui_dependent);
+        int * const fds = static_cast<int *>(socket->m_gui_dependent);
 
         fds[0] = -1;
         fds[1] = -1;
@@ -174,7 +174,7 @@ protected:
     // access the FDs we store
     int& FD(GSocket *socket, SocketDir d)
     {
-        return wx_static_cast(int *, socket->m_gui_dependent)[d];
+        return static_cast<int *>(socket->m_gui_dependent)[d];
     }
 };
 

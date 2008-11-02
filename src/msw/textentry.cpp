@@ -103,7 +103,7 @@ public:
 
             memcpy(olestr, wcbuf, size);
 
-            *rgelt++ = wx_static_cast(LPOLESTR, olestr);
+            *rgelt++ = static_cast<LPOLESTR>(olestr);
 
             ++(*pceltFetched);
         }
@@ -341,7 +341,7 @@ bool wxTextEntry::AutoComplete(const wxArrayString& choices)
                     NULL,
                     CLSCTX_INPROC_SERVER,
                     IID_IAutoComplete,
-                    wx_reinterpret_cast(void **, &pAutoComplete)
+                    reinterpret_cast<void **>(&pAutoComplete)
                  );
     if ( FAILED(hr) )
     {
@@ -365,7 +365,7 @@ bool wxTextEntry::AutoComplete(const wxArrayString& choices)
     hr = pAutoComplete->QueryInterface
                         (
                            IID_IAutoComplete2,
-                           wx_reinterpret_cast(void **, &pAutoComplete2)
+                           reinterpret_cast<void **>(&pAutoComplete2)
                         );
     if ( SUCCEEDED(hr) )
     {

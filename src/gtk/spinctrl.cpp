@@ -142,7 +142,7 @@ double wxSpinCtrlGTKBase::DoGetValue() const
 
     GtkDisableEvents();
     gtk_spin_button_update( GTK_SPIN_BUTTON(m_widget) );
-    wx_const_cast(wxSpinCtrlGTKBase*, this)->m_value =
+    const_cast<wxSpinCtrlGTKBase*>(this)->m_value =
         gtk_spin_button_get_value(GTK_SPIN_BUTTON(m_widget));
     GtkEnableEvents();
 

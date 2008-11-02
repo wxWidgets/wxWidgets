@@ -167,7 +167,7 @@ wxGDIRefData *wxRegion::CreateGDIRefData() const
 
 wxGDIRefData *wxRegion::CloneGDIRefData(const wxGDIRefData *data) const
 {
-    return new wxRegionRefData(*wx_static_cast(const wxRegionRefData *, data));
+    return new wxRegionRefData(*static_cast<const wxRegionRefData *>(data));
 }
 
 //-----------------------------------------------------------------------------
@@ -262,10 +262,10 @@ bool wxRegion::DoGetBox(wxCoord& x, wxCoord& y, wxCoord& w, wxCoord& h) const
     {
         CGRect box ;
         HIShapeGetBounds( M_REGION , &box ) ;
-        x = wx_static_cast(int, box.origin.x);
-        y = wx_static_cast(int, box.origin.y);
-        w = wx_static_cast(int, box.size.width);
-        h = wx_static_cast(int, box.size.height);
+        x = static_cast<int>(box.origin.x);
+        y = static_cast<int>(box.origin.y);
+        w = static_cast<int>(box.size.width);
+        h = static_cast<int>(box.size.height);
 
         return true;
     }

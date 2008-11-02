@@ -133,9 +133,9 @@ wxBitmap wxImageList::GetBitmap(int index) const
     if ( obj == NULL )
         return wxNullBitmap ;
     else if ( obj->IsKindOf(CLASSINFO(wxIcon)) )
-        return wxBitmap( *(wx_static_cast(wxIcon*, obj)) ) ;
+        return wxBitmap( *(static_cast<wxIcon*>(obj)) ) ;
     else
-        return *(wx_static_cast(wxBitmap*, obj)) ;
+        return *(static_cast<wxBitmap*>(obj)) ;
 }
 
 // Get the icon
@@ -154,7 +154,7 @@ wxIcon wxImageList::GetIcon(int index) const
         return wxNullIcon ;
     }
     else
-        return *(wx_static_cast(wxIcon*, obj)) ;
+        return *(static_cast<wxIcon*>(obj)) ;
 }
 
 bool wxImageList::Replace( int index, const wxBitmap &bitmap )
@@ -269,13 +269,13 @@ bool wxImageList::GetSize( int index, int &width, int &height ) const
     wxObject *obj = (wxObject*)node->GetData();
     if (obj->IsKindOf(CLASSINFO(wxIcon)))
     {
-        wxIcon *bm = wx_static_cast( wxIcon* , obj ) ;
+        wxIcon *bm = static_cast< wxIcon* >(obj ) ;
         width = bm->GetWidth();
         height = bm->GetHeight();
     }
     else
     {
-        wxBitmap *bm = wx_static_cast( wxBitmap* , obj ) ;
+        wxBitmap *bm = static_cast< wxBitmap* >(obj ) ;
         width = bm->GetWidth();
         height = bm->GetHeight();
     }
@@ -294,12 +294,12 @@ bool wxImageList::Draw(
     wxObject *obj = (wxObject*)node->GetData();
     if (obj->IsKindOf(CLASSINFO(wxIcon)))
     {
-        wxIcon *bm = wx_static_cast( wxIcon* , obj ) ;
+        wxIcon *bm = static_cast< wxIcon* >(obj ) ;
         dc.DrawIcon( *bm , x, y );
     }
     else
     {
-        wxBitmap *bm = wx_static_cast( wxBitmap* , obj ) ;
+        wxBitmap *bm = static_cast< wxBitmap* >(obj ) ;
         dc.DrawBitmap( *bm, x, y, (flags & wxIMAGELIST_DRAW_TRANSPARENT) > 0 );
     }
 

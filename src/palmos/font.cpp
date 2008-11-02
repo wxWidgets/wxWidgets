@@ -405,7 +405,7 @@ wxGDIRefData *wxFont::CreateGDIRefData() const
 
 wxGDIRefData *wxFont::CloneGDIRefData(const wxGDIRefData *data) const
 {
-    return new wxFontRefData(*wx_static_cast(const wxFontRefData *, data));
+    return new wxFontRefData(*static_cast<const wxFontRefData *>(data));
 }
 
 bool wxFont::RealizeResource()

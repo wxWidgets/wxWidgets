@@ -66,7 +66,7 @@ wxString wxStandardPaths::GetInstallPrefix() const
 {
     if ( m_prefix.empty() )
     {
-        wx_const_cast(wxStandardPaths *, this)->m_prefix = wxT("/sys$system");
+        const_cast<wxStandardPaths *>(this)->m_prefix = wxT("/sys$system");
     }
 
     return m_prefix;
@@ -173,7 +173,7 @@ wxString wxStandardPaths::GetInstallPrefix() const
 {
     if ( m_prefix.empty() )
     {
-        wxStandardPaths *pathPtr = wx_const_cast(wxStandardPaths *, this);
+        wxStandardPaths *pathPtr = const_cast<wxStandardPaths *>(this);
         pathPtr->DetectPrefix();
     }
 

@@ -469,7 +469,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                 }
 
                 mii.cch = itemText.length();
-                mii.dwTypeData = wx_const_cast(wxChar *, itemText.wx_str());
+                mii.dwTypeData = const_cast<wxChar *>(itemText.wx_str());
 
                 if (flags & MF_POPUP)
                 {
@@ -489,7 +489,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                 //     item and this looks downright ugly
                 //
                 // so instead draw it ourselves in MSWOnDrawItem()
-                mii.dwItemData = wx_reinterpret_cast(ULONG_PTR, pItem);
+                mii.dwItemData = reinterpret_cast<ULONG_PTR>(pItem);
                 if ( pItem->IsCheckable() )
                 {
                     mii.hbmpChecked =
@@ -760,7 +760,7 @@ void wxMenu::SetTitle(const wxString& label)
             info.fMask = MIIM_TYPE;
             info.fType = MFT_STRING;
             info.cch = m_title.length();
-            info.dwTypeData = wx_const_cast(wxChar *, m_title.wx_str());
+            info.dwTypeData = const_cast<wxChar *>(m_title.wx_str());
             if ( !SetMenuItemInfo(hMenu, 0, TRUE, & info) )
             {
                 wxLogLastError(wxT("SetMenuItemInfo"));
@@ -930,7 +930,7 @@ WXHMENU wxMenuBar::Create()
     if ( m_hMenu != 0 )
         return m_hMenu;
 
-    wxToolMenuBar * const bar = wx_static_cast(wxToolMenuBar *, GetToolBar());
+    wxToolMenuBar * const bar = static_cast<wxToolMenuBar *>(GetToolBar());
     if ( !bar )
         return NULL;
 
@@ -1080,7 +1080,7 @@ void wxMenuBar::SetMenuLabel(size_t pos, const wxString& label)
     info.fMask = MIIM_TYPE;
     info.fType = MFT_STRING;
     info.cch = label.length();
-    info.dwTypeData = wx_const_cast(wxChar *, label.wx_str());
+    info.dwTypeData = const_cast<wxChar *>(label.wx_str());
     if ( !SetMenuItemInfo(GetHmenu(), id, TRUE, &info) )
     {
         wxLogLastError(wxT("SetMenuItemInfo"));

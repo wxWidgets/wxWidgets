@@ -933,7 +933,7 @@ private:
     // facilitate doing pointer arithmetic with it
     char *StringData() const
     {
-        return wx_static_cast(char *, m_data.GetData());
+        return static_cast<char *>(m_data.GetData());
     }
 
     const char *StringAtOfs(wxMsgTableEntry *pTable, size_t32 n) const

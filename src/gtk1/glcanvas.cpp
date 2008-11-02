@@ -177,7 +177,7 @@ wxGLCanvas::wxGLCanvas(wxWindow *parent,
                        const wxPalette& palette)
     : m_createImplicitContext(true)
 {
-    m_sharedContext = wx_const_cast(wxGLContext *, shared);
+    m_sharedContext = const_cast<wxGLContext *>(shared);
 
     Create(parent, id, pos, size, style, name, attribList, palette);
 }
@@ -191,7 +191,7 @@ wxGLCanvas::wxGLCanvas(wxWindow *parent,
                        const wxPalette& palette )
     : m_createImplicitContext(true)
 {
-    m_sharedContextOf = wx_const_cast(wxGLCanvas *, shared);
+    m_sharedContextOf = const_cast<wxGLCanvas *>(shared);
 
     Create(parent, id, pos, size, style, name, attribList, palette);
 }

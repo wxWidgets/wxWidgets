@@ -98,7 +98,7 @@ int name::Index(const T& Item, bool bFromEnd) const                           \
       size_t ui = size() - 1;                                                 \
       do {                                                                    \
         if ( (T*)base_array::operator[](ui) == &Item )                        \
-          return wx_static_cast(int, ui);                                     \
+          return static_cast<int>(ui);                                     \
         ui--;                                                                 \
       }                                                                       \
       while ( ui != 0 );                                                      \
@@ -107,7 +107,7 @@ int name::Index(const T& Item, bool bFromEnd) const                           \
   else {                                                                      \
     for( size_t ui = 0; ui < size(); ui++ ) {                                 \
       if( (T*)base_array::operator[](ui) == &Item )                           \
-        return wx_static_cast(int, ui);                                       \
+        return static_cast<int>(ui);                                       \
     }                                                                         \
   }                                                                           \
                                                                               \

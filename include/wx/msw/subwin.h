@@ -61,7 +61,7 @@ public:
 
     HWND operator[](size_t n) const
     {
-        return wx_const_cast(wxSubwindows *, this)->Get(n);
+        return const_cast<wxSubwindows *>(this)->Get(n);
     }
 
     // initialize the given window: id will be stored in wxWindowIDRef ensuring

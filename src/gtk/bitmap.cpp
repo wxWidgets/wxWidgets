@@ -228,7 +228,7 @@ wxBitmapRefData::~wxBitmapRefData()
 
 //-----------------------------------------------------------------------------
 
-#define M_BMPDATA wx_static_cast(wxBitmapRefData*, m_refData)
+#define M_BMPDATA static_cast<wxBitmapRefData*>(m_refData)
 
 IMPLEMENT_DYNAMIC_CLASS(wxBitmap,wxGDIObject)
 
@@ -258,7 +258,7 @@ wxBitmap::wxBitmap(const char* const* bits)
     wxCHECK2_MSG(bits != NULL, return, wxT("invalid bitmap data"));
 
     GdkBitmap* mask = NULL;
-    SetPixmap(gdk_pixmap_create_from_xpm_d(wxGetRootWindow()->window, &mask, NULL, wx_const_cast(char**, bits)));
+    SetPixmap(gdk_pixmap_create_from_xpm_d(wxGetRootWindow()->window, &mask, NULL, const_cast<char**>(bits)));
 
     if (M_BMPDATA->m_pixmap != NULL && mask != NULL)
     {
@@ -930,7 +930,7 @@ wxGDIRefData* wxBitmap::CreateGDIRefData() const
 
 wxGDIRefData* wxBitmap::CloneGDIRefData(const wxGDIRefData* data) const
 {
-    const wxBitmapRefData* oldRef = wx_static_cast(const wxBitmapRefData*, data);
+    const wxBitmapRefData* oldRef = static_cast<const wxBitmapRefData*>(data);
     wxBitmapRefData* newRef = new wxBitmapRefData;
     newRef->m_width = oldRef->m_width;
     newRef->m_height = oldRef->m_height;

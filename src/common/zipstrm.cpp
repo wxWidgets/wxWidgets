@@ -1336,7 +1336,7 @@ void wxZipInputStream::Init(const wxString& file)
     Init();
     m_allowSeeking = true;
     wxFFileInputStream *ffile;
-    ffile = wx_static_cast(wxFFileInputStream*, m_parent_i_stream);
+    ffile = static_cast<wxFFileInputStream*>(m_parent_i_stream);
     wxZipEntryPtr_ entry;
 
     if (ffile->Ok()) {
@@ -2051,7 +2051,7 @@ bool wxZipOutputStream::CopyEntry(wxArchiveEntry *entry,
         return false;
     }
 
-    return CopyEntry(zipEntry, wx_static_cast(wxZipInputStream&, stream));
+    return CopyEntry(zipEntry, static_cast<wxZipInputStream&>(stream));
 }
 
 bool wxZipOutputStream::CopyArchiveMetaData(wxZipInputStream& inputStream)
@@ -2065,7 +2065,7 @@ bool wxZipOutputStream::CopyArchiveMetaData(wxZipInputStream& inputStream)
 
 bool wxZipOutputStream::CopyArchiveMetaData(wxArchiveInputStream& stream)
 {
-    return CopyArchiveMetaData(wx_static_cast(wxZipInputStream&, stream));
+    return CopyArchiveMetaData(static_cast<wxZipInputStream&>(stream));
 }
 
 void wxZipOutputStream::SetLevel(int level)

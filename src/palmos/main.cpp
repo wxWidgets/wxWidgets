@@ -52,7 +52,7 @@ int wxEntry()
     // argv[] must be NULL-terminated
     argv[argc] = NULL;
 
-    return wxEntry(wx_const_cast(int, argc), argv);
+    return wxEntry(const_cast<int>(argc), argv);
 }
 
 #endif // wxUSE_GUI

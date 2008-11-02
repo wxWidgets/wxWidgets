@@ -88,7 +88,7 @@ public:
     {
         wxCharTypeBuffer buf;
         if ( str )
-            buf.m_data = new Data(wx_const_cast(CharType*, str), Data::NonOwned);
+            buf.m_data = new Data(const_cast<CharType*>(str), Data::NonOwned);
         return buf;
     }
 
@@ -110,7 +110,7 @@ public:
 
         CharType * const p = m_data->Get();
 
-        wxCharTypeBuffer *self = wx_const_cast(wxCharTypeBuffer*, this);
+        wxCharTypeBuffer *self = const_cast<wxCharTypeBuffer*>(this);
         self->m_data->Set(NULL);
         self->DecRef();
 

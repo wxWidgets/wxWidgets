@@ -99,9 +99,9 @@ private:
                                const void* data,
                                void* info)
     {
-        GSocket * const socket = wx_static_cast(GSocket *, info);
+        GSocket * const socket = static_cast<GSocket *>(info);
         MacGSocketData * const
-            macdata = wx_static_cast(MacGSocketData *, socket->m_gui_dependent);
+            macdata = static_cast<MacGSocketData *>(socket->m_gui_dependent);
         if ( !macdata )
             return;
 
@@ -167,7 +167,7 @@ private:
     // may return NULL if we hadn't created the data for this socket yet
     MacGSocketData *GetData(GSocket *socket) const
     {
-        return wx_static_cast(MacGSocketData *, socket->m_gui_dependent);
+        return static_cast<MacGSocketData *>(socket->m_gui_dependent);
     }
 
     // return the custom data pointer initializing it if it hadn't been done

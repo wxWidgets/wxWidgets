@@ -132,7 +132,7 @@ wxString wxURI::Unescape(const wxString& uri)
 
             wxASSERT_MSG( n >= 0 && n <= 0xff, "unexpected character value" );
 
-            c = wx_static_cast(char, n);
+            c = static_cast<char>(n);
         }
 
         *p = c;

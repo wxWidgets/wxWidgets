@@ -508,7 +508,7 @@ public:
                    const wxSize& fullSize)
         : wxDC(new PageFragmentDCImpl((wxMemoryDC*)this, printer, offset, fullSize))
     {
-        wx_static_cast(PageFragmentDCImpl*, m_pimpl)->DoSelect(bmp);
+        static_cast<PageFragmentDCImpl*>(m_pimpl)->DoSelect(bmp);
     }
 };
 

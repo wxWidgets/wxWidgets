@@ -77,7 +77,7 @@ wxColourDialogHookProc(HWND hwnd,
     {
         CHOOSECOLOR *pCC = (CHOOSECOLOR *)lParam;
         wxColourDialog * const
-            dialog = wx_reinterpret_cast(wxColourDialog *, pCC->lCustData);
+            dialog = reinterpret_cast<wxColourDialog *>(pCC->lCustData);
 
         const wxString title = dialog->GetTitle();
         if ( !title.empty() )

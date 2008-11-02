@@ -112,7 +112,7 @@ void wxWrapSizer::ClearRows()
         row->GetChildren().clear();
 
         wxPropChanger * const
-            propChanger = wx_static_cast(wxPropChanger *, item->GetUserData());
+            propChanger = static_cast<wxPropChanger *>(item->GetUserData());
         if ( propChanger )
         {
             // this deletes propChanger and so restores the old proportion

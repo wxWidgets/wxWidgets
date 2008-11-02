@@ -124,7 +124,7 @@ wxGDIRefData *wxIcon::CreateGDIRefData() const
 
 wxGDIRefData *wxIcon::CloneGDIRefData(const wxGDIRefData *data) const
 {
-    return new wxIconRefData(*wx_static_cast(const wxIconRefData *, data));
+    return new wxIconRefData(*static_cast<const wxIconRefData *>(data));
 }
 
 WXHICON wxIcon::GetHICON() const

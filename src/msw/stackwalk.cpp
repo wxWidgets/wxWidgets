@@ -161,7 +161,7 @@ void wxStackFrame::OnParam(PSYMBOL_INFO pSymInfo)
 BOOL CALLBACK
 EnumSymbolsProc(PSYMBOL_INFO pSymInfo, ULONG WXUNUSED(SymSize), PVOID data)
 {
-    wxStackFrame *frame = wx_static_cast(wxStackFrame *, data);
+    wxStackFrame *frame = static_cast<wxStackFrame *>(data);
 
     // we're only interested in parameters
     if ( pSymInfo->Flags & IMAGEHLP_SYMBOL_INFO_PARAMETER )

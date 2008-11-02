@@ -457,7 +457,7 @@ protected:
     virtual void DeleteData() { }
 public:
     // for wxList::iterator
-    void** GetDataPtr() const { return &(wx_const_cast(wxNodeBase*, this)->m_data); }
+    void** GetDataPtr() const { return &(const_cast<wxNodeBase*>(this)->m_data); }
 private:
     // optional key stuff
     wxListKeyValue m_key;

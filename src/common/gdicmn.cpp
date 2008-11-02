@@ -528,7 +528,7 @@ void wxStockGDI::DeleteAll()
 
 const wxBrush* wxStockGDI::GetBrush(Item item)
 {
-    wxBrush* brush = wx_static_cast(wxBrush*, ms_stockObject[item]);
+    wxBrush* brush = static_cast<wxBrush*>(ms_stockObject[item]);
     if (brush == NULL)
     {
         switch (item)
@@ -573,7 +573,7 @@ const wxBrush* wxStockGDI::GetBrush(Item item)
 
 const wxColour* wxStockGDI::GetColour(Item item)
 {
-    wxColour* colour = wx_static_cast(wxColour*, ms_stockObject[item]);
+    wxColour* colour = static_cast<wxColour*>(ms_stockObject[item]);
     if (colour == NULL)
     {
         switch (item)
@@ -609,7 +609,7 @@ const wxColour* wxStockGDI::GetColour(Item item)
 
 const wxCursor* wxStockGDI::GetCursor(Item item)
 {
-    wxCursor* cursor = wx_static_cast(wxCursor*, ms_stockObject[item]);
+    wxCursor* cursor = static_cast<wxCursor*>(ms_stockObject[item]);
     if (cursor == NULL)
     {
         switch (item)
@@ -633,7 +633,7 @@ const wxCursor* wxStockGDI::GetCursor(Item item)
 
 const wxFont* wxStockGDI::GetFont(Item item)
 {
-    wxFont* font = wx_static_cast(wxFont*, ms_stockObject[item]);
+    wxFont* font = static_cast<wxFont*>(ms_stockObject[item]);
     if (font == NULL)
     {
         switch (item)
@@ -660,7 +660,7 @@ const wxFont* wxStockGDI::GetFont(Item item)
 
 const wxPen* wxStockGDI::GetPen(Item item)
 {
-    wxPen* pen = wx_static_cast(wxPen*, ms_stockObject[item]);
+    wxPen* pen = static_cast<wxPen*>(ms_stockObject[item]);
     if (pen == NULL)
     {
         switch (item)
@@ -731,7 +731,7 @@ wxGDIObjListBase::~wxGDIObjListBase()
 {
     for (wxList::compatibility_iterator node = list.GetFirst(); node; node = node->GetNext())
     {
-        delete wx_static_cast(wxObject*, node->GetData());
+        delete static_cast<wxObject*>(node->GetData());
     }
 }
 

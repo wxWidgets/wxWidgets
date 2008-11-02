@@ -195,7 +195,7 @@ WXWPARAM wxMenuItem::GetMSWId() const
     // generating WM_COMMAND messages with negative high word of wParam), so
     // use the cast to ensure the id is in range
     return m_subMenu ? wxPtrToUInt(m_subMenu->GetHMenu())
-                     : wx_static_cast(unsigned short, GetId());
+                     : static_cast<unsigned short>(GetId());
 }
 
 // get item state

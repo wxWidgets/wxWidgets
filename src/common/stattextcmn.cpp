@@ -323,7 +323,7 @@ wxString wxStaticTextBase::Ellipsize(const wxString& label) const
         return label;
     }
 
-    wxClientDC dc(wx_const_cast(wxStaticTextBase*, this));
+    wxClientDC dc(const_cast<wxStaticTextBase*>(this));
     dc.SetFont(GetFont());
 
     wxArrayInt charOffsets;

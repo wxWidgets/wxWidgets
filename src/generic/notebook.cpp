@@ -102,7 +102,7 @@ private:
 
 static int GetPageId(wxTabView *tabview, wxNotebookPage *page)
 {
-    return wx_static_cast(wxNotebookTabView*, tabview)->GetId(page);
+    return static_cast<wxNotebookTabView*>(tabview)->GetId(page);
 }
 
 // ----------------------------------------------------------------------------

@@ -18,7 +18,7 @@ wxBase64Encode(char *dst, size_t dstLen, const void *src_, size_t srcLen)
 {
     wxCHECK_MSG( src_, wxCONV_FAILED, _T("NULL input buffer") );
 
-    const unsigned char *src = wx_static_cast(const unsigned char *, src_);
+    const unsigned char *src = static_cast<const unsigned char *>(src_);
 
     static const char b64[] =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
@@ -71,7 +71,7 @@ wxBase64Decode(void *dst_, size_t dstLen,
 {
     wxCHECK_MSG( src, wxCONV_FAILED, _T("NULL input buffer") );
 
-    unsigned char *dst = wx_static_cast(unsigned char *, dst_);
+    unsigned char *dst = static_cast<unsigned char *>(dst_);
 
     size_t decLen = 0;
 
@@ -118,7 +118,7 @@ wxBase64Decode(void *dst_, size_t dstLen,
     const char *p;
     for ( p = src; srcLen; p++, srcLen-- )
     {
-        const unsigned char c = decode[wx_static_cast(unsigned char, *p)];
+        const unsigned char c = decode[static_cast<unsigned char>(*p)];
         switch ( c )
         {
             case WSP:

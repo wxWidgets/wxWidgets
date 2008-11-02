@@ -447,7 +447,7 @@ void wxToolBar::SetWindowStyleFlag( long style )
 
 bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 {
-    wxToolBarTool* tool = wx_static_cast(wxToolBarTool*, toolBase);
+    wxToolBarTool* tool = static_cast<wxToolBarTool*>(toolBase);
 
     GSList* radioGroup;
     switch ( tool->GetStyle() )
@@ -552,7 +552,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 
 bool wxToolBar::DoDeleteTool(size_t /* pos */, wxToolBarToolBase* toolBase)
 {
-    wxToolBarTool* tool = wx_static_cast(wxToolBarTool*, toolBase);
+    wxToolBarTool* tool = static_cast<wxToolBarTool*>(toolBase);
 
     if (tool->GetStyle() == wxTOOL_STYLE_CONTROL)
     {
@@ -597,7 +597,7 @@ GSList* wxToolBar::GetRadioGroup(size_t pos)
 
 void wxToolBar::DoEnableTool(wxToolBarToolBase *toolBase, bool enable)
 {
-    wxToolBarTool* tool = wx_static_cast(wxToolBarTool*, toolBase);
+    wxToolBarTool* tool = static_cast<wxToolBarTool*>(toolBase);
 
     if (tool->m_item)
         gtk_widget_set_sensitive(GTK_WIDGET(tool->m_item), enable);
@@ -605,7 +605,7 @@ void wxToolBar::DoEnableTool(wxToolBarToolBase *toolBase, bool enable)
 
 void wxToolBar::DoToggleTool( wxToolBarToolBase *toolBase, bool toggle )
 {
-    wxToolBarTool* tool = wx_static_cast(wxToolBarTool*, toolBase);
+    wxToolBarTool* tool = static_cast<wxToolBarTool*>(toolBase);
 
     if (tool->m_item)
     {
@@ -653,7 +653,7 @@ wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord WXUNUSED(x),
 
 void wxToolBar::SetToolShortHelp( int id, const wxString& helpString )
 {
-    wxToolBarTool* tool = wx_static_cast(wxToolBarTool*, FindById(id));
+    wxToolBarTool* tool = static_cast<wxToolBarTool*>(FindById(id));
 
     if ( tool )
     {
@@ -668,7 +668,7 @@ void wxToolBar::SetToolShortHelp( int id, const wxString& helpString )
 
 void wxToolBar::SetToolNormalBitmap( int id, const wxBitmap& bitmap )
 {
-    wxToolBarTool* tool = wx_static_cast(wxToolBarTool*, FindById(id));
+    wxToolBarTool* tool = static_cast<wxToolBarTool*>(FindById(id));
     if ( tool )
     {
         wxCHECK_RET( tool->IsButton(), wxT("Can only set bitmap on button tools."));
@@ -680,7 +680,7 @@ void wxToolBar::SetToolNormalBitmap( int id, const wxBitmap& bitmap )
 
 void wxToolBar::SetToolDisabledBitmap( int id, const wxBitmap& bitmap )
 {
-    wxToolBarTool* tool = wx_static_cast(wxToolBarTool*, FindById(id));
+    wxToolBarTool* tool = static_cast<wxToolBarTool*>(FindById(id));
     if ( tool )
     {
         wxCHECK_RET( tool->IsButton(), wxT("Can only set bitmap on button tools."));

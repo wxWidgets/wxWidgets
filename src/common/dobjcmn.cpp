@@ -320,7 +320,7 @@ bool wxTextDataObject::GetDataHere(const wxDataFormat& format, void *buf) const
 bool wxTextDataObject::SetData(const wxDataFormat& format,
                                size_t len, const void *buf_)
 {
-    const char * const buf = wx_static_cast(const char *, buf_);
+    const char * const buf = static_cast<const char *>(buf_);
 
     if ( buf == NULL )
         return false;

@@ -913,9 +913,9 @@ public:
     // would break the existing code overriding them, so instead we provide
     // these const synonyms which can be used from const-correct code
     int GetRowsCount() const
-        { return wx_const_cast(wxGridTableBase *, this)->GetNumberRows(); }
+        { return const_cast<wxGridTableBase *>(this)->GetNumberRows(); }
     int GetColsCount() const
-        { return wx_const_cast(wxGridTableBase *, this)->GetNumberCols(); }
+        { return const_cast<wxGridTableBase *>(this)->GetNumberCols(); }
 
 
     virtual bool IsEmptyCell( int row, int col ) = 0;

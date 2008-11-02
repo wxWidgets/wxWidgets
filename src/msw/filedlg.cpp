@@ -88,10 +88,10 @@ wxFileDialogHookFunction(HWND      hDlg,
     {
         case WM_NOTIFY:
             {
-                OFNOTIFY *pNotifyCode = wx_reinterpret_cast(OFNOTIFY *, lParam);
+                OFNOTIFY *pNotifyCode = reinterpret_cast<OFNOTIFY *>(lParam);
                 if ( pNotifyCode->hdr.code == CDN_INITDONE )
                 {
-                    wx_reinterpret_cast(wxFileDialog *,
+                    reinterpret_cast<wxFileDialog *>(
                                         pNotifyCode->lpOFN->lCustData)
                         ->MSWOnInitDone((WXHWND)hDlg);
                  }

@@ -131,7 +131,7 @@ wxAppConsoleBase::wxAppConsoleBase()
     m_traits = NULL;
     m_mainLoop = NULL;
 
-    ms_appInstance = wx_static_cast(wxAppConsole *, this);
+    ms_appInstance = static_cast<wxAppConsole *>(this);
 
 #ifdef __WXDEBUG__
     SetTraceMasks();

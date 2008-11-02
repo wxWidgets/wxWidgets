@@ -182,7 +182,7 @@ wxGDIRefData *wxBitmap::CreateGDIRefData() const
 
 wxGDIRefData *wxBitmap::CloneGDIRefData(const wxGDIRefData *data) const
 {
-    return new wxBitmapRefData(*wx_static_cast(const wxBitmapRefData *, data));
+    return new wxBitmapRefData(*static_cast<const wxBitmapRefData *>(data));
 }
 
 bool wxBitmap::Create(int width, int height, int depth)

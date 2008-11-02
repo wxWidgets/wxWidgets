@@ -351,7 +351,7 @@ wxGDIRefData *wxFont::CreateGDIRefData() const
 
 wxGDIRefData *wxFont::CloneGDIRefData(const wxGDIRefData *data) const
 {
-    return new wxFontRefData(*wx_static_cast(const wxFontRefData *, data));
+    return new wxFontRefData(*static_cast<const wxFontRefData *>(data));
 }
 
 // ----------------------------------------------------------------------------
@@ -690,7 +690,7 @@ void wxGetTextExtent(WXDisplay* display, const wxFont& font,
     int slen = str.length();
 
     XTextExtents((XFontStruct*) pFontStruct,
-                 wx_const_cast(char*, (const char *)str.mb_str()), slen,
+                 const_cast<char*>((const char *)str.mb_str()), slen,
                  &direction, &ascent2, &descent2, &overall);
 
     if ( width )

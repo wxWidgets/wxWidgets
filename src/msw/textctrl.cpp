@@ -82,7 +82,7 @@
 // dummy value used for m_dropTarget, different from any valid pointer value
 // (which are all even under Windows) and NULL
 static wxDropTarget *
-    wxRICHTEXT_DEFAULT_DROPTARGET = wx_reinterpret_cast(wxDropTarget *, 1);
+    wxRICHTEXT_DEFAULT_DROPTARGET = reinterpret_cast<wxDropTarget *>(1);
 
 #endif // wxUSE_DRAG_AND_DROP && wxUSE_RICHEDIT
 

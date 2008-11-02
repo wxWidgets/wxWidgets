@@ -27,7 +27,7 @@ class WXDLLIMPEXP_BASE wxStackFrameBase
 private:
     // put this inline function here so that it is defined before use
     wxStackFrameBase *ConstCast() const
-        { return wx_const_cast(wxStackFrameBase *, this); }
+        { return const_cast<wxStackFrameBase *>(this); }
 
 public:
     wxStackFrameBase(size_t level, void *address = NULL)
