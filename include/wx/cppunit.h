@@ -125,6 +125,18 @@ assertEquals(int expected,
     assertEquals(unsigned long(expected), actual, sourceLine, message);
 }
 
+// we also need this one to resolve ambiguity in the tests comparing unsigned
+// short (e.g. wxDateTime_t returned by several wxDateTime methods) with
+// literal integer constants
+inline void
+assertEquals(int expected,
+             unsigned short actual,
+             CppUnit::SourceLine sourceLine,
+             const std::string& message)
+{
+    assertEquals(unsigned short(expected), actual, sourceLine, message);
+}
+
 CPPUNIT_NS_END
 
 // Use this macro to compare a wxArrayString with the pipe-separated elements
