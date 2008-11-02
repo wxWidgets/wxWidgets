@@ -49,6 +49,7 @@ ctags --totals --c++-kinds=+px --language-force=c++ \
 	src/generic/*.cpp \
 	src/$1/*.cpp \
 	src/html/*.cpp \
+	src/propgrid/*.cpp \
 	src/richtext/*.cpp \
 	src/unix/*.cpp \
 	src/xml/*.cpp \
