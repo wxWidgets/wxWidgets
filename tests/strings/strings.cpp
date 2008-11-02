@@ -834,13 +834,13 @@ void StringTestCase::ExplicitConversion()
 void StringTestCase::IndexedAccess()
 {
     wxString s("bar");
-    CPPUNIT_ASSERT_EQUAL( 'r', s[2] );
+    CPPUNIT_ASSERT_EQUAL( 'r', (char)s[2] );
 
     // this tests for a possible bug in UTF-8 based wxString implementation:
     // the 3rd character of the underlying byte string is going to change, but
     // the 3rd character of wxString should remain the same
     s[0] = L'\u00e9';
-    CPPUNIT_ASSERT_EQUAL( 'r', s[2] );
+    CPPUNIT_ASSERT_EQUAL( 'r', (char)s[2] );
 }
 
 void StringTestCase::BeforeAndAfter()
