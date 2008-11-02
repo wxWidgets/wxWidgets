@@ -29,7 +29,7 @@ enum
 };
 
 #define wxFC_DEFAULT_STYLE wxFC_OPEN
-extern WXDLLIMPEXP_DATA_CORE( const wxChar ) wxFileCtrlNameStr[]; // in filectrlcmn.cpp
+extern WXDLLIMPEXP_DATA_CORE(const char) wxFileCtrlNameStr[]; // in filectrlcmn.cpp
 
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_FILECTRL_SELECTIONCHANGED;
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_FILECTRL_FILEACTIVATED;

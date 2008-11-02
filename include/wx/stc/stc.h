@@ -1978,7 +1978,7 @@ class  WordList;
 struct SCNotification;
 
 #ifndef SWIG
-extern WXDLLIMPEXP_STC const wxChar* wxSTCNameStr;
+extern WXDLLIMPEXP_DATA_STC(const char) wxSTCNameStr[];
 class  WXDLLIMPEXP_FWD_STC wxStyledTextCtrl;
 class  WXDLLIMPEXP_FWD_STC wxStyledTextEvent;
 #endif
@@ -3703,7 +3703,7 @@ public:
         if ( to )
             *to = GetSelectionEnd();
     }
-    
+
     // kept for compatibility only
     void GetSelection(int *from, int *to)
     {
@@ -3715,7 +3715,7 @@ public:
             *to = t;
     }
 #endif
-    
+
     virtual bool IsEditable() const { return !GetReadOnly(); }
     virtual void SetEditable(bool editable) { SetReadOnly(!editable); }
 

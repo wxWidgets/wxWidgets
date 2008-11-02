@@ -24,7 +24,7 @@
 
 
 #ifndef SWIG
-extern WXDLLIMPEXP_PROPGRID const wxChar *wxPropertyGridNameStr;
+extern WXDLLIMPEXP_DATA_PROPGRID(const char) wxPropertyGridNameStr[];
 #endif
 
 
@@ -418,10 +418,10 @@ enum wxPG_KEYBOARD_ACTIONS
     wxPG_ACTION_EXPAND_PROPERTY,
     wxPG_ACTION_COLLAPSE_PROPERTY,
     wxPG_ACTION_CANCEL_EDIT,
-    wxPG_ACTION_PRESS_BUTTON,  // Causes editor button (if any) to be pressed 
+    wxPG_ACTION_PRESS_BUTTON,  // Causes editor button (if any) to be pressed
     wxPG_ACTION_MAX
 };
- 
+
 /** @}
 */
 
@@ -614,19 +614,21 @@ public:
 
     /** The default constructor. The styles to be used are styles valid for
         the wxWindow and wxScrolledWindow.
-        @see @link wndflags Additional Window Styles@endlink
+
+        @see @link wndflags Additional Window Styles @endlink
     */
     wxPropertyGrid( wxWindow *parent, wxWindowID id = wxID_ANY,
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long style = wxPG_DEFAULT_STYLE,
-                    const wxChar* name = wxPropertyGridNameStr );
+                    const wxString& name = wxPropertyGridNameStr );
 
     /** Destructor */
     virtual ~wxPropertyGrid();
 #endif
 
     /** Adds given key combination to trigger given action.
+
         @param action
             Which action to trigger. See @link pgactions List of list of
             wxPropertyGrid actions@endlink.
@@ -693,7 +695,7 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxPG_DEFAULT_STYLE,
-                 const wxChar* name = wxPropertyGridNameStr );
+                 const wxString& name = wxPropertyGridNameStr );
 
     /**
         Call when editor widget's contents is modified.

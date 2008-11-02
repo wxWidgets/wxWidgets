@@ -24,7 +24,7 @@
 class WXDLLIMPEXP_FWD_ADV wxAnimation;
 
 extern WXDLLIMPEXP_DATA_ADV(wxAnimation) wxNullAnimation;
-extern WXDLLIMPEXP_DATA_ADV(const wxChar) wxAnimationCtrlNameStr[];
+extern WXDLLIMPEXP_DATA_ADV(const char) wxAnimationCtrlNameStr[];
 
 
 // ----------------------------------------------------------------------------

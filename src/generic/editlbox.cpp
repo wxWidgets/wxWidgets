@@ -30,7 +30,7 @@
 // implementation
 // ============================================================================
 
-const wxChar wxEditableListBoxNameStr[] = wxT("editableListBox");
+const char wxEditableListBoxNameStr[] = "editableListBox";
 
 static const char * eledit_xpm[] = {
 "16 16 3 1",

@@ -42,7 +42,7 @@ class WXDLLIMPEXP_FWD_ADV wxDataViewColumn;
 class WXDLLIMPEXP_FWD_ADV wxDataViewRenderer;
 class WXDLLIMPEXP_FWD_ADV wxDataViewModelNotifier;
 
-extern WXDLLIMPEXP_DATA_ADV(const wxChar) wxDataViewCtrlNameStr[];
+extern WXDLLIMPEXP_DATA_ADV(const char) wxDataViewCtrlNameStr[];
 
 // the default width of new (text) columns:
 #define wxDVC_DEFAULT_WIDTH             80
@@ -707,7 +707,7 @@ public:
         { return m_expander_column; }
 
     virtual wxDataViewColumn *GetSortingColumn() const = 0;
-    
+
     void SetIndent( int indent )
         { m_indent = indent ; DoSetIndent(); }
     int GetIndent() const

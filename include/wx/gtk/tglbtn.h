@@ -26,7 +26,7 @@ class WXDLLIMPEXP_FWD_CORE wxToggleBitmapButton;
 // global data
 //-----------------------------------------------------------------------------
 
-extern WXDLLIMPEXP_CORE const char wxCheckBoxNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const char) wxCheckBoxNameStr[];
 
 //-----------------------------------------------------------------------------
 // wxBitmapToggleButton
@@ -78,7 +78,7 @@ public:
 protected:
     void GTKDisableEvents();
     void GTKEnableEvents();
-    
+
     virtual wxSize DoGetBestSize() const;
     virtual void DoApplyWidgetStyle(GtkRcStyle *style);
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
@@ -127,11 +127,11 @@ public:
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
- 
+
 protected:
     void GTKDisableEvents();
     void GTKEnableEvents();
-    
+
     virtual wxSize DoGetBestSize() const;
     virtual void DoApplyWidgetStyle(GtkRcStyle *style);
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;

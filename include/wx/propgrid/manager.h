@@ -27,7 +27,7 @@
 // -----------------------------------------------------------------------
 
 #ifndef SWIG
-extern WXDLLIMPEXP_PROPGRID const wxChar *wxPropertyGridManagerNameStr;
+extern WXDLLIMPEXP_DATA_PROPGRID(const char) wxPropertyGridManagerNameStr[];
 #endif
 
 /** @class wxPropertyGridPage
@@ -260,7 +260,7 @@ public:
                            const wxPoint& pos = wxDefaultPosition,
                            const wxSize& size = wxDefaultSize,
                            long style = wxPGMAN_DEFAULT_STYLE,
-                           const wxChar* name = wxPropertyGridManagerNameStr );
+                           const wxString& name = wxPropertyGridManagerNameStr );
 
     /** Destructor */
     virtual ~wxPropertyGridManager();
@@ -320,7 +320,7 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxPGMAN_DEFAULT_STYLE,
-                 const wxChar* name = wxPropertyGridManagerNameStr );
+                 const wxString& name = wxPropertyGridManagerNameStr );
 
     /**
         Enables or disables (shows/hides) categories according to parameter

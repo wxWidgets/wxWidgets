@@ -134,7 +134,7 @@ void wxPropertyGrid::AutoGetTranslation ( bool ) { }
 
 // -----------------------------------------------------------------------
 
-const wxChar *wxPropertyGridNameStr = wxT("wxPropertyGrid");
+const char wxPropertyGridNameStr[] = "wxPropertyGrid";
 
 // -----------------------------------------------------------------------
 // Statics in one class for easy destruction.
@@ -325,11 +325,11 @@ protected:
     }
 
     void OnPaint( wxPaintEvent& event );
-    
+
     // Always be focussable, even with child windows
     virtual void SetCanFocus(bool WXUNUSED(canFocus))
     {  wxPanel::SetCanFocus(true); }
-    
+
 
 private:
     DECLARE_EVENT_TABLE()
@@ -409,7 +409,7 @@ wxPropertyGrid::wxPropertyGrid( wxWindow *parent,
                                 const wxPoint& pos,
                                 const wxSize& size,
                                 long style,
-                                const wxChar* name )
+                                const wxString& name )
     : wxScrolledWindow()
 {
     Init1();
@@ -423,7 +423,7 @@ bool wxPropertyGrid::Create( wxWindow *parent,
                              const wxPoint& pos,
                              const wxSize& size,
                              long style,
-                             const wxChar* name )
+                             const wxString& name )
 {
 
     if ( !(style&wxBORDER_MASK) )
@@ -526,7 +526,7 @@ void wxPropertyGrid::Init2()
 #ifdef __WXMAC__
    // Smaller controls on Mac
    SetWindowVariant(wxWINDOW_VARIANT_SMALL);
-#endif 
+#endif
 
     // Now create state, if one didn't exist already
     // (wxPropertyGridManager might have created it for us).
@@ -2058,7 +2058,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
                 cellX += state->m_colWidths[ci];
                 if ( ci < (state->m_colWidths.size()-1) )
                     nextCellWidth = state->m_colWidths[ci+1];
-                cellRect.x = cellX; 
+                cellRect.x = cellX;
                 dc.DestroyClippingRegion(); // Is this really necessary?
                 textXAdd = 0;
             }
@@ -3095,7 +3095,7 @@ void wxPropertyGrid::OnCustomEditorEvent( wxEvent &event )
     else
     {
         // No value after all
-        
+
         // Regardless of editor type, unfocus editor on
         // text-editing related enter press.
         if ( event.GetEventType() == wxEVT_COMMAND_TEXT_ENTER )
@@ -3337,13 +3337,13 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
         wxPrintf( "Selected %s\n", m_selected->GetClassInfo()->GetClassName() );
     else
         wxPrintf( "None selected\n" );
-    
+
     if (p)
         wxPrintf( "P =  %s\n", p->GetClassInfo()->GetClassName() );
     else
         wxPrintf( "P = NULL\n" );
 */
-  
+
     // If we are frozen, then just set the values.
     if ( m_frozen )
     {
@@ -5502,7 +5502,7 @@ wxArrayInt wxPGChoices::GetValuesForStrings( const wxArrayString& strings ) cons
 
 // -----------------------------------------------------------------------
 
-wxArrayInt wxPGChoices::GetIndicesForStrings( const wxArrayString& strings, 
+wxArrayInt wxPGChoices::GetIndicesForStrings( const wxArrayString& strings,
                                               wxArrayString* unmatched ) const
 {
     wxArrayInt arr;

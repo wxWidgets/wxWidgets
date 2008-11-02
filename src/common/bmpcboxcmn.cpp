@@ -38,7 +38,7 @@
 #include "wx/odcombo.h"
 
 
-const wxChar wxBitmapComboBoxNameStr[] = wxT("bitmapComboBox");
+const char wxBitmapComboBoxNameStr[] = "bitmapComboBox";
 
 #if defined(wxBITMAPCOMBOBOX_OWNERDRAWN_BASED)
 
@@ -235,7 +235,7 @@ wxCoord wxBitmapComboBoxBase::MeasureItem(size_t WXUNUSED(item)) const
         int imgHeightArea = m_usedImgSize.y + 2;
         return imgHeightArea > m_fontHeight ? imgHeightArea : m_fontHeight;
     }
-    
+
     return wxBCB_DEFAULT_ITEM_HEIGHT;
 }
 

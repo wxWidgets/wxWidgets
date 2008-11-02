@@ -27,7 +27,7 @@ class WXDLLIMPEXP_FWD_CORE wxListEvent;
 #define wxEL_NO_REORDER         0x0800
 #define wxEL_DEFAULT_STYLE      (wxEL_ALLOW_NEW | wxEL_ALLOW_EDIT | wxEL_ALLOW_DELETE)
 
-extern WXDLLIMPEXP_DATA_ADV(const wxChar) wxEditableListBoxNameStr[];
+extern WXDLLIMPEXP_DATA_ADV(const char) wxEditableListBoxNameStr[];
 
 // This class provides a composite control that lets the
 // user easily enter list of strings

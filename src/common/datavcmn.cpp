@@ -30,7 +30,7 @@
     #include "wx/crt.h"
 #endif
 
-const wxChar wxDataViewCtrlNameStr[] = wxT("dataviewCtrl");
+const char wxDataViewCtrlNameStr[] = "dataviewCtrl";
 
 
 bool operator == (const wxDataViewItem &left, const wxDataViewItem &right)
@@ -721,7 +721,7 @@ bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect la
 void wxDataViewRendererBase::CancelEditing()
 {
     if (!m_editorCtrl) return;
-    
+
     GetOwner()->GetOwner()->GetMainWindow()->SetFocus();
 
     m_editorCtrl->Hide();
@@ -1220,7 +1220,7 @@ wxDataViewCtrlBase::PrependColumn( wxDataViewColumn *col )
     return true;
 }
 
-bool 
+bool
 wxDataViewCtrlBase::InsertColumn( unsigned int WXUNUSED(pos), wxDataViewColumn *col )
 {
     col->SetOwner( (wxDataViewCtrl*) this );

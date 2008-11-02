@@ -72,7 +72,7 @@
 // wxPropertyGridManager
 // -----------------------------------------------------------------------
 
-const wxChar *wxPropertyGridManagerNameStr = wxT("wxPropertyGridManager");
+const char wxPropertyGridManagerNameStr[] = "wxPropertyGridManager";
 
 
 // Categoric Mode Icon
@@ -259,7 +259,7 @@ wxPropertyGridManager::wxPropertyGridManager( wxWindow *parent,
                                               const wxPoint& pos,
                                               const wxSize& size,
                                               long style,
-                                              const wxChar* name )
+                                              const wxString& name )
     : wxPanel()
 {
     Init1();
@@ -273,7 +273,7 @@ bool wxPropertyGridManager::Create( wxWindow *parent,
                                     const wxPoint& pos,
                                     const wxSize& size,
                                     long style,
-                                    const wxChar* name )
+                                    const wxString& name )
 {
 
     bool res = wxPanel::Create( parent, id, pos, size,
@@ -371,7 +371,7 @@ void wxPropertyGridManager::Init2( int style )
 #ifdef __WXMAC__
    // Smaller controls on Mac
    SetWindowVariant(wxWINDOW_VARIANT_SMALL);
-#endif 
+#endif
 
     // Create propertygrid.
     m_pPropGrid->Create(this,baseId,wxPoint(0,0),csz,
@@ -512,7 +512,7 @@ void wxPropertyGridManager::SetWindowStyleFlag( long style )
                                    (style&wxPG_MAN_PASS_FLAGS_MASK) );
 
     // Need to re-position windows?
-    if ( (oldWindowStyle & (wxPG_TOOLBAR|wxPG_DESCRIPTION)) != 
+    if ( (oldWindowStyle & (wxPG_TOOLBAR|wxPG_DESCRIPTION)) !=
          (style & (wxPG_TOOLBAR|wxPG_DESCRIPTION)) )
     {
         RecreateControls();

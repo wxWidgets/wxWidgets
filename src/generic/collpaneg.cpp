@@ -39,7 +39,7 @@
 // implementation
 // ============================================================================
 
-const wxChar wxCollapsiblePaneNameStr[] = wxT("collapsiblePane");
+const char wxCollapsiblePaneNameStr[] = "collapsiblePane";
 
 //-----------------------------------------------------------------------------
 // wxGenericCollapsiblePane
@@ -86,7 +86,7 @@ bool wxGenericCollapsiblePane::Create(wxWindow *parent,
     // on Mac we use the disclosure triangle
     // we need a light gray line above and below, lets approximate with the frame
     m_pStaticLine = NULL;
-    m_pButton = new wxDisclosureTriangle( this, wxID_ANY, GetBtnLabel(), 
+    m_pButton = new wxDisclosureTriangle( this, wxID_ANY, GetBtnLabel(),
                                          wxDefaultPosition, wxDefaultSize, wxSIMPLE_BORDER );
     m_pButton->SetBackgroundColour( wxColour( 221, 226, 239 ) );
     m_sz = new wxBoxSizer(wxHORIZONTAL);
@@ -124,10 +124,10 @@ wxGenericCollapsiblePane::~wxGenericCollapsiblePane()
 {
     if (m_pButton)
         m_pButton->SetContainingSizer(NULL);
-    
+
     if (m_pStaticLine)
         m_pStaticLine->SetContainingSizer(NULL);
-    
+
     // our sizer is not deleted automatically since we didn't use SetSizer()!
     wxDELETE(m_sz);
 }

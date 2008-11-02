@@ -22,7 +22,7 @@
 // constants
 // ----------------------------------------------------------------------------
 
-extern WXDLLIMPEXP_DATA_ADV(const wxChar) wxGridNameStr[];
+extern WXDLLIMPEXP_DATA_ADV(const char) wxGridNameStr[];
 
 // Default parameters for wxGrid
 //
@@ -2326,8 +2326,8 @@ public:
         SetEventObject(obj);
     }
 
-    // explicitly specifying inline allows gcc < 3.4 to 
-    // handle the deprecation attribute even in the constructor. 
+    // explicitly specifying inline allows gcc < 3.4 to
+    // handle the deprecation attribute even in the constructor.
     wxDEPRECATED( inline
     wxGridEvent(int id,
                 wxEventType type,

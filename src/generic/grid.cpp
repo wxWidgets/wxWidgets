@@ -50,7 +50,7 @@
 
 #include "wx/generic/gridsel.h"
 
-const wxChar wxGridNameStr[] = wxT("grid");
+const char wxGridNameStr[] = "grid";
 
 #if defined(__WXMOTIF__)
     #define WXUNUSED_MOTIF(identifier)  WXUNUSED(identifier)

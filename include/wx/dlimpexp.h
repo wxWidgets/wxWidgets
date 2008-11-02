@@ -218,10 +218,13 @@
 
 #ifdef WXMAKINGDLL_PROPGRID
 #    define WXDLLIMPEXP_PROPGRID WXEXPORT
+#    define WXDLLIMPEXP_DATA_PROPGRID(type) WXEXPORT type
 #elif defined(WXUSINGDLL)
 #    define WXDLLIMPEXP_PROPGRID WXIMPORT
+#    define WXDLLIMPEXP_DATA_PROPGRID(type) WXIMPORT type
 #else /* not making nor using DLL */
 #    define WXDLLIMPEXP_PROPGRID
+#    define WXDLLIMPEXP_DATA_PROPGRID(type) type
 #endif
 
 #ifdef WXMAKINGDLL_RICHTEXT
@@ -241,11 +244,14 @@
 #endif
 
 #ifdef WXMAKINGDLL_STC
-    #define WXDLLIMPEXP_STC WXEXPORT
+#    define WXDLLIMPEXP_STC WXEXPORT
+#    define WXDLLIMPEXP_DATA_STC(type) WXEXPORT type
 #elif defined(WXUSINGDLL)
-    #define WXDLLIMPEXP_STC WXIMPORT
+#    define WXDLLIMPEXP_STC WXIMPORT
+#    define WXDLLIMPEXP_DATA_STC(type) WXIMPORT type
 #else /* not making nor using DLL */
-    #define WXDLLIMPEXP_STC
+#    define WXDLLIMPEXP_STC
+#    define WXDLLIMPEXP_DATA_STC(type) type
 #endif
 
 /*
