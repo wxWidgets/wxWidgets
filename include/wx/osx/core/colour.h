@@ -32,10 +32,10 @@ public:
     // accessors
     virtual bool IsOk() const { return m_cgColour; }
 
-    ChannelType Red() const { return m_red; }
-    ChannelType Green() const { return m_green; }
-    ChannelType Blue() const { return m_blue; }
-    ChannelType Alpha() const { return m_alpha; }
+    virtual WXDLLIMPEXP_INLINE_CORE ChannelType Red() const { return m_red; }
+    virtual WXDLLIMPEXP_INLINE_CORE ChannelType Green() const { return m_green; }
+    virtual WXDLLIMPEXP_INLINE_CORE ChannelType Blue() const { return m_blue; }
+    virtual WXDLLIMPEXP_INLINE_CORE ChannelType Alpha() const { return m_alpha; }
 
     // comparison
     bool operator == (const wxColour& colour) const;

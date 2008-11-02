@@ -132,12 +132,23 @@
 #ifdef WXMAKINGDLL_CORE
 #    define WXDLLIMPEXP_CORE WXEXPORT
 #    define WXDLLIMPEXP_DATA_CORE(type) WXEXPORT type
+#    if defined(HAVE_VISIBILITY)
+#        define WXDLLIMPEXP_INLINE_CORE WXEXPORT
+#    else
+#        define WXDLLIMPEXP_INLINE_CORE
+#    endif
 #elif defined(WXUSINGDLL)
 #    define WXDLLIMPEXP_CORE WXIMPORT
 #    define WXDLLIMPEXP_DATA_CORE(type) WXIMPORT type
+#    if defined(HAVE_VISIBILITY)
+#        define WXDLLIMPEXP_INLINE_CORE WXIMPORT
+#    else
+#        define WXDLLIMPEXP_INLINE_CORE
+#    endif
 #else /* not making nor using DLL */
 #    define WXDLLIMPEXP_CORE
 #    define WXDLLIMPEXP_DATA_CORE(type) type
+#    define WXDLLIMPEXP_INLINE_CORE
 #endif
 
 #ifdef WXMAKINGDLL_ADV
