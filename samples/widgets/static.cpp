@@ -499,7 +499,7 @@ void StaticWidgetsPage::OnButtonReset(wxCommandEvent& WXUNUSED(event))
 
 void StaticWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& event)
 {
-    if (event.GetEventObject() == wx_static_cast(wxObject*, m_chkEllipsize))
+    if (event.GetEventObject() == static_cast<wxObject*>(m_chkEllipsize))
     {
         m_radioEllipsize->Enable(event.IsChecked());
     }

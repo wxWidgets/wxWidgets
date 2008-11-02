@@ -1315,7 +1315,7 @@ void MyPanel::OnListBoxButtons( wxCommandEvent &event )
 
 static wxString GetDataString(wxClientData *data)
 {
-    return data ? wx_static_cast(wxStringClientData *, data)->GetData()
+    return data ? static_cast<wxStringClientData *>(data)->GetData()
                 : wxString("none");
 }
 

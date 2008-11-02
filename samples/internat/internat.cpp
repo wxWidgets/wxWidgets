@@ -194,7 +194,7 @@ bool MyApp::OnCmdLineParsed(wxCmdLineParser& parser)
             return false;
         }
 
-        m_lang = wx_static_cast(wxLanguage, lang->Language);
+        m_lang = static_cast<wxLanguage>(lang->Language);
     }
 
     return true;

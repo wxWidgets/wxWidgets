@@ -604,7 +604,7 @@ void MyFrame::OnHitTest(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnType(wxCommandEvent& event)
 {
-    m_type = wx_static_cast(BookType, event.GetId() - ID_BOOK_NOTEBOOK);
+    m_type = static_cast<BookType>(event.GetId() - ID_BOOK_NOTEBOOK);
 
     if ( m_bookCtrl )
         m_sizerFrame->Hide(m_bookCtrl);
@@ -919,7 +919,7 @@ void MyFrame::OnBookCtrl(wxBookCtrlBaseEvent& event)
             // NB: can't use wxStaticCast here as wxBookCtrlBase is not in
             //     wxRTTI
             const wxBookCtrlBase * const
-                book = wx_static_cast(wxBookCtrlBase *, event.GetEventObject());
+                book = static_cast<wxBookCtrlBase *>(event.GetEventObject());
             if ( idx != wxNOT_FOUND &&
                     book && book->GetPageText(idx) == VETO_PAGE_NAME )
             {

@@ -228,7 +228,7 @@ int CTheApp::ExitInstance()
 BOOL CTheApp::PreTranslateMessage(MSG *msg)
 {
     wxEventLoop * const
-        evtLoop = wx_static_cast(wxEventLoop *, wxEventLoop::GetActive());
+        evtLoop = static_cast<wxEventLoop *>(wxEventLoop::GetActive());
     if ( evtLoop && evtLoop->PreProcessMessage(msg) )
         return TRUE;
 
