@@ -680,17 +680,21 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
     const wxString topic = connection->m_topic;
     wxString item;
 
+    bool error = false;
+
     const int msg = streams->Read8();
     switch ( msg )
     {
         case IPC_EXECUTE:
             {
                 wxIPCFormat format;
-                size_t size;
+                size_t size wxDUMMY_INITIALIZE(0);
                 void * const
                     data = streams->ReadFormatData(connection, &format, &size);
-
-                connection->OnExecute(topic, data, size, format);
+                if ( data )
+                    connection->OnExecute(topic, data, size, format);
+                else
+                    error = true;
             }
             break;
 
@@ -699,11 +703,14 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
                 item = streams->ReadString();
 
                 wxIPCFormat format;
-                size_t size;
+                size_t size wxDUMMY_INITIALIZE(0);
                 void * const
                     data = streams->ReadFormatData(connection, &format, &size);
 
-                connection->OnAdvise(topic, item, data, size, format);
+                if ( data )
+                    connection->OnAdvise(topic, item, data, size, format);
+                else
+                    error = true;
             }
             break;
 
@@ -732,10 +739,13 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
                 item = streams->ReadString();
                 wxIPCFormat format = (wxIPCFormat)streams->Read8();
 
-                size_t size;
+                size_t size wxDUMMY_INITIALIZE(0);
                 void * const data = streams->ReadData(connection, &size);
 
-                connection->OnPoke(topic, item, data, size, format);
+                if ( data )
+                    connection->OnPoke(topic, item, data, size, format);
+                else
+                    error = true;
             }
             break;
 
@@ -789,9 +799,12 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
 
         default:
             wxLogDebug("Unknown message code %d received.", msg);
-            IPCOutput(streams).Write8(IPC_FAIL);
+            error = true;
             break;
     }
+
+    if ( error )
+        IPCOutput(streams).Write8(IPC_FAIL);
 }
 
 void wxTCPEventHandler::Server_OnRequest(wxSocketEvent &event)
