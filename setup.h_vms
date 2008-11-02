@@ -637,29 +637,9 @@ typedef pid_t GPid;
 /* --- end MSW options --- */
 
 /*
- * Supports bool type
- */
-#define HAVE_BOOL
-
-/*
  * Define if your compiler supports the explicit keyword
  */
 #define HAVE_EXPLICIT 1
-
-/*
- * Define if your compiler supports const_cast<>()
- */
-#define HAVE_CONST_CAST 1
-
-/*
- * Define if your compiler supports reinterpret_cast<>()
- */
-#define HAVE_REINTERPRET_CAST 1
-
-/*
- * Define if your compiler supports const_cast<>()
- */
-#define HAVE_STATIC_CAST 1
 
 /*
  * Define if your compiler has C99 va_copy
