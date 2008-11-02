@@ -50,6 +50,18 @@
     #define wxStringStrlen   wxStrlen
 #endif
 
+// ----------------------------------------------------------------------------
+// global variables
+// ----------------------------------------------------------------------------
+
+namespace wxPrivate
+{
+
+static UntypedBufferData s_untypedNullData(NULL);
+
+UntypedBufferData * const untypedNullDataPtr = &s_untypedNullData;
+
+} // namespace wxPrivate
 
 // ---------------------------------------------------------------------------
 // static class variables definition
@@ -2096,3 +2108,4 @@ int wxString::Freq(wxUniChar ch) const
     }
     return count;
 }
+

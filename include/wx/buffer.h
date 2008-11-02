@@ -26,6 +26,44 @@ class WXDLLIMPEXP_FWD_BASE wxCStrData;
 // of new/delete
 // ----------------------------------------------------------------------------
 
+// helpers used by wxCharTypeBuffer
+namespace wxPrivate
+{
+
+struct UntypedBufferData
+{
+    enum Kind
+    {
+        Owned,
+        NonOwned
+    };
+
+    UntypedBufferData(void *str, Kind kind = Owned)
+        : m_str(str), m_ref(1), m_owned(kind == Owned) {}
+
+    ~UntypedBufferData()
+    {
+        if ( m_owned )
+            free(m_str);
+    }
+
+    void *m_str;
+
+    // "short" to have sizeof(Data)=8 on 32bit archs
+    unsigned short m_ref;
+
+    bool m_owned;
+};
+
+// this has to be defined inside the DLL (and not e.g. as a static variable
+// inside an inline function) as otherwise MSVC gives link errors when the
+// functions are effectively inlined (i.e. in non-debug build)
+//
+// NB: this is defined in string.cpp and not the (non-existent) buffer.cpp
+extern WXDLLIMPEXP_DATA_BASE(UntypedBufferData * const) untypedNullDataPtr;
+
+} // namespace wxPrivate
+
 template <typename T>
 class wxCharTypeBuffer
 {
@@ -43,7 +81,7 @@ public:
     wxCharTypeBuffer(size_t len)
     {
         m_data = new Data((CharType *)malloc((len + 1)*sizeof(CharType)));
-        m_data->m_str[len] = (CharType)0;
+        m_data->Get()[len] = (CharType)0;
     }
 
     static const wxCharTypeBuffer CreateNonOwned(const CharType *str)
@@ -70,10 +108,10 @@ public:
         wxASSERT_MSG( m_data->m_owned, _T("can't release non-owned buffer") );
         wxASSERT_MSG( m_data->m_ref == 1, _T("can't release shared buffer") );
 
-        CharType *p = m_data->m_str;
+        CharType * const p = m_data->Get();
 
         wxCharTypeBuffer *self = wx_const_cast(wxCharTypeBuffer*, this);
-        self->m_data->m_str = NULL;
+        self->m_data->Set(NULL);
         self->DecRef();
 
         return p;
@@ -127,51 +165,35 @@ public:
         }
         else
         {
-            m_data->m_str = str;
+            m_data->Set(str);
             m_data->m_owned = true;
         }
 
         return true;
     }
 
-    CharType *data() { return m_data->m_str; }
-    const CharType *data() const { return  m_data->m_str; }
+    CharType *data() { return m_data->Get(); }
+    const CharType *data() const { return  m_data->Get(); }
     operator const CharType *() const { return data(); }
     CharType operator[](size_t n) const { return data()[n]; }
 
 private:
     // reference-counted data
-    struct Data
+    struct Data : wxPrivate::UntypedBufferData
     {
-        enum Kind
-        {
-            Owned,
-            NonOwned
-        };
-
         Data(CharType *str, Kind kind = Owned)
-            : m_str(str), m_ref(1), m_owned(kind == Owned) {}
-
-        ~Data()
+            : UntypedBufferData(str, kind)
         {
-            if ( m_owned )
-                free(m_str);
         }
 
-        CharType *m_str;
-
-        // "short" to have sizeof(Data)=8 on 32bit archs
-        unsigned short m_ref;
-
-        bool m_owned;
+        CharType *Get() const { return static_cast<CharType *>(m_str); }
+        void Set(CharType *str) { m_str = str; }
     };
 
     // placeholder for NULL string, to simplify this code
     static Data *GetNullData()
     {
-        static Data s_nullData(NULL);
-
-        return &s_nullData;
+        return static_cast<Data *>(wxPrivate::untypedNullDataPtr);
     }
 
     void IncRef()
