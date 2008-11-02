@@ -194,72 +194,6 @@
 /*  check for native bool type and TRUE/FALSE constants */
 /*  ---------------------------------------------------------------------------- */
 
-/*  Add more tests here for Windows compilers that already define bool */
-/*  (under Unix, configure tests for this) */
-#ifndef HAVE_BOOL
-    #if defined( __MWERKS__ )
-        #if (__MWERKS__ >= 0x1000) && __option(bool)
-            #define HAVE_BOOL
-        #endif
-    #elif defined(__APPLE__) && defined(__APPLE_CC__)
-        /*  Apple bundled gcc supports bool */
-        #define HAVE_BOOL
-    #elif defined(__VISUALC__) && (__VISUALC__ == 1020)
-        /*  in VC++ 4.2 the bool keyword is reserved (hence can't be typedefed) */
-        /*  but not implemented, so we must #define it */
-        #define bool unsigned int
-    #elif defined(__VISUALC__) && (__VISUALC__ == 1010)
-        /*  For VisualC++ 4.1, we need to define */
-        /*  bool as something between 4.0 & 5.0... */
-        typedef unsigned int wxbool;
-        #define bool wxbool
-        #define HAVE_BOOL
-    #elif defined(__VISUALC__) && (__VISUALC__ > 1020)
-        /*  VC++ supports bool since 4.2 */
-        #define HAVE_BOOL
-    #elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x500)
-        /*  Borland 5.0+ supports bool */
-        #define HAVE_BOOL
-    #elif wxCHECK_WATCOM_VERSION(1,0)
-        /*  Watcom 11+ supports bool */
-        #define HAVE_BOOL
-    #elif defined(__DIGITALMARS__)
-        /*  DigitalMars supports bool */
-        #define HAVE_BOOL
-    #elif defined(__GNUWIN32__) || defined(__MINGW32__) || defined(__CYGWIN__)
-        /*  Cygwin supports bool */
-        #define HAVE_BOOL
-    #elif defined(__VISAGECPP__)
-        #if __IBMCPP__ < 400
-            typedef unsigned long bool;
-            #define true ((bool)1)
-            #define false ((bool)0)
-        #endif
-        #define HAVE_BOOL
-    #elif defined(__WXPALMOS__)
-        /*  Palm OS supports bool */
-        #define HAVE_BOOL
-    #endif /*  compilers */
-#endif /*  HAVE_BOOL */
-
-#if !defined(__MWERKS__) || !defined(true)
-#if !defined(HAVE_BOOL) && !defined(bool) && !defined(VMS)
-    /*  NB: of course, this doesn't replace the standard type, because, for */
-    /*      example, overloading based on bool/int parameter doesn't work and */
-    /*      so should be avoided in portable programs */
-    typedef unsigned int bool;
-#endif /*  bool */
-
-/*  deal with TRUE/true stuff: we assume that if the compiler supports bool, it */
-/*  supports true/false as well and that, OTOH, if it does _not_ support bool, */
-/*  it doesn't support these keywords (this is less sure, in particular VC++ */
-/*  4.x could be a problem here) */
-#ifndef HAVE_BOOL
-    #define true ((bool)1)
-    #define false ((bool)0)
-#endif
-#endif
-
 /*  for backwards compatibility, also define TRUE and FALSE */
 /*  */
 /*  note that these definitions should work both in C++ and C code, so don't */
@@ -315,51 +249,10 @@ typedef short int WXTYPE;
     #define wxEXPLICIT
 #endif /*  HAVE_EXPLICIT/!HAVE_EXPLICIT */
 
-/* check for static/const_cast<>() (we don't use the other ones for now) */
-#ifndef HAVE_CXX_CASTS
-    #if defined(__VISUALC__) && (__VISUALC__ >= 1100)
-        /*  VC++ 6.0 and 5.0 have C++ casts (what about earlier versions?) */
-        #define HAVE_CXX_CASTS
-    #elif defined(__MINGW32__) || defined(__CYGWIN32__)
-        #if wxCHECK_GCC_VERSION(2, 95)
-            /*  GCC 2.95 has C++ casts, what about earlier versions? */
-            #define HAVE_CXX_CASTS
-        #endif
-    #endif
-#endif /*  !HAVE_CXX_CASTS */
-
-#ifdef HAVE_CXX_CASTS
-    #ifndef HAVE_CONST_CAST
-        #define HAVE_CONST_CAST
-    #endif
-    #ifndef HAVE_REINTERPRET_CAST
-        #define HAVE_REINTERPRET_CAST
-    #endif
-    #ifndef HAVE_STATIC_CAST
-        #define HAVE_STATIC_CAST
-    #endif
-    #ifndef HAVE_DYNAMIC_CAST
-        #define HAVE_DYNAMIC_CAST
-    #endif
-#endif /*  HAVE_CXX_CASTS */
-
-#ifdef HAVE_STATIC_CAST
-    #define wx_static_cast(t, x) static_cast<t>(x)
-#else
-    #define wx_static_cast(t, x) ((t)(x))
-#endif
-
-#ifdef HAVE_CONST_CAST
-    #define wx_const_cast(t, x) const_cast<t>(x)
-#else
-    #define wx_const_cast(t, x) ((t)(x))
-#endif
-
-#ifdef HAVE_REINTERPRET_CAST
-    #define wx_reinterpret_cast(t, x) reinterpret_cast<t>(x)
-#else
-    #define wx_reinterpret_cast(t, x) ((t)(x))
-#endif
+/* these macros are obsolete, use the standard C++ casts directly now */
+#define wx_static_cast(t, x) static_cast<t>(x)
+#define wx_const_cast(t, x) const_cast<t>(x)
+#define wx_reinterpret_cast(t, x) reinterpret_cast<t>(x)
 
 /*
    This one is a wx invention: like static cast but used when we intentionally

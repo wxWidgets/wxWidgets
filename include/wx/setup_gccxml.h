@@ -610,11 +610,6 @@
 /* --- end MSW options --- */
 
 /*
- * Supports bool type
- */
-#define HAVE_BOOL 1
-
-/*
  * Define if your compiler supports the explicit keyword
  */
 #define HAVE_EXPLICIT 1

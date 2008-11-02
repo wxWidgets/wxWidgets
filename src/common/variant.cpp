@@ -517,8 +517,6 @@ double wxVariant::GetDouble() const
 // wxVariantBoolData
 // -----------------------------------------------------------------
 
-#ifdef HAVE_BOOL
-
 class WXDLLIMPEXP_BASE wxVariantDataBool: public wxVariantData
 {
 public:
@@ -653,8 +651,6 @@ bool wxVariant::GetBool() const
         return 0;
     }
 }
-
-#endif // HAVE_BOOL
 
 // -----------------------------------------------------------------
 // wxVariantDataChar
@@ -1728,10 +1724,8 @@ bool wxVariant::Convert(long* value) const
         *value = (long) (((wxVariantDoubleData*)GetData())->GetValue());
     else if (type == wxT("long"))
         *value = ((wxVariantDataLong*)GetData())->GetValue();
-#ifdef HAVE_BOOL
     else if (type == wxT("bool"))
         *value = (long) (((wxVariantDataBool*)GetData())->GetValue());
-#endif
     else if (type == wxT("string"))
         *value = wxAtol(((wxVariantDataString*)GetData())->GetValue());
     else
@@ -1747,10 +1741,8 @@ bool wxVariant::Convert(bool* value) const
         *value = ((int) (((wxVariantDoubleData*)GetData())->GetValue()) != 0);
     else if (type == wxT("long"))
         *value = (((wxVariantDataLong*)GetData())->GetValue() != 0);
-#ifdef HAVE_BOOL
     else if (type == wxT("bool"))
         *value = ((wxVariantDataBool*)GetData())->GetValue();
-#endif
     else if (type == wxT("string"))
     {
         wxString val(((wxVariantDataString*)GetData())->GetValue());
@@ -1775,10 +1767,8 @@ bool wxVariant::Convert(double* value) const
         *value = ((wxVariantDoubleData*)GetData())->GetValue();
     else if (type == wxT("long"))
         *value = (double) (((wxVariantDataLong*)GetData())->GetValue());
-#ifdef HAVE_BOOL
     else if (type == wxT("bool"))
         *value = (double) (((wxVariantDataBool*)GetData())->GetValue());
-#endif
     else if (type == wxT("string"))
         *value = (double) wxAtof(((wxVariantDataString*)GetData())->GetValue());
     else
@@ -1794,10 +1784,8 @@ bool wxVariant::Convert(wxUniChar* value) const
         *value = ((wxVariantDataChar*)GetData())->GetValue();
     else if (type == wxT("long"))
         *value = (char) (((wxVariantDataLong*)GetData())->GetValue());
-#ifdef HAVE_BOOL
     else if (type == wxT("bool"))
         *value = (char) (((wxVariantDataBool*)GetData())->GetValue());
-#endif
     else
         return false;
 

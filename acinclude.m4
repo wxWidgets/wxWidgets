@@ -144,43 +144,6 @@ AC_DEFUN([WX_CPP_NEW_HEADERS],
 ])
 
 dnl ---------------------------------------------------------------------------
-dnl WX_CPP_BOOL checks whether the C++ compiler has a built in bool type
-dnl
-dnl call WX_CPP_BOOL - will define HAVE_BOOL if the compiler supports bool
-dnl ---------------------------------------------------------------------------
-
-AC_DEFUN([WX_CPP_BOOL],
-[
-  AC_CACHE_CHECK([if C++ compiler supports bool], wx_cv_cpp_bool,
-  [
-    AC_LANG_SAVE
-    AC_LANG_CPLUSPLUS
-
-    AC_TRY_COMPILE(
-      [
-      ],
-      [
-        bool b = true;
-
-        return 0;
-      ],
-      [
-        wx_cv_cpp_bool=yes
-      ],
-      [
-        wx_cv_cpp_bool=no
-      ]
-    )
-
-    AC_LANG_RESTORE
-  ])
-
-  if test "$wx_cv_cpp_bool" = "yes"; then
-    AC_DEFINE(HAVE_BOOL)
-  fi
-])
-
-dnl ---------------------------------------------------------------------------
 dnl WX_CPP_EXPLICIT checks whether the C++ compiler support the explicit
 dnl keyword and defines HAVE_EXPLICIT if this is the case
 dnl ---------------------------------------------------------------------------
@@ -741,82 +704,6 @@ if test "$enable_largefile" != no; then
         AC_DEFINE(HAVE_LARGEFILE_SUPPORT)
     fi
     AC_MSG_RESULT($wx_largefile)
-fi
-])
-
-
-dnl Available from the GNU Autoconf Macro Archive at:
-dnl http://www.gnu.org/software/ac-archive/htmldoc/ac_cxx_const_cast.html
-dnl
-AC_DEFUN([AC_CXX_CONST_CAST],
-[AC_CACHE_CHECK(whether the compiler supports const_cast<>,
-ac_cv_cxx_const_cast,
-[AC_LANG_SAVE
- AC_LANG_CPLUSPLUS
- AC_TRY_COMPILE(,[int x = 0;const int& y = x;int& z = const_cast<int&>(y);return z;],
- ac_cv_cxx_const_cast=yes, ac_cv_cxx_const_cast=no)
- AC_LANG_RESTORE
-])
-if test "$ac_cv_cxx_const_cast" = yes; then
-  AC_DEFINE(HAVE_CONST_CAST,,[define if the compiler supports const_cast<>])
-fi
-])
-
-dnl http://www.gnu.org/software/ac-archive/htmldoc/ac_cxx_reinterpret_cast.html
-AC_DEFUN([AC_CXX_REINTERPRET_CAST],
-[AC_CACHE_CHECK(whether the compiler supports reinterpret_cast<>,
-ac_cv_cxx_reinterpret_cast,
-[AC_LANG_SAVE
- AC_LANG_CPLUSPLUS
- AC_TRY_COMPILE([#include <typeinfo>
-class Base { public : Base () {} virtual void f () = 0;};
-class Derived : public Base { public : Derived () {} virtual void f () {} };
-class Unrelated { public : Unrelated () {} };
-int g (Unrelated&) { return 0; }],[
-Derived d;Base& b=d;Unrelated& e=reinterpret_cast<Unrelated&>(b);return g(e);],
- ac_cv_cxx_reinterpret_cast=yes, ac_cv_cxx_reinterpret_cast=no)
- AC_LANG_RESTORE
-])
-if test "$ac_cv_cxx_reinterpret_cast" = yes; then
-  AC_DEFINE(HAVE_REINTERPRET_CAST,,
-            [define if the compiler supports reinterpret_cast<>])
-fi
-])
-
-dnl and http://www.gnu.org/software/ac-archive/htmldoc/ac_cxx_static_cast.html
-AC_DEFUN([AC_CXX_STATIC_CAST],
-[AC_CACHE_CHECK(whether the compiler supports static_cast<>,
-ac_cv_cxx_static_cast,
-[AC_LANG_SAVE
- AC_LANG_CPLUSPLUS
- AC_TRY_COMPILE([#include <typeinfo>
-class Base { public : Base () {} virtual void f () = 0; };
-class Derived : public Base { public : Derived () {} virtual void f () {} };
-int g (Derived&) { return 0; }],[
-Derived d; Base& b = d; Derived& s = static_cast<Derived&> (b); return g (s);],
- ac_cv_cxx_static_cast=yes, ac_cv_cxx_static_cast=no)
- AC_LANG_RESTORE
-])
-if test "$ac_cv_cxx_static_cast" = yes; then
-  AC_DEFINE(HAVE_STATIC_CAST,, [define if the compiler supports static_cast<>])
-fi
-])
-
-dnl http://autoconf-archive.cryp.to/ac_cxx_dynamic_cast.html
-AC_DEFUN([AC_CXX_DYNAMIC_CAST],
-[AC_CACHE_CHECK(whether the compiler supports dynamic_cast<>,
-ac_cv_cxx_dynamic_cast,
-[AC_LANG_SAVE
- AC_LANG_CPLUSPLUS
- AC_TRY_COMPILE([#include <typeinfo>
-class Base { public : Base () {} virtual void f () = 0;};
-class Derived : public Base { public : Derived () {} virtual void f () {} };],[
-Derived d; Base& b=d; return dynamic_cast<Derived*>(&b) ? 0 : 1;],
- ac_cv_cxx_dynamic_cast=yes, ac_cv_cxx_dynamic_cast=no)
- AC_LANG_RESTORE
-])
-if test "$ac_cv_cxx_dynamic_cast" = yes; then
-  AC_DEFINE(HAVE_DYNAMIC_CAST,,[define if the compiler supports dynamic_cast<>])
 fi
 ])
 

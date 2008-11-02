@@ -23,11 +23,7 @@
 #define wx_USE_NANOX 0
 #define TARGET_CARBON 1
 
-#define HAVE_BOOL 1
 #define HAVE_EXPLICIT 1
-#define HAVE_CONST_CAST 
-#define HAVE_REINTERPRET_CAST 
-#define HAVE_STATIC_CAST 
 #define HAVE_VA_COPY 1
 #define HAVE_VARIADIC_MACROS 1
 #define HAVE_VISIBILITY 1

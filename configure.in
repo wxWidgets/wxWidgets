@@ -1742,18 +1742,8 @@ WX_C_BIGENDIAN
 dnl check for iostream (as opposed to iostream.h) standard header
 WX_CPP_NEW_HEADERS(, AC_DEFINE(wxUSE_IOSTREAMH))
 
-dnl check whether C++ compiler supports bool built-in type
-WX_CPP_BOOL
-
 dnl check whether C++ compiler supports explicit keyword
 WX_CPP_EXPLICIT
-
-dnl check whether C++ compiler supports C++ casts
-AC_CXX_CONST_CAST
-AC_CXX_REINTERPRET_CAST
-AC_CXX_STATIC_CAST
-dnl we don't use HAVE_DYNAMIC_CAST anywhere right now...
-dnl AC_CXX_DYNAMIC_CAST
 
 dnl With Sun CC, temporaries have block scope by default. This flag is needed
 dnl to get the expression scope behaviour that conforms to the standard.

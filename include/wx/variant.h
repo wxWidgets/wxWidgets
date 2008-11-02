@@ -186,14 +186,12 @@ public:
     long GetLong() const;
 
     // bool
-#ifdef HAVE_BOOL
     wxVariant(bool val, const wxString& name = wxEmptyString);
     bool operator== (bool value) const;
     bool operator!= (bool value) const;
     void operator= (bool value) ;
     inline operator bool () const {  return GetBool(); }
     bool GetBool() const ;
-#endif
 
     // wxDateTime
 #if wxUSE_DATETIME
