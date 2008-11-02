@@ -122,7 +122,7 @@ assertEquals(int expected,
              CppUnit::SourceLine sourceLine,
              const std::string& message)
 {
-    assertEquals(unsigned long(expected), actual, sourceLine, message);
+    assertEquals((unsigned long)expected, actual, sourceLine, message);
 }
 
 // we also need this one to resolve ambiguity in the tests comparing unsigned
@@ -134,7 +134,7 @@ assertEquals(int expected,
              CppUnit::SourceLine sourceLine,
              const std::string& message)
 {
-    assertEquals(unsigned short(expected), actual, sourceLine, message);
+    assertEquals((unsigned short)expected, actual, sourceLine, message);
 }
 
 CPPUNIT_NS_END
