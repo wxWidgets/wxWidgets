@@ -137,6 +137,16 @@ assertEquals(int expected,
     assertEquals((unsigned short)expected, actual, sourceLine, message);
 }
 
+// this one is useful for wxTextCtrl functions which return longs
+inline void
+assertEquals(int expected,
+             long actual,
+             CppUnit::SourceLine sourceLine,
+             const std::string& message)
+{
+    assertEquals((long)expected, actual, sourceLine, message);
+}
+
 CPPUNIT_NS_END
 
 // Use this macro to compare a wxArrayString with the pipe-separated elements
