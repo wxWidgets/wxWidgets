@@ -80,7 +80,7 @@ bool MyApp::OnInit(void)
 
     wxInitAllImageHandlers();
 
-    m_testFont.Create(10, wxSWISS, wxNORMAL, wxNORMAL);
+    m_testFont.Create(10, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
 
     g_printData = new wxPrintData;
     // You could set an initial paper size here
