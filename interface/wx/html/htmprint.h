@@ -36,12 +36,16 @@ public:
         Renders HTML text to the DC.
 
         @param x,y
-            position of upper-left corner of printing rectangle (see SetSize())
+            position of upper-left corner of printing rectangle (see SetSize()).
+        @param known_pagebreaks
+            @todo docme
         @param from
-            y-coordinate of the very first visible cell
+            y-coordinate of the very first visible cell.
         @param dont_render
             if @true then this method only returns y coordinate of the next page
-            and does not output anything
+            and does not output anything.
+        @param to
+            y-coordinate of the last visible cell.
 
         Returned value is y coordinate of first cell than didn't fit onto page.
         Use this value as from in next call to Render() in order to print multipages document.

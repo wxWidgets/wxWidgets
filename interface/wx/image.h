@@ -119,6 +119,9 @@ public:
             The image object which is to be affected by this operation.
         @param stream
             Opened output stream for writing the data.
+        @param verbose
+            If set to @true, errors reported by the image handler will produce
+            wxLogMessages.
 
         @return @true if the operation succeeded, @false otherwise.
 

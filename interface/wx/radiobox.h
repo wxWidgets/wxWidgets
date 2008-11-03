@@ -186,15 +186,16 @@ public:
     */
     virtual bool Enable(unsigned int n, bool enable = true);
 
-
     /**
-        Finds a button matching the given string, returning the position if found, or
-        -1 if not found.
+        Finds a button matching the given string, returning the position if found,
+        or @c wxNOT_FOUND if not found.
 
         @param string
             The string to find.
+        @param bCase
+            Should the search be case-sensitive?
     */
-    virtual int FindString(const wxString& s, bool bCase = false) const;
+    virtual int FindString(const wxString& string, bool bCase = false) const;
 
     /**
         Returns the number of columns in the radiobox.

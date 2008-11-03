@@ -26,9 +26,9 @@ public:
     /**
         Creates the log frame window and starts collecting the messages in it.
 
-        @param parent
+        @param pParent
             The parent window for the log frame, may be @NULL
-        @param title
+        @param szTitle
             The title for the log frame
         @param show
             @true to show the frame initially (default), otherwise

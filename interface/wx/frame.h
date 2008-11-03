@@ -386,7 +386,7 @@ public:
         @param n
             The number of fields in the status bar. It must be the
             same used in CreateStatusBar.
-        @param widths
+        @param widths_field
             Must contain an array of n integers, each of which is a status field width
             in pixels. A value of -1 indicates that the field is variable width; at
             least one field must be -1. You should delete this array after calling

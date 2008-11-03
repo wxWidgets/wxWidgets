@@ -401,7 +401,7 @@ public:
 
         This method replaces the previously set alignment with the specified one.
 
-        @param align
+        @param alignment
             Combination of @c wxALIGN_XXX bit masks.
 
         @see Top(), Left(), Right(), Bottom(), Centre()

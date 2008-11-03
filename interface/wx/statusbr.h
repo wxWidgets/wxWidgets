@@ -180,7 +180,7 @@ public:
         @param n
             The number of fields in the status bar. Must be equal to the
             number passed to SetFieldsCount() the last time it was called.
-        @param widths
+        @param widths_field
             Contains an array of n integers, each of which is either an
             absolute status field width in pixels if positive or indicates a
             variable width field if negative.

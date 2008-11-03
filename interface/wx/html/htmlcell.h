@@ -6,61 +6,67 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/**
-    @class wxHtmlColourCell
-
-    This cell changes the colour of either the background or the foreground.
-
-    @library{wxhtml}
-    @category{html}
-*/
-class wxHtmlColourCell : public wxHtmlCell
-{
-public:
-    /**
-        Constructor.
-
-        @param clr
-            The color
-        @param flags
-            Can be one of following:
-            - wxHTML_CLR_FOREGROUND: change color of text
-            - wxHTML_CLR_BACKGROUND: change background color
-    */
-    wxHtmlColourCell(const wxColour& clr, int flags = wxHTML_CLR_FOREGROUND);
-};
-
 
 
 /**
-    @class wxHtmlWidgetCell
+    @class wxHtmlRenderingStyle
 
-    wxHtmlWidgetCell is a class that provides a connection between HTML cells and
-    widgets (an object derived from wxWindow).
-    You can use it to display things like forms, input boxes etc. in an HTML window.
-
-    wxHtmlWidgetCell takes care of resizing and moving window.
+    Allows HTML rendering customizations.
+    This class is used when rendering wxHtmlCells as a callback.
 
     @library{wxhtml}
     @category{html}
+
+    @see wxHtmlRenderingInfo
 */
-class wxHtmlWidgetCell : public wxHtmlCell
+class wxHtmlRenderingStyle
 {
 public:
     /**
-        Constructor.
-
-        @param wnd
-            Connected window. It is parent window @b must be the wxHtmlWindow object
-            within which it is displayed!
-        @param w
-            Floating width. If non-zero width of wnd window is adjusted so that it is
-            always w percents of parent container's width. (For example w = 100 means
-            that the window will always have same width as parent container).
+        Returns the colour to use for the selected text.
     */
-    wxHtmlWidgetCell(wxWindow* wnd, int w = 0);
+    virtual wxColour GetSelectedTextColour(const wxColour& clr) = 0;
+
+    /**
+        Returns the colour to use for the selected text's background.
+    */
+    virtual wxColour GetSelectedTextBgColour(const wxColour& clr) = 0;
 };
 
+
+/**
+    @class wxHtmlRenderingInfo
+
+    This class contains information given to cells when drawing them.
+    Contains rendering state, selection information and rendering style object
+    that can be used to customize the output.
+
+    @library{wxhtml}
+    @category{html}
+
+    @see @ref overview_html_cells, wxHtmlCell
+*/
+class wxHtmlRenderingInfo
+{
+public:
+    /**
+        Default ctor.
+    */
+    wxHtmlRenderingInfo();
+
+    //@{
+    /**
+        Accessors.
+    */
+    void SetSelection(wxHtmlSelection *s);
+    wxHtmlSelection *GetSelection() const;
+
+    void SetStyle(wxHtmlRenderingStyle *style);
+    wxHtmlRenderingStyle& GetStyle();
+
+    wxHtmlRenderingState& GetState();
+    //@}
+};
 
 
 /**
@@ -107,7 +113,7 @@ public:
         Renders the cell.
 
         @param dc
-            Device context to which the cell is to be drawn
+            Device context to which the cell is to be drawn.
         @param x,y
             Coordinates of parent's upper left corner (origin). You must
             add this to m_PosX,m_PosY when passing coordinates to dc's methods
@@ -117,10 +123,12 @@ public:
             @endcode
         @param view_y1
             y-coord of the first line visible in window.
-            This is used to optimize rendering speed
+            This is used to optimize rendering speed.
         @param view_y2
             y-coord of the last line visible in window.
-            This is used to optimize rendering speed
+            This is used to optimize rendering speed.
+        @param info
+            Additional information for the rendering of the cell.
     */
     virtual void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2, wxHtmlRenderingInfo& info);
 
@@ -138,8 +146,10 @@ public:
             @code
                 dc->DrawText("hello", x + m_PosX, y + m_PosY)
             @endcode
+        @param info
+            Additional information for the rendering of the cell.
     */
-    virtual void DrawInvisible(wxDC& cd, int x , int y, wxHtmlRenderingInfo& info);
+    virtual void DrawInvisible(wxDC& dc, int x , int y, wxHtmlRenderingInfo& info);
 
     /**
         Returns pointer to itself if this cell matches condition (or if any of the
@@ -537,3 +547,57 @@ public:
     wxString GetTarget() const;
 };
 
+/**
+    @class wxHtmlColourCell
+
+    This cell changes the colour of either the background or the foreground.
+
+    @library{wxhtml}
+    @category{html}
+*/
+class wxHtmlColourCell : public wxHtmlCell
+{
+public:
+    /**
+        Constructor.
+
+        @param clr
+            The color
+        @param flags
+            Can be one of following:
+            - wxHTML_CLR_FOREGROUND: change color of text
+            - wxHTML_CLR_BACKGROUND: change background color
+    */
+    wxHtmlColourCell(const wxColour& clr, int flags = wxHTML_CLR_FOREGROUND);
+};
+
+
+
+/**
+    @class wxHtmlWidgetCell
+
+    wxHtmlWidgetCell is a class that provides a connection between HTML cells and
+    widgets (an object derived from wxWindow).
+    You can use it to display things like forms, input boxes etc. in an HTML window.
+
+    wxHtmlWidgetCell takes care of resizing and moving window.
+
+    @library{wxhtml}
+    @category{html}
+*/
+class wxHtmlWidgetCell : public wxHtmlCell
+{
+public:
+    /**
+        Constructor.
+
+        @param wnd
+            Connected window. It is parent window @b must be the wxHtmlWindow object
+            within which it is displayed!
+        @param w
+            Floating width. If non-zero width of wnd window is adjusted so that it is
+            always w percents of parent container's width. (For example w = 100 means
+            that the window will always have same width as parent container).
+    */
+    wxHtmlWidgetCell(wxWindow* wnd, int w = 0);
+};

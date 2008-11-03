@@ -100,7 +100,7 @@ public:
         If the file is found in any directory, returns @true and the full path
         of the file in @a str, otherwise returns @false and doesn't modify @a str.
 
-        @param str
+        @param pStr
             Receives the full path of the file, must not be @NULL
         @param path
             wxPATH_SEP-separated list of directories
