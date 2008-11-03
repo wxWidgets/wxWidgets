@@ -103,7 +103,7 @@
 #   endif
 
     /*
-       VC6 insists on complaining about 
+       VC6 insists on complaining about
 
         return type for 'wxVector<T>::reverse_iterator::operator ->' is 'T **'
         (ie; not a UDT or reference to a UDT.  Will produce errors if applied
@@ -506,7 +506,7 @@ typedef short int WXTYPE;
 #else
     #define  wxDEPRECATED_CONSTRUCTOR(x) wxDEPRECATED( inline x)
 #endif
-    
+
 /*
    Macro which marks the function as being deprecated but also defines it
    inline.
@@ -1222,7 +1222,7 @@ typedef double wxDouble;
 
 #if wxUSE_WCHAR_T && (!defined(SIZEOF_WCHAR_T) || (SIZEOF_WCHAR_T == 2))
     #define wxWCHAR_T_IS_WXCHAR16
-    typedef wchar_t wxChar16; 
+    typedef wchar_t wxChar16;
 #else
     typedef wxUint16 wxChar16;
 #endif
@@ -2087,6 +2087,14 @@ enum wxHitTest
 /*  GDI descriptions */
 /*  ---------------------------------------------------------------------------- */
 
+/*
+    WARNING: the following styles are deprecated; use the
+             wxFontFamily, wxFontStyle, wxFontWeight, wxBrushStyle,
+             wxPenStyle, wxPenCap, wxPenJoin enum values instead!
+*/
+
+#if FUTURE_WXWIN_COMPATIBILITY_3_0
+
 /* don't use any elements of this enum in the new code */
 enum wxDeprecatedGUIConstants
 {
@@ -2109,13 +2117,6 @@ enum wxDeprecatedGUIConstants
     /*  Also wxNORMAL for normal (non-italic text) */
     wxITALIC,
     wxSLANT,
-
-
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
-    /*
-        WARNING: the following styles are deprecated; use the wxBrushStyle,
-                 wxPenStyle, wxPenCap, wxPenJoin enum values instead!
-    */
 
     /*  Pen styles */
     wxSOLID      =   100,
@@ -2142,8 +2143,8 @@ enum wxDeprecatedGUIConstants
     wxVERTICAL_HATCH,
     wxFIRST_HATCH = wxBDIAGONAL_HATCH,
     wxLAST_HATCH = wxVERTICAL_HATCH
-#endif
 };
+#endif
 
 /*  Logical ops */
 typedef enum

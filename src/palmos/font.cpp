@@ -107,9 +107,9 @@ public:
     wxFontRefData(int size,
                   const wxSize& pixelSize,
                   bool sizeUsingPixels,
-                  int family,
-                  int style,
-                  int weight,
+                  wxFontFamily family,
+                  wxFontStyle style,
+                  wxFontWeight weight,
                   bool underlined,
                   const wxString& faceName,
                   wxFontEncoding encoding)
@@ -231,12 +231,12 @@ public:
         }
     }
 
-    void SetFamily(int family)
+    void SetFamily(wxFontFamily family)
     {
         m_family = family;
     }
 
-    void SetStyle(int style)
+    void SetStyle(wxFontStyle style)
     {
         if ( m_nativeFontInfoOk )
             m_nativeFontInfo.SetStyle((wxFontStyle)style);
@@ -244,7 +244,7 @@ public:
             m_style = style;
     }
 
-    void SetWeight(int weight)
+    void SetWeight(wxFontWeight weight)
     {
         if ( m_nativeFontInfoOk )
             m_nativeFontInfo.SetWeight((wxFontWeight)weight);
@@ -287,9 +287,9 @@ protected:
     void Init(int size,
               const wxSize& pixelSize,
               bool sizeUsingPixels,
-              int family,
-              int style,
-              int weight,
+              wxFontFamily family,
+              wxFontStyle style,
+              wxFontWeight weight,
               bool underlined,
               const wxString& faceName,
               wxFontEncoding encoding);
@@ -300,9 +300,9 @@ protected:
     int           m_pointSize;
     wxSize        m_pixelSize;
     bool          m_sizeUsingPixels;
-    int           m_family;
-    int           m_style;
-    int           m_weight;
+    wxFontFamily  m_family;
+    wxFontStyle   m_style;
+    wxFontWeight  m_weight;
     bool          m_underlined;
     wxString      m_faceName;
     wxFontEncoding m_encoding;
@@ -328,9 +328,9 @@ protected:
 void wxFontRefData::Init(int pointSize,
                          const wxSize& pixelSize,
                          bool sizeUsingPixels,
-                         int family,
-                         int style,
-                         int weight,
+                         wxFontFamily family,
+                         wxFontStyle style,
+                         wxFontWeight weight,
                          bool underlined,
                          const wxString& faceName,
                          wxFontEncoding encoding)
@@ -381,9 +381,9 @@ wxFont::wxFont(const wxString& fontdesc)
 bool wxFont::DoCreate(int pointSize,
                       const wxSize& pixelSize,
                       bool sizeUsingPixels,
-                      int family,
-                      int style,
-                      int weight,
+                      wxFontFamily family,
+                      wxFontStyle style,
+                      wxFontWeight weight,
                       bool underlined,
                       const wxString& faceName,
                       wxFontEncoding encoding)
@@ -440,15 +440,15 @@ void wxFont::SetPixelSize(const wxSize& pixelSize)
 {
 }
 
-void wxFont::SetFamily(int family)
+void wxFont::SetFamily(wxFontFamily family)
 {
 }
 
-void wxFont::SetStyle(int style)
+void wxFont::SetStyle(wxFontStyle style)
 {
 }
 
-void wxFont::SetWeight(int weight)
+void wxFont::SetWeight(wxFontWeight weight)
 {
 }
 
@@ -488,17 +488,17 @@ bool wxFont::IsUsingSizeInPixels() const
     return false;
 }
 
-int wxFont::GetFamily() const
+wxFontFamily wxFont::GetFamily() const
 {
     return wxFONTFAMILY_ROMAN;
 }
 
-int wxFont::GetStyle() const
+wxFontStyle wxFont::GetStyle() const
 {
     return wxFONTSTYLE_NORMAL;
 }
 
-int wxFont::GetWeight() const
+wxFontWeight wxFont::GetWeight() const
 {
     return wxFONTWEIGHT_NORMAL;
 }

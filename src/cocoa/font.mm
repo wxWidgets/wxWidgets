@@ -94,7 +94,7 @@
 static NSFont* GetNSFontForNativeFontInfo(const wxNativeFontInfo &info);
 static void UpdateNativeFontInfoWithNSFont(wxNativeFontInfo &info, NSFont *cocoaNSFont);
 static wxNativeFontInfo MakeNativeFontInfoForNSFont(NSFont *cocoaNSFont, bool underlined = false);
-static wxNativeFontInfo MakeNativeFontInfo(int size, int family, int style, int weight, bool underlined, const wxString& faceName, wxFontEncoding encoding);
+static wxNativeFontInfo MakeNativeFontInfo(int size, wxFontFamily family, wxFontStyle style, wxFontWeight weight, bool underlined, const wxString& faceName, wxFontEncoding encoding);
 
 /*! @discussion
     Due to 2.8 ABI compatibility concerns we probably don't want to change wxNativeFontInfo
@@ -146,9 +146,9 @@ public:
     }
 
     wxFontRefData(int size,
-                  int family,
-                  int style,
-                  int weight,
+                  wxFontFamily family,
+                  wxFontStyle style,
+                  wxFontWeight weight,
                   bool underlined,
                   const wxString& faceName,
                   wxFontEncoding encoding)
@@ -166,9 +166,9 @@ protected:
         FIXME: Remove from trunk
      */
     void Init(int size,
-              int family,
-              int style,
-              int weight,
+              wxFontFamily family,
+              wxFontStyle style,
+              wxFontWeight weight,
               bool underlined,
               const wxString& faceName,
               wxFontEncoding encoding);
@@ -283,7 +283,7 @@ static wxNativeFontInfo MakeNativeFontInfoForNSFont(NSFont *cocoaNSFont, bool un
 
 IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
 
-static wxNativeFontInfo MakeNativeFontInfo(int size, int family, int style, int weight, bool underlined, const wxString& faceName, wxFontEncoding encoding)
+static wxNativeFontInfo MakeNativeFontInfo(int size, wxFontFamily family, wxFontStyle style, wxFontWeight weight, bool underlined, const wxString& faceName, wxFontEncoding encoding)
 {
     wxNativeFontInfo m_info; // NOTE: not an i-var despite name
     m_info.pointSize = size;
@@ -296,7 +296,7 @@ static wxNativeFontInfo MakeNativeFontInfo(int size, int family, int style, int 
     return m_info;
 }
 
-void wxFontRefData::Init(int size, int family, int style, int weight, bool underlined, const wxString& faceName, wxFontEncoding encoding)
+void wxFontRefData::Init(int size, wxFontFamily family, wxFontStyle style, wxFontWeight weight, bool underlined, const wxString& faceName, wxFontEncoding encoding)
 {
     m_info = MakeNativeFontInfo(size, family, style, weight, underlined, faceName, encoding);
 }
@@ -364,19 +364,19 @@ bool wxFont::GetUnderlined() const
         return false;
 }
 
-int wxFont::GetStyle() const
+wxFontStyle wxFont::GetStyle() const
 {
     wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
     return M_FONTDATA->m_info.style;
 }
 
-int wxFont::GetFamily() const
+wxFontFamily wxFont::GetFamily() const
 {
     wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
     return M_FONTDATA->m_info.family;
 }
 
-int wxFont::GetWeight() const
+wxFontWeight wxFont::GetWeight() const
 {
     wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
     return M_FONTDATA->m_info.weight;
@@ -388,7 +388,7 @@ const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
     return &M_FONTDATA->m_info;
 }
 
-bool wxFont::Create(int pointSize, int family, int style, int weight, bool underlined, const wxString& faceName, wxFontEncoding encoding)
+bool wxFont::Create(int pointSize, wxFontFamily family, wxFontStyle style, wxFontWeight weight, bool underlined, const wxString& faceName, wxFontEncoding encoding)
 {
     UnRef();
     m_refData = new wxFontRefData(pointSize, family, style, weight, underlined, faceName, encoding);
@@ -417,7 +417,7 @@ void wxFont::SetPointSize(int pointSize)
     RealizeResource();
 }
 
-void wxFont::SetFamily(int family)
+void wxFont::SetFamily(wxFontFamily family)
 {
     AllocExclusive();
 
@@ -426,7 +426,7 @@ void wxFont::SetFamily(int family)
     RealizeResource();
 }
 
-void wxFont::SetStyle(int style)
+void wxFont::SetStyle(wxFontStyle style)
 {
     AllocExclusive();
 
@@ -435,7 +435,7 @@ void wxFont::SetStyle(int style)
     RealizeResource();
 }
 
-void wxFont::SetWeight(int weight)
+void wxFont::SetWeight(wxFontWeight weight)
 {
     AllocExclusive();
 

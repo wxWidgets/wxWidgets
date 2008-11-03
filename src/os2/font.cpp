@@ -272,9 +272,9 @@ protected:
     // Font characterstics
     //
     int                             m_nPointSize;
-    int                             m_nFamily;
-    int                             m_nStyle;
-    int                             m_nWeight;
+    wxFontFamily                    m_family;
+    wxFontStyle                     m_style;
+    wxFontWeight                    m_weight;
     bool                            m_bUnderlined;
     wxString                        m_sFaceName;
     wxFontEncoding                  m_vEncoding;
@@ -891,9 +891,9 @@ wxFont::wxFont(
 // in wxDC::SetFont, when information is available about scaling etc.
 // ----------------------------------------------------------------------------
 bool wxFont::Create( int             nPointSize,
-                     int             nFamily,
-                     int             nStyle,
-                     int             nWeight,
+                     wxFontFamily nFamily,
+                     wxFontStyle nStyle,
+                     wxFontWeight nWeight,
                      bool            bUnderlined,
                      const wxString& rsFaceName,
                      wxFontEncoding  vEncoding )
@@ -1082,23 +1082,23 @@ int wxFont::GetPointSize() const
     return M_FONTDATA->GetPointSize();
 } // end of wxFont::GetPointSize
 
-int wxFont::GetFamily() const
+wxFontFamily wxFont::GetFamily() const
 {
-    wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
+    wxCHECK_MSG( Ok(), wxFONTFAMILY_MAX, wxT("invalid font") );
 
     return M_FONTDATA->GetFamily();
 } // end of wxFont::GetFamily
 
-int wxFont::GetStyle() const
+wxFontStyle wxFont::GetStyle() const
 {
-    wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
+    wxCHECK_MSG( Ok(), wxFONTSTYLE_MAX, wxT("invalid font") );
 
     return M_FONTDATA->GetStyle();
 } // end of wxFont::GetStyle
 
-int wxFont::GetWeight() const
+wxFontWeight wxFont::GetWeight() const
 {
-    wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
+    wxCHECK_MSG( Ok(), wxFONTWEIGHT_MAX, wxT("invalid font") );
 
     return M_FONTDATA->GetWeight();
 }

@@ -54,9 +54,9 @@ public:
     }
 
     wxFontRefData(int size,
-                  int family,
-                  int style,
-                  int weight,
+                  wxFontFamily family,
+                  wxFontStyle style,
+                  wxFontWeight weight,
                   bool underlined,
                   const wxString& faceName,
                   wxFontEncoding encoding)
@@ -84,7 +84,7 @@ public:
 
     int GetPointSize() const { return m_pointSize; }
 
-    void SetFamily( int family )
+    void SetFamily( wxFontFamily family )
     {
         m_family = family;
         MacInvalidateNativeFont();
@@ -93,7 +93,7 @@ public:
 
     int GetFamily() const { return m_family; }
 
-    void SetStyle( int style )
+    void SetStyle( wxFontStyle style )
     {
         m_style = style;
         MacInvalidateNativeFont();
@@ -102,7 +102,7 @@ public:
 
     int GetStyle() const { return m_style; }
 
-    void SetWeight( int weight )
+    void SetWeight( wxFontWeight weight )
     {
         m_weight = weight;
         MacInvalidateNativeFont();
@@ -142,9 +142,9 @@ public:
 protected:
     // common part of all ctors
     void Init(int size,
-              int family,
-              int style,
-              int weight,
+              wxFontFamily family,
+              wxFontStyle style,
+              wxFontWeight weight,
               bool underlined,
               const wxString& faceName,
               wxFontEncoding encoding);
@@ -154,9 +154,9 @@ protected:
 #endif
     // font characterstics
     int             m_pointSize;
-    int             m_family;
-    int             m_style;
-    int             m_weight;
+    wxFontFamily    m_family;
+    wxFontStyle     m_style;
+    wxFontWeight    m_weight;
     bool            m_underlined;
     wxString        m_faceName;
     wxFontEncoding  m_encoding;
@@ -202,9 +202,9 @@ public:
 // ----------------------------------------------------------------------------
 
 void wxFontRefData::Init(int pointSize,
-    int family,
-    int style,
-    int weight,
+    wxFontFamily family,
+    wxFontStyle style,
+    wxFontWeight weight,
     bool underlined,
     const wxString& faceName,
     wxFontEncoding encoding)
@@ -406,17 +406,17 @@ void wxFontRefData::MacFindFont()
                 }
             }
 
-            
+
             CTFontSymbolicTraits traits = 0;
 
             if (m_weight == wxBOLD)
                 traits |= kCTFontBoldTrait;
             if (m_style == wxITALIC || m_style == wxSLANT)
                 traits |= kCTFontItalicTrait;
-     
+
             // use font caching
             wxString lookupnameWithSize = wxString::Format( "%s_%ld_%ld", m_faceName.c_str(), traits, m_pointSize );
-            
+
             static std::map< std::wstring , wxCFRef< CTFontRef > > fontcache ;
             m_ctFont = fontcache[ std::wstring(lookupnameWithSize.wc_str()) ];
             if ( !m_ctFont )
@@ -429,7 +429,7 @@ void wxFontRefData::MacFindFont()
                         qdstyle |= bold;
                     if (m_style == wxITALIC || m_style == wxSLANT)
                         qdstyle |= italic;
-                    
+
                     Str255 qdFontName ;
                     wxMacStringToPascal( m_faceName , qdFontName );
                     m_ctFont.reset( CTFontCreateWithQuickdrawInstance(qdFontName, 0 , qdstyle, m_pointSize) );
@@ -454,7 +454,7 @@ void wxFontRefData::MacFindFont()
                         // TODO further fallbacks, synthesizing bold and italic, trying direct PostScript names etc
                     }
                 }
-                
+
                 fontcache[ std::wstring(lookupnameWithSize.wc_str()) ] = m_ctFont;
 #if 1 // debugging coretext font matching
                 CTFontSymbolicTraits received = CTFontGetSymbolicTraits( m_ctFont ) & 0x03;
@@ -473,7 +473,7 @@ void wxFontRefData::MacFindFont()
                     CFShow( dict );
                     CFRelease( dict );
                 }
-#endif  
+#endif
             }
 
         }
@@ -711,12 +711,12 @@ wxFont::wxFont(const wxString& fontdesc)
 }
 
 bool wxFont::Create(int pointSize,
-    int family,
-    int style,
-    int weight,
-    bool underlined,
-    const wxString& faceName,
-    wxFontEncoding encoding)
+                    wxFontFamily family,
+                    wxFontStyle style,
+                    wxFontWeight weight,
+                    bool underlined,
+                    const wxString& faceName,
+                    wxFontEncoding encoding)
 {
     UnRef();
 
@@ -837,7 +837,7 @@ void wxFont::SetPointSize(int pointSize)
     RealizeResource();
 }
 
-void wxFont::SetFamily(int family)
+void wxFont::SetFamily(wxFontFamily family)
 {
     Unshare();
 
@@ -846,7 +846,7 @@ void wxFont::SetFamily(int family)
     RealizeResource();
 }
 
-void wxFont::SetStyle(int style)
+void wxFont::SetStyle(wxFontStyle style)
 {
     Unshare();
 
@@ -855,7 +855,7 @@ void wxFont::SetStyle(int style)
     RealizeResource();
 }
 
-void wxFont::SetWeight(int weight)
+void wxFont::SetWeight(wxFontWeight weight)
 {
     Unshare();
 
@@ -921,23 +921,23 @@ wxSize wxFont::GetPixelSize() const
 #endif
 }
 
-int wxFont::GetFamily() const
+wxFontFamily wxFont::GetFamily() const
 {
-    wxCHECK_MSG( M_FONTDATA != NULL , 0, wxT("invalid font") );
+    wxCHECK_MSG( M_FONTDATA != NULL , wxFONTFAMILY_MAX, wxT("invalid font") );
 
     return M_FONTDATA->GetFamily();
 }
 
-int wxFont::GetStyle() const
+wxFontStyle wxFont::GetStyle() const
 {
-    wxCHECK_MSG( M_FONTDATA != NULL , 0, wxT("invalid font") );
+    wxCHECK_MSG( M_FONTDATA != NULL , wxFONTSTYLE_MAX, wxT("invalid font") );
 
     return M_FONTDATA->GetStyle() ;
 }
 
-int wxFont::GetWeight() const
+wxFontWeight wxFont::GetWeight() const
 {
-    wxCHECK_MSG( M_FONTDATA != NULL , 0, wxT("invalid font") );
+    wxCHECK_MSG( M_FONTDATA != NULL , wxFONTWEIGHT_MAX, wxT("invalid font") );
 
     return M_FONTDATA->GetWeight();
 }

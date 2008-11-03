@@ -130,9 +130,9 @@ wxFontBase::~wxFontBase()
 
 /* static */
 wxFont *wxFontBase::New(int size,
-                        int family,
-                        int style,
-                        int weight,
+                        wxFontFamily family,
+                        wxFontStyle style,
+                        wxFontWeight weight,
                         bool underlined,
                         const wxString& face,
                         wxFontEncoding encoding)
@@ -176,9 +176,9 @@ wxFont *wxFontBase::New(int pointSize,
 
 /* static */
 wxFont *wxFontBase::New(const wxSize& pixelSize,
-                        int family,
-                        int style,
-                        int weight,
+                        wxFontFamily family,
+                        wxFontStyle style,
+                        wxFontWeight weight,
                         bool underlined,
                         const wxString& face,
                         wxFontEncoding encoding)
