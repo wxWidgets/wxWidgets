@@ -394,9 +394,9 @@ void wxFontRefData::MacFindFont()
                     case wxFONTFAMILY_MODERN :
                     case wxFONTFAMILY_TELETYPE:
                         m_faceName =  wxT("Courier");
-                        if ( m_style == wxFONTFAMILY_ITALIC && m_weight == wxFONTFAMILY_NORMAL )
+                        if ( m_style == wxFONTSTYLE_ITALIC && m_weight == wxFONTWEIGHT_NORMAL )
                         {
-                            m_style = wxFONTFAMILY_ITALIC;
+                            m_style = wxFONTSTYLE_ITALIC;
                         }
                         break ;
 
