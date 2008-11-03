@@ -7318,6 +7318,9 @@ if test "$wxUSE_GUI" = "yes"; then
     if test "$wxUSE_PROPGRID" = "yes" ; then
         BUILT_WX_LIBS="propgrid $BUILT_WX_LIBS"
     fi
+    if test "$wxUSE_RICHTEXT" = "yes" ; then
+        BUILT_WX_LIBS="richtext $BUILT_WX_LIBS"
+    fi
     if test "$wxUSE_STC" = "yes" ; then
         BUILT_WX_LIBS="stc $BUILT_WX_LIBS"
     fi
