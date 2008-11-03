@@ -21,13 +21,13 @@ DESTDIR =
 
 ### Targets: ###
 
-all: emulator helpview hhp2cached ifacecheck screenshotgen
+all: emulator helpview hhp2cached ifacecheck screenshotgen wxrc
 
-install: install_ifacecheck install_screenshotgen
+install: install_ifacecheck install_screenshotgen install_wxrc
 
-uninstall: uninstall_ifacecheck uninstall_screenshotgen
+uninstall: uninstall_ifacecheck uninstall_screenshotgen uninstall_wxrc
 
-install-strip: install install-strip_ifacecheck install-strip_screenshotgen
+install-strip: install install-strip_ifacecheck install-strip_screenshotgen install-strip_wxrc
 
 clean: 
 	rm -rf ./.deps ./.pch
@@ -37,6 +37,7 @@ clean:
 	-(cd hhp2cached && $(MAKE) clean)
 	-(cd ifacecheck/src && $(MAKE) clean)
 	-(cd screenshotgen/src && $(MAKE) clean)
+	-(cd wxrc && $(MAKE) clean)
 
 distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
@@ -45,6 +46,7 @@ distclean: clean
 	-(cd hhp2cached && $(MAKE) distclean)
 	-(cd ifacecheck/src && $(MAKE) distclean)
 	-(cd screenshotgen/src && $(MAKE) distclean)
+	-(cd wxrc && $(MAKE) distclean)
 
 emulator: 
 	(cd emulator/src && $(MAKE) all)
@@ -79,6 +81,18 @@ uninstall_screenshotgen:
 install-strip_screenshotgen: 
 	(cd screenshotgen/src && $(MAKE) install-strip)
 
+wxrc: 
+	(cd wxrc && $(MAKE) all)
+
+install_wxrc: 
+	(cd wxrc && $(MAKE) install)
+
+uninstall_wxrc: 
+	(cd wxrc && $(MAKE) uninstall)
+
+install-strip_wxrc: 
+	(cd wxrc && $(MAKE) install-strip)
+
 
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include ./.deps/*.d
@@ -86,4 +100,5 @@ install-strip_screenshotgen:
 .PHONY: all install uninstall clean distclean emulator helpview hhp2cached \
 	ifacecheck install_ifacecheck uninstall_ifacecheck install-strip_ifacecheck \
 	screenshotgen install_screenshotgen uninstall_screenshotgen \
-	install-strip_screenshotgen
+	install-strip_screenshotgen wxrc install_wxrc uninstall_wxrc \
+	install-strip_wxrc

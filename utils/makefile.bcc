@@ -44,7 +44,7 @@ MAKEARGS = -DCC="$(CC)" -DCXX="$(CXX)" -DCFLAGS="$(CFLAGS)" \
 
 ### Targets: ###
 
-all: emulator helpview hhp2cached ifacecheck screenshotgen
+all: emulator helpview hhp2cached ifacecheck screenshotgen wxrc
 
 clean: 
 	-if exist .\*.obj del .\*.obj
@@ -70,6 +70,10 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>screenshotgen.bat
 	call screenshotgen.bat
 	@del screenshotgen.bat
+	@echo cd wxrc >wxrc.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>wxrc.bat
+	call wxrc.bat
+	@del wxrc.bat
 
 emulator: 
 	@echo cd emulator\src >emulator.bat
@@ -100,4 +104,10 @@ screenshotgen:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>screenshotgen.bat
 	call screenshotgen.bat
 	@del screenshotgen.bat
+
+wxrc: 
+	@echo cd wxrc >wxrc.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>wxrc.bat
+	call wxrc.bat
+	@del wxrc.bat
 

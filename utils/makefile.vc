@@ -34,7 +34,7 @@ MAKEARGS = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" \
 
 ### Targets: ###
 
-all: sub_emulator sub_helpview sub_hhp2cached sub_ifacecheck sub_screenshotgen
+all: sub_emulator sub_helpview sub_hhp2cached sub_ifacecheck sub_screenshotgen sub_wxrc
 
 clean: 
 	-if exist .\*.obj del .\*.obj
@@ -53,6 +53,9 @@ clean:
 	$(MAKE) -f makefile.vc $(MAKEARGS) clean
 	cd "$(MAKEDIR)"
 	cd screenshotgen\src
+	$(MAKE) -f makefile.vc $(MAKEARGS) clean
+	cd "$(MAKEDIR)"
+	cd wxrc
 	$(MAKE) -f makefile.vc $(MAKEARGS) clean
 	cd "$(MAKEDIR)"
 
@@ -78,6 +81,11 @@ sub_ifacecheck:
 
 sub_screenshotgen: 
 	cd screenshotgen\src
+	$(MAKE) -f makefile.vc $(MAKEARGS) all
+	cd "$(MAKEDIR)"
+
+sub_wxrc: 
+	cd wxrc
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"
 
