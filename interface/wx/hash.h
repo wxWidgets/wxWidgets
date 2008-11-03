@@ -9,12 +9,38 @@
 /**
     @class wxHashTable
 
-    @b Please note that this class is retained for backward compatibility
+    @deprecated
+    Please note that this class is retained for backward compatibility
     reasons; you should use wxHashMap.
 
     This class provides hash table functionality for wxWidgets, and for an
-    application if it wishes.  Data can be hashed on an integer or string
-    key.
+    application if it wishes.  Data can be hashed on an integer or string key.
+
+    Example:
+    @code
+        wxHashTable table(wxKEY_STRING);
+
+        wxPoint *point = new wxPoint(100, 200);
+        table.Put("point 1", point);
+
+        ....
+
+        wxPoint *found_point = (wxPoint *)table.Get("point 1");
+    @endcode
+
+    A hash table is implemented as an array of pointers to lists.
+    When no data has been stored, the hash table takes only a little more space
+    than this array (default size is 1000). When a data item is added, an integer
+    is constructed from the integer or string key that is within the bounds of the array.
+    If the array element is @NULL, a new (keyed) list is created for the element.
+    Then the data object is appended to the list, storing the key in case other
+    data objects need to be stored in the list also (when a 'collision' occurs).
+
+    Retrieval involves recalculating the array index from the key, and searching
+    along the keyed list for the data object whose stored key matches the passed key.
+    Obviously this is quicker when there are fewer collisions, so hashing will
+    become inefficient if the number of items to be stored greatly exceeds the
+    size of the hash table.
 
     @library{wxbase}
     @category{containers}
@@ -36,9 +62,9 @@ public:
     virtual ~wxHashTable();
 
     /**
-        The counterpart of @e Next.  If the application wishes to iterate
-        through all the data in the hash table, it can call @e BeginFind and
-        then loop on @e Next.
+        The counterpart of Next().  If the application wishes to iterate
+        through all the data in the hash table, it can call BeginFind() and
+        then loop on Next().
     */
     void BeginFind();
 
@@ -56,16 +82,15 @@ public:
     //@}
 
     /**
-        If set to @true data stored in hash table will be deleted when hash table object
-        is destroyed.
+        If set to @true data stored in hash table will be deleted when hash table
+        object is destroyed.
     */
     void DeleteContents(bool flag);
 
     //@{
     /**
-        Gets data from the hash table, using an integer or string key (depending on
-        which
-        has table constructor was used).
+        Gets data from the hash table, using an integer or string key
+        (depending on which has table constructor was used).
     */
     wxObject* Get(long key);
     wxObject* Get(const char* key);
@@ -84,20 +109,20 @@ public:
 
     /**
         If the application wishes to iterate through all the data in the hash
-        table, it can call @e BeginFind and then loop on @e Next. This function
-        returns a @b Node() pointer (or @NULL if there are no more nodes).
+        table, it can call BeginFind() and then loop on Next(). This function
+        returns a @b wxHashTable::Node pointer (or @NULL if there are no more nodes).
+
         The return value is functionally equivalent to @b wxNode but might not be
         implemented as a @b wxNode. The user will probably only wish to use the
-        @b GetData method to retrieve the data; the node may also be deleted.
+        wxNode::GetData() method to retrieve the data; the node may also be deleted.
     */
     wxHashTable::Node* Next();
 
     //@{
     /**
         Inserts data into the hash table, using an integer or string key (depending on
-        which
-        has table constructor was used). The key string is copied and stored by the hash
-        table implementation.
+        which has table constructor was used).
+        The key string is copied and stored by the hash table implementation.
     */
     void Put(long key, wxObject* object);
     void Put(const char* key, wxObject* object);

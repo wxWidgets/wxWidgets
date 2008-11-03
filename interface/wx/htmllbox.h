@@ -9,11 +9,19 @@
 /**
     @class wxHtmlListBox
 
-    wxHtmlListBox is an implementation of wxVListBox which
-    shows HTML content in the listbox rows. This is still an abstract base class
-    and you will need to derive your own class from it (see htlbox sample for the
-    example) but you will only need to override a single
-    wxHtmlListBox::OnGetItem function.
+    wxHtmlListBox is an implementation of wxVListBox which shows HTML content in
+    the listbox rows. This is still an abstract base class and you will need to
+    derive your own class from it (see htlbox sample for the example) but you will
+    only need to override a single wxHtmlListBox::OnGetItem function.
+
+    @beginEventTable{wxHtmlCellEvent,wxHtmlLinkEvent}
+    @event{EVT_HTML_CELL_CLICKED(id, func)}
+        A wxHtmlCell was clicked.
+    @event{EVT_HTML_CELL_HOVER(id, func)}
+        The mouse passed over a wxHtmlCell.
+    @event{EVT_HTML_LINK_CLICKED(id, func)}
+        A wxHtmlCell which contains an hyperlink was clicked.
+    @endEventTable
 
     @library{wxhtml}
     @category{ctrl}
@@ -24,18 +32,19 @@
 class wxHtmlListBox : public wxVListBox
 {
 public:
-    //@{
     /**
-        Default constructor, you must call Create()
-        later.
+        Normal constructor which calls Create() internally.
     */
     wxHtmlListBox(wxWindow* parent, wxWindowID id = wxID_ANY,
                   const wxPoint& pos = wxDefaultPosition,
                   const wxSize& size = wxDefaultSize,
                   long style = 0,
                   const wxString& name = wxHtmlListBoxNameStr);
+
+    /**
+        Default constructor, you must call Create() later.
+    */
     wxHtmlListBox();
-    //@}
 
     /**
         Destructor cleans up whatever resources we use.
@@ -44,10 +53,11 @@ public:
 
     /**
         Creates the control and optionally sets the initial number of items in it
-        (it may also be set or changed later with
-        wxVListBox::SetItemCount).
+        (it may also be set or changed later with wxVListBox::SetItemCount).
+
         There are no special styles defined for wxHtmlListBox, in particular the
         wxListBox styles (with the exception of @c wxLB_MULTIPLE) can not be used here.
+
         Returns @true on success or @false if the control couldn't be created
     */
     bool Create(wxWindow* parent, wxWindowID id = wxID_ANY,
@@ -58,14 +68,15 @@ public:
 
     //@{
     /**
-        Returns the wxFileSystem used by the HTML parser of
-        this object. The file system object is used to resolve the paths in HTML
-        fragments displayed in the control and you should use
-        wxFileSystem::ChangePathTo if you use
-        relative paths for the images or other resources embedded in your HTML.
+        Returns the wxFileSystem used by the HTML parser of this object.
+
+        The file system object is used to resolve the paths in HTML fragments
+        displayed in the control and you should use wxFileSystem::ChangePathTo
+        if you use relative paths for the images or other resources embedded in
+        your HTML.
     */
-    wxFileSystem GetFileSystem() const;
-    const wxFileSystem GetFileSystem() const;
+    wxFileSystem& GetFileSystem() const;
+    const wxFileSystem& GetFileSystem() const;
     //@}
 
 protected:
@@ -85,12 +96,11 @@ protected:
 
     /**
         This virtual function may be overridden to change the appearance of the
-        background of the selected cells in the same way as
-        GetSelectedTextColour().
-        It should be rarely, if ever, used because
-        wxVListBox::SetSelectionBackground allows to
-        change the selection background for all cells at once and doing anything more
-        fancy is probably going to look strangely.
+        background of the selected cells in the same way as GetSelectedTextColour().
+
+        It should be rarely, if ever, used because wxVListBox::SetSelectionBackground
+        allows to change the selection background for all cells at once and doing
+        anything more fancy is probably going to look strangely.
 
         @see GetSelectedTextColour()
     */
@@ -117,13 +127,13 @@ protected:
         This method must be implemented in the derived class and should return
         the body (i.e. without @c html nor @c body tags) of the HTML fragment
         for the given item.
+
         Note that this function should always return a text fragment for the @a n item
         which renders with the same height both when it is selected and when it's not:
         i.e. if you call, inside your OnGetItem() implementation, @c IsSelected(n) to
         make the items appear differently when they are selected, then you should make
-        sure
-        that the returned HTML fragment will render with the same height or else you'll
-        see some artifacts when the user selects an item.
+        sure that the returned HTML fragment will render with the same height or else
+        you'll see some artifacts when the user selects an item.
     */
     virtual wxString OnGetItem(size_t n) const = 0;
 };
@@ -136,43 +146,61 @@ protected:
     wxSimpleHtmlListBox is an implementation of wxHtmlListBox which
     shows HTML content in the listbox rows.
 
-    Unlike wxHtmlListBox, this is not an abstract class and thus it
-    has the advantage that you can use it without deriving your own class from it.
+    Unlike wxHtmlListBox, this is not an abstract class and thus it has the
+    advantage that you can use it without deriving your own class from it.
     However, it also has the disadvantage that this is not a virtual control and
-    thus it's not
-    well-suited for those cases where you need to show a huge number of items:
-    every time you
-    add/insert a string, it will be stored internally and thus will take memory.
+    thus it's not well-suited for those cases where you need to show a huge number
+    of items: every time you add/insert a string, it will be stored internally
+    and thus will take memory.
 
     The interface exposed by wxSimpleHtmlListBox fully implements the
-    wxControlWithItems interface, thus you should refer to
-    wxControlWithItems's documentation for the API reference
-    for adding/removing/retrieving items in the listbox.
-    Also note that the wxVListBox::SetItemCount function is
+    wxControlWithItems interface, thus you should refer to wxControlWithItems's
+    documentation for the API reference for adding/removing/retrieving items in
+    the listbox. Also note that the wxVListBox::SetItemCount function is
     @c protected in wxSimpleHtmlListBox's context so that you cannot call it
-    directly,
-    wxSimpleHtmlListBox will do it for you.
+    directly, wxSimpleHtmlListBox will do it for you.
 
     Note: in case you need to append a lot of items to the control at once, make
     sure to use the
-    @ref wxControlWithItems::append "Append(const wxArrayString )" function.
+    @ref wxControlWithItems::Append "Append(const wxArrayString&)" function.
 
     Thus the only difference between a wxListBox and a wxSimpleHtmlListBox
     is that the latter stores strings which can contain HTML fragments (see the
-    list of
-    @ref overview_htmltagssupported "tags supported by wxHTML").
+    list of @ref overview_html_supptags "tags supported by wxHTML").
 
     Note that the HTML strings you fetch to wxSimpleHtmlListBox should not contain
-    the @c html
-    or @c body tags.
+    the @c \<html\> or @c \<body\> tags.
 
     @beginStyleTable
     @style{wxHLB_DEFAULT_STYLE}
            The default style: wxBORDER_SUNKEN
     @style{wxHLB_MULTIPLE}
-           Multiple-selection list: the user can toggle multiple items on and
-           off.
+           Multiple-selection list: the user can toggle multiple items on and off.
     @endStyleTable
+
+
+    A wxSimpleHtmlListBox emits the same events used by wxListBox and by wxHtmlListBox.
+
+    @beginEventTable{wxCommandEvent}
+    @event{EVT_LISTBOX(id, func)}
+        Process a wxEVT_COMMAND_LISTBOX_SELECTED event, when an item on the list
+        is selected.
+    @event{EVT_LISTBOX_DCLICK(id, func)}
+        Process a wxEVT_COMMAND_LISTBOX_DOUBLECLICKED event, when the listbox is
+        double-clicked.
+    @endEventTable
+
+    @beginEventTable{wxHtmlCellEvent}
+    @event{EVT_HTML_CELL_CLICKED(id, func)}
+        A wxHtmlCell was clicked.
+    @event{EVT_HTML_CELL_HOVER(id, func)}
+        The mouse passed over a wxHtmlCell.
+    @endEventTable
+
+    @beginEventTable{wxHtmlLinkEvent}
+    @event{EVT_HTML_LINK_CLICKED(id, func)}
+        A wxHtmlCell which contains an hyperlink was clicked.
+    @endEventTable
 
     @library{wxhtml}
     @category{ctrl}
@@ -183,10 +211,27 @@ protected:
 class wxSimpleHtmlListBox : public wxHtmlListBox
 {
 public:
-    //@{
     /**
-        Default constructor, you must call Create()
-        later.
+        Constructor, creating and showing the HTML list box.
+
+        @param parent
+            Parent window. Must not be NULL.
+        @param id
+            Window identifier. A value of -1 indicates a default value.
+        @param pos
+            Window position.
+        @param size
+            Window size. If wxDefaultSize is specified then the window is sized appropriately.
+        @param n
+            Number of strings with which to initialise the control.
+        @param choices
+            An array of strings with which to initialise the control.
+        @param style
+            Window style. See wxHLB_* flags.
+        @param validator
+            Window validator.
+        @param name
+            Window name.
     */
     wxHtmlListBox(wxWindow* parent, wxWindowID id,
                   const wxPoint& pos = wxDefaultPosition,
@@ -196,6 +241,27 @@ public:
                   long style = wxHLB_DEFAULT_STYLE,
                   const wxValidator& validator = wxDefaultValidator,
                   const wxString& name = "simpleHtmlListBox");
+
+    /**
+        Constructor, creating and showing the HTML list box.
+
+        @param parent
+            Parent window. Must not be NULL.
+        @param id
+            Window identifier. A value of -1 indicates a default value.
+        @param pos
+            Window position.
+        @param size
+            Window size. If wxDefaultSize is specified then the window is sized appropriately.
+        @param choices
+            An array of strings with which to initialise the control.
+        @param style
+            Window style. See wxHLB_* flags.
+        @param validator
+            Window validator.
+        @param name
+            Window name.
+    */
     wxHtmlListBox(wxWindow* parent, wxWindowID id,
                   const wxPoint& pos,
                   const wxSize& size,
@@ -203,11 +269,11 @@ public:
                   long style = wxHLB_DEFAULT_STYLE,
                   const wxValidator& validator = wxDefaultValidator,
                   const wxString& name = "simpleHtmlListBox");
-    See also
-    wxSimpleHtmlListBox::Create
 
+    /**
+        Default constructor, you must call Create() later.
+    */
     wxSimpleHtmlListBox();
-    //@}
 
     /**
         Frees the array of stored items and relative client data.
