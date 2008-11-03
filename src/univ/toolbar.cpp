@@ -691,26 +691,26 @@ void wxToolBar::DoDraw(wxControlRenderer *renderer)
         {
             label = tool->GetLabel();
             bitmap = tool->GetBitmap();
+
+            if ( !bitmap.IsOk() )
+            {
+                // it's better not to draw anything than to assert inside
+                // drawing code as this results in an almost guaranteed crash
+                // as we're likely to be called by a paint event handler and so
+                // the assert is going to be triggered again and again and ...
+                continue;
+            }
         }
         //else: leave both the label and the bitmap invalid to draw a separator
 
         if ( !tool->IsControl() )
         {
-            int tbStyle = 0;
-            if(HasFlag(wxTB_TEXT))
-            {
+            int tbStyle = HasFlag(wxTB_VERTICAL) ? wxTB_VERTICAL : wxTB_HORIZONTAL;
+            if ( HasFlag(wxTB_TEXT) )
                 tbStyle |= wxTB_TEXT;
-            }
 
-            if(HasFlag(wxTB_VERTICAL))
-            {
-                tbStyle |= wxTB_VERTICAL;
-            }
-            else
-            {
-                tbStyle |= wxTB_HORIZONTAL;
-            }
-            rend->DrawToolBarButton(dc, label, bitmap, rectTool, flags, tool->GetStyle(), tbStyle);
+            rend->DrawToolBarButton(dc, label, bitmap, rectTool, flags,
+                                    tool->GetStyle(), tbStyle);
         }
         else // control
         {
