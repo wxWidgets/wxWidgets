@@ -1125,7 +1125,7 @@ void MBConvTestCase::TestStreamEncoder(
 
     textOutputStream.Flush();
 
-    CPPUNIT_ASSERT_EQUAL( (wxFileOffset)multiBytes, memoryOutputStream.TellO() );
+    CPPUNIT_ASSERT_EQUAL( multiBytes, size_t(memoryOutputStream.TellO()) );
     wxCharBuffer copy( memoryOutputStream.TellO() );
     memoryOutputStream.CopyTo( copy.data(), memoryOutputStream.TellO());
     CPPUNIT_ASSERT_EQUAL( 0, memcmp( copy.data(), multiBuffer, multiBytes ) );
