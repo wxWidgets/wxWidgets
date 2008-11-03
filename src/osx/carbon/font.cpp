@@ -43,7 +43,7 @@ class WXDLLEXPORT wxFontRefData: public wxGDIRefData
 public:
     wxFontRefData()
     {
-        Init(10, wxDEFAULT, wxNORMAL, wxNORMAL,
+        Init(10, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL,
              false, wxT("applicationfont"), wxFONTENCODING_DEFAULT);
     }
 
@@ -91,7 +91,7 @@ public:
     }
 
 
-    int GetFamily() const { return m_family; }
+    wxFontFamily GetFamily() const { return m_family; }
 
     void SetStyle( wxFontStyle style )
     {
@@ -100,7 +100,7 @@ public:
     }
 
 
-    int GetStyle() const { return m_style; }
+    wxFontStyle GetStyle() const { return m_style; }
 
     void SetWeight( wxFontWeight weight )
     {
@@ -109,7 +109,7 @@ public:
     }
 
 
-    int GetWeight() const { return m_weight; }
+    wxFontWeight GetWeight() const { return m_weight; }
 
     void SetUnderlined( bool u )
     {
@@ -345,7 +345,7 @@ wxFontRefData::wxFontRefData( CTFontDescriptorRef fontdescriptor, int size )
 
 void wxFontRefData::Init( CTFontRef font )
 {
-    Init(10, wxDEFAULT, wxNORMAL, wxNORMAL,
+    Init(10, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL,
          false, wxT("applicationfont"), wxFONTENCODING_DEFAULT);
 
     m_ctFont.reset( font );
@@ -359,7 +359,7 @@ void wxFontRefData::MacFindFont()
 #if wxOSX_USE_CORE_TEXT
     if (  UMAGetSystemVersion() >= 0x1050 )
     {
-        if ( m_faceName.empty() && m_family == wxDEFAULT )
+        if ( m_faceName.empty() && m_family == wxFONTFAMILY_DEFAULT )
         {
             m_ctFont.reset(CTFontCreateUIFontForLanguage( kCTFontSystemFontType, 0.0, NULL ));
         }
@@ -371,9 +371,9 @@ void wxFontRefData::MacFindFont()
             m_pointSize = CTFontGetSize(m_ctFont) ;
             CTFontSymbolicTraits traits = CTFontGetSymbolicTraits( m_ctFont );
             if ( traits & kCTFontItalicTrait )
-                m_style = wxITALIC;
+                m_style = wxFONTSTYLE_ITALIC;
             if (  traits & kCTFontBoldTrait )
-                m_weight = wxBOLD ;
+                m_weight = wxFONTWEIGHT_BOLD ;
         }
         else
         {
@@ -381,22 +381,22 @@ void wxFontRefData::MacFindFont()
             {
                 switch ( m_family )
                 {
-                    case wxSCRIPT :
-                    case wxROMAN :
-                    case wxDECORATIVE :
+                    case wxFONTFAMILY_SCRIPT :
+                    case wxFONTFAMILY_ROMAN :
+                    case wxFONTFAMILY_DECORATIVE :
                         m_faceName = wxT("Times");
                         break ;
 
-                    case wxSWISS :
+                    case wxFONTFAMILY_SWISS :
                         m_faceName =  wxT("Helvetica");
                         break ;
 
-                    case wxMODERN :
-                    case wxTELETYPE:
+                    case wxFONTFAMILY_MODERN :
+                    case wxFONTFAMILY_TELETYPE:
                         m_faceName =  wxT("Courier");
-                        if ( m_style == wxITALIC && m_weight == wxNORMAL )
+                        if ( m_style == wxFONTFAMILY_ITALIC && m_weight == wxFONTFAMILY_NORMAL )
                         {
-                            m_style = wxITALIC;
+                            m_style = wxFONTFAMILY_ITALIC;
                         }
                         break ;
 
@@ -409,9 +409,9 @@ void wxFontRefData::MacFindFont()
 
             CTFontSymbolicTraits traits = 0;
 
-            if (m_weight == wxBOLD)
+            if (m_weight == wxFONTWEIGHT_BOLD)
                 traits |= kCTFontBoldTrait;
-            if (m_style == wxITALIC || m_style == wxSLANT)
+            if (m_style == wxFONTSTYLE_ITALIC || m_style == wxFONTSTYLE_SLANT)
                 traits |= kCTFontItalicTrait;
 
             // use font caching
@@ -425,9 +425,9 @@ void wxFontRefData::MacFindFont()
                 if ( m_faceName.IsAscii() )
                 {
                     uint8 qdstyle = 0;
-                    if (m_weight == wxBOLD)
+                    if (m_weight == wxFONTWEIGHT_BOLD)
                         qdstyle |= bold;
-                    if (m_style == wxITALIC || m_style == wxSLANT)
+                    if (m_style == wxFONTSTYLE_ITALIC || m_style == wxFONTSTYLE_SLANT)
                         qdstyle |= italic;
 
                     Str255 qdFontName ;
@@ -509,8 +509,8 @@ void wxFontRefData::MacFindFont()
             &fmfont ,
             &atsuSize ,
             &kHorizontal,
-            (m_weight == wxBOLD) ? &kTrue : &kFalse ,
-            (m_style == wxITALIC || m_style == wxSLANT) ? &kTrue : &kFalse ,
+            (m_weight == wxFONTWEIGHT_BOLD) ? &kTrue : &kFalse ,
+            (m_style == wxFONTSTYLE_ITALIC || m_style == wxFONTSTYLE_SLANT) ? &kTrue : &kFalse ,
             (m_underlined) ? &kTrue : &kFalse ,
         };
 
@@ -541,11 +541,11 @@ void wxFontRefData::MacFindFont()
             m_macFontStyle = style ;
             m_faceName = wxMacMakeStringFromPascal( qdFontName );
             if ( m_macFontStyle & bold )
-                m_weight = wxBOLD ;
+                m_weight = wxFONTWEIGHT_BOLD ;
             else
-                m_weight = wxNORMAL ;
+                m_weight = wxFONTWEIGHT_NORMAL ;
             if ( m_macFontStyle & italic )
-                m_style = wxITALIC ;
+                m_style = wxFONTSTYLE_ITALIC ;
             if ( m_macFontStyle & underline )
                 m_underlined = true ;
             m_pointSize = m_macFontSize ;
@@ -555,7 +555,7 @@ void wxFontRefData::MacFindFont()
         {
             if ( m_faceName.empty() )
             {
-                if ( m_family == wxDEFAULT )
+                if ( m_family == wxFONTFAMILY_DEFAULT )
                 {
                     m_macFontFamily = GetAppFont();
                     FMGetFontFamilyName(m_macFontFamily,qdFontName);
@@ -565,18 +565,18 @@ void wxFontRefData::MacFindFont()
                 {
                     switch ( m_family )
                     {
-                        case wxSCRIPT :
-                        case wxROMAN :
-                        case wxDECORATIVE :
+                        case wxFONTFAMILY_SCRIPT :
+                        case wxFONTFAMILY_ROMAN :
+                        case wxFONTFAMILY_DECORATIVE :
                             m_faceName = wxT("Times");
                             break ;
 
-                        case wxSWISS :
+                        case wxFONTFAMILY_SWISS :
                             m_faceName =  wxT("Helvetica");
                             break ;
 
-                        case wxMODERN :
-                        case wxTELETYPE:
+                        case wxFONTFAMILY_MODERN :
+                        case wxFONTFAMILY_TELETYPE:
                             m_faceName =  wxT("Courier");
                             break ;
 
@@ -614,9 +614,9 @@ void wxFontRefData::MacFindFont()
             }
 
             m_macFontStyle = 0;
-            if (m_weight == wxBOLD)
+            if (m_weight == wxFONTWEIGHT_BOLD)
                 m_macFontStyle |= bold;
-            if (m_style == wxITALIC || m_style == wxSLANT)
+            if (m_style == wxFONTSTYLE_ITALIC || m_style == wxFONTSTYLE_SLANT)
                 m_macFontStyle |= italic;
             if (m_underlined)
                 m_macFontStyle |= underline;
@@ -768,7 +768,7 @@ bool wxFont::MacCreateFromThemeFont(wxUint16 themeFontID)
         UnRef();
 
         m_refData = new wxFontRefData(
-                                      12, wxDEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL,
+                                      12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL,
                                       false, wxEmptyString, wxFONTENCODING_DEFAULT );
 
         M_FONTDATA->m_macThemeFontID = themeFontID ;
