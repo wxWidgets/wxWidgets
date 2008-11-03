@@ -192,6 +192,8 @@ Currently the following symbols exist:
     have an efficient (CPU-specific) implementation. Notice that the functions
     themselves are always available but can be prohibitively slow to use when
     implemented in a generic way, using a critical section.}
+@itemdef{wxHAS_CONFIG_TEMPLATE_RW, Defined if the currently used compiler
+    supports template Read() and Write() methods in wxConfig.}
 @itemdef{wxHAS_LARGE_FILES, Defined if wxFile supports files more than 4GB in size.}
 @itemdef{wxHAS_LARGE_FFILES, Defined if wxFFile supports files more than 4GB in size.}
 @itemdef{wxHAS_POWER_EVENTS, Defined if wxPowerEvent are ever generated on the current platform.}

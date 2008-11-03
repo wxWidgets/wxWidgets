@@ -52,6 +52,14 @@ class WXDLLIMPEXP_FWD_BASE wxArrayString;
   #define wxUSE_CONFIG_NATIVE 1
 #endif
 
+// not all compilers can deal with template Read/Write() methods, define this
+// symbol if the template functions are available
+#if (!defined(__VISUALC__) || __VISUALC__ > 1200) && \
+    !defined( __VMS ) && \
+    !defined (__DMC__)
+    #define wxHAS_CONFIG_TEMPLATE_RW
+#endif
+
 // Style flags for constructor style parameter
 enum
 {
@@ -185,8 +193,7 @@ public:
    // no default version since it does not make sense for binary data
 #endif // wxUSE_BASE64
 
-  // Causes ambiguities in VC++ 6 and OpenVMS (at least)
-#if ( (!defined(__VISUALC__) || __VISUALC__ > 1200) && !defined( __VMS ) && !defined (__DMC__))
+#ifdef wxHAS_CONFIG_TEMPLATE_RW
   // read other types, for which wxFromString is defined
   template <typename T>
   bool Read(const wxString& key, T* value) const
@@ -209,7 +216,7 @@ public:
       }
       return found;
   }
-#endif
+#endif // wxHAS_CONFIG_TEMPLATE_RW
 
   // convenience functions returning directly the value 
   wxString Read(const wxString& key,

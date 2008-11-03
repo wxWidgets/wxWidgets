@@ -67,7 +67,9 @@ void ConfigTestCase::ReadWriteLocalTest()
     config->Write(wxString(wxT("long1")), 234L);
     config->Write(wxT("double1"), 345.67);
     config->Write(wxT("bool1"), true);
+#ifdef wxHAS_CONFIG_TEMPLATE_RW
     config->Write(wxT("color1"), wxColour(11,22,33,44));
+#endif // wxHAS_CONFIG_TEMPLATE_RW
     config->Flush();
     delete config;
 
@@ -114,12 +116,14 @@ void ConfigTestCase::ReadWriteLocalTest()
 
     CPPUNIT_ASSERT( config->ReadBool(wxT("bool1"), false) == bool1 );
 
+#ifdef wxHAS_CONFIG_TEMPLATE_RW
     wxColour color1;
     r = config->Read(wxT("color1"), &color1);
     CPPUNIT_ASSERT( r );
     CPPUNIT_ASSERT( color1 == wxColour(11,22,33,44) );
 
     CPPUNIT_ASSERT( config->ReadObject(wxT("color1"), wxNullColour) == color1 );
+#endif // wxHAS_CONFIG_TEMPLATE_RW
 
     config->DeleteAll();
     delete config;
@@ -149,9 +153,11 @@ void ConfigTestCase::ReadValues(wxConfig *config, bool has_values)
     bool bool1;
     r = config->Read(wxT("bool1"), &bool1, true);
     CPPUNIT_ASSERT_EQUAL( r, has_values );
+#ifdef wxHAS_CONFIG_TEMPLATE_RW
     wxColour color1;
     r = config->Read(wxT("color1"), &color1, wxColour(11,22,33,44));
     CPPUNIT_ASSERT_EQUAL( r, has_values );
+#endif // wxHAS_CONFIG_TEMPLATE_RW
 }
 
 
