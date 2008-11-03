@@ -5484,10 +5484,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\wx\tls.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\include\wx\toolbar.h"
 				>
 			</File>

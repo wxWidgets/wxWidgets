@@ -412,6 +412,7 @@ ALL_BASE_HEADERS =  \
 	wx/thread.h \
 	wx/thrimpl.cpp \
 	wx/timer.h \
+	wx/tls.h \
 	wx/tokenzr.h \
 	wx/tracker.h \
 	wx/txtstrm.h \
@@ -566,6 +567,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/thread.h \
 	wx/thrimpl.cpp \
 	wx/timer.h \
+	wx/tls.h \
 	wx/tokenzr.h \
 	wx/tracker.h \
 	wx/txtstrm.h \
@@ -3714,7 +3716,6 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/textctrl.h \
 	wx/textdlg.h \
 	wx/textentry.h \
-	wx/tls.h \
 	wx/toolbar.h \
 	wx/validate.h \
 	wx/valtext.h \

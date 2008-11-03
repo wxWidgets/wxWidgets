@@ -1451,6 +1451,10 @@ SOURCE=..\..\include\wx\timer.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\tls.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\tokenzr.h
 # End Source File
 # Begin Source File

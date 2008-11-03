@@ -240,6 +240,7 @@ wx/textfile.h
 wx/thread.h
 wx/thrimpl.cpp
 wx/timer.h
+wx/tls.h
 wx/tokenzr.h
 wx/tracker.h
 wx/txtstrm.h

@@ -6462,10 +6462,6 @@ SOURCE=..\..\include\wx\tipwin.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\tls.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\toolbar.h
 # End Source File
 # Begin Source File

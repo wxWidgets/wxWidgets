@@ -1507,6 +1507,9 @@
 				RelativePath="..\..\include\wx\timer.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\tls.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\tokenzr.h">
 			</File>
 			<File
