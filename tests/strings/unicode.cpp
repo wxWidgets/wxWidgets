@@ -27,8 +27,13 @@
 // to it should fail
 struct StringConversionData
 {
-    const char *str;
-    const wchar_t *wcs;
+    StringConversionData(const char *str_, const wchar_t *wcs_, int flags_ = 0)
+        : str(str_), wcs(wcs_), flags(flags_)
+    {
+    }
+
+    const char * const str;
+    const wchar_t * const wcs;
 
     enum
     {
@@ -36,7 +41,7 @@ struct StringConversionData
         ONLY_MB2WC = 1  // only test str -> wcs conversion
     };
 
-    int flags;
+    const int flags;
 
     // test that the conversion between str and wcs (subject to flags) succeeds
     //
@@ -281,21 +286,22 @@ void UnicodeTestCase::ConversionUTF7()
     static const StringConversionData utf7data[] =
     {
         // normal fragments
-        { "+AKM-", L"\xa3" },
-        { "+AOk-t+AOk-", L"\xe9t\xe9" },
+        StringConversionData("+AKM-", L"\xa3"),
+        StringConversionData("+AOk-t+AOk-", L"\xe9t\xe9"),
 
         // this one is an alternative valid encoding of the same string
-        { "+AOk-t+AOk", L"\xe9t\xe9", StringConversionData::ONLY_MB2WC },
+        StringConversionData("+AOk-t+AOk", L"\xe9t\xe9",
+                             StringConversionData::ONLY_MB2WC),
 
         // some special cases
-        { "+-", L"+" },
-        { "+--", L"+-" },
+        StringConversionData("+-", L"+"),
+        StringConversionData("+--", L"+-"),
 
         // the following are invalid UTF-7 sequences
-        { "\xa3", NULL },
-        { "+", NULL },
-        { "+~", NULL },
-        { "a+", NULL },
+        StringConversionData("\xa3", NULL),
+        StringConversionData("+", NULL),
+        StringConversionData("+~", NULL),
+        StringConversionData("a+", NULL),
     };
 
     for ( size_t n = 0; n < WXSIZEOF(utf7data); n++ )
@@ -322,9 +328,9 @@ void UnicodeTestCase::ConversionUTF8()
     static const StringConversionData utf8data[] =
     {
 #ifdef wxHAVE_U_ESCAPE
-        { "\xc2\xa3", L"\u00a3" },
+        StringConversionData("\xc2\xa3", L"\u00a3"),
 #endif
-        { "\xc2", NULL },
+        StringConversionData("\xc2", NULL),
     };
 
     wxCSConv conv(_T("utf-8"));
@@ -341,11 +347,14 @@ void UnicodeTestCase::ConversionUTF16()
     static const StringConversionData utf16data[] =
     {
 #ifdef wxHAVE_U_ESCAPE
-        { "\x04\x1f\x04\x40\x04\x38\x04\x32\x04\x35\x04\x42\0\0",
-          L"\u041f\u0440\u0438\u0432\u0435\u0442" },
-        { "\x01\0\0b\x01\0\0a\x01\0\0r\0\0", L"\u0100b\u0100a\u0100r" },
+        StringConversionData(
+            "\x04\x1f\x04\x40\x04\x38\x04\x32\x04\x35\x04\x42\0\0",
+            L"\u041f\u0440\u0438\u0432\u0435\u0442"),
+        StringConversionData(
+            "\x01\0\0b\x01\0\0a\x01\0\0r\0\0",
+            L"\u0100b\u0100a\u0100r"),
 #endif
-        { "\0f\0o\0o\0\0", L"foo" },
+        StringConversionData("\0f\0o\0o\0\0", L"foo"),
     };
 
     wxCSConv conv(wxFONTENCODING_UTF16BE);
@@ -368,11 +377,11 @@ void UnicodeTestCase::ConversionUTF32()
     static const StringConversionData utf32data[] =
     {
 #ifdef wxHAVE_U_ESCAPE
-        {
+        StringConversionData(
             "\0\0\x04\x1f\0\0\x04\x40\0\0\x04\x38\0\0\x04\x32\0\0\x04\x35\0\0\x04\x42\0\0\0\0",
-          L"\u041f\u0440\u0438\u0432\u0435\u0442" },
+          L"\u041f\u0440\u0438\u0432\u0435\u0442"),
 #endif
-        { "\0\0\0f\0\0\0o\0\0\0o\0\0\0\0", L"foo" },
+        StringConversionData("\0\0\0f\0\0\0o\0\0\0o\0\0\0\0", L"foo"),
     };
 
     wxCSConv conv(wxFONTENCODING_UTF32BE);

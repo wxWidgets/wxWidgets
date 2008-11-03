@@ -292,9 +292,9 @@ void FileNameTestCase::TestNormalize()
 
     static const struct FileNameTest
     {
-        wxString original;
+        const char *original;
         int flags;
-        wxString expected;
+        const char *expected;
         wxPathFormat fmt;
     } tests[] =
     {
@@ -311,8 +311,8 @@ void FileNameTestCase::TestNormalize()
         // test wxPATH_NORM_TILDE
         // NB: do the tilde expansion also under Windows to test if it works there too
         { "/a/b/~", wxPATH_NORM_TILDE, "/a/b/~", wxPATH_UNIX },
-        { "/~/a/b", wxPATH_NORM_TILDE, home + "a/b", wxPATH_UNIX },
-        { "~/a/b", wxPATH_NORM_TILDE, home + "a/b", wxPATH_UNIX },
+        { "/~/a/b", wxPATH_NORM_TILDE, "HOME/a/b", wxPATH_UNIX },
+        { "~/a/b", wxPATH_NORM_TILDE, "HOME/a/b", wxPATH_UNIX },
 
         // test wxPATH_NORM_CASE
         { "Foo", wxPATH_NORM_CASE, "Foo", wxPATH_UNIX },
@@ -325,8 +325,8 @@ void FileNameTestCase::TestNormalize()
           "c:\\users\\zeitlin", wxPATH_DOS },
 
         // test wxPATH_NORM_ABSOLUTE
-        { "a/b/", wxPATH_NORM_ABSOLUTE, cwd + "a/b/", wxPATH_UNIX },
-        { "a/b/c.ext", wxPATH_NORM_ABSOLUTE, cwd + "a/b/c.ext", wxPATH_UNIX },
+        { "a/b/", wxPATH_NORM_ABSOLUTE, "CWD/a/b/", wxPATH_UNIX },
+        { "a/b/c.ext", wxPATH_NORM_ABSOLUTE, "CWD/a/b/c.ext", wxPATH_UNIX },
         { "/a", wxPATH_NORM_ABSOLUTE, "/a", wxPATH_UNIX },
 
         // test giving no flags at all to Normalize()
@@ -364,6 +364,9 @@ void FileNameTestCase::TestNormalize()
         );
 
         // compare result with expected string
+        wxString expected(tests[i].expected);
+        expected.Replace(_T("HOME/"), home);
+        expected.Replace(_T("CWD/"), cwd);
         CPPUNIT_ASSERT_EQUAL( fnt.expected, fn.GetFullPath(fnt.fmt) );
     }
 }

@@ -105,47 +105,36 @@ assertEquals(const wchar_t *expected,
     assertEquals(wxString(expected), actual, sourceLine, message);
 }
 
+#define WX_CPPUNIT_ASSERT_EQUALS(T1, T2)                                      \
+    inline void                                                               \
+    assertEquals(T1 expected,                                                 \
+                 T2 actual,                                                   \
+                 CppUnit::SourceLine sourceLine,                              \
+                 const std::string& message)                                  \
+    {                                                                         \
+        if ( !assertion_traits<T1>::equal(expected,actual) )                  \
+        {                                                                     \
+            Asserter::failNotEqual( assertion_traits<T1>::toString(expected), \
+                                    assertion_traits<T2>::toString(actual),   \
+                                    sourceLine,                               \
+                                    message );                                \
+        }                                                                     \
+    }
+
 // and another to be able to specify (usually literal) ints as expected values
-// for functions returning any of unsigned {int,long} or size_t
-inline void
-assertEquals(int expected,
-             unsigned actual,
-             CppUnit::SourceLine sourceLine,
-             const std::string& message)
-{
-    assertEquals(unsigned(expected), actual, sourceLine, message);
-}
+// for functions returning size_t
+WX_CPPUNIT_ASSERT_EQUALS(int, size_t);
 
-inline void
-assertEquals(int expected,
-             unsigned long actual,
-             CppUnit::SourceLine sourceLine,
-             const std::string& message)
-{
-    assertEquals((unsigned long)expected, actual, sourceLine, message);
-}
+// special section with VC6 workarounds: due to incorrect resolution of
+// overloaded/template functions in this compiler (it basically doesn't use the
+// template version at all if any overloaded function matches partially even if
+// none of them matches fully) we also need
+#ifdef __VISUALC6__
 
-// we also need this one to resolve ambiguity in the tests comparing unsigned
-// short (e.g. wxDateTime_t returned by several wxDateTime methods) with
-// literal integer constants
-inline void
-assertEquals(int expected,
-             unsigned short actual,
-             CppUnit::SourceLine sourceLine,
-             const std::string& message)
-{
-    assertEquals((unsigned short)expected, actual, sourceLine, message);
-}
+WX_CPPUNIT_ASSERT_EQUALS(int, int);
+WX_CPPUNIT_ASSERT_EQUALS(size_t, size_t);
 
-// this one is useful for wxTextCtrl functions which return longs
-inline void
-assertEquals(int expected,
-             long actual,
-             CppUnit::SourceLine sourceLine,
-             const std::string& message)
-{
-    assertEquals((long)expected, actual, sourceLine, message);
-}
+#endif // VC6
 
 CPPUNIT_NS_END
 

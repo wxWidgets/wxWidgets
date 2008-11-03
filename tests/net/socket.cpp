@@ -79,7 +79,7 @@ wxSockAddressPtr SocketTestCase::GetServer() const
         addr->Hostname(gs_serverHost);
         addr->Service("www");
 
-        ptr.reset(addr);
+        ptr = wxSockAddressPtr(addr);
     }
 
     return ptr;
@@ -104,7 +104,7 @@ wxSocketClientPtr SocketTestCase::GetHTTPSocket(int flags) const
 
     sock->Write(httpGetRoot.ToAscii(), httpGetRoot.length());
 
-    ptr.reset(sock);
+    ptr = wxSocketClientPtr(sock);
     return ptr;
 }
 
