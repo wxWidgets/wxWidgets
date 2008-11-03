@@ -856,6 +856,62 @@ public:
     */
     void SetPropertyAttributeAll( const wxString& attrName, wxVariant value );
 
+    /**
+        Sets background colour of a property.
+
+        @param id
+            Property name or pointer.
+
+        @param colour
+            New background colour.
+
+        @param recursively
+            If True, child properties are affected recursively. Property
+            categories are skipped if this flag is used.
+    */
+    void SetPropertyBackgroundColour( wxPGPropArg id,
+                                      const wxColour& colour,
+                                      bool recursively = true );
+
+    /** Resets text and background colours of given property.
+    */
+    void SetPropertyColoursToDefault( wxPGPropArg id );
+
+    /**
+        Sets text colour of a property.
+
+        @param id
+            Property name or pointer.
+
+        @param colour
+            New background colour.
+
+        @param recursively
+            If True, child properties are affected recursively. Property
+            categories are skipped if this flag is used.
+    */
+    void SetPropertyTextColour( wxPGPropArg id,
+                                const wxColour& col,
+                                bool recursively = true );
+
+    /**
+        Returns background colour of first cell of a property.
+    */
+    wxColour GetPropertyBackgroundColour( wxPGPropArg id ) const
+    {
+        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxColour())
+        return p->GetCell(0).GetBgCol();
+    }
+
+    /**
+        Returns text colour of first cell of a property.
+    */
+    wxColour GetPropertyTextColour( wxPGPropArg id ) const
+    {
+        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxColour())
+        return p->GetCell(0).GetFgCol();
+    }
+
     /** Sets text, bitmap, and colours for given column's cell.
 
         @remarks

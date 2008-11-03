@@ -774,6 +774,38 @@ bool wxPropertyGridInterface::SetPropertyMaxLength( wxPGPropArg id, int maxLen )
 
 // -----------------------------------------------------------------------
 
+void
+wxPropertyGridInterface::SetPropertyBackgroundColour( wxPGPropArg id,
+                                                      const wxColour& colour,
+                                                      bool recursively )
+{
+    wxPG_PROP_ARG_CALL_PROLOG()
+    p->SetBackgroundColour( colour, recursively );
+    RefreshProperty( p );
+}
+
+// -----------------------------------------------------------------------
+
+void wxPropertyGridInterface::SetPropertyTextColour( wxPGPropArg id,
+                                                     const wxColour& colour,
+                                                     bool recursively )
+{
+    wxPG_PROP_ARG_CALL_PROLOG()
+    p->SetTextColour( colour, recursively );
+    RefreshProperty( p );
+}
+
+// -----------------------------------------------------------------------
+
+void wxPropertyGridInterface::SetPropertyColoursToDefault( wxPGPropArg id )
+{
+    wxPG_PROP_ARG_CALL_PROLOG()
+
+    p->m_cells.clear();
+}
+
+// -----------------------------------------------------------------------
+
 void wxPropertyGridInterface::SetPropertyCell( wxPGPropArg id,
                                                int column,
                                                const wxString& text,

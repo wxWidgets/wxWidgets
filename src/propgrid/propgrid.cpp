@@ -1177,54 +1177,6 @@ void wxPropertyGrid::SetCaptionTextColour( const wxColour& col )
 }
 
 // -----------------------------------------------------------------------
-
-void wxPropertyGrid::SetPropertyBackgroundColour( wxPGPropArg id,
-                                                  const wxColour& colour,
-                                                  bool recursively )
-{
-    wxPG_PROP_ARG_CALL_PROLOG()
-    p->SetBackgroundColour( colour, recursively );
-    DrawItemAndChildren( p );
-}
-
-// -----------------------------------------------------------------------
-
-wxColour wxPropertyGrid::GetPropertyBackgroundColour( wxPGPropArg id ) const
-{
-    wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxColour())
-
-    return p->GetCell(0).GetBgCol();
-}
-
-// -----------------------------------------------------------------------
-
-void wxPropertyGrid::SetPropertyTextColour( wxPGPropArg id, const wxColour& colour,
-                                            bool recursively )
-{
-    wxPG_PROP_ARG_CALL_PROLOG()
-    p->SetTextColour( colour, recursively );
-    DrawItemAndChildren( p );
-}
-
-// -----------------------------------------------------------------------
-
-wxColour wxPropertyGrid::GetPropertyTextColour( wxPGPropArg id ) const
-{
-    wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxColour())
-
-    return p->GetCell(0).GetFgCol();
-}
-
-// -----------------------------------------------------------------------
-
-void wxPropertyGrid::SetPropertyColoursToDefault( wxPGPropArg id )
-{
-    wxPG_PROP_ARG_CALL_PROLOG()
-
-    p->m_cells.clear();
-}
-
-// -----------------------------------------------------------------------
 // wxPropertyGrid property adding and removal
 // -----------------------------------------------------------------------
 

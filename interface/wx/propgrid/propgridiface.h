@@ -245,6 +245,11 @@ public:
     wxVariant GetPropertyAttribute( wxPGPropArg id, const wxString& attrName ) const;
 
     /**
+        Returns background colour of first cell of a property.
+    */
+    wxColour GetPropertyBackgroundColour( wxPGPropArg id ) const;
+
+    /**
         Returns pointer of property's nearest parent category. If no category
         found, returns @NULL.
     */
@@ -292,6 +297,11 @@ public:
 
     /** Returns property's name, by which it is globally accessible. */
     wxString GetPropertyName( wxPGProperty* property );
+
+    /**
+        Returns text colour of first cell of a property.
+    */
+    wxColour GetPropertyTextColour( wxPGPropArg id ) const;
 
     /**
         Returns validator of a property as a reference, which you
@@ -617,6 +627,23 @@ public:
     void SetPropertyAttributeAll( const wxString& attrName, wxVariant value );
 
     /**
+        Sets background colour of a property.
+
+        @param id
+            Property name or pointer.
+
+        @param colour
+            New background colour.
+
+        @param recursively
+            If True, child properties are affected recursively. Property
+            categories are skipped if this flag is used.
+    */
+    void SetPropertyBackgroundColour( wxPGPropArg id,
+                                      const wxColour& colour,
+                                      bool recursively = true );
+
+    /**
         Sets text, bitmap, and colours for given column's cell.
 
         @remarks
@@ -637,6 +664,11 @@ public:
         This untyped client data has to be deleted manually.
     */
     void SetPropertyClientData( wxPGPropArg id, void* clientData );
+
+    /**
+        Resets text and background colours of given property.
+    */
+    void SetPropertyColoursToDefault( wxPGPropArg id );
 
     /**
         Sets editor for a property.
@@ -738,6 +770,24 @@ public:
         Sets max length of property's text.
     */
     bool SetPropertyMaxLength( wxPGPropArg id, int maxLen );
+
+
+    /**
+        Sets text colour of a property.
+
+        @param id
+            Property name or pointer.
+
+        @param colour
+            New background colour.
+
+        @param recursively
+            If True, child properties are affected recursively. Property
+            categories are skipped if this flag is used.
+    */
+    void SetPropertyTextColour( wxPGPropArg id,
+                                const wxColour& col,
+                                bool recursively = true );
 
     /**
         Sets validator of a property.

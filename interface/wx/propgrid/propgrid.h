@@ -587,16 +587,6 @@ public:
     wxVariant GetUncommittedPropertyValue();
 
     /**
-        Returns cell background colour of a property.
-    */
-    wxColour GetPropertyBackgroundColour( wxPGPropArg id ) const;
-
-    /**
-        Returns cell background colour of a property.
-    */
-    wxColour GetPropertyTextColour( wxPGPropArg id ) const;
-
-    /**
         Returns "root property". It does not have name, etc. and it is not
         visible. It is only useful for accessing its children.
     */
@@ -777,24 +767,6 @@ public:
         Sets background colour of margin.
     */
     void SetMarginColour(const wxColour& col);
-
-    /**
-        Sets background colour of property and all its children. Colours of
-        captions are not affected. Background brush cache is optimized for often
-        set colours to be set last.
-    */
-    void SetPropertyBackgroundColour( wxPGPropArg id, const wxColour& col );
-
-    /**
-        Resets text and background colours of given property.
-    */
-    void SetPropertyColoursToDefault( wxPGPropArg id );
-
-    /**
-        Sets text colour of property and all its children.
-    */
-    void SetPropertyTextColour( wxPGPropArg id, const wxColour& col,
-                                bool recursively = true );
 
     /**
         Sets selection background colour - applies to selected property name

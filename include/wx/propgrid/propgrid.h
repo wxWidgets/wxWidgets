@@ -839,12 +839,6 @@ public:
     */
     wxVariant GetUncommittedPropertyValue();
 
-    /** Returns cell background colour of a property. */
-    wxColour GetPropertyBackgroundColour( wxPGPropArg id ) const;
-
-    /** Returns cell background colour of a property. */
-    wxColour GetPropertyTextColour( wxPGPropArg id ) const;
-
     /** Returns "root property". It does not have name, etc. and it is not
         visible. It is only useful for accessing its children.
     */
@@ -988,33 +982,6 @@ public:
 
     /** Sets background colour of margin. */
     void SetMarginColour(const wxColour& col);
-
-    /**
-        Sets background colour of property.
-
-        @param id
-            Property name or pointer.
-
-        @param colour
-            New background colour.
-
-        @param recursively
-            If True, child properties are affected recursively. Property
-            categories are skipped if this flag is used.
-    */
-    void SetPropertyBackgroundColour( wxPGPropArg id,
-                                      const wxColour& colour,
-                                      bool recursively = false);
-
-    /** Resets text and background colours of given property.
-    */
-    void SetPropertyColoursToDefault( wxPGPropArg id );
-
-    /** Sets text colour of property and all its children.
-    */
-    void SetPropertyTextColour( wxPGPropArg id,
-                                const wxColour& col,
-                                bool recursively = true );
 
     /**
         Sets selection background colour - applies to selected property name
