@@ -155,9 +155,9 @@ protected:
     bool DoCreate(int size,
                   const wxSize& pixelSize,
                   bool sizeUsingPixels,
-                  int family,
-                  int style,
-                  int weight,
+                  wxFontFamily family,
+                  wxFontStyle style,
+                  wxFontWeight weight,
                   bool underlined = false,
                   const wxString& face = wxEmptyString,
                   wxFontEncoding encoding = wxFONTENCODING_DEFAULT);

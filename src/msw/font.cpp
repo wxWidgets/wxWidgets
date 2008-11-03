@@ -171,18 +171,18 @@ public:
         return m_nativeFontInfoOk ? true : m_sizeUsingPixels;
     }
 
-    int GetFamily() const
+    wxFontFamily GetFamily() const
     {
         return m_family;
     }
 
-    int GetStyle() const
+    wxFontStyle GetStyle() const
     {
         return m_nativeFontInfoOk ? m_nativeFontInfo.GetStyle()
                                   : m_style;
     }
 
-    int GetWeight() const
+    wxFontWeight GetWeight() const
     {
         return m_nativeFontInfoOk ? m_nativeFontInfo.GetWeight()
                                   : m_weight;
@@ -410,7 +410,7 @@ void wxFontRefData::Init(const wxNativeFontInfo& info, WXHFONT hFont)
     m_nativeFontInfo = info;
     // This is the best we can do since we don't have the
     // correct information at this point.
-    m_family = wxSWISS;
+    m_family = wxFONTFAMILY_SWISS;
 }
 
 wxFontRefData::~wxFontRefData()
