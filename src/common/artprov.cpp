@@ -348,7 +348,7 @@ wxIcon wxArtProvider::GetMessageBoxIcon(int flags)
 
 #ifndef wxHAS_NATIVE_ART_PROVIDER_IMPL
 /*static*/
-wxSize wxArtProvider::GetNativeSizeHint(const wxArtClient& client)
+wxSize wxArtProvider::GetNativeSizeHint(const wxArtClient& WXUNUSED(client))
 {
     // rather than returning some arbitrary value that doesn't make much
     // sense (as 2.8 used to do), tell the caller that we don't have a clue:
