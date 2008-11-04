@@ -17,6 +17,7 @@
 #if wxUSE_MDI
 
 #include "wx/frame.h"
+#include "wx/menu.h"
 
 // forward declarations
 class WXDLLIMPEXP_FWD_CORE wxMDIParentFrame;
