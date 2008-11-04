@@ -2,28 +2,24 @@
 // Name:        wx/msw/mdi.h
 // Purpose:     MDI (Multiple Document Interface) classes
 // Author:      Julian Smart
-// Modified by:
+// Modified by: 2008-10-31 Vadim Zeitlin: derive from the base classes
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart
+// Copyright:   (c) 1997 Julian Smart
+//              (c) 2008 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MDI_H_
-#define _WX_MDI_H_
+#ifndef _WX_MSW_MDI_H_
+#define _WX_MSW_MDI_H_
 
 #include "wx/frame.h"
-
-extern WXDLLIMPEXP_DATA_CORE(const char) wxStatusLineNameStr[];
-
-class WXDLLIMPEXP_FWD_CORE wxMDIClientWindow;
-class WXDLLIMPEXP_FWD_CORE wxMDIChildFrame;
 
 // ---------------------------------------------------------------------------
 // wxMDIParentFrame
 // ---------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxMDIParentFrame : public wxFrame
+class WXDLLIMPEXP_CORE wxMDIParentFrame : public wxMDIParentFrameBase
 {
 public:
     wxMDIParentFrame();
@@ -48,41 +44,26 @@ public:
                 long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
                 const wxString& name = wxFrameNameStr);
 
-    // accessors
-    // ---------
+    // override/implement base class [pure] virtual methods
+    // ----------------------------------------------------
 
-    // Get the active MDI child window
-    wxMDIChildFrame *GetActiveChild() const;
+    static bool IsTDI() { return false; }
 
-    // Get the client window
-    wxMDIClientWindow *GetClientWindow() const { return m_clientWindow; }
+    // we don't store the active child in m_currentChild so override this
+    // function to find it dynamically
+    virtual wxMDIChildFrame *GetActiveChild() const;
 
-    // Create the client window class (don't Create the window,
-    // just return a new class)
-    virtual wxMDIClientWindow *OnCreateClient();
-
-    // MDI windows menu functions
-    // --------------------------
-
-    // return the pointer to the current window menu or NULL if we don't have
-    // because of wxFRAME_NO_WINDOW_MENU style
-    wxMenu *GetWindowMenu() const { return m_windowMenu; }
-
-    // use the given menu instead of the default window menu
-    //
-    // menu can be NULL to disable the window menu completely
-    void SetWindowMenu(wxMenu* menu) ;
-
-    virtual void DoMenuUpdates(wxMenu* menu = NULL);
-
-    // MDI operations
-    // --------------
     virtual void Cascade();
     virtual void Tile(wxOrientation orient = wxHORIZONTAL);
     virtual void ArrangeIcons();
     virtual void ActivateNext();
     virtual void ActivatePrevious();
 
+#if wxUSE_MENUS
+    virtual void SetWindowMenu(wxMenu* menu);
+
+    virtual void DoMenuUpdates(wxMenu* menu = NULL);
+#endif // wxUSE_MENUS
 
     // implementation only from now on
 
@@ -127,12 +108,6 @@ protected:
     void UpdateClientSize();
 
 
-    wxMDIClientWindow *             m_clientWindow;
-    wxMDIChildFrame *               m_currentChild;
-
-    // the current window menu or NULL if we are not using it
-    wxMenu *m_windowMenu;
-
     // true if MDI Frame is intercepting commands, not child
     bool m_parentFrameActive;
 
@@ -155,7 +130,7 @@ private:
 // wxMDIChildFrame
 // ---------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxMDIChildFrame : public wxFrame
+class WXDLLIMPEXP_CORE wxMDIChildFrame : public wxMDIChildFrameBase
 {
 public:
     wxMDIChildFrame() { Init(); }
@@ -172,8 +147,6 @@ public:
         Create(parent, id, title, pos, size, style, name);
     }
 
-    virtual ~wxMDIChildFrame();
-
     bool Create(wxMDIParentFrame *parent,
                 wxWindowID id,
                 const wxString& title,
@@ -182,20 +155,19 @@ public:
                 long style = wxDEFAULT_FRAME_STYLE,
                 const wxString& name = wxFrameNameStr);
 
-    virtual bool IsTopLevel() const { return false; }
+    virtual ~wxMDIChildFrame();
 
-    // MDI operations
+    // implement MDI operations
+    virtual void Activate();
+
+    // Override some frame operations too
     virtual void Maximize(bool maximize = true);
     virtual void Restore();
-    virtual void Activate();
+
+    virtual bool Show(bool show = true);
 
     // Implementation only from now on
     // -------------------------------
-
-    wxMDIParentFrame* GetMDIParent() const
-    {
-        return wxStaticCast(wxFrame::GetParent(), wxMDIParentFrame);
-    }
 
     // Handlers
     bool HandleMDIActivate(long bActivate, WXHWND, WXHWND);
@@ -212,8 +184,6 @@ public:
     bool ResetWindowStyle(void *vrect);
 
     void OnIdle(wxIdleEvent& event);
-
-    virtual bool Show(bool show = true);
 
 protected:
     virtual void DoGetScreenPosition(int *x, int *y) const;
@@ -240,16 +210,10 @@ private:
 // wxMDIClientWindow
 // ---------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxMDIClientWindow : public wxWindow
+class WXDLLIMPEXP_CORE wxMDIClientWindow : public wxMDIClientWindowBase
 {
 public:
     wxMDIClientWindow() { Init(); }
-    wxMDIClientWindow(wxMDIParentFrame *parent, long style = 0)
-    {
-        Init();
-
-        CreateClient(parent, style);
-    }
 
     // Note: this is virtual, to allow overridden behaviour.
     virtual bool CreateClient(wxMDIParentFrame *parent,
@@ -272,5 +236,4 @@ private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxMDIClientWindow)
 };
 
-#endif
-    // _WX_MDI_H_
+#endif // _WX_MSW_MDI_H_

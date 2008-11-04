@@ -15,7 +15,7 @@
 class MyApp : public wxApp
 {
 public:
-    bool OnInit();
+    virtual bool OnInit();
 };
 
 class MyCanvas : public wxScrolledWindow
@@ -26,11 +26,11 @@ public:
 
     bool IsDirty() const { return m_dirty; }
 
-    void OnEvent(wxMouseEvent& event);
-
     void SetText(const wxString& text) { m_text = text; Refresh(); }
 
 private:
+    void OnEvent(wxMouseEvent& event);
+
     wxString m_text;
 
     bool m_dirty;
@@ -42,11 +42,10 @@ private:
 class MyFrame : public wxMDIParentFrame
 {
 public:
-    wxTextCtrl *textWindow;
+    MyFrame();
+    virtual ~MyFrame();
 
-    MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title,
-            const wxPoint& pos, const wxSize& size, const long style);
-
+private:
     void InitToolBar(wxToolBar* toolBar);
 
     void OnSize(wxSizeEvent& event);
@@ -55,16 +54,20 @@ public:
     void OnQuit(wxCommandEvent& event);
     void OnClose(wxCloseEvent& event);
 
+    wxTextCtrl *m_textWindow;
+
     DECLARE_EVENT_TABLE()
 };
 
-class MyChild: public wxMDIChildFrame
+class MyChild : public wxMDIChildFrame
 {
 public:
-    MyCanvas *canvas;
-    MyChild(wxMDIParentFrame *parent, const wxString& title);
-    ~MyChild();
+    MyChild(wxMDIParentFrame *parent);
+    virtual ~MyChild();
 
+    static unsigned GetChildrenCount() { return ms_numChildren; }
+
+private:
     void OnActivate(wxActivateEvent& event);
 
     void OnRefresh(wxCommandEvent& event);
@@ -72,15 +75,19 @@ public:
     void OnChangeTitle(wxCommandEvent& event);
     void OnChangePosition(wxCommandEvent& event);
     void OnChangeSize(wxCommandEvent& event);
-    void OnQuit(wxCommandEvent& event);
+    void OnClose(wxCommandEvent& event);
     void OnSize(wxSizeEvent& event);
     void OnMove(wxMoveEvent& event);
-    void OnClose(wxCloseEvent& event);
+    void OnCloseWindow(wxCloseEvent& event);
 
 #if wxUSE_CLIPBOARD
     void OnPaste(wxCommandEvent& event);
     void OnUpdatePaste(wxUpdateUIEvent& event);
 #endif // wxUSE_CLIPBOARD
+
+    static unsigned ms_numChildren;
+
+    MyCanvas *m_canvas;
 
     DECLARE_EVENT_TABLE()
 };
@@ -88,12 +95,8 @@ public:
 // menu items ids
 enum
 {
-    MDI_QUIT = wxID_EXIT,
-    MDI_NEW_WINDOW = 101,
     MDI_REFRESH,
     MDI_CHANGE_TITLE,
     MDI_CHANGE_POSITION,
-    MDI_CHANGE_SIZE,
-    MDI_CHILD_QUIT,
-    MDI_ABOUT = wxID_ABOUT
+    MDI_CHANGE_SIZE
 };

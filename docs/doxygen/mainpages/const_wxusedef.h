@@ -134,6 +134,7 @@ library:
 @itemdef{wxUSE_GAUGE, Use wxGauge class.}
 @itemdef{wxUSE_GENERIC_DRAGIMAGE, Used in wxDragImage sample.}
 @itemdef{wxUSE_GENERIC_DRAWELLIPSE, See comment in wx/dc.h file.}
+@itemdef{wxUSE_GENERIC_MDI_AS_NATIVE, This is not a user-settable symbol, it is only used internally in wx/generic/mdig.h.}
 @itemdef{wxUSE_GEOMETRY, Use common geometry classes}
 @itemdef{wxUSE_GIF, Use GIF wxImageHandler}
 @itemdef{wxUSE_GLCANVAS, Enables OpenGL support.}

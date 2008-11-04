@@ -140,9 +140,6 @@ END_EVENT_TABLE()
 
 wxMDIParentFrame::wxMDIParentFrame()
 {
-    m_clientWindow = NULL;
-    m_currentChild = NULL;
-    m_windowMenu = NULL;
     m_parentFrameActive = true;
 }
 
@@ -154,17 +151,11 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
                               long style,
                               const wxString& name)
 {
-  m_clientWindow = NULL;
-  m_currentChild = NULL;
-
   // this style can be used to prevent a window from having the standard MDI
   // "Window" menu
-  if ( style & wxFRAME_NO_WINDOW_MENU )
+  if ( !(style & wxFRAME_NO_WINDOW_MENU) )
   {
-      m_windowMenu = NULL;
-  }
-  else // normal case: we have the window menu, so construct it
-  {
+      // normal case: we have the window menu, so construct it
       m_windowMenu = new wxMenu;
 
       m_windowMenu->Append(IDM_WINDOWCASCADE, _("&Cascade"));
@@ -225,8 +216,6 @@ wxMDIParentFrame::~wxMDIParentFrame()
 #endif // wxUSE_STATUSBAR
 
     DestroyChildren();
-
-    delete m_windowMenu;
 
     // the MDI frame menubar is not automatically deleted by Windows unlike for
     // the normal frames
@@ -319,20 +308,15 @@ void wxMDIParentFrame::InternalSetMenuBar()
 
 void wxMDIParentFrame::SetWindowMenu(wxMenu* menu)
 {
-    if (m_windowMenu)
-    {
-        RemoveWindowMenu();
+    // notice that Remove/AddWindowMenu() are safe to call even when
+    // m_windowMenu is NULL
+    RemoveWindowMenu();
 
-        delete m_windowMenu;
-        m_windowMenu = NULL;
-    }
+    delete m_windowMenu;
 
-    if (menu)
-    {
-        m_windowMenu = menu;
+    m_windowMenu = menu;
 
-        AddWindowMenu();
-    }
+    AddWindowMenu();
 }
 
 void wxMDIParentFrame::DoMenuUpdates(wxMenu* menu)
@@ -409,13 +393,6 @@ wxMDIChildFrame *wxMDIParentFrame::GetActiveChild() const
         return NULL;
 
     return (wxMDIChildFrame *)wxFindWinFromHandle(hWnd);
-}
-
-// Create the client window class (don't Create the window, just return a new
-// class)
-wxMDIClientWindow *wxMDIParentFrame::OnCreateClient()
-{
-    return new wxMDIClientWindow;
 }
 
 // Responds to colour changes, and passes event on to children.
@@ -738,6 +715,8 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
                              long style,
                              const wxString& name)
 {
+    m_mdiParent = parent;
+
   SetName(name);
 
   if ( id != wxID_ANY )
@@ -859,7 +838,7 @@ bool wxMDIChildFrame::Show(bool show)
 
     // we need to refresh the MDI frame window menu to include (or exclude if
     // we've been hidden) this frame
-    wxMDIParentFrame *parent = GetMDIParent();
+    wxMDIParentFrame * const parent = GetMDIParent();
     MDISetMenu(parent->GetClientWindow(), NULL, NULL);
 
     return true;
@@ -898,8 +877,8 @@ void wxMDIChildFrame::DoSetClientSize(int width, int height)
 
   // If there's an MDI parent, must subtract the parent's top left corner
   // since MoveWindow moves relative to the parent
-  wxMDIParentFrame *mdiParent = GetMDIParent();
-  ::ScreenToClient((HWND) mdiParent->GetClientWindow()->GetHWND(), &point);
+  wxMDIParentFrame * const mdiParent = GetMDIParent();
+  ::ScreenToClient(GetHwndOf(mdiParent->GetClientWindow()), &point);
 
   MoveWindow(hWnd, point.x, point.y, actual_width, actual_height, (BOOL)true);
 
@@ -934,8 +913,8 @@ void wxMDIChildFrame::DoGetPosition(int *x, int *y) const
 
   // Since we now have the absolute screen coords,
   // if there's a parent we must subtract its top left corner
-  wxMDIParentFrame *mdiParent = GetMDIParent();
-  ::ScreenToClient((HWND) mdiParent->GetClientWindow()->GetHWND(), &point);
+  wxMDIParentFrame * const mdiParent = GetMDIParent();
+  ::ScreenToClient(GetHwndOf(mdiParent->GetClientWindow()), &point);
 
   if (x)
       *x = point.x;
@@ -945,7 +924,7 @@ void wxMDIChildFrame::DoGetPosition(int *x, int *y) const
 
 void wxMDIChildFrame::InternalSetMenuBar()
 {
-    wxMDIParentFrame *parent = GetMDIParent();
+    wxMDIParentFrame * const parent = GetMDIParent();
 
     MDIInsertWindowMenu(parent->GetClientWindow(),
                      m_hMenu, GetMDIWindowMenu(parent));
@@ -971,7 +950,7 @@ WXHICON wxMDIChildFrame::GetDefaultIcon() const
 
 void wxMDIChildFrame::Maximize(bool maximize)
 {
-    wxMDIParentFrame *parent = GetMDIParent();
+    wxMDIParentFrame * const parent = GetMDIParent();
     if ( parent && parent->GetClientWindow() )
     {
         ::SendMessage(GetWinHwnd(parent->GetClientWindow()),
@@ -982,7 +961,7 @@ void wxMDIChildFrame::Maximize(bool maximize)
 
 void wxMDIChildFrame::Restore()
 {
-    wxMDIParentFrame *parent = GetMDIParent();
+    wxMDIParentFrame * const parent = GetMDIParent();
     if ( parent && parent->GetClientWindow() )
     {
         ::SendMessage(GetWinHwnd(parent->GetClientWindow()), WM_MDIRESTORE,
@@ -992,7 +971,7 @@ void wxMDIChildFrame::Restore()
 
 void wxMDIChildFrame::Activate()
 {
-    wxMDIParentFrame *parent = GetMDIParent();
+    wxMDIParentFrame * const parent = GetMDIParent();
     if ( parent && parent->GetClientWindow() )
     {
         ::SendMessage(GetWinHwnd(parent->GetClientWindow()), WM_MDIACTIVATE,
@@ -1104,7 +1083,7 @@ bool wxMDIChildFrame::HandleMDIActivate(long WXUNUSED(activate),
                                         WXHWND hwndAct,
                                         WXHWND hwndDeact)
 {
-    wxMDIParentFrame *parent = GetMDIParent();
+    wxMDIParentFrame * const parent = GetMDIParent();
 
     HMENU menuToSet = 0;
 
@@ -1237,7 +1216,7 @@ bool wxMDIChildFrame::MSWTranslateMessage(WXMSG* msg)
 
 void wxMDIChildFrame::MSWDestroyWindow()
 {
-    wxMDIParentFrame *parent = GetMDIParent();
+    wxMDIParentFrame * const parent = GetMDIParent();
 
     // Must make sure this handle is invalidated (set to NULL) since all sorts
     // of things could happen after the child client is destroyed, but before
@@ -1264,7 +1243,7 @@ void wxMDIChildFrame::MSWDestroyWindow()
 bool wxMDIChildFrame::ResetWindowStyle(void *vrect)
 {
     RECT *rect = (RECT *)vrect;
-    wxMDIParentFrame* pFrameWnd = GetMDIParent();
+    wxMDIParentFrame * const pFrameWnd = GetMDIParent();
     wxMDIChildFrame* pChild = pFrameWnd->GetActiveChild();
 
     if (!pChild || (pChild == this))

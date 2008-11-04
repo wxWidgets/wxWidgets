@@ -34,10 +34,6 @@ BEGIN_EVENT_TABLE(wxMDIParentFrame, wxFrame)
     EVT_SYS_COLOUR_CHANGED(wxMDIParentFrame::OnSysColourChanged)
 END_EVENT_TABLE()
 
-BEGIN_EVENT_TABLE(wxMDIClientWindow, wxWindow)
-    EVT_SCROLL(wxMDIClientWindow::OnScroll)
-END_EVENT_TABLE()
-
 #define TRACE_MDI "mdi"
 
 static const int IDM_WINDOWTILEHOR  = 4001;
@@ -85,9 +81,6 @@ void UMAHighlightAndActivateWindow( WindowRef inWindowRef , bool inActivate )
 
 void wxMDIParentFrame::Init()
 {
-    m_clientWindow = NULL;
-    m_currentChild = NULL;
-    m_windowMenu = (wxMenu*) NULL;
     m_parentFrameActive = true;
     m_shouldBeShown = false;
 }
@@ -104,7 +97,7 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
     // "Window" menu
     if ( style & wxFRAME_NO_WINDOW_MENU )
     {
-        m_windowMenu = (wxMenu *)NULL;
+        m_windowMenu = NULL;
         style -= wxFRAME_NO_WINDOW_MENU ;
     }
     else // normal case: we have the window menu, so construct it
@@ -135,8 +128,6 @@ wxMDIParentFrame::~wxMDIParentFrame()
 
     // already deleted by DestroyChildren()
     m_clientWindow = NULL ;
-
-    delete m_windowMenu;
 }
 
 void wxMDIParentFrame::SetMenuBar(wxMenuBar *menu_bar)
@@ -267,19 +258,6 @@ void wxMDIParentFrame::OnActivate(wxActivateEvent& event)
     event.Skip();
 }
 
-// Returns the active MDI child window
-wxMDIChildFrame *wxMDIParentFrame::GetActiveChild() const
-{
-    return m_currentChild ;
-}
-
-// Create the client window class (don't Create the window,
-// just return a new class)
-wxMDIClientWindow *wxMDIParentFrame::OnCreateClient()
-{
-    return new wxMDIClientWindow( this );
-}
-
 // Responds to colour changes, and passes event on to children.
 void wxMDIParentFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
@@ -287,32 +265,6 @@ void wxMDIParentFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
 
     // Propagate the event to the non-top-level children
     wxFrame::OnSysColourChanged(event);
-}
-
-// MDI operations
-void wxMDIParentFrame::Cascade()
-{
-    // TODO
-}
-
-void wxMDIParentFrame::Tile(wxOrientation WXUNUSED(orient))
-{
-    // TODO
-}
-
-void wxMDIParentFrame::ArrangeIcons()
-{
-    // TODO
-}
-
-void wxMDIParentFrame::ActivateNext()
-{
-    // TODO
-}
-
-void wxMDIParentFrame::ActivatePrevious()
-{
-    // TODO
 }
 
 bool wxMDIParentFrame::ShouldBeVisible() const
@@ -365,10 +317,6 @@ bool wxMDIParentFrame::Show( bool show )
 // Child frame
 // ----------------------------------------------------------------------------
 
-wxMDIChildFrame::wxMDIChildFrame()
-{
-    Init() ;
-}
 void wxMDIChildFrame::Init()
 {
 }
@@ -381,13 +329,15 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
                              long style,
                              const wxString& name)
 {
+    m_mdiParent = parent;
+
     SetName(name);
 
     if ( id == wxID_ANY )
         id = (int)NewControlId();
 
     wxNonOwnedWindow::Create( parent, id, pos , size , MacRemoveBordersFromStyle(style) , name ) ;
-    
+
     SetTitle( title );
 
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
@@ -398,11 +348,6 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
 wxMDIChildFrame::~wxMDIChildFrame()
 {
     DestroyChildren();
-}
-
-void wxMDIChildFrame::SetMenuBar(wxMenuBar *menu_bar)
-{
-    return wxFrame::SetMenuBar( menu_bar ) ;
 }
 
 void wxMDIChildFrame::MacActivate(long timestamp, bool activating)
@@ -462,16 +407,6 @@ void wxMDIChildFrame::MacActivate(long timestamp, bool activating)
 }
 
 // MDI operations
-void wxMDIChildFrame::Maximize()
-{
-    wxFrame::Maximize() ;
-}
-
-void wxMDIChildFrame::Restore()
-{
-    wxFrame::Restore() ;
-}
-
 void wxMDIChildFrame::Activate()
 {
     Raise ();
@@ -480,10 +415,6 @@ void wxMDIChildFrame::Activate()
 //-----------------------------------------------------------------------------
 // wxMDIClientWindow
 //-----------------------------------------------------------------------------
-
-wxMDIClientWindow::wxMDIClientWindow()
-{
-}
 
 wxMDIClientWindow::~wxMDIClientWindow()
 {
@@ -498,15 +429,9 @@ bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long style)
     return true;
 }
 
-// Get size *available for subwindows* i.e. excluding menu bar.
 void wxMDIClientWindow::DoGetClientSize(int *x, int *y) const
 {
     wxDisplaySize( x , y ) ;
-}
-
-// Explicitly call default scroll behaviour
-void wxMDIClientWindow::OnScroll(wxScrollEvent& WXUNUSED(event))
-{
 }
 
 #endif // wxUSE_MDI

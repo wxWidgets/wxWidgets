@@ -1,88 +1,72 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        mdi.h
+// Name:        wx/osx/carbon/mdi.h
 // Purpose:     MDI (Multiple Document Interface) classes.
-//              This doesn't have to be implemented just like Windows,
-//              it could be a tabbed design as in wxGTK.
 // Author:      Stefan Csomor
-// Modified by:
+// Modified by: 2008-10-31 Vadim Zeitlin: derive from the base classes
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
+//              (c) 2008 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MDI_H_
-#define _WX_MDI_H_
+#ifndef _WX_OSX_CARBON_MDI_H_
+#define _WX_OSX_CARBON_MDI_H_
 
-#include "wx/frame.h"
-
-WXDLLIMPEXP_DATA_CORE(extern const char) wxStatusLineNameStr[];
-
-class WXDLLIMPEXP_FWD_CORE wxMDIClientWindow;
-class WXDLLIMPEXP_FWD_CORE wxMDIChildFrame;
-
-class WXDLLIMPEXP_CORE wxMDIParentFrame: public wxFrame
+class WXDLLIMPEXP_CORE wxMDIParentFrame : public wxMDIParentFrameBase
 {
-  DECLARE_DYNAMIC_CLASS(wxMDIParentFrame)
-
 public:
+    wxMDIParentFrame() { Init(); }
+    wxMDIParentFrame(wxWindow *parent,
+                     wxWindowID id,
+                     const wxString& title,
+                     const wxPoint& pos = wxDefaultPosition,
+                     const wxSize& size = wxDefaultSize,
+                     long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
+                     const wxString& name = wxFrameNameStr)
+    {
+        Init();
+        Create(parent, id, title, pos, size, style, name);
+    }
 
-  wxMDIParentFrame() { Init(); }
-  wxMDIParentFrame(wxWindow *parent,
-                   wxWindowID id,
-                   const wxString& title,
-                   const wxPoint& pos = wxDefaultPosition,
-                   const wxSize& size = wxDefaultSize,
-                   long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,  // Scrolling refers to client window
-                   const wxString& name = wxFrameNameStr)
-  {
-      Init();
-      Create(parent, id, title, pos, size, style, name);
-  }
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxString& title,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
+                const wxString& name = wxFrameNameStr);
 
-  virtual ~wxMDIParentFrame();
+    virtual ~wxMDIParentFrame();
 
-  bool Create(wxWindow *parent,
-           wxWindowID id,
-           const wxString& title,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
-           const wxString& name = wxFrameNameStr);
+    // implement/override base class [pure] virtuals
+    // ---------------------------------------------
 
-  // Mac OS activate event
-  virtual void MacActivate(long timestamp, bool activating);
+    static bool IsTDI() { return false; }
 
-  // wxWidgets activate event
-  void OnActivate(wxActivateEvent& event);
-  void OnSysColourChanged(wxSysColourChangedEvent& event);
+    virtual void AddChild(wxWindowBase *child);
+    virtual void RemoveChild(wxWindowBase *child);
 
-  void SetMenuBar(wxMenuBar *menu_bar);
+    virtual void ActivateNext() { /* TODO */ }
+    virtual void ActivatePrevious() { /* TODO */ }
 
-  // Get the active MDI child window (Windows only)
-  wxMDIChildFrame *GetActiveChild() const ;
+    virtual bool Show(bool show = true);
 
-  // Get the client window
-  inline wxMDIClientWindow *GetClientWindow() const { return m_clientWindow; };
-  // Get rect to be used to center top-level children
-  virtual void GetRectForTopLevelChildren(int *x, int *y, int *w, int *h);
 
-  // Create the client window class (don't Create the window,
-  // just return a new class)
-  virtual wxMDIClientWindow *OnCreateClient() ;
+    // Mac-specific implementation from now on
+    // ---------------------------------------
 
-  // MDI operations
-  virtual void Cascade();
-  virtual void Tile(wxOrientation WXUNUSED(orient) = wxHORIZONTAL);
-  virtual void ArrangeIcons();
-  virtual void ActivateNext();
-  virtual void ActivatePrevious();
+    // Mac OS activate event
+    virtual void MacActivate(long timestamp, bool activating);
 
-  virtual bool Show( bool show = true );
+    // wxWidgets activate event
+    void OnActivate(wxActivateEvent& event);
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
 
-  // overridden base clas virtuals
-  virtual void AddChild(wxWindowBase *child);
-  virtual void RemoveChild(wxWindowBase *child);
+    void SetMenuBar(wxMenuBar *menu_bar);
+
+    // Get rect to be used to center top-level children
+    virtual void GetRectForTopLevelChildren(int *x, int *y, int *w, int *h);
 
 protected:
     // common part of all ctors
@@ -93,9 +77,6 @@ protected:
     bool ShouldBeVisible() const;
 
 
-    // TODO maybe have this member
-    wxMDIClientWindow *m_clientWindow;
-    wxMDIChildFrame *m_currentChild;
     wxMenu *m_windowMenu;
 
     // true if MDI Frame is intercepting commands, not child
@@ -107,88 +88,67 @@ protected:
 
 private:
     friend class WXDLLIMPEXP_FWD_CORE wxMDIChildFrame;
+
     DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS(wxMDIParentFrame)
 };
 
-class WXDLLIMPEXP_CORE wxMDIChildFrame: public wxFrame
+class WXDLLIMPEXP_CORE wxMDIChildFrame : public wxMDIChildFrameBase
 {
-DECLARE_DYNAMIC_CLASS(wxMDIChildFrame)
 public:
+    wxMDIChildFrame() { Init(); }
+    wxMDIChildFrame(wxMDIParentFrame *parent,
+                    wxWindowID id,
+                    const wxString& title,
+                    const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& size = wxDefaultSize,
+                    long style = wxDEFAULT_FRAME_STYLE,
+                    const wxString& name = wxFrameNameStr)
+    {
+        Init() ;
+        Create(parent, id, title, pos, size, style, name);
+    }
 
-  wxMDIChildFrame();
-  inline wxMDIChildFrame(wxMDIParentFrame *parent,
-           wxWindowID id,
-           const wxString& title,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           long style = wxDEFAULT_FRAME_STYLE,
-           const wxString& name = wxFrameNameStr)
-  {
-      Init() ;
-      Create(parent, id, title, pos, size, style, name);
-  }
+    bool Create(wxMDIParentFrame *parent,
+                wxWindowID id,
+                const wxString& title,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxDEFAULT_FRAME_STYLE,
+                const wxString& name = wxFrameNameStr);
 
-  virtual ~wxMDIChildFrame();
+    virtual ~wxMDIChildFrame();
 
-  bool Create(wxMDIParentFrame *parent,
-           wxWindowID id,
-           const wxString& title,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           long style = wxDEFAULT_FRAME_STYLE,
-           const wxString& name = wxFrameNameStr);
+    // un-override the base class override
+    virtual bool IsTopLevel() const { return true; }
 
-  // Mac OS activate event
-  virtual void MacActivate(long timestamp, bool activating);
+    // implement MDI operations
+    virtual void Activate();
 
-  // Set menu bar
-  void SetMenuBar(wxMenuBar *menu_bar);
 
-  // MDI operations
-  virtual void Maximize();
-  virtual void Maximize( bool ){ Maximize() ; } // this one is inherited from wxFrame
-  virtual void Restore();
-  virtual void Activate();
+    // Mac OS activate event
+    virtual void MacActivate(long timestamp, bool activating);
+
 protected:
-
     // common part of all ctors
     void Init();
+
+    DECLARE_DYNAMIC_CLASS(wxMDIChildFrame)
 };
 
-/* The client window is a child of the parent MDI frame, and itself
- * contains the child MDI frames.
- * However, you create the MDI children as children of the MDI parent:
- * only in the implementation does the client window become the parent
- * of the children. Phew! So the children are sort of 'adopted'...
- */
-
-class WXDLLIMPEXP_CORE wxMDIClientWindow: public wxWindow
+class WXDLLIMPEXP_CORE wxMDIClientWindow : public wxMDIClientWindowBase
 {
-  DECLARE_DYNAMIC_CLASS(wxMDIClientWindow)
- public:
+public:
+    wxMDIClientWindow() { }
+    virtual ~wxMDIClientWindow();
 
-  wxMDIClientWindow() ;
-  inline wxMDIClientWindow(wxMDIParentFrame *parent, long style = 0)
-  {
-      CreateClient(parent, style);
-  }
-
-  virtual ~wxMDIClientWindow();
-
-  // Note: this is virtual, to allow overridden behaviour.
-  virtual bool CreateClient(wxMDIParentFrame *parent, long style = wxVSCROLL | wxHSCROLL);
-
-  // Explicitly call default scroll behaviour
-  void OnScroll(wxScrollEvent& event);
+    virtual bool CreateClient(wxMDIParentFrame *parent,
+                              long style = wxVSCROLL | wxHSCROLL);
 
 protected:
-    // Gets the size available for subwindows after menu size, toolbar size
-    // and status bar size have been subtracted. If you want to manage your own
-    // toolbar(s), don't call SetToolBar.
-    void DoGetClientSize(int *width, int *height) const;
+    virtual void DoGetClientSize(int *width, int *height) const;
 
-DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS(wxMDIClientWindow)
 };
 
-#endif
-    // _WX_MDI_H_
+#endif // _WX_OSX_CARBON_MDI_H_

@@ -59,18 +59,15 @@ BEGIN_EVENT_TABLE(wxMDIParentFrame, wxFrame)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxMDIClientWindow, wxNotebook)
-    EVT_SCROLL(wxMDIClientWindow::OnScroll)
     EVT_NOTEBOOK_PAGE_CHANGED(wxID_NOTEBOOK_CLIENT_AREA, wxMDIClientWindow::OnPageChanged)
 END_EVENT_TABLE()
 
 
 // Parent frame
 
-wxMDIParentFrame::wxMDIParentFrame()
+void wxMDIParentFrame::Init()
 {
-    m_clientWindow = (wxMDIClientWindow*) NULL;
-    m_activeChild = (wxMDIChildFrame*) NULL;
-    m_activeMenuBar = (wxMenuBar*) NULL;
+    m_activeMenuBar = NULL;
 }
 
 bool wxMDIParentFrame::Create(wxWindow *parent,
@@ -81,29 +78,17 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
                               long style,
                               const wxString& name)
 {
-    m_clientWindow = (wxMDIClientWindow*) NULL;
-    m_activeChild = (wxMDIChildFrame*) NULL;
-    m_activeMenuBar = (wxMenuBar*) NULL;
-
-    bool success = wxFrame::Create(parent, id, title, pos, size, style, name);
-    if (success)
-    {
-        // TODO: app cannot override OnCreateClient since
-        // wxMDIParentFrame::OnCreateClient will still be called
-        // (we're in the constructor). How to resolve?
-
-        m_clientWindow = OnCreateClient();
-
-        // Uses own style for client style
-        m_clientWindow->CreateClient(this, GetWindowStyleFlag());
-
-        int w, h;
-        GetClientSize(& w, & h);
-        m_clientWindow->SetSize(0, 0, w, h);
-        return true;
-    }
-    else
+    if ( !wxFrame::Create(parent, id, title, pos, size, style, name) )
         return false;
+
+    m_clientWindow = OnCreateClient();
+    if ( !m_clientWindow->CreateClient(this, GetWindowStyleFlag()) )
+        return false;
+
+    int w, h;
+    GetClientSize(& w, & h);
+    m_clientWindow->SetSize(0, 0, w, h);
+    return true;
 }
 
 wxMDIParentFrame::~wxMDIParentFrame()
@@ -121,7 +106,7 @@ void wxMDIParentFrame::SetMenuBar(wxMenuBar *menu_bar)
 {
     m_frameMenuBar = menu_bar;
 
-    SetChildMenuBar((wxMDIChildFrame*) NULL);
+    SetChildMenuBar(NULL);
 }
 
 void wxMDIParentFrame::OnSize(wxSizeEvent& WXUNUSED(event))
@@ -139,27 +124,9 @@ void wxMDIParentFrame::OnSize(wxSizeEvent& WXUNUSED(event))
         GetClientWindow()->SetSize(x, y, width, height);
 }
 
-void wxMDIParentFrame::DoGetClientSize(int *width, int *height) const
-{
-    wxFrame::DoGetClientSize(width, height);
-}
-
 void wxMDIParentFrame::OnActivate(wxActivateEvent& WXUNUSED(event))
 {
     // Do nothing
-}
-
-// Returns the active MDI child window
-wxMDIChildFrame *wxMDIParentFrame::GetActiveChild() const
-{
-    return m_activeChild;
-}
-
-// Create the client window class (don't Create the window,
-// just return a new class)
-wxMDIClientWindow *wxMDIParentFrame::OnCreateClient()
-{
-    return new wxMDIClientWindow ;
 }
 
 // Set the child's menu into the parent frame
@@ -167,7 +134,7 @@ void wxMDIParentFrame::SetChildMenuBar(wxMDIChildFrame* child)
 {
     wxMenuBar* oldMenuBar = m_activeMenuBar;
 
-    if (child == (wxMDIChildFrame*) NULL)  // No child: use parent frame
+    if (child == NULL)  // No child: use parent frame
     {
         if (GetMenuBar() && (GetMenuBar() != m_activeMenuBar))
         {
@@ -185,7 +152,7 @@ void wxMDIParentFrame::SetChildMenuBar(wxMDIChildFrame* child)
 
         }
     }
-    else if (child->GetMenuBar() == (wxMenuBar*) NULL) // No child menu bar: use parent frame
+    else if (child->GetMenuBar() == NULL) // No child menu bar: use parent frame
     {
         if (GetMenuBar() && (GetMenuBar() != m_activeMenuBar))
         {
@@ -231,9 +198,9 @@ bool wxMDIParentFrame::ProcessEvent(wxEvent& event)
     inEvent = event.GetEventType();
 
     bool res = false;
-    if (m_activeChild && event.IsKindOf(CLASSINFO(wxCommandEvent)))
+    if (m_currentChild && event.IsKindOf(CLASSINFO(wxCommandEvent)))
     {
-        res = m_activeChild->HandleWindowEvent(event);
+        res = m_currentChild->HandleWindowEvent(event);
     }
 
     if (!res)
@@ -242,18 +209,6 @@ bool wxMDIParentFrame::ProcessEvent(wxEvent& event)
     inEvent = wxEVT_NULL;
 
     return res;
-}
-
-void wxMDIParentFrame::DoSetSize(int x, int y,
-                                 int width, int height,
-                                 int sizeFlags)
-{
-    wxWindow::DoSetSize(x, y, width, height, sizeFlags);
-}
-
-void wxMDIParentFrame::DoSetClientSize(int width, int height)
-{
-    wxWindow::DoSetClientSize(width, height);
 }
 
 // Responds to colour changes, and passes event on to children.
@@ -265,32 +220,6 @@ void wxMDIParentFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
     wxFrame::OnSysColourChanged(event);
 }
 
-// MDI operations
-void wxMDIParentFrame::Cascade()
-{
-    // TODO
-}
-
-void wxMDIParentFrame::Tile(wxOrientation WXUNUSED(orient))
-{
-    // TODO
-}
-
-void wxMDIParentFrame::ArrangeIcons()
-{
-    // TODO
-}
-
-void wxMDIParentFrame::ActivateNext()
-{
-    // TODO
-}
-
-void wxMDIParentFrame::ActivatePrevious()
-{
-    // TODO
-}
-
 // Default menu selection behaviour - display a help string
 void wxMDIParentFrame::OnMenuHighlight(wxMenuEvent& event)
 {
@@ -300,7 +229,7 @@ void wxMDIParentFrame::OnMenuHighlight(wxMenuEvent& event)
             SetStatusText(wxEmptyString);
         else
         {
-            wxMenuBar *menuBar = (wxMenuBar*) NULL;
+            wxMenuBar *menuBar = NULL;
             if (GetActiveChild())
               menuBar = GetActiveChild()->GetMenuBar();
             else
@@ -316,11 +245,6 @@ void wxMDIParentFrame::OnMenuHighlight(wxMenuEvent& event)
 }
 
 // Child frame
-
-wxMDIChildFrame::wxMDIChildFrame()
-{
-    m_mdiParentFrame = (wxMDIParentFrame*) NULL;
-}
 
 bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
                              wxWindowID id,
@@ -344,7 +268,7 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
 
     clientWindow->AddChild(this);
 
-    SetMDIParentFrame(parent);
+    m_mdiParent = parent;
     PreCreation();
 
     int width = size.x;
@@ -414,7 +338,7 @@ wxMDIChildFrame::~wxMDIChildFrame()
         wxMDIParentFrame* parentFrame = GetMDIParentFrame();
 
         if (parentFrame->GetActiveChild() == this)
-            parentFrame->SetActiveChild((wxMDIChildFrame*) NULL);
+            parentFrame->SetActiveChild(NULL);
         wxMDIClientWindow* clientWindow = parentFrame->GetClientWindow();
 
         // Remove page if still there
@@ -437,74 +361,10 @@ wxMDIChildFrame::~wxMDIChildFrame()
         }
         else
         {
-            parentFrame->SetActiveChild((wxMDIChildFrame*) NULL);
-            parentFrame->SetChildMenuBar((wxMDIChildFrame*) NULL);
+            parentFrame->SetActiveChild(NULL);
+            parentFrame->SetChildMenuBar(NULL);
         }
     }
-}
-
-#if 0
-// Implementation: intercept and act upon raise and lower commands.
-void wxMDIChildFrame::OnRaise()
-{
-    wxMDIParentFrame* parentFrame = (wxMDIParentFrame*) GetParent() ;
-    wxMDIChildFrame* oldActiveChild = parentFrame->GetActiveChild();
-    parentFrame->SetActiveChild(this);
-
-    if (oldActiveChild)
-    {
-        wxActivateEvent event(wxEVT_ACTIVATE, false, oldActiveChild->GetId());
-        event.SetEventObject( oldActiveChild );
-        oldActiveChild->HandleWindowEvent(event);
-    }
-
-    wxActivateEvent event(wxEVT_ACTIVATE, true, this->GetId());
-    event.SetEventObject( this );
-    this->HandleWindowEvent(event);
-}
-
-void wxMDIChildFrame::OnLower()
-{
-    wxMDIParentFrame* parentFrame = (wxMDIParentFrame*) GetParent() ;
-    wxMDIChildFrame* oldActiveChild = parentFrame->GetActiveChild();
-
-    if (oldActiveChild == this)
-    {
-        wxActivateEvent event(wxEVT_ACTIVATE, false, oldActiveChild->GetId());
-        event.SetEventObject( oldActiveChild );
-        oldActiveChild->HandleWindowEvent(event);
-    }
-    // TODO: unfortunately we don't now know which is the top-most child,
-    // so make the active child NULL.
-    parentFrame->SetActiveChild((wxMDIChildFrame*) NULL);
-}
-#endif
-
-// Set the client size (i.e. leave the calculation of borders etc.
-// to wxWidgets)
-void wxMDIChildFrame::DoSetClientSize(int width, int height)
-{
-    wxWindow::DoSetClientSize(width, height);
-}
-
-void wxMDIChildFrame::DoGetClientSize(int* width, int* height) const
-{
-    wxWindow::DoGetSize(width, height);
-}
-
-void wxMDIChildFrame::DoSetSize(int x, int y, int width, int height, int sizeFlags)
-{
-    wxWindow::DoSetSize(x, y, width, height, sizeFlags);
-}
-
-void wxMDIChildFrame::DoGetSize(int* width, int* height) const
-{
-    wxWindow::DoGetSize(width, height);
-}
-
-void wxMDIChildFrame::DoGetPosition(int *x, int *y) const
-{
-    wxWindow::DoGetPosition(x, y);
 }
 
 bool wxMDIChildFrame::Show(bool show)
@@ -524,63 +384,14 @@ void wxMDIChildFrame::SetMenuBar(wxMenuBar *menuBar)
     GetMDIParentFrame()->SetChildMenuBar(this);
 }
 
-// Set icon
-void wxMDIChildFrame::SetIcon(const wxIcon& icon)
-{
-    m_icons = wxIconBundle( icon );
-
-    if (icon.Ok())
-    {
-        // Not appropriate since there are no icons in
-        // a tabbed window
-    }
-}
-
-void wxMDIChildFrame::SetIcons(const wxIconBundle& icons)
-{
-    m_icons = icons;
-}
-
 void wxMDIChildFrame::SetTitle(const wxString& title)
 {
-    wxTopLevelWindow::SetTitle( title );
+    m_title = title;
     wxMDIClientWindow* clientWindow = GetMDIParentFrame()->GetClientWindow();
 
-    // Remove page if still there
-    {
-        int i = clientWindow->FindPage(this);
-
-        if (i != -1)
-            clientWindow->SetPageText(i, title);
-    }
-}
-
-// MDI operations
-void wxMDIChildFrame::Maximize()
-{
-    // TODO
-}
-
-void wxMDIChildFrame::Iconize(bool WXUNUSED(iconize))
-{
-    // TODO
-}
-
-bool wxMDIChildFrame::IsIconized() const
-{
-    return false;
-}
-
-// Is it maximized? Always maximized under Motif, using the
-// tabbed MDI implementation.
-bool wxMDIChildFrame::IsMaximized(void) const
-{
-    return true;
-}
-
-void wxMDIChildFrame::Restore()
-{
-    // TODO
+    int i = clientWindow->FindPage(this);
+    if (i != wxNOT_FOUND)
+        clientWindow->SetPageText(i, title);
 }
 
 void wxMDIChildFrame::Activate()
@@ -588,35 +399,7 @@ void wxMDIChildFrame::Activate()
     // TODO
 }
 
-void wxMDIChildFrame::CaptureMouse()
-{
-    wxWindow::CaptureMouse();
-}
-
-void wxMDIChildFrame::ReleaseMouse()
-{
-    wxWindow::ReleaseMouse();
-}
-
-void wxMDIChildFrame::Raise()
-{
-    wxWindow::Raise();
-}
-
-void wxMDIChildFrame::Lower(void)
-{
-    wxWindow::Raise();
-}
-
-void wxMDIChildFrame::DoSetSizeHints(int WXUNUSED(minW), int WXUNUSED(minH), int WXUNUSED(maxW), int WXUNUSED(maxH), int WXUNUSED(incW), int WXUNUSED(incH))
-{
-}
-
 // Client window
-
-wxMDIClientWindow::wxMDIClientWindow()
-{
-}
 
 wxMDIClientWindow::~wxMDIClientWindow()
 {
@@ -631,13 +414,11 @@ bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long style)
 {
     SetWindowStyleFlag(style);
 
-    bool success = wxNotebook::Create(parent, wxID_NOTEBOOK_CLIENT_AREA, wxPoint(0, 0), wxSize(100, 100), 0);
-    if (success)
-    {
-        return true;
-    }
-    else
+    if ( !wxNotebook::Create(parent, wxID_NOTEBOOK_CLIENT_AREA,
+                             wxPoint(0, 0), wxSize(100, 100), 0) )
         return false;
+
+    return true;
 }
 
 int wxMDIClientWindow::FindPage(const wxNotebookPage* page)
@@ -649,37 +430,6 @@ int wxMDIClientWindow::FindPage(const wxNotebookPage* page)
     }
 
     return -1;
-}
-
-void wxMDIClientWindow::DoSetSize(int x, int y, int width, int height, int sizeFlags)
-{
-    wxWindow::DoSetSize(x, y, width, height, sizeFlags);
-}
-
-void wxMDIClientWindow::DoSetClientSize(int width, int height)
-{
-    wxWindow::DoSetClientSize(width, height);
-}
-
-void wxMDIClientWindow::DoGetClientSize(int *width, int *height) const
-{
-    wxWindow::DoGetClientSize(width, height);
-}
-
-void wxMDIClientWindow::DoGetSize(int *width, int *height) const
-{
-    wxWindow::DoGetSize(width, height);
-}
-
-void wxMDIClientWindow::DoGetPosition(int *x, int *y) const
-{
-    wxWindow::DoGetPosition(x, y);
-}
-
-void wxMDIClientWindow::OnScroll(wxScrollEvent& event)
-{
-    //    Default(); // Default processing: OBSOLETE FUNCTION
-    event.Skip();
 }
 
 void wxMDIClientWindow::OnPageChanged(wxBookCtrlEvent& event)

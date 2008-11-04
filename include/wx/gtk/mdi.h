@@ -1,9 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/gtk/mdi.h
-// Purpose:
+// Purpose:     TDI-based MDI implementation for wxGTK
 // Author:      Robert Roebling
+// Modified by: 2008-10-31 Vadim Zeitlin: derive from the base classes
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
+//              (c) 2008 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -15,11 +17,13 @@
 class WXDLLIMPEXP_FWD_CORE wxMDIChildFrame;
 class WXDLLIMPEXP_FWD_CORE wxMDIClientWindow;
 
+typedef struct _GtkNotebook GtkNotebook;
+
 //-----------------------------------------------------------------------------
 // wxMDIParentFrame
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxMDIParentFrame: public wxFrame
+class WXDLLIMPEXP_CORE wxMDIParentFrame : public wxMDIParentFrameBase
 {
 public:
     wxMDIParentFrame() { Init(); }
@@ -36,29 +40,28 @@ public:
         (void)Create(parent, id, title, pos, size, style, name);
     }
 
-    virtual ~wxMDIParentFrame();
-    bool Create( wxWindow *parent,
-                 wxWindowID id,
-                 const wxString& title,
-                 const wxPoint& pos = wxDefaultPosition,
-                 const wxSize& size = wxDefaultSize,
-                 long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
-                 const wxString& name = wxFrameNameStr );
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxString& title,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
+                const wxString& name = wxFrameNameStr);
 
-    wxMDIChildFrame *GetActiveChild() const;
+    // we don't store the active child in m_currentChild unlike the base class
+    // version so override this method to find it dynamically
+    virtual wxMDIChildFrame *GetActiveChild() const;
 
-    wxMDIClientWindow *GetClientWindow() const;
-    virtual wxMDIClientWindow *OnCreateClient();
+    // implement base class pure virtuals
+    // ----------------------------------
 
-    virtual void Cascade() {}
-    virtual void Tile(wxOrientation WXUNUSED(orient) = wxHORIZONTAL) {}
-    virtual void ArrangeIcons() {}
     virtual void ActivateNext();
     virtual void ActivatePrevious();
 
+    static bool IsTDI() { return true; }
+
     // implementation
 
-    wxMDIClientWindow  *m_clientWindow;
     bool                m_justInserted;
 
     virtual void OnInternalIdle();
@@ -77,95 +80,54 @@ private:
 // wxMDIChildFrame
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxMDIChildFrame: public wxFrame
+class WXDLLIMPEXP_CORE wxMDIChildFrame : public wxTDIChildFrame
 {
 public:
-    wxMDIChildFrame();
-    wxMDIChildFrame( wxMDIParentFrame *parent,
-                     wxWindowID id,
-                     const wxString& title,
-                     const wxPoint& pos = wxDefaultPosition,
-                     const wxSize& size = wxDefaultSize,
-                     long style = wxDEFAULT_FRAME_STYLE,
-                     const wxString& name = wxFrameNameStr );
+    wxMDIChildFrame() { Init(); }
+    wxMDIChildFrame(wxMDIParentFrame *parent,
+                    wxWindowID id,
+                    const wxString& title,
+                    const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& size = wxDefaultSize,
+                    long style = wxDEFAULT_FRAME_STYLE,
+                    const wxString& name = wxFrameNameStr)
+    {
+        Init();
+
+        Create(parent, id, title, pos, size, style, name);
+    }
+
+    bool Create(wxMDIParentFrame *parent,
+                wxWindowID id,
+                const wxString& title,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxDEFAULT_FRAME_STYLE,
+                const wxString& name = wxFrameNameStr);
 
     virtual ~wxMDIChildFrame();
-    bool Create( wxMDIParentFrame *parent,
-                 wxWindowID id,
-                 const wxString& title,
-                 const wxPoint& pos = wxDefaultPosition,
-                 const wxSize& size = wxDefaultSize,
-                 long style = wxDEFAULT_FRAME_STYLE,
-                 const wxString& name = wxFrameNameStr );
 
     virtual void SetMenuBar( wxMenuBar *menu_bar );
     virtual wxMenuBar *GetMenuBar() const;
 
-    virtual void AddChild( wxWindowBase *child );
-
     virtual void Activate();
 
-#if wxUSE_STATUSBAR
-    // no status bars
-    virtual wxStatusBar* CreateStatusBar( int WXUNUSED(number) = 1,
-                                        long WXUNUSED(style) = 1,
-                                        wxWindowID WXUNUSED(id) = 1,
-                                        const wxString& WXUNUSED(name) = wxEmptyString)
-      { return (wxStatusBar*)NULL; }
+    virtual void SetTitle(const wxString& title);
 
-    virtual wxStatusBar *GetStatusBar() const { return (wxStatusBar*)NULL; }
-    virtual void SetStatusText( const wxString &WXUNUSED(text), int WXUNUSED(number)=0 ) {}
-    virtual void SetStatusWidths( int WXUNUSED(n), const int WXUNUSED(widths_field)[] ) {}
-#endif
-
-#if wxUSE_TOOLBAR
-    // no toolbar
-    virtual wxToolBar* CreateToolBar( long WXUNUSED(style),
-                                       wxWindowID WXUNUSED(id),
-                                       const wxString& WXUNUSED(name) )
-        { return (wxToolBar*)NULL; }
-    virtual wxToolBar *GetToolBar() const { return (wxToolBar*)NULL; }
-#endif // wxUSE_TOOLBAR
-
-    // no icon
-    virtual void SetIcons(const wxIconBundle& icons )
-        { wxTopLevelWindowBase::SetIcons(icons); }
-
-    // no title
-    virtual void SetTitle( const wxString &title );
-
-    // no maximize etc
-    virtual void Maximize( bool WXUNUSED(maximize) = true ) { }
-    virtual bool IsMaximized() const { return true; }
-    virtual void Iconize(bool WXUNUSED(iconize) = true) { }
-    virtual bool IsIconized() const { return false; }
-    virtual void Restore() {}
-
-    virtual bool IsTopLevel() const { return false; }
-
-    virtual bool Destroy();
+    // implementation
 
     void OnActivate( wxActivateEvent& event );
     void OnMenuHighlight( wxMenuEvent& event );
-
-    // implementation
 
     wxMenuBar         *m_menuBar;
     GtkNotebookPage   *m_page;
     bool               m_justInserted;
 
-protected:
-    // override wxFrame methods to not do anything
-    virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO);
-
-    // no size hints
-    virtual void DoSetSizeHints(int WXUNUSED(minW), int WXUNUSED(minH),
-                                int WXUNUSED(maxW), int WXUNUSED(maxH),
-                                int WXUNUSED(incW), int WXUNUSED(incH)) {}
-
 private:
+    void Init();
+
+    GtkNotebook *GTKGetNotebook() const;
+
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxMDIChildFrame)
 };
@@ -174,13 +136,13 @@ private:
 // wxMDIClientWindow
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxMDIClientWindow: public wxWindow
+class WXDLLIMPEXP_CORE wxMDIClientWindow : public wxMDIClientWindowBase
 {
 public:
-    wxMDIClientWindow();
-    wxMDIClientWindow( wxMDIParentFrame *parent, long style = 0 );
-    virtual ~wxMDIClientWindow();
-    virtual bool CreateClient( wxMDIParentFrame *parent, long style = wxVSCROLL | wxHSCROLL );
+    wxMDIClientWindow() { }
+
+    virtual bool CreateClient(wxMDIParentFrame *parent,
+                              long style = wxVSCROLL | wxHSCROLL);
 
 private:
     virtual void AddChildGTK(wxWindowGTK* child);

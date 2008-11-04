@@ -1374,7 +1374,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/motif/icon.cpp
     src/motif/listbox.cpp
     src/motif/main.cpp
-    src/motif/mdi.cpp
     src/motif/menu.cpp
     src/motif/menuitem.cpp
     src/motif/minifram.cpp
@@ -1407,6 +1406,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/fontdlgg.cpp
     src/generic/fontpickerg.cpp
     src/generic/listctrl.cpp
+    src/generic/mdig.cpp
     src/generic/notebook.cpp
     src/generic/prntdlgg.cpp
     src/generic/statline.cpp
@@ -1424,6 +1424,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/fontdlgg.h
     wx/generic/fontpickerg.h
     wx/generic/listctrl.h
+    wx/generic/mdig.h
     wx/generic/notebook.h
     wx/generic/prntdlgg.h
     wx/generic/statline.h
@@ -1460,7 +1461,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/motif/gauge.h
     wx/motif/icon.h
     wx/motif/listbox.h
-    wx/motif/mdi.h
     wx/motif/menu.h
     wx/motif/menuitem.h
     wx/motif/minifram.h

@@ -2,334 +2,260 @@
 // Name:        wx/generic/mdig.h
 // Purpose:     Generic MDI (Multiple Document Interface) classes
 // Author:      Hans Van Leemputten
-// Modified by:
+// Modified by: 2008-10-31 Vadim Zeitlin: derive from the base classes
 // Created:     29/07/2002
 // RCS-ID:      $Id$
-// Copyright:   (c) Hans Van Leemputten
+// Copyright:   (c) 2002 Hans Van Leemputten
+//              (c) 2008 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MDIG_H_
-#define _WX_MDIG_H_
+#ifndef _WX_GENERIC_MDIG_H_
+#define _WX_GENERIC_MDIG_H_
 
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
 
-#include "wx/frame.h"
 #include "wx/panel.h"
-#include "wx/notebook.h"
 
+class WXDLLIMPEXP_FWD_CORE wxBookCtrlBase;
+class WXDLLIMPEXP_FWD_CORE wxBookCtrlEvent;
 class WXDLLIMPEXP_FWD_CORE wxIcon;
 class WXDLLIMPEXP_FWD_CORE wxIconBundle;
+class WXDLLIMPEXP_FWD_CORE wxNotebook;
 
-extern WXDLLIMPEXP_DATA_CORE(const char) wxStatusLineNameStr[];
+#if wxUSE_GENERIC_MDI_AS_NATIVE
+    #define wxGenericMDIParentFrame wxMDIParentFrame
+    #define wxGenericMDIChildFrame wxMDIChildFrame
+    #define wxGenericMDIClientWindow wxMDIClientWindow
+#else // !wxUSE_GENERIC_MDI_AS_NATIVE
+    class WXDLLIMPEXP_FWD_CORE wxGenericMDIParentFrame;
+    class WXDLLIMPEXP_FWD_CORE wxGenericMDIChildFrame;
+    class WXDLLIMPEXP_FWD_CORE wxGenericMDIClientWindow;
+#endif // wxUSE_GENERIC_MDI_AS_NATIVE/!wxUSE_GENERIC_MDI_AS_NATIVE
 
-
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_FWD_CORE wxGenericMDIParentFrame;
-class WXDLLIMPEXP_FWD_CORE wxGenericMDIClientWindow;
-class WXDLLIMPEXP_FWD_CORE wxGenericMDIChildFrame;
-
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // wxGenericMDIParentFrame
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxGenericMDIParentFrame: public wxFrame
+class WXDLLIMPEXP_CORE wxGenericMDIParentFrame : public wxMDIParentFrameBase
 {
 public:
-    wxGenericMDIParentFrame();
+    wxGenericMDIParentFrame() { Init(); }
     wxGenericMDIParentFrame(wxWindow *parent,
                      wxWindowID winid,
                      const wxString& title,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
-                     const wxString& name = wxFrameNameStr);
+                     const wxString& name = wxFrameNameStr)
+    {
+        Init();
+
+        Create(parent, winid, title, pos, size, style, name);
+    }
+
+    bool Create(wxWindow *parent,
+                wxWindowID winid,
+                const wxString& title,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
+                const wxString& name = wxFrameNameStr);
 
     virtual ~wxGenericMDIParentFrame();
-    bool Create( wxWindow *parent,
-                 wxWindowID winid,
-                 const wxString& title,
-                 const wxPoint& pos = wxDefaultPosition,
-                 const wxSize& size = wxDefaultSize,
-                 long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
-                 const wxString& name = wxFrameNameStr );
+
+    // implement base class pure virtuals
+    static bool IsTDI() { return true; }
+
+    virtual void ActivateNext() { AdvanceActive(true); }
+    virtual void ActivatePrevious() { AdvanceActive(false); }
 
 #if wxUSE_MENUS
-    wxMenu* GetWindowMenu() const { return m_pWindowMenu; };
-    void SetWindowMenu(wxMenu* pMenu);
+    virtual void SetWindowMenu(wxMenu* pMenu);
 
     virtual void SetMenuBar(wxMenuBar *pMenuBar);
 #endif // wxUSE_MENUS
 
-    void SetChildMenuBar(wxGenericMDIChildFrame *pChild);
-
     virtual bool ProcessEvent(wxEvent& event);
 
-    wxGenericMDIChildFrame *GetActiveChild() const;
-    inline void SetActiveChild(wxGenericMDIChildFrame* pChildFrame);
+    virtual wxGenericMDIClientWindow *OnCreateGenericClient();
 
-    wxGenericMDIClientWindow *GetClientWindow() const;
-    virtual wxGenericMDIClientWindow *OnCreateClient();
 
-    virtual void Cascade() { /* Has no effect */ }
-    virtual void Tile(wxOrientation WXUNUSED(orient) = wxHORIZONTAL) { }
-    virtual void ArrangeIcons() { /* Has no effect */ }
-    virtual void ActivateNext();
-    virtual void ActivatePrevious();
+    // implementation only from now on
+    void WXSetChildMenuBar(wxGenericMDIChildFrame *child);
+    void WXUpdateChildTitle(wxGenericMDIChildFrame *child);
+    void WXActivateChild(wxGenericMDIChildFrame *child);
+    void WXRemoveChild(wxGenericMDIChildFrame *child);
+    bool WXIsActiveChild(wxGenericMDIChildFrame *child) const;
+    bool WXIsInsideChildHandler(wxGenericMDIChildFrame *child) const;
+
+    // return the book control used by the client window to manage the pages
+    wxBookCtrlBase *GetBookCtrl() const;
 
 protected:
-    wxGenericMDIClientWindow   *m_pClientWindow;
-    wxGenericMDIChildFrame     *m_pActiveChild;
 #if wxUSE_MENUS
-    wxMenu              *m_pWindowMenu;
-    wxMenuBar           *m_pMyMenuBar;
+    wxMenuBar *m_pMyMenuBar;
 #endif // wxUSE_MENUS
 
-protected:
+    // advance the activation forward or backwards
+    void AdvanceActive(bool forward);
+
+private:
     void Init();
 
 #if wxUSE_MENUS
     void RemoveWindowMenu(wxMenuBar *pMenuBar);
     void AddWindowMenu(wxMenuBar *pMenuBar);
 
-    void DoHandleMenu(wxCommandEvent &event);
+    void OnWindowMenu(wxCommandEvent& event);
 #endif // wxUSE_MENUS
 
-    virtual void DoGetClientSize(int *width, int *height) const;
+    void OnClose(wxCloseEvent& event);
 
-private:
+    // return the client window, may be NULL if we hadn't been created yet
+    wxGenericMDIClientWindow *GetGenericClientWindow() const;
+
+    // close all children, return false if any of them vetoed it
+    bool CloseAll();
+
+
+    // this pointer is non-NULL if we're currently inside our ProcessEvent()
+    // and we forwarded the event to this child (as we do with menu events)
+    wxMDIChildFrameBase *m_childHandler;
+
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxGenericMDIParentFrame)
 };
 
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // wxGenericMDIChildFrame
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxGenericMDIChildFrame: public wxPanel
+class WXDLLIMPEXP_CORE wxGenericMDIChildFrame : public wxTDIChildFrame
 {
 public:
-    wxGenericMDIChildFrame();
-    wxGenericMDIChildFrame( wxGenericMDIParentFrame *parent,
-                     wxWindowID winid,
-                     const wxString& title,
-                     const wxPoint& pos = wxDefaultPosition,
-                     const wxSize& size = wxDefaultSize,
-                     long style = wxDEFAULT_FRAME_STYLE,
-                     const wxString& name = wxFrameNameStr );
+    wxGenericMDIChildFrame() { Init(); }
+    wxGenericMDIChildFrame(wxGenericMDIParentFrame *parent,
+                           wxWindowID winid,
+                           const wxString& title,
+                           const wxPoint& pos = wxDefaultPosition,
+                           const wxSize& size = wxDefaultSize,
+                           long style = wxDEFAULT_FRAME_STYLE,
+                           const wxString& name = wxFrameNameStr)
+    {
+        Init();
+
+        Create(parent, winid, title, pos, size, style, name);
+    }
+
+    bool Create(wxGenericMDIParentFrame *parent,
+                wxWindowID winid,
+                const wxString& title,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxDEFAULT_FRAME_STYLE,
+                const wxString& name = wxFrameNameStr);
 
     virtual ~wxGenericMDIChildFrame();
-    bool Create( wxGenericMDIParentFrame *parent,
-                 wxWindowID winid,
-                 const wxString& title,
-                 const wxPoint& pos = wxDefaultPosition,
-                 const wxSize& size = wxDefaultSize,
-                 long style = wxDEFAULT_FRAME_STYLE,
-                 const wxString& name = wxFrameNameStr );
+
+    // implement MDI operations
+    virtual void Activate();
+
 
 #if wxUSE_MENUS
     virtual void SetMenuBar( wxMenuBar *menu_bar );
     virtual wxMenuBar *GetMenuBar() const;
 #endif // wxUSE_MENUS
 
+    virtual wxString GetTitle() const { return m_title; }
     virtual void SetTitle(const wxString& title);
-    virtual wxString GetTitle() const;
 
-    virtual void Activate();
+    virtual bool TryParent(wxEvent& event);
 
-#if wxUSE_STATUSBAR
-    // no status bars
-    virtual wxStatusBar* CreateStatusBar( int WXUNUSED(number) = 1,
-                                        long WXUNUSED(style) = 1,
-                                        wxWindowID WXUNUSED(winid) = 1,
-                                        const wxString& WXUNUSED(name) = wxEmptyString)
-      { return (wxStatusBar*)NULL; }
+    // implementation only from now on
 
-    virtual wxStatusBar *GetStatusBar() const { return (wxStatusBar*)NULL; }
-    virtual void SetStatusText( const wxString &WXUNUSED(text), int WXUNUSED(number)=0 ) {}
-    virtual void SetStatusWidths( int WXUNUSED(n), const int WXUNUSED(widths_field)[] ) {}
+    wxGenericMDIParentFrame* GetGenericMDIParent() const
+    {
+#if wxUSE_GENERIC_MDI_AS_NATIVE
+        return GetMDIParent();
+#else // generic != native
+        return m_mdiParentGeneric;
 #endif
-
-#if wxUSE_TOOLBAR
-    // no toolbar bars
-    virtual wxToolBar* CreateToolBar( long WXUNUSED(style),
-                                       wxWindowID WXUNUSED(winid),
-                                       const wxString& WXUNUSED(name) )
-        { return (wxToolBar*)NULL; }
-    virtual wxToolBar *GetToolBar() const { return (wxToolBar*)NULL; }
-#endif
-
-    // no icon
-    void SetIcon(const wxIcon& WXUNUSED(icon)) { }
-    virtual void SetIcons( const wxIconBundle& WXUNUSED(icons) ) { }
-
-    // no maximize etc
-    virtual void Maximize( bool WXUNUSED(maximize) = true) { /* Has no effect */ }
-    virtual void Restore() { /* Has no effect */ }
-    virtual void Iconize(bool WXUNUSED(iconize)  = true) { /* Has no effect */ }
-    virtual bool IsMaximized() const { return true; }
-    virtual bool IsIconized() const { return false; }
-    virtual bool ShowFullScreen(bool WXUNUSED(show), long WXUNUSED(style)) { return false; }
-    virtual bool IsFullScreen() const { return false; }
-
-    virtual bool IsTopLevel() const { return false; }
-
-    void OnMenuHighlight(wxMenuEvent& event);
-    void OnActivate(wxActivateEvent& event);
-
-    // The next 2 are copied from top level...
-    void OnCloseWindow(wxCloseEvent& event);
-    void OnSize(wxSizeEvent& event);
-
-    void SetMDIParentFrame(wxGenericMDIParentFrame* parentFrame);
-    wxGenericMDIParentFrame* GetMDIParentFrame() const;
+    }
 
 protected:
-    wxGenericMDIParentFrame *m_pMDIParentFrame;
-    wxRect            m_MDIRect;
-    wxString          m_Title;
+    wxString m_title;
 
 #if wxUSE_MENUS
     wxMenuBar        *m_pMenuBar;
 #endif // wxUSE_MENUS
 
+#if !wxUSE_GENERIC_MDI_AS_NATIVE
+    wxGenericMDIParentFrame *m_mdiParentGeneric;
+#endif
+
 protected:
     void Init();
 
-    virtual void DoMoveWindow(int x, int y, int width, int height);
-
-    // no size hints
-    virtual void DoSetSizeHints(int WXUNUSED(minW), int WXUNUSED(minH),
-                                int WXUNUSED(maxW), int WXUNUSED(maxH),
-                                int WXUNUSED(incW), int WXUNUSED(incH)) {}
-
-    // This function needs to be called when a size change is confirmed,
-    // we needed this function to prevent any body from the outside
-    // changing the panel... it messes the UI layout when we would allow it.
-    void ApplyMDIChildFrameRect();
-
 private:
+    void OnMenuHighlight(wxMenuEvent& event);
+    void OnClose(wxCloseEvent& event);
+
     DECLARE_DYNAMIC_CLASS(wxGenericMDIChildFrame)
     DECLARE_EVENT_TABLE()
 
     friend class wxGenericMDIClientWindow;
 };
 
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // wxGenericMDIClientWindow
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxGenericMDIClientWindow: public wxNotebook
+class WXDLLIMPEXP_CORE wxGenericMDIClientWindow : public wxMDIClientWindowBase
 {
 public:
-    wxGenericMDIClientWindow();
-    wxGenericMDIClientWindow( wxGenericMDIParentFrame *parent, long style = 0 );
-    virtual ~wxGenericMDIClientWindow();
-    virtual bool CreateClient( wxGenericMDIParentFrame *parent, long style = wxVSCROLL | wxHSCROLL );
+    wxGenericMDIClientWindow() { }
 
-    virtual int SetSelection(size_t nPage);
+    // unfortunately we need to provide our own version of CreateClient()
+    // because of the difference in the type of the first parameter and
+    // implement the base class pure virtual method in terms of it
+    // (CreateGenericClient() is virtual itself to allow customizing the client
+    // window creation by overriding it in the derived classes)
+    virtual bool CreateGenericClient(wxWindow *parent);
+    virtual bool CreateClient(wxMDIParentFrame *parent,
+                              long WXUNUSED(style) = wxVSCROLL | wxHSCROLL)
+    {
+        return CreateGenericClient(parent);
+    }
 
-protected:
+    // implementation only
+    wxBookCtrlBase *GetBookCtrl() const;
+    wxGenericMDIChildFrame *GetChild(size_t pos) const;
+    int FindChild(wxGenericMDIChildFrame *child) const;
+
+private:
     void PageChanged(int OldSelection, int newSelection);
 
     void OnPageChanged(wxBookCtrlEvent& event);
     void OnSize(wxSizeEvent& event);
 
-private:
+    // the notebook containing all MDI children as its pages
+    wxNotebook *m_notebook;
+
     DECLARE_DYNAMIC_CLASS(wxGenericMDIClientWindow)
-    DECLARE_EVENT_TABLE()
 };
 
+// ----------------------------------------------------------------------------
+// inline functions implementation
+// ----------------------------------------------------------------------------
 
-/*
- * Define normal wxMDI classes based on wxGenericMDI
- */
-
-#ifndef wxUSE_GENERIC_MDI_AS_NATIVE
-#if defined(__WXUNIVERSAL__) || defined(__WXPM__) || defined(__WXCOCOA__)
-#define wxUSE_GENERIC_MDI_AS_NATIVE   1
-#else
-#define wxUSE_GENERIC_MDI_AS_NATIVE   0
-#endif
-#endif // wxUSE_GENERIC_MDI_AS_NATIVE
-
-#if wxUSE_GENERIC_MDI_AS_NATIVE
-
-class wxMDIChildFrame ;
-
-//-----------------------------------------------------------------------------
-// wxMDIParentFrame
-//-----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxMDIParentFrame: public wxGenericMDIParentFrame
+inline bool
+wxGenericMDIParentFrame::
+WXIsInsideChildHandler(wxGenericMDIChildFrame *child) const
 {
-public:
-    wxMDIParentFrame() {}
-    wxMDIParentFrame(wxWindow *parent,
-                     wxWindowID winid,
-                     const wxString& title,
-                     const wxPoint& pos = wxDefaultPosition,
-                     const wxSize& size = wxDefaultSize,
-                     long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
-                     const wxString& name = wxFrameNameStr)
-         :wxGenericMDIParentFrame(parent, winid, title, pos, size, style, name)
-     {
-     }
+    return child == m_childHandler;
+}
 
-    wxMDIChildFrame * GetActiveChild() const ;
-
-
-private:
-    DECLARE_DYNAMIC_CLASS(wxMDIParentFrame)
-};
-
-//-----------------------------------------------------------------------------
-// wxMDIChildFrame
-//-----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxMDIChildFrame: public wxGenericMDIChildFrame
-{
-public:
-    wxMDIChildFrame() {}
-
-    wxMDIChildFrame( wxGenericMDIParentFrame *parent,
-                     wxWindowID winid,
-                     const wxString& title,
-                     const wxPoint& pos = wxDefaultPosition,
-                     const wxSize& size = wxDefaultSize,
-                     long style = wxDEFAULT_FRAME_STYLE,
-                     const wxString& name = wxFrameNameStr )
-         :wxGenericMDIChildFrame(parent, winid, title, pos, size, style, name)
-     {
-     }
-private:
-    DECLARE_DYNAMIC_CLASS(wxMDIChildFrame)
-};
-
-//-----------------------------------------------------------------------------
-// wxMDIClientWindow
-//-----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxMDIClientWindow: public wxGenericMDIClientWindow
-{
-public:
-    wxMDIClientWindow() {}
-
-    wxMDIClientWindow( wxGenericMDIParentFrame *parent, long style = 0 )
-        :wxGenericMDIClientWindow(parent, style)
-    {
-    }
-
-private:
-    DECLARE_DYNAMIC_CLASS(wxMDIClientWindow)
-};
-
-#endif
-
-#endif
-    // _WX_MDIG_H_
+#endif // _WX_GENERIC_MDIG_H_
