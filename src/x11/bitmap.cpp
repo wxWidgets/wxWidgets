@@ -1427,25 +1427,25 @@ public:
 
     virtual bool LoadFile(wxBitmap *WXUNUSED(bitmap),
                           const wxString& WXUNUSED(name),
-                          long WXUNUSED(flags),
+                          wxBitmapType WXUNUSED(flags),
                           int WXUNUSED(desiredWidth),
                           int WXUNUSED(desiredHeight))
         { return false; }
 
     virtual bool SaveFile(const wxBitmap *WXUNUSED(bitmap),
                           const wxString& WXUNUSED(name),
-                          int WXUNUSED(type),
+                          wxBitmapType WXUNUSED(type),
                           const wxPalette *WXUNUSED(palette) = NULL)
         { return false; }
 
-    virtual bool Create(wxBitmap *bitmap, const void* data, long flags,
+    virtual bool Create(wxBitmap *bitmap, const void* data, wxBitmapType flags,
                         int width, int height, int depth = 1);
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxXPMDataHandler, wxBitmapHandler)
 
 bool wxXPMDataHandler::Create(wxBitmap *bitmap, const void* bits,
-                              long WXUNUSED(flags),
+                              wxBitmapType WXUNUSED(flags),
                               int WXUNUSED(width), int WXUNUSED(height), int WXUNUSED(depth))
 {
 #if wxHAVE_LIB_XPM
