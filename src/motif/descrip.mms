@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 19 december 2007                                                    *
+# Date : 5 November 2008                                                     *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -54,7 +54,6 @@ OBJECTS = \
 		icon.obj,\
 		listbox.obj,\
 		main.obj,\
-		mdi.obj,\
 		menu.obj,\
 		menuitem.obj,\
 		minifram.obj,\
@@ -106,7 +105,6 @@ SOURCES = \
 		icon.cpp,\
 		listbox.cpp,\
 		main.cpp,\
-		mdi.cpp,\
 		menu.cpp,\
 		menuitem.cpp,\
 		minifram.cpp,\
@@ -169,7 +167,6 @@ gsockmot.obj : gsockmot.cpp
 icon.obj : icon.cpp
 listbox.obj : listbox.cpp
 main.obj : main.cpp
-mdi.obj : mdi.cpp
 menu.obj : menu.cpp
 menuitem.obj : menuitem.cpp
 minifram.obj : minifram.cpp
