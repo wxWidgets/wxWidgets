@@ -164,7 +164,8 @@ SOURCES = \
 
 .ifdef __WXMOTIF__
 OBJECTS0=statusbr.obj,statline.obj,notebook.obj,spinctlg.obj,collpaneg.obj,\
-	combog.obj,animateg.obj,colrdlgg.obj,clrpickerg.obj,fontpickerg.obj
+	combog.obj,animateg.obj,colrdlgg.obj,clrpickerg.obj,fontpickerg.obj,\
+	mdig.obj
 .else
 .ifdef __WXX11__
 OBJECTS0=accel.obj,filedlgg.obj,dragimgg.obj,fdrepdlg.obj,htmllbox.obj,\
