@@ -20,12 +20,48 @@
     #include "wx/wx.h"
 #endif
 
+#include "wx/beforestd.h"
+#include <cppunit/TestListener.h>
+#include <cppunit/Test.h>
+#include <cppunit/TestResult.h>
+#include "wx/afterstd.h"
+
 #include "wx/cmdline.h"
 #include <iostream>
 
 using CppUnit::Test;
 using CppUnit::TestSuite;
 using CppUnit::TestFactoryRegistry;
+
+
+// Displays the test name. This allow for quick investigation on which test hangs
+class DetailListener : public CppUnit::TestListener
+{
+public:
+    DetailListener(bool doTiming = false):
+        CppUnit::TestListener(),
+        m_timing(doTiming)
+    {
+    }
+
+    virtual void startTest(CppUnit::Test *test)
+    {
+        CppUnit::stdCOut() << test->getName () << " ";
+        m_watch.Start();
+    }
+
+    virtual void endTest(CppUnit::Test * WXUNUSED(test))
+    {
+        m_watch.Pause();
+        if ( m_timing )
+            CppUnit::stdCOut() << " (in "<< m_watch.Time() << " ms )";
+        CppUnit::stdCOut() << "\n";
+    }
+
+protected :
+    bool m_timing;
+    wxStopWatch m_watch;
+};
 
 using namespace std;
 
@@ -55,6 +91,8 @@ private:
     // command lines options/parameters
     bool m_list;
     bool m_longlist;
+    bool m_detail;
+    bool m_timing;
     vector<string> m_registries;
 };
 
@@ -97,6 +135,12 @@ void TestApp::OnInitCmdLine(wxCmdLineParser& parser)
         { wxCMD_LINE_SWITCH, "L", "longlist",
             "list the test cases, do not run them",
             wxCMD_LINE_VAL_NONE, 0 },
+        { wxCMD_LINE_SWITCH, "d", "detail",
+            "print the test case names, run them",
+            wxCMD_LINE_VAL_NONE, 0 },
+        { wxCMD_LINE_SWITCH, "t", "timing",
+            "print names and mesure running time of individual test, run them",
+            wxCMD_LINE_VAL_NONE, 0 },
         { wxCMD_LINE_PARAM, NULL, NULL, "REGISTRY", wxCMD_LINE_VAL_STRING,
             wxCMD_LINE_PARAM_OPTIONAL | wxCMD_LINE_PARAM_MULTIPLE },
         wxCMD_LINE_DESC_END
@@ -117,6 +161,8 @@ bool TestApp::OnCmdLineParsed(wxCmdLineParser& parser)
 
     m_longlist = parser.Found(_T("longlist"));
     m_list = m_longlist || parser.Found(_T("list"));
+    m_timing = parser.Found(_T("timing"));
+    m_detail = !m_timing && parser.Found(_T("detail"));
 
     return TestAppBase::OnCmdLineParsed(parser);
 }
@@ -162,6 +208,11 @@ int TestApp::OnRun()
     // cerr) and don't flush it so all the dots appear at once at the end which
     // is not very useful so unbuffer cout to work around this
     cout.setf(ios::unitbuf);
+
+    // add detail listener if needed
+    DetailListener detailListener(m_timing);
+    if ( m_detail || m_timing )
+        runner.eventManager().addListener(&detailListener);
 
     return runner.run("", false, true, !verbose) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
