@@ -118,6 +118,9 @@ void wxGLCanvasBase::OnSize(wxSizeEvent& WXUNUSED(event))
 /* static */
 bool wxGLCanvasBase::IsExtensionInList(const char *list, const char *extension)
 {
+    if ( !list )
+        return false;
+
     for ( const char *p = list; *p; p++ )
     {
         // advance up to the next possible match
