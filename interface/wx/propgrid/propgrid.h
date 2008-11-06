@@ -451,6 +451,10 @@ public:
     /**
         Enables or disables (shows/hides) categories according to parameter
         enable.
+
+        @remarks This functions deselects selected property, if any. Validation
+                failure option wxPG_VFB_STAY_IN_PROPERTY is not respected, ie.
+                selection is cleared even if editor had invalid value.
     */
     bool EnableCategories( bool enable );
 
@@ -811,11 +815,19 @@ public:
 
     /**
         Sorts all items at all levels (except private children).
+
+        @remarks This functions deselects selected property, if any. Validation
+                failure option wxPG_VFB_STAY_IN_PROPERTY is not respected, ie.
+                selection is cleared even if editor had invalid value.
     */
     void Sort();
 
     /**
         Sorts children of a property.
+
+        @remarks This functions deselects selected property, if any. Validation
+                failure option wxPG_VFB_STAY_IN_PROPERTY is not respected, ie.
+                selection is cleared even if editor had invalid value.
     */
     void SortChildren( wxPGPropArg id );
 };

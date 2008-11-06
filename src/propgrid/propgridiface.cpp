@@ -315,11 +315,7 @@ void wxPropertyGridInterface::DeleteProperty( wxPGPropArg id )
     wxPropertyGrid* grid = state->GetGrid();
 
     if ( grid->GetState() == state )
-    {
-        bool selRes = grid->DoSelectProperty(NULL, wxPG_SEL_DELETING);
-        wxPG_CHECK_RET_DBG( selRes,
-                            wxT("failed to deselect a property (editor probably had invalid value)") );
-    }
+        grid->DoSelectProperty(NULL, wxPG_SEL_DELETING|wxPG_SEL_NOVALIDATE);
 
     state->DoDelete( p );
 
@@ -358,12 +354,16 @@ wxPGProperty* wxPropertyGridInterface::ReplaceProperty( wxPGPropArg id, wxPGProp
 // wxPropertyGridInterface property operations
 // -----------------------------------------------------------------------
 
-bool wxPropertyGridInterface::ClearSelection()
+bool wxPropertyGridInterface::ClearSelection( bool validation )
 {
+    int flags = 0;
+    if ( !validation )
+        flags |= wxPG_SEL_NOVALIDATE;
+
     wxPropertyGridPageState* state = m_pState;
     wxPropertyGrid* pg = state->GetGrid();
     if ( pg->GetState() == state )
-        return pg->DoClearSelection();
+        return pg->DoSelectProperty(NULL, flags);
     else
         state->SetSelection(NULL);
     return true;
@@ -428,8 +428,7 @@ bool wxPropertyGridInterface::ExpandAll( bool doExpand )
     if ( GetSelection() && GetSelection() != state->DoGetRoot() &&
          !doExpand )
     {
-        if ( !pg->ClearSelection() )
-            return false;
+        pg->ClearSelection(false);
     }
 
     wxPGVIterator it;

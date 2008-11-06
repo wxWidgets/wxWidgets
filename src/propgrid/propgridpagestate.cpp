@@ -1565,13 +1565,8 @@ bool wxPropertyGridPageState::PrepareToAddItem( wxPGProperty* property,
 #endif
 
     // Make sure nothing is selected.
-    if ( propGrid && propGrid->m_selected )
-    {
-        bool selRes = propGrid->ClearSelection();
-        wxPG_CHECK_MSG_DBG( selRes,
-                            true,
-                            wxT("failed to deselect a property (editor probably had invalid value)") );
-    }
+    if ( propGrid )
+        propGrid->ClearSelection(false);
 
     // NULL parent == root parent
     if ( !scheduledParent )

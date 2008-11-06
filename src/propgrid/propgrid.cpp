@@ -1038,13 +1038,7 @@ void wxPropertyGrid::ResetColours()
 bool wxPropertyGrid::SetFont( const wxFont& font )
 {
     // Must disable active editor.
-    if ( m_selected )
-    {
-        bool selRes = ClearSelection();
-        wxPG_CHECK_MSG_DBG( selRes,
-                            false,
-                            wxT("failed to deselect a property (editor probably had invalid value)") );
-    }
+    ClearSelection(false);
 
     // TODO: Following code is disabled with wxMac because
     //   it is reported to fail. I (JMS) cannot debug it
@@ -2177,12 +2171,7 @@ void wxPropertyGrid::Refresh( bool WXUNUSED(eraseBackground),
 
 void wxPropertyGrid::Clear()
 {
-    if ( m_selected )
-    {
-        bool selRes = DoSelectProperty(NULL, wxPG_SEL_DELETING);  // This must be before state clear
-        wxPG_CHECK_RET_DBG( selRes,
-                            wxT("failed to deselect a property (editor probably had invalid value)") );
-    }
+    ClearSelection(false);
 
     m_pState->DoClear();
 
@@ -2201,8 +2190,7 @@ void wxPropertyGrid::Clear()
 
 bool wxPropertyGrid::EnableCategories( bool enable )
 {
-    if ( !ClearSelection() )
-        return false;
+    ClearSelection(false);
 
     if ( enable )
     {
@@ -2254,13 +2242,7 @@ void wxPropertyGrid::SwitchState( wxPropertyGridPageState* pNewState )
 
     wxPGProperty* oldSelection = m_selected;
 
-    // Deselect
-    if ( m_selected )
-    {
-        bool selRes = ClearSelection();
-        wxPG_CHECK_RET_DBG( selRes,
-                            wxT("failed to deselect a property (editor probably had invalid value)") );
-    }
+    ClearSelection(false);
 
     m_pState->m_selected = oldSelection;
 
@@ -2328,9 +2310,7 @@ void wxPropertyGrid::SortChildren( wxPGPropArg id )
 
 void wxPropertyGrid::Sort()
 {
-    bool selRes = ClearSelection();  // This must be before state clear
-    wxPG_CHECK_RET_DBG( selRes,
-                        wxT("failed to deselect a property (editor probably had invalid value)") );
+    ClearSelection(false);  // This must be before state clear
 
     m_pState->Sort();
 }
@@ -3666,10 +3646,9 @@ bool wxPropertyGrid::DoCollapse( wxPGProperty* p, bool sendEvents )
     wxPGProperty* pwc = wxStaticCast(p, wxPGProperty);
 
     // If active editor was inside collapsed section, then disable it
-    if ( m_selected && m_selected->IsSomeParent (p) )
+    if ( m_selected && m_selected->IsSomeParent(p) )
     {
-        if ( !ClearSelection() )
-            return false;
+        ClearSelection(false);
     }
 
     // Store dont-center-splitter flag 'cause we need to temporarily set it
@@ -3754,8 +3733,7 @@ bool wxPropertyGrid::DoHideProperty( wxPGProperty* p, bool hide, int flags )
          ( m_selected == p || m_selected->IsSomeParent(p) )
        )
         {
-            if ( !ClearSelection() )
-                return false;
+            ClearSelection(false);
         }
 
     m_pState->DoHideProperty(p, hide, flags);

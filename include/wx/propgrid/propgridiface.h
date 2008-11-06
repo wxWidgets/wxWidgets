@@ -200,9 +200,18 @@ public:
     */
     virtual void Clear() = 0;
 
-    /** Deselect current selection, if any. Returns true if success
-        (ie. validator did not intercept). */
-    bool ClearSelection();
+    /**
+        Clears current selection, if any.
+
+        @param validation
+            If set to @false, deselecting the property will always work,
+            even if its editor had invalid value in it.
+
+        @return Returns @true if successful or if there was no selection. May
+                fail if validation was enabled and active editor had invalid
+                value.
+    */
+    bool ClearSelection( bool validation = false);
 
     /** Resets modified status of all properties.
     */

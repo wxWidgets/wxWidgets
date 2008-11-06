@@ -252,14 +252,6 @@
 // -----------------------------------------------------------------------
 
 
-// wxPG_CHECK_FOO_DBG - debug check with message that does not
-//                      interrupt program flow.
-#define wxPG_CHECK_RET_DBG(A,B) \
-    if ( !(A) ) { wxLogWarning(B); return; }
-#define wxPG_CHECK_MSG_DBG(A,B,C) \
-    if ( !(A) ) { wxLogWarning(C); return B; }
-
-
 class wxPGEditor;
 class wxPGProperty;
 class wxPropertyCategory;
