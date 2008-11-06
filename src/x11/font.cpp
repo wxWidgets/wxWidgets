@@ -601,18 +601,18 @@ bool wxFont::Create(const wxString& fontname, wxFontEncoding enc)
     M_FONTDATA->m_faceName = tn.GetNextToken();  // family
 
     tmp = tn.GetNextToken().MakeUpper();         // weight
-    if (tmp == wxT("BOLD")) M_FONTDATA->m_weight = wxBOLD;
-    if (tmp == wxT("BLACK")) M_FONTDATA->m_weight = wxBOLD;
-    if (tmp == wxT("EXTRABOLD")) M_FONTDATA->m_weight = wxBOLD;
-    if (tmp == wxT("DEMIBOLD")) M_FONTDATA->m_weight = wxBOLD;
-    if (tmp == wxT("ULTRABOLD")) M_FONTDATA->m_weight = wxBOLD;
+    if (tmp == wxT("BOLD")) M_FONTDATA->m_weight = wxFONTWEIGHT_BOLD;
+    if (tmp == wxT("BLACK")) M_FONTDATA->m_weight = wxFONTWEIGHT_BOLD;
+    if (tmp == wxT("EXTRABOLD")) M_FONTDATA->m_weight = wxFONTWEIGHT_BOLD;
+    if (tmp == wxT("DEMIBOLD")) M_FONTDATA->m_weight = wxFONTWEIGHT_BOLD;
+    if (tmp == wxT("ULTRABOLD")) M_FONTDATA->m_weight = wxFONTWEIGHT_BOLD;
 
-    if (tmp == wxT("LIGHT")) M_FONTDATA->m_weight = wxLIGHT;
-    if (tmp == wxT("THIN")) M_FONTDATA->m_weight = wxLIGHT;
+    if (tmp == wxT("LIGHT")) M_FONTDATA->m_weight = wxFONTWEIGHT_LIGHT;
+    if (tmp == wxT("THIN")) M_FONTDATA->m_weight = wxFONTWEIGHT_LIGHT;
 
     tmp = tn.GetNextToken().MakeUpper();        // slant
-    if (tmp == wxT("I")) M_FONTDATA->m_style = wxITALIC;
-    if (tmp == wxT("O")) M_FONTDATA->m_style = wxITALIC;
+    if (tmp == wxT("I")) M_FONTDATA->m_style = wxFONTSTYLE_ITALIC;
+    if (tmp == wxT("O")) M_FONTDATA->m_style = wxFONTSTYLE_ITALIC;
 
     tn.GetNextToken();                           // set width
     tn.GetNextToken();                           // add. style
@@ -631,17 +631,17 @@ bool wxFont::Create(const wxString& fontname, wxFontEncoding enc)
     tmp = tn.GetNextToken().MakeUpper();         // spacing
 
     if (tmp == wxT("M"))
-        M_FONTDATA->m_family = wxMODERN;
+        M_FONTDATA->m_family = wxFONTFAMILY_MODERN;
     else if (M_FONTDATA->m_faceName == wxT("TIMES"))
-        M_FONTDATA->m_family = wxROMAN;
+        M_FONTDATA->m_family = wxFONTFAMILY_ROMAN;
     else if (M_FONTDATA->m_faceName == wxT("HELVETICA"))
-        M_FONTDATA->m_family = wxSWISS;
+        M_FONTDATA->m_family = wxFONTFAMILY_SWISS;
     else if (M_FONTDATA->m_faceName == wxT("LUCIDATYPEWRITER"))
-        M_FONTDATA->m_family = wxTELETYPE;
+        M_FONTDATA->m_family = wxFONTFAMILY_TELETYPE;
     else if (M_FONTDATA->m_faceName == wxT("LUCIDA"))
-        M_FONTDATA->m_family = wxDECORATIVE;
+        M_FONTDATA->m_family = wxFONTFAMILY_DECORATIVE;
     else if (M_FONTDATA->m_faceName == wxT("UTOPIA"))
-        M_FONTDATA->m_family = wxSCRIPT;
+        M_FONTDATA->m_family = wxFONTFAMILY_SCRIPT;
 
     tn.GetNextToken();                           // avg width
 
