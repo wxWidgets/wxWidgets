@@ -85,12 +85,12 @@
 
 <!--
     Notify people on the blame list when a build goes from good to bad.
--->
 
 <mailnotifier>
     <mode>problem</mode>
     <lookup>wx-devs</lookup>
 </mailnotifier>
+-->
 
 <!--
     Log every build to a mailing list.
