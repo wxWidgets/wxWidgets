@@ -78,10 +78,15 @@
         // defined in many other places on other systems (Motif, at least on
         // OpenVMS; Cocoa and X11) so prevent the problem by defining it before
         // including these headers
-        #define BOOL int
-        #include <sql.h>
-        #include <sqlext.h>
-        #undef BOOL
+        #ifndef BOOL
+            #define BOOL int
+            #include <sql.h>
+            #include <sqlext.h>
+            #undef BOOL
+        #else
+            #include <sql.h>
+            #include <sqlext.h>
+        #endif
     #endif // wxUSE_BUILTIN_IODBC/!wxUSE_BUILTIN_IODBC
     }
 #endif
