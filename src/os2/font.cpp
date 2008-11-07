@@ -272,9 +272,9 @@ protected:
     // Font characterstics
     //
     int                             m_nPointSize;
-    wxFontFamily                    m_family;
-    wxFontStyle                     m_style;
-    wxFontWeight                    m_weight;
+    wxFontFamily                    m_nFamily;
+    wxFontStyle                     m_nStyle;
+    wxFontWeight                    m_nWeight;
     bool                            m_bUnderlined;
     wxString                        m_sFaceName;
     wxFontEncoding                  m_vEncoding;
@@ -434,37 +434,37 @@ bool wxFontRefData::Alloc( wxFont* pFont )
     // and face name.
     //
     if (strcmp(m_vNativeFontInfo.fm.szFamilyname, "Times New Roman") == 0)
-        m_nFamily = wxROMAN;
+        m_nFamily = wxFONTFAMILY_ROMAN;
     else if (strcmp(m_vNativeFontInfo.fm.szFamilyname, "Times New Roman MT 30") == 0)
-        m_nFamily = wxROMAN;
+        m_nFamily = wxFONTFAMILY_ROMAN;
     else if (strcmp(m_vNativeFontInfo.fm.szFamilyname, "@Times New Roman MT 30") == 0)
-        m_nFamily = wxROMAN;
+        m_nFamily = wxFONTFAMILY_ROMAN;
     else if (strcmp(m_vNativeFontInfo.fm.szFamilyname, "Tms Rmn") == 0)
-        m_nFamily = wxROMAN;
+        m_nFamily = wxFONTFAMILY_ROMAN;
     else if (strcmp(m_vNativeFontInfo.fm.szFamilyname, "WarpSans") == 0)
-        m_nFamily = wxDECORATIVE;
+        m_nFamily = wxFONTFAMILY_DECORATIVE;
     else if (strcmp(m_vNativeFontInfo.fm.szFamilyname, "Helvetica") == 0)
-        m_nFamily = wxSWISS;
+        m_nFamily = wxFONTFAMILY_SWISS;
     else if (strcmp(m_vNativeFontInfo.fm.szFamilyname, "Helv") == 0)
-        m_nFamily = wxSWISS;
+        m_nFamily = wxFONTFAMILY_SWISS;
     else if (strcmp(m_vNativeFontInfo.fm.szFamilyname, "Script") == 0)
-        m_nFamily = wxSCRIPT;
+        m_nFamily = wxFONTFAMILY_SCRIPT;
     else if (strcmp(m_vNativeFontInfo.fm.szFamilyname, "Courier New") == 0)
-        m_nFamily = wxTELETYPE;
+        m_nFamily = wxFONTFAMILY_TELETYPE;
     else if (strcmp(m_vNativeFontInfo.fm.szFamilyname, "Courier") == 0)
-        m_nFamily = wxTELETYPE;
+        m_nFamily = wxFONTFAMILY_TELETYPE;
     else if (strcmp(m_vNativeFontInfo.fm.szFamilyname, "System Monospaced") == 0)
-        m_nFamily = wxTELETYPE;
+        m_nFamily = wxFONTFAMILY_TELETYPE;
     else if (strcmp(m_vNativeFontInfo.fm.szFamilyname, "System VIO") == 0)
-        m_nFamily = wxMODERN;
+        m_nFamily = wxFONTFAMILY_MODERN;
     else if (strcmp(m_vNativeFontInfo.fm.szFamilyname, "System Proportional") == 0)
-        m_nFamily = wxMODERN;
+        m_nFamily = wxFONTFAMILY_MODERN;
     else if (strcmp(m_vNativeFontInfo.fm.szFamilyname, "Arial") == 0)
-        m_nFamily = wxSWISS;
+        m_nFamily = wxFONTFAMILY_SWISS;
     else if (strcmp(m_vNativeFontInfo.fm.szFamilyname, "Swiss") == 0)
-        m_nFamily = wxSWISS;
+        m_nFamily = wxFONTFAMILY_SWISS;
     else
-        m_nFamily = wxSWISS;
+        m_nFamily = wxFONTFAMILY_SWISS;
 
     if (m_vNativeFontInfo.fa.fsSelection & FATTR_SEL_ITALIC)
         m_nStyle = wxFONTSTYLE_ITALIC;
@@ -595,37 +595,37 @@ wxFontFamily wxNativeFontInfo::GetFamily() const
     // Extract family from facename
     //
     if (strcmp(fm.szFamilyname, "Times New Roman") == 0)
-        nFamily = wxROMAN;
+        nFamily = wxFONTFAMILY_ROMAN;
     else if (strcmp(fm.szFamilyname, "Times New Roman MT 30") == 0)
-        nFamily = wxROMAN;
+        nFamily = wxFONTFAMILY_ROMAN;
     else if (strcmp(fm.szFamilyname, "@Times New Roman MT 30") == 0)
-        nFamily = wxROMAN;
+        nFamily = wxFONTFAMILY_ROMAN;
     else if (strcmp(fm.szFamilyname, "Tms Rmn") == 0)
-        nFamily = wxROMAN;
+        nFamily = wxFONTFAMILY_ROMAN;
     else if (strcmp(fm.szFamilyname, "WarpSans") == 0)
-        nFamily = wxDECORATIVE;
+        nFamily = wxFONTFAMILY_DECORATIVE;
     else if (strcmp(fm.szFamilyname, "Helvetica") == 0)
-        nFamily = wxSWISS;
+        nFamily = wxFONTFAMILY_SWISS;
     else if (strcmp(fm.szFamilyname, "Helv") == 0)
-        nFamily = wxSWISS;
+        nFamily = wxFONTFAMILY_SWISS;
     else if (strcmp(fm.szFamilyname, "Script") == 0)
-        nFamily = wxSCRIPT;
+        nFamily = wxFONTFAMILY_SCRIPT;
     else if (strcmp(fm.szFamilyname, "Courier New") == 0)
-        nFamily = wxTELETYPE;
+        nFamily = wxFONTFAMILY_TELETYPE;
     else if (strcmp(fm.szFamilyname, "Courier") == 0)
-        nFamily = wxTELETYPE;
+        nFamily = wxFONTFAMILY_TELETYPE;
     else if (strcmp(fm.szFamilyname, "System Monospaced") == 0)
-        nFamily = wxTELETYPE;
+        nFamily = wxFONTFAMILY_TELETYPE;
     else if (strcmp(fm.szFamilyname, "System VIO") == 0)
-        nFamily = wxMODERN;
+        nFamily = wxFONTFAMILY_MODERN;
     else if (strcmp(fm.szFamilyname, "System Proportional") == 0)
-        nFamily = wxMODERN;
+        nFamily = wxFONTFAMILY_MODERN;
     else if (strcmp(fm.szFamilyname, "Arial") == 0)
-        nFamily = wxSWISS;
+        nFamily = wxFONTFAMILY_SWISS;
     else if (strcmp(fm.szFamilyname, "Swiss") == 0)
-        nFamily = wxSWISS;
+        nFamily = wxFONTFAMILY_SWISS;
     else
-        nFamily = wxSWISS;
+        nFamily = wxFONTFAMILY_SWISS;
     return (wxFontFamily)nFamily;
 } // end of wxNativeFontInfo::GetFamily
 
@@ -709,31 +709,31 @@ void wxNativeFontInfo::SetFamily(
 
     switch (eFamily)
     {
-        case wxSCRIPT:
+        case wxFONTFAMILY_SCRIPT:
             sFacename = wxT("Tms Rmn");
             break;
 
-        case wxDECORATIVE:
+        case wxFONTFAMILY_DECORATIVE:
             sFacename = wxT("WarpSans");
             break;
 
-        case wxROMAN:
+        case wxFONTFAMILY_ROMAN:
             sFacename = wxT("Tms Rmn");
             break;
 
-        case wxTELETYPE:
+        case wxFONTFAMILY_TELETYPE:
             sFacename = wxT("Courier") ;
             break;
 
-        case wxMODERN:
+        case wxFONTFAMILY_MODERN:
             sFacename = wxT("System VIO") ;
             break;
 
-        case wxSWISS:
+        case wxFONTFAMILY_SWISS:
             sFacename = wxT("Helv") ;
             break;
 
-        case wxDEFAULT:
+        case wxFONTFAMILY_DEFAULT:
         default:
             sFacename = wxT("System VIO") ;
     }
