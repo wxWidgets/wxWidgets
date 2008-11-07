@@ -814,6 +814,8 @@ void wxAuiManager::UpdateHintWindowConfig()
                                          wxDefaultPosition, wxSize(1,1),
                                          wxFRAME_FLOAT_ON_PARENT
                                          | wxFRAME_TOOL_WINDOW );
+            m_hint_wnd->Connect(wxEVT_ACTIVATE,
+                wxActivateEventHandler(wxAuiManager::OnHintActivate), NULL, this);
 
             // Can't set the bg colour of a Frame in wxMac
             wxPanel* p = new wxPanel(m_hint_wnd);
@@ -3296,6 +3298,17 @@ void wxAuiManager::HideHint()
         m_frame->Update();
         m_last_hint = wxRect();
     }
+}
+
+void wxAuiManager::OnHintActivate(wxActivateEvent& WXUNUSED(event))
+{
+    // Do nothing so this event isn't handled in the base handlers.
+
+    // Letting the hint window activate without this handler can lead to
+    // weird behavior on Mac where the menu is switched out to the top
+    // window's menu in MDI applications when it shouldn't be. So since
+    // we don't want user interaction with the hint window anyway, we just
+    // prevent it from activating here.
 }
 
 
