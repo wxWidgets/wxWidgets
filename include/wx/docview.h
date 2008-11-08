@@ -490,7 +490,7 @@ public:
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long type = wxDEFAULT_FRAME_STYLE,
-                    const wxString& name = wxT("frame"));
+                    const wxString& name = wxFrameNameStr);
     virtual ~wxDocChildFrame(){}
 
     void OnActivate(wxActivateEvent& event);

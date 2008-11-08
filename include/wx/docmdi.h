@@ -29,11 +29,11 @@ public:
     wxDocMDIParentFrame();
     wxDocMDIParentFrame(wxDocManager *manager, wxFrame *parent, wxWindowID id,
         const wxString& title, const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize, long style = wxDEFAULT_FRAME_STYLE, const wxString& name = wxT("frame"));
+        const wxSize& size = wxDefaultSize, long style = wxDEFAULT_FRAME_STYLE, const wxString& name = wxFrameNameStr);
 
     bool Create(wxDocManager *manager, wxFrame *parent, wxWindowID id,
         const wxString& title, const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize, long style = wxDEFAULT_FRAME_STYLE, const wxString& name = wxT("frame"));
+        const wxSize& size = wxDefaultSize, long style = wxDEFAULT_FRAME_STYLE, const wxString& name = wxFrameNameStr);
 
     wxDocManager *GetDocumentManager(void) const { return m_docManager; }
 
@@ -64,7 +64,7 @@ public:
     wxDocMDIChildFrame();
     wxDocMDIChildFrame(wxDocument *doc, wxView *view, wxMDIParentFrame *frame, wxWindowID id,
         const wxString& title, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-        long type = wxDEFAULT_FRAME_STYLE, const wxString& name = wxT("frame"));
+        long type = wxDEFAULT_FRAME_STYLE, const wxString& name = wxFrameNameStr);
     virtual ~wxDocMDIChildFrame();
 
     bool Create(wxDocument *doc,
