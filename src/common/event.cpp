@@ -1143,8 +1143,6 @@ void wxEvtHandler::QueueEvent(wxEvent *event)
 
     m_pendingEvents->Append(event);
 
-    wxLEAVE_CRIT_SECT( m_pendingEventsLock );
-
     // 2) Add this event handler to list of event handlers that
     //    have pending events.
 
@@ -1156,6 +1154,14 @@ void wxEvtHandler::QueueEvent(wxEvent *event)
         wxPendingEvents->Append(this);
 
     wxLEAVE_CRIT_SECT(*wxPendingEventsLocker);
+
+    // only release m_pendingEventsLock now because otherwise there is a race
+    // condition as described in the ticket #9093: we could process the event
+    // just added to m_pendingEvents in our ProcessPendingEvents() below before
+    // we had time to append this pointer to wxPendingEvents list; thus
+    // breaking the invariant that a handler should be in the list iff it has
+    // any pending events to process
+    wxLEAVE_CRIT_SECT( m_pendingEventsLock );
 
     // 3) Inform the system that new pending events are somewhere,
     //    and that these should be processed in idle time.
