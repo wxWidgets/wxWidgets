@@ -1283,7 +1283,7 @@
  */
 #if wxUSE_GUI
 
-#if wxUSE_ACCESSIBILITY && !defined(__WXMSW__)
+#if wxUSE_ACCESSIBILITY && !defined(__WXMSW__) && !defined(__GCCXML__)
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_ACCESSIBILITY is currently only supported under wxMSW"
 #   else
