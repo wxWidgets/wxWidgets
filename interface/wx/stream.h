@@ -353,6 +353,7 @@ public:
 
     /**
         Returns the parent stream of the stream buffer.
+        @deprecated use GetStream() instead
     */
     wxStreamBase* Stream();
 

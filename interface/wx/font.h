@@ -401,7 +401,7 @@ public:
 
         @see SetFamily()
     */
-    wxFontFamily GetFamily() const;
+    virtual wxFontFamily GetFamily() const;
 
     /**
         Returns the platform-dependent string completely describing this font.
@@ -437,7 +437,7 @@ public:
 
         @see SetStyle()
     */
-    wxFontStyle GetStyle() const;
+    virtual wxFontStyle GetStyle() const;
 
     /**
         Returns @true if the font is underlined, @false otherwise.
@@ -451,7 +451,7 @@ public:
 
         @see SetWeight()
     */
-    wxFontWeight GetWeight() const;
+    virtual wxFontWeight GetWeight() const;
 
     /**
         Returns @true if the font is a fixed width (or monospaced) font,
@@ -596,7 +596,7 @@ public:
 
         @see GetUnderlined()
     */
-    void SetUnderlined(const bool underlined);
+    virtual void SetUnderlined(bool underlined);
 
     /**
         Sets the font weight.

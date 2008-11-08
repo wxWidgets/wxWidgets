@@ -214,6 +214,7 @@ public:
         (You should always test if it is non-@NULL.
         For example @c TITLE handler sets window title only if some window is
         associated, otherwise it does nothing.
+        @deprecated use GetWindowInterface()->GetHTMLWindow() instead
     */
     wxHtmlWindow* GetWindow();
 

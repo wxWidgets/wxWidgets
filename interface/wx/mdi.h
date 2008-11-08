@@ -234,14 +234,14 @@ public:
         If there are any children at all this function returns a non-@NULL
         pointer.
     */
-    wxMDIChildFrame* GetActiveChild() const;
+    virtual wxMDIChildFrame* GetActiveChild() const;
 
     /**
         Returns a pointer to the client window.
 
         @see OnCreateClient()
     */
-    wxWindow *GetClientWindow() const;
+    wxMDIClientWindowBase* GetClientWindow() const;
 
     /**
         Returns the current MDI Window menu.
@@ -315,7 +315,7 @@ public:
         @param menu
             The menu to be used instead of the standard MDI Window menu or @NULL.
     */
-    void SetWindowMenu(wxMenu *menu);
+    virtual void SetWindowMenu(wxMenu* menu);
 
     /**
         Tiles the MDI child windows either horizontally or vertically depending
