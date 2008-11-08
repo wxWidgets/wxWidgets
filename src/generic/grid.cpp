@@ -4315,6 +4315,9 @@ bool wxGrid::Create(wxWindow *parent, wxWindowID id,
 
 wxGrid::~wxGrid()
 {
+    if ( m_winCapture && m_winCapture->HasCapture() )
+        m_winCapture->ReleaseMouse();
+
     // Ensure that the editor control is destroyed before the grid is,
     // otherwise we crash later when the editor tries to do something with the
     // half destroyed grid
