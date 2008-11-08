@@ -56,9 +56,9 @@ public:
     }
 
     wxFontRefData( int             nSize
-                  ,int             nFamily
-                  ,int             nStyle
-                  ,int             nWeight
+                  ,wxFontFamily    nFamily
+                  ,wxFontStyle     nStyle
+                  ,wxFontWeight    nWeight
                   ,bool            bUnderlined
                   ,const wxString& sFaceName
                   ,wxFontEncoding  vEncoding
@@ -120,18 +120,18 @@ public:
         return m_nPointSize;
     }
 
-    inline int GetFamily(void) const
+    inline wxFontFamily GetFamily(void) const
     {
         return m_nFamily;
     }
 
-    inline int GetStyle(void) const
+    inline wxFontStyle GetStyle(void) const
     {
         return m_bNativeFontInfoOk ? m_vNativeFontInfo.GetStyle()
                                    : m_nStyle;
     }
 
-    inline int GetWeight(void) const
+    inline wxFontWeight GetWeight(void) const
     {
         return m_bNativeFontInfoOk ? m_vNativeFontInfo.GetWeight()
                                    : m_nWeight;
@@ -175,23 +175,23 @@ public:
             m_nPointSize = nPointSize;
     }
 
-    inline void SetFamily(int nFamily)
+    inline void SetFamily(wxFontFamily nFamily)
     {
         m_nFamily = nFamily;
     }
 
-    inline void SetStyle(int nStyle)
+    inline void SetStyle(wxFontStyle nStyle)
     {
         if (m_bNativeFontInfoOk)
-            m_vNativeFontInfo.SetStyle((wxFontStyle)nStyle);
+            m_vNativeFontInfo.SetStyle(nStyle);
         else
             m_nStyle = nStyle;
     }
 
-    inline void SetWeight(int nWeight)
+    inline void SetWeight(wxFontWeight nWeight)
     {
         if (m_bNativeFontInfoOk)
-            m_vNativeFontInfo.SetWeight((wxFontWeight)nWeight);
+            m_vNativeFontInfo.SetWeight(nWeight);
         else
             m_nWeight = nWeight;
     }
@@ -309,9 +309,9 @@ protected:
 
 void wxFontRefData::Init(
   int                               nPointSize
-, int                               nFamily
-, int                               nStyle
-, int                               nWeight
+, wxFontFamily                      nFamily
+, wxFontStyle                       nStyle
+, wxFontWeight                      nWeight
 , bool                              bUnderlined
 , const wxString&                   rsFaceName
 , wxFontEncoding                    vEncoding
@@ -991,7 +991,7 @@ void wxFont::SetPointSize(
 } // end of wxFont::SetPointSize
 
 void wxFont::SetFamily(
-  int                               nFamily
+  wxFontFamily                      nFamily
 )
 {
     AllocExclusive();
@@ -1002,7 +1002,7 @@ void wxFont::SetFamily(
 } // end of wxFont::SetFamily
 
 void wxFont::SetStyle(
-  int                               nStyle
+  wxFontStyle                       nStyle
 )
 {
     AllocExclusive();
@@ -1013,7 +1013,7 @@ void wxFont::SetStyle(
 } // end of wxFont::SetStyle
 
 void wxFont::SetWeight(
-  int                               nWeight
+  wxFontWeight                      nWeight
 )
 {
     AllocExclusive();
