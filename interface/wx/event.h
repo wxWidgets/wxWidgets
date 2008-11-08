@@ -1921,7 +1921,7 @@ public:
     /**
         Constructor.
     */
-    wxCommandEvent(wxEventType commandEventType = 0, int id = 0);
+    wxCommandEvent(wxEventType commandEventType = wxEVT_NULL, int id = 0);
 
     /**
         Returns client data pointer for a listbox or choice selection event

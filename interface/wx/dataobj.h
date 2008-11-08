@@ -80,7 +80,7 @@ public:
         object by pickling it first.
         @endWxPythonOnly
     */
-    virtual void SetData(size_t size, const void* data);
+    virtual bool SetData(size_t size, const void* data);
 
     /**
         Like SetData(), but doesn't copy the data - instead the object takes

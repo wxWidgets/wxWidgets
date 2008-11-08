@@ -498,7 +498,7 @@ public:
     /**
        Appends the string literal @e psz with max length @e nLen.
     */
-    wxString& Append(const wchar_t* pwz);
+    wxString& Append(const char* psz, size_t nLen);
 
     /**
        Appends the wide string literal @e psz with max length @e nLen.
@@ -508,7 +508,7 @@ public:
     /**
        Appends the string @e s.
     */
-    wxString& Append(const wchar_t* pwz, size_t nLen);
+    wxString& Append(const wxString& s);
 
     /**
        Appends the character @e ch @e count times.

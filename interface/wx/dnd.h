@@ -187,10 +187,12 @@ public:
     /**
         This constructor requires that you must call SetData() later.
 
-        Note that the exact type of @a iconCopy and subsequent parameters
-        differs between wxMSW and wxGTK: these are cursors under Windows but
+        Note that the type of @a iconCopy and subsequent parameters
+        differs between different ports: these are cursors under Windows but
         icons for GTK. You should use the macro wxDROP_ICON() in portable
         programs instead of directly using either of these types.
+
+        @onlyfor{wxmsw,wxmac}
 
         @param win
             The window which initiates the drag and drop operation.
@@ -202,17 +204,19 @@ public:
             The icon or cursor used for feedback when operation can't be done.
     */
     wxDropSource(wxWindow* win = NULL,
-                 const wxIconOrCursor& iconCopy = wxNullIconOrCursor,
-                 const wxIconOrCursor& iconMove = wxNullIconOrCursor,
-                 const wxIconOrCursor& iconNone = wxNullIconOrCursor);
+                 const wxIcon& iconCopy = wxNullIcon,
+                 const wxIcon& iconMove = wxNullIcon,
+                 const wxIcon& iconNone = wxNullIcon);
 
     /**
         The constructor for wxDataObject.
 
-        Note that the exact type of @a iconCopy and subsequent parameters
-        differs between wxMSW and wxGTK: these are cursors under Windows but
+        Note that the type of @a iconCopy and subsequent parameters
+        differs between different ports: these are cursors under Windows but
         icons for GTK. You should use the macro wxDROP_ICON() in portable
         programs instead of directly using either of these types.
+
+        @onlyfor{wxmsw,wxmac}
 
         @param data
             The data associated with the drop source.
@@ -226,9 +230,59 @@ public:
             The icon or cursor used for feedback when operation can't be done.
     */
     wxDropSource(wxDataObject& data, wxWindow* win = NULL,
-                 const wxIconOrCursor& iconCopy = wxNullIconOrCursor,
-                 const wxIconOrCursor& iconMove = wxNullIconOrCursor,
-                 const wxIconOrCursor& iconNone = wxNullIconOrCursor);
+                 const wxIcon& iconCopy = wxNullIcon,
+                 const wxIcon& iconMove = wxNullIcon,
+                 const wxIcon& iconNone = wxNullIcon);
+
+    /**
+        This constructor requires that you must call SetData() later.
+
+        Note that the type of @a iconCopy and subsequent parameters
+        differs between different ports: these are cursors under Windows but
+        icons for GTK. You should use the macro wxDROP_ICON() in portable
+        programs instead of directly using either of these types.
+
+        @onlyfor{wxgtk}
+
+        @param win
+            The window which initiates the drag and drop operation.
+        @param iconCopy
+            The icon or cursor used for feedback for copy operation.
+        @param iconMove
+            The icon or cursor used for feedback for move operation.
+        @param iconNone
+            The icon or cursor used for feedback when operation can't be done.
+    */
+    wxDropSource(wxWindow* win = NULL,
+                 const wxCursor& iconCopy = wxNullCursor,
+                 const wxCursor& iconMove = wxNullCursor,
+                 const wxCursor& iconNone = wxNullCursor);
+
+    /**
+        The constructor for wxDataObject.
+
+        Note that the type of @a iconCopy and subsequent parameters
+        differs between different ports: these are cursors under Windows but
+        icons for GTK. You should use the macro wxDROP_ICON() in portable
+        programs instead of directly using either of these types.
+
+        @onlyfor{wxgtk}
+
+        @param data
+            The data associated with the drop source.
+        @param win
+            The window which initiates the drag and drop operation.
+        @param iconCopy
+            The icon or cursor used for feedback for copy operation.
+        @param iconMove
+            The icon or cursor used for feedback for move operation.
+        @param iconNone
+            The icon or cursor used for feedback when operation can't be done.
+    */
+    wxDropSource(wxDataObject& data, wxWindow* win = NULL,
+                 const wxCursor& iconCopy = wxNullCursor,
+                 const wxCursor& iconMove = wxNullCursor,
+                 const wxCursor& iconNone = wxNullCursor);
 
     /**
         Default constructor.

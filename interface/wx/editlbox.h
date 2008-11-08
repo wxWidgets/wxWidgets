@@ -66,7 +66,7 @@ public:
                       const wxPoint& pos = wxDefaultPosition,
                       const wxSize& size = wxDefaultSize,
                       long style = wxEL_DEFAULT_STYLE,
-                      const wxString& name = "editableListBox");
+                      const wxString& name = wxEditableListBoxNameStr);
 
     /**
         Destructor, destroying the list box.

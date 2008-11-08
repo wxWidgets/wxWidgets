@@ -168,7 +168,7 @@ public:
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
-                     const wxString& name = "frame");
+                     const wxString& name = wxFrameNameStr);
 
     /**
         Destructor.
@@ -395,7 +395,7 @@ public:
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long style = wxDEFAULT_FRAME_STYLE,
-                    const wxString& name = "frame");
+                    const wxString& name = wxFrameNameStr);
 
     /**
         Destructor. Destroys all child windows and menu bar if present.

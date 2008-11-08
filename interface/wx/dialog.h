@@ -167,7 +167,7 @@ public:
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
              long style = wxDEFAULT_DIALOG_STYLE,
-             const wxString& name = "dialogBox");
+             const wxString& name = wxDialogNameStr);
 
     /**
         Destructor. Deletes any child windows before deleting the physical
@@ -207,7 +207,8 @@ public:
     */
     bool Create(wxWindow* parent, wxWindowID id, const wxString& title,
                 const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize, long style = 536877056,
+                const wxSize& size = wxDefaultSize,
+                long style = wxDEFAULT_DIALOG_STYLE,
                 const wxString& name = wxDialogNameStr);
 
     /**

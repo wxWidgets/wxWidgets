@@ -92,7 +92,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxCAPTION | wxRESIZE_BORDER,
-                const wxString& name = "frame");
+                const wxString& name = wxFrameNameStr);
 
     /**
         Destructor. Destroys all child windows and menu bar if present.

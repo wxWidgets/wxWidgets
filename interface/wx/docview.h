@@ -851,7 +851,7 @@ public:
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long style = wxDEFAULT_FRAME_STYLE,
-                    const wxString& name = "frame");
+                    const wxString& name = wxFrameNameStr);
 
     /**
         Destructor.
@@ -933,7 +933,7 @@ public:
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxDEFAULT_FRAME_STYLE,
-                     const wxString& name = "frame");
+                     const wxString& name = wxFrameNameStr);
 
     /**
         Destructor.
@@ -1106,12 +1106,15 @@ public:
     */
     virtual wxString GetUserReadableName() const;
 
+    //@{
     /**
         Returns the list whose elements are the views on the document.
 
         @see GetFirstView()
     */
-    wxList GetViews() const;
+    wxList& GetViews() const;
+    const wxList& GetViews() const;
+    //@}
 
     /**
         Returns @true if the document has been modified since the last save,

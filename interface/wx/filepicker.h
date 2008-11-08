@@ -187,12 +187,12 @@ public:
     */
     wxDirPickerCtrl(wxWindow* parent, wxWindowID id,
                     const wxString& path = wxEmptyString,
-                    const wxString& message = "Select a folder",
+                    const wxString& message = wxDirSelectorPromptStr,
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long style = wxDIRP_DEFAULT_STYLE,
                     const wxValidator& validator = wxDefaultValidator,
-                    const wxString& name = "dirpickerctrl");
+                    const wxString& name = wxDirPickerCtrlNameStr);
 
     /**
         Creates the widgets with the given parameters.

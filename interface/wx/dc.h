@@ -121,7 +121,7 @@ public:
     bool Blit(wxCoord xdest, wxCoord ydest, wxCoord width,
               wxCoord height, wxDC* source, wxCoord xsrc, wxCoord ysrc,
               int logicalFunc = wxCOPY, bool useMask = false,
-              wxCoord xsrcMask = -1, wxCoord ysrcMask = -1);
+              wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord);
 
     /**
         Adds the specified point to the bounding box which can be retrieved
@@ -207,7 +207,7 @@ public:
         @see SetTextForeground(), SetTextBackground(), wxMemoryDC
     */
     void DrawBitmap(const wxBitmap& bitmap, wxCoord x, wxCoord y,
-                     bool transparent);
+                    bool useMask = false);
 
     //@{
     /**
@@ -445,7 +445,7 @@ public:
         the string. See GetTextExtent() for how to get the dimensions of a text
         string, which can be used to position the text more precisely.
 
-        @note The current @ref GetLogicalFunction() "logical function" is 
+        @note The current @ref GetLogicalFunction() "logical function" is
               ignored by this function.
     */
     void DrawText(const wxString& text, wxCoord x, wxCoord y);
@@ -517,7 +517,7 @@ public:
         are returned as a tuple.
         @endWxPythonOnly
     */
-    void GetClippingBox(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
+    void GetClippingBox(wxCoord *x, wxCoord *y, wxCoord *width, wxCoord *height) const;
 
     /**
         Returns the depth (number of bits/pixel) of this DC.
@@ -576,7 +576,7 @@ public:
     void GetMultiLineTextExtent(const wxString& string, wxCoord* w,
                                 wxCoord* h,
                                 wxCoord* heightLine = NULL,
-                                wxFont* font = NULL) const;
+                                const wxFont* font = NULL) const;
     /**
         Gets the dimensions of the string using the currently selected font.
         @a string is the text string to measure, @e heightLine, if non @NULL,
@@ -588,7 +588,7 @@ public:
 
         @see wxFont, SetFont(), GetPartialTextExtents(), GetTextExtent()
     */
-    const wxSize GetMultiLineTextExtent(const wxString& string) const;
+    wxSize GetMultiLineTextExtent(const wxString& string) const;
 
     /**
         Fills the @a widths array with the widths from the beginning of @a text
@@ -1068,12 +1068,12 @@ public:
             setting the @c no-maskblt option to 1.
         @param xsrcMask
             Source x position on the mask. If both xsrcMask and ysrcMask are
-            -1, xsrc and ysrc will be assumed for the mask source position.
-            Currently only implemented on Windows.
+            wxDefaultCoord, @a xsrc and @a ysrc will be assumed for the mask
+            source position. Currently only implemented on Windows.
         @param ysrcMask
             Source y position on the mask. If both xsrcMask and ysrcMask are
-            -1, xsrc and ysrc will be assumed for the mask source position.
-            Currently only implemented on Windows.
+            wxDefaultCoord, @a xsrc and @a ysrc will be assumed for the mask
+            source position. Currently only implemented on Windows.
 
         There is partial support for Blit() in wxPostScriptDC, under X.
 
@@ -1091,7 +1091,8 @@ public:
                      wxCoord srcWidth, wxCoord srcHeight,
                      int logicalFunc = wxCOPY,
                      bool useMask = false,
-                     wxCoord xsrcMask = -1, wxCoord ysrcMask = -1);
+                     wxCoord xsrcMask = wxDefaultCoord,
+                     wxCoord ysrcMask = wxDefaultCoord);
 };
 
 
