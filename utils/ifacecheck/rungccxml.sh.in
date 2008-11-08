@@ -31,10 +31,9 @@ if [[ ! -z "$1" ]]; then
 fi
 
 me=$(basename $0)
-path=${0%%/$me}
-current=$(pwd)         # current path
+current=$(pwd)/${0%%/$me}            # current path
 
-#gccxmloutput="$current/$gccxmloutput"
+gccxmloutput="$current/$gccxmloutput"
 
 cd @top_srcdir@/include              # go to wx include folder
 
