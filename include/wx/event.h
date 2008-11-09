@@ -2297,21 +2297,21 @@ public:
     // winid and event type
     void Connect(int winid,
                  int lastId,
-                 int eventType,
+                 wxEventType eventType,
                  wxObjectEventFunction func,
                  wxObject *userData = (wxObject *) NULL,
                  wxEvtHandler *eventSink = (wxEvtHandler *) NULL);
 
     // Convenience function: take just one id
     void Connect(int winid,
-                 int eventType,
+                 wxEventType eventType,
                  wxObjectEventFunction func,
                  wxObject *userData = (wxObject *) NULL,
                  wxEvtHandler *eventSink = (wxEvtHandler *) NULL)
         { Connect(winid, wxID_ANY, eventType, func, userData, eventSink); }
 
     // Even more convenient: without id (same as using id of wxID_ANY)
-    void Connect(int eventType,
+    void Connect(wxEventType eventType,
                  wxObjectEventFunction func,
                  wxObject *userData = (wxObject *) NULL,
                  wxEvtHandler *eventSink = (wxEvtHandler *) NULL)

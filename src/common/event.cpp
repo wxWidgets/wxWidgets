@@ -1298,7 +1298,7 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
         return true;
 
     // propagate the event upwards the window chain and/or to the application
-    // object if it wasn't processed at this level 
+    // object if it wasn't processed at this level
     return TryParent(event);
 }
 
@@ -1383,7 +1383,7 @@ bool wxEvtHandler::SearchEventTable(wxEventTable& table, wxEvent& event)
 }
 
 void wxEvtHandler::Connect( int id, int lastId,
-                            int eventType,
+                            wxEventType eventType,
                             wxObjectEventFunction func,
                             wxObject *userData,
                             wxEvtHandler* eventSink )
