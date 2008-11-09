@@ -38,6 +38,7 @@ public:
         Default constructor.
     */
     wxGenericDirCtrl();
+
     /**
         Main constructor.
 
@@ -63,7 +64,7 @@ public:
         @param name
             The window name.
     */
-    wxGenericDirCtrl(wxWindow* parent, const wxWindowID id = -1,
+    wxGenericDirCtrl(wxWindow* parent, const wxWindowID id = wxID_ANY,
                      const wxString& dir = wxDirDialogDefaultFolderStr,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,

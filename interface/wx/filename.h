@@ -334,14 +334,17 @@ public:
     */
     void AssignHomeDir();
 
+    //@{
     /**
         The function calls CreateTempFileName() to create a temporary file
         and sets this object to the name of the file.
+
         If a temporary file couldn't be created, the object is put into
         an invalid state (see IsOk())
     */
-    void AssignTempFileName(const wxString& prefix,
-                            wxFile* fileTemp = NULL);
+    void AssignTempFileName(const wxString& prefix, wxFile* fileTemp);
+    void AssignTempFileName(const wxString& prefix, wxFFile* fileTemp);
+    //@}
 
     /**
         Reset all components to default, uninitialized state.

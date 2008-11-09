@@ -73,7 +73,7 @@ public:
     /**
         Same as @code GetIcon( wxSize( size, size ) ) @endcode.
     */
-    const wxIcon  GetIcon(wxCoord size = -1) const;
+    wxIcon GetIcon(wxCoord size = wxDefaultCoord) const;
 
     /**
         Returns the icon with exactly the given size or ::wxNullIcon if this

@@ -529,7 +529,7 @@ public:
 
         @see GetFamily(), SetFaceName()
     */
-    void SetFamily(wxFontFamily family);
+    virtual void SetFamily(wxFontFamily family);
 
     /**
         Creates the font corresponding to the given native font description string
@@ -586,7 +586,7 @@ public:
 
         @see GetStyle()
     */
-    void SetStyle(wxFontStyle style);
+    virtual void SetStyle(wxFontStyle style);
 
     /**
         Sets underlining.
@@ -606,7 +606,7 @@ public:
 
         @see GetWeight()
     */
-    void SetWeight(wxFontWeight weight);
+    virtual void SetWeight(wxFontWeight weight);
 
     /**
         Inequality operator.
@@ -692,10 +692,9 @@ public:
         Finds a font of the given specification, or creates one and adds it to the
         list. See the @ref wxFont "wxFont constructor" for details of the arguments.
     */
-    wxFont* FindOrCreateFont(int point_size, int family, int style,
-                             int weight,
-                             bool underline = false,
-                             const wxString& facename = NULL,
+    wxFont* FindOrCreateFont(int point_size, wxFontFamily family, wxFontStyle style,
+                             wxFontWeight weight, bool underline = false,
+                             const wxString& facename = wxEmptyString,
                              wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 };
 

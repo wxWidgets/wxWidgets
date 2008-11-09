@@ -29,7 +29,9 @@ public:
     wxHtmlHelpFrame(wxWindow* parent, int wxWindowID,
                     const wxString& title = wxEmptyString,
                     int style = wxHF_DEFAULT_STYLE,
-                    wxHtmlHelpData* data = NULL);
+                    wxHtmlHelpData* data = NULL,
+                    wxConfigBase* config = NULL,
+                    const wxString& rootpath = wxEmptyString);
 
     /**
         You may override this virtual method to add more buttons to the help window's

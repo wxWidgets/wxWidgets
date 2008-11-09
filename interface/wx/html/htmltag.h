@@ -148,6 +148,7 @@ public:
     */
     bool HasParam(const wxString& par) const;
 
+    //@{
     /**
         This method scans the given parameter. Usage is exactly the same as sscanf's
         usage except that you don't pass a string but a parameter name as the first
@@ -161,6 +162,8 @@ public:
         @param value
             pointer to a variable to store the value in
     */
-    wxString ScanParam(const wxString& par, const wxChar* format, void* value) const;
+    int ScanParam(const wxString& par, const wchar_t* format, void* value) const;
+    int ScanParam(const wxString& par, const char* format, void* value) const;
+    //@}
 };
 

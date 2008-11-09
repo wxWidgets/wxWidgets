@@ -59,7 +59,7 @@ public:
         <b>Render() changes the DC's user scale and does NOT restore it.</b>
     */
     int Render(int x, int y, wxArrayInt& known_pagebreaks, int from = 0,
-               int dont_render = 0, int to = INT_MAX);
+               int dont_render = false, int to = INT_MAX);
 
     /**
         Assign DC instance to the renderer.

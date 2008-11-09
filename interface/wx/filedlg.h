@@ -90,14 +90,14 @@ public:
             Dialog name. Not implemented.
     */
     wxFileDialog(wxWindow* parent,
-                 const wxString& message = "Choose a file",
-                 const wxString& defaultDir = "",
-                 const wxString& defaultFile = "",
-                 const wxString& wildcard = ".",
+                 const wxString& message = wxFileSelectorPromptStr,
+                 const wxString& defaultDir = wxEmptyString,
+                 const wxString& defaultFile = wxEmptyString,
+                 const wxString& wildcard = wxFileSelectorDefaultWildcardStr,
                  long style = wxFD_DEFAULT_STYLE,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
-                 const wxString& name = "filedlg");
+                 const wxString& name = wxFileDialogNameStr);
 
     /**
         Destructor.

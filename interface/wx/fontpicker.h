@@ -59,7 +59,7 @@ public:
                      const wxSize& size = wxDefaultSize,
                      long style = wxFNTP_DEFAULT_STYLE,
                      const wxValidator& validator = wxDefaultValidator,
-                     const wxString& name = "fontpickerctrl");
+                     const wxString& name = wxFontPickerCtrlNameStr);
 
     /**
         Creates this widget with given parameters.

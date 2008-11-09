@@ -88,7 +88,7 @@ public:
                long style = wxFC_DEFAULT_STYLE,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
-               const wxString& name = "filectrl");
+               const wxString& name = wxFileCtrlNameStr);
 
     /**
         Create function for two-step construction. See wxFileCtrl() for details.
@@ -206,7 +206,7 @@ public:
     /**
         Constructor.
     */
-    wxFileCtrlEvent(wxEventType type, wxObject evtObject, int id);
+    wxFileCtrlEvent(wxEventType type, wxObject *evtObject, int id);
 
     /**
         Returns the current directory.

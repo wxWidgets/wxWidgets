@@ -63,13 +63,13 @@ public:
     */
     wxFilePickerCtrl(wxWindow* parent, wxWindowID id,
                      const wxString& path = wxEmptyString,
-                     const wxString& message = "Select a file",
-                     const wxString& wildcard = ".",
+                     const wxString& message = wxFileSelectorPromptStr,
+                     const wxString& wildcard = wxFileSelectorDefaultWildcardStr,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxFLP_DEFAULT_STYLE,
                      const wxValidator& validator = wxDefaultValidator,
-                     const wxString& name = "filepickerctrl");
+                     const wxString& name = wxFilePickerCtrlNameStr);
 
     /**
         Creates this widget with the given parameters.
@@ -282,7 +282,7 @@ public:
     */
     wxFileDirPickerEvent(wxEventType type, wxObject* generator,
                          int id,
-                         const wxString path);
+                         const wxString& path);
 
     /**
         Retrieve the absolute path of the file/directory the user has just selected.

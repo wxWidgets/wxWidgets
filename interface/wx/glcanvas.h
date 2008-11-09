@@ -261,7 +261,7 @@ public:
 
         @return @false if an error occurred.
     */
-    bool SetCurrent(const wxGLContext context);
+    bool SetCurrent(const wxGLContext& context) const;
 
     /**
         Swaps the double-buffer of this window, making the back-buffer the

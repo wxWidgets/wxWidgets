@@ -90,24 +90,13 @@ public:
         @param bits
             Specifies an array of pixel values.
         @param width
-            Specifies the width of the bitmap.
+            The width of the image.
         @param height
-            Specifies the height of the bitmap.
-        @param depth
-            Specifies the depth of the bitmap.
-            If this is omitted, then a value of 1 (monochrome bitmap) is used.
+            The height of the image.
+
+        @onlyfor{wxmsw,wxmac}
     */
-    wxIcon(const char bits[], int width, int height, int depth = 1);
-
-
-    /**
-        Creates a new icon. A depth of ::wxICON_SCREEN_DEPTH indicates the
-        depth of the current screen or visual.
-
-        Some platforms only support 1 for monochrome and ::wxICON_SCREEN_DEPTH for
-        the current colour setting.
-    */
-    wxIcon(int width, int height, int depth = wxICON_SCREEN_DEPTH);
+    wxIcon(const char bits[], int width, int height);
 
     /**
         Creates a bitmap from XPM data.

@@ -53,9 +53,9 @@ public:
         Adds a cubic bezier curve from the current point, using two control
         points and an end point.
     */
-    void AddCurveToPoint(wxDouble cx1, wxDouble cy1,
-                         wxDouble cx2, wxDouble cy2,
-                         wxDouble x, wxDouble y);
+    virtual void AddCurveToPoint(wxDouble cx1, wxDouble cy1,
+                                 wxDouble cx2, wxDouble cy2,
+                                 wxDouble x, wxDouble y);
     /**
         Adds a cubic bezier curve from the current point, using two control
         points and an end point.
@@ -319,12 +319,12 @@ public:
         Creates a native brush, having a linear gradient, starting at (x1,y1) with
         color c1 to (x2,y2) with color c2
     */
-    wxGraphicsBrush CreateLinearGradientBrush(wxDouble x1,
-            wxDouble y1,
-            wxDouble x2,
-            wxDouble y2,
-            const wxColouramp;c1,
-            const wxColouramp;c2) const;
+    virtual wxGraphicsBrush CreateLinearGradientBrush(wxDouble x1,
+                                                      wxDouble y1,
+                                                      wxDouble x2,
+                                                      wxDouble y2,
+                                                      const wxColour& c1,
+                                                      const wxColour& c2) const;
 
     /**
         Creates a native affine transformation matrix from the passed in values. The
@@ -332,8 +332,8 @@ public:
     */
     virtual wxGraphicsMatrix CreateMatrix(wxDouble a = 1.0, wxDouble b = 0.0,
                                           wxDouble c = 0.0, wxDouble d = 1.0,
-                                  wxDouble tx = 0.0,
-                                  wxDouble ty = 0.0) const;
+                                          wxDouble tx = 0.0,
+                                          wxDouble ty = 0.0) const;
 
     /**
         Creates a native graphics path which is initially empty.
@@ -585,11 +585,11 @@ public:
         color c1 to (x2,y2) with color c2
     */
     wxGraphicsBrush CreateLinearGradientBrush(wxDouble x1,
-            wxDouble y1,
-            wxDouble x2,
-            wxDouble y2,
-            const wxColouramp;c1,
-            const wxColouramp;c2);
+                                              wxDouble y1,
+                                              wxDouble x2,
+                                              wxDouble y2,
+                                              const wxColour& c1,
+                                              const wxColour& c2) = 0;
 
     /**
         Creates a native affine transformation matrix from the passed in values. The
@@ -597,7 +597,7 @@ public:
     */
     virtual wxGraphicsMatrix CreateMatrix(wxDouble a = 1.0, wxDouble b = 0.0,
                                           wxDouble c = 0.0, wxDouble d = 1.0,
-                                  wxDouble tx = 0.0,
+                                          wxDouble tx = 0.0,
                                           wxDouble ty = 0.0) = 0;
 
     /**

@@ -1680,7 +1680,7 @@ public:
     /**
         Overridden wxWindow method.
     */
-    void Fit();
+    virtual void Fit();
 
     /**
         Causes immediate repainting of the grid.

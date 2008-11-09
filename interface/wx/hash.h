@@ -54,7 +54,7 @@ public:
         Constructor. @a key_type is one of wxKEY_INTEGER, or wxKEY_STRING,
         and indicates what sort of keying is required. @a size is optional.
     */
-    wxHashTable(unsigned int key_type, int size = 1000);
+    wxHashTable(wxKeyType key_type = wxKEY_INTEGER, size_t size = 1000);
 
     /**
         Destroys the hash table.

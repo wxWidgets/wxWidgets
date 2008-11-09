@@ -332,7 +332,7 @@ public:
         @param id
             The identifier for a menu item.
     */
-    void ProcessCommand(int id);
+    bool ProcessCommand(int id);
 
     /**
         Tells the frame to show the given menu bar.

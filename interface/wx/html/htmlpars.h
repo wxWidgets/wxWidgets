@@ -139,7 +139,7 @@ public:
     /**
         Parses the m_Source from @a begin_pos to @a end_pos - 1.
     */
-    void DoParsing(int begin_pos, int end_pos);
+    void DoParsing(const const_iterator& begin_pos, const const_iterator& end_pos);
 
     /**
         Parses the whole m_Source.

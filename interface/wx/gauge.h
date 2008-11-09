@@ -74,7 +74,7 @@ public:
             const wxSize& size = wxDefaultSize,
             long style = wxGA_HORIZONTAL,
             const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = "gauge");
+            const wxString& name = wxGaugeNameStr);
 
     /**
         Destructor, destroying the gauge.

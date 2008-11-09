@@ -1435,9 +1435,9 @@ public:
         only redrawing those areas, which have been exposed.
     */
     bool IsExposed(int x, int y) const;
-    const bool IsExposed(wxPoint amp;pt) const;
-    const bool IsExposed(int x, int y, int w, int h) const;
-    const bool IsExposed(wxRect amp;rect) const;
+    bool IsExposed(wxPoint& pt) const;
+    bool IsExposed(int x, int y, int w, int h) const;
+    bool IsExposed(wxRect& rect) const;
     //@}
 
     /**

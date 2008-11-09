@@ -101,7 +101,7 @@ public:
         @param showWaitMsg
             If @true then a decoration-less window with progress message is displayed.
     */
-    bool AddBook(const wxFileName& bookFile, bool showWaitMsg);
+    bool AddBook(const wxFileName& bookFile, bool showWaitMsg = false);
 
     /**
         Adds a book (i.e. a @ref overview_html_helpformats ".hhp file"; an HTML Help
@@ -115,7 +115,7 @@ public:
         @param showWaitMsg
             If @true then a decoration-less window with progress message is displayed.
     */
-    bool AddBook(const wxString& bookUrl, bool showWaitMsg);
+    bool AddBook(const wxString& bookUrl, bool showWaitMsg = false);
 
     /**
         Displays page @a x.
@@ -133,14 +133,14 @@ public:
         -# try to find x in index (if x is for example "How To ...")
         -# switch to Search panel and start searching
     */
-    void Display(const wxString& x);
+    bool Display(const wxString& x);
 
     /**
         @overload
 
         This alternative form is used to search help contents by numeric IDs.
     */
-    void Display(const int id);
+    bool Display(int id);
 
     /**
         Displays help window and focuses contents panel.

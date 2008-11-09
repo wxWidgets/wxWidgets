@@ -61,12 +61,11 @@ public:
         Constructor.
         The parameters are the same as wxScrolled::wxScrolled() constructor.
     */
-    wxHtmlWindow(wxWindow parent, wxWindowID id = -1,
+    wxHtmlWindow(wxWindow *parent, wxWindowID id = wxID_ANY,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxHW_DEFAULT_STYLE,
                  const wxString& name = "htmlWindow");
-    //@}
 
     /**
         Adds @ref overview_html_filters "input filter" to the static list of available
@@ -464,7 +463,8 @@ public:
     */
     wxHtmlCellEvent(wxEventType commandType, int id,
                     wxHtmlCell* cell,
-                    const wxPoint& point);
+                    const wxPoint& point,
+                    const wxMouseEvent& ev);
 
     /**
         Returns the wxHtmlCellEvent associated with the event.
