@@ -66,7 +66,7 @@ struct wxVectorMemOpsGeneric
         T *mem = (T*)::operator new(newCapacity * sizeof(T));
         for ( size_t i = 0; i < occupiedSize; i++ )
         {
-            new(mem + i) T(old[i]);
+            ::new(mem + i) T(old[i]);
             old[i].~T();
         }
         ::operator delete(old);
@@ -242,7 +242,7 @@ public:
         // use placement new to initialize new object in preallocated place in
         // m_values and store 'v' in it:
         void* const place = m_values + m_size;
-        new(place) value_type(v);
+        ::new(place) value_type(v);
 
         // only increase m_size if the ctor didn't throw an exception; notice
         // that if it _did_ throw, everything is OK, because we only increased
