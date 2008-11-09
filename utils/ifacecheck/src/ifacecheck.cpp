@@ -434,6 +434,7 @@ bool IfaceCheckApp::StringContainsMethodName(const wxString& str, const wxMethod
 
 bool IfaceCheckApp::FixMethod(const wxString& header, const wxMethod* iface, const wxMethod* api)
 {
+    unsigned int i,j;
     wxASSERT(iface && api);
 
     wxTextFile file;
@@ -521,7 +522,7 @@ bool IfaceCheckApp::FixMethod(const wxString& header, const wxMethod* iface, con
     const wxArgumentTypeArray& realargs = api->GetArgumentTypes();
     if (realargs.GetCount() == doxygenargs.GetCount())
     {
-        for (unsigned int j=0; j<doxygenargs.GetCount(); j++)
+        for (j=0; j<doxygenargs.GetCount(); j++)
             if (doxygenargs[j]==realargs[j])
             {
                 realargs[j].SetArgumentName(doxygenargs[j].GetArgumentName());
@@ -543,7 +544,7 @@ bool IfaceCheckApp::FixMethod(const wxString& header, const wxMethod* iface, con
     wxASSERT(nStartColumn != wxNOT_FOUND);
 
     // wrap lines too long at comma boundaries
-    for (unsigned int i=0; i<toinsert.GetCount(); i++)
+    for (i=0; i<toinsert.GetCount(); i++)
     {
         size_t len = toinsert[i].Len();
         if (len > WRAP_COLUMN)
@@ -563,7 +564,7 @@ bool IfaceCheckApp::FixMethod(const wxString& header, const wxMethod* iface, con
     }
 
     // insert the new lines
-    for (unsigned int i=0; i<toinsert.GetCount(); i++)
+    for (i=0; i<toinsert.GetCount(); i++)
         file.InsertLine(toinsert[i], start+i);
 
     // now save the modification
@@ -583,9 +584,9 @@ bool IfaceCheckApp::FixMethod(const wxString& header, const wxMethod* iface, con
     // update the other method's locations for those methods which belong to the modified header
     // and are placed _below_ the modified method
     wxClassPtrArray cToUpdate = m_doxyInterface.FindClassesDefinedIn(header);
-    for (unsigned int i=0; i < cToUpdate.GetCount(); i++)
+    for (i=0; i < cToUpdate.GetCount(); i++)
     {
-        for (unsigned int j=0; j < cToUpdate[i]->GetMethodCount(); j++)
+        for (j=0; j < cToUpdate[i]->GetMethodCount(); j++)
         {
             wxMethod& m = cToUpdate[i]->GetMethod(j);
             if (m.GetLocation() > iface->GetLocation())
