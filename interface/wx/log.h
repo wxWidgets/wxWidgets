@@ -609,7 +609,8 @@ public:
     standard @e strftime() function. For example, the default format is
     "[%d/%b/%y %H:%M:%S] " which gives something like "[17/Sep/98 22:10:16] "
     (without quotes) for the current date. Setting an empty string as the time
-    format disables timestamping of the messages completely.
+    format or calling the shortcut wxLog::DisableTimestamp(), disables timestamping
+    of the messages completely.
 
     See also
     @li AddTraceMask()
@@ -675,13 +676,6 @@ public:
         @see RemoveTraceMask()
     */
     static void ClearTraceMasks();
-
-    /**
-        Disables time stamping of the log messages.
-
-        @since 2.9.0
-    */
-    static void SetTimestamp(const wxString& format);
 
     /**
         Instructs wxLog to not create new log targets on the fly if there is none
@@ -799,6 +793,13 @@ public:
         Passing an empty string to this function disables message time stamping.
     */
     static void SetTimestamp(const wxString& format);
+
+    /**
+        Disables time stamping of the log messages.
+
+        @since 2.9.0
+    */
+    static void DisableTimestamp();
 
     /**
         Sets the trace mask, see @ref log_derivingyours section for details.
