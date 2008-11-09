@@ -249,9 +249,9 @@ protected:
     // Common part of all ctors
     //
     void Init( int             nSize
-              ,int             nFamily
-              ,int             nStyle
-              ,int             nWeight
+              ,wxFontFamily    nFamily
+              ,wxFontStyle     nStyle
+              ,wxFontWeight    nWeight
               ,bool            bUnderlined
               ,const wxString& rsFaceName
               ,wxFontEncoding  vEncoding
