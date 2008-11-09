@@ -75,8 +75,9 @@ class IfaceCheckLog : public wxLog
 public:
     IfaceCheckLog() {}
 
-    void DoLog(wxLogLevel level, const wxString& msg, time_t stamp)
+    void DoLog(wxLogLevel, const wxString& msg, time_t)
     {
+        // send all messages to stdout (normal behaviour is to sent them to stderr)
         wxPrintf(msg);
         wxPrintf("\n");
         Flush();

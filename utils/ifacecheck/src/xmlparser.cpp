@@ -82,7 +82,7 @@ void wxType::SetTypeFromString(const wxString& t)
     m_strType.Replace(" ,", ",");
 
     // ADHOC-FIX
-    m_strType.Replace("_wxArraywxArrayStringBase", "const wxString&");
+    m_strType.Replace("_wxArraywxArrayStringBase", "wxString");
 
     m_strType = m_strType.Strip(wxString::both);
 
@@ -104,12 +104,12 @@ void wxType::SetTypeFromString(const wxString& t)
     if (m_strTypeClean.EndsWith("Base"))
         m_strTypeClean = m_strTypeClean.Left(m_strTypeClean.Len()-4);
 
+    // remove the namespace from the types; there's no problem of conflicts
+    // (except for templates) and this avoids tons of false warnings
+    if (m_strTypeClean.Contains("::") && !m_strTypeClean.Contains("<"))
+        m_strTypeClean = m_strTypeClean.Mid(m_strTypeClean.Find("::")+2);
+
     // ADHOC-FIX:
-    // doxygen likes to put wxDateTime:: in front of all wxDateTime enums;
-    // fix this to avoid false positives
-    m_strTypeClean.Replace("wxDateTime::", "");
-    m_strTypeClean.Replace("wxStockGDI::", "");     // same story for some other classes
-    m_strTypeClean.Replace("wxHelpEvent::", "");
     m_strTypeClean.Replace("wxWindowID", "int");
 }
 
@@ -174,6 +174,8 @@ void wxArgumentType::SetDefaultValue(const wxString& defval, const wxString& def
         p->Replace("0x000000001", "1");
         p->Replace("\\000\\000\\000", "");    // fix for unicode strings:
         p->Replace("\\011", "\\t");
+        p->Replace("e+0", "");
+        p->Replace("2147483647", "__INT_MAX__");
 
         // ADHOC-FIX: for wxConv* default values
         p->Replace("wxConvAuto(wxFONTENCODING_DEFAULT)", "wxConvAuto()");
@@ -211,6 +213,10 @@ bool wxArgumentType::operator==(const wxArgumentType& m) const
     if ((const wxType&)(*this) != (const wxType&)m)
         return false;
 
+    // check if the default values match
+    // ---------------------------------
+
+
     // ADHOC-FIX:
     // default values for style attributes of wxWindow-derived classes in gccxml appear as raw
     // numbers; avoid false positives in this case!
@@ -232,6 +238,11 @@ bool wxArgumentType::operator==(const wxArgumentType& m) const
             return true;
         }
     }
+    else if (m_strTypeClean == "float" || m_strTypeClean == "double")
+        // gccXML translates the default floating values in a hardly usable
+        // format; e.g. 25.2 => 2.51999999999999992894572642398998141288757324219e+1
+        // we avoid check on these...
+        return true;
 
     if (m_strDefaultValueForCmp != m.m_strDefaultValueForCmp)
     {
