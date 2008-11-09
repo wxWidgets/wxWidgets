@@ -1,4 +1,4 @@
-    /////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 // Name:        xmlparser.cpp
 // Purpose:     Parser of the API/interface XML files
 // Author:      Francesco Montorsi
@@ -135,8 +135,8 @@ bool wxType::operator==(const wxType& m) const
 
     if (g_verbose)
     {
-        LogMessage("Type '%s' does not match type '%s'", m_strType, m.m_strType);
-        LogMessage(" => TypeClean %s / %s;  IsConst %d / %d; IsStatic %d / %d; IsPointer %d / %d; IsReference %d / %d",
+        wxLogMessage("Type '%s' does not match type '%s'", m_strType, m.m_strType);
+        wxLogMessage(" => TypeClean %s / %s;  IsConst %d / %d; IsStatic %d / %d; IsPointer %d / %d; IsReference %d / %d",
                    m_strTypeClean, m.m_strTypeClean, IsConst(), m.IsConst(),
                    IsStatic(), m.IsStatic(), IsPointer(), m.IsPointer(),
                    IsReference(), m.IsReference());
@@ -226,7 +226,7 @@ bool wxArgumentType::operator==(const wxArgumentType& m) const
             (m.m_strDefaultValueForCmp.IsNumber() && m_strDefaultValueForCmp.StartsWith("wx")))
         {
             if (g_verbose)
-                LogMessage("Supposing '%s'  default value to be the same of '%s'...",
+                wxLogMessage("Supposing '%s'  default value to be the same of '%s'...",
                            m_strDefaultValueForCmp, m.m_strDefaultValueForCmp);
 
             return true;
@@ -247,7 +247,7 @@ bool wxArgumentType::operator==(const wxArgumentType& m) const
         }
 
         if (g_verbose)
-            LogMessage("Argument type '%s = %s' has different default value from '%s = %s'",
+            wxLogMessage("Argument type '%s = %s' has different default value from '%s = %s'",
                        m_strType, m_strDefaultValueForCmp, m.m_strType, m.m_strDefaultValueForCmp);
         return false;
     }
@@ -267,7 +267,7 @@ bool wxMethod::IsOk() const
     // NOTE: m_retType can be a wxEmptyType, and means that this method
     //       is a ctor or a dtor.
     if (!m_retType.IsOk() && m_retType!=wxEmptyType) {
-        LogError("'%s' method has invalid return type: %s", m_retType.GetAsString());
+        wxLogError("'%s' method has invalid return type: %s", m_retType.GetAsString());
         return false;
     }
 
@@ -276,7 +276,7 @@ bool wxMethod::IsOk() const
 
     // a function can't be both const and static or virtual and static!
     if ((m_bConst && m_bStatic) || ((m_bVirtual || m_bPureVirtual) && m_bStatic)) {
-        LogError("'%s' method can't be both const/static or virtual/static", m_strName);
+        wxLogError("'%s' method can't be both const/static or virtual/static", m_strName);
         return false;
     }
 
@@ -284,7 +284,7 @@ bool wxMethod::IsOk() const
 
     for (unsigned int i=0; i<m_args.GetCount(); i++)
         if (!m_args[i].IsOk()) {
-            LogError("'%s' method has invalid %d-th argument type: %s",
+            wxLogError("'%s' method has invalid %d-th argument type: %s",
                      m_strName, i+1, m_args[i].GetAsString());
             return false;
         }
@@ -298,7 +298,7 @@ bool wxMethod::IsOk() const
         for (unsigned int i=1; i<m_args.GetCount(); i++)
         {
             if (previousArgHasDefault && !m_args[i].HasDefaultValue()) {
-                LogError("'%s' method has %d-th argument which has no default value "
+                wxLogError("'%s' method has %d-th argument which has no default value "
                          "(while the previous one had one!)",
                          m_strName, i+1);
                 return false;
@@ -317,13 +317,13 @@ bool wxMethod::MatchesExceptForAttributes(const wxMethod& m) const
         GetName() != m.GetName())
     {
         if (g_verbose)
-            LogMessage("The method '%s' does not match method '%s'; different names/rettype", GetName(), m.GetName());
+            wxLogMessage("The method '%s' does not match method '%s'; different names/rettype", GetName(), m.GetName());
         return false;
     }
 
     if (m_args.GetCount()!=m.m_args.GetCount()) {
         if (g_verbose)
-            LogMessage("Method '%s' has %d arguments while '%s' has %d arguments",
+            wxLogMessage("Method '%s' has %d arguments while '%s' has %d arguments",
                        m_strName, m_args.GetCount(), m_strName, m.m_args.GetCount());
         return false;
     }
@@ -359,7 +359,7 @@ bool wxMethod::operator==(const wxMethod& m) const
         GetAccessSpecifier() != m.GetAccessSpecifier())
     {
         if (g_verbose)
-            LogMessage("The method '%s' does not match method '%s'; different attributes", GetName(), m.GetName());
+            wxLogMessage("The method '%s' does not match method '%s'; different attributes", GetName(), m.GetName());
 
         return false;
     }
@@ -509,7 +509,7 @@ bool wxClass::CheckConsistency() const
         for (unsigned int j=0; j<m_methods.GetCount(); j++)
             if (i!=j && m_methods[i] == m_methods[j])
             {
-                LogError("class %s has two methods with the same prototype: '%s'",
+                wxLogError("class %s has two methods with the same prototype: '%s'",
                          m_strName, m_methods[i].GetAsString());
                 return false;
 
@@ -546,7 +546,7 @@ const wxMethod* wxClass::RecursiveUpwardFindMethod(const wxMethod& m,
         {
             const wxClass *parent = allclasses->FindClass(m_parents[i]);
             if (!parent) {
-                LogError("Could not find parent '%s' of class '%s'...",
+                wxLogError("Could not find parent '%s' of class '%s'...",
                          m_parents[i], GetName());
                 return false;
             }
@@ -589,7 +589,7 @@ wxMethodPtrArray wxClass::RecursiveUpwardFindMethodsNamed(const wxString& name,
         {
             const wxClass *parent = allclasses->FindClass(m_parents[i]);
             if (!parent) {
-                LogError("Could not find parent '%s' of class '%s'...",
+                wxLogError("Could not find parent '%s' of class '%s'...",
                          m_parents[i], GetName());
                 return false;
             }
@@ -632,13 +632,23 @@ void wxXmlInterface::Dump(const wxString& filename)
         sorted[i]->Dump(apiout);
 }
 
-bool wxXmlInterface::CheckParseResults() const
+bool wxXmlInterface::CheckConsistency() const
 {
     // this check can be quite slow, so do it only for debug releases:
 //#ifdef __WXDEBUG__
     for (unsigned int i=0; i<m_classes.GetCount(); i++)
+    {
         if (!m_classes[i].CheckConsistency())
             return false;
+
+        for (unsigned int j=0; j<m_classes.GetCount(); j++)
+            if (i!=j && m_classes[i].GetName() == m_classes[j].GetName())
+            {
+                wxLogError("two classes have the same name: %s",
+                         m_classes[i].GetName());
+                return false;
+            }
+    }
 //#endif
 
     return true;
@@ -775,16 +785,16 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
     wxXmlNode *child;
     int nodes = 0;
 
-    LogMessage("Parsing %s...", filename);
+    wxLogMessage("Parsing %s...", filename);
 
     if (!doc.Load(filename)) {
-        LogError("can't load %s", filename);
+        wxLogError("can't load %s", filename);
         return false;
     }
 
     // start processing the XML file
     if (doc.GetRoot()->GetName() != "GCC_XML") {
-        LogError("invalid root node for %s", filename);
+        wxLogError("invalid root node for %s", filename);
         return false;
     }
 
@@ -807,7 +817,7 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
 
     if (old)
     {
-        LogError("The version of GCC-XML used for the creation of %s is too old; "
+        wxLogError("The version of GCC-XML used for the creation of %s is too old; "
                  "the cvs_revision attribute of the root node reports '%s', "
                  "minimal required is 1.%d.", filename, version, MIN_REVISION);
         return false;
@@ -833,7 +843,7 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
 
             // NOTE: <File> nodes can have an id == "f0"...
 
-            LogError("Invalid id for node %s: %s", n, child->GetAttribute("id"));
+            wxLogError("Invalid id for node %s: %s", n, child->GetAttribute("id"));
             return false;
         }
 
@@ -841,7 +851,7 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
         {
             wxString cname = child->GetAttribute("name");
             if (cname.IsEmpty()) {
-                LogError("Invalid empty name for '%s' node", n);
+                wxLogError("Invalid empty name for '%s' node", n);
                 return false;
             }
 
@@ -870,7 +880,7 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
                 if (ids.IsEmpty())
                 {
                     if (child->GetAttribute("incomplete") != "1") {
-                        LogError("Invalid member IDs for '%s' class node: %s",
+                        wxLogError("Invalid member IDs for '%s' class node: %s",
                                 cname, child->GetAttribute("id"));
                         return false;
                     }
@@ -881,7 +891,7 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
                 {
                     // decode the non-empty list of IDs:
                     if (!getMemberIDs(&members, newClass, ids)) {
-                        LogError("Invalid member IDs for '%s' class node: %s",
+                        wxLogError("Invalid member IDs for '%s' class node: %s",
                                 cname, child->GetAttribute("id"));
                         return false;
                     }
@@ -895,7 +905,7 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
         {
             unsigned long typeId = 0;
             if (!getID(&typeId, child->GetAttribute("type"))) {
-                LogError("Invalid type for node %s: %s", n, child->GetAttribute("type"));
+                wxLogError("Invalid type for node %s: %s", n, child->GetAttribute("type"));
                 return false;
             }
 
@@ -913,7 +923,7 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
         {
             unsigned long type = 0;
             if (!getID(&type, child->GetAttribute("type")) || type == 0) {
-                LogError("Invalid type for node %s: %s", n, child->GetAttribute("type"));
+                wxLogError("Invalid type for node %s: %s", n, child->GetAttribute("type"));
                 return false;
             }
 
@@ -959,7 +969,7 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
         else if (n == "File")
         {
             if (!child->GetAttribute("id").StartsWith("f")) {
-                LogError("Unexpected file ID: %s", child->GetAttribute("id"));
+                wxLogError("Unexpected file ID: %s", child->GetAttribute("id"));
                 return false;
             }
 
@@ -984,7 +994,7 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
                 // they're never used as return/argument types by wxWidgets methods
 
                 if (g_verbose)
-                    LogWarning("Type node '%s' with ID '%s' does not have name attribute",
+                    wxLogWarning("Type node '%s' with ID '%s' does not have name attribute",
                                n, child->GetAttribute("id"));
 
                 types[id] = "TOFIX";
@@ -1003,7 +1013,7 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
     while (toResolveTypes.size()>0)
     {
         if (g_verbose)
-            LogMessage("%d types were collected; %d types need yet to be resolved...",
+            wxLogMessage("%d types were collected; %d types need yet to be resolved...",
                        types.size(), toResolveTypes.size());
 
         for (wxToResolveTypeHashMap::iterator i = toResolveTypes.begin();
@@ -1057,7 +1067,7 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
                 }
                 else
                 {
-                    LogError("Cannot solve '%d' reference type!", referenced);
+                    wxLogError("Cannot solve '%d' reference type!", referenced);
                     return false;
                 }
             }
@@ -1069,7 +1079,7 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
     {
         unsigned long fileID = 0;
         if (!getID(&fileID, m_classes[i].GetHeader()) || fileID == 0) {
-            LogError("invalid header id: %s", m_classes[i].GetHeader());
+            wxLogError("invalid header id: %s", m_classes[i].GetHeader());
             return false;
         }
 
@@ -1078,7 +1088,7 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
         if (idx == files.end())
         {
             // this is an error!
-            LogError("couldn't find file ID '%s'", m_classes[i].GetHeader());
+            wxLogError("couldn't find file ID '%s'", m_classes[i].GetHeader());
         }
         else
             m_classes[i].SetHeader(idx->second);
@@ -1092,7 +1102,7 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
             unsigned long id;
 
             if (!getID(&id, m_classes[i].GetParent(k))) {
-                LogError("invalid parent class ID for '%s'", m_classes[i].GetName());
+                wxLogError("invalid parent class ID for '%s'", m_classes[i].GetName());
                 return false;
             }
 
@@ -1100,7 +1110,7 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
             if (idx == types.end())
             {
                 // this is an error!
-                LogError("couldn't find parent class ID '%d'", id);
+                wxLogError("couldn't find parent class ID '%d'", id);
             }
             else
                 // replace k-th parent with its true name:
@@ -1120,7 +1130,7 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
         {
             unsigned long id = 0;
             if (!getID(&id, child->GetAttribute("id"))) {
-                LogError("invalid ID for node '%s' with ID '%s'", n, child->GetAttribute("id"));
+                wxLogError("invalid ID for node '%s' with ID '%s'", n, child->GetAttribute("id"));
                 return false;
             }
 
@@ -1132,7 +1142,7 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
                 // this <Method> node is a method of the i-th class!
                 wxMethod newfunc;
                 if (!ParseMethod(child, types, newfunc)) {
-                    LogError("The method '%s' could not be added to class '%s'",
+                    wxLogError("The method '%s' could not be added to class '%s'",
                              child->GetAttribute("demangled"), p->GetName());
                     return false;
                 }
@@ -1140,12 +1150,12 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
                 // do some additional check that we can do only here:
 
                 if (newfunc.IsCtor() && !p->IsValidCtorForThisClass(newfunc)) {
-                    LogError("The method '%s' does not seem to be a ctor for '%s'",
+                    wxLogError("The method '%s' does not seem to be a ctor for '%s'",
                              newfunc.GetName(), p->GetName());
                     return false;
                 }
                 if (newfunc.IsDtor() && !p->IsValidDtorForThisClass(newfunc)) {
-                    LogError("The method '%s' does not seem to be a dtor for '%s'",
+                    wxLogError("The method '%s' does not seem to be a dtor for '%s'",
                              newfunc.GetName(), p->GetName());
                     return false;
                 }
@@ -1160,8 +1170,8 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
         if ((++nodes%PROGRESS_RATE)==0) ShowProgress();
     }
 
-    if (!CheckParseResults())
-        return false;
+    if (!CheckConsistency())
+        return false;       // the check failed
 
     return true;
 }
@@ -1183,7 +1193,7 @@ bool wxXmlGccInterface::ParseMethod(const wxXmlNode *p,
     if (!getID(&retid, p->GetAttribute("returns")) || retid == 0)
     {
         if (p->GetName() != "Destructor" && p->GetName() != "Constructor") {
-            LogError("Empty return ID for method '%s', with ID '%s'",
+            wxLogError("Empty return ID for method '%s', with ID '%s'",
                      name, p->GetAttribute("id"));
             return false;
         }
@@ -1192,13 +1202,13 @@ bool wxXmlGccInterface::ParseMethod(const wxXmlNode *p,
     {
         wxTypeIdHashMap::const_iterator retidx = types.find(retid);
         if (retidx == types.end()) {
-            LogError("Could not find return type ID '%s'", retid);
+            wxLogError("Could not find return type ID '%s'", retid);
             return false;
         }
 
         ret = wxType(retidx->second);
         if (!ret.IsOk()) {
-            LogError("Invalid return type '%s' for method '%s', with ID '%s'",
+            wxLogError("Invalid return type '%s' for method '%s', with ID '%s'",
                      retidx->second, name, p->GetAttribute("id"));
             return false;
         }
@@ -1213,14 +1223,14 @@ bool wxXmlGccInterface::ParseMethod(const wxXmlNode *p,
         {
             unsigned long id = 0;
             if (!getID(&id, arg->GetAttribute("type")) || id == 0) {
-                LogError("Invalid argument type ID '%s' for method '%s' with ID %s",
+                wxLogError("Invalid argument type ID '%s' for method '%s' with ID %s",
                          arg->GetAttribute("type"), name, p->GetAttribute("id"));
                 return false;
             }
 
             wxTypeIdHashMap::const_iterator idx = types.find(id);
             if (idx == types.end()) {
-                LogError("Could not find argument type ID '%s'", id);
+                wxLogError("Could not find argument type ID '%s'", id);
                 return false;
             }
 
@@ -1256,7 +1266,7 @@ bool wxXmlGccInterface::ParseMethod(const wxXmlNode *p,
         m.SetAccessSpecifier(wxMAS_PRIVATE);
 
     if (!m.IsOk()) {
-        LogError("The prototype '%s' is not valid!", m.GetAsString());
+        wxLogError("The prototype '%s' is not valid!", m.GetAsString());
         return false;
     }
 
@@ -1294,7 +1304,7 @@ static wxString GetTextFromChildren(const wxXmlNode *n)
         else if (ref->GetType() == wxXML_TEXT_NODE)
             text += ref->GetContent();
         else
-            LogWarning("Unexpected node type while getting text from '%s' node", n->GetName());
+            wxLogWarning("Unexpected node type while getting text from '%s' node", n->GetName());
 
         ref = ref->GetNext();
     }
@@ -1368,7 +1378,7 @@ int GetAvailabilityFor(const wxXmlNode *node)
     for (unsigned int i=0; i < ports.GetCount(); i++)
     {
         if (!ports[i].StartsWith("wx")) {
-            LogError("unexpected port ID '%s'", ports[i]);
+            wxLogError("unexpected port ID '%s'", ports[i]);
             return false;
         }
 
@@ -1388,16 +1398,16 @@ bool wxXmlDoxygenInterface::Parse(const wxString& filename)
     wxXmlDocument index;
     wxXmlNode *compound;
 
-    LogMessage("Parsing %s...", filename);
+    wxLogMessage("Parsing %s...", filename);
 
     if (!index.Load(filename)) {
-        LogError("can't load %s", filename);
+        wxLogError("can't load %s", filename);
         return false;
     }
 
     // start processing the index:
     if (index.GetRoot()->GetName() != "doxygenindex") {
-        LogError("invalid root node for %s", filename);
+        wxLogError("invalid root node for %s", filename);
         return false;
     }
 
@@ -1428,8 +1438,8 @@ bool wxXmlDoxygenInterface::Parse(const wxString& filename)
     }
     //wxPrint("\n");
 
-    if (!CheckParseResults())
-        return false;
+    if (!CheckConsistency())
+        return false;       // the check failed
 
     return true;
 }
@@ -1442,16 +1452,16 @@ bool wxXmlDoxygenInterface::ParseCompoundDefinition(const wxString& filename)
     int nodes = 0;
 
     if (g_verbose)
-        LogMessage("Parsing %s...", filename);
+        wxLogMessage("Parsing %s...", filename);
 
     if (!doc.Load(filename)) {
-        LogError("can't load %s", filename);
+        wxLogError("can't load %s", filename);
         return false;
     }
 
     // start processing this compound definition XML
     if (doc.GetRoot()->GetName() != "doxygen") {
-        LogError("invalid root node for %s", filename);
+        wxLogError("invalid root node for %s", filename);
         return false;
     }
 
@@ -1485,7 +1495,7 @@ bool wxXmlDoxygenInterface::ParseCompoundDefinition(const wxString& filename)
 
                             wxMethod m;
                             if (!ParseMethod(membernode, m, header)) {
-                                LogError("The method '%s' could not be added to class '%s'",
+                                wxLogError("The method '%s' could not be added to class '%s'",
                                          m.GetName(), klass.GetName());
                                 return false;
                             }
@@ -1501,7 +1511,7 @@ bool wxXmlDoxygenInterface::ParseCompoundDefinition(const wxString& filename)
                                 absoluteFile = header;
                             else if (header != absoluteFile)
                             {
-                                LogError("The method '%s' is documented in a different "
+                                wxLogError("The method '%s' is documented in a different "
                                             "file from others (which belong to '%s') ?",
                                             header, absoluteFile);
                                 return false;
@@ -1547,8 +1557,8 @@ bool wxXmlDoxygenInterface::ParseCompoundDefinition(const wxString& filename)
             if (klass.IsOk())
                 m_classes.Add(klass);
             else if (g_verbose)
-                LogWarning("discarding class '%s' with %d methods...",
-                        klass.GetName(), klass.GetMethodCount());
+                wxLogWarning("discarding class '%s' with %d methods...",
+                           klass.GetName(), klass.GetMethodCount());
         }
 
         child = child->GetNext();
@@ -1593,7 +1603,7 @@ bool wxXmlDoxygenInterface::ParseMethod(const wxXmlNode* p, wxMethod& m, wxStrin
             }
 
             if (typestr.IsEmpty()) {
-                LogError("cannot find type node for a param in method '%s'", m.GetName());
+                wxLogError("cannot find type node for a param in method '%s'", m.GetName());
                 return false;
             }
 
@@ -1641,7 +1651,7 @@ bool wxXmlDoxygenInterface::ParseMethod(const wxXmlNode* p, wxMethod& m, wxStrin
     m.SetPureVirtual(p->GetAttribute("virt")=="pure-virtual");
 
     if (!m.IsOk()) {
-        LogError("The prototype '%s' is not valid!", m.GetAsString());
+        wxLogError("The prototype '%s' is not valid!", m.GetAsString());
         return false;
     }
 

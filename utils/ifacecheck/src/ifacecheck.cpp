@@ -70,6 +70,19 @@ static const wxCmdLineEntryDesc g_cmdLineDesc[] =
     wxCMD_LINE_DESC_END
 };
 
+class IfaceCheckLog : public wxLog
+{
+public:
+    IfaceCheckLog() {}
+
+    void DoLog(wxLogLevel level, const wxString& msg, time_t stamp)
+    {
+        wxPrintf(msg);
+        wxPrintf("\n");
+        Flush();
+    }
+};
+
 class IfaceCheckApp : public wxAppConsole
 {
 public:
@@ -84,7 +97,6 @@ public:
     bool FixMethod(const wxString& header, const wxMethod* iface, const wxMethod* api);
     bool StringContainsMethodName(const wxString& str, const wxMethod* m);
 
-    void ShowProgress();
     void PrintStatistics(long secs);
 
     bool IsToProcess(const wxString& headername) const
@@ -117,6 +129,10 @@ int IfaceCheckApp::OnRun()
         wxString::Format("wxWidgets Interface checker utility (built %s against %s)",
                          __DATE__, wxVERSION_STRING));
 
+    // make the output more readable:
+    wxLog::SetActiveTarget(new IfaceCheckLog);
+    wxLog::DisableTimestamp();
+
     // parse the command line...
     bool ok = true;
     wxString preprocFile;
@@ -145,14 +161,14 @@ int IfaceCheckApp::OnRun()
                 !m_doxyInterface.Parse(parser.GetParam(1)))
                 return 1;
 
-            g_bLogEnabled = true;
+//            g_bLogEnabled = true;
 
             if (parser.Found(DUMP_SWITCH))
             {
-                LogMessage("Dumping real API to '%s'...", API_DUMP_FILE);
+                wxLogMessage("Dumping real API to '%s'...", API_DUMP_FILE);
                 m_gccInterface.Dump(API_DUMP_FILE);
 
-                LogMessage("Dumping interface API to '%s'...", INTERFACE_DUMP_FILE);
+                wxLogMessage("Dumping interface API to '%s'...", INTERFACE_DUMP_FILE);
                 m_doxyInterface.Dump(INTERFACE_DUMP_FILE);
             }
             else
@@ -192,23 +208,17 @@ int IfaceCheckApp::OnRun()
     }
 }
 
-void IfaceCheckApp::ShowProgress()
-{
-    wxPrint(".");
-    //fflush(stdout);
-}
-
 bool IfaceCheckApp::Compare()
 {
     const wxClassArray& interfaces = m_doxyInterface.GetClasses();
     const wxClass* c;
     int mcount = 0, ccount = 0;
 
-    LogMessage("Comparing the interface API to the real API (%d classes to compare)...",
-               interfaces.GetCount());
+    wxLogMessage("Comparing the interface API to the real API (%d classes to compare)...",
+                 interfaces.GetCount());
 
     if (!m_strToMatch.IsEmpty())
-        LogMessage("Processing only header files matching '%s' expression.", m_strToMatch);
+        wxLogMessage("Processing only header files matching '%s' expression.", m_strToMatch);
 
     for (unsigned int i=0; i<interfaces.GetCount(); i++)
     {
@@ -218,7 +228,7 @@ bool IfaceCheckApp::Compare()
             (interfaces[i].GetAvailability() & m_gccInterface.GetInterfacePort()) == 0) {
 
             if (g_verbose)
-                LogMessage("skipping class '%s' since it's not available for the %s port.",
+                wxLogMessage("skipping class '%s' since it's not available for the %s port.",
                            interfaces[i].GetName(), m_gccInterface.GetInterfacePortName());
 
             continue;       // skip this method
@@ -259,15 +269,15 @@ bool IfaceCheckApp::Compare()
 
         } else {
 
-            LogMessage("%s: couldn't find the real interface for the '%s' class",
+            wxLogMessage("%s: couldn't find the real interface for the '%s' class",
                        header, cname);
             ccount++;
         }
     }
 
-    LogMessage("%d on a total of %d methods (%.1f%%) of the interface headers do not exist in the real headers",
+    wxLogMessage("%d on a total of %d methods (%.1f%%) of the interface headers do not exist in the real headers",
                mcount, m_doxyInterface.GetMethodCount(), (float)(100.0 * mcount/m_doxyInterface.GetMethodCount()));
-    LogMessage("%d on a total of %d classes (%.1f%%) of the interface headers do not exist in the real headers",
+    wxLogMessage("%d on a total of %d classes (%.1f%%) of the interface headers do not exist in the real headers",
                ccount, m_doxyInterface.GetClassesCount(), (float)(100.0 * ccount/m_doxyInterface.GetClassesCount()));
 
     return true;
@@ -293,7 +303,7 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClass* api)
             (m.GetAvailability() & m_gccInterface.GetInterfacePort()) == 0) {
 
             if (g_verbose)
-                LogMessage("skipping method '%s' since it's not available for the %s port.",
+                wxLogMessage("skipping method '%s' since it's not available for the %s port.",
                            m.GetAsString(), m_gccInterface.GetInterfacePortName());
 
             continue;       // skip this method
@@ -349,7 +359,7 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClass* api)
 
                     // modify interface header
                     if (FixMethod(iface->GetHeader(), &m, &tmp))
-                        LogMessage("Adjusted attributes of '%s' method", m.GetAsString());
+                        wxLogMessage("Adjusted attributes of '%s' method", m.GetAsString());
 
                     proceed = false;
                     break;
@@ -360,7 +370,7 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClass* api)
             {
                 if (overloads.GetCount()==0)
                 {
-                    LogMessage("%s: real '%s' class and their parents have no method '%s'",
+                    wxLogMessage("%s: real '%s' class and their parents have no method '%s'",
                                 header, api->GetName(), m.GetAsString());
                     // we've found no overloads
                 }
@@ -383,7 +393,7 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClass* api)
                     for (unsigned int j=0; j<overloads.GetCount(); j++)
                         warning += "\n\treal header: " + overloads[j]->GetAsString(true, true, true, true);
 
-                    wxPrint(warning + "\n");
+                    wxLogWarning(warning);
                     count++;
 
                     if (overloads.GetCount()>1)
@@ -391,7 +401,7 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClass* api)
                         // TODO: decide which of these overloads is the most "similar" to m
                         //       and eventually modify it
                         if (m_modify)
-                            wxPrint("\tmanual fix is required\n");
+                            wxLogWarning("\tmanual fix is required");
                     }
                     else
                     {
@@ -399,7 +409,7 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClass* api)
 
                         if (m_modify || m.IsCtor())
                         {
-                            wxPrint("\tfixing it...\n");
+                            wxLogWarning("\tfixing it...");
 
                             // try to modify it!
                             FixMethod(iface->GetHeader(), &m, overloads[0]);
@@ -427,7 +437,7 @@ bool IfaceCheckApp::FixMethod(const wxString& header, const wxMethod* iface, con
 
     wxTextFile file;
     if (!file.Open(header)) {
-        LogError("\tcan't open the '%s' header file.", header);
+        wxLogError("\tcan't open the '%s' header file.", header);
         return false;
     }
 
@@ -435,13 +445,13 @@ bool IfaceCheckApp::FixMethod(const wxString& header, const wxMethod* iface, con
     // i.e. the line containing the semicolon at the end of the declaration.
     int end = iface->GetLocation()-1;
     if (end <= 0 || end >= (int)file.GetLineCount()) {
-        LogWarning("\tinvalid location info for method '%s': %d.",
+        wxLogWarning("\tinvalid location info for method '%s': %d.",
                    iface->GetAsString(), iface->GetLocation());
         return false;
     }
 
     if (!file.GetLine(end).Contains(";")) {
-        LogWarning("\tinvalid location info for method '%s': %d.",
+        wxLogWarning("\tinvalid location info for method '%s': %d.",
                    iface->GetAsString(), iface->GetLocation());
         return false;
     }
@@ -476,7 +486,7 @@ bool IfaceCheckApp::FixMethod(const wxString& header, const wxMethod* iface, con
 
     if (start <= 0 || !founddecl)
     {
-        LogError("\tcan't find the beginning of the declaration of '%s' method in '%s' header looking backwards from line %d; I arrived at %d and gave up",
+        wxLogError("\tcan't find the beginning of the declaration of '%s' method in '%s' header looking backwards from line %d; I arrived at %d and gave up",
                  iface->GetAsString(), header, end+1 /* zero-based => 1-based */, start);
         return false;
     }
@@ -557,7 +567,7 @@ bool IfaceCheckApp::FixMethod(const wxString& header, const wxMethod* iface, con
 
     // now save the modification
     if (!file.Write()) {
-        LogError("\tcan't save the '%s' header file.", header);
+        wxLogError("\tcan't save the '%s' header file.", header);
         return false;
     }
 
@@ -567,7 +577,7 @@ bool IfaceCheckApp::FixMethod(const wxString& header, const wxMethod* iface, con
         return false;
 
     if (g_verbose)
-        LogMessage("\tthe final row offset for following methods is %d lines.", nOffset);
+        wxLogMessage("\tthe final row offset for following methods is %d lines.", nOffset);
 
     // update the other method's locations for those methods which belong to the modified header
     // and are placed _below_ the modified method
@@ -592,7 +602,7 @@ bool IfaceCheckApp::ParsePreprocessorOutput(const wxString& filename)
 {
     wxTextFile tf;
     if (!tf.Open(filename)) {
-        LogError("can't open the '%s' preprocessor output file.", filename);
+        wxLogError("can't open the '%s' preprocessor output file.", filename);
         return false;
     }
 
@@ -605,7 +615,7 @@ bool IfaceCheckApp::ParsePreprocessorOutput(const wxString& filename)
         // the format of this line should be:
         //    #define DEFNAME DEFVALUE
         if (!line.StartsWith("#define ")) {
-            LogError("unexpected content in '%s' at line %d.", filename, i+1);
+            wxLogError("unexpected content in '%s' at line %d.", filename, i+1);
             return false;
         }
 
@@ -634,7 +644,7 @@ bool IfaceCheckApp::ParsePreprocessorOutput(const wxString& filename)
         }
     }
 
-    LogMessage("Parsed %d preprocessor #defines from '%s' which will be used later...",
+    wxLogMessage("Parsed %d preprocessor #defines from '%s' which will be used later...",
                useful, filename);
 
     return true;
@@ -645,9 +655,9 @@ void IfaceCheckApp::PrintStatistics(long secs)
     // these stats, for what regards the gcc XML, are all referred to the wxWidgets
     // classes only!
 
-    LogMessage("wx real headers contains declaration of %d classes (%d methods)",
+    wxLogMessage("wx real headers contains declaration of %d classes (%d methods)",
                m_gccInterface.GetClassesCount(), m_gccInterface.GetMethodCount());
-    LogMessage("wx interface headers contains declaration of %d classes (%d methods)",
+    wxLogMessage("wx interface headers contains declaration of %d classes (%d methods)",
                m_doxyInterface.GetClassesCount(), m_doxyInterface.GetMethodCount());
 
     // build a list of the undocumented wx classes
@@ -664,7 +674,7 @@ void IfaceCheckApp::PrintStatistics(long secs)
     list.RemoveLast();
     list.RemoveLast();
 
-    LogMessage("the list of the %d undocumented wx classes is: %s", undoc, list);
-    LogMessage("total processing took %d seconds.", secs);
+    wxLogMessage("the list of the %d undocumented wx classes is: %s", undoc, list);
+    wxLogMessage("total processing took %d seconds.", secs);
 }
 

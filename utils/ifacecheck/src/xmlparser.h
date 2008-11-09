@@ -16,6 +16,7 @@
 #include <wx/dynarray.h>
 #include <wx/xml/xml.h>
 #include <wx/platinfo.h>
+#include <wx/log.h>
 
 
 /*
@@ -30,24 +31,8 @@
     // ...fix description...
 */
 
-
-
-// helper macros
-#define LogMessage(fmt, ...)   { if (g_bLogEnabled) { wxPrintf(fmt "\n", __VA_ARGS__); fflush(stdout); }}
-#define LogWarning(fmt, ...)   { if (g_bLogEnabled) { wxPrintf(fmt "\n", __VA_ARGS__); fflush(stdout); }}
-#define LogError(fmt, ...)     { if (g_bLogEnabled) { wxPrintf("ERROR: " fmt "\n", __VA_ARGS__); fflush(stdout); }}
-#define wxPrint(str)           { wxPrintf(str); fflush(stdout); }
-
-// enable/disable logging
-extern bool g_bLogEnabled;
-
-class LogNull
-{
-public:
-    LogNull() { g_bLogEnabled = false; }
-    ~LogNull() { g_bLogEnabled = true; }
-};
-
+// NOTE: all messages in this way are printed on the stderr
+//#define wxLogWarning   wxLogMessage
 
 
 // ----------------------------------------------------------------------------
@@ -445,9 +430,10 @@ public:
     wxClassPtrArray FindClassesDefinedIn(const wxString& headerfile) const;
 
     void ShowProgress()
-        { /*wxPrint(".");*/ }
+        { /*wxFprintf(stderr, ".");*/ }
 
-    bool CheckParseResults() const;
+    // is this interface coherent?
+    bool CheckConsistency() const;
 
 protected:
     wxClassArray m_classes;
