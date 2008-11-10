@@ -19,6 +19,7 @@
 
 #include "wx/dataview.h"
 #include "wx/spinctrl.h"
+#include "wx/choice.h"
 
 #include "wx/weakref.h"
 
@@ -1315,6 +1316,64 @@ bool wxDataViewSpinRenderer::GetValue( wxVariant &value ) const
     value = m_data;
     return true;
 }
+
+// -------------------------------------
+// wxDataViewChoiceRenderer
+// -------------------------------------
+
+#ifndef __WXGTK20__
+
+wxDataViewChoiceRenderer::wxDataViewChoiceRenderer( const wxArrayString& choices, wxDataViewCellMode mode, int alignment ) :
+   wxDataViewCustomRenderer(wxT("string"), mode, alignment )
+{
+    m_choices = choices;
+}
+
+wxControl* wxDataViewChoiceRenderer::CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value )
+{
+    wxString s = value;
+    wxSize size = labelRect.GetSize();
+#ifdef __WXMAC__
+    size = wxSize( wxMax(70,labelRect.width ), -1 );
+#endif
+    wxChoice *c = new wxChoice( parent, wxID_ANY, labelRect.GetTopLeft(), size, m_choices );
+    c->SetStringSelection( value.GetString() );
+
+    return c;
+}
+
+bool wxDataViewChoiceRenderer::GetValueFromEditorCtrl( wxControl* editor, wxVariant &value )
+{
+    wxChoice *c = (wxChoice*) editor;
+    wxString s = c->GetStringSelection();
+    value = s;
+    return true;
+}
+
+bool wxDataViewChoiceRenderer::Render( wxRect rect, wxDC *dc, int state )
+{
+    RenderText( m_data, 0, rect, dc, state );
+    return true;
+}
+
+wxSize wxDataViewChoiceRenderer::GetSize() const
+{
+    return wxSize(80,16);
+}
+
+bool wxDataViewChoiceRenderer::SetValue( const wxVariant &value )
+{
+    m_data = value.GetString();
+    return true;
+}
+
+bool wxDataViewChoiceRenderer::GetValue( wxVariant &value ) const
+{
+    value = m_data;
+    return true;
+}
+
+#endif
 
 //-----------------------------------------------------------------------------
 // wxDataViewTreeStore

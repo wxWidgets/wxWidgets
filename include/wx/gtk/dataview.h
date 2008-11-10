@@ -263,6 +263,27 @@ protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewDateRenderer)
 };
     
+// -------------------------------------
+// wxDataViewChoiceRenderer
+// -------------------------------------
+
+class WXDLLIMPEXP_ADV wxDataViewChoiceRenderer: public wxDataViewCustomRenderer
+{
+public:
+    wxDataViewChoiceRenderer( const wxArrayString &choices,
+                            wxDataViewCellMode mode = wxDATAVIEW_CELL_EDITABLE,
+                            int alignment = wxDVR_DEFAULT_ALIGNMENT );
+    virtual bool Render( wxRect rect, wxDC *dc, int state );
+    virtual wxSize GetSize() const;
+    virtual bool SetValue( const wxVariant &value );
+    virtual bool GetValue( wxVariant &value ) const;
+
+    void SetAlignment( int align );
+private:
+    wxArrayString m_choices;
+    wxString      m_data;
+};
+
 // --------------------------------------------------------- 
 // wxDataViewColumn
 // --------------------------------------------------------- 

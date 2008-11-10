@@ -74,15 +74,15 @@ static const char *small1_xpm[] = {
 
 /*
 Implement this data model
-            Title               Artist               Year
--------------------------------------------------------------
+            Title               Artist               Year        Judgement
+--------------------------------------------------------------------------
 1: My Music:
     2:  Pop music
-        3:  You are not alone   Michael Jackson      1995
-        4:  Take a bow          Madonna              1994
+        3:  You are not alone   Michael Jackson      1995        good
+        4:  Take a bow          Madonna              1994        good
     5:  Classical music
-        6:  Ninth Symphony      Ludwig v. Beethoven  1824
-        7:  German Requiem      Johannes Brahms      1868
+        6:  Ninth Symphony      Ludwig v. Beethoven  1824        good
+        7:  German Requiem      Johannes Brahms      1868        good
 */
 
 
@@ -100,6 +100,7 @@ public:
         m_title = title;
         m_artist = artist;
         m_year = year;
+        m_quality = "good";
         m_isContainer = false;
     }
 
@@ -136,6 +137,7 @@ public:
     wxString            m_title;
     wxString            m_artist;
     int                 m_year;
+    wxString            m_quality;
 
 private:
     MyMusicModelNode   *m_parent;
@@ -255,7 +257,7 @@ public:
 
     virtual unsigned int GetColumnCount() const
     {
-        return 5;
+        return 6;
     }
 
     virtual wxString GetColumnType( unsigned int col ) const
@@ -275,14 +277,15 @@ public:
             case 0: variant = node->m_title; break;
             case 1: variant = node->m_artist; break;
             case 2: variant = (long) node->m_year; break;
-            case 3:
+            case 3: variant = node->m_quality; break;
+            case 4:
                // wxMac doesn't conceal the popularity progress renderer, return 0 for containers
                if (IsContainer(item))
                   variant = (long) 0;
                else
                   variant = (long) 80;  // all music is very 80% popular
                break;
-            case 4:
+            case 5:
                // Make size of red square depend on year
                if (GetYear(item) < 1900)
                   variant = (long) 35;
@@ -313,6 +316,7 @@ public:
             case 0: node->m_title = variant.GetString(); return true;
             case 1: node->m_artist  = variant.GetString(); return true;
             case 2: node->m_year  = variant.GetLong(); return true;
+            case 3: node->m_quality  = variant.GetString(); return true;
             default: wxLogError( wxT("MyMusicModel::SetValue: wrong column") );
         }
         return false;
@@ -626,7 +630,8 @@ public:
 
     virtual wxSize GetSize() const
     {
-        return wxSize(60,m_height);
+        //return wxSize(60,m_height);
+        return wxSize(60,20);
     }
 
     virtual bool SetValue( const wxVariant &value )
@@ -844,19 +849,26 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
         wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE );
     m_musicCtrl->AppendColumn( column1 );
 
-#if 1
     wxDataViewSpinRenderer *sr = new wxDataViewSpinRenderer( 0, 2010, wxDATAVIEW_CELL_EDITABLE, wxALIGN_RIGHT );
-    wxDataViewColumn *column2 = new wxDataViewColumn( wxT("year"), sr, 2, 80, wxALIGN_LEFT,
+    wxDataViewColumn *column2 = new wxDataViewColumn( wxT("year"), sr, 2, 100, wxALIGN_LEFT,
         wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE );
     m_musicCtrl->AppendColumn( column2 );
 
-    m_musicCtrl->AppendProgressColumn( wxT("popularity"), 3, wxDATAVIEW_CELL_INERT, 80 );
+    wxArrayString choices;
+    choices.Add( "good" );
+    choices.Add( "bad" );
+    choices.Add( "lousy" );
+    wxDataViewChoiceRenderer *c = new wxDataViewChoiceRenderer( choices, wxDATAVIEW_CELL_EDITABLE, wxALIGN_RIGHT );
+    wxDataViewColumn *column3 = new wxDataViewColumn( wxT("rating"), c, 3, 100, wxALIGN_LEFT,
+        wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE );
+    m_musicCtrl->AppendColumn( column3 );
+
+    m_musicCtrl->AppendProgressColumn( wxT("popularity"), 4, wxDATAVIEW_CELL_INERT, 80 );
 
     MyCustomRenderer *cr = new MyCustomRenderer( wxDATAVIEW_CELL_ACTIVATABLE, wxALIGN_RIGHT );
-    wxDataViewColumn *column3 = new wxDataViewColumn( wxT("custom"), cr, 4, -1, wxALIGN_LEFT,
+    wxDataViewColumn *column4 = new wxDataViewColumn( wxT("custom"), cr, 5, -1, wxALIGN_LEFT,
         wxDATAVIEW_COL_RESIZABLE );
-    m_musicCtrl->AppendColumn( column3 );
-#endif
+    m_musicCtrl->AppendColumn( column4 );
 
     data_sizer->Add( m_musicCtrl, 3, wxGROW );
 
@@ -877,8 +889,8 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 #endif
 
     wxDataViewTextRendererAttr *ra = new wxDataViewTextRendererAttr;
-    wxDataViewColumn *column4 = new wxDataViewColumn(wxT("attributes"), ra, 2 );
-    m_listCtrl->AppendColumn( column4 );
+    wxDataViewColumn *column5 = new wxDataViewColumn(wxT("attributes"), ra, 2 );
+    m_listCtrl->AppendColumn( column5 );
 
     data_sizer->Add( m_listCtrl, 2, wxGROW );
 

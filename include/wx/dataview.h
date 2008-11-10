@@ -882,6 +882,33 @@ private:
     long    m_min,m_max;
 };
 
+#ifndef __WXGTK20__
+
+// -------------------------------------
+// wxDataViewChoiceRenderer
+// -------------------------------------
+
+class WXDLLIMPEXP_ADV wxDataViewChoiceRenderer: public wxDataViewCustomRenderer
+{
+public:
+    wxDataViewChoiceRenderer( const wxArrayString &choices,
+                            wxDataViewCellMode mode = wxDATAVIEW_CELL_EDITABLE,
+                            int alignment = wxDVR_DEFAULT_ALIGNMENT );
+    virtual bool HasEditorCtrl() { return true; }
+    virtual wxControl* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value );
+    virtual bool GetValueFromEditorCtrl( wxControl* editor, wxVariant &value );
+    virtual bool Render( wxRect rect, wxDC *dc, int state );
+    virtual wxSize GetSize() const;
+    virtual bool SetValue( const wxVariant &value );
+    virtual bool GetValue( wxVariant &value ) const;
+
+private:
+    wxArrayString m_choices;
+    wxString      m_data;
+};
+
+#endif
+
 //-----------------------------------------------------------------------------
 // wxDataViewTreeStore
 //-----------------------------------------------------------------------------

@@ -1541,7 +1541,7 @@ static void wxGtkTextRendererEditedCallback( GtkCellRendererText *renderer,
 static void wxGtkTextRendererEditedCallback( GtkCellRendererText *WXUNUSED(renderer),
     gchar *arg1, gchar *arg2, gpointer user_data )
 {
-    wxDataViewTextRenderer *cell = (wxDataViewTextRenderer*) user_data;
+    wxDataViewRenderer *cell = (wxDataViewRenderer*) user_data;
 
     wxString tmp = wxGTK_CONV_BACK_FONT(arg2, cell->GetOwner()->GetOwner()->GetFont());
     wxVariant value = tmp;
@@ -2021,6 +2021,120 @@ wxSize wxDataViewProgressRenderer::GetSize() const
     return wxSize(40,12);
 }
 
+// -------------------------------------
+// wxDataViewChoiceRenderer
+// -------------------------------------
+
+wxDataViewChoiceRenderer::wxDataViewChoiceRenderer( const wxArrayString &choices,
+                            wxDataViewCellMode mode, int alignment  ) :
+    wxDataViewCustomRenderer( "string", mode, alignment, true )
+{
+   m_choices = choices;
+
+#ifdef __WXGTK26__
+    if (!gtk_check_version(2,6,0))
+    {
+        m_renderer = (GtkCellRenderer*) gtk_cell_renderer_combo_new();
+
+        GtkListStore *store = gtk_list_store_new( 1, G_TYPE_STRING );
+        size_t n;
+        for (n = 0; n < m_choices.GetCount(); n++)
+            gtk_list_store_insert_with_values( store, NULL, n, 0, m_choices[n].utf8_str(), -1 );
+        
+        g_object_set (m_renderer,
+                "model", store,
+                "text-column", 0,
+                "has-entry", FALSE,
+                NULL);
+    
+        bool editable = (mode & wxDATAVIEW_CELL_EDITABLE);
+        g_object_set (m_renderer, "editable", editable, NULL);
+        
+        SetAlignment(alignment);
+        
+        g_signal_connect_after( m_renderer, "edited", G_CALLBACK(wxGtkTextRendererEditedCallback), this );
+
+        GtkInitHandlers();
+    }
+    else
+#endif
+    {
+        // Use custom cell code
+        wxDataViewCustomRenderer::Init(mode, alignment);
+    }
+}
+
+bool wxDataViewChoiceRenderer::Render( wxRect rect, wxDC *dc, int state )
+{
+    RenderText( m_data, 0, rect, dc, state );
+    return true;
+}
+
+wxSize wxDataViewChoiceRenderer::GetSize() const
+{
+    return wxSize(70,20);
+}
+
+bool wxDataViewChoiceRenderer::SetValue( const wxVariant &value )
+{
+    
+#ifdef __WXGTK26__
+    if (!gtk_check_version(2,6,0))
+    {
+        GValue gvalue = { 0, };
+        g_value_init( &gvalue, G_TYPE_STRING );
+        g_value_set_string( &gvalue, wxGTK_CONV_FONT( value.GetString(), GetOwner()->GetOwner()->GetFont() ) );
+        g_object_set_property( G_OBJECT(m_renderer), "text", &gvalue );
+        g_value_unset( &gvalue );
+    }
+    else
+#endif
+        m_data = value.GetString();
+
+    return true;
+}
+
+bool wxDataViewChoiceRenderer::GetValue( wxVariant &value ) const
+{
+#ifdef __WXGTK26__
+    if (!gtk_check_version(2,6,0))
+    {
+        GValue gvalue = { 0, };
+        g_value_init( &gvalue, G_TYPE_STRING );
+        g_object_get_property( G_OBJECT(m_renderer), "text", &gvalue );
+        wxString temp = wxGTK_CONV_BACK_FONT( g_value_get_string( &gvalue ), const_cast<wxDataViewTextRenderer*>(this)->GetOwner()->GetOwner()->GetFont() );
+        g_value_unset( &gvalue );
+        value = temp;
+        wxPrintf( "temp %s\n", temp );
+    }
+    else
+#endif
+        value = m_data;
+
+    return true;
+}
+
+void wxDataViewChoiceRenderer::SetAlignment( int align )
+{
+    wxDataViewCustomRenderer::SetAlignment(align);
+
+    if (gtk_check_version(2,10,0))
+        return;
+
+    // horizontal alignment:
+    PangoAlignment pangoAlign = PANGO_ALIGN_LEFT;
+    if (align & wxALIGN_RIGHT)
+        pangoAlign = PANGO_ALIGN_RIGHT;
+    else if (align & wxALIGN_CENTER_HORIZONTAL)
+        pangoAlign = PANGO_ALIGN_CENTER;
+
+    GValue gvalue = { 0, };
+    g_value_init( &gvalue, gtk_cell_renderer_mode_get_type() );
+    g_value_set_enum( &gvalue, pangoAlign );
+    g_object_set_property( G_OBJECT(m_renderer), "alignment", &gvalue );
+    g_value_unset( &gvalue );
+}
+    
 // ---------------------------------------------------------
 // wxDataViewDateRenderer
 // ---------------------------------------------------------
