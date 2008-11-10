@@ -82,7 +82,7 @@ public:
             Dialog position (ignored under MSW).
     */
     wxMessageDialog(wxWindow* parent, const wxString& message,
-                    const wxString& caption = "Message box",
+                    const wxString& caption = wxMessageBoxCaptionStr,
                     long style = wxOK | wxCENTRE,
                     const wxPoint& pos = wxDefaultPosition);
 

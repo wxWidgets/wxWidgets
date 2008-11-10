@@ -65,7 +65,7 @@ public:
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = 0,
-               const wxString& name = wxEmptyStr);
+               const wxString& name = wxEmptyString);
 
     /**
         Returns the wxListView associated with the control.

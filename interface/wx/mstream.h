@@ -66,7 +66,7 @@ public:
         buffer data of length len. The stream does not take ownership of the buffer,
         i.e. the buffer will not be deleted in its destructor.
     */
-    wxMemoryInputStream(const char* data, size_t len);
+    wxMemoryInputStream(const void* data, size_t len);
 
     /**
         Creates a new read-only memory stream, initializing it with the data from

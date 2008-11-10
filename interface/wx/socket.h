@@ -70,12 +70,12 @@ public:
 
         @return @true on success, @false if something goes wrong (invalid @a service).
     */
-    bool Service(unsigned short service);
+    bool Service(unsigned short service) = 0;
 
     /**
         Returns the current service.
     */
-    unsigned short Service();
+    unsigned short Service() const = 0;
 };
 
 
@@ -262,7 +262,7 @@ public:
     /**
         Returns the current service.
     */
-    virtual unsigned short Service();
+    virtual unsigned short Service() const;
 };
 
 

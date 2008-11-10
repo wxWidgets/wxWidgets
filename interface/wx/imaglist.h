@@ -100,6 +100,8 @@ public:
                  bitmap will automatically be split into smaller images, each
                  matching the dimensions of the image list.
                  This does not apply when adding icons.
+
+        @onlyfor{wxmsw,wxmac}
     */
     int Add(const wxIcon& icon);
 
@@ -206,6 +208,8 @@ public:
 
         @remarks The original bitmap or icon is not affected by the Replace()
                  operation, and can be deleted afterwards.
+
+        @onlyfor{wxmsw,wxmac}
     */
     bool Replace(int index, const wxIcon& icon);
 };

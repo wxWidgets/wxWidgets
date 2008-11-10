@@ -641,7 +641,7 @@ public:
         does have it, this pointer may be used to directly manipulate the alpha values
         which are stored as the RGB ones.
     */
-    const unsigned char * GetAlpha() const;
+    unsigned char* GetAlpha() const;
 
     /**
         Returns the blue intensity at the given coordinate.
@@ -932,7 +932,9 @@ public:
 
         @see SaveFile()
     */
-    bool LoadFile(wxInputStream& stream, wxBitmapType type, int index = -1);
+    virtual bool LoadFile(wxInputStream& stream,
+                          wxBitmapType type = wxBITMAP_TYPE_ANY,
+                          int index = -1);
 
     /**
         Loads an image from a file.
@@ -1221,6 +1223,7 @@ public:
     */
     void SetAlpha(int x, int y, unsigned char alpha);
 
+    //@{
     /**
         Sets the image data without performing checks.
 
@@ -1235,7 +1238,10 @@ public:
         that will be responsible for deleting it.
         Do not pass to this function a pointer obtained through GetData().
     */
-    void SetData(unsigned char* data);
+    void SetData(unsigned char* data, bool static_data = false);
+    void SetData(unsigned char* data, int new_width, int new_height,
+                 bool static_data = false);
+    //@}
 
     /**
         Specifies whether there is a mask or not.
@@ -1303,7 +1309,8 @@ public:
         This routine performs bounds-checks for the coordinate so it can be considered
         a safe way to manipulate the data.
     */
-    void SetRGB(wxRect& rect, unsigned char red,
+    void SetRGB(const wxRect& rect,
+                unsigned char red,
                 unsigned char green,
                 unsigned char blue);
 

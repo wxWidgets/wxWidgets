@@ -273,7 +273,7 @@ public:
         Find an item whose data matches this data, starting from start or the
         beginning if 'start' is @c -1.
     */
-    long FindItem(long start, long data);
+    long FindItem(long start, wxUIntPtr data);
 
     /**
         Find an item nearest this position in the specified direction,
@@ -923,7 +923,7 @@ public:
     /**
         Constructor.
     */
-    wxListEvent(wxEventType commandType = 0, int id = 0);
+    wxListEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
 
     /**
         For @c EVT_LIST_CACHE_HINT event only: return the first item which the
@@ -1025,9 +1025,9 @@ public:
         Construct a wxListItemAttr with the specified foreground and
         background colors and font.
     */
-    wxListItemAttr(const wxColour colText,
-                   const wxColour colBack,
-                   const wxFont font);
+    wxListItemAttr(const wxColour& colText,
+                   const wxColour& colBack,
+                   const wxFont& font);
 
     /**
         Returns the currently set background color.

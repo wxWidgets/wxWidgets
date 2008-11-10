@@ -179,6 +179,8 @@ public:
         @param stipple
             A stipple bitmap.
 
+        @onlyfor{wxmsw,wxmac}
+
         @see SetWidth(), SetStipple()
     */
     wxPen(const wxBitmap& stipple, int width);

@@ -463,14 +463,14 @@ public:
         This function returns a reference on the current object, so the user can
         test any states of the stream right away.
     */
-    wxOutputStream Write(const void* buffer, size_t size);
+    wxOutputStream& Write(const void* buffer, size_t size);
 
     /**
         Reads data from the specified input stream and stores them
         in the current stream. The data is read until an error is raised
         by one of the two streams.
     */
-    wxOutputStream Write(wxInputStream& stream_in);
+    wxOutputStream& Write(wxInputStream& stream_in);
 };
 
 
@@ -817,7 +817,7 @@ public:
         @return This function returns a reference on the current object, so the
                 user can test any states of the stream right away.
     */
-    wxInputStream Read(void* buffer, size_t size);
+    virtual wxInputStream& Read(void* buffer, size_t size);
 
     /**
         Reads data from the input queue and stores it in the specified output stream.
@@ -861,13 +861,13 @@ public:
 
         @return Returns the amount of bytes saved in the Write-Back buffer.
     */
-    size_t Ungetch(const char* buffer, size_t size);
+    size_t Ungetch(const void* buffer, size_t size);
 
     /**
         This function acts like the previous one except that it takes only one
         character: it is sometimes shorter to use than the generic function.
     */
-    Return value bool Ungetch(char c);
+    bool Ungetch(char c);
 };
 
 

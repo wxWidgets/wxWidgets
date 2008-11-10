@@ -102,7 +102,7 @@ public:
         @remarks Only use this when the menu bar has been associated with a
                  frame; otherwise, use the wxMenu equivalent call.
     */
-    void Enable(int id, const bool enable);
+    void Enable(int id, bool enable);
 
     /**
         Enables or disables a whole menu.
@@ -451,7 +451,7 @@ public:
         @param style
             If set to wxMENU_TEAROFF, the menu will be detachable (wxGTK only).
     */
-    wxMenu(const wxString& title = "", long style = 0);
+    wxMenu(const wxString& title, long style = 0);
 
     /**
         Destructor, destroying the menu.
@@ -624,7 +624,7 @@ public:
 
         @see FindItem(), Destroy(), Remove()
     */
-    void Delete(int id);
+    bool Delete(int id);
 
     /**
         Deletes the menu item from the menu. If the item is a submenu, it will
@@ -635,7 +635,7 @@ public:
 
         @see FindItem(), Destroy(), Remove()
     */
-    void Delete(wxMenuItem* item);
+    bool Delete(wxMenuItem* item);
 
     /**
         Deletes the menu item from the menu. If the item is a submenu, it will
@@ -647,7 +647,7 @@ public:
 
         @see FindItem(), Deletes(), Remove()
     */
-    void Destroy(int id);
+    bool Destroy(int id);
 
     /**
         Deletes the menu item from the menu. If the item is a submenu, it will
@@ -659,7 +659,7 @@ public:
 
         @see FindItem(), Deletes(), Remove()
     */
-    void Destroy(wxMenuItem* item);
+    bool Destroy(wxMenuItem* item);
 
     /**
         Enables or disables (greys out) a menu item.
@@ -698,7 +698,7 @@ public:
 
         @return Menu item object or NULL if none is found.
     */
-    const wxMenuItem* FindItem(int id, wxMenu** menu = NULL) const;
+    wxMenuItem* FindItem(int id, wxMenu** menu = NULL) const;
 
     /**
         Returns the wxMenuItem given a position in the menu.
@@ -748,13 +748,16 @@ public:
     */
     size_t GetMenuItemCount() const;
 
+    //@{
     /**
         Returns the list of items in the menu.
 
         wxMenuItemList is a pseudo-template list class containing wxMenuItem
         pointers, see wxList.
     */
-    wxMenuItemList GetMenuItems() const;
+    wxMenuItemList& GetMenuItems() const;
+    const wxMenuItemList& GetMenuItems() const;
+    //@}
 
     /**
         Returns the title of the menu.
@@ -785,8 +788,8 @@ public:
         @see Append(), Prepend()
     */
     wxMenuItem* Insert(size_t pos, int id,
-                       const wxString& item = "",
-                       const wxString& helpString = "",
+                       const wxString& item = wxEmptyString,
+                       const wxString& helpString = wxEmptyString,
                        wxItemKind kind = wxITEM_NORMAL);
 
     /**
@@ -850,8 +853,8 @@ public:
 
         @see Append(), Insert()
     */
-    wxMenuItem* Prepend(int id, const wxString& item = "",
-                        const wxString& helpString = "",
+    wxMenuItem* Prepend(int id, const wxString& item = wxEmptyString,
+                        const wxString& helpString = wxEmptyString,
                         wxItemKind kind = wxITEM_NORMAL);
 
     /**

@@ -174,8 +174,8 @@ public:
         compatibility concerns).
     */
     const wxWCharBuffer cMB2WC(const char* in,
-                               size_t inLen = wxNO_LEN,
-                               size_t *outLen = NULL) const;
+                               size_t inLen,
+                               size_t *outLen) const;
 
     //@{
     /**
@@ -201,8 +201,8 @@ public:
         FromWChar(), please see the description of cMB2WC() for more details.
     */
     const wxCharBuffer cWC2MB(const wchar_t* in,
-                              size_t inLen = wxNO_LEN,
-                              size_t *outLen = NULL) const;
+                              size_t inLen,
+                              size_t *outLen) const;
 
     //@{
     /**

@@ -30,14 +30,14 @@ public:
 
         By default, no modifiers are active.
      */
-    wxKeyboardState(bool controlDown,
-                    bool shiftDown,
-                    bool altDown,
-                    bool metaDown);
+    wxKeyboardState(bool controlDown = false,
+                    bool shiftDown = false,
+                    bool altDown = false,
+                    bool metaDown = false);
 
     /**
         Return the bit mask of all pressed modifier keys.
-        
+
         The return value is a combination of @c wxMOD_ALT, @c wxMOD_CONTROL,
         @c wxMOD_SHIFT and @c wxMOD_META bit masks. Additionally, @c wxMOD_NONE
         is defined as 0, i.e. corresponds to no modifiers (see HasModifiers())

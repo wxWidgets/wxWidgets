@@ -64,7 +64,7 @@ public:
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = wxTAB_TRAVERSAL,
-            const wxString& name = "panel");
+            const wxString& name = wxPanelNameStr);
 
     /**
         Destructor. Deletes any child windows before deleting the physical window.

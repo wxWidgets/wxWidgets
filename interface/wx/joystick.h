@@ -48,7 +48,7 @@ public:
         @param id
             The button id to report, from 0 to GetNumberButtons() - 1
     */
-    bool GetButtonState(unsigned id) const;
+    bool GetButtonState(unsigned int id) const;
 
     /**
         Returns the manufacturer id.
@@ -114,7 +114,7 @@ public:
         @param axis
             The joystick axis to report, from 0 to GetNumberAxes() - 1.
     */
-    int GetPosition(unsigned axis) const;
+    int GetPosition(unsigned int axis) const;
 
     /**
         Returns the product id for the joystick.

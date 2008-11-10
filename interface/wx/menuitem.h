@@ -80,8 +80,8 @@ public:
             If non-@NULL, indicates that the menu item is a submenu.
     */
     wxMenuItem(wxMenu* parentMenu = NULL, int id = wxID_SEPARATOR,
-               const wxString& text = "",
-               const wxString& helpString = "",
+               const wxString& text = wxEmptyString,
+               const wxString& helpString = wxEmptyString,
                wxItemKind kind = wxITEM_NORMAL,
                wxMenu* subMenu = NULL);
 

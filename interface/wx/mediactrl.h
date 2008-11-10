@@ -250,11 +250,11 @@ public:
         @param name
             Window name.
     */
-    wxMediaCtrl(wxWindow* parent, wxWindowID id, const wxString& fileName = wxT(""),
+    wxMediaCtrl(wxWindow* parent, wxWindowID id, const wxString& fileName = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-                long style = 0, const wxString& szBackend = wxT(""),
+                long style = 0, const wxString& szBackend = wxEmptyString,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxPanelNameStr);
+                const wxString& name = "mediaCtrl");
 
     /**
         Creates this control.
@@ -284,11 +284,11 @@ public:
         @param name
             Window name.
     */
-    bool Create(wxWindow* parent, wxWindowID id, const wxString& fileName = wxT(""),
+    bool Create(wxWindow* parent, wxWindowID id, const wxString& fileName = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-                long style = 0, const wxString& szBackend = wxT(""),
+                long style = 0, const wxString& szBackend = wxEmptyString,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxPanelNameStr);
+                const wxString& name = "mediaCtrl");
 
     /**
         Obtains the best size relative to the original/natural size of the

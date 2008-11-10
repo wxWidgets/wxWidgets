@@ -199,7 +199,7 @@ public:
             Position before which to insert the items: if pos is 0 the
             items will be inserted in the beginning of the listbox
     */
-    void InsertItems(int nItems, const wxString *items,
+    void InsertItems(unsigned int nItems, const wxString *items,
                      unsigned int pos);
 
     /**
@@ -234,7 +234,7 @@ public:
         @param clientData
             Options array of client data pointers
     */
-    void Set(int n, const wxString* choices, void **clientData = NULL);
+    void Set(unsigned int n, const wxString* choices, void *clientData);
 
     /**
         Clears the list box and adds the given strings to it.
@@ -246,7 +246,7 @@ public:
         @param clientData
             Options array of client data pointers
     */
-    void Set(const wxArrayString& choices, void **clientData = NULL);
+    void Set(const wxArrayString& choices, void *clientData);
 
     /**
         Set the specified item to be the first visible item.

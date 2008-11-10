@@ -34,7 +34,7 @@ public:
         @param size
             size of the new buffer.
     */
-    wxMemoryBuffer(size_t size);
+    wxMemoryBuffer(size_t size = DefBufSize);
 
     /**
         Append a single byte to the buffer.

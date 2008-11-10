@@ -396,7 +396,7 @@ public:
         Constructs a log target which sends all the log messages to the given
         output stream. If it is @NULL, the messages are sent to @c cerr.
     */
-    wxLogStream(std::ostream ostr = NULL);
+    wxLogStream(std::ostream *ostr = NULL);
 };
 
 
