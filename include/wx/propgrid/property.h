@@ -199,11 +199,9 @@ class WXDLLIMPEXP_PROPGRID wxPGCell : public wxObject
 {
 public:
     wxPGCell();
-    wxPGCell( const wxPGCell& other )
+    wxPGCell(const wxPGCell& other)
+        : wxObject(other)
     {
-         m_refData = other.m_refData;
-         if ( m_refData )
-             m_refData->IncRef();
     }
 
     wxPGCell( const wxString& text,
@@ -649,10 +647,8 @@ class WXDLLIMPEXP_PROPGRID wxPGChoiceEntry : public wxPGCell
 public:
     wxPGChoiceEntry();
     wxPGChoiceEntry(const wxPGChoiceEntry& other)
+        : wxPGCell(other)
     {
-         m_refData = other.m_refData;
-         if ( m_refData )
-             m_refData->IncRef();
         m_value = other.m_value;
     }
     wxPGChoiceEntry( const wxString& label,
