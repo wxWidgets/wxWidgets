@@ -80,7 +80,7 @@ struct wxVectorMemOpsGeneric
         T* sourceptr = source;
         for ( size_t i = count; i > 0; --i, ++destptr, ++sourceptr )
         {
-            new(destptr) T(*sourceptr);
+            ::new(destptr) T(*sourceptr);
             sourceptr->~T();
         }
     }
@@ -92,7 +92,7 @@ struct wxVectorMemOpsGeneric
         T* sourceptr = source + count - 1;
         for ( size_t i = count; i > 0; --i, --destptr, --sourceptr )
         {
-            new(destptr) T(*sourceptr);
+            ::new(destptr) T(*sourceptr);
             sourceptr->~T();
         }
     }
@@ -309,7 +309,7 @@ public:
 
         // use placement new to initialize new object in preallocated place in
         // m_values and store 'v' in it:
-        new(place) value_type(v);
+        ::new(place) value_type(v);
 
         // now that we did successfully add the new element, increment the size
         // and disable moving the items back
