@@ -225,19 +225,15 @@ void wxFontsManagerBase::AddBundle(wxFontBundle *bundle)
 // ----------------------------------------------------------------------------
 
 wxFontMgrFontRefData::wxFontMgrFontRefData(int size,
-                                           int family,
-                                           int style,
-                                           int weight,
+                                           wxFontFamily family,
+                                           wxFontStyle style,
+                                           wxFontWeight weight,
                                            bool underlined,
                                            const wxString& faceName,
                                            wxFontEncoding encoding)
 {
-    if ( family == wxDEFAULT )
-        family = wxSWISS;
-    if ( style == wxDEFAULT )
-        style = wxNORMAL;
-    if ( weight == wxDEFAULT )
-        weight = wxNORMAL;
+    if ( family == wxFONTFAMILY_DEFAULT )
+        family = wxFONTFAMILY_SWISS;
     if ( size == wxDEFAULT )
         size = 12;
 
@@ -294,21 +290,21 @@ void wxFontMgrFontRefData::SetPointSize(int pointSize)
     m_fontValid = false;
 }
 
-void wxFontMgrFontRefData::SetFamily(int family)
+void wxFontMgrFontRefData::SetFamily(wxFontFamily family)
 {
-    m_info.family = (wxFontFamily)family;
+    m_info.family = family;
     m_fontValid = false;
 }
 
-void wxFontMgrFontRefData::SetStyle(int style)
+void wxFontMgrFontRefData::SetStyle(wxFontStyle style)
 {
-    m_info.style = (wxFontStyle)style;
+    m_info.style = style;
     m_fontValid = false;
 }
 
-void wxFontMgrFontRefData::SetWeight(int weight)
+void wxFontMgrFontRefData::SetWeight(wxFontWeight weight)
 {
-    m_info.weight = (wxFontWeight)weight;
+    m_info.weight = weight;
     m_fontValid = false;
 }
 
