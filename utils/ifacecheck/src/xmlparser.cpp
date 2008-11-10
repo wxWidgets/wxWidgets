@@ -635,11 +635,13 @@ void wxXmlInterface::Dump(const wxString& filename)
     // dump the classes in alphabetical order
     wxSortedClassArray sorted(CompareWxClassObjects);
     sorted.Alloc(m_classes.GetCount());
-    for (unsigned int i=0; i<m_classes.GetCount(); i++)
+
+    unsigned i;
+    for (i=0; i<m_classes.GetCount(); i++)
         sorted.Add(&m_classes[i]);
 
     // now they have been sorted
-    for (unsigned int i=0; i<sorted.GetCount(); i++)
+    for (i=0; i<sorted.GetCount(); i++)
         sorted[i]->Dump(apiout);
 }
 
@@ -1086,7 +1088,8 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
     }
 
     // resolve header names
-    for (unsigned int i=0; i<m_classes.GetCount(); i++)
+    unsigned i;
+    for (i=0; i<m_classes.GetCount(); i++)
     {
         unsigned long fileID = 0;
         if (!getID(&fileID, m_classes[i].GetHeader()) || fileID == 0) {
@@ -1106,7 +1109,7 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
     }
 
     // resolve parent names
-    for (unsigned int i=0; i<m_classes.GetCount(); i++)
+    for (i=0; i<m_classes.GetCount(); i++)
     {
         for (unsigned int k=0; k<m_classes[i].GetParentCount(); k++)
         {
