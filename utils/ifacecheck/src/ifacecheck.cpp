@@ -494,7 +494,7 @@ bool IfaceCheckApp::FixMethod(const wxString& header, const wxMethod* iface, con
     }
 
     // remove the old prototype
-    for (int i=start; i<=end; i++)
+    for (int k=start; k<=end; k++)
         file.RemoveLine(start);     // remove (end-start)-nth times the start-th line
 
 #define INDENTATION_STR  wxString("    ")
