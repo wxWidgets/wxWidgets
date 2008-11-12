@@ -5696,7 +5696,7 @@ if test "$wxUSE_INTL" = "yes" ; then
   fi
 fi
 
-if test "$wxUSE_XLOCALE" == "yes" ; then
+if test "$wxUSE_XLOCALE" = "yes" ; then
     AC_DEFINE(wxUSE_XLOCALE)
     AC_CHECK_TYPES(locale_t,,,
                    [#include <xlocale.h>
