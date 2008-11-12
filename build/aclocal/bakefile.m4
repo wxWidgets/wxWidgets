@@ -973,7 +973,7 @@ elif test ${D}DEPSMODE = unixcc; then
     depsdir=${D}builddir/${D}DEPSDIRBASE
     mkdir -p ${D}depsdir
     
-    eval "${D}cmd ${D}DEPSFLAG" | sed "s|.*:|${D}objfile:|" >${D}{DEPSDIR}/${D}{objfilebase}.d
+    eval "${D}cmd ${D}DEPSFLAG" | sed "s|.*:|${D}objfile:|" >${D}{depsdir}/${D}{objfilebase}.d
     exit 0
 
 else
