@@ -44,7 +44,11 @@ public:
 
     bool LoadFile(const wxString& name, wxBitmapType flags = wxICON_DEFAULT_TYPE,
                   int WXUNUSED(desiredWidth)=-1, int WXUNUSED(desiredHeight)=-1)
-        { return LoadFile(name, flags); }
+        { return wxBitmap::LoadFile(name, flags); }
+
+    // unhide the base class version
+    virtual bool LoadFile(const wxString& name, wxBitmapType flags)
+        { return wxBitmap::LoadFile(name, flags); }
 
     // create from bitmap (which should have a mask unless it's monochrome):
     // there shouldn't be any implicit bitmap -> icon conversion (i.e. no
