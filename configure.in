@@ -126,7 +126,6 @@ DEFAULT_DEFAULT_wxUSE_X11=0
 DEFAULT_DEFAULT_wxUSE_DFB=0
 
 PROGRAM_EXT=
-SO_SUFFIX=so
 SAMPLES_RPATH_FLAG=
 SAMPLES_RPATH_POSTLINK=
 
@@ -141,7 +140,6 @@ case "${host}" in
     USE_HPUX=1
     DEFAULT_DEFAULT_wxUSE_MOTIF=1
     NEEDS_D_REENTRANT_FOR_R_FUNCS=1
-    SO_SUFFIX=sl
     AC_DEFINE(__HPUX__)
 
     dnl many standard declarations in HP-UX headers are only included if either
@@ -245,12 +243,6 @@ case "${host}" in
     USE_AIX=1
     USE_SYSV=1
     USE_SVR4=1
-    dnl quoting from http://www-1.ibm.com/servers/esdd/articles/gnu.html:
-    dnl
-    dnl     Both archive libraries and shared libraries on AIX have an .a
-    dnl     extension. This will explain why you can't link with an .so and
-    dnl     why it works with the name changed to .a.
-    SO_SUFFIX=a
     AC_DEFINE(__AIX__)
     AC_DEFINE(__SYSV__)
     AC_DEFINE(__SVR4__)
@@ -268,7 +260,6 @@ case "${host}" in
     dnl MBN: some of the defines have been moved after toolkit detection
     dnl      because for wxMotif/wxGTK/wxX11 to build on Cygwin
     dnl      USE_UNIX  must be set and not USE_WIN32
-    SO_SUFFIX=dll
     PROGRAM_EXT=".exe"
     DEFAULT_DEFAULT_wxUSE_MSW=1
   ;;
@@ -319,7 +310,6 @@ case "${host}" in
     dnl Darwin based distributions (including Mac OS X)
     USE_BSD=1
     USE_DARWIN=1
-    SO_SUFFIX=dylib
     AC_DEFINE(__BSD__)
     AC_DEFINE(__DARWIN__)
     AC_DEFINE(TARGET_CARBON)
@@ -332,7 +322,6 @@ case "${host}" in
     dnl For some reason the test that should be cross-compiler capable fails
     dnl However, there is no doubt that MacOS PowerPC is big endian.
     ac_cv_c_bigendian=yes
-    SO_SUFFIX=shlib
     dnl AC_DEFINE(TARGET_CARBON)
     dnl platform.h needs TARGET_CARBON before setup.h, we'll add it to CPPFLAGS
     DEFAULT_DEFAULT_wxUSE_OSX_CARBON=1
