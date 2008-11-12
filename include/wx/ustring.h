@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_USTRING_H_BASE_
-#define _WX_USTRING_H_BASE_
+#ifndef _WX_USTRING_H_
+#define _WX_USTRING_H_
 
 #include "wx/defs.h"
 #include "wx/string.h"
@@ -165,37 +165,37 @@ public:
 
     // assign
 
-    inline wxUString &assign( const wxChar32* str )
+    wxUString &assign( const wxChar32* str )
     {
         std::basic_string<wxChar32> *base = this;
         return (wxUString &) base->assign( str );
     }
 
-    inline wxUString &assign( const wxChar32* str, size_type n )
+    wxUString &assign( const wxChar32* str, size_type n )
     {
         std::basic_string<wxChar32> *base = this;
         return (wxUString &) base->assign( str, n );
     }
 
-    inline wxUString &assign( const wxUString &str )
+    wxUString &assign( const wxUString &str )
     {
         std::basic_string<wxChar32> *base = this;
         return (wxUString &) base->assign( str );
     }
 
-    inline wxUString &assign( const wxUString &str, size_type pos, size_type n )
+    wxUString &assign( const wxUString &str, size_type pos, size_type n )
     {
         std::basic_string<wxChar32> *base = this;
         return (wxUString &) base->assign( str, pos, n );
     }
 
-    inline wxUString &assign( wxChar32 ch )
+    wxUString &assign( wxChar32 ch )
     {
         std::basic_string<wxChar32> *base = this;
         return (wxUString &) base->assign( (size_type) 1, ch );
     }
 
-    inline wxUString &assign( size_type n, wxChar32 ch )
+    wxUString &assign( size_type n, wxChar32 ch )
     {
         std::basic_string<wxChar32> *base = this;
         return (wxUString &) base->assign( n, ch );
@@ -302,57 +302,57 @@ public:
 
     wxUString &assign( wxUniChar ch )
     {
-        return assign( (const wxChar32) ch.GetValue() );
+        return assign( (wxChar32) ch.GetValue() );
     }
 
     wxUString &assign( size_type n, wxUniChar ch )
     {
-        return assign( n, (const wxChar32) ch.GetValue() );
+        return assign( n, (wxChar32) ch.GetValue() );
     }
 
     wxUString &assign( wxUniCharRef ch )
     {
-        return assign( (const wxChar32) ch.GetValue() );
+        return assign( (wxChar32) ch.GetValue() );
     }
 
     wxUString &assign( size_type n, wxUniCharRef ch )
     {
-        return assign( n, (const wxChar32) ch.GetValue() );
+        return assign( n, (wxChar32) ch.GetValue() );
     }
 
     // append [STL overload]
 
-    inline wxUString &append( const wxUString &s )
+    wxUString &append( const wxUString &s )
     {
         std::basic_string<wxChar32> *base = this;
         return (wxUString &) base->append( s );
     }
 
-    inline wxUString &append( const wxUString &s, size_type pos, size_type n )
+    wxUString &append( const wxUString &s, size_type pos, size_type n )
     {
         std::basic_string<wxChar32> *base = this;
         return (wxUString &) base->append( s, pos, n );
     }
 
-    inline wxUString &append( const wxChar32* s )
+    wxUString &append( const wxChar32* s )
     {
         std::basic_string<wxChar32> *base = this;
         return (wxUString &) base->append( s );
     }
 
-    inline wxUString &append( const wxChar32* s, size_type n )
+    wxUString &append( const wxChar32* s, size_type n )
     {
         std::basic_string<wxChar32> *base = this;
         return (wxUString &) base->append( s, n );
     }
 
-    inline wxUString &append( size_type n, wxChar32 c )
+    wxUString &append( size_type n, wxChar32 c )
     {
         std::basic_string<wxChar32> *base = this;
         return (wxUString &) base->append( n, c );
     }
 
-    inline wxUString &append( wxChar32 c )
+    wxUString &append( wxChar32 c )
     {
         std::basic_string<wxChar32> *base = this;
         return (wxUString &) base->append( 1, c );
@@ -424,31 +424,31 @@ public:
 
     // insert [STL overloads]
 
-    inline wxUString &insert( size_type pos, const wxUString &s )
+    wxUString &insert( size_type pos, const wxUString &s )
     {
         std::basic_string<wxChar32> *base = this;
         return (wxUString &) base->insert( pos, s );
     }
 
-    inline wxUString &insert( size_type pos, const wxUString &s, size_type pos1, size_type n )
+    wxUString &insert( size_type pos, const wxUString &s, size_type pos1, size_type n )
     {
         std::basic_string<wxChar32> *base = this;
         return (wxUString &) base->insert( pos, s, pos1, n );
     }
 
-    inline wxUString &insert( size_type pos, const wxChar32 *s )
+    wxUString &insert( size_type pos, const wxChar32 *s )
     {
         std::basic_string<wxChar32> *base = this;
         return (wxUString &) base->insert( pos, s );
     }
 
-    inline wxUString &insert( size_type pos, const wxChar32 *s, size_type n )
+    wxUString &insert( size_type pos, const wxChar32 *s, size_type n )
     {
         std::basic_string<wxChar32> *base = this;
         return (wxUString &) base->insert( pos, s, n );
     }
 
-    inline wxUString &insert( size_type pos, size_type n, wxChar32 c )
+    wxUString &insert( size_type pos, size_type n, wxChar32 c )
     {
         std::basic_string<wxChar32> *base = this;
         return (wxUString &) base->insert( pos, n, c );
@@ -524,63 +524,63 @@ public:
 
 
     // operator =
-    inline wxUString& operator=(const wxUString& s)
+    wxUString& operator=(const wxUString& s)
         { return assign( s ); }
-    inline wxUString& operator=(const wxString& s)
+    wxUString& operator=(const wxString& s)
         { return assign( s ); }
-    inline wxUString& operator=(const wxCStrData* s)
+    wxUString& operator=(const wxCStrData* s)
         { return assign( s ); }
-    inline wxUString& operator=(const char *s)
+    wxUString& operator=(const char *s)
         { return assign( s ); }
-    inline wxUString& operator=(const wxChar16 *s)
+    wxUString& operator=(const wxChar16 *s)
         { return assign( s ); }
-    inline wxUString& operator=(const wxChar32 *s)
+    wxUString& operator=(const wxChar32 *s)
         { return assign( s ); }
-    inline wxUString& operator=(const wxCharBuffer &s)
+    wxUString& operator=(const wxCharBuffer &s)
         { return assign( s ); }
-    inline wxUString& operator=(const wxU16CharBuffer &s)
+    wxUString& operator=(const wxU16CharBuffer &s)
         { return assign( s ); }
-    inline wxUString& operator=(const wxU32CharBuffer &s)
+    wxUString& operator=(const wxU32CharBuffer &s)
         { return assign( s ); }
-    inline wxUString& operator=(const char ch)
+    wxUString& operator=(const char ch)
         { return assign( ch ); }
-    inline wxUString& operator=(const wxChar16 ch)
+    wxUString& operator=(const wxChar16 ch)
         { return assign( ch ); }
-    inline wxUString& operator=(const wxChar32 ch)
+    wxUString& operator=(const wxChar32 ch)
         { return assign( ch ); }
-    inline wxUString& operator=(const wxUniChar ch)
+    wxUString& operator=(const wxUniChar ch)
         { return assign( ch ); }
-    inline wxUString& operator=(const wxUniCharRef ch)
+    wxUString& operator=(const wxUniCharRef ch)
         { return assign( ch ); }
 
     // operator +=
-    inline wxUString& operator+=(const wxUString& s)
+    wxUString& operator+=(const wxUString& s)
         { return append( s ); }
-    inline wxUString& operator+=(const wxString& s)
+    wxUString& operator+=(const wxString& s)
         { return append( s ); }
-    inline wxUString& operator+=(const wxCStrData* s)
+    wxUString& operator+=(const wxCStrData* s)
         { return append( s ); }
-    inline wxUString& operator+=(const char *s)
+    wxUString& operator+=(const char *s)
         { return append( s ); }
-    inline wxUString& operator+=(const wxChar16 *s)
+    wxUString& operator+=(const wxChar16 *s)
         { return append( s ); }
-    inline wxUString& operator+=(const wxChar32 *s)
+    wxUString& operator+=(const wxChar32 *s)
         { return append( s ); }
-    inline wxUString& operator+=(const wxCharBuffer &s)
+    wxUString& operator+=(const wxCharBuffer &s)
         { return append( s ); }
-    inline wxUString& operator+=(const wxU16CharBuffer &s)
+    wxUString& operator+=(const wxU16CharBuffer &s)
         { return append( s ); }
-    inline wxUString& operator+=(const wxU32CharBuffer &s)
+    wxUString& operator+=(const wxU32CharBuffer &s)
         { return append( s ); }
-    inline wxUString& operator+=(const char ch)
+    wxUString& operator+=(const char ch)
         { return append( ch ); }
-    inline wxUString& operator+=(const wxChar16 ch)
+    wxUString& operator+=(const wxChar16 ch)
         { return append( ch ); }
-    inline wxUString& operator+=(const wxChar32 ch)
+    wxUString& operator+=(const wxChar32 ch)
         { return append( ch ); }
-    inline wxUString& operator+=(const wxUniChar ch)
+    wxUString& operator+=(const wxUniChar ch)
         { return append( ch ); }
-    inline wxUString& operator+=(const wxUniCharRef ch)
+    wxUString& operator+=(const wxUniCharRef ch)
         { return append( ch ); }
 
 };
@@ -691,5 +691,4 @@ wxUSTRING_COMP_OPERATORS( const wxU16CharBuffer & )
 wxUSTRING_COMP_OPERATORS( const wxU32CharBuffer & )
 wxUSTRING_COMP_OPERATORS( const wxCStrData * )
 
-#endif
-    // _WX_USTRING_H_BASE_
+#endif // _WX_USTRING_H_
