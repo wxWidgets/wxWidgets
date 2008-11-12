@@ -256,8 +256,11 @@ void wxPrintData::ConvertFromNative()
     m_nativeData->TransferTo( *this ) ;
 }
 
-void wxPrintData::operator=(const wxPrintData& data)
+wxPrintData& wxPrintData::operator=(const wxPrintData& data)
 {
+    if ( &data == this )
+        return *this;
+
     m_printNoCopies = data.m_printNoCopies;
     m_printCollate = data.m_printCollate;
     m_printOrientation = data.m_printOrientation;
@@ -295,6 +298,8 @@ void wxPrintData::operator=(const wxPrintData& data)
         m_privData = new char[m_privDataLen];
         memcpy( m_privData, data.GetPrivData(), m_privDataLen );
     }
+
+    return *this;
 }
 
 // Is this data OK for showing the print dialog?

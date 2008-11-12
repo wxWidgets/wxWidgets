@@ -228,7 +228,7 @@ public:
     wxString GetFilename() const { return m_filename; }
     void SetFilename( const wxString &filename ) { m_filename = filename; }
 
-    void operator=(const wxPrintData& data);
+    wxPrintData& operator=(const wxPrintData& data);
 
     char* GetPrivData() const { return m_privData; }
     int GetPrivDataLen() const { return m_privDataLen; }
