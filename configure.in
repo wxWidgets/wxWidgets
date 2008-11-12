@@ -1685,55 +1685,68 @@ fi
 
 fi dnl wxUSE_VARARG_MACROS == yes
 
+
 dnl check for large file support
+LARGEFILE_CPPFLAGS=
 AC_SYS_LARGEFILE
+if test "$ac_cv_sys_file_offset_bits" = "64"; then
+    LARGEFILE_CPPFLAGS="-D_FILE_OFFSET_BITS=64"
+elif test "$ac_cv_sys_large_files" = 1; then
+    LARGEFILE_CPPFLAGS="-D_LARGE_FILES"
+fi
 
 dnl we need to define _FILE_OFFSET_BITS or _LARGE_FILES on the compiler command
 dnl line because otherwise the system headers risk being included before
 dnl wx/defs.h which defines these constants leading to inconsistent
 dnl sizeof(off_t) in different source files of the same program and linking
 dnl problems
-if test "x$wx_largefile" = "xyes"; then
-    if test "x$ac_cv_sys_file_offset_bits" = "x64"; then
-        WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES"
+if test -n "$LARGEFILE_CPPFLAGS"; then
+    WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS $LARGEFILE_CPPFLAGS"
 
-        dnl We get "Large Files (ILP32) not supported in strict ANSI mode."
-        dnl #error from HP standard headers unless __STDC_EXT__ is defined.
-        dnl The compiler should define it automatically, but some old g++
-        dnl versions don't define it, so test and add it if necessary. AFAIK
-        dnl the problem only affects the C++ compiler so it is added to
-        dnl CXXFLAGS only.
-        if test "$USE_HPUX" = 1 -a "$GXX" = "yes"; then
-            AC_CACHE_CHECK(
-                [if -D__STDC_EXT__ is required],
-                wx_cv_STDC_EXT_required,
-                [
-                    AC_LANG_PUSH(C++)
-                    AC_TRY_COMPILE(
-                        [],
-                        [
-                            #ifndef __STDC_EXT__
-                                choke me
-                            #endif
-                        ],
-                        wx_cv_STDC_EXT_required=no,
-                        wx_cv_STDC_EXT_required=yes
-                    )
-                    AC_LANG_POP()
-                ]
-            )
-            if test "x$wx_cv_STDC_EXT_required" = "xyes"; then
-                WXCONFIG_CXXFLAGS="$WXCONFIG_CXXFLAGS -D__STDC_EXT__"
-            fi
+    dnl We get "Large Files (ILP32) not supported in strict ANSI mode."
+    dnl #error from HP standard headers unless __STDC_EXT__ is defined.
+    dnl The compiler should define it automatically, but some old g++
+    dnl versions don't define it, so test and add it if necessary. AFAIK
+    dnl the problem only affects the C++ compiler so it is added to
+    dnl CXXFLAGS only.
+    if test "$USE_HPUX" = 1 -a "$GXX" = "yes"; then
+        AC_CACHE_CHECK(
+            [if -D__STDC_EXT__ is required],
+            wx_cv_STDC_EXT_required,
+            [
+                AC_LANG_PUSH(C++)
+                AC_TRY_COMPILE(
+                    [],
+                    [
+                        #ifndef __STDC_EXT__
+                            choke me
+                        #endif
+                    ],
+                    wx_cv_STDC_EXT_required=no,
+                    wx_cv_STDC_EXT_required=yes
+                )
+                AC_LANG_POP()
+            ]
+        )
+        if test "x$wx_cv_STDC_EXT_required" = "xyes"; then
+            WXCONFIG_CXXFLAGS="$WXCONFIG_CXXFLAGS -D__STDC_EXT__"
         fi
-    else
-        WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS -D_LARGE_FILES"
     fi
-    dnl AC_FUNC_FSEEKO sets HAVE_FSEEKO and $ac_cv_sys_largefile_source
-    AC_FUNC_FSEEKO
-    if test "$ac_cv_sys_largefile_source" != no; then
-        WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS -D_LARGEFILE_SOURCE=$ac_cv_sys_largefile_source"
-    fi
+fi
+
+dnl AC_FUNC_FSEEKO sets HAVE_FSEEKO and $ac_cv_sys_largefile_source
+dnl
+dnl it may be affected by large file flags (this happens under HP-UX 11 for
+dnl example) so set them before using it and also use C++ to ensure that we get
+dnl errors, not warnings, about the missing functions
+AC_LANG_PUSH(C++)
+old_CPPFLAGS="$CPPFLAGS"
+CPPFLAGS="$CPPFLAGS $LARGEFILE_CPPFLAGS"
+AC_FUNC_FSEEKO
+CPPFLAGS="$old_CPPFLAGS"
+AC_LANG_POP()
+if test "$ac_cv_sys_largefile_source" != no; then
+    WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS -D_LARGEFILE_SOURCE=$ac_cv_sys_largefile_source"
 fi
 
 dnl check for bytesex stuff (don't use AC_C_BIGENDIAN to allow cross-compiling)
