@@ -33268,37 +33268,37 @@ ALL_GUI_DIST: ALL_DIST
 	$(CP_P) $(INCDIR)/wx/xml/*.h $(DISTDIR)/include/wx/xml
 	$(CP_P) $(INCDIR)/wx/xrc/*.h $(DISTDIR)/include/wx/xrc
 	$(CP_P) $(INCDIR)/wx/protocol/*.h $(DISTDIR)/include/wx/protocol
-        
+
 	mkdir $(DISTDIR)/art
 	mkdir $(DISTDIR)/art/gtk
 	mkdir $(DISTDIR)/art/motif
 	$(CP_P) $(WXDIR)/art/*.xpm $(DISTDIR)/art
 	$(CP_P) $(WXDIR)/art/gtk/*.xpm $(DISTDIR)/art/gtk
 	$(CP_P) $(WXDIR)/art/motif/*.xpm $(DISTDIR)/art/motif
-        
+
 	mkdir $(DISTDIR)/src/$(TOOLKITDIR)
 	$(CP_P) $(COMMDIR)/*.cpp $(DISTDIR)/src/common
 	$(CP_P) $(COMMDIR)/*.c $(DISTDIR)/src/common
 	$(CP_P) $(COMMDIR)/*.inc $(DISTDIR)/src/common
 	$(CP_P) $(COMMDIR)/*.mms $(DISTDIR)/src/common
-        
+
 	mkdir $(DISTDIR)/src/xrc
 	$(CP_P) $(SRCDIR)/xrc/*.cpp $(DISTDIR)/src/xrc
-        
+
 	mkdir $(DISTDIR)/src/unix
 	$(CP_P) $(UNIXDIR)/*.cpp $(DISTDIR)/src/unix
 	$(CP_P) $(UNIXDIR)/*.mms $(DISTDIR)/src/unix
-        
+
 	mkdir $(DISTDIR)/src/generic
 	$(CP_P) $(GENDIR)/*.cpp $(DISTDIR)/src/generic
 	$(CP_P) $(GENDIR)/*.mms $(DISTDIR)/src/generic
-        
+
 	mkdir $(DISTDIR)/src/html
 	$(CP_P) $(HTMLDIR)/*.cpp $(DISTDIR)/src/html
-        
+
 	mkdir $(DISTDIR)/src/richtext
 	$(CP_P) $(RICHTEXTDIR)/*.cpp $(DISTDIR)/src/richtext
-        
+
 	mkdir $(DISTDIR)/src/aui
 	$(CP_P) $(AUIDIR)/*.cpp $(DISTDIR)/src/aui
 
@@ -33312,17 +33312,17 @@ ALL_GUI_DIST: ALL_DIST
 	$(CP_P) $(STCDIR)/*.* $(DISTDIR)/src/stc
 	$(CP_P) $(STCDIR)/scintilla/src/* $(DISTDIR)/src/stc/scintilla/src
 	$(CP_P) $(STCDIR)/scintilla/include/* $(DISTDIR)/src/stc/scintilla/include
-        
+
 	mkdir $(DISTDIR)/src/png
 	$(CP_PR) $(PNGDIR)/* $(DISTDIR)/src/png
-        
+
 	mkdir $(DISTDIR)/src/jpeg
 	$(CP_P) $(JPEGDIR)/*.h $(DISTDIR)/src/jpeg
 	$(CP_P) $(JPEGDIR)/*.c $(DISTDIR)/src/jpeg
 	$(CP_P) $(JPEGDIR)/*.vc $(DISTDIR)/src/jpeg
 	$(CP_P) $(JPEGDIR)/makefile.* $(DISTDIR)/src/jpeg
 	$(CP_P) $(JPEGDIR)/README $(DISTDIR)/src/jpeg
-        
+
 	mkdir $(DISTDIR)/src/tiff
 	mkdir $(DISTDIR)/src/tiff/config
 	mkdir $(DISTDIR)/src/tiff/contrib
@@ -33432,7 +33432,7 @@ GTK_DIST: UNIV_DIST
 	mkdir $(DISTDIR)/src/gtk/hildon
 	$(CP_P) $(INCDIR)/wx/gtk/hildon/*.h $(DISTDIR)/include/wx/gtk/hildon
 	$(CP_P) $(GTKDIR)/hildon/*.cpp $(DISTDIR)/src/gtk/hildon
-        
+
 	mkdir $(DISTDIR)/src/osx
 	mkdir $(DISTDIR)/src/osx/core
 	$(CP_P) $(WXDIR)/src/osx/core/*.cpp $(DISTDIR)/src/osx/core
