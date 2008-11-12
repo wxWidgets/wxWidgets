@@ -7434,8 +7434,8 @@ if test "x$INTELCXX" = "xyes" ; then
     dnl     remark #1419: external declaration in primary source file
     CXXWARNINGS="-Wall -wd279,383,444,810,869,981,1418,1419"
 elif test "$GXX" = yes ; then
-    dnl CXXWARNINGS="-Wall -W -Wcast-qual -Werror"
     CXXWARNINGS="-Wall -Wundef -Wunused-parameter -Wno-ctor-dtor-privacy"
+    AX_CXXFLAGS_GCC_OPTION(-Woverloaded-virtual, CXXWARNINGS)
 fi
 
 
