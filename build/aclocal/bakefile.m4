@@ -208,6 +208,10 @@ AC_DEFUN([AC_BAKEFILE_SUFFIXES],
     dlldir="$libdir"
 
     case "${BAKEFILE_HOST}" in
+        dnl PA-RISC HP systems used .sl but IA64 use ELF-64 and so use the
+        dnl standard .so extension
+        ia64-hp-hpux* )
+        ;;
         *-hp-hpux* )
             SO_SUFFIX="sl"
             SO_SUFFIX_MODULE="sl"
