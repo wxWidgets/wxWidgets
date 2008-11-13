@@ -312,7 +312,7 @@ public:
     */
     wxFont(int pointSize, wxFontFamily family, int style,
            wxFontWeight weight,
-           const bool underline = false,
+           bool underline = false,
            const wxString& faceName = "",
            wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
@@ -361,7 +361,7 @@ public:
     */
     wxFont(const wxSize& pixelSize, wxFontFamily family,
            int style, wxFontWeight weight,
-           const bool underline = false,
+           bool underline = false,
            const wxString& faceName = "",
            wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
     //@}
@@ -475,7 +475,7 @@ public:
     */
     static wxFont* New(int pointSize, wxFontFamily family, int style,
                        wxFontWeight weight,
-                       const bool underline = false,
+                       bool underline = false,
                        const wxString& faceName = "",
                        wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
     static wxFont* New(int pointSize, wxFontFamily family,
@@ -486,7 +486,7 @@ public:
                        wxFontFamily family,
                        int style,
                        wxFontWeight weight,
-                       const bool underline = false,
+                       bool underline = false,
                        const wxString& faceName = "",
                        wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
     static wxFont* New(const wxSize& pixelSize,

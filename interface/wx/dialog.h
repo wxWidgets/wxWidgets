@@ -190,7 +190,7 @@ public:
 
         @see @ref overview_dialog_autoscrolling (for more on layout adaptation)
     */
-    bool CanDoLayoutAdapation();
+    bool CanDoLayoutAdaptation();
 
     /**
         Centres the dialog box on the display.
@@ -251,7 +251,7 @@ public:
 
         @see @ref overview_dialog_autoscrolling (for more on layout adaptation)
     */
-    bool DoLayoutAdapation();
+    bool DoLayoutAdaptation();
 
     /**
         This function is called when the titlebar OK button is pressed

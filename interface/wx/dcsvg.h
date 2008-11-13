@@ -37,20 +37,10 @@ class wxSVGFileDC : public wxDC
 {
 public:
     /**
-        Initializes a wxSVGFileDC with the given @a f filename with a default
-        size (340x240) at 72.0 dots per inch (a frequent screen resolution).
-    */
-    wxSVGFileDC(wxString f);
-    /**
-        Initializes a wxSVGFileDC with the given @a f filename with the given
-        @a Width and @a Height at 72.0 dots per inch.
-    */
-    wxSVGFileDC(wxString f, int Width, int Height);
-    /**
         Initializes a wxSVGFileDC with the given @a f filename with the given
         @a Width and @a Height at @a dpi resolution.
     */
-    wxSVGFileDC(wxString f, int Width, int Height, float dpi);
+    wxSVGFileDC(const wxString& filename, int width = 320, int height = 240, double dpi = 72);
 
     /**
         Destructor.
@@ -66,9 +56,9 @@ public:
         @see wxDC::Blit()
     */
     bool Blit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
-              wxSVGFileDC* source, wxCoord xsrc, wxCoord ysrc,
-              int logicalFunc = wxCOPY, bool useMask = FALSE,
-              wxCoord xsrcMask = -1, wxCoord ysrcMask = -1);
+              wxDC* source, wxCoord xsrc, wxCoord ysrc, int rop = wxCOPY,
+              bool useMask = false, wxCoord xsrcMask = wxDefaultCoord,
+              wxCoord ysrcMask = wxDefaultCoord);
 
     /**
         Adds the specified point to the bounding box which can be retrieved
@@ -131,7 +121,7 @@ public:
 
     /**
         Draw a bitmap on the device context at the specified point. If
-        @a transparent is @true and the bitmap has a transparency mask, the
+        @a useMask is @true and the bitmap has a transparency mask, the
         bitmap will be drawn transparently.
 
         When drawing a mono-bitmap, the current text foreground colour will be
@@ -142,7 +132,7 @@ public:
         @see wxDC::SetTextForeground(), wxDC::SetTextBackground(), wxMemoryDC
     */
     void DrawBitmap(const wxBitmap& bitmap, wxCoord x, wxCoord y,
-                    bool transparent);
+                    bool useMask = false);
 
     //@{
     /**
@@ -283,7 +273,7 @@ public:
         The spline is drawn using a series of lines, using an algorithm taken from
         the X drawing program "XFIG".
     */
-    void DrawSpline(wxList* points);
+    void DrawSpline(const wxPointList* points);
 
     /**
         Draws a three-point spline using the current pen.
@@ -319,7 +309,7 @@ public:
     /**
         Not implemented.
     */
-    void FloodFill(wxCoord x, wxCoord y, const wxColour& colour,
+    bool FloodFill(wxCoord x, wxCoord y, const wxColour& colour,
                    int style = wxFLOOD_SURFACE);
 
     //@{
@@ -362,7 +352,7 @@ public:
     /**
         Not implemented.
     */
-    void GetClippingBox(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
+    void GetClippingBox(wxCoord *x, wxCoord *y, wxCoord *width, wxCoord *height);
 
     //@{
     /**
@@ -444,7 +434,7 @@ public:
     void GetTextExtent(const wxString& string, wxCoord* w, wxCoord* h,
                        wxCoord* descent = NULL,
                        wxCoord* externalLeading = NULL,
-                       wxFont* font = NULL);
+                       const wxFont* font = NULL) const;
 
     //@{
     /**

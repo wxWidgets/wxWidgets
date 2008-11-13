@@ -231,8 +231,8 @@ public:
         Use IsOk() to check whether the wxPrintPreview object was created correctly.
     */
     wxPrintPreview(wxPrintout* printout,
-                   wxPrintout* printoutForPrinting,
-                   wxPrintData* data = NULL);
+                   wxPrintout* printoutForPrinting = NULL,
+                   wxPrintDialogData* data = NULL);
 
     /**
         Destructor.

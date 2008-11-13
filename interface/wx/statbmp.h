@@ -56,7 +56,7 @@ public:
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
-                   const wxString& name = "staticBitmap");
+                   const wxString& name = wxStaticBitmapNameStr);
 
     /**
         Creation function, for two-step construction. For details see wxStaticBitmap().

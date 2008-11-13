@@ -105,7 +105,7 @@ public:
             If "Skip" button was pressed since last Update() call,
             this is set to @true.
     */
-    virtual bool Update(int value, const wxString& newmsg = "",
+    virtual bool Update(int value, const wxString& newmsg = wxEmptyString,
                         bool* skip = NULL);
 };
 

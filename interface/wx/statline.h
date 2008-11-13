@@ -61,7 +61,7 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxLI_HORIZONTAL,
-                 const wxString& name = "staticLine");
+                 const wxString& name = wxStaticLineNameStr);
 
     /**
         Creates the static line for two-step construction.

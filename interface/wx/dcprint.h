@@ -42,7 +42,7 @@ public:
                     backward compatibility.
     */
     wxPrinterDC(const wxString& driver, const wxString& device,
-                const wxString& output, const bool interactive = true,
+                const wxString& output, bool interactive = true,
                 int orientation = wxPORTRAIT);
 
     /**

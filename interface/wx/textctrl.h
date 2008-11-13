@@ -1636,7 +1636,7 @@ public:
 
     /**
         Sets the new text control value.
-       
+
         It also marks the control as not-modified which means that IsModified()
         would return @false immediately after the call to SetValue().
 
@@ -1771,7 +1771,7 @@ public:
         @param ostr
             The C++ stream to redirect, cout is used if it is @NULL
     */
-    wxStreamToTextRedirector(wxTextCtrl text, ostream* ostr = NULL);
+    wxStreamToTextRedirector(wxTextCtrl *text, ostream* ostr);
 
     /**
         When a wxStreamToTextRedirector object is destroyed, the redirection is ended

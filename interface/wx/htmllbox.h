@@ -233,14 +233,14 @@ public:
         @param name
             Window name.
     */
-    wxHtmlListBox(wxWindow* parent, wxWindowID id,
-                  const wxPoint& pos = wxDefaultPosition,
-                  const wxSize& size = wxDefaultSize,
-                  int n = 0,
-                  const wxString choices[] = NULL,
-                  long style = wxHLB_DEFAULT_STYLE,
-                  const wxValidator& validator = wxDefaultValidator,
-                  const wxString& name = "simpleHtmlListBox");
+    wxSimpleHtmlListBox(wxWindow* parent, wxWindowID id,
+                        const wxPoint& pos = wxDefaultPosition,
+                        const wxSize& size = wxDefaultSize,
+                        int n = 0,
+                        const wxString choices[] = NULL,
+                        long style = wxHLB_DEFAULT_STYLE,
+                        const wxValidator& validator = wxDefaultValidator,
+                        const wxString& name = wxSimpleHtmlListBoxNameStr);
 
     /**
         Constructor, creating and showing the HTML list box.
@@ -262,13 +262,13 @@ public:
         @param name
             Window name.
     */
-    wxHtmlListBox(wxWindow* parent, wxWindowID id,
-                  const wxPoint& pos,
-                  const wxSize& size,
-                  const wxArrayString& choices,
-                  long style = wxHLB_DEFAULT_STYLE,
-                  const wxValidator& validator = wxDefaultValidator,
-                  const wxString& name = "simpleHtmlListBox");
+    wxSimpleHtmlListBox(wxWindow* parent, wxWindowID id,
+                        const wxPoint& pos,
+                        const wxSize& size,
+                        const wxArrayString& choices,
+                        long style = wxHLB_DEFAULT_STYLE,
+                        const wxValidator& validator = wxDefaultValidator,
+                        const wxString& name = wxSimpleHtmlListBoxNameStr);
 
     /**
         Default constructor, you must call Create() later.
@@ -292,14 +292,14 @@ public:
                 const wxString choices[] = NULL,
                 long style = wxHLB_DEFAULT_STYLE,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = "simpleHtmlListBox");
+                const wxString& name = wxSimpleHtmlListBoxNameStr);
     bool Create(wxWindow* parent, wxWindowID id,
                 const wxPoint& pos,
                 const wxSize& size,
                 const wxArrayString& choices,
                 long style = wxHLB_DEFAULT_STYLE,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = "simpleHtmlListBox");
+                const wxString& name = wxSimpleHtmlListBoxNameStr);
     //@}
 };
 

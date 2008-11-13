@@ -95,7 +95,7 @@ public:
 
         @see Initialize(), SplitVertically(), SplitHorizontally(), Create()
     */
-    wxSplitterWindow(wxWindow* parent, wxWindowID id,
+    wxSplitterWindow(wxWindow* parent, wxWindowID id = wxID_ANY,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxSP_3D,

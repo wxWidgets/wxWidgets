@@ -47,7 +47,7 @@ public:
     /**
         Constructor does nothing, use Walk() to walk the stack.
     */
-    wxStackWalker();
+    wxStackWalker(const char* argv0 = NULL);
 
     /**
         Destructor does nothing neither but should be virtual as this class is used as

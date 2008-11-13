@@ -63,7 +63,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = "staticBox");
+                const wxString& name = wxStaticBoxNameStr);
 
     /**
         Destructor, destroying the group box.

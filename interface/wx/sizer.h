@@ -1079,7 +1079,7 @@ public:
 
         @see Remove()
     */
-    bool Detach(size_t index);
+    virtual bool Detach(int index);
 
     /**
         Tell the sizer to resize the @a window so that its client area matches the
@@ -1374,7 +1374,7 @@ public:
 
         @return @true if the child item was found and removed, @false otherwise.
     */
-    bool Remove(wxWindow* window);
+    virtual bool Remove(wxWindow* window);
 
     /**
         Removes a sizer child from the sizer and destroys it.
@@ -1403,7 +1403,7 @@ public:
 
         @return @true if the child item was found and removed, @false otherwise.
     */
-    bool Remove(size_t index);
+    virtual bool Remove(int index);
 
     /**
         Detaches the given @a oldwin from the sizer and replaces it with the
@@ -1473,7 +1473,7 @@ public:
 
         @see wxSizerItem::SetMinSize()
     */
-    void SetItemMinSize(wxWindow* window, int width, int height);
+    bool SetItemMinSize(wxWindow* window, int width, int height);
 
     /**
         Set an item's minimum size by window, sizer, or position.
@@ -1484,7 +1484,7 @@ public:
 
         @see wxSizerItem::SetMinSize()
     */
-    void SetItemMinSize(wxSizer* sizer, int width, int height);
+    bool SetItemMinSize(wxSizer* sizer, int width, int height);
 
     /**
         Set an item's minimum size by window, sizer, or position.
@@ -1495,7 +1495,7 @@ public:
 
         @see wxSizerItem::SetMinSize()
     */
-    void SetItemMinSize(size_t index, int width, int height);
+    bool SetItemMinSize(size_t index, int width, int height);
 
     /**
         Call this to give the sizer a minimal size.
@@ -1678,7 +1678,7 @@ public:
     /**
         This constructor creates a new static box with the given label and parent window.
     */
-    wxStaticBoxSizer(int orient, wxWindow parent,
+    wxStaticBoxSizer(int orient, wxWindow *parent,
                      const wxString& label = wxEmptyString);
 
     /**

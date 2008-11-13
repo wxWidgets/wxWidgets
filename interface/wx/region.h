@@ -120,7 +120,7 @@ public:
         A wxPython alias for this operator is called Next.
         @endWxPythonOnly
     */
-    void operator ++();
+    wxRegionIterator& operator ++();
 
     /**
         Returns @true if there are still some rectangles; otherwise returns @false.
@@ -181,7 +181,7 @@ public:
         in the provided array.
         @a fillStyle parameter may have values @c wxWINDING_RULE or @c wxODDEVEN_RULE.
     */
-    wxRegion(size_t n, const wxPoint* points, int fillStyle = wxWINDING_RULE);
+    wxRegion(size_t n, const wxPoint* points, int fillStyle = wxODDEVEN_RULE);
     /**
         Constructs a region using a bitmap. See Union() for more details.
     */
@@ -210,7 +210,7 @@ public:
 
         @return The return value is one of @c wxOutRegion and @c wxInRegion.
     */
-    wxRegionContain Contains(long& x, long& y) const;
+    wxRegionContain Contains(wxCoord x, wxCoord y) const;
     /**
         Returns a value indicating whether the given point is contained within the region.
 
@@ -227,7 +227,7 @@ public:
               ::wxInRegion then indicates that all or some part of the region is
               contained in this region.
     */
-    wxRegionContain Contains(long& x, long& y, long& width, long& height) const;
+    wxRegionContain Contains(wxCoord x, wxCoord y, wxCoord width, wxCoord height) const;
     /**
         Returns a value indicating whether the given rectangle is contained within the
         region.
@@ -252,7 +252,7 @@ public:
     */
     void GetBox(wxCoord& x, wxCoord& y, wxCoord& width,
                 wxCoord& height) const;
-    const wxRect  GetBox() const;
+    wxRect GetBox() const;
     //@}
 
     /**

@@ -524,13 +524,12 @@ public:
     /**
         Finds a handler by type.
     */
-    wxRichTextFileHandler* FindHandler(int imageType);
+    static wxRichTextFileHandler* FindHandler(wxRichTextFileType imageType);
 
     /**
         Finds a handler by extension and type.
     */
-    wxRichTextFileHandler* FindHandler(const wxString& extension,
-                                       int imageType);
+    static wxRichTextFileHandler* FindHandler(const wxString& extension, wxRichTextFileType imageType);
 
     /**
         Finds a handler by name.
@@ -698,14 +697,14 @@ public:
     /**
         Loads content from a stream.
     */
-    bool LoadFile(wxInputStream& stream,
-                  int type = wxRICHTEXT_TYPE_ANY);
+    virtual bool LoadFile(wxInputStream& stream,
+                          wxRichTextFileType type = wxRICHTEXT_TYPE_ANY);
 
     /**
         Loads content from a file.
     */
-    bool LoadFile(const wxString& filename,
-                  int type = wxRICHTEXT_TYPE_ANY);
+    virtual bool LoadFile(const wxString& filename,
+                          wxRichTextFileType type = wxRICHTEXT_TYPE_ANY);
 
     /**
         Marks the buffer as modified or unmodified.
@@ -794,14 +793,14 @@ public:
     /**
         Saves content to a stream.
     */
-    bool SaveFile(wxOutputStream& stream,
-                  int type = wxRICHTEXT_TYPE_ANY);
+    virtual bool SaveFile(wxOutputStream& stream,
+                          wxRichTextFileType type = wxRICHTEXT_TYPE_ANY);
 
     /**
         Saves content to a file.
     */
-    bool SaveFile(const wxString& filename,
-                  int type = wxRICHTEXT_TYPE_ANY);
+    virtual bool SaveFile(const wxString& filename,
+                          wxRichTextFileType type = wxRICHTEXT_TYPE_ANY);
 
     /**
         Sets the basic (overall) style. This is the style of the whole

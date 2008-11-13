@@ -1456,7 +1456,7 @@ public:
     /**
         Loads an image from a file and writes it at the current insertion point.
     */
-    bool WriteImage(const wxString& filename, int bitmapType);
+    virtual bool WriteImage(const wxString& filename, wxBitmapType bitmapType);
 
     /**
         Writes an image block at the current insertion point.

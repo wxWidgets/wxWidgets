@@ -56,7 +56,7 @@ public:
     */
     wxStatusBar(wxWindow* parent, wxWindowID id = wxID_ANY,
                 long style = wxST_SIZEGRIP,
-                const wxString& name = "statusBar");
+                const wxString& name = wxStatusBarNameStr);
 
     /**
         Destructor.

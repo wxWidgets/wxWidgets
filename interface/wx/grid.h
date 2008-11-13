@@ -2306,8 +2306,8 @@ public:
         @true even if the cell is only partially visible.
     */
     bool IsVisible(int row, int col, bool wholeCellVisible = true) const;
-    const bool IsVisible(const wxGridCellCoords& coords,
-                         bool wholeCellVisible = true) const;
+    bool IsVisible(const wxGridCellCoords& coords,
+                   bool wholeCellVisible = true) const;
     //@}
 
     //@{

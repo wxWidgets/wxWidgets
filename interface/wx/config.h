@@ -504,64 +504,64 @@ public:
 
         @return @true if value was really read, @false if the default was used.
     */
-    const bool Read(const wxString& key, wxString* str,
-                      const wxString& defaultVal) const;
+    bool Read(const wxString& key, wxString* str,
+              const wxString& defaultVal) const;
     /**
         Another version of Read(), returning the string value directly.
     */
     const wxString Read(const wxString& key,
-                         const wxString& defaultVal) const;
+                        const wxString& defaultVal) const;
     /**
         Reads a long value, returning @true if the value was found. If the
         value was not found, @a l is not changed.
     */
-    const bool Read(const wxString& key, long* l) const;
+    bool Read(const wxString& key, long* l) const;
     /**
         Reads a long value, returning @true if the value was found. If the
         value was not found, @a defaultVal is used instead.
     */
-    const bool Read(const wxString& key, long* l,
-                    long defaultVal) const;
+    bool Read(const wxString& key, long* l,
+              long defaultVal) const;
     /**
         Reads a double value, returning @true if the value was found. If the
         value was not found, @a d is not changed.
     */
-    const bool Read(const wxString& key, double* d) const;
+    bool Read(const wxString& key, double* d) const;
     /**
         Reads a double value, returning @true if the value was found. If the
         value was not found, @a defaultVal is used instead.
     */
-    const bool Read(const wxString& key, double* d,
+    bool Read(const wxString& key, double* d,
                      double defaultVal) const;
     /**
         Reads a bool value, returning @true if the value was found. If the
         value was not found, @a b is not changed.
     */
-    const bool Read(const wxString& key, bool* b) const;
+    bool Read(const wxString& key, bool* b) const;
     /**
         Reads a bool value, returning @true if the value was found. If the
         value was not found, @a defaultVal is used instead.
     */
-    const bool Read(const wxString& key, bool* d,
-                     bool defaultVal) const;
+    bool Read(const wxString& key, bool* d,
+              bool defaultVal) const;
     /**
         Reads a binary block, returning @true if the value was found. If the
         value was not found, @a buf is not changed.
     */
-    const bool Read(const wxString& key, wxMemoryBuffer* buf) const;
+    bool Read(const wxString& key, wxMemoryBuffer* buf) const;
     /**
         Reads a value of type T, for which function wxFromString() is defined,
         returning @true if the value was found. If the value was not found,
         @a value is not changed.
     */
-    const bool Read(const wxString& key, T* value) const;
+    bool Read(const wxString& key, T* value) const;
     /**
         Reads a value of type T, for which function wxFromString() is defined,
         returning @true if the value was found. If the value was not found,
         @a defaultVal is used instead.
     */
-    const bool Read(const wxString& key, T* value,
-                     const T& defaultVal) const;
+    bool Read(const wxString& key, T* value,
+              const T& defaultVal) const;
 
     /**
         Reads a bool value from the key and returns it. @a defaultVal is

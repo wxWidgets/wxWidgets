@@ -121,6 +121,6 @@ public:
         Shows the dialog, returning @c wxID_OK if the user pressed OK, and
         @c wxID_CANCEL otherwise.
     */
-    int ShowModal();
+    virtual int ShowModal();
 };
 

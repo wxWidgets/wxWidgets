@@ -198,7 +198,7 @@ public:
         May only be called after successful call to Compile().
     */
     bool Matches(const wxChar* text, int flags = 0) const;
-    const bool Matches(const wxChar* text, int flags, size_t len) const;
+    bool Matches(const wxChar* text, int flags, size_t len) const;
     //@}
 
     /**
@@ -210,7 +210,7 @@ public:
 
         May only be called after successful call to Compile().
     */
-    const bool Matches(const wxString& text, int flags = 0) const;
+    bool Matches(const wxString& text, int flags = 0) const;
 
     /**
         Replaces the current regular expression in the string pointed to by

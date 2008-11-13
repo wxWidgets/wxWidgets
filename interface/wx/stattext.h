@@ -76,7 +76,7 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = 0,
-                 const wxString& name = "staticText");
+                 const wxString& name = wxStaticTextNameStr);
 
     /**
         Creation function, for two-step construction. For details see wxStaticText().

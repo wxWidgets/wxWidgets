@@ -124,10 +124,10 @@ public:
 
         @see Create()
     */
-    wxSpinButton(wxWindow* parent, wxWindowID id,
+    wxSpinButton(wxWindow* parent, wxWindowID id = -1,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
-                 long style = wxSP_HORIZONTAL,
+                 long style = wxSP_VERTICAL,
                  const wxString& name = "spinButton");
 
     /**
@@ -141,7 +141,8 @@ public:
     */
     bool Create(wxWindow* parent, wxWindowID id = -1,
                 const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize, long style = wxSP_HORIZONTAL,
+                const wxSize& size = wxDefaultSize,
+                long style = wxSP_VERTICAL,
                 const wxString& name = "wxSpinButton");
 
     /**

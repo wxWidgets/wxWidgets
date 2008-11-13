@@ -116,7 +116,7 @@ public:
                           const wxPoint& pos = wxDefaultPosition,
                           const wxSize& size = wxDefaultSize,
                           long style = wxDEFAULT_DIALOG_STYLE,
-                          const wxString& name = "dialogBox");
+                          const wxString& name = wxDialogNameStr);
 
     /**
         Override this if you wish to add the book control in a way different from the

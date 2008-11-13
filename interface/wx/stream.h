@@ -290,7 +290,7 @@ public:
 
         @see Write()
     */
-    Return value size_t Read(wxStreamBuffer* buffer);
+    size_t Read(wxStreamBuffer* buffer);
 
     /**
         Resets to the initial state variables concerning the buffer.
@@ -326,7 +326,7 @@ public:
 
         @see wxStreamBuffer(), Fixed(), Flushable()
     */
-    void SetBufferIO(char* buffer_start, char* buffer_end);
+    void SetBufferIO(void* start, void* end, bool takeOwnership = false);
 
     /**
         Destroys or invalidates the previous IO buffer and allocates a new one of the
@@ -463,7 +463,7 @@ public:
         This function returns a reference on the current object, so the user can
         test any states of the stream right away.
     */
-    wxOutputStream& Write(const void* buffer, size_t size);
+    virtual wxOutputStream& Write(const void* buffer, size_t size);
 
     /**
         Reads data from the specified input stream and stores them

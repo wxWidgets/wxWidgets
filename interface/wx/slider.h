@@ -151,7 +151,7 @@ public:
              const wxSize& size = wxDefaultSize,
              long style = wxSL_HORIZONTAL,
              const wxValidator& validator = wxDefaultValidator,
-             const wxString& name = "slider");
+             const wxString& name = wxSliderNameStr);
 
     /**
         Destructor, destroying the slider.

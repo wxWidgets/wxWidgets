@@ -384,9 +384,9 @@ public:
     bool operator !=(const wxString& value) const;
     bool operator !=(const wxChar* value) const;
     bool operator !=(wxChar value) const;
-    bool operator !=(const long value) const;
-    bool operator !=(const bool value) const;
-    bool operator !=(const double value) const;
+    bool operator !=(long value) const;
+    bool operator !=(bool value) const;
+    bool operator !=(double value) const;
     bool operator !=(void* value) const;
     bool operator !=(wxObject* value) const;
     bool operator !=(const wxVariantList& value) const;
@@ -404,9 +404,9 @@ public:
     void operator =(const wxString& value);
     void operator =(const wxChar* value);
     void operator =(wxChar value);
-    void operator =(const long value);
-    void operator =(const bool value);
-    void operator =(const double value);
+    void operator =(long value);
+    void operator =(bool value);
+    void operator =(double value);
     void operator =(void* value);
     void operator =(wxObject* value);
     void operator =(const wxVariantList& value);
@@ -422,9 +422,9 @@ public:
     bool operator ==(const wxString& value) const;
     bool operator ==(const wxChar* value) const;
     bool operator ==(wxChar value) const;
-    bool operator ==(const long value) const;
-    bool operator ==(const bool value) const;
-    bool operator ==(const double value) const;
+    bool operator ==(long value) const;
+    bool operator ==(bool value) const;
+    bool operator ==(double value) const;
     bool operator ==(void* value) const;
     bool operator ==(wxObject* value) const;
     bool operator ==(const wxVariantList& value) const;

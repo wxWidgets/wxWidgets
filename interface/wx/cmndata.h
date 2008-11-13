@@ -661,7 +661,7 @@ public:
     /**
         Assigns print data to this object.
     */
-    void operator =(const wxPrintData& data);
+    wxPrintData& operator =(const wxPrintData& data);
 };
 
 

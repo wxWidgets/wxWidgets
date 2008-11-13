@@ -85,10 +85,10 @@ public:
                const wxSize& size = wxDefaultSize,
                int n = 0,
                const wxString choices[] = NULL,
-               int majorDimension = 0,
+               int majorDimension = 1,
                long style = wxRA_SPECIFY_COLS,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = "radioBox");
+               const wxString& name = wxRadioBoxNameStr);
 
     /**
         Constructor, creating and showing a radiobox.
@@ -125,10 +125,10 @@ public:
                const wxPoint& pos,
                const wxSize& size,
                const wxArrayString& choices,
-               int majorDimension = 0,
+               int majorDimension = 1,
                long style = wxRA_SPECIFY_COLS,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = "radioBox");
+               const wxString& name = wxRadioBoxNameStr);
 
     /**
         Destructor, destroying the radiobox item.
@@ -148,7 +148,7 @@ public:
                 int majorDimension = 0,
                 long style = wxRA_SPECIFY_COLS,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = "radioBox");
+                const wxString& name = wxRadioBoxNameStr);
 
     /**
         Creates the radiobox for two-step construction. See wxRadioBox()
@@ -162,7 +162,7 @@ public:
                 int majorDimension = 0,
                 long style = wxRA_SPECIFY_COLS,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = "radioBox");
+                const wxString& name = wxRadioBoxNameStr);
 
     /**
         Enables or disables an individual button in the radiobox.
@@ -314,5 +314,5 @@ public:
         @endWxPythonOnly
 
     */
-    virtual bool Show(unsigned int item, const bool show = true);
+    virtual bool Show(unsigned int item, bool show = true);
 };
