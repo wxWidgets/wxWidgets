@@ -355,6 +355,14 @@ public:
             m_strings[i] = m_array[i];
         return m_strings;
     }
+
+    wxString* Release()
+    {
+        wxString *r = GetStrings();
+        m_strings = NULL;
+        return r;
+    }
+
 private:
     const wxArrayString& m_array;
     wxString* m_strings;

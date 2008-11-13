@@ -600,7 +600,11 @@ public:
             If @true, the window is eligible for drop file events.
             If @false, the window will not accept drop file events.
 
-        @remarks Windows only.
+        @remarks Windows only until version 2.8.9, available on all platforms
+                 since 2.8.10. Cannot be used together with SetDropTarget() on
+                 non-Windows platforms.
+
+        @see SetDropTarget()
     */
     virtual void DragAcceptFiles(bool accept);
 
