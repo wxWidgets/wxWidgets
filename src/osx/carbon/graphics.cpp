@@ -690,7 +690,7 @@ void wxMacCoreGraphicsBrushData::CreateRadialGradientBrush( wxDouble xo, wxDoubl
     const wxColour &oColor, const wxColour &cColor )
 {
     m_gradientFunction = CreateGradientFunction( oColor, cColor );
-    m_shading = CGShadingCreateRadial( wxMacGetGenericRGBColorSpace(), CGPointMake((CGFloat) xo,(CGFloat) yo), 0, 
+    m_shading = CGShadingCreateRadial( wxMacGetGenericRGBColorSpace(), CGPointMake((CGFloat) xo,(CGFloat) yo), 0,
                                         CGPointMake((CGFloat) xc,(CGFloat) yc), (CGFloat) radius, m_gradientFunction, true, true ) ;
     m_isShading = true ;
 }
@@ -1364,10 +1364,6 @@ public:
     // text
     //
 
-    virtual void DrawText( const wxString &str, wxDouble x, wxDouble y );
-
-    virtual void DrawText( const wxString &str, wxDouble x, wxDouble y, wxDouble angle );
-
     virtual void GetTextExtent( const wxString &text, wxDouble *width, wxDouble *height,
         wxDouble *descent, wxDouble *externalLeading ) const;
 
@@ -1389,6 +1385,9 @@ public:
 
 private:
     void EnsureIsValid();
+
+    virtual void DoDrawText( const wxString &str, wxDouble x, wxDouble y );
+    virtual void DoDrawRotatedText( const wxString &str, wxDouble x, wxDouble y, wxDouble angle );
 
     CGContextRef m_cgContext;
 #if wxOSX_USE_CARBON
@@ -1944,7 +1943,7 @@ void wxMacCoreGraphicsContext::PopState()
     CGContextRestoreGState( m_cgContext );
 }
 
-void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDouble y )
+void wxMacCoreGraphicsContext::DoDrawText( const wxString &str, wxDouble x, wxDouble y )
 {
     wxCHECK_RET( !m_font.IsNull(), wxT("wxMacCoreGraphicsContext::DrawText - no valid font set") );
 
@@ -1989,7 +1988,7 @@ void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDoub
     CGContextSaveGState(m_cgContext);
 
     CGColorRef col = wxMacCreateCGColor( fref->GetColour() );
-    CGContextSetTextDrawingMode (m_cgContext, kCGTextFill); 
+    CGContextSetTextDrawingMode (m_cgContext, kCGTextFill);
     CGContextSetFillColorWithColor( m_cgContext, col );
 
     wxCFStringRef text(str, wxLocale::GetSystemEncoding() );
@@ -2000,7 +1999,9 @@ void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDoub
 #endif
 }
 
-void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDouble y, wxDouble angle )
+void wxMacCoreGraphicsContext::DoDrawRotatedText(const wxString &str,
+                                                 wxDouble x, wxDouble y,
+                                                 wxDouble angle)
 {
     wxCHECK_RET( !m_font.IsNull(), wxT("wxMacCoreGraphicsContext::DrawText - no valid font set") );
 
@@ -2099,7 +2100,7 @@ void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDoub
 #endif
 #if wxOSX_USE_IPHONE
     // default implementation takes care of rotation and calls non rotated DrawText afterwards
-    wxGraphicsContext::DrawText( str, x, y, angle );
+    wxGraphicsContext::DoDrawRotatedText( str, x, y, angle );
 #endif
 }
 
@@ -2191,7 +2192,7 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
 
     wxCFStringRef text(str, wxLocale::GetSystemEncoding() );
     CGSize sz = MeasureTextInContext( fref->GetUIFont() , text.AsNSString() );
-    
+
     if ( height )
         *height = sz.height;
         /*
@@ -2273,7 +2274,7 @@ void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArr
 #else
         ATSLayoutRecord *layoutRecords = NULL;
         ItemCount glyphCount = 0;
-        
+
         // Get the glyph extents
         OSStatus err = ::ATSUDirectGetLayoutDataArrayPtrFromTextLayout(atsuLayout,
                                                                        0,
@@ -2282,7 +2283,7 @@ void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArr
                                                                        &layoutRecords,
                                                                        &glyphCount);
         wxASSERT(glyphCount == (text.length()+1));
-        
+
         if ( err == noErr && glyphCount == (text.length()+1))
         {
             for ( int pos = 1; pos < (int)glyphCount ; pos ++ )
@@ -2290,7 +2291,7 @@ void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArr
                 widths[pos-1] = FixedToInt( layoutRecords[pos].realPos );
             }
         }
-        
+
         ::ATSUDirectReleaseLayoutDataArrayPtr(NULL,
                                               kATSUDirectDataLayoutRecordATSLayoutRecordCurrent,
                                               (void **) &layoutRecords);

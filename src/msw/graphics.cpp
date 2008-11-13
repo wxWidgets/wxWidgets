@@ -323,7 +323,6 @@ public:
     virtual void PushState();
     virtual void PopState();
 
-    virtual void DrawText( const wxString &str, wxDouble x, wxDouble y);
     virtual void GetTextExtent( const wxString &str, wxDouble *width, wxDouble *height,
         wxDouble *descent, wxDouble *externalLeading ) const;
     virtual void GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const;
@@ -333,6 +332,11 @@ public:
 private:
     void    Init();
     void    SetDefaults();
+
+    virtual void DoDrawText(const wxString& str, wxDouble x, wxDouble y)
+        { DoDrawFilledText(str, x, y, wxNullGraphicsBrush); }
+    virtual void DoDrawFilledText(const wxString& str, wxDouble x, wxDouble y,
+                                  const wxGraphicsBrush& backgroundBrush);
 
     Graphics* m_context;
     GraphicsStates m_stateStack;
@@ -667,7 +671,7 @@ wxGDIPlusBitmapData::wxGDIPlusBitmapData( wxGraphicsRenderer* renderer, Bitmap* 
     m_helper = NULL;
 }
 
-wxGDIPlusBitmapData::wxGDIPlusBitmapData( wxGraphicsRenderer* renderer, 
+wxGDIPlusBitmapData::wxGDIPlusBitmapData( wxGraphicsRenderer* renderer,
                         const wxBitmap &bmp) : wxGraphicsObjectRefData( renderer )
 {
     m_bitmap = NULL;
@@ -1238,7 +1242,7 @@ void wxGDIPlusContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxD
 
         interim.LockBits(&bounds, ImageLockModeRead,
             interim.GetPixelFormat(),&data);
-        
+
         bool hasAlpha = false;
         for ( size_t y = 0 ; y < height && !hasAlpha ; ++y)
         {
@@ -1270,16 +1274,31 @@ void wxGDIPlusContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxD
     DeleteObject(iconInfo.hbmMask);
 }
 
-void wxGDIPlusContext::DrawText( const wxString &str, wxDouble x, wxDouble y )
+void wxGDIPlusContext::DoDrawFilledText(const wxString& str,
+                                        wxDouble x, wxDouble y,
+                                        const wxGraphicsBrush& brush)
 {
-    wxCHECK_RET( !m_font.IsNull(), wxT("wxGDIPlusContext::DrawText - no valid font set") );
+    wxCHECK_RET( !m_font.IsNull(),
+                 wxT("wxGDIPlusContext::DrawText - no valid font set") );
 
     if ( str.IsEmpty())
         return ;
 
-    wxWCharBuffer s = str.wc_str( *wxConvUI );
-    m_context->DrawString( s , -1 , ((wxGDIPlusFontData*)m_font.GetRefData())->GetGDIPlusFont() ,
-            PointF( x , y ) , StringFormat::GenericTypographic() , ((wxGDIPlusFontData*)m_font.GetRefData())->GetGDIPlusBrush() );
+    const wxGDIPlusFontData * const
+        fontData = (wxGDIPlusFontData *)m_font.GetRefData();
+    const wxGDIPlusBrushData * const
+        brushData = (wxGDIPlusBrushData *)m_brush.GetRefData();
+
+    m_context->DrawString
+               (
+                    str.wc_str(*wxConvUI),  // string to draw, always Unicode
+                    -1,                     // length: string is NUL-terminated
+                    fontData->GetGDIPlusFont(),
+                    PointF(x, y),
+                    StringFormat::GenericTypographic(),
+                    brushData ? brushData->GetGDIPlusBrush()
+                              : fontData->GetGDIPlusBrush()
+               );
 }
 
 void wxGDIPlusContext::GetTextExtent( const wxString &str, wxDouble *width, wxDouble *height,
@@ -1318,7 +1337,7 @@ void wxGDIPlusContext::GetTextExtent( const wxString &str, wxDouble *width, wxDo
     {
         RectF layoutRect(0,0, 100000.0f, 100000.0f);
         StringFormat strFormat( StringFormat::GenericTypographic() );
-        strFormat.SetFormatFlags( StringFormatFlagsMeasureTrailingSpaces | strFormat.GetFormatFlags() ); 
+        strFormat.SetFormatFlags( StringFormatFlagsMeasureTrailingSpaces | strFormat.GetFormatFlags() );
 
         RectF bounds ;
         m_context->MeasureString((const wchar_t *) s , wcslen(s) , f, layoutRect, &strFormat, &bounds ) ;
@@ -1353,7 +1372,7 @@ void wxGDIPlusContext::GetPartialTextExtents(const wxString& text, wxArrayDouble
         ranges[i].Length = 1 ;
     }
     strFormat.SetMeasurableCharacterRanges(len,ranges);
-    strFormat.SetFormatFlags( StringFormatFlagsMeasureTrailingSpaces | strFormat.GetFormatFlags() ); 
+    strFormat.SetFormatFlags( StringFormatFlagsMeasureTrailingSpaces | strFormat.GetFormatFlags() );
     m_context->MeasureCharacterRanges(ws, -1 , f,layoutRect, &strFormat,1,regions) ;
 
     RectF bbox ;
@@ -1365,7 +1384,7 @@ void wxGDIPlusContext::GetPartialTextExtents(const wxString& text, wxArrayDouble
 }
 
 bool wxGDIPlusContext::ShouldOffset() const
-{     
+{
     int penwidth = 0 ;
     if ( !m_pen.IsNull() )
     {
@@ -1434,7 +1453,7 @@ public :
     virtual wxGraphicsContext * CreateContext( const wxMemoryDC& dc);
 
     virtual wxGraphicsContext * CreateContext( const wxPrinterDC& dc);
-    
+
     virtual wxGraphicsContext * CreateContextFromNativeContext( void * context );
 
     virtual wxGraphicsContext * CreateContextFromNativeWindow( void * window );
@@ -1471,7 +1490,7 @@ public :
 
     // create a native bitmap representation
     virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap );
-    
+
     // create a subimage from a native image representation
     virtual wxGraphicsBitmap CreateSubBitmap( const wxGraphicsBitmap &bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h  );
 

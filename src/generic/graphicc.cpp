@@ -311,8 +311,6 @@ private :
 
 class WXDLLIMPEXP_CORE wxCairoContext : public wxGraphicsContext
 {
-    DECLARE_NO_COPY_CLASS(wxCairoContext)
-
 public:
     wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& dc );
     wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& dc );
@@ -370,7 +368,6 @@ public:
     virtual void PushState();
     virtual void PopState();
 
-    virtual void DrawText( const wxString &str, wxDouble x, wxDouble y);
     virtual void GetTextExtent( const wxString &str, wxDouble *width, wxDouble *height,
                                 wxDouble *descent, wxDouble *externalLeading ) const;
     virtual void GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const;
@@ -378,7 +375,11 @@ public:
 private:
     void Init(cairo_t *context);
 
+    virtual void DoDrawText( const wxString &str, wxDouble x, wxDouble y );
+
     cairo_t* m_context;
+
+    DECLARE_NO_COPY_CLASS(wxCairoContext)
 };
 
 //-----------------------------------------------------------------------------
@@ -1390,19 +1391,22 @@ void wxCairoContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDou
 }
 
 
-void wxCairoContext::DrawText( const wxString &str, wxDouble x, wxDouble y )
+void wxCairoContext::DoDrawText(const wxString& str, wxDouble x, wxDouble y)
 {
-    wxCHECK_RET( !m_font.IsNull(), wxT("wxCairoContext::DrawText - no valid font set") );
+    wxCHECK_RET( !m_font.IsNull(),
+                 wxT("wxCairoContext::DrawText - no valid font set") );
 
     if ( str.empty())
         return;
 
-#ifdef __WXGTK__
     const wxCharBuffer data = str.utf8_str();
     if ( !data )
         return;
-    size_t datalen = strlen(data);
+
     ((wxCairoFontData*)m_font.GetRefData())->Apply(this);
+
+#ifdef __WXGTK__
+    size_t datalen = strlen(data);
 
     PangoLayout *layout = pango_cairo_create_layout (m_context);
     pango_layout_set_font_description( layout, ((wxCairoFontData*)m_font.GetRefData())->GetFont());
@@ -1412,15 +1416,13 @@ void wxCairoContext::DrawText( const wxString &str, wxDouble x, wxDouble y )
 
     g_object_unref (layout);
 #else
-    ((wxCairoFontData*)m_font.GetRefData())->Apply(this);
     // Cairo's x,y for drawing text is at the baseline, so we need to adjust
     // the position we move to by the ascent.
     cairo_font_extents_t fe;
     cairo_font_extents(m_context, &fe);
     cairo_move_to(m_context, x, y+fe.ascent);
 
-    const wxWX2MBbuf buf(str.mb_str(wxConvUTF8));
-    cairo_show_text(m_context,buf);
+    cairo_show_text(m_context, data);
 #endif
 }
 

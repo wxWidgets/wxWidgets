@@ -613,7 +613,11 @@ void wxGraphicsContext::DrawPath( const wxGraphicsPath& path, int fillStyle )
     StrokePath( path );
 }
 
-void wxGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDouble y, wxDouble angle )
+void
+wxGraphicsContext::DoDrawRotatedText(const wxString &str,
+                                     wxDouble x,
+                                     wxDouble y,
+                                     wxDouble angle)
 {
     Translate(x,y);
     Rotate( -angle );
@@ -622,7 +626,11 @@ void wxGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDouble y, w
     Translate(-x,-y);
 }
 
-void wxGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDouble y, const wxGraphicsBrush& backgroundBrush )
+void
+wxGraphicsContext::DoDrawFilledText(const wxString &str,
+                                    wxDouble x,
+                                    wxDouble y,
+                                    const wxGraphicsBrush& backgroundBrush)
 {
     wxGraphicsBrush formerBrush = m_brush;
     wxGraphicsPen formerPen = m_pen;
@@ -644,7 +652,11 @@ void wxGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDouble y, c
     SetPen( formerPen );
 }
 
-void wxGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDouble y, wxDouble angle, const wxGraphicsBrush& backgroundBrush )
+void
+wxGraphicsContext::DoDrawRotatedFilledText(const wxString &str,
+                                           wxDouble x, wxDouble y,
+                                           wxDouble angle,
+                                           const wxGraphicsBrush& backgroundBrush)
 {
     wxGraphicsBrush formerBrush = m_brush;
     wxGraphicsPen formerPen = m_pen;
