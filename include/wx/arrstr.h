@@ -364,6 +364,11 @@ public:
             m_strings[i] = m_array[i];
         return m_strings;
     }
+
+#if wxABI_VERSION >= 20810
+    wxString* Release();
+#endif // wxABI_VERSION >= 20810
+
 private:
     const wxArrayString& m_array;
     wxString* m_strings;

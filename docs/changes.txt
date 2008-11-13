@@ -104,6 +104,7 @@ All (GUI):
   single-cell paragraphs.
 - Fixed wxHTML's line breaks handling in <pre> blocks broken in 2.8.8 (#10120).
 - wxHTML: don't include extra whitespace in table cells.
+- Implemented wxWindow::DragAcceptFiles() on all platforms.
 
 All (Unix):
 
