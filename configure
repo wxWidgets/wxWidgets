@@ -47001,13 +47001,13 @@ fi
 
 TOOLKIT_LOWERCASE=xxx
 if test "$TOOLKIT" = "MAC"; then
-    TOOLKIT_LOWERCASE=osx
+    TOOLKIT_LOWERCASE=osx_carbon
 fi
 if test "$TOOLKIT" = "OSX_CARBON"; then
-    TOOLKIT_LOWERCASE=osx
+    TOOLKIT_LOWERCASE=osx_carbon
 fi
 if test "$TOOLKIT" = "OSX_COCOA"; then
-    TOOLKIT_LOWERCASE=osx
+    TOOLKIT_LOWERCASE=osx_cocoa
 fi
 if test "$TOOLKIT_LOWERCASE" = "xxx"; then
     TOOLKIT_LOWERCASE=`echo $TOOLKIT | tr '[A-Z]' '[a-z]'`
