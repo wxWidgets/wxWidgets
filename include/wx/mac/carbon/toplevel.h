@@ -48,6 +48,8 @@ public:
                 const wxString& name = wxFrameNameStr);
 
     virtual ~wxTopLevelWindowMac();
+    
+    virtual bool Destroy();
 
     virtual wxPoint GetClientAreaOrigin() const;
 

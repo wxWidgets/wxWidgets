@@ -1393,13 +1393,14 @@ bool wxMacUnicodeTextControl::Create( wxTextCtrl *wxPeer,
 
     InstallControlEventHandler( m_controlRef , GetwxMacUnicodeTextControlEventHandlerUPP(),
                                 GetEventTypeCount(unicodeTextControlEventList), unicodeTextControlEventList, this,
-                                NULL);
+                                (EventHandlerRef*) &m_macTextCtrlEventHandler);
                                 
     return true;
 }
 
 wxMacUnicodeTextControl::~wxMacUnicodeTextControl()
 {
+    ::RemoveEventHandler((EventHandlerRef) m_macTextCtrlEventHandler);
 }
 
 void wxMacUnicodeTextControl::VisibilityChanged(bool shown)
