@@ -94,7 +94,7 @@ typedef wxUint32 size_t32;
 const size_t32 MSGCATALOG_MAGIC    = 0x950412de;
 const size_t32 MSGCATALOG_MAGIC_SW = 0xde120495;
 
-// the constants describing the format of lang_LANG locale string
+// the constants describing the format of ll_CC locale string
 static const size_t LEN_LANG = 2;
 static const size_t LEN_SUBLANG = 2;
 static const size_t LEN_FULL = LEN_LANG + 1 + LEN_SUBLANG; // 1 for '_'
@@ -135,23 +135,27 @@ public:
 
 static wxLocale *wxSetLocale(wxLocale *pLocale);
 
-// helper functions of GetSystemLanguage()
-#ifdef __UNIX__
+namespace
+{
 
 // get just the language part
-static inline wxString ExtractLang(const wxString& langFull)
+inline wxString ExtractLang(const wxString& langFull)
 {
     return langFull.Left(LEN_LANG);
 }
 
+// helper functions of GetSystemLanguage()
+#ifdef __UNIX__
+
 // get everything else (including the leading '_')
-static inline wxString ExtractNotLang(const wxString& langFull)
+inline wxString ExtractNotLang(const wxString& langFull)
 {
     return langFull.Mid(LEN_LANG);
 }
 
 #endif // __UNIX__
 
+} // anonymous namespace
 
 // ----------------------------------------------------------------------------
 // Plural forms parser
@@ -1191,14 +1195,13 @@ bool wxMsgCatalogFile::Load(const wxString& szDirPrefix, const wxString& szName,
 
 
   searchPath += GetFullSearchPath(szDirPrefix);
-  size_t sublocaleIndex = szDirPrefix.find(wxS('_'));
-  if ( sublocaleIndex != wxString::npos )
+  if ( szDirPrefix[LEN_LANG] == wxS('_') )
   {
-      // also add just base locale name: for things like "fr_BE" (belgium
-      // french) we should use "fr" if no belgium specific message catalogs
-      // exist
+      // also add just base locale name: for things like "fr_BE" (Belgium
+      // French) we should use fall back on plain "fr" if no Belgium-specific
+      // message catalogs exist
       searchPath << wxPATH_SEP
-                 << GetFullSearchPath(szDirPrefix.Left(sublocaleIndex));
+                 << GetFullSearchPath(ExtractLang(szDirPrefix));
   }
 
   // don't give translation errors here because the wxstd catalog might
@@ -1762,7 +1765,7 @@ bool wxLocale::Init(int language, int flags)
 
     const char *retloc = wxSetlocaleTryUTF8(LC_ALL, locale);
 
-    const wxString langOnly = locale.Left(2);
+    const wxString langOnly = ExtractLang(locale);
     if ( !retloc )
     {
         // Some C libraries don't like xx_YY form and require xx only
@@ -1795,11 +1798,11 @@ bool wxLocale::Init(int language, int flags)
         // so will translate the abbrev for them
         wxString localeAlt;
         if ( langOnly == wxS("he") )
-            localeAlt = wxS("iw") + locale.Mid(3);
+            localeAlt = wxS("iw") + ExtractNotLang(locale);
         else if ( langOnly == wxS("id") )
-            localeAlt = wxS("in") + locale.Mid(3);
+            localeAlt = wxS("in") + ExtractNotLang(locale);
         else if ( langOnly == wxS("yi") )
-            localeAlt = wxS("ji") + locale.Mid(3);
+            localeAlt = wxS("ji") + ExtractNotLang(locale);
         else if ( langOnly == wxS("nb") )
             localeAlt = wxS("no_NO");
         else if ( langOnly == wxS("nn") )
@@ -1809,7 +1812,7 @@ bool wxLocale::Init(int language, int flags)
         {
             retloc = wxSetlocaleTryUTF8(LC_ALL, localeAlt);
             if ( !retloc )
-                retloc = wxSetlocaleTryUTF8(LC_ALL, localeAlt.Left(2));
+                retloc = wxSetlocaleTryUTF8(LC_ALL, ExtractLang(localeAlt));
         }
     }
 
@@ -1895,7 +1898,7 @@ bool wxLocale::Init(int language, int flags)
     if ( !retloc )
     {
         // Some C libraries don't like xx_YY form and require xx only
-        retloc = wxSetlocale(LC_ALL, locale.Mid(0,2));
+        retloc = wxSetlocale(LC_ALL, ExtractLang(locale));
     }
 #else
     wxUnusedVar(flags);
@@ -2538,7 +2541,7 @@ bool wxLocale::IsAvailable(int lang)
     if ( !tmp )
     {
         // Some C libraries don't like xx_YY form and require xx only
-        tmp = wxSetlocaleTryUTF8(LC_ALL, info->CanonicalName.Left(2));
+        tmp = wxSetlocaleTryUTF8(LC_ALL, ExtractLang(info->CanonicalName));
         if ( !tmp )
             return false;
     }
@@ -2567,24 +2570,26 @@ bool wxLocale::AddCatalog(const wxString& szDomain,
                           const wxString& msgIdCharset)
 
 {
-  wxMsgCatalog *pMsgCat = new wxMsgCatalog;
+    wxMsgCatalog *pMsgCat = new wxMsgCatalog;
 
-  if ( pMsgCat->Load(m_strShort, szDomain, msgIdCharset, m_bConvertEncoding) ) {
-    // add it to the head of the list so that in GetString it will
-    // be searched before the catalogs added earlier
-    pMsgCat->m_pNext = m_pMsgCat;
-    m_pMsgCat = pMsgCat;
+    if ( pMsgCat->Load(m_strShort, szDomain, msgIdCharset, m_bConvertEncoding) )
+    {
+        // add it to the head of the list so that in GetString it will
+        // be searched before the catalogs added earlier
+        pMsgCat->m_pNext = m_pMsgCat;
+        m_pMsgCat = pMsgCat;
 
-    return true;
-  }
-  else {
+        return true;
+    }
+
     // don't add it because it couldn't be loaded anyway
     delete pMsgCat;
+
 
     // It is OK to not load catalog if the msgid language and m_language match,
     // in which case we can directly display the texts embedded in program's
     // source code:
-    if (m_language == msgIdLanguage)
+    if ( msgIdLanguage == m_language )
         return true;
 
     // If there's no exact match, we may still get partial match where the
@@ -2592,13 +2597,12 @@ bool wxLocale::AddCatalog(const wxString& szDomain,
     // permitted to use en_US strings from sources even if m_language is en_GB:
     const wxLanguageInfo *msgIdLangInfo = GetLanguageInfo(msgIdLanguage);
     if ( msgIdLangInfo &&
-         msgIdLangInfo->CanonicalName.Mid(0, 2) == m_strShort.Mid(0, 2) )
+          ExtractLang(msgIdLangInfo->CanonicalName) == ExtractLang(m_strShort) )
     {
         return true;
     }
 
     return false;
-  }
 }
 
 // ----------------------------------------------------------------------------
