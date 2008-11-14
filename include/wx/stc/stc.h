@@ -2643,7 +2643,7 @@ public:
     void SetReadOnly(bool readOnly);
 
     // Will a paste succeed?
-    bool CanPaste();
+    bool CanPaste() const;
 
     // Are there any undoable actions in the undo history?
     bool CanUndo() const;

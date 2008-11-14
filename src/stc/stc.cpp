@@ -1569,7 +1569,7 @@ void wxStyledTextCtrl::SetReadOnly(bool readOnly)
 }
 
 // Will a paste succeed?
-bool wxStyledTextCtrl::CanPaste()
+bool wxStyledTextCtrl::CanPaste() const
 {
     return SendMsg(2173, 0, 0) != 0;
 }

@@ -663,6 +663,7 @@ constNonGetterMethods = set((
     'LineFromPosition',
     'PositionFromLine',
     'LineLength',
+    'CanPaste',
     'CanRedo',
     'CanUndo',
 ))
