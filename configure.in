@@ -1786,7 +1786,11 @@ fi
 if test "x$HPCXX" = "xyes"; then
     dnl 2340: "value copied to temporary, reference to temporary used": very
     dnl       painful as triggered by any occurrence of user-defined conversion
-    CXXFLAGS="+W 2340 $CXXFLAGS"
+    dnl 4232: "conversion from 'Foo *' to a more strictly aligned type 'Bar *'
+    dnl       may cause misaligned access": this might indicate a real problem
+    dnl       but any use of GTK+ cast macros results in it so it's unusable
+    dnl       for wxGTK code
+    CXXFLAGS="+W 2340,4232 $CXXFLAGS"
 fi
 
 dnl DEC/Compaq/HP cxx warnings
