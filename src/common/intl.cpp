@@ -1177,6 +1177,9 @@ static wxString GetFullSearchPath(const wxString& lang)
 bool wxMsgCatalogFile::Load(const wxString& szDirPrefix, const wxString& szName,
                             wxPluralFormsCalculatorPtr& rPluralFormsCalculator)
 {
+    wxCHECK_MSG( szDirPrefix.length() >= LEN_LANG, false,
+                    "invalid language specification" );
+
   wxString searchPath;
 
 #if wxUSE_FONTMAP
@@ -2570,6 +2573,8 @@ bool wxLocale::AddCatalog(const wxString& szDomain,
                           const wxString& msgIdCharset)
 
 {
+    wxCHECK_MSG( IsOk(), false, "must initialize catalog first" );
+
     wxMsgCatalog *pMsgCat = new wxMsgCatalog;
 
     if ( pMsgCat->Load(m_strShort, szDomain, msgIdCharset, m_bConvertEncoding) )

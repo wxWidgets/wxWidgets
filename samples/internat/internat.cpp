@@ -218,16 +218,13 @@ bool MyApp::OnInit()
         m_lang = lng == -1 ? wxLANGUAGE_DEFAULT : langIds[lng];
     }
 
-    if ( m_lang != wxLANGUAGE_DEFAULT )
+    // don't use wxLOCALE_LOAD_DEFAULT flag so that Init() doesn't return
+    // false just because it failed to load wxstd catalog
+    if ( !m_locale.Init(m_lang, wxLOCALE_CONV_ENCODING) )
     {
-        // don't use wxLOCALE_LOAD_DEFAULT flag so that Init() doesn't return
-        // false just because it failed to load wxstd catalog
-        if ( !m_locale.Init(m_lang, wxLOCALE_CONV_ENCODING) )
-        {
-            wxLogWarning(_("This language is not supported by the system."));
+        wxLogWarning(_("This language is not supported by the system."));
 
-            // continue nevertheless
-        }
+        // continue nevertheless
     }
 
     // normally this wouldn't be necessary as the catalog files would be found
