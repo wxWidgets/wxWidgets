@@ -898,12 +898,6 @@ int wxSystemColourProperty::ColToInd( const wxColour& colour ) const
 }
 
 
-static inline wxColour wxColourFromPGLong( long col )
-{
-    return wxColour((col&0xFF),((col>>8)&0xFF),((col>>16)&0xFF));
-}
-
-
 void wxSystemColourProperty::OnSetValue()
 {
     // Convert from generic wxobject ptr to wxPGVariantDataColour
