@@ -1601,7 +1601,7 @@ void wxAuiManager::GetPanePositionsAndSizes(wxAuiDockInfo& dock,
     {
         wxAuiPaneInfo& pane = *(dock.panes.Item(pane_i));
 
-        if (pane.state & wxAuiPaneInfo::actionPane)
+        if (pane.HasFlag(wxAuiPaneInfo::actionPane))
         {
             wxASSERT_MSG(action_pane==-1, wxT("Too many fixed action panes"));
             action_pane = pane_i;
@@ -2213,7 +2213,7 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
                 dock.toolbar = false;
             if (pane.HasFlag(wxAuiPaneInfo::optionDockFixed))
                 dock.fixed = true;
-            if (pane.state & wxAuiPaneInfo::actionPane)
+            if (pane.HasFlag(wxAuiPaneInfo::actionPane))
                 action_pane_marked = true;
         }
 
@@ -4380,7 +4380,7 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
         wxAuiPaneInfo& pane = GetPane(m_action_window);
         wxASSERT_MSG(pane.IsOk(), wxT("Pane window not found"));
 
-        pane.state |= wxAuiPaneInfo::actionPane;
+        pane.SetFlag(wxAuiPaneInfo::actionPane, true);
 
         wxPoint pt = event.GetPosition();
         DoDrop(m_docks, m_panes, pane, pt, m_action_offset);
