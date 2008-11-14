@@ -1237,7 +1237,7 @@ bool wxSystemColourProperty::StringToValue( wxVariant& value, const wxString& te
             if ( res && GetIndex() >= 0 )
             {
                 val.m_type = GetIndex();
-                if ( val.m_type >= 0 && val.m_type < m_choices.GetCount() )
+                if ( val.m_type < m_choices.GetCount() )
                     val.m_type = m_choices[val.m_type].GetValue();
 
                 // Get proper colour for type.
