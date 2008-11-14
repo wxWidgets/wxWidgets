@@ -39,14 +39,16 @@ public:
 	~LineMarker() {
 		delete pxpm;
 	}
-	LineMarker &operator=(const LineMarker &) {
+	LineMarker &operator=(const LineMarker &other) {
 		// Defined to avoid pxpm being blindly copied, not as real assignment operator
-		markType = SC_MARK_CIRCLE;
-		fore = ColourDesired(0,0,0);
-		back = ColourDesired(0xff,0xff,0xff);
-		alpha = SC_ALPHA_NOALPHA;
-		delete pxpm;
-		pxpm = NULL;
+		if ( &other != this ) {
+			markType = SC_MARK_CIRCLE;
+			fore = ColourDesired(0,0,0);
+			back = ColourDesired(0xff,0xff,0xff);
+			alpha = SC_ALPHA_NOALPHA;
+			delete pxpm;
+			pxpm = NULL;
+		}
 		return *this;
 	}
 	void RefreshColourPalette(Palette &pal, bool want);
