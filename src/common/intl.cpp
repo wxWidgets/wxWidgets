@@ -2575,6 +2575,14 @@ bool wxLocale::AddCatalog(const wxString& szDomain,
 {
     wxCHECK_MSG( IsOk(), false, "must initialize catalog first" );
 
+
+    // It is OK to not load catalog if the msgid language and m_language match,
+    // in which case we can directly display the texts embedded in program's
+    // source code:
+    if ( msgIdLanguage == m_language )
+        return true;
+
+
     wxMsgCatalog *pMsgCat = new wxMsgCatalog;
 
     if ( pMsgCat->Load(m_strShort, szDomain, msgIdCharset, m_bConvertEncoding) )
@@ -2590,12 +2598,6 @@ bool wxLocale::AddCatalog(const wxString& szDomain,
     // don't add it because it couldn't be loaded anyway
     delete pMsgCat;
 
-
-    // It is OK to not load catalog if the msgid language and m_language match,
-    // in which case we can directly display the texts embedded in program's
-    // source code:
-    if ( msgIdLanguage == m_language )
-        return true;
 
     // If there's no exact match, we may still get partial match where the
     // (basic) language is same, but the country differs. For example, it's
