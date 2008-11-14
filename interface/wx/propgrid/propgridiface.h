@@ -820,7 +820,7 @@ public:
             categories are skipped if this flag is used.
     */
     void SetPropertyTextColour( wxPGPropArg id,
-                                const wxColour& col,
+                                const wxColour& colour,
                                 bool recursively = true );
 
     /**
