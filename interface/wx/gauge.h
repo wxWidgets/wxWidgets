@@ -64,6 +64,8 @@ public:
             Window size.
         @param style
             Gauge style.
+        @param validator
+            Window validator.
         @param name
             Window name.
 

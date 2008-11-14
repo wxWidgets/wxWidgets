@@ -298,8 +298,6 @@ public:
         arbitrary locations. In such case you may implement this method only
         and leave InsertRows() unimplemented.
 
-        @param pos
-            The position of the first new row.
         @param numRows
             The number of rows to add.
      */
@@ -628,6 +626,12 @@ public:
     wxGridCellChoiceEditor(size_t count = 0,
                            const wxString choices[] = NULL,
                            bool allowOthers = false);
+    /**
+        @param choices
+            An array of strings from which the user can choose.
+        @param allowOthers
+            If allowOthers is @true, the user can type a string not in choices array.
+    */
     wxGridCellChoiceEditor(const wxArrayString& choices,
                            bool allowOthers = false);
     //@}
