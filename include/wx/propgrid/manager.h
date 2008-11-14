@@ -163,7 +163,8 @@ protected:
     */
     virtual void DoSetSplitterPosition( int pos,
                                         int splitterColumn = 0,
-                                        bool allPages = false );
+                                        bool allPages = false,
+                                        bool fromAutoCenter = false );
 
     /** Propagate to other pages.
     */

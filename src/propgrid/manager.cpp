@@ -207,7 +207,10 @@ void wxPropertyGridPage::SetSplitterPosition( int splitterPos, int col )
         DoSetSplitterPosition(splitterPos, col, false);
 }
 
-void wxPropertyGridPage::DoSetSplitterPosition( int pos, int splitterColumn, bool allPages )
+void wxPropertyGridPage::DoSetSplitterPosition( int pos,
+                                                int splitterColumn,
+                                                bool allPages,
+                                                bool WXUNUSED(fromAutoCenter) )
 {
     if ( allPages && m_manager->GetPageCount() )
         m_manager->SetSplitterPosition( pos, splitterColumn );
