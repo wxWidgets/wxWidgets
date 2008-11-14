@@ -7067,10 +7067,11 @@ bool wxRichTextImage::LoadFromBlock()
 /// Make block from the wxImage
 bool wxRichTextImage::MakeBlock()
 {
-    if (m_imageBlock.GetImageType() == wxBITMAP_TYPE_ANY || m_imageBlock.GetImageType() == -1)
-        m_imageBlock.SetImageType(wxBITMAP_TYPE_PNG);
+    wxBitmapType type = m_imageBlock.GetImageType();
+    if ( type == wxBITMAP_TYPE_ANY || type == wxBITMAP_TYPE_INVALID )
+        m_imageBlock.SetImageType(type = wxBITMAP_TYPE_PNG);
 
-    m_imageBlock.MakeImageBlock(m_image, m_imageBlock.GetImageType());
+    m_imageBlock.MakeImageBlock(m_image, type);
     return m_imageBlock.Ok();
 }
 
@@ -7416,7 +7417,7 @@ bool wxRichTextImageBlock::MakeImageBlock(const wxString& filename, wxBitmapType
     wxString filenameToRead(filename);
     bool removeFile = false;
 
-    if (imageType == -1)
+    if (imageType == wxBITMAP_TYPE_INVALID)
         return false; // Could not determine image type
 
     if ((imageType != wxBITMAP_TYPE_JPEG) && convertToJPEG)
@@ -7458,7 +7459,7 @@ bool wxRichTextImageBlock::MakeImageBlock(wxImage& image, wxBitmapType imageType
     m_imageType = imageType;
     image.SetOption(wxT("quality"), quality);
 
-    if (imageType == -1)
+    if (imageType == wxBITMAP_TYPE_INVALID)
         return false; // Could not determine image type
 
     wxString tempFile;
