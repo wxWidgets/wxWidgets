@@ -228,14 +228,12 @@ void wxFrameBase::UpdateWindowUI(long flags)
 #if wxUSE_MENUS
     if (GetMenuBar())
     {
-        if ((flags & wxUPDATE_UI_FROMIDLE) && !wxUSE_IDLEMENUUPDATES)
-        {
-            // If coming from an idle event, we only
-            // want to update the menus if we're
-            // in the wxUSE_IDLEMENUUPDATES configuration:
-            // so if we're not, do nothing
-        }
-        else
+        // If coming from an idle event, we only want to update the menus if
+        // we're in the wxUSE_IDLEMENUUPDATES configuration, otherwise they
+        // will be update when the menu is opened later
+#if !wxUSE_IDLEMENUUPDATES
+        if ( !(flags & wxUPDATE_UI_FROMIDLE) )
+#endif // wxUSE_IDLEMENUUPDATES
             DoMenuUpdates();
     }
 #endif // wxUSE_MENUS
@@ -254,15 +252,14 @@ void wxFrameBase::OnMenuHighlight(wxMenuEvent& event)
 #endif // wxUSE_STATUSBAR
 }
 
-#if !wxUSE_IDLEMENUUPDATES
 void wxFrameBase::OnMenuOpen(wxMenuEvent& event)
-#else
-void wxFrameBase::OnMenuOpen(wxMenuEvent& WXUNUSED(event))
-#endif
 {
-#if !wxUSE_IDLEMENUUPDATES
+#if wxUSE_IDLEMENUUPDATES
+    wxUnusedVar(event);
+#else // !wxUSE_IDLEMENUUPDATES
+    // as we didn't update the menus from idle time, do it now
     DoMenuUpdates(event.GetMenu());
-#endif // !wxUSE_IDLEMENUUPDATES
+#endif // wxUSE_IDLEMENUUPDATES/!wxUSE_IDLEMENUUPDATES
 }
 
 void wxFrameBase::OnMenuClose(wxMenuEvent& WXUNUSED(event))
