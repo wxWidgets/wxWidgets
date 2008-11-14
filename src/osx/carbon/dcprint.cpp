@@ -120,13 +120,18 @@ wxNativePrinterDC* wxNativePrinterDC::Create(wxPrintData* data)
     return new wxMacCarbonPrinterDC(data) ;
 }
 
-bool wxMacCarbonPrinterDC::StartDoc(  wxPrinterDC* dc , const wxString& WXUNUSED(message)  )
+bool wxMacCarbonPrinterDC::StartDoc(  wxPrinterDC* dc , const wxString& message  )
 {
     if ( m_err )
         return false ;
 
     wxPrinterDCImpl *impl = (wxPrinterDCImpl*) dc->GetImpl();
     wxMacCarbonPrintData *native = (wxMacCarbonPrintData*) impl->GetPrintData().GetNativeData() ;
+
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
+    if ( PMPrintSettingsSetJobName != NULL )
+        PMPrintSettingsSetJobName(native->m_macPrintSettings, wxCFStringRef(message));
+#endif
 
     m_err = PMSessionBeginCGDocumentNoDialog(native->m_macPrintSession,
               native->m_macPrintSettings,
