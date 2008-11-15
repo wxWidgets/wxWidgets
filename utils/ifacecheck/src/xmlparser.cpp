@@ -68,6 +68,7 @@ void wxType::SetTypeFromString(const wxString& t)
     m_strType.Replace("[]", "*");
     m_strType.Replace("long int", "long");      // in wx typically we never write "long int", just "long"
     m_strType.Replace("long unsigned int", "unsigned long");
+    m_strType.Replace("short unsigned int", "unsigned short");
 
     // make sure the * and & operator always use the same spacing rules
     // (to make sure GetAsString() output is always consistent)
@@ -83,6 +84,7 @@ void wxType::SetTypeFromString(const wxString& t)
 
     // ADHOC-FIX
     m_strType.Replace("_wxArraywxArrayStringBase", "wxString");
+    m_strType.Replace("ExitCode", "void*");     // used in wxThread stuff
 
     m_strType = m_strType.Strip(wxString::both);
 
