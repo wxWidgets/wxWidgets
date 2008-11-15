@@ -120,7 +120,7 @@ public:
 
         @since 2.9.0
      */
-    static wxString wxXmlResource::FindXRCIDById(int numId);
+    static wxString FindXRCIDById(int numId);
 
     /**
         Gets the global resources object or creates one if none exists.

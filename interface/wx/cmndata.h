@@ -424,14 +424,21 @@ public:
     void SetCustomColour(int i, const wxColour& colour);
 
     /**
+        Converts the colours saved in this class in a string form, separing
+        the various colours with a comma.
+    */
+    wxString ToString() const;
+
+    /**
+        Decodes the given string, which should be in the same format returned
+        by ToString(), and sets the internal colours.
+    */
+    bool FromString(const wxString& str);
+
+    /**
         Assignment operator for the colour data.
     */
     wxColourData& operator =(const wxColourData& data);
-
-
-    /** @todo document these */
-    wxString wxColourData::ToString() const;
-    bool wxColourData::FromString(const wxString& str);
 };
 
 
