@@ -81,37 +81,6 @@ public:
     static int GetLevel();
 
     /**
-        Returns the output stream associated with the debug context.
-
-        @deprecated
-        This is obsolete, replaced by wxLog functionality.
-
-        @see SetStream()
-    */
-    ostream GetStream();
-
-    /**
-        Returns a pointer to the output stream buffer associated with the debug context.
-        There may not necessarily be a stream buffer if the stream has been set
-        by the user.
-
-        @deprecated
-        This is obsolete, replaced by wxLog functionality.
-    */
-    streambuf* GetStreamBuf();
-
-    /**
-        Returns @true if there is a stream currently associated
-        with the debug context.
-
-        @deprecated
-        This is obsolete, replaced by wxLog functionality.
-
-        @see SetStream(), GetStream()
-    */
-    bool HasStream();
-
-    /**
         Prints a list of the classes declared in this application, giving derivation
         and whether instances of this class can be dynamically created.
 
@@ -168,15 +137,6 @@ public:
     static void SetDebugMode(bool debug);
 
     /**
-        Sets the current debug file and creates a stream.
-        This will delete any existing stream and stream buffer.
-
-        By default, the debug context stream outputs to the debugger (Windows)
-        or standard error (other platforms).
-    */
-    bool SetFile(const wxString& filename);
-
-    /**
         Sets the debug level (default 1).
 
         The debug level is used by the wxTraceLevel function and the WXTRACELEVEL
@@ -199,31 +159,6 @@ public:
         The shutdown function must be take no parameters and return nothing.
     */
     static void SetShutdownNotifyFunction(wxShutdownNotifyFunction func);
-
-    /**
-        Sets the debugging stream to be the debugger (Windows) or standard error (other
-        platforms).
-
-        This is the default setting. The existing stream will be flushed and deleted.
-
-        @deprecated
-        This is obsolete, replaced by wxLog functionality.
-    */
-    bool SetStandardError();
-
-    /**
-        Sets the stream and optionally, stream buffer associated with the debug context.
-        This operation flushes and deletes the existing stream (and stream buffer if any).
-
-        @deprecated
-        This is obsolete, replaced by wxLog functionality.
-
-        @param stream
-            Stream to associate with the debug context. Do not set this to @NULL.
-        @param streamBuf
-            Stream buffer to associate with the debug context.
-    */
-    void SetStream(ostream* stream, streambuf* streamBuf = NULL);
 };
 
 

@@ -166,6 +166,8 @@ public:
         function, you can use just the base name of the function and the
         correct suffix is appended automatically depending on the current
         build. Otherwise, this method is identical to GetSymbol().
+
+        @onlyfor{wxmsw}
     */
     void* GetSymbolAorW(const wxString& name) const;
 

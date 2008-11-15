@@ -352,7 +352,7 @@ public:
     /**
         Not implemented.
     */
-    void GetClippingBox(wxCoord *x, wxCoord *y, wxCoord *width, wxCoord *height);
+    void GetClippingBox(wxCoord *x, wxCoord *y, wxCoord *width, wxCoord *height) const;
 
     //@{
     /**

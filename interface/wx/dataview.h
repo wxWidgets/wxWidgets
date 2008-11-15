@@ -858,11 +858,6 @@ public:
     virtual bool ClearColumns();
 
     /**
-        Unselects all rows.
-    */
-    void ClearSelection();
-
-    /**
         Collapses the item.
     */
     virtual void Collapse(const wxDataViewItem& item);
@@ -1597,14 +1592,14 @@ public:
     /**
         Returns @true if the column is reorderable.
     */
-    bool GetReorderable();
+    virtual bool IsReorderable() const;
 
     /**
         Returns @true if the column is sortable.
 
         @see SetSortable()
     */
-    bool GetSortable();
+    virtual bool IsSortable() const;
 
     /**
         Returns the width of the column.

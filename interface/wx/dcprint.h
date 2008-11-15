@@ -30,20 +30,6 @@ public:
         you pass a pointer instead.
     */
     wxPrinterDC(const wxPrintData& printData);
-    /**
-        Constructor. With empty strings for the first three arguments, the
-        default printer dialog is displayed. @a device indicates the type of
-        printer and @a output is an optional file for printing to. The
-        @a driver parameter is currently unused.  Use the wxDC::Ok() member to
-        test whether the constructor was successful in creating a usable device
-        context.
-
-        @deprecated This constructor is deprecated and retained only for
-                    backward compatibility.
-    */
-    wxPrinterDC(const wxString& driver, const wxString& device,
-                const wxString& output, bool interactive = true,
-                int orientation = wxPORTRAIT);
 
     /**
         Return the rectangle in device coordinates that corresponds to the full
@@ -54,6 +40,6 @@ public:
         negative values, while the bottom right coordinates will be somewhat
         larger than the values returned by wxDC::GetSize().
     */
-    wxRect wxPrinterDC::GetPaperRect();
+    wxRect GetPaperRect() const;
 };
 

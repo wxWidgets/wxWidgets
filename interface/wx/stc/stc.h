@@ -331,10 +331,10 @@ public:
     */
     wxStyledTextCtrl::wxStyledTextCtrl(wxWindow* parent,
                                        wxWindowID id = wxID_ANY,
-                                       const wxPoint pos = wxDefaultPosition,
-                                       const wxSize size = wxDefaultSize,
+                                       const wxPoint& pos = wxDefaultPosition,
+                                       const wxSize& size = wxDefaultSize,
                                        long style = 0,
-                                       const wxString name = "stcwindow");
+                                       const wxString& name = wxSTCNameStr);
 
     /**
         Extend life of document.
@@ -597,7 +597,7 @@ public:
     /**
         Will a paste succeed?
     */
-    bool CanPaste();
+    virtual bool CanPaste() const;
 
     /**
         Are there any redoable actions in the undo history?

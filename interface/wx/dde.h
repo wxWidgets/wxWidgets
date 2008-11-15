@@ -11,8 +11,8 @@
 
     A wxDDEConnection object represents the connection between a client and a
     server. It can be created by making a connection using a wxDDEClient
-    object, or by the acceptance of a connection by a wxDDEServer object. The
-    bulk of a DDE (Dynamic Data Exchange) conversation is controlled by calling
+    object, or by the acceptance of a connection by a wxDDEServer object.
+    The bulk of a DDE (Dynamic Data Exchange) conversation is controlled by calling
     members in a wxDDEConnection object or by overriding its members.
 
     An application should normally derive a new connection class from
@@ -25,6 +25,7 @@
 
     @library{wxbase}
     @category{ipc}
+    @onlyfor{wxmsw}
 
     @see wxConnectionBase, wxDDEClient, wxDDEServer, @ref overview_ipc
 */
@@ -222,6 +223,7 @@ public:
 
     @library{wxbase}
     @category{ipc}
+    @onlyfor{wxmsw}
 
     @see wxDDEServer, wxDDEConnection, @ref overview_ipc
 */
@@ -280,6 +282,7 @@ public:
 
     @library{wxbase}
     @category{ipc}
+    @onlyfor{wxmsw}
 
     @see wxDDEClient, wxDDEConnection, @ref overview_ipc
 */

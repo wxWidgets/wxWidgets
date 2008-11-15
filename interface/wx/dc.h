@@ -137,13 +137,6 @@ public:
     void Clear();
 
     /**
-        Performs all necessary computations for given platform and context type
-        after each change of scale and origin parameters. Usually called
-        automatically internally after such changes.
-    */
-    virtual void ComputeScaleAndOrigin();
-
-    /**
         Displays a cross hair using the current pen. This is a vertical and
         horizontal line the height and width of the window, centred on the
         given point.
@@ -759,7 +752,7 @@ public:
     /**
         Returns @true if the DC is ok to use.
     */
-    bool Ok();
+    bool IsOk() const;
 
     /**
         Converts logical X coordinate to device coordinate, using the current

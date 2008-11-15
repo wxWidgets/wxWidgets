@@ -1797,7 +1797,7 @@ public:
         date set to 0. Hours are not restricted to 0-24 range, neither are
         minutes, seconds or milliseconds.
     */
-    wxTimeSpan(long hours, long min, long sec, long msec);
+    wxTimeSpan(long hours, long min = 0, wxLongLong sec = 0, wxLongLong msec = 0);
 
     /**
         Returns the absolute value of the timespan: does not modify the object.

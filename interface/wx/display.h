@@ -71,12 +71,6 @@ public:
     wxVideoMode GetCurrentMode() const;
 
     /**
-        Returns the bit depth of the display whose index was passed to the
-        constructor.
-    */
-    int GetDepth() const;
-
-    /**
         Returns the index of the display on which the given point lies, or
         @c wxNOT_FOUND if the point is not on any connected display.
 

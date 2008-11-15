@@ -203,25 +203,6 @@ public:
     virtual ~wxObject();
 
     /**
-        A virtual function that may be redefined by derived classes to allow dumping of
-        memory states.
-
-        This function is only defined in debug build and exists only if @c __WXDEBUG__
-        is defined.
-
-        @param stream
-            Stream on which to output dump information.
-
-        @remarks Currently wxWidgets does not define Dump() for derived classes,
-                 but programmers may wish to use it for their own applications.
-                 Be sure to call the Dump member of the class's base class to allow all
-                 information to be dumped.
-                 The implementation of this function in wxObject just writes
-                 the class name of the object.
-    */
-    void Dump(ostream& stream);
-
-    /**
         This virtual function is redefined for every class that requires run-time
         type information, when using the ::DECLARE_CLASS macro (or similar).
     */

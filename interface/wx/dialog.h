@@ -190,7 +190,7 @@ public:
 
         @see @ref overview_dialog_autoscrolling (for more on layout adaptation)
     */
-    bool CanDoLayoutAdaptation();
+    virtual bool CanDoLayoutAdaptation();
 
     /**
         Centres the dialog box on the display.
@@ -251,7 +251,7 @@ public:
 
         @see @ref overview_dialog_autoscrolling (for more on layout adaptation)
     */
-    bool DoLayoutAdaptation();
+    virtual bool DoLayoutAdaptation();
 
     /**
         This function is called when the titlebar OK button is pressed
@@ -259,6 +259,8 @@ public:
         GetAffirmativeId() is sent by default. You can override this function.
         If the function returns @false, wxWidgets will call Close() for the
         dialog.
+
+        @onlyfor{wxmsw}
     */
     virtual bool DoOK();
 
@@ -362,6 +364,8 @@ public:
         supported.
 
         This function is not available on any other platform.
+
+        @onlyfor{wxmsw}
     */
     wxToolBar* GetToolBar() const;
 
@@ -400,9 +404,11 @@ public:
         Returns @true if @a id is in the array of identifiers to be regarded as
         the main buttons for the non-scrolling area of a dialog.
 
+        @onlyfor{wxmsw}
+
         @see @ref overview_dialog_autoscrolling (for more on layout adaptation)
     */
-    bool IsMainButton(wxWindowID& id) const;
+    bool IsMainButtonId(wxWindowID id) const;
 
     /**
         Returns @true if the dialog box is modal, @false otherwise.

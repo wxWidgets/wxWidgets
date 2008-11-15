@@ -25,28 +25,11 @@ public:
     wxPostScriptDC(const wxPrintData& printData);
 
     /**
-        Constructor. @a output is an optional file for printing to, and if
-        @a interactive is @true a dialog box will be displayed for adjusting
-        various parameters. @a parent is the parent of the printer dialog box.
-
-        Use the wxDC::Ok() member to test whether the constructor was
-        successful in creating a usable device context.
-
-        See wxPrintData for various functions to set and get PostScript
-        printing settings.
-
-        @deprecated This constructor is deprecated.
-    */
-    wxPostScriptDC(const wxString& output,
-                   bool interactive,
-                   wxWindow* parent);
-
-    /**
         Return resolution used in PostScript output.
 
         @see SetResolution()
     */
-    static int GetResolution();
+    static int GetResolution() const;
 
     /**
         Set resolution (in pixels per inch) that will be used in PostScript

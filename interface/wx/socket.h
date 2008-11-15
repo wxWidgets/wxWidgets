@@ -257,12 +257,12 @@ public:
 
         @return @true on success, @false if something goes wrong (invalid @a service).
     */
-    virtual bool Service(unsigned short service);
+    virtual bool Service(unsigned short service) = 0;
 
     /**
         Returns the current service.
     */
-    virtual unsigned short Service() const;
+    virtual unsigned short Service() const = 0;
 };
 
 

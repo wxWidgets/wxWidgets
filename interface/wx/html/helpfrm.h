@@ -57,14 +57,6 @@ public:
     wxHtmlHelpController* GetController() const;
 
     /**
-        Reads the user's settings for this frame.
-
-        @see wxHtmlHelpController::ReadCustomization
-    */
-    void ReadCustomization(wxConfigBase* cfg,
-                           const wxString& path = wxEmptyString);
-
-    /**
         Sets the help controller associated with the frame.
     */
     void SetController(wxHtmlHelpController* contoller);
@@ -75,13 +67,5 @@ public:
         @a format must contain exactly one "%s" (it will be replaced by the page title).
     */
     void SetTitleFormat(const wxString& format);
-
-    /**
-        Saves the user's settings for this frame.
-
-        @see wxHtmlHelpController::WriteCustomization
-    */
-    void WriteCustomization(wxConfigBase* cfg,
-                            const wxString& path = wxEmptyString);
 };
 

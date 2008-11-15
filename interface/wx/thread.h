@@ -303,7 +303,7 @@ public:
     /**
         This constructor simply initializes a member variable.
     */
-    wxThreadHelper();
+    wxThreadHelper(wxThreadKind kind = wxTHREAD_JOINABLE);
 
     /**
         The destructor frees the resources associated with the thread.
