@@ -27,6 +27,7 @@
 extern WXDLLIMPEXP_DATA_PROPGRID(const char) wxPropertyGridNameStr[];
 #endif
 
+class wxPGComboBox;
 
 // -----------------------------------------------------------------------
 // Global variables
@@ -1219,8 +1220,11 @@ public:
     void IncFrozen() { m_frozen++; }
     void DecFrozen() { m_frozen--; }
 
-    void OnComboItemPaint( wxPGCustomComboControl* pCb,int item,wxDC& dc,
-                           wxRect& rect,int flags );
+    void OnComboItemPaint( const wxPGComboBox* pCb,
+                           int item,
+                           wxDC* pDc,
+                           wxRect& rect,
+                           int flags );
 
     /** Standardized double-to-string conversion.
     */

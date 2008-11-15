@@ -266,7 +266,6 @@ class wxPropertyGrid;
 class wxPropertyGridEvent;
 class wxPropertyGridManager;
 class wxPGOwnerDrawnComboBox;
-class wxPGCustomComboControl;
 class wxPGEditorDialogAdapter;
 class wxPGValidationInfo;
 

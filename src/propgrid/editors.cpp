@@ -528,31 +528,37 @@ public:
                                             name ) )
             return false;
 
-        m_dclickProcessor = new wxPGDoubleClickProcessor(this, GetGrid()->GetSelection() );
+        m_dclickProcessor = new
+            wxPGDoubleClickProcessor( this, GetGrid()->GetSelection() );
 
         PushEventHandler(m_dclickProcessor);
 
         return true;
     }
 
-    virtual void OnDrawItem( wxDC& dc, const wxRect& rect, int item, int flags ) const
+    virtual void OnDrawItem( wxDC& dc,
+                             const wxRect& rect,
+                             int item,
+                             int flags ) const
     {
         wxPropertyGrid* pg = GetGrid();
-        pg->OnComboItemPaint((wxPGCustomComboControl*)this,item,dc,(wxRect&)rect,flags);
+        pg->OnComboItemPaint( this, item, &dc, (wxRect&)rect, flags );
     }
+
     virtual wxCoord OnMeasureItem( size_t item ) const
     {
         wxPropertyGrid* pg = GetGrid();
         wxRect rect;
         rect.x = -1;
         rect.width = 0;
-        pg->OnComboItemPaint((wxPGCustomComboControl*)this,item,*((wxDC*)NULL),rect,0);
+        pg->OnComboItemPaint( this, item, NULL, rect, 0 );
         return rect.height;
     }
 
     wxPropertyGrid* GetGrid() const
     {
-        wxPropertyGrid* pg = wxDynamicCast(GetParent()->GetParent(),wxPropertyGrid);
+        wxPropertyGrid* pg = wxDynamicCast(GetParent()->GetParent(),
+                                           wxPropertyGrid);
         wxASSERT(pg);
         return pg;
     }
@@ -563,15 +569,17 @@ public:
         wxRect rect;
         rect.x = -1;
         rect.width = -1;
-        pg->OnComboItemPaint((wxPGCustomComboControl*)this,item,*((wxDC*)NULL),rect,0);
+        pg->OnComboItemPaint( this, item, NULL, rect, 0 );
         return rect.width;
     }
 
-    virtual void PositionTextCtrl( int WXUNUSED(textCtrlXAdjust), int WXUNUSED(textCtrlYAdjust) )
+    virtual void PositionTextCtrl( int WXUNUSED(textCtrlXAdjust),
+                                   int WXUNUSED(textCtrlYAdjust) )
     {
         wxPropertyGrid* pg = GetGrid();
         wxOwnerDrawnComboBox::PositionTextCtrl(
-            wxPG_TEXTCTRLXADJUST - (wxPG_XBEFOREWIDGET+wxPG_CONTROL_MARGIN+1) - 1,
+            wxPG_TEXTCTRLXADJUST -
+            (wxPG_XBEFOREWIDGET+wxPG_CONTROL_MARGIN+1) - 1,
             pg->GetSpacingY() + 2
         );
     }
@@ -582,14 +590,12 @@ private:
 };
 
 
-void wxPropertyGrid::OnComboItemPaint( wxPGCustomComboControl* pCc,
+void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
                                        int item,
-                                       wxDC& dc,
+                                       wxDC* pDc,
                                        wxRect& rect,
                                        int flags )
 {
-    wxPGComboBox* pCb = (wxPGComboBox*)pCc;
-
     // Sanity check
     wxASSERT( IsKindOf(CLASSINFO(wxPropertyGrid)) );
 
@@ -669,13 +675,14 @@ void wxPropertyGrid::OnComboItemPaint( wxPGCustomComboControl* pCc,
     if ( (flags & wxODCB_PAINTING_CONTROL) )
         paintdata.m_choiceItem = -1;
 
-    if ( &dc )
-        dc.SetBrush(*wxWHITE_BRUSH);
+    if ( pDc )
+        pDc->SetBrush(*wxWHITE_BRUSH);
 
     if ( rect.x >= 0 )
     {
         //
         // DrawItem call
+        wxDC& dc = *pDc;
 
         wxPoint pt(rect.x + wxPG_CONTROL_MARGIN - wxPG_CHOICEXADJUST - 1,
                    rect.y + 1);
@@ -760,6 +767,7 @@ void wxPropertyGrid::OnComboItemPaint( wxPGCustomComboControl* pCc,
     {
         //
         // MeasureItem call
+        wxDC& dc = *pDc;
 
         p->OnCustomPaint( dc, rect, paintdata );
         rect.height = paintdata.m_drawnHeight + 2;
