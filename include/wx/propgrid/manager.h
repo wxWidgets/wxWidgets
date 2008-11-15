@@ -166,13 +166,6 @@ protected:
                                         bool allPages = false,
                                         bool fromAutoCenter = false );
 
-    /** Propagate to other pages.
-    */
-    void DoSetSplitterPositionThisPage( int pos, int splitterColumn = 0 )
-    {
-        wxPropertyGridPageState::DoSetSplitterPosition( pos, splitterColumn );
-    }
-
     /** Page label (may be referred as name in some parts of documentation).
         Can be set in constructor, or passed in
         wxPropertyGridManager::AddPage(), but *not* in both.

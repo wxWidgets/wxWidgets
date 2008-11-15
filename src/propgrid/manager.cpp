@@ -210,12 +210,15 @@ void wxPropertyGridPage::SetSplitterPosition( int splitterPos, int col )
 void wxPropertyGridPage::DoSetSplitterPosition( int pos,
                                                 int splitterColumn,
                                                 bool allPages,
-                                                bool WXUNUSED(fromAutoCenter) )
+                                                bool fromAutoCenter )
 {
     if ( allPages && m_manager->GetPageCount() )
         m_manager->SetSplitterPosition( pos, splitterColumn );
     else
-        DoSetSplitterPositionThisPage( pos, splitterColumn );
+        wxPropertyGridPageState::DoSetSplitterPosition( pos,
+                                                        splitterColumn,
+                                                        allPages,
+                                                        fromAutoCenter );
 }
 
 // -----------------------------------------------------------------------
@@ -1675,7 +1678,7 @@ void wxPropertyGridManager::SetSplitterPosition( int pos, int splitterColumn )
     for ( i=0; i<GetPageCount(); i++ )
     {
         wxPropertyGridPage* page = GetPage(i);
-        page->DoSetSplitterPositionThisPage( pos, splitterColumn );
+        page->DoSetSplitterPosition( pos, splitterColumn, false );
     }
 
     m_pPropGrid->SetInternalFlag(wxPG_FL_SPLITTER_PRE_SET);
