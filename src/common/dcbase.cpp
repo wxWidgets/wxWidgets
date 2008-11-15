@@ -300,12 +300,12 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& data)
 {
 }
 
-wxRect wxPrinterDC::GetPaperRect()
+wxRect wxPrinterDC::GetPaperRect() const
 {
     return GetImpl()->GetPaperRect();
 }
 
-int wxPrinterDC::GetResolution()
+int wxPrinterDC::GetResolution() const
 {
     return GetImpl()->GetResolution();
 }

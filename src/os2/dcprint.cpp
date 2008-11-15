@@ -138,7 +138,7 @@ void wxPrinterDCImpl::EndPage()
 //        ::EndPage((HDC) m_hDC);
 } // end of wxPrinterDC::EndPage
 
-wxRect wxPrinterDCImpl::GetPaperRect()
+wxRect wxPrinterDCImpl::GetPaperRect() const
 {
     // Use page rect if we can't get paper rect.
     wxCoord w, h;

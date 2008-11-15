@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/dc.h
 // Purpose:     wxDC class
-// Author:      Vadim Zeitlin 
+// Author:      Vadim Zeitlin
 // Modified by:
 // Created:     05/25/99
 // RCS-ID:      $Id$
@@ -497,10 +497,10 @@ public:
     // ---------------------------------------------------------
     // wxPrinterDC Impl API
 
-    virtual wxRect GetPaperRect()
+    virtual wxRect GetPaperRect() const
         { int w = 0; int h = 0; DoGetSize( &w, &h ); return wxRect(0,0,w,h); }
 
-    virtual int GetResolution()
+    virtual int GetResolution() const
         { return -1; }
 
 private:
@@ -667,7 +667,7 @@ public:
     wxSize GetPPI() const
         { return m_pimpl->GetPPI(); }
 
-    virtual int GetResolution()
+    virtual int GetResolution() const
         { return m_pimpl->GetResolution(); }
 
     // Right-To-Left (RTL) modes

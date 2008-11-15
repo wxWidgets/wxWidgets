@@ -91,8 +91,8 @@ public:
 
     // Overrridden for wxPrinterDC Impl
 
-    virtual int GetResolution();
-    virtual wxRect GetPaperRect();
+    virtual int GetResolution() const;
+    virtual wxRect GetPaperRect() const;
 
 protected:
     bool DoFloodFill(wxCoord x1, wxCoord y1, const wxColour &col, int style = wxFLOOD_SURFACE);

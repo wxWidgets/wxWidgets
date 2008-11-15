@@ -2015,12 +2015,12 @@ void wxGnomePrinterDCImpl::SetPrintData(const wxPrintData& data)
 
 // overridden for wxPrinterDC Impl
 
-int wxGnomePrinterDCImpl::GetResolution()
+int wxGnomePrinterDCImpl::GetResolution() const
 {
     return DPI;
 }
 
-wxRect wxGnomePrinterDCImpl::GetPaperRect()
+wxRect wxGnomePrinterDCImpl::GetPaperRect() const
 {
     // GNOME print doesn't support printer margins
     int w = 0;

@@ -33,7 +33,7 @@ class WXDLLIMPEXP_CORE wxPrinterDCImpl: public wxPMDCImpl
     virtual void StartPage(void);
     virtual void EndPage(void);
 
-    virtual wxRect GetPaperRect();
+    virtual wxRect GetPaperRect() const;
 
 protected:
     virtual void DoDrawBitmap( const wxBitmap& rBmp

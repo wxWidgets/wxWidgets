@@ -31,17 +31,17 @@ public:
     virtual void StartPage(void) ;
     virtual void EndPage(void) ;
 
-    wxRect GetPaperRect();
+    wxRect GetPaperRect() const;
 
     wxPrintData& GetPrintData() { return m_printData; }
     virtual wxSize GetPPI() const;
-    
+
 protected:
     virtual void DoGetSize( int *width, int *height ) const;
-    
+
     wxPrintData        m_printData ;
     wxNativePrinterDC* m_nativePrinterDC ;
-    
+
 private:
     DECLARE_CLASS(wxPrinterDC)
 #endif // wxUSE_PRINTING_ARCHITECTURE

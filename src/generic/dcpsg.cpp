@@ -342,7 +342,7 @@ bool wxPostScriptDCImpl::IsOk() const
   return m_ok;
 }
 
-wxRect wxPostScriptDCImpl::GetPaperRect()
+wxRect wxPostScriptDCImpl::GetPaperRect() const
 {
     int w = 0;
     int h = 0;
@@ -350,7 +350,7 @@ wxRect wxPostScriptDCImpl::GetPaperRect()
     return wxRect(0,0,w,h);
 }
 
-int wxPostScriptDCImpl::GetResolution()
+int wxPostScriptDCImpl::GetResolution() const
 {
     return DPI;
 }

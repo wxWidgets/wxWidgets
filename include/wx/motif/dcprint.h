@@ -24,7 +24,7 @@ public:
                     int orientation = wxPORTRAIT);
     virtual ~wxPrinterDC();
 
-    wxRect GetPaperRect();
+    wxRect GetPaperRect() const;
 
     DECLARE_CLASS(wxPrinterDCImpl)
 };

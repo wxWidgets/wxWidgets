@@ -1074,7 +1074,7 @@ wxDC* wxGtkPrinter::PrintDialog( wxWindow *parent )
     }
 
     m_printDialogData = dialog.GetPrintDialogData();
-    
+
     return new wxPrinterDC( m_printDialogData.GetPrintData() );
 }
 
@@ -1132,7 +1132,7 @@ wxGtkPrinterDCImpl::wxGtkPrinterDCImpl(wxPrinterDC *owner, const wxPrintData& da
 #if wxCAIRO_SCALE
     m_PS2DEV = 1.0;
     m_DEV2PS = 1.0;
-    
+
     cairo_scale( m_cairo, 72.0 / (double)m_resolution, 72.0 / (double)m_resolution );
 #else
     m_PS2DEV = (double)m_resolution / 72.0;
@@ -1866,7 +1866,7 @@ void wxGtkPrinterDCImpl::DoDrawRotatedText(const wxString& text, wxCoord x, wxCo
 void wxGtkPrinterDCImpl::Clear()
 {
 // Clear does nothing for printing, but keep the code
-// for later reuse 
+// for later reuse
 /*
     cairo_save(m_cairo);
     cairo_set_operator (m_cairo, CAIRO_OPERATOR_SOURCE);
@@ -1902,7 +1902,7 @@ void wxGtkPrinterDCImpl::SetPen( const wxPen& pen )
     m_pen = pen;
 
     double width;
-    
+
     if (m_pen.GetWidth() <= 0)
         width = 0.1;
     else
@@ -2251,7 +2251,7 @@ void wxGtkPrinterDCImpl::SetPrintData(const wxPrintData& data)
 
 // overriden for wxPrinterDC Impl
 
-wxRect wxGtkPrinterDCImpl::GetPaperRect()
+wxRect wxGtkPrinterDCImpl::GetPaperRect() const
 {
     // Does GtkPrint support printer margins?
     int w = 0;
@@ -2260,7 +2260,7 @@ wxRect wxGtkPrinterDCImpl::GetPaperRect()
     return wxRect( 0,0,w,h );
 }
 
-int wxGtkPrinterDCImpl::GetResolution()
+int wxGtkPrinterDCImpl::GetResolution() const
 {
     return m_resolution;
 }
@@ -2357,7 +2357,7 @@ void wxGtkPrintPreview::DetermineScaling()
         wxSize sizeDevUnits(paper->GetSizeDeviceUnits());
         sizeDevUnits.x = wxRound((double)sizeDevUnits.x * (double)m_resolution / 72.0);
         sizeDevUnits.y = wxRound((double)sizeDevUnits.y * (double)m_resolution / 72.0);
-        
+
         wxSize sizeTenthsMM(paper->GetSize());
         wxSize sizeMM(sizeTenthsMM.x / 10, sizeTenthsMM.y / 10);
 

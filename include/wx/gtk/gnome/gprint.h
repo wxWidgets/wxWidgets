@@ -265,7 +265,7 @@ protected:
     void DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
 #if wxUSE_SPLINES
     void DoDrawSpline(const wxPointList *points);
-#endif 
+#endif
     bool DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
             wxDC *source, wxCoord xsrc, wxCoord ysrc, int rop = wxCOPY, bool useMask = false,
             wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord);
@@ -289,8 +289,8 @@ protected:
     wxPrintData& GetPrintData() { return m_printData; }
 
     // overriden for wxPrinterDC Impl
-    virtual wxRect GetPaperRect();
-    virtual int GetResolution();
+    virtual wxRect GetPaperRect() const;
+    virtual int GetResolution() const;
 
 private:
     wxPrintData             m_printData;
@@ -301,7 +301,7 @@ private:
     unsigned char           m_currentRed;
     unsigned char           m_currentGreen;
     unsigned char           m_currentBlue;
-    
+
     double                  m_pageHeight;
 
     GnomePrintContext      *m_gpc;

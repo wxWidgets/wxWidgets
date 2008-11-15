@@ -28,8 +28,8 @@ public:
     wxPrinterDC();
     wxPrinterDC(const wxPrintData& data);
 
-    wxRect GetPaperRect();
-    int GetResolution();
+    wxRect GetPaperRect() const;
+    int GetResolution() const;
 
 protected:
     wxPrinterDC(wxDCImpl *impl) : wxDC(impl) { }

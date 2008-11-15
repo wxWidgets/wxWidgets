@@ -35,7 +35,7 @@ public:
     virtual void StartPage();
     virtual void EndPage();
 
-    virtual wxRect GetPaperRect();
+    virtual wxRect GetPaperRect() const;
 
 protected:
     virtual void DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,

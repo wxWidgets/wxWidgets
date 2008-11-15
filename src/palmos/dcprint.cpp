@@ -100,7 +100,7 @@ void wxPrinterDC::EndPage()
 {
 }
 
-wxRect wxPrinterDC::GetPaperRect()
+wxRect wxPrinterDC::GetPaperRect() const
 {
     // Use page rect if we can't get paper rect.
     wxCoord w, h;

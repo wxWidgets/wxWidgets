@@ -228,7 +228,7 @@ void wxPrinterDCImpl::EndPage()
 }
 
 
-wxRect wxPrinterDCImpl::GetPaperRect()
+wxRect wxPrinterDCImpl::GetPaperRect() const
 
 {
     if (!IsOk()) return wxRect(0, 0, 0, 0);

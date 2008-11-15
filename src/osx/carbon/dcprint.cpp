@@ -85,7 +85,7 @@ wxMacCarbonPrinterDC::wxMacCarbonPrinterDC( wxPrintData* data )
 
     PMResolution res;
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5 
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
     if ( PMPrinterGetOutputResolution != NULL )
     {
         PMPrinter printer;
@@ -103,11 +103,11 @@ wxMacCarbonPrinterDC::wxMacCarbonPrinterDC( wxPrintData* data )
     else
 #endif
     {
-#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5 
+#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
         m_err = PMGetResolution((PMPageFormat) (native->m_macPageFormat), &res);
 #endif
     }
-    
+
     m_ppi = wxSize(int(res.hRes), int(res.vRes));
 }
 
@@ -135,7 +135,7 @@ bool wxMacCarbonPrinterDC::StartDoc(  wxPrinterDC* dc , const wxString& message 
 
     m_err = PMSessionBeginCGDocumentNoDialog(native->m_macPrintSession,
               native->m_macPrintSettings,
-              native->m_macPageFormat);    
+              native->m_macPageFormat);
     if ( m_err != noErr )
         return false;
 
@@ -148,7 +148,7 @@ bool wxMacCarbonPrinterDC::StartDoc(  wxPrinterDC* dc , const wxString& message 
     m_maxY = wxCoord(rPage.bottom - rPage.top);
 
     PMResolution res;
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5 
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
     if ( PMPrinterGetOutputResolution != NULL )
     {
         PMPrinter printer;
@@ -166,7 +166,7 @@ bool wxMacCarbonPrinterDC::StartDoc(  wxPrinterDC* dc , const wxString& message 
     else
 #endif
     {
-#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5 
+#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
        m_err = PMGetResolution((PMPageFormat) (native->m_macPageFormat), &res);
 #endif
     }
@@ -256,7 +256,7 @@ void wxMacCarbonPrinterDC::GetSize( int *w , int *h) const
         *h = m_maxY ;
 }
 
-wxSize wxMacCarbonPrinterDC::GetPPI() const 
+wxSize wxMacCarbonPrinterDC::GetPPI() const
 {
      return m_ppi ;
 };
@@ -286,7 +286,7 @@ wxPrinterDCImpl::wxPrinterDCImpl( wxPrinterDC *owner, const wxPrintData& printda
         {
             wxSize sz = GetPPI();
             m_mm_to_pix_x = mm2inches * sz.x;
-            m_mm_to_pix_y = mm2inches * sz.y;        
+            m_mm_to_pix_y = mm2inches * sz.y;
         }
         // we need at least a measuring context because people start measuring before a page
         // gets printed at all
@@ -344,7 +344,7 @@ void wxPrinterDCImpl::EndDoc(void)
     }
 }
 
-wxRect wxPrinterDCImpl::GetPaperRect()
+wxRect wxPrinterDCImpl::GetPaperRect() const
 {
     wxCoord w, h;
     GetOwner()->GetSize(&w, &h);
