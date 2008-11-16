@@ -22,11 +22,8 @@ GtkScrolledWindow.  Child widget positions are adjusted for the scrolling
 position in size_allocate.  A second same-size GdkWindow is placed behind
 widget->window, to allow GDK to use a more efficient scrolling technique.
 
-For borders, space is reserved in realize and size_allocate.
-For non-scrolling wxWindows, a second GdkWindow is used for the
-border; scrolling wxWindows draw their border on wxPizza's parent
-(a GtkScrolledWindow) GdkWindow.  Border widths for sunken and raised
-styles are taken from widget->style, so they will match the current theme.
+For borders, space is reserved in realize and size_allocate.  The border is
+drawn on wxPizza's parent GdkWindow.
 
 For RTL, child widget positions are mirrored in size_allocate.
 */
@@ -71,31 +68,11 @@ static void size_allocate(GtkWidget* widget, GtkAllocation* alloc)
             if (is_resize)
                 gdk_window_resize(widget->window, w, h);
         }
-        else if (pizza->m_backing_window)
-        {
-            // two windows, widget->window is smaller by border widths (need to
-            // move widget->window as well as resize because border can change)
-            gdk_window_move_resize(pizza->m_backing_window,
-                alloc->x, alloc->y, alloc->width, alloc->height);
-            gdk_window_move_resize(widget->window, border_x, border_y, w, h);
-        }
         else
         {
             // one window
             gdk_window_move_resize(widget->window,
-                alloc->x, alloc->y, alloc->width, alloc->height);
-        }
-        if (is_resize && pizza->m_backing_window)
-        {
-            // wxWidgets turns off redraw-on-allocate by default,
-            // so border area needs to be invalidated
-            if (border_x > 1 || border_y > 1)
-            {
-                if (pizza->m_is_scrollable)
-                    ; // invalidate does not seem to be needed in this case
-                else
-                    gdk_window_invalidate_rect(pizza->m_backing_window, NULL, false);
-            }
+                alloc->x + border_x, alloc->y + border_y, w, h);
         }
     }
     // adjust child positions
@@ -128,49 +105,46 @@ static void realize(GtkWidget* widget)
     parent_class->realize(widget);
 
     wxPizza* pizza = WX_PIZZA(widget);
-    // second window is created if there is a border, or wxWindow is scrollable
     if (pizza->m_border_style || pizza->m_is_scrollable)
     {
-        GdkWindowAttr attr;
-        attr.event_mask = pizza->m_is_scrollable ? 0 : GDK_EXPOSURE_MASK;
-        attr.x = widget->allocation.x;
-        attr.y = widget->allocation.y;
-        attr.width = widget->allocation.width;
-        attr.height = widget->allocation.height;
         int border_x, border_y;
         pizza->get_border_widths(border_x, border_y);
+        int x = widget->allocation.x + border_x;
+        int y = widget->allocation.y + border_y;
         int w = widget->allocation.width  - 2 * border_x;
         int h = widget->allocation.height - 2 * border_y;
         if (w < 0) w = 0;
         if (h < 0) h = 0;
         if (pizza->m_is_scrollable)
         {
-            attr.x += border_x;
-            attr.y += border_y;
+            // second window is created if wxWindow is scrollable
+            GdkWindowAttr attr;
+            attr.event_mask = 0;
+            attr.x = x;
+            attr.y = y;
             attr.width  = w;
             attr.height = h;
-        }
-        attr.wclass = GDK_INPUT_OUTPUT;
-        attr.visual = gtk_widget_get_visual(widget);
-        attr.colormap = gtk_widget_get_colormap(widget);
-        attr.window_type = GDK_WINDOW_CHILD;
+            attr.wclass = GDK_INPUT_OUTPUT;
+            attr.visual = gtk_widget_get_visual(widget);
+            attr.colormap = gtk_widget_get_colormap(widget);
+            attr.window_type = GDK_WINDOW_CHILD;
 
-        pizza->m_backing_window = gdk_window_new(
-            gdk_window_get_parent(widget->window),
-            &attr,
-            GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP);
+            pizza->m_backing_window = gdk_window_new(
+                gdk_window_get_parent(widget->window),
+                &attr,
+                GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP);
 
-        gdk_window_set_user_data(pizza->m_backing_window, widget);
-        if (pizza->m_is_scrollable)
+            gdk_window_set_user_data(pizza->m_backing_window, widget);
             gdk_window_reparent(widget->window, pizza->m_backing_window, 0, 0);
-        else
-            gdk_window_reparent(widget->window, pizza->m_backing_window, border_x, border_y);
-        gdk_window_resize(widget->window, w, h);
+            gdk_window_resize(widget->window, w, h);
 
-        // Parts of m_backing_window which are supposed to be obscured may be
-        // exposed temporarily while resizing. Setting the backing pixmap to
-        // None prevents those areas from being briefly painted black.
-        gdk_window_set_back_pixmap(pizza->m_backing_window, NULL, false);
+            // Parts of m_backing_window may be exposed temporarily while
+            // resizing. Setting the backing pixmap to None prevents those
+            // areas from being briefly painted black.
+            gdk_window_set_back_pixmap(pizza->m_backing_window, NULL, false);
+        }
+        else
+            gdk_window_move_resize(widget->window, x, y, w, h);
     }
 }
 
@@ -386,6 +360,7 @@ void wxPizza::scroll(int dx, int dy)
 void wxPizza::get_border_widths(int& x, int& y)
 {
     x = y = 0;
+#ifndef __WXUNIVERSAL__
     if (m_border_style & wxBORDER_SIMPLE)
         x = y = 1;
     else if (m_border_style)
@@ -397,4 +372,5 @@ void wxPizza::get_border_widths(int& x, int& y)
             y = entry_widget->style->ythickness;
         }
     }
+#endif
 }

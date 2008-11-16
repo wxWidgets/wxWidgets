@@ -295,30 +295,27 @@ gtk_window_expose_callback( GtkWidget* widget,
 }
 }
 
-//-----------------------------------------------------------------------------
-// "expose_event" from m_widget, for drawing border
-//-----------------------------------------------------------------------------
-
 #ifndef __WXUNIVERSAL__
+//-----------------------------------------------------------------------------
+// "expose_event" from m_wxwindow->parent, for drawing border
+//-----------------------------------------------------------------------------
 
 extern "C" {
 static gboolean
 expose_event_border(GtkWidget* widget, GdkEventExpose* gdk_event, wxWindow* win)
 {
-    // if this event is not for the GdkWindow the border is drawn on
-    if (win->m_wxwindow == win->m_widget && gdk_event->window == widget->window)
+    if (gdk_event->window != widget->window)
         return false;
 
-    int x = 0;
-    int y = 0;
-    // GtkScrolledWindow is GTK_NO_WINDOW
-    if (GTK_WIDGET_NO_WINDOW(widget))
-    {
-        x = widget->allocation.x;
-        y = widget->allocation.y;
-    }
-    int w = win->m_wxwindow->allocation.width;
-    int h = win->m_wxwindow->allocation.height;
+    const GtkAllocation& alloc = win->m_wxwindow->allocation;
+    const int x = alloc.x;
+    const int y = alloc.y;
+    const int w = alloc.width;
+    const int h = alloc.height;
+
+    if (w <= 0 || h <= 0)
+        return false;
+
     if (win->HasFlag(wxBORDER_SIMPLE))
     {
         gdk_draw_rectangle(gdk_event->window,
@@ -332,7 +329,7 @@ expose_event_border(GtkWidget* widget, GdkEventExpose* gdk_event, wxWindow* win)
 
         // Style detail to use
         const char* detail;
-        if (widget == win->m_wxwindow)
+        if (win->m_widget == win->m_wxwindow)
             // for non-scrollable wxWindows
             detail = "entry";
         else
@@ -343,9 +340,28 @@ expose_event_border(GtkWidget* widget, GdkEventExpose* gdk_event, wxWindow* win)
            win->m_wxwindow->style, gdk_event->window, GTK_STATE_NORMAL,
            shadow, NULL, wxGTKPrivate::GetEntryWidget(), detail, x, y, w, h);
     }
+    return false;
+}
+}
 
-    // no further painting is needed for border-only GdkWindow
-    return win->m_wxwindow == win->m_widget;
+//-----------------------------------------------------------------------------
+// "parent_set" from m_wxwindow
+//-----------------------------------------------------------------------------
+
+extern "C" {
+static void
+parent_set(GtkWidget* widget, GtkObject* old_parent, wxWindow* win)
+{
+    if (old_parent)
+    {
+        g_signal_handlers_disconnect_by_func(
+            old_parent, (void*)expose_event_border, win);
+    }
+    if (widget->parent)
+    {
+        g_signal_connect_after(widget->parent, "expose_event",
+            G_CALLBACK(expose_event_border), win);
+    }
 }
 }
 #endif // !__WXUNIVERSAL__
@@ -2040,6 +2056,13 @@ bool wxWindowGTK::Create( wxWindow *parent,
 
 
     m_wxwindow = wxPizza::New(m_windowStyle);
+#ifndef __WXUNIVERSAL__
+    if (HasFlag(wxPizza::BORDER_STYLES))
+    {
+        g_signal_connect(m_wxwindow, "parent_set",
+            G_CALLBACK(parent_set), this);
+    }
+#endif
     if (!HasFlag(wxHSCROLL) && !HasFlag(wxVSCROLL))
         m_widget = m_wxwindow;
     else
@@ -2215,15 +2238,6 @@ void wxWindowGTK::PostCreation()
 
         g_signal_connect (m_imData->context, "commit",
                           G_CALLBACK (gtk_wxwindow_commit_cb), this);
-
-        // border drawing
-#ifndef __WXUNIVERSAL__
-        if (HasFlag(wxPizza::BORDER_STYLES))
-        {
-            g_signal_connect(m_widget, "expose_event",
-                G_CALLBACK(expose_event_border), this);
-        }
-#endif
     }
 
     // focus handling
