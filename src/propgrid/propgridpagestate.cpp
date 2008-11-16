@@ -74,11 +74,10 @@ void wxPropertyGridIteratorBase::Init( wxPropertyGridPageState* state, int flags
 
 void wxPropertyGridIteratorBase::Init( wxPropertyGridPageState* state, int flags, int startPos, int dir  )
 {
-    wxPGProperty* property;
+    wxPGProperty* property = NULL;
 
     if ( startPos == wxTOP )
     {
-        property = NULL;
         if ( dir == 0 )
             dir = 1;
     }
@@ -90,8 +89,7 @@ void wxPropertyGridIteratorBase::Init( wxPropertyGridPageState* state, int flags
     }
     else
     {
-        wxASSERT_MSG( false, wxT("Only supported stating positions are wxTOP and wxBOTTOM") );
-        property = NULL;
+        wxFAIL_MSG("Only supported starting positions are wxTOP and wxBOTTOM");
     }
 
     Init( state, flags, property, dir );
@@ -470,7 +468,7 @@ void wxPropertyGridPageState::DoSetPropertyName( wxPGProperty* p,
 //   NB: Nowadays only needed for alphabetic/categoric mode switching.
 // -----------------------------------------------------------------------
 
-#define II_INVALID_I    0x00FFFFFF
+//#define II_INVALID_I    0x00FFFFFF
 
 #define ITEM_ITERATION_VARIABLES \
     wxPGProperty* parent; \
@@ -481,6 +479,7 @@ void wxPropertyGridPageState::DoSetPropertyName( wxPGProperty* p,
     parent = m_properties; \
     i = 0;
 
+#if 0
 #define ITEM_ITERATION_INIT(startparent, startindex, state) \
     parent = startparent; \
     i = (unsigned int)startindex; \
@@ -489,6 +488,7 @@ void wxPropertyGridPageState::DoSetPropertyName( wxPGProperty* p,
         parent = state->m_properties; \
         i = 0; \
     }
+#endif
 
 #define ITEM_ITERATION_LOOP_BEGIN \
     do \
@@ -895,8 +895,6 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
     int reduceCol = -1;
     int highestColWidth = 0;
 
-    bool minimizedCols = false;
-
 #ifdef __WXDEBUG__
     if ( debug )
         wxLogDebug(wxT("ColumnWidthCheck (virtualWidth: %i, clientWidth: %i)"), width, clientWidth);
@@ -910,7 +908,6 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
         if ( m_colWidths[i] <= min )
         {
             m_colWidths[i] = min;
-            minimizedCols = true;
         }
         else
         {
@@ -947,10 +944,10 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
         if ( colsWidth < width )
         {
             // Increase column
-        #ifdef __WXDEBUG__
-        if ( debug )
-            wxLogDebug(wxT("  Adjust last column to %i"), m_colWidths[lastColumn] + widthHigher);
-        #endif
+#ifdef __WXDEBUG__
+            if ( debug )
+                wxLogDebug(wxT("  Adjust last column to %i"), m_colWidths[lastColumn] + widthHigher);
+#endif
             m_colWidths[lastColumn] = m_colWidths[lastColumn] + widthHigher;
         }
         else if ( colsWidth > width )
@@ -1376,7 +1373,7 @@ void wxPropertyGridPageState::DoSetPropertyValues( const wxVariantList& list, wx
 
     //
     // Second pass for special entries
-    for ( node = list.begin(); node != list.end(); node++ )
+    for ( node = list.begin(); node != list.end(); ++node )
     {
         wxVariant *current = (wxVariant*)*node;
 
@@ -1440,7 +1437,7 @@ void wxPropertyGridPageState::DoSetPropertyValues( const wxVariantList& list, wx
 
     if ( numSpecialEntries )
     {
-        for ( node = list.begin(); node != list.end(); node++ )
+        for ( node = list.begin(); node != list.end(); ++node )
         {
             wxVariant *current = (wxVariant*)*node;
 
@@ -1471,7 +1468,7 @@ void wxPropertyGridPageState::DoSetPropertyValues( const wxVariantList& list, wx
                                 wxVariantList& list2 = current->GetList();
                                 wxVariantList::const_iterator node2;
 
-                                for ( node2 = list2.begin(); node2 != list2.end(); node2++ )
+                                for ( node2 = list2.begin(); node2 != list2.end(); ++node2 )
                                 {
                                     wxVariant *attr = (wxVariant*)*node2;
                                     foundProp->SetAttribute( attr->GetName(), *attr );

@@ -17,7 +17,6 @@
     #pragma hdrstop
 #endif
 
-#include "wx/display.h"
 #include "wx/sizer.h"
 #include "wx/private/flagscheck.h"
 
@@ -32,6 +31,7 @@
     #include "wx/toplevel.h"
 #endif // WX_PRECOMP
 
+#include "wx/display.h"
 #include "wx/listimpl.cpp"
 
 
@@ -1631,11 +1631,9 @@ wxSize wxFlexGridSizer::CalcMin()
     m_rowHeights.assign(nrows, -1);
     m_colWidths.assign(ncols, -1);
 
-    // n is the index of the item in left-to-right top-to-bottom order
-    size_t n = 0;
     for ( wxSizerItemList::iterator i = m_children.begin();
           i != m_children.end();
-          ++i, ++n )
+          ++i)
     {
         wxSizerItem * const item = *i;
         if ( item->IsShown() )
@@ -1789,21 +1787,21 @@ void wxFlexGridSizer::AdjustForGrowables(const wxSize& sz)
         {
             const int col = n % ncols;
             didAdjustMinSize |= (*i)->InformFirstDirection(wxHORIZONTAL, m_colWidths[col], sz.y - m_calculatedMinSize.y);
-    }
+        }
 
         // Only redo if info was actually used
         if( didAdjustMinSize )
-    {
-        DoAdjustForGrowables
-        (
-            sz.x - m_calculatedMinSize.x,
-            m_growableCols,
-            m_colWidths,
-            m_growMode == wxFLEX_GROWMODE_SPECIFIED ? &m_growableColsProportions
-                                                    : NULL
-        );
+        {
+            DoAdjustForGrowables
+            (
+                sz.x - m_calculatedMinSize.x,
+                m_growableCols,
+                m_colWidths,
+                m_growMode == wxFLEX_GROWMODE_SPECIFIED ? &m_growableColsProportions
+                                                        : NULL
+            );
+        }
     }
-}
 
     if ( (m_flexDirection & wxVERTICAL) || (m_growMode != wxFLEX_GROWMODE_NONE) )
     {

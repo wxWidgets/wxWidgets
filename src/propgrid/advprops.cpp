@@ -453,14 +453,7 @@ wxFontProperty::wxFontProperty( const wxString& label, const wxString& name,
     // Initialize font family choices list
     if ( !wxPGGlobalVars->m_fontFamilyChoices )
     {
-        wxFontEnumerator enumerator;
-        enumerator.EnumerateFacenames();
-
-#if wxMINOR_VERSION > 6
-        wxArrayString faceNames = enumerator.GetFacenames();
-#else
-        wxArrayString& faceNames = *enumerator.GetFacenames();
-#endif
+        wxArrayString faceNames = wxFontEnumerator::GetFacenames();
 
         faceNames.Sort();
 
@@ -896,7 +889,6 @@ int wxSystemColourProperty::ColToInd( const wxColour& colour ) const
     }
     return wxNOT_FOUND;
 }
-
 
 void wxSystemColourProperty::OnSetValue()
 {
@@ -1576,7 +1568,7 @@ const wxString& wxPGGetDefaultImageWildcard()
 
         // Let's iterate over the image handler list.
         //for ( wxList::Node *node = handlers.GetFirst(); node; node = node->GetNext() )
-        for ( node = handlers.begin(); node != handlers.end(); node++ )
+        for ( node = handlers.begin(); node != handlers.end(); ++node )
         {
             wxImageHandler *handler = (wxImageHandler*)*node;
 

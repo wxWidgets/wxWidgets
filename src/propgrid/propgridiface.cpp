@@ -1003,7 +1003,7 @@ wxString wxPropertyGridInterface::SaveEditableState( int includedStates ) const
 
                 if ( !p->HasFlag(wxPG_PROP_COLLAPSED) )
                     result += EscapeDelimiters(p->GetName());
-                    result += wxS(",");
+                result += wxS(",");
 
             }
 

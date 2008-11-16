@@ -235,7 +235,7 @@ IMPLEMENT_CLASS(wxPropertyGridManager, wxPanel)
 #define ID_ADVTOOLBAR_OFFSET        1
 #define ID_ADVHELPCAPTION_OFFSET    2
 #define ID_ADVHELPCONTENT_OFFSET    3
-#define ID_ADVBUTTON_OFFSET         4
+//#define ID_ADVBUTTON_OFFSET         4
 #define ID_ADVTBITEMSBASE_OFFSET    5   // Must be last.
 
 // -----------------------------------------------------------------------

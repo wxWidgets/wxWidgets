@@ -200,7 +200,7 @@ bool wxIntProperty::StringToValue( wxVariant& variant, const wxString& text, int
 
         int firstNonZeroPos = 0;
 
-        for ( ; i != iMax; i++ )
+        for ( ; i != iMax; ++i )
         {
             wxChar c = *i;
             if ( c != wxS('0') && c != wxS(' ') )
@@ -606,7 +606,7 @@ void wxPropertyGrid::DoubleToString(wxString& target,
         wxString::const_iterator i = target.end() - 1;
         size_t new_len = target.length() - 1;
 
-        for ( ; i != target.begin(); i-- )
+        for ( ; i != target.begin(); --i )
         {
             if ( *i != wxS('0') )
                 break;
@@ -973,7 +973,7 @@ void wxEnumProperty::OnSetValue()
     else if ( variantType == wxPG_VARIANT_TYPE_STRING )
         ValueFromString_( m_value, m_value.GetString(), 0 );
     else
-        wxASSERT( false );
+        wxFAIL;
 
     if ( ms_nextIndex != -2 )
     {
@@ -2400,16 +2400,13 @@ void wxPropertyGrid::ArrayStringToString( wxString& dst, const wxArrayString& sr
     unsigned int i;
     unsigned int itemCount = src.size();
 
-    wxChar preas[2];
+    wxChar preas[2] = { 0, 0 };
 
     dst.Empty();
 
-    if ( !preDelim )
-        preas[0] = 0;
-    else if ( (flags & 1) )
+    if ( flags & 1 )
     {
         preas[0] = preDelim;
-        preas[1] = 0;
         pdr = wxS("\\");
         pdr += preDelim;
     }

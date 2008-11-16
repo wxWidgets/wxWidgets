@@ -227,15 +227,7 @@ void wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
                 paintdata.m_drawnWidth = imageSize.x;
                 paintdata.m_drawnHeight = imageSize.y;
 
-                if ( !isUnspecified )
-                {
-                    property->OnCustomPaint( dc, imageRect, paintdata );
-                }
-                else
-                {
-                    dc.SetBrush(*wxWHITE_BRUSH);
-                    dc.DrawRectangle(imageRect);
-                }
+                property->OnCustomPaint( dc, imageRect, paintdata );
 
                 imageOffset = paintdata.m_drawnWidth;
             }
@@ -796,7 +788,7 @@ void wxPGProperty::DoGenerateComposedValue( wxString& text,
                 childValue = overrideValue;
             else
                 childValue = curChild->GetValue();
-            node++;
+            ++node;
             if ( node != valueOverrides->end() )
                 overrideValue = *node;
             else
@@ -1047,7 +1039,7 @@ bool wxPGProperty::StringToValue( wxVariant& variant, const wxString& text, int 
                 {
                     int depth = 1;
 
-                    if ( it != text.end() ) it++;
+                    if ( it != text.end() ) ++it;
                     pos++;
                     size_t startPos = pos;
 
@@ -1055,7 +1047,7 @@ bool wxPGProperty::StringToValue( wxVariant& variant, const wxString& text, int 
                     while ( it != text.end() && depth > 0 )
                     {
                         a = *it;
-                        it++;
+                        ++it;
                         pos++;
 
                         if ( a == wxS(']') )
@@ -1109,7 +1101,7 @@ bool wxPGProperty::StringToValue( wxVariant& variant, const wxString& text, int 
                     if ( a == delimeter )
                     {
                         pos--;
-                        it--;
+                        --it;
                     }
                 }
             }
@@ -1118,7 +1110,7 @@ bool wxPGProperty::StringToValue( wxVariant& variant, const wxString& text, int 
         if ( a == 0 )
             break;
 
-        it++;
+        ++it;
         if ( it != text.end() )
         {
             a = *it;
@@ -1243,7 +1235,7 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
 
             // Children in list can be in any order, but we will give hint to
             // GetPropertyByNameWH(). This optimizes for full list parsing.
-            for ( node = list.begin(); node != list.end(); node++ )
+            for ( node = list.begin(); node != list.end(); ++node )
             {
                 wxVariant& childValue = *((wxVariant*)*node);
                 wxPGProperty* child = GetPropertyByNameWH(childValue.GetName(), i);
@@ -2311,7 +2303,7 @@ bool wxPGProperty::AreAllChildrenSpecified( wxVariant* pendingList ) const
         {
             const wxString& childName = child->GetBaseName();
 
-            for ( ; node != pList->end(); node++ )
+            for ( ; node != pList->end(); ++node )
             {
                 const wxVariant& item = *((const wxVariant*)*node);
                 if ( item.GetName() == childName )
@@ -2500,7 +2492,7 @@ wxPGAttributeStorage::~wxPGAttributeStorage()
 {
     wxPGHashMapS2P::iterator it;
 
-    for ( it = m_map.begin(); it != m_map.end(); it++ )
+    for ( it = m_map.begin(); it != m_map.end(); ++it )
     {
         wxVariantData* data = (wxVariantData*) it->second;
         data->DecRef();
