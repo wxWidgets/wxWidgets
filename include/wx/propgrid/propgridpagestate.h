@@ -234,7 +234,8 @@ private:
     } \
     const CLASS& operator=( const CLASS& it ) \
     { \
-        Assign(it); \
+        if (this != &it) \
+            Assign(it); \
         return *this; \
     } \
     CLASS& operator++() { Next(); return *this; } \
@@ -359,9 +360,12 @@ public:
 #ifndef SWIG
     const wxPGVIterator& operator=( const wxPGVIterator& it )
     {
-        UnRef();
-        m_pIt = it.m_pIt;
-        m_pIt->IncRef();
+        if (this != &it)
+        {
+            UnRef();
+            m_pIt = it.m_pIt;
+            m_pIt->IncRef();
+        }
         return *this;
     }
 #endif

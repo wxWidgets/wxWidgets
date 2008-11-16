@@ -126,7 +126,8 @@ public:
 #ifndef SWIG
     void operator=(const wxColourPropertyValue& cpv)
     {
-        Init( cpv.m_type, cpv.m_colour );
+        if (this != &cpv)
+            Init( cpv.m_type, cpv.m_colour );
     }
 
 private:
@@ -289,9 +290,10 @@ public:
                       const wxColour& value = *wxWHITE );
     virtual ~wxColourProperty();
 
-protected:
     virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
     virtual wxColour GetColour( int index ) const;
+
+protected:
     virtual wxVariant DoTranslateVal( wxColourPropertyValue& v ) const;
 
 private:

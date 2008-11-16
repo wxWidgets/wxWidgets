@@ -230,8 +230,11 @@ public:
 
     wxVector& operator=(const wxVector& vb)
     {
-        clear();
-        Copy(vb);
+        if (this != &vb)
+        {
+            clear();
+            Copy(vb);
+        }
         return *this;
     }
 

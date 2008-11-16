@@ -175,7 +175,7 @@ public:
         // assorted assignment operators
 
     wxFileName& operator=(const wxFileName& filename)
-        { Assign(filename); return *this; }
+        { if (this != &filename) Assign(filename); return *this; }
 
     wxFileName& operator=(const wxString& filename)
         { Assign(filename); return *this; }

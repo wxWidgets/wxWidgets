@@ -322,7 +322,7 @@ public:
         data->IncRef();
         variant.SetData(data);
         variant.SetName(it->first);
-        it++;
+        ++it;
         return true;
     }
 
@@ -992,7 +992,8 @@ public:
 #ifndef SWIG
     void operator= (const wxPGChoices& a)
     {
-        AssignData(a.m_data);
+        if (this != &a)
+            AssignData(a.m_data);
     }
 
     wxPGChoiceEntry& operator[](unsigned int i)
@@ -2355,9 +2356,9 @@ public:
 
     int GetTextExtent( const wxWindow* wnd, const wxFont& font ) const;
 
-protected:
     virtual wxString ValueToString( wxVariant& value, int argFlags ) const;
 
+protected:
     void SetTextColIndex( unsigned int colInd )
         { m_capFgColIndex = (wxByte) colInd; }
     unsigned int GetTextColIndex() const
