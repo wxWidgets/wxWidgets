@@ -268,6 +268,8 @@ typedef short int WXTYPE;
         #pragma warning(disable: 1682)
         /* conversion from "X" to "T" may lose significant bits */
         #pragma warning(disable: 810)
+        /* non-pointer conversion from "foo" to "bar" may lose significant bits */
+        #pragma warning(disable: 2259)
 
         return x;
 

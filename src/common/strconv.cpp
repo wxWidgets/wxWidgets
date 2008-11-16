@@ -3364,6 +3364,11 @@ wxCharBuffer wxSafeConvertWX2MB(const wchar_t *ws)
 #define WX_DEFINE_GLOBAL_CONV(klass, name, ctor_args) \
     WX_DEFINE_GLOBAL_CONV2(klass, klass, name, ctor_args)
 
+#ifdef __INTELC__
+    // disable warning "variable 'xxx' was declared but never referenced"
+    #pragma warning(disable: 177)
+#endif // Intel C++
+
 #ifdef __WINDOWS__
     WX_DEFINE_GLOBAL_CONV2(wxMBConv, wxMBConv_win32, wxConvLibc, wxEMPTY_PARAMETER_VALUE);
 #else

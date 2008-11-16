@@ -279,7 +279,7 @@ private:
     // the current decoder state: this is only used by ToWChar() if srcLen
     // parameter is not wxNO_LEN, when working on the entire NUL-terminated
     // strings we neither update nor use the state
-    class DecoderState : StateMode
+    class DecoderState : private StateMode
     {
     private:
         // current state: this one is private as we want to enforce the use of
@@ -311,7 +311,7 @@ private:
 
     // encoder state is simpler as we always receive entire Unicode characters
     // on input
-    class EncoderState : StateMode
+    class EncoderState : private StateMode
     {
     private:
         Mode mode;

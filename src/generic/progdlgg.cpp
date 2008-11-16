@@ -148,7 +148,6 @@ wxProgressDialog::wxProgressDialog(const wxString& title,
     m_msg = new wxStaticText(this, wxID_ANY, message);
     sizerTop->Add(m_msg, 0, wxLEFT | wxTOP, 2*LAYOUT_MARGIN);
 
-    wxSize sizeLabel = m_msg->GetSize();
     if ( maximum > 0 )
     {
         int gauge_style = wxGA_HORIZONTAL;

@@ -25,7 +25,7 @@
 // this is defined in src/gtk/toplevel.cpp
 extern int wxOpenModalDialogsCount;
 
-wxDEFINE_TIED_SCOPED_PTR_TYPE(wxGUIEventLoop);
+wxDEFINE_TIED_SCOPED_PTR_TYPE(wxGUIEventLoop)
 
 
 //-----------------------------------------------------------------------------

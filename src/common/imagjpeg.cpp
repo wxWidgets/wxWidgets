@@ -148,7 +148,7 @@ CPP_METHODDEF(void) wx_term_source ( j_decompress_ptr cinfo )
 
 // JPEG error manager:
 
-struct wx_error_mgr : jpeg_error_mgr
+struct wx_error_mgr : public jpeg_error_mgr
 {
   jmp_buf setjmp_buffer;    /* for return to caller */
 };

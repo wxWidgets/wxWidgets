@@ -7409,14 +7409,14 @@ dnl check for icc before gcc as icc is also recognized as gcc
 if test "x$INTELCC" = "xyes" ; then
     dnl Warnings which can't be easily suppressed in C code are disabled:
     dnl
-    dnl     remark #810: conversion from "x" to "y" may lose significant bits
-    dnl     remark #869: parameter "foo" was never referenced
-    dnl     remark #1572: floating-point equality and inequality comparisons
-    dnl                   are unreliable
-    dnl     remark #1684: conversion from pointer to same-sized integral type
-    dnl
-    dnl (for others see below)
-    CWARNINGS="-Wall -wd810,869,981,1418,1572,1684"
+    dnl     #810: conversion from "x" to "y" may lose significant bits
+    dnl     #869: parameter "foo" was never referenced
+    dnl     #1572: floating-point equality and inequality comparisons
+    dnl            are unreliable
+    dnl     #1684: conversion from pointer to same-sized integral type
+    dnl     #2259: non-pointer conversion from "x" to "y" may lose significant
+    dnl            bits
+    CWARNINGS="-Wall -wd810,869,981,1418,1572,1684,2259"
 elif test "$GCC" = yes ; then
     CWARNINGS="-Wall -Wundef"
 fi
@@ -7428,15 +7428,16 @@ if test "x$INTELCXX" = "xyes" ; then
     dnl (279) are generated for standard macros and so there is nothing we can
     dnl do about them
     dnl
-    dnl     remark #279: controlling expression is constant
-    dnl     remark #383: value copied to temporary, reference to temporary used
-    dnl     remark #444: destructor for base class "xxx" is not virtual
-    dnl     remark #810: conversion from "x" to "y" may lose significant bits
-    dnl     remark #869: parameter "foo" was never referenced
-    dnl     remark #981: operands are evaluated in unspecified order
-    dnl     remark #1418: external definition with no prior declaration
-    dnl     remark #1419: external declaration in primary source file
-    CXXWARNINGS="-Wall -wd279,383,444,810,869,981,1418,1419"
+    dnl     #279: controlling expression is constant
+    dnl     #383: value copied to temporary, reference to temporary used
+    dnl     #444: destructor for base class "xxx" is not virtual
+    dnl     #981: operands are evaluated in unspecified order
+    dnl     #1418: external definition with no prior declaration
+    dnl     #1419: external declaration in primary source file
+    dnl     #1881: argument must be a constant null pointer value
+    dnl
+    dnl (for others see CWARNINGS above)
+    CXXWARNINGS="-Wall -wd279,383,444,810,869,981,1418,1419,1881,2259"
 elif test "$GXX" = yes ; then
     CXXWARNINGS="-Wall -Wundef -Wunused-parameter -Wno-ctor-dtor-privacy"
     AX_CXXFLAGS_GCC_OPTION(-Woverloaded-virtual, CXXWARNINGS)

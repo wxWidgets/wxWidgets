@@ -1226,7 +1226,6 @@ void wxPostScriptDCImpl::SetPen( const wxPen& pen )
         double bluePS = (double)(blue) / 255.0;
         double greenPS = (double)(green) / 255.0;
 
-        wxString buffer;
         buffer.Printf( "%f %f %f setrgbcolor\n", redPS, greenPS, bluePS );
         buffer.Replace( ",", "." );
         PsPrint( buffer );

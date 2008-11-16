@@ -179,7 +179,7 @@ public:
 
 private:
     // reference-counted data
-    struct Data : wxPrivate::UntypedBufferData
+    struct Data : public wxPrivate::UntypedBufferData
     {
         Data(CharType *str, Kind kind = Owned)
             : UntypedBufferData(str, kind)

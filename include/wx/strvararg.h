@@ -564,7 +564,7 @@ struct wxArgNormalizerNarrowChar
         // FIXME-UTF8: which one is better default in absence of fmt string
         //             (i.e. when used like e.g. Foo("foo", "bar", 'c', NULL)?
         if ( !fmt || fmt->GetArgumentType(index) == wxFormatString::Arg_Char )
-            m_value = wxUniChar(value).GetValue();
+            m_value = wx_truncate_cast(T, wxUniChar(value).GetValue());
         else
             m_value = value;
     }

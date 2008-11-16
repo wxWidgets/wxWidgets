@@ -25,10 +25,10 @@
 wxUString &wxUString::assignFromAscii( const char *str )
 {
    size_type len = wxStrlen( str );
-   
+
    wxU32CharBuffer buffer( len );
    wxChar32 *ptr = buffer.data();
-   
+
    size_type i;
    for (i = 0; i < len; i++)
    {
@@ -36,7 +36,7 @@ wxUString &wxUString::assignFromAscii( const char *str )
        ptr++;
        str++;
    }
-   
+
    return assign( buffer );
 }
 
@@ -49,10 +49,10 @@ wxUString &wxUString::assignFromAscii( const char *str, size_type n )
        len++;
        s++;
    }
-   
+
    wxU32CharBuffer buffer( len );
    wxChar32 *ptr = buffer.data();
-   
+
    size_type i;
    for (i = 0; i < len; i++)
    {
@@ -60,16 +60,13 @@ wxUString &wxUString::assignFromAscii( const char *str, size_type n )
        ptr++;
        str++;
    }
-   
+
    return *this;
 }
 
 // ----------------------------------------------------------------------------
 // UTF-8
 // ----------------------------------------------------------------------------
-
-static const wxUint32 utf8_max[]=
-    { 0x7f, 0x7ff, 0xffff, 0x1fffff, 0x3ffffff, 0x7fffffff, 0xffffffff };
 
 // this table gives the length of the UTF-8 encoding from its first character:
 const unsigned char tableUtf8Lengths[256] = {
@@ -110,7 +107,7 @@ wxUString &wxUString::assignFromUTF8( const char *str )
 {
     if (!str)
         return assign( wxUString() );
-     
+
     size_type ucs4_len = 0;
     const char *p = str;
     while (*p)
@@ -125,7 +122,7 @@ wxUString &wxUString::assignFromUTF8( const char *str )
 
     wxU32CharBuffer buffer( ucs4_len );
     wxChar32 *out = buffer.data();
-    
+
     p = str;
     while (*p)
     {
@@ -178,7 +175,7 @@ wxUString &wxUString::assignFromUTF8( const char *str )
                 code <<= 6;
                 code |= c & 0x3F;
             }
-            
+
             *out = code;
             p++;
         }
@@ -192,7 +189,7 @@ wxUString &wxUString::assignFromUTF8( const char *str, size_type n )
 {
     if (!str)
         return assign( wxUString() );
-     
+
     size_type ucs4_len = 0;
     size_type utf8_pos = 0;
     const char *p = str;
@@ -208,10 +205,10 @@ wxUString &wxUString::assignFromUTF8( const char *str, size_type n )
         ucs4_len ++;
         p += len;
     }
-    
+
     wxU32CharBuffer buffer( ucs4_len );
     wxChar32 *out = buffer.data();
-    
+
     utf8_pos = 0;
     p = str;
     while (*p)
@@ -222,7 +219,7 @@ wxUString &wxUString::assignFromUTF8( const char *str, size_type n )
             if (utf8_pos + 1 > n)
                 break;
             utf8_pos++;
-                
+
             *out = c;
             p++;
         }
@@ -272,13 +269,13 @@ wxUString &wxUString::assignFromUTF8( const char *str, size_type n )
                 code <<= 6;
                 code |= c & 0x3F;
             }
-            
+
             *out = code;
             p++;
         }
         out++;
     }
-    
+
     *out = 0;
 
     return assign( buffer.data() );
@@ -288,7 +285,7 @@ wxUString &wxUString::assignFromUTF16( const wxChar16* str, size_type n )
 {
     if (!str)
         return assign( wxUString() );
-     
+
     size_type ucs4_len = 0;
     size_type utf16_pos = 0;
     const wxChar16 *p = str;
@@ -307,10 +304,10 @@ wxUString &wxUString::assignFromUTF16( const wxChar16* str, size_type n )
         {
            len = 2;
         }
-    
+
         if (utf16_pos + len > n)
             break;
-            
+
         ucs4_len++;
         p += len;
         utf16_pos += len;
@@ -320,7 +317,7 @@ wxUString &wxUString::assignFromUTF16( const wxChar16* str, size_type n )
     wxChar32 *out = buffer.data();
 
     utf16_pos = 0;
-    
+
     p = str;
     while (*p)
     {
@@ -328,7 +325,7 @@ wxUString &wxUString::assignFromUTF16( const wxChar16* str, size_type n )
         {
             if (utf16_pos + 1 > n)
                 break;
-        
+
             *out = *p;
             p++;
             utf16_pos++;
@@ -337,14 +334,14 @@ wxUString &wxUString::assignFromUTF16( const wxChar16* str, size_type n )
         {
             if (utf16_pos + 2 > n)
                 break;
-        
+
            *out = ((p[0] - 0xd7c0) << 10) + (p[1] - 0xdc00);
            p += 2;
            utf16_pos += 2;
         }
         out++;
     }
-    
+
     return assign( buffer.data() );
 }
 
@@ -352,7 +349,7 @@ wxUString &wxUString::assignFromUTF16( const wxChar16* str )
 {
     if (!str)
         return assign( wxUString() );
-     
+
     size_type ucs4_len = 0;
     const wxChar16 *p = str;
     while (*p)
@@ -370,14 +367,14 @@ wxUString &wxUString::assignFromUTF16( const wxChar16* str )
         {
            len = 2;
         }
-    
+
         ucs4_len++;
         p += len;
     }
 
     wxU32CharBuffer buffer( ucs4_len );
     wxChar32 *out = buffer.data();
-    
+
     p = str;
     while (*p)
     {
@@ -393,7 +390,7 @@ wxUString &wxUString::assignFromUTF16( const wxChar16* str )
         }
         out++;
     }
-    
+
     return assign( buffer.data() );
 }
 
@@ -401,9 +398,9 @@ wxUString &wxUString::assignFromCString( const char* str )
 {
     if (!str)
         return assign( wxUString() );
-        
+
     wxWCharBuffer buffer = wxConvLibc.cMB2WC( str );
-     
+
     return assign( buffer );
 }
 
@@ -411,9 +408,9 @@ wxUString &wxUString::assignFromCString( const char* str, const wxMBConv &conv )
 {
     if (!str)
         return assign( wxUString() );
-     
+
     wxWCharBuffer buffer = conv.cMB2WC( str );
-     
+
     return assign( buffer );
 }
 
@@ -421,12 +418,12 @@ wxCharBuffer wxUString::utf8_str() const
 {
     size_type utf8_length = 0;
     const wxChar32 *ptr = data();
-    
+
     while (*ptr)
     {
         wxChar32 code = *ptr;
         ptr++;
-    
+
         if ( code <= 0x7F )
         {
             utf8_length++;
@@ -448,17 +445,17 @@ wxCharBuffer wxUString::utf8_str() const
             // invalid range, skip
         }
     }
-    
+
     wxCharBuffer result( utf8_length );
-    
+
     char *out = result.data();
-    
+
     ptr = data();
     while (*ptr)
     {
         wxChar32 code = *ptr;
         ptr++;
-    
+
         if ( code <= 0x7F )
         {
             out[0] = (char)code;
@@ -493,40 +490,40 @@ wxCharBuffer wxUString::utf8_str() const
 
     wxPrintf( "utf8_str %s len %d\n", result, wxStrlen( result.data() ) );
     wxPrintf( "utf8_str %s len %d\n", result, wxStrlen( result.data() ) );
-    
+
     return result;
 }
-    
+
 wxU16CharBuffer wxUString::utf16_str() const
 {
     size_type utf16_length = 0;
     const wxChar32 *ptr = data();
-    
+
     while (*ptr)
     {
         wxChar32 code = *ptr;
         ptr++;
-        
+
         // TODO: error range checks
-        
+
         if (code < 0x10000)
            utf16_length++;
         else
            utf16_length += 2;
     }
-    
+
     wxU16CharBuffer result( utf16_length );
     wxChar16 *out = result.data();
-    
+
     ptr = data();
-    
+
     while (*ptr)
     {
         wxChar32 code = *ptr;
         ptr++;
-        
+
         // TODO: error range checks
-        
+
         if (code < 0x10000)
         {
            out[0] = code;
@@ -539,6 +536,6 @@ wxU16CharBuffer wxUString::utf16_str() const
            out += 2;
         }
     }
-    
-    return result;    
+
+    return result;
 }

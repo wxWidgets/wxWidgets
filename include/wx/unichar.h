@@ -155,7 +155,7 @@ private:
     {
 #if wxUSE_UNICODE
         if ( c < 0x80 )
-            return c;
+            return wx_truncate_cast(char, c);
 
         return ToHi8bit(c);
 #else

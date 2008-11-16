@@ -603,7 +603,6 @@ void wxMimeTypesManagerImpl::Initialize(int mailcapStyles,
                     {
                         if (textfile.GetLine(i).Find(wxT("=")) != wxNOT_FOUND)
                         {
-                            wxString mimeType = textfile.GetVerb(i);
                             wxString desktopFile = textfile.GetCmd(i);
 
                             if (deskTopFilesSeen.Index(desktopFile) == wxNOT_FOUND)
