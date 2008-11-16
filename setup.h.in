@@ -610,29 +610,9 @@
 /* --- end MSW options --- */
 
 /*
- * Supports bool type
- */
-#undef HAVE_BOOL
-
-/*
  * Define if your compiler supports the explicit keyword
  */
 #undef HAVE_EXPLICIT
-
-/*
- * Define if your compiler supports const_cast<>()
- */
-#undef HAVE_CONST_CAST
-
-/*
- * Define if your compiler supports reinterpret_cast<>()
- */
-#undef HAVE_REINTERPRET_CAST
-
-/*
- * Define if your compiler supports static_cast<>()
- */
-#undef HAVE_STATIC_CAST
 
 /*
  * Define if your compiler has C99 va_copy
