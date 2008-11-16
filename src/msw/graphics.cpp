@@ -1171,6 +1171,11 @@ void wxGDIPlusContext::PopState()
 // premultiplied format, therefore in the failing cases we create a new bitmap using the non-premultiplied
 // bytes as parameter
 
+void wxGraphicsContext::DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
+{
+    static_cast<wxGDIPlusContext*>(this)->DrawBitmap(bmp, x, y, w, h);
+}
+
 void wxGDIPlusContext::DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
     Bitmap* image = static_cast<wxGDIPlusBitmapData*>(bmp.GetRefData())->GetGDIPlusBitmap();
@@ -1611,7 +1616,7 @@ wxGraphicsFont wxGDIPlusRenderer::CreateFont( const wxFont &font , const wxColou
         return wxNullGraphicsFont;
 }
 
-wxGraphicsBitmap wxGDIPlusRenderer::CreateBitmap( const wxBitmap& bmp )
+wxGraphicsBitmap wxGraphicsRenderer::CreateBitmap( const wxBitmap& bmp )
 {
     if ( bmp.Ok() )
     {
