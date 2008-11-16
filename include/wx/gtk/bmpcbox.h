@@ -125,9 +125,9 @@ public:
     virtual bool IsEditable() const;
     virtual void SetEditable(bool editable);
 
-protected:
-
     virtual GtkWidget* GetConnectWidget();
+
+protected:
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
 
     virtual void GTKCreateComboBoxWidget();

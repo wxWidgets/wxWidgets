@@ -442,10 +442,12 @@ public:
     */
     int GetPageByState( const wxPropertyGridPageState* pstate ) const;
 
+protected:
     /** Returns wxPropertyGridPageState of given page, current page's for -1.
     */
     virtual wxPropertyGridPageState* GetPageState( int page ) const;
 
+public:
     /** Returns number of managed pages. */
     size_t GetPageCount() const;
 
@@ -610,15 +612,13 @@ protected:
     */
     virtual wxPropertyGrid* CreatePropertyGrid() const;
 
-    virtual void RefreshProperty( wxPGProperty* p );
-
 public:
+    virtual void RefreshProperty( wxPGProperty* p );
 
     //
     // Overridden functions - no documentation required.
     //
 
-    virtual wxSize DoGetBestSize() const;
     void SetId( wxWindowID winid );
 
     virtual void Freeze();
@@ -628,11 +628,13 @@ public:
     virtual void SetWindowStyleFlag ( long style );
 
 protected:
+    virtual wxSize DoGetBestSize() const;
 
 public:
 
 #ifndef SWIG
 
+    virtual bool ProcessEvent( wxEvent& event );
     //
     // Event handlers
     //
@@ -726,8 +728,6 @@ protected:
     // Reimplement these to handle "descboxheight" state item
     virtual bool SetEditableStateItem( const wxString& name, wxVariant value );
     virtual wxVariant GetEditableStateItem( const wxString& name ) const;
-
-    virtual bool ProcessEvent( wxEvent& event );
 
 private:
     DECLARE_EVENT_TABLE()

@@ -307,8 +307,6 @@ public:
     }
 
     // wxControlWithItems methods
-    virtual void DoClear();
-    virtual void DoDeleteOneItem(unsigned int n);
     virtual unsigned int GetCount() const;
     virtual wxString GetString(unsigned int n) const;
     virtual void SetString(unsigned int n, const wxString& s);
@@ -335,6 +333,8 @@ public:
     wxCONTROL_ITEMCONTAINER_CLIENTDATAOBJECT_RECAST
 
 protected:
+    virtual void DoClear();
+    virtual void DoDeleteOneItem(unsigned int n);
 
     // Callback for drawing. Font, background and text colour have been
     // prepared according to selection, focus and such.

@@ -1327,6 +1327,9 @@ public:
     */
     bool UnfocusEditor();
 
+    virtual bool ProcessEvent(wxEvent& event);
+    virtual void SetWindowStyleFlag( long style );
+
 protected:
 
     /**
@@ -1375,7 +1378,6 @@ public:
 
     // Overridden functions.
     virtual bool Destroy();
-    virtual wxSize DoGetBestSize() const;
     // Returns property at given y coordinate (relative to grid's top left).
     wxPGProperty* GetItemAtY( int y ) const { return DoGetItemAtY(y); }
 
@@ -1391,6 +1393,7 @@ public:
 
 
 protected:
+    virtual wxSize DoGetBestSize() const;
 
 #ifndef wxPG_ICON_WIDTH
     wxBitmap            *m_expandbmp, *m_collbmp;
@@ -1791,9 +1794,6 @@ protected:
     void SetupChildEventHandling( wxWindow* wnd );
 
     void CustomSetCursor( int type, bool override = false );
-
-    virtual bool ProcessEvent(wxEvent& event);
-    virtual void SetWindowStyleFlag( long style );
 
     /**
         Repositions scrollbar and underlying panel according to changed virtual

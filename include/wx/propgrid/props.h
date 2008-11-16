@@ -302,10 +302,10 @@ public:
                               wxPGValidationInfo* pValidationInfo,
                               int mode =
                                  wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE );
+    virtual wxValidator* DoGetValidator () const;
 
 protected:
     int m_precision;
-    virtual wxValidator* DoGetValidator () const;
 };
 
 // -----------------------------------------------------------------------

@@ -31,6 +31,8 @@ protected:
                            int WXUNUSED(sizeFlags) = wxSIZE_AUTO) {}
     virtual void DoMoveWindow(int WXUNUSED(x), int WXUNUSED(y),
                               int WXUNUSED(width), int WXUNUSED(height)) {}
+    // override to convert wx mnemonics to GTK+ ones and handle stock ids
+    virtual void DoSetCustomLabel(wxString& var, const ButtonLabel& label);
 
 private:
     // override to use stock GTK+ defaults instead of just string ones
@@ -38,9 +40,6 @@ private:
     virtual wxString GetDefaultNoLabel() const;
     virtual wxString GetDefaultOKLabel() const;
     virtual wxString GetDefaultCancelLabel() const;
-
-    // override to convert wx mnemonics to GTK+ ones and handle stock ids
-    virtual void DoSetCustomLabel(wxString& var, const ButtonLabel& label);
 
     // create the real GTK+ dialog: this is done from ShowModal() to allow
     // changing the message between constructing the dialog and showing it

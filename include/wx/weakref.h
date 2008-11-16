@@ -59,6 +59,13 @@ public:
         }
     }
 
+    virtual void OnObjectDestroy()
+    {
+        // Tracked object itself removes us from list of trackers
+        wxASSERT(m_pobj != NULL);
+        m_pobj = NULL;
+    }
+
 protected:
     void Assign(T* pobj)
     {
@@ -80,13 +87,6 @@ protected:
     void AssignCopy(const wxWeakRefStatic& wr)
     {
         Assign( wr.m_pobj );
-    }
-
-    virtual void OnObjectDestroy()
-    {
-        // Tracked object itself removes us from list of trackers
-        wxASSERT( m_pobj!=NULL );
-        m_pobj = NULL;
     }
 
     T *m_pobj;
@@ -120,6 +120,14 @@ struct wxWeakRefImpl<T, false> : public wxTrackerNode
             m_pobj = NULL;
             m_ptbase = NULL;
         }
+    }
+
+    virtual void OnObjectDestroy()
+    {
+        // Tracked object itself removes us from list of trackers
+        wxASSERT(m_pobj != NULL);
+        m_pobj = NULL;
+        m_ptbase = NULL;
     }
 
 protected:
@@ -175,14 +183,6 @@ protected:
             m_pobj = pobj;
             m_ptbase = ptbase;
         }
-    }
-
-    virtual void OnObjectDestroy()
-    {
-        // Tracked object itself removes us from list of trackers
-        wxASSERT( m_pobj!=NULL );
-        m_pobj = NULL;
-        m_ptbase = NULL;
     }
 
     T *m_pobj;
@@ -293,6 +293,13 @@ public:
         }
     }
 
+    virtual void OnObjectDestroy()
+    {
+        wxASSERT_MSG(m_pobj, "tracked object should have removed us itself");
+
+        m_pobj = NULL;
+    }
+
 protected:
     void Assign(T *pobj)
     {
@@ -318,13 +325,6 @@ protected:
                 wxFAIL_MSG( "Tracked class should inherit from wxTrackable" );
             }
         }
-    }
-
-    virtual void OnObjectDestroy()
-    {
-        wxASSERT_MSG( m_pobj, "tracked object should have removed us itself" );
-
-        m_pobj = NULL;
     }
 
     T *m_pobj;
