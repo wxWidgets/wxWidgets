@@ -29,6 +29,7 @@ class WXDLLIMPEXP_CORE wxGraphicsRenderer;
 class WXDLLIMPEXP_CORE wxGraphicsPen;
 class WXDLLIMPEXP_CORE wxGraphicsBrush;
 class WXDLLIMPEXP_CORE wxGraphicsFont;
+class WXDLLIMPEXP_CORE wxGraphicsBitmap;
 
 /*
  * notes about the graphics context apis
@@ -111,6 +112,16 @@ private :
 
 extern WXDLLEXPORT_DATA(wxGraphicsFont) wxNullGraphicsFont;
 
+class WXDLLIMPEXP_CORE wxGraphicsBitmap : public wxGraphicsObject
+{
+public :
+    wxGraphicsBitmap() {}
+    virtual ~wxGraphicsBitmap() {}
+private :
+    DECLARE_DYNAMIC_CLASS(wxGraphicsBitmap)
+} ;
+
+extern WXDLLEXPORT_DATA(wxGraphicsBitmap) wxNullGraphicsBitmap;
 
 class WXDLLIMPEXP_CORE wxGraphicsMatrixData : public wxGraphicsObjectRefData
 {
@@ -428,6 +439,12 @@ public:
 
     // sets the font
     virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) const;
+    
+#if wxABI_VERSION >= 20809
+    wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) const;
+#endif
+
+    //virtual wxGraphicsBitmap CreateSubBitmap( const wxGraphicsBitmap &bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h  ) const;
 
     // create a 'native' matrix corresponding to these values
     virtual wxGraphicsMatrix CreateMatrix( wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0,
@@ -527,7 +544,10 @@ public:
     //
     // image support
     //
-
+#if wxABI_VERSION >= 20809
+    void DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
+#endif
+    
     virtual void DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) = 0;
 
     virtual void DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) = 0;
@@ -666,6 +686,7 @@ public :
    // sets the font
     virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) = 0;
 
+    wxGraphicsBitmap CreateBitmap( const wxBitmap &bmp ) = 0;
 private :
     DECLARE_NO_COPY_CLASS(wxGraphicsRenderer)
     DECLARE_ABSTRACT_CLASS(wxGraphicsRenderer)

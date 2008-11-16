@@ -788,6 +788,27 @@ wxMacCoreGraphicsFontData::~wxMacCoreGraphicsFontData()
     }
 }
 
+class wxMacCoreGraphicsBitmapData : public wxGraphicsObjectRefData
+{
+public:
+    wxMacCoreGraphicsBitmapData( wxGraphicsRenderer* renderer, const wxBitmap& bmp );
+    ~wxMacCoreGraphicsBitmapData();
+
+    virtual CGImageRef GetBitmap() { return m_bitmap; }
+private :
+    CGImageRef m_bitmap;
+};
+
+wxMacCoreGraphicsBitmapData::wxMacCoreGraphicsBitmapData( wxGraphicsRenderer* renderer, const wxBitmap& bmp ) : wxGraphicsObjectRefData( renderer )
+{
+    m_bitmap = (CGImageRef)( bmp.CGImageCreate() );
+}
+
+wxMacCoreGraphicsBitmapData::~wxMacCoreGraphicsBitmapData()
+{
+    CGImageRelease( m_bitmap );
+}
+
 //
 // Graphics Matrix
 //
@@ -1281,6 +1302,7 @@ public:
     //
     // image support
     //
+    void DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
 
     virtual void DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
 
@@ -1690,38 +1712,37 @@ void wxMacCoreGraphicsContext::Rotate( wxDouble angle )
 
 void wxMacCoreGraphicsContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
+    wxGraphicsBitmap bitmap = GetRenderer()->CreateBitmap(bmp);
+    DrawBitmap(bitmap, x, y, w, h);
+}
+
+void wxMacCoreGraphicsContext::DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
+{
     EnsureIsValid();
 
-    CGImageRef image = (CGImageRef)( bmp.CGImageCreate() );
+    CGImageRef image = static_cast<wxMacCoreGraphicsBitmapData*>(bmp.GetRefData())->GetBitmap();
     HIRect r = CGRectMake( x , y , w , h );
-    if ( bmp.GetDepth() == 1 )
+
+    // set the brush, which is used when the bitmap's depth == 1 
+    if (  !m_brush.IsNull() )
     {
-        // is is a mask, the '1' in the mask tell where to draw the current brush
-        if (  !m_brush.IsNull() )
+        if ( ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->IsShading() )
         {
-            if ( ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->IsShading() )
-            {
-                // TODO clip to mask
-            /*
-                CGContextSaveGState( m_cgContext );
-                CGContextAddPath( m_cgContext , (CGPathRef) path.GetNativePath() );
-                CGContextClip( m_cgContext );
-                CGContextDrawShading( m_cgContext, ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->GetShading() );
-                CGContextRestoreGState( m_cgContext);
-            */
-            }
-            else
-            {
-                ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->Apply(this);
-                HIViewDrawCGImage( m_cgContext , &r , image );
-            }
+            // TODO clip to mask
+        /*
+            CGContextSaveGState( m_cgContext );
+            CGContextAddPath( m_cgContext , (CGPathRef) path.GetNativePath() );
+            CGContextClip( m_cgContext );
+            CGContextDrawShading( m_cgContext, ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->GetShading() );
+            CGContextRestoreGState( m_cgContext);
+        */
+        }
+        else
+        {
+            ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->Apply(this);
+            HIViewDrawCGImage( m_cgContext , &r , image );
         }
     }
-    else
-    {
-        HIViewDrawCGImage( m_cgContext , &r , image );
-    }
-    CGImageRelease( image );
 }
 
 void wxMacCoreGraphicsContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
@@ -2131,6 +2152,8 @@ public :
 
    // sets the font
     virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) ;
+    
+    wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) ;
 
 private :
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxMacCoreGraphicsRenderer)
@@ -2264,6 +2287,18 @@ wxGraphicsFont wxMacCoreGraphicsRenderer::CreateFont( const wxFont &font , const
     }
     else
         return wxNullGraphicsFont;
+}
+
+wxGraphicsBitmap wxMacCoreGraphicsRenderer::CreateBitmap( const wxBitmap& bmp )
+{
+    if ( bmp.Ok() )
+    {
+        wxGraphicsBitmap p;
+        p.SetRefData(new wxMacCoreGraphicsBitmapData( this , bmp ));
+        return p;
+    }
+    else
+        return wxNullGraphicsBitmap;
 }
 
 
