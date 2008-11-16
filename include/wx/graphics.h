@@ -686,7 +686,10 @@ public :
    // sets the font
     virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) = 0;
 
-    wxGraphicsBitmap CreateBitmap( const wxBitmap &bmp ) = 0;
+#if wxABI_VERSION >= 20809
+    wxGraphicsBitmap CreateBitmap( const wxBitmap &bmp );
+#endif
+
 private :
     DECLARE_NO_COPY_CLASS(wxGraphicsRenderer)
     DECLARE_ABSTRACT_CLASS(wxGraphicsRenderer)
