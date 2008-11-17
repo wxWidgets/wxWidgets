@@ -180,9 +180,8 @@ bool wxBMPHandler::SaveDib(wxImage *image,
 
     // get the resolution from the image options  or fall back to 72dpi standard
     // for the BMP format if not specified
-    wxUint32 hres = image->GetOptionInt(wxIMAGE_OPTION_RESOLUTIONX),
-             vres = image->GetOptionInt(wxIMAGE_OPTION_RESOLUTIONY);
-    switch ( image->GetOptionInt(wxIMAGE_OPTION_RESOLUTIONUNIT) )
+    int hres, vres;
+    switch ( GetResolutionFromOptions(*image, &hres, &vres) )
     {
         default:
             wxFAIL_MSG( _T("unexpected image resolution units") );
@@ -195,8 +194,8 @@ bool wxBMPHandler::SaveDib(wxImage *image,
 
         case wxIMAGE_RESOLUTION_INCHES:
             // convert resolution in inches to resolution in centimeters
-            hres = (wxUint32)(10*mm2inches*hres);
-            vres = (wxUint32)(10*mm2inches*vres);
+            hres = (int)(10*mm2inches*hres);
+            vres = (int)(10*mm2inches*vres);
             // fall through to convert it to resolution in meters
 
         case wxIMAGE_RESOLUTION_CM:
