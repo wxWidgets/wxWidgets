@@ -295,9 +295,11 @@ public:
   void pop_back() { RemoveAt(GetCount() - 1); }
   void push_back(const_reference v) { Add(v); }
   reverse_iterator rbegin() { return reverse_iterator(end() - 1); }
-  const_reverse_iterator rbegin() const;
+  const_reverse_iterator rbegin() const
+    { return const_reverse_iterator(end() - 1); }
   reverse_iterator rend() { return reverse_iterator(begin() - 1); }
-  const_reverse_iterator rend() const;
+  const_reverse_iterator rend() const
+    { return const_reverse_iterator(begin() - 1); }
   void reserve(size_type n) /* base::reserve*/;
   void resize(size_type n, value_type v = value_type());
   size_type size() const { return GetCount(); }
