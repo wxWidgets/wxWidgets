@@ -41,6 +41,17 @@ public:
     virtual wxConfigBase* CreateConfig();
 
     /**
+        Used by wxWidgets to create the main event loop used by wxApp::OnRun().
+
+        The default implementation of this method in wxGUIAppTraits returns the
+        usual platform-specific GUI event loop. The version in wxConsoleAppTraits
+        returns a console-specific event loop which can be used to handle timer
+        and socket events in console programs under Unix and MSW or @NULL under
+        the other platforms where console event loops are not supported yet.
+     */
+    virtual wxEventLoopBase *CreateEventLoop() = 0;
+
+    /**
         Creates the global font mapper object used for encodings/charset mapping.
     */
     virtual wxFontMapper* CreateFontMapper() = 0;
