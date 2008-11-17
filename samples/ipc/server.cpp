@@ -324,25 +324,26 @@ MyConnection::OnRequest(const wxString& topic,
 {
     *size = 0;
 
-    wxString afterDate;
+    wxString s,
+             afterDate;
     if ( item.StartsWith("Date", &afterDate) )
     {
         const wxDateTime now = wxDateTime::Now();
 
         if ( afterDate.empty() )
         {
-            m_requestData = now.Format();
+            s = now.Format();
             *size = wxNO_LEN;
         }
         else if ( afterDate == "+len" )
         {
-            m_requestData = now.FormatTime() + " " + now.FormatDate();
-            *size = strlen(m_requestData.mb_str()) + 1;
+            s = now.FormatTime() + " " + now.FormatDate();
+            *size = strlen(s.mb_str()) + 1;
         }
     }
     else if ( item == "bytes[3]" )
     {
-        m_requestData = "123";
+        s = "123";
         *size = 3;
     }
 
@@ -352,7 +353,10 @@ MyConnection::OnRequest(const wxString& topic,
         return NULL;
     }
 
-    const void * const data = m_requestData.mb_str();
+    // store the data pointer to which we return in a member variable to ensure
+    // that the pointer remains valid even after we return
+    m_requestData = s.mb_str();
+    const void * const data = m_requestData;
     Log("OnRequest", topic, item, data, *size, format);
     return data;
 }

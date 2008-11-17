@@ -78,9 +78,9 @@ public:
     wxString m_advise;
 
 protected:
-    // the data returned by last OnRequest(): we keep it in this wxString to
+    // the data returned by last OnRequest(): we keep it in this buffer to
     // ensure that the pointer we return from OnRequest() stays valid
-    wxString m_requestData;
+    wxCharBuffer m_requestData;
 };
 
 class MyServer : public wxServer
