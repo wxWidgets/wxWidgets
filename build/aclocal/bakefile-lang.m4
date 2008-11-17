@@ -59,6 +59,36 @@ AC_DEFUN([_AC_BAKEFILE_LANG_COMPILER],
     AC_LANG_POP($2)
 ])
 
+dnl More specific version of the above macro checking whether the compiler
+dnl version is at least the given one (assumes that we do use this compiler)
+dnl
+dnl _AC_BAKEFILE_LANG_COMPILER_LATER_THAN(NAME, LANG, SYMBOL, VER, VERMSG, IF-YES, IF-NO)
+AC_DEFUN([_AC_BAKEFILE_LANG_COMPILER_LATER_THAN],
+[
+    AC_LANG_PUSH($2)
+    AC_CACHE_CHECK(
+        [whether we are using $1 $2 compiler v$5 or later],
+        [bakefile_cv_[]_AC_LANG_ABBREV[]_compiler_[]$3[]_lt_[]$4],
+        [AC_TRY_COMPILE(
+            [],
+            [
+             #ifndef $3 || $3 < $4
+                choke me
+             #endif
+            ],
+            [bakefile_cv_[]_AC_LANG_ABBREV[]_compiler_[]$3[]_lt_[]$4=yes],
+            [bakefile_cv_[]_AC_LANG_ABBREV[]_compiler_[]$3[]_lt_[]$4=no]
+         )
+        ]
+    )
+    if test "x$bakefile_cv_[]_AC_LANG_ABBREV[]_compiler_[]$3[]_lt_[]$4" = "xyes"; then
+        :; $6
+    else
+        :; $7
+    fi
+    AC_LANG_POP($2)
+])
+
 dnl CodeWarrior Metrowerks compiler defines __MWERKS__ for both C and C++
 AC_DEFUN([AC_BAKEFILE_PROG_MWCC],
 [
@@ -115,6 +145,29 @@ AC_DEFUN([AC_BAKEFILE_PROG_INTELCC],
 AC_DEFUN([AC_BAKEFILE_PROG_INTELCXX],
 [
     _AC_BAKEFILE_LANG_COMPILER(Intel, C++, __INTEL_COMPILER, INTELCXX=yes)
+])
+
+dnl Intel compiler command line options changed in incompatible ways sometimes
+dnl before v8 (-KPIC was replaced with gcc-compatible -fPIC) and again in v10
+dnl (-create-pch deprecated in favour of -pch-create) so we need to test for
+dnl its exact version too
+AC_DEFUN([AC_BAKEFILE_PROG_INTELCC_8],
+[
+    _AC_BAKEFILE_LANG_COMPILER_LATER_THAN(Intel, C, __INTEL_COMPILER, 800, 8, INTELCC8=yes)
+])
+AC_DEFUN([AC_BAKEFILE_PROG_INTELCXX_8],
+[
+    _AC_BAKEFILE_LANG_COMPILER_LATER_THAN(Intel, C++, __INTEL_COMPILER, 800, 8, INTELCXX8=yes)
+])
+
+AC_DEFUN([AC_BAKEFILE_PROG_INTELCC_10],
+[
+    _AC_BAKEFILE_LANG_COMPILER_LATER_THAN(Intel, C, __INTEL_COMPILER, 1000, 10, INTELCC10=yes)
+])
+
+AC_DEFUN([AC_BAKEFILE_PROG_INTELCXX_10],
+[
+    _AC_BAKEFILE_LANG_COMPILER_LATER_THAN(Intel, C++, __INTEL_COMPILER, 1000, 10, INTELCXX10=yes)
 ])
 
 dnl HP-UX aCC: see http://docs.hp.com/en/6162/preprocess.htm#macropredef
@@ -194,6 +247,12 @@ AC_DEFUN([_AC_BAKEFILE_PROG_COMPILER],
     dnl always test for it
     AC_BAKEFILE_PROG_INTEL$1
 
+    dnl If we use Intel compiler we also need to know its version
+    if test "$INTEL$1" = "yes"; then
+        AC_BAKEFILE_PROG_INTEL$1_8
+        AC_BAKEFILE_PROG_INTEL$1_10
+    fi
+
     dnl if we're using gcc, we can't be using any of incompatible compilers
     if test "x$G$1" != "xyes"; then
         if test "x$1" = "xC"; then
@@ -213,7 +272,9 @@ AC_DEFUN([_AC_BAKEFILE_PROG_COMPILER],
 
             Darwin)
                 AC_BAKEFILE_PROG_MW$1
-                AC_BAKEFILE_PROG_XL$1
+                if test "$MW$1" != "yes"; then
+                    AC_BAKEFILE_PROG_XL$1
+                fi
                 ;;
 
             IRIX*)
@@ -221,8 +282,11 @@ AC_DEFUN([_AC_BAKEFILE_PROG_COMPILER],
                 ;;
 
             Linux*)
-                dnl Sun CC is now available under Linux too
-                AC_BAKEFILE_PROG_SUN$1
+                dnl Sun CC is now available under Linux too, test for it unless
+                dnl we already found that we were using a different compiler
+                if test "$INTEL$1" != "yes"; then
+                    AC_BAKEFILE_PROG_SUN$1
+                fi
                 ;;
 
             HP-UX*)
