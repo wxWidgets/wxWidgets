@@ -53,20 +53,22 @@
 namespace
 {
 
-// Message codes
+// Message codes (don't change them to avoid breaking the existing code using
+// wxIPC protocol!)
 enum IPCCode
 {
-    IPC_EXECUTE = 1,
-    IPC_REQUEST,
-    IPC_POKE,
-    IPC_ADVISE_START,
-    IPC_ADVISE_REQUEST,
-    IPC_ADVISE,
-    IPC_ADVISE_STOP,
-    IPC_REQUEST_REPLY,
-    IPC_FAIL,
-    IPC_CONNECT,
-    IPC_DISCONNECT
+    IPC_EXECUTE         = 1,
+    IPC_REQUEST         = 2,
+    IPC_POKE            = 3,
+    IPC_ADVISE_START    = 4,
+    IPC_ADVISE_REQUEST  = 5,
+    IPC_ADVISE          = 6,
+    IPC_ADVISE_STOP     = 7,
+    IPC_REQUEST_REPLY   = 8,
+    IPC_FAIL            = 9,
+    IPC_CONNECT         = 10,
+    IPC_DISCONNECT      = 11,
+    IPC_MAX
 };
 
 } // anonymous namespace
@@ -576,8 +578,8 @@ const void *wxTCPConnection::Request(const wxString& item,
 
     IPCOutput(m_streams).Write(IPC_REQUEST, item, format);
 
-    int ret = m_streams->Read8();
-    if ( ret == IPC_FAIL )
+    const int ret = m_streams->Read8();
+    if ( ret != IPC_REQUEST_REPLY )
         return NULL;
 
     return m_streams->ReadData(this, size);
@@ -605,11 +607,9 @@ bool wxTCPConnection::StartAdvise(const wxString& item)
 
     IPCOutput(m_streams).Write(IPC_ADVISE_START, item);
 
-    int ret = m_streams->Read8();
-    if (ret != IPC_FAIL)
-        return true;
-    else
-        return false;
+    const int ret = m_streams->Read8();
+
+    return ret == IPC_ADVISE_START;
 }
 
 bool wxTCPConnection::StopAdvise (const wxString& item)
@@ -619,12 +619,9 @@ bool wxTCPConnection::StopAdvise (const wxString& item)
 
     IPCOutput(m_streams).Write(IPC_ADVISE_STOP, item);
 
-    int ret = m_streams->Read8();
+    const int ret = m_streams->Read8();
 
-    if (ret != IPC_FAIL)
-        return true;
-    else
-        return false;
+    return ret == IPC_ADVISE_STOP;
 }
 
 // Calls that SERVER can make
@@ -795,6 +792,11 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
             sock->Close();
             connection->SetConnected(false);
             connection->OnDisconnect();
+            break;
+
+        case IPC_FAIL:
+            wxLogDebug("Unexpected IPC_FAIL received");
+            error = true;
             break;
 
         default:
