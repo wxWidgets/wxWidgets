@@ -763,6 +763,20 @@ public:
         If the given option is not present, the function returns 0.
         Use HasOption() is 0 is a possibly valid value for the option.
 
+        Options common to all formats:
+        @li wxIMAGE_OPTION_MAX_WIDTH and wxIMAGE_OPTION_MAX_HEIGHT: If either
+            of these options is specified, the loaded image will be scaled down
+            (preserving its aspect ratio) so that its width is less than the
+            max width given if it is not 0 @em and its height is less than the
+            max height given if it is not 0. This is typically used for loading
+            thumbnails and the advantage of using these options compared to
+            calling Rescale() after loading is that some handlers (only JPEG
+            one right now) support rescaling the image during loading which is
+            vastly more efficient than loading the entire huge image and
+            rescaling it later (if these options are not supported by the
+            handler, this is still what happens however). These options must be
+            set before calling LoadFile() to have any effect.
+
         Options for wxPNGHandler:
         @li wxIMAGE_OPTION_PNG_FORMAT: Format for saving a PNG file.
         @li wxIMAGE_OPTION_PNG_BITDEPTH: Bit depth for every channel (R/G/B/A).

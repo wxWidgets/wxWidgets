@@ -228,11 +228,17 @@ static inline void wx_cmyk_to_rgb(unsigned char* rgb, const unsigned char* cmyk)
 
 bool wxJPEGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose, int WXUNUSED(index) )
 {
+    wxCHECK_MSG( image, false, "NULL image pointer" );
+
     struct jpeg_decompress_struct cinfo;
     wx_error_mgr jerr;
     unsigned char *ptr;
 
+    // save this before calling Destroy()
+    const unsigned maxWidth = image->GetOptionInt(wxIMAGE_OPTION_MAX_WIDTH),
+                   maxHeight = image->GetOptionInt(wxIMAGE_OPTION_MAX_HEIGHT);
     image->Destroy();
+
     cinfo.err = jpeg_std_error( &jerr );
     jerr.error_exit = wx_error_exit;
 
@@ -268,9 +274,20 @@ bool wxJPEGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
         bytesPerPixel = 3;
     }
 
+    // scale the picture to fit in the specified max size if necessary
+    if ( maxWidth > 0 || maxHeight > 0 )
+    {
+        unsigned& scale = cinfo.scale_denom;
+        while ( (maxWidth && (cinfo.image_width / scale > maxWidth)) ||
+                    (maxHeight && (cinfo.image_height / scale > maxHeight)) )
+        {
+            scale *= 2;
+        }
+    }
+
     jpeg_start_decompress( &cinfo );
 
-    image->Create( cinfo.image_width, cinfo.image_height );
+    image->Create( cinfo.output_width, cinfo.output_height );
     if (!image->Ok()) {
         jpeg_finish_decompress( &cinfo );
         jpeg_destroy_decompress( &cinfo );

@@ -1978,12 +1978,10 @@ void wxImage::SetPalette(const wxPalette& palette)
 
 void wxImage::SetOption(const wxString& name, const wxString& value)
 {
-    wxCHECK_RET( Ok(), wxT("invalid image") );
-
     AllocExclusive();
 
     int idx = M_IMGDATA->m_optionNames.Index(name, false);
-    if (idx == wxNOT_FOUND)
+    if ( idx == wxNOT_FOUND )
     {
         M_IMGDATA->m_optionNames.Add(name);
         M_IMGDATA->m_optionValues.Add(value);
@@ -2004,10 +2002,11 @@ void wxImage::SetOption(const wxString& name, int value)
 
 wxString wxImage::GetOption(const wxString& name) const
 {
-    wxCHECK_MSG( Ok(), wxEmptyString, wxT("invalid image") );
+    if ( !M_IMGDATA )
+        return wxEmptyString;
 
     int idx = M_IMGDATA->m_optionNames.Index(name, false);
-    if (idx == wxNOT_FOUND)
+    if ( idx == wxNOT_FOUND )
         return wxEmptyString;
     else
         return M_IMGDATA->m_optionValues[idx];
@@ -2020,9 +2019,8 @@ int wxImage::GetOptionInt(const wxString& name) const
 
 bool wxImage::HasOption(const wxString& name) const
 {
-    wxCHECK_MSG( Ok(), false, wxT("invalid image") );
-
-    return (M_IMGDATA->m_optionNames.Index(name, false) != wxNOT_FOUND);
+    return M_IMGDATA ? M_IMGDATA->m_optionNames.Index(name, false) != wxNOT_FOUND
+                     : false;
 }
 
 // ----------------------------------------------------------------------------
@@ -2214,18 +2212,42 @@ int wxImage::GetImageCount( wxInputStream &stream, wxBitmapType type )
 
 bool wxImage::DoLoad(wxImageHandler& handler, wxInputStream& stream, int index)
 {
+    // save the options values which can be clobbered by the handler (e.g. many
+    // of them call Destroy() before trying to load the file)
+    const unsigned maxWidth = GetOptionInt(wxIMAGE_OPTION_MAX_WIDTH),
+                   maxHeight = GetOptionInt(wxIMAGE_OPTION_MAX_HEIGHT);
+
     if ( !handler.LoadFile(this, stream, true/*verbose*/, index) )
         return false;
 
     M_IMGDATA->m_type = handler.GetType();
+
+    // rescale the image to the specified size if needed
+    if ( maxWidth || maxHeight )
+    {
+        const unsigned widthOrig = GetWidth(),
+                       heightOrig = GetHeight();
+
+        // this uses the same (trivial) algorithm as the JPEG handler
+        unsigned width = widthOrig,
+                 height = heightOrig;
+        while ( (maxWidth && width > maxWidth) ||
+                    (maxHeight && height > maxHeight) )
+        {
+            width /= 2;
+            height /= 2;
+        }
+
+        if ( width != widthOrig || height != heightOrig )
+            Rescale(width, height, wxIMAGE_QUALITY_HIGH);
+    }
+
     return true;
 }
 
 bool wxImage::LoadFile( wxInputStream& stream, wxBitmapType type, int index )
 {
-    UnRef();
-
-    m_refData = new wxImageRefData;
+    AllocExclusive();
 
     wxImageHandler *handler;
 
