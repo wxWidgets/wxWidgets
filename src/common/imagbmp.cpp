@@ -182,7 +182,7 @@ bool wxBMPHandler::SaveDib(wxImage *image,
     // for the BMP format if not specified
     wxUint32 hres = image->GetOptionInt(wxIMAGE_OPTION_RESOLUTIONX),
              vres = image->GetOptionInt(wxIMAGE_OPTION_RESOLUTIONY);
-    switch ( image->GetOptionInt(wxIMAGE_OPTION_RESOLUTION) )
+    switch ( image->GetOptionInt(wxIMAGE_OPTION_RESOLUTIONUNIT) )
     {
         default:
             wxFAIL_MSG( _T("unexpected image resolution units") );
