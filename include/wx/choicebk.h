@@ -93,7 +93,7 @@ protected:
 
     void UpdateSelectedPage(size_t newsel)
     {
-        m_selection = newsel;
+        m_selection = wx_static_cast(int, newsel);
         GetChoiceCtrl()->Select(newsel);
     }
 

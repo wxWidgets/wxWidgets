@@ -102,6 +102,9 @@ All (GUI):
   Polish Pro input.
 - Fixed wxHtmlWindow::SelectionToText() to correctly insert newlines after
   single-cell paragraphs.
+- Fixed wxHTML's line breaks handling in <pre> blocks broken in 2.8.8 (#10120).
+- wxHTML: don't include extra whitespace in table cells.
+- Implemented wxWindow::DragAcceptFiles() on all platforms.
 
 All (Unix):
 
@@ -113,6 +116,8 @@ wxMSW:
 - Fixed bug with using non default encoding in wxTextCtrl in ANSI build.
 - Restored generation of events for accelerators when there is no menu bar.
 - Fixed wxArtProvider::GetSizeHint() to return 16x16 for wxART_FRAME_ICON.
+- Fixed toolbar buttons so that they don't disappear temporarily when clicked
+  if the event handler causes window update.
 
 wxGTK:
 

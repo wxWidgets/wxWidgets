@@ -2750,6 +2750,56 @@ void wxWindowBase::DoMoveInTabOrder(wxWindow *win, MoveKind move)
 }
 
 // ----------------------------------------------------------------------------
+// drag and drop
+// ----------------------------------------------------------------------------
+
+#if wxUSE_DRAG_AND_DROP && !defined(__WXMSW__)
+
+class wxDragAcceptFilesImplTarget : public wxFileDropTarget
+{
+public:
+    wxDragAcceptFilesImplTarget(wxWindowBase *win) : m_win(win) {}
+
+    virtual bool OnDropFiles(wxCoord x, wxCoord y,
+                             const wxArrayString& filenames)
+    {
+        wxDropFilesEvent event(wxEVT_DROP_FILES,
+                               filenames.size(),
+                               wxCArrayString(filenames).Release());
+        event.SetEventObject(m_win);
+        event.m_pos.x = x;
+        event.m_pos.y = y;
+
+        return m_win->GetEventHandler()->ProcessEvent(event);
+    }
+
+private:
+    wxWindowBase * const m_win;
+
+    DECLARE_NO_COPY_CLASS(wxDragAcceptFilesImplTarget)
+};
+
+
+// Generic version of DragAcceptFiles(). It works by installing a simple
+// wxFileDropTarget-to-EVT_DROP_FILES adaptor and therefore cannot be used
+// together with explicit SetDropTarget() calls.
+void wxWindowBase::DragAcceptFiles(bool accept)
+{
+    if ( accept )
+    {
+        wxASSERT_MSG( !GetDropTarget(),
+                      _T("cannot use DragAcceptFiles() and SetDropTarget() together") );
+        SetDropTarget(new wxDragAcceptFilesImplTarget(this));
+    }
+    else
+    {
+        SetDropTarget(NULL);
+    }
+}
+
+#endif // wxUSE_DRAG_AND_DROP && !defined(__WXMSW__)
+
+// ----------------------------------------------------------------------------
 // global functions
 // ----------------------------------------------------------------------------
 

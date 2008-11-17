@@ -46,9 +46,22 @@ static wxString LINKAGEMODE HtmlizeLinebreaks(const wxString& str)
                 }
                 out << wxT('>');
                 break;
+
+            // We need to translate any line break into exactly one <br>.
+            // Quoting HTML spec: "A line break is defined to be a carriage
+            // return (&#x000D;), a line feed (&#x000A;), or a carriage
+            // return/line feed pair."
+            case wxT('\r'):
+                {
+                    size_t j = i + 1;
+                    if ( j < len && str[j] == wxT('\n') )
+                        i = j;
+                }
+                // fall through
             case wxT('\n'):
                 out << wxT("<br>");
                 break;
+
             default:
                 out << str[i];
                 break;

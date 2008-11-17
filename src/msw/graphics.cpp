@@ -325,7 +325,7 @@ public:
     // gets the matrix of this context
     virtual wxGraphicsMatrix GetTransform() const;
 
-    virtual void DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
+    void DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
     virtual void DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
     virtual void DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
     virtual void PushState();
@@ -626,6 +626,99 @@ void wxGDIPlusBrushData::CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wx
     b->SetSurroundColors(colors, &count);
 }
 
+wxGDIPlusBitmapData::wxGDIPlusBitmapData( wxGraphicsRenderer* renderer, 
+                        const wxBitmap &bmp) : wxGraphicsObjectRefData( renderer )
+{
+    m_bitmap = NULL;
+    Bitmap* image = NULL;
+    Bitmap* helper = NULL;
+    if ( bmp.GetMask() )
+    {
+        Bitmap interim((HBITMAP)bmp.GetHBITMAP(),(HPALETTE)bmp.GetPalette()->GetHPALETTE()) ;
+
+        size_t width = interim.GetWidth();
+        size_t height = interim.GetHeight();
+        Rect bounds(0,0,width,height);
+
+        image = new Bitmap(width,height,PixelFormat32bppPARGB) ;
+
+        Bitmap interimMask((HBITMAP)bmp.GetMask()->GetMaskBitmap(),NULL);
+        wxASSERT(interimMask.GetPixelFormat() == PixelFormat1bppIndexed);
+
+        BitmapData dataMask ;
+        interimMask.LockBits(&bounds,ImageLockModeRead,
+            interimMask.GetPixelFormat(),&dataMask);
+
+
+        BitmapData imageData ;
+        image->LockBits(&bounds,ImageLockModeWrite, PixelFormat32bppPARGB, &imageData);
+
+        BYTE maskPattern = 0 ;
+        BYTE maskByte = 0;
+        size_t maskIndex ;
+
+        for ( size_t y = 0 ; y < height ; ++y)
+        {
+            maskIndex = 0 ;
+            for( size_t x = 0 ; x < width; ++x)
+            {
+                if ( x % 8 == 0)
+                {
+                    maskPattern = 0x80;
+                    maskByte = *((BYTE*)dataMask.Scan0 + dataMask.Stride*y + maskIndex);
+                    maskIndex++;
+                }
+                else
+                    maskPattern = maskPattern >> 1;
+
+                ARGB *dest = (ARGB*)((BYTE*)imageData.Scan0 + imageData.Stride*y + x*4);
+                if ( (maskByte & maskPattern) == 0 )
+                    *dest = 0x00000000;
+                else
+                {
+                    Color c ;
+                    interim.GetPixel(x,y,&c) ;
+                    *dest = (c.GetValue() | Color::AlphaMask);
+                }
+            }
+        }
+
+        image->UnlockBits(&imageData);
+
+        interimMask.UnlockBits(&dataMask);
+        interim.UnlockBits(&dataMask);
+    }
+    else
+    {
+        image = Bitmap::FromHBITMAP((HBITMAP)bmp.GetHBITMAP(),(HPALETTE)bmp.GetPalette()->GetHPALETTE());
+        if ( bmp.HasAlpha() && GetPixelFormatSize(image->GetPixelFormat()) == 32 )
+        {
+            size_t width = image->GetWidth();
+            size_t height = image->GetHeight();
+            Rect bounds(0,0,width,height);
+            BitmapData data ;
+
+            helper = image ;
+            image = NULL ;
+            helper->LockBits(&bounds, ImageLockModeRead,
+                helper->GetPixelFormat(),&data);
+
+            image = new Bitmap(data.Width, data.Height, data.Stride,
+                PixelFormat32bppPARGB , (BYTE*) data.Scan0);
+
+            helper->UnlockBits(&data);
+        }
+    }
+    if ( image )
+        m_bitmap = image;
+    delete helper;
+}
+
+wxGDIPlusBitmapData::~wxGDIPlusBitmapData()
+{
+    delete m_bitmap;
+}
+
 //-----------------------------------------------------------------------------
 // wxGDIPlusFont implementation
 //-----------------------------------------------------------------------------
@@ -813,7 +906,7 @@ void wxGDIPlusPathData::GetCurrentPoint( wxDouble* x, wxDouble* y) const
 void wxGDIPlusPathData::AddArc( wxDouble x, wxDouble y, wxDouble r, double startAngle, double endAngle, bool clockwise )
 {
     double sweepAngle = endAngle - startAngle ;
-    if( abs(sweepAngle) >= 2*M_PI)
+    if( fabs(sweepAngle) >= 2*M_PI)
     {
         sweepAngle = 2 * M_PI;
     }
@@ -1171,6 +1264,12 @@ void wxGDIPlusContext::PopState()
 // premultiplied format, therefore in the failing cases we create a new bitmap using the non-premultiplied
 // bytes as parameter
 
+void wxGraphicsContext::DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
+{
+    Bitmap* image = static_cast<wxGDIPlusBitmapData*>(bmp.GetRefData())->GetGDIPlusBitmap();
+    static_cast<wxGDIPlusContext*>(this)->DrawBitmap(bmp, x, y, w, h);
+}
+
 void wxGDIPlusContext::DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
     Bitmap* image = static_cast<wxGDIPlusBitmapData*>(bmp.GetRefData())->GetGDIPlusBitmap();
@@ -1436,8 +1535,7 @@ public :
     // sets the font
     virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) ;
 
-    virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) ;
-
+    wxGraphicsBitmap CreateBitmap( const wxBitmap &bmp ) ;
 protected :
     void EnsureIsLoaded();
     void Load();
@@ -1612,13 +1710,12 @@ wxGraphicsFont wxGDIPlusRenderer::CreateFont( const wxFont &font , const wxColou
         return wxNullGraphicsFont;
 }
 
-wxGraphicsBitmap wxGDIPlusRenderer::CreateBitmap( const wxBitmap &bitmap )
+wxGraphicsBitmap wxGraphicsRenderer::CreateBitmap( const wxBitmap& bmp )
 {
-    EnsureIsLoaded();
-    if ( bitmap.Ok() )
+    if ( bmp.Ok() )
     {
         wxGraphicsBitmap p;
-        p.SetRefData(new wxGDIPlusBitmapData( this , bitmap ));
+        p.SetRefData(new wxGDIPlusBitmapData( this , bmp ));
         return p;
     }
     else

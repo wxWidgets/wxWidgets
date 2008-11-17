@@ -91,7 +91,7 @@ wxGnomeVFSLibrary::~wxGnomeVFSLibrary()
         // which we link implicitly (GTK+ itself?) which are not uninstalled
         // when it's unloaded resulting in this crash, so just leave it in
         // memory -- it's a lesser evil
-        m_gnome_vfs_lib->.Detach();
+        m_gnome_vfs_lib->Detach();
         delete m_gnome_vfs_lib;
     }
 }

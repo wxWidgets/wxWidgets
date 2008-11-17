@@ -1040,7 +1040,7 @@ wxEvtHandler::wxEvtHandler()
     m_eventsLocker = new wxCriticalSection;
 #  endif
 #endif
-    
+
     // no client data (yet)
     m_clientData = NULL;
     m_clientDataType = wxClientData_None;
@@ -1142,8 +1142,6 @@ void wxEvtHandler::AddPendingEvent(wxEvent& event)
 
     m_pendingEvents->Append(eventCopy);
 
-    wxLEAVE_CRIT_SECT( Lock() );
-
     // 2) Add this event handler to list of event handlers that
     //    have pending events.
 
@@ -1154,6 +1152,8 @@ void wxEvtHandler::AddPendingEvent(wxEvent& event)
     wxPendingEvents->Append(this);
 
     wxLEAVE_CRIT_SECT(*wxPendingEventsLocker);
+
+    wxLEAVE_CRIT_SECT( Lock() );
 
     // 3) Inform the system that new pending events are somewhere,
     //    and that these should be processed in idle time.
@@ -1166,7 +1166,7 @@ void wxEvtHandler::ProcessPendingEvents()
     // pending events
     wxCHECK_RET( m_pendingEvents,
                  wxT("Please call wxApp::ProcessPendingEvents() instead") );
-    
+
     wxENTER_CRIT_SECT( Lock() );
 
     // we leave the loop once we have processed all events that were present at

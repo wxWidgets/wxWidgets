@@ -96,6 +96,16 @@ bool wxTopLevelWindowMac::Create(wxWindow *parent,
     return true;
 }
 
+bool wxTopLevelWindowMac::Destroy()
+{
+    // NB: this will get called during destruction if we don't do it now,
+    // and may fire a kill focus event on a control being destroyed
+    if (m_macWindow)
+        ClearKeyboardFocus( (WindowRef)m_macWindow );
+        
+    return wxTopLevelWindowBase::Destroy();
+}
+
 wxTopLevelWindowMac::~wxTopLevelWindowMac()
 {
     FullScreenData *data = (FullScreenData *) m_macFullScreenData ;

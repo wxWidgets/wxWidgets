@@ -1302,7 +1302,7 @@ public:
     //
     // image support
     //
-    virtual void DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
+    void DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
 
     virtual void DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
 
@@ -1710,6 +1710,11 @@ void wxMacCoreGraphicsContext::Rotate( wxDouble angle )
         m_windowTransform = CGAffineTransformRotate(m_windowTransform,angle);
 }
 
+void wxGraphicsContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
+{
+    static_cast<wxMacCoreGraphicsContext*>(this)->DrawBitmap(bmp, x, y, w, h);
+}
+
 void wxMacCoreGraphicsContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
     wxGraphicsBitmap bitmap = GetRenderer()->CreateBitmap(bmp);
@@ -1740,9 +1745,9 @@ void wxMacCoreGraphicsContext::DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble
         else
         {
             ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->Apply(this);
+            HIViewDrawCGImage( m_cgContext , &r , image );
         }
     }
-    HIViewDrawCGImage( m_cgContext , &r , image );
 }
 
 void wxMacCoreGraphicsContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
@@ -2153,7 +2158,7 @@ public :
    // sets the font
     virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) ;
     
-    virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) ;
+    wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) ;
 
 private :
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxMacCoreGraphicsRenderer)
@@ -2289,7 +2294,7 @@ wxGraphicsFont wxMacCoreGraphicsRenderer::CreateFont( const wxFont &font , const
         return wxNullGraphicsFont;
 }
 
-wxGraphicsBitmap wxMacCoreGraphicsRenderer::CreateBitmap( const wxBitmap& bmp )
+wxGraphicsBitmap wxGraphicsRenderer::CreateBitmap( const wxBitmap& bmp )
 {
     if ( bmp.Ok() )
     {

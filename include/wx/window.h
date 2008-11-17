@@ -1027,6 +1027,14 @@ public:
         // NULL; it's owned by the window and will be deleted by it)
     virtual void SetDropTarget( wxDropTarget *dropTarget ) = 0;
     virtual wxDropTarget *GetDropTarget() const { return m_dropTarget; }
+
+#ifndef __WXMSW__ // MSW version is in msw/window.h
+#if wxABI_VERSION >= 20810
+    // Accept files for dragging
+    void DragAcceptFiles(bool accept);
+#endif // wxABI_VERSION >= 20810
+#endif // !__WXMSW__
+
 #endif // wxUSE_DRAG_AND_DROP
 
     // constraints and sizers

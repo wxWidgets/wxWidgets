@@ -1129,9 +1129,10 @@ bool wxToolBar::MSWCommand(WXUINT WXUNUSED(cmd), WXWORD id)
 
     bool toggled = false; // just to suppress warnings
 
+    LRESULT state = ::SendMessage(GetHwnd(), TB_GETSTATE, id, 0);
+
     if ( tool->CanBeToggled() )
     {
-        LRESULT state = ::SendMessage(GetHwnd(), TB_GETSTATE, id, 0);
         toggled = (state & TBSTATE_CHECKED) != 0;
 
         // ignore the event when a radio button is released, as this doesn't
@@ -1143,9 +1144,29 @@ bool wxToolBar::MSWCommand(WXUINT WXUNUSED(cmd), WXWORD id)
         UnToggleRadioGroup(tool);
     }
 
+    // Without the two lines of code below, if the toolbar was repainted during
+    // OnLeftClick(), then it could end up without the tool bitmap temporarily
+    // (see http://lists.nongnu.org/archive/html/lmi/2008-10/msg00014.html).
+    // The Update() call bellow ensures that this won't happen, by repainting
+    // invalidated areas of the toolbar immediately.
+    //
+    // To complicate matters, the tool would be drawn in depressed state (this
+    // code is called when mouse button is released, not pressed). That's not
+    // ideal, having the tool pressed for the duration of OnLeftClick()
+    // provides the user with useful visual clue that the app is busy reacting
+    // to the event. So we manually put the tool into pressed state, handle the
+    // event and then finally restore tool's original state.
+    ::SendMessage(GetHwnd(), TB_SETSTATE, id, MAKELONG(state | TBSTATE_PRESSED, 0));
+    Update();
+
+    bool allowLeftClick = OnLeftClick((int)id, toggled);
+
+    // restore the unpressed state
+    ::SendMessage(GetHwnd(), TB_SETSTATE, id, MAKELONG(state, 0));
+
     // OnLeftClick() can veto the button state change - for buttons which
     // may be toggled only, of couse
-    if ( !OnLeftClick((int)id, toggled) && tool->CanBeToggled() )
+    if ( !allowLeftClick && tool->CanBeToggled() )
     {
         // revert back
         tool->Toggle(!toggled);

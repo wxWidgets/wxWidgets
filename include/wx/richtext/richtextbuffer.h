@@ -1067,7 +1067,7 @@ public:
     virtual int GetParagraphLength(long paragraphNumber) const;
 
     /// Get the number of paragraphs
-    virtual int GetParagraphCount() const { return GetChildCount(); }
+    virtual int GetParagraphCount() const { return wx_static_cast(int, GetChildCount()); }
 
     /// Get the number of visible lines
     virtual int GetLineCount() const;

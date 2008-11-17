@@ -2645,3 +2645,10 @@ int wxCMPFUNC_CONV wxStringSortDescending(wxString* s1, wxString* s2)
 {
     return -s1->Cmp(*s2);
 }
+
+wxString* wxCArrayString::Release()
+{
+    wxString *r = GetStrings();
+    m_strings = NULL;
+    return r;
+}

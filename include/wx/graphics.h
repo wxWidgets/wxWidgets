@@ -440,8 +440,10 @@ public:
     // sets the font
     virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) const;
     
-    virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) const;
-    
+#if wxABI_VERSION >= 20809
+    wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) const;
+#endif
+
     //virtual wxGraphicsBitmap CreateSubBitmap( const wxGraphicsBitmap &bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h  ) const;
 
     // create a 'native' matrix corresponding to these values
@@ -545,8 +547,10 @@ public:
     //
     // image support
     //
-    virtual void DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) = 0;
-
+#if wxABI_VERSION >= 20809
+    void DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
+#endif
+    
     virtual void DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) = 0;
 
     virtual void DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) = 0;
@@ -685,7 +689,10 @@ public :
    // sets the font
     virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) = 0;
 
-    virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bmp ) = 0;
+#if wxABI_VERSION >= 20809
+    wxGraphicsBitmap CreateBitmap( const wxBitmap &bmp );
+#endif
+
 private :
     DECLARE_NO_COPY_CLASS(wxGraphicsRenderer)
     DECLARE_ABSTRACT_CLASS(wxGraphicsRenderer)

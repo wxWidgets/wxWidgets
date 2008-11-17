@@ -665,10 +665,12 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
     TAG_HANDLER_VARS
         wxHtmlTableCell* m_Table;
         wxString m_tAlign, m_rAlign;
+        wxHtmlContainerCell *m_enclosingContainer;
 
     TAG_HANDLER_CONSTR(TABLE)
     {
         m_Table = NULL;
+        m_enclosingContainer = NULL;
         m_tAlign = m_rAlign = wxEmptyString;
     }
 
@@ -681,9 +683,8 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
         if (tag.GetName() == wxT("TABLE"))
         {
             wxHtmlTableCell *oldt = m_Table;
-            wxHtmlContainerCell *oldcont;
 
-            oldcont = c = m_WParser->OpenContainer();
+            m_enclosingContainer = c = m_WParser->OpenContainer();
 
             m_Table = new wxHtmlTableCell(c, tag, m_WParser->GetPixelScale());
 
@@ -717,11 +718,12 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
             ParseInner(tag);
 
             m_WParser->SetAlign(oldAlign);
-            m_WParser->SetContainer(oldcont);
+            m_WParser->SetContainer(m_enclosingContainer);
             m_WParser->CloseContainer();
 
             m_Table = oldt;
-            return true;
+
+            return true; // ParseInner() called
         }
 
 
@@ -763,8 +765,19 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
                     m_WParser->SetAlign(wxHTML_ALIGN_CENTER);
 
                 m_WParser->OpenContainer();
+
+                ParseInner(tag);
+
+                // set the current container back to the enclosing one so that
+                // text outside of <th> and <td> isn't included in any cell
+                // (this happens often enough in practice because it's common
+                // to use whitespace between </td> and the next <td>):
+                m_WParser->SetContainer(m_enclosingContainer);
+
+                return true; // ParseInner() called
             }
         }
+
         return false;
     }
 
