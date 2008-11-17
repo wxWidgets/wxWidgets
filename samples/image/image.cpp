@@ -26,6 +26,7 @@
 #include "wx/mstream.h"
 #include "wx/wfstream.h"
 #include "wx/quantize.h"
+#include "wx/stopwatch.h"
 
 #if wxUSE_CLIPBOARD
     #include "wx/dataobj.h"
@@ -119,6 +120,8 @@ public:
     void OnAbout( wxCommandEvent &event );
     void OnNewFrame( wxCommandEvent &event );
     void OnImageInfo( wxCommandEvent &event );
+    void OnThumbnail( wxCommandEvent &event );
+
 #ifdef wxHAVE_RAW_BITMAP
     void OnTestRawBitmap( wxCommandEvent &event );
 #endif // wxHAVE_RAW_BITMAP
@@ -1110,7 +1113,8 @@ enum
     ID_ABOUT = wxID_ABOUT,
     ID_NEW = 100,
     ID_INFO,
-    ID_SHOWRAW
+    ID_SHOWRAW,
+    ID_SHOWTHUMBNAIL
 };
 
 IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )
@@ -1120,6 +1124,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_MENU    (ID_QUIT,  MyFrame::OnQuit)
   EVT_MENU    (ID_NEW,   MyFrame::OnNewFrame)
   EVT_MENU    (ID_INFO,  MyFrame::OnImageInfo)
+  EVT_MENU    (ID_SHOWTHUMBNAIL, MyFrame::OnThumbnail)
 #ifdef wxHAVE_RAW_BITMAP
   EVT_MENU    (ID_SHOWRAW, MyFrame::OnTestRawBitmap)
 #endif
@@ -1143,6 +1148,9 @@ MyFrame::MyFrame()
   menuImage->AppendSeparator();
   menuImage->Append( ID_SHOWRAW, _T("Test &raw bitmap...\tCtrl-R"));
 #endif
+  menuImage->AppendSeparator();
+  menuImage->Append( ID_SHOWTHUMBNAIL, _T("Test &thumbnail...\tCtrl-T"),
+                    "Test scaling the image during load (try with JPEG)");
   menuImage->AppendSeparator();
   menuImage->Append( ID_ABOUT, _T("&About..."));
   menuImage->AppendSeparator();
@@ -1309,3 +1317,37 @@ bool MyApp::OnInit()
 
     return true;
 }
+
+void MyFrame::OnThumbnail( wxCommandEvent &WXUNUSED(event) )
+{
+#if wxUSE_FILEDLG
+    wxString filename = wxFileSelector(_T("Select image file"));
+    if ( filename.empty() )
+        return;
+
+    static const int THUMBNAIL_WIDTH = 320;
+    static const int THUMBNAIL_HEIGHT = 240;
+
+    wxImage image;
+    image.SetOption(wxIMAGE_OPTION_MAX_WIDTH, THUMBNAIL_WIDTH);
+    image.SetOption(wxIMAGE_OPTION_MAX_HEIGHT, THUMBNAIL_HEIGHT);
+
+    wxStopWatch sw;
+    if ( !image.LoadFile(filename) )
+    {
+        wxLogError(_T("Couldn't load image from '%s'."), filename.c_str());
+        return;
+    }
+
+    const long loadTime = sw.Time();
+
+    MyImageFrame * const
+        frame = new MyImageFrame(this, filename, wxBitmap(image));
+    frame->Show();
+    wxLogStatus(frame, "Loaded \"%s\" in %ldms", filename, loadTime);
+#else
+    wxLogError( _T("Couldn't create file selector dialog") );
+    return;
+#endif // wxUSE_FILEDLG
+}
+
