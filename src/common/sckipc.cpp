@@ -119,11 +119,12 @@ GetAddressFromName(const wxString& serverName,
 class wxTCPEventHandler : public wxEvtHandler
 {
 public:
-    wxTCPEventHandler() : wxEvtHandler() {}
+    wxTCPEventHandler() : wxEvtHandler() { }
 
     void Client_OnRequest(wxSocketEvent& event);
     void Server_OnRequest(wxSocketEvent& event);
 
+private:
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxTCPEventHandler)
 };
@@ -134,7 +135,38 @@ enum
     _SERVER_ONREQUEST_ID
 };
 
-static wxTCPEventHandler *gs_handler = NULL;
+// --------------------------------------------------------------------------
+// wxTCPEventHandlerModule (private class)
+// --------------------------------------------------------------------------
+
+class wxTCPEventHandlerModule : public wxModule
+{
+public:
+    wxTCPEventHandlerModule() : wxModule() { }
+
+    // get the global wxTCPEventHandler creating it if necessary
+    static wxTCPEventHandler& GetHandler()
+    {
+        if ( !ms_handler )
+            ms_handler = new wxTCPEventHandler;
+
+        return *ms_handler;
+    }
+
+    // as ms_handler is initialized on demand, don't do anything in OnInit()
+    virtual bool OnInit() { return true; }
+    virtual void OnExit() { wxDELETE(ms_handler); }
+
+private:
+    static wxTCPEventHandler *ms_handler;
+
+    DECLARE_DYNAMIC_CLASS(wxTCPEventHandlerModule)
+    DECLARE_NO_COPY_CLASS(wxTCPEventHandlerModule)
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxTCPEventHandlerModule, wxModule)
+
+wxTCPEventHandler *wxTCPEventHandlerModule::ms_handler = NULL;
 
 // --------------------------------------------------------------------------
 // wxIPCSocketStreams
@@ -370,7 +402,8 @@ wxConnectionBase *wxTCPClient::MakeConnection(const wxString& host,
                     connection->m_topic = topic;
                     connection->m_sock  = client;
                     connection->m_streams = streams;
-                    client->SetEventHandler(*gs_handler, _CLIENT_ONREQUEST_ID);
+                    client->SetEventHandler(wxTCPEventHandlerModule::GetHandler(),
+                                            _CLIENT_ONREQUEST_ID);
                     client->SetClientData(connection);
                     client->SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG);
                     client->Notify(true);
@@ -471,7 +504,8 @@ bool wxTCPServer::Create(const wxString& serverName)
         return false;
     }
 
-    m_server->SetEventHandler(*gs_handler, _SERVER_ONREQUEST_ID);
+    m_server->SetEventHandler(wxTCPEventHandlerModule::GetHandler(),
+                              _SERVER_ONREQUEST_ID);
     m_server->SetClientData(this);
     m_server->SetNotify(wxSOCKET_CONNECTION_FLAG);
     m_server->Notify(true);
@@ -860,7 +894,8 @@ void wxTCPEventHandler::Server_OnRequest(wxSocketEvent &event)
                     new_connection->m_sock = sock;
                     new_connection->m_streams = streams;
                     new_connection->m_topic = topic;
-                    sock->SetEventHandler(*gs_handler, _CLIENT_ONREQUEST_ID);
+                    sock->SetEventHandler(wxTCPEventHandlerModule::GetHandler(),
+                                          _CLIENT_ONREQUEST_ID);
                     sock->SetClientData(new_connection);
                     sock->SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG);
                     sock->Notify(true);
@@ -881,20 +916,5 @@ void wxTCPEventHandler::Server_OnRequest(wxSocketEvent &event)
     delete streams;
     sock->Destroy();
 }
-
-// --------------------------------------------------------------------------
-// wxTCPEventHandlerModule (private class)
-// --------------------------------------------------------------------------
-
-class wxTCPEventHandlerModule: public wxModule
-{
-public:
-    virtual bool OnInit() { gs_handler = new wxTCPEventHandler; return true; }
-    virtual void OnExit() { wxDELETE(gs_handler); }
-
-    DECLARE_DYNAMIC_CLASS(wxTCPEventHandlerModule)
-};
-
-IMPLEMENT_DYNAMIC_CLASS(wxTCPEventHandlerModule, wxModule)
 
 #endif // wxUSE_SOCKETS && wxUSE_IPC && wxUSE_STREAMS
