@@ -325,7 +325,7 @@ public:
     // gets the matrix of this context
     virtual wxGraphicsMatrix GetTransform() const;
 
-    void DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
+    void DrawGraphicsBitmapInternal( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
     virtual void DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
     virtual void DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
     virtual void PushState();
@@ -1171,12 +1171,12 @@ void wxGDIPlusContext::PopState()
 // premultiplied format, therefore in the failing cases we create a new bitmap using the non-premultiplied
 // bytes as parameter
 
-void wxGraphicsContext::DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
+void wxGraphicsContext::DrawGraphicsBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
-    static_cast<wxGDIPlusContext*>(this)->DrawBitmap(bmp, x, y, w, h);
+    static_cast<wxGDIPlusContext*>(this)->DrawGraphicsBitmapInternal(bmp, x, y, w, h);
 }
 
-void wxGDIPlusContext::DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
+void wxGDIPlusContext::DrawGraphicsBitmapInternal( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
     Bitmap* image = static_cast<wxGDIPlusBitmapData*>(bmp.GetRefData())->GetGDIPlusBitmap();
     if ( image )
@@ -1186,7 +1186,7 @@ void wxGDIPlusContext::DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDo
 void wxGDIPlusContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
     wxGraphicsBitmap bitmap = GetRenderer()->CreateBitmap(bmp);
-    DrawBitmap(bitmap, x, y, w, h);
+    DrawGraphicsBitmapInternal(bitmap, x, y, w, h);
 }
 
 void wxGDIPlusContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h )

@@ -1302,7 +1302,7 @@ public:
     //
     // image support
     //
-    void DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
+    void DrawGraphicsBitmapInternal( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
 
     virtual void DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
 
@@ -1710,18 +1710,18 @@ void wxMacCoreGraphicsContext::Rotate( wxDouble angle )
         m_windowTransform = CGAffineTransformRotate(m_windowTransform,angle);
 }
 
-void wxGraphicsContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
+void wxGraphicsContext::DrawGraphicsBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
-    static_cast<wxMacCoreGraphicsContext*>(this)->DrawBitmap(bmp, x, y, w, h);
+    static_cast<wxMacCoreGraphicsContext*>(this)->DrawGraphicsBitmapInternal(bmp, x, y, w, h);
 }
 
 void wxMacCoreGraphicsContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
     wxGraphicsBitmap bitmap = GetRenderer()->CreateBitmap(bmp);
-    DrawBitmap(bitmap, x, y, w, h);
+    DrawGraphicsBitmapInternal(bitmap, x, y, w, h);
 }
 
-void wxMacCoreGraphicsContext::DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
+void wxMacCoreGraphicsContext::DrawGraphicsBitmapInternal( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
     EnsureIsValid();
 
@@ -1745,9 +1745,9 @@ void wxMacCoreGraphicsContext::DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble
         else
         {
             ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->Apply(this);
-            HIViewDrawCGImage( m_cgContext , &r , image );
         }
     }
+    HIViewDrawCGImage( m_cgContext , &r , image );
 }
 
 void wxMacCoreGraphicsContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
