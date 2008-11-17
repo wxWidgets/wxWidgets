@@ -7,6 +7,35 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    Possible values for the image resolution option.
+
+    @see wxImage::GetOptionInt().
+ */
+enum wxImageResolution
+{
+    /// Resolution not specified.
+    wxIMAGE_RESOLUTION_NONE = 0,
+
+    /// Resolution specified in inches.
+    wxIMAGE_RESOLUTION_INCHES = 1,
+
+    /// Resolution specified in centimetres.
+    wxIMAGE_RESOLUTION_CM = 2
+};
+
+/**
+    Possible values for PNG image type option.
+
+    @see wxImage::GetOptionInt().
+ */
+enum wxImagePNGType
+{
+    wxPNG_TYPE_COLOUR = 0,      ///< Colour PNG image.
+    wxPNG_TYPE_GREY = 2,        ///< Greyscale PNG image converted from RGB.
+    wxPNG_TYPE_GREY_RED = 3     ///< Greyscale PNG image using red as grey.
+};
+
+/**
     @class wxImageHandler
 
     This is the base class for implementing image file loading/saving, and
@@ -748,22 +777,30 @@ public:
     unsigned char GetMaskRed() const;
 
     /**
-        Gets a user-defined option. The function is case-insensitive to @a name.
+        Gets a user-defined string-valued option.
 
-        For example, when saving as a JPEG file, the option @b quality is
-        used, which is a number between 0 and 100 (0 is terrible, 100 is very good).
+        Currently the only defined string option is
+        @li wxIMAGE_OPTION_FILENAME: The name of the file from which the image
+            was loaded.
 
         @see SetOption(), GetOptionInt(), HasOption()
+
+        @param name
+            The name of the option, case-insensitive.
+        @return
+            The value of the option or an empty string if not found. Use
+            HasOption() if an empty string can be a valid option value.
     */
     wxString GetOption(const wxString& name) const;
 
     /**
-        Gets a user-defined option as an integer.
+        Gets a user-defined integer-valued option.
+
         The function is case-insensitive to @a name.
         If the given option is not present, the function returns 0.
         Use HasOption() is 0 is a possibly valid value for the option.
 
-        Options common to all formats:
+        Generic options:
         @li wxIMAGE_OPTION_MAX_WIDTH and wxIMAGE_OPTION_MAX_HEIGHT: If either
             of these options is specified, the loaded image will be scaled down
             (preserving its aspect ratio) so that its width is less than the
@@ -777,16 +814,37 @@ public:
             handler, this is still what happens however). These options must be
             set before calling LoadFile() to have any effect.
 
-        Options for wxPNGHandler:
-        @li wxIMAGE_OPTION_PNG_FORMAT: Format for saving a PNG file.
+        @li wxIMAGE_OPTION_QUALITY: JPEG quality used when saving. This is an
+            integer in 0..100 range with 0 meaning very poor and 100 excellent
+            (but very badly compressed). This option is currently ignored for
+            the other formats.
+
+        @li wxIMAGE_OPTION_RESOLUTIONUNIT: The value of this option determines
+            whether the resolution of the image is specified in centimetres or
+            inches, see wxImageResolution enum elements.
+
+        @li wxIMAGE_OPTION_RESOLUTION, wxIMAGE_OPTION_RESOLUTIONX and
+            wxIMAGE_OPTION_RESOLUTIONY: These options define the resolution of
+            the image in the units corresponding to wxIMAGE_OPTION_RESOLUTIONUNIT
+            options value. The first option can be set before saving the image
+            to set both horizontal and vertical resolution to the same value.
+            The X and Y options are set by the image handlers if they support
+            the image resolution (currently BMP, JPEG and TIFF handlers do) and
+            the image provides the resolution information and can be queried
+            after loading the image.
+
+        Options specific to wxPNGHandler:
+        @li wxIMAGE_OPTION_PNG_FORMAT: Format for saving a PNG file, see
+            wxImagePNGType for the supported values.
         @li wxIMAGE_OPTION_PNG_BITDEPTH: Bit depth for every channel (R/G/B/A).
 
-        Supported values for wxIMAGE_OPTION_PNG_FORMAT:
-        @li wxPNG_TYPE_COLOUR: Stores RGB image.
-        @li wxPNG_TYPE_GREY: Stores grey image, converts from RGB.
-        @li wxPNG_TYPE_GREY_RED: Stores grey image, uses red value as grey.
-
         @see SetOption(), GetOption()
+
+        @param name
+            The name of the option, case-insensitive.
+        @return
+            The value of the option or 0 if not found. Use HasOption() if 0
+            can be a valid option value.
     */
     int GetOptionInt(const wxString& name) const;
 
