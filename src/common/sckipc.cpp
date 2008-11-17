@@ -582,7 +582,11 @@ const void *wxTCPConnection::Request(const wxString& item,
     if ( ret != IPC_REQUEST_REPLY )
         return NULL;
 
-    return m_streams->ReadData(this, size);
+    // ReadData() needs a non-NULL size pointer but the client code can call us
+    // with NULL pointer (this makes sense if it knows that it always works
+    // with NUL-terminated strings)
+    size_t sizeFallback;
+    return m_streams->ReadData(this, size ? size : &sizeFallback);
 }
 
 bool wxTCPConnection::DoPoke(const wxString& item,
