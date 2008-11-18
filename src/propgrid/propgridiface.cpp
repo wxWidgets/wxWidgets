@@ -361,11 +361,16 @@ bool wxPropertyGridInterface::ClearSelection( bool validation )
         flags |= wxPG_SEL_NOVALIDATE;
 
     wxPropertyGridPageState* state = m_pState;
-    wxPropertyGrid* pg = state->GetGrid();
-    if ( pg->GetState() == state )
-        return pg->DoSelectProperty(NULL, flags);
-    else
-        state->SetSelection(NULL);
+
+    if ( state )
+    {
+        wxPropertyGrid* pg = state->GetGrid();
+        if ( pg->GetState() == state )
+            return pg->DoSelectProperty(NULL, flags);
+        else
+            state->SetSelection(NULL);
+    }
+
     return true;
 }
 
