@@ -21,7 +21,13 @@
 #endif
 
 #include "wx/beforestd.h"
+#ifdef __VISUALC__
+    #pragma warning(disable:4100)
+#endif
 #include <cppunit/TestListener.h>
+#ifdef __VISUALC__
+    #pragma warning(default:4100)
+#endif
 #include <cppunit/Test.h>
 #include <cppunit/TestResult.h>
 #include "wx/afterstd.h"
@@ -34,7 +40,8 @@ using CppUnit::TestSuite;
 using CppUnit::TestFactoryRegistry;
 
 
-// Displays the test name. This allow for quick investigation on which test hangs
+// Displays the test name before starting to execute it: this helps with
+// diagnosing where exactly does a test crash or hang when/if it does.
 class DetailListener : public CppUnit::TestListener
 {
 public:
@@ -46,7 +53,7 @@ public:
 
     virtual void startTest(CppUnit::Test *test)
     {
-        CppUnit::stdCOut() << test->getName () << " ";
+        std::cout << test->getName () << " ";
         m_watch.Start();
     }
 
@@ -54,8 +61,8 @@ public:
     {
         m_watch.Pause();
         if ( m_timing )
-            CppUnit::stdCOut() << " (in "<< m_watch.Time() << " ms )";
-        CppUnit::stdCOut() << "\n";
+            std::cout << " (in "<< m_watch.Time() << " ms )";
+        std::cout << "\n";
     }
 
 protected :
