@@ -357,9 +357,9 @@ void FileNameTestCase::TestNormalize()
         wxFileName fn(fnt.original, fnt.fmt);
 
         // be sure this normalization does not fail
-        CPPUNIT_ASSERT_MESSAGE
+        WX_ASSERT_MESSAGE
         (
-            (const char *)wxString::Format(_T("Normalize(%s) failed"), fnt.original).mb_str(),
+            ("#%d: Normalize(%s) failed", (int)i, fnt.original),
             fn.Normalize(fnt.flags, cwd, fnt.fmt)
         );
 
@@ -367,7 +367,11 @@ void FileNameTestCase::TestNormalize()
         wxString expected(tests[i].expected);
         expected.Replace(_T("HOME/"), home);
         expected.Replace(_T("CWD/"), cwd);
-        CPPUNIT_ASSERT_EQUAL( fnt.expected, fn.GetFullPath(fnt.fmt) );
+        WX_ASSERT_EQUAL_MESSAGE
+        (
+            ("array element #%d", (int)i),
+            expected, fn.GetFullPath(fnt.fmt)
+        );
     }
 }
 
