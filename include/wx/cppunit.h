@@ -160,6 +160,10 @@ CPPUNIT_NS_END
 #define WX_ASSERT_MESSAGE(msg, cond) \
     CPPUNIT_ASSERT_MESSAGE(std::string(wxString::Format msg .mb_str()), (cond))
 
+#define WX_ASSERT_EQUAL_MESSAGE(msg, expected, actual) \
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(std::string(wxString::Format msg .mb_str()), \
+                                 (expected), (actual))
+
 ///////////////////////////////////////////////////////////////////////////////
 // define stream inserter for wxString if it's not defined in the main library,
 // we need it to output the test failures involving wxString
