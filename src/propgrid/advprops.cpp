@@ -1530,7 +1530,10 @@ void wxCursorProperty::OnCustomPaint( wxDC& dc,
                               0,
                               0,
                               NULL,
-                              DI_COMPAT | DI_DEFAULTSIZE | DI_NORMAL
+            #if !defined(__WXWINCE__)
+                              DI_COMPAT | DI_DEFAULTSIZE |
+            #endif
+                              DI_NORMAL
                             );
             #endif
             }
