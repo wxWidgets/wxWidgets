@@ -185,7 +185,7 @@ void TextStreamTestCase::TestULongLong()
 
 #if wxUSE_UNICODE
 
-const static wchar_t txtWchar[4] =
+static const wchar_t txtWchar[4] =
 {
     0x0041, // LATIN CAPITAL LETTER A
     0x0100, // A WITH BREVE, LATIN SMALL LETTER
@@ -193,28 +193,28 @@ const static wchar_t txtWchar[4] =
     0x0100, // A WITH BREVE, LATIN SMALL LETTER
 };
 
-const static unsigned char txtUtf8[6] =
+static const unsigned char txtUtf8[6] =
 {
     0x41, 0xc4, 0x80, 0x41, 0xc4, 0x80,
 };
 
-const static unsigned char txtUtf16le[8] =
+static const unsigned char txtUtf16le[8] =
 {
     0x41, 0x00, 0x00, 0x01, 0x41, 0x00, 0x00, 0x01,
 };
 
-const static unsigned char txtUtf16be[8] =
+static const unsigned char txtUtf16be[8] =
 {
     0x00, 0x41, 0x01, 0x00, 0x00, 0x41, 0x01, 0x00,
 };
 
-const static unsigned char txtUtf32le[16] =
+static const unsigned char txtUtf32le[16] =
 {
     0x41, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00,
     0x41, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00,
 };
 
-const static unsigned char txtUtf32be[16] =
+static const unsigned char txtUtf32be[16] =
 {
     0x00, 0x00, 0x00, 0x41, 0x00, 0x00, 0x01, 0x00,
     0x00, 0x00, 0x00, 0x41, 0x00, 0x00, 0x01, 0x00,

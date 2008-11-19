@@ -89,8 +89,8 @@ void TextFileTestCase::CreateTestFile(size_t len, const char *contents)
     FILE *f = fopen(GetTestFileName(), "wb");
     CPPUNIT_ASSERT( f );
 
-    CPPUNIT_ASSERT( fwrite(contents, 1, len, f) >= 0 );
-    CPPUNIT_ASSERT( fclose(f) == 0 );
+    CPPUNIT_ASSERT_EQUAL( len, fwrite(contents, 1, len, f) );
+    CPPUNIT_ASSERT_EQUAL( 0, fclose(f) );
 }
 
 void TextFileTestCase::ReadEmpty()

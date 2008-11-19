@@ -1243,11 +1243,10 @@ void CorruptionTestCase::ExtractArchive(wxInputStream& in)
 {
     auto_ptr<wxArchiveInputStream> arc(m_factory->NewStream(in));
     auto_ptr<wxArchiveEntry> entry(arc->GetNextEntry());
-        
+
     while (entry.get() != NULL) {
-        wxString name = entry->GetName();
         char buf[1024];
-        
+
         while (arc->IsOk())
             arc->Read(buf, sizeof(buf));
 
@@ -1329,7 +1328,7 @@ ArchiveTestSuite *ArchiveTestSuite::makeSuite()
                         addTest(test);
                 }
 
-    for (int options = 0; options <= PipeIn; options += PipeIn) 
+    for (int options = 0; options <= PipeIn; options += PipeIn)
     {
         wxObject *pObj = wxCreateDynamicObject(m_name + _T("ClassFactory"));
         wxArchiveClassFactory *factory;

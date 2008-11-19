@@ -243,12 +243,12 @@ void UnicodeTestCase::ConversionEmpty()
     size_t len;
 
 #if wxUSE_UNICODE
-    wxCharBuffer buf = wxConvLibc.cWC2MB(L"", 0, &len);
+    wxConvLibc.cWC2MB(L"", 0, &len);
 #else // !wxUSE_UNICODE
-    wxWCharBuffer wbuf = wxConvLibc.cMB2WC("", 0, &len);
+    wxConvLibc.cMB2WC("", 0, &len);
 #endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
-    CPPUNIT_ASSERT(len == 0);
+    CPPUNIT_ASSERT_EQUAL( 0, len );
 }
 
 void UnicodeTestCase::ConversionWithNULs()
@@ -368,8 +368,8 @@ void UnicodeTestCase::ConversionUTF16()
     // terminate the string, this exposed a bug in our conversion code which
     // got confused in this case
     size_t len;
-    wxWCharBuffer wbuf(conv.cMB2WC("\x01\0\0B\0C" /* A macron BC */, 6, &len));
-    CPPUNIT_ASSERT_EQUAL( (size_t)3, len );
+    conv.cMB2WC("\x01\0\0B\0C" /* A macron BC */, 6, &len);
+    CPPUNIT_ASSERT_EQUAL( 3, len );
 }
 
 void UnicodeTestCase::ConversionUTF32()
@@ -392,9 +392,8 @@ void UnicodeTestCase::ConversionUTF32()
     }
 
     size_t len;
-    wxWCharBuffer wbuf(conv.cMB2WC("\0\0\x01\0\0\0\0B\0\0\0C" /* A macron BC */,
-                                   12, &len));
-    CPPUNIT_ASSERT_EQUAL( (size_t)3, len );
+    conv.cMB2WC("\0\0\x01\0\0\0\0B\0\0\0C" /* A macron BC */, 12, &len);
+    CPPUNIT_ASSERT_EQUAL( 3, len );
 }
 
 void UnicodeTestCase::IsConvOk()

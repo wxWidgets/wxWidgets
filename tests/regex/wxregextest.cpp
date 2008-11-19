@@ -327,7 +327,7 @@ wxString wxRegExTestSuite::FlagStr(int flags)
     }
 
     return _T(" (") + str.Mid(3) + _T(")");
-};
+}
 
 // register in the unnamed registry so that these tests are run by default
 CPPUNIT_TEST_SUITE_REGISTRATION(wxRegExTestSuite);

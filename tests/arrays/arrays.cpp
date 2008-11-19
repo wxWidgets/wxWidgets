@@ -94,7 +94,7 @@ size_t Bar::ms_bars = 0;
 
 WX_DECLARE_OBJARRAY(Bar, ArrayBars);
 #include "wx/arrimpl.cpp"
-WX_DEFINE_OBJARRAY(ArrayBars);
+WX_DEFINE_OBJARRAY(ArrayBars)
 
 // ----------------------------------------------------------------------------
 // helpers for sorting arrays and comparing items
@@ -125,9 +125,9 @@ int wxCMPFUNC_CONV name ## RevCompare(T* first, T* second)                    \
 
 typedef unsigned short ushort;
 
-DEFINE_COMPARE(Char, char);
-DEFINE_COMPARE(UShort, ushort);
-DEFINE_COMPARE(Int, int);
+DEFINE_COMPARE(Char, char)
+DEFINE_COMPARE(UShort, ushort)
+DEFINE_COMPARE(Int, int)
 
 WX_DEFINE_ARRAY_CHAR(char, wxArrayChar);
 WX_DEFINE_SORTED_ARRAY_CHAR(char, wxSortedArrayCharNoCmp);
@@ -539,11 +539,11 @@ void ArraysTestCase::wxArray ## name ## Test()                                \
     CPPUNIT_ASSERT( b.Index( 17 ) == 3 );                                     \
 }
 
-TestArrayOf(UShort);
+TestArrayOf(UShort)
 
-TestArrayOf(Char);
+TestArrayOf(Char)
 
-TestArrayOf(Int);
+TestArrayOf(Int)
 
 void ArraysTestCase::Alloc()
 {

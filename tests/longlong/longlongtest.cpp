@@ -237,7 +237,7 @@ void LongLongTestCase::Division()
 
 void LongLongTestCase::BitOperations()
 {
-    for ( size_t n = 0; n < ITEMS; n++ )
+    for ( size_t m = 0; m < ITEMS; m++ )
     {
         wxLongLong a = RAND_LL();
 

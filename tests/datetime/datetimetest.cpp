@@ -281,10 +281,10 @@ void DateTimeTestCase::TestTimeJDN()
         // JDNs must be computed for UTC times
         double jdn = dt.FromUTC().GetJulianDayNumber();
 
-        CPPUNIT_ASSERT( jdn == d.jdn );
+        CPPUNIT_ASSERT_EQUAL( d.jdn, jdn );
 
         dt.Set(jdn);
-        CPPUNIT_ASSERT( dt.GetJulianDayNumber() == jdn );
+        CPPUNIT_ASSERT_EQUAL( jdn, dt.GetJulianDayNumber() );
     }
 }
 
@@ -879,7 +879,6 @@ void DateTimeTestCase::TestDateParse()
 
     for ( size_t n = 0; n < WXSIZEOF(parseTestDates); n++ )
     {
-        wxDateTime dt;
         if ( dt.ParseDate(parseTestDates[n].str) )
         {
             CPPUNIT_ASSERT( parseTestDates[n].good );
@@ -984,7 +983,6 @@ void DateTimeTestCase::TestDateTimeParse()
     wxDateTime dt;
     for ( size_t n = 0; n < WXSIZEOF(parseTestDates); n++ )
     {
-        wxDateTime dt;
         if ( dt.ParseDateTime(parseTestDates[n].str) )
         {
             CPPUNIT_ASSERT( parseTestDates[n].good );

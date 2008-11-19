@@ -531,7 +531,7 @@ enum
     Number_Unsigned = 2,    // if not specified, works for signed conversion
     Number_Signed   = 4,    // if not specified, works for unsigned
     Number_LongLong = 8,    // only for long long tests
-    Number_Long     = 16,   // only for long tests
+    Number_Long     = 16    // only for long tests
 };
 
 static const struct ToLongData

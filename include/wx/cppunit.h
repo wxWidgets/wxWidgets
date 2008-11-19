@@ -123,7 +123,7 @@ assertEquals(const wchar_t *expected,
 
 // and another to be able to specify (usually literal) ints as expected values
 // for functions returning size_t
-WX_CPPUNIT_ASSERT_EQUALS(int, size_t);
+WX_CPPUNIT_ASSERT_EQUALS(int, size_t)
 
 // special section with VC6 workarounds: due to incorrect resolution of
 // overloaded/template functions in this compiler (it basically doesn't use the
@@ -131,8 +131,8 @@ WX_CPPUNIT_ASSERT_EQUALS(int, size_t);
 // none of them matches fully) we also need
 #ifdef __VISUALC6__
 
-WX_CPPUNIT_ASSERT_EQUALS(int, int);
-WX_CPPUNIT_ASSERT_EQUALS(size_t, size_t);
+WX_CPPUNIT_ASSERT_EQUALS(int, int)
+WX_CPPUNIT_ASSERT_EQUALS(size_t, size_t)
 
 #endif // VC6
 
