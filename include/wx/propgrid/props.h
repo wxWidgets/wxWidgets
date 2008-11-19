@@ -20,6 +20,12 @@ class wxArrayEditorDialog;
 
 #include "wx/propgrid/editors.h"
 
+#include "wx/filename.h"
+#include "wx/dialog.h"
+#include "wx/textctrl.h"
+#include "wx/button.h"
+#include "wx/listbox.h"
+
 // -----------------------------------------------------------------------
 
 //
@@ -47,8 +53,6 @@ WX_PG_IMPLEMENT_PROPERTY_CLASS_PLAIN(NAME, T, EDITOR)
 // -----------------------------------------------------------------------
 
 #ifndef SWIG
-
-#include "wx/textctrl.h"
 
 /** @class wxPGInDialogValidator
     @ingroup classes
@@ -571,8 +575,6 @@ public:
 
 // -----------------------------------------------------------------------
 
-#include "wx/filename.h"
-
 // Indicates first bit useable by derived properties.
 #define wxPG_PROP_SHOW_FULL_FILENAME  wxPG_PROP_CLASS_SPECIFIC_1
 
@@ -851,10 +853,6 @@ wxValidator* PROPNAME::DoGetValidator () const \
 // -----------------------------------------------------------------------
 // wxArrayEditorDialog
 // -----------------------------------------------------------------------
-
-#include "wx/button.h"
-#include "wx/dialog.h"
-#include "wx/listbox.h"
 
 #define wxAEDIALOG_STYLE \
     (wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxOK | wxCANCEL | wxCENTRE)
