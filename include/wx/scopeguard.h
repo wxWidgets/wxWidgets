@@ -411,7 +411,7 @@ template <typename T, typename U>
 class VariableSetterImpl : public VariableSetterBase
 {
 public:
-    VariableSetterImpl(T& var, const U& value)
+    VariableSetterImpl(T& var, U value)
         : m_var(var),
           m_value(value)
     {
@@ -424,7 +424,7 @@ public:
 
 private:
     T& m_var;
-    const U& m_value;
+    const U m_value;
 
     // suppress the warning about assignment operator not being generated
     VariableSetterImpl<T, U>& operator=(const VariableSetterImpl<T, U>&);
@@ -454,7 +454,7 @@ private:
 
 template <typename T, typename U>
 inline
-wxPrivate::VariableSetterImpl<T, U> wxMakeVarSetter(T& var, const U& value)
+wxPrivate::VariableSetterImpl<T, U> wxMakeVarSetter(T& var, U value)
 {
       return wxPrivate::VariableSetterImpl<T, U>(var, value);
 }

@@ -131,6 +131,9 @@ wxScopeGuard wxMakeGuard(F func, P1 p1, ..., PN pN);
     }
     @endcode
 
+    Notice that @a value is copied, i.e. stored by value, so it can be a
+    temporary object returned by a function call, for example.
+
     @see wxON_BLOCK_EXIT_OBJ0(), wxON_BLOCK_EXIT_NULL()
 
     @header{wx/scopeguard.h}
