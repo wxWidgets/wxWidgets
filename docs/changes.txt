@@ -94,6 +94,7 @@ Major new features in 2.8 release
 All:
 
 - Added Vietnamese translation (Tran Ngoc Quan).
+- Updated Slovenian translation (Martin Srebotnjak).
 
 All (GUI):
 
