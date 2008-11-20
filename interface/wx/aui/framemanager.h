@@ -284,7 +284,7 @@ public:
         This method is used to specify wxAuiManager's settings flags. @a flags
         specifies options which allow the frame management behavior to be modified.
     */
-    void SetFlags(unsigned int flags);
+    void SetFlags(int flags);
 
     /**
         Called to specify the frame or window which is to be managed by wxAuiManager.
@@ -516,10 +516,10 @@ public:
     bool HasCloseButton() const;
 
     /**
-        HasFlag() returns @true if the the property specified by flag is active for the
-        pane.
+        HasFlag() returns @true if the property specified by flag is active for
+        the pane.
     */
-    bool HasFlag(unsigned int flag) const;
+    bool HasFlag(int flag) const;
 
     /**
         HasGripper() returns @true if the pane displays a gripper.

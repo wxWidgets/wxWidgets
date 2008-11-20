@@ -331,7 +331,7 @@ public:
         return *this;
     }
 
-    wxAuiPaneInfo& SetFlag(unsigned int flag, bool option_state)
+    wxAuiPaneInfo& SetFlag(int flag, bool option_state)
     {
         if (option_state)
             state |= flag;
@@ -340,7 +340,7 @@ public:
         return *this;
     }
 
-    bool HasFlag(unsigned int flag) const
+    bool HasFlag(int flag) const
     {
         return (state & flag) != 0;
     }
