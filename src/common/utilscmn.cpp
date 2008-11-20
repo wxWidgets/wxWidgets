@@ -1077,21 +1077,8 @@ static bool DoLaunchDefaultBrowser(const wxString& urlOrig, int flags)
     sei.nShow = SW_SHOWNORMAL;
     sei.fMask = SEE_MASK_FLAG_NO_UI; // we give error message ourselves
 
-    ::ShellExecuteEx(&sei);
-
-    const INT_PTR nResult = (INT_PTR)sei.hInstApp;
-
-    // Firefox returns file not found for some reason, so make an exception
-    // for it
-    if ( nResult > 32 || nResult == SE_ERR_FNF )
-    {
-#ifdef __WXDEBUG__
-        // Log something if SE_ERR_FNF happens
-        if ( nResult == SE_ERR_FNF )
-            wxLogDebug(wxT("SE_ERR_FNF from ShellExecute -- maybe FireFox?"));
-#endif // __WXDEBUG__
+    if ( ::ShellExecuteEx(&sei) )
         return true;
-    }
 #elif defined(__WXCOCOA__)
     // NOTE: We need to call the real implementation from src/cocoa/utils.mm
     // because the code must use Objective-C features.
