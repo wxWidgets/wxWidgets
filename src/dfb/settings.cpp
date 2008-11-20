@@ -78,7 +78,6 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index,
             return val;
 
         default:
-            wxFAIL_MSG( "unsupported metric" );
             return -1;
     }
 }
