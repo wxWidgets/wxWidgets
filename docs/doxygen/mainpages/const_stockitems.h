@@ -11,8 +11,11 @@
 
 @page page_stockitems Stock items
 
-Window IDs for which stock buttons and menu items are created
-(see the wxButton constructor and the wxMenuItem constructor):
+The following is the list of the window IDs for which stock buttons and menu items
+are created.
+See the wxButton constructor and the wxMenuItem constructor for classes which
+automatically add stock bitmaps when using stock IDs.
+Also note that you can retrieve stock bitmaps using wxArtProvider.
 
 @beginDefList
 @row3col{<b>Stock ID</b>, <b>GTK icon</b>, <b>Stock label</b>}
