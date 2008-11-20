@@ -1920,7 +1920,7 @@ void wxGnomePrinterDCImpl::DoGetTextExtent(const wxString& string, wxCoord *widt
     const wxCharBuffer dataUTF8 = string.utf8_str();
 #endif
 
-    gint oldSize;
+    gint oldSize = 0;
     if ( theFont )
     {
         // scale the font and apply it
