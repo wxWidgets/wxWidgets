@@ -825,10 +825,11 @@ bool OutputStringEnt(wxOutputStream& stream,
     {
         wxChar c = str.GetChar(i);
         if (c == wxS('<') || c == wxS('>') ||
-            (c == wxS('&') && str.Mid(i+1, 4) != wxS("amp;")) ||
+            (c == wxS('&') && str.substr(i+1, 4) != wxS("amp;")) ||
             ((flags & XML_ESCAPE_QUOTES) && c == wxS('"')))
         {
-            if ( !OutputString(stream, str.substr(last, i), convMem, convFile) )
+            if ( !OutputString(stream, str.substr(last, i - last),
+                               convMem, convFile) )
                 return false;
 
             const char *escaped;
@@ -858,7 +859,7 @@ bool OutputStringEnt(wxOutputStream& stream,
         }
     }
 
-    return OutputString(stream, str.substr(last, i), convMem, convFile);
+    return OutputString(stream, str.substr(last, i - last), convMem, convFile);
 }
 
 bool OutputIndentation(wxOutputStream& stream,
