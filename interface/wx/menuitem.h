@@ -15,7 +15,7 @@
     usually construct an object of this class for you.
 
     Also please note that the methods related to fonts and bitmaps are currently
-    only implemented for Windows and GTK+.
+    only implemented for Windows, Mac and GTK+.
 
     @library{wxcore}
     @category{menus}
@@ -75,7 +75,7 @@ public:
             Optional help string that will be shown on the status bar.
         @param kind
             May be @c wxITEM_SEPARATOR, @c wxITEM_NORMAL, @c wxITEM_CHECK or
-            @c wxITEM_RADIO
+            @c wxITEM_RADIO.
         @param subMenu
             If non-@NULL, indicates that the menu item is a submenu.
     */
@@ -250,14 +250,18 @@ public:
     void SetBackgroundColour(const wxColour& colour) const;
 
     /**
-        Sets the bitmap for the menu item (Windows and GTK+ only).
+        Sets the bitmap for the menu item.
         It is equivalent to wxMenuItem::SetBitmaps(bmp, wxNullBitmap).
+
+        @onlyfor{wxmsw,wxmac,wxgtk}
     */
     virtual void SetBitmap(const wxBitmap& bmp);
 
     /**
-        Sets the checked/unchecked bitmaps for the menu item (Windows only).
+        Sets the checked/unchecked bitmaps for the menu item.
         The first bitmap is also used as the single bitmap for uncheckable menu items.
+
+        @onlyfor{wxmsw}
     */
     void SetBitmaps(const wxBitmap& checked,
                     const wxBitmap& unchecked = wxNullBitmap);
