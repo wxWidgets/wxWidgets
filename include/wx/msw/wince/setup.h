@@ -1290,6 +1290,13 @@
 // Set this to 1 to enable wxDIB (don't change unless you have reason to)
 #define wxUSE_WXDIB 1
 
+// Set this to 1 to compile in wxRegKey class.
+//
+// Default is 1
+//
+// Recommended setting: 1, this is used internally by wx in a few places
+#define wxUSE_REGKEY 1
+
 // ----------------------------------------------------------------------------
 // Windows CE specific stuff
 // ----------------------------------------------------------------------------
