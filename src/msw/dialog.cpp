@@ -395,7 +395,7 @@ void wxDialog::DestroyGripper()
         // we're not shown at all as in this case ResizeGripper() might not
         // have been called yet)
         wxASSERT_MSG( !IsShown() ||
-                      ::GetNextWindow((HWND)m_hGripper, GW_HWNDNEXT) == 0,
+                      ::GetWindow((HWND)m_hGripper, GW_HWNDNEXT) == 0,
             _T("Bug in wxWidgets: gripper should be at the bottom of Z-order") );
         ::DestroyWindow((HWND) m_hGripper);
         m_hGripper = 0;
