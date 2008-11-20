@@ -119,6 +119,7 @@ wxMSW:
 - Fixed wxArtProvider::GetSizeHint() to return 16x16 for wxART_FRAME_ICON.
 - Fixed toolbar buttons so that they don't disappear temporarily when clicked
   if the event handler causes window update.
+- Fix display enumeration under WinCE (Vince Harron).
 
 wxGTK:
 
