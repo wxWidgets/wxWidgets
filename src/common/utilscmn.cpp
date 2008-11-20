@@ -960,16 +960,17 @@ bool wxLaunchDefaultApplication(const wxString& document, int flags)
             return true;
     }
 #elif defined(__WXMSW__)
-    const INT_PTR result = (INT_PTR)::ShellExecute
-                                      (
-                                        NULL,           // parent window
-                                        _T("open"),
-                                        document.wx_str(),
-                                        NULL,           // parameters
-                                        NULL,           // working directory
-                                        SW_SHOWDEFAULT
-                                      );
-    if ( result > 32 )
+    WinStruct<SHELLEXECUTEINFO> sei;
+    sei.lpFile = document.wx_str();
+    sei.lpVerb = _T("open");
+    sei.nShow = SW_SHOWDEFAULT;
+
+    // avoid Windows message box in case of error for consistency with
+    // wxLaunchDefaultBrowser() even if don't show the error ourselves in this
+    // function
+    sei.fMask = SEE_MASK_FLAG_NO_UI;
+
+    if ( ::ShellExecuteEx(&sei) )
         return true;
 #endif
 
