@@ -81,6 +81,8 @@ bool wxMSWDateControls::CheckInitialization()
             typedef BOOL (WINAPI *ICCEx_t)(INITCOMMONCONTROLSEX *);
             wxDYNLIB_FUNCTION( ICCEx_t, InitCommonControlsEx, dllComCtl32 );
 
+            dllComCtl32.Detach();
+
             if ( pfnInitCommonControlsEx )
             {
                 s_initResult = (*pfnInitCommonControlsEx)(&icex);
