@@ -879,7 +879,7 @@ static bool AskUserForFileName()
     wxString filename;
 
 #if wxUSE_FILEDLG
-    filename = wxLoadFileSelector(_T("any file"), wxEmptyString, gs_lastFile);
+    filename = wxLoadFileSelector(_T("any"), wxEmptyString, gs_lastFile);
 #else // !wxUSE_FILEDLG
     filename = wxGetTextFromUser(_T("Enter the file name"), _T("exec sample"),
                                  gs_lastFile);
