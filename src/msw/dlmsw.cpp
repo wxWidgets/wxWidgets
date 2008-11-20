@@ -282,9 +282,11 @@ wxDllType wxDynamicLibrary::GetProgramHandle()
 
 /* static */
 wxDllType
-wxDynamicLibrary::RawLoad(const wxString& libname, int WXUNUSED(flags))
+wxDynamicLibrary::RawLoad(const wxString& libname, int flags)
 {
-    return ::LoadLibrary(libname.t_str());
+    return flags & wxDL_GET_LOADED
+            ? ::GetModuleHandle(libname.t_str())
+            : ::LoadLibrary(libname.t_str());
 }
 
 /* static */

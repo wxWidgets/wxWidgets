@@ -966,8 +966,14 @@ int wxApp::GetComCtl32Version()
         // we're prepared to handle the errors
         wxLogNull noLog;
 
-        // the DLL should really be available
-        wxDynamicLibrary dllComCtl32(_T("comctl32.dll"), wxDL_VERBATIM);
+        // we don't want to load comctl32.dll, it should be already loaded but,
+        // depending on the OS version and the presence of the manifest, it can
+        // be either v5 or v6 and instead of trying to guess it just get the
+        // handle of the already loaded version
+        wxDynamicLibrary dllComCtl32(_T("comctl32.dll"),
+                                     wxDL_VERBATIM |
+                                     wxDL_QUIET |
+                                     wxDL_GET_LOADED);
         if ( !dllComCtl32.IsLoaded() )
         {
             s_verComCtl32 = 0;
@@ -1005,6 +1011,9 @@ int wxApp::GetComCtl32Version()
                 }
             }
         }
+
+        // we shouldn't unload it here as we didn't really load it above
+        dllComCtl32.Detach();
     }
 
     return s_verComCtl32;

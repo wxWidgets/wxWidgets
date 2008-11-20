@@ -73,10 +73,18 @@ enum wxDLFlags
     wxDL_VERBATIM   = 0x00000008,   // attempt to load the supplied library
                                     // name without appending the usual dll
                                     // filename extension.
+
+    // this flag is obsolete, don't use
     wxDL_NOSHARE    = 0x00000010,   // load new DLL, don't reuse already loaded
                                     // (only for wxPluginManager)
 
     wxDL_QUIET      = 0x00000020,   // don't log an error if failed to load
+
+    // this flag is dangerous, for internal use of wxMSW only, don't use
+    wxDL_GET_LOADED = 0x00000040,   // Win32 only: return handle of already
+                                    // loaded DLL or NULL otherwise; Unload()
+                                    // should not be called so don't forget to
+                                    // Detach() if you use this function
 
     wxDL_DEFAULT    = wxDL_NOW      // default flags correspond to Win32
 };

@@ -67,10 +67,17 @@ bool wxMSWDateControls::CheckInitialization()
         icex.dwSize = sizeof(icex);
         icex.dwICC = ICC_DATE_CLASSES;
 
-        wxDynamicLibrary dllComCtl32(_T("comctl32.dll") , wxDL_VERBATIM);
+        // see comment in wxApp::GetComCtl32Version() explaining the
+        // use of wxDL_GET_LOADED
+        wxDynamicLibrary dllComCtl32(_T("comctl32.dll"),
+                                     wxDL_VERBATIM |
+                                     wxDL_QUIET |
+                                     wxDL_GET_LOADED);
 
         if ( dllComCtl32.IsLoaded() )
         {
+            wxLogNull noLog;
+
             typedef BOOL (WINAPI *ICCEx_t)(INITCOMMONCONTROLSEX *);
             wxDYNLIB_FUNCTION( ICCEx_t, InitCommonControlsEx, dllComCtl32 );
 
