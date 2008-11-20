@@ -76,7 +76,7 @@ private:
 
 // For __POCKETPC__
 
-#include "wx/msw/tbar95.h"
+#include "wx/msw/toolbar.h"
 
 class WXDLLIMPEXP_CORE wxToolMenuBar : public wxToolBar
 {
