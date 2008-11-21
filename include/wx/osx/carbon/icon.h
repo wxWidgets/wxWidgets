@@ -22,7 +22,7 @@ public:
 
     wxIcon(const char* const* data);
     wxIcon(const char bits[], int width , int height );
-    wxIcon(const wxString& name, int flags = wxICON_DEFAULT_TYPE,
+    wxIcon(const wxString& name, wxBitmapType flags = wxICON_DEFAULT_TYPE,
            int desiredWidth = -1, int desiredHeight = -1);
     wxIcon(const wxIconLocation& loc)
     {
@@ -88,9 +88,16 @@ public:
     SetType(wxBITMAP_TYPE_ICON_RESOURCE);
   };
 
-  virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
-      int desiredWidth = -1, int desiredHeight = -1);
-
+  virtual bool LoadFile(wxBitmap *bitmap,
+                        const wxString& name,
+                        wxBitmapType flags,
+                        int desiredWidth = -1,
+                        int desiredHeight = -1);
+  // unhide the base class virtual
+  virtual bool LoadFile(wxBitmap *bitmap,
+                        const wxString& name,
+                        wxBitmapType flags)
+      { return LoadFile(bitmap, name, flags, -1, -1); }
 };
 
 #endif

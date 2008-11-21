@@ -97,10 +97,10 @@ wxIcon::wxIcon(const char* const* bits)
 }
 
 wxIcon::wxIcon(
-    const wxString& icon_file, int flags,
+    const wxString& icon_file, wxBitmapType flags,
     int desiredWidth, int desiredHeight )
 {
-    LoadFile( icon_file, (wxBitmapType) flags, desiredWidth, desiredHeight );
+    LoadFile( icon_file, flags, desiredWidth, desiredHeight );
 }
 
 wxIcon::wxIcon(WXHICON icon, const wxSize& size)
@@ -305,7 +305,7 @@ void wxIcon::CopyFromBitmap( const wxBitmap& bmp )
 IMPLEMENT_DYNAMIC_CLASS(wxICONResourceHandler, wxBitmapHandler)
 
 bool  wxICONResourceHandler::LoadFile(
-    wxBitmap *bitmap, const wxString& name, long WXUNUSED(flags),
+    wxBitmap *bitmap, const wxString& name, wxBitmapType WXUNUSED(flags),
     int desiredWidth, int desiredHeight )
 {
     wxIcon icon ;
