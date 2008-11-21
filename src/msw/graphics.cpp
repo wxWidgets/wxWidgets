@@ -269,6 +269,7 @@ public:
 
 private :
     Bitmap* m_bitmap;
+    Bitmap* m_helper;
 };
 
 class WXDLLIMPEXP_CORE wxGDIPlusFontData : public wxGraphicsObjectRefData
@@ -630,8 +631,8 @@ wxGDIPlusBitmapData::wxGDIPlusBitmapData( wxGraphicsRenderer* renderer,
                         const wxBitmap &bmp) : wxGraphicsObjectRefData( renderer )
 {
     m_bitmap = NULL;
+    m_helper = NULL;
     Bitmap* image = NULL;
-    Bitmap* helper = NULL;
     if ( bmp.GetMask() )
     {
         Bitmap interim((HBITMAP)bmp.GetHBITMAP(),(HPALETTE)bmp.GetPalette()->GetHPALETTE()) ;
@@ -696,27 +697,27 @@ wxGDIPlusBitmapData::wxGDIPlusBitmapData( wxGraphicsRenderer* renderer,
             size_t width = image->GetWidth();
             size_t height = image->GetHeight();
             Rect bounds(0,0,width,height);
-            BitmapData data ;
+            static BitmapData data ;
 
-            helper = image ;
+            m_helper = image ;
             image = NULL ;
-            helper->LockBits(&bounds, ImageLockModeRead,
-                helper->GetPixelFormat(),&data);
+            m_helper->LockBits(&bounds, ImageLockModeRead,
+                m_helper->GetPixelFormat(),&data);
 
             image = new Bitmap(data.Width, data.Height, data.Stride,
                 PixelFormat32bppPARGB , (BYTE*) data.Scan0);
 
-            helper->UnlockBits(&data);
+            m_helper->UnlockBits(&data);
         }
     }
     if ( image )
         m_bitmap = image;
-    delete helper;
 }
 
 wxGDIPlusBitmapData::~wxGDIPlusBitmapData()
 {
     delete m_bitmap;
+    delete m_helper;
 }
 
 //-----------------------------------------------------------------------------
@@ -1180,7 +1181,17 @@ void wxGDIPlusContext::DrawGraphicsBitmapInternal( const wxGraphicsBitmap &bmp, 
 {
     Bitmap* image = static_cast<wxGDIPlusBitmapData*>(bmp.GetRefData())->GetGDIPlusBitmap();
     if ( image )
-        m_context->DrawImage(image,(REAL) x,(REAL) y,(REAL) w,(REAL) h) ;
+    {
+        if( image->GetWidth() != (UINT) w || image->GetHeight() != (UINT) h )
+        {
+            Rect drawRect((REAL) x, (REAL)y, (REAL)w, (REAL)h);
+            m_context->SetPixelOffsetMode( PixelOffsetModeNone );
+            m_context->DrawImage(image, drawRect, 0 , 0 , image->GetWidth()-1, image->GetHeight()-1, UnitPixel ) ;
+            m_context->SetPixelOffsetMode( PixelOffsetModeHalf );
+        }
+        else
+            m_context->DrawImage(image,(REAL) x,(REAL) y,(REAL) w,(REAL) h) ;
+    }
 }
 
 void wxGDIPlusContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
