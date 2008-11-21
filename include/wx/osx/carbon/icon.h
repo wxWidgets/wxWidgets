@@ -50,7 +50,7 @@ public:
     void SetDepth(int d);
     void SetOk(bool isOk);
 
-    WXHICON GetHICON() const ;
+    WXHICON GetHICON() const;
 
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;
@@ -60,44 +60,30 @@ private:
     DECLARE_DYNAMIC_CLASS(wxIcon)
 };
 
-/*
-class WXDLLIMPEXP_CORE wxICONFileHandler: public wxBitmapHandler
-{
-  DECLARE_DYNAMIC_CLASS(wxICONFileHandler)
-public:
-  inline wxICONFileHandler()
-  {
-    m_name = "ICO icon file";
-    m_extension = "ico";
-    m_type = wxBITMAP_TYPE_ICO;
-  };
-
-  virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
-      int desiredWidth = -1, int desiredHeight = -1);
-};
-*/
-
 class WXDLLIMPEXP_CORE wxICONResourceHandler: public wxBitmapHandler
 {
-  DECLARE_DYNAMIC_CLASS(wxICONResourceHandler)
 public:
-  inline wxICONResourceHandler()
-  {
-    SetName(wxT("ICON resource"));
-    SetExtension(wxEmptyString);
-    SetType(wxBITMAP_TYPE_ICON_RESOURCE);
-  };
+    wxICONResourceHandler()
+    {
+        SetName(wxT("ICON resource"));
+        SetExtension(wxEmptyString);
+        SetType(wxBITMAP_TYPE_ICON_RESOURCE);
+    }
 
-  virtual bool LoadFile(wxBitmap *bitmap,
-                        const wxString& name,
-                        wxBitmapType flags,
-                        int desiredWidth = -1,
-                        int desiredHeight = -1);
-  // unhide the base class virtual
-  virtual bool LoadFile(wxBitmap *bitmap,
-                        const wxString& name,
-                        wxBitmapType flags)
-      { return LoadFile(bitmap, name, flags, -1, -1); }
+    virtual bool LoadFile(wxBitmap *bitmap,
+                          const wxString& name,
+                          wxBitmapType flags,
+                          int desiredWidth = -1,
+                          int desiredHeight = -1);
+
+    // unhide the base class virtual
+    virtual bool LoadFile(wxBitmap *bitmap,
+            const wxString& name,
+            wxBitmapType flags)
+        { return LoadFile(bitmap, name, flags, -1, -1); }
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxICONResourceHandler)
 };
 
 #endif
