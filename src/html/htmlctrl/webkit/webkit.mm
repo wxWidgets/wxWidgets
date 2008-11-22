@@ -468,7 +468,16 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
 
 wxWebKitCtrl::~wxWebKitCtrl()
 {
-
+    MyFrameLoadMonitor* myFrameLoadMonitor = [m_webView frameLoadDelegate];
+    MyPolicyDelegate* myPolicyDelegate = [m_webView policyDelegate];
+    [m_webView setFrameLoadDelegate: nil];
+    [m_webView setPolicyDelegate: nil];
+    
+    if (myFrameLoadMonitor)
+        [myFrameLoadMonitor release];
+        
+    if (myPolicyDelegate)
+        [myPolicyDelegate release];
 }
 
 // ----------------------------------------------------------------------------

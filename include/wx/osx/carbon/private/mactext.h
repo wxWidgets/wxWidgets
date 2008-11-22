@@ -45,6 +45,7 @@ protected :
 
     // contains the tag for the content (is different for password and non-password controls)
     OSType m_valueTag ;
+    WXEVENTHANDLERREF    m_macTextCtrlEventHandler ;
 public :
     ControlEditTextSelectionRec m_selection ;
 };

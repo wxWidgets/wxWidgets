@@ -509,11 +509,12 @@ void wxMacUnicodeTextControl::InstallEventHandlers()
 {
     ::InstallControlEventHandler( m_controlRef , GetwxMacUnicodeTextControlEventHandlerUPP(),
                                 GetEventTypeCount(unicodeTextControlEventList), unicodeTextControlEventList, this,
-                                NULL);
+                                (EventHandlerRef*) &m_macTextCtrlEventHandler);
 }
 
 wxMacUnicodeTextControl::~wxMacUnicodeTextControl()
 {
+    ::RemoveEventHandler((EventHandlerRef) m_macTextCtrlEventHandler);
 }
 
 void wxMacUnicodeTextControl::VisibilityChanged(bool shown)
