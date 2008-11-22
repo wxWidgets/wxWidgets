@@ -12,14 +12,23 @@
     A toolbar is a bar of buttons and/or other controls usually placed below
     the menu bar in a wxFrame.
 
-    You may create a toolbar that is managed by the frame, by calling
+    You may create a toolbar that is managed by a frame calling
     wxFrame::CreateToolBar(). Under Pocket PC, you should always use this
     function for creating the toolbar to be managed by the frame, so that
     wxWidgets can use a combined menubar and toolbar. Where you manage your
-    own toolbars, create a wxToolBar as usual.
+    own toolbars, create wxToolBar as usual.
 
-    The meaning of a "separator" is a vertical line under Windows and simple
-    space under GTK+.
+    There are several different types of tools you can add to a toolbar.
+    These types are controlled by the ::wxItemKind enumeration.
+
+    Note that many methods in wxToolBar such as wxToolBar::AddTool return a
+    @c wxToolBarToolBase* object.
+    This should be regarded as an opaque handle representing the newly added
+    toolbar item, providing access to its id and position within the toolbar.
+    Changes to the item's state should be made through calls to wxToolBar methods,
+    for example wxToolBar::EnableTool.
+    Calls to @c wxToolBarToolBase methods (undocumented by purpose) will not change
+    the visible state of the item within the the tool bar.
 
     <b>wxMSW note</b>: Note that under wxMSW toolbar paints tools to reflect
     system-wide colours. If you use more than 16 colours in your tool bitmaps,
@@ -39,9 +48,6 @@
     @code
     if (wxTheApp->GetComCtl32Version() >= 600 && ::wxDisplayDepth() >= 32)
     @endcode
-
-    There are several different types of tools you can add to a toolbar. These
-    types are controlled by the ::wxItemKind enumeration.
 
     @beginStyleTable
     @style{wxTB_FLAT}
@@ -75,7 +81,7 @@
         Align the toolbar at the right side of parent window.
     @endStyleTable
 
-    See also @ref overview_windowstyles. Note that the Win32 native toolbar
+    See also @ref overview_windowstyles. Note that the wxMSW native toolbar
     ignores @c wxTB_NOICONS style. Also, toggling the @c wxTB_TEXT works only
     if the style was initially on.
 
@@ -111,8 +117,8 @@
     button. The event handler functions take a wxCommandEvent argument. For most
     event macros, the identifier of the tool is passed, but for EVT_TOOL_ENTER()
     the toolbar window identifier is passed and the tool identifier is retrieved
-    from the wxCommandEvent. This is because the identifier may be -1 when the
-    mouse moves off a tool, and -1 is not allowed as an identifier in the event
+    from the wxCommandEvent. This is because the identifier may be @c wxID_ANY when the
+    mouse moves off a tool, and @c wxID_ANY is not allowed as an identifier in the event
     system.
 
     @library{wxcore}
@@ -136,20 +142,20 @@ public:
         @param id
             Window identifier. If -1, will automatically create an identifier.
         @param pos
-            Window position. ::wxDefaultPosition is (-1, -1) which indicates that
-            wxWidgets should generate a default position for the window. If
-            using the wxWindow class directly, supply an actual position.
+            Window position. ::wxDefaultPosition indicates that wxWidgets should
+            generate a default position for the window.
+            If using the wxWindow class directly, supply an actual position.
         @param size
-            Window size. ::wxDefaultSize is (-1, -1) which indicates that
-            wxWidgets should generate a default size for the window.
+            Window size. ::wxDefaultSize indicates that wxWidgets should generate
+            a default size for the window.
         @param style
-            Window style. See wxToolBar for details.
+            Window style. See wxToolBar initial description for details.
         @param name
             Window name.
 
         @remarks After a toolbar is created, you use AddTool() and perhaps
-            AddSeparator(), and then you must call Realize() to construct and
-            display the toolbar tools.
+                 AddSeparator(), and then you must call Realize() to construct
+                 and display the toolbar tools.
     */
     wxToolBar(wxWindow* parent, wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,
@@ -217,6 +223,9 @@ public:
 
     /**
         Adds a separator for spacing groups of tools.
+
+        Note that the meaning of a "separator" is a vertical line under wxMSW and
+        a simple space under wxGTK.
 
         @see AddTool(), SetToolSeparation()
     */
