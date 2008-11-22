@@ -8,8 +8,8 @@
 
 
 /**
-    We redefine these constants here because S_IREAD &c are _not_ standard
-    however, we do assume that the values correspond to the Unix umask bits.
+    We redefine these constants here because S_IREAD &c are _not_ standard.
+    However, we do assume that the values correspond to the Unix umask bits.
 */
 enum wxPosixPermissions
 {
@@ -44,7 +44,7 @@ enum wxPosixPermissions
     //@}
 
     /// Default mode for the new files: allow reading/writing them to everybody but
-    /// the effective file mode will be set after anding this value with umask and
+    /// the effective file mode will be set after ANDing this value with umask and
     /// so won't include wxS_IW{GRP,OTH} for the default 022 umask value
     wxS_DEFAULT = (wxPOSIX_USER_READ | wxPOSIX_USER_WRITE | \
                    wxPOSIX_GROUP_READ | wxPOSIX_GROUP_WRITE | \
@@ -52,7 +52,7 @@ enum wxPosixPermissions
 
     /// Default mode for the new directories (see wxFileName::Mkdir): allow
     /// reading/writing/executing them to everybody, but just like wxS_DEFAULT
-    /// the effective directory mode will be set after anding this value with umask
+    /// the effective directory mode will be set after ANDing this value with umask
     wxS_DIR_DEFAULT = (wxPOSIX_USER_READ | wxPOSIX_USER_WRITE | wxPOSIX_USER_EXECUTE | \
                        wxPOSIX_GROUP_READ | wxPOSIX_GROUP_WRITE | wxPOSIX_GROUP_EXECUTE | \
                        wxPOSIX_OTHERS_READ | wxPOSIX_OTHERS_WRITE | wxPOSIX_OTHERS_EXECUTE)
@@ -84,12 +84,12 @@ enum wxPosixPermissions
     file by default, you should explicitly call wxTempFile::Commit() to do it.
     Calling wxTempFile::Discard() explicitly discards any modifications: it
     closes and deletes the temporary file and leaves the original file unchanged.
-    If you don't call neither of Commit() and Discard(), the destructor will
+    If you call neither Commit() nor Discard(), the destructor will
     call Discard() automatically.
 
     To summarize: if you want to replace another file, create an instance of
-    wxTempFile passing the name of the file to be replaced to the constructor
-    (you may also use default constructor and pass the file name to wxTempFile::Open).
+    wxTempFile passing the name of the file to be replaced to the constructor.
+    (You may also use default constructor and pass the file name to wxTempFile::Open.)
     Then you can write to wxTempFile using wxFile-like functions and later call
     wxTempFile::Commit() to replace the old file (and close this one) or call
     wxTempFile::Discard() to cancel the modifications.
@@ -102,12 +102,12 @@ class wxTempFile
 public:
     /**
         Associates wxTempFile with the file to be replaced and opens it.
-        You should use IsOpened() to verify if the constructor succeeded.
+        You should use IsOpened() to verify that the constructor succeeded.
     */
     wxTempFile(const wxString& strName);
 
     /**
-        Destructor calls Discard() if temporary file is still opened.
+        Destructor calls Discard() if temporary file is still open.
     */
     ~wxTempFile();
 
@@ -116,14 +116,14 @@ public:
         file to the old name. Returns @true if both actions succeeded.
 
         If @false is returned it may unfortunately mean two quite different things:
-        either that either the old file couldn't be deleted or that the new file
+        either that the old file couldn't be deleted or that the new file
         couldn't be renamed to the old name.
     */
     bool Commit();
 
     /**
-        Discard changes: the old file contents is not changed, temporary file is
-        deleted.
+        Discard changes: the old file contents are not changed, the temporary
+        file is deleted.
     */
     void Discard();
 
@@ -136,8 +136,7 @@ public:
         Returns the length of the file.
 
         This method may return wxInvalidOffset if the length couldn't be
-        determined or also 0 even for non-empty files if the file is not
-        seekable.
+        determined or 0 even for non-empty files if the file is not seekable.
 
         In general, the only way to determine if the file for which this function
         returns 0 is really empty or not is to try reading from it.
@@ -180,20 +179,11 @@ public:
 /**
     @class wxFile
 
-    A wxFile performs raw file I/O.
-
-    This is a very small class designed to minimize the overhead of using it - in fact,
-    there is hardly any overhead at all, but using it brings you automatic error
-    checking and hides differences between platforms and compilers.
-
-    wxFile also automatically closes the file in its destructor making it unnecessary
-    to worry about forgetting to do it.
-
     A wxFile performs raw file I/O. This is a very small class designed to
     minimize the overhead of using it - in fact, there is hardly any overhead at
     all, but using it brings you automatic error checking and hides differences
     between platforms and compilers. wxFile also automatically closes the file in
-    its destructor making it unnecessary to worry about forgetting to do it.
+    its destructor so you won't forget to do so.
     wxFile is a wrapper around @c file descriptor. - see also wxFFile for a
     wrapper around @c FILE structure.
 
@@ -226,7 +216,7 @@ public:
         read_write,
 
         /** Open file for appending: the file is opened for writing, but the old contents
-            of the file is not erased and the file pointer is initially placed at the end
+            of the file are not erased and the file pointer is initially placed at the end
             of the file; can not be used with Access().
 
             This is the same as OpenMode::write if the file doesn't exist.
@@ -273,7 +263,7 @@ public:
 
     /**
         Destructor will close the file.
-        @note it is not virtual so you should not use wxFile polymorphically.
+        @note This destructor is not virtual so you should not use wxFile polymorphically.
     */
     ~wxFile();
 
@@ -285,7 +275,7 @@ public:
 
     /**
         Attaches an existing file descriptor to the wxFile object.
-        Example of predefined file descriptors are 0, 1 and 2 which correspond to
+        Examples of predefined file descriptors are 0, 1 and 2 which correspond to
         stdin, stdout and stderr (and have symbolic names of @c wxFile::fd_stdin,
         @c wxFile::fd_stdout and @c wxFile::fd_stderr).
 
@@ -321,7 +311,7 @@ public:
 
     /**
         Returns @true if the end of the file has been reached.
-        Note that the behaviour of the file pointer based class wxFFile is
+        Note that the behaviour of the file pointer-based class wxFFile is
         different as wxFFile::Eof() will return @true here only if an
         attempt has been made to read @b past the last byte of the file, while
         wxFile::Eof() will return @true even before such attempt is made if the
@@ -329,7 +319,7 @@ public:
 
         Note also that this function doesn't work on unseekable file descriptors
         (examples include pipes, terminals and sockets under Unix) and an attempt to
-        use it will result in an error message in such case.
+        use it will result in an error message.
 
         So, to read the entire file into memory, you should write a loop which uses
         Read() repeatedly and tests its return condition instead of using Eof()
@@ -339,7 +329,7 @@ public:
 
     /**
         Returns @true if the given name specifies an existing regular file
-        (not a directory or a link)
+        (not a directory or a link).
     */
     static bool Exists(const wxString& filename);
 
@@ -377,7 +367,6 @@ public:
         @param access
             An OR-combination of wxPosixPermissions enumeration values.
     */
-    bool Open(const wxString& filename,
     bool Open(const wxString& filename, wxFile::OpenMode mode = wxFile::read,
               int access = wxS_DEFAULT);
 
