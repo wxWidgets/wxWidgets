@@ -38,10 +38,10 @@
     The following help controller classes are defined:
     - wxWinHelpController, for controlling Windows Help.
     - wxCHMHelpController, for controlling MS HTML Help. To use this, you need to
-      set wxUSE_MS_HTML_HELP to 1 in setup.h and have htmlhelp.h header from
-      Microsoft's HTML Help kit (you don't need VC++ specific htmlhelp.lib
+      set wxUSE_MS_HTML_HELP to 1 in setup.h and have the htmlhelp.h header from
+      Microsoft's HTML Help kit. (You don't need the VC++-specific htmlhelp.lib
       because wxWidgets loads necessary DLL at runtime and so it works with all
-      compilers).
+      compilers.)
     - wxBestHelpController, for controlling MS HTML Help or, if Microsoft's runtime
       is not available, wxHtmlHelpController. You need to provide @b both CHM and
       HTB versions of the help file. For wxMSW only.
@@ -208,7 +208,7 @@ public:
     virtual bool LoadFile(const wxString& file = "");
 
     /**
-        Overridable member called when this application's viewer is quit by the user.
+        Overrideable member called when this application's viewer is quit by the user.
         This does not work for all help controllers.
     */
     virtual bool OnQuit();
@@ -220,7 +220,7 @@ public:
     virtual bool Quit();
 
     /**
-        For wxHtmlHelpController, the title is set (again with %s indicating the
+        For wxHtmlHelpController, the title is set (with %s indicating the
         page title) and also the size and position of the frame if the frame is
         already open. @a newFrameEachTime is ignored.
 
