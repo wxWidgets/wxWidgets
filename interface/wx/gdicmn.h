@@ -311,14 +311,19 @@ public:
     wxRect Inflate(wxCoord dx, wxCoord dy) const;
     //@}
 
-    //@{
     /**
-        Modifies the rectangle to contain the overlapping box of this rectangle
+        Modifies this rectangle to contain the overlapping portion of this rectangle
         and the one passed in as parameter.
+
+        @return This rectangle, modified.
+    */
+    wxRect& Intersect(const wxRect& rect);
+
+    /**
+        Returns the overlapping portion of this rectangle and the one passed in as
+        parameter.
     */
     wxRect Intersect(const wxRect& rect) const;
-    wxRect& Intersect(const wxRect& rect);
-    //@}
 
     /**
         Returns @true if this rectangle has a non-empty intersection with the
