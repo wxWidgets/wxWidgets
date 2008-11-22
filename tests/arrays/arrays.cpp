@@ -609,11 +609,7 @@ void ArraysTestCase::Swap()
 {
     DoTestSwap("Foo", "Bar", "Baz", (wxArrayString *)NULL);
 
-    // VC6 can't compile this call with mysterious error about in DoTestSwap()
-#ifndef __VISUALC6__
     DoTestSwap(1, 10, 100, (wxArrayInt *)NULL);
-#endif
-
     DoTestSwap(6, 28, 496, (wxArrayLong *)NULL);
 }
 
