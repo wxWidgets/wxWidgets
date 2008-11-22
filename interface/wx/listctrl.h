@@ -339,8 +339,10 @@ public:
 
     /**
         Gets information about the item. See SetItem() for more information.
-        You must call @e info.SetId() to the ID of item you're interested in
-        before calling this method.
+
+        You must call @e info.SetId() to set the ID of item you're interested in
+        before calling this method, and @e info.SetMask() with the flags indicating
+        what fields you need to retrieve from @a info.
     */
     bool GetItem(wxListItem& info) const;
 
