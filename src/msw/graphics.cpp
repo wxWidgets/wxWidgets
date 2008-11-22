@@ -1284,10 +1284,10 @@ void wxGDIPlusContext::DoDrawFilledText(const wxString& str,
     if ( str.IsEmpty())
         return ;
 
-    const wxGDIPlusFontData * const
+    wxGDIPlusFontData * const
         fontData = (wxGDIPlusFontData *)m_font.GetRefData();
-    const wxGDIPlusBrushData * const
-        brushData = (wxGDIPlusBrushData *)m_brush.GetRefData();
+    wxGDIPlusBrushData * const
+        brushData = (wxGDIPlusBrushData *)brush.GetRefData();
 
     m_context->DrawString
                (
