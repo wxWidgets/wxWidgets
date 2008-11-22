@@ -48,6 +48,7 @@ public:
         Default constructor.
     */
     wxGauge();
+
     /**
         Constructor, creating and showing a gauge.
 
@@ -56,8 +57,9 @@ public:
         @param id
             Window identifier.
         @param range
-            Integer range (maximum value) of the gauge. It is ignored when the
-            gauge is used in indeterminate mode.
+            Integer range (maximum value) of the gauge.
+            See SetRange() for more details about the meaning of this value
+            when using the gauge in indeterminate mode.
         @param pos
             Window position.
         @param size
@@ -154,6 +156,10 @@ public:
     /**
         Sets the range (maximum value) of the gauge. This function makes the
         gauge switch to determinate mode, if it's not already.
+
+        When the gauge is in indeterminate mode, under wxMSW the gauge
+        repeatedly goes from zero to @a range and back; under other ports
+        when in indeterminate mode, the @a range setting is ignored.
 
         @see GetRange()
     */
