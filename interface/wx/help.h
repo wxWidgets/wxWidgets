@@ -35,7 +35,7 @@
     The remaining help controller classes need to be named explicitly by an
     application that wishes to make use of them.
 
-    There are currently the following help controller classes defined:
+    The following help controller classes are defined:
     - wxWinHelpController, for controlling Windows Help.
     - wxCHMHelpController, for controlling MS HTML Help. To use this, you need to
       set wxUSE_MS_HTML_HELP to 1 in setup.h and have htmlhelp.h header from
@@ -44,12 +44,12 @@
       compilers).
     - wxBestHelpController, for controlling MS HTML Help or, if Microsoft's runtime
       is not available, wxHtmlHelpController. You need to provide @b both CHM and
-      HTB versions of the help file. For 32bit Windows only.
+      HTB versions of the help file. For wxMSW only.
     - wxExtHelpController, for controlling external browsers under Unix.
       The default browser is Netscape Navigator. The 'help' sample shows its use.
     - wxWinceHelpController, for controlling a simple @c .htm help controller for
       Windows CE applications.
-    - wxHtmlHelpController, a sophisticated help controller using wxHTML(), in a
+    - wxHtmlHelpController, a sophisticated help controller using wxHTML, in a
       similar style to the Microsoft HTML Help viewer and using some of the same
       files. Although it has an API compatible with other help controllers, it has
       more advanced features, so it is recommended that you use the specific API
@@ -142,9 +142,16 @@ public:
                                   const wxPoint& pos);
 
     /**
-        wxHtmlHelpController returns the frame, size and position.
-        For all other help controllers, this function does nothing and just
-        returns @NULL.
+        For wxHtmlHelpController, returns the latest frame size and position
+        settings and whether a new frame is drawn with each invocation.
+        For all other help controllers, this function does nothing and just returns @NULL.
+
+        @param size
+            The most recent frame size.
+        @param pos
+            The most recent frame position.
+        @param newFrameEachTime
+            @true if a new frame is drawn with each invocation.
     */
     virtual wxFrame* GetFrameParameters(const wxSize* size = NULL,
                                         const wxPoint* pos = NULL,
