@@ -9,15 +9,10 @@
 /**
     @class wxToolBar
 
-    The name wxToolBar is defined to be a synonym for one of the following
-    classes:
+    A toolbar is a bar of buttons and/or other controls usually placed below
+    the menu bar in a wxFrame.
 
-    - @b wxToolBar95 - The native Windows 95 toolbar. Used on Windows 95, NT 4
-      and above.
-    - @b wxToolBarMSW - A Windows implementation. Used on 16-bit Windows.
-    - @b wxToolBarGTK - The GTK toolbar.
-
-    You may also create a toolbar that is managed by the frame, by calling
+    You may create a toolbar that is managed by the frame, by calling
     wxFrame::CreateToolBar(). Under Pocket PC, you should always use this
     function for creating the toolbar to be managed by the frame, so that
     wxWidgets can use a combined menubar and toolbar. Where you manage your
@@ -26,26 +21,21 @@
     The meaning of a "separator" is a vertical line under Windows and simple
     space under GTK+.
 
-    @b wxToolBar95: Note that this toolbar paints tools to reflect
-    system-wide colours. If you use more than 16 colours in your tool
-    bitmaps, you may wish to suppress this behaviour, otherwise system
-    colours in your bitmaps will inadvertently be mapped to system colours.
+    <b>wxMSW note</b>: Note that under wxMSW toolbar paints tools to reflect
+    system-wide colours. If you use more than 16 colours in your tool bitmaps,
+    you may wish to suppress this behaviour, otherwise system colours in your
+    bitmaps will inadvertently be mapped to system colours.
     To do this, set the msw.remap system option before creating the toolbar:
-
     @code
     wxSystemOptions::SetOption(wxT("msw.remap"), 0);
     @endcode
-
     If you wish to use 32-bit images (which include an alpha channel for
     transparency) use:
-
     @code
     wxSystemOptions::SetOption(wxT("msw.remap"), 2);
     @endcode
-
     Then colour remapping is switched off, and a transparent background
     used. But only use this option under Windows XP with true colour:
-
     @code
     if (wxTheApp->GetComCtl32Version() >= 600 && ::wxDisplayDepth() >= 32)
     @endcode

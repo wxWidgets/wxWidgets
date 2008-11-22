@@ -103,8 +103,6 @@
     Please see the widgets sample ("Slider" page) to see the difference between
     EVT_SCROLL_THUMBRELEASE and EVT_SCROLL_CHANGED in action.
 
-    @todo are all strings "Windows 95 only" really up2date?
-
     @library{wxcore}
     @category{ctrl}
     @appearance{slider.png}
@@ -161,14 +159,14 @@ public:
     /**
         Clears the selection, for a slider with the @b wxSL_SELRANGE style.
 
-        @remarks Windows 95 only.
+        @onlyfor{wxmsw}
     */
     virtual void ClearSel();
 
     /**
         Clears the ticks.
 
-        @remarks Windows 95 only.
+        @onlyfor{wxmsw}
     */
     virtual void ClearTicks();
 
@@ -213,7 +211,7 @@ public:
     /**
         Returns the selection end point.
 
-        @remarks Windows 95 only.
+        @onlyfor{wxmsw}
 
         @see GetSelStart(), SetSelection()
     */
@@ -222,7 +220,7 @@ public:
     /**
         Returns the selection start point.
 
-        @remarks Windows 95 only.
+        @onlyfor{wxmsw}
 
         @see GetSelEnd(), SetSelection()
     */
@@ -231,7 +229,7 @@ public:
     /**
         Returns the thumb length.
 
-        @remarks Windows 95 only.
+        @onlyfor{wxmsw}
 
         @see SetThumbLength()
     */
@@ -240,7 +238,7 @@ public:
     /**
         Returns the tick frequency.
 
-        @remarks Windows 95 only.
+        @onlyfor{wxmsw}
 
         @see SetTickFreq()
     */
@@ -289,7 +287,7 @@ public:
         @param endPos
             The selection end position.
 
-        @remarks Windows 95 only.
+        @onlyfor{wxmsw}
 
         @see GetSelStart(), GetSelEnd()
     */
@@ -301,7 +299,7 @@ public:
         @param len
             The thumb length.
 
-        @remarks Windows 95 only.
+        @onlyfor{wxmsw}
 
         @see GetThumbLength()
     */
@@ -313,7 +311,7 @@ public:
         @param tickPos
             The tick position.
 
-        @remarks Windows 95 only.
+        @onlyfor{wxmsw}
 
         @see SetTickFreq()
     */
@@ -328,7 +326,7 @@ public:
         @param pos
             Position. Must be greater than zero. @todo: what is this for?
 
-        @remarks Windows 95 only.
+        @onlyfor{wxmsw}
 
         @see GetTickFreq()
     */

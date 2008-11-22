@@ -15,14 +15,12 @@
 
     @beginStyleTable
     @style{wxST_SIZEGRIP}
-        On Windows 95, displays a gripper at right-hand side of the status bar.
+        Displays a gripper at the right-hand side of the status bar.
     @endStyleTable
-
-    @todo reference to win95 may be old and wrong
 
     @remarks
     It is possible to create controls and other windows on the status bar.
-    Position these windows from an OnSize event handler.
+    Position these windows from an OnSize() event handler.
 
     @library{wxcore}
     @category{miscwnd}

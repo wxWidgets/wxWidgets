@@ -222,19 +222,18 @@ public:
         @return A pointer to the toolbar if it was created successfully, @NULL
                 otherwise.
 
-        @remarks By default, the toolbar is an instance of wxToolBar (which is
-                 defined to be a suitable toolbar class on each
-                 platform, such as wxToolBar95). To use a different
-                 class, override OnCreateToolBar().
-                 When a toolbar has been created with this function, or made
-                 known to the frame with wxFrame::SetToolBar, the frame will
-                 manage the toolbar position and adjust the return value from
-                 wxWindow::GetClientSize to reflect the available space for
-                 application windows.
-                 Under Pocket PC, you should always use this function for creating
-                 the toolbar to be managed by the frame, so that wxWidgets can
-                 use a combined menubar and toolbar.
-                 Where you manage your own toolbars, create a wxToolBar as usual.
+        @remarks
+            By default, the toolbar is an instance of wxToolBar.
+            To use a different class, override OnCreateToolBar().
+            When a toolbar has been created with this function, or made
+            known to the frame with wxFrame::SetToolBar(), the frame will
+            manage the toolbar position and adjust the return value from
+            wxWindow::GetClientSize() to reflect the available space for
+            application windows.
+            Under Pocket PC, you should always use this function for creating
+            the toolbar to be managed by the frame, so that wxWidgets can
+            use a combined menubar and toolbar.
+            Where you manage your own toolbars, create a wxToolBar as usual.
 
         @see CreateStatusBar(), OnCreateToolBar(), SetToolBar(), GetToolBar()
     */

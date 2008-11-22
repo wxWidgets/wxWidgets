@@ -25,7 +25,7 @@
     be overridden in order to give an opportunity to use a different class of client
     window.
 
-    Under Windows 95, the client window will automatically have a sunken border style
+    Under wxMSW, the client window will automatically have a sunken border style
     when the active child is not maximized, and no border style when a child is maximized.
 
     @library{wxcore}
@@ -157,7 +157,7 @@ public:
 
         @remarks
 
-        Under Windows 95, the client window will automatically have a sunken
+        Under wxMSW, the client window will automatically have a sunken
         border style when the active child is not maximized, and no border
         style when a child is maximized.
 

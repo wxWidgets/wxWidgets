@@ -99,7 +99,7 @@ enum wxPaperSize
     wxPAPER_FANFOLD_STD_GERMAN, ///<  German Std Fanfold, 8 1/2 by 12 inches
     wxPAPER_FANFOLD_LGL_GERMAN, ///<  German Legal Fanfold, 8 1/2 by 13 inches
 
-    // Windows 95 Only
+    // wxMSW Only
 
     wxPAPER_ISO_B4,             ///<  B4 (ISO) 250 x 353 mm
     wxPAPER_JAPANESE_POSTCARD,  ///<  Japanese Postcard 100 x 148 mm

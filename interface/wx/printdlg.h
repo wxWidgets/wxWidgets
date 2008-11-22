@@ -93,8 +93,7 @@ public:
     @library{wxcore}
     @category{printing}
 
-    @see @ref overview_printing "Printing framework overview",
-         wxPrintDialog, wxPageSetupDialogData
+    @see @ref overview_printing, wxPrintDialog, wxPageSetupDialogData
 */
 class wxPageSetupDialog : public wxDialog
 {
