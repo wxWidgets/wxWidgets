@@ -7,7 +7,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-/** The line termination type (kept wxTextFileType name for compability) */
+/**
+    The line termination type (kept wxTextFileType name for compability).
+*/
 enum wxTextFileType
 {
     wxTextFileType_None,  //!< incomplete (the last line of the file only)
@@ -16,7 +18,6 @@ enum wxTextFileType
     wxTextFileType_Mac,   //!< line is terminated with 'CR' = 0xD = 13 = '\\r'
     wxTextFileType_Os2    //!< line is terminated with 'CR' 'LF'
 };
-
 
 /**
     @class wxTextFile
@@ -40,7 +41,7 @@ enum wxTextFileType
     - Create and open it: this is done with either wxTextFile::Create or wxTextFile::Open
       function which opens the file (name may be specified either as the argument to
       these functions or in the constructor), reads its contents in memory (in the
-      case of @c Open()) and closes it.
+      case of wxTextFile::Open()) and closes it.
     - Work with the lines in the file: this may be done either with "direct
       access" functions like wxTextFile::GetLineCount and wxTextFile::GetLine
       (@e operator[] does exactly the same but looks more like array addressing)
