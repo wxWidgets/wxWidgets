@@ -97,6 +97,12 @@ public:
     virtual void InitDialog();
 
     /**
+        See wxWindow::SetAutoLayout(): when auto layout is on, this function gets
+        called automatically when the window is resized.
+    */
+    virtual bool Layout();
+
+    /**
         The default handler for wxEVT_SYS_COLOUR_CHANGED.
 
         @param event

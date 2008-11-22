@@ -1503,8 +1503,10 @@ public:
         Invokes the constraint-based layout algorithm or the sizer-based algorithm
         for this window.
 
-        See SetAutoLayout(): when auto layout is on, this function gets called automatically
-        when the window is resized.
+        This function does not get called automatically when the window is resized
+        because lots of windows deriving from wxWindow does not need this functionality.
+        If you want to have Layout() called automatically, you should derive
+        from wxPanel (see wxPanel::Layout).
 
         @see @ref overview_windowsizing
     */
@@ -1981,8 +1983,9 @@ public:
         updated when its size changes.
 
         @param autoLayout
-            Set this to @true if you wish the Layout function to be
-            called automatically when the window is resized.
+            Set this to @true if you wish the Layout() function to be
+            called automatically when the window is resized
+            (really happens only if you derive from wxPanel or wxTopLevelWindow).
 
         @see SetConstraints()
     */

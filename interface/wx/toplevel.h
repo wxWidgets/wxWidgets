@@ -177,6 +177,12 @@ public:
     bool IsUsingNativeDecorations() const;
 
     /**
+        See wxWindow::SetAutoLayout(): when auto layout is on, this function gets
+        called automatically when the window is resized.
+    */
+    virtual bool Layout();
+
+    /**
         Maximizes or restores the window.
 
         @param maximize
