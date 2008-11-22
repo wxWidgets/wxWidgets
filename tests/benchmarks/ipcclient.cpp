@@ -12,6 +12,8 @@
 
 #include "wx/evtloop.h"
 
+// do this before including wx/ipc.h under Windows to use TCP even there
+#define wxUSE_DDE_FOR_IPC 0
 #include "wx/ipc.h"
 #include "../../samples/ipc/ipcsetup.h"
 
