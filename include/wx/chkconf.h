@@ -108,9 +108,12 @@
 #   endif
 #endif /* !defined(wxUSE_FS_ARCHIVE) */
 
-/* don't give an error about this one yet, it's not fully implemented */
 #ifndef wxUSE_FSVOLUME
-#   define wxUSE_FSVOLUME 0
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_FSVOLUME must be defined."
+#   else
+#       define wxUSE_FSVOLUME 0
+#   endif
 #endif /* !defined(wxUSE_FSVOLUME) */
 
 #ifndef wxUSE_DYNAMIC_LOADER
