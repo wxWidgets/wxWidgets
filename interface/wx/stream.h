@@ -795,6 +795,8 @@ public:
     /**
         Returns the first character in the input queue and removes it,
         blocking until it appears if necessary.
+
+        On success returns a value between 0 - 255; on end of file returns @c wxEOF.
     */
     int GetC();
 
