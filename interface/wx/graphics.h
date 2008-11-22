@@ -398,11 +398,20 @@ public:
 
     //@{
     /**
-        Draws a text at the defined position, at the given angle.
+        Draws a text at the defined position.
+
+        If @a angle is specified, the string is drawn at the given angle to the
+        (default) horizontal direction. If @a backgroundBrush is specified, the
+        text is filled using it.
     */
     void DrawText(const wxString& str, wxDouble x, wxDouble y,
                   wxDouble angle);
     void DrawText(const wxString& str, wxDouble x, wxDouble y);
+    void DrawText(const wxString& str, wxDouble x, wxDouble y,
+                  const wxGraphicsBrush& backgroundBrush)
+    void DrawText(const wxString& str, wxDouble x, wxDouble y,
+                  wxDouble angle,
+                  const wxGraphicsBrush& backgroundBrush )
     //@}
 
     /**
