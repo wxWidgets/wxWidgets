@@ -207,8 +207,9 @@ enum wxUpdateUI
            Under Windows, puts a query button on the caption. When pressed,
            Windows will go into a context-sensitive help mode and wxWidgets
            will send a wxEVT_HELP event if the user clicked on an application window.
-           This style cannot be used together with wxMAXIMIZE_BOX or wxMINIMIZE_BOX, so
-           these two styles are automatically turned of if this one is used.
+           This style cannot be used (because of the underlying native behaviour)
+           together with @c wxMAXIMIZE_BOX or @c wxMINIMIZE_BOX, so these two styles
+           are automatically turned off if this one is used.
     @style{wxWS_EX_PROCESS_IDLE}
            This window should always process idle events, even if the mode set
            by wxIdleEvent::SetMode is wxIDLE_PROCESS_SPECIFIED.
