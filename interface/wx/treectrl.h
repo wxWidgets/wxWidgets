@@ -78,7 +78,8 @@
     @event{EVT_TREE_SET_INFO(id, func)}
           Information is being supplied.
     @event{EVT_TREE_ITEM_ACTIVATED(id, func)}
-          The item has been activated, i.e. chosen by double clicking it with mouse or from keyboard.
+          The item has been activated, i.e. chosen by double clicking it with
+          mouse or from keyboard.
     @event{EVT_TREE_ITEM_COLLAPSED(id, func)}
           The item has been collapsed.
     @event{EVT_TREE_ITEM_COLLAPSING(id, func)}
@@ -98,9 +99,11 @@
     @event{EVT_TREE_KEY_DOWN(id, func)}
           A key has been pressed.
     @event{EVT_TREE_ITEM_GETTOOLTIP(id, func)}
-          The opportunity to set the item tooltip is being given to the application (call wxTreeEvent::SetToolTip). Windows only.
+          The opportunity to set the item tooltip is being given to the application
+          (call wxTreeEvent::SetToolTip). Windows only.
     @event{EVT_TREE_ITEM_MENU(id, func)}
-          The context menu for the selected item has been requested, either by a right click or by using the menu key.
+          The context menu for the selected item has been requested, either by a
+          right click or by using the menu key.
     @event{EVT_TREE_STATE_IMAGE_CLICK(id, func)}
           The state image has been clicked. Windows only.
     @endEventTable
@@ -123,8 +126,8 @@
     @category{ctrl}
     @appearance{treectrl.png}
 
-    @see wxDataViewTreeCtrl, wxTreeEvent, wxTreeItemData, @ref overview_treectrl, wxListBox,
-         wxListCtrl, wxImageList
+    @see wxDataViewTreeCtrl, wxTreeEvent, wxTreeItemData, @ref overview_treectrl,
+         wxListBox, wxListCtrl, wxImageList
 */
 class wxTreeCtrl : public wxControl
 {
@@ -264,7 +267,7 @@ public:
                 const wxString& name = wxTreeCtrlNameStr);
 
     /**
-        Deletes the specified item. A EVT_TREE_DELETE_ITEM() event will be
+        Deletes the specified item. A @c EVT_TREE_DELETE_ITEM event will be
         generated.
 
         This function may cause a subsequent call to GetNextChild() to fail.
@@ -273,7 +276,7 @@ public:
 
     /**
         Deletes all items in the control. Note that this may not generate
-        EVT_TREE_DELETE_ITEM() events under some Windows versions although
+        @c EVT_TREE_DELETE_ITEM events under some Windows versions although
         normally such event is generated for each removed item.
     */
     virtual void DeleteAllItems();
@@ -289,11 +292,11 @@ public:
 
     /**
         Starts editing the label of the given @a item. This function generates a
-        EVT_TREE_BEGIN_LABEL_EDIT() event which can be vetoed so that no text
+        @c EVT_TREE_BEGIN_LABEL_EDIT event which can be vetoed so that no text
         control will appear for in-place editing.
 
         If the user changed the label (i.e. s/he does not press ESC or leave the
-        text control without changes, a EVT_TREE_END_LABEL_EDIT() event will be
+        text control without changes, a @c EVT_TREE_END_LABEL_EDIT event will be
         sent which can be vetoed as well.
 
         @see EndEditLabel(), wxTreeEvent
@@ -592,13 +595,11 @@ public:
         - @c wxTREE_HITTEST_NOWHERE: In the client area but below the last item.
         - @c wxTREE_HITTEST_ONITEMBUTTON: On the button associated with an item.
         - @c wxTREE_HITTEST_ONITEMICON: On the bitmap associated with an item.
-        - @c wxTREE_HITTEST_ONITEMINDENT: In the indentation associated with an
-            item.
-        - @c wxTREE_HITTEST_ONITEMLABEL: On the label (string) associated with
-            an item.
+        - @c wxTREE_HITTEST_ONITEMINDENT: In the indentation associated with an item.
+        - @c wxTREE_HITTEST_ONITEMLABEL: On the label (string) associated with an item.
         - @c wxTREE_HITTEST_ONITEMRIGHT: In the area to the right of an item.
         - @c wxTREE_HITTEST_ONITEMSTATEICON: On the state icon for a tree view
-            item that is in a user-defined state.
+          item that is in a user-defined state.
         - @c wxTREE_HITTEST_TOLEFT: To the right of the client area.
         - @c wxTREE_HITTEST_TORIGHT: To the left of the client area.
 
@@ -982,7 +983,7 @@ public:
     int GetKeyCode() const;
 
     /**
-        Returns the key event for EVT_TREE_KEY_DOWN() events.
+        Returns the key event for @c EVT_TREE_KEY_DOWN events.
     */
     const wxKeyEvent& GetKeyEvent() const;
 
@@ -992,8 +993,8 @@ public:
     const wxString& GetLabel() const;
 
     /**
-        Returns the old item index (valid for EVT_TREE_ITEM_CHANGING() and
-        EVT_TREE_ITEM_CHANGED() events).
+        Returns the old item index (valid for @c EVT_TREE_ITEM_CHANGING and
+        @c EVT_TREE_ITEM_CHANGED events).
     */
     wxTreeItemId GetOldItem() const;
 
@@ -1009,12 +1010,12 @@ public:
 
     /**
         Returns @true if the label edit was cancelled. This should be called
-        from within an EVT_TREE_END_LABEL_EDIT() handler.
+        from within an @c EVT_TREE_END_LABEL_EDIT handler.
     */
     bool IsEditCancelled() const;
 
     /**
-        Set the tooltip for the item (valid for EVT_TREE_ITEM_GETTOOLTIP()
+        Set the tooltip for the item (valid for @c EVT_TREE_ITEM_GETTOOLTIP
         events). Windows only.
     */
     void SetToolTip(const wxString& tooltip);
