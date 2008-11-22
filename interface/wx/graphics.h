@@ -404,6 +404,12 @@ public:
     /**
         Draws text at the defined position.
 
+        @param str
+            The text to draw.
+        @param x
+            The x coordinate position to draw the text at.
+        @param y
+            The y coordinate position to draw the text at.
         @param angle
             The angle relative to the (default) horizontal direction to draw
             the string.
@@ -412,6 +418,12 @@ public:
     /**
         Draws text at the defined position.
 
+        @param str
+            The text to draw.
+        @param x
+            The x coordinate position to draw the text at.
+        @param y
+            The y coordinate position to draw the text at.
         @param backgroundBrush
             Brush to fill the text with.
     */
@@ -420,6 +432,12 @@ public:
     /**
         Draws text at the defined position.
 
+        @param str
+            The text to draw.
+        @param x
+            The x coordinate position to draw the text at.
+        @param y
+            The y coordinate position to draw the text at.
         @param angle
             The angle relative to the (default) horizontal direction to draw
             the string.
