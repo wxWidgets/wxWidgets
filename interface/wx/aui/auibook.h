@@ -56,23 +56,25 @@
 
 
     @beginEventTable{wxAuiNotebookEvent}
-        @event{EVT_AUINOTEBOOK_PAGE_CLOSE(id, func)}
-            @todo Provide description.
-        @event{EVT_AUINOTEBOOK_PAGE_CHANGED(id, func)}
-            @todo Provide description.
-        @event{EVT_AUINOTEBOOK_PAGE_CHANGING(id, func)}
-            @todo Provide description.
-        @event{EVT_AUINOTEBOOK_BUTTON(id, func)}
-            @todo Provide description.
-        @event{EVT_AUINOTEBOOK_BEGIN_DRAG(id, func)}
-            @todo Provide description.
-        @event{EVT_AUINOTEBOOK_END_DRAG(id, func)}
-            @todo Provide description.
-        @event{EVT_AUINOTEBOOK_DRAG_MOTION(id, func)}
-            @todo Provide description.
-        @event{EVT_AUINOTEBOOK_ALLOW_DND(id, func)}
-            @todo Provide description.
+    @event{EVT_AUINOTEBOOK_PAGE_CLOSE(id, func)}
+        Provide description.
+    @event{EVT_AUINOTEBOOK_PAGE_CHANGED(id, func)}
+        Provide description.
+    @event{EVT_AUINOTEBOOK_PAGE_CHANGING(id, func)}
+        Provide description.
+    @event{EVT_AUINOTEBOOK_BUTTON(id, func)}
+        Provide description.
+    @event{EVT_AUINOTEBOOK_BEGIN_DRAG(id, func)}
+        Provide description.
+    @event{EVT_AUINOTEBOOK_END_DRAG(id, func)}
+        Provide description.
+    @event{EVT_AUINOTEBOOK_DRAG_MOTION(id, func)}
+        Provide description.
+    @event{EVT_AUINOTEBOOK_ALLOW_DND(id, func)}
+        Provide description.
     @endEventTable
+
+    @todo provide description for the events above.
 
     @library{wxaui}
     @category{aui}

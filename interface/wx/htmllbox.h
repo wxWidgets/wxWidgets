@@ -90,7 +90,7 @@ protected:
         @param link
             Description of the link.
 
-        @see See also wxHtmlLinkInfo.
+        @see wxHtmlLinkInfo.
     */
     virtual void OnLinkClicked(size_t n, const wxHtmlLinkInfo& link);
 

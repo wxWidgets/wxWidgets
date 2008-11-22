@@ -513,7 +513,7 @@ public:
     supports member templates.
 
     @code
-    template class Arc, class T = typename Arc::entry_type*
+    template<class Arc, class T = typename Arc::entry_type*>
     class wxArchiveIterator
     {
         // this constructor creates an 'end of sequence' object
@@ -528,8 +528,8 @@ public:
 
     The first template parameter should be the type of archive input stream
     (e.g. wxArchiveInputStream) and the second can either be a pointer to an entry
-    (e.g. wxArchiveEntry*), or a string/pointer pair (e.g. std::pairwxString,
-    wxArchiveEntry*).
+    (e.g. wxArchiveEntry*), or a string/pointer pair
+    (e.g. std::pair<wxString,wxArchiveEntry*>).
 
     The @c wx/archive.h header defines the following typedefs:
 
