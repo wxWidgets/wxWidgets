@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        graphics.h
-// Purpose:     interface of wxGraphicsPath
+// Purpose:     interface of various wxGraphics* classes
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -199,10 +199,11 @@ public:
 /**
     @class wxGraphicsContext
 
-    A wxGraphicsContext instance is the object that is drawn upon. It is created by
-    a renderer using wxGraphicsRenderer::CreateContext(). This can be either directly
-    using a renderer instance, or indirectly using the static convenience Create()
-    functions of wxGraphicsContext that always delegate the task to the default renderer.
+    A wxGraphicsContext instance is the object that is drawn upon. It is
+    created by a renderer using wxGraphicsRenderer::CreateContext(). This can
+    be either directly using a renderer instance, or indirectly using the
+    static convenience Create() functions of wxGraphicsContext that always
+    delegate the task to the default renderer.
 
     @code
     void MyCanvas::OnPaint(wxPaintEvent &event)
@@ -233,7 +234,6 @@ public:
     }
     @endcode
 
-
     @library{wxcore}
     @category{gdi,dc}
 
@@ -247,46 +247,46 @@ public:
 
         @see wxGraphicsRenderer::CreateContext()
     */
-    static wxGraphicsContext* Create( wxWindow* window ) ;
+    static wxGraphicsContext* Create(wxWindow* window);
 
     /**
         Creates a wxGraphicsContext from a wxWindowDC
 
         @see wxGraphicsRenderer::CreateContext()
     */
-    static wxGraphicsContext* Create( const wxWindowDC& dc) ;
+    static wxGraphicsContext* Create(const wxWindowDC& dc);
 
     /**
         Creates a wxGraphicsContext from a wxMemoryDC
 
         @see wxGraphicsRenderer::CreateContext()
     */
-    static wxGraphicsContext * Create( const wxMemoryDC& dc) ;
+    static wxGraphicsContext* Create(const wxMemoryDC& dc);
 
     /**
-        Creates a wxGraphicsContext from a wxPrinterDC. Under
-        GTK+, this will only work when using the GtkPrint
-        printing backend which is available since GTK+ 2.10.
+        Creates a wxGraphicsContext from a wxPrinterDC. Under GTK+, this will
+        only work when using the GtkPrint printing backend which is available
+        since GTK+ 2.10.
 
-        @see wxGraphicsRenderer::CreateContext(), @ref overview_unixprinting "Printing under Unix"
+        @see wxGraphicsRenderer::CreateContext(), @ref overview_unixprinting
     */
-    static wxGraphicsContext * Create( const wxPrinterDC& dc) ;
+    static wxGraphicsContext* Create(const wxPrinterDC& dc);
 
     /**
-        Clips drawings to the region
+        Clips drawings to the specified region.
     */
     virtual void Clip(const wxRegion& region) = 0;
 
     /**
-        Clips drawings to the rectangle.
+        Clips drawings to the specified rectangle.
     */
     virtual void Clip(wxDouble x, wxDouble y, wxDouble w, wxDouble h) = 0;
 
     /**
-        Concatenates the passed in transform with the current transform of this context
+        Concatenates the passed in transform with the current transform of this
+        context.
     */
     virtual void ConcatTransform(const wxGraphicsMatrix& matrix) = 0;
-
 
     /**
         Creates a native brush from a wxBrush.
@@ -300,24 +300,24 @@ public:
                                       const wxColour& col = *wxBLACK) const;
 
     /**
-        Creates a wxGraphicsContext from a native context. This native context must be
-        eg a CGContextRef for Core Graphics, a Graphics pointer for GDIPlus or a
-        cairo_t pointer for cairo.
+        Creates a wxGraphicsContext from a native context. This native context
+        must be a CGContextRef for Core Graphics, a Graphics pointer for
+        GDIPlus, or a cairo_t pointer for cairo.
 
-        @see wxGraphicsRenderer:: CreateContextFromNativeContext
+        @see wxGraphicsRenderer::CreateContextFromNativeContext()
     */
     static wxGraphicsContext* CreateFromNative(void* context);
 
     /**
         Creates a wxGraphicsContext from a native window.
 
-        @see wxGraphicsRenderer:: CreateContextFromNativeWindow
+        @see wxGraphicsRenderer::CreateContextFromNativeWindow()
     */
     static wxGraphicsContext* CreateFromNativeWindow(void* window);
 
     /**
-        Creates a native brush, having a linear gradient, starting at (x1,y1) with
-        color c1 to (x2,y2) with color c2
+        Creates a native brush, having a linear gradient, starting at
+        (@a x1, @a y1) with color @a c1 to (@a x2, @a y2) with color @a c2.
     */
     virtual wxGraphicsBrush CreateLinearGradientBrush(wxDouble x1,
                                                       wxDouble y1,
@@ -327,8 +327,8 @@ public:
                                                       const wxColour& c2) const;
 
     /**
-        Creates a native affine transformation matrix from the passed in values. The
-        defaults result in an identity matrix.
+        Creates a native affine transformation matrix from the passed in
+        values. The default parameters result in an identity matrix.
     */
     virtual wxGraphicsMatrix CreateMatrix(wxDouble a = 1.0, wxDouble b = 0.0,
                                           wxDouble c = 0.0, wxDouble d = 1.0,
@@ -346,8 +346,9 @@ public:
     virtual wxGraphicsPen CreatePen(const wxPen& pen) const;
 
     /**
-        Creates a native brush, having a radial gradient originating at (xo,yc) with
-        color oColour and ends on a circle around (xc,yc) with radius r and color cColour
+        Creates a native brush, having a radial gradient originating at
+        (@a xo, @a yc) with color @a oColour and ends on a circle around
+        (@a xc, @a yc) with the given @a radius and color @a cColour.
     */
     virtual wxGraphicsBrush CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
                                                       wxDouble xc, wxDouble yc,
@@ -356,8 +357,8 @@ public:
                                                       const wxColour& cColor) const;
 
     /**
-        Draws the bitmap. In case of a mono bitmap, this is treated as a mask and the
-        current brushed is used for filling.
+        Draws the bitmap. In case of a mono bitmap, this is treated as a mask
+        and the current brushed is used for filling.
     */
     virtual void DrawBitmap(const wxBitmap& bmp, wxDouble x, wxDouble y,
                             wxDouble w, wxDouble h) = 0;
@@ -396,23 +397,37 @@ public:
     virtual void DrawRoundedRectangle(wxDouble x, wxDouble y, wxDouble w,
                                       wxDouble h, wxDouble radius);
 
-    //@{
     /**
-        Draws a text at the defined position.
+        Draws text at the defined position.
+    */
+    void DrawText(const wxString& str, wxDouble x, wxDouble y);
+    /**
+        Draws text at the defined position.
 
-        If @a angle is specified, the string is drawn at the given angle to the
-        (default) horizontal direction. If @a backgroundBrush is specified, the
-        text is filled using it.
+        @param angle
+            The angle relative to the (default) horizontal direction to draw
+            the string.
+    */
+    void DrawText(const wxString& str, wxDouble x, wxDouble y, wxDouble angle);
+    /**
+        Draws text at the defined position.
+
+        @param backgroundBrush
+            Brush to fill the text with.
     */
     void DrawText(const wxString& str, wxDouble x, wxDouble y,
-                  wxDouble angle);
-    void DrawText(const wxString& str, wxDouble x, wxDouble y);
+                  const wxGraphicsBrush& backgroundBrush);
+    /**
+        Draws text at the defined position.
+
+        @param angle
+            The angle relative to the (default) horizontal direction to draw
+            the string.
+        @param backgroundBrush
+            Brush to fill the text with.
+    */
     void DrawText(const wxString& str, wxDouble x, wxDouble y,
-                  const wxGraphicsBrush& backgroundBrush)
-    void DrawText(const wxString& str, wxDouble x, wxDouble y,
-                  wxDouble angle,
-                  const wxGraphicsBrush& backgroundBrush )
-    //@}
+                  wxDouble angle, const wxGraphicsBrush& backgroundBrush);
 
     /**
         Fills the path with the current brush.
@@ -421,25 +436,33 @@ public:
                           int fillStyle = wxODDEVEN_RULE) = 0;
 
     /**
-        Returns the native context (CGContextRef for Core Graphics, Graphics pointer
-        for GDIPlus and cairo_t pointer for cairo).
+        Returns the native context (CGContextRef for Core Graphics, Graphics
+        pointer for GDIPlus and cairo_t pointer for cairo).
     */
     virtual void* GetNativeContext() = 0;
 
     /**
         Fills the @a widths array with the widths from the beginning of
-        @a text to the corresponding character of @e text.
+        @a text to the corresponding character of @a text.
     */
     virtual void GetPartialTextExtents(const wxString& text,
                                        wxArrayDouble& widths) const = 0;
 
     /**
         Gets the dimensions of the string using the currently selected font.
-        @e string is the text string to measure, @e w and @e h are
-        the total width and height respectively, @a descent is the
-        dimension from the baseline of the font to the bottom of the
-        descender, and @a externalLeading is any extra vertical space added
-        to the font by the font designer (usually is zero).
+
+        @param text
+            The text string to measure.
+        @param width
+            Variable to store the total calculated width of the text.
+        @param height
+            Variable to store the total calculated height of the text.
+        @param descent
+            Variable to store the dimension from the baseline of the font to
+            the bottom of the descender.
+        @param externalLeading
+            Any extra vertical space added to the font by the font designer
+            (usually is zero).
     */
     virtual void GetTextExtent(const wxString& text, wxDouble* width,
                                wxDouble* height, wxDouble* descent,
@@ -456,7 +479,7 @@ public:
     virtual void ResetClip() = 0;
 
     /**
-        Rotates the current transformation matrix (radians),
+        Rotates the current transformation matrix (in radians).
     */
     virtual void Rotate(wxDouble angle) = 0;
 
@@ -465,29 +488,32 @@ public:
     */
     virtual void Scale(wxDouble xScale, wxDouble yScale) = 0;
 
-    //@{
     /**
         Sets the brush for filling paths.
     */
     void SetBrush(const wxBrush& brush);
+    /**
+        Sets the brush for filling paths.
+    */
     void SetBrush(const wxGraphicsBrush& brush);
-    //@}
 
-    //@{
     /**
         Sets the font for drawing text.
     */
     void SetFont(const wxFont& font, const wxColour& colour);
+    /**
+        Sets the font for drawing text.
+    */
     void SetFont(const wxGraphicsFont& font);
-    //@}
 
-    //@{
     /**
         Sets the pen used for stroking.
     */
     void SetPen(const wxGraphicsPen& pen);
+    /**
+        Sets the pen used for stroking.
+    */
     void SetPen(const wxPen& pen);
-    //@}
 
     /**
         Sets the current transformation matrix of this context
@@ -499,15 +525,17 @@ public:
     */
     virtual void StrokeLine(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2);
 
-    //@{
     /**
-        Stroke disconnected lines from begin to end points, fastest method available
-        for this purpose.
+        Stroke disconnected lines from begin to end points, fastest method
+        available for this purpose.
     */
     void StrokeLines(size_t n, const wxPoint2DDouble* beginPoints,
                      const wxPoint2DDouble* endPoints);
+    /**
+        Stroke disconnected lines from begin to end points, fastest method
+        available for this purpose.
+    */
     void StrokeLines(size_t n, const wxPoint2DDouble* points);
-    //@}
 
     /**
         Strokes along a path with the current pen.
@@ -527,12 +555,13 @@ public:
 
     A wxGraphicsRenderer is the instance corresponding to the rendering engine
     used. There may be multiple instances on a system, if there are different
-    rendering engines present, but there is always only one instance per engine.
-    This instance is pointed back to by all objects created by it (wxGraphicsContext,
-    wxGraphicsPath etc) and can be retrieved through their wxGraphicsObject::GetRenderer()
-    method. Therefore you can create an additional instance of a path etc. by calling
-    wxGraphicsObject::GetRenderer() and then using the appropriate CreateXXX function
-    of that renderer.
+    rendering engines present, but there is always only one instance per
+    engine. This instance is pointed back to by all objects created by it
+    (wxGraphicsContext, wxGraphicsPath etc) and can be retrieved through their
+    wxGraphicsObject::GetRenderer() method. Therefore you can create an
+    additional instance of a path etc. by calling
+    wxGraphicsObject::GetRenderer() and then using the appropriate CreateXXX()
+    function of that renderer.
 
     @code
     wxGraphicsPath *path = // from somewhere
@@ -540,7 +569,7 @@ public:
     @endcode
 
     @library{wxcore}
-    @category{FIXME}
+    @category{gdi}
 */
 class wxGraphicsRenderer : public wxObject
 {
@@ -553,28 +582,27 @@ public:
     /**
         Creates a wxGraphicsContext from a wxWindowDC
     */
-    virtual wxGraphicsContext * CreateContext( const wxWindowDC& dc) = 0 ;
+    virtual wxGraphicsContext* CreateContext(const wxWindowDC& dc) = 0 ;
 
     /**
         Creates a wxGraphicsContext from a wxMemoryDC
     */
-    virtual wxGraphicsContext * CreateContext( const wxMemoryDC& dc) = 0 ;
+    virtual wxGraphicsContext* CreateContext(const wxMemoryDC& dc) = 0 ;
 
     /**
         Creates a wxGraphicsContext from a wxPrinterDC
     */
-    virtual wxGraphicsContext * CreateContext( const wxPrinterDC& dc) = 0 ;
+    virtual wxGraphicsContext* CreateContext(const wxPrinterDC& dc) = 0 ;
 
     /**
         Creates a native brush from a wxBrush.
     */
     virtual wxGraphicsBrush CreateBrush(const wxBrush& brush) = 0;
 
-
     /**
-        Creates a wxGraphicsContext from a native context. This native context must be
-        eg a CGContextRef for Core Graphics, a Graphics pointer for GDIPlus or a cairo_t
-        pointer for cairo.
+        Creates a wxGraphicsContext from a native context. This native context
+        must be a CGContextRef for Core Graphics, a Graphics pointer for
+        GDIPlus, or a cairo_t pointer for cairo.
     */
     virtual wxGraphicsContext* CreateContextFromNativeContext(void* context) = 0;
 
@@ -590,19 +618,19 @@ public:
                                       const wxColour& col = *wxBLACK) = 0;
 
     /**
-        Creates a native brush, having a linear gradient, starting at (x1,y1) with
-        color c1 to (x2,y2) with color c2
+        Creates a native brush, having a linear gradient, starting at
+        (@a x1, @a y1) with color @a c1 to (@a x2, @a y2) with color @a c2.
     */
-    wxGraphicsBrush CreateLinearGradientBrush(wxDouble x1,
-                                              wxDouble y1,
-                                              wxDouble x2,
-                                              wxDouble y2,
-                                              const wxColour& c1,
-                                              const wxColour& c2) = 0;
+    virtual wxGraphicsBrush CreateLinearGradientBrush(wxDouble x1,
+                                                      wxDouble y1,
+                                                      wxDouble x2,
+                                                      wxDouble y2,
+                                                      const wxColour& c1,
+                                                      const wxColour& c2) = 0;
 
     /**
-        Creates a native affine transformation matrix from the passed in values. The
-        defaults result in an identity matrix.
+        Creates a native affine transformation matrix from the passed in
+        values. The defaults result in an identity matrix.
     */
     virtual wxGraphicsMatrix CreateMatrix(wxDouble a = 1.0, wxDouble b = 0.0,
                                           wxDouble c = 0.0, wxDouble d = 1.0,
@@ -620,8 +648,9 @@ public:
     virtual wxGraphicsPen CreatePen(const wxPen& pen) = 0;
 
     /**
-        Creates a native brush, having a radial gradient originating at (xo,yc) with
-        color oColour and ends on a circle around (xc,yc) with radius r and color cColour
+        Creates a native brush, having a radial gradient originating at
+        (@a xo, @a yc) with color @a oColour and ends on a circle around
+        (@a xc, @a yc) with the given @a radius and color @a cColour.
     */
     virtual wxGraphicsBrush CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
                                                       wxDouble xc, wxDouble yc,
@@ -631,7 +660,8 @@ public:
 
     /**
         Returns the default renderer on this platform. On OS X this is the Core
-        Graphics (a.k.a. Quartz 2D) renderer, on MSW the GDIPlus renderer, and on GTK we currently default to the cairo renderer.
+        Graphics (a.k.a. Quartz 2D) renderer, on MSW the GDIPlus renderer, and
+        on GTK we currently default to the cairo renderer.
     */
     static wxGraphicsRenderer* GetDefaultRenderer();
 };
@@ -641,13 +671,14 @@ public:
 /**
     @class wxGraphicsBrush
 
-    A wxGraphicsBrush is a native representation of a brush. The contents
-    are specific and private to the respective renderer. Instances are ref counted and can
-    therefore be assigned as usual. The only way to get a valid instance is via
-    wxGraphicsContext::CreateBrush or wxGraphicsRenderer::CreateBrush.
+    A wxGraphicsBrush is a native representation of a brush. The contents are
+    specific and private to the respective renderer. Instances are ref counted
+    and can therefore be assigned as usual. The only way to get a valid
+    instance is via wxGraphicsContext::CreateBrush() or
+    wxGraphicsRenderer::CreateBrush().
 
     @library{wxcore}
-    @category{FIXME}
+    @category{gdi}
 */
 class wxGraphicsBrush : public wxGraphicsObject
 {
@@ -660,13 +691,14 @@ public:
 /**
     @class wxGraphicsFont
 
-    A wxGraphicsFont is a native representation of a font. The contents
-    are specific and private to the respective renderer. Instances are ref counted and can
-    therefore be assigned as usual. The only way to get a valid instance is via
-    wxGraphicsContext::CreateFont or wxGraphicsRenderer::CreateFont.
+    A wxGraphicsFont is a native representation of a font. The contents are
+    specific and private to the respective renderer. Instances are ref counted
+    and can therefore be assigned as usual. The only way to get a valid
+    instance is via wxGraphicsContext::CreateFont() or
+    wxGraphicsRenderer::CreateFont().
 
     @library{wxcore}
-    @category{FIXME}
+    @category{gdi}
 */
 class wxGraphicsFont : public wxGraphicsObject
 {
@@ -679,13 +711,14 @@ public:
 /**
     @class wxGraphicsPen
 
-    A wxGraphicsPen is a native representation of a pen. The contents
-    are specific and private to the respective renderer. Instances are ref counted and can
-    therefore be assigned as usual. The only way to get a valid instance is via
-    wxGraphicsContext::CreatePen or wxGraphicsRenderer::CreatePen.
+    A wxGraphicsPen is a native representation of a pen. The contents are
+    specific and private to the respective renderer. Instances are ref counted
+    and can therefore be assigned as usual. The only way to get a valid
+    instance is via wxGraphicsContext::CreatePen() or
+    wxGraphicsRenderer::CreatePen().
 
     @library{wxcore}
-    @category{FIXME}
+    @category{gdi}
 */
 class wxGraphicsPen : public wxGraphicsObject
 {
@@ -698,35 +731,38 @@ public:
 /**
     @class wxGraphicsMatrix
 
-    A wxGraphicsMatrix is a native representation of an affine matrix. The contents
-    are specific and private to the respective renderer. Instances are ref counted and can
-    therefore be assigned as usual. The only way to get a valid instance is via
-    wxGraphicsContext::CreateMatrix or wxGraphicsRenderer::CreateMatrix.
+    A wxGraphicsMatrix is a native representation of an affine matrix. The
+    contents are specific and private to the respective renderer. Instances are
+    ref counted and can therefore be assigned as usual. The only way to get a
+    valid instance is via wxGraphicsContext::CreateMatrix() or
+    wxGraphicsRenderer::CreateMatrix().
 
     @library{wxcore}
-    @category{FIXME}
+    @category{gdi}
 */
 class wxGraphicsMatrix : public wxGraphicsObject
 {
 public:
-    //@{
     /**
-
+        Concatenates the matrix passed with the current matrix.
     */
-    void Concat(const wxGraphicsMatrix* t);
+    virtual void Concat(const wxGraphicsMatrix* t);
+    /**
+        Concatenates the matrix passed with the current matrix.
+    */
     void Concat(const wxGraphicsMatrix& t);
-    //@}
 
     /**
         Returns the component values of the matrix via the argument pointers.
     */
-    virtual void Get(wxDouble* a = NULL, wxDouble* b = NULL, wxDouble* c = NULL,
-                     wxDouble* d = NULL, wxDouble* tx = NULL,
-                     wxDouble* ty = NULL) const;
+    virtual void Get(wxDouble* a = NULL, wxDouble* b = NULL,
+                     wxDouble* c = NULL, wxDouble* d = NULL,
+                     wxDouble* tx = NULL, wxDouble* ty = NULL) const;
 
     /**
-        Returns the native representation of the matrix. For CoreGraphics this is a
-        CFAffineMatrix pointer. For GDIPlus a Matrix Pointer and for Cairo a cairo_matrix_t pointer.
+        Returns the native representation of the matrix. For CoreGraphics this
+        is a CFAffineMatrix pointer, for GDIPlus a Matrix Pointer, and for
+        Cairo a cairo_matrix_t pointer.
     */
     virtual void* GetNativeMatrix() const;
 
@@ -738,6 +774,10 @@ public:
     /**
         Returns @true if the elements of the transformation matrix are equal.
     */
+    virtual bool IsEqual(const wxGraphicsMatrix* t) const;
+    /**
+        Returns @true if the elements of the transformation matrix are equal.
+    */
     bool IsEqual(const wxGraphicsMatrix& t) const;
 
     /**
@@ -746,7 +786,7 @@ public:
     virtual bool IsIdentity() const;
 
     /**
-        Rotates this matrix (radians).
+        Rotates this matrix (in radians).
     */
     virtual void Rotate(wxDouble angle);
 
@@ -756,15 +796,15 @@ public:
     virtual void Scale(wxDouble xScale, wxDouble yScale);
 
     /**
-        Sets the matrix to the respective values (default values are the identity
-        matrix)
+        Sets the matrix to the respective values (default values are the
+        identity matrix).
     */
     virtual void Set(wxDouble a = 1.0, wxDouble b = 0.0, wxDouble c = 0.0,
                      wxDouble d = 1.0, wxDouble tx = 0.0, wxDouble ty = 0.0);
 
     /**
         Applies this matrix to a distance (ie. performs all transforms except
-        translations)
+        translations).
     */
     virtual void TransformDistance(wxDouble* dx, wxDouble* dy) const;
 
@@ -778,3 +818,4 @@ public:
     */
     virtual void Translate(wxDouble dx, wxDouble dy);
 };
+
