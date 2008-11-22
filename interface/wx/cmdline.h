@@ -322,7 +322,7 @@ public:
         backslash can be used to escape all the other special characters.
     */
     static wxArrayString
-    ConvertStringToArgs(const wxChar cmdline,
+    ConvertStringToArgs(const wxString& cmdline,
                         wxCmdLineSplitType flags = wxCMD_LINE_SPLIT_DOS);
 
     /**

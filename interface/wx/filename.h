@@ -546,7 +546,7 @@ public:
 
         @see GetPathSeparators()
     */
-    static wxChar GetPathSeparator(wxPathFormat format = wxPATH_NATIVE);
+    static wxUniChar GetPathSeparator(wxPathFormat format = wxPATH_NATIVE);
 
     /**
         Returns the string containing all the path separators for this format.

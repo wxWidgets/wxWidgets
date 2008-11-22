@@ -105,7 +105,7 @@ public:
     /**
         Deletes the subkey with all of its subkeys/values recursively.
     */
-    void DeleteKey(const wxChar* szKey);
+    void DeleteKey(const wxString& szKey);
 
     /**
         Deletes this key and all of its subkeys and values recursively.
@@ -115,7 +115,7 @@ public:
     /**
         Deletes the named value.
     */
-    void DeleteValue(const wxChar* szKey);
+    void DeleteValue(const wxString& szKey);
 
     /**
         Returns @true if the key exists.
@@ -165,7 +165,7 @@ public:
     /**
         Returns @true if given subkey exists.
     */
-    bool HasSubKey(const wxChar* szKey) const;
+    bool HasSubKey(const wxString& szKey) const;
 
     /**
         Returns @true if any subkeys exist.
@@ -175,7 +175,7 @@ public:
     /**
         Returns @true if the value exists.
     */
-    bool HasValue(const wxChar* szValue) const;
+    bool HasValue(const wxString& szValue) const;
 
     /**
         Returns @true if any values exist.
@@ -202,37 +202,37 @@ public:
     /**
         Retrieves the string value.
     */
-    bool QueryValue(const wxChar* szValue, wxString& strValue) const;
+    bool QueryValue(const wxString& szValue, wxString& strValue) const;
 
     /**
         Retrieves the numeric value.
     */
-    const bool QueryValue(const wxChar* szValue, long* plValue) const;
+    const bool QueryValue(const wxString& szValue, long* plValue) const;
 
     /**
         Renames the key.
     */
-    bool Rename(const wxChar* szNewName);
+    bool Rename(const wxString& szNewName);
 
     /**
         Renames a value.
     */
-    bool RenameValue(const wxChar* szValueOld,
-                     const wxChar* szValueNew);
+    bool RenameValue(const wxString& szValueOld,
+                     const wxString& szValueNew);
 
     /**
         Sets the given @a szValue which must be numeric.
         If the value doesn't exist, it is created.
     */
-    bool SetValue(const wxChar* szValue, long lValue);
+    bool SetValue(const wxString& szValue, long lValue);
     /**
         Sets the given @a szValue which must be string.
         If the value doesn't exist, it is created.
     */
-    bool SetValue(const wxChar* szValue, const wxString& strValue);
+    bool SetValue(const wxString& szValue, const wxString& strValue);
     /**
         Sets the given @a szValue which must be binary.
         If the value doesn't exist, it is created.
     */
-    bool SetValue(const wxChar* szValue, const wxMemoryBuffer& buf);
+    bool SetValue(const wxString& szValue, const wxMemoryBuffer& buf);
 };
