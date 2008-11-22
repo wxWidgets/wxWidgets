@@ -6,6 +6,26 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+
+/**
+    @class wxTaskBarIconEvent
+
+    The event class used by wxTaskBarIcon.
+    For a list of the event macros meant to be used with wxTaskBarIconEvent,
+    please look at wxTaskBarIcon description.
+
+    @library{wxadv}
+    @category{events}
+*/
+class wxTaskBarIconEvent : public wxEvent
+{
+public:
+    /**
+        Constructor.
+    */
+    wxTaskBarIconEvent(wxEventType evtType, wxTaskBarIcon *tbIcon);
+};
+
 /**
     @class wxTaskBarIcon
 
@@ -13,7 +33,9 @@
     A taskbar icon is an icon that appears in the 'system tray' and responds to
     mouse clicks, optionally with a tooltip above it to help provide information.
 
+
     @section taskbaricon_xnote X Window System Note
+
     Under X Window System, the window manager must support either the
     "System Tray Protocol" (see http://freedesktop.org/wiki/Specifications/systemtray-spec)
     by freedesktop.org (WMs used by modern desktop environments such as GNOME >= 2,
