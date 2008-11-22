@@ -80,7 +80,7 @@
 
     @see wxBitmap, wxIcon, wxWindow::SetCursor(), wxSetCursor(), ::wxStockCursor
 */
-class wxCursor : public wxBitmap
+class wxCursor : public wxGDIObject
 {
 public:
     /**
