@@ -89,6 +89,9 @@
     flag{mac.listctrl.always_use_generic}
         Tells wxListCtrl to use the generic control even when it is capable of
         using the native control instead. Also knwon as wxMAC_ALWAYS_USE_GENERIC_LISTCTRL.
+    flag{mac.textcontrol-use-spell-checker}
+        This option only has effect for Mac OS X 10.4 and higher.
+        If 1 activates the spell checking in wxTextCtrl.
     @endFlagTable
 
 
