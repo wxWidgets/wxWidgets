@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------------
-// wxFSVolume represents a volume/drive/mount point in a file system
+// wxFSVolume represents a volume/drive in a file system
 // ----------------------------------------------------------------------------
 
 #ifndef _WX_FSVOLUME_H_
@@ -23,7 +23,7 @@
 #include "wx/arrstr.h"
 
 // the volume flags
-enum
+enum wxFSVolumeFlags
 {
     // is the volume mounted?
     wxFS_VOL_MOUNTED = 0x0001,
