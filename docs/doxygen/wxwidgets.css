@@ -525,3 +525,7 @@ DIV.tags LI {
 	line-height: 100%;
 }
 
+CODE {
+    font-size: 110%;
+    color: #444444;
+}
