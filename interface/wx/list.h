@@ -369,9 +369,13 @@ public:
 
     /**
         Resizes the list.
-        If the the list is enlarges items with the value @e v are appended to the list.
+
+        If the list is longer than @a n, then items are removed until the list
+        becomes long @a n.
+        If the list is shorter than @a n items with the value @a v are appended
+        to the list until the list becomes long @a n.
     */
-    void resize(size_type n);
+    void resize(size_type n, value_type v = value_type());
 
     /**
         Reverses the list.
