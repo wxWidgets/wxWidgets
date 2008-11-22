@@ -185,7 +185,7 @@ and the possibilities of this way of handling events in this way are rather
 different.
 
 Let us start by looking at the syntax: the first obvious difference is that you
-don't need to use neither @c DECLARE_EVENT_TABLE() nor @c BEGIN_EVENT_TABLE and 
+don't need to use neither @c DECLARE_EVENT_TABLE() nor @c BEGIN_EVENT_TABLE and
 associated macros any more. Instead, in any place in your code, but usually in
 the code of the class defining the handlers itself (and definitely not in the
 global scope as with the event tables), you should call its Connect() method
@@ -554,12 +554,12 @@ the your identifiers don't conflict accidentally.
 Since version 2.2.x of wxWidgets, each event type is identified by ID which
 is given to the event type @e at runtime which makes it possible to add
 new event types to the library or application without risking ID clashes
-(two different event types mistakingly getting the same event ID). This
-event type ID is stored in a struct of type @b const wxEventType.
+(two different event types mistakingly getting the same event ID).
+This event type ID is stored in a struct of type <b>const wxEventType</b>.
 
 In order to define a new event type, there are principally two choices.
 One is to define a entirely new event class (typically deriving from
-wxEvent or wxCommandEvent.
+wxEvent or wxCommandEvent).
 
 The other is to use the existing event classes and give them an new event
 type. You'll have to define and declare a new event type using either way,
@@ -567,32 +567,27 @@ and this is done using the following macros:
 
 @code
 // in the header of the source file
-BEGIN_DECLARE_EVENT_TYPES()
-DECLARE_EVENT_TYPE(name, value)
-END_DECLARE_EVENT_TYPES()
+extern const wxEventType wxEVT_YOUR_EVENT_NAME;
 
 // in the implementation
-DEFINE_EVENT_TYPE(name)
+DEFINE_EVENT_TYPE(wxEVT_YOUR_EVENT_NAME)
 @endcode
 
-You can ignore the @e value parameter of the DECLARE_EVENT_TYPE macro
-since it is used only for backwards compatibility with wxWidgets 2.0.x based
-applications where you have to give the event type ID an explicit value.
 See also the @ref page_samples_event for an example of code
 defining and working with the custom event types.
 
 
 @subsection overview_eventhandling_custom_existing Using Existing Event Classes
 
-If you just want to use a wxCommandEvent with
-a new event type, you can then use one of the generic event table macros
-listed below, without having to define a new macro yourself. This also
-has the advantage that you won't have to define a new wxEvent::Clone()
-method for posting events between threads etc. This could look like this
-in your code:
+If you just want to use a wxCommandEvent with a new event type, you can then use
+one of the generic event table macros listed below, without having to define a
+new event class yourself. This also has the advantage that you won't have to define a
+new wxEvent::Clone() method for posting events between threads etc.
+
+Example:
 
 @code
-DECLARE_EVENT_TYPE(wxEVT_MY_EVENT, -1)
+extern const wxEventType wxEVT_MY_EVENT;
 DEFINE_EVENT_TYPE(wxEVT_MY_EVENT)
 
 // user code intercepting the event
@@ -600,10 +595,10 @@ DEFINE_EVENT_TYPE(wxEVT_MY_EVENT)
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 EVT_MENU    (wxID_EXIT, MyFrame::OnExit)
 // ....
-EVT_COMMAND  (ID_MY_WINDOW, wxEVT_MY_EVENT, MyFrame::OnMyEvent)
+EVT_COMMAND (ID_MY_WINDOW, wxEVT_MY_EVENT, MyFrame::OnMyEvent)
 END_EVENT_TABLE()
 
-void MyFrame::OnMyEvent( wxCommandEvent  )
+void MyFrame::OnMyEvent( wxCommandEvent& event )
 {
     // do something
     wxString text = event.GetText();
@@ -616,8 +611,10 @@ void MyWindow::SendEvent()
 {
     wxCommandEvent event( wxEVT_MY_EVENT, GetId() );
     event.SetEventObject( this );
+
     // Give it some contents
     event.SetText( wxT("Hallo") );
+
     // Send it
     GetEventHandler()->ProcessEvent( event );
 }
@@ -675,21 +672,23 @@ private:
     wxPlotCurve   *m_curve;
 };
 
-DECLARE_EVENT_TYPE( wxEVT_PLOT_ACTION, -1 )
-
+extern const wxEventType wxEVT_PLOT_ACTION;
 typedef void (wxEvtHandler::*wxPlotEventFunction)(wxPlotEvent&);
 
+#define wxPlotEventHandler(func) \
+    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxPlotEventFunction, &func)
 #define EVT_PLOT(id, fn) \
-    DECLARE_EVENT_TABLE_ENTRY( wxEVT_PLOT_ACTION, id, -1, \
-    (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxNotifyEventFunction) \
-    wxStaticCastEvent( wxPlotEventFunction, &fn ), (wxObject *) NULL ),
+    wx__DECLARE_EVT1(wxEVT_PLOT_ACTION, id, wxPlotEventHandler(fn))
 
 
 // code implementing the event type and the event class
 
 DEFINE_EVENT_TYPE( wxEVT_PLOT_ACTION )
 
-wxPlotEvent::wxPlotEvent( ...
+wxPlotEvent::wxPlotEvent( ... )
+{
+    ...
+}
 
 
 // user code intercepting the event
@@ -722,10 +721,10 @@ For the full list of event classes, please see the
 @ref group_class_events "event classes group page".
 
 
-@todo for all controls state clearly when calling a member function results in an 
-      event being generated and when it doesn't (possibly updating also the 
-      'Events generated by the user vs programmatically generated events' paragraph 
-      of the 'Event handling overview' with the list of the functions which break 
+@todo for all controls state clearly when calling a member function results in an
+      event being generated and when it doesn't (possibly updating also the
+      'Events generated by the user vs programmatically generated events' paragraph
+      of the 'Event handling overview' with the list of the functions which break
       that rule).
 
 */
