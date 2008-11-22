@@ -20,7 +20,7 @@
     the control's look and feel.
 
     An effort has been made to try to maintain an API as similar to that of
-    wxNotebook.
+    wxNotebook (note that wxAuiNotebook does not derive from wxNotebook!).
 
     The default theme that is used is wxAuiDefaultTabArt, which provides a modern,
     glossy look and feel.
@@ -54,12 +54,35 @@
            With this style, tabs are drawn along the bottom of the notebook.
     @endStyleTable
 
+
+    @beginEventTable{wxAuiNotebookEvent}
+        @event{EVT_AUINOTEBOOK_PAGE_CLOSE(id, func)}
+            @todo Provide description.
+        @event{EVT_AUINOTEBOOK_PAGE_CHANGED(id, func)}
+            @todo Provide description.
+        @event{EVT_AUINOTEBOOK_PAGE_CHANGING(id, func)}
+            @todo Provide description.
+        @event{EVT_AUINOTEBOOK_BUTTON(id, func)}
+            @todo Provide description.
+        @event{EVT_AUINOTEBOOK_BEGIN_DRAG(id, func)}
+            @todo Provide description.
+        @event{EVT_AUINOTEBOOK_END_DRAG(id, func)}
+            @todo Provide description.
+        @event{EVT_AUINOTEBOOK_DRAG_MOTION(id, func)}
+            @todo Provide description.
+        @event{EVT_AUINOTEBOOK_ALLOW_DND(id, func)}
+            @todo Provide description.
+    @endEventTable
+
     @library{wxaui}
     @category{aui}
 */
 class wxAuiNotebook : public wxControl
 {
 public:
+    /**
+        Default ctor.
+    */
     wxAuiNotebook();
 
     /**
