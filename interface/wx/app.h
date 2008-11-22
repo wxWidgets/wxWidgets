@@ -531,9 +531,10 @@ public:
     /**
         Returns a pointer to the top window.
 
-        @remarks If the top window hasn't been set using SetTopWindow(),
-                 this function will find the first top-level window
-                 (frame or dialog) and return that.
+        @remarks
+            If the top window hasn't been set using SetTopWindow(), this function
+            will find the first top-level window (frame or dialog or instance of
+            wxTopLevelWindow) from the internal top level window list and return that.
 
         @see SetTopWindow()
     */
@@ -624,9 +625,13 @@ public:
         Sets the 'top' window. You can call this from within OnInit() to let wxWidgets
         know which is the main window. You don't have to set the top window;
         it is only a convenience so that (for example) certain dialogs without parents
-        can use a specific window as the top window. If no top window is specified by the
-        application, wxWidgets just uses the first frame or dialog in its top-level window
-        list, when it needs to use the top window.
+        can use a specific window as the top window.
+
+        If no top window is specified by the application, wxWidgets just uses the
+        first frame or dialog (or better, any wxTopLevelWindow) in its top-level
+        window list, when it needs to use the top window.
+        If you previously called SetTopWindow() and now you need to restore this
+        automatic behaviour you can call @code wxApp::SetTopWindow(NULL) @endcode.
 
         @param window
             The new top window.

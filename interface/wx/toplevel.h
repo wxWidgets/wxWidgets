@@ -42,6 +42,9 @@ enum
     directly, but all of its methods are also applicable for the two classes
     above.
 
+    Note that the instances of wxTopLevelWindow are managed by wxWidgets in the
+    internal top level window list.
+
     @library{wxcore}
     @category{managedwnd}
 
