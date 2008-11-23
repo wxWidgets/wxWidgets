@@ -387,9 +387,6 @@ LRESULT CALLBACK _GSocket_Internal_WinProc(HWND hWnd,
 
       if (event != -1)
       {
-        cback = socket->m_cbacks[event];
-        data = socket->m_data[event];
-
         if (event == GSOCK_LOST)
           socket->m_detected = GSOCK_LOST_FLAG;
         else
@@ -397,16 +394,10 @@ LRESULT CALLBACK _GSocket_Internal_WinProc(HWND hWnd,
       }
     }
 
-    /* OK, we can now leave the critical section because we have
-     * already obtained the callback address (we make no further
-     * accesses to socket->whatever). However, the app should
-     * be prepared to handle events from a socket that has just
-     * been closed!
-     */
     LeaveCriticalSection(&critical);
 
-    if (cback != NULL)
-      (cback)(socket, event, data);
+    if ( socket )
+        socket->NotifyOnStateChange(event);
 
     return (LRESULT) 0;
   }

@@ -179,6 +179,10 @@ public:
     virtual void Close() = 0;
     virtual void Shutdown();
 
+    // notify m_wxsocket about the given socket event by calling its (inaptly
+    // named) OnRequest() method
+    void NotifyOnStateChange(GSocketEvent event);
+
     // this is officially SOCKET (unsigned int) under Windows but we don't want
     // to include winsock.h which defines SOCKET from here so just use int
     // under all platforms
@@ -209,9 +213,6 @@ public:
 
 protected:
     GSocketBase(wxSocketBase& wxsocket);
-
-    // notify m_wxsocket
-    void NotifyOnStateChange(GSocketEvent event);
 
 private:
     // set in ctor and never changed except that it's reset to NULL when the
