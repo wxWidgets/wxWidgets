@@ -367,7 +367,7 @@ LRESULT CALLBACK _GSocket_Internal_WinProc(HWND hWnd,
      * destroyed) and for safety, check that the m_fd field
      * is what we expect it to be.
      */
-    if ((socket != NULL) && (socket->m_fd == wParam))
+    if ((socket != NULL) && ((WPARAM)socket->m_fd == wParam))
     {
       switch WSAGETSELECTEVENT(lParam)
       {

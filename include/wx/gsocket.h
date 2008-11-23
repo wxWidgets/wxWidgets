@@ -173,11 +173,10 @@ public:
     virtual void Close() = 0;
     virtual void Shutdown();
 
-#ifdef __WINDOWS__
-    SOCKET m_fd;
-#else
+    // this is officially SOCKET (unsigned int) under Windows but we don't want
+    // to include winsock.h which defines SOCKET from here so just use int
+    // under all platforms
     int m_fd;
-#endif
 
     int m_initialRecvBufferSize;
     int m_initialSendBufferSize;
