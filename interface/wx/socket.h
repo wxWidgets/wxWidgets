@@ -713,6 +713,13 @@ public:
     bool GetPeer(wxSockAddress& addr) const;
 
     /**
+        Return the socket timeout in seconds.
+
+        The timeout can be set using SetTimeout() and is 10 minutes by default.
+     */
+    long GetTimeout() const;
+
+    /**
         Returns @true if the socket is connected.
     */
     bool IsConnected() const;

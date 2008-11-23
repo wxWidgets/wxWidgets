@@ -160,6 +160,7 @@ public:
   wxSocketFlags GetFlags() const { return m_flags; }
   void SetFlags(wxSocketFlags flags);
   void SetTimeout(long seconds);
+  long GetTimeout() const { return m_timeout; }
 
   bool GetOption(int level, int optname, void *optval, int *optlen);
   bool SetOption(int level, int optname, const void *optval, int optlen);
