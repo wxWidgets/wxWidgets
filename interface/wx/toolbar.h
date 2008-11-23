@@ -231,6 +231,7 @@ public:
     */
     virtual wxToolBarToolBase* AddSeparator();
 
+    //@{
     /**
         Adds a tool to the toolbar.
 
@@ -323,6 +324,7 @@ public:
                                const wxString& shortHelpString = wxEmptyString,
                                const wxString& longHelpString = wxEmptyString,
                                wxObject* clientData = NULL);
+    //@}
 
     /**
         Deletes all the tools in the toolbar.
@@ -529,8 +531,8 @@ public:
                                   const wxBitmap& bitmap2 = wxNullBitmap,
                                   bool isToggle = false,
                                   wxObject* clientData = NULL,
-                                  const wxString& shortHelpString = "",
-                                  const wxString& longHelpString = "");
+                                  const wxString& shortHelpString = wxEmptyString,
+                                  const wxString& longHelpString = wxEmptyString);
     wxToolBarToolBase* InsertTool(size_t pos,
                                   wxToolBarToolBase* tool);
     //@}
@@ -627,6 +629,7 @@ public:
     */
     bool SetDropdownMenu(int id, wxMenu* menu);
 
+    //@{
     /**
         Set the values to be used as margins for the toolbar.
 
@@ -656,6 +659,7 @@ public:
         @see GetMargins(), wxSize
     */
     void SetMargins(const wxSize& size);
+    //@}
 
     /**
         Sets the default size of each tool bitmap. The default bitmap size is 16
