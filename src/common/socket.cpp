@@ -231,12 +231,8 @@ void GSocketBase::Shutdown()
  */
 void GSocketBase::SetTimeout(unsigned long millis)
 {
-#ifdef __WXMSW__
     m_timeout.tv_sec  = (millis / 1000);
     m_timeout.tv_usec = (millis % 1000) * 1000;
-#else
-    m_timeout = millis;
-#endif
 }
 
 void GSocketBase::NotifyOnStateChange(GSocketEvent event)

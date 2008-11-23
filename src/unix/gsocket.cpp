@@ -1161,13 +1161,11 @@ void GSocket::Disable(GSocketEvent event)
  */
 GSocketError GSocket::Input_Timeout()
 {
-  struct timeval tv;
   fd_set readfds;
   int ret;
 
-  /* Linux select() will overwrite the struct on return */
-  tv.tv_sec  = (m_timeout / 1000);
-  tv.tv_usec = (m_timeout % 1000) * 1000;
+  // Linux select() will overwrite the struct on return so make a copy
+  struct timeval tv = m_timeout;
 
   if (!m_non_blocking)
   {
@@ -1202,13 +1200,11 @@ GSocketError GSocket::Input_Timeout()
  */
 GSocketError GSocket::Output_Timeout()
 {
-  struct timeval tv;
   fd_set writefds;
   int ret;
 
-  /* Linux select() will overwrite the struct on return */
-  tv.tv_sec  = (m_timeout / 1000);
-  tv.tv_usec = (m_timeout % 1000) * 1000;
+  // Linux select() will overwrite the struct on return so make a copy
+  struct timeval tv = m_timeout;
 
   GSocket_Debug( ("m_non_blocking has: %d\n", (int)m_non_blocking) );
 

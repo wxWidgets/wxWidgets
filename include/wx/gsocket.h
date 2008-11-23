@@ -37,6 +37,8 @@ class WXDLLIMPEXP_FWD_NET wxSocketBase;
 #include <stdlib.h>
 #endif
 
+#include <time.h>       // for timeval
+
 enum GAddressType
 {
   GSOCK_NOFAMILY = 0,
@@ -215,11 +217,7 @@ public:
     bool m_broadcast;
     bool m_dobind;
 
-#ifdef __WINDOWS__
     struct timeval m_timeout;
-#else
-    unsigned long m_timeout;
-#endif
 
     GSocketEventFlags m_detected;
 
