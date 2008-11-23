@@ -4998,31 +4998,10 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
           AC_MSG_WARN([wxMutex won't be recursive on this platform])
         fi
       fi
-
+    
       dnl test for compiler thread-specific variables support
-      AX_GXX_VERSION
-      if test -n "$ax_cv_gxx_version"; then
-          dnl g++ supports __thread since at least version 3.3 but its support
-          dnl seems to be broken until 4.1, see
-          dnl   http://thread.gmane.org/gmane.comp.lib.wxwidgets.devel/108388
-          AC_MSG_CHECKING([for __thread support in g++])
-          case "$ax_cv_gxx_version" in
-            1.* | 2.* )
-                AC_MSG_RESULT([doesn't exist])
-                wx_cv_cc___thread=no
-                ;;
-            3.*)
-                AC_MSG_RESULT([broken])
-                wx_cv_cc___thread=no
-                ;;
-            *)
-                AC_MSG_RESULT([works])
-                wx_cv_cc___thread=yes
-                ;;
-          esac
-      else
-          AC_CACHE_CHECK([for __thread keyword],
-                         wx_cv_cc___thread,
+      AC_CACHE_CHECK([for __thread keyword],
+                     wx_cv_cc___thread,
           [
               AC_TRY_COMPILE([#include <pthread.h>],
                   [
@@ -5032,7 +5011,31 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
                   wx_cv_cc___thread=yes,
                   wx_cv_cc___thread=no
               )
-          ])
+          ]
+      )
+
+      if test "$wx_cv_cc___thread" = "yes"; then
+          AX_GXX_VERSION
+          if test -n "$ax_cv_gxx_version"; then
+              dnl g++ supports __thread since at least version 3.3 but its support
+              dnl seems to be broken until 4.1, see
+              dnl   http://thread.gmane.org/gmane.comp.lib.wxwidgets.devel/108388
+              dnl
+              dnl NB: we still need to test __thread support with
+              dnl     AC_TRY_COMPILE above even for g++ 4 as it doesn't
+              dnl     support it for all architectures (e.g. it doesn't
+              dnl     work under OS X)
+              AC_MSG_CHECKING([whether __thread support in g++ is usable])
+              case "$ax_cv_gxx_version" in
+                1.* | 2.* | 3.* )
+                    AC_MSG_RESULT([no, it's broken])
+                    wx_cv_cc___thread=no
+                    ;;
+                *)
+                    AC_MSG_RESULT([yes, it works])
+                    ;;
+              esac
+          fi
       fi
 
       if test "$wx_cv_cc___thread" = "yes"; then
