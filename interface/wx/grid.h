@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        grid.h
-// Purpose:     interface of wxGridCellFloatRenderer
+// Purpose:     interface of wxGrid and related classes
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -14,8 +14,8 @@
     @library{wxadv}
     @category{grid}
 
-    @see wxGridCellRenderer, wxGridCellNumberRenderer, wxGridCellStringRenderer,
-    wxGridCellBoolRenderer
+    @see wxGridCellRenderer, wxGridCellBoolRenderer, wxGridCellNumberRenderer,
+         wxGridCellStringRenderer
 */
 class wxGridCellFloatRenderer : public wxGridCellStringRenderer
 {
@@ -80,10 +80,14 @@ public:
 class wxGridTableBase : public wxObject
 {
 public:
-    /// Default constructor.
+    /**
+        Default constructor.
+     */
     wxGridTableBase();
 
-    /// Destructor frees the attribute provider if it was created.
+    /**
+        Destructor frees the attribute provider if it was created.
+     */
     virtual ~wxGridTableBase();
 
     /**
@@ -108,8 +112,8 @@ public:
         Return the number of rows in the table.
 
         This method is not virtual and is only provided as a convenience for
-        the derived classes which can't call GetNumberRows() without a @c
-        const_cast from their const methods.
+        the derived classes which can't call GetNumberRows() without a
+        @c const_cast from their const methods.
      */
     int GetRowsCount() const;
 
@@ -117,18 +121,20 @@ public:
         Return the number of columns in the table.
 
         This method is not virtual and is only provided as a convenience for
-        the derived classes which can't call GetNumberCols() without a @c
-        const_cast from their const methods.
+        the derived classes which can't call GetNumberCols() without a
+        @c const_cast from their const methods.
      */
     int GetColsCount() const;
 
 
     /**
-        Accessing table cells.
+        @name Table Cell Accessors
      */
     //@{
 
-    /// Must be overridden to implement testing for empty cells.
+    /**
+        Must be overridden to implement testing for empty cells.
+     */
     virtual bool IsEmptyCell(int row, int col) = 0;
 
     /**
@@ -139,17 +145,21 @@ public:
      */
     bool IsEmpty(const wxGridCellCoords& coords);
 
-    /// Must be overridden to implement accessing the table values as text.
+    /**
+        Must be overridden to implement accessing the table values as text.
+     */
     virtual wxString GetValue(int row, int col) = 0;
 
-    /// Must be overridden to implement setting the table values as text.
+    /**
+        Must be overridden to implement setting the table values as text.
+     */
     virtual void SetValue(int row, int col, const wxString& value) = 0;
 
     /**
         Returns the type of the value in the given cell.
 
-        By default all cells are strings and this method returns @c
-        wxGRID_VALUE_STRING.
+        By default all cells are strings and this method returns
+        @c wxGRID_VALUE_STRING.
      */
     virtual wxString GetTypeName(int row, int col);
 
@@ -207,7 +217,6 @@ public:
      */
     virtual void *GetValueAsCustom(int row, int col, const wxString& typeName);
 
-
     /**
         Sets the value of the given cell as a long.
 
@@ -246,6 +255,7 @@ public:
 
     //@}
 
+
     /**
         Called by the grid when the table is associated with it.
 
@@ -262,7 +272,7 @@ public:
 
 
     /**
-        Modifying the table structure.
+        @name Table Structure Modifiers
 
         Notice that none of these functions are pure virtual as they don't have
         to be implemented if the table structure is never modified after
@@ -313,19 +323,25 @@ public:
      */
     virtual bool DeleteRows(size_t pos = 0, size_t numRows = 1);
 
-    /// Exactly the same as InsertRows() but for columns.
+    /**
+        Exactly the same as InsertRows() but for columns.
+     */
     virtual bool InsertCols(size_t pos = 0, size_t numCols = 1);
 
-    /// Exactly the same as AppendRows() but for columns.
+    /**
+        Exactly the same as AppendRows() but for columns.
+     */
     virtual bool AppendCols(size_t numCols = 1);
 
-    /// Exactly the same as DeleteRows() but for columns.
+    /**
+        Exactly the same as DeleteRows() but for columns.
+     */
     virtual bool DeleteCols(size_t pos = 0, size_t numCols = 1);
 
     //@}
 
     /**
-        Table rows and columns labels.
+        @name Table Row and Column Labels
 
         By default the numbers are used for labeling rows and Latin letters for
         labeling columns. If the table has more than 26 columns, the pairs of
@@ -335,10 +351,14 @@ public:
      */
     //@{
 
-    /// Return the label of the specified row.
+    /**
+        Return the label of the specified row.
+     */
     virtual wxString GetRowLabelValue(int row);
 
-    /// Return the label of the specified column.
+    /**
+        Return the label of the specified column.
+     */
     virtual wxString GetColLabelValue(int col);
 
     /**
@@ -350,14 +370,16 @@ public:
      */
     virtual void SetRowLabelValue(int row, const wxString& label);
 
-    /// Exactly the same as SetRowLabelValue() but for columns.
+    /**
+        Exactly the same as SetRowLabelValue() but for columns.
+     */
     virtual void SetColLabelValue(int col, const wxString& label);
 
     //@}
 
 
     /**
-        Attributes management.
+        @name Attributes Management
 
         By default the attributes management is delegated to
         wxGridCellAttrProvider class. You may override the methods in this
@@ -445,29 +467,29 @@ public:
 /**
     @class wxGridCellEditor
 
-    This class is responsible for providing and manipulating
-    the in-place edit controls for the grid.  Instances of wxGridCellEditor
-    (actually, instances of derived classes since it is an abstract class) can be
-    associated with the cell attributes for individual cells, rows, columns, or
-    even for the entire grid.
+    This class is responsible for providing and manipulating the in-place edit
+    controls for the grid.  Instances of wxGridCellEditor (actually, instances
+    of derived classes since it is an abstract class) can be associated with
+    the cell attributes for individual cells, rows, columns, or even for the
+    entire grid.
 
     @library{wxadv}
     @category{grid}
 
-    @see wxGridCellTextEditor, wxGridCellFloatEditor, wxGridCellBoolEditor,
-    wxGridCellNumberEditor, wxGridCellChoiceEditor
+    @see wxGridCellBoolEditor, wxGridCellChoiceEditor, wxGridCellFloatEditor,
+         wxGridCellNumberEditor, wxGridCellTextEditor
 */
 class wxGridCellEditor
 {
 public:
     /**
-
+        Default constructor.
     */
     wxGridCellEditor();
 
     /**
-        Fetch the value from the table and prepare the edit control
-        to begin editing. Set the focus to the edit control.
+        Fetch the value from the table and prepare the edit control to begin
+        editing. Sets the focus to the edit control.
     */
     virtual void BeginEdit(int row, int col, wxGrid* grid) = 0;
 
@@ -488,19 +510,21 @@ public:
     virtual void Destroy();
 
     /**
-        Complete the editing of the current cell. Returns @true if the value has
-        changed. If necessary, the control may be destroyed.
+        Complete the editing of the current cell. If necessary, the control may
+        be destroyed.
+
+        @return @true if the value has changed.
     */
     virtual bool EndEdit(int row, int col, wxGrid* grid) = 0;
 
     /**
-        Some types of controls on some platforms may need some help
-        with the Return key.
+        Some types of controls on some platforms may need some help with the
+        Return key.
     */
     virtual void HandleReturn(wxKeyEvent& event);
 
     /**
-
+        Returns @true if the edit control has been created.
     */
     bool IsCreated();
 
@@ -533,16 +557,15 @@ public:
     virtual void StartingClick();
 
     /**
-        If the editor is enabled by pressing keys on the grid,
-        this will be called to let the editor do something about
-        that first key if desired.
+        If the editor is enabled by pressing keys on the grid, this will be
+        called to let the editor do something about that first key if desired.
     */
     virtual void StartingKey(wxKeyEvent& event);
 
 protected:
 
     /**
-        The dtor is private because only DecRef() can delete us.
+        The destructor is private because only DecRef() can delete us.
     */
     virtual ~wxGridCellEditor();
 };
@@ -552,13 +575,13 @@ protected:
 /**
     @class wxGridCellTextEditor
 
-    The editor for string/text data.
+    Grid cell editor for string/text data.
 
     @library{wxadv}
     @category{grid}
 
-    @see wxGridCellEditor, wxGridCellFloatEditor, wxGridCellBoolEditor,
-    wxGridCellNumberEditor, wxGridCellChoiceEditor
+    @see wxGridCellEditor, wxGridCellBoolEditor, wxGridCellChoiceEditor,
+         wxGridCellFloatEditor, wxGridCellNumberEditor
 */
 class wxGridCellTextEditor : public wxGridCellEditor
 {
@@ -569,8 +592,8 @@ public:
     wxGridCellTextEditor();
 
     /**
-        The parameters string format is "n" where n is a number representing the
-        maximum width.
+        The parameters string format is "n" where n is a number representing
+        the maximum width.
     */
     virtual void SetParameters(const wxString& params);
 };
@@ -586,14 +609,14 @@ public:
     @library{wxadv}
     @category{grid}
 
-    @see wxGridCellRenderer, wxGridCellNumberRenderer, wxGridCellFloatRenderer,
-    wxGridCellBoolRenderer
+    @see wxGridCellRenderer, wxGridCellBoolRenderer, wxGridCellFloatRenderer,
+         wxGridCellNumberRenderer
 */
 class wxGridCellStringRenderer : public wxGridCellRenderer
 {
 public:
     /**
-        Default constructor
+        Default constructor.
     */
     wxGridCellStringRenderer();
 };
@@ -608,20 +631,20 @@ public:
     @library{wxadv}
     @category{grid}
 
-    @see wxGridCellEditor, wxGridCellFloatEditor, wxGridCellBoolEditor,
-    wxGridCellTextEditor, wxGridCellNumberEditor
+    @see wxGridCellEditor, wxGridCellBoolEditor, wxGridCellFloatEditor,
+         wxGridCellNumberEditor, wxGridCellTextEditor
 */
 class wxGridCellChoiceEditor : public wxGridCellEditor
 {
 public:
-    //@{
     /**
         @param count
             Number of strings from which the user can choose.
         @param choices
             An array of strings from which the user can choose.
         @param allowOthers
-            If allowOthers is @true, the user can type a string not in choices array.
+            If allowOthers is @true, the user can type a string not in choices
+            array.
     */
     wxGridCellChoiceEditor(size_t count = 0,
                            const wxString choices[] = NULL,
@@ -630,11 +653,11 @@ public:
         @param choices
             An array of strings from which the user can choose.
         @param allowOthers
-            If allowOthers is @true, the user can type a string not in choices array.
+            If allowOthers is @true, the user can type a string not in choices
+            array.
     */
     wxGridCellChoiceEditor(const wxArrayString& choices,
                            bool allowOthers = false);
-    //@}
 
     /**
         Parameters string format is "item1[,item2[...,itemN]]"
@@ -647,6 +670,14 @@ public:
 /**
     @class wxGridEditorCreatedEvent
 
+    @beginEventTable{wxGridEditorCreatedEvent}
+    @event{EVT_GRID_EDITOR_CREATED(func)}
+        The editor for a cell was created. Processes a
+        @c wxEVT_GRID_EDITOR_CREATED event type.
+    @event{EVT_GRID_CMD_EDITOR_CREATED(id, func)}
+        The editor for a cell was created; variant taking a window identifier.
+        Processes a @c wxEVT_GRID_EDITOR_CREATED event type.
+    @endEventTable
 
     @library{wxadv}
     @category{grid}
@@ -654,17 +685,15 @@ public:
 class wxGridEditorCreatedEvent : public wxCommandEvent
 {
 public:
-    //@{
     /**
-
+        Default constructor.
     */
     wxGridEditorCreatedEvent();
-    wxGridEditorCreatedEvent(int id, wxEventType type,
-                             wxObject* obj,
-                             int row,
-                             int col,
-                             wxControl* ctrl);
-    //@}
+    /**
+        Constructor for initializing all event attributes.
+    */
+    wxGridEditorCreatedEvent(int id, wxEventType type, wxObject* obj,
+                             int row, int col, wxControl* ctrl);
 
     /**
         Returns the column at which the event occurred.
@@ -702,6 +731,14 @@ public:
 /**
     @class wxGridRangeSelectEvent
 
+    @beginEventTable{wxGridRangeSelectEvent}
+    @event{EVT_GRID_RANGE_SELECT(func)}
+        The user selected a group of contiguous cells. Processes a
+        @c wxEVT_GRID_RANGE_SELECT event type.
+    @event{EVT_GRID_CMD_RANGE_SELECT(id, func)}
+        The user selected a group of contiguous cells; variant taking a window
+        identifier. Processes a @c wxEVT_GRID_RANGE_SELECT event type.
+    @endEventTable
 
     @library{wxadv}
     @category{grid}
@@ -709,21 +746,20 @@ public:
 class wxGridRangeSelectEvent : public wxNotifyEvent
 {
 public:
-    //@{
     /**
-
+        Default constructor.
     */
     wxGridRangeSelectEvent();
+    /**
+        Constructor for initializing all event attributes.
+    */
     wxGridRangeSelectEvent(int id, wxEventType type,
                            wxObject* obj,
                            const wxGridCellCoords& topLeft,
                            const wxGridCellCoords& bottomRight,
-                           bool sel = true,
-                           bool control = false,
-                           bool shift = false,
-                           bool alt = false,
+                           bool sel = true, bool control = false,
+                           bool shift = false, bool alt = false,
                            bool meta = false);
-    //@}
 
     /**
         Returns @true if the Alt key was down at the time of the event.
@@ -786,31 +822,32 @@ public:
 /**
     @class wxGridCellRenderer
 
-    This class is responsible for actually drawing the cell
-    in the grid. You may pass it to the wxGridCellAttr (below) to change the
-    format of one given cell or to wxGrid::SetDefaultRenderer() to change the
-    view of all cells. This is an abstract class, and you will normally use one of
-    the
-    predefined derived classes or derive your own class from it.
+    This class is responsible for actually drawing the cell in the grid. You
+    may pass it to the wxGridCellAttr (below) to change the format of one given
+    cell or to wxGrid::SetDefaultRenderer() to change the view of all cells.
+    This is an abstract class, and you will normally use one of the predefined
+    derived classes or derive your own class from it.
 
     @library{wxadv}
     @category{grid}
 
-    @see wxGridCellStringRenderer, wxGridCellNumberRenderer,
-    wxGridCellFloatRenderer, wxGridCellBoolRenderer
+    @see wxGridCellBoolRenderer, wxGridCellFloatRenderer,
+         wxGridCellNumberRenderer, wxGridCellStringRenderer
 */
 class wxGridCellRenderer
 {
 public:
     /**
-
+        This function must be implemented in derived classes to return a copy
+        of itself.
     */
     virtual wxGridCellRenderer* Clone() const = 0;
 
     /**
-        Draw the given cell on the provided DC inside the given rectangle
-        using the style specified by the attribute and the default or selected
-        state corresponding to the isSelected value.
+        Draw the given cell on the provided DC inside the given rectangle using
+        the style specified by the attribute and the default or selected state
+        corresponding to the isSelected value.
+
         This pure virtual function has a default implementation which will
         prepare the DC using the given attribute: it will draw the rectangle
         with the background colour from attr and set the text colour and font.
@@ -831,20 +868,21 @@ public:
 /**
     @class wxGridCellNumberEditor
 
-    The editor for numeric integer data.
+    Grid cell editor for numeric integer data.
 
     @library{wxadv}
     @category{grid}
 
-    @see wxGridCellEditor, wxGridCellFloatEditor, wxGridCellBoolEditor,
-    wxGridCellTextEditor, wxGridCellChoiceEditor
+    @see wxGridCellEditor, wxGridCellBoolEditor, wxGridCellChoiceEditor,
+         wxGridCellFloatEditor, wxGridCellTextEditor
 */
 class wxGridCellNumberEditor : public wxGridCellTextEditor
 {
 public:
     /**
-        Allows to specify the range for acceptable data;
-        if min == max == -1, no range checking is done
+        Allows you to specify the range for acceptable data. Values equal to
+        -1 for both @a min and @a max indicate that no range checking should be
+        done.
     */
     wxGridCellNumberEditor(int min = -1, int max = -1);
 
@@ -857,8 +895,8 @@ public:
 protected:
 
     /**
-        If the return value is @true, the editor uses a wxSpinCtrl to get user input,
-        otherwise it uses a wxTextCtrl.
+        If the return value is @true, the editor uses a wxSpinCtrl to get user
+        input, otherwise it uses a wxTextCtrl.
     */
     bool HasRange() const;
 
@@ -875,26 +913,38 @@ protected:
 
     This event class contains information about a row/column resize event.
 
+    @beginEventTable{wxGridSizeEvent}
+    @event{EVT_GRID_COL_SIZE(func)}
+        The user resized a column by dragging it. Processes a
+        @c wxEVT_GRID_COL_SIZE event type.
+    @event{EVT_GRID_ROW_SIZE(func)}
+        The user resized a row by dragging it. Processes a
+        @c wxEVT_GRID_ROW_SIZE event type.
+    @event{EVT_GRID_CMD_COL_SIZE(id, func)}
+        The user resized a column by dragging it; variant taking a window
+        identifier. Processes a @c wxEVT_GRID_COL_SIZE event type.
+    @event{EVT_GRID_CMD_ROW_SIZE(id, func)}
+        The user resized a row by dragging it; variant taking a window
+        identifier. Processes a @c wxEVT_GRID_ROW_SIZE event type.
+    @endEventTable
+
     @library{wxadv}
     @category{grid}
 */
 class wxGridSizeEvent : public wxNotifyEvent
 {
 public:
-    //@{
     /**
-
+        Default constructor.
     */
     wxGridSizeEvent();
+    /**
+        Constructor for initializing all event attributes.
+    */
     wxGridSizeEvent(int id, wxEventType type, wxObject* obj,
-                    int rowOrCol = -1,
-                    int x = -1,
-                    int y = -1,
-                    bool control = false,
-                    bool shift = false,
-                    bool alt = false,
-                    bool meta = false);
-    //@}
+                    int rowOrCol = -1, int x = -1, int y = -1,
+                    bool control = false, bool shift = false,
+                    bool alt = false, bool meta = false);
 
     /**
         Returns @true if the Alt key was down at the time of the event.
@@ -937,8 +987,8 @@ public:
     @library{wxadv}
     @category{grid}
 
-    @see wxGridCellRenderer, wxGridCellStringRenderer, wxGridCellFloatRenderer,
-    wxGridCellBoolRenderer
+    @see wxGridCellRenderer, wxGridCellBoolRenderer, wxGridCellFloatRenderer,
+         wxGridCellStringRenderer
 */
 class wxGridCellNumberRenderer : public wxGridCellStringRenderer
 {
