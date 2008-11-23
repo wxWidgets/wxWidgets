@@ -41,7 +41,9 @@
 #include "wx/stopwatch.h"
 #include "wx/thread.h"
 #include "wx/evtloop.h"
+
 #include "wx/private/fd.h"
+#include "wx/private/socket.h"
 
 // DLL options compatibility check:
 #include "wx/build.h"
@@ -242,6 +244,113 @@ void GSocketBase::NotifyOnStateChange(GSocketEvent event)
     // GSocketEvent and wxSocketNotify enums have the same elements with the
     // same values
     m_wxsocket->OnRequest(static_cast<wxSocketNotify>(event));
+}
+
+/* Address handling */
+
+/* GSocket_SetLocal:
+ * GSocket_GetLocal:
+ * GSocket_SetPeer:
+ * GSocket_GetPeer:
+ *  Set or get the local or peer address for this socket. The 'set'
+ *  functions return GSOCK_NOERROR on success, an error code otherwise.
+ *  The 'get' functions return a pointer to a GAddress object on success,
+ *  or NULL otherwise, in which case they set the error code of the
+ *  corresponding GSocket.
+ *
+ *  Error codes:
+ *    GSOCK_INVSOCK - the socket is not valid.
+ *    GSOCK_INVADDR - the address is not valid.
+ */
+GSocketError GSocketBase::SetLocal(GAddress *address)
+{
+  /* the socket must be initialized, or it must be a server */
+  if (m_fd != INVALID_SOCKET && !m_server)
+  {
+    m_error = GSOCK_INVSOCK;
+    return GSOCK_INVSOCK;
+  }
+
+  /* check address */
+  if (address == NULL || address->m_family == GSOCK_NOFAMILY)
+  {
+    m_error = GSOCK_INVADDR;
+    return GSOCK_INVADDR;
+  }
+
+  if (m_local)
+    GAddress_destroy(m_local);
+
+  m_local = GAddress_copy(address);
+
+  return GSOCK_NOERROR;
+}
+
+GSocketError GSocketBase::SetPeer(GAddress *address)
+{
+  /* check address */
+  if (address == NULL || address->m_family == GSOCK_NOFAMILY)
+  {
+    m_error = GSOCK_INVADDR;
+    return GSOCK_INVADDR;
+  }
+
+  if (m_peer)
+    GAddress_destroy(m_peer);
+
+  m_peer = GAddress_copy(address);
+
+  return GSOCK_NOERROR;
+}
+
+GAddress *GSocketBase::GetLocal()
+{
+  GAddress *address;
+  wxSockAddr addr;
+  WX_SOCKLEN_T size = sizeof(addr);
+  GSocketError err;
+
+  /* try to get it from the m_local var first */
+  if (m_local)
+    return GAddress_copy(m_local);
+
+  /* else, if the socket is initialized, try getsockname */
+  if (m_fd == INVALID_SOCKET)
+  {
+    m_error = GSOCK_INVSOCK;
+    return NULL;
+  }
+
+  if (getsockname(m_fd, (sockaddr*)&addr, &size) == SOCKET_ERROR)
+  {
+    m_error = GSOCK_IOERR;
+    return NULL;
+  }
+
+  /* got a valid address from getsockname, create a GAddress object */
+  if ((address = GAddress_new()) == NULL)
+  {
+     m_error = GSOCK_MEMERR;
+     return NULL;
+  }
+
+  if ((err = _GAddress_translate_from(address, (sockaddr*)&addr, size)) != GSOCK_NOERROR)
+  {
+     GAddress_destroy(address);
+     m_error = err;
+     return NULL;
+  }
+
+  return address;
+}
+
+GAddress *GSocketBase::GetPeer()
+{
+  /* try to get it from the m_peer var */
+  if (m_peer)
+    return GAddress_copy(m_peer);
+
+  return NULL;
 }
 
 // ==========================================================================

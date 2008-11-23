@@ -29,6 +29,8 @@
 
 #if wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__)
 
+#include "wx/private/socket.h"
+
 #include <assert.h>
 #include <sys/types.h>
 #ifdef __VISAGECPP__
@@ -443,12 +445,6 @@ struct servent *wxGetservbyname_r(const char *port, const char *protocol,
 #  define GSocket_Debug(args)
 #endif /* __GSOCKET_DEBUG__ */
 
-#if wxUSE_IPV6
-typedef struct sockaddr_storage wxSockAddr;
-#else
-typedef struct sockaddr wxSockAddr;
-#endif
-
 /* Table of GUI-related functions. We must call them indirectly because
  * of wxBase and GUI separation: */
 
@@ -510,123 +506,6 @@ void GSocket::Shutdown()
         DisableEvents();
 
     GSocketBase::Shutdown();
-}
-
-/* Address handling */
-
-/* GSocket_SetLocal:
- * GSocket_GetLocal:
- * GSocket_SetPeer:
- * GSocket_GetPeer:
- *  Set or get the local or peer address for this socket. The 'set'
- *  functions return GSOCK_NOERROR on success, an error code otherwise.
- *  The 'get' functions return a pointer to a GAddress object on success,
- *  or NULL otherwise, in which case they set the error code of the
- *  corresponding GSocket.
- *
- *  Error codes:
- *    GSOCK_INVSOCK - the socket is not valid.
- *    GSOCK_INVADDR - the address is not valid.
- */
-GSocketError GSocket::SetLocal(GAddress *address)
-{
-  assert(this);
-
-  /* the socket must be initialized, or it must be a server */
-  if ((m_fd != INVALID_SOCKET && !m_server))
-  {
-    m_error = GSOCK_INVSOCK;
-    return GSOCK_INVSOCK;
-  }
-
-  /* check address */
-  if (address == NULL || address->m_family == GSOCK_NOFAMILY)
-  {
-    m_error = GSOCK_INVADDR;
-    return GSOCK_INVADDR;
-  }
-
-  if (m_local)
-    GAddress_destroy(m_local);
-
-  m_local = GAddress_copy(address);
-
-  return GSOCK_NOERROR;
-}
-
-GSocketError GSocket::SetPeer(GAddress *address)
-{
-  assert(this);
-
-  /* check address */
-  if (address == NULL || address->m_family == GSOCK_NOFAMILY)
-  {
-    m_error = GSOCK_INVADDR;
-    return GSOCK_INVADDR;
-  }
-
-  if (m_peer)
-    GAddress_destroy(m_peer);
-
-  m_peer = GAddress_copy(address);
-
-  return GSOCK_NOERROR;
-}
-
-GAddress *GSocket::GetLocal()
-{
-  GAddress *address;
-  wxSockAddr addr;
-  WX_SOCKLEN_T size = sizeof(addr);
-  GSocketError err;
-
-  assert(this);
-
-  /* try to get it from the m_local var first */
-  if (m_local)
-    return GAddress_copy(m_local);
-
-  /* else, if the socket is initialized, try getsockname */
-  if (m_fd == INVALID_SOCKET)
-  {
-    m_error = GSOCK_INVSOCK;
-    return NULL;
-  }
-
-  if (getsockname(m_fd, (sockaddr*)&addr, (WX_SOCKLEN_T *) &size) < 0)
-  {
-    m_error = GSOCK_IOERR;
-    return NULL;
-  }
-
-  /* got a valid address from getsockname, create a GAddress object */
-  address = GAddress_new();
-  if (address == NULL)
-  {
-    m_error = GSOCK_MEMERR;
-    return NULL;
-  }
-
-  err = _GAddress_translate_from(address, (sockaddr*)&addr, size);
-  if (err != GSOCK_NOERROR)
-  {
-    GAddress_destroy(address);
-    m_error = err;
-    return NULL;
-  }
-
-  return address;
-}
-
-GAddress *GSocket::GetPeer()
-{
-  assert(this);
-
-  /* try to get it from the m_peer var */
-  if (m_peer)
-    return GAddress_copy(m_peer);
-
-  return NULL;
 }
 
 /* Server specific parts */

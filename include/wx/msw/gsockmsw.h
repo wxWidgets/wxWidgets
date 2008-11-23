@@ -38,10 +38,6 @@ public:
     virtual GSocket *WaitConnection(wxSocketBase& wxsocket);
 
 
-  GSocketError SetLocal(GAddress *address);
-  GSocketError SetPeer(GAddress *address);
-  GAddress *GetLocal();
-  GAddress *GetPeer();
   GSocketError SetServer();
 
   // not used under MSW

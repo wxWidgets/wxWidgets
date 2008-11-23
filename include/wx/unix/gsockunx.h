@@ -23,10 +23,6 @@ public:
     virtual void Shutdown();
     virtual GSocket *WaitConnection(wxSocketBase& wxsocket);
 
-    GSocketError SetLocal(GAddress *address);
-    GSocketError SetPeer(GAddress *address);
-    GAddress *GetLocal();
-    GAddress *GetPeer();
     GSocketError SetServer();
     bool SetReusable();
     bool SetBroadcast();

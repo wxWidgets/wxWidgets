@@ -51,16 +51,4 @@
     #define wxFD_CLR(fd, fds) FD_CLR(fd, fds)
 #endif // __INTELC__/!__INTELC__
 
-// this is for Windows where configure doesn't define this
-#ifndef SOCKOPTLEN_T
-    #define SOCKOPTLEN_T int
-#endif
-
-/*
- * MSW defines this, Unices don't.
- */
-#ifndef INVALID_SOCKET
-    #define INVALID_SOCKET (-1)
-#endif
-
 #endif // _WX_PRIVATE_FD_H_

@@ -169,8 +169,14 @@ public:
     // the given wxSocket (and inherits its attributes such as timeout)
     static GSocket *Create(wxSocketBase& wxsocket);
 
-    void SetTimeout(unsigned long millisec);
     virtual ~GSocketBase();
+
+    void SetTimeout(unsigned long millisec);
+
+    GSocketError SetLocal(GAddress *address);
+    GSocketError SetPeer(GAddress *address);
+    GAddress *GetLocal();
+    GAddress *GetPeer();
 
     GSocketEventFlags Select(GSocketEventFlags flags);
 
