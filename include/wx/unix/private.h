@@ -12,8 +12,9 @@
 #define _WX_UNIX_PRIVATE_H_
 
 // this file is currently empty as its original contents was moved to
-// include/wx/gsocket.h but let's keep it for now in case we need it for
+// include/wx/private/fd.h but let's keep it for now in case we need it for
 // something again in the future
+#include "wx/private/fd.h"
 
 #endif // _WX_UNIX_PRIVATE_H_
 

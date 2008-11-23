@@ -41,6 +41,7 @@
 #include "wx/stopwatch.h"
 #include "wx/thread.h"
 #include "wx/evtloop.h"
+#include "wx/private/fd.h"
 
 // DLL options compatibility check:
 #include "wx/build.h"

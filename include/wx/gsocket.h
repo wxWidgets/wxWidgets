@@ -294,57 +294,6 @@ GSocketError _GAddress_Init_UNIX(GAddress *address);
 GSocketError GAddress_UNIX_SetPath(GAddress *address, const char *path);
 GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf);
 
-// standard linux headers produce many warnings when used with icc
-#if defined(__INTELC__) && defined(__LINUX__)
-    inline void wxFD_ZERO(fd_set *fds)
-    {
-        #pragma warning(push)
-        #pragma warning(disable:593)
-        FD_ZERO(fds);
-        #pragma warning(pop)
-    }
-
-    inline void wxFD_SET(int fd, fd_set *fds)
-    {
-        #pragma warning(push, 1)
-        #pragma warning(disable:1469)
-        FD_SET(fd, fds);
-        #pragma warning(pop)
-    }
-
-    inline bool wxFD_ISSET(int fd, fd_set *fds)
-    {
-        #pragma warning(push, 1)
-        #pragma warning(disable:1469)
-        return FD_ISSET(fd, fds);
-        #pragma warning(pop)
-    }
-    inline bool wxFD_CLR(int fd, fd_set *fds)
-    {
-        #pragma warning(push, 1)
-        #pragma warning(disable:1469)
-        return FD_CLR(fd, fds);
-        #pragma warning(pop)
-    }
-#else // !__INTELC__
-    #define wxFD_ZERO(fds) FD_ZERO(fds)
-    #define wxFD_SET(fd, fds) FD_SET(fd, fds)
-    #define wxFD_ISSET(fd, fds) FD_ISSET(fd, fds)
-    #define wxFD_CLR(fd, fds) FD_CLR(fd, fds)
-#endif // __INTELC__/!__INTELC__
-
-// this is for Windows where configure doesn't define this
-#ifndef SOCKOPTLEN_T
-    #define SOCKOPTLEN_T int
-#endif
-
-/*
- * MSW defines this, Unices don't.
- */
-#ifndef INVALID_SOCKET
-#define INVALID_SOCKET (-1)
-#endif
-
 #endif /* wxUSE_SOCKETS */
 
 #endif /* _WX_GSOCKET_H_ */
