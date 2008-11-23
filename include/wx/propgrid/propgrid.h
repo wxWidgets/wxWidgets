@@ -495,8 +495,8 @@ enum wxPG_KEYBOARD_ACTIONS
 #define wxPG_MAN_FL_PAGE_INSERTED           0x02000000
 // Active editor control is abnormally large
 #define wxPG_FL_ABNORMAL_EDITOR             0x04000000
-// Recursion guard for OnCustomEditorEvent
-#define wxPG_FL_IN_ONCUSTOMEDITOREVENT      0x08000000
+// Recursion guard for HandleCustomEditorEvent
+#define wxPG_FL_IN_HANDLECUSTOMEDITOREVENT  0x08000000
 #define wxPG_FL_VALUE_CHANGE_IN_EVENT       0x10000000
 // Editor control width should not change on resize
 #define wxPG_FL_FIXED_WIDTH_EDITOR          0x20000000
@@ -1179,6 +1179,9 @@ public:
         return m_wndEditor2;
     }
 
+    // Events from editor controls are forward to this function
+    void HandleCustomEditorEvent( wxEvent &event );
+
 #ifndef SWIG
 
     /**
@@ -1195,22 +1198,6 @@ public:
 
     // Mostly useful for page switching.
     void SwitchState( wxPropertyGridPageState* pNewState );
-
-    /**
-        When creating custom property editors, connect required editor events to
-        this function. For instance:
-
-        @code
-            control->Connect(control->GetId(), wxEVT_COMMAND_TEXT_UPDATED,
-                             wxEventHandler(wxPropertyGrid::OnCustomEditorEvent),
-                             NULL, propgrid);
-        @endcode
-
-        @remarks You should never need to call this function directly!
-
-        @see wxPGEditor::CreateControls(), wxEvtHandler::Connect()
-    */
-    void OnCustomEditorEvent( wxEvent &event );
 
     long GetInternalFlags() const { return m_iFlags; }
     bool HasInternalFlag( long flag ) const
@@ -1327,7 +1314,6 @@ public:
     */
     bool UnfocusEditor();
 
-    virtual bool ProcessEvent(wxEvent& event);
     virtual void SetWindowStyleFlag( long style );
 
 protected:

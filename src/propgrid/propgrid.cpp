@@ -2388,7 +2388,7 @@ bool wxPropertyGrid::CommitChangesFromEditor( wxUint32 flags )
 
     // Don't do this if already processing editor event. It might
     // induce recursive dialogs and crap like that.
-    if ( m_iFlags & wxPG_FL_IN_ONCUSTOMEDITOREVENT )
+    if ( m_iFlags & wxPG_FL_IN_HANDLECUSTOMEDITOREVENT )
     {
         if ( m_inDoPropertyChanged )
             return true;
@@ -2879,27 +2879,7 @@ bool wxPropertyGrid::DoEditorValidate()
 
 // -----------------------------------------------------------------------
 
-bool wxPropertyGrid::ProcessEvent(wxEvent& event)
-{
-    wxWindow* wnd = (wxWindow*) event.GetEventObject();
-    if ( wnd && wnd->IsKindOf(CLASSINFO(wxWindow)) )
-    {
-        wxWindow* parent = wnd->GetParent();
-
-        if ( parent &&
-             (parent == m_canvas ||
-              parent->GetParent() == m_canvas) )
-        {
-            OnCustomEditorEvent(event);
-            return true;
-        }
-    }
-    return wxPanel::ProcessEvent(event);
-}
-
-// -----------------------------------------------------------------------
-
-void wxPropertyGrid::OnCustomEditorEvent( wxEvent &event )
+void wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
 {
     wxPGProperty* selected = m_selected;
 
@@ -2908,7 +2888,7 @@ void wxPropertyGrid::OnCustomEditorEvent( wxEvent &event )
     if ( !selected )
         return;
 
-    if ( m_iFlags & wxPG_FL_IN_ONCUSTOMEDITOREVENT )
+    if ( m_iFlags & wxPG_FL_IN_HANDLECUSTOMEDITOREVENT )
         return;
 
     wxVariant pendingValue(selected->GetValueRef());
@@ -2938,7 +2918,7 @@ void wxPropertyGrid::OnCustomEditorEvent( wxEvent &event )
         m_prevTcValue = newTcValue;
     }
 
-    SetInternalFlag(wxPG_FL_IN_ONCUSTOMEDITOREVENT);
+    SetInternalFlag(wxPG_FL_IN_HANDLECUSTOMEDITOREVENT);
 
     bool validationFailure = false;
     bool buttonWasHandled = false;
@@ -3038,7 +3018,7 @@ void wxPropertyGrid::OnCustomEditorEvent( wxEvent &event )
         }
     }
 
-    ClearInternalFlag(wxPG_FL_IN_ONCUSTOMEDITOREVENT);
+    ClearInternalFlag(wxPG_FL_IN_HANDLECUSTOMEDITOREVENT);
 }
 
 // -----------------------------------------------------------------------
@@ -3163,8 +3143,36 @@ void wxPropertyGrid::CustomSetCursor( int type, bool override )
 }
 
 // -----------------------------------------------------------------------
-// wxPropertyGrid property selection
+// wxPropertyGrid property selection, editor creation
 // -----------------------------------------------------------------------
+
+//
+// This class forwards events from property editor controls to wxPropertyGrid.
+class wxPropertyGridEditorEventForwarder : public wxEvtHandler
+{
+public:
+    wxPropertyGridEditorEventForwarder( wxPropertyGrid* propGrid )
+        : wxEvtHandler(), m_propGrid(propGrid)
+    {
+    }
+
+    virtual ~wxPropertyGridEditorEventForwarder()
+    {
+    }
+
+private:
+    bool ProcessEvent( wxEvent& event )
+    {
+        // Always skip
+        event.Skip();
+
+        m_propGrid->HandleCustomEditorEvent(event);
+
+        return wxEvtHandler::ProcessEvent(event);
+    }
+
+    wxPropertyGrid*         m_propGrid;
+};
 
 // Setups event handling for child control
 void wxPropertyGrid::SetupChildEventHandling( wxWindow* argWnd )
@@ -3192,6 +3200,10 @@ void wxPropertyGrid::SetupChildEventHandling( wxWindow* argWnd )
             wxMouseEventHandler(wxPropertyGrid::OnMouseEntry),
             NULL, this);
     }
+
+    wxPropertyGridEditorEventForwarder* forwarder;
+    forwarder = new wxPropertyGridEditorEventForwarder(this);
+    argWnd->PushEventHandler(forwarder);
 
     argWnd->Connect(id, wxEVT_KEY_DOWN,
         wxCharEventHandler(wxPropertyGrid::OnChildKeyDown),
@@ -3222,6 +3234,7 @@ void wxPropertyGrid::FreeEditors()
     // Do not free editors immediately if processing events
     if ( m_wndEditor2 )
     {
+        m_wndEditor2->PopEventHandler(true);
         m_wndEditor2->Hide();
         wxPendingDelete.Append( m_wndEditor2 );
         m_wndEditor2 = (wxWindow*) NULL;
@@ -3229,6 +3242,7 @@ void wxPropertyGrid::FreeEditors()
 
     if ( m_wndEditor )
     {
+        m_wndEditor->PopEventHandler(true);
         m_wndEditor->Hide();
         wxPendingDelete.Append( m_wndEditor );
         m_wndEditor = (wxWindow*) NULL;

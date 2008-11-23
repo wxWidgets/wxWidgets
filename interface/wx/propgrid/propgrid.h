@@ -659,22 +659,6 @@ public:
     bool IsFrozen() const;
 
     /**
-        When creating custom property editors, connect required editor events to
-        this function. For instance:
-
-        @code
-            control->Connect(control->GetId(), wxEVT_COMMAND_TEXT_UPDATED,
-                            wxEventHandler(wxPropertyGrid::OnCustomEditorEvent),
-                            NULL, propgrid);
-        @endcode
-
-        @remarks You should never need to call this function directly!
-
-        @see wxPGEditor::CreateControls(), wxEvtHandler::Connect()
-    */
-    void OnCustomEditorEvent( wxEvent &event );
-
-    /**
         Redraws given property.
     */
     virtual void RefreshProperty( wxPGProperty* p );

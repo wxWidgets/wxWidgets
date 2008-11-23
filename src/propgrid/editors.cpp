@@ -877,15 +877,6 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
     else
         cb->SetSelection( -1 );
 
-    // Connect event handling
-    wxWindowID id = cb->GetId();
-    propGrid->Connect(id, wxEVT_COMMAND_COMBOBOX_SELECTED,
-        wxEventHandler(wxPropertyGrid::OnCustomEditorEvent));
-    propGrid->Connect(id, wxEVT_COMMAND_TEXT_UPDATED,
-        wxEventHandler(wxPropertyGrid::OnCustomEditorEvent));
-    propGrid->Connect(id, wxEVT_COMMAND_TEXT_ENTER,
-        wxEventHandler(wxPropertyGrid::OnCustomEditorEvent));
-
 #ifdef __WXMSW__
     cb->Show();
 #endif
@@ -1298,7 +1289,7 @@ void wxSimpleCheckBox::SetValue( int value )
 
     wxPropertyGrid* propGrid = (wxPropertyGrid*) GetParent()->GetParent();
     wxASSERT( propGrid->IsKindOf(CLASSINFO(wxPropertyGrid)) );
-    propGrid->OnCustomEditorEvent(evt);
+    propGrid->HandleCustomEditorEvent(evt);
 }
 
 
@@ -1400,14 +1391,6 @@ wxPGWindowList wxPGCheckBoxEditor::CreateControls( wxPropertyGrid* propGrid,
     wxSimpleCheckBox* cb = new wxSimpleCheckBox(propGrid->GetPanel(),wxPG_SUBID1,pt,sz);
 
     cb->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
-
-    cb->Connect( wxPG_SUBID1, wxEVT_LEFT_DOWN,
-            (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction)
-            &wxPropertyGrid::OnCustomEditorEvent, NULL, propGrid );
-
-    cb->Connect( wxPG_SUBID1, wxEVT_LEFT_DCLICK,
-            (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction)
-            &wxPropertyGrid::OnCustomEditorEvent, NULL, propGrid );
 
     if ( property->GetChoiceSelection() > 0 &&
          !property->IsValueUnspecified() )
@@ -1711,13 +1694,6 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
     if ( maxLen > 0 )
         tc->SetMaxLength( maxLen );
 
-    // Connect event handling
-    id = ed->GetId();
-    this->Connect(id, wxEVT_COMMAND_TEXT_UPDATED,
-        wxEventHandler(wxPropertyGrid::OnCustomEditorEvent));
-    this->Connect(id, wxEVT_COMMAND_TEXT_ENTER,
-        wxEventHandler(wxPropertyGrid::OnCustomEditorEvent));
-
     return (wxWindow*) ed;
 }
 
@@ -1778,11 +1754,6 @@ wxWindow* wxPropertyGrid::GenerateEditorButton( const wxPoint& pos, const wxSize
 
     if ( selected->HasFlag(wxPG_PROP_READONLY) )
         but->Disable();
-
-    // Connect event handling
-    id = but->GetId();
-    this->Connect(id, wxEVT_COMMAND_BUTTON_CLICKED,
-        wxEventHandler(wxPropertyGrid::OnCustomEditorEvent));
 
     return but;
 }
@@ -1881,17 +1852,10 @@ wxPGMultiButton::wxPGMultiButton( wxPropertyGrid* pg, const wxSize& sz )
     SetBackgroundColour(pg->GetCellBackgroundColour());
 }
 
-void wxPGMultiButton::Finalize( wxPropertyGrid* propGrid, const wxPoint& pos )
+void wxPGMultiButton::Finalize( wxPropertyGrid* WXUNUSED(propGrid),
+                                const wxPoint& pos )
 {
     Move( pos.x + m_fullEditorSize.x - m_buttonsWidth, pos.y );
-
-    // Connect event handling
-    for ( unsigned int i=0; i<GetCount(); i++ )
-    {
-        wxWindowID id = GetButtonId(i);
-        propGrid->Connect(id, wxEVT_COMMAND_BUTTON_CLICKED,
-            wxEventHandler(wxPropertyGrid::OnCustomEditorEvent));
-    }
 }
 
 int wxPGMultiButton::GenId( int id ) const
