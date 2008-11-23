@@ -179,6 +179,12 @@ public:
     virtual void Close() = 0;
     virtual void Shutdown();
 
+    void SetInitialSocketBuffers(int recv, int send)
+    {
+        m_initialRecvBufferSize = recv;
+        m_initialSendBufferSize = send;
+    }
+
     // notify m_wxsocket about the given socket event by calling its (inaptly
     // named) OnRequest() method
     void NotifyOnStateChange(GSocketEvent event);

@@ -60,12 +60,6 @@ public:
   GSocketError SetSockOpt(int level, int optname,
     const void *optval, int optlen);
 
-  void SetInitialSocketBuffers(int recv, int send)
-  {
-      m_initialRecvBufferSize = recv;
-      m_initialSendBufferSize = send;
-  }
-
 protected:
   GSocketError Input_Timeout();
   GSocketError Output_Timeout();

@@ -44,11 +44,6 @@ public:
     void Notify(bool flag);
     void Detected_Read();
     void Detected_Write();
-    void SetInitialSocketBuffers(int recv, int send)
-    {
-        m_initialRecvBufferSize = recv;
-        m_initialSendBufferSize = send;
-    }
 
 protected:
     //enable or disable event callback using gsocket gui callback table
