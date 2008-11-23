@@ -72,26 +72,21 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( SocketTestCase, "SocketTestCase" );
 
 wxSockAddressPtr SocketTestCase::GetServer() const
 {
-    wxSockAddressPtr ptr;
-    if ( !gs_serverHost.empty() )
-    {
-        wxIPV4address *addr = new wxIPV4address;
-        addr->Hostname(gs_serverHost);
-        addr->Service("www");
+    if ( gs_serverHost.empty() )
+        return wxSockAddressPtr();
 
-        ptr = wxSockAddressPtr(addr);
-    }
+    wxIPV4address *addr = new wxIPV4address;
+    addr->Hostname(gs_serverHost);
+    addr->Service("www");
 
-    return ptr;
+    return wxSockAddressPtr(addr);
 }
 
 wxSocketClientPtr SocketTestCase::GetHTTPSocket(int flags) const
 {
-    wxSocketClientPtr ptr;
-
     wxSockAddressPtr addr = GetServer();
     if ( !addr.get() )
-        return ptr;
+        return wxSocketClientPtr();
 
     wxSocketClient *sock = new wxSocketClient(flags);
     sock->SetTimeout(1);
@@ -104,8 +99,7 @@ wxSocketClientPtr SocketTestCase::GetHTTPSocket(int flags) const
 
     sock->Write(httpGetRoot.ToAscii(), httpGetRoot.length());
 
-    ptr = wxSocketClientPtr(sock);
-    return ptr;
+    return wxSocketClientPtr(sock);
 }
 
 void SocketTestCase::BlockingConnect()
