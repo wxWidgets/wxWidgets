@@ -31,14 +31,10 @@
     @li @c wxEVT_SIZE: if the frame has exactly one child window, not counting the
         status and toolbar, this child is resized to take the entire frame client area.
         If two or more windows are present, they should be laid out explicitly either
-        by manually handling wxEVT_SIZE or using sizers;
+        by manually handling @c wxEVT_SIZE or using sizers;
     @li @c wxEVT_MENU_HIGHLIGHT: the default implementation displays the help string
         associated with the selected item in the first pane of the status bar, if there is one.
 
-
-    @section frame_styles
-
-    wxFrame supports the following styles:
 
     @beginStyleTable
     @style{wxDEFAULT_FRAME_STYLE}
@@ -109,6 +105,15 @@
            On Mac OS X, frames with this style will be shown with a metallic
            look. This is an extra style.
     @endExtraStyleTable
+
+    @beginEventTable{wxCloseEvent}
+    @event{EVT_CLOSE(func)}
+        The frame is being closed by the user or programmatically (see wxWindow::Close).
+        The user may generate this event clicking the close button
+        (typically the 'X' on the top-right of the title bar) if it's present
+        (see the @c wxCLOSE_BOX style).
+    @endEventTable
+
 
     @library{wxcore}
     @category{managedwnd}
