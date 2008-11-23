@@ -16,16 +16,18 @@ class wxGSocketIOHandler;
 class GSocket : public GSocketBase
 {
 public:
-    GSocket();
-    ~GSocket();
+    GSocket(wxSocketBase& wxsocket);
+    virtual ~GSocket();
+
     virtual void Close();
     virtual void Shutdown();
+    virtual GSocket *WaitConnection(wxSocketBase& wxsocket);
+
     GSocketError SetLocal(GAddress *address);
     GSocketError SetPeer(GAddress *address);
     GAddress *GetLocal();
     GAddress *GetPeer();
     GSocketError SetServer();
-    GSocket *WaitConnection();
     bool SetReusable();
     bool SetBroadcast();
     bool DontDoBind();
@@ -34,11 +36,7 @@ public:
     int Read(char *buffer, int size);
     int Write(const char *buffer, int size);
     void SetNonBlocking(bool non_block);
-    void SetTimeout(unsigned long millisec);
     GSocketError WXDLLIMPEXP_NET GetError();
-    void SetCallback(GSocketEventFlags flags,
-        GSocketCallback callback, char *cdata);
-    void UnsetCallback(GSocketEventFlags flags);
     GSocketError GetSockOpt(int level, int optname, void *optval, int *optlen);
     GSocketError SetSockOpt(int level, int optname,
         const void *optval, int optlen);
@@ -74,6 +72,11 @@ public:
 
   // pointer for storing extra (usually GUI-specific) data
   void *m_gui_dependent;
+
+private:
+    // notify the associated wxSocket about a change in socket state and shut
+    // down the socket if the event is GSOCK_LOST
+    void OnStateChange(GSocketEvent event);
 };
 
 // A version of GSocketManager which uses FDs for socket IO

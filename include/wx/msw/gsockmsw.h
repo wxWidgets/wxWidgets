@@ -27,16 +27,23 @@
 class GSocket : public GSocketBase
 {
 public:
-  GSocket() : GSocketBase() { m_msgnumber = 0; }
+    GSocket::GSocket(wxSocketBase& wxsocket)
+        : GSocketBase(wxsocket)
+    {
+        m_msgnumber = 0;
+    }
 
-  virtual void Close();
+    virtual void Close();
+
+    virtual GSocket *WaitConnection(wxSocketBase& wxsocket);
+
 
   GSocketError SetLocal(GAddress *address);
   GSocketError SetPeer(GAddress *address);
   GAddress *GetLocal();
   GAddress *GetPeer();
   GSocketError SetServer();
-  GSocket *WaitConnection();
+
   // not used under MSW
   void Notify(bool) { }
   bool SetReusable();
@@ -47,11 +54,7 @@ public:
   int Read(char *buffer, int size);
   int Write(const char *buffer, int size);
   void SetNonBlocking(bool non_block);
-  void SetTimeout(unsigned long millis);
   GSocketError WXDLLIMPEXP_NET GetError();
-  void SetCallback(GSocketEventFlags flags,
-    GSocketCallback callback, char *cdata);
-  void UnsetCallback(GSocketEventFlags flags);
   GSocketError GetSockOpt(int level, int optname,
     void *optval, int *optlen);
   GSocketError SetSockOpt(int level, int optname,

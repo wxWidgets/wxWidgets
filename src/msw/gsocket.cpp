@@ -308,7 +308,7 @@ GSocketError GSocket::SetServer()
  *    GSOCK_MEMERR     - couldn't allocate memory.
  *    GSOCK_IOERR      - low-level error.
  */
-GSocket *GSocket::WaitConnection()
+GSocket *GSocket::WaitConnection(wxSocketBase& wxsocket)
 {
   GSocket *connection;
   wxSockAddr from;
@@ -327,7 +327,7 @@ GSocket *GSocket::WaitConnection()
   }
 
   /* Create a GSocket object for the new connection */
-  connection = GSocket::Create();
+  connection = GSocket::Create(wxsocket);
 
   if (!connection)
   {
@@ -721,16 +721,6 @@ void GSocket::SetNonBlocking(bool non_block)
   m_non_blocking = non_block;
 }
 
-/* GSocket_SetTimeout:
- *  Sets the timeout for blocking calls. Time is expressed in
- *  milliseconds.
- */
-void GSocket::SetTimeout(unsigned long millis)
-{
-  m_timeout.tv_sec  = (millis / 1000);
-  m_timeout.tv_usec = (millis % 1000) * 1000;
-}
-
 /* GSocket_GetError:
  *  Returns the last error occurred for this socket. Note that successful
  *  operations do not clear this back to GSOCK_NOERROR, so use it only
@@ -739,69 +729,6 @@ void GSocket::SetTimeout(unsigned long millis)
 GSocketError WXDLLIMPEXP_NET GSocket::GetError()
 {
   return m_error;
-}
-
-/* Callbacks */
-
-/* GSOCK_INPUT:
- *   There is data to be read in the input buffer. If, after a read
- *   operation, there is still data available, the callback function will
- *   be called again.
- * GSOCK_OUTPUT:
- *   The socket is available for writing. That is, the next write call
- *   won't block. This event is generated only once, when the connection is
- *   first established, and then only if a call failed with GSOCK_WOULDBLOCK,
- *   when the output buffer empties again. This means that the app should
- *   assume that it can write since the first OUTPUT event, and no more
- *   OUTPUT events will be generated unless an error occurs.
- * GSOCK_CONNECTION:
- *   Connection successfully established, for client sockets, or incoming
- *   client connection, for server sockets. Wait for this event (also watch
- *   out for GSOCK_LOST) after you issue a nonblocking GSocket_Connect() call.
- * GSOCK_LOST:
- *   The connection is lost (or a connection request failed); this could
- *   be due to a failure, or due to the peer closing it gracefully.
- */
-
-/* GSocket_SetCallback:
- *  Enables the callbacks specified by 'flags'. Note that 'flags'
- *  may be a combination of flags OR'ed toghether, so the same
- *  callback function can be made to accept different events.
- *  The callback function must have the following prototype:
- *
- *  void function(GSocket *socket, GSocketEvent event, char *cdata)
- */
-void GSocket::SetCallback(GSocketEventFlags flags,
-                         GSocketCallback callback, char *cdata)
-{
-  int count;
-
-  for (count = 0; count < GSOCK_MAX_EVENT; count++)
-  {
-    if ((flags & (1 << count)) != 0)
-    {
-      m_cbacks[count] = callback;
-      m_data[count] = cdata;
-    }
-  }
-}
-
-/* GSocket_UnsetCallback:
- *  Disables all callbacks specified by 'flags', which may be a
- *  combination of flags OR'ed toghether.
- */
-void GSocket::UnsetCallback(GSocketEventFlags flags)
-{
-  int count;
-
-  for (count = 0; count < GSOCK_MAX_EVENT; count++)
-  {
-    if ((flags & (1 << count)) != 0)
-    {
-      m_cbacks[count] = NULL;
-      m_data[count] = NULL;
-    }
-  }
 }
 
 GSocketError GSocket::GetSockOpt(int level, int optname,

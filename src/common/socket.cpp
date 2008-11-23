@@ -158,9 +158,9 @@ void GSocketManager::Init()
 // ==========================================================================
 
 /* static */
-GSocket *GSocketBase::Create()
+GSocket *GSocketBase::Create(wxSocketBase& wxsocket)
 {
-    GSocket * const newsocket = new GSocket();
+    GSocket * const newsocket = new GSocket(wxsocket);
     if ( !GSocketManager::Get()->Init_Socket(newsocket) )
     {
         delete newsocket;
@@ -170,7 +170,8 @@ GSocket *GSocketBase::Create()
     return newsocket;
 }
 
-GSocketBase::GSocketBase()
+GSocketBase::GSocketBase(wxSocketBase& wxsocket)
+    : m_wxsocket(&wxsocket)
 {
     m_fd              = INVALID_SOCKET;
     m_detected        = 0;
@@ -180,12 +181,8 @@ GSocketBase::GSocketBase()
     m_server          = false;
     m_stream          = true;
     m_non_blocking    = false;
-#ifdef __WINDOWS__
-    m_timeout.tv_sec  = 10 * 60;  /* 10 minutes */
-    m_timeout.tv_usec = 0;
-#else
-    m_timeout         = 10*60*1000; /* 10 minutes * 60 sec * 1000 millisec */
-#endif
+
+    SetTimeout(wxsocket.GetTimeout() * 1000);
 
     m_establishing    = false;
     m_reusable        = false;
@@ -193,9 +190,6 @@ GSocketBase::GSocketBase()
     m_dobind          = true;
     m_initialRecvBufferSize = -1;
     m_initialSendBufferSize = -1;
-
-    for ( int i = 0; i < GSOCK_MAX_EVENT; i++ )
-        m_cbacks[i] = NULL;
 }
 
 GSocketBase::~GSocketBase()
@@ -226,11 +220,28 @@ void GSocketBase::Shutdown()
         Close();
     }
 
-    /* Disable GUI callbacks */
-    for ( int evt = 0; evt < GSOCK_MAX_EVENT; evt++ )
-        m_cbacks[evt] = NULL;
-
     m_detected = GSOCK_LOST_FLAG;
+}
+
+/* GSocket_SetTimeout:
+ *  Sets the timeout for blocking calls. Time is expressed in
+ *  milliseconds.
+ */
+void GSocketBase::SetTimeout(unsigned long millis)
+{
+#ifdef __WXMSW__
+    m_timeout.tv_sec  = (millis / 1000);
+    m_timeout.tv_usec = (millis % 1000) * 1000;
+#else
+    m_timeout = millis;
+#endif
+}
+
+void GSocketBase::NotifyOnStateChange(GSocketEvent event)
+{
+    // GSocketEvent and wxSocketNotify enums have the same elements with the
+    // same values
+    m_wxsocket->OnRequest(static_cast<wxSocketNotify>(event));
 }
 
 // ==========================================================================
@@ -395,18 +406,7 @@ bool wxSocketBase::Close()
     InterruptWait();
 
     if (m_socket)
-    {
-        // Disable callbacks
-        m_socket->UnsetCallback(
-            GSOCK_INPUT_FLAG |
-            GSOCK_OUTPUT_FLAG |
-            GSOCK_LOST_FLAG |
-            GSOCK_CONNECTION_FLAG
-        );
-
-        // Shutdown the connection
         m_socket->Shutdown();
-    }
 
     m_connected = false;
     m_establishing = false;
@@ -1324,7 +1324,7 @@ wxSocketServer::wxSocketServer(const wxSockAddress& addr_man,
 {
     wxLogTrace( wxTRACE_Socket, _T("Opening wxSocketServer") );
 
-    m_socket = GSocket::Create();
+    m_socket = GSocket::Create(*this);
 
     if (!m_socket)
     {
@@ -1355,11 +1355,6 @@ wxSocketServer::wxSocketServer(const wxSockAddress& addr_man,
         return;
     }
 
-    m_socket->SetTimeout(m_timeout * 1000);
-    m_socket->SetCallback(GSOCK_INPUT_FLAG | GSOCK_OUTPUT_FLAG |
-                                  GSOCK_LOST_FLAG | GSOCK_CONNECTION_FLAG,
-                                  wx_socket_callback, (char *)this);
-
     wxLogTrace( wxTRACE_Socket, _T("wxSocketServer on fd %d"), m_socket->m_fd );
 }
 
@@ -1376,19 +1371,13 @@ bool wxSocketServer::AcceptWith(wxSocketBase& sock, bool wait)
     // When we are finished, we put the socket to blocking mode
     // again.
     wxSocketUnblocker unblock(m_socket, !wait);
-    GSocket * const child_socket = m_socket->WaitConnection();
+    sock.m_socket = m_socket->WaitConnection(sock);
 
-    if (!child_socket)
+    if ( !sock.m_socket )
         return false;
 
     sock.m_type = wxSOCKET_BASE;
-    sock.m_socket = child_socket;
     sock.m_connected = true;
-
-    sock.m_socket->SetTimeout(sock.m_timeout * 1000);
-    sock.m_socket->SetCallback(GSOCK_INPUT_FLAG | GSOCK_OUTPUT_FLAG |
-            GSOCK_LOST_FLAG | GSOCK_CONNECTION_FLAG,
-            wx_socket_callback, (char *)&sock);
 
     return true;
 }
@@ -1487,22 +1476,12 @@ bool wxSocketClient::DoConnect(const wxSockAddress& addr_man,
         delete m_socket;
     }
 
-    m_socket = GSocket::Create();
+    m_socket = GSocket::Create(*this);
     m_connected = false;
     m_establishing = false;
 
     if (!m_socket)
         return false;
-
-    m_socket->SetTimeout(m_timeout * 1000);
-    m_socket->SetCallback(
-        GSOCK_INPUT_FLAG |
-        GSOCK_OUTPUT_FLAG |
-        GSOCK_LOST_FLAG |
-        GSOCK_CONNECTION_FLAG,
-        wx_socket_callback,
-        (char *)this
-    );
 
     // If wait == false, then the call should be nonblocking. When we are
     // finished, we put the socket to blocking mode again.
@@ -1602,13 +1581,11 @@ wxDatagramSocket::wxDatagramSocket( const wxSockAddress& addr,
                 : wxSocketBase( flags, wxSOCKET_DATAGRAM )
 {
     // Create the socket
-    m_socket = GSocket::Create();
+    m_socket = GSocket::Create(*this);
 
     if (!m_socket)
-    {
-        wxFAIL_MSG( _T("datagram socket not new'd") );
         return;
-    }
+
     m_socket->Notify(m_notify);
     // Setup the socket as non connection oriented
     m_socket->SetLocal(addr.GetAddress());
@@ -1634,10 +1611,6 @@ wxDatagramSocket::wxDatagramSocket( const wxSockAddress& addr,
     // Initialize all stuff
     m_connected = false;
     m_establishing = false;
-    m_socket->SetTimeout( m_timeout * 1000 );
-    m_socket->SetCallback( GSOCK_INPUT_FLAG | GSOCK_OUTPUT_FLAG |
-                           GSOCK_LOST_FLAG | GSOCK_CONNECTION_FLAG,
-                           wx_socket_callback, (char*)this );
 }
 
 wxDatagramSocket& wxDatagramSocket::RecvFrom( wxSockAddress& addr,

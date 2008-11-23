@@ -467,7 +467,8 @@ void GSocket_Cleanup()
 
 /* Constructors / Destructors for GSocket */
 
-GSocket::GSocket()
+GSocket::GSocket(wxSocketBase& wxsocket)
+    : GSocketBase(wxsocket)
 {
   m_handler             = NULL;
 
@@ -723,7 +724,7 @@ GSocketError GSocket::SetServer()
  *    GSOCK_MEMERR     - couldn't allocate memory.
  *    GSOCK_IOERR      - low-level error.
  */
-GSocket *GSocket::WaitConnection()
+GSocket *GSocket::WaitConnection(wxSocketBase& wxsocket)
 {
   wxSockAddr from;
   WX_SOCKLEN_T fromlen = sizeof(from);
@@ -741,7 +742,7 @@ GSocket *GSocket::WaitConnection()
   }
 
   /* Create a GSocket object for the new connection */
-  connection = GSocket::Create();
+  connection = GSocket::Create(wxsocket);
 
   if (!connection)
   {
@@ -1238,17 +1239,6 @@ void GSocket::SetNonBlocking(bool non_block)
   m_non_blocking = non_block;
 }
 
-/* GSocket_SetTimeout:
- *  Sets the timeout for blocking calls. Time is expressed in
- *  milliseconds.
- */
-void GSocket::SetTimeout(unsigned long millisec)
-{
-  assert(this);
-
-  m_timeout = millisec;
-}
-
 /* GSocket_GetError:
  *  Returns the last error occurred for this socket. Note that successful
  *  operations do not clear this back to GSOCK_NOERROR, so use it only
@@ -1259,73 +1249,6 @@ GSocketError WXDLLIMPEXP_NET GSocket::GetError()
   assert(this);
 
   return m_error;
-}
-
-/* Callbacks */
-
-/* GSOCK_INPUT:
- *   There is data to be read in the input buffer. If, after a read
- *   operation, there is still data available, the callback function will
- *   be called again.
- * GSOCK_OUTPUT:
- *   The socket is available for writing. That is, the next write call
- *   won't block. This event is generated only once, when the connection is
- *   first established, and then only if a call failed with GSOCK_WOULDBLOCK,
- *   when the output buffer empties again. This means that the app should
- *   assume that it can write since the first OUTPUT event, and no more
- *   OUTPUT events will be generated unless an error occurs.
- * GSOCK_CONNECTION:
- *   Connection successfully established, for client sockets, or incoming
- *   client connection, for server sockets. Wait for this event (also watch
- *   out for GSOCK_LOST) after you issue a nonblocking GSocket_Connect() call.
- * GSOCK_LOST:
- *   The connection is lost (or a connection request failed); this could
- *   be due to a failure, or due to the peer closing it gracefully.
- */
-
-/* GSocket_SetCallback:
- *  Enables the callbacks specified by 'flags'. Note that 'flags'
- *  may be a combination of flags OR'ed toghether, so the same
- *  callback function can be made to accept different events.
- *  The callback function must have the following prototype:
- *
- *  void function(GSocket *socket, GSocketEvent event, char *cdata)
- */
-void GSocket::SetCallback(GSocketEventFlags flags,
-                         GSocketCallback callback, char *cdata)
-{
-  int count;
-
-  assert(this);
-
-  for (count = 0; count < GSOCK_MAX_EVENT; count++)
-  {
-    if ((flags & (1 << count)) != 0)
-    {
-      m_cbacks[count] = callback;
-      m_data[count] = cdata;
-    }
-  }
-}
-
-/* GSocket_UnsetCallback:
- *  Disables all callbacks specified by 'flags', which may be a
- *  combination of flags OR'ed toghether.
- */
-void GSocket::UnsetCallback(GSocketEventFlags flags)
-{
-  int count;
-
-  assert(this);
-
-  for (count = 0; count < GSOCK_MAX_EVENT; count++)
-  {
-    if ((flags & (1 << count)) != 0)
-    {
-      m_cbacks[count] = NULL;
-      m_data[count] = NULL;
-    }
-  }
 }
 
 GSocketError GSocket::GetSockOpt(int level, int optname,
@@ -1345,13 +1268,6 @@ GSocketError GSocket::SetSockOpt(int level, int optname,
 
     return GSOCK_OPTERR;
 }
-
-#define CALL_CALLBACK(socket, event) {                                  \
-  socket->Disable(event);                                               \
-  if (socket->m_cbacks[event])                                          \
-    socket->m_cbacks[event](socket, event, socket->m_data[event]);      \
-}
-
 
 void GSocket::Enable(GSocketEvent event)
 {
@@ -1573,6 +1489,15 @@ int GSocket::Send_Dgram(const char *buffer, int size)
   return ret;
 }
 
+void GSocket::OnStateChange(GSocketEvent event)
+{
+    Disable(event);
+    NotifyOnStateChange(event);
+
+    if ( event == GSOCK_LOST )
+        Shutdown();
+}
+
 void GSocket::Detected_Read()
 {
   char c;
@@ -1590,8 +1515,7 @@ void GSocket::Detected_Read()
   {
     m_establishing = false;
 
-    CALL_CALLBACK(this, GSOCK_LOST);
-    Shutdown();
+    OnStateChange(GSOCK_LOST);
     return;
   }
 
@@ -1599,26 +1523,25 @@ void GSocket::Detected_Read()
 
   if (num > 0)
   {
-    CALL_CALLBACK(this, GSOCK_INPUT);
+    OnStateChange(GSOCK_INPUT);
   }
   else
   {
     if (m_server && m_stream)
     {
-      CALL_CALLBACK(this, GSOCK_CONNECTION);
+      OnStateChange(GSOCK_CONNECTION);
     }
     else if (num == 0)
     {
       if (m_stream)
       {
         /* graceful shutdown */
-        CALL_CALLBACK(this, GSOCK_LOST);
-        Shutdown();
+        OnStateChange(GSOCK_LOST);
       }
       else
       {
         /* Empty datagram received */
-        CALL_CALLBACK(this, GSOCK_INPUT);
+        OnStateChange(GSOCK_INPUT);
       }
     }
     else
@@ -1626,12 +1549,11 @@ void GSocket::Detected_Read()
       /* Do not throw a lost event in cases where the socket isn't really lost */
       if ((errno == EWOULDBLOCK) || (errno == EAGAIN) || (errno == EINTR))
       {
-        CALL_CALLBACK(this, GSOCK_INPUT);
+        OnStateChange(GSOCK_INPUT);
       }
       else
       {
-        CALL_CALLBACK(this, GSOCK_LOST);
-        Shutdown();
+        OnStateChange(GSOCK_LOST);
       }
     }
   }
@@ -1646,8 +1568,7 @@ void GSocket::Detected_Write()
   {
     m_establishing = false;
 
-    CALL_CALLBACK(this, GSOCK_LOST);
-    Shutdown();
+    OnStateChange(GSOCK_LOST);
     return;
   }
 
@@ -1662,22 +1583,21 @@ void GSocket::Detected_Write()
 
     if (error)
     {
-      CALL_CALLBACK(this, GSOCK_LOST);
-      Shutdown();
+      OnStateChange(GSOCK_LOST);
     }
     else
     {
-      CALL_CALLBACK(this, GSOCK_CONNECTION);
+      OnStateChange(GSOCK_CONNECTION);
       /* We have to fire this event by hand because CONNECTION (for clients)
        * and OUTPUT are internally the same and we just disabled CONNECTION
        * events with the above macro.
        */
-      CALL_CALLBACK(this, GSOCK_OUTPUT);
+      OnStateChange(GSOCK_OUTPUT);
     }
   }
   else
   {
-    CALL_CALLBACK(this, GSOCK_OUTPUT);
+    OnStateChange(GSOCK_OUTPUT);
   }
 }
 

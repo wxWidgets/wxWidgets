@@ -20,6 +20,8 @@
 
 #include "wx/dlimpexp.h" /* for WXDLLIMPEXP_NET */
 
+class WXDLLIMPEXP_FWD_NET wxSocketBase;
+
 #include <stddef.h>
 
 /*
@@ -163,12 +165,16 @@ private:
 class GSocketBase
 {
 public:
-    // static factory function
-    static GSocket *Create();
+    // static factory function: creates the low-level socket associated with
+    // the given wxSocket (and inherits its attributes such as timeout)
+    static GSocket *Create(wxSocketBase& wxsocket);
 
+    void SetTimeout(unsigned long millisec);
     virtual ~GSocketBase();
 
     GSocketEventFlags Select(GSocketEventFlags flags);
+
+    virtual GSocket *WaitConnection(wxSocketBase& wxsocket) = 0;
 
     virtual void Close() = 0;
     virtual void Shutdown();
@@ -200,11 +206,19 @@ public:
 #endif
 
     GSocketEventFlags m_detected;
-    GSocketCallback m_cbacks[GSOCK_MAX_EVENT];
-    char *m_data[GSOCK_MAX_EVENT];
 
 protected:
-    GSocketBase();
+    GSocketBase(wxSocketBase& wxsocket);
+
+    // notify m_wxsocket
+    void NotifyOnStateChange(GSocketEvent event);
+
+private:
+    // set in ctor and never changed except that it's reset to NULL when the
+    // socket is shut down
+    wxSocketBase *m_wxsocket;
+
+    DECLARE_NO_COPY_CLASS(GSocketBase)
 };
 
 #if defined(__WINDOWS__)
