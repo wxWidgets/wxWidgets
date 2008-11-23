@@ -153,6 +153,86 @@ void GSocketManager::Init()
 }
 
 // ==========================================================================
+// GSocketBase
+// ==========================================================================
+
+/* static */
+GSocket *GSocketBase::Create()
+{
+    GSocket * const newsocket = new GSocket();
+    if ( !GSocketManager::Get()->Init_Socket(newsocket) )
+    {
+        delete newsocket;
+        return NULL;
+    }
+
+    return newsocket;
+}
+
+GSocketBase::GSocketBase()
+{
+    m_fd              = INVALID_SOCKET;
+    m_detected        = 0;
+    m_local           = NULL;
+    m_peer            = NULL;
+    m_error           = GSOCK_NOERROR;
+    m_server          = false;
+    m_stream          = true;
+    m_non_blocking    = false;
+#ifdef __WINDOWS__
+    m_timeout.tv_sec  = 10 * 60;  /* 10 minutes */
+    m_timeout.tv_usec = 0;
+#else
+    m_timeout         = 10*60*1000; /* 10 minutes * 60 sec * 1000 millisec */
+#endif
+
+    m_establishing    = false;
+    m_reusable        = false;
+    m_broadcast       = false;
+    m_dobind          = true;
+    m_initialRecvBufferSize = -1;
+    m_initialSendBufferSize = -1;
+
+    for ( int i = 0; i < GSOCK_MAX_EVENT; i++ )
+        m_cbacks[i] = NULL;
+}
+
+GSocketBase::~GSocketBase()
+{
+    if (m_fd != INVALID_SOCKET)
+        Shutdown();
+
+    if (m_local)
+        GAddress_destroy(m_local);
+
+    if (m_peer)
+        GAddress_destroy(m_peer);
+
+    // cast is ok as all GSocketBase objects we have in our code are really
+    // GSockets
+    GSocketManager::Get()->Destroy_Socket(static_cast<GSocket *>(this));
+}
+
+/* GSocket_Shutdown:
+ *  Disallow further read/write operations on this socket, close
+ *  the fd and disable all callbacks.
+ */
+void GSocketBase::Shutdown()
+{
+    if ( m_fd != INVALID_SOCKET )
+    {
+        shutdown(m_fd, 1 /* SD_SEND */);
+        Close();
+    }
+
+    /* Disable GUI callbacks */
+    for ( int evt = 0; evt < GSOCK_MAX_EVENT; evt++ )
+        m_cbacks[evt] = NULL;
+
+    m_detected = GSOCK_LOST_FLAG;
+}
+
+// ==========================================================================
 // wxSocketBase
 // ==========================================================================
 
@@ -1243,7 +1323,7 @@ wxSocketServer::wxSocketServer(const wxSockAddress& addr_man,
 {
     wxLogTrace( wxTRACE_Socket, _T("Opening wxSocketServer") );
 
-    m_socket = GSocket_new();
+    m_socket = GSocket::Create();
 
     if (!m_socket)
     {
@@ -1406,7 +1486,7 @@ bool wxSocketClient::DoConnect(const wxSockAddress& addr_man,
         delete m_socket;
     }
 
-    m_socket = GSocket_new();
+    m_socket = GSocket::Create();
     m_connected = false;
     m_establishing = false;
 
@@ -1521,7 +1601,7 @@ wxDatagramSocket::wxDatagramSocket( const wxSockAddress& addr,
                 : wxSocketBase( flags, wxSOCKET_DATAGRAM )
 {
     // Create the socket
-    m_socket = GSocket_new();
+    m_socket = GSocket::Create();
 
     if (!m_socket)
     {

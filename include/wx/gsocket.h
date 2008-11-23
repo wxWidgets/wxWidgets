@@ -163,7 +163,15 @@ private:
 class GSocketBase
 {
 public:
+    // static factory function
+    static GSocket *Create();
+
+    virtual ~GSocketBase();
+
     GSocketEventFlags Select(GSocketEventFlags flags);
+
+    virtual void Close() = 0;
+    virtual void Shutdown();
 
 #ifdef __WINDOWS__
     SOCKET m_fd;
@@ -171,7 +179,6 @@ public:
     int m_fd;
 #endif
 
-    bool m_ok;
     int m_initialRecvBufferSize;
     int m_initialSendBufferSize;
 
@@ -196,6 +203,9 @@ public:
     GSocketEventFlags m_detected;
     GSocketCallback m_cbacks[GSOCK_MAX_EVENT];
     char *m_data[GSOCK_MAX_EVENT];
+
+protected:
+    GSocketBase();
 };
 
 #if defined(__WINDOWS__)
@@ -203,7 +213,6 @@ public:
 #else
     #include "wx/unix/gsockunx.h"
 #endif
-
 
 /* Global initializers */
 
@@ -213,11 +222,6 @@ bool GSocket_Init();
 
 /* GSocket_Cleanup() must be called at the end */
 void GSocket_Cleanup();
-
-
-/* Constructors / Destructors */
-
-GSocket *GSocket_new();
 
 
 /* GAddress */
@@ -332,6 +336,13 @@ GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf);
 // this is for Windows where configure doesn't define this
 #ifndef SOCKOPTLEN_T
     #define SOCKOPTLEN_T int
+#endif
+
+/*
+ * MSW defines this, Unices don't.
+ */
+#ifndef INVALID_SOCKET
+#define INVALID_SOCKET (-1)
 #endif
 
 #endif /* wxUSE_SOCKETS */

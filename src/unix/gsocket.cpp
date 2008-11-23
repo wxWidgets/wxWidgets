@@ -134,13 +134,6 @@ int _System soclose(int);
 #define SOCKOPTLEN_T WX_SOCKLEN_T
 #endif
 
-/*
- * MSW defines this, Unices don't.
- */
-#ifndef INVALID_SOCKET
-#define INVALID_SOCKET -1
-#endif
-
 /* UnixWare reportedly needs this for FIONBIO definition */
 #ifdef __UNIXWARE__
 #include <sys/filio.h>
@@ -476,34 +469,10 @@ void GSocket_Cleanup()
 
 GSocket::GSocket()
 {
-  int i;
-
-  m_fd                  = INVALID_SOCKET;
   m_handler             = NULL;
 
-  for (i=0;i<GSOCK_MAX_EVENT;i++)
-  {
-    m_cbacks[i]         = NULL;
-  }
-  m_detected            = 0;
-  m_local               = NULL;
-  m_peer                = NULL;
-  m_error               = GSOCK_NOERROR;
-  m_server              = false;
-  m_stream              = true;
   m_gui_dependent       = NULL;
-  m_non_blocking        = false;
-  m_reusable            = false;
-  m_broadcast           = false;
-  m_dobind              = true;
-  m_timeout             = 10*60*1000;
-                                /* 10 minutes * 60 sec * 1000 millisec */
-  m_establishing        = false;
   m_use_events          = false;
-  m_initialRecvBufferSize = -1;
-  m_initialSendBufferSize = -1;
-
-  m_ok = GSocketManager::Get()->Init_Socket(this);
 }
 
 void GSocket::Close()
@@ -526,23 +495,7 @@ void GSocket::Close()
 
 GSocket::~GSocket()
 {
-  assert(this);
-
-  /* Check that the socket is really shutdowned */
-  if (m_fd != INVALID_SOCKET)
-    Shutdown();
-
-  GSocketManager::Get()->Destroy_Socket(this);
-
   delete m_handler;
-
-  /* Destroy private addresses */
-  if (m_local)
-    GAddress_destroy(m_local);
-
-  if (m_peer)
-    GAddress_destroy(m_peer);
-
 }
 
 /* GSocket_Shutdown:
@@ -551,26 +504,11 @@ GSocket::~GSocket()
  */
 void GSocket::Shutdown()
 {
-  int evt;
+    /* Don't allow events to fire after socket has been closed */
+    if (m_use_events)
+        DisableEvents();
 
-  assert(this);
-
-  /* Don't allow events to fire after socket has been closed */
-  if (m_use_events)
-    DisableEvents();
-
-  /* If socket has been created, shutdown it */
-  if (m_fd != INVALID_SOCKET)
-  {
-    shutdown(m_fd, 1);
-    Close();
-  }
-
-  /* Disable GUI callbacks */
-  for (evt = 0; evt < GSOCK_MAX_EVENT; evt++)
-    m_cbacks[evt] = NULL;
-
-  m_detected = GSOCK_LOST_FLAG;
+    GSocketBase::Shutdown();
 }
 
 /* Address handling */
@@ -803,7 +741,7 @@ GSocket *GSocket::WaitConnection()
   }
 
   /* Create a GSocket object for the new connection */
-  connection = GSocket_new();
+  connection = GSocket::Create();
 
   if (!connection)
   {
@@ -1741,18 +1679,6 @@ void GSocket::Detected_Write()
   {
     CALL_CALLBACK(this, GSOCK_OUTPUT);
   }
-}
-
-/* Compatibility functions for GSocket */
-GSocket *GSocket_new(void)
-{
-    GSocket *newsocket = new GSocket();
-    if (newsocket->IsOk())
-        return newsocket;
-
-    delete newsocket;
-
-    return NULL;
 }
 
 /*

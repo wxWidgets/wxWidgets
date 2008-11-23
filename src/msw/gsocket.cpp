@@ -110,77 +110,11 @@ void GSocket_Cleanup()
 
 /* Constructors / Destructors for GSocket */
 
-GSocket::GSocket()
-{
-  int i;
-
-  m_fd              = INVALID_SOCKET;
-  for (i = 0; i < GSOCK_MAX_EVENT; i++)
-  {
-    m_cbacks[i]     = NULL;
-  }
-  m_detected        = 0;
-  m_local           = NULL;
-  m_peer            = NULL;
-  m_error           = GSOCK_NOERROR;
-  m_server          = false;
-  m_stream          = true;
-  m_non_blocking    = false;
-  m_timeout.tv_sec  = 10 * 60;  /* 10 minutes */
-  m_timeout.tv_usec = 0;
-  m_establishing    = false;
-  m_reusable        = false;
-  m_broadcast       = false;
-  m_dobind          = true;
-  m_initialRecvBufferSize = -1;
-  m_initialSendBufferSize = -1;
-
-  m_ok = GSocketManager::Get()->Init_Socket(this);
-}
-
 void GSocket::Close()
 {
     GSocketManager::Get()->Disable_Events(this);
     closesocket(m_fd);
     m_fd = INVALID_SOCKET;
-}
-
-GSocket::~GSocket()
-{
-  GSocketManager::Get()->Destroy_Socket(this);
-
-  /* Check that the socket is really shutdowned */
-  if (m_fd != INVALID_SOCKET)
-    Shutdown();
-
-  /* Destroy private addresses */
-  if (m_local)
-    GAddress_destroy(m_local);
-
-  if (m_peer)
-    GAddress_destroy(m_peer);
-}
-
-/* GSocket_Shutdown:
- *  Disallow further read/write operations on this socket, close
- *  the fd and disable all callbacks.
- */
-void GSocket::Shutdown()
-{
-  int evt;
-
-  /* If socket has been created, shutdown it */
-  if (m_fd != INVALID_SOCKET)
-  {
-    shutdown(m_fd, 1 /* SD_SEND */);
-    Close();
-  }
-
-  /* Disable GUI callbacks */
-  for (evt = 0; evt < GSOCK_MAX_EVENT; evt++)
-    m_cbacks[evt] = NULL;
-
-  m_detected = GSOCK_LOST_FLAG;
 }
 
 /* Address handling */
@@ -393,7 +327,7 @@ GSocket *GSocket::WaitConnection()
   }
 
   /* Create a GSocket object for the new connection */
-  connection = GSocket_new();
+  connection = GSocket::Create();
 
   if (!connection)
   {
@@ -1031,17 +965,6 @@ int GSocket::Send_Dgram(const char *buffer, int size)
 
   return ret;
 }
-
-/* Compatibility functions for GSocket */
-GSocket *GSocket_new()
-{
-    GSocket *newsocket = new GSocket();
-    if(newsocket->IsOk())
-        return newsocket;
-    delete newsocket;
-    return NULL;
-}
-
 
 /*
  * -------------------------------------------------------------------------

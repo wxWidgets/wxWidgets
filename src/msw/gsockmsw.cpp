@@ -313,10 +313,10 @@ void GSocketMSWManager::Destroy_Socket(GSocket *socket)
 {
   /* Remove the socket from the list */
   EnterCriticalSection(&critical);
-  if ( socket->IsOk() )
-  {
-      const int msgnum = socket->m_msgnumber;
 
+  const int msgnum = socket->m_msgnumber;
+  if ( msgnum )
+  {
       // we need to remove any pending messages for this socket to avoid having
       // them sent to a new socket which could reuse the same message number as
       // soon as we destroy this one
@@ -326,6 +326,7 @@ void GSocketMSWManager::Destroy_Socket(GSocket *socket)
 
       socketList[msgnum - WM_USER] = NULL;
   }
+  //else: the socket has never been created successfully
 
   LeaveCriticalSection(&critical);
 }

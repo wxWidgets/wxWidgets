@@ -17,10 +17,9 @@ class GSocket : public GSocketBase
 {
 public:
     GSocket();
-    virtual ~GSocket();
-    bool IsOk() { return m_ok; }
-    void Close();
-    void Shutdown();
+    ~GSocket();
+    virtual void Close();
+    virtual void Shutdown();
     GSocketError SetLocal(GAddress *address);
     GSocketError SetPeer(GAddress *address);
     GAddress *GetLocal();
@@ -45,8 +44,8 @@ public:
         const void *optval, int optlen);
     //attach or detach from main loop
     void Notify(bool flag);
-    virtual void Detected_Read();
-    virtual void Detected_Write();
+    void Detected_Read();
+    void Detected_Write();
     void SetInitialSocketBuffers(int recv, int send)
     {
         m_initialRecvBufferSize = recv;

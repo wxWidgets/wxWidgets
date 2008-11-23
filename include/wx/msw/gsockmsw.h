@@ -27,11 +27,10 @@
 class GSocket : public GSocketBase
 {
 public:
-  GSocket();
-  ~GSocket();
-  bool IsOk() { return m_ok; }
-  void Close();
-  void Shutdown();
+  GSocket() : GSocketBase() { m_msgnumber = 0; }
+
+  virtual void Close();
+
   GSocketError SetLocal(GAddress *address);
   GSocketError SetPeer(GAddress *address);
   GAddress *GetLocal();
