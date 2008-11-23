@@ -12,24 +12,24 @@
  * -------------------------------------------------------------------------
  */
 
-#if defined(__WATCOMC__)
 #include "wx/wxprec.h"
-#include <errno.h>
-#include <nerrno.h>
-#endif
 
-#ifndef __GSOCKET_STANDALONE__
-#include "wx/defs.h"
+#if wxUSE_SOCKETS
+
+#include "wx/gsocket.h"
+
+#include "wx/private/fd.h"
+#include "wx/private/socket.h"
 #include "wx/private/gsocketiohandler.h"
-#endif
 
 #if defined(__VISAGECPP__)
 #define BSD_SELECT /* use Berkeley Sockets select */
 #endif
 
-#if wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__)
-
-#include "wx/private/socket.h"
+#if defined(__WATCOMC__)
+#include <errno.h>
+#include <nerrno.h>
+#endif
 
 #include <assert.h>
 #include <sys/types.h>
@@ -177,20 +177,9 @@ int _System soclose(int);
 #  define GSOCKET_MSG_NOSIGNAL 0
 #endif /* MSG_NOSIGNAL */
 
-#ifndef __GSOCKET_STANDALONE__
-#  include "wx/unix/gsockunx.h"
-#  include "wx/unix/private.h"
-#  include "wx/gsocket.h"
 #if wxUSE_THREADS && (defined(HAVE_GETHOSTBYNAME) || defined(HAVE_GETSERVBYNAME))
 #  include "wx/thread.h"
 #endif
-#else
-#  include "gsockunx.h"
-#  include "gsocket.h"
-#  ifndef WXUNUSED
-#    define WXUNUSED(x)
-#  endif
-#endif /* __GSOCKET_STANDALONE__ */
 
 #if defined(HAVE_GETHOSTBYNAME)
 static struct hostent * deepCopyHostent(struct hostent *h,
@@ -2079,4 +2068,4 @@ GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf)
   return GSOCK_NOERROR;
 }
 #endif  /* !defined(__VISAGECPP__) */
-#endif  /* wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__) */
+#endif  /* wxUSE_SOCKETS */
