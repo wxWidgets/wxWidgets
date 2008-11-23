@@ -5000,18 +5000,40 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
       fi
 
       dnl test for compiler thread-specific variables support
-      AC_CACHE_CHECK([for __thread keyword],
-                     wx_cv_cc___thread,
-      [
-          AC_TRY_COMPILE([#include <pthread.h>],
-              [
-                  static __thread int n = 0;
-                  static __thread int *p = 0;
-              ],
-              wx_cv_cc___thread=yes,
-              wx_cv_cc___thread=no
-          )
-      ])
+      AX_GXX_VERSION
+      if test -n "$ax_cv_gxx_version"; then
+          dnl g++ supports __thread since at least version 3.3 but its support
+          dnl seems to be broken until 4.1, see
+          dnl   http://thread.gmane.org/gmane.comp.lib.wxwidgets.devel/108388
+          AC_MSG_CHECKING([for __thread support in g++])
+          case "$ax_cv_gxx_version" in
+            1.* | 2.* )
+                AC_MSG_RESULT([doesn't exist])
+                wx_cv_cc___thread=no
+                ;;
+            3.*)
+                AC_MSG_RESULT([broken])
+                wx_cv_cc___thread=no
+                ;;
+            *)
+                AC_MSG_RESULT([works])
+                wx_cv_cc___thread=yes
+                ;;
+          esac
+      else
+          AC_CACHE_CHECK([for __thread keyword],
+                         wx_cv_cc___thread,
+          [
+              AC_TRY_COMPILE([#include <pthread.h>],
+                  [
+                      static __thread int n = 0;
+                      static __thread int *p = 0;
+                  ],
+                  wx_cv_cc___thread=yes,
+                  wx_cv_cc___thread=no
+              )
+          ])
+      fi
 
       if test "$wx_cv_cc___thread" = "yes"; then
         AC_DEFINE(HAVE___THREAD_KEYWORD)

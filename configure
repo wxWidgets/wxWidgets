@@ -701,6 +701,7 @@ PANGOXFT_LIBS
 CFLAGS_VISIBILITY
 CXXFLAGS_VISIBILITY
 LIBICONV
+GXX_VERSION
 SDL_CONFIG
 SDL_CFLAGS
 SDL_LIBS
@@ -40261,13 +40262,133 @@ echo "$as_me: WARNING: wxMutex won't be recursive on this platform" >&2;}
         fi
       fi
 
-            { echo "$as_me:$LINENO: checking for __thread keyword" >&5
+
+  GXX_VERSION=""
+
+
+
+  { echo "$as_me:$LINENO: checking if gcc accepts -dumpversion option" >&5
+echo $ECHO_N "checking if gcc accepts -dumpversion option... $ECHO_C" >&6; }
+
+  if  test "x$GCC" = "xyes" ; then
+
+    if  test -z "" ; then
+
+      ax_gcc_option_test="int main()
+{
+	return 0;
+}"
+
+else
+
+      ax_gcc_option_test=""
+
+fi
+
+
+    # Dump the test program to file
+    cat <<EOF > conftest.c
+$ax_gcc_option_test
+EOF
+
+    # Dump back the file to the log, useful for debugging purposes
+    { ac_try='cat conftest.c 1>&5'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }
+
+    if  { ac_try='$CC  -dumpversion -c conftest.c 1>&5'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } ; then
+
+   	        { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+
+    ax_gcc_version_option=yes
+
+
+else
+
+   		{ echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+
+    ax_gcc_version_option=no
+
+
+fi
+
+
+else
+
+    { echo "$as_me:$LINENO: result: no gcc available" >&5
+echo "${ECHO_T}no gcc available" >&6; }
+
+fi
+
+
+  if test "x$GXX" = "xyes"; then
+
+    if test "x$ax_gxx_version_option" != "no"; then
+
+      { echo "$as_me:$LINENO: checking gxx version" >&5
+echo $ECHO_N "checking gxx version... $ECHO_C" >&6; }
+if test "${ax_cv_gxx_version+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+        ax_cv_gxx_version="`$CXX -dumpversion`"
+        if test "x$ax_cv_gxx_version" = "x"; then
+
+          ax_cv_gxx_version=""
+
+fi
+
+
+fi
+{ echo "$as_me:$LINENO: result: $ax_cv_gxx_version" >&5
+echo "${ECHO_T}$ax_cv_gxx_version" >&6; }
+      GXX_VERSION=$ax_cv_gxx_version
+
+fi
+
+
+fi
+
+
+
+      if test -n "$ax_cv_gxx_version"; then
+                                        { echo "$as_me:$LINENO: checking for __thread support in g++" >&5
+echo $ECHO_N "checking for __thread support in g++... $ECHO_C" >&6; }
+          case "$ax_cv_gxx_version" in
+            1.* | 2.* )
+                { echo "$as_me:$LINENO: result: doesn't exist" >&5
+echo "${ECHO_T}doesn't exist" >&6; }
+                wx_cv_cc___thread=no
+                ;;
+            3.*)
+                { echo "$as_me:$LINENO: result: broken" >&5
+echo "${ECHO_T}broken" >&6; }
+                wx_cv_cc___thread=no
+                ;;
+            *)
+                { echo "$as_me:$LINENO: result: works" >&5
+echo "${ECHO_T}works" >&6; }
+                wx_cv_cc___thread=yes
+                ;;
+          esac
+      else
+          { echo "$as_me:$LINENO: checking for __thread keyword" >&5
 echo $ECHO_N "checking for __thread keyword... $ECHO_C" >&6; }
 if test "${wx_cv_cc___thread+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
 
-          cat >conftest.$ac_ext <<_ACEOF
+              cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
@@ -40278,8 +40399,8 @@ int
 main ()
 {
 
-                  static __thread int n = 0;
-                  static __thread int *p = 0;
+                      static __thread int n = 0;
+                      static __thread int *p = 0;
 
   ;
   return 0;
@@ -40316,6 +40437,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
 { echo "$as_me:$LINENO: result: $wx_cv_cc___thread" >&5
 echo "${ECHO_T}$wx_cv_cc___thread" >&6; }
+      fi
 
       if test "$wx_cv_cc___thread" = "yes"; then
         cat >>confdefs.h <<\_ACEOF
@@ -51774,6 +51896,7 @@ PANGOXFT_LIBS!$PANGOXFT_LIBS$ac_delim
 CFLAGS_VISIBILITY!$CFLAGS_VISIBILITY$ac_delim
 CXXFLAGS_VISIBILITY!$CXXFLAGS_VISIBILITY$ac_delim
 LIBICONV!$LIBICONV$ac_delim
+GXX_VERSION!$GXX_VERSION$ac_delim
 SDL_CONFIG!$SDL_CONFIG$ac_delim
 SDL_CFLAGS!$SDL_CFLAGS$ac_delim
 SDL_LIBS!$SDL_LIBS$ac_delim
@@ -51785,7 +51908,6 @@ GNOMEVFS_CFLAGS!$GNOMEVFS_CFLAGS$ac_delim
 GNOMEVFS_LIBS!$GNOMEVFS_LIBS$ac_delim
 HILDON_CFLAGS!$HILDON_CFLAGS$ac_delim
 HILDON_LIBS!$HILDON_LIBS$ac_delim
-CAIRO_CFLAGS!$CAIRO_CFLAGS$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -51827,6 +51949,7 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+CAIRO_CFLAGS!$CAIRO_CFLAGS$ac_delim
 CAIRO_LIBS!$CAIRO_LIBS$ac_delim
 GST_CFLAGS!$GST_CFLAGS$ac_delim
 GST_LIBS!$GST_LIBS$ac_delim
@@ -51923,7 +52046,6 @@ SETFILE!$SETFILE$ac_delim
 OBJCXXFLAGS!$OBJCXXFLAGS$ac_delim
 GCC_PCH!$GCC_PCH$ac_delim
 ICC_PCH!$ICC_PCH$ac_delim
-ICC_PCH_CREATE_SWITCH!$ICC_PCH_CREATE_SWITCH$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -51965,6 +52087,7 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+ICC_PCH_CREATE_SWITCH!$ICC_PCH_CREATE_SWITCH$ac_delim
 ICC_PCH_USE_SWITCH!$ICC_PCH_USE_SWITCH$ac_delim
 BK_MAKE_PCH!$BK_MAKE_PCH$ac_delim
 COND_BUILD_DEBUG!$COND_BUILD_DEBUG$ac_delim
@@ -52061,7 +52184,6 @@ COND_SHARED_0_USE_GUI_1_USE_OPENGL_1!$COND_SHARED_0_USE_GUI_1_USE_OPENGL_1$ac_de
 COND_SHARED_0_USE_GUI_1_wxUSE_LIBJPEG_builtin!$COND_SHARED_0_USE_GUI_1_wxUSE_LIBJPEG_builtin$ac_delim
 COND_SHARED_0_USE_GUI_1_wxUSE_LIBPNG_builtin!$COND_SHARED_0_USE_GUI_1_wxUSE_LIBPNG_builtin$ac_delim
 COND_SHARED_0_USE_GUI_1_wxUSE_LIBTIFF_builtin!$COND_SHARED_0_USE_GUI_1_wxUSE_LIBTIFF_builtin$ac_delim
-COND_SHARED_0_USE_STC_1!$COND_SHARED_0_USE_STC_1$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -52103,6 +52225,7 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+COND_SHARED_0_USE_STC_1!$COND_SHARED_0_USE_STC_1$ac_delim
 COND_SHARED_0_wxUSE_EXPAT_builtin!$COND_SHARED_0_wxUSE_EXPAT_builtin$ac_delim
 COND_SHARED_0_wxUSE_REGEX_builtin!$COND_SHARED_0_wxUSE_REGEX_builtin$ac_delim
 COND_SHARED_0_wxUSE_ZLIB_builtin!$COND_SHARED_0_wxUSE_ZLIB_builtin$ac_delim
@@ -52199,7 +52322,6 @@ WX_LIBRARY_BASENAME_GUI!$WX_LIBRARY_BASENAME_GUI$ac_delim
 USE_GUI!$USE_GUI$ac_delim
 AFMINSTALL!$AFMINSTALL$ac_delim
 WIN32INSTALL!$WIN32INSTALL$ac_delim
-TOOLKIT!$TOOLKIT$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -52241,6 +52363,7 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+TOOLKIT!$TOOLKIT$ac_delim
 TOOLKIT_DIR!$TOOLKIT_DIR$ac_delim
 TOOLCHAIN_NAME!$TOOLCHAIN_NAME$ac_delim
 TOOLCHAIN_FULLNAME!$TOOLCHAIN_FULLNAME$ac_delim
@@ -52280,7 +52403,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 37; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 38; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
