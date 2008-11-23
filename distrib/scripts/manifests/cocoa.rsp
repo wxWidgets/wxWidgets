@@ -2,6 +2,7 @@ install-cocoa.txt
 readme-cocoa.txt
 
 include/wx/cocoa/*.h
+include/wx/cocoa/objc/*.h
 src/cocoa/*.cpp
 src/cocoa/*.mm
 src/cocoa/*.r
