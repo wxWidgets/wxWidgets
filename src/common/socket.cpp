@@ -720,6 +720,112 @@ wxSocketBase& wxSocketBase::Discard()
 // Wait functions
 // --------------------------------------------------------------------------
 
+/* GSocket_Select:
+ *  Polls the socket to determine its status. This function will
+ *  check for the events specified in the 'flags' parameter, and
+ *  it will return a mask indicating which operations can be
+ *  performed. This function won't block, regardless of the
+ *  mode (blocking | nonblocking) of the socket.
+ */
+GSocketEventFlags GSocketBase::Select(GSocketEventFlags flags)
+{
+  assert(this);
+
+  GSocketEventFlags result = 0;
+  fd_set readfds;
+  fd_set writefds;
+  fd_set exceptfds;
+  struct timeval tv;
+
+  if (m_fd == -1)
+    return (GSOCK_LOST_FLAG & flags);
+
+  /* Do not use a static struct, Linux can garble it */
+  tv.tv_sec = 0;
+  tv.tv_usec = 0;
+
+  wxFD_ZERO(&readfds);
+  wxFD_ZERO(&writefds);
+  wxFD_ZERO(&exceptfds);
+  wxFD_SET(m_fd, &readfds);
+  if (flags & GSOCK_OUTPUT_FLAG || flags & GSOCK_CONNECTION_FLAG)
+    wxFD_SET(m_fd, &writefds);
+  wxFD_SET(m_fd, &exceptfds);
+
+  /* Check 'sticky' CONNECTION flag first */
+  result |= GSOCK_CONNECTION_FLAG & m_detected;
+
+  /* If we have already detected a LOST event, then don't try
+   * to do any further processing.
+   */
+  if ((m_detected & GSOCK_LOST_FLAG) != 0)
+  {
+    m_establishing = false;
+    return (GSOCK_LOST_FLAG & flags);
+  }
+
+  /* Try select now */
+  if (select(m_fd + 1, &readfds, &writefds, &exceptfds, &tv) < 0)
+  {
+    /* What to do here? */
+    return (result & flags);
+  }
+
+  /* Check for exceptions and errors */
+  if (wxFD_ISSET(m_fd, &exceptfds))
+  {
+    m_establishing = false;
+    m_detected = GSOCK_LOST_FLAG;
+
+    /* LOST event: Abort any further processing */
+    return (GSOCK_LOST_FLAG & flags);
+  }
+
+  /* Check for readability */
+  if (wxFD_ISSET(m_fd, &readfds))
+  {
+    result |= GSOCK_INPUT_FLAG;
+
+    if (m_server && m_stream)
+    {
+      /* This is a TCP server socket that detected a connection.
+         While the INPUT_FLAG is also set, it doesn't matter on
+         this kind of  sockets, as we can only Accept() from them. */
+      m_detected |= GSOCK_CONNECTION_FLAG;
+    }
+  }
+
+  /* Check for writability */
+  if (wxFD_ISSET(m_fd, &writefds))
+  {
+    if (m_establishing && !m_server)
+    {
+      int error;
+      SOCKOPTLEN_T len = sizeof(error);
+      m_establishing = false;
+      getsockopt(m_fd, SOL_SOCKET, SO_ERROR, (char*)&error, &len);
+
+      if (error)
+      {
+        m_detected = GSOCK_LOST_FLAG;
+
+        /* LOST event: Abort any further processing */
+        return (GSOCK_LOST_FLAG & flags);
+      }
+      else
+      {
+        m_detected |= GSOCK_CONNECTION_FLAG;
+      }
+    }
+    else
+    {
+      result |= GSOCK_OUTPUT_FLAG;
+    }
+  }
+
+  return (result | m_detected) & flags;
+}
+
 // All Wait functions poll the socket using GSocket_Select() to
 // check for the specified combination of conditions, until one
 // of these conditions become true, an error occurs, or the
@@ -749,11 +855,6 @@ wxSocketBase::DoWait(long seconds, long milliseconds, wxSocketEventFlags flags)
     if ( wxIsMainThread() )
     {
         eventLoop = wxEventLoop::GetActive();
-
-#ifdef __WXMSW__
-        wxASSERT_MSG( eventLoop,
-                      "Sockets won't work without a running event loop" );
-#endif // __WXMSW__
     }
     else // in worker thread
     {
@@ -808,10 +909,9 @@ wxSocketBase::DoWait(long seconds, long milliseconds, wxSocketEventFlags flags)
 
         if ( eventLoop )
         {
-            // Dispatch the events when we run in the main thread and have an
-            // active event loop: without this sockets don't work at all under
-            // MSW as socket flags are only updated when socket messages are
-            // processed.
+            // This function is only called if wxSOCKET_BLOCK flag was not used
+            // and so we should dispatch the events if there is an event loop
+            // capable of doing it.
             if ( eventLoop->Pending() )
                 eventLoop->Dispatch();
         }

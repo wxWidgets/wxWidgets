@@ -154,6 +154,50 @@ private:
     static GSocketManager *ms_manager;
 };
 
+/*
+    Base class providing functionality common to BSD and Winsock sockets.
+
+    TODO: merge this in wxSocket itself, there is no reason to maintain the
+          separation between wxSocket and GSocket.
+ */
+class GSocketBase
+{
+public:
+    GSocketEventFlags Select(GSocketEventFlags flags);
+
+#ifdef __WINDOWS__
+    SOCKET m_fd;
+#else
+    int m_fd;
+#endif
+
+    bool m_ok;
+    int m_initialRecvBufferSize;
+    int m_initialSendBufferSize;
+
+    GAddress *m_local;
+    GAddress *m_peer;
+    GSocketError m_error;
+
+    bool m_non_blocking;
+    bool m_server;
+    bool m_stream;
+    bool m_establishing;
+    bool m_reusable;
+    bool m_broadcast;
+    bool m_dobind;
+
+#ifdef __WINDOWS__
+    struct timeval m_timeout;
+#else
+    unsigned long m_timeout;
+#endif
+
+    GSocketEventFlags m_detected;
+    GSocketCallback m_cbacks[GSOCK_MAX_EVENT];
+    char *m_data[GSOCK_MAX_EVENT];
+};
+
 #if defined(__WINDOWS__)
     #include "wx/msw/gsockmsw.h"
 #else
@@ -245,6 +289,50 @@ unsigned short GAddress_INET6_GetPort(GAddress *address);
 GSocketError _GAddress_Init_UNIX(GAddress *address);
 GSocketError GAddress_UNIX_SetPath(GAddress *address, const char *path);
 GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf);
+
+// standard linux headers produce many warnings when used with icc
+#if defined(__INTELC__) && defined(__LINUX__)
+    inline void wxFD_ZERO(fd_set *fds)
+    {
+        #pragma warning(push)
+        #pragma warning(disable:593)
+        FD_ZERO(fds);
+        #pragma warning(pop)
+    }
+
+    inline void wxFD_SET(int fd, fd_set *fds)
+    {
+        #pragma warning(push, 1)
+        #pragma warning(disable:1469)
+        FD_SET(fd, fds);
+        #pragma warning(pop)
+    }
+
+    inline bool wxFD_ISSET(int fd, fd_set *fds)
+    {
+        #pragma warning(push, 1)
+        #pragma warning(disable:1469)
+        return FD_ISSET(fd, fds);
+        #pragma warning(pop)
+    }
+    inline bool wxFD_CLR(int fd, fd_set *fds)
+    {
+        #pragma warning(push, 1)
+        #pragma warning(disable:1469)
+        return FD_CLR(fd, fds);
+        #pragma warning(pop)
+    }
+#else // !__INTELC__
+    #define wxFD_ZERO(fds) FD_ZERO(fds)
+    #define wxFD_SET(fd, fds) FD_SET(fd, fds)
+    #define wxFD_ISSET(fd, fds) FD_ISSET(fd, fds)
+    #define wxFD_CLR(fd, fds) FD_CLR(fd, fds)
+#endif // __INTELC__/!__INTELC__
+
+// this is for Windows where configure doesn't define this
+#ifndef SOCKOPTLEN_T
+    #define SOCKOPTLEN_T int
+#endif
 
 #endif /* wxUSE_SOCKETS */
 

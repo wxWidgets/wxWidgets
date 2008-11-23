@@ -13,7 +13,7 @@
 
 class wxGSocketIOHandler;
 
-class GSocket
+class GSocket : public GSocketBase
 {
 public:
     GSocket();
@@ -34,7 +34,6 @@ public:
     GSocketError SetNonOriented();
     int Read(char *buffer, int size);
     int Write(const char *buffer, int size);
-    GSocketEventFlags Select(GSocketEventFlags flags);
     void SetNonBlocking(bool non_block);
     void SetTimeout(unsigned long millisec);
     GSocketError WXDLLIMPEXP_NET GetError();
@@ -66,34 +65,13 @@ protected:
     int Recv_Dgram(char *buffer, int size);
     int Send_Stream(const char *buffer, int size);
     int Send_Dgram(const char *buffer, int size);
-    bool m_ok;
-    int m_initialRecvBufferSize;
-    int m_initialSendBufferSize;
 public:
     /* DFE: We can't protect these data member until the GUI code is updated */
     /* protected: */
-  int m_fd;
   wxGSocketIOHandler *m_handler;
-  GAddress *m_local;
-  GAddress *m_peer;
-  GSocketError m_error;
-
-  bool m_non_blocking;
-  bool m_server;
-  bool m_stream;
-  bool m_establishing;
-  bool m_reusable;
-  bool m_broadcast;
-  bool m_dobind;
-  unsigned long m_timeout;
 
   // true if socket should fire events
   bool m_use_events;
-
-  /* Callbacks */
-  GSocketEventFlags m_detected;
-  GSocketCallback m_cbacks[GSOCK_MAX_EVENT];
-  char *m_data[GSOCK_MAX_EVENT];
 
   // pointer for storing extra (usually GUI-specific) data
   void *m_gui_dependent;

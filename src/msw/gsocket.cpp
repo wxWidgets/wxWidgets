@@ -776,18 +776,6 @@ int GSocket::Write(const char *buffer, int size)
   return ret;
 }
 
-/* GSocket_Select:
- *  Polls the socket to determine its status. This function will
- *  check for the events specified in the 'flags' parameter, and
- *  it will return a mask indicating which operations can be
- *  performed. This function won't block, regardless of the
- *  mode (blocking | nonblocking) of the socket.
- */
-GSocketEventFlags GSocket::Select(GSocketEventFlags flags)
-{
-  return flags & m_detected;
-}
-
 /* Attributes */
 
 /* GSocket_SetNonBlocking:

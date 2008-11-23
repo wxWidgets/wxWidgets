@@ -24,7 +24,7 @@
 #endif
 
 /* Definition of GSocket */
-class GSocket
+class GSocket : public GSocketBase
 {
 public:
   GSocket();
@@ -47,7 +47,6 @@ public:
   GSocketError SetNonOriented();
   int Read(char *buffer, int size);
   int Write(const char *buffer, int size);
-  GSocketEventFlags Select(GSocketEventFlags flags);
   void SetNonBlocking(bool non_block);
   void SetTimeout(unsigned long millis);
   GSocketError WXDLLIMPEXP_NET GetError();
@@ -73,31 +72,10 @@ protected:
   int Recv_Dgram(char *buffer, int size);
   int Send_Stream(const char *buffer, int size);
   int Send_Dgram(const char *buffer, int size);
-  bool m_ok;
-  int m_initialRecvBufferSize;
-  int m_initialSendBufferSize;
 
 /* TODO: Make these protected */
 public:
-  SOCKET m_fd;
-  GAddress *m_local;
-  GAddress *m_peer;
-  GSocketError m_error;
 
-  /* Attributes */
-  bool m_non_blocking;
-  bool m_server;
-  bool m_stream;
-  bool m_establishing;
-  bool m_reusable;
-  bool m_broadcast;
-  bool m_dobind;
-  struct timeval m_timeout;
-
-  /* Callbacks */
-  GSocketEventFlags m_detected;
-  GSocketCallback m_cbacks[GSOCK_MAX_EVENT];
-  char *m_data[GSOCK_MAX_EVENT];
   int m_msgnumber;
 };
 
