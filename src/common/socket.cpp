@@ -1152,34 +1152,6 @@ void wxSocketBase::SetFlags(wxSocketFlags flags)
 // Event handling
 // --------------------------------------------------------------------------
 
-// A note on how events are processed, which is probably the most
-// difficult thing to get working right while keeping the same API
-// and functionality for all platforms.
-//
-// When GSocket detects an event, it calls wx_socket_callback, which in
-// turn just calls wxSocketBase::OnRequest in the corresponding wxSocket
-// object. OnRequest does some housekeeping, and if the event is to be
-// propagated to the user, it creates a new wxSocketEvent object and
-// posts it. The event is not processed immediately, but delayed with
-// AddPendingEvent instead. This is necessary in order to decouple the
-// event processing from wx_socket_callback; otherwise, subsequent IO
-// calls made from the user event handler would fail, as gtk callbacks
-// are not reentrant.
-//
-// Note that, unlike events, user callbacks (now deprecated) are _not_
-// decoupled from wx_socket_callback and thus they suffer from a variety
-// of problems. Avoid them where possible and use events instead.
-
-extern "C"
-void LINKAGEMODE wx_socket_callback(GSocket * WXUNUSED(socket),
-                                    GSocketEvent notification,
-                                    char *cdata)
-{
-    wxSocketBase *sckobj = (wxSocketBase *)cdata;
-
-    sckobj->OnRequest((wxSocketNotify) notification);
-}
-
 void wxSocketBase::OnRequest(wxSocketNotify notification)
 {
     switch(notification)
