@@ -691,6 +691,8 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
 
         if ( flags & wxODCB_PAINTING_CONTROL )
             renderFlags |= wxPGCellRenderer::Control;
+        else
+            renderFlags |= wxPGCellRenderer::ChoicePopup;
 
         if ( flags & wxODCB_PAINTING_SELECTED )
             renderFlags |= wxPGCellRenderer::Selected;

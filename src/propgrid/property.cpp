@@ -149,8 +149,10 @@ int wxPGCellRenderer::PreDrawCell( wxDC& dc, const wxRect& rect, const wxPGCell&
         dc.SetTextForeground(cell.GetFgCol());
     }
 
-    // Draw Background
-    dc.DrawRectangle(rect);
+    // Draw Background, but only if not rendering in control
+    // (as control already has rendered correct background).
+    if ( !(flags & (Control|ChoicePopup)) )
+        dc.DrawRectangle(rect);
 
     const wxBitmap& bmp = cell.GetBitmap();
     if ( bmp.Ok() &&
