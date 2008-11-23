@@ -1553,7 +1553,7 @@ wxDatagramSocket::wxDatagramSocket( const wxSockAddress& addr,
     // Initialize all stuff
     m_connected = false;
     m_establishing = false;
-    m_socket->SetTimeout( m_timeout );
+    m_socket->SetTimeout( m_timeout * 1000 );
     m_socket->SetCallback( GSOCK_INPUT_FLAG | GSOCK_OUTPUT_FLAG |
                            GSOCK_LOST_FLAG | GSOCK_CONNECTION_FLAG,
                            wx_socket_callback, (char*)this );
