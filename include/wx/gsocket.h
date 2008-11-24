@@ -37,7 +37,13 @@ class WXDLLIMPEXP_FWD_NET wxSocketBase;
 #include <stdlib.h>
 #endif
 
-#include <time.h>       // for timeval
+// include the header defining timeval: under Windows this struct is used only
+// with sockets so we need to include winsock.h which we do via windows.h
+#ifdef __WXMSW__
+    #include "wx/msw/wrapwin.h"
+#else
+    #include <sys/time.h>   // for timeval
+#endif
 
 enum GAddressType
 {
