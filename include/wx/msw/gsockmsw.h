@@ -27,7 +27,7 @@
 class GSocket : public GSocketBase
 {
 public:
-    GSocket::GSocket(wxSocketBase& wxsocket)
+    GSocket(wxSocketBase& wxsocket)
         : GSocketBase(wxsocket)
     {
         m_msgnumber = 0;
