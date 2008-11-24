@@ -315,9 +315,16 @@ wxPGWindowList wxPGDatePickerCtrlEditor::CreateControls( wxPropertyGrid* propgri
 #else
     wxSize useSz = sz;
 #endif
+
+    wxDateTime dateValue(wxInvalidDateTime);
+
+    wxVariant value = prop->GetValue();
+    if ( value.GetType() == wxT("datetime") )
+        dateValue = value.GetDateTime();
+
     ctrl->Create(propgrid->GetPanel(),
                  wxPG_SUBID1,
-                 prop->GetDateValue(),
+                 dateValue,
                  pos,
                  useSz,
                  prop->GetDatePickerStyle() | wxNO_BORDER);
