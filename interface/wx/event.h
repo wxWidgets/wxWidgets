@@ -2861,6 +2861,27 @@ public:
     This allows the wxWindow::Close function to return @true or @false depending
     on whether the close instruction was honoured or not.
 
+    Example of a wxCloseEvent handler:
+
+    @code
+        void MyFrame::OnClose(wxCloseEvent& event)
+        {
+            if ( event.CanVeto() && m_bFileNotSaved )
+            {
+                if ( wxMessageBox("The file has not been saved... continue closing?",
+                                  "Please confirm",
+                                  wxICON_QUESTION | wxYES_NO) != wxYES )
+                {
+                    event.Veto();
+                    return;
+                }
+            }
+
+            Destroy();  // you may also do:  event.Skip();
+                        // since the default event handler does call Destroy(), too
+        }
+    @endcode
+
     The EVT_END_SESSION event is slightly different as it is sent by the system
     when the user session is ending (e.g. because of log out or shutdown) and
     so all windows are being forcefully closed. At least under MSW, after the
