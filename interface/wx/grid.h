@@ -7,6 +7,70 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    @class wxGridCellRenderer
+
+    This class is responsible for actually drawing the cell in the grid. You
+    may pass it to the wxGridCellAttr (below) to change the format of one given
+    cell or to wxGrid::SetDefaultRenderer() to change the view of all cells.
+    This is an abstract class, and you will normally use one of the predefined
+    derived classes or derive your own class from it.
+
+    @library{wxadv}
+    @category{grid}
+
+    @see wxGridCellBoolRenderer, wxGridCellFloatRenderer,
+         wxGridCellNumberRenderer, wxGridCellStringRenderer
+*/
+class wxGridCellRenderer
+{
+public:
+    /**
+        This function must be implemented in derived classes to return a copy
+        of itself.
+    */
+    virtual wxGridCellRenderer* Clone() const = 0;
+
+    /**
+        Draw the given cell on the provided DC inside the given rectangle using
+        the style specified by the attribute and the default or selected state
+        corresponding to the isSelected value.
+
+        This pure virtual function has a default implementation which will
+        prepare the DC using the given attribute: it will draw the rectangle
+        with the background colour from attr and set the text colour and font.
+    */
+    virtual void Draw(wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
+                      const wxRect& rect, int row, int col,
+                      bool isSelected) = 0;
+
+    /**
+        Get the preferred size of the cell for its contents.
+    */
+    virtual wxSize GetBestSize(wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
+                               int row, int col) = 0;
+};
+
+/**
+    @class wxGridCellBoolRenderer
+
+    This class may be used to format boolean data in a cell.
+
+    @library{wxadv}
+    @category{grid}
+
+    @see wxGridCellRenderer, wxGridCellFloatRenderer, wxGridCellNumberRenderer,
+         wxGridCellStringRenderer
+*/
+class wxGridCellBoolRenderer : public wxGridCellRenderer
+{
+public:
+    /**
+        Default constructor.
+    */
+    wxGridCellBoolRenderer();
+};
+
+/**
     @class wxGridCellFloatRenderer
 
     This class may be used to format floating point data in a cell.
@@ -52,6 +116,482 @@ public:
         Sets the width.
     */
     void SetWidth(int width);
+};
+
+/**
+    @class wxGridCellNumberRenderer
+
+    This class may be used to format integer data in a cell.
+
+    @library{wxadv}
+    @category{grid}
+
+    @see wxGridCellRenderer, wxGridCellBoolRenderer, wxGridCellFloatRenderer,
+         wxGridCellStringRenderer
+*/
+class wxGridCellNumberRenderer : public wxGridCellStringRenderer
+{
+public:
+    /**
+        Default constructor.
+    */
+    wxGridCellNumberRenderer();
+};
+
+/**
+    @class wxGridCellStringRenderer
+
+    This class may be used to format string data in a cell; it is the default
+    for string cells.
+
+    @library{wxadv}
+    @category{grid}
+
+    @see wxGridCellRenderer, wxGridCellBoolRenderer, wxGridCellFloatRenderer,
+         wxGridCellNumberRenderer
+*/
+class wxGridCellStringRenderer : public wxGridCellRenderer
+{
+public:
+    /**
+        Default constructor.
+    */
+    wxGridCellStringRenderer();
+};
+
+
+
+/**
+    @class wxGridCellEditor
+
+    This class is responsible for providing and manipulating the in-place edit
+    controls for the grid.  Instances of wxGridCellEditor (actually, instances
+    of derived classes since it is an abstract class) can be associated with
+    the cell attributes for individual cells, rows, columns, or even for the
+    entire grid.
+
+    @library{wxadv}
+    @category{grid}
+
+    @see wxGridCellBoolEditor, wxGridCellChoiceEditor, wxGridCellFloatEditor,
+         wxGridCellNumberEditor, wxGridCellTextEditor
+*/
+class wxGridCellEditor
+{
+public:
+    /**
+        Default constructor.
+    */
+    wxGridCellEditor();
+
+    /**
+        Fetch the value from the table and prepare the edit control to begin
+        editing. Sets the focus to the edit control.
+    */
+    virtual void BeginEdit(int row, int col, wxGrid* grid) = 0;
+
+    /**
+        Create a new object which is the copy of this one.
+    */
+    virtual wxGridCellEditor* Clone() const = 0;
+
+    /**
+        Creates the actual edit control.
+    */
+    virtual void Create(wxWindow* parent, wxWindowID id,
+                        wxEvtHandler* evtHandler) = 0;
+
+    /**
+        Final cleanup.
+    */
+    virtual void Destroy();
+
+    /**
+        Complete the editing of the current cell. If necessary, the control may
+        be destroyed.
+
+        @return @true if the value has changed.
+    */
+    virtual bool EndEdit(int row, int col, wxGrid* grid) = 0;
+
+    /**
+        Some types of controls on some platforms may need some help with the
+        Return key.
+    */
+    virtual void HandleReturn(wxKeyEvent& event);
+
+    /**
+        Returns @true if the edit control has been created.
+    */
+    bool IsCreated();
+
+    /**
+        Draws the part of the cell not occupied by the control: the base class
+        version just fills it with background colour from the attribute.
+    */
+    virtual void PaintBackground(const wxRect& rectCell, wxGridCellAttr* attr);
+
+    /**
+        Reset the value in the control back to its starting value.
+    */
+    virtual void Reset() = 0;
+
+    /**
+        Size and position the edit control.
+    */
+    virtual void SetSize(const wxRect& rect);
+
+    /**
+        Show or hide the edit control, use the specified attributes to set
+        colours/fonts for it.
+    */
+    virtual void Show(bool show, wxGridCellAttr* attr = NULL);
+
+    /**
+        If the editor is enabled by clicking on the cell, this method will be
+        called.
+    */
+    virtual void StartingClick();
+
+    /**
+        If the editor is enabled by pressing keys on the grid, this will be
+        called to let the editor do something about that first key if desired.
+    */
+    virtual void StartingKey(wxKeyEvent& event);
+
+protected:
+
+    /**
+        The destructor is private because only DecRef() can delete us.
+    */
+    virtual ~wxGridCellEditor();
+};
+
+/**
+    @class wxGridCellBoolEditor
+
+    Grid cell editor for boolean data.
+
+    @library{wxadv}
+    @category{grid}
+
+    @see wxGridCellEditor, wxGridCellChoiceEditor, wxGridCellFloatEditor,
+         wxGridCellNumberEditor, wxGridCellTextEditor
+*/
+class wxGridCellBoolEditor : public wxGridCellEditor
+{
+public:
+    /**
+        Default constructor.
+    */
+    wxGridCellBoolEditor();
+
+    /**
+        Returns @true if the given @a value is equal to the string
+        representation of the truth value we currently use (see
+        UseStringValues()).
+    */
+    static bool IsTrueValue(const wxString& value);
+
+    /**
+        This method allows you to customize the values returned by GetValue()
+        for the cell using this editor. By default, the default values of the
+        arguments are used, i.e. @c "1" is returned if the cell is checked and
+        an empty string otherwise.
+    */
+    static void UseStringValues(const wxString& valueTrue = "1",
+                                const wxString& valueFalse = wxEmptyString) const;
+};
+
+/**
+    @class wxGridCellChoiceEditor
+
+    Grid cell editor for string data providing the user a choice from a list of
+    strings.
+
+    @library{wxadv}
+    @category{grid}
+
+    @see wxGridCellEditor, wxGridCellBoolEditor, wxGridCellFloatEditor,
+         wxGridCellNumberEditor, wxGridCellTextEditor
+*/
+class wxGridCellChoiceEditor : public wxGridCellEditor
+{
+public:
+    /**
+        @param count
+            Number of strings from which the user can choose.
+        @param choices
+            An array of strings from which the user can choose.
+        @param allowOthers
+            If allowOthers is @true, the user can type a string not in choices
+            array.
+    */
+    wxGridCellChoiceEditor(size_t count = 0,
+                           const wxString choices[] = NULL,
+                           bool allowOthers = false);
+    /**
+        @param choices
+            An array of strings from which the user can choose.
+        @param allowOthers
+            If allowOthers is @true, the user can type a string not in choices
+            array.
+    */
+    wxGridCellChoiceEditor(const wxArrayString& choices,
+                           bool allowOthers = false);
+
+    /**
+        Parameters string format is "item1[,item2[...,itemN]]"
+    */
+    virtual void SetParameters(const wxString& params);
+};
+
+/**
+    @class wxGridCellTextEditor
+
+    Grid cell editor for string/text data.
+
+    @library{wxadv}
+    @category{grid}
+
+    @see wxGridCellEditor, wxGridCellBoolEditor, wxGridCellChoiceEditor,
+         wxGridCellFloatEditor, wxGridCellNumberEditor
+*/
+class wxGridCellTextEditor : public wxGridCellEditor
+{
+public:
+    /**
+        Default constructor.
+    */
+    wxGridCellTextEditor();
+
+    /**
+        The parameters string format is "n" where n is a number representing
+        the maximum width.
+    */
+    virtual void SetParameters(const wxString& params);
+};
+
+/**
+    @class wxGridCellFloatEditor
+
+    The editor for floating point numbers data.
+
+    @library{wxadv}
+    @category{grid}
+
+    @see wxGridCellEditor, wxGridCellNumberEditor, wxGridCellBoolEditor,
+    wxGridCellTextEditor, wxGridCellChoiceEditor
+*/
+class wxGridCellFloatEditor : public wxGridCellTextEditor
+{
+public:
+    /**
+        @param width
+            Minimum number of characters to be shown.
+        @param precision
+            Number of digits after the decimal dot.
+    */
+    wxGridCellFloatEditor(int width = -1, int precision = -1);
+
+    /**
+        Parameters string format is "width,precision"
+    */
+    virtual void SetParameters(const wxString& params);
+};
+
+/**
+    @class wxGridCellNumberEditor
+
+    Grid cell editor for numeric integer data.
+
+    @library{wxadv}
+    @category{grid}
+
+    @see wxGridCellEditor, wxGridCellBoolEditor, wxGridCellChoiceEditor,
+         wxGridCellFloatEditor, wxGridCellTextEditor
+*/
+class wxGridCellNumberEditor : public wxGridCellTextEditor
+{
+public:
+    /**
+        Allows you to specify the range for acceptable data. Values equal to
+        -1 for both @a min and @a max indicate that no range checking should be
+        done.
+    */
+    wxGridCellNumberEditor(int min = -1, int max = -1);
+
+
+    /**
+        Parameters string format is "min,max".
+    */
+    virtual void SetParameters(const wxString& params);
+
+protected:
+
+    /**
+        If the return value is @true, the editor uses a wxSpinCtrl to get user
+        input, otherwise it uses a wxTextCtrl.
+    */
+    bool HasRange() const;
+
+    /**
+        String representation of the value.
+    */
+    wxString GetString() const;
+};
+
+
+
+/**
+    @class wxGridCellAttr
+
+    This class can be used to alter the cells' appearance in the grid by
+    changing their attributes from the defaults. An object of this class may be
+    returned by wxGridTableBase::GetAttr().
+
+    @library{wxadv}
+    @category{grid}
+*/
+class wxGridCellAttr
+{
+public:
+    /**
+        Default constructor.
+    */
+    wxGridCellAttr();
+    /**
+        Constructor specifying some of the often used attributes.
+    */
+    wxGridCellAttr(const wxColour& colText, const wxColour& colBack,
+                   const wxFont& font, int hAlign, int vAlign);
+
+    /**
+        Creates a new copy of this object.
+    */
+    wxGridCellAttr* Clone() const;
+
+    /**
+        This class is reference counted: it is created with ref count of 1, so
+        calling DecRef() once will delete it. Calling IncRef() allows to lock
+        it until the matching DecRef() is called.
+    */
+    void DecRef();
+
+    /**
+        See SetAlignment() for the returned values.
+    */
+    void GetAlignment(int* hAlign, int* vAlign) const;
+
+    /**
+        Returns the background colour.
+    */
+    const wxColour& GetBackgroundColour() const;
+
+    /**
+        Returns the cell editor.
+    */
+    wxGridCellEditor* GetEditor(const wxGrid* grid, int row, int col) const;
+
+    /**
+        Returns the font.
+    */
+    const wxFont& GetFont() const;
+
+    /**
+        Returns the cell renderer.
+    */
+    wxGridCellRenderer* GetRenderer(const wxGrid* grid, int row, int col) const;
+
+    /**
+        Returns the text colour.
+    */
+    const wxColour& GetTextColour() const;
+
+    /**
+        Returns @true if this attribute has a valid alignment set.
+    */
+    bool HasAlignment() const;
+
+    /**
+        Returns @true if this attribute has a valid background colour set.
+    */
+    bool HasBackgroundColour() const;
+
+    /**
+        Returns @true if this attribute has a valid cell editor set.
+    */
+    bool HasEditor() const;
+
+    /**
+        Returns @true if this attribute has a valid font set.
+    */
+    bool HasFont() const;
+
+    /**
+        Returns @true if this attribute has a valid cell renderer set.
+    */
+    bool HasRenderer() const;
+
+    /**
+        Returns @true if this attribute has a valid text colour set.
+    */
+    bool HasTextColour() const;
+
+    /**
+        This class is reference counted: it is created with ref count of 1, so
+        calling DecRef() once will delete it. Calling IncRef() allows to lock
+        it until the matching DecRef() is called.
+    */
+    void IncRef();
+
+    /**
+        Returns @true if this cell is set as read-only.
+    */
+    bool IsReadOnly() const;
+
+    /**
+        Sets the alignment. @a hAlign can be one of @c wxALIGN_LEFT,
+        @c wxALIGN_CENTRE or @c wxALIGN_RIGHT and @a vAlign can be one of
+        @c wxALIGN_TOP, @c wxALIGN_CENTRE or @c wxALIGN_BOTTOM.
+    */
+    void SetAlignment(int hAlign, int vAlign);
+
+    /**
+        Sets the background colour.
+    */
+    void SetBackgroundColour(const wxColour& colBack);
+
+    /**
+        @todo Needs documentation.
+    */
+    void SetDefAttr(wxGridCellAttr* defAttr);
+
+    /**
+        Sets the editor to be used with the cells with this attribute.
+    */
+    void SetEditor(wxGridCellEditor* editor);
+
+    /**
+        Sets the font.
+    */
+    void SetFont(const wxFont& font);
+
+    /**
+        Sets the cell as read-only.
+    */
+    void SetReadOnly(bool isReadOnly = true);
+
+    /**
+        Sets the renderer to be used for cells with this attribute. Takes
+        ownership of the pointer.
+    */
+    void SetRenderer(wxGridCellRenderer* renderer);
+
+    /**
+        Sets the text colour.
+    */
+    void SetTextColour(const wxColour& colText);
 };
 
 
@@ -460,817 +1000,6 @@ public:
         returns @true.
      */
     virtual bool CanHaveAttributes();
-};
-
-
-
-/**
-    @class wxGridCellEditor
-
-    This class is responsible for providing and manipulating the in-place edit
-    controls for the grid.  Instances of wxGridCellEditor (actually, instances
-    of derived classes since it is an abstract class) can be associated with
-    the cell attributes for individual cells, rows, columns, or even for the
-    entire grid.
-
-    @library{wxadv}
-    @category{grid}
-
-    @see wxGridCellBoolEditor, wxGridCellChoiceEditor, wxGridCellFloatEditor,
-         wxGridCellNumberEditor, wxGridCellTextEditor
-*/
-class wxGridCellEditor
-{
-public:
-    /**
-        Default constructor.
-    */
-    wxGridCellEditor();
-
-    /**
-        Fetch the value from the table and prepare the edit control to begin
-        editing. Sets the focus to the edit control.
-    */
-    virtual void BeginEdit(int row, int col, wxGrid* grid) = 0;
-
-    /**
-        Create a new object which is the copy of this one.
-    */
-    virtual wxGridCellEditor* Clone() const = 0;
-
-    /**
-        Creates the actual edit control.
-    */
-    virtual void Create(wxWindow* parent, wxWindowID id,
-                        wxEvtHandler* evtHandler) = 0;
-
-    /**
-        Final cleanup.
-    */
-    virtual void Destroy();
-
-    /**
-        Complete the editing of the current cell. If necessary, the control may
-        be destroyed.
-
-        @return @true if the value has changed.
-    */
-    virtual bool EndEdit(int row, int col, wxGrid* grid) = 0;
-
-    /**
-        Some types of controls on some platforms may need some help with the
-        Return key.
-    */
-    virtual void HandleReturn(wxKeyEvent& event);
-
-    /**
-        Returns @true if the edit control has been created.
-    */
-    bool IsCreated();
-
-    /**
-        Draws the part of the cell not occupied by the control: the base class
-        version just fills it with background colour from the attribute.
-    */
-    virtual void PaintBackground(const wxRect& rectCell, wxGridCellAttr* attr);
-
-    /**
-        Reset the value in the control back to its starting value.
-    */
-    virtual void Reset() = 0;
-
-    /**
-        Size and position the edit control.
-    */
-    virtual void SetSize(const wxRect& rect);
-
-    /**
-        Show or hide the edit control, use the specified attributes to set
-        colours/fonts for it.
-    */
-    virtual void Show(bool show, wxGridCellAttr* attr = NULL);
-
-    /**
-        If the editor is enabled by clicking on the cell, this method will be
-        called.
-    */
-    virtual void StartingClick();
-
-    /**
-        If the editor is enabled by pressing keys on the grid, this will be
-        called to let the editor do something about that first key if desired.
-    */
-    virtual void StartingKey(wxKeyEvent& event);
-
-protected:
-
-    /**
-        The destructor is private because only DecRef() can delete us.
-    */
-    virtual ~wxGridCellEditor();
-};
-
-
-
-/**
-    @class wxGridCellTextEditor
-
-    Grid cell editor for string/text data.
-
-    @library{wxadv}
-    @category{grid}
-
-    @see wxGridCellEditor, wxGridCellBoolEditor, wxGridCellChoiceEditor,
-         wxGridCellFloatEditor, wxGridCellNumberEditor
-*/
-class wxGridCellTextEditor : public wxGridCellEditor
-{
-public:
-    /**
-        Default constructor.
-    */
-    wxGridCellTextEditor();
-
-    /**
-        The parameters string format is "n" where n is a number representing
-        the maximum width.
-    */
-    virtual void SetParameters(const wxString& params);
-};
-
-
-
-/**
-    @class wxGridCellStringRenderer
-
-    This class may be used to format string data in a cell; it is the default
-    for string cells.
-
-    @library{wxadv}
-    @category{grid}
-
-    @see wxGridCellRenderer, wxGridCellBoolRenderer, wxGridCellFloatRenderer,
-         wxGridCellNumberRenderer
-*/
-class wxGridCellStringRenderer : public wxGridCellRenderer
-{
-public:
-    /**
-        Default constructor.
-    */
-    wxGridCellStringRenderer();
-};
-
-
-
-/**
-    @class wxGridCellChoiceEditor
-
-    The editor for string data allowing to choose from a list of strings.
-
-    @library{wxadv}
-    @category{grid}
-
-    @see wxGridCellEditor, wxGridCellBoolEditor, wxGridCellFloatEditor,
-         wxGridCellNumberEditor, wxGridCellTextEditor
-*/
-class wxGridCellChoiceEditor : public wxGridCellEditor
-{
-public:
-    /**
-        @param count
-            Number of strings from which the user can choose.
-        @param choices
-            An array of strings from which the user can choose.
-        @param allowOthers
-            If allowOthers is @true, the user can type a string not in choices
-            array.
-    */
-    wxGridCellChoiceEditor(size_t count = 0,
-                           const wxString choices[] = NULL,
-                           bool allowOthers = false);
-    /**
-        @param choices
-            An array of strings from which the user can choose.
-        @param allowOthers
-            If allowOthers is @true, the user can type a string not in choices
-            array.
-    */
-    wxGridCellChoiceEditor(const wxArrayString& choices,
-                           bool allowOthers = false);
-
-    /**
-        Parameters string format is "item1[,item2[...,itemN]]"
-    */
-    virtual void SetParameters(const wxString& params);
-};
-
-
-
-/**
-    @class wxGridEditorCreatedEvent
-
-    @beginEventTable{wxGridEditorCreatedEvent}
-    @event{EVT_GRID_EDITOR_CREATED(func)}
-        The editor for a cell was created. Processes a
-        @c wxEVT_GRID_EDITOR_CREATED event type.
-    @event{EVT_GRID_CMD_EDITOR_CREATED(id, func)}
-        The editor for a cell was created; variant taking a window identifier.
-        Processes a @c wxEVT_GRID_EDITOR_CREATED event type.
-    @endEventTable
-
-    @library{wxadv}
-    @category{grid}
-*/
-class wxGridEditorCreatedEvent : public wxCommandEvent
-{
-public:
-    /**
-        Default constructor.
-    */
-    wxGridEditorCreatedEvent();
-    /**
-        Constructor for initializing all event attributes.
-    */
-    wxGridEditorCreatedEvent(int id, wxEventType type, wxObject* obj,
-                             int row, int col, wxControl* ctrl);
-
-    /**
-        Returns the column at which the event occurred.
-    */
-    int GetCol();
-
-    /**
-        Returns the edit control.
-    */
-    wxControl* GetControl();
-
-    /**
-        Returns the row at which the event occurred.
-    */
-    int GetRow();
-
-    /**
-        Sets the column at which the event occurred.
-    */
-    void SetCol(int col);
-
-    /**
-        Sets the edit control.
-    */
-    void SetControl(wxControl* ctrl);
-
-    /**
-        Sets the row at which the event occurred.
-    */
-    void SetRow(int row);
-};
-
-
-
-/**
-    @class wxGridRangeSelectEvent
-
-    @beginEventTable{wxGridRangeSelectEvent}
-    @event{EVT_GRID_RANGE_SELECT(func)}
-        The user selected a group of contiguous cells. Processes a
-        @c wxEVT_GRID_RANGE_SELECT event type.
-    @event{EVT_GRID_CMD_RANGE_SELECT(id, func)}
-        The user selected a group of contiguous cells; variant taking a window
-        identifier. Processes a @c wxEVT_GRID_RANGE_SELECT event type.
-    @endEventTable
-
-    @library{wxadv}
-    @category{grid}
-*/
-class wxGridRangeSelectEvent : public wxNotifyEvent
-{
-public:
-    /**
-        Default constructor.
-    */
-    wxGridRangeSelectEvent();
-    /**
-        Constructor for initializing all event attributes.
-    */
-    wxGridRangeSelectEvent(int id, wxEventType type,
-                           wxObject* obj,
-                           const wxGridCellCoords& topLeft,
-                           const wxGridCellCoords& bottomRight,
-                           bool sel = true, bool control = false,
-                           bool shift = false, bool alt = false,
-                           bool meta = false);
-
-    /**
-        Returns @true if the Alt key was down at the time of the event.
-    */
-    bool AltDown() const;
-
-    /**
-        Returns @true if the Control key was down at the time of the event.
-    */
-    bool ControlDown() const;
-
-    /**
-        Top left corner of the rectangular area that was (de)selected.
-    */
-    wxGridCellCoords GetBottomRightCoords();
-
-    /**
-        Bottom row of the rectangular area that was (de)selected.
-    */
-    int GetBottomRow();
-
-    /**
-        Left column of the rectangular area that was (de)selected.
-    */
-    int GetLeftCol();
-
-    /**
-        Right column of the rectangular area that was (de)selected.
-    */
-    int GetRightCol();
-
-    /**
-        Top left corner of the rectangular area that was (de)selected.
-    */
-    wxGridCellCoords GetTopLeftCoords();
-
-    /**
-        Top row of the rectangular area that was (de)selected.
-    */
-    int GetTopRow();
-
-    /**
-        Returns @true if the Meta key was down at the time of the event.
-    */
-    bool MetaDown() const;
-
-    /**
-        Returns @true if the area was selected, @false otherwise.
-    */
-    bool Selecting();
-
-    /**
-        Returns @true if the Shift key was down at the time of the event.
-    */
-    bool ShiftDown() const;
-};
-
-
-
-/**
-    @class wxGridCellRenderer
-
-    This class is responsible for actually drawing the cell in the grid. You
-    may pass it to the wxGridCellAttr (below) to change the format of one given
-    cell or to wxGrid::SetDefaultRenderer() to change the view of all cells.
-    This is an abstract class, and you will normally use one of the predefined
-    derived classes or derive your own class from it.
-
-    @library{wxadv}
-    @category{grid}
-
-    @see wxGridCellBoolRenderer, wxGridCellFloatRenderer,
-         wxGridCellNumberRenderer, wxGridCellStringRenderer
-*/
-class wxGridCellRenderer
-{
-public:
-    /**
-        This function must be implemented in derived classes to return a copy
-        of itself.
-    */
-    virtual wxGridCellRenderer* Clone() const = 0;
-
-    /**
-        Draw the given cell on the provided DC inside the given rectangle using
-        the style specified by the attribute and the default or selected state
-        corresponding to the isSelected value.
-
-        This pure virtual function has a default implementation which will
-        prepare the DC using the given attribute: it will draw the rectangle
-        with the background colour from attr and set the text colour and font.
-    */
-    virtual void Draw(wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
-                      const wxRect& rect, int row, int col,
-                      bool isSelected) = 0;
-
-    /**
-        Get the preferred size of the cell for its contents.
-    */
-    virtual wxSize GetBestSize(wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
-                               int row, int col) = 0;
-};
-
-
-
-/**
-    @class wxGridCellNumberEditor
-
-    Grid cell editor for numeric integer data.
-
-    @library{wxadv}
-    @category{grid}
-
-    @see wxGridCellEditor, wxGridCellBoolEditor, wxGridCellChoiceEditor,
-         wxGridCellFloatEditor, wxGridCellTextEditor
-*/
-class wxGridCellNumberEditor : public wxGridCellTextEditor
-{
-public:
-    /**
-        Allows you to specify the range for acceptable data. Values equal to
-        -1 for both @a min and @a max indicate that no range checking should be
-        done.
-    */
-    wxGridCellNumberEditor(int min = -1, int max = -1);
-
-
-    /**
-        Parameters string format is "min,max".
-    */
-    virtual void SetParameters(const wxString& params);
-
-protected:
-
-    /**
-        If the return value is @true, the editor uses a wxSpinCtrl to get user
-        input, otherwise it uses a wxTextCtrl.
-    */
-    bool HasRange() const;
-
-    /**
-        String representation of the value.
-    */
-    wxString GetString() const;
-};
-
-
-
-/**
-    @class wxGridSizeEvent
-
-    This event class contains information about a row/column resize event.
-
-    @beginEventTable{wxGridSizeEvent}
-    @event{EVT_GRID_COL_SIZE(func)}
-        The user resized a column by dragging it. Processes a
-        @c wxEVT_GRID_COL_SIZE event type.
-    @event{EVT_GRID_ROW_SIZE(func)}
-        The user resized a row by dragging it. Processes a
-        @c wxEVT_GRID_ROW_SIZE event type.
-    @event{EVT_GRID_CMD_COL_SIZE(id, func)}
-        The user resized a column by dragging it; variant taking a window
-        identifier. Processes a @c wxEVT_GRID_COL_SIZE event type.
-    @event{EVT_GRID_CMD_ROW_SIZE(id, func)}
-        The user resized a row by dragging it; variant taking a window
-        identifier. Processes a @c wxEVT_GRID_ROW_SIZE event type.
-    @endEventTable
-
-    @library{wxadv}
-    @category{grid}
-*/
-class wxGridSizeEvent : public wxNotifyEvent
-{
-public:
-    /**
-        Default constructor.
-    */
-    wxGridSizeEvent();
-    /**
-        Constructor for initializing all event attributes.
-    */
-    wxGridSizeEvent(int id, wxEventType type, wxObject* obj,
-                    int rowOrCol = -1, int x = -1, int y = -1,
-                    bool control = false, bool shift = false,
-                    bool alt = false, bool meta = false);
-
-    /**
-        Returns @true if the Alt key was down at the time of the event.
-    */
-    bool AltDown() const;
-
-    /**
-        Returns @true if the Control key was down at the time of the event.
-    */
-    bool ControlDown() const;
-
-    /**
-        Position in pixels at which the event occurred.
-    */
-    wxPoint GetPosition();
-
-    /**
-        Row or column at that was resized.
-    */
-    int GetRowOrCol();
-
-    /**
-        Returns @true if the Meta key was down at the time of the event.
-    */
-    bool MetaDown() const;
-
-    /**
-        Returns @true if the Shift key was down at the time of the event.
-    */
-    bool ShiftDown() const;
-};
-
-
-
-/**
-    @class wxGridCellNumberRenderer
-
-    This class may be used to format integer data in a cell.
-
-    @library{wxadv}
-    @category{grid}
-
-    @see wxGridCellRenderer, wxGridCellBoolRenderer, wxGridCellFloatRenderer,
-         wxGridCellStringRenderer
-*/
-class wxGridCellNumberRenderer : public wxGridCellStringRenderer
-{
-public:
-    /**
-        Default constructor
-    */
-    wxGridCellNumberRenderer();
-};
-
-
-
-/**
-    @class wxGridCellAttr
-
-    This class can be used to alter the cells' appearance in
-    the grid by changing their colour/font/... from default. An object of this
-    class may be returned by wxGridTableBase::GetAttr.
-
-    @library{wxadv}
-    @category{grid}
-*/
-class wxGridCellAttr
-{
-public:
-    //@{
-    /**
-        Constructor specifying some of the often used attributes.
-    */
-    wxGridCellAttr();
-    wxGridCellAttr(const wxColour& colText,
-                   const wxColour& colBack,
-                   const wxFont& font,
-                   int hAlign, int vAlign);
-    //@}
-
-    /**
-        Creates a new copy of this object.
-    */
-    wxGridCellAttr* Clone() const;
-
-    /**
-
-    */
-    void DecRef();
-
-    /**
-        See SetAlignment() for the returned values.
-    */
-    void GetAlignment(int* hAlign, int* vAlign) const;
-
-    /**
-
-    */
-    const wxColour& GetBackgroundColour() const;
-
-    /**
-
-    */
-    wxGridCellEditor* GetEditor(const wxGrid* grid, int row, int col) const;
-
-    /**
-
-    */
-    const wxFont& GetFont() const;
-
-    /**
-
-    */
-    wxGridCellRenderer* GetRenderer(const wxGrid* grid, int row, int col) const;
-
-    /**
-
-    */
-    const wxColour& GetTextColour() const;
-
-    /**
-
-    */
-    bool HasAlignment() const;
-
-    /**
-
-    */
-    bool HasBackgroundColour() const;
-
-    /**
-
-    */
-    bool HasEditor() const;
-
-    /**
-
-    */
-    bool HasFont() const;
-
-    /**
-
-    */
-    bool HasRenderer() const;
-
-    /**
-        accessors
-    */
-    bool HasTextColour() const;
-
-    /**
-        This class is ref counted: it is created with ref count of 1, so
-        calling DecRef() once will delete it. Calling IncRef() allows to lock
-        it until the matching DecRef() is called
-    */
-    void IncRef();
-
-    /**
-
-    */
-    bool IsReadOnly() const;
-
-    /**
-        Sets the alignment. @a hAlign can be one of @c wxALIGN_LEFT,
-        @c wxALIGN_CENTRE or @c wxALIGN_RIGHT and @a vAlign can be one
-        of @c wxALIGN_TOP, @c wxALIGN_CENTRE or @c wxALIGN_BOTTOM.
-    */
-    void SetAlignment(int hAlign, int vAlign);
-
-    /**
-        Sets the background colour.
-    */
-    void SetBackgroundColour(const wxColour& colBack);
-
-    /**
-
-    */
-    void SetDefAttr(wxGridCellAttr* defAttr);
-
-    /**
-
-    */
-    void SetEditor(wxGridCellEditor* editor);
-
-    /**
-        Sets the font.
-    */
-    void SetFont(const wxFont& font);
-
-    /**
-
-    */
-    void SetReadOnly(bool isReadOnly = true);
-
-    /**
-        takes ownership of the pointer
-    */
-    void SetRenderer(wxGridCellRenderer* renderer);
-
-    /**
-        Sets the text colour.
-    */
-    void SetTextColour(const wxColour& colText);
-};
-
-
-
-/**
-    @class wxGridCellBoolRenderer
-
-    This class may be used to format boolean data in a cell.
-    for string cells.
-
-    @library{wxadv}
-    @category{grid}
-
-    @see wxGridCellRenderer, wxGridCellStringRenderer, wxGridCellFloatRenderer,
-    wxGridCellNumberRenderer
-*/
-class wxGridCellBoolRenderer : public wxGridCellRenderer
-{
-public:
-    /**
-        Default constructor
-    */
-    wxGridCellBoolRenderer();
-};
-
-
-
-/**
-    @class wxGridEvent
-
-    This event class contains information about various grid events.
-
-    @library{wxadv}
-    @category{grid}
-*/
-class wxGridEvent : public wxNotifyEvent
-{
-public:
-    //@{
-    /**
-
-    */
-    wxGridEvent();
-    wxGridEvent(int id, wxEventType type, wxObject* obj,
-                int row = -1, int col = -1,
-                int x = -1, int y = -1,
-                bool sel = true,
-                bool control = false,
-                bool shift = false,
-                bool alt = false,
-                bool meta = false);
-    //@}
-
-    /**
-        Returns @true if the Alt key was down at the time of the event.
-    */
-    bool AltDown() const;
-
-    /**
-        Returns @true if the Control key was down at the time of the event.
-    */
-    bool ControlDown() const;
-
-    /**
-        Column at which the event occurred.
-    */
-    virtual int GetCol();
-
-    /**
-        Position in pixels at which the event occurred.
-    */
-    wxPoint GetPosition();
-
-    /**
-        Row at which the event occurred.
-    */
-    virtual int GetRow();
-
-    /**
-        Returns @true if the Meta key was down at the time of the event.
-    */
-    bool MetaDown() const;
-
-    /**
-        Returns @true if the user is selecting grid cells, @false -- if
-        deselecting.
-    */
-    bool Selecting();
-
-    /**
-        Returns @true if the Shift key was down at the time of the event.
-    */
-    bool ShiftDown() const;
-};
-
-
-
-/**
-    @class wxGridCellFloatEditor
-
-    The editor for floating point numbers data.
-
-    @library{wxadv}
-    @category{grid}
-
-    @see wxGridCellEditor, wxGridCellNumberEditor, wxGridCellBoolEditor,
-    wxGridCellTextEditor, wxGridCellChoiceEditor
-*/
-class wxGridCellFloatEditor : public wxGridCellTextEditor
-{
-public:
-    /**
-        @param width
-            Minimum number of characters to be shown.
-        @param precision
-            Number of digits after the decimal dot.
-    */
-    wxGridCellFloatEditor(int width = -1, int precision = -1);
-
-    /**
-        Parameters string format is "width,precision"
-    */
-    virtual void SetParameters(const wxString& params);
 };
 
 
@@ -3079,69 +2808,31 @@ protected:
 
 
 /**
-    @class wxGridCellBoolEditor
-
-    The editor for boolean data.
-
-    @library{wxadv}
-    @category{grid}
-
-    @see wxGridCellEditor, wxGridCellFloatEditor, wxGridCellNumberEditor,
-    wxGridCellTextEditor, wxGridCellChoiceEditor
-*/
-class wxGridCellBoolEditor : public wxGridCellEditor
-{
-public:
-    /**
-        Default constructor.
-    */
-    wxGridCellBoolEditor();
-
-    /**
-        Returns @true if the given @a value is equal to the string representation of
-        the truth value we currently use (see
-        wxGridCellBoolEditor::UseStringValues).
-    */
-    static bool IsTrueValue(const wxString& value);
-
-    /**
-        ,  wxString&@e valueFalse = _T(""))
-        This method allows to customize the values returned by GetValue() method for
-        the cell using this editor. By default, the default values of the arguments are
-        used, i.e. @c "1" is returned if the cell is checked and an empty string
-        otherwise, using this method allows to change this.
-    */
-    static void UseStringValues() const;
-};
-
-
-
-/**
     @class wxGridUpdateLocker
 
-    This small class can be used to prevent wxGrid from redrawing
-    during its lifetime by calling wxGrid::BeginBatch
-    in its constructor and wxGrid::EndBatch in its
-    destructor. It is typically used in a function performing several operations
-    with a grid which would otherwise result in flicker. For example:
+    This small class can be used to prevent wxGrid from redrawing during its
+    lifetime by calling wxGrid::BeginBatch() in its constructor and
+    wxGrid::EndBatch() in its destructor. It is typically used in a function
+    performing several operations with a grid which would otherwise result in
+    flicker. For example:
 
     @code
     void MyFrame::Foo()
-        {
-            m_grid = new wxGrid(this, ...);
+    {
+        m_grid = new wxGrid(this, ...);
 
-            wxGridUpdateLocker noUpdates(m_grid);
-            m_grid-AppendColumn();
-            ... many other operations with m_grid...
-            m_grid-AppendRow();
+        wxGridUpdateLocker noUpdates(m_grid);
+        m_grid-AppendColumn();
+        // ... many other operations with m_grid ...
+        m_grid-AppendRow();
 
-            // destructor called, grid refreshed
-        }
+        // destructor called, grid refreshed
+    }
     @endcode
 
-    Using this class is easier and safer than calling
-    wxGrid::BeginBatch and wxGrid::EndBatch
-    because you don't risk not to call the latter (due to an exception for example).
+    Using this class is easier and safer than calling wxGrid::BeginBatch() and
+    wxGrid::EndBatch() because you don't risk missing the call the latter (due
+    to an exception for example).
 
     @library{wxadv}
     @category{grid}
@@ -3150,25 +2841,399 @@ class wxGridUpdateLocker
 {
 public:
     /**
-        Creates an object preventing the updates of the specified @e grid. The
+        Creates an object preventing the updates of the specified @a grid. The
         parameter could be @NULL in which case nothing is done. If @a grid is
-        non-@NULL then the grid must exist for longer than wxGridUpdateLocker object
-        itself.
-        The default constructor could be followed by a call to
-        Create() to set the
-        grid object later.
+        non-@NULL then the grid must exist for longer than this
+        wxGridUpdateLocker object itself.
+
+        The default constructor could be followed by a call to Create() to set
+        the grid object later.
     */
     wxGridUpdateLocker(wxGrid* grid = NULL);
 
     /**
-        Destructor reenables updates for the grid this object is associated with.
+        Destructor reenables updates for the grid this object is associated
+        with.
     */
     ~wxGridUpdateLocker();
 
     /**
-        This method can be called if the object had been constructed using the default
-        constructor. It must not be called more than once.
+        This method can be called if the object had been constructed using the
+        default constructor. It must not be called more than once.
     */
     void Create(wxGrid* grid);
+};
+
+
+
+/**
+    @class wxGridEvent
+
+    This event class contains information about various grid events.
+
+    @beginEventTable{wxGridEvent}
+    @event{EVT_GRID_CELL_CHANGE(func)}
+        The user changed the data in a cell. Processes a
+        @c wxEVT_GRID_CELL_CHANGE event type.
+    @event{EVT_GRID_CELL_LEFT_CLICK(func)}
+        The user clicked a cell with the left mouse button. Processes a
+        @c wxEVT_GRID_CELL_LEFT_CLICK event type.
+    @event{EVT_GRID_CELL_LEFT_DCLICK(func)}
+        The user double-clicked a cell with the left mouse button. Processes a
+        @c wxEVT_GRID_CELL_LEFT_DCLICK event type.
+    @event{EVT_GRID_CELL_RIGHT_CLICK(func)}
+        The user clicked a cell with the right mouse button. Processes a
+        @c wxEVT_GRID_CELL_RIGHT_CLICK event type.
+    @event{EVT_GRID_CELL_RIGHT_DCLICK(func)}
+        The user double-clicked a cell with the right mouse button. Processes a
+        @c wxEVT_GRID_CELL_RIGHT_DCLICK event type.
+    @event{EVT_GRID_EDITOR_HIDDEN(func)}
+        The editor for a cell was hidden. Processes a
+        @c wxEVT_GRID_EDITOR_HIDDEN event type.
+    @event{EVT_GRID_EDITOR_SHOWN(func)}
+        The editor for a cell was shown. Processes a
+        @c wxEVT_GRID_EDITOR_SHOWN event type.
+    @event{EVT_GRID_LABEL_LEFT_CLICK(func)}
+        The user clicked a label with the left mouse button. Processes a
+        @c wxEVT_GRID_LABEL_LEFT_CLICK event type.
+    @event{EVT_GRID_LABEL_LEFT_DCLICK(func)}
+        The user double-clicked a label with the left mouse button. Processes a
+        @c wxEVT_GRID_LABEL_LEFT_DCLICK event type.
+    @event{EVT_GRID_LABEL_RIGHT_CLICK(func)}
+        The user clicked a label with the right mouse button. Processes a
+        @c wxEVT_GRID_LABEL_RIGHT_CLICK event type.
+    @event{EVT_GRID_LABEL_RIGHT_DCLICK(func)}
+        The user double-clicked a label with the right mouse button. Processes
+        a @c wxEVT_GRID_LABEL_RIGHT_DCLICK event type.
+    @event{EVT_GRID_SELECT_CELL(func)}
+        The user moved to, and selected a cell. Processes a
+        @c wxEVT_GRID_SELECT_CELL event type.
+    @event{EVT_GRID_CMD_CELL_CHANGE(id, func)}
+        The user changed the data in a cell; variant taking a window
+        identifier. Processes a @c wxEVT_GRID_CELL_CHANGE event type.
+    @event{EVT_GRID_CMD_CELL_LEFT_CLICK(id, func)}
+        The user clicked a cell with the left mouse button; variant taking a
+        window identifier. Processes a @c wxEVT_GRID_CELL_LEFT_CLICK event
+        type.
+    @event{EVT_GRID_CMD_CELL_LEFT_DCLICK(id, func)}
+        The user double-clicked a cell with the left mouse button; variant
+        taking a window identifier. Processes a @c wxEVT_GRID_CELL_LEFT_DCLICK
+        event type.
+    @event{EVT_GRID_CMD_CELL_RIGHT_CLICK(id, func)}
+        The user clicked a cell with the right mouse button; variant taking a
+        window identifier. Processes a @c wxEVT_GRID_CELL_RIGHT_CLICK event
+        type.
+    @event{EVT_GRID_CMD_CELL_RIGHT_DCLICK(id, func)}
+        The user double-clicked a cell with the right mouse button; variant
+        taking a window identifier. Processes a @c wxEVT_GRID_CELL_RIGHT_DCLICK
+        event type.
+    @event{EVT_GRID_CMD_EDITOR_HIDDEN(id, func)}
+        The editor for a cell was hidden; variant taking a window identifier.
+        Processes a @c wxEVT_GRID_EDITOR_HIDDEN event type.
+    @event{EVT_GRID_CMD_EDITOR_SHOWN(id, func)}
+        The editor for a cell was shown; variant taking a window identifier.
+        Processes a @c wxEVT_GRID_EDITOR_SHOWN event type.
+    @event{EVT_GRID_CMD_LABEL_LEFT_CLICK(id, func)}
+        The user clicked a label with the left mouse button; variant taking a
+        window identifier. Processes a @c wxEVT_GRID_LABEL_LEFT_CLICK event
+        type.
+    @event{EVT_GRID_CMD_LABEL_LEFT_DCLICK(id, func)}
+        The user double-clicked a label with the left mouse button; variant
+        taking a window identifier. Processes a @c wxEVT_GRID_LABEL_LEFT_DCLICK
+        event type.
+    @event{EVT_GRID_CMD_LABEL_RIGHT_CLICK(id, func)}
+        The user clicked a label with the right mouse button; variant taking a
+        window identifier. Processes a @c wxEVT_GRID_LABEL_RIGHT_CLICK event
+        type.
+    @event{EVT_GRID_CMD_LABEL_RIGHT_DCLICK(id, func)}
+        The user double-clicked a label with the right mouse button; variant
+        taking a window identifier. Processes a
+        @c wxEVT_GRID_LABEL_RIGHT_DCLICK event type.
+    @event{EVT_GRID_CMD_SELECT_CELL(id, func)}
+        The user moved to, and selected a cell; variant taking a window
+        identifier. Processes a @c wxEVT_GRID_SELECT_CELL event type.
+    @endEventTable
+
+    @library{wxadv}
+    @category{grid}
+*/
+class wxGridEvent : public wxNotifyEvent
+{
+public:
+    /**
+        Default constructor.
+    */
+    wxGridEvent();
+    /**
+        Constructor for initializing all event attributes.
+    */
+    wxGridEvent(int id, wxEventType type, wxObject* obj,
+                int row = -1, int col = -1, int x = -1, int y = -1,
+                bool sel = true, bool control = false, bool shift = false,
+                bool alt = false, bool meta = false);
+
+    /**
+        Returns @true if the Alt key was down at the time of the event.
+    */
+    bool AltDown() const;
+
+    /**
+        Returns @true if the Control key was down at the time of the event.
+    */
+    bool ControlDown() const;
+
+    /**
+        Column at which the event occurred.
+    */
+    virtual int GetCol();
+
+    /**
+        Position in pixels at which the event occurred.
+    */
+    wxPoint GetPosition();
+
+    /**
+        Row at which the event occurred.
+    */
+    virtual int GetRow();
+
+    /**
+        Returns @true if the Meta key was down at the time of the event.
+    */
+    bool MetaDown() const;
+
+    /**
+        Returns @true if the user is selecting grid cells, or @false if
+        deselecting.
+    */
+    bool Selecting();
+
+    /**
+        Returns @true if the Shift key was down at the time of the event.
+    */
+    bool ShiftDown() const;
+};
+
+
+
+/**
+    @class wxGridSizeEvent
+
+    This event class contains information about a row/column resize event.
+
+    @beginEventTable{wxGridSizeEvent}
+    @event{EVT_GRID_COL_SIZE(func)}
+        The user resized a column by dragging it. Processes a
+        @c wxEVT_GRID_COL_SIZE event type.
+    @event{EVT_GRID_ROW_SIZE(func)}
+        The user resized a row by dragging it. Processes a
+        @c wxEVT_GRID_ROW_SIZE event type.
+    @event{EVT_GRID_CMD_COL_SIZE(id, func)}
+        The user resized a column by dragging it; variant taking a window
+        identifier. Processes a @c wxEVT_GRID_COL_SIZE event type.
+    @event{EVT_GRID_CMD_ROW_SIZE(id, func)}
+        The user resized a row by dragging it; variant taking a window
+        identifier. Processes a @c wxEVT_GRID_ROW_SIZE event type.
+    @endEventTable
+
+    @library{wxadv}
+    @category{grid}
+*/
+class wxGridSizeEvent : public wxNotifyEvent
+{
+public:
+    /**
+        Default constructor.
+    */
+    wxGridSizeEvent();
+    /**
+        Constructor for initializing all event attributes.
+    */
+    wxGridSizeEvent(int id, wxEventType type, wxObject* obj,
+                    int rowOrCol = -1, int x = -1, int y = -1,
+                    bool control = false, bool shift = false,
+                    bool alt = false, bool meta = false);
+
+    /**
+        Returns @true if the Alt key was down at the time of the event.
+    */
+    bool AltDown() const;
+
+    /**
+        Returns @true if the Control key was down at the time of the event.
+    */
+    bool ControlDown() const;
+
+    /**
+        Position in pixels at which the event occurred.
+    */
+    wxPoint GetPosition();
+
+    /**
+        Row or column at that was resized.
+    */
+    int GetRowOrCol();
+
+    /**
+        Returns @true if the Meta key was down at the time of the event.
+    */
+    bool MetaDown() const;
+
+    /**
+        Returns @true if the Shift key was down at the time of the event.
+    */
+    bool ShiftDown() const;
+};
+
+
+
+/**
+    @class wxGridRangeSelectEvent
+
+    @beginEventTable{wxGridRangeSelectEvent}
+    @event{EVT_GRID_RANGE_SELECT(func)}
+        The user selected a group of contiguous cells. Processes a
+        @c wxEVT_GRID_RANGE_SELECT event type.
+    @event{EVT_GRID_CMD_RANGE_SELECT(id, func)}
+        The user selected a group of contiguous cells; variant taking a window
+        identifier. Processes a @c wxEVT_GRID_RANGE_SELECT event type.
+    @endEventTable
+
+    @library{wxadv}
+    @category{grid}
+*/
+class wxGridRangeSelectEvent : public wxNotifyEvent
+{
+public:
+    /**
+        Default constructor.
+    */
+    wxGridRangeSelectEvent();
+    /**
+        Constructor for initializing all event attributes.
+    */
+    wxGridRangeSelectEvent(int id, wxEventType type,
+                           wxObject* obj,
+                           const wxGridCellCoords& topLeft,
+                           const wxGridCellCoords& bottomRight,
+                           bool sel = true, bool control = false,
+                           bool shift = false, bool alt = false,
+                           bool meta = false);
+
+    /**
+        Returns @true if the Alt key was down at the time of the event.
+    */
+    bool AltDown() const;
+
+    /**
+        Returns @true if the Control key was down at the time of the event.
+    */
+    bool ControlDown() const;
+
+    /**
+        Top left corner of the rectangular area that was (de)selected.
+    */
+    wxGridCellCoords GetBottomRightCoords();
+
+    /**
+        Bottom row of the rectangular area that was (de)selected.
+    */
+    int GetBottomRow();
+
+    /**
+        Left column of the rectangular area that was (de)selected.
+    */
+    int GetLeftCol();
+
+    /**
+        Right column of the rectangular area that was (de)selected.
+    */
+    int GetRightCol();
+
+    /**
+        Top left corner of the rectangular area that was (de)selected.
+    */
+    wxGridCellCoords GetTopLeftCoords();
+
+    /**
+        Top row of the rectangular area that was (de)selected.
+    */
+    int GetTopRow();
+
+    /**
+        Returns @true if the Meta key was down at the time of the event.
+    */
+    bool MetaDown() const;
+
+    /**
+        Returns @true if the area was selected, @false otherwise.
+    */
+    bool Selecting();
+
+    /**
+        Returns @true if the Shift key was down at the time of the event.
+    */
+    bool ShiftDown() const;
+};
+
+
+
+/**
+    @class wxGridEditorCreatedEvent
+
+    @beginEventTable{wxGridEditorCreatedEvent}
+    @event{EVT_GRID_EDITOR_CREATED(func)}
+        The editor for a cell was created. Processes a
+        @c wxEVT_GRID_EDITOR_CREATED event type.
+    @event{EVT_GRID_CMD_EDITOR_CREATED(id, func)}
+        The editor for a cell was created; variant taking a window identifier.
+        Processes a @c wxEVT_GRID_EDITOR_CREATED event type.
+    @endEventTable
+
+    @library{wxadv}
+    @category{grid}
+*/
+class wxGridEditorCreatedEvent : public wxCommandEvent
+{
+public:
+    /**
+        Default constructor.
+    */
+    wxGridEditorCreatedEvent();
+    /**
+        Constructor for initializing all event attributes.
+    */
+    wxGridEditorCreatedEvent(int id, wxEventType type, wxObject* obj,
+                             int row, int col, wxControl* ctrl);
+
+    /**
+        Returns the column at which the event occurred.
+    */
+    int GetCol();
+
+    /**
+        Returns the edit control.
+    */
+    wxControl* GetControl();
+
+    /**
+        Returns the row at which the event occurred.
+    */
+    int GetRow();
+
+    /**
+        Sets the column at which the event occurred.
+    */
+    void SetCol(int col);
+
+    /**
+        Sets the edit control.
+    */
+    void SetControl(wxControl* ctrl);
+
+    /**
+        Sets the row at which the event occurred.
+    */
+    void SetRow(int row);
 };
 
