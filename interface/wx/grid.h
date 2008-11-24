@@ -1008,51 +1008,54 @@ public:
     @class wxGrid
 
     wxGrid and its related classes are used for displaying and editing tabular
-    data.
-    They provide a rich set of features for display, editing, and interacting
-    with a variety of data sources. For simple applications, and to help you
-    get started, wxGrid is the only class you need to refer to directly. It
-    will set up default instances of the other classes and manage them for you.
-    For more complex applications you can derive your own classes for custom
-    grid views, grid data tables, cell editors and renderers. The @ref
-    overview_grid "wxGrid overview" has examples of simple and more complex applications,
+    data. They provide a rich set of features for display, editing, and
+    interacting with a variety of data sources. For simple applications, and to
+    help you get started, wxGrid is the only class you need to refer to
+    directly. It will set up default instances of the other classes and manage
+    them for you. For more complex applications you can derive your own classes
+    for custom grid views, grid data tables, cell editors and renderers. The
+    @ref overview_grid has examples of simple and more complex applications,
     explains the relationship between the various grid classes and has a
     summary of the keyboard shortcuts and mouse functions provided by wxGrid.
-
-    wxGrid has been greatly expanded and redesigned for wxWidgets 2.2 onwards.
-    The new grid classes are reasonably backward-compatible but there are some
-    exceptions. There are also easier ways of doing many things compared to the
-    previous implementation.
 
     A wxGridTableBase class holds the actual data to be displayed by a wxGrid
     class. One or more wxGrid classes may act as a view for one table class.
     The default table class is called wxGridStringTable and holds an array of
-    strings. An instance of such a class is created by wxGrid::CreateGrid.
+    strings. An instance of such a class is created by CreateGrid().
 
     wxGridCellRenderer is the abstract base class for rendereing contents in a
     cell. The following renderers are predefined:
-     - wxGridCellStringRenderer,
-     - wxGridCellBoolRenderer,
-     - wxGridCellFloatRenderer,
-     - wxGridCellNumberRenderer.
+
+    - wxGridCellBoolRenderer
+    - wxGridCellFloatRenderer
+    - wxGridCellNumberRenderer
+    - wxGridCellStringRenderer
+
     The look of a cell can be further defined using wxGridCellAttr. An object
-    of this type may be returned by wxGridTableBase::GetAttr.
+    of this type may be returned by wxGridTableBase::GetAttr().
 
     wxGridCellEditor is the abstract base class for editing the value of a
     cell. The following editors are predefined:
-     - wxGridCellTextEditor
-     - wxGridCellBoolEditor
-     - wxGridCellChoiceEditor
-     - wxGridCellNumberEditor.
+
+    - wxGridCellBoolEditor
+    - wxGridCellChoiceEditor
+    - wxGridCellFloatEditor
+    - wxGridCellNumberEditor
+    - wxGridCellTextEditor
+    
+    Please see wxGridEvent, wxGridSizeEvent, wxGridRangeSelectEvent, and
+    wxGridEditorCreatedEvent for the documentation of all event types you can
+    use with wxGrid.
 
     @library{wxadv}
     @category{grid}
 
-    @see @ref overview_grid "wxGrid overview"
+    @see @ref overview_grid, wxGridUpdateLocker
 */
 class wxGrid : public wxScrolledWindow
 {
 public:
+
     /**
         Different selection modes supported by the grid.
      */
@@ -1079,6 +1082,12 @@ public:
         wxGridSelectColumns
     };
 
+
+    /**
+        @name Constructors and Initialization
+     */
+    //@{
+
     /**
         Default constructor.
 
@@ -1086,19 +1095,26 @@ public:
         CreateGrid() or SetTable() to initialize the grid contents.
      */
     wxGrid();
-
     /**
         Constructor creating the grid window.
 
         You must call either CreateGrid() or SetTable() to initialize the grid
         contents before using it.
     */
-    wxGrid(wxWindow* parent,
-           wxWindowID id,
+    wxGrid(wxWindow* parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            long style = wxWANTS_CHARS,
            const wxString& name = wxGridNameStr);
+
+    /**
+        Destructor.
+
+        This will also destroy the associated grid table unless you passed a
+        table object to the grid and specified that the grid should not take
+        ownership of the table (see SetTable()).
+    */
+    virtual ~wxGrid();
 
     /**
         Creates the grid window for an object initialized using the default
@@ -1107,224 +1123,11 @@ public:
         You must call either CreateGrid() or SetTable() to initialize the grid
         contents before using it.
      */
-    bool Create(wxWindow* parent,
-                wxWindowID id,
+    bool Create(wxWindow* parent, wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxWANTS_CHARS,
                 const wxString& name = wxGridNameStr);
-
-    /**
-        Destructor.
-
-        This will also destroy the associated grid table unless you passed a
-        table object to the grid and specified that the grid should not take
-        ownership of the table (see wxGrid::SetTable).
-    */
-    virtual ~wxGrid();
-
-    /**
-        Appends one or more new columns to the right of the grid.
-
-        The @a updateLabels argument is not used at present. If you are using a
-        derived grid table class you will need to override
-        wxGridTableBase::AppendCols. See InsertCols() for further information.
-
-        @return @true on success or @false if appending columns failed.
-    */
-    bool AppendCols(int numCols = 1, bool updateLabels = true);
-
-    /**
-        Appends one or more new rows to the bottom of the grid.
-
-        The @a updateLabels argument is not used at present. If you are using a
-        derived grid table class you will need to override
-        wxGridTableBase::AppendRows. See InsertRows() for further information.
-
-        @return @true on success or @false if appending rows failed.
-    */
-    bool AppendRows(int numRows = 1, bool updateLabels = true);
-
-    /**
-        Return @true if the horizontal grid lines stop at the last column
-        boundary or @false if they continue to the end of the window.
-
-        The default is to clip grid lines.
-
-        @see ClipHorzGridLines(), AreVertGridLinesClipped()
-     */
-    bool AreHorzGridLinesClipped() const;
-
-    /**
-        Return @true if the vertical grid lines stop at the last row
-        boundary or @false if they continue to the end of the window.
-
-        The default is to clip grid lines.
-
-        @see ClipVertGridLines(), AreHorzGridLinesClipped()
-     */
-    bool AreVertGridLinesClipped() const;
-
-    /**
-        Automatically sets the height and width of all rows and columns to fit their
-        contents.
-    */
-    void AutoSize();
-
-    /**
-        Automatically adjusts width of the column to fit its label.
-    */
-    void AutoSizeColLabelSize(int col);
-
-    /**
-        Automatically sizes the column to fit its contents. If setAsMin is @true the
-        calculated width will
-        also be set as the minimal width for the column.
-    */
-    void AutoSizeColumn(int col, bool setAsMin = true);
-
-    /**
-        Automatically sizes all columns to fit their contents. If setAsMin is @true the
-        calculated widths will
-        also be set as the minimal widths for the columns.
-    */
-    void AutoSizeColumns(bool setAsMin = true);
-
-    /**
-        Automatically sizes the row to fit its contents. If setAsMin is @true the
-        calculated height will
-        also be set as the minimal height for the row.
-    */
-    void AutoSizeRow(int row, bool setAsMin = true);
-
-    /**
-        Automatically adjusts height of the row to fit its label.
-    */
-    void AutoSizeRowLabelSize(int col);
-
-    /**
-        Automatically sizes all rows to fit their contents. If setAsMin is @true the
-        calculated heights will
-        also be set as the minimal heights for the rows.
-    */
-    void AutoSizeRows(bool setAsMin = true);
-
-    /**
-        Increments the grid's batch count.
-
-        When the count is greater than zero repainting of the grid is
-        suppressed. Each call to BeginBatch must be matched by a later call to
-        EndBatch(). Code that does a lot of grid modification can be enclosed
-        between BeginBatch and EndBatch calls to avoid screen flicker. The
-        final EndBatch will cause the grid to be repainted.
-
-        Notice that you should use wxGridUpdateLocker which ensures that there
-        is always a matching EndBatch() call for this BeginBatch() if possible
-        instead of calling this method directly.
-    */
-    void BeginBatch();
-
-    /**
-        Convert grid cell coordinates to grid window pixel coordinates.
-
-        This function returns the rectangle that encloses the block of cells
-        limited by @a topLeft and @a bottomRight cell in device coords and
-        clipped to the client size of the grid window.
-
-        @see CellToRect()
-    */
-    wxRect BlockToDeviceRect(const wxGridCellCoords& topLeft,
-                             const wxGridCellCoords& bottomRight) const;
-
-    /**
-        Returns @true if columns can be moved by dragging with the mouse.
-
-        Columns can be moved by dragging on their labels.
-    */
-    bool CanDragColMove() const;
-
-    /**
-        Returns @true if columns can be resized by dragging with the mouse.
-
-        Columns can be resized by dragging the edges of their labels. If grid
-        line dragging is enabled they can also be resized by dragging the right
-        edge of the column in the grid cell area (see
-        wxGrid::EnableDragGridSize).
-    */
-    bool CanDragColSize() const;
-
-    /**
-        Return @true if the dragging of grid lines to resize rows and columns
-        is enabled or @false otherwise.
-    */
-    bool CanDragGridSize() const;
-
-    /**
-        Returns @true if rows can be resized by dragging with the mouse.
-
-        Rows can be resized by dragging the edges of their labels. If grid line
-        dragging is enabled they can also be resized by dragging the lower edge
-        of the row in the grid cell area (see wxGrid::EnableDragGridSize).
-    */
-    bool CanDragRowSize() const;
-
-    /**
-        Returns @true if the in-place edit control for the current grid cell
-        can be used and @false otherwise.
-
-        This function always returns @false for the read-only cells.
-    */
-    bool CanEnableCellControl() const;
-
-    //@{
-    /**
-        Return the rectangle corresponding to the grid cell's size and position
-        in logical coordinates.
-
-        @see BlockToDeviceRect()
-    */
-    wxRect CellToRect(int row, int col) const;
-    const wxRect CellToRect(const wxGridCellCoords& coords) const;
-
-    //@}
-
-    /**
-        Clears all data in the underlying grid table and repaints the grid.
-
-        The table is not deleted by this function. If you are using a derived
-        table class then you need to override wxGridTableBase::Clear() for this
-        function to have any effect.
-    */
-    void ClearGrid();
-
-    /**
-        Deselects all cells that are currently selected.
-    */
-    void ClearSelection();
-
-    /**
-        Change whether the horizontal grid lines are clipped by the end of the
-        last column.
-
-        By default the grid lines are not drawn beyond the end of the last
-        column but after calling this function with @a clip set to @false they
-        will be drawn across the entire grid window.
-
-        @see AreHorzGridLinesClipped(), ClipVertGridLines()
-     */
-    void ClipHorzGridLines(bool clip);
-
-    /**
-        Change whether the vertical grid lines are clipped by the end of the
-        last row.
-
-        By default the grid lines are not drawn beyond the end of the last
-        row but after calling this function with @a clip set to @false they
-        will be drawn across the entire grid window.
-
-        @see AreVertzGridLinesClipped(), ClipHorzGridLines()
-     */
-    void ClipVertzGridLines(bool clip);
 
     /**
         Creates a grid with the specified initial number of rows and columns.
@@ -1332,6 +1135,7 @@ public:
         Call this directly after the grid constructor. When you use this
         function wxGrid will create and manage a simple table of string values
         for you. All of the grid data will be stored in memory.
+
         For applications with more complex data types or relationships, or for
         dealing with very large datasets, you should derive your own grid table
         class and pass a table object to the grid with SetTable().
@@ -1340,107 +1144,26 @@ public:
                     wxGridSelectionModes selmode = wxGridSelectCells);
 
     /**
-        Deletes one or more columns from a grid starting at the specified
-        position.
+        Passes a pointer to a custom grid table to be used by the grid.
 
-        The @a updateLabels argument is not used at present. If you are using a
-        derived grid table class you will need to override
-        wxGridTableBase::DeleteCols. See InsertCols() for further information.
+        This should be called after the grid constructor and before using the
+        grid object. If @a takeOwnership is set to @true then the table will be
+        deleted by the wxGrid destructor.
 
-        @return @true on success or @false if deleting columns failed.
+        Use this function instead of CreateGrid() when your application
+        involves complex or non-string data or data sets that are too large to
+        fit wholly in memory.
     */
-    bool DeleteCols(int pos = 0, int numCols = 1, bool updateLabels = true);
+    bool SetTable(wxGridTableBase* table, bool takeOwnership = false,
+                  wxGridSelectionModes selmode = wxGridSelectCells);
+
+    //@}
+
 
     /**
-        Deletes one or more rows from a grid starting at the specified position.
-
-        The @a updateLabels argument is not used at present. If you are using a
-        derived grid table class you will need to override
-        wxGridTableBase::DeleteRows. See InsertRows() for further information.
-
-        @return @true on success or @false if appending rows failed.
-    */
-    bool DeleteRows(int pos = 0, int numRows = 1, bool updateLabels = true);
-
-    /**
-        Disables in-place editing of grid cells.
-
-        Equivalent to calling EnableCellEditControl(@false).
-    */
-    void DisableCellEditControl();
-
-    /**
-        Disables column moving by dragging with the mouse.
-
-        Equivalent to passing @false to EnableDragColMove().
-    */
-    void DisableDragColMove();
-
-    /**
-        Disables column sizing by dragging with the mouse.
-
-        Equivalent to passing @false to EnableDragColSize().
-    */
-    void DisableDragColSize();
-
-    /**
-        Disable mouse dragging of grid lines to resize rows and columns.
-
-        Equivalent to passing @false to EnableDragGridSize()
-    */
-    void DisableDragGridSize();
-
-    /**
-        Disables row sizing by dragging with the mouse.
-
-        Equivalent to passing @false to EnableDragRowSize().
-    */
-    void DisableDragRowSize();
-
-    /**
-        Enables or disables in-place editing of grid cell data.
-
-        The grid will issue either a wxEVT_GRID_EDITOR_SHOWN or
-        wxEVT_GRID_EDITOR_HIDDEN event.
-    */
-    void EnableCellEditControl(bool enable = true);
-
-    /**
-        Enables or disables column moving by dragging with the mouse.
-    */
-    void EnableDragColMove(bool enable = true);
-
-    /**
-        Enables or disables column sizing by dragging with the mouse.
-    */
-    void EnableDragColSize(bool enable = true);
-
-    /**
-        Enables or disables row and column resizing by dragging gridlines with the
-        mouse.
-    */
-    void EnableDragGridSize(bool enable = true);
-
-    /**
-        Enables or disables row sizing by dragging with the mouse.
-    */
-    void EnableDragRowSize(bool enable = true);
-
-    /**
-        Makes the grid globally editable or read-only.
-
-        If the edit argument is @false this function sets the whole grid as
-        read-only. If the argument is @true the grid is set to the default
-        state where cells may be editable. In the default state you can set
-        single grid cells and whole rows and columns to be editable or
-        read-only via wxGridCellAttribute::SetReadOnly. For single cells you
-        can also use the shortcut function SetReadOnly().
-
-        For more information about controlling grid cell attributes see the
-        wxGridCellAttr cell attribute class and the
-        @ref overview_grid "wxGrid overview".
-    */
-    void EnableEditing(bool edit);
+        @name Grid Line Formatting
+     */
+    //@{
 
     /**
         Turns the drawing of grid lines on or off.
@@ -1448,36 +1171,224 @@ public:
     void EnableGridLines(bool enable = true);
 
     /**
-        Decrements the grid's batch count.
+        Returns the pen used for vertical grid lines.
 
-        When the count is greater than zero repainting of the grid is
-        suppressed. Each previous call to BeginBatch() must be matched by a
-        later call to EndBatch. Code that does a lot of grid modification can
-        be enclosed between BeginBatch and EndBatch calls to avoid screen
-        flicker. The final EndBatch will cause the grid to be repainted.
+        This virtual function may be overridden in derived classes in order to
+        change the appearance of individual grid lines for the given column
+        @a col.
 
-        @see wxGridUpdateLocker
+        See GetRowGridLinePen() for an example.
     */
-    void EndBatch();
+    virtual wxPen GetColGridLinePen(int col);
 
     /**
-        Overridden wxWindow method.
+        Returns the pen used for grid lines.
+
+        This virtual function may be overridden in derived classes in order to
+        change the appearance of grid lines. Note that currently the pen width
+        must be 1.
+
+        @see GetColGridLinePen(), GetRowGridLinePen()
     */
-    virtual void Fit();
+    virtual wxPen GetDefaultGridLinePen();
 
     /**
-        Causes immediate repainting of the grid.
+        Returns the colour used for grid lines.
 
-        Use this instead of the usual wxWindow::Refresh.
+        @see GetDefaultGridLinePen()
     */
-    void ForceRefresh();
+    wxColour GetGridLineColour() const;
 
     /**
-        Returns the number of times that BeginBatch() has been called
-        without (yet) matching calls to EndBatch(). While
-        the grid's batch count is greater than zero the display will not be updated.
+        Returns the pen used for horizontal grid lines.
+
+        This virtual function may be overridden in derived classes in order to
+        change the appearance of individual grid line for the given @a row.
+
+        Example:
+        @code
+        // in a grid displaying music notation, use a solid black pen between
+        // octaves (C0=row 127, C1=row 115 etc.)
+        wxPen MidiGrid::GetRowGridLinePen(int row)
+        {
+            if ( row % 12 == 7 )
+                return wxPen(*wxBLACK, 1, wxSOLID);
+            else
+                return GetDefaultGridLinePen();
+        }
+        @endcode
     */
-    int GetBatchCount();
+    virtual wxPen GetRowGridLinePen(int row);
+
+    /**
+        Returns @true if drawing of grid lines is turned on, @false otherwise.
+    */
+    bool GridLinesEnabled() const;
+
+    /**
+        Sets the colour used to draw grid lines.
+    */
+    void SetGridLineColour(const wxColour& colour);
+
+    //@}
+
+
+    /**
+        @name Label Values and Formatting
+     */
+    //@{
+
+    /**
+        Sets the arguments to the current column label alignment values.
+
+        Horizontal alignment will be one of @c wxALIGN_LEFT, @c wxALIGN_CENTRE
+        or @c wxALIGN_RIGHT.
+
+        Vertical alignment will be one of @c wxALIGN_TOP, @c wxALIGN_CENTRE or
+        @c wxALIGN_BOTTOM.
+    */
+    void GetColLabelAlignment(int* horiz, int* vert) const;
+
+    /**
+        Returns the orientation of the column labels (either @c wxHORIZONTAL or
+        @c wxVERTICAL).
+    */
+    int GetColLabelTextOrientation() const;
+
+    /**
+        Returns the specified column label.
+
+        The default grid table class provides column labels of the form
+        A,B...Z,AA,AB...ZZ,AAA... If you are using a custom grid table you can
+        override wxGridTableBase::GetColLabelValue() to provide your own
+        labels.
+    */
+    wxString GetColLabelValue(int col) const;
+
+    /**
+        Returns the colour used for the background of row and column labels.
+    */
+    wxColour GetLabelBackgroundColour() const;
+
+    /**
+        Returns the font used for row and column labels.
+    */
+    wxFont GetLabelFont() const;
+
+    /**
+        Returns the colour used for row and column label text.
+    */
+    wxColour GetLabelTextColour() const;
+
+    /**
+        Returns the alignment used for row labels.
+
+        Horizontal alignment will be one of @c wxALIGN_LEFT, @c wxALIGN_CENTRE
+        or @c wxALIGN_RIGHT.
+
+        Vertical alignment will be one of @c wxALIGN_TOP, @c wxALIGN_CENTRE or
+        @c wxALIGN_BOTTOM.
+    */
+    void GetRowLabelAlignment(int* horiz, int* vert) const;
+
+    /**
+        Returns the specified row label.
+
+        The default grid table class provides numeric row labels. If you are
+        using a custom grid table you can override
+        wxGridTableBase::GetRowLabelValue() to provide your own labels.
+    */
+    wxString GetRowLabelValue(int row) const;
+
+    /**
+        Hides the column labels by calling SetColLabelSize() with a size of 0.
+        Show labels again by calling that method with a width greater than 0.
+    */
+    void HideColLabels();
+
+    /**
+        Hides the row labels by calling SetRowLabelSize() with a size of 0.
+
+        The labels can be shown again by calling SetRowLabelSize() with a width
+        greater than 0.
+    */
+    void HideRowLabels();
+
+    /**
+        Sets the horizontal and vertical alignment of column label text.
+
+        Horizontal alignment should be one of @c wxALIGN_LEFT,
+        @c wxALIGN_CENTRE or @c wxALIGN_RIGHT. Vertical alignment should be one
+        of @c wxALIGN_TOP, @c wxALIGN_CENTRE or @c wxALIGN_BOTTOM.
+    */
+    void SetColLabelAlignment(int horiz, int vert);
+
+    /**
+        Sets the orientation of the column labels (either @c wxHORIZONTAL or
+        @c wxVERTICAL).
+    */
+    void SetColLabelTextOrientation(int textOrientation);
+
+    /**
+        Set the value for the given column label.
+
+        If you are using a custom grid table you must override
+        wxGridTableBase::SetColLabelValue() for this to have any effect.
+    */
+    void SetColLabelValue(int col, const wxString& value);
+
+    /**
+        Sets the background colour for row and column labels.
+    */
+    void SetLabelBackgroundColour(const wxColour& colour);
+
+    /**
+        Sets the font for row and column labels.
+    */
+    void SetLabelFont(const wxFont& font);
+
+    /**
+        Sets the colour for row and column label text.
+    */
+    void SetLabelTextColour(const wxColour& colour);
+
+    /**
+        Sets the horizontal and vertical alignment of row label text.
+
+        Horizontal alignment should be one of @c wxALIGN_LEFT,
+        @c wxALIGN_CENTRE or @c wxALIGN_RIGHT. Vertical alignment should be one
+        of @c wxALIGN_TOP, @c wxALIGN_CENTRE or @c wxALIGN_BOTTOM.
+    */
+    void SetRowLabelAlignment(int horiz, int vert);
+
+    /**
+        Sets the value for the given row label.
+
+        If you are using a derived grid table you must override
+        wxGridTableBase::SetRowLabelValue() for this to have any effect.
+    */
+    void SetRowLabelValue(int row, const wxString& value);
+
+    /**
+        Call this in order to make the column labels use a native look by using
+        wxRenderer::DrawHeaderButton() internally.
+
+        There is no equivalent method for drawing row columns as there is not
+        native look for that. This option is useful when using wxGrid for
+        displaying tables and not as a spread-sheet.
+    */
+    void SetUseNativeColLabels(bool native = true);
+
+    //@}
+
+
+    /**
+        @name Cell Formatting
+
+        Note that wxGridCellAttr can be used alternatively to most of these
+        methods. See the "Attributes Management" of wxGridTableBase.
+     */
+    //@{
 
     /**
         Sets the arguments to the horizontal and vertical text alignment values
@@ -1497,112 +1408,14 @@ public:
     wxColour GetCellBackgroundColour(int row, int col) const;
 
     /**
-        Returns a pointer to the editor for the cell at the specified location.
-
-        See wxGridCellEditor and the @ref overview_grid "wxGrid overview"
-        for more information about cell editors and renderers.
-
-        The caller must call DecRef() on the returned pointer.
-    */
-    wxGridCellEditor* GetCellEditor(int row, int col) const;
-
-    /**
         Returns the font for text in the grid cell at the specified location.
     */
     wxFont GetCellFont(int row, int col) const;
 
     /**
-        Returns a pointer to the renderer for the grid cell at the specified
-        location.
-
-        See wxGridCellRenderer and the @ref overview_grid "wxGrid overview"
-        for more information about cell editors and renderers.
-
-        The caller must call DecRef() on the returned pointer.
-    */
-    wxGridCellRenderer* GetCellRenderer(int row, int col) const;
-
-    /**
         Returns the text colour for the grid cell at the specified location.
     */
     wxColour GetCellTextColour(int row, int col) const;
-
-    //@{
-    /**
-        Returns the string contained in the cell at the specified location.
-
-        For simple applications where a grid object automatically uses a
-        default grid table of string values you use this function together with
-        SetCellValue() to access cell values. For more complex applications
-        where you have derived your own grid table class that contains various
-        data types (e.g. numeric, boolean or user-defined custom types) then
-        you only use this function for those cells that contain string values.
-
-        See wxGridTableBase::CanGetValueAs and the @ref overview_grid "wxGrid overview"
-        for more information.
-    */
-    wxString GetCellValue(int row, int col) const;
-    const wxString  GetCellValue(const wxGridCellCoords& coords) const;
-    //@}
-
-    /**
-        Returns the column ID of the specified column position.
-    */
-    int GetColAt(int colPos) const;
-
-    /**
-        Returns the pen used for vertical grid lines.
-
-        This virtual function may be overridden in derived classes in order to
-        change the appearance of individual grid lines for the given column @e
-        col.
-
-        See GetRowGridLinePen() for an example.
-    */
-    virtual wxPen GetColGridLinePen(int col);
-
-    /**
-        Sets the arguments to the current column label alignment values.
-
-        Horizontal alignment will be one of @c wxALIGN_LEFT, @c wxALIGN_CENTRE
-        or @c wxALIGN_RIGHT.
-
-        Vertical alignment will be one of @c wxALIGN_TOP, @c wxALIGN_CENTRE or
-        @c wxALIGN_BOTTOM.
-    */
-    void GetColLabelAlignment(int* horiz, int* vert) const;
-
-    /**
-        Returns the current height of the column labels.
-    */
-    int GetColLabelSize() const;
-
-    /**
-        Returns the specified column label.
-
-        The default grid table class provides column labels of the form
-        A,B...Z,AA,AB...ZZ,AAA... If you are using a custom grid table you can
-        override wxGridTableBase::GetColLabelValue to provide your own labels.
-    */
-    wxString GetColLabelValue(int col) const;
-
-    /**
-        Returns the minimal width to which a column may be resized.
-
-        Use SetColMinimalAcceptableWidth() to change this value globally or
-        SetColMinimalWidth() to do it for individual columns.
-    */
-    int GetColMinimalAcceptableWidth() const;
-
-    /**
-        Returns the position of the specified column.
-    */
-    int GetColPos(int colID) const;
-
-    /**
-        Returns the width of the specified column.
-    */
-    int GetColSize(int col) const;
 
     /**
         Returns the default cell alignment.
@@ -1633,24 +1446,182 @@ public:
     wxColour GetDefaultCellTextColour() const;
 
     /**
-        Returns the default height for column labels.
+        Sets the horizontal and vertical alignment for grid cell text at the
+        specified location.
+
+        Horizontal alignment should be one of @c wxALIGN_LEFT,
+        @c wxALIGN_CENTRE or @c wxALIGN_RIGHT.
+
+        Vertical alignment should be one of @c wxALIGN_TOP, @c wxALIGN_CENTRE
+        or @c wxALIGN_BOTTOM.
     */
-    int GetDefaultColLabelSize() const;
+    void SetCellAlignment(int row, int col, int horiz, int vert);
+    /**
+        Sets the horizontal and vertical alignment for grid cell text at the
+        specified location.
+
+        Horizontal alignment should be one of @c wxALIGN_LEFT,
+        @c wxALIGN_CENTRE or @c wxALIGN_RIGHT.
+
+        Vertical alignment should be one of @c wxALIGN_TOP, @c wxALIGN_CENTRE
+        or @c wxALIGN_BOTTOM.
+    */
+    void SetCellAlignment(int align, int row, int col);
 
     /**
-        Returns the current default width for grid columns.
+        Set the background colour for the given cell or all cells by default.
     */
-    int GetDefaultColSize() const;
+    void SetCellBackgroundColour(int row, int col, const wxColour& colour);
+
+    /**
+        Sets the font for text in the grid cell at the specified location.
+    */
+    void SetCellFont(int row, int col, const wxFont& font);
+
+    /**
+        Sets the text colour for the given cell.
+    */
+    void SetCellTextColour(int row, int col, const wxColour& colour);
+    /**
+        Sets the text colour for the given cell.
+    */
+    void SetCellTextColour(const wxColour& val, int row, int col);
+    /**
+        Sets the text colour for all cells by default.
+    */
+    void SetCellTextColour(const wxColour& colour);
+
+    /**
+        Sets the default horizontal and vertical alignment for grid cell text.
+
+        Horizontal alignment should be one of @c wxALIGN_LEFT,
+        @c wxALIGN_CENTRE or @c wxALIGN_RIGHT. Vertical alignment should be one
+        of @c wxALIGN_TOP, @c wxALIGN_CENTRE or @c wxALIGN_BOTTOM.
+    */
+    void SetDefaultCellAlignment(int horiz, int vert);
+
+    /**
+        Sets the default background colour for grid cells.
+    */
+    void SetDefaultCellBackgroundColour(const wxColour& colour);
+
+    /**
+        Sets the default font to be used for grid cell text.
+    */
+    void SetDefaultCellFont(const wxFont& font);
+
+    /**
+        Sets the current default colour for grid cell text.
+    */
+    void SetDefaultCellTextColour(const wxColour& colour);
+
+    //@}
+
+
+    /**
+        @name Cell Values, Editors, and Renderers
+
+        Note that wxGridCellAttr can be used alternatively to most of these
+        methods. See the "Attributes Management" of wxGridTableBase.
+     */
+    //@{
+
+    /**
+        Returns @true if the in-place edit control for the current grid cell
+        can be used and @false otherwise.
+
+        This function always returns @false for the read-only cells.
+    */
+    bool CanEnableCellControl() const;
+
+    /**
+        Disables in-place editing of grid cells.
+
+        Equivalent to calling EnableCellEditControl(@false).
+    */
+    void DisableCellEditControl();
+
+    /**
+        Enables or disables in-place editing of grid cell data.
+
+        The grid will issue either a @c wxEVT_GRID_EDITOR_SHOWN or
+        @c wxEVT_GRID_EDITOR_HIDDEN event.
+    */
+    void EnableCellEditControl(bool enable = true);
+
+    /**
+        Makes the grid globally editable or read-only.
+
+        If the edit argument is @false this function sets the whole grid as
+        read-only. If the argument is @true the grid is set to the default
+        state where cells may be editable. In the default state you can set
+        single grid cells and whole rows and columns to be editable or
+        read-only via wxGridCellAttr::SetReadOnly(). For single cells you
+        can also use the shortcut function SetReadOnly().
+
+        For more information about controlling grid cell attributes see the
+        wxGridCellAttr class and the @ref overview_grid.
+    */
+    void EnableEditing(bool edit);
+
+    /**
+        Returns a pointer to the editor for the cell at the specified location.
+
+        See wxGridCellEditor and the @ref overview_grid for more information
+        about cell editors and renderers.
+
+        The caller must call DecRef() on the returned pointer.
+    */
+    wxGridCellEditor* GetCellEditor(int row, int col) const;
+
+    /**
+        Returns a pointer to the renderer for the grid cell at the specified
+        location.
+
+        See wxGridCellRenderer and the @ref overview_grid for more information
+        about cell editors and renderers.
+
+        The caller must call DecRef() on the returned pointer.
+    */
+    wxGridCellRenderer* GetCellRenderer(int row, int col) const;
+
+    /**
+        Returns the string contained in the cell at the specified location.
+
+        For simple applications where a grid object automatically uses a
+        default grid table of string values you use this function together with
+        SetCellValue() to access cell values. For more complex applications
+        where you have derived your own grid table class that contains various
+        data types (e.g. numeric, boolean or user-defined custom types) then
+        you only use this function for those cells that contain string values.
+
+        See wxGridTableBase::CanGetValueAs() and the @ref overview_grid for
+        more information.
+    */
+    wxString GetCellValue(int row, int col) const;
+    /**
+        Returns the string contained in the cell at the specified location.
+
+        For simple applications where a grid object automatically uses a
+        default grid table of string values you use this function together with
+        SetCellValue() to access cell values. For more complex applications
+        where you have derived your own grid table class that contains various
+        data types (e.g. numeric, boolean or user-defined custom types) then
+        you only use this function for those cells that contain string values.
+
+        See wxGridTableBase::CanGetValueAs() and the @ref overview_grid for
+        more information.
+    */
+    const wxString GetCellValue(const wxGridCellCoords& coords) const;
 
     /**
         Returns a pointer to the current default grid cell editor.
 
-        See wxGridCellEditor and the @ref overview_grid "wxGrid overview"
-        for more information about cell editors and renderers.
+        See wxGridCellEditor and the @ref overview_grid for more information
+        about cell editors and renderers.
     */
     wxGridCellEditor* GetDefaultEditor() const;
 
-    //@{
     /**
         Returns the default editor for the specified cell.
 
@@ -1658,14 +1629,25 @@ public:
         cell type but this method may be overridden in the derived classes to
         use custom editors for some cells by default.
 
-        Notice that the same may be usually achieved in simpler way by
+        Notice that the same may be achieved in a usually simpler way by
         associating a custom editor with the given cell or cells.
 
         The caller must call DecRef() on the returned pointer.
     */
     virtual wxGridCellEditor* GetDefaultEditorForCell(int row, int col) const;
-    wxGridCellEditor*  GetDefaultEditorForCell(const wxGridCellCoords& c) const;
-    //@}
+    /**
+        Returns the default editor for the specified cell.
+
+        The base class version returns the editor appropriate for the current
+        cell type but this method may be overridden in the derived classes to
+        use custom editors for some cells by default.
+
+        Notice that the same may be achieved in a usually simpler way by
+        associating a custom editor with the given cell or cells.
+
+        The caller must call DecRef() on the returned pointer.
+    */
+    wxGridCellEditor* GetDefaultEditorForCell(const wxGridCellCoords& c) const;
 
     /**
         Returns the default editor for the cells containing values of the given
@@ -1678,25 +1660,13 @@ public:
 
         The caller must call DecRef() on the returned pointer.
     */
-    virtual wxGridCellEditor *
-    GetDefaultEditorForType(const wxString& typeName) const;
-
-    /**
-        Returns the pen used for grid lines.
-
-        This virtual function may be overridden in derived classes in order to
-        change the appearance of grid lines. Note that currently the pen width
-        must be 1.
-
-        @see GetColGridLinePen(), GetRowGridLinePen()
-    */
-    virtual wxPen GetDefaultGridLinePen();
+    virtual wxGridCellEditor* GetDefaultEditorForType(const wxString& typeName) const;
 
     /**
         Returns a pointer to the current default grid cell renderer.
 
-        See wxGridCellRenderer and the @ref overview_grid "wxGrid overview"
-        for more information about cell editors and renderers.
+        See wxGridCellRenderer and the @ref overview_grid for more information
+        about cell editors and renderers.
 
         The caller must call DecRef() on the returned pointer.
     */
@@ -1711,7 +1681,7 @@ public:
 
         The caller must call DecRef() on the returned pointer.
     */
-    virtual wxGridCellRenderer *GetDefaultRendererForCell(int row, int col) const;
+    virtual wxGridCellRenderer* GetDefaultRendererForCell(int row, int col) const;
 
     /**
         Returns the default renderer for the cell containing values of the
@@ -1719,323 +1689,12 @@ public:
 
         @see GetDefaultEditorForType()
     */
-    virtual wxGridCellRenderer *
-    GetDefaultRendererForType(const wxString& typeName) const;
-
-    /**
-        Returns the default width for the row labels.
-    */
-    int GetDefaultRowLabelSize() const;
-
-    /**
-        Returns the current default height for grid rows.
-    */
-    int GetDefaultRowSize() const;
-
-    /**
-        Returns the current grid cell column position.
-    */
-    int GetGridCursorCol() const;
-
-    /**
-        Returns the current grid cell row position.
-    */
-    int GetGridCursorRow() const;
-
-    /**
-        Returns the colour used for grid lines.
-
-        @see GetDefaultGridLinePen()
-    */
-    wxColour GetGridLineColour() const;
-
-    /**
-        Returns the colour used for the background of row and column labels.
-    */
-    wxColour GetLabelBackgroundColour() const;
-
-    /**
-        Returns the font used for row and column labels.
-    */
-    wxFont GetLabelFont() const;
-
-    /**
-        Returns the colour used for row and column label text.
-    */
-    wxColour GetLabelTextColour() const;
-
-    /**
-        Returns the total number of grid columns.
-
-        This is the same as the number of columns in the underlying grid
-        table.
-    */
-    int GetNumberCols() const;
-
-    /**
-        Returns the total number of grid rows.
-
-        This is the same as the number of rows in the underlying grid table.
-    */
-    int GetNumberRows() const;
-
-    /**
-        Returns the attribute for the given cell creating one if necessary.
-
-        If the cell already has an attribute, it is returned. Otherwise a new
-        attribute is created, associated with the cell and returned. In any
-        case the caller must call DecRef() on the returned pointer.
-
-        This function may only be called if CanHaveAttributes() returns @true.
-    */
-    wxGridCellAttr *GetOrCreateCellAttr(int row, int col) const;
-
-    /**
-        Returns the pen used for horizontal grid lines.
-
-        This virtual function may be overridden in derived classes in order to
-        change the appearance of individual grid line for the given row @e row.
-
-        Example:
-        @code
-           // in a grid displaying music notation, use a solid black pen between
-           // octaves (C0=row 127, C1=row 115 etc.)
-           wxPen MidiGrid::GetRowGridLinePen(int row)
-           {
-               if ( row % 12 == 7 )
-                  return wxPen(*wxBLACK, 1, wxSOLID);
-               else
-                  return GetDefaultGridLinePen();
-           }
-        @endcode
-    */
-    virtual wxPen GetRowGridLinePen(int row);
-
-    /**
-        Returns the alignment used for row labels.
-
-        Horizontal alignment will be one of @c wxALIGN_LEFT, @c wxALIGN_CENTRE
-        or @c wxALIGN_RIGHT.
-
-        Vertical alignment will be one of @c wxALIGN_TOP, @c wxALIGN_CENTRE or
-        @c wxALIGN_BOTTOM.
-    */
-    void GetRowLabelAlignment(int* horiz, int* vert) const;
-
-    /**
-        Returns the current width of the row labels.
-    */
-    int GetRowLabelSize() const;
-
-    /**
-        Returns the specified row label.
-
-        The default grid table class provides numeric row labels. If you are
-        using a custom grid table you can override
-        wxGridTableBase::GetRowLabelValue to provide your own labels.
-    */
-    wxString GetRowLabelValue(int row) const;
-
-    /**
-        Returns the minimal size to which rows can be resized.
-
-        Use SetRowMinimalAcceptableHeight() to change this value globally or
-        SetRowMinimalHeight() to do it for individual cells.
-
-        @see GetColMinimalAcceptableWidth()
-    */
-    int GetRowMinimalAcceptableHeight() const;
-
-    /**
-        Returns the height of the specified row.
-    */
-    int GetRowSize(int row) const;
-
-    /**
-        Returns the number of pixels per horizontal scroll increment.
-
-        The default is 15.
-
-        @see GetScrollLineY(), SetScrollLineX(), SetScrollLineY()
-    */
-    int GetScrollLineX() const;
-
-    /**
-        Returns the number of pixels per vertical scroll increment.
-
-        The default is 15.
-
-        @see GetScrollLineX(), SetScrollLineX(), SetScrollLineY()
-    */
-    int GetScrollLineY() const;
-
-    /**
-        Returns an array of individually selected cells.
-
-        Notice that this array does @em not contain all the selected cells in
-        general as it doesn't include the cells selected as part of column, row
-        or block selection. You must use this method, GetSelectedCols(),
-        GetSelectedRows() and GetSelectionBlockTopLeft() and
-        GetSelectionBlockBottomRight() methods to obtain the entire selection
-        in general.
-
-        Please notice this behaviour is by design and is needed in order to
-        support grids of arbitrary size (when an entire column is selected in
-        a grid with a million of columns, we don't want to create an array with
-        a million of entries in this function, instead it returns an empty
-        array and GetSelectedCols() returns an array containing one element).
-    */
-    wxGridCellCoordsArray GetSelectedCells() const;
-
-    /**
-        Returns an array of selected columns.
-
-        Please notice that this method alone is not sufficient to find all the
-        selected columns as it contains only the columns which were
-        individually selected but not those being part of the block selection
-        or being selected in virtue of all of their cells being selected
-        individually, please see GetSelectedCells() for more details.
-    */
-    wxArrayInt GetSelectedCols() const;
-
-    /**
-        Returns an array of selected rows.
-
-        Please notice that this method alone is not sufficient to find all the
-        selected rows as it contains only the rows which were individually
-        selected but not those being part of the block selection or being
-        selected in virtue of all of their cells being selected individually,
-        please see GetSelectedCells() for more details.
-    */
-    wxArrayInt GetSelectedRows() const;
-
-    /**
-        Access or update the selection fore/back colours
-    */
-    wxColour GetSelectionBackground() const;
-
-    /**
-        Returns an array of the bottom right corners of blocks of selected
-        cells.
-
-        Please see GetSelectedCells() for more information about the selection
-        representation in wxGrid.
-
-        @see GetSelectionBlockTopLeft()
-    */
-    wxGridCellCoordsArray GetSelectionBlockBottomRight() const;
-
-    /**
-        Returns an array of the top left corners of blocks of selected cells.
-
-        Please see GetSelectedCells() for more information about the selection
-        representation in wxGrid.
-
-        @see GetSelectionBlockBottomRight()
-    */
-    wxGridCellCoordsArray GetSelectionBlockTopLeft() const;
-
-    /**
-        Returns the colour used for drawing the selection foreground.
-    */
-    wxColour GetSelectionForeground() const;
-
-    /**
-        Returns the current selection mode.
-
-        @see SetSelectionMode().
-    */
-    wxGridSelectionModes GetSelectionMode() const;
-
-    /**
-        Returns a base pointer to the current table object.
-
-        The returned pointer is still owned by the grid.
-    */
-    wxGridTableBase *GetTable() const;
-
-    //@{
-    /**
-        Make the given cell current and ensure it is visible.
-
-        This method is equivalent to calling MakeCellVisible() and
-        SetGridCursor() and so, as with the latter, a wxEVT_GRID_SELECT_CELL
-        event is generated by it and the selected cell doesn't change if the
-        event is vetoed.
-     */
-    void GoToCell(int row, int col);
-    void GoToCell(const wxGridCellCoords& coords);
-    //@}
-
-    /**
-        Returns @true if drawing of grid lines is turned on, @false otherwise.
-    */
-    bool GridLinesEnabled() const;
+    virtual wxGridCellRenderer* GetDefaultRendererForType(const wxString& typeName) const;
 
     /**
         Hides the in-place cell edit control.
     */
     void HideCellEditControl();
-
-    /**
-        Hides the column labels by calling SetColLabelSize()
-        with a size of 0. Show labels again by calling that method with
-        a width greater than 0.
-    */
-    void HideColLabels();
-
-    /**
-        Hides the row labels by calling SetRowLabelSize() with a size of 0.
-
-        The labels can be shown again by calling SetRowLabelSize() with a width
-        greater than 0.
-    */
-    void HideRowLabels();
-
-    /**
-        Inserts one or more new columns into a grid with the first new column
-        at the specified position.
-
-        Notice that inserting the columns in the grid requires grid table
-        cooperation: when this method is called, grid object begins by
-        requesting the underlying grid table to insert new columns. If this is
-        successful the table notifies the grid and the grid updates the
-        display. For a default grid (one where you have called
-        wxGrid::CreateGrid) this process is automatic. If you are using a
-        custom grid table (specified with wxGrid::SetTable) then you must
-        override wxGridTableBase::InsertCols() in your derived table class.
-
-        @param pos
-            The position which the first newly inserted column will have.
-        @param numCols
-            The number of columns to insert.
-        @param updateLabels
-            Currently not used.
-        @return
-            @true if the columns were successfully inserted, @false if an error
-            occurred (most likely the table couldn't be updated).
-    */
-    bool InsertCols(int pos = 0, int numCols = 1, bool updateLabels = true);
-
-    /**
-        Inserts one or more new rows into a grid with the first new row at the
-        specified position.
-
-        Notice that you must implement wxGridTableBase::InsertRows() if you use
-        a grid with a custom table, please see InsertCols() for more
-        information.
-
-        @param pos
-            The position which the first newly inserted row will have.
-        @param numRows
-            The number of rows to insert.
-        @param updateLabels
-            Currently not used.
-        @return
-            @true if the rows were successfully inserted, @false if an error
-            occurred (most likely the table couldn't be updated).
-    */
-    bool InsertRows(int pos = 0, int numRows = 1, bool updateLabels = true);
 
     /**
         Returns @true if the in-place edit control is currently enabled.
@@ -2058,14 +1717,6 @@ public:
     */
     bool IsEditable() const;
 
-    //@{
-    /**
-        Is this cell currently selected?
-    */
-    bool IsInSelection(int row, int col) const;
-    bool IsInSelection(const wxGridCellCoords& coords) const;
-    //@}
-
     /**
         Returns @true if the cell at the specified location can't be edited.
 
@@ -2074,35 +1725,546 @@ public:
     bool IsReadOnly(int row, int col) const;
 
     /**
-        Returns @true if there are currently any selected cells, rows, columns
-        or blocks.
-    */
-    bool IsSelection() const;
+        Register a new data type.
 
-    //@{
+        The data types allow to naturally associate specific renderers and
+        editors to the cells containing values of the given type. For example,
+        the grid automatically registers a data type with the name
+        @c wxGRID_VALUE_STRING which uses wxGridCellStringRenderer and
+        wxGridCellTextEditor as its renderer and editor respectively -- this is
+        the data type used by all the cells of the default wxGridStringTable,
+        so this renderer and editor are used by default for all grid cells.
+
+        However if a custom table returns @c wxGRID_VALUE_BOOL from its
+        wxGridTableBase::GetTypeName() method, then wxGridCellBoolRenderer and
+        wxGridCellBoolEditor are used for it because the grid also registers a
+        boolean data type with this name.
+
+        And as this mechanism is completely generic, you may register your own
+        data types using your own custom renderers and editors. Just remember
+        that the table must identify a cell as being of the given type for them
+        to be used for this cell.
+
+        @param typeName
+            Name of the new type. May be any string, but if the type name is
+            the same as the name of an already registered type, including one
+            of the standard ones (which are @c wxGRID_VALUE_STRING, @c
+            wxGRID_VALUE_BOOL, @c wxGRID_VALUE_NUMBER, @c wxGRID_VALUE_FLOAT
+            and @c wxGRID_VALUE_CHOICE), then the new registration information
+            replaces the previously used renderer and editor.
+        @param renderer
+            The renderer to use for the cells of this type. Its ownership is
+            taken by the grid, i.e. it will call DecRef() on this pointer when
+            it doesn't need it any longer.
+        @param editor
+            The editor to use for the cells of this type. Its ownership is also
+            taken by the grid.
+    */
+    void RegisterDataType(const wxString& typeName,
+                          wxGridCellRenderer* renderer,
+                          wxGridCellEditor* editor);
+
     /**
-        Returns @true if a cell is either wholly or at least partially visible
-        in the grid window.
+        Sets the value of the current grid cell to the current in-place edit
+        control value.
 
-        By default, the cell must be entirely visible for this function to
-        return true but if @a wholeCellVisible is @false, the function returns
-        @true even if the cell is only partially visible.
+        This is called automatically when the grid cursor moves from the
+        current cell to a new cell. It is also a good idea to call this
+        function when closing a grid since any edits to the final cell location
+        will not be saved otherwise.
     */
-    bool IsVisible(int row, int col, bool wholeCellVisible = true) const;
-    bool IsVisible(const wxGridCellCoords& coords,
-                   bool wholeCellVisible = true) const;
+    void SaveEditControlValue();
+
+    /**
+        Sets the editor for the grid cell at the specified location.
+
+        The grid will take ownership of the pointer.
+
+        See wxGridCellEditor and the @ref overview_grid for more information
+        about cell editors and renderers.
+    */
+    void SetCellEditor(int row, int col, wxGridCellEditor* editor);
+
+    /**
+        Sets the renderer for the grid cell at the specified location.
+
+        The grid will take ownership of the pointer.
+
+        See wxGridCellRenderer and the @ref overview_grid for more information
+        about cell editors and renderers.
+    */
+    void SetCellRenderer(int row, int col, wxGridCellRenderer* renderer);
+
+    /**
+        Sets the string value for the cell at the specified location.
+
+        For simple applications where a grid object automatically uses a
+        default grid table of string values you use this function together with
+        GetCellValue() to access cell values. For more complex applications
+        where you have derived your own grid table class that contains various
+        data types (e.g. numeric, boolean or user-defined custom types) then
+        you only use this function for those cells that contain string values.
+
+        See wxGridTableBase::CanSetValueAs() and the @ref overview_grid for
+        more information.
+    */
+    void SetCellValue(int row, int col, const wxString& s);
+    /**
+        Sets the string value for the cell at the specified location.
+
+        For simple applications where a grid object automatically uses a
+        default grid table of string values you use this function together with
+        GetCellValue() to access cell values. For more complex applications
+        where you have derived your own grid table class that contains various
+        data types (e.g. numeric, boolean or user-defined custom types) then
+        you only use this function for those cells that contain string values.
+
+        See wxGridTableBase::CanSetValueAs() and the @ref overview_grid for
+        more information.
+    */
+    void SetCellValue(const wxGridCellCoords& coords, const wxString& s);
+    /**
+        @deprecated Please use SetCellValue(int,int,const wxString&) or
+                    SetCellValue(const wxGridCellCoords&,const wxString&)
+                    instead.
+
+        Sets the string value for the cell at the specified location.
+
+        For simple applications where a grid object automatically uses a
+        default grid table of string values you use this function together with
+        GetCellValue() to access cell values. For more complex applications
+        where you have derived your own grid table class that contains various
+        data types (e.g. numeric, boolean or user-defined custom types) then
+        you only use this function for those cells that contain string values.
+
+        See wxGridTableBase::CanSetValueAs() and the @ref overview_grid for
+        more information.
+    */
+    void SetCellValue(const wxString& val, int row, int col);
+
+    /**
+        Sets the specified column to display boolean values.
+
+        @see SetColFormatCustom()
+    */
+    void SetColFormatBool(int col);
+
+    /**
+        Sets the specified column to display data in a custom format.
+
+        This method provides an alternative to defining a custom grid table
+        which would return @a typeName from its GetTypeName() method for the
+        cells in this column: while it doesn't really change the type of the
+        cells in this column, it does associate the renderer and editor used
+        for the cells of the specified type with them.
+
+        See the @ref overview_grid for more information on working with custom
+        data types.
+    */
+    void SetColFormatCustom(int col, const wxString& typeName);
+
+    /**
+        Sets the specified column to display floating point values with the
+        given width and precision.
+
+        @see SetColFormatCustom()
+    */
+    void SetColFormatFloat(int col, int width = -1, int precision = -1);
+
+    /**
+        Sets the specified column to display integer values.
+
+        @see SetColFormatCustom()
+    */
+    void SetColFormatNumber(int col);
+
+    /**
+        Sets the default editor for grid cells.
+
+        The grid will take ownership of the pointer.
+
+        See wxGridCellEditor and the @ref overview_grid for more information
+        about cell editors and renderers.
+    */
+    void SetDefaultEditor(wxGridCellEditor* editor);
+
+    /**
+        Sets the default renderer for grid cells.
+
+        The grid will take ownership of the pointer.
+
+        See wxGridCellRenderer and the @ref overview_grid for more information
+        about cell editors and renderers.
+    */
+    void SetDefaultRenderer(wxGridCellRenderer* renderer);
+
+    /**
+        Makes the cell at the specified location read-only or editable.
+
+        @see IsReadOnly()
+    */
+    void SetReadOnly(int row, int col, bool isReadOnly = true);
+
+    /**
+        Displays the in-place cell edit control for the current cell.
+    */
+    void ShowCellEditControl();
+
     //@}
 
-    //@{
-    /**
-        Brings the specified cell into the visible grid cell area with minimal
-        scrolling.
 
-        Does nothing if the cell is already visible.
+    /**
+        @name Column and Row Sizes
+     */
+    //@{
+
+    /**
+        Automatically sets the height and width of all rows and columns to fit
+        their contents.
     */
-    void MakeCellVisible(int row, int col);
-    void MakeCellVisible(const wxGridCellCoords& coords);
+    void AutoSize();
+
+    /**
+        Automatically adjusts width of the column to fit its label.
+    */
+    void AutoSizeColLabelSize(int col);
+
+    /**
+        Automatically sizes the column to fit its contents. If @a setAsMin is
+        @true the calculated width will also be set as the minimal width for
+        the column.
+    */
+    void AutoSizeColumn(int col, bool setAsMin = true);
+
+    /**
+        Automatically sizes all columns to fit their contents. If @a setAsMin
+        is @true the calculated widths will also be set as the minimal widths
+        for the columns.
+    */
+    void AutoSizeColumns(bool setAsMin = true);
+
+    /**
+        Automatically sizes the row to fit its contents. If @a setAsMin is
+        @true the calculated height will also be set as the minimal height for
+        the row.
+    */
+    void AutoSizeRow(int row, bool setAsMin = true);
+
+    /**
+        Automatically adjusts height of the row to fit its label.
+    */
+    void AutoSizeRowLabelSize(int col);
+
+    /**
+        Automatically sizes all rows to fit their contents. If @a setAsMin is
+        @true the calculated heights will also be set as the minimal heights
+        for the rows.
+    */
+    void AutoSizeRows(bool setAsMin = true);
+
+    /**
+        Returns the current height of the column labels.
+    */
+    int GetColLabelSize() const;
+
+    /**
+        Returns the minimal width to which a column may be resized.
+
+        Use SetColMinimalAcceptableWidth() to change this value globally or
+        SetColMinimalWidth() to do it for individual columns.
+
+        @see GetRowMinimalAcceptableHeight()
+    */
+    int GetColMinimalAcceptableWidth() const;
+
+    /**
+        Returns the width of the specified column.
+    */
+    int GetColSize(int col) const;
+
+    /**
+        Returns the default height for column labels.
+    */
+    int GetDefaultColLabelSize() const;
+
+    /**
+        Returns the current default width for grid columns.
+    */
+    int GetDefaultColSize() const;
+
+    /**
+        Returns the default width for the row labels.
+    */
+    int GetDefaultRowLabelSize() const;
+
+    /**
+        Returns the current default height for grid rows.
+    */
+    int GetDefaultRowSize() const;
+
+    /**
+        Returns the minimal size to which rows can be resized.
+
+        Use SetRowMinimalAcceptableHeight() to change this value globally or
+        SetRowMinimalHeight() to do it for individual cells.
+
+        @see GetColMinimalAcceptableWidth()
+    */
+    int GetRowMinimalAcceptableHeight() const;
+
+    /**
+        Returns the current width of the row labels.
+    */
+    int GetRowLabelSize() const;
+
+    /**
+        Returns the height of the specified row.
+    */
+    int GetRowSize(int row) const;
+
+    /**
+        Sets the height of the column labels.
+
+        If @a height equals to @c wxGRID_AUTOSIZE then height is calculated
+        automatically so that no label is truncated. Note that this could be
+        slow for a large table.
+    */
+    void SetColLabelSize(int height);
+
+    /**
+        Sets the minimal @a width to which the user can resize columns.
+
+        @see GetColMinimalAcceptableWidth()
+    */
+    void SetColMinimalAcceptableWidth(int width);
+
+    /**
+        Sets the minimal @a width for the specified column @a col.
+
+        It is usually best to call this method during grid creation as calling
+        it later will not resize the column to the given minimal width even if
+        it is currently narrower than it.
+
+        @a width must be greater than the minimal acceptable column width as
+        returned by GetColMinimalAcceptableWidth().
+    */
+    void SetColMinimalWidth(int col, int width);
+
+    /**
+        Sets the width of the specified column.
+
+        Notice that this function does not refresh the grid, you need to call
+        ForceRefresh() to make the changes take effect immediately.
+
+        @param col
+            The column index.
+        @param width
+            The new column width in pixels or a negative value to fit the
+            column width to its label width.
+    */
+    void SetColSize(int col, int width);
+
+    /**
+        Sets the default width for columns in the grid.
+
+        This will only affect columns subsequently added to the grid unless
+        @a resizeExistingCols is @true.
+
+        If @a width is less than GetColMinimalAcceptableWidth(), then the
+        minimal acceptable width is used instead of it.
+    */
+    void SetDefaultColSize(int width, bool resizeExistingCols = false);
+
+    /**
+        Sets the default height for rows in the grid.
+
+        This will only affect rows subsequently added to the grid unless
+        @a resizeExistingRows is @true.
+
+        If @a height is less than GetRowMinimalAcceptableHeight(), then the
+        minimal acceptable heihgt is used instead of it.
+    */
+    void SetDefaultRowSize(int height, bool resizeExistingRows = false);
+
+    /**
+        Sets the width of the row labels.
+
+        If @a width equals @c wxGRID_AUTOSIZE then width is calculated
+        automatically so that no label is truncated. Note that this could be
+        slow for a large table.
+    */
+    void SetRowLabelSize(int width);
+
+    /**
+        Sets the minimal row @a height used by default.
+
+        See SetColMinimalAcceptableWidth() for more information.
+    */
+    void SetRowMinimalAcceptableHeight(int height);
+
+    /**
+        Sets the minimal @a height for the specified @a row.
+
+        See SetColMinimalWidth() for more information.
+    */
+    void SetRowMinimalHeight(int row, int height);
+
+    /**
+        Sets the height of the specified row.
+
+        See SetColSize() for more information.
+    */
+    void SetRowSize(int row, int height);
+
     //@}
+
+
+    /**
+        @name User-Resizing and Dragging
+     */
+    //@{
+
+    /**
+        Return @true if the dragging of cells is enabled or @false otherwise.
+    */
+    bool CanDragCell() const;
+
+    /**
+        Returns @true if columns can be moved by dragging with the mouse.
+
+        Columns can be moved by dragging on their labels.
+    */
+    bool CanDragColMove() const;
+
+    /**
+        Returns @true if columns can be resized by dragging with the mouse.
+
+        Columns can be resized by dragging the edges of their labels. If grid
+        line dragging is enabled they can also be resized by dragging the right
+        edge of the column in the grid cell area (see EnableDragGridSize()).
+    */
+    bool CanDragColSize() const;
+
+    /**
+        Return @true if the dragging of grid lines to resize rows and columns
+        is enabled or @false otherwise.
+    */
+    bool CanDragGridSize() const;
+
+    /**
+        Returns @true if rows can be resized by dragging with the mouse.
+
+        Rows can be resized by dragging the edges of their labels. If grid line
+        dragging is enabled they can also be resized by dragging the lower edge
+        of the row in the grid cell area (see EnableDragGridSize()).
+    */
+    bool CanDragRowSize() const;
+
+    /**
+        Disables column moving by dragging with the mouse.
+
+        Equivalent to passing @false to EnableDragColMove().
+    */
+    void DisableDragColMove();
+
+    /**
+        Disables column sizing by dragging with the mouse.
+
+        Equivalent to passing @false to EnableDragColSize().
+    */
+    void DisableDragColSize();
+
+    /**
+        Disable mouse dragging of grid lines to resize rows and columns.
+
+        Equivalent to passing @false to EnableDragGridSize()
+    */
+    void DisableDragGridSize();
+
+    /**
+        Disables row sizing by dragging with the mouse.
+
+        Equivalent to passing @false to EnableDragRowSize().
+    */
+    void DisableDragRowSize();
+
+    /**
+        Enables or disables cell dragging with the mouse.
+    */
+    void EnableDragCell(bool enable = true);
+
+    /**
+        Enables or disables column moving by dragging with the mouse.
+    */
+    void EnableDragColMove(bool enable = true);
+
+    /**
+        Enables or disables column sizing by dragging with the mouse.
+    */
+    void EnableDragColSize(bool enable = true);
+
+    /**
+        Enables or disables row and column resizing by dragging gridlines with
+        the mouse.
+    */
+    void EnableDragGridSize(bool enable = true);
+
+    /**
+        Enables or disables row sizing by dragging with the mouse.
+    */
+    void EnableDragRowSize(bool enable = true);
+
+    /**
+        Returns the column ID of the specified column position.
+    */
+    int GetColAt(int colPos) const;
+
+    /**
+        Returns the position of the specified column.
+    */
+    int GetColPos(int colID) const;
+
+    /**
+        Sets the position of the specified column.
+    */
+    void SetColPos(int colID, int newPos);
+
+    //@}
+
+
+    /**
+        @name Cursor Movement
+     */
+    //@{
+
+    /**
+        Returns the current grid cell column position.
+    */
+    int GetGridCursorCol() const;
+
+    /**
+        Returns the current grid cell row position.
+    */
+    int GetGridCursorRow() const;
+
+    /**
+        Make the given cell current and ensure it is visible.
+
+        This method is equivalent to calling MakeCellVisible() and
+        SetGridCursor() and so, as with the latter, a @c wxEVT_GRID_SELECT_CELL
+        event is generated by it and the selected cell doesn't change if the
+        event is vetoed.
+     */
+    void GoToCell(int row, int col);
+    /**
+        Make the given cell current and ensure it is visible.
+
+        This method is equivalent to calling MakeCellVisible() and
+        SetGridCursor() and so, as with the latter, a @c wxEVT_GRID_SELECT_CELL
+        event is generated by it and the selected cell doesn't change if the
+        event is vetoed.
+     */
+    void GoToCell(const wxGridCellCoords& coords);
 
     /**
         Moves the grid cursor down by one row.
@@ -2185,62 +2347,143 @@ public:
     bool MovePageUp();
 
     /**
-        Register a new data type.
+        Set the grid cursor to the specified cell.
 
-        The data types allow to naturally associate specific renderers and
-        editors to the cells containing values of the given type. For example,
-        the grid automatically registers a data type with the name @c
-        wxGRID_VALUE_STRING which uses wxGridCellStringRenderer and
-        wxGridCellTextEditor as its renderer and editor respectively -- this is
-        the data type used by all the cells of the default wxGridStringTable,
-        so this renderer and editor are used by default for all grid cells.
+        The grid cursor indicates the current cell and can be moved by the user
+        using the arrow keys or the mouse.
 
-        However if a custom table returns @c wxGRID_VALUE_BOOL from its
-        wxGridTableBase::GetTypeName() method, then wxGridCellBoolRenderer and
-        wxGridCellBoolEditor are used for it because the grid also registers a
-        boolean data type with this name.
+        Calling this function generates a @c wxEVT_GRID_SELECT_CELL event and
+        if the event handler vetoes this event, the cursor is not moved.
 
-        And as this mechanism is completely generic, you may register your own
-        data types using your own custom renderers and editors. Just remember
-        that the table must identify a cell as being of the given type for them
-        to be used for this cell.
-
-        @param typeName
-            Name of the new type. May be any string, but if the type name is
-            the same as the name of an already registered type, including one
-            of the standard ones (which are @c wxGRID_VALUE_STRING, @c
-            wxGRID_VALUE_BOOL, @c wxGRID_VALUE_NUMBER, @c wxGRID_VALUE_FLOAT
-            and @c wxGRID_VALUE_CHOICE), then the new registration information
-            replaces the previously used renderer and editor.
-        @param renderer
-            The renderer to use for the cells of this type. Its ownership is
-            taken by the grid, i.e. it will call DecRef() on this pointer when
-            it doesn't need it any longer.
-        @param editor
-            The editor to use for the cells of this type. Its ownership is also
-            taken by the grid.
+        This function doesn't make the target call visible, use GoToCell() to
+        do this.
     */
-    void RegisterDataType(const wxString& typeName,
-                          wxGridCellRenderer* renderer,
-                          wxGridCellEditor* editor);
+    void SetGridCursor(int row, int col);
+    /**
+        Set the grid cursor to the specified cell.
+
+        The grid cursor indicates the current cell and can be moved by the user
+        using the arrow keys or the mouse.
+
+        Calling this function generates a @c wxEVT_GRID_SELECT_CELL event and
+        if the event handler vetoes this event, the cursor is not moved.
+
+        This function doesn't make the target call visible, use GoToCell() to
+        do this.
+    */
+    void SetGridCursor(const wxGridCellCoords& coords);
+
+    //@}
+
 
     /**
-        Sets the value of the current grid cell to the current in-place edit
-        control value.
+        @name User Selection
+     */
+    //@{
 
-        This is called automatically when the grid cursor moves from the
-        current cell to a new cell. It is also a good idea to call this
-        function when closing a grid since any edits to the final cell location
-        will not be saved otherwise.
+    /**
+        Deselects all cells that are currently selected.
     */
-    void SaveEditControlValue();
+    void ClearSelection();
+
+    /**
+        Returns an array of individually selected cells.
+
+        Notice that this array does @em not contain all the selected cells in
+        general as it doesn't include the cells selected as part of column, row
+        or block selection. You must use this method, GetSelectedCols(),
+        GetSelectedRows() and GetSelectionBlockTopLeft() and
+        GetSelectionBlockBottomRight() methods to obtain the entire selection
+        in general.
+
+        Please notice this behaviour is by design and is needed in order to
+        support grids of arbitrary size (when an entire column is selected in
+        a grid with a million of columns, we don't want to create an array with
+        a million of entries in this function, instead it returns an empty
+        array and GetSelectedCols() returns an array containing one element).
+    */
+    wxGridCellCoordsArray GetSelectedCells() const;
+
+    /**
+        Returns an array of selected columns.
+
+        Please notice that this method alone is not sufficient to find all the
+        selected columns as it contains only the columns which were
+        individually selected but not those being part of the block selection
+        or being selected in virtue of all of their cells being selected
+        individually, please see GetSelectedCells() for more details.
+    */
+    wxArrayInt GetSelectedCols() const;
+
+    /**
+        Returns an array of selected rows.
+
+        Please notice that this method alone is not sufficient to find all the
+        selected rows as it contains only the rows which were individually
+        selected but not those being part of the block selection or being
+        selected in virtue of all of their cells being selected individually,
+        please see GetSelectedCells() for more details.
+    */
+    wxArrayInt GetSelectedRows() const;
+
+    /**
+        Returns the colour used for drawing the selection background.
+    */
+    wxColour GetSelectionBackground() const;
+
+    /**
+        Returns an array of the bottom right corners of blocks of selected
+        cells.
+
+        Please see GetSelectedCells() for more information about the selection
+        representation in wxGrid.
+
+        @see GetSelectionBlockTopLeft()
+    */
+    wxGridCellCoordsArray GetSelectionBlockBottomRight() const;
+
+    /**
+        Returns an array of the top left corners of blocks of selected cells.
+
+        Please see GetSelectedCells() for more information about the selection
+        representation in wxGrid.
+
+        @see GetSelectionBlockBottomRight()
+    */
+    wxGridCellCoordsArray GetSelectionBlockTopLeft() const;
+
+    /**
+        Returns the colour used for drawing the selection foreground.
+    */
+    wxColour GetSelectionForeground() const;
+
+    /**
+        Returns the current selection mode.
+
+        @see SetSelectionMode().
+    */
+    wxGridSelectionModes GetSelectionMode() const;
+
+    /**
+        Returns @true if the given cell is selected.
+    */
+    bool IsInSelection(int row, int col) const;
+    /**
+        Returns @true if the given cell is selected.
+    */
+    bool IsInSelection(const wxGridCellCoords& coords) const;
+
+    /**
+        Returns @true if there are currently any selected cells, rows, columns
+        or blocks.
+    */
+    bool IsSelection() const;
 
     /**
         Selects all cells in the grid.
     */
     void SelectAll();
 
-    //@{
     /**
         Selects a rectangular block of cells.
 
@@ -2250,10 +2493,16 @@ public:
     */
     void SelectBlock(int topRow, int leftCol, int bottomRow, int rightCol,
                      bool addToSelected = false);
+    /**
+        Selects a rectangular block of cells.
+
+        If @a addToSelected is @false then any existing selection will be
+        deselected; if @true the column will be added to the existing
+        selection.
+    */
     void SelectBlock(const wxGridCellCoords& topLeft,
                      const wxGridCellCoords& bottomRight,
                      bool addToSelected = false);
-    //@}
 
     /**
         Selects the specified column.
@@ -2278,386 +2527,6 @@ public:
     */
     void SelectRow(int row, bool addToSelected = false);
 
-    //@{
-    /**
-        Sets the horizontal and vertical alignment for grid cell text at the
-        specified location.
-
-        Horizontal alignment should be one of @c wxALIGN_LEFT, @c
-        wxALIGN_CENTRE or @c wxALIGN_RIGHT.
-
-        Vertical alignment should be one of @c wxALIGN_TOP, @c wxALIGN_CENTRE
-        or @c wxALIGN_BOTTOM.
-    */
-    void SetCellAlignment(int row, int col, int horiz, int vert);
-    void SetCellAlignment(int align, int row, int col);
-    //@}
-
-    //@{
-    /**
-        Set the background colour for the given cell or all cells by default.
-    */
-    void SetCellBackgroundColour(int row, int col, const wxColour& colour);
-    //@}
-
-    /**
-        Sets the editor for the grid cell at the specified location.
-
-        The grid will take ownership of the pointer.
-
-        See wxGridCellEditor and the @ref overview_grid "wxGrid overview"
-        for more information about cell editors and renderers.
-    */
-    void SetCellEditor(int row, int col, wxGridCellEditor* editor);
-
-    /**
-        Sets the font for text in the grid cell at the specified location.
-    */
-    void SetCellFont(int row, int col, const wxFont& font);
-
-    /**
-        Sets the renderer for the grid cell at the specified location.
-
-        The grid will take ownership of the pointer.
-
-        See wxGridCellRenderer and the @ref overview_grid "wxGrid overview"
-        for more information about cell editors and renderers.
-    */
-    void SetCellRenderer(int row, int col, wxGridCellRenderer* renderer);
-
-    //@{
-    /**
-        Sets the text colour for the given cell or all cells by default.
-    */
-    void SetCellTextColour(int row, int col, const wxColour& colour);
-    void SetCellTextColour(const wxColour& val, int row, int col);
-    void SetCellTextColour(const wxColour& colour);
-    //@}
-
-    //@{
-    /**
-        Sets the string value for the cell at the specified location.
-
-        For simple applications where a grid object automatically uses a
-        default grid table of string values you use this function together with
-        GetCellValue() to access cell values. For more complex applications
-        where you have derived your own grid table class that contains various
-        data types (e.g. numeric, boolean or user-defined custom types) then
-        you only use this function for those cells that contain string values.
-        The last form is for backward compatibility only.
-
-        See wxGridTableBase::CanSetValueAs and the @ref overview_grid
-        "wxGrid overview" for more information.
-    */
-    void SetCellValue(int row, int col, const wxString& s);
-    void SetCellValue(const wxGridCellCoords& coords, const wxString& s);
-    void SetCellValue(const wxString& val, int row, int col);
-    //@}
-
-    /**
-        Sets the cell attributes for all cells in the specified column.
-
-        For more information about controlling grid cell attributes see the
-        wxGridCellAttr cell attribute class and the @ref overview_grid "wxGrid overview".
-    */
-    void SetColAttr(int col, wxGridCellAttr* attr);
-
-    /**
-        Sets the specified column to display boolean values.
-
-        @see SetColFormatCustom()
-    */
-    void SetColFormatBool(int col);
-
-    /**
-        Sets the specified column to display data in a custom format.
-
-        This method provides an alternative to defining a custom grid table
-        which would return @a typeName from its GetTypeName() method for the
-        cells in this column: while it doesn't really change the type of the
-        cells in this column, it does associate the renderer and editor used
-        for the cells of the specified type with them.
-
-        See the @ref overview_grid "wxGrid overview" for more
-        information on working with custom data types.
-    */
-    void SetColFormatCustom(int col, const wxString& typeName);
-
-    /**
-        Sets the specified column to display floating point values with the
-        given width and precision.
-
-        @see SetColFormatCustom()
-    */
-    void SetColFormatFloat(int col, int width = -1, int precision = -1);
-
-    /**
-        Sets the specified column to display integer values.
-
-        @see SetColFormatCustom()
-    */
-    void SetColFormatNumber(int col);
-
-    /**
-        Sets the horizontal and vertical alignment of column label text.
-
-        Horizontal alignment should be one of @c wxALIGN_LEFT, @c
-        wxALIGN_CENTRE or @c wxALIGN_RIGHT.
-        Vertical alignment should be one of @c wxALIGN_TOP, @c wxALIGN_CENTRE
-        or @c wxALIGN_BOTTOM.
-    */
-    void SetColLabelAlignment(int horiz, int vert);
-
-    /**
-        Sets the height of the column labels.
-
-        If @a height equals to @c wxGRID_AUTOSIZE then height is calculated
-        automatically so that no label is truncated. Note that this could be
-        slow for a large table.
-    */
-    void SetColLabelSize(int height);
-
-    /**
-        Set the value for the given column label.
-
-        If you are using a custom grid table you must override
-        wxGridTableBase::SetColLabelValue for this to have any effect.
-    */
-    void SetColLabelValue(int col, const wxString& value);
-
-    /**
-        Sets the minimal width to which the user can resize columns.
-
-        @see GetColMinimalAcceptableWidth()
-    */
-    void SetColMinimalAcceptableWidth(int width);
-
-    /**
-        Sets the minimal width for the specified column.
-
-        It is usually best to call this method during grid creation as calling
-        it later will not resize the column to the given minimal width even if
-        it is currently narrower than it.
-
-        @a width must be greater than the minimal acceptable column width as
-        returned by GetColMinimalAcceptableWidth().
-    */
-    void SetColMinimalWidth(int col, int width);
-
-    /**
-        Sets the position of the specified column.
-    */
-    void SetColPos(int colID, int newPos);
-
-    /**
-        Sets the width of the specified column.
-
-        Notice that this function does not refresh the grid, you need to call
-        ForceRefresh() to make the changes take effect immediately.
-
-        @param col
-            The column index.
-        @param width
-            The new column width in pixels or a negative value to fit the
-            column width to its label width.
-    */
-    void SetColSize(int col, int width);
-
-    /**
-        Sets the default horizontal and vertical alignment for grid cell text.
-
-        Horizontal alignment should be one of @c wxALIGN_LEFT, @c
-        wxALIGN_CENTRE or @c wxALIGN_RIGHT.
-        Vertical alignment should be one of @c wxALIGN_TOP, @c wxALIGN_CENTRE
-        or @c wxALIGN_BOTTOM.
-    */
-    void SetDefaultCellAlignment(int horiz, int vert);
-
-    /**
-        Sets the default background colour for grid cells.
-    */
-    void SetDefaultCellBackgroundColour(const wxColour& colour);
-
-    /**
-        Sets the default font to be used for grid cell text.
-    */
-    void SetDefaultCellFont(const wxFont& font);
-
-    /**
-        Sets the current default colour for grid cell text.
-    */
-    void SetDefaultCellTextColour(const wxColour& colour);
-
-    /**
-        Sets the default width for columns in the grid.
-
-        This will only affect columns subsequently added to the grid unless
-        @a resizeExistingCols is @true.
-
-        If @a width is less than GetColMinimalAcceptableWidth(), then the
-        minimal acceptable width is used instead of it.
-    */
-    void SetDefaultColSize(int width, bool resizeExistingCols = false);
-
-    /**
-        Sets the default editor for grid cells.
-
-        The grid will take ownership of the pointer.
-
-        See wxGridCellEditor and the @ref overview_grid "wxGrid overview"
-        for more information about cell editors and renderers.
-    */
-    void SetDefaultEditor(wxGridCellEditor* editor);
-
-    /**
-        Sets the default renderer for grid cells.
-
-        The grid will take ownership of the pointer.
-
-        See wxGridCellRenderer and the @ref overview_grid "wxGrid overview"
-        for more information about cell editors and renderers.
-    */
-    void SetDefaultRenderer(wxGridCellRenderer* renderer);
-
-    /**
-        Sets the default height for rows in the grid.
-
-        This will only affect rows subsequently added to the grid unless
-        @a resizeExistingRows is @true.
-
-        If @a height is less than GetRowMinimalAcceptableHeight(), then the
-        minimal acceptable heihgt is used instead of it.
-    */
-    void SetDefaultRowSize(int height, bool resizeExistingRows = false);
-
-    //@{
-    /**
-        Set the grid cursor to the specified cell.
-
-        The grid cursor indicates the current cell and can be moved by the user
-        using the arrow keys or the mouse.
-
-        Calling this function generates a wxEVT_GRID_SELECT_CELL event and if
-        the event handler vetoes this event, the cursor is not moved.
-
-        This function doesn't make the target call visible, use GoToCell() to
-        do this.
-    */
-    void SetGridCursor(int row, int col);
-    void SetGridCursor(const wxGridCellCoords& coords);
-    //@}
-
-    /**
-        Sets the colour used to draw grid lines.
-    */
-    void SetGridLineColour(const wxColour& colour);
-
-    /**
-        Sets the background colour for row and column labels.
-    */
-    void SetLabelBackgroundColour(const wxColour& colour);
-
-    /**
-        Sets the font for row and column labels.
-    */
-    void SetLabelFont(const wxFont& font);
-
-    /**
-        Sets the colour for row and column label text.
-    */
-    void SetLabelTextColour(const wxColour& colour);
-
-    /**
-        Sets the extra margins used around the grid area.
-
-        A grid may occupy more space than needed for its data display and
-        this function allows to set how big this extra space is
-    */
-    void SetMargins(int extraWidth, int extraHeight);
-
-    /**
-        Makes the cell at the specified location read-only or editable.
-
-        @see IsReadOnly()
-    */
-    void SetReadOnly(int row, int col, bool isReadOnly = true);
-
-    /**
-        Sets the cell attributes for all cells in the specified row.
-
-        The grid takes ownership of the attribute pointer.
-
-        See the wxGridCellAttr class for more information about controlling
-        cell attributes.
-    */
-    void SetRowAttr(int row, wxGridCellAttr* attr);
-
-    /**
-        Sets the horizontal and vertical alignment of row label text.
-
-        Horizontal alignment should be one of @c wxALIGN_LEFT, @c
-        wxALIGN_CENTRE or @c wxALIGN_RIGHT.
-        Vertical alignment should be one of @c wxALIGN_TOP, @c wxALIGN_CENTRE
-        or @c wxALIGN_BOTTOM.
-    */
-    void SetRowLabelAlignment(int horiz, int vert);
-
-    /**
-        Sets the width of the row labels.
-
-        If @a width equals @c wxGRID_AUTOSIZE then width is calculated
-        automatically so that no label is truncated. Note that this could be
-        slow for a large table.
-    */
-    void SetRowLabelSize(int width);
-
-    /**
-        Sets the value for the given row label.
-
-        If you are using a derived grid table you must override
-        wxGridTableBase::SetRowLabelValue for this to have any effect.
-    */
-    void SetRowLabelValue(int row, const wxString& value);
-
-    /**
-        Sets the minimal row height used by default.
-
-        See SetColMinimalAcceptableWidth() for more information.
-    */
-    void SetRowMinimalAcceptableHeight(int height);
-
-    /**
-        Sets the minimal height for the specified row.
-
-        See SetColMinimalWidth() for more information.
-    */
-    void SetRowMinimalHeight(int row, int height);
-
-    /**
-        Sets the height of the specified row.
-
-        See SetColSize() for more information.
-    */
-    void SetRowSize(int row, int height);
-
-    /**
-        Sets the number of pixels per horizontal scroll increment.
-
-        The default is 15.
-
-        @see GetScrollLineX(), GetScrollLineY(), SetScrollLineY()
-    */
-    void SetScrollLineX(int x);
-
-    /**
-        Sets the number of pixels per vertical scroll increment.
-
-        The default is 15.
-
-        @see GetScrollLineX(), GetScrollLineY(), SetScrollLineX()
-    */
-    void SetScrollLineY(int y);
-
     /**
         Set the colour to be used for drawing the selection background.
     */
@@ -2678,35 +2547,119 @@ public:
     */
     void SetSelectionMode(wxGridSelectionModes selmode);
 
-    /**
-        Passes a pointer to a custom grid table to be used by the grid.
+    //@}
 
-        This should be called after the grid constructor and before using the
-        grid object. If @a takeOwnership is set to @true then the table will be
-        deleted by the wxGrid destructor.
-
-        Use this function instead of CreateGrid() when your application
-        involves complex or non-string data or data sets that are too large to
-        fit wholly in memory.
-    */
-    bool SetTable(wxGridTableBase* table,
-                  bool takeOwnership = false,
-                  wxGridSelectionModes selmode = wxGridSelectCells);
 
     /**
-        Call this in order to make the column labels use a native look by using
-        wxRenderer::DrawHeaderButton internally.
-
-        There is no equivalent method for drawing row columns as there is not
-        native look for that. This option is useful when using wxGrid for
-        displaying tables and not as a spread-sheet.
-    */
-    void SetUseNativeColLabels(bool native = true);
+        @name Scrolling
+     */
+    //@{
 
     /**
-        Displays the in-place cell edit control for the current cell.
+        Returns the number of pixels per horizontal scroll increment.
+
+        The default is 15.
+
+        @see GetScrollLineY(), SetScrollLineX(), SetScrollLineY()
     */
-    void ShowCellEditControl();
+    int GetScrollLineX() const;
+
+    /**
+        Returns the number of pixels per vertical scroll increment.
+
+        The default is 15.
+
+        @see GetScrollLineX(), SetScrollLineX(), SetScrollLineY()
+    */
+    int GetScrollLineY() const;
+
+    /**
+        Returns @true if a cell is either entirely or at least partially
+        visible in the grid window.
+
+        By default, the cell must be entirely visible for this function to
+        return @true but if @a wholeCellVisible is @false, the function returns
+        @true even if the cell is only partially visible.
+    */
+    bool IsVisible(int row, int col, bool wholeCellVisible = true) const;
+    /**
+        Returns @true if a cell is either entirely or at least partially
+        visible in the grid window.
+
+        By default, the cell must be entirely visible for this function to
+        return @true but if @a wholeCellVisible is @false, the function returns
+        @true even if the cell is only partially visible.
+    */
+    bool IsVisible(const wxGridCellCoords& coords,
+                   bool wholeCellVisible = true) const;
+
+    /**
+        Brings the specified cell into the visible grid cell area with minimal
+        scrolling.
+
+        Does nothing if the cell is already visible.
+    */
+    void MakeCellVisible(int row, int col);
+    /**
+        Brings the specified cell into the visible grid cell area with minimal
+        scrolling.
+
+        Does nothing if the cell is already visible.
+    */
+    void MakeCellVisible(const wxGridCellCoords& coords);
+
+    /**
+        Sets the number of pixels per horizontal scroll increment.
+
+        The default is 15.
+
+        @see GetScrollLineX(), GetScrollLineY(), SetScrollLineY()
+    */
+    void SetScrollLineX(int x);
+
+    /**
+        Sets the number of pixels per vertical scroll increment.
+
+        The default is 15.
+
+        @see GetScrollLineX(), GetScrollLineY(), SetScrollLineX()
+    */
+    void SetScrollLineY(int y);
+
+    //@}
+
+
+    /**
+        @name Cell and Device Coordinate Translation
+     */
+    //@{
+
+    /**
+        Convert grid cell coordinates to grid window pixel coordinates.
+
+        This function returns the rectangle that encloses the block of cells
+        limited by @a topLeft and @a bottomRight cell in device coords and
+        clipped to the client size of the grid window.
+
+        @see CellToRect()
+    */
+    wxRect BlockToDeviceRect(const wxGridCellCoords& topLeft,
+                             const wxGridCellCoords& bottomRight) const;
+
+    /**
+        Return the rectangle corresponding to the grid cell's size and position
+        in logical coordinates.
+
+        @see BlockToDeviceRect()
+    */
+    wxRect CellToRect(int row, int col) const;
+    /**
+        Return the rectangle corresponding to the grid cell's size and position
+        in logical coordinates.
+
+        @see BlockToDeviceRect()
+    */
+    const wxRect CellToRect(const wxGridCellCoords& coords) const;
 
     /**
         Returns the column at the given pixel position.
@@ -2714,23 +2667,22 @@ public:
         @param x
             The x position to evaluate.
         @param clipToMinMax
-            If @true, rather than returning wxNOT_FOUND, it returns either the
-            first or last column depending on whether x is too far to the left
-            or right respectively.
+            If @true, rather than returning @c wxNOT_FOUND, it returns either
+            the first or last column depending on whether @a x is too far to
+            the left or right respectively.
         @return
-            The column index or wxNOT_FOUND.
+            The column index or @c wxNOT_FOUND.
     */
     int XToCol(int x, bool clipToMinMax = false) const;
 
     /**
         Returns the column whose right hand edge is close to the given logical
-        x position.
+        @a x position.
 
         If no column edge is near to this position @c wxNOT_FOUND is returned.
     */
     int XToEdgeOfCol(int x) const;
 
-    //@{
     /**
         Translates logical pixel coordinates to the grid cell coordinates.
 
@@ -2741,18 +2693,24 @@ public:
 
         @see XToCol(), YToRow()
      */
+    wxGridCellCoords XYToCell(int x, int y) const;
+    /**
+        Translates logical pixel coordinates to the grid cell coordinates.
 
+        Notice that this function expects logical coordinates on input so if
+        you use this function in a mouse event handler you need to translate
+        the mouse position, which is expressed in device coordinates, to
+        logical ones.
+
+        @see XToCol(), YToRow()
+     */
+    wxGridCellCoords XYToCell(const wxPoint& pos) const;
     // XYToCell(int, int, wxGridCellCoords&) overload is intentionally
     // undocumented, using it is ugly and non-const reference parameters are
     // not used in wxWidgets API
 
-    wxGridCellCoords XYToCell(int x, int y) const;
-    wxGridCellCoords XYToCell(const wxPoint& pos) const;
-
-    //@}
-
     /**
-        Returns the row whose bottom edge is close to the given logical y
+        Returns the row whose bottom edge is close to the given logical @a y
         position.
 
         If no row edge is near to this position @c wxNOT_FOUND is returned.
@@ -2760,11 +2718,274 @@ public:
     int YToEdgeOfRow(int y) const;
 
     /**
-        Returns the grid row that corresponds to the logical y coordinate.
+        Returns the grid row that corresponds to the logical @a y coordinate.
 
-        Returns @c wxNOT_FOUND if there is no row at the y position.
+        Returns @c wxNOT_FOUND if there is no row at the @a y position.
     */
     int YToRow(int y, bool clipToMinMax = false) const;
+
+    //@}
+
+
+    /**
+        @name Miscellaneous Functions
+     */
+    //@{
+
+    /**
+        Appends one or more new columns to the right of the grid.
+
+        The @a updateLabels argument is not used at present. If you are using a
+        derived grid table class you will need to override
+        wxGridTableBase::AppendCols(). See InsertCols() for further
+        information.
+
+        @return @true on success or @false if appending columns failed.
+    */
+    bool AppendCols(int numCols = 1, bool updateLabels = true);
+
+    /**
+        Appends one or more new rows to the bottom of the grid.
+
+        The @a updateLabels argument is not used at present. If you are using a
+        derived grid table class you will need to override
+        wxGridTableBase::AppendRows(). See InsertRows() for further
+        information.
+
+        @return @true on success or @false if appending rows failed.
+    */
+    bool AppendRows(int numRows = 1, bool updateLabels = true);
+
+    /**
+        Return @true if the horizontal grid lines stop at the last column
+        boundary or @false if they continue to the end of the window.
+
+        The default is to clip grid lines.
+
+        @see ClipHorzGridLines(), AreVertGridLinesClipped()
+     */
+    bool AreHorzGridLinesClipped() const;
+
+    /**
+        Return @true if the vertical grid lines stop at the last row
+        boundary or @false if they continue to the end of the window.
+
+        The default is to clip grid lines.
+
+        @see ClipVertGridLines(), AreHorzGridLinesClipped()
+     */
+    bool AreVertGridLinesClipped() const;
+
+    /**
+        Increments the grid's batch count.
+
+        When the count is greater than zero repainting of the grid is
+        suppressed. Each call to BeginBatch must be matched by a later call to
+        EndBatch(). Code that does a lot of grid modification can be enclosed
+        between BeginBatch() and EndBatch() calls to avoid screen flicker. The
+        final EndBatch() call will cause the grid to be repainted.
+
+        Notice that you should use wxGridUpdateLocker which ensures that there
+        is always a matching EndBatch() call for this BeginBatch() if possible
+        instead of calling this method directly.
+    */
+    void BeginBatch();
+
+    /**
+        Clears all data in the underlying grid table and repaints the grid.
+
+        The table is not deleted by this function. If you are using a derived
+        table class then you need to override wxGridTableBase::Clear() for this
+        function to have any effect.
+    */
+    void ClearGrid();
+
+    /**
+        Change whether the horizontal grid lines are clipped by the end of the
+        last column.
+
+        By default the grid lines are not drawn beyond the end of the last
+        column but after calling this function with @a clip set to @false they
+        will be drawn across the entire grid window.
+
+        @see AreHorzGridLinesClipped(), ClipVertGridLines()
+     */
+    void ClipHorzGridLines(bool clip);
+
+    /**
+        Change whether the vertical grid lines are clipped by the end of the
+        last row.
+
+        By default the grid lines are not drawn beyond the end of the last
+        row but after calling this function with @a clip set to @false they
+        will be drawn across the entire grid window.
+
+        @see AreVertGridLinesClipped(), ClipHorzGridLines()
+     */
+    void ClipVertGridLines(bool clip);
+
+    /**
+        Deletes one or more columns from a grid starting at the specified
+        position.
+
+        The @a updateLabels argument is not used at present. If you are using a
+        derived grid table class you will need to override
+        wxGridTableBase::DeleteCols(). See InsertCols() for further
+        information.
+
+        @return @true on success or @false if deleting columns failed.
+    */
+    bool DeleteCols(int pos = 0, int numCols = 1, bool updateLabels = true);
+
+    /**
+        Deletes one or more rows from a grid starting at the specified
+        position.
+
+        The @a updateLabels argument is not used at present. If you are using a
+        derived grid table class you will need to override
+        wxGridTableBase::DeleteRows(). See InsertRows() for further
+        information.
+
+        @return @true on success or @false if appending rows failed.
+    */
+    bool DeleteRows(int pos = 0, int numRows = 1, bool updateLabels = true);
+
+    /**
+        Decrements the grid's batch count.
+
+        When the count is greater than zero repainting of the grid is
+        suppressed. Each previous call to BeginBatch() must be matched by a
+        later call to EndBatch(). Code that does a lot of grid modification can
+        be enclosed between BeginBatch() and EndBatch() calls to avoid screen
+        flicker. The final EndBatch() will cause the grid to be repainted.
+
+        @see wxGridUpdateLocker
+    */
+    void EndBatch();
+
+    /**
+        Overridden wxWindow method.
+    */
+    virtual void Fit();
+
+    /**
+        Causes immediate repainting of the grid.
+
+        Use this instead of the usual wxWindow::Refresh().
+    */
+    void ForceRefresh();
+
+    /**
+        Returns the number of times that BeginBatch() has been called without
+        (yet) matching calls to EndBatch(). While the grid's batch count is
+        greater than zero the display will not be updated.
+    */
+    int GetBatchCount();
+
+    /**
+        Returns the total number of grid columns.
+
+        This is the same as the number of columns in the underlying grid table.
+    */
+    int GetNumberCols() const;
+
+    /**
+        Returns the total number of grid rows.
+
+        This is the same as the number of rows in the underlying grid table.
+    */
+    int GetNumberRows() const;
+
+    /**
+        Returns the attribute for the given cell creating one if necessary.
+
+        If the cell already has an attribute, it is returned. Otherwise a new
+        attribute is created, associated with the cell and returned. In any
+        case the caller must call DecRef() on the returned pointer.
+
+        This function may only be called if CanHaveAttributes() returns @true.
+    */
+    wxGridCellAttr *GetOrCreateCellAttr(int row, int col) const;
+
+    /**
+        Returns a base pointer to the current table object.
+
+        The returned pointer is still owned by the grid.
+    */
+    wxGridTableBase *GetTable() const;
+
+    /**
+        Inserts one or more new columns into a grid with the first new column
+        at the specified position.
+
+        Notice that inserting the columns in the grid requires grid table
+        cooperation: when this method is called, grid object begins by
+        requesting the underlying grid table to insert new columns. If this is
+        successful the table notifies the grid and the grid updates the
+        display. For a default grid (one where you have called CreateGrid())
+        this process is automatic. If you are using a custom grid table
+        (specified with SetTable()) then you must override
+        wxGridTableBase::InsertCols() in your derived table class.
+
+        @param pos
+            The position which the first newly inserted column will have.
+        @param numCols
+            The number of columns to insert.
+        @param updateLabels
+            Currently not used.
+        @return
+            @true if the columns were successfully inserted, @false if an error
+            occurred (most likely the table couldn't be updated).
+    */
+    bool InsertCols(int pos = 0, int numCols = 1, bool updateLabels = true);
+
+    /**
+        Inserts one or more new rows into a grid with the first new row at the
+        specified position.
+
+        Notice that you must implement wxGridTableBase::InsertRows() if you use
+        a grid with a custom table, please see InsertCols() for more
+        information.
+
+        @param pos
+            The position which the first newly inserted row will have.
+        @param numRows
+            The number of rows to insert.
+        @param updateLabels
+            Currently not used.
+        @return
+            @true if the rows were successfully inserted, @false if an error
+            occurred (most likely the table couldn't be updated).
+    */
+    bool InsertRows(int pos = 0, int numRows = 1, bool updateLabels = true);
+
+    /**
+        Sets the cell attributes for all cells in the specified column.
+
+        For more information about controlling grid cell attributes see the
+        wxGridCellAttr cell attribute class and the @ref overview_grid.
+    */
+    void SetColAttr(int col, wxGridCellAttr* attr);
+
+    /**
+        Sets the extra margins used around the grid area.
+
+        A grid may occupy more space than needed for its data display and
+        this function allows to set how big this extra space is
+    */
+    void SetMargins(int extraWidth, int extraHeight);
+
+    /**
+        Sets the cell attributes for all cells in the specified row.
+
+        The grid takes ownership of the attribute pointer.
+
+        See the wxGridCellAttr class for more information about controlling
+        cell attributes.
+    */
+    void SetRowAttr(int row, wxGridCellAttr* attr);
+
+    //@}
 
 protected:
     /**
