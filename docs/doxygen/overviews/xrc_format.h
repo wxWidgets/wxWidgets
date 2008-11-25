@@ -8,34 +8,35 @@
 
 
 /*
-    NOTE: to make doxygen happy about <custom-tags> we're forced to
-          escape all < and > symbols which appear inside a doxygen comment
+    NOTE: To make doxygen happy about <custom-tags> we're forced to
+          escape all < and > symbols which appear inside a doxygen comment.
+          Also, don't use < and > symbols in section titles.
 */
 
 
 /**
 
-@page overview_xrcformat XRC file format
+@page overview_xrcformat XRC File Format
 
 Table of contents:
-@li @ref overview_xrcformat_overview
-@li @ref overview_xrcformat_root
-@li @ref overview_xrcformat_objects
-    @li @ref overview_xrcformat_object
-    @li @ref overview_xrcformat_object_ref
-@li @ref overview_xrcformat_datatypes
-@li @ref overview_xrcformat_windows
-    @li @ref overview_xrcformat_std_props
-    @li @ref overview_xrcformat_controls
-@li @ref overview_xrcformat_sizers
-@li @ref overview_xrcformat_other_objects
-@li @ref overview_xrcformat_platform
-@li @ref overview_xrcformat_extending
-    @li @ref overview_xrcformat_extending_subclass
-    @li @ref overview_xrcformat_extending_unknown
-    @li @ref overview_xrcformat_extending_custom
-@li @ref overview_xrcformat_packed
-@li @ref overview_xrcformat_oldversions
+- @ref overview_xrcformat_overview
+- @ref overview_xrcformat_root
+- @ref overview_xrcformat_objects
+    - @ref overview_xrcformat_object
+    - @ref overview_xrcformat_object_ref
+- @ref overview_xrcformat_datatypes
+- @ref overview_xrcformat_windows
+    - @ref overview_xrcformat_std_props
+    - @ref overview_xrcformat_controls
+- @ref overview_xrcformat_sizers
+- @ref overview_xrcformat_other_objects
+- @ref overview_xrcformat_platform
+- @ref overview_xrcformat_extending
+    - @ref overview_xrcformat_extending_subclass
+    - @ref overview_xrcformat_extending_unknown
+    - @ref overview_xrcformat_extending_custom
+- @ref overview_xrcformat_packed
+- @ref overview_xrcformat_oldversions
 
 This document describes the format of XRC resource files, as used by wxXmlResource.
 
@@ -64,7 +65,7 @@ Child objects are not directly accessible via wxXmlResource, they can only
 be accessed using XRCCTRL().
 
 
-@section overview_xrcformat_root Root element: \<resource\>
+@section overview_xrcformat_root Resource Root Element
 
 The root element is always @c \<resource\>. It has one optional attribute, @c
 version. If set, it specifies version of the file. In absence of @c version
@@ -97,9 +98,9 @@ set and it must be set to a value unique among root's children.
 
 
 
-@section overview_xrcformat_objects Defining objects
+@section overview_xrcformat_objects Defining Objects
 
-@subsection overview_xrcformat_object \<object\>
+@subsection overview_xrcformat_object Object Element
 
 The @c \<object\> element represents a single object (typically a GUI element)
 and it usually maps directly to a wxWidgets class instance. It has one
@@ -161,7 +162,7 @@ Example:
 @endcode
 
 
-@subsection overview_xrcformat_object_ref \<object_ref\>
+@subsection overview_xrcformat_object_ref Object References
 
 Anywhere an @c \<object\> element can be used, @c \<object_ref\> may be used
 instead. @c \<object_ref\> is a @em reference to another named (i.e. with the
@@ -224,7 +225,7 @@ is identical to:
 @endcode
 
 
-@section overview_xrcformat_datatypes Data types
+@section overview_xrcformat_datatypes Data Types
 
 There are several property data types that are frequently reused by different
 properties. Rather than describing their format in the documentation of
@@ -327,13 +328,13 @@ attribute on the property node to "0":
 @see @ref overview_xrcformat_pre_v2530, @ref overview_xrcformat_pre_v2301
 
 
-@subsection overview_xrcformat_type_text_notrans Non-translatable text
+@subsection overview_xrcformat_type_text_notrans Non-Translatable Text
 
 Like @ref overview_xrcformat_type_text, but the text is never translated and
 @c translate attribute cannot be used.
 
 
-@subsection overview_xrcformat_type_string URL
+@subsection overview_xrcformat_type_string String
 
 An unformatted string. Unlike with @ref overview_xrcformat_type_text, no escaping
 or translations are done.
@@ -455,11 +456,11 @@ Examples:
 @endcode
 
 
-@section overview_xrcformat_windows Controls and windows
+@section overview_xrcformat_windows Controls and Windows
 
 This section describes support wxWindow-derived classes in XRC format.
 
-@subsection overview_xrcformat_std_props Standard properties
+@subsection overview_xrcformat_std_props Standard Properties
 
 The following properties are always (unless stated otherwise in
 control-specific docs) available for @em windows objects. They are omitted
@@ -499,7 +500,7 @@ from properties lists below.
 All of these properties are optional.
 
 
-@subsection overview_xrcformat_controls Supported controls
+@subsection overview_xrcformat_controls Supported Controls
 
 This section lists all controls supported by default. For each control, its
 control-specific properties are listed. If the control can have child objects,
@@ -1784,7 +1785,7 @@ Example:
 
 
 
-@section overview_xrcformat_other_objects Other objects
+@section overview_xrcformat_other_objects Other Objects
 
 In addition to describing UI elements, XRC files can contain non-windows
 objects such as bitmaps or icons. This is a concession to Windows developers
@@ -1820,7 +1821,7 @@ wxIcon resources are identical to @ref overview_xrcformat_bitmap "wxBitmap ones"
 except that the class is @c wxIcon.
 
 
-@section overview_xrcformat_platform Platform specific content
+@section overview_xrcformat_platform Platform Specific Content
 
 It is possible to conditionally process parts of XRC files on some platforms
 only and ignore them on other platforms. @em Any element in XRC file, be it
@@ -1846,7 +1847,7 @@ Examples:
 
 
 
-@section overview_xrcformat_extending Extending XRC format
+@section overview_xrcformat_extending Extending the XRC Format
 
 The XRC format is designed to be extensible and allows specifying and loading
 custom controls. The three available mechanisms are described in the rest of
@@ -1886,7 +1887,7 @@ The subclass must satisfy a number of requirements:
     must not be customized.
 
 
-@subsection overview_xrcformat_extending_unknown \<object class="unknown"\>
+@subsection overview_xrcformat_extending_unknown Unknown Objects
 
 A more flexible solution is to put a @em placeholder in the XRC file and
 replace it with custom control after the resource is loaded. This is done by
@@ -1911,7 +1912,7 @@ the @ref overview_xrcformat_std_props "standard window properties".
       they are mutually exclusive.
 
 
-@subsection overview_xrcformat_extending_custom Adding custom classes
+@subsection overview_xrcformat_extending_custom Adding Custom Classes
 
 Finally, XRC allows adding completely new classes in addition to the ones
 listed in this document. A class for which wxXmlResourceHandler is implemented
@@ -1937,7 +1938,7 @@ are accessible using type-unsafe wxXmlResource::LoadObject() method.
 
 
 
-@section overview_xrcformat_packed Packed XRC files
+@section overview_xrcformat_packed Packed XRC Files
 
 In addition to plain XRC files, wxXmlResource supports (if wxFileSystem support
 is compiled in) compressed XRC resources. Compressed resources have either
@@ -1946,13 +1947,13 @@ number of XRC files and their dependencies (bitmaps, icons etc.).
 
 
 
-@section overview_xrcformat_oldversions Older format versions
+@section overview_xrcformat_oldversions Older Format Versions
 
 This section describes differences in older revisions of XRC format (i.e.
 files with older values of @c version attribute of @c \<resource\>).
 
 
-@subsection overview_xrcformat_pre_v2530 Versions before 2.5.3.0
+@subsection overview_xrcformat_pre_v2530 Versions Before 2.5.3.0
 
 Version 2.5.3.0 introduced C-like handling of "\\" in text. In older versions,
 "\n", "\t" and "\r" escape sequences were replaced with respective characters
@@ -1961,7 +1962,7 @@ replaced with single "\", as one would expect. Starting with 2.5.3.0, all of
 them are handled in C-like manner.
 
 
-@subsection overview_xrcformat_pre_v2301 Versions before 2.3.0.1
+@subsection overview_xrcformat_pre_v2301 Versions Before 2.3.0.1
 
 Prior to version 2.3.0.1, "$" was used for accelerators instead of "_"
 or "&amp;". For example,
