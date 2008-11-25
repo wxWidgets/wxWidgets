@@ -279,58 +279,120 @@ public:
 
     Example:
     @code
+        extern const wxEventType wxEVT_COMMAND_MYTHREAD_UPDATE;
+
         class MyFrame : public wxFrame, public wxThreadHelper
         {
         public:
-            MyFrame() : wxThreadHelper(wxTHREAD_JOINABLE) {}
-
-            ...
-
-            virtual ExitCode Entry()
-            {
-                // here we do our long task, periodically calling TestDestroy():
-                while (!TestDestroy())
-                {
-                    // ...do another bit of work here...
-
-                    // post an update message to the frame
-                }
-
-                // TestDestroy() returned true (which means the main thread
-                // asked us to terminate as soon as possible) or we ended the
-                // long task...
-                return (ExitCode)0;
-            }
-
+            MyFrame(...) { ... }
             ~MyFrame()
             {
-                // important: before terminating, we _must_ wait for our
-                // joinable thread to end, if it's running!
-                if (GetThread()->IsRunning())
-                    GetThread()->Wait();
+                // it's better to do any thread cleanup in the OnClose()
+                // event handler, rather than in the destructor.
+                // This is because the event loop for a top-level window is not
+                // active anymore when its destructor is called and if the thread
+                // sends events when ending, they won't be processed unless
+                // you ended the thread from OnClose.
+                // See @ref overview_windowdeletion for more info.
             }
 
             ...
             void DoStartALongTask();
+            void OnThreadUpdate(wxCommandEvent& evt);
+            void OnClose(wxCloseEvent& evt);
             ...
-        }
+
+        protected:
+            virtual wxThread::ExitCode Entry();
+
+            // the output data of the Entry() routine:
+            char m_data[1024];
+            wxCriticalSection m_dataCS; // protects field above
+
+            DECLARE_EVENT_TABLE()
+        };
+
+        DEFINE_EVENT_TYPE(wxEVT_COMMAND_MYTHREAD_UPDATE)
+        BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+            EVT_COMMAND(wxID_ANY, wxEVT_COMMAND_MYTHREAD_UPDATE, MyFrame::OnThreadUpdate)
+            EVT_CLOSE(MyFrame::OnClose)
+        END_EVENT_TABLE()
 
         void MyFrame::DoStartALongTask()
         {
             // we want to start a long task, but we don't want our GUI to block
             // while it's executed, so we use a thread to do it.
-            if (Create() != wxTHREAD_NO_ERROR)
+            if (CreateThread(wxTHREAD_JOINABLE) != wxTHREAD_NO_ERROR)
             {
                 wxLogError("Could not create the worker thread!");
                 return;
             }
 
             // go!
-            if (Run() != wxTHREAD_NO_ERROR)
+            if (GetThread()->Run() != wxTHREAD_NO_ERROR)
             {
                 wxLogError("Could not run the worker thread!");
                 return;
             }
+        }
+
+        wxThread::ExitCode MyFrame::Entry()
+        {
+            // IMPORTANT:
+            // this function gets executed in the secondary thread context!
+
+            int offset = 0;
+
+            // here we do our long task, periodically calling TestDestroy():
+            while (!GetThread()->TestDestroy())
+            {
+                // since this Entry() is implemented in MyFrame context we don't
+                // need any pointer to access the m_data, m_processedData, m_dataCS
+                // variables... very nice!
+
+                // this is an example of the generic structure of a download thread:
+                char buffer[1024];
+                download_chunk(buffer, 1024);     // this takes time...
+
+                {
+                    // ensure noone reads m_data while we write it
+                    wxCriticalSectionLocker lock(m_dataCS);
+                    memcpy(m_data+offset, buffer, 1024);
+                    offset += 1024;
+                }
+
+
+                // VERY IMPORTANT: do not call any GUI function inside this
+                //                 function; rather use wxQueueEvent():
+                wxQueueEvent(this, new wxCommandEvent(wxEVT_COMMAND_MYTHREAD_UPDATE));
+                    // we used pointer 'this' assuming it's safe; see OnClose()
+            }
+
+            // TestDestroy() returned true (which means the main thread asked us
+            // to terminate as soon as possible) or we ended the long task...
+            return (wxThread::ExitCode)0;
+        }
+
+        void MyFrame::OnClose(wxCloseEvent&)
+        {
+            // important: before terminating, we _must_ wait for our joinable
+            // thread to end, if it's running; in fact it uses variables of this
+            // instance and posts events to *this event handler
+
+            if (GetThread() &&      // DoStartALongTask() may have not been called
+                GetThread()->IsRunning())
+                GetThread()->Wait();
+
+            Destroy();
+        }
+
+        void MyFrame::OnThreadUpdate(wxCommandEvent&evt)
+        {
+            // ...do something... e.g. m_pGauge->Pulse();
+
+            // read some parts of m_data just for fun:
+            wxCriticalSectionLocker lock(m_dataCS);
+            wxPrintf("%c", m_data[100]);
         }
     @endcode
 
@@ -365,6 +427,25 @@ public:
         This function is pure virtual and must be implemented by any derived class.
         The thread execution will start here.
 
+        You'll typically want your Entry() to look like:
+        @code
+            wxThread::ExitCode Entry()
+            {
+                while (!GetThread()->TestDestroy())
+                {
+                    // ... do some work ...
+
+                    if (IsWorkCompleted)
+                        break;
+
+                    if (HappenedStoppingError)
+                        return (wxThread::ExitCode)1;   // failure
+                }
+
+                return (wxThread::ExitCode)0;           // success
+            }
+        @endcode
+
         The returned value is the thread exit code which is only useful for
         joinable threads and is the value returned by @c "GetThread()->Wait()".
 
@@ -374,26 +455,30 @@ public:
     virtual ExitCode Entry() = 0;
 
     /**
-        Creates a new thread.
+        Creates a new thread of the given @a kind.
 
         The thread object is created in the suspended state, and you
         should call @ref wxThread::Run "GetThread()->Run()" to start running it.
 
         You may optionally specify the stack size to be allocated to it (ignored
-        on platforms that don't support setting it explicitly, eg. Unix).
-
-        Note that the type of the thread which is created is defined in the
-        constructor.
+        on platforms that don't support setting it explicitly, e.g. Unix).
 
         @return One of the ::wxThreadError enum values.
     */
-    wxThreadError Create(unsigned int stackSize = 0);
+    wxThreadError CreateThread(wxThreadKind kind = wxTHREAD_JOINABLE,
+                               unsigned int stackSize = 0);
 
     /**
         This is a public function that returns the wxThread object associated with
         the thread.
     */
     wxThread* GetThread() const;
+
+    /**
+        Returns the last type of thread given to the CreateThread() function
+        or to the constructor.
+    */
+    wxThreadKind GetThreadKind() const;
 };
 
 /**
@@ -541,55 +626,66 @@ enum
     @code
     // declare a new type of event, to be used by our MyThread class:
     extern const wxEventType wxEVT_COMMAND_MYTHREAD_COMPLETED;
+    extern const wxEventType wxEVT_COMMAND_MYTHREAD_UPDATE;
+    class MyFrame;
 
     class MyThread : public wxThread
     {
     public:
-        MyThread(wxEvtHandler *handler) : wxThread(wxTHREAD_DETACHED)
-            { m_pHandler = handler; }
+        MyThread(MyFrame *handler)
+            : wxThread(wxTHREAD_DETACHED)
+            { m_pHandler = handler }
+        ~MyThread();
 
-        ExitCode Entry()
-        {
-            while (!TestDestroy())
-            {
-                // ... do a bit of work...
-            }
-
-            // signal the event handler that this thread is going to be destroyed
-            // NOTE: here we assume that using the m_pHandler pointer is safe,
-            //       (in this case it's assured by the MyFrame destructor)
-            wxQueueEvent(m_pHandler, new wxCommandEvent(wxEVT_COMMAND_MYTHREAD_COMPLETED));
-
-            return (ExitCode)0;     // success
-        }
-
-        wxEvtHandler *m_pHandler;
+    protected:
+        virtual ExitCode Entry();
+        MyFrame *m_pHandler;
     };
 
     class MyFrame : public wxFrame
     {
     public:
         ...
-        ~MyFrame();
+        ~MyFrame()
+        {
+            // it's better to do any thread cleanup in the OnClose()
+            // event handler, rather than in the destructor.
+            // This is because the event loop for a top-level window is not
+            // active anymore when its destructor is called and if the thread
+            // sends events when ending, they won't be processed unless
+            // you ended the thread from OnClose.
+            // See @ref overview_windowdeletion for more info.
+        }
         ...
         void DoStartThread();
         void DoPauseThread();
 
-        // a resume routine would be mostly identic to DoPauseThread()
+        // a resume routine would be nearly identic to DoPauseThread()
         void DoResumeThread() { ... }
 
-        void OnThreadExit(wxCommandEvent&);
+        void OnThreadCompletion(wxCommandEvent&);
+        void OnClose(wxCloseEvent&);
 
     protected:
         MyThread *m_pThread;
+        wxCriticalSection m_pThreadCS;    // protects the m_pThread pointer
 
-        // this is _required_ for writing safe code!
-        wxCriticalSection m_critSection;
+        DECLARE_EVENT_TABLE()
     };
+
+    BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+        EVT_CLOSE(MyFrame::OnClose)
+        EVT_MENU(Minimal_Start,  MyFrame::DoStartThread)
+        EVT_COMMAND(wxID_ANY, wxEVT_COMMAND_MYTHREAD_UPDATE, MyFrame::OnThreadUpdate)
+        EVT_COMMAND(wxID_ANY, wxEVT_COMMAND_MYTHREAD_COMPLETED, MyFrame::OnThreadCompletion)
+    END_EVENT_TABLE()
+
+    DEFINE_EVENT_TYPE(wxEVT_COMMAND_MYTHREAD_COMPLETED)
+    DEFINE_EVENT_TYPE(wxEVT_COMMAND_MYTHREAD_UPDATE)
 
     void MyFrame::DoStartThread()
     {
-        m_pThread = new wxThread();
+        m_pThread = new MyThread(this);
 
         if ( m_pThread->Create() != wxTHREAD_NO_ERROR )
         {
@@ -613,54 +709,95 @@ enum
         }
     }
 
-    void MyFrame::OnThreadExit(wxCommandEvent&)
+    wxThread::ExitCode MyThread::Entry()
     {
-        // the thread just ended; make sure not to leave dangling pointers around
-        m_pThread = NULL;
+        while (!TestDestroy())
+        {
+            // ... do a bit of work...
+
+            wxQueueEvent(m_pHandler, new wxCommandEvent(wxEVT_COMMAND_MYTHREAD_UPDATE));
+        }
+
+        // signal the event handler that this thread is going to be destroyed
+        // NOTE: here we assume that using the m_pHandler pointer is safe,
+        //       (in this case this is assured by the MyFrame destructor)
+        wxQueueEvent(m_pHandler, new wxCommandEvent(wxEVT_COMMAND_MYTHREAD_COMPLETED));
+
+        return (wxThread::ExitCode)0;     // success
+    }
+
+    MyThread::~MyThread()
+    {
+        wxCriticalSectionLocker enter(m_pHandler->m_pThreadCS);
+
+        // the thread is being destroyed; make sure not to leave dangling pointers around
+        m_pHandler->m_pThread = NULL;
+    }
+
+    void MyFrame::OnThreadCompletion(wxCommandEvent&)
+    {
+        wxMessageOutputDebug().Printf("MYFRAME: MyThread exited!\n");
+    }
+
+    void MyFrame::OnThreadUpdate(wxCommandEvent&)
+    {
+        wxMessageOutputDebug().Printf("MYFRAME: MyThread update...\n");
     }
 
     void MyFrame::DoPauseThread()
     {
         // anytime we access the m_pThread pointer we must ensure that it won't
-        // be modified in the meanwhile; inside a critical section we are sure
-        // that we are the only thread running, so that's what we need.
-        wxCriticalSectionLocker enter(m_critSection);
+        // be modified in the meanwhile; since only a single thread may be
+        // inside a given critical section at a given time, the following code
+        // is safe:
+        wxCriticalSectionLocker enter(m_pThreadCS);
 
         if (m_pThread)         // does the thread still exist?
         {
             // without a critical section, once reached this point it may happen
             // that the OS scheduler gives control to the MyThread::Entry() function,
             // which in turn may return (because it completes its work) making
-            // invalid the m_pThread pointer; the critical section above
-            // makes this code safe.
+            // invalid the m_pThread pointer
 
             if (m_pThread->Pause() != wxTHREAD_NO_ERROR )
                 wxLogError("Can't pause the thread!");
         }
     }
 
-    MyFrame::~MyFrame()
+    void MyFrame::OnClose(wxCloseEvent&)
     {
-        wxCriticalSectionLocker enter(m_critSection);
-
-        if (m_pThread)         // does the thread still exist?
         {
-            if (m_pThread->Delete() != wxTHREAD_NO_ERROR )
-                wxLogError("Can't delete the thread!");
+            wxCriticalSectionLocker enter(m_pThreadCS);
 
-            // as soon as we exit the critical section and the MyThread::Entry
-            // function calls TestDestroy(), the thread will exit and thus
-            // call OnExitThread(); we need to maintain MyFrame object alive
-            // until then:
-            wxEventLoopBase* p = wxEventLoopBase::GetActive();
-            while (p->Pending() && m_pThread)
-                p->Dispatch();
+            if (m_pThread)         // does the thread still exist?
+            {
+                m_out.Printf("MYFRAME: deleting thread");
 
-            // the wxEVT_COMMAND_MYTHREAD_COMPLETED event was posted, we can
-            // safely exit
+                if (m_pThread->Delete() != wxTHREAD_NO_ERROR )
+                    wxLogError("Can't delete the thread!");
+            }
+        }       // exit from the critical section to give the thread
+                // the possibility to enter its destructor
+                // (which is guarded with m_pThreadCS critical section!)
+
+        while (1)
+        {
+            { // was the ~MyThread() function executed?
+                wxCriticalSectionLocker enter(m_pThreadCS);
+                if (!m_pThread) break;
+            }
+
+            // wait for thread completion
+            wxThread::This()->Sleep(1);
         }
+
+        Destroy();
     }
     @endcode
+
+    For a more detailed and comprehensive example, see @sample{thread}.
+    For a simpler way to share data and synchronization objects between
+    the main and the secondary thread see wxThreadHelper.
 
     Conversely, @b joinable threads do not delete themselves when they are done
     processing and as such are safe to create on the stack. Joinable threads
@@ -817,9 +954,10 @@ public:
         the thread calls TestDestroy() or when it finishes processing.
 
         @note
-            While this could work on a joinable thread you simply should not
-            call this routine on them as afterwards you may not be able to call
-            Wait() to free the memory of that thread.
+            This function works on a joinable thread but in that case makes
+            the TestDestroy() function of the thread return @true and then
+            waits for its completion (i.e. it differs from Wait() because
+            it asks the thread to terminate before waiting).
 
         See @ref thread_deletion for a broader explanation of this routine.
     */
@@ -944,8 +1082,13 @@ public:
     wxThreadError Resume();
 
     /**
-        Starts the thread execution. Should be called after
-        Create().
+        Starts the thread execution. Should be called after Create().
+
+        Note that once you Run() a @b detached thread, @e any function call you do
+        on the thread pointer (you must allocate it on the heap) is @e "unsafe";
+        i.e. the thread may have terminated at any moment after Run() and your pointer
+        may be dangling. See @ref thread_types for an example of safe manipulation
+        of detached threads.
 
         This function can only be called from another thread context.
     */
@@ -1003,12 +1146,13 @@ public:
     static wxThread* This();
 
     /**
-        Waits for a joinable thread to terminate and returns the value the thread
+        Waits for a @b joinable thread to terminate and returns the value the thread
         returned from Entry() or @c "(ExitCode)-1" on error. Notice that, unlike
         Delete(), this function doesn't cancel the thread in any way so the caller
         waits for as long as it takes to the thread to exit.
 
         You can only Wait() for @b joinable (not detached) threads.
+
         This function can only be called from another thread context.
 
         See @ref thread_deletion for a broader explanation of this routine.
@@ -1016,7 +1160,7 @@ public:
     ExitCode Wait();
 
     /**
-        Give the rest of the thread time slice to the system allowing the other
+        Give the rest of the thread's time-slice to the system allowing the other
         threads to run.
 
         Note that using this function is @b strongly discouraged, since in
@@ -1042,8 +1186,8 @@ public:
         With a well-behaving, CPU-efficient thread the operating system is likely
         to properly care for its reactivation the moment it needs it, whereas with
         non-deterministic, Yield-using threads all bets are off and the system
-        scheduler is free to penalize drastically</strong>, and this effect gets worse
-        with increasing system load due to less free CPU resources available.
+        scheduler is free to penalize them drastically</strong>, and this effect
+        gets worse with increasing system load due to less free CPU resources available.
         You may refer to various Linux kernel @c sched_yield discussions for more
         information.
 
