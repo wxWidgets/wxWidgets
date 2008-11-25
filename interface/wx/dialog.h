@@ -180,8 +180,11 @@ public:
              const wxString& name = wxDialogNameStr);
 
     /**
-        Destructor. Deletes any child windows before deleting the physical
-        window.
+        Destructor.
+
+        Deletes any child windows before deleting the physical window.
+
+        See @ref overview_windowdeletion for more info.
     */
     virtual ~wxDialog();
 

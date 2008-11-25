@@ -54,6 +54,42 @@ class wxTopLevelWindow : public wxWindow
 {
 public:
     /**
+        Default ctor.
+    */
+    wxTopLevelWindow();
+
+    /**
+        Constructor creating the top level window.
+    */
+    wxTopLevelWindow(wxWindow *parent,
+                    wxWindowID winid,
+                    const wxString& title,
+                    const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& size = wxDefaultSize,
+                    long style = wxDEFAULT_FRAME_STYLE,
+                    const wxString& name = wxFrameNameStr);
+
+    /**
+        Destructor. Remember that wxTopLevelWindows do not get immediately
+        destroyed when the user (or the app) closes them; they have a
+        @b delayed destruction.
+
+        See @ref overview_windowdeletion for more info.
+    */
+    virtual ~wxTopLevelWindow();
+
+    /**
+        Creates the top level window.
+    */
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxString& title,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxDEFAULT_FRAME_STYLE,
+                const wxString& name = wxFrameNameStr);
+
+    /**
         Returns @true if the platform supports making the window translucent.
 
         @see SetTransparent()

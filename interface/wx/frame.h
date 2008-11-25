@@ -165,6 +165,8 @@ public:
 
     /**
         Destructor. Destroys all child windows and menu bar if present.
+
+        See @ref overview_windowdeletion for more info.
     */
     virtual ~wxFrame();
 
