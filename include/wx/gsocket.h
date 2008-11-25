@@ -220,6 +220,13 @@ public:
     // named) OnRequest() method
     void NotifyOnStateChange(GSocketEvent event);
 
+    // FIXME: making these functions virtual is a hack necessary to make the
+    //        wxBase library link without requiring wxNet under Unix where
+    //        GSocketSelectManager (part of wxBase) uses them, they don't
+    //        really need to be virtual at all
+    virtual void Detected_Read() { }
+    virtual void Detected_Write() { }
+
     // this is officially SOCKET (unsigned int) under Windows but we don't want
     // to include winsock.h which defines SOCKET from here so just use int
     // under all platforms
