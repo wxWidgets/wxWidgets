@@ -11,6 +11,8 @@
 #ifndef _WX_UNIX_GSOCKUNX_H_
 #define _WX_UNIX_GSOCKUNX_H_
 
+#include <unistd.h>
+
 class wxGSocketIOHandler;
 
 class GSocket : public GSocketBase
