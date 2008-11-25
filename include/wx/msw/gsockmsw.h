@@ -33,8 +33,6 @@ public:
         m_msgnumber = 0;
     }
 
-    virtual void Close();
-
     virtual GSocket *WaitConnection(wxSocketBase& wxsocket);
 
 

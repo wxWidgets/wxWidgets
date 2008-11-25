@@ -210,6 +210,15 @@ GSocketBase::~GSocketBase()
     GSocketManager::Get()->Destroy_Socket(static_cast<GSocket *>(this));
 }
 
+void GSocketBase::Close()
+{
+    if ( m_fd != INVALID_SOCKET )
+    {
+        GSocketManager::Get()->Close_Socket(static_cast<GSocket *>(this));
+        m_fd = INVALID_SOCKET;
+    }
+}
+
 /* GSocket_Shutdown:
  *  Disallow further read/write operations on this socket, close
  *  the fd and disable all callbacks.

@@ -185,13 +185,11 @@ public:
     virtual void OnExit();
 
     virtual bool Init_Socket(GSocket *socket);
+    virtual void Close_Socket(GSocket *socket);
     virtual void Destroy_Socket(GSocket *socket);
 
     virtual void Install_Callback(GSocket *socket, GSocketEvent event);
     virtual void Uninstall_Callback(GSocket *socket, GSocketEvent event);
-
-    virtual void Enable_Events(GSocket *socket);
-    virtual void Disable_Events(GSocket *socket);
 };
 
 /* Global initializers */
@@ -309,6 +307,13 @@ bool GSocketMSWManager::Init_Socket(GSocket *socket)
   return true;
 }
 
+void GSocketMSWManager::Close_Socket(GSocket *socket)
+{
+    Uninstall_Callback(socket, GSOCK_MAX_EVENT /* unused anyhow */);
+
+    closesocket(socket->m_fd);
+}
+
 void GSocketMSWManager::Destroy_Socket(GSocket *socket)
 {
   /* Remove the socket from the list */
@@ -329,18 +334,6 @@ void GSocketMSWManager::Destroy_Socket(GSocket *socket)
   //else: the socket has never been created successfully
 
   LeaveCriticalSection(&critical);
-}
-
-void GSocketMSWManager::Install_Callback(GSocket * WXUNUSED(socket),
-                                         GSocketEvent WXUNUSED(event))
-{
-    wxFAIL_MSG( _T("not used under MSW") );
-}
-
-void GSocketMSWManager::Uninstall_Callback(GSocket * WXUNUSED(socket),
-                                           GSocketEvent WXUNUSED(event))
-{
-    wxFAIL_MSG( _T("not used under MSW") );
 }
 
 /* Windows proc for asynchronous event handling */
@@ -405,12 +398,13 @@ LRESULT CALLBACK _GSocket_Internal_WinProc(HWND hWnd,
     return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
 
-/* _GSocket_Enable_Events:
+/*
  *  Enable all event notifications; we need to be notified of all
  *  events for internal processing, but we will only notify users
- *  when an appropiate callback function has been installed.
+ *  when an appropriate callback function has been installed.
  */
-void GSocketMSWManager::Enable_Events(GSocket *socket)
+void GSocketMSWManager::Install_Callback(GSocket *socket,
+                                         GSocketEvent WXUNUSED(event))
 {
   if (socket->m_fd != INVALID_SOCKET)
   {
@@ -438,10 +432,11 @@ void GSocketMSWManager::Enable_Events(GSocket *socket)
   }
 }
 
-/* _GSocket_Disable_Events:
- *  Disable event notifications (when shutdowning the socket)
+/*
+ *  Disable event notifications (used when shutting down the socket)
  */
-void GSocketMSWManager::Disable_Events(GSocket *socket)
+void GSocketMSWManager::Uninstall_Callback(GSocket *socket,
+                                           GSocketEvent WXUNUSED(event))
 {
   if (socket->m_fd != INVALID_SOCKET)
   {

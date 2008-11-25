@@ -101,13 +101,6 @@ void GSocket_Cleanup()
 
 /* Constructors / Destructors for GSocket */
 
-void GSocket::Close()
-{
-    GSocketManager::Get()->Disable_Events(this);
-    closesocket(m_fd);
-    m_fd = INVALID_SOCKET;
-}
-
 /* Server specific parts */
 
 /* GSocket_SetServer:
@@ -152,7 +145,7 @@ GSocketError GSocket::SetServer()
   }
 
   ioctlsocket(m_fd, FIONBIO, (u_long FAR *) &arg);
-  GSocketManager::Get()->Enable_Events(this);
+  GSocketManager::Get()->Install_Callback(this);
 
   /* allow a socket to re-bind if the socket is in the TIME_WAIT
      state after being previously closed.
@@ -262,7 +255,7 @@ GSocket *GSocket::WaitConnection(wxSocketBase& wxsocket)
   }
 
   ioctlsocket(connection->m_fd, FIONBIO, (u_long FAR *) &arg);
-  GSocketManager::Get()->Enable_Events(connection);
+  GSocketManager::Get()->Install_Callback(connection);
 
   return connection;
 }
@@ -374,7 +367,7 @@ GSocketError GSocket::Connect(GSocketStream stream)
   }
 
   ioctlsocket(m_fd, FIONBIO, (u_long FAR *) &arg);
-  GSocketManager::Get()->Enable_Events(this);
+  GSocketManager::Get()->Install_Callback(this);
 
   // If the reuse flag is set, use the applicable socket reuse flag
   if (m_reusable)
@@ -485,7 +478,7 @@ GSocketError GSocket::SetNonOriented()
   }
 
   ioctlsocket(m_fd, FIONBIO, (u_long FAR *) &arg);
-  GSocketManager::Get()->Enable_Events(this);
+  GSocketManager::Get()->Install_Callback(this);
 
   if (m_reusable)
   {

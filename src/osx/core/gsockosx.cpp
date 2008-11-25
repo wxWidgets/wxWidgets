@@ -15,6 +15,17 @@
 
 #include <CoreFoundation/CoreFoundation.h>
 
+namespace
+{
+
+// ----------------------------------------------------------------------------
+// global variables
+// ----------------------------------------------------------------------------
+
+// Sockets must use the event loop to monitor the events so we store a
+// reference to the main thread event loop here
+static CFRunLoopRef gs_mainRunLoop = NULL;
+
 // ----------------------------------------------------------------------------
 // Mac-specific data associated with each socket by GSocketCFManager
 // ----------------------------------------------------------------------------
@@ -61,16 +72,33 @@ public:
 
         m_source = CFSocketCreateRunLoopSource(NULL, m_socket, 0);
 
-        return m_source != NULL;
+        if ( !m_source )
+        {
+            CFRelease(m_socket);
+            return false;
+        }
+
+        CFRunLoopAddSource(gs_mainRunLoop, m_source, kCFRunLoopCommonModes);
+
+        return true;
     }
 
-    // free the objects created by Initialize()
+    // close the socket if it was opened
+    void Close()
+    {
+        // VZ: CFRunLoopRemoveSource() is probably unnecessary as
+        //     CFSocketInvalidate() seems to do it internally from reading the
+        //     docs, please remove it (and this comment) after testing
+        CFRunLoopRemoveSource(gs_mainRunLoop, m_source, kCFRunLoopCommonModes);
+        CFSocketInvalidate(m_socket);
+
+        CFRelease(m_source);
+        CFRelease(m_socket);
+    }
+
     ~MacGSocketData()
     {
-        if ( m_source )
-            CFRelease(m_source);
-        if ( m_socket )
-            CFRelease(m_socket);
+        wxASSERT_MSG( !m_source && !m_socket, "forgot to call Close()?" );
     }
 
     // return true if Initialize() had already been called successfully
@@ -138,6 +166,9 @@ private:
     DECLARE_NO_COPY_CLASS(MacGSocketData);
 };
 
+} // anonymous namespace
+
+
 // ----------------------------------------------------------------------------
 // CoreFoundation implementation of GSocketManager
 // ----------------------------------------------------------------------------
@@ -149,13 +180,11 @@ public:
     virtual void OnExit();
 
     virtual bool Init_Socket(GSocket *socket);
+    virtual void Close_Socket(GSocket *socket);
     virtual void Destroy_Socket(GSocket *socket);
 
     virtual void Install_Callback(GSocket *socket, GSocketEvent event);
     virtual void Uninstall_Callback(GSocket *socket, GSocketEvent event);
-
-    virtual void Enable_Events(GSocket *socket);
-    virtual void Disable_Events(GSocket *socket);
 
 private:
     // retrieve our custom data associated with the given socket
@@ -191,29 +220,22 @@ private:
     // differently depending on whether they happen on a server or on a client
     // socket)
     static int GetCFCallback(GSocket *socket, GSocketEvent event);
-
-
-    // Sockets must use the event loop on the main thread so we store a
-    // reference to the main loop here in OnInit()
-    static CFRunLoopRef ms_mainRunLoop;
 };
-
-CFRunLoopRef GSocketCFManager::ms_mainRunLoop = NULL;
 
 bool GSocketCFManager::OnInit()
 {
     // No need to store the main loop again
-    if (ms_mainRunLoop != NULL)
+    if (gs_mainRunLoop != NULL)
         return true;
 
     // Get the loop for the main thread so our events will actually fire.
     // The common socket.cpp code will assert if initialize is called from a
     // secondary thread, otherwise Mac would have the same problems as MSW
-    ms_mainRunLoop = CFRunLoopGetCurrent();
-    if ( !ms_mainRunLoop )
+    gs_mainRunLoop = CFRunLoopGetCurrent();
+    if ( !gs_mainRunLoop )
         return false;
 
-    CFRetain(ms_mainRunLoop);
+    CFRetain(gs_mainRunLoop);
 
     return true;
 }
@@ -221,14 +243,24 @@ bool GSocketCFManager::OnInit()
 void GSocketCFManager::OnExit()
 {
     // Release the reference count, and set the reference back to NULL
-    CFRelease(ms_mainRunLoop);
-    ms_mainRunLoop = NULL;
+    CFRelease(gs_mainRunLoop);
+    gs_mainRunLoop = NULL;
 }
 
 bool GSocketCFManager::Init_Socket(GSocket *socket)
 {
     socket->m_gui_dependent = new MacGSocketData;
     return true;
+}
+
+void GSocketCFManager::Close_Socket(GSocket *socket)
+{
+    Uninstall_Callback(socket, GSOCK_INPUT);
+    Uninstall_Callback(socket, GSOCK_OUTPUT);
+
+    MacGSocketData * const data = GetData(socket);
+    if ( data )
+        data->Close();
 }
 
 void GSocketCFManager::Destroy_Socket(GSocket *socket)
@@ -283,29 +315,6 @@ void GSocketCFManager::Uninstall_Callback(GSocket *socket, GSocketEvent event)
         return;
 
     CFSocketDisableCallBacks(data->GetSocket(), GetCFCallback(socket, event));
-}
-
-void GSocketCFManager::Enable_Events(GSocket *socket)
-{
-    const MacGSocketData * const data = GetInitializedData(socket);
-    if ( !data )
-        return;
-
-    CFRunLoopAddSource(ms_mainRunLoop, data->GetSource(), kCFRunLoopCommonModes);
-}
-
-void GSocketCFManager::Disable_Events(GSocket *socket)
-{
-    const MacGSocketData * const data = GetInitializedData(socket);
-    if ( !data )
-        return;
-
-    // CFSocketInvalidate does CFRunLoopRemoveSource anyway
-    CFRunLoopRemoveSource(ms_mainRunLoop, data->GetSource(), kCFRunLoopCommonModes);
-    CFSocketInvalidate(data->GetSocket());
-
-    // CFSocketInvalidate has closed the socket so we want to make sure GSocket knows this
-    socket->m_fd = -1;
 }
 
 GSocketManager *wxAppTraits::GetSocketManager()

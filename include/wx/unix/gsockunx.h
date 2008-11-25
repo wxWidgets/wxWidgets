@@ -19,7 +19,6 @@ public:
     GSocket(wxSocketBase& wxsocket);
     virtual ~GSocket();
 
-    virtual void Close();
     virtual void Shutdown();
     virtual GSocket *WaitConnection(wxSocketBase& wxsocket);
 
@@ -41,12 +40,35 @@ public:
     void Detected_Read();
     void Detected_Write();
 
-protected:
-    //enable or disable event callback using gsocket gui callback table
-    void EnableEvents(bool flag = true);
-    void DisableEvents() { EnableEvents(false); }
-    void Enable(GSocketEvent event);
-    void Disable(GSocketEvent event);
+private:
+    // enable or disable notifications for socket input/output events but only
+    // if m_use_events is true; do nothing otherwise
+    void EnableEvents()
+    {
+        if ( m_use_events )
+            DoEnableEvents(true);
+    }
+
+    void DisableEvents()
+    {
+        if ( m_use_events )
+            DoEnableEvents(false);
+    }
+
+    // really enable or disable socket input/output events, regardless of
+    // m_use_events value
+    void DoEnableEvents(bool enable);
+
+
+    // enable or disable events for the given event if m_use_events; do nothing
+    // otherwise
+    //
+    // notice that these functions also update m_detected: EnableEvent() clears
+    // the corresponding bit in it and DisableEvent() sets it
+    void EnableEvent(GSocketEvent event);
+    void DisableEvent(GSocketEvent event);
+
+
     GSocketError Input_Timeout();
     GSocketError Output_Timeout();
     int Recv_Stream(char *buffer, int size);
@@ -92,20 +114,18 @@ public:
 
         return true;
     }
-    virtual void Destroy_Socket(GSocket *socket)
-    {
-        free(socket->m_gui_dependent);
-    }
 
-    virtual void Enable_Events(GSocket *socket)
-    {
-        Install_Callback(socket, GSOCK_INPUT);
-        Install_Callback(socket, GSOCK_OUTPUT);
-    }
-    virtual void Disable_Events(GSocket *socket)
+    virtual void Close_Socket(GSocket *socket)
     {
         Uninstall_Callback(socket, GSOCK_INPUT);
         Uninstall_Callback(socket, GSOCK_OUTPUT);
+
+        close(socket->m_fd);
+    }
+
+    virtual void Destroy_Socket(GSocket *socket)
+    {
+        free(socket->m_gui_dependent);
     }
 
 protected:

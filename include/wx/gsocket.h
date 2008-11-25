@@ -144,16 +144,33 @@ public:
     virtual void OnExit() = 0;
 
 
-    // do manager-specific socket initializations (and undo it): this is called
-    // in the beginning/end of the socket initialization/destruction
+    // do manager-specific socket initializations: called in the beginning of
+    // the socket initialization
     virtual bool Init_Socket(GSocket *socket) = 0;
+
+    // called when the socket is being closed
+    //
+    // TODO: merge this with Destroy_Socket(), currently 2 separate functions
+    //       are needed because Init_Socket() always allocates manager-specific
+    //       resources in GSocket and Destroy_Socket() must be called even if
+    //       the socket has never been opened, but if the allocation were done
+    //       on demand, then Destroy_Socket() could be called from
+    //       GSocket::Close() and we wouldn't need Close_Socket() at all
+    virtual void Close_Socket(GSocket *socket) = 0;
+
+    // undo Init_Socket(): called from GSocket dtor
     virtual void Destroy_Socket(GSocket *socket) = 0;
 
-    virtual void Install_Callback(GSocket *socket, GSocketEvent event) = 0;
-    virtual void Uninstall_Callback(GSocket *socket, GSocketEvent event) = 0;
 
-    virtual void Enable_Events(GSocket *socket) = 0;
-    virtual void Disable_Events(GSocket *socket) = 0;
+    // these functions enable or disable monitoring of the given socket for the
+    // specified events inside the currently running event loop (but notice
+    // that both BSD and Winsock implementations actually use socket->m_server
+    // value to determine what exactly should be monitored so it needs to be
+    // set before calling these functions)
+    virtual void Install_Callback(GSocket *socket,
+                                  GSocketEvent event = GSOCK_MAX_EVENT) = 0;
+    virtual void Uninstall_Callback(GSocket *socket,
+                                    GSocketEvent event = GSOCK_MAX_EVENT) = 0;
 
     virtual ~GSocketManager() { }
 
@@ -190,7 +207,7 @@ public:
 
     virtual GSocket *WaitConnection(wxSocketBase& wxsocket) = 0;
 
-    virtual void Close() = 0;
+    void Close();
     virtual void Shutdown();
 
     void SetInitialSocketBuffers(int recv, int send)

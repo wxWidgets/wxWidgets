@@ -453,30 +453,12 @@ void GSocket_Cleanup()
 /* Constructors / Destructors for GSocket */
 
 GSocket::GSocket(wxSocketBase& wxsocket)
-    : GSocketBase(wxsocket)
+       : GSocketBase(wxsocket)
 {
   m_handler             = NULL;
 
   m_gui_dependent       = NULL;
   m_use_events          = false;
-}
-
-void GSocket::Close()
-{
-    if (m_use_events)
-        DisableEvents();
-
-    /*  When running on OS X, the gsockosx implementation of GSocketGUIFunctionsTable
-        will close the socket during Disable_Events.  However, it will only do this
-        if it is being used.  That is, it won't do it in a console program.  To
-        ensure we get the right behavior, we have gsockosx set m_fd = INVALID_SOCKET
-        if it has closed the socket which indicates to us (at runtime, instead of
-        at compile time as this had been before) that the socket has already
-        been closed.
-     */
-    if(m_fd != INVALID_SOCKET)
-        close(m_fd);
-    m_fd = INVALID_SOCKET;
 }
 
 GSocket::~GSocket()
@@ -491,8 +473,7 @@ GSocket::~GSocket()
 void GSocket::Shutdown()
 {
     /* Don't allow events to fire after socket has been closed */
-    if (m_use_events)
-        DisableEvents();
+    DisableEvents();
 
     GSocketBase::Shutdown();
 }
@@ -548,8 +529,7 @@ GSocketError GSocket::SetServer()
 #endif
 
   ioctl(m_fd, FIONBIO, &arg);
-  if (m_use_events)
-    EnableEvents();
+  EnableEvents();
 
   /* allow a socket to re-bind if the socket is in the TIME_WAIT
      state after being previously closed.
@@ -629,7 +609,7 @@ GSocket *GSocket::WaitConnection(wxSocketBase& wxsocket)
   connection->m_fd = accept(m_fd, (sockaddr*)&from, (WX_SOCKLEN_T *) &fromlen);
 
   /* Reenable CONNECTION events */
-  Enable(GSOCK_CONNECTION);
+  EnableEvent(GSOCK_CONNECTION);
 
   if (connection->m_fd == INVALID_SOCKET)
   {
@@ -679,15 +659,22 @@ void GSocket::Notify(bool flag)
     if (flag == m_use_events)
         return;
     m_use_events = flag;
-    EnableEvents(flag);
+    DoEnableEvents(flag);
 }
 
-void GSocket::EnableEvents(bool flag)
+void GSocket::DoEnableEvents(bool flag)
 {
-    if (flag)
-        GSocketManager::Get()->Enable_Events(this);
-    else
-        GSocketManager::Get()->Disable_Events(this);
+    GSocketManager * const manager = GSocketManager::Get();
+    if ( flag )
+    {
+        manager->Install_Callback(this, GSOCK_INPUT);
+        manager->Install_Callback(this, GSOCK_OUTPUT);
+    }
+    else // off
+    {
+        manager->Uninstall_Callback(this, GSOCK_INPUT);
+        manager->Uninstall_Callback(this, GSOCK_OUTPUT);
+    }
 }
 
 bool GSocket::SetReusable()
@@ -756,7 +743,7 @@ GSocketError GSocket::Connect(GSocketStream stream)
   assert(this);
 
   /* Enable CONNECTION events (needed for nonblocking connections) */
-  Enable(GSOCK_CONNECTION);
+  EnableEvent(GSOCK_CONNECTION);
 
   if (m_fd != INVALID_SOCKET)
   {
@@ -819,15 +806,14 @@ GSocketError GSocket::Connect(GSocketStream stream)
   /* Connect it to the peer address, with a timeout (see below) */
   ret = connect(m_fd, m_peer->m_addr, m_peer->m_len);
 
-  /* We only call Enable_Events if we know we aren't shutting down the socket.
-   * NB: Enable_Events needs to be called whether the socket is blocking or
+  /* We only call EnableEvents() if we know we aren't shutting down the socket.
+   * NB: EnableEvents() needs to be called whether the socket is blocking or
    * non-blocking, it just shouldn't be called prior to knowing there is a
    * connection _if_ blocking sockets are being used.
    * If connect above returns 0, we are already connected and need to make the
-   * call to Enable_Events now.
+   * call to EnableEvents() now.
    */
-
-  if (m_use_events && (m_non_blocking || ret == 0))
+  if ( m_non_blocking || (ret == 0) )
     EnableEvents();
 
   if (ret == -1)
@@ -853,8 +839,7 @@ GSocketError GSocket::Connect(GSocketStream stream)
         SOCKOPTLEN_T len = sizeof(error);
 
         getsockopt(m_fd, SOL_SOCKET, SO_ERROR, (char*) &error, &len);
-        if (m_use_events)
-            EnableEvents();
+        EnableEvents();
 
         if (!error)
           return GSOCK_NOERROR;
@@ -934,8 +919,7 @@ GSocketError GSocket::SetNonOriented()
 #else
   ioctl(m_fd, FIONBIO, &arg);
 #endif
-  if (m_use_events)
-    EnableEvents();
+  EnableEvents();
 
   if (m_reusable)
   {
@@ -983,7 +967,7 @@ int GSocket::Read(char *buffer, int size)
   }
 
   /* Disable events during query of socket status */
-  Disable(GSOCK_INPUT);
+  DisableEvent(GSOCK_INPUT);
 
   /* If the socket is blocking, wait for data (with a timeout) */
   if (Input_Timeout() == GSOCK_TIMEDOUT) {
@@ -1029,7 +1013,7 @@ int GSocket::Read(char *buffer, int size)
   }
 
   /* Enable events again now that we are done processing */
-  Enable(GSOCK_INPUT);
+  EnableEvent(GSOCK_INPUT);
 
   return ret;
 }
@@ -1082,7 +1066,7 @@ int GSocket::Write(const char *buffer, int size)
      * that the socket is writable until a read operation fails. Only then
      * will further OUTPUT events be posted.
      */
-    Enable(GSOCK_OUTPUT);
+    EnableEvent(GSOCK_OUTPUT);
 
     return -1;
   }
@@ -1137,7 +1121,7 @@ GSocketError GSocket::SetSockOpt(int level, int optname,
     return GSOCK_OPTERR;
 }
 
-void GSocket::Enable(GSocketEvent event)
+void GSocket::EnableEvent(GSocketEvent event)
 {
     if (m_use_events)
     {
@@ -1146,7 +1130,7 @@ void GSocket::Enable(GSocketEvent event)
     }
 }
 
-void GSocket::Disable(GSocketEvent event)
+void GSocket::DisableEvent(GSocketEvent event)
 {
     if (m_use_events)
     {
@@ -1355,7 +1339,7 @@ int GSocket::Send_Dgram(const char *buffer, int size)
 
 void GSocket::OnStateChange(GSocketEvent event)
 {
-    Disable(event);
+    DisableEvent(event);
     NotifyOnStateChange(event);
 
     if ( event == GSOCK_LOST )
