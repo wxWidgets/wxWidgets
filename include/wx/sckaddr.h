@@ -18,7 +18,7 @@
 
 #include "wx/string.h"
 
-#include "wx/gsocket.h"
+struct GAddress;
 
 // Any socket address kind
 class WXDLLIMPEXP_NET wxSockAddress : public wxObject
