@@ -345,16 +345,12 @@ LRESULT CALLBACK _GSocket_Internal_WinProc(HWND hWnd,
 {
   GSocket *socket;
   GSocketEvent event;
-  GSocketCallback cback;
-  char *data;
 
   if (uMsg >= WM_USER && uMsg <= (WM_USER + MAXSOCKETS - 1))
   {
     EnterCriticalSection(&critical);
     socket = socketList[(uMsg - WM_USER)];
     event = (GSocketEvent) -1;
-    cback = NULL;
-    data = NULL;
 
     /* Check that the socket still exists (it has not been
      * destroyed) and for safety, check that the m_fd field
