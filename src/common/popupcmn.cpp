@@ -43,9 +43,10 @@
 
 #ifdef __WXGTK__
     #include <gtk/gtk.h>
-#endif
-#ifdef __WXX11__
-#include "wx/x11/private.h"
+#elif defined(__WXMSW__)
+    #include "wx/msw/private.h"
+#elif defined(__WXX11__)
+    #include "wx/x11/private.h"
 #endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxPopupWindow, wxWindow)
