@@ -555,6 +555,9 @@ public:
     // identifies a thread inside a process
     wxThreadIdType GetId() const;
 
+    wxThreadKind GetKind() const
+        { return m_isDetached ? wxTHREAD_DETACHED : wxTHREAD_JOINABLE; }
+
     // called when the thread exits - in the context of this thread
     //
     // NB: this function will not be called if the thread is Kill()ed

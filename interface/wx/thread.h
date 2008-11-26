@@ -984,6 +984,13 @@ public:
     wxThreadIdType GetId() const;
 
     /**
+        Returns the thread kind as it was given in the ctor.
+
+        @since 2.9.0
+    */
+    wxThreadKind GetKind() const;
+
+    /**
         Gets the priority of the thread, between zero and 100.
 
         The following priorities are defined:
