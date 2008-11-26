@@ -22,7 +22,7 @@
 
 #include "wx/event.h"
 #include "wx/sckaddr.h"
-#include "wx/gsocket.h"
+#include "wx/private/gsocket.h"
 #include "wx/list.h"
 
 // ------------------------------------------------------------------------

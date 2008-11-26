@@ -16,7 +16,7 @@
 #if wxUSE_SOCKETS && wxUSE_SELECT_DISPATCHER
 
 #include "wx/private/selectdispatcher.h"
-#include "wx/gsocket.h"
+#include "wx/private/gsocket.h"
 
 class WXDLLIMPEXP_BASE wxGSocketIOHandler : public wxFDIOHandler
 {

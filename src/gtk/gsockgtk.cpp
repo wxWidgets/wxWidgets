@@ -19,7 +19,7 @@
 #include <gdk/gdk.h>
 #include <glib.h>
 
-#include "wx/gsocket.h"
+#include "wx/private/gsocket.h"
 #include "wx/apptrait.h"
 
 extern "C" {

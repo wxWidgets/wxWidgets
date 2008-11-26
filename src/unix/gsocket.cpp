@@ -16,7 +16,7 @@
 
 #if wxUSE_SOCKETS
 
-#include "wx/gsocket.h"
+#include "wx/private/gsocket.h"
 
 #include "wx/private/fd.h"
 #include "wx/private/socket.h"

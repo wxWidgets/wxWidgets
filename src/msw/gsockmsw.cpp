@@ -36,7 +36,7 @@
 #   pragma warning(disable:4115) /* named type definition in parentheses */
 #endif
 
-#include "wx/gsocket.h"
+#include "wx/private/gsocket.h"
 #include "wx/apptrait.h"
 #include "wx/link.h"
 

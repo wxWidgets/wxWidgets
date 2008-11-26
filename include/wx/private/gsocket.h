@@ -1,18 +1,16 @@
-/* -------------------------------------------------------------------------
- * Project:     GSocket (Generic Socket)
- * Name:        gsocket.h
- * Author:      Guilhem Lavaux
- *              Guillermo Rodriguez Garcia <guille@iies.es>
- * Copyright:   (c) Guilhem Lavaux
- *              (c) 2007,2008 Vadim Zeitlin <vadim@wxwidgets.org>
- * Licence:     wxWindows Licence
- * Purpose:     GSocket include file (system independent)
- * CVSID:       $Id$
- * -------------------------------------------------------------------------
- */
+/////////////////////////////////////////////////////////////////////////////
+// Name:        wx/private/gsocket.h
+// Purpose:     GSocket implementation
+// Authors:     Guilhem Lavaux, Vadim Zeitlin
+// Created:     April 1997
+// RCS-ID:      $Id$
+// Copyright:   (c) 1997 Guilhem Lavaux
+//              (c) 2008 Vadim Zeitlin
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GSOCKET_H_
-#define _WX_GSOCKET_H_
+#ifndef _WX_PRIVATE_GSOCKET_H_
+#define _WX_PRIVATE_GSOCKET_H_
 
 #include "wx/defs.h"
 
@@ -350,4 +348,4 @@ GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf);
 
 #endif /* wxUSE_SOCKETS */
 
-#endif /* _WX_GSOCKET_H_ */
+#endif /* _WX_PRIVATE_GSOCKET_H_ */
