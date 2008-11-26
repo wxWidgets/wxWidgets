@@ -1059,17 +1059,6 @@ public:
     wxThreadError Kill();
 
     /**
-        Called when the thread exits.
-
-        This function is called in the context of the thread associated with the
-        wxThread object, not in the context of the main thread.
-        This function will not be called if the thread was @ref Kill() killed.
-
-        This function should never be called directly.
-    */
-    virtual void OnExit();
-
-    /**
         Suspends the thread.
 
         Under some implementations (Win32), the thread is suspended immediately,
@@ -1227,6 +1216,19 @@ protected:
         OnExit() will be called just before exiting.
     */
     void Exit(ExitCode exitcode = 0);
+
+private:
+
+    /**
+        Called when the thread exits.
+
+        This function is called in the context of the thread associated with the
+        wxThread object, not in the context of the main thread.
+        This function will not be called if the thread was @ref Kill() killed.
+
+        This function should never be called directly.
+    */
+    virtual void OnExit();
 };
 
 

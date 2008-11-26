@@ -271,7 +271,7 @@ private:
 
 #if wxCRITSECT_IS_MUTEX
     // implement wxCriticalSection using mutexes
-    inline wxCriticalSection::wxCriticalSection( wxCriticalSectionType critSecType ) 
+    inline wxCriticalSection::wxCriticalSection( wxCriticalSectionType critSecType )
        : m_mutex( critSecType == wxCRITSEC_DEFAULT ? wxMUTEX_RECURSIVE : wxMUTEX_DEFAULT )  { }
     inline wxCriticalSection::~wxCriticalSection() { }
 
@@ -558,11 +558,6 @@ public:
     wxThreadKind GetKind() const
         { return m_isDetached ? wxTHREAD_DETACHED : wxTHREAD_JOINABLE; }
 
-    // called when the thread exits - in the context of this thread
-    //
-    // NB: this function will not be called if the thread is Kill()ed
-    virtual void OnExit() { }
-
     // Returns true if the thread was asked to terminate: this function should
     // be called by the thread from time to time, otherwise the main thread
     // will be left forever in Delete()!
@@ -584,6 +579,11 @@ private:
     // no copy ctor/assignment operator
     wxThread(const wxThread&);
     wxThread& operator=(const wxThread&);
+
+    // called when the thread exits - in the context of this thread
+    //
+    // NB: this function will not be called if the thread is Kill()ed
+    virtual void OnExit() { }
 
     friend class wxThreadInternal;
 
@@ -639,14 +639,14 @@ private:
         // sets it to NULL, then the thread object still
         // exists and can be killed
         wxCriticalSectionLocker locker(m_critSection);
-    
+
         if ( m_thread )
         {
             m_thread->Kill();
-            
+
             if ( m_kind == wxTHREAD_JOINABLE )
               delete m_thread;
-            
+
             m_thread = NULL;
         }
     }
@@ -678,9 +678,9 @@ public:
     wxThread *GetThread() const
     {
         wxCriticalSectionLocker locker((wxCriticalSection&)m_critSection);
-        
+
         wxThread* thread = m_thread;
-        
+
         return thread;
     }
 
@@ -688,7 +688,7 @@ protected:
     wxThread *m_thread;
     wxThreadKind m_kind;
     wxCriticalSection m_critSection; // To guard the m_thread variable
-    
+
     friend class wxThreadHelperThread;
 };
 
@@ -696,16 +696,16 @@ protected:
 inline void *wxThreadHelperThread::Entry()
 {
     void * const result = m_owner.Entry();
-    
+
     wxCriticalSectionLocker locker(m_owner.m_critSection);
-    
+
     // Detached thread will be deleted after returning, so make sure
     // wxThreadHelper::GetThread will not return an invalid pointer.
     // And that wxThreadHelper::KillThread will not try to kill
     // an already deleted thread
     if ( m_owner.m_kind == wxTHREAD_DETACHED )
         m_owner.m_thread = NULL;
-        
+
     return result;
 }
 
