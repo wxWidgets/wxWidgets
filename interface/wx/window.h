@@ -1515,6 +1515,9 @@ public:
     /**
         Lowers the window to the bottom of the window hierarchy (Z-order).
 
+        @remarks
+        This function only works for wxTopLevelWindow-derived classes.
+
         @see Raise()
     */
     virtual void Lower();
@@ -1748,7 +1751,9 @@ public:
 
     /**
         Raises the window to the top of the window hierarchy (Z-order).
-        In current version of wxWidgets this works both for managed and child windows.
+
+        @remarks
+        This function only works for wxTopLevelWindow-derived classes.
 
         @see Lower()
     */
