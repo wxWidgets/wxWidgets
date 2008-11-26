@@ -39,6 +39,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_cmdlinetest.obj \
 	$(OBJS)\test_fileconf.obj \
 	$(OBJS)\test_datetimetest.obj \
+	$(OBJS)\test_timertest.obj \
 	$(OBJS)\test_filekind.obj \
 	$(OBJS)\test_filenametest.obj \
 	$(OBJS)\test_filesystest.obj \
@@ -108,6 +109,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_comboboxtest.obj \
 	$(OBJS)\test_gui_textctrltest.obj \
 	$(OBJS)\test_gui_textentrytest.obj \
+	$(OBJS)\test_gui_listctrltest.obj \
 	$(OBJS)\test_gui_rawbmp.obj \
 	$(OBJS)\test_gui_htmlwindow.obj \
 	$(OBJS)\test_gui_guifuncs.obj \
@@ -487,6 +489,9 @@ $(OBJS)\test_fileconf.obj: .\config\fileconf.cpp
 $(OBJS)\test_datetimetest.obj: .\datetime\datetimetest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\datetime\datetimetest.cpp
 
+$(OBJS)\test_timertest.obj: .\events\timertest.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\events\timertest.cpp
+
 $(OBJS)\test_filekind.obj: .\filekind\filekind.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\filekind\filekind.cpp
 
@@ -663,6 +668,9 @@ $(OBJS)\test_gui_textctrltest.obj: .\controls\textctrltest.cpp
 
 $(OBJS)\test_gui_textentrytest.obj: .\controls\textentrytest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\controls\textentrytest.cpp
+
+$(OBJS)\test_gui_listctrltest.obj: .\controls\listctrltest.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\controls\listctrltest.cpp
 
 $(OBJS)\test_gui_rawbmp.obj: .\image\rawbmp.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\image\rawbmp.cpp

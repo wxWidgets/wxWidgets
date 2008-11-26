@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        listctrl.h
+// Name:        wx/listctrl.h
 // Purpose:     interface of wxListCtrl
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
@@ -40,16 +40,6 @@
     implementation for report mode, and uses a generic implementation for other
     modes. You can use the generic implementation for report mode as well by setting
     the @c mac.listctrl.always_use_generic system option (see wxSystemOption) to 1.
-
-    <b>wxMSW Note</b>: In report view, the control has several columns
-    which are identified by their internal indices. By default, these indices
-    correspond to their order on screen, i.e. the column 0 appears first (in the
-    left-to-right or maybe right-to-left if the current language uses this writing
-    direction), the column 1 next and so on. However it is possible to reorder the
-    columns visual order using SetColumnsOrder() method and the user can also
-    rearrange the columns interactively by dragging them. In this case, the index
-    of the column is not the same as its order and the functions GetColumnOrder()
-    and GetColumnIndexFromOrder() should be used to translate between them.
 
 
     @beginStyleTable
@@ -293,12 +283,30 @@ public:
     int GetColumnCount() const;
 
     /**
-        Gets the column number by visual order index (report view only).
+        Gets the column index from its position in visual order.
+
+        After calling SetColumnsOrder(), the index returned by this function
+        corresponds to the value of the element number @a pos in the array
+        returned by GetColumnsOrder().
+
+        Please see SetColumnsOrder() documentation for an example and
+        additional remarks about the columns ordering.
+
+        @see GetColumnOrder()
     */
-    int GetColumnIndexFromOrder(int order) const;
+    int GetColumnIndexFromOrder(int pos) const;
 
     /**
-        Gets the column visual order index (valid in report view only).
+        Gets the column visual order position.
+
+        This function returns the index of the column which appears at the
+        given visual position, e.g. calling it with @a col equal to 0 returns
+        the index of the first shown column.
+
+        Please see SetColumnsOrder() documentation for an example and
+        additional remarks about the columns ordering.
+
+        @see GetColumnsOrder(), GetColumnIndexFromOrder()
     */
     int GetColumnOrder(int col) const;
 
@@ -309,7 +317,13 @@ public:
 
     /**
         Returns the array containing the orders of all columns.
+
         On error, an empty array is returned.
+
+        Please see SetColumnsOrder() documentation for an example and
+        additional remarks about the columns ordering.
+
+        @see GetColumnOrder(), GetColumnIndexFromOrder()
     */
     wxArrayInt GetColumnsOrder() const;
 
@@ -641,14 +655,53 @@ public:
     bool SetColumnWidth(int col, int width);
 
     /**
-        Sets the order of all columns at once.
+        Changes the order in which the columns are shown.
+
+        By default, the columns of a list control appear on the screen in order
+        of their indices, i.e. the column 0 appears first, the column 1 next
+        and so on. However by using this function it is possible to arbitrarily
+        reorder the columns visual order and the user can also rearrange the
+        columns interactively by dragging them. In this case, the index of the
+        column is not the same as its order and the functions GetColumnOrder()
+        and GetColumnIndexFromOrder() should be used to translate between them.
+        Notice that all the other functions still work with the column indices,
+        i.e. the visual positioning of the columns on screen doesn't affect the
+        code setting or getting their values for example.
 
         The @a orders array must have the same number elements as the number of
-        columns and contain each position exactly once.
+        columns and contain each position exactly once. Its n-th element
+        contains the index of the column to be shown in n-th position, so for a
+        control with three columns passing an array with elements 2, 0 and 1
+        results in the third column being displayed first, the first one next
+        and the second one last.
 
-        This function is valid in report view only.
+        Example of using it:
+        @code
+            wxListCtrl *list = new wxListCtrl(...);
+            for ( int i = 0; i < 3; i++ )
+                list->InsertColumn(i, wxString::Format("Column %d", i));
+
+            wxArrayInt order(3);
+            order[0] = 2;
+            order[1] = 0;
+            order[2] = 1;
+            list->SetColumnsOrder(order);
+
+            // now list->GetColumnsOrder() will return order and
+            // list->GetColumnIndexFromOrder(n) will return order[n] and
+            // list->GetColumnOrder() will return 1, 2 and 0 for the column 0,
+            // 1 and 2 respectively
+        @endcode
+
+        Please notice that this function makes sense for report view only and
+        currently is only implemented in wxMSW port. To avoid explicit tests
+        for @c __WXMSW__ in your code, please use @c wxHAS_LISTCTRL_COLUMN_ORDER
+        as this will allow it to start working under the other platforms when
+        support for the column reordering is added there.
+
+        @see GetColumnsOrder()
     */
-    bool SetColumnOrder(const wxArrayInt& orders) const;
+    bool SetColumnsOrder(const wxArrayInt& orders) const;
 
     /**
         Sets the image list associated with the control.

@@ -256,6 +256,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_cmdlinetest.obj &
 	$(OBJS)\test_fileconf.obj &
 	$(OBJS)\test_datetimetest.obj &
+	$(OBJS)\test_timertest.obj &
 	$(OBJS)\test_filekind.obj &
 	$(OBJS)\test_filenametest.obj &
 	$(OBJS)\test_filesystest.obj &
@@ -322,6 +323,7 @@ TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_comboboxtest.obj &
 	$(OBJS)\test_gui_textctrltest.obj &
 	$(OBJS)\test_gui_textentrytest.obj &
+	$(OBJS)\test_gui_listctrltest.obj &
 	$(OBJS)\test_gui_rawbmp.obj &
 	$(OBJS)\test_gui_htmlwindow.obj &
 	$(OBJS)\test_gui_guifuncs.obj &
@@ -432,6 +434,9 @@ $(OBJS)\test_fileconf.obj :  .AUTODEPEND .\config\fileconf.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_datetimetest.obj :  .AUTODEPEND .\datetime\datetimetest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_timertest.obj :  .AUTODEPEND .\events\timertest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_filekind.obj :  .AUTODEPEND .\filekind\filekind.cpp
@@ -609,6 +614,9 @@ $(OBJS)\test_gui_textctrltest.obj :  .AUTODEPEND .\controls\textctrltest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_textentrytest.obj :  .AUTODEPEND .\controls\textentrytest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_listctrltest.obj :  .AUTODEPEND .\controls\listctrltest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_rawbmp.obj :  .AUTODEPEND .\image\rawbmp.cpp

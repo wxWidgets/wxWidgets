@@ -261,6 +261,10 @@ SOURCE=.\html\htmlwindow.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\controls\listctrltest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\geometry\point.cpp
 # End Source File
 # Begin Source File

@@ -91,6 +91,10 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_SHOW_COL_INFO, MyFrame::OnShowColInfo)
     EVT_MENU(LIST_SHOW_SEL_INFO, MyFrame::OnShowSelInfo)
     EVT_MENU(LIST_SHOW_VIEW_RECT, MyFrame::OnShowViewRect)
+#ifdef wxHAS_LISTCTRL_COLUMN_ORDER
+    EVT_MENU(LIST_SET_COL_ORDER, MyFrame::OnSetColOrder)
+    EVT_MENU(LIST_GET_COL_ORDER, MyFrame::OnGetColOrder)
+#endif // wxHAS_LISTCTRL_COLUMN_ORDER
     EVT_MENU(LIST_FREEZE, MyFrame::OnFreeze)
     EVT_MENU(LIST_THAW, MyFrame::OnThaw)
     EVT_MENU(LIST_TOGGLE_LINES, MyFrame::OnToggleLines)
@@ -236,6 +240,10 @@ MyFrame::MyFrame(const wxChar *title)
     menuList->Append(LIST_SHOW_COL_INFO, _T("Show &column info\tCtrl-C"));
     menuList->Append(LIST_SHOW_SEL_INFO, _T("Show &selected items\tCtrl-S"));
     menuList->Append(LIST_SHOW_VIEW_RECT, _T("Show &view rect"));
+#ifdef wxHAS_LISTCTRL_COLUMN_ORDER
+    menuList->Append(LIST_SET_COL_ORDER, _T("Se&t columns order\tShift-Ctrl-O"));
+    menuList->Append(LIST_GET_COL_ORDER, _T("Show&w columns order\tCtrl-O"));
+#endif // wxHAS_LISTCTRL_COLUMN_ORDER
     menuList->AppendSeparator();
     menuList->Append(LIST_SORT, _T("Sor&t\tCtrl-T"));
     menuList->AppendSeparator();
@@ -651,6 +659,69 @@ void MyFrame::OnShowViewRect(wxCommandEvent& WXUNUSED(event))
     wxLogMessage("View rect: (%d, %d)-(%d, %d)",
                  r.GetLeft(), r.GetTop(), r.GetRight(), r.GetBottom());
 }
+
+// ----------------------------------------------------------------------------
+// column order tests
+// ----------------------------------------------------------------------------
+
+#ifdef wxHAS_LISTCTRL_COLUMN_ORDER
+
+static wxString DumpIntArray(const wxArrayInt& a)
+{
+    wxString s("{ ");
+    const size_t count = a.size();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        if ( n )
+            s += ", ";
+        s += wxString::Format("%lu", (unsigned long)a[n]);
+    }
+
+    s += " }";
+
+    return s;
+}
+
+void MyFrame::OnSetColOrder(wxCommandEvent& WXUNUSED(event))
+{
+    wxArrayInt order(3);
+    order[0] = 2;
+    order[1] = 0;
+    order[2] = 1;
+    if ( m_listCtrl->SetColumnsOrder(order) )
+        wxLogMessage("Column order set to %s", DumpIntArray(order));
+}
+
+void MyFrame::OnGetColOrder(wxCommandEvent& WXUNUSED(event))
+{
+    // show what GetColumnsOrder() returns
+    const wxArrayInt order = m_listCtrl->GetColumnsOrder();
+    wxString msg = "Columns order: " +
+                        DumpIntArray(m_listCtrl->GetColumnsOrder()) + "\n";
+
+    int n;
+    const int count = m_listCtrl->GetColumnCount();
+
+    // show the results of GetColumnOrder() for each column
+    msg += "GetColumnOrder() results:\n";
+    for ( n = 0; n < count; n++ )
+    {
+        msg += wxString::Format("    %2d -> %2d\n",
+                                n, m_listCtrl->GetColumnOrder(n));
+    }
+
+    // and the results of GetColumnIndexFromOrder() too
+    msg += "GetColumnIndexFromOrder() results:\n";
+    for ( n = 0; n < count; n++ )
+    {
+        msg += wxString::Format("    %2d -> %2d\n",
+                                n, m_listCtrl->GetColumnIndexFromOrder(n));
+    }
+
+    wxLogMessage("%s", msg);
+}
+
+#endif // wxHAS_LISTCTRL_COLUMN_ORDER
 
 void MyFrame::OnShowColInfo(wxCommandEvent& WXUNUSED(event))
 {

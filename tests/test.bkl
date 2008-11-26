@@ -110,6 +110,7 @@
             controls/comboboxtest.cpp
             controls/textctrltest.cpp
             controls/textentrytest.cpp
+            controls/listctrltest.cpp
             image/rawbmp.cpp
             html/htmlwindow.cpp
             misc/guifuncs.cpp

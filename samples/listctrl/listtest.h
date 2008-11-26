@@ -136,6 +136,10 @@ protected:
     void OnShowColInfo(wxCommandEvent& event);
     void OnShowSelInfo(wxCommandEvent& event);
     void OnShowViewRect(wxCommandEvent& event);
+#ifdef wxHAS_LISTCTRL_COLUMN_ORDER
+    void OnSetColOrder(wxCommandEvent& event);
+    void OnGetColOrder(wxCommandEvent& event);
+#endif // wxHAS_LISTCTRL_COLUMN_ORDER
     void OnFreeze(wxCommandEvent& event);
     void OnThaw(wxCommandEvent& event);
     void OnToggleLines(wxCommandEvent& event);
@@ -204,6 +208,10 @@ enum
     LIST_SHOW_COL_INFO,
     LIST_SHOW_SEL_INFO,
     LIST_SHOW_VIEW_RECT,
+#ifdef wxHAS_LISTCTRL_COLUMN_ORDER
+    LIST_SET_COL_ORDER,
+    LIST_GET_COL_ORDER,
+#endif // wxHAS_LISTCTRL_COLUMN_ORDER
     LIST_GOTO,
     LIST_FOCUS_LAST,
     LIST_FREEZE,

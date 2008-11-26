@@ -900,6 +900,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\controls\listctrltest.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\geometry\point.cpp"
 				>
 			</File>

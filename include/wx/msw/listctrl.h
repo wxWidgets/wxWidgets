@@ -17,6 +17,10 @@
 
 class WXDLLIMPEXP_FWD_CORE wxImageList;
 
+// define this symbol to indicate the availability of SetColumnsOrder() and
+// related functions
+#define wxHAS_LISTCTRL_COLUMN_ORDER
+
 /*
     The wxListCtrl can show lists of items in four different modes:
     wxLC_LIST:   multicolumn list view, with optional small icons (icons could be

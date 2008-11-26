@@ -721,33 +721,32 @@ bool wxListCtrl::SetColumnWidth(int col, int width)
 // columns order
 // ----------------------------------------------------------------------------
 
-int wxListCtrl::GetColumnOrder(int col) const
-{
-    const int numCols = GetColumnCount();
-    wxCHECK_MSG( col >= 0 && col < numCols, -1, _T("Col index out of bounds") );
-
-    wxArrayInt indexArray(numCols);
-
-    if ( !ListView_GetColumnOrderArray(GetHwnd(), numCols, &indexArray[0]) )
-        return -1;
-
-    return indexArray[col];
-}
-
 int wxListCtrl::GetColumnIndexFromOrder(int order) const
 {
     const int numCols = GetColumnCount();
-    wxASSERT_MSG( order >= 0 && order < numCols, _T("Col order out of bounds") );
+    wxCHECK_MSG( order >= 0 && order < numCols, -1,
+                _T("Column position out of bounds") );
 
     wxArrayInt indexArray(numCols);
-
     if ( !ListView_GetColumnOrderArray(GetHwnd(), numCols, &indexArray[0]) )
         return -1;
 
-    for ( int col = 0; col < numCols; col++ )
+    return indexArray[order];
+}
+
+int wxListCtrl::GetColumnOrder(int col) const
+{
+    const int numCols = GetColumnCount();
+    wxASSERT_MSG( col >= 0 && col < numCols, _T("Column index out of bounds") );
+
+    wxArrayInt indexArray(numCols);
+    if ( !ListView_GetColumnOrderArray(GetHwnd(), numCols, &indexArray[0]) )
+        return -1;
+
+    for ( int pos = 0; pos < numCols; pos++ )
     {
-        if ( indexArray[col] == order )
-            return col;
+        if ( indexArray[pos] == col )
+            return pos;
     }
 
     wxFAIL_MSG( _T("no column with with given order?") );
