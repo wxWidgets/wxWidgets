@@ -1131,5 +1131,139 @@ public:
     wxDCClipper(wxDC& dc, const wxRect& rect);
     wxDCClipper(wxDC& dc, int x, int y, int w, int h);
     //@}
+
+    /**
+        Destroys the clipping region associated with the DC passed to the ctor.
+    */
+    ~wxDCClipper();
+};
+
+
+/**
+    @class wxDCBrushChanger
+
+    wxDCBrushChanger is a small helper class for setting a brush on a wxDC
+    and unsetting it automatically in the destructor, restoring the previous one.
+
+    @library{wxcore}
+    @category{gdi}
+
+    @see wxDC::SetBrush()
+*/
+class wxDCBrushChanger
+{
+public:
+    /**
+        Sets @a brush on the given @a dc, storing the old one.
+
+        @param dc
+            The DC where the brush must be temporary set.
+        @param brush
+            The brush to set.
+    */
+    wxDCBrushChanger(wxDC& dc, const wxBrush& brush);
+
+    /**
+        Restores the brush originally selected in the DC passed to the ctor.
+    */
+    ~wxDCBrushChanger();
+};
+
+
+/**
+    @class wxDCPenChanger
+
+    wxDCPenChanger is a small helper class for setting a pen on a wxDC
+    and unsetting it automatically in the destructor, restoring the previous one.
+
+    @library{wxcore}
+    @category{gdi}
+
+    @see wxDC::SetPen()
+*/
+class wxDCPenChanger
+{
+public:
+    /**
+        Sets @a pen on the given @a dc, storing the old one.
+
+        @param dc
+            The DC where the pen must be temporary set.
+        @param pen
+            The pen to set.
+    */
+    wxDCPenChanger(wxDC& dc, const wxPen& pen);
+
+    /**
+        Restores the pen originally selected in the DC passed to the ctor.
+    */
+    ~wxDCPenChanger();
+};
+
+
+
+/**
+    @class wxDCTextColourChanger
+
+    wxDCTextColourChanger is a small helper class for setting a foreground
+    text colour on a wxDC and unsetting it automatically in the destructor,
+    restoring the previous one.
+
+    @library{wxcore}
+    @category{gdi}
+
+    @see wxDC::SetTextForeground()
+*/
+class wxDCTextColourChanger
+{
+public:
+    /**
+        Sets @a col on the given @a dc, storing the old one.
+
+        @param dc
+            The DC where the colour must be temporary set.
+        @param col
+            The colour to set.
+    */
+    wxDCTextColourChanger(wxDC& dc, const wxColour& col);
+
+    /**
+        Restores the colour originally selected in the DC passed to the ctor.
+    */
+    ~wxDCTextColourChanger();
+};
+
+
+
+/**
+    @class wxDCFontChanger
+
+    wxDCFontChanger is a small helper class for setting a font on a wxDC and
+    unsetting it automatically in the destructor, restoring the previous one.
+
+    @since 2.9.0
+
+    @library{wxcore}
+    @category{gdi}
+
+    @see wxDC::SetFont()
+*/
+class wxDCFontChanger
+{
+public:
+    /**
+        Sets @a font on the given @a dc, storing the old one.
+
+        @param dc
+            The DC where the font must be temporary set.
+        @param font
+            The font to set.
+    */
+    wxDCFontChanger(wxDC& dc, const wxFont& font);
+
+    /**
+        Restores the colour originally selected in the DC passed to the ctor.
+    */
+    ~wxDCFontChanger();
 };
 

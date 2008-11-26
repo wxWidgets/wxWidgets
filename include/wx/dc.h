@@ -1252,4 +1252,32 @@ private:
     DECLARE_NO_COPY_CLASS(wxDCClipper)
 };
 
+// ----------------------------------------------------------------------------
+// helper class: you can use it to temporarily change the DC font and
+// restore it automatically when the object goes out of scope
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxDCFontChanger
+{
+public:
+    wxDCFontChanger(wxDC& dc, const wxFont& font) : m_dc(dc), m_fontOld(dc.GetFont())
+    {
+        m_dc.SetFont(font);
+    }
+
+    ~wxDCFontChanger()
+    {
+        if ( m_fontOld.Ok() )
+            m_dc.SetFont(m_fontOld);
+    }
+
+private:
+    wxDC& m_dc;
+
+    wxFont m_fontOld;
+
+    DECLARE_NO_COPY_CLASS(wxDCFontChanger)
+};
+
+
 #endif // _WX_DC_H_BASE_
