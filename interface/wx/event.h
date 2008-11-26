@@ -83,6 +83,10 @@ public:
         Gets the timestamp for the event. The timestamp is the time in milliseconds
         since some fixed moment (not necessarily the standard Unix Epoch, so only
         differences between the timestamps and not their absolute values usually make sense).
+
+        @warning
+        wxWidgets returns a non-NULL timestamp only for mouse and key events
+        (see wxMouseEvent and wxKeyEvent).
     */
     long GetTimestamp() const;
 
@@ -117,7 +121,7 @@ public:
     /**
         Sets the timestamp for the event.
     */
-    void SetTimestamp(long = 0);
+    void SetTimestamp(long timeStamp = 0);
 
     /**
         Test if this event should be propagated or not, i.e. if the propagation level
