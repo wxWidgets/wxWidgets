@@ -335,9 +335,7 @@ gtk_frame_map_callback( GtkWidget*,
                         wxTopLevelWindow *win )
 {
     const bool wasIconized = win->IsIconized();
-
     win->SetIconizeState(false);
-
     if (wasIconized)
     {
         // Because GetClientSize() returns (0,0) when IsIconized() is true,
@@ -349,7 +347,13 @@ gtk_frame_map_callback( GtkWidget*,
         win->m_oldClientWidth = 0;
         gtk_widget_queue_resize(win->m_wxwindow);
     }
-
+    // it is possible for m_isShown to be false here, see bug #9909
+    if (win->wxWindowBase::Show(true))
+    {
+        wxShowEvent eventShow(win->GetId(), true);
+        eventShow.SetEventObject(win);
+        win->GetEventHandler()->ProcessEvent(eventShow);
+    }
     return false;
 }
 }
