@@ -361,6 +361,9 @@ public:
     int GetWidth() const;
     int GetHeight() const;
 
+    wxSize GetSize() const
+        { return wxSize(GetWidth(), GetHeight()); }
+
     // Gets the type of image found by LoadFile or specified with SaveFile
     wxBitmapType GetType() const;
 

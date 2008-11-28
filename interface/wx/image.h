@@ -705,6 +705,8 @@ public:
 
     /**
         Gets the height of the image in pixels.
+
+        @see GetWidth(), GetSize()
     */
     int GetHeight() const;
 
@@ -877,6 +879,15 @@ public:
     wxImage GetSubImage(const wxRect& rect) const;
 
     /**
+        Returns the size of the image in pixels.
+
+        @since 2.9.0
+
+        @see GetHeight(), GetWidth()
+    */
+    wxSize GetSize() const;
+
+    /**
         Gets the type of image found by LoadFile() or specified with SaveFile().
 
         @since 2.9.0
@@ -886,7 +897,7 @@ public:
     /**
         Gets the width of the image in pixels.
 
-        @see GetHeight()
+        @see GetHeight(), GetSize()
     */
     int GetWidth() const;
 

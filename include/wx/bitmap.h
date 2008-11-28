@@ -161,6 +161,9 @@ public:
     virtual int GetWidth() const = 0;
     virtual int GetDepth() const = 0;
 
+    wxSize GetSize() const
+        { return wxSize(GetWidth(), GetHeight()); }
+
 #if wxUSE_IMAGE
     virtual wxImage ConvertToImage() const = 0;
 #endif // wxUSE_IMAGE

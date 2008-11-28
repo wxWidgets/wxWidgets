@@ -440,6 +440,8 @@ public:
 
     /**
         Gets the height of the bitmap in pixels.
+
+        @see GetWidth(), GetSize()
     */
     virtual int GetHeight() const;
 
@@ -466,9 +468,18 @@ public:
     virtual wxBitmap GetSubBitmap(const wxRect& rect) const;
 
     /**
+        Returns the size of the bitmap in pixels.
+
+        @since 2.9.0
+
+        @see GetHeight(), GetWidth()
+    */
+    wxSize GetSize() const;
+
+    /**
         Gets the width of the bitmap in pixels.
 
-        @see GetHeight()
+        @see GetHeight(), GetSize()
     */
     virtual int GetWidth() const;
 
