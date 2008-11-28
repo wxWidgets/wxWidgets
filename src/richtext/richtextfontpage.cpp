@@ -793,8 +793,6 @@ void wxRichTextFontPage::OnRichtextfontpageSuperscriptClick( wxCommandEvent& WXU
 {
     if ( m_superscriptCtrl->Get3StateValue() == wxCHK_CHECKED)
         m_subscriptCtrl->Set3StateValue( wxCHK_UNCHECKED );
-    else
-        m_subscriptCtrl->Set3StateValue( wxCHK_CHECKED );
 
     UpdatePreview();
 }
@@ -807,8 +805,6 @@ void wxRichTextFontPage::OnRichtextfontpageSubscriptClick( wxCommandEvent& WXUNU
 {
     if ( m_subscriptCtrl->Get3StateValue() == wxCHK_CHECKED)
         m_superscriptCtrl->Set3StateValue( wxCHK_UNCHECKED );
-    else
-        m_superscriptCtrl->Set3StateValue( wxCHK_CHECKED );
 
     UpdatePreview();
 }
