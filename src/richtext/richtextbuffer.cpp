@@ -4169,12 +4169,12 @@ void wxRichTextParagraph::ApplyParagraphStyle(const wxTextAttrEx& attr, const wx
         // centering, right-justification
         if (attr.HasAlignment() && GetAttributes().GetAlignment() == wxTEXT_ALIGNMENT_CENTRE)
         {
-            pos.x = (rect.GetWidth() - size.x)/2 + pos.x;
+            pos.x = (rect.GetWidth() - (pos.x - rect.x) - size.x)/2 + pos.x;
             line->SetPosition(pos);
         }
         else if (attr.HasAlignment() && GetAttributes().GetAlignment() == wxTEXT_ALIGNMENT_RIGHT)
         {
-            pos.x = pos.x + rect.GetWidth() - size.x;
+            pos.x = rect.x + rect.GetWidth() - size.x;
             line->SetPosition(pos);
         }
 
@@ -4759,7 +4759,7 @@ bool wxRichTextParagraph::FindWrapPosition(const wxRichTextRange& range, wxDC& d
             widthBefore = 0;
 
         size_t i;
-        for (i = (size_t) range.GetStart(); i < (size_t) range.GetEnd(); i++)
+        for (i = (size_t) range.GetStart(); i <= (size_t) range.GetEnd(); i++)
         {
             int widthFromStartOfThisRange = g_GlobalPartialTextExtents[i - GetRange().GetStart()] - widthBefore;
 
