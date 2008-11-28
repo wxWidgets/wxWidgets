@@ -741,7 +741,6 @@ ALL_BASE_SOURCES =  \
 	src/unix/stackwalk.cpp \
 	src/unix/utilsunx.cpp \
 	src/unix/mimetype.cpp \
-	src/common/gsocketiohandler.cpp \
 	src/msw/basemsw.cpp \
 	src/msw/crashrpt.cpp \
 	src/msw/debughlp.cpp \
@@ -763,7 +762,6 @@ ALL_BASE_SOURCES =  \
 	$(BASE_OSX_SRC) \
 	src/common/fdiodispatcher.cpp \
 	src/common/selectdispatcher.cpp \
-	src/common/gsocketiohandler.cpp \
 	src/unix/appunix.cpp \
 	src/unix/evtloopunix.cpp \
 	src/unix/timerunx.cpp \
@@ -805,6 +803,7 @@ ALL_BASE_SOURCES =  \
 	src/common/sckstrm.cpp \
 	src/common/socket.cpp \
 	src/common/url.cpp \
+	src/common/socketiohandler.cpp \
 	src/unix/sockunix.cpp \
 	src/osx/core/sockosx.cpp \
 	src/msw/gsocket.cpp \
@@ -3978,7 +3977,6 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_fdiodispatcher.o \
 	monodll_selectdispatcher.o \
-	monodll_gsocketiohandler.o \
 	monodll_appunix.o \
 	monodll_evtloopunix.o \
 	monodll_timerunx.o \
@@ -4003,8 +4001,7 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_threadpsx.o \
 	monodll_unix_stackwalk.o \
 	monodll_utilsunx.o \
-	monodll_unix_mimetype.o \
-	monodll_gsocketiohandler.o
+	monodll_unix_mimetype.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_basemsw.o \
@@ -4036,9 +4033,11 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS \
 @COND_TOOLKIT_OSX_COCOA@	= monodll_osx_cocoa_utils.o
 @COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS \
-@COND_PLATFORM_MACOSX_1@	= monodll_sockunix.o monodll_sockosx.o
+@COND_PLATFORM_MACOSX_1@	= monodll_socketiohandler.o monodll_sockunix.o \
+@COND_PLATFORM_MACOSX_1@	monodll_sockosx.o
 @COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS = monodll_sockunix.o
-@COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS = monodll_sockunix.o
+@COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS = \
+@COND_PLATFORM_UNIX_1@	monodll_socketiohandler.o monodll_sockunix.o
 COND_PLATFORM_WIN32_1___NET_PLATFORM_SRC_OBJECTS =  \
 	monodll_gsocket.o \
 	monodll_gsockmsw.o \
@@ -5790,7 +5789,6 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_fdiodispatcher.o \
 	monolib_selectdispatcher.o \
-	monolib_gsocketiohandler.o \
 	monolib_appunix.o \
 	monolib_evtloopunix.o \
 	monolib_timerunx.o \
@@ -5815,8 +5813,7 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_threadpsx.o \
 	monolib_unix_stackwalk.o \
 	monolib_utilsunx.o \
-	monolib_unix_mimetype.o \
-	monolib_gsocketiohandler.o
+	monolib_unix_mimetype.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_basemsw.o \
@@ -5848,9 +5845,11 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_1 \
 @COND_TOOLKIT_OSX_COCOA@	= monolib_osx_cocoa_utils.o
 @COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS_1 \
-@COND_PLATFORM_MACOSX_1@	= monolib_sockunix.o monolib_sockosx.o
+@COND_PLATFORM_MACOSX_1@	= monolib_socketiohandler.o monolib_sockunix.o \
+@COND_PLATFORM_MACOSX_1@	monolib_sockosx.o
 @COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS_1 = monolib_sockunix.o
-@COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_1 = monolib_sockunix.o
+@COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_1 = \
+@COND_PLATFORM_UNIX_1@	monolib_socketiohandler.o monolib_sockunix.o
 COND_PLATFORM_WIN32_1___NET_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_gsocket.o \
 	monolib_gsockmsw.o \
@@ -7639,7 +7638,6 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_fdiodispatcher.o \
 	basedll_selectdispatcher.o \
-	basedll_gsocketiohandler.o \
 	basedll_appunix.o \
 	basedll_evtloopunix.o \
 	basedll_timerunx.o \
@@ -7664,8 +7662,7 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_threadpsx.o \
 	basedll_unix_stackwalk.o \
 	basedll_utilsunx.o \
-	basedll_unix_mimetype.o \
-	basedll_gsocketiohandler.o
+	basedll_unix_mimetype.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_basemsw.o \
@@ -7733,7 +7730,6 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_fdiodispatcher.o \
 	baselib_selectdispatcher.o \
-	baselib_gsocketiohandler.o \
 	baselib_appunix.o \
 	baselib_evtloopunix.o \
 	baselib_timerunx.o \
@@ -7758,8 +7754,7 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_threadpsx.o \
 	baselib_unix_stackwalk.o \
 	baselib_utilsunx.o \
-	baselib_unix_mimetype.o \
-	baselib_gsocketiohandler.o
+	baselib_unix_mimetype.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_basemsw.o \
@@ -7843,9 +7838,11 @@ COND_USE_SOSYMLINKS_1___netdll___so_symlinks_uninst_cmd = rm -f \
 @COND_USE_SOSYMLINKS_1@__netdll___so_symlinks_uninst_cmd = $(COND_USE_SOSYMLINKS_1___netdll___so_symlinks_uninst_cmd)
 @COND_PLATFORM_WIN32_1@__netdll___win32rc = netdll_version_rc.o
 @COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS_2 \
-@COND_PLATFORM_MACOSX_1@	= netdll_sockunix.o netdll_sockosx.o
+@COND_PLATFORM_MACOSX_1@	= netdll_socketiohandler.o netdll_sockunix.o \
+@COND_PLATFORM_MACOSX_1@	netdll_sockosx.o
 @COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS_2 = netdll_sockunix.o
-@COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_2 = netdll_sockunix.o
+@COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_2 = \
+@COND_PLATFORM_UNIX_1@	netdll_socketiohandler.o netdll_sockunix.o
 COND_PLATFORM_WIN32_1___NET_PLATFORM_SRC_OBJECTS_2 =  \
 	netdll_gsocket.o \
 	netdll_gsockmsw.o \
@@ -7864,9 +7861,11 @@ COND_MONOLITHIC_0_SHARED_0___netlib___depname = \
 @COND_USE_PCH_1@_____pch_wxprec_netlib_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_netlib/wx/wxprec.h.gch
 @COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS_3 \
-@COND_PLATFORM_MACOSX_1@	= netlib_sockunix.o netlib_sockosx.o
+@COND_PLATFORM_MACOSX_1@	= netlib_socketiohandler.o netlib_sockunix.o \
+@COND_PLATFORM_MACOSX_1@	netlib_sockosx.o
 @COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS_3 = netlib_sockunix.o
-@COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_3 = netlib_sockunix.o
+@COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_3 = \
+@COND_PLATFORM_UNIX_1@	netlib_socketiohandler.o netlib_sockunix.o
 COND_PLATFORM_WIN32_1___NET_PLATFORM_SRC_OBJECTS_3 =  \
 	netlib_gsocket.o \
 	netlib_gsockmsw.o \
@@ -16151,11 +16150,11 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1@monodll_utilsunx.o: $(srcdir)/src/unix/utilsunx.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/utilsunx.cpp
 
-@COND_PLATFORM_UNIX_1@monodll_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
+@COND_PLATFORM_UNIX_1@monodll_socketiohandler.o: $(srcdir)/src/common/socketiohandler.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/socketiohandler.cpp
 
-@COND_PLATFORM_OS2_1@monodll_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
+@COND_PLATFORM_MACOSX_1@monodll_socketiohandler.o: $(srcdir)/src/common/socketiohandler.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/socketiohandler.cpp
 
 @COND_PLATFORM_UNIX_1@monodll_sockunix.o: $(srcdir)/src/unix/sockunix.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/sockunix.cpp
@@ -20831,11 +20830,11 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1@monolib_utilsunx.o: $(srcdir)/src/unix/utilsunx.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/utilsunx.cpp
 
-@COND_PLATFORM_UNIX_1@monolib_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
+@COND_PLATFORM_UNIX_1@monolib_socketiohandler.o: $(srcdir)/src/common/socketiohandler.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/socketiohandler.cpp
 
-@COND_PLATFORM_OS2_1@monolib_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
+@COND_PLATFORM_MACOSX_1@monolib_socketiohandler.o: $(srcdir)/src/common/socketiohandler.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/socketiohandler.cpp
 
 @COND_PLATFORM_UNIX_1@monolib_sockunix.o: $(srcdir)/src/unix/sockunix.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/sockunix.cpp
@@ -23927,12 +23926,6 @@ basedll_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(BASEDLL_ODEP)
 @COND_PLATFORM_MACOSX_1@basedll_utilsunx.o: $(srcdir)/src/unix/utilsunx.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/utilsunx.cpp
 
-@COND_PLATFORM_UNIX_1@basedll_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(BASEDLL_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
-
-@COND_PLATFORM_OS2_1@basedll_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(BASEDLL_ODEP)
-@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
-
 baselib_appbase.o: $(srcdir)/src/common/appbase.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/appbase.cpp
 
@@ -24389,12 +24382,6 @@ baselib_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(BASELIB_ODEP)
 @COND_PLATFORM_MACOSX_1@baselib_utilsunx.o: $(srcdir)/src/unix/utilsunx.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/utilsunx.cpp
 
-@COND_PLATFORM_UNIX_1@baselib_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(BASELIB_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
-
-@COND_PLATFORM_OS2_1@baselib_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(BASELIB_ODEP)
-@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
-
 netdll_version_rc.o: $(srcdir)/src/msw/version.rc $(NETDLL_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_58)  $(__EXCEPTIONS_DEFINE_p_57) $(__RTTI_DEFINE_p_57) $(__THREAD_DEFINE_p_57)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_58) $(__INC_TIFF_p_58) $(__INC_JPEG_p_58) $(__INC_PNG_p_57) $(__INC_ZLIB_p_59) $(__INC_REGEX_p_57) $(__INC_EXPAT_p_57) --define wxUSE_GUI=0 --define WXUSINGDLL --define WXMAKINGDLL_NET
 
@@ -24442,6 +24429,12 @@ netdll_net.o: $(srcdir)/src/msw/wince/net.cpp $(NETDLL_ODEP)
 
 netdll_sockosx.o: $(srcdir)/src/osx/core/sockosx.cpp $(NETDLL_ODEP)
 	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/osx/core/sockosx.cpp
+
+@COND_PLATFORM_UNIX_1@netdll_socketiohandler.o: $(srcdir)/src/common/socketiohandler.cpp $(NETDLL_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/common/socketiohandler.cpp
+
+@COND_PLATFORM_MACOSX_1@netdll_socketiohandler.o: $(srcdir)/src/common/socketiohandler.cpp $(NETDLL_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/common/socketiohandler.cpp
 
 @COND_PLATFORM_UNIX_1@netdll_sockunix.o: $(srcdir)/src/unix/sockunix.cpp $(NETDLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/unix/sockunix.cpp
@@ -24496,6 +24489,12 @@ netlib_net.o: $(srcdir)/src/msw/wince/net.cpp $(NETLIB_ODEP)
 
 netlib_sockosx.o: $(srcdir)/src/osx/core/sockosx.cpp $(NETLIB_ODEP)
 	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/osx/core/sockosx.cpp
+
+@COND_PLATFORM_UNIX_1@netlib_socketiohandler.o: $(srcdir)/src/common/socketiohandler.cpp $(NETLIB_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/common/socketiohandler.cpp
+
+@COND_PLATFORM_MACOSX_1@netlib_socketiohandler.o: $(srcdir)/src/common/socketiohandler.cpp $(NETLIB_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/common/socketiohandler.cpp
 
 @COND_PLATFORM_UNIX_1@netlib_sockunix.o: $(srcdir)/src/unix/sockunix.cpp $(NETLIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/unix/sockunix.cpp

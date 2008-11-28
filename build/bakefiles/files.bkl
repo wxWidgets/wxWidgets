@@ -109,7 +109,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
  -->
 <set var="BASE_UNIX_SRC" hints="files">
     $(BASE_UNIX_AND_DARWIN_NOTWXMAC_SRC)
-    src/common/gsocketiohandler.cpp
 </set>
 <set var="BASE_UNIX_HDR" hints="files">
     $(BASE_UNIX_AND_DARWIN_NOTWXMAC_HDR)
@@ -233,7 +232,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="BASE_OS2_SRC" hints="files">
     src/common/fdiodispatcher.cpp
     src/common/selectdispatcher.cpp
-    src/common/gsocketiohandler.cpp
     src/unix/appunix.cpp
     src/unix/evtloopunix.cpp
     src/unix/timerunx.cpp
@@ -535,6 +533,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- ====================================================================== -->
 
 <set var="NET_UNIX_SRC" hints="files">
+    src/common/socketiohandler.cpp
     src/unix/sockunix.cpp
 </set>
 

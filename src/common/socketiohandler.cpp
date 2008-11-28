@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        src/common/gsocketiohandler.cpp
+// Name:        src/common/socketiohandler.cpp
 // Purpose:     implementation of wxFDIOHandler for wxSocket
 // Author:      Angel Vidal, Lukasz Michalski
 // Created:     08.24.06
@@ -24,7 +24,7 @@
 
 #include "wx/apptrait.h"
 #include "wx/unix/private.h"
-#include "wx/private/gsocketiohandler.h"
+#include "wx/private/socketiohandler.h"
 
 // ============================================================================
 // implementation
@@ -155,11 +155,17 @@ void wxSocketSelectManager::Uninstall_Callback(wxSocketImpl *socket_,
     }
 }
 
-wxSocketManager *wxAppTraits::GetSocketManager()
+// set the wxBase variable to point to our wxSocketManager implementation
+//
+// see comments in wx/apptrait.h for the explanation of why do we do it
+// like this
+static struct ManagerSetter
 {
-    static wxSocketSelectManager s_manager;
-
-    return &s_manager;
-}
+    ManagerSetter()
+    {
+        static wxSocketSelectManager s_manager;
+        wxAppTraits::SetDefaultSocketManager(&s_manager);
+    }
+} gs_managerSetter;
 
 #endif // wxUSE_SOCKETS

@@ -18,7 +18,6 @@
 #include "wx/private/fd.h"
 #include "wx/private/socket.h"
 #include "wx/unix/private/sockunix.h"
-#include "wx/private/gsocketiohandler.h"
 
 #if defined(__VISAGECPP__)
 #define BSD_SELECT /* use Berkeley Sockets select */

@@ -43,18 +43,6 @@ public:
     virtual int AddProcessCallback(wxEndProcessData *data, int fd);
 
 
-    // wxThread helpers
-    // ----------------
-
-    // Darwin uses the same wxSocketManager in console and GUI and, like MSW,
-    // uses SetDefaultSocketManager() to initialize it
-#if wxUSE_SOCKETS && !defined(__DARWIN__)
-    // returns the select()-based socket manager for console applications which
-    // is also used by some ports (wxX11, wxDFB) in the GUI build (hence it is
-    // here and not in wxConsoleAppTraits)
-    virtual wxSocketManager *GetSocketManager();
-#endif
-
 protected:
     // a helper for the implementation of WaitForChild() in wxGUIAppTraits:
     // checks the streams used for redirected IO in execData and returns true
