@@ -25,7 +25,6 @@
 
     @library{wxhtml}
     @category{ctrl}
-    @appearance{htmllistbox.png}
 
     @see wxSimpleHtmlListBox
 */

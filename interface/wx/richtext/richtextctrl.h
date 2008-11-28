@@ -54,6 +54,7 @@
 
     @library{wxrichtext}
     @category{events,richtext}
+    @appearance{richtextctrl.png}
 */
 class wxRichTextEvent : public wxNotifyEvent
 {
