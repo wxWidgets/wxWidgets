@@ -697,7 +697,7 @@ bool wxWindowsPrintDialog::ConvertToNative( wxPrintDialogData &data )
 
     pd->hwndOwner = NULL;
     pd->hInstance = NULL;
-    pd->lCustData = NULL;
+    pd->lCustData = 0;
     pd->lpfnPrintHook = NULL;
     pd->lpfnSetupHook = NULL;
     pd->lpPrintTemplateName = NULL;
