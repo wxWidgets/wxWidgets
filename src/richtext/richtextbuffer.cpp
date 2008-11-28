@@ -3550,7 +3550,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
     ClearUnusedLines(lineCount);
 
     // Apply styles to wrapped lines
-    ApplyParagraphStyle(attr, rect);
+    ApplyParagraphStyle(attr, rect, dc);
 
     SetCachedSize(wxSize(maxWidth, currentPosition.y + spaceBeforePara + spaceAfterPara));
 
@@ -3602,7 +3602,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
 }
 
 /// Apply paragraph styles, such as centering, to wrapped lines
-void wxRichTextParagraph::ApplyParagraphStyle(const wxTextAttr& attr, const wxRect& rect)
+void wxRichTextParagraph::ApplyParagraphStyle(const wxTextAttr& attr, const wxRect& rect, wxDC& dc)
 {
     if (!attr.HasAlignment())
         return;
@@ -3618,12 +3618,14 @@ void wxRichTextParagraph::ApplyParagraphStyle(const wxTextAttr& attr, const wxRe
         // centering, right-justification
         if (attr.HasAlignment() && GetAttributes().GetAlignment() == wxTEXT_ALIGNMENT_CENTRE)
         {
-            pos.x = (rect.GetWidth() - (pos.x - rect.x) - size.x)/2 + pos.x;
+            int rightIndent = ConvertTenthsMMToPixels(dc, attr.GetRightIndent());
+            pos.x = (rect.GetWidth() - (pos.x - rect.x) - rightIndent - size.x)/2 + pos.x;
             line->SetPosition(pos);
         }
         else if (attr.HasAlignment() && GetAttributes().GetAlignment() == wxTEXT_ALIGNMENT_RIGHT)
         {
-            pos.x = rect.x + rect.GetWidth() - size.x;
+            int rightIndent = ConvertTenthsMMToPixels(dc, attr.GetRightIndent());
+            pos.x = rect.x + rect.GetWidth() - size.x - rightIndent;
             line->SetPosition(pos);
         }
 
@@ -4228,7 +4230,7 @@ bool wxRichTextParagraph::FindWrapPosition(const wxRichTextRange& range, wxDC& d
             widthBefore = 0;
 
         size_t i;
-        for (i = (size_t) range.GetStart(); i= < (size_t) range.GetEnd(); i++)
+        for (i = (size_t) range.GetStart(); i <= (size_t) range.GetEnd(); i++)
         {
             int widthFromStartOfThisRange = (*partialExtents)[i - GetRange().GetStart()] - widthBefore;
 
