@@ -30,37 +30,12 @@
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// wxSocketImplFDIO
-// ----------------------------------------------------------------------------
-
-class wxSocketImplFDIO : public wxSocketImplUnix
-{
-public:
-    wxSocketImplFDIO(wxSocketBase& wxsocket)
-        : wxSocketImplUnix(wxsocket)
-    {
-    }
-
-    int GetFlags() const { return m_flags; }
-    void RemoveFlag(wxFDIODispatcherEntryFlags flag) { m_flags &= ~flag; }
-    void AddFlag(wxFDIODispatcherEntryFlags flag) { m_flags |= flag; }
-
-private:
-    int m_flags;
-};
-
-// ----------------------------------------------------------------------------
 // wxSocketSelectManager
 // ----------------------------------------------------------------------------
 
 class wxSocketSelectManager : public wxSocketFDBasedManager
 {
 public:
-    virtual wxSocketImpl *CreateSocket(wxSocketBase& wxsocket)
-    {
-        return new wxSocketImplFDIO(wxsocket);
-    }
-
     virtual void Install_Callback(wxSocketImpl *socket, wxSocketNotify event);
     virtual void Uninstall_Callback(wxSocketImpl *socket, wxSocketNotify event);
 };
@@ -68,7 +43,7 @@ public:
 void wxSocketSelectManager::Install_Callback(wxSocketImpl *socket_,
                                              wxSocketNotify event)
 {
-    wxSocketImplFDIO * const socket = static_cast<wxSocketImplFDIO *>(socket_);
+    wxSocketImplUnix * const socket = static_cast<wxSocketImplUnix *>(socket_);
 
     const int fd = socket->m_fd;
 
@@ -85,20 +60,20 @@ void wxSocketSelectManager::Install_Callback(wxSocketImpl *socket_,
 
     // register it when it's used for the first time, update it if it had been
     // previously registered
-    const bool registerHandler = socket->GetFlags() == 0;
+    const bool alreadyRegistered = socket->HasAnyEnabledCallbacks();
 
-    socket->AddFlag(d == FD_INPUT ? wxFDIO_INPUT : wxFDIO_OUTPUT);
+    socket->EnableCallback(d == FD_INPUT ? wxFDIO_INPUT : wxFDIO_OUTPUT);
 
-    if ( registerHandler )
-        dispatcher->RegisterFD(fd, socket, socket->GetFlags());
+    if ( alreadyRegistered )
+        dispatcher->ModifyFD(fd, socket, socket->GetEnabledCallbacks());
     else
-        dispatcher->ModifyFD(fd, socket, socket->GetFlags());
+        dispatcher->RegisterFD(fd, socket, socket->GetEnabledCallbacks());
 }
 
 void wxSocketSelectManager::Uninstall_Callback(wxSocketImpl *socket_,
                                                wxSocketNotify event)
 {
-    wxSocketImplFDIO * const socket = static_cast<wxSocketImplFDIO *>(socket_);
+    wxSocketImplUnix * const socket = static_cast<wxSocketImplUnix *>(socket_);
 
     const SocketDir d = GetDirForEvent(socket, event);
 
@@ -115,16 +90,12 @@ void wxSocketSelectManager::Uninstall_Callback(wxSocketImpl *socket_,
     if ( !dispatcher )
         return;
 
-    socket->RemoveFlag(flag);
+    socket->DisableCallback(flag);
 
-    if ( !socket->GetFlags() )
-    {
+    if ( !socket->HasAnyEnabledCallbacks() )
         dispatcher->UnregisterFD(fd);
-    }
     else
-    {
-        dispatcher->ModifyFD(fd, socket, socket->GetFlags());
-    }
+        dispatcher->ModifyFD(fd, socket, socket->GetEnabledCallbacks());
 }
 
 // set the wxBase variable to point to our wxSocketManager implementation

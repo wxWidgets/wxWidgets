@@ -27,6 +27,7 @@ public:
         m_fds[1] = -1;
 
         m_use_events = false;
+        m_enabledCallbacks = 0;
     }
 
     virtual void Shutdown();
@@ -41,6 +42,14 @@ public:
     virtual void OnReadWaiting();
     virtual void OnWriteWaiting();
     virtual void OnExceptionWaiting();
+
+    // Unix-specific functions
+    bool HasAnyEnabledCallbacks() const { return m_enabledCallbacks != 0; }
+    void EnableCallback(wxFDIODispatcherEntryFlags flag)
+        { m_enabledCallbacks |= flag; }
+    void DisableCallback(wxFDIODispatcherEntryFlags flag)
+        { m_enabledCallbacks &= ~flag; }
+    int GetEnabledCallbacks() const { return m_enabledCallbacks; }
 
 private:
     virtual wxSocketError DoHandleConnect(int ret);
@@ -99,6 +108,7 @@ private:
     int Send_Stream(const char *buffer, int size);
     int Send_Dgram(const char *buffer, int size);
 
+
 protected:
     // true if socket should fire events
     bool m_use_events;
@@ -106,6 +116,13 @@ protected:
     // descriptors for input and output event notification channels associated
     // with the socket
     int m_fds[2];
+
+    // the events which are currently enabled for this socket, combination of
+    // wxFDIO_INPUT and wxFDIO_OUTPUT values
+    //
+    // TODO: this overlaps with m_detected but the semantics of the latter are
+    //       very unclear so I don't dare to remove it right now
+    int m_enabledCallbacks;
 
 private:
     // notify the associated wxSocket about a change in socket state and shut
