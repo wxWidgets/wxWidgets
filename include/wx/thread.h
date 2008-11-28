@@ -633,11 +633,10 @@ class WXDLLIMPEXP_BASE wxThreadHelper
 private:
     void KillThread()
     {
-        // If detached thread is about to finish, it will set
-        // m_thread to NULL so don't delete it then
-        // But if KillThread is called before detached thread
-        // sets it to NULL, then the thread object still
-        // exists and can be killed
+        // If wxThreadHelperThread is detached and is about to finish, it will
+        // set m_thread to NULL so don't delete it then.
+        // But if KillThread is called before wxThreadHelperThread (in detached mode)
+        // sets it to NULL, then the thread object still exists and can be killed
         wxCriticalSectionLocker locker(m_critSection);
 
         if ( m_thread )
