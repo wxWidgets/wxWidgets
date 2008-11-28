@@ -140,6 +140,7 @@ public:
     // change the dialog style flag
     void SetMessageDialogStyle(long style)
     {
+#ifdef __WXDEBUG__
         wxASSERT_MSG( ((style & wxYES_NO) == wxYES_NO) || !(style & wxYES_NO),
                       "wxYES and wxNO may only be used together" );
 
@@ -152,14 +153,21 @@ public:
         wxASSERT_MSG( (style & wxID_OK) != wxID_OK,
                       "wxMessageBox: Did you mean wxOK (and not wxID_OK)?" );
 
-        wxASSERT_MSG( !(style & wxNO_DEFAULT) || (style & wxNO),
-                      "wxNO_DEFAULT is invalid without wxNO" );
+        if ((style & wxNO) == 0)
+            wxASSERT_MSG( !(style & wxNO_DEFAULT),
+                          "wxNO_DEFAULT is invalid without wxNO" );
 
-        wxASSERT_MSG( !(style & wxCANCEL_DEFAULT) || (style & wxCANCEL),
-                      "wxCANCEL_DEFAULT is invalid without wxCANCEL" );
+        if ((style & wxCANCEL) == 0)
+            wxASSERT_MSG( !(style & wxCANCEL_DEFAULT),
+                          "wxCANCEL_DEFAULT is invalid without wxCANCEL" );
 
-        wxASSERT_MSG( !(style & wxCANCEL_DEFAULT) || !(style & wxNO_DEFAULT),
-                      "only one default button can be specified" );
+        if ((style & wxCANCEL_DEFAULT) != 0)
+            wxASSERT_MSG( !(style & wxNO_DEFAULT),
+                          "only one default button can be specified" );
+        if ((style & wxNO_DEFAULT) != 0)
+            wxASSERT_MSG( !(style & wxCANCEL_DEFAULT),
+                          "only one default button can be specified" );
+#endif
 
         m_dialogStyle = style;
     }
