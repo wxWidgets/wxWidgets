@@ -12,6 +12,43 @@
     This class represents a dialog that shows a single or multi-line message,
     with a choice of OK, Yes, No and Cancel buttons.
 
+    @beginStyleTable
+    @style{wxOK}
+        Puts an Ok button in the message box. May be combined with @c wxCANCEL.
+    @style{wxCANCEL}
+        Puts a Cancel button in the message box. Must be combined with
+        either @c wxOK or @c wxYES_NO.
+    @style{wxYES_NO}
+        Puts Yes and No buttons in the message box. May be combined with
+        @c wxCANCEL.
+    @style{wxNO_DEFAULT}
+        Makes the "No" button default, can only be used with @c wxYES_NO.
+    @style{wxCANCEL_DEFAULT}
+        Makes the "Cancel" button default, can only be used with @c wxCANCEL
+    @style{wxYES_DEFAULT}
+        Makes the "Yes" button default, this is the default behaviour and
+        this flag exists solely for symmetry with @c wxNO_DEFAULT.
+    @style{wxOK_DEFAULT}
+        Makes the "OK" button default, this is the default behaviour and
+        this flag exists solely for symmetry with @c wxCANCEL_DEFAULT.
+    @style{wxICON_EXCLAMATION}
+        Displays an exclamation mark symbol.
+    @style{wxICON_ERROR}
+        Displays an error symbol.
+    @style{wxICON_HAND}
+        Displays an error symbol, this is a MSW-inspired synonym for @c wxICON_ERROR.
+    @style{wxICON_QUESTION}
+        Displays a question mark symbol. This icon is automatically used
+        with @c wxYES_NO so it's usually unnecessary to specify it explicitly.
+    @style{wxICON_INFORMATION}
+        Displays an information symbol. This icon is used by default if
+        @c wxYES_NO is not given so it is usually unnecessary to specify it
+        explicitly.
+    @style{wxSTAY_ON_TOP}
+        Makes the message box stay on top of all other windows (currently
+        implemented only under MSW).
+    @endStyleTable
+
     @library{wxcore}
     @category{cmndlg}
 
@@ -24,46 +61,7 @@ public:
         Constructor specifying the message box properties.
         Use ShowModal() to show the dialog.
 
-        @a style may be a bit list of the following identifiers:
-
-        @beginStyleTable
-        @style{wxOK}
-            Puts an Ok button in the message box. May be combined with @c
-            wxCANCEL.
-        @style{wxCANCEL}
-            Puts a Cancel button in the message box. Must be combined with
-            either @c wxOK or @c wxYES_NO.
-        @style{wxYES_NO}
-            Puts Yes and No buttons in the message box. May be combined with
-            @c wxCANCEL.
-        @style{wxNO_DEFAULT}
-            Makes the "No" button default, can only be used with @c wxYES_NO.
-        @style{wxCANCEL_DEFAULT}
-            Makes the "Cancel" button default, can only be used with @c wxCANCEL
-        @style{wxYES_DEFAULT}
-            Makes the "Yes" button default, this is the default behaviour and
-            this flag exists solely for symmetry with @c wxNO_DEFAULT.
-        @style{wxOK_DEFAULT}
-            Makes the "OK" button default, this is the default behaviour and
-            this flag exists solely for symmetry with @c wxCANCEL_DEFAULT.
-        @style{wxICON_EXCLAMATION}
-            Displays an exclamation mark symbol.
-        @style{wxICON_ERROR}
-            Displays an error symbol.
-        @style{wxICON_HAND}
-            Displays an error symbol, this is a MSW-inspired synonym for @c
-            wxICON_ERROR.
-        @style{wxICON_QUESTION}
-            Displays a question mark symbol. This icon is automatically used
-            with @c wxYES_NO so it's usually unnecessary to specify it explicitly.
-        @style{wxICON_INFORMATION}
-            Displays an information symbol. This icon is used by default if @c
-            wxYES_NO is not given so it is usually unnecessary to specify it
-            explicitly.
-        @style{wxSTAY_ON_TOP}
-            Makes the message box stay on top of all other windows (currently
-            implemented only under MSW).
-        @endStyleTable
+        @a style may be a bit list of the identifiers described above.
 
         Notice that not all styles are compatible: only one of @c wxOK and
         @c wxYES_NO may be specified (and one of them must be specified) and at
