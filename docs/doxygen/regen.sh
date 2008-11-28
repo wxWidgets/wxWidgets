@@ -56,6 +56,39 @@ fi
 #
 doxygen $cfgfile
 
+if [[ "$1" = "qch" ]]; then
+    # we need to add missing files to the .qhp
+    cd out/html
+    qhelpfile="index.qhp"
+
+    # remove <file> lines
+    cat $qhelpfile | grep -v "\<file\>" >temp
+
+    # remove last 3 lines
+    lines=$(wc -l < temp)
+    wanted=`expr $lines - 3`
+    head -n $wanted temp >$qhelpfile
+
+    # remove useless .md5 and .map files
+    rm *map *md5
+
+    # add a <file> tag for _any_ file in out/html folder except the .qhp itself
+    for f in *; do
+        if [[ $f != $qhelpfile ]]; then
+            echo "      <file>$f</file>" >>$qhelpfile
+        fi
+    done
+
+    # add ending tags to the qhp file
+    echo "    </files>
+  </filterSection>
+</QtHelpProject>" >>$qhelpfile
+
+    # last, run qhelpgenerator:
+    cd ../..
+    qhelpgenerator out/html/index.qhp -o out/wx.qch
+fi
+
 # Doxygen has the annoying habit to put the full path of the
 # affected files in the log file; remove it to make the log
 # more readable
