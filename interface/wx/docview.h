@@ -1472,27 +1472,6 @@ public:
         called, as this is not done automatically.
     */
     virtual void UseMenu(wxMenu* menu);
-
-    /**
-        A character array of strings corresponding to the most recently opened
-        files.
-    */
-    char** m_fileHistory;
-
-    /**
-        The number of files stored in the history array.
-    */
-    size_t m_fileHistoryN;
-
-    /**
-        The maximum number of files to be stored and displayed on the menu.
-    */
-    size_t m_fileMaxFiles;
-
-    /**
-        The file menu used to display the file history list (if enabled).
-    */
-    wxMenu* m_fileMenu;
 };
 
 
