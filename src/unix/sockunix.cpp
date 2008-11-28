@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/unix/gsocket.cpp
+// Name:        src/unix/sockunix.cpp
 // Purpose:     wxSocketImpl implementation for Unix systems
 // Authors:     Guilhem Lavaux, Guillermo Rodriguez Garcia, David Elliott,
 //              Vadim Zeitlin
@@ -15,10 +15,9 @@
 
 #if wxUSE_SOCKETS
 
-#include "wx/private/gsocket.h"
-
 #include "wx/private/fd.h"
 #include "wx/private/socket.h"
+#include "wx/unix/private/sockunix.h"
 #include "wx/private/gsocketiohandler.h"
 
 #if defined(__VISAGECPP__)

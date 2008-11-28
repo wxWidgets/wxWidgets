@@ -44,7 +44,7 @@
 #include "wx/evtloop.h"
 
 #include "wx/private/fd.h"
-#include "wx/private/gsocket.h"
+#include "wx/private/socket.h"
 
 // DLL options compatibility check:
 #include "wx/build.h"

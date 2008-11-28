@@ -12,7 +12,7 @@
 #if wxUSE_SOCKETS
 
 #include <stdlib.h>
-#include "wx/private/gsocket.h"
+#include "wx/private/socket.h"
 #include "wx/app.h"
 #include "wx/apptrait.h"
 

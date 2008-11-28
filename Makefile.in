@@ -444,7 +444,6 @@ ALL_BASE_HEADERS =  \
 	wx/meta/movable.h \
 	$(BASE_PLATFORM_HDR) \
 	wx/fs_inet.h \
-	wx/gsocket.h \
 	wx/protocol/file.h \
 	wx/protocol/ftp.h \
 	wx/protocol/http.h \
@@ -454,7 +453,6 @@ ALL_BASE_HEADERS =  \
 	wx/sckstrm.h \
 	wx/socket.h \
 	wx/url.h \
-	$(NET_PLATFORM_HDR) \
 	wx/xml/xml.h \
 	wx/xtixml.h
 ALL_HEADERS =  \
@@ -610,8 +608,6 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/unix/tls.h \
 	wx/unix/execute.h \
 	wx/unix/mimetype.h \
-	wx/unix/private.h \
-	wx/private/gsocketiohandler.h \
 	wx/msw/apptrait.h \
 	wx/msw/apptbase.h \
 	wx/msw/chkconf.h \
@@ -642,7 +638,6 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/palmos/stdpaths.h \
 	wx/msdos/mimetype.h \
 	wx/fs_inet.h \
-	wx/gsocket.h \
 	wx/protocol/file.h \
 	wx/protocol/ftp.h \
 	wx/protocol/http.h \
@@ -652,11 +647,6 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/sckstrm.h \
 	wx/socket.h \
 	wx/url.h \
-	wx/unix/gsockunx.h \
-	wx/msw/gsockmsw.h \
-	$(NET_WINCE_HDR) \
-	wx/unix/gsockunx.h \
-	wx/unix/gsockunx.h \
 	wx/xml/xml.h \
 	wx/xtixml.h
 ALL_BASE_SOURCES =  \
@@ -815,8 +805,8 @@ ALL_BASE_SOURCES =  \
 	src/common/sckstrm.cpp \
 	src/common/socket.cpp \
 	src/common/url.cpp \
-	src/unix/gsocket.cpp \
-	src/osx/core/gsockosx.cpp \
+	src/unix/sockunix.cpp \
+	src/osx/core/sockosx.cpp \
 	src/msw/gsocket.cpp \
 	src/msw/gsockmsw.cpp \
 	src/msw/urlmsw.cpp \
@@ -1930,7 +1920,6 @@ COND_USE_STC_1___wxscintilla___depname = \
 @COND_TOOLKIT_WINCE@BASE_WINCE_HDR = wx/msw/wince/time.h \
 @COND_TOOLKIT_WINCE@	wx/msw/wince/chkconf.h
 @COND_TOOLKIT_WINCE@NET_WINCE_SRC = src/msw/wince/net.cpp
-@COND_TOOLKIT_WINCE@NET_WINCE_HDR = wx/msw/wince/net.h
 @COND_TOOLKIT_MSW@MSW_HTML_HDR = wx/msw/helpbest.h
 @COND_TOOLKIT_COCOA@OPENGL_HDR_PLATFORM = wx/cocoa/glcanvas.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@OPENGL_HDR_PLATFORM \
@@ -2097,7 +2086,6 @@ COND_TOOLKIT__BASE_OSX_HDR =  \
 	wx/unix/tls.h \
 	wx/unix/execute.h \
 	wx/unix/mimetype.h \
-	wx/unix/private.h \
 	wx/osx/core/cfdataref.h \
 	wx/osx/core/cfref.h \
 	wx/osx/core/cfstring.h \
@@ -2120,7 +2108,6 @@ COND_TOOLKIT_COCOA_BASE_OSX_HDR =  \
 	wx/unix/tls.h \
 	wx/unix/execute.h \
 	wx/unix/mimetype.h \
-	wx/unix/private.h \
 	wx/osx/core/cfdataref.h \
 	wx/osx/core/cfref.h \
 	wx/osx/core/cfstring.h \
@@ -2143,7 +2130,6 @@ COND_TOOLKIT_GTK_BASE_OSX_HDR =  \
 	wx/unix/tls.h \
 	wx/unix/execute.h \
 	wx/unix/mimetype.h \
-	wx/unix/private.h \
 	wx/osx/core/cfdataref.h \
 	wx/osx/core/cfref.h \
 	wx/osx/core/cfstring.h \
@@ -2166,7 +2152,6 @@ COND_TOOLKIT_MOTIF_BASE_OSX_HDR =  \
 	wx/unix/tls.h \
 	wx/unix/execute.h \
 	wx/unix/mimetype.h \
-	wx/unix/private.h \
 	wx/osx/core/cfdataref.h \
 	wx/osx/core/cfref.h \
 	wx/osx/core/cfstring.h \
@@ -2229,7 +2214,6 @@ COND_TOOLKIT_X11_BASE_OSX_HDR =  \
 	wx/unix/tls.h \
 	wx/unix/execute.h \
 	wx/unix/mimetype.h \
-	wx/unix/private.h \
 	wx/osx/core/cfdataref.h \
 	wx/osx/core/cfref.h \
 	wx/osx/core/cfstring.h \
@@ -2241,9 +2225,6 @@ COND_TOOLKIT_X11_BASE_OSX_HDR =  \
 @COND_PLATFORM_MACOSX_1@BASE_PLATFORM_HDR = $(BASE_OSX_HDR)
 @COND_PLATFORM_MSDOS_1@BASE_PLATFORM_HDR = wx/msdos/mimetype.h
 COND_PLATFORM_OS2_1_BASE_PLATFORM_HDR =  \
-	wx/private/fdiodispatcher.h \
-	wx/private/selectdispatcher.h \
-	wx/private/gsocketiohandler.h \
 	wx/unix/app.h \
 	wx/os2/apptbase.h \
 	wx/os2/apptrait.h \
@@ -2267,9 +2248,7 @@ COND_PLATFORM_UNIX_1_BASE_PLATFORM_HDR =  \
 	wx/unix/stackwalk.h \
 	wx/unix/tls.h \
 	wx/unix/execute.h \
-	wx/unix/mimetype.h \
-	wx/unix/private.h \
-	wx/private/gsocketiohandler.h
+	wx/unix/mimetype.h
 @COND_PLATFORM_UNIX_1@BASE_PLATFORM_HDR = $(COND_PLATFORM_UNIX_1_BASE_PLATFORM_HDR)
 COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR =  \
 	wx/msw/apptrait.h \
@@ -2294,11 +2273,6 @@ COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR =  \
 	wx/msw/wrapwin.h \
 	$(BASE_WINCE_HDR)
 @COND_PLATFORM_WIN32_1@BASE_PLATFORM_HDR = $(COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR)
-@COND_PLATFORM_MACOSX_1@NET_PLATFORM_HDR = wx/unix/gsockunx.h
-@COND_PLATFORM_OS2_1@NET_PLATFORM_HDR = wx/unix/gsockunx.h
-@COND_PLATFORM_UNIX_1@NET_PLATFORM_HDR = wx/unix/gsockunx.h
-@COND_PLATFORM_WIN32_1@NET_PLATFORM_HDR = \
-@COND_PLATFORM_WIN32_1@	wx/msw/gsockmsw.h $(NET_WINCE_HDR)
 @COND_TOOLKIT_COCOA@LOWLEVEL_HDR = 
 COND_TOOLKIT_DFB_LOWLEVEL_HDR =  \
 	wx/generic/caret.h \
@@ -4062,11 +4036,11 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS \
 @COND_TOOLKIT_OSX_COCOA@	= monodll_osx_cocoa_utils.o
 @COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS \
-@COND_PLATFORM_MACOSX_1@	= monodll_unix_gsocket.o monodll_gsockosx.o
-@COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS = monodll_unix_gsocket.o
-@COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS = monodll_unix_gsocket.o
+@COND_PLATFORM_MACOSX_1@	= monodll_sockunix.o monodll_sockosx.o
+@COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS = monodll_sockunix.o
+@COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS = monodll_sockunix.o
 COND_PLATFORM_WIN32_1___NET_PLATFORM_SRC_OBJECTS =  \
-	monodll_msw_gsocket.o \
+	monodll_gsocket.o \
 	monodll_gsockmsw.o \
 	monodll_urlmsw.o \
 	$(__NET_WINCE_SRC_OBJECTS)
@@ -4565,7 +4539,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS =  \
 	monodll_gtk1_dnd.o \
 	monodll_gtk1_evtloop.o \
 	monodll_gtk1_font.o \
-	monodll_gtk1_gsockgtk.o \
+	monodll_gtk1_sockgtk.o \
 	monodll_gtk1_main.o \
 	monodll_gtk1_minifram.o \
 	monodll_gtk1_pen.o \
@@ -4606,7 +4580,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_gtk_evtloop.o \
 	monodll_filectrl.o \
 	monodll_gtk_font.o \
-	monodll_gtk_gsockgtk.o \
+	monodll_gtk_sockgtk.o \
 	monodll_gtk_minifram.o \
 	monodll_gtk_pen.o \
 	monodll_gtk_popupwin.o \
@@ -5030,7 +5004,7 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS =  \
 	monodll_motif_font.o \
 	monodll_motif_frame.o \
 	monodll_motif_gauge.o \
-	monodll_gsockmot.o \
+	monodll_sockmot.o \
 	monodll_motif_icon.o \
 	monodll_motif_listbox.o \
 	monodll_motif_main.o \
@@ -5266,7 +5240,7 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS =  \
 	monodll_os2_frame.o \
 	monodll_os2_gauge.o \
 	monodll_os2_gdiimage.o \
-	monodll_gsockpm.o \
+	monodll_sockpm.o \
 	monodll_os2_helpwin.o \
 	monodll_os2_icon.o \
 	monodll_os2_iniconf.o \
@@ -5431,7 +5405,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_gtk1_dnd.o \
 	monodll_gtk1_evtloop.o \
 	monodll_gtk1_font.o \
-	monodll_gtk1_gsockgtk.o \
+	monodll_gtk1_sockgtk.o \
 	monodll_gtk1_main.o \
 	monodll_gtk1_minifram.o \
 	monodll_gtk1_pen.o \
@@ -5472,7 +5446,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_gtk_evtloop.o \
 	monodll_filectrl.o \
 	monodll_gtk_font.o \
-	monodll_gtk_gsockgtk.o \
+	monodll_gtk_sockgtk.o \
 	monodll_gtk_minifram.o \
 	monodll_gtk_pen.o \
 	monodll_gtk_popupwin.o \
@@ -5874,11 +5848,11 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_1 \
 @COND_TOOLKIT_OSX_COCOA@	= monolib_osx_cocoa_utils.o
 @COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS_1 \
-@COND_PLATFORM_MACOSX_1@	= monolib_unix_gsocket.o monolib_gsockosx.o
-@COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS_1 = monolib_unix_gsocket.o
-@COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_1 = monolib_unix_gsocket.o
+@COND_PLATFORM_MACOSX_1@	= monolib_sockunix.o monolib_sockosx.o
+@COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS_1 = monolib_sockunix.o
+@COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_1 = monolib_sockunix.o
 COND_PLATFORM_WIN32_1___NET_PLATFORM_SRC_OBJECTS_1 =  \
-	monolib_msw_gsocket.o \
+	monolib_gsocket.o \
 	monolib_gsockmsw.o \
 	monolib_urlmsw.o \
 	$(__NET_WINCE_SRC_OBJECTS_1)
@@ -6377,7 +6351,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_gtk1_dnd.o \
 	monolib_gtk1_evtloop.o \
 	monolib_gtk1_font.o \
-	monolib_gtk1_gsockgtk.o \
+	monolib_gtk1_sockgtk.o \
 	monolib_gtk1_main.o \
 	monolib_gtk1_minifram.o \
 	monolib_gtk1_pen.o \
@@ -6418,7 +6392,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_gtk_evtloop.o \
 	monolib_filectrl.o \
 	monolib_gtk_font.o \
-	monolib_gtk_gsockgtk.o \
+	monolib_gtk_sockgtk.o \
 	monolib_gtk_minifram.o \
 	monolib_gtk_pen.o \
 	monolib_gtk_popupwin.o \
@@ -6842,7 +6816,7 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_1 =  \
 	monolib_motif_font.o \
 	monolib_motif_frame.o \
 	monolib_motif_gauge.o \
-	monolib_gsockmot.o \
+	monolib_sockmot.o \
 	monolib_motif_icon.o \
 	monolib_motif_listbox.o \
 	monolib_motif_main.o \
@@ -7078,7 +7052,7 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_1 =  \
 	monolib_os2_frame.o \
 	monolib_os2_gauge.o \
 	monolib_os2_gdiimage.o \
-	monolib_gsockpm.o \
+	monolib_sockpm.o \
 	monolib_os2_helpwin.o \
 	monolib_os2_icon.o \
 	monolib_os2_iniconf.o \
@@ -7243,7 +7217,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_gtk1_dnd.o \
 	monolib_gtk1_evtloop.o \
 	monolib_gtk1_font.o \
-	monolib_gtk1_gsockgtk.o \
+	monolib_gtk1_sockgtk.o \
 	monolib_gtk1_main.o \
 	monolib_gtk1_minifram.o \
 	monolib_gtk1_pen.o \
@@ -7284,7 +7258,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_gtk_evtloop.o \
 	monolib_filectrl.o \
 	monolib_gtk_font.o \
-	monolib_gtk_gsockgtk.o \
+	monolib_gtk_sockgtk.o \
 	monolib_gtk_minifram.o \
 	monolib_gtk_pen.o \
 	monolib_gtk_popupwin.o \
@@ -7869,11 +7843,11 @@ COND_USE_SOSYMLINKS_1___netdll___so_symlinks_uninst_cmd = rm -f \
 @COND_USE_SOSYMLINKS_1@__netdll___so_symlinks_uninst_cmd = $(COND_USE_SOSYMLINKS_1___netdll___so_symlinks_uninst_cmd)
 @COND_PLATFORM_WIN32_1@__netdll___win32rc = netdll_version_rc.o
 @COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS_2 \
-@COND_PLATFORM_MACOSX_1@	= netdll_unix_gsocket.o netdll_gsockosx.o
-@COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS_2 = netdll_unix_gsocket.o
-@COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_2 = netdll_unix_gsocket.o
+@COND_PLATFORM_MACOSX_1@	= netdll_sockunix.o netdll_sockosx.o
+@COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS_2 = netdll_sockunix.o
+@COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_2 = netdll_sockunix.o
 COND_PLATFORM_WIN32_1___NET_PLATFORM_SRC_OBJECTS_2 =  \
-	netdll_msw_gsocket.o \
+	netdll_gsocket.o \
 	netdll_gsockmsw.o \
 	netdll_urlmsw.o \
 	$(__NET_WINCE_SRC_OBJECTS_2)
@@ -7890,11 +7864,11 @@ COND_MONOLITHIC_0_SHARED_0___netlib___depname = \
 @COND_USE_PCH_1@_____pch_wxprec_netlib_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_netlib/wx/wxprec.h.gch
 @COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS_3 \
-@COND_PLATFORM_MACOSX_1@	= netlib_unix_gsocket.o netlib_gsockosx.o
-@COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS_3 = netlib_unix_gsocket.o
-@COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_3 = netlib_unix_gsocket.o
+@COND_PLATFORM_MACOSX_1@	= netlib_sockunix.o netlib_sockosx.o
+@COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS_3 = netlib_sockunix.o
+@COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_3 = netlib_sockunix.o
 COND_PLATFORM_WIN32_1___NET_PLATFORM_SRC_OBJECTS_3 =  \
-	netlib_msw_gsocket.o \
+	netlib_gsocket.o \
 	netlib_gsockmsw.o \
 	netlib_urlmsw.o \
 	$(__NET_WINCE_SRC_OBJECTS_3)
@@ -8339,7 +8313,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_gtk1_dnd.o \
 	coredll_gtk1_evtloop.o \
 	coredll_gtk1_font.o \
-	coredll_gtk1_gsockgtk.o \
+	coredll_gtk1_sockgtk.o \
 	coredll_gtk1_main.o \
 	coredll_gtk1_minifram.o \
 	coredll_gtk1_pen.o \
@@ -8380,7 +8354,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_gtk_evtloop.o \
 	coredll_filectrl.o \
 	coredll_gtk_font.o \
-	coredll_gtk_gsockgtk.o \
+	coredll_gtk_sockgtk.o \
 	coredll_gtk_minifram.o \
 	coredll_gtk_pen.o \
 	coredll_gtk_popupwin.o \
@@ -8804,7 +8778,7 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_2 =  \
 	coredll_motif_font.o \
 	coredll_motif_frame.o \
 	coredll_motif_gauge.o \
-	coredll_gsockmot.o \
+	coredll_sockmot.o \
 	coredll_motif_icon.o \
 	coredll_motif_listbox.o \
 	coredll_motif_main.o \
@@ -9040,7 +9014,7 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_2 =  \
 	coredll_os2_frame.o \
 	coredll_os2_gauge.o \
 	coredll_os2_gdiimage.o \
-	coredll_gsockpm.o \
+	coredll_sockpm.o \
 	coredll_os2_helpwin.o \
 	coredll_os2_icon.o \
 	coredll_os2_iniconf.o \
@@ -9205,7 +9179,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_gtk1_dnd.o \
 	coredll_gtk1_evtloop.o \
 	coredll_gtk1_font.o \
-	coredll_gtk1_gsockgtk.o \
+	coredll_gtk1_sockgtk.o \
 	coredll_gtk1_main.o \
 	coredll_gtk1_minifram.o \
 	coredll_gtk1_pen.o \
@@ -9246,7 +9220,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_gtk_evtloop.o \
 	coredll_filectrl.o \
 	coredll_gtk_font.o \
-	coredll_gtk_gsockgtk.o \
+	coredll_gtk_sockgtk.o \
 	coredll_gtk_minifram.o \
 	coredll_gtk_pen.o \
 	coredll_gtk_popupwin.o \
@@ -9843,7 +9817,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_gtk1_dnd.o \
 	corelib_gtk1_evtloop.o \
 	corelib_gtk1_font.o \
-	corelib_gtk1_gsockgtk.o \
+	corelib_gtk1_sockgtk.o \
 	corelib_gtk1_main.o \
 	corelib_gtk1_minifram.o \
 	corelib_gtk1_pen.o \
@@ -9884,7 +9858,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_gtk_evtloop.o \
 	corelib_filectrl.o \
 	corelib_gtk_font.o \
-	corelib_gtk_gsockgtk.o \
+	corelib_gtk_sockgtk.o \
 	corelib_gtk_minifram.o \
 	corelib_gtk_pen.o \
 	corelib_gtk_popupwin.o \
@@ -10308,7 +10282,7 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_3 =  \
 	corelib_motif_font.o \
 	corelib_motif_frame.o \
 	corelib_motif_gauge.o \
-	corelib_gsockmot.o \
+	corelib_sockmot.o \
 	corelib_motif_icon.o \
 	corelib_motif_listbox.o \
 	corelib_motif_main.o \
@@ -10544,7 +10518,7 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_3 =  \
 	corelib_os2_frame.o \
 	corelib_os2_gauge.o \
 	corelib_os2_gdiimage.o \
-	corelib_gsockpm.o \
+	corelib_sockpm.o \
 	corelib_os2_helpwin.o \
 	corelib_os2_icon.o \
 	corelib_os2_iniconf.o \
@@ -10709,7 +10683,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_gtk1_dnd.o \
 	corelib_gtk1_evtloop.o \
 	corelib_gtk1_font.o \
-	corelib_gtk1_gsockgtk.o \
+	corelib_gtk1_sockgtk.o \
 	corelib_gtk1_main.o \
 	corelib_gtk1_minifram.o \
 	corelib_gtk1_pen.o \
@@ -10750,7 +10724,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_gtk_evtloop.o \
 	corelib_filectrl.o \
 	corelib_gtk_font.o \
-	corelib_gtk_gsockgtk.o \
+	corelib_gtk_sockgtk.o \
 	corelib_gtk_minifram.o \
 	corelib_gtk_pen.o \
 	corelib_gtk_popupwin.o \
@@ -14530,7 +14504,7 @@ monodll_socket.o: $(srcdir)/src/common/socket.cpp $(MONODLL_ODEP)
 monodll_url.o: $(srcdir)/src/common/url.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/url.cpp
 
-monodll_msw_gsocket.o: $(srcdir)/src/msw/gsocket.cpp $(MONODLL_ODEP)
+monodll_gsocket.o: $(srcdir)/src/msw/gsocket.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/gsocket.cpp
 
 monodll_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.cpp $(MONODLL_ODEP)
@@ -14542,8 +14516,8 @@ monodll_urlmsw.o: $(srcdir)/src/msw/urlmsw.cpp $(MONODLL_ODEP)
 monodll_net.o: $(srcdir)/src/msw/wince/net.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/wince/net.cpp
 
-monodll_gsockosx.o: $(srcdir)/src/osx/core/gsockosx.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/gsockosx.cpp
+monodll_sockosx.o: $(srcdir)/src/osx/core/sockosx.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/sockosx.cpp
 
 monodll_graphicc.o: $(srcdir)/src/generic/graphicc.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/graphicc.cpp
@@ -14851,8 +14825,8 @@ monodll_motif_frame.o: $(srcdir)/src/motif/frame.cpp $(MONODLL_ODEP)
 monodll_motif_gauge.o: $(srcdir)/src/motif/gauge.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/motif/gauge.cpp
 
-monodll_gsockmot.o: $(srcdir)/src/motif/gsockmot.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/motif/gsockmot.cpp
+monodll_sockmot.o: $(srcdir)/src/motif/sockmot.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/motif/sockmot.cpp
 
 monodll_motif_icon.o: $(srcdir)/src/motif/icon.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/motif/icon.cpp
@@ -15478,8 +15452,8 @@ monodll_os2_gauge.o: $(srcdir)/src/os2/gauge.cpp $(MONODLL_ODEP)
 monodll_os2_gdiimage.o: $(srcdir)/src/os2/gdiimage.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/gdiimage.cpp
 
-monodll_gsockpm.o: $(srcdir)/src/os2/gsockpm.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/gsockpm.cpp
+monodll_sockpm.o: $(srcdir)/src/os2/sockpm.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/sockpm.cpp
 
 monodll_os2_helpwin.o: $(srcdir)/src/os2/helpwin.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/helpwin.cpp
@@ -16183,14 +16157,14 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_OS2_1@monodll_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
 
-@COND_PLATFORM_UNIX_1@monodll_unix_gsocket.o: $(srcdir)/src/unix/gsocket.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/gsocket.cpp
+@COND_PLATFORM_UNIX_1@monodll_sockunix.o: $(srcdir)/src/unix/sockunix.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/sockunix.cpp
 
-@COND_PLATFORM_MACOSX_1@monodll_unix_gsocket.o: $(srcdir)/src/unix/gsocket.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/gsocket.cpp
+@COND_PLATFORM_MACOSX_1@monodll_sockunix.o: $(srcdir)/src/unix/sockunix.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/sockunix.cpp
 
-@COND_PLATFORM_OS2_1@monodll_unix_gsocket.o: $(srcdir)/src/unix/gsocket.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/gsocket.cpp
+@COND_PLATFORM_OS2_1@monodll_sockunix.o: $(srcdir)/src/unix/sockunix.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/sockunix.cpp
 
 @COND_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monodll_generic_caret.o: $(srcdir)/src/generic/caret.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
@@ -16378,8 +16352,8 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_gtk_font.o: $(srcdir)/src/gtk/font.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/font.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_gtk_gsockgtk.o: $(srcdir)/src/gtk/gsockgtk.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/gsockgtk.cpp
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_gtk_sockgtk.o: $(srcdir)/src/gtk/sockgtk.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/sockgtk.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_gtk_minifram.o: $(srcdir)/src/gtk/minifram.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/minifram.cpp
@@ -16465,8 +16439,8 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monodll_gtk1_font.o: $(srcdir)/src/gtk1/font.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk1/font.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monodll_gtk1_gsockgtk.o: $(srcdir)/src/gtk1/gsockgtk.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk1/gsockgtk.cpp
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monodll_gtk1_sockgtk.o: $(srcdir)/src/gtk1/sockgtk.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk1/sockgtk.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monodll_gtk1_main.o: $(srcdir)/src/gtk1/main.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk1/main.cpp
@@ -19210,7 +19184,7 @@ monolib_socket.o: $(srcdir)/src/common/socket.cpp $(MONOLIB_ODEP)
 monolib_url.o: $(srcdir)/src/common/url.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/url.cpp
 
-monolib_msw_gsocket.o: $(srcdir)/src/msw/gsocket.cpp $(MONOLIB_ODEP)
+monolib_gsocket.o: $(srcdir)/src/msw/gsocket.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/gsocket.cpp
 
 monolib_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.cpp $(MONOLIB_ODEP)
@@ -19222,8 +19196,8 @@ monolib_urlmsw.o: $(srcdir)/src/msw/urlmsw.cpp $(MONOLIB_ODEP)
 monolib_net.o: $(srcdir)/src/msw/wince/net.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/wince/net.cpp
 
-monolib_gsockosx.o: $(srcdir)/src/osx/core/gsockosx.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/gsockosx.cpp
+monolib_sockosx.o: $(srcdir)/src/osx/core/sockosx.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/sockosx.cpp
 
 monolib_graphicc.o: $(srcdir)/src/generic/graphicc.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/graphicc.cpp
@@ -19531,8 +19505,8 @@ monolib_motif_frame.o: $(srcdir)/src/motif/frame.cpp $(MONOLIB_ODEP)
 monolib_motif_gauge.o: $(srcdir)/src/motif/gauge.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/motif/gauge.cpp
 
-monolib_gsockmot.o: $(srcdir)/src/motif/gsockmot.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/motif/gsockmot.cpp
+monolib_sockmot.o: $(srcdir)/src/motif/sockmot.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/motif/sockmot.cpp
 
 monolib_motif_icon.o: $(srcdir)/src/motif/icon.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/motif/icon.cpp
@@ -20158,8 +20132,8 @@ monolib_os2_gauge.o: $(srcdir)/src/os2/gauge.cpp $(MONOLIB_ODEP)
 monolib_os2_gdiimage.o: $(srcdir)/src/os2/gdiimage.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/gdiimage.cpp
 
-monolib_gsockpm.o: $(srcdir)/src/os2/gsockpm.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/gsockpm.cpp
+monolib_sockpm.o: $(srcdir)/src/os2/sockpm.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/sockpm.cpp
 
 monolib_os2_helpwin.o: $(srcdir)/src/os2/helpwin.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/helpwin.cpp
@@ -20863,14 +20837,14 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_OS2_1@monolib_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
 
-@COND_PLATFORM_UNIX_1@monolib_unix_gsocket.o: $(srcdir)/src/unix/gsocket.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/gsocket.cpp
+@COND_PLATFORM_UNIX_1@monolib_sockunix.o: $(srcdir)/src/unix/sockunix.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/sockunix.cpp
 
-@COND_PLATFORM_MACOSX_1@monolib_unix_gsocket.o: $(srcdir)/src/unix/gsocket.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/gsocket.cpp
+@COND_PLATFORM_MACOSX_1@monolib_sockunix.o: $(srcdir)/src/unix/sockunix.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/sockunix.cpp
 
-@COND_PLATFORM_OS2_1@monolib_unix_gsocket.o: $(srcdir)/src/unix/gsocket.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/gsocket.cpp
+@COND_PLATFORM_OS2_1@monolib_sockunix.o: $(srcdir)/src/unix/sockunix.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/sockunix.cpp
 
 @COND_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monolib_generic_caret.o: $(srcdir)/src/generic/caret.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
@@ -21058,8 +21032,8 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_gtk_font.o: $(srcdir)/src/gtk/font.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/font.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_gtk_gsockgtk.o: $(srcdir)/src/gtk/gsockgtk.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/gsockgtk.cpp
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_gtk_sockgtk.o: $(srcdir)/src/gtk/sockgtk.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/sockgtk.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_gtk_minifram.o: $(srcdir)/src/gtk/minifram.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/minifram.cpp
@@ -21145,8 +21119,8 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monolib_gtk1_font.o: $(srcdir)/src/gtk1/font.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk1/font.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monolib_gtk1_gsockgtk.o: $(srcdir)/src/gtk1/gsockgtk.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk1/gsockgtk.cpp
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monolib_gtk1_sockgtk.o: $(srcdir)/src/gtk1/sockgtk.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk1/sockgtk.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monolib_gtk1_main.o: $(srcdir)/src/gtk1/main.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk1/main.cpp
@@ -24454,7 +24428,7 @@ netdll_socket.o: $(srcdir)/src/common/socket.cpp $(NETDLL_ODEP)
 netdll_url.o: $(srcdir)/src/common/url.cpp $(NETDLL_ODEP)
 	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/common/url.cpp
 
-netdll_msw_gsocket.o: $(srcdir)/src/msw/gsocket.cpp $(NETDLL_ODEP)
+netdll_gsocket.o: $(srcdir)/src/msw/gsocket.cpp $(NETDLL_ODEP)
 	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/msw/gsocket.cpp
 
 netdll_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.cpp $(NETDLL_ODEP)
@@ -24466,17 +24440,17 @@ netdll_urlmsw.o: $(srcdir)/src/msw/urlmsw.cpp $(NETDLL_ODEP)
 netdll_net.o: $(srcdir)/src/msw/wince/net.cpp $(NETDLL_ODEP)
 	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/msw/wince/net.cpp
 
-netdll_gsockosx.o: $(srcdir)/src/osx/core/gsockosx.cpp $(NETDLL_ODEP)
-	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/osx/core/gsockosx.cpp
+netdll_sockosx.o: $(srcdir)/src/osx/core/sockosx.cpp $(NETDLL_ODEP)
+	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/osx/core/sockosx.cpp
 
-@COND_PLATFORM_UNIX_1@netdll_unix_gsocket.o: $(srcdir)/src/unix/gsocket.cpp $(NETDLL_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/unix/gsocket.cpp
+@COND_PLATFORM_UNIX_1@netdll_sockunix.o: $(srcdir)/src/unix/sockunix.cpp $(NETDLL_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/unix/sockunix.cpp
 
-@COND_PLATFORM_MACOSX_1@netdll_unix_gsocket.o: $(srcdir)/src/unix/gsocket.cpp $(NETDLL_ODEP)
-@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/unix/gsocket.cpp
+@COND_PLATFORM_MACOSX_1@netdll_sockunix.o: $(srcdir)/src/unix/sockunix.cpp $(NETDLL_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/unix/sockunix.cpp
 
-@COND_PLATFORM_OS2_1@netdll_unix_gsocket.o: $(srcdir)/src/unix/gsocket.cpp $(NETDLL_ODEP)
-@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/unix/gsocket.cpp
+@COND_PLATFORM_OS2_1@netdll_sockunix.o: $(srcdir)/src/unix/sockunix.cpp $(NETDLL_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/unix/sockunix.cpp
 
 netlib_fs_inet.o: $(srcdir)/src/common/fs_inet.cpp $(NETLIB_ODEP)
 	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/common/fs_inet.cpp
@@ -24508,7 +24482,7 @@ netlib_socket.o: $(srcdir)/src/common/socket.cpp $(NETLIB_ODEP)
 netlib_url.o: $(srcdir)/src/common/url.cpp $(NETLIB_ODEP)
 	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/common/url.cpp
 
-netlib_msw_gsocket.o: $(srcdir)/src/msw/gsocket.cpp $(NETLIB_ODEP)
+netlib_gsocket.o: $(srcdir)/src/msw/gsocket.cpp $(NETLIB_ODEP)
 	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/msw/gsocket.cpp
 
 netlib_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.cpp $(NETLIB_ODEP)
@@ -24520,17 +24494,17 @@ netlib_urlmsw.o: $(srcdir)/src/msw/urlmsw.cpp $(NETLIB_ODEP)
 netlib_net.o: $(srcdir)/src/msw/wince/net.cpp $(NETLIB_ODEP)
 	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/msw/wince/net.cpp
 
-netlib_gsockosx.o: $(srcdir)/src/osx/core/gsockosx.cpp $(NETLIB_ODEP)
-	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/osx/core/gsockosx.cpp
+netlib_sockosx.o: $(srcdir)/src/osx/core/sockosx.cpp $(NETLIB_ODEP)
+	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/osx/core/sockosx.cpp
 
-@COND_PLATFORM_UNIX_1@netlib_unix_gsocket.o: $(srcdir)/src/unix/gsocket.cpp $(NETLIB_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/unix/gsocket.cpp
+@COND_PLATFORM_UNIX_1@netlib_sockunix.o: $(srcdir)/src/unix/sockunix.cpp $(NETLIB_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/unix/sockunix.cpp
 
-@COND_PLATFORM_MACOSX_1@netlib_unix_gsocket.o: $(srcdir)/src/unix/gsocket.cpp $(NETLIB_ODEP)
-@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/unix/gsocket.cpp
+@COND_PLATFORM_MACOSX_1@netlib_sockunix.o: $(srcdir)/src/unix/sockunix.cpp $(NETLIB_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/unix/sockunix.cpp
 
-@COND_PLATFORM_OS2_1@netlib_unix_gsocket.o: $(srcdir)/src/unix/gsocket.cpp $(NETLIB_ODEP)
-@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/unix/gsocket.cpp
+@COND_PLATFORM_OS2_1@netlib_sockunix.o: $(srcdir)/src/unix/sockunix.cpp $(NETLIB_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/unix/sockunix.cpp
 
 coredll_version_rc.o: $(srcdir)/src/msw/version.rc $(COREDLL_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_58)  $(__EXCEPTIONS_DEFINE_p_57) $(__RTTI_DEFINE_p_57) $(__THREAD_DEFINE_p_57)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_58) $(__INC_TIFF_p_58) $(__INC_JPEG_p_58) $(__INC_PNG_p_57) $(__INC_ZLIB_p_59) $(__INC_REGEX_p_57) $(__INC_EXPAT_p_57) --define WXUSINGDLL --define WXMAKINGDLL_CORE --define wxUSE_BASE=0
@@ -24874,8 +24848,8 @@ coredll_motif_frame.o: $(srcdir)/src/motif/frame.cpp $(COREDLL_ODEP)
 coredll_motif_gauge.o: $(srcdir)/src/motif/gauge.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/motif/gauge.cpp
 
-coredll_gsockmot.o: $(srcdir)/src/motif/gsockmot.cpp $(COREDLL_ODEP)
-	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/motif/gsockmot.cpp
+coredll_sockmot.o: $(srcdir)/src/motif/sockmot.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/motif/sockmot.cpp
 
 coredll_motif_icon.o: $(srcdir)/src/motif/icon.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/motif/icon.cpp
@@ -25501,8 +25475,8 @@ coredll_os2_gauge.o: $(srcdir)/src/os2/gauge.cpp $(COREDLL_ODEP)
 coredll_os2_gdiimage.o: $(srcdir)/src/os2/gdiimage.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/os2/gdiimage.cpp
 
-coredll_gsockpm.o: $(srcdir)/src/os2/gsockpm.cpp $(COREDLL_ODEP)
-	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/os2/gsockpm.cpp
+coredll_sockpm.o: $(srcdir)/src/os2/sockpm.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/os2/sockpm.cpp
 
 coredll_os2_helpwin.o: $(srcdir)/src/os2/helpwin.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/os2/helpwin.cpp
@@ -25927,8 +25901,8 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_gtk_font.o: $(srcdir)/src/gtk/font.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/font.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_gtk_gsockgtk.o: $(srcdir)/src/gtk/gsockgtk.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/gsockgtk.cpp
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_gtk_sockgtk.o: $(srcdir)/src/gtk/sockgtk.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/sockgtk.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_gtk_minifram.o: $(srcdir)/src/gtk/minifram.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/minifram.cpp
@@ -26014,8 +25988,8 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@coredll_gtk1_font.o: $(srcdir)/src/gtk1/font.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk1/font.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@coredll_gtk1_gsockgtk.o: $(srcdir)/src/gtk1/gsockgtk.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk1/gsockgtk.cpp
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@coredll_gtk1_sockgtk.o: $(srcdir)/src/gtk1/sockgtk.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk1/sockgtk.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@coredll_gtk1_main.o: $(srcdir)/src/gtk1/main.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk1/main.cpp
@@ -28381,8 +28355,8 @@ corelib_motif_frame.o: $(srcdir)/src/motif/frame.cpp $(CORELIB_ODEP)
 corelib_motif_gauge.o: $(srcdir)/src/motif/gauge.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/motif/gauge.cpp
 
-corelib_gsockmot.o: $(srcdir)/src/motif/gsockmot.cpp $(CORELIB_ODEP)
-	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/motif/gsockmot.cpp
+corelib_sockmot.o: $(srcdir)/src/motif/sockmot.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/motif/sockmot.cpp
 
 corelib_motif_icon.o: $(srcdir)/src/motif/icon.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/motif/icon.cpp
@@ -29008,8 +28982,8 @@ corelib_os2_gauge.o: $(srcdir)/src/os2/gauge.cpp $(CORELIB_ODEP)
 corelib_os2_gdiimage.o: $(srcdir)/src/os2/gdiimage.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/os2/gdiimage.cpp
 
-corelib_gsockpm.o: $(srcdir)/src/os2/gsockpm.cpp $(CORELIB_ODEP)
-	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/os2/gsockpm.cpp
+corelib_sockpm.o: $(srcdir)/src/os2/sockpm.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/os2/sockpm.cpp
 
 corelib_os2_helpwin.o: $(srcdir)/src/os2/helpwin.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/os2/helpwin.cpp
@@ -29434,8 +29408,8 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_gtk_font.o: $(srcdir)/src/gtk/font.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/font.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_gtk_gsockgtk.o: $(srcdir)/src/gtk/gsockgtk.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/gsockgtk.cpp
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_gtk_sockgtk.o: $(srcdir)/src/gtk/sockgtk.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/sockgtk.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_gtk_minifram.o: $(srcdir)/src/gtk/minifram.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/minifram.cpp
@@ -29521,8 +29495,8 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@corelib_gtk1_font.o: $(srcdir)/src/gtk1/font.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk1/font.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@corelib_gtk1_gsockgtk.o: $(srcdir)/src/gtk1/gsockgtk.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk1/gsockgtk.cpp
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@corelib_gtk1_sockgtk.o: $(srcdir)/src/gtk1/sockgtk.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk1/sockgtk.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@corelib_gtk1_main.o: $(srcdir)/src/gtk1/main.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk1/main.cpp

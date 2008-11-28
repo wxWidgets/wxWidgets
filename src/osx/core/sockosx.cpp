@@ -13,8 +13,8 @@
 
 #if wxUSE_SOCKETS
 
-#include "wx/private/gsocket.h"
-#include "wx/unix/gsockunx.h"
+#include "wx/private/socket.h"
+#include "wx/unix/private/sockunix.h"
 #include "wx/apptrait.h"
 
 #include <CoreFoundation/CoreFoundation.h>

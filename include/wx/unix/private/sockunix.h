@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/unix/gsockunx.h
+// Name:        wx/unix/private/sockunix.h
 // Purpose:     wxSocketImpl implementation for Unix systems
 // Authors:     Guilhem Lavaux, Vadim Zeitlin
 // Created:     April 1997

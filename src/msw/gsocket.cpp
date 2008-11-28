@@ -57,7 +57,7 @@
 
 #if wxUSE_SOCKETS
 
-#include "wx/private/gsocket.h"
+#include "wx/private/socket.h"
 #include "wx/link.h"
 
 wxFORCE_LINK_MODULE(gsockmsw)

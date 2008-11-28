@@ -15,7 +15,7 @@
 
 #include <X11/Intrinsic.h>      // XtAppAdd/RemoveInput()
 #include "wx/motif/private.h"   // wxGetAppContext()
-#include "wx/private/gsocket.h"
+#include "wx/private/socket.h"
 #include "wx/apptrait.h"
 
 extern "C" {

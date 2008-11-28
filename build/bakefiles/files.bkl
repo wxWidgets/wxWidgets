@@ -99,7 +99,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     $(BASE_UNIX_AND_DARWIN_HDR)
     wx/unix/execute.h
     wx/unix/mimetype.h
-    wx/unix/private.h
 </set>
 
 <!--
@@ -114,7 +113,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="BASE_UNIX_HDR" hints="files">
     $(BASE_UNIX_AND_DARWIN_NOTWXMAC_HDR)
-    wx/private/gsocketiohandler.h
 </set>
 
 <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
@@ -249,9 +247,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="BASE_AND_GUI_OS2_SRC" hints="files">
 </set>
 <set var="BASE_OS2_HDR" hints="files">
-    wx/private/fdiodispatcher.h
-    wx/private/selectdispatcher.h
-    wx/private/gsocketiohandler.h
     wx/unix/app.h
     wx/os2/apptbase.h
     wx/os2/apptrait.h
@@ -540,14 +535,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- ====================================================================== -->
 
 <set var="NET_UNIX_SRC" hints="files">
-    src/unix/gsocket.cpp
-</set>
-<set var="NET_UNIX_HDR" hints="files">
-    wx/unix/gsockunx.h
+    src/unix/sockunix.cpp
 </set>
 
 <set var="NET_OSX_SRC" hints="files">
-    src/osx/core/gsockosx.cpp
+    src/osx/core/sockosx.cpp
 </set>
 
 <set var="NET_WIN32_SRC" hints="files">
@@ -567,10 +559,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="NET_OS2_SRC" hints="files">
-    src/unix/gsocket.cpp
-</set>
-<set var="NET_OS2_HDR" hints="files">
-    wx/unix/gsockunx.h
+    src/unix/sockunix.cpp
 </set>
 
 <set var="NET_CMN_SRC" hints="files">
@@ -587,7 +576,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="NET_CMN_HDR" hints="files">
     wx/fs_inet.h
-    wx/gsocket.h
     wx/protocol/file.h
     wx/protocol/ftp.h
     wx/protocol/http.h
@@ -999,7 +987,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/evtloop.cpp
     src/gtk/filectrl.cpp
     src/gtk/font.cpp
-    src/gtk/gsockgtk.cpp
+    src/gtk/sockgtk.cpp
     src/gtk/minifram.cpp
     src/gtk/pen.cpp
     src/gtk/popupwin.cpp
@@ -1183,7 +1171,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk1/dnd.cpp
     src/gtk1/evtloop.cpp
     src/gtk1/font.cpp
-    src/gtk1/gsockgtk.cpp
+    src/gtk1/sockgtk.cpp
     src/gtk1/main.cpp
     src/gtk1/minifram.cpp
     src/gtk1/pen.cpp
@@ -1373,7 +1361,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/motif/font.cpp
     src/motif/frame.cpp
     src/motif/gauge.cpp
-    src/motif/gsockmot.cpp
+    src/motif/sockmot.cpp
     src/motif/icon.cpp
     src/motif/listbox.cpp
     src/motif/main.cpp
@@ -2034,7 +2022,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/os2/frame.cpp
     src/os2/gauge.cpp
     src/os2/gdiimage.cpp
-    src/os2/gsockpm.cpp
+    src/os2/sockpm.cpp
     src/os2/helpwin.cpp
     src/os2/icon.cpp
     src/os2/iniconf.cpp
@@ -3622,10 +3610,7 @@ src/osx/iphone/window.mm
         <if cond="PLATFORM_OS2=='1'">$(NET_OS2_SRC)</if>
     </set>
     <set var="NET_PLATFORM_HDR" hints="files">
-        <if cond="PLATFORM_UNIX=='1'">$(NET_UNIX_HDR)</if>
         <if cond="PLATFORM_WIN32=='1'">$(NET_WIN32_HDR) $(NET_WINCE_HDR)</if>
-        <if cond="PLATFORM_OS2=='1'">$(NET_OS2_HDR)</if>
-        <if cond="PLATFORM_MACOSX=='1'">$(NET_UNIX_HDR)</if>
     </set>
 
     <set var="NET_SRC" hints="files">
@@ -3795,7 +3780,7 @@ src/osx/iphone/window.mm
     <!-- for 'make install', only the headers needed for the installed port -->
     <set var="ALL_BASE_HEADERS" make_var="1" hints="files">
         $(BASE_CMN_HDR) $(BASE_PLATFORM_HDR)
-        $(NET_CMN_HDR) $(NET_PLATFORM_HDR)
+        $(NET_CMN_HDR)
         $(XML_HDR)
     </set>
     <set var="ALL_HEADERS" make_var="1" hints="files">
@@ -3812,10 +3797,6 @@ src/osx/iphone/window.mm
         $(BASE_PALMOS_HDR)
         $(BASE_MSDOS_HDR)
         $(NET_CMN_HDR)
-        $(NET_UNIX_HDR)
-        $(NET_WIN32_HDR) $(NET_WINCE_HDR)
-        $(NET_OS2_HDR)
-        $(NET_UNIX_HDR)
         $(XML_HDR)
     </set>
 

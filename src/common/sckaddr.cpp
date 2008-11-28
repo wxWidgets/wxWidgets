@@ -32,9 +32,9 @@
     #endif
 #endif // !WX_PRECOMP
 
-#include "wx/private/gsocket.h"
 #include "wx/socket.h"
 #include "wx/sckaddr.h"
+#include "wx/private/socket.h"
 
 IMPLEMENT_ABSTRACT_CLASS(wxSockAddress, wxObject)
 IMPLEMENT_ABSTRACT_CLASS(wxIPaddress, wxSockAddress)
