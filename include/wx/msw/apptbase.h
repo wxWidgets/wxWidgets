@@ -46,26 +46,6 @@ public:
     virtual WXDWORD WaitForThread(WXHANDLE hThread) = 0;
 
 
-    // wxSocket support
-    // ----------------
-
-#if wxUSE_SOCKETS
-    // this function is used by wxNet library to set the default socket manager
-    // to use: doing it like this allows us to keep all socket-related code in
-    // wxNet instead of having to pull it in wxBase itself as we'd have to do
-    // if we really implemented GSocketManager here
-    //
-    // we don't take ownership of this pointer, it should have a lifetime
-    // greater than that of any socket (e.g. be a pointer to a static object)
-    static void SetDefaultSocketManager(GSocketManager *manager)
-    {
-        ms_manager = manager;
-    }
-
-    virtual GSocketManager *GetSocketManager() { return ms_manager; }
-#endif // wxUSE_SOCKETS
-
-
 #ifndef __WXWINCE__
     // console helpers
     // ---------------
@@ -86,8 +66,6 @@ protected:
     // implementation of WaitForThread() for the console applications which is
     // also used by the GUI code if it doesn't [yet|already} dispatch events
     WXDWORD DoSimpleWaitForThread(WXHANDLE hThread);
-
-    static GSocketManager *ms_manager;
 };
 
 #endif // _WX_MSW_APPTBASE_H_

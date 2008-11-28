@@ -111,6 +111,8 @@ wxAppConsole *wxAppConsoleBase::ms_appInstance = NULL;
 
 wxAppInitializerFunction wxAppConsoleBase::ms_appInitFn = NULL;
 
+wxSocketManager *wxAppTraitsBase::ms_manager = NULL;
+
 // ----------------------------------------------------------------------------
 // wxEventLoopPtr
 // ----------------------------------------------------------------------------

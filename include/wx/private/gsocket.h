@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/private/gsocket.h
-// Purpose:     GSocket implementation
+// Purpose:     wxSocketImpl nd related declarations
 // Authors:     Guilhem Lavaux, Vadim Zeitlin
 // Created:     April 1997
 // RCS-ID:      $Id$
@@ -9,6 +9,31 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+/*
+    Brief overview of different socket classes:
+
+    - wxSocketBase is the public class representing a socket ("Base" here
+      refers to the fact that wxSocketClient and wxSocketServer are derived
+      from it and predates the convention of using "Base" for common base
+      classes for platform-specific classes in wxWidgets) with implementation
+      common to all platforms and forwarding methods whose implementation
+      differs between platforms to wxSocketImpl which it contains.
+
+    - wxSocketImpl is actually just an abstract base class having only code
+      common to all platforms, the concrete implementation classes derive from
+      it and are created by wxSocketManager::CreateSocket().
+
+    - Some socket operations have different implementations in console-mode and
+      GUI applications. wxSocketManager class exists to abstract this in such
+      way that console applications (using wxBase) don't depend on wxNet. An
+      object of this class is made available via wxApp and GUI applications set
+      up a different kind of global socket manager from console ones.
+
+      TODO: it looks like wxSocketManager could be eliminated by providing
+            methods for registering/unregistering sockets directly in
+            wxEventLoop.
+ */
+
 #ifndef _WX_PRIVATE_GSOCKET_H_
 #define _WX_PRIVATE_GSOCKET_H_
 
@@ -16,9 +41,7 @@
 
 #if wxUSE_SOCKETS
 
-#include "wx/dlimpexp.h" /* for WXDLLIMPEXP_NET */
-
-class WXDLLIMPEXP_FWD_NET wxSocketBase;
+#include "wx/socket.h"
 
 #include <stddef.h>
 
@@ -43,61 +66,48 @@ class WXDLLIMPEXP_FWD_NET wxSocketBase;
     #include <sys/time.h>   // for timeval
 #endif
 
+// these definitions are for MSW when we don't use configure, otherwise these
+// symbols are defined by configure
+#ifndef WX_SOCKLEN_T
+    #define WX_SOCKLEN_T int
+#endif
+
+#ifndef SOCKOPTLEN_T
+    #define SOCKOPTLEN_T int
+#endif
+
+// define some symbols which winsock.h defines but traditional BSD headers
+// don't
+#ifndef SOCKET
+    #define SOCKET int
+#endif
+
+#ifndef INVALID_SOCKET
+    #define INVALID_SOCKET (-1)
+#endif
+
+#ifndef SOCKET_ERROR
+    #define SOCKET_ERROR (-1)
+#endif
+
+#if wxUSE_IPV6
+    typedef struct sockaddr_storage wxSockAddr;
+#else
+    typedef struct sockaddr wxSockAddr;
+#endif
+
 enum GAddressType
 {
-  GSOCK_NOFAMILY = 0,
-  GSOCK_INET,
-  GSOCK_INET6,
-  GSOCK_UNIX
+    wxSOCKET_NOFAMILY = 0,
+    wxSOCKET_INET,
+    wxSOCKET_INET6,
+    wxSOCKET_UNIX
 };
 
-enum GSocketStream
-{
-  GSOCK_STREAMED,
-  GSOCK_UNSTREAMED
-};
-
-enum GSocketError
-{
-  GSOCK_NOERROR = 0,
-  GSOCK_INVOP,
-  GSOCK_IOERR,
-  GSOCK_INVADDR,
-  GSOCK_INVSOCK,
-  GSOCK_NOHOST,
-  GSOCK_INVPORT,
-  GSOCK_WOULDBLOCK,
-  GSOCK_TIMEDOUT,
-  GSOCK_MEMERR,
-  GSOCK_OPTERR
-};
-
-/* See below for an explanation on how events work.
- */
-enum GSocketEvent
-{
-  GSOCK_INPUT  = 0,
-  GSOCK_OUTPUT = 1,
-  GSOCK_CONNECTION = 2,
-  GSOCK_LOST = 3,
-  GSOCK_MAX_EVENT = 4
-};
-
-enum
-{
-  GSOCK_INPUT_FLAG = 1 << GSOCK_INPUT,
-  GSOCK_OUTPUT_FLAG = 1 << GSOCK_OUTPUT,
-  GSOCK_CONNECTION_FLAG = 1 << GSOCK_CONNECTION,
-  GSOCK_LOST_FLAG = 1 << GSOCK_LOST
-};
-
-typedef int GSocketEventFlags;
+typedef int wxSocketEventFlags;
 
 struct GAddress;
-class GSocket;
-
-typedef void (*GSocketCallback)(GSocket *socket, GSocketEvent event,
-                                char *cdata);
+class wxSocketImpl;
 
 /*
    Class providing hooks abstracting the differences between console and GUI
@@ -108,23 +118,23 @@ typedef void (*GSocketCallback)(GSocket *socket, GSocketEvent event,
    its existence is that we want the same socket code work differently
    depending on whether it's used from a console or a GUI program. This is
    achieved by implementing the virtual methods of this class differently in
-   the objects returned by wxConsoleAppTraits::GetSocketFunctionsTable() and
-   the same method in wxGUIAppTraits.
+   the objects returned by wxConsoleAppTraits::GetSocketManager() and the same
+   method in wxGUIAppTraits.
  */
-class GSocketManager
+class wxSocketManager
 {
 public:
     // set the manager to use, we don't take ownership of it
     //
-    // this should be called before GSocket_Init(), i.e. before the first
-    // wxSocket object is created, otherwise the manager returned by
-    // wxAppTraits::GetSocketManager() will be used
-    static void Set(GSocketManager *manager);
+    // this should be called before creating the first wxSocket object,
+    // otherwise the manager returned by wxAppTraits::GetSocketManager() will
+    // be used
+    static void Set(wxSocketManager *manager);
 
     // return the manager to use
     //
     // this initializes the manager at first use
-    static GSocketManager *Get()
+    static wxSocketManager *Get()
     {
         if ( !ms_manager )
             Init();
@@ -135,29 +145,20 @@ public:
     // called before the first wxSocket is created and should do the
     // initializations needed in order to use the network
     //
-    // return true if initialized successfully
+    // return true if initialized successfully; if this returns false sockets
+    // can't be used at all
     virtual bool OnInit() = 0;
 
     // undo the initializations of OnInit()
     virtual void OnExit() = 0;
 
 
-    // do manager-specific socket initializations: called in the beginning of
-    // the socket initialization
-    virtual bool Init_Socket(GSocket *socket) = 0;
-
-    // called when the socket is being closed
+    // create a concrete socket implementation associated with the given
+    // wxSocket object
     //
-    // TODO: merge this with Destroy_Socket(), currently 2 separate functions
-    //       are needed because Init_Socket() always allocates manager-specific
-    //       resources in GSocket and Destroy_Socket() must be called even if
-    //       the socket has never been opened, but if the allocation were done
-    //       on demand, then Destroy_Socket() could be called from
-    //       GSocket::Close() and we wouldn't need Close_Socket() at all
-    virtual void Close_Socket(GSocket *socket) = 0;
+    // the returned object must be deleted by the caller
+    virtual wxSocketImpl *CreateSocket(wxSocketBase& wxsocket) = 0;
 
-    // undo Init_Socket(): called from GSocket dtor
-    virtual void Destroy_Socket(GSocket *socket) = 0;
 
 
     // these functions enable or disable monitoring of the given socket for the
@@ -165,77 +166,134 @@ public:
     // that both BSD and Winsock implementations actually use socket->m_server
     // value to determine what exactly should be monitored so it needs to be
     // set before calling these functions)
-    virtual void Install_Callback(GSocket *socket,
-                                  GSocketEvent event = GSOCK_MAX_EVENT) = 0;
-    virtual void Uninstall_Callback(GSocket *socket,
-                                    GSocketEvent event = GSOCK_MAX_EVENT) = 0;
+    virtual void Install_Callback(wxSocketImpl *socket,
+                                  wxSocketNotify event = wxSOCKET_MAX_EVENT) = 0;
+    virtual void Uninstall_Callback(wxSocketImpl *socket,
+                                    wxSocketNotify event = wxSOCKET_MAX_EVENT) = 0;
 
-    virtual ~GSocketManager() { }
+    virtual ~wxSocketManager() { }
 
 private:
     // get the manager to use if we don't have it yet
     static void Init();
 
-    static GSocketManager *ms_manager;
+    static wxSocketManager *ms_manager;
 };
 
 /*
-    Base class providing functionality common to BSD and Winsock sockets.
+    Base class for all socket implementations providing functionality common to
+    BSD and Winsock sockets.
 
-    TODO: merge this in wxSocket itself, there is no reason to maintain the
-          separation between wxSocket and GSocket.
+    Objects of this class are not created directly but only via its static
+    Create() method which in turn forwards to wxSocketManager::CreateSocket().
  */
-class GSocketBase
+class wxSocketImpl
 {
 public:
     // static factory function: creates the low-level socket associated with
     // the given wxSocket (and inherits its attributes such as timeout)
-    static GSocket *Create(wxSocketBase& wxsocket);
+    static wxSocketImpl *Create(wxSocketBase& wxsocket);
 
-    virtual ~GSocketBase();
+    virtual ~wxSocketImpl();
 
+    // set various socket properties: all of those can only be called before
+    // creating the socket
     void SetTimeout(unsigned long millisec);
-
-    GSocketError SetLocal(GAddress *address);
-    GSocketError SetPeer(GAddress *address);
-    GAddress *GetLocal();
-    GAddress *GetPeer();
-
-    GSocketEventFlags Select(GSocketEventFlags flags);
-
-    virtual GSocket *WaitConnection(wxSocketBase& wxsocket) = 0;
-
-    void Close();
-    virtual void Shutdown();
-
+    void SetNonBlocking(bool non_blocking) { m_non_blocking = non_blocking; }
+    void SetReusable() { m_reusable = true; }
+    void SetBroadcast() { m_broadcast = true; }
+    void DontDoBind() { m_dobind = false; }
     void SetInitialSocketBuffers(int recv, int send)
     {
         m_initialRecvBufferSize = recv;
         m_initialSendBufferSize = send;
     }
 
+    wxSocketError SetLocal(GAddress *address);
+    wxSocketError SetPeer(GAddress *address);
+
+    // accessors
+    // ---------
+
+    GAddress *GetLocal();
+    GAddress *GetPeer();
+
+    wxSocketError GetError() const { return m_error; }
+    bool IsOk() const { return m_error == wxSOCKET_NOERROR; }
+
+
+    // creating/closing the socket
+    // --------------------------
+
+    // notice that SetLocal() must be called before creating the socket using
+    // any of the functions below
+    //
+    // all of Create() functions return wxSOCKET_NOERROR if the operation
+    // completed successfully or one of:
+    //  wxSOCKET_INVSOCK - the socket is in use.
+    //  wxSOCKET_INVADDR - the local (server) or peer (client) address has not
+    //                     been set.
+    //  wxSOCKET_IOERR   - any other error.
+
+    // create a socket listening on the local address specified by SetLocal()
+    // (notice that DontDoBind() is ignored by this function)
+    wxSocketError CreateServer();
+
+    // create a socket connected to the peer address specified by SetPeer()
+    // (notice that DontDoBind() is ignored by this function)
+    //
+    // this function may return wxSOCKET_WOULDBLOCK in addition to the return
+    // values listed above
+    wxSocketError CreateClient();
+
+    // create (and bind unless DontDoBind() had been called) an UDP socket
+    // associated with the given local address
+    wxSocketError CreateUDP();
+
+    // may be called whether the socket was created or not, calls DoClose() if
+    // it was indeed created
+    void Close();
+
+    virtual void Shutdown();
+
+
+    // IO operations
+    // -------------
+
+    virtual int Read(char *buffer, int size) = 0;
+    virtual int Write(const char *buffer, int size) = 0;
+
+    wxSocketEventFlags Select(wxSocketEventFlags flags);
+
+    virtual wxSocketImpl *WaitConnection(wxSocketBase& wxsocket) = 0;
+
+
+    // notifications
+    // -------------
+
     // notify m_wxsocket about the given socket event by calling its (inaptly
     // named) OnRequest() method
-    void NotifyOnStateChange(GSocketEvent event);
+    void NotifyOnStateChange(wxSocketNotify event);
 
     // FIXME: making these functions virtual is a hack necessary to make the
     //        wxBase library link without requiring wxNet under Unix where
-    //        GSocketSelectManager (part of wxBase) uses them, they don't
+    //        wxSocketSelectManager (part of wxBase) uses them, they don't
     //        really need to be virtual at all
     virtual void Detected_Read() { }
     virtual void Detected_Write() { }
+    virtual void Notify(bool WXUNUSED(notify)) { }
 
-    // this is officially SOCKET (unsigned int) under Windows but we don't want
-    // to include winsock.h which defines SOCKET from here so just use int
-    // under all platforms
-    int m_fd;
+    // TODO: make these fields protected and provide accessors for those of
+    //       them that wxSocketBase really needs
+//protected:
+    SOCKET m_fd;
 
     int m_initialRecvBufferSize;
     int m_initialSendBufferSize;
 
     GAddress *m_local;
     GAddress *m_peer;
-    GSocketError m_error;
+    wxSocketError m_error;
 
     bool m_non_blocking;
     bool m_server;
@@ -247,36 +305,70 @@ public:
 
     struct timeval m_timeout;
 
-    GSocketEventFlags m_detected;
+    wxSocketEventFlags m_detected;
 
 protected:
-    GSocketBase(wxSocketBase& wxsocket);
+    wxSocketImpl(wxSocketBase& wxsocket);
 
 private:
+    // handle the given connect() return value (which may be 0 or EWOULDBLOCK
+    // or something else)
+    virtual wxSocketError DoHandleConnect(int ret) = 0;
+
+    // called by Close() if we have a valid m_fd
+    virtual void DoClose() = 0;
+
+    // put this socket into non-blocking mode and enable monitoring this socket
+    // as part of the event loop
+    virtual void UnblockAndRegisterWithEventLoop() = 0;
+
+    // check that the socket wasn't created yet and that the given address
+    // (either m_local or m_peer depending on the socket kind) is valid and
+    // set m_error and return false if this is not the case
+    bool PreCreateCheck(GAddress *addr);
+
+    // set the given socket option: this just wraps setsockopt(SOL_SOCKET)
+    int SetSocketOption(int optname, int optval)
+    {
+        // although modern Unix systems use "const void *" for the 4th
+        // parameter here, old systems and Winsock still use "const char *"
+        return setsockopt(m_fd, SOL_SOCKET, optname,
+                          reinterpret_cast<const char *>(&optval),
+                          sizeof(optval));
+    }
+
+    // set the given socket option to true value: this is an even simpler
+    // wrapper for setsockopt(SOL_SOCKET) for boolean options
+    int EnableSocketOption(int optname)
+    {
+        return SetSocketOption(optname, 1);
+    }
+
+    // apply the options to the (just created) socket and register it with the
+    // event loop by calling UnblockAndRegisterWithEventLoop()
+    void PostCreation();
+
+    // update local address after binding/connecting
+    wxSocketError UpdateLocalAddress();
+
+
     // set in ctor and never changed except that it's reset to NULL when the
     // socket is shut down
     wxSocketBase *m_wxsocket;
 
-    DECLARE_NO_COPY_CLASS(GSocketBase)
+    DECLARE_NO_COPY_CLASS(wxSocketImpl)
 };
 
-#if defined(__WINDOWS__)
+#if defined(__WXMSW__)
     #include "wx/msw/gsockmsw.h"
 #else
     #include "wx/unix/gsockunx.h"
 #endif
 
-/* Global initializers */
-
-/* GSocket_Init() must be called at the beginning (but after calling
- * GSocketManager::Set() if a custom manager should be used) */
-bool GSocket_Init();
-
-/* GSocket_Cleanup() must be called at the end */
-void GSocket_Cleanup();
-
 
 /* GAddress */
+
+// TODO: make GAddress a real class instead of this mix of C and C++
 
 // Represents a socket endpoint, i.e. -- in spite of its name -- not an address
 // but an (address, port) pair
@@ -288,7 +380,7 @@ struct GAddress
     GAddressType m_family;
     int m_realfamily;
 
-    GSocketError m_error;
+    wxSocketError m_error;
 };
 
 GAddress *GAddress_new();
@@ -303,48 +395,48 @@ GAddressType GAddress_GetFamily(GAddress *address);
  * address family will be implicitly set to AF_INET.
  */
 
-GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname);
-GSocketError GAddress_INET_SetBroadcastAddress(GAddress *address);
-GSocketError GAddress_INET_SetAnyAddress(GAddress *address);
-GSocketError GAddress_INET_SetHostAddress(GAddress *address,
+wxSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname);
+wxSocketError GAddress_INET_SetBroadcastAddress(GAddress *address);
+wxSocketError GAddress_INET_SetAnyAddress(GAddress *address);
+wxSocketError GAddress_INET_SetHostAddress(GAddress *address,
                                           unsigned long hostaddr);
-GSocketError GAddress_INET_SetPortName(GAddress *address, const char *port,
+wxSocketError GAddress_INET_SetPortName(GAddress *address, const char *port,
                                        const char *protocol);
-GSocketError GAddress_INET_SetPort(GAddress *address, unsigned short port);
+wxSocketError GAddress_INET_SetPort(GAddress *address, unsigned short port);
 
-GSocketError GAddress_INET_GetHostName(GAddress *address, char *hostname,
+wxSocketError GAddress_INET_GetHostName(GAddress *address, char *hostname,
                                        size_t sbuf);
 unsigned long GAddress_INET_GetHostAddress(GAddress *address);
 unsigned short GAddress_INET_GetPort(GAddress *address);
 
-GSocketError _GAddress_translate_from(GAddress *address,
+wxSocketError _GAddress_translate_from(GAddress *address,
                                       struct sockaddr *addr, int len);
-GSocketError _GAddress_translate_to  (GAddress *address,
+wxSocketError _GAddress_translate_to  (GAddress *address,
                                       struct sockaddr **addr, int *len);
-GSocketError _GAddress_Init_INET(GAddress *address);
+wxSocketError _GAddress_Init_INET(GAddress *address);
 
 #if wxUSE_IPV6
 
-GSocketError GAddress_INET6_SetHostName(GAddress *address, const char *hostname);
-GSocketError GAddress_INET6_SetAnyAddress(GAddress *address);
-GSocketError GAddress_INET6_SetHostAddress(GAddress *address,
+wxSocketError GAddress_INET6_SetHostName(GAddress *address, const char *hostname);
+wxSocketError GAddress_INET6_SetAnyAddress(GAddress *address);
+wxSocketError GAddress_INET6_SetHostAddress(GAddress *address,
                                           struct in6_addr hostaddr);
-GSocketError GAddress_INET6_SetPortName(GAddress *address, const char *port,
+wxSocketError GAddress_INET6_SetPortName(GAddress *address, const char *port,
                                        const char *protocol);
-GSocketError GAddress_INET6_SetPort(GAddress *address, unsigned short port);
+wxSocketError GAddress_INET6_SetPort(GAddress *address, unsigned short port);
 
-GSocketError GAddress_INET6_GetHostName(GAddress *address, char *hostname,
+wxSocketError GAddress_INET6_GetHostName(GAddress *address, char *hostname,
                                        size_t sbuf);
-GSocketError GAddress_INET6_GetHostAddress(GAddress *address,struct in6_addr *hostaddr);
+wxSocketError GAddress_INET6_GetHostAddress(GAddress *address,struct in6_addr *hostaddr);
 unsigned short GAddress_INET6_GetPort(GAddress *address);
 
 #endif // wxUSE_IPV6
 
 // these functions are available under all platforms but only implemented under
-// Unix ones, elsewhere they just return GSOCK_INVADDR
-GSocketError _GAddress_Init_UNIX(GAddress *address);
-GSocketError GAddress_UNIX_SetPath(GAddress *address, const char *path);
-GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf);
+// Unix ones, elsewhere they just return wxSOCKET_INVADDR
+wxSocketError _GAddress_Init_UNIX(GAddress *address);
+wxSocketError GAddress_UNIX_SetPath(GAddress *address, const char *path);
+wxSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf);
 
 #endif /* wxUSE_SOCKETS */
 

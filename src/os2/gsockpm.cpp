@@ -1,7 +1,7 @@
 /* -------------------------------------------------------------------------
- * Project: GSocket (Generic Socket) for WX
+ * Project: wxSocketImpl (Generic Socket) for WX
  * Name:    gsockpm.c
- * Purpose: GSocket: PM part
+ * Purpose: wxSocketImpl: PM part
  * Licence: The wxWindows licence
  * CVSID:   $Id$
  * ------------------------------------------------------------------------- */
@@ -19,30 +19,32 @@
 #define wxSockReadMask  0x01
 #define wxSockWriteMask 0x02
 
-static void _GSocket_PM_Input(void *data)
+static void wxSocket_PM_Input(void *data)
 {
-    GSocket *socket = (GSocket *) data;
+    wxSocketImpl *socket = static_cast<wxSocketImpl *>(data);
+
     socket->Detected_Read();
 }
 
-static void _GSocket_PM_Output(void *data)
+static void wxSocket_PM_Output(void *data)
 {
-    GSocket *socket = (GSocket *) data;
+    wxSocketImpl *socket = static_cast<wxSocketImpl *>(data);
+
     socket->Detected_Write();
 }
 
-class PMSocketManager : public GSocketInputBasedManager
+class PMSocketManager : public wxSocketInputBasedManager
 {
 public:
-    virtual int AddInput(GSocket *socket, SocketDir d)
+    virtual int AddInput(wxSocketImpl *socket, SocketDir d)
     {
 
       if (d == FD_OUTPUT)
           return wxTheApp->AddSocketHandler(socket->m_fd, wxSockWriteMask,
-					    _GSocket_PM_Output, (void *)socket);
+                                            wxSocket_PM_Output, (void *)socket);
       else
           return wxTheApp->AddSocketHandler(socket->m_fd, wxSockReadMask,
-					  _GSocket_PM_Input, (void *)socket);
+                                            wxSocket_PM_Input, (void *)socket);
     }
 
     virtual void RemoveInput(int fd)
@@ -51,7 +53,7 @@ public:
     }
 };
 
-GSocketManager *wxGUIAppTraits::GetSocketManager()
+wxSocketManager *wxGUIAppTraits::GetSocketManager()
 {
     static PMSocketManager s_manager;
     return &s_manager;

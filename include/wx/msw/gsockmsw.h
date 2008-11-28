@@ -1,12 +1,15 @@
-/* -------------------------------------------------------------------------
- * Project:     GSocket (Generic Socket) for WX
- * Name:        gsockmsw.h
- * Copyright:   (c) Guilhem Lavaux
- * Licence:     wxWindows Licence
- * Purpose:     GSocket MSW header
- * CVSID:       $Id$
- * -------------------------------------------------------------------------
- */
+/////////////////////////////////////////////////////////////////////////////
+// Name:       wx/msw/gsockmsw.h
+// Purpose:    MSW-specific socket implementation
+// Authors:    Guilhem Lavaux, Guillermo Rodriguez Garcia, Vadim Zeitlin
+// Created:    April 1997
+// Copyright:  (C) 1999-1997, Guilhem Lavaux
+//             (C) 1999-2000, Guillermo Rodriguez Garcia
+//             (C) 2008 Vadim Zeitlin
+// RCS_ID:     $Id$
+// License:    wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
+
 
 #ifndef _WX_MSW_GSOCKMSW_H_
 #define _WX_MSW_GSOCKMSW_H_
@@ -20,53 +23,50 @@
 #endif
 
 #if defined(__WXWINCE__) || defined(__CYGWIN__)
-#include <winsock.h>
+    #include <winsock.h>
 #endif
 
-/* Definition of GSocket */
-class GSocket : public GSocketBase
+// ----------------------------------------------------------------------------
+// MSW-specific socket implementation
+// ----------------------------------------------------------------------------
+
+class wxSocketImplMSW : public wxSocketImpl
 {
 public:
-    GSocket(wxSocketBase& wxsocket)
-        : GSocketBase(wxsocket)
+    wxSocketImplMSW(wxSocketBase& wxsocket);
+
+    virtual ~wxSocketImplMSW();
+
+    virtual wxSocketImpl *WaitConnection(wxSocketBase& wxsocket);
+
+
+    int Read(char *buffer, int size);
+    int Write(const char *buffer, int size);
+
+private:
+    virtual wxSocketError DoHandleConnect(int ret);
+    virtual void DoClose();
+
+    virtual void UnblockAndRegisterWithEventLoop()
     {
-        m_msgnumber = 0;
+        // no need to make the socket non-blocking, Install_Callback() will do
+        // it
+        wxSocketManager::Get()->Install_Callback(this);
     }
 
-    virtual GSocket *WaitConnection(wxSocketBase& wxsocket);
+    wxSocketError Input_Timeout();
+    wxSocketError Output_Timeout();
+    wxSocketError Connect_Timeout();
+    int Recv_Stream(char *buffer, int size);
+    int Recv_Dgram(char *buffer, int size);
+    int Send_Stream(const char *buffer, int size);
+    int Send_Dgram(const char *buffer, int size);
 
+    int m_msgnumber;
 
-  GSocketError SetServer();
+    friend class wxSocketMSWManager;
 
-  // not used under MSW
-  void Notify(bool) { }
-  bool SetReusable();
-  bool SetBroadcast();
-  bool DontDoBind();
-  GSocketError Connect(GSocketStream stream);
-  GSocketError SetNonOriented();
-  int Read(char *buffer, int size);
-  int Write(const char *buffer, int size);
-  void SetNonBlocking(bool non_block);
-  GSocketError WXDLLIMPEXP_NET GetError();
-  GSocketError GetSockOpt(int level, int optname,
-    void *optval, int *optlen);
-  GSocketError SetSockOpt(int level, int optname,
-    const void *optval, int optlen);
-
-protected:
-  GSocketError Input_Timeout();
-  GSocketError Output_Timeout();
-  GSocketError Connect_Timeout();
-  int Recv_Stream(char *buffer, int size);
-  int Recv_Dgram(char *buffer, int size);
-  int Send_Stream(const char *buffer, int size);
-  int Send_Dgram(const char *buffer, int size);
-
-/* TODO: Make these protected */
-public:
-
-  int m_msgnumber;
+    DECLARE_NO_COPY_CLASS(wxSocketImplMSW)
 };
 
 #endif  /* _WX_MSW_GSOCKMSW_H_ */

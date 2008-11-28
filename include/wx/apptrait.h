@@ -30,7 +30,7 @@ class WXDLLIMPEXP_FWD_BASE wxString;
 class WXDLLIMPEXP_FWD_BASE wxTimer;
 class WXDLLIMPEXP_FWD_BASE wxTimerImpl;
 
-class GSocketManager;
+class wxSocketManager;
 
 
 // ----------------------------------------------------------------------------
@@ -116,9 +116,21 @@ public:
     virtual void RemoveFromPendingDelete(wxObject *object) = 0;
 
 #if wxUSE_SOCKETS
+    // this function is used by wxNet library to set the default socket manager
+    // to use: doing it like this allows us to keep all socket-related code in
+    // wxNet instead of having to pull it in wxBase itself as we'd have to do
+    // if we really implemented wxSocketManager here
+    //
+    // we don't take ownership of this pointer, it should have a lifetime
+    // greater than that of any socket (e.g. be a pointer to a static object)
+    static void SetDefaultSocketManager(wxSocketManager *manager)
+    {
+        ms_manager = manager;
+    }
+
     // return socket manager: this is usually different for console and GUI
     // applications (although some ports use the same implementation for both)
-    virtual GSocketManager *GetSocketManager() = 0;
+    virtual wxSocketManager *GetSocketManager() { return ms_manager; }
 #endif
 
     // create a new, port specific, instance of the event loop used by wxApp
@@ -169,6 +181,9 @@ protected:
     // utility function: returns the stack frame as a plain wxString
     virtual wxString GetAssertStackTrace();
 #endif
+
+private:
+    static wxSocketManager *ms_manager;
 };
 
 // ----------------------------------------------------------------------------

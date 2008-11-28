@@ -42,8 +42,6 @@
 // wxAppTraits implementation
 // ============================================================================
 
-GSocketManager *wxAppTraits::ms_manager = NULL;
-
 WXDWORD wxAppTraits::DoSimpleWaitForThread(WXHANDLE hThread)
 {
     return ::WaitForSingleObject((HANDLE)hThread, INFINITE);

@@ -24,29 +24,29 @@
 
 extern "C" {
 static
-void _GSocket_GDK_Input(gpointer data,
+void wxSocket_GDK_Input(gpointer data,
                         gint WXUNUSED(source),
                         GdkInputCondition condition)
 {
-  GSocket *socket = (GSocket *)data;
+  wxSocketImpl const *socket = static_cast<wxSocketImpl *>(data);
 
-  if (condition & GDK_INPUT_READ)
+  if ( condition & GDK_INPUT_READ )
     socket->Detected_Read();
-  if (condition & GDK_INPUT_WRITE)
+  if ( condition & GDK_INPUT_WRITE )
     socket->Detected_Write();
 }
 }
 
-class GTKSocketManager : public GSocketInputBasedManager
+class GTKSocketManager : public wxSocketInputBasedManager
 {
 public:
-    virtual int AddInput(GSocket *socket, SocketDir d)
+    virtual int AddInput(wxSocketImpl *socket, SocketDir d)
     {
         return gdk_input_add
                (
                     socket->m_fd,
                     d == FD_OUTPUT ? GDK_INPUT_WRITE : GDK_INPUT_READ,
-                    _GSocket_GDK_Input,
+                    wxSocket_GDK_Input,
                     socket
                );
     }
@@ -57,7 +57,7 @@ public:
     }
 };
 
-GSocketManager *wxGUIAppTraits::GetSocketManager()
+wxSocketManager *wxGUIAppTraits::GetSocketManager()
 {
     static GTKSocketManager s_manager;
     return &s_manager;

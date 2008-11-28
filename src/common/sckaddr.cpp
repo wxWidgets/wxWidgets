@@ -145,12 +145,12 @@ bool wxIPV4address::Hostname(const wxString& name)
     return false;
   }
   m_origHostname = name;
-  return (GAddress_INET_SetHostName(m_address, name.mb_str()) == GSOCK_NOERROR);
+  return (GAddress_INET_SetHostName(m_address, name.mb_str()) == wxSOCKET_NOERROR);
 }
 
 bool wxIPV4address::Hostname(unsigned long addr)
 {
-  bool rv = (GAddress_INET_SetHostAddress(m_address, addr) == GSOCK_NOERROR);
+  bool rv = (GAddress_INET_SetHostAddress(m_address, addr) == wxSOCKET_NOERROR);
   if (rv)
       m_origHostname = Hostname();
   else
@@ -160,17 +160,17 @@ bool wxIPV4address::Hostname(unsigned long addr)
 
 bool wxIPV4address::Service(const wxString& name)
 {
-  return (GAddress_INET_SetPortName(m_address, name.mb_str(), "tcp") == GSOCK_NOERROR);
+  return (GAddress_INET_SetPortName(m_address, name.mb_str(), "tcp") == wxSOCKET_NOERROR);
 }
 
 bool wxIPV4address::Service(unsigned short port)
 {
-  return (GAddress_INET_SetPort(m_address, port) == GSOCK_NOERROR);
+  return (GAddress_INET_SetPort(m_address, port) == wxSOCKET_NOERROR);
 }
 
 bool wxIPV4address::LocalHost()
 {
-  return (GAddress_INET_SetHostName(m_address, "localhost") == GSOCK_NOERROR);
+  return (GAddress_INET_SetHostName(m_address, "localhost") == wxSOCKET_NOERROR);
 }
 
 bool wxIPV4address::IsLocalHost() const
@@ -180,12 +180,12 @@ bool wxIPV4address::IsLocalHost() const
 
 bool wxIPV4address::BroadcastAddress()
 {
-  return (GAddress_INET_SetBroadcastAddress(m_address) == GSOCK_NOERROR);
+  return (GAddress_INET_SetBroadcastAddress(m_address) == wxSOCKET_NOERROR);
 }
 
 bool wxIPV4address::AnyAddress()
 {
-  return (GAddress_INET_SetAnyAddress(m_address) == GSOCK_NOERROR);
+  return (GAddress_INET_SetAnyAddress(m_address) == wxSOCKET_NOERROR);
 }
 
 wxString wxIPV4address::Hostname() const
@@ -253,7 +253,7 @@ bool wxIPV6address::Hostname(const wxString& name)
     return false;
   }
   m_origHostname = name;
-  return (GAddress_INET6_SetHostName(m_address, name.mb_str()) == GSOCK_NOERROR);
+  return (GAddress_INET6_SetHostName(m_address, name.mb_str()) == wxSOCKET_NOERROR);
 }
 
 bool wxIPV6address::Hostname(unsigned char addr[16])
@@ -273,17 +273,17 @@ bool wxIPV6address::Hostname(unsigned char addr[16])
 
 bool wxIPV6address::Service(const wxString& name)
 {
-  return (GAddress_INET6_SetPortName(m_address, name.mb_str(), "tcp") == GSOCK_NOERROR);
+  return (GAddress_INET6_SetPortName(m_address, name.mb_str(), "tcp") == wxSOCKET_NOERROR);
 }
 
 bool wxIPV6address::Service(unsigned short port)
 {
-  return (GAddress_INET6_SetPort(m_address, port) == GSOCK_NOERROR);
+  return (GAddress_INET6_SetPort(m_address, port) == wxSOCKET_NOERROR);
 }
 
 bool wxIPV6address::LocalHost()
 {
-  return (GAddress_INET6_SetHostName(m_address, "localhost") == GSOCK_NOERROR);
+  return (GAddress_INET6_SetHostName(m_address, "localhost") == wxSOCKET_NOERROR);
 }
 
 bool wxIPV6address::IsLocalHost() const
@@ -306,7 +306,7 @@ bool wxIPV6address::BroadcastAddress()
 
 bool wxIPV6address::AnyAddress()
 {
-  return (GAddress_INET6_SetAnyAddress(m_address) == GSOCK_NOERROR);
+  return (GAddress_INET6_SetAnyAddress(m_address) == wxSOCKET_NOERROR);
 }
 
 wxString wxIPV6address::IPAddress() const
@@ -356,7 +356,7 @@ wxString wxIPV6address::Hostname() const
 
    if ( GAddress_INET6_GetHostName(m_address,
                                    hostname,
-                                   WXSIZEOF(hostname)) != GSOCK_NOERROR )
+                                   WXSIZEOF(hostname)) != wxSOCKET_NOERROR )
        return wxEmptyString;
 
    return wxString::FromAscii(hostname);

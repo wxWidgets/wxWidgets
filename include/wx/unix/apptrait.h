@@ -81,7 +81,7 @@ public:
 #endif
 
 #if wxUSE_SOCKETS && defined(wxHAS_GUI_SOCKET_MANAGER)
-    virtual GSocketManager *GetSocketManager();
+    virtual wxSocketManager *GetSocketManager();
 #endif
 };
 

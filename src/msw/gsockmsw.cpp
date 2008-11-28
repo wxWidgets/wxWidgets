@@ -1,13 +1,15 @@
-/* -------------------------------------------------------------------------
- * Project:     GSocket (Generic Socket)
- * Name:        src/msw/gsockmsw.cpp
- * Copyright:   (c) Guilhem Lavaux
- * Licence:     wxWindows Licence
- * Author:      Guillermo Rodriguez Garcia <guille@iies.es>
- * Purpose:     GSocket GUI-specific MSW code
- * CVSID:       $Id$
- * -------------------------------------------------------------------------
- */
+/////////////////////////////////////////////////////////////////////////////
+// Name:       src/msw/gsockmsw.cpp
+// Purpose:    MSW-specific socket support
+// Authors:    Guilhem Lavaux, Guillermo Rodriguez Garcia
+// Created:    April 1997
+// Copyright:  (C) 1999-1997, Guilhem Lavaux
+//             (C) 1999-2000, Guillermo Rodriguez Garcia
+//             (C) 2008 Vadim Zeitlin
+// RCS_ID:     $Id$
+// License:    wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
+
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
@@ -64,13 +66,13 @@ WX_DECLARE_HASH_MAP(int,bool,wxIntegerHash,wxIntegerEqual,SocketHash);
 #  pragma warning(default:4115) /* named type definition in parentheses */
 #endif
 
-#define CLASSNAME  TEXT("_GSocket_Internal_Window_Class")
+#define CLASSNAME  TEXT("_wxSocket_Internal_Window_Class")
 
 /* implemented in utils.cpp */
 extern "C" WXDLLIMPEXP_BASE HWND
 wxCreateHiddenWindow(LPCTSTR *pclassname, LPCTSTR classname, WNDPROC wndproc);
 
-/* Maximum number of different GSocket objects at a given time.
+/* Maximum number of different wxSocket objects at a given time.
  * This value can be modified at will, but it CANNOT be greater
  * than (0x7FFF - WM_USER + 1)
  */
@@ -95,13 +97,13 @@ typedef int (PASCAL *WSAWaitForMultipleEventsFunc)(long,HANDLE,BOOL,long,BOOL);
 typedef int (PASCAL *WSAEnumNetworkEventsFunc)(SOCKET,HANDLE,LPWSANETWORKEVENTS);
 #endif //__WXWINCE__
 
-LRESULT CALLBACK _GSocket_Internal_WinProc(HWND, UINT, WPARAM, LPARAM);
+LRESULT CALLBACK wxSocket_Internal_WinProc(HWND, UINT, WPARAM, LPARAM);
 
 /* Global variables */
 
 static HWND hWin;
 static CRITICAL_SECTION critical;
-static GSocket* socketList[MAXSOCKETS];
+static wxSocketImplMSW *socketList[MAXSOCKETS];
 static int firstAvailable;
 
 #ifndef __WXWINCE__
@@ -175,32 +177,32 @@ DWORD WINAPI SocketThread(LPVOID data)
 #endif
 
 // ----------------------------------------------------------------------------
-// MSW implementation of GSocketManager
+// MSW implementation of wxSocketManager
 // ----------------------------------------------------------------------------
 
-class GSocketMSWManager : public GSocketManager
+class wxSocketMSWManager : public wxSocketManager
 {
 public:
     virtual bool OnInit();
     virtual void OnExit();
 
-    virtual bool Init_Socket(GSocket *socket);
-    virtual void Close_Socket(GSocket *socket);
-    virtual void Destroy_Socket(GSocket *socket);
-
-    virtual void Install_Callback(GSocket *socket, GSocketEvent event);
-    virtual void Uninstall_Callback(GSocket *socket, GSocketEvent event);
+    virtual wxSocketImpl *CreateSocket(wxSocketBase& wxsocket)
+    {
+        return new wxSocketImplMSW(wxsocket);
+    }
+    virtual void Install_Callback(wxSocketImpl *socket, wxSocketNotify event);
+    virtual void Uninstall_Callback(wxSocketImpl *socket, wxSocketNotify event);
 };
 
 /* Global initializers */
 
-bool GSocketMSWManager::OnInit()
+bool wxSocketMSWManager::OnInit()
 {
   static LPCTSTR pclassname = NULL;
   int i;
 
   /* Create internal window for event notifications */
-  hWin = wxCreateHiddenWindow(&pclassname, CLASSNAME, _GSocket_Internal_WinProc);
+  hWin = wxCreateHiddenWindow(&pclassname, CLASSNAME, wxSocket_Internal_WinProc);
   if (!hWin)
       return false;
 
@@ -253,10 +255,12 @@ bool GSocketMSWManager::OnInit()
   currSocket = 0;
 #endif
 
-  return true;
+  // finally initialize WinSock
+  WSADATA wsaData;
+  return WSAStartup((1 << 8) | 1, &wsaData) == 0;
 }
 
-void GSocketMSWManager::OnExit()
+void wxSocketMSWManager::OnExit()
 {
 #ifdef __WXWINCE__
 /* Delete the threads here */
@@ -276,18 +280,19 @@ void GSocketMSWManager::OnExit()
 
   /* Delete critical section */
   DeleteCriticalSection(&critical);
+
+  WSACleanup();
 }
 
 /* Per-socket GUI initialization / cleanup */
 
-bool GSocketMSWManager::Init_Socket(GSocket *socket)
+wxSocketImplMSW::wxSocketImplMSW(wxSocketBase& wxsocket)
+    : wxSocketImpl(wxsocket)
 {
-  int i;
-
   /* Allocate a new message number for this socket */
   EnterCriticalSection(&critical);
 
-  i = firstAvailable;
+  int i = firstAvailable;
   while (socketList[i] != NULL)
   {
     i = (i + 1) % MAXSOCKETS;
@@ -295,41 +300,32 @@ bool GSocketMSWManager::Init_Socket(GSocket *socket)
     if (i == firstAvailable)    /* abort! */
     {
       LeaveCriticalSection(&critical);
-      return false;
+      m_msgnumber = 0; // invalid
+      return;
     }
   }
-  socketList[i] = socket;
+  socketList[i] = this;
   firstAvailable = (i + 1) % MAXSOCKETS;
-  socket->m_msgnumber = (i + WM_USER);
+  m_msgnumber = (i + WM_USER);
 
   LeaveCriticalSection(&critical);
-
-  return true;
 }
 
-void GSocketMSWManager::Close_Socket(GSocket *socket)
-{
-    Uninstall_Callback(socket, GSOCK_MAX_EVENT /* unused anyhow */);
-
-    closesocket(socket->m_fd);
-}
-
-void GSocketMSWManager::Destroy_Socket(GSocket *socket)
+wxSocketImplMSW::~wxSocketImplMSW()
 {
   /* Remove the socket from the list */
   EnterCriticalSection(&critical);
 
-  const int msgnum = socket->m_msgnumber;
-  if ( msgnum )
+  if ( m_msgnumber )
   {
       // we need to remove any pending messages for this socket to avoid having
       // them sent to a new socket which could reuse the same message number as
       // soon as we destroy this one
       MSG msg;
-      while ( ::PeekMessage(&msg, hWin, msgnum, msgnum, PM_REMOVE) )
+      while ( ::PeekMessage(&msg, hWin, m_msgnumber, m_msgnumber, PM_REMOVE) )
           ;
 
-      socketList[msgnum - WM_USER] = NULL;
+      socketList[m_msgnumber - WM_USER] = NULL;
   }
   //else: the socket has never been created successfully
 
@@ -338,19 +334,19 @@ void GSocketMSWManager::Destroy_Socket(GSocket *socket)
 
 /* Windows proc for asynchronous event handling */
 
-LRESULT CALLBACK _GSocket_Internal_WinProc(HWND hWnd,
+LRESULT CALLBACK wxSocket_Internal_WinProc(HWND hWnd,
                                            UINT uMsg,
                                            WPARAM wParam,
                                            LPARAM lParam)
 {
-  GSocket *socket;
-  GSocketEvent event;
+  wxSocketImplMSW *socket;
+  wxSocketNotify event;
 
   if (uMsg >= WM_USER && uMsg <= (WM_USER + MAXSOCKETS - 1))
   {
     EnterCriticalSection(&critical);
     socket = socketList[(uMsg - WM_USER)];
-    event = (GSocketEvent) -1;
+    event = (wxSocketNotify) -1;
 
     /* Check that the socket still exists (it has not been
      * destroyed) and for safety, check that the m_fd field
@@ -360,24 +356,24 @@ LRESULT CALLBACK _GSocket_Internal_WinProc(HWND hWnd,
     {
       switch WSAGETSELECTEVENT(lParam)
       {
-        case FD_READ:    event = GSOCK_INPUT; break;
-        case FD_WRITE:   event = GSOCK_OUTPUT; break;
-        case FD_ACCEPT:  event = GSOCK_CONNECTION; break;
+        case FD_READ:    event = wxSOCKET_INPUT; break;
+        case FD_WRITE:   event = wxSOCKET_OUTPUT; break;
+        case FD_ACCEPT:  event = wxSOCKET_CONNECTION; break;
         case FD_CONNECT:
         {
           if (WSAGETSELECTERROR(lParam) != 0)
-            event = GSOCK_LOST;
+            event = wxSOCKET_LOST;
           else
-            event = GSOCK_CONNECTION;
+            event = wxSOCKET_CONNECTION;
           break;
         }
-        case FD_CLOSE:   event = GSOCK_LOST; break;
+        case FD_CLOSE:   event = wxSOCKET_LOST; break;
       }
 
       if (event != -1)
       {
-        if (event == GSOCK_LOST)
-          socket->m_detected = GSOCK_LOST_FLAG;
+        if (event == wxSOCKET_LOST)
+          socket->m_detected = wxSOCKET_LOST_FLAG;
         else
           socket->m_detected |= (1 << event);
       }
@@ -399,9 +395,11 @@ LRESULT CALLBACK _GSocket_Internal_WinProc(HWND hWnd,
  *  events for internal processing, but we will only notify users
  *  when an appropriate callback function has been installed.
  */
-void GSocketMSWManager::Install_Callback(GSocket *socket,
-                                         GSocketEvent WXUNUSED(event))
+void wxSocketMSWManager::Install_Callback(wxSocketImpl *socket_,
+                                         wxSocketNotify WXUNUSED(event))
 {
+    wxSocketImplMSW * const socket = static_cast<wxSocketImplMSW *>(socket_);
+
   if (socket->m_fd != INVALID_SOCKET)
   {
     /* We could probably just subscribe to all events regardless
@@ -431,9 +429,11 @@ void GSocketMSWManager::Install_Callback(GSocket *socket,
 /*
  *  Disable event notifications (used when shutting down the socket)
  */
-void GSocketMSWManager::Uninstall_Callback(GSocket *socket,
-                                           GSocketEvent WXUNUSED(event))
+void wxSocketMSWManager::Uninstall_Callback(wxSocketImpl *socket_,
+                                           wxSocketNotify WXUNUSED(event))
 {
+    wxSocketImplMSW * const socket = static_cast<wxSocketImplMSW *>(socket_);
+
   if (socket->m_fd != INVALID_SOCKET)
   {
 #ifndef __WXWINCE__
@@ -445,15 +445,15 @@ void GSocketMSWManager::Uninstall_Callback(GSocket *socket,
   }
 }
 
-// set the wxBase variable to point to our GSocketManager implementation
+// set the wxBase variable to point to our wxSocketManager implementation
 //
-// see comments in wx/msw/apptbase.h for the explanation of why do we do it
+// see comments in wx/apptrait.h for the explanation of why do we do it
 // like this
 static struct ManagerSetter
 {
     ManagerSetter()
     {
-        static GSocketMSWManager s_manager;
+        static wxSocketMSWManager s_manager;
         wxAppTraits::SetDefaultSocketManager(&s_manager);
     }
 } gs_managerSetter;

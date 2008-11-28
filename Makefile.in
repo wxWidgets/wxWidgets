@@ -27,7 +27,6 @@ STRIP = @STRIP@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_DIR = @INSTALL_DIR@
-ICC_PCH_USE_SWITCH = @ICC_PCH_USE_SWITCH@
 BK_DEPS = @BK_DEPS@
 BK_MAKE_PCH = @BK_MAKE_PCH@
 srcdir = @srcdir@
@@ -817,6 +816,7 @@ ALL_BASE_SOURCES =  \
 	src/common/socket.cpp \
 	src/common/url.cpp \
 	src/unix/gsocket.cpp \
+	src/osx/core/gsockosx.cpp \
 	src/msw/gsocket.cpp \
 	src/msw/gsockmsw.cpp \
 	src/msw/urlmsw.cpp \
@@ -1959,7 +1959,6 @@ COND_TOOLKIT__BASE_OSX_SRC =  \
 	src/unix/utilsunx.cpp \
 	src/unix/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
-	src/osx/core/gsockosx.cpp \
 	src/osx/core/stdpaths_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/core/utilsexc_base.cpp
@@ -1980,7 +1979,6 @@ COND_TOOLKIT_COCOA_BASE_OSX_SRC =  \
 	src/unix/utilsunx.cpp \
 	src/unix/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
-	src/osx/core/gsockosx.cpp \
 	src/osx/core/stdpaths_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/core/utilsexc_base.cpp
@@ -2001,7 +1999,6 @@ COND_TOOLKIT_GTK_BASE_OSX_SRC =  \
 	src/unix/utilsunx.cpp \
 	src/unix/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
-	src/osx/core/gsockosx.cpp \
 	src/osx/core/stdpaths_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/core/utilsexc_base.cpp
@@ -2022,7 +2019,6 @@ COND_TOOLKIT_MOTIF_BASE_OSX_SRC =  \
 	src/unix/utilsunx.cpp \
 	src/unix/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
-	src/osx/core/gsockosx.cpp \
 	src/osx/core/stdpaths_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/core/utilsexc_base.cpp
@@ -2030,7 +2026,6 @@ COND_TOOLKIT_MOTIF_BASE_OSX_SRC =  \
 COND_TOOLKIT_OSX_CARBON_BASE_OSX_SRC =  \
 	src/osx/core/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
-	src/osx/core/gsockosx.cpp \
 	src/osx/core/stdpaths_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/core/utilsexc_base.cpp \
@@ -2051,7 +2046,6 @@ COND_TOOLKIT_OSX_CARBON_BASE_OSX_SRC =  \
 COND_TOOLKIT_OSX_COCOA_BASE_OSX_SRC =  \
 	src/osx/core/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
-	src/osx/core/gsockosx.cpp \
 	src/osx/core/stdpaths_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/core/utilsexc_base.cpp \
@@ -2085,7 +2079,6 @@ COND_TOOLKIT_X11_BASE_OSX_SRC =  \
 	src/unix/utilsunx.cpp \
 	src/unix/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
-	src/osx/core/gsockosx.cpp \
 	src/osx/core/stdpaths_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/core/utilsexc_base.cpp
@@ -3951,7 +3944,7 @@ COND_WINDOWS_IMPLIB_1___monodll___importlib = \
 	-Wl,--out-implib=$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_WINDOWS_IMPLIB_1@__monodll___importlib = $(COND_WINDOWS_IMPLIB_1___monodll___importlib)
 @COND_GCC_PCH_1@__monodll_PCH_INC = -I./.pch/wxprec_monodll
-@COND_ICC_PCH_1@__monodll_PCH_INC = $(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@__monodll_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	./.pch/wxprec_monodll/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_monodll_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_monodll/wx/wxprec.h.gch
@@ -3988,7 +3981,6 @@ COND_USE_SOSYMLINKS_1___monodll___so_symlinks_uninst_cmd = rm -f \
 COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_core_mimetype.o \
 	monodll_cfstring.o \
-	monodll_gsockosx.o \
 	monodll_stdpaths_cf.o \
 	monodll_strconv_cf.o \
 	monodll_utilsexc_base.o \
@@ -4069,7 +4061,8 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 @COND_TOOLKIT_OSX_CARBON@	= monodll_carbon_utils.o monodll_uma.o
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS \
 @COND_TOOLKIT_OSX_COCOA@	= monodll_osx_cocoa_utils.o
-@COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS = monodll_unix_gsocket.o
+@COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS \
+@COND_PLATFORM_MACOSX_1@	= monodll_unix_gsocket.o monodll_gsockosx.o
 @COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS = monodll_unix_gsocket.o
 @COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS = monodll_unix_gsocket.o
 COND_PLATFORM_WIN32_1___NET_PLATFORM_SRC_OBJECTS =  \
@@ -5793,14 +5786,13 @@ COND_MONOLITHIC_1_SHARED_0___monolib___depname = \
 @COND_MONOLITHIC_1_SHARED_0@__uninstall_monolib___depname \
 @COND_MONOLITHIC_1_SHARED_0@	= uninstall_monolib
 @COND_GCC_PCH_1@__monolib_PCH_INC = -I./.pch/wxprec_monolib
-@COND_ICC_PCH_1@__monolib_PCH_INC = $(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@__monolib_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	./.pch/wxprec_monolib/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_monolib_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_monolib/wx/wxprec.h.gch
 COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_core_mimetype.o \
 	monolib_cfstring.o \
-	monolib_gsockosx.o \
 	monolib_stdpaths_cf.o \
 	monolib_strconv_cf.o \
 	monolib_utilsexc_base.o \
@@ -5882,7 +5874,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_1 \
 @COND_TOOLKIT_OSX_COCOA@	= monolib_osx_cocoa_utils.o
 @COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS_1 \
-@COND_PLATFORM_MACOSX_1@	= monolib_unix_gsocket.o
+@COND_PLATFORM_MACOSX_1@	= monolib_unix_gsocket.o monolib_gsockosx.o
 @COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS_1 = monolib_unix_gsocket.o
 @COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_1 = monolib_unix_gsocket.o
 COND_PLATFORM_WIN32_1___NET_PLATFORM_SRC_OBJECTS_1 =  \
@@ -7612,7 +7604,7 @@ COND_WINDOWS_IMPLIB_1___basedll___importlib = \
 	-Wl,--out-implib=$(LIBDIRNAME)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_WINDOWS_IMPLIB_1@__basedll___importlib = $(COND_WINDOWS_IMPLIB_1___basedll___importlib)
 @COND_GCC_PCH_1@__basedll_PCH_INC = -I./.pch/wxprec_basedll
-@COND_ICC_PCH_1@__basedll_PCH_INC = $(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@__basedll_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	./.pch/wxprec_basedll/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_basedll_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_basedll/wx/wxprec.h.gch
@@ -7650,7 +7642,6 @@ COND_USE_SOSYMLINKS_1___basedll___so_symlinks_uninst_cmd = rm -f \
 COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_core_mimetype.o \
 	basedll_cfstring.o \
-	basedll_gsockosx.o \
 	basedll_stdpaths_cf.o \
 	basedll_strconv_cf.o \
 	basedll_utilsexc_base.o \
@@ -7738,14 +7729,13 @@ COND_MONOLITHIC_0_SHARED_0___baselib___depname = \
 @COND_MONOLITHIC_0_SHARED_0@__uninstall_baselib___depname \
 @COND_MONOLITHIC_0_SHARED_0@	= uninstall_baselib
 @COND_GCC_PCH_1@__baselib_PCH_INC = -I./.pch/wxprec_baselib
-@COND_ICC_PCH_1@__baselib_PCH_INC = $(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@__baselib_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	./.pch/wxprec_baselib/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_baselib_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_baselib/wx/wxprec.h.gch
 COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_core_mimetype.o \
 	baselib_cfstring.o \
-	baselib_gsockosx.o \
 	baselib_stdpaths_cf.o \
 	baselib_strconv_cf.o \
 	baselib_utilsexc_base.o \
@@ -7843,7 +7833,7 @@ COND_WINDOWS_IMPLIB_1___netdll___importlib = \
 	-Wl,--out-implib=$(LIBDIRNAME)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_WINDOWS_IMPLIB_1@__netdll___importlib = $(COND_WINDOWS_IMPLIB_1___netdll___importlib)
 @COND_GCC_PCH_1@__netdll_PCH_INC = -I./.pch/wxprec_netdll
-@COND_ICC_PCH_1@__netdll_PCH_INC = $(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@__netdll_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	./.pch/wxprec_netdll/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_netdll_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_netdll/wx/wxprec.h.gch
@@ -7879,7 +7869,7 @@ COND_USE_SOSYMLINKS_1___netdll___so_symlinks_uninst_cmd = rm -f \
 @COND_USE_SOSYMLINKS_1@__netdll___so_symlinks_uninst_cmd = $(COND_USE_SOSYMLINKS_1___netdll___so_symlinks_uninst_cmd)
 @COND_PLATFORM_WIN32_1@__netdll___win32rc = netdll_version_rc.o
 @COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS_2 \
-@COND_PLATFORM_MACOSX_1@	= netdll_unix_gsocket.o
+@COND_PLATFORM_MACOSX_1@	= netdll_unix_gsocket.o netdll_gsockosx.o
 @COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS_2 = netdll_unix_gsocket.o
 @COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_2 = netdll_unix_gsocket.o
 COND_PLATFORM_WIN32_1___NET_PLATFORM_SRC_OBJECTS_2 =  \
@@ -7895,12 +7885,12 @@ COND_MONOLITHIC_0_SHARED_0___netlib___depname = \
 @COND_MONOLITHIC_0_SHARED_0@__install_netlib___depname = install_netlib
 @COND_MONOLITHIC_0_SHARED_0@__uninstall_netlib___depname = uninstall_netlib
 @COND_GCC_PCH_1@__netlib_PCH_INC = -I./.pch/wxprec_netlib
-@COND_ICC_PCH_1@__netlib_PCH_INC = $(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@__netlib_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	./.pch/wxprec_netlib/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_netlib_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_netlib/wx/wxprec.h.gch
 @COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS_3 \
-@COND_PLATFORM_MACOSX_1@	= netlib_unix_gsocket.o
+@COND_PLATFORM_MACOSX_1@	= netlib_unix_gsocket.o netlib_gsockosx.o
 @COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS_3 = netlib_unix_gsocket.o
 @COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_3 = netlib_unix_gsocket.o
 COND_PLATFORM_WIN32_1___NET_PLATFORM_SRC_OBJECTS_3 =  \
@@ -7929,7 +7919,7 @@ COND_WINDOWS_IMPLIB_1___coredll___importlib = \
 	-Wl,--out-implib=$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_WINDOWS_IMPLIB_1@__coredll___importlib = $(COND_WINDOWS_IMPLIB_1___coredll___importlib)
 @COND_GCC_PCH_1@__coredll_PCH_INC = -I./.pch/wxprec_coredll
-@COND_ICC_PCH_1@__coredll_PCH_INC = $(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@__coredll_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	./.pch/wxprec_coredll/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_coredll_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_coredll/wx/wxprec.h.gch
@@ -9464,7 +9454,7 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___corelib___depname = \
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@__uninstall_corelib___depname \
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@	= uninstall_corelib
 @COND_GCC_PCH_1@__corelib_PCH_INC = -I./.pch/wxprec_corelib
-@COND_ICC_PCH_1@__corelib_PCH_INC = $(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@__corelib_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	./.pch/wxprec_corelib/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_corelib_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_corelib/wx/wxprec.h.gch
@@ -10979,7 +10969,7 @@ COND_WINDOWS_IMPLIB_1___advdll___importlib = \
 	-Wl,--out-implib=$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_WINDOWS_IMPLIB_1@__advdll___importlib = $(COND_WINDOWS_IMPLIB_1___advdll___importlib)
 @COND_GCC_PCH_1@__advdll_PCH_INC = -I./.pch/wxprec_advdll
-@COND_ICC_PCH_1@__advdll_PCH_INC = $(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@__advdll_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	./.pch/wxprec_advdll/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_advdll_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_advdll/wx/wxprec.h.gch
@@ -11100,7 +11090,7 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___advlib___depname = \
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@__uninstall_advlib___depname \
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@	= uninstall_advlib
 @COND_GCC_PCH_1@__advlib_PCH_INC = -I./.pch/wxprec_advlib
-@COND_ICC_PCH_1@__advlib_PCH_INC = $(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@__advlib_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	./.pch/wxprec_advlib/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_advlib_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_advlib/wx/wxprec.h.gch
@@ -11201,7 +11191,7 @@ COND_WINDOWS_IMPLIB_1___mediadll___importlib = \
 	-Wl,--out-implib=$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_WINDOWS_IMPLIB_1@__mediadll___importlib = $(COND_WINDOWS_IMPLIB_1___mediadll___importlib)
 @COND_GCC_PCH_1@__mediadll_PCH_INC = -I./.pch/wxprec_mediadll
-@COND_ICC_PCH_1@__mediadll_PCH_INC = $(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@__mediadll_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	./.pch/wxprec_mediadll/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_mediadll_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_mediadll/wx/wxprec.h.gch
@@ -11268,7 +11258,7 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1___medialib___depname = \
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1@__uninstall_medialib___depname \
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1@	= uninstall_medialib
 @COND_GCC_PCH_1@__medialib_PCH_INC = -I./.pch/wxprec_medialib
-@COND_ICC_PCH_1@__medialib_PCH_INC = $(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@__medialib_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	./.pch/wxprec_medialib/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_medialib_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_medialib/wx/wxprec.h.gch
@@ -11315,7 +11305,7 @@ COND_WINDOWS_IMPLIB_1___htmldll___importlib = \
 	-Wl,--out-implib=$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_WINDOWS_IMPLIB_1@__htmldll___importlib = $(COND_WINDOWS_IMPLIB_1___htmldll___importlib)
 @COND_GCC_PCH_1@__htmldll_PCH_INC = -I./.pch/wxprec_htmldll
-@COND_ICC_PCH_1@__htmldll_PCH_INC = $(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@__htmldll_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	./.pch/wxprec_htmldll/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_htmldll_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_htmldll/wx/wxprec.h.gch
@@ -11361,7 +11351,7 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_HTML_1___htmllib___depname = \
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_HTML_1@__uninstall_htmllib___depname \
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_HTML_1@	= uninstall_htmllib
 @COND_GCC_PCH_1@__htmllib_PCH_INC = -I./.pch/wxprec_htmllib
-@COND_ICC_PCH_1@__htmllib_PCH_INC = $(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@__htmllib_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	./.pch/wxprec_htmllib/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_htmllib_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_htmllib/wx/wxprec.h.gch
@@ -11387,7 +11377,7 @@ COND_WINDOWS_IMPLIB_1___qadll___importlib = \
 	-Wl,--out-implib=$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_qa-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_WINDOWS_IMPLIB_1@__qadll___importlib = $(COND_WINDOWS_IMPLIB_1___qadll___importlib)
 @COND_GCC_PCH_1@__qadll_PCH_INC = -I./.pch/wxprec_qadll
-@COND_ICC_PCH_1@__qadll_PCH_INC = $(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@__qadll_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	./.pch/wxprec_qadll/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_qadll_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_qadll/wx/wxprec.h.gch
@@ -11430,7 +11420,7 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_QA_1___qalib___depname = \
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_QA_1@__uninstall_qalib___depname \
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_QA_1@	= uninstall_qalib
 @COND_GCC_PCH_1@__qalib_PCH_INC = -I./.pch/wxprec_qalib
-@COND_ICC_PCH_1@__qalib_PCH_INC = $(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@__qalib_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	./.pch/wxprec_qalib/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_qalib_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_qalib/wx/wxprec.h.gch
@@ -11451,7 +11441,7 @@ COND_WINDOWS_IMPLIB_1___xmldll___importlib = \
 	-Wl,--out-implib=$(LIBDIRNAME)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_WINDOWS_IMPLIB_1@__xmldll___importlib = $(COND_WINDOWS_IMPLIB_1___xmldll___importlib)
 @COND_GCC_PCH_1@__xmldll_PCH_INC = -I./.pch/wxprec_xmldll
-@COND_ICC_PCH_1@__xmldll_PCH_INC = $(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@__xmldll_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	./.pch/wxprec_xmldll/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_xmldll_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_xmldll/wx/wxprec.h.gch
@@ -11492,7 +11482,7 @@ COND_MONOLITHIC_0_SHARED_0___xmllib___depname = \
 @COND_MONOLITHIC_0_SHARED_0@__install_xmllib___depname = install_xmllib
 @COND_MONOLITHIC_0_SHARED_0@__uninstall_xmllib___depname = uninstall_xmllib
 @COND_GCC_PCH_1@__xmllib_PCH_INC = -I./.pch/wxprec_xmllib
-@COND_ICC_PCH_1@__xmllib_PCH_INC = $(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@__xmllib_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	./.pch/wxprec_xmllib/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_xmllib_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_xmllib/wx/wxprec.h.gch
@@ -11515,7 +11505,7 @@ COND_WINDOWS_IMPLIB_1___xrcdll___importlib = \
 	-Wl,--out-implib=$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_WINDOWS_IMPLIB_1@__xrcdll___importlib = $(COND_WINDOWS_IMPLIB_1___xrcdll___importlib)
 @COND_GCC_PCH_1@__xrcdll_PCH_INC = -I./.pch/wxprec_xrcdll
-@COND_ICC_PCH_1@__xrcdll_PCH_INC = $(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@__xrcdll_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	./.pch/wxprec_xrcdll/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_xrcdll_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_xrcdll/wx/wxprec.h.gch
@@ -11558,7 +11548,7 @@ COND_MONOLITHIC_0_SHARED_0_USE_XRC_1___xrclib___depname = \
 @COND_MONOLITHIC_0_SHARED_0_USE_XRC_1@__uninstall_xrclib___depname \
 @COND_MONOLITHIC_0_SHARED_0_USE_XRC_1@	= uninstall_xrclib
 @COND_GCC_PCH_1@__xrclib_PCH_INC = -I./.pch/wxprec_xrclib
-@COND_ICC_PCH_1@__xrclib_PCH_INC = $(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@__xrclib_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	./.pch/wxprec_xrclib/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_xrclib_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_xrclib/wx/wxprec.h.gch
@@ -11581,7 +11571,7 @@ COND_WINDOWS_IMPLIB_1___auidll___importlib = \
 	-Wl,--out-implib=$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_aui-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_WINDOWS_IMPLIB_1@__auidll___importlib = $(COND_WINDOWS_IMPLIB_1___auidll___importlib)
 @COND_GCC_PCH_1@__auidll_PCH_INC = -I./.pch/wxprec_auidll
-@COND_ICC_PCH_1@__auidll_PCH_INC = $(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@__auidll_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	./.pch/wxprec_auidll/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_auidll_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_auidll/wx/wxprec.h.gch
@@ -11624,7 +11614,7 @@ COND_MONOLITHIC_0_SHARED_0_USE_AUI_1___auilib___depname = \
 @COND_MONOLITHIC_0_SHARED_0_USE_AUI_1@__uninstall_auilib___depname \
 @COND_MONOLITHIC_0_SHARED_0_USE_AUI_1@	= uninstall_auilib
 @COND_GCC_PCH_1@__auilib_PCH_INC = -I./.pch/wxprec_auilib
-@COND_ICC_PCH_1@__auilib_PCH_INC = $(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@__auilib_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	./.pch/wxprec_auilib/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_auilib_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_auilib/wx/wxprec.h.gch
@@ -11647,8 +11637,7 @@ COND_WINDOWS_IMPLIB_1___propgriddll___importlib = \
 	-Wl,--out-implib=$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_propgrid-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_WINDOWS_IMPLIB_1@__propgriddll___importlib = $(COND_WINDOWS_IMPLIB_1___propgriddll___importlib)
 @COND_GCC_PCH_1@__propgriddll_PCH_INC = -I./.pch/wxprec_propgriddll
-@COND_ICC_PCH_1@__propgriddll_PCH_INC = \
-@COND_ICC_PCH_1@	$(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@__propgriddll_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	./.pch/wxprec_propgriddll/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_propgriddll_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_propgriddll/wx/wxprec.h.gch
@@ -11692,8 +11681,7 @@ COND_MONOLITHIC_0_SHARED_0_USE_PROPGRID_1___propgridlib___depname = \
 @COND_MONOLITHIC_0_SHARED_0_USE_PROPGRID_1@__uninstall_propgridlib___depname \
 @COND_MONOLITHIC_0_SHARED_0_USE_PROPGRID_1@	= uninstall_propgridlib
 @COND_GCC_PCH_1@__propgridlib_PCH_INC = -I./.pch/wxprec_propgridlib
-@COND_ICC_PCH_1@__propgridlib_PCH_INC = \
-@COND_ICC_PCH_1@	$(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@__propgridlib_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	./.pch/wxprec_propgridlib/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_propgridlib_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_propgridlib/wx/wxprec.h.gch
@@ -11716,8 +11704,7 @@ COND_WINDOWS_IMPLIB_1___richtextdll___importlib = \
 	-Wl,--out-implib=$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_WINDOWS_IMPLIB_1@__richtextdll___importlib = $(COND_WINDOWS_IMPLIB_1___richtextdll___importlib)
 @COND_GCC_PCH_1@__richtextdll_PCH_INC = -I./.pch/wxprec_richtextdll
-@COND_ICC_PCH_1@__richtextdll_PCH_INC = \
-@COND_ICC_PCH_1@	$(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@__richtextdll_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	./.pch/wxprec_richtextdll/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_richtextdll_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_richtextdll/wx/wxprec.h.gch
@@ -11761,8 +11748,7 @@ COND_MONOLITHIC_0_SHARED_0_USE_RICHTEXT_1___richtextlib___depname = \
 @COND_MONOLITHIC_0_SHARED_0_USE_RICHTEXT_1@__uninstall_richtextlib___depname \
 @COND_MONOLITHIC_0_SHARED_0_USE_RICHTEXT_1@	= uninstall_richtextlib
 @COND_GCC_PCH_1@__richtextlib_PCH_INC = -I./.pch/wxprec_richtextlib
-@COND_ICC_PCH_1@__richtextlib_PCH_INC = \
-@COND_ICC_PCH_1@	$(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@__richtextlib_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	./.pch/wxprec_richtextlib/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_richtextlib_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_richtextlib/wx/wxprec.h.gch
@@ -11785,7 +11771,7 @@ COND_WINDOWS_IMPLIB_1___stcdll___importlib = \
 	-Wl,--out-implib=$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_WINDOWS_IMPLIB_1@__stcdll___importlib = $(COND_WINDOWS_IMPLIB_1___stcdll___importlib)
 @COND_GCC_PCH_1@__stcdll_PCH_INC = -I./.pch/wxprec_stcdll
-@COND_ICC_PCH_1@__stcdll_PCH_INC = $(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@__stcdll_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	./.pch/wxprec_stcdll/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_stcdll_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_stcdll/wx/wxprec.h.gch
@@ -11828,7 +11814,7 @@ COND_MONOLITHIC_0_SHARED_0_USE_STC_1___stclib___depname = \
 @COND_MONOLITHIC_0_SHARED_0_USE_STC_1@__uninstall_stclib___depname \
 @COND_MONOLITHIC_0_SHARED_0_USE_STC_1@	= uninstall_stclib
 @COND_GCC_PCH_1@__stclib_PCH_INC = -I./.pch/wxprec_stclib
-@COND_ICC_PCH_1@__stclib_PCH_INC = $(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@__stclib_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	./.pch/wxprec_stclib/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_stclib_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_stclib/wx/wxprec.h.gch
@@ -11851,7 +11837,7 @@ COND_WINDOWS_IMPLIB_1___gldll___importlib = \
 	-Wl,--out-implib=$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_WINDOWS_IMPLIB_1@__gldll___importlib = $(COND_WINDOWS_IMPLIB_1___gldll___importlib)
 @COND_GCC_PCH_1@__gldll_PCH_INC = -I./.pch/wxprec_gldll
-@COND_ICC_PCH_1@__gldll_PCH_INC = $(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@__gldll_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	./.pch/wxprec_gldll/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_gldll_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_gldll/wx/wxprec.h.gch
@@ -11920,7 +11906,7 @@ COND_SHARED_0_USE_GUI_1_USE_OPENGL_1___gllib___depname = \
 @COND_SHARED_0_USE_GUI_1_USE_OPENGL_1@__uninstall_gllib___depname \
 @COND_SHARED_0_USE_GUI_1_USE_OPENGL_1@	= uninstall_gllib
 @COND_GCC_PCH_1@__gllib_PCH_INC = -I./.pch/wxprec_gllib
-@COND_ICC_PCH_1@__gllib_PCH_INC = $(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@__gllib_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	./.pch/wxprec_gllib/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_gllib_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_gllib/wx/wxprec.h.gch
@@ -14445,9 +14431,6 @@ monodll_core_mimetype.o: $(srcdir)/src/osx/core/mimetype.cpp $(MONODLL_ODEP)
 monodll_cfstring.o: $(srcdir)/src/osx/core/cfstring.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/cfstring.cpp
 
-monodll_gsockosx.o: $(srcdir)/src/osx/core/gsockosx.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/gsockosx.cpp
-
 monodll_stdpaths_cf.o: $(srcdir)/src/osx/core/stdpaths_cf.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/stdpaths_cf.cpp
 
@@ -14558,6 +14541,9 @@ monodll_urlmsw.o: $(srcdir)/src/msw/urlmsw.cpp $(MONODLL_ODEP)
 
 monodll_net.o: $(srcdir)/src/msw/wince/net.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/wince/net.cpp
+
+monodll_gsockosx.o: $(srcdir)/src/osx/core/gsockosx.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/gsockosx.cpp
 
 monodll_graphicc.o: $(srcdir)/src/generic/graphicc.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/graphicc.cpp
@@ -19125,9 +19111,6 @@ monolib_core_mimetype.o: $(srcdir)/src/osx/core/mimetype.cpp $(MONOLIB_ODEP)
 monolib_cfstring.o: $(srcdir)/src/osx/core/cfstring.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/cfstring.cpp
 
-monolib_gsockosx.o: $(srcdir)/src/osx/core/gsockosx.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/gsockosx.cpp
-
 monolib_stdpaths_cf.o: $(srcdir)/src/osx/core/stdpaths_cf.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/stdpaths_cf.cpp
 
@@ -19238,6 +19221,9 @@ monolib_urlmsw.o: $(srcdir)/src/msw/urlmsw.cpp $(MONOLIB_ODEP)
 
 monolib_net.o: $(srcdir)/src/msw/wince/net.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/wince/net.cpp
+
+monolib_gsockosx.o: $(srcdir)/src/osx/core/gsockosx.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/gsockosx.cpp
 
 monolib_graphicc.o: $(srcdir)/src/generic/graphicc.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/graphicc.cpp
@@ -23805,9 +23791,6 @@ basedll_core_mimetype.o: $(srcdir)/src/osx/core/mimetype.cpp $(BASEDLL_ODEP)
 basedll_cfstring.o: $(srcdir)/src/osx/core/cfstring.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/osx/core/cfstring.cpp
 
-basedll_gsockosx.o: $(srcdir)/src/osx/core/gsockosx.cpp $(BASEDLL_ODEP)
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/osx/core/gsockosx.cpp
-
 basedll_stdpaths_cf.o: $(srcdir)/src/osx/core/stdpaths_cf.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/osx/core/stdpaths_cf.cpp
 
@@ -24270,9 +24253,6 @@ baselib_core_mimetype.o: $(srcdir)/src/osx/core/mimetype.cpp $(BASELIB_ODEP)
 baselib_cfstring.o: $(srcdir)/src/osx/core/cfstring.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/osx/core/cfstring.cpp
 
-baselib_gsockosx.o: $(srcdir)/src/osx/core/gsockosx.cpp $(BASELIB_ODEP)
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/osx/core/gsockosx.cpp
-
 baselib_stdpaths_cf.o: $(srcdir)/src/osx/core/stdpaths_cf.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/osx/core/stdpaths_cf.cpp
 
@@ -24486,6 +24466,9 @@ netdll_urlmsw.o: $(srcdir)/src/msw/urlmsw.cpp $(NETDLL_ODEP)
 netdll_net.o: $(srcdir)/src/msw/wince/net.cpp $(NETDLL_ODEP)
 	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/msw/wince/net.cpp
 
+netdll_gsockosx.o: $(srcdir)/src/osx/core/gsockosx.cpp $(NETDLL_ODEP)
+	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/osx/core/gsockosx.cpp
+
 @COND_PLATFORM_UNIX_1@netdll_unix_gsocket.o: $(srcdir)/src/unix/gsocket.cpp $(NETDLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/unix/gsocket.cpp
 
@@ -24536,6 +24519,9 @@ netlib_urlmsw.o: $(srcdir)/src/msw/urlmsw.cpp $(NETLIB_ODEP)
 
 netlib_net.o: $(srcdir)/src/msw/wince/net.cpp $(NETLIB_ODEP)
 	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/msw/wince/net.cpp
+
+netlib_gsockosx.o: $(srcdir)/src/osx/core/gsockosx.cpp $(NETLIB_ODEP)
+	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/osx/core/gsockosx.cpp
 
 @COND_PLATFORM_UNIX_1@netlib_unix_gsocket.o: $(srcdir)/src/unix/gsocket.cpp $(NETLIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/unix/gsocket.cpp

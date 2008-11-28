@@ -52,6 +52,4 @@ private:
     // the signal handlers
     WX_DECLARE_HASH_MAP(int, SignalHandler, wxIntegerHash, wxIntegerEqual, SignalHandlerHash);
     SignalHandlerHash m_signalHandlerHash;
-
-    friend class GSocketGUIFunctionsTableBase;
 };

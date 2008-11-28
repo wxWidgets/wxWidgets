@@ -22,70 +22,76 @@
 
 #include "wx/event.h"
 #include "wx/sckaddr.h"
-#include "wx/private/gsocket.h"
 #include "wx/list.h"
+
+class wxSocketImpl;
 
 // ------------------------------------------------------------------------
 // Types and constants
 // ------------------------------------------------------------------------
 
+// Types of different socket notifications or events.
+//
+// NB: the values here should be consecutive and start with 0 as they are
+//     used to construct the wxSOCKET_XXX_FLAG bit mask values below
 enum wxSocketNotify
 {
-  wxSOCKET_INPUT = GSOCK_INPUT,
-  wxSOCKET_OUTPUT = GSOCK_OUTPUT,
-  wxSOCKET_CONNECTION = GSOCK_CONNECTION,
-  wxSOCKET_LOST = GSOCK_LOST
+    wxSOCKET_INPUT,
+    wxSOCKET_OUTPUT,
+    wxSOCKET_CONNECTION,
+    wxSOCKET_LOST,
+    wxSOCKET_MAX_EVENT
 };
 
 enum
 {
-  wxSOCKET_INPUT_FLAG = GSOCK_INPUT_FLAG,
-  wxSOCKET_OUTPUT_FLAG = GSOCK_OUTPUT_FLAG,
-  wxSOCKET_CONNECTION_FLAG = GSOCK_CONNECTION_FLAG,
-  wxSOCKET_LOST_FLAG = GSOCK_LOST_FLAG
+    wxSOCKET_INPUT_FLAG = 1 << wxSOCKET_INPUT,
+    wxSOCKET_OUTPUT_FLAG = 1 << wxSOCKET_OUTPUT,
+    wxSOCKET_CONNECTION_FLAG = 1 << wxSOCKET_CONNECTION,
+    wxSOCKET_LOST_FLAG = 1 << wxSOCKET_LOST
 };
 
-typedef GSocketEventFlags wxSocketEventFlags;
+// this is a combination of the bit masks defined above
+typedef int wxSocketEventFlags;
 
 enum wxSocketError
 {
-  // from GSocket
-  wxSOCKET_NOERROR = GSOCK_NOERROR,
-  wxSOCKET_INVOP = GSOCK_INVOP,
-  wxSOCKET_IOERR = GSOCK_IOERR,
-  wxSOCKET_INVADDR = GSOCK_INVADDR,
-  wxSOCKET_INVSOCK = GSOCK_INVSOCK,
-  wxSOCKET_NOHOST = GSOCK_NOHOST,
-  wxSOCKET_INVPORT = GSOCK_INVPORT,
-  wxSOCKET_WOULDBLOCK = GSOCK_WOULDBLOCK,
-  wxSOCKET_TIMEDOUT = GSOCK_TIMEDOUT,
-  wxSOCKET_MEMERR = GSOCK_MEMERR,
-
-  // wxSocket-specific (not yet implemented)
-  wxSOCKET_DUMMY
+    wxSOCKET_NOERROR = 0,
+    wxSOCKET_INVOP,
+    wxSOCKET_IOERR,
+    wxSOCKET_INVADDR,
+    wxSOCKET_INVSOCK,
+    wxSOCKET_NOHOST,
+    wxSOCKET_INVPORT,
+    wxSOCKET_WOULDBLOCK,
+    wxSOCKET_TIMEDOUT,
+    wxSOCKET_MEMERR,
+    wxSOCKET_OPTERR
 };
 
+// socket options/flags bit masks
 enum
 {
-  wxSOCKET_NONE = 0,
-  wxSOCKET_NOWAIT = 1,
-  wxSOCKET_WAITALL = 2,
-  wxSOCKET_BLOCK = 4,
-  wxSOCKET_REUSEADDR = 8,
-  wxSOCKET_BROADCAST = 16,
-  wxSOCKET_NOBIND = 32
-};
-
-enum wxSocketType
-{
-  wxSOCKET_UNINIT,
-  wxSOCKET_CLIENT,
-  wxSOCKET_SERVER,
-  wxSOCKET_BASE,
-  wxSOCKET_DATAGRAM
+    wxSOCKET_NONE = 0,
+    wxSOCKET_NOWAIT = 1,
+    wxSOCKET_WAITALL = 2,
+    wxSOCKET_BLOCK = 4,
+    wxSOCKET_REUSEADDR = 8,
+    wxSOCKET_BROADCAST = 16,
+    wxSOCKET_NOBIND = 32
 };
 
 typedef int wxSocketFlags;
+
+// socket kind values (badly defined, don't use)
+enum wxSocketType
+{
+    wxSOCKET_UNINIT,
+    wxSOCKET_CLIENT,
+    wxSOCKET_SERVER,
+    wxSOCKET_BASE,
+    wxSOCKET_DATAGRAM
+};
 
 
 
@@ -111,14 +117,14 @@ public:
 
   // state
   bool Ok() const { return IsOk(); }
-  bool IsOk() const { return (m_socket != NULL); }
+  bool IsOk() const { return m_impl != NULL; }
   bool Error() const { return m_error; }
   bool IsClosed() const { return m_closed; }
   bool IsConnected() const { return m_connected; }
   bool IsData() { return WaitForRead(0, 0); }
   bool IsDisconnected() const { return !IsConnected(); }
   wxUint32 LastCount() const { return m_lcount; }
-  wxSocketError LastError() const { return (wxSocketError)m_socket->GetError(); }
+  wxSocketError LastError() const;
   void SaveState();
   void RestoreState();
 
@@ -182,7 +188,7 @@ public:
   // Implementation from now on
   // --------------------------
 
-  // do not use, should be private (called from GSocket)
+  // do not use, should be private (called from wxSocketImpl only)
   void OnRequest(wxSocketNotify notify);
 
   // do not use, not documented nor supported
@@ -201,7 +207,7 @@ private:
   // wait until the given flags are set for this socket or the given timeout
   // (or m_timeout) expires
   //
-  // notice that GSOCK_LOST_FLAG is always taken into account but the return
+  // notice that wxSOCKET_LOST_FLAG is always taken into account but the return
   // value depends on whether it is included in flags or not: if it is, and the
   // connection is indeed lost, true is returned, but if it isn't then the
   // function returns false in this case
@@ -215,7 +221,7 @@ private:
 
 private:
   // socket
-  GSocket      *m_socket;           // GSocket
+  wxSocketImpl *m_impl;             // port-specific implementation
   wxSocketType  m_type;             // wxSocket type
 
   // state

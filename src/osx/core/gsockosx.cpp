@@ -1,16 +1,20 @@
-/* -------------------------------------------------------------------------
- * Project: GSocket (Generic Socket) for WX
- * Name:    src/osx/corefoundation/gsockosx.c
- * Purpose: GSocket: Mac OS X mach-o part
- * CVSID:   $Id$
- * Mac code by Brian Victor, February 2002.  Email comments to bhv1@psu.edu
- * ------------------------------------------------------------------------- */
+/////////////////////////////////////////////////////////////////////////////
+// Name:        osx/core/gsockosx.cpp
+// Purpose:     wxSocketImpl implementation for OS X
+// Authors:     Brian Victor, Vadim Zeitlin
+// Created:     February 2002
+// RCS-ID:      $Id$
+// Copyright:   (c) 2002 Brian Victor
+//              (c) 2008 Vadim Zeitlin
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
 
 #if wxUSE_SOCKETS
 
 #include "wx/private/gsocket.h"
+#include "wx/unix/gsockunx.h"
 #include "wx/apptrait.h"
 
 #include <CoreFoundation/CoreFoundation.h>
@@ -27,32 +31,63 @@ namespace
 static CFRunLoopRef gs_mainRunLoop = NULL;
 
 // ----------------------------------------------------------------------------
-// Mac-specific data associated with each socket by GSocketCFManager
+// Mac-specific socket implementation
 // ----------------------------------------------------------------------------
 
-class MacGSocketData
+class wxSocketImplMac : public wxSocketImplUnix
 {
 public:
-    // default ctor creates the object in uninitialized state, use Initialize()
-    // later to make it usable
-    MacGSocketData()
+    wxSocketImplMac(wxSocketBase& wxsocket)
+        : wxSocketImplUnix(wxsocket)
     {
         m_socket = NULL;
         m_source = NULL;
     }
 
-    // initialize the data associated with the given socket
-    bool Initialize(GSocket *socket)
+    virtual ~wxSocketImplMac()
     {
-        wxASSERT_MSG( !IsInitialized(), "shouldn't be called twice" );
+        wxASSERT_MSG( !m_source && !m_socket, "forgot to call Close()?" );
+    }
 
+    // get the underlying socket: creates it on demand
+    CFSocketRef GetSocket() /* const */
+    {
+        if ( !m_socket )
+            Initialize();
+
+        return m_socket;
+    }
+
+private:
+    virtual void DoClose()
+    {
+        wxSocketManager * const manager = wxSocketManager::Get();
+        if ( manager )
+        {
+            manager->Uninstall_Callback(this, wxSOCKET_INPUT);
+            manager->Uninstall_Callback(this, wxSOCKET_OUTPUT);
+        }
+
+        // VZ: CFRunLoopRemoveSource() is probably unnecessary as
+        //     CFSocketInvalidate() seems to do it internally from reading the
+        //     docs, please remove it (and this comment) after testing
+        CFRunLoopRemoveSource(gs_mainRunLoop, m_source, kCFRunLoopCommonModes);
+        CFSocketInvalidate(m_socket);
+
+        CFRelease(m_source);
+        CFRelease(m_socket);
+    }
+
+    // initialize the data associated with the given socket
+    bool Initialize()
+    {
         // we need a valid Unix socket to create a CFSocket
-        if ( socket->m_fd < 0 )
+        if ( m_fd < 0 )
             return false;
 
         CFSocketContext cont;
         cont.version = 0;               // this currently must be 0
-        cont.info = socket;             // pointer passed to our callback
+        cont.info = this;               // pointer passed to our callback
         cont.retain = NULL;             // no need to retain/release/copy the
         cont.release = NULL;            //  socket pointer, so all callbacks
         cont.copyDescription = NULL;    //  can be left NULL
@@ -60,7 +95,7 @@ public:
         m_socket = CFSocketCreateWithNative
                    (
                         NULL,                   // default allocator
-                        socket->m_fd,
+                        m_fd,
                         kCFSocketReadCallBack |
                         kCFSocketWriteCallBack |
                         kCFSocketConnectCallBack,
@@ -83,55 +118,13 @@ public:
         return true;
     }
 
-    // close the socket if it was opened
-    void Close()
-    {
-        // VZ: CFRunLoopRemoveSource() is probably unnecessary as
-        //     CFSocketInvalidate() seems to do it internally from reading the
-        //     docs, please remove it (and this comment) after testing
-        CFRunLoopRemoveSource(gs_mainRunLoop, m_source, kCFRunLoopCommonModes);
-        CFSocketInvalidate(m_socket);
-
-        CFRelease(m_source);
-        CFRelease(m_socket);
-    }
-
-    ~MacGSocketData()
-    {
-        wxASSERT_MSG( !m_source && !m_socket, "forgot to call Close()?" );
-    }
-
-    // return true if Initialize() had already been called successfully
-    bool IsInitialized() const { return m_source && m_socket; }
-
-
-    // accessors: should only be called if IsInitialized()
-    CFSocketRef GetSocket() const
-    {
-        wxASSERT( IsInitialized() );
-
-        return m_socket;
-    }
-
-    CFRunLoopSourceRef GetSource() const
-    {
-        wxASSERT( IsInitialized() );
-
-        return m_source;
-    }
-
-private:
     static void SocketCallback(CFSocketRef WXUNUSED(s),
                                CFSocketCallBackType callbackType,
                                CFDataRef WXUNUSED(address),
                                const void* data,
                                void* info)
     {
-        GSocket * const socket = static_cast<GSocket *>(info);
-        MacGSocketData * const
-            macdata = static_cast<MacGSocketData *>(socket->m_gui_dependent);
-        if ( !macdata )
-            return;
+        wxSocketImplMac * const socket = static_cast<wxSocketImplMac *>(info);
 
         switch (callbackType)
         {
@@ -163,66 +156,39 @@ private:
     CFSocketRef m_socket;
     CFRunLoopSourceRef m_source;
 
-    DECLARE_NO_COPY_CLASS(MacGSocketData);
+    DECLARE_NO_COPY_CLASS(wxSocketImplMac)
 };
 
 } // anonymous namespace
 
 
 // ----------------------------------------------------------------------------
-// CoreFoundation implementation of GSocketManager
+// CoreFoundation implementation of wxSocketManager
 // ----------------------------------------------------------------------------
 
-class GSocketCFManager : public GSocketManager
+class wxSocketManagerMac : public wxSocketManager
 {
 public:
     virtual bool OnInit();
     virtual void OnExit();
 
-    virtual bool Init_Socket(GSocket *socket);
-    virtual void Close_Socket(GSocket *socket);
-    virtual void Destroy_Socket(GSocket *socket);
+    virtual wxSocketImpl *CreateSocket(wxSocketBase& wxsocket)
+    {
+        return new wxSocketImplMac(wxsocket);
+    }
 
-    virtual void Install_Callback(GSocket *socket, GSocketEvent event);
-    virtual void Uninstall_Callback(GSocket *socket, GSocketEvent event);
+    virtual void Install_Callback(wxSocketImpl *socket, wxSocketNotify event);
+    virtual void Uninstall_Callback(wxSocketImpl *socket, wxSocketNotify event);
 
 private:
-    // retrieve our custom data associated with the given socket
-    //
-    // this is a low level function, use GetInitializedData() instead if the
-    // data pointer should also be correctly initialized if it hadn't been done
-    // yet
-    //
-    // may return NULL if we hadn't created the data for this socket yet
-    MacGSocketData *GetData(GSocket *socket) const
-    {
-        return static_cast<MacGSocketData *>(socket->m_gui_dependent);
-    }
-
-    // return the custom data pointer initializing it if it hadn't been done
-    // yet
-    //
-    // may return NULL if there is no associated data
-    MacGSocketData *GetInitializedData(GSocket *socket) const
-    {
-        MacGSocketData * const data = GetData(socket);
-        if ( data && !data->IsInitialized() )
-        {
-            if ( !data->Initialize(socket) )
-                return NULL;
-        }
-
-        return data;
-    }
-
     // return CFSocket callback mask corresponding to the given event (the
     // socket parameter is needed because some events are interpreted
     // differently depending on whether they happen on a server or on a client
     // socket)
-    static int GetCFCallback(GSocket *socket, GSocketEvent event);
+    static int GetCFCallback(wxSocketImpl *socket, wxSocketNotify event);
 };
 
-bool GSocketCFManager::OnInit()
+bool wxSocketManagerMac::OnInit()
 {
     // No need to store the main loop again
     if (gs_mainRunLoop != NULL)
@@ -240,88 +206,66 @@ bool GSocketCFManager::OnInit()
     return true;
 }
 
-void GSocketCFManager::OnExit()
+void wxSocketManagerMac::OnExit()
 {
     // Release the reference count, and set the reference back to NULL
     CFRelease(gs_mainRunLoop);
     gs_mainRunLoop = NULL;
 }
 
-bool GSocketCFManager::Init_Socket(GSocket *socket)
-{
-    socket->m_gui_dependent = new MacGSocketData;
-    return true;
-}
-
-void GSocketCFManager::Close_Socket(GSocket *socket)
-{
-    Uninstall_Callback(socket, GSOCK_INPUT);
-    Uninstall_Callback(socket, GSOCK_OUTPUT);
-
-    MacGSocketData * const data = GetData(socket);
-    if ( data )
-        data->Close();
-}
-
-void GSocketCFManager::Destroy_Socket(GSocket *socket)
-{
-    MacGSocketData * const data = GetData(socket);
-    if ( data )
-    {
-        delete data;
-        socket->m_gui_dependent = NULL;
-    }
-}
-
 /* static */
-int GSocketCFManager::GetCFCallback(GSocket *socket, GSocketEvent event)
+int wxSocketManagerMac::GetCFCallback(wxSocketImpl *socket, wxSocketNotify event)
 {
     switch ( event )
     {
-        case GSOCK_CONNECTION:
+        case wxSOCKET_CONNECTION:
             return socket->m_server ? kCFSocketReadCallBack
                                     : kCFSocketConnectCallBack;
 
-        case GSOCK_LOST:
-        case GSOCK_INPUT:
+        case wxSOCKET_LOST:
+        case wxSOCKET_INPUT:
             return kCFSocketReadCallBack;
 
-        case GSOCK_OUTPUT:
+        case wxSOCKET_OUTPUT:
             return kCFSocketWriteCallBack;
 
-        case GSOCK_MAX_EVENT:
-            wxFAIL_MSG( "invalid GSocketEvent" );
+        case wxSOCKET_MAX_EVENT:
+            wxFAIL_MSG( "invalid wxSocketNotify" );
             return 0;
 
         default:
-            wxFAIL_MSG( "unknown GSocketEvent" );
+            wxFAIL_MSG( "unknown wxSocketNotify" );
             return 0;
     }
 }
 
-void GSocketCFManager::Install_Callback(GSocket *socket, GSocketEvent event)
+void wxSocketManagerMac::Install_Callback(wxSocketImpl *socket_,
+                                          wxSocketNotify event)
 {
-    const MacGSocketData * const data = GetInitializedData(socket);
-    if ( !data )
-        return;
+    wxSocketImplMac * const socket = static_cast<wxSocketImplMac *>(socket_);
 
-    CFSocketEnableCallBacks(data->GetSocket(), GetCFCallback(socket, event));
+    CFSocketEnableCallBacks(socket->GetSocket(), GetCFCallback(socket, event));
 }
 
-void GSocketCFManager::Uninstall_Callback(GSocket *socket, GSocketEvent event)
+void wxSocketManagerMac::Uninstall_Callback(wxSocketImpl *socket_,
+                                            wxSocketNotify event)
 {
-    const MacGSocketData * const data = GetInitializedData(socket);
-    if ( !data )
-        return;
+    wxSocketImplMac * const socket = static_cast<wxSocketImplMac *>(socket_);
 
-    CFSocketDisableCallBacks(data->GetSocket(), GetCFCallback(socket, event));
+    CFSocketDisableCallBacks(socket->GetSocket(), GetCFCallback(socket, event));
 }
 
-GSocketManager *wxAppTraits::GetSocketManager()
+// set the wxBase variable to point to our wxSocketManager implementation
+//
+// see comments in wx/apptrait.h for the explanation of why do we do it
+// like this
+static struct ManagerSetter
 {
-    static GSocketCFManager s_manager;
-
-    return &s_manager;
-};
+    ManagerSetter()
+    {
+        static wxSocketManagerMac s_manager;
+        wxAppTraits::SetDefaultSocketManager(&s_manager);
+    }
+} gs_managerSetter;
 
 #endif // wxUSE_SOCKETS

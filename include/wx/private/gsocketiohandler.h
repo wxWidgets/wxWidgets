@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/private/gsocketiohandler.h
-// Purpose:     class for registering GSocket in wxSelectDispatcher
+// Purpose:     class for registering sockets with wxSelectDispatcher
 // Authors:     Lukasz Michalski
 // Created:     December 2006
 // Copyright:   (c) Lukasz Michalski
@@ -18,10 +18,10 @@
 #include "wx/private/selectdispatcher.h"
 #include "wx/private/gsocket.h"
 
-class WXDLLIMPEXP_BASE wxGSocketIOHandler : public wxFDIOHandler
+class WXDLLIMPEXP_BASE wxSocketIOHandler : public wxFDIOHandler
 {
 public:
-    wxGSocketIOHandler(GSocket* socket)
+    wxSocketIOHandler(wxSocketImpl *socket)
     {
         m_socket = socket;
         m_flags = 0;
@@ -36,7 +36,7 @@ public:
     virtual void OnExceptionWaiting() { m_socket->Detected_Read(); }
 
 private:
-    GSocket* m_socket;
+    wxSocketImpl *m_socket;
     int m_flags;
 };
 

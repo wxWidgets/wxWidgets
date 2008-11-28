@@ -1,51 +1,62 @@
-/* -------------------------------------------------------------------------
- * Project:     GSocket (Generic Socket) for WX
- * Name:        gsockunx.h
- * Copyright:   (c) Guilhem Lavaux
- * Licence:     wxWindows Licence
- * Purpose:     GSocket Unix header
- * CVSID:       $Id$
- * -------------------------------------------------------------------------
- */
+/////////////////////////////////////////////////////////////////////////////
+// Name:        wx/unix/gsockunx.h
+// Purpose:     wxSocketImpl implementation for Unix systems
+// Authors:     Guilhem Lavaux, Vadim Zeitlin
+// Created:     April 1997
+// RCS-ID:      $Id$
+// Copyright:   (c) 1997 Guilhem Lavaux
+//              (c) 2008 Vadim Zeitlin
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_UNIX_GSOCKUNX_H_
 #define _WX_UNIX_GSOCKUNX_H_
 
 #include <unistd.h>
+#include <sys/ioctl.h>
 
-class wxGSocketIOHandler;
+class wxSocketIOHandler;
 
-class GSocket : public GSocketBase
+class wxSocketImplUnix : public wxSocketImpl
 {
 public:
-    GSocket(wxSocketBase& wxsocket);
-    virtual ~GSocket();
+    wxSocketImplUnix(wxSocketBase& wxsocket);
 
     virtual void Shutdown();
-    virtual GSocket *WaitConnection(wxSocketBase& wxsocket);
+    virtual wxSocketImpl *WaitConnection(wxSocketBase& wxsocket);
 
-    GSocketError SetServer();
-    bool SetReusable();
-    bool SetBroadcast();
-    bool DontDoBind();
-    GSocketError Connect(GSocketStream stream);
-    GSocketError SetNonOriented();
     int Read(char *buffer, int size);
     int Write(const char *buffer, int size);
-    void SetNonBlocking(bool non_block);
-    GSocketError WXDLLIMPEXP_NET GetError();
-    GSocketError GetSockOpt(int level, int optname, void *optval, int *optlen);
-    GSocketError SetSockOpt(int level, int optname,
-        const void *optval, int optlen);
     //attach or detach from main loop
     void Notify(bool flag);
     void Detected_Read();
     void Detected_Write();
 
 private:
+    virtual wxSocketError DoHandleConnect(int ret);
+    virtual void DoClose()
+    {
+        wxSocketManager * const manager = wxSocketManager::Get();
+        if ( manager )
+        {
+            manager->Uninstall_Callback(this, wxSOCKET_INPUT);
+            manager->Uninstall_Callback(this, wxSOCKET_OUTPUT);
+        }
+
+        close(m_fd);
+    }
+
+    virtual void UnblockAndRegisterWithEventLoop()
+    {
+        int trueArg = 1;
+        ioctl(m_fd, FIONBIO, &trueArg);
+
+        EnableEvents();
+    }
+
     // enable or disable notifications for socket input/output events but only
     // if m_use_events is true; do nothing otherwise
-    void EnableEvents()
+    virtual void EnableEvents()
     {
         if ( m_use_events )
             DoEnableEvents(true);
@@ -67,38 +78,36 @@ private:
     //
     // notice that these functions also update m_detected: EnableEvent() clears
     // the corresponding bit in it and DisableEvent() sets it
-    void EnableEvent(GSocketEvent event);
-    void DisableEvent(GSocketEvent event);
+    void EnableEvent(wxSocketNotify event);
+    void DisableEvent(wxSocketNotify event);
 
 
-    GSocketError Input_Timeout();
-    GSocketError Output_Timeout();
+    wxSocketError Input_Timeout();
+    wxSocketError Output_Timeout();
     int Recv_Stream(char *buffer, int size);
     int Recv_Dgram(char *buffer, int size);
     int Send_Stream(const char *buffer, int size);
     int Send_Dgram(const char *buffer, int size);
-public:
-    /* DFE: We can't protect these data member until the GUI code is updated */
-    /* protected: */
-  wxGSocketIOHandler *m_handler;
 
-  // true if socket should fire events
-  bool m_use_events;
+protected:
+    // true if socket should fire events
+    bool m_use_events;
 
-  // pointer for storing extra (usually GUI-specific) data
-  void *m_gui_dependent;
+    // descriptors for input and output event notification channels associated
+    // with the socket
+    int m_fds[2];
 
 private:
     // notify the associated wxSocket about a change in socket state and shut
-    // down the socket if the event is GSOCK_LOST
-    void OnStateChange(GSocketEvent event);
+    // down the socket if the event is wxSOCKET_LOST
+    void OnStateChange(wxSocketNotify event);
+
+    // give it access to our m_fds
+    friend class wxSocketFDBasedManager;
 };
 
-// A version of GSocketManager which uses FDs for socket IO
-//
-// This class uses GSocket::m_gui_dependent field to store the 2 (for input and
-// output) FDs associated with the socket.
-class GSocketFDBasedManager : public GSocketManager
+// A version of wxSocketManager which uses FDs for socket IO
+class wxSocketFDBasedManager : public wxSocketManager
 {
 public:
     // no special initialization/cleanup needed when using FDs
@@ -106,28 +115,9 @@ public:
     virtual void OnExit() { }
 
     // allocate/free the storage we need
-    virtual bool Init_Socket(GSocket *socket)
+    virtual wxSocketImpl *CreateSocket(wxSocketBase& wxsocket)
     {
-        socket->m_gui_dependent = malloc(sizeof(int)*2);
-        int * const fds = static_cast<int *>(socket->m_gui_dependent);
-
-        fds[0] = -1;
-        fds[1] = -1;
-
-        return true;
-    }
-
-    virtual void Close_Socket(GSocket *socket)
-    {
-        Uninstall_Callback(socket, GSOCK_INPUT);
-        Uninstall_Callback(socket, GSOCK_OUTPUT);
-
-        close(socket->m_fd);
-    }
-
-    virtual void Destroy_Socket(GSocket *socket)
-    {
-        free(socket->m_gui_dependent);
+        return new wxSocketImplUnix(wxsocket);
     }
 
 protected:
@@ -140,8 +130,8 @@ protected:
         FD_OUTPUT
     };
 
-    // get the FD index corresponding to the given GSocketEvent
-    SocketDir GetDirForEvent(GSocket *socket, GSocketEvent event)
+    // get the FD index corresponding to the given wxSocketNotify
+    SocketDir GetDirForEvent(wxSocketImpl *socket, wxSocketNotify event)
     {
         switch ( event )
         {
@@ -149,34 +139,34 @@ protected:
                 wxFAIL_MSG( "unexpected socket event" );
                 // fall through
 
-            case GSOCK_LOST:
+            case wxSOCKET_LOST:
                 // fall through
 
-            case GSOCK_INPUT:
+            case wxSOCKET_INPUT:
                 return FD_INPUT;
 
-            case GSOCK_OUTPUT:
+            case wxSOCKET_OUTPUT:
                 return FD_OUTPUT;
 
-            case GSOCK_CONNECTION:
+            case wxSOCKET_CONNECTION:
                 // FIXME: explain this?
                 return socket->m_server ? FD_INPUT : FD_OUTPUT;
         }
     }
 
     // access the FDs we store
-    int& FD(GSocket *socket, SocketDir d)
+    int& FD(wxSocketImpl *socket, SocketDir d)
     {
-        return static_cast<int *>(socket->m_gui_dependent)[d];
+        return static_cast<wxSocketImplUnix *>(socket)->m_fds[d];
     }
 };
 
 // Common base class for all ports using X11-like (and hence implemented in
 // X11, Motif and GTK) AddInput() and RemoveInput() functions
-class GSocketInputBasedManager : public GSocketFDBasedManager
+class wxSocketInputBasedManager : public wxSocketFDBasedManager
 {
 public:
-    virtual void Install_Callback(GSocket *socket, GSocketEvent event)
+    virtual void Install_Callback(wxSocketImpl *socket, wxSocketNotify event)
     {
         wxCHECK_RET( socket->m_fd != -1,
                         "shouldn't be called on invalid socket" );
@@ -190,7 +180,7 @@ public:
         fd = AddInput(socket, d);
     }
 
-    virtual void Uninstall_Callback(GSocket *socket, GSocketEvent event)
+    virtual void Uninstall_Callback(wxSocketImpl *socket, wxSocketNotify event)
     {
         const SocketDir d = GetDirForEvent(socket, event);
 
@@ -205,7 +195,7 @@ public:
 private:
     // these functions map directly to XtAdd/RemoveInput() or
     // gdk_input_add/remove()
-    virtual int AddInput(GSocket *socket, SocketDir d) = 0;
+    virtual int AddInput(wxSocketImpl *socket, SocketDir d) = 0;
     virtual void RemoveInput(int fd) = 0;
 };
 

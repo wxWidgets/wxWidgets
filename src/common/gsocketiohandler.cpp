@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        src/common/gsocketiohandler.cpp
-// Purpose:     implementation of wxFDIOHandler for GSocket
+// Purpose:     implementation of wxFDIOHandler for wxSocket
 // Author:      Angel Vidal, Lukasz Michalski
 // Created:     08.24.06
 // RCS-ID:      $Id$
@@ -31,19 +31,47 @@
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// GSocketSelectManager
+// wxSocketImplFDIO
 // ----------------------------------------------------------------------------
 
-class GSocketSelectManager : public GSocketFDBasedManager
+class wxSocketImplFDIO : public wxSocketImplUnix
 {
 public:
-    virtual void Install_Callback(GSocket *socket, GSocketEvent event);
-    virtual void Uninstall_Callback(GSocket *socket, GSocketEvent event);
+    wxSocketImplFDIO(wxSocketBase& wxsocket)
+        : wxSocketImplUnix(wxsocket)
+    {
+        m_handler = NULL;
+    }
+
+    virtual ~wxSocketImplFDIO()
+    {
+        delete m_handler;
+    }
+
+    wxSocketIOHandler *m_handler;
 };
 
-void GSocketSelectManager::Install_Callback(GSocket *socket,
-                                            GSocketEvent event)
+// ----------------------------------------------------------------------------
+// wxSocketSelectManager
+// ----------------------------------------------------------------------------
+
+class wxSocketSelectManager : public wxSocketFDBasedManager
 {
+public:
+    virtual wxSocketImpl *CreateSocket(wxSocketBase& wxsocket)
+    {
+        return new wxSocketImplFDIO(wxsocket);
+    }
+
+    virtual void Install_Callback(wxSocketImpl *socket, wxSocketNotify event);
+    virtual void Uninstall_Callback(wxSocketImpl *socket, wxSocketNotify event);
+};
+
+void wxSocketSelectManager::Install_Callback(wxSocketImpl *socket_,
+                                             wxSocketNotify event)
+{
+    wxSocketImplFDIO * const socket = static_cast<wxSocketImplFDIO *>(socket_);
+
     const int fd = socket->m_fd;
 
     if ( fd == -1 )
@@ -55,7 +83,7 @@ void GSocketSelectManager::Install_Callback(GSocket *socket,
     if ( !dispatcher )
         return;
 
-    wxGSocketIOHandler *& handler = socket->m_handler;
+    wxSocketIOHandler *& handler = socket->m_handler;
 
     // we should register the new handlers but modify the existing ones in place
     bool registerHandler;
@@ -66,7 +94,7 @@ void GSocketSelectManager::Install_Callback(GSocket *socket,
     else // no existing handler
     {
         registerHandler = true;
-        handler = new wxGSocketIOHandler(socket);
+        handler = new wxSocketIOHandler(socket);
     }
 
     FD(socket, d) = fd;
@@ -85,9 +113,11 @@ void GSocketSelectManager::Install_Callback(GSocket *socket,
         dispatcher->ModifyFD(fd, handler, handler->GetFlags());
 }
 
-void GSocketSelectManager::Uninstall_Callback(GSocket *socket,
-                                              GSocketEvent event)
+void wxSocketSelectManager::Uninstall_Callback(wxSocketImpl *socket_,
+                                               wxSocketNotify event)
 {
+    wxSocketImplFDIO * const socket = static_cast<wxSocketImplFDIO *>(socket_);
+
     const SocketDir d = GetDirForEvent(socket, event);
 
     const int fd = FD(socket, d);
@@ -103,7 +133,7 @@ void GSocketSelectManager::Uninstall_Callback(GSocket *socket,
     if ( !dispatcher )
         return;
 
-    wxGSocketIOHandler *& handler = socket->m_handler;
+    wxSocketIOHandler *& handler = socket->m_handler;
     if ( handler )
     {
         handler->RemoveFlag(flag);
@@ -125,9 +155,9 @@ void GSocketSelectManager::Uninstall_Callback(GSocket *socket,
     }
 }
 
-GSocketManager *wxAppTraits::GetSocketManager()
+wxSocketManager *wxAppTraits::GetSocketManager()
 {
-    static GSocketSelectManager s_manager;
+    static wxSocketSelectManager s_manager;
 
     return &s_manager;
 }

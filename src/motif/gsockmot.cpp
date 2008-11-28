@@ -20,28 +20,28 @@
 
 extern "C" {
 
-static void _GSocket_Motif_Input(XtPointer data, int *WXUNUSED(fid),
+static void wxSocket_Motif_Input(XtPointer data, int *WXUNUSED(fid),
                                  XtInputId *WXUNUSED(id))
 {
-    GSocket *socket = (GSocket *)data;
+    wxSocketImpl * const socket = static_cast<wxSocketImpl *>(data);
 
     socket->Detected_Read();
 }
 
-static void _GSocket_Motif_Output(XtPointer data, int *WXUNUSED(fid),
+static void wxSocket_Motif_Output(XtPointer data, int *WXUNUSED(fid),
                                   XtInputId *WXUNUSED(id))
 {
-    GSocket *socket = (GSocket *)data;
+    wxSocketImpl * const socket = static_cast<wxSocketImpl *>(data);
 
     socket->Detected_Write();
 }
 
 }
 
-class MotifSocketManager : public GSocketInputBasedManager
+class MotifSocketManager : public wxSocketInputBasedManager
 {
 public:
-    virtual int AddInput(GSocket *socket, SocketDir d)
+    virtual int AddInput(wxSocketImpl *socket, SocketDir d)
     {
         return XtAppAddInput
                (
@@ -49,8 +49,8 @@ public:
                     socket->m_fd,
                     (XtPointer)(d == FD_OUTPUT ? XtInputWriteMask
                                                : XtInputReadMask),
-                    d == FD_OUTPUT ? _GSocket_Motif_Output
-                                   : _GSocket_Motif_Input,
+                    d == FD_OUTPUT ? wxSocket_Motif_Output
+                                   : wxSocket_Motif_Input,
                     socket
                );
     }
@@ -61,7 +61,7 @@ public:
     }
 };
 
-GSocketManager *wxGUIAppTraits::GetSocketManager()
+wxSocketManager *wxGUIAppTraits::GetSocketManager()
 {
     static MotifSocketManager s_manager;
     return &s_manager;

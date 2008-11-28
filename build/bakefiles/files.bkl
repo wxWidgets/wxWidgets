@@ -184,7 +184,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- Used on Mac OS X wxMac base, and Mac OS X darwin base -->
 <set var="BASE_COREFOUNDATION_SRC" hints="files">
     src/osx/core/cfstring.cpp
-    src/osx/core/gsockosx.cpp
     src/osx/core/stdpaths_cf.cpp
     src/osx/core/strconv_cf.cpp
     src/osx/core/utilsexc_base.cpp
@@ -545,6 +544,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="NET_UNIX_HDR" hints="files">
     wx/unix/gsockunx.h
+</set>
+
+<set var="NET_OSX_SRC" hints="files">
+    src/osx/core/gsockosx.cpp
 </set>
 
 <set var="NET_WIN32_SRC" hints="files">
@@ -3615,7 +3618,7 @@ src/osx/iphone/window.mm
     <set var="NET_PLATFORM_SRC" hints="files">
         <if cond="PLATFORM_UNIX=='1'">$(NET_UNIX_SRC)</if>
         <if cond="PLATFORM_WIN32=='1'">$(NET_WIN32_SRC) $(NET_WINCE_SRC)</if>
-        <if cond="PLATFORM_MACOSX=='1'">$(NET_UNIX_SRC)</if>
+        <if cond="PLATFORM_MACOSX=='1'">$(NET_UNIX_SRC) $(NET_OSX_SRC)</if>
         <if cond="PLATFORM_OS2=='1'">$(NET_OS2_SRC)</if>
     </set>
     <set var="NET_PLATFORM_HDR" hints="files">
@@ -3828,7 +3831,8 @@ src/osx/iphone/window.mm
         $(BASE_AND_GUI_OSX_CARBON_SRC)
         $(BASE_AND_GUI_OSX_COCOA_SRC)
         $(BASE_AND_GUI_WIN32_SRC)
-        $(NET_CMN_SRC) $(NET_UNIX_SRC) $(NET_WIN32_SRC) $(NET_WINCE_SRC)
+        $(NET_CMN_SRC) $(NET_UNIX_SRC) $(NET_OSX_SRC)
+        $(NET_WIN32_SRC) $(NET_WINCE_SRC)
         $(XML_SRC)
     </set>
 
