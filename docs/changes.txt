@@ -103,6 +103,8 @@ All (GUI):
   Also fixed a bug whereby e.g. Croatian keys didn't work, by moving more code
   to key down handler.
 - Fixed a problem with HTML list generation for wxRichTextCtrl.
+- wxRichTextCtrl no longer deletes a character when content is selected
+  before pressing Delete.
 - Fixed wxHTML's pagebreaks computation in tables (D.J.Stauffer).
 - Fixed wxHtmlWindow::SelectionToText() to correctly insert newlines after
   single-cell paragraphs.
