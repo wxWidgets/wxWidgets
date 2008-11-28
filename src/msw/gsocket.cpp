@@ -77,6 +77,12 @@ wxFORCE_LINK_MODULE(gsockmsw)
 
 #include "wx/private/socket.h"
 
+/* static */
+wxSocketImpl *wxSocketImpl::Create(wxSocketBase& wxsocket)
+{
+    return new wxSocketImplMSW(wxsocket);
+}
+
 void wxSocketImplMSW::DoClose()
 {
     wxSocketManager::Get()->

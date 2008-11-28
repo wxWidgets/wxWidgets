@@ -141,12 +141,6 @@ public:
     virtual bool OnInit() { return true; }
     virtual void OnExit() { }
 
-    // allocate/free the storage we need
-    virtual wxSocketImpl *CreateSocket(wxSocketBase& wxsocket)
-    {
-        return new wxSocketImplUnix(wxsocket);
-    }
-
 protected:
     // identifies either input or output direction
     //

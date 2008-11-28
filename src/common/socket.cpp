@@ -160,13 +160,6 @@ void wxSocketManager::Init()
 // wxSocketImpl
 // ==========================================================================
 
-/* static */
-wxSocketImpl *wxSocketImpl::Create(wxSocketBase& wxsocket)
-{
-    wxSocketManager * const manager = wxSocketManager::Get();
-    return manager ? manager->CreateSocket(wxsocket) : NULL;
-}
-
 wxSocketImpl::wxSocketImpl(wxSocketBase& wxsocket)
     : m_wxsocket(&wxsocket)
 {

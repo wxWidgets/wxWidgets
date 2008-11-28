@@ -431,6 +431,12 @@ struct servent *wxGetservbyname_r(const char *port, const char *protocol,
 #  define SOCKET_DEBUG(args)
 #endif /* __GSOCKET_DEBUG__ */
 
+/* static */
+wxSocketImpl *wxSocketImpl::Create(wxSocketBase& wxsocket)
+{
+    return new wxSocketImplUnix(wxsocket);
+}
+
 
 /*
  *  Disallow further read/write operations on this socket, close
@@ -1680,4 +1686,5 @@ wxSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf)
   return wxSOCKET_NOERROR;
 }
 #endif  /* !defined(__VISAGECPP__) */
+
 #endif  /* wxUSE_SOCKETS */

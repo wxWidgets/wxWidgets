@@ -21,7 +21,7 @@
 
     - wxSocketImpl is actually just an abstract base class having only code
       common to all platforms, the concrete implementation classes derive from
-      it and are created by wxSocketManager::CreateSocket().
+      it and are created by wxSocketImpl::Create().
 
     - Some socket operations have different implementations in console-mode and
       GUI applications. wxSocketManager class exists to abstract this in such
@@ -153,14 +153,6 @@ public:
     virtual void OnExit() = 0;
 
 
-    // create a concrete socket implementation associated with the given
-    // wxSocket object
-    //
-    // the returned object must be deleted by the caller
-    virtual wxSocketImpl *CreateSocket(wxSocketBase& wxsocket) = 0;
-
-
-
     // these functions enable or disable monitoring of the given socket for the
     // specified events inside the currently running event loop (but notice
     // that both BSD and Winsock implementations actually use socket->m_server
@@ -185,7 +177,7 @@ private:
     BSD and Winsock sockets.
 
     Objects of this class are not created directly but only via its static
-    Create() method which in turn forwards to wxSocketManager::CreateSocket().
+    Create() method which is implemented in port-specific code.
  */
 class wxSocketImpl
 {
