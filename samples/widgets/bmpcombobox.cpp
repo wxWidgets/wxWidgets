@@ -578,12 +578,16 @@ void BitmapComboBoxWidgetsPage::OnButtonLoadFromFile(wxCommandEvent& WXUNUSED(ev
     if ( sel == wxNOT_FOUND )
         sel = m_combobox->GetCount();
 
-    m_combobox->Insert(s, QueryBitmap(&s), sel);
+    wxBitmap bmp = QueryBitmap(&s);
+    if (bmp.IsOk())
+        m_combobox->Insert(s, bmp, sel);
 }
 
 void BitmapComboBoxWidgetsPage::OnButtonSetFromFile(wxCommandEvent& WXUNUSED(event))
 {
-    m_combobox->SetItemBitmap(m_combobox->GetSelection(), QueryBitmap(NULL));
+    wxBitmap bmp = QueryBitmap(NULL);
+    if (bmp.IsOk())
+        m_combobox->SetItemBitmap(m_combobox->GetSelection(), bmp);
 }
 
 void BitmapComboBoxWidgetsPage::OnButtonAddMany(wxCommandEvent& WXUNUSED(event))
@@ -661,6 +665,7 @@ void BitmapComboBoxWidgetsPage::LoadWidgetImages( wxArrayString* strings, wxImag
     if ( !wxDir::Exists(fn.GetFullPath()) ||
          !wxDir::GetAllFiles(fn.GetFullPath(),strings,wxT("*.xpm")) )
     {
+        // Try ../../samples/widgets/icons
         fn.RemoveLastDir();
         fn.RemoveLastDir();
         fn.AppendDir(wxT("icons"));
@@ -693,7 +698,7 @@ void BitmapComboBoxWidgetsPage::LoadWidgetImages( wxArrayString* strings, wxImag
     for ( i=0; i<strings->size(); i++ )
     {
         fn.SetFullName((*strings)[i]);
-        wxString name =fn.GetName();
+        wxString name = fn.GetName();
 
         // Handle few exceptions
         if ( name == wxT("bmpbtn") )
@@ -715,6 +720,11 @@ void BitmapComboBoxWidgetsPage::LoadWidgetImages( wxArrayString* strings, wxImag
 #endif
             images->Add(bmp);
             (*strings)[i] = name;
+
+            // if the combobox is empty, use as bitmap size of the image list
+            // the size of the first valid image loaded
+            if (foundSize == wxDefaultSize)
+                foundSize = bmp.GetSize();
         }
     }
 
@@ -894,7 +904,8 @@ wxBitmap BitmapComboBoxWidgetsPage::QueryBitmap(wxString* pStr)
         bitmap = LoadBitmap(filepath);
     }
 
-    wxLogDebug(wxT("%i, %i"),bitmap.GetWidth(), bitmap.GetHeight());
+    if (bitmap.IsOk())
+        wxLogDebug(wxT("%i, %i"),bitmap.GetWidth(), bitmap.GetHeight());
 
     ::wxSetCursor( *wxSTANDARD_CURSOR );
 
