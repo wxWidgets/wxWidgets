@@ -657,7 +657,7 @@ void MyFrame::MessageBox(wxCommandEvent& WXUNUSED(event))
                            "A long, long string to test out the message box "
                            "layout properly.",
                            "Message box text",
-                           wxVSCROLL | wxCENTER |
+                           wxCENTER |
                            wxNO_DEFAULT | wxYES_NO | wxCANCEL |
                            wxICON_INFORMATION);
 
