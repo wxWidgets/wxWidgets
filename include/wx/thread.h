@@ -659,12 +659,18 @@ public:
     // destructor deletes m_thread
     virtual ~wxThreadHelper() { KillThread(); }
 
+#if WXWIN_COMPATIBILITY_2_8
+    wxDEPRECATED( wxThreadError Create(unsigned int stackSize = 0) );
+#endif
+
     // create a new thread (and optionally set the stack size on platforms that
     // support/need that), call Run() to start it
-    wxThreadError Create(unsigned int stackSize = 0)
+    wxThreadError CreateThread(wxThreadKind kind = wxTHREAD_JOINABLE,
+                               unsigned int stackSize = 0)
     {
         KillThread();
 
+        m_kind = kind;
         m_thread = new wxThreadHelperThread(*this, m_kind);
 
         return m_thread->Create(stackSize);
@@ -691,6 +697,11 @@ protected:
 
     friend class wxThreadHelperThread;
 };
+
+#if WXWIN_COMPATIBILITY_2_8
+inline wxThreadError wxThreadHelper::Create(unsigned int stackSize)
+{ return CreateThread(m_kind, stackSize); }
+#endif
 
 // call Entry() in owner, put it down here to avoid circular declarations
 inline void *wxThreadHelperThread::Entry()
