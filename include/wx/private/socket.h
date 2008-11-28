@@ -3,7 +3,7 @@
 // Purpose:     wxSocketImpl nd related declarations
 // Authors:     Guilhem Lavaux, Vadim Zeitlin
 // Created:     April 1997
-// RCS-ID:      $Id$
+// RCS-ID:      $Id: socket.h 56994 2008-11-28 12:47:07Z VZ $
 // Copyright:   (c) 1997 Guilhem Lavaux
 //              (c) 2008 Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -275,12 +275,7 @@ public:
     // named) OnRequest() method
     void NotifyOnStateChange(wxSocketNotify event);
 
-    // FIXME: making these functions virtual is a hack necessary to make the
-    //        wxBase library link without requiring wxNet under Unix where
-    //        wxSocketSelectManager (part of wxBase) uses them, they don't
-    //        really need to be virtual at all
-    virtual void Detected_Read() { }
-    virtual void Detected_Write() { }
+    // FIXME: this one probably isn't needed here at all
     virtual void Notify(bool WXUNUSED(notify)) { }
 
     // TODO: make these fields protected and provide accessors for those of

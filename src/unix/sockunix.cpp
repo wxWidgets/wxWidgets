@@ -672,7 +672,7 @@ int wxSocketImplUnix::Read(char *buffer, int size)
       if (m_use_events)
       {
         m_detected = wxSOCKET_LOST_FLAG;
-        Detected_Read();
+        OnReadWaiting();
         return 0;
       }
     }
@@ -974,11 +974,10 @@ void wxSocketImplUnix::OnStateChange(wxSocketNotify event)
         Shutdown();
 }
 
-void wxSocketImplUnix::Detected_Read()
+void wxSocketImplUnix::OnReadWaiting()
 {
   char c;
 
-  /* Safeguard against straggling call to Detected_Read */
   if (m_fd == INVALID_SOCKET)
   {
     return;
@@ -1035,7 +1034,7 @@ void wxSocketImplUnix::Detected_Read()
   }
 }
 
-void wxSocketImplUnix::Detected_Write()
+void wxSocketImplUnix::OnWriteWaiting()
 {
   /* If we have already detected a LOST event, then don't try
    * to do any further processing.
@@ -1075,6 +1074,11 @@ void wxSocketImplUnix::Detected_Write()
   {
     OnStateChange(wxSOCKET_OUTPUT);
   }
+}
+
+void wxSocketImplUnix::OnExceptionWaiting()
+{
+    wxFAIL_MSG( "not supposed to be called" );
 }
 
 /*

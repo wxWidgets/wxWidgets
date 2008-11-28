@@ -23,8 +23,7 @@
 #if wxUSE_SOCKETS && wxUSE_SELECT_DISPATCHER
 
 #include "wx/apptrait.h"
-#include "wx/unix/private.h"
-#include "wx/private/socketiohandler.h"
+#include "wx/private/socket.h"
 
 // ============================================================================
 // implementation
@@ -40,15 +39,14 @@ public:
     wxSocketImplFDIO(wxSocketBase& wxsocket)
         : wxSocketImplUnix(wxsocket)
     {
-        m_handler = NULL;
     }
 
-    virtual ~wxSocketImplFDIO()
-    {
-        delete m_handler;
-    }
+    int GetFlags() const { return m_flags; }
+    void RemoveFlag(wxFDIODispatcherEntryFlags flag) { m_flags &= ~flag; }
+    void AddFlag(wxFDIODispatcherEntryFlags flag) { m_flags |= flag; }
 
-    wxSocketIOHandler *m_handler;
+private:
+    int m_flags;
 };
 
 // ----------------------------------------------------------------------------
@@ -83,34 +81,18 @@ void wxSocketSelectManager::Install_Callback(wxSocketImpl *socket_,
     if ( !dispatcher )
         return;
 
-    wxSocketIOHandler *& handler = socket->m_handler;
-
-    // we should register the new handlers but modify the existing ones in place
-    bool registerHandler;
-    if ( handler )
-    {
-        registerHandler = false;
-    }
-    else // no existing handler
-    {
-        registerHandler = true;
-        handler = new wxSocketIOHandler(socket);
-    }
-
     FD(socket, d) = fd;
-    if (d == FD_INPUT)
-    {
-        handler->AddFlag(wxFDIO_INPUT);
-    }
-    else
-    {
-        handler->AddFlag(wxFDIO_OUTPUT);
-    }
+
+    // register it when it's used for the first time, update it if it had been
+    // previously registered
+    const bool registerHandler = socket->GetFlags() == 0;
+
+    socket->AddFlag(d == FD_INPUT ? wxFDIO_INPUT : wxFDIO_OUTPUT);
 
     if ( registerHandler )
-        dispatcher->RegisterFD(fd, handler, handler->GetFlags());
+        dispatcher->RegisterFD(fd, socket, socket->GetFlags());
     else
-        dispatcher->ModifyFD(fd, handler, handler->GetFlags());
+        dispatcher->ModifyFD(fd, socket, socket->GetFlags());
 }
 
 void wxSocketSelectManager::Uninstall_Callback(wxSocketImpl *socket_,
@@ -133,25 +115,15 @@ void wxSocketSelectManager::Uninstall_Callback(wxSocketImpl *socket_,
     if ( !dispatcher )
         return;
 
-    wxSocketIOHandler *& handler = socket->m_handler;
-    if ( handler )
-    {
-        handler->RemoveFlag(flag);
+    socket->RemoveFlag(flag);
 
-        if ( !handler->GetFlags() )
-        {
-            dispatcher->UnregisterFD(fd);
-            delete handler;
-            socket->m_handler = NULL;
-        }
-        else
-        {
-            dispatcher->ModifyFD(fd, handler, handler->GetFlags());
-        }
+    if ( !socket->GetFlags() )
+    {
+        dispatcher->UnregisterFD(fd);
     }
     else
     {
-        dispatcher->UnregisterFD(fd);
+        dispatcher->ModifyFD(fd, socket, socket->GetFlags());
     }
 }
 

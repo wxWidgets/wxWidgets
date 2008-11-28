@@ -1,10 +1,12 @@
-/* -------------------------------------------------------------------------
- * Project: wxSocketImpl (Generic Socket) for WX
- * Name:    gsockpm.c
- * Purpose: wxSocketImpl: PM part
- * Licence: The wxWindows licence
- * CVSID:   $Id$
- * ------------------------------------------------------------------------- */
+///////////////////////////////////////////////////////////////////////////////
+// Name:        os2/sockpm.cpp
+// Purpose:     implementation of OS-2-specific handler event handling
+// Author:      Guilhem Lavaux, Vadim Zeitlin
+// Created:     1999
+// RCS-ID:      $Id$
+// Copyright:   (c) 1999-2008 wxWidgets dev team
+// Licence:     wxWindows licence
+///////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
@@ -21,30 +23,29 @@
 
 static void wxSocket_PM_Input(void *data)
 {
-    wxSocketImpl *socket = static_cast<wxSocketImpl *>(data);
+    wxFDIOHandler *handler = static_cast<wxFDIOHandler *>(data);
 
-    socket->Detected_Read();
+    handler->OnReadWaiting();
 }
 
 static void wxSocket_PM_Output(void *data)
 {
-    wxSocketImpl *socket = static_cast<wxSocketImpl *>(data);
+    wxFDIOHandler *handler = static_cast<wxFDIOHandler *>(data);
 
-    socket->Detected_Write();
+    handler->OnWriteWaiting();
 }
 
 class PMSocketManager : public wxSocketInputBasedManager
 {
 public:
-    virtual int AddInput(wxSocketImpl *socket, SocketDir d)
+    virtual int AddInput(wxFDIOHandler *handler, int fd, SocketDir d)
     {
-
       if (d == FD_OUTPUT)
-          return wxTheApp->AddSocketHandler(socket->m_fd, wxSockWriteMask,
-                                            wxSocket_PM_Output, (void *)socket);
+          return wxTheApp->AddSocketHandler(fd, wxSockWriteMask,
+                                            wxSocket_PM_Output, handler);
       else
-          return wxTheApp->AddSocketHandler(socket->m_fd, wxSockReadMask,
-                                            wxSocket_PM_Input, (void *)socket);
+          return wxTheApp->AddSocketHandler(fd, wxSockReadMask,
+                                            wxSocket_PM_Input, handler);
     }
 
     virtual void RemoveInput(int fd)

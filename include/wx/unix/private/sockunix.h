@@ -14,8 +14,10 @@
 
 #include <unistd.h>
 #include <sys/ioctl.h>
+#include "wx/private/fdiodispatcher.h"
 
-class wxSocketImplUnix : public wxSocketImpl
+class wxSocketImplUnix : public wxSocketImpl,
+                         public wxFDIOHandler
 {
 public:
     wxSocketImplUnix(wxSocketBase& wxsocket)
@@ -34,8 +36,11 @@ public:
     int Write(const char *buffer, int size);
     //attach or detach from main loop
     void Notify(bool flag);
-    void Detected_Read();
-    void Detected_Write();
+
+    // wxFDIOHandler methods
+    virtual void OnReadWaiting();
+    virtual void OnWriteWaiting();
+    virtual void OnExceptionWaiting();
 
 private:
     virtual wxSocketError DoHandleConnect(int ret);
@@ -160,9 +165,9 @@ protected:
     }
 
     // access the FDs we store
-    int& FD(wxSocketImpl *socket, SocketDir d)
+    int& FD(wxSocketImplUnix *socket, SocketDir d)
     {
-        return static_cast<wxSocketImplUnix *>(socket)->m_fds[d];
+        return socket->m_fds[d];
     }
 };
 
@@ -171,8 +176,11 @@ protected:
 class wxSocketInputBasedManager : public wxSocketFDBasedManager
 {
 public:
-    virtual void Install_Callback(wxSocketImpl *socket, wxSocketNotify event)
+    virtual void Install_Callback(wxSocketImpl *socket_, wxSocketNotify event)
     {
+        wxSocketImplUnix * const
+            socket = static_cast<wxSocketImplUnix *>(socket_);
+
         wxCHECK_RET( socket->m_fd != -1,
                         "shouldn't be called on invalid socket" );
 
@@ -182,11 +190,14 @@ public:
         if ( fd != -1 )
             RemoveInput(fd);
 
-        fd = AddInput(socket, d);
+        fd = AddInput(socket, socket->m_fd, d);
     }
 
-    virtual void Uninstall_Callback(wxSocketImpl *socket, wxSocketNotify event)
+    virtual void Uninstall_Callback(wxSocketImpl *socket_, wxSocketNotify event)
     {
+        wxSocketImplUnix * const
+            socket = static_cast<wxSocketImplUnix *>(socket_);
+
         const SocketDir d = GetDirForEvent(socket, event);
 
         int& fd = FD(socket, d);
@@ -200,7 +211,7 @@ public:
 private:
     // these functions map directly to XtAdd/RemoveInput() or
     // gdk_input_add/remove()
-    virtual int AddInput(wxSocketImpl *socket, SocketDir d) = 0;
+    virtual int AddInput(wxFDIOHandler *handler, int fd, SocketDir d) = 0;
     virtual void RemoveInput(int fd) = 0;
 };
 

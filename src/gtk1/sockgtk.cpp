@@ -28,26 +28,26 @@ void wxSocket_GDK_Input(gpointer data,
                         gint WXUNUSED(source),
                         GdkInputCondition condition)
 {
-  wxSocketImpl const *socket = static_cast<wxSocketImpl *>(data);
+    wxFDIOHandler * const handler = static_cast<wxFDIOHandler *>(data);
 
-  if ( condition & GDK_INPUT_READ )
-    socket->Detected_Read();
-  if ( condition & GDK_INPUT_WRITE )
-    socket->Detected_Write();
+    if ( condition & GDK_INPUT_READ )
+        handler->OnReadWaiting();
+    if ( condition & GDK_INPUT_WRITE )
+        handler->OnWriteWaiting();
 }
 }
 
 class GTKSocketManager : public wxSocketInputBasedManager
 {
 public:
-    virtual int AddInput(wxSocketImpl *socket, SocketDir d)
+    virtual int AddInput(wxFDIOHandler *handler, int fd, SocketDir d)
     {
         return gdk_input_add
                (
-                    socket->m_fd,
+                    fd,
                     d == FD_OUTPUT ? GDK_INPUT_WRITE : GDK_INPUT_READ,
                     wxSocket_GDK_Input,
-                    socket
+                    handler
                );
     }
 

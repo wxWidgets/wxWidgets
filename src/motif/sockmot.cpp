@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        motif/gsockmot.cpp
+// Name:        motif/sockmot.cpp
 // Purpose:     implementation of wxMotif-specific socket event handling
 // Author:      Guilhem Lavaux, Vadim Zeitlin
 // Created:     1999
@@ -23,17 +23,17 @@ extern "C" {
 static void wxSocket_Motif_Input(XtPointer data, int *WXUNUSED(fid),
                                  XtInputId *WXUNUSED(id))
 {
-    wxSocketImpl * const socket = static_cast<wxSocketImpl *>(data);
+    wxFDIOHandler * const handler = static_cast<wxFDIOHandler *>(data);
 
-    socket->Detected_Read();
+    handler->OnReadWaiting();
 }
 
 static void wxSocket_Motif_Output(XtPointer data, int *WXUNUSED(fid),
                                   XtInputId *WXUNUSED(id))
 {
-    wxSocketImpl * const socket = static_cast<wxSocketImpl *>(data);
+    wxFDIOHandler * const handler = static_cast<wxFDIOHandler *>(data);
 
-    socket->Detected_Write();
+    handler->OnWriteWaiting();
 }
 
 }
@@ -41,17 +41,17 @@ static void wxSocket_Motif_Output(XtPointer data, int *WXUNUSED(fid),
 class MotifSocketManager : public wxSocketInputBasedManager
 {
 public:
-    virtual int AddInput(wxSocketImpl *socket, SocketDir d)
+    virtual int AddInput(wxFDIOHandler *handler, int fd, SocketDir d)
     {
         return XtAppAddInput
                (
                     wxGetAppContext(),
-                    socket->m_fd,
+                    fd,
                     (XtPointer)(d == FD_OUTPUT ? XtInputWriteMask
                                                : XtInputReadMask),
                     d == FD_OUTPUT ? wxSocket_Motif_Output
                                    : wxSocket_Motif_Input,
-                    socket
+                    handler
                );
     }
 
