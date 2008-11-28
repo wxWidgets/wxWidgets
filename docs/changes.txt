@@ -105,6 +105,8 @@ All (GUI):
 - Fixed a problem with HTML list generation for wxRichTextCtrl.
 - wxRichTextCtrl no longer deletes a character when content is selected
   before pressing Delete.
+- Fixed inability to select no superscript and no subscript in wxRichTextCtrl's
+  formatting dialog.
 - Fixed wxHTML's pagebreaks computation in tables (D.J.Stauffer).
 - Fixed wxHtmlWindow::SelectionToText() to correctly insert newlines after
   single-cell paragraphs.
