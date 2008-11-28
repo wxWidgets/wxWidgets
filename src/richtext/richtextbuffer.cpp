@@ -3618,12 +3618,12 @@ void wxRichTextParagraph::ApplyParagraphStyle(const wxTextAttr& attr, const wxRe
         // centering, right-justification
         if (attr.HasAlignment() && GetAttributes().GetAlignment() == wxTEXT_ALIGNMENT_CENTRE)
         {
-            pos.x = (rect.GetWidth() - size.x)/2 + pos.x;
+            pos.x = (rect.GetWidth() - (pos.x - rect.x) - size.x)/2 + pos.x;
             line->SetPosition(pos);
         }
         else if (attr.HasAlignment() && GetAttributes().GetAlignment() == wxTEXT_ALIGNMENT_RIGHT)
         {
-            pos.x = pos.x + rect.GetWidth() - size.x;
+            pos.x = rect.x + rect.GetWidth() - size.x;
             line->SetPosition(pos);
         }
 
@@ -4228,7 +4228,7 @@ bool wxRichTextParagraph::FindWrapPosition(const wxRichTextRange& range, wxDC& d
             widthBefore = 0;
 
         size_t i;
-        for (i = (size_t) range.GetStart(); i < (size_t) range.GetEnd(); i++)
+        for (i = (size_t) range.GetStart(); i= < (size_t) range.GetEnd(); i++)
         {
             int widthFromStartOfThisRange = (*partialExtents)[i - GetRange().GetStart()] - widthBefore;
 
@@ -5473,7 +5473,7 @@ wxTextAttr wxRichTextBuffer::GetStyleForNewParagraph(long pos, bool caretPositio
                 if (para->GetAttributes().HasBulletNumber())
                     attr.SetBulletNumber(para->GetAttributes().GetBulletNumber());
             }
-		}
+        }
 
         if (!foundAttributes)
         {
