@@ -431,16 +431,6 @@ struct servent *wxGetservbyname_r(const char *port, const char *protocol,
 #  define SOCKET_DEBUG(args)
 #endif /* __GSOCKET_DEBUG__ */
 
-/* Constructors / Destructors for wxSocketImplUnix */
-
-wxSocketImplUnix::wxSocketImplUnix(wxSocketBase& wxsocket)
-    : wxSocketImpl(wxsocket)
-{
-    m_fds[0] =
-    m_fds[1] = -1;
-
-    m_use_events = false;
-}
 
 /*
  *  Disallow further read/write operations on this socket, close

@@ -15,12 +15,17 @@
 #include <unistd.h>
 #include <sys/ioctl.h>
 
-class wxSocketIOHandler;
-
 class wxSocketImplUnix : public wxSocketImpl
 {
 public:
-    wxSocketImplUnix(wxSocketBase& wxsocket);
+    wxSocketImplUnix(wxSocketBase& wxsocket)
+        : wxSocketImpl(wxsocket)
+    {
+        m_fds[0] =
+        m_fds[1] = -1;
+
+        m_use_events = false;
+    }
 
     virtual void Shutdown();
     virtual wxSocketImpl *WaitConnection(wxSocketBase& wxsocket);
