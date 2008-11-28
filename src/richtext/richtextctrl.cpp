@@ -872,13 +872,12 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
 
         long newPos = m_caretPosition;
 
-        DeleteSelectedContent(& newPos);
+        bool processed = DeleteSelectedContent(& newPos);
 
         // Submit range in character positions, which are greater than caret positions,
         // so subtract 1 for deleted character and add 1 for conversion to character position.
         if (newPos > -1)
         {
-            bool processed = false;
             if (event.CmdDown())
             {
                 long pos = wxRichTextCtrl::FindNextWordPosition(-1);
@@ -922,12 +921,11 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
 
         long newPos = m_caretPosition;
 
-        DeleteSelectedContent(& newPos);
+        bool processed = DeleteSelectedContent(& newPos);
 
         // Submit range in character positions, which are greater than caret positions,
         if (newPos < GetBuffer().GetRange().GetEnd()+1)
         {
-            bool processed = false;
             if (event.CmdDown())
             {
                 long pos = wxRichTextCtrl::FindNextWordPosition(1);
