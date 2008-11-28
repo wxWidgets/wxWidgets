@@ -180,7 +180,8 @@ public:
                 const wxString& name = wxBitmapComboBoxNameStr);
 
     /**
-        Returns size of bitmaps used in the list.
+        Returns the size of the bitmaps used in the combo box.
+        If the combo box is empty, then ::wxDefaultSize is returned.
     */
     virtual wxSize GetBitmapSize() const;
 

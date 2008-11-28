@@ -48,7 +48,7 @@ void wxBitmapComboBox::Init()
 {
     m_bitmapCellIndex = 0;
     m_stringCellIndex = 1;
-    m_bitmapSize = wxSize(0, 0);
+    m_bitmapSize = wxSize(-1, -1);
 }
 
 wxBitmapComboBox::wxBitmapComboBox(wxWindow *parent,
@@ -129,7 +129,7 @@ void wxBitmapComboBox::GTKCreateComboBoxWidget()
 
     // This must be called as gtk_combo_box_entry_new_with_model adds
     // automatically adds one text column.
-    gtk_cell_layout_clear( GTK_CELL_LAYOUT(m_widget) ); 
+    gtk_cell_layout_clear( GTK_CELL_LAYOUT(m_widget) );
 
     GtkCellRenderer* imageRenderer = gtk_cell_renderer_pixbuf_new();
     gtk_cell_layout_pack_start( GTK_CELL_LAYOUT(m_widget),
@@ -160,7 +160,7 @@ GdkWindow *wxBitmapComboBox::GTKGetWindow(wxArrayGdkWindows& windows) const
 {
     if ( GetEntry() )
         return wxComboBox::GTKGetWindow(windows);
-    
+
     return wxChoice::GTKGetWindow(windows);
 }
 
@@ -172,7 +172,7 @@ void wxBitmapComboBox::SetItemBitmap(unsigned int n, const wxBitmap& bitmap)
 {
     if ( bitmap.IsOk() )
     {
-        if ( m_bitmapSize.x == 0 )
+        if ( m_bitmapSize.x < 0 )
         {
             m_bitmapSize.x = bitmap.GetWidth();
             m_bitmapSize.y = bitmap.GetHeight();
