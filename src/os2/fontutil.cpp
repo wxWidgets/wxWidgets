@@ -233,7 +233,7 @@ bool wxTestFontEncoding( const wxNativeEncodingInfo& rInfo )
     vLogFont.fsFontUse = FATTR_FONTUSE_OUTLINE |      // only outline fonts allowed
                          FATTR_FONTUSE_TRANSFORMABLE; // may be transformed
 
-    wxStrncpy((wxChar*)vLogFont.szFacename, rInfo.facename.c_str(), WXSIZEOF(vLogFont.szFacename));
+    wxStrlcpy((wxChar*)vLogFont.szFacename, rInfo.facename.c_str(), WXSIZEOF(vLogFont.szFacename));
 
     if (!::GpiCreateLogFont( hPS
                             ,NULL
@@ -549,7 +549,7 @@ void wxOS2SelectMatchingFontByName(
             break;
     }
 
-    wxStrncpy(zFontFaceName, sFaceName.c_str(), WXSIZEOF(zFontFaceName));
+    wxStrlcpy(zFontFaceName, sFaceName.c_str(), WXSIZEOF(zFontFaceName));
     nPointSize = pFont->GetPointSize();
 
     //

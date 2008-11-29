@@ -132,7 +132,7 @@ bool wxGetHostName(wxChar *WXUNUSED_IN_WINCE(buf),
 #if defined(__WXWINCE__)
     // TODO-CE
     return false;
-#elif defined(__WIN32__) && !defined(__WXMICROWIN__)
+#else
     DWORD nSize = maxSize;
     if ( !::GetComputerName(buf, &nSize) )
     {
@@ -142,16 +142,6 @@ bool wxGetHostName(wxChar *WXUNUSED_IN_WINCE(buf),
     }
 
     return true;
-#else
-    wxChar *sysname;
-    const wxChar *default_host = wxT("noname");
-
-    if ((sysname = wxGetenv(wxT("SYSTEM_NAME"))) == NULL) {
-        GetProfileString(WX_SECTION, eHOSTNAME, default_host, buf, maxSize - 1);
-    } else
-        wxStrncpy(buf, sysname, maxSize - 1);
-    buf[maxSize] = wxT('\0');
-    return *buf ? true : false;
 #endif
 }
 
@@ -228,7 +218,7 @@ bool wxGetFullHostName(wxChar *buf, int maxSize)
 
             if ( !host.empty() )
             {
-                wxStrncpy(buf, host, maxSize);
+                wxStrlcpy(buf, host, maxSize);
 
                 return true;
             }
@@ -246,7 +236,7 @@ bool wxGetUserId(wxChar *WXUNUSED_IN_WINCE(buf),
 #if defined(__WXWINCE__)
     // TODO-CE
     return false;
-#elif defined(__WIN32__) && !defined(__WXMICROWIN__)
+#else
     DWORD nSize = maxSize;
     if ( ::GetUserName(buf, &nSize) == 0 )
     {
@@ -260,24 +250,6 @@ bool wxGetUserId(wxChar *WXUNUSED_IN_WINCE(buf),
     }
 
     return true;
-#else   // __WXMICROWIN__
-    wxChar *user;
-    const wxChar *default_id = wxT("anonymous");
-
-    // Can't assume we have NIS (PC-NFS) or some other ID daemon
-    // So we ...
-    if ( (user = wxGetenv(wxT("USER"))) == NULL &&
-         (user = wxGetenv(wxT("LOGNAME"))) == NULL )
-    {
-        // Use wxWidgets configuration data (comming soon)
-        GetProfileString(WX_SECTION, eUSERID, default_id, buf, maxSize - 1);
-    }
-    else
-    {
-        wxStrncpy(buf, user, maxSize - 1);
-    }
-
-    return *buf ? true : false;
 #endif
 }
 
@@ -294,8 +266,7 @@ bool wxGetUserName(wxChar *buf, int maxSize)
     wxString name;
     if(!key.QueryValue(wxT("Owner"),name))
         return false;
-    wxStrncpy(buf, name.c_str(), maxSize-1);
-    buf[maxSize-1] = _T('\0');
+    wxStrlcpy(buf, name.c_str(), maxSize);
     return true;
 #elif defined(USE_NET_API)
     CHAR szUserName[256];
@@ -374,7 +345,7 @@ error:
 
     if ( !ok )
     {
-        wxStrncpy(buf, wxT("Unknown User"), maxSize);
+        wxStrlcpy(buf, wxT("Unknown User"), maxSize);
     }
 
     return true;

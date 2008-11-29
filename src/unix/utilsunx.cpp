@@ -777,16 +777,14 @@ static bool wxGetHostNameInternal(wxChar *buf, int sz)
     bool ok = uname(&uts) != -1;
     if ( ok )
     {
-        wxStrncpy(buf, wxSafeConvertMB2WX(uts.nodename), sz - 1);
-        buf[sz] = wxT('\0');
+        wxStrlcpy(buf, wxSafeConvertMB2WX(uts.nodename), sz);
     }
 #elif defined(HAVE_GETHOSTNAME)
     char cbuf[sz];
     bool ok = gethostname(cbuf, sz) != -1;
     if ( ok )
     {
-        wxStrncpy(buf, wxSafeConvertMB2WX(cbuf), sz - 1);
-        buf[sz] = wxT('\0');
+        wxStrlcpy(buf, wxSafeConvertMB2WX(cbuf), sz);
     }
 #else // no uname, no gethostname
     wxFAIL_MSG(wxT("don't know host name for this machine"));
@@ -839,7 +837,7 @@ bool wxGetFullHostName(wxChar *buf, int sz)
             else
             {
                 // the canonical name
-                wxStrncpy(buf, wxSafeConvertMB2WX(host->h_name), sz);
+                wxStrlcpy(buf, wxSafeConvertMB2WX(host->h_name), sz);
             }
         }
         //else: it's already a FQDN (BSD behaves this way)
@@ -855,7 +853,7 @@ bool wxGetUserId(wxChar *buf, int sz)
     *buf = wxT('\0');
     if ((who = getpwuid(getuid ())) != NULL)
     {
-        wxStrncpy (buf, wxSafeConvertMB2WX(who->pw_name), sz - 1);
+        wxStrlcpy (buf, wxSafeConvertMB2WX(who->pw_name), sz);
         return true;
     }
 
@@ -873,7 +871,7 @@ bool wxGetUserName(wxChar *buf, int sz)
        char *comma = strchr(who->pw_gecos, ',');
        if (comma)
            *comma = '\0'; // cut off non-name comment fields
-       wxStrncpy (buf, wxSafeConvertMB2WX(who->pw_gecos), sz - 1);
+       wxStrlcpy(buf, wxSafeConvertMB2WX(who->pw_gecos), sz);
        return true;
     }
 

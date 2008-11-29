@@ -87,6 +87,56 @@ wxArrayString wxStringTokenize(const wxString& string,
                                wxStringTokenizerMode mode = wxTOKEN_DEFAULT);
 
 /**
+    Safe and more convenient replacement for strncpy().
+
+    This function copies the source string @a src to the destination buffer @a
+    dst of size @a n without overflowing the buffer and ensuring that it is
+    always @NUL-terminated.
+
+    Example of use:
+    @code
+        char buf[256];
+        if ( wxStrlcpy(buf, GetSomeString(), WXSIZEOF(buf)) > WXSIZEOF(buf) )
+            ... handle truncation ...
+    @endcode
+    Notice that using wxStrncpy() in similar way is wrong, the above is broadly
+    equivalent to
+    @code
+        char buf[256];
+        buf[WXSIZEOF(buf) - 1] = '\0';
+        wxStrncpy(buf, GetSomeString(), WXSIZEOF(buf) - 1);
+        if ( buf[WXSIZEOF(buf) - 1] != '\0' )
+        {
+            ... truncation occurred ...
+            // need to NUL-terminate string manually
+            buf[WXSIZEOF(buf) - 1] = '\0';
+        }
+    @endcode
+    which should explain the advantage of using wxStrlcpy().
+
+    Notice that this function is similar to the OpenBSD strlcpy() function.
+
+    The template parameter @a T can be either @c char or @c wchar_t.
+
+    @param dst
+        Destination buffer of size (greater or) equal to @a n.
+    @param src
+        @NUL-terminated source string.
+    @param n
+        The size of the destination buffer.
+    @return
+        The length of @a src, if the returned value is greater or equal to @a n
+        then there was not enough space in the destination buffer and the
+        string was truncated.
+
+    @since{2.9.0}
+
+    @header{wx/wxcrt.h}
+ */
+template <typename T>
+size_t wxStrlcpy(T *dst, const T *src, size_t n);
+
+/**
     This function replaces the dangerous standard function @e sprintf() and is
     like @e snprintf() available on some platforms. The only difference with
     @e sprintf() is that an additional argument - buffer size - is taken and

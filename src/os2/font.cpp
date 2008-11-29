@@ -697,7 +697,7 @@ bool wxNativeFontInfo::SetFaceName(
   const wxString&                   sFacename
 )
 {
-    wxStrncpy((wxChar*)fa.szFacename, sFacename, WXSIZEOF(fa.szFacename));
+    wxStrlcpy((wxChar*)fa.szFacename, sFacename, WXSIZEOF(fa.szFacename));
     return true;
 } // end of wxNativeFontInfo::SetFaceName
 

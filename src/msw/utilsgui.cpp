@@ -123,10 +123,9 @@ wxChar *wxLoadUserResource(const wxString& resourceName, const wxString& resourc
 
     // Not all compilers put a zero at the end of the resource (e.g. BC++ doesn't).
     // so we need to find the length of the resource.
-    int len = ::SizeofResource(wxGetInstance(), hResource);
-    wxChar  *s = new wxChar[len+1];
-    wxStrncpy(s,theText,len);
-    s[len]=0;
+    int len = ::SizeofResource(wxGetInstance(), hResource) + 1;
+    wxChar *s = new wxChar[len];
+    wxStrlcpy(s, theText, len);
 
     // Obsolete in WIN32
 #ifndef __WIN32__

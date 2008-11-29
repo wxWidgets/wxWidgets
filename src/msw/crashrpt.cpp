@@ -247,8 +247,7 @@ bool wxCrashReportImpl::Generate(int flags, EXCEPTION_POINTERS *ep)
 /* static */
 void wxCrashReport::SetFileName(const wxString& filename)
 {
-    wxStrncpy(gs_reportFilename, filename.c_str(), WXSIZEOF(gs_reportFilename) - 1);
-    gs_reportFilename[WXSIZEOF(gs_reportFilename) - 1] = _T('\0');
+    wxStrlcpy(gs_reportFilename, filename.wx_str(), WXSIZEOF(gs_reportFilename));
 }
 
 /* static */

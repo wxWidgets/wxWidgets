@@ -807,7 +807,7 @@ bool wxDialUpManagerMSW::Dial(const wxString& nameOfISP,
 
     RASDIALPARAMS rasDialParams;
     rasDialParams.dwSize = sizeof(rasDialParams);
-    wxStrncpy(rasDialParams.szEntryName, entryName, RAS_MaxEntryName);
+    wxStrlcpy(rasDialParams.szEntryName, entryName, RAS_MaxEntryName);
 
     // do we have the username and password?
     if ( !username || !password )
@@ -829,8 +829,8 @@ bool wxDialUpManagerMSW::Dial(const wxString& nameOfISP,
     }
     else
     {
-        wxStrncpy(rasDialParams.szUserName, username, UNLEN);
-        wxStrncpy(rasDialParams.szPassword, password, PWLEN);
+        wxStrlcpy(rasDialParams.szUserName, username, UNLEN);
+        wxStrlcpy(rasDialParams.szPassword, password, PWLEN);
     }
 
     // default values for other fields

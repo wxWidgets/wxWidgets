@@ -149,7 +149,7 @@ wxDataFormat wxRegisterClipboardFormat(char *WXUNUSED(formatName))
 bool wxGetClipboardFormatName(const wxDataFormat& dataFormat, char *formatName,
                               int maxCount)
 {
-    wxStrncpy( formatName, dataFormat.GetId().c_str(), maxCount );
+    wxStrlcpy( formatName, dataFormat.GetId().c_str(), maxCount );
 
     return true;
 }

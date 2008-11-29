@@ -1068,8 +1068,7 @@ const wxChar *wxSysErrorMsg(unsigned long nErrCode)
 #if !defined(__SMARTPHONE__) /* of WinCE */
     if( lpMsgBuf != 0 )
     {
-        wxStrncpy(s_szBuf, (const wxChar *)lpMsgBuf, WXSIZEOF(s_szBuf) - 1);
-        s_szBuf[WXSIZEOF(s_szBuf) - 1] = wxS('\0');
+        wxStrlcpy(s_szBuf, (const wxChar *)lpMsgBuf, WXSIZEOF(s_szBuf));
 
         LocalFree(lpMsgBuf);
 

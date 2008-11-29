@@ -233,7 +233,7 @@ bool wxGetUserId(wxChar *buf, int n)
     if (!user)
         user = _T("user");
 
-    wxStrncpy(buf, user, n);
+    wxStrlcpy(buf, user, n);
     return true;
 }
 
@@ -254,7 +254,7 @@ bool wxGetHostName(wxChar *buf, int n)
     if (!host)
         host = _T("host");
 
-    wxStrncpy(buf, host, n);
+    wxStrlcpy(buf, host, n);
     return true;
 }
 

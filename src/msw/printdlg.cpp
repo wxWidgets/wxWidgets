@@ -412,10 +412,9 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
         {
             // NB: the cast is needed in the ANSI build, strangely enough
             //     dmDeviceName is BYTE[] and not char[] there
-            wxStrncpy(reinterpret_cast<wxChar *>(devMode->dmDeviceName),
+            wxStrlcpy(reinterpret_cast<wxChar *>(devMode->dmDeviceName),
                       name.wx_str(),
-                      WXSIZEOF(devMode->dmDeviceName) - 1);
-            devMode->dmDeviceName[WXSIZEOF(devMode->dmDeviceName) - 1] = wxT('\0');
+                      WXSIZEOF(devMode->dmDeviceName));
         }
 
         //// Colour

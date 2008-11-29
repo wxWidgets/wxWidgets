@@ -3850,8 +3850,7 @@ bool wxWindowMSW::HandleTooltipNotify(WXUINT code,
         // if we got TTN_NEEDTEXTW in Unicode build: in this case we just have
         // to copy the string we have into the buffer
         static wxChar buf[513];
-        wxStrncpy(buf, ttip.c_str(), WXSIZEOF(buf) - 1);
-        buf[WXSIZEOF(buf) - 1] = _T('\0');
+        wxStrlcpy(buf, ttip.c_str(), WXSIZEOF(buf));
         ttText->lpszText = buf;
     }
 

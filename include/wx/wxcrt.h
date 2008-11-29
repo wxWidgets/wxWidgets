@@ -231,6 +231,36 @@ inline char *wxStrncpy(char *dest, const wchar_t *src, size_t n)
 inline wchar_t *wxStrncpy(wchar_t *dest, const char *src, size_t n)
     { return wxCRT_StrncpyW(dest, wxConvLibc.cMB2WC(src), n); }
 
+// this is a new function so we don't care about backwards compatibility and
+// so don't need to support wchar_t/char overloads
+inline size_t wxStrlcpy(char *dest, const char *src, size_t n)
+{
+    const size_t len = wxCRT_StrlenA(src);
+
+    if ( n )
+    {
+        if ( n-- > len )
+            n = len;
+        wxCRT_StrncpyA(dest, src, n);
+        dest[n] = '\0';
+    }
+
+    return len;
+}
+inline size_t wxStrlcpy(wchar_t *dest, const wchar_t *src, size_t n)
+{
+    const size_t len = wxCRT_StrlenW(src);
+    if ( n )
+    {
+        if ( n-- > len )
+            n = len;
+        wxCRT_StrncpyW(dest, src, n);
+        dest[n] = L'\0';
+    }
+
+    return len;
+}
+
 inline char *wxStrcat(char *dest, const char *src)
     { return wxCRT_StrcatA(dest, src); }
 inline wchar_t *wxStrcat(wchar_t *dest, const wchar_t *src)

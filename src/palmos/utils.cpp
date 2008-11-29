@@ -97,7 +97,7 @@ bool wxGetUserName(wxChar *buf, int maxSize)
         return false;
     }
 
-    wxStrncpy (buf, wxSafeConvertMB2WX(id), maxSize - 1);
+    wxStrlcpy(buf, wxSafeConvertMB2WX(id), maxSize);
 
     // free the buffer
     MemPtrUnlock(id);

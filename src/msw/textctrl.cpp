@@ -2447,7 +2447,7 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
         cf.yHeight = 20*font.GetPointSize(); // 1 pt = 20 twips
         cf.bCharSet = lf.lfCharSet;
         cf.bPitchAndFamily = lf.lfPitchAndFamily;
-        wxStrncpy( cf.szFaceName, lf.lfFaceName, WXSIZEOF(cf.szFaceName) );
+        wxStrlcpy(cf.szFaceName, lf.lfFaceName, WXSIZEOF(cf.szFaceName));
 
         // also deal with underline/italic/bold attributes: note that we must
         // always set CFM_ITALIC &c bits in dwMask, even if we don't set the

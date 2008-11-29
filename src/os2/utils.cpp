@@ -93,13 +93,12 @@ bool wxGetHostName( wxChar* zBuf, int nMaxSize )
                                 ,(void*)zBuf
                                 ,(ULONG)nMaxSize - 1
                                );
+        zBuf[nMaxSize] = _T('\0');
     }
     else
     {
-        wxStrncpy(zBuf, zSysname, nMaxSize - 1);
+        wxStrlcpy(zBuf, zSysname, nMaxSize);
     }
-
-    zBuf[nMaxSize] = _T('\0');
 #endif
 
     return *zBuf ? true : false;
@@ -121,7 +120,7 @@ bool wxGetUserName( wxChar* zBuf, int nMaxSize )
 #ifdef USE_NET_API
     wxGetUserId( zBuf, nMaxSize );
 #else
-    wxStrncpy(zBuf, _T("Unknown User"), nMaxSize);
+    wxStrlcpy(zBuf, _T("Unknown User"), nMaxSize);
 #endif
     return true;
 }

@@ -120,7 +120,7 @@ void wxFontEnumeratorHelper::DoEnumerate()
 #ifdef __WIN32__
     LOGFONT lf;
     lf.lfCharSet = m_charset;
-    wxStrncpy(lf.lfFaceName, m_facename, WXSIZEOF(lf.lfFaceName));
+    wxStrlcpy(lf.lfFaceName, m_facename, WXSIZEOF(lf.lfFaceName));
     lf.lfPitchAndFamily = 0;
     ::EnumFontFamiliesEx(hDC, &lf, (wxFONTENUMPROC)wxFontEnumeratorProc,
                          (LPARAM)this, 0) ;

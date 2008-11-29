@@ -162,7 +162,7 @@ bool wxTestFontEncoding(const wxNativeEncodingInfo& info)
     wxZeroMemory(lf);       // all default values
 
     lf.lfCharSet = (BYTE)info.charset;
-    wxStrncpy(lf.lfFaceName, info.facename, WXSIZEOF(lf.lfFaceName));
+    wxStrlcpy(lf.lfFaceName, info.facename, WXSIZEOF(lf.lfFaceName));
 
     HFONT hfont = ::CreateFontIndirect(&lf);
     if ( !hfont )

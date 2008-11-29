@@ -664,8 +664,8 @@ static void RegisterAndStoreClassName(const wxString& uniqueClassName,
                                       WNDCLASS *lpWndClass)
 {
     const size_t length = uniqueClassName.length() + 1; // for trailing NUL
-    wxChar *newChars = new wxChar[length];
-    wxStrncpy(newChars, uniqueClassName, length);
+    wxChar * const newChars = new wxChar[length];
+    wxStrlcpy(newChars, uniqueClassName, length);
     *className = newChars;
     lpWndClass->lpszClassName = *className;
 

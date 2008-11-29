@@ -494,8 +494,7 @@ int wxFileDialog::ShowModal()
 
     //=== Setting defaultFileName >>=========================================
 
-    wxStrncpy(fileNameBuffer, m_fileName, wxMAXPATH-1);
-    fileNameBuffer[ wxMAXPATH-1 ] = wxT('\0');
+    wxStrlcpy(fileNameBuffer, m_fileName, WXSIZEOF(fileNameBuffer));
 
     of.lpstrFile = fileNameBuffer;  // holds returned filename
     of.nMaxFile  = wxMAXPATH;
@@ -596,8 +595,7 @@ int wxFileDialog::ShowModal()
                 extension = extension + wxStrlen( extension ) + 1;
 
             m_fileName = AppendExtension(fileNameBuffer, extension);
-            wxStrncpy(fileNameBuffer, m_fileName.c_str(), wxMin(m_fileName.length(), wxMAXPATH-1));
-            fileNameBuffer[wxMin(m_fileName.length(), wxMAXPATH-1)] = wxT('\0');
+            wxStrlcpy(fileNameBuffer, m_fileName.c_str(), WXSIZEOF(fileNameBuffer));
         }
 
         m_path = fileNameBuffer;

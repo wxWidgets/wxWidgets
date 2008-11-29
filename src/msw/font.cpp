@@ -618,9 +618,7 @@ void wxNativeFontInfo::SetUnderlined(bool underlined)
 
 bool wxNativeFontInfo::SetFaceName(const wxString& facename)
 {
-    size_t len = WXSIZEOF(lf.lfFaceName);
-    wxStrncpy(lf.lfFaceName, facename, len);
-    lf.lfFaceName[len - 1] = '\0';    // truncate the face name
+    wxStrlcpy(lf.lfFaceName, facename, WXSIZEOF(lf.lfFaceName));
     return true;
 }
 
