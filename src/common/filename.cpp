@@ -2404,52 +2404,51 @@ wxString wxFileName::GetHumanReadableSize(const wxString &failmsg, int precision
 
 #if defined( __WXOSX_MAC__ ) && wxOSX_USE_CARBON
 
-const short kMacExtensionMaxLength = 16 ;
+namespace
+{
+
 class MacDefaultExtensionRecord
 {
-public :
-  MacDefaultExtensionRecord()
-  {
-    m_ext[0] = 0 ;
-    m_type = m_creator = 0 ;
-  }
-  MacDefaultExtensionRecord( const MacDefaultExtensionRecord& from )
-  {
-    wxStrcpy( m_ext , from.m_ext ) ;
-    m_type = from.m_type ;
-    m_creator = from.m_creator ;
-  }
-  MacDefaultExtensionRecord( const wxChar * extension , OSType type , OSType creator )
-  {
-    wxStrncpy( m_ext , extension , kMacExtensionMaxLength ) ;
-    m_ext[kMacExtensionMaxLength] = 0 ;
-    m_type = type ;
-    m_creator = creator ;
-  }
-  wxChar m_ext[kMacExtensionMaxLength] ;
-  OSType m_type ;
-  OSType m_creator ;
-}  ;
+public:
+    MacDefaultExtensionRecord()
+    {
+        m_type =
+        m_creator = 0 ;
+    }
 
-WX_DECLARE_OBJARRAY(MacDefaultExtensionRecord, MacDefaultExtensionArray) ;
+    // default copy ctor, assignment operator and dtor are ok
 
-bool gMacDefaultExtensionsInited = false ;
+    MacDefaultExtensionRecord(const wxString& ext, OSType type, OSType creator)
+        : m_ext(ext)
+    {
+        m_type = type;
+        m_creator = creator;
+    }
+
+    wxString m_ext;
+    OSType m_type;
+    OSType m_creator;
+};
+
+WX_DECLARE_OBJARRAY(MacDefaultExtensionRecord, MacDefaultExtensionArray);
+
+bool gMacDefaultExtensionsInited = false;
 
 #include "wx/arrimpl.cpp"
 
-WX_DEFINE_EXPORTED_OBJARRAY(MacDefaultExtensionArray) ;
+WX_DEFINE_EXPORTED_OBJARRAY(MacDefaultExtensionArray);
 
-MacDefaultExtensionArray gMacDefaultExtensions ;
+MacDefaultExtensionArray gMacDefaultExtensions;
 
 // load the default extensions
-MacDefaultExtensionRecord gDefaults[] =
+const MacDefaultExtensionRecord gDefaults[] =
 {
-    MacDefaultExtensionRecord( wxT("txt") , 'TEXT' , 'ttxt' ) ,
-    MacDefaultExtensionRecord( wxT("tif") , 'TIFF' , '****' ) ,
-    MacDefaultExtensionRecord( wxT("jpg") , 'JPEG' , '****' ) ,
-} ;
+    MacDefaultExtensionRecord( "txt", 'TEXT', 'ttxt' ),
+    MacDefaultExtensionRecord( "tif", 'TIFF', '****' ),
+    MacDefaultExtensionRecord( "jpg", 'JPEG', '****' ),
+};
 
-static void MacEnsureDefaultExtensionsLoaded()
+void MacEnsureDefaultExtensionsLoaded()
 {
     if ( !gMacDefaultExtensionsInited )
     {
@@ -2458,9 +2457,11 @@ static void MacEnsureDefaultExtensionsLoaded()
         {
             gMacDefaultExtensions.Add( gDefaults[i] ) ;
         }
-        gMacDefaultExtensionsInited = true ;
+        gMacDefaultExtensionsInited = true;
     }
 }
+
+} // anonymous namespace
 
 bool wxFileName::MacSetTypeAndCreator( wxUint32 type , wxUint32 creator )
 {
@@ -2530,11 +2531,9 @@ bool wxFileName::MacFindDefaultTypeAndCreator( const wxString& ext , wxUint32 *t
 
 void wxFileName::MacRegisterDefaultTypeAndCreator( const wxString& ext , wxUint32 type , wxUint32 creator )
 {
-  MacEnsureDefaultExtensionsLoaded() ;
-  MacDefaultExtensionRecord rec ;
-  rec.m_type = type ;
-  rec.m_creator = creator ;
-  wxStrncpy( rec.m_ext , ext.Lower().c_str() , kMacExtensionMaxLength ) ;
-  gMacDefaultExtensions.Add( rec ) ;
+  MacEnsureDefaultExtensionsLoaded();
+  MacDefaultExtensionRecord rec(ext.Lower(), type, creator);
+  gMacDefaultExtensions.Add( rec );
 }
-#endif
+
+#endif // defined( __WXOSX_MAC__ ) && wxOSX_USE_CARBON
