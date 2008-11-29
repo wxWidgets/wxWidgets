@@ -137,15 +137,15 @@ private:
                 // timeframe so I'm not sure what to think, but after so many hours,
                 // this seems to address the issue and it's time to move on.
                 if (data == NULL)
-                    socket->Detected_Write();
+                    socket->OnWriteWaiting();
                 break;
 
             case kCFSocketReadCallBack:
-                socket->Detected_Read();
+                socket->OnReadWaiting();
                 break;
 
             case kCFSocketWriteCallBack:
-                socket->Detected_Write();
+                socket->OnWriteWaiting();
                 break;
 
             default:
