@@ -169,6 +169,22 @@ public:
 
     wxVector() : m_size(0), m_capacity(0), m_values(NULL) {}
 
+    wxVector(size_type size)
+        : m_size(0), m_capacity(0), m_values(NULL) 
+    {
+        reserve(size);
+        for ( size_t n = 0; n < size; n++ )
+            push_back(value_type());
+    }
+
+    wxVector(size_type size, const value_type& v)
+        : m_size(0), m_capacity(0), m_values(NULL) 
+    {
+        reserve(n);
+        for ( size_t n = 0; n < size; n++ )
+            push_back(v);
+    }
+
     wxVector(const wxVector& c) : m_size(0), m_capacity(0), m_values(NULL)
     {
         Copy(c);

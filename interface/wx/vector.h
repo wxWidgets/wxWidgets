@@ -65,6 +65,18 @@ public:
     wxVector();
 
     /**
+        Constructor initializing the vector with the given number of
+        default-constructed objects.
+     */
+    wxVector(size_type size);
+
+    /**
+        Constructor initializing the vector with the given number of
+        copies of the given object.
+     */
+    wxVector(size_type size, const value_type& value);
+
+    /**
         Copy onstructor.
     */
     wxVector(const wxVector<T>& c);
