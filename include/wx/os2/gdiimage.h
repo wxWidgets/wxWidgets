@@ -191,6 +191,12 @@ public:
     int GetHeight() const { return IsNull() ? 0 : GetGDIImageData()->m_nHeight; }
     int GetDepth() const { return IsNull() ? 0 : GetGDIImageData()->m_nDepth; }
 
+    wxSize GetSize() const
+    {
+        return IsNull() ? wxSize(0,0) :
+               wxSize(GetGDIImageData()->m_nWidth, GetGDIImageData()->m_nHeight);
+    }
+
     void SetWidth(int nW) { EnsureHasData(); GetGDIImageData()->m_nWidth = nW; }
     void SetHeight(int nH) { EnsureHasData(); GetGDIImageData()->m_nHeight = nH; }
     void SetDepth(int nD) { EnsureHasData(); GetGDIImageData()->m_nDepth = nD; }
