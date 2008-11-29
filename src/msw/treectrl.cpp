@@ -2858,11 +2858,12 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     switch ( hdr->code )
     {
         case NM_DBLCLK:
-            // we translate NM_DBLCLK into ACTIVATED event, so don't interpret
-            // the return code of this event handler as the return value for
-            // NM_DBLCLK - otherwise, double clicking the item to toggle its
-            // expanded status would never work
-            *result = false;
+            // we translate NM_DBLCLK into ACTIVATED event and if the user
+            // handled the activation of the item we shouldn't proceed with
+            // also using the same double click for toggling the item expanded
+            // state -- but OTOH do let the user to expand/collapse the item by
+            // double clicking on it if the activation is not handled specially
+            *result = processed;
             break;
 
         case NM_RCLICK:
