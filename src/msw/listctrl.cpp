@@ -2485,7 +2485,8 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     if ( lvi.mask & LVIF_TEXT )
                     {
                         wxString text = OnGetItemText(item, lvi.iSubItem);
-                        wxStrncpy(lvi.pszText, text, lvi.cchTextMax);
+                        wxStrncpy(lvi.pszText, text, lvi.cchTextMax - 1);
+                        lvi.pszText[lvi.cchTextMax - 1] = _T('\0');
                     }
 
                     // see comment at the end of wxListCtrl::GetColumn()
