@@ -116,15 +116,8 @@
 extern void wxSetKeyboardHook(bool doIt);
 #endif
 
-// NB: all "NoRedraw" classes must have the same names as the "normal" classes
-//     with NR suffix - wxWindow::MSWCreate() supposes this
-#ifdef __WXWINCE__
-WXDLLIMPEXP_CORE       wxChar *wxCanvasClassName;
-WXDLLIMPEXP_CORE       wxChar *wxCanvasClassNameNR;
-#else
 WXDLLIMPEXP_CORE const wxChar *wxCanvasClassName = NULL;
 WXDLLIMPEXP_CORE const wxChar *wxCanvasClassNameNR = NULL;
-#endif
 WXDLLIMPEXP_CORE const wxChar *wxMDIFrameClassName = NULL;
 WXDLLIMPEXP_CORE const wxChar *wxMDIFrameClassNameNoRedraw = NULL;
 WXDLLIMPEXP_CORE const wxChar *wxMDIChildFrameClassName = NULL;
@@ -611,20 +604,6 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     // ensure that base cleanup is done if we return too early
     wxCallBaseCleanup callBaseCleanup(this);
 
-#ifdef __WXWINCE__
-    wxString tmp = GetAppName();
-    tmp += wxT("ClassName");
-    wxCanvasClassName = wxStrdup( tmp.wc_str() );
-    tmp += wxT("NR");
-    wxCanvasClassNameNR = wxStrdup( tmp.wc_str() );
-    HWND hWnd = FindWindow( wxCanvasClassNameNR, NULL );
-    if (hWnd)
-    {
-        SetForegroundWindow( (HWND)(((DWORD)hWnd)|0x01) );
-        return false;
-    }
-#endif
-
 #if !defined(__WXMICROWIN__)
     InitCommonControls();
 #endif // !defined(__WXMICROWIN__)
@@ -811,11 +790,6 @@ void wxApp::CleanUp()
     // which case the registration will fail after the first time if we don't
     // unregister the classes now
     UnregisterWindowClasses();
-
-#ifdef __WXWINCE__
-    free( wxCanvasClassName );
-    free( wxCanvasClassNameNR );
-#endif
 }
 
 // ----------------------------------------------------------------------------
