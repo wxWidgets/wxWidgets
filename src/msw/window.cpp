@@ -183,11 +183,7 @@
 extern wxMenu *wxCurrentPopupMenu;
 #endif
 
-#ifdef __WXWINCE__
-extern       wxChar *wxCanvasClassName;
-#else
 extern const wxChar *wxCanvasClassName;
-#endif
 
 // true if we had already created the std colour map, used by
 // wxGetStdColourMap() and wxWindow::OnSysColourChanged()           (FIXME-MT)
@@ -1280,13 +1276,8 @@ bool wxCheckWindowWndProc(WXHWND hWnd,
 // managed in one place and then accessed from here and other places, such as
 // wxApp::RegisterWindowClasses() and wxApp::UnregisterWindowClasses()
 
-#ifdef __WXWINCE__
-    extern       wxChar *wxCanvasClassName;
-    extern       wxChar *wxCanvasClassNameNR;
-#else
     extern const wxChar *wxCanvasClassName;
     extern const wxChar *wxCanvasClassNameNR;
-#endif
     extern const wxChar *wxMDIFrameClassName;
     extern const wxChar *wxMDIFrameClassNameNoRedraw;
     extern const wxChar *wxMDIChildFrameClassName;
