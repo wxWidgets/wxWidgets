@@ -52,9 +52,6 @@
 
 extern wxMenu *wxCurrentPopupMenu;
 
-extern const wxChar *wxMDIFrameClassName;   // from app.cpp
-extern const wxChar *wxMDIChildFrameClassName;
-extern const wxChar *wxMDIChildFrameClassNameNoRedraw;
 extern void wxRemoveHandleAssociation(wxWindow *win);
 
 // ---------------------------------------------------------------------------
@@ -188,7 +185,7 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
   msflags &= ~WS_VSCROLL;
   msflags &= ~WS_HSCROLL;
 
-  if ( !wxWindow::MSWCreate(wxMDIFrameClassName,
+  if ( !wxWindow::MSWCreate(wxApp::GetRegisteredClassName(_T("wxMDIFrame")),
                             title.wx_str(),
                             pos, size,
                             msflags,
@@ -736,9 +733,12 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
 
   MDICREATESTRUCT mcs;
 
-  mcs.szClass = style & wxFULL_REPAINT_ON_RESIZE
-                    ? wxMDIChildFrameClassName
-                    : wxMDIChildFrameClassNameNoRedraw;
+  wxString className =
+      wxApp::GetRegisteredClassName(_T("wxMDIChildFrame"), COLOR_WINDOW);
+  if ( !(style & wxFULL_REPAINT_ON_RESIZE) )
+      className += wxApp::GetNoRedrawClassSuffix();
+
+  mcs.szClass = className.wx_str();
   mcs.szTitle = title.wx_str();
   mcs.hOwner = wxGetInstance();
   if (x != wxDefaultCoord)

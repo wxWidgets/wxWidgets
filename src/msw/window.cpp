@@ -183,8 +183,6 @@
 extern wxMenu *wxCurrentPopupMenu;
 #endif
 
-extern const wxChar *wxCanvasClassName;
-
 // true if we had already created the std colour map, used by
 // wxGetStdColourMap() and wxWindow::OnSysColourChanged()           (FIXME-MT)
 static bool gs_hasStdCmap = false;
@@ -585,6 +583,12 @@ wxWindowMSW::~wxWindowMSW()
 
 }
 
+/* static */
+const wxChar *wxWindowMSW::MSWGetRegisteredClassName()
+{
+    return wxApp::GetRegisteredClassName(_T("wxWindow"), COLOR_BTNFACE);
+}
+
 // real construction (Init() must have been called before!)
 bool wxWindowMSW::Create(wxWindow *parent,
                          wxWindowID id,
@@ -617,7 +621,8 @@ bool wxWindowMSW::Create(wxWindow *parent,
         msflags |= WS_VISIBLE;
     }
 
-    if ( !MSWCreate(wxCanvasClassName, NULL, pos, size, msflags, exstyle) )
+    if ( !MSWCreate(MSWGetRegisteredClassName(),
+                    NULL, pos, size, msflags, exstyle) )
         return false;
 
     InheritAttributes();
@@ -1272,31 +1277,12 @@ void wxWindowMSW::DissociateHandle()
 bool wxCheckWindowWndProc(WXHWND hWnd,
                           WXFARPROC WXUNUSED(wndProc))
 {
-// TODO: This list of window class names should be factored out so they can be
-// managed in one place and then accessed from here and other places, such as
-// wxApp::RegisterWindowClasses() and wxApp::UnregisterWindowClasses()
+    const wxString str(wxGetWindowClass(hWnd));
 
-    extern const wxChar *wxCanvasClassName;
-    extern const wxChar *wxCanvasClassNameNR;
-    extern const wxChar *wxMDIFrameClassName;
-    extern const wxChar *wxMDIFrameClassNameNoRedraw;
-    extern const wxChar *wxMDIChildFrameClassName;
-    extern const wxChar *wxMDIChildFrameClassNameNoRedraw;
-    wxString str(wxGetWindowClass(hWnd));
-    if (str == wxCanvasClassName ||
-        str == wxCanvasClassNameNR ||
-#if wxUSE_GLCANVAS
-        str == _T("wxGLCanvasClass") ||
-        str == _T("wxGLCanvasClassNR") ||
-#endif // wxUSE_GLCANVAS
-        str == wxMDIFrameClassName ||
-        str == wxMDIFrameClassNameNoRedraw ||
-        str == wxMDIChildFrameClassName ||
-        str == wxMDIChildFrameClassNameNoRedraw ||
-        str == _T("wxTLWHiddenParent"))
-        return true; // Effectively means don't subclass
-    else
-        return false;
+    // TODO: get rid of wxTLWHiddenParent special case (currently it's not
+    //       registered by wxApp but using ad hoc code in msw/toplevel.cpp);
+    //       there is also a hidden window class used by sockets &c
+    return wxApp::IsRegisteredClassName(str) || str == _T("wxTLWHiddenParent");
 }
 
 // ----------------------------------------------------------------------------
@@ -3676,6 +3662,11 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
     // especially for wxTLWs
     wxCHECK_MSG( !m_hWnd, true, "window can't be recreated" );
 
+    // this can happen if this function is called using the return value of
+    // wxApp::GetRegisteredClassName() which failed
+    wxCHECK_MSG( wclass, false, "failed to register window class?" );
+
+
     // choose the position/size for the new window
     int x, y, w, h;
     (void)MSWGetCreateWindowCoords(pos, size, x, y, w, h);
@@ -3690,7 +3681,7 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
     wxString className(wclass);
     if ( !HasFlag(wxFULL_REPAINT_ON_RESIZE) )
     {
-        className += wxT("NR");
+        className += wxApp::GetNoRedrawClassSuffix();
     }
 
     // do create the window

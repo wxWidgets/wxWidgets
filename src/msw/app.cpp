@@ -51,6 +51,7 @@
 #include "wx/evtloop.h"
 #include "wx/thread.h"
 #include "wx/scopeguard.h"
+#include "wx/vector.h"
 
 #include "wx/msw/private.h"
 #include "wx/msw/dc.h"
@@ -116,12 +117,23 @@
 extern void wxSetKeyboardHook(bool doIt);
 #endif
 
-WXDLLIMPEXP_CORE const wxChar *wxCanvasClassName = NULL;
-WXDLLIMPEXP_CORE const wxChar *wxCanvasClassNameNR = NULL;
-WXDLLIMPEXP_CORE const wxChar *wxMDIFrameClassName = NULL;
-WXDLLIMPEXP_CORE const wxChar *wxMDIFrameClassNameNoRedraw = NULL;
-WXDLLIMPEXP_CORE const wxChar *wxMDIChildFrameClassName = NULL;
-WXDLLIMPEXP_CORE const wxChar *wxMDIChildFrameClassNameNoRedraw = NULL;
+namespace
+{
+
+struct ClassRegInfo
+{
+    // the base name of the class: this is used to construct the unique name in
+    // RegisterClassWithUniqueNames()
+    wxString basename;
+
+    // the name of the registered class with and without CS_[HV]REDRAW styles
+    wxString regname,
+             regnameNR;
+};
+
+wxVector<ClassRegInfo> gs_regClassesInfo;
+
+} // anonymous namespace
 
 // ----------------------------------------------------------------------------
 // private functions
@@ -620,8 +632,6 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 
     wxOleInitialize();
 
-    RegisterWindowClasses();
-
 #if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
     wxSetKeyboardHook(true);
 #endif
@@ -632,143 +642,106 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 }
 
 // ---------------------------------------------------------------------------
-// RegisterWindowClasses
+// Win32 window class registration
 // ---------------------------------------------------------------------------
 
-// This function registers the given class name and stores a pointer to a
-// heap-allocated copy of it at the specified location, it must be deleted
-// later.
-static void RegisterAndStoreClassName(const wxString& uniqueClassName,
-                                      const wxChar **className,
-                                      WNDCLASS *lpWndClass)
+/* static */
+const wxChar *wxApp::GetRegisteredClassName(const wxChar *name,
+                                            int bgBrushCol,
+                                            int extraStyles)
 {
-    const size_t length = uniqueClassName.length() + 1; // for trailing NUL
-    wxChar * const newChars = new wxChar[length];
-    wxStrlcpy(newChars, uniqueClassName, length);
-    *className = newChars;
-    lpWndClass->lpszClassName = *className;
-
-    if ( !::RegisterClass(lpWndClass) )
+    const size_t count = gs_regClassesInfo.size();
+    for ( size_t n = 0; n < count; n++ )
     {
-        wxLogLastError(wxString::Format(wxT("RegisterClass(%s)"), newChars));
+        if ( gs_regClassesInfo[n].basename == name )
+            return gs_regClassesInfo[n].regname;
     }
-}
 
-// This function registers the class defined by the provided WNDCLASS struct
-// contents using a unique name constructed from the specified base name and
-// and a suffix unique to this library instance. It also stores the generated
-// unique names for normal and "no redraw" versions of the class in the
-// provided variables, caller must delete their contents later.
-static void RegisterClassWithUniqueNames(const wxString& baseName,
-                                         const wxChar **className,
-                                         const wxChar **classNameNR,
-                                         WNDCLASS *lpWndClass)
-{
-    // for each class we register one with CS_(V|H)REDRAW style and one
-    // without for windows created with wxNO_FULL_REDRAW_ON_REPAINT flag
-    static const long styleNormal = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;
-    static const long styleNoRedraw = CS_DBLCLKS;
-
-    const wxString uniqueSuffix(wxString::Format(wxT("@%p"), className));
-
-    wxString uniqueClassName(baseName + uniqueSuffix);
-    lpWndClass->style = styleNormal;
-    RegisterAndStoreClassName(uniqueClassName, className, lpWndClass);
-
-    // NB: remember that code elsewhere supposes that no redraw class names
-    //     use the same names as normal classes with "NR" suffix so we must put
-    //     "NR" at the end instead of using more natural baseName+"NR"+suffix
-    wxString uniqueClassNameNR(uniqueClassName + wxT("NR"));
-    lpWndClass->style = styleNoRedraw;
-    RegisterAndStoreClassName(uniqueClassNameNR, classNameNR, lpWndClass);
-}
-
-// TODO we should only register classes really used by the app. For this it
-//      would be enough to just delay the class registration until an attempt
-//      to create a window of this class is made.
-bool wxApp::RegisterWindowClasses()
-{
+    // we need to register this class
     WNDCLASS wndclass;
     wxZeroMemory(wndclass);
 
-    // the fields which are common to all classes
     wndclass.lpfnWndProc   = (WNDPROC)wxWndProc;
     wndclass.hInstance     = wxhInstance;
-    wndclass.hCursor       = ::LoadCursor((HINSTANCE)NULL, IDC_ARROW);
+    wndclass.hCursor       = ::LoadCursor(NULL, IDC_ARROW);
+    wndclass.hbrBackground = (HBRUSH)wxUIntToPtr(bgBrushCol + 1);
+    wndclass.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS | extraStyles;
 
-    // register the class for all normal windows and "no redraw" frames
-    wndclass.hbrBackground = (HBRUSH)(COLOR_BTNFACE + 1);
-    RegisterClassWithUniqueNames(wxT("wxWindowClass"),
-                                 &wxCanvasClassName,
-                                 &wxCanvasClassNameNR,
-                                 &wndclass);
 
-    // Register the MDI frame window class and "no redraw" MDI frame
-    wndclass.hbrBackground = (HBRUSH)NULL; // paint MDI frame ourselves
-    RegisterClassWithUniqueNames(wxT("wxMDIFrameClass"),
-                                 &wxMDIFrameClassName,
-                                 &wxMDIFrameClassNameNoRedraw,
-                                 &wndclass);
+    ClassRegInfo regClass;
+    regClass.basename = name;
 
-    // Register the MDI child frame window class and "no redraw" MDI child frame
-    wndclass.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-    RegisterClassWithUniqueNames(wxT("wxMDIChildFrameClass"),
-                                 &wxMDIChildFrameClassName,
-                                 &wxMDIChildFrameClassNameNoRedraw,
-                                 &wndclass);
-
-    return true;
-}
-
-// ---------------------------------------------------------------------------
-// UnregisterWindowClasses
-// ---------------------------------------------------------------------------
-
-// This function unregisters the class with the given name and frees memory
-// allocated for it by RegisterAndStoreClassName().
-static bool UnregisterAndFreeClassName(const wxChar **ppClassName)
-{
-    bool retval = true;
-
-    if ( !::UnregisterClass(*ppClassName, wxhInstance) )
+    // constuct a unique suffix to allow registering the class with the same
+    // base name in a main application using wxWidgets and a DLL using
+    // wxWidgets loaded into its address space: as gs_regClassesInfo variable
+    // is different in them, we're going to obtain a unique prefix by using its
+    // address here
+    regClass.regname = regClass.basename +
+                            wxString::Format(wxT("@%p"), &gs_regClassesInfo);
+    wndclass.lpszClassName = regClass.regname.wx_str();
+    if ( !::RegisterClass(&wndclass) )
     {
-        wxLogLastError(
-                wxString::Format(wxT("UnregisterClass(%s)"), *ppClassName));
-
-        retval = false;
+        wxLogLastError(wxString::Format(wxT("RegisterClass(%s)"),
+                       regClass.regname));
+        return NULL;
     }
 
-    delete [] (wxChar*) *ppClassName;
-    *ppClassName = NULL;
+    // NB: remember that code elsewhere supposes that no redraw class names
+    //     use the same names as normal classes with "NR" suffix so we must put
+    //     "NR" at the end instead of using more natural basename+"NR"+suffix
+    regClass.regnameNR = regClass.regname + GetNoRedrawClassSuffix();
+    wndclass.style &= ~(CS_HREDRAW | CS_VREDRAW);
+    wndclass.lpszClassName = regClass.regnameNR.wx_str();
+    if ( !::RegisterClass(&wndclass) )
+    {
+        wxLogLastError(wxString::Format(wxT("RegisterClass(%s)"),
+                       regClass.regname));
+        ::UnregisterClass(regClass.regname, wxhInstance);
+        return NULL;
+    }
 
-    return retval;
+    gs_regClassesInfo.push_back(regClass);
+
+    // take care to return the pointer which will remain valid after the
+    // function returns (it could be invalidated later if new elements are
+    // added to the vector and it's reallocated but this shouldn't matter as
+    // this pointer should be used right now, not stored)
+    return gs_regClassesInfo.back().regname.wx_str();
 }
 
-bool wxApp::UnregisterWindowClasses()
+bool wxApp::IsRegisteredClassName(const wxString& name)
 {
-    bool retval = true;
+    const size_t count = gs_regClassesInfo.size();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        if ( gs_regClassesInfo[n].regname == name ||
+                gs_regClassesInfo[n].regnameNR == name )
+            return true;
+    }
 
-#ifndef __WXMICROWIN__
-    if ( !UnregisterAndFreeClassName(&wxMDIFrameClassName) )
-        retval = false;
+    return false;
+}
 
-    if ( !UnregisterAndFreeClassName(&wxMDIFrameClassNameNoRedraw) )
-        retval = false;
+void wxApp::UnregisterWindowClasses()
+{
+    const size_t count = gs_regClassesInfo.size();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        const ClassRegInfo& regClass = gs_regClassesInfo[n];
+        if ( !::UnregisterClass(regClass.regname, wxhInstance) )
+        {
+            wxLogLastError(wxString::Format(wxT("UnregisterClass(%s)"),
+                           regClass.regname));
+        }
 
-    if ( !UnregisterAndFreeClassName(&wxMDIChildFrameClassName) )
-        retval = false;
+        if ( !::UnregisterClass(regClass.regnameNR, wxhInstance) )
+        {
+            wxLogLastError(wxString::Format(wxT("UnregisterClass(%s)"),
+                           regClass.regnameNR));
+        }
+    }
 
-    if ( !UnregisterAndFreeClassName(&wxMDIChildFrameClassNameNoRedraw) )
-        retval = false;
-
-    if ( !UnregisterAndFreeClassName(&wxCanvasClassName) )
-        retval = false;
-
-    if ( !UnregisterAndFreeClassName(&wxCanvasClassNameNR) )
-        retval = false;
-#endif // __WXMICROWIN__
-
-    return retval;
+    gs_regClassesInfo.clear();
 }
 
 void wxApp::CleanUp()

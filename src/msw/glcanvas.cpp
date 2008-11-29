@@ -29,7 +29,6 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/app.h"
-    #include "wx/module.h"
 #endif
 
 #include "wx/msw/private.h"
@@ -103,110 +102,6 @@ LRESULT WXDLLEXPORT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message,
 #  pragma comment( lib, "opengl32" )
 #  pragma comment( lib, "glu32" )
 #endif
-
-// ----------------------------------------------------------------------------
-// constants
-// ----------------------------------------------------------------------------
-
-static const wxChar *wxGLCanvasClassName = wxT("wxGLCanvasClass");
-static const wxChar *wxGLCanvasClassNameNoRedraw = wxT("wxGLCanvasClassNR");
-
-// ============================================================================
-// implementation
-// ============================================================================
-
-// ----------------------------------------------------------------------------
-// wxGLModule is responsible for unregistering wxGLCanvasClass Windows class
-// ----------------------------------------------------------------------------
-
-class wxGLModule : public wxModule
-{
-public:
-    bool OnInit() { return true; }
-    void OnExit() { UnregisterClasses(); }
-
-    // register the GL classes if not done yet, return true if ok, false if
-    // registration failed
-    static bool RegisterClasses();
-
-    // unregister the classes, done automatically on program termination
-    static void UnregisterClasses();
-
-private:
-    // wxGLCanvas is only used from the main thread so this is MT-ok
-    static bool ms_registeredGLClasses;
-
-    DECLARE_DYNAMIC_CLASS(wxGLModule)
-};
-
-IMPLEMENT_DYNAMIC_CLASS(wxGLModule, wxModule)
-
-bool wxGLModule::ms_registeredGLClasses = false;
-
-/* static */
-bool wxGLModule::RegisterClasses()
-{
-    if ( ms_registeredGLClasses )
-        return true;
-
-    // We have to register a special window class because we need the CS_OWNDC
-    // style for GLCanvas: some OpenGL drivers are buggy and don't work with
-    // windows without this style
-    WNDCLASS wndclass;
-
-    // the fields which are common to all classes
-    wndclass.lpfnWndProc   = (WNDPROC)wxWndProc;
-    wndclass.cbClsExtra    = 0;
-    wndclass.cbWndExtra    = sizeof( DWORD ); // VZ: what is this DWORD used for?
-    wndclass.hInstance     = wxhInstance;
-    wndclass.hIcon         = (HICON) NULL;
-    wndclass.hCursor       = ::LoadCursor((HINSTANCE)NULL, IDC_ARROW);
-    wndclass.lpszMenuName  = NULL;
-
-    // Register the GLCanvas class name
-    wndclass.hbrBackground = (HBRUSH)NULL;
-    wndclass.lpszClassName = wxGLCanvasClassName;
-    wndclass.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS | CS_OWNDC;
-
-    if ( !::RegisterClass(&wndclass) )
-    {
-        wxLogLastError(wxT("RegisterClass(wxGLCanvasClass)"));
-        return false;
-    }
-
-    // Register the GLCanvas class name for windows which don't do full repaint
-    // on resize
-    wndclass.lpszClassName = wxGLCanvasClassNameNoRedraw;
-    wndclass.style        &= ~(CS_HREDRAW | CS_VREDRAW);
-
-    if ( !::RegisterClass(&wndclass) )
-    {
-        wxLogLastError(wxT("RegisterClass(wxGLCanvasClassNameNoRedraw)"));
-
-        ::UnregisterClass(wxGLCanvasClassName, wxhInstance);
-
-        return false;
-    }
-
-    ms_registeredGLClasses = true;
-
-    return true;
-}
-
-/* static */
-void wxGLModule::UnregisterClasses()
-{
-    // we need to unregister the classes in case we're in a DLL which is
-    // unloaded and then loaded again because if we don't, the registration is
-    // going to fail in wxGLCanvas::Create() the next time we're loaded
-    if ( ms_registeredGLClasses )
-    {
-        ::UnregisterClass(wxGLCanvasClassName, wxhInstance);
-        ::UnregisterClass(wxGLCanvasClassNameNoRedraw, wxhInstance);
-
-        ms_registeredGLClasses = false;
-    }
-}
 
 // ----------------------------------------------------------------------------
 // wxGLContext
@@ -297,13 +192,6 @@ bool wxGLCanvas::CreateWindow(wxWindow *parent,
 {
     wxCHECK_MSG( parent, false, wxT("can't create wxWindow without parent") );
 
-    if ( !wxGLModule::RegisterClasses() )
-    {
-        wxLogError(_("Failed to register OpenGL window class."));
-
-        return false;
-    }
-
     if ( !CreateBase(parent, id, pos, size, style, wxDefaultValidator, name) )
         return false;
 
@@ -319,7 +207,8 @@ bool wxGLCanvas::CreateWindow(wxWindow *parent,
     DWORD msflags = WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
     msflags |= MSWGetStyle(style, &exStyle);
 
-    if ( !MSWCreate(wxGLCanvasClassName, NULL, pos, size, msflags, exStyle) )
+    if ( !MSWCreate(wxApp::GetRegisteredClassName(_T("wxGLCanvas"), -1, CS_OWNDC),
+                    NULL, pos, size, msflags, exStyle) )
         return false;
 
     m_hDC = ::GetDC(GetHwnd());

@@ -79,13 +79,6 @@ LONG APIENTRY _EXPORT
 wxDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
 // ----------------------------------------------------------------------------
-// globals
-// ----------------------------------------------------------------------------
-
-// the name of the default wxWidgets class
-extern const wxChar *wxCanvasClassName;
-
-// ----------------------------------------------------------------------------
 // wxTLWHiddenParentModule: used to manage the hidden parent window (we need a
 // module to ensure that the window is always deleted)
 // ----------------------------------------------------------------------------
@@ -490,7 +483,8 @@ bool wxTopLevelWindowMSW::CreateFrame(const wxString& title,
         exflags |= WS_EX_LAYOUTRTL;
 #endif
 
-    return MSWCreate(wxCanvasClassName, title.wx_str(), pos, sz, flags, exflags);
+    return MSWCreate(MSWGetRegisteredClassName(),
+                     title.wx_str(), pos, sz, flags, exflags);
 }
 
 bool wxTopLevelWindowMSW::Create(wxWindow *parent,
