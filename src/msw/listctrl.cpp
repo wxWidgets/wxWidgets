@@ -39,6 +39,7 @@
 #endif
 
 #include "wx/imaglist.h"
+#include "wx/vector.h"
 
 #include "wx/msw/private.h"
 
@@ -2908,11 +2909,14 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
             dc.SetPen(pen);
             dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
-            int numCols = GetColumnCount();
-            int* indexArray = new int[numCols];
-            if ( !ListView_GetColumnOrderArray( GetHwnd(), numCols, indexArray) )
+            const int numCols = GetColumnCount();
+            wxVector<int> indexArray(numCols);
+            if ( !ListView_GetColumnOrderArray(GetHwnd(),
+                                               numCols,
+                                               &indexArray[0]) )
             {
                 wxFAIL_MSG( _T("invalid column index array in OnPaint()") );
+                return;
             }
 
             int x = itemRect.GetX();
@@ -2923,8 +2927,6 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
                 dc.DrawLine(x-1, firstItemRect.GetY() - gap,
                             x-1, itemRect.GetBottom());
             }
-
-            delete indexArray;
         }
     }
 }
