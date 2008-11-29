@@ -83,11 +83,7 @@ wxDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 // ----------------------------------------------------------------------------
 
 // the name of the default wxWidgets class
-#ifdef __WXWINCE__
-extern       wxChar *wxCanvasClassName;
-#else
 extern const wxChar *wxCanvasClassName;
-#endif
 
 // ----------------------------------------------------------------------------
 // wxTLWHiddenParentModule: used to manage the hidden parent window (we need a

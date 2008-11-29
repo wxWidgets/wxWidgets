@@ -44,11 +44,7 @@
 // Externals (somewhere in src/msw/app.cpp and src/msw/window.cpp)
 //---------------------------------------------------------------------------
 extern "C" WXDLLIMPEXP_BASE HINSTANCE wxGetInstance(void);
-#ifdef __WXWINCE__
-extern WXDLLIMPEXP_CORE       wxChar *wxCanvasClassName;
-#else
 extern WXDLLIMPEXP_CORE const wxChar *wxCanvasClassName;
-#endif
 
 LRESULT WXDLLIMPEXP_CORE APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message,
                                    WPARAM wParam, LPARAM lParam);
