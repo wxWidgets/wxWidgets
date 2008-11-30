@@ -180,7 +180,7 @@ public:
     wxVector(size_type size, const value_type& v)
         : m_size(0), m_capacity(0), m_values(NULL) 
     {
-        reserve(n);
+        reserve(size);
         for ( size_t n = 0; n < size; n++ )
             push_back(v);
     }
