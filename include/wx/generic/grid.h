@@ -918,7 +918,10 @@ public:
         { return const_cast<wxGridTableBase *>(this)->GetNumberCols(); }
 
 
-    virtual bool IsEmptyCell( int row, int col ) = 0;
+    virtual bool IsEmptyCell( int row, int col )
+    {
+        return GetValue(row, col).empty();
+    }
 
     bool IsEmpty(const wxGridCellCoords& coord)
     {
@@ -1071,7 +1074,6 @@ public:
     int GetNumberCols();
     wxString GetValue( int row, int col );
     void SetValue( int row, int col, const wxString& s );
-    bool IsEmptyCell( int row, int col );
 
     // overridden functions from wxGridTableBase
     //

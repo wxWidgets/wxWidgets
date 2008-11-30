@@ -673,9 +673,14 @@ public:
     //@{
 
     /**
-        Must be overridden to implement testing for empty cells.
+        May be overridden to implement testing for empty cells.
+
+        This method is used by the grid to test if the given cell is not used
+        and so whether a neighbouring cell may overflow into it. By default it
+        only returns true if the value of the given cell, as returned by
+        GetValue(), is empty.
      */
-    virtual bool IsEmptyCell(int row, int col) = 0;
+    virtual bool IsEmptyCell(int row, int col);
 
     /**
         Same as IsEmptyCell() but taking wxGridCellCoords.
