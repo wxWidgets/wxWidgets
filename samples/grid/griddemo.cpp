@@ -101,8 +101,6 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( wxID_EXIT, GridFrame::OnQuit )
     EVT_MENU( ID_VTABLE, GridFrame::OnVTable)
     EVT_MENU( ID_BUGS_TABLE, GridFrame::OnBugsTable)
-    EVT_MENU( ID_SMALL_GRID, GridFrame::OnSmallGrid)
-    EVT_MENU( ID_TABULAR_GRID, GridFrame::OnTabularGrid)
 
     EVT_MENU( ID_DESELECT_CELL, GridFrame::DeselectCell)
     EVT_MENU( ID_DESELECT_COL, GridFrame::DeselectCol)
@@ -148,8 +146,6 @@ GridFrame::GridFrame()
     wxMenu *fileMenu = new wxMenu;
     fileMenu->Append( ID_VTABLE, _T("&Virtual table test\tCtrl-V"));
     fileMenu->Append( ID_BUGS_TABLE, _T("&Bugs table test\tCtrl-B"));
-    fileMenu->Append( ID_SMALL_GRID, _T("&Small Grid test\tCtrl-S"));
-    fileMenu->Append( ID_TABULAR_GRID, _T("&Tabular Grid test\tCtrl-T"));
     fileMenu->AppendSeparator();
     fileMenu->Append( wxID_EXIT, _T("E&xit\tAlt-X") );
 
@@ -1132,17 +1128,6 @@ void GridFrame::OnBugsTable(wxCommandEvent& )
     frame->Show(true);
 }
 
-void GridFrame::OnSmallGrid(wxCommandEvent& )
-{
-    wxFrame* frame = new wxFrame(NULL, wxID_ANY, _T("A Small Grid"),
-                                 wxDefaultPosition, wxSize(640, 480));
-    wxPanel* panel = new wxPanel(frame, wxID_ANY);
-    wxGrid* grid = new wxGrid(panel, wxID_ANY, wxPoint(10,10), wxSize(400,400),
-                              wxWANTS_CHARS | wxSIMPLE_BORDER);
-    grid->CreateGrid(3,3);
-    frame->Show(true);
-}
-
 // ----------------------------------------------------------------------------
 // MyGridCellAttrProvider
 // ----------------------------------------------------------------------------
@@ -1185,44 +1170,15 @@ wxGridCellAttr *MyGridCellAttrProvider::GetAttr(int row, int col,
     return attr;
 }
 
-// ----------------------------------------------------------------------------
-
-void GridFrame::OnTabularGrid(wxCommandEvent& )
-{
-    wxFrame* frame = new wxFrame(NULL, wxID_ANY, _T("A small tabular Grid"),
-                                 wxDefaultPosition, wxSize(640, 480));
-    wxGrid* grid = new wxGrid(frame, wxID_ANY, wxPoint(10,10), wxSize(40,40),
-                              wxWANTS_CHARS | wxBORDER_SUNKEN);
-    grid->SetRowLabelSize( 0 );
-    grid->DisableDragRowSize();
-    grid->SetUseNativeColLabels();
-    grid->CreateGrid(10,10);
-    grid->SetSelectionMode( wxGrid::wxGridSelectRows );
-
-    frame->Show(true);
-}
-
 void GridFrame::OnVTable(wxCommandEvent& )
 {
     static long s_sizeGrid = 10000;
 
-#ifdef __WXMOTIF__
-    // MB: wxGetNumberFromUser doesn't work properly for wxMotif
-    wxString s;
-    s << s_sizeGrid;
-    s = wxGetTextFromUser( _T("Size of the table to create"),
-                           _T("Size:"),
-                           s );
-
-    s.ToLong( &s_sizeGrid );
-
-#else
     s_sizeGrid = wxGetNumberFromUser(_T("Size of the table to create"),
                                      _T("Size: "),
                                      _T("wxGridDemo question"),
                                      s_sizeGrid,
                                      0, 32000, this);
-#endif
 
     if ( s_sizeGrid != -1 )
     {
