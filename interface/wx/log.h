@@ -446,6 +446,11 @@ class wxLogBuffer : public wxLog
 {
 public:
     /**
+        The default ctor does nothing.
+    */
+    wxLogBuffer();
+
+    /**
         Shows all the messages collected so far to the user (using a message box in the
         GUI applications or by printing them out to the console in text mode) and
         clears the internal buffer.
