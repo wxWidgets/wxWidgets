@@ -654,8 +654,8 @@ void MyFrame::MessageBox(wxCommandEvent& WXUNUSED(event))
 {
     wxMessageDialog dialog(this,
                            "This is a message box\n"
-                           "A long, long string to test out the message box "
-                           "layout properly.",
+                           "This is a long, long string to test out if the message box "
+                           "layouts properly.",
                            "Message box text",
                            wxCENTER |
                            wxNO_DEFAULT | wxYES_NO | wxCANCEL |
