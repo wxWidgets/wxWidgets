@@ -1111,6 +1111,7 @@ void wxVLogTrace(const char* mask,
     function is that usually there are a lot of trace messages, so it might
     make sense to separate them from other debug messages.
 
+    @deprecated
     This version of wxLogTrace() only logs the message if all the bits
     corresponding to the @a mask are set in the wxLog trace mask which can be
     set by calling wxLog::SetTraceMask(). This version is less flexible than
