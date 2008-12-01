@@ -15,7 +15,14 @@ attributes of a wxWindow, how they relate to each other, and how they interact
 with sizers. This document will attempt to clear the fog a little, and give
 some simple explanations of things.
 
-Glossary:
+@li @ref overview_windowsizing_glossary
+@li @ref overview_windowsizing_func
+
+
+<hr>
+
+
+@section overview_windowsizing_glossary Glossary
 
 @li @b "Best Size": the best size of a widget depends on what kind of widget it is,
     and usually also on the contents of the widget. For example a wxListBox's best
@@ -54,7 +61,7 @@ Glossary:
     initial size of the control to the resulting size.
 
 
-Functions related to sizing:
+@section overview_windowsizing_func Functions related to sizing
 
 @li wxWindow::GetEffectiveMinSize(): returns a blending of the widget's minimal size
     and best size, giving precedence to the minimal size.
