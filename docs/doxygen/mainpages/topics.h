@@ -48,8 +48,10 @@ The following is a basic categorization of them:
 @li @subpage overview_exceptions
 @li @subpage overview_windowstyles
 @li @subpage overview_windowdeletion
+@li @subpage overview_windowsizing
 @li @subpage overview_windowids
 @li @subpage overview_envvars
+@li @subpage overview_customwidgets
 
 @section page_topics_nongui Non-GUI Classes
 
@@ -80,7 +82,6 @@ The following is a basic categorization of them:
 @li @subpage overview_sizer
 @li @subpage overview_xrc
 @li @subpage overview_xrcformat
-@li @subpage overview_windowsizing
 @li @subpage overview_scrolling
 @li @subpage overview_dialog
 @li @subpage overview_validator
