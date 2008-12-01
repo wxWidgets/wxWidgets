@@ -3830,15 +3830,6 @@ void wxGridStringTable::SetValue( int row, int col, const wxString& value )
     m_data[row][col] = value;
 }
 
-bool wxGridStringTable::IsEmptyCell( int row, int col )
-{
-    wxCHECK_MSG( (row < GetNumberRows()) && (col < GetNumberCols()),
-                 true,
-                  _T("invalid row or column index in wxGridStringTable") );
-
-    return (m_data[row][col] == wxEmptyString);
-}
-
 void wxGridStringTable::Clear()
 {
     int row, col;
