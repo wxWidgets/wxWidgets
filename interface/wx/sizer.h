@@ -527,43 +527,6 @@ public:
 
 
 /**
-    @class wxNotebookSizer
-
-    @deprecated
-    This class is deprecated and should not be used in new code! It is no
-    longer needed, wxNotebook control can be inserted
-    into any sizer class and its minimal size will be determined correctly.
-
-    wxNotebookSizer is a specialized sizer to make sizers work in connection
-    with using notebooks. This sizer is different from any other sizer as you
-    must not add any children to it - instead, it queries the notebook class
-    itself.  The only thing this sizer does is to determine the size of the
-    biggest page of the notebook and report an adjusted minimal size to a more
-    toplevel sizer.
-
-    @library{wxbase}
-    @category{winlayout}
-
-    @see wxSizer, wxNotebook,
-         @ref overview_sizer "Sizers overview"
-*/
-class wxNotebookSizer : public wxSizer
-{
-public:
-    /**
-        Constructor. It takes an associated notebook as its only parameter.
-    */
-    wxNotebookSizer(wxNotebook* notebook);
-
-    /**
-        Returns the notebook associated with the sizer.
-    */
-    wxNotebook* GetNotebook();
-};
-
-
-
-/**
     @class wxFlexGridSizer
 
     A flex grid sizer is a sizer which lays out its children in a two-dimensional
