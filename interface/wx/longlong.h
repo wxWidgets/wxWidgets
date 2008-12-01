@@ -17,8 +17,8 @@
 
     wxLongLong defines all usual arithmetic operations such as addition,
     subtraction, bitwise shifts and logical operations as well as multiplication
-    and division (not yet for the machines without native @e long long). It
-    also has operators for implicit construction from and conversion to the native
+    and division (not yet for the machines without native @e long long).
+    It also has operators for implicit construction from and conversion to the native
     @e long long type if it exists and @e long.
 
     You would usually use this type in exactly the same manner as any other
@@ -183,6 +183,21 @@ public:
 
 };
 
+
+/**
+    @class wxULongLong
+
+    This class represents an unsigned 64 bit long number.
+
+    Since wxULongLong has exactly the same API as wxLongLong, please refer
+    to wxLongLong documentation (this page exists only as redirection).
+
+    @library{wxbase}
+    @category{data}
+*/
+class wxULongLong
+{
+};
 
 
 // ============================================================================
