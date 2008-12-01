@@ -61,19 +61,28 @@ if [[ "$1" = "qch" ]]; then
     cd out/html
     qhelpfile="index.qhp"
 
-    # remove <file> lines
-    cat $qhelpfile | grep -v "\<file\>" >temp
+    # remove all <file> and <files> tags
+    cat $qhelpfile | grep -v "<file" >temp
 
-    # remove last 3 lines
+    # remove last 4 lines (so we have nothing after the last <keyword> tag)
     lines=$(wc -l < temp)
-    wanted=`expr $lines - 3`
+    wanted=`expr $lines - 4`
     head -n $wanted temp >$qhelpfile
 
-    # remove useless .md5 and .map files
-    rm *map *md5
+    # generate a list of new <keyword> tags to add to the index file; without
+    # this step in the 'index' tab of Qt assistant the "wxWindow" class is not
+    # present; just "wxWindow::wxWindow" ctor is listed.
+    # NOTE: this operation is not indispensable but produces a QCH easier to use IMO.
+    sed -e 's/<keyword name="wx[a-zA-Z~]*" id="wx\([a-zA-Z]*\)::[a-zA-Z~]*" ref="\([a-z_]*.html\)#.*"/<keyword name="wx\1" id="wx\1" ref="\2"/g' < $qhelpfile | grep "<keyword name=\"wx" | uniq >temp
+    cat temp >>$qhelpfile
+    echo "    </keywords>" >>$qhelpfile
+    echo "    <files>" >>$qhelpfile
+
+    # remove useless files to make the qch slim
+    rm temp *map *md5
 
     # add a <file> tag for _any_ file in out/html folder except the .qhp itself
-    for f in *; do
+    for f in * */*png; do
         if [[ $f != $qhelpfile ]]; then
             echo "      <file>$f</file>" >>$qhelpfile
         fi
@@ -83,6 +92,12 @@ if [[ "$1" = "qch" ]]; then
     echo "    </files>
   </filterSection>
 </QtHelpProject>" >>$qhelpfile
+
+    # replace keyword names so that they appear fully-qualified in the
+    # "index" tab of the Qt Assistant; e.g. Fit => wxWindow::Fit
+    # NOTE: this operation is not indispendable but produces a QCH easier to use IMO.
+    sed -e 's/<keyword name="[a-zA-Z:~]*" id="\([a-zA-Z]*::[a-zA-Z~]*\)"/<keyword name="\1" id="\1"/g' <$qhelpfile >temp
+    mv temp $qhelpfile
 
     # last, run qhelpgenerator:
     cd ../..
