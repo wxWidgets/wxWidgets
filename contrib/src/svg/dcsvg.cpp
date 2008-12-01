@@ -122,9 +122,11 @@ void wxSVGFileDC::Init (wxString f, int Width, int Height, float dpi)
         write(s);
         s = wxT("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" ") + newline ;
         write(s);
-        s = wxT("\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\"> ")+ newline ;
+        s = wxT("\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\"> ") + newline ;
         write(s);
-        s.Printf ( wxT("<svg width=\"%.2gcm\" height=\"%.2gcm\" viewBox=\"0 0 %d %d \"> \n"), float(Width)/dpi*2.54, float(Height)/dpi*2.54, Width, Height );
+        s =  wxT("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" ") + newline;
+        write(s);
+        s.Printf( wxT("    width=\"%.2gcm\" height=\"%.2gcm\" viewBox=\"0 0 %d %d \"> \n"), float(Width)/dpi*2.54, float(Height)/dpi*2.54, Width, Height );
         write(s);
         s = wxT("<title>SVG Picture created as ") + wxFileNameFromPath(f) + wxT(" </title>") + newline ;
         write(s);
