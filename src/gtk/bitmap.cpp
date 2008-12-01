@@ -280,6 +280,9 @@ bool wxBitmap::Create( int width, int height, int depth )
     if (depth == 32)
     {
         SetPixbuf(gdk_pixbuf_new(GDK_COLORSPACE_RGB, true, 8, width, height), 32);
+        // must initialize alpha, otherwise GetPixmap()
+        // will create a mask out of garbage
+        gdk_pixbuf_fill(M_BMPDATA->m_pixbuf, 0x000000ff);
     }
     else
     {
