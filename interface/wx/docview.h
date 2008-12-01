@@ -92,6 +92,15 @@ public:
     virtual wxView* CreateView(wxDocument* doc, long flags = 0);
 
     /**
+        This function implements the default (very primitive) format detection
+        which checks if the extension is that of the template.
+
+        @param path
+            The path to be checked against the template.
+    */
+    virtual bool FileMatchesTemplate(const wxString& path);
+
+    /**
         Returns the default file extension for the document data, as passed to
         the document template constructor.
     */
@@ -108,6 +117,13 @@ public:
         constructor.
     */
     wxString GetDirectory() const;
+
+    /**
+        Returns the run-time class information that allows document
+        instances to be constructed dynamically, as passed to the document
+        template constructor.
+    */
+    wxClassInfo* GetDocClassInfo() const;
 
     /**
         Returns a pointer to the document manager instance for which this
@@ -131,6 +147,13 @@ public:
         Returns the flags, as passed to the document template constructor.
     */
     long GetFlags() const;
+
+    /**
+        Returns the run-time class information that allows view instances
+        to be constructed dynamically, as passed to the document template
+        constructor.
+    */
+    wxClassInfo* GetViewClassInfo() const;
 
     /**
         Returns the view type name, as passed to the document template
