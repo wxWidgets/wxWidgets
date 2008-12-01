@@ -56,7 +56,7 @@ enum wxURIHostType
           wxFileSystem, the old wxURL, and older url specifications.
 
     @library{wxbase}
-    @category{data}
+    @category{net}
 
     @see wxURL
 */
