@@ -101,6 +101,7 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( wxID_EXIT, GridFrame::OnQuit )
     EVT_MENU( ID_VTABLE, GridFrame::OnVTable)
     EVT_MENU( ID_BUGS_TABLE, GridFrame::OnBugsTable)
+    EVT_MENU( ID_TABULAR_TABLE, GridFrame::OnTabularTable)
 
     EVT_MENU( ID_DESELECT_CELL, GridFrame::DeselectCell)
     EVT_MENU( ID_DESELECT_COL, GridFrame::DeselectCol)
@@ -146,6 +147,7 @@ GridFrame::GridFrame()
     wxMenu *fileMenu = new wxMenu;
     fileMenu->Append( ID_VTABLE, _T("&Virtual table test\tCtrl-V"));
     fileMenu->Append( ID_BUGS_TABLE, _T("&Bugs table test\tCtrl-B"));
+    fileMenu->Append( ID_TABULAR_TABLE, _T("&Tabular table test\tCtrl-T"));
     fileMenu->AppendSeparator();
     fileMenu->Append( wxID_EXIT, _T("E&xit\tAlt-X") );
 
@@ -1515,7 +1517,7 @@ wxString BugsGridTable::GetColLabelValue( int col )
 BugsGridFrame::BugsGridFrame()
              : wxFrame(NULL, wxID_ANY, _T("Bugs table"))
 {
-    wxGrid *grid = new wxGrid(this, wxID_ANY, wxDefaultPosition);
+    wxGrid *grid = new wxGrid(this, wxID_ANY);
     wxGridTableBase *table = new BugsGridTable();
     table->SetAttrProvider(new MyGridCellAttrProvider);
     grid->SetTable(table, true);
@@ -1537,4 +1539,233 @@ BugsGridFrame::BugsGridFrame()
     SetClientSize(grid->GetSize());
 }
 
+// ============================================================================
+// TabularGrid: grid used for display of tabular data
+// ============================================================================
+
+class TabularGridTable : public wxGridTableBase
+{
+public:
+    enum
+    {
+        COL_NAME,
+        COL_EXT,
+        COL_SIZE,
+        COL_DATE,
+        COL_MAX
+    };
+
+    enum
+    {
+        ROW_MAX = 3
+    };
+
+    virtual int GetNumberRows() { return ROW_MAX; }
+    virtual int GetNumberCols() { return COL_MAX; }
+
+    virtual wxString GetValue(int row, int col)
+    {
+        // notice that column parameter here always refers to the internal
+        // column index, independently of its position on the screen
+        static const char *filedata[][COL_MAX] =
+        {
+            { "autoexec", "bat",    "412", "Apr 17  2004" },
+            { "boot",     "ini",    "604", "May 27  2006" },
+            { "io",       "sys",  "40774", "May 31  1994" },
+        };
+        wxCOMPILE_TIME_ASSERT( WXSIZEOF(filedata) == ROW_MAX, Mismatch );
+
+        return filedata[row][col];
+    }
+
+    virtual void SetValue(int, int, const wxString&)
+    {
+        wxFAIL_MSG( "shouldn't be called" );
+    }
+
+    virtual wxString GetColLabelValue(int col)
+    {
+        static const char *labels[] = { "Name", "Extension", "Size", "Date" };
+        wxCOMPILE_TIME_ASSERT( WXSIZEOF(labels) == COL_MAX, Mismatch );
+
+        return labels[col];
+    }
+
+    virtual void SetColLabelValue(int, const wxString&)
+    {
+        wxFAIL_MSG( "shouldn't be called" );
+    }
+};
+
+// specialized text control for column indexes entry
+class ColIndexEntry : public wxTextCtrl
+{
+public:
+    ColIndexEntry(wxWindow *parent)
+        : wxTextCtrl(parent, wxID_ANY, "")
+    {
+        SetValidator(wxTextValidator(wxFILTER_NUMERIC));
+    }
+
+    int GetCol()
+    {
+        unsigned long col;
+        if ( !GetValue().ToULong(&col) || col > TabularGridTable::COL_MAX )
+        {
+            SetFocus();
+            return -1;
+        }
+
+        return col;
+    }
+
+protected:
+    virtual wxSize DoGetBestSize() const
+    {
+        wxSize size = wxTextCtrl::DoGetBestSize();
+        size.x = 3*GetCharWidth();
+        return size;
+    }
+};
+
+class TabularGridFrame : public wxFrame
+{
+public:
+    TabularGridFrame();
+
+private:
+    enum // control ids
+    {
+        Id_Check_UseNative,
+        Id_Check_EnableColMove
+    };
+
+    // event handlers
+
+    void OnToggleUseNativeHeader(wxCommandEvent&)
+    {
+        m_grid->SetUseNativeColLabels(m_chkUseNative->IsChecked());
+    }
+
+    void OnToggleColMove(wxCommandEvent&)
+    {
+        m_grid->EnableDragColMove(m_chkEnableColMove->IsChecked());
+    }
+
+    void OnMoveColumn(wxCommandEvent&)
+    {
+        int col = m_txtColIndex->GetCol();
+        int pos = m_txtColPos->GetCol();
+        if ( col == -1 || pos == -1 )
+            return;
+
+        m_grid->SetColPos(col, pos);
+
+        UpdateOrder();
+    }
+
+    void OnGridColMove(wxGridEvent& event)
+    {
+        UpdateOrder();
+
+        event.Skip();
+    }
+
+    void UpdateOrder()
+    {
+        wxString s;
+        for ( int pos = 0; pos < TabularGridTable::COL_MAX; pos++ )
+            s << m_grid->GetColAt(pos) << ' ';
+
+        m_statOrder->SetLabel(s);
+    }
+
+    // controls
+    wxGrid *m_grid;
+    wxCheckBox *m_chkUseNative,
+               *m_chkEnableColMove;
+
+    ColIndexEntry *m_txtColIndex,
+                  *m_txtColPos;
+
+    wxStaticText *m_statOrder;
+
+    DECLARE_NO_COPY_CLASS(TabularGridFrame)
+    DECLARE_EVENT_TABLE()
+};
+
+BEGIN_EVENT_TABLE(TabularGridFrame, wxFrame)
+    EVT_CHECKBOX(Id_Check_UseNative, TabularGridFrame::OnToggleUseNativeHeader)
+    EVT_CHECKBOX(Id_Check_EnableColMove, TabularGridFrame::OnToggleColMove)
+
+    EVT_BUTTON(wxID_APPLY, TabularGridFrame::OnMoveColumn)
+
+    EVT_GRID_COL_MOVE(TabularGridFrame::OnGridColMove)
+END_EVENT_TABLE()
+
+TabularGridFrame::TabularGridFrame()
+                : wxFrame(NULL, wxID_ANY, "Tabular table")
+{
+    // create and initialize the grid with the specified data
+    m_grid = new wxGrid(this, wxID_ANY);
+    m_grid->SetTable(new TabularGridTable, true, wxGrid::wxGridSelectRows);
+
+    m_grid->SetUseNativeColLabels();
+    m_grid->EnableDragColMove();
+
+    // add it and the other controls to the frame
+    wxSizer * const sizerTop = new wxBoxSizer(wxVERTICAL);
+    sizerTop->Add(m_grid, wxSizerFlags(1).Expand().Border());
+
+    wxSizer * const sizerControls = new wxBoxSizer(wxHORIZONTAL);
+
+    wxSizer * const sizerStyles = new wxBoxSizer(wxVERTICAL);
+    m_chkUseNative = new wxCheckBox(this, Id_Check_UseNative,
+                                    "&Use native header");
+    m_chkUseNative->SetValue(true);
+    sizerStyles->Add(m_chkUseNative, wxSizerFlags().Border());
+
+    m_chkEnableColMove = new wxCheckBox(this, Id_Check_EnableColMove,
+                                        "Allow column re&ordering");
+    m_chkEnableColMove->SetValue(true);
+    sizerStyles->Add(m_chkEnableColMove, wxSizerFlags().Border());
+    sizerControls->Add(sizerStyles);
+
+    sizerControls->AddSpacer(10);
+
+    wxSizer * const sizerColumns = new wxBoxSizer(wxVERTICAL);
+    wxSizer * const sizerMoveCols = new wxBoxSizer(wxHORIZONTAL);
+    const wxSizerFlags
+        flagsHorz(wxSizerFlags().Border(wxLEFT | wxRIGHT).Centre());
+    sizerMoveCols->Add(new wxStaticText(this, wxID_ANY, "&Move column"),
+                       flagsHorz);
+    m_txtColIndex = new ColIndexEntry(this);
+    sizerMoveCols->Add(m_txtColIndex, flagsHorz);
+    sizerMoveCols->Add(new wxStaticText(this, wxID_ANY, "&to"), flagsHorz);
+    m_txtColPos = new ColIndexEntry(this);
+    sizerMoveCols->Add(m_txtColPos, flagsHorz);
+    sizerMoveCols->Add(new wxButton(this, wxID_APPLY), flagsHorz);
+
+    sizerColumns->Add(sizerMoveCols, wxSizerFlags().Expand().Border(wxBOTTOM));
+
+    wxSizer * const sizerShowCols = new wxBoxSizer(wxHORIZONTAL);
+    sizerShowCols->Add(new wxStaticText(this, wxID_ANY, "Current order:"),
+                       flagsHorz);
+    m_statOrder = new wxStaticText(this, wxID_ANY, "<default>");
+    sizerShowCols->Add(m_statOrder, flagsHorz);
+    sizerColumns->Add(sizerShowCols, wxSizerFlags().Expand().Border(wxTOP));
+
+    sizerControls->Add(sizerColumns, wxSizerFlags(1).Expand().Border());
+
+    sizerTop->Add(sizerControls, wxSizerFlags().Expand().Border());
+
+    SetSizerAndFit(sizerTop);
+    SetBackgroundColour(*wxWHITE);
+    Show();
+}
+
+void GridFrame::OnTabularTable(wxCommandEvent&)
+{
+    new TabularGridFrame;
+}
 

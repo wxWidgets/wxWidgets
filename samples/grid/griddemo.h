@@ -108,6 +108,7 @@ public:
     void About( wxCommandEvent& );
     void OnVTable( wxCommandEvent& );
     void OnBugsTable( wxCommandEvent& );
+    void OnTabularTable( wxCommandEvent& );
 
     enum
     {
@@ -148,6 +149,7 @@ public:
         ID_SET_CELL_BG_COLOUR,
         ID_VTABLE,
         ID_BUGS_TABLE,
+        ID_TABULAR_TABLE,
         ID_SELECT_UNSELECT,
         ID_SHOW_SELECTION,
         ID_SELECT_ALL,
@@ -251,7 +253,7 @@ private:
 class BugsGridTable : public wxGridTableBase
 {
 public:
-    BugsGridTable(){};
+    BugsGridTable() { }
 
     virtual int GetNumberRows();
     virtual int GetNumberCols();
