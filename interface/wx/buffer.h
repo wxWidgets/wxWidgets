@@ -6,6 +6,78 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+
+/**
+    wxCharTypeBuffer<T> is a template class for storing characters.
+
+    @todo provide better docs for this class
+
+    @nolibrary
+    @category{misc}
+*/
+template <typename T>
+class wxCharTypeBuffer
+{
+public:
+    typedef T CharType;
+
+    wxCharTypeBuffer(const CharType *str = NULL);
+    wxCharTypeBuffer(size_t len);
+    wxCharTypeBuffer(const wxCharTypeBuffer& src);
+    ~wxCharTypeBuffer();
+
+    void reset();
+
+    wxCharTypeBuffer& operator=(const CharType *str);
+    wxCharTypeBuffer& operator=(const wxCharTypeBuffer& src);
+
+    bool extend(size_t len);
+
+    CharType *data();
+    const CharType *data() const;
+    operator const CharType *() const;
+    CharType operator[](size_t n) const;
+};
+
+/**
+    This is a specialization of wxCharTypeBuffer<T> for @c char type.
+
+    @todo provide better docs for this class
+
+    @nolibrary
+    @category{misc}
+*/
+class wxCharBuffer : public wxCharTypeBuffer<char>
+{
+public:
+    typedef wxCharTypeBuffer<char> wxCharTypeBufferBase;
+
+    wxCharBuffer(const wxCharTypeBufferBase& buf);
+    wxCharBuffer(const CharType *str = NULL);
+    wxCharBuffer(size_t len);
+    wxCharBuffer(const wxCStrData& cstr);
+};
+
+/**
+    This is a specialization of wxCharTypeBuffer<T> for @c wchar_t type.
+    This class is available only when <tt>wxUSE_WCHAR_T==1</tt>
+
+    @nolibrary
+    @category{misc}
+*/
+class wxWCharBuffer : public wxCharTypeBuffer<wchar_t>
+{
+public:
+    typedef wxCharTypeBuffer<wchar_t> wxCharTypeBufferBase;
+
+    wxWCharBuffer(const wxCharTypeBufferBase& buf);
+    wxWCharBuffer(const CharType *str = NULL);
+    wxWCharBuffer(size_t len);
+    wxWCharBuffer(const wxCStrData& cstr);
+};
+
+
+
 /**
     @class wxMemoryBuffer
 
