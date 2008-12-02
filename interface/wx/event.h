@@ -34,7 +34,26 @@ class wxEvent : public wxObject
 {
 public:
     /**
-        Constructor. Should not need to be used directly by an application.
+        Constructor.
+
+        Notice that events are usually created by wxWidgets itself and creating
+        e.g. a wxPaintEvent in your code and sending it to e.g. a wxTextCtrl
+        will not usually affect it at all as native controls have no specific
+        knowledge about wxWidgets events. However you may construct objects of
+        specific types and pass them to wxEvtHandler::ProcessEvent() if you
+        want to create your own custom control and want to process its events
+        in the same manner as the standard ones.
+
+        Also please notice that the order of parameters in this constructor is
+        different from almost all the derived classes which specify the event
+        type as the first argument.
+
+        @param id
+            The identifier of the object (window, timer, ...) which generated
+            this event.
+        @param eventType
+            The unique type of event, e.g. wxEVT_PAINT, wxEVT_SIZE or
+            wxEVT_COMMAND_BUTTON_CLICKED.
     */
     wxEvent(int id = 0, wxEventType eventType = wxEVT_NULL);
 
