@@ -1441,6 +1441,8 @@ properties:
      Item's kind is wxITEM_RADIO (default: 0)?}
 @row3col{toggle, @ref overview_xrcformat_type_bool,
      Item's kind is wxITEM_CHECK (default: 0)?}
+@row3col{dropdown, see below,
+     Item's kind is wxITEM_DROPDOWN (default: 0)? (@since 2.9.0)}
 @row3col{tooltip, @ref overview_xrcformat_type_text,
     Tooltip to use for the tool (default: none).}
 @row3col{longhelp, @ref overview_xrcformat_type_text,
@@ -1449,7 +1451,11 @@ properties:
      Is the tool initially disabled (default: 0)?}
 @endTable
 
-@c radio and @c toggle are mutually exclusive.
+The presence of a @c dropdown property indicates that the tool is of type
+wxITEM_DROPDOWN. It must be either empty or contain exactly one wxMenu @ref
+xrc_wxmenu child object defining the drop-down button associated menu.
+
+Notice that @c radio, @c toggle and @c dropdown are mutually exclusive.
 
 Children that are neither @c tool nor @c separator must be instances of classes
 derived from wxControl and are added to the toolbar using
@@ -1466,6 +1472,20 @@ Example:
     <object class="tool" name="bar">
         <bitmap>bar.png</bitmap>
         <label>Bar</label>
+    </object>
+    <object class="tool" name="view_auto">
+        <bitmap>view.png</bitmap>
+        <label>View</label>
+        <dropdown>
+            <object class="wxMenu">
+                <object class="wxMenuItem" name="view_as_text">
+                    <label>View as text</label>
+                </object>
+                <object class="wxMenuItem" name="view_as_hex">
+                    <label>View as binary</label>
+                </object>
+            </object>
+        </dropdown>
     </object>
     <object class="separator"/>
     <object class="wxComboBox">

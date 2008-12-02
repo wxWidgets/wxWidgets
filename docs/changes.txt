@@ -345,6 +345,7 @@ All (GUI):
 - Added wxWindow::AlwaysShowScrollbars() (Julian Scheid).
 - Added wxMouseEvent::GetClickCount() (Julian Scheid).
 - Added wxBG_STYLE_TRANSPARENT background style (Julian Scheid).
+- Added support for drop-down toolbar buttons to XRC.
 - Added XRCSIZERITEM() macro for obtaining sizers from XRC (Brian Vanderburg II).
 - New and improved wxFileCtrl (Diaa Sami and Marcin Wojdyr).
 - Added wxEventBlocker class (Francesco Montorsi).

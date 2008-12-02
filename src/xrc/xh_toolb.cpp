@@ -58,22 +58,57 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
         wxItemKind kind = wxITEM_NORMAL;
         if (GetBool(wxT("radio")))
             kind = wxITEM_RADIO;
+
         if (GetBool(wxT("toggle")))
         {
             wxASSERT_MSG( kind == wxITEM_NORMAL,
                           _T("can't have both toggle and radio button at once") );
             kind = wxITEM_CHECK;
         }
-        m_toolbar->AddTool(GetID(),
-                           GetText(wxT("label")),
-                           GetBitmap(wxT("bitmap"), wxART_TOOLBAR),
-                           GetBitmap(wxT("bitmap2"), wxART_TOOLBAR),
-                           kind,
-                           GetText(wxT("tooltip")),
-                           GetText(wxT("longhelp")));
+
+        // check whether we have dropdown tag inside
+        wxMenu *menu = NULL; // menu for drop down items
+        wxXmlNode * const nodeDropdown = GetParamNode("dropdown");
+        if ( nodeDropdown )
+        {
+            wxASSERT_MSG( kind == wxITEM_NORMAL,
+                          "drop down button can't be a check/radio "
+                          "button too" );
+
+            kind = wxITEM_DROPDOWN;
+
+            // also check for the menu specified inside dropdown (it is
+            // optional and may be absent for e.g. dynamically-created
+            // menus)
+            wxXmlNode * const nodeMenu = nodeDropdown->GetChildren();
+            if ( nodeMenu )
+            {
+                wxObject *res = CreateResFromNode(nodeMenu, NULL);
+                menu = wxDynamicCast(res, wxMenu);
+                wxASSERT_MSG( menu, "invalid drop down object contents" );
+
+                wxASSERT_MSG( !nodeMenu->GetNext(),
+                              "only single menu tag allowed inside dropdown" );
+            }
+        }
+
+        wxToolBarToolBase * const
+            tool = m_toolbar->AddTool
+                             (
+                                GetID(),
+                                GetText(wxT("label")),
+                                GetBitmap(wxT("bitmap"), wxART_TOOLBAR),
+                                GetBitmap(wxT("bitmap2"), wxART_TOOLBAR),
+                                kind,
+                                GetText(wxT("tooltip")),
+                                GetText(wxT("longhelp"))
+                             );
 
         if ( GetBool(wxT("disabled")) )
             m_toolbar->EnableTool(GetID(), false);
+
+        if ( menu )
+            tool->SetDropdownMenu(menu);
 
         return m_toolbar; // must return non-NULL
     }

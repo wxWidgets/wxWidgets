@@ -81,6 +81,25 @@
                                 <object class="wxToolBar">
                                     <style>wxTB_FLAT|wxTB_NODIVIDER</style>
                                     <margins>2,2</margins>
+                                    <object class="tool" name="New">
+                                        <bitmap stock_id="wxART_NEW"/>
+                                        <label>New</label>
+                                    </object>
+                                    <object class="tool" name="view_auto">
+                                        <bitmap stock_id="wxART_FILE_OPEN"/>
+                                        <label>View</label>
+                                        <dropdown>
+                                            <object class="wxMenu">
+                                                <object class="wxMenuItem" name="view_as_text">
+                                                    <label>View as text</label>
+                                                </object>
+                                                <object class="wxMenuItem" name="view_as_hex">
+                                                    <label>View as binary</label>
+                                                </object>
+                                            </object>
+                                        </dropdown>
+                                    </object>
+                                    <object class="separator"/>
                                     <object class="tool" name="home">
                                         <toggle>1</toggle>
                                         <bitmap stock_id="wxART_GO_HOME"/>
@@ -128,6 +147,24 @@
                                     <style>wxTB_FLAT|wxTB_NODIVIDER</style>
                                     <bg>#bbbbff</bg>
                                     <margins>2,2</margins>
+                                    <object class="tool" name="New">
+                                        <bitmap stock_id="wxART_NEW"/>
+                                        <label>New</label>
+                                    </object>
+                                    <object class="tool" name="view_auto">
+                                        <bitmap stock_id="wxART_FILE_OPEN"/>
+                                        <label>View</label>
+                                        <dropdown>
+                                            <object class="wxMenu">
+                                                <object class="wxMenuItem" name="view_as_text">
+                                                    <label>View as text</label>
+                                                </object>
+                                                <object class="wxMenuItem" name="view_as_hex">
+                                                    <label>View as binary</label>
+                                                </object>
+                                            </object>
+                                        </dropdown>
+                                    </object>
                                     <object class="tool" name="home">
                                         <toggle>1</toggle>
                                         <bitmap stock_id="wxART_GO_HOME"/>
