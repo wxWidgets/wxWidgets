@@ -1442,7 +1442,7 @@ properties:
 @row3col{toggle, @ref overview_xrcformat_type_bool,
      Item's kind is wxITEM_CHECK (default: 0)?}
 @row3col{dropdown, see below,
-     Item's kind is wxITEM_DROPDOWN (default: 0)? (@since 2.9.0)}
+     Item's kind is wxITEM_DROPDOWN (default: 0)? (only available since wxWidgets 2.9.0)}
 @row3col{tooltip, @ref overview_xrcformat_type_text,
     Tooltip to use for the tool (default: none).}
 @row3col{longhelp, @ref overview_xrcformat_type_text,
@@ -1452,7 +1452,7 @@ properties:
 @endTable
 
 The presence of a @c dropdown property indicates that the tool is of type
-wxITEM_DROPDOWN. It must be either empty or contain exactly one wxMenu @ref
+wxITEM_DROPDOWN. It must be either empty or contain exactly one @ref
 xrc_wxmenu child object defining the drop-down button associated menu.
 
 Notice that @c radio, @c toggle and @c dropdown are mutually exclusive.
