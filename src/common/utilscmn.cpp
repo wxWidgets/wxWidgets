@@ -436,7 +436,7 @@ bool wxGetEmailAddress(wxChar *address, int maxSize)
     if ( !email )
         return false;
 
-    wxStrlcpy(address, email, maxSize);
+    wxStrlcpy(address, email.t_str(), maxSize);
 
     return true;
 }
