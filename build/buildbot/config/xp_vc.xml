@@ -17,8 +17,7 @@
         <make>nmake /nologo /f makefile.vc BUILD=release SHARED=1 CPPUNIT_CFLAGS=-Ik:/buildbot/VC9libs/cppunit-1.12.1/include CPPUNIT_LIBS=k:/buildbot/VC9libs/cppunit-1.12.1/lib/cppunit.lib</make>
         <steps>
             <checkout/>
-            <compile-all/>
-            <run-tests/>
+            <compile-all tests="true"/>
         </steps>
     </build>
     <build>
@@ -29,8 +28,7 @@
         <make>nmake /nologo /f makefile.vc BUILD=release SHARED=1 CPPUNIT_CFLAGS=-Ik:/buildbot/VC9libs/cppunit-1.12.1/include CPPUNIT_LIBS=k:/buildbot/VC9libs/cppunit-1.12.1/lib/cppunit.lib</make>
         <steps>
             <checkout branch="{$STABLE_BRANCH}"/>
-            <compile-all contrib="false"/>
-            <run-tests/>
+            <compile-all contrib="false" tests="true"/>
         </steps>
     </build>
     <build>
@@ -41,8 +39,7 @@
         <make>nmake /nologo /f makefile.vc BUILD=debug SHARED=1 CPPUNIT_CFLAGS=-Ik:/buildbot/VC9libs/cppunit-1.12.1/include CPPUNIT_LIBS=k:/buildbot/VC9libs/cppunit-1.12.1/lib/cppunitd.lib</make>
         <steps>
             <checkout/>
-            <compile-all/>
-            <run-tests/>
+            <compile-all tests="true"/>
         </steps>
     </build>
     <build>
@@ -53,8 +50,7 @@
         <make>nmake /nologo /f makefile.vc BUILD=debug SHARED=1 CPPUNIT_CFLAGS=-Ik:/buildbot/VC9libs/cppunit-1.12.1/include CPPUNIT_LIBS=k:/buildbot/VC9libs/cppunit-1.12.1/lib/cppunitd.lib</make>
         <steps>
             <checkout branch="{$STABLE_BRANCH}"/>
-            <compile-all contrib="false"/>
-            <run-tests/>
+            <compile-all contrib="false" tests="true"/>
         </steps>
     </build>
     <build>
@@ -65,8 +61,7 @@
         <make>nmake /nologo /f makefile.vc BUILD=release SHARED=1 CPPUNIT_CFLAGS=-Ik:/buildbot/VC6libs/cppunit-1.12.1/include CPPUNIT_LIBS=k:/buildbot/VC6libs/cppunit-1.12.1/lib/cppunit.lib</make>
         <steps>
             <checkout/>
-            <compile-all/>
-            <run-tests/>
+            <compile-all tests="true"/>
         </steps>
     </build>
     <build>
@@ -77,8 +72,7 @@
         <make>nmake /nologo /f makefile.vc BUILD=release SHARED=1 CPPUNIT_CFLAGS=-Ik:/buildbot/VC6libs/cppunit-1.12.1/include CPPUNIT_LIBS=k:/buildbot/VC6libs/cppunit-1.12.1/lib/cppunit.lib</make>
         <steps>
             <checkout branch="{$STABLE_BRANCH}"/>
-            <compile-all contrib="false"/>
-            <run-tests/>
+            <compile-all contrib="false" tests="true"/>
         </steps>
     </build>
     <build>
@@ -89,8 +83,7 @@
         <make>nmake /nologo /f makefile.vc BUILD=debug SHARED=1 CPPUNIT_CFLAGS=-Ik:/buildbot/VC6libs/cppunit-1.12.1/include CPPUNIT_LIBS=k:/buildbot/VC6libs/cppunit-1.12.1/lib/cppunitd.lib</make>
         <steps>
             <checkout/>
-            <compile-all/>
-            <run-tests/>
+            <compile-all tests="true"/>
         </steps>
     </build>
     <build>
@@ -101,9 +94,7 @@
         <make>nmake /nologo /f makefile.vc BUILD=debug SHARED=1 CPPUNIT_CFLAGS=-Ik:/buildbot/VC6libs/cppunit-1.12.1/include CPPUNIT_LIBS=k:/buildbot/VC6libs/cppunit-1.12.1/lib/cppunitd.lib</make>
         <steps>
             <checkout branch="{$STABLE_BRANCH}"/>
-            <compile-all contrib="false"/>
-            <run-tests/>
+            <compile-all contrib="false" tests="true"/>
         </steps>
     </build>
-
 </bot>
