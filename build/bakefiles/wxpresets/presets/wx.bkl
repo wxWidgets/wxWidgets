@@ -165,7 +165,7 @@
 
     <!-- Presets for limited dmars make.exe format: -->
     <if cond="FORMAT=='dmars'">
-        <set var="WX_UNICODE">0</set>
+        <set var="WX_UNICODE">1</set>
         <set var="WX_DEBUG">1</set>
         <set var="WX_SHARED">0</set>
     </if>
@@ -198,7 +198,7 @@
     <!-- Configuration for building the bakefile with               -->
     <!-- unicode strings or not (unicode or ansi).                  -->
     <if cond="not isdefined('WX_UNICODE')">
-        <set var="WX_UNICODE_DEFAULT" overwrite="0">0</set>
+        <set var="WX_UNICODE_DEFAULT" overwrite="0">1</set>
         <option name="WX_UNICODE">
             <values>0,1</values>
             <values-description>ANSI,Unicode</values-description>
