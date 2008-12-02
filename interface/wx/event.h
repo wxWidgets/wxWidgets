@@ -1684,6 +1684,14 @@ public:
     int GetWheelRotation() const;
 
     /**
+        Gets the axis the wheel operation concerns; @c 0 is the Y axis as on
+        most mouse wheels, @c 1 is the X axis.
+
+        Note that only some models of mouse have horizontal wheel axis.
+    */
+    int GetWheelAxis() const;
+
+    /**
         Returns X coordinate of the physical mouse event position.
     */
     wxCoord GetX() const;
