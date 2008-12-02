@@ -53,7 +53,12 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
 {
     if (m_class == wxT("tool"))
     {
-        wxCHECK_MSG(m_toolbar, NULL, wxT("Incorrect syntax of XRC resource: tool not within a toolbar!"));
+        if ( !m_toolbar )
+        {
+            wxLogError(_("XRC syntax error: \"tool\" only allowed inside a "
+                         "toolbar"));
+            return NULL;
+        }
 
         wxItemKind kind = wxITEM_NORMAL;
         if (GetBool(wxT("radio")))
@@ -61,8 +66,13 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
 
         if (GetBool(wxT("toggle")))
         {
-            wxASSERT_MSG( kind == wxITEM_NORMAL,
-                          _T("can't have both toggle and radio button at once") );
+            if ( kind != wxITEM_NORMAL )
+            {
+                wxLogWarning(_("XRC syntax error: tool can't have both "
+                               "\"radio\" and \"toggle\" properties, "
+                               "ignoring the former."));
+            }
+
             kind = wxITEM_CHECK;
         }
 
@@ -71,9 +81,12 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
         wxXmlNode * const nodeDropdown = GetParamNode("dropdown");
         if ( nodeDropdown )
         {
-            wxASSERT_MSG( kind == wxITEM_NORMAL,
-                          "drop down button can't be a check/radio "
-                          "button too" );
+            if ( kind != wxITEM_NORMAL )
+            {
+                wxLogWarning(_("XRC syntax error: drop-down tool can't have "
+                               "neither \"radio\" nor \"toggle\" properties, "
+                               "ignoring them."));
+            }
 
             kind = wxITEM_DROPDOWN;
 
@@ -85,10 +98,17 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
             {
                 wxObject *res = CreateResFromNode(nodeMenu, NULL);
                 menu = wxDynamicCast(res, wxMenu);
-                wxASSERT_MSG( menu, "invalid drop down object contents" );
+                if ( !menu )
+                {
+                    wxLogError(_("XRC syntax error: invalid drop-down tool "
+                                 "contents (expected a menu)."));
+                }
 
-                wxASSERT_MSG( !nodeMenu->GetNext(),
-                              "only single menu tag allowed inside dropdown" );
+                if ( nodeMenu->GetNext() )
+                {
+                    wxLogWarning(_("XRC syntax error: unexpected extra "
+                                   "contents under drop-down tool."));
+                }
             }
         }
 
@@ -115,7 +135,12 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
 
     else if (m_class == wxT("separator"))
     {
-        wxCHECK_MSG(m_toolbar, NULL, wxT("Incorrect syntax of XRC resource: separator not within a toolbar!"));
+        if ( !m_toolbar )
+        {
+            wxLogError(_("XRC syntax error: \"separator\" only allowed inside a "
+                         "toolbar"));
+            return NULL;
+        }
         m_toolbar->AddSeparator();
         return m_toolbar; // must return non-NULL
     }

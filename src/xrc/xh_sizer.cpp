@@ -179,7 +179,12 @@ wxObject* wxSizerXmlHandler::Handle_sizeritem()
 
 wxObject* wxSizerXmlHandler::Handle_spacer()
 {
-    wxCHECK_MSG(m_parentSizer, NULL, wxT("Incorrect syntax of XRC resource: spacer not within sizer!"));
+    if ( !m_parentSizer )
+    {
+        wxLogError(_("XRC syntax error: \"spacer\" only allowed inside a "
+                     "sizer"));
+        return NULL;
+    }
 
     wxSizerItem* sitem = MakeSizerItem();
     SetSizerItemAttributes(sitem);
@@ -195,10 +200,13 @@ wxObject* wxSizerXmlHandler::Handle_sizer()
 
     wxXmlNode *parentNode = m_node->GetParent();
 
-    wxCHECK_MSG(m_parentSizer != NULL ||
-                (parentNode && parentNode->GetType() == wxXML_ELEMENT_NODE &&
-                 m_parentAsWindow), NULL,
-                wxT("Sizer must have a window parent node"));
+    if ( !m_parentSizer &&
+            (!parentNode || parentNode->GetType() != wxXML_ELEMENT_NODE ||
+             !m_parentAsWindow) )
+    {
+        wxLogError(_("XRC syntax error: sizer must have a window parent."));
+        return NULL;
+    }
 
     if (m_class == wxT("wxBoxSizer"))
         sizer = Handle_wxBoxSizer();

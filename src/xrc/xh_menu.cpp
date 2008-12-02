@@ -88,7 +88,13 @@ wxObject *wxMenuXmlHandler::DoCreateResource()
                 kind = wxITEM_RADIO;
             if (GetBool(wxT("checkable")))
             {
-                wxASSERT_MSG( kind == wxITEM_NORMAL, _T("can't have both checkable and radio button at once") );
+                if ( kind != wxITEM_NORMAL )
+                {
+                    wxLogWarning(_("XRC syntax error: a menu item can't have "
+                                   "both \"radio\" and \"checkable\" "
+                                   "properties, ignoring the former."));
+                }
+
                 kind = wxITEM_CHECK;
             }
 
