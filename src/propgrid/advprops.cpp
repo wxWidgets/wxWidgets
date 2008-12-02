@@ -108,6 +108,116 @@ bool operator == (const wxArrayInt& array1, const wxArrayInt& array2)
 #if wxUSE_SPINBTN
 
 
+//
+// This class implements ability to rapidly change "spin" value
+// by moving mouse when one of the spin buttons is depressed.
+class wxPGSpinButton : public wxSpinButton
+{
+public:
+    wxPGSpinButton() : wxSpinButton()
+    {
+        m_bLeftDown = false;
+        m_hasCapture = false;
+        m_spins = 1;
+
+        Connect( wxEVT_LEFT_DOWN,
+                 wxMouseEventHandler(wxPGSpinButton::OnMouseEvent) );
+        Connect( wxEVT_LEFT_UP,
+                 wxMouseEventHandler(wxPGSpinButton::OnMouseEvent) );
+        Connect( wxEVT_MOTION,
+                 wxMouseEventHandler(wxPGSpinButton::OnMouseEvent) );
+        Connect( wxEVT_MOUSE_CAPTURE_LOST,
+          wxMouseCaptureLostEventHandler(wxPGSpinButton::OnMouseCaptureLost) );
+    }
+
+    int GetSpins() const
+    {
+        return m_spins;
+    }
+
+private:
+    wxPoint m_ptPosition;
+
+    // Having a separate spins variable allows us to handle validation etc. for
+    // multiple spin events at once (with quick mouse movements there could be
+    // hundreds of 'spins' being done at once). Technically things like this
+    // should be stored in event (wxSpinEvent in this case), but there probably
+    // isn't anything there that can be reliably reused.
+    int     m_spins;
+
+    bool    m_bLeftDown;
+
+    // SpinButton seems to be a special for mouse capture, so we may need track
+    // privately whether mouse is actually captured.
+    bool    m_hasCapture;
+
+    void Capture()
+    {
+        if ( !m_hasCapture )
+        {
+            CaptureMouse();
+            m_hasCapture = true;
+        }
+
+        SetCursor(wxCURSOR_SIZENS);
+    }
+    void Release()
+    {
+        m_bLeftDown = false;
+
+        if ( m_hasCapture )
+        {
+            ReleaseMouse();
+            m_hasCapture = false;
+        }
+
+        wxWindow *parent = GetParent();
+        if ( parent )
+            SetCursor(parent->GetCursor());
+        else
+            SetCursor(wxNullCursor);
+    }
+
+    void OnMouseEvent(wxMouseEvent& event)
+    {
+        if ( event.GetEventType() == wxEVT_LEFT_DOWN )
+        {
+            m_bLeftDown = true;
+            m_ptPosition = event.GetPosition();
+        }
+        else if ( event.GetEventType() == wxEVT_LEFT_UP )
+        {
+            Release();
+            m_bLeftDown = false;
+        }
+        else if ( event.GetEventType() == wxEVT_MOTION )
+        {
+            if ( m_bLeftDown )
+            {
+                Capture();
+                int dy = m_ptPosition.y - event.GetPosition().y;
+                m_ptPosition = event.GetPosition();
+
+                wxSpinEvent evtscroll( (dy >= 0) ? wxEVT_SCROLL_LINEUP :
+                                                   wxEVT_SCROLL_LINEDOWN,
+                                       GetId() );
+                evtscroll.SetEventObject(this);
+
+                m_spins = abs(dy);
+                GetEventHandler()->ProcessEvent(evtscroll);
+                m_spins = 1;
+            }
+        }
+
+        event.Skip();
+    }
+    void OnMouseCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(event))
+    {
+        Release();
+    }
+};
+
+
 WX_PG_IMPLEMENT_INTERNAL_EDITOR_CLASS(SpinCtrl,
                                       wxPGSpinCtrlEditor,
                                       wxPGEditor)
@@ -128,7 +238,10 @@ wxPGWindowList wxPGSpinCtrlEditor::CreateControls( wxPropertyGrid* propgrid, wxP
     wxSize tcSz(sz.x - butSz.x - margin, sz.y);
     wxPoint butPos(pos.x + tcSz.x + margin, pos.y);
 
-    wxSpinButton* wnd2 = new wxSpinButton();
+    wxSpinButton* wnd2;
+
+    wnd2 = new wxPGSpinButton();
+
 #ifdef __WXMSW__
     wnd2->Hide();
 #endif
@@ -152,6 +265,7 @@ bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* proper
 {
     int evtType = event.GetEventType();
     int keycode = -1;
+    int spins = 1;
     bool bigStep = false;
 
     if ( evtType == wxEVT_KEY_DOWN )
@@ -177,6 +291,12 @@ bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* proper
 
     if ( evtType == wxEVT_SCROLL_LINEUP || evtType == wxEVT_SCROLL_LINEDOWN )
     {
+        wxPGSpinButton* spinButton =
+            (wxPGSpinButton*) propgrid->GetEditorControlSecondary();
+
+        if ( spinButton )
+            spins = spinButton->GetSpins();
+
         wxString s;
         // Can't use wnd since it might be clipper window
         wxTextCtrl* tc = wxDynamicCast(propgrid->GetEditorControl(), wxTextCtrl);
@@ -202,6 +322,8 @@ bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* proper
                 if ( bigStep )
                     step *= 10.0;
 
+                step *= (double) spins;
+
                 if ( evtType == wxEVT_SCROLL_LINEUP ) v_d += step;
                 else v_d -= step;
 
@@ -225,6 +347,8 @@ bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* proper
             {
                 if ( bigStep )
                     step *= 10;
+
+                step *= spins;
 
                 if ( evtType == wxEVT_SCROLL_LINEUP ) v_ll += step;
                 else v_ll -= step;
