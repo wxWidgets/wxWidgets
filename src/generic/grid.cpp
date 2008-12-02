@@ -9030,7 +9030,7 @@ bool wxGrid::MovePageUp()
 bool wxGrid::MovePageDown()
 {
     return DoMoveCursorByPage(
-                wxGridForwardOperations(this, wxGridColumnOperations()));
+                wxGridForwardOperations(this, wxGridRowOperations()));
 }
 
 // helper of DoMoveCursorByBlock(): advance the cell coordinates using diroper
