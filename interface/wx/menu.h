@@ -24,7 +24,6 @@
     If you are not calling event.Skip() for events that you don't process in
     these event handlers, menu shortcuts may cease to work.
 
-
     @library{wxcore}
     @category{menus}
 
@@ -387,7 +386,7 @@ public:
     (following the appropriate MacOS X interface guideline).
     On PalmOS @e wxID_EXIT is disabled according to Palm OS Companion guidelines.
 
-    Menu items may be either normal items, check items or radio items.
+    Menu items may be either @e normal items, @e check items or @e radio items.
     Normal items don't have any special properties while the check items have a
     boolean flag associated to them and they show a checkmark in the menu when
     the flag is set.
@@ -402,15 +401,15 @@ public:
     first item of this kind and ends with the first item of a different kind (or
     the end of the menu). Notice that because the radio groups are defined in terms
     of the item positions inserting or removing the items in the menu containing
-    the radio items risks to not work correctly. Finally note that radio items
-    are not supported under Motif.
+    the radio items risks to not work correctly.
 
 
     @section menu_allocation Allocation strategy
 
-    All menus except the popup ones must be created on the heap.
+    All menus except the popup ones must be created on the @b heap.
     All menus attached to a menubar or to another menu will be deleted by their
     parent when it is deleted.
+
     As the frame menubar is deleted by the frame itself, it means that normally
     all menus used are deleted automatically.
 
@@ -418,13 +417,17 @@ public:
     @section menu_eventhandling Event handling
 
     If the menu is part of a menubar, then wxMenuBar event processing is used.
-    With a popup menu, there is a variety of ways to handle a menu selection event
-    (wxEVT_COMMAND_MENU_SELECTED).
-    Derive a new class from wxMenu and define event table entries using the EVT_MENU macro.
-    Set a new event handler for wxMenu, using an object whose class has EVT_MENU entries.
-    Provide EVT_MENU handlers in the window which pops up the menu, or in an
-    ancestor of this window.
 
+    With a popup menu (see wxWindow::PopupMenu), there is a variety of ways to
+    handle a menu selection event (@c wxEVT_COMMAND_MENU_SELECTED):
+    - Provide @c EVT_MENU handlers in the window which pops up the menu, or in an
+      ancestor of that window (the simplest method);
+    - Derive a new class from wxMenu and define event table entries using the @c EVT_MENU macro;
+    - Set a new event handler for wxMenu, through wxEvtHandler::SetNextHandler,
+      specifying an object whose class has @c EVT_MENU entries;
+
+    Note that instead of static @c EVT_MENU macros you can also use dynamic
+    connection; see @ref overview_eventhandling_connect.
 
     @library{wxcore}
     @category{menus}
@@ -576,6 +579,8 @@ public:
         Adds a radio item to the end of the menu.
         All consequent radio items form a group and when an item in the group is
         checked, all the others are automatically unchecked.
+
+        @note Radio items are not supported under wxMotif.
 
         @see Append(), InsertRadioItem()
     */
