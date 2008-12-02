@@ -57,6 +57,8 @@ public:
             Message displayed above the progress bar.
         @param maximum
             Maximum value for the progress bar.
+            In the generic implementation the progress bar is constructed
+            only if this value is greater than zero.
         @param parent
             Parent window.
         @param style
@@ -71,6 +73,31 @@ public:
         Destructor. Deletes the dialog and enables all top level windows.
     */
     virtual ~wxProgressDialog();
+
+    /**
+        Returns the last value passed to the Update() function or
+        @c wxNOT_FOUND if the dialog has no progress bar.
+
+        @since 2.9.0
+    */
+    int GetValue() const;
+
+    /**
+        Returns the maximum value of the progress meter, as passed to
+        the constructor or @c wxNOT_FOUND if the dialog has no progress bar.
+
+        @since 2.9.0
+    */
+    int GetRange() const;
+
+    /**
+        Returns the last message passed to the Update() function;
+        if you always passed wxEmptyString to Update() then the message
+        set through the constructor is returned.
+
+        @since 2.9.0
+    */
+    wxString GetMessage() const;
 
     /**
         Works like Update() but makes the gauge control run in indeterminate mode

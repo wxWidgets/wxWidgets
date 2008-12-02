@@ -487,6 +487,25 @@ bool wxProgressDialog::Show( bool show )
     return wxDialog::Show(show);
 }
 
+int wxProgressDialog::GetValue() const
+{
+    if (m_gauge)
+        return m_gauge->GetValue();
+    return wxNOT_FOUND;
+}
+
+int wxProgressDialog::GetRange() const
+{
+    if (m_gauge)
+        return m_gauge->GetRange();
+    return wxNOT_FOUND;
+}
+
+wxString wxProgressDialog::GetMessage() const
+{
+    return m_msg->GetLabel();
+}
+
 // ----------------------------------------------------------------------------
 // event handlers
 // ----------------------------------------------------------------------------

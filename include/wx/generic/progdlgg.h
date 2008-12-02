@@ -61,13 +61,17 @@ public:
     // Must provide overload to avoid hiding it (and warnings about it)
     virtual void Update() { wxDialog::Update(); }
 
+    virtual bool Show( bool show = true );
+
     /* Can be called to continue after the cancel button has been pressed, but
        the program decided to continue the operation (e.g., user didn't
        confirm it)
     */
     void Resume();
 
-    virtual bool Show( bool show = true );
+    int GetValue() const;
+    int GetRange() const;
+    wxString GetMessage() const;
 
 protected:
     // callback for optional abort button
@@ -101,7 +105,7 @@ private:
     void DisableSkip() { EnableSkip(false); }
     void DisableAbort() { EnableAbort(false); }
 
-    // the status bar
+    // the widget displaying current status (may be NULL)
     wxGauge *m_gauge;
     // the message displayed
     wxStaticText *m_msg;

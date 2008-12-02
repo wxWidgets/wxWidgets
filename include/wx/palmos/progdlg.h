@@ -2,7 +2,7 @@
 // Name:        wx/palmos/progdlg.h
 // Purpose:     wxProgressDialog interface
 // Author:      Wlodzimierz ABX Skiba
-// Modified by: 
+// Modified by:
 // Created:     29.12.2004
 // RCS-ID:      $Id$
 // Copyright:   (c) Wlodzimierz Skiba
@@ -34,6 +34,10 @@ public:
     virtual bool Show( bool show = true );
 
     Boolean Callback(/*PrgCallbackData */ void *data);
+
+    int GetValue() const { return m_cur; }
+    int GetRange() const { return m_max; }
+    wxString GetMessage() const { return m_msg; }
 
 private:
 
