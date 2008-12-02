@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 10 September 2008                                                   *
+# Date : 2 December 2008                                                     *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -50,7 +50,7 @@ OBJECTS = appunix.obj,apptraits.obj,\
 		dlunix.obj,\
 		fontenum.obj,\
 		fontutil.obj,\
-		gsocket.obj,\
+		sockunix.obj,\
 		mimetype.obj,\
 		threadpsx.obj,\
 		utilsunx.obj,\
@@ -70,7 +70,7 @@ SOURCES = appunix.cpp,apptraits.cpp,\
 		dlunix.cpp,\
 		fontenum.cpp,\
 		fontutil.cpp,\
-		gsocket.cpp,\
+		sockunix.cpp,\
 		mimetype.cpp,\
 		threadpsx.cpp,\
 		utilsunx.cpp,\
@@ -108,8 +108,8 @@ dir.obj : dir.cpp
 dlunix.obj : dlunix.cpp
 fontenum.obj : fontenum.cpp
 fontutil.obj : fontutil.cpp
-gsocket.obj : gsocket.cpp
-	cxx $(CXXFLAGS)$(CXX_DEFINE)/nowarn gsocket.cpp
+sockunix.obj : sockunix.cpp
+	cxx $(CXXFLAGS)$(CXX_DEFINE)/nowarn sockunix.cpp
 mimetype.obj : mimetype.cpp
 threadpsx.obj : threadpsx.cpp
 utilsunx.obj : utilsunx.cpp
