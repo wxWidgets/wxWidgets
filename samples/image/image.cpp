@@ -184,6 +184,8 @@ public:
         SetClientSize(bitmap.GetWidth(), bitmap.GetHeight());
 
         UpdateStatusBar();
+        
+        SetBackgroundColour(*wxWHITE);
     }
 
     void OnEraseBackground(wxEraseEvent& WXUNUSED(event))
@@ -194,6 +196,9 @@ public:
     void OnPaint(wxPaintEvent& WXUNUSED(event))
     {
         wxPaintDC dc(this);
+        
+        ClearBackground();
+        
         const wxSize size = GetClientSize();
         dc.DrawBitmap(m_bitmap,
                       (size.x - m_bitmap.GetWidth())/2,
