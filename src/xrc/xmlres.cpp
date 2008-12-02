@@ -1193,13 +1193,19 @@ wxXmlNode *wxXmlResourceHandler::GetParamNode(const wxString& param)
     while (n)
     {
         if (n->GetType() == wxXML_ELEMENT_NODE && n->GetName() == param)
+        {
+            // TODO: check that there are no other properties/parameters with
+            //       the same name and log an error if there are (can't do this
+            //       right now as I'm not sure if it's not going to break code
+            //       using this function in unintentional way (i.e. for
+            //       accessing other things than properties), for example
+            //       wxBitmapComboBoxXmlHandler almost surely does
             return n;
+        }
         n = n->GetNext();
     }
     return NULL;
 }
-
-
 
 bool wxXmlResourceHandler::IsOfClass(wxXmlNode *node, const wxString& classname)
 {
