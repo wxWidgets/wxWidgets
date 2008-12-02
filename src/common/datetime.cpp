@@ -381,7 +381,8 @@ extern const char *wxDumpDate(const wxDateTime* dt)
     static char buf[128];
 
     wxString fmt(dt->Format("%Y-%m-%d (%a) %H:%M:%S"));
-    wxStrlcpy(buf, fmt + " (" + dt->GetValue().ToString() + " ticks)",
+    wxStrlcpy(buf,
+              (fmt + " (" + dt->GetValue().ToString() + " ticks)").ToAscii(),
               WXSIZEOF(buf));
 
     return buf;
