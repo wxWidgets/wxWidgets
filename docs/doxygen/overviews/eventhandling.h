@@ -128,7 +128,7 @@ the frame will result in calling OnSize() method. Note that this macro doesn't
 need a window identifier, since normally you are only interested in the current
 window's size events.
 
-The EVT_BUTTON macro demonstrates that the originating event does not have to
+The @c EVT_BUTTON macro demonstrates that the originating event does not have to
 come from the window class implementing the event table -- if the event source
 is a button within a panel within a frame, this will still work, because event
 tables are searched up through the hierarchy of windows for the command events.

@@ -1,12 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        event.h
-// Purpose:     interface of wxEventHandler, wxEventBlocker and many
+// Purpose:     interface of wxEvtHandler, wxEventBlocker and many
 //              wxEvent-derived classes
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
-
 
 
 /**
@@ -256,13 +255,13 @@ public:
     @class wxEvtHandler
 
     A class that can handle events from the windowing system.
-    wxWindow (and therefore all window classes) are derived from this class.
+    wxWindow is (and therefore all window classes are) derived from this class.
 
     When events are received, wxEvtHandler invokes the method listed in the
     event table using itself as the object.  When using multiple inheritance
-    it is imperative that the wxEvtHandler(-derived) class be the first
-    class inherited such that the "this" pointer for the overall object
-    will be identical to the "this" pointer for the wxEvtHandler portion.
+    <b>it is imperative that the wxEvtHandler(-derived) class is the first
+    class inherited</b> such that the @c this pointer for the overall object
+    will be identical to the @c this pointer of the wxEvtHandler portion.
 
     @library{wxbase}
     @category{events}
@@ -522,13 +521,13 @@ public:
         (such as a new control) where you define new event types, as opposed to
         allowing the user to override virtual functions.
 
-        An instance where you might actually override the ProcessEvent function is where
+        An instance where you might actually override the ProcessEvent() function is where
         you want to direct event processing to event handlers not normally noticed by
         wxWidgets. For example, in the document/view architecture, documents and views
-        are potential event handlers. When an event reaches a frame, ProcessEvent will
+        are potential event handlers. When an event reaches a frame, ProcessEvent() will
         need to be called on the associated document and view in case event handler functions
         are associated with these objects. The property classes library (wxProperty) also
-        overrides ProcessEvent for similar reasons.
+        overrides ProcessEvent() for similar reasons.
 
         The normal order of event table searching is as follows:
         -# If the object is disabled (via a call to wxEvtHandler::SetEvtHandlerEnabled)
@@ -588,6 +587,7 @@ public:
                  @li The event type matches, and
                  @li the identifier or identifier range matches, or the event table
                      entry's identifier is zero.
+
                  If a suitable function is called but calls wxEvent::Skip, this
                  function will fail, and searching will continue.
 
@@ -3268,8 +3268,58 @@ public:
 // Global functions/macros
 // ============================================================================
 
-/** @ingroup group_funcmacro_misc */
+/** @ingroup group_funcmacro_events */
 //@{
+
+/**
+    Each wxEvent-derived class has an @e event-type associated.
+    See the macro DEFINE_EVENT_TYPE() for more info.
+
+    @see @ref overview_eventhandling_custom
+*/
+typedef int wxEventType;
+
+/**
+    Initializes a new event type using wxNewEventType().
+*/
+#define DEFINE_EVENT_TYPE(name)     const wxEventType name = wxNewEventType();
+
+/**
+    Generates a new unique event type.
+*/
+wxEventType wxNewEventType();
+
+/**
+    Use this macro inside a class declaration to declare a @e static event table
+    for that class.
+
+    In the implementation file you'll need to use the BEGIN_EVENT_TABLE()
+    and the END_EVENT_TABLE() macros, plus some additional @c EVT_xxx macro
+    to capture events.
+
+    @see @ref overview_eventhandling_eventtables
+*/
+#define DECLARE_EVENT_TABLE()
+
+/**
+    Use this macro in a source file to start listing @e static event handlers
+    for a specific class.
+
+    Use END_EVENT_TABLE() to terminate the event-declaration block.
+
+    @see @ref overview_eventhandling_eventtables
+*/
+#define BEGIN_EVENT_TABLE(theClass, baseClass)
+
+/**
+    Use this macro in a source file to end listing @e static event handlers
+    for a specific class.
+
+    Use BEGIN_EVENT_TABLE() to start the event-declaration block.
+
+    @see @ref overview_eventhandling_eventtables
+*/
+#define END_EVENT_TABLE()
 
 /**
     In a GUI application, this function posts @a event to the specified @e dest
