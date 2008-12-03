@@ -365,6 +365,9 @@ typedef struct _OSVERSIONINFOEX {
 #ifndef HDS_FULLDRAG
     #define HDS_FULLDRAG 0x0080
 #endif
+#ifndef HDS_FLAT
+    #define HDS_FLAT 0x0200
+#endif
 
 
 #ifndef HDN_BEGINDRAG
