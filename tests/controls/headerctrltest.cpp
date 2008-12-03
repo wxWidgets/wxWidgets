@@ -79,13 +79,13 @@ void HeaderCtrlTestCase::AddDelete()
 {
     CPPUNIT_ASSERT_EQUAL( 0, m_header->GetColumnCount() );
 
-    m_header->AppendColumn(wxHeaderCtrlColumn("Column 1"));
+    m_header->AppendColumn(wxHeaderColumn("Column 1"));
     CPPUNIT_ASSERT_EQUAL( 1, m_header->GetColumnCount() );
 
-    m_header->AppendColumn(wxHeaderCtrlColumn("Column 2"));
+    m_header->AppendColumn(wxHeaderColumn("Column 2"));
     CPPUNIT_ASSERT_EQUAL( 2, m_header->GetColumnCount() );
 
-    m_header->InsertColumn(wxHeaderCtrlColumn("Column 0"), 0);
+    m_header->InsertColumn(wxHeaderColumn("Column 0"), 0);
     CPPUNIT_ASSERT_EQUAL( 3, m_header->GetColumnCount() );
 
     m_header->DeleteColumn(2);
@@ -98,8 +98,8 @@ void HeaderCtrlTestCase::BestSize()
     CPPUNIT_ASSERT( sizeEmpty.x > 0 );
     CPPUNIT_ASSERT( sizeEmpty.y > 0 );
 
-    m_header->AppendColumn(wxHeaderCtrlColumn("Foo"));
-    m_header->AppendColumn(wxHeaderCtrlColumn("Bar"));
+    m_header->AppendColumn(wxHeaderColumn("Foo"));
+    m_header->AppendColumn(wxHeaderColumn("Bar"));
     const wxSize size = m_header->GetBestSize();
     CPPUNIT_ASSERT_EQUAL( sizeEmpty.y, size.y );
 }
