@@ -17,6 +17,8 @@
     #pragma hdrstop
 #endif
 
+#ifdef __WXMSW__ // no generic version of this control yet
+
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/headerctrl.h"
@@ -102,3 +104,4 @@ void HeaderCtrlTestCase::BestSize()
     CPPUNIT_ASSERT_EQUAL( sizeEmpty.y, size.y );
 }
 
+#endif // __WXMSW__
