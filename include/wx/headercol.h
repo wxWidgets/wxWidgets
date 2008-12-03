@@ -163,7 +163,7 @@ protected:
 
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     #include "wx/msw/headercol.h"
-#else
+#elif 0 // TODO
     #define wxHAS_GENERIC_HEADERCOL
     #include "wx/generic/headercolg.h"
 #endif

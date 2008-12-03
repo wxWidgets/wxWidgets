@@ -134,7 +134,7 @@ private:
 
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     #include "wx/msw/headerctrl.h"
-#else // !native MSW
+#elif 0 // TODO
     #define wxHAS_GENERIC_HEADERCTRL
     #include "wx/generic/headerctrl.h"
 #endif // platform
