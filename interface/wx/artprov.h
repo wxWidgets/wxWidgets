@@ -7,6 +7,17 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    This type identifies the client of the art objects requested to wxArtProvider.
+*/
+typedef wxString wxArtClient;
+
+/**
+    This type identifies a specific art object which can be requested to wxArtProvider.
+*/
+typedef wxString wxArtID;
+
+
+/**
     @class wxArtProvider
 
     wxArtProvider class is used to customize the look of wxWidgets application.
@@ -44,10 +55,6 @@
     There's another way of taking advantage of this class: you can use it in your
     code and use platform native icons as provided by wxArtProvider::GetBitmap or
     wxArtProvider::GetIcon.
-
-    @todo IS THIS NB TRUE?
-    (@note this is not yet really possible as of wxWidgets 2.3.3, the set of wxArtProvider
-     bitmaps is too small).
 
     @section artprovider_identify Identifying art resources
 
@@ -116,7 +123,13 @@
 
     @note
     When running under GTK+ 2, GTK+ stock item IDs (e.g. @c "gtk-cdrom") may be used
-    as well. Additionally, if wxGTK was compiled against GTK+ >= 2.4, then it is also
+    as well:
+    @code
+        #ifdef __WXGTK__
+        wxBitmap bmp = wxArtProvider::GetBitmap("gtk-cdrom", wxART_MENU);
+        #endif
+    @endcode
+    Additionally, if wxGTK was compiled against GTK+ >= 2.4, then it is also
     possible to load icons from current icon theme by specifying their name (without
     extension and directory components).
     Icon themes recognized by GTK+ follow the freedesktop.org Icon Themes specification
@@ -128,7 +141,7 @@
 
     @section artprovider_clients Clients
 
-    Client is the entity that calls wxArtProvider's GetBitmap or GetIcon function.
+    The @e client is the entity that calls wxArtProvider's GetBitmap() or GetIcon() function.
     It is represented by wxClientID type and can have one of these values:
 
     @li wxART_TOOLBAR
@@ -141,7 +154,7 @@
     @li wxART_OTHER (used for all requests that don't fit into any of the
         categories above)
 
-    Client ID servers as a hint to wxArtProvider that is supposed to help it to
+    Client ID serve as a hint to wxArtProvider that is supposed to help it to
     choose the best looking bitmap. For example it is often desirable to use
     slightly different icons in menus and toolbars even though they represent
     the same action (e.g. wxART_FILE_OPEN). Remember that this is really only a
