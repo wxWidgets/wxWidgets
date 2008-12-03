@@ -64,15 +64,15 @@ public:
         able to pass wxUniChars to various standard narrow and wide character
         functions.
     */
-    operator char() const { return To8bit(m_value); }
-    operator unsigned char() const { return (unsigned char)To8bit(m_value); }
-    operator wchar_t() const { return (wchar_t)m_value; }
-    operator int() const { return (int)m_value; }
-    operator unsigned int() const { return (unsigned int)m_value; }
-    operator long int() const { return (long int)m_value; }
-    operator unsigned long int() const { return (unsigned long)m_value; }
-    operator short int() const { return (short int)m_value; }
-    operator unsigned short int() const { return (unsigned short int)m_value; }
+    operator char() const;
+    operator unsigned char() const;
+    operator wchar_t() const;
+    operator int() const;
+    operator unsigned int() const;
+    operator long int() const;
+    operator unsigned long int() const;
+    operator short int() const;
+    operator unsigned short int() const;
     //@}
 
     //@{
