@@ -1513,7 +1513,7 @@ public:
     */
     wxDataViewBitmapRenderer(const wxString& varianttype = "wxBitmap",
                              wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-                             int align = wxDVR_DEFAULT_ALIGNMENT,
+                             int align = wxDVR_DEFAULT_ALIGNMENT);
 };
 
 
