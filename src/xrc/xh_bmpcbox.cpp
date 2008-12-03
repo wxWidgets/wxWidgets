@@ -21,6 +21,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/bmpcbox.h"

@@ -21,6 +21,8 @@
 
 #ifndef WX_PRECOMP
     #include "wx/frame.h"
+    #include "wx/log.h"
+    #include "wx/menu.h"
     #include "wx/toolbar.h"
 #endif
 
