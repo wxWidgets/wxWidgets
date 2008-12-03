@@ -266,14 +266,16 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
     GetBuffer().AddEventHandler(this);
 
     // Accelerators
-    wxAcceleratorEntry entries[4];
+    wxAcceleratorEntry entries[6];
 
     entries[0].Set(wxACCEL_CMD,   (int) 'C',       wxID_COPY);
     entries[1].Set(wxACCEL_CMD,   (int) 'X',       wxID_CUT);
     entries[2].Set(wxACCEL_CMD,   (int) 'V',       wxID_PASTE);
     entries[3].Set(wxACCEL_CMD,   (int) 'A',       wxID_SELECTALL);
+    entries[4].Set(wxACCEL_CMD,   (int) 'Z',       wxID_UNDO);
+    entries[5].Set(wxACCEL_CMD,   (int) 'Y',       wxID_REDO);
 
-    wxAcceleratorTable accel(4, entries);
+    wxAcceleratorTable accel(6, entries);
     SetAcceleratorTable(accel);
 
     return true;
