@@ -654,6 +654,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/geometry.cpp
     src/common/gifdecod.cpp
     src/common/graphcmn.cpp
+    src/common/headercolcmn.cpp
+    src/common/headerctrlcmn.cpp
     src/common/helpbase.cpp
     src/common/iconbndl.cpp
     src/common/imagall.cpp
@@ -711,6 +713,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/dirctrlg.cpp
     src/generic/dragimgg.cpp
     src/generic/filectrlg.cpp
+    src/generic/headercolg.cpp
+    src/generic/headerctrlg.cpp
     src/generic/listbkg.cpp
     src/generic/logg.cpp
     src/generic/numdlgg.cpp
@@ -774,6 +778,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/dirctrlg.h
     wx/generic/dragimgg.h
     wx/generic/filectrlg.h
+    wx/generic/headercol.h
+    wx/generic/headerctrl.h
     wx/generic/logg.h
     wx/generic/msgdlgg.h
     wx/generic/numdlgg.h
@@ -791,6 +797,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/textdlgg.h
     wx/generic/treectlg.h
     wx/graphics.h
+    wx/headercol.h
+    wx/headerctrl.h
     wx/helphtml.h
     wx/icon.h
     wx/layout.h
@@ -1639,6 +1647,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/filedlg.cpp
     src/msw/frame.cpp
     src/msw/gauge.cpp
+    src/msw/headercol.cpp
+    src/msw/headerctrl.cpp
     src/msw/iniconf.cpp
     src/msw/listbox.cpp
     src/msw/listctrl.cpp
@@ -1708,6 +1718,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/frame.h
     wx/msw/gauge.h
     wx/msw/gdiimage.h
+    wx/msw/headercol.h
+    wx/msw/headerctrl.h
     wx/msw/icon.h
     wx/msw/imaglist.h
     wx/msw/iniconf.h

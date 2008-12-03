@@ -35,6 +35,17 @@ inline void wxSetCCUnicodeFormat(HWND WXUNUSED_IN_WINCE(hwnd))
 // this is implemented in msw/settings.cpp
 class wxFont;
 extern wxFont wxGetCCDefaultFont();
-#endif
+
+// this is just a wrapper for HDITEM which we can't use in the public header
+// because we don't want to include commctrl.h (and hence windows.h) from there
+struct wxHDITEM : public HDITEM
+{
+    wxHDITEM()
+    {
+        ::ZeroMemory(this, sizeof(*this));
+    }
+};
+
+#endif // wxUSE_GUI
 
 #endif // _WX_MSW_WRAPCCTL_H_

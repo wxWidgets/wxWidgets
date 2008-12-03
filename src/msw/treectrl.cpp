@@ -797,6 +797,11 @@ bool wxTreeCtrl::DoGetItem(wxTreeViewItem *tvItem) const
     wxCHECK_MSG( tvItem->hItem != TVI_ROOT, false,
                  _T("can't retrieve virtual root item") );
 
+    return DoGetPossiblyRootItem(tvItem);
+}
+
+bool wxTreeCtrl::DoGetPossiblyRootItem(wxTreeViewItem *tvItem) const
+{
     if ( !TreeView_GetItem(GetHwnd(), tvItem) )
     {
         wxLogLastError(wxT("TreeView_GetItem"));
@@ -992,14 +997,7 @@ wxTreeItemParam *wxTreeCtrl::GetItemParam(const wxTreeItemId& item) const
 
     wxTreeViewItem tvItem(item, TVIF_PARAM);
 
-    // hidden root may still have data.
-    if ( IS_VIRTUAL_ROOT(item) )
-    {
-        return GET_VIRTUAL_ROOT()->GetParam();
-    }
-
-    // visible node.
-    if ( !DoGetItem(&tvItem) )
+    if ( !DoGetPossiblyRootItem(&tvItem) )
     {
         return NULL;
     }
@@ -1214,7 +1212,7 @@ bool wxTreeCtrl::ItemHasChildren(const wxTreeItemId& item) const
     wxCHECK_MSG( item.IsOk(), false, wxT("invalid tree item") );
 
     wxTreeViewItem tvItem(item, TVIF_CHILDREN);
-    DoGetItem(&tvItem);
+    DoGetPossiblyRootItem(&tvItem);
 
     return tvItem.cChildren != 0;
 }

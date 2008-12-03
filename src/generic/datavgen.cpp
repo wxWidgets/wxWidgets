@@ -73,6 +73,8 @@ static const int EXPANDER_OFFSET = 1;
 // on wxMSW the header window (only that part however) can be made native!
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     #define USE_NATIVE_HEADER_WINDOW
+
+    #include "wx/headerctrl.h"
 #endif
 
 //Below is the compare stuff
@@ -83,7 +85,12 @@ static bool g_asending = true;
 
 // NB: for some reason, this class must be dllexport'ed or we get warnings from
 //     MSVC in DLL build
-class WXDLLIMPEXP_ADV wxDataViewHeaderWindowBase : public wxControl
+class WXDLLIMPEXP_ADV wxDataViewHeaderWindowBase : public
+#ifdef USE_NATIVE_HEADER_WINDOW
+                                                   wxHeaderCtrl
+#else
+                                                   wxControl
+#endif
 {
 public:
     wxDataViewHeaderWindowBase()
@@ -127,21 +134,12 @@ protected:
 class wxDataViewHeaderWindowMSW : public wxDataViewHeaderWindowBase
 {
 public:
-
-    wxDataViewHeaderWindowMSW( wxDataViewCtrl *parent,
-                               wxWindowID id,
-                               const wxPoint &pos = wxDefaultPosition,
-                               const wxSize &size = wxDefaultSize,
-                               const wxString &name = wxT("wxdataviewctrlheaderwindow") )
+    wxDataViewHeaderWindowMSW(wxDataViewCtrl *parent)
     {
-        Create(parent, id, pos, size, name);
+        Create(parent);
     }
 
-    bool Create(wxDataViewCtrl *parent, wxWindowID id,
-                const wxPoint &pos, const wxSize &size,
-                const wxString &name);
-
-    ~wxDataViewHeaderWindowMSW();
+    bool Create(wxDataViewCtrl *parent);
 
     // called when any column setting is changed and/or changed
     // the column count
@@ -154,8 +152,6 @@ public:
 
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
     
-    virtual bool AcceptsFocusFromKeyboard() const { return false; }
-
 protected:
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
 
@@ -172,7 +168,6 @@ protected:
     int          m_buttonHeight;
     bool         m_vetoColumnDrag;
     bool         m_delayedUpdate;
-    wxImageList *m_imageList;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxDataViewHeaderWindowMSW)
@@ -189,7 +184,7 @@ class wxGenericDataViewHeaderWindow : public wxDataViewHeaderWindowBase
 {
 public:
     wxGenericDataViewHeaderWindow( wxDataViewCtrl *parent,
-                                    wxWindowID id,
+                                    wxWindowID id = wxID_ANY,
                                     const wxPoint &pos = wxDefaultPosition,
                                     const wxSize &size = wxDefaultSize,
                                     const wxString &name = wxT("wxdataviewctrlheaderwindow") )
@@ -1186,13 +1181,12 @@ wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewRenderer *c
                                     int width, wxAlignment align, int flags ) :
     wxDataViewColumnBase( title, cell, model_column, width, align, flags )
 {
-    SetAlignment(align);
+    wxDataViewColumnBase::SetWidth(width == wxCOL_WIDTH_DEFAULT
+                                    ? wxDVC_DEFAULT_WIDTH
+                                    : width);
     SetTitle(title);
+    SetAlignment(align);
     SetFlags(flags);
-
-    m_autosize = width < 0;  // TODO
-
-    Init(width < 0 ? wxDVC_DEFAULT_WIDTH : width);
 }
 
 wxDataViewColumn::wxDataViewColumn( const wxBitmap &bitmap, wxDataViewRenderer *cell,
@@ -1200,80 +1194,44 @@ wxDataViewColumn::wxDataViewColumn( const wxBitmap &bitmap, wxDataViewRenderer *
                                     int width, wxAlignment align, int flags ) :
     wxDataViewColumnBase( bitmap, cell, model_column, width, align, flags )
 {
+    wxDataViewColumnBase::SetWidth(width == wxCOL_WIDTH_DEFAULT
+                                    ? wxDVC_DEFAULT_WIDTH
+                                    : width);
+    SetBitmap(bitmap);
     SetAlignment(align);
     SetFlags(flags);
-
-    Init(width < 0 ? wxDVC_DEFAULT_WIDTH : width);
 }
 
-wxDataViewColumn::~wxDataViewColumn()
+void wxDataViewColumn::SetFlags(int flags)
 {
-}
+    if ( flags != GetFlags() )
+    {
+        wxDataViewColumnBase::SetFlags(flags);
 
-void wxDataViewColumn::Init( int width )
-{
-    m_width = width;
-    m_minWidth = wxDVC_DEFAULT_MINWIDTH;
-    m_ascending = true;
-}
-
-void wxDataViewColumn::SetResizeable( bool resizeable )
-{
-    if (resizeable)
-        m_flags |= wxDATAVIEW_COL_RESIZABLE;
-    else
-        m_flags &= ~wxDATAVIEW_COL_RESIZABLE;
-}
-
-void wxDataViewColumn::SetHidden( bool hidden )
-{
-    if (hidden)
-        m_flags |= wxDATAVIEW_COL_HIDDEN;
-    else
-        m_flags &= ~wxDATAVIEW_COL_HIDDEN;
-
-    // tell our owner to e.g. update its scrollbars:
-    if (GetOwner())
-        GetOwner()->OnColumnChange();
-}
-
-void wxDataViewColumn::SetSortable( bool sortable )
-{
-    if (sortable)
-        m_flags |= wxDATAVIEW_COL_SORTABLE;
-    else
-        m_flags &= ~wxDATAVIEW_COL_SORTABLE;
-
-    // Update header button
-    if (GetOwner())
-        GetOwner()->OnColumnChange();
-}
-
-void wxDataViewColumn::SetReorderable( bool reorderable )
-{
-    if (reorderable)
-        m_flags |= wxDATAVIEW_COL_REORDERABLE;
-    else
-        m_flags &= ~wxDATAVIEW_COL_REORDERABLE;
+        // tell our owner to e.g. update its scrollbars:
+        if ( GetOwner() )
+            GetOwner()->OnColumnChange();
+    }
 }
 
 void wxDataViewColumn::SetSortOrder( bool ascending )
 {
-    m_ascending = ascending;
+    if ( ascending == IsSortOrderAscending() )
+        return;
+
+    wxDataViewColumnBase::SetSortOrder(ascending);
 
     // Update header button
     if (GetOwner())
         GetOwner()->OnColumnChange();
 }
 
-bool wxDataViewColumn::IsSortOrderAscending() const
-{
-    return m_ascending;
-}
-
 void wxDataViewColumn::SetInternalWidth( int width )
 {
-    m_width = width;
+    if ( width == GetWidth() )
+        return;
+
+    wxDataViewColumnBase::SetWidth(width);
 
     // the scrollbars of the wxDataViewCtrl needs to be recalculated!
     if (m_owner && m_owner->m_clientArea)
@@ -1282,11 +1240,23 @@ void wxDataViewColumn::SetInternalWidth( int width )
 
 void wxDataViewColumn::SetWidth( int width )
 {
-    if (m_owner->m_headerArea) m_owner->m_headerArea->UpdateDisplay();
+    if ( width == wxCOL_WIDTH_DEFAULT )
+        width = wxDVC_DEFAULT_WIDTH;
+
+    if ( width == GetWidth() )
+        return;
+
+    if (m_owner->m_headerArea)
+        m_owner->m_headerArea->UpdateDisplay();
 
     SetInternalWidth(width);
 }
 
+int wxDataViewColumn::GetWidth() const
+{
+    int width = wxDataViewColumnBase::GetWidth();
+    return width == wxCOL_WIDTH_DEFAULT ? wxDVC_DEFAULT_WIDTH : width;
+}
 
 //-----------------------------------------------------------------------------
 // wxDataViewHeaderWindowBase
@@ -1310,21 +1280,12 @@ void wxDataViewHeaderWindowBase::SendEvent(wxEventType type, unsigned int n)
 
 #ifdef USE_NATIVE_HEADER_WINDOW
 
-#ifndef HDS_DRAGDROP
-    #define HDS_DRAGDROP 0x0040
-#endif
-#ifndef HDS_FULLDRAG
-    #define HDS_FULLDRAG 0x0080
-#endif
-
 // implemented in msw/listctrl.cpp:
 int WXDLLIMPEXP_CORE wxMSWGetColumnClicked(NMHDR *nmhdr, POINT *ptClick);
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewHeaderWindowMSW, wxWindow)
 
-bool wxDataViewHeaderWindowMSW::Create( wxDataViewCtrl *parent, wxWindowID id,
-                                        const wxPoint &pos, const wxSize &size,
-                                        const wxString &name )
+bool wxDataViewHeaderWindowMSW::Create(wxDataViewCtrl *parent)
 {
     m_owner = parent;
 
@@ -1333,56 +1294,7 @@ bool wxDataViewHeaderWindowMSW::Create( wxDataViewCtrl *parent, wxWindowID id,
     m_vetoColumnDrag = false;
     m_buttonHeight = wxRendererNative::Get().GetHeaderButtonHeight( this );
 
-    int x = pos.x == wxDefaultCoord ? 0 : pos.x,
-        y = pos.y == wxDefaultCoord ? 0 : pos.y,
-        w = size.x == wxDefaultCoord ? 1 : size.x,
-        h = m_buttonHeight;
-
-    wxSize new_size(w,h);
-
-    if ( !CreateControl(parent, id, pos, new_size, 0, wxDefaultValidator, name) )
-        return false;
-
-    // create the native WC_HEADER window:
-    WXHWND hwndParent = (HWND)parent->GetHandle();
-    WXDWORD msStyle = WS_CHILD | HDS_DRAGDROP | HDS_BUTTONS | HDS_HORZ | HDS_HOTTRACK | HDS_FULLDRAG;
-
-    if ( m_isShown )
-        msStyle |= WS_VISIBLE;
-
-    m_hWnd = CreateWindowEx(0,
-                            WC_HEADER,
-                            (LPCTSTR) NULL,
-                            msStyle,
-                            x, y, w, h,
-                            (HWND)hwndParent,
-                            (HMENU)-1,
-                            wxGetInstance(),
-                            (LPVOID) NULL);
-    if (m_hWnd == NULL)
-    {
-        wxLogLastError(_T("CreateWindowEx"));
-        return false;
-    }
-
-    m_imageList = new wxImageList( 16, 16 );
-    (void)Header_SetImageList((HWND) m_hWnd, m_imageList->GetHIMAGELIST());
-
-    // we need to subclass the m_hWnd to force wxWindow::HandleNotify
-    // to call wxDataViewHeaderWindow::MSWOnNotify
-    SubclassWin(m_hWnd);
-
-    // the following is required to get the default win's font for
-    // header windows and must be done befor sending the HDM_LAYOUT msg
-    SetFont(GetFont());
-
-    return true;
-}
-
-wxDataViewHeaderWindowMSW::~wxDataViewHeaderWindow()
-{
-    delete m_imageList;
-    UnsubclassWin();
+    return wxHeaderCtrl::Create(parent, wxID_ANY);
 }
 
 wxSize wxDataViewHeaderWindowMSW::DoGetBestSize() const
@@ -1402,79 +1314,36 @@ void wxDataViewHeaderWindowMSW::OnInternalIdle()
 void wxDataViewHeaderWindowMSW::UpdateDisplay()
 {
     // remove old columns
-    for (int j=0, max=Header_GetItemCount((HWND)m_hWnd); j < max; j++)
-        Header_DeleteItem((HWND)m_hWnd, 0);
-
-    m_imageList->RemoveAll();
+    DeleteAllColumns();
 
     // add the updated array of columns to the header control
-    unsigned int cols = GetOwner()->GetColumnCount();
-    unsigned int added = 0;
+    const unsigned int cols = GetOwner()->GetColumnCount();
     for (unsigned int i = 0; i < cols; i++)
     {
-        wxDataViewColumn *col = GetColumn( i );
+        wxDataViewColumn * const col = GetColumn( i );
         if (col->IsHidden())
             continue;      // don't add it!
 
-        wxString title( col->GetTitle() );
-        HDITEM hdi;
-        hdi.mask = HDI_TEXT | HDI_FORMAT | HDI_WIDTH;
-        if (col->GetBitmap().IsOk())
-        {
-           m_imageList->Add( col->GetBitmap() );
-           hdi.mask |= HDI_IMAGE;
-           hdi.iImage = m_imageList->GetImageCount()-1;
-        }
-        hdi.pszText = (wxChar *) title.wx_str();
-        hdi.cxy = col->GetWidth();
-        hdi.cchTextMax = sizeof(hdi.pszText)/sizeof(hdi.pszText[0]);
-        hdi.fmt = HDF_LEFT | HDF_STRING;
-        if (col->GetBitmap().IsOk())
-            hdi.fmt |= HDF_IMAGE;
+        // we store the column index to use later as client data (we need to do
+        // it since column indices in the control and the model may not be the
+        // same if any columns have been hidden)
+        col->SetClientData(i);
 
-        //hdi.fmt &= ~(HDF_SORTDOWN|HDF_SORTUP);
+        AppendColumn(*col);
 
-        if (col->IsSortable() && GetOwner()->GetSortingColumn() == col)
+        if ( col->IsSortable() && GetOwner()->GetSortingColumn() == col )
         {
-            //The Microsoft Comctrl32.dll 6.0 support SORTUP/SORTDOWN, but they are not default
-            //see http://msdn2.microsoft.com/en-us/library/ms649534.aspx for more detail
-            // VZ: works with 5.81
-            hdi.fmt |= col->IsSortOrderAscending() ? HDF_SORTUP : HDF_SORTDOWN;
+            ShowSortIndicator(GetColumnCount() - 1, col->IsSortOrderAscending());
         }
 
-        // lParam is reserved for application's use:
-        // we store there the column index to use it later in MSWOnNotify
-        // (since columns may have been hidden)
-        hdi.lParam = (LPARAM)i;
-
+#if 0
         // the native wxMSW implementation of the header window
         // draws the column separator COLUMN_WIDTH_OFFSET pixels
         // on the right: to correct this effect we make the column
         // exactly COLUMN_WIDTH_OFFSET wider (for the first column):
         if (i == 0)
             hdi.cxy += COLUMN_WIDTH_OFFSET;
-
-        switch (col->GetAlignment())
-        {
-        case wxALIGN_LEFT:
-            hdi.fmt |= HDF_LEFT;
-            break;
-        case wxALIGN_CENTER:
-        case wxALIGN_CENTER_HORIZONTAL:
-            hdi.fmt |= HDF_CENTER;
-            break;
-        case wxALIGN_RIGHT:
-            hdi.fmt |= HDF_RIGHT;
-            break;
-
-        default:
-            // such alignment is not allowed for the column header!
-            break; // wxFAIL;
-        }
-
-        SendMessage((HWND)m_hWnd, HDM_INSERTITEM,
-                    (WPARAM)added, (LPARAM)&hdi);
-        added++;
+#endif
     }
 }
 
@@ -4124,7 +3993,7 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
     if (HasFlag(wxDV_NO_HEADER))
         m_headerArea = NULL;
     else
-        m_headerArea = new wxDataViewHeaderWindow( this, wxID_ANY );
+        m_headerArea = new wxDataViewHeaderWindow(this);
 
     SetTargetWindow( m_clientArea );
 

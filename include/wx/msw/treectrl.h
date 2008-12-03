@@ -242,8 +242,10 @@ private:
     // the common part of all ctors
     void Init();
 
-    // helper functions
+    // helper functions: DoGetItem() doesn't work for hidden virtual root item
+    // while DoGetPossiblyRootItem() does
     bool DoGetItem(wxTreeViewItem *tvItem) const;
+    bool DoGetPossiblyRootItem(wxTreeViewItem *tvItem) const;
     void DoSetItem(wxTreeViewItem *tvItem);
 
     void DoExpand(const wxTreeItemId& item, int flag);

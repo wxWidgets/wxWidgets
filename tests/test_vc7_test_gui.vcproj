@@ -613,6 +613,9 @@
 				RelativePath=".\misc\guifuncs.cpp">
 			</File>
 			<File
+				RelativePath=".\controls\headerctrltest.cpp">
+			</File>
+			<File
 				RelativePath=".\html\htmlwindow.cpp">
 			</File>
 			<File

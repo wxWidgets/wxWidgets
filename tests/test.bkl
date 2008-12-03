@@ -108,9 +108,10 @@
             geometry/point.cpp
             config/config.cpp
             controls/comboboxtest.cpp
+            controls/headerctrltest.cpp
+            controls/listctrltest.cpp
             controls/textctrltest.cpp
             controls/textentrytest.cpp
-            controls/listctrltest.cpp
             image/rawbmp.cpp
             html/htmlwindow.cpp
             misc/guifuncs.cpp

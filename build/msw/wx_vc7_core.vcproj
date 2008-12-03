@@ -724,6 +724,12 @@
 				RelativePath="..\..\src\common\graphcmn.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\common\headercolcmn.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\common\headerctrlcmn.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\common\helpbase.cpp">
 			</File>
 			<File
@@ -1263,6 +1269,36 @@
 			</File>
 			<File
 				RelativePath="..\..\src\msw\graphics.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\msw\headercol.cpp">
+				<FileConfiguration
+					Name="DLL Universal Release|Win32"
+					ExcludedFromBuild="TRUE"/>
+				<FileConfiguration
+					Name="DLL Universal Debug|Win32"
+					ExcludedFromBuild="TRUE"/>
+				<FileConfiguration
+					Name="Universal Release|Win32"
+					ExcludedFromBuild="TRUE"/>
+				<FileConfiguration
+					Name="Universal Debug|Win32"
+					ExcludedFromBuild="TRUE"/>
+			</File>
+			<File
+				RelativePath="..\..\src\msw\headerctrl.cpp">
+				<FileConfiguration
+					Name="DLL Universal Release|Win32"
+					ExcludedFromBuild="TRUE"/>
+				<FileConfiguration
+					Name="DLL Universal Debug|Win32"
+					ExcludedFromBuild="TRUE"/>
+				<FileConfiguration
+					Name="Universal Release|Win32"
+					ExcludedFromBuild="TRUE"/>
+				<FileConfiguration
+					Name="Universal Debug|Win32"
+					ExcludedFromBuild="TRUE"/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\helpchm.cpp">
@@ -1915,6 +1951,12 @@
 			</File>
 			<File
 				RelativePath="..\..\src\generic\fontpickerg.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\generic\headercolg.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\generic\headerctrlg.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\generic\listbkg.cpp">
@@ -2986,6 +3028,12 @@
 				RelativePath="..\..\include\wx\msw\glcanvas.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\msw\headercol.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\msw\headerctrl.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\msw\helpbest.h">
 			</File>
 			<File
@@ -3234,6 +3282,12 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\generic\gridsel.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\generic\headercol.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\generic\headerctrl.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\generic\helpext.h">
@@ -3771,6 +3825,12 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\grid.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\headercol.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\headerctrl.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\help.h">

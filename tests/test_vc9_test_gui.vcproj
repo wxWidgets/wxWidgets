@@ -868,6 +868,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\controls\headerctrltest.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\html\htmlwindow.cpp"
 				>
 			</File>

@@ -299,12 +299,8 @@ protected:
 // wxDataViewColumn
 // ---------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewColumn: public wxDataViewColumnBase
+class WXDLLIMPEXP_ADV wxDataViewColumn : public wxDataViewColumnBase
 {
-    friend class wxDataViewHeaderWindowBase;
-    friend class wxDataViewHeaderWindow;
-    friend class wxDataViewHeaderWindowMSW;
-
 public:
     wxDataViewColumn( const wxString &title, wxDataViewRenderer *renderer, 
                       unsigned int model_column, int width = wxDVC_DEFAULT_WIDTH, 
@@ -314,59 +310,25 @@ public:
                       unsigned int model_column, int width = wxDVC_DEFAULT_WIDTH, 
                       wxAlignment align = wxALIGN_CENTER,
                       int flags = wxDATAVIEW_COL_RESIZABLE );
-    virtual ~wxDataViewColumn();
 
-    // setters:
+    // override some methods to notify the owner about changes
+    virtual void SetFlags(int flags);
+    virtual void SetWidth(int width);
+    virtual void SetSortOrder(bool ascending);
 
-    virtual void SetTitle( const wxString &title )
-        { m_title=title; }
-    virtual void SetAlignment( wxAlignment align )
-        { m_align=align; }
-    virtual void SetMinWidth( int minWidth )
-        { m_minWidth=minWidth; }
-    virtual void SetWidth( int width );
-    virtual void SetSortable( bool sortable );
-    virtual void SetResizeable( bool resizeable );
-    virtual void SetHidden( bool hidden );
-    virtual void SetSortOrder( bool ascending );
-    virtual void SetReorderable( bool reorderable );
-
-    // getters:
-
-    virtual wxString GetTitle() const
-        { return m_title; }
-    virtual wxAlignment GetAlignment() const
-        { return m_align; }
-    virtual int GetWidth() const
-        { return m_width; }
-    virtual int GetMinWidth() const
-        { return m_minWidth; }
-    virtual bool IsSortable() const
-        { return (m_flags & wxDATAVIEW_COL_SORTABLE) != 0; }
-    virtual bool IsResizeable() const
-        { return (m_flags & wxDATAVIEW_COL_RESIZABLE) != 0; }
-    virtual bool IsHidden() const
-        { return (m_flags & wxDATAVIEW_COL_HIDDEN) != 0; }
-    virtual bool IsSortOrderAscending() const;
-    virtual bool IsReorderable() const
-        { return (m_flags & wxDATAVIEW_COL_REORDERABLE) != 0; }
+    // override this one to return our default width for columns whose width
+    // was not explicitly set
+    virtual int GetWidth() const;
 
 private:
-    int                      m_width;
-    int                      m_minWidth;
-    int                      m_flags;
-    wxAlignment              m_align;
-    wxString                 m_title;
-    bool                     m_ascending;
-    bool                     m_autosize;
-
-    void Init(int width);
-
     // like SetWidth() but does not ask the header window of the
     // wxDataViewCtrl to reflect the width-change.
     void SetInternalWidth(int width);
 
-protected:
+    friend class wxDataViewHeaderWindowBase;
+    friend class wxDataViewHeaderWindow;
+    friend class wxDataViewHeaderWindowMSW;
+
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewColumn)
 };
 

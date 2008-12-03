@@ -283,10 +283,7 @@ wx/unix/stackwalk.h
 wx/unix/tls.h
 wx/unix/execute.h
 wx/unix/mimetype.h
-wx/unix/private.h
-wx/private/gsocketiohandler.h
 wx/fs_inet.h
-wx/gsocket.h
 wx/protocol/file.h
 wx/protocol/ftp.h
 wx/protocol/http.h
@@ -296,7 +293,6 @@ wx/sckipc.h
 wx/sckstrm.h
 wx/socket.h
 wx/url.h
-wx/unix/gsockunx.h
 wx/xml/xml.h
 wx/xtixml.h
 EOF

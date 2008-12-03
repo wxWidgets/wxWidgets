@@ -107,9 +107,10 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_point.obj \
 	$(OBJS)\test_gui_config.obj \
 	$(OBJS)\test_gui_comboboxtest.obj \
+	$(OBJS)\test_gui_headerctrltest.obj \
+	$(OBJS)\test_gui_listctrltest.obj \
 	$(OBJS)\test_gui_textctrltest.obj \
 	$(OBJS)\test_gui_textentrytest.obj \
-	$(OBJS)\test_gui_listctrltest.obj \
 	$(OBJS)\test_gui_rawbmp.obj \
 	$(OBJS)\test_gui_htmlwindow.obj \
 	$(OBJS)\test_gui_guifuncs.obj \
@@ -663,14 +664,17 @@ $(OBJS)\test_gui_config.obj: .\config\config.cpp
 $(OBJS)\test_gui_comboboxtest.obj: .\controls\comboboxtest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\controls\comboboxtest.cpp
 
+$(OBJS)\test_gui_headerctrltest.obj: .\controls\headerctrltest.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\controls\headerctrltest.cpp
+
+$(OBJS)\test_gui_listctrltest.obj: .\controls\listctrltest.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\controls\listctrltest.cpp
+
 $(OBJS)\test_gui_textctrltest.obj: .\controls\textctrltest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\controls\textctrltest.cpp
 
 $(OBJS)\test_gui_textentrytest.obj: .\controls\textentrytest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\controls\textentrytest.cpp
-
-$(OBJS)\test_gui_listctrltest.obj: .\controls\listctrltest.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\controls\listctrltest.cpp
 
 $(OBJS)\test_gui_rawbmp.obj: .\image\rawbmp.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\image\rawbmp.cpp

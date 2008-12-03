@@ -18,12 +18,16 @@
 
 #include "wx/control.h"
 #include "wx/textctrl.h"
-#include "wx/bitmap.h"
+#include "wx/headercol.h"
 #include "wx/variant.h"
 #include "wx/dynarray.h"
 #include "wx/icon.h"
 #include "wx/imaglist.h"
 #include "wx/weakref.h"
+
+#if !(defined(__WXGTK20__) || defined(__WXMAC__)) || defined(__WXUNIVERSAL__)
+    #define wxHAS_GENERIC_DATAVIEWCTRL
+#endif
 
 class WXDLLIMPEXP_FWD_CORE wxDataFormat;
 
@@ -495,15 +499,25 @@ DECLARE_VARIANT_OBJECT_EXPORTED(wxDataViewIconText, WXDLLIMPEXP_ADV)
 // wxDataViewColumnBase
 // ---------------------------------------------------------
 
+// for compatibility only, do not use
 enum wxDataViewColumnFlags
 {
-    wxDATAVIEW_COL_RESIZABLE     = 1,
-    wxDATAVIEW_COL_SORTABLE      = 2,
-    wxDATAVIEW_COL_REORDERABLE   = 4,
-    wxDATAVIEW_COL_HIDDEN        = 8
+    wxDATAVIEW_COL_RESIZABLE     = wxCOL_RESIZABLE,
+    wxDATAVIEW_COL_SORTABLE      = wxCOL_SORTABLE,
+    wxDATAVIEW_COL_REORDERABLE   = wxCOL_REORDERABLE,
+    wxDATAVIEW_COL_HIDDEN        = wxCOL_HIDDEN
 };
 
-class WXDLLIMPEXP_ADV wxDataViewColumnBase: public wxObject
+class WXDLLIMPEXP_ADV wxDataViewColumnBase : public
+// native implementations of wxDataViewCtrl have their own implementations of
+// wxDataViewColumnBase and so they need to only inherit from
+// wxHeaderColumnBase to provide the same interface as the generic port which
+// uses the platform native (if any) wxHeaderColumn
+#ifdef wxHAS_GENERIC_DATAVIEWCTRL
+                                             wxHeaderColumn
+#else
+                                             wxHeaderColumnBase
+#endif
 {
 public:
     wxDataViewColumnBase( const wxString &title, wxDataViewRenderer *renderer,
@@ -517,49 +531,27 @@ public:
     virtual ~wxDataViewColumnBase();
 
     // setters:
-
-    virtual void SetTitle( const wxString &title ) = 0;
-    virtual void SetAlignment( wxAlignment align ) = 0;
-    virtual void SetSortable( bool sortable ) = 0;
-    virtual void SetReorderable(bool reorderable) = 0;
-    virtual void SetResizeable( bool resizeable ) = 0;
-    virtual void SetHidden( bool hidden ) = 0;
-    virtual void SetSortOrder( bool ascending ) = 0;
-    virtual void SetFlags( int flags );
     virtual void SetOwner( wxDataViewCtrl *owner )
         { m_owner = owner; }
-    virtual void SetBitmap( const wxBitmap &bitmap )
-        { m_bitmap=bitmap; }
-
-    virtual void SetMinWidth( int minWidth ) = 0;
-    virtual void SetWidth( int width ) = 0;
-
 
     // getters:
-
-    virtual wxString GetTitle() const = 0;
-    virtual wxAlignment GetAlignment() const = 0;
-    virtual int GetWidth() const = 0;
-    virtual int GetMinWidth() const = 0;
-
-    virtual int GetFlags() const;
-
-    virtual bool IsHidden() const = 0;
-    virtual bool IsReorderable() const = 0;
-    virtual bool IsResizeable() const = 0;
-    virtual bool IsSortable() const = 0;
-    virtual bool IsSortOrderAscending() const = 0;
-
-    const wxBitmap &GetBitmap() const       { return m_bitmap; }
-    unsigned int GetModelColumn() const     { return static_cast<unsigned int>(m_model_column); }
-
+    unsigned int GetModelColumn() const { return static_cast<unsigned int>(m_model_column); }
     wxDataViewCtrl *GetOwner() const        { return m_owner; }
     wxDataViewRenderer* GetRenderer() const { return m_renderer; }
+
+#ifndef wxHAS_GENERIC_DATAVIEWCTRL
+    // implement some of base class pure virtuals (the rest is port-dependent
+    // and done differently in generic and native versions)
+    virtual void SetBitmap( const wxBitmap& bitmap ) { m_bitmap = bitmap; }
+    virtual wxBitmap GetBitmap() const { return m_bitmap; }
+#endif // !wxHAS_GENERIC_DATAVIEWCTRL
 
 protected:
     wxDataViewRenderer      *m_renderer;
     int                      m_model_column;
+#ifndef wxHAS_GENERIC_DATAVIEWCTRL
     wxBitmap                 m_bitmap;
+#endif // !wxHAS_GENERIC_DATAVIEWCTRL
     wxDataViewCtrl          *m_owner;
 
 protected:
@@ -593,11 +585,11 @@ public:
     // short cuts
     wxDataViewColumn *PrependTextColumn( const wxString &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
-                    wxAlignment align = (wxAlignment)(wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL),
+                    wxAlignment align = wxALIGN_NOT,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *PrependIconTextColumn( const wxString &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
-                    wxAlignment align = (wxAlignment)(wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL),
+                    wxAlignment align = wxALIGN_NOT,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *PrependToggleColumn( const wxString &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxDVC_TOGGLE_DEFAULT_WIDTH,
@@ -609,7 +601,7 @@ public:
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *PrependDateColumn( const wxString &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE, int width = -1,
-                    wxAlignment align = (wxAlignment)(wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL),
+                    wxAlignment align = wxALIGN_NOT,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *PrependBitmapColumn( const wxString &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
@@ -617,11 +609,11 @@ public:
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *PrependTextColumn( const wxBitmap &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
-                    wxAlignment align = (wxAlignment)(wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL),
+                    wxAlignment align = wxALIGN_NOT,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *PrependIconTextColumn( const wxBitmap &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
-                    wxAlignment align = (wxAlignment)(wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL),
+                    wxAlignment align = wxALIGN_NOT,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *PrependToggleColumn( const wxBitmap &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxDVC_TOGGLE_DEFAULT_WIDTH,
@@ -633,7 +625,7 @@ public:
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *PrependDateColumn( const wxBitmap &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE, int width = -1,
-                    wxAlignment align = (wxAlignment)(wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL),
+                    wxAlignment align = wxALIGN_NOT,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *PrependBitmapColumn( const wxBitmap &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
@@ -642,11 +634,11 @@ public:
 
     wxDataViewColumn *AppendTextColumn( const wxString &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
-                    wxAlignment align = (wxAlignment)(wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL),
+                    wxAlignment align = wxALIGN_NOT,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *AppendIconTextColumn( const wxString &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
-                    wxAlignment align = (wxAlignment)(wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL),
+                    wxAlignment align = wxALIGN_NOT,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *AppendToggleColumn( const wxString &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxDVC_TOGGLE_DEFAULT_WIDTH,
@@ -658,7 +650,7 @@ public:
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *AppendDateColumn( const wxString &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE, int width = -1,
-                    wxAlignment align = (wxAlignment)(wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL),
+                    wxAlignment align = wxALIGN_NOT,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *AppendBitmapColumn( const wxString &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
@@ -666,11 +658,11 @@ public:
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *AppendTextColumn( const wxBitmap &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
-                    wxAlignment align = (wxAlignment)(wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL),
+                    wxAlignment align = wxALIGN_NOT,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *AppendIconTextColumn( const wxBitmap &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
-                    wxAlignment align = (wxAlignment)(wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL),
+                    wxAlignment align = wxALIGN_NOT,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *AppendToggleColumn( const wxBitmap &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxDVC_TOGGLE_DEFAULT_WIDTH,
@@ -682,7 +674,7 @@ public:
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *AppendDateColumn( const wxBitmap &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE, int width = -1,
-                    wxAlignment align = (wxAlignment)(wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL),
+                    wxAlignment align = wxALIGN_NOT,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *AppendBitmapColumn( const wxBitmap &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
@@ -850,13 +842,20 @@ typedef void (wxEvtHandler::*wxDataViewEventFunction)(wxDataViewEvent&);
 #define EVT_DATAVIEW_COLUMN_REORDERED(id, fn) wx__DECLARE_DATAVIEWEVT(COLUMN_REORDERED, id, fn)
 
 
-#if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
+#ifdef wxHAS_GENERIC_DATAVIEWCTRL
+    // this symbol doesn't follow the convention for wxUSE_XXX symbols which
+    // are normally always defined as either 0 or 1, so its use is deprecated
+    // and it only exists for backwards compatibility, don't use it any more
+    // and use wxHAS_GENERIC_DATAVIEWCTRL instead
+    #define wxUSE_GENERICDATAVIEWCTRL
+
+    #include "wx/generic/dataview.h"
+#elif defined(__WXGTK20__)
     #include "wx/gtk/dataview.h"
-#elif defined(__WXMAC__) && !defined(__WXUNIVERSAL__)
+#elif defined(__WXMAC__)
     #include "wx/osx/dataview.h"
 #else
-    #define wxUSE_GENERICDATAVIEWCTRL
-    #include "wx/generic/dataview.h"
+    #error "unknown native wxDataViewCtrl implementation"
 #endif
 
 // -------------------------------------

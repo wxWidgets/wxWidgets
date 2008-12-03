@@ -1115,10 +1115,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\wx\gsocket.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\include\wx\protocol\http.h"
 				>
 			</File>

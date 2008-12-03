@@ -359,9 +359,13 @@ typedef struct _OSVERSIONINFOEX {
     #define NMHEADER HD_NOTIFY
 #endif
 
-#ifndef HDS_FULLDRAG
-    #define HDS_FULLDRAG 128
+#ifndef HDS_DRAGDROP
+    #define HDS_DRAGDROP 0x0040
 #endif
+#ifndef HDS_FULLDRAG
+    #define HDS_FULLDRAG 0x0080
+#endif
+
 
 #ifndef HDN_BEGINDRAG
     #define HDN_BEGINDRAG (HDN_FIRST - 11)

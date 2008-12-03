@@ -2744,6 +2744,8 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/frame.h \
 	wx/msw/gauge.h \
 	wx/msw/gdiimage.h \
+	wx/msw/headercol.h \
+	wx/msw/headerctrl.h \
 	wx/msw/icon.h \
 	wx/msw/imaglist.h \
 	wx/msw/iniconf.h \
@@ -3283,6 +3285,8 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/frame.h \
 	wx/msw/gauge.h \
 	wx/msw/gdiimage.h \
+	wx/msw/headercol.h \
+	wx/msw/headerctrl.h \
 	wx/msw/icon.h \
 	wx/msw/imaglist.h \
 	wx/msw/iniconf.h \
@@ -3635,6 +3639,8 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/generic/dirctrlg.h \
 	wx/generic/dragimgg.h \
 	wx/generic/filectrlg.h \
+	wx/generic/headercol.h \
+	wx/generic/headerctrl.h \
 	wx/generic/logg.h \
 	wx/generic/msgdlgg.h \
 	wx/generic/numdlgg.h \
@@ -3652,6 +3658,8 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/generic/textdlgg.h \
 	wx/generic/treectlg.h \
 	wx/graphics.h \
+	wx/headercol.h \
+	wx/headerctrl.h \
 	wx/helphtml.h \
 	wx/icon.h \
 	wx/layout.h \
@@ -4215,6 +4223,8 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_geometry.o \
 	monodll_gifdecod.o \
 	monodll_graphcmn.o \
+	monodll_headercolcmn.o \
+	monodll_headerctrlcmn.o \
 	monodll_helpbase.o \
 	monodll_iconbndl.o \
 	monodll_imagall.o \
@@ -4272,6 +4282,8 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_dirctrlg.o \
 	monodll_dragimgg.o \
 	monodll_filectrlg.o \
+	monodll_headercolg.o \
+	monodll_headerctrlg.o \
 	monodll_listbkg.o \
 	monodll_logg.o \
 	monodll_numdlgg.o \
@@ -4402,6 +4414,8 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_geometry.o \
 	monodll_gifdecod.o \
 	monodll_graphcmn.o \
+	monodll_headercolcmn.o \
+	monodll_headerctrlcmn.o \
 	monodll_helpbase.o \
 	monodll_iconbndl.o \
 	monodll_imagall.o \
@@ -4459,6 +4473,8 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_dirctrlg.o \
 	monodll_dragimgg.o \
 	monodll_filectrlg.o \
+	monodll_headercolg.o \
+	monodll_headerctrlg.o \
 	monodll_listbkg.o \
 	monodll_logg.o \
 	monodll_numdlgg.o \
@@ -5068,6 +5084,8 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_msw_filedlg.o \
 	monodll_msw_frame.o \
 	monodll_msw_gauge.o \
+	monodll_headercol.o \
+	monodll_headerctrl.o \
 	monodll_msw_iniconf.o \
 	monodll_msw_listbox.o \
 	monodll_msw_listctrl.o \
@@ -5303,6 +5321,8 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS =  \
 	monodll_msw_filedlg.o \
 	monodll_msw_frame.o \
 	monodll_msw_gauge.o \
+	monodll_headercol.o \
+	monodll_headerctrl.o \
 	monodll_msw_iniconf.o \
 	monodll_msw_listbox.o \
 	monodll_msw_listctrl.o \
@@ -6027,6 +6047,8 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_geometry.o \
 	monolib_gifdecod.o \
 	monolib_graphcmn.o \
+	monolib_headercolcmn.o \
+	monolib_headerctrlcmn.o \
 	monolib_helpbase.o \
 	monolib_iconbndl.o \
 	monolib_imagall.o \
@@ -6084,6 +6106,8 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_dirctrlg.o \
 	monolib_dragimgg.o \
 	monolib_filectrlg.o \
+	monolib_headercolg.o \
+	monolib_headerctrlg.o \
 	monolib_listbkg.o \
 	monolib_logg.o \
 	monolib_numdlgg.o \
@@ -6214,6 +6238,8 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_geometry.o \
 	monolib_gifdecod.o \
 	monolib_graphcmn.o \
+	monolib_headercolcmn.o \
+	monolib_headerctrlcmn.o \
 	monolib_helpbase.o \
 	monolib_iconbndl.o \
 	monolib_imagall.o \
@@ -6271,6 +6297,8 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_dirctrlg.o \
 	monolib_dragimgg.o \
 	monolib_filectrlg.o \
+	monolib_headercolg.o \
+	monolib_headerctrlg.o \
 	monolib_listbkg.o \
 	monolib_logg.o \
 	monolib_numdlgg.o \
@@ -6880,6 +6908,8 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_msw_filedlg.o \
 	monolib_msw_frame.o \
 	monolib_msw_gauge.o \
+	monolib_headercol.o \
+	monolib_headerctrl.o \
 	monolib_msw_iniconf.o \
 	monolib_msw_listbox.o \
 	monolib_msw_listctrl.o \
@@ -7115,6 +7145,8 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1 =  \
 	monolib_msw_filedlg.o \
 	monolib_msw_frame.o \
 	monolib_msw_gauge.o \
+	monolib_headercol.o \
+	monolib_headerctrl.o \
 	monolib_msw_iniconf.o \
 	monolib_msw_listbox.o \
 	monolib_msw_listctrl.o \
@@ -7989,6 +8021,8 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_geometry.o \
 	coredll_gifdecod.o \
 	coredll_graphcmn.o \
+	coredll_headercolcmn.o \
+	coredll_headerctrlcmn.o \
 	coredll_helpbase.o \
 	coredll_iconbndl.o \
 	coredll_imagall.o \
@@ -8046,6 +8080,8 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_dirctrlg.o \
 	coredll_dragimgg.o \
 	coredll_filectrlg.o \
+	coredll_headercolg.o \
+	coredll_headerctrlg.o \
 	coredll_listbkg.o \
 	coredll_logg.o \
 	coredll_numdlgg.o \
@@ -8176,6 +8212,8 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_geometry.o \
 	coredll_gifdecod.o \
 	coredll_graphcmn.o \
+	coredll_headercolcmn.o \
+	coredll_headerctrlcmn.o \
 	coredll_helpbase.o \
 	coredll_iconbndl.o \
 	coredll_imagall.o \
@@ -8233,6 +8271,8 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_dirctrlg.o \
 	coredll_dragimgg.o \
 	coredll_filectrlg.o \
+	coredll_headercolg.o \
+	coredll_headerctrlg.o \
 	coredll_listbkg.o \
 	coredll_logg.o \
 	coredll_numdlgg.o \
@@ -8842,6 +8882,8 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_msw_filedlg.o \
 	coredll_msw_frame.o \
 	coredll_msw_gauge.o \
+	coredll_headercol.o \
+	coredll_headerctrl.o \
 	coredll_msw_iniconf.o \
 	coredll_msw_listbox.o \
 	coredll_msw_listctrl.o \
@@ -9077,6 +9119,8 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_2 =  \
 	coredll_msw_filedlg.o \
 	coredll_msw_frame.o \
 	coredll_msw_gauge.o \
+	coredll_headercol.o \
+	coredll_headerctrl.o \
 	coredll_msw_iniconf.o \
 	coredll_msw_listbox.o \
 	coredll_msw_listctrl.o \
@@ -9493,6 +9537,8 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_geometry.o \
 	corelib_gifdecod.o \
 	corelib_graphcmn.o \
+	corelib_headercolcmn.o \
+	corelib_headerctrlcmn.o \
 	corelib_helpbase.o \
 	corelib_iconbndl.o \
 	corelib_imagall.o \
@@ -9550,6 +9596,8 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_dirctrlg.o \
 	corelib_dragimgg.o \
 	corelib_filectrlg.o \
+	corelib_headercolg.o \
+	corelib_headerctrlg.o \
 	corelib_listbkg.o \
 	corelib_logg.o \
 	corelib_numdlgg.o \
@@ -9680,6 +9728,8 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_geometry.o \
 	corelib_gifdecod.o \
 	corelib_graphcmn.o \
+	corelib_headercolcmn.o \
+	corelib_headerctrlcmn.o \
 	corelib_helpbase.o \
 	corelib_iconbndl.o \
 	corelib_imagall.o \
@@ -9737,6 +9787,8 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_dirctrlg.o \
 	corelib_dragimgg.o \
 	corelib_filectrlg.o \
+	corelib_headercolg.o \
+	corelib_headerctrlg.o \
 	corelib_listbkg.o \
 	corelib_logg.o \
 	corelib_numdlgg.o \
@@ -10346,6 +10398,8 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_msw_filedlg.o \
 	corelib_msw_frame.o \
 	corelib_msw_gauge.o \
+	corelib_headercol.o \
+	corelib_headerctrl.o \
 	corelib_msw_iniconf.o \
 	corelib_msw_listbox.o \
 	corelib_msw_listctrl.o \
@@ -10581,6 +10635,8 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_3 =  \
 	corelib_msw_filedlg.o \
 	corelib_msw_frame.o \
 	corelib_msw_gauge.o \
+	corelib_headercol.o \
+	corelib_headerctrl.o \
 	corelib_msw_iniconf.o \
 	corelib_msw_listbox.o \
 	corelib_msw_listctrl.o \
@@ -17722,6 +17778,18 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_msw_gauge.o: $(srcdir)/src/msw/gauge.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/gauge.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_headercol.o: $(srcdir)/src/msw/headercol.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/headercol.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_headercol.o: $(srcdir)/src/msw/headercol.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/headercol.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_headerctrl.o: $(srcdir)/src/msw/headerctrl.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/headerctrl.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_headerctrl.o: $(srcdir)/src/msw/headerctrl.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/headerctrl.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_msw_iniconf.o: $(srcdir)/src/msw/iniconf.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/iniconf.cpp
 
@@ -18232,6 +18300,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_graphcmn.o: $(srcdir)/src/common/graphcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/graphcmn.cpp
 
+@COND_USE_GUI_1@monodll_headercolcmn.o: $(srcdir)/src/common/headercolcmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/headercolcmn.cpp
+
+@COND_USE_GUI_1@monodll_headerctrlcmn.o: $(srcdir)/src/common/headerctrlcmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/headerctrlcmn.cpp
+
 @COND_USE_GUI_1@monodll_helpbase.o: $(srcdir)/src/common/helpbase.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/helpbase.cpp
 
@@ -18402,6 +18476,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_USE_GUI_1@monodll_filectrlg.o: $(srcdir)/src/generic/filectrlg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/filectrlg.cpp
+
+@COND_USE_GUI_1@monodll_headercolg.o: $(srcdir)/src/generic/headercolg.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/headercolg.cpp
+
+@COND_USE_GUI_1@monodll_headerctrlg.o: $(srcdir)/src/generic/headerctrlg.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/headerctrlg.cpp
 
 @COND_USE_GUI_1@monodll_listbkg.o: $(srcdir)/src/generic/listbkg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/listbkg.cpp
@@ -22402,6 +22482,18 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_msw_gauge.o: $(srcdir)/src/msw/gauge.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/gauge.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_headercol.o: $(srcdir)/src/msw/headercol.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/headercol.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_headercol.o: $(srcdir)/src/msw/headercol.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/headercol.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_headerctrl.o: $(srcdir)/src/msw/headerctrl.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/headerctrl.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_headerctrl.o: $(srcdir)/src/msw/headerctrl.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/headerctrl.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_msw_iniconf.o: $(srcdir)/src/msw/iniconf.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/iniconf.cpp
 
@@ -22912,6 +23004,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_graphcmn.o: $(srcdir)/src/common/graphcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/graphcmn.cpp
 
+@COND_USE_GUI_1@monolib_headercolcmn.o: $(srcdir)/src/common/headercolcmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/headercolcmn.cpp
+
+@COND_USE_GUI_1@monolib_headerctrlcmn.o: $(srcdir)/src/common/headerctrlcmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/headerctrlcmn.cpp
+
 @COND_USE_GUI_1@monolib_helpbase.o: $(srcdir)/src/common/helpbase.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/helpbase.cpp
 
@@ -23082,6 +23180,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_filectrlg.o: $(srcdir)/src/generic/filectrlg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/filectrlg.cpp
+
+@COND_USE_GUI_1@monolib_headercolg.o: $(srcdir)/src/generic/headercolg.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/headercolg.cpp
+
+@COND_USE_GUI_1@monolib_headerctrlg.o: $(srcdir)/src/generic/headerctrlg.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/headerctrlg.cpp
 
 @COND_USE_GUI_1@monolib_listbkg.o: $(srcdir)/src/generic/listbkg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/listbkg.cpp
@@ -27271,6 +27375,18 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_msw_gauge.o: $(srcdir)/src/msw/gauge.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/gauge.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_headercol.o: $(srcdir)/src/msw/headercol.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/headercol.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_headercol.o: $(srcdir)/src/msw/headercol.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/headercol.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_headerctrl.o: $(srcdir)/src/msw/headerctrl.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/headerctrl.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_headerctrl.o: $(srcdir)/src/msw/headerctrl.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/headerctrl.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_msw_iniconf.o: $(srcdir)/src/msw/iniconf.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/iniconf.cpp
 
@@ -27781,6 +27897,12 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_graphcmn.o: $(srcdir)/src/common/graphcmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/graphcmn.cpp
 
+@COND_USE_GUI_1@coredll_headercolcmn.o: $(srcdir)/src/common/headercolcmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/headercolcmn.cpp
+
+@COND_USE_GUI_1@coredll_headerctrlcmn.o: $(srcdir)/src/common/headerctrlcmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/headerctrlcmn.cpp
+
 @COND_USE_GUI_1@coredll_helpbase.o: $(srcdir)/src/common/helpbase.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/helpbase.cpp
 
@@ -27951,6 +28073,12 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_USE_GUI_1@coredll_filectrlg.o: $(srcdir)/src/generic/filectrlg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/filectrlg.cpp
+
+@COND_USE_GUI_1@coredll_headercolg.o: $(srcdir)/src/generic/headercolg.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/headercolg.cpp
+
+@COND_USE_GUI_1@coredll_headerctrlg.o: $(srcdir)/src/generic/headerctrlg.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/headerctrlg.cpp
 
 @COND_USE_GUI_1@coredll_listbkg.o: $(srcdir)/src/generic/listbkg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/listbkg.cpp
@@ -30778,6 +30906,18 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_msw_gauge.o: $(srcdir)/src/msw/gauge.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/gauge.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_headercol.o: $(srcdir)/src/msw/headercol.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/headercol.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_headercol.o: $(srcdir)/src/msw/headercol.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/headercol.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_headerctrl.o: $(srcdir)/src/msw/headerctrl.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/headerctrl.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_headerctrl.o: $(srcdir)/src/msw/headerctrl.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/headerctrl.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_msw_iniconf.o: $(srcdir)/src/msw/iniconf.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/iniconf.cpp
 
@@ -31288,6 +31428,12 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@corelib_graphcmn.o: $(srcdir)/src/common/graphcmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/graphcmn.cpp
 
+@COND_USE_GUI_1@corelib_headercolcmn.o: $(srcdir)/src/common/headercolcmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/headercolcmn.cpp
+
+@COND_USE_GUI_1@corelib_headerctrlcmn.o: $(srcdir)/src/common/headerctrlcmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/headerctrlcmn.cpp
+
 @COND_USE_GUI_1@corelib_helpbase.o: $(srcdir)/src/common/helpbase.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/helpbase.cpp
 
@@ -31458,6 +31604,12 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_filectrlg.o: $(srcdir)/src/generic/filectrlg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/filectrlg.cpp
+
+@COND_USE_GUI_1@corelib_headercolg.o: $(srcdir)/src/generic/headercolg.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/headercolg.cpp
+
+@COND_USE_GUI_1@corelib_headerctrlg.o: $(srcdir)/src/generic/headerctrlg.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/headerctrlg.cpp
 
 @COND_USE_GUI_1@corelib_listbkg.o: $(srcdir)/src/generic/listbkg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/listbkg.cpp

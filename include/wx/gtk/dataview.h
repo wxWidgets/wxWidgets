@@ -323,6 +323,8 @@ public:
 
     virtual void SetReorderable( bool reorderable );
 
+    virtual void SetFlags(int flags) { SetIndividualFlags(flags); }
+
     // getters:
 
     virtual wxString GetTitle() const;
@@ -337,6 +339,8 @@ public:
     virtual int GetMinWidth() const;
     
     virtual bool IsReorderable() const;
+
+    virtual int GetFlags() const { return GetFromIndividualFlags(); }
 
     // implementation
     GtkWidget* GetGtkHandle() { return m_column; }

@@ -1540,7 +1540,7 @@ enum wxDataViewColumnFlags
     @library{wxadv}
     @category{dvc}
 */
-class wxDataViewColumn : public wxObject
+class wxDataViewColumn : public wxHeaderColumn
 {
 public:
     //@{
@@ -1562,16 +1562,6 @@ public:
     //@}
 
     /**
-        Destructor.
-    */
-    virtual ~wxDataViewColumn();
-
-    /**
-        Returns the bitmap in the header of the column, if any.
-    */
-    const wxBitmap& GetBitmap() const;
-
-    /**
         Returns the index of the column of the model, which this
         wxDataViewColumn is displaying.
     */
@@ -1588,68 +1578,6 @@ public:
         @see wxDataViewRenderer.
     */
     wxDataViewRenderer* GetRenderer() const;
-
-    /**
-        Returns @true if the column is reorderable.
-    */
-    virtual bool IsReorderable() const;
-
-    /**
-        Returns @true if the column is sortable.
-
-        @see SetSortable()
-    */
-    virtual bool IsSortable() const;
-
-    /**
-        Returns the width of the column.
-    */
-    virtual int GetWidth() const;
-
-    /**
-        Returns @true, if the sort order is ascending.
-
-        @see SetSortOrder()
-    */
-    virtual bool IsSortOrderAscending() const;
-
-    /**
-        Set the alignment of the column header.
-    */
-    virtual void SetAlignment(wxAlignment align);
-
-    /**
-        Set the bitmap of the column header.
-    */
-    virtual void SetBitmap(const wxBitmap& bitmap);
-
-    /**
-        Indicate wether the column can be reordered by the user using the mouse.
-        This is typically implemented visually by dragging the header button around.
-    */
-    virtual void SetReorderable(bool reorderable);
-
-    /**
-        Indicate the sort order if the implementation of the wxDataViewCtrl supports
-        it, most commonly by showing a little arrow.
-    */
-    virtual void SetSortOrder(bool ascending);
-
-    /**
-        Indicate that the column is sortable.
-        This does not show any sorting indicate yet, but it does make the column
-        header clickable. Call SetSortOrder() afterwards to actually make the sort
-        indicator appear.
-
-        If @a sortable is @false, the column header is no longer clickable and
-        the sort indicator (little arrow) will disappear.
-    */
-    virtual void SetSortable(bool sortable);
-
-    /**
-        Set the title of the column header to @a title.
-    */
-    virtual void SetTitle(const wxString& title);
 };
 
 

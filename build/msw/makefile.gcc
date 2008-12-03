@@ -1617,6 +1617,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_filedlg.o \
 	$(OBJS)\monodll_frame.o \
 	$(OBJS)\monodll_gauge.o \
+	$(OBJS)\monodll_headercol.o \
+	$(OBJS)\monodll_headerctrl.o \
 	$(OBJS)\monodll_iniconf.o \
 	$(OBJS)\monodll_listbox.o \
 	$(OBJS)\monodll_listctrl.o \
@@ -1700,6 +1702,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_geometry.o \
 	$(OBJS)\monodll_gifdecod.o \
 	$(OBJS)\monodll_graphcmn.o \
+	$(OBJS)\monodll_headercolcmn.o \
+	$(OBJS)\monodll_headerctrlcmn.o \
 	$(OBJS)\monodll_helpbase.o \
 	$(OBJS)\monodll_iconbndl.o \
 	$(OBJS)\monodll_imagall.o \
@@ -1757,6 +1761,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_dirctrlg.o \
 	$(OBJS)\monodll_dragimgg.o \
 	$(OBJS)\monodll_filectrlg.o \
+	$(OBJS)\monodll_headercolg.o \
+	$(OBJS)\monodll_headerctrlg.o \
 	$(OBJS)\monodll_listbkg.o \
 	$(OBJS)\monodll_logg.o \
 	$(OBJS)\monodll_numdlgg.o \
@@ -1936,6 +1942,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_geometry.o \
 	$(OBJS)\monodll_gifdecod.o \
 	$(OBJS)\monodll_graphcmn.o \
+	$(OBJS)\monodll_headercolcmn.o \
+	$(OBJS)\monodll_headerctrlcmn.o \
 	$(OBJS)\monodll_helpbase.o \
 	$(OBJS)\monodll_iconbndl.o \
 	$(OBJS)\monodll_imagall.o \
@@ -1993,6 +2001,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_dirctrlg.o \
 	$(OBJS)\monodll_dragimgg.o \
 	$(OBJS)\monodll_filectrlg.o \
+	$(OBJS)\monodll_headercolg.o \
+	$(OBJS)\monodll_headerctrlg.o \
 	$(OBJS)\monodll_listbkg.o \
 	$(OBJS)\monodll_logg.o \
 	$(OBJS)\monodll_numdlgg.o \
@@ -2291,6 +2301,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_filedlg.o \
 	$(OBJS)\monolib_frame.o \
 	$(OBJS)\monolib_gauge.o \
+	$(OBJS)\monolib_headercol.o \
+	$(OBJS)\monolib_headerctrl.o \
 	$(OBJS)\monolib_iniconf.o \
 	$(OBJS)\monolib_listbox.o \
 	$(OBJS)\monolib_listctrl.o \
@@ -2374,6 +2386,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_geometry.o \
 	$(OBJS)\monolib_gifdecod.o \
 	$(OBJS)\monolib_graphcmn.o \
+	$(OBJS)\monolib_headercolcmn.o \
+	$(OBJS)\monolib_headerctrlcmn.o \
 	$(OBJS)\monolib_helpbase.o \
 	$(OBJS)\monolib_iconbndl.o \
 	$(OBJS)\monolib_imagall.o \
@@ -2431,6 +2445,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_dirctrlg.o \
 	$(OBJS)\monolib_dragimgg.o \
 	$(OBJS)\monolib_filectrlg.o \
+	$(OBJS)\monolib_headercolg.o \
+	$(OBJS)\monolib_headerctrlg.o \
 	$(OBJS)\monolib_listbkg.o \
 	$(OBJS)\monolib_logg.o \
 	$(OBJS)\monolib_numdlgg.o \
@@ -2610,6 +2626,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_geometry.o \
 	$(OBJS)\monolib_gifdecod.o \
 	$(OBJS)\monolib_graphcmn.o \
+	$(OBJS)\monolib_headercolcmn.o \
+	$(OBJS)\monolib_headerctrlcmn.o \
 	$(OBJS)\monolib_helpbase.o \
 	$(OBJS)\monolib_iconbndl.o \
 	$(OBJS)\monolib_imagall.o \
@@ -2667,6 +2685,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_dirctrlg.o \
 	$(OBJS)\monolib_dragimgg.o \
 	$(OBJS)\monolib_filectrlg.o \
+	$(OBJS)\monolib_headercolg.o \
+	$(OBJS)\monolib_headerctrlg.o \
 	$(OBJS)\monolib_listbkg.o \
 	$(OBJS)\monolib_logg.o \
 	$(OBJS)\monolib_numdlgg.o \
@@ -2880,6 +2900,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_filedlg.o \
 	$(OBJS)\coredll_frame.o \
 	$(OBJS)\coredll_gauge.o \
+	$(OBJS)\coredll_headercol.o \
+	$(OBJS)\coredll_headerctrl.o \
 	$(OBJS)\coredll_iniconf.o \
 	$(OBJS)\coredll_listbox.o \
 	$(OBJS)\coredll_listctrl.o \
@@ -2963,6 +2985,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_geometry.o \
 	$(OBJS)\coredll_gifdecod.o \
 	$(OBJS)\coredll_graphcmn.o \
+	$(OBJS)\coredll_headercolcmn.o \
+	$(OBJS)\coredll_headerctrlcmn.o \
 	$(OBJS)\coredll_helpbase.o \
 	$(OBJS)\coredll_iconbndl.o \
 	$(OBJS)\coredll_imagall.o \
@@ -3020,6 +3044,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_dirctrlg.o \
 	$(OBJS)\coredll_dragimgg.o \
 	$(OBJS)\coredll_filectrlg.o \
+	$(OBJS)\coredll_headercolg.o \
+	$(OBJS)\coredll_headerctrlg.o \
 	$(OBJS)\coredll_listbkg.o \
 	$(OBJS)\coredll_logg.o \
 	$(OBJS)\coredll_numdlgg.o \
@@ -3199,6 +3225,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_geometry.o \
 	$(OBJS)\coredll_gifdecod.o \
 	$(OBJS)\coredll_graphcmn.o \
+	$(OBJS)\coredll_headercolcmn.o \
+	$(OBJS)\coredll_headerctrlcmn.o \
 	$(OBJS)\coredll_helpbase.o \
 	$(OBJS)\coredll_iconbndl.o \
 	$(OBJS)\coredll_imagall.o \
@@ -3256,6 +3284,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_dirctrlg.o \
 	$(OBJS)\coredll_dragimgg.o \
 	$(OBJS)\coredll_filectrlg.o \
+	$(OBJS)\coredll_headercolg.o \
+	$(OBJS)\coredll_headerctrlg.o \
 	$(OBJS)\coredll_listbkg.o \
 	$(OBJS)\coredll_logg.o \
 	$(OBJS)\coredll_numdlgg.o \
@@ -3360,6 +3390,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_filedlg.o \
 	$(OBJS)\corelib_frame.o \
 	$(OBJS)\corelib_gauge.o \
+	$(OBJS)\corelib_headercol.o \
+	$(OBJS)\corelib_headerctrl.o \
 	$(OBJS)\corelib_iniconf.o \
 	$(OBJS)\corelib_listbox.o \
 	$(OBJS)\corelib_listctrl.o \
@@ -3443,6 +3475,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_geometry.o \
 	$(OBJS)\corelib_gifdecod.o \
 	$(OBJS)\corelib_graphcmn.o \
+	$(OBJS)\corelib_headercolcmn.o \
+	$(OBJS)\corelib_headerctrlcmn.o \
 	$(OBJS)\corelib_helpbase.o \
 	$(OBJS)\corelib_iconbndl.o \
 	$(OBJS)\corelib_imagall.o \
@@ -3500,6 +3534,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_dirctrlg.o \
 	$(OBJS)\corelib_dragimgg.o \
 	$(OBJS)\corelib_filectrlg.o \
+	$(OBJS)\corelib_headercolg.o \
+	$(OBJS)\corelib_headerctrlg.o \
 	$(OBJS)\corelib_listbkg.o \
 	$(OBJS)\corelib_logg.o \
 	$(OBJS)\corelib_numdlgg.o \
@@ -3679,6 +3715,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_geometry.o \
 	$(OBJS)\corelib_gifdecod.o \
 	$(OBJS)\corelib_graphcmn.o \
+	$(OBJS)\corelib_headercolcmn.o \
+	$(OBJS)\corelib_headerctrlcmn.o \
 	$(OBJS)\corelib_helpbase.o \
 	$(OBJS)\corelib_iconbndl.o \
 	$(OBJS)\corelib_imagall.o \
@@ -3736,6 +3774,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_dirctrlg.o \
 	$(OBJS)\corelib_dragimgg.o \
 	$(OBJS)\corelib_filectrlg.o \
+	$(OBJS)\corelib_headercolg.o \
+	$(OBJS)\corelib_headerctrlg.o \
 	$(OBJS)\corelib_listbkg.o \
 	$(OBJS)\corelib_logg.o \
 	$(OBJS)\corelib_numdlgg.o \
@@ -5863,6 +5903,12 @@ $(OBJS)\monodll_filedlg.o: ../../src/msw/filedlg.cpp
 $(OBJS)\monodll_frame.o: ../../src/msw/frame.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monodll_headercol.o: ../../src/msw/headercol.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monodll_headerctrl.o: ../../src/msw/headerctrl.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monodll_iniconf.o: ../../src/msw/iniconf.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -7245,6 +7291,16 @@ $(OBJS)\monodll_graphcmn.o: ../../src/common/graphcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_headercolcmn.o: ../../src/common/headercolcmn.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_headerctrlcmn.o: ../../src/common/headerctrlcmn.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_helpbase.o: ../../src/common/helpbase.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -7526,6 +7582,16 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_filectrlg.o: ../../src/generic/filectrlg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_headercolg.o: ../../src/generic/headercolg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_headerctrlg.o: ../../src/generic/headerctrlg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -8166,6 +8232,12 @@ $(OBJS)\monolib_filedlg.o: ../../src/msw/filedlg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_frame.o: ../../src/msw/frame.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_headercol.o: ../../src/msw/headercol.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_headerctrl.o: ../../src/msw/headerctrl.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_iniconf.o: ../../src/msw/iniconf.cpp
@@ -9550,6 +9622,16 @@ $(OBJS)\monolib_graphcmn.o: ../../src/common/graphcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_headercolcmn.o: ../../src/common/headercolcmn.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_headerctrlcmn.o: ../../src/common/headerctrlcmn.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_helpbase.o: ../../src/common/helpbase.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -9831,6 +9913,16 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_filectrlg.o: ../../src/generic/filectrlg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_headercolg.o: ../../src/generic/headercolg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_headerctrlg.o: ../../src/generic/headerctrlg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -10860,6 +10952,12 @@ $(OBJS)\coredll_filedlg.o: ../../src/msw/filedlg.cpp
 $(OBJS)\coredll_frame.o: ../../src/msw/frame.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\coredll_headercol.o: ../../src/msw/headercol.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\coredll_headerctrl.o: ../../src/msw/headerctrl.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\coredll_iniconf.o: ../../src/msw/iniconf.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -11879,6 +11977,16 @@ $(OBJS)\coredll_graphcmn.o: ../../src/common/graphcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_headercolcmn.o: ../../src/common/headercolcmn.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_headerctrlcmn.o: ../../src/common/headerctrlcmn.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_helpbase.o: ../../src/common/helpbase.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -12164,6 +12272,16 @@ $(OBJS)\coredll_filectrlg.o: ../../src/generic/filectrlg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_headercolg.o: ../../src/generic/headercolg.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_headerctrlg.o: ../../src/generic/headerctrlg.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_listbkg.o: ../../src/generic/listbkg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -12314,6 +12432,12 @@ $(OBJS)\corelib_filedlg.o: ../../src/msw/filedlg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_frame.o: ../../src/msw/frame.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\corelib_headercol.o: ../../src/msw/headercol.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\corelib_headerctrl.o: ../../src/msw/headerctrl.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_iniconf.o: ../../src/msw/iniconf.cpp
@@ -13335,6 +13459,16 @@ $(OBJS)\corelib_graphcmn.o: ../../src/common/graphcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_headercolcmn.o: ../../src/common/headercolcmn.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_headerctrlcmn.o: ../../src/common/headerctrlcmn.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_helpbase.o: ../../src/common/helpbase.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -13616,6 +13750,16 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_filectrlg.o: ../../src/generic/filectrlg.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_headercolg.o: ../../src/generic/headercolg.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_headerctrlg.o: ../../src/generic/headerctrlg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 

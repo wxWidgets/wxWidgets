@@ -458,6 +458,14 @@ SOURCE=..\..\src\common\graphcmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\headercolcmn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\headerctrlcmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\helpbase.cpp
 # End Source File
 # Begin Source File
@@ -1475,6 +1483,76 @@ SOURCE=..\..\src\msw\gdiplus.cpp
 # Begin Source File
 
 SOURCE=..\..\src\msw\graphics.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\msw\headercol.cpp
+
+!IF  "$(CFG)" == "core - Win32 DLL Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+
+!ENDIF
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\msw\headerctrl.cpp
+
+!IF  "$(CFG)" == "core - Win32 DLL Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+
+!ENDIF
+
 # End Source File
 # Begin Source File
 
@@ -2883,6 +2961,14 @@ SOURCE=..\..\src\generic\fontdlgg.cpp
 # Begin Source File
 
 SOURCE=..\..\src\generic\fontpickerg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\generic\headercolg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\generic\headerctrlg.cpp
 # End Source File
 # Begin Source File
 
@@ -4986,6 +5072,14 @@ SOURCE=..\..\include\wx\msw\glcanvas.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\headercol.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\headerctrl.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\helpbest.h
 # End Source File
 # Begin Source File
@@ -5315,6 +5409,14 @@ SOURCE=..\..\include\wx\generic\gridctrl.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\generic\gridsel.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\headercol.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\headerctrl.h
 # End Source File
 # Begin Source File
 
@@ -6027,6 +6129,14 @@ SOURCE=..\..\include\wx\graphics.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\grid.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\headercol.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\headerctrl.h
 # End Source File
 # Begin Source File
 

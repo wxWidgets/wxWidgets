@@ -834,12 +834,15 @@ void wxDataViewEditorCtrlEvtHandler::OnKillFocus( wxFocusEvent &event )
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewColumnBase, wxObject)
 
-wxDataViewColumnBase::wxDataViewColumnBase(const wxString& WXUNUSED(title),
+wxDataViewColumnBase::wxDataViewColumnBase(const wxString& title,
                                            wxDataViewRenderer *renderer,
                                            unsigned int model_column,
-                                           int WXUNUSED(width),
-                                           wxAlignment WXUNUSED(align),
-                                           int WXUNUSED(flags))
+                                           int width,
+                                           wxAlignment align,
+                                           int flags)
+#ifdef wxHAS_GENERIC_DATAVIEWCTRL
+                    : wxHeaderColumn(title, width, align, flags)
+#endif
 {
     m_renderer = renderer;
     m_model_column = model_column;
@@ -853,43 +856,24 @@ wxDataViewColumnBase::wxDataViewColumnBase(const wxString& WXUNUSED(title),
 wxDataViewColumnBase::wxDataViewColumnBase(const wxBitmap& bitmap,
                                            wxDataViewRenderer *renderer,
                                            unsigned int model_column,
-                                           int WXUNUSED(width),
-                                           wxAlignment WXUNUSED(align),
-                                           int WXUNUSED(flags) )
+                                           int width,
+                                           wxAlignment align,
+                                           int flags)
+#ifdef wxHAS_GENERIC_DATAVIEWCTRL
+                    : wxHeaderColumn(bitmap, width, align, flags)
+#else
+                    : m_bitmap(bitmap)
+#endif
 {
     m_renderer = renderer;
     m_model_column = model_column;
-    m_bitmap = bitmap;
     m_owner = NULL;
     m_renderer->SetOwner( (wxDataViewColumn*) this );
 }
 
 wxDataViewColumnBase::~wxDataViewColumnBase()
 {
-    if (m_renderer)
-        delete m_renderer;
-}
-
-int wxDataViewColumnBase::GetFlags() const
-{
-    int ret = 0;
-
-    if (IsSortable())
-        ret |= wxDATAVIEW_COL_SORTABLE;
-    if (IsResizeable())
-        ret |= wxDATAVIEW_COL_RESIZABLE;
-    if (IsHidden())
-        ret |= wxDATAVIEW_COL_HIDDEN;
-
-    return ret;
-}
-
-void wxDataViewColumnBase::SetFlags(int flags)
-{
-    SetSortable((flags & wxDATAVIEW_COL_SORTABLE) != 0);
-    SetResizeable((flags & wxDATAVIEW_COL_RESIZABLE) != 0);
-    SetHidden((flags & wxDATAVIEW_COL_HIDDEN) != 0);
-    SetReorderable((flags & wxDATAVIEW_COL_REORDERABLE) != 0);
+    delete m_renderer;
 }
 
 // ---------------------------------------------------------

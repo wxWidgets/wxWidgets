@@ -387,18 +387,6 @@ public:
   {
     return false; // not implemented
   }
-  virtual bool IsReorderable() const
-  {
-    return ((this->m_flags & wxDATAVIEW_COL_REORDERABLE) != 0);
-  }
-  virtual bool IsResizeable() const
-  {
-    return ((this->m_flags & wxDATAVIEW_COL_RESIZABLE) != 0);
-  }
-  virtual bool IsSortable() const
-  {
-    return ((this->m_flags & wxDATAVIEW_COL_SORTABLE) != 0);
-  }
   virtual bool IsSortOrderAscending() const
   {
     return this->m_ascending;
