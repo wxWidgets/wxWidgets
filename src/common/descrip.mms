@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 29 October 2008                                                     *
+# Date : 3 December 2008                                                     *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -209,7 +209,7 @@ OBJECTS2=tbarbase.obj,srchcmn.obj,\
 		filepickercmn.obj,\
 		fontpickercmn.obj,\
 		pickerbase.obj,\
-		listctrlcmn.obj,gsocketiohandler.obj,fdiodispatcher.obj,\
+		listctrlcmn.obj,socketiohandler.obj,fdiodispatcher.obj,\
 		selectdispatcher.obj,overlaycmn.obj,windowid.obj,sstream.obj,\
 		wrapsizer.obj
 
@@ -293,7 +293,7 @@ SOURCES = \
 		gbsizer.cpp,\
 		gdicmn.cpp,\
 		gifdecod.cpp,\
-		gsocketiohandler.cpp,\
+		socketiohandler.cpp,\
 		hash.cpp,\
 		hashmap.cpp,\
 		helpbase.cpp,\
@@ -519,7 +519,7 @@ gaugecmn.obj : gaugecmn.cpp
 gbsizer.obj : gbsizer.cpp
 gdicmn.obj : gdicmn.cpp
 gifdecod.obj : gifdecod.cpp
-gsocketiohandler.obj : gsocketiohandler.cpp
+socketiohandler.obj : socketiohandler.cpp
 hash.obj : hash.cpp
 hashmap.obj : hashmap.cpp
 helpbase.obj : helpbase.cpp
