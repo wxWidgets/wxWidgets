@@ -152,9 +152,10 @@ private:
 
 enum
 {
-    ID_ROTATE_LEFT = 100,
+    ID_ROTATE_LEFT = wxID_HIGHEST+1,
     ID_ROTATE_RIGHT,
-    ID_RESIZE
+    ID_RESIZE,
+    ID_PAINT_BG
 };
 
 class MyImageFrame : public wxFrame
@@ -170,6 +171,8 @@ public:
         wxMenu *menu = new wxMenu;
         menu->Append(wxID_SAVE);
         menu->AppendSeparator();
+        m_pClearBgMenu = menu->AppendCheckItem(ID_PAINT_BG, _T("&Paint background"));
+        menu->AppendSeparator();
         menu->Append(ID_RESIZE, _T("&Fit to window\tCtrl-F"));
         menu->AppendSeparator();
         menu->Append(ID_ROTATE_LEFT, _T("Rotate &left\tCtrl-L"));
@@ -184,8 +187,8 @@ public:
         SetClientSize(bitmap.GetWidth(), bitmap.GetHeight());
 
         UpdateStatusBar();
-        
-        SetBackgroundColour(*wxWHITE);
+
+//        SetBackgroundColour(*wxWHITE);
     }
 
     void OnEraseBackground(wxEraseEvent& WXUNUSED(event))
@@ -196,9 +199,10 @@ public:
     void OnPaint(wxPaintEvent& WXUNUSED(event))
     {
         wxPaintDC dc(this);
-        
-        ClearBackground();
-        
+
+        if (m_pClearBgMenu->IsChecked())
+            ClearBackground();
+
         const wxSize size = GetClientSize();
         dc.DrawBitmap(m_bitmap,
                       (size.x - m_bitmap.GetWidth())/2,
@@ -373,6 +377,7 @@ private:
     }
 
     wxBitmap m_bitmap;
+    wxMenuItem* m_pClearBgMenu;
 
     DECLARE_EVENT_TABLE()
 };
