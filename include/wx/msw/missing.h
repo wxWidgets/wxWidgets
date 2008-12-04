@@ -235,6 +235,9 @@ typedef struct wxtagNMLVCUSTOMDRAW_ {
 #ifndef HDS_HOTTRACK
     #define HDS_HOTTRACK 4
 #endif
+#ifndef HDS_FLAT
+    #define HDS_FLAT 0x0200
+#endif
 
 #ifndef HDF_SORTUP
     #define HDF_SORTUP   0x0400
@@ -364,9 +367,6 @@ typedef struct _OSVERSIONINFOEX {
 #endif
 #ifndef HDS_FULLDRAG
     #define HDS_FULLDRAG 0x0080
-#endif
-#ifndef HDS_FLAT
-    #define HDS_FLAT 0x0200
 #endif
 
 
