@@ -130,6 +130,7 @@ wxMSW:
   if the event handler causes window update.
 - Fix display enumeration under WinCE (Vince Harron).
 - Fix best size calculation for wxNotebook with multiple rows (Alex McCarthy).
+- Correct coordinates of wxDropFilesEvent (Dmitriy Maksimov).
 
 wxGTK:
 
