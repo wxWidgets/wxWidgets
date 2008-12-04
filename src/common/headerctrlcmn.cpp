@@ -32,7 +32,7 @@
 // wxHeaderCtrlBase implementation
 // ============================================================================
 
-WXDLLIMPEXP_DATA_CORE(const char) wxHeaderCtrlNameStr[] = "wxHeaderCtrl";
+extern WXDLLIMPEXP_DATA_CORE(const char) wxHeaderCtrlNameStr[] = "wxHeaderCtrl";
 
 void wxHeaderCtrlBase::DeleteAllColumns()
 {
