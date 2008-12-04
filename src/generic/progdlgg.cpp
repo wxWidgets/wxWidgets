@@ -668,6 +668,8 @@ void wxProgressDialog::UpdateMessage(const wxString &newmsg)
     {
         m_msg->SetLabel(newmsg);
 
+        Fit();   // adapt to the new label size
+
         wxYieldIfNeeded() ;
     }
 }
