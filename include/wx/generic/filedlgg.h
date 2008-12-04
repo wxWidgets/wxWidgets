@@ -131,7 +131,7 @@ private:
 class WXDLLIMPEXP_CORE wxFileDialog: public wxGenericFileDialog
 {
 public:
-     wxFileDialog() {}
+    wxFileDialog() {}
 
     wxFileDialog(wxWindow *parent,
                  const wxString& message = wxFileSelectorPromptStr,
@@ -139,8 +139,12 @@ public:
                  const wxString& defaultFile = wxEmptyString,
                  const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
                  long style = 0,
-                 const wxPoint& pos = wxDefaultPosition)
-          :wxGenericFileDialog(parent, message, defaultDir, defaultFile, wildCard, style, pos)
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize)
+          :wxGenericFileDialog(parent, message,
+                               defaultDir, defaultFile, wildCard,
+                               style,
+                               pos, size)
      {
      }
 
