@@ -7,6 +7,11 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    The type of unique identifiers (ID) used for wxWindow-derived classes.
+*/
+typedef int wxWindowID;
+
+/**
     @class wxIdManager
 
     wxIdManager is responsible for allocating and releasing window IDs.
