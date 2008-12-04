@@ -426,39 +426,37 @@ public:
 
     @code
     wxXmlDocument doc;
-    if (!doc.Load(wxT("myfile.xml")))
+    if (!doc.Load("myfile.xml"))
         return @false;
 
     // start processing the XML file
-    if (doc.GetRoot()-GetName() != wxT("myroot-node"))
+    if (doc.GetRoot()->GetName() != "myroot-node")
         return @false;
 
-    wxXmlNode *child = doc.GetRoot()-GetChildren();
+    wxXmlNode *child = doc.GetRoot()->GetChildren();
     while (child) {
 
-        if (child-GetName() == wxT("tag1")) {
+        if (child-GetName() == "tag1") {
 
             // process text enclosed by tag1/tag1
-            wxString content = child-GetNodeContent();
+            wxString content = child->GetNodeContent();
 
             ...
 
             // process attributes of tag1
             wxString attrvalue1 =
-                child-GetAttribute(wxT("attr1"),
-                                  wxT("default-value"));
+                child->GetAttribute("attr1", "default-value");
             wxString attrvalue2 =
-                child-GetAttribute(wxT("attr2"),
-                                  wxT("default-value"));
+                child->GetAttribute("attr2", "default-value");
 
             ...
 
-        } else if (child-GetName() == wxT("tag2")) {
+        } else if (child->GetName() == "tag2") {
 
             // process tag2 ...
         }
 
-        child = child-GetNext();
+        child = child->GetNext();
     }
     @endcode
 
@@ -468,10 +466,10 @@ public:
 
     @code
     wxXmlDocument doc;
-    doc.Load(wxT("myfile.xml"), wxT("UTF-8"), wxXMLDOC_KEEP_WHITESPACE_NODES);
+    doc.Load("myfile.xml", "UTF-8", wxXMLDOC_KEEP_WHITESPACE_NODES);
 
     // myfile2.xml will be indentic to myfile.xml saving it this way:
-    doc.Save(wxT("myfile2.xml"), wxXML_NO_INDENTATION);
+    doc.Save("myfile2.xml", wxXML_NO_INDENTATION);
     @endcode
 
     Using default parameters, you will get a reformatted document which in general
@@ -479,8 +477,8 @@ public:
 
     @code
     wxXmlDocument doc;
-    doc.Load(wxT("myfile.xml"));
-    doc.Save(wxT("myfile2.xml"));  // myfile2.xml != myfile.xml
+    doc.Load("myfile.xml");
+    doc.Save("myfile2.xml");  // myfile2.xml != myfile.xml
     @endcode
 
     @library{wxxml}
@@ -505,7 +503,7 @@ public:
         Loads the given filename using the given encoding. See Load().
     */
     wxXmlDocument(const wxString& filename,
-                  const wxString& encoding = wxT("UTF-8"));
+                  const wxString& encoding = "UTF-8"));
 
     /**
         Loads the XML document from given stream using the given encoding. See Load().
