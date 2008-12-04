@@ -24,12 +24,14 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/log.h"
 #endif // WX_PRECOMP
 
 #include "wx/headerctrl.h"
 #include "wx/imaglist.h"
 
 #include "wx/msw/wrapcctl.h"
+#include "wx/msw/private.h"
 
 // ============================================================================
 // wxHeaderCtrl implementation
