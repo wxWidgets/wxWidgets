@@ -4088,7 +4088,6 @@ bool wxWindowMSW::HandleDropFiles(WXWPARAM wParam)
         ::DragQueryFile(hFilesInfo, wIndex,
                         wxStringBuffer(files[wIndex], len), len);
     }
-    DragFinish (hFilesInfo);
 
     wxDropFilesEvent event(wxEVT_DROP_FILES, gwFilesDropped, files);
     event.SetEventObject(this);
@@ -4097,6 +4096,8 @@ bool wxWindowMSW::HandleDropFiles(WXWPARAM wParam)
     DragQueryPoint(hFilesInfo, (LPPOINT) &dropPoint);
     event.m_pos.x = dropPoint.x;
     event.m_pos.y = dropPoint.y;
+
+    DragFinish(hFilesInfo);
 
     return HandleWindowEvent(event);
 #endif
