@@ -46,6 +46,11 @@ public:
 
     virtual ~wxHeaderCtrl();
 
+
+    // this method is only overridden in order to synchronize the control with
+    // the main window when it is scrolled
+    virtual void ScrollWindow(int dx, int dy, const wxRect *rect = NULL);
+
 private:
     // implement base class pure virtuals
     virtual unsigned int DoGetCount() const;

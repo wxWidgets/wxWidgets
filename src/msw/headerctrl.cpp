@@ -87,6 +87,29 @@ wxHeaderCtrl::~wxHeaderCtrl()
 }
 
 // ----------------------------------------------------------------------------
+// wxHeaderCtrl scrolling
+// ----------------------------------------------------------------------------
+
+// as the native control doesn't support offsetting its contents, we use a hack
+// here to make it appear correctly when the parent is scrolled: instead of
+// scrolling or repainting we simply move the control window itself
+void wxHeaderCtrl::ScrollWindow(int dx,
+                                int WXUNUSED_UNLESS_DEBUG(dy),
+                                const wxRect * WXUNUSED_UNLESS_DEBUG(rect))
+{
+    // this doesn't make sense at all
+    wxASSERT_MSG( !dy, "header window can't be scrolled vertically" );
+
+    // this would actually be nice to support for "frozen" headers
+    wxASSERT_MSG( !rect, "header window can't be scrolled partially" );
+
+    // offset the window by the scroll increment to the left and increment its
+    // width to still extend to the right boundary to compensate for it (notice
+    // that dx is negative when scrolling to the right)
+    SetSize(GetPosition().x + dx, -1, GetSize().x - dx, -1, wxSIZE_USE_EXISTING);
+}
+
+// ----------------------------------------------------------------------------
 // wxHeaderCtrl geometry calculation
 // ----------------------------------------------------------------------------
 

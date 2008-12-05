@@ -29,7 +29,9 @@
     Notice that this control itself doesn't do anything other than displaying
     the column headers. In particular column reordering and sorting must still
     be supported by the associated control displaying the real data under the
-    header.
+    header. Also remember to call ScrollWindow() method of the control if the
+    associated data display window has a horizontal scrollbar, otherwise the
+    headers wouldn't align with the data when the window is scrolled.
 
     This control is implemented using the native header control under MSW
     systems and a generic implementation elsewhere.
