@@ -34,10 +34,8 @@
 #include "wx/gtk/private.h"
 #include "wx/dynlib.h"
 #include "wx/paper.h"
-#include "wx/rawbmp.h"
 
 #include <gtk/gtk.h>
-#include <gtk/gtkpagesetupunixdialog.h>
 
 #if wxUSE_GRAPHICS_CONTEXT
 #include "wx/graphics.h"
@@ -1653,84 +1651,13 @@ void wxGtkPrinterDCImpl::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoor
 {
     wxCHECK_RET( bitmap.IsOk(), wxT("Invalid bitmap in wxGtkPrinterDCImpl::DoDrawBitmap"));
 
-    cairo_surface_t* surface;
     x = wxCoord(XLOG2DEV(x));
     y = wxCoord(YLOG2DEV(y));
     int bw = bitmap.GetWidth();
     int bh = bitmap.GetHeight();
     wxBitmap bmpSource = bitmap;  // we need a non-const instance.
-    unsigned char* buffer = new unsigned char[bw*bh*4];
-    wxUint32* data = (wxUint32*)buffer;
-
-    wxMask *mask = NULL;
-    if (useMask) mask = bmpSource.GetMask();
-
-    // Create a surface object and copy the bitmap pixel data to it. If the image has alpha (or a mask represented as alpha)
-    // then we'll use a different format and iterator than if it doesn't.
-    if (bmpSource.HasAlpha() || mask)
-    {
-        surface = cairo_image_surface_create_for_data(
-            buffer, CAIRO_FORMAT_ARGB32, bw, bh, bw*4);
-        wxAlphaPixelData pixData(bmpSource, wxPoint(0,0), wxSize(bw, bh));
-        wxCHECK_RET( pixData, wxT("Failed to gain raw access to bitmap data."));
-
-        wxAlphaPixelData::Iterator p(pixData);
-        int y, x;
-        for (y=0; y<bh; y++)
-        {
-            wxAlphaPixelData::Iterator rowStart = p;
-            for (x=0; x<bw; x++)
-            {
-                // Each pixel in CAIRO_FORMAT_ARGB32 is a 32-bit quantity,
-                // with alpha in the upper 8 bits, then red, then green, then
-                // blue. The 32-bit quantities are stored native-endian.
-                // Pre-multiplied alpha is used.
-                unsigned char alpha = p.Alpha();
-
-                if (!bmpSource.HasAlpha() && mask)
-                    alpha = 255;
-
-                if (alpha == 0)
-                    *data = 0;
-                else
-                    *data = ( alpha                  << 24
-                              | (p.Red() * alpha/255)    << 16
-                              | (p.Green() * alpha/255)  <<  8
-                              | (p.Blue() * alpha/255) );
-                ++data;
-                ++p;
-            }
-            p = rowStart;
-            p.OffsetY(pixData, 1);
-        }
-    }
-    else  // no alpha
-    {
-        surface = cairo_image_surface_create_for_data(
-            buffer, CAIRO_FORMAT_RGB24, bw, bh, bw*4);
-        wxNativePixelData pixData(bmpSource, wxPoint(0,0), wxSize(bw, bh));
-        wxCHECK_RET( pixData, wxT("Failed to gain raw access to bitmap data."));
-
-        wxNativePixelData::Iterator p(pixData);
-        int y, x;
-        for (y=0; y<bh; y++)
-        {
-            wxNativePixelData::Iterator rowStart = p;
-            for (x=0; x<bw; x++)
-            {
-                // Each pixel in CAIRO_FORMAT_RGB24 is a 32-bit quantity, with
-                // the upper 8 bits unused. Red, Green, and Blue are stored in
-                // the remaining 24 bits in that order.  The 32-bit quantities
-                // are stored native-endian.
-                *data = ( p.Red() << 16 | p.Green() << 8 | p.Blue() );
-                ++data;
-                ++p;
-            }
-            p = rowStart;
-            p.OffsetY(pixData, 1);
-        }
-    }
-
+    if (!useMask && !bitmap.HasPixbuf() && bitmap.GetMask())
+        bmpSource.SetMask(NULL);
 
     cairo_save(m_cairo);
 
@@ -1738,23 +1665,16 @@ void wxGtkPrinterDCImpl::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoor
     cairo_translate(m_cairo, x, y);
 
     // Scale the image
-    cairo_filter_t filter = CAIRO_FILTER_BILINEAR;
-    cairo_pattern_t* pattern = cairo_pattern_create_for_surface(surface);
-    cairo_pattern_set_filter(pattern,filter);
     wxDouble scaleX = (wxDouble) XLOG2DEVREL(bw) / (wxDouble) bw;
     wxDouble scaleY = (wxDouble) YLOG2DEVREL(bh) / (wxDouble) bh;
     cairo_scale(m_cairo, scaleX, scaleY);
 
-    cairo_set_source(m_cairo, pattern);
+    gdk_cairo_set_source_pixbuf(m_cairo, bmpSource.GetPixbuf(), 0, 0);
+    cairo_pattern_set_filter(cairo_get_source(m_cairo), CAIRO_FILTER_NEAREST);
     // Use the original size here since the context is scaled already.
     cairo_rectangle(m_cairo, 0, 0, bw, bh);
     // Fill the rectangle using the pattern.
     cairo_fill(m_cairo);
-
-    // Clean up.
-    cairo_pattern_destroy(pattern);
-    cairo_surface_destroy(surface);
-    delete [] buffer;
 
     CalcBoundingBox(0,0);
     CalcBoundingBox(bw,bh);
