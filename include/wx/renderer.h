@@ -110,10 +110,11 @@ struct WXDLLIMPEXP_CORE wxHeaderButtonParams
     int         m_labelAlignment;
 };
 
-enum wxHeaderSortIconType {
+enum wxHeaderSortIconType
+{
     wxHDR_SORT_ICON_NONE,        // Header button has no sort arrow
-    wxHDR_SORT_ICON_UP,          // Header button an an up sort arrow icon
-    wxHDR_SORT_ICON_DOWN         // Header button an a down sort arrow icon
+    wxHDR_SORT_ICON_UP,          // Header button an up sort arrow icon
+    wxHDR_SORT_ICON_DOWN         // Header button a down sort arrow icon
 };
 
 
