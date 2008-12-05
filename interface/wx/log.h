@@ -6,6 +6,41 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+
+/**
+    Different standard log levels (you may also define your own) used with
+    wxLog::OnLog() by standard wxLog functions wxLogError(), wxLogWarning(),
+    etc...
+*/
+enum wxLogLevelValues
+{
+    wxLOG_FatalError, //!< program can't continue, abort immediately
+    wxLOG_Error,      //!< a serious error, user must be informed about it
+    wxLOG_Warning,    //!< user is normally informed about it but may be ignored
+    wxLOG_Message,    //!< normal message (i.e. normal output of a non GUI app)
+    wxLOG_Status,     //!< informational: might go to the status line of GUI app
+    wxLOG_Info,       //!< informational message (a.k.a. 'Verbose')
+    wxLOG_Debug,      //!< never shown to the user, disabled in release mode
+    wxLOG_Trace,      //!< trace messages are also only enabled in debug mode
+    wxLOG_Progress,   //!< used for progress indicator (not yet)
+    wxLOG_User = 100, //!< user defined levels start here
+    wxLOG_Max = 10000
+};
+
+/**
+    The type used for trace masks.
+*/
+typedef unsigned long wxTraceMask;
+
+/**
+    The type used to specify a log level.
+
+    Default values of ::wxLogLevel used by wxWidgets are contained in the
+    ::wxLogLevelValues enumeration.
+*/
+typedef unsigned long wxLogLevel;
+
+
 /**
     @class wxLogWindow
 
@@ -785,8 +820,8 @@ public:
     static wxLog* SetActiveTarget(wxLog* logtarget);
 
     /**
-        Specifies that log messages with level  logLevel should be ignored
-        and not sent to the active log target.
+        Specifies that log messages with level greater (numerically) than
+        @a logLevel should be ignored and not sent to the active log target.
     */
     static void SetLogLevel(wxLogLevel logLevel);
 
