@@ -33,12 +33,11 @@ wish to jump directly in the details of its support in the library:
 @section overview_unicode_what What is Unicode?
 
 Unicode is a standard for character encoding which addresses the shortcomings
-of the previous, 8 bit standards, by using at least 16 (and possibly 32) bits
-for encoding each character. This allows to have at least 65536 characters
-(in what is called the BMP, or basic multilingual plane) and possible 2^32 of
-them instead of the usual 256 and is sufficient to encode all of the world
-languages at once. More details about Unicode may be found at
-http://www.unicode.org/.
+of the previous standards (e.g. the ASCII standard), by using 8, 16 or 32 bits
+for encoding each character.
+This allows enough code points (see below for the definition) sufficient to
+encode all of the world languages at once.
+More details about Unicode may be found at http://www.unicode.org/.
 
 From a practical point of view, using Unicode is almost a requirement when
 writing applications for international audience. Moreover, any application
@@ -46,31 +45,72 @@ reading files which it didn't produce or receiving data from the network from
 other services should be ready to deal with Unicode.
 
 
-@section overview_unicode_encodings Unicode Representations
+@section overview_unicode_encodings Unicode Representations and Terminology
 
-Unicode provides a unique code to identify every character, however in practice
-these codes are not always used directly but encoded using one of the standard
-UTF or Unicode Transformation Formats which are algorithms mapping the Unicode
-codes to byte code sequences. The simplest of them is UTF-32 which simply maps
-the Unicode code to a 4 byte sequence representing this 32 bit number (although
-this is still not completely trivial as the mapping is different for little and
-big-endian architectures). UTF-32 is commonly used under Unix systems for
-internal representation of Unicode strings. Another very widespread standard is
-UTF-16 which is used by Microsoft Windows: it encodes the first (approximately)
-64 thousands of Unicode characters using only 2 bytes and uses a pair of 16-bit
-codes to encode the characters beyond this. Finally, the most widespread
-encoding used for the external Unicode storage (e.g. files and network
-protocols) is UTF-8 which is byte-oriented and so avoids the endianness
-ambiguities of UTF-16 and UTF-32. However UTF-8 uses a variable number of bytes
-for representing Unicode characters which makes it less efficient than UTF-32
-for internal representation.
+When working with Unicode, it's important to define the meaning of some terms.
 
-From the C/C++ programmer perspective the situation is further complicated by
-the fact that the standard type @c wchar_t which is used to represent the
+A @e glyph is a particular image that represents a @e character or part of a character.
+Any character may have one or more glyph associated; e.g. some of the possible
+glyphs for the capital letter 'A' are:
+
+@image html overview_unicode_glyphs.png
+
+Unicode assigns each character of almost any existing alphabet/script a number,
+which is called <em>code point</em>; it's typically indicated in documentation
+manuals and in the Unicode website as @c U+xxxx where @c xxxx is an hexadecimal number.
+
+The Unicode standard divides the space of all possible code points in @e planes;
+a plane is a range of 65,536 (1000016) contiguous Unicode code points.
+Planes are numbered from 0 to 16, where the first one is the @e BMP, or Basic
+Multilingual Plane.
+
+Code points are represented in computer memory as a sequence of one or more
+<em>code units</em>, where a code unit is a unit of memory: 8, 16, or 32 bits.
+More precisely, a code unit is the minimal bit combination that can represent a
+unit of encoded text for processing or interchange.
+
+The @e UTF or Unicode Transformation Formats are algorithms mapping the Unicode
+code points to code unit sequences. The simplest of them is <b>UTF-32</b> where
+each code unit is composed by 32 bits (4 bytes) and each code point is represented
+by a single code unit.
+(Note that even UTF-32 is still not completely trivial as the mapping is different
+for little and big-endian architectures). UTF-32 is commonly used under Unix systems for
+internal representation of Unicode strings.
+
+Another very widespread standard is <b>UTF-16</b> which is used by Microsoft Windows:
+it encodes the first (approximately) 64 thousands of Unicode code points
+(the BMP plane) using 16-bit code units (2 bytes) and uses a pair of 16-bit code
+units to encode the characters beyond this. These pairs are called @e surrogate.
+
+Finally, the most widespread encoding used for the external Unicode storage
+(e.g. files and network protocols) is <b>UTF-8</b> which is byte-oriented and so
+avoids the endianness ambiguities of UTF-16 and UTF-32.
+UTF-8 uses code units of 8 bits (1 byte); code points beyond the usual english
+alphabet are represented using a variable number of bytes, which makes it less
+efficient than UTF-32 for internal representation.
+
+As visual aid to understand the differences between the various concepts described
+so far, look at the different UTF representations of the same code point:
+
+@image html overview_unicode_codes.png
+
+In this particular case UTF8 requires more space than UTF16 (3 bytes instead of 2).
+
+Note that from the C/C++ programmer perspective the situation is further complicated
+by the fact that the standard type @c wchar_t which is usually used to represent the
 Unicode ("wide") strings in C/C++ doesn't have the same size on all platforms.
 It is 4 bytes under Unix systems, corresponding to the tradition of using
 UTF-32, but only 2 bytes under Windows which is required by compatibility with
 the OS which uses UTF-16.
+
+Typically when UTF8 is used, code units are stored into @c char types, since
+@c char are 8bit wide on almost all systems; when using UTF16 typically code
+units are stored into @c wchar_t types since @c wchar_t is at least 16bits on
+all systems. This is also the approach used by wxString.
+See @ref overview_wxstring for more info.
+
+See also http://unicode.org/glossary/ for the official definitions of the
+terms reported above.
 
 
 @section overview_unicode_supportin Unicode Support in wxWidgets
@@ -81,15 +121,16 @@ near future. This means that internally only Unicode strings are used and that,
 under Microsoft Windows, Unicode system API is used which means that wxWidgets
 programs require the Microsoft Layer for Unicode to run on Windows 95/98/ME.
 
-However, unlike Unicode build mode in the previous versions of wxWidgets, this
-support is mostly transparent: you can still continue to work with the narrow
-(i.e. @c char*) strings even if wide (i.e. @c wchar_t*) strings are also
+However, unlike the Unicode build mode of the previous versions of wxWidgets, this
+support is mostly transparent: you can still continue to work with the @b narrow
+(i.e. current-locale-encoded @c char*) strings even if @b wide
+(i.e. UTF16/UCS2-encoded @c wchar_t* or UTF8-encoded @c char) strings are also
 supported. Any wxWidgets function accepts arguments of either type as both
 kinds of strings are implicitly converted to wxString, so both
 @code
 wxMessageBox("Hello, world!");
 @endcode
-and somewhat less usual
+and the somewhat less usual
 @code
 wxMessageBox(L"Salut \u00e0 toi!"); // 00E0 is "Latin Small Letter a with Grave"
 @endcode
@@ -105,14 +146,14 @@ ISO-8859-1 (or even if the sources were compiled under different locale
 in the case of gcc). In particular, the most common encoding used under
 modern Unix systems is UTF-8 and as the string above is not a valid UTF-8 byte
 sequence, nothing would be displayed at all in this case. Thus it is important
-to never use 8 bit characters directly in the program source but use wide
-strings or, alternatively, write
+to <b>never use 8-bit (instead of 7-bit) characters directly in the program source</b>
+but use wide strings or, alternatively, write
 @code
 wxMessageBox(wxString::FromUTF8("Salut \xc3\xa0 toi!"));
 @endcode
 
-In a similar way, wxString provides access to its contents as either wchar_t or
-char character buffer. Of course, the latter only works if the string contains
+In a similar way, wxString provides access to its contents as either @c wchar_t or
+@c char character buffer. Of course, the latter only works if the string contains
 data representable in the current locale encoding. This will always be the case
 if the string had been initially constructed from a narrow string or if it
 contains only 7-bit ASCII data but otherwise this conversion is not guaranteed
@@ -120,7 +161,9 @@ to succeed. And as with wxString::FromUTF8() example above, you can always use
 wxString::ToUTF8() to retrieve the string contents in UTF-8 encoding -- this,
 unlike converting to @c char* using the current locale, never fails.
 
-To summarize, Unicode support in wxWidgets is mostly transparent for the
+For more info about how wxString works, please see the @ref overview_string.
+
+To summarize, Unicode support in wxWidgets is mostly @b transparent for the
 application and if you use wxString objects for storing all the character data
 in your program there is really nothing special to do. However you should be
 aware of the potential problems covered by the following section.
@@ -132,10 +175,10 @@ The problems can be separated into three broad classes:
 
 @subsection overview_unicode_compilation_errors Unicode-Related Compilation Errors
 
-Because of the need to support implicit conversions to both @c char and @c
-wchar_t, wxString implementation is rather involved and many of its operators
-don't return the types which they could be naively expected to return. For
-example, the @c operator[] doesn't return neither a @c char nor a @c wchar_t
+Because of the need to support implicit conversions to both @c char and
+@c wchar_t, wxString implementation is rather involved and many of its operators
+don't return the types which they could be naively expected to return.
+For example, the @c operator[] doesn't return neither a @c char nor a @c wchar_t
 but an object of a helper class wxUniChar or wxUniCharRef which is implicitly
 convertible to either. Usually you don't need to worry about this as the
 conversions do their work behind the scenes however in some cases it doesn't
@@ -145,7 +188,7 @@ n:
  - Writing @code switch ( s[n] ) @endcode doesn't work because the argument of
    the switch statement must an integer expression so you need to replace
    @c s[n] with @code s[n].GetValue() @endcode. You may also force the
-   conversion to char or wchar_t by using an explicit cast but beware that
+   conversion to @c char or @c wchar_t by using an explicit cast but beware that
    converting the value to char uses the conversion to current locale and may
    return 0 if it fails. Finally notice that writing @code (wxChar)s[n] @endcode
    works both with wxWidgets 3.0 and previous library versions and so should be
@@ -272,7 +315,7 @@ for ( const wchar_t *p = s.wc_str(); *p; p++ )
 however this doesn't work correctly for strings with embedded @c NUL characters
 and the use of iterators is generally preferred as they provide some run-time
 checks (at least in debug build) unlike the raw pointers. But if you do use
-them, it is better to use wchar_t pointers rather than char ones to avoid the
+them, it is better to use @c wchar_t pointers rather than @c char ones to avoid the
 data loss problems due to conversion as discussed in the previous section.
 
 
@@ -291,7 +334,7 @@ and so can return an empty string if the string contains characters not represen
 it as explained in @ref overview_unicode_data_loss. The same applies to wxString::c_str()
 if its result is used as a narrow string. Finally, wxString::ToUTF8() and wxString::wc_str()
 functions never fail and always return a pointer to char string containing the
-UTF-8 representation of the string or wchar_t string.
+UTF-8 representation of the string or @c wchar_t string.
 
 wxString also provides two convenience functions: wxString::From8BitData() and
 wxString::To8BitData(). They can be used to create a wxString from arbitrary binary
@@ -307,9 +350,9 @@ instead.
 
 Final word of caution: most of these functions may return either directly the
 pointer to internal string buffer or a temporary wxCharBuffer or wxWCharBuffer
-object. Such objects are implicitly convertible to char and wchar_t pointers,
+object. Such objects are implicitly convertible to @c char and @c wchar_t pointers,
 respectively, and so the result of, for example, wxString::ToUTF8() can always be
-passed directly to a function taking @c const @c char*. However code such as
+passed directly to a function taking <tt>const char*</tt>. However code such as
 @code
 const char *p = s.ToUTF8();
 ...
@@ -339,6 +382,10 @@ function directly.
 @c wxUSE_UNICODE is now defined as 1 by default to indicate Unicode support.
 If UTF-8 is used for the internal storage in wxString, @c wxUSE_UNICODE_UTF8 is
 also defined, otherwise @c wxUSE_UNICODE_WCHAR is.
+
+You are encouraged to always use the default build settings of wxWidgets; this avoids
+the need of different builds of the same application/library because of different
+"build modes".
 
 */
 
