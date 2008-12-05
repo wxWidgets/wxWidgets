@@ -24,10 +24,13 @@
 
     - wx, wx-lib: templates to be used respectively for <dll>/<exe> and <lib>
                   targets; they add all the wxWidgets-related settings (e.g. the
-                  include and library search paths, the __WXDEBUG__ symbol, etc)
+                  include and library search paths, the __WXDEBUG__ symbol, etc).
 
-    - wxconsole: to be used when building console-only libraries or apps
-                 (adds the wxUSE_GUI=0 define).
+    - wxgui: to be used when building GUI-mode applications.
+
+    - wxconsole: to be used when building console-only applications
+                 (NOTE: it doesn't add the wxUSE_GUI=0 define since you don't
+                 need it when compiling wxBase-only code).
 
     - wxlike: this template should be combined with "wx" or "wx-lib" and will
               make your project build with the same Unicode, debug & shared
@@ -63,7 +66,7 @@
     - <wxlike-dirname>: sets the output directory for the current target to $(value)
                         when on Unix and to e.g. $(value)/vc_lib when on Windows,
                         i.e. acts like <dirname> just following wxWidgets naming rules.
-                        Useful to allow multiple builds of the 
+                        Useful to allow multiple builds of the
 
     - <wxlike-paths>: if your library/application needs to compile & link with both
                       wxWidgets and some other wx-based library, which in turn
@@ -109,7 +112,7 @@
 
 
     <!-- this variable identifies the version of the wx presets.
-         this is changed only when major changes to wxpresets take place. 
+         this is changed only when major changes to wxpresets take place.
     -->
     <set var="WX_PRESETS_VERSION">4</set>
 
@@ -122,7 +125,7 @@
     </set>
 
     <!-- if you define this variable to 0 before including wx presets, the
-         "test_for_selected_wxbuild" target which is added by default in win32 and GNU 
+         "test_for_selected_wxbuild" target which is added by default in win32 and GNU
          makefiles, won't be added.
          This is useful when e.g. you want to have wxWidgets as an optional
          dependency and thus you don't want to perform that check unconditionally.
@@ -322,7 +325,7 @@
             <debug-info>$(_DEBUGINFO)</debug-info>
         </if>
     </template>
-    
+
     <!-- Template for building wx-based GUI applications -->
     <template id="wxgui" template="wx">
         <app-type>gui</app-type>
@@ -434,7 +437,7 @@
     </define-tag>
 
     <!-- Adds to the compiler & linker flags the path for the "include" and the
-         "lib" folders of a library following wxWidgets conventions which is 
+         "lib" folders of a library following wxWidgets conventions which is
          located in $(value).
     -->
     <define-tag name="wxlike-paths" rules="exe,lib,dll,module">
