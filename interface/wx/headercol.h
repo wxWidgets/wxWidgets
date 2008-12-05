@@ -303,6 +303,13 @@ public:
     virtual bool IsHidden() const;
 
     /**
+        Returns @true if the column is currently shown.
+
+        This corresponds to the absence of wxCOL_HIDDEN flag.
+     */
+    bool IsShown() const;
+
+    /**
         Sets the sort order for this column.
 
         This only makes sense for sortable columns and is only taken into

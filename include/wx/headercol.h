@@ -148,6 +148,8 @@ public:
         { ChangeFlag(wxCOL_HIDDEN, hidden); }
     virtual bool IsHidden() const
         { return HasFlag(wxCOL_HIDDEN); }
+    bool IsShown() const
+        { return !IsHidden(); }
 
     // for sortable columns indicate whether we should sort in ascending or
     // descending order
