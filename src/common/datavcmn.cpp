@@ -851,6 +851,12 @@ wxDataViewColumnBase::wxDataViewColumnBase(const wxString& title,
 
     // NOTE: the wxDataViewColumn's ctor must store the width, align, flags
     //       parameters inside the native control!
+#ifndef wxHAS_GENERIC_DATAVIEWCTRL
+    wxUnusedVar(title);
+    wxUnusedVar(width);
+    wxUnusedVar(align);
+    wxUnusedVar(flags);
+#endif // !wxHAS_GENERIC_DATAVIEWCTRL
 }
 
 wxDataViewColumnBase::wxDataViewColumnBase(const wxBitmap& bitmap,
@@ -869,6 +875,12 @@ wxDataViewColumnBase::wxDataViewColumnBase(const wxBitmap& bitmap,
     m_model_column = model_column;
     m_owner = NULL;
     m_renderer->SetOwner( (wxDataViewColumn*) this );
+
+#ifndef wxHAS_GENERIC_DATAVIEWCTRL
+    wxUnusedVar(width);
+    wxUnusedVar(align);
+    wxUnusedVar(flags);
+#endif // !wxHAS_GENERIC_DATAVIEWCTRL
 }
 
 wxDataViewColumnBase::~wxDataViewColumnBase()
