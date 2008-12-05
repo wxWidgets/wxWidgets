@@ -147,6 +147,9 @@ private:
     virtual void DoDelete(unsigned int idx) = 0;
     virtual void DoShowColumn(unsigned int idx, bool show) = 0;
     virtual void DoShowSortIndicator(unsigned int idx, int sortOrder) = 0;
+
+    // this window doesn't look nice with the border so don't use it by default
+    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
 };
 
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
