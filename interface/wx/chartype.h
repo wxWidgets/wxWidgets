@@ -23,6 +23,9 @@
 #endif
 @endcode
 
+    Note that since wxWidgets 2.9.0 you shouldn't use wxT() anymore in your
+    program sources if you want to support Unicode.
+
     @see @ref overview_unicode, wxS()
 
     @header{wx/chartype.h}
@@ -34,6 +37,8 @@
     @c 'x' or @c "foo") to either convert them to wide characters or wide strings
     in @c wchar_t-based (UTF-16) builds or keep them unchanged in @c char-based
     (UTF-8) builds.
+
+    Basically this macro produces characters or strings of type wxStringCharType.
 
     The use of this macro is optional as the translation will always be done at
     run-time even if there is a mismatch between the kind of the literal used
@@ -88,9 +93,11 @@ typedef wxUSE_UNICODE_dependent wxUChar;
 
     The @c wxUSE_UNICODE_WCHAR symbol is defined to @c 1 when building on
     Windows while it's defined to @c 0 when building on Unix, Linux or OS X.
+    (Note that @c wxUSE_UNICODE_UTF8 symbol is defined as the opposite of
+    @c wxUSE_UNICODE_WCHAR.)
 
-    Note that wxStringCharType is the type used by wxString for internal storage
-    of the characters.
+    Note that wxStringCharType (as the name says) is the type used by wxString
+    for internal storage of the characters.
 */
 typedef wxUSE_UNICODE_WCHAR_dependent wxStringCharType;
 
