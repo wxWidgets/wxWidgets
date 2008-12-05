@@ -42,3 +42,18 @@ void wxHeaderCtrlBase::DeleteAllColumns()
 }
 
 
+void wxHeaderCtrlBase::ScrollWindow(int dx,
+                                    int WXUNUSED_UNLESS_DEBUG(dy),
+                                    const wxRect * WXUNUSED_UNLESS_DEBUG(rect))
+
+{
+    // this doesn't make sense at all
+    wxASSERT_MSG( !dy, "header window can't be scrolled vertically" );
+
+    // this would actually be nice to support for "frozen" headers but it isn't
+    // supported currently
+    wxASSERT_MSG( !rect, "header window can't be scrolled partially" );
+
+    DoScrollHorz(dx);
+}
+
