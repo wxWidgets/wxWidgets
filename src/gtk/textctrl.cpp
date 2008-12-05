@@ -1344,8 +1344,7 @@ void wxTextCtrl::SetSelection( long from, long to )
         gtk_text_buffer_get_iter_at_offset( m_buffer, &fromi, from );
         gtk_text_buffer_get_iter_at_offset( m_buffer, &toi, to );
 
-        gtk_text_buffer_place_cursor( m_buffer, &fromi );
-        gtk_text_buffer_move_mark_by_name( m_buffer, "selection_bound", &fromi );
+        gtk_text_buffer_select_range( m_buffer, &fromi, &toi );
     }
     else // single line
     {
