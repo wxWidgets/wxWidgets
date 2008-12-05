@@ -51,6 +51,7 @@ private:
     virtual unsigned int DoGetCount() const;
     virtual void DoInsert(const wxHeaderColumn& col, unsigned int idx);
     virtual void DoDelete(unsigned int idx);
+    virtual void DoShowColumn(unsigned int idx, bool show);
     virtual void DoShowSortIndicator(unsigned int idx, int sortOrder);
 
     // override wxWindow methods which must be implemented by a new control

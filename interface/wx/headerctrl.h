@@ -160,6 +160,34 @@ public:
     void DeleteColumn(unsigned int idx);
 
     /**
+        Show or hide the column.
+
+        Initially the column is shown by default or hidden if it was added with
+        wxCOL_HIDDEN flag set.
+
+        When a column is hidden, it doesn't appear at all on the screen but its
+        index is still taken into account when working with other columns. E.g.
+        if there are three columns 0, 1 and 2 and the column 1 is hidden you
+        still need to use index 2 to refer to the last visible column.
+
+        @param idx
+            The index of the column to show or hide, from 0 to GetColumnCount().
+        @param show
+            Indicates whether the column should be shown (default) or hidden.
+     */
+    void ShowColumn(unsigned int idx, bool show = true);
+
+    /**
+        Hide the column with the given index.
+
+        This is the same as calling @code ShowColumn(idx, false) @endcode.
+
+        @param idx
+            The index of the column to show or hide, from 0 to GetColumnCount().
+     */
+    void HideColumn(unsigned int idx);
+
+    /**
         Update the column sort indicator.
 
         The sort indicator, if shown, is typically an arrow pointing upwards or

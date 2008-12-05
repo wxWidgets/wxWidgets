@@ -145,6 +145,12 @@ void wxHeaderCtrl::DoInsert(const wxHeaderColumn& col, unsigned int idx)
         hdi.iImage = m_imageList->GetImageCount() - 1;
     }
 
+    if ( col.IsHidden() )
+    {
+        hdi.mask |= HDI_WIDTH;
+        hdi.cxy = 0;
+    }
+
     if ( Header_InsertItem(GetHwnd(), idx, &hdi) == -1 )
     {
         wxLogLastError(_T("Header_InsertItem"));
@@ -163,6 +169,29 @@ void wxHeaderCtrl::DoDelete(unsigned int idx)
 // wxHeaderCtrl columns attributes
 // ----------------------------------------------------------------------------
 
+void wxHeaderCtrl::DoShowColumn(unsigned int idx, bool show)
+{
+    wxHDITEM hdi;
+    hdi.mask = HDI_WIDTH;
+
+    if ( !Header_GetItem(GetHwnd(), idx, &hdi) )
+    {
+        wxLogLastError(_T("Header_GetItem(HDI_WIDTH)"));
+        return;
+    }
+
+    if ( show )
+        hdi.cxy = 80; // FIXME: we don't have the column width here any more
+    else
+        hdi.cxy = 0;
+
+    if ( !Header_SetItem(GetHwnd(), idx, &hdi) )
+    {
+        wxLogLastError(_T("Header_SetItem(HDI_WIDTH)"));
+        return;
+    }
+}
+
 void wxHeaderCtrl::DoShowSortIndicator(unsigned int idx, int sortOrder)
 {
     wxHDITEM hdi;
@@ -170,7 +199,7 @@ void wxHeaderCtrl::DoShowSortIndicator(unsigned int idx, int sortOrder)
 
     if ( !Header_GetItem(GetHwnd(), idx, &hdi) )
     {
-        wxLogLastError(_T("Header_GetItem"));
+        wxLogLastError(_T("Header_GetItem(HDI_FORMAT)"));
         return;
     }
 
@@ -181,7 +210,7 @@ void wxHeaderCtrl::DoShowSortIndicator(unsigned int idx, int sortOrder)
 
     if ( !Header_SetItem(GetHwnd(), idx, &hdi) )
     {
-        wxLogLastError(_T("Header_SetItem"));
+        wxLogLastError(_T("Header_SetItem(HDI_FORMAT)"));
     }
 }
 

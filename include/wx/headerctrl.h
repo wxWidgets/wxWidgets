@@ -101,6 +101,20 @@ public:
     // modifying columns
     // -----------------
 
+    // show or hide the column, notice that even when a column is hidden we
+    // still account for it when using indices
+    void ShowColumn(unsigned int idx, bool show = true)
+    {
+        wxCHECK_RET( idx < GetColumnCount(), "invalid column index" );
+
+        DoShowColumn(idx, show);
+    }
+
+    void HideColumn(unsigned int idx)
+    {
+        ShowColumn(idx, false);
+    }
+
     // indicate that the column is used for sorting in ascending order if
     // sortOrder is true, for sorting in descending order if it is false or not
     // used for sorting at all if it is -1
@@ -108,6 +122,8 @@ public:
     {
         wxCHECK_RET( sortOrder == 0 || sortOrder == 1 || sortOrder == -1,
                      "invalid sort order value" );
+
+        wxCHECK_RET( idx < GetColumnCount(), "invalid column index" );
 
         DoShowSortIndicator(idx, sortOrder);
     }
@@ -129,6 +145,7 @@ private:
     virtual unsigned int DoGetCount() const = 0;
     virtual void DoInsert(const wxHeaderColumn& col, unsigned int idx) = 0;
     virtual void DoDelete(unsigned int idx) = 0;
+    virtual void DoShowColumn(unsigned int idx, bool show) = 0;
     virtual void DoShowSortIndicator(unsigned int idx, int sortOrder) = 0;
 };
 
@@ -136,7 +153,7 @@ private:
     #include "wx/msw/headerctrl.h"
 #elif 0 // TODO
     #define wxHAS_GENERIC_HEADERCTRL
-    #include "wx/generic/headerctrl.h"
+    #include "wx/generic/headerctrlg.h"
 #endif // platform
 
 #endif // _WX_HEADERCTRL_H_
