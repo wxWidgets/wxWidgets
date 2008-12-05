@@ -160,7 +160,7 @@ private:
 
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     #include "wx/msw/headerctrl.h"
-#elif 0 // TODO
+#else
     #define wxHAS_GENERIC_HEADERCTRL
     #include "wx/generic/headerctrlg.h"
 #endif // platform
