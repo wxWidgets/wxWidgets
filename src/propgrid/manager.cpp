@@ -1004,19 +1004,10 @@ void wxPropertyGridManager::RepaintSplitter( wxDC& dc, int new_splittery, int ne
 
 // -----------------------------------------------------------------------
 
-void wxPropertyGridManager::RefreshHelpBox( int new_splittery, int new_width, int new_height )
+void wxPropertyGridManager::UpdateDescriptionBox( int new_splittery, int new_width, int new_height )
 {
-    //if ( new_splittery == m_splitterY && new_width == m_width )
-    //    return;
-
     int use_hei = new_height;
     use_hei--;
-
-    //wxRendererNative::Get().DrawSplitterSash(this,dc,
-        //wxSize(width,m_splitterHeight),new_splittery,wxHORIZONTAL);
-
-    //wxRendererNative::Get().DrawSplitterBorder(this,dc,
-    //    wxRect(0,new_splittery,new_width,m_splitterHeight));
 
     // Fix help control positions.
     int cap_hei = m_pPropGrid->m_fontHeight;
@@ -1050,8 +1041,8 @@ void wxPropertyGridManager::RefreshHelpBox( int new_splittery, int new_width, in
         }
     }
 
-    wxClientDC dc(this);
-    RepaintSplitter( dc, new_splittery, new_width, new_height, true );
+    wxRect r(0, new_splittery, new_width, new_height-new_splittery);
+    RefreshRect(r);
 
     m_splitterY = new_splittery;
 
@@ -1120,7 +1111,7 @@ void wxPropertyGridManager::RecalculatePositions( int width, int height )
 
         propgridBottomY = new_splittery;
 
-        RefreshHelpBox( new_splittery, width, height );
+        UpdateDescriptionBox( new_splittery, width, height );
     }
 
     if ( m_iFlags & wxPG_FL_INITIALIZED )
@@ -1283,15 +1274,24 @@ void wxPropertyGridManager::RecreateControls()
 
         if ( !m_pTxtHelpCaption )
         {
-            m_pTxtHelpCaption = new wxStaticText (this,baseId+ID_ADVHELPCAPTION_OFFSET,wxEmptyString);
+            m_pTxtHelpCaption = new wxStaticText(this,
+                                                 baseId+ID_ADVHELPCAPTION_OFFSET,
+                                                 wxT(""),
+                                                 wxDefaultPosition,
+                                                 wxDefaultSize,
+                                                 wxALIGN_LEFT|wxST_NO_AUTORESIZE);
             m_pTxtHelpCaption->SetFont( m_pPropGrid->m_captionFont );
-            m_pTxtHelpCaption->SetCursor ( *wxSTANDARD_CURSOR );
+            m_pTxtHelpCaption->SetCursor( *wxSTANDARD_CURSOR );
         }
         if ( !m_pTxtHelpContent )
         {
-            m_pTxtHelpContent = new wxStaticText (this,baseId+ID_ADVHELPCONTENT_OFFSET,
-                wxEmptyString,wxDefaultPosition,wxDefaultSize,wxALIGN_LEFT|wxST_NO_AUTORESIZE);
-            m_pTxtHelpContent->SetCursor ( *wxSTANDARD_CURSOR );
+            m_pTxtHelpContent = new wxStaticText(this,
+                                                 baseId+ID_ADVHELPCONTENT_OFFSET,
+                                                 wxT(""),
+                                                 wxDefaultPosition,
+                                                 wxDefaultSize,
+                                                 wxALIGN_LEFT|wxST_NO_AUTORESIZE);
+            m_pTxtHelpContent->SetCursor( *wxSTANDARD_CURSOR );
         }
 
         SetDescribedProperty(GetSelection());
@@ -1464,8 +1464,7 @@ void wxPropertyGridManager::SetDescription( const wxString& label, const wxStrin
         m_pTxtHelpCaption->SetSize(-1,osz1.y);
         m_pTxtHelpContent->SetSize(-1,osz2.y);
 
-        if ( (m_iFlags & wxPG_FL_DESC_REFRESH_REQUIRED) || (osz2.x<(m_width-10)) )
-            RefreshHelpBox( m_splitterY, m_width, m_height );
+        UpdateDescriptionBox( m_splitterY, m_width, m_height );
     }
 }
 
@@ -1481,8 +1480,7 @@ void wxPropertyGridManager::SetDescribedProperty( wxPGProperty* p )
         }
         else
         {
-            m_pTxtHelpCaption->SetLabel(wxEmptyString);
-            m_pTxtHelpContent->SetLabel(wxEmptyString);
+            SetDescription( wxEmptyString, wxEmptyString );
         }
     }
 }
@@ -1583,7 +1581,7 @@ void wxPropertyGridManager::OnMouseMove( wxMouseEvent &event )
                 m_splitterY = sy;
 
                 m_pPropGrid->SetSize( m_width, m_splitterY - m_pPropGrid->GetPosition().y );
-                RefreshHelpBox( m_splitterY, m_width, m_height );
+                UpdateDescriptionBox( m_splitterY, m_width, m_height );
 
                 m_extraHeight -= change;
                 InvalidateBestSize();

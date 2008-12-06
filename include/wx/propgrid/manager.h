@@ -715,7 +715,7 @@ protected:
     /** (Re)creates/destroys controls, according to the window style bits. */
     void RecreateControls();
 
-    void RefreshHelpBox( int new_splittery, int new_width, int new_height );
+    void UpdateDescriptionBox( int new_splittery, int new_width, int new_height );
 
     void RepaintSplitter( wxDC& dc,
                           int new_splittery,
