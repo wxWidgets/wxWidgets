@@ -58,6 +58,9 @@
     wxWindow::SetVirtualSizeHints() with wxWindow::SetMinVirtualSize() or
     similar and remove it entirely in future.
 
+    @todo review docs for this class replacing SetVirtualSizeHints() with
+          SetMinClientSize().
+
     As with all windows, an application can draw onto a wxScrolled using a
     @ref overview_dc "device context".
 

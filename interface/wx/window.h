@@ -2449,6 +2449,17 @@ public:
     //@}
 
     /**
+        Use of this function for windows which are not toplevel windows
+        (such as wxDialog or wxFrame) is discouraged.
+        Please use SetMinSize() and SetMaxSize() instead.
+
+        @see wxTopLevelWindow::SetSizeHints
+    */
+    void SetSizeHints( const wxSize& minSize,
+                       const wxSize& maxSize=wxDefaultSize,
+                       const wxSize& incSize=wxDefaultSize);
+
+    /**
         Sets the window to have the given layout sizer.
         The window will then own the object, and will take care of its deletion.
         If an existing layout constraints object is already owned by the
