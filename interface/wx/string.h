@@ -6,59 +6,6 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/**
-    @class wxStringBuffer
-
-    This tiny class allows you to conveniently access the wxString internal buffer
-    as a writable pointer without any risk of forgetting to restore the string
-    to the usable state later.
-
-    For example, assuming you have a low-level OS function called
-    @c "GetMeaningOfLifeAsString(char *)" returning the value in the provided
-    buffer (which must be writable, of course) you might call it like this:
-
-    @code
-        wxString theAnswer;
-        GetMeaningOfLifeAsString(wxStringBuffer(theAnswer, 1024));
-        if ( theAnswer != "42" )
-            wxLogError("Something is very wrong!");
-    @endcode
-
-    Note that the exact usage of this depends on whether or not wxUSE_STL is
-    enabled. If wxUSE_STL is enabled, wxStringBuffer creates a separate empty
-    character buffer, and if wxUSE_STL is disabled, it uses GetWriteBuf() from
-    wxString, keeping the same buffer wxString uses intact. In other words,
-    relying on wxStringBuffer containing the old wxString data is not a good
-    idea if you want to build your program both with and without wxUSE_STL.
-
-    @library{wxbase}
-    @category{data}
-*/
-class wxStringBuffer
-{
-public:
-    /**
-        Constructs a writable string buffer object associated with the given string
-        and containing enough space for at least @a len characters.
-        Basically, this is equivalent to calling wxString::GetWriteBuf() and
-        saving the result.
-    */
-    wxStringBuffer(const wxString& str, size_t len);
-
-    /**
-        Restores the string passed to the constructor to the usable state by calling
-        wxString::UngetWriteBuf() on it.
-    */
-    ~wxStringBuffer();
-
-    /**
-        Returns the writable pointer to a buffer of the size at least equal to the
-        length specified in the constructor.
-    */
-    wxStringCharType* operator wxStringCharType *();
-};
-
-
 
 /**
     @class wxString
@@ -68,66 +15,29 @@ public:
     version wxWidgets 3.0.
 
     wxString is a class representing a Unicode character string.
-    wxString uses @c std::string internally to store its content
-    unless this is not supported by the compiler or disabled
-    specifically when building wxWidgets and it therefore inherits
-    many features from @c std::string. Most implementations of
-    @c std::string are thread-safe and don't use reference counting.
-    By default, wxString uses @c std::string internally even if
-    wxUSE_STL is not defined.
+    wxString uses @c std::basic_string internally (even if @c wxUSE_STL is not defined)
+    to store its content (unless this is not supported by the compiler or disabled
+    specifically when building wxWidgets) and it therefore inherits
+    many features from @c std::basic_string. (Note that most implementations of
+    @c std::basic_string are thread-safe and don't use reference counting.)
 
-    wxString now internally uses UTF-16 under Windows and UTF-8 under
-    Unix, Linux and OS X to store its content. Note that when iterating
-    over a UTF-16 string under Windows, the user code has to take care
-    of surrogate pair handling whereas Windows itself has built-in
-    support pairs in UTF-16, such as for drawing strings on screen.
-
-    Much work has been done to make existing code using ANSI string literals
-    work as before. If you nonetheless need to have a wxString that uses wchar_t
-    on Unix and Linux, too, you can specify this on the command line with the
-    @c configure @c --disable-utf8 switch or you can consider using wxUString
-    or std::wstring instead.
-
-    Accessing a UTF-8 string by index can be very inefficient because
-    a single character is represented by a variable number of bytes so that
-    the entire string has to be parsed in order to find the character.
-    Since iterating over a string by index is a common programming technique and
-    was also possible and encouraged by wxString using the access operator[]()
-    wxString implements caching of the last used index so that iterating over
-    a string is a linear operation even in UTF-8 mode.
-
-    It is nonetheless recommended to use iterators (instead of index based
-    access) like this:
-
-    @code
-    wxString s = "hello";
-    wxString::const_iterator i;
-    for (i = s.begin(); i != s.end(); ++i)
-    {
-        wxUniChar uni_ch = *i;
-        // do something with it
-    }
-    @endcode
-
-    Please see the @ref overview_string and the @ref overview_unicode for more
-    information about it.
-
-    wxString uses the current locale encoding to convert any C string
-    literal to Unicode. The same is done for converting to and from
-    @c std::string and for the return value of c_str().
-    For this conversion, the @a wxConvLibc class instance is used.
-    See wxCSConv and wxMBConv.
-
-    wxString implements most of the methods of the @c std::string class.
-    These standard functions are only listed here, but they are not
-    fully documented in this manual. Please see the STL documentation.
+    These @c std::basic_string standard functions are only listed here, but
+    they are not fully documented in this manual; see the STL documentation
+    (http://www.cppreference.com/wiki/string/start) for more info.
     The behaviour of all these functions is identical to the behaviour
     described there.
 
     You may notice that wxString sometimes has several functions which do
-    the same thing like Length(), Len() and length() which
-    all return the string length. In all cases of such duplication the
-    @c std::string compatible method should be used.
+    the same thing like Length(), Len() and length() which all return the
+    string length. In all cases of such duplication the @c std::string
+    compatible methods should be used.
+
+    For informations about the internal encoding used by wxString and
+    for important warnings and advices for using it, please read
+    the @ref overview_string.
+
+    In wxWidgets 3.0 wxString always stores Unicode strings, so you should
+    be sure to read also @ref overview_unicode.
 
 
     @section string_construct Constructors and assignment operators
@@ -229,6 +139,7 @@ public:
     original string is not modified and the function returns the extracted
     substring.
 
+    @li at()
     @li substr()
     @li Mid()
     @li operator()()
@@ -1344,14 +1255,6 @@ public:
         STL reference for their documentation.
     */
     //@{
-        size_t length() const;
-        size_type size() const;
-        size_type max_size() const;
-        size_type capacity() const;
-        void reserve(size_t sz);
-
-        void resize(size_t nSize, wxUniChar ch = '\0');
-
         wxString& append(const wxString& str, size_t pos, size_t n);
         wxString& append(const wxString& str);
         wxString& append(const char *sz, size_t n);
@@ -1366,7 +1269,12 @@ public:
         wxString& assign(size_t n, wxUniChar ch);
         wxString& assign(const_iterator first, const_iterator last);
 
+        wxUniChar at(size_t n) const;
+        wxUniCharRef at(size_t n);
+
         void clear();
+
+        size_type capacity() const;
 
         int compare(const wxString& str) const;
         int compare(size_t nStart, size_t nLen, const wxString& str) const;
@@ -1376,6 +1284,8 @@ public:
               const char* sz, size_t nCount = npos) const;
         int compare(size_t nStart, size_t nLen,
               const wchar_t* sz, size_t nCount = npos) const;
+
+        wxCStrData data() const;
 
         bool empty() const;
 
@@ -1387,6 +1297,28 @@ public:
         size_t find(const char* sz, size_t nStart = 0, size_t n = npos) const;
         size_t find(const wchar_t* sz, size_t nStart = 0, size_t n = npos) const;
         size_t find(wxUniChar ch, size_t nStart = 0) const;
+        size_t find_first_of(const char* sz, size_t nStart = 0) const;
+        size_t find_first_of(const wchar_t* sz, size_t nStart = 0) const;
+        size_t find_first_of(const char* sz, size_t nStart, size_t n) const;
+        size_t find_first_of(const wchar_t* sz, size_t nStart, size_t n) const;
+        size_t find_first_of(wxUniChar c, size_t nStart = 0) const
+        size_t find_last_of (const wxString& str, size_t nStart = npos) const
+        size_t find_last_of (const char* sz, size_t nStart = npos) const;
+        size_t find_last_of (const wchar_t* sz, size_t nStart = npos) const;
+        size_t find_last_of(const char* sz, size_t nStart, size_t n) const;
+        size_t find_last_of(const wchar_t* sz, size_t nStart, size_t n) const;
+        size_t find_last_of(wxUniChar c, size_t nStart = npos) const
+        size_t find_first_not_of(const wxString& str, size_t nStart = 0) const
+        size_t find_first_not_of(const char* sz, size_t nStart = 0) const;
+        size_t find_first_not_of(const wchar_t* sz, size_t nStart = 0) const;
+        size_t find_first_not_of(const char* sz, size_t nStart, size_t n) const;
+        size_t find_first_not_of(const wchar_t* sz, size_t nStart, size_t n) const;
+        size_t find_first_not_of(wxUniChar ch, size_t nStart = 0) const;
+        size_t find_last_not_of(const wxString& str, size_t nStart = npos) const
+        size_t find_last_not_of(const char* sz, size_t nStart = npos) const;
+        size_t find_last_not_of(const wchar_t* sz, size_t nStart = npos) const;
+        size_t find_last_not_of(const char* sz, size_t nStart, size_t n) const;
+        size_t find_last_not_of(const wchar_t* sz, size_t nStart, size_t n) const;
 
         wxString& insert(size_t nPos, const wxString& str);
         wxString& insert(size_t nPos, const wxString& str, size_t nStart, size_t n);
@@ -1396,6 +1328,13 @@ public:
         iterator insert(iterator it, wxUniChar ch);
         void insert(iterator it, const_iterator first, const_iterator last);
         void insert(iterator it, size_type n, wxUniChar ch);
+
+        size_t length() const;
+
+        size_type max_size() const;
+
+        void reserve(size_t sz);
+        void resize(size_t nSize, wxUniChar ch = '\0');
 
         wxString& replace(size_t nStart, size_t nLen, const wxString& str);
         wxString& replace(size_t nStart, size_t nLen, size_t nCount, wxUniChar ch);
@@ -1423,12 +1362,10 @@ public:
         size_t rfind(const wchar_t* sz, size_t nStart = npos, size_t n = npos) const;
         size_t rfind(wxUniChar ch, size_t nStart = npos) const;
 
+        size_type size() const;
         wxString substr(size_t nStart = 0, size_t nLen = npos) const;
-
         void swap(wxString& str);
-
     //@}
-
 };
 
 /**
@@ -1510,3 +1447,55 @@ public:
     wxChar* operator wxChar *();
 };
 
+
+/**
+    @class wxStringBuffer
+
+    This tiny class allows you to conveniently access the wxString internal buffer
+    as a writable pointer without any risk of forgetting to restore the string
+    to the usable state later.
+
+    For example, assuming you have a low-level OS function called
+    @c "GetMeaningOfLifeAsString(char *)" returning the value in the provided
+    buffer (which must be writable, of course) you might call it like this:
+
+    @code
+        wxString theAnswer;
+        GetMeaningOfLifeAsString(wxStringBuffer(theAnswer, 1024));
+        if ( theAnswer != "42" )
+            wxLogError("Something is very wrong!");
+    @endcode
+
+    Note that the exact usage of this depends on whether or not @c wxUSE_STL is
+    enabled. If @c wxUSE_STL is enabled, wxStringBuffer creates a separate empty
+    character buffer, and if @c wxUSE_STL is disabled, it uses GetWriteBuf() from
+    wxString, keeping the same buffer wxString uses intact. In other words,
+    relying on wxStringBuffer containing the old wxString data is not a good
+    idea if you want to build your program both with and without @c wxUSE_STL.
+
+    @library{wxbase}
+    @category{data}
+*/
+class wxStringBuffer
+{
+public:
+    /**
+        Constructs a writable string buffer object associated with the given string
+        and containing enough space for at least @a len characters.
+        Basically, this is equivalent to calling wxString::GetWriteBuf() and
+        saving the result.
+    */
+    wxStringBuffer(const wxString& str, size_t len);
+
+    /**
+        Restores the string passed to the constructor to the usable state by calling
+        wxString::UngetWriteBuf() on it.
+    */
+    ~wxStringBuffer();
+
+    /**
+        Returns the writable pointer to a buffer of the size at least equal to the
+        length specified in the constructor.
+    */
+    wxStringCharType* operator wxStringCharType *();
+};

@@ -49,30 +49,34 @@ other services should be ready to deal with Unicode.
 
 When working with Unicode, it's important to define the meaning of some terms.
 
-A @e glyph is a particular image that represents a @e character or part of a character.
+A <b><em>glyph</em></b> is a particular image that represents a character or part
+of a character.
 Any character may have one or more glyph associated; e.g. some of the possible
 glyphs for the capital letter 'A' are:
 
 @image html overview_unicode_glyphs.png
 
 Unicode assigns each character of almost any existing alphabet/script a number,
-which is called <em>code point</em>; it's typically indicated in documentation
+which is called <b><em>code point</em></b>; it's typically indicated in documentation
 manuals and in the Unicode website as @c U+xxxx where @c xxxx is an hexadecimal number.
 
 The Unicode standard divides the space of all possible code points in @e planes;
 a plane is a range of 65,536 (1000016) contiguous Unicode code points.
 Planes are numbered from 0 to 16, where the first one is the @e BMP, or Basic
 Multilingual Plane.
+The BMP contains characters for all modern languages, and a large number of
+special characters. The other planes in fact contain mainly historic scripts,
+special-purpose characters or are unused.
 
 Code points are represented in computer memory as a sequence of one or more
-<em>code units</em>, where a code unit is a unit of memory: 8, 16, or 32 bits.
+<b><em>code units</em></b>, where a code unit is a unit of memory: 8, 16, or 32 bits.
 More precisely, a code unit is the minimal bit combination that can represent a
 unit of encoded text for processing or interchange.
 
 The @e UTF or Unicode Transformation Formats are algorithms mapping the Unicode
 code points to code unit sequences. The simplest of them is <b>UTF-32</b> where
-each code unit is composed by 32 bits (4 bytes) and each code point is represented
-by a single code unit.
+each code unit is composed by 32 bits (4 bytes) and each code point is always
+represented by a single code unit (fixed length encoding).
 (Note that even UTF-32 is still not completely trivial as the mapping is different
 for little and big-endian architectures). UTF-32 is commonly used under Unix systems for
 internal representation of Unicode strings.
@@ -81,6 +85,7 @@ Another very widespread standard is <b>UTF-16</b> which is used by Microsoft Win
 it encodes the first (approximately) 64 thousands of Unicode code points
 (the BMP plane) using 16-bit code units (2 bytes) and uses a pair of 16-bit code
 units to encode the characters beyond this. These pairs are called @e surrogate.
+Thus UTF16 uses a variable number of code units to encode each code point.
 
 Finally, the most widespread encoding used for the external Unicode storage
 (e.g. files and network protocols) is <b>UTF-8</b> which is byte-oriented and so
@@ -107,7 +112,7 @@ Typically when UTF8 is used, code units are stored into @c char types, since
 @c char are 8bit wide on almost all systems; when using UTF16 typically code
 units are stored into @c wchar_t types since @c wchar_t is at least 16bits on
 all systems. This is also the approach used by wxString.
-See @ref overview_wxstring for more info.
+See @ref overview_string for more info.
 
 See also http://unicode.org/glossary/ for the official definitions of the
 terms reported above.
@@ -123,8 +128,8 @@ programs require the Microsoft Layer for Unicode to run on Windows 95/98/ME.
 
 However, unlike the Unicode build mode of the previous versions of wxWidgets, this
 support is mostly transparent: you can still continue to work with the @b narrow
-(i.e. current-locale-encoded @c char*) strings even if @b wide
-(i.e. UTF16/UCS2-encoded @c wchar_t* or UTF8-encoded @c char) strings are also
+(i.e. current locale-encoded @c char*) strings even if @b wide
+(i.e. UTF16/UCS2-encoded @c wchar_t* or UTF8-encoded @c char*) strings are also
 supported. Any wxWidgets function accepts arguments of either type as both
 kinds of strings are implicitly converted to wxString, so both
 @code
@@ -132,7 +137,7 @@ wxMessageBox("Hello, world!");
 @endcode
 and the somewhat less usual
 @code
-wxMessageBox(L"Salut \u00e0 toi!"); // 00E0 is "Latin Small Letter a with Grave"
+wxMessageBox(L"Salut \u00E0 toi!"); // U+00E0 is "Latin Small Letter a with Grave"
 @endcode
 work as expected.
 
@@ -147,9 +152,10 @@ in the case of gcc). In particular, the most common encoding used under
 modern Unix systems is UTF-8 and as the string above is not a valid UTF-8 byte
 sequence, nothing would be displayed at all in this case. Thus it is important
 to <b>never use 8-bit (instead of 7-bit) characters directly in the program source</b>
-but use wide strings or, alternatively, write
+but use wide strings or, alternatively, write:
 @code
-wxMessageBox(wxString::FromUTF8("Salut \xc3\xa0 toi!"));
+wxMessageBox(wxString::FromUTF8("Salut \xC3\xA0 toi!"));
+    // in UTF8 the character U+00E0 is encoded as 0xC3A0
 @endcode
 
 In a similar way, wxString provides access to its contents as either @c wchar_t or
@@ -327,6 +333,7 @@ different encoding of it. So you need to be able to convert the data to various
 representations and the wxString methods wxString::ToAscii(), wxString::ToUTF8()
 (or its synonym wxString::utf8_str()), wxString::mb_str(), wxString::c_str() and
 wxString::wc_str() can be used for this.
+
 The first of them should be only used for the string containing 7-bit ASCII characters
 only, anything else will be replaced by some substitution character.
 wxString::mb_str() converts the string to the encoding used by the current locale

@@ -51,6 +51,8 @@ unhindered through any traditional transport channels.
 
 @section overview_mbconv_string Background: The wxString Class
 
+@todo rewrite this overview; it's not up2date with wxString changes
+
 If you have compiled wxWidgets in Unicode mode, the wxChar type will become
 identical to wchar_t rather than char, and a wxString stores wxChars. Hence,
 all wxString manipulation in your application will then operate on Unicode

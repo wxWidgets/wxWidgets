@@ -13,10 +13,12 @@
 Classes: wxString, wxArrayString, wxStringTokenizer
 
 @li @ref overview_string_intro
+@li @ref overview_string_internal
 @li @ref overview_string_comparison
 @li @ref overview_string_advice
 @li @ref overview_string_related
 @li @ref overview_string_tuning
+@li @ref overview_string_settings
 
 
 <hr>
@@ -24,24 +26,103 @@ Classes: wxString, wxArrayString, wxStringTokenizer
 
 @section overview_string_intro Introduction
 
-wxString is a class which represents a character string of arbitrary length and
-containing arbitrary characters. The ASCII NUL character is allowed, but be
-aware that in the current string implementation some methods might not work
-correctly in this case.
+wxString is a class which represents a Unicode string of arbitrary length and
+containing arbitrary characters.
 
-Since wxWidgets 3.0 wxString internally uses UCS-2 (basically 2-byte per
-character wchar_t) under Windows and UTF-8 under Unix, Linux and
-OS X to store its content. Much work has been done to make
-existing code using ANSI string literals work as before.
+The @c NUL character is allowed, but be
+aware that in the current string implementation some methods might not work
+correctly in this case. @todo still true?
 
 This class has all the standard operations you can expect to find in a string
 class: dynamic memory management (string extends to accommodate new
-characters), construction from other strings, C strings, wide character C strings 
+characters), construction from other strings, C strings, wide character C strings
 and characters, assignment operators, access to individual characters, string
-concatenation and comparison, substring extraction, case conversion, trimming and padding (with
-spaces), searching and replacing and both C-like @c printf (wxString::Printf)
+concatenation and comparison, substring extraction, case conversion, trimming and
+padding (with spaces), searching and replacing and both C-like @c printf (wxString::Printf)
 and stream-like insertion functions as well as much more - see wxString for a
 list of all functions.
+
+The wxString class has been completely rewritten for wxWidgets 3.0 but much work
+has been done to make existing code using ANSI string literals work as it did
+in previous versions.
+
+
+@section overview_string_internal Internal wxString encoding
+
+Since wxWidgets 3.0 wxString internally uses <b>UCS-2</b> (with Unicode
+code units stored in @c wchar_t) under Windows and <b>UTF-8</b> (with Unicode
+code units stored in @c char) under Unix, Linux and Mac OS X to store its content.
+
+For definitions of <em>code units</em> and <em>code points</em> terms, please
+see the @ref overview_unicode_encodings paragraph.
+
+Note that there is a difference about UCS-2 and UTF-16: the first is a fixed-length
+encoding, without <em>surrogate pairs</em>, while the latter is a
+variable-length encoding. Except for this the two encodings are identical.
+
+For simplicity of implementation, wxString when <tt>wxUSE_UNICODE_WCHAR==1</tt>
+(e.g. on Windows) uses UCS-2 and thus doesn't know anything about surrogate pairs;
+it always consider 1 code unit per 1 code point, while this is really true only for
+characters in the @e BMP (Basic Multilingual Plane).
+Thus when iterating over a UTF-16 string stored in a wxString under Windows, the user
+code has to take care of <em>surrogate pair</em> handling himself.
+(Note however that Windows itself has built-in support for surrogate pairs in UTF-16,
+such as for drawing strings on screen.)
+
+When instead <tt>wxUSE_UNICODE_UTF8==1</tt> (e.g. on Linux and Mac OS X)
+wxString handles UTF8 multi-bytes sequences just fine, so that you can use
+UTF8 in a completely transparent way:
+
+Example:
+@code
+    // first test, using exotic characters outside of the Unicode BMP:
+
+    wxString test = wxString::FromUTF8("\xF0\x90\x8C\x80");
+        // U+10300 is "OLD ITALIC LETTER A" and is part of Unicode Plane 1
+        // in UTF8 it's encoded as 0xF0 0x90 0x8C 0x80
+
+    // it's a single Unicode code-point encoded as:
+    // - a UTF16 surrogate pair under Windows
+    // - a UTF8 multiple-bytes sequence under Linux
+    // (without considering the final NULL)
+
+    wxPrintf("wxString reports a length of %d character(s)", test.length());
+        // prints "wxString reports a length of 1 character(s)" on Linux
+        // prints "wxString reports a length of 2 character(s)" on Windows
+        // since Windows doesn't have surrogate pairs support!
+
+
+    // second test, this time using characters part of the Unicode BMP:
+
+    wxString test2 = wxString::FromUTF8("\x41\xC3\xA0\xE2\x82\xAC");
+        // this is the UTF8 encoding of capital letter A followed by
+        // 'small case letter a with grave' followed by the 'euro sign'
+
+    // they are 3 Unicode code-points encoded as:
+    // - 3 UTF16 code units under Windows
+    // - 6 UTF8 code units under Linux
+    // (without considering the final NULL)
+
+    wxPrintf("wxString reports a length of %d character(s)", test2.length());
+        // prints "wxString reports a length of 3 character(s)" on Linux
+        // prints "wxString reports a length of 3 character(s)" on Windows
+@endcode
+
+To better explain what stated above, consider the second string of the example
+above; it's composed by 3 characters and the final @c NULL:
+
+@image html overview_wxstring_encoding.png
+
+As you can see, UCS2/UTF16 encoding is straightforward (for characters in the @e BMP)
+and in this example the UCS2-encoded wxString takes 8 bytes.
+UTF8 encoding is more elaborated and in this example takes 7 bytes.
+
+The type used by wxString to store Unicode code units is called wxStringCharType.
+
+In general, for strings containing many latin characters UTF8 provides a big
+advantage in memory footprint respect UTF16, but requires some more processing
+for common operations like e.g. length calculation.
+
 
 
 @section overview_string_comparison Comparison to Other String Classes
@@ -50,51 +131,52 @@ The advantages of using a special string class instead of working directly with
 C strings are so obvious that there is a huge number of such classes available.
 The most important advantage is the need to always remember to allocate/free
 memory for C strings; working with fixed size buffers almost inevitably leads
-to buffer overflows. At last, C++ has a standard string class (std::string). So
+to buffer overflows. At last, C++ has a standard string class (@c std::string). So
 why the need for wxString? There are several advantages:
 
-@li <b>Efficiency:</b> Since wxWidgets 3.0 wxString uses std::string (UTF8
-    mode under Linux, Unix and OS X) or std::wstring (MSW) internally by
-    default to store its constent. wxString will therefore inherit the
-    performance characteristics from std::string.
+@li <b>Efficiency:</b> Since wxWidgets 3.0 wxString uses @c std::string (in UTF8
+    mode under Linux, Unix and OS X) or @c std::wstring (in UTF16 mode under Windows)
+    internally by default to store its contents. wxString will therefore inherit the
+    performance characteristics from @c std::string.
 @li <b>Compatibility:</b> This class tries to combine almost full compatibility
-    with the old wxWidgets 1.xx wxString class, some reminiscence to MFC
-    CString class and 90% of the functionality of std::string class.
-@li <b>Rich set of functions:</b> Some of the functions present in wxString are very
-    useful but don't exist in most of other string classes: for example,
-    wxString::AfterFirst, wxString::BeforeLast, wxString::operators or
-    wxString::Printf. Of course, all the standard string operations are
-    supported as well.
-@li <b>Unicode wxString is Unicode friendly:</b> it allows to easily convert to
-    and from ANSI and Unicode strings (see the @ref overview_unicode "unicode overview"
-    for more details) and maps to @c wstring transparently.
+    with the old wxWidgets 1.xx wxString class, some reminiscence of MFC's
+    CString class and 90% of the functionality of @c std::string class.
+@li <b>Rich set of functions:</b> Some of the functions present in wxString are
+    very useful but don't exist in most of other string classes: for example,
+    wxString::AfterFirst, wxString::BeforeLast, wxString::Printf.
+    Of course, all the standard string operations are supported as well.
+@li <b>wxString is Unicode friendly:</b> it allows to easily convert to
+    and from ANSI and Unicode strings (see @ref overview_unicode
+    for more details) and maps to @c std::wstring transparently.
 @li <b>Used by wxWidgets:</b> And, of course, this class is used everywhere
     inside wxWidgets so there is no performance loss which would result from
-    conversions of objects of any other string class (including std::string) to
+    conversions of objects of any other string class (including @c std::string) to
     wxString internally by wxWidgets.
 
 However, there are several problems as well. The most important one is probably
 that there are often several functions to do exactly the same thing: for
 example, to get the length of the string either one of wxString::length(),
 wxString::Len() or wxString::Length() may be used. The first function, as
-almost all the other functions in lowercase, is std::string compatible. The
+almost all the other functions in lowercase, is @c std::string compatible. The
 second one is the "native" wxString version and the last one is the wxWidgets
 1.xx way.
 
-So which is better to use? The usage of the std::string compatible functions is
+So which is better to use? The usage of the @c std::string compatible functions is
 strongly advised! It will both make your code more familiar to other C++
-programmers (who are supposed to have knowledge of std::string but not of
+programmers (who are supposed to have knowledge of @c std::string but not of
 wxString), let you reuse the same code in both wxWidgets and other programs (by
-just typedefing wxString as std::string when used outside wxWidgets) and by
+just typedefing wxString as @c std::string when used outside wxWidgets) and by
 staying compatible with future versions of wxWidgets which will probably start
-using std::string sooner or later too.
+using @c std::string sooner or later too.
 
-In the situations where there is no corresponding std::string function, please
+In the situations where there is no corresponding @c std::string function, please
 try to use the new wxString methods and not the old wxWidgets 1.xx variants
 which are deprecated and may disappear in future versions.
 
 
 @section overview_string_advice Advice About Using wxString
+
+@subsection overview_string_implicitconv Implicit conversions
 
 Probably the main trap with using this class is the implicit conversion
 operator to <tt>const char*</tt>. It is advised that you use wxString::c_str()
@@ -124,8 +206,8 @@ because the argument of @c puts() is known to be of the type
 <tt>const char*</tt>, this is @b not done for @c printf() which is a function
 with variable number of arguments (and whose arguments are of unknown types).
 So this call may do any number of things (including displaying the correct
-string on screen), although the most likely result is a program crash. The
-solution is to use wxString::c_str(). Just replace this line with this:
+string on screen), although the most likely result is a program crash.
+The solution is to use wxString::c_str(). Just replace this line with this:
 
 @code
 printf("Hello, %s!\n", output.c_str());
@@ -138,9 +220,42 @@ its contents are completely arbitrary. The solution to this problem is also
 easy, just make the function return wxString instead of a C string.
 
 This leads us to the following general advice: all functions taking string
-arguments should take <tt>const wxString</tt> (this makes assignment to the
+arguments should take <tt>const wxString&</tt> (this makes assignment to the
 strings inside the function faster) and all functions returning strings
 should return wxString - this makes it safe to return local variables.
+
+Finally note that wxString uses the current locale encoding to convert any C string
+literal to Unicode. The same is done for converting to and from @c std::string
+and for the return value of c_str().
+For this conversion, the @a wxConvLibc class instance is used.
+See wxCSConv and wxMBConv.
+
+
+@subsection overview_string_iterating Iterating wxString's characters
+
+As previously described, when <tt>wxUSE_UNICODE_UTF8==1</tt>, wxString internally
+uses the variable-length UTF8 encoding.
+Accessing a UTF-8 string by index can be very @b inefficient because
+a single character is represented by a variable number of bytes so that
+the entire string has to be parsed in order to find the character.
+Since iterating over a string by index is a common programming technique and
+was also possible and encouraged by wxString using the access operator[]()
+wxString implements caching of the last used index so that iterating over
+a string is a linear operation even in UTF-8 mode.
+
+It is nonetheless recommended to use @b iterators (instead of index based
+access) like this:
+
+@code
+wxString s = "hello";
+wxString::const_iterator i;
+for (i = s.begin(); i != s.end(); ++i)
+{
+    wxUniChar uni_ch = *i;
+    // do something with it
+}
+@endcode
+
 
 
 @section overview_string_related String Related Functions and Classes
@@ -158,7 +273,7 @@ these problems: wxIsEmpty() verifies whether the string is empty (returning
 case-insensitive string comparison function known either as @c stricmp() or
 @c strcasecmp() on different platforms.
 
-The <tt>@<wx/string.h@></tt> header also defines wxSnprintf and wxVsnprintf
+The <tt>@<wx/string.h@></tt> header also defines ::wxSnprintf and ::wxVsnprintf
 functions which should be used instead of the inherently dangerous standard
 @c sprintf() and which use @c snprintf() instead which does buffer size checks
 whenever possible. Of course, you may also use wxString::Printf which is also
@@ -180,7 +295,7 @@ wxStrings.
 
 @note This section is strictly about performance issues and is absolutely not
 necessary to read for using wxString class. Please skip it unless you feel
-familiar with profilers and relative tools. 
+familiar with profilers and relative tools.
 
 For the performance reasons wxString doesn't allocate exactly the amount of
 memory needed for each string. Instead, it adds a small amount of space to each
@@ -243,6 +358,17 @@ really consider fine tuning wxString for your application).
 
 It goes without saying that a profiler should be used to measure the precise
 difference the change to @c EXTRA_ALLOC makes to your program.
+
+
+@section overview_string_settings wxString Related Compilation Settings
+
+Much work has been done to make existing code using ANSI string literals
+work as before version 3.0.
+If you nonetheless need to have a wxString that uses @c wchar_t
+on Unix and Linux, too, you can specify this on the command line with the
+@c configure @c --disable-utf8 switch or you can consider using wxUString
+or @c std::wstring instead.
+
 
 */
 
