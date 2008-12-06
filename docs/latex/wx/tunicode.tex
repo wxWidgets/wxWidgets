@@ -89,7 +89,7 @@ To summarize, here is a brief example of how a program which can be compiled
 in both ANSI and Unicode modes could look like:
 
 \begin{verbatim}
-#ifdef __UNICODE__
+#if wxUSE_UNICODE
     wchar_t wch = L'*';
     const wchar_t *ws = L"Hello, world!";
     int len = wcslen(ws);
