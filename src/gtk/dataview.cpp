@@ -975,11 +975,11 @@ static GtkCellEditable *gtk_wx_cell_renderer_start_editing(
 {
     GtkWxCellRenderer *wxrenderer = (GtkWxCellRenderer *) renderer;
     wxDataViewCustomRenderer *cell = wxrenderer->cell;
-    
+
     // Renderer doesn't support in-place editing
     if (!cell->HasEditorCtrl())
         return NULL;
-        
+
     // An in-place editing control is still around
     if (cell->GetEditorCtrl())
         return NULL;
@@ -1086,7 +1086,7 @@ gtk_wx_cell_renderer_render (GtkCellRenderer      *renderer,
     rect.y += cell_area->y;
     rect.width  -= renderer->xpad * 2;
     rect.height -= renderer->ypad * 2;
-        
+
     GdkRectangle dummy;
     if (gdk_rectangle_intersect (expose_area, &rect, &dummy))
     {
@@ -1477,18 +1477,18 @@ wxDataViewCellMode wxDataViewRenderer::GetMode() const
 void wxDataViewRenderer::GtkUpdateAlignment()
 {
     int align = m_alignment;
-    
+
     // query alignment from column ?
     if (align == -1)
     {
         // None there yet
         if (GetOwner() == NULL)
             return;
-        
+
         align = GetOwner()->GetAlignment();
         align |= wxALIGN_CENTRE_VERTICAL;
     }
-    
+
     // horizontal alignment:
 
     gfloat xalign = 0.0;
@@ -2040,18 +2040,18 @@ wxDataViewChoiceRenderer::wxDataViewChoiceRenderer( const wxArrayString &choices
         size_t n;
         for (n = 0; n < m_choices.GetCount(); n++)
             gtk_list_store_insert_with_values( store, NULL, n, 0, m_choices[n].utf8_str(), -1 );
-        
+
         g_object_set (m_renderer,
                 "model", store,
                 "text-column", 0,
                 "has-entry", FALSE,
                 NULL);
-    
+
         bool editable = (mode & wxDATAVIEW_CELL_EDITABLE);
         g_object_set (m_renderer, "editable", editable, NULL);
-        
+
         SetAlignment(alignment);
-        
+
         g_signal_connect_after( m_renderer, "edited", G_CALLBACK(wxGtkTextRendererEditedCallback), this );
 
         GtkInitHandlers();
@@ -2077,7 +2077,7 @@ wxSize wxDataViewChoiceRenderer::GetSize() const
 
 bool wxDataViewChoiceRenderer::SetValue( const wxVariant &value )
 {
-    
+
 #ifdef __WXGTK26__
     if (!gtk_check_version(2,6,0))
     {
@@ -2134,7 +2134,7 @@ void wxDataViewChoiceRenderer::SetAlignment( int align )
     g_object_set_property( G_OBJECT(m_renderer), "alignment", &gvalue );
     g_value_unset( &gvalue );
 }
-    
+
 // ---------------------------------------------------------
 // wxDataViewDateRenderer
 // ---------------------------------------------------------
@@ -2563,7 +2563,7 @@ void wxDataViewColumn::Init(wxAlignment align, int flags, int width)
     m_label = gtk_label_new("");
     gtk_box_pack_end( GTK_BOX(box), GTK_WIDGET(m_label), FALSE, FALSE, 1 );
     gtk_tree_view_column_set_widget( column, box );
-    
+
     gtk_tree_view_column_pack_end( column, renderer, TRUE );
 
     gtk_tree_view_column_set_cell_data_func( column, renderer,
@@ -2672,7 +2672,7 @@ void wxDataViewColumn::SetAlignment( wxAlignment align )
         xalign = 0.5;
 
     gtk_tree_view_column_set_alignment( column, xalign );
-    
+
     if (m_renderer && m_renderer->GetAlignment() == -1)
         m_renderer->GtkUpdateAlignment();
 }
@@ -3697,7 +3697,7 @@ void wxDataViewCtrl::Init()
 {
     m_notifier = NULL;
     m_internal = NULL;
-    
+
     m_cols.DeleteContents( true );
 }
 
