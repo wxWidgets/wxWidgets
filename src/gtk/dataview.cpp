@@ -2686,7 +2686,16 @@ void wxDataViewColumn::SetSortable( bool sortable )
 {
     GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN(m_column);
 
-    gtk_tree_view_column_set_clickable( column, sortable );
+    if ( sortable )
+    {
+        gtk_tree_view_column_set_sort_column_id( column, GetModelColumn() );
+    }
+    else
+    {
+        gtk_tree_view_column_set_sort_column_id( column, -1 );
+        gtk_tree_view_column_set_sort_indicator( column, FALSE );
+        gtk_tree_view_column_set_clickable( column, FALSE );
+    }
 }
 
 bool wxDataViewColumn::IsSortable() const
@@ -2695,25 +2704,18 @@ bool wxDataViewColumn::IsSortable() const
     return gtk_tree_view_column_get_clickable( column );
 }
 
-void wxDataViewColumn::SetAsSortKey( bool sort )
+void wxDataViewColumn::SetAsSortKey( bool WXUNUSED(sort) )
 {
-    GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN(m_column);
-
-    if (sort)
-    {
-        gtk_tree_view_column_set_sort_column_id( column, GetModelColumn() );
-    }
-    else
-    {
-        gtk_tree_view_column_set_sort_column_id( column, -1 );
-        gtk_tree_view_column_set_sort_indicator( column, FALSE );
-    }
+    // it might not make sense to have this function in wxHeaderColumnBase at
+    // all in fact, changing of the sort order should only be done using the
+    // associated control API
+    wxFAIL_MSG( "not implemented" );
 }
 
 bool wxDataViewColumn::IsSortKey() const
 {
     GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN(m_column);
-    return (gtk_tree_view_column_get_sort_column_id( column ) != -1);
+    return gtk_tree_view_column_get_sort_indicator( column );
 }
 
 bool wxDataViewColumn::IsResizeable() const
