@@ -129,6 +129,8 @@ typedef wxString wxArtID;
         wxBitmap bmp = wxArtProvider::GetBitmap("gtk-cdrom", wxART_MENU);
         #endif
     @endcode
+    For a list of the GTK+ stock items please refer to the GTK+ documentation page
+    http://library.gnome.org/devel/gtk/stable/gtk-Stock-Items.html.
     Additionally, if wxGTK was compiled against GTK+ >= 2.4, then it is also
     possible to load icons from current icon theme by specifying their name (without
     extension and directory components).
