@@ -361,9 +361,6 @@ private:
     bool    m_isConnected;
 
     void Init(wxAlignment align, int flags, int width);
-
-protected:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewColumn)
 };
 
 WX_DECLARE_LIST_WITH_DECL(wxDataViewColumn, wxDataViewColumnList,
