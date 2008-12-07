@@ -13,6 +13,7 @@
 #if wxUSE_TIMER
 
 #include "wx/gtk/private/timer.h"
+#include "wx/app.h"
 
 #include <gtk/gtk.h>
 
@@ -39,6 +40,10 @@ static gboolean timeout_callback(gpointer data)
 
     // Release lock again.
     gdk_threads_leave();
+
+    wxApp* app = wxTheApp;
+    if (app)
+        app->WakeUpIdle();
 
     return keepGoing;
 }
