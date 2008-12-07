@@ -2515,15 +2515,13 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
 
 }
 
-IMPLEMENT_CLASS(wxDataViewColumn, wxDataViewColumnBase)
-
 #include <wx/listimpl.cpp>
 WX_DEFINE_LIST(wxDataViewColumnList)
 
 wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewRenderer *cell,
                                     unsigned int model_column, int width,
-                                    wxAlignment align, int flags ) :
-    wxDataViewColumnBase( title, cell, model_column, width, align, flags )
+                                    wxAlignment align, int flags )
+    : wxDataViewColumnBase( cell, model_column )
 {
     Init( align, flags, width );
 
@@ -2532,8 +2530,8 @@ wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewRenderer *c
 
 wxDataViewColumn::wxDataViewColumn( const wxBitmap &bitmap, wxDataViewRenderer *cell,
                                     unsigned int model_column, int width,
-                                    wxAlignment align, int flags ) :
-    wxDataViewColumnBase( bitmap, cell, model_column, width, align, flags )
+                                    wxAlignment align, int flags )
+    : wxDataViewColumnBase( bitmap, cell, model_column )
 {
     Init( align, flags, width );
 
@@ -2688,8 +2686,7 @@ void wxDataViewColumn::SetSortable( bool sortable )
 {
     GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN(m_column);
 
-    gtk_tree_view_column_set_clickable( GTK_TREE_VIEW_COLUMN(m_column),
-                                        sortable );
+    gtk_tree_view_column_set_clickable( column, sortable );
 }
 
 bool wxDataViewColumn::IsSortable() const
