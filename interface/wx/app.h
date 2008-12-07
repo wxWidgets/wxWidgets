@@ -800,9 +800,9 @@ void wxWakeUpIdle();
 bool wxYield();
 
 /**
-    This function is similar to wxYield, except that it disables the user input to
-    all program windows before calling wxYield and re-enables it again
-    afterwards. If @a win is not @NULL, this window will remain enabled,
+    This function is similar to wxYield(), except that it disables the user
+    input to all program windows before calling wxYield() and re-enables it
+    again afterwards. If @a win is not @NULL, this window will remain enabled,
     allowing the implementation of some limited user interaction.
     Returns the result of the call to ::wxYield.
 
