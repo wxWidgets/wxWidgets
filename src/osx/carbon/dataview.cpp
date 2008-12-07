@@ -967,6 +967,24 @@ void wxDataViewColumn::SetWidth(int width)
   }
 }
 
+void wxDataViewColumn::SetAsSortKey(bool WXUNUSED(sort))
+{
+    // see wxGTK native wxDataViewColumn implementation
+    wxFAIL_MSG( "not implemented" );
+}
+
+bool wxDataViewColumn::IsSortKey() const
+{
+    wxDataViewCtrl * const dataViewCtrlPtr(GetOwner());
+    wxMacDataViewDataBrowserListViewControlPointer macDataViewListCtrlPtr(
+        dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(
+            dataViewCtrlPtr->GetPeer()));
+
+    DataBrowserPropertyID propertyID;
+    return macDataViewListCtrlPtr->GetSortProperty(&propertyID) == noErr &&
+            propertyID == m_propertyID;
+}
+
 //-----------------------------------------------------------------------------
 // wxDataViewCtrl
 //-----------------------------------------------------------------------------

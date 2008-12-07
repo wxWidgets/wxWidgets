@@ -380,6 +380,7 @@ public:
     virtual int GetWidth() const { return m_width; }
     virtual bool IsHidden() const { return false; } // TODO
     virtual bool IsSortOrderAscending() const { return m_ascending; }
+    virtual bool IsSortKey() const;
 
     virtual void SetAlignment(wxAlignment align);
     virtual void SetBitmap   (wxBitmap const& bitmap);
@@ -393,6 +394,7 @@ public:
     virtual void SetSortOrder  (bool ascending);
     virtual void SetTitle      (wxString const& title);
     virtual void SetWidth      (int  width);
+    virtual void SetAsSortKey(bool sort = true);
 
     // implementation only
     WXDataBrowserPropertyID GetPropertyID() const
