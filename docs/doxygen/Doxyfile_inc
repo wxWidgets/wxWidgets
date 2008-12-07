@@ -26,7 +26,7 @@ STRIP_FROM_PATH        = "$(WXWIDGETS)/"
 STRIP_FROM_INC_PATH    = "$(WXWIDGETS)/include/" \
                          "$(WXWIDGETS)/interface/"
 SHORT_NAMES            = NO
-JAVADOC_AUTOBRIEF      = NO
+JAVADOC_AUTOBRIEF      = YES
 QT_AUTOBRIEF           = NO
 MULTILINE_CPP_IS_BRIEF = NO
 DETAILS_AT_TOP         = YES
