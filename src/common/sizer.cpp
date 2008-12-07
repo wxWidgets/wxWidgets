@@ -1830,7 +1830,8 @@ bool wxFlexGridSizer::IsColGrowable( size_t idx )
 
 void wxFlexGridSizer::AddGrowableRow( size_t idx, int proportion )
 {
-    wxASSERT_MSG( !IsRowGrowable( idx ), 
+    wxCHECK_RET( idx < (size_t)GetRows(), "invalid row index" );
+    wxASSERT_MSG( !IsRowGrowable( idx ),
                   "AddGrowableRow() called for growable row" );
     m_growableRows.Add( idx );
     m_growableRowsProportions.Add( proportion );
@@ -1838,7 +1839,8 @@ void wxFlexGridSizer::AddGrowableRow( size_t idx, int proportion )
 
 void wxFlexGridSizer::AddGrowableCol( size_t idx, int proportion )
 {
-    wxASSERT_MSG( !IsColGrowable( idx ), 
+    wxCHECK_RET( idx < (size_t)GetCols(), "invalid column index" );
+    wxASSERT_MSG( !IsColGrowable( idx ),
                   "AddGrowableCol() called for growable column" );
     m_growableCols.Add( idx );
     m_growableColsProportions.Add( proportion );
