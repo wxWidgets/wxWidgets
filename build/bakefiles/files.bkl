@@ -713,7 +713,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/dirctrlg.cpp
     src/generic/dragimgg.cpp
     src/generic/filectrlg.cpp
-    src/generic/headercolg.cpp
     src/generic/headerctrlg.cpp
     src/generic/listbkg.cpp
     src/generic/logg.cpp
@@ -778,7 +777,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/dirctrlg.h
     wx/generic/dragimgg.h
     wx/generic/filectrlg.h
-    wx/generic/headercol.h
     wx/generic/headerctrl.h
     wx/generic/logg.h
     wx/generic/msgdlgg.h
@@ -1647,7 +1645,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/filedlg.cpp
     src/msw/frame.cpp
     src/msw/gauge.cpp
-    src/msw/headercol.cpp
     src/msw/headerctrl.cpp
     src/msw/iniconf.cpp
     src/msw/listbox.cpp
@@ -1718,7 +1715,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/frame.h
     wx/msw/gauge.h
     wx/msw/gdiimage.h
-    wx/msw/headercol.h
     wx/msw/headerctrl.h
     wx/msw/icon.h
     wx/msw/imaglist.h

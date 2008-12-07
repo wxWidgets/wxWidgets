@@ -49,11 +49,10 @@ public:
 
 private:
     // implement base class pure virtuals
+    virtual void DoSetCount(unsigned int count);
     virtual unsigned int DoGetCount() const;
-    virtual void DoInsert(const wxHeaderColumn& col, unsigned int idx);
-    virtual void DoDelete(unsigned int idx);
-    virtual void DoShowColumn(unsigned int idx, bool show);
-    virtual void DoShowSortIndicator(unsigned int idx, int sortOrder);
+    virtual void DoUpdate(unsigned int idx);
+
     virtual void DoScrollHorz(int dx);
 
     // override wxWindow methods which must be implemented by a new control
@@ -64,6 +63,13 @@ private:
 
     // common part of all ctors
     void Init();
+
+    // wrapper around Header_{Set,Insert}Item(): either appends the item to the
+    // end or modifies the existing item by copying information from
+    // GetColumn(idx) to it
+    enum Operation { Set, Insert };
+    void DoSetOrInsertItem(Operation oper, unsigned int idx);
+
 
     // the image list: initially NULL, created on demand
     wxImageList *m_imageList;

@@ -75,19 +75,6 @@ private:
     // refresh all the controls starting from (and including) the given one
     void RefreshColsAfter(unsigned int idx);
 
-    // all our current columns
-    typedef wxVector<wxHeaderColumn> Columns;
-    Columns m_cols;
-
-    // sorting indicators for the columns: our API is such that it allows using
-    // multiple columns for sorting, and even if this is not used anywhere in
-    // practice right now, still support this
-    //
-    // the values are interpreted in the same way as ShowSortIndicator()
-    // sortOrder parameter: true/false for ascending/descending sort if the
-    // corresponding column is used for sorting or -1 otherwise
-    wxVector<int> m_sortOrders;
-
     // index of the column under mouse or -1 if none
     unsigned int m_hover;
 

@@ -2527,7 +2527,6 @@ wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewRenderer *c
 {
     Init( align, flags, width );
 
-    gtk_tree_view_column_set_clickable( GTK_TREE_VIEW_COLUMN(m_column), TRUE );
     SetTitle( title );
 }
 
@@ -2568,10 +2567,6 @@ void wxDataViewColumn::Init(wxAlignment align, int flags, int width)
 
     gtk_tree_view_column_set_cell_data_func( column, renderer,
         wxGtkTreeCellDataFunc, (gpointer) GetRenderer(), NULL );
-}
-
-wxDataViewColumn::~wxDataViewColumn()
-{
 }
 
 void wxDataViewColumn::OnInternalIdle()
@@ -2693,7 +2688,21 @@ void wxDataViewColumn::SetSortable( bool sortable )
 {
     GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN(m_column);
 
-    if (sortable)
+    gtk_tree_view_column_set_clickable( GTK_TREE_VIEW_COLUMN(m_column),
+                                        sortable );
+}
+
+bool wxDataViewColumn::IsSortable() const
+{
+    GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN(m_column);
+    return gtk_tree_view_column_get_clickable( column );
+}
+
+void wxDataViewColumn::SetAsSortKey( bool sort )
+{
+    GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN(m_column);
+
+    if (sort)
     {
         gtk_tree_view_column_set_sort_column_id( column, GetModelColumn() );
     }
@@ -2704,7 +2713,7 @@ void wxDataViewColumn::SetSortable( bool sortable )
     }
 }
 
-bool wxDataViewColumn::IsSortable() const
+bool wxDataViewColumn::IsSortKey() const
 {
     GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN(m_column);
     return (gtk_tree_view_column_get_sort_column_id( column ) != -1);

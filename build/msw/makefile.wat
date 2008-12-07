@@ -290,7 +290,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_filedlg.obj &
 	$(OBJS)\monodll_frame.obj &
 	$(OBJS)\monodll_gauge.obj &
-	$(OBJS)\monodll_headercol.obj &
 	$(OBJS)\monodll_headerctrl.obj &
 	$(OBJS)\monodll_iniconf.obj &
 	$(OBJS)\monodll_listbox.obj &
@@ -434,7 +433,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_dirctrlg.obj &
 	$(OBJS)\monodll_dragimgg.obj &
 	$(OBJS)\monodll_filectrlg.obj &
-	$(OBJS)\monodll_headercolg.obj &
 	$(OBJS)\monodll_headerctrlg.obj &
 	$(OBJS)\monodll_listbkg.obj &
 	$(OBJS)\monodll_logg.obj &
@@ -674,7 +672,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_dirctrlg.obj &
 	$(OBJS)\monodll_dragimgg.obj &
 	$(OBJS)\monodll_filectrlg.obj &
-	$(OBJS)\monodll_headercolg.obj &
 	$(OBJS)\monodll_headerctrlg.obj &
 	$(OBJS)\monodll_listbkg.obj &
 	$(OBJS)\monodll_logg.obj &
@@ -979,7 +976,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_filedlg.obj &
 	$(OBJS)\monolib_frame.obj &
 	$(OBJS)\monolib_gauge.obj &
-	$(OBJS)\monolib_headercol.obj &
 	$(OBJS)\monolib_headerctrl.obj &
 	$(OBJS)\monolib_iniconf.obj &
 	$(OBJS)\monolib_listbox.obj &
@@ -1123,7 +1119,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_dirctrlg.obj &
 	$(OBJS)\monolib_dragimgg.obj &
 	$(OBJS)\monolib_filectrlg.obj &
-	$(OBJS)\monolib_headercolg.obj &
 	$(OBJS)\monolib_headerctrlg.obj &
 	$(OBJS)\monolib_listbkg.obj &
 	$(OBJS)\monolib_logg.obj &
@@ -1363,7 +1358,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_dirctrlg.obj &
 	$(OBJS)\monolib_dragimgg.obj &
 	$(OBJS)\monolib_filectrlg.obj &
-	$(OBJS)\monolib_headercolg.obj &
 	$(OBJS)\monolib_headerctrlg.obj &
 	$(OBJS)\monolib_listbkg.obj &
 	$(OBJS)\monolib_logg.obj &
@@ -1589,7 +1583,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_filedlg.obj &
 	$(OBJS)\coredll_frame.obj &
 	$(OBJS)\coredll_gauge.obj &
-	$(OBJS)\coredll_headercol.obj &
 	$(OBJS)\coredll_headerctrl.obj &
 	$(OBJS)\coredll_iniconf.obj &
 	$(OBJS)\coredll_listbox.obj &
@@ -1733,7 +1726,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_dirctrlg.obj &
 	$(OBJS)\coredll_dragimgg.obj &
 	$(OBJS)\coredll_filectrlg.obj &
-	$(OBJS)\coredll_headercolg.obj &
 	$(OBJS)\coredll_headerctrlg.obj &
 	$(OBJS)\coredll_listbkg.obj &
 	$(OBJS)\coredll_logg.obj &
@@ -1973,7 +1965,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_dirctrlg.obj &
 	$(OBJS)\coredll_dragimgg.obj &
 	$(OBJS)\coredll_filectrlg.obj &
-	$(OBJS)\coredll_headercolg.obj &
 	$(OBJS)\coredll_headerctrlg.obj &
 	$(OBJS)\coredll_listbkg.obj &
 	$(OBJS)\coredll_logg.obj &
@@ -2081,7 +2072,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_filedlg.obj &
 	$(OBJS)\corelib_frame.obj &
 	$(OBJS)\corelib_gauge.obj &
-	$(OBJS)\corelib_headercol.obj &
 	$(OBJS)\corelib_headerctrl.obj &
 	$(OBJS)\corelib_iniconf.obj &
 	$(OBJS)\corelib_listbox.obj &
@@ -2225,7 +2215,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_dirctrlg.obj &
 	$(OBJS)\corelib_dragimgg.obj &
 	$(OBJS)\corelib_filectrlg.obj &
-	$(OBJS)\corelib_headercolg.obj &
 	$(OBJS)\corelib_headerctrlg.obj &
 	$(OBJS)\corelib_listbkg.obj &
 	$(OBJS)\corelib_logg.obj &
@@ -2465,7 +2454,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_dirctrlg.obj &
 	$(OBJS)\corelib_dragimgg.obj &
 	$(OBJS)\corelib_filectrlg.obj &
-	$(OBJS)\corelib_headercolg.obj &
 	$(OBJS)\corelib_headerctrlg.obj &
 	$(OBJS)\corelib_listbkg.obj &
 	$(OBJS)\corelib_logg.obj &
@@ -6148,9 +6136,6 @@ $(OBJS)\monodll_filedlg.obj :  .AUTODEPEND ..\..\src\msw\filedlg.cpp
 $(OBJS)\monodll_frame.obj :  .AUTODEPEND ..\..\src\msw\frame.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
-$(OBJS)\monodll_headercol.obj :  .AUTODEPEND ..\..\src\msw\headercol.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
 $(OBJS)\monodll_headerctrl.obj :  .AUTODEPEND ..\..\src\msw\headerctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -7831,11 +7816,6 @@ $(OBJS)\monodll_filectrlg.obj :  .AUTODEPEND ..\..\src\generic\filectrlg.cpp
 !endif
 
 !ifeq USE_GUI 1
-$(OBJS)\monodll_headercolg.obj :  .AUTODEPEND ..\..\src\generic\headercolg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
 $(OBJS)\monodll_headerctrlg.obj :  .AUTODEPEND ..\..\src\generic\headerctrlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -8477,9 +8457,6 @@ $(OBJS)\monolib_filedlg.obj :  .AUTODEPEND ..\..\src\msw\filedlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_frame.obj :  .AUTODEPEND ..\..\src\msw\frame.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_headercol.obj :  .AUTODEPEND ..\..\src\msw\headercol.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_headerctrl.obj :  .AUTODEPEND ..\..\src\msw\headerctrl.cpp
@@ -10162,11 +10139,6 @@ $(OBJS)\monolib_filectrlg.obj :  .AUTODEPEND ..\..\src\generic\filectrlg.cpp
 !endif
 
 !ifeq USE_GUI 1
-$(OBJS)\monolib_headercolg.obj :  .AUTODEPEND ..\..\src\generic\headercolg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
 $(OBJS)\monolib_headerctrlg.obj :  .AUTODEPEND ..\..\src\generic\headerctrlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
@@ -11195,9 +11167,6 @@ $(OBJS)\coredll_filedlg.obj :  .AUTODEPEND ..\..\src\msw\filedlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_frame.obj :  .AUTODEPEND ..\..\src\msw\frame.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-
-$(OBJS)\coredll_headercol.obj :  .AUTODEPEND ..\..\src\msw\headercol.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_headerctrl.obj :  .AUTODEPEND ..\..\src\msw\headerctrl.cpp
@@ -12517,11 +12486,6 @@ $(OBJS)\coredll_filectrlg.obj :  .AUTODEPEND ..\..\src\generic\filectrlg.cpp
 !endif
 
 !ifeq USE_GUI 1
-$(OBJS)\coredll_headercolg.obj :  .AUTODEPEND ..\..\src\generic\headercolg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
 $(OBJS)\coredll_headerctrlg.obj :  .AUTODEPEND ..\..\src\generic\headerctrlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -12677,9 +12641,6 @@ $(OBJS)\corelib_filedlg.obj :  .AUTODEPEND ..\..\src\msw\filedlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_frame.obj :  .AUTODEPEND ..\..\src\msw\frame.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-
-$(OBJS)\corelib_headercol.obj :  .AUTODEPEND ..\..\src\msw\headercol.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_headerctrl.obj :  .AUTODEPEND ..\..\src\msw\headerctrl.cpp
@@ -13995,11 +13956,6 @@ $(OBJS)\corelib_dragimgg.obj :  .AUTODEPEND ..\..\src\generic\dragimgg.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_filectrlg.obj :  .AUTODEPEND ..\..\src\generic\filectrlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-$(OBJS)\corelib_headercolg.obj :  .AUTODEPEND ..\..\src\generic\headercolg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 

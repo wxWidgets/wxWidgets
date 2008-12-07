@@ -508,26 +508,25 @@ enum wxDataViewColumnFlags
     wxDATAVIEW_COL_HIDDEN        = wxCOL_HIDDEN
 };
 
-class WXDLLIMPEXP_ADV wxDataViewColumnBase : public
-// native implementations of wxDataViewCtrl have their own implementations of
-// wxDataViewColumnBase and so they need to only inherit from
-// wxHeaderColumnBase to provide the same interface as the generic port which
-// uses the platform native (if any) wxHeaderColumn
-#ifdef wxHAS_GENERIC_DATAVIEWCTRL
-                                             wxHeaderColumn
-#else
-                                             wxHeaderColumnBase
-#endif
+class WXDLLIMPEXP_ADV wxDataViewColumnBase : public wxHeaderColumnBase
 {
 public:
-    wxDataViewColumnBase( const wxString &title, wxDataViewRenderer *renderer,
-                          unsigned int model_column, int width = wxDVC_DEFAULT_WIDTH,
-                          wxAlignment align = wxALIGN_CENTER,
-                          int flags = wxDATAVIEW_COL_RESIZABLE );
-    wxDataViewColumnBase( const wxBitmap &bitmap, wxDataViewRenderer *renderer,
-                          unsigned int model_column, int width = wxDVC_DEFAULT_WIDTH,
-                          wxAlignment align = wxALIGN_CENTER,
-                          int flags = wxDATAVIEW_COL_RESIZABLE );
+    // ctor for the text columns: takes ownership of renderer
+    wxDataViewColumnBase(wxDataViewRenderer *renderer,
+                         unsigned int model_column)
+    {
+        Init(renderer, model_column);
+    }
+
+    // ctor for the bitmap columns
+    wxDataViewColumnBase(const wxBitmap& bitmap,
+                         wxDataViewRenderer *renderer,
+                         unsigned int model_column)
+        : m_bitmap(bitmap)
+    {
+        Init(renderer, model_column);
+    }
+
     virtual ~wxDataViewColumnBase();
 
     // setters:
@@ -539,23 +538,20 @@ public:
     wxDataViewCtrl *GetOwner() const        { return m_owner; }
     wxDataViewRenderer* GetRenderer() const { return m_renderer; }
 
-#ifndef wxHAS_GENERIC_DATAVIEWCTRL
     // implement some of base class pure virtuals (the rest is port-dependent
     // and done differently in generic and native versions)
     virtual void SetBitmap( const wxBitmap& bitmap ) { m_bitmap = bitmap; }
     virtual wxBitmap GetBitmap() const { return m_bitmap; }
-#endif // !wxHAS_GENERIC_DATAVIEWCTRL
 
 protected:
     wxDataViewRenderer      *m_renderer;
     int                      m_model_column;
-#ifndef wxHAS_GENERIC_DATAVIEWCTRL
     wxBitmap                 m_bitmap;
-#endif // !wxHAS_GENERIC_DATAVIEWCTRL
     wxDataViewCtrl          *m_owner;
 
-protected:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewColumnBase)
+private:
+    // common part of all ctors
+    void Init(wxDataViewRenderer *renderer, unsigned int model_column);
 };
 
 // ---------------------------------------------------------

@@ -91,43 +91,6 @@ unsigned int wxHeaderCtrl::DoGetCount() const
     return m_cols.size();
 }
 
-void wxHeaderCtrl::DoInsert(const wxHeaderColumn& col, unsigned int idx)
-{
-    m_cols.insert(m_cols.begin() + idx, col);
-    m_sortOrders.insert(m_sortOrders.begin() + idx, -1);
-
-    if ( m_cols[idx].IsShown() )
-        RefreshColsAfter(idx);
-}
-
-void wxHeaderCtrl::DoDelete(unsigned int idx)
-{
-    m_cols.erase(m_cols.begin() + idx);
-    m_sortOrders.erase(m_sortOrders.begin() + idx);
-
-    RefreshColsAfter(idx);
-}
-
-void wxHeaderCtrl::DoShowColumn(unsigned int idx, bool show)
-{
-    if ( show != m_cols[idx].IsShown() )
-    {
-        m_cols[idx].SetHidden(!show);
-
-        RefreshColsAfter(idx);
-    }
-}
-
-void wxHeaderCtrl::DoShowSortIndicator(unsigned int idx, int sortOrder)
-{
-    if ( sortOrder != m_sortOrders[idx] )
-    {
-        m_sortOrders[idx] = sortOrder;
-
-        RefreshCol(idx);
-    }
-}
-
 // ----------------------------------------------------------------------------
 // wxHeaderCtrl scrolling
 // ----------------------------------------------------------------------------

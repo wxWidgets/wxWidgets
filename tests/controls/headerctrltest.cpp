@@ -45,7 +45,7 @@ private:
     void AddDelete();
     void BestSize();
 
-    wxHeaderCtrl *m_header;
+    wxHeaderCtrlSimple *m_header;
 
     DECLARE_NO_COPY_CLASS(HeaderCtrlTestCase)
 };
@@ -62,7 +62,7 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( HeaderCtrlTestCase, "HeaderCtrlTestCase" 
 
 void HeaderCtrlTestCase::setUp()
 {
-    m_header = new wxHeaderCtrl(wxTheApp->GetTopWindow());
+    m_header = new wxHeaderCtrlSimple(wxTheApp->GetTopWindow());
 }
 
 void HeaderCtrlTestCase::tearDown()

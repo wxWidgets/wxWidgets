@@ -1617,7 +1617,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_filedlg.o \
 	$(OBJS)\monodll_frame.o \
 	$(OBJS)\monodll_gauge.o \
-	$(OBJS)\monodll_headercol.o \
 	$(OBJS)\monodll_headerctrl.o \
 	$(OBJS)\monodll_iniconf.o \
 	$(OBJS)\monodll_listbox.o \
@@ -1761,7 +1760,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_dirctrlg.o \
 	$(OBJS)\monodll_dragimgg.o \
 	$(OBJS)\monodll_filectrlg.o \
-	$(OBJS)\monodll_headercolg.o \
 	$(OBJS)\monodll_headerctrlg.o \
 	$(OBJS)\monodll_listbkg.o \
 	$(OBJS)\monodll_logg.o \
@@ -2001,7 +1999,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_dirctrlg.o \
 	$(OBJS)\monodll_dragimgg.o \
 	$(OBJS)\monodll_filectrlg.o \
-	$(OBJS)\monodll_headercolg.o \
 	$(OBJS)\monodll_headerctrlg.o \
 	$(OBJS)\monodll_listbkg.o \
 	$(OBJS)\monodll_logg.o \
@@ -2301,7 +2298,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_filedlg.o \
 	$(OBJS)\monolib_frame.o \
 	$(OBJS)\monolib_gauge.o \
-	$(OBJS)\monolib_headercol.o \
 	$(OBJS)\monolib_headerctrl.o \
 	$(OBJS)\monolib_iniconf.o \
 	$(OBJS)\monolib_listbox.o \
@@ -2445,7 +2441,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_dirctrlg.o \
 	$(OBJS)\monolib_dragimgg.o \
 	$(OBJS)\monolib_filectrlg.o \
-	$(OBJS)\monolib_headercolg.o \
 	$(OBJS)\monolib_headerctrlg.o \
 	$(OBJS)\monolib_listbkg.o \
 	$(OBJS)\monolib_logg.o \
@@ -2685,7 +2680,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_dirctrlg.o \
 	$(OBJS)\monolib_dragimgg.o \
 	$(OBJS)\monolib_filectrlg.o \
-	$(OBJS)\monolib_headercolg.o \
 	$(OBJS)\monolib_headerctrlg.o \
 	$(OBJS)\monolib_listbkg.o \
 	$(OBJS)\monolib_logg.o \
@@ -2900,7 +2894,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_filedlg.o \
 	$(OBJS)\coredll_frame.o \
 	$(OBJS)\coredll_gauge.o \
-	$(OBJS)\coredll_headercol.o \
 	$(OBJS)\coredll_headerctrl.o \
 	$(OBJS)\coredll_iniconf.o \
 	$(OBJS)\coredll_listbox.o \
@@ -3044,7 +3037,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_dirctrlg.o \
 	$(OBJS)\coredll_dragimgg.o \
 	$(OBJS)\coredll_filectrlg.o \
-	$(OBJS)\coredll_headercolg.o \
 	$(OBJS)\coredll_headerctrlg.o \
 	$(OBJS)\coredll_listbkg.o \
 	$(OBJS)\coredll_logg.o \
@@ -3284,7 +3276,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_dirctrlg.o \
 	$(OBJS)\coredll_dragimgg.o \
 	$(OBJS)\coredll_filectrlg.o \
-	$(OBJS)\coredll_headercolg.o \
 	$(OBJS)\coredll_headerctrlg.o \
 	$(OBJS)\coredll_listbkg.o \
 	$(OBJS)\coredll_logg.o \
@@ -3390,7 +3381,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_filedlg.o \
 	$(OBJS)\corelib_frame.o \
 	$(OBJS)\corelib_gauge.o \
-	$(OBJS)\corelib_headercol.o \
 	$(OBJS)\corelib_headerctrl.o \
 	$(OBJS)\corelib_iniconf.o \
 	$(OBJS)\corelib_listbox.o \
@@ -3534,7 +3524,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_dirctrlg.o \
 	$(OBJS)\corelib_dragimgg.o \
 	$(OBJS)\corelib_filectrlg.o \
-	$(OBJS)\corelib_headercolg.o \
 	$(OBJS)\corelib_headerctrlg.o \
 	$(OBJS)\corelib_listbkg.o \
 	$(OBJS)\corelib_logg.o \
@@ -3774,7 +3763,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_dirctrlg.o \
 	$(OBJS)\corelib_dragimgg.o \
 	$(OBJS)\corelib_filectrlg.o \
-	$(OBJS)\corelib_headercolg.o \
 	$(OBJS)\corelib_headerctrlg.o \
 	$(OBJS)\corelib_listbkg.o \
 	$(OBJS)\corelib_logg.o \
@@ -5903,9 +5891,6 @@ $(OBJS)\monodll_filedlg.o: ../../src/msw/filedlg.cpp
 $(OBJS)\monodll_frame.o: ../../src/msw/frame.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monodll_headercol.o: ../../src/msw/headercol.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\monodll_headerctrl.o: ../../src/msw/headerctrl.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -7586,11 +7571,6 @@ $(OBJS)\monodll_filectrlg.o: ../../src/generic/filectrlg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\monodll_headercolg.o: ../../src/generic/headercolg.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_headerctrlg.o: ../../src/generic/headerctrlg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -8232,9 +8212,6 @@ $(OBJS)\monolib_filedlg.o: ../../src/msw/filedlg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_frame.o: ../../src/msw/frame.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\monolib_headercol.o: ../../src/msw/headercol.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_headerctrl.o: ../../src/msw/headerctrl.cpp
@@ -9917,11 +9894,6 @@ $(OBJS)\monolib_filectrlg.o: ../../src/generic/filectrlg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\monolib_headercolg.o: ../../src/generic/headercolg.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_headerctrlg.o: ../../src/generic/headerctrlg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -10950,9 +10922,6 @@ $(OBJS)\coredll_filedlg.o: ../../src/msw/filedlg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\coredll_frame.o: ../../src/msw/frame.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\coredll_headercol.o: ../../src/msw/headercol.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\coredll_headerctrl.o: ../../src/msw/headerctrl.cpp
@@ -12272,11 +12241,6 @@ $(OBJS)\coredll_filectrlg.o: ../../src/generic/filectrlg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\coredll_headercolg.o: ../../src/generic/headercolg.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_headerctrlg.o: ../../src/generic/headerctrlg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -12432,9 +12396,6 @@ $(OBJS)\corelib_filedlg.o: ../../src/msw/filedlg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_frame.o: ../../src/msw/frame.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\corelib_headercol.o: ../../src/msw/headercol.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_headerctrl.o: ../../src/msw/headerctrl.cpp
@@ -13750,11 +13711,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_filectrlg.o: ../../src/generic/filectrlg.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\corelib_headercolg.o: ../../src/generic/headercolg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 

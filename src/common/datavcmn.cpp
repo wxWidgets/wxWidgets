@@ -832,55 +832,13 @@ void wxDataViewEditorCtrlEvtHandler::OnKillFocus( wxFocusEvent &event )
 // wxDataViewColumnBase
 // ---------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxDataViewColumnBase, wxObject)
-
-wxDataViewColumnBase::wxDataViewColumnBase(const wxString& title,
-                                           wxDataViewRenderer *renderer,
-                                           unsigned int model_column,
-                                           int width,
-                                           wxAlignment align,
-                                           int flags)
-#ifdef wxHAS_GENERIC_DATAVIEWCTRL
-                    : wxHeaderColumn(title, width, align, flags)
-#endif
+void wxDataViewColumnBase::Init(wxDataViewRenderer *renderer,
+                                unsigned int model_column)
 {
     m_renderer = renderer;
     m_model_column = model_column;
     m_owner = NULL;
     m_renderer->SetOwner( (wxDataViewColumn*) this );
-
-    // NOTE: the wxDataViewColumn's ctor must store the width, align, flags
-    //       parameters inside the native control!
-#ifndef wxHAS_GENERIC_DATAVIEWCTRL
-    wxUnusedVar(title);
-    wxUnusedVar(width);
-    wxUnusedVar(align);
-    wxUnusedVar(flags);
-#endif // !wxHAS_GENERIC_DATAVIEWCTRL
-}
-
-wxDataViewColumnBase::wxDataViewColumnBase(const wxBitmap& bitmap,
-                                           wxDataViewRenderer *renderer,
-                                           unsigned int model_column,
-                                           int width,
-                                           wxAlignment align,
-                                           int flags)
-#ifdef wxHAS_GENERIC_DATAVIEWCTRL
-                    : wxHeaderColumn(bitmap, width, align, flags)
-#else
-                    : m_bitmap(bitmap)
-#endif
-{
-    m_renderer = renderer;
-    m_model_column = model_column;
-    m_owner = NULL;
-    m_renderer->SetOwner( (wxDataViewColumn*) this );
-
-#ifndef wxHAS_GENERIC_DATAVIEWCTRL
-    wxUnusedVar(width);
-    wxUnusedVar(align);
-    wxUnusedVar(flags);
-#endif // !wxHAS_GENERIC_DATAVIEWCTRL
 }
 
 wxDataViewColumnBase::~wxDataViewColumnBase()

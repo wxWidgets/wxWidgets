@@ -16,7 +16,11 @@
 
     It is used as part of wxGrid and (will be used in the near future) in
     in wxDataViewCtrl and report view of wxListCtrl but can be also used
-    independently.
+    independently. In general this class is meant to be used as part of another
+    control which already stores the column information somewhere as it can't
+    be used directly: instead you need to inherit from it and implement the
+    GetColumn() method to provide column information. See wxHeaderCtrlSimple
+    for a concrete control class which can be used directly.
 
     In addition to labeling the columns, the control has the following
     features:
@@ -85,7 +89,7 @@ public:
                  wxWindowID winid = wxID_ANY,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
-                 long style = 0,
+                 long style = wxHD_DEFAULT_STYLE,
                  const wxString& name = wxHeaderCtrlNameStr);
 
     /**
@@ -115,11 +119,24 @@ public:
                 wxWindowID winid = wxID_ANY,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = 0,
+                long style = wxHD_DEFAULT_STYLE,
                 const wxString& name = wxHeaderCtrlNameStr);
 
     /**
+        Set the number of columns in the control.
+
+        The control will use GetColumn() to get information about all the
+        new columns and refresh itself, i.e. this method also has the same
+        effect as calling UpdateColumn() for all columns but it should only be
+        used if the number of columns really changed.
+     */
+    void SetColumnCount(unsigned int count);
+
+    /**
         Return the number of columns in the control.
+
+        @return
+            Number of columns as previously set by SetColumnCount().
 
         @see IsEmpty()
      */
@@ -131,6 +148,59 @@ public:
         @see GetColumnCount()
      */
     bool IsEmpty() const;
+
+protected:
+    /**
+        Method to be implemented by the derived classes to return the
+        information for the given column.
+
+        @param idx
+            The column index, between 0 and the value last passed to
+            SetColumnCount().
+     */
+    virtual wxHeaderColumnBase& GetColumn(unsigned int idx) = 0;
+};
+
+
+/**
+    @class wxHeaderCtrlSimple
+
+    wxHeaderCtrlSimple is a concrete header control which can be used directly,
+    without inheriting from it as you need to do when using wxHeaderCtrl
+    itself.
+
+    When using it, you need to use simple AppendColumn(), InsertColumn() and
+    DeleteColumn() methods instead of setting the number of columns with
+    SetColumnCount() and returning the information about them from the
+    overridden GetColumn().
+
+    @library{wxcore}
+    @category{ctrl}
+
+    @see wxHeaderCtrl
+*/
+class wxHeaderCtrlSimple : public wxHeaderCtrl
+{
+public:
+    /**
+        Default constructor not creating the underlying window.
+
+        You must use Create() after creating the object using this constructor.
+     */
+    wxHeaderCtrlSimple();
+
+    /**
+        Constructor creating the window.
+
+        Please see the base class wxHeaderCtrl::Create() method for the
+        parameters description.
+     */
+    wxHeaderCtrlSimple(wxWindow *parent,
+                       wxWindowID winid = wxID_ANY,
+                       const wxPoint& pos = wxDefaultPosition,
+                       const wxSize& size = wxDefaultSize,
+                       long style = wxHD_DEFAULT_STYLE,
+                       const wxString& name = wxHeaderCtrlNameStr);
 
     /**
         Insert the column at the given position.

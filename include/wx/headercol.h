@@ -47,7 +47,7 @@ enum
 //                     wxListCtrl, wxDataViewCtrl or wxGrid
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxHeaderColumnBase : public wxObject
+class WXDLLIMPEXP_CORE wxHeaderColumnBase
 {
 public:
     // ctors and dtor
@@ -92,14 +92,6 @@ public:
     // alignment of the text: wxALIGN_CENTRE, wxALIGN_LEFT or wxALIGN_RIGHT
     virtual void SetAlignment(wxAlignment align) = 0;
     virtual wxAlignment GetAlignment() const = 0;
-
-    // arbitrary client data associated with the column (currently only
-    // implemented in MSW because it is used in MSW wxDataViewCtrl
-    // implementation)
-    virtual void SetClientData(wxUIntPtr WXUNUSED(data))
-        { wxFAIL_MSG("not implemented"); }
-    virtual wxUIntPtr GetClientData() const
-        { return 0; }
 
 
     // flags manipulations:
@@ -151,8 +143,19 @@ public:
     bool IsShown() const
         { return !IsHidden(); }
 
+
+    // sorting
+    // -------
+
+    // set this column as the one used to sort the control
+    virtual void SetAsSortKey(bool sort = true) = 0;
+    void UnsetAsSortKey() { SetAsSortKey(false); }
+
+    // return true if the column is used for sorting
+    virtual bool IsSortKey() const = 0;
+
     // for sortable columns indicate whether we should sort in ascending or
-    // descending order
+    // descending order (this should only be taken into account if IsSortKey())
     virtual void SetSortOrder(bool ascending) = 0;
     void ToggleSortOrder() { SetSortOrder(!IsSortOrderAscending()); }
     virtual bool IsSortOrderAscending() const = 0;
@@ -163,12 +166,80 @@ protected:
     int GetFromIndividualFlags() const;
 };
 
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
-    #include "wx/msw/headercol.h"
-#else
-    #define wxHAS_GENERIC_HEADERCOL
-    #include "wx/generic/headercolg.h"
-#endif
+// ----------------------------------------------------------------------------
+// wxHeaderColumnSimple: trivial generic implementation of wxHeaderColumnBase
+// ----------------------------------------------------------------------------
 
+class wxHeaderColumnSimple : public wxHeaderColumnBase
+{
+public:
+    // ctors and dtor
+    wxHeaderColumnSimple(const wxString& title,
+                         int width = wxCOL_WIDTH_DEFAULT,
+                         wxAlignment align = wxALIGN_NOT,
+                         int flags = wxCOL_DEFAULT_FLAGS)
+        : m_title(title),
+          m_width(width),
+          m_align(align),
+          m_flags(flags)
+    {
+        Init();
+    }
+
+    wxHeaderColumnSimple(const wxBitmap& bitmap,
+                         int width = wxCOL_WIDTH_DEFAULT,
+                         wxAlignment align = wxALIGN_CENTER,
+                         int flags = wxCOL_DEFAULT_FLAGS)
+        : m_bitmap(bitmap),
+          m_width(width),
+          m_align(align),
+          m_flags(flags)
+    {
+        Init();
+    }
+
+    // implement base class pure virtuals
+    virtual void SetTitle(const wxString& title) { m_title = title; }
+    virtual wxString GetTitle() const { return m_title; }
+
+    virtual void SetBitmap(const wxBitmap& bitmap) { m_bitmap = bitmap; }
+    wxBitmap GetBitmap() const { return m_bitmap; }
+
+    virtual void SetWidth(int width) { m_width = width; }
+    virtual int GetWidth() const { return m_width; }
+
+    virtual void SetMinWidth(int minWidth) { m_minWidth = minWidth; }
+    virtual int GetMinWidth() const { return m_minWidth; }
+
+    virtual void SetAlignment(wxAlignment align) { m_align = align; }
+    virtual wxAlignment GetAlignment() const { return m_align; }
+
+    virtual void SetFlags(int flags) { m_flags = flags; }
+    virtual int GetFlags() const { return m_flags; }
+
+    virtual void SetAsSortKey(bool sort = true) { m_sort = sort; }
+    virtual bool IsSortKey() const { return m_sort; }
+
+    virtual void SetSortOrder(bool ascending) { m_sortAscending = ascending; }
+    virtual bool IsSortOrderAscending() const { return m_sortAscending; }
+
+private:
+    // common part of all ctors
+    void Init()
+    {
+        m_minWidth = 0;
+        m_sort = false;
+        m_sortAscending = true;
+    }
+
+    wxString m_title;
+    wxBitmap m_bitmap;
+    int m_width,
+        m_minWidth;
+    wxAlignment m_align;
+    int m_flags;
+    bool m_sort,
+         m_sortAscending;
+};
 #endif // _WX_HEADERCOL_H_
 

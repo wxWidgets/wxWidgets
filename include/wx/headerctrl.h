@@ -13,6 +13,8 @@
 
 #include "wx/control.h"
 
+#include "wx/vector.h"
+
 #include "wx/headercol.h"
 
 // notice that the classes in this header are defined in the core library even
@@ -34,8 +36,6 @@ enum
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxHeaderCtrlNameStr[];
 
-class WXDLLIMPEXP_FWD_CORE wxHeaderColumn;
-
 // ----------------------------------------------------------------------------
 // wxHeaderCtrlBase defines the interface of a header control
 // ----------------------------------------------------------------------------
@@ -51,29 +51,111 @@ public:
                  wxWindowID winid = wxID_ANY,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
-                 long style = 0,
+                 long style = wxHD_DEFAULT_STYLE,
                  const wxString& name = wxHeaderCtrlNameStr);
 
     bool Create(wxWindow *parent,
                 wxWindowID winid = wxID_ANY,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = 0,
+                long style = wxHD_DEFAULT_STYLE,
                 const wxString& name = wxHeaderCtrlNameStr);
      */
+
+    // column-related methods
+    // ----------------------
+
+    // set the number of columns in the control
+    //
+    // this also calls UpdateColumn() for all columns
+    void SetColumnCount(unsigned int count) { DoSetCount(count); }
+
+    // return the number of columns in the control as set by SetColumnCount()
+    unsigned int GetColumnCount() const { return DoGetCount(); }
+
+    // return whether the control has any columns
+    bool IsEmpty() const { return DoGetCount() == 0; }
+
+    // update the column with the given index
+    void UpdateColumn(unsigned int idx)
+    {
+        wxCHECK_RET( idx < GetColumnCount(), "invalid column index" );
+
+        DoUpdate(idx);
+    }
+
+
+    // implementation only from now on
+    // -------------------------------
+
+    // the user doesn't need to TAB to this control
+    virtual bool AcceptsFocusFromKeyboard() const { return false; }
+
+    // this method is only overridden in order to synchronize the control with
+    // the main window when it is scrolled, the derived class must implement
+    // DoScrollHorz()
+    virtual void ScrollWindow(int dx, int dy, const wxRect *rect = NULL);
+
+protected:
+    // this method must be implemented by the derived classes to return the
+    // information for the given column
+    virtual wxHeaderColumnBase& GetColumn(unsigned int idx) = 0;
+
+private:
+    // methods implementing our public API and defined in platform-specific
+    // implementations
+    virtual void DoSetCount(unsigned int count) = 0;
+    virtual unsigned int DoGetCount() const = 0;
+    virtual void DoUpdate(unsigned int idx) = 0;
+
+    virtual void DoScrollHorz(int dx) = 0;
+
+    // this window doesn't look nice with the border so don't use it by default
+    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+};
+
+// ----------------------------------------------------------------------------
+// wxHeaderCtrl: port-specific header control implementation, notice that this
+//               is still an ABC which is meant to be used as part of another
+//               control, see wxHeaderCtrlSimple for a standalone version
+// ----------------------------------------------------------------------------
+
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+    #include "wx/msw/headerctrl.h"
+#else
+    #define wxHAS_GENERIC_HEADERCTRL
+    #include "wx/generic/headerctrlg.h"
+#endif // platform
+
+// ----------------------------------------------------------------------------
+// wxHeaderCtrlSimple: concrete header control which can be used standalone
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxHeaderCtrlSimple : public wxHeaderCtrl
+{
+public:
+    // control creation
+    // ----------------
+
+    wxHeaderCtrlSimple() { Init(); }
+    wxHeaderCtrlSimple(wxWindow *parent,
+                       wxWindowID winid = wxID_ANY,
+                       const wxPoint& pos = wxDefaultPosition,
+                       const wxSize& size = wxDefaultSize,
+                       long style = wxHD_DEFAULT_STYLE,
+                       const wxString& name = wxHeaderCtrlNameStr)
+    {
+        Init();
+
+        Create(parent, winid, pos, size, style, name);
+    }
 
     // managing the columns
     // --------------------
 
-    // return the number of columns in the control
-    unsigned int GetColumnCount() const { return DoGetCount(); }
-
-    // return whether the control has any columns
-    bool IsEmpty() const { return GetColumnCount() == 0; }
-
     // insert the column at the given position, using GetColumnCount() as
     // position appends it at the end
-    void InsertColumn(const wxHeaderColumn& col, unsigned int idx)
+    void InsertColumn(const wxHeaderColumnSimple& col, unsigned int idx)
     {
         wxCHECK_RET( idx <= GetColumnCount(), "invalid column index" );
 
@@ -81,7 +163,7 @@ public:
     }
 
     // append the column to the end of the control
-    void AppendColumn(const wxHeaderColumn& col)
+    void AppendColumn(const wxHeaderColumnSimple& col)
     {
         DoInsert(col, GetColumnCount());
     }
@@ -115,54 +197,43 @@ public:
         ShowColumn(idx, false);
     }
 
-    // indicate that the column is used for sorting in ascending order if
-    // sortOrder is true, for sorting in descending order if it is false or not
-    // used for sorting at all if it is -1
-    void ShowSortIndicator(unsigned int idx, int sortOrder)
+    // indicate that the column is used for sorting
+    void ShowSortIndicator(unsigned int idx, bool ascending = true)
     {
-        wxCHECK_RET( sortOrder == 0 || sortOrder == 1 || sortOrder == -1,
-                     "invalid sort order value" );
-
         wxCHECK_RET( idx < GetColumnCount(), "invalid column index" );
 
-        DoShowSortIndicator(idx, sortOrder);
+        DoShowSortIndicator(idx, ascending);
     }
 
-    // remove the sort indicator from the given column
-    void RemoveSortIndicator(unsigned int idx)
-    {
-        DoShowSortIndicator(idx, -1);
-    }
+    // remove the sort indicator completely
+    void RemoveSortIndicator();
 
-
-    // implementation only from now on
-    // -------------------------------
-
-    // the user doesn't need to TAB to this control
-    virtual bool AcceptsFocusFromKeyboard() const { return false; }
-
-    // this method is only overridden in order to synchronize the control with
-    // the main window when it is scrolled, the derived class must implement
-    // DoScrollHorz()
-    virtual void ScrollWindow(int dx, int dy, const wxRect *rect = NULL);
+protected:
+    virtual wxHeaderColumnBase& GetColumn(unsigned int idx);
 
 private:
-    virtual unsigned int DoGetCount() const = 0;
-    virtual void DoInsert(const wxHeaderColumn& col, unsigned int idx) = 0;
-    virtual void DoDelete(unsigned int idx) = 0;
-    virtual void DoShowColumn(unsigned int idx, bool show) = 0;
-    virtual void DoShowSortIndicator(unsigned int idx, int sortOrder) = 0;
-    virtual void DoScrollHorz(int dx) = 0;
+    // functions implementing our public API
+    void DoInsert(const wxHeaderColumnSimple& col, unsigned int idx);
+    void DoDelete(unsigned int idx);
+    void DoShowColumn(unsigned int idx, bool show);
+    void DoShowSortIndicator(unsigned int idx, bool ascending);
 
-    // this window doesn't look nice with the border so don't use it by default
-    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+    // common part of all ctors
+    void Init();
+
+    // bring the column count in sync with the number of columns we store
+    void UpdateColumnCount() { SetColumnCount(m_cols.size()); }
+
+
+    // all our current columns
+    typedef wxVector<wxHeaderColumnSimple> Columns;
+    Columns m_cols;
+
+    // the column currently used for sorting or -1 if none
+    unsigned int m_sortKey;
+
+
+    DECLARE_NO_COPY_CLASS(wxHeaderCtrlSimple)
 };
-
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
-    #include "wx/msw/headerctrl.h"
-#else
-    #define wxHAS_GENERIC_HEADERCTRL
-    #include "wx/generic/headerctrlg.h"
-#endif // platform
 
 #endif // _WX_HEADERCTRL_H_

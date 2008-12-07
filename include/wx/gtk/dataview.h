@@ -300,8 +300,6 @@ public:
                       wxAlignment align = wxALIGN_CENTER,
                       int flags = wxDATAVIEW_COL_RESIZABLE );
 
-    virtual ~wxDataViewColumn();
-
 
     // setters:
 
@@ -314,6 +312,7 @@ public:
 
     virtual void SetSortable( bool sortable );
     virtual void SetSortOrder( bool ascending );
+    virtual void SetAsSortKey(bool sort = true);
 
     virtual void SetResizeable( bool resizeable );
     virtual void SetHidden( bool hidden );
@@ -332,6 +331,8 @@ public:
 
     virtual bool IsSortable() const;
     virtual bool IsSortOrderAscending() const;
+    virtual bool IsSortKey() const = 0;
+
     virtual bool IsResizeable() const;
     virtual bool IsHidden() const;
 

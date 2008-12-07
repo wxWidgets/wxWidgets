@@ -128,10 +128,49 @@ unsigned int wxHeaderCtrl::DoGetCount() const
     return Header_GetItemCount(GetHwnd());
 }
 
-void wxHeaderCtrl::DoInsert(const wxHeaderColumn& col, unsigned int idx)
+void wxHeaderCtrl::DoSetCount(unsigned int count)
 {
-    // copy the HDITEM because we may modify it below
-    HDITEM hdi = col.GetHDI();
+    unsigned n;
+
+    // first delete all old columns
+    const unsigned countOld = DoGetCount();
+    for ( n = 0; n < countOld; n++ )
+    {
+        if ( !Header_DeleteItem(GetHwnd(), 0) )
+        {
+            wxLogLastError(_T("Header_DeleteItem"));
+        }
+    }
+
+    // and add the new ones
+    for ( n = 0; n < count; n++ )
+    {
+        DoSetOrInsertItem(Insert, n);
+    }
+}
+
+void wxHeaderCtrl::DoUpdate(unsigned int idx)
+{
+    DoSetOrInsertItem(Set, idx);
+}
+
+void wxHeaderCtrl::DoSetOrInsertItem(Operation oper, unsigned int idx)
+{
+    const wxHeaderColumnBase& col = GetColumn(idx);
+
+    wxHDITEM hdi;
+
+    // notice that we need to store the string we use the pointer to until we
+    // pass it to the control
+    wxWxCharBuffer buf;
+    if ( !col.GetTitle().empty() )
+    {
+        hdi.mask |= HDI_TEXT;
+
+        buf = col.GetTitle().wx_str();
+        hdi.pszText = buf.data();
+        hdi.cchTextMax = wxStrlen(buf);
+    }
 
     const wxBitmap bmp = col.GetBitmap();
     if ( bmp.IsOk() )
@@ -160,72 +199,54 @@ void wxHeaderCtrl::DoInsert(const wxHeaderColumn& col, unsigned int idx)
         hdi.iImage = m_imageList->GetImageCount() - 1;
     }
 
-    if ( col.IsHidden() )
+    if ( col.GetAlignment() != wxALIGN_NOT )
+    {
+        hdi.mask |= HDI_FORMAT;
+        switch ( col.GetAlignment() )
+        {
+            case wxALIGN_LEFT:
+                hdi.fmt |= HDF_LEFT;
+                break;
+
+            case wxALIGN_CENTER:
+            case wxALIGN_CENTER_HORIZONTAL:
+                hdi.fmt |= HDF_CENTER;
+                break;
+
+            case wxALIGN_RIGHT:
+                hdi.fmt |= HDF_RIGHT;
+                break;
+
+            default:
+                wxFAIL_MSG( "invalid column header alignment" );
+        }
+    }
+
+    if ( col.IsSortKey() )
+    {
+        hdi.mask |= HDI_FORMAT;
+        hdi.fmt |= col.IsSortOrderAscending() ? HDF_SORTUP : HDF_SORTDOWN;
+    }
+
+    if ( col.GetWidth() != wxCOL_WIDTH_DEFAULT || col.IsHidden() )
     {
         hdi.mask |= HDI_WIDTH;
-        hdi.cxy = 0;
+        hdi.cxy = col.IsHidden() ? 0 : col.GetWidth();
     }
 
-    if ( Header_InsertItem(GetHwnd(), idx, &hdi) == -1 )
+    const LRESULT rc = ::SendMessage(GetHwnd(),
+                                     oper == Set ? HDM_SETITEM : HDM_INSERTITEM,
+                                     idx,
+                                     (LPARAM)&hdi);
+    if ( oper == Set )
     {
-        wxLogLastError(_T("Header_InsertItem"));
+        if ( !rc )
+            wxLogLastError(_T("Header_SetItem()"));
     }
-}
-
-void wxHeaderCtrl::DoDelete(unsigned int idx)
-{
-    if ( !Header_DeleteItem(GetHwnd(), idx) )
+    else // Insert
     {
-        wxLogLastError(_T("Header_DeleteItem"));
-    }
-}
-
-// ----------------------------------------------------------------------------
-// wxHeaderCtrl columns attributes
-// ----------------------------------------------------------------------------
-
-void wxHeaderCtrl::DoShowColumn(unsigned int idx, bool show)
-{
-    wxHDITEM hdi;
-    hdi.mask = HDI_WIDTH;
-
-    if ( !Header_GetItem(GetHwnd(), idx, &hdi) )
-    {
-        wxLogLastError(_T("Header_GetItem(HDI_WIDTH)"));
-        return;
-    }
-
-    if ( show )
-        hdi.cxy = 80; // FIXME: we don't have the column width here any more
-    else
-        hdi.cxy = 0;
-
-    if ( !Header_SetItem(GetHwnd(), idx, &hdi) )
-    {
-        wxLogLastError(_T("Header_SetItem(HDI_WIDTH)"));
-        return;
-    }
-}
-
-void wxHeaderCtrl::DoShowSortIndicator(unsigned int idx, int sortOrder)
-{
-    wxHDITEM hdi;
-    hdi.mask = HDI_FORMAT;
-
-    if ( !Header_GetItem(GetHwnd(), idx, &hdi) )
-    {
-        wxLogLastError(_T("Header_GetItem(HDI_FORMAT)"));
-        return;
-    }
-
-    if ( sortOrder == -1 )
-        hdi.fmt &= ~(HDF_SORTDOWN | HDF_SORTUP);
-    else
-        hdi.fmt |= sortOrder ? HDF_SORTUP : HDF_SORTDOWN;
-
-    if ( !Header_SetItem(GetHwnd(), idx, &hdi) )
-    {
-        wxLogLastError(_T("Header_SetItem(HDI_FORMAT)"));
+        if ( rc == -1 )
+            wxLogLastError(_T("Header_InsertItem()"));
     }
 }
 

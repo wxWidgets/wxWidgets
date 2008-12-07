@@ -38,42 +38,29 @@ enum
     @class wxHeaderColumn
 
     Represents a column header in controls displaying tabular data such as
-    wxHeaderCtrl, wxDataViewCtrl or wxGrid.
+    wxDataViewCtrl or wxGrid.
+
+    Notice that this is an abstract base class which is implemented (usually
+    using the information stored in the associated control) by the different
+    controls using wxHeaderCtrl. You may use wxHeaderCtrlSimple which uses
+    concrete wxHeaderColumnSimple if you don't already store the column
+    information somewhere.
 
     @library{wxcore}
     @category{ctrl}
-
-    @see wxHeaderCtrl
  */
 class wxHeaderColumn
 {
 public:
-    //@{
-    /**
-        Constructor for a column header.
-
-        The first constructor creates a header showing the given text @a title
-        while the second one creates one showing the specified @a bitmap image.
-     */
-    wxHeaderColumn(const wxString& title,
-                   int width = wxCOL_WIDTH_DEFAULT,
-                   wxAlignment align = wxALIGN_NOT,
-                   int flags = wxCOL_DEFAULT_FLAGS);
-    wxHeaderColumn(const wxBitmap &bitmap,
-                   int width = wxDVC_DEFAULT_WIDTH,
-                   wxAlignment align = wxALIGN_CENTER,
-                   int flags = wxCOL_DEFAULT_FLAGS);
-    //@}
-
     /**
         Set the text to display in the column header.
      */
-    virtual void SetTitle(const wxString& title);
+    virtual void SetTitle(const wxString& title) = 0;
 
     /**
         Get the text shown in the column header.
      */
-    virtual wxString GetTitle() const;
+    virtual wxString GetTitle() const = 0;
 
     /**
         Set the bitmap to be displayed in the column header.
@@ -81,14 +68,14 @@ public:
         Notice that the bitmaps displayed in different columns of the same
         control must all be of the same size.
      */
-    virtual void SetBitmap(const wxBitmap& bitmap);
+    virtual void SetBitmap(const wxBitmap& bitmap) = 0;
 
     /**
         Returns the bitmap in the header of the column, if any.
 
         If the column has no associated bitmap, wxNullBitmap is returned.
     */
-    virtual wxBitmap GetBitmap() const;                                   \
+    virtual wxBitmap GetBitmap() const = 0;
 
     /**
         Set the column width.
@@ -97,7 +84,7 @@ public:
             The column width in pixels or the special wxCOL_WIDTH_DEFAULT value
             meaning to use default width.
      */
-    virtual void SetWidth(int width);
+    virtual void SetWidth(int width) = 0;
 
     /**
         Returns the current width of the column.
@@ -105,7 +92,7 @@ public:
         @return
             Width of the column in pixels, never wxCOL_WIDTH_DEFAULT.
     */
-    virtual int GetWidth() const;
+    virtual int GetWidth() const = 0;
 
     /**
         Set the minimal column width.
@@ -119,7 +106,7 @@ public:
             The minimal column width in pixels, may be 0 to remove any
             previously set restrictions.
      */
-    virtual void SetMinWidth(int minWidth);
+    virtual void SetMinWidth(int minWidth) = 0;
 
     /**
         Return the minimal column width.
@@ -127,7 +114,7 @@ public:
         @return
             The value previously set by SetMinWidth() or 0 by default.
      */
-    virtual int GetMinWidth() const;
+    virtual int GetMinWidth() const = 0;
 
     /**
         Set the alignment of the column header.
@@ -140,7 +127,7 @@ public:
             wxALIGN_CENTRE for consistency (but notice that GetAlignment()
             never returns it).
     */
-    virtual void SetAlignment(wxAlignment align);
+    virtual void SetAlignment(wxAlignment align) = 0;
 
     /**
         Returns the current column alignment.
@@ -148,18 +135,7 @@ public:
         @return
             One of wxALIGN_CENTRE, wxALIGN_LEFT or wxALIGN_RIGHT.
      */
-    virtual wxAlignment GetAlignment() const;
-
-
-    // not documented because I'm not sure if it should be in the public API at
-    // all
-#if 0
-    // arbitrary client data associated with the column (currently only
-    // implemented in MSW because it is used in MSW wxDataViewCtrl
-    // implementation)
-    virtual void SetClientData(wxUIntPtr data);
-    virtual wxUIntPtr GetClientData() const;
-#endif
+    virtual wxAlignment GetAlignment() const = 0;
 
 
     /**
@@ -174,7 +150,7 @@ public:
             Combination of wxCOL_RESIZABLE, wxCOL_SORTABLE, wxCOL_REORDERABLE
             and wxCOL_HIDDEN bit flags.
      */
-    virtual void SetFlags(int flags);
+    virtual void SetFlags(int flags) = 0;
 
     /**
         Set or clear the given flag.
@@ -222,7 +198,7 @@ public:
 
         @see SetFlags()
      */
-    virtual int GetFlags() const;
+    virtual int GetFlags() const = 0;
 
     /**
         Return @true if the specified flag is currently set for this column.
@@ -309,17 +285,55 @@ public:
      */
     bool IsShown() const;
 
+
+
+    /**
+        Sets this column as the sort key for the associated control.
+
+        Calling this function with @true argument means that this column is
+        currently used for sorting the control contents and so should typically
+        display an arrow indicating it (the direction of the arrow depends on
+        IsSortOrderAscending() return value).
+
+        Don't confuse this function with SetSortable() which should be used to
+        indicate that the column @em may be used for sorting while this one is
+        used to indicate that it currently @em is used for sorting. Of course,
+        SetAsSortKey() can be only called for sortable columns.
+
+        @param sort
+            Sort (default) or don't sort the control contents by this column.
+     */
+    virtual void SetAsSortKey(bool sort = true) = 0;
+
+    /**
+        Don't use this column for sorting.
+
+        This is equivalent to calling SetAsSortKey() with @false argument.
+     */
+    void UnsetAsSortKey();
+
+    /**
+        Returns @true if the column is currently used for sorting.
+
+        Notice that this function simply returns the value last passed to
+        SetAsSortKey() (or @false if SetAsSortKey() had never been called), it
+        is up to the associated control to use this information to actually
+        sort its contents.
+     */
+    virtual bool IsSortKey() const = 0;
+
     /**
         Sets the sort order for this column.
 
-        This only makes sense for sortable columns and is only taken into
-        account by the control in which this column is inserted, this function
-        just stores the sort order in the wxHeaderColumn object.
+        This only makes sense for sortable columns which are currently used as
+        sort key, i.e. for which IsSortKey() returns @true and is only taken
+        into account by the control in which this column is inserted, this
+        function just stores the sort order in the wxHeaderColumn object.
 
         @param ascending
             If @true, sort in ascending order, otherwise in descending order.
      */
-    virtual void SetSortOrder(bool ascending);
+    virtual void SetSortOrder(bool ascending) = 0;
 
     /**
         Inverses the sort order.
@@ -335,9 +349,74 @@ public:
     /**
         Returns @true, if the sort order is ascending.
 
+        Notice that it only makes sense to call this function if the column is
+        used for sorting at all, i.e. if IsSortKey() returns @true.
+
         @see SetSortOrder()
     */
-    virtual bool IsSortOrderAscending() const;
+    virtual bool IsSortOrderAscending() const = 0;
 };
 
+/**
+    @class wxHeaderColumnSimple
 
+    Simple container for the information about the column.
+
+    This is a concrete class implementing all base wxHeaderColumn class methods
+    in a trivial way, i.e. by just storing the information in the object
+    itself. It is used by and with wxHeaderCtrlSimple, e.g.
+    @code
+        wxHeaderCtrlSimple * header = new wxHeaderCtrlSimple(...);
+        wxHeaderColumnSimple col("Title");
+        col.SetWidth(100);
+        col.SetSortable(100);
+        header->AppendColumn(col);
+    @endcode
+
+    @library{wxcore}
+    @category{ctrl}
+ */
+class wxHeaderColumnSimple : public wxHeaderColumn
+{
+public:
+    //@{
+    /**
+        Constructor for a column header.
+
+        The first constructor creates a header showing the given text @a title
+        while the second one creates one showing the specified @a bitmap image.
+     */
+    wxHeaderColumnSimple(const wxString& title,
+                         int width = wxCOL_WIDTH_DEFAULT,
+                         wxAlignment align = wxALIGN_NOT,
+                         int flags = wxCOL_DEFAULT_FLAGS);
+
+    wxHeaderColumnSimple(const wxBitmap &bitmap,
+                         int width = wxDVC_DEFAULT_WIDTH,
+                         wxAlignment align = wxALIGN_CENTER,
+                         int flags = wxCOL_DEFAULT_FLAGS);
+    //@}
+
+    //@{
+
+    /// Trivial implementations of the base class pure virtual functions.
+
+    virtual void SetTitle(const wxString& title);
+    virtual wxString GetTitle() const;
+    virtual void SetBitmap(const wxBitmap& bitmap);
+    virtual wxBitmap GetBitmap() const;
+    virtual void SetWidth(int width);
+    virtual int GetWidth() const;
+    virtual void SetMinWidth(int minWidth);
+    virtual int GetMinWidth() const;
+    virtual void SetAlignment(wxAlignment align);
+    virtual wxAlignment GetAlignment() const;
+    virtual void SetFlags(int flags);
+    virtual int GetFlags() const;
+    virtual void SetAsSortKey(bool sort = true);
+    virtual bool IsSortKey() const;
+    virtual void SetSortOrder(bool ascending);
+    virtual bool IsSortOrderAscending() const;
+
+    //@}
+};
