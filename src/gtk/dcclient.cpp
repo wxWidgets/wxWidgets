@@ -1070,9 +1070,6 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
     int w = bitmap.GetWidth();
     int h = bitmap.GetHeight();
 
-    if (m_window && m_window->GetLayoutDirection() == wxLayout_RightToLeft)
-        xx -= w;
-
     CalcBoundingBox( x, y );
     CalcBoundingBox( x + w, y + h );
 
@@ -1080,6 +1077,9 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
 
     int ww = XLOG2DEVREL(w);
     int hh = YLOG2DEVREL(h);
+
+    if (m_window && m_window->GetLayoutDirection() == wxLayout_RightToLeft)
+        xx -= ww;
 
     if (IsOutsideOfClippingRegion( xx,yy,ww,hh ))
         return;
