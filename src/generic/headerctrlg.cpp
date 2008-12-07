@@ -56,6 +56,7 @@ const unsigned COL_NONE = (unsigned)-1;
 
 void wxHeaderCtrl::Init()
 {
+    m_numColumns = 0;
     m_hover = COL_NONE;
     m_scrollOffset = 0;
 }
@@ -86,9 +87,24 @@ wxHeaderCtrl::~wxHeaderCtrl()
 // wxHeaderCtrl columns manipulation
 // ----------------------------------------------------------------------------
 
+void wxHeaderCtrl::DoSetCount(unsigned int count)
+{
+    m_numColumns = count;
+
+    Refresh();
+}
+
 unsigned int wxHeaderCtrl::DoGetCount() const
 {
-    return m_cols.size();
+    return m_numColumns;
+}
+
+void wxHeaderCtrl::DoUpdate(unsigned int idx)
+{
+    // we need to refresh not only this column but also the ones after it in
+    // case it was shown or hidden or its width changed -- it would be nice to
+    // avoid doing this unnecessary by storing the old column width (TODO)
+    RefreshColsAfter(idx);
 }
 
 // ----------------------------------------------------------------------------
@@ -116,10 +132,12 @@ wxSize wxHeaderCtrl::DoGetBestSize() const
 
 int wxHeaderCtrl::GetColStart(unsigned int idx) const
 {
+    wxHeaderCtrl * const self = const_cast<wxHeaderCtrl *>(this);
+
     int pos = 0;
     for ( unsigned n = 0; n < idx; n++ )
     {
-        const wxHeaderColumn& col = m_cols[n];
+        const wxHeaderColumnBase& col = self->GetColumn(n);
         if ( col.IsShown() )
             pos += col.GetWidth();
     }
@@ -135,7 +153,7 @@ void wxHeaderCtrl::RefreshCol(unsigned int idx)
 {
     wxRect rect = GetClientRect();
     rect.x += GetColStart(idx);
-    rect.width = m_cols[idx].GetWidth();
+    rect.width = GetColumn(idx).GetWidth();
 
     RefreshRect(rect);
 }
@@ -173,34 +191,25 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     // account for the horizontal scrollbar offset in the parent window
     dc.SetDeviceOrigin(m_scrollOffset, 0);
 
-    const unsigned int count = m_cols.size();
+    const unsigned int count = m_numColumns;
     int xpos = 0;
     for ( unsigned int i = 0; i < count; i++ )
     {
-        const wxHeaderColumn& col = m_cols[i];
+        const wxHeaderColumnBase& col = GetColumn(i);
         if ( col.IsHidden() )
             continue;
 
         const int colWidth = col.GetWidth();
 
         wxHeaderSortIconType sortArrow;
-        switch ( m_sortOrders[i] )
+        if ( col.IsSortKey() )
         {
-            default:
-                wxFAIL_MSG( "wrong sort order value" );
-                // fall through
-
-            case -1:
-                sortArrow = wxHDR_SORT_ICON_NONE;
-                break;
-
-            case 0:
-                sortArrow = wxHDR_SORT_ICON_DOWN;
-                break;
-
-            case 1:
-                sortArrow = wxHDR_SORT_ICON_UP;
-                break;
+            sortArrow = col.IsSortOrderAscending() ? wxHDR_SORT_ICON_UP
+                                                   : wxHDR_SORT_ICON_DOWN;
+        }
+        else // not sorting by this column
+        {
+            sortArrow = wxHDR_SORT_ICON_NONE;
         }
 
         int state = 0;

@@ -49,11 +49,10 @@ public:
 
 private:
     // implement base class pure virtuals
+    virtual void DoSetCount(unsigned int count);
     virtual unsigned int DoGetCount() const;
-    virtual void DoInsert(const wxHeaderColumn& col, unsigned int idx);
-    virtual void DoDelete(unsigned int idx);
-    virtual void DoShowColumn(unsigned int idx, bool show);
-    virtual void DoShowSortIndicator(unsigned int idx, int sortOrder);
+    virtual void DoUpdate(unsigned int idx);
+
     virtual void DoScrollHorz(int dx);
 
     // override wxWindow methods which must be implemented by a new control
@@ -74,6 +73,9 @@ private:
 
     // refresh all the controls starting from (and including) the given one
     void RefreshColsAfter(unsigned int idx);
+
+    // number of columns in the control currently
+    unsigned int m_numColumns;
 
     // index of the column under mouse or -1 if none
     unsigned int m_hover;
