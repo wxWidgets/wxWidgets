@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/mac/carbon/dataview.h
 // Purpose:     wxDataViewCtrl native implementation header
-// Author:      
+// Author:
 // Id:          $Id$
 // Copyright:   (c) 2007
 // Licence:     wxWindows licence
@@ -108,7 +108,7 @@ public:
 // constructors / destructor
 //
   wxDataViewCustomRenderer(wxString const& varianttype=wxT("string"), wxDataViewCellMode mode=wxDATAVIEW_CELL_INERT, int align=wxDVR_DEFAULT_ALIGNMENT);
-  
+
   virtual ~wxDataViewCustomRenderer();
 
   void RenderText( const wxString &text, int xoffset, wxRect cell, wxDC *dc, int state );
@@ -120,29 +120,29 @@ public:
 
 //
 // methods handling user actions
-// 
+//
   virtual bool Render(wxRect cell, wxDC* dc, int state) = 0;
 
   virtual bool Activate( wxRect WXUNUSED(cell),
                          wxDataViewModel *WXUNUSED(model),
-                         const wxDataViewItem & WXUNUSED(item), 
+                         const wxDataViewItem & WXUNUSED(item),
                          unsigned int WXUNUSED(col) )
                          { return false; }
 
   virtual bool LeftClick( wxPoint WXUNUSED(cursor),
                           wxRect WXUNUSED(cell),
                           wxDataViewModel *WXUNUSED(model),
-                          const wxDataViewItem & WXUNUSED(item), 
+                          const wxDataViewItem & WXUNUSED(item),
                           unsigned int WXUNUSED(col) )
                           { return false; }
-  
+
   virtual bool StartDrag( wxPoint WXUNUSED(cursor),
                           wxRect WXUNUSED(cell),
                           wxDataViewModel *WXUNUSED(model),
-                          const wxDataViewItem & WXUNUSED(item), 
+                          const wxDataViewItem & WXUNUSED(item),
                           unsigned int WXUNUSED(col) )
                           { return false; }
-    
+
 //
 // device context handling
 //
@@ -251,17 +251,17 @@ class WXDLLIMPEXP_ADV wxDataViewIconTextRenderer: public wxDataViewRenderer
 {
 public:
   wxDataViewIconTextRenderer(wxString const& varianttype = wxT("wxDataViewIconText"), wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int align=wxDVR_DEFAULT_ALIGNMENT);
-  
+
 //
 // inherited functions from wxDataViewRenderer
 //
   virtual bool Render();
-  
+
 //
 // implementation
 //
   virtual WXDataBrowserPropertyType GetPropertyType() const;
-  
+
 protected:
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewIconTextRenderer)
@@ -347,103 +347,94 @@ private:
 class WXDLLIMPEXP_ADV wxDataViewColumn: public wxDataViewColumnBase
 {
 public:
-//
-// constructors / destructor
-//
-  wxDataViewColumn(wxString const& title, wxDataViewRenderer* renderer, unsigned int model_column, int width=80, wxAlignment align=wxALIGN_CENTER,
-                   int flags=wxDATAVIEW_COL_RESIZABLE);
-  wxDataViewColumn(wxBitmap const& bitmap, wxDataViewRenderer* renderer, unsigned int model_column, int width=80, wxAlignment align=wxALIGN_CENTER,
-                   int flags=wxDATAVIEW_COL_RESIZABLE);
+    // constructors / destructor
+    wxDataViewColumn(const wxString& title,
+                     wxDataViewRenderer* renderer,
+                     unsigned int model_column,
+                     int width = wxDVC_DEFAULT_WIDTH,
+                     wxAlignment align = wxALIGN_CENTER,
+                     int flags = wxDATAVIEW_COL_RESIZABLE)
+        : wxDataViewColumnBase(renderer, model_column),
+          m_title(title)
+    {
+        Init(width, align, flags);
+    }
 
-//
-// inherited methods from wxDataViewColumnBase
-//
-  virtual wxAlignment GetAlignment() const
-  {
-    return this->m_alignment;
-  }
-  virtual int GetFlags() const
-  {
-    return this->m_flags;
-  }
-  virtual int GetMaxWidth() const
-  {
-    return this->m_maxWidth;
-  }
-  virtual int GetMinWidth() const
-  {
-    return this->m_minWidth;
-  }
-  virtual wxString GetTitle() const
-  {
-    return this->m_title;
-  }
-  virtual int GetWidth() const
-  {
-    return this->m_width;
-  }
+    wxDataViewColumn(const wxBitmap& bitmap,
+                     wxDataViewRenderer* renderer,
+                     unsigned int model_column,
+                     int width = wxDVC_DEFAULT_WIDTH,
+                     wxAlignment align = wxALIGN_CENTER,
+                     int flags = wxDATAVIEW_COL_RESIZABLE)
+        : wxDataViewColumnBase(bitmap, renderer, model_column)
+    {
+        Init(width, align, flags);
+    }
 
-  virtual bool IsHidden() const
-  {
-    return false; // not implemented
-  }
-  virtual bool IsSortOrderAscending() const
-  {
-    return this->m_ascending;
-  }
+    // implement wxHeaderColumnBase pure virtual methods
+    virtual wxAlignment GetAlignment() const { return m_alignment; }
+    virtual int GetFlags() const { return m_flags; }
+    virtual int GetMaxWidth() const { return m_maxWidth; }
+    virtual int GetMinWidth() const { return m_minWidth; }
+    virtual wxString GetTitle() const { return m_title; }
+    virtual int GetWidth() const { return m_width; }
+    virtual bool IsHidden() const { return false; } // TODO
+    virtual bool IsSortOrderAscending() const { return m_ascending; }
 
-  virtual void SetAlignment(wxAlignment align);
-  virtual void SetBitmap   (wxBitmap const& bitmap);
-  virtual void SetFlags    (int flags);
-  virtual void SetHidden(bool WXUNUSED(hidden))
-  {
-  }
-  virtual void SetMaxWidth   (int maxWidth);
-  virtual void SetMinWidth   (int minWidth);
-  virtual void SetReorderable(bool reorderable);
-  virtual void SetResizeable (bool resizeable);
-  virtual void SetSortable   (bool sortable);
-  virtual void SetSortOrder  (bool ascending);
-  virtual void SetTitle      (wxString const& title);
-  virtual void SetWidth      (int  width);
+    virtual void SetAlignment(wxAlignment align);
+    virtual void SetBitmap   (wxBitmap const& bitmap);
+    virtual void SetFlags    (int flags) { SetIndividualFlags(flags); }
+    virtual void SetHidden(bool WXUNUSED(hidden)) { } // TODO
+    virtual void SetMaxWidth   (int maxWidth);
+    virtual void SetMinWidth   (int minWidth);
+    virtual void SetReorderable(bool reorderable);
+    virtual void SetResizeable (bool resizeable);
+    virtual void SetSortable   (bool sortable);
+    virtual void SetSortOrder  (bool ascending);
+    virtual void SetTitle      (wxString const& title);
+    virtual void SetWidth      (int  width);
 
-//
-// implementation
-//
-  WXDataBrowserPropertyID GetPropertyID() const
-  {
-    return this->m_propertyID;
-  }
-  
-  void SetPropertyID(WXDataBrowserPropertyID newID)
-  {
-    this->m_propertyID = newID;
-  }
-  void SetWidthVariable(int NewWidth)
-  {
-    this->m_width = NewWidth;
-  }
+    // implementation only
+    WXDataBrowserPropertyID GetPropertyID() const
+    {
+        return m_propertyID;
+    }
 
-protected:
+    void SetPropertyID(WXDataBrowserPropertyID newID)
+    {
+        m_propertyID = newID;
+    }
+    void SetWidthVariable(int NewWidth)
+    {
+        m_width = NewWidth;
+    }
+
 private:
-//
-// variables
-//
-  bool m_ascending; // sorting order
+    // common part of all ctors
+    void Init(int width, wxAlignment align, int flags)
+    {
+        m_ascending = true;
+        m_flags = flags & ~wxDATAVIEW_COL_HIDDEN; // TODO
+        m_maxWidth = 30000;
+        m_minWidth = 0;
+        m_width = width >= 0 ? width : wxDVC_DEFAULT_WIDTH;
+        m_alignment = align;
+    }
 
-  WXDataBrowserPropertyID m_propertyID; // each column is identified by its unique property ID (NOT by the column index)
-  
-  int m_flags;    // flags for the column
-  int m_maxWidth; // maximum width for the column
-  int m_minWidth; // minimum width for the column
-  int m_width;    // column width
+    bool m_ascending; // sorting order
 
-  wxAlignment m_alignment; // column header alignment
+    // each column is identified by its unique property ID (NOT by the column
+    // index)
+    WXDataBrowserPropertyID m_propertyID;
 
-  wxString m_title; // column title
+    int m_flags;    // flags for the column
+    int m_maxWidth; // maximum width for the column
+    int m_minWidth; // minimum width for the column
+    int m_width;    // column width
 
- // wxWidget internal stuff:
-  DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewColumn)
+    wxAlignment m_alignment; // column header alignment
+
+    wxString m_title; // column title
 };
 
 // ---------------------------------------------------------
@@ -474,14 +465,14 @@ public:
   {
     return this;
   }
-  
+
  // inherited methods from 'wxDataViewCtrlBase':
   virtual bool AssociateModel(wxDataViewModel* model);
 
   virtual bool AppendColumn(wxDataViewColumn* columnPtr);
   virtual bool PrependColumn(wxDataViewColumn* columnPtr);
   virtual bool InsertColumn( unsigned int pos, wxDataViewColumn *col );
-  
+
   virtual bool ClearColumns();
   virtual bool DeleteColumn(wxDataViewColumn* columnPtr);
   virtual wxDataViewColumn* GetColumn(unsigned int pos) const;
@@ -491,14 +482,14 @@ public:
   virtual void Collapse(wxDataViewItem const& item);
   virtual void EnsureVisible(wxDataViewItem const& item, wxDataViewColumn const* columnPtr=NULL);
   virtual void Expand(wxDataViewItem const& item);
-  
+
   virtual wxDataViewColumn* GetSortingColumn() const;
 
   virtual unsigned int GetCount() const;
   virtual wxRect GetItemRect(wxDataViewItem const& item, wxDataViewColumn const* columnPtr) const;
   virtual wxDataViewItem GetSelection() const;
   virtual int GetSelections(wxDataViewItemArray& sel) const;
-  
+
   virtual void HitTest(wxPoint const& point, wxDataViewItem& item, wxDataViewColumn*& columnPtr) const;
 
   virtual bool IsSelected(wxDataViewItem const& item) const;
@@ -542,7 +533,7 @@ public:
 
  // with CG, we need to get the context from an kEventControlDraw event
  // unfortunately, the DataBrowser callbacks don't provide the context
- // and we need it, so we need to set/remove it before and after draw 
+ // and we need it, so we need to set/remove it before and after draw
  // events so we can access it in the callbacks.
   void MacSetDrawingContext(void* context)
   {
@@ -603,7 +594,7 @@ private:
   void* m_cgContext; // pointer to core graphics context
 
   wxDataViewCustomRenderer* m_CustomRendererPtr; // pointer to a valid custom renderer while editing; this class does NOT own the pointer
-  
+
   wxDataViewItem m_CustomRendererItem; // currently edited item by the customerenderer; it is invalid while not editing
 
   ColumnPointerHashMapType m_ColumnPointers; // all column pointers are stored in a hash map with the property ID as a key
