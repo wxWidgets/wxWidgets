@@ -1034,10 +1034,6 @@ GdkBitmap* wxWindowDCImpl::GetClippedMask(GdkBitmap* mask, int w, int h,
     c1.pixel = 1;
     wxGtkObject<GdkGC> gc(gdk_gc_new( new_mask ));
 
-    // zero-ing new_mask
-    gdk_gc_set_foreground( gc, &c0 );
-    gdk_draw_rectangle( new_mask, gc, TRUE, 0, 0, w, h );
-
     // clipping region
     gdk_gc_set_clip_region( gc, m_currentClippingRegion.GetRegion() );
     gdk_gc_set_clip_origin( gc, -x, -y );
