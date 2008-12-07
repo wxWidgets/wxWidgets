@@ -67,6 +67,11 @@ public:
                    int flags = wxCOL_DEFAULT_FLAGS);
     */
 
+    // virtual dtor for the base class to avoid gcc warnings even though we
+    // don't normally delete the objects of this class via a pointer to
+    // wxHeaderColumnBase so it's not necessary, strictly speaking
+    virtual ~wxHeaderColumnBase() { }
+
 
     // setters and getters for various attributes
     // ------------------------------------------
@@ -100,7 +105,7 @@ public:
     // notice that while we make Set/GetFlags() pure virtual here and implement
     // the individual flags access in terms of them, for some derived classes
     // it is more natural to implement access to each flag individually, in
-    // which case they can use SetIndividualFlags() and GetFromIndividualFlags() 
+    // which case they can use SetIndividualFlags() and GetFromIndividualFlags()
     // below to implement Set/GetFlags()
 
     // set or retrieve all column flags at once: combination of wxCOL_XXX
