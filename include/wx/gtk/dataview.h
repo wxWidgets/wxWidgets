@@ -331,7 +331,7 @@ public:
 
     virtual bool IsSortable() const;
     virtual bool IsSortOrderAscending() const;
-    virtual bool IsSortKey() const = 0;
+    virtual bool IsSortKey() const;
 
     virtual bool IsResizeable() const;
     virtual bool IsHidden() const;
