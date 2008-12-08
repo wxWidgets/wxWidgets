@@ -49,8 +49,8 @@ other services should be ready to deal with Unicode.
 
 When working with Unicode, it's important to define the meaning of some terms.
 
-A <b><em>glyph</em></b> is a particular image that represents a character or part
-of a character.
+A <b><em>glyph</em></b> is a particular image (usually part of a font) that
+represents a character or part of a character.
 Any character may have one or more glyph associated; e.g. some of the possible
 glyphs for the capital letter 'A' are:
 
@@ -60,7 +60,13 @@ Unicode assigns each character of almost any existing alphabet/script a number,
 which is called <b><em>code point</em></b>; it's typically indicated in documentation
 manuals and in the Unicode website as @c U+xxxx where @c xxxx is an hexadecimal number.
 
-The Unicode standard divides the space of all possible code points in @e planes;
+Note that typically one character is assigned exactly one code point, but there
+are exceptions; the so-called <em>precomposed characters</em>
+(see http://en.wikipedia.org/wiki/Precomposed_character) or the <em>ligatures</em>.
+In these cases a single "character" may be mapped to more than one code point or
+viceversa more characters may be mapped to a single code point.
+
+The Unicode standard divides the space of all possible code points in <b><em>planes</em></b>;
 a plane is a range of 65,536 (1000016) contiguous Unicode code points.
 Planes are numbered from 0 to 16, where the first one is the @e BMP, or Basic
 Multilingual Plane.
@@ -73,7 +79,7 @@ Code points are represented in computer memory as a sequence of one or more
 More precisely, a code unit is the minimal bit combination that can represent a
 unit of encoded text for processing or interchange.
 
-The @e UTF or Unicode Transformation Formats are algorithms mapping the Unicode
+The <b><em>UTF</em></b> or Unicode Transformation Formats are algorithms mapping the Unicode
 code points to code unit sequences. The simplest of them is <b>UTF-32</b> where
 each code unit is composed by 32 bits (4 bytes) and each code point is always
 represented by a single code unit (fixed length encoding).
@@ -129,7 +135,7 @@ programs require the Microsoft Layer for Unicode to run on Windows 95/98/ME.
 However, unlike the Unicode build mode of the previous versions of wxWidgets, this
 support is mostly transparent: you can still continue to work with the @b narrow
 (i.e. current locale-encoded @c char*) strings even if @b wide
-(i.e. UTF16/UCS2-encoded @c wchar_t* or UTF8-encoded @c char*) strings are also
+(i.e. UTF16-encoded @c wchar_t* or UTF8-encoded @c char*) strings are also
 supported. Any wxWidgets function accepts arguments of either type as both
 kinds of strings are implicitly converted to wxString, so both
 @code
@@ -386,7 +392,7 @@ function directly.
 
 @section overview_unicode_settings Unicode Related Compilation Settings
 
-@c wxUSE_UNICODE is now defined as 1 by default to indicate Unicode support.
+@c wxUSE_UNICODE is now defined as @c 1 by default to indicate Unicode support.
 If UTF-8 is used for the internal storage in wxString, @c wxUSE_UNICODE_UTF8 is
 also defined, otherwise @c wxUSE_UNICODE_WCHAR is.
 

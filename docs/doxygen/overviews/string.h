@@ -14,6 +14,7 @@ Classes: wxString, wxArrayString, wxStringTokenizer
 
 @li @ref overview_string_intro
 @li @ref overview_string_internal
+@li @ref overview_string_binary
 @li @ref overview_string_comparison
 @li @ref overview_string_advice
 @li @ref overview_string_related
@@ -27,16 +28,12 @@ Classes: wxString, wxArrayString, wxStringTokenizer
 @section overview_string_intro Introduction
 
 wxString is a class which represents a Unicode string of arbitrary length and
-containing arbitrary characters.
-
-The @c NUL character is allowed, but be
-aware that in the current string implementation some methods might not work
-correctly in this case. @todo still true?
+containing arbitrary Unicode characters.
 
 This class has all the standard operations you can expect to find in a string
 class: dynamic memory management (string extends to accommodate new
-characters), construction from other strings, C strings, wide character C strings
-and characters, assignment operators, access to individual characters, string
+characters), construction from other strings, compatibility with C strings and
+wide character C strings, assignment operators, access to individual characters, string
 concatenation and comparison, substring extraction, case conversion, trimming and
 padding (with spaces), searching and replacing and both C-like @c printf (wxString::Printf)
 and stream-like insertion functions as well as much more - see wxString for a
@@ -49,28 +46,31 @@ in previous versions.
 
 @section overview_string_internal Internal wxString encoding
 
-Since wxWidgets 3.0 wxString internally uses <b>UCS-2</b> (with Unicode
+Since wxWidgets 3.0 wxString internally uses <b>UTF-16</b> (with Unicode
 code units stored in @c wchar_t) under Windows and <b>UTF-8</b> (with Unicode
 code units stored in @c char) under Unix, Linux and Mac OS X to store its content.
 
 For definitions of <em>code units</em> and <em>code points</em> terms, please
 see the @ref overview_unicode_encodings paragraph.
 
-Note that there is a difference about UCS-2 and UTF-16: the first is a fixed-length
-encoding, without <em>surrogate pairs</em>, while the latter is a
-variable-length encoding. Except for this the two encodings are identical.
-
 For simplicity of implementation, wxString when <tt>wxUSE_UNICODE_WCHAR==1</tt>
-(e.g. on Windows) uses UCS-2 and thus doesn't know anything about surrogate pairs;
-it always consider 1 code unit per 1 code point, while this is really true only for
-characters in the @e BMP (Basic Multilingual Plane).
+(e.g. on Windows) uses <em>per code unit indexing</em> instead of
+<em>per code point indexing</em> and doesn't know anything about surrogate pairs;
+in other words it always considers code points to be composed by 1 code point,
+while this is really true only for characters in the @e BMP (Basic Multilingual Plane).
 Thus when iterating over a UTF-16 string stored in a wxString under Windows, the user
-code has to take care of <em>surrogate pair</em> handling himself.
+code has to take care of <em>surrogate pairs</em> himself.
 (Note however that Windows itself has built-in support for surrogate pairs in UTF-16,
 such as for drawing strings on screen.)
 
+@remarks
+Note that while the behaviour of wxString when <tt>wxUSE_UNICODE_WCHAR==1</tt>
+resembles UCS-2 encoding, it's not completely correct to refer to wxString as
+UCS-2 encoded since you can encode characters outside the @e BMP in a wxString.
+
 When instead <tt>wxUSE_UNICODE_UTF8==1</tt> (e.g. on Linux and Mac OS X)
-wxString handles UTF8 multi-bytes sequences just fine, so that you can use
+wxString handles UTF8 multi-bytes sequences just fine also for characters outside
+the BMP (it implements <em>per code point indexing</em>), so that you can use
 UTF8 in a completely transparent way:
 
 Example:
@@ -89,7 +89,7 @@ Example:
     wxPrintf("wxString reports a length of %d character(s)", test.length());
         // prints "wxString reports a length of 1 character(s)" on Linux
         // prints "wxString reports a length of 2 character(s)" on Windows
-        // since Windows doesn't have surrogate pairs support!
+        // since wxString on Windows doesn't have surrogate pairs support!
 
 
     // second test, this time using characters part of the Unicode BMP:
@@ -113,16 +113,29 @@ above; it's composed by 3 characters and the final @c NULL:
 
 @image html overview_wxstring_encoding.png
 
-As you can see, UCS2/UTF16 encoding is straightforward (for characters in the @e BMP)
-and in this example the UCS2-encoded wxString takes 8 bytes.
+As you can see, UTF16 encoding is straightforward (for characters in the @e BMP)
+and in this example the UTF16-encoded wxString takes 8 bytes.
 UTF8 encoding is more elaborated and in this example takes 7 bytes.
 
-The type used by wxString to store Unicode code units is called wxStringCharType.
-
 In general, for strings containing many latin characters UTF8 provides a big
-advantage in memory footprint respect UTF16, but requires some more processing
-for common operations like e.g. length calculation.
+advantage with regards to the memory footprint respect UTF16, but requires some
+more processing for common operations like e.g. length calculation.
 
+Finally, note that the type used by wxString to store Unicode code units
+(@c wchar_t or @c char) is always @c typedef-ined to be ::wxStringCharType.
+
+
+@section overview_string_binary Using wxString to store binary data
+
+wxString can be used to store binary data (even if it contains @c NULs) using the
+functions wxString::To8BitData and wxString::From8BitData.
+
+Beware that even if @c NUL character is allowed, in the current string implementation
+some methods might not work correctly with them.
+
+Note however that other classes like wxMemoryBuffer are more suited to this task.
+For handling binary data you may also want to look at the wxStreamBuffer,
+wxMemoryOutputStream, wxMemoryInputStream classes.
 
 
 @section overview_string_comparison Comparison to Other String Classes
@@ -364,11 +377,16 @@ difference the change to @c EXTRA_ALLOC makes to your program.
 
 Much work has been done to make existing code using ANSI string literals
 work as before version 3.0.
+
 If you nonetheless need to have a wxString that uses @c wchar_t
 on Unix and Linux, too, you can specify this on the command line with the
 @c configure @c --disable-utf8 switch or you can consider using wxUString
 or @c std::wstring instead.
 
+@c wxUSE_UNICODE is now defined as @c 1 by default to indicate Unicode support.
+If UTF-8 is used for the internal storage in wxString, @c wxUSE_UNICODE_UTF8 is
+also defined, otherwise @c wxUSE_UNICODE_WCHAR is.
+See also @ref page_wxusedef_important.
 
 */
 
