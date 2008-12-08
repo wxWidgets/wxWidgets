@@ -1301,20 +1301,20 @@ public:
         size_t find_first_of(const wchar_t* sz, size_t nStart = 0) const;
         size_t find_first_of(const char* sz, size_t nStart, size_t n) const;
         size_t find_first_of(const wchar_t* sz, size_t nStart, size_t n) const;
-        size_t find_first_of(wxUniChar c, size_t nStart = 0) const
-        size_t find_last_of (const wxString& str, size_t nStart = npos) const
+        size_t find_first_of(wxUniChar c, size_t nStart = 0) const;
+        size_t find_last_of (const wxString& str, size_t nStart = npos) const;
         size_t find_last_of (const char* sz, size_t nStart = npos) const;
         size_t find_last_of (const wchar_t* sz, size_t nStart = npos) const;
         size_t find_last_of(const char* sz, size_t nStart, size_t n) const;
         size_t find_last_of(const wchar_t* sz, size_t nStart, size_t n) const;
-        size_t find_last_of(wxUniChar c, size_t nStart = npos) const
-        size_t find_first_not_of(const wxString& str, size_t nStart = 0) const
+        size_t find_last_of(wxUniChar c, size_t nStart = npos) const;
+        size_t find_first_not_of(const wxString& str, size_t nStart = 0) const;
         size_t find_first_not_of(const char* sz, size_t nStart = 0) const;
         size_t find_first_not_of(const wchar_t* sz, size_t nStart = 0) const;
         size_t find_first_not_of(const char* sz, size_t nStart, size_t n) const;
         size_t find_first_not_of(const wchar_t* sz, size_t nStart, size_t n) const;
         size_t find_first_not_of(wxUniChar ch, size_t nStart = 0) const;
-        size_t find_last_not_of(const wxString& str, size_t nStart = npos) const
+        size_t find_last_not_of(const wxString& str, size_t nStart = npos) const;
         size_t find_last_not_of(const char* sz, size_t nStart = npos) const;
         size_t find_last_not_of(const wchar_t* sz, size_t nStart = npos) const;
         size_t find_last_not_of(const char* sz, size_t nStart, size_t n) const;
@@ -1339,23 +1339,23 @@ public:
         wxString& replace(size_t nStart, size_t nLen, const wxString& str);
         wxString& replace(size_t nStart, size_t nLen, size_t nCount, wxUniChar ch);
         wxString& replace(size_t nStart, size_t nLen,
-                    const wxString& str, size_t nStart2, size_t nLen2);
+                          const wxString& str, size_t nStart2, size_t nLen2);
         wxString& replace(size_t nStart, size_t nLen,
-                    const char* sz, size_t nCount);
+                          const char* sz, size_t nCount);
         wxString& replace(size_t nStart, size_t nLen,
-                    const wchar_t* sz, size_t nCount);
+                          const wchar_t* sz, size_t nCount);
         wxString& replace(size_t nStart, size_t nLen,
-                    const wxString& s, size_t nCount);
+                          const wxString& s, size_t nCount);
         wxString& replace(iterator first, iterator last, const wxString& s);
         wxString& replace(iterator first, iterator last, const char* s, size_type n);
         wxString& replace(iterator first, iterator last, const wchar_t* s, size_type n);
         wxString& replace(iterator first, iterator last, size_type n, wxUniChar ch);
         wxString& replace(iterator first, iterator last,
-                    const_iterator first1, const_iterator last1);
+                          const_iterator first1, const_iterator last1);
         wxString& replace(iterator first, iterator last,
-                    const char *first1, const char *last1);
+                          const char *first1, const char *last1);
         wxString& replace(iterator first, iterator last,
-                    const wchar_t *first1, const wchar_t *last1);
+                          const wchar_t *first1, const wchar_t *last1);
 
         size_t rfind(const wxString& str, size_t nStart = npos) const;
         size_t rfind(const char* sz, size_t nStart = npos, size_t n = npos) const;
