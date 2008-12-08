@@ -214,6 +214,11 @@ void wxHeaderCtrl::RefreshColsAfter(unsigned int idx)
 // wxHeaderCtrl dragging
 // ----------------------------------------------------------------------------
 
+bool wxHeaderCtrl::IsResizing() const
+{
+    return m_colBeingResized != COL_NONE;
+}
+
 void wxHeaderCtrl::UpdateResizingMarker(int xPhysical)
 {
     // unfortunately drawing the marker over the parent window doesn't work as
@@ -244,8 +249,7 @@ void wxHeaderCtrl::EndDragging()
 
 void wxHeaderCtrl::EndResizing(int width)
 {
-    wxASSERT_MSG( m_colBeingResized != COL_NONE,
-                  "shouldn't be called if we're not resizing" );
+    wxASSERT_MSG( IsResizing(), "shouldn't be called if we're not resizing" );
 
     EndDragging();
 
@@ -277,6 +281,8 @@ BEGIN_EVENT_TABLE(wxHeaderCtrl, wxHeaderCtrlBase)
     EVT_MOUSE_EVENTS(wxHeaderCtrl::OnMouse)
 
     EVT_MOUSE_CAPTURE_LOST(wxHeaderCtrl::OnCaptureLost)
+
+    EVT_KEY_DOWN(wxHeaderCtrl::OnKeyDown)
 END_EVENT_TABLE()
 
 void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
@@ -345,8 +351,21 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 
 void wxHeaderCtrl::OnCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(event))
 {
-    if ( m_colBeingResized != COL_NONE )
+    if ( IsResizing() )
         EndResizing(-1);
+}
+
+void wxHeaderCtrl::OnKeyDown(wxKeyEvent& event)
+{
+    if ( IsResizing() && event.GetKeyCode() == WXK_ESCAPE )
+    {
+        ReleaseMouse();
+        EndResizing(-1);
+    }
+    else
+    {
+        event.Skip();
+    }
 }
 
 void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
@@ -362,7 +381,7 @@ void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
 
     // first deal with the [continuation of any] dragging operations in
     // progress
-    if ( m_colBeingResized != COL_NONE )
+    if ( IsResizing() )
     {
         if ( mevent.LeftUp() )
             EndResizing(xPhysical - GetColStart(m_colBeingResized));

@@ -65,6 +65,7 @@ private:
     // event handlers
     void OnPaint(wxPaintEvent& event);
     void OnMouse(wxMouseEvent& event);
+    void OnKeyDown(wxKeyEvent& event);
     void OnCaptureLost(wxMouseCaptureLostEvent& event);
 
     // return the horizontal start position of the given column in physical
@@ -86,6 +87,9 @@ private:
     // that this means that we return column 0 even if the position is over
     // column 1 but close enough to the divider separating it from column 0)
     int FindColumnAtPos(int x, bool& onSeparator) const;
+
+    // return true if a drag resizing operation is currently in progress
+    bool IsResizing() const;
 
     // end any drag operation currently in progress (resizing or reordering)
     void EndDragging();
