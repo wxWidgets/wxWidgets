@@ -4199,7 +4199,8 @@ void wxGridRowLabelWindow::OnMouseEvent( wxMouseEvent& event )
 
 void wxGridRowLabelWindow::OnMouseWheel( wxMouseEvent& event )
 {
-    m_owner->GetEventHandler()->ProcessEvent( event );
+    if (!m_owner->GetEventHandler()->ProcessEvent( event ))
+        event.Skip();
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -4249,7 +4250,8 @@ void wxGridColLabelWindow::OnMouseEvent( wxMouseEvent& event )
 
 void wxGridColLabelWindow::OnMouseWheel( wxMouseEvent& event )
 {
-    m_owner->GetEventHandler()->ProcessEvent( event );
+    if (!m_owner->GetEventHandler()->ProcessEvent( event ))
+        event.Skip();
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -4285,7 +4287,8 @@ void wxGridCornerLabelWindow::OnMouseEvent( wxMouseEvent& event )
 
 void wxGridCornerLabelWindow::OnMouseWheel( wxMouseEvent& event )
 {
-    m_owner->GetEventHandler()->ProcessEvent(event);
+    if (!m_owner->GetEventHandler()->ProcessEvent(event))
+        event.Skip();
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -4351,7 +4354,8 @@ void wxGridWindow::OnMouseEvent( wxMouseEvent& event )
 
 void wxGridWindow::OnMouseWheel( wxMouseEvent& event )
 {
-    m_owner->GetEventHandler()->ProcessEvent( event );
+    if (!m_owner->GetEventHandler()->ProcessEvent( event ))
+        event.Skip();
 }
 
 // This seems to be required for wxMotif/wxGTK otherwise the mouse
