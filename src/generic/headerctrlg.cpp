@@ -134,7 +134,7 @@ int wxHeaderCtrl::GetColStart(unsigned int idx) const
 {
     wxHeaderCtrl * const self = const_cast<wxHeaderCtrl *>(this);
 
-    int pos = 0;
+    int pos = m_scrollOffset;
     for ( unsigned n = 0; n < idx; n++ )
     {
         const wxHeaderColumnBase& col = self->GetColumn(n);
@@ -287,11 +287,14 @@ void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
 {
     mevent.Skip();
 
+    // account for the control displacement
+    const int x = mevent.GetX() - m_scrollOffset;
+
     // find if the event is over a column at all
     bool onSeparator;
     const unsigned col = mevent.Leaving()
                             ? (onSeparator = false, COL_NONE)
-                            : FindColumnAtPos(mevent.GetX(), onSeparator);
+                            : FindColumnAtPos(x, onSeparator);
 
     // update the highlighted column if it changed
     if ( col != m_hover )
