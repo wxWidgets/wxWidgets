@@ -375,7 +375,11 @@ DEFAULT_wxUSE_IPV6=no
 DEFAULT_wxUSE_TAB_DIALOG=no
 DEFAULT_wxUSE_GSTREAMER8=no
 
+dnl automatic features
 DEFAULT_wxUSE_UNICODE_UTF8=auto
+DEFAULT_wxUSE_OPENGL=auto
+DEFAULT_wxUSE_MEDIACTRL=auto
+
 DEFAULT_wxUSE_UNICODE_UTF8_LOCALE=no
 
 dnl Mac/Cocoa users need to enable building universal binaries explicitly
@@ -3627,7 +3631,7 @@ dnl OpenGL libraries
 dnl ---------------------------------------------------------------------------
 
 USE_OPENGL=0
-if test "$wxUSE_OPENGL" = "yes"; then
+if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
     if test "$wxUSE_MGL" = 1 -o "$wxUSE_DFB" = 1; then
         AC_MSG_WARN([wxGLCanvas not implemented for this port, library will be compiled without it.])
         wxUSE_OPENGL="no"
@@ -3702,9 +3706,17 @@ if test "$wxUSE_OPENGL" = "yes"; then
         [ ])
 
         if test "x$OPENGL_LIBS" = "x"; then
-            AC_MSG_WARN([OpenGL libraries not available, disabling support for OpenGL])
-            wxUSE_OPENGL=no
-            USE_OPENGL=0
+            if test "$wxUSE_OPENGL" = "yes"; then
+                AC_MSG_ERROR([OpenGL libraries not available])
+            else
+                dnl case wxUSE_OPENGL=auto
+                AC_MSG_WARN([OpenGL libraries not available, disabling support for OpenGL])
+                wxUSE_OPENGL=no
+                USE_OPENGL=0
+            fi
+        else
+            dnl libraries are available... change 'auto' in 'yes'
+            wxUSE_OPENGL=yes
         fi
     fi
 
@@ -7200,7 +7212,7 @@ dnl ---------------------------------------------------------------------------
 
 USE_MEDIA=0
 
-if test "$wxUSE_MEDIACTRL" = "yes"; then
+if test "$wxUSE_MEDIACTRL" = "yes" -o "$wxUSE_MEDIACTRL" = "auto"; then
     USE_MEDIA=1
 
     dnl -----------------------------------------------------------------------
@@ -7261,6 +7273,13 @@ if test "$wxUSE_MEDIACTRL" = "yes"; then
     if test $USE_MEDIA = 1; then
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS mediaplayer"
         AC_DEFINE(wxUSE_MEDIACTRL)
+    else
+        if test "$wxUSE_MEDIACTRL" = "yes"; then
+            AC_MSG_ERROR([GStreamer not available])
+        else
+            dnl was set to 'auto'
+            AC_MSG_WARN([GStreamer not available... disabling wxMediaCtrl])
+        fi
     fi
 fi
 
