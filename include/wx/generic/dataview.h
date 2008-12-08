@@ -463,8 +463,8 @@ protected:
     virtual wxDataViewItem GetItemByRow( unsigned int row ) const;
     virtual int GetRowByItem( const wxDataViewItem & item ) const;
 
-    wxDataViewColumn* GetSortingColumn() { return m_sortingColumn; }
-    void SetSortingColumn( wxDataViewColumn* column ) { m_sortingColumn = column; }
+    int GetSortingColumnIndex() const { return m_sortingColumnIdx; }
+    void SetSortingColumnIndex(int idx) { m_sortingColumnIdx = idx; }
 
 public:     // utility functions not part of the API
 
@@ -490,7 +490,9 @@ private:
     wxDataViewModelNotifier  *m_notifier;
     wxDataViewMainWindow     *m_clientArea;
     wxDataViewHeaderWindow   *m_headerArea;
-    wxDataViewColumn         *m_sortingColumn;
+
+    // the index of the column currently used for sorting or -1
+    int m_sortingColumnIdx;
 
 private:
     void OnSize( wxSizeEvent &event );

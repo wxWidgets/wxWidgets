@@ -125,9 +125,46 @@ private:
 
     void OnClick(wxHeaderCtrlEvent& event)
     {
-        if ( !SendEvent(wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK,
-                        event.GetColumn()) )
+        const unsigned idx = event.GetColumn();
+
+        if ( SendEvent(wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK, idx) )
+            return;
+
+        // default handling for the column click is to sort by this column or
+        // toggle its sort order
+        wxDataViewCtrl * const owner = GetOwner();
+        wxDataViewColumn * const col = owner->GetColumn(idx);
+        if ( !col->IsSortable() )
+        {
+            // no default handling for non-sortable columns
             event.Skip();
+            return;
+        }
+
+        if ( col->IsSortKey() )
+        {
+            // already using this column for sorting, just change the order
+            col->ToggleSortOrder();
+        }
+        else // not using this column for sorting yet
+        {
+            // first unset the old sort column if any
+            int oldSortKey = owner->GetSortingColumnIndex();
+            if ( oldSortKey != wxNOT_FOUND )
+            {
+                owner->GetColumn(oldSortKey)->UnsetAsSortKey();
+                owner->OnColumnChange(oldSortKey);
+            }
+
+            owner->SetSortingColumnIndex(idx);
+            col->SetAsSortKey();
+        }
+
+        wxDataViewModel * const model = owner->GetModel();
+        if ( model )
+            model->Resort();
+
+        owner->OnColumnChange(idx);
     }
 
     void OnRClick(wxHeaderCtrlEvent& event)
@@ -3188,7 +3225,8 @@ void wxDataViewCtrl::Init()
     m_notifier = NULL;
 
     // No sorting column at start
-    m_sortingColumn = NULL;
+    m_sortingColumnIdx = wxNOT_FOUND;
+
     m_headerArea = NULL;
 }
 
@@ -3414,7 +3452,8 @@ int wxDataViewCtrl::GetColumnPosition( const wxDataViewColumn *column ) const
 
 wxDataViewColumn *wxDataViewCtrl::GetSortingColumn() const
 {
-    return NULL;
+    return m_sortingColumnIdx == wxNOT_FOUND ? NULL
+                                             : GetColumn(m_sortingColumnIdx);
 }
 
 //Selection code with wxDataViewItem as parameters
