@@ -333,6 +333,15 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         // ASCII and Unicode versions of this message
         case HDN_BEGINTRACKA:
         case HDN_BEGINTRACKW:
+            // non-resizeable columns can't be resized no matter what, don't
+            // even generate any events for them
+            if ( !GetColumn(idx).IsResizeable() )
+            {
+                *result = TRUE;
+
+                return true;
+            }
+
             evtType = wxEVT_COMMAND_HEADER_BEGIN_RESIZE;
             // fall through
 
