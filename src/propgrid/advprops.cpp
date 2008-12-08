@@ -194,18 +194,23 @@ private:
         {
             if ( m_bLeftDown )
             {
-                Capture();
                 int dy = m_ptPosition.y - event.GetPosition().y;
-                m_ptPosition = event.GetPosition();
+                if ( dy )
+                {
+                    Capture();
+                    m_ptPosition = event.GetPosition();
 
-                wxSpinEvent evtscroll( (dy >= 0) ? wxEVT_SCROLL_LINEUP :
-                                                   wxEVT_SCROLL_LINEDOWN,
-                                       GetId() );
-                evtscroll.SetEventObject(this);
+                    wxSpinEvent evtscroll( (dy >= 0) ? wxEVT_SCROLL_LINEUP :
+                                                       wxEVT_SCROLL_LINEDOWN,
+                                           GetId() );
+                    evtscroll.SetEventObject(this);
 
-                m_spins = abs(dy);
-                GetEventHandler()->ProcessEvent(evtscroll);
-                m_spins = 1;
+                    wxASSERT( m_spins == 1 );
+
+                    m_spins = abs(dy);
+                    GetEventHandler()->ProcessEvent(evtscroll);
+                    m_spins = 1;
+                }
             }
         }
 
