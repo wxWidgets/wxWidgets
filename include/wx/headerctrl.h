@@ -20,6 +20,7 @@
 // notice that the classes in this header are defined in the core library even
 // although currently they're only used by wxGrid which is in wxAdv because we
 // plan to use it in wxListCtrl which is in core too in the future
+class WXDLLIMPEXP_FWD_CORE wxHeaderCtrlEvent;
 
 // ----------------------------------------------------------------------------
 // constants
@@ -101,6 +102,15 @@ protected:
     // information for the given column
     virtual wxHeaderColumnBase& GetColumn(unsigned int idx) = 0;
 
+    // this method is called from the default EVT_HEADER_SEPARATOR_DCLICK
+    // handler to update the fitting column width of the given column, it
+    // should return true if the width was really updated
+    virtual bool UpdateColumnWidthToFit(unsigned int WXUNUSED(idx),
+                                        int WXUNUSED(widthTitle))
+    {
+        return false;
+    }
+
 private:
     // methods implementing our public API and defined in platform-specific
     // implementations
@@ -112,6 +122,11 @@ private:
 
     // this window doesn't look nice with the border so don't use it by default
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+
+    // event handlers
+    void OnSeparatorDClick(wxHeaderCtrlEvent& event);
+
+    DECLARE_EVENT_TABLE()
 };
 
 // ----------------------------------------------------------------------------
@@ -276,6 +291,8 @@ extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_HEADER_DCLICK;
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_HEADER_RIGHT_DCLICK;
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_HEADER_MIDDLE_DCLICK;
 
+extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_HEADER_SEPARATOR_DCLICK;
+
 typedef void (wxEvtHandler::*wxHeaderCtrlEventFunction)(wxHeaderCtrlEvent&);
 
 #define wxHeaderCtrlEventHandler(func) \
@@ -292,5 +309,7 @@ typedef void (wxEvtHandler::*wxHeaderCtrlEventFunction)(wxHeaderCtrlEvent&);
 #define EVT_HEADER_DCLICK(id, fn) wx__DECLARE_HEADER_EVT(DCLICK, id, fn)
 #define EVT_HEADER_RIGHT_DCLICK(id, fn) wx__DECLARE_HEADER_EVT(RIGHT_DCLICK, id, fn)
 #define EVT_HEADER_MIDDLE_DCLICK(id, fn) wx__DECLARE_HEADER_EVT(MIDDLE_DCLICK, id, fn)
+
+#define EVT_HEADER_SEPARATOR_DCLICK(id, fn) wx__DECLARE_HEADER_EVT(SEPARATOR_DCLICK, id, fn)
 
 #endif // _WX_HEADERCTRL_H_

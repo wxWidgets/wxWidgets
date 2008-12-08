@@ -68,8 +68,11 @@ private:
     // return the horizontal start position of the given column
     int GetColStart(unsigned int idx) const;
 
-    // refresh the given column [only]
+    // refresh the given column [only]; idx must be valid
     void RefreshCol(unsigned int idx);
+
+    // refresh the given column if idx is valid
+    void RefreshColIfNotNone(unsigned int idx);
 
     // refresh all the controls starting from (and including) the given one
     void RefreshColsAfter(unsigned int idx);

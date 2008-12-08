@@ -63,6 +63,12 @@
             A column heading was right double clicked.
         @event{EVT_HEADER_MIDDLE_DCLICK(id, func)}
             A column heading was double clicked with the middle mouse button.
+
+        @event{EVT_HEADER_SEPARATOR_DCLICK(id, func)}
+            Separator to the right of the specified column was double clicked
+            (this action is commonly used to resize the column to fit its
+            contents width and the control provides UpdateColumnWidthToFit() method
+            to make implementing this easier).
     @endEventTable
 
     @library{wxcore}
@@ -170,6 +176,61 @@ protected:
             SetColumnCount().
      */
     virtual wxHeaderColumnBase& GetColumn(unsigned int idx) = 0;
+
+    /**
+        Method which may be implemented by the derived classes to allow double
+        clicking the column separator to resize the column to fit its contents.
+
+        When a separator is double clicked, the default handler of
+        EVT_HEADER_SEPARATOR_DCLICK event calls this function and refreshes the
+        column if it returns @true so to implement the resizing of the column
+        to fit its width on header double click you need to implement this
+        method using logic similar to this example:
+        @code
+            class MyHeaderCtrl : public wxHeaderColumnBase
+            {
+            public:
+                ...
+
+                void SetWidth(int width) { m_width = width; }
+                virtual int GetWidth() const { return m_width; }
+
+            private:
+                int m_width;
+            };
+
+            class MyHeaderCtrl : public wxHeaderCtrl
+            {
+            public:
+            protected:
+                virtual wxHeaderColumnBase& GetColumn(unsigned int idx)
+                {
+                    return m_cols[idx];
+                }
+
+                virtual bool UpdateColumnWidthToFit(unsigned int idx, int widthTitle)
+                {
+                    int widthContents = ... compute minimal width for column idx ...
+                    m_cols[idx].SetWidth(wxMax(widthContents, widthTitle));
+                    return true;
+                }
+
+                wxVector<MyHeaderColumn> m_cols;
+            };
+        @endcode
+
+        Base class version simply returns @false.
+
+        @param width
+            Contains minimal width needed to display the column header itself
+            and will usually be used as a starting point for the fitting width
+            calculation.
+        @return
+            @true to indicate that the column was resized, i.e. GetColumn() now
+            returns the new width value, and so must be refreshed or @false
+            meaning that the control didn't reach to the separator double click.
+     */
+    virtual bool UpdateColumnWidthToFit(unsigned int idx, int widthTitle);
 };
 
 

@@ -213,7 +213,7 @@ void wxHeaderCtrl::RefreshColsAfter(unsigned int idx)
 // wxHeaderCtrl event handlers
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxHeaderCtrl, wxControl)
+BEGIN_EVENT_TABLE(wxHeaderCtrl, wxHeaderCtrlBase)
     EVT_PAINT(wxHeaderCtrl::OnPaint)
 
     EVT_MOUSE_EVENTS(wxHeaderCtrl::OnMouse)
@@ -330,15 +330,24 @@ void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
     }
 
     // determine the type of header event corresponding to this mouse event
-    wxEventType evtType;
-    const bool click = mevent.ButtonUp();
-    if ( click || mevent.ButtonDClick() )
+    wxEventType evtType = wxEVT_NULL;
+    const bool click = mevent.ButtonUp(),
+               dblclk = mevent.ButtonDClick();
+    if ( click || dblclk )
     {
         switch ( mevent.GetButton() )
         {
             case wxMOUSE_BTN_LEFT:
-                evtType = click ? wxEVT_COMMAND_HEADER_CLICK
-                                : wxEVT_COMMAND_HEADER_DCLICK;
+                // treat left double clicks on separator specially
+                if ( onSeparator && dblclk )
+                {
+                    evtType = wxEVT_COMMAND_HEADER_SEPARATOR_DCLICK;
+                }
+                else // not double click on separator
+                {
+                    evtType = click ? wxEVT_COMMAND_HEADER_CLICK
+                                    : wxEVT_COMMAND_HEADER_DCLICK;
+                }
                 break;
 
             case wxMOUSE_BTN_RIGHT:
@@ -353,16 +362,19 @@ void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
 
             default:
                 // ignore clicks from other mouse buttons
-                return;
+                ;
         }
-
-        wxHeaderCtrlEvent event(evtType, GetId());
-        event.SetEventObject(this);
-        event.SetColumn(col);
-
-        if ( GetEventHandler()->ProcessEvent(event) )
-            mevent.Skip(false);
     }
+
+    if ( evtType == wxEVT_NULL )
+        return;
+
+    wxHeaderCtrlEvent event(evtType, GetId());
+    event.SetEventObject(this);
+    event.SetColumn(col);
+
+    if ( GetEventHandler()->ProcessEvent(event) )
+        mevent.Skip(false);
 }
 
 #endif // wxHAS_GENERIC_HEADERCTRL

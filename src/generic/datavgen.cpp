@@ -88,12 +88,25 @@ public:
     wxDataViewCtrl *GetOwner() const
         { return static_cast<wxDataViewCtrl *>(GetParent()); }
 
-private:
+protected:
+    // implement/override wxHeaderCtrl functions by forwarding them to the main
+    // control
     virtual wxHeaderColumnBase& GetColumn(unsigned int idx)
     {
         return *(GetOwner()->GetColumn(idx));
     }
 
+    virtual bool UpdateColumnWidthToFit(unsigned int idx, int widthTitle)
+    {
+        wxDataViewCtrl * const owner = GetOwner();
+
+        int widthContents = owner->GetBestColumnWidth(idx);
+        owner->GetColumn(idx)->SetWidth(wxMax(widthTitle, widthContents));
+
+        return true;
+    }
+
+private:
     bool SendEvent(wxEventType type, unsigned int n)
     {
         wxDataViewCtrl * const owner = GetOwner();

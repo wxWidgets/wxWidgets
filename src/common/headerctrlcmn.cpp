@@ -45,6 +45,10 @@ const unsigned int wxNO_COLUMN = static_cast<unsigned>(-1);
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxHeaderCtrlNameStr[] = "wxHeaderCtrl";
 
+BEGIN_EVENT_TABLE(wxHeaderCtrlBase, wxControl)
+    EVT_HEADER_SEPARATOR_DCLICK(wxID_ANY, wxHeaderCtrlBase::OnSeparatorDClick)
+END_EVENT_TABLE()
+
 void wxHeaderCtrlBase::ScrollWindow(int dx,
                                     int WXUNUSED_UNLESS_DEBUG(dy),
                                     const wxRect * WXUNUSED_UNLESS_DEBUG(rect))
@@ -58,6 +62,19 @@ void wxHeaderCtrlBase::ScrollWindow(int dx,
     wxASSERT_MSG( !rect, "header window can't be scrolled partially" );
 
     DoScrollHorz(dx);
+}
+
+void wxHeaderCtrlBase::OnSeparatorDClick(wxHeaderCtrlEvent& event)
+{
+    const unsigned col = event.GetColumn();
+
+    int w = wxWindowBase::GetTextExtent(GetColumn(col).GetTitle()).x;
+    w += 2*GetCharWidth(); // add some arbitrary margins around text
+
+    if ( !UpdateColumnWidthToFit(col, w) )
+        event.Skip();
+    else
+        UpdateColumn(col);
 }
 
 // ============================================================================
@@ -145,3 +162,5 @@ const wxEventType wxEVT_COMMAND_HEADER_MIDDLE_CLICK = wxNewEventType();
 const wxEventType wxEVT_COMMAND_HEADER_DCLICK = wxNewEventType();
 const wxEventType wxEVT_COMMAND_HEADER_RIGHT_DCLICK = wxNewEventType();
 const wxEventType wxEVT_COMMAND_HEADER_MIDDLE_DCLICK = wxNewEventType();
+
+const wxEventType wxEVT_COMMAND_HEADER_SEPARATOR_DCLICK = wxNewEventType();

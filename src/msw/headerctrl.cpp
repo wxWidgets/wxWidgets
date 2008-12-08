@@ -28,6 +28,9 @@
 #endif // WX_PRECOMP
 
 #include "wx/headerctrl.h"
+
+#ifndef wxHAS_GENERIC_HEADERCTRL
+
 #include "wx/imaglist.h"
 
 #include "wx/msw/wrapcctl.h"
@@ -257,7 +260,16 @@ void wxHeaderCtrl::DoSetOrInsertItem(Operation oper, unsigned int idx)
 // wxHeaderCtrl events
 // ----------------------------------------------------------------------------
 
-bool wxHeaderCtrl::SendClickEvent(bool dblclk, unsigned int idx, int button)
+bool wxHeaderCtrl::SendEvent(wxEventType evtType, unsigned int idx)
+{
+    wxHeaderCtrlEvent event(evtType, GetId());
+    event.SetEventObject(this);
+    event.SetColumn(idx);
+
+    return GetEventHandler()->ProcessEvent(event);
+}
+
+bool wxHeaderCtrl::SendClickEvent(bool dblclk, int button, unsigned int idx)
 {
     wxEventType evtType;
     switch ( button )
@@ -282,24 +294,19 @@ bool wxHeaderCtrl::SendClickEvent(bool dblclk, unsigned int idx, int button)
             return false;
     }
 
-    wxHeaderCtrlEvent event(evtType, GetId());
-    event.SetEventObject(this);
-    event.SetColumn(idx);
-
-    return GetEventHandler()->ProcessEvent(event);
+    return SendEvent(evtType, idx);
 }
 
 bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 {
     NMHEADER * const nmhdr = (NMHEADER *)lParam;
 
-    switch ( nmhdr->hdr.code )
+    const int idx = nmhdr->iItem;
+    switch ( const UINT code = nmhdr->hdr.code )
     {
         case HDN_ITEMCLICK:
         case HDN_ITEMDBLCLICK:
-            if ( SendClickEvent(nmhdr->hdr.code == HDN_ITEMDBLCLICK,
-                                nmhdr->iItem,
-                                nmhdr->iButton) )
+            if ( SendClickEvent(code == HDN_ITEMDBLCLICK, nmhdr->iButton, idx) )
                 return true;
             break;
 
@@ -313,13 +320,20 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 const int col = wxMSWGetColumnClicked(&nmhdr->hdr, &pt);
                 if ( col != wxNOT_FOUND )
                 {
-                    if ( SendClickEvent(nmhdr->hdr.code == NM_RDBLCLK, col, 1) )
+                    if ( SendClickEvent(code == NM_RDBLCLK, 1, col) )
                         return true;
                 }
                 //else: ignore clicks outside any column
             }
             break;
+
+        case HDN_DIVIDERDBLCLICK:
+            if ( SendEvent(wxEVT_COMMAND_HEADER_SEPARATOR_DCLICK, idx) )
+                return true;
+            break;
     }
 
     return wxHeaderCtrlBase::MSWOnNotify(idCtrl, lParam, result);
 }
+
+#endif // wxHAS_GENERIC_HEADERCTRL
