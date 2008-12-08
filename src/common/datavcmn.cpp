@@ -1887,10 +1887,12 @@ void wxDataViewTreeCtrl::OnCollapsed( wxDataViewEvent &event )
 void wxDataViewTreeCtrl::OnSize( wxSizeEvent &event )
 {
 #if defined(wxUSE_GENERICDATAVIEWCTRL)
-    wxSize size = GetClientSize();
-    wxDataViewColumn *col = GetColumn( 0 );
-    if (col)
-       col->SetWidth( size.x );
+    // automatically resize our only column to take the entire control width
+    if ( GetColumnCount() )
+    {
+        wxSize size = GetClientSize();
+        GetColumn(0)->SetWidth(size.x);
+    }
 #endif
     event.Skip( true );
 }
