@@ -237,6 +237,9 @@ void wxHeaderCtrl::EndDragging()
     UpdateResizingMarker(-1);
 
     m_overlay.Reset();
+
+    // don't use the special dragging cursor any more
+    SetCursor(wxNullCursor);
 }
 
 void wxHeaderCtrl::EndResizing(int width)
@@ -245,6 +248,11 @@ void wxHeaderCtrl::EndResizing(int width)
                   "shouldn't be called if we're not resizing" );
 
     EndDragging();
+
+    // if dragging was cancelled we must have already lost the mouse capture so
+    // don't try to release it
+    if ( width != -1 )
+        ReleaseMouse();
 
     wxHeaderCtrlEvent event(wxEVT_COMMAND_HEADER_END_DRAG, GetId());
     event.SetEventObject(this);
@@ -401,6 +409,8 @@ void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
         {
             // start resizing the column
             m_colBeingResized = col;
+            SetCursor(wxCursor(wxCURSOR_SIZEWE));
+            CaptureMouse();
             UpdateResizingMarker(xPhysical);
         }
         else // on column itself
