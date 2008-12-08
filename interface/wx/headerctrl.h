@@ -356,6 +356,22 @@ public:
             The column to remove sort indicator for.
      */
     void RemoveSortIndicator(unsigned int idx);
+
+protected:
+    /**
+        This function can be overridden in the classes deriving from this
+        control instead of overriding UpdateColumnWidthToFit().
+
+        To implement automatic column resizing to fit its contents width when
+        the column divider is double clicked, you need to simply return the
+        fitting width for the given column @a idx from this method, the control
+        will automatically use the biggest value between the one returned from
+        here and the one needed for the display of the column title itself.
+
+        The base class version returns -1 indicating that this function is not
+        implemented.
+     */
+    virtual int GetBestFittingWidth(unsigned int idx) const;
 };
 
 /**

@@ -149,6 +149,19 @@ void wxHeaderCtrlSimple::RemoveSortIndicator()
     }
 }
 
+bool
+wxHeaderCtrlSimple::UpdateColumnWidthToFit(unsigned int idx, int widthTitle)
+{
+    const int widthContents = GetBestFittingWidth(idx);
+    if ( widthContents == -1 )
+        return false;
+
+    m_cols[idx].SetWidth(wxMax(widthContents, widthTitle));
+    UpdateColumn(idx);
+
+    return true;
+}
+
 // ============================================================================
 // wxHeaderCtrlEvent implementation
 // ============================================================================

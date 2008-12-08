@@ -224,7 +224,17 @@ public:
     void RemoveSortIndicator();
 
 protected:
+    // implement/override base class methods
     virtual wxHeaderColumnBase& GetColumn(unsigned int idx);
+    virtual bool UpdateColumnWidthToFit(unsigned int idx, int widthTitle);
+
+    // and define another one to be overridden in the derived classes: it
+    // should return the best width for the given column contents or -1 if not
+    // implemented, we use it to implement UpdateColumnWidthToFit()
+    virtual int GetBestFittingWidth(unsigned int WXUNUSED(idx)) const
+    {
+        return -1;
+    }
 
 private:
     // functions implementing our public API
