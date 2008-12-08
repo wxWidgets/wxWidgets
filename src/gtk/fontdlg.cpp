@@ -142,7 +142,7 @@ wxFontDialog::~wxFontDialog()
 
 void wxFontDialog::SetChosenFont(const char *fontname)
 {
-    m_fontData.SetChosenFont(wxFont( wxString::FromAscii(fontname) ));
+    m_fontData.SetChosenFont(wxFont( wxString::FromUTF8(fontname) ));
 }
 
 #endif // wxUSE_FONTDLG && !__WXGPE__
