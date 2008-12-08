@@ -154,9 +154,12 @@ private:
 
     void OnEndDrag(wxHeaderCtrlEvent& event)
     {
-        const unsigned col = event.GetColumn();
-        GetColumn(col).SetWidth(event.GetWidth());
-        GetOwner()->OnColumnChange(col);
+        if ( !event.IsCancelled() )
+        {
+            const unsigned col = event.GetColumn();
+            GetColumn(col).SetWidth(event.GetWidth());
+            GetOwner()->OnColumnChange(col);
+        }
     }
 
     DECLARE_EVENT_TABLE()
