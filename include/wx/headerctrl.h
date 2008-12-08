@@ -323,9 +323,9 @@ extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_HEADER_MIDDLE_DCLICK;
 
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_HEADER_SEPARATOR_DCLICK;
 
-extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_HEADER_BEGIN_DRAG;
-extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_HEADER_DRAGGING;
-extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_HEADER_END_DRAG;
+extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_HEADER_BEGIN_RESIZE;
+extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_HEADER_RESIZING;
+extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_HEADER_END_RESIZE;
 
 typedef void (wxEvtHandler::*wxHeaderCtrlEventFunction)(wxHeaderCtrlEvent&);
 
@@ -346,8 +346,8 @@ typedef void (wxEvtHandler::*wxHeaderCtrlEventFunction)(wxHeaderCtrlEvent&);
 
 #define EVT_HEADER_SEPARATOR_DCLICK(id, fn) wx__DECLARE_HEADER_EVT(SEPARATOR_DCLICK, id, fn)
 
-#define EVT_HEADER_BEGIN_DRAG(id, fn) wx__DECLARE_HEADER_EVT(BEGIN_DRAG, id, fn)
-#define EVT_HEADER_DRAGGING(id, fn) wx__DECLARE_HEADER_EVT(DRAGGING, id, fn)
-#define EVT_HEADER_END_DRAG(id, fn) wx__DECLARE_HEADER_EVT(END_DRAG, id, fn)
+#define EVT_HEADER_BEGIN_RESIZE(id, fn) wx__DECLARE_HEADER_EVT(BEGIN_RESIZE, id, fn)
+#define EVT_HEADER_RESIZING(id, fn) wx__DECLARE_HEADER_EVT(RESIZING, id, fn)
+#define EVT_HEADER_END_RESIZE(id, fn) wx__DECLARE_HEADER_EVT(END_RESIZE, id, fn)
 
 #endif // _WX_HEADERCTRL_H_

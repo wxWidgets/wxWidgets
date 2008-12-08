@@ -70,21 +70,22 @@
             contents width and the control provides UpdateColumnWidthToFit() method
             to make implementing this easier).
 
-        @event{EVT_HEADER_BEGIN_DRAG(id, func)}
-            The user started to drag the column with the specified index (this
-            can only happen if wxHeaderColumn::IsResizeable() returned true for
-            this column). The event can be vetoed to prevent the control from
-            being resized, if it isn't, the dragging and end drag events will
-            be generated later.
-        @event{EVT_HEADER_DRAGGING(id, func)}
-            The user is dragging the column with the specified index and its
-            current width is wxHeaderCtrlEvent::GetWidth(). The event can be
-            vetoed to stop the dragging operation completely at any time.
-        @event{EVT_HEADER_END_DRAG(id, func)}
-            The user stopped dragging the column. If
-            wxHeaderCtrlEvent::IsCancelled() returns @true, nothing should
-            be done, otherwise the column should normally be resized to the
-            value of wxHeaderCtrlEvent::GetWidth().
+        @event{EVT_HEADER_BEGIN_RESIZE(id, func)}
+            The user started to drag the separator to the right of the column
+            with the specified index (this can only happen for the columns for
+            which wxHeaderColumn::IsResizeable() returns true). The event can
+            be vetoed to prevent the column from being resized. If it isn't,
+            the resizing and end resize events will be generated later.
+        @event{EVT_HEADER_RESIZING(id, func)}
+            The user is dragging the column with the specified index resizing
+            it and its current width is wxHeaderCtrlEvent::GetWidth(). The
+            event can be vetoed to stop the dragging operation completely at
+            any time.
+        @event{EVT_HEADER_END_RESIZE(id, func)}
+            Either the user stopped dragging the column by releasing the mouse
+            or the resizing was cancelled. If wxHeaderCtrlEvent::IsCancelled()
+            returns @true, nothing should be done, otherwise the column should
+            normally be resized to the value of wxHeaderCtrlEvent::GetWidth().
     @endEventTable
 
     @library{wxcore}

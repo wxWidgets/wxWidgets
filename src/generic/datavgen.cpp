@@ -137,13 +137,13 @@ private:
             event.Skip();
     }
 
-    void OnBeginDrag(wxHeaderCtrlEvent& event)
+    void OnBeginResize(wxHeaderCtrlEvent& event)
     {
         if ( !GetColumn(event.GetColumn()).IsResizeable() )
             event.Veto();
     }
 
-    void OnDragging(wxHeaderCtrlEvent& event)
+    void OnResizing(wxHeaderCtrlEvent& event)
     {
         const wxHeaderColumnBase& col = GetColumn(event.GetColumn());
 
@@ -152,7 +152,7 @@ private:
             event.Veto();
     }
 
-    void OnEndDrag(wxHeaderCtrlEvent& event)
+    void OnEndResize(wxHeaderCtrlEvent& event)
     {
         if ( !event.IsCancelled() )
         {
@@ -170,9 +170,9 @@ BEGIN_EVENT_TABLE(wxDataViewHeaderWindow, wxHeaderCtrl)
     EVT_HEADER_CLICK(wxID_ANY, wxDataViewHeaderWindow::OnClick)
     EVT_HEADER_RIGHT_CLICK(wxID_ANY, wxDataViewHeaderWindow::OnRClick)
 
-    EVT_HEADER_BEGIN_DRAG(wxID_ANY, wxDataViewHeaderWindow::OnBeginDrag)
-    EVT_HEADER_DRAGGING(wxID_ANY, wxDataViewHeaderWindow::OnDragging)
-    EVT_HEADER_END_DRAG(wxID_ANY, wxDataViewHeaderWindow::OnEndDrag)
+    EVT_HEADER_BEGIN_RESIZE(wxID_ANY, wxDataViewHeaderWindow::OnBeginResize)
+    EVT_HEADER_RESIZING(wxID_ANY, wxDataViewHeaderWindow::OnResizing)
+    EVT_HEADER_END_RESIZE(wxID_ANY, wxDataViewHeaderWindow::OnEndResize)
 END_EVENT_TABLE()
 
 //-----------------------------------------------------------------------------

@@ -258,7 +258,7 @@ void wxHeaderCtrl::EndResizing(int width)
     if ( width != -1 )
         ReleaseMouse();
 
-    wxHeaderCtrlEvent event(wxEVT_COMMAND_HEADER_END_DRAG, GetId());
+    wxHeaderCtrlEvent event(wxEVT_COMMAND_HEADER_END_RESIZE, GetId());
     event.SetEventObject(this);
     event.SetColumn(m_colBeingResized);
     if ( width == -1 )

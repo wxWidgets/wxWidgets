@@ -332,19 +332,19 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         // ASCII and Unicode versions of this message
         case HDN_BEGINTRACKA:
         case HDN_BEGINTRACKW:
-            evtType = wxEVT_COMMAND_HEADER_BEGIN_DRAG;
+            evtType = wxEVT_COMMAND_HEADER_BEGIN_RESIZE;
             // fall through
 
         case HDN_TRACKA:
         case HDN_TRACKW:
             if ( evtType == wxEVT_NULL )
-                evtType = wxEVT_COMMAND_HEADER_DRAGGING;
+                evtType = wxEVT_COMMAND_HEADER_RESIZING;
             // fall through
 
         case HDN_ENDTRACKA:
         case HDN_ENDTRACKW:
             if ( evtType == wxEVT_NULL )
-                evtType = wxEVT_COMMAND_HEADER_END_DRAG;
+                evtType = wxEVT_COMMAND_HEADER_END_RESIZE;
 
             width = nmhdr->pitem->cxy;
             break;
