@@ -367,13 +367,11 @@ DEFAULT_wxUSE_LIBGNOMEVFS=no
 DEFAULT_wxUSE_LIBHILDON=no
 DEFAULT_wxUSE_LIBMSPACK=no
 DEFAULT_wxUSE_LIBSDL=no
-DEFAULT_wxUSE_OPENGL=no
 
 dnl features disabled by default
 DEFAULT_wxUSE_ACCESSIBILITY=no
 DEFAULT_wxUSE_GRAPHICS_CONTEXT=no
 DEFAULT_wxUSE_IPV6=no
-DEFAULT_wxUSE_MEDIACTRL=no
 DEFAULT_wxUSE_TAB_DIALOG=no
 DEFAULT_wxUSE_GSTREAMER8=no
 
@@ -4998,7 +4996,7 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
           AC_MSG_WARN([wxMutex won't be recursive on this platform])
         fi
       fi
-    
+
       dnl test for compiler thread-specific variables support
       AC_CACHE_CHECK([for __thread keyword],
                      wx_cv_cc___thread,
@@ -6354,11 +6352,7 @@ if test "$wxUSE_HELP" = "yes"; then
 fi
 
 if test "$wxUSE_PRINTING_ARCHITECTURE" = "yes" ; then
-    if test "$wxUSE_CONSTRAINTS" != "yes"; then
-        AC_MSG_WARN(Printing support cannot be used without constraints so it won't be compiled without it)
-    else
-        AC_DEFINE(wxUSE_PRINTING_ARCHITECTURE)
-    fi
+    AC_DEFINE(wxUSE_PRINTING_ARCHITECTURE)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS printing"
 fi
 
@@ -7106,11 +7100,7 @@ if test "$wxUSE_NUMBERDLG" = "yes"; then
 fi
 
 if test "$wxUSE_PROGRESSDLG" = "yes"; then
-    if test "$wxUSE_CONSTRAINTS" != "yes"; then
-       AC_MSG_WARN(wxProgressDialog requires constraints so it won't be compiled without them)
-    else
-        AC_DEFINE(wxUSE_PROGRESSDLG)
-    fi
+    AC_DEFINE(wxUSE_PROGRESSDLG)
 fi
 
 if test "$wxUSE_SPLASH" = "yes"; then
@@ -7119,11 +7109,7 @@ if test "$wxUSE_SPLASH" = "yes"; then
 fi
 
 if test "$wxUSE_STARTUP_TIPS" = "yes"; then
-    if test "$wxUSE_CONSTRAINTS" != "yes"; then
-       AC_MSG_WARN(Startup tips requires constraints and won't be compiled without them)
-    else
-        AC_DEFINE(wxUSE_STARTUP_TIPS)
-    fi
+    AC_DEFINE(wxUSE_STARTUP_TIPS)
 fi
 
 if test "$wxUSE_TEXTDLG" = "yes"; then
