@@ -3702,10 +3702,9 @@ if test "$wxUSE_OPENGL" = "yes"; then
         [ ])
 
         if test "x$OPENGL_LIBS" = "x"; then
-            dnl it should be an error and not a warning because OpenGL is not on
-            dnl by default and so if it had been explicitly requested, we
-            dnl shouldn't just fall back to compiling the library without it
-            AC_MSG_ERROR(OpenGL libraries not available)
+            AC_MSG_WARN([OpenGL libraries not available, disabling support for OpenGL])
+            wxUSE_OPENGL=no
+            USE_OPENGL=0
         fi
     fi
 
