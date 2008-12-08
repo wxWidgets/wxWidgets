@@ -295,7 +295,8 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     wxEventType evtType = wxEVT_NULL;
     int idx = nmhdr->iItem;
     int width = 0;
-    switch ( const UINT code = nmhdr->hdr.code )
+    const UINT code = nmhdr->hdr.code;
+    switch ( code )
     {
         // click events
         // ------------
