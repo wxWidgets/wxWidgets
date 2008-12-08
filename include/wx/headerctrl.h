@@ -269,24 +269,44 @@ class WXDLLIMPEXP_CORE wxHeaderCtrlEvent : public wxNotifyEvent
 {
 public:
     wxHeaderCtrlEvent(wxEventType commandType = wxEVT_NULL, int winid = 0)
-        : wxNotifyEvent(commandType, winid)
+        : wxNotifyEvent(commandType, winid),
+          m_col(-1),
+          m_width(0),
+          m_cancelled(false)
     {
     }
 
     wxHeaderCtrlEvent(const wxHeaderCtrlEvent& event)
         : wxNotifyEvent(event),
-          m_col(event.m_col)
+          m_col(event.m_col),
+          m_width(event.m_width),
+          m_cancelled(event.m_cancelled)
     {
     }
 
+    // the column which this event pertains to: valid for all header events
     int GetColumn() const { return m_col; }
     void SetColumn(int col) { m_col = col; }
+
+    // the width of the column: valid for column resizing/dragging events only
+    int GetWidth() const { return m_width; }
+    void SetWidth(int width) { m_width = width; }
+
+    // was the drag operation cancelled or did it complete successfully?
+    bool IsCancelled() const { return m_cancelled; }
+    void SetCancelled() { m_cancelled = true; }
 
     virtual wxEvent *Clone() const { return new wxHeaderCtrlEvent(*this); }
 
 protected:
     // the column affected by the event
     int m_col;
+
+    // the current width for the dragging events
+    int m_width;
+
+    // was the drag operation cancelled?
+    bool m_cancelled;
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxHeaderCtrlEvent)
@@ -302,6 +322,10 @@ extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_HEADER_RIGHT_DCLICK;
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_HEADER_MIDDLE_DCLICK;
 
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_HEADER_SEPARATOR_DCLICK;
+
+extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_HEADER_BEGIN_DRAG;
+extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_HEADER_DRAGGING;
+extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_HEADER_END_DRAG;
 
 typedef void (wxEvtHandler::*wxHeaderCtrlEventFunction)(wxHeaderCtrlEvent&);
 
@@ -321,5 +345,9 @@ typedef void (wxEvtHandler::*wxHeaderCtrlEventFunction)(wxHeaderCtrlEvent&);
 #define EVT_HEADER_MIDDLE_DCLICK(id, fn) wx__DECLARE_HEADER_EVT(MIDDLE_DCLICK, id, fn)
 
 #define EVT_HEADER_SEPARATOR_DCLICK(id, fn) wx__DECLARE_HEADER_EVT(SEPARATOR_DCLICK, id, fn)
+
+#define EVT_HEADER_BEGIN_DRAG(id, fn) wx__DECLARE_HEADER_EVT(BEGIN_DRAG, id, fn)
+#define EVT_HEADER_DRAGGING(id, fn) wx__DECLARE_HEADER_EVT(DRAGGING, id, fn)
+#define EVT_HEADER_END_DRAG(id, fn) wx__DECLARE_HEADER_EVT(END_DRAG, id, fn)
 
 #endif // _WX_HEADERCTRL_H_

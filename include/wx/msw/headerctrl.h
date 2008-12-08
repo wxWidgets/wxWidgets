@@ -71,13 +71,10 @@ private:
     enum Operation { Set, Insert };
     void DoSetOrInsertItem(Operation oper, unsigned int idx);
 
-    // send an event of the given type for the given column, return true if it
-    // was processed
-    bool SendEvent(wxEventType evtType, unsigned int idx);
-
-    // send a click or double click event (depending on dblclk value) for the
-    // click with the given button on the given item
-    bool SendClickEvent(bool dblclk, int button, unsigned int idx);
+    // get the event type corresponding to a click or double click event
+    // (depending on dblclk value) with the specified (using MSW convention)
+    // mouse button
+    wxEventType GetClickEventType(bool dblclk, int button);
 
 
     // the image list: initially NULL, created on demand

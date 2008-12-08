@@ -260,16 +260,7 @@ void wxHeaderCtrl::DoSetOrInsertItem(Operation oper, unsigned int idx)
 // wxHeaderCtrl events
 // ----------------------------------------------------------------------------
 
-bool wxHeaderCtrl::SendEvent(wxEventType evtType, unsigned int idx)
-{
-    wxHeaderCtrlEvent event(evtType, GetId());
-    event.SetEventObject(this);
-    event.SetColumn(idx);
-
-    return GetEventHandler()->ProcessEvent(event);
-}
-
-bool wxHeaderCtrl::SendClickEvent(bool dblclk, int button, unsigned int idx)
+wxEventType wxHeaderCtrl::GetClickEventType(bool dblclk, int button)
 {
     wxEventType evtType;
     switch ( button )
@@ -291,23 +282,27 @@ bool wxHeaderCtrl::SendClickEvent(bool dblclk, int button, unsigned int idx)
 
         default:
             wxFAIL_MSG( wxS("unexpected event type") );
-            return false;
+            evtType = wxEVT_NULL;
     }
 
-    return SendEvent(evtType, idx);
+    return evtType;
 }
 
 bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 {
     NMHEADER * const nmhdr = (NMHEADER *)lParam;
 
-    const int idx = nmhdr->iItem;
+    wxEventType evtType = wxEVT_NULL;
+    int idx = nmhdr->iItem;
+    int width = 0;
     switch ( const UINT code = nmhdr->hdr.code )
     {
+        // click events
+        // ------------
+
         case HDN_ITEMCLICK:
         case HDN_ITEMDBLCLICK:
-            if ( SendClickEvent(code == HDN_ITEMDBLCLICK, nmhdr->iButton, idx) )
-                return true;
+            evtType = GetClickEventType(code == HDN_ITEMDBLCLICK, nmhdr->iButton);
             break;
 
             // although we should get the notifications about the right clicks
@@ -317,20 +312,64 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         case NM_RDBLCLK:
             {
                 POINT pt;
-                const int col = wxMSWGetColumnClicked(&nmhdr->hdr, &pt);
-                if ( col != wxNOT_FOUND )
-                {
-                    if ( SendClickEvent(code == NM_RDBLCLK, 1, col) )
-                        return true;
-                }
+                idx = wxMSWGetColumnClicked(&nmhdr->hdr, &pt);
+                if ( idx != wxNOT_FOUND )
+                    evtType = GetClickEventType(code == NM_RDBLCLK, 1);
                 //else: ignore clicks outside any column
             }
             break;
 
         case HDN_DIVIDERDBLCLICK:
-            if ( SendEvent(wxEVT_COMMAND_HEADER_SEPARATOR_DCLICK, idx) )
-                return true;
+            evtType = wxEVT_COMMAND_HEADER_SEPARATOR_DCLICK;
             break;
+
+
+        // column resizing events
+        // ----------------------
+
+        // see comments in wxListCtrl::MSWOnNotify() for why we catch both
+        // ASCII and Unicode versions of this message
+        case HDN_BEGINTRACKA:
+        case HDN_BEGINTRACKW:
+            evtType = wxEVT_COMMAND_HEADER_BEGIN_DRAG;
+            // fall through
+
+        case HDN_TRACKA:
+        case HDN_TRACKW:
+            if ( evtType == wxEVT_NULL )
+                evtType = wxEVT_COMMAND_HEADER_DRAGGING;
+            // fall through
+
+        case HDN_ENDTRACKA:
+        case HDN_ENDTRACKW:
+            if ( evtType == wxEVT_NULL )
+                evtType = wxEVT_COMMAND_HEADER_END_DRAG;
+
+            width = nmhdr->pitem->cxy;
+            break;
+    }
+
+
+    // do generate the corresponding wx event
+    if ( evtType != wxEVT_NULL )
+    {
+        wxHeaderCtrlEvent event(evtType, GetId());
+        event.SetEventObject(this);
+        event.SetColumn(idx);
+        event.SetWidth(width);
+
+        if ( GetEventHandler()->ProcessEvent(event) )
+        {
+            if ( !event.IsAllowed() )
+            {
+                // all of HDN_BEGIN{DRAG,TRACK}, HDN_TRACK and HDN_ITEMCHANGING
+                // interpret TRUE return value as meaning to stop the control
+                // default handling of the message
+                *result = TRUE;
+            }
+
+            return true;
+        }
     }
 
     return wxHeaderCtrlBase::MSWOnNotify(idCtrl, lParam, result);

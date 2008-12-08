@@ -102,6 +102,7 @@ protected:
 
         int widthContents = owner->GetBestColumnWidth(idx);
         owner->GetColumn(idx)->SetWidth(wxMax(widthTitle, widthContents));
+        owner->OnColumnChange(idx);
 
         return true;
     }
@@ -136,6 +137,28 @@ private:
             event.Skip();
     }
 
+    void OnBeginDrag(wxHeaderCtrlEvent& event)
+    {
+        if ( !GetColumn(event.GetColumn()).IsResizeable() )
+            event.Veto();
+    }
+
+    void OnDragging(wxHeaderCtrlEvent& event)
+    {
+        const wxHeaderColumnBase& col = GetColumn(event.GetColumn());
+
+        const int minWidth = col.GetMinWidth();
+        if ( event.GetWidth() < minWidth )
+            event.Veto();
+    }
+
+    void OnEndDrag(wxHeaderCtrlEvent& event)
+    {
+        const unsigned col = event.GetColumn();
+        GetColumn(col).SetWidth(event.GetWidth());
+        GetOwner()->OnColumnChange(col);
+    }
+
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxDataViewHeaderWindow)
 };
@@ -143,6 +166,10 @@ private:
 BEGIN_EVENT_TABLE(wxDataViewHeaderWindow, wxHeaderCtrl)
     EVT_HEADER_CLICK(wxID_ANY, wxDataViewHeaderWindow::OnClick)
     EVT_HEADER_RIGHT_CLICK(wxID_ANY, wxDataViewHeaderWindow::OnRClick)
+
+    EVT_HEADER_BEGIN_DRAG(wxID_ANY, wxDataViewHeaderWindow::OnBeginDrag)
+    EVT_HEADER_DRAGGING(wxID_ANY, wxDataViewHeaderWindow::OnDragging)
+    EVT_HEADER_END_DRAG(wxID_ANY, wxDataViewHeaderWindow::OnEndDrag)
 END_EVENT_TABLE()
 
 //-----------------------------------------------------------------------------
@@ -3288,7 +3315,7 @@ bool wxDataViewCtrl::AppendColumn( wxDataViewColumn *col )
         return false;
 
     m_cols.Append( col );
-    OnColumnChange();
+    OnColumnsCountChanged();
     return true;
 }
 
@@ -3298,7 +3325,7 @@ bool wxDataViewCtrl::PrependColumn( wxDataViewColumn *col )
         return false;
 
     m_cols.Insert( col );
-    OnColumnChange();
+    OnColumnsCountChanged();
     return true;
 }
 
@@ -3308,11 +3335,19 @@ bool wxDataViewCtrl::InsertColumn( unsigned int pos, wxDataViewColumn *col )
         return false;
 
     m_cols.Insert( pos, col );
-    OnColumnChange();
+    OnColumnsCountChanged();
     return true;
 }
 
-void wxDataViewCtrl::OnColumnChange()
+void wxDataViewCtrl::OnColumnChange(unsigned int idx)
+{
+    if ( m_headerArea )
+        m_headerArea->UpdateColumn(idx);
+
+    m_clientArea->UpdateDisplay();
+}
+
+void wxDataViewCtrl::OnColumnsCountChanged()
 {
     if (m_headerArea)
         m_headerArea->SetColumnCount(GetColumnCount());
@@ -3335,20 +3370,9 @@ unsigned int wxDataViewCtrl::GetColumnCount() const
     return m_cols.GetCount();
 }
 
-wxDataViewColumn* wxDataViewCtrl::GetColumn( unsigned int pos ) const
+wxDataViewColumn* wxDataViewCtrl::GetColumn( unsigned int idx ) const
 {
-    wxDataViewColumnList::const_iterator iter;
-    unsigned int i = 0;
-    for (iter = m_cols.begin(); iter!=m_cols.end(); iter++)
-    {
-        if (i == pos)
-            return *iter;
-
-        if ((*iter)->IsHidden())
-            continue;
-        i ++;
-    }
-    return NULL;
+    return m_cols[idx];
 }
 
 void wxDataViewCtrl::ColumnMoved( wxDataViewColumn* col, unsigned int new_pos )
@@ -3371,7 +3395,7 @@ bool wxDataViewCtrl::DeleteColumn( wxDataViewColumn *column )
         return false;
 
     m_cols.Erase(ret);
-    OnColumnChange();
+    OnColumnsCountChanged();
 
     return true;
 }
@@ -3379,7 +3403,7 @@ bool wxDataViewCtrl::DeleteColumn( wxDataViewColumn *column )
 bool wxDataViewCtrl::ClearColumns()
 {
     m_cols.Clear();
-    OnColumnChange();
+    OnColumnsCountChanged();
     return true;
 }
 

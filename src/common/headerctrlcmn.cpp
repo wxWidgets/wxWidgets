@@ -177,3 +177,7 @@ const wxEventType wxEVT_COMMAND_HEADER_RIGHT_DCLICK = wxNewEventType();
 const wxEventType wxEVT_COMMAND_HEADER_MIDDLE_DCLICK = wxNewEventType();
 
 const wxEventType wxEVT_COMMAND_HEADER_SEPARATOR_DCLICK = wxNewEventType();
+
+const wxEventType wxEVT_COMMAND_HEADER_BEGIN_DRAG = wxNewEventType();
+const wxEventType wxEVT_COMMAND_HEADER_DRAGGING = wxNewEventType();
+const wxEventType wxEVT_COMMAND_HEADER_END_DRAG = wxNewEventType();

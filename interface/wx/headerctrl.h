@@ -69,6 +69,22 @@
             (this action is commonly used to resize the column to fit its
             contents width and the control provides UpdateColumnWidthToFit() method
             to make implementing this easier).
+
+        @event{EVT_HEADER_BEGIN_DRAG(id, func)}
+            The user started to drag the column with the specified index (this
+            can only happen if wxHeaderColumn::IsResizeable() returned true for
+            this column). The event can be vetoed to prevent the control from
+            being resized, if it isn't, the dragging and end drag events will
+            be generated later.
+        @event{EVT_HEADER_DRAGGING(id, func)}
+            The user is dragging the column with the specified index and its
+            current width is wxHeaderCtrlEvent::GetWidth(). The event can be
+            vetoed to stop the dragging operation completely at any time.
+        @event{EVT_HEADER_END_DRAG(id, func)}
+            The user stopped dragging the column. If
+            wxHeaderCtrlEvent::IsCancelled() returns @true, nothing should
+            be done, otherwise the column should normally be resized to the
+            value of wxHeaderCtrlEvent::GetWidth().
     @endEventTable
 
     @library{wxcore}
@@ -389,6 +405,22 @@ class wxHeaderCtrlEvent : public wxNotifyEvent
 public:
     /**
         Return the index of the column affected by this event.
+
+        This method can be called for all header control events.
      */
     int GetColumn() const;
+
+    /**
+        Return the current width of the column.
+
+        This method can only be called for the dragging events.
+     */
+    int GetWidth() const;
+
+    /**
+        Return @true if the drag operation was cancelled.
+
+        This method can only be called for the end drag event.
+     */
+    bool IsCancelled() const;
 };

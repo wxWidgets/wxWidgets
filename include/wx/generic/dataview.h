@@ -359,11 +359,6 @@ private:
         m_sortAscending = true;
     }
 
-    // like SetWidth() but does not ask the header window of the
-    // wxDataViewCtrl to reflect the width-change.
-    void SetInternalWidth(int width);
-
-
     wxString m_title;
     int m_width,
         m_minWidth;
@@ -482,8 +477,11 @@ public:     // utility functions not part of the API
     // called by header window after reorder
     void ColumnMoved( wxDataViewColumn* col, unsigned int new_pos );
 
-    // updates the header window after a change in a column setting
-    void OnColumnChange();
+    // update the display after a change to an individual column
+    void OnColumnChange(unsigned int idx);
+
+    // update after a change to the number of columns
+    void OnColumnsCountChanged();
 
     wxWindow *GetMainWindow() { return (wxWindow*) m_clientArea; }
 

@@ -57,7 +57,8 @@ const unsigned COL_NONE = (unsigned)-1;
 void wxHeaderCtrl::Init()
 {
     m_numColumns = 0;
-    m_hover = COL_NONE;
+    m_hover =
+    m_colBeingResized = COL_NONE;
     m_scrollOffset = 0;
 }
 
@@ -210,6 +211,55 @@ void wxHeaderCtrl::RefreshColsAfter(unsigned int idx)
 }
 
 // ----------------------------------------------------------------------------
+// wxHeaderCtrl dragging
+// ----------------------------------------------------------------------------
+
+void wxHeaderCtrl::UpdateResizingMarker(int xPhysical)
+{
+    // unfortunately drawing the marker over the parent window doesn't work as
+    // it's usually covered by another window (the main control view) so just
+    // draw the marker over the header itself, even if it makes it not very
+    // useful
+    wxClientDC dc(this);
+
+    wxDCOverlay dcover(m_overlay, &dc);
+    dcover.Clear();
+
+    if ( xPhysical != -1 )
+    {
+        dc.SetPen(*wxLIGHT_GREY_PEN);
+        dc.DrawLine(xPhysical, 0, xPhysical, GetClientSize().y);
+    }
+}
+
+void wxHeaderCtrl::EndDragging()
+{
+    UpdateResizingMarker(-1);
+
+    m_overlay.Reset();
+}
+
+void wxHeaderCtrl::EndResizing(int width)
+{
+    wxASSERT_MSG( m_colBeingResized != COL_NONE,
+                  "shouldn't be called if we're not resizing" );
+
+    EndDragging();
+
+    wxHeaderCtrlEvent event(wxEVT_COMMAND_HEADER_END_DRAG, GetId());
+    event.SetEventObject(this);
+    event.SetColumn(m_colBeingResized);
+    if ( width == -1 )
+        event.SetCancelled();
+    else
+        event.SetWidth(width);
+
+    GetEventHandler()->ProcessEvent(event);
+
+    m_colBeingResized = COL_NONE;
+}
+
+// ----------------------------------------------------------------------------
 // wxHeaderCtrl event handlers
 // ----------------------------------------------------------------------------
 
@@ -217,6 +267,8 @@ BEGIN_EVENT_TABLE(wxHeaderCtrl, wxHeaderCtrlBase)
     EVT_PAINT(wxHeaderCtrl::OnPaint)
 
     EVT_MOUSE_EVENTS(wxHeaderCtrl::OnMouse)
+
+    EVT_MOUSE_CAPTURE_LOST(wxHeaderCtrl::OnCaptureLost)
 END_EVENT_TABLE()
 
 void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
@@ -283,18 +335,42 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     }
 }
 
+void wxHeaderCtrl::OnCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(event))
+{
+    if ( m_colBeingResized != COL_NONE )
+        EndResizing(-1);
+}
+
 void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
 {
+    // do this in advance to allow simply returning if we're not interested,
+    // we'll undo it if we do handle the event below
     mevent.Skip();
 
+
     // account for the control displacement
-    const int x = mevent.GetX() - m_scrollOffset;
+    const int xPhysical = mevent.GetX();
+    const int xLogical = xPhysical - m_scrollOffset;
+
+    // first deal with the [continuation of any] dragging operations in
+    // progress
+    if ( m_colBeingResized != COL_NONE )
+    {
+        if ( mevent.LeftUp() )
+            EndResizing(xLogical - GetColStart(m_colBeingResized));
+        else // update the live separator position
+            UpdateResizingMarker(xPhysical);
+
+        return;
+    }
+
 
     // find if the event is over a column at all
     bool onSeparator;
     const unsigned col = mevent.Leaving()
                             ? (onSeparator = false, COL_NONE)
-                            : FindColumnAtPos(x, onSeparator);
+                            : FindColumnAtPos(xLogical, onSeparator);
+
 
     // update the highlighted column if it changed
     if ( col != m_hover )
@@ -306,9 +382,6 @@ void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
         RefreshColIfNotNone(m_hover);
     }
 
-    if ( col == COL_NONE )
-        return;
-
     // update mouse cursor as it moves around
     if ( mevent.Moving() )
     {
@@ -316,20 +389,30 @@ void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
         return;
     }
 
+    // all the other events only make sense when they happen over a column
+    if ( col == COL_NONE )
+        return;
+
+
+    // enter various dragging modes on left mouse press
     if ( mevent.LeftDown() )
     {
-        // TODO
         if ( onSeparator )
-            // resize column
+        {
+            // start resizing the column
+            m_colBeingResized = col;
+            UpdateResizingMarker(xPhysical);
+        }
+        else // on column itself
+        {
+            // TODO: drag column
             ;
-        else
-            // drag column
-            ;
+        }
 
         return;
     }
 
-    // determine the type of header event corresponding to this mouse event
+    // determine the type of header event corresponding to click events
     wxEventType evtType = wxEVT_NULL;
     const bool click = mevent.ButtonUp(),
                dblclk = mevent.ButtonDClick();

@@ -13,6 +13,7 @@
 
 #include "wx/event.h"
 #include "wx/vector.h"
+#include "wx/overlay.h"
 
 // ----------------------------------------------------------------------------
 // wxHeaderCtrl
@@ -64,6 +65,7 @@ private:
     // event handlers
     void OnPaint(wxPaintEvent& event);
     void OnMouse(wxMouseEvent& event);
+    void OnCaptureLost(wxMouseCaptureLostEvent& event);
 
     // return the horizontal start position of the given column
     int GetColStart(unsigned int idx) const;
@@ -84,6 +86,17 @@ private:
     // column 1 but close enough to the divider separating it from column 0)
     int FindColumnAtPos(int x, bool& onSeparator) const;
 
+    // end any drag operation currently in progress (resizing or reordering)
+    void EndDragging();
+
+    // and the resizing operation currently in progress and generate an event
+    // about it with its cancelled flag set if width is -1
+    void EndResizing(int width);
+
+    // update the current position of the resizing marker if xPhysical is a
+    // valid physical coordinate value or remove it entirely if it is -1
+    void UpdateResizingMarker(int xPhysical);
+
 
     // number of columns in the control currently
     unsigned int m_numColumns;
@@ -91,8 +104,15 @@ private:
     // index of the column under mouse or -1 if none
     unsigned int m_hover;
 
+    // the column being resized or -1 if there is no resizing operation in
+    // progress
+    unsigned int m_colBeingResized;
+
     // the horizontal scroll offset
     int m_scrollOffset;
+
+    // the overlay display used during the dragging operations
+    wxOverlay m_overlay;
 
 
     DECLARE_EVENT_TABLE()
