@@ -120,7 +120,7 @@ private:
 //               control, see wxHeaderCtrlSimple for a standalone version
 // ----------------------------------------------------------------------------
 
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#if 0// defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     #include "wx/msw/headerctrl.h"
 #else
     #define wxHAS_GENERIC_HEADERCTRL
@@ -235,5 +235,62 @@ private:
 
     DECLARE_NO_COPY_CLASS(wxHeaderCtrlSimple)
 };
+
+// ----------------------------------------------------------------------------
+// wxHeaderCtrl events
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxHeaderCtrlEvent : public wxNotifyEvent
+{
+public:
+    wxHeaderCtrlEvent(wxEventType commandType = wxEVT_NULL, int winid = 0)
+        : wxNotifyEvent(commandType, winid)
+    {
+    }
+
+    wxHeaderCtrlEvent(const wxHeaderCtrlEvent& event)
+        : wxNotifyEvent(event),
+          m_col(event.m_col)
+    {
+    }
+
+    int GetColumn() const { return m_col; }
+    void SetColumn(int col) { m_col = col; }
+
+    virtual wxEvent *Clone() const { return new wxHeaderCtrlEvent(*this); }
+
+protected:
+    // the column affected by the event
+    int m_col;
+
+private:
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxHeaderCtrlEvent)
+};
+
+
+extern WXDLLIMPEXP_ADV const wxEventType wxEVT_COMMAND_HEADER_CLICK;
+extern WXDLLIMPEXP_ADV const wxEventType wxEVT_COMMAND_HEADER_RIGHT_CLICK;
+extern WXDLLIMPEXP_ADV const wxEventType wxEVT_COMMAND_HEADER_MIDDLE_CLICK;
+
+extern WXDLLIMPEXP_ADV const wxEventType wxEVT_COMMAND_HEADER_DCLICK;
+extern WXDLLIMPEXP_ADV const wxEventType wxEVT_COMMAND_HEADER_RIGHT_DCLICK;
+extern WXDLLIMPEXP_ADV const wxEventType wxEVT_COMMAND_HEADER_MIDDLE_DCLICK;
+
+typedef void (wxEvtHandler::*wxHeaderCtrlEventFunction)(wxHeaderCtrlEvent&);
+
+#define wxHeaderCtrlEventHandler(func) \
+    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent( \
+            wxHeaderCtrlEventFunction, &func)
+
+#define wx__DECLARE_HEADER_EVT(evt, id, fn) \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_HEADER_ ## evt, id, wxHeaderCtrlEventHandler(fn))
+
+#define EVT_HEADER_CLICK(id, fn) wx__DECLARE_HEADER_EVT(CLICK, id, fn)
+#define EVT_HEADER_RIGHT_CLICK(id, fn) wx__DECLARE_HEADER_EVT(RIGHT_CLICK, id, fn)
+#define EVT_HEADER_MIDDLE_CLICK(id, fn) wx__DECLARE_HEADER_EVT(MIDDLE_CLICK, id, fn)
+
+#define EVT_HEADER_DCLICK(id, fn) wx__DECLARE_HEADER_EVT(DCLICK, id, fn)
+#define EVT_HEADER_RIGHT_DCLICK(id, fn) wx__DECLARE_HEADER_EVT(RIGHT_DCLICK, id, fn)
+#define EVT_HEADER_MIDDLE_DCLICK(id, fn) wx__DECLARE_HEADER_EVT(MIDDLE_DCLICK, id, fn)
 
 #endif // _WX_HEADERCTRL_H_

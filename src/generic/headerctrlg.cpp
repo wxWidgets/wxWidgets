@@ -145,6 +145,41 @@ int wxHeaderCtrl::GetColStart(unsigned int idx) const
     return pos;
 }
 
+int wxHeaderCtrl::FindColumnAtPos(int x, bool& onSeparator) const
+{
+    wxHeaderCtrl * const self = const_cast<wxHeaderCtrl *>(this);
+
+    int pos = 0;
+    const unsigned count = GetColumnCount();
+    for ( unsigned n = 0; n < count; n++ )
+    {
+        const wxHeaderColumnBase& col = self->GetColumn(n);
+        if ( col.IsHidden() )
+            continue;
+
+        pos += col.GetWidth();
+
+        // if the column is resizeable, check if we're approximatively over the
+        // line separating it from the next column
+        //
+        // TODO: don't hardcode sensitivity
+        if ( col.IsResizeable() && abs(x - pos) < 8 )
+        {
+            onSeparator = true;
+            return n;
+        }
+
+        // inside this column?
+        if ( x < pos )
+        {
+            onSeparator = false;
+            return n;
+        }
+    }
+
+    return COL_NONE;
+}
+
 // ----------------------------------------------------------------------------
 // wxHeaderCtrl repainting
 // ----------------------------------------------------------------------------
@@ -242,9 +277,70 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     }
 }
 
-void wxHeaderCtrl::OnMouse(wxMouseEvent& event)
+void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
 {
-    event.Skip();
+    mevent.Skip();
+
+    // find if the event is over a column at all
+    bool onSeparator;
+    const unsigned col = FindColumnAtPos(mevent.GetX(), onSeparator);
+    if ( col == COL_NONE )
+        return;
+
+    // update mouse cursor as it moves around
+    if ( mevent.Moving() )
+    {
+        SetCursor(onSeparator ? wxCursor(wxCURSOR_SIZEWE) : wxNullCursor);
+        return;
+    }
+
+    if ( mevent.LeftDown() )
+    {
+        // TODO
+        if ( onSeparator )
+            // resize column
+            ;
+        else
+            // drag column
+            ;
+
+        return;
+    }
+
+    // determine the type of header event corresponding to this mouse event
+    wxEventType evtType;
+    const bool click = mevent.ButtonUp();
+    if ( click || mevent.ButtonDClick() )
+    {
+        switch ( mevent.GetButton() )
+        {
+            case wxMOUSE_BTN_LEFT:
+                evtType = click ? wxEVT_COMMAND_HEADER_CLICK
+                                : wxEVT_COMMAND_HEADER_DCLICK;
+                break;
+
+            case wxMOUSE_BTN_RIGHT:
+                evtType = click ? wxEVT_COMMAND_HEADER_RIGHT_CLICK
+                                : wxEVT_COMMAND_HEADER_RIGHT_DCLICK;
+                break;
+
+            case wxMOUSE_BTN_MIDDLE:
+                evtType = click ? wxEVT_COMMAND_HEADER_MIDDLE_CLICK
+                                : wxEVT_COMMAND_HEADER_MIDDLE_DCLICK;
+                break;
+
+            default:
+                // ignore clicks from other mouse buttons
+                return;
+        }
+
+        wxHeaderCtrlEvent event(evtType, GetId());
+        event.SetEventObject(this);
+        event.SetColumn(col);
+
+        if ( GetEventHandler()->ProcessEvent(event) )
+            mevent.Skip(false);
+    }
 }
 
 #endif // wxHAS_GENERIC_HEADERCTRL

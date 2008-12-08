@@ -33,6 +33,9 @@
 #include "wx/msw/wrapcctl.h"
 #include "wx/msw/private.h"
 
+// from src/msw/listctrl.cpp
+extern int WXDLLIMPEXP_CORE wxMSWGetColumnClicked(NMHDR *nmhdr, POINT *ptClick);
+
 // ============================================================================
 // wxHeaderCtrl implementation
 // ============================================================================
@@ -250,3 +253,73 @@ void wxHeaderCtrl::DoSetOrInsertItem(Operation oper, unsigned int idx)
     }
 }
 
+// ----------------------------------------------------------------------------
+// wxHeaderCtrl events
+// ----------------------------------------------------------------------------
+
+bool wxHeaderCtrl::SendClickEvent(bool dblclk, unsigned int idx, int button)
+{
+    wxEventType evtType;
+    switch ( button )
+    {
+        case 0:
+            evtType = dblclk ? wxEVT_COMMAND_HEADER_DCLICK
+                             : wxEVT_COMMAND_HEADER_CLICK;
+            break;
+
+        case 1:
+            evtType = dblclk ? wxEVT_COMMAND_HEADER_RIGHT_DCLICK
+                             : wxEVT_COMMAND_HEADER_RIGHT_CLICK;
+            break;
+
+        case 2:
+            evtType = dblclk ? wxEVT_COMMAND_HEADER_MIDDLE_DCLICK
+                             : wxEVT_COMMAND_HEADER_MIDDLE_CLICK;
+            break;
+
+        default:
+            wxFAIL_MSG( wxS("unexpected event type") );
+            return false;
+    }
+
+    wxHeaderCtrlEvent event(evtType, GetId());
+    event.SetEventObject(this);
+    event.SetColumn(idx);
+
+    return GetEventHandler()->ProcessEvent(event);
+}
+
+bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
+{
+    NMHEADER * const nmhdr = (NMHEADER *)lParam;
+
+    switch ( nmhdr->hdr.code )
+    {
+        case HDN_ITEMCLICK:
+        case HDN_ITEMDBLCLICK:
+            if ( SendClickEvent(nmhdr->hdr.code == HDN_ITEMDBLCLICK,
+                                nmhdr->iItem,
+                                nmhdr->iButton) )
+                return true;
+            break;
+
+            // although we should get the notifications about the right clicks
+            // via HDN_ITEM[DBL]CLICK too according to MSDN this simply doesn't
+            // happen in practice on any Windows system up to 2003
+        case NM_RCLICK:
+        case NM_RDBLCLK:
+            {
+                POINT pt;
+                const int col = wxMSWGetColumnClicked(&nmhdr->hdr, &pt);
+                if ( col != wxNOT_FOUND )
+                {
+                    if ( SendClickEvent(nmhdr->hdr.code == NM_RDBLCLK, col, 1) )
+                        return true;
+                }
+                //else: ignore clicks outside any column
+            }
+            break;
+    }
+
+    return wxHeaderCtrlBase::MSWOnNotify(idCtrl, lParam, result);
+}

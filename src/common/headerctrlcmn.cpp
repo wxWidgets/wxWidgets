@@ -132,3 +132,16 @@ void wxHeaderCtrlSimple::RemoveSortIndicator()
     }
 }
 
+// ============================================================================
+// wxHeaderCtrlEvent implementation
+// ============================================================================
+
+IMPLEMENT_DYNAMIC_CLASS(wxHeaderCtrlEvent, wxNotifyEvent)
+
+const wxEventType wxEVT_COMMAND_HEADER_CLICK = wxNewEventType();
+const wxEventType wxEVT_COMMAND_HEADER_RIGHT_CLICK = wxNewEventType();
+const wxEventType wxEVT_COMMAND_HEADER_MIDDLE_CLICK = wxNewEventType();
+
+const wxEventType wxEVT_COMMAND_HEADER_DCLICK = wxNewEventType();
+const wxEventType wxEVT_COMMAND_HEADER_RIGHT_DCLICK = wxNewEventType();
+const wxEventType wxEVT_COMMAND_HEADER_MIDDLE_DCLICK = wxNewEventType();

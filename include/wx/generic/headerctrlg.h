@@ -74,6 +74,14 @@ private:
     // refresh all the controls starting from (and including) the given one
     void RefreshColsAfter(unsigned int idx);
 
+    // return the column at the given position or -1 if it is beyond the
+    // rightmost column and put true into onSeparator output parameter if the
+    // position is near the divider at the right end of this column (notice
+    // that this means that we return column 0 even if the position is over
+    // column 1 but close enough to the divider separating it from column 0)
+    int FindColumnAtPos(int x, bool& onSeparator) const;
+
+
     // number of columns in the control currently
     unsigned int m_numColumns;
 

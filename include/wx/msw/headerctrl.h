@@ -60,6 +60,7 @@ private:
 
     // override MSW-specific methods needed for new control
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
+    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
 
     // common part of all ctors
     void Init();
@@ -69,6 +70,10 @@ private:
     // GetColumn(idx) to it
     enum Operation { Set, Insert };
     void DoSetOrInsertItem(Operation oper, unsigned int idx);
+
+    // send a click or double click event (depending on dblclk value) for the
+    // click with the given button on the given item
+    bool SendClickEvent(bool dblclk, unsigned int idx, int button);
 
 
     // the image list: initially NULL, created on demand

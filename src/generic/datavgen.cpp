@@ -67,15 +67,15 @@ static const int EXPANDER_OFFSET = 4;
 static const int EXPANDER_OFFSET = 1;
 #endif
 
-//-----------------------------------------------------------------------------
-// wxDataViewHeaderWindow
-//-----------------------------------------------------------------------------
-
 //Below is the compare stuff
 //For the generic implements, both the leaf nodes and the nodes are sorted for fast search when needed
 static wxDataViewModel * g_model;
 static int g_column = -2;
 static bool g_asending = true;
+
+//-----------------------------------------------------------------------------
+// wxDataViewHeaderWindow
+//-----------------------------------------------------------------------------
 
 class wxDataViewHeaderWindow : public wxHeaderCtrl
 {
@@ -88,15 +88,49 @@ public:
     wxDataViewCtrl *GetOwner() const
         { return static_cast<wxDataViewCtrl *>(GetParent()); }
 
-protected:
+private:
     virtual wxHeaderColumnBase& GetColumn(unsigned int idx)
     {
         return *(GetOwner()->GetColumn(idx));
     }
 
-private:
+    bool SendEvent(wxEventType type, unsigned int n)
+    {
+        wxDataViewCtrl * const owner = GetOwner();
+        wxDataViewEvent event(type, owner->GetId());
+
+        event.SetEventObject(owner);
+        event.SetColumn(n);
+        event.SetDataViewColumn(owner->GetColumn(n));
+        event.SetModel(owner->GetModel());
+
+        // for events created by wxDataViewHeaderWindow the
+        // row / value fields are not valid
+        return owner->GetEventHandler()->ProcessEvent(event);
+    }
+
+    void OnClick(wxHeaderCtrlEvent& event)
+    {
+        if ( !SendEvent(wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK,
+                        event.GetColumn()) )
+            event.Skip();
+    }
+
+    void OnRClick(wxHeaderCtrlEvent& event)
+    {
+        if ( !SendEvent(wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK,
+                        event.GetColumn()) )
+            event.Skip();
+    }
+
+    DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxDataViewHeaderWindow)
 };
+
+BEGIN_EVENT_TABLE(wxDataViewHeaderWindow, wxHeaderCtrl)
+    EVT_HEADER_CLICK(wxID_ANY, wxDataViewHeaderWindow::OnClick)
+    EVT_HEADER_RIGHT_CLICK(wxID_ANY, wxDataViewHeaderWindow::OnRClick)
+END_EVENT_TABLE()
 
 //-----------------------------------------------------------------------------
 // wxDataViewRenameTimer
