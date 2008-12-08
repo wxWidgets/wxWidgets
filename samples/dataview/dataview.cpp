@@ -841,17 +841,18 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 #if 0
     // Call this and sorting is enabled
     // immediatly upon start up.
-    column0->SetSortOrder( true );
+    column0->SetAsSortKey();
 #endif
 
     tr = new wxDataViewTextRenderer( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
     wxDataViewColumn *column1 = new wxDataViewColumn( wxT("artist"), tr, 1, 150, wxALIGN_LEFT,
         wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE );
+    column1->SetMinWidth(150); // this column can't be resized to be smaller
     m_musicCtrl->AppendColumn( column1 );
 
     wxDataViewSpinRenderer *sr = new wxDataViewSpinRenderer( 0, 2010, wxDATAVIEW_CELL_EDITABLE, wxALIGN_RIGHT );
-    wxDataViewColumn *column2 = new wxDataViewColumn( wxT("year"), sr, 2, 100, wxALIGN_LEFT,
-        wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE );
+    wxDataViewColumn *column2 = new wxDataViewColumn( wxT("year"), sr, 2, 60, wxALIGN_LEFT,
+        wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE );
     m_musicCtrl->AppendColumn( column2 );
 
     wxArrayString choices;
