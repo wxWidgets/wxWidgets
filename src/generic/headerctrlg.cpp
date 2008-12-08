@@ -193,6 +193,12 @@ void wxHeaderCtrl::RefreshCol(unsigned int idx)
     RefreshRect(rect);
 }
 
+void wxHeaderCtrl::RefreshColIfNotNone(unsigned int idx)
+{
+    if ( idx != COL_NONE )
+        RefreshCol(idx);
+}
+
 void wxHeaderCtrl::RefreshColsAfter(unsigned int idx)
 {
     wxRect rect = GetClientRect();
@@ -283,7 +289,20 @@ void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
 
     // find if the event is over a column at all
     bool onSeparator;
-    const unsigned col = FindColumnAtPos(mevent.GetX(), onSeparator);
+    const unsigned col = mevent.Leaving()
+                            ? (onSeparator = false, COL_NONE)
+                            : FindColumnAtPos(mevent.GetX(), onSeparator);
+
+    // update the highlighted column if it changed
+    if ( col != m_hover )
+    {
+        const unsigned hoverOld = m_hover;
+        m_hover = col;
+
+        RefreshColIfNotNone(hoverOld);
+        RefreshColIfNotNone(m_hover);
+    }
+
     if ( col == COL_NONE )
         return;
 
