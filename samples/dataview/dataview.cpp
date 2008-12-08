@@ -1115,6 +1115,10 @@ void MyFrame::OnContextMenu( wxDataViewEvent &event )
 
 void MyFrame::OnHeaderClick( wxDataViewEvent &event )
 {
+    // we need to skip the event to let the default behaviour of sorting by
+    // this column when it is clicked to take place
+    event.Skip();
+
     if(!m_log)
         return;
 
