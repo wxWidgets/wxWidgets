@@ -168,44 +168,47 @@ void wxHeaderCtrl::DoSetOrInsertItem(Operation oper, unsigned int idx)
 
     // notice that we need to store the string we use the pointer to until we
     // pass it to the control
-    wxWxCharBuffer buf;
-    if ( !col.GetTitle().empty() )
-    {
-        hdi.mask |= HDI_TEXT;
-
-        buf = col.GetTitle().wx_str();
-        hdi.pszText = buf.data();
-        hdi.cchTextMax = wxStrlen(buf);
-    }
+    hdi.mask |= HDI_TEXT;
+    wxWxCharBuffer buf = col.GetTitle().wx_str();
+    hdi.pszText = buf.data();
+    hdi.cchTextMax = wxStrlen(buf);
 
     const wxBitmap bmp = col.GetBitmap();
-    if ( bmp.IsOk() )
+    if ( bmp.IsOk() || oper == Set )
     {
-        const int bmpWidth = bmp.GetWidth(),
-                  bmpHeight = bmp.GetHeight();
-
-        if ( !m_imageList )
-        {
-            m_imageList = new wxImageList(bmpWidth, bmpHeight);
-            Header_SetImageList(GetHwnd(), GetHimagelistOf(m_imageList));
-        }
-        else // already have an image list
-        {
-            // check that all bitmaps we use have the same size
-            int imageWidth,
-                imageHeight;
-            m_imageList->GetSize(0, imageWidth, imageHeight);
-
-            wxASSERT_MSG( imageWidth == bmpWidth && imageHeight == bmpHeight,
-                          "all column bitmaps must have the same size" );
-        }
-
-        m_imageList->Add(bmp);
         hdi.mask |= HDI_IMAGE;
-        hdi.iImage = m_imageList->GetImageCount() - 1;
+
+        if ( bmp.IsOk() )
+        {
+            const int bmpWidth = bmp.GetWidth(),
+                      bmpHeight = bmp.GetHeight();
+
+            if ( !m_imageList )
+            {
+                m_imageList = new wxImageList(bmpWidth, bmpHeight);
+                Header_SetImageList(GetHwnd(), GetHimagelistOf(m_imageList));
+            }
+            else // already have an image list
+            {
+                // check that all bitmaps we use have the same size
+                int imageWidth,
+                    imageHeight;
+                m_imageList->GetSize(0, imageWidth, imageHeight);
+
+                wxASSERT_MSG( imageWidth == bmpWidth && imageHeight == bmpHeight,
+                              "all column bitmaps must have the same size" );
+            }
+
+            m_imageList->Add(bmp);
+            hdi.iImage = m_imageList->GetImageCount() - 1;
+        }
+        else // no bitmap but we still need to update the item
+        {
+            hdi.iImage = I_IMAGENONE;
+        }
     }
 
-    if ( col.GetAlignment() != wxALIGN_NOT )
+    if ( col.GetAlignment() != wxALIGN_NOT || oper == Set )
     {
         hdi.mask |= HDI_FORMAT;
         switch ( col.GetAlignment() )
