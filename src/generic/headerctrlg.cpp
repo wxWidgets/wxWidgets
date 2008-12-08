@@ -357,7 +357,7 @@ void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
     if ( m_colBeingResized != COL_NONE )
     {
         if ( mevent.LeftUp() )
-            EndResizing(xLogical - GetColStart(m_colBeingResized));
+            EndResizing(xPhysical - GetColStart(m_colBeingResized));
         else // update the live separator position
             UpdateResizingMarker(xPhysical);
 

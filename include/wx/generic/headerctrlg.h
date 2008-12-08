@@ -67,7 +67,8 @@ private:
     void OnMouse(wxMouseEvent& event);
     void OnCaptureLost(wxMouseCaptureLostEvent& event);
 
-    // return the horizontal start position of the given column
+    // return the horizontal start position of the given column in physical
+    // coordinates
     int GetColStart(unsigned int idx) const;
 
     // refresh the given column [only]; idx must be valid
