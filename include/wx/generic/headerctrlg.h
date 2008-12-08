@@ -94,9 +94,19 @@ private:
     // end any drag operation currently in progress (resizing or reordering)
     void EndDragging();
 
-    // and the resizing operation currently in progress and generate an event
-    // about it with its cancelled flag set if width is -1
-    void EndResizing(int width);
+    // start (if m_colBeingResized is -1) or continue resizing the column
+    //
+    // this generates wxEVT_COMMAND_HEADER_BEGIN_RESIZE/RESIZING events and can
+    // cancel the operation if the user handler decides so
+    void StartOrContinueResizing(unsigned int col, int xPhysical);
+
+    // end the resizing operation currently in progress and generate an event
+    // about it with its cancelled flag set if xPhysical is -1
+    void EndResizing(int xPhysical);
+
+    // constrain the given position to be larger than the start position of the
+    // given column plus its minimal width and return the effective width
+    int ConstrainByMinWidth(unsigned int col, int& xPhysical);
 
     // update the current position of the resizing marker if xPhysical is a
     // valid physical coordinate value or remove it entirely if it is -1

@@ -143,15 +143,6 @@ private:
             event.Veto();
     }
 
-    void OnResizing(wxHeaderCtrlEvent& event)
-    {
-        const wxHeaderColumnBase& col = GetColumn(event.GetColumn());
-
-        const int minWidth = col.GetMinWidth();
-        if ( event.GetWidth() < minWidth )
-            event.Veto();
-    }
-
     void OnEndResize(wxHeaderCtrlEvent& event)
     {
         if ( !event.IsCancelled() )
@@ -171,7 +162,6 @@ BEGIN_EVENT_TABLE(wxDataViewHeaderWindow, wxHeaderCtrl)
     EVT_HEADER_RIGHT_CLICK(wxID_ANY, wxDataViewHeaderWindow::OnRClick)
 
     EVT_HEADER_BEGIN_RESIZE(wxID_ANY, wxDataViewHeaderWindow::OnBeginResize)
-    EVT_HEADER_RESIZING(wxID_ANY, wxDataViewHeaderWindow::OnResizing)
     EVT_HEADER_END_RESIZE(wxID_ANY, wxDataViewHeaderWindow::OnEndResize)
 END_EVENT_TABLE()
 

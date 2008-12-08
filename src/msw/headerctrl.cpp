@@ -295,6 +295,7 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     wxEventType evtType = wxEVT_NULL;
     int idx = nmhdr->iItem;
     int width = 0;
+    bool cancelled = false;
     const UINT code = nmhdr->hdr.code;
     switch ( code )
     {
@@ -343,10 +344,34 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
         case HDN_ENDTRACKA:
         case HDN_ENDTRACKW:
+            width = nmhdr->pitem->cxy;
+
             if ( evtType == wxEVT_NULL )
+            {
                 evtType = wxEVT_COMMAND_HEADER_END_RESIZE;
 
-            width = nmhdr->pitem->cxy;
+                // don't generate events with invalid width
+                const int minWidth = GetColumn(idx).GetMinWidth();
+                if ( width < minWidth )
+                    width = minWidth;
+            }
+            break;
+
+        case HDN_ITEMCHANGING:
+            if ( nmhdr->pitem && (nmhdr->pitem->mask & HDI_WIDTH) )
+            {
+                // prevent the column from being shrunk beneath its min width
+                if ( nmhdr->pitem->cxy < GetColumn(idx).GetMinWidth() )
+                {
+                    *result = TRUE;
+
+                    return true;
+                }
+            }
+            break;
+
+        case NM_RELEASEDCAPTURE:
+            cancelled = true;
             break;
     }
 
@@ -358,6 +383,8 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         event.SetEventObject(this);
         event.SetColumn(idx);
         event.SetWidth(width);
+        if ( cancelled )
+            event.SetCancelled();
 
         if ( GetEventHandler()->ProcessEvent(event) )
         {

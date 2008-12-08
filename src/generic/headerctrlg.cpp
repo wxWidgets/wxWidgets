@@ -247,7 +247,54 @@ void wxHeaderCtrl::EndDragging()
     SetCursor(wxNullCursor);
 }
 
-void wxHeaderCtrl::EndResizing(int width)
+int wxHeaderCtrl::ConstrainByMinWidth(unsigned int col, int& xPhysical)
+{
+    const int xStart = GetColStart(col);
+
+    // notice that GetMinWidth() returns 0 if there is no minimal width so it
+    // still makes sense to use it even in this case
+    const int xMinEnd = xStart + GetColumn(col).GetMinWidth();
+
+    if ( xPhysical < xMinEnd )
+        xPhysical = xMinEnd;
+
+    return xPhysical - xStart;
+}
+
+void wxHeaderCtrl::StartOrContinueResizing(unsigned int col, int xPhysical)
+{
+    wxHeaderCtrlEvent event(IsResizing() ? wxEVT_COMMAND_HEADER_RESIZING
+                                         : wxEVT_COMMAND_HEADER_BEGIN_RESIZE,
+                            GetId());
+    event.SetEventObject(this);
+    event.SetColumn(col);
+
+    event.SetWidth(ConstrainByMinWidth(col, xPhysical));
+
+    if ( GetEventHandler()->ProcessEvent(event) && !event.IsAllowed() )
+    {
+        if ( IsResizing() )
+        {
+            ReleaseMouse();
+            EndResizing(-1);
+        }
+        //else: nothing to do -- we just don't start to resize
+    }
+    else // go ahead with resizing
+    {
+        if ( !IsResizing() )
+        {
+            m_colBeingResized = col;
+            SetCursor(wxCursor(wxCURSOR_SIZEWE));
+            CaptureMouse();
+        }
+        //else: we had already done the above when we started
+
+        UpdateResizingMarker(xPhysical);
+    }
+}
+
+void wxHeaderCtrl::EndResizing(int xPhysical)
 {
     wxASSERT_MSG( IsResizing(), "shouldn't be called if we're not resizing" );
 
@@ -255,16 +302,16 @@ void wxHeaderCtrl::EndResizing(int width)
 
     // if dragging was cancelled we must have already lost the mouse capture so
     // don't try to release it
-    if ( width != -1 )
+    if ( xPhysical != -1 )
         ReleaseMouse();
 
     wxHeaderCtrlEvent event(wxEVT_COMMAND_HEADER_END_RESIZE, GetId());
     event.SetEventObject(this);
     event.SetColumn(m_colBeingResized);
-    if ( width == -1 )
+    if ( xPhysical == -1 )
         event.SetCancelled();
     else
-        event.SetWidth(width);
+        event.SetWidth(ConstrainByMinWidth(m_colBeingResized, xPhysical));
 
     GetEventHandler()->ProcessEvent(event);
 
@@ -384,9 +431,9 @@ void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
     if ( IsResizing() )
     {
         if ( mevent.LeftUp() )
-            EndResizing(xPhysical - GetColStart(m_colBeingResized));
+            EndResizing(xPhysical);
         else // update the live separator position
-            UpdateResizingMarker(xPhysical);
+            StartOrContinueResizing(m_colBeingResized, xPhysical);
 
         return;
     }
@@ -427,10 +474,8 @@ void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
         if ( onSeparator )
         {
             // start resizing the column
-            m_colBeingResized = col;
-            SetCursor(wxCursor(wxCURSOR_SIZEWE));
-            CaptureMouse();
-            UpdateResizingMarker(xPhysical);
+            wxASSERT_MSG( !IsResizing(), "reentering resize mode?" );
+            StartOrContinueResizing(col, xPhysical);
         }
         else // on column itself
         {
