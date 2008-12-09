@@ -211,9 +211,13 @@ typedef struct wxtagNMLVCUSTOMDRAW_ {
 #endif // defined __VISUALC__ && __VISUALC__ <= 1100
 
 // ----------------------------------------------------------------------------
-// ListView common control
-// Needed by listctrl.cpp
+// definitions related to ListView and Header common controls, needed by
+// msw/listctrl.cpp and msw/headerctrl.cpp
 // ----------------------------------------------------------------------------
+
+#ifndef I_IMAGENONE
+    #define I_IMAGENONE (-2)
+#endif
 
 #ifndef LVS_EX_FULLROWSELECT
     #define LVS_EX_FULLROWSELECT 0x00000020
