@@ -118,8 +118,10 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
     m_parentFrameActive = true;
 
     m_clientWindow = OnCreateClient();
+    if ( !m_clientWindow || !m_clientWindow->CreateClient(this, style) )
+        return false;
 
-    return m_clientWindow != NULL;
+    return true;
 }
 
 wxMDIParentFrame::~wxMDIParentFrame()
