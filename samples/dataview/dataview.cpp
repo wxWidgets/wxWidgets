@@ -836,7 +836,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 
     wxDataViewTextRenderer *tr = new wxDataViewTextRenderer( wxT("string"), wxDATAVIEW_CELL_INERT );
     wxDataViewColumn *column0 = new wxDataViewColumn( wxT("title"), tr, 0, 200, wxALIGN_LEFT,
-        wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE );
+        wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_RESIZABLE );
     m_musicCtrl->AppendColumn( column0 );
 #if 0
     // Call this and sorting is enabled
