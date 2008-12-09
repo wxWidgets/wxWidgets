@@ -1161,7 +1161,16 @@ bool wxToolBar::MSWCommand(WXUINT WXUNUSED(cmd), WXWORD id)
 
     bool allowLeftClick = OnLeftClick((int)id, toggled);
 
-    // restore the unpressed state
+    // Restore the unpressed state. Enabled/toggled state might have been
+    // changed since so take care of it.
+    if (tool->IsEnabled())
+        state |= TBSTATE_ENABLED;
+    else
+        state &= ~TBSTATE_ENABLED;
+    if (tool->IsToggled())
+        state |= TBSTATE_CHECKED;
+    else
+        state &= ~TBSTATE_CHECKED;
     ::SendMessage(GetHwnd(), TB_SETSTATE, id, MAKELONG(state, 0));
 
     // OnLeftClick() can veto the button state change - for buttons which
