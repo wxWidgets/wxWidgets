@@ -183,6 +183,18 @@ public:
      */
     bool IsEmpty() const;
 
+    /**
+        Update the column with the given index.
+
+        When the value returned by GetColumn() changes, this method must be
+        called to notify the control about the change and update the visual
+        display to match the new column data.
+
+        @param idx
+            The column index, must be less than GetColumnCount().
+     */
+    void UpdateColumn(unsigned int idx);
+
 protected:
     /**
         Method to be implemented by the derived classes to return the
