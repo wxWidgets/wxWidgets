@@ -65,11 +65,9 @@ private:
     // common part of all ctors
     void Init();
 
-    // wrapper around Header_{Set,Insert}Item(): either appends the item to the
-    // end or modifies the existing item by copying information from
-    // GetColumn(idx) to it
-    enum Operation { Set, Insert };
-    void DoSetOrInsertItem(Operation oper, unsigned int idx);
+    // wrapper around Header_InsertItem(): insert the item by using information
+    // from GetColumn(idx)
+    void DoInsertItem(unsigned int idx);
 
     // get the event type corresponding to a click or double click event
     // (depending on dblclk value) with the specified (using MSW convention)
