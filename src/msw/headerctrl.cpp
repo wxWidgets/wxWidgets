@@ -151,16 +151,22 @@ void wxHeaderCtrl::DoSetCount(unsigned int count)
     // and add the new ones
     for ( n = 0; n < count; n++ )
     {
-        DoSetOrInsertItem(Insert, n);
+        DoInsertItem(n);
     }
 }
 
 void wxHeaderCtrl::DoUpdate(unsigned int idx)
 {
-    DoSetOrInsertItem(Set, idx);
+    // the native control does provide Header_SetItem() but it's inconvenient
+    // to use it because it sends HDN_ITEMCHANGING messages and we'd have to
+    // arrange not to block setting the width from there and the logic would be
+    // more complicated as we'd have to reset the old values as well as setting
+    // the new ones -- so instead just recreate the column
+    Header_DeleteItem(GetHwnd(), idx);
+    DoInsertItem(idx);
 }
 
-void wxHeaderCtrl::DoSetOrInsertItem(Operation oper, unsigned int idx)
+void wxHeaderCtrl::DoInsertItem(unsigned int idx)
 {
     const wxHeaderColumnBase& col = GetColumn(idx);
 
@@ -174,7 +180,7 @@ void wxHeaderCtrl::DoSetOrInsertItem(Operation oper, unsigned int idx)
     hdi.cchTextMax = wxStrlen(buf);
 
     const wxBitmap bmp = col.GetBitmap();
-    if ( bmp.IsOk() || oper == Set )
+    if ( bmp.IsOk() )
     {
         hdi.mask |= HDI_IMAGE;
 
@@ -208,7 +214,7 @@ void wxHeaderCtrl::DoSetOrInsertItem(Operation oper, unsigned int idx)
         }
     }
 
-    if ( col.GetAlignment() != wxALIGN_NOT || oper == Set )
+    if ( col.GetAlignment() != wxALIGN_NOT )
     {
         hdi.mask |= HDI_FORMAT;
         switch ( col.GetAlignment() )
@@ -243,19 +249,9 @@ void wxHeaderCtrl::DoSetOrInsertItem(Operation oper, unsigned int idx)
         hdi.cxy = col.IsHidden() ? 0 : col.GetWidth();
     }
 
-    const LRESULT rc = ::SendMessage(GetHwnd(),
-                                     oper == Set ? HDM_SETITEM : HDM_INSERTITEM,
-                                     idx,
-                                     (LPARAM)&hdi);
-    if ( oper == Set )
+    if ( ::SendMessage(GetHwnd(), HDM_INSERTITEM, idx, (LPARAM)&hdi) == -1 )
     {
-        if ( !rc )
-            wxLogLastError(_T("Header_SetItem()"));
-    }
-    else // Insert
-    {
-        if ( rc == -1 )
-            wxLogLastError(_T("Header_InsertItem()"));
+        wxLogLastError(_T("Header_InsertItem()"));
     }
 }
 
