@@ -229,13 +229,7 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
     subframe->Show(true);
 }
 
-void MyFrame::OnSize(wxSizeEvent&
-                                  #ifdef __WXUNIVERSAL__
-                                  event
-                                  #else
-                                  WXUNUSED(event)
-                                  #endif
-                                  )
+void MyFrame::OnSize(wxSizeEvent& event)
 {
     int w, h;
     GetClientSize(&w, &h);
@@ -248,6 +242,8 @@ void MyFrame::OnSize(wxSizeEvent&
     // be done.
 #ifdef __WXUNIVERSAL__
     event.Skip();
+#else
+    wxUnusedVar(event);
 #endif
 }
 
