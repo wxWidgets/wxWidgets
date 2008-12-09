@@ -3632,14 +3632,15 @@ dnl ---------------------------------------------------------------------------
 
 USE_OPENGL=0
 if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
-    if test "$wxUSE_MGL" = 1 -o "$wxUSE_DFB" = 1; then
-        AC_MSG_WARN([wxGLCanvas not implemented for this port, library will be compiled without it.])
-        wxUSE_OPENGL="no"
-    elif test "$wxUSE_OSX_CARBON" = 1 -o "$wxUSE_OSX_COCOA" = 1 -o "$wxUSE_COCOA" = 1; then
+
+    dnl look in glcanvas.h for the list of platforms supported by wxGlCanvas:
+
+    if test "$wxUSE_OSX_CARBON" = 1 -o "$wxUSE_OSX_COCOA" = 1 -o "$wxUSE_COCOA" = 1; then
         OPENGL_LIBS="-framework OpenGL -framework AGL"
     elif test "$wxUSE_MSW" = 1; then
         OPENGL_LIBS="-lopengl32 -lglu32"
-    else
+    elif test "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1 -o "$wxUSE_GTK2" = 1 -o "$wxUSE_GTK" = 1; then
+
         dnl adjust CPPFLAGS to include GL/gl.h location if necessary
         dnl (/opt/graphics/OpenGL is for HP-UX systems, bug 925307)
         AC_MSG_CHECKING([for OpenGL headers])
@@ -3718,6 +3719,9 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
             dnl libraries are available... change 'auto' in 'yes'
             wxUSE_OPENGL=yes
         fi
+    else
+        AC_MSG_WARN([wxGLCanvas not implemented for this port, library will be compiled without it.])
+        wxUSE_OPENGL="no"
     fi
 
     if test "$wxUSE_OPENGL" = "yes"; then
