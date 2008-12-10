@@ -30,6 +30,7 @@
 #include "wx/colordlg.h"
 #include "wx/fontdlg.h"
 #include "wx/numdlg.h"
+#include "wx/aboutdlg.h"
 
 #include "wx/grid.h"
 #include "wx/generic/gridctrl.h"
@@ -1112,10 +1113,14 @@ void GridFrame::OnEditorHidden( wxGridEvent& ev )
 
 void GridFrame::About(  wxCommandEvent& WXUNUSED(ev) )
 {
-    (void)wxMessageBox( _T("\n\nwxGrid demo \n\n")
-                        _T("Michael Bedward, Julian Smart, Vadim Zeitlin"),
-                        _T("About"),
-                        wxOK );
+    wxAboutDialogInfo aboutInfo;
+    aboutInfo.SetName(wxT("wxGrid demo"));
+    aboutInfo.SetDescription(_("wxGrid sample program"));
+    aboutInfo.AddDeveloper(wxT("Michael Bedward"));
+    aboutInfo.AddDeveloper(wxT("Julian Smart"));
+    aboutInfo.AddDeveloper(wxT("Vadim Zeitlin"));
+
+    wxAboutBox(aboutInfo);
 }
 
 
