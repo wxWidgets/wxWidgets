@@ -325,7 +325,6 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     int idx = nmhdr->iItem;
     int width = 0;
     int order = -1;
-    bool cancelled = false;
     bool veto = false;
     const UINT code = nmhdr->hdr.code;
     switch ( code )
@@ -432,7 +431,7 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             break;
 
         case NM_RELEASEDCAPTURE:
-            cancelled = true;
+            evtType = wxEVT_COMMAND_HEADER_DRAGGING_CANCELLED;
             break;
     }
 
@@ -446,8 +445,6 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         event.SetWidth(width);
         if ( order != -1 )
             event.SetNewOrder(order);
-        if ( cancelled )
-            event.SetCancelled();
 
         if ( GetEventHandler()->ProcessEvent(event) )
         {

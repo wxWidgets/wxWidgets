@@ -300,17 +300,19 @@ void wxHeaderCtrl::EndResizing(int xPhysical)
 
     EndDragging();
 
+    const bool cancelled = xPhysical == -1;
+
     // if dragging was cancelled we must have already lost the mouse capture so
     // don't try to release it
-    if ( xPhysical != -1 )
+    if ( !cancelled )
         ReleaseMouse();
 
-    wxHeaderCtrlEvent event(wxEVT_COMMAND_HEADER_END_RESIZE, GetId());
+    wxHeaderCtrlEvent event(cancelled ? wxEVT_COMMAND_HEADER_DRAGGING_CANCELLED
+                                      : wxEVT_COMMAND_HEADER_END_RESIZE,
+                            GetId());
     event.SetEventObject(this);
     event.SetColumn(m_colBeingResized);
-    if ( xPhysical == -1 )
-        event.SetCancelled();
-    else
+    if ( !cancelled )
         event.SetWidth(ConstrainByMinWidth(m_colBeingResized, xPhysical));
 
     GetEventHandler()->ProcessEvent(event);

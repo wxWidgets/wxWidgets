@@ -151,7 +151,7 @@ private:
 //               control, see wxHeaderCtrlSimple for a standalone version
 // ----------------------------------------------------------------------------
 
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#if 0// defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     #include "wx/msw/headerctrl.h"
 #else
     #define wxHAS_GENERIC_HEADERCTRL
@@ -288,8 +288,7 @@ public:
         : wxNotifyEvent(commandType, winid),
           m_col(-1),
           m_width(0),
-          m_order(static_cast<unsigned int>(-1)),
-          m_cancelled(false)
+          m_order(static_cast<unsigned int>(-1))
     {
     }
 
@@ -297,8 +296,7 @@ public:
         : wxNotifyEvent(event),
           m_col(event.m_col),
           m_width(event.m_width),
-          m_order(event.m_order),
-          m_cancelled(event.m_cancelled)
+          m_order(event.m_order)
     {
     }
 
@@ -314,10 +312,6 @@ public:
     unsigned int GetNewOrder() const { return m_order; }
     void SetNewOrder(unsigned int order) { m_order = order; }
 
-    // was the drag operation cancelled or did it complete successfully?
-    bool IsCancelled() const { return m_cancelled; }
-    void SetCancelled() { m_cancelled = true; }
-
     virtual wxEvent *Clone() const { return new wxHeaderCtrlEvent(*this); }
 
 protected:
@@ -329,9 +323,6 @@ protected:
 
     // the new column position for end reorder event
     unsigned int m_order;
-
-    // was the drag operation cancelled?
-    bool m_cancelled;
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxHeaderCtrlEvent)
@@ -354,6 +345,8 @@ extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_HEADER_END_RESIZE;
 
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_HEADER_BEGIN_REORDER;
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_HEADER_END_REORDER;
+
+extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_HEADER_DRAGGING_CANCELLED;
 
 typedef void (wxEvtHandler::*wxHeaderCtrlEventFunction)(wxHeaderCtrlEvent&);
 
@@ -380,5 +373,7 @@ typedef void (wxEvtHandler::*wxHeaderCtrlEventFunction)(wxHeaderCtrlEvent&);
 
 #define EVT_HEADER_BEGIN_REORDER(id, fn) wx__DECLARE_HEADER_EVT(BEGIN_REORDER, id, fn)
 #define EVT_HEADER_END_REORDER(id, fn) wx__DECLARE_HEADER_EVT(END_REORDER, id, fn)
+
+#define EVT_HEADER_DRAGGING_CANCELLED(id, fn) wx__DECLARE_HEADER_EVT(DRAGGING_CANCELLED, id, fn)
 
 #endif // _WX_HEADERCTRL_H_

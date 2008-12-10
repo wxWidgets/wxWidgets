@@ -75,17 +75,17 @@
             with the specified index (this can only happen for the columns for
             which wxHeaderColumn::IsResizeable() returns true). The event can
             be vetoed to prevent the column from being resized. If it isn't,
-            the resizing and end resize events will be generated later.
+            the resizing and end resize (or dragging cancelled) events will be
+            generated later.
         @event{EVT_HEADER_RESIZING(id, func)}
             The user is dragging the column with the specified index resizing
             it and its current width is wxHeaderCtrlEvent::GetWidth(). The
             event can be vetoed to stop the dragging operation completely at
             any time.
         @event{EVT_HEADER_END_RESIZE(id, func)}
-            Either the user stopped dragging the column by releasing the mouse
-            or the resizing was cancelled. If wxHeaderCtrlEvent::IsCancelled()
-            returns @true, nothing should be done, otherwise the column should
-            normally be resized to the value of wxHeaderCtrlEvent::GetWidth().
+            The user stopped dragging the column by releasing the mouse. The
+            column should normally be resized to the value of
+            wxHeaderCtrlEvent::GetWidth().
 
         @event{EVT_HEADER_BEGIN_REORDER(id, func)}
             The user started to drag the column with the specified index (this
@@ -93,13 +93,20 @@
             event can be vetoed to prevent the column from being reordered,
             otherwise the end reorder message will be generated later.
         @event{EVT_HEADER_END_REORDER(id, func)}
-            Either the user dropped the column in its new location or the
-            drag operation was cancelled. If wxHeaderCtrlEvent::IsCancelled()
-            returns @true, nothing should be done, otherwise the event can be
+            The user dropped the column in its new location. The event can be
             vetoed to prevent the column from being placed at the new position
             or handled to update the display of the data in the associated
             control to match the new column location (available from
             wxHeaderCtrlEvent::GetNewOrder()).
+
+        @event{EVT_HEADER_DRAGGING_CANCELLED(id, func)}
+            The resizing or reordering operation currently in progress was
+            cancelled. This can happen if the user pressed Esc key while
+            dragging the mouse or the mouse capture was lost for some other
+            reason. You only need to handle this event if your application
+            entered into some modal mode when resizing or reordering began, in
+            which case it should handle this event in addition to the matching
+            end resizing or reordering ones.
     @endEventTable
 
     @library{wxcore}
@@ -509,11 +516,4 @@ public:
         new column position in wxHeaderCtrl::GetColumnsOrder().
      */
     unsigned int GetNewOrder() const;
-
-    /**
-        Return @true if the drag operation was cancelled.
-
-        This method can only be called for the end drag event.
-     */
-    bool IsCancelled() const;
 };

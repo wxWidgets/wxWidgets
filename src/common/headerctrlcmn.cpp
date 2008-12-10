@@ -247,3 +247,5 @@ const wxEventType wxEVT_COMMAND_HEADER_END_RESIZE = wxNewEventType();
 
 const wxEventType wxEVT_COMMAND_HEADER_BEGIN_REORDER = wxNewEventType();
 const wxEventType wxEVT_COMMAND_HEADER_END_REORDER = wxNewEventType();
+
+const wxEventType wxEVT_COMMAND_HEADER_DRAGGING_CANCELLED = wxNewEventType();

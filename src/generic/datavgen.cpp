@@ -176,12 +176,9 @@ private:
 
     void OnEndResize(wxHeaderCtrlEvent& event)
     {
-        if ( !event.IsCancelled() )
-        {
-            const unsigned col = event.GetColumn();
-            GetColumn(col).SetWidth(event.GetWidth());
-            GetOwner()->OnColumnChange(col);
-        }
+        const unsigned col = event.GetColumn();
+        GetColumn(col).SetWidth(event.GetWidth());
+        GetOwner()->OnColumnChange(col);
     }
 
     void OnEndReorder(wxHeaderCtrlEvent& event)
