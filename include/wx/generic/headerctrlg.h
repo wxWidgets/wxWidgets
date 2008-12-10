@@ -89,7 +89,7 @@ private:
     // position is near the divider at the right end of this column (notice
     // that this means that we return column 0 even if the position is over
     // column 1 but close enough to the divider separating it from column 0)
-    int FindColumnAtPos(int x, bool& onSeparator) const;
+    int FindColumnAtPoint(int x, bool& onSeparator) const;
 
     // return true if a drag resizing operation is currently in progress
     bool IsResizing() const;

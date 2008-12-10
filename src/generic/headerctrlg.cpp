@@ -90,8 +90,31 @@ wxHeaderCtrl::~wxHeaderCtrl()
 
 void wxHeaderCtrl::DoSetCount(unsigned int count)
 {
+    // update the column indices array if necessary
+    if ( count > m_numColumns )
+    {
+        // all new columns have default positions equal to their indices
+        for ( unsigned n = m_numColumns; n < count; n++ )
+            m_colIndices.push_back(n);
+    }
+    else if ( count < m_numColumns )
+    {
+        // filter out all the positions which are invalid now while keeping the
+        // order of the remaining ones
+        wxArrayInt colIndices;
+        for ( unsigned n = 0; n < m_numColumns; n++ )
+        {
+            const unsigned idx = m_colIndices[n];
+            if ( idx < count )
+                colIndices.push_back(idx);
+        }
+
+        wxASSERT_MSG( colIndices.size() == count, "logic error" );
+
+        m_colIndices = colIndices;
+    }
+
     m_numColumns = count;
-    m_colIndices.resize(count);
 
     Refresh();
 }
@@ -139,7 +162,7 @@ int wxHeaderCtrl::GetColStart(unsigned int idx) const
     int pos = m_scrollOffset;
     for ( unsigned n = 0; n < idx; n++ )
     {
-        const wxHeaderColumnBase& col = self->GetColumn(n);
+        const wxHeaderColumnBase& col = self->GetColumn(m_colIndices[n]);
         if ( col.IsShown() )
             pos += col.GetWidth();
     }
@@ -147,7 +170,7 @@ int wxHeaderCtrl::GetColStart(unsigned int idx) const
     return pos;
 }
 
-int wxHeaderCtrl::FindColumnAtPos(int x, bool& onSeparator) const
+int wxHeaderCtrl::FindColumnAtPoint(int x, bool& onSeparator) const
 {
     wxHeaderCtrl * const self = const_cast<wxHeaderCtrl *>(this);
 
@@ -155,7 +178,7 @@ int wxHeaderCtrl::FindColumnAtPos(int x, bool& onSeparator) const
     const unsigned count = GetColumnCount();
     for ( unsigned n = 0; n < count; n++ )
     {
-        const wxHeaderColumnBase& col = self->GetColumn(n);
+        const wxHeaderColumnBase& col = self->GetColumn(m_colIndices[n]);
         if ( col.IsHidden() )
             continue;
 
@@ -175,7 +198,7 @@ int wxHeaderCtrl::FindColumnAtPos(int x, bool& onSeparator) const
         if ( x < pos )
         {
             onSeparator = false;
-            return n;
+            return GetColumnAt(n);
         }
     }
 
@@ -367,7 +390,7 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     int xpos = 0;
     for ( unsigned int i = 0; i < count; i++ )
     {
-        const wxHeaderColumnBase& col = GetColumn(i);
+        const wxHeaderColumnBase& col = GetColumn(m_colIndices[i]);
         if ( col.IsHidden() )
             continue;
 
@@ -461,7 +484,7 @@ void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
     bool onSeparator;
     const unsigned col = mevent.Leaving()
                             ? (onSeparator = false, COL_NONE)
-                            : FindColumnAtPos(xLogical, onSeparator);
+                            : FindColumnAtPoint(xLogical, onSeparator);
 
 
     // update the highlighted column if it changed
