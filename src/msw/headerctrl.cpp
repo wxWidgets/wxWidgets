@@ -151,7 +151,7 @@ void wxHeaderCtrl::DoSetCount(unsigned int count)
     // and add the new ones
     for ( n = 0; n < count; n++ )
     {
-        DoInsertItem(n);
+        DoInsertItem(n, -1 /* default order, i.e. append */);
     }
 }
 
@@ -162,11 +162,15 @@ void wxHeaderCtrl::DoUpdate(unsigned int idx)
     // arrange not to block setting the width from there and the logic would be
     // more complicated as we'd have to reset the old values as well as setting
     // the new ones -- so instead just recreate the column
+
+    // we need to preserve the old position ourselves as the column doesn't
+    // store it (TODO: should it?)
+    const unsigned int pos = GetColumnPos(idx);
     Header_DeleteItem(GetHwnd(), idx);
-    DoInsertItem(idx);
+    DoInsertItem(idx, pos);
 }
 
-void wxHeaderCtrl::DoInsertItem(unsigned int idx)
+void wxHeaderCtrl::DoInsertItem(unsigned int idx, int order)
 {
     const wxHeaderColumnBase& col = GetColumn(idx);
 
@@ -249,10 +253,36 @@ void wxHeaderCtrl::DoInsertItem(unsigned int idx)
         hdi.cxy = col.IsHidden() ? 0 : col.GetWidth();
     }
 
+    if ( order != -1 )
+    {
+        hdi.mask |= HDI_ORDER;
+        hdi.iOrder = order;
+    }
+
     if ( ::SendMessage(GetHwnd(), HDM_INSERTITEM, idx, (LPARAM)&hdi) == -1 )
     {
         wxLogLastError(_T("Header_InsertItem()"));
     }
+}
+
+void wxHeaderCtrl::DoSetColumnsOrder(const wxArrayInt& order)
+{
+    if ( !Header_SetOrderArray(GetHwnd(), order.size(), &order[0]) )
+    {
+        wxLogLastError(_T("Header_GetOrderArray"));
+    }
+}
+
+wxArrayInt wxHeaderCtrl::DoGetColumnsOrder() const
+{
+    const unsigned count = GetColumnCount();
+    wxArrayInt order(count);
+    if ( !Header_GetOrderArray(GetHwnd(), count, &order[0]) )
+    {
+        wxLogLastError(_T("Header_GetOrderArray"));
+    }
+
+    return order;
 }
 
 // ----------------------------------------------------------------------------
@@ -294,7 +324,9 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     wxEventType evtType = wxEVT_NULL;
     int idx = nmhdr->iItem;
     int width = 0;
+    int order = -1;
     bool cancelled = false;
+    bool veto = false;
     const UINT code = nmhdr->hdr.code;
     switch ( code )
     {
@@ -336,9 +368,8 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             // even generate any events for them
             if ( !GetColumn(idx).IsResizeable() )
             {
-                *result = TRUE;
-
-                return true;
+                veto = true;
+                break;
             }
 
             evtType = wxEVT_COMMAND_HEADER_BEGIN_RESIZE;
@@ -370,12 +401,34 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             {
                 // prevent the column from being shrunk beneath its min width
                 if ( nmhdr->pitem->cxy < GetColumn(idx).GetMinWidth() )
-                {
-                    *result = TRUE;
-
-                    return true;
-                }
+                    veto = true;
             }
+            break;
+
+
+        // column reordering events
+        // ------------------------
+
+        case HDN_BEGINDRAG:
+            // Windows sometimes sends us events with invalid column indices
+            if ( idx == -1 )
+                break;
+
+            // column must have the appropriate flag to be draggable
+            if ( !GetColumn(idx).IsReorderable() )
+            {
+                veto = true;
+                break;
+            }
+
+            evtType = wxEVT_COMMAND_HEADER_BEGIN_REORDER;
+            break;
+
+        case HDN_ENDDRAG:
+            evtType = wxEVT_COMMAND_HEADER_END_REORDER;
+
+            wxASSERT_MSG( nmhdr->pitem->mask & HDI_ORDER, "should have order" );
+            order = nmhdr->pitem->iOrder;
             break;
 
         case NM_RELEASEDCAPTURE:
@@ -391,21 +444,30 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         event.SetEventObject(this);
         event.SetColumn(idx);
         event.SetWidth(width);
+        if ( order != -1 )
+            event.SetNewOrder(order);
         if ( cancelled )
             event.SetCancelled();
 
         if ( GetEventHandler()->ProcessEvent(event) )
         {
-            if ( !event.IsAllowed() )
-            {
-                // all of HDN_BEGIN{DRAG,TRACK}, HDN_TRACK and HDN_ITEMCHANGING
-                // interpret TRUE return value as meaning to stop the control
-                // default handling of the message
-                *result = TRUE;
-            }
+            if ( event.IsAllowed() )
+                return true;
 
-            return true;
+            // we need to veto the default handling of this message, don't
+            // return to execute the code in the "if veto" branch below
+            veto = true;
         }
+    }
+
+    if ( veto )
+    {
+        // all of HDN_BEGIN{DRAG,TRACK}, HDN_TRACK and HDN_ITEMCHANGING
+        // interpret TRUE return value as meaning to stop the control
+        // default handling of the message
+        *result = TRUE;
+
+        return true;
     }
 
     return wxHeaderCtrlBase::MSWOnNotify(idCtrl, lParam, result);

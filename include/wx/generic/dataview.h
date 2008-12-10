@@ -485,6 +485,12 @@ public:     // utility functions not part of the API
 
     wxWindow *GetMainWindow() { return (wxWindow*) m_clientArea; }
 
+    // return the index of the given column in m_cols
+    int GetColumnIndex(const wxDataViewColumn *column) const;
+
+    // return the column displayed at the given position in the control
+    wxDataViewColumn *GetColumnAt(unsigned int pos) const;
+
 private:
     wxDataViewColumnList      m_cols;
     wxDataViewModelNotifier  *m_notifier;

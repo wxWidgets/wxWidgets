@@ -13,6 +13,7 @@
 
 #include "wx/control.h"
 
+#include "wx/dynarray.h"
 #include "wx/vector.h"
 
 #include "wx/headercol.h"
@@ -85,6 +86,18 @@ public:
         DoUpdate(idx);
     }
 
+    // set the columns order: the array defines the column index which appears
+    // the given position, it must have GetColumnCount() elements and contain
+    // all indices exactly once
+    void SetColumnsOrder(const wxArrayInt& order);
+    wxArrayInt GetColumnsOrder() const;
+
+    // get the index of the column at the given display position
+    unsigned int GetColumnAt(unsigned int pos) const;
+
+    // get the position at which this column is currently displayed
+    unsigned int GetColumnPos(unsigned int idx) const;
+
 
     // implementation only from now on
     // -------------------------------
@@ -119,6 +132,9 @@ private:
     virtual void DoUpdate(unsigned int idx) = 0;
 
     virtual void DoScrollHorz(int dx) = 0;
+
+    virtual void DoSetColumnsOrder(const wxArrayInt& order) = 0;
+    virtual wxArrayInt DoGetColumnsOrder() const = 0;
 
     // this window doesn't look nice with the border so don't use it by default
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
@@ -272,6 +288,7 @@ public:
         : wxNotifyEvent(commandType, winid),
           m_col(-1),
           m_width(0),
+          m_order(static_cast<unsigned int>(-1)),
           m_cancelled(false)
     {
     }
@@ -280,6 +297,7 @@ public:
         : wxNotifyEvent(event),
           m_col(event.m_col),
           m_width(event.m_width),
+          m_order(event.m_order),
           m_cancelled(event.m_cancelled)
     {
     }
@@ -291,6 +309,10 @@ public:
     // the width of the column: valid for column resizing/dragging events only
     int GetWidth() const { return m_width; }
     void SetWidth(int width) { m_width = width; }
+
+    // the new position of the column: for end reorder events only
+    unsigned int GetNewOrder() const { return m_order; }
+    void SetNewOrder(unsigned int order) { m_order = order; }
 
     // was the drag operation cancelled or did it complete successfully?
     bool IsCancelled() const { return m_cancelled; }
@@ -304,6 +326,9 @@ protected:
 
     // the current width for the dragging events
     int m_width;
+
+    // the new column position for end reorder event
+    unsigned int m_order;
 
     // was the drag operation cancelled?
     bool m_cancelled;
@@ -327,6 +352,9 @@ extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_HEADER_BEGIN_RESIZE;
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_HEADER_RESIZING;
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_HEADER_END_RESIZE;
 
+extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_HEADER_BEGIN_REORDER;
+extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_HEADER_END_REORDER;
+
 typedef void (wxEvtHandler::*wxHeaderCtrlEventFunction)(wxHeaderCtrlEvent&);
 
 #define wxHeaderCtrlEventHandler(func) \
@@ -349,5 +377,8 @@ typedef void (wxEvtHandler::*wxHeaderCtrlEventFunction)(wxHeaderCtrlEvent&);
 #define EVT_HEADER_BEGIN_RESIZE(id, fn) wx__DECLARE_HEADER_EVT(BEGIN_RESIZE, id, fn)
 #define EVT_HEADER_RESIZING(id, fn) wx__DECLARE_HEADER_EVT(RESIZING, id, fn)
 #define EVT_HEADER_END_RESIZE(id, fn) wx__DECLARE_HEADER_EVT(END_RESIZE, id, fn)
+
+#define EVT_HEADER_BEGIN_REORDER(id, fn) wx__DECLARE_HEADER_EVT(BEGIN_REORDER, id, fn)
+#define EVT_HEADER_END_REORDER(id, fn) wx__DECLARE_HEADER_EVT(END_REORDER, id, fn)
 
 #endif // _WX_HEADERCTRL_H_

@@ -86,6 +86,20 @@
             or the resizing was cancelled. If wxHeaderCtrlEvent::IsCancelled()
             returns @true, nothing should be done, otherwise the column should
             normally be resized to the value of wxHeaderCtrlEvent::GetWidth().
+
+        @event{EVT_HEADER_BEGIN_REORDER(id, func)}
+            The user started to drag the column with the specified index (this
+            can only happen for the controls with wxHD_DRAGDROP style). This
+            event can be vetoed to prevent the column from being reordered,
+            otherwise the end reorder message will be generated later.
+        @event{EVT_HEADER_END_REORDER(id, func)}
+            Either the user dropped the column in its new location or the
+            drag operation was cancelled. If wxHeaderCtrlEvent::IsCancelled()
+            returns @true, nothing should be done, otherwise the event can be
+            vetoed to prevent the column from being placed at the new position
+            or handled to update the display of the data in the associated
+            control to match the new column location (available from
+            wxHeaderCtrlEvent::GetNewOrder()).
     @endEventTable
 
     @library{wxcore}
@@ -194,6 +208,62 @@ public:
             The column index, must be less than GetColumnCount().
      */
     void UpdateColumn(unsigned int idx);
+
+    /**
+        Change the columns display order.
+
+        The display order defines the order in which the columns appear on the
+        screen and does @em not affect the interpretation of indices by all the
+        other class methods.
+
+        The @a order array specifies the column indices corresponding to the
+        display positions.
+
+        @param order
+            A permutation of all column indices, i.e. an array of size
+            GetColumnsOrder() containing all column indices exactly once. The
+            n-th element of this array defines the index of the column shown at
+            the n-th position from left (for the default left-to-right writing
+            direction).
+
+        @see wxListCtrl::SetColumnsOrder()
+     */
+    void SetColumnsOrder(const wxArrayInt& order);
+
+    /**
+        Return the array describing the columns display order.
+
+        For the controls without wxHD_DRAGDROP style the returned array will be
+        the same as was passed to SetColumnsOrder() previously or define the
+        default order (with n-th element being n) if it hadn't been called. But
+        for the controls with wxHD_DRAGDROP style, the columns can be also
+        reordered by user.
+     */
+    wxArrayInt GetColumnsOrder() const;
+
+    /**
+        Return the index of the column displayed at the given position.
+
+        @param pos
+            The display position, e.g. 0 for the left-most column, 1 for the
+            next one and so on until GetColumnCount() - 1.
+
+        @see GetColumnPos()
+     */
+    unsigned int GetColumnAt(unsigned int pos) const;
+
+    /**
+        Get the position at which this column is currently displayed.
+
+        Notice that a valid position is returned even for the hidden columns
+        currently.
+
+        @param idx
+            The column index, must be less than GetColumnCount().
+
+        @see GetColumnAt()
+     */
+    unsigned int GetColumnPos(unsigned int idx) const;
 
 protected:
     /**
@@ -429,6 +499,16 @@ public:
         This method can only be called for the dragging events.
      */
     int GetWidth() const;
+
+    /**
+        Return the new order of the column.
+
+        This method can only be called for end reorder event for which it
+        indicates the tentative new position for the column GetColumn()
+        selected by the user. If the event is not vetoed, this will become the
+        new column position in wxHeaderCtrl::GetColumnsOrder().
+     */
+    unsigned int GetNewOrder() const;
 
     /**
         Return @true if the drag operation was cancelled.

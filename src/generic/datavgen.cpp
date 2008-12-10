@@ -184,6 +184,13 @@ private:
         }
     }
 
+    void OnEndReorder(wxHeaderCtrlEvent& event)
+    {
+        wxDataViewCtrl * const owner = GetOwner();
+        owner->ColumnMoved(owner->GetColumn(event.GetColumn()),
+                           event.GetNewOrder());
+    }
+
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxDataViewHeaderWindow)
 };
@@ -193,6 +200,8 @@ BEGIN_EVENT_TABLE(wxDataViewHeaderWindow, wxHeaderCtrl)
     EVT_HEADER_RIGHT_CLICK(wxID_ANY, wxDataViewHeaderWindow::OnRClick)
 
     EVT_HEADER_END_RESIZE(wxID_ANY, wxDataViewHeaderWindow::OnEndResize)
+
+    EVT_HEADER_END_REORDER(wxID_ANY, wxDataViewHeaderWindow::OnEndReorder)
 END_EVENT_TABLE()
 
 //-----------------------------------------------------------------------------
@@ -1227,7 +1236,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     unsigned int x_start;
     for (x_start = 0; col_start < cols; col_start++)
     {
-        wxDataViewColumn *col = GetOwner()->GetColumn(col_start);
+        wxDataViewColumn *col = GetOwner()->GetColumnAt(col_start);
         if (col->IsHidden())
             continue;      // skip it!
 
@@ -1242,7 +1251,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     unsigned int x_last = x_start;
     for (; col_last < cols; col_last++)
     {
-        wxDataViewColumn *col = GetOwner()->GetColumn(col_last);
+        wxDataViewColumn *col = GetOwner()->GetColumnAt(col_last);
         if (col->IsHidden())
             continue;      // skip it!
 
@@ -1274,7 +1283,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         int x = x_start;
         for (unsigned int i = col_start; i < col_last; i++)
         {
-            wxDataViewColumn *col = GetOwner()->GetColumn(i);
+            wxDataViewColumn *col = GetOwner()->GetColumnAt(i);
             if (col->IsHidden())
                 continue;       // skip it
 
@@ -1315,8 +1324,8 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     wxDataViewColumn *expander = GetOwner()->GetExpanderColumn();
     if (!expander)
     {
-        // TODO: last column for RTL support
-        expander = GetOwner()->GetColumn( 0 );
+        // TODO-RTL: last column for RTL support
+        expander = GetOwner()->GetColumnAt( 0 );
         GetOwner()->SetExpanderColumn(expander);
     }
 
@@ -1326,7 +1335,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     for (unsigned int i = col_start; i < col_last; i++)
     {
 
-        wxDataViewColumn *col = GetOwner()->GetColumn( i );
+        wxDataViewColumn *col = GetOwner()->GetColumnAt( i );
         wxDataViewRenderer *cell = col->GetRenderer();
         cell_rect.width = col->GetWidth();
 
@@ -1476,7 +1485,7 @@ void wxDataViewMainWindow::OnRenameTimer()
     unsigned int i;
     for (i = 0; i < cols; i++)
     {
-        wxDataViewColumn *c = GetOwner()->GetColumn( i );
+        wxDataViewColumn *c = GetOwner()->GetColumnAt( i );
         if (c->IsHidden())
             continue;      // skip it!
 
@@ -1787,7 +1796,7 @@ void wxDataViewMainWindow::ScrollTo( int rows, int column )
         m_owner->CalcUnscrolledPosition( rect.x, rect.y, &xx, &yy );
         for (x_start = 0; colnum < column; colnum++)
         {
-            wxDataViewColumn *col = GetOwner()->GetColumn(colnum);
+            wxDataViewColumn *col = GetOwner()->GetColumnAt(colnum);
             if (col->IsHidden())
                 continue;      // skip it!
 
@@ -1822,7 +1831,7 @@ int wxDataViewMainWindow::GetEndOfLastCol() const
     for (i = 0; i < GetOwner()->GetColumnCount(); i++)
     {
         const wxDataViewColumn *c =
-            const_cast<wxDataViewCtrl*>(GetOwner())->GetColumn( i );
+            const_cast<wxDataViewCtrl*>(GetOwner())->GetColumnAt( i );
 
         if (!c->IsHidden())
             width += c->GetWidth();
@@ -2549,7 +2558,7 @@ void wxDataViewMainWindow::HitTest( const wxPoint & point, wxDataViewItem & item
     m_owner->CalcUnscrolledPosition( point.x, point.y, &x, &y );
     for (unsigned x_start = 0; colnum < cols; colnum++)
     {
-        col = GetOwner()->GetColumn(colnum);
+        col = GetOwner()->GetColumnAt(colnum);
         if (col->IsHidden())
             continue;      // skip it!
 
@@ -2573,9 +2582,9 @@ wxRect wxDataViewMainWindow::GetItemRect( const wxDataViewItem & item, const wxD
     wxDataViewColumn *col = NULL;
     for( int i = 0, cols = GetOwner()->GetColumnCount(); i < cols; i ++ )
     {
-       col = GetOwner()->GetColumn( i );
+       col = GetOwner()->GetColumnAt( i );
        x += col->GetWidth();
-       if( GetOwner()->GetColumn(i+1) == column )
+       if( GetOwner()->GetColumnAt(i+1) == column )
            break;
     }
     int w = col->GetWidth();
@@ -2864,7 +2873,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
     unsigned int i;
     for (i = 0; i < cols; i++)
     {
-        wxDataViewColumn *c = GetOwner()->GetColumn( i );
+        wxDataViewColumn *c = GetOwner()->GetColumnAt( i );
         if (c->IsHidden())
             continue;      // skip it!
 
@@ -3399,16 +3408,34 @@ wxDataViewColumn* wxDataViewCtrl::GetColumn( unsigned int idx ) const
     return m_cols[idx];
 }
 
-void wxDataViewCtrl::ColumnMoved( wxDataViewColumn* col, unsigned int new_pos )
+wxDataViewColumn *wxDataViewCtrl::GetColumnAt(unsigned int pos) const
 {
-    if (new_pos > m_cols.GetCount()) return;
+    // columns can't be reordered if there is no header window which allows
+    // to do this
+    const unsigned idx = m_headerArea ? m_headerArea->GetColumnsOrder()[pos]
+                                      : pos;
 
-    // Exchange position
-    m_cols.DeleteContents(false);
-    m_cols.DeleteObject( col );
-    m_cols.Insert( new_pos, col );
-    m_cols.DeleteContents(true);
+    return GetColumn(idx);
+}
 
+int wxDataViewCtrl::GetColumnIndex(const wxDataViewColumn *column) const
+{
+    const unsigned count = m_cols.size();
+    for ( unsigned n = 0; n < count; n++ )
+    {
+        if ( m_cols[n] == column )
+            return n;
+    }
+
+    return wxNOT_FOUND;
+}
+
+void wxDataViewCtrl::ColumnMoved(wxDataViewColumn * WXUNUSED(col),
+                                 unsigned int WXUNUSED(new_pos))
+{
+    // do _not_ reorder m_cols elements here, they should always be in the
+    // order in which columns were added, we only display the columns in
+    // different order
     m_clientArea->UpdateDisplay();
 }
 
@@ -3433,17 +3460,18 @@ bool wxDataViewCtrl::ClearColumns()
 
 int wxDataViewCtrl::GetColumnPosition( const wxDataViewColumn *column ) const
 {
-    int ret = 0, dead = 0;
-    int len = GetColumnCount();
-    for (int i=0; i<len; i++)
+    int ret = 0,
+        dummy = 0;
+    unsigned int len = GetColumnCount();
+    for ( unsigned int i = 0; i < len; i++ )
     {
-        wxDataViewColumn * col = GetColumn(i);
+        wxDataViewColumn * col = GetColumnAt(i);
         if (col->IsHidden())
             continue;
         ret += col->GetWidth();
         if (column==col)
         {
-            CalcScrolledPosition( ret, dead, &ret, &dead );
+            CalcScrolledPosition( ret, dummy, &ret, &dummy );
             break;
         }
     }
@@ -3619,17 +3647,7 @@ void wxDataViewCtrl::EnsureVisible( const wxDataViewItem & item, const wxDataVie
         if( column == NULL )
             EnsureVisible(row, -1);
         else
-        {
-            int col = 0;
-            int len = GetColumnCount();
-            for( int i = 0; i < len; i ++ )
-                if( GetColumn(i) == column )
-                {
-                    col = i;
-                    break;
-                }
-            EnsureVisible( row, col );
-        }
+            EnsureVisible( row, GetColumnIndex(column) );
     }
 
 }

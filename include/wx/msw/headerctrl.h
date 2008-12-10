@@ -55,6 +55,9 @@ private:
 
     virtual void DoScrollHorz(int dx);
 
+    virtual void DoSetColumnsOrder(const wxArrayInt& order);
+    virtual wxArrayInt DoGetColumnsOrder() const;
+
     // override wxWindow methods which must be implemented by a new control
     virtual wxSize DoGetBestSize() const;
 
@@ -66,8 +69,8 @@ private:
     void Init();
 
     // wrapper around Header_InsertItem(): insert the item by using information
-    // from GetColumn(idx)
-    void DoInsertItem(unsigned int idx);
+    // from GetColumn(idx) and at the given display position if order != -1
+    void DoInsertItem(unsigned int idx, int order);
 
     // get the event type corresponding to a click or double click event
     // (depending on dblclk value) with the specified (using MSW convention)

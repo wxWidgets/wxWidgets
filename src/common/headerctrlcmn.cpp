@@ -64,6 +64,10 @@ void wxHeaderCtrlBase::ScrollWindow(int dx,
     DoScrollHorz(dx);
 }
 
+// ----------------------------------------------------------------------------
+// wxHeaderCtrlBase event handling
+// ----------------------------------------------------------------------------
+
 void wxHeaderCtrlBase::OnSeparatorDClick(wxHeaderCtrlEvent& event)
 {
     const unsigned col = event.GetColumn();
@@ -75,6 +79,65 @@ void wxHeaderCtrlBase::OnSeparatorDClick(wxHeaderCtrlEvent& event)
         event.Skip();
     else
         UpdateColumn(col);
+}
+
+// ----------------------------------------------------------------------------
+// wxHeaderCtrlBase column reordering
+// ----------------------------------------------------------------------------
+
+void wxHeaderCtrlBase::SetColumnsOrder(const wxArrayInt& order)
+{
+    const unsigned count = GetColumnCount();
+    wxCHECK_RET( order.size() == count, "wrong number of columns" );
+
+    // check the array validity
+    wxArrayInt seen(count, 0);
+    for ( unsigned n = 0; n < count; n++ )
+    {
+        const unsigned idx = order[n];
+        wxCHECK_RET( idx < count, "invalid column index" );
+        wxCHECK_RET( !seen[idx], "duplicate column index" );
+
+        seen[idx] = 1;
+    }
+
+    DoSetColumnsOrder(order);
+
+    // TODO-RTL: do we need to reverse the array?
+}
+
+wxArrayInt wxHeaderCtrlBase::GetColumnsOrder() const
+{
+    const wxArrayInt order = DoGetColumnsOrder();
+
+    wxASSERT_MSG( order.size() == GetColumnCount(), "invalid order array" );
+
+    return order;
+}
+
+unsigned int wxHeaderCtrlBase::GetColumnAt(unsigned int pos) const
+{
+    wxCHECK_MSG( pos < GetColumnCount(), wxNO_COLUMN, "invalid position" );
+
+    return GetColumnsOrder()[pos];
+}
+
+unsigned int wxHeaderCtrlBase::GetColumnPos(unsigned int idx) const
+{
+    const unsigned count = GetColumnCount();
+
+    wxCHECK_MSG( idx < count, wxNO_COLUMN, "invalid index" );
+
+    const wxArrayInt order = GetColumnsOrder();
+    for ( unsigned n = 0; n < count; n++ )
+    {
+        if ( (unsigned)order[n] == idx )
+            return n;
+    }
+
+    wxFAIL_MSG( "column unexpectedly not displayed at all" );
+
+    return wxNO_COLUMN;
 }
 
 // ============================================================================
@@ -181,3 +244,6 @@ const wxEventType wxEVT_COMMAND_HEADER_SEPARATOR_DCLICK = wxNewEventType();
 const wxEventType wxEVT_COMMAND_HEADER_BEGIN_RESIZE = wxNewEventType();
 const wxEventType wxEVT_COMMAND_HEADER_RESIZING = wxNewEventType();
 const wxEventType wxEVT_COMMAND_HEADER_END_RESIZE = wxNewEventType();
+
+const wxEventType wxEVT_COMMAND_HEADER_BEGIN_REORDER = wxNewEventType();
+const wxEventType wxEVT_COMMAND_HEADER_END_REORDER = wxNewEventType();
