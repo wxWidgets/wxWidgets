@@ -91,6 +91,7 @@ wxHeaderCtrl::~wxHeaderCtrl()
 void wxHeaderCtrl::DoSetCount(unsigned int count)
 {
     m_numColumns = count;
+    m_colIndices.resize(count);
 
     Refresh();
 }
@@ -318,6 +319,21 @@ void wxHeaderCtrl::EndResizing(int xPhysical)
     GetEventHandler()->ProcessEvent(event);
 
     m_colBeingResized = COL_NONE;
+}
+
+// ----------------------------------------------------------------------------
+// wxHeaderCtrl column reordering
+// ----------------------------------------------------------------------------
+
+void wxHeaderCtrl::DoSetColumnsOrder(const wxArrayInt& order)
+{
+    m_colIndices = order;
+    Refresh();
+}
+
+wxArrayInt wxHeaderCtrl::DoGetColumnsOrder() const
+{
+    return m_colIndices;
 }
 
 // ----------------------------------------------------------------------------

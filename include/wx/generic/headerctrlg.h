@@ -56,6 +56,9 @@ private:
 
     virtual void DoScrollHorz(int dx);
 
+    virtual void DoSetColumnsOrder(const wxArrayInt& order);
+    virtual wxArrayInt DoGetColumnsOrder() const;
+
     // override wxWindow methods which must be implemented by a new control
     virtual wxSize DoGetBestSize() const;
 
@@ -128,6 +131,10 @@ private:
 
     // the overlay display used during the dragging operations
     wxOverlay m_overlay;
+
+    // the indices of the column appearing at the given position on the display
+    // (its size is always m_numColumns)
+    wxArrayInt m_colIndices;
 
 
     DECLARE_EVENT_TABLE()
