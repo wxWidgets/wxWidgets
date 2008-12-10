@@ -606,15 +606,24 @@ public:
         Returns the value that specifies how the sizer grows in the "non-flexible"
         direction if there is one.
 
+        The behaviour of the elements in the flexible direction (i.e. both rows
+        and columns by default, or rows only if GetFlexibleDirection() is @c
+        wxVERTICAL or columns only if it is @c wxHORIZONTAL) is always governed
+        by their proportion as specified in the call to AddGrowableRow() or
+        AddGrowableCol(). What happens in the other direction depends on the
+        value of returned by this function as described below.
+
         @return
             One of the following values:
-            - wxFLEX_GROWMODE_NONE: Sizer doesn't grow in the non-flexible direction.
-            - wxFLEX_GROWMODE_SPECIFIED: Sizer honors growable columns/rows set with
-              AddGrowableCol() and AddGrowableRow(). In this case equal sizing applies
-              to minimum sizes of columns or rows (this is the default value).
+            - wxFLEX_GROWMODE_NONE: Sizer doesn't grow its elements at all in
+              the non-flexible direction.
+            - wxFLEX_GROWMODE_SPECIFIED: Sizer honors growable columns/rows set
+              with AddGrowableCol() and AddGrowableRow() in the non-flexible
+              direction as well. In this case equal sizing applies to minimum
+              sizes of columns or rows (this is the default value).
             - wxFLEX_GROWMODE_ALL: Sizer equally stretches all columns or rows in
-              the non-flexible direction, whether they are growable or not in the
-              flexible direction.
+              the non-flexible direction, independently of the proportions
+              applied in the flexible direction.
 
         @see SetFlexibleDirection(), SetNonFlexibleGrowMode()
     */
