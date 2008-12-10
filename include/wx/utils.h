@@ -74,8 +74,17 @@ class WXDLLIMPEXP_FWD_CORE wxWindowList;
 // String functions (deprecated, use wxString)
 // ----------------------------------------------------------------------------
 
+#ifdef WXWIN_COMPATIBILITY_2_8
 // A shorter way of using strcmp
-#define wxStringEq(s1, s2) (s1 && s2 && (wxStrcmp(s1, s2) == 0))
+wxDEPRECATED_INLINE(inline bool wxStringEq(const char *s1, const char *s2),
+    return wxCRT_StrcmpA(s1, s2) == 0; )
+
+#if wxUSE_UNICODE
+wxDEPRECATED_INLINE(inline bool wxStringEq(const wchar_t *s1, const wchar_t *s2),
+    return wxCRT_StrcmpW(s1, s2) == 0; )
+#endif // wxUSE_UNICODE
+
+#endif // WXWIN_COMPATIBILITY_2_8
 
 // ----------------------------------------------------------------------------
 // Miscellaneous functions
