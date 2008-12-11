@@ -58,7 +58,9 @@ void wxHeaderCtrl::Init()
 {
     m_numColumns = 0;
     m_hover =
-    m_colBeingResized = COL_NONE;
+    m_colBeingResized =
+    m_colBeingReordered = COL_NONE;
+    m_dragOffset = 0;
     m_scrollOffset = 0;
 }
 
@@ -152,7 +154,9 @@ wxSize wxHeaderCtrl::DoGetBestSize() const
 {
     // the vertical size is rather arbitrary but it looks better if we leave
     // some space around the text
-    return wxSize(GetColStart(GetColumnCount()), (7*GetCharHeight())/4);
+    return wxSize(IsEmpty() ? DEFAULT_ITEM_WIDTH
+                            : GetColEnd(GetColumnCount() - 1),
+                  (7*GetCharHeight())/4);
 }
 
 int wxHeaderCtrl::GetColStart(unsigned int idx) const
@@ -160,9 +164,13 @@ int wxHeaderCtrl::GetColStart(unsigned int idx) const
     wxHeaderCtrl * const self = const_cast<wxHeaderCtrl *>(this);
 
     int pos = m_scrollOffset;
-    for ( unsigned n = 0; n < idx; n++ )
+    for ( unsigned n = 0; ; n++ )
     {
-        const wxHeaderColumnBase& col = self->GetColumn(m_colIndices[n]);
+        const unsigned i = m_colIndices[n];
+        if ( i == idx )
+            break;
+
+        const wxHeaderColumnBase& col = self->GetColumn(i);
         if ( col.IsShown() )
             pos += col.GetWidth();
     }
@@ -170,7 +178,14 @@ int wxHeaderCtrl::GetColStart(unsigned int idx) const
     return pos;
 }
 
-int wxHeaderCtrl::FindColumnAtPoint(int x, bool& onSeparator) const
+int wxHeaderCtrl::GetColEnd(unsigned int idx) const
+{
+    int x = GetColStart(idx);
+
+    return x + const_cast<wxHeaderCtrl *>(this)->GetColumn(idx).GetWidth();
+}
+
+unsigned int wxHeaderCtrl::FindColumnAtPoint(int x, bool *onSeparator) const
 {
     wxHeaderCtrl * const self = const_cast<wxHeaderCtrl *>(this);
 
@@ -178,7 +193,8 @@ int wxHeaderCtrl::FindColumnAtPoint(int x, bool& onSeparator) const
     const unsigned count = GetColumnCount();
     for ( unsigned n = 0; n < count; n++ )
     {
-        const wxHeaderColumnBase& col = self->GetColumn(m_colIndices[n]);
+        const unsigned idx = m_colIndices[n];
+        const wxHeaderColumnBase& col = self->GetColumn(idx);
         if ( col.IsHidden() )
             continue;
 
@@ -190,15 +206,17 @@ int wxHeaderCtrl::FindColumnAtPoint(int x, bool& onSeparator) const
         // TODO: don't hardcode sensitivity
         if ( col.IsResizeable() && abs(x - pos) < 8 )
         {
-            onSeparator = true;
-            return n;
+            if ( onSeparator )
+                *onSeparator = true;
+            return idx;
         }
 
         // inside this column?
         if ( x < pos )
         {
-            onSeparator = false;
-            return GetColumnAt(n);
+            if ( onSeparator )
+                *onSeparator = false;
+            return idx;
         }
     }
 
@@ -235,7 +253,7 @@ void wxHeaderCtrl::RefreshColsAfter(unsigned int idx)
 }
 
 // ----------------------------------------------------------------------------
-// wxHeaderCtrl dragging
+// wxHeaderCtrl dragging/resizing/reordering
 // ----------------------------------------------------------------------------
 
 bool wxHeaderCtrl::IsResizing() const
@@ -243,32 +261,60 @@ bool wxHeaderCtrl::IsResizing() const
     return m_colBeingResized != COL_NONE;
 }
 
+bool wxHeaderCtrl::IsReordering() const
+{
+    return m_colBeingReordered != COL_NONE;
+}
+
+void wxHeaderCtrl::ClearMarkers()
+{
+    wxClientDC dc(this);
+
+    wxDCOverlay dcover(m_overlay, &dc);
+    dcover.Clear();
+}
+
 void wxHeaderCtrl::UpdateResizingMarker(int xPhysical)
 {
-    // unfortunately drawing the marker over the parent window doesn't work as
-    // it's usually covered by another window (the main control view) so just
-    // draw the marker over the header itself, even if it makes it not very
-    // useful
     wxClientDC dc(this);
 
     wxDCOverlay dcover(m_overlay, &dc);
     dcover.Clear();
 
-    if ( xPhysical != -1 )
-    {
-        dc.SetPen(*wxLIGHT_GREY_PEN);
-        dc.DrawLine(xPhysical, 0, xPhysical, GetClientSize().y);
-    }
+    // unfortunately drawing the marker over the parent window doesn't work as
+    // it's usually covered by another window (the main control view) so just
+    // draw the marker over the header itself, even if it makes it not very
+    // useful
+    dc.SetPen(*wxLIGHT_GREY_PEN);
+    dc.DrawLine(xPhysical, 0, xPhysical, GetClientSize().y);
 }
 
 void wxHeaderCtrl::EndDragging()
 {
-    UpdateResizingMarker(-1);
+    ClearMarkers();
 
     m_overlay.Reset();
 
     // don't use the special dragging cursor any more
     SetCursor(wxNullCursor);
+}
+
+void wxHeaderCtrl::CancelDragging()
+{
+    wxASSERT_MSG( IsDragging(),
+                  "shouldn't be called if we're not dragging anything" );
+
+    EndDragging();
+
+    unsigned int& col = IsResizing() ? m_colBeingResized : m_colBeingReordered;
+
+    wxHeaderCtrlEvent event(wxEVT_COMMAND_HEADER_DRAGGING_CANCELLED, GetId());
+    event.SetEventObject(this);
+    event.SetColumn(col);
+
+    GetEventHandler()->ProcessEvent(event);
+
+    col = COL_NONE;
 }
 
 int wxHeaderCtrl::ConstrainByMinWidth(unsigned int col, int& xPhysical)
@@ -300,7 +346,7 @@ void wxHeaderCtrl::StartOrContinueResizing(unsigned int col, int xPhysical)
         if ( IsResizing() )
         {
             ReleaseMouse();
-            EndResizing(-1);
+            CancelDragging();
         }
         //else: nothing to do -- we just don't start to resize
     }
@@ -324,24 +370,90 @@ void wxHeaderCtrl::EndResizing(int xPhysical)
 
     EndDragging();
 
-    const bool cancelled = xPhysical == -1;
+    ReleaseMouse();
 
-    // if dragging was cancelled we must have already lost the mouse capture so
-    // don't try to release it
-    if ( !cancelled )
-        ReleaseMouse();
-
-    wxHeaderCtrlEvent event(cancelled ? wxEVT_COMMAND_HEADER_DRAGGING_CANCELLED
-                                      : wxEVT_COMMAND_HEADER_END_RESIZE,
-                            GetId());
+    wxHeaderCtrlEvent event(wxEVT_COMMAND_HEADER_END_RESIZE, GetId());
     event.SetEventObject(this);
     event.SetColumn(m_colBeingResized);
-    if ( !cancelled )
-        event.SetWidth(ConstrainByMinWidth(m_colBeingResized, xPhysical));
+    event.SetWidth(ConstrainByMinWidth(m_colBeingResized, xPhysical));
 
     GetEventHandler()->ProcessEvent(event);
 
     m_colBeingResized = COL_NONE;
+}
+
+void wxHeaderCtrl::UpdateReorderingMarker(int xPhysical)
+{
+    wxClientDC dc(this);
+
+    wxDCOverlay dcover(m_overlay, &dc);
+    dcover.Clear();
+
+    dc.SetPen(*wxBLUE);
+    dc.SetBrush(*wxTRANSPARENT_BRUSH);
+
+    // draw the phantom position of the column being dragged
+    int x = xPhysical - m_dragOffset;
+    int y = GetClientSize().y;
+    dc.DrawRectangle(x, 0,
+                     GetColumn(m_colBeingReordered).GetWidth(), y);
+
+    // and also a hint indicating where it is going to be inserted if it's
+    // dropped now
+    unsigned int col = FindColumnAtPoint(xPhysical);
+    if ( col != COL_NONE )
+    {
+        static const int DROP_MARKER_WIDTH = 4;
+
+        dc.SetBrush(*wxBLUE);
+        dc.DrawRectangle(GetColEnd(col) - DROP_MARKER_WIDTH/2, 0,
+                         DROP_MARKER_WIDTH, y);
+    }
+}
+
+void wxHeaderCtrl::StartReordering(unsigned int col, int xPhysical)
+{
+    wxHeaderCtrlEvent event(wxEVT_COMMAND_HEADER_BEGIN_REORDER, GetId());
+    event.SetEventObject(this);
+    event.SetColumn(col);
+
+    if ( GetEventHandler()->ProcessEvent(event) && !event.IsAllowed() )
+    {
+        // don't start dragging it, nothing to do otherwise
+        return;
+    }
+
+    m_dragOffset = xPhysical - GetColStart(col);
+
+    m_colBeingReordered = col;
+    SetCursor(wxCursor(wxCURSOR_HAND));
+    CaptureMouse();
+
+    UpdateReorderingMarker(xPhysical);
+}
+
+void wxHeaderCtrl::EndReordering(int xPhysical)
+{
+    wxASSERT_MSG( IsReordering(), "shouldn't be called if we're not reordering" );
+
+    EndDragging();
+
+    ReleaseMouse();
+
+    wxHeaderCtrlEvent event(wxEVT_COMMAND_HEADER_END_REORDER, GetId());
+    event.SetEventObject(this);
+    event.SetColumn(m_colBeingReordered);
+
+    const unsigned pos = GetColumnPos(FindColumnAtPoint(xPhysical));
+    event.SetNewOrder(pos);
+
+    if ( !GetEventHandler()->ProcessEvent(event) || event.IsAllowed() )
+    {
+        // do reorder the columns
+        DoMoveCol(m_colBeingReordered, pos);
+    }
+
+    m_colBeingReordered = COL_NONE;
 }
 
 // ----------------------------------------------------------------------------
@@ -357,6 +469,34 @@ void wxHeaderCtrl::DoSetColumnsOrder(const wxArrayInt& order)
 wxArrayInt wxHeaderCtrl::DoGetColumnsOrder() const
 {
     return m_colIndices;
+}
+
+void wxHeaderCtrl::DoMoveCol(unsigned int idx, unsigned int pos)
+{
+    const unsigned count = m_colIndices.size();
+
+    wxArrayInt colIndices;
+    colIndices.reserve(count);
+    for ( unsigned n = 0; n < count; n++ )
+    {
+        // NB: order of checks is important for this to work when the new
+        //     column position is the same as the old one
+
+        // insert the column at its new position
+        if ( colIndices.size() == pos )
+            colIndices.push_back(idx);
+
+        // delete the column from its old position
+        const unsigned idxOld = m_colIndices[n];
+        if ( idxOld == idx )
+            continue;
+
+        colIndices.push_back(idxOld);
+    }
+
+    m_colIndices = colIndices;
+
+    Refresh();
 }
 
 // ----------------------------------------------------------------------------
@@ -390,7 +530,8 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     int xpos = 0;
     for ( unsigned int i = 0; i < count; i++ )
     {
-        const wxHeaderColumnBase& col = GetColumn(m_colIndices[i]);
+        const unsigned idx = m_colIndices[i];
+        const wxHeaderColumnBase& col = GetColumn(idx);
         if ( col.IsHidden() )
             continue;
 
@@ -410,7 +551,7 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         int state = 0;
         if ( IsEnabled() )
         {
-            if ( i == m_hover )
+            if ( idx == m_hover )
                 state = wxCONTROL_CURRENT;
         }
         else // disabled
@@ -439,21 +580,24 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 
 void wxHeaderCtrl::OnCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(event))
 {
-    if ( IsResizing() )
-        EndResizing(-1);
+    if ( IsDragging() )
+        CancelDragging();
 }
 
 void wxHeaderCtrl::OnKeyDown(wxKeyEvent& event)
 {
-    if ( IsResizing() && event.GetKeyCode() == WXK_ESCAPE )
+    if ( event.GetKeyCode() == WXK_ESCAPE )
     {
-        ReleaseMouse();
-        EndResizing(-1);
+        if ( IsDragging() )
+        {
+            ReleaseMouse();
+            CancelDragging();
+
+            return;
+        }
     }
-    else
-    {
-        event.Skip();
-    }
+
+    event.Skip();
 }
 
 void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
@@ -479,12 +623,22 @@ void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
         return;
     }
 
+    if ( IsReordering() )
+    {
+        if ( mevent.LeftUp() )
+            EndReordering(xPhysical);
+        else // update the column position
+            UpdateReorderingMarker(xPhysical);
+
+        return;
+    }
+
 
     // find if the event is over a column at all
     bool onSeparator;
     const unsigned col = mevent.Leaving()
                             ? (onSeparator = false, COL_NONE)
-                            : FindColumnAtPoint(xLogical, onSeparator);
+                            : FindColumnAtPoint(xLogical, &onSeparator);
 
 
     // update the highlighted column if it changed
@@ -515,13 +669,15 @@ void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
         if ( onSeparator )
         {
             // start resizing the column
-            wxASSERT_MSG( !IsResizing(), "reentering resize mode?" );
+            wxASSERT_MSG( !IsResizing(), "reentering column resize mode?" );
             StartOrContinueResizing(col, xPhysical);
         }
         else // on column itself
         {
-            // TODO: drag column
-            ;
+            // start dragging the column
+            wxASSERT_MSG( !IsReordering(), "reentering column move mode?" );
+
+            StartReordering(col, xPhysical);
         }
 
         return;

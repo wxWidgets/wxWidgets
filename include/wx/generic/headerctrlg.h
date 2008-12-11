@@ -71,9 +71,16 @@ private:
     void OnKeyDown(wxKeyEvent& event);
     void OnCaptureLost(wxMouseCaptureLostEvent& event);
 
+    // move the column with given idx at given position (this doesn't generate
+    // any events but does refresh the display)
+    void DoMoveCol(unsigned int idx, unsigned int pos);
+
     // return the horizontal start position of the given column in physical
     // coordinates
     int GetColStart(unsigned int idx) const;
+
+    // and the end position
+    int GetColEnd(unsigned int idx) const;
 
     // refresh the given column [only]; idx must be valid
     void RefreshCol(unsigned int idx);
@@ -89,13 +96,23 @@ private:
     // position is near the divider at the right end of this column (notice
     // that this means that we return column 0 even if the position is over
     // column 1 but close enough to the divider separating it from column 0)
-    int FindColumnAtPoint(int x, bool& onSeparator) const;
+    unsigned int FindColumnAtPoint(int x, bool *onSeparator = NULL) const;
 
     // return true if a drag resizing operation is currently in progress
     bool IsResizing() const;
 
+    // return true if a drag reordering operation is currently in progress
+    bool IsReordering() const;
+
+    // return true if any drag operation is currently in progress
+    bool IsDragging() const { return IsResizing() || IsReordering(); }
+
     // end any drag operation currently in progress (resizing or reordering)
     void EndDragging();
+
+    // cancel the drag operation currently in progress and generate an event
+    // about it
+    void CancelDragging();
 
     // start (if m_colBeingResized is -1) or continue resizing the column
     //
@@ -107,13 +124,23 @@ private:
     // about it with its cancelled flag set if xPhysical is -1
     void EndResizing(int xPhysical);
 
+    // same functions as above but for column moving/reordering instead of
+    // resizing
+    void StartReordering(unsigned int col, int xPhysical);
+    void EndReordering(int xPhysical);
+
     // constrain the given position to be larger than the start position of the
     // given column plus its minimal width and return the effective width
     int ConstrainByMinWidth(unsigned int col, int& xPhysical);
 
-    // update the current position of the resizing marker if xPhysical is a
-    // valid physical coordinate value or remove it entirely if it is -1
+    // update the current position of the resizing marker
     void UpdateResizingMarker(int xPhysical);
+
+    // update the information displayed while a column is being moved around
+    void UpdateReorderingMarker(int xPhysical);
+
+    // clear any overlaid markers
+    void ClearMarkers();
 
 
     // number of columns in the control currently
@@ -125,6 +152,14 @@ private:
     // the column being resized or -1 if there is no resizing operation in
     // progress
     unsigned int m_colBeingResized;
+
+    // the column being moved or -1 if there is no reordering operation in
+    // progress
+    unsigned int m_colBeingReordered;
+
+    // the distance from the start of m_colBeingReordered and the mouse
+    // position when the user started to drag it
+    int m_dragOffset;
 
     // the horizontal scroll offset
     int m_scrollOffset;
