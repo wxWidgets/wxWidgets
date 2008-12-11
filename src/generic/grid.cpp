@@ -6779,42 +6779,41 @@ void wxGrid::DoEndDragMoveCol()
     SetColPos( m_dragRowOrCol, newPos );
 }
 
-void wxGrid::SetColPos( int colID, int newPos )
+void wxGrid::SetColPos(int idx, int pos)
 {
-    if ( m_colAt.IsEmpty() )
+    if ( m_colAt.empty() )
     {
-        m_colAt.Alloc( m_numCols );
-
-        int i;
-        for ( i = 0; i < m_numCols; i++ )
-        {
-            m_colAt.Add( i );
-        }
+        // we're going to need m_colAt now, initialize it
+        m_colAt.reserve(m_numCols);
+        for ( int i = 0; i < m_numCols; i++ )
+            m_colAt.push_back(i);
     }
 
-    int oldPos = GetColPos( colID );
+    // create the updated copy of m_colAt
+    const unsigned count = m_colAt.size();
 
-    //Reshuffle the m_colAt array
-    if ( newPos > oldPos )
+    wxArrayInt colAt;
+    colAt.reserve(count);
+    for ( unsigned n = 0; n < count; n++ )
     {
-        int i;
-        for ( i = oldPos; i < newPos; i++ )
-        {
-            m_colAt[i] = m_colAt[i+1];
-        }
-    }
-    else
-    {
-        int i;
-        for ( i = oldPos; i > newPos; i-- )
-        {
-            m_colAt[i] = m_colAt[i-1];
-        }
+        // NB: order of checks is important for this to work when the new
+        //     column position is the same as the old one
+
+        // insert the column at its new position
+        if ( colAt.size() == static_cast<unsigned>(pos) )
+            colAt.push_back(idx);
+
+        // delete the column from its old position
+        const int idxOld = m_colAt[n];
+        if ( idxOld == idx )
+            continue;
+
+        colAt.push_back(idxOld);
     }
 
-    m_colAt[newPos] = colID;
+    m_colAt = colAt;
 
-    //Recalculate the column rights
+    // also recalculate the column rights
     if ( !m_colWidths.IsEmpty() )
     {
         int colRight = 0;
@@ -6828,7 +6827,11 @@ void wxGrid::SetColPos( int colID, int newPos )
         }
     }
 
-    m_colWindow->Refresh();
+    // and make the changes visible
+    if ( m_useNativeHeader )
+        GetColHeader()->SetColumnsOrder(m_colAt);
+    else
+        m_colWindow->Refresh();
     m_gridWin->Refresh();
 }
 
