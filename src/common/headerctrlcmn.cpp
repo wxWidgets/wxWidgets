@@ -227,7 +227,6 @@ wxHeaderCtrlSimple::UpdateColumnWidthToFit(unsigned int idx, int widthTitle)
         return false;
 
     m_cols[idx].SetWidth(wxMax(widthContents, widthTitle));
-    UpdateColumn(idx);
 
     return true;
 }
