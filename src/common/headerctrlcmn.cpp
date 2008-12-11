@@ -64,6 +64,13 @@ void wxHeaderCtrlBase::ScrollWindow(int dx,
     DoScrollHorz(dx);
 }
 
+void wxHeaderCtrlBase::SetColumnCount(unsigned int count)
+{
+    OnColumnCountChanging(count);
+
+    DoSetCount(count);
+}
+
 // ----------------------------------------------------------------------------
 // wxHeaderCtrlBase event handling
 // ----------------------------------------------------------------------------

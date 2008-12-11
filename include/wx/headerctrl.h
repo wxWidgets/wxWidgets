@@ -70,7 +70,7 @@ public:
     // set the number of columns in the control
     //
     // this also calls UpdateColumn() for all columns
-    void SetColumnCount(unsigned int count) { DoSetCount(count); }
+    void SetColumnCount(unsigned int count);
 
     // return the number of columns in the control as set by SetColumnCount()
     unsigned int GetColumnCount() const { return DoGetCount(); }
@@ -123,6 +123,11 @@ protected:
     {
         return false;
     }
+
+    // this method can be overridden in the derived classes to do something
+    // (e.g. update/resize some internal data structures) before the number of
+    // columns in the control changes
+    virtual void OnColumnCountChanging(unsigned int WXUNUSED(count)) { }
 
 private:
     // methods implementing our public API and defined in platform-specific

@@ -337,6 +337,18 @@ protected:
             meaning that the control didn't reach to the separator double click.
      */
     virtual bool UpdateColumnWidthToFit(unsigned int idx, int widthTitle);
+
+    /**
+        Can be overridden in the derived class to update internal data
+        structures when the number of the columns in the control changes.
+
+        This method is called by SetColumnCount() before effectively changing
+        the number of columns.
+
+        The base class version does nothing but it is good practice to still
+        call it from the overridden version in the derived class.
+     */
+    virtual void OnColumnCountChanging(unsigned int count);
 };
 
 
